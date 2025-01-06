@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNC Program Analyzer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .file-input-container {
+            margin-bottom: 20px;
+        }
+
+        .file-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .button {
+            padding: 8px 16px;
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .button:hover {
+            background-color: #1565c0;
+        }
+
+        .file-input-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .file-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px dashed #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .selected-files {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .status {
+            padding: 10px;
+            background-color: #e3f2fd;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            color: #1976d2;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 16px;
+            font-weight: 500;
+            color: #666;
+        }
+
+        .tab.active {
+            color: #1976d2;
+            border-bottom: 2px solid #1976d2;
+            margin-bottom: -2px;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .program-link {
+            color: #1976d2;
+            text-decoration: none;
+            cursor: pointer;
+            display: block;
+            margin: 5px 0;
+        }
+
+        .program-link:hover {
+            text-decoration: underline;
+        }
+
+        .tool-info {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            border-left: 3px solid #1976d2;
+        }
+
+        .combined-program {
+            width: 100%;
+            height: 600px;
+            font-family: monospace;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+            resize: vertical;
+            white-space: pre;
+            overflow-wrap: normal;
+            overflow-x: auto;
+            line-height: 20px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 20px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 10px;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab {
+                width: 100%;
+                text-align: center;
+                border-bottom: 1px solid #e0e0e0;
+            }
+
+            .tab.active {
+                border-bottom: 2px solid #1976d2;
+            }
+
+            .file-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Analyzátor CNC Programů</h1>
+        
+        <div class="file-input-container">
+            <label class="file-input-label">Vyberte CNC programy pro analýzu:</label>
+            <div class="file-buttons">
+                <button class="button" onclick="document.getElementById('mpfInput').click()">Vybrat MPF soubory</button>
+                <button class="button" onclick="document.getElementById('spfInput').click()">Vybrat SPF soubory</button>
+                <button class="button" onclick="document.getElementById('allInput').click()">Vybrat všechny soubory</button>
+            </div>
+            <input type="file" id="mpfInput" multiple accept=".mpf" style="display: none">
+            <input type="file" id="spfInput" multiple accept=".spf" style="display: none">
+            <input type="file" id="allInput" multiple accept=".mpf,.spf" style="display: none">
+            <div id="selectedFiles" class="selected-files">Žádné vybrané soubory</div>
+        </div>
+        
+        <div id="status" class="status" style="display: none;"></div>
+
+        <div class="tabs">
+            <button class="tab active" data-tab="tools">Přehled Nástrojů</button>
+            <button class="tab" data-tab="program">Zdrojový Kód</button>
+        </div>
+
+        <div id="toolsContent" class="tab-content active">
+            <div class="section-title">Hlavní Programy</div>
+            <div id="mainProgramsList"></div>
+            
+            <div class="section-title">Podprogramy a Nástroje</div>
+            <div id="subProgramsList"></div>
+        </div>
+
+        <div id="programContent" class="tab-content">
+            <textarea id="combinedProgram" class="combined-program" readonly></textarea>
+        </div>
+    </div>
+
+    <script>
+        class CNCProgramAnalyzer {
+            constructor() {
+                this.mainPrograms = {};
+                this.subPrograms = {};
+                this.toolInfo = {};
+                this.combinedProgram = '';
+                this.initializeEventListeners();
+            }
+
+            initializeEventListeners() {
+                ['mpfInput', 'spfInput', 'allInput'].forEach(inputId => {
+                    document.getElementById(inputId).addEventListener('change', (e) => this.handleFileChange(e));
+                });
+                
+                document.querySelectorAll('.tab').forEach(tab => {
+                    tab.addEventListener('click', () => this.switchTab(tab.dataset.tab));
+                });
+            }
+
+            async handleFileChange(event) {
+                const files = event.target.files;
+                if (files.length === 0) return;
+
+                const fileList = Array.from(files).map(f => f.name).join(', ');
+                document.getElementById('selectedFiles').textContent = `Vybrané soubory: ${fileList}`;
+
+                this.showStatus('Načítání programů...');
+
+                for (let file of files) {
+                    try {
+                        const content = await this.readFile(file);
+                        if (file.name.toLowerCase().endsWith('.mpf')) {
+                            this.mainPrograms[file.name] = content;
+                        } else if (file.name.toLowerCase().endsWith('.spf')) {
+                            this.subPrograms[file.name] = content;
+                        }
+                    } catch (error) {
+                        console.error(`Chyba při čtení souboru ${file.name}:`, error);
+                    }
+                }
+
+                this.processPrograms();
+                this.updateUI();
+                this.showStatus(`Načteno ${Object.keys(this.mainPrograms).length} hlavních programů a ${Object.keys(this.subPrograms).length} podprogramů`);
+            }
+
+            readFile(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.onerror = (e) => reject(e);
+                    reader.readAsText(file, 'UTF-8');
+                });
+            }
+
+            processPrograms() {
+                for (const [name, content] of Object.entries(this.subPrograms)) {
+                    this.toolInfo[name] = this.findToolInfo(content);
+                    const calls = this.findSubprogramCalls(name);
+                    this.toolInfo[name] = this.toolInfo[name].map(([tool, next]) => 
+                        [tool, next, calls[0] || '']);
+                }
+
+                this.createCombinedProgram();
+            }
+
+            findToolInfo(content) {
+                const lines = content.split('\n');
+                const tools = [];
+                
+                for (let i = 0; i < lines.length; i++) {
+                    const line = lines[i];
+                    if (line.includes('T') && /T\d+/.test(line)) {
+                        const nextLine = i + 1 < lines.length ? lines[i + 1] : "";
+                        tools.push([line.trim(), nextLine.trim(), ""]);
+                    }
+                }
+                
+                return tools;
+            }
+
+            findSubprogramCalls(subprogramName) {
+                const subBaseName = subprogramName.split('.')[0];
+                const subNumber = subBaseName.match(/\d+/);
+                
+                if (!subNumber) return [];
+                
+                const subNum = subNumber[0];
+                const calls = [];
+                
+                Object.values(this.mainPrograms).forEach(content => {
+                    const lines = content.split('\n');
+                    lines.forEach(line => {
+                        if (line.includes(`L${subNum}`) || 
+                            (line.includes(subBaseName) && line.toUpperCase().includes('CALL'))) {
+                            calls.push(line.trim());
+                        }
+                    });
+                });
+                
+                return calls;
+            }
+
+            createCombinedProgram() {
+                const parts = [];
+                
+                Object.entries(this.mainPrograms).forEach(([name, content]) => {
+                    parts.push(`\n${'='.repeat(50)}`);
+                    parts.push(`HLAVNÍ PROGRAM: ${name}`);
+                    parts.push('='.repeat(50));
+                    parts.push(content);
+                });
+                
+                Object.entries(this.subPrograms).forEach(([name, content]) => {
+                    parts.push(`\n${'='.repeat(50)}`);
+                    parts.push(`PODPROGRAM: ${name}`);
+                    parts.push('='.repeat(50));
+                    parts.push(content);
+                });
+                
+                this.combinedProgram = parts.join('\n');
+            }
+
+            updateUI() {
+                const mainProgramsList = document.getElementById('mainProgramsList');
+                mainProgramsList.innerHTML = Object.keys(this.mainPrograms)
+                    .map(name => `<a class="program-link" onclick="analyzer.scrollToProgram('${name}', true)">${name}</a>`)
+                    .join('');
+
+                const subProgramsList = document.getElementById('subProgramsList');
+                subProgramsList.innerHTML = Object.entries(this.toolInfo)
+                    .map(([program, tools]) => `
+                        <div class="tool-info">
+                            <a class="program-link" onclick="analyzer.scrollToProgram('${program}', false)">${program}</a>
+                            ${tools.map(([toolLine, nextLine, callLine]) => `
+                                <div style="margin-left: 20px; margin-top: 10px;">
+                                    ${callLine ? `<div style="color: #2e7d32;">Volání: ${callLine}</div>` : ''}
+                                    <div style="font-family: monospace;">${toolLine}</div>
+                                    ${nextLine ? `<div style="font-family: monospace; color: #666;">${nextLine}</div>` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    `)
+                    .join('');
+
+                document.getElementById('combinedProgram').value = this.combinedProgram;
+            }
+
+            scrollToProgram(programName, isMain) {
+                const searchText = `${isMain ? 'HLAVNÍ PROGRAM' : 'PODPROGRAM'}: ${programName}`;
+                const textarea = document.getElementById('combinedProgram');
+                const text = textarea.value;
+                const index = text.indexOf(searchText);
+                
+                if (index !== -1) {
+                    this.switchTab('program');
+                    textarea.focus();
+                    
+                    // Najdeme začátek řádku s programem
+                    const textBeforeTarget = text.substring(0, index);
+                    const linesBeforeTarget = textBeforeTarget.split('\n').length - 1;
+                    
+                    // Nastavíme scroll na začátek programu
+                    const lineHeight = 20;
+                    textarea.scrollTop = linesBeforeTarget * lineHeight;
+                    
+                    // Vybereme text pro zvýraznění
+                    textarea.setSelectionRange(index, index + searchText.length);
+                }
+            }
+
+            switchTab(tabId) {
+                document.querySelectorAll('.tab').forEach(tab => {
+                    tab.classList.toggle('active', tab.dataset.tab === tabId);
+                });
+                
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.toggle('active', content.id === `${tabId}Content`);
+                });
+            }
+
+            showStatus(message) {
+                const status = document.getElementById('status');
+                status.textContent = message;
+                status.style.display = message ? 'block' : 'none';
+            }
+        }
+
+        const analyzer = new CNCProgramAnalyzer();
+    </script>
+</body>
+</html>
