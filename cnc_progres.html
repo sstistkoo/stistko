@@ -197,17 +197,12 @@
 </head>
 <body>
     <div class="container">
-        <h1>Analyzátor CNC Programů</h1>
+        <h1>PROGRES CNC KOLORUBAČ</h1>
         
         <div class="file-input-container">
-            <label class="file-input-label">Vyberte CNC programy pro analýzu:</label>
             <div class="file-buttons">
-                <button class="button" onclick="document.getElementById('mpfInput').click()">Vybrat MPF soubory</button>
-                <button class="button" onclick="document.getElementById('spfInput').click()">Vybrat SPF soubory</button>
-                <button class="button" onclick="document.getElementById('allInput').click()">Vybrat všechny soubory</button>
+                <button class="button" onclick="document.getElementById('allInput').click()">vybrat soubory</button>
             </div>
-            <input type="file" id="mpfInput" multiple accept=".mpf" style="display: none">
-            <input type="file" id="spfInput" multiple accept=".spf" style="display: none">
             <input type="file" id="allInput" multiple accept=".mpf,.spf" style="display: none">
             <div id="selectedFiles" class="selected-files">Žádné vybrané soubory</div>
         </div>
