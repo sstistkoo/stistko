@@ -4,19 +4,210 @@
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PROGRES CNC KOLORUBAČ</title>
+    <title>CNC Program Analyzer</title>
     <style>
-        /* CSS styly zůstávají nezměněny */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .file-input-container {
+            margin-bottom: 20px;
+        }
+
+        .file-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .button {
+            padding: 8px 16px;
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .button:hover {
+            background-color: #1565c0;
+        }
+
+        .file-input-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .file-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px dashed #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .selected-files {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .status {
+            padding: 10px;
+            background-color: #e3f2fd;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            color: #1976d2;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 16px;
+            font-weight: 500;
+            color: #666;
+        }
+
+        .tab.active {
+            color: #1976d2;
+            border-bottom: 2px solid #1976d2;
+            margin-bottom: -2px;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .program-link {
+            color: #1976d2;
+            text-decoration: none;
+            cursor: pointer;
+            display: block;
+            margin: 5px 0;
+        }
+
+        .program-link:hover {
+            text-decoration: underline;
+        }
+
+        .tool-info {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            border-left: 3px solid #1976d2;
+        }
+
+        .combined-program {
+            width: 100%;
+            height: 600px;
+            font-family: monospace;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+            resize: vertical;
+            white-space: pre;
+            overflow-wrap: normal;
+            overflow-x: auto;
+            line-height: 20px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 20px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 10px;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab {
+                width: 100%;
+                text-align: center;
+                border-bottom: 1px solid #e0e0e0;
+            }
+
+            .tab.active {
+                border-bottom: 2px solid #1976d2;
+            }
+
+            .file-buttons {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>PROGRES CNC KOLORUBAČ</h1>
+        <h1>Analyzátor CNC Programů</h1>
         
         <div class="file-input-container">
+            <label class="file-input-label">Vyberte CNC programy pro analýzu:</label>
             <div class="file-buttons">
-                <button class="button" onclick="document.getElementById('allInput').click()">vybrat soubory</button>
+                <button class="button" onclick="document.getElementById('mpfInput').click()">Vybrat MPF soubory</button>
+                <button class="button" onclick="document.getElementById('spfInput').click()">Vybrat SPF soubory</button>
+                <button class="button" onclick="document.getElementById('allInput').click()">Vybrat všechny soubory</button>
             </div>
+            <input type="file" id="mpfInput" multiple accept=".mpf" style="display: none">
+            <input type="file" id="spfInput" multiple accept=".spf" style="display: none">
             <input type="file" id="allInput" multiple accept=".mpf,.spf" style="display: none">
             <div id="selectedFiles" class="selected-files">Žádné vybrané soubory</div>
         </div>
@@ -52,8 +243,13 @@
             }
 
             initializeEventListeners() {
-                // Ujisti se, že tento kód odpovídá HTML
-                document.getElementById('allInput').addEventListener('change', (e) => this.handleFileChange(e));
+                ['mpfInput', 'spfInput', 'allInput'].forEach(inputId => {
+                    document.getElementById(inputId).addEventListener('change', (e) => this.handleFileChange(e));
+                });
+                
+                document.querySelectorAll('.tab').forEach(tab => {
+                    tab.addEventListener('click', () => this.switchTab(tab.dataset.tab));
+                });
             }
 
             async handleFileChange(event) {
@@ -68,7 +264,6 @@
                 for (let file of files) {
                     try {
                         const content = await this.readFile(file);
-                        console.log(`Content of ${file.name}:`, content); // Debugging line
                         if (file.name.toLowerCase().endsWith('.mpf')) {
                             this.mainPrograms[file.name] = content;
                         } else if (file.name.toLowerCase().endsWith('.spf')) {
@@ -92,7 +287,7 @@
                     reader.readAsText(file, 'UTF-8');
                 });
             }
-            
+
             processPrograms() {
                 for (const [name, content] of Object.entries(this.subPrograms)) {
                     this.toolInfo[name] = this.findToolInfo(content);
