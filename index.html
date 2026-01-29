@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stistko - AI Asistent Projekty</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1200px;
+        width: 100%;
+      }
+
+      header {
+        text-align: center;
+        color: white;
+        margin-bottom: 50px;
+        animation: fadeInDown 0.8s ease;
+      }
+
+      h1 {
+        font-size: 3em;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .subtitle {
+        font-size: 1.2em;
+        opacity: 0.9;
+      }
+
+      .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        animation: fadeInUp 1s ease;
+      }
+
+      .project-card {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+        cursor: pointer;
+        text-decoration: none;
+        color: inherit;
+        display: block;
+      }
+
+      .project-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      .project-icon {
+        font-size: 3em;
+        margin-bottom: 15px;
+        display: block;
+      }
+
+      .project-title {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 10px;
+      }
+
+      .project-description {
+        color: #666;
+        line-height: 1.6;
+        font-size: 0.95em;
+      }
+
+      .project-tag {
+        display: inline-block;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.8em;
+        margin-top: 15px;
+      }
+
+      footer {
+        text-align: center;
+        color: white;
+        margin-top: 50px;
+        opacity: 0.8;
+        animation: fadeIn 1.5s ease;
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 2em;
+        }
+
+        .subtitle {
+          font-size: 1em;
+        }
+
+        .projects-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* Různé barvy pro každou kartu */
+      .project-card:nth-child(1) .project-icon {
+        color: #667eea;
+      }
+      .project-card:nth-child(2) .project-icon {
+        color: #f093fb;
+      }
+      .project-card:nth-child(3) .project-icon {
+        color: #4facfe;
+      }
+      .project-card:nth-child(4) .project-icon {
+        color: #43e97b;
+      }
+      .project-card:nth-child(5) .project-icon {
+        color: #fa709a;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>🚀 Stistko AI Projekty</h1>
+        <p class="subtitle">Vyberte aplikaci pro spuštění</p>
+      </header>
+
+      <div class="projects-grid">
+        <!-- 2D Parametrické kreslení -->
+        <a href="2D/index.html" class="project-card">
+          <span class="project-icon">📐</span>
+          <div class="project-title">2D Parametrické kreslení</div>
+          <div class="project-description">
+            Interaktivní nástroj pro parametrické kreslení s integrovaným AI
+            asistentem. Umožňuje tvorbu geometrických útvarů s přesným
+            ovládáním.
+          </div>
+          <span class="project-tag">AI Asistent</span>
+        </a>
+
+        <!-- AI Modul Testing -->
+        <a href="AI_modul/test-ai-module.html" class="project-card">
+          <span class="project-icon">🧪</span>
+          <div class="project-title">AI Modul - Testování</div>
+          <div class="project-description">
+            Testovací prostředí pro AI modul. Experimentujte s různými AI modely
+            a nastavením pro optimální výkon.
+          </div>
+          <span class="project-tag">Testing</span>
+        </a>
+
+        <!-- Chat s AI -->
+        <a href="chat/chat.html" class="project-card">
+          <span class="project-icon">💬</span>
+          <div class="project-title">Chat s AI</div>
+          <div class="project-description">
+            Přímá konverzace s AI asistentem. Ptejte se na cokoliv, získejte
+            odpovědi a podporu v reálném čase.
+          </div>
+          <span class="project-tag">Konverzace</span>
+        </a>
+
+        <!-- Programování - HTML Editor -->
+        <a href="programovani/index.html" class="project-card">
+          <span class="project-icon">💻</span>
+          <div class="project-title">HTML Editor s AI</div>
+          <div class="project-description">
+            Pokročilý editor pro tvorbu HTML kódu s pomocí AI asistenta.
+            Vytvářejte webové stránky rychle a efektivně.
+          </div>
+          <span class="project-tag">Vývoj</span>
+        </a>
+
+        <!-- AI CAM - G kód -->
+        <a href="AI_cam/SimDraha.html" class="project-card">
+          <span class="project-icon">⚙️</span>
+          <div class="project-title">AI CAM - G Kód</div>
+          <div class="project-description">
+            Generování G kódu pro CNC stroje pomocí AI. Simulace dráhy nástroje
+            a optimalizace obrábění.
+          </div>
+          <span class="project-tag">CNC</span>
+        </a>
+      </div>
+
+      <footer>
+        <p>&copy; 2026 Stistko | Powered by AI</p>
+      </footer>
+    </div>
+
+    <script>
+      // Animace při načtení stránky
+      document.addEventListener("DOMContentLoaded", function () {
+        const cards = document.querySelectorAll(".project-card");
+        cards.forEach((card, index) => {
+          card.style.animationDelay = `${index * 0.1}s`;
+        });
+      });
+
+      // Přidání ripple efektu při kliknutí
+      document.querySelectorAll(".project-card").forEach((card) => {
+        card.addEventListener("click", function (e) {
+          const ripple = document.createElement("div");
+          ripple.style.position = "absolute";
+          ripple.style.borderRadius = "50%";
+          ripple.style.background = "rgba(255, 255, 255, 0.6)";
+          ripple.style.width = ripple.style.height = "100px";
+          ripple.style.left =
+            e.clientX - this.getBoundingClientRect().left - 50 + "px";
+          ripple.style.top =
+            e.clientY - this.getBoundingClientRect().top - 50 + "px";
+          ripple.style.animation = "ripple 0.6s ease-out";
+          ripple.style.pointerEvents = "none";
+
+          this.style.position = "relative";
+          this.style.overflow = "hidden";
+          this.appendChild(ripple);
+
+          setTimeout(() => ripple.remove(), 600);
+        });
+      });
+
+      // Přidání CSS pro ripple animaci
+      const style = document.createElement("style");
+      style.textContent = `
+            @keyframes ripple {
+                from {
+                    transform: scale(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+      document.head.appendChild(style);
+    </script>
+  </body>
+</html>
