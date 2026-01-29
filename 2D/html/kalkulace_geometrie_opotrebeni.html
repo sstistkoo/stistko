@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Převodník geometrie - opotřebení</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <style>
+      .card {
+        background: white;
+        border-radius: 0.5rem;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        margin-bottom: 1.5rem;
+      }
+      .input-field {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 0.25rem;
+        font-size: 16px;
+      }
+      .btn {
+        padding: 0.5rem 1rem;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        touch-action: manipulation;
+      }
+      .btn-gray {
+        background-color: #4b5563;
+        color: white;
+      }
+      .btn-gray:hover {
+        background-color: #374151;
+      }
+      .shortcut-item {
+        display: flex;
+        padding: 0.5rem;
+        gap: 1rem;
+        align-items: start;
+      }
+      .shortcut-key {
+        background: #f3f4f6;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        font-family: monospace;
+        min-width: 140px;
+        display: inline-block;
+      }
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+      }
+      .modal-content {
+        position: relative;
+        background-color: white;
+        margin: 15% auto;
+        padding: 20px;
+        border-radius: 0.5rem;
+        max-width: 500px;
+        width: 90%;
+      }
+      .close-button {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        font-size: 24px;
+        cursor: pointer;
+        color: #666;
+      }
+      .close-button:hover {
+        color: #333;
+      }
+      .calculation-step {
+        padding: 8px;
+        margin: 4px 0;
+        background-color: #f8f9fa;
+        border-radius: 4px;
+      }
+      @media (max-width: 768px) {
+        .shortcut-item {
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+        .shortcut-key {
+          width: 100%;
+          min-width: auto;
+        }
+        body {
+          padding: 0.5rem;
+        }
+        .input-field {
+          padding: 0.75rem;
+        }
+        .modal-content {
+          margin: 5% auto;
+          width: 95%;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 p-4">
+    <div class="max-w-3xl mx-auto">
+      <!-- Kalkulačka -->
+      <div class="card p-4">
+        <div class="flex justify-between items-start mb-6">
+          <div>
+            <h1 class="text-xl md:text-2xl font-bold mb-2">
+              Převodník geometrie - opotřebení
+            </h1>
+            <p class="text-gray-600">Zadejte hodnoty pro přepočet</p>
+          </div>
+          <button
+            onclick="clearValues()"
+            class="btn btn-gray text-sm whitespace-nowrap"
+          >
+            Vymazat hodnoty
+          </button>
+          <button
+            onclick="openOznameniModal()"
+            class="btn bg-green-500 hover:bg-green-600 text-white text-sm whitespace-nowrap"
+            style="margin-left: 10px"
+          >
+            Ukázka
+          </button>
+          <div style="display: inline-block; margin-left: 20px">
+            <a href="index.html"><i class="fas fa-home fa-lg"></i></a>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- První sloupec -->
+          <div class="space-y-4">
+            <h3 class="font-medium mb-4">Zadej údaje</h3>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm mb-2">Geometrie:</label>
+                <input
+                  type="number"
+                  step="0.001"
+                  id="firstGeometry"
+                  class="input-field"
+                  placeholder="0.000"
+                />
+              </div>
+              <div>
+                <label class="block text-sm mb-2">Opotřebení:</label>
+                <input
+                  type="number"
+                  step="0.001"
+                  id="firstWear"
+                  class="input-field"
+                  placeholder="0.000"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Druhý sloupec -->
+          <div class="space-y-4">
+            <h3 class="font-medium mb-4">Propočet</h3>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm mb-2">Geometrie:</label>
+                <div class="flex gap-2">
+                  <div
+                    id="secondGeometry"
+                    class="flex-1 input-field bg-gray-50"
+                  >
+                    0.000
+                  </div>
+                  <button
+                    onclick="showCalculation()"
+                    class="btn bg-blue-500 hover:bg-blue-600 text-white px-3"
+                  >
+                    Výpočet
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label class="block text-sm mb-2">Opotřebení:</label>
+                <div class="flex gap-2">
+                  <input
+                    type="number"
+                    step="0.001"
+                    id="secondWear"
+                    class="flex-1 input-field"
+                    placeholder="0.000"
+                  />
+                  <button
+                    onclick="clearSecondWear()"
+                    class="btn bg-gray-200 hover:bg-gray-300 px-3"
+                  >
+                    ×
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 text-sm space-y-2 text-gray-600">
+          <p><strong>Length 1:</strong> Hodnoty pro osu X</p>
+          <p><strong>Length 2:</strong> Hodnoty pro osu Z</p>
+        </div>
+      </div>
+
+      <!-- Průvodce -->
+      <div class="card p-4">
+        <h2 class="text-xl font-bold mb-6">
+          Průvodce přesunem hodnot - Sinumerik 840D
+        </h2>
+
+        <div class="space-y-6">
+          <!-- Nejrychlejší postup -->
+          <div>
+            <h3 class="font-medium text-lg mb-3">
+              Nejrychlejší postup přesunu hodnoty:
+            </h3>
+            <div class="bg-blue-50 p-4 rounded text-sm space-y-2">
+              <p>1. Aktivujte pole opotřebení (SELECT)</p>
+              <p>2. Označte celou hodnotu (Shift + šipka vpravo)</p>
+              <p>3. Zkopírujte hodnotu (Ctrl + C)</p>
+              <p>4. Přesuňte se na pole geometrie</p>
+              <p>
+                5. Otevřete kalkulačku (Shift + =) - automaticky načte hodnotu z
+                geometrie
+              </p>
+              <p>
+                6. Zadejte + (Shift + +) a vložte hodnotu ze schránky (Ctrl + V)
+              </p>
+              <p>
+                7. Potvrďte INS nebo Input - nová hodnota se vloží do geometrie
+              </p>
+              <p>8. Přesuňte se zpět na opotřebení a vynulujte ho</p>
+            </div>
+          </div>
+
+          <!-- Rychlé klávesy -->
+          <div class="space-y-4">
+            <h3 class="font-medium text-lg mb-3">
+              Rychlé klávesy pro práci s hodnotami:
+            </h3>
+            <div class="space-y-2">
+              <div class="shortcut-item">
+                <span class="shortcut-key">SELECT</span>
+                <span>Aktivovat pole opotřebení</span>
+              </div>
+              <div class="shortcut-item">
+                <span class="shortcut-key">Shift + šipka vpravo</span>
+                <span>Označit celou hodnotu v opotřebení</span>
+              </div>
+              <div class="shortcut-item">
+                <span class="shortcut-key">Ctrl + C</span>
+                <span>Zkopírovat označenou hodnotu</span>
+              </div>
+              <div class="shortcut-item">
+                <span class="shortcut-key">Shift + =</span>
+                <span>Otevřít kalkulačku s hodnotou z geometrie</span>
+              </div>
+              <div class="shortcut-item">
+                <span class="shortcut-key">+ (Shift + +)</span>
+                <span>Zadat plus pro přičtení hodnoty</span>
+              </div>
+              <div class="shortcut-item">
+                <span class="shortcut-key">Ctrl + V</span>
+                <span>Vložit hodnotu z opotřebení a propočítat</span>
+              </div>
+              <div class="shortcut-item">
+                <span class="shortcut-key">INS nebo Input</span>
+                <span>Potvrdit a vložit novou hodnotu</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Navigace -->
+          <div>
+            <h3 class="font-medium text-lg mb-3">Navigace v tabulce:</h3>
+            <div class="space-y-2">
+              <div class="shortcut-item">
+                <span class="shortcut-key">Menu Select + T</span>
+                <span>Otevření tabulky nástrojů</span>
+              </div>
+              <div class="shortcut-item">
+                <span class="shortcut-key">Page Up/Down</span>
+                <span>Pohyb mezi nástroji</span>
+              </div>
+              <div class="shortcut-item">
+                <span class="shortcut-key">Alt + L</span>
+                <span>Přepínání mezi geometrií a opotřebením</span>
+              </div>
+              <div class="shortcut-item">
+                <span class="shortcut-key">Šipky</span>
+                <span>Pohyb mezi poli v tabulce</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal pro výpočet -->
+    <div id="calculationModal" class="modal">
+      <div class="modal-content">
+        <span class="close-button" onclick="closeModal()">&times;</span>
+        <h2 class="text-xl font-bold mb-4">Detailní výpočet</h2>
+        <div id="calculationDetails" class="space-y-2"></div>
+      </div>
+    </div>
+
+    <!-- Modal pro ukázku opotřebení -->
+    <div id="oznameniModal" class="modal">
+      <div
+        class="modal-content"
+        style="
+          max-width: 900px;
+          height: 90vh;
+          margin: 5% auto;
+          overflow-y: auto;
+        "
+      >
+        <span class="close-button" onclick="closeOznameniModal()">&times;</span>
+        <iframe
+          src="opotrebeni_ukazka.html"
+          style="width: 100%; height: 100%; border: none"
+        ></iframe>
+      </div>
+    </div>
+
+    <script>
+      // Globální proměnné
+      const firstGeometry = document.getElementById("firstGeometry");
+      const firstWear = document.getElementById("firstWear");
+      const secondGeometry = document.getElementById("secondGeometry");
+      const secondWear = document.getElementById("secondWear");
+
+      // Formátování čísla na 3 desetinná místa
+      function formatNumber(value) {
+        if (!value || isNaN(value)) return "0.000";
+        return parseFloat(value).toFixed(3);
+      }
+
+      // Aktualizace hodnoty při psaní
+      function handleInput(input) {
+        let value = input.value;
+        if (value === "" || value === "-") return;
+
+        // Omezení na 3 desetinná místa během psaní
+        const parts = value.split(".");
+        if (parts[1] && parts[1].length > 3) {
+          parts[1] = parts[1].substring(0, 3);
+          input.value = parts.join(".");
+        }
+        calculateSecondGeometry();
+      }
+
+      // Formátování při opuštění pole
+      function handleBlur(input) {
+        if (input.value === "" || input.value === "-") {
+          input.value = "0.000";
+        } else {
+          input.value = formatNumber(input.value);
+        }
+        calculateSecondGeometry();
+      }
+
+      // Výpočet geometrie
+      function calculateSecondGeometry() {
+        const geometry = parseFloat(firstGeometry.value) || 0;
+        const wear = parseFloat(firstWear.value) || 0;
+        const wear2 = parseFloat(secondWear.value) || 0;
+
+        const newGeometry = geometry + wear - wear2;
+        secondGeometry.textContent = formatNumber(newGeometry);
+      }
+
+      // Vymazání všech hodnot
+      function clearValues() {
+        firstGeometry.value = "0.000";
+        firstWear.value = "0.000";
+        secondWear.value = "0.000";
+        secondGeometry.textContent = "0.000";
+      }
+
+      // Vymazání druhého opotřebení
+      function clearSecondWear() {
+        secondWear.value = "0.000";
+        calculateSecondGeometry();
+      }
+
+      // Zobrazení výpočtu
+      function showCalculation() {
+        const geometry = parseFloat(firstGeometry.value) || 0;
+        const wear = parseFloat(firstWear.value) || 0;
+        const wear2 = parseFloat(secondWear.value) || 0;
+        const result = geometry + wear - wear2;
+
+        const calculationDetails =
+          document.getElementById("calculationDetails");
+        calculationDetails.innerHTML = `
+                <div class="calculation-step">
+                    <strong>Hodnoty:</strong>
+                    <br>Geometrie 1: ${formatNumber(geometry)}
+                    <br>Opotřebení 1: ${formatNumber(wear)}
+                    <br>Opotřebení 2: ${formatNumber(wear2)}
+                </div>
+                <div class="calculation-step">
+                    <strong>Výpočet:</strong>
+                    <br>Geometrie 1 (${formatNumber(geometry)})
+                        <br>+ Opotřebení 1 (${formatNumber(wear)})
+                    <br>- Opotřebení 2 (${formatNumber(wear2)})
+                </div>
+                <div class="calculation-step">
+                    <strong>Výsledek:</strong>
+                    <br>${formatNumber(geometry)} + ${formatNumber(
+          wear
+        )} - ${formatNumber(wear2)} = ${formatNumber(result)}
+                </div>
+            `;
+
+        document.getElementById("calculationModal").style.display = "block";
+      }
+
+      // Zavření modalu
+      function closeModal() {
+        document.getElementById("calculationModal").style.display = "none";
+      }
+
+      // Otevření modálu s ukázkou
+      function openOznameniModal() {
+        document.getElementById("oznameniModal").style.display = "block";
+      }
+
+      // Zavření modálu s ukázkou
+      function closeOznameniModal() {
+        document.getElementById("oznameniModal").style.display = "none";
+      }
+
+      // Zavření modalu při kliknutí mimo
+      window.onclick = function (event) {
+        const modal = document.getElementById("calculationModal");
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      };
+
+      // Přidání event listenerů
+      function initializeEvents() {
+        const inputs = [firstGeometry, firstWear, secondWear];
+        inputs.forEach((input) => {
+          input.addEventListener("input", () => handleInput(input));
+          input.addEventListener("blur", () => handleBlur(input));
+          input.addEventListener("focus", () => {
+            if (input.value === "0.000") {
+              input.value = "";
+            }
+          });
+        });
+      }
+
+      // Inicializace po načtení stránky
+      document.addEventListener("DOMContentLoaded", function () {
+        clearValues();
+        initializeEvents();
+      });
+    </script>
+  </body>
+</html>

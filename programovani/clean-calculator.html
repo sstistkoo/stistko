@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="utf-8" />
+    <title>Kalkulačka</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      :root {
+        --primary-color: #667eea;
+        --secondary-color: #764ba2;
+        --bg-color: #1a202c;
+        --container-bg: #2d3748;
+        --text-color: #e2e8f0;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .calculator-container {
+        background: var(--container-bg);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        max-width: 400px;
+        width: 100%;
+      }
+
+      h1 {
+        color: var(--text-color);
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 24px;
+      }
+
+      .display {
+        background: var(--bg-color);
+        color: var(--text-color);
+        font-size: 32px;
+        padding: 20px;
+        text-align: right;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        min-height: 70px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+      }
+
+      .buttons {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+      }
+
+      button {
+        padding: 20px;
+        font-size: 20px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-weight: 600;
+      }
+
+      button:hover {
+        transform: scale(1.05);
+      }
+
+      button:active {
+        transform: scale(0.95);
+      }
+
+      .btn-number,
+      .btn-operator {
+        background: #4a5568;
+        color: var(--text-color);
+      }
+
+      .btn-operator {
+        background: var(--primary-color);
+      }
+
+      .btn-equals {
+        background: #48bb78;
+        color: white;
+        grid-column: span 2;
+      }
+
+      .btn-clear {
+        background: #f56565;
+        color: white;
+        grid-column: span 2;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="calculator-container">
+      <h1>Kalkulačka</h1>
+      <div class="display" id="display" role="status" aria-live="polite">0</div>
+      <div class="buttons">
+        <button class="btn-clear" id="button-clear">C</button>
+        <button class="btn-operator" id="button-divide">/</button>
+        <button class="btn-operator" id="button-multiply">*</button>
+        <button class="btn-number" id="button-7">7</button>
+        <button class="btn-number" id="button-8">8</button>
+        <button class="btn-number" id="button-9">9</button>
+        <button class="btn-operator" id="button-subtract">-</button>
+        <button class="btn-number" id="button-4">4</button>
+        <button class="btn-number" id="button-5">5</button>
+        <button class="btn-number" id="button-6">6</button>
+        <button class="btn-operator" id="button-add">+</button>
+        <button class="btn-number" id="button-1">1</button>
+        <button class="btn-number" id="button-2">2</button>
+        <button class="btn-number" id="button-3">3</button>
+        <button class="btn-equals" id="button-equals">=</button>
+        <button class="btn-number" id="button-0">0</button>
+        <button class="btn-number" id="button-decimal">.</button>
+      </div>
+    </div>
+
+    <script>
+      const display = document.getElementById('display');
+      let currentOperand = '0';
+      let previousOperand = '';
+      let operation = undefined;
+
+      function updateDisplay() {
+        display.textContent = currentOperand;
+      }
+
+      function appendNumber(number) {
+        if (currentOperand === '0') {
+          currentOperand = number.toString();
+        } else {
+          currentOperand += number.toString();
+        }
+        updateDisplay();
+      }
+
+      function chooseOperation(op) {
+        if (currentOperand === '') return;
+        if (previousOperand !== '') {
+          compute();
+        }
+        operation = op;
+        previousOperand = currentOperand;
+        currentOperand = '';
+      }
+
+      function compute() {
+        let result;
+        const prev = parseFloat(previousOperand);
+        const current = parseFloat(currentOperand);
+        if (isNaN(prev) || isNaN(current)) return;
+
+        switch (operation) {
+          case '+':
+            result = prev + current;
+            break;
+          case '-':
+            result = prev - current;
+            break;
+          case '*':
+            result = prev * current;
+            break;
+          case '/':
+            result = prev / current;
+            break;
+          default:
+            return;
+        }
+        currentOperand = result.toString();
+        previousOperand = '';
+        operation = undefined;
+        updateDisplay();
+      }
+
+      // Event listeners
+      document.getElementById('button-0').addEventListener('click', () => appendNumber(0));
+      document.getElementById('button-1').addEventListener('click', () => appendNumber(1));
+      document.getElementById('button-2').addEventListener('click', () => appendNumber(2));
+      document.getElementById('button-3').addEventListener('click', () => appendNumber(3));
+      document.getElementById('button-4').addEventListener('click', () => appendNumber(4));
+      document.getElementById('button-5').addEventListener('click', () => appendNumber(5));
+      document.getElementById('button-6').addEventListener('click', () => appendNumber(6));
+      document.getElementById('button-7').addEventListener('click', () => appendNumber(7));
+      document.getElementById('button-8').addEventListener('click', () => appendNumber(8));
+      document.getElementById('button-9').addEventListener('click', () => appendNumber(9));
+
+      document.getElementById('button-add').addEventListener('click', () => chooseOperation('+'));
+      document
+        .getElementById('button-subtract')
+        .addEventListener('click', () => chooseOperation('-'));
+      document
+        .getElementById('button-multiply')
+        .addEventListener('click', () => chooseOperation('*'));
+      document
+        .getElementById('button-divide')
+        .addEventListener('click', () => chooseOperation('/'));
+      document.getElementById('button-equals').addEventListener('click', () => compute());
+
+      document.getElementById('button-clear').addEventListener('click', () => {
+        currentOperand = '0';
+        previousOperand = '';
+        operation = undefined;
+        updateDisplay();
+      });
+    </script>
+  </body>
+</html>

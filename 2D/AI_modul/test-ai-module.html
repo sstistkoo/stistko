@@ -1,0 +1,4385 @@
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Modul v3.0 - Testování</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --bg-primary: #0f172a;
+        --bg-secondary: #1e293b;
+        --bg-tertiary: #334155;
+        --text-primary: #f1f5f9;
+        --text-secondary: #94a3b8;
+        --accent-blue: #3b82f6;
+        --accent-purple: #8b5cf6;
+        --accent-green: #22c55e;
+        --accent-yellow: #f59e0b;
+        --accent-red: #ef4444;
+        --border-color: rgba(71, 85, 105, 0.5);
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: linear-gradient(135deg, var(--bg-primary) 0%, #1e1b4b 100%);
+        min-height: 100vh;
+        color: var(--text-primary);
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      h1 {
+        text-align: center;
+        background: linear-gradient(135deg, #38bdf8 0%, #a78bfa 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 30px;
+        font-size: 28px;
+      }
+
+      .card {
+        background: rgba(30, 41, 59, 0.8);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 20px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .card-title {
+        font-size: 16px;
+        color: var(--text-primary);
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 600;
+      }
+
+      .card-title .icon {
+        font-size: 20px;
+      }
+
+      /* Smart Model Panel */
+      .smart-panel {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 20px;
+      }
+
+      .smart-panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+
+      .smart-panel-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 600;
+        color: #60a5fa;
+      }
+
+      .auto-switch-toggle {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        color: var(--text-secondary);
+      }
+
+      .toggle-switch {
+        position: relative;
+        width: 44px;
+        height: 24px;
+        background: var(--bg-tertiary);
+        border-radius: 12px;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+
+      .toggle-switch.active {
+        background: var(--accent-green);
+      }
+
+      .toggle-switch::after {
+        content: '';
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 18px;
+        height: 18px;
+        background: white;
+        border-radius: 50%;
+        transition: transform 0.3s;
+      }
+
+      .toggle-switch.active::after {
+        transform: translateX(20px);
+      }
+
+      /* Best Models Grid */
+      .best-models-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 10px;
+      }
+
+      .best-model-card {
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        padding: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+        position: relative;
+      }
+
+      .best-model-card:hover {
+        border-color: var(--accent-blue);
+        transform: translateY(-2px);
+      }
+
+      .best-model-card.selected {
+        border-color: var(--accent-green);
+        background: rgba(34, 197, 94, 0.1);
+      }
+
+      .best-model-card.unavailable {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .model-rank {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        color: #1e293b;
+        font-size: 10px;
+        font-weight: bold;
+        padding: 2px 6px;
+        border-radius: 6px;
+      }
+
+      .model-rank.silver {
+        background: linear-gradient(135deg, #94a3b8, #64748b);
+        color: white;
+      }
+      .model-rank.bronze {
+        background: linear-gradient(135deg, #cd7f32, #a0522d);
+        color: white;
+      }
+
+      .model-provider-icon {
+        font-size: 24px;
+        margin-bottom: 4px;
+      }
+      .model-name {
+        font-size: 13px;
+        font-weight: 500;
+        margin-bottom: 4px;
+      }
+      .model-quality {
+        font-size: 11px;
+        color: var(--text-secondary);
+      }
+
+      .model-rpm-bar {
+        margin-top: 8px;
+        height: 4px;
+        background: var(--bg-tertiary);
+        border-radius: 2px;
+        overflow: hidden;
+      }
+
+      .model-rpm-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
+        transition: width 0.3s;
+      }
+
+      .model-rpm-text {
+        font-size: 10px;
+        color: var(--text-secondary);
+        margin-top: 4px;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      /* RPM Monitor */
+      .rpm-monitor {
+        background: rgba(15, 23, 42, 0.6);
+        border-radius: 10px;
+        padding: 12px;
+        margin-top: 12px;
+      }
+
+      .rpm-monitor-title {
+        font-size: 12px;
+        color: var(--text-secondary);
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .rpm-providers {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .rpm-provider {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+      }
+
+      .rpm-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--accent-green);
+      }
+
+      .rpm-dot.warning {
+        background: var(--accent-yellow);
+      }
+      .rpm-dot.danger {
+        background: var(--accent-red);
+      }
+
+      /* Provider tabs */
+      .provider-tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+      }
+
+      .provider-tab {
+        padding: 10px 16px;
+        background: rgba(51, 65, 85, 0.5);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .provider-tab:hover {
+        background: rgba(71, 85, 105, 0.7);
+        border-color: #64748b;
+      }
+
+      .provider-tab.active {
+        background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+        border-color: transparent;
+        color: white;
+      }
+
+      /* Model select */
+      .model-section {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 15px;
+        align-items: end;
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        font-size: 12px;
+        color: var(--text-secondary);
+        margin-bottom: 6px;
+      }
+
+      select,
+      input,
+      textarea {
+        width: 100%;
+        padding: 12px 14px;
+        background: rgba(15, 23, 42, 0.8);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        color: var(--text-primary);
+        font-size: 14px;
+        transition: border-color 0.2s;
+      }
+
+      select:focus,
+      input:focus,
+      textarea:focus {
+        outline: none;
+        border-color: var(--accent-blue);
+      }
+
+      .model-info {
+        background: rgba(59, 130, 246, 0.1);
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        border-radius: 10px;
+        padding: 12px 16px;
+        font-size: 12px;
+        color: #93c5fd;
+        text-align: center;
+      }
+
+      .model-info .rpm {
+        font-size: 22px;
+        font-weight: bold;
+        color: #60a5fa;
+      }
+
+      /* Buttons */
+      button {
+        padding: 10px 18px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 500;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+        color: white;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+      }
+
+      .btn-secondary {
+        background: rgba(51, 65, 85, 0.6);
+        color: var(--text-primary);
+        border: 1px solid var(--border-color);
+      }
+
+      .btn-secondary:hover {
+        background: rgba(71, 85, 105, 0.8);
+      }
+
+      .btn-success {
+        background: linear-gradient(135deg, #22c55e, #16a34a);
+        color: white;
+      }
+
+      .btn-danger {
+        background: rgba(239, 68, 68, 0.2);
+        color: #f87171;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+      }
+
+      .btn-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      /* Chat Area */
+      .chat-container {
+        background: rgba(15, 23, 42, 0.6);
+        border-radius: 12px;
+        min-height: 300px;
+        max-height: 400px;
+        overflow-y: auto;
+        padding: 16px;
+        margin-bottom: 16px;
+      }
+
+      .chat-empty {
+        text-align: center;
+        color: var(--text-secondary);
+        padding: 60px 20px;
+      }
+
+      .chat-message {
+        margin-bottom: 16px;
+        display: flex;
+      }
+
+      .chat-message.user {
+        justify-content: flex-end;
+      }
+      .chat-message.assistant {
+        justify-content: flex-start;
+      }
+
+      .chat-bubble {
+        max-width: 80%;
+        padding: 12px 16px;
+        border-radius: 16px;
+        font-size: 14px;
+        line-height: 1.5;
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      .chat-message.user .chat-bubble {
+        background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+        color: white;
+        border-bottom-right-radius: 4px;
+      }
+
+      .chat-message.assistant .chat-bubble {
+        background: var(--bg-tertiary);
+        color: var(--text-primary);
+        border-bottom-left-radius: 4px;
+      }
+
+      .chat-bubble.error {
+        background: rgba(239, 68, 68, 0.2);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: #f87171;
+      }
+
+      /* Input Area */
+      .chat-input-area {
+        display: flex;
+        gap: 10px;
+        align-items: flex-end;
+      }
+
+      .chat-input-area textarea {
+        flex: 1;
+        min-height: 50px;
+        max-height: 150px;
+        resize: vertical;
+      }
+
+      .btn-upload {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        background: var(--bg-tertiary);
+        color: var(--text-secondary);
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* Chat Model Bar */
+      .chat-model-bar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+        padding: 10px 12px;
+        background: rgba(15, 23, 42, 0.6);
+        border-radius: 10px;
+        border: 1px solid var(--border-color);
+        flex-wrap: wrap;
+      }
+
+      .model-mode-toggle {
+        display: flex;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 8px;
+        padding: 3px;
+      }
+
+      .mode-btn {
+        padding: 6px 14px;
+        border: none;
+        background: transparent;
+        color: var(--text-secondary);
+        font-size: 12px;
+        cursor: pointer;
+        border-radius: 6px;
+        transition: all 0.2s;
+      }
+
+      .mode-btn:hover {
+        color: var(--text-primary);
+      }
+
+      .mode-btn.active {
+        background: var(--accent-blue);
+        color: white;
+      }
+
+      .chat-model-selectors {
+        display: flex;
+        gap: 8px;
+        flex: 1;
+      }
+
+      .chat-model-selectors select {
+        padding: 6px 10px;
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        color: var(--text-primary);
+        font-size: 12px;
+        cursor: pointer;
+        min-width: 120px;
+      }
+
+      .chat-model-selectors select:hover {
+        border-color: var(--accent-blue);
+      }
+
+      .chat-auto-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex: 1;
+        font-size: 12px;
+        color: var(--text-secondary);
+      }
+
+      .auto-badge {
+        background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+        color: white;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 500;
+      }
+
+      #autoSelectedModel {
+        color: var(--accent-green);
+        font-weight: 500;
+      }
+
+      /* Chat Actions Dropdown */
+      .chat-header-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+      }
+
+      .chat-actions-dropdown {
+        position: relative;
+      }
+
+      .chat-actions-btn {
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        padding: 4px 10px;
+        color: var(--text-secondary);
+        font-size: 12px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        transition: all 0.2s;
+      }
+
+      .chat-actions-btn:hover {
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        border-color: var(--accent-blue);
+      }
+
+      .chat-actions-menu {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        margin-top: 4px;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        min-width: 180px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        z-index: 100;
+        display: none;
+        overflow: hidden;
+      }
+
+      .chat-actions-menu.open {
+        display: block;
+      }
+
+      .chat-action-item {
+        padding: 10px 14px;
+        cursor: pointer;
+        font-size: 13px;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: background 0.15s;
+      }
+
+      .chat-action-item:hover {
+        background: var(--bg-tertiary);
+      }
+
+      .chat-action-item.danger {
+        color: var(--accent-red);
+      }
+
+      .chat-action-divider {
+        height: 1px;
+        background: var(--border-color);
+        margin: 4px 0;
+      }
+
+      /* Status Bar */
+      .status-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 12px;
+        color: var(--text-secondary);
+        margin-bottom: 12px;
+        padding: 8px 12px;
+        background: rgba(15, 23, 42, 0.4);
+        border-radius: 8px;
+      }
+
+      .status-badge {
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+      }
+
+      .status-badge.ready {
+        background: rgba(34, 197, 94, 0.2);
+        color: #4ade80;
+      }
+      .status-badge.loading {
+        background: rgba(59, 130, 246, 0.2);
+        color: #60a5fa;
+      }
+      .status-badge.error {
+        background: rgba(239, 68, 68, 0.2);
+        color: #f87171;
+      }
+
+      /* Token Counter */
+      .token-counter {
+        font-size: 11px;
+        color: var(--text-secondary);
+        text-align: right;
+        margin-top: 8px;
+      }
+
+      /* API Keys Grid */
+      .keys-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 10px;
+      }
+
+      .key-input-group {
+        position: relative;
+      }
+      .key-input-group input {
+        padding-right: 40px;
+        font-size: 12px;
+      }
+
+      .key-status {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 14px;
+      }
+
+      .key-status.ok {
+        color: var(--accent-green);
+      }
+      .key-status.demo {
+        color: var(--accent-yellow);
+      }
+      .key-status.none {
+        color: var(--text-secondary);
+      }
+
+      /* Collapsible */
+      .collapsible-header {
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .collapsible-header .arrow {
+        transition: transform 0.3s;
+      }
+      .collapsible-header.open .arrow {
+        transform: rotate(180deg);
+      }
+
+      .collapsible-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+      }
+
+      .collapsible-content.open {
+        max-height: 1000px;
+      }
+
+      /* Features Grid */
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 12px;
+        margin-top: 16px;
+      }
+
+      .feature-card {
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        padding: 14px;
+        transition: all 0.2s;
+        cursor: pointer;
+      }
+
+      .feature-card:hover {
+        border-color: var(--accent-blue);
+        transform: translateY(-2px);
+      }
+
+      .feature-icon {
+        font-size: 24px;
+        margin-bottom: 8px;
+      }
+      .feature-title {
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 4px;
+      }
+      .feature-desc {
+        font-size: 12px;
+        color: var(--text-secondary);
+      }
+
+      /* Modal */
+      .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(5px);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .modal-content {
+        background: var(--bg-secondary);
+        border-radius: 16px;
+        max-width: 900px;
+        width: 100%;
+        max-height: 85vh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .modal-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .modal-header h2 {
+        font-size: 18px;
+      }
+
+      .modal-close {
+        background: rgba(239, 68, 68, 0.2);
+        border: none;
+        color: #f87171;
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 18px;
+      }
+
+      .modal-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px 24px;
+      }
+
+      .modal-footer {
+        padding: 16px 24px;
+        border-top: 1px solid var(--border-color);
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+      }
+
+      /* Stats Grid */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+
+      .stat-card {
+        background: rgba(15, 23, 42, 0.6);
+        border-radius: 10px;
+        padding: 14px;
+        text-align: center;
+      }
+
+      .stat-value {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 4px;
+      }
+
+      .stat-label {
+        font-size: 11px;
+        color: var(--text-secondary);
+      }
+
+      .stat-card.success .stat-value {
+        color: var(--accent-green);
+      }
+      .stat-card.warning .stat-value {
+        color: var(--accent-yellow);
+      }
+      .stat-card.info .stat-value {
+        color: var(--accent-blue);
+      }
+
+      /* Loading Animation */
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+
+      .loading-dots {
+        display: inline-flex;
+        gap: 4px;
+      }
+
+      .loading-dots span {
+        width: 8px;
+        height: 8px;
+        background: #60a5fa;
+        border-radius: 50%;
+        animation: pulse 1.4s infinite;
+      }
+
+      .loading-dots span:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .loading-dots span:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+
+      /* DevTools Panel */
+      #devToolsPanel {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 280px;
+        background: #1e1e1e;
+        border-top: 2px solid #007acc;
+        z-index: 9999;
+        font-family: 'Consolas', 'Monaco', monospace;
+        font-size: 12px;
+      }
+
+      .devtools-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 12px;
+        background: #252526;
+        border-bottom: 1px solid #3c3c3c;
+        height: 32px;
+      }
+
+      .devtools-tabs {
+        display: flex;
+        gap: 4px;
+      }
+
+      .devtools-tab {
+        padding: 6px 12px;
+        color: #969696;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        font-size: 12px;
+      }
+
+      .devtools-tab:hover {
+        color: #fff;
+      }
+
+      .devtools-tab.active {
+        color: #fff;
+        border-bottom-color: #007acc;
+      }
+
+      #devToolsContent {
+        height: calc(100% - 32px);
+        overflow-y: auto;
+        padding: 8px 12px;
+        color: #d4d4d4;
+      }
+
+      #devConsoleOutput {
+        height: 100%;
+        overflow-y: auto;
+      }
+
+      .dev-entry {
+        padding: 4px 0;
+        border-bottom: 1px solid #2d2d2d;
+        display: flex;
+        gap: 8px;
+      }
+
+      .dev-entry-time {
+        color: #6a9955;
+        min-width: 80px;
+      }
+
+      .dev-entry-type {
+        min-width: 60px;
+        font-weight: 500;
+      }
+
+      .dev-entry.error .dev-entry-type {
+        color: #f14c4c;
+      }
+      .dev-entry.warn .dev-entry-type {
+        color: #cca700;
+      }
+      .dev-entry.info .dev-entry-type {
+        color: #3794ff;
+      }
+      .dev-entry.log .dev-entry-type {
+        color: #d4d4d4;
+      }
+      .dev-entry.network .dev-entry-type {
+        color: #4ec9b0;
+      }
+      .dev-entry.success .dev-entry-type {
+        color: #4ec9b0;
+      }
+
+      .dev-entry-msg {
+        flex: 1;
+        word-break: break-word;
+      }
+
+      #devToolsToggle {
+        position: fixed;
+        bottom: 16px;
+        right: 16px;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #007acc 0%, #005a9e 100%);
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
+        z-index: 9998;
+        box-shadow: 0 2px 8px rgba(0, 122, 204, 0.4);
+        transition: all 0.2s;
+        opacity: 0.8;
+      }
+
+      #devToolsToggle:hover {
+        opacity: 1;
+        transform: scale(1.1);
+      }
+
+      #devToolsToggle:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 16px rgba(0, 122, 204, 0.6);
+      }
+
+      #devToolsToggle.active {
+        background: linear-gradient(135deg, #f14c4c 0%, #d32f2f 100%);
+        box-shadow: 0 4px 12px rgba(241, 76, 76, 0.4);
+      }
+
+      /* Rate Limits Cards */
+      .rate-limits-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 12px;
+        margin-top: 16px;
+      }
+
+      .rate-limit-card {
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 16px;
+        position: relative;
+        transition: all 0.2s;
+      }
+
+      .rate-limit-card:hover {
+        border-color: var(--accent-blue);
+        transform: translateY(-2px);
+      }
+
+      .rate-limit-card .provider-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+
+      .rate-limit-card .provider-name {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      .rate-limit-card .status-indicator {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--accent-green);
+      }
+
+      .rate-limit-card .status-indicator.warning {
+        background: var(--accent-yellow);
+      }
+      .rate-limit-card .status-indicator.danger {
+        background: var(--accent-red);
+      }
+      .rate-limit-card .status-indicator.inactive {
+        background: var(--text-secondary);
+      }
+
+      .rate-limit-card .limit-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+        color: var(--text-secondary);
+        margin-bottom: 6px;
+      }
+
+      .rate-limit-card .limit-value {
+        color: var(--text-primary);
+        font-weight: 500;
+      }
+
+      .rate-limit-card .check-limits-btn {
+        margin-top: 12px;
+        width: 100%;
+        padding: 8px;
+        background: rgba(59, 130, 246, 0.1);
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        border-radius: 8px;
+        color: #60a5fa;
+        font-size: 12px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        transition: all 0.2s;
+      }
+
+      .rate-limit-card .check-limits-btn:hover {
+        background: rgba(59, 130, 246, 0.2);
+      }
+
+      /* Discover Models */
+      .discover-section {
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.1));
+        border: 1px solid rgba(139, 92, 246, 0.3);
+        border-radius: 12px;
+        padding: 16px;
+      }
+
+      .discover-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+
+      .discover-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 600;
+        color: #a78bfa;
+      }
+
+      .discover-provider-btn {
+        padding: 8px 14px;
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        color: var(--text-primary);
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .discover-provider-btn:hover {
+        background: rgba(59, 130, 246, 0.2);
+        border-color: var(--accent-blue);
+      }
+
+      .discover-provider-btn.active {
+        background: rgba(59, 130, 246, 0.3);
+        border-color: var(--accent-blue);
+        color: var(--accent-blue);
+      }
+
+      .discover-model-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 10px;
+        background: rgba(15, 23, 42, 0.6);
+        border-radius: 6px;
+        font-size: 12px;
+      }
+
+      .discover-model-row .model-name {
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .discover-model-row .model-status {
+        font-size: 10px;
+        padding: 2px 6px;
+        border-radius: 4px;
+        margin-left: 8px;
+        white-space: nowrap;
+      }
+
+      .discover-model-row .model-status.have {
+        background: rgba(34, 197, 94, 0.2);
+        color: #4ade80;
+      }
+
+      .discover-model-row .model-status.missing {
+        background: rgba(251, 191, 36, 0.2);
+        color: #fbbf24;
+      }
+
+      /* Test button */
+      .discover-model-row .test-btn {
+        background: rgba(34, 197, 94, 0.2);
+        border: none;
+        color: #4ade80;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 10px;
+        cursor: pointer;
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+
+      .discover-model-row .test-btn:hover {
+        background: rgba(34, 197, 94, 0.4);
+        transform: scale(1.05);
+      }
+
+      /* Toast notification */
+      .toast-notification {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%) translateY(100px);
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        border: 1px solid var(--accent-green);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 12px;
+        font-size: 14px;
+        z-index: 10000;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        transition: all 0.3s ease;
+      }
+
+      .toast-notification.show {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+      }
+
+      /* Discover Tab Toggle */
+      .discover-tab-btn {
+        padding: 8px 16px;
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid var(--border-color);
+        color: var(--text-secondary);
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .discover-tab-btn:first-child {
+        border-radius: 8px 0 0 8px;
+      }
+
+      .discover-tab-btn:last-child {
+        border-radius: 0 8px 8px 0;
+        border-left: none;
+      }
+
+      .discover-tab-btn.active {
+        background: var(--accent-blue);
+        border-color: var(--accent-blue);
+        color: white;
+      }
+
+      .discover-tab-btn span {
+        font-size: 11px;
+        opacity: 0.8;
+      }
+
+      .discover-single-list {
+        max-height: 400px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      /* Provider group header */
+      .discover-provider-group {
+        margin-top: 12px;
+        padding-top: 8px;
+        border-top: 1px solid var(--border-color);
+      }
+
+      .discover-provider-group:first-child {
+        margin-top: 0;
+        padding-top: 0;
+        border-top: none;
+      }
+
+      .discover-provider-name {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--accent-blue);
+        padding: 4px 8px;
+        margin-bottom: 6px;
+        background: rgba(59, 130, 246, 0.1);
+        border-radius: 4px;
+      }
+
+      /* Info button */
+      .discover-model-row .info-btn {
+        background: rgba(59, 130, 246, 0.2);
+        border: none;
+        color: var(--accent-blue);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 10px;
+        cursor: pointer;
+        margin-left: 6px;
+        transition: all 0.2s;
+      }
+
+      .discover-model-row .info-btn:hover {
+        background: rgba(59, 130, 246, 0.4);
+      }
+
+      /* Model info popup */
+      .model-info-popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 16px;
+        max-width: 90%;
+        width: 320px;
+        z-index: 1000;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      }
+
+      .model-info-popup h3 {
+        margin: 0 0 12px 0;
+        font-size: 14px;
+        color: var(--text-primary);
+      }
+
+      .model-info-popup .info-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 6px 0;
+        font-size: 12px;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .model-info-popup .info-row:last-child {
+        border-bottom: none;
+      }
+
+      .model-info-popup .info-label {
+        color: var(--text-secondary);
+      }
+
+      .model-info-popup .info-value {
+        color: var(--text-primary);
+        font-weight: 500;
+      }
+
+      .model-info-popup .close-btn {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background: none;
+        border: none;
+        color: var(--text-secondary);
+        font-size: 18px;
+        cursor: pointer;
+      }
+
+      .model-info-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+      }
+
+      .discover-models-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        max-height: 200px;
+        overflow-y: auto;
+      }
+
+      .discover-model-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 12px;
+        background: rgba(15, 23, 42, 0.6);
+        border-radius: 8px;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .discover-model-item:hover {
+        background: rgba(30, 41, 59, 0.8);
+      }
+
+      .discover-model-item .model-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .discover-model-item .model-badge {
+        font-size: 10px;
+        padding: 2px 6px;
+        border-radius: 4px;
+        background: rgba(34, 197, 94, 0.2);
+        color: #4ade80;
+      }
+
+      .discover-model-item .model-badge.new {
+        background: rgba(59, 130, 246, 0.2);
+        color: #60a5fa;
+      }
+
+      .discover-model-item .model-badge.vision {
+        background: rgba(245, 158, 11, 0.2);
+        color: #fbbf24;
+      }
+
+      /* Provider Models List */
+      .provider-models-list {
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid var(--border-color);
+      }
+
+      .provider-models-title {
+        font-size: 12px;
+        color: var(--text-secondary);
+        margin-bottom: 8px;
+      }
+
+      .provider-model-chip {
+        display: inline-block;
+        padding: 4px 10px;
+        background: rgba(51, 65, 85, 0.5);
+        border-radius: 16px;
+        font-size: 11px;
+        margin: 2px 4px 2px 0;
+        color: var(--text-secondary);
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .provider-model-chip:hover {
+        background: rgba(59, 130, 246, 0.2);
+        color: var(--accent-blue);
+      }
+
+      /* Usage Stats */
+      .usage-stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+
+      .usage-stat-card {
+        background: rgba(15, 23, 42, 0.6);
+        border-radius: 10px;
+        padding: 16px;
+        text-align: center;
+        border: 1px solid var(--border-color);
+      }
+
+      .usage-stat-card .stat-icon {
+        font-size: 24px;
+        margin-bottom: 8px;
+      }
+
+      .usage-stat-card .stat-value {
+        font-size: 28px;
+        font-weight: bold;
+        background: linear-gradient(135deg, #38bdf8, #a78bfa);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .usage-stat-card .stat-label {
+        font-size: 12px;
+        color: var(--text-secondary);
+        margin-top: 4px;
+      }
+
+      /* All Models Ranked List */
+      .all-models-ranked-list {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        max-height: 400px;
+        overflow-y: auto;
+        padding-right: 8px;
+      }
+
+      .ranked-model-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 14px;
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .ranked-model-item:hover {
+        border-color: var(--accent-blue);
+        background: rgba(30, 41, 59, 0.8);
+        transform: translateX(4px);
+      }
+
+      .ranked-model-item.selected {
+        border-color: var(--accent-green);
+        background: rgba(34, 197, 94, 0.1);
+      }
+
+      .ranked-model-rank {
+        min-width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+      .ranked-model-rank.gold {
+        background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        color: #1e293b;
+      }
+
+      .ranked-model-rank.silver {
+        background: linear-gradient(135deg, #94a3b8, #64748b);
+        color: white;
+      }
+
+      .ranked-model-rank.bronze {
+        background: linear-gradient(135deg, #cd7f32, #a0522d);
+        color: white;
+      }
+
+      .ranked-model-rank.normal {
+        background: var(--bg-tertiary);
+        color: var(--text-secondary);
+      }
+
+      .ranked-model-info {
+        flex: 1;
+      }
+
+      .ranked-model-name {
+        font-weight: 500;
+        font-size: 13px;
+        margin-bottom: 2px;
+      }
+
+      .ranked-model-provider {
+        font-size: 11px;
+        color: var(--text-secondary);
+      }
+
+      .ranked-model-stats {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .ranked-model-quality {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 12px;
+      }
+
+      .quality-bar {
+        width: 60px;
+        height: 6px;
+        background: var(--bg-tertiary);
+        border-radius: 3px;
+        overflow: hidden;
+      }
+
+      .quality-fill {
+        height: 100%;
+        border-radius: 3px;
+        transition: width 0.3s;
+      }
+
+      .quality-fill.tier1 {
+        background: linear-gradient(90deg, #22c55e, #16a34a);
+      }
+      .quality-fill.tier2 {
+        background: linear-gradient(90deg, #3b82f6, #2563eb);
+      }
+      .quality-fill.tier3 {
+        background: linear-gradient(90deg, #f59e0b, #d97706);
+      }
+      .quality-fill.tier4 {
+        background: linear-gradient(90deg, #94a3b8, #64748b);
+      }
+
+      .ranked-model-rpm {
+        font-size: 11px;
+        color: var(--text-secondary);
+        background: rgba(51, 65, 85, 0.5);
+        padding: 2px 8px;
+        border-radius: 10px;
+      }
+
+      .ranked-model-tier {
+        font-size: 10px;
+        padding: 2px 8px;
+        border-radius: 10px;
+        font-weight: 500;
+      }
+
+      .ranked-model-tier.tier1 {
+        background: rgba(34, 197, 94, 0.2);
+        color: #4ade80;
+      }
+
+      .ranked-model-tier.tier2 {
+        background: rgba(59, 130, 246, 0.2);
+        color: #60a5fa;
+      }
+
+      .ranked-model-tier.tier3 {
+        background: rgba(245, 158, 11, 0.2);
+        color: #fbbf24;
+      }
+
+      .ranked-model-tier.tier4 {
+        background: rgba(148, 163, 184, 0.2);
+        color: #94a3b8;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .container {
+          padding: 10px;
+        }
+        .best-models-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .chat-bubble {
+          max-width: 90%;
+        }
+        .rate-limits-grid {
+          grid-template-columns: 1fr;
+        }
+        .ranked-model-stats {
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 4px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- 1. Nastavení -->
+      <div class="card">
+        <div class="collapsible-header" onclick="toggleSection('settingsSection')">
+          <div class="card-title" style="margin: 0">
+            <span class="icon">⚙️</span> Nastavení
+            <span
+              style="font-size: 12px; color: var(--text-secondary); font-weight: normal"
+              id="currentSettingsInfo"
+            ></span>
+          </div>
+          <span class="arrow" id="settingsSectionArrow">▶</span>
+        </div>
+        <div class="collapsible-content" id="settingsSection">
+          <div style="padding-top: 16px">
+            <!-- Provider tabs -->
+            <div style="margin-bottom: 16px">
+              <label>Poskytovatel:</label>
+              <div class="provider-tabs" id="providerTabs">
+                <div class="provider-tab active" data-provider="gemini">🤖 Gemini</div>
+                <div class="provider-tab" data-provider="groq">⚡ Groq</div>
+                <div class="provider-tab" data-provider="openrouter">🌐 OpenRouter</div>
+                <div class="provider-tab" data-provider="mistral">🔥 Mistral</div>
+                <div class="provider-tab" data-provider="cohere">🧬 Cohere</div>
+                <div class="provider-tab" data-provider="huggingface">🤗 HuggingFace</div>
+              </div>
+            </div>
+
+            <!-- Model selection -->
+            <div class="model-section">
+              <div>
+                <label>Model:</label>
+                <select id="modelSelect"></select>
+              </div>
+              <div class="model-info">
+                <div>Limit:</div>
+                <div><span class="rpm" id="modelRpm">15</span> RPM</div>
+              </div>
+            </div>
+
+            <!-- API Keys -->
+            <div
+              style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-color)"
+            >
+              <label>API Klíče:</label>
+              <div class="keys-grid">
+                <div class="key-input-group">
+                  <label>🤖 Gemini</label>
+                  <input type="password" id="keyGemini" placeholder="AIza..." />
+                  <span class="key-status" id="statusGemini">●</span>
+                </div>
+                <div class="key-input-group">
+                  <label>⚡ Groq</label>
+                  <input type="password" id="keyGroq" placeholder="gsk_..." />
+                  <span class="key-status" id="statusGroq">●</span>
+                </div>
+                <div class="key-input-group">
+                  <label>🌐 OpenRouter</label>
+                  <input type="password" id="keyOpenrouter" placeholder="sk-or-..." />
+                  <span class="key-status" id="statusOpenrouter">●</span>
+                </div>
+                <div class="key-input-group">
+                  <label>🔥 Mistral</label>
+                  <input type="password" id="keyMistral" placeholder="..." />
+                  <span class="key-status" id="statusMistral">●</span>
+                </div>
+                <div class="key-input-group">
+                  <label>🧬 Cohere</label>
+                  <input type="password" id="keyCohere" placeholder="..." />
+                  <span class="key-status" id="statusCohere">●</span>
+                </div>
+                <div class="key-input-group">
+                  <label>🤗 HuggingFace</label>
+                  <input type="password" id="keyHuggingface" placeholder="hf_..." />
+                  <span class="key-status" id="statusHuggingface">●</span>
+                </div>
+              </div>
+              <div class="btn-row" style="margin-top: 12px">
+                <button class="btn-success" onclick="saveKeys()">💾 Uložit</button>
+                <button class="btn-secondary" onclick="exportSettings()">📥 Export</button>
+                <button class="btn-secondary" onclick="importSettings()">📤 Import</button>
+                <button class="btn-danger" onclick="clearKeys()">🗑️ Smazat</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Chat -->
+      <div class="card">
+        <div class="collapsible-header" onclick="toggleSection('chatSection')">
+          <div class="chat-header-row">
+            <div style="display: flex; align-items: center; gap: 10px">
+              <div class="card-title" style="margin: 0">
+                <span class="icon">💬</span> Chat
+              </div>
+              <div class="chat-actions-dropdown" onclick="event.stopPropagation()">
+                <button
+                  class="chat-actions-btn"
+                  onclick="toggleChatMenu();"
+                >
+                  ⚙️ <span style="font-size: 10px">▼</span>
+                </button>
+                <div class="chat-actions-menu" id="chatActionsMenu">
+                  <div
+                    class="chat-action-item"
+                    onclick="sendStream(); closeChatMenu();"
+                  >
+                    📡 Stream odpověď
+                  </div>
+                  <div
+                    class="chat-action-item"
+                    onclick="copyResponse(); closeChatMenu();"
+                  >
+                    📋 Kopírovat odpověď
+                  </div>
+                  <div class="chat-action-divider"></div>
+                  <div
+                    class="chat-action-item"
+                    onclick="testAllModels(); closeChatMenu();"
+                  >
+                    🧪 Test modelů
+                  </div>
+                  <div
+                    class="chat-action-item"
+                    onclick="testFreeModels(); closeChatMenu();"
+                  >
+                    🆓 Test FREE modelů
+                  </div>
+                  <div
+                    class="chat-action-item"
+                    onclick="showStats(); closeChatMenu();"
+                  >
+                    📊 Statistiky
+                  </div>
+                  <div class="chat-action-divider"></div>
+                  <div
+                    class="chat-action-item danger"
+                    onclick="clearChat(); closeChatMenu();"
+                  >
+                    🧹 Vyčistit chat
+                  </div>
+                </div>
+              </div>
+            </div>
+            <span class="arrow" id="chatSectionArrow">▶</span>
+            </div>
+          </div>
+        </div>
+        <div class="collapsible-content" id="chatSection">
+          <div style="padding-top: 16px">
+            <!-- Model Selection Bar -->
+            <div class="chat-model-bar">
+              <div class="model-mode-toggle">
+                <button class="mode-btn active" id="modeAutoBtn" onclick="setChatMode('auto')">
+                  🎯 Auto
+                </button>
+                <button class="mode-btn" id="modeManualBtn" onclick="setChatMode('manual')">
+                  ✋ Manual
+                </button>
+              </div>
+
+              <div class="chat-model-selectors" id="chatModelSelectors" style="display: none">
+                <select id="chatProviderSelect" onchange="onChatProviderChange()">
+                  <option value="gemini">🤖 Gemini</option>
+                  <option value="groq">⚡ Groq</option>
+                  <option value="openrouter">🌐 OpenRouter</option>
+                  <option value="mistral">🔥 Mistral</option>
+                  <option value="cohere">🧬 Cohere</option>
+                  <option value="huggingface">🤗 HuggingFace</option>
+                </select>
+                <select id="chatModelSelect">
+                  <!-- Dynamicky naplněno -->
+                </select>
+              </div>
+
+              <div class="chat-auto-info" id="chatAutoInfo">
+                <span class="auto-badge">🎯 Auto</span>
+                <span id="autoSelectedModel">Nejlepší dostupný model</span>
+              </div>
+            </div>
+
+            <div class="status-bar">
+              <div>
+                <span id="currentProvider">gemini</span> /
+                <span id="currentModel">-</span>
+              </div>
+              <div class="status-badge ready" id="statusBadge">● Připraven</div>
+            </div>
+
+            <div class="chat-container" id="chatContainer">
+              <div class="chat-empty" id="chatEmpty">Začni konverzaci...</div>
+            </div>
+
+            <div class="chat-input-area">
+              <button
+                class="btn-upload"
+                onclick="document.getElementById('fileInput').click()"
+                title="Nahrát soubor"
+              >
+                📎
+              </button>
+              <input
+                type="file"
+                id="fileInput"
+                accept="image/*,.txt,.md,.json"
+                style="display: none"
+                onchange="handleFileSelect(event)"
+              />
+              <textarea
+                id="userPrompt"
+                placeholder="Napiš zprávu..."
+                oninput="updateTokenCount()"
+              ></textarea>
+              <button
+                class="btn-primary"
+                id="btnSend"
+                onclick="sendRequest()"
+                style="height: 50px; padding: 0 20px"
+              >
+                📤
+              </button>
+            </div>
+            <div class="token-counter">
+              <span id="tokenCount">~0 tokenů</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Objevit modely od providerů -->
+      <div class="card">
+        <div class="collapsible-header" onclick="toggleSection('discoverSection')">
+          <div class="card-title" style="margin: 0">
+            <span class="icon">🔍</span> Objevit modely od providerů
+          </div>
+          <span class="arrow" id="discoverSectionArrow">▶</span>
+        </div>
+        <div class="collapsible-content" id="discoverSection">
+          <div class="discover-section" style="margin-top: 16px">
+            <div class="discover-header">
+              <div class="discover-title"><span>🌐</span> Vyberte providera pro načtení modelů</div>
+            </div>
+
+            <!-- Provider buttons -->
+            <div class="discover-providers" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
+              <button class="discover-provider-btn" onclick="discoverModels('gemini')" data-provider="gemini">
+                🌟 Google Gemini
+              </button>
+              <button class="discover-provider-btn" onclick="discoverModels('groq')" data-provider="groq">
+                🦙 Groq
+              </button>
+              <button class="discover-provider-btn" onclick="discoverModels('openrouter')" data-provider="openrouter">
+                🌐 OpenRouter
+              </button>
+              <button class="discover-provider-btn" onclick="discoverModels('mistral')" data-provider="mistral">
+                🔥 Mistral
+              </button>
+            </div>
+
+            <!-- Results container -->
+            <div id="discoverResults" style="display: none;">
+              <div class="discover-loading" id="discoverLoading" style="display: none; text-align: center; padding: 20px; color: var(--text-secondary);">
+                ⏳ Načítám modely...
+              </div>
+
+              <!-- Toggle FREE/PAID -->
+              <div class="discover-toggle" style="display: flex; justify-content: center; gap: 0; margin-bottom: 12px;">
+                <button class="discover-tab-btn active" id="discoverTabFree" onclick="switchDiscoverTab('free')">
+                  🆓 FREE <span id="discoverFreeCount"></span>
+                </button>
+                <button class="discover-tab-btn" id="discoverTabPaid" onclick="switchDiscoverTab('paid')">
+                  💰 Placené <span id="discoverPaidCount"></span>
+                </button>
+              </div>
+
+              <!-- Single list (switched by tabs) -->
+              <div class="discover-single-list" id="discoverModelsList">
+                <!-- Dynamicky naplněno -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Smart Model Selection Panel -->
+      <div class="card">
+        <div class="collapsible-header" onclick="toggleSection('smartModelSection')">
+          <div class="card-title" style="margin: 0">
+            <span class="icon">🎯</span> Smart Model Selection
+          </div>
+          <span class="arrow" id="smartModelSectionArrow">▶</span>
+        </div>
+        <div class="collapsible-content" id="smartModelSection">
+          <div class="smart-panel" style="margin-top: 16px">
+            <div class="smart-panel-header">
+              <div class="smart-panel-title"><span>⚡</span> Rychlý výběr nejlepších modelů</div>
+              <div class="auto-switch-toggle">
+                <span>Auto-Switch</span>
+                <div
+                  class="toggle-switch active"
+                  id="autoSwitchToggle"
+                  onclick="toggleAutoSwitch()"
+                ></div>
+              </div>
+            </div>
+
+            <div class="best-models-grid" id="bestModelsGrid">
+              <!-- Dynamicky naplněno -->
+            </div>
+
+            <div class="rpm-monitor">
+              <div class="rpm-monitor-title"><span>📊</span> RPM Monitor (requests per minute)</div>
+              <div class="rpm-providers" id="rpmProviders">
+                <!-- Dynamicky naplněno -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Seznam všech modelů seřazený podle kvality -->
+          <div style="margin-top: 20px">
+            <div
+              style="
+                font-size: 14px;
+                font-weight: 600;
+                margin-bottom: 12px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+              "
+            >
+              <span>📋</span> Všechny modely (seřazeno podle kvality)
+            </div>
+            <div id="allModelsRankedList" class="all-models-ranked-list">
+              <!-- Dynamicky naplněno -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Rate Limity & RPD -->
+      <div class="card">
+        <div class="collapsible-header" onclick="toggleSection('rateLimitsSection')">
+          <div class="card-title" style="margin: 0">
+            <span class="icon">⏱️</span> Rate Limity & RPD
+          </div>
+          <span class="arrow" id="rateLimitsSectionArrow">▶</span>
+        </div>
+        <div class="collapsible-content" id="rateLimitsSection">
+          <div style="padding: 12px 0 0 0; font-size: 12px; color: var(--text-secondary)">
+            <strong>RPM</strong> = Requests Per Minute | <strong>RPD</strong> = Requests Per Day<br />
+            💡 Klikněte na tlačítko u každého providera pro kontrolu aktuálních limitů
+          </div>
+          <div class="rate-limits-grid" id="rateLimitsGrid">
+            <!-- Dynamicky naplněno -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Statistiky použití -->
+      <div class="card">
+        <div class="collapsible-header" onclick="toggleSection('usageStatsSection')">
+          <div class="card-title" style="margin: 0">
+            <span class="icon">📊</span> Statistiky použití
+          </div>
+          <span class="arrow" id="usageStatsSectionArrow">▶</span>
+        </div>
+        <div class="collapsible-content" id="usageStatsSection">
+          <div style="padding-top: 16px">
+            <div class="usage-stats-grid" id="usageStatsGrid">
+              <!-- Dynamicky naplněno -->
+            </div>
+            <div id="providerUsageDetails">
+              <!-- Dynamicky naplněno -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. Nové funkce v3.0 -->
+      <div class="card">
+        <div class="collapsible-header" onclick="toggleSection('featuresSection')">
+          <div class="card-title" style="margin: 0">
+            <span class="icon">🚀</span> Nové funkce v3.0
+          </div>
+          <span class="arrow" id="featuresSectionArrow">▶</span>
+        </div>
+        <div class="collapsible-content" id="featuresSection">
+          <div class="features-grid" style="margin-top: 16px">
+            <div class="feature-card" onclick="testContextCompression()">
+              <div class="feature-icon">🗜️</div>
+              <div class="feature-title">Context Compression</div>
+              <div class="feature-desc">Automatická komprese dlouhých textů</div>
+            </div>
+            <div class="feature-card" onclick="testTokenBudget()">
+              <div class="feature-icon">💰</div>
+              <div class="feature-title">Token Budget</div>
+              <div class="feature-desc">Adaptivní správa tokenů</div>
+            </div>
+            <div class="feature-card" onclick="testPromptOptimizer()">
+              <div class="feature-icon">⚡</div>
+              <div class="feature-title">Prompt Optimizer</div>
+              <div class="feature-desc">Chytrá optimalizace promptů</div>
+            </div>
+            <div class="feature-card" onclick="testSmartRetry()">
+              <div class="feature-icon">🔄</div>
+              <div class="feature-title">Smart Retry</div>
+              <div class="feature-desc">Automatický fallback</div>
+            </div>
+            <div class="feature-card" onclick="testCache()">
+              <div class="feature-icon">💾</div>
+              <div class="feature-title">Response Cache</div>
+              <div class="feature-desc">Ukládání odpovědí</div>
+            </div>
+            <div class="feature-card" onclick="testParallel()">
+              <div class="feature-icon">⚡</div>
+              <div class="feature-title">Parallel</div>
+              <div class="feature-desc">Paralelní dotazy</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Modal -->
+    <div id="statsModal" class="modal" style="display: none">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>📊 Statistiky AI Modulu</h2>
+          <button class="modal-close" onclick="closeStatsModal()">×</button>
+        </div>
+        <div class="modal-body" id="statsContent"></div>
+        <div class="modal-footer">
+          <button class="btn-danger" onclick="resetStats()">🗑️ Reset</button>
+          <button class="btn-primary" onclick="closeStatsModal()">Zavřít</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Test Modal -->
+    <div id="testModal" class="modal" style="display: none">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>🧪 Test modelů</h2>
+          <button class="modal-close" onclick="closeTestModal()">×</button>
+        </div>
+        <div class="modal-body" id="testResults"></div>
+        <div class="modal-footer">
+          <button class="btn-secondary" onclick="copyTestReport()">📋 Kopírovat</button>
+          <button class="btn-primary" onclick="closeTestModal()">Zavřít</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- DevTools Panel -->
+    <div id="devToolsPanel" style="display: none">
+      <div class="devtools-header">
+        <div class="devtools-tabs">
+          <span class="devtools-tab active" onclick="switchDevTab('console')">Console</span>
+          <span class="devtools-tab" onclick="switchDevTab('network')">Network</span>
+          <span class="devtools-tab" onclick="switchDevTab('state')">State</span>
+        </div>
+        <div>
+          <button
+            onclick="clearDevConsole()"
+            style="
+              background: none;
+              border: none;
+              color: #8b949e;
+              cursor: pointer;
+              margin-right: 8px;
+            "
+            title="Vymazat"
+          >
+            🗑️
+          </button>
+          <button
+            onclick="toggleDevTools()"
+            style="background: none; border: none; color: #8b949e; cursor: pointer"
+            title="Zavřít"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+      <div id="devToolsContent">
+        <div id="devConsoleOutput"></div>
+      </div>
+    </div>
+    <button
+      id="devToolsToggle"
+      onclick="toggleDevTools()"
+      title="Mobile DevTools"
+      style="display: none"
+    >
+      🛠️
+    </button>
+
+    <input
+      type="file"
+      id="importInput"
+      accept=".json"
+      style="display: none"
+      onchange="handleImport(event)"
+    />
+
+    <!-- AI Module v3.0 -->
+    <script src="ai_module.js"></script>
+
+    <script>
+      // ============================================================
+      // GLOBAL STATE
+      // ============================================================
+      let currentProvider = 'gemini';
+      let autoSwitch = true;
+      let selectedBestModel = null;
+      let lastResponse = '';
+
+      // ============================================================
+      // PROVIDER LIMITS DATA
+      // ============================================================
+      const PROVIDER_LIMITS = {
+        gemini: { rpm: 15, rpd: 1500, icon: '🤖', name: 'Gemini' },
+        groq: { rpm: 30, rpd: 14400, icon: '⚡', name: 'Groq' },
+        openrouter: {
+          rpm: 20,
+          rpd: '50-1000',
+          icon: '🌐',
+          name: 'OpenRouter',
+          note: 'Free: 50 | Paid: 1000',
+        },
+        mistral: { rpm: 10, rpd: 500, icon: '🔥', name: 'Mistral' },
+        cohere: { rpm: 20, rpd: 1000, icon: '🧬', name: 'Cohere' },
+        huggingface: { rpm: 10, rpd: 500, icon: '🤗', name: 'HuggingFace' },
+      };
+
+      // ============================================================
+      // ALL MODELS RANKED BY QUALITY (from project ModelSelector.js)
+      // ============================================================
+      const ALL_MODELS_RANKED = [
+        // Tier 1: Nejlepší pro kódování (90-100 kvalita)
+        {
+          provider: 'gemini',
+          model: 'gemini-2.5-pro',
+          name: 'Gemini 2.5 Pro',
+          rpm: 5,
+          quality: 98,
+          tier: 1,
+        },
+        {
+          provider: 'openrouter',
+          model: 'deepseek/deepseek-r1-0528:free',
+          name: 'DeepSeek R1',
+          rpm: 20,
+          quality: 96,
+          tier: 1,
+          free: true,
+        },
+        {
+          provider: 'gemini',
+          model: 'gemini-2.5-flash',
+          name: 'Gemini 2.5 Flash',
+          rpm: 15,
+          quality: 95,
+          tier: 1,
+        },
+        {
+          provider: 'openrouter',
+          model: 'mistralai/devstral-2512:free',
+          name: 'Devstral',
+          rpm: 20,
+          quality: 93,
+          tier: 1,
+          free: true,
+        },
+        {
+          provider: 'groq',
+          model: 'llama-3.3-70b-versatile',
+          name: 'Llama 3.3 70B',
+          rpm: 30,
+          quality: 92,
+          tier: 1,
+        },
+        {
+          provider: 'mistral',
+          model: 'codestral-latest',
+          name: 'Codestral',
+          rpm: 10,
+          quality: 90,
+          tier: 1,
+        },
+
+        // Tier 2: Velmi dobré (80-90 kvalita)
+        {
+          provider: 'groq',
+          model: 'mixtral-8x7b-32768',
+          name: 'Mixtral 8x7B',
+          rpm: 30,
+          quality: 88,
+          tier: 2,
+        },
+        {
+          provider: 'cohere',
+          model: 'command-r',
+          name: 'Command R',
+          rpm: 20,
+          quality: 85,
+          tier: 2,
+          free: true,
+        },
+        {
+          provider: 'mistral',
+          model: 'mistral-small-latest',
+          name: 'Mistral Small',
+          rpm: 30,
+          quality: 85,
+          tier: 2,
+        },
+        {
+          provider: 'cohere',
+          model: 'command-r',
+          name: 'Command R',
+          rpm: 20,
+          quality: 82,
+          tier: 2,
+        },
+
+        // Tier 3: Dobré (70-80 kvalita)
+        {
+          provider: 'groq',
+          model: 'gemma-2-9b-it',
+          name: 'Gemma 2 9B',
+          rpm: 30,
+          quality: 78,
+          tier: 3,
+        },
+        {
+          provider: 'huggingface',
+          model: 'Qwen/Qwen2.5-7B-Instruct',
+          name: 'Qwen 2.5 7B',
+          rpm: 10,
+          quality: 76,
+          tier: 3,
+        },
+        {
+          provider: 'openrouter',
+          model: 'mistralai/mistral-small-3.1-24b-instruct:free',
+          name: 'Mistral Small 3.1 24B',
+          rpm: 20,
+          quality: 75,
+          tier: 3,
+          free: true,
+        },
+
+        // Tier 4: Základní (60-70 kvalita)
+        {
+          provider: 'huggingface',
+          model: 'meta-llama/Llama-3.2-3B-Instruct',
+          name: 'Llama 3.2 3B',
+          rpm: 10,
+          quality: 70,
+          tier: 4,
+        },
+      ];
+
+      // ============================================================
+      // PROVIDER MODELS DATA
+      // ============================================================
+      const PROVIDER_MODELS = {
+        gemini: [
+          { name: 'Gemini 2.5 Pro', value: 'gemini-2.5-pro', quality: 98, rpm: 5 },
+          { name: 'Gemini 2.5 Flash', value: 'gemini-2.5-flash', quality: 95, rpm: 15 },
+          { name: 'Gemini 2.0 Flash', value: 'gemini-2.0-flash', quality: 88, rpm: 15 },
+          { name: 'Gemini 1.5 Pro', value: 'gemini-1.5-pro', quality: 90, rpm: 2 },
+          { name: 'Gemini 1.5 Flash', value: 'gemini-1.5-flash', quality: 85, rpm: 15 },
+        ],
+        groq: [
+          { name: 'Llama 3.3 70B', value: 'llama-3.3-70b-versatile', quality: 92, rpm: 30 },
+          { name: 'Mixtral 8x7B', value: 'mixtral-8x7b-32768', quality: 88, rpm: 30 },
+          { name: 'Gemma 2 9B', value: 'gemma-2-9b-it', quality: 78, rpm: 30 },
+          {
+            name: 'Llama 4 Maverick',
+            value: 'meta-llama/llama-4-maverick-17b-128e-instruct',
+            quality: 85,
+            rpm: 30,
+            vision: true,
+          },
+          {
+            name: 'Llama 4 Scout',
+            value: 'meta-llama/llama-4-scout-17b-16e-instruct',
+            quality: 83,
+            rpm: 30,
+            vision: true,
+          },
+        ],
+        openrouter: [
+          {
+            name: 'DeepSeek R1',
+            value: 'deepseek/deepseek-r1-0528:free',
+            quality: 96,
+            rpm: 20,
+            free: true,
+            new: true,
+          },
+          {
+            name: 'Devstral',
+            value: 'mistralai/devstral-2512:free',
+            quality: 93,
+            rpm: 20,
+            free: true,
+          },
+          {
+            name: 'Llama 3.3 70B',
+            value: 'meta-llama/llama-3.3-70b-instruct:free',
+            quality: 88,
+            rpm: 20,
+            free: true,
+          },
+          {
+            name: 'Gemma 3 27B',
+            value: 'google/gemma-3-27b-it:free',
+            quality: 86,
+            rpm: 20,
+            free: true,
+          },
+          {
+            name: 'Mistral Small 3.1 24B',
+            value: 'mistralai/mistral-small-3.1-24b-instruct:free',
+            quality: 82,
+            rpm: 20,
+            free: true,
+          },
+        ],
+        mistral: [
+          { name: 'Codestral', value: 'codestral-latest', quality: 90, rpm: 10, free: true },
+          {
+            name: 'Mistral Small',
+            value: 'mistral-small-latest',
+            quality: 85,
+            rpm: 30,
+            free: true,
+          },
+          { name: 'Mistral 7B', value: 'open-mistral-7b', quality: 75, rpm: 10, free: true },
+          { name: 'Mixtral 8x7B', value: 'open-mixtral-8x7b', quality: 82, rpm: 10, free: true },
+        ],
+        cohere: [
+          { name: 'Command R', value: 'command-r', quality: 85, rpm: 20, free: true },
+          {
+            name: 'Command R7B',
+            value: 'command-r7b-12-2024',
+            quality: 78,
+            rpm: 20,
+            free: true,
+            new: true,
+          },
+          { name: 'Command Light', value: 'command-light', quality: 72, rpm: 20, free: true },
+        ],
+        huggingface: [
+          { name: 'Qwen 2.5 7B', value: 'Qwen/Qwen2.5-7B-Instruct', quality: 76, rpm: 10 },
+          { name: 'Llama 3.2 3B', value: 'meta-llama/Llama-3.2-3B-Instruct', quality: 70, rpm: 10 },
+          {
+            name: 'Mixtral 8x7B',
+            value: 'mistralai/Mixtral-8x7B-Instruct-v0.1',
+            quality: 82,
+            rpm: 10,
+          },
+        ],
+      };
+
+      // ============================================================
+      // INITIALIZATION
+      // ============================================================
+      document.addEventListener('DOMContentLoaded', () => {
+        loadKeys();
+        updateKeyStatuses();
+        updateModels();
+        setupProviderTabs();
+        updateBestModelsGrid();
+        updateRpmMonitor();
+        updateTokenCount();
+        updateRateLimitsGrid();
+        updateUsageStats();
+        updateAllModelsRankedList();
+
+        // Initialize Chat mode
+        updateChatModelSelect();
+        updateAutoModelInfo();
+
+        // DevTools startup log
+        setTimeout(() => {
+          logToConsole('info', '🚀 AI Module v3.0 loaded');
+          logToConsole('info', `📡 Providers: ${Object.keys(PROVIDER_LIMITS).length}`);
+          const keysCount = Object.keys(PROVIDER_LIMITS).filter(p => AI.getKey(p)).length;
+          logToConsole('info', `🔑 API Keys configured: ${keysCount}`);
+        }, 100);
+
+        // Auto-refresh RPM monitor
+        setInterval(() => {
+          updateRpmMonitor();
+          updateRateLimitsGrid();
+          updateUsageStats();
+          if (chatMode === 'auto') updateAutoModelInfo();
+        }, 5000);
+
+        // Setup AI events
+        AI.on('request:start', data => {
+          logToConsole('info', `Request: ${data.provider}/${data.model}`);
+        });
+
+        AI.on('request:complete', data => {
+          logToConsole(
+            'info',
+            `Complete: ${data.duration}ms, ~${data.tokensIn}→${data.tokensOut} tokens`
+          );
+          logNetworkRequest(data.provider, data.model, true, data.duration);
+          updateRpmMonitor();
+          updateRateLimitsGrid();
+          updateUsageStats();
+        });
+
+        AI.on('request:error', data => {
+          logToConsole('error', `Error: ${data.error}`);
+          logNetworkRequest(data.provider, data.model, false, 0);
+        });
+      });
+
+      // ============================================================
+      // ALL MODELS RANKED LIST
+      // ============================================================
+      function updateAllModelsRankedList() {
+        const list = document.getElementById('allModelsRankedList');
+        if (!list) return;
+
+        const providerIcons = {
+          gemini: '🤖',
+          groq: '⚡',
+          openrouter: '🌐',
+          mistral: '🔥',
+          cohere: '🧬',
+          huggingface: '🤗',
+        };
+
+        const tierNames = {
+          1: 'Tier 1: Nejlepší',
+          2: 'Tier 2: Velmi dobré',
+          3: 'Tier 3: Dobré',
+          4: 'Tier 4: Základní',
+        };
+
+        list.innerHTML = ALL_MODELS_RANKED.map((m, i) => {
+          const rankClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : 'normal';
+          const tierClass = `tier${m.tier}`;
+          const isSelected = selectedBestModel === `${m.provider}:${m.model}`;
+          const hasKey = AI.getKey(m.provider);
+
+          return `
+            <div class="ranked-model-item ${isSelected ? 'selected' : ''} ${!hasKey ? 'no-key' : ''}"
+                 onclick="selectBestModel('${m.provider}', '${m.model}')"
+                 title="${!hasKey ? 'Chybí API klíč pro ' + m.provider : 'Klikni pro výběr'}">
+              <div class="ranked-model-rank ${rankClass}">${i + 1}</div>
+              <div style="font-size: 20px;">${providerIcons[m.provider]}</div>
+              <div class="ranked-model-info">
+                <div class="ranked-model-name">${m.name}</div>
+                <div class="ranked-model-provider">${m.provider} • ${m.model.length > 30 ? m.model.slice(0, 30) + '...' : m.model}</div>
+              </div>
+              <div class="ranked-model-stats">
+                <div class="ranked-model-quality">
+                  <div class="quality-bar">
+                    <div class="quality-fill ${tierClass}" style="width: ${m.quality}%"></div>
+                  </div>
+                  <span>${m.quality}%</span>
+                </div>
+                <div class="ranked-model-rpm">${m.rpm} RPM</div>
+                <div class="ranked-model-tier ${tierClass}">${m.free ? '🆓 FREE' : `T${m.tier}`}</div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // ============================================================
+      // SMART MODEL SELECTION
+      // ============================================================
+      function updateBestModelsGrid() {
+        const grid = document.getElementById('bestModelsGrid');
+        if (!grid) return;
+
+        const bestModels = AI.getBestModels
+          ? AI.getBestModels(6)
+          : AI.getAllModelsSorted().slice(0, 6);
+        const providerIcons = {
+          gemini: '🤖',
+          groq: '⚡',
+          openrouter: '🌐',
+          mistral: '🔥',
+          cohere: '🧬',
+          huggingface: '🤗',
+        };
+
+        grid.innerHTML = bestModels
+          .map((m, i) => {
+            const remaining = AI.rateLimit.remaining(m.provider, m.model);
+            const rpm = m.rpm || 15;
+            const fillPercent = Math.round((remaining / rpm) * 100);
+            const rankClass = i === 0 ? '' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
+            const isSelected = selectedBestModel === `${m.provider}:${m.model}`;
+
+            return `
+            <div class="best-model-card ${isSelected ? 'selected' : ''}"
+                 onclick="selectBestModel('${m.provider}', '${m.model}')"
+                 data-provider="${m.provider}" data-model="${m.model}">
+                ${i < 3 ? `<div class="model-rank ${rankClass}">#${i + 1}</div>` : ''}
+                <div class="model-provider-icon">${providerIcons[m.provider] || '🤖'}</div>
+                <div class="model-name">${m.name?.split(' - ')[1] || m.model.split('/').pop()}</div>
+                <div class="model-quality">Quality: ${m.quality}%</div>
+                <div class="model-rpm-bar">
+                    <div class="model-rpm-fill" style="width: ${fillPercent}%"></div>
+                </div>
+                <div class="model-rpm-text">
+                    <span>${remaining}/${rpm} RPM</span>
+                    <span>${m.provider}</span>
+                </div>
+            </div>
+        `;
+          })
+          .join('');
+      }
+
+      function selectBestModel(provider, model) {
+        selectedBestModel = `${provider}:${model}`;
+        currentProvider = provider;
+
+        // Update UI
+        document.querySelectorAll('.best-model-card').forEach(card => {
+          card.classList.remove('selected');
+          if (card.dataset.provider === provider && card.dataset.model === model) {
+            card.classList.add('selected');
+          }
+        });
+
+        // Update ranked list
+        document.querySelectorAll('.ranked-model-item').forEach(item => {
+          item.classList.remove('selected');
+        });
+        updateAllModelsRankedList();
+
+        // Update provider tabs
+        document.querySelectorAll('.provider-tab').forEach(tab => {
+          tab.classList.toggle('active', tab.dataset.provider === provider);
+        });
+
+        // Update model select
+        updateModels();
+        document.getElementById('modelSelect').value = model;
+        updateModelInfo();
+
+        document.getElementById('currentProvider').textContent = provider;
+        document.getElementById('currentModel').textContent = model.split('/').pop();
+
+        logToConsole('info', `Vybrán model: ${provider}/${model}`);
+      }
+
+      function toggleAutoSwitch() {
+        autoSwitch = !autoSwitch;
+        const toggle = document.getElementById('autoSwitchToggle');
+        toggle.classList.toggle('active', autoSwitch);
+
+        if (autoSwitch) {
+          logToConsole('info', 'Auto-Switch zapnut - automatické přepínání na nejlepší model');
+        } else {
+          logToConsole('info', 'Auto-Switch vypnut');
+        }
+      }
+
+      // ============================================================
+      // CHAT MODE (Auto/Manual)
+      // ============================================================
+      let chatMode = 'auto'; // 'auto' nebo 'manual'
+
+      function setChatMode(mode) {
+        chatMode = mode;
+
+        // Update buttons
+        document.getElementById('modeAutoBtn').classList.toggle('active', mode === 'auto');
+        document.getElementById('modeManualBtn').classList.toggle('active', mode === 'manual');
+
+        // Show/hide selectors
+        const selectors = document.getElementById('chatModelSelectors');
+        const autoInfo = document.getElementById('chatAutoInfo');
+
+        if (mode === 'manual') {
+          selectors.style.display = 'flex';
+          autoInfo.style.display = 'none';
+          // Sync with current provider/model
+          document.getElementById('chatProviderSelect').value = currentProvider;
+          updateChatModelSelect();
+        } else {
+          selectors.style.display = 'none';
+          autoInfo.style.display = 'flex';
+          updateAutoModelInfo();
+        }
+
+        logToConsole(
+          'info',
+          `Chat režim: ${mode === 'auto' ? 'Automatický výběr' : 'Manuální výběr'}`
+        );
+      }
+
+      function onChatProviderChange() {
+        const provider = document.getElementById('chatProviderSelect').value;
+        currentProvider = provider;
+        updateChatModelSelect();
+
+        // Update main provider tabs too
+        document.querySelectorAll('.provider-tab').forEach(tab => {
+          tab.classList.toggle('active', tab.dataset.provider === provider);
+        });
+
+        document.getElementById('currentProvider').textContent = provider;
+      }
+
+      function updateChatModelSelect() {
+        const select = document.getElementById('chatModelSelect');
+        const provider = document.getElementById('chatProviderSelect').value;
+        const models = PROVIDER_MODELS[provider] || [];
+
+        select.innerHTML = models
+          .map(m => `<option value="${m.value}">${m.name} (${m.quality}%)</option>`)
+          .join('');
+
+        if (models.length > 0) {
+          const model = select.value;
+          AI.setModel(provider, model);
+          document.getElementById('currentModel').textContent = model.split('/').pop();
+        }
+
+        // Add change listener
+        select.onchange = () => {
+          const model = select.value;
+          AI.setModel(currentProvider, model);
+          document.getElementById('currentModel').textContent = model.split('/').pop();
+          logToConsole('info', `Model změněn: ${currentProvider}/${model}`);
+        };
+      }
+
+      function updateAutoModelInfo() {
+        const best = AI.selectBestModel();
+        if (best) {
+          const providerInfo = PROVIDER_LIMITS[best.provider];
+          document.getElementById('autoSelectedModel').textContent =
+            `${providerInfo?.icon || ''} ${best.provider}/${best.model.split('/').pop()}`;
+          document.getElementById('currentProvider').textContent = best.provider;
+          document.getElementById('currentModel').textContent = best.model.split('/').pop();
+        }
+      }
+
+      function getSelectedModelForChat() {
+        if (chatMode === 'auto') {
+          return AI.selectBestModel();
+        } else {
+          return {
+            provider: document.getElementById('chatProviderSelect').value,
+            model: document.getElementById('chatModelSelect').value,
+          };
+        }
+      }
+
+      // ============================================================
+      // RPM MONITOR
+      // ============================================================
+      function updateRpmMonitor() {
+        const container = document.getElementById('rpmProviders');
+        if (!container) return;
+
+        const providers = ['gemini', 'groq', 'openrouter', 'mistral', 'cohere', 'huggingface'];
+        const icons = {
+          gemini: '🤖',
+          groq: '⚡',
+          openrouter: '🌐',
+          mistral: '🔥',
+          cohere: '🧬',
+          huggingface: '🤗',
+        };
+
+        container.innerHTML = providers
+          .map(p => {
+            if (!AI.getKey(p)) return '';
+
+            const remaining = AI.rateLimit.remaining(p);
+            const limit = AI.rateLimit._getLimit(p);
+            const percent = (remaining / limit) * 100;
+            const dotClass = percent > 50 ? '' : percent > 20 ? 'warning' : 'danger';
+
+            return `
+            <div class="rpm-provider">
+                <span class="rpm-dot ${dotClass}"></span>
+                <span>${icons[p]} ${remaining}/${limit}</span>
+            </div>
+        `;
+          })
+          .filter(Boolean)
+          .join('');
+
+        // Also update best models grid
+        updateBestModelsGrid();
+      }
+
+      // ============================================================
+      // RATE LIMITS GRID
+      // ============================================================
+      function updateRateLimitsGrid() {
+        const grid = document.getElementById('rateLimitsGrid');
+        if (!grid) return;
+
+        const providers = Object.keys(PROVIDER_LIMITS);
+
+        grid.innerHTML = providers
+          .map(p => {
+            const info = PROVIDER_LIMITS[p];
+            const hasKey = AI.getKey(p);
+            const remaining = hasKey ? AI.rateLimit.remaining(p) : 0;
+            const limit = info.rpm;
+            const percent = hasKey ? (remaining / limit) * 100 : 0;
+            const statusClass = !hasKey
+              ? 'inactive'
+              : percent > 50
+                ? ''
+                : percent > 20
+                  ? 'warning'
+                  : 'danger';
+
+            const models = PROVIDER_MODELS[p] || [];
+            const modelChips = models
+              .slice(0, 4)
+              .map(
+                m =>
+                  `<span class="provider-model-chip" onclick="quickSelectModel('${p}', '${m.value}')">${m.name}</span>`
+              )
+              .join('');
+
+            return `
+            <div class="rate-limit-card">
+              <div class="provider-header">
+                <div class="provider-name">
+                  <span>${info.icon}</span> ${info.name}
+                </div>
+                <div class="status-indicator ${statusClass}"></div>
+              </div>
+              <div class="limit-row">
+                <span>RPM:</span>
+                <span class="limit-value">${info.rpm} req/min</span>
+              </div>
+              <div class="limit-row">
+                <span>RPD:</span>
+                <span class="limit-value">${info.rpd} req/day</span>
+              </div>
+              ${info.note ? `<div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">${info.note}</div>` : ''}
+              <div class="provider-models-list">
+                <div class="provider-models-title">Modely:</div>
+                ${modelChips || '<span style="font-size: 11px; color: var(--text-secondary);">Žádné modely</span>'}
+              </div>
+              <button class="check-limits-btn" onclick="checkProviderLimits('${p}')">
+                🔍 Zkontrolovat limity
+              </button>
+            </div>
+          `;
+          })
+          .join('');
+      }
+
+      function quickSelectModel(provider, model) {
+        currentProvider = provider;
+
+        // Update provider tabs
+        document.querySelectorAll('.provider-tab').forEach(tab => {
+          tab.classList.toggle('active', tab.dataset.provider === provider);
+        });
+
+        updateModels();
+
+        setTimeout(() => {
+          const select = document.getElementById('modelSelect');
+          if (select) {
+            select.value = model;
+            updateModelInfo();
+          }
+        }, 50);
+
+        document.getElementById('currentProvider').textContent = provider;
+        logToConsole('info', `Vybrán model: ${provider}/${model}`);
+      }
+
+      async function checkProviderLimits(provider) {
+        const info = PROVIDER_LIMITS[provider];
+        const hasKey = AI.getKey(provider);
+
+        if (!hasKey) {
+          alert(
+            `❌ Pro ${info.name} není nastaven API klíč!\n\nPřidejte klíč v sekci Nastavení → API Klíče.`
+          );
+          return;
+        }
+
+        // RPM: použito v poslední minutě
+        const remaining = AI.rateLimit.remaining(provider);
+        const usedRpm = info.rpm - remaining;
+
+        // RPD: denní použití ze statistik
+        const stats = AI.stats.get();
+        const providerStats = stats.byProvider[provider] || { calls: 0 };
+        const usedToday = providerStats.calls || 0;
+
+        alert(
+          `📊 ${info.icon} ${info.name} - Stav limitů:\n\n` +
+            `RPM (Requests Per Minute):\n` +
+            `  • Limit: ${info.rpm} req/min\n` +
+            `  • Použito: ${usedRpm} req\n\n` +
+            `RPD (Requests Per Day):\n` +
+            `  • Limit: ${info.rpd} req/day\n` +
+            `  • Použito dnes: ${usedToday} req\n` +
+            (info.note ? `\n💡 ${info.note}` : '')
+        );
+      }
+
+      // ============================================================
+      // DISCOVER MODELS - Fetch from provider APIs
+      // ============================================================
+
+      // Modely které máme definované v ALL_MODELS
+      function getOurModels(provider) {
+        const models = AI.ALL_MODELS[provider] || [];
+        return models.map(m => ({ value: m.value.toLowerCase(), quality: m.quality }));
+      }
+
+      // Odhad kvality modelu na základě různých faktorů
+      function estimateQuality(model, provider) {
+        const id = model.id.toLowerCase();
+        const name = (model.name || '').toLowerCase();
+
+        // Pokud máme model v ALL_MODELS, použijeme jeho kvalitu
+        const ourModels = AI.ALL_MODELS[provider] || [];
+        for (const m of ourModels) {
+          if (m.value.toLowerCase() === id || id.includes(m.value.toLowerCase())) {
+            return m.quality;
+          }
+        }
+
+        // Heuristika pro odhad kvality
+        let quality = 70; // Výchozí hodnota
+
+        // Podle názvu/typu modelu
+        if (id.includes('gpt-4') || id.includes('claude-3-opus') || id.includes('gemini-2') || id.includes('pro')) {
+          quality = 95;
+        } else if (id.includes('gpt-3.5') || id.includes('claude-3-sonnet') || id.includes('gemini-1.5')) {
+          quality = 88;
+        } else if (id.includes('claude-3-haiku') || id.includes('flash')) {
+          quality = 82;
+        } else if (id.includes('llama-3.1-70b') || id.includes('llama-3.2-90b') || id.includes('mixtral-8x22b')) {
+          quality = 90;
+        } else if (id.includes('llama-3') || id.includes('qwen-2')) {
+          quality = 85;
+        } else if (id.includes('mixtral') || id.includes('mistral-large')) {
+          quality = 85;
+        } else if (id.includes('mistral-medium') || id.includes('codestral')) {
+          quality = 80;
+        } else if (id.includes('mistral-small') || id.includes('ministral')) {
+          quality = 75;
+        } else if (id.includes('mini') || id.includes('small') || id.includes('tiny') || id.includes('nano')) {
+          quality = 65;
+        } else if (id.includes('embed') || id.includes('whisper')) {
+          quality = 50; // Specializované modely
+        }
+
+        // Bonus za context length
+        if (model.contextLength) {
+          if (model.contextLength >= 128000) quality = Math.min(99, quality + 5);
+          else if (model.contextLength >= 32000) quality = Math.min(99, quality + 3);
+        }
+
+        // Bonus podle ceny (dražší = většinou lepší)
+        if (model.pricing && model.pricing.prompt) {
+          const price = parseFloat(model.pricing.prompt);
+          if (price > 0.01) quality = Math.min(99, quality + 5);
+          else if (price > 0.001) quality = Math.min(99, quality + 2);
+        }
+
+        return Math.round(quality);
+      }
+
+      // API endpointy pro získání modelů
+      const DISCOVER_APIS = {
+        gemini: {
+          url: 'https://generativelanguage.googleapis.com/v1beta/models',
+          keyParam: 'key',
+          parse: (data) => {
+            return (data.models || []).map(m => ({
+              id: m.name.replace('models/', ''),
+              name: m.displayName || m.name,
+              description: m.description || '',
+              free: !m.name.includes('ultra') && !m.name.includes('pro-vision'),
+              contextLength: m.inputTokenLimit || null,
+            }));
+          }
+        },
+        groq: {
+          url: 'https://api.groq.com/openai/v1/models',
+          headers: (key) => ({ 'Authorization': `Bearer ${key}` }),
+          parse: (data) => {
+            return (data.data || []).map(m => ({
+              id: m.id,
+              name: m.id,
+              description: m.owned_by || '',
+              free: true, // Groq je zatím free
+              contextLength: m.context_window || null,
+            }));
+          }
+        },
+        openrouter: {
+          url: 'https://openrouter.ai/api/v1/models',
+          headers: (key) => ({ 'Authorization': `Bearer ${key}` }),
+          parse: (data) => {
+            return (data.data || []).map(m => ({
+              id: m.id,
+              name: m.name || m.id,
+              description: m.description || '',
+              free: m.id.endsWith(':free') || (m.pricing && m.pricing.prompt === '0' && m.pricing.completion === '0'),
+              pricing: m.pricing,
+              contextLength: m.context_length || null,
+            }));
+          }
+        },
+        mistral: {
+          url: 'https://api.mistral.ai/v1/models',
+          headers: (key) => ({ 'Authorization': `Bearer ${key}` }),
+          parse: (data) => {
+            return (data.data || []).map(m => ({
+              id: m.id,
+              name: m.id,
+              description: m.owned_by || '',
+              free: m.id.includes('open') || m.id.includes('small'),
+              contextLength: m.max_context_length || null,
+            }));
+          }
+        }
+      };
+
+      // Global store for discovered models
+      let discoveredModels = { free: [], paid: [], provider: null };
+      let activeDiscoverTab = 'free';
+
+      async function discoverModels(provider) {
+        const api = DISCOVER_APIS[provider];
+        if (!api) {
+          alert('Provider není podporován pro discover');
+          return;
+        }
+
+        // Update button state
+        document.querySelectorAll('.discover-provider-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.provider === provider);
+        });
+
+        const resultsDiv = document.getElementById('discoverResults');
+        const loadingDiv = document.getElementById('discoverLoading');
+        const modelsList = document.getElementById('discoverModelsList');
+
+        resultsDiv.style.display = 'block';
+        loadingDiv.style.display = 'block';
+        modelsList.innerHTML = '';
+        discoveredModels = { free: [], paid: [], provider };
+
+        try {
+          const key = AI._getDemoKey ? AI._getDemoKey(provider) : AI.getKey(provider);
+          if (!key) {
+            throw new Error(`Žádný API klíč pro ${provider}`);
+          }
+
+          let url = api.url;
+          const options = { method: 'GET' };
+
+          if (api.keyParam) {
+            url += `?${api.keyParam}=${key}`;
+          }
+
+          if (api.headers) {
+            options.headers = api.headers(key);
+          }
+
+          const response = await fetch(url, options);
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
+
+          const data = await response.json();
+          const models = api.parse(data);
+
+          // Get our models for comparison
+          const ourModels = getOurModels(provider);
+
+          // Add hasModel flag and quality to each model
+          models.forEach(m => {
+            const modelId = m.id.toLowerCase();
+            // Check if we have this model
+            const ourModel = ourModels.find(our => modelId.includes(our.value) || our.value.includes(modelId));
+            m.hasModel = !!ourModel;
+            // Estimate quality
+            m.quality = estimateQuality(m, provider);
+          });
+
+          // Split into free and paid, sort by quality
+          discoveredModels.free = models.filter(m => m.free).sort((a, b) => b.quality - a.quality);
+          discoveredModels.paid = models.filter(m => !m.free).sort((a, b) => b.quality - a.quality);
+          discoveredModels.provider = provider;
+
+          // Update tab counts
+          document.getElementById('discoverTabFree').querySelector('span').textContent = `(${discoveredModels.free.length})`;
+          document.getElementById('discoverTabPaid').querySelector('span').textContent = `(${discoveredModels.paid.length})`;
+
+          // Render current tab
+          switchDiscoverTab(activeDiscoverTab);
+
+          logToConsole('info', `${provider}: Nalezeno ${discoveredModels.free.length} free + ${discoveredModels.paid.length} placených modelů`);
+
+        } catch (error) {
+          modelsList.innerHTML = `<div style="color: var(--accent-red); font-size: 12px; padding: 10px;">❌ Chyba: ${error.message}</div>`;
+          logToConsole('error', `Discover ${provider} selhal:`, error.message);
+        } finally {
+          loadingDiv.style.display = 'none';
+        }
+      }
+
+      function switchDiscoverTab(tab) {
+        activeDiscoverTab = tab;
+
+        // Update tab buttons
+        document.getElementById('discoverTabFree').classList.toggle('active', tab === 'free');
+        document.getElementById('discoverTabPaid').classList.toggle('active', tab === 'paid');
+
+        const modelsList = document.getElementById('discoverModelsList');
+        const models = tab === 'free' ? discoveredModels.free : discoveredModels.paid;
+        const provider = discoveredModels.provider;
+
+        if (!models || models.length === 0) {
+          modelsList.innerHTML = `<div style="color: var(--text-secondary); font-size: 12px; padding: 10px;">${tab === 'free' ? 'Žádné free modely' : 'Žádné placené modely'}</div>`;
+          return;
+        }
+
+        // Group OpenRouter models by provider
+        if (provider === 'openrouter') {
+          renderGroupedModels(models, tab === 'paid');
+        } else {
+          renderFlatModels(models, tab === 'paid');
+        }
+      }
+
+      function renderFlatModels(models, showPrice) {
+        const modelsList = document.getElementById('discoverModelsList');
+        modelsList.innerHTML = models.map(m => createModelRow(m, showPrice)).join('');
+      }
+
+      function renderGroupedModels(models, showPrice) {
+        const modelsList = document.getElementById('discoverModelsList');
+
+        // Group by provider (first part of id before /)
+        const groups = {};
+        models.forEach(m => {
+          const parts = m.id.split('/');
+          const providerName = parts.length > 1 ? parts[0] : 'Ostatní';
+          if (!groups[providerName]) groups[providerName] = [];
+          groups[providerName].push(m);
+        });
+
+        // Sort groups alphabetically
+        const sortedGroups = Object.keys(groups).sort();
+
+        let html = '';
+        sortedGroups.forEach(groupName => {
+          html += `<div class="discover-provider-group">`;
+          html += `<div class="discover-provider-name">📦 ${groupName} (${groups[groupName].length})</div>`;
+          html += groups[groupName].map(m => createModelRow(m, showPrice)).join('');
+          html += `</div>`;
+        });
+
+        modelsList.innerHTML = html;
+      }
+
+      function createModelRow(model, showPrice) {
+        let priceInfo = '';
+        if (showPrice && model.pricing) {
+          priceInfo = ` <span style="color: var(--text-secondary); font-size: 10px;">($${model.pricing.prompt || '?'}/1M)</span>`;
+        }
+
+        // Quality badge with color based on quality score
+        const quality = model.quality || 70;
+        let qualityColor = '#94a3b8'; // šedá
+        if (quality >= 90) qualityColor = '#4ade80'; // zelená
+        else if (quality >= 80) qualityColor = '#60a5fa'; // modrá
+        else if (quality >= 70) qualityColor = '#fbbf24'; // žlutá
+        else qualityColor = '#f87171'; // červená
+
+        const qualityBadge = `<span class="model-quality" style="background: ${qualityColor}20; color: ${qualityColor}; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 600;">${quality}%</span>`;
+
+        const statusBadge = model.hasModel
+          ? '<span class="model-status have">✓ Máme</span>'
+          : '<span class="model-status missing">+ Nový</span>';
+
+        const provider = discoveredModels.provider;
+        // Test button only for free models
+        const testBtn = !showPrice
+          ? `<button class="test-btn" onclick="useModelInChat('${provider}', '${escapeHtml(model.id)}', '${escapeHtml(model.name)}')">▶️ Test</button>`
+          : '';
+        const infoBtn = `<button class="info-btn" onclick="showModelInfo('${escapeHtml(model.name)}', '${escapeHtml(model.id)}', '${escapeHtml(model.description || '')}', ${model.pricing ? JSON.stringify(model.pricing).replace(/"/g, '&quot;') : 'null'}, ${model.quality || 70}, ${model.contextLength || 0})">ℹ️</button>`;
+
+        return `
+          <div class="discover-model-row">
+            <span class="model-name">${model.name}${priceInfo}</span>
+            <div style="display: flex; align-items: center; gap: 4px;">
+              ${qualityBadge}
+              ${statusBadge}
+              ${testBtn}
+              ${infoBtn}
+            </div>
+          </div>
+        `;
+      }
+
+      function escapeHtml(text) {
+        if (!text) return '';
+        return text.replace(/[&<>"']/g, (m) => ({
+          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[m]));
+      }
+
+      function showModelInfo(name, id, description, pricing, quality = 70, contextLength = 0) {
+        // Remove existing popup
+        const existingOverlay = document.querySelector('.model-info-overlay');
+        if (existingOverlay) existingOverlay.remove();
+        const existingPopup = document.querySelector('.model-info-popup');
+        if (existingPopup) existingPopup.remove();
+
+        // Translate description to Czech summary
+        const descCz = translateDescription(description, id);
+
+        // Quality color
+        let qualityColor = '#94a3b8';
+        if (quality >= 90) qualityColor = '#4ade80';
+        else if (quality >= 80) qualityColor = '#60a5fa';
+        else if (quality >= 70) qualityColor = '#fbbf24';
+        else qualityColor = '#f87171';
+
+        // Create overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'model-info-overlay';
+        overlay.onclick = closeModelInfo;
+        document.body.appendChild(overlay);
+
+        // Create popup
+        const popup = document.createElement('div');
+        popup.className = 'model-info-popup';
+
+        let pricingHtml = '';
+        if (pricing) {
+          pricingHtml = `
+            <div class="info-row">
+              <span class="info-label">💰 Cena vstup:</span>
+              <span class="info-value">$${pricing.prompt || '0'} / 1M tokenů</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">💸 Cena výstup:</span>
+              <span class="info-value">$${pricing.completion || '0'} / 1M tokenů</span>
+            </div>
+          `;
+        }
+
+        let contextHtml = '';
+        if (contextLength && contextLength > 0) {
+          const ctxFormatted = contextLength >= 1000 ? `${Math.round(contextLength / 1000)}K` : contextLength;
+          contextHtml = `
+            <div class="info-row">
+              <span class="info-label">📏 Context:</span>
+              <span class="info-value">${ctxFormatted} tokenů</span>
+            </div>
+          `;
+        }
+
+        popup.innerHTML = `
+          <button class="close-btn" onclick="closeModelInfo()">×</button>
+          <h3>🤖 ${name}</h3>
+          <div class="info-row">
+            <span class="info-label">⭐ Kvalita:</span>
+            <span class="info-value" style="color: ${qualityColor}; font-weight: bold;">${quality}%</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">🏷️ ID:</span>
+            <span class="info-value" style="font-size: 11px; word-break: break-all;">${id}</span>
+          </div>
+          ${contextHtml}
+          <div class="info-row">
+            <span class="info-label">📝 Popis:</span>
+            <span class="info-value" style="font-size: 11px;">${descCz}</span>
+          </div>
+          ${pricingHtml}
+        `;
+
+        document.body.appendChild(popup);
+      }
+
+      function closeModelInfo() {
+        const overlay = document.querySelector('.model-info-overlay');
+        if (overlay) overlay.remove();
+        const popup = document.querySelector('.model-info-popup');
+        if (popup) popup.remove();
+      }
+
+      function translateDescription(desc, modelId) {
+        if (!desc || desc.length < 5) {
+          // Generate description from model ID
+          const id = modelId.toLowerCase();
+          if (id.includes('code') || id.includes('coder')) return 'Specializovaný model pro programování a generování kódu.';
+          if (id.includes('vision') || id.includes('image')) return 'Model s podporou zpracování obrázků.';
+          if (id.includes('instruct')) return 'Model optimalizovaný pro následování instrukcí.';
+          if (id.includes('chat')) return 'Konverzační model pro chatové aplikace.';
+          if (id.includes('embed')) return 'Model pro vytváření textových embeddingů.';
+          if (id.includes('flash')) return 'Rychlý a efektivní model pro běžné úlohy.';
+          if (id.includes('pro')) return 'Profesionální model s vyšší kvalitou odpovědí.';
+          if (id.includes('mini') || id.includes('small')) return 'Kompaktní model, rychlý a levný.';
+          return 'Jazykový model pro generování textu.';
+        }
+
+        // Simple translation hints
+        desc = desc
+          .replace(/multimodal/gi, 'vícemodální')
+          .replace(/language model/gi, 'jazykový model')
+          .replace(/coding/gi, 'programování')
+          .replace(/general purpose/gi, 'univerzální')
+          .replace(/fast/gi, 'rychlý')
+          .replace(/efficient/gi, 'efektivní')
+          .replace(/powerful/gi, 'výkonný')
+          .replace(/advanced/gi, 'pokročilý')
+          .replace(/optimized for/gi, 'optimalizovaný pro')
+          .replace(/designed for/gi, 'navržený pro')
+          .replace(/supports/gi, 'podporuje');
+
+        // Truncate if too long
+        if (desc.length > 200) {
+          desc = desc.substring(0, 197) + '...';
+        }
+
+        return desc;
+      }
+
+      function refreshDiscoverModels() {
+        // Legacy - keep for compatibility
+        logToConsole('info', 'Použijte tlačítka providerů pro načtení modelů');
+      }
+
+      // Použít model v chatu pro testování
+      function useModelInChat(provider, modelId, modelName) {
+        // Přepnout na manuální režim
+        setChatMode('manual');
+
+        // Nastavit provider
+        const providerSelect = document.getElementById('chatProviderSelect');
+        providerSelect.value = provider;
+        onChatProviderChange();
+
+        // Přidat model do selectu pokud tam není
+        const modelSelect = document.getElementById('chatModelSelect');
+        let optionExists = false;
+        for (let opt of modelSelect.options) {
+          if (opt.value === modelId) {
+            optionExists = true;
+            break;
+          }
+        }
+
+        if (!optionExists) {
+          // Přidat nový model na začátek
+          const option = document.createElement('option');
+          option.value = modelId;
+          option.textContent = `🆕 ${modelName}`;
+          modelSelect.insertBefore(option, modelSelect.firstChild);
+        }
+
+        // Vybrat model
+        modelSelect.value = modelId;
+        AI.setModel(provider, modelId);
+        document.getElementById('currentProvider').textContent = provider;
+        document.getElementById('currentModel').textContent = modelId.split('/').pop();
+
+        // Otevřít chat sekci
+        const chatSection = document.getElementById('chatSection');
+        const chatHeader = chatSection.previousElementSibling;
+        if (!chatSection.classList.contains('open')) {
+          chatHeader.click();
+        }
+
+        // Scroll na chat
+        chatSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        // Focus na input
+        setTimeout(() => {
+          const textarea = document.getElementById('userPrompt');
+          if (textarea) textarea.focus();
+        }, 300);
+
+        logToConsole('info', `🧪 Testování modelu: ${provider}/${modelId}`);
+
+        // Zobrazit toast
+        showToast(`✅ Model ${modelName} připraven k testování!`);
+      }
+
+      // Toast notifikace
+      function showToast(message) {
+        const existing = document.querySelector('.toast-notification');
+        if (existing) existing.remove();
+
+        const toast = document.createElement('div');
+        toast.className = 'toast-notification';
+        toast.textContent = message;
+        document.body.appendChild(toast);
+
+        setTimeout(() => toast.classList.add('show'), 10);
+        setTimeout(() => {
+          toast.classList.remove('show');
+          setTimeout(() => toast.remove(), 300);
+        }, 3000);
+      }
+
+      // ============================================================
+      // USAGE STATS
+      // ============================================================
+      function updateUsageStats() {
+        const statsGrid = document.getElementById('usageStatsGrid');
+        const detailsDiv = document.getElementById('providerUsageDetails');
+        if (!statsGrid) return;
+
+        const stats = AI.stats?.get() || {
+          totalCalls: 0,
+          dailyCalls: 0,
+          totalTokensIn: 0,
+          totalTokensOut: 0,
+          byProvider: {},
+        };
+        const cacheStats = AI.cache?.stats() || { hits: 0, misses: 0, hitRate: '0%' };
+
+        statsGrid.innerHTML = `
+          <div class="usage-stat-card">
+            <div class="stat-icon">📞</div>
+            <div class="stat-value">${stats.totalCalls}</div>
+            <div class="stat-label">Celkem volání</div>
+          </div>
+          <div class="usage-stat-card">
+            <div class="stat-icon">📅</div>
+            <div class="stat-value">${stats.dailyCalls}</div>
+            <div class="stat-label">Dnes</div>
+          </div>
+          <div class="usage-stat-card">
+            <div class="stat-icon">🔤</div>
+            <div class="stat-value">${formatNumber(stats.totalTokensIn + stats.totalTokensOut)}</div>
+            <div class="stat-label">Tokenů celkem</div>
+          </div>
+          <div class="usage-stat-card">
+            <div class="stat-icon">💾</div>
+            <div class="stat-value">${cacheStats.hitRate}</div>
+            <div class="stat-label">Cache hit rate</div>
+          </div>
+        `;
+
+        if (detailsDiv && Object.keys(stats.byProvider || {}).length > 0) {
+          detailsDiv.innerHTML = `
+            <div style="margin-top: 16px;">
+              <div style="font-size: 13px; font-weight: 600; margin-bottom: 10px;">📊 Podle providera:</div>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px;">
+                ${Object.entries(stats.byProvider)
+                  .map(([p, s]) => {
+                    const info = PROVIDER_LIMITS[p] || { icon: '🤖', name: p };
+                    return `
+                    <div style="background: rgba(15, 23, 42, 0.6); padding: 10px; border-radius: 8px; font-size: 12px;">
+                      <div style="font-weight: 500;">${info.icon} ${info.name}</div>
+                      <div style="color: var(--text-secondary); margin-top: 4px;">
+                        ${s.calls} volání • ${formatNumber(s.tokensIn + s.tokensOut)} tok.
+                      </div>
+                    </div>
+                  `;
+                  })
+                  .join('')}
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      function formatNumber(num) {
+        if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+        if (num >= 1000) return (num / 1000).toFixed(1) + 'k';
+        return num.toString();
+      }
+
+      // ============================================================
+      // PROVIDER & MODEL MANAGEMENT
+      // ============================================================
+      function setupProviderTabs() {
+        document.querySelectorAll('.provider-tab').forEach(tab => {
+          tab.addEventListener('click', () => {
+            document.querySelectorAll('.provider-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            currentProvider = tab.dataset.provider;
+            document.getElementById('currentProvider').textContent = currentProvider;
+            updateModels();
+            selectedBestModel = null;
+            updateBestModelsGrid();
+          });
+        });
+      }
+
+      function updateModels() {
+        const select = document.getElementById('modelSelect');
+        if (!select) return;
+
+        const models = AI.getModels(currentProvider);
+        select.innerHTML = models
+          .map(m => `<option value="${m.value}">${m.name} (${m.rpm} RPM)</option>`)
+          .join('');
+
+        updateModelInfo();
+      }
+
+      function updateModelInfo() {
+        const select = document.getElementById('modelSelect');
+        const model = select?.value;
+        if (!model) return;
+
+        const limit = AI.getModelLimit(model);
+        document.getElementById('modelRpm').textContent = limit;
+        document.getElementById('currentModel').textContent = model.split('/').pop();
+        document.getElementById('currentSettingsInfo').textContent =
+          `(${currentProvider} / ${model.split('/').pop()})`;
+      }
+
+      // ============================================================
+      // API KEYS
+      // ============================================================
+      function loadKeys() {
+        const keys = JSON.parse(localStorage.getItem('aiModuleKeys') || '{}');
+
+        ['gemini', 'groq', 'openrouter', 'mistral', 'cohere', 'huggingface'].forEach(p => {
+          const input = document.getElementById('key' + p.charAt(0).toUpperCase() + p.slice(1));
+          if (input && keys[p]) {
+            input.value = keys[p];
+            AI.setKey(p, keys[p]);
+          }
+        });
+      }
+
+      function saveKeys() {
+        const keys = {};
+        ['gemini', 'groq', 'openrouter', 'mistral', 'cohere', 'huggingface'].forEach(p => {
+          const input = document.getElementById('key' + p.charAt(0).toUpperCase() + p.slice(1));
+          if (input?.value) {
+            keys[p] = input.value;
+            AI.setKey(p, input.value);
+          }
+        });
+
+        localStorage.setItem('aiModuleKeys', JSON.stringify(keys));
+        updateKeyStatuses();
+        updateBestModelsGrid();
+        alert('✅ Klíče uloženy!');
+      }
+
+      function clearKeys() {
+        if (!confirm('Smazat všechny klíče?')) return;
+        localStorage.removeItem('aiModuleKeys');
+        ['gemini', 'groq', 'openrouter', 'mistral', 'cohere', 'huggingface'].forEach(p => {
+          const input = document.getElementById('key' + p.charAt(0).toUpperCase() + p.slice(1));
+          if (input) input.value = '';
+          AI.setKey(p, '');
+        });
+        updateKeyStatuses();
+        updateBestModelsGrid();
+      }
+
+      function updateKeyStatuses() {
+        ['gemini', 'groq', 'openrouter', 'mistral', 'cohere', 'huggingface'].forEach(p => {
+          const status = document.getElementById('status' + p.charAt(0).toUpperCase() + p.slice(1));
+          if (!status) return;
+
+          const hasKey = AI.getKey(p);
+          const isDemo = AI.isUsingDemoKey(p);
+
+          if (hasKey && !isDemo) {
+            status.className = 'key-status ok';
+            status.textContent = '✓';
+          } else if (hasKey && isDemo) {
+            status.className = 'key-status demo';
+            status.textContent = '⚠';
+          } else {
+            status.className = 'key-status none';
+            status.textContent = '○';
+          }
+        });
+      }
+
+      function exportSettings() {
+        const settings = {
+          keys: JSON.parse(localStorage.getItem('aiModuleKeys') || '{}'),
+          provider: currentProvider,
+          autoSwitch: autoSwitch,
+          exported: new Date().toISOString(),
+        };
+
+        const blob = new Blob([JSON.stringify(settings, null, 2)], { type: 'application/json' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `ai-module-settings-${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+      }
+
+      function importSettings() {
+        document.getElementById('importInput').click();
+      }
+
+      function handleImport(event) {
+        const file = event.target.files?.[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = e => {
+          try {
+            const settings = JSON.parse(e.target.result);
+            if (settings.keys) {
+              localStorage.setItem('aiModuleKeys', JSON.stringify(settings.keys));
+              loadKeys();
+              updateKeyStatuses();
+              updateBestModelsGrid();
+              alert('✅ Nastavení importováno!');
+            }
+          } catch (err) {
+            alert('❌ Chyba při importu: ' + err.message);
+          }
+        };
+        reader.readAsText(file);
+        event.target.value = '';
+      }
+
+      // ============================================================
+      // CHAT FUNCTIONS
+      // ============================================================
+      function addChatMessage(text, isUser = false, isError = false) {
+        const container = document.getElementById('chatContainer');
+        const empty = document.getElementById('chatEmpty');
+        if (empty) empty.style.display = 'none';
+
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `chat-message ${isUser ? 'user' : 'assistant'}`;
+
+        const bubble = document.createElement('div');
+        bubble.className = `chat-bubble ${isError ? 'error' : ''}`;
+        bubble.textContent = text;
+
+        msgDiv.appendChild(bubble);
+        container.appendChild(msgDiv);
+        container.scrollTop = container.scrollHeight;
+
+        return bubble;
+      }
+
+      function updateLastBubble(text, isError = false) {
+        const messages = document.querySelectorAll('.chat-message.assistant');
+        if (messages.length === 0) return;
+
+        const bubble = messages[messages.length - 1].querySelector('.chat-bubble');
+        if (bubble) {
+          bubble.textContent = text;
+          bubble.classList.toggle('error', isError);
+        }
+      }
+
+      async function sendRequest() {
+        const promptInput = document.getElementById('userPrompt');
+        const prompt = promptInput?.value.trim();
+
+        if (!prompt) {
+          alert('Zadej dotaz');
+          return;
+        }
+
+        // Add user message
+        addChatMessage(prompt, true);
+        promptInput.value = '';
+        updateTokenCount();
+
+        // Add loading message
+        const loadingBubble = addChatMessage('Přemýšlím...');
+
+        setStatus('loading', 'Odesílám...');
+        document.getElementById('btnSend').disabled = true;
+
+        const startTime = performance.now();
+
+        try {
+          let response;
+          const selected = getSelectedModelForChat();
+
+          response = await AI.ask(prompt, {
+            provider: selected.provider,
+            model: selected.model,
+            system: 'Odpovídej česky. Jsi přátelský asistent.',
+          });
+
+          document.getElementById('currentProvider').textContent = selected.provider;
+          document.getElementById('currentModel').textContent = selected.model.split('/').pop();
+
+          const elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
+          updateLastBubble(response);
+          lastResponse = response;
+          setStatus('ready', `✓ ${elapsed}s`);
+        } catch (error) {
+          updateLastBubble(`Chyba: ${error.message}`, true);
+          setStatus('error', 'Chyba');
+        }
+
+        document.getElementById('btnSend').disabled = false;
+        updateRpmMonitor();
+      }
+
+      async function sendStream() {
+        const promptInput = document.getElementById('userPrompt');
+        const prompt = promptInput?.value.trim();
+
+        if (!prompt) {
+          alert('Zadej dotaz');
+          return;
+        }
+
+        addChatMessage(prompt, true);
+        promptInput.value = '';
+
+        const bubble = addChatMessage('');
+        setStatus('loading', 'Streamuji...');
+
+        let fullResponse = '';
+        const selected = getSelectedModelForChat();
+
+        try {
+          for await (const chunk of AI.askStream(prompt, {
+            provider: selected.provider,
+            model: selected.model,
+            system: 'Odpovídej česky.',
+          })) {
+            fullResponse += chunk;
+            bubble.textContent = fullResponse;
+          }
+
+          lastResponse = fullResponse;
+          setStatus('ready', '✓ Stream dokončen');
+        } catch (error) {
+          bubble.textContent = `Chyba: ${error.message}`;
+          bubble.classList.add('error');
+          setStatus('error', 'Chyba');
+        }
+
+        updateRpmMonitor();
+      }
+
+      function clearChat() {
+        const container = document.getElementById('chatContainer');
+        const empty = document.getElementById('chatEmpty');
+        container.innerHTML = '';
+        if (empty) {
+          container.appendChild(empty);
+          empty.style.display = 'block';
+        }
+        lastResponse = '';
+      }
+
+      // Chat Actions Dropdown functions
+      function toggleChatMenu() {
+        const menu = document.getElementById('chatActionsMenu');
+        menu.classList.toggle('open');
+
+        // Close on click outside
+        if (menu.classList.contains('open')) {
+          setTimeout(() => {
+            document.addEventListener('click', closeChatMenuOnOutside);
+          }, 10);
+        }
+      }
+
+      function closeChatMenu() {
+        const menu = document.getElementById('chatActionsMenu');
+        menu.classList.remove('open');
+        document.removeEventListener('click', closeChatMenuOnOutside);
+      }
+
+      function closeChatMenuOnOutside(e) {
+        const dropdown = document.querySelector('.chat-actions-dropdown');
+        if (!dropdown.contains(e.target)) {
+          closeChatMenu();
+        }
+      }
+
+      // Test FREE models - verifikuje zda jsou modely stále zdarma
+      async function testFreeModels() {
+        const resultsId = 'freeModelsResults';
+        let resultsDiv = document.getElementById(resultsId);
+
+        // Vytvoř nebo vyčisti výsledkový div v chat kontejneru
+        const chatContainer = document.getElementById('chatContainer');
+        const empty = document.getElementById('chatEmpty');
+        if (empty) empty.style.display = 'none';
+
+        if (!resultsDiv) {
+          resultsDiv = document.createElement('div');
+          resultsDiv.id = resultsId;
+          resultsDiv.className = 'chat-bubble assistant';
+          chatContainer.appendChild(resultsDiv);
+        }
+
+        resultsDiv.innerHTML = `
+          <div style="font-weight: bold; margin-bottom: 10px; color: var(--accent-blue);">🆓 Test FREE modelů</div>
+          <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">
+            Testování všech modelů zda jsou stále zdarma...
+          </div>
+          <div id="freeTestProgress"></div>
+        `;
+
+        const progressDiv = document.getElementById('freeTestProgress');
+        const providers = Object.keys(AI.ALL_MODELS);
+        const results = { free: [], paid: [], error: [] };
+
+        for (const provider of providers) {
+          const models = AI.ALL_MODELS[provider];
+          for (const modelObj of models) {
+            const model = modelObj.value;
+            const modelName = modelObj.name;
+            const testRow = document.createElement('div');
+            testRow.style.cssText =
+              'padding: 6px 0; border-bottom: 1px solid var(--border-color); font-size: 12px;';
+            testRow.innerHTML = `<span style="color: var(--text-secondary);">⏳</span> ${provider}: ${modelName}`;
+            progressDiv.appendChild(testRow);
+
+            try {
+              // Jednoduchý test - pošli minimální požadavek
+              const response = await AI.ask('Hi', {
+                provider,
+                model,
+                maxTokens: 5,
+                timeout: 10000,
+              });
+
+              // Pokud prošlo bez chyby, model funguje
+              testRow.innerHTML = `<span style="color: var(--accent-green);">✓ FREE</span> ${provider}: ${modelName}`;
+              results.free.push(`${provider}/${model}`);
+            } catch (err) {
+              const errMsg = err.message.toLowerCase();
+
+              // Detekce platební/kvótové chyby
+              if (
+                errMsg.includes('402') ||
+                errMsg.includes('payment') ||
+                errMsg.includes('billing') ||
+                errMsg.includes('quota') ||
+                errMsg.includes('credit') ||
+                errMsg.includes('paid') ||
+                errMsg.includes('upgrade') ||
+                errMsg.includes('subscription')
+              ) {
+                testRow.innerHTML = `<span style="color: var(--accent-red);">💰 PAID</span> ${provider}: ${modelName}`;
+                results.paid.push(`${provider}/${model}`);
+              } else if (
+                errMsg.includes('rate') ||
+                errMsg.includes('limit') ||
+                errMsg.includes('429')
+              ) {
+                // Rate limit znamená že model funguje ale jsme limitovaní
+                testRow.innerHTML = `<span style="color: var(--accent-yellow);">⚠️ RATE</span> ${provider}: ${modelName} (limit)`;
+                results.free.push(`${provider}/${model}`);
+              } else {
+                testRow.innerHTML = `<span style="color: var(--text-secondary);">❓ ERR</span> ${provider}: ${modelName}`;
+                results.error.push({ model: `${provider}/${model}`, error: err.message });
+              }
+            }
+
+            // Krátká pauza aby se nepřetížil API
+            await new Promise(r => setTimeout(r, 500));
+          }
+        }
+
+        // Souhrn
+        const summaryDiv = document.createElement('div');
+        summaryDiv.style.cssText =
+          'margin-top: 12px; padding-top: 12px; border-top: 2px solid var(--border-color);';
+        summaryDiv.innerHTML = `
+          <div style="font-weight: bold; margin-bottom: 8px;">📊 Souhrn:</div>
+          <div style="color: var(--accent-green);">✓ FREE: ${results.free.length} modelů</div>
+          <div style="color: var(--accent-red);">💰 PAID: ${results.paid.length} modelů</div>
+          <div style="color: var(--text-secondary);">❓ Chyby: ${results.error.length}</div>
+          ${
+            results.paid.length > 0
+              ? `
+            <div style="margin-top: 8px; padding: 8px; background: rgba(255,100,100,0.1); border-radius: 6px; font-size: 11px;">
+              <strong>⚠️ Placené modely:</strong><br>${results.paid.join('<br>')}
+            </div>
+          `
+              : ''
+          }
+        `;
+        progressDiv.appendChild(summaryDiv);
+
+        logToConsole(
+          'info',
+          `FREE test dokončen: ${results.free.length} free, ${results.paid.length} paid, ${results.error.length} errors`
+        );
+      }
+
+      function copyResponse() {
+        if (!lastResponse) {
+          alert('Žádná odpověď ke kopírování');
+          return;
+        }
+        navigator.clipboard.writeText(lastResponse).then(() => {
+          alert('✓ Zkopírováno');
+        });
+      }
+
+      function setStatus(type, text) {
+        const badge = document.getElementById('statusBadge');
+        if (!badge) return;
+        badge.className = 'status-badge ' + type;
+        badge.textContent = type === 'loading' ? '⏳ ' + text : '● ' + text;
+      }
+
+      function updateTokenCount() {
+        const prompt = document.getElementById('userPrompt')?.value || '';
+        const tokens = AI.estimateTokens(prompt);
+        document.getElementById('tokenCount').textContent = `~${tokens} tokenů`;
+      }
+
+      // ============================================================
+      // FILE HANDLING
+      // ============================================================
+      function handleFileSelect(event) {
+        const file = event.target.files?.[0];
+        if (!file) return;
+
+        // For now just log
+        logToConsole('info', `Soubor: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`);
+        alert(`Soubor ${file.name} nahrán. (Vision modely podporují obrázky)`);
+      }
+
+      // ============================================================
+      // TESTING & STATS
+      // ============================================================
+      async function testAllModels() {
+        const modal = document.getElementById('testModal');
+        const results = document.getElementById('testResults');
+
+        modal.style.display = 'flex';
+        results.innerHTML =
+          '<div style="text-align: center; padding: 40px;"><div class="loading-dots"><span></span><span></span><span></span></div><p style="margin-top: 10px;">Testuji modely...</p></div>';
+
+        const testPrompt = 'Odpověz pouze číslem: 2 + 2 = ?';
+        const providers = AI.getAvailableProviders();
+        const testResults = [];
+
+        for (const provider of providers) {
+          const models = AI.getModels(provider).slice(0, 2); // Test max 2 per provider
+
+          for (const m of models) {
+            try {
+              const start = Date.now();
+              const response = await AI.ask(testPrompt, {
+                provider,
+                model: m.value,
+                autoFallback: false,
+              });
+              const time = ((Date.now() - start) / 1000).toFixed(2);
+
+              testResults.push({
+                provider,
+                model: m.value,
+                name: m.name,
+                success: true,
+                response: response.trim(),
+                time,
+              });
+            } catch (error) {
+              testResults.push({
+                provider,
+                model: m.value,
+                name: m.name,
+                success: false,
+                error: error.message,
+              });
+            }
+          }
+        }
+
+        // Display results
+        const successCount = testResults.filter(r => r.success).length;
+        const avgTime =
+          testResults.filter(r => r.success).reduce((a, r) => a + parseFloat(r.time), 0) /
+            successCount || 0;
+
+        results.innerHTML = `
+        <div class="stats-grid">
+            <div class="stat-card success">
+                <div class="stat-value">${successCount}</div>
+                <div class="stat-label">Úspěšných</div>
+            </div>
+            <div class="stat-card warning">
+                <div class="stat-value">${testResults.length - successCount}</div>
+                <div class="stat-label">Selhalo</div>
+            </div>
+            <div class="stat-card info">
+                <div class="stat-value">${avgTime.toFixed(2)}s</div>
+                <div class="stat-label">Průměr</div>
+            </div>
+        </div>
+        ${testResults
+          .map(
+            r => `
+            <div style="padding: 10px; margin-bottom: 8px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; border-left: 3px solid ${r.success ? 'var(--accent-green)' : 'var(--accent-red)'};">
+                <div style="font-weight: 500;">${r.name}</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">${r.model}</div>
+                ${
+                  r.success
+                    ? `<div style="font-size: 12px; color: var(--accent-green);">✓ ${r.response} (${r.time}s)</div>`
+                    : `<div style="font-size: 12px; color: var(--accent-red);">✗ ${r.error}</div>`
+                }
+            </div>
+        `
+          )
+          .join('')}
+    `;
+      }
+
+      function closeTestModal() {
+        document.getElementById('testModal').style.display = 'none';
+      }
+
+      function copyTestReport() {
+        const results = document.getElementById('testResults').innerText;
+        navigator.clipboard.writeText(results).then(() => alert('✓ Report zkopírován'));
+      }
+
+      function showStats() {
+        const modal = document.getElementById('statsModal');
+        const content = document.getElementById('statsContent');
+
+        const stats = AI.stats.get();
+        const cacheStats = AI.cache.stats();
+
+        content.innerHTML = `
+        <div class="stats-grid">
+            <div class="stat-card info">
+                <div class="stat-value">${stats.totalCalls}</div>
+                <div class="stat-label">Celkem volání</div>
+            </div>
+            <div class="stat-card info">
+                <div class="stat-value">${stats.dailyCalls}</div>
+                <div class="stat-label">Dnes</div>
+            </div>
+            <div class="stat-card success">
+                <div class="stat-value">${stats.totalTokensIn + stats.totalTokensOut}</div>
+                <div class="stat-label">Celkem tokenů</div>
+            </div>
+            <div class="stat-card warning">
+                <div class="stat-value">${cacheStats.hitRate}</div>
+                <div class="stat-label">Cache hit rate</div>
+            </div>
+        </div>
+
+        <h3 style="margin: 20px 0 12px; font-size: 14px;">📊 Podle providera:</h3>
+        ${Object.entries(stats.byProvider || {})
+          .map(
+            ([p, s]) => `
+            <div style="padding: 10px; margin-bottom: 8px; background: rgba(15, 23, 42, 0.6); border-radius: 8px;">
+                <div style="font-weight: 500;">${p}</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">
+                    ${s.calls} volání | ${s.tokensIn + s.tokensOut} tokenů
+                </div>
+            </div>
+        `
+          )
+          .join('')}
+
+        <h3 style="margin: 20px 0 12px; font-size: 14px;">💾 Cache:</h3>
+        <div style="padding: 10px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; font-size: 13px;">
+            Velikost: ${cacheStats.size}/${cacheStats.maxSize} |
+            Hits: ${cacheStats.hits} | Misses: ${cacheStats.misses}
+        </div>
+    `;
+
+        modal.style.display = 'flex';
+      }
+
+      function closeStatsModal() {
+        document.getElementById('statsModal').style.display = 'none';
+      }
+
+      function resetStats() {
+        if (!confirm('Reset všech statistik?')) return;
+        AI.stats.reset();
+        AI.cache.clear();
+        showStats();
+      }
+
+      // ============================================================
+      // NEW v3.0 FEATURES TESTS
+      // ============================================================
+      async function testContextCompression() {
+        const longText = `
+        Toto je velmi dlouhý text, který obsahuje spoustu opakujících se informací.
+        JavaScript je programovací jazyk, který se používá pro tvorbu webových stránek.
+        /* Toto je velmi dlouhý komentář, který by měl být zkrácen při kompresi kontextu,
+           protože obsahuje spoustu nepotřebných informací a zabírá zbytečně tokeny */
+
+
+
+        Mezi odstavci je spousta prázdných řádků, které by měly být redukovány.
+        console.log("Velmi dlouhá debug zpráva, která by měla být také zkrácena při agresivní kompresi textu");
+    `;
+
+        const compressed = AI.contextCompression.compress(longText, { aggressive: true });
+        const originalTokens = AI.estimateTokens(longText);
+        const compressedTokens = AI.estimateTokens(compressed);
+
+        alert(`🗜️ Context Compression:
+
+Originál: ${originalTokens} tokenů
+Komprese: ${compressedTokens} tokenů
+Úspora: ${Math.round((1 - compressedTokens / originalTokens) * 100)}%`);
+      }
+
+      function testTokenBudget() {
+        const budget = AI.tokenBudget.getBudget('gemini-2.5-flash', 'gemini');
+
+        alert(`💰 Token Budget pro gemini-2.5-flash:
+
+System: ${budget.system} tokenů
+Context: ${budget.context} tokenů
+Historie: ${budget.history} tokenů
+Celkem: ${budget.total} tokenů`);
+      }
+
+      function testPromptOptimizer() {
+        const testPrompts = [
+          'Co je JavaScript?',
+          'Můžu použít React pro mobilní aplikace?',
+          'Vyjmenuj 5 programovacích jazyků',
+          'Napiš kód pro kalkulačku',
+        ];
+
+        let result = '⚡ Prompt Optimizer - detekce typu dotazu:\n\n';
+
+        testPrompts.forEach(p => {
+          const queryType = AI.promptOptimizer.detectQueryType(p);
+          result += `"${p}"\n→ Typ: ${queryType.type}, Max tokens: ${queryType.maxTokens}\n\n`;
+        });
+
+        alert(result);
+      }
+
+      async function testSmartRetry() {
+        setStatus('loading', 'Testuji Smart Retry...');
+
+        try {
+          const result = await AI.smartRetry.askWithFallback("Řekni 'test OK'", {
+            maxRetries: 2,
+          });
+
+          alert(`🔄 Smart Retry úspěšný!\n\nOdpověď: ${result}`);
+        } catch (error) {
+          alert(`❌ Smart Retry selhal: ${error.message}`);
+        }
+
+        setStatus('ready', 'Připraven');
+      }
+
+      function testCache() {
+        const stats = AI.cache.stats();
+
+        alert(`💾 Response Cache:
+
+Velikost: ${stats.size}/${stats.maxSize}
+Hits: ${stats.hits}
+Misses: ${stats.misses}
+Hit Rate: ${stats.hitRate}`);
+      }
+
+      async function testParallel() {
+        setStatus('loading', 'Testuji paralelní dotazy...');
+
+        const prompts = ["Řekni 'A'", "Řekni 'B'", "Řekni 'C'"];
+
+        try {
+          const startTime = Date.now();
+          const results = await AI.parallel(prompts, { maxConcurrent: 3 });
+          const elapsed = ((Date.now() - startTime) / 1000).toFixed(2);
+
+          const success = results.filter(r => r.success).length;
+          alert(`⚡ Parallel Execution:
+
+${success}/${results.length} úspěšných
+Celkový čas: ${elapsed}s
+
+Odpovědi:
+${results.map((r, i) => `${i + 1}. ${r.success ? r.response?.trim() : '❌ ' + r.error}`).join('\n')}`);
+        } catch (error) {
+          alert(`❌ Parallel test selhal: ${error.message}`);
+        }
+
+        setStatus('ready', 'Připraven');
+      }
+
+      // ============================================================
+      // COLLAPSIBLE SECTIONS
+      // ============================================================
+      function toggleSection(sectionId) {
+        const content = document.getElementById(sectionId);
+        const arrow = document.getElementById(sectionId + 'Arrow');
+
+        if (content) {
+          content.classList.toggle('open');
+        }
+        if (arrow) {
+          const isOpen = content?.classList.contains('open');
+          arrow.textContent = isOpen ? '▼' : '▶';
+        }
+      }
+
+      // ============================================================
+      // DEVTOOLS
+      // ============================================================
+      let devToolsVisible = false;
+      let currentDevTab = 'console';
+      let networkLogs = [];
+
+      function toggleDevTools() {
+        const panel = document.getElementById('devToolsPanel');
+        const toggle = document.getElementById('devToolsToggle');
+        devToolsVisible = !devToolsVisible;
+        panel.style.display = devToolsVisible ? 'block' : 'none';
+        toggle.classList.toggle('active', devToolsVisible);
+      }
+
+      function switchDevTab(tab) {
+        currentDevTab = tab;
+        document.querySelectorAll('.devtools-tab').forEach(t => {
+          t.classList.toggle('active', t.textContent.toLowerCase() === tab);
+        });
+        renderDevContent();
+      }
+
+      function renderDevContent() {
+        const content = document.getElementById('devToolsContent');
+        if (currentDevTab === 'console') {
+          content.innerHTML = '<div id="devConsoleOutput"></div>';
+          // Re-render console logs
+        } else if (currentDevTab === 'network') {
+          content.innerHTML = `
+            <div style="color: #969696; padding: 8px 0;">
+              <div style="margin-bottom: 8px;">📡 Síťové požadavky (${networkLogs.length})</div>
+              ${
+                networkLogs
+                  .map(
+                    log => `
+                <div class="dev-entry ${log.success ? 'success' : 'error'}">
+                  <span class="dev-entry-time">${log.time}</span>
+                  <span class="dev-entry-type">${log.method}</span>
+                  <span class="dev-entry-msg">${log.provider} → ${log.model} ${log.success ? '✓' : '✗'} ${log.duration}ms</span>
+                </div>
+              `
+                  )
+                  .join('') || '<div style="color:#969696">Žádné požadavky</div>'
+              }
+            </div>
+          `;
+        } else if (currentDevTab === 'state') {
+          const stats = AI.stats.get();
+          const keys = Object.keys(PROVIDER_LIMITS).map(p => ({
+            provider: p,
+            hasKey: !!AI.getKey(p),
+            isDemo: AI.isUsingDemoKey(p),
+          }));
+          content.innerHTML = `
+            <div style="color: #d4d4d4;">
+              <div style="margin-bottom: 12px; color: #4ec9b0;">📊 AI Module State</div>
+
+              <div style="margin-bottom: 8px; color: #dcdcaa;">Statistiky:</div>
+              <div style="padding-left: 12px; margin-bottom: 12px;">
+                <div>Celkem volání: <span style="color:#4ec9b0">${stats.totalCalls}</span></div>
+                <div>Volání dnes: <span style="color:#4ec9b0">${stats.dailyCalls}</span></div>
+                <div>Tokeny IN: <span style="color:#4ec9b0">${stats.totalTokensIn}</span></div>
+                <div>Tokeny OUT: <span style="color:#4ec9b0">${stats.totalTokensOut}</span></div>
+              </div>
+
+              <div style="margin-bottom: 8px; color: #dcdcaa;">API Klíče:</div>
+              <div style="padding-left: 12px; margin-bottom: 12px;">
+                ${keys
+                  .map(
+                    k => `
+                  <div>
+                    ${PROVIDER_LIMITS[k.provider].icon} ${k.provider}:
+                    ${k.hasKey ? (k.isDemo ? '<span style="color:#cca700">demo</span>' : '<span style="color:#4ec9b0">vlastní</span>') : '<span style="color:#f14c4c">chybí</span>'}
+                  </div>
+                `
+                  )
+                  .join('')}
+              </div>
+
+              <div style="margin-bottom: 8px; color: #dcdcaa;">Aktuální nastavení:</div>
+              <div style="padding-left: 12px;">
+                <div>Provider: <span style="color:#ce9178">${currentProvider}</span></div>
+                <div>Auto-Switch: <span style="color:#${autoSwitch ? '4ec9b0' : 'f14c4c'}">${autoSwitch ? 'ON' : 'OFF'}</span></div>
+                <div>Cache entries: <span style="color:#4ec9b0">${AI.cache._data.size || 0}</span></div>
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      function clearDevConsole() {
+        const output = document.getElementById('devConsoleOutput');
+        if (output) output.innerHTML = '';
+        networkLogs = [];
+        logToConsole('info', 'Konzole vymazána');
+      }
+
+      function logToConsole(type, ...args) {
+        const output = document.getElementById('devConsoleOutput');
+        if (!output) return;
+
+        const entry = document.createElement('div');
+        entry.className = 'dev-entry ' + type;
+
+        const time = new Date().toLocaleTimeString('cs-CZ');
+        const typeLabel = type.toUpperCase().padEnd(7);
+
+        entry.innerHTML = `
+          <span class="dev-entry-time">${time}</span>
+          <span class="dev-entry-type">${typeLabel}</span>
+          <span class="dev-entry-msg">${args.join(' ')}</span>
+        `;
+        output.appendChild(entry);
+        output.scrollTop = output.scrollHeight;
+      }
+
+      function logNetworkRequest(provider, model, success, duration) {
+        networkLogs.push({
+          time: new Date().toLocaleTimeString('cs-CZ'),
+          method: 'POST',
+          provider,
+          model,
+          success,
+          duration,
+        });
+        if (networkLogs.length > 50) networkLogs.shift();
+        if (currentDevTab === 'network') renderDevContent();
+      }
+
+      // F12 shortcut - pouze pro mobilní zařízení
+      // Na PC nechávám F12 pro nativní DevTools prohlížeče
+      function isMobileDevice() {
+        return (
+          /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+            navigator.userAgent
+          ) ||
+          (window.innerWidth <= 768 && 'ontouchstart' in window)
+        );
+      }
+
+      document.addEventListener('keydown', e => {
+        if (e.key === 'F12' && isMobileDevice()) {
+          e.preventDefault();
+          toggleDevTools();
+        }
+        // Na PC F12 otevře normální DevTools prohlížeče
+      });
+
+      // Skrýt DevTools tlačítko na PC, zobrazit pouze na mobilu
+      function updateDevToolsButtonVisibility() {
+        const btn = document.getElementById('devToolsToggle');
+        if (btn) {
+          btn.style.display = isMobileDevice() ? 'flex' : 'none';
+        }
+      }
+
+      // Aktualizovat při načtení a změně velikosti okna
+      window.addEventListener('load', updateDevToolsButtonVisibility);
+      window.addEventListener('resize', updateDevToolsButtonVisibility);
+
+      // Capture errors
+      window.onerror = (msg, url, line) => logToConsole('error', `${msg} (line ${line})`);
+      window.onunhandledrejection = e => logToConsole('error', 'Promise rejected:', e.reason);
+    </script>
+  </body>
+</html>

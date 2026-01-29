@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Test AI Asistenta</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background: #1a1a1a;
+        color: #e0e0e0;
+      }
+      .test-section {
+        background: #2d2d2d;
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 8px;
+        border-left: 4px solid #667eea;
+      }
+      h1 {
+        color: #667eea;
+      }
+      h2 {
+        color: #a0a0a0;
+        font-size: 18px;
+      }
+      button {
+        background: #667eea;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 5px;
+      }
+      button:hover {
+        background: #5568d3;
+      }
+      .result {
+        background: #1a1a1a;
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 4px;
+        font-family: monospace;
+        font-size: 12px;
+      }
+      .success {
+        color: #48bb78;
+      }
+      .error {
+        color: #f56565;
+      }
+      .info {
+        color: #4299e1;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🤖 Test AI Asistenta</h1>
+    <p>Tento test ověří, že AI asistent dokáže vytvořit, přepsat a doplnit kód.</p>
+
+    <div class="test-section">
+      <h2>📥 Krok 1: Příprava</h2>
+      <p class="info">
+        <strong>Otevřete hlavní aplikaci v novém tabu:</strong><br />
+        <a href="http://localhost:3000/" target="_blank" style="color: #667eea; font-size: 18px">
+          🚀 Otevřít HTML Studio →
+        </a>
+      </p>
+      <button onclick="test1Prepare()">✓ Aplikace otevřena</button>
+      <div id="result1" class="result"></div>
+    </div>
+
+    <div class="test-section">
+      <h2>➕ Krok 2: Přidání prvku (smajlík)</h2>
+      <button onclick="test2AddElement()">Test: Přidat smajlíka</button>
+      <div id="result2" class="result"></div>
+      <p class="info">Očekávaný příkaz: "přidej 😊 smajlíka nad kalkulačkou"</p>
+    </div>
+
+    <div class="test-section">
+      <h2>✏️ Krok 3: Úprava existujícího (změna barvy)</h2>
+      <button onclick="test3ModifyExisting()">Test: Změnit barvu</button>
+      <div id="result3" class="result"></div>
+      <p class="info">Očekávaný příkaz: "změň barvu tlačítek na zelenou"</p>
+    </div>
+
+    <div class="test-section">
+      <h2>🗑️ Krok 4: Odstranění (vymaž prvek)</h2>
+      <button onclick="test4RemoveElement()">Test: Odstranit smajlíka</button>
+      <div id="result4" class="result"></div>
+      <p class="info">Očekávaný příkaz: "odstran smajlíka"</p>
+    </div>
+
+    <div class="test-section">
+      <h2>📊 Výsledky testů</h2>
+      <div id="summary" class="result"></div>
+    </div>
+
+    <script>
+      const testResults = {
+        load: false,
+        add: false,
+        modify: false,
+        remove: false,
+      };
+
+      // Test 1: Příprava
+      async function test1Prepare() {
+        const result = document.getElementById('result1');
+        testResults.load = true;
+        result.innerHTML = `<span class="success">✅ Připraveno! Pokračujte na Test 2.</span>`;
+        updateSummary();
+      }
+
+      // Test 2: Přidání prvku
+      async function test2AddElement() {
+        const result = document.getElementById('result2');
+        result.innerHTML = '⏳ Spouštím AI příkaz...';
+
+        // Simulace - uživatel musí zadat do AI panelu: "přidej 😊 smajlíka nad kalkulačkou"
+        result.innerHTML = `<span class="info">ℹ️ Tento test vyžaduje manuální akci:</span><br>
+                1. Otevři AI panel (ikona vlevo dole)<br>
+                2. Napiš: <strong>"přidej 😊 smajlíka nad kalkulačkou"</strong><br>
+                3. Zkontroluj, že se smajlík přidal<br>
+                4. Klikni "Úspěch" nebo "Selhání" níže<br><br>
+                <button onclick="markTest('add', true)">✅ Úspěch</button>
+                <button onclick="markTest('add', false)">❌ Selhání</button>`;
+      }
+
+      // Test 3: Úprava existujícího
+      async function test3ModifyExisting() {
+        const result = document.getElementById('result3');
+        result.innerHTML = `<span class="info">ℹ️ Tento test vyžaduje manuální akci:</span><br>
+                1. V AI panelu napiš: <strong>"změň barvu tlačítek na zelenou"</strong><br>
+                2. Zkontroluj, že se barva změnila<br>
+                3. Klikni "Úspěch" nebo "Selhání" níže<br><br>
+                <button onclick="markTest('modify', true)">✅ Úspěch</button>
+                <button onclick="markTest('modify', false)">❌ Selhání</button>`;
+      }
+
+      // Test 4: Odstranění prvku
+      async function test4RemoveElement() {
+        const result = document.getElementById('result4');
+        result.innerHTML = `<span class="info">ℹ️ Tento test vyžaduje manuální akci:</span><br>
+                1. V AI panelu napiš: <strong>"odstran smajlíka"</strong><br>
+                2. Zkontroluj, že smajlík zmizel<br>
+                3. Klikni "Úspěch" nebo "Selhání" níže<br><br>
+                <button onclick="markTest('remove', true)">✅ Úspěch</button>
+                <button onclick="markTest('remove', false)">❌ Selhání</button>`;
+      }
+
+      function markTest(testName, success) {
+        testResults[testName] = success;
+        updateSummary();
+
+        const resultDiv = document.getElementById(
+          `result${testName === 'add' ? '2' : testName === 'modify' ? '3' : '4'}`
+        );
+        resultDiv.innerHTML = success
+          ? '<span class="success">✅ Test prošel</span>'
+          : '<span class="error">❌ Test selhal</span>';
+      }
+
+      function updateSummary() {
+        const summary = document.getElementById('summary');
+        const passed = Object.values(testResults).filter(r => r === true).length;
+        const total = Object.keys(testResults).length;
+
+        summary.innerHTML = `
+                <strong>Shrnutí testů:</strong><br>
+                Test 1 - Načtení: ${testResults.load ? '✅' : '⏳'}<br>
+                Test 2 - Přidání: ${testResults.add === true ? '✅' : testResults.add === false ? '❌' : '⏳'}<br>
+                Test 3 - Úprava: ${testResults.modify === true ? '✅' : testResults.modify === false ? '❌' : '⏳'}<br>
+                Test 4 - Odstranění: ${testResults.remove === true ? '✅' : testResults.remove === false ? '❌' : '⏳'}<br><br>
+                <strong>Celkové skóre: ${passed}/${total}</strong>
+            `;
+      }
+
+      // Inicializace
+      updateSummary();
+    </script>
+  </body>
+</html>

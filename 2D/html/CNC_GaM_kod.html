@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNC G a M Kódy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 10px;
+        }
+        h1, h2 {
+            font-size: 1.5em;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            font-size: 1em;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            font-size: 1em;
+        }
+        #gCodesInfo, #mCodesInfo, #commandsInfo {
+            margin-top: 20px;
+        }
+        @media (min-width: 600px) {
+            button {
+                width: auto;
+            }
+        }
+        /* Přidat styl pro navigační ikonu */
+        .home-link {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            color: #333;
+            text-decoration: none;
+            font-size: 24px;
+            z-index: 1000;
+            background: white;
+            padding: 8px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .home-link:hover {
+            color: #666;
+            background: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <!-- Přidat navigační ikonu hned pod začátek body -->
+    <a href="index.html" class="home-link">
+        <i class="fas fa-home"></i>
+    </a>
+    <h1>CNC-G a M Kódy + Příkazy</h1>
+    <p>Vyhledávání: <span id="matchCount">0</span> nalezených shod</p>
+    <input type="text" id="searchInput" placeholder="Vyhledat..." onkeyup="searchFunction()">
+    <button class="active" onclick="showInfo('gCodesInfo')">G kód</button>
+    <button onclick="showInfo('mCodesInfo')">M kód</button>
+    <button onclick="showInfo('commandsInfo')">Příkazy</button>
+    <div id="gCodesInfo" style="display: block;">
+        <h2>G Kódy</h2>
+        <p style="white-space: pre-line;">
+            G0 - rychloposuv\n
+            G1 - pracovní posuv\n
+            G2 - kruhová interpolace ve směru hodinových ručiček\n
+            G3 - kruhová interpolace proti směru hodinových ručiček\n
+            CIP - kruhová interpolace přes mezibod\n
+            G4 - prodleva\n
+            G9 - přesné najetí - působí v jedné větě\n
+            G17 - interpolační rovina XY\n
+            G18 - interpolační rovina XZ\n
+            G19 - interpolační rovina YZ\n
+            G25 - ohraničení minimálního pracovního pole, ohraničení počtu otáček\n
+            G26 - ohraničení maximálního pracovního pole, ohraničení počtu otáček\n
+            G33 - závit s konstantním stoupáním\n
+            G331 - vrtání závitu\n
+            G332 - zpětný pohyb při vrtání závitu\n
+            G40 - vypnout kompenzaci poloměru nástroje\n
+            G41 - zapnout kompenzaci poloměru nástroje vlevo\n
+            G42 - zapnout kompenzaci poloměru nástroje vpravo\n
+            G53 - zrušení nastavitelného posunutí nulového bodu - působí v jedné větě\n
+            G54-G57 - nastavitelné posunutí nulového bodu\n
+            G500 - zrušení nastavitelného posunutí nulového bodu\n
+            G505-G599 - nastavitelná posunutí nulového bodu\n
+            G60 - zpomalení rychlosti, přesné najetí\n
+            G601 - jemné přesné najetí\n
+            G602 - hrubé přesné najetí\n
+            G603 - znovu zapnout, je-li dosažano požadované hodnoty\n
+            G63 - řezání závitu bez synchronizace\n
+            G64 - režim řízení dráhy\n
+            G641 - režim řízení dráhy s programovaným přejezdem\n
+            G70 - programování v palcích\n
+            G71 - programování v mm\n
+            G90 - absolutní programování\n
+            G91 - přírůstkové programování\n
+            G94 - posuv v mm/min nebo Inch/min\n
+            G95 - posuv v mm/ot nebo Inch/ot\n
+            G96 - konstantní řezná rychlost\n
+            G97 - zrušení konstantní řezné rychlosti\n
+            G110 - programování v polárních souřadnicích relativně\n
+            G111 - programování v polárních souřadnicích absolutně\n
+            G112 - program. v polár. souř., vztažených k poslednímu platnému pólu\n
+            G140 - měkké najetí a odjetí\n
+            G141 - najetí, popř. odjetí zleva\n
+            G142 - najetí, popř. odjetí zprava\n
+            G143 - směr najetí(odjetí) v závislosti na poloze bodu ke směru tangenty\n
+            G147 - najetí po přímce\n
+            G148 - odjetí po přímce\n
+            G247 - najetí po čtvrtkružnici\n
+            G248 - odjetí po čtvrtkružnici\n
+            G340 - prostorové odjetí a najetí (základní nastavení)\n
+            G341 - najetí a odjetí v rovině\n
+            G347 - najetí po půlkružnici\n
+            G348 - odjetí po půlkružnici\n
+            G450 - najetí na konturu a odjetí\n
+            G451 - najetí na konturu a odjetí\n
+        </p>
+    </div>
+    <div id="mCodesInfo" style="display: none;">
+        <h2>M Kódy</h2>
+        <p style="white-space: pre-line;">
+            M0 - programový stop\n
+            M1 - volitelný stop (stop programu jen při OPT.STOP)\n
+            M2 - konec programu\n
+            M2=3 - poh. nástroj ZAP ve směru hod. ručiček\n
+            M2=4 - poh. nástroj ZAP proti směru hod. ručiček\n
+            M2=5 - poh. nástroj VYP\n
+            M3 - vřeteno ZAP ve směru hod.ručiček\n
+            M4 - vřeteno ZAP proti směru hod.ručiček\n
+            M5 - vřeteno VYP\n
+            M8 - chlazení ZAP\n
+            M9 - chlazení VYP\n
+            M10 - brzda vřetene ZAP\n
+            M11 - brzda vřetene VYP\n
+            M17 - konec podprogramu\n
+            M20 - pinola zpět\n
+            M21 - pinola vpřed\n
+            M23 - sběrač obrobků zpět\n
+            M24 - sběrač obrobků vpřed\n
+            M25 - upínací zařízení otevřít\n
+            M26 - upínací zařízení zavřít\n
+            M30 - konec hlavního programu\n
+            M32 - konec programu pro režim nakládání\n
+            M57 - kývání vřetene ZAP\n
+            M58 - kývání vřetene P\n
+            M67 - tyčový podavač/magazin posuv ZAP\n
+            M68 - tyčový podavač/magazin posuv VYP\n
+            M69 - výměna tyče\n
+            M71 - ofukování ZAP\n
+            M72 - ofukování VYP\n
+        </p>
+    </div>
+    <div id="commandsInfo" style="display: none;">
+        <h2>Příkazy</h2>
+        <p style="white-space: pre-line;">
+            AC - absolutní poloha např. : X=AC(10)\n
+            ACN - absolutní zadání míry, polohu najet v negativním směru\n
+            ACP - absolutní zadání míry, polohu najet v pozitivním směru\n
+            AND - logická spojka AND\n
+            AP - polární úhel při programování v polárních souřadnicích\n
+            AR - úhel rozevření u kruhové interpolace\n
+            AXIS - typ proměnné\n
+            AX - operátor osy\n
+            AXNAME - řetězcová operace\n
+            AMIRROR - přídavné zrcadlení\n
+            AROT - přídavná rotace\n
+            ASCALE - přídavné měřítko\n
+            ATRANS - přídavné posunutí\n
+            B_AND, B_NOT, B_OR, B_XOR - logické spojovací operátory\n
+            BOOL - typ proměnné\n
+            CASE - konstrukce smyčky\n
+            CIP - kruhová interpolace pomocí mezibodu\n
+            CHAR - typ proměnné\n
+            CHF - vložit sražení hrany\n
+            CR - kružnice pomocí zadání poloměru\n
+            CFC - konstantní posuv po kontuře\n
+            CFIN - konstantní posuv ostří nástroje\n
+            CFTCP - konstantní posuv osy frézovacího nástroje\n
+            CONTPRON - příprava kontury\n
+            CHR - sražení hrany pomocí délky sražení (přepony)\n
+            D - číslo ostří nástroje\n
+            DC - absolutní zadání rozměru, přímá poloha\n
+            DIAMOF - programování v poloměrech\n
+            DIAMON - průměrové programování\n
+            DEF - definice proměnné\n
+            DISPLOF - indikace v programovém okně vypnout\n
+            DISPLOF - indikace v programovém okně zapnout\n
+            DIV - celočíselné dělení\n
+            DEFAULT - konstrukce smyčky\n
+            DEFINE AS - programování makra\n
+            DISC - korekce vnějšího rohu, flexibilní programování příkazů najetí a odjetí\n
+            DISCL - vzdálenost koncového bodu od pracovní roviny při WAB\n
+            DISR - vzdálenost hrany frézy od startovního bodu při WAB\n
+            ELSE - konstrukce smyčky\n
+            ENDFOR - konstrukce smyčky\n
+            ENDLOOP - konstrukce smyčky\n
+            ENDWHILE - konstrukce smyčky\n
+            ENDIF - konstrukce smyčky\n
+            EXECTAB - projetí prvku kontury\n
+            EXECUTE - tabulka kontury hotová\n
+            F - posuv\n
+            FOR - konstrukce smyčky\n
+            FRAME - typ proměnné\n
+            FAD - rychlost pomalého posuvu do hloubky při měkkém najetí a odjetí\n
+            GOTOB - skok směrem na začátek programu\n
+            GOTOF - skok směrem na konec programu\n
+            I1 - adresa pro kruhový mezibod\n
+            IC - inkrementální poloha př. : = IC(10)\n
+            IF - konstrukt smyčky\n
+            INT - typ proměnné\n
+            INTERSEC - vypočítat průsečík kontur\n
+            J1 - adresa pro mezibod kružnice\n
+            KONT - adresa pro mezibod kružnice\n
+            K1 - adresa pro mezibod kružnice\n
+            LIMS - omezení počtu otáček\n
+            LOOP - konstrukce smyčky\n
+            MCALL - modální vyvolání podprogramu\n
+            MSG - zobrazit text na obrazovce\n
+            MIRROR - zapnout zrcadlení\n
+            N - číslo věty\n
+            NOT - negace\n
+            NORM - přímé najetí na konturu\n
+            OFFN - Offset kontura-normálně\n
+            OR - logický OR operátor\n
+            P - počet průchodů podprogramu\n
+            PROC - podprogram - definice procedury (předávací parametery)\n
+            R - parametry R[0]-R[99]\n
+            ROT - zapnutí rotace\n
+            REAL - typ proměnné\n
+            RET - konec podprogramu, skok zpět do vyšší úrovně\n
+            RND - vložení zaoblení\n
+            RNDM - modální vložení zaoblení\n
+            RP - polární poloměr při programování polárních souřadnic\n
+            RPL - určení rotační roviny\n
+            REP - inicializace pole\n
+            S - adresa vřetena\n
+            SAVE - uložení registru při vyvolání podprogramu\n
+            SETAL - zapnutí alarmu\n
+            SET - nastavení proměnných\n
+            SETMS - nastavení hlavního vřetena\n
+            SF - počáteční bod pootočení pro G33\n
+            SPCOF - vypnutí polohování vřetena\n
+            SPCON - zapnutí polohování vřetena\n
+            STRING - typ proměnné\n
+            SCALE - zapnutí změny měřítka\n
+            STRLEN - řetězcové operace\n
+            SPOS - polohování vřetena s řízenou polohou\n
+            SPOSA - polohování vřetena s řízenou polohou\n
+            SUPA - vypnutí všech programovatelných nastavitelných rámců, posunutí\n
+            SBLOF - zapnout potlačení režimu věta po větě\n
+        </p>
+    </div>
+    <script>
+    function showInfo(infoId) {
+        document.getElementById('gCodesInfo').style.display = 'none';
+        document.getElementById('mCodesInfo').style.display = 'none';
+        document.getElementById('commandsInfo').style.display = 'none';
+        document.getElementById(infoId).style.display = 'block';
+        var buttons = document.querySelectorAll('button');
+        buttons.forEach(button => button.classList.remove('active'));
+        document.querySelector(`button[onclick="showInfo('${infoId}')"]`).classList.add('active');
+        // Vynulovat vyhledávací text a odstranit zvýraznění
+        document.getElementById('searchInput').value = '';
+        searchFunction(); // Spustit vyhledávací funkci pro odstranění zvýraznění
+    }
+    function searchFunction() {
+        var input, filter, div, p, i, txtValue;
+        input = document.getElementById('searchInput');
+        filter = input.value.toLowerCase(); // Převést vyhledávací text na malá písmena
+        var activeTab = document.querySelector('button.active');
+        if (activeTab) {
+            var targetDivId = activeTab.getAttribute('onclick').match(/'([^']+)'/)[1];
+            div = document.getElementById(targetDivId);
+            p = div.getElementsByTagName('p');
+        } else {
+            return; // Pokud není aktivní záložka, neprovádějte vyhledávání
+        }
+        var matchCount = 0;
+        for (i = 0; i < p.length; i++) {
+            txtValue = p[i].textContent || p[i].innerText;
+            p[i].innerHTML = txtValue;
+            if (filter) {
+                var regex = new RegExp(filter, 'gi'); // 'i' pro ignorování velikosti písmen
+                var highlightedText = txtValue.replace(regex, '<span style="background-color: blue; color: white;">$&</span>');
+                p[i].innerHTML = highlightedText;
+                matchCount += (highlightedText.match(/<span/g) || []).length;
+                p[i].style.display = "";
+            } else {
+                p[i].style.display = ""; // Obnovit zobrazení
+            }
+        }
+        document.getElementById('matchCount').innerHTML = matchCount;
+    }
+    </script>
+</body>
+</html>

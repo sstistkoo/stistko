@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📱 Mobilní Diagnostika</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            padding: 20px;
+            background: #0a0a0b;
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #00d4aa;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .section {
+            background: #1a1a1b;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #00d4aa;
+        }
+
+        .section h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #00d4aa;
+        }
+
+        .info-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .value {
+            color: #fff;
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .status.ok {
+            background: #10b981;
+            color: white;
+        }
+
+        .status.warning {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .status.error {
+            background: #ef4444;
+            color: white;
+        }
+
+        button {
+            background: #00d4aa;
+            color: #0a0a0b;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .css-test {
+            width: 100px;
+            height: 100px;
+            background: #ef4444;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .css-test {
+                background: #10b981;
+            }
+        }
+
+        code {
+            background: #000;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📱 Diagnostika mobilního zobrazení</h1>
+
+        <div class="section">
+            <h2>🖥️ Informace o zařízení</h2>
+            <div class="info-item">
+                <div class="label">Šířka okna:</div>
+                <div class="value" id="width">-</div>
+            </div>
+            <div class="info-item">
+                <div class="label">Výška okna:</div>
+                <div class="value" id="height">-</div>
+            </div>
+            <div class="info-item">
+                <div class="label">PoměrPixelRatio:</div>
+                <div class="value" id="pixelRatio">-</div>
+            </div>
+            <div class="info-item">
+                <div class="label">Orientace:</div>
+                <div class="value" id="orientation">-</div>
+            </div>
+            <div class="info-item">
+                <div class="label">Touch podpora:</div>
+                <div class="value" id="touch">-</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🌐 Prohlížeč</h2>
+            <div class="info-item">
+                <div class="label">User Agent:</div>
+                <div class="value" id="userAgent" style="font-size: 12px; word-break: break-all;">-</div>
+            </div>
+            <div class="info-item">
+                <div class="label">Detekce mobilního zařízení:</div>
+                <div class="value" id="isMobile">-</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎨 CSS Media Query Test</h2>
+            <div class="info-item">
+                <div class="label">Test @media (max-width: 768px):</div>
+                <div class="css-test"></div>
+                <div class="value" id="cssTest">-</div>
+                <div style="margin-top: 10px; font-size: 14px; color: #888;">
+                    Pokud je čtverec <strong style="color: #10b981;">ZELENÝ</strong>, CSS media queries fungují ✅<br>
+                    Pokud je čtverec <strong style="color: #ef4444;">ČERVENÝ</strong>, CSS media queries nefungují ❌
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>💾 LocalStorage</h2>
+            <div class="info-item">
+                <div class="label">LocalStorage dostupný:</div>
+                <div class="value" id="localStorage">-</div>
+            </div>
+            <div class="info-item">
+                <div class="label">Počet uložených položek:</div>
+                <div class="value" id="localStorageCount">-</div>
+            </div>
+            <div class="info-item">
+                <div class="label">Verze aplikace:</div>
+                <div class="value" id="appVersion">-</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔧 Akce</h2>
+            <button onclick="clearCache()">🗑️ Vymazat pouze Browser Cache</button>
+            <button onclick="hardReload()">🔄 Hard Reload (Ctrl+Shift+R)</button>
+            <button onclick="showCSSFiles()">📄 Zobrazit načtené CSS soubory</button>
+            <button onclick="goToMain()">➡️ Přejít na hlavní aplikaci</button>
+        </div>
+
+        <div class="section" id="cssFiles" style="display: none;">
+            <h2>📄 Načtené CSS soubory</h2>
+            <div id="cssFilesList"></div>
+        </div>
+    </div>
+
+    <script>
+        // Načíst informace
+        function loadInfo() {
+            document.getElementById('width').textContent = window.innerWidth + 'px';
+            document.getElementById('height').textContent = window.innerHeight + 'px';
+            document.getElementById('pixelRatio').textContent = window.devicePixelRatio;
+            document.getElementById('orientation').textContent = window.innerWidth > window.innerHeight ? 'Landscape (na šířku)' : 'Portrait (na výšku)';
+
+            const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            document.getElementById('touch').innerHTML = hasTouch ?
+                '<span class="status ok">✅ Ano</span>' :
+                '<span class="status error">❌ Ne</span>';
+
+            document.getElementById('userAgent').textContent = navigator.userAgent;
+
+            const isMobile = window.innerWidth <= 768;
+            document.getElementById('isMobile').innerHTML = isMobile ?
+                '<span class="status ok">✅ Mobilní zařízení (≤768px)</span>' :
+                '<span class="status warning">⚠️ Desktop (>768px)</span>';
+
+            // CSS test
+            const cssTest = document.querySelector('.css-test');
+            const bgColor = window.getComputedStyle(cssTest).backgroundColor;
+            const isGreen = bgColor.includes('16, 185, 129') || bgColor.includes('10b981');
+            document.getElementById('cssTest').innerHTML = isGreen ?
+                '<span class="status ok">✅ Media queries fungují</span>' :
+                '<span class="status error">❌ Media queries nefungují</span>';
+
+            // LocalStorage
+            try {
+                const test = 'test';
+                localStorage.setItem(test, test);
+                localStorage.removeItem(test);
+                document.getElementById('localStorage').innerHTML = '<span class="status ok">✅ Dostupný</span>';
+
+                const count = Object.keys(localStorage).length;
+                document.getElementById('localStorageCount').textContent = count + ' položek';
+
+                const version = localStorage.getItem('app_version') || 'Neznámá';
+                document.getElementById('appVersion').textContent = version;
+            } catch (e) {
+                document.getElementById('localStorage').innerHTML = '<span class="status error">❌ Nedostupný</span>';
+                document.getElementById('localStorageCount').textContent = 'N/A';
+                document.getElementById('appVersion').textContent = 'N/A';
+            }
+        }
+
+        function clearCache() {
+            if ('caches' in window) {
+                caches.keys().then(names => {
+                    names.forEach(name => caches.delete(name));
+                    alert('✅ Browser cache vymazána!\n\nPoznámka: localStorage NEBYLA smazána (vaše data jsou zachována)');
+                });
+            } else {
+                alert('⚠️ Cache API není dostupná v tomto prohlížeči');
+            }
+        }
+
+        function hardReload() {
+            location.reload(true);
+        }
+
+        function showCSSFiles() {
+            const section = document.getElementById('cssFiles');
+            const list = document.getElementById('cssFilesList');
+
+            section.style.display = 'block';
+            list.innerHTML = '';
+
+            const links = document.querySelectorAll('link[rel="stylesheet"]');
+            links.forEach(link => {
+                const div = document.createElement('div');
+                div.className = 'info-item';
+                div.innerHTML = `
+                    <div class="label">CSS soubor:</div>
+                    <div class="value" style="font-size: 12px; word-break: break-all;">
+                        ${link.href}
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+
+            if (links.length === 0) {
+                list.innerHTML = '<div class="info-item"><div class="value" style="color: #ef4444;">❌ Žádné CSS soubory nenalezeny!</div></div>';
+            }
+        }
+
+        function goToMain() {
+            window.location.href = 'index.html?v=' + Date.now();
+        }
+
+        // Načíst info při načtení stránky
+        loadInfo();
+
+        // Aktualizovat při změně velikosti okna
+        window.addEventListener('resize', loadInfo);
+        window.addEventListener('orientationchange', () => {
+            setTimeout(loadInfo, 100);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+/* Header */
+.header {
+  height: 56px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  flex-shrink: 0;
+  z-index: 100;
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Posun headeru když je sidebar otevřený */
+body.sidebar-open .header {
+  margin-left: 320px;
+}
+
+.header-left, .header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-btn {
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.nav-btn:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.nav-btn:active {
+  transform: scale(0.95);
+}
+
+/* AI emoji styling */
+.ai-emoji {
+  font-size: 18px;
+  display: inline-block;
+}
+
+.nav-btn svg {
+  width: 22px;
+  height: 22px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.logo-icon {
+  font-size: 20px;
+}
+
+.logo-text {
+  font-size: 16px;
+}
+
+@media (max-width: 480px) {
+  .logo-text {
+    display: none;
+  }
+
+  .header-left {
+    min-width: 50px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 0 8px;
+  }
+
+  .header-right {
+    gap: 2px;
+  }
+
+  .nav-btn {
+    min-width: 40px;
+    min-height: 40px;
+  }
+
+  .nav-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Zajistit viditelnost důležitých tlačítek */
+  .header-right .nav-btn {
+    display: flex;
+  }
+
+  /* Na malých obrazovkách skrýt některá méně důležitá tlačítka */
+  @media (max-width: 350px) {
+    /* Skrýt tlačítko konzole a refresh jen na velmi malých displejích */
+    #consoleBtn,
+    #refreshBtn {
+      display: none !important;
+    }
+  }
+
+  @media (max-width: 350px) {
+    /* Na velmi malých displejích skrýt i view switcher */
+    #viewEditorBtn,
+    #viewPreviewBtn {
+      display: none !important;
+    }
+
+    .header-right {
+      gap: 1px;
+    }
+
+    .nav-btn {
+      min-width: 36px;
+      min-height: 36px;
+    }
+  }
+}

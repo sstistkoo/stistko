@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hlavní Stránka</title>
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <style>
+            body {
+              font-family: Arial, sans-serif;
+              margin: 0;
+              padding: 0;
+              background-color: #f4f4f4;
+            }
+            h1 {
+              text-align: center;
+              color: #333;
+              padding: 20px;
+            }
+            button {
+              background-color: #4caf50; /* Zelená barva pozadí */
+              border: none;
+              color: white;
+              padding: 15px 32px;
+              text-align: center;
+              text-decoration: none;
+              display: inline-block;
+              font-size: 16px;
+              margin: 4px 2px;
+              cursor: pointer;
+              border-radius: 12px; /* Zaoblené rohy */
+              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Stín */
+              transition: background-color 0.3s, transform 0.3s; /* Efekt při najetí */
+            }
+            button:hover {
+              background-color: #45a049; /* Tmavší zelená při najetí */
+              transform: scale(1.05); /* Zvětšení tlačítka při najetí */
+            }
+            /* Styl pro tmavý režim */
+            body.dark-mode {
+              background-color: #121212;
+              color: white;
+            }
+            .dark-mode-toggle {
+              position: absolute;
+              top: 20px;
+              right: 20px;
+              cursor: pointer;
+              font-size: 24px;
+            }
+            .error-terminal {
+              position: fixed;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+              background-color: #fff;
+              padding: 20px;
+              border: 1px solid #ddd;
+              border-radius: 10px;
+              box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+              display: none;
+            }
+            .sidebar {
+              position: fixed;
+              left: -250px;
+              width: 250px;
+              height: 100%;
+              background-color: #f4f4f4;
+              box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+              transition: left 0.3s;
+              z-index: 1000;
+            }
+            .sidebar.open {
+              left: 0;
+            }
+            .menu-toggle {
+              position: absolute;
+              top: 20px;
+              left: 20px;
+              cursor: pointer;
+              font-size: 24px;
+            }
+            .terminal {
+              position: fixed;
+              bottom: 20px;
+              left: 20px;
+              width: 300px;
+              height: auto;
+              border: 1px solid #ccc;
+              padding: 10px;
+              background-color: white;
+              z-index: 999;
+              display: none; /* Přidáno výchozí skrytí terminálu */
+            }
+            .terminal-content {
+              padding: 10px;
+            }
+            /* Přidat nové styly pro velké ikony */
+            .big-icons-grid {
+              display: grid;
+              grid-template-rows: auto;
+              grid-template-columns: repeat(3, 1fr);
+              gap: 20px;
+              padding: 20px;
+              margin-top: 20px;
+              max-width: 1200px;
+              margin-left: auto;
+              margin-right: auto;
+            }
+
+            .big-icon-button {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              padding: 20px;
+              background-color: var(--card-background);
+              border-radius: 15px;
+              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+              text-decoration: none;
+              color: inherit;
+              transition: transform 0.2s;
+              min-height: 150px;
+              text-align: center;
+            }
+
+            .big-icon-button:hover {
+              transform: translateY(-5px);
+            }
+
+            .big-icon-button i {
+              font-size: 40px;
+              margin-bottom: 10px;
+              color: #4caf50;
+            }
+
+            .big-icon-button span {
+              font-size: 18px;
+              font-weight: bold;
+            }
+
+            /* Přidat nové styly pro tlačítka v menu */
+            .sidebar-button {
+              display: block;
+              width: 90%;
+              margin: 10px auto;
+              padding: 10px 15px;
+              background-color: #4caf50;
+              color: white;
+              border: none;
+              border-radius: 8px;
+              text-decoration: none;
+              text-align: center;
+              font-size: 16px;
+              cursor: pointer;
+              transition: background-color 0.3s, transform 0.2s;
+            }
+
+            .sidebar-button:hover {
+              background-color: #45a049;
+              transform: scale(1.05);
+            }
+
+            .sidebar-button i {
+              margin-right: 8px;
+            }
+
+            .side-menu-btn {
+              background: #4caf50;
+              color: white;
+              border: none;
+              padding: 10px 15px;
+              border-radius: 5px;
+              cursor: pointer;
+              font-size: 14px;
+              display: flex;
+              align-items: center;
+              gap: 5px;
+              margin: 0 10px;
+            }
+
+            .side-menu-btn:hover {
+              background: #45a049;
+            }
+
+            .side-menu-btn i {
+              font-size: 18px;
+            }
+
+            .side-menu {
+              position: fixed;
+              top: 0;
+              height: 100%;
+              background: white;
+              box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+              z-index: 1000;
+              overflow-y: auto;
+              transition: transform 0.3s ease;
+              width: 250px;
+            }
+
+            .left-menu {
+              left: 0;
+              transform: translateX(-100%);
+            }
+
+            .right-menu {
+              right: 0;
+              transform: translateX(100%);
+            }
+
+            .side-menu.active {
+              transform: translateX(0);
+            }
+
+            .menu-close {
+              position: absolute;
+              right: 5px;
+              top: 5px;
+              background: none;
+              border: none;
+              font-size: 18px;
+              cursor: pointer;
+              color: #666;
+              padding: 5px;
+              line-height: 1;
+              z-index: 1001;
+            }
+
+            .menu-items {
+              padding-top: 30px; /* Přidat prostor pro křížek */
+            }
+
+            .menu-close:hover {
+              color: #333;
+              transform: scale(1.1);
+            }
+
+            .menu-item {
+              padding: 15px;
+              border-bottom: 1px solid #eee;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              gap: 10px;
+            }
+
+            .menu-item:hover {
+              background: #f0f0f0;
+            }
+
+            .menu-item i {
+              font-size: 18px;
+              width: 24px;
+              text-align: center;
+            }
+
+            /* Responzivní úpravy */
+            @media (max-width: 768px) {
+              .side-menu {
+                width: 80%;
+              }
+            }
+
+            /* Přidat nový styl pro menu položky */
+            .side-menu .menu-item {
+              padding: 12px 20px;
+              margin: 8px 15px;
+              background-color: #4caf50;
+              color: white;
+              border-radius: 8px;
+              transition: all 0.3s ease;
+              text-decoration: none;
+              display: flex;
+              align-items: center;
+              gap: 10px;
+              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+            .side-menu .menu-item:hover {
+              background-color: #45a049;
+              transform: translateY(-2px);
+              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+
+            .side-menu .menu-item i {
+              font-size: 18px;
+              width: 24px;
+              text-align: center;
+              color: white;
+            }
+
+            .side-menu .menu-item span {
+              color: white;
+              font-weight: 500;
+            }
+
+            /* Upravené styly pro mobilní zobrazení */
+            @media screen and (max-width: 768px) {
+              .big-icons-grid {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: auto;
+                gap: 15px;
+                padding: 10px;
+                margin-top: 80px; /* Prostor pro horní menu */
+              }
+
+              .big-icon-button {
+                min-height: 100px; /* Menší výška pro mobily */
+                padding: 15px;
+              }
+
+              .big-icon-button i {
+                font-size: 30px; /* Menší ikony */
+              }
+
+              .big-icon-button span {
+                font-size: 16px;
+              }
+
+              /* Upravené horní menu pro mobily */
+              .search-container {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                background: white;
+                padding: 10px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+                display: flex;
+                justify-content: space-between;
+              }
+
+              .side-menu-btn {
+                padding: 8px;
+                font-size: 12px;
+              }
+
+              .side-menu-btn i {
+                font-size: 16px;
+              }
+
+              h1 {
+                font-size: 1.2em;
+                margin: 5px 0;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+              }
+
+              /* Upravené postranní menu */
+              .side-menu {
+                width: 80%; /* Širší menu na mobilu */
+              }
+
+              .menu-item {
+                padding: 12px;
+                font-size: 14px;
+              }
+
+              /* Upravené modální okna */
+              .modal {
+                width: 95%;
+                height: 90%;
+                margin: 0;
+      <<<<<<< HEAD
+              }
+            }
+
+            /* Přizpůsobení pro orientaci na výšku - maximálně 768px */
+            @media screen and (max-width: 768px) and (orientation: portrait) {
+              .big-icons-grid {
+                grid-template-columns: 1fr 1fr;
+              }
+
+              .big-icons-grid .big-icon-button:nth-child(1),
+              .big-icons-grid .big-icon-button:nth-child(2),
+              .big-icons-grid .big-icon-button:nth-child(3),
+              .big-icons-grid .big-icon-button:nth-child(4),
+              .big-icons-grid .big-icon-button:nth-child(5),
+              .big-icons-grid .big-icon-button:nth-child(6),
+              .big-icons-grid .big-icon-button:nth-child(7) {
+                grid-column: auto;
+              }
+            }
+
+            /* Přizpůsobení pro orientaci na šířku - maximálně 768px */
+            @media screen and (max-width: 768px) and (orientation: landscape) {
+              .big-icons-grid {
+                grid-template-columns: repeat(2, 1fr);
+              }
+
+              .big-icons-grid .big-icon-button:nth-child(1),
+              .big-icons-grid .big-icon-button:nth-child(2),
+              .big-icons-grid .big-icon-button:nth-child(3),
+              .big-icons-grid .big-icon-button:nth-child(4),
+              .big-icons-grid .big-icon-button:nth-child(5),
+              .big-icons-grid .big-icon-button:nth-child(6),
+              .big-icons-grid .big-icon-button:nth-child(7) {
+                grid-column: auto;
+              }
+            }
+
+            /* Modal styles */
+            .modal {
+              display: none;
+              position: fixed;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background-color: rgba(0, 0, 0, 0.5);
+              z-index: 1000;
+              overflow: auto;
+            }
+
+            .modal-content {
+              position: fixed;
+              background-color: #fff;
+              margin: 0;
+              padding: 0;
+              width: 100%;
+              height: 100vh;
+              max-width: none;
+              border-radius: 0;
+              box-shadow: none;
+              overflow: hidden;
+              top: 0;
+              left: 0;
+            }
+
+            .modal-iframe {
+              width: 100%;
+              height: 100%;
+              border: none;
+              transform: none;
+            }
+
+            .close-modal {
+              position: fixed;
+              right: 20px;
+              top: 20px;
+              font-size: 28px;
+              background: rgba(255, 255, 255, 0.9);
+              z-index: 1002;
+            }
+            /* Přidat styly pro horní panel */
+            .search-container {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              padding: 10px 20px;
+              background-color: #f8f9fa;
+              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+            .search-container .menu-item {
+              display: flex;
+              align-items: center;
+              gap: 5px;
+              padding: 8px 15px;
+              text-decoration: none;
+              color: #333;
+              border-radius: 5px;
+              transition: background-color 0.3s;
+            }
+
+            .search-container .menu-item:hover {
+              background-color: #e9ecef;
+            }
+
+            .search-container .menu-item i {
+              font-size: 1.2em;
+              color: #4caf50;
+            }
+
+            .search-container h1 {
+              margin: 0;
+              padding: 0;
+              font-size: 1.5em;
+              text-align: center;
+              flex-grow: 1;
+            }
+
+            .search-container .right-buttons {
+              display: flex;
+              align-items: center;
+              gap: 10px;
+            }
+    </style>
+  </head>
+  <body>
+    <!-- Upravit strukturu horního menu -->
+    <div class="search-container">
+      <div style="display: flex; align-items: center; gap: 10px">
+        <button class="side-menu-btn" onclick="toggleLeftMenu()">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+
+      <h1><span id="datetime" style="font-size: 14px; color: #666"></span></h1>
+
+      <div class="right-buttons">
+        <button class="side-menu-btn" onclick="toggleRightMenu()">
+          <i class="fas fa-cog"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Upravit levé menu - odstranit datetime -->
+    <div class="side-menu left-menu" id="leftMenu">
+      <button class="menu-close" onclick="toggleLeftMenu()">&times;</button>
+      <div class="menu-items">
+        <a href="#" onclick="openPrikazyModal()" class="menu-item">
+          <i class="fas fa-code"></i>
+          <span>Příkazy Syntax</span>
+        </a>
+        <a href="#" onclick="openGkodModal()" class="menu-item">
+          <i class="fas fa-cog"></i>
+          <span>G kód Syntax</span>
+        </a>
+        <a href="#" onclick="openMkodModal()" class="menu-item">
+          <i class="fas fa-cogs"></i>
+          <span>M kód Syntax</span>
+        </a>
+        <hr style="width: 90%; border: 1px solid #ccc; margin: 15px auto" />
+        <a href="#" onclick="openPosuvRadiusModal()" class="menu-item">
+          <i class="fas fa-circle-notch"></i>
+          <span>Posuv Radius</span>
+        </a>
+        <a href="#" onclick="openGcodeMeaningModal()" class="menu-item">
+          <i class="fas fa-code"></i>
+          <span>G-kód význam</span>
+        </a>
+        <hr style="width: 90%; border: 1px solid #ccc; margin: 15px auto" />
+        <a href="#" onclick="openZkratkyModal()" class="menu-item">
+          <i class="fas fa-keyboard"></i>
+          <span>Zkratky na displeji</span>
+        </a>
+        <a href="#" onclick="openSystemPromModal()" class="menu-item">
+          <i class="fas fa-microchip"></i>
+          <span>Sys. proměnné</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Upravit pravé menu - odstranit Obráběcí plátky -->
+    <div class="side-menu right-menu" id="rightMenu">
+      <button class="menu-close" onclick="toggleRightMenu()">&times;</button>
+      <div class="menu-items">
+        <a href="cnc_program.html" class="menu-item">
+          <i class="fas fa-code"></i>
+          <span>G90 - analýza programu</span>
+        </a>
+        <a href="kalkulace_geometrie_opotrebeni.html" class="menu-item">
+          <i class="fas fa-drafting-compass"></i>
+          <span>Geometrie - opotřebení</span>
+        </a>
+        <a href="cas.html" class="menu-item">
+          <i class="fas fa-clock"></i>
+          <span>Čas a vzdálenost</span>
+        </a>
+        <a href="#" onclick="openSimulatorEditor()" class="menu-item">
+          <i class="fas fa-desktop"></i>
+          <span>Simulátor a Editor</span>
+        </a>
+        <a href="SimEditor.html" class="menu-item">
+          <i class="fas fa-edit"></i>
+          <span>Editor</span>
+        </a>
+        <a href="simKresleni.html" class="menu-item">
+          <i class="fas fa-pen-fancy"></i>
+          <span>Kreslení</span>
+        </a>
+        <a href="SimDraha.html" class="menu-item">
+          <i class="fas fa-robot"></i>
+          <span>CAM</span>
+        </a>
+        <a href="SimDxf.html" class="menu-item">
+          <i class="fas fa-file"></i>
+          <span>DXF-JSON</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Upravit hlavní mřížku ikon -->
+    <div class="big-icons-grid">
+      <a href="#" onclick="openCalculator()" class="big-icon-button">
+        <i class="fas fa-calculator fa-3x"></i>
+        <span>Kalkulačka</span>
+      </a>
+      <a href="sichty.html" class="big-icon-button">
+        <i class="fas fa-calendar-alt fa-3x"></i>
+        <span>Kalendář</span>
+      </a>
+      <a href="kalkulace_korekce_nastroje.html" class="big-icon-button">
+        <i class="fas fa-wrench fa-3x"></i>
+        <span>Korekce Nástrojů</span>
+      </a>
+      <a href="#" onclick="openLKorekceModal()" class="big-icon-button">
+        <i class="fas fa-tools fa-3x"></i>
+        <span>L Korekce (Z, vnější průměr)</span>
+      </a>
+      <a href="tolerance.html" class="big-icon-button">
+        <i class="fas fa-ruler fa-3x"></i>
+        <span>Volné míry</span>
+      </a>
+      <a href="trojuhelnik.html" class="big-icon-button">
+        <i class="fas fa-square-root-alt fa-3x"></i>
+        <span>Kužel - trojúhelník</span>
+      </a>
+      <a href="ukazky_kodu.html" class="big-icon-button">
+        <i class="fas fa-file-code fa-3x"></i>
+        <span>Ukázky CNC kódů</span>
+      </a>
+      <a href="obrabeci_platky.html" class="big-icon-button">
+        <i class="fas fa-cog fa-3x"></i>
+        <span>Obráběcí Plátky</span>
+      </a>
+      <a href="2D_AI.html" class="big-icon-button">
+        <i class="fas fa-drafting-compass fa-3x"></i>
+        <span>2D AI</span>
+      </a>
+      <a href="2D/index.html" class="big-icon-button">
+        <i class="fas fa-cube fa-3x"></i>
+        <span>2D AI Kreslení</span>
+      </a>
+    </div>
+
+    <div
+      id="cncModal"
+      style="
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        border: 1px solid #ccc;
+        padding: 20px;
+        z-index: 1000;
+        width: 80%;
+        height: 80%;
+      "
+    >
+      <button onclick="closeCNCModal()" style="float: right; font-size: 0.5em">
+        ❌
+      </button>
+      <iframe
+        src="CNC_GaM_kod.html"
+        style="width: 100%; height: 100%; border: none"
+      ></iframe>
+    </div>
+    <div
+      id="gcodeModal"
+      style="
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        border: 1px solid #ccc;
+        padding: 20px;
+        z-index: 1000;
+        width: 90%;
+        height: 90%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      "
+    >
+      <button
+        onclick="closeGcodeModal()"
+        style="
+          position: absolute;
+          right: 10px;
+          top: 10px;
+          border: none;
+          background: none;
+          font-size: 20px;
+          cursor: pointer;
+        "
+      >
+        ❌
+      </button>
+      <iframe
+        src="Gkod.html"
+        style="width: 100%; height: 100%; border: none"
+      ></iframe>
+    </div>
+    <!-- Přidání nového modálního okna pro G kódy - význam -->
+    <div
+      id="gcodeMeaningModal"
+      class="modal"
+      style="
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        border: 1px solid #ccc;
+        padding: 20px;
+        z-index: 1000;
+        width: 90%;
+        height: 90%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      "
+    >
+      <button
+        onclick="closeGcodeMeaningModal()"
+        style="
+          position: absolute;
+          right: 10px;
+          top: 10px;
+          border: none;
+          background: none;
+          font-size: 20px;
+          cursor: pointer;
+        "
+      >
+        ❌
+      </button>
+      <iframe
+        src="Gkod.html"
+        style="width: 100%; height: calc(100% - 40px); border: none"
+      ></iframe>
+    </div>
+    <!-- Přidat nové modální okno pro příkazy -->
+    <div
+      id="prikazyModal"
+      class="modal"
+      style="
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        border: 1px solid #ccc;
+        padding: 20px;
+        z-index: 1000;
+        width: 90%;
+        height: 90%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      "
+    >
+      <button
+        onclick="closePrikazyModal()"
+        style="
+          position: absolute;
+          right: 10px;
+          top: 10px;
+          border: none;
+          background: none;
+          font-size: 20px;
+          cursor: pointer;
+        "
+      >
+        ❌
+      </button>
+      <iframe
+        src="Menu_prikazy.html"
+        style="width: 100%; height: calc(100% - 40px); border: none"
+      ></iframe>
+    </div>
+    <!-- Přidat nová modální okna pro G a M kódy -->
+    <div
+      id="gkodModal"
+      class="modal"
+      style="
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        border: 1px solid #ccc;
+        padding: 20px;
+        z-index: 1000;
+        width: 90%;
+        height: 90%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      "
+    >
+      <button
+        onclick="closeGkodModal()"
+        style="
+          position: absolute;
+          right: 10px;
+          top: 10px;
+          border: none;
+          background: none;
+          font-size: 20px;
+          cursor: pointer;
+        "
+      >
+        ❌
+      </button>
+      <iframe
+        src="Menu_G_kod.html"
+        style="width: 100%; height: calc(100% - 40px); border: none"
+      ></iframe>
+    </div>
+
+    <div
+      id="mkodModal"
+      class="modal"
+      style="
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        border: 1px solid #ccc;
+        padding: 20px;
+        z-index: 1000;
+        width: 90%;
+        height: 90%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      "
+    >
+      <button
+        onclick="closeMkodModal()"
+        style="
+          position: absolute;
+          right: 10px;
+          top: 10px;
+          border: none;
+          background: none;
+          font-size: 20px;
+          cursor: pointer;
+        "
+      >
+        ❌
+      </button>
+      <iframe
+        src="Menu_M_kod.html"
+        style="width: 100%; height: calc(100% - 40px); border: none"
+      ></iframe>
+    </div>
+    <!-- Přidat modální okna před uzavírací tag body -->
+    <div
+      id="zkratkyModal"
+      class="modal"
+      style="
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        border: 1px solid #ccc;
+        padding: 20px;
+        z-index: 1000;
+        width: 90%;
+        height: 90%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      "
+    >
+      <button
+        onclick="closeZkratkyModal()"
+        style="
+          position: absolute;
+          right: 10px;
+          top: 10px;
+          border: none;
+          background: none;
+          font-size: 20px;
+          cursor: pointer;
+        "
+      >
+        ❌
+      </button>
+      <iframe
+        src="Menu_zkratky.html"
+        style="width: 100%; height: calc(100% - 40px); border: none"
+      ></iframe>
+    </div>
+
+    <div
+      id="systemPromModal"
+      class="modal"
+      style="
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        border: 1px solid #ccc;
+        padding: 20px;
+        z-index: 1000;
+        width: 90%;
+        height: 90%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      "
+    >
+      <button
+        onclick="closeSystemPromModal()"
+        style="
+          position: absolute;
+          right: 10px;
+          top: 10px;
+          border: none;
+          background: none;
+          font-size: 20px;
+          cursor: pointer;
+        "
+      >
+        ❌
+      </button>
+      <iframe
+        src="Menu_system_prom.html"
+        style="width: 100%; height: calc(100% - 40px); border: none"
+      ></iframe>
+    </div>
+    <div
+      id="calculatorModal"
+      style="
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        border: 1px solid #ccc;
+        padding: 20px;
+        z-index: 1000;
+        width: 80%;
+        height: 80%;
+      "
+    >
+      <button
+        onclick="closeCalculator()"
+        style="float: right; font-size: 0.5em"
+      >
+        ❌
+      </button>
+      <iframe
+        src="kalkulacka.html"
+        style="width: 100%; height: 100%; border: none"
+      ></iframe>
+    </div>
+    <!-- Modální okno pro posuv radius -->
+    <div
+      id="posuvRadiusModal"
+      class="modal"
+      style="
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        border: 1px solid #ccc;
+        padding: 20px;
+        z-index: 1000;
+        width: 90%;
+        height: 90%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      "
+    >
+      <button
+        onclick="closePosuvRadiusModal()"
+        style="
+          position: absolute;
+          right: 10px;
+          top: 10px;
+          border: none;
+          background: none;
+          font-size: 20px;
+          cursor: pointer;
+        "
+      >
+        ❌
+      </button>
+      <iframe
+        src="posuv_radius.html"
+        style="width: 100%; height: calc(100% - 40px); border: none"
+      ></iframe>
+    </div>
+    <!-- Přidat modální okno pro L korekce -->
+    <div
+      id="lKorekceModal"
+      class="modal"
+      style="
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        border: 1px solid #ccc;
+        padding: 20px;
+        z-index: 1000;
+        width: 90%;
+        height: 90%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      "
+    >
+      <button
+        onclick="closeLKorekceModal()"
+        style="
+          position: absolute;
+          right: 10px;
+          top: 10px;
+          border: none;
+          background: none;
+          font-size: 20px;
+          cursor: pointer;
+        "
+      >
+        ❌
+      </button>
+      <iframe
+        src="karusel_korekcni_kalkulator.html"
+        style="width: 100%; height: calc(100% - 40px); border: none"
+      ></iframe>
+    </div>
+    <script>
+      function toggleDarkMode() {
+        document.body.classList.toggle("dark-mode");
+      }
+      function toggleErrorTerminal() {
+        document.getElementById("error-terminal").style.display =
+          document.getElementById("error-terminal").style.display === "block"
+            ? "none"
+            : "block";
+      }
+      function toggleTerminal() {
+        document.querySelector(".terminal").style.display =
+          document.querySelector(".terminal").style.display === "block"
+            ? "none"
+            : "block";
+      }
+      function openCalculator() {
+        document.getElementById("calculatorModal").style.display = "block";
+        window.history.pushState({ modal: "calculator" }, "");
+      }
+      function closeCalculator() {
+        document.getElementById("calculatorModal").style.display = "none";
+        if (window.history.state && window.history.state.modal) {
+          window.history.back();
+        }
+      }
+      function openCNCModal() {
+        document.getElementById("cncModal").style.display = "block";
+      }
+      function closeCNCModal() {
+        document.getElementById("cncModal").style.display = "none";
+      }
+      function openModal(url) {
+        const modal = document.createElement("div");
+        modal.className = "modal";
+        modal.id = "dynamicModal";
+
+        const content = document.createElement("div");
+        content.className = "modal-content";
+
+        const closeBtn = document.createElement("button");
+        closeBtn.className = "close-modal";
+        closeBtn.innerHTML = "×";
+        closeBtn.onclick = () => {
+          document.body.removeChild(modal);
+          history.pushState(null, "", window.location.pathname);
+        };
+
+        const iframe = document.createElement("iframe");
+        iframe.className = "modal-iframe";
+        iframe.src = url;
+
+        content.appendChild(closeBtn);
+        content.appendChild(iframe);
+        modal.appendChild(content);
+
+        modal.onclick = (e) => {
+          if (e.target === modal) {
+            document.body.removeChild(modal);
+            history.pushState(null, "", window.location.pathname);
+          }
+        };
+
+        document.body.appendChild(modal);
+        modal.style.display = "block";
+
+        history.pushState({ modal: true }, "", "#modal");
+        window.onpopstate = () => {
+          const modal = document.getElementById("dynamicModal");
+          if (modal) {
+            document.body.removeChild(modal);
+          }
+        };
+      }
+      function openGcodeModal() {
+        document.getElementById("gcodeModal").style.display = "block";
+        document.getElementById("sidebar").classList.remove("open");
+        window.history.pushState({ modal: "gcode" }, "");
+      }
+
+      function closeGcodeModal() {
+        document.getElementById("gcodeModal").style.display = "none";
+        if (window.history.state && window.history.state.modal) {
+          window.history.back();
+        }
+      }
+
+      function openGcodeMeaningModal() {
+        document.getElementById("gcodeMeaningModal").style.display = "block";
+        document.getElementById("sidebar").classList.remove("open");
+      }
+
+      function closeGcodeMeaningModal() {
+        document.getElementById("gcodeMeaningModal").style.display = "none";
+      }
+
+      function openSimulatorEditor() {
+        window.location.href = "Simulator_Editor_CNC.html";
+      }
+
+      // Přidat nové funkce pro modal opotřebení
+      function openOopotrebeniModal() {
+        document.getElementById("opotrebeniModal").style.display = "block";
+        document.getElementById("sidebar").classList.remove("open");
+      }
+
+      function closeOopotrebeniModal() {
+        document.getElementById("opotrebeniModal").style.display = "none";
+      }
+
+      function openPrikazyModal() {
+        document.getElementById("prikazyModal").style.display = "block";
+        document.getElementById("sidebar").classList.remove("open");
+      }
+
+      function closePrikazyModal() {
+        document.getElementById("prikazyModal").style.display = "none";
+      }
+
+      function openGkodModal() {
+        document.getElementById("gkodModal").style.display = "block";
+        document.getElementById("sidebar").classList.remove("open");
+      }
+
+      function closeGkodModal() {
+        document.getElementById("gkodModal").style.display = "none";
+      }
+
+      function openMkodModal() {
+        document.getElementById("mkodModal").style.display = "block";
+        document.getElementById("sidebar").classList.remove("open");
+      }
+
+      function closeMkodModal() {
+        document.getElementById("mkodModal").style.display = "none";
+      }
+
+      function toggleLeftMenu() {
+        document.getElementById("leftMenu").classList.toggle("active");
+      }
+
+      function toggleRightMenu() {
+        document.getElementById("rightMenu").classList.toggle("active");
+      }
+
+      // Zavřít menu při kliknutí mimo
+      document.addEventListener("click", (e) => {
+        const leftMenu = document.getElementById("leftMenu");
+        const rightMenu = document.getElementById("rightMenu");
+        const leftBtn = document.querySelector(
+          '.side-menu-btn[onclick="toggleLeftMenu()"]'
+        );
+        const rightBtn = document.querySelector(
+          '.side-menu-btn[onclick="toggleRightMenu()"]'
+        );
+
+        if (!leftMenu.contains(e.target) && !leftBtn.contains(e.target)) {
+          leftMenu.classList.remove("active");
+        }
+        if (!rightMenu.contains(e.target) && !rightBtn.contains(e.target)) {
+          rightMenu.classList.remove("active");
+        }
+      });
+
+      function openZkratkyModal() {
+        document.getElementById("zkratkyModal").style.display = "block";
+        document.getElementById("leftMenu").classList.remove("active");
+        window.history.pushState({ modal: "zkratky" }, "");
+      }
+
+      function closeZkratkyModal() {
+        document.getElementById("zkratkyModal").style.display = "none";
+        if (window.history.state && window.history.state.modal === "zkratky") {
+          window.history.back();
+        }
+      }
+
+      function openSystemPromModal() {
+        document.getElementById("systemPromModal").style.display = "block";
+        document.getElementById("leftMenu").classList.remove("active");
+        window.history.pushState({ modal: "systemprom" }, "");
+      }
+
+      function closeSystemPromModal() {
+        document.getElementById("systemPromModal").style.display = "none";
+        if (
+          window.history.state &&
+          window.history.state.modal === "systemprom"
+        ) {
+          window.history.back();
+        }
+      }
+
+      function updateDateTime() {
+        const now = new Date();
+        const dateStr = now.toLocaleDateString("cs-CZ");
+        const timeStr = now.toLocaleTimeString("cs-CZ");
+        document.getElementById(
+          "datetime"
+        ).textContent = `${dateStr} ${timeStr}`;
+      }
+
+      // Update time every second
+      setInterval(updateDateTime, 1000);
+      // Initial call
+      updateDateTime();
+
+      // Přidat globální handler pro zpětné tlačítko
+      window.onpopstate = function (event) {
+        // Nezobrazovat poznámky při návratu z jiné stránky
+        if (!event.state || !event.state.modal) {
+          return;
+        }
+
+        // Zavřít všechna modální okna
+        const modals = document.querySelectorAll(".modal");
+        modals.forEach((modal) => {
+          modal.style.display = "none";
+        });
+
+        // Zavřít kalkulačku
+        document.getElementById("calculatorModal").style.display = "none";
+      };
+
+      // Upravit funkci pro načtení stránky
+      document.addEventListener("DOMContentLoaded", function () {
+        updateDateTime();
+        initializeMenus();
+      });
+
+      function initializeMenus() {
+        // Přidat event listenery pro menu tlačítka
+        document.addEventListener("click", function (e) {
+          // Zastavit propagaci kliknutí z menu položek
+          if (e.target.closest(".menu-item")) {
+            e.stopPropagation();
+          }
+        });
+
+        // Zavřít menu při kliknutí mimo
+        document.addEventListener("click", function (e) {
+          const leftMenu = document.getElementById("leftMenu");
+          const rightMenu = document.getElementById("rightMenu");
+          const leftBtn = document.querySelector(
+            '.side-menu-btn[onclick="toggleLeftMenu()"]'
+          );
+          const rightBtn = document.querySelector(
+            '.side-menu-btn[onclick="toggleRightMenu()"]'
+          );
+
+          if (!leftMenu.contains(e.target) && !leftBtn.contains(e.target)) {
+            leftMenu.classList.remove("active");
+          }
+          if (!rightMenu.contains(e.target) && !rightBtn.contains(e.target)) {
+            rightMenu.classList.remove("active");
+          }
+        });
+      }
+
+      // Upravit funkce pro modální okna
+      function openModal(url) {
+        var modal = document.createElement("div");
+        modal.id = "dynamicModal";
+        // ...rest of existing modal code...
+
+        window.history.pushState({ modal: true }, "");
+      }
+
+      function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+          modal.style.display = "none";
+          if (window.history.state && window.history.state.modal) {
+            window.history.back();
+          }
+        }
+      }
+
+      // Přidat do existujícího onpopstate handleru
+      window.onpopstate = function (event) {
+        const modals = {
+          zkratky: "zkratkyModal",
+          systemprom: "systemPromModal",
+          // ...existing modals...
+        };
+
+        if (event.state && event.state.modal && modals[event.state.modal]) {
+          document.getElementById(modals[event.state.modal]).style.display =
+            "none";
+        }
+
+        // ...rest of existing onpopstate code...
+      };
+
+      // Upravit handler pro zpětné tlačítko
+      window.onpopstate = function (event) {
+        const modals = document.querySelectorAll(
+          ".modal, #calculatorModal, #dynamicModal"
+        );
+        modals.forEach((modal) => {
+          if (modal) {
+            if (modal.id === "dynamicModal") {
+              document.body.removeChild(modal);
+            } else {
+              modal.style.display = "none";
+            }
+          }
+        });
+      };
+
+      // Reset history state při načtení stránky
+      window.addEventListener("load", function () {
+        // Vyčistit historii při prvním načtení
+        if (!window.history.state) {
+          window.history.replaceState(null, "", window.location.pathname);
+        }
+        updateDateTime();
+        initializeMenus();
+      });
+
+      // Upravený handler pro zpětné tlačítko
+      window.onpopstate = function (event) {
+        // Nezobrazovat poznámky při návratu z jiné stránky
+        if (!event.state || !event.state.modal) {
+          return;
+        }
+
+        // Zavřít všechna modální okna
+        const modals = document.querySelectorAll(
+          ".modal, #calculatorModal, #dynamicModal"
+        );
+        modals.forEach((modal) => {
+          if (modal) {
+            if (modal.id === "dynamicModal" && modal.parentNode) {
+              modal.parentNode.removeChild(modal);
+            } else {
+              modal.style.display = "none";
+            }
+          }
+        });
+      };
+
+      // Upravená funkce pro otevírání modálních oken
+      function openModal(url) {
+        var modal = document.createElement("div");
+        modal.id = "dynamicModal";
+        modal.style.display = "block";
+        // ...existing modal styles...
+
+        var iframe = document.createElement("iframe");
+        iframe.src = url;
+        iframe.style.width = "100%";
+        iframe.style.height = "100%";
+        iframe.style.border = "none";
+
+        // Přidat event listener pro zprávy z iframe
+        iframe.addEventListener("load", function () {
+          iframe.contentWindow.postMessage(
+            { type: "parentUrl", url: window.location.href },
+            "*"
+          );
+        });
+
+        modal.appendChild(iframe);
+
+        var closeButton = document.createElement("button");
+        closeButton.onclick = function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          document.body.removeChild(modal);
+          if (window.history.state && window.history.state.modal) {
+            window.history.back();
+          }
+        };
+        // ...existing closeButton styles...
+
+        modal.appendChild(closeButton);
+        document.body.appendChild(modal);
+
+        window.history.pushState({ modal: true }, "", "#modal");
+      }
+
+      // Upravené funkce pro ostatní modální okna
+      function openNotesModal() {
+        if (!window.history.state || !window.history.state.modal) {
+          window.history.pushState({ modal: true, type: "notes" }, "");
+        }
+        document.getElementById("notesModal").style.display = "block";
+        loadNotes();
+      }
+
+      function closeNotesModal() {
+        document.getElementById("notesModal").style.display = "none";
+        if (window.history.state && window.history.state.modal) {
+          window.history.back();
+        }
+      }
+
+      // Event listener pro zprávy z iframe
+      window.addEventListener("message", function (event) {
+        if (event.data.type === "closeModal") {
+          const modal = document.getElementById("dynamicModal");
+          if (modal) {
+            modal.parentNode.removeChild(modal);
+          }
+        }
+      });
+
+      // Modální okno pro posuv radius
+      function openPosuvRadiusModal() {
+        document.getElementById("posuvRadiusModal").style.display = "block";
+        window.history.pushState(
+          { modalId: "posuvRadiusModal" },
+          "",
+          "#posuvRadius"
+        );
+      }
+
+      function closePosuvRadiusModal() {
+        document.getElementById("posuvRadiusModal").style.display = "none";
+        if (
+          window.history.state &&
+          window.history.state.modalId === "posuvRadiusModal"
+        ) {
+          window.history.back();
+        }
+      }
+
+      function openLKorekceModal() {
+        document.getElementById("lKorekceModal").style.display = "block";
+        window.history.pushState({ modalId: "lKorekceModal" }, "", "#lkorekce");
+      }
+
+      function closeLKorekceModal() {
+        document.getElementById("lKorekceModal").style.display = "none";
+        if (
+          window.history.state &&
+          window.history.state.modalId === "lKorekceModal"
+        ) {
+          window.history.back();
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,11 @@
+/* Preview */
+.preview-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: white;
+}
+
+.light-theme .preview-frame {
+  background: white;
+}

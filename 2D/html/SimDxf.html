@@ -1,0 +1,1235 @@
+<<<<<<< HEAD
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DXF - JSON Konvertor Pro</title>
+    <script src="https://cdn.jsdelivr.net/npm/dxf-parser@1.1.2/dist/dxf-parser.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* SVĚTLÝ REŽIM - Engineering Style */
+        body { 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; 
+            background-color: #f0f2f5; color: #333; 
+            height: 100vh; display: flex; flex-direction: column; overflow: hidden; 
+        }
+
+        header { 
+            background: #fff; padding: 10px 20px; border-bottom: 1px solid #ccc; 
+            display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); z-index: 10;
+        }
+        h1 { margin: 0; font-size: 18px; color: #d84315; display: flex; align-items: center; gap: 10px; font-weight: 700; }
+        
+        .main-area { display: flex; flex: 1; overflow: hidden; flex-direction: row; position: relative; }
+
+        /* Drag Overlay */
+        .drag-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(216, 67, 21, 0.1); border: 4px dashed #d84315;
+            display: none; justify-content: center; align-items: center;
+            font-size: 24px; font-weight: bold; color: #d84315; z-index: 100; pointer-events: none;
+            backdrop-filter: blur(3px);
+        }
+        body.drag-active .drag-overlay { display: flex; }
+
+        .panel { 
+            flex: 1; display: flex; flex-direction: column; padding: 15px; 
+            border-right: 1px solid #ddd; min-width: 0; position: relative;
+            background: #fdfdfd; transition: background 0.3s;
+        }
+        .panel:last-child { border-right: none; }
+        
+        .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        h2 { font-size: 13px; text-transform: uppercase; color: #555; margin: 0; border-bottom: 2px solid #d84315; padding-bottom: 4px; font-weight: 700; letter-spacing: 0.5px; }
+        
+        /* View Toggle */
+        .view-toggle { display: flex; background: #e0e0e0; border-radius: 4px; padding: 2px; }
+        .vt-btn { padding: 4px 12px; font-size: 11px; cursor: pointer; border-radius: 3px; color: #555; border: none; background: transparent; font-weight: 600; }
+        .vt-btn.active { background: #fff; color: #000; box-shadow: 0 1px 2px rgba(0,0,0,0.15); }
+
+        /* Filters Bar */
+        .filters-bar {
+            display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; padding: 5px; background: #f1f1f1; border-radius: 4px; border: 1px solid #e0e0e0;
+        }
+        .filter-group-label { font-size: 10px; font-weight: bold; color: #777; width: 100%; margin-bottom: 2px; text-transform: uppercase; }
+        
+        .chip {
+            background: #fff; color: #444; border: 1px solid #ccc; padding: 3px 8px; border-radius: 12px;
+            font-size: 10px; cursor: pointer; white-space: nowrap; user-select: none; display: flex; align-items: center; gap: 4px;
+            transition: all 0.15s; font-weight: 600;
+        }
+        .chip:hover { background: #f9f9f9; border-color: #999; }
+        .chip.active { background: #2e7d32; color: white; border-color: #2e7d32; }
+        .chip.active:hover { background: #1b5e20; }
+        .chip-ignore { background: #fff; color: #aaa; text-decoration: line-through; border-color: #eee; }
+        .chip-ignore.active { background: #d32f2f; color: white; text-decoration: none; border-color: #b71c1c; }
+
+        /* Content Area */
+        .content-stack { flex: 1; position: relative; overflow: hidden; border: 1px solid #ccc; border-radius: 4px; background: #fff; box-shadow: inset 0 2px 5px rgba(0,0,0,0.03); }
+        
+        textarea, .gcode-view { 
+            width: 100%; height: 100%; border: none; background: transparent; 
+            color: #222; padding: 12px; font-family: 'Consolas', 'Monaco', monospace; 
+            resize: none; font-size: 12px; outline: none; white-space: pre; overflow: auto; box-sizing: border-box;
+            position: absolute; top: 0; left: 0; line-height: 1.4;
+        }
+        
+        .gcode-view { display: none; background: #fafafa; color: #333; overflow-y: scroll; }
+        
+        .gc-line { border-bottom: 1px solid #eee; display: flex; padding: 2px 0; }
+        .gc-line:hover { background: #e3f2fd; }
+        .gc-num { color: #888; width: 30px; display: inline-block; user-select: none; text-align: right; margin-right: 10px; font-size: 11px; }
+        .gc-cmd { color: #d84315; font-weight: bold; width: 30px; }
+        .gc-coord { color: #1565c0; margin-right: 8px; }
+        .gc-arc { color: #2e7d32; font-weight: bold; }
+
+        canvas { width: 100%; height: 100%; display: none; position: absolute; top: 0; left: 0; background: #fff; cursor: grab; }
+        canvas:active { cursor: grabbing; }
+        
+        .stats-info { font-size: 11px; color: #666; margin-top: 6px; min-height: 16px; font-family: monospace; display: flex; justify-content: space-between; align-items: center; }
+        .highlight-val { color: #d84315; font-weight: bold; }
+
+        .controls-container { margin-bottom: 12px; display: flex; flex-direction: column; gap: 8px; }
+        .btn-row { display: flex; gap: 8px; width: 100%; }
+        
+        .btn { 
+            flex: 1; padding: 10px; border: none; border-radius: 4px; font-weight: 600; cursor: pointer; 
+            display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 12px; transition: 0.2s; color: white; white-space: nowrap; 
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .btn:active { transform: translateY(1px); box-shadow: none; }
+        
+        .btn-primary { background-color: #d84315; } .btn-primary:hover { background-color: #bf360c; }
+        .btn-sec { background-color: #f5f5f5; color: #333; border: 1px solid #ccc; } .btn-sec:hover { background-color: #e0e0e0; }
+        .btn-del { background-color: #fff; color: #d32f2f; border: 1px solid #d32f2f; flex: 0 0 40px; } .btn-del:hover { background-color: #ffebee; }
+        .btn-copy { background-color: #00838f; flex: 0 0 40px; } .btn-copy:hover { background-color: #006064; }
+        
+        .btn-file { position: relative; overflow: hidden; background: #2e7d32; } .btn-file:hover { background: #1b5e20; }
+        .btn-file-orange { background: #f57f17; } .btn-file-orange:hover { background: #e65100; }
+        .btn-file input[type=file] { position: absolute; top: 0; right: 0; min-width: 100%; min-height: 100%; font-size: 100px; text-align: right; opacity: 0; cursor: pointer; }
+
+        .status-bar { 
+            padding: 6px 20px; background: #e0e0e0; font-size: 11px; color: #555; border-top: 1px solid #ccc; 
+            display: flex; justify-content: space-between; flex-shrink: 0; font-weight: 500;
+        }
+        
+        .opt-group { display: flex; align-items: center; justify-content: center; gap: 5px; font-size: 11px; color: #333; background: #eee; padding: 0 10px; border-radius: 4px; border: 1px solid #ddd; }
+        select { border: none; background: transparent; font-weight: bold; color: #d84315; outline: none; font-size: 11px; cursor: pointer; }
+        .inp-sm { width: 40px; border: 1px solid #ccc; border-radius: 3px; padding: 2px 4px; text-align: center; font-weight: bold; font-size: 11px; }
+        input[type="checkbox"] { accent-color: #d84315; cursor: pointer; }
+        label { cursor: pointer; user-select: none; }
+
+        @media screen and (max-width: 768px) {
+            body { position: fixed; width: 100%; overflow: hidden; }
+            .main-area { flex-direction: column; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+            .panel { border-right: none; border-bottom: 4px solid #e0e0e0; flex: none; min-height: 75vh; padding: 12px; }
+            .btn { padding: 12px; font-size: 13px; }
+            header { padding: 8px 15px; }
+            .status-bar span:nth-child(2) { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1><i class="fas fa-drafting-compass"></i> DXF - JSON Pro</h1>
+    <div style="font-size: 11px; color: #888; font-weight: 600">v3.6 Numbering</div>
+</header>
+
+<div class="main-area">
+    <div class="drag-overlay">Přetáhněte soubor sem</div>
+
+    <!-- PANEL DXF (LEVÝ/HORNÍ) -->
+    <div class="panel" id="panel-dxf">
+        <div class="panel-header">
+            <h2>DXF (Skica)</h2>
+            <div class="view-toggle">
+                <button class="vt-btn active" onclick="setView('dxf', 'code')">Kód</button>
+                <button class="vt-btn" onclick="setView('dxf', 'preview')">Náhled</button>
+            </div>
+        </div>
+        
+        <!-- Filtry -->
+        <div class="filters-bar" id="filters-container" style="display:none">
+            <div class="filter-group-label">Vrstvy</div>
+            <div id="layers-list" style="display:flex; gap:4px; flex-wrap:wrap; width:100%"></div>
+            <div style="width:100%; height:1px; background:#ddd; margin:4px 0"></div>
+            <div class="filter-group-label">Ignorovat Entity</div>
+            <div class="chip chip-ignore active" onclick="toggleFilter('DIMENSION', this)">Kóty</div>
+            <div class="chip chip-ignore active" onclick="toggleFilter('TEXT', this)">Texty</div>
+            <div class="chip chip-ignore active" onclick="toggleFilter('HATCH', this)">Šrafy</div>
+        </div>
+
+        <div class="controls-container">
+            <div class="btn-row">
+                <label class="btn btn-file">
+                    <i class="fas fa-folder-open"></i> Načíst DXF
+                    <input type="file" id="dxfFile" accept=".dxf">
+                </label>
+                <button class="btn btn-del" onclick="clearPanel('dxf')" title="Vymazat vše"><i class="fas fa-trash-alt"></i></button>
+                <button class="btn btn-copy" onclick="copyToClipboard('dxfContent')" title="Kopírovat"><i class="fas fa-copy"></i></button>
+                <button class="btn btn-sec" onclick="downloadDxfResult()" title="Uložit DXF"><i class="fas fa-save"></i></button>
+            </div>
+            <div class="btn-row">
+                <button class="btn btn-primary" onclick="convertDxfToJson()">
+                    Převést na JSON <i class="fas fa-arrow-down"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="content-stack">
+            <textarea id="dxfContent" placeholder="Obsah DXF..."></textarea>
+            <canvas id="dxfCanvas"></canvas>
+        </div>
+        <div class="stats-info">
+            <span id="dxf-stats"></span>
+            <span style="font-size: 10px; cursor: pointer; color: #00838f; font-weight:bold" onclick="fitView('dxf')"><i class="fas fa-compress"></i> FIT</span>
+        </div>
+    </div>
+
+    <!-- PANEL JSON (PRAVÝ/DOLNÍ) -->
+    <div class="panel" id="panel-json">
+        <div class="panel-header">
+            <h2>JSON Data</h2>
+            <div class="view-toggle">
+                <button class="vt-btn active" onclick="setView('json', 'code')">JSON</button>
+                <button class="vt-btn" onclick="setView('json', 'gcode')">G-Kód</button>
+                <button class="vt-btn" onclick="setView('json', 'preview')">Náhled</button>
+            </div>
+        </div>
+
+        <div class="controls-container">
+            <div class="btn-row">
+                <label class="btn btn-file btn-file-orange">
+                    <i class="fas fa-file-code"></i> Načíst JSON
+                    <input type="file" id="jsonFile" accept=".json">
+                </label>
+                <button class="btn btn-del" onclick="clearPanel('json')" title="Vymazat vše"><i class="fas fa-trash-alt"></i></button>
+                <button class="btn btn-copy" onclick="copyToClipboard('jsonContent')" title="Kopírovat"><i class="fas fa-copy"></i></button>
+                <button class="btn btn-sec" onclick="downloadJson()"><i class="fas fa-download"></i></button>
+            </div>
+            <div class="btn-row">
+                <div class="opt-group" style="flex: 1;">
+                    <select id="machine-type" onchange="convertDxfToJson()">
+                        <option value="KARUSEL">Karusel</option>
+                        <option value="SOUSTRUH">Soustruh</option>
+                    </select>
+                </div>
+                <div class="opt-group" title="Zarovná začátek výkresu na X0 Z0">
+                    <input type="checkbox" id="chk-auto-zero" checked onchange="convertDxfToJson()"> <label for="chk-auto-zero">Auto 0</label>
+                </div>
+                <div class="opt-group" title="Zobrazit čísla řádků v náhledu">
+                    <input type="checkbox" id="chk-show-nums" onchange="drawPreviewFromJSON(false)"> <label for="chk-show-nums">Čísla</label>
+                </div>
+                <div class="opt-group" title="Měřítko pro export">
+                    Sc: <input type="number" id="export-scale" value="1.0" step="0.1" class="inp-sm">
+                </div>
+                <button class="btn btn-primary" style="flex: 0.5;" onclick="convertJsonToDxf()" title="Exportovat do DXF">
+                    <i class="fas fa-arrow-up"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="content-stack">
+            <textarea id="jsonContent" placeholder="Obsah JSON..."></textarea>
+            <div id="gcodeContent" class="gcode-view"></div>
+            <canvas id="jsonCanvas"></canvas>
+        </div>
+        <div class="stats-info">
+             <span id="json-stats"></span>
+             <span style="font-size: 10px; cursor: pointer; color: #00838f; font-weight:bold" onclick="fitView('json')"><i class="fas fa-compress"></i> FIT</span>
+        </div>
+    </div>
+</div>
+
+<div class="status-bar">
+    <span id="status-msg">Připraveno.</span>
+    <span>Index Visualization</span>
+</div>
+
+<script>
+    // --- STATE ---
+    const AppState = {
+        dxf: { layers: {}, parsed: null, view: { x: 0, y: 0, k: 1 } },
+        json: { parsed: null, view: { x: 0, y: 0, k: 1 } },
+        filters: { ignore: ['DIMENSION', 'TEXT', 'MTEXT', 'HATCH'] }
+    };
+
+    // --- UI HELPERS ---
+    function setView(panel, type) {
+        const p = document.getElementById(`panel-${panel}`);
+        const ta = p.querySelector('textarea');
+        const cv = p.querySelector('canvas');
+        const gc = p.querySelector('.gcode-view');
+        
+        ta.style.display = 'none'; cv.style.display = 'none'; if(gc) gc.style.display = 'none';
+        
+        if(type==='code') ta.style.display = 'block';
+        else if(type==='preview') { cv.style.display = 'block'; panel==='json' ? drawPreviewFromJSON(false) : drawPreviewFromDXF(false); }
+        else if(type==='gcode') { gc.style.display = 'block'; renderGCodeView(); }
+
+        p.querySelectorAll('.vt-btn').forEach(b => {
+            b.classList.toggle('active', b.innerText.toLowerCase().includes(type.replace('code','json').replace('gcode','g-kód')));
+            if(type==='code' && b.innerText==='Kód') b.classList.add('active');
+            if(type==='code' && b.innerText==='JSON') b.classList.add('active');
+            if(type==='gcode' && b.innerText==='G-Kód') b.classList.add('active');
+            if(type==='preview' && b.innerText==='Náhled') b.classList.add('active');
+        });
+    }
+    
+    function fitView(panel) { 
+        AppState[panel].view = { x:0, y:0, k:1, autoFit:true }; 
+        panel==='dxf' ? drawPreviewFromDXF(true) : drawPreviewFromJSON(true); 
+    }
+    
+    function clearPanel(type) {
+        if(confirm('Opravdu vymazat?')) {
+            document.getElementById(`${type}Content`).value = '';
+            document.getElementById(`${type}-stats`).innerHTML = '';
+            if(type==='json') document.getElementById('gcodeContent').innerHTML = '';
+            AppState[type] = { layers: {}, parsed: null, view: { x: 0, y: 0, k: 1 } };
+            const cv = document.getElementById(`${type}Canvas`);
+            const ctx = cv.getContext('2d'); ctx.clearRect(0,0,cv.width,cv.height); ctx.fillStyle='#fff'; ctx.fillRect(0,0,cv.width,cv.height);
+            if(type === 'dxf') {
+                document.getElementById('layers-list').innerHTML = '';
+                document.getElementById('filters-container').style.display = 'none';
+            }
+            setStatus('Vymazáno.');
+        }
+    }
+
+    function renderGCodeView() {
+        const txt = document.getElementById('jsonContent').value;
+        const div = document.getElementById('gcodeContent');
+        div.innerHTML = '';
+        if(!txt.trim()) { div.innerHTML = '<div style="padding:10px;color:#aaa">Žádná data</div>'; return; }
+        try {
+            const data = JSON.parse(txt);
+            let html = '<div style="padding:10px; font-family: monospace; font-size:12px;">';
+            if(data.points) {
+                data.points.forEach((p, i) => {
+                    let row = `<div class="gc-line"><span class="gc-num">${i}.</span>`;
+                    if(p.break) {
+                        row += `<span class="gc-cmd" style="color:#aaa">G0</span> <span class="gc-coord">X${p.x.toFixed(3)} Z${p.z.toFixed(3)}</span>`;
+                    } else if(p.type === 'line') {
+                        row += `<span class="gc-cmd">G1</span> <span class="gc-coord">X${p.x.toFixed(3)} Z${p.z.toFixed(3)}</span>`;
+                    } else if(p.type === 'arc') {
+                        const code = p.cw ? 'G2' : 'G3';
+                        row += `<span class="gc-cmd gc-arc">${code}</span> <span class="gc-coord">X${p.x.toFixed(3)} Z${p.z.toFixed(3)}</span> <span class="gc-coord" style="color:#e65100">R${p.r.toFixed(3)}</span>`;
+                        row += `<span style="font-size:9px;color:#999;margin-left:5px">(I${(p.cx).toFixed(2)} K${(p.cz).toFixed(2)})</span>`;
+                    }
+                    row += `</div>`;
+                    html += row;
+                });
+            }
+            html += '</div>';
+            div.innerHTML = html;
+        } catch(e) { div.innerText = "Chyba dat"; }
+    }
+
+    function copyToClipboard(id) { document.getElementById(id).select(); document.execCommand('copy'); setStatus("Zkopírováno."); window.getSelection().removeAllRanges(); }
+    function setStatus(msg) { document.getElementById('status-msg').innerText = msg; }
+    function setStats(id, w, h, count) { document.getElementById(id).innerHTML = `Prvky: <span class="highlight-val">${count}</span> | Rozměr: <span class="highlight-val">${w.toFixed(1)}</span> x <span class="highlight-val">${h.toFixed(1)}</span>`; }
+
+    // --- FILTERS/FILES ---
+    function toggleFilter(type, el) {
+        el.classList.toggle('active');
+        if(el.classList.contains('active')) AppState.filters.ignore.push(type);
+        else AppState.filters.ignore = AppState.filters.ignore.filter(t => t !== type);
+        convertDxfToJson();
+    }
+
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(e => document.body.addEventListener(e, ev => { ev.preventDefault(); ev.stopPropagation(); }));
+    document.body.addEventListener('dragenter', () => document.body.classList.add('drag-active'));
+    document.body.addEventListener('dragleave', (e) => { if(!e.relatedTarget) document.body.classList.remove('drag-active'); });
+    document.body.addEventListener('drop', (e) => {
+        document.body.classList.remove('drag-active');
+        const f = e.dataTransfer.files[0];
+        if(f) handleFile(f);
+    });
+    
+    document.getElementById('dxfFile').addEventListener('change', e => handleFile(e.target.files[0]));
+    document.getElementById('jsonFile').addEventListener('change', e => handleFile(e.target.files[0]));
+
+    function handleFile(f) {
+        if(!f) return;
+        const r = new FileReader();
+        const ext = f.name.split('.').pop().toLowerCase();
+        r.onload = e => {
+            if(ext === 'dxf') {
+                document.getElementById('dxfContent').value = e.target.result;
+                setStatus(`Načteno: ${f.name}`);
+                analyzeDXF(); 
+            } else if(ext === 'json') {
+                document.getElementById('jsonContent').value = e.target.result;
+                setStatus(`Načteno: ${f.name}`);
+                drawPreviewFromJSON(true); 
+            }
+        };
+        r.readAsText(f);
+    }
+
+    // --- LOGIC ---
+    function analyzeDXF() {
+        const txt = document.getElementById('dxfContent').value;
+        if(!txt.trim()) return;
+        try {
+            const parser = new DxfParser();
+            AppState.dxf.parsed = parser.parseSync(txt);
+            const layers = {};
+            if(AppState.dxf.parsed && AppState.dxf.parsed.entities) {
+                AppState.dxf.parsed.entities.forEach(e => {
+                    const l = e.layer || "0";
+                    layers[l] = (layers[l] || 0) + 1;
+                });
+            }
+            AppState.dxf.layers = layers;
+            renderLayerBar();
+            
+            drawPreviewFromDXF(true); 
+            setView('dxf', 'preview');
+            convertDxfToJson(); 
+        } catch(e) { console.error(e); }
+    }
+
+    function renderLayerBar() {
+        const c = document.getElementById('layers-list');
+        c.innerHTML = '';
+        document.getElementById('filters-container').style.display = 'block';
+        Object.keys(AppState.dxf.layers).forEach(l => {
+            const d = document.createElement('div');
+            d.className = 'chip active';
+            d.dataset.layer = l;
+            d.innerHTML = `<span>${l}</span><span style="font-size:9px;opacity:0.6">${AppState.dxf.layers[l]}</span>`;
+            d.onclick = function() { this.classList.toggle('active'); convertDxfToJson(); };
+            c.appendChild(d);
+        });
+    }
+
+    function convertDxfToJson() {
+        if(!AppState.dxf.parsed) return;
+        const activeL = Array.from(document.querySelectorAll('#layers-list .chip.active')).map(e => e.dataset.layer);
+        const entities = AppState.dxf.parsed.entities.filter(e => {
+            if(AppState.filters.ignore.includes(e.type)) return false;
+            if(e.type === 'MTEXT' && AppState.filters.ignore.includes('TEXT')) return false;
+            return activeL.includes(e.layer || "0");
+        });
+        const points = parseEntitiesToPoints(entities);
+        const mType = document.getElementById('machine-type').value;
+        const project = { version: "1.0", timestamp: new Date().toISOString(), machineType: mType, points: points, dimensions: [] };
+        document.getElementById('jsonContent').value = JSON.stringify(project, null, 2);
+        drawPreviewFromJSON(true); 
+    }
+
+    function parseEntitiesToPoints(entities) {
+        let points = []; let idCounter = 1;
+        function add(start, end, type, extra={}) {
+            const sX = start.x, sZ = start.y; const eX = end.x, eZ = end.y;
+            const last = points[points.length-1];
+            if(!last || Math.abs(last.x - sX) > 0.001 || Math.abs(last.z - sZ) > 0.001) {
+                points.push({ x: sX, z: sZ, break: !!last, type: 'line', id: idCounter++ });
+            }
+            points.push({ x: eX, z: eZ, break: false, type, id: idCounter++, ...extra });
+        }
+        entities.forEach(ent => {
+            if (ent.type === 'LINE') add(ent.vertices[0], ent.vertices[1], 'line');
+            else if (ent.type === 'CIRCLE') {
+                const c = ent.center, r = ent.radius;
+                add({x:c.x-r, y:c.y}, {x:c.x+r, y:c.y}, 'arc', {r, cw:true, cx:c.x, cz:c.y});
+                add({x:c.x+r, y:c.y}, {x:c.x-r, y:c.y}, 'arc', {r, cw:true, cx:c.x, cz:c.y});
+            }
+            else if (ent.type === 'ARC') {
+                const c = ent.center, r = ent.radius;
+                const s = {x: c.x + r*Math.cos(ent.startAngle), y: c.y + r*Math.sin(ent.startAngle)};
+                const e = {x: c.x + r*Math.cos(ent.endAngle), y: c.y + r*Math.sin(ent.endAngle)};
+                add(s, e, 'arc', {r, cw:false, cx:c.x, cz:c.y});
+            }
+            else if (ent.type === 'LWPOLYLINE' || ent.type === 'POLYLINE') {
+                if(!ent.vertices || ent.vertices.length < 2) return;
+                for(let i=0; i<ent.vertices.length; i++) {
+                    const curr = ent.vertices[i];
+                    const next = ent.vertices[(i+1) % ent.vertices.length];
+                    if(i === ent.vertices.length - 1 && !ent.shape) continue; 
+                    if(curr.bulge) {
+                        const b = curr.bulge;
+                        const theta = 4 * Math.atan(b);
+                        const dist = Math.sqrt(Math.pow(next.x-curr.x,2) + Math.pow(next.y-curr.y,2));
+                        const r = Math.abs(dist / (2 * Math.sin(theta/2)));
+                        const midX = (curr.x + next.x)/2, midY = (curr.y + next.y)/2;
+                        const cot = 1/Math.tan(theta/2); 
+                        const cX = midX - (next.y-curr.y)/2 * cot;
+                        const cY = midY + (next.x-curr.x)/2 * cot;
+                        add({x:curr.x, y:curr.y}, {x:next.x, y:next.y}, 'arc', {r: r, cw: b < 0, cx: cX, cz: cY});
+                    } else {
+                        add({x:curr.x, y:curr.y}, {x:next.x, y:next.y}, 'line');
+                    }
+                }
+            }
+        });
+        if(document.getElementById('chk-auto-zero').checked && points.length > 0) {
+            let minX=Infinity, minZ=Infinity;
+            points.forEach(p => { minX=Math.min(minX,p.x); minZ=Math.min(minZ,p.z); });
+            points.forEach(p => { p.x-=minX; p.z-=minZ; if(p.cx!=null){p.cx-=minX; p.cz-=minZ;} });
+        }
+        return points;
+    }
+
+    function convertJsonToDxf() {
+        const txt = document.getElementById('jsonContent').value;
+        if(!txt.trim()) return;
+        try {
+            const data = JSON.parse(txt);
+            const scale = parseFloat(document.getElementById('export-scale').value) || 1.0;
+            let dxf = `0\nSECTION\n2\nHEADER\n9\n$ACADVER\n1\nAC1009\n9\n$INSUNITS\n70\n4\n0\nENDSEC\n0\nSECTION\n2\nENTITIES\n`;
+            const fmt = n => n.toFixed(6);
+            for(let i=0; i<(data.points||[]).length-1; i++) {
+                const s = data.points[i], e = data.points[i+1];
+                if(e.break) continue;
+                const sx = s.x * scale, sz = s.z * scale;
+                const ex = e.x * scale, ez = e.z * scale;
+                if(e.type === 'line') {
+                    dxf += `0\nLINE\n8\n0\n10\n${fmt(sx)}\n20\n${fmt(sz)}\n30\n0\n11\n${fmt(ex)}\n21\n${fmt(ez)}\n31\n0\n`;
+                } else if(e.type === 'arc') {
+                    const cx=e.cx*scale, cy=e.cz*scale, r=e.r*scale;
+                    let a1 = Math.atan2(sz-cy, sx-cx)*180/Math.PI;
+                    let a2 = Math.atan2(ez-cy, ex-cx)*180/Math.PI;
+                    if(a1<0) a1+=360; if(a2<0) a2+=360;
+                    dxf += `0\nARC\n8\n0\n10\n${fmt(cx)}\n20\n${fmt(cy)}\n30\n0\n40\n${fmt(r)}\n50\n${fmt(e.cw?a2:a1)}\n51\n${fmt(e.cw?a1:a2)}\n`;
+                }
+            }
+            dxf += `0\nENDSEC\n0\nEOF\n`;
+            document.getElementById('dxfContent').value = dxf;
+            setStatus("DXF vygenerováno.");
+            analyzeDXF(); 
+        } catch(e) { alert("Chyba JSON"); }
+    }
+
+    // --- CANVAS RENDERER ---
+    function initCanvas(id, key) {
+        const c = document.getElementById(id);
+        const state = AppState[key];
+        let drag=false, sx, sy;
+        const redraw = () => key==='dxf' ? drawPreviewFromDXF(false) : drawPreviewFromJSON(false);
+        c.addEventListener('wheel', e => { e.preventDefault(); state.view.k *= (e.deltaY>0?0.9:1.1); redraw(); });
+        const start = (x,y) => { drag=true; sx=x; sy=y; };
+        const move = (x,y) => { if(drag) { state.view.x+=x-sx; state.view.y+=y-sy; sx=x; sy=y; redraw(); } };
+        c.addEventListener('mousedown', e => start(e.clientX, e.clientY));
+        window.addEventListener('mousemove', e => move(e.clientX, e.clientY));
+        window.addEventListener('mouseup', () => drag=false);
+        c.addEventListener('touchstart', e => start(e.touches[0].clientX, e.touches[0].clientY));
+        c.addEventListener('touchmove', e => { e.preventDefault(); move(e.touches[0].clientX, e.touches[0].clientY); });
+        c.addEventListener('touchend', () => drag=false);
+    }
+    initCanvas('dxfCanvas', 'dxf'); initCanvas('jsonCanvas', 'json');
+
+    function drawPreviewFromDXF(fit) {
+        if(!AppState.dxf.parsed) return;
+        const active = Array.from(document.querySelectorAll('#layers-list .chip.active')).map(e=>e.dataset.layer);
+        const ents = AppState.dxf.parsed.entities.filter(e => {
+            if(AppState.filters.ignore.includes(e.type)) return false;
+            return active.includes(e.layer||"0");
+        });
+        drawPoints('dxfCanvas', parseEntitiesToPoints(ents), 'dxf-stats', AppState.dxf.view, fit);
+        if(fit) AppState.dxf.view.autoFit = false;
+    }
+    function drawPreviewFromJSON(fit) {
+        try {
+            const data = JSON.parse(document.getElementById('jsonContent').value);
+            drawPoints('jsonCanvas', data.points||[], 'json-stats', AppState.json.view, fit);
+            if(fit) AppState.json.view.autoFit = false;
+        } catch(e){}
+    }
+
+    function drawPoints(cid, pts, sid, view, fit) {
+        const c = document.getElementById(cid);
+        const ctx = c.getContext('2d');
+        const w = c.parentElement.clientWidth, h = c.parentElement.clientHeight;
+        c.width = w; c.height = h;
+        ctx.fillStyle = '#fff'; ctx.fillRect(0,0,w,h);
+        if(!pts.length) return;
+        let minX=Infinity, maxX=-Infinity, minZ=Infinity, maxZ=-Infinity;
+        pts.forEach(p => { minX=Math.min(minX,p.x); maxX=Math.max(maxX,p.x); minZ=Math.min(minZ,p.z); maxZ=Math.max(maxZ,p.z); });
+        setStats(sid, maxX-minX, maxZ-minZ, pts.length);
+        if(fit || view.autoFit) {
+            const pad = 40;
+            const sc = Math.min((w-pad)/(maxX-minX||1), (h-pad)/(maxZ-minZ||1));
+            view.k = sc;
+            view.x = (w - (maxX-minX)*sc)/2 - minX*sc;
+            view.y = (h - (maxZ-minZ)*sc)/2 + maxZ*sc; 
+        }
+        ctx.beginPath(); ctx.strokeStyle = '#eee'; ctx.lineWidth = 1;
+        const tx = x => view.x + x*view.k;
+        const ty = z => view.y - z*view.k;
+        for(let i=0; i<w; i+=50) { ctx.moveTo(i,0); ctx.lineTo(i,h); }
+        for(let i=0; i<h; i+=50) { ctx.moveTo(0,i); ctx.lineTo(w,i); }
+        ctx.stroke();
+        
+        ctx.lineWidth = 1.5; ctx.strokeStyle = '#222';
+        const showNums = document.getElementById('chk-show-nums') && document.getElementById('chk-show-nums').checked;
+        ctx.font = '10px monospace';
+        ctx.fillStyle = '#1565c0'; // Blue for numbers
+
+        for(let i=0; i<pts.length; i++) {
+            const p = pts[i];
+            const px = tx(p.x), py = ty(p.z);
+            
+            // Draw number
+            if(showNums) ctx.fillText(i, px+4, py-4);
+
+            if(i === pts.length-1) break; // Last point just drawn num, no segment
+            const e = pts[i+1];
+            if(e.break) continue;
+
+            ctx.beginPath();
+            ctx.moveTo(px, py);
+            if(e.type==='line') ctx.lineTo(tx(e.x), ty(e.z));
+            else if(e.type==='arc') {
+                const cx=tx(e.cx), cy=ty(e.cz), r=e.r*view.k;
+                const as = Math.atan2(ty(p.z)-cy, tx(p.x)-cx);
+                const ae = Math.atan2(ty(e.z)-cy, tx(e.x)-cx);
+                ctx.arc(cx, cy, r, as, ae, !e.cw); 
+            }
+            ctx.stroke();
+        }
+
+        if(pts.length > 0) {
+            ctx.fillStyle = '#00c853'; const sx = tx(pts[0].x), sy = ty(pts[0].z); ctx.fillRect(sx-3, sy-3, 6, 6);
+        }
+        const ox=tx(0), oy=ty(0);
+        ctx.beginPath(); ctx.strokeStyle = '#d84315'; ctx.lineWidth=1;
+        ctx.moveTo(ox-10, oy); ctx.lineTo(ox+10, oy); ctx.moveTo(ox, oy-10); ctx.lineTo(ox, oy+10); ctx.stroke();
+    }
+
+    function downloadTextFile(c, n) {
+        const b = new Blob([c], {type:'text/plain'});
+        const u = URL.createObjectURL(b);
+        const a = document.createElement('a'); a.href=u; a.download=n; a.click();
+    }
+    function downloadJson() { downloadTextFile(document.getElementById('jsonContent').value, 'projekt.json'); }
+    function downloadDxfResult() { 
+        const v=document.getElementById('dxfContent').value; 
+        if(v.startsWith('0')) downloadTextFile(v, 'export.dxf'); 
+    }
+</script>
+</body>
+</html>
+=======
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DXF - JSON Konvertor Pro</title>
+    <script src="https://cdn.jsdelivr.net/npm/dxf-parser@1.1.2/dist/dxf-parser.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* SVĚTLÝ REŽIM - Engineering Style */
+        body { 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; 
+            background-color: #f0f2f5; color: #333; 
+            height: 100vh; display: flex; flex-direction: column; overflow: hidden; 
+        }
+
+        header { 
+            background: #fff; padding: 10px 20px; border-bottom: 1px solid #ccc; 
+            display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); z-index: 10;
+        }
+        h1 { margin: 0; font-size: 18px; color: #d84315; display: flex; align-items: center; gap: 10px; font-weight: 700; }
+        
+        .main-area { display: flex; flex: 1; overflow: hidden; flex-direction: row; position: relative; }
+
+        /* Drag Overlay */
+        .drag-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(216, 67, 21, 0.1); border: 4px dashed #d84315;
+            display: none; justify-content: center; align-items: center;
+            font-size: 24px; font-weight: bold; color: #d84315; z-index: 100; pointer-events: none;
+            backdrop-filter: blur(3px);
+        }
+        body.drag-active .drag-overlay { display: flex; }
+
+        .panel { 
+            flex: 1; display: flex; flex-direction: column; padding: 15px; 
+            border-right: 1px solid #ddd; min-width: 0; position: relative;
+            background: #fdfdfd; transition: background 0.3s;
+        }
+        .panel:last-child { border-right: none; }
+        
+        .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        h2 { font-size: 13px; text-transform: uppercase; color: #555; margin: 0; border-bottom: 2px solid #d84315; padding-bottom: 4px; font-weight: 700; letter-spacing: 0.5px; }
+        
+        /* View Toggle */
+        .view-toggle { display: flex; background: #e0e0e0; border-radius: 4px; padding: 2px; }
+        .vt-btn { padding: 4px 12px; font-size: 11px; cursor: pointer; border-radius: 3px; color: #555; border: none; background: transparent; font-weight: 600; }
+        .vt-btn.active { background: #fff; color: #000; box-shadow: 0 1px 2px rgba(0,0,0,0.15); }
+
+        /* Filters Bar */
+        .filters-bar {
+            display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; padding: 5px; background: #f1f1f1; border-radius: 4px; border: 1px solid #e0e0e0;
+        }
+        .filter-group-label { font-size: 10px; font-weight: bold; color: #777; width: 100%; margin-bottom: 2px; text-transform: uppercase; }
+        
+        .chip {
+            background: #fff; color: #444; border: 1px solid #ccc; padding: 3px 8px; border-radius: 12px;
+            font-size: 10px; cursor: pointer; white-space: nowrap; user-select: none; display: flex; align-items: center; gap: 4px;
+            transition: all 0.15s; font-weight: 600;
+        }
+        .chip:hover { background: #f9f9f9; border-color: #999; }
+        .chip.active { background: #2e7d32; color: white; border-color: #2e7d32; }
+        .chip.active:hover { background: #1b5e20; }
+        .chip-ignore { background: #fff; color: #aaa; text-decoration: line-through; border-color: #eee; }
+        .chip-ignore.active { background: #d32f2f; color: white; text-decoration: none; border-color: #b71c1c; }
+
+        /* Content Area */
+        .content-stack { flex: 1; position: relative; overflow: hidden; border: 1px solid #ccc; border-radius: 4px; background: #fff; box-shadow: inset 0 2px 5px rgba(0,0,0,0.03); }
+        
+        textarea, .gcode-view { 
+            width: 100%; height: 100%; border: none; background: transparent; 
+            color: #222; padding: 12px; font-family: 'Consolas', 'Monaco', monospace; 
+            resize: none; font-size: 12px; outline: none; white-space: pre; overflow: auto; box-sizing: border-box;
+            position: absolute; top: 0; left: 0; line-height: 1.4;
+        }
+        
+        .gcode-view { display: none; background: #fafafa; color: #333; overflow-y: scroll; }
+        
+        .gc-line { border-bottom: 1px solid #eee; display: flex; padding: 2px 0; }
+        .gc-line:hover { background: #e3f2fd; }
+        .gc-num { color: #888; width: 30px; display: inline-block; user-select: none; text-align: right; margin-right: 10px; font-size: 11px; }
+        .gc-cmd { color: #d84315; font-weight: bold; width: 30px; }
+        .gc-coord { color: #1565c0; margin-right: 8px; }
+        .gc-arc { color: #2e7d32; font-weight: bold; }
+
+        canvas { width: 100%; height: 100%; display: none; position: absolute; top: 0; left: 0; background: #fff; cursor: grab; }
+        canvas:active { cursor: grabbing; }
+        
+        .stats-info { font-size: 11px; color: #666; margin-top: 6px; min-height: 16px; font-family: monospace; display: flex; justify-content: space-between; align-items: center; }
+        .highlight-val { color: #d84315; font-weight: bold; }
+
+        .controls-container { margin-bottom: 12px; display: flex; flex-direction: column; gap: 8px; }
+        .btn-row { display: flex; gap: 8px; width: 100%; }
+        
+        .btn { 
+            flex: 1; padding: 10px; border: none; border-radius: 4px; font-weight: 600; cursor: pointer; 
+            display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 12px; transition: 0.2s; color: white; white-space: nowrap; 
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .btn:active { transform: translateY(1px); box-shadow: none; }
+        
+        .btn-primary { background-color: #d84315; } .btn-primary:hover { background-color: #bf360c; }
+        .btn-sec { background-color: #f5f5f5; color: #333; border: 1px solid #ccc; } .btn-sec:hover { background-color: #e0e0e0; }
+        .btn-del { background-color: #fff; color: #d32f2f; border: 1px solid #d32f2f; flex: 0 0 40px; } .btn-del:hover { background-color: #ffebee; }
+        .btn-copy { background-color: #00838f; flex: 0 0 40px; } .btn-copy:hover { background-color: #006064; }
+        
+        .btn-file { position: relative; overflow: hidden; background: #2e7d32; } .btn-file:hover { background: #1b5e20; }
+        .btn-file-orange { background: #f57f17; } .btn-file-orange:hover { background: #e65100; }
+        .btn-file input[type=file] { position: absolute; top: 0; right: 0; min-width: 100%; min-height: 100%; font-size: 100px; text-align: right; opacity: 0; cursor: pointer; }
+
+        .status-bar { 
+            padding: 6px 20px; background: #e0e0e0; font-size: 11px; color: #555; border-top: 1px solid #ccc; 
+            display: flex; justify-content: space-between; flex-shrink: 0; font-weight: 500;
+        }
+        
+        .opt-group { display: flex; align-items: center; justify-content: center; gap: 5px; font-size: 11px; color: #333; background: #eee; padding: 0 10px; border-radius: 4px; border: 1px solid #ddd; }
+        select { border: none; background: transparent; font-weight: bold; color: #d84315; outline: none; font-size: 11px; cursor: pointer; }
+        .inp-sm { width: 40px; border: 1px solid #ccc; border-radius: 3px; padding: 2px 4px; text-align: center; font-weight: bold; font-size: 11px; }
+        input[type="checkbox"] { accent-color: #d84315; cursor: pointer; }
+        label { cursor: pointer; user-select: none; }
+
+        @media screen and (max-width: 768px) {
+            body { position: fixed; width: 100%; overflow: hidden; }
+            .main-area { flex-direction: column; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+            .panel { border-right: none; border-bottom: 4px solid #e0e0e0; flex: none; min-height: 75vh; padding: 12px; }
+            .btn { padding: 12px; font-size: 13px; }
+            header { padding: 8px 15px; }
+            .status-bar span:nth-child(2) { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1><i class="fas fa-drafting-compass"></i> DXF - JSON Pro</h1>
+    <div style="font-size: 11px; color: #888; font-weight: 600">v3.6 Numbering</div>
+</header>
+
+<div class="main-area">
+    <div class="drag-overlay">Přetáhněte soubor sem</div>
+
+    <!-- PANEL DXF (LEVÝ/HORNÍ) -->
+    <div class="panel" id="panel-dxf">
+        <div class="panel-header">
+            <h2>DXF (Skica)</h2>
+            <div class="view-toggle">
+                <button class="vt-btn active" onclick="setView('dxf', 'code')">Kód</button>
+                <button class="vt-btn" onclick="setView('dxf', 'preview')">Náhled</button>
+            </div>
+        </div>
+        
+        <!-- Filtry -->
+        <div class="filters-bar" id="filters-container" style="display:none">
+            <div class="filter-group-label">Vrstvy</div>
+            <div id="layers-list" style="display:flex; gap:4px; flex-wrap:wrap; width:100%"></div>
+            <div style="width:100%; height:1px; background:#ddd; margin:4px 0"></div>
+            <div class="filter-group-label">Ignorovat Entity</div>
+            <div class="chip chip-ignore active" onclick="toggleFilter('DIMENSION', this)">Kóty</div>
+            <div class="chip chip-ignore active" onclick="toggleFilter('TEXT', this)">Texty</div>
+            <div class="chip chip-ignore active" onclick="toggleFilter('HATCH', this)">Šrafy</div>
+        </div>
+
+        <div class="controls-container">
+            <div class="btn-row">
+                <label class="btn btn-file">
+                    <i class="fas fa-folder-open"></i> Načíst DXF
+                    <input type="file" id="dxfFile" accept=".dxf">
+                </label>
+                <button class="btn btn-del" onclick="clearPanel('dxf')" title="Vymazat vše"><i class="fas fa-trash-alt"></i></button>
+                <button class="btn btn-copy" onclick="copyToClipboard('dxfContent')" title="Kopírovat"><i class="fas fa-copy"></i></button>
+                <button class="btn btn-sec" onclick="downloadDxfResult()" title="Uložit DXF"><i class="fas fa-save"></i></button>
+            </div>
+            <div class="btn-row">
+                <button class="btn btn-primary" onclick="convertDxfToJson()">
+                    Převést na JSON <i class="fas fa-arrow-down"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="content-stack">
+            <textarea id="dxfContent" placeholder="Obsah DXF..."></textarea>
+            <canvas id="dxfCanvas"></canvas>
+        </div>
+        <div class="stats-info">
+            <span id="dxf-stats"></span>
+            <span style="font-size: 10px; cursor: pointer; color: #00838f; font-weight:bold" onclick="fitView('dxf')"><i class="fas fa-compress"></i> FIT</span>
+        </div>
+    </div>
+
+    <!-- PANEL JSON (PRAVÝ/DOLNÍ) -->
+    <div class="panel" id="panel-json">
+        <div class="panel-header">
+            <h2>JSON Data</h2>
+            <div class="view-toggle">
+                <button class="vt-btn active" onclick="setView('json', 'code')">JSON</button>
+                <button class="vt-btn" onclick="setView('json', 'gcode')">G-Kód</button>
+                <button class="vt-btn" onclick="setView('json', 'preview')">Náhled</button>
+            </div>
+        </div>
+
+        <div class="controls-container">
+            <div class="btn-row">
+                <label class="btn btn-file btn-file-orange">
+                    <i class="fas fa-file-code"></i> Načíst JSON
+                    <input type="file" id="jsonFile" accept=".json">
+                </label>
+                <button class="btn btn-del" onclick="clearPanel('json')" title="Vymazat vše"><i class="fas fa-trash-alt"></i></button>
+                <button class="btn btn-copy" onclick="copyToClipboard('jsonContent')" title="Kopírovat"><i class="fas fa-copy"></i></button>
+                <button class="btn btn-sec" onclick="downloadJson()"><i class="fas fa-download"></i></button>
+            </div>
+            <div class="btn-row">
+                <div class="opt-group" style="flex: 1;">
+                    <select id="machine-type" onchange="convertDxfToJson()">
+                        <option value="KARUSEL">Karusel</option>
+                        <option value="SOUSTRUH">Soustruh</option>
+                    </select>
+                </div>
+                <div class="opt-group" title="Zarovná začátek výkresu na X0 Z0">
+                    <input type="checkbox" id="chk-auto-zero" checked onchange="convertDxfToJson()"> <label for="chk-auto-zero">Auto 0</label>
+                </div>
+                <div class="opt-group" title="Zobrazit čísla řádků v náhledu">
+                    <input type="checkbox" id="chk-show-nums" onchange="drawPreviewFromJSON(false)"> <label for="chk-show-nums">Čísla</label>
+                </div>
+                <div class="opt-group" title="Měřítko pro export">
+                    Sc: <input type="number" id="export-scale" value="1.0" step="0.1" class="inp-sm">
+                </div>
+                <button class="btn btn-primary" style="flex: 0.5;" onclick="convertJsonToDxf()" title="Exportovat do DXF">
+                    <i class="fas fa-arrow-up"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="content-stack">
+            <textarea id="jsonContent" placeholder="Obsah JSON..."></textarea>
+            <div id="gcodeContent" class="gcode-view"></div>
+            <canvas id="jsonCanvas"></canvas>
+        </div>
+        <div class="stats-info">
+             <span id="json-stats"></span>
+             <span style="font-size: 10px; cursor: pointer; color: #00838f; font-weight:bold" onclick="fitView('json')"><i class="fas fa-compress"></i> FIT</span>
+        </div>
+    </div>
+</div>
+
+<div class="status-bar">
+    <span id="status-msg">Připraveno.</span>
+    <span>Index Visualization</span>
+</div>
+
+<script>
+    // --- STATE ---
+    const AppState = {
+        dxf: { layers: {}, parsed: null, view: { x: 0, y: 0, k: 1 } },
+        json: { parsed: null, view: { x: 0, y: 0, k: 1 } },
+        filters: { ignore: ['DIMENSION', 'TEXT', 'MTEXT', 'HATCH'] }
+    };
+
+    // --- UI HELPERS ---
+    function setView(panel, type) {
+        const p = document.getElementById(`panel-${panel}`);
+        const ta = p.querySelector('textarea');
+        const cv = p.querySelector('canvas');
+        const gc = p.querySelector('.gcode-view');
+        
+        ta.style.display = 'none'; cv.style.display = 'none'; if(gc) gc.style.display = 'none';
+        
+        if(type==='code') ta.style.display = 'block';
+        else if(type==='preview') { cv.style.display = 'block'; panel==='json' ? drawPreviewFromJSON(false) : drawPreviewFromDXF(false); }
+        else if(type==='gcode') { gc.style.display = 'block'; renderGCodeView(); }
+
+        p.querySelectorAll('.vt-btn').forEach(b => {
+            b.classList.toggle('active', b.innerText.toLowerCase().includes(type.replace('code','json').replace('gcode','g-kód')));
+            if(type==='code' && b.innerText==='Kód') b.classList.add('active');
+            if(type==='code' && b.innerText==='JSON') b.classList.add('active');
+            if(type==='gcode' && b.innerText==='G-Kód') b.classList.add('active');
+            if(type==='preview' && b.innerText==='Náhled') b.classList.add('active');
+        });
+    }
+    
+    function fitView(panel) { 
+        AppState[panel].view = { x:0, y:0, k:1, autoFit:true }; 
+        panel==='dxf' ? drawPreviewFromDXF(true) : drawPreviewFromJSON(true); 
+    }
+    
+    function clearPanel(type) {
+        if(confirm('Opravdu vymazat?')) {
+            document.getElementById(`${type}Content`).value = '';
+            document.getElementById(`${type}-stats`).innerHTML = '';
+            if(type==='json') document.getElementById('gcodeContent').innerHTML = '';
+            AppState[type] = { layers: {}, parsed: null, view: { x: 0, y: 0, k: 1 } };
+            const cv = document.getElementById(`${type}Canvas`);
+            const ctx = cv.getContext('2d'); ctx.clearRect(0,0,cv.width,cv.height); ctx.fillStyle='#fff'; ctx.fillRect(0,0,cv.width,cv.height);
+            if(type === 'dxf') {
+                document.getElementById('layers-list').innerHTML = '';
+                document.getElementById('filters-container').style.display = 'none';
+            }
+            setStatus('Vymazáno.');
+        }
+    }
+
+    function renderGCodeView() {
+        const txt = document.getElementById('jsonContent').value;
+        const div = document.getElementById('gcodeContent');
+        div.innerHTML = '';
+        if(!txt.trim()) { div.innerHTML = '<div style="padding:10px;color:#aaa">Žádná data</div>'; return; }
+        try {
+            const data = JSON.parse(txt);
+            let html = '<div style="padding:10px; font-family: monospace; font-size:12px;">';
+            if(data.points) {
+                data.points.forEach((p, i) => {
+                    let row = `<div class="gc-line"><span class="gc-num">${i}.</span>`;
+                    if(p.break) {
+                        row += `<span class="gc-cmd" style="color:#aaa">G0</span> <span class="gc-coord">X${p.x.toFixed(3)} Z${p.z.toFixed(3)}</span>`;
+                    } else if(p.type === 'line') {
+                        row += `<span class="gc-cmd">G1</span> <span class="gc-coord">X${p.x.toFixed(3)} Z${p.z.toFixed(3)}</span>`;
+                    } else if(p.type === 'arc') {
+                        const code = p.cw ? 'G2' : 'G3';
+                        row += `<span class="gc-cmd gc-arc">${code}</span> <span class="gc-coord">X${p.x.toFixed(3)} Z${p.z.toFixed(3)}</span> <span class="gc-coord" style="color:#e65100">R${p.r.toFixed(3)}</span>`;
+                        row += `<span style="font-size:9px;color:#999;margin-left:5px">(I${(p.cx).toFixed(2)} K${(p.cz).toFixed(2)})</span>`;
+                    }
+                    row += `</div>`;
+                    html += row;
+                });
+            }
+            html += '</div>';
+            div.innerHTML = html;
+        } catch(e) { div.innerText = "Chyba dat"; }
+    }
+
+    function copyToClipboard(id) { document.getElementById(id).select(); document.execCommand('copy'); setStatus("Zkopírováno."); window.getSelection().removeAllRanges(); }
+    function setStatus(msg) { document.getElementById('status-msg').innerText = msg; }
+    function setStats(id, w, h, count) { document.getElementById(id).innerHTML = `Prvky: <span class="highlight-val">${count}</span> | Rozměr: <span class="highlight-val">${w.toFixed(1)}</span> x <span class="highlight-val">${h.toFixed(1)}</span>`; }
+
+    // --- FILTERS/FILES ---
+    function toggleFilter(type, el) {
+        el.classList.toggle('active');
+        if(el.classList.contains('active')) AppState.filters.ignore.push(type);
+        else AppState.filters.ignore = AppState.filters.ignore.filter(t => t !== type);
+        convertDxfToJson();
+    }
+
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(e => document.body.addEventListener(e, ev => { ev.preventDefault(); ev.stopPropagation(); }));
+    document.body.addEventListener('dragenter', () => document.body.classList.add('drag-active'));
+    document.body.addEventListener('dragleave', (e) => { if(!e.relatedTarget) document.body.classList.remove('drag-active'); });
+    document.body.addEventListener('drop', (e) => {
+        document.body.classList.remove('drag-active');
+        const f = e.dataTransfer.files[0];
+        if(f) handleFile(f);
+    });
+    
+    document.getElementById('dxfFile').addEventListener('change', e => handleFile(e.target.files[0]));
+    document.getElementById('jsonFile').addEventListener('change', e => handleFile(e.target.files[0]));
+
+    function handleFile(f) {
+        if(!f) return;
+        const r = new FileReader();
+        const ext = f.name.split('.').pop().toLowerCase();
+        r.onload = e => {
+            if(ext === 'dxf') {
+                document.getElementById('dxfContent').value = e.target.result;
+                setStatus(`Načteno: ${f.name}`);
+                analyzeDXF(); 
+            } else if(ext === 'json') {
+                document.getElementById('jsonContent').value = e.target.result;
+                setStatus(`Načteno: ${f.name}`);
+                drawPreviewFromJSON(true); 
+            }
+        };
+        r.readAsText(f);
+    }
+
+    // --- LOGIC ---
+    function analyzeDXF() {
+        const txt = document.getElementById('dxfContent').value;
+        if(!txt.trim()) return;
+        try {
+            const parser = new DxfParser();
+            AppState.dxf.parsed = parser.parseSync(txt);
+            const layers = {};
+            if(AppState.dxf.parsed && AppState.dxf.parsed.entities) {
+                AppState.dxf.parsed.entities.forEach(e => {
+                    const l = e.layer || "0";
+                    layers[l] = (layers[l] || 0) + 1;
+                });
+            }
+            AppState.dxf.layers = layers;
+            renderLayerBar();
+            
+            drawPreviewFromDXF(true); 
+            setView('dxf', 'preview');
+            convertDxfToJson(); 
+        } catch(e) { console.error(e); }
+    }
+
+    function renderLayerBar() {
+        const c = document.getElementById('layers-list');
+        c.innerHTML = '';
+        document.getElementById('filters-container').style.display = 'block';
+        Object.keys(AppState.dxf.layers).forEach(l => {
+            const d = document.createElement('div');
+            d.className = 'chip active';
+            d.dataset.layer = l;
+            d.innerHTML = `<span>${l}</span><span style="font-size:9px;opacity:0.6">${AppState.dxf.layers[l]}</span>`;
+            d.onclick = function() { this.classList.toggle('active'); convertDxfToJson(); };
+            c.appendChild(d);
+        });
+    }
+
+    function convertDxfToJson() {
+        if(!AppState.dxf.parsed) return;
+        const activeL = Array.from(document.querySelectorAll('#layers-list .chip.active')).map(e => e.dataset.layer);
+        const entities = AppState.dxf.parsed.entities.filter(e => {
+            if(AppState.filters.ignore.includes(e.type)) return false;
+            if(e.type === 'MTEXT' && AppState.filters.ignore.includes('TEXT')) return false;
+            return activeL.includes(e.layer || "0");
+        });
+        const points = parseEntitiesToPoints(entities);
+        const mType = document.getElementById('machine-type').value;
+        const project = { version: "1.0", timestamp: new Date().toISOString(), machineType: mType, points: points, dimensions: [] };
+        document.getElementById('jsonContent').value = JSON.stringify(project, null, 2);
+        drawPreviewFromJSON(true); 
+    }
+
+    function parseEntitiesToPoints(entities) {
+        let points = []; let idCounter = 1;
+        function add(start, end, type, extra={}) {
+            const sX = start.x, sZ = start.y; const eX = end.x, eZ = end.y;
+            const last = points[points.length-1];
+            if(!last || Math.abs(last.x - sX) > 0.001 || Math.abs(last.z - sZ) > 0.001) {
+                points.push({ x: sX, z: sZ, break: !!last, type: 'line', id: idCounter++ });
+            }
+            points.push({ x: eX, z: eZ, break: false, type, id: idCounter++, ...extra });
+        }
+        entities.forEach(ent => {
+            if (ent.type === 'LINE') add(ent.vertices[0], ent.vertices[1], 'line');
+            else if (ent.type === 'CIRCLE') {
+                const c = ent.center, r = ent.radius;
+                add({x:c.x-r, y:c.y}, {x:c.x+r, y:c.y}, 'arc', {r, cw:true, cx:c.x, cz:c.y});
+                add({x:c.x+r, y:c.y}, {x:c.x-r, y:c.y}, 'arc', {r, cw:true, cx:c.x, cz:c.y});
+            }
+            else if (ent.type === 'ARC') {
+                const c = ent.center, r = ent.radius;
+                const s = {x: c.x + r*Math.cos(ent.startAngle), y: c.y + r*Math.sin(ent.startAngle)};
+                const e = {x: c.x + r*Math.cos(ent.endAngle), y: c.y + r*Math.sin(ent.endAngle)};
+                add(s, e, 'arc', {r, cw:false, cx:c.x, cz:c.y});
+            }
+            else if (ent.type === 'LWPOLYLINE' || ent.type === 'POLYLINE') {
+                if(!ent.vertices || ent.vertices.length < 2) return;
+                for(let i=0; i<ent.vertices.length; i++) {
+                    const curr = ent.vertices[i];
+                    const next = ent.vertices[(i+1) % ent.vertices.length];
+                    if(i === ent.vertices.length - 1 && !ent.shape) continue; 
+                    if(curr.bulge) {
+                        const b = curr.bulge;
+                        const theta = 4 * Math.atan(b);
+                        const dist = Math.sqrt(Math.pow(next.x-curr.x,2) + Math.pow(next.y-curr.y,2));
+                        const r = Math.abs(dist / (2 * Math.sin(theta/2)));
+                        const midX = (curr.x + next.x)/2, midY = (curr.y + next.y)/2;
+                        const cot = 1/Math.tan(theta/2); 
+                        const cX = midX - (next.y-curr.y)/2 * cot;
+                        const cY = midY + (next.x-curr.x)/2 * cot;
+                        add({x:curr.x, y:curr.y}, {x:next.x, y:next.y}, 'arc', {r: r, cw: b < 0, cx: cX, cz: cY});
+                    } else {
+                        add({x:curr.x, y:curr.y}, {x:next.x, y:next.y}, 'line');
+                    }
+                }
+            }
+        });
+        if(document.getElementById('chk-auto-zero').checked && points.length > 0) {
+            let minX=Infinity, minZ=Infinity;
+            points.forEach(p => { minX=Math.min(minX,p.x); minZ=Math.min(minZ,p.z); });
+            points.forEach(p => { p.x-=minX; p.z-=minZ; if(p.cx!=null){p.cx-=minX; p.cz-=minZ;} });
+        }
+        return points;
+    }
+
+    function convertJsonToDxf() {
+        const txt = document.getElementById('jsonContent').value;
+        if(!txt.trim()) return;
+        try {
+            const data = JSON.parse(txt);
+            const scale = parseFloat(document.getElementById('export-scale').value) || 1.0;
+            let dxf = `0\nSECTION\n2\nHEADER\n9\n$ACADVER\n1\nAC1009\n9\n$INSUNITS\n70\n4\n0\nENDSEC\n0\nSECTION\n2\nENTITIES\n`;
+            const fmt = n => n.toFixed(6);
+            for(let i=0; i<(data.points||[]).length-1; i++) {
+                const s = data.points[i], e = data.points[i+1];
+                if(e.break) continue;
+                const sx = s.x * scale, sz = s.z * scale;
+                const ex = e.x * scale, ez = e.z * scale;
+                if(e.type === 'line') {
+                    dxf += `0\nLINE\n8\n0\n10\n${fmt(sx)}\n20\n${fmt(sz)}\n30\n0\n11\n${fmt(ex)}\n21\n${fmt(ez)}\n31\n0\n`;
+                } else if(e.type === 'arc') {
+                    const cx=e.cx*scale, cy=e.cz*scale, r=e.r*scale;
+                    let a1 = Math.atan2(sz-cy, sx-cx)*180/Math.PI;
+                    let a2 = Math.atan2(ez-cy, ex-cx)*180/Math.PI;
+                    if(a1<0) a1+=360; if(a2<0) a2+=360;
+                    dxf += `0\nARC\n8\n0\n10\n${fmt(cx)}\n20\n${fmt(cy)}\n30\n0\n40\n${fmt(r)}\n50\n${fmt(e.cw?a2:a1)}\n51\n${fmt(e.cw?a1:a2)}\n`;
+                }
+            }
+            dxf += `0\nENDSEC\n0\nEOF\n`;
+            document.getElementById('dxfContent').value = dxf;
+            setStatus("DXF vygenerováno.");
+            analyzeDXF(); 
+        } catch(e) { alert("Chyba JSON"); }
+    }
+
+    // --- CANVAS RENDERER ---
+    function initCanvas(id, key) {
+        const c = document.getElementById(id);
+        const state = AppState[key];
+        let drag=false, sx, sy;
+        const redraw = () => key==='dxf' ? drawPreviewFromDXF(false) : drawPreviewFromJSON(false);
+        c.addEventListener('wheel', e => { e.preventDefault(); state.view.k *= (e.deltaY>0?0.9:1.1); redraw(); });
+        const start = (x,y) => { drag=true; sx=x; sy=y; };
+        const move = (x,y) => { if(drag) { state.view.x+=x-sx; state.view.y+=y-sy; sx=x; sy=y; redraw(); } };
+        c.addEventListener('mousedown', e => start(e.clientX, e.clientY));
+        window.addEventListener('mousemove', e => move(e.clientX, e.clientY));
+        window.addEventListener('mouseup', () => drag=false);
+        c.addEventListener('touchstart', e => start(e.touches[0].clientX, e.touches[0].clientY));
+        c.addEventListener('touchmove', e => { e.preventDefault(); move(e.touches[0].clientX, e.touches[0].clientY); });
+        c.addEventListener('touchend', () => drag=false);
+    }
+    initCanvas('dxfCanvas', 'dxf'); initCanvas('jsonCanvas', 'json');
+
+    function drawPreviewFromDXF(fit) {
+        if(!AppState.dxf.parsed) return;
+        const active = Array.from(document.querySelectorAll('#layers-list .chip.active')).map(e=>e.dataset.layer);
+        const ents = AppState.dxf.parsed.entities.filter(e => {
+            if(AppState.filters.ignore.includes(e.type)) return false;
+            return active.includes(e.layer||"0");
+        });
+        drawPoints('dxfCanvas', parseEntitiesToPoints(ents), 'dxf-stats', AppState.dxf.view, fit);
+        if(fit) AppState.dxf.view.autoFit = false;
+    }
+    function drawPreviewFromJSON(fit) {
+        try {
+            const data = JSON.parse(document.getElementById('jsonContent').value);
+            drawPoints('jsonCanvas', data.points||[], 'json-stats', AppState.json.view, fit);
+            if(fit) AppState.json.view.autoFit = false;
+        } catch(e){}
+    }
+
+    function drawPoints(cid, pts, sid, view, fit) {
+        const c = document.getElementById(cid);
+        const ctx = c.getContext('2d');
+        const w = c.parentElement.clientWidth, h = c.parentElement.clientHeight;
+        c.width = w; c.height = h;
+        ctx.fillStyle = '#fff'; ctx.fillRect(0,0,w,h);
+        if(!pts.length) return;
+        let minX=Infinity, maxX=-Infinity, minZ=Infinity, maxZ=-Infinity;
+        pts.forEach(p => { minX=Math.min(minX,p.x); maxX=Math.max(maxX,p.x); minZ=Math.min(minZ,p.z); maxZ=Math.max(maxZ,p.z); });
+        setStats(sid, maxX-minX, maxZ-minZ, pts.length);
+        if(fit || view.autoFit) {
+            const pad = 40;
+            const sc = Math.min((w-pad)/(maxX-minX||1), (h-pad)/(maxZ-minZ||1));
+            view.k = sc;
+            view.x = (w - (maxX-minX)*sc)/2 - minX*sc;
+            view.y = (h - (maxZ-minZ)*sc)/2 + maxZ*sc; 
+        }
+        ctx.beginPath(); ctx.strokeStyle = '#eee'; ctx.lineWidth = 1;
+        const tx = x => view.x + x*view.k;
+        const ty = z => view.y - z*view.k;
+        for(let i=0; i<w; i+=50) { ctx.moveTo(i,0); ctx.lineTo(i,h); }
+        for(let i=0; i<h; i+=50) { ctx.moveTo(0,i); ctx.lineTo(w,i); }
+        ctx.stroke();
+        
+        ctx.lineWidth = 1.5; ctx.strokeStyle = '#222';
+        const showNums = document.getElementById('chk-show-nums') && document.getElementById('chk-show-nums').checked;
+        ctx.font = '10px monospace';
+        ctx.fillStyle = '#1565c0'; // Blue for numbers
+
+        for(let i=0; i<pts.length; i++) {
+            const p = pts[i];
+            const px = tx(p.x), py = ty(p.z);
+            
+            // Draw number
+            if(showNums) ctx.fillText(i, px+4, py-4);
+
+            if(i === pts.length-1) break; // Last point just drawn num, no segment
+            const e = pts[i+1];
+            if(e.break) continue;
+
+            ctx.beginPath();
+            ctx.moveTo(px, py);
+            if(e.type==='line') ctx.lineTo(tx(e.x), ty(e.z));
+            else if(e.type==='arc') {
+                const cx=tx(e.cx), cy=ty(e.cz), r=e.r*view.k;
+                const as = Math.atan2(ty(p.z)-cy, tx(p.x)-cx);
+                const ae = Math.atan2(ty(e.z)-cy, tx(e.x)-cx);
+                ctx.arc(cx, cy, r, as, ae, !e.cw); 
+            }
+            ctx.stroke();
+        }
+
+        if(pts.length > 0) {
+            ctx.fillStyle = '#00c853'; const sx = tx(pts[0].x), sy = ty(pts[0].z); ctx.fillRect(sx-3, sy-3, 6, 6);
+        }
+        const ox=tx(0), oy=ty(0);
+        ctx.beginPath(); ctx.strokeStyle = '#d84315'; ctx.lineWidth=1;
+        ctx.moveTo(ox-10, oy); ctx.lineTo(ox+10, oy); ctx.moveTo(ox, oy-10); ctx.lineTo(ox, oy+10); ctx.stroke();
+    }
+
+    function downloadTextFile(c, n) {
+        const b = new Blob([c], {type:'text/plain'});
+        const u = URL.createObjectURL(b);
+        const a = document.createElement('a'); a.href=u; a.download=n; a.click();
+    }
+    function downloadJson() { downloadTextFile(document.getElementById('jsonContent').value, 'projekt.json'); }
+    function downloadDxfResult() { 
+        const v=document.getElementById('dxfContent').value; 
+        if(v.startsWith('0')) downloadTextFile(v, 'export.dxf'); 
+    }
+</script>
+</body>
+</html>
+>>>>>>> e52642107a8edc8ab34a98eec0d608b52fdb2926

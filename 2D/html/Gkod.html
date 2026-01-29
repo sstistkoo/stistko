@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Příklady G kódu</title>
+    <style>
+        /* Základní styly */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 10px;
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        /* Kontejner s responzivní šířkou */
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0 10px;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 800px;
+                padding: 0 20px;
+            }
+        }
+
+        /* Nadpis */
+        h1 {
+            color: #333;
+            text-align: center;
+            font-size: 1.5em;
+            margin: 10px 0;
+        }
+
+        /* Select box */
+        select {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            font-size: 16px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            background-color: white;
+        }
+
+        /* Sekce s příklady */
+        .example-section {
+            margin-top: 15px;
+            padding: 15px;
+            border-left: 3px solid #007bff;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        /* Syntax a kód */
+        .syntax-section {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            overflow-x: auto;
+        }
+
+        .code-line {
+            font-family: 'Courier New', monospace;
+            white-space: pre;
+            padding: 2px 0;
+            font-size: 14px;
+        }
+
+        /* Nadpisy sekcí */
+        .section-title {
+            font-weight: bold;
+            color: #0056b3;
+            margin: 15px 0 10px 0;
+            font-size: 1.1em;
+        }
+
+        /* Grid pro vlastnosti */
+        .properties-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        @media (min-width: 768px) {
+            .properties-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            }
+        }
+
+        .property-item {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #dee2e6;
+        }
+
+        /* Scrollovatelný kód na mobilech */
+        .syntax-block {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        /* Vylepšení čitelnosti na malých obrazovkách */
+        @media (max-width: 480px) {
+            body {
+                font-size: 14px;
+            }
+
+            .code-line {
+                font-size: 12px;
+            }
+
+            .example-section {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 1.3em;
+            }
+        }
+
+        /* Tmavý režim pro mobilní zařízení */
+        @media (prefers-color-scheme: dark) {
+            /* ... odstraněno ... */
+        }
+
+        /* Přidání stylů pro theme switch */
+        .theme-switch {
+            position: fixed;
+            top: 20px;
+            left: 20px; /* Změna z right na left */
+            z-index: 1000;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+        }
+
+        .theme-switch:hover {
+            background-color: rgba(0,0,0,0.1);
+        }
+
+        .theme-switch svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        /* Tmavý režim */
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .example-section,
+        body.dark-mode .syntax-section,
+        body.dark-mode .property-item {
+            background-color: #2d2d2d;
+            border-color: #404040;
+        }
+
+        body.dark-mode select {
+            background-color: #2d2d2d;
+            color: #e0e0e0;
+            border-color: #404040;
+        }
+
+        body.dark-mode h1 {
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .section-title {
+            color: #66b3ff;
+        }
+
+        /* Odstranění původního media query pro dark mode */
+        @media (prefers-color-scheme: dark) {
+            /* ... odstraněno ... */
+        }
+
+        /* Úprava stylu přepínače pro lepší viditelnost */
+        .theme-switch {
+            position: fixed;
+            top: 20px;
+            left: 20px; /* Změna z right na left */
+            z-index: 1000;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid #007bff;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .theme-switch:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .theme-switch svg {
+            width: 24px;
+            height: 24px;
+            fill: #007bff;
+        }
+
+        body.dark-mode .theme-switch {
+            background: rgba(0, 0, 0, 0.2);
+            border-color: #66b3ff;
+        }
+
+        body.dark-mode .theme-switch svg {
+            fill: #66b3ff;
+        }
+
+        .light-icon, .dark-icon {
+            opacity: 1 !important;
+        }
+
+        /* Light mode výchozí stav */
+        body {
+            background-color: #ffffff;
+            color: #333333;
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-switch" title="Přepnout tmavý režim">
+        <svg class="light-icon" viewBox="0 0 24 24">
+            <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/>
+        </svg>
+        <svg class="dark-icon" viewBox="0 0 24 24" style="display: none;">
+            <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-3.03 0-5.5-2.47-5.5-5.5 0-1.82.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/>
+        </svg>
+    </button>
+    <div class="container">
+        <h1>G kód - příklady</h1>
+        <form id="codeForm">
+            <label for="gcodeSelect">Vyberte G kód:</label>
+            <select id="gcodeSelect" required>
+                <option value="">-- Vyberte --</option>
+                <option value="G00">G00</option>
+                <option value="G01">G01</option>
+                <option value="G02">G02</option>
+                <option value="G03">G03</option>
+                <option value="G04">G04</option>
+                <option value="G09">G09</option>
+                <option value="G17">G17</option>
+                <option value="G18">G18</option>
+                <option value="G19">G19</option>
+                <option value="G25">G25</option>
+                <option value="G26">G26</option>
+                <option value="G33">G33</option>
+                <option value="G40">G40</option>
+                <option value="G41">G41</option>
+                <option value="G42">G42</option>
+                <option value="G53">G53</option>
+                <option value="G54">G54</option>
+                <option value="G55">G55</option>
+                <option value="G56">G56</option>
+                <option value="G57">G57</option>
+                <option value="G60">G60</option>
+                <option value="G61">G61</option>
+                <option value="G62">G62</option>
+                <option value="G63">G63</option>
+                <option value="G64">G64</option>
+                <option value="G70">G70</option>
+                <option value="G71">G71</option>
+                <option value="G90">G90</option>
+                <option value="G91">G91</option>
+                <option value="G94">G94</option>
+                <option value="G95">G95</option>
+                <option value="G96">G96</option>
+                <option value="G97">G97</option>
+                <option value="G110">G110</option>
+                <option value="G111">G111</option>
+                <option value="G112">G112</option>
+                <option value="G140">G140</option>
+                <option value="G141">G141</option>
+                <option value="G142">G142</option>
+                <option value="G143">G143</option>
+                <option value="G147">G147</option>
+                <option value="G148">G148</option>
+                <option value="G247">G247</option>
+                <option value="G248">G248</option>
+                <option value="G331">G331</option>
+                <option value="G332">G332</option>
+                <option value="G340">G340</option>
+                <option value="G341">G341</option>
+                <option value="G347">G347</option>
+                <option value="G348">G348</option>
+                <option value="G450">G450</option>
+                <option value="G451">G451</option>
+                <option value="G500">G500</option>
+                <option value="G505">G505</option>
+                <option value="G599">G599</option>
+                <option value="G601">G601</option>
+                <option value="G602">G602</option>
+                <option value="G603">G603</option>
+                <option value="G641">G641</option>
+            </select>
+        </form>
+        <div id="exampleOutput" class="code-example" style="display:none;"></div>
+        <div id="codeDescription" style="margin-top: 20px;"></div>
+    </div>
+    <script>
+        const form = document.getElementById('codeForm');
+        const output = document.getElementById('exampleOutput');
+        const description = document.getElementById('codeDescription');
+
+        const examples = {
+            'G00': {
+                program: 'N10 G00 X100 Z50  ; Rychlý přesun na pozici X=100mm Z=50mm\nN20 G00 X150 Z0   ; Další polohování\nN30 G00 X0 Z0    ; Návrat do výchozí pozice',
+                description: 'Rychloposuv - příkaz pro rychlé polohování nástroje mimo řez.',
+                usage: '• Použití:\n  - Rychlé polohování mezi operacemi\n  - Návrat do výchozí pozice\n  - Odjezd nástroje do bezpečné vzdálenosti\n  - Pohyb při výměně nástroje',
+                properties: '• Vlastnosti:\n  - Maximální rychlost os stroje\n  - Simultánní pohyb všech os\n  - Neprogramuje se posuvová rychlost F\n\n• Syntax:\n  G00 X.. Z..\n\n• Příklad:\n  N10 G00 X100 Z50  ; Přesun na absolutní pozici\n  N20 G91           ; Přepnutí na přírůstkové programování\n  N30 G00 X-20 Z-10 ; Relativní pohyb o -20mm v X a -10mm v Z',
+                syntax: 'G00 X.. Z..',
+                example: 'N10 G00 X100 Z50  ; Přesun na absolutní pozici'
+            },
+            'G01': {
+                program: 'N10 G01 X50 Z-25 F0.2  ; Lineární interpolace s posuvem 0.2mm/ot\nN20 G01 X100 Z-50 F0.15',
+                description: 'Lineární interpolace - přímkový pohyb nástroje definovanou rychlostí.',
+                usage: '• Použití:\n  - Soustružení válcových ploch\n  - Čelní soustružení\n  - Sražení hran\n  - Zapichování',
+                properties: '• Vlastnosti:\n  - Přímočarý pohyb definovanou rychlostí\n  - Nutné definovat posuv F\n  - Možnost práce v G90/G91\n\n• Syntax:\n  G01 X.. Z.. F..\n\n• Příklad:\n  N10 G90 G01 X30 Z-20 F0.2  ; Absolutní souřadnice\n  N20 G91 G01 X-5 Z-10 F0.15  ; Přírůstkové souřadnice',
+                syntax: 'G01 X.. Z.. F..',
+                example: 'N10 G01 X30 Z-20 F0.2  ; Přímkový pohyb s posuvem'
+            },
+            'G02': {
+                program: 'N10 G02 X80 Z-40 CR=20 F0.2  ; Kruhový oblouk pomocí rádiusu\nN20 G02 X120 Z-60 I20 K0 F0.2  ; Kruhový oblouk pomocí středu\nN30 G02 AR=90 X50 Z-30 F0.2  ; Kruhový oblouk pomocí úhlu\nN40 G02 CT=15 X40 Z-25 F0.2  ; Tečné napojení kružnicí',
+                description: 'Kruhová interpolace ve směru hodinových ručiček (po směru). Umožňuje čtyři způsoby programování oblouků.',
+                usage: '• Použití:\n  - Soustružení vnějších rádiusů\n  - Tvarové soustružení\n  - Přechodové rádiusy\n  - Kruhové interpolace\n  - Tečné napojení oblouků',
+                properties: '• Vlastnosti:\n  - Čtyři způsoby programování:\n    1. Pomocí rádiusu (CR=)\n    2. Pomocí středu (I,K)\n    3. Pomocí úhlu (AR=)\n    4. Pomocí tečného napojení (CT=)\n  - Směr po směru hodinových ručiček\n  - Nutné definovat koncový bod\n  - Posuv F je povinný',
+                syntax: `G02 X.. Z.. CR=.. F..     ; Pomocí rádiusu (CR=poloměr)
+G02 X.. Z.. I.. K.. F..    ; Pomocí středu (I,K = relativní souřadnice středu)
+G02 AR=.. X.. Z.. F..      ; Pomocí úhlu (AR=úhel ve stupních)
+G02 CT=.. X.. Z.. F..      ; Pomocí tečného napojení (CT=poloměr)`,
+                example: `; Příklad 1 - Pomocí rádiusu (CR):
+N10 G02 X50 Z-25 CR=15 F0.2    ; Vnější rádius R15
+N20 G02 X30 Z-40 CR=-12 F0.2   ; Vnitřní rádius R12 (CR= záporné)
+
+; Příklad 2 - Pomocí středu (I,K):
+N10 G02 X60 Z-30 I20 K-15 F0.2 ; I,K jsou vzdálenosti od počátku
+N20 G02 X40 Z-20 I-10 K0 F0.2  ; Střed je vlevo od počátku
+
+; Příklad 3 - Pomocí úhlu (AR):
+N10 G02 AR=90 X40 Z-40 F0.2    ; Oblouk 90 stupňů
+N20 G02 AR=180 X60 Z-30 F0.2   ; Oblouk 180 stupňů
+
+; Příklad 4 - Pomocí tečného napojení (CT):
+N10 G01 X30 Z-20 F0.2          ; Přímka
+N20 G02 CT=10 X50 Z-35 F0.2    ; Tečné napojení R10`
+            },
+            'G03': {
+                program: 'N10 G03 X60 Z-30 CR=15 F0.2  ; Kruhový oblouk pomocí rádiusu\nN20 G03 X100 Z-50 I-20 K0 F0.2 ; Kruhový oblouk pomocí středu\nN30 G03 AR=90 X40 Z-20 F0.2  ; Kruhový oblouk pomocí úhlu\nN40 G03 CT=8 X60 Z-40 F0.2  ; Tečné napojení kružnicí',
+                description: 'Kruhová interpolace proti směru hodinových ručiček (proti směru). Umožňuje čtyři způsoby programování oblouků.',
+                usage: '• Použití:\n  - Soustružení vnitřních rádiusů\n  - Tvarové soustružení\n  - Přechodové rádiusy\n  - Kruhové interpolace\n  - Tečné napojení oblouků',
+                properties: '• Vlastnosti:\n  - Čtyři způsoby programování:\n    1. Pomocí rádiusu (CR=)\n    2. Pomocí středu (I,K)\n    3. Pomocí úhlu (AR=)\n    4. Pomocí tečného napojení (CT=)\n  - Směr proti směru hodinových ručiček\n  - Nutné definovat koncový bod\n  - Posuv F je povinný',
+                syntax: `G03 X.. Z.. CR=.. F..     ; Pomocí rádiusu (CR=poloměr)
+G03 X.. Z.. I.. K.. F..    ; Pomocí středu (I,K = relativní souřadnice středu)
+G03 AR=.. X.. Z.. F..      ; Pomocí úhlu (AR=úhel ve stupních)
+G03 CT=.. X.. Z.. F..      ; Pomocí tečného napojení (CT=poloměr)`,
+                example: `; Příklad 1 - Pomocí rádiusu (CR):
+N10 G03 X40 Z-20 CR=15 F0.2    ; Vnější rádius R15
+N20 G03 X25 Z-35 CR=-12 F0.2   ; Vnitřní rádius R12 (CR= záporné)
+
+; Příklad 2 - Pomocí středu (I,K):
+N10 G03 X50 Z-25 I-20 K-15 F0.2 ; I,K jsou vzdálenosti od počátku
+N20 G03 X35 Z-15 I10 K0 F0.2    ; Střed je vpravo od počátku
+
+; Příklad 3 - Pomocí úhlu (AR):
+N10 G03 AR=90 X30 Z-30 F0.2    ; Oblouk 90 stupňů
+N20 G03 AR=180 X45 Z-25 F0.2   ; Oblouk 180 stupňů
+
+; Příklad 4 - Pomocí tečného napojení (CT):
+N10 G01 X40 Z-25 F0.2          ; Přímka
+N20 G03 CT=8 X60 Z-40 F0.2     ; Tečné napojení R8`
+            },
+
+            // Pohybové a pomocné funkce
+            'G04': {
+                program: 'N10 G04 F2.5  ; Časová prodleva 2.5 sekundy\nN20 G04 S1000 ; Prodleva 1000 otáček vřetene',
+                description: 'Časová prodleva v programu - pozastavení běhu programu na určitou dobu.',
+                usage: '• Použití:\n  - Technologické přestávky\n  - Čekání na dokončení operace\n  - Stabilizace řezných podmínek',
+                properties: '• Vlastnosti:\n  - Dva způsoby zadání:\n    1. F.. (časová prodleva v sekundách)\n    2. S.. (počet otáček vřetene)\n\n• Syntax:\n  G04 F..  ; časová prodleva\n  G04 S..  ; prodleva na otáčky',
+                syntax: 'G04 F..  ; časová prodleva\nG04 S..  ; prodleva na otáčky',
+                example: 'N10 G04 F2.5  ; Časová prodleva 2.5 sekundy'
+            },
+            'G09': {
+                program: 'N10 G01 X100 F0.2\nN20 G09\nN30 G01 Z-50',
+                description: 'Přesné zastavení - jednorázové.',
+                usage: '• Použití:\n  - Přesné polohování\n  - Kontrola dosažení pozice\n  - Kritické operace vyžadující přesnost',
+                properties: '• Vlastnosti:\n  - Platí pouze pro jeden blok\n  - Stroj čeká na dosažení přesné pozice\n\n• Syntax:\n  G09',
+                syntax: 'G09',
+                example: 'N10 G01 X100 F0.2\nN20 G09\nN30 G01 Z-50'
+            },
+
+            // Volba rovin
+            'G17': {
+                program: 'N10 G17\nN20 G02 X100 Y100 I50 J0 F0.2  ; Kruhová interpolace v rovině XY',
+                description: 'Volba pracovní roviny XY (základní rovina pro frézování).',
+                usage: '• Použití:\n  - Frézovací operace v rovině XY\n  - Kruhové interpolace v XY\n  - Standardní rovina pro frézování',
+                properties: '• Vlastnosti:\n  - Definuje hlavní osy jako X a Y\n  - Z je kolmá na rovinu XY\n  - Standardní nastavení pro frézky\n  - Určuje směr pohybu G02/G03',
+                syntax: 'G17',
+                example: 'N10 G17\nN20 G02 X100 Y100 I50 J0 F0.2  ; Kruhová interpolace v XY'
+            },
+            'G18': {
+                program: 'N10 G18\nN20 G02 X100 Z-50 I30 K0 F0.2  ; Kruhová interpolace v rovině ZX',
+                description: 'Volba pracovní roviny ZX (základní rovina pro soustružení).',
+                usage: '• Použití:\n  - Základní soustružnické operace\n  - Kruhové interpolace v ZX\n  - Standardní rovina pro soustružení',
+                properties: '• Vlastnosti:\n  - Definuje hlavní osy jako Z a X\n  - Y je kolmá na rovinu ZX\n  - Výchozí nastavení pro soustruhy\n  - Určuje směr pohybu G02/G03',
+                syntax: 'G18',
+                example: 'N10 G18\nN20 G02 X100 Z-50 I30 K0 F0.2  ; Kruhová interpolace v ZX'
+            },
+            'G19': {
+                program: 'N10 G19\nN20 G02 Y100 Z-50 J30 K0 F0.2  ; Kruhová interpolace v rovině YZ',
+                description: 'Volba pracovní roviny YZ.',
+                usage: '• Použití:\n  - Speciální obráběcí operace\n  - Kruhové interpolace v YZ\n  - Boční obrábění',
+                properties: '• Vlastnosti:\n  - Definuje hlavní osy jako Y a Z\n  - X je kolmá na rovinu YZ\n  - Používá se pro speciální aplikace\n  - Určuje směr pohybu G02/G03',
+                syntax: 'G19',
+                example: 'N10 G19\nN20 G02 Y100 Z-50 J30 K0 F0.2  ; Kruhová interpolace v YZ'
+            },
+
+            // Limitní funkce
+            'G25': {
+                program: 'N10 G25 X-200 Z-400  ; Dolní limit pracovního prostoru',
+                description: 'Definice dolního limitu pracovního prostoru.',
+                usage: '• Použití:\n  - Omezení pracovního prostoru\n  - Ochrana stroje\n  - Prevence kolizí',
+                properties: '• Vlastnosti:\n  - Definuje minimální hodnoty os\n  - Aktivní po zapnutí stroje\n  - Softwarový limit',
+                syntax: 'G25 X.. Z..',
+                example: 'N10 G25 X-200 Z-400  ; Dolní limit pracovního prostoru'
+            },
+            'G26': {
+                program: 'N10 G26 X200 Z400  ; Horní limit pracovního prostoru',
+                description: 'Definice horního limitu pracovního prostoru.',
+                usage: '• Použití:\n  - Omezení pracovního prostoru\n  - Ochrana stroje\n  - Prevence kolizí',
+                properties: '• Vlastnosti:\n  - Definuje maximální hodnoty os\n  - Aktivní po zapnutí stroje\n  - Softwarový limit',
+                syntax: 'G26 X.. Z..',
+                example: 'N10 G26 X200 Z400  ; Horní limit pracovního prostoru'
+            },
+
+            // Závitové funkce
+            'G33': {
+                program: 'N10 G33 Z-30 K2  ; Řezání závitu se stoupáním 2mm\nN20 G33 Z0 K2  ; Zpětný pohyb',
+                description: 'Řezání závitu s konstantním stoupáním - synchronizované s vřetenem.',
+                usage: '• Použití:\n  - Řezání metrických závitů\n  - Řezání palcových závitů\n  - Výroba přesných závitů\n  - Vícenásobné závity',
+                properties: '• Vlastnosti:\n  - K: stoupání v mm (metrický)\n  - I: stoupání v TPI (palcový)\n  - SF: počáteční úhel (pro vícenásobné závity)\n  - Synchronizace s vřetenem\n  - Konstantní stoupání',
+                syntax: 'G33 Z.. K..  ; Pro metrické závity\nG33 Z.. I..  ; Pro palcové závity',
+                example: 'N10 G33 Z-30 K2  ; Metrický závit, stoupání 2mm\nN20 G33 Z-30 I20  ; Palcový závit, 20 TPI'
+            },
+
+            // Korekce nástroje
+            'G40': {
+                program: 'N10 G40 G01 X100 Z0 F0.2  ; Zrušení korekce',
+                description: 'Zrušení korekce rádiusu nástroje.',
+                usage: '• Použití:\n  - Vypnutí aktivní korekce\n  - Přímé polohování\n  - Ukončení konturování',
+                properties: '• Vlastnosti:\n  - Ruší G41/G42\n  - Nutné definovat výjezdový bod\n  - Přímý pohyb bez korekce',
+                syntax: 'G40',
+                example: 'N10 G40 G01 X100 Z0 F0.2  ; Zrušení korekce'
+            },
+            'G41': {
+                program: 'N10 G41 D1 G01 X50 Z0 F0.2  ; Korekce vlevo od kontury',
+                description: 'Korekce rádiusu nástroje vlevo od kontury (pro vnější soustružení).',
+                usage: '• Použití:\n  - Vnější soustružení\n  - Levé konturování\n  - Kompenzace rádiusu špičky',
+                properties: '• Vlastnosti:\n  - D: číslo korekce nástroje\n  - Aktivní do zrušení G40\n  - Automatická kompenzace dráhy',
+                syntax: 'G41 D.. X.. Z.. F..',
+                example: 'N10 G41 D1 G01 X50 Z0 F0.2  ; Korekce vlevo'
+            },
+
+            // ...další G kódy podobným způsobem...
+
+            // Rychlostní funkce
+            'G94': {
+                program: 'N10 G94 F100  ; Posuv 100mm/min',
+                description: 'Posuv v mm za minutu (nebo palce za minutu).',
+                usage: '• Použití:\n  - Frézování\n  - Rychlostní obrábění\n  - Konstantní lineární rychlost',
+                properties: '• Vlastnosti:\n  - F hodnota v mm/min\n  - Nezávislé na otáčkách\n  - Standardní pro frézování',
+                syntax: 'G94 F..',
+                example: 'N10 G94 F100  ; Posuv 100mm/min'
+            },
+            'G95': {
+                program: 'N10 G95 F0.2  ; Posuv 0.2mm/ot',
+                description: 'Posuv v mm na otáčku vřetene.',
+                usage: '• Použití:\n  - Soustružení\n  - Závitování\n  - Konstantní tříska',
+                properties: '• Vlastnosti:\n  - F hodnota v mm/ot\n  - Závislé na otáčkách\n  - Standardní pro soustružení',
+                syntax: 'G95 F..',
+                example: 'N10 G95 F0.2  ; Posuv 0.2mm/ot'
+            },
+            'G96': {
+                program: 'N10 G96 S200 LIMS=2000  ; Konstantní řezná rychlost 200m/min',
+                description: 'Konstantní řezná rychlost v m/min (nebo ft/min).',
+                usage: '• Použití:\n  - Soustružení\n  - Optimální řezné podmínky\n  - Konstantní kvalita povrchu',
+                properties: '• Vlastnosti:\n  - S hodnota v m/min\n  - Automatická změna otáček\n  - LIMS omezení max. otáček',
+                syntax: 'G96 S.. LIMS=..',
+                example: 'N10 G96 S200 LIMS=2000  ; Řezná rychlost 200m/min'
+            },
+            'G97': {
+                program: 'N10 G97 S1000  ; Konstantní otáčky 1000 ot/min',
+                description: 'Konstantní otáčky vřetene.',
+                usage: '• Použití:\n  - Vrtání\n  - Závitování\n  - Speciální operace',
+                properties: '• Vlastnosti:\n  - S hodnota v ot/min\n  - Přímé řízení otáček\n  - Ruší G96',
+                syntax: 'G97 S..',
+                example: 'N10 G97 S1000  ; Otáčky 1000 ot/min'
+            },
+
+            // Nulové body a transformace
+            'G53': {
+                program: 'N10 G53 G00 X100 Z50  ; Absolutní pohyb ve strojních souřadnicích',
+                description: 'Potlačení posunutí nulového bodu - pohyb ve strojních souřadnicích.',
+                usage: '• Použití:\n  - Výměna nástrojů\n  - Bezpečné polohování\n  - Přejezdy do referenčních bodů',
+                properties: '• Vlastnosti:\n  - Platí pouze v bloku kde je programován\n  - Ruší G54-G599 dočasně\n  - Strojní souřadnice',
+                syntax: 'G53 G00/G01 X.. Z..',
+                example: 'N10 G53 G00 X100 Z50  ; Pohyb ve strojních souřadnicích'
+            },
+            'G54': {
+                program: 'N10 G54 G00 X0 Z0  ; Najetí do nulového bodu obrobku',
+                description: 'První nastavitelné posunutí nulového bodu (první upnutí).',
+                usage: '• Použití:\n  - Standardní posunutí pro první upnutí\n  - Základní nulový bod obrobku\n  - Série stejných dílů',
+                properties: '• Vlastnosti:\n  - Hodnoty v tabulce nulových bodů\n  - Aktivní do další změny\n  - Standardní předvolba',
+                syntax: 'G54',
+                example: 'N10 G54\nN20 G00 X0 Z0  ; Najetí do nulového bodu'
+            },
+            'G55': {
+                // Podobně jako G54, ale pro druhé upnutí
+            },
+            // ...G56, G57 podobně
+
+            // Přesnost polohování
+            'G60': {
+                program: 'N10 G60 G01 X100 Z-50 F0.2  ; Přesné najetí s přibrzděním',
+                description: 'Přesné polohování s přibrzděním.',
+                usage: '• Použití:\n  - Přesné obrábění\n  - Kritické rozměry\n  - Dokončovací operace',
+                properties: '• Vlastnosti:\n  - Snížení rychlosti před cílem\n  - Vyšší přesnost\n  - Delší čas obrábění',
+                syntax: 'G60',
+                example: 'N10 G60 G01 X100 Z-50 F0.2  ; Přesné najetí'
+            },
+
+            // Způsob obrábění
+            'G64': {
+                program: 'N10 G64 SOFT  ; Plynulé obrábění s přesným zastavením',
+                description: 'Režim plynulého obrábění s kontrolou přesnosti.',
+                usage: '• Použití:\n  - Standardní obrábění\n  - Konturování\n  - Plynulé přechody',
+                properties: '• Vlastnosti:\n  - Optimalizace rychlosti\n  - Kontrola odchylky\n  - SOFT pro vyšší přesnost',
+                syntax: 'G64 [SOFT]',
+                example: 'N10 G64 SOFT  ; Plynulé obrábění s vyšší přesností'
+            },
+
+            // Měrový systém
+            'G70': {
+                program: 'N10 G70  ; Přepnutí na palcový systém',
+                description: 'Programování v palcích.',
+                usage: '• Použití:\n  - Palcové rozměry\n  - Americké výkresy\n  - Speciální závity',
+                properties: '• Vlastnosti:\n  - Rozměry v palcích\n  - Posuvy v inch/rev\n  - Převod jednotek',
+                syntax: 'G70',
+                example: 'N10 G70\nN20 G01 X1.0 Z-0.5 F0.005  ; Rozměry v palcích'
+            },
+            'G71': {
+                program: 'N10 G71  ; Přepnutí na metrický systém',
+                description: 'Programování v milimetrech.',
+                usage: '• Použití:\n  - Metrické rozměry\n  - Standardní výkresy\n  - Metrické závity',
+                properties: '• Vlastnosti:\n  - Rozměry v mm\n  - Posuvy v mm/ot\n  - Standardní jednotky',
+                syntax: 'G71',
+                example: 'N10 G71\nN20 G01 X25.4 Z-12.7 F0.2  ; Rozměry v mm'
+            },
+
+            // Cykly a speciální funkce
+            'G110': {
+                program: 'N10 G110 X0 Z0  ; Polární počátek v aktuální pozici',
+                description: 'Nastavení polárního počátku.',
+                usage: '• Použití:\n  - Polární programování\n  - Obrábění podle úhlů\n  - Speciální tvary',
+                properties: '• Vlastnosti:\n  - Definice nového počátku\n  - Pro polární souřadnice\n  - Relativní k aktuální pozici',
+                syntax: 'G110 X.. Z..',
+                example: 'N10 G110 X0 Z0  ; Nastavení polárního počátku'
+            },
+
+            // Další cykly...
+            'G331': {
+                program: 'N10 G331 Z-20 K2 S500  ; Vrtání závitu',
+                description: 'Vrtání závitu bez kompenzačního sklíčidla.',
+                usage: '• Použití:\n  - Vrtání závitů\n  - Tuhé závitování\n  - Přesné závity',
+                properties: '• Vlastnosti:\n  - K: stoupání závitu\n  - S: otáčky vřetene\n  - Synchronizovaný pohyb',
+                syntax: 'G331 Z.. K.. S..',
+                example: 'N10 G331 Z-20 K2 S500  ; Vrtání závitu M10'
+            },
+            'G332': {
+                program: 'N10 G332 Z0 K2 S500  ; Zpětný pohyb při vrtání závitu',
+                description: 'Vyjetí z vrtaného závitu.',
+                usage: '• Použití:\n  - Zpětný pohyb při závitování\n  - Párový příkaz k G331\n  - Dokončení závitu',
+                properties: '• Vlastnosti:\n  - Stejné stoupání jako G331\n  - Opačný směr otáček\n  - Synchronizovaný pohyb',
+                syntax: 'G332 Z.. K.. S..',
+                example: 'N10 G332 Z0 K2 S500  ; Vyjetí ze závitu'
+            }
+
+            // ...můžu pokračovat s dalšími G kódy podle potřeby
+        };
+
+        document.getElementById('gcodeSelect').addEventListener('change', function() {
+            const gcode = this.value;
+            const example = examples[gcode];
+            output.style.display = 'none';
+
+            if (example) {
+                description.innerHTML = `
+                    <div class="example-section description">
+                        <div class="section-title">Popis:</div>
+                        ${example.description || 'Popis není k dispozici'}
+                    </div>
+                    <div class="example-section">
+                        <div class="section-title">Syntax:</div>
+                        <div class="syntax-section">
+                            <h4>Základní syntax:</h4>
+                            <div class="code-line">${example.syntax ? example.syntax.split('\n').join('</div><div class="code-line">') : 'Syntax není definována'}</div>
+                        </div>
+                    </div>
+                    <div class="example-section">
+                        <div class="section-title">Příklad použití:</div>
+                        <div class="syntax-section">
+                            <div class="code-line">${example.example ? example.example.split('\n').join('</div><div class="code-line">') : 'Příklad není k dispozici'}</div>
+                        </div>
+                    </div>
+                    ${example.usage && example.usage.includes('-') ? `
+                    <div class="example-section">
+                        <div class="section-title">Použití:</div>
+                        <div class="properties-grid">
+                            ${example.usage.split('\n')
+                                .filter(line => line.trim().startsWith('  -'))
+                                .map(line => `<div class="property-item">${line.replace('  -', '•')}</div>`)
+                                .join('')}
+                        </div>
+                    </div>
+                    ` : ''}
+                `;
+                description.style.display = 'block';
+            } else {
+                description.style.display = 'none';
+            }
+        });
+
+// Aktualizace dodatečných kódů s příklady
+const additionalCodes = {
+    'G42': {
+        description: 'Korekce rádiusu nástroje vpravo od kontury (pro vnitřní soustružení).',
+        syntax: 'G42 D..',
+        example: 'N10 G42 D1 G01 X50 Z0 F0.2  ; Korekce vpravo\nN20 G01 X30 Z-20 F0.2  ; Obrábění s korekcí'
+    },
+    'G55': {
+        description: 'Druhé nastavitelné posunutí nulového bodu (druhé upnutí).',
+        syntax: 'G55',
+        example: 'N10 G55            ; Aktivace druhého posunutí\nN20 G00 X0 Z0     ; Najetí do druhého nulového bodu'
+    },
+    'G56': {
+        description: 'Třetí nastavitelné posunutí nulového bodu.',
+        syntax: 'G56',
+        example: 'N10 G56            ; Aktivace třetího posunutí\nN20 G00 X0 Z0     ; Najetí do třetího nulového bodu'
+    },
+    'G57': {
+        description: 'Čtvrté nastavitelné posunutí nulového bodu.',
+        syntax: 'G57',
+        example: 'N10 G57            ; Aktivace čtvrtého posunutí\nN20 G00 X0 Z0     ; Najetí do čtvrtého nulového bodu'
+    },
+    'G61': {
+        description: 'Přesné zastavení - modální (platí do zrušení).',
+        syntax: 'G61',
+        example: 'N10 G61                    ; Aktivace přesného zastavení\nN20 G01 X100 Z-50 F0.2    ; Pohyb s přesným zastavením'
+    },
+    'G62': {
+        description: 'Režim rohového zpomalení při konturování.',
+        syntax: 'G62',
+        example: 'N10 G62                    ; Aktivace rohového zpomalení\nN20 G01 X50 Z0 F0.3       ; Obrábění s rohovým zpomalením'
+    },
+    'G63': {
+        description: 'Řezání závitu bez synchronizace.',
+        syntax: 'G63',
+        example: 'N10 G63 Z-30               ; Řezání závitu bez synchronizace\nN20 G63 Z0                ; Zpětný pohyb'
+    },
+    'G111': {
+        description: 'Polární programování relativní k pólu.',
+        syntax: 'G111',
+        example: 'N10 G111 X0 Z0             ; Nastavení relativního pólu\nN20 G01 AP=45 RP=50 F0.2   ; Polární pohyb'
+    },
+    'G112': {
+        description: 'Polární programování absolutní.',
+        syntax: 'G112',
+        example: 'N10 G112                   ; Aktivace absolutního polárního programování\nN20 G01 AP=90 RP=100 F0.2  ; Absolutní polární pohyb'
+    },
+    'G140': {
+        description: 'Měkké najetí a odjetí.',
+        syntax: 'G140',
+        example: 'N10 G140                   ; Aktivace měkkého najetí\nN20 G01 X100 Z-50 F0.2    ; Pohyb s měkkým najetím'
+    },
+    'G141': {
+        description: 'Najetí zleva nebo zprava.',
+        syntax: 'G141',
+        example: 'N10 G141 D1 X50 Z0 F0.2    ; Najetí zleva\nN20 G141 D2 X30 Z-20 F0.2   ; Najetí zprava'
+    },
+    'G142': {
+        description: 'Relativní najetí ke kontuře.',
+        syntax: 'G142',
+        example: 'N10 G142 X10 Z-5 F0.2      ; Relativní najetí\nN20 G01 X50 Z-25 F0.2      ; Pokračování v kontuře'
+    },
+    'G143': {
+        description: 'Tangenciální najetí ke kontuře.',
+        syntax: 'G143',
+        example: 'N10 G143 X20 Z-10 F0.2     ; Tangenciální najetí\nN20 G01 X60 Z-30 F0.2      ; Pokračování v kontuře'
+    },
+    'G147': {
+        description: 'Měkké najetí po přímce.',
+        syntax: 'G147',
+        example: 'N10 G147 X30 Z0 F0.2       ; Měkké najetí přímkou\nN20 G01 X80 Z-40 F0.2      ; Hlavní pohyb'
+    },
+    'G148': {
+        description: 'Měkké odjetí po přímce.',
+        syntax: 'G148',
+        example: 'N10 G148 X0 Z10 F0.2       ; Měkké odjetí přímkou\nN20 G00 X100 Z50           ; Odjezd do bezpečné pozice'
+    },
+    'G247': {
+        description: 'Měkké najetí po kvadrantu.',
+        syntax: 'G247',
+        example: 'N10 G247 X40 Z0 F0.2       ; Měkké najetí po kvadrantu\nN20 G01 X90 Z-45 F0.2      ; Hlavní pohyb'
+    },
+    'G248': {
+        description: 'Měkké odjetí po kvadrantu.',
+        syntax: 'G248',
+        example: 'N10 G248 X0 Z10 F0.2       ; Měkké odjetí po kvadrantu\nN20 G00 X100 Z50           ; Odjezd do bezpečné pozice'
+    },
+    'G340': {
+        description: 'Prostorové najetí a odjetí (základní nastavení).',
+        syntax: 'G340',
+        example: 'N10 G340                   ; Aktivace prostorového najetí\nN20 G01 X50 Z-25 Y10 F0.2  ; Prostorový pohyb'
+    },
+    'G341': {
+        description: 'Najetí a odjetí v rovině.',
+        syntax: 'G341',
+        example: 'N10 G341                   ; Aktivace rovinného najetí\nN20 G01 X60 Z-30 F0.2      ; Rovinný pohyb'
+    },
+    'G347': {
+        description: 'Najetí po půlkruhu.',
+        syntax: 'G347',
+        example: 'N10 G347 X35 Z0 F0.2       ; Najetí po půlkruhu\nN20 G01 X85 Z-42.5 F0.2    ; Hlavní pohyb'
+    },
+    'G348': {
+        description: 'Odjetí po půlkruhu.',
+        syntax: 'G348',
+        example: 'N10 G348 X0 Z10 F0.2       ; Odjetí po půlkruhu\nN20 G00 X100 Z50           ; Odjezd do bezpečné pozice'
+    },
+    'G450': {
+        description: 'Přechodový kruh při korekci rádiusu nástroje.',
+        syntax: 'G450',
+        example: 'N10 G450                   ; Aktivace přechodového kruhu\nN20 G41 D1                ; Korekce vlevo\nN30 G01 X50 Z-25 F0.2      ; Pohyb s korekcí'
+    },
+    'G451': {
+        description: 'Průsečík ekvidistant při korekci rádiusu nástroje.',
+        syntax: 'G451',
+        example: 'N10 G451                   ; Aktivace průsečíku ekvidistant\nN20 G41 D1                ; Korekce vlevo\nN30 G01 X55 Z-27.5 F0.2    ; Pohyb s korekcí'
+    },
+    'G500': {
+        description: 'Deaktivace všech posunutí nulových bodů.',
+        syntax: 'G500',
+        example: 'N10 G500                   ; Zrušení posunutí\nN20 G00 X0 Z0             ; Najetí do strojního nulového bodu'
+    },
+    'G505': {
+        description: 'Páté nastavitelné posunutí nulového bodu.',
+        syntax: 'G505',
+        example: 'N10 G505                   ; Aktivace pátého posunutí\nN20 G00 X0 Z0             ; Najetí do pátého nulového bodu'
+    },
+    'G599': {
+        description: 'Absolutní posunutí nulového bodu.',
+        syntax: 'G599',
+        example: 'N10 G599                   ; Aktivace absolutního posunutí\nN20 G00 X0 Z0             ; Najetí do absolutního nulového bodu'
+    },
+    'G601': {
+        description: 'Přesné zastavení jemné.',
+        syntax: 'G601',
+        example: 'N10 G601                   ; Aktivace jemného zastavení\nN20 G01 X100 Z-50 F0.2    ; Pohyb s jemným zastavením'
+    },
+    'G602': {
+        description: 'Přesné zastavení hrubé.',
+        syntax: 'G602',
+        example: 'N10 G602                   ; Aktivace hrubého zastavení\nN20 G01 X100 Z-50 F0.2    ; Pohyb s hrubým zastavením'
+    },
+    'G603': {
+        description: 'Přesné zastavení podle kritéria bloku.',
+        syntax: 'G603',
+        example: 'N10 G603                   ; Aktivace blokového zastavení\nN20 G01 X100 Z-50 F0.2    ; Pohyb s blokovým zastavením'
+    },
+    'G641': {
+        description: 'Plynulé obrábění s programovatelnou přesností.',
+        syntax: 'G641 ADIS=..',
+        example: 'N10 G641 ADIS=0.1          ; Plynulé obrábění s přesností 0.1mm\nN20 G01 X75 Z-37.5 F0.2    ; Pohyb s plynulým přechodem'
+    }
+};
+
+// Sloučení existujících a nových kódů
+Object.assign(examples, additionalCodes);
+
+        // Přidání funkcionality pro přepínání tématu
+        const themeSwitch = document.querySelector('.theme-switch');
+        const lightIcon = document.querySelector('.light-icon');
+        const darkIcon = document.querySelector('.dark-icon');
+
+        // Načtení uloženého nastavení
+        const isDarkMode = localStorage.getItem('darkMode') === 'true';
+        if (isDarkMode) {
+            document.body.classList.add('dark-mode');
+            lightIcon.style.display = 'none';
+            darkIcon.style.display = 'block';
+        }
+
+        themeSwitch.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDark);
+
+            // Přepínání ikon
+            lightIcon.style.display = isDark ? 'none' : 'block';
+            darkIcon.style.display = isDark ? 'block' : 'none';
+        });
+
+        // Upravená inicializace dark mode
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+        const savedTheme = localStorage.getItem('darkMode');
+
+        // Nastavení počátečního stavu
+        if (savedTheme === 'true' || (savedTheme === null && prefersDarkScheme.matches)) {
+            document.body.classList.add('dark-mode');
+            lightIcon.style.display = 'none';
+            darkIcon.style.display = 'block';
+        } else {
+            document.body.classList.remove('dark-mode');
+            lightIcon.style.display = 'block';
+            darkIcon.style.display = 'none';
+        }
+
+        // ...rest of existing script...
+    </script>
+</body>
+</html>

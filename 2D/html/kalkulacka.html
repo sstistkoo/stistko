@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobilní Kalkulačka</title>
+    <style>
+        /* Základní reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Základní nastavení stránky */
+        body {
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow: hidden; /* Skrytí posuvníků */
+        }
+
+        /* Kontejner kalkulačky */
+        .calculator {
+            width: 100%;
+            max-width: 350px;
+            height: auto;
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s;
+        }
+
+        /* Vstupní pole */
+        #result {
+            width: 100%;
+            height: 60px;
+            font-size: 28px;
+            text-align: right;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background-color: white;
+        }
+
+        /* Kontejner historie */
+        .history-container {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background-color: white;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .history-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        #history {
+            max-height: 150px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            margin: 5px 0;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        /* Tlačítka historie */
+        .history-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .history-button {
+            padding: 4px 10px;
+            font-size: 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .copy-btn {
+            background-color: #2196F3;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+        }
+
+        .clear-history-btn {
+            background: none;
+            border: none;
+            color: #dc3545;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 0 5px;
+        }
+
+        /* Mřížka tlačítek */
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .buttons button {
+            aspect-ratio: 1;
+            font-size: 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: #f8f9fa;
+            color: #333;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .buttons button:active {
+            background-color: #e9ecef;
+        }
+
+        .operator {
+            background-color: #ff9500 !important;
+            color: white !important;
+        }
+
+        .equals {
+            background-color: #2196F3 !important;
+            color: white !important;
+        }
+
+        .clear {
+            background-color: #dc3545 !important;
+            color: white !important;
+        }
+
+        /* Čísla v historii */
+        .number-span {
+            cursor: pointer;
+            padding: 2px 4px;
+            border-radius: 3px;
+            background-color: #f1f3f5;
+        }
+
+        .number-span:hover {
+            background-color: #e9ecef;
+        }
+
+        /* Responzivní design pro malé obrazovky */
+        @media (max-width: 360px) {
+            body {
+                padding: 10px;
+            }
+
+            .calculator {
+                padding: 10px;
+            }
+
+            .buttons button {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <input type="text" id="result" readonly>
+        <div class="history-container">
+            <div class="history-header">
+                <span class="history-title">Historie výpočtů</span>
+                <button class="clear-history-btn" onclick="clearHistory()">×</button>
+                <button class="maximize-btn" onclick="maximizeCalculator()">🔍</button>
+                <button class="minimize-btn" onclick="minimizeCalculator()">⬅️</button>
+            </div>
+            <div id="history"></div>
+        </div>
+        <div class="buttons">
+            <button class="clear" onclick="clearDisplay()">C</button>
+            <button onclick="appendValue('(')">(</button>
+            <button onclick="appendValue(')')">)</button>
+            <button class="operator" onclick="appendValue('/')">/</button>
+            
+            <button onclick="appendValue('7')">7</button>
+            <button onclick="appendValue('8')">8</button>
+            <button onclick="appendValue('9')">9</button>
+            <button class="operator" onclick="appendValue('*')">×</button>
+            
+            <button onclick="appendValue('4')">4</button>
+            <button onclick="appendValue('5')">5</button>
+            <button onclick="appendValue('6')">6</button>
+            <button class="operator" onclick="appendValue('-')">-</button>
+            
+            <button onclick="appendValue('1')">1</button>
+            <button onclick="appendValue('2')">2</button>
+            <button onclick="appendValue('3')">3</button>
+            <button class="operator" onclick="appendValue('+')">+</button>
+            
+            <button onclick="appendValue('0')">0</button>
+            <button onclick="appendValue('.')">.</button>
+            <button onclick="appendValue('π')">π</button>
+            <button class="equals" onclick="calculate()">=</button>
+        </div>
+    </div>
+
+    <script>
+        const result = document.getElementById('result');
+        const history = document.getElementById('history');
+        let calculation = '';
+
+        function appendValue(value) {
+            calculation += value;
+            result.value = calculation;
+        }
+
+        function clearDisplay() {
+            calculation = '';
+            result.value = '';
+        }
+
+        function copyToCalculation(defaultValue) {
+            const selection = window.getSelection();
+            let valueToAdd = '';
+            
+            if (selection && selection.toString().trim()) {
+                valueToAdd = selection.toString();
+            } else {
+                valueToAdd = defaultValue;
+            }
+
+            calculation += valueToAdd;
+            result.value = calculation;
+        }
+
+        function deleteHistoryItem(historyItem) {
+            if (historyItem && historyItem.parentNode === history) {
+                history.removeChild(historyItem);
+            }
+        }
+
+        function clearHistory() {
+            history.innerHTML = '';
+        }
+
+        function selectNumber(element) {
+            const selection = window.getSelection();
+            const range = document.createRange();
+            range.selectNodeContents(element);
+            selection.removeAllRanges();
+            selection.addRange(range);
+        }
+
+        function wrapNumbersWithSpans(text) {
+            return text.replace(/(\d+(\.\d+)?)/g, '<span class="number-span" onclick="selectNumber(this)">$1</span>');
+        }
+
+        function calculate() {
+            if (!calculation) return;
+
+            try {
+                let expression = calculation.replace(/π/g, Math.PI);
+                let answer = eval(expression);
+                
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                
+                const calculationText = document.createElement('span');
+                calculationText.className = 'calculation-text';
+                calculationText.innerHTML = wrapNumbersWithSpans(calculation + ' = ' + answer.toFixed(3)); // Zaokrouhlení na 3 desetinná místa
+                
+                const buttons = document.createElement('div');
+                buttons.className = 'history-buttons';
+                
+                const copyButton = document.createElement('button');
+                copyButton.className = 'history-button copy-btn';
+                copyButton.textContent = 'Použít';
+                copyButton.onclick = () => copyToCalculation(answer.toString());
+                
+                const deleteButton = document.createElement('button');
+                deleteButton.className = 'history-button delete-btn';
+                deleteButton.textContent = 'Smazat';
+                deleteButton.onclick = () => deleteHistoryItem(historyItem);
+                
+                buttons.appendChild(copyButton);
+                buttons.appendChild(deleteButton);
+                
+                historyItem.appendChild(calculationText);
+                historyItem.appendChild(buttons);
+                
+                history.insertBefore(historyItem, history.firstChild);
+                
+                calculation = answer.toString();
+                result.value = calculation;
+            } catch (error) {
+                result.value = 'Chyba';
+            }
+        }
+
+        function maximizeCalculator() {
+            const calculator = document.querySelector('.calculator');
+            calculator.style.width = '100%';
+            calculator.style.height = '100%';
+            calculator.style.position = 'fixed';
+            calculator.style.top = '0';
+            calculator.style.left = '0';
+            calculator.style.zIndex = '1000';
+            document.body.style.overflow = 'hidden'; // Skrytí posuvníků
+        }
+
+        function minimizeCalculator() {
+            const calculator = document.querySelector('.calculator');
+            calculator.style.width = '100%';
+            calculator.style.maxWidth = '350px';
+            calculator.style.height = 'auto';
+            calculator.style.position = 'static';
+            calculator.style.top = 'auto';
+            calculator.style.left = 'auto';
+            calculator.style.zIndex = 'auto';
+            document.body.style.overflow = 'auto'; // Zobrazení posuvníků
+        }
+
+        document.addEventListener('keydown', function(event) {
+            const key = event.key;
+            
+            if (key >= '0' && key <= '9' || key === '.' || key === '+' || key === '-' || key === '*' || key === '/' || key === '(' || key === ')') {
+                appendValue(key);
+            } else if (key === 'Enter') {
+                calculate();
+            } else if (key === 'Escape') {
+                clearDisplay();
+            } else if (key === 'p') {
+                appendValue('π');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,3169 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>CNC Editor - Sinumerik 840D</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        html {
+            height: 100%;
+            overflow: hidden; 
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%; 
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            overscroll-behavior: contain;
+            touch-action: none;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            width: 100%;
+        }
+
+        .simulator {
+            flex: 1; 
+            min-height: 150px; 
+            width: 100%;
+            border-bottom: 1px solid #ccc;
+            position: relative; 
+            touch-action: none;
+        }
+
+        .editor-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+            position: relative;
+            overflow: hidden;
+            min-height: 0; 
+        }
+
+        .canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #f8f9fa;
+            touch-action: none;
+        }
+        
+        #simulatorCanvas {
+            touch-action: none;
+        }
+
+        .position-info {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 16px; 
+            font-family: monospace;
+            z-index: 1000;
+            pointer-events: none;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+            min-width: 200px; 
+        }
+
+        #editor {
+            width: 100%;
+            height: 100%; 
+            resize: none; 
+            padding: 10px;
+            box-sizing: border-box;
+            font-family: monospace;
+            border: none;
+            outline: none;
+            background: #fff;
+            line-height: 1.5em;
+            cursor: pointer;
+            -webkit-overflow-scrolling: touch; 
+            overflow-y: auto; 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            bottom: 0; 
+            overscroll-behavior: contain;
+            touch-action: pan-y;
+            user-select: text;
+            -webkit-user-select: text;
+            font-size: 16px; 
+            padding-right: 55px;
+        }
+        
+        #editor[readonly] {
+            background: #fff;
+            color: #000;
+            cursor: pointer;
+        }
+
+
+        .editor-wrapper {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            min-height: 0; 
+        }
+
+        .toolbar {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap; 
+            gap: 8px;
+            padding: 8px;
+            align-items: center;
+            flex-shrink: 0;
+            background: #f5f5f5;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .file-input-button, 
+        .action-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 50px; 
+            font-size: 16px; 
+            flex: 1;
+            background: #007bff;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            padding: 0 10px;
+            min-width: 60px;
+        }
+        
+        .action-button:hover, .file-input-button:hover {
+            background: #0056b3;
+        }
+
+        .button-icon {
+            font-size: 20px; 
+            margin-right: 8px; 
+            margin-bottom: 0;
+            width: 24px;
+            text-align: center;
+        }
+        
+        .button-text {
+            display: none; 
+        }
+        
+         .file-input-button {
+            flex-direction: row;
+            text-align: left;
+         }
+         .file-input-button .button-icon {
+             font-size: 20px;
+         }
+
+
+        .player-container {
+            flex: 3; 
+            min-width: 300px; 
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: nowrap; 
+        }
+        
+        .player-container .action-button {
+            flex: 0 0 50px; 
+            min-height: 50px;
+            min-width: 50px;
+            font-size: 20px;
+            padding: 0;
+        }
+        .player-container .action-button .button-icon {
+            margin: 0; 
+        }
+
+
+        .player-info {
+            flex: 1; 
+            display: flex;
+            flex-direction: column; 
+            align-items: stretch; 
+            gap: 4px;
+            font-size: 14px; 
+            min-width: 150px;
+        }
+        
+        .player-info span {
+             text-align: center;
+        }
+
+        #speedSlider {
+            width: 100%; 
+            height: 25px; 
+            margin: 0;
+        }
+
+        .program-list {
+            display: flex;
+            flex-wrap: nowrap; 
+            gap: 5px;
+            padding: 8px;
+            width: 100%;
+            background: #f0f0f0;
+            border-bottom: 1px solid #ddd;
+            box-sizing: border-box; 
+            flex-shrink: 0; 
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch; 
+            min-height: 50px; 
+            max-height: 60px; 
+            align-items: center; 
+            touch-action: pan-x;
+        }
+
+        .program-list-item {
+            flex: 0 0 auto; 
+            padding: 8px 12px; 
+            font-size: 14px; 
+            background: #e9e9e9;
+            border-radius: 4px;
+            cursor: pointer;
+            white-space: nowrap;
+            border: 1px solid #ddd;
+            margin: 2px;
+        }
+
+        .program-list-item:hover {
+            background: #d0d0d0;
+        }
+
+        .program-list-item.active {
+            background: #007bff;
+            color: white;
+            border-color: #0056b3;
+        }
+        
+        .home-link {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #333;
+            text-decoration: none;
+            font-size: 20px;
+            z-index: 2000;
+            background: white; 
+            padding: 6px 10px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            touch-action: auto;
+        }
+
+        .home-link:hover {
+            color: #666;
+            background: #f5f5f5;
+        }
+
+        @media (max-width: 768px) {
+            
+            .simulator {
+                flex: 1.5;
+            }
+            .editor-container {
+                flex: 1;
+            }
+
+            .position-info {
+                font-size: 13px;
+                padding: 4px 8px;
+                right: 5px;
+                top: 5px;
+                min-width: 170px;
+                max-width: 220px;
+            }
+            
+            .home-link {
+                top: 5px;
+                left: 5px;
+                font-size: 18px;
+                padding: 6px 8px;
+            }
+
+            .toolbar {
+                padding: 4px;
+                gap: 4px;
+                flex-direction: column; 
+            }
+            
+            .toolbar-row {
+                display: flex;
+                width: 100%;
+                gap: 4px;
+            }
+
+            .file-input-button,
+            .action-button {
+                flex: 1 1 25%; 
+                min-height: 44px;
+                font-size: 14px;
+                padding: 4px;
+            }
+            
+            .button-icon {
+                font-size: 18px;
+                margin: 0; 
+            }
+            
+            .player-container {
+                flex-basis: 100%; 
+                order: 10; 
+                flex: 1 1 100%;
+                min-width: auto; 
+                padding: 0; 
+                gap: 4px;
+                flex-wrap: nowrap; 
+            }
+
+            .player-container .action-button {
+                flex: 0 0 44px; 
+                min-height: 44px; 
+                min-width: 44px;
+                font-size: 18px; 
+                padding: 0;
+            }
+
+            .player-info {
+                flex: 1 1 auto; 
+                min-width: 100px;
+                flex-direction: column; 
+                gap: 2px;
+                font-size: 12px;
+                padding: 0 4px; 
+            }
+
+            #speedSlider {
+                width: 100%; 
+                height: 20px;
+                margin: 0;
+            }
+
+            #editor {
+                font-size: 16px;
+                line-height: 1.5em;
+                padding: 10px;
+                padding-right: 55px;
+            }
+
+            .program-list {
+                padding: 4px;
+                min-height: 48px; 
+                max-height: 52px;
+            }
+            
+            .program-list-item {
+                flex: 0 0 auto; 
+                min-width: 80px;
+                padding: 6px 10px;
+                font-size: 14px;
+            }
+            
+            .modal-content {
+                margin: 10% auto; 
+                width: 90%; 
+            }
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 8px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .parameters-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        
+        .parameters-table th,
+        .parameters-table td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .parameters-table th {
+            background-color: #f5f5f5;
+        }
+
+        .close {
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #f00;
+        }
+
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+            pointer-events: none;
+            z-index: 1000;
+            min-width: 100px;
+            text-align: center;
+            transform: translate(-50%, -120%);
+        }
+
+        .crosshair {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 1px solid red;
+            background-color: rgba(255, 0, 0, 0.2);
+            pointer-events: none;
+            display: none;
+            z-index: 1001;
+            transform: translate(-10px, -10px);
+            overflow: hidden;
+        }
+        
+        .crosshair::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background-color: red;
+            transform: translateY(-50%);
+        }
+        
+        .crosshair::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 1px;
+            background-color: red;
+            transform: translateX(-50%);
+        }
+        
+        .container.editor-fullscreen .simulator,
+        .container.editor-fullscreen .toolbar,
+        .container.editor-fullscreen .program-list {
+            display: none;
+        }
+        
+        .container.editor-fullscreen .editor-container {
+            flex: 1;
+            height: 100%; 
+        }
+        
+        .editor-buttons-wrapper {
+            display: none; 
+            position: absolute;
+            top: 10px;
+            left: 10px; 
+            right: 10px; 
+            z-index: 10;
+            pointer-events: none; 
+            display: flex;
+            justify-content: space-between; 
+            align-items: flex-start; 
+        }
+
+        .editor-buttons-left,
+        .editor-buttons-right {
+            display: flex;
+            gap: 8px;
+            pointer-events: auto; 
+        }
+        
+        .editor-action-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: none; 
+        }
+
+        .editor-action-button:hover {
+            opacity: 0.9;
+        }
+
+        #overwriteBtn {
+            background-color: #28a745; 
+        }
+        #pasteBtn {
+            background-color: #ffc107; 
+            color: #212529;
+        }
+        #editorLinkBtn {
+            background-color: #17a2b8; 
+        }
+        #editorDoneBtn {
+            background-color: #007bff; 
+        }
+        
+        .container.editor-fullscreen .editor-buttons-wrapper,
+        .container.editor-fullscreen .editor-action-button {
+            display: flex; 
+        }
+
+        .container.editor-fullscreen #editor {
+            padding-top: 64px; 
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        
+        .editor-quick-edit-button {
+            display: block; 
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 10;
+            background-color: rgba(0, 123, 255, 0.7); 
+            color: white;
+            border: none;
+            border-radius: 8px;
+            width: 44px;
+            height: 44px;
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 44px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+        
+        .editor-quick-edit-button:hover {
+            opacity: 1;
+        }
+        
+        .container.editor-fullscreen .editor-quick-edit-button {
+            display: none;
+        }
+        
+    </style>
+</head>
+<body>
+    <a href="index.html" class="home-link">
+        <i class="fas fa-home"></i>
+    </a>
+    <div class="container">
+        <div class="simulator">
+            <div class="canvas-container">
+                <canvas id="simulatorCanvas"></canvas>
+                <div class="position-info">
+                    Aktuální: X: <span id="posX">0.000</span> Z: <span id="posZ">0.000</span><br>
+                    Vybraný: X: <span id="selectedPosX">-</span> Z: <span id="selectedPosZ">-</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="toolbar">
+            <div class="toolbar-row">
+                <label class="file-input-button">
+                    <span class="button-icon">📂</span>
+                    <span class="button-text">Načíst</span>
+                    <input type="file" id="actualFileInput" accept=".mpf,.spf" multiple style="display: none;">
+                </label>
+                
+                <button id="refreshBtn" onclick="window.simulator.resetView()" class="action-button" title="Obnovit simulaci a pohled">
+                    <span class="button-icon"><i class="fas fa-sync-alt"></i></span>
+                    <span class="button-text">Refresh</span>
+                </button>
+                <button id="toggleKeyboardBtn" onclick="openExternalEditor()" class="action-button" title="Otevřít v externím editoru">
+                    <span class="button-icon"><i class="fas fa-edit"></i></span>
+                    <span class="button-text">Editor</span>
+                </button>
+                
+                <button onclick="showParameters()" class="action-button">
+                    <span class="button-icon">R</span>
+                    <span class="button-text">Parametry</span>
+                </button>
+            </div>
+            <div class="toolbar-row">
+                <div class="player-container">
+                    <button id="prevBtn" class="action-button" title="Krok zpět">
+                        <span class="button-icon">⏪</span>
+                    </button>
+                    <button id="playBtn" class="action-button" title="Přehrát/Pozastavit">
+                        <span class="button-icon">▶️</span>
+                    </button>
+                    <button id="nextBtn" class="action-button" title="Krok vpřed">
+                        <span class="button-icon">⏩</span>
+                    </button>
+                    <div class="player-info">
+                        <input type="range" id="speedSlider" min="1" max="100" value="50" title="Rychlost přehrávání">
+                        <span>Řádek: <span id="currentLine">0</span>/<span id="totalLines">0</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="program-list" id="programList"></div>
+        <div class="editor-container">
+            <div class="editor-wrapper">
+                
+                <button id="quickEditBtn" class="editor-quick-edit-button" onclick="toggleEditorMode()" title="Otevřít velký editor">
+                    Ed.
+                </button>
+
+                <div class="editor-buttons-wrapper">
+                    <div class="editor-buttons-left">
+                        <button id="overwriteBtn" class="editor-action-button" onclick="overwriteFromClipboard()" title="Smaže editor a vloží obsah schránky">
+                            Přepsat
+                        </button>
+                        <button id="pasteBtn" class="editor-action-button" onclick="pasteAtCursor()" title="Vloží obsah schránky na pozici kurzoru">
+                            Vložit
+                        </button>
+                    </div>
+                    
+                    <div class="editor-buttons-right">
+                        <button id="editorLinkBtn" class="editor-action-button" 
+                                onclick="openExternalEditor()" 
+                                onmousedown="isOpeningExternalEditor = true" 
+                                ontouchstart="isOpeningExternalEditor = true"
+                                title="Otevřít v externím editoru (nová záložka)">
+                            Editor...
+                        </button>
+                        <button id="editorDoneBtn" class="editor-action-button" onclick="toggleEditorMode()" title="Zavřít velký editor">
+                            Hotovo
+                        </button>
+                    </div>
+                </div>
+                
+                <textarea id="editor" spellcheck="false" placeholder="Vložte váš CNC program zde..."></textarea>
+            </div>
+        </div>
+    </div>
+    <div id="parametersModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeParametersModal()">&times;</span>
+            <h2>Aktuální hodnoty parametrů</h2>
+            <table class="parameters-table">
+                <thead>
+                    <tr>
+                        <th>Parametr</th>
+                        <th>Hodnota</th>
+                    </tr>
+                </thead>
+                <tbody id="parametersTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        function throttle(func, limit) {
+            let inThrottle;
+            return function(...args) {
+                if (!inThrottle) {
+                    func.apply(this, args);
+                    inThrottle = true;
+                    setTimeout(() => inThrottle = false, limit);
+                }
+            }
+        }
+
+        let debugCounter = 0;
+        function debug(message) {
+            console.log(`[${new Date().toLocaleTimeString()}] ${message}`);
+        }
+
+        let isOpeningExternalEditor = false;
+
+        const editor = document.getElementById('editor');
+        const fileInput = document.getElementById('actualFileInput');
+        const fileNameDisplay = document.getElementById('fileName');
+        const posXElement = document.getElementById('posX');
+        const posZElement = document.getElementById('posZ');
+        const selectedPosXElement = document.getElementById('selectedPosX');
+        const selectedPosZElement = document.getElementById('selectedPosZ');
+
+        class CNCParser {
+            constructor() {
+                this.parameters = new Map();
+                this.loadedSubprograms = new Map();
+                this.baseDirectory = '';
+                this.subprogramFiles = new Map(); 
+                this.loadedPrograms = new Map(); 
+
+                for (let i = 0; i <= 99; i++) {
+                    this.parameters.set(`R${i}`, 0);
+                }
+
+                this.modalFeedRate = 1; 
+                this.modalSpindleSpeed = 1000; 
+                this.modalFeedMode = 'G95'; 
+                this.modalSpindleMode = 'G97'; 
+
+                this.reset();
+            }
+
+            reset() {
+                this.currentX = 0;
+                this.currentZ = 0;
+                this.absoluteMode = true;
+                this.isFirstMove = true;
+                this.modalMotionCommand = 'G0'; 
+
+                if (this.parameters) {
+                    this.parameters.clear();
+                    for (let i = 0; i <= 99; i++) {
+                        this.parameters.set(`R${i}`, 0);
+                    }
+                }
+
+                this.modalFeedRate = 1;
+                this.modalSpindleSpeed = 1000;
+                this.modalFeedMode = 'G95';
+                this.modalSpindleMode = 'G97';
+
+                debug('Parser resetován');
+            }
+
+            evaluateParameters(expression) {
+                try {
+                    const fullLine = expression.split(';')[0].trim();
+
+                    const cleanLine = fullLine.replace(/^N\d+\s*/, '');
+
+                    const rAssignment = cleanLine.match(/R(\d+)\s*=\s*(.+)/);
+
+                    if (rAssignment) {
+                        const [, paramNum, expression] = rAssignment;
+
+                        try {
+                            const expandedExpr = expression.replace(/R(\d+)/g, (match, num) => {
+                                const value = this.parameters.get(`R${num}`);
+                                return value !== undefined ? value : '0';
+                            });
+
+                            const result = Function(`return ${expandedExpr}`)();
+                            const numResult = Number(result);
+
+                            if (!isNaN(numResult)) {
+                                this.parameters.set(`R${paramNum}`, numResult);
+                                return numResult;
+                            } else {
+                                console.warn(`✗ Neplatný výsledek pro R${paramNum}: ${result}`);
+                            }
+                        } catch (e) {
+                            console.warn(`✗ Chyba při vyhodnocení R${paramNum} = ${expression}:`, e);
+                        }
+                    }
+
+                    return 0;
+                } catch (e) {
+                    console.warn('Chyba při zpracování parametrů:', expression, e);
+                    return 0;
+                }
+            }
+
+            parseParameterValue(value) {
+                try {
+                    let expression = value;
+                    if (value.includes('=')) {
+                        expression = value.split('=')[1].trim();
+                    }
+                    
+                    const evaluatedExp = expression.replace(/R(\d+)/g, (match, number) => {
+                        const paramValue = this.parameters.get(`R${number}`);
+                        return paramValue !== undefined ? paramValue : '0';
+                    });
+
+                    if (!/^[0-9\.\-\+\*\/\s\(\)]+$/.test(evaluatedExp) && !/^[0-9\.]+$/.test(evaluatedExp)) {
+                        return 0; 
+                    }
+
+                    const result = Function(`return ${evaluatedExp}`)();
+                    const numResult = Number(result);
+                    
+                    if (isNaN(numResult)) return 0;
+                    return numResult;
+
+                } catch (e) {
+                    return 0;
+                }
+            }
+
+            parseCoordinate(value, current) {
+                try {
+                    let numericalValue;
+
+                    if (value.includes('=')) {
+                        const expression = value.split('=')[1].trim();
+
+                        const evaluatedExp = expression.replace(/R(\d+)/g, (match, number) => {
+                            const paramValue = this.parameters.get(`R${number}`);
+                            return paramValue !== undefined ? paramValue : '0';
+                        });
+
+                        const result = Function(`return ${evaluatedExp}`)();
+                        numericalValue = Number(result);
+                    } else {
+                        numericalValue = parseFloat(value);
+                    }
+
+                    if (isNaN(numericalValue)) return current;
+
+                    const rounded = Number(numericalValue.toFixed(3));
+                    
+                    if (this.absoluteMode) {
+                        return rounded;
+                    } else {
+                        return Number((current + rounded).toFixed(3));
+                    }
+
+                } catch (e) {
+                    console.warn('Chyba při parsování souřadnice:', value, e);
+                    return current;
+                }
+            }
+
+            calculateArcPoints(start, end, center, isClockwise, resolution = 50) {
+                const startAngle = Math.atan2(start.x - center.x, start.z - center.z);
+                const endAngle = Math.atan2(end.x - center.x, end.z - center.z);
+
+                let radius = Math.hypot(start.x - center.x, start.z - center.z);
+                let angleStep;
+                let points = [];
+
+                let totalAngle = endAngle - startAngle;
+                if (isClockwise) {
+                    if (totalAngle >= 0) totalAngle -= 2 * Math.PI;
+                } else {
+                    if (totalAngle <= 0) totalAngle += 2 * Math.PI;
+                }
+
+                angleStep = totalAngle / resolution;
+
+                for (let i = 0; i <= resolution; i++) {
+                    const angle = startAngle + angleStep * i;
+                    const x = center.x + radius * Math.sin(angle);
+                    const z = center.z + radius * Math.cos(angle);
+                    points.push({ x: Number(x.toFixed(3)), z: Number(z.toFixed(3)) });
+                }
+
+                return points;
+            }
+
+            parseArcMovement(words, movement) {
+                let hasCR = false;
+                let hasAR = false;
+                let arcRadius = 0;
+
+                const params = {
+                    CR: null,
+                    AR: null,
+                    I: null,
+                    K: null,
+                    I1: null,
+                    K1: null,
+                    CT: null,
+                    TURN: 0
+                };
+
+                for (let word of words) {
+                    
+                    if (word.includes('=')) {
+                        const [param, expression] = word.split('=');
+                        let evaluatedValue;
+                        try {
+                            const expandedExpr = expression.replace(/R(\d+)/g, (match, num) => {
+                                const rVal = this.parameters.get(`R${num}`);
+                                return rVal !== undefined ? rVal : '0';
+                            });
+                            evaluatedValue = Function(`return ${expandedExpr}`)();
+                        } catch (e) {
+                            console.warn(`Chyba při vyhodnocení parametru ${param}=${expression}`, e);
+                            evaluatedValue = NaN;
+                        }
+
+                        const numValue = parseFloat(evaluatedValue); 
+
+                        switch (param.toUpperCase()) {
+                            case 'CR':
+                                params.CR = Math.abs(numValue);
+                                hasCR = true;
+                                break;
+                            case 'AR': 
+                                params.AR = numValue; 
+                                break;
+                            case 'TURN': 
+                                params.TURN = parseInt(numValue); 
+                                break;
+                        }
+                        continue; 
+                    }
+
+
+                    const command = word[0];
+                    const value = parseFloat(word.slice(1));
+                    if (isNaN(value)) continue;
+
+                    switch (command) {
+                        case 'I':
+                            params.I = movement.fromX + value;
+                            break;
+                        case 'K':
+                            params.K = movement.fromZ + value;
+                            break;
+                        case 'I1':
+                            params.I1 = movement.fromX + value;
+                            break;
+                        case 'K1':
+                            params.K1 = movement.fromZ + value;
+                            break;
+                    }
+                }
+
+                const startPoint = { x: movement.fromX, z: movement.fromZ };
+                const endPoint = { x: movement.toX, z: movement.toZ };
+                let centerPoint = { x: 0, z: 0 };
+
+                if (params.I !== null && params.K !== null) {
+                    centerPoint = { x: params.I, z: params.K };
+                } else if (params.I1 !== null && params.K1 !== null) {
+                    centerPoint = { x: params.I1, z: params.K1 };
+                } else if (hasCR) {
+                    if (isNaN(params.CR)) {
+                         console.error('Chybná hodnota CR, oblouk nelze vypočítat.', words);
+                         return { points: [], center: null };
+                    }
+                    
+                    const chord = Math.hypot(endPoint.x - startPoint.x, endPoint.z - startPoint.z);
+                    if (params.CR < chord / 2) {
+                        console.warn('CR je příliš malý, použije se minimální možný poloměr');
+                        params.CR = chord / 2;
+                    }
+
+                    const h = Math.sqrt(params.CR * params.CR - (chord * chord / 4));
+                    const midX = (startPoint.x + endPoint.x) / 2;
+                    const midZ = (startPoint.z + endPoint.z) / 2;
+
+                    const dirX = (startPoint.z - endPoint.z) / chord;
+                    const dirZ = (endPoint.x - startPoint.x) / chord;
+
+                    const center1 = {
+                        x: midX + h * dirX,
+                        z: midZ + h * dirZ
+                    };
+
+                    const center2 = {
+                        x: midX - h * dirX,
+                        z: midZ - h * dirZ
+                    };
+
+                    const angle1 = this.calculateTotalAngle(startPoint, endPoint, center1, movement.type === 'G2');
+                    const angle2 = this.calculateTotalAngle(startPoint, endPoint, center2, movement.type === 'G2');
+
+                    centerPoint = Math.abs(angle1) <= Math.abs(angle2) ? center1 : center2;
+
+                }
+
+                const radius = Math.hypot(startPoint.x - centerPoint.x, startPoint.z - centerPoint.z);
+                const startAngle = Math.atan2(startPoint.x - centerPoint.x, startPoint.z - centerPoint.z);
+                let endAngle = Math.atan2(endPoint.x - centerPoint.x, endPoint.z - centerPoint.z);
+
+                if (movement.type === 'G2') { 
+                    if (endAngle >= startAngle) endAngle -= 2 * Math.PI;
+                    endAngle -= 2 * Math.PI * (params.TURN || 0);
+                } else { 
+                    if (endAngle <= startAngle) endAngle += 2 * Math.PI;
+                    endAngle += 2 * Math.PI * (params.TURN || 0);
+                }
+
+                const points = [];
+                const steps = Math.max(50, Math.abs(endAngle - startAngle) * 20);
+                const angleStep = (endAngle - startAngle) / steps;
+
+                for (let i = 0; i <= steps; i++) {
+                    const angle = startAngle + angleStep * i;
+                    const x = centerPoint.x + radius * Math.sin(angle);
+                    const z = centerPoint.z + radius * Math.cos(angle);
+                    points.push({
+                        x: Number(x.toFixed(3)),
+                        z: Number(z.toFixed(3))
+                    });
+                }
+
+                return {
+                    points: points,
+                    center: centerPoint 
+                };
+            }
+
+            calculateTotalAngle(start, end, center, isClockwise) {
+                const startAngle = Math.atan2(start.x - center.x, start.z - center.z);
+                let endAngle = Math.atan2(end.x - center.x, end.z - center.z);
+                let totalAngle = endAngle - startAngle;
+
+                if (isClockwise) {
+                    if (totalAngle > 0) totalAngle -= 2 * Math.PI;
+                } else {
+                    if (totalAngle < 0) totalAngle += 2 * Math.PI;
+                }
+
+                return totalAngle;
+            }
+
+            async parseLine(line) {
+                const lMatch = line.trim().match(/L(\d+)/i);
+                if (lMatch) {
+                    const subprogramNumber = parseInt(lMatch[1]);
+                    await this.processSubprogramParameters(subprogramNumber);
+                    return null; 
+                }
+
+                const cleanedLine = line.trim()
+                    .toUpperCase()
+                    .replace(/G0(?=[XZ])/g, 'G0 ')  
+                    .replace(/G1(?=[XZ])/g, 'G1 ')  
+                    .replace(/G91(?=[XZ])/g, 'G91 ') 
+                    .replace(/G90(?=[XZ])/g, 'G90 '); 
+
+                if (cleanedLine.includes('=')) {
+                    const parts = cleanedLine.split(/\s+/);
+                    let hasParameterAssignment = false;
+                    for (const part of parts) {
+                         if (part.match(/R(\d+)\s*=\s*(.+)/) && !part.startsWith('CR=')) { 
+                             this.evaluateParameters(part);
+                             hasParameterAssignment = true;
+                         }
+                    }
+                    if (hasParameterAssignment && !parts.some(p => p.startsWith('X') || p.startsWith('Z') || p.startsWith('G'))) {
+                         return null;
+                    }
+                }
+
+                const words = cleanedLine.split(/\s+/);
+                if (words.length === 0) return null;
+
+                const movement = {
+                    fromX: this.currentX,
+                    fromZ: this.currentZ,
+                    toX: this.currentX, 
+                    toZ: this.currentZ, 
+                    rapid: this.modalMotionCommand === 'G0', 
+                    center: null,
+                    arcPoints: null,
+                    isArc: (this.modalMotionCommand === 'G2' || this.modalMotionCommand === 'G3'),
+                    type: this.modalMotionCommand,
+
+                    feedRate: this.modalFeedRate,
+                    spindleSpeed: this.modalSpindleSpeed,
+                    feedMode: this.modalFeedMode, 
+                    spindleMode: this.modalSpindleMode 
+                };
+
+                let hasMove = false;
+                let hasGCommand = false; 
+                let nextX = this.currentX; 
+                let nextZ = this.currentZ; 
+
+                for (let word of words) {
+                    if (!word) continue;
+
+                    if (word.startsWith('CR=') || word.startsWith('AR=') || word.startsWith('TURN=')) {
+                        continue;
+                    }
+                    if (word.startsWith('I') || word.startsWith('K')) {
+                         if (!word.startsWith('I1') && !word.startsWith('K1')) { 
+                            continue;
+                         }
+                    }
+
+
+                    const command = word[0];
+                    let value = word.slice(1);
+
+                    if (command === 'X' || command === 'Z') {
+                        if (value.includes('=')) {
+                            value = '=' + value.split('=')[1];  
+                        }
+                    }
+
+                    switch (command) {
+                        case 'G':
+                            hasGCommand = true;
+                            const gValue = parseInt(value);
+                            switch (gValue) {
+                                case 0:
+                                    movement.rapid = true;
+                                    this.modalMotionCommand = 'G0'; 
+                                    movement.type = 'G0';
+                                    movement.isArc = false; 
+                                    break;
+                                case 1:
+                                    movement.rapid = false;
+                                    this.modalMotionCommand = 'G1'; 
+                                    movement.type = 'G1';
+                                    movement.isArc = false; 
+                                    break;
+                                case 90:
+                                    this.absoluteMode = true;
+                                    break;
+                                case 91:
+                                    this.absoluteMode = false;
+                                    break;
+                                case 2:
+                                    movement.rapid = false;
+                                    this.modalMotionCommand = 'G2'; 
+                                    movement.type = 'G2'; 
+                                    movement.isArc = true;
+                                    break;
+                                case 3:
+                                    movement.rapid = false;
+                                    this.modalMotionCommand = 'G3'; 
+                                    movement.type = 'G3'; 
+                                    movement.isArc = true;
+                                    break;
+                                case 94:
+                                    this.modalFeedMode = 'G94';
+                                    movement.feedMode = 'G94';
+                                    break;
+                                case 95:
+                                    this.modalFeedMode = 'G95';
+                                    movement.feedMode = 'G95';
+                                    break;
+                                case 96:
+                                    this.modalSpindleMode = 'G96';
+                                    movement.spindleMode = 'G96';
+                                    break;
+                                case 97:
+                                    this.modalSpindleMode = 'G97';
+                                    movement.spindleMode = 'G97';
+                                    break;
+                            }
+                            break;
+                        case 'X':
+                            nextX = this.parseCoordinate(value, this.currentX);
+                            hasMove = true;
+                            break;
+                        case 'Z':
+                            nextZ = this.parseCoordinate(value, this.currentZ);
+                            hasMove = true;
+                            break;
+                        
+                        case 'F':
+                            if (value.startsWith('=') || /^[0-9\.\-]+$/.test(value)) {
+                                this.modalFeedRate = this.parseParameterValue(value);
+                                movement.feedRate = this.modalFeedRate;
+                            }
+                            break;
+                        case 'S':
+                            if (value.startsWith('=') || /^[0-9\.\-]+$/.test(value) || /S=R\d+/.test(word)) {
+                                this.modalSpindleSpeed = this.parseParameterValue(value);
+                                movement.spindleSpeed = this.modalSpindleSpeed;
+                            }
+                            break;
+                    }
+                }
+
+                if(hasMove) {
+                    movement.toX = nextX;
+                    movement.toZ = nextZ;
+                    this.currentX = nextX;
+                    this.currentZ = nextZ;
+                }
+
+
+                if (!hasGCommand && words.some(w => w.startsWith('CR='))) {
+                    movement.isArc = true; 
+                    movement.type = this.modalMotionCommand; 
+                    movement.rapid = false; 
+                }
+
+                if (hasMove && movement.isArc) { 
+                    if (movement.type === 'G0' || movement.type === 'G1') {
+                        console.warn('CR=... byl volán s aktivním G0/G1. Chybí G2/G3. Použije se G3 (default).');
+                        movement.type = 'G3'; 
+                        this.modalMotionCommand = 'G3'; 
+                    }
+                    const arcResult = this.parseArcMovement(words, movement);
+                    movement.arcPoints = arcResult.points;
+                    movement.center = arcResult.center; 
+                }
+
+
+                if (hasMove) {
+                    if (movement.arcPoints && movement.arcPoints.length > 0) {
+                        movement.points = [...movement.arcPoints];
+                    } else {
+                        movement.points = [{
+                            x: movement.toX,
+                            z: movement.toZ
+                        }];
+                    }
+                }
+                return hasMove ? movement : null;
+            }
+
+            async parseProgram(program) {
+                this.reset();
+                const lines = program.split('\n');
+                const movements = [];
+                const lineIndexes = []; 
+
+                for (const line of lines) {
+                    const lMatch = line.trim().match(/L(\d+)/i);
+                    if (lMatch) {
+                        const subprogramNumber = parseInt(lMatch[1]);
+                        await this.processSubprogramParameters(subprogramNumber);
+                    }
+                }
+
+                this.currentX = 0;
+                this.currentZ = 0;
+                this.absoluteMode = true; 
+                this.modalMotionCommand = 'G0'; 
+
+                for (let i = 0; i < lines.length; i++) {
+                    const line = lines[i];
+                    if (line.trim() === '' || line.trim().startsWith(';')) continue;
+                    
+                    const movement = await this.parseLine(line);
+                    
+                    if (movement) {
+                        movements.push(movement);
+                        lineIndexes.push(i); 
+                    }
+                }
+
+                debug(`Celkem pohybů: ${movements.length}`);
+                return { movements, lineIndexes, program }; 
+            }
+
+            setBaseDirectory(path) {
+                this.baseDirectory = path.replace(/["']/g, '').trim();
+                console.log(`Nastavena cesta k podprogramům: ${this.baseDirectory}`);
+            }
+
+            async loadSubprogram(number) {
+                const baseName = `L${number}`;
+                const filename = `${baseName}.SPF`;
+
+                const foundProgram = Array.from(this.loadedPrograms.values())
+                    .find(prog => prog.file.name.toUpperCase().startsWith(baseName));
+                if (foundProgram) {
+                    return foundProgram.content;
+                }
+
+                if (this.loadedSubprograms.has(baseName)) {
+                    return this.loadedSubprograms.get(baseName);
+                }
+
+                const file = this.subprogramFiles.get(baseName);
+                if (!file) {
+                    console.warn(`Podprogram ${baseName} nenalezen v načtených souborech`);
+                    return null;
+                }
+
+                try {
+                    const content = await this.readFile(file);
+                    this.loadedSubprograms.set(baseName, content);
+                    return content;
+                } catch (error) {
+                    console.warn(`Nelze načíst podprogram ${filename}:`, error);
+                    return null;
+                }
+            }
+
+            readFile(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.onerror = (e) => reject(e);
+                    reader.readAsText(file);
+                });
+            }
+
+            async loadSubprogramDirectory(fileList) {
+                this.subprogramFiles.clear();
+                for (let file of fileList) {
+                    if (file.name.toUpperCase().endsWith('.SPF')) {
+                        const baseName = file.name.toUpperCase().replace(/\.SPF$/, '');
+                        this.subprogramFiles.set(baseName, file);
+                    }
+                }
+                console.log('Načtené podprogramy:', Array.from(this.subprogramFiles.keys()));
+            }
+
+            async processSubprogramParameters(subprogramNumber) {
+                const content = await this.loadSubprogram(subprogramNumber);
+                if (!content) return;
+
+                const lines = content.split('\n');
+                for (const line of lines) {
+                    const trimmedLine = line.trim().toUpperCase();
+
+                    if (trimmedLine.includes('R') && trimmedLine.includes('=')) {
+                        const lineWithoutComments = trimmedLine.split(';')[0].trim();
+
+                        const cleanLine = lineWithoutComments.replace(/^N\d+\s*/, '');
+
+                        const parts = cleanLine.split(/\s+/);
+                        
+                        for (const part of parts) {
+                            const match = part.match(/^R(\d+)\s*=\s*([^=].*)/);
+                            if (match) {
+                                const [, paramNum, expression] = match;
+                                try {
+                                    let cleanExpr = expression.replace(/^\(|\)$/g, '');
+
+                                    const expandedExpr = cleanExpr.replace(/R(\d+)/g, (match, num) => {
+                                        const value = this.parameters.get(`R${num}`);
+                                        return value !== undefined ? value : '0';
+                                    });
+
+                                    const result = Function(`return ${expandedExpr}`)();
+                                    const numResult = Number(result);
+
+                                    if (!isNaN(numResult)) {
+                                        this.parameters.set(`R${paramNum}`, numResult);
+                                    }
+                                } catch (e) {
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            async loadProgram(file) {
+                try {
+                    const content = await this.readFile(file);
+                    const upperName = file.name.toUpperCase();
+                    this.loadedPrograms.set(file.name, {
+                        content: content,
+                        file: file
+                    });
+                    if (upperName.endsWith('.SPF')) {
+                        const baseName = upperName.replace(/\.SPF$/, '');
+                        this.subprogramFiles.set(baseName, file);
+                    }
+                    return content;
+                } catch (error) {
+                    console.warn(`Nelze načíst program ${file.name}:`, error);
+                    return null;
+                }
+            }
+
+            getProgram(name) {
+                return this.loadedPrograms.get(name)?.content || null;
+            }
+
+            getProgramList() {
+                return Array.from(this.loadedPrograms.keys());
+            }
+        };
+
+        class Simulator {
+            constructor() {
+                this.canvas = document.getElementById('simulatorCanvas');
+                if (!this.canvas) {
+                    throw new Error('Canvas element nenalezen');
+                }
+
+                this.ctx = this.canvas.getContext('2d');
+                this.parser = new CNCParser();
+
+                this.setupBasicProperties();
+
+                this.setupEventHandlers();
+
+                this.createBoundMethods();
+
+                this.setupEventListeners();
+                this.setupTooltip();
+
+                this.setupCanvas();
+                window.addEventListener('resize', () => this.setupCanvas());
+
+                debug('Simulátor inicializován');
+            }
+
+            setupEventHandlers() {
+                this.handleMouseMove = (event) => {
+                    if (this.isDragging) return;
+                    
+                    const rect = this.canvas.getBoundingClientRect();
+                    const mouseX = event.clientX - rect.left;
+                    const mouseY = event.clientY - rect.top;
+
+                    this.checkPointUnderCrosshair(mouseX, mouseY, 0); 
+                };
+
+                this.handleZoom = (event) => {
+                    event.preventDefault();
+                    const rect = this.canvas.getBoundingClientRect();
+                    const mouseX = event.clientX - rect.left;
+                    const mouseY = event.clientY - rect.top;
+                    const worldX = (mouseX - this.centerX) / (this.baseScale * this.zoomFactor);
+                    const worldY = (this.centerY - mouseY) / (this.baseScale * this.zoomFactor);
+
+                    if (event.deltaY < 0) {
+                        this.zoomFactor = Math.min(this.zoomFactor * 1.1, 1000);
+                    } else {
+                        this.zoomFactor = Math.max(this.zoomFactor * 0.9, 0.1);
+                    }
+
+                    this.scale = this.baseScale * this.zoomFactor;
+                    this.centerX = mouseX - worldX * this.scale;
+                    this.centerY = mouseY + worldY * this.scale;
+                    this.gridCache = this.createGridCache();
+                    this.simulate(false);
+                };
+
+                this.startDrag = this.startDrag.bind(this);
+                this.drag = this.drag.bind(this);
+                this.stopDrag = this.stopDrag.bind(this);
+                this.handleTouchStart = this.handleTouchStart.bind(this);
+                this.handleTouchMove = this.handleTouchMove.bind(this);
+                this.handleTouchEnd = this.handleTouchEnd.bind(this);
+                this.handleCanvasClick = this.handleCanvasClick.bind(this);
+            }
+
+            createBoundMethods() {
+                this.boundHandleZoom = this.handleZoom.bind(this);
+                this.boundHandleMouseMove = this.handleMouseMove.bind(this);
+                this.boundStartDrag = this.startDrag;
+                this.boundDrag = this.drag;
+                this.boundStopDrag = this.stopDrag;
+                this.boundHandleTouchStart = this.handleTouchStart;
+                this.boundHandleTouchMove = this.handleTouchMove;
+                this.boundHandleTouchEnd = this.handleTouchEnd;
+                this.boundHandleCanvasClick = this.handleCanvasClick;
+            }
+
+            setupBasicProperties() {
+                this.gridCache = null;
+                this.lastUpdate = 0;
+                this.updateThreshold = 50;
+                this.minScale = 0.1;
+                this.padding = 50;
+                this.maxScale = 10;
+                this.lastMouseX = 0;
+                this.lastMouseY = 0;
+                this.isDragging = false;
+                this.baseScale = 1;
+                this.zoomFactor = 1;
+                this.viewPosition = { x: 0, y: 0 };
+                this.programBounds = null;
+                this.originX = 0;
+                this.originY = 0;
+                this.points = [];
+                this.lastSelectedPoint = null;
+                this.highlightedPoint = null;
+                this.pulseAnimation = null;
+                
+                this.showRapidMoves = true; 
+                this.isZooming = false; 
+                this.lastTouchDistance = 0; 
+                this.touchAnchorWorldX = 0;
+                this.touchAnchorWorldZ = 0;
+                this.touchAnchorCanvasX = 0;
+                this.touchAnchorCanvasY = 0;
+                
+                this.inspectTimer = null; 
+                this.isInspecting = false; 
+                this.touchInspectOffsetY = -80; 
+                this.lastTouchInspectTime = 0; 
+            }
+
+            setupEventListeners() {
+                this.canvas.addEventListener('wheel', this.boundHandleZoom);
+                this.canvas.addEventListener('mousedown', this.boundStartDrag);
+                this.canvas.addEventListener('mousemove', this.boundDrag);
+                this.canvas.addEventListener('mouseup', this.boundStopDrag);
+                this.canvas.addEventListener('mouseleave', this.boundStopDrag);
+                this.canvas.addEventListener('click', this.boundHandleCanvasClick);
+
+                this.canvas.addEventListener('touchstart', this.boundHandleTouchStart, { passive: false });
+                this.canvas.addEventListener('touchmove', this.boundHandleTouchMove, { passive: false });
+                this.canvas.addEventListener('touchend', this.boundHandleTouchEnd);
+            }
+
+            setupTooltip() {
+                this.tooltip = document.createElement('div');
+                this.tooltip.className = 'tooltip';
+                const container = document.querySelector('.canvas-container');
+                if (container) {
+                    container.appendChild(this.tooltip);
+                    this.tooltip.style.display = 'none';
+
+                    this.canvas.addEventListener('mousemove', this.boundHandleMouseMove);
+                
+                this.canvas.addEventListener('mouseout', () => {
+                    if (!this.isInspecting) {
+                        this.tooltip.style.display = 'none';
+                    }
+                });
+
+                    this.crosshair = document.createElement('div');
+                    this.crosshair.className = 'crosshair';
+                    container.appendChild(this.crosshair);
+                }
+            }
+
+            startDrag(event) {
+                const rect = this.canvas.getBoundingClientRect();
+                const mouseX = event.clientX - rect.left;
+                const mouseY = event.clientY - rect.top;
+
+                const hitPoint = this.points.find(point => {
+                    const dx = mouseX - point.screenX;
+                    const dy = mouseY - point.screenY;
+                    return Math.sqrt(dx * dx + dy * dy) < 5;
+                });
+
+                if (!hitPoint) {
+                    this.isDragging = true;
+                    this.lastMouseX = event.clientX;
+                    this.lastMouseY = event.clientY;
+                    this.canvas.style.cursor = 'grabbing';
+                }
+            }
+
+            drag(event) {
+                if (!this.isDragging) return;
+                const deltaX = event.clientX - this.lastMouseX;
+                const deltaY = event.clientY - this.lastMouseY;
+
+                this.centerX += deltaX;
+                this.centerY += deltaY;
+
+                this.lastMouseX = event.clientX;
+                this.lastMouseY = event.clientY;
+
+                this.gridCache = this.createGridCache();
+                this.simulate();
+            }
+
+            stopDrag() {
+                setTimeout(() => {
+                    this.isDragging = false;
+                    this.canvas.style.cursor = 'default';
+                    if (this.lastMovements) {
+                        this.drawPath(this.lastMovements);
+                    }
+                }, 50);
+            }
+
+            handleTouchStart(event) {
+                event.preventDefault();
+
+                if (this.inspectTimer) {
+                    clearTimeout(this.inspectTimer);
+                    this.inspectTimer = null;
+                }
+                
+                this.crosshair.style.display = 'none';
+                this.tooltip.style.display = 'none';
+
+                if (event.touches.length === 2) {
+                    const touch1 = event.touches[0];
+                    const touch2 = event.touches[1];
+                    this.lastTouchDistance = Math.hypot(
+                        touch2.clientX - touch1.clientX,
+                        touch2.clientY - touch1.clientY
+                    );
+                    this.touchZoomStartScale = this.zoomFactor;
+                    
+                    this.isDragging = false; 
+                    this.isZooming = true;
+                    this.isInspecting = false; 
+                    
+                    const rect = this.canvas.getBoundingClientRect();
+                    this.touchAnchorCanvasX = (touch1.clientX + touch2.clientX) / 2 - rect.left;
+                    this.touchAnchorCanvasY = (touch1.clientY + touch2.clientY) / 2 - rect.top;
+                    
+                    this.touchAnchorWorldX = (this.touchAnchorCanvasX - this.centerX) / this.scale;
+                    this.touchAnchorWorldZ = (this.centerY - this.touchAnchorCanvasY) / this.scale;
+                    
+                } else if (event.touches.length === 1) {
+                    const touch = event.touches[0];
+                    this.touchStartX = touch.clientX;
+                    this.touchStartY = touch.clientY;
+                    this.isDragging = true; 
+                    this.isZooming = false; 
+                    this.isInspecting = false; 
+
+                    this.inspectTimer = setTimeout(() => {
+                        this.isDragging = false; 
+                        this.isInspecting = true; 
+                        this.inspectTimer = null;
+                        
+                        const rect = this.canvas.getBoundingClientRect();
+                        const canvasX = touch.clientX - rect.left;
+                        const canvasY = touch.clientY - rect.top;
+                        this.checkPointUnderCrosshair(canvasX, canvasY, this.touchInspectOffsetY);
+                        
+                    }, 500); 
+                }
+            }
+
+            handleTouchMove(event) {
+                event.preventDefault();
+                
+                if (this.inspectTimer) {
+                    clearTimeout(this.inspectTimer);
+                    this.inspectTimer = null;
+                }
+
+                if (event.touches.length === 2) {
+                    this.isZooming = true;
+                    this.isDragging = false;
+                    this.isInspecting = false; 
+                    
+                    const touch1 = event.touches[0];
+                    const touch2 = event.touches[1];
+                    
+                    const newDistance = Math.hypot(
+                        touch2.clientX - touch1.clientX,
+                        touch2.clientY - touch1.clientY
+                    );
+
+                    const scaleRatio = newDistance / this.lastTouchDistance;
+                    
+                    this.zoomFactor = Math.min(Math.max(this.touchZoomStartScale * scaleRatio, 0.1), 1000);
+                    this.scale = this.baseScale * this.zoomFactor;
+                    
+                    const rect = this.canvas.getBoundingClientRect();
+                    const newMidX = (touch1.clientX + touch2.clientX) / 2 - rect.left;
+                    const newMidY = (touch1.clientY + touch2.clientY) / 2 - rect.top;
+
+                    this.centerX = newMidX - this.touchAnchorWorldX * this.scale;
+                    this.centerY = newMidY + this.touchAnchorWorldZ * this.scale;
+
+                    this.gridCache = this.createGridCache();
+                    this.simulate(false);
+                    
+                } else if (event.touches.length === 1 && this.isDragging && !this.isZooming && !this.isInspecting) { 
+                    const touch = event.touches[0];
+                    const deltaX = touch.clientX - this.touchStartX;
+                    const deltaY = touch.clientY - this.touchStartY;
+
+                    this.centerX += deltaX;
+                    this.centerY += deltaY;
+
+                    this.touchStartX = touch.clientX;
+                    this.touchStartY = touch.clientY;
+
+                    this.gridCache = this.createGridCache();
+                    this.simulate();
+                    
+                } else if (event.touches.length === 1 && this.isInspecting) {
+                    const touch = event.touches[0];
+                    const rect = this.canvas.getBoundingClientRect();
+                    const canvasX = touch.clientX - rect.left;
+                    const canvasY = touch.clientY - rect.top;
+                    
+                    this.checkPointUnderCrosshair(canvasX, canvasY, this.touchInspectOffsetY);
+                }
+
+                if (this.lastMovements) {
+                    requestAnimationFrame(() => {
+                        this.drawPath(this.lastMovements);
+                    });
+                }
+            }
+
+            handleTouchEnd(event) {
+                if (this.inspectTimer) {
+                    clearTimeout(this.inspectTimer);
+                    this.inspectTimer = null;
+                }
+                
+                if (this.isInspecting) {
+                    this.crosshair.style.display = 'none';
+                    this.tooltip.style.display = 'none';
+                }
+
+                this.isDragging = false;
+                this.isZooming = false;
+                this.isInspecting = false;
+                this.lastTouchDistance = 0;
+
+                setTimeout(() => {
+                    if (this.lastMovements) {
+                        this.drawPath(this.lastMovements);
+                    }
+                }, 50);
+            }
+
+            setupCanvas() {
+                const parent = this.canvas.parentElement;
+                if (parent.clientWidth === 0 || parent.clientHeight === 0) {
+                     setTimeout(() => this.setupCanvas(), 50);
+                     return;
+                }
+                
+                this.canvas.width = parent.clientWidth;
+                this.canvas.height = parent.clientHeight;
+                
+                this.centerX = this.canvas.width / 2;
+                this.centerY = this.canvas.height / 2;
+                
+                if (this.baseScale === 1) { 
+                   this.scale = Math.min(this.canvas.width, this.canvas.height) / 200;
+                   this.baseScale = this.scale;
+                } else {
+                   this.scale = this.baseScale * this.zoomFactor;
+                }
+
+                this.gridCache = this.createGridCache();
+                this.simulate();
+            }
+
+            getGridStep() {
+                const minPixelsBetweenLines = 90; 
+
+                const idealStep = minPixelsBetweenLines / this.scale;
+
+                const steps = [0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000];
+                
+                for (let i = 0; i < steps.length; i++) {
+                    if (steps[i] >= idealStep) {
+                        return steps[i]; 
+                    }
+                }
+                
+                return steps[steps.length - 1]; 
+            }
+
+            createGridCache() {
+                const cacheCanvas = document.createElement('canvas');
+                cacheCanvas.width = this.canvas.width;
+                cacheCanvas.height = this.canvas.height;
+                const ctx = cacheCanvas.getContext('2d');
+
+                ctx.strokeStyle = '#ddd';
+                ctx.lineWidth = 0.5;
+                ctx.fillStyle = '#666';
+                ctx.font = '14px Arial'; 
+                ctx.textAlign = 'left';
+                ctx.textBaseline = 'middle';
+
+                const gridStep = this.getGridStep(); 
+                const subGridStep = gridStep / 5; 
+                
+                let decimals = 0;
+                if (gridStep <= 1) { 
+                    decimals = 1;
+                }
+
+                const origin = this.worldToScreen(0, 0);
+
+                const viewportLeft = -this.centerX / this.scale - gridStep;
+                const viewportRight = (this.canvas.width - this.centerX) / this.scale + gridStep;
+                const viewportTop = (this.centerY) / this.scale + gridStep;
+                const viewportBottom = -(this.canvas.height - this.centerY) / this.scale - gridStep;
+
+                const iStartX = Math.floor(viewportLeft / subGridStep);
+                const iEndX = Math.ceil(viewportRight / subGridStep);
+                const iStartY = Math.floor(viewportBottom / subGridStep);
+                const iEndY = Math.ceil(viewportTop / subGridStep);
+
+                const mainLines = [];
+                const subLines = [];
+
+                for (let i = iStartX; i <= iEndX; i++) {
+                    const x = i * subGridStep; 
+                    const screenX = this.worldToScreen(x, 0).x;
+                    
+                    const isMainLine = (i % 5) === 0; 
+
+                    if (isMainLine) {
+                        mainLines.push(() => {
+                            ctx.strokeStyle = '#aaa';
+                            ctx.lineWidth = 1;
+                            ctx.beginPath();
+                            ctx.moveTo(screenX, 0);
+                            ctx.lineTo(screenX, this.canvas.height);
+                            ctx.stroke();
+                            if (Math.abs(x) > 0.001 || i === 0) { 
+                                ctx.fillText(`X${x.toFixed(decimals)}`, screenX + 4, this.canvas.height - 15);
+                            }
+                        });
+                    } else {
+                        subLines.push(() => {
+                            ctx.strokeStyle = '#ddd';
+                            ctx.lineWidth = 0.5;
+                            ctx.beginPath();
+                            ctx.moveTo(screenX, 0);
+                            ctx.lineTo(screenX, this.canvas.height);
+                            ctx.stroke();
+                        });
+                    }
+                }
+
+                for (let i = iStartY; i <= iEndY; i++) {
+                    const y = i * subGridStep; 
+                    const screenY = this.worldToScreen(0, y).y;
+                    
+                    const isMainLine = (i % 5) === 0; 
+                    
+                    if (isMainLine) {
+                        mainLines.push(() => {
+                            ctx.strokeStyle = '#aaa';
+                            ctx.lineWidth = 1;
+                            ctx.beginPath();
+                            ctx.moveTo(0, screenY);
+                            ctx.lineTo(this.canvas.width, screenY);
+                            ctx.stroke();
+                            if (Math.abs(y) > 0.001 || i === 0) { 
+                                ctx.fillText(`Z${y.toFixed(decimals)}`, 4, screenY + 4);
+                            }
+                        });
+                    } else {
+                        subLines.push(() => {
+                            ctx.strokeStyle = '#ddd';
+                            ctx.lineWidth = 0.5;
+                            ctx.beginPath();
+                            ctx.moveTo(0, screenY);
+                            ctx.lineTo(this.canvas.width, screenY);
+                            ctx.stroke();
+                        });
+                    }
+                }
+
+                subLines.forEach(drawFn => drawFn());
+                mainLines.forEach(drawFn => drawFn());
+
+                return cacheCanvas;
+            }
+
+            drawAxes() {
+                if (this.gridCache) {
+                    this.ctx.drawImage(this.gridCache, 0, 0);
+                }
+
+                const origin = this.worldToScreen(0, 0);
+
+                this.ctx.strokeStyle = '#000';
+                this.ctx.lineWidth = 2;
+
+                this.ctx.beginPath();
+                this.ctx.moveTo(0, origin.y);
+                this.ctx.lineTo(this.canvas.width, origin.y);
+                this.ctx.stroke();
+
+                this.ctx.beginPath();
+                this.ctx.moveTo(origin.x, 0);
+                this.ctx.lineTo(origin.x, this.canvas.height);
+                this.ctx.stroke();
+
+                this.ctx.fillStyle = '#000';
+                this.ctx.font = 'bold 16px Arial';
+
+                this.ctx.textAlign = 'right';
+                this.ctx.textBaseline = 'top';
+                this.ctx.fillText('X', this.canvas.width - 10, origin.y + 5);
+
+                this.ctx.textAlign = 'left';
+                this.ctx.textBaseline = 'top';
+                this.ctx.fillText('Z', origin.x + 5, 5);
+            }
+
+            drawPath(movements) {
+                if (!movements || !Array.isArray(movements) || movements.length === 0) {
+                    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                    this.drawAxes();
+                    return;
+                }
+
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this.drawAxes();
+
+                let batchRapid = [];
+                let batchNormal = [];
+                this.points = [];
+
+                for (let move of movements) {
+                    const from = this.worldToScreen(move.fromX, move.fromZ);
+                    const to = this.worldToScreen(move.toX, move.toZ);
+
+                    if (!move.rapid) {
+                        this.points.push({
+                            screenX: from.x,
+                            screenY: from.y,
+                            x: move.fromX,
+                            z: move.fromZ,
+                            isStart: true
+                        });
+                    }
+
+                    if (move.isArc && move.arcPoints) {
+                        this.ctx.strokeStyle = '#007bff';
+                        this.ctx.lineWidth = 2;
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(from.x, from.y);
+
+                        for (let point of move.arcPoints) {
+                            const screenPoint = this.worldToScreen(point.x, point.z);
+                            this.ctx.lineTo(screenPoint.x, screenPoint.y);
+                        }
+                        this.ctx.stroke(); 
+
+                        if (move.center) {
+                            const center = this.worldToScreen(move.center.x, move.center.z);
+                            this.points.push({
+                                screenX: center.x,
+                                screenY: center.y,
+                                x: move.center.x,
+                                z: move.center.z,
+                                isCenter: true
+                            });
+                        }
+                    } else {
+                        if (move.rapid) {
+                            batchRapid.push({from, to});
+                        } else {
+                            batchNormal.push({from, to});
+                        }
+                    }
+
+                    this.points.push({
+                        screenX: to.x,
+                        screenY: to.y,
+                        x: move.toX,
+                        z: move.toZ
+                    });
+                }
+
+                if (this.showRapidMoves && batchRapid.length > 0) {
+                    this.ctx.strokeStyle = '#ff0000';
+                    this.ctx.lineWidth = 1;
+                    this.ctx.beginPath();
+                    for (let move of batchRapid) {
+                        this.ctx.moveTo(move.from.x, move.from.y);
+                        this.ctx.lineTo(move.to.x, move.to.y);
+                    }
+                    this.ctx.stroke();
+                }
+
+                if (batchNormal.length > 0) {
+                    this.ctx.strokeStyle = '#007bff';
+                    this.ctx.lineWidth = 2;
+                    this.ctx.beginPath();
+                    for (let move of batchNormal) {
+                        this.ctx.moveTo(move.from.x, move.from.y);
+                        this.ctx.lineTo(move.to.x, move.to.y);
+                    }
+                    this.ctx.stroke();
+                }
+
+                for (let point of this.points) {
+                    this.ctx.fillStyle = point.isCenter ? '#00ff00' : (point.isStart ? '#007bff' : '#007bff');
+                    this.ctx.beginPath();
+                    this.ctx.arc(point.screenX, point.screenY, 3, 0, Math.PI * 2);
+                    this.ctx.fill();
+                }
+
+                this.lastMovements = movements;
+
+                if (this.highlightedPoint) {
+                    this.drawHighlightedPoint();
+                }
+            }
+            
+            centerOnPoint(worldX, worldZ, zoom = true) {
+                if (zoom && this.zoomFactor < 5) { 
+                    this.zoomFactor = 5; 
+                }
+                this.scale = this.baseScale * this.zoomFactor; 
+
+                this.centerX = (this.canvas.width / 2) - (worldX * this.scale);
+                this.centerY = (this.canvas.height / 2) + (worldZ * this.scale);
+
+                this.gridCache = this.createGridCache();
+                if (this.lastMovements) {
+                    this.drawPath(this.lastMovements);
+                } else {
+                    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                    this.drawAxes();
+                }
+            }
+
+            drawHighlightedPoint() {
+                if (!this.highlightedPoint) return;
+
+                const point = this.worldToScreen(this.highlightedPoint.x, this.highlightedPoint.z);
+
+                this.ctx.save();
+                this.ctx.beginPath();
+                this.ctx.arc(point.x, point.y, 4, 0, Math.PI * 2);
+                this.ctx.fillStyle = '#ff0000';
+                this.ctx.fill();
+
+                const now = Date.now();
+                const phase = (now % 1000) / 1000;
+                const radius = 8 + Math.sin(phase * Math.PI * 2) * 4;
+
+                this.ctx.beginPath();
+                this.ctx.arc(point.x, point.y, radius, 0, Math.PI * 2);
+                this.ctx.strokeStyle = '#ff0000';
+                this.ctx.lineWidth = 2;
+                this.ctx.stroke();
+                this.ctx.restore();
+
+                if (this.highlightedPoint) { 
+                    this.animationFrame = requestAnimationFrame(() => this.drawHighlightedPoint());
+                }
+            }
+
+            calculateBounds(movements) {
+                if (!movements || movements.length === 0) return null;
+                let minX = Infinity;
+                let maxX = -Infinity;
+                let minZ = Infinity;
+                let maxZ = -Infinity;
+
+                movements.forEach(move => {
+                    minX = Math.min(minX, move.fromX, move.toX);
+                    maxX = Math.max(maxX, move.fromX, move.toX);
+                    minZ = Math.min(minZ, move.fromZ, move.toZ);
+                    maxZ = Math.max(maxZ, move.fromZ, move.toZ);
+                });
+
+                if (minX === maxX) {
+                    minX -= 5;
+                    maxX += 5;
+                }
+                if (minZ === maxZ) {
+                    minZ -= 5;
+                    maxZ += 5;
+                }
+
+                return { minX, maxX, minZ, maxZ };
+            }
+
+            adjustScale(bounds) {
+                if (!bounds) return;
+                this.programBounds = bounds; 
+
+                const width = bounds.maxX - bounds.minX;
+                const height = bounds.maxZ - bounds.minZ;
+
+                if (!this.baseScale || this.baseScale === 1) {
+                    const scaleX = (this.canvas.width - this.padding * 2) / (width || 1);
+                    const scaleY = (this.canvas.height - this.padding * 2) / (height || 1);
+                    this.baseScale = Math.min(scaleX, scaleY);
+                }
+                this.scale = this.baseScale * this.zoomFactor;
+
+                if (!this.isDragging && !this.programBounds) {
+                    const origin = this.worldToScreen(0, 0);
+                    const centerX = this.canvas.width / 2;
+                    const centerY = this.canvas.height / 2;
+                    this.centerX += centerX - origin.x;
+                    this.centerY += centerY - origin.y;
+                }
+            }
+
+            resetView() {
+                const program = editor.value;
+                if (!program.trim()) return;
+
+                this.parser.parseProgram(program).then(parsedData => {
+                    const movements = parsedData.movements;
+                    if (movements && Array.isArray(movements)) {
+                        const workMoves = movements.filter(move => !move.rapid);
+
+                        if (workMoves.length > 0) {
+                            let bounds = { minX: Infinity, maxX: -Infinity, minZ: Infinity, maxZ: -Infinity };
+                            
+                            workMoves.forEach(move => {
+                                bounds.minX = Math.min(bounds.minX, move.fromX, move.toX);
+                                bounds.maxX = Math.max(bounds.maxX, move.fromX, move.toX);
+                                bounds.minZ = Math.min(bounds.minZ, move.fromZ, move.toZ);
+                                bounds.maxZ = Math.max(bounds.maxZ, move.fromZ, move.toZ);
+                                if (move.isArc && move.arcPoints) {
+                                    for (const p of move.arcPoints) {
+                                        bounds.minX = Math.min(bounds.minX, p.x);
+                                        bounds.maxX = Math.max(bounds.maxX, p.x);
+                                        bounds.minZ = Math.min(bounds.minZ, p.z);
+                                        bounds.maxZ = Math.max(bounds.maxZ, p.z);
+                                    }
+                                }
+                            });
+
+
+                            const margin = {
+                                x: (bounds.maxX - bounds.minX) * 0.1 || 5, 
+                                z: (bounds.maxZ - bounds.minZ) * 0.1 || 5
+                            };
+
+                            bounds.minX -= margin.x;
+                            bounds.maxX += margin.x;
+                            bounds.minZ -= margin.z;
+                            bounds.maxZ += margin.z;
+
+                            const width = bounds.maxX - bounds.minX;
+                            const height = bounds.maxZ - bounds.minZ;
+
+                            const scaleX = (this.canvas.width - this.padding * 2) / (width || 1);
+                            const scaleY = (this.canvas.height - this.padding * 2) / (height || 1);
+                            
+                            this.baseScale = Math.min(scaleX, scaleY);
+                            this.zoomFactor = 1;
+                            this.scale = this.baseScale;
+
+                            const centerX = (bounds.minX + bounds.maxX) / 2;
+                            const centerZ = (bounds.minZ + bounds.maxZ) / 2;
+
+                            this.centerX = (this.canvas.width / 2) - (centerX * this.scale);
+                            this.centerY = (this.canvas.height / 2) + (centerZ * this.scale);
+
+
+                            this.gridCache = this.createGridCache();
+                            
+                            this.drawPath(movements);
+                        } else {
+                            const bounds = this.calculateBounds(movements);
+                            if (bounds) {
+                            }
+                        }
+                    }
+                }).catch(error => {
+                    console.error('Chyba při parsování programu:', error);
+                });
+            }
+
+            worldToScreen(x, z) {
+                return {
+                    x: this.centerX + x * this.scale,     
+                    y: this.centerY - z * this.scale      
+                };
+            }
+            
+            screenToWorld(screenX, screenY, offsetY = 0) {
+                const targetY = screenY + offsetY;
+                
+                return {
+                    x: (screenX - this.centerX) / this.scale,
+                    z: (this.centerY - targetY) / this.scale 
+                };
+            }
+
+            async simulate(resetView = false) {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                const program = editor.value;
+
+                if (program.trim()) {
+                    debug('Spuštění simulace programu');
+                    
+                    const parsedData = await this.parser.parseProgram(program);
+                    const movements = parsedData.movements;
+                    
+                    if (resetView) { 
+                        this.lastSelectedPoint = null;
+                        selectedPosXElement.textContent = '-';
+                        selectedPosZElement.textContent = '-';
+                        this.baseScale = 1; 
+                        this.zoomFactor = 1;
+                    }
+
+                    const bounds = this.calculateBounds(movements);
+                    this.adjustScale(bounds); 
+
+                    this.drawAxes();
+                    this.drawPath(movements);
+                    debug('Simulace dokončena');
+                    
+                    return parsedData; 
+                } else {
+                    this.drawAxes();
+                    return null; 
+                }
+            }
+
+            formatNumber(num) {
+                const rounded = Number(num).toFixed(3);
+                return rounded.replace(/\.?0+$/, '');
+            }
+            
+            checkPointUnderCrosshair(canvasX, canvasY, offsetY = 0) {
+                
+                const crosshairX = canvasX;
+                const crosshairY = canvasY + offsetY;
+
+                const worldCoords = this.screenToWorld(crosshairX, crosshairY);
+
+                const worldTolerance = 15 / this.scale;
+
+                let hitPoint = null;
+                let minDistance = Infinity;
+
+                for (const point of this.points) {
+                    const dx = point.x - worldCoords.x;
+                    const dz = point.z - worldCoords.z;
+                    const distance = Math.sqrt(dx * dx + dz * dz);
+
+                    if (distance < worldTolerance && distance < minDistance) {
+                        minDistance = distance;
+                        hitPoint = point;
+                    }
+                }
+                
+                this.crosshair.style.display = 'block';
+                this.crosshair.style.left = `${crosshairX}px`;
+                this.crosshair.style.top = `${crosshairY}px`;
+
+                this.tooltip.style.display = 'block';
+                this.tooltip.style.left = `${crosshairX}px`; 
+                this.tooltip.style.top = `${crosshairY}px`;  
+
+
+                if (hitPoint) {
+                    this.tooltip.textContent = `X${this.formatNumber(hitPoint.x)} Z${this.formatNumber(hitPoint.z)}`;
+                    this.updateSelectedPosition(hitPoint.x, hitPoint.z);
+                    this.lastSelectedPoint = hitPoint;
+                    
+                    const screenPoint = this.worldToScreen(hitPoint.x, hitPoint.z);
+                    this.crosshair.style.left = `${screenPoint.x}px`;
+                    this.crosshair.style.top = `${screenPoint.y}px`;
+                    
+                    this.tooltip.style.left = `${screenPoint.x}px`;
+                    this.tooltip.style.top = `${screenPoint.y}px`;
+                    
+                } else {
+                    this.tooltip.textContent = `X${this.formatNumber(worldCoords.x)} Z${this.formatNumber(worldCoords.z)}`;
+                    this.updateSelectedPosition(null, null); 
+                }
+            }
+
+
+            updateSelectedPosition(x, z) {
+                if (x !== null && z !== null) {
+                    selectedPosXElement.textContent = this.formatNumber(x);
+                    selectedPosZElement.textContent = this.formatNumber(z);
+                } else {
+                    selectedPosXElement.textContent = '-';
+                    selectedPosZElement.textContent = '-';
+                }
+            }
+
+            highlightPoint(x, z) {
+                this.clearHighlight(true); 
+
+                this.highlightedPoint = { x, z };
+
+                const animate = () => {
+                    if (!this.highlightedPoint) return; 
+                    
+                    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                    this.drawAxes();
+                    if (this.lastMovements) {
+                        this.drawPath(this.lastMovements);
+                    }
+                    
+                    if (!this.highlightedPoint) return; 
+
+                    const point = this.worldToScreen(this.highlightedPoint.x, this.highlightedPoint.z);
+
+                    this.ctx.save();
+
+                    this.ctx.beginPath();
+                    this.ctx.arc(point.x, point.y, 4, 0, Math.PI * 2);
+                    this.ctx.fillStyle = '#ff0000';
+                    this.ctx.fill();
+
+                    const now = Date.now();
+                    const phase = (now % 1000) / 1000;
+                    const radius = 8 + Math.sin(phase * Math.PI * 2) * 4;
+
+                    this.ctx.beginPath();
+                    this.ctx.arc(point.x, point.y, radius, 0, Math.PI * 2);
+                    this.ctx.strokeStyle = '#ff0000';
+                    this.ctx.lineWidth = 2;
+                    this.ctx.stroke();
+
+                    this.ctx.restore();
+
+                    this.animationFrame = requestAnimationFrame(animate);
+                };
+
+                animate();
+            }
+
+            clearHighlight(partial = false) {
+                if (this.animationFrame) {
+                    cancelAnimationFrame(this.animationFrame);
+                    this.animationFrame = null;
+                }
+
+                this.highlightedPoint = null;
+
+                if (!partial) {
+                    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                    this.drawAxes();
+                    if (this.lastMovements) {
+                        this.drawPath(this.lastMovements);
+                    }
+                }
+            }
+
+            async handleCanvasClick(event) {
+                if (this.isDragging) return;
+
+                const rect = this.canvas.getBoundingClientRect();
+                const mouseX = event.clientX - rect.left;
+                const mouseY = event.clientY - rect.top;
+
+                this.clearHighlight();
+
+                const hitPoint = this.points.find(point => {
+                    const dx = mouseX - point.screenX;
+                    const dy = mouseY - point.screenY;
+                    return Math.sqrt(dx * dx + dy * dy) < 8;
+                });
+
+                if (hitPoint) {
+                    const lineIndex = await this.findLineByCoordinates(hitPoint.x, hitPoint.z);
+                    if (lineIndex >= 0) {
+                        this.highlightLineAndPoint(lineIndex, hitPoint);
+                    }
+                }
+            }
+
+            highlightLineAndPoint(lineIndex, point) {
+                const lines = editor.value.split('\n');
+                const cleanLines = lines.map(line => line.replace(/^→\s*/, ''));
+
+                cleanLines[lineIndex] = '→ ' + cleanLines[lineIndex];
+                editor.value = cleanLines.join('\n');
+
+                selectedPosXElement.textContent = this.formatNumber(point.x);
+                selectedPosZElement.textContent = this.formatNumber(point.z);
+
+                this.highlightPoint(point.x, point.z);
+
+                
+                const lineHeight = (editor.scrollHeight / lines.length) || 24; 
+                const viewportHeight = editor.clientHeight;
+                const targetPosition = lineHeight * (lineIndex - 1);
+
+                if (targetPosition < editor.scrollTop ||
+                    targetPosition > editor.scrollTop + viewportHeight - lineHeight * 3) {
+                    editor.scrollTop = Math.max(0, targetPosition);
+                }
+            }
+
+            clearAllHighlights() {
+                this.highlightedPoint = null;
+                this.clearHighlight();
+            }
+
+            async findLineByCoordinates(targetX, targetZ) {
+                 const tempParser = new CNCParser();
+                tempParser.parameters = new Map(this.parser.parameters);
+                
+                const program = editor.value;
+                const lines = program.split('\n');
+                const tolerance = 0.001;
+
+                for (let i = 0; i < lines.length; i++) {
+                    const line = lines[i];
+                    if (!line || line.trim().startsWith(';')) continue;
+
+                    const movement = await tempParser.parseLine(line);
+
+                    if (movement) {
+                        if (Math.abs(movement.toX - targetX) < tolerance &&
+                            Math.abs(movement.toZ - targetZ) < tolerance) {
+                            return i;
+                        }
+                    }
+                }
+                return -1;
+            }
+
+            async simulateToLine(lineIndex) {
+                const program = editor.value;
+                const lines = program.split('\n').slice(0, lineIndex + 1).join('\n');
+                
+                const savedState = {
+                    currentX: this.parser.currentX,
+                    currentZ: this.parser.currentZ,
+                    absoluteMode: this.parser.absoluteMode,
+                    modalMotionCommand: this.parser.modalMotionCommand, 
+                    parameters: new Map(this.parser.parameters) 
+                };
+
+                const parsedData = await this.parser.parseProgram(lines);
+                this.drawPath(parsedData.movements);
+
+                this.parser.currentX = savedState.currentX;
+                this.parser.currentZ = savedState.currentZ;
+                this.parser.absoluteMode = savedState.absoluteMode;
+                this.parser.modalMotionCommand = savedState.modalMotionCommand; 
+                this.parser.parameters = savedState.parameters;
+            }
+        };
+
+        class CNCPlayer {
+            constructor(simulator) {
+                const elements = {
+                    posX: document.getElementById('posX'),
+                    posZ: document.getElementById('posZ'),
+                    playBtn: document.getElementById('playBtn'),
+                    prevBtn: document.getElementById('prevBtn'),
+                    nextBtn: document.getElementById('nextBtn'),
+                    speedSlider: document.getElementById('speedSlider'),
+                    currentLine: document.getElementById('currentLine'),
+                    totalLines: document.getElementById('totalLines')
+                };
+
+                if (Object.values(elements).some(el => !el)) {
+                    console.error('Některé požadované DOM elementy nebyly nalezeny');
+                    return;
+                }
+
+                this.elements = elements;
+
+                this.simulator = simulator;
+                this.movements = []; 
+                this.lineMovements = []; 
+                this.currentIndex = -1; 
+                this.currentLineIndex = -1; 
+                this.isPlaying = false;
+                this.playTimer = null;
+                this.speed = 50; 
+
+                this.elements.playBtn.addEventListener('click', () => this.togglePlay());
+                this.elements.prevBtn.addEventListener('click', () => this.prev());
+                this.elements.nextBtn.addEventListener('click', () => this.next());
+                this.elements.speedSlider.addEventListener('input', (e) => this.setSpeed(e.target.value));
+
+                this.updateControls();
+            }
+
+            updateControls() {
+                if (!this.elements) return; 
+                this.elements.prevBtn.disabled = this.currentIndex < 0 || this.isPlaying;
+                this.elements.nextBtn.disabled = this.currentIndex >= this.movements.length - 1 || this.isPlaying;
+                this.elements.speedSlider.disabled = this.isPlaying;
+            }
+
+            togglePlay() {
+                if (this.isPlaying) {
+                    this.pause();
+                } else {
+                    this.play();
+                }
+            }
+
+            async setProgram(data) {
+                this.stop(); 
+                
+                const lines = data.program.split('\n');
+                this.movements = data.movements || [];
+                this.lineMovements = data.lineIndexes || [];
+
+                this.elements.totalLines.textContent = lines.length;
+                this.updateLineSpans(-1); 
+                
+                this.simulator.clearAllHighlights();
+                this.simulator.drawPath(this.movements); 
+                this.elements.posX.textContent = this.simulator.formatNumber(0);
+                this.elements.posZ.textContent = this.simulator.formatNumber(0);
+            }
+
+            play() {
+                if (this.currentIndex >= this.movements.length - 1) {
+                    this.stop(); 
+                }
+                this.isPlaying = true;
+                this.elements.playBtn.innerHTML = '<span class="button-icon">⏸️</span>';
+                this.elements.playBtn.title = 'Pozastavit';
+                this.updateControls(); 
+                this.playNext();
+            }
+
+            pause() {
+                this.isPlaying = false;
+                this.elements.playBtn.innerHTML = '<span class="button-icon">▶️</span>';
+                this.elements.playBtn.title = 'Přehrát';
+                clearTimeout(this.playTimer);
+                this.updateControls(); 
+            }
+
+            prev() {
+                if (this.currentIndex > 0) {
+                    this.currentIndex--;
+                } else {
+                    this.currentIndex = -1; 
+                }
+                this.drawToCurrentIndex(false);
+                this.updateControls(); 
+            }
+
+            next() {
+                if (this.currentIndex < this.movements.length - 1) {
+                    this.currentIndex++;
+                    this.drawToCurrentIndex(false);
+                    this.updateControls(); 
+                }
+            }
+            
+            async drawToCurrentIndex(centerView = false) {
+                if (this.currentIndex < 0) {
+                    this.simulator.clearAllHighlights();
+                    this.simulator.drawPath([]); 
+                    this.elements.posX.textContent = this.simulator.formatNumber(0);
+                    this.elements.posZ.textContent = this.simulator.formatNumber(0);
+                    this.highlightEditorLine(-1);
+                    this.updateLineSpans(-1);
+                    return;
+                }
+                
+                const currentMovements = this.movements.slice(0, this.currentIndex + 1);
+                
+                if (currentMovements.length > 0) {
+                    
+                    const lastMove = currentMovements[currentMovements.length - 1];
+                    this.elements.posX.textContent = this.simulator.formatNumber(lastMove.toX);
+                    this.elements.posZ.textContent = this.simulator.formatNumber(lastMove.toZ);
+                    
+                    if (centerView) {
+                        this.simulator.centerOnPoint(lastMove.toX, lastMove.toZ, true); 
+                    } else {
+                        this.simulator.drawPath(currentMovements);
+                    }
+                    
+                    this.simulator.highlightPoint(lastMove.toX, lastMove.toZ);
+                    
+                    const lineIndex = this.lineMovements[this.currentIndex];
+                    this.highlightEditorLine(lineIndex);
+                    this.updateLineSpans(lineIndex);
+                }
+            }
+
+
+            highlightEditorLine(lineIndex) {
+                 const lines = editor.value.split('\n');
+                 const cleanLines = lines.map(line => line.replace(/^→\s*/, ''));
+                 
+                 let targetScroll; 
+                 
+                 const editorHeight = editor.clientHeight;
+                 const totalLines = lines.length || 1;
+                 const lineHeight = (editor.scrollHeight / totalLines) || 24; 
+
+                 if (lineIndex >= 0 && lineIndex < cleanLines.length) {
+                     cleanLines[lineIndex] = '→ ' + cleanLines[lineIndex];
+                     
+                     const lineTop = lineIndex * lineHeight;
+                     
+                     targetScroll = Math.max(0, lineTop - (editorHeight / 3)); 
+
+                     const comfortZoneTop = editor.scrollTop + lineHeight; 
+                     const comfortZoneBottom = editor.scrollTop + editorHeight - (lineHeight * 2); 
+
+                     if (lineTop < comfortZoneTop || lineTop > comfortZoneBottom) {
+                         if (this.isPlaying) {
+                            editor.scrollTop = targetScroll;
+                         }
+                     }
+                 }
+                 
+                 const currentScroll = editor.scrollTop;
+                 editor.value = cleanLines.join('\n');
+                 editor.scrollTop = currentScroll; 
+
+                 if (this.isPlaying && lineIndex >= 0) {
+                     const lineTop = lineIndex * lineHeight;
+                     const comfortZoneTop = editor.scrollTop + lineHeight;
+                     const comfortZoneBottom = editor.scrollTop + editorHeight - (lineHeight * 2);
+                     
+                     if (lineTop < comfortZoneTop || lineTop > comfortZoneBottom) {
+                         editor.scrollTop = targetScroll;
+                     }
+                 }
+                 
+                 this.currentLineIndex = lineIndex;
+            }
+            
+            updateLineSpans(lineIndex) {
+                 this.elements.currentLine.textContent = lineIndex + 1;
+            }
+
+            playNext() {
+                if (!this.isPlaying || this.currentIndex >= this.movements.length - 1) {
+                    this.pause(); 
+                    return;
+                }
+
+                this.currentIndex++;
+                
+                requestAnimationFrame(async () => {
+                    if (!this.isPlaying) return; 
+                    await this.drawToCurrentIndex(false); 
+                    this.updateControls();
+
+                    const delay = this.calculateDelay();
+                    this.playTimer = setTimeout(() => this.playNext(), delay);
+                });
+            }
+
+            calculateDelay() {
+                const speedValue = parseInt(this.elements.speedSlider.value);
+                return 1000 - (speedValue * 9.5);
+            }
+
+            stop() {
+                this.pause();
+                this.currentIndex = -1;
+                this.drawToCurrentIndex(); 
+                this.updateControls();
+            }
+
+            setSpeed(value) {
+                this.speed = parseInt(value);
+            }
+        };
+
+        function createProgramListItem(file) {
+            const programList = document.getElementById('programList');
+            const item = document.createElement('div');
+            item.className = 'program-list-item';
+            const displayName = file.name.replace(/\.(SPF|MPF)$/i, '');
+            item.textContent = displayName;
+            
+            item.dataset.filename = file.name; 
+            
+            item.onclick = async () => {
+                programList.querySelectorAll('.program-list-item')
+                    .forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+
+                const content = window.simulator.parser.getProgram(file.name);
+                if (content) {
+                    editor.value = content;
+                    await simulateProgram(); 
+                    window.simulator.resetView(); 
+                }
+            };
+            programList.appendChild(item);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            try {
+                window.simulator = new Simulator();
+
+                window.simulator.player = new CNCPlayer(window.simulator);
+
+                const currentPath = window.location.pathname;
+                const baseDirectory = currentPath.substring(0, currentPath.lastIndexOf('/'));
+                window.simulator.parser.setBaseDirectory(baseDirectory);
+
+                const fileInput = document.getElementById('actualFileInput');
+                const programList = document.getElementById('programList');
+
+                if (fileInput && programList) {
+                    fileInput.addEventListener('change', async function(event) {
+                        if (!window.simulator || !window.simulator.parser) return;
+
+                        // OPRAVA ZDE: Vyčistíme localStorage a zablokujeme automatické načtení
+                        localStorage.removeItem('cncExternalEditorData');
+                        isLoadingExternalData = true;
+                        setTimeout(() => { isLoadingExternalData = false; }, 1000);
+
+                        const files = Array.from(this.files);
+                        programList.innerHTML = '';
+                        window.simulator.parser.loadedPrograms.clear(); 
+                        window.simulator.parser.subprogramFiles.clear(); 
+
+                        let firstProgramFile = null;
+
+                        for (const file of files) {
+                            await window.simulator.parser.loadProgram(file); 
+                            
+                            createProgramListItem(file);
+
+                            if (file.name.toUpperCase().endsWith('.MPF')) {
+                                firstProgramFile = file;
+                            }
+                        }
+
+                        if (!firstProgramFile && files.length > 0) {
+                            firstProgramFile = files[0]; 
+                        }
+                        
+                        if (firstProgramFile) {
+                            const content = window.simulator.parser.getProgram(firstProgramFile.name);
+                            if (content) {
+                                editor.value = content;
+                                const firstItem = Array.from(programList.children).find(child => child.dataset.filename === firstProgramFile.name);
+                                firstItem?.classList.add('active');
+                                
+                                await simulateProgram(); 
+                                window.simulator.resetView(); 
+                            }
+                        }
+
+                        debug(`Načteno ${files.length} programů`);
+                    });
+                }
+
+                const editor = document.getElementById('editor');
+                if (editor) {
+                    const debouncedSimulate = debounce(async () => {
+                        if (window.simulator && editor.readOnly) {
+                            await simulateProgram();
+                        }
+                    }, 500); 
+                    editor.addEventListener('input', debouncedSimulate);
+                }
+                
+                editor.readOnly = true;
+                
+                editor.addEventListener('blur', () => {
+                    if (isOpeningExternalEditor) {
+                        isOpeningExternalEditor = false;
+                        return; 
+                    }
+
+                    if (!editor.readOnly) {
+                        toggleEditorMode();
+                    }
+                });
+
+                debug('Inicializace dokončena');
+            } catch (error) {
+                console.error('Chyba při inicializaci:', error);
+            }
+        }, { once: true });
+        
+        window.toggleEditorMode = function() {
+            const editor = document.getElementById('editor');
+            const container = document.querySelector('.container');
+            const homeLink = document.querySelector('.home-link');
+
+            editor.readOnly = !editor.readOnly;
+            
+            container.classList.toggle('editor-fullscreen');
+
+            if (editor.readOnly) {
+                editor.blur(); 
+                window.simulateProgram(); 
+                if (homeLink) homeLink.style.display = 'block'; 
+            } else {
+                editor.focus(); 
+                if (homeLink) homeLink.style.display = 'none'; 
+            }
+        };
+
+
+        editor.addEventListener('click', async function(e) {
+            if (!window.simulator || !window.simulator.player) return;
+            if (window.simulator.player.isPlaying) return; 
+            
+            if (!editor.readOnly) return;
+
+            const cursorPosition = editor.selectionStart;
+            const lines = editor.value.split('\n');
+            if (!lines.length) return;
+
+            const clickedLineIndex = editor.value.substr(0, cursorPosition).split('\n').length - 1;
+            if (clickedLineIndex < 0) return;
+            
+            let targetMovementIndex = -1;
+            for(let i = window.simulator.player.lineMovements.length - 1; i >= 0; i--) {
+                if (window.simulator.player.lineMovements[i] <= clickedLineIndex) {
+                    targetMovementIndex = i;
+                    break;
+                }
+            }
+            
+            window.simulator.player.currentIndex = targetMovementIndex;
+            await window.simulator.player.drawToCurrentIndex(true);
+            window.simulator.player.updateControls();
+        });
+
+        window.addEventListener('resize', debounce(() => {
+            if (window.simulator) {
+                window.simulator.setupCanvas();
+            }
+        }, 250));
+
+        window.simulateProgram = async function() {
+            if (window.simulator) {
+                const parsedData = await window.simulator.simulate();
+                
+                if (window.simulator.player && parsedData) {
+                    await window.simulator.player.setProgram(parsedData);
+                }
+            }
+        };
+
+        function showParameters() {
+            if (!window.simulator || !window.simulator.parser) return;
+            
+            const modal = document.getElementById('parametersModal');
+            const tableBody = document.getElementById('parametersTableBody');
+            tableBody.innerHTML = '';
+
+            const parameters = Array.from(window.simulator.parser.parameters.entries())
+                .filter(([_, value]) => value !== 0) 
+                .sort((a, b) => {
+                    const numA = parseInt(a[0].replace('R', ''));
+                    const numB = parseInt(b[0].replace('R', ''));
+                    return numA - numB;
+                });
+
+            if (parameters.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td colspan="2" style="text-align: center; padding: 20px;">
+                        Žádné definované parametry
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            } else {
+                for (const [param, value] of parameters) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${param}</td>
+                        <td>${typeof value === 'number' ? value.toFixed(3) : value}</td>
+                    `;
+                    tableBody.appendChild(row);
+                }
+            }
+
+            modal.style.display = 'block';
+        }
+
+        function closeParametersModal() {
+            const modal = document.getElementById('parametersModal');
+            modal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('parametersModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        };
+
+        function saveSimulatorState() {
+            if (!window.simulator) return;
+            const state = {
+                editorContent: editor.value,
+                activeProgram: document.querySelector('.program-list-item.active')?.dataset.filename || '',
+                viewState: {
+                    centerX: window.simulator.centerX,
+                    centerY: window.simulator.centerY,
+                    zoomFactor: window.simulator.zoomFactor,
+                    scale: window.simulator.scale
+                },
+                timestamp: Date.now()
+            };
+            localStorage.setItem('simulatorState', JSON.stringify(state));
+        }
+
+        function loadSimulatorState() {
+            const savedState = localStorage.getItem('simulatorState');
+            if (savedState) {
+                const state = JSON.parse(savedState);
+
+                if (Date.now() - state.timestamp < 3600000) {
+                    editor.value = state.editorContent;
+
+                    if (window.simulator && state.viewState) {
+                        window.simulator.centerX = state.viewState.centerX;
+                        window.simulator.centerY = state.viewState.centerY;
+                        window.simulator.zoomFactor = state.viewState.zoomFactor;
+                        window.simulator.scale = state.viewState.scale;
+                    }
+
+                }
+            }
+        }
+
+        window.addEventListener('load', () => {
+             loadSimulatorState();
+        });
+
+        window.addEventListener('beforeunload', () => {
+            saveSimulatorState();
+        });
+
+        async function overwriteFromClipboard() {
+            try {
+                const text = await navigator.clipboard.readText();
+                const overwriteBtn = document.getElementById('overwriteBtn');
+                
+                if (text && text.trim() !== '') {
+                    editor.value = text;
+                    await simulateProgram(); 
+                    if (!editor.readOnly) {
+                        toggleEditorMode();
+                    }
+                } else {
+                    if (overwriteBtn) {
+                        const originalTitle = overwriteBtn.title;
+                        overwriteBtn.title = 'Schránka je prázdná!';
+                        setTimeout(() => { overwriteBtn.title = originalTitle; }, 3000);
+                    }
+                }
+            } catch (err) {
+                 console.error('Nepodařilo se číst ze schránky: ', err.message);
+                 const overwriteBtn = document.getElementById('overwriteBtn');
+                 if (overwriteBtn) {
+                    const originalTitle = overwriteBtn.title;
+                    overwriteBtn.title = 'Chyba! Povolte prosím přístup ke schránce.';
+                    setTimeout(() => { overwriteBtn.title = originalTitle; }, 3000);
+                 }
+            }
+        }
+
+        async function pasteAtCursor() {
+            try {
+                const text = await navigator.clipboard.readText();
+                const pasteBtn = document.getElementById('pasteBtn');
+                
+                if (text && text.trim() !== '') {
+                    const start = editor.selectionStart;
+                    const end = editor.selectionEnd;
+                    const currentText = editor.value;
+                    
+                    editor.value = currentText.substring(0, start) + text + currentText.substring(end);
+                    
+                    editor.selectionStart = start + text.length;
+                    editor.selectionEnd = start + text.length;
+                    
+                } else {
+                    if (pasteBtn) {
+                        const originalTitle = pasteBtn.title;
+                        pasteBtn.title = 'Schránka je prázdná!';
+                        setTimeout(() => { pasteBtn.title = originalTitle; }, 3000);
+                    }
+                }
+            } catch (err) {
+                 console.error('Nepodařilo se číst ze schránky: ', err.message);
+                 const pasteBtn = document.getElementById('pasteBtn');
+                 if (pasteBtn) {
+                    const originalTitle = pasteBtn.title;
+                    pasteBtn.title = 'Chyba! Povolte prosím přístup ke schránce.';
+                    setTimeout(() => { pasteBtn.title = originalTitle; }, 3000);
+                 }
+            }
+        }
+
+        async function openExternalEditor() {
+            if (!window.simulator || !window.simulator.parser) {
+                console.error("Simulátor není připraven.");
+                return;
+            }
+            
+            const activeProgramEl = document.querySelector('.program-list-item.active');
+            const activeProgramName = activeProgramEl ? activeProgramEl.dataset.filename : 'HlavniProgram.mpf'; 
+            
+            const dataToStore = {
+                mainProgramName: activeProgramName, 
+                parameters: Array.from(window.simulator.parser.parameters),
+                movements: window.simulator.player.movements, 
+                loadedPrograms: {}
+            };
+        
+            const programNames = window.simulator.parser.getProgramList();
+            for (const name of programNames) {
+                dataToStore.loadedPrograms[name] = window.simulator.parser.getProgram(name);
+            }
+            
+            if (!dataToStore.loadedPrograms[activeProgramName]) {
+                 dataToStore.loadedPrograms[activeProgramName] = editor.value;
+            }
+        
+            try {
+                localStorage.setItem('cncExternalEditorData', JSON.stringify(dataToStore));
+                
+                window.open('SimEditor.html', '_blank');
+
+            } catch (e) {
+                console.error("Chyba při ukládání do localStorage:", e);
+                alert("Došlo k chybě při ukládání dat do localStorage. Editor nelze otevřít.");
+            }
+
+            isOpeningExternalEditor = false;
+        }
+
+        // ==========================================
+        // INTEGRACE S EXTERNÍM EDITOREM (SimEditor)
+        // ==========================================
+
+        // Zámek pro zabránění souběžnému spuštění (Race Condition)
+        let isLoadingExternalData = false;
+
+        async function loadFromExternalEditor() {
+            if (isLoadingExternalData) {
+                console.log('Již probíhá načítání externích dat - přeskočeno.');
+                return;
+            }
+            
+            isLoadingExternalData = true;
+
+            try {
+                const rawData = localStorage.getItem('cncExternalEditorData');
+                if (!rawData) return;
+
+                const data = JSON.parse(rawData);
+                
+                if (!window.simulator || !window.simulator.parser) return;
+
+                if (data.parameters) {
+                    const paramsMap = new Map(data.parameters);
+                    paramsMap.forEach((val, key) => {
+                        const numVal = (typeof val === 'object' && val !== null) ? val.value : val;
+                        window.simulator.parser.parameters.set(key, Number(numVal));
+                    });
+                }
+
+                if (data.loadedPrograms) {
+                    window.simulator.parser.loadedPrograms.clear();
+                    window.simulator.parser.subprogramFiles.clear();
+                    
+                    const programList = document.getElementById('programList');
+                    if (programList) programList.innerHTML = '';
+
+                    const programNames = Object.keys(data.loadedPrograms);
+                    
+                    for (const name of programNames) {
+                        const content = data.loadedPrograms[name];
+                        const mockFile = { name: name };
+                        
+                        window.simulator.parser.loadedPrograms.set(name, {
+                            content: content,
+                            file: mockFile
+                        });
+
+                        if (name.toUpperCase().endsWith('.SPF')) {
+                            const baseName = name.toUpperCase().replace(/\.SPF$/, '');
+                            window.simulator.parser.loadedSubprograms.set(baseName, content);
+                        }
+
+                        createProgramListItem(mockFile);
+                    }
+
+                    if (data.mainProgramName && data.loadedPrograms[data.mainProgramName]) {
+                        const editor = document.getElementById('editor');
+                        const content = data.loadedPrograms[data.mainProgramName];
+                        
+                        // Zde je důležité zkontrolovat, zda se obsah skutečně změnil, ale
+                        // díky zámku nahoře už je to bezpečnější
+                        if (editor.value !== content) {
+                            editor.value = content;
+                            
+                            const items = document.querySelectorAll('.program-list-item');
+                            items.forEach(item => {
+                                if (item.dataset.filename === data.mainProgramName) {
+                                    item.classList.add('active');
+                                } else {
+                                    item.classList.remove('active');
+                                }
+                            });
+
+                            await simulateProgram();
+                            window.simulator.resetView();
+                            
+                            console.log(`[Simulator] Data načtena z externího editoru: ${data.mainProgramName}`);
+                        }
+                    }
+                }
+
+            } catch (e) {
+                console.error("Chyba při načítání dat z externího editoru:", e);
+            } finally {
+                // Vždy uvolníme zámek, i když dojde k chybě
+                isLoadingExternalData = false;
+            }
+        }
+
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'cncExternalEditorData') {
+                loadFromExternalEditor();
+            }
+        });
+
+        // Použití debouncingu pro focus události, aby se zabránilo vícenásobnému spuštění
+        // při rychlém přepínání nebo načítání
+        let focusLoadTimeout;
+        window.addEventListener('focus', () => {
+             clearTimeout(focusLoadTimeout);
+             focusLoadTimeout = setTimeout(loadFromExternalEditor, 200);
+        });
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                clearTimeout(focusLoadTimeout); // Sdílený timeout
+                focusLoadTimeout = setTimeout(loadFromExternalEditor, 200);
+            }
+        });
+
+    </script>
+</body>
+</html>
