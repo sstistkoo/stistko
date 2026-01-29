@@ -5,6 +5,11 @@
 
 // ===== API KEYS & STORAGE =====
 window.API_STORAGE_KEY = "soustruznik_api_keys";
+// ⚠️ POUZE DEMO/TESTOVACÍ API KLÍČE PRO VÝVOJ ⚠️
+// Tyto klíče jsou veřejné, mají omezený rate limit a mohou být kdykoliv zneplatněny
+// Pro produkční použití si vytvořte vlastní klíče a uložte je do .env souboru
+// Více informací: viz SECURITY.md
+
 // DEMO API KEY - rozdělený na 2 části (bezpečné pro GitHub)
 window.EMBEDDED_API_KEY = "AIzaSyCXuMvhO_senLS" + "oA_idEuBk_EwnMmIPIhg"; // Split for security
 // DEMO GROQ API KEY - rozdělený na 2 části (bezpečné pro GitHub)

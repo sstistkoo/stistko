@@ -61,7 +61,9 @@
 
 const AI = {
 
-    // ============== DEMO KLÍČE (rozdělené pro GitHub) ==============
+    // ============== ⚠️ DEMO/TESTOVACÍ KLÍČE - POUZE PRO VÝVOJ ⚠️ ==============
+    // Tyto klíče jsou veřejné testovací klíče s omezeným rate limitem
+    // NIKDY NEPOUŽÍVAT V PRODUKCI - viz SECURITY.md
     DEMO_KEYS: {
         gemini: "AIzaSyCXuMvhO_senLS" + "oA_idEuBk_EwnMmIPIhg",
         groq: "gsk_0uZbn9KqiBa3Zsl11ACX" + "WGdyb3FYZddvc6oPIn9HTvJpGgoBbYrJ",

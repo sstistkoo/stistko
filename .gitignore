@@ -1,0 +1,28 @@
+# Ignorovat skutečné API klíče a citlivé soubory
+.env
+.env.local
+.env.production
+*.key
+*.pem
+secrets.js
+api-keys.js
+
+# Ignorovat node_modules
+node_modules/
+dist/
+build/
+
+# Ignorovat IDE soubory
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignorovat log soubory
+*.log
+npm-debug.log*
+
+# Ignorovat dočasné soubory
+*.tmp
+.DS_Store
+Thumbs.db
