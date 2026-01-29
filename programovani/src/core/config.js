@@ -34,7 +34,9 @@ export const config = {
   },
 
   ai: {
-    // Demo klíče (rozdělené pro GitHub)
+    // ⚠️ POUZE DEMO/TESTOVACÍ KLÍČE PRO VÝVOJ - NEPOUŽÍVAT V PRODUKCI ⚠️
+    // Tyto klíče jsou veřejné, mají omezený rate limit a mohou být kdykoliv zneplatněny
+    // Pro produkci si vytvořte vlastní API klíče - viz SECURITY.md
     demoKeys: {
       gemini: '***REMOVED***' + '***REMOVED***',
       groq: '***REMOVED***' + '***REMOVED***',
