@@ -1,0 +1,2097 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>CNC AI</title>
+    <style>
+        :root {
+            --vh: 1vh;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(to bottom, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            min-height: calc(var(--vh, 1vh) * 100);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            position: relative;
+        }
+
+        /* Horní lišta */
+        .top-bar {
+            background: #0f1419;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid #2a2a3e;
+        }
+
+        .current-mode {
+            font-size: 18px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            padding: 10px 16px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+            white-space: nowrap;
+        }
+
+        .current-mode:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+        }
+
+        .current-mode:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+        }
+
+        .logo {
+            font-size: 24px;
+        }
+
+        .app-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .separator {
+            color: #666;
+            margin: 0 4px;
+        }
+
+        .control-switch {
+            display: flex;
+            gap: 8px;
+            margin-left: auto;
+        }
+
+        .switch-btn {
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .switch-btn.active {
+            color: #ff6b35;
+            background: rgba(255, 107, 53, 0.1);
+        }
+
+        /* Tlačítko nastavení v horní liště */
+        .settings-top-btn {
+            background: rgba(37, 99, 235, 0.15);
+            border: none;
+            color: #fff;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 20px;
+            margin-left: auto;
+        }
+
+        .settings-top-btn:hover {
+            background: rgba(37, 99, 235, 0.25);
+            transform: scale(1.05);
+        }
+
+        .settings-top-btn:active {
+            transform: scale(0.95);
+        }
+
+        .settings-icon {
+            font-size: 20px;
+        }
+
+        .settings-label {
+            font-size: 14px;
+        }
+
+        /* View mode switch */
+        .view-switch {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .view-switch-label {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .view-btn {
+            background: none;
+            border: 1px solid #2a2a3e;
+            color: #888;
+            font-size: 12px;
+            cursor: pointer;
+            padding: 4px 10px;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .view-btn.active {
+            color: #ff6b35;
+            background: rgba(255, 107, 53, 0.1);
+            border-color: #ff6b35;
+        }
+
+        .view-btn:hover {
+            border-color: #ff6b35;
+        }
+
+        /* Force mobile view */
+        body.force-mobile .app-container {
+            max-width: 480px !important;
+        }
+
+        body.force-mobile .main-content {
+            display: block !important;
+            grid-template-columns: unset !important;
+            padding: 16px !important;
+        }
+
+        body.force-mobile .left-column,
+        body.force-mobile .right-column {
+            width: 100%;
+        }
+
+        body.force-mobile .gcode-display {
+            min-height: 200px !important;
+            font-size: 16px !important;
+        }
+
+        body.force-mobile .mobile-only {
+            display: none !important;
+        }
+
+        body.force-mobile .integrated-nav {
+            display: flex !important;
+        }
+
+        body.force-mobile .ai-section {
+            position: relative !important;
+        }
+
+        /* AI Chat View */
+        .chat-view {
+            display: none;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .chat-view.active {
+            display: flex;
+        }
+
+        .cnc-view {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .cnc-view.hidden {
+            display: none;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            background: #1a1a2e;
+            border-radius: 12px;
+            min-height: 300px;
+            max-height: 400px;
+        }
+
+        .chat-message {
+            display: flex;
+            gap: 12px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chat-message.user {
+            flex-direction: row-reverse;
+        }
+
+        .chat-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .chat-message.user .chat-avatar {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+        }
+
+        .chat-message.ai .chat-avatar {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        }
+
+        .chat-bubble {
+            background: #0f1419;
+            padding: 12px 16px;
+            border-radius: 16px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        .chat-message.user .chat-bubble {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+        }
+
+        .chat-input-area {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex: 1;
+            background: #0f1419;
+            border: 1px solid #2a2a3e;
+            color: #fff;
+            padding: 14px 16px;
+            border-radius: 12px;
+            font-size: 15px;
+            resize: none;
+            min-height: 50px;
+            max-height: 150px;
+            font-family: inherit;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .chat-send-btn {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            border: none;
+            color: #fff;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-send-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4);
+        }
+
+        .chat-send-btn:active {
+            transform: scale(0.95);
+        }
+
+        .chat-placeholder {
+            text-align: center;
+            color: #666;
+            padding: 40px 20px;
+            font-size: 14px;
+        }
+
+        /* Hlavní obsah */
+        .main-content {
+            padding: 16px;
+            padding-bottom: calc(80px + env(safe-area-inset-bottom));
+        }
+
+        /* Vizualizace sekce */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding: 8px 0;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #aaa;
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .section-icons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            background: #fff;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .icon-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* G-kód editor */
+        .gcode-display {
+            background: #0f1419;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            line-height: 1.6;
+            min-height: 200px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+            color: #4a9eff;
+            border: 1px solid #2a2a3e;
+            width: 100%;
+            resize: vertical;
+        }
+
+        .gcode-display:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+
+        /* AI CNC Sekce */
+        .ai-section {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
+        }
+
+        .ai-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .ai-icon {
+            font-size: 20px;
+        }
+
+        .ai-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .ai-controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .model-select {
+            flex: 1;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .model-select option {
+            background: #1a1a2e;
+            color: #fff;
+        }
+
+        .machine-info {
+            display: flex;
+            gap: 8px;
+            font-size: 12px;
+            color: rgba(255,255,255,0.7);
+            margin-left: auto;
+        }
+
+        .machine-info-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(255,255,255,0.05);
+            padding: 4px 8px;
+            border-radius: 6px;
+            white-space: nowrap;
+        }
+
+        .machine-info-icon {
+            font-size: 14px;
+        }
+
+        .editor-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.1);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        .editor-toggle input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        /* Input skupina */
+        .input-group {
+            background: #fff;
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .input-field {
+            width: 100%;
+            border: none;
+            padding: 12px 16px;
+            font-size: 16px;
+            color: #333;
+            background: transparent;
+            outline: none;
+        }
+
+        .input-field::placeholder {
+            color: #999;
+        }
+
+        /* Tlačítka akce */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .action-icon-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .action-icon-btn:active {
+            transform: scale(0.95);
+            background: rgba(255,255,255,0.15);
+        }
+
+        .analyze-btn {
+            flex: 1;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .analyze-btn:active {
+            transform: scale(0.98);
+            background: rgba(255,255,255,0.25);
+        }
+
+        /* Integrovaná navigace v AI sekci */
+        .integrated-nav {
+            display: none;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            justify-content: space-around;
+            gap: 4px;
+        }
+
+        .integrated-nav .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 2px;
+            padding: 4px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            color: rgba(255,255,255,0.6);
+            transition: all 0.3s;
+            border-radius: 6px;
+            flex: 1;
+            min-height: 54px;
+        }
+
+        .integrated-nav .nav-item.active {
+            color: #fff;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .integrated-nav .nav-icon {
+            font-size: 20px;
+            position: relative;
+            margin-top: 4px;
+        }
+
+        .integrated-nav .nav-label {
+            font-size: 9px;
+            font-weight: 500;
+            margin-top: auto;
+        }
+
+        /* Mobilní navigace */
+        .mobile-only {
+            display: flex;
+        }
+
+        /* Spodní navigace */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #0f1419;
+            border-top: 1px solid #2a2a3e;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0 calc(12px + env(safe-area-inset-bottom));
+            padding-bottom: calc(12px + env(safe-area-inset-bottom));
+            box-shadow: 0 -4px 16px rgba(0,0,0,0.3);
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 16px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            color: #888;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .nav-item.active {
+            color: #ff6b35;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            position: relative;
+        }
+
+        .bottom-nav .nav-icon.main {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: -24px;
+            box-shadow: 0 4px 16px rgba(255, 107, 53, 0.4);
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        /* Výsuvné menu */
+        .side-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            max-width: 320px;
+            height: 100vh;
+            height: calc(var(--vh, 1vh) * 100);
+            background: #0f1419;
+            box-shadow: -4px 0 16px rgba(0,0,0,0.5);
+            transition: right 0.3s ease;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .side-menu.open {
+            right: 0;
+        }
+
+        /* Levý panel */
+        .left-panel {
+            right: auto;
+            left: -100%;
+            box-shadow: 4px 0 16px rgba(0,0,0,0.5);
+            transition: left 0.3s ease;
+        }
+
+        .left-panel.open {
+            left: 0;
+            right: auto;
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 999;
+        }
+
+        .menu-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .menu-header {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .menu-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .menu-close {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 28px;
+            cursor: pointer;
+            padding: 0;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+
+        .menu-close:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .menu-content {
+            padding: 20px;
+        }
+
+        .menu-placeholder {
+            color: #888;
+            text-align: center;
+            padding: 40px 20px;
+            font-style: italic;
+        }
+
+        /* Panel sekce */
+        .panel-section {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 0;
+        }
+
+        .panel-btn {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            border: none;
+            color: #fff;
+            padding: 16px 20px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 16px;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+        }
+
+        .panel-btn:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+        }
+
+        .panel-btn:active {
+            transform: translateX(2px);
+        }
+
+        .panel-icon {
+            font-size: 24px;
+        }
+
+        .panel-label {
+            font-weight: 500;
+        }
+
+        /* Modální okno nastavení */
+        .settings-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .settings-modal.show {
+            display: flex;
+        }
+
+        .settings-content {
+            background: #0f1419;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+        }
+
+        .settings-header {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            padding: 20px;
+            border-radius: 16px 16px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .settings-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .settings-close {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 28px;
+            cursor: pointer;
+            padding: 0;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+
+        .settings-close:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .settings-body {
+            padding: 20px;
+        }
+
+        .settings-section {
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #2a2a3e;
+        }
+
+        .settings-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .settings-section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ff6b35;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .settings-item {
+            margin-bottom: 16px;
+        }
+
+        .settings-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .settings-label {
+            display: block;
+            font-size: 14px;
+            color: #aaa;
+            margin-bottom: 8px;
+        }
+
+        .settings-select,
+        .settings-input {
+            width: 100%;
+            background: #1a1a2e;
+            border: 1px solid #2a2a3e;
+            color: #fff;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        .settings-select:hover,
+        .settings-input:hover {
+            border-color: #ff6b35;
+        }
+
+        .settings-select:focus,
+        .settings-input:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+
+        .settings-description {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        /* Responzivita */
+        @media (min-width: 768px) {
+            body {
+                background: #0a0a0f;
+                padding-bottom: 0;
+            }
+
+            .app-container {
+                width: 100%;
+                max-width: 1200px;
+                background: #16213e;
+                border-radius: 16px;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+                margin: 20px auto;
+                overflow: hidden;
+            }
+
+            .top-bar {
+                border-radius: 16px 16px 0 0;
+            }
+
+            .main-content {
+                display: grid;
+                grid-template-columns: 1fr 400px;
+                gap: 20px;
+                padding: 24px;
+                padding-bottom: 24px;
+            }
+
+            .left-column {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .right-column {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .gcode-display {
+                min-height: 400px;
+                font-size: 15px;
+            }
+
+            .ai-section {
+                position: sticky;
+                top: 20px;
+            }
+
+            /* Zobrazit integrovanou navigaci v desktop režimu */
+            .integrated-nav {
+                display: flex !important;
+            }
+
+            /* Skrýt mobilní navigaci v desktop režimu */
+            .mobile-only {
+                display: none !important;
+            }
+
+            .section-icons {
+                gap: 12px;
+            }
+
+            .icon-btn {
+                width: 44px;
+                height: 44px;
+                font-size: 22px;
+            }
+
+            .settings-content {
+                max-width: 600px;
+            }
+
+            .side-menu {
+                max-width: 400px;
+            }
+
+            .left-panel {
+                max-width: 400px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .app-container {
+                max-width: 1400px;
+            }
+
+            .main-content {
+                grid-template-columns: 1fr 450px;
+                gap: 24px;
+                padding: 32px;
+            }
+
+            .gcode-display {
+                min-height: 500px;
+                font-size: 16px;
+            }
+        }
+
+        /* Skrytý file input */
+        #fileInput {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Horní lišta -->
+        <div class="top-bar">
+            <button type="button" class="current-mode" id="currentMode">💬 AI Chat</button>
+            <button class="settings-top-btn" id="settingsTopBtn">⚙️</button>
+        </div>
+
+        <!-- Hlavní obsah -->
+        <div class="main-content">
+            <!-- CNC View -->
+            <div class="cnc-view">
+                <div class="left-column">
+                    <!-- G-kód display -->
+                    <textarea class="gcode-display" id="gcodeDisplay" spellcheck="false">; Karusel Podložky
+G54 T1 D1 G95 M41
+G97 S60 M4
+G91 G1 X-300 F1
+M30</textarea>
+                </div>
+
+                <div class="right-column">
+                    <!-- AI CNC Sekce -->
+                    <div class="ai-section">
+                        <div class="ai-header">
+                            <div class="ai-icon">🤖</div>
+                            <div class="ai-title">AI CNC</div>
+                            <div class="machine-info">
+                                <div class="machine-info-item">
+                                    <span class="machine-info-icon">🔧</span>
+                                    <span id="machineTypeDisplay">Karusel</span>
+                                </div>
+                                <div class="machine-info-item">
+                                    <span class="machine-info-icon">💻</span>
+                                    <span id="controlSystemDisplay">Sinumerik</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ai-controls">
+                            <select class="model-select" id="modelSelect">
+                                <option value="gemini-2-flash-exp">Gemini 2.0 Flash Exp (15 req/min)</option>
+                                <option value="gemini-3-pro">Gemini 3 Pro (2 req/min)</option>
+                                <option value="gemini-2-5-flash">Gemini 2.5 Flash (10 req/min)</option>
+                                <option value="gemini-2-5-flash-lite">Gemini 2.5 Flash Lite (15 req/min)</option>
+                            </select>
+                            <div class="editor-toggle">
+                                <input type="checkbox" id="editorToggle" checked>
+                                <label for="editorToggle">EDITOR: ZAP</label>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <input type="text" class="input-field" id="promptInput" 
+                                   placeholder="Ptejte se na kód...">
+                        </div>
+
+                        <div class="action-buttons">
+                            <button class="action-icon-btn" id="flashBtn">⚡</button>
+                            <button class="action-icon-btn" id="photoBtn">📷</button>
+                            <button class="analyze-btn" id="analyzeBtn">ANALYZOVAT</button>
+                            <button class="action-icon-btn" id="visualizationBtn">👁️</button>
+                            <button class="action-icon-btn" id="folderBtn">📁</button>
+                        </div>
+
+                        <!-- Navigace integrovaná do AI sekce -->
+                        <div class="integrated-nav">
+                            <button type="button" class="nav-item" id="leftPanelBtn">
+                                <div class="nav-icon">☰</div>
+                                <div class="nav-label">Panel</div>
+                            </button>
+                            <button type="button" class="nav-item" id="quickActionsBtn">
+                                <div class="nav-icon">⚡</div>
+                                <div class="nav-label">Akce</div>
+                            </button>
+                            <button type="button" class="nav-item" id="keyboardBtn">
+                                <div class="nav-icon">⌨️</div>
+                                <div class="nav-label">Klávesnice</div>
+                            </button>
+                            <button type="button" class="nav-item" id="navManual" data-mode="manual">
+                                <div class="nav-icon">📚</div>
+                                <div class="nav-label">Příručka</div>
+                            </button>
+                            <button type="button" class="nav-item" id="menuBtn">
+                                <div class="nav-icon">☰</div>
+                                <div class="nav-label">Menu</div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat View -->
+            <div class="chat-view" id="chatView">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="chat-placeholder">
+                        💬 Začněte konverzaci s AI<br>
+                        <small>Ptejte se na cokoliv...</small>
+                    </div>
+                </div>
+                
+                <!-- AI Chat Sekce -->
+                <div class="ai-section">
+                    <div class="ai-header">
+                        <div class="ai-icon">💬</div>
+                        <div class="ai-title">AI Chat</div>
+                    </div>
+
+                    <div class="ai-controls">
+                        <select class="model-select" id="modelSelectChat">
+                            <option value="gemini-2-flash-exp">Gemini 2.0 Flash Exp (15 req/min)</option>
+                            <option value="gemini-3-pro">Gemini 3 Pro (2 req/min)</option>
+                            <option value="gemini-2-5-flash">Gemini 2.5 Flash (10 req/min)</option>
+                            <option value="gemini-2-5-flash-lite">Gemini 2.5 Flash Lite (15 req/min)</option>
+                        </select>
+                        <div class="editor-toggle">
+                            <input type="checkbox" id="editorToggleChat">
+                            <label for="editorToggleChat">EDITOR: VYP</label>
+                        </div>
+                    </div>
+
+                    <div class="chat-input-area">
+                        <textarea class="chat-input" id="chatInput" placeholder="Napište zprávu..." rows="1"></textarea>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="action-icon-btn" id="flashBtnChat">⚡</button>
+                        <button class="action-icon-btn" id="photoBtnChat">📷</button>
+                        <button class="analyze-btn" id="sendChatBtn">ODESLAT</button>
+                        <button class="action-icon-btn" id="clearChatBtn" title="Vymazat chat">🗑️</button>
+                        <button class="action-icon-btn" id="folderBtnChat">📁</button>
+                    </div>
+
+                    <!-- Navigace integrovaná do AI sekce -->
+                    <div class="integrated-nav">
+                        <button type="button" class="nav-item" id="leftPanelBtnChat">
+                            <div class="nav-icon">☰</div>
+                            <div class="nav-label">Panel</div>
+                        </button>
+                        <button type="button" class="nav-item" id="quickActionsBtnChat">
+                            <div class="nav-icon">⚡</div>
+                            <div class="nav-label">Akce</div>
+                        </button>
+                        <button type="button" class="nav-item" id="navManualChat" data-mode="manual">
+                            <div class="nav-icon">📚</div>
+                            <div class="nav-label">Příručka</div>
+                        </button>
+                        <button type="button" class="nav-item" id="menuBtnChat">
+                            <div class="nav-icon">☰</div>
+                            <div class="nav-label">Menu</div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Overlay pro menu -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <!-- Overlay pro levý panel -->
+    <div class="menu-overlay" id="leftPanelOverlay"></div>
+
+    <!-- Levý výsuvný panel -->
+    <div class="side-menu left-panel" id="leftPanel">
+        <div class="menu-header">
+            <div class="menu-title">🧮 Panel nástrojů</div>
+            <button class="menu-close" id="leftPanelClose">×</button>
+        </div>
+        <div class="menu-content">
+            <div class="panel-section">
+                <button class="panel-btn" id="calculatorBtn">
+                    <span class="panel-icon">🧮</span>
+                    <span class="panel-label">Kalkulačka</span>
+                </button>
+                <button class="panel-btn" id="saveBtnPanel">
+                    <span class="panel-icon">💾</span>
+                    <span class="panel-label">Uložit projekt</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Výsuvné menu -->
+    <div class="side-menu" id="sideMenu">
+        <div class="menu-header">
+            <div class="menu-title">Menu</div>
+            <button class="menu-close" id="menuClose">×</button>
+        </div>
+        <div class="menu-content">
+            <div class="menu-placeholder">Zatím prázdné<br>Položky budou přidány později</div>
+        </div>
+    </div>
+
+    <!-- Modální okno nastavení -->
+    <div class="settings-modal" id="settingsModal">
+        <div class="settings-content">
+            <div class="settings-header">
+                <div class="settings-title">⚙️ Nastavení</div>
+                <button class="settings-close" id="settingsClose">×</button>
+            </div>
+            <div class="settings-body">
+                <!-- AI Nastavení -->
+                <div class="settings-section">
+                    <div class="settings-section-title">🤖 Nastavení AI</div>
+                    
+                    <div class="settings-item">
+                        <label class="settings-label">Výchozí AI model</label>
+                        <select class="settings-select" id="defaultAiModel">
+                            <option value="flash-lite">Gemini Flash Lite</option>
+                            <option value="gemini-pro">Gemini Pro</option>
+                            <option value="claude-sonnet">Claude Sonnet 4.5</option>
+                            <option value="claude-opus">Claude Opus 4</option>
+                        </select>
+                        <div class="settings-description">Model použitý při generování programů</div>
+                    </div>
+
+                    <div class="settings-item">
+                        <label class="settings-label">Jazyk komunikace</label>
+                        <select class="settings-select" id="aiLanguage">
+                            <option value="cs">Čeština</option>
+                            <option value="en">English</option>
+                            <option value="de">Deutsch</option>
+                            <option value="sk">Slovenčina</option>
+                        </select>
+                    </div>
+
+                    <div class="settings-item">
+                        <label class="settings-label">Teplota modelu</label>
+                        <select class="settings-select" id="aiTemperature">
+                            <option value="0.3">0.3 - Přesné, konzistentní</option>
+                            <option value="0.7" selected>0.7 - Vyvážené</option>
+                            <option value="1.0">1.0 - Kreativní</option>
+                        </select>
+                        <div class="settings-description">Vyšší hodnota = více kreativní odpovědi</div>
+                    </div>
+                </div>
+
+                <!-- Nastavení stroje -->
+                <div class="settings-section">
+                    <div class="settings-section-title">🔧 Nastavení stroje</div>
+                    
+                    <div class="settings-item">
+                        <label class="settings-label">Typ stroje</label>
+                        <select class="settings-select" id="machineType">
+                            <option value="lathe">Soustruh (Lathe)</option>
+                            <option value="carousel" selected>Karusel</option>
+                            <option value="mill">Frézka (Mill)</option>
+                            <option value="swiss">Švýcarský automat</option>
+                            <option value="turning-center">Obráběcí centrum</option>
+                        </select>
+                    </div>
+
+                    <div class="settings-item">
+                        <label class="settings-label">Počet os</label>
+                        <select class="settings-select" id="machineAxes">
+                            <option value="2">2 osy (X, Z)</option>
+                            <option value="3">3 osy (X, Y, Z)</option>
+                            <option value="4">4 osy (X, Y, Z, C)</option>
+                            <option value="5">5 os</option>
+                        </select>
+                    </div>
+
+                    <div class="settings-item">
+                        <label class="settings-label">Maximální otáčky (RPM)</label>
+                        <input type="number" class="settings-input" id="maxRpm" placeholder="6000" value="6000">
+                    </div>
+
+                    <div class="settings-item">
+                        <label class="settings-label">Maximální posuv (mm/min)</label>
+                        <input type="number" class="settings-input" id="maxFeed" placeholder="3000" value="3000">
+                    </div>
+                </div>
+
+                <!-- Nastavení řídicího systému -->
+                <div class="settings-section">
+                    <div class="settings-section-title">💻 Operační systém</div>
+                    
+                    <div class="settings-item">
+                        <label class="settings-label">Typ řízení</label>
+                        <select class="settings-select" id="controlSystem">
+                            <option value="fanuc">Fanuc</option>
+                            <option value="sinumerik" selected>Sinumerik (840D / 828D)</option>
+                            <option value="heidenhain">Heidenhain</option>
+                            <option value="haas">Haas</option>
+                            <option value="mazak">Mazak</option>
+                            <option value="okuma">Okuma</option>
+                        </select>
+                    </div>
+
+                    <div class="settings-item">
+                        <label class="settings-label">Formát G-kódu</label>
+                        <select class="settings-select" id="gcodeFormat">
+                            <option value="iso">ISO (G-code)</option>
+                            <option value="eia">EIA</option>
+                            <option value="heidenhain">Heidenhain (conversational)</option>
+                        </select>
+                    </div>
+
+                    <div class="settings-item">
+                        <label class="settings-label">Číslo programu</label>
+                        <input type="text" class="settings-input" id="programPrefix" placeholder="O" value="O">
+                        <div class="settings-description">Prefix pro čísla programů (např. O, %, :)</div>
+                    </div>
+
+                    <div class="settings-item">
+                        <label class="settings-label">Desetinný oddělovač</label>
+                        <select class="settings-select" id="decimalSeparator">
+                            <option value=".">Tečka (.)</option>
+                            <option value=",">Čárka (,)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skrytý file input -->
+    <input type="file" id="fileInput" accept=".nc,.txt,.gcode">
+
+    <script>
+        // Nastavení skutečné výšky viewportu pro mobilní zařízení
+        function setVhProperty() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+
+        // Nastavit při načtení
+        setVhProperty();
+
+        // Aktualizovat při změně orientace nebo velikosti
+        window.addEventListener('resize', setVhProperty);
+        window.addEventListener('orientationchange', setVhProperty);
+
+        // Nastavit výchozí mobilní zobrazení (vždy)
+        document.body.classList.add('force-mobile');
+
+        // Načtení uloženého projektu při startu
+        function loadSavedProject() {
+            try {
+                const savedProject = localStorage.getItem('cnc-ai-project');
+                if (savedProject) {
+                    const project = JSON.parse(savedProject);
+                    
+                    // Načtení G-kódu
+                    if (project.gcode) {
+                        document.getElementById('gcodeDisplay').value = project.gcode;
+                    }
+                    
+                    // Načtení modelu
+                    if (project.model) {
+                        document.getElementById('modelSelect').value = project.model;
+                    }
+                    
+                    // Načtení stavu editoru
+                    if (project.editorEnabled !== undefined) {
+                        const editorToggle = document.getElementById('editorToggle');
+                        editorToggle.checked = project.editorEnabled;
+                        editorToggle.nextElementSibling.textContent = 
+                            project.editorEnabled ? 'EDITOR: ZAP' : 'EDITOR: VYP';
+                    }
+                    
+                    // Načtení typu ovládání
+                    if (project.controlType) {
+                        const karuselBtn = document.getElementById('karuselBtn');
+                        const sinumerikBtn = document.getElementById('sinumerikBtn');
+                        
+                        if (project.controlType.includes('Sinumerik')) {
+                            sinumerikBtn.classList.add('active');
+                            karuselBtn.classList.remove('active');
+                        } else {
+                            karuselBtn.classList.add('active');
+                            sinumerikBtn.classList.remove('active');
+                        }
+                    }
+                    
+                    console.log('Projekt načten z localStorage');
+                }
+            } catch (error) {
+                console.error('Chyba při načítání projektu:', error);
+            }
+        }
+
+        // Načíst uložený projekt
+        loadSavedProject();
+
+        // Editor toggle
+        const editorToggle = document.getElementById('editorToggle');
+        const editorLabel = editorToggle.nextElementSibling;
+
+        editorToggle.addEventListener('change', (e) => {
+            editorLabel.textContent = e.target.checked ? 'EDITOR: ZAP' : 'EDITOR: VYP';
+        });
+
+        // Analyze button
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const promptInput = document.getElementById('promptInput');
+
+        analyzeBtn.addEventListener('click', () => {
+            const prompt = promptInput.value.trim();
+            const gcode = document.getElementById('gcodeDisplay').value;
+            const model = document.getElementById('modelSelect').value;
+            const editorEnabled = document.getElementById('editorToggle').checked;
+            
+            if (prompt) {
+                console.log('Analyzuji:', prompt);
+                
+                // Přidat do historie CNC
+                const historyItem = {
+                    timestamp: new Date().toISOString(),
+                    type: 'cnc',
+                    prompt: prompt,
+                    model: model,
+                    editorEnabled: editorEnabled,
+                    gcode: editorEnabled ? gcode : null,
+                    response: null // Zde bude AI odpověď
+                };
+                
+                saveToCncHistory(historyItem);
+                
+                alert('Analyzuji: ' + prompt);
+            } else {
+                alert('Zadejte prosím text pro analýzu');
+            }
+        });
+
+        // Flash button
+        document.getElementById('flashBtn').addEventListener('click', () => {
+            console.log('Flash akce');
+        });
+
+        // Photo button
+        document.getElementById('photoBtn').addEventListener('click', () => {
+            console.log('Foto akce');
+        });
+
+        // Folder button - načtení souboru
+        const folderBtn = document.getElementById('folderBtn');
+        const fileInput = document.getElementById('fileInput');
+
+        folderBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const content = event.target.result;
+                    document.getElementById('gcodeDisplay').value = content;
+                    console.log('Soubor načten:', file.name);
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        // Visualization button
+        document.getElementById('visualizationBtn').addEventListener('click', () => {
+            console.log('Vizualizace');
+            alert('Vizualizace G-kódu - funkcionalita bude přidána');
+        });
+
+        // Panel tlačítka
+        document.getElementById('calculatorBtn')?.addEventListener('click', () => {
+            console.log('Kalkulačka');
+            alert('Kalkulačka - funkcionalita bude přidána');
+            leftPanel.classList.remove('open');
+            leftPanelOverlay.classList.remove('show');
+            document.body.style.overflow = '';
+        });
+
+        // Nastavení v horní liště
+        const settingsTopBtn = document.getElementById('settingsTopBtn');
+        if (settingsTopBtn) {
+            settingsTopBtn.addEventListener('click', () => {
+                console.log('Nastavení');
+                document.getElementById('settingsModal').classList.add('show');
+                document.body.style.overflow = 'hidden';
+            });
+        }
+
+        document.getElementById('saveBtnPanel')?.addEventListener('click', () => {
+            const content = document.getElementById('gcodeDisplay').value;
+            const modelSelect = document.getElementById('modelSelect').value;
+            const editorEnabled = document.getElementById('editorToggle').checked;
+            const controlType = document.querySelector('.switch-btn.active')?.textContent.trim() || 'Karusel';
+            
+            const project = {
+                gcode: content,
+                model: modelSelect,
+                editorEnabled: editorEnabled,
+                controlType: controlType,
+                timestamp: new Date().toISOString(),
+                version: '1.0'
+            };
+            
+            try {
+                localStorage.setItem('cnc-ai-project', JSON.stringify(project));
+                alert('✓ Projekt uložen');
+                leftPanel.classList.remove('open');
+                leftPanelOverlay.classList.remove('show');
+                document.body.style.overflow = '';
+                console.log('Projekt uložen');
+            } catch (error) {
+                console.error('Chyba při ukládání:', error);
+                alert('Nepodařilo se uložit projekt');
+            }
+        });
+
+        // Modální okno nastavení
+        const settingsModal = document.getElementById('settingsModal');
+        const settingsClose = document.getElementById('settingsClose');
+
+        // Zavření nastavení - křížek
+        settingsClose.addEventListener('click', () => {
+            settingsModal.classList.remove('show');
+            document.body.style.overflow = '';
+        });
+
+        // Zavření nastavení - kliknutí mimo okno
+        settingsModal.addEventListener('click', (e) => {
+            if (e.target === settingsModal) {
+                settingsModal.classList.remove('show');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Načtení uložených nastavení
+        function loadSettings() {
+            try {
+                const settings = localStorage.getItem('cnc-ai-settings');
+                if (settings) {
+                    const parsed = JSON.parse(settings);
+                    
+                    // AI nastavení
+                    if (parsed.defaultAiModel) document.getElementById('defaultAiModel').value = parsed.defaultAiModel;
+                    if (parsed.aiLanguage) document.getElementById('aiLanguage').value = parsed.aiLanguage;
+                    if (parsed.aiTemperature) document.getElementById('aiTemperature').value = parsed.aiTemperature;
+                    
+                    // Nastavení stroje
+                    if (parsed.machineType) document.getElementById('machineType').value = parsed.machineType;
+                    if (parsed.machineAxes) document.getElementById('machineAxes').value = parsed.machineAxes;
+                    if (parsed.maxRpm) document.getElementById('maxRpm').value = parsed.maxRpm;
+                    if (parsed.maxFeed) document.getElementById('maxFeed').value = parsed.maxFeed;
+                    
+                    // Operační systém
+                    if (parsed.controlSystem) document.getElementById('controlSystem').value = parsed.controlSystem;
+                    if (parsed.gcodeFormat) document.getElementById('gcodeFormat').value = parsed.gcodeFormat;
+                    if (parsed.programPrefix) document.getElementById('programPrefix').value = parsed.programPrefix;
+                    if (parsed.decimalSeparator) document.getElementById('decimalSeparator').value = parsed.decimalSeparator;
+                    
+                    console.log('Nastavení načteno');
+                }
+            } catch (error) {
+                console.error('Chyba při načítání nastavení:', error);
+            }
+        }
+
+        // Uložení nastavení při změně
+        function saveSettings() {
+            const settings = {
+                // AI nastavení
+                defaultAiModel: document.getElementById('defaultAiModel').value,
+                aiLanguage: document.getElementById('aiLanguage').value,
+                aiTemperature: document.getElementById('aiTemperature').value,
+                
+                // Nastavení stroje
+                machineType: document.getElementById('machineType').value,
+                machineAxes: document.getElementById('machineAxes').value,
+                maxRpm: document.getElementById('maxRpm').value,
+                maxFeed: document.getElementById('maxFeed').value,
+                
+                // Operační systém
+                controlSystem: document.getElementById('controlSystem').value,
+                gcodeFormat: document.getElementById('gcodeFormat').value,
+                programPrefix: document.getElementById('programPrefix').value,
+                decimalSeparator: document.getElementById('decimalSeparator').value
+            };
+            
+            localStorage.setItem('cnc-ai-settings', JSON.stringify(settings));
+            console.log('Nastavení uloženo');
+            
+            // Aktualizovat zobrazení typu stroje a řízení
+            updateMachineDisplay();
+        }
+
+        // Funkce pro aktualizaci zobrazení typu stroje a řízení
+        function updateMachineDisplay() {
+            const machineType = document.getElementById('machineType');
+            const controlSystem = document.getElementById('controlSystem');
+            const machineTypeDisplay = document.getElementById('machineTypeDisplay');
+            const controlSystemDisplay = document.getElementById('controlSystemDisplay');
+            
+            if (machineType && machineTypeDisplay) {
+                const selectedOption = machineType.options[machineType.selectedIndex];
+                machineTypeDisplay.textContent = selectedOption.text;
+            }
+            
+            if (controlSystem && controlSystemDisplay) {
+                const selectedOption = controlSystem.options[controlSystem.selectedIndex];
+                controlSystemDisplay.textContent = selectedOption.text.split(' ')[0]; // Jen název bez závorek
+            }
+        }
+
+        // Přidání event listenerů pro auto-save
+        document.querySelectorAll('.settings-select, .settings-input').forEach(element => {
+            element.addEventListener('change', saveSettings);
+        });
+
+        // Načíst nastavení při startu
+        loadSettings();
+        
+        // Aktualizovat zobrazení typu stroje a řízení
+        updateMachineDisplay();
+
+        // Funkce pro ukládání CNC historie
+        function saveToCncHistory(item) {
+            try {
+                let history = JSON.parse(localStorage.getItem('cnc-ai-cnc-history') || '[]');
+                history.unshift(item); // Přidat na začátek
+                // Omezit na 100 položek
+                if (history.length > 100) {
+                    history = history.slice(0, 100);
+                }
+                localStorage.setItem('cnc-ai-cnc-history', JSON.stringify(history));
+                console.log('CNC historie uložena');
+            } catch (error) {
+                console.error('Chyba při ukládání CNC historie:', error);
+            }
+        }
+
+        // Funkce pro ukládání Chat historie
+        function saveToChatHistory(item) {
+            try {
+                let history = JSON.parse(localStorage.getItem('cnc-ai-chat-history') || '[]');
+                history.unshift(item); // Přidat na začátek
+                // Omezit na 100 položek
+                if (history.length > 100) {
+                    history = history.slice(0, 100);
+                }
+                localStorage.setItem('cnc-ai-chat-history', JSON.stringify(history));
+                console.log('Chat historie uložena');
+            } catch (error) {
+                console.error('Chyba při ukládání Chat historie:', error);
+            }
+        }
+
+        // Funkce pro načtení CNC historie
+        function getCncHistory() {
+            try {
+                return JSON.parse(localStorage.getItem('cnc-ai-cnc-history') || '[]');
+            } catch (error) {
+                console.error('Chyba při načítání CNC historie:', error);
+                return [];
+            }
+        }
+
+        // Funkce pro načtení Chat historie
+        function getChatHistory() {
+            try {
+                return JSON.parse(localStorage.getItem('cnc-ai-chat-history') || '[]');
+            } catch (error) {
+                console.error('Chyba při načítání Chat historie:', error);
+                return [];
+            }
+        }
+
+        // Funkce pro vymazání historie
+        function clearCncHistory() {
+            if (confirm('Opravdu chcete vymazat celou CNC historii?')) {
+                localStorage.removeItem('cnc-ai-cnc-history');
+                console.log('CNC historie vymazána');
+                alert('CNC historie byla vymazána');
+            }
+        }
+
+        function clearChatHistory() {
+            if (confirm('Opravdu chcete vymazat celou Chat historii?')) {
+                localStorage.removeItem('cnc-ai-chat-history');
+                console.log('Chat historie vymazána');
+                alert('Chat historie byla vymazána');
+            }
+        }
+
+        // Export historie do JSON
+        function exportHistory() {
+            const cncHistory = getCncHistory();
+            const chatHistory = getChatHistory();
+            const exportData = {
+                cnc: cncHistory,
+                chat: chatHistory,
+                exportDate: new Date().toISOString()
+            };
+            
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `cnc-ai-history-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        console.log('Aplikace načtena');
+        console.log('CNC historie:', getCncHistory().length, 'položek');
+        console.log('Chat historie:', getChatHistory().length, 'položek');
+
+        // Navigace a přepínání režimů
+        const currentModeDisplay = document.getElementById('currentMode');
+        const navManual = document.getElementById('navManual');
+
+        // Proměnná pro sledování aktuálního AI režimu
+        let currentAiMode = 'ai-chat'; // Výchozí
+
+        // Funkce pro přepnutí režimu
+        function switchMode(mode, icon, label) {
+            currentModeDisplay.innerHTML = `${icon} ${label}`;
+            
+            // Odstranění active z položek
+            if (navManual) {
+                navManual.classList.remove('active');
+            }
+        }
+
+        // Funkce pro přepnutí mezi AI Chat a AI CNC
+        function toggleAiMode() {
+            const cncView = document.querySelector('.cnc-view');
+            const chatView = document.getElementById('chatView');
+            
+            if (currentAiMode === 'ai-chat') {
+                // Přepnout na AI CNC
+                currentAiMode = 'ai-cnc';
+                currentModeDisplay.innerHTML = '🤖 AI CNC';
+                cncView.classList.remove('hidden');
+                chatView.classList.remove('active');
+                console.log('Přepnuto na AI CNC');
+            } else {
+                // Přepnout na AI Chat
+                currentAiMode = 'ai-chat';
+                currentModeDisplay.innerHTML = '💬 AI Chat';
+                cncView.classList.add('hidden');
+                chatView.classList.add('active');
+                console.log('Přepnuto na AI Chat');
+            }
+        }
+
+        // Kliknutí na text nahoře v horní liště - přepíná mezi AI Chat a AI CNC
+        currentModeDisplay.addEventListener('click', toggleAiMode);
+
+        // Chat funkcionalita
+        const chatInput = document.getElementById('chatInput');
+        const sendChatBtn = document.getElementById('sendChatBtn');
+        const chatMessages = document.getElementById('chatMessages');
+        const editorToggleChat = document.getElementById('editorToggleChat');
+
+        // Editor toggle v chatu
+        editorToggleChat.addEventListener('change', (e) => {
+            const label = e.target.nextElementSibling;
+            if (e.target.checked) {
+                label.textContent = 'EDITOR: ZAP';
+                console.log('Editor kontext zapnut - AI vidí obsah G-kódu');
+            } else {
+                label.textContent = 'EDITOR: VYP';
+                console.log('Editor kontext vypnut');
+            }
+        });
+
+        function sendMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+
+            // Odstranit placeholder
+            const placeholder = chatMessages.querySelector('.chat-placeholder');
+            if (placeholder) placeholder.remove();
+
+            // Přidat kontext editoru pokud je zapnutý
+            let fullMessage = message;
+            if (editorToggleChat.checked) {
+                const gcodeContent = document.getElementById('gcodeDisplay').value;
+                fullMessage = `[Kontext z editoru: ${gcodeContent}]\n\n${message}`;
+            }
+
+            // Přidat uživatelskou zprávu
+            const userMsg = document.createElement('div');
+            userMsg.className = 'chat-message user';
+            userMsg.innerHTML = `
+                <div class="chat-avatar">👤</div>
+                <div class="chat-bubble">${message}</div>
+            `;
+            chatMessages.appendChild(userMsg);
+
+            // Vymazat input
+            chatInput.value = '';
+            chatInput.style.height = 'auto';
+
+            // Scrollovat dolů
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Simulace AI odpovědi (placeholder - později připojíš skutečné API)
+            setTimeout(() => {
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'chat-message ai';
+                let response = 'Děkuji za vaši zprávu. Toto je placeholder odpověď.';
+                if (editorToggleChat.checked) {
+                    response += ' Vidím obsah z editoru G-kódu a mohu na něj reagovat.';
+                }
+                aiMsg.innerHTML = `
+                    <div class="chat-avatar">🤖</div>
+                    <div class="chat-bubble">${response}</div>
+                `;
+                chatMessages.appendChild(aiMsg);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // Přidat do historie chatu
+                const historyItem = {
+                    timestamp: new Date().toISOString(),
+                    type: 'chat',
+                    userMessage: message,
+                    aiResponse: response,
+                    model: document.getElementById('modelSelectChat').value,
+                    editorEnabled: editorToggleChat.checked,
+                    gcode: editorToggleChat.checked ? document.getElementById('gcodeDisplay').value : null
+                };
+                
+                saveToChatHistory(historyItem);
+            }, 1000);
+        }
+
+        sendChatBtn.addEventListener('click', sendMessage);
+        
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // Auto-resize textarea
+        chatInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+
+        // Chat tlačítka - event listenery
+        document.getElementById('flashBtnChat')?.addEventListener('click', () => {
+            console.log('Flash v chatu');
+        });
+
+        document.getElementById('photoBtnChat')?.addEventListener('click', () => {
+            console.log('Foto v chatu');
+        });
+
+        document.getElementById('folderBtnChat')?.addEventListener('click', () => {
+            console.log('Složka v chatu');
+        });
+
+        // Vymazání chatu
+        document.getElementById('clearChatBtn')?.addEventListener('click', () => {
+            if (confirm('Opravdu chcete vymazat celou konverzaci?')) {
+                // Vymazat zprávy z UI
+                chatMessages.innerHTML = `
+                    <div class="chat-placeholder">
+                        💬 Začněte konverzaci s AI<br>
+                        <small>Ptejte se na cokoliv...</small>
+                    </div>
+                `;
+                console.log('Chat vymazán');
+            }
+        });
+
+        // Vymazání chatu
+        document.getElementById('clearChatBtn')?.addEventListener('click', () => {
+            if (confirm('Opravdu chcete vymazat celou konverzaci?')) {
+                chatMessages.innerHTML = `
+                    <div class="chat-placeholder">
+                        💬 Začněte konverzaci s AI<br>
+                        <small>Ptejte se na cokoliv...</small>
+                    </div>
+                `;
+                console.log('Chat vymazán');
+            }
+        });
+
+        // Chat navigace
+        document.getElementById('leftPanelBtnChat')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            leftPanel.classList.add('open');
+            leftPanelOverlay.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        });
+
+        document.getElementById('quickActionsBtnChat')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            alert('Rychlé akce - chat');
+        });
+
+        document.getElementById('navManualChat')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('Příručka - chat');
+        });
+
+        document.getElementById('menuBtnChat')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            sideMenu.classList.add('open');
+            menuOverlay.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        });
+
+        // Home (klávesnice) - smazáno
+
+        // Příručka
+        if (navManual) {
+            navManual.addEventListener('click', (e) => {
+                e.preventDefault();
+                switchMode('manual', '📚', 'Příručka');
+                navManual.classList.add('active');
+                console.log('Přepnuto na Příručku');
+            });
+        }
+
+        // Enter key pro analýzu
+        promptInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                analyzeBtn.click();
+            }
+        });
+
+        // Výsuvné menu
+        const menuBtn = document.getElementById('menuBtn');
+        const menuOverlay = document.getElementById('menuOverlay');
+        const sideMenu = document.getElementById('sideMenu');
+        const menuClose = document.getElementById('menuClose');
+
+        // Otevření menu
+        menuBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            sideMenu.classList.add('open');
+            menuOverlay.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        });
+
+        // Zavření menu - křížek
+        menuClose.addEventListener('click', () => {
+            sideMenu.classList.remove('open');
+            menuOverlay.classList.remove('show');
+            document.body.style.overflow = '';
+        });
+
+        // Zavření menu - kliknutí na overlay
+        menuOverlay.addEventListener('click', () => {
+            sideMenu.classList.remove('open');
+            menuOverlay.classList.remove('show');
+            document.body.style.overflow = '';
+        });
+
+        // Levý panel
+        const leftPanelBtn = document.getElementById('leftPanelBtn');
+        const leftPanelBtnMobile = document.getElementById('leftPanelBtnMobile');
+        const leftPanelOverlay = document.getElementById('leftPanelOverlay');
+        const leftPanel = document.getElementById('leftPanel');
+        const leftPanelClose = document.getElementById('leftPanelClose');
+
+        // Otevření levého panelu - desktop
+        leftPanelBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            leftPanel.classList.add('open');
+            leftPanelOverlay.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        });
+
+        // Otevření levého panelu - mobile
+        if (leftPanelBtnMobile) {
+            leftPanelBtnMobile.addEventListener('click', (e) => {
+                e.preventDefault();
+                leftPanel.classList.add('open');
+                leftPanelOverlay.classList.add('show');
+                document.body.style.overflow = 'hidden';
+            });
+        }
+
+        // Zavření levého panelu - křížek
+        leftPanelClose.addEventListener('click', () => {
+            leftPanel.classList.remove('open');
+            leftPanelOverlay.classList.remove('show');
+            document.body.style.overflow = '';
+        });
+
+        // Zavření levého panelu - kliknutí na overlay
+        leftPanelOverlay.addEventListener('click', () => {
+            leftPanel.classList.remove('open');
+            leftPanelOverlay.classList.remove('show');
+            document.body.style.overflow = '';
+        });
+
+        // Rychlé akce tlačítko
+        const quickActionsBtn = document.getElementById('quickActionsBtn');
+        const quickActionsBtnMobile = document.getElementById('quickActionsBtnMobile');
+        
+        quickActionsBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('Rychlé akce');
+            alert('Rychlé akce - funkcionalita bude přidána');
+        });
+
+        if (quickActionsBtnMobile) {
+            quickActionsBtnMobile.addEventListener('click', (e) => {
+                e.preventDefault();
+                console.log('Rychlé akce');
+                alert('Rychlé akce - funkcionalita bude přidána');
+            });
+        }
+
+        // Home tlačítko - mobile (klávesnice)
+        const keyboardBtn = document.getElementById('keyboardBtn');
+        if (keyboardBtn) {
+            keyboardBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                console.log('Klávesnice - funkcionalita bude přidána');
+                // Zde můžeš přidat funkcionalitu pro virtuální klávesnici nebo jiné akce
+            });
+        }
+
+        // Příručka - mobile
+        const navManualMobile = document.getElementById('navManualMobile');
+        if (navManualMobile) {
+            navManualMobile.addEventListener('click', (e) => {
+                e.preventDefault();
+                switchMode('manual', '📚', 'Příručka');
+                navManual.classList.add('active');
+                console.log('Přepnuto na Příručku');
+            });
+        }
+
+        // Menu - mobile
+        const menuBtnMobile = document.getElementById('menuBtnMobile');
+        if (menuBtnMobile) {
+            menuBtnMobile.addEventListener('click', (e) => {
+                e.preventDefault();
+                sideMenu.classList.add('open');
+                menuOverlay.classList.add('show');
+                document.body.style.overflow = 'hidden';
+            });
+        }
+    </script>
+</body>
+</html>

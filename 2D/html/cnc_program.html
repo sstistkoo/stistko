@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNC Program Analyzer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .file-input-container {
+            margin-bottom: 20px;
+        }
+
+        .file-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .button {
+            padding: 8px 16px;
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .button:hover {
+            background-color: #1565c0;
+        }
+
+        .file-input-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .file-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px dashed #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .selected-files {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .status {
+            padding: 10px;
+            background-color: #e3f2fd;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            color: #1976d2;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 16px;
+            font-weight: 500;
+            color: #666;
+        }
+
+        .tab.active {
+            color: #1976d2;
+            border-bottom: 2px solid #1976d2;
+            margin-bottom: -2px;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .program-link {
+            color: #1976d2;
+            text-decoration: none;
+            cursor: pointer;
+            display: block;
+            margin: 5px 0;
+        }
+
+        .program-link:hover {
+            text-decoration: underline;
+        }
+
+        .tool-info {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            border-left: 3px solid #1976d2;
+        }
+
+        .combined-program {
+            width: 100%;
+            height: 600px;
+            font-family: monospace;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+            resize: vertical;
+            white-space: pre;
+            overflow-wrap: normal;
+            overflow-x: auto;
+            line-height: 20px; /* Důležité pro výpočet scrollTop */
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 20px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 5px;
+            }
+
+            .container {
+                padding: 10px;
+                margin: 0;
+                border-radius: 0;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+                margin-bottom: 15px;
+            }
+
+            .tabs {
+                flex-direction: row;
+                overflow-x: auto;
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+                margin-bottom: 10px;
+            }
+
+            .tab {
+                flex: none;
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+
+            .tab-content {
+                padding: 10px;
+                border-radius: 0;
+            }
+
+            .combined-program {
+                height: calc(100vh - 200px);
+                font-size: 14px;
+                padding: 8px;
+                border-radius: 0;
+            }
+
+            .tool-info {
+                margin: 5px 0;
+                padding: 8px;
+            }
+
+            .program-link {
+                padding: 8px 0;
+                font-size: 14px;
+            }
+
+            .section-title {
+                font-size: 16px;
+                margin: 15px 0 8px 0;
+            }
+
+            .file-input-container {
+                margin-bottom: 15px;
+            }
+
+            .selected-files {
+                font-size: 12px;
+                padding: 8px;
+            }
+
+            .status {
+                padding: 8px;
+                font-size: 13px;
+                margin-bottom: 15px;
+            }
+        }
+
+        /* Tmavý režim */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .container,
+        body.dark-mode .tab-content {
+            background-color: #1e1e1e;
+        }
+
+        body.dark-mode .combined-program {
+            background-color: #2d2d2d;
+            color: #e0e0e0;
+            border-color: #404040;
+        }
+
+        body.dark-mode .tool-info {
+            background-color: #262626;
+        }
+
+        body.dark-mode .status {
+            background-color: #1a237e;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .tab {
+            color: #aaa;
+        }
+
+        body.dark-mode .tab.active {
+            color: #64b5f6;
+            border-bottom-color: #64b5f6;
+        }
+
+        /* Tlačítko přepínání režimu bylo odstraněno */
+
+        /* Menu */
+        .menu {
+            display: flex;
+            justify-content: center;
+            margin: 10px 0;
+        }
+
+        .menu-link {
+            color: #1976d2;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            background-color: #e3f2fd;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .menu-link:hover {
+            background-color: #bbdefb;
+        }
+
+        body.dark-mode .menu-link {
+            background-color: #1a237e;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .menu-link:hover {
+            background-color: #283593;
+        }
+
+        /* Navigační ikona */
+        .home-link {
+            position: fixed;
+            top: 10px;
+            left: 10px; /* Změna pozice */
+            transform: none; /* Odstraněn transform */
+            color: #1976d2;
+            text-decoration: none;
+            font-size: 24px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Přidáno pro centrování ikony */
+            /* gap: 8px; */ /* Odstraněno */
+            background: #e3f2fd;
+            padding: 10px; /* Změna z 8px 16px */
+            width: 44px; /* Pevná velikost pro kruh */
+            height: 44px; /* Pevná velikost pro kruh */
+            border-radius: 50%; /* Změna na kruh */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .home-link i {
+            font-size: 20px;
+            /* Styl pro span byl odstraněn */
+        }
+
+        .home-link:hover {
+            color: #1565c0;
+            background: #bbdefb;
+            transform: scale(1.05); /* Odstraněn translateX */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        body.dark-mode .home-link {
+            background: #1a237e;
+            color: #90caf9;
+        }
+
+        body.dark-mode .home-link:hover {
+            background: #283593;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="home-link">
+        <i class="fas fa-home"></i>
+        <!-- <span>Hlavní menu</span> --> <!-- Odstraněn text -->
+    </a>
+
+    <!--
+    <button class="theme-toggle" onclick="toggleDarkMode()" title="Přepnout tmavý režim">
+        🌓
+    </button>
+    -->
+
+    <div class="container">
+        <h1>Nože a absolutní hodnoty</h1> <!-- Změněn nadpis -->
+
+        <div class="file-input-container">
+            <label class="file-input-label">Vyberte CNC programy pro analýzu:</label>
+            <div class="file-buttons">
+                <button class="button" onclick="document.getElementById('allInput').click()">Vybrat soubory</button>
+            </div>
+            <input type="file" id="allInput" multiple accept=".mpf,.spf" style="display: none">
+            <div id="selectedFiles" class="selected-files">Žádné vybrané soubory</div>
+        </div>
+
+        <div id="status" class="status" style="display: none;"></div>
+
+        <div class="tabs">
+            <button class="tab active" data-tab="tools">Přehled programu</button>
+            <button class="tab" data-tab="program">Program</button>
+            <button class="tab" data-tab="g90">G90</button>
+        </div>
+
+        <div id="toolsContent" class="tab-content active">
+            <div class="section-title">Hlavní Programy</div>
+            <div id="mainProgramsList"></div>
+
+            <div class="section-title">Podprogramy a Nástroje</div>
+            <div id="subProgramsList"></div>
+        </div>
+
+        <div id="programContent" class="tab-content">
+            <textarea id="combinedProgram" class="combined-program"></textarea>
+        </div>
+
+        <div id="g90Content" class="tab-content">
+            <textarea id="g90Program" class="combined-program" readonly></textarea>
+        </div>
+    </div>
+
+    <script>
+        /* Odstraněna funkce toggleDarkMode()
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        }
+        */
+
+        /* Odstraněna kontrola localStorage pro dark mode
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+        }
+        */
+
+        class CNCProgramAnalyzer {
+            constructor() {
+                this.mainPrograms = {};
+                this.subPrograms = {};
+                this.toolInfo = {};
+                this.combinedProgram = '';
+                this.g90Program = '';
+                this.lineHeight = 20; // Definuje výšku řádku (musí odpovídat CSS)
+                this.initializeEventListeners();
+            }
+
+            initializeEventListeners() {
+                ['allInput'].forEach(inputId => {
+                    document.getElementById(inputId).addEventListener('change', (e) => this.handleFileChange(e));
+                });
+
+                document.querySelectorAll('.tab').forEach(tab => {
+                    tab.addEventListener('click', () => this.switchTab(tab.dataset.tab));
+                });
+
+                // Event listener pro kliknutí v editoru "Program"
+                document.getElementById('combinedProgram').addEventListener('click', (e) => {
+                    const textarea = e.target;
+                    const clickPosition = textarea.selectionStart;
+                    const text = textarea.value;
+                    const lines = text.split('\n');
+                    
+                    let currentProgram = null;
+                    let lineIndex = 0; // Relativní index řádku od hlavičky programu
+                    let programStartLine = 0; // Absolutní index řádku hlavičky programu
+                    let currentLineAbs = 0; // Absolutní index kliknutého řádku
+
+                    for (let i = 0; i < lines.length; i++) {
+                        const line = lines[i];
+                        if (line.startsWith('==================================================')) {
+                            const nextLine = lines[i + 1] || '';
+                            if (nextLine.includes('PROGRAM:')) {
+                                currentProgram = nextLine;
+                                programStartLine = i + 2; // Řádek, kde začíná kód programu
+                            }
+                        }
+
+                        const lineStart = text.substring(0, text.indexOf(line, (i > 0 ? lines.slice(0, i).join('\n').length : 0))).length;
+                        const lineEnd = lineStart + line.length;
+
+                        if (clickPosition >= lineStart && clickPosition <= lineEnd + 1) { // +1 pro \n
+                            currentLineAbs = i;
+                            lineIndex = i - programStartLine;
+                            textarea.setSelectionRange(lineStart, lineEnd);
+                            break;
+                        }
+                    }
+
+                    if (currentProgram && lineIndex >= 0) {
+                        // Najdeme odpovídající řádek v G90
+                        const g90Textarea = document.getElementById('g90Program');
+                        const g90Text = g90Textarea.value;
+                        const g90Lines = g90Text.split('\n');
+                        const g90ProgramHeader = currentProgram.replace('PROGRAM:', 'PROGRAM (G90):');
+
+                        let g90ProgramStart = -1;
+                        for (let i = 0; i < g90Lines.length; i++) {
+                            if (g90Lines[i] === g90ProgramHeader) {
+                                g90ProgramStart = i + 1; // První řádek kódu v G90
+                                break;
+                            }
+                        }
+                        
+                        if (g90ProgramStart !== -1) {
+                            const targetLineAbs = g90ProgramStart + lineIndex;
+                            
+                            if(targetLineAbs < g90Lines.length) {
+                                const targetLine = g90Lines[targetLineAbs];
+                                // Musíme najít přesnou pozici targetLine, protože indexof nemusí stačit
+                                let lineStart = 0;
+                                for(let i=0; i < targetLineAbs; i++) {
+                                    lineStart += g90Lines[i].length + 1; // +1 pro \n
+                                }
+                                const lineEnd = lineStart + targetLine.length;
+
+                                // Přepneme na G90 a označíme odpovídající řádek
+                                this.switchTab('g90');
+                                g90Textarea.focus();
+                                g90Textarea.setSelectionRange(lineStart, lineEnd);
+                                // Scrollujeme tak, aby byl řádek nahoře
+                                g90Textarea.scrollTop = targetLineAbs * this.lineHeight; 
+                            }
+                        }
+                    }
+                });
+            }
+
+            async handleFileChange(event) {
+                const files = event.target.files;
+                if (files.length === 0) return;
+
+                const fileList = Array.from(files).map(f => f.name).join(', ');
+                document.getElementById('selectedFiles').textContent = `Vybrané soubory: ${fileList}`;
+
+                this.showStatus('Načítání programů...');
+                this.mainPrograms = {};
+                this.subPrograms = {};
+                this.toolInfo = {};
+
+                for (let file of files) {
+                    try {
+                        const content = await this.readFile(file);
+                        if (file.name.toLowerCase().endsWith('.mpf')) {
+                            this.mainPrograms[file.name] = content;
+                        } else if (file.name.toLowerCase().endsWith('.spf')) {
+                            this.subPrograms[file.name] = content;
+                        }
+                    } catch (error) {
+                        console.error(`Chyba při čtení souboru ${file.name}:`, error);
+                        this.showStatus(`Chyba při čtení souboru ${file.name}`);
+                    }
+                }
+
+                this.processPrograms();
+                this.updateUI();
+                this.showStatus(`Načteno ${Object.keys(this.mainPrograms).length} hlavních programů a ${Object.keys(this.subPrograms).length} podprogramů`);
+            }
+
+            readFile(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.onerror = (e) => reject(e);
+                    reader.readAsText(file, 'UTF-8');
+                });
+            }
+
+            processPrograms() {
+                for (const [name, content] of Object.entries(this.subPrograms)) {
+                    this.toolInfo[name] = this.findToolInfo(content);
+                    const calls = this.findSubprogramCalls(name);
+                    // Přiřadíme první nalezené volání ke každému nástroji (tohle možná není ideální, ale odpovídá původní logice)
+                    this.toolInfo[name] = this.toolInfo[name].map(([tool, next]) =>
+                        [tool, next, calls[0] || '']);
+                }
+
+                this.createCombinedProgram();
+            }
+
+            findToolInfo(content) {
+                const lines = content.split('\n');
+                const tools = [];
+
+                for (let i = 0; i < lines.length; i++) {
+                    const line = lines[i];
+                    if (line.includes('T') && /T\d+/.test(line)) {
+                        const nextLine = i + 1 < lines.length ? lines[i + 1] : "";
+                        tools.push([line.trim(), nextLine.trim(), ""]);
+                    }
+                }
+
+                return tools;
+            }
+
+            findSubprogramCalls(subprogramName) {
+                const subBaseName = subprogramName.split('.')[0].toUpperCase(); // Normalizujeme na velká písmena
+                const subNumberMatch = subBaseName.match(/\d+/);
+
+                if (!subNumberMatch) return [];
+
+                const subNum = subNumberMatch[0];
+                const calls = [];
+
+                Object.values(this.mainPrograms).forEach(content => {
+                    const lines = content.split('\n');
+                    lines.forEach(line => {
+                        const upperLine = line.toUpperCase();
+                        // Hledáme L<číslo> nebo CALL "<jméno>"
+                        if (upperLine.includes(`L${subNum}`) ||
+                            (upperLine.includes('CALL') && upperLine.includes(`"${subBaseName}"`))) {
+                            calls.push(line.trim());
+                        }
+                    });
+                });
+
+                return calls;
+            }
+
+            convertToG90(content) {
+                const lines = content.split('\n');
+                let currentX = 0;
+                let currentY = 0; // Přidáno pro úplnost, i když se nepoužívá
+                let currentZ = 0;
+                let isG91Mode = false;
+                let lastAbsoluteZ = 0; // Sleduje poslední absolutní Z pozici pro G91
+
+                const convertedLines = lines.map(line => {
+                    const originalLine = line.trim();
+                    let g90Comment = ""; // Komentář pro G90
+                    let outputLine = originalLine;
+
+                    // Detekce G90
+                    if (originalLine.includes('G90')) {
+                        isG91Mode = false;
+                        // Aktualizovat absolutní pozice ze současného G90 řádku
+                        const xMatch = originalLine.match(/X([-\d.]+)/);
+                        const zMatch = originalLine.match(/Z([-\d.]+)/);
+                        if (xMatch) currentX = parseFloat(xMatch[1]);
+                        if (zMatch) {
+                            currentZ = parseFloat(zMatch[1]);
+                            lastAbsoluteZ = currentZ; // Uložit poslední absolutní Z pozici
+                        }
+                        return originalLine; // Vracíme původní řádek
+                    }
+
+                    // Detekce G91
+                    if (originalLine.includes('G91')) {
+                        isG91Mode = true;
+                        g90Comment = ` ; (puvodni: ${originalLine})`;
+                        
+                        const xMatch = originalLine.match(/X([-\d.]+)/);
+                        const zMatch = originalLine.match(/Z([-\d.]+)/);
+
+                        if (xMatch || zMatch) {
+                            // Tento G91 řádek obsahuje i pohyb
+                            if (xMatch) currentX += parseFloat(xMatch[1]);
+                            if (zMatch) {
+                                const zIncrement = parseFloat(zMatch[1]);
+                                currentZ = lastAbsoluteZ + zIncrement; // Použít poslední absolutní Z
+                                lastAbsoluteZ = currentZ; 
+                            }
+
+                            // Sestavit nový G90 řádek
+                            // *** OPRAVA FORMÁTOVÁNÍ N-BLOKU ***
+                            
+                            // 1. Najdeme N-blok
+                            let nBlock = '';
+                            const nMatch = originalLine.match(/N\d+/);
+                            if (nMatch) {
+                                nBlock = nMatch[0] + ' ';
+                            }
+
+                            // 2. Najdeme zbytek (bez N, G91, X, Z)
+                            const restOfLine = originalLine
+                                .replace(/N\d+/, '')
+                                .replace(/G91|X[-\d.]+|Z[-\d.]+/g, '')
+                                .trim();
+
+                            // 3. Sestavíme nový řádek
+                            let newLine = nBlock + 'G90'; // N-blok je první
+                            if (xMatch) newLine += ` X${currentX.toFixed(3)}`;
+                            if (zMatch) newLine += ` Z${currentZ.toFixed(3)}`;
+                            
+                            if (restOfLine) newLine += ' ' + restOfLine;
+                            
+                            outputLine = newLine.trim() + g90Comment;
+                            // *** KONEC OPRAVY FORMÁTOVÁNÍ ***
+                        } else {
+                            // Samotný G91 (bez X/Z)
+                            // *** OPRAVA FORMÁTOVÁNÍ PRO SAMOTNÝ G91 ***
+                            let nBlock = '';
+                            const nMatch = originalLine.match(/N\d+/);
+                            if (nMatch) {
+                                nBlock = nMatch[0] + ' ';
+                            }
+                            const restOfLine = originalLine.replace(/N\d+/, '').replace(/G91/g, '').trim();
+                            outputLine = (nBlock + 'G90 ' + restOfLine).trim() + g90Comment;
+                            // *** KONEC OPRAVY ***
+                        }
+                        return outputLine;
+                    }
+
+                    // Zpracování řádků, když jsme v G91 módu
+                    if (isG91Mode && /[XZ]/.test(originalLine)) {
+                        const xMatch = originalLine.match(/X([-\d.]+)/);
+                        const zMatch = originalLine.match(/Z([-\d.]+)/);
+
+                        if (xMatch || zMatch) {
+                            g90Comment = ` ; (puvodni: ${originalLine})`;
+                            let newLine = originalLine;
+
+                            if (xMatch) {
+                                currentX += parseFloat(xMatch[1]);
+                                newLine = newLine.replace(/X[-\d.]+/, `X${currentX.toFixed(3)}`);
+                            }
+                            if (zMatch) {
+                                const zIncrement = parseFloat(zMatch[1]);
+                                currentZ = lastAbsoluteZ + zIncrement;
+                                lastAbsoluteZ = currentZ;
+                                newLine = newLine.replace(/Z[-\d.]+/, `Z${currentZ.toFixed(3)}`);
+                            }
+                            
+                            // Ujistíme se, že G90 je modální (není třeba ho přidávat na každý řádek)
+                            outputLine = newLine + g90Comment;
+                        }
+                        return outputLine;
+                    }
+
+                    // *** OPRAVA CHYBY: Zpracování řádků, když jsme v G90 módu (!isG91Mode) ***
+                    if (!isG91Mode && /[XZ]/.test(originalLine)) {
+                        const xMatch = originalLine.match(/X([-\d.]+)/);
+                        const zMatch = originalLine.match(/Z([-\d.]+)/);
+                        
+                        if (xMatch) currentX = parseFloat(xMatch[1]);
+                        if (zMatch) {
+                            currentZ = parseFloat(zMatch[1]);
+                            lastAbsoluteZ = currentZ; // Musíme aktualizovat lastAbsoluteZ
+                        }
+                        // Není třeba nic měnit na řádku, jen aktualizovat interní stav
+                        return originalLine; 
+                    }
+                    // *** KONEC OPRAVY ***
+
+
+                    // Všechny ostatní řádky
+                    return originalLine;
+                });
+
+                return convertedLines.join('\n');
+            }
+
+
+            createCombinedProgram() {
+                const parts = [];
+
+                Object.entries(this.mainPrograms).forEach(([name, content]) => {
+                    parts.push(`\n${'='.repeat(50)}`);
+                    parts.push(`HLAVNÍ PROGRAM: ${name}`);
+                    parts.push('='.repeat(50));
+                    parts.push(content);
+                });
+
+                Object.entries(this.subPrograms).forEach(([name, content]) => {
+                    parts.push(`\n${'='.repeat(50)}`);
+                    parts.push(`PODPROGRAM: ${name}`);
+                    parts.push('='.repeat(50));
+                    parts.push(content);
+                });
+
+                this.combinedProgram = parts.join('\n');
+
+                // Vytvoření G90 verze
+                const g90Parts = [];
+                Object.entries(this.mainPrograms).forEach(([name, content]) => {
+                    g90Parts.push(`\n${'='.repeat(50)}`);
+                    g90Parts.push(`HLAVNÍ PROGRAM (G90): ${name}`);
+                    g90Parts.push('='.repeat(50));
+                    g90Parts.push(this.convertToG90(content));
+                });
+
+                Object.entries(this.subPrograms).forEach(([name, content]) => {
+                    g90Parts.push(`\n${'='.repeat(50)}`);
+                    g90Parts.push(`PODPROGRAM (G90): ${name}`);
+                    g90Parts.push('='.repeat(50));
+                    g90Parts.push(this.convertToG90(content));
+                });
+
+                this.g90Program = g90Parts.join('\n');
+            }
+
+            updateUI() {
+                const mainProgramsList = document.getElementById('mainProgramsList');
+                mainProgramsList.innerHTML = Object.keys(this.mainPrograms)
+                    .map(name => `<a class="program-link" onclick="analyzer.scrollToProgram('${name}', true)">${name}</a>`)
+                    .join('');
+
+                const subProgramsList = document.getElementById('subProgramsList');
+                subProgramsList.innerHTML = Object.entries(this.toolInfo)
+                    .map(([program, tools]) => `
+                        <div class="tool-info">
+                            <a class="program-link" onclick="analyzer.scrollToProgram('${program}', false)">${program}</a>
+                            ${tools.map(([toolLine, nextLine, callLine]) => `
+                                <div style="margin-left: 20px; margin-top: 10px;">
+                                    ${callLine ? `<div style="color: #2e7d32;">Volání: ${callLine}</div>` : ''}
+                                    <div style="font-family: monospace;">${toolLine}</div>
+                                    ${nextLine ? `<div style="font-family: monospace; color: #666;">${nextLine}</div>` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    `)
+                    .join('');
+
+                document.getElementById('combinedProgram').value = this.combinedProgram;
+                document.getElementById('g90Program').value = this.g90Program;
+            }
+
+            scrollToProgram(programName, isMain) {
+                const searchText = `${isMain ? 'HLAVNÍ PROGRAM' : 'PODPROGRAM'}: ${programName}`;
+                const searchTextG90 = `${isMain ? 'HLAVNÍ PROGRAM (G90)' : 'PODPROGRAM (G90)'}: ${programName}`;
+
+                const textarea = document.getElementById('combinedProgram');
+                const textareaG90 = document.getElementById('g90Program');
+
+                const text = textarea.value;
+                const textG90 = textareaG90.value;
+
+                const index = text.indexOf(searchText);
+                const indexG90 = textG90.indexOf(searchTextG90);
+
+                if (index !== -1 && indexG90 !== -1) {
+                    this.switchTab('program');
+                    textarea.focus();
+
+                    textarea.setSelectionRange(index, index + searchText.length);
+                    const linesBeforeProgram = text.substring(0, index).split('\n').length - 1;
+                    textarea.scrollTop = linesBeforeProgram * this.lineHeight;
+
+                    // Synchronizujeme G90
+                    const linesBeforeG90 = textG90.substring(0, indexG90).split('\n').length - 1;
+                    textareaG90.setSelectionRange(indexG90, indexG90 + searchTextG90.length);
+                    textareaG90.scrollTop = linesBeforeG90 * this.lineHeight;
+                }
+            }
+
+            switchTab(tabId) {
+                document.querySelectorAll('.tab').forEach(tab => {
+                    tab.classList.toggle('active', tab.dataset.tab === tabId);
+                });
+
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.toggle('active', content.id === `${tabId}Content`);
+                });
+
+                // Při přepnutí na G90 ze záložky Program
+                if (tabId === 'g90' && document.querySelector('.tab[data-tab="program"]').classList.contains('active')) {
+                    const programTextarea = document.getElementById('combinedProgram');
+                    const g90Textarea = document.getElementById('g90Program');
+
+                    const selStart = programTextarea.selectionStart;
+                    const textBeforeSelection = programTextarea.value.substring(0, selStart);
+                    const currentLineNumber = textBeforeSelection.split('\n').length; // 1-based
+
+                    // Najdeme poslední hlavičku programu
+                    const programMatch = /((?:HLAVNÍ PROGRAM|PODPROGRAM): (.+?))(?=\n|$)/g;
+                    let lastMatch = null;
+                    let match;
+                    while ((match = programMatch.exec(textBeforeSelection)) !== null) {
+                        lastMatch = match;
+                    }
+
+                    if (lastMatch) {
+                        const isMain = lastMatch[0].includes('HLAVNÍ PROGRAM');
+                        const programName = lastMatch[2].trim();
+                        const programHeaderText = lastMatch[1];
+                        const g90Header = `${isMain ? 'HLAVNÍ PROGRAM (G90)' : 'PODPROGRAM (G90)'}: ${programName}`;
+
+                        // Najdeme pozici hlavičky v G90 textu
+                        const g90Text = g90Textarea.value;
+                        const g90Lines = g90Text.split('\n');
+                        const headerIndex = g90Lines.findIndex(line => line.includes(g90Header)); // 0-based
+
+                        if (headerIndex !== -1) {
+                            // *** OPRAVA LOGIKY ***
+                            // Najdeme řádek hlavičky v původním textu
+                            const headerCharIndex = textBeforeSelection.lastIndexOf(programHeaderText);
+                            const textBeforeHeader = textBeforeSelection.substring(0, headerCharIndex);
+                            const headerLineNumber = textBeforeHeader.split('\n').length; // 1-based
+
+                            // Vypočítáme relativní offset řádku od hlavičky
+                            const relativeLineIndex = (currentLineNumber - headerLineNumber); 
+                            
+                            // Cílový řádek v G90
+                            const targetLineIndex = headerIndex + relativeLineIndex; // 0-based
+                            // *** KONEC OPRAVY ***
+
+                            if (targetLineIndex < g90Lines.length) {
+                                const targetLine = g90Lines[targetLineIndex];
+                                
+                                // Najdeme startovní pozici cílového řádku
+                                let lineStart = 0;
+                                for(let i=0; i < targetLineIndex; i++) {
+                                    lineStart += g90Lines[i].length + 1; // +1 pro \n
+                                }
+                                const lineEnd = lineStart + targetLine.length;
+
+                                // Nastavíme focus a označení v G90
+                                g90Textarea.focus();
+                                g90Textarea.setSelectionRange(lineStart, lineEnd);
+                                g90Textarea.scrollTop = targetLineIndex * this.lineHeight;
+                            }
+                        }
+                    }
+                }
+
+                // Při přepnutí na Program zachováme možnost editace
+                if (tabId === 'program') {
+                    document.getElementById('combinedProgram').focus();
+                }
+            }
+
+            showStatus(message) {
+                const status = document.getElementById('status');
+                status.textContent = message;
+                status.style.display = message ? 'block' : 'none';
+            }
+        }
+
+        const analyzer = new CNCProgramAnalyzer();
+    </script>
+</body>
+</html>

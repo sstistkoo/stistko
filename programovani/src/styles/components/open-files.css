@@ -1,0 +1,116 @@
+/**
+ * Open Files Manager Styles
+ * Styling for the open files list in menu
+ */
+
+.open-files-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+/* Mobile - zmenšená výška */
+@media (max-width: 768px) {
+  .open-files-list {
+    max-height: 100px;
+  }
+
+  .open-file-item {
+    padding: 6px 10px;
+  }
+
+  .open-file-item .file-name {
+    font-size: 0.85em;
+  }
+}
+
+.no-files-message {
+  padding: 12px;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.9em;
+  font-style: italic;
+}
+
+.open-file-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--bg-tertiary);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.open-file-item:hover {
+  background: var(--primary);
+  color: white;
+  transform: translateX(2px);
+}
+
+.open-file-item .file-icon {
+  font-size: 1.2em;
+  flex-shrink: 0;
+}
+
+.open-file-item .file-name {
+  flex: 1;
+  font-size: 0.9em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.open-file-item .file-close-btn {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 4px;
+  padding: 3px;
+  cursor: pointer;
+  color: #ef4444;
+  opacity: 0.8;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.open-file-item .file-close-btn:hover {
+  opacity: 1;
+  background: rgba(239, 68, 68, 0.4);
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.open-file-item .file-close-btn svg {
+  width: 12px;
+  height: 12px;
+  stroke: #ef4444;
+  stroke-width: 2.5;
+}
+
+/* Scrollbar styling */
+.open-files-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.open-files-list::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 3px;
+}
+
+.open-files-list::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 3px;
+}
+
+.open-files-list::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}

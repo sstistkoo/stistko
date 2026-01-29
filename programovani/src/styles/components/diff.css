@@ -1,0 +1,784 @@
+/**
+ * Diff Component Styles - Copilot-style visual diff
+ * Barevné diff zobrazení: zelená = přidáno, červená = odebráno
+ */
+
+/* ======================== */
+/* Diff Container           */
+/* ======================== */
+
+.diff-container.copilot-style {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  background: var(--bg-secondary, #1a1b26);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border-color, #2a2b36);
+}
+
+/* ======================== */
+/* Diff Lines               */
+/* ======================== */
+
+.diff-line {
+  display: flex;
+  align-items: stretch;
+  min-height: 22px;
+  transition: background 0.15s ease;
+}
+
+.diff-line:hover {
+  filter: brightness(1.1);
+}
+
+/* Line numbers */
+.diff-line-num {
+  min-width: 45px;
+  padding: 0 8px;
+  text-align: right;
+  color: var(--text-muted, #565869);
+  background: rgba(0, 0, 0, 0.2);
+  user-select: none;
+  font-size: 12px;
+}
+
+/* Prefix (+, -, space) */
+.diff-prefix {
+  width: 20px;
+  text-align: center;
+  font-weight: bold;
+  user-select: none;
+}
+
+/* Content */
+.diff-content {
+  flex: 1;
+  padding: 0 12px 0 4px;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+/* ======================== */
+/* Unchanged Lines          */
+/* ======================== */
+
+.diff-unchanged {
+  background: transparent;
+}
+
+.diff-unchanged .diff-prefix {
+  color: var(--text-muted, #565869);
+}
+
+.diff-unchanged .diff-content {
+  color: var(--text-secondary, #a9b1d6);
+}
+
+/* ======================== */
+/* Added Lines (Green)      */
+/* ======================== */
+
+.diff-added {
+  background: rgba(46, 160, 67, 0.15);
+  border-left: 3px solid #2ea043;
+}
+
+.diff-added .diff-line-num {
+  background: rgba(46, 160, 67, 0.25);
+  color: #7ee787;
+}
+
+.diff-added .diff-prefix {
+  color: #2ea043;
+}
+
+.diff-added .diff-content {
+  color: #7ee787;
+}
+
+/* ======================== */
+/* Removed Lines (Red)      */
+/* ======================== */
+
+.diff-removed {
+  background: rgba(248, 81, 73, 0.15);
+  border-left: 3px solid #f85149;
+  text-decoration: line-through;
+  text-decoration-color: rgba(248, 81, 73, 0.5);
+}
+
+.diff-removed .diff-line-num {
+  background: rgba(248, 81, 73, 0.25);
+  color: #ffa198;
+}
+
+.diff-removed .diff-prefix {
+  color: #f85149;
+}
+
+.diff-removed .diff-content {
+  color: #ffa198;
+}
+
+/* ======================== */
+/* Change Groups            */
+/* ======================== */
+
+.diff-change-group {
+  border: 1px solid rgba(136, 146, 176, 0.2);
+  border-left: none;
+  border-right: none;
+  margin: 4px 0;
+  background: rgba(136, 146, 176, 0.05);
+}
+
+/* ======================== */
+/* Collapsed Section        */
+/* ======================== */
+
+.diff-collapsed {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: rgba(136, 146, 176, 0.1);
+  color: var(--text-muted, #565869);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.diff-collapsed:hover {
+  background: rgba(136, 146, 176, 0.2);
+  color: var(--text-primary, #c0caf5);
+}
+
+.collapse-icon {
+  font-size: 16px;
+}
+
+/* ======================== */
+/* Change Actions (Copilot) */
+/* ======================== */
+
+.diff-change-actions.copilot-style {
+  background: var(--bg-tertiary, #24283b);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 12px 0;
+  border: 1px solid var(--border-color, #2a2b36);
+}
+
+.change-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.change-location {
+  font-size: 12px;
+  color: var(--text-muted, #565869);
+}
+
+.change-stats {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(136, 146, 176, 0.15);
+}
+
+.change-stats::before {
+  content: '';
+}
+
+.diff-preview {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.change-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+/* ======================== */
+/* Buttons                  */
+/* ======================== */
+
+.btn-accept,
+.btn-accept-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #2ea043 0%, #238636 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-accept:hover,
+.btn-accept-all:hover {
+  background: linear-gradient(135deg, #3fb950 0%, #2ea043 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(46, 160, 67, 0.3);
+}
+
+.btn-reject,
+.btn-reject-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: rgba(248, 81, 73, 0.15);
+  color: #f85149;
+  border: 1px solid rgba(248, 81, 73, 0.3);
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-reject:hover,
+.btn-reject-all:hover {
+  background: rgba(248, 81, 73, 0.25);
+  border-color: #f85149;
+}
+
+/* ======================== */
+/* Batch Actions            */
+/* ======================== */
+
+.diff-batch-actions.copilot-style {
+  background: var(--bg-tertiary, #24283b);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 12px 0;
+  border: 1px solid var(--border-color, #2a2b36);
+}
+
+.batch-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.batch-count {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary, #c0caf5);
+}
+
+.batch-stats {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, rgba(46, 160, 67, 0.2) 0%, rgba(248, 81, 73, 0.2) 100%);
+}
+
+.batch-buttons {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.batch-changes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ======================== */
+/* Individual Change Cards  */
+/* ======================== */
+
+.change-card {
+  background: var(--bg-secondary, #1a1b26);
+  border-radius: 8px;
+  padding: 12px;
+  border: 1px solid var(--border-color, #2a2b36);
+  transition: all 0.2s;
+}
+
+.change-card:hover {
+  border-color: var(--accent-color, #7aa2f7);
+}
+
+.change-card.applied {
+  opacity: 0.5;
+  background: rgba(46, 160, 67, 0.1);
+  border-color: #2ea043;
+}
+
+.change-card.rejected {
+  opacity: 0.5;
+  background: rgba(248, 81, 73, 0.1);
+  border-color: #f85149;
+}
+
+.change-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.change-card-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.change-card-buttons button {
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+/* ======================== */
+/* Inline Editor Overlay    */
+/* ======================== */
+
+.inline-diff-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: rgba(30, 41, 59, 0.95);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--accent-color, #7aa2f7);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  z-index: 100;
+  overflow: hidden;
+}
+
+.inline-diff-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: var(--accent-color, #7aa2f7);
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.inline-diff-content {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.inline-diff-footer {
+  display: flex;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.2);
+  justify-content: flex-end;
+}
+
+.inline-diff-footer button {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+/* ======================== */
+/* Animations               */
+/* ======================== */
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.diff-change-actions,
+.diff-batch-actions,
+.change-card {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* ======================== */
+/* Scrollbar                */
+/* ======================== */
+
+.diff-container::-webkit-scrollbar,
+.diff-preview::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.diff-container::-webkit-scrollbar-track,
+.diff-preview::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.diff-container::-webkit-scrollbar-thumb,
+.diff-preview::-webkit-scrollbar-thumb {
+  background: rgba(136, 146, 176, 0.3);
+  border-radius: 4px;
+}
+
+.diff-container::-webkit-scrollbar-thumb:hover,
+.diff-preview::-webkit-scrollbar-thumb:hover {
+  background: rgba(136, 146, 176, 0.5);
+}
+
+/* ======================== */
+/* Keyboard Hints           */
+/* ======================== */
+
+.keyboard-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text-muted, #565869);
+  margin-left: 8px;
+}
+
+.kbd {
+  display: inline-block;
+  padding: 2px 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* ======================== */
+/* Diff Message Header      */
+/* ======================== */
+
+.diff-message-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, rgba(46, 160, 67, 0.1) 0%, rgba(122, 162, 247, 0.1) 100%);
+  border-radius: 10px 10px 0 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.diff-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.diff-icon {
+  font-size: 18px;
+}
+
+.diff-text {
+  color: var(--text-primary, #c0caf5);
+}
+
+.diff-stats-badge {
+  display: inline-flex;
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+}
+
+.diff-stats-badge .added {
+  color: #7ee787;
+}
+
+.diff-stats-badge .removed {
+  color: #ffa198;
+}
+
+.diff-actions-inline {
+  display: flex;
+  gap: 8px;
+}
+
+.diff-actions-inline .btn-undo-all,
+.diff-actions-inline .btn-keep-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.diff-actions-inline .btn-undo-all {
+  background: rgba(248, 81, 73, 0.15);
+  color: #f85149;
+  border: 1px solid rgba(248, 81, 73, 0.3);
+}
+
+.diff-actions-inline .btn-undo-all:hover:not(:disabled) {
+  background: rgba(248, 81, 73, 0.25);
+  border-color: #f85149;
+}
+
+.diff-actions-inline .btn-keep-all {
+  background: linear-gradient(135deg, #2ea043 0%, #238636 100%);
+  color: white;
+  border: none;
+}
+
+.diff-actions-inline .btn-keep-all:hover:not(:disabled) {
+  background: linear-gradient(135deg, #3fb950 0%, #2ea043 100%);
+  transform: translateY(-1px);
+}
+
+.diff-actions-inline button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ======================== */
+/* Diff Details Toggle      */
+/* ======================== */
+
+.diff-details {
+  border-radius: 0 0 10px 10px;
+  overflow: hidden;
+}
+
+.diff-summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-muted, #565869);
+  transition: all 0.2s;
+}
+
+.diff-summary:hover {
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--text-primary, #c0caf5);
+}
+
+.diff-details[open] .diff-summary .toggle-icon {
+  transform: rotate(180deg);
+}
+
+.diff-preview-container {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* ======================== */
+/* Undone/Kept States       */
+/* ======================== */
+
+.diff-message.undone {
+  opacity: 0.6;
+}
+
+.diff-message.undone .diff-message-header {
+  background: linear-gradient(135deg, rgba(248, 81, 73, 0.1) 0%, rgba(248, 81, 73, 0.05) 100%);
+}
+
+.diff-message.undone::after {
+  content: '↩️ Změny vráceny';
+  display: block;
+  padding: 8px 16px;
+  background: rgba(248, 81, 73, 0.1);
+  color: #ffa198;
+  font-size: 12px;
+  text-align: center;
+}
+
+.diff-message.kept::after {
+  content: '✓ Změny ponechány';
+  display: block;
+  padding: 8px 16px;
+  background: rgba(46, 160, 67, 0.1);
+  color: #7ee787;
+  font-size: 12px;
+  text-align: center;
+}
+
+/* ======================== */
+/* Pending Changes          */
+/* ======================== */
+
+.pending-changes-container.copilot-style {
+  background: var(--bg-tertiary, #24283b);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(122, 162, 247, 0.3);
+}
+
+.pending-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, rgba(122, 162, 247, 0.15) 0%, rgba(187, 154, 247, 0.1) 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.pending-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: var(--text-primary, #c0caf5);
+}
+
+.pending-icon {
+  font-size: 16px;
+}
+
+.pending-stats {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  padding: 4px 10px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+}
+
+.pending-batch-actions {
+  display: flex;
+  gap: 10px;
+  padding: 12px 16px;
+  background: rgba(0, 0, 0, 0.15);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.pending-changes-list {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* ======================== */
+/* Change Cards             */
+/* ======================== */
+
+.change-card {
+  background: var(--bg-secondary, #1a1b26);
+  border-radius: 8px;
+  padding: 12px;
+  border: 1px solid var(--border-color, #2a2b36);
+  transition: all 0.2s;
+}
+
+.change-card:hover {
+  border-color: var(--accent-color, #7aa2f7);
+}
+
+.change-card.applied {
+  background: rgba(46, 160, 67, 0.08);
+  border-color: rgba(46, 160, 67, 0.3);
+}
+
+.change-card.rejected {
+  background: rgba(248, 81, 73, 0.08);
+  border-color: rgba(248, 81, 73, 0.3);
+  opacity: 0.6;
+}
+
+.change-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.change-location {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-muted, #565869);
+}
+
+.change-stats-mini {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  padding: 2px 6px;
+  background: rgba(136, 146, 176, 0.15);
+  border-radius: 4px;
+}
+
+.change-preview-details {
+  margin-bottom: 10px;
+}
+
+.change-preview-details summary {
+  font-size: 12px;
+  color: var(--text-muted, #565869);
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+.change-preview-details summary:hover {
+  color: var(--text-primary, #c0caf5);
+}
+
+.change-diff-preview {
+  margin-top: 8px;
+  border-radius: 6px;
+  overflow: hidden;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.change-card-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.btn-sm {
+  padding: 4px 10px !important;
+  font-size: 12px !important;
+}
+
+.btn-sm svg {
+  width: 14px !important;
+  height: 14px !important;
+}
+
+/* All processed state */
+.pending-changes-message.all-processed .pending-header {
+  background: linear-gradient(135deg, rgba(46, 160, 67, 0.1) 0%, rgba(122, 162, 247, 0.05) 100%);
+}
+
+.pending-changes-message.all-processed .pending-batch-actions {
+  display: none;
+}

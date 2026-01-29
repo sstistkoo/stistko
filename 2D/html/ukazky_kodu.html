@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ukázky CNC kódů</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f4f4f4;
+      }
+
+      .header {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        max-width: 800px;
+        margin: 0 auto 20px auto;
+        background-color: #fff;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .back-button {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-right: 20px;
+      }
+
+      .back-button:hover {
+        background-color: #45a049;
+      }
+
+      .code-container {
+        background: white;
+        width: 100%;
+        max-width: 800px;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        margin: 0 auto 20px auto;
+      }
+
+      .code-title {
+        font-size: 1.2em;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #333;
+      }
+
+      pre {
+        background-color: #f8f8f8;
+        padding: 15px;
+        border-radius: 5px;
+        overflow-x: auto;
+        border: 1px solid #ddd;
+        white-space: pre; /* Zachovat formátování */
+        min-width: 300px; /* Minimální šířka pro kód */
+      }
+
+      code {
+        font-family: "Courier New", Courier, monospace;
+        display: inline-block; /* Zajistit správné zobrazení */
+        min-width: 100%; /* Minimální šířka kódu */
+      }
+
+      /* Přidat/upravit responzivní styly */
+      @media (max-width: 768px) {
+        body {
+          padding: 10px;
+        }
+
+        .header {
+          flex-direction: column;
+          text-align: center;
+          padding: 10px 5px;
+        }
+
+        .header h1 {
+          font-size: 1.5em;
+          margin: 10px 0;
+        }
+
+        .back-button {
+          width: 100%;
+          justify-content: center;
+          margin: 0 0 10px 0;
+        }
+
+        .code-container {
+          padding: 10px;
+          margin: 0 auto 15px auto;
+        }
+
+        .code-title {
+          font-size: 1.1em;
+        }
+
+        pre {
+          padding: 10px;
+          font-size: 0.9em;
+          white-space: pre-wrap;
+          word-wrap: break-word;
+        }
+
+        code {
+          font-size: 14px;
+        }
+      }
+
+      /* Přidat podporu pro horizontální scroll na mobilech */
+      .code-scroll {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        position: relative;
+        min-width: 300px; /* Minimální šířka */
+        max-width: 800px; /* Maximální šířka */
+        width: 100%; /* Plná šířka v rámci containeru */
+      }
+
+      /* Indikátor scrollování */
+      .code-scroll::after {
+        content: "→";
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #666;
+        animation: bounce 1s infinite;
+        display: none;
+      }
+
+      @media (max-width: 768px) {
+        .code-scroll::after {
+          display: block;
+        }
+      }
+
+      @keyframes bounce {
+        0%,
+        100% {
+          right: 10px;
+        }
+        50% {
+          right: 5px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <button onclick="window.location.href='index.html'" class="back-button">
+        <i class="fas fa-home"></i>
+        Zpět na hlavní stránku
+      </button>
+      <h1>Ukázky CNC kódů</h1>
+    </div>
+
+    <div class="code-container">
+      <div class="code-title">Podložky</div>
+      <div class="code-scroll">
+        <pre><code>G54 T1 D1 G95 M41
+G97 S60 M4
+G91 G1 X-300 F1
+M30</code></pre>
+      </div>
+      <ul
+        style="
+          margin-top: 10px;
+          margin-bottom: 0;
+          font-size: 0.98em;
+          color: #333;
+        "
+      >
+        <li><b>G54</b> – Volba pracovního nulového bodu</li>
+        <li><b>T1 D1</b> – Výběr nástroje 1 a korekce 1</li>
+        <li><b>G95</b> – Posuv v mm/ot</li>
+        <li><b>M41</b> – Nízký převodový stupeň</li>
+        <li><b>G97</b> – Konstantní otáčky vřetena</li>
+        <li><b>S60</b> – Otáčky vřetena 60/min</li>
+        <li><b>M4</b> – Spuštění vřetena vlevo (CCW)</li>
+        <li><b>G91</b> – Přírůstkový způsob zadávání</li>
+        <li><b>G1</b> – Lineární interpolace (posuv)</li>
+        <li><b>X-300</b> – Posun v ose X o -300 mm</li>
+        <li><b>F1</b> – Posuv 1 mm/ot</li>
+        <li><b>M30</b> – Konec programu</li>
+      </ul>
+    </div>
+
+    <div class="code-container">
+      <div class="code-title">Základní vnější soustružení</div>
+      <div class="code-scroll">
+        <pre><code>G54
+G90 G95
+G96 S200 LIMS=2000
+T1 D1
+G0 X100 Z2
+G1 Z0 F0.2
+X-0.4
+G0 X100 Z2</code></pre>
+      </div>
+    </div>
+
+    <div class="code-container">
+      <div class="code-title">GOTO - Nepodmíněný skok</div>
+      <div class="code-scroll">
+        <pre><code>N10 G0 X100 Z2       ; Rychloposuv na pozici
+STARTPOINT:          ; Návěští pro skok
+N20 G1 X80 F0.2     ; Pracovní posuv
+N30 G0 X100         ; Odjezd
+N40 Z-10            ; Posun v Z
+N50 GOTO STARTPOINT ; Skok zpět na návěští
+N60 M30             ; Konec programu (nikdy se neprovede)</code></pre>
+      </div>
+    </div>
+
+    <div class="code-container">
+      <div class="code-title">
+        GOTOB - Skok zpět s počítadlem (opakování cyklu)
+      </div>
+      <div class="code-scroll">
+        <pre><code>N10 R1=0             ; Počítadlo cyklů
+LOOP_START:          ; Návěští pro skok
+N20 G1 X80 F0.2     ; Pracovní posuv
+N30 G0 X100         ; Odjezd
+N40 Z-10            ; Posun v Z
+N50 R1=R1+1         ; Zvýšení počítadla
+N60 IF R1<5 GOTOB LOOP_START  ; Skok zpět, pokud R1 < 5
+N70 M30             ; Konec programu</code></pre>
+      </div>
+    </div>
+
+    <div class="code-container">
+      <div class="code-title">FOR cyklus s transformací</div>
+      <div class="code-scroll">
+        <pre><code>TRANS X100 Z50      ; Absolutní posunutí nulového bodu
+FOR R1=1 TO 10     ; Začátek cyklu, 10 opakování
+  G1 X80 F0.2      ; Pracovní posuv
+  ATRANS X-5       ; Přírůstkové posunutí v X o -5mm
+  G1 Z-10          ; Posun v Z
+ENDFOR            ; Konec FOR cyklu
+TRANS             ; Zrušení všech transformací
+M30               ; Konec programu</code></pre>
+      </div>
+    </div>
+
+    <div class="code-container">
+      <div class="code-title">GOTOF - Skok vpřed</div>
+      <div class="code-scroll">
+        <pre><code>N10 R1=0             ; Nastavení proměnné
+N20 G1 X100 F0.2    ; První řez
+N30 IF R1>5 GOTOF ENDPOS  ; Skok na konec při splnění podmínky
+N40 G1 X90          ; Další řez
+N50 R1=R1+1         ; Zvýšení počítadla
+N60 GOTO N30        ; Skok zpět na test
+ENDPOS:             ; Návěští pro konec
+N70 G0 X100 Z50     ; Koncová pozice
+N80 M30             ; Konec programu</code></pre>
+      </div>
+    </div>
+
+    <div class="code-container">
+      <div class="code-title">WHILE cyklus s výpisem parametrů</div>
+      <div class="code-scroll">
+        <pre><code>G0 X0 Z0            ; Nájezd do počáteční pozice
+R1=$AA_IW[X]       ; Uložení aktuální pozice X do R1
+MSG("hodnoty osy X "&lt;&lt;R1&lt;&lt;" mm")  ; Výpis aktuální hodnoty osy X
+
+WHILE $AA_IW[X] < 100  ; Dokud je skutečná pozice X menší než 100
+    MSG("pocitadlo "&lt;&lt;R1&lt;&lt;" drazek")  ; Výpis počítadla drážek
+    G1 X=R1 F0.2    ; Lineární pohyb v X
+    G4 F0.5         ; Krátká prodleva
+    R1=R1+10        ; Zvýšení počítadla o 10
+ENDWHILE           ; Konec cyklu
+
+MSG()              ; Vypnutí výpisu
+G0 X200 Z50       ; Odjezd do bezpečné pozice
+M30               ; Konec programu</code></pre>
+      </div>
+    </div>
+
+    <div class="code-container">
+      <div class="code-title">Příklady výpisu MSG</div>
+      <div class="code-scroll">
+        <pre><code>MSG("Aktualni hodnota: "&lt;&lt;R1)         ; Základní výpis proměnné
+MSG("Pocet kusu: "&lt;&lt;R2&lt;&lt;" ks")        ; Výpis s jednotkami
+MSG("Prumer: "&lt;&lt;$AA_IW[X]&lt;&lt;" mm")     ; Výpis systémové proměnné
+MSG("Poloha Z: "&lt;&lt;R3&lt;&lt;" od nuly")     ; Výpis s dodatečným textem
+MSG()                                        ; Vypnutí/vymazání zprávy</code></pre>
+      </div>
+    </div>
+  </body>
+</html>

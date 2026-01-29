@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabulky</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+
+        /* Přidat styl pro kontejner s ikonou */
+        .home-link {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #333;
+            text-decoration: none;
+            font-size: 24px;
+        }
+
+        .home-link:hover {
+            color: #666;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <h1>Tabulky</h1>
+    <!-- Změnit umístění ikony a přidat nové styly -->
+    <a href="index.html" class="home-link">
+        <i class="fas fa-home"></i>
+    </a>
+
+    <p>Tata stránka obsahuje údaje podle standardu 2768 MK.</p>
+    <h2>Třídy přesnosti a tolerance</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Třída přesnosti</th>
+                <th>od 0,5 do 3</th>
+                <th>od 3 do 6</th>
+                <th>od 6 do 30</th>
+                <th>od 30 do 120</th>
+                <th>od 120 do 400</th>
+                <th>od 400 do 1000</th>
+                <th>od 1000 do 2000</th>
+                <th>od 2000 do 4000</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>f</td>
+                <td>±0,05</td>
+                <td>±0,05</td>
+                <td>±0,1</td>
+                <td>±0,15</td>
+                <td>±0,2</td>
+                <td>±0,3</td>
+                <td>±0,5</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>m</td>
+                <td>±0,1</td>
+                <td>±0,1</td>
+                <td>±0,2</td>
+                <td>±0,3</td>
+                <td>±0,5</td>
+                <td>±0,8</td>
+                <td>±1,2</td>
+                <td>±2</td>
+            </tr>
+            <tr>
+                <td>c</td>
+                <td>±0,2</td>
+                <td>±0,3</td>
+                <td>±0,5</td>
+                <td>±0,8</td>
+                <td>±1,2</td>
+                <td>±2</td>
+                <td>±3</td>
+                <td>±4</td>
+            </tr>
+            <tr>
+                <td>v</td>
+                <td>-</td>
+                <td>±0,5</td>
+                <td>±1</td>
+                <td>±1,5</td>
+                <td>±2,5</td>
+                <td>±4</td>
+                <td>±6</td>
+                <td>±8</td>
+            </tr>
+        </tbody>
+    </table>
+    <h2>NEPŘEDEPSANÉ MEZNÍ ÚCHYLKY ZKOSENÍ A ZAOBLENÍ HRAN</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Třída přesnosti</th>
+                <th>od 0,5 do 3</th>
+                <th>od 3 do 6</th>
+                <th>přes 6</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>f,m</td>
+                <td>±0,2</td>
+                <td>±0,5</td>
+                <td>±1</td>
+            </tr>
+            <tr>
+                <td>c,v</td>
+                <td>±0,4</td>
+                <td>±1</td>
+                <td>±2</td>
+            </tr>
+        </tbody>
+    </table>
+    <h2>NEPŘEDEPSANÉ MEZNÍ ÚCHYLKY ÚHLOVÝCH ROZMĚRŮ</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Třída přesnosti</th>
+                <th>do 10</th>
+                <th>od 10 do 50</th>
+                <th>od 50 do 120</th>
+                <th>od 120 do 400</th>
+                <th>přes 400</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>f,m</td>
+                <td>±1°</td>
+                <td>±0°30'</td>
+                <td>±0°20'</td>
+                <td>±0°10'</td>
+                <td>±0°05'</td>
+            </tr>
+            <tr>
+                <td>c</td>
+                <td>±1°30'</td>
+                <td>±1°</td>
+                <td>±0°30'</td>
+                <td>±0°15'</td>
+                <td>±0°10'</td>
+            </tr>
+            <tr>
+                <td>v</td>
+                <td>±3°</td>
+                <td>±2°</td>
+                <td>±1°</td>
+                <td>±0°30'</td>
+                <td>±0°20'</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

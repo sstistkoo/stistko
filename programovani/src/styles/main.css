@@ -1,0 +1,161 @@
+/* Reset & Base */
+@import './base/reset.css';
+@import './base/variables.css';
+@import './base/typography.css';
+@import './base/mobile.css';
+
+/* Components */
+@import './components/header.css';
+@import './components/toolbar.css';
+@import './components/editor.css';
+@import './components/preview.css';
+@import './components/modal.css';
+@import './components/toast.css';
+@import './components/button.css';
+@import './components/panels.css';
+@import './components/sidebar.css';
+@import './components/side-panel.css';
+@import './components/orchestrator-loading.css';
+@import './components/tabs.css';
+@import './components/quick-actions.css';
+@import './components/ai-testing.css';
+@import './components/diff.css';
+@import './components/thinking.css';
+
+/* Layout */
+:root {
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-top: env(safe-area-inset-top, 0px);
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  touch-action: manipulation;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding-bottom: var(--safe-bottom);
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* View Modes */
+.app.view-editor .editor-section {
+  flex: 1;
+  display: flex;
+}
+
+.app.view-editor .preview-section {
+  display: none;
+}
+
+.app.view-preview .preview-section {
+  flex: 1;
+  display: flex;
+}
+
+.app.view-preview .editor-section {
+  display: none;
+}
+
+/* Sections */
+.editor-section,
+.preview-section {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.editor-section {
+  border-right: 1px solid var(--border);
+}
+
+.section-header {
+  display: none;
+}
+
+.section-actions {
+  display: none;
+}
+
+.editor-container,
+.preview-container {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  height: 100%;
+  min-height: 0;
+  width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  /* Na mobilu výchozí zobrazení pouze náhled */
+  .app {
+    flex-direction: column;
+  }
+
+  /* Zobrazit pouze náhled výchozí */
+  .app .editor-section {
+    display: none;
+  }
+
+  .app .preview-section {
+    display: flex;
+    flex: 1;
+  }
+
+  /* Když uživatel přepne na editor */
+  .app.view-editor .editor-section {
+    display: flex;
+    flex: 1;
+  }
+
+  .app.view-editor .preview-section {
+    display: none;
+  }
+
+  /* Když uživatel přepne na náhled */
+  .app.view-preview .editor-section {
+    display: none;
+  }
+
+  .app.view-preview .preview-section {
+    display: flex;
+    flex: 1;
+  }
+
+  /* Split view na mobilu - oba pod sebou */
+  .app.view-split {
+    flex-direction: column;
+  }
+
+  .app.view-split .editor-section {
+    display: flex;
+    flex: 1;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .app.view-split .preview-section {
+    display: flex;
+    flex: 1;
+    border-bottom: none;
+  }
+}

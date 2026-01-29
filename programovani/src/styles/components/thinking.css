@@ -1,0 +1,177 @@
+/**
+ * thinking.css
+ * Copilot-style thinking/reasoning display
+ * Shows AI's thought process in a collapsible section
+ */
+
+/* Thinking block container */
+.thinking-block {
+  margin-bottom: 12px;
+  border: 1px solid rgba(147, 112, 219, 0.3);
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(147, 112, 219, 0.1) 0%, rgba(100, 149, 237, 0.1) 100%);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.thinking-block:hover {
+  border-color: rgba(147, 112, 219, 0.5);
+}
+
+/* Summary (clickable header) */
+.thinking-summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  background: rgba(147, 112, 219, 0.15);
+  transition: background 0.2s;
+  list-style: none;
+}
+
+.thinking-summary::-webkit-details-marker {
+  display: none;
+}
+
+.thinking-summary:hover {
+  background: rgba(147, 112, 219, 0.25);
+}
+
+/* Thinking icon */
+.thinking-icon {
+  font-size: 1.1em;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.thinking-block[open] .thinking-icon {
+  animation: none;
+}
+
+/* Label */
+.thinking-label {
+  flex: 1;
+  font-size: 0.9em;
+  color: #b8a3e0;
+  font-weight: 500;
+}
+
+/* Toggle icon */
+.thinking-summary .toggle-icon {
+  font-size: 0.75em;
+  color: #8b7cb3;
+  transition: transform 0.3s ease;
+}
+
+.thinking-block[open] .thinking-summary .toggle-icon {
+  transform: rotate(90deg);
+}
+
+/* Content area */
+.thinking-content {
+  padding: 14px;
+  font-size: 0.88em;
+  line-height: 1.6;
+  color: #c4b8dc;
+  border-top: 1px solid rgba(147, 112, 219, 0.2);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.thinking-content p {
+  margin: 0 0 8px 0;
+}
+
+.thinking-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Steps/numbered list in thinking */
+.thinking-content ol,
+.thinking-content ul {
+  margin: 8px 0;
+  padding-left: 20px;
+}
+
+.thinking-content li {
+  margin: 4px 0;
+  color: #b8a3e0;
+}
+
+/* Code references in thinking */
+.thinking-content code {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 0.9em;
+  color: #e0b3ff;
+}
+
+/* Highlight important parts */
+.thinking-content strong {
+  color: #d4c4f0;
+}
+
+/* Thinking steps indicator */
+.thinking-steps {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.thinking-step-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(147, 112, 219, 0.5);
+}
+
+.thinking-step-dot.active {
+  background: #9370db;
+}
+
+/* Animation when thinking block appears */
+@keyframes thinkingAppear {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.thinking-block {
+  animation: thinkingAppear 0.3s ease-out;
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+  .thinking-summary {
+    padding: 8px 12px;
+  }
+
+  .thinking-content {
+    padding: 10px 12px;
+    font-size: 0.85em;
+  }
+
+  .thinking-icon {
+    font-size: 1em;
+  }
+}
+
+/* Dark mode enhancements */
+@media (prefers-color-scheme: dark) {
+  .thinking-block {
+    border-color: rgba(147, 112, 219, 0.4);
+  }
+}

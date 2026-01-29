@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <title>Příkazy a Syntax</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            padding: 20px;
+        }
+        .command-list {
+            width: 300px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .command-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .command-item:hover {
+            background-color: #f0f0f0;
+        }
+        .command-name {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        .command-brief {
+            font-size: 0.9em;
+            color: #666;
+            font-family: monospace;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+            width: 80%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .modal-content {
+            margin: 20px 0;
+        }
+        .close-button {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            border: none;
+            background: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+        .example-code {
+            background: #f8f8f8;
+            padding: 15px;
+            border-left: 4px solid #4CAF50;
+            margin: 5px 0 10px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .syntax-section {
+            background: #fff8dc;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .example-section {
+            margin: 20px 0;
+            padding-bottom: 20px;
+        }
+        .example-title {
+            color: #2c3e50;
+            font-weight: bold;
+            margin: 10px 0 5px 0;
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .example-description {
+            margin: 5px 0 15px 0;
+            color: #666;
+            font-size: 0.95em;
+        }
+        .search-box {
+            width: calc(100% - 40px);
+            max-width: 600px;
+            margin: 20px auto;
+            display: block;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+        .commands-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            padding: 20px;
+            margin: 0 auto;
+            max-width: 1200px;
+        }
+        .command-button {
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .command-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            background: #f8f8f8;
+        }
+        .command-name {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 1.2em;
+            margin-bottom: 8px;
+        }
+        .command-brief {
+            font-size: 0.9em;
+            color: #666;
+            font-family: monospace;
+        }
+        .command-group {
+            margin: 30px 0;
+        }
+        .group-title {
+            font-size: 1.5em;
+            color: #2c3e50;
+            margin: 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #4CAF50;
+            grid-column: 1 / -1;
+        }
+        .commands-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            padding: 20px;
+            margin: 0 auto;
+            max-width: 1200px;
+        }
+        h1 {
+            text-align: center;
+            margin: 20px auto;
+            width: 100%;
+            color: #2c3e50;
+            font-size: 2em;
+            padding: 10px 0;
+        }
+
+        /* Responsive styly */
+        @media (max-width: 768px) {
+            .commands-grid {
+                grid-template-columns: 1fr;
+                padding: 10px;
+            }
+
+            .command-button {
+                font-size: 14px;
+            }
+
+            .search-box {
+                width: 90%;
+                font-size: 16px;
+                padding: 10px;
+            }
+
+            .modal {
+                width: 95%;
+                max-width: none;
+            }
+
+            .example-code {
+                font-size: 14px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .group-title {
+                font-size: 1.2em;
+            }
+        }
+
+        /* Upravený styl pro modální okno */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+            width: 80%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sinumerik 840D Příkazy</h1>
+
+    <div class="search-container">
+        <button class="menu-toggle">
+            <i class="fas fa-bars"></i> Kategorie
+        </button>
+
+        <input type="text"
+               class="search-box"
+               id="searchBox"
+               placeholder="Hledat příkaz...">
+
+        <button class="quick-codes-toggle">
+            <i class="fas fa-list"></i> Příkazy
+        </button>
+    </div>
+
+    <div class="side-menu categories-menu" id="categoriesMenu">
+        <button class="menu-close">&times;</button>
+        <div id="categoriesList">
+            <!-- Kategorie se vygenerují dynamicky -->
+        </div>
+    </div>
+
+    <div class="side-menu quick-codes-menu" id="quickCodesMenu">
+        <button class="menu-close">&times;</button>
+        <div id="quickCodesList">
+            <!-- Příkazy se vygenerují dynamicky -->
+        </div>
+    </div>
+
+    <!-- Přidat CSS styly pro nové prvky -->
+    <style>
+        .search-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            gap: 10px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .menu-toggle, .quick-codes-toggle {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            white-space: nowrap;
+            transition: background-color 0.3s;
+        }
+
+        .menu-toggle:hover, .quick-codes-toggle:hover {
+            background-color: #45a049;
+        }
+
+        .side-menu {
+            position: fixed;
+            top: 0;
+            height: 100%;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            z-index: 99;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .categories-menu {
+            left: 0;
+            width: 250px;
+            transform: translateX(-100%);
+        }
+
+        .quick-codes-menu {
+            right: 0;
+            width: 200px;
+            transform: translateX(100%);
+        }
+
+        .categories-menu.active,
+        .quick-codes-menu.active {
+            transform: translateX(0);
+        }
+
+        .menu-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+
+        .menu-item:hover {
+            background: #f0f0f0;
+        }
+
+        .menu-close {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .reset-view {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .reset-view:hover {
+            background: #ff5252;
+        }
+
+        .reset-view.active {
+            display: block;
+        }
+    </style>
+
+    <div class="commands-grid" id="commandList">
+        <!-- Skupiny příkazů se vytvoří dynamicky -->
+    </div>
+
+    <button id="resetView" class="reset-view">
+        Zobrazit vše
+    </button>
+
+    <!-- Přidejte overlay pro modál -->
+    <div id="modalOverlay" class="modal-overlay"></div>
+
+    <div id="commandModal" class="modal">
+        <button class="close-button">&times;</button>
+        <div class="modal-content" id="modalContent"></div>
+    </div>
+
+    <script type="text/javascript">
+        'use strict';
+        console.log('Script initialization started');
+
+        // Deklarace proměnných
+        var commandGroups = {
+            'Základní pohybové příkazy': [
+                'AC', 'ACN', 'ACP', 'IC', 'DC'
+            ],
+            'Polární souřadnice': [
+                'AP', 'RP', 'AR'
+            ],
+            'Kruhová interpolace': [
+                'CIP', 'CR', 'I1', 'J1', 'K1'
+            ],
+            'Transformace souřadnic': [
+                'TRANS', 'ATRANS', 'ROT', 'AROT',
+                'MIRROR', 'AMIRROR', 'SCALE', 'ASCALE'
+            ],
+            'Tvarové prvky': [
+                'CHF', 'CHR', 'RND', 'RNDM',
+                'CONTPRON', 'KONT', 'OFFN', 'NORM'
+            ],
+            'Programové řízení': [
+                'IF', 'ELSE', 'ENDIF',
+                'FOR', 'ENDFOR',
+                'WHILE', 'ENDWHILE',
+                'LOOP', 'ENDLOOP',
+                'CASE', 'DEFAULT',
+                'GOTOB', 'GOTOF', 'GOTO'  // Přidáno GOTO do seznamu
+            ],
+            'Logické operátory': [
+                'AND', 'OR', 'NOT',
+                'B_AND', 'B_NOT', 'B_OR', 'B_XOR'
+            ],
+            'Nastavení obrábění': [
+                'CFC', 'CFIN', 'CFTCP',
+                'DIAMOF', 'DIAMON',
+                'F', 'FAD', 'S', 'LIMS',
+                'D', 'DISC', 'DISCL', 'DISR'
+            ],
+            'Podprogramy a makra': [
+                'PROC', 'RET', 'MCALL',
+                'P', 'SAVE', 'DEFINE AS'
+            ],
+            'Datové typy a proměnné': [
+                'DEF', 'AXIS', 'AX', 'AXNAME',
+                'BOOL', 'CHAR', 'FRAME',
+                'INT', 'REAL', 'STRING'
+            ],
+            'Vřeteno a polohování': [
+                'SPCON', 'SPCOF',
+                'SPOS', 'SPOSA',
+                'SETMS', 'SF'
+            ],
+            'Systémové příkazy': [
+                'MSG', 'SETAL', 'SET',
+                'SBLOF', 'DISPLOF',
+                'SUPA', 'N'
+            ]
+        };
+
+        var commandsList = [
+            {
+                name: 'AC',
+                syntax: 'osa=AC(hodnota)',
+                description: 'Absolutní programování polohy. Hodnota je vztažena k nulovému bodu stroje nebo obrobku. Funguje i v přírůstkovém programování G91.',
+                examples: [
+                    {
+                        title: 'Základní použití:',
+                        code: 'G0 X=AC(100) Z=AC(50)  ; Najetí na absolutní pozici\nG1 X=AC(80) F0.2       ; Soustružení na průměr 80mm',
+                        description: 'Absolutní polohování v osách X a Z'
+                    },
+                    {
+                        title: 'Použití v G91:',
+                        code: 'G91                    ; Přírůstkové programování\nG1 X=IC(10)           ; Přírůstkový pohyb\nX=AC(50)             ; Absolutní pozice i v G91',
+                        description: 'AC funguje nezávisle na G90/G91'
+                    }
+                ]
+            },
+            {
+                name: 'ACN',
+                syntax: 'osa=ACN(hodnota)',
+                description: 'Absolutní programování s najetím v negativním směru.',
+                examples: [
+                    {
+                        title: 'Vnitřní soustružení:',
+                        code: 'G0 X=AC(50) Z=AC(2)\nG1 X=ACN(80)',
+                        description: 'Nástroj najede na pozici vždy z menšího rozměru'
+                    }
+                ]
+            },
+            {
+                name: 'ACP',
+                syntax: 'osa=ACP(hodnota)',
+                description: 'Absolutní programování s najetím v pozitivním směru.',
+                examples: [
+                    {
+                        title: 'Vnější soustružení:',
+                        code: 'G0 X=AC(100) Z=AC(2)\nG1 X=ACP(80)',
+                        description: 'Nástroj najede na pozici vždy z většího rozměru'
+                    }
+                ]
+            },
+            {
+                name: 'AND',
+                syntax: 'IF (podmínka1 AND podmínka2)',
+                description: 'Logická spojka AND pro kombinaci podmínek.',
+                examples: [
+                    {
+                        title: 'Použití v podmínce:',
+                        code: 'R1=5 R2=10\nIF (R1>0 AND R2<20) GOTOF N100',
+                        description: 'Skok na N100 pokud jsou splněny obě podmínky'
+                    }
+                ]
+            },
+            {
+                name: 'AP',
+                syntax: 'AP=hodnota',
+                description: 'Polární úhel při programování v polárních souřadnicích.',
+                examples: [
+                    {
+                        title: 'Polární programování:',
+                        code: 'G111                  ; Aktivace polárních souřadnic\nRP=50 AP=45           ; Bod 50mm pod úhlem 45°',
+                        description: 'Definice bodu pomocí vzdálenosti a úhlu'
+                    }
+                ]
+            },
+            {
+                name: 'AR',
+                syntax: 'AR=hodnota',
+                description: 'Úhel rozevření u kruhové interpolace.',
+                examples: [
+                    {
+                        title: 'Kruhový oblouk:',
+                        code: 'G2 X100 Z0 AR=90    ; Kruhový oblouk s úhlem 90°',
+                        description: 'Vytvoření čtvrtkruhu pomocí úhlu rozevření'
+                    }
+                ]
+            },
+            {
+                name: 'AXIS',
+                syntax: 'DEF AXIS název',
+                description: 'Definice proměnné typu osa.',
+                examples: [
+                    {
+                        title: 'Definice osy:',
+                        code: 'DEF AXIS OSA_X       ; Definice proměnné pro osu X\nOSA_X=100            ; Přiřazení hodnoty',
+                        description: 'Použití proměnné typu AXIS pro práci s osami'
+                    }
+                ]
+            },
+            {
+                name: 'AMIRROR',
+                syntax: 'AMIRROR X0 Y0',
+                description: 'Přídavné zrcadlení ke stávajícímu zrcadlení.',
+                examples: [
+                    {
+                        title: 'Přídavné zrcadlení:',
+                        code: 'MIRROR X0            ; Základní zrcadlení\nAMIRROR Y0          ; Přidání zrcadlení v Y',
+                        description: 'Kombinace více zrcadlení'
+                    }
+                ]
+            },
+            {
+                name: 'AROT',
+                syntax: 'AROT X=úhel',
+                description: 'Přídavná rotace souřadného systému.',
+                examples: [
+                    {
+                        title: 'Přídavná rotace:',
+                        code: 'ROT X45             ; Základní rotace 45°\nAROT X30            ; Přídavná rotace o 30°',
+                        description: 'Celková rotace bude 75°'
+                    }
+                ]
+            },
+            {
+                name: 'B_AND',
+                syntax: 'IF (B_AND(var1,var2))',
+                description: 'Bitový operátor AND pro porovnání jednotlivých bitů dvou hodnot.',
+                examples: [
+                    {
+                        title: 'Porovnání bitů:',
+                        code: 'R1=5 R2=3\nIF B_AND(R1,R2) GOTOF N100 ; Skok když je výsledek nenulový',
+                        description: 'Porovnání bitů: 5(101) AND 3(011) = 1(001)'
+                    }
+                ]
+            },
+            {
+                name: 'CIP',
+                syntax: 'CIP X.. Z.. I1=.. K1=..',
+                description: 'Kruhová interpolace přes zadaný mezibod. Umožňuje programování oblouku zadáním průchozího bodu.',
+                examples: [
+                    {
+                        title: 'Kruhový oblouk:',
+                        code: 'G0 X0 Z0\nCIP X50 Z-20 I1=25 K1=-5  ; Oblouk přes bod I1,K1\nG1 X100 Z-50              ; Pokračování lineárním pohybem',
+                        description: 'Vytvoření plynulého přechodu obloukem'
+                    }
+                ]
+            },
+            {
+                name: 'CHF',
+                syntax: 'CHF=hodnota',
+                description: 'Vloží sražení hrany mezi dva pohyby. Hodnota určuje velikost sražení.',
+                examples: [
+                    {
+                        title: 'Sražení hrany:',
+                        code: 'G1 X100 Z0\nCHF=2      ; Sražení 2mm\nZ-30        ; Druhý pohyb se sražením',
+                        description: 'Automatické sražení hrany mezi pohyby'
+                    }
+                ]
+            },
+            {
+                name: 'DIAMOF',
+                syntax: 'DIAMOF',
+                description: 'Přepne programování na zadávání v poloměrech (radius). Hodnoty X jsou interpretovány jako poloměr.',
+                examples: [
+                    {
+                        title: 'Programování v poloměrech:',
+                        code: 'DIAMOF\nG1 X25 F0.2    ; X=25 znamená průměr 50mm\nG1 Z-30        ; Podélný pohyb\nDIAMON        ; Přepnutí zpět na průměry',
+                        description: 'Ukázka přepínání mezi průměry a poloměry'
+                    }
+                ]
+            },
+            {
+                name: 'DIAMON',
+                syntax: 'DIAMON',
+                description: 'Přepne programování na zadávání v průměrech. Hodnoty X jsou interpretovány jako průměr.',
+                examples: [
+                    {
+                        title: 'Programování v průměrech:',
+                        code: 'DIAMON\nG1 X50 F0.2    ; X=50 znamená průměr 50mm\nG1 Z-30        ; Podélný pohyb',
+                        description: 'Standardní programování pro soustružení'
+                    }
+                ]
+            },
+            {
+                name: 'GOTOF',
+                syntax: 'IF (podmínka) GOTOF číslo_řádku/návěští',
+                description: 'Podmíněný skok vpřed v programu. Hledá cílový řádek pouze směrem ke konci programu.',
+                examples: [
+                    {
+                        title: 'Podmíněný skok:',
+                        code: 'N100 R1=R1+1\nIF R1<5 GOTOF N200  ; Skok na N200 pokud R1<5\nN150 G1 X50 F0.2\nN200 G1 Z-30',
+                        description: 'Řízení průběhu programu pomocí skoku vpřed'
+                    }
+                ]
+            },
+            {
+                name: 'GOTOB',
+                syntax: 'IF (podmínka) GOTOB číslo_řádku/návěští',
+                description: 'Podmíněný skok vzad v programu. Hledá cílový řádek pouze směrem k začátku programu.',
+                examples: [
+                    {
+                        title: 'Smyčka s počítadlem:',
+                        code: 'N100 R1=5\nN110 G1 X50 F0.2\nN120 R1=R1-1\nN130 IF R1>0 GOTOB N110  ; Opakuj dokud R1>0',
+                        description: 'Vytvoření programové smyčky pomocí skoku vzad'
+                    }
+                ]
+            },
+            {
+                name: 'MSG',
+                syntax: 'MSG("text zprávy")',
+                description: 'Zobrazí text zprávy na obrazovce řídicího systému. Používá se pro komunikaci s obsluhou.',
+                examples: [
+                    {
+                        title: 'Základní použití:',
+                        code: 'MSG("Vyměňte nástroj")  ; Zobrazí zprávu\nM0                    ; Zastaví program\nMSG("")               ; Vymaže zprávu',
+                        description: 'Informování operátora během programu'
+                    }
+                ]
+            },
+            {
+                name: 'FOR',
+                syntax: 'FOR proměnná=start TO konec\n...\nENDFOR',
+                description: 'Vytvoření programové smyčky s počítadlem. Provádí blok příkazů mezi FOR a ENDFOR.',
+                examples: [
+                    {
+                        title: 'Základní smyčka:',
+                        code: 'N100 FOR R1=1 TO 5    ; Opakuj 5x\nN110   G1 X=R1 F0.2   ; Pohyb v X\nN120   G1 Z-10        ; Pohyb v Z\nN130 ENDFOR',
+                        description: 'Opakování bloku 5krát'
+                    },
+                    {
+                        title: 'Smyčka s krokem:',
+                        code: 'FOR R2=0 TO 100 STEP 20  ; Krok po 20\n  G1 X=R2 F0.2          ; Postupné pohyby\n  G4 F1                 ; Prodleva 1s\nENDFOR',
+                        description: 'Použití STEP pro určení velikosti kroku'
+                    }
+                ]
+            },
+            {
+                name: 'WHILE',
+                syntax: 'WHILE podmínka\n...\nENDWHILE',
+                description: 'Smyčka s podmínkou na začátku. Provádí blok příkazů, dokud je podmínka splněna.',
+                examples: [
+                    {
+                        title: 'Podmíněné opakování:',
+                        code: 'R1=0\nWHILE R1<5         ; Dokud R1 menší než 5\n  G1 X=R1*10 F0.2  ; Násobky 10\n  R1=R1+1         ; Zvýšení počítadla\nENDWHILE',
+                        description: 'Opakování dokud není splněna podmínka'
+                    }
+                ]
+            },
+            {
+                name: 'CASE',
+                syntax: 'CASE proměnná OF konstanty ... DEFAULT ...',
+                description: 'Větvení programu podle hodnoty proměnné. Umožňuje provést různé akce pro různé hodnoty.',
+                examples: [
+                    {
+                        title: 'Výběr podle hodnoty:',
+                        code: 'CASE R1 OF 1 GOTOF _m1 2 GOTOF _m2 DEFAULT GOTOF _def\n_m1: G1 X100    ; Pro R1=1\n    GOTOF _end\n_m2: G1 X200    ; Pro R1=2\n    GOTOF _end\n_def: MSG("Neplatná hodnota")\n_end: M30',
+                        description: 'Různé akce pro různé hodnoty R1'
+                    }
+                ]
+            },
+            {
+                name: 'PROC',
+                syntax: 'PROC název(parametry)',
+                description: 'Definice podprogramu s parametry. Umožňuje vytvořit znovupoužitelný blok kódu.',
+                examples: [
+                    {
+                        title: 'Definice podprogramu:',
+                        code: 'PROC drilling(REAL _depth, INT _count)\n  R1=0\n  WHILE R1<_count\n    G1 Z=_depth F0.1\n    G0 Z2\n    R1=R1+1\n  ENDWHILE\n  RET\n\n; Volání\ndrilling(-30.5, 3)',
+                        description: 'Podprogram pro vrtání s parametry'
+                    }
+                ]
+            },
+            {
+                name: 'SPCON',
+                syntax: 'SPCON',
+                description: 'Zapnutí polohování vřetena. Umožňuje přesné polohování vřetena při zastavení.',
+                examples: [
+                    {
+                        title: 'Polohování vřetena:',
+                        code: 'SPCON              ; Aktivace polohování\nSPOS=45           ; Natočení na 45°\nG0 X100           ; Pohyb v X\nSPCOF             ; Vypnutí polohování',
+                        description: 'Přesné polohování vřetena'
+                    }
+                ]
+            },
+            {
+                name: 'SPOS',
+                syntax: 'SPOS=úhel',
+                description: 'Natočení vřetena na zadaný úhel. Vyžaduje aktivní SPCON.',
+                examples: [
+                    {
+                        title: 'Natočení vřetena:',
+                        code: 'SPCON              ; Aktivace polohování\nSPOS=180          ; Otočení o 180°\nG4 F1             ; Prodleva pro stabilizaci\nG0 X50            ; Pohyb v X',
+                        description: 'Přesné natočení vřetena na pozici'
+                    }
+                ]
+            },
+            {
+                name: 'SCALE',
+                syntax: 'SCALE X.. Y.. Z..',
+                description: 'Změna měřítka pro programované rozměry. Umožňuje zvětšení nebo zmenšení programovaných hodnot.',
+                examples: [
+                    {
+                        title: 'Základní použití:',
+                        code: 'SCALE X2 Z2      ; Dvojnásobné zvětšení v X a Z\nG1 X50 Z-30       ; Skutečný pohyb bude X100 Z-60\nSCALE            ; Vypnutí změny měřítka',
+                        description: 'Zvětšení všech následujících pohybů'
+                    }
+                ]
+            },
+            {
+                name: 'RND',
+                syntax: 'RND=hodnota',
+                description: 'Vložení zaoblení mezi dva lineární pohyby nebo mezi lineární a kruhový pohyb.',
+                examples: [
+                    {
+                        title: 'Zaoblení rohu:',
+                        code: 'G1 X100 F0.2    ; První pohyb\nRND=5           ; Zaoblení R5\nZ-30            ; Druhý pohyb',
+                        description: 'Automatické vložení zaoblení'
+                    },
+                    {
+                        title: 'Komplexní obrábění:',
+                        code: 'G1 X50\nRND=3           ; První zaoblení\nZ-20\nRND=5           ; Druhé zaoblení\nX70             ; Vytvoří plynulý profil',
+                        description: 'Více zaoblení v jednom programu'
+                    }
+                ]
+            },
+            {
+                name: 'RNDM',
+                syntax: 'RNDM=hodnota\nRNDM=0 (vypnutí)',
+                description: 'Modální zaoblení - automaticky vkládá zaoblení mezi všechny následující pohyby až do vypnutí.',
+                examples: [
+                    {
+                        title: 'Modální zaoblení:',
+                        code: 'RNDM=3          ; Zapnutí modálního zaoblení R3\nG1 X100\nZ-20           ; Automatické zaoblení R3\nX70            ; Další automatické zaoblení\nRNDM=0          ; Vypnutí modálního zaoblení',
+                        description: 'Série zaoblení bez opakovaného zadávání'
+                    }
+                ]
+            },
+            {
+                name: 'S',
+                syntax: 'S hodnota',
+                description: 'Nastavení otáček vřetena nebo řezné rychlosti (v závislosti na G96/G97).',
+                examples: [
+                    {
+                        title: 'Konstantní otáčky:',
+                        code: 'G97 S1000 M3    ; 1000 ot/min pravotočivě\nG1 X50 F0.2\nS1500           ; Zvýšení na 1500 ot/min',
+                        description: 'Přímé zadání otáček'
+                    },
+                    {
+                        title: 'Konstantní řezná rychlost:',
+                        code: 'G96 S200 M3     ; 200m/min konstantní řezná rychlost\nLIMS=2000       ; Limit otáček 2000/min\nG1 X20 F0.2     ; Automatická regulace otáček',
+                        description: 'Řízení konstantní řezné rychlosti'
+                    }
+                ]
+            },
+            {
+                name: 'SETMS',
+                syntax: 'SETMS(číslo)',
+                description: 'Nastavení hlavního vřetena pro více-vřetenové stroje.',
+                examples: [
+                    {
+                        title: 'Přepínání vřeten:',
+                        code: 'SETMS(1)        ; Aktivace vřetena 1\nS1000 M3\nSETMS(2)        ; Přepnutí na vřeteno 2\nS500 M3',
+                        description: 'Ovládání více vřeten'
+                    }
+                ]
+            },
+            {
+                name: 'SETAL',
+                syntax: 'SETAL(číslo_alarmu)',
+                description: 'Vyvolání programovatelného alarmu. Slouží k upozornění na specifické situace v programu.',
+                examples: [
+                    {
+                        title: 'Kontrola podmínky:',
+                        code: 'IF R1>100\n  SETAL(61000)  ; Vyvolání alarmu 61000\nENDIF',
+                        description: 'Alarm při překročení hodnoty'
+                    }
+                ]
+            },
+            {
+                name: 'BOOL',
+                syntax: 'DEF BOOL proměnná=hodnota',
+                description: 'Definice logické proměnné typu BOOL. Může nabývat hodnot TRUE nebo FALSE.',
+                examples: [
+                    {
+                        title: 'Definice proměnné:',
+                        code: 'DEF BOOL _kontrola=TRUE    ; Definice boolean\nIF _kontrola == TRUE       ; Podmínka\n  MSG("Test OK")\nENDIF',
+                        description: 'Použití boolean proměnné v podmínce'
+                    }
+                ]
+            },
+            {
+                name: 'CONTPRON',
+                syntax: 'CONTPRON',
+                description: 'Příprava kontury pro následné zpracování. Aktivuje režim přípravy kontury.',
+                examples: [
+                    {
+                        title: 'Definice kontury:',
+                        code: 'CONTPRON                  ; Start definice kontury\nG1 X100 Z0\nX80\nZ-50                    ; Body kontury\nCONTPROF                 ; Konec definice kontury',
+                        description: 'Příprava kontury pro další zpracování'
+                    }
+                ]
+            },
+            {
+                name: 'DISC',
+                syntax: 'DISC=hodnota',
+                description: 'Korekce vnějšího rohu při nájezdu nebo odjezdu. Určuje vzdálenost dráhy nástroje od kontury.',
+                examples: [
+                    {
+                        title: 'Nájezd na konturu:',
+                        code: 'DISC=3                   ; Nastavení odstupu 3mm\nG1 X100 Z0 F0.2          ; Nájezd s korekcí\nG1 X80                   ; Obrábění kontury',
+                        description: 'Bezpečný nájezd na konturu s odstupem'
+                    }
+                ]
+            },
+            {
+                name: 'INT',
+                syntax: 'DEF INT proměnná=hodnota',
+                description: 'Definice celočíselné proměnné. Používá se pro počítadla a indexy.',
+                examples: [
+                    {
+                        title: 'Použití počítadla:',
+                        code: 'DEF INT _pocet=5          ; Definice počítadla\nN10 G1 X=_pocet*10       ; X = 50mm\n_pocet=_pocet-1         ; Snížení počítadla\nIF _pocet>0 GOTOB N10',
+                        description: 'Smyčka s celočíselným počítadlem'
+                    }
+                ]
+            },
+            {
+                name: 'REAL',
+                syntax: 'DEF REAL proměnná=hodnota',
+                description: 'Definice proměnné s desetinnou čárkou. Pro přesné výpočty a rozměry.',
+                examples: [
+                    {
+                        title: 'Výpočet rozměru:',
+                        code: 'DEF REAL _prumer=50.5    ; Průměr součásti\nDEF REAL _radius=_prumer/2  ; Výpočet poloměru\nG1 X=_radius F0.2        ; Použití vypočtené hodnoty',
+                        description: 'Práce s desetinnými čísly'
+                    }
+                ]
+            },
+            {
+                name: 'STRING',
+                syntax: 'DEF STRING[délka] proměnná=hodnota',
+                description: 'Definice textového řetězce. Pro ukládání textu a zpráv.',
+                examples: [
+                    {
+                        title: 'Práce s textem:',
+                        code: 'DEF STRING[20] _text="Vyměňte nástroj"\nMSG(_text)              ; Zobrazení zprávy\n_text="Hotovo"\nMSG(_text)',
+                        description: 'Ukládání a zobrazování textových zpráv'
+                    }
+                ]
+            },
+            {
+                name: 'MCALL',
+                syntax: 'MCALL název_podprogramu',
+                description: 'Modální volání podprogramu. Podprogram se automaticky volá v každém následujícím bloku.',
+                examples: [
+                    {
+                        title: 'Opakované vrtání:',
+                        code: 'MCALL L10              ; Aktivace modálního volání L10\nX10 Y20              ; První pozice - volá L10\nX30 Y20              ; Druhá pozice - volá L10\nMCALL                ; Vypnutí modálního volání',
+                        description: 'Automatické volání podprogramu na více pozicích'
+                    }
+                ]
+            },
+            {
+                name: 'SAVE',
+                syntax: 'PROC název SAVE',
+                description: 'Ukládá aktuální nastavení při volání podprogramu. Zajišťuje návrat do původního stavu.',
+                examples: [
+                    {
+                        title: 'Bezpečné volání podprogramu:',
+                        code: 'PROC vrtani SAVE       ; Definice s uložením stavu\nG17 G90 G54          ; Lokální nastavení\nG0 Z-10\nRET                  ; Návrat do původního stavu',
+                        description: 'Zachování nastavení hlavního programu'
+                    }
+                ]
+            },
+            {
+                name: 'CFC',
+                syntax: 'CFC',
+                description: 'Konstantní posuv po kontuře. Zajišťuje konstantní posuv nástroje po naprogramované dráze.',
+                examples: [
+                    {
+                        title: 'Obrábění kontury:',
+                        code: 'CFC                  ; Aktivace konstantního posuvu\nG1 X100 Z0 F0.2      ; První pohyb\nX80 Z-20             ; Šikmý pohyb - posuv se upraví\nCFIN                 ; Přepnutí na konstantní posuv ostří',
+                        description: 'Zachování stejné rychlosti po kontuře'
+                    }
+                ]
+            },
+            {
+                name: 'CFIN',
+                syntax: 'CFIN',
+                description: 'Konstantní posuv ostří nástroje. Udržuje konstantní posuv břitu nástroje.',
+                examples: [
+                    {
+                        title: 'Soustružení šikmých ploch:',
+                        code: 'CFIN                 ; Aktivace konstantního posuvu ostří\nG1 X100 Z0 F0.15     ; Počáteční bod\nX50 Z-25             ; Šikmá plocha - posuv se přizpůsobí\nCFC                  ; Přepnutí zpět na konstantní posuv',
+                        description: 'Rovnoměrné zatížení břitu nástroje'
+                    }
+                ]
+            },
+            {
+                name: 'DISPLOF',
+                syntax: 'DISPLOF',
+                description: 'Vypnutí zobrazování bloků programu během zpracování. Používá se pro optimalizaci výkonu.',
+                examples: [
+                    {
+                        title: 'Rychlé zpracování:',
+                        code: 'DISPLOF              ; Vypnutí zobrazování\nFOR R1=1 TO 1000     ; Smyčka s mnoha průchody\n  G1 X=R1 F0.2\nENDFOR\nDISPLON              ; Zapnutí zobrazování',
+                        description: 'Zrychlení zpracování programu'
+                    }
+                ]
+            },
+            {
+                name: 'SBLOF',
+                syntax: 'SBLOF',
+                description: 'Vypnutí režimu jednotlivých bloků. Program běží plynule bez zastavování po blocích.',
+                examples: [
+                    {
+                        title: 'Plynulé obrábění:',
+                        code: 'SBLOF                ; Vypnutí režimu po blocích\nG1 X100 F0.2         ; První pohyb\nX80 Z-20             ; Další pohyby bez přerušení\nSBLON                ; Zapnutí režimu po blocích',
+                        description: 'Nepřerušovaný běh programu'
+                    }
+                ]
+            },
+            {
+                name: 'DEFINE AS',
+                syntax: 'DEFINE název AS text_makra',
+                description: 'Definice makra pro opakovaně používané sekvence příkazů.',
+                examples: [
+                    {
+                        title: 'Vytvoření makra:',
+                        code: 'DEFINE BEZPECNA_VZDALENOST AS G0 G90 Z100\nDEFINE CHLAZENI_ZAP AS M8 G4 F2\n\n; Použití maker\nBEZPECNA_VZDALENOST   ; Odjezd do bezpečné výšky\nCHLAZENI_ZAP          ; Zapnutí chlazení s prodlevou',
+                        description: 'Zjednodušení často používaných sekvencí'
+                    }
+                ]
+            },
+            {
+                name: 'LIMS',
+                syntax: 'LIMS=hodnota',
+                description: 'Omezení maximálních otáček vřetena při G96 (konstantní řezná rychlost).',
+                examples: [
+                    {
+                        title: 'Omezení otáček:',
+                        code: 'G96 S200 M3         ; Konstantní řezná rychlost 200m/min\nLIMS=2000           ; Max. otáčky 2000/min\nG1 X10 F0.2         ; Při malém průměru se otáčky omezí na 2000',
+                        description: 'Bezpečné omezení maximálních otáček'
+                    }
+                ]
+            },
+            {
+                name: 'AX',
+                syntax: 'AX(název_osy)',
+                description: 'Převod názvu osy na její proměnnou. Používá se pro dynamické adresování os.',
+                examples: [
+                    {
+                        title: 'Dynamické adresování:',
+                        code: 'DEF AXIS osa=AX("X")   ; Definice osy X\nG1 osa=100 F0.2       ; Pohyb v ose X',
+                        description: 'Použití proměnné pro adresování osy'
+                    }
+                ]
+            },
+            {
+                name: 'AXNAME',
+                syntax: 'AXNAME("název_osy")',
+                description: 'Konverze textového řetězce na identifikátor osy. Pro dynamickou práci s osami.',
+                examples: [
+                    {
+                        title: 'Konverze názvu osy:',
+                        code: 'DEF AXIS osa\nosa=AXNAME("X")\nG1 osa=50 F0.2',
+                        description: 'Převod textového názvu osy na proměnnou'
+                    }
+                ]
+            },
+            {
+                name: 'DIV',
+                syntax: 'hodnota1 DIV hodnota2',
+                description: 'Celočíselné dělení. Vrací celou část výsledku dělení.',
+                examples: [
+                    {
+                        title: 'Celočíselný výpočet:',
+                        code: 'R1=15 DIV 4         ; R1=3 (15/4=3.75)\nIF (R1 DIV 2)==1 GOTOF N100',
+                        description: 'Použití celočíselného dělení v podmínkách'
+                    }
+                ]
+            },
+            {
+                name: 'NORM',
+                syntax: 'NORM',
+                description: 'Přímý nájezd na konturu. Nastaví standardní způsob nájezdu na konturu.',
+                examples: [
+                    {
+                        title: 'Nájezd na konturu:',
+                        code: 'NORM                ; Nastavení přímého nájezdu\nG1 X100 Z0 F0.2    ; Nájezd na konturu\nG1 X80 Z-20         ; Obrábění kontury',
+                        description: 'Standardní způsob nájezdu'
+                    }
+                ]
+            },
+            {
+                name: 'SUPA',
+                syntax: 'SUPA',
+                description: 'Vypnutí všech programovatelných posunutí a transformací. Vrací souřadný systém do základního stavu.',
+                examples: [
+                    {
+                        title: 'Reset transformací:',
+                        code: 'TRANS X100          ; Posunutí\nROT X45             ; Rotace\nSUPA                ; Vypnutí všech transformací\nG0 X0 Z0            ; Nájezd v základním systému',
+                        description: 'Návrat do základního souřadného systému'
+                    }
+                ]
+            },
+            {
+                name: 'SF',
+                syntax: 'SF=hodnota',
+                description: 'Počáteční bod pootočení při řezání závitů (G33). Určuje úhel začátku řezání závitu.',
+                examples: [
+                    {
+                        title: 'Řezání závitu:',
+                        code: 'G0 X50 Z2\nSF=180              ; Start ve 180°\nG33 Z-30 K2         ; Řezání závitu\nG0 X52',
+                        description: 'Nastavení počátečního bodu závitu'
+                    }
+                ]
+            },
+            {
+                name: 'OFFN',
+                syntax: 'OFFN=hodnota',
+                description: 'Offset kontury v normálovém směru. Umožňuje programovat ekvidistantní kontury.',
+                examples: [
+                    {
+                        title: 'Offset kontury:',
+                        code: 'OFFN=1              ; Offset 1mm\nG1 X100 Z0 F0.2    ; První kontura\nOFFN=0              ; Vypnutí offsetu',
+                        description: 'Vytvoření paralelní kontury'
+                    }
+                ]
+            },
+            {
+                name: 'STRLEN',
+                syntax: 'STRLEN(string)',
+                description: 'Vrací délku textového řetězce. Používá se pro práci s textem.',
+                examples: [
+                    {
+                        title: 'Práce s délkou textu:',
+                        code: 'DEF STRING[20] _text="Test"\nDEF INT _delka\n_delka=STRLEN(_text)    ; _delka=4',
+                        description: 'Zjištění délky řetězce'
+                    }
+                ]
+            },
+            {
+                name: 'CHAR',
+                syntax: 'DEF CHAR proměnná=hodnota',
+                description: 'Definice znakové proměnné. Pro ukládání jednotlivých znaků.',
+                examples: [
+                    {
+                        title: 'Použití znaku:',
+                        code: 'DEF CHAR _znak="A"\nIF _znak=="X" GOTOF N100',
+                        description: 'Práce s jednotlivými znaky'
+                    }
+                ]
+            },
+            {
+                name: 'FRAME',
+                syntax: 'DEF FRAME proměnná',
+                description: 'Definice souřadného systému. Obsahuje informace o posunutí, rotaci a měřítku.',
+                examples: [
+                    {
+                        title: 'Práce s rámcem:',
+                        code: 'DEF FRAME _pozice\n_pozice=CTRANS("X",100,"Z",50)  ; Posunutí\n_pozice=_pozice:CROT("Z",45)    ; Přidání rotace',
+                        description: 'Komplexní transformace souřadnic'
+                    }
+                ]
+            },
+            {
+                name: 'F',
+                syntax: 'F hodnota',
+                description: 'Nastavení posuvu. Hodnota v mm/ot nebo mm/min podle G95/G94.',
+                examples: [
+                    {
+                        title: 'Nastavení posuvu:',
+                        code: 'G95             ; Posuv v mm/ot\nF0.2            ; Posuv 0.2mm/ot\nG94             ; Posuv v mm/min\nF100            ; Posuv 100mm/min',
+                        description: 'Různé způsoby zadání posuvu'
+                    }
+                ]
+            },
+            {
+                name: 'FAD',
+                syntax: 'FAD=hodnota',
+                description: 'Definice posuvu pro měkký nájezd a odjezd. Používá se pro plynulý přechod.',
+                examples: [
+                    {
+                        title: 'Měkký nájezd:',
+                        code: 'FAD=50           ; Posuv pro nájezd 50mm/min\nG1 X100 F200      ; Hlavní pohyb s posuvem 200mm/min',
+                        description: 'Plynulý přechod při nájezdu'
+                    }
+                ]
+            },
+            {
+                name: 'D',
+                syntax: 'D číslo',
+                description: 'Výběr korekce nástroje. Aktivuje zadané číslo korekce.',
+                examples: [
+                    {
+                        title: 'Použití korekce:',
+                        code: 'T1 D1            ; Nástroj 1 s korekcí 1\nG1 X100 F0.2      ; Pohyb s aktivní korekcí',
+                        description: 'Aktivace a použití korekce nástroje'
+                    }
+                ]
+            },
+            {
+                name: 'DISCL',
+                syntax: 'DISCL=hodnota',
+                description: 'Vzdálenost koncového bodu od pracovní roviny při nájezdu/odjezdu.',
+                examples: [
+                    {
+                        title: 'Bezpečná vzdálenost:',
+                        code: 'DISCL=2           ; Vzdálenost 2mm od roviny\nG1 X100 Z0 F0.2    ; Nájezd s bezpečnou vzdáleností',
+                        description: 'Nastavení bezpečné vzdálenosti'
+                    }
+                ]
+            },
+            {
+                name: 'GOTO',
+                syntax: 'GOTO číslo_řádku/návěští',
+                description: 'Nepodmíněný skok v programu. Přeskočí na zadané číslo řádku nebo návěští. Na rozdíl od GOTOF/GOTOB hledá cíl v celém programu.',
+                examples: [
+                    {
+                        title: 'Základní použití:',
+                        code: 'N100 G1 X100 F0.2\nGOTO N200           ; Skok na řádek N200\nG1 X50              ; Tento řádek se přeskočí\nN200 G1 Z-30',
+                        description: 'Nepodmíněný skok na jiný řádek programu'
+                    },
+                    {
+                        title: 'Skok na návěští:',
+                        code: '_START:\nG1 X100 F0.2\nR1=R1+1\nIF R1<5 GOTO _START  ; Opakování 5x\nM30',
+                        description: 'Použití návěští pro vytvoření smyčky'
+                    }
+                ]
+            }
+            // End of commandsList array
+        ];
+
+        // Funkce pro práci s modálním oknem
+        function showDetails(cmdName) {
+            console.log('showDetails called for:', cmdName);
+            const command = commandsList.find(cmd => cmd.name === cmdName);
+            if (!command) {
+                console.error('Command not found:', cmdName);
+                return;
+            }
+
+            const modal = document.getElementById('commandModal');
+            const overlay = document.getElementById('modalOverlay');
+            const content = document.getElementById('modalContent');
+
+            if (!modal || !overlay || !content) {
+                console.error('Modal elements not found');
+                return;
+            }
+
+            content.innerHTML = `
+                <h2>${command.name}</h2>
+                <h3>Syntax:</h3>
+                <div class="syntax-section">
+                    <div class="example-code">${command.syntax}</div>
+                    <p class="example-description">${command.description}</p>
+                </div>
+                <div class="example-section">
+                    <h3>Příklady použití:</h3>
+                    ${command.examples.map(example => `
+                        <div class="example-title">${example.title}</div>
+                        <div class="example-code">${example.code}</div>
+                        <div class="example-description">${example.description}</div>
+                    `).join('')}
+                </div>
+            `;
+
+            modal.style.display = 'block';
+            overlay.style.display = 'block';
+            console.log('Modal shown');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('commandModal');
+            const overlay = document.getElementById('modalOverlay');
+            modal.style.display = 'none';
+            overlay.style.display = 'none';
+            console.log('Modal closed');
+        }
+
+        // Funkce pro vytváření seznamu příkazů
+        function createCommandList(commands) {
+            console.log('Creating command list...');
+            const container = document.getElementById('commandList');
+            if (!container) {
+                console.error('Command list container not found!');
+                return;
+            }
+            container.innerHTML = '';
+
+            Object.entries(commandGroups).forEach(([groupName, commandNames]) => {
+                const groupDiv = document.createElement('div');
+                groupDiv.className = 'command-group';
+
+                const titleDiv = document.createElement('div');
+                titleDiv.className = 'group-title';
+                titleDiv.textContent = groupName;
+                groupDiv.appendChild(titleDiv);
+
+                const filteredCommands = commands.filter(cmd => commandNames.includes(cmd.name));
+                console.log(`Adding ${filteredCommands.length} commands for group ${groupName}`);
+
+                filteredCommands.forEach(cmd => {
+                    const cmdDiv = document.createElement('div');
+                    cmdDiv.className = 'command-button';
+                    cmdDiv.setAttribute('data-command', cmd.name);
+                    cmdDiv.innerHTML = `
+                        <div class="command-name">${cmd.name}</div>
+                        <div class="command-brief">${cmd.description.split('.')[0]}.</div>
+                    `;
+                    groupDiv.appendChild(cmdDiv);
+                });
+
+                container.appendChild(groupDiv);
+            });
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded');
+
+            // Inicializace
+            createCommandList(commandsList);
+            initializeCategoriesMenu();
+            initializeQuickCodesMenu();
+
+            // Command button click handler
+            document.addEventListener('click', function(e) {
+                const button = e.target.closest('.command-button');
+                if (button) {
+                    const commandName = button.getAttribute('data-command');
+                    if (commandName) {
+                        console.log('Command clicked:', commandName);
+                        showDetails(commandName);
+                    }
+                }
+            });
+
+            // Menu toggle handlers
+            document.querySelector('.menu-toggle').addEventListener('click', toggleCategoriesMenu);
+            document.querySelector('.quick-codes-toggle').addEventListener('click', toggleQuickCodesMenu);
+
+            // Close button handlers
+            document.querySelectorAll('.menu-close').forEach(button => {
+                button.addEventListener('click', function() {
+                    const menu = this.closest('.side-menu');
+                    if (menu) {
+                        menu.classList.remove('active');
+                    }
+                });
+            });
+
+            // Reset view button handler
+            document.getElementById('resetView').addEventListener('click', resetViewToAll);
+
+            // Modal close button handler
+            document.querySelector('.close-button').addEventListener('click', closeModal);
+
+            // Modal overlay click handler
+            document.getElementById('modalOverlay').addEventListener('click', closeModal);
+
+            // Stop propagation on modal content
+            document.getElementById('commandModal').addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+
+            // Search box handler
+            document.getElementById('searchBox').addEventListener('input', function(e) {
+                filterCommands(e.target.value);
+            });
+        });
+
+        function initializeCategoriesMenu() {
+            console.log('Initializing categories menu');
+            const categoriesList = document.getElementById('categoriesList');
+            categoriesList.innerHTML = ''; // Clear existing content
+
+            Object.keys(commandGroups).forEach(category => {
+                const div = document.createElement('div');
+                div.className = 'menu-item';
+                div.textContent = category;
+                div.addEventListener('click', () => {
+                    filterByCategory(category);
+                    toggleCategoriesMenu();
+                });
+                categoriesList.appendChild(div);
+            });
+        }
+
+        function initializeQuickCodesMenu() {
+            console.log('Initializing quick codes menu');
+            const quickCodesList = document.getElementById('quickCodesList');
+            quickCodesList.innerHTML = ''; // Clear existing content
+
+            const allCommands = commandsList.map(cmd => cmd.name).sort();
+            allCommands.forEach(cmdName => {
+                const div = document.createElement('div');
+                div.className = 'menu-item';
+                div.textContent = cmdName;
+                div.addEventListener('click', () => {
+                    showDetails(cmdName);
+                    toggleQuickCodesMenu();
+                });
+                quickCodesList.appendChild(div);
+            });
+        }
+
+        function filterByCategory(category) {
+            console.log('Filtering by category:', category);
+            const commands = commandsList.filter(cmd =>
+                commandGroups[category].includes(cmd.name)
+            );
+            createCommandList(commands);
+            document.getElementById('resetView').classList.add('active');
+        }
+
+        function resetViewToAll() {
+            console.log('Resetting view');
+            createCommandList(commandsList);
+            document.getElementById('resetView').classList.remove('active');
+        }
+
+        // Přidejte tyto funkce nebo upravte existující
+        function toggleCategoriesMenu() {
+            console.log('Toggling categories menu');
+            const menu = document.getElementById('categoriesMenu');
+            menu.classList.toggle('active');
+        }
+
+        function toggleQuickCodesMenu() {
+            console.log('Toggling quick codes menu');
+            const menu = document.getElementById('quickCodesMenu');
+            menu.classList.toggle('active');
+        }
+
+        function filterCommands(searchTerm) {
+            console.log('Filtering commands:', searchTerm);
+            const filteredCommands = commandsList.filter(cmd =>
+                cmd.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                cmd.description.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            createCommandList(filteredCommands);
+        }
+
+        // ...rest of existing code...
+    </script>
+</body>
+</html>

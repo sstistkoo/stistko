@@ -1,0 +1,75 @@
+/* Side Panel - Levý vysouvací panel */
+.side-panel {
+  position: fixed;
+  top: 0;
+  left: -320px;
+  width: 320px;
+  height: 100vh;
+  height: 100dvh;
+  background: var(--bg-primary);
+  border-right: 1px solid var(--border);
+  z-index: 1000;
+  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.side-panel.show {
+  left: 0;
+}
+
+.panel-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  background: var(--bg-primary);
+  z-index: 10;
+}
+
+.panel-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.panel-close {
+  width: 32px;
+  height: 32px;
+  min-height: 44px;
+  min-width: 44px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 24px;
+  cursor: pointer;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.panel-close:hover {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.panel-body {
+  padding: 20px;
+}
+
+@media (max-width: 768px) {
+  .side-panel {
+    width: 85vw;
+    left: -85vw;
+  }
+
+  .side-panel.show {
+    left: 0;
+  }
+}

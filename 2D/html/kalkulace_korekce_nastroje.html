@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kalkulátor korekcí</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary-color: #2563eb;
+        --secondary-color: #1e40af;
+        --background-color: #f8fafc;
+        --card-background: #ffffff;
+        --border-color: #e2e8f0;
+        --text-color: #1e293b;
+      }
+
+      body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 10px;
+        background-color: var(--background-color);
+        color: var(--text-color);
+        line-height: 1.6;
+      }
+
+      .card {
+        background: var(--card-background);
+        border-radius: 12px;
+        padding: 1rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+          0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        position: relative;
+        padding-top: 60px;
+      }
+
+      .grid {
+        display: grid;
+        gap: 1.5rem;
+        margin: 1.5rem 0;
+      }
+
+      .grid-cols-3 {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .grid-cols-2 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      select,
+      input {
+        padding: 0.75rem;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        width: 100%;
+        box-sizing: border-box;
+        font-size: 1rem;
+        transition: border-color 0.2s, box-shadow 0.2s;
+      }
+
+      select:focus,
+      input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      }
+
+      .controls {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .x-controls {
+        display: flex;
+        gap: 1rem;
+        margin-left: 1rem; /* Přidáme mezeru vlevo pro lepší oddělení od Osa X */
+      }
+
+      .result-box {
+        background-color: var(--background-color);
+        padding: 1rem;
+        border-radius: 8px;
+        font-family: "Consolas", monospace;
+        border: 1px solid var(--border-color);
+      }
+
+      .large-result {
+        font-size: 1.5rem;
+        color: var(--primary-color);
+        font-weight: bold;
+      }
+
+      .result-display {
+        font-size: 1.5rem;
+        color: var(--primary-color);
+        font-weight: bold;
+        font-family: "Consolas", monospace;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: var(--text-color);
+      }
+
+      h3 {
+        color: var(--secondary-color);
+        margin: 1.5rem 0 1rem 0;
+      }
+
+      .section-divider {
+        margin: 2rem 0;
+        border-top: 2px solid var(--border-color);
+        padding-top: 2rem;
+      }
+
+      #totalSum {
+        padding: 1rem;
+        background: var(--primary-color);
+        color: white;
+        border-radius: 8px;
+        text-align: center;
+        margin-top: 1rem;
+      }
+
+      .input-group {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .diff-calculation {
+        font-family: "Consolas", monospace;
+        color: var(--text-color);
+        font-size: 0.9rem;
+        white-space: nowrap;
+      }
+
+      /* Upravené rozložení pro mobilní zařízení */
+      @media (max-width: 768px) {
+        .controls {
+          grid-template-columns: 1fr;
+          gap: 0.5rem;
+        }
+
+        .x-controls {
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+
+        .grid-cols-2,
+        .grid-cols-3 {
+          grid-template-columns: 1fr;
+        }
+
+        select,
+        input,
+        button {
+          padding: 12px; /* Větší touch target */
+          font-size: 16px; /* Předejít iOS zoom na input */
+        }
+
+        .input-group {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .diff-calculation {
+          margin-top: 0.5rem;
+          padding: 0.5rem;
+          background-color: var(--background-color);
+          border-radius: 4px;
+          text-align: center;
+        }
+
+        .result-box,
+        .calculation-detail {
+          padding: 0.75rem;
+          font-size: 0.9rem;
+        }
+
+        .large-result,
+        .result-display {
+          font-size: 1.25rem;
+          text-align: center;
+        }
+
+        #totalSum {
+          margin: 1rem 0;
+        }
+
+        .section-divider {
+          margin: 1.5rem 0;
+          padding-top: 1.5rem;
+        }
+      }
+
+      /* Optimalizace pro velmi malé obrazovky */
+      @media (max-width: 360px) {
+        body {
+          padding: 5px;
+        }
+
+        .card {
+          padding: 0.75rem;
+        }
+
+        h3 {
+          font-size: 1.1rem;
+        }
+
+        label {
+          font-size: 0.9rem;
+        }
+      }
+
+      .absolute-controls {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      @media (max-width: 768px) {
+        .absolute-controls {
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+      }
+
+      /* Přidáme styl pro oddělení výpočtů */
+      .diff-calculation {
+        display: block;
+        margin-top: 0.25rem;
+      }
+
+      /* Odstraníme .radius-section a .calculation-detail styly */
+      .radius-section,
+      .calculation-detail {
+        display: none;
+      }
+
+      /* Přidáme nový styl */
+      .radius-input {
+        width: 50%; /* Poloviční šířka */
+        margin: 0 auto; /* Vycentrování */
+        display: block;
+      }
+
+      /* Upravíme styl pro radius-input */
+      .radius-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start; /* Zarovnání doleva */
+      }
+
+      .radius-input {
+        width: auto; /* Šířka podle obsahu */
+        min-width: 100px; /* Minimální šířka */
+        margin: 0; /* Zrušíme automatické mezery */
+      }
+
+      .controls select {
+        width: auto; /* Přepínače budou mít šířku podle obsahu */
+        min-width: 80px; /* Minimální šířka pro přepínače */
+      }
+
+      .input-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* Dva sloupce stejné šířky */
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+      }
+
+      .radius-row {
+        margin-bottom: 1rem;
+      }
+
+      @media (max-width: 768px) {
+        .input-row {
+          grid-template-columns: 1fr; /* Na mobilu jeden sloupec */
+        }
+      }
+
+      /* Přidáme styl pro přepínač zobrazení */
+      #displayMode {
+        border: none;
+        background: transparent;
+        font-size: 1.2rem;
+        cursor: pointer;
+        margin-left: 0.5rem;
+        vertical-align: middle;
+      }
+
+      #displayMode:focus {
+        outline: none;
+        box-shadow: none;
+      }
+
+      /* Přidáme plynulé zobrazení/skrytí přepínače */
+      #displayMode {
+        transition: opacity 0.3s;
+      }
+
+      /* Přidáme styl pro 4 sloupce */
+      .grid-cols-4 {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      @media (max-width: 768px) {
+        .grid-cols-4 {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* Přidáme styly pro displeje */
+      #displayZ {
+        display: none;
+      }
+
+      #displayX,
+      #displayZ {
+        transition: opacity 0.3s;
+      }
+
+      /* Přidat styl pro ikonu domů vpravo nahoře */
+      .home-link {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        color: var(--text-color);
+        text-decoration: none;
+        font-size: 24px;
+        z-index: 100;
+      }
+
+      .home-link:hover {
+        color: var(--primary-color);
+      }
+
+      /* Styl pro modální okno */
+      .karusel-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        overflow: auto;
+      }
+
+      .karusel-modal-content {
+        position: fixed;
+        background-color: #fff;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100vh;
+        max-width: none;
+        border-radius: 0;
+        box-shadow: none;
+        overflow: hidden;
+        top: 0;
+        left: 0;
+      }
+
+      .karusel-modal-iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+
+      .karusel-close-btn {
+        position: fixed;
+        right: 20px;
+        top: 20px;
+        font-size: 28px;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        cursor: pointer;
+        z-index: 1002;
+        padding: 10px 15px;
+        border-radius: 5px;
+      }
+
+      .karusel-close-btn:hover {
+        background: white;
+      }
+
+      /* Tlačítko v horní části */
+      .karusel-button {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        z-index: 99;
+      }
+
+      .karusel-button:hover {
+        background-color: var(--secondary-color);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <button class="karusel-button" onclick="openKaruselModal()">
+        <i class="fas fa-cog"></i> Z, vnější průměr
+      </button>
+      <a href="index.html" class="home-link">
+        <i class="fas fa-home"></i>
+      </a>
+      <div class="controls">
+        <select id="axis">
+          <option value="X" selected>Osa X</option>
+          <option value="Z">Osa Z</option>
+        </select>
+        <div id="xControls" class="x-controls" style="display: none">
+          <select id="holeMode">
+            <option value="outer" selected>D2 - vnější</option>
+            <option value="hole">D1 - díra</option>
+          </select>
+          <select id="diameterMode">
+            <option value="radius">Poloměr</option>
+            <option value="diameter">Průměr</option>
+          </select>
+        </div>
+        <input type="hidden" id="invertDifference" value="invert" />
+      </div>
+
+      <div class="radius-row">
+        <div class="radius-container">
+          <label>Rádius nástroje</label>
+          <input type="text" id="radius" value="0" class="radius-input" />
+        </div>
+      </div>
+
+      <!-- Upravíme popisek v horní části -->
+      <div class="input-row">
+        <div>
+          <label id="displayAxisLabel"
+            >X displej při naškrábnutí (poloměr)
+          </label>
+          <div class="input-group">
+            <input type="text" id="current" value="0" />
+          </div>
+        </div>
+        <div>
+          <label id="targetLabel">naměřený Poloměr (X)</label>
+          <div class="input-group">
+            <input type="text" id="target" value="0" />
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2">
+        <div>
+          <label id="lValueLabel">L1- Hodnota displeje</label>
+          <input type="text" id="currentL" value="0" />
+        </div>
+        <div>
+          <label>Výpočet</label>
+          <div class="result-box">
+            <div class="diff-calculation" id="diffCalculation">0</div>
+            <div class="diff-calculation" id="fullCalculation">0</div>
+            <div class="diff-calculation" id="calculation">0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upravíme HTML pro zobrazení dvou hodnot displeje -->
+      <div class="grid grid-cols-2" style="margin-top: 20px">
+        <div>
+          <h3 id="lResultLabel">L1- změnit na:</h3>
+          <div class="large-result" id="finalResult">0</div>
+        </div>
+        <div>
+          <div id="displayX">
+            <h3>
+              Hodnota displeje:
+              <select
+                id="displayMode"
+                style="width: auto; padding: 0 0.5rem; font-size: 1rem"
+              >
+                <option value="radius">Poloměr</option>
+                <option value="diameter">Průměr</option>
+              </select>
+            </h3>
+            <div class="result-display" id="displayValue">0</div>
+          </div>
+          <div id="displayZ" style="margin-top: 1rem">
+            <h3>Hodnota displeje (Z):</h3>
+            <div class="result-display" id="displayValueZ">0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-divider">
+        <h3>Korekce nástroje - absolutní hodnoty</h3>
+
+        <!-- Sekce pro osu X -->
+        <div id="xSection" style="display: none">
+          <div class="absolute-controls">
+            <select id="absoluteDiameterMode" class="p-2 border rounded">
+              <option value="radius">Poloměr</option>
+              <option value="diameter">Průměr</option>
+            </select>
+            <select id="absoluteHoleMode" class="p-2 border rounded">
+              <option value="outer">D2 - vnější</option>
+              <option value="hole">D1 - díra</option>
+            </select>
+          </div>
+
+          <div style="margin-bottom: 1rem">
+            <label>Rádius</label>
+            <input
+              type="text"
+              id="radiusResult"
+              value="0"
+              class="p-2 border rounded"
+            />
+          </div>
+
+          <div class="grid grid-cols-2">
+            <div>
+              <label id="workpieceLabel">Poloměr</label>
+              <input type="text" id="workpieceHeightX" value="0" />
+            </div>
+            <div>
+              <label>Výpočet korekce</label>
+              <div class="result-box" id="secondSum">0</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sekce pro osu Z -->
+        <div id="zSection">
+          <div class="grid grid-cols-3">
+            <div>
+              <label>G57</label>
+              <input type="text" id="g57" value="800" />
+            </div>
+            <div>
+              <label>G54 (podložky)</label>
+              <input type="text" id="g54" value="100" />
+            </div>
+            <div>
+              <label>Součet OFFSET</label>
+              <div class="result-box" id="firstSum">0</div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3">
+            <!-- Změníme na 3 sloupce -->
+            <div>
+              <label>Výška kola</label>
+              <input type="text" id="workpieceHeightZ" value="0" />
+            </div>
+            <div>
+              <label>Rádius</label>
+              <input type="text" id="radiusValue" value="0" />
+            </div>
+            <div>
+              <label>Výpočet korekce Z</label>
+              <div class="result-box" id="secondSumAlternate">0</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Společný výsledek -->
+        <div style="margin-top: 20px">
+          <div class="result-box">
+            <div id="totalSum" class="large-result">0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upravíme JavaScript pro aktualizaci popisků a synchronizaci -->
+    <script>
+      const parseNum = (val, def = "0") =>
+        parseFloat(String(val || def).replace(",", ".")) || 0;
+      const formatNum = (num) =>
+        Number(num)
+          .toFixed(3)
+          .replace(/\.?0+$/, "");
+
+      const state = {
+        axis: "X",
+        isDiameter: false,
+        isHole: false,
+        invertDifference: true, // změněno na true
+        absoluteIsDiameter: false,
+        absoluteIsHole: false,
+        displayInDiameter: false,
+      };
+
+      // Přidáme oddělené stavy pro každou osu
+      const stateX = {
+        current: "0",
+        target: "0",
+        currentL: "0",
+        workpieceHeight: "0",
+      };
+
+      const stateZ = {
+        current: "0",
+        target: "0",
+        currentL: "0",
+        g57: "800",
+        g54: "100",
+        workpieceHeight: "0",
+      };
+
+      // Funkce pro uložení stavu aktuální osy
+      function saveAxisState() {
+        const currentState = state.axis === "X" ? stateX : stateZ;
+        currentState.current = document.getElementById("current").value;
+        currentState.target = document.getElementById("target").value;
+        currentState.currentL = document.getElementById("currentL").value;
+
+        if (state.axis === "X") {
+          currentState.workpieceHeight =
+            document.getElementById("workpieceHeightX").value;
+        } else {
+          currentState.workpieceHeight =
+            document.getElementById("workpieceHeightZ").value;
+          stateZ.g57 = document.getElementById("g57").value;
+          stateZ.g54 = document.getElementById("g54").value;
+        }
+      }
+
+      // Funkce pro načtení stavu osy
+      function loadAxisState(newAxis) {
+        const newState = newAxis === "X" ? stateX : stateZ;
+        document.getElementById("current").value = newState.current;
+        document.getElementById("target").value = newState.target;
+        document.getElementById("currentL").value = newState.currentL;
+
+        if (newAxis === "X") {
+          document.getElementById("workpieceHeightX").value =
+            newState.workpieceHeight;
+        } else {
+          document.getElementById("workpieceHeightZ").value =
+            newState.workpieceHeight;
+          document.getElementById("g57").value = stateZ.g57;
+          document.getElementById("g54").value = stateZ.g54;
+        }
+      }
+
+      function updateCalculations() {
+        // Definujeme zTotalSum na začátku funkce
+        let zTotalSum = 0;
+
+        const current = parseNum(document.getElementById("current").value);
+        const targetInput = parseNum(document.getElementById("target").value);
+        // Upravíme zpracování hodnoty target podle aktivní osy
+        const target =
+          state.axis === "X" && state.isDiameter
+            ? targetInput / 2
+            : targetInput;
+        const currentL = parseNum(document.getElementById("currentL").value);
+        const radius = parseNum(document.getElementById("radius").value);
+        const g57 = parseNum(document.getElementById("g57").value);
+        const g54 = parseNum(document.getElementById("g54").value);
+        // Oddělené načítání hodnot pro osy X a Z
+        const workpieceX = parseNum(
+          document.getElementById("workpieceHeightX").value
+        );
+        const workpieceZ = parseNum(
+          document.getElementById("workpieceHeightZ").value
+        );
+        const radiusAbsolute = parseNum(
+          document.getElementById("radiusResult").value
+        );
+
+        // Společné výpočty pro hlavní část
+        const adjustedRadius =
+          state.axis === "X" && state.isDiameter ? radius * 2 : radius;
+        const finalRadius = state.isHole ? -radius : radius;
+        const normalDifference = target - current;
+        const sumWithRadius = normalDifference + finalRadius;
+        const invertedSum = state.invertDifference
+          ? -sumWithRadius
+          : sumWithRadius;
+        const totalWithInversion = currentL + invertedSum;
+
+        // Update hlavního UI
+        // Odstraníme aktualizaci currentValue
+        // document.getElementById('currentValue').textContent = formatNum(current);
+        // Upravíme formátování výpočtů pro zobrazení převodu průměr/poloměr
+        // Update výpočtů s novým formátováním - upravíme podmínku pro targetDisplay
+        const targetDisplay =
+          state.axis === "X" && state.isDiameter
+            ? `(${formatNum(targetInput)} ÷ 2)`
+            : formatNum(targetInput);
+
+        // Update výpočtů s novým formátováním
+        document.getElementById(
+          "diffCalculation"
+        ).textContent = `${targetDisplay} - ${formatNum(current)} = ${formatNum(
+          normalDifference
+        )}`;
+        document.getElementById("calculation").textContent = `${formatNum(
+          currentL
+        )} + ${formatNum(invertedSum)} = ${formatNum(totalWithInversion)}`;
+        document.getElementById("finalResult").textContent =
+          formatNum(totalWithInversion);
+
+        // Update hodnoty displeje
+        const displayOperation = state.isHole ? "-" : "+";
+        const displayTotal = state.isHole
+          ? target - adjustedRadius
+          : target + adjustedRadius;
+        const displayTotalFormatted = state.isDiameter
+          ? displayTotal * 2
+          : displayTotal;
+        document.getElementById("displayValue").textContent = formatNum(
+          displayTotalFormatted
+        );
+
+        // Update rozdílu a plného výpočtu u Požadované X
+        document.getElementById(
+          "diffCalculation"
+        ).textContent = `${targetDisplay} - ${formatNum(current)} = ${formatNum(
+          normalDifference
+        )}`;
+        document.getElementById("fullCalculation").textContent = `${formatNum(
+          radius
+        )} + ${formatNum(normalDifference)} = ${formatNum(sumWithRadius)}`;
+
+        if (state.axis === "X") {
+          const workpieceInput = parseNum(
+            document.getElementById("workpieceHeightX").value
+          );
+          const workpieceDisplay = state.absoluteIsDiameter
+            ? `(${formatNum(workpieceInput)} ÷ 2)`
+            : formatNum(workpieceInput);
+          const workpieceValue = state.absoluteIsDiameter
+            ? workpieceInput / 2
+            : workpieceInput;
+          const radiusValue = parseNum(
+            document.getElementById("radiusResult").value
+          );
+          const operation = state.absoluteIsHole ? "-" : "+";
+          const xSecondSum =
+            workpieceValue +
+            (state.absoluteIsHole ? -radiusValue : radiusValue);
+
+          document.getElementById("xSection").style.display = "block";
+          document.getElementById("zSection").style.display = "none";
+          document.getElementById("workpieceLabel").textContent =
+            state.absoluteIsDiameter
+              ? "naměřený Průměr (X)"
+              : "naměřený Poloměr (X)";
+
+          // Upravený formát výpisu výpočtu korekce
+          const resultText = state.absoluteIsDiameter
+            ? `${workpieceDisplay} ${operation} ${formatNum(
+                radiusValue
+              )} = ${formatNum(xSecondSum)}`
+            : `${workpieceDisplay} ${operation} ${formatNum(
+                radiusValue
+              )} = ${formatNum(xSecondSum)}`;
+
+          document.getElementById("secondSum").textContent = resultText;
+          document.getElementById("totalSum").textContent =
+            formatNum(xSecondSum);
+        } else {
+          // Pro osu Z používáme vždy přímé hodnoty bez průměr/poloměr úprav
+          document.getElementById("diffCalculation").textContent = `${formatNum(
+            targetInput
+          )} - ${formatNum(current)} = ${formatNum(targetInput - current)}`;
+
+          document.getElementById("fullCalculation").textContent = `${formatNum(
+            radius
+          )} + ${formatNum(targetInput - current)} = ${formatNum(
+            radius + (targetInput - current)
+          )}`;
+
+          document.getElementById("calculation").textContent = `${formatNum(
+            currentL
+          )} + ${formatNum(invertedSum)} = ${formatNum(totalWithInversion)}`;
+
+          // Výpočty pro osu Z
+          const zFirstSum = g57 + g54; // 900
+          const zHeightRadius = workpieceZ + radius; // 125 + 562 = 687
+          zTotalSum = zFirstSum + zHeightRadius; // 900 + 687 = 1587
+
+          // Aktualizujeme výpisy výpočtů
+          document.getElementById("firstSum").textContent = `${formatNum(
+            g57
+          )} + ${formatNum(g54)} = ${formatNum(zFirstSum)}`;
+
+          document.getElementById(
+            "secondSumAlternate"
+          ).textContent = `(${formatNum(workpieceZ)} + ${formatNum(
+            radius
+          )}) + ${formatNum(zFirstSum)} = ${formatNum(zTotalSum)}`;
+
+          document.getElementById("totalSum").textContent =
+            formatNum(zTotalSum);
+
+          // Pro hodnotu displeje zobrazíme pouze součet výšky kola a rádiusu
+          document.getElementById("displayValueZ").textContent =
+            formatNum(zHeightRadius);
+          document.getElementById("displayValueZ").title = `${formatNum(
+            workpieceZ
+          )} + ${formatNum(radius)} = ${formatNum(zHeightRadius)}`;
+        }
+
+        if (state.axis === "X") {
+          // Výpočet hodnoty displeje pro osu X
+          const operation = state.isHole ? "-" : "+";
+          let displayValue;
+
+          if (state.isDiameter) {
+            // Pro průměr
+            if (state.displayInDiameter) {
+              // Zobrazení v průměru
+              displayValue = state.isHole
+                ? targetInput - radius * 2
+                : targetInput + radius * 2;
+            } else {
+              // Zobrazení v poloměru
+              const halfDiameter = targetInput / 2;
+              displayValue = state.isHole
+                ? halfDiameter - radius
+                : halfDiameter + radius;
+            }
+          } else {
+            // Pro poloměr
+            if (state.displayInDiameter) {
+              // Zobrazení v průměru
+              displayValue =
+                (state.isHole ? target - radius : target + radius) * 2;
+            } else {
+              // Zobrazení v poloměru
+              displayValue = state.isHole ? target - radius : target + radius;
+            }
+          }
+
+          document.getElementById("displayValue").textContent =
+            formatNum(displayValue);
+
+          // Tooltip pro zobrazení výpočtu
+          const tooltipText = state.isDiameter
+            ? state.displayInDiameter
+              ? `${formatNum(targetInput)} ${operation} (${formatNum(
+                  radius
+                )} × 2)`
+              : `(${formatNum(targetInput)} ÷ 2) ${operation} ${formatNum(
+                  radius
+                )}`
+            : state.displayInDiameter
+            ? `(${formatNum(target)} ${operation} ${formatNum(radius)}) × 2`
+            : `${formatNum(target)} ${operation} ${formatNum(radius)}`;
+
+          document.getElementById(
+            "displayValue"
+          ).title = `${tooltipText} = ${formatNum(displayValue)}`;
+        }
+
+        // Aktualizace zobrazení přepínače podle osy
+        const displayModeSelect = document.getElementById("displayMode");
+        if (state.axis === "X") {
+          displayModeSelect.style.display = "inline";
+          // Výpočty pro osu X zůstávají stejné
+          // ...existing X axis display code...
+        } else {
+          // Skryjeme X displej a zobrazíme Z displej
+          document.getElementById("displayX").style.display = "none";
+          document.getElementById("displayZ").style.display = "block";
+
+          const zFirstSum = g57 + g54;
+          const zHeightRadius = workpieceZ + radius;
+          zTotalSum = zFirstSum + zHeightRadius;
+
+          // Aktualizujeme výpisy výpočtů
+          document.getElementById("firstSum").textContent = `${formatNum(
+            g57
+          )} + ${formatNum(g54)} = ${formatNum(zFirstSum)}`;
+
+          document.getElementById(
+            "secondSumAlternate"
+          ).textContent = `(${formatNum(workpieceZ)} + ${formatNum(
+            radius
+          )}) + ${formatNum(zFirstSum)} = ${formatNum(zTotalSum)}`;
+
+          document.getElementById("totalSum").textContent =
+            formatNum(zTotalSum);
+
+          // Pro hodnotu displeje zobrazíme pouze součet výšky kola a rádiusu
+          document.getElementById("displayValueZ").textContent =
+            formatNum(zHeightRadius);
+          document.getElementById("displayValueZ").title = `${formatNum(
+            workpieceZ
+          )} + ${formatNum(radius)} = ${formatNum(zHeightRadius)}`;
+        }
+      }
+
+      // Upravíme event listener pro přepínání os - odstraníme volání updateLabels
+      document.getElementById("axis").addEventListener("change", (e) => {
+        saveAxisState(); // Uložíme současný stav
+        state.axis = e.target.value;
+        loadAxisState(state.axis); // Načteme nový stav
+
+        // Update UI
+        document
+          .querySelectorAll(".axisLabel")
+          .forEach((el) => (el.textContent = state.axis));
+        document.querySelectorAll(".lLabel").forEach((el) => {
+          el.textContent = state.axis === "X" ? "1" : "2";
+        });
+
+        document.getElementById("xSection").style.display =
+          e.target.value === "X" ? "block" : "none";
+        document.getElementById("zSection").style.display =
+          e.target.value === "Z" ? "block" : "none";
+
+        // Odstraníme volání updateLabels
+        updateLabels();
+        updateControlsVisibility();
+        updateCalculations();
+
+        // Aktualizace zobrazení přepínače
+        const displayModeSelect = document.getElementById("displayMode");
+        displayModeSelect.style.display =
+          e.target.value === "X" ? "inline" : "none";
+
+        const isXAxis = e.target.value === "X";
+        document.getElementById("displayX").style.display = isXAxis
+          ? "block"
+          : "none";
+        document.getElementById("displayZ").style.display = isXAxis
+          ? "none"
+          : "block";
+      });
+
+      document
+        .getElementById("invertDifference")
+        .addEventListener("change", (e) => {
+          state.invertDifference = e.target.value === "invert";
+          updateCalculations();
+        });
+
+      document
+        .getElementById("diameterMode")
+        .addEventListener("change", (e) => {
+          state.isDiameter = e.target.value === "diameter";
+          updateCalculations();
+        });
+
+      document.getElementById("holeMode").addEventListener("change", (e) => {
+        state.isHole = e.target.value === "hole";
+        updateCalculations();
+      });
+
+      document
+        .getElementById("absoluteDiameterMode")
+        .addEventListener("change", (e) => {
+          state.absoluteIsDiameter = e.target.value === "diameter";
+          updateCalculations();
+        });
+
+      document
+        .getElementById("absoluteHoleMode")
+        .addEventListener("change", (e) => {
+          state.absoluteIsHole = e.target.value === "hole";
+          updateCalculations();
+        });
+
+      document.getElementById("displayMode").addEventListener("change", (e) => {
+        state.displayInDiameter = e.target.value === "diameter";
+        updateCalculations();
+      });
+
+      document.querySelectorAll("input").forEach((input) => {
+        input.addEventListener("input", updateCalculations);
+      });
+
+      // Synchronizace pouze pro rádius nástroje
+      ["radius", "radiusResult", "radiusValue"].forEach((id) => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.addEventListener("input", (e) => {
+            const value = e.target.value;
+            ["radius", "radiusResult", "radiusValue"].forEach((targetId) => {
+              if (targetId !== id) {
+                const target = document.getElementById(targetId);
+                if (target) target.value = value;
+              }
+            });
+            updateCalculations();
+          });
+        }
+      });
+
+      // Přidat event listener pro radiusResult input
+      document
+        .getElementById("radiusResult")
+        .addEventListener("input", updateCalculations);
+
+      // Inicializace
+      loadAxisState("X");
+      updateCalculations();
+
+      // Upravíme funkci pro kontrolu viditelnosti
+      function updateControlsVisibility() {
+        const isXAxis = state.axis === "X";
+        document.getElementById("xControls").style.display = isXAxis
+          ? "flex"
+          : "none";
+      }
+
+      // Přidáme volání updateControlsVisibility do inicializace
+      function initializeUI() {
+        // ...existing code...
+        updateControlsVisibility();
+      }
+
+      // Zajistíme, že se kontroly správně zobrazí při startu
+      document.addEventListener("DOMContentLoaded", () => {
+        updateControlsVisibility();
+      });
+
+      // Přidáme synchronizaci hodnot mezi horní a dolní částí
+      document.getElementById("target").addEventListener("input", (e) => {
+        if (state.axis === "X") {
+          document.getElementById("workpieceHeightX").value = e.target.value;
+        } else {
+          document.getElementById("workpieceHeightZ").value = e.target.value;
+        }
+        updateCalculations();
+      });
+
+      document
+        .getElementById("workpieceHeightZ")
+        .addEventListener("input", (e) => {
+          if (state.axis === "Z") {
+            document.getElementById("target").value = e.target.value;
+          }
+          updateCalculations();
+        });
+
+      // Upravíme event listenery pro přepínače režimu
+      document
+        .getElementById("diameterMode")
+        .addEventListener("change", (e) => {
+          state.isDiameter = e.target.value === "diameter";
+          state.absoluteIsDiameter = state.isDiameter;
+          document.getElementById("absoluteDiameterMode").value =
+            e.target.value;
+          updateLabels();
+          updateCalculations();
+        });
+
+      document
+        .getElementById("absoluteDiameterMode")
+        .addEventListener("change", (e) => {
+          state.absoluteIsDiameter = e.target.value === "diameter";
+          state.isDiameter = state.absoluteIsDiameter;
+          document.getElementById("diameterMode").value = e.target.value;
+          document.getElementById("workpieceHeightX").value =
+            document.getElementById("target").value;
+          updateLabels();
+          updateCalculations();
+        });
+
+      // Přidáme volání updateLabels do inicializace
+      document.addEventListener("DOMContentLoaded", () => {
+        updateControlsVisibility();
+        updateLabels();
+      });
+
+      function updateLabels() {
+        if (state.axis === "X") {
+          const modeText = state.isDiameter
+            ? "naměřený Průměr (X)"
+            : "naměřený Poloměr (X)";
+          document.getElementById("targetLabel").textContent = modeText;
+          document.getElementById("workpieceLabel").textContent =
+            state.absoluteIsDiameter
+              ? "naměřený Průměr (X)"
+              : "naměřený Poloměr (X)";
+          document.getElementById("lValueLabel").textContent =
+            "L1- Hodnota displeje";
+          document.getElementById("lResultLabel").textContent =
+            "L1- změnit na:";
+          document.getElementById("displayAxisLabel").textContent =
+            "X displej při naškrábnutí (poloměr)";
+        } else {
+          document.getElementById("targetLabel").textContent =
+            "naškrábnutá výška kola";
+          document.getElementById("workpieceLabel").textContent =
+            "naškrábnutá výška kola";
+          document.getElementById("lValueLabel").textContent =
+            "L2- Hodnota displeje";
+          document.getElementById("lResultLabel").textContent =
+            "L2- změnit na:";
+          document.getElementById("displayAxisLabel").textContent =
+            "Z Hodnota displeje";
+        }
+      }
+
+      // Funkcí pro modální okno Karusel Kalkulator
+      function openKaruselModal() {
+        const modal = document.getElementById("karuselModal");
+        modal.style.display = "block";
+      }
+
+      function closeKaruselModal() {
+        const modal = document.getElementById("karuselModal");
+        modal.style.display = "none";
+      }
+
+      // Zavřít modální okno při kliknutí mimo
+      window.addEventListener("click", function (event) {
+        const modal = document.getElementById("karuselModal");
+        if (event.target === modal) {
+          closeKaruselModal();
+        }
+      });
+    </script>
+
+    <!-- Modální okno pro Karusel Kalkulator -->
+    <div id="karuselModal" class="karusel-modal">
+      <button class="karusel-close-btn" onclick="closeKaruselModal()">✕</button>
+      <div class="karusel-modal-content">
+        <iframe
+          src="karusel_korekcni_kalkulator.html"
+          class="karusel-modal-iframe"
+        ></iframe>
+      </div>
+    </div>
+  </body>
+</html>

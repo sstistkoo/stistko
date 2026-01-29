@@ -1,0 +1,382 @@
+    <div id="calculatorModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Kalkulačka</h2>
+            <div class="calculator">
+                <input type="text" class="calc-screen" id="calcScreen" readonly>
+                <div class="calc-buttons">
+                    <div class="calc-btn-item clear">C</div>
+                    <div class="calc-btn-item operator">(</div>
+                    <div class="calc-btn-item operator">)</div>
+                    <div class="calc-btn-item operator">/</div>
+                    <div class="calc-btn-item">7</div>
+                    <div class="calc-btn-item">8</div>
+                    <div class="calc-btn-item">9</div>
+                    <div class="calc-btn-item operator">*</div>
+                    <div class="calc-btn-item">4</div>
+                    <div class="calc-btn-item">5</div>
+                    <div class="calc-btn-item">6</div>
+                    <div class="calc-btn-item operator">-</div>
+                    <div class="calc-btn-item">1</div>
+                    <div class="calc-btn-item">2</div>
+                    <div class="calc-btn-item">3</div>
+                    <div class="calc-btn-item operator">+</div>
+                    <div class="calc-btn-item">0</div>
+                    <div class="calc-btn-item">.</div>
+                    <div class="calc-btn-item" id="transferBtn">→</div>
+                    <div class="calc-btn-item equals">=</div>
+                </div>
+            </div>
+        </div>
+    </div><!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulátor korekcí Sinumerik 840D</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .axis-selector {
+            margin-bottom: 20px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .axis-btn {
+            padding: 10px 15px;
+            font-size: 18px;
+            background-color: #e0e0e0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 80px;
+        }
+        .axis-btn.active {
+            background-color: #007bff;
+            color: white;
+        }
+        .calc-btn {
+            padding: 10px 15px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .calc-icon {
+            font-style: normal;
+            margin-right: 5px;
+        }
+        .input-group {
+            display: flex;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+        label {
+            width: 180px;
+            display: inline-block;
+            font-weight: bold;
+        }
+        input {
+            flex-grow: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .result-group {
+            display: flex;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            align-items: center;
+        }
+        .result-label {
+            width: 180px;
+            font-weight: bold;
+        }
+        .result-value {
+            flex-grow: 1;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #f0f8ff;
+            border: 1px solid #b8daff;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .axis-indicator {
+            font-weight: bold;
+            color: #007bff;
+        }
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 300px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover {
+            color: black;
+        }
+        .calculator {
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .calc-screen {
+            width: 100%;
+            height: 50px;
+            border: none;
+            background-color: #f8f8f8;
+            font-size: 20px;
+            text-align: right;
+            padding: 0 10px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+        .calc-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+            padding: 5px;
+        }
+        .calc-btn-item {
+            padding: 10px;
+            font-size: 18px;
+            text-align: center;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .calc-btn-item:hover {
+            background-color: #e0e0e0;
+        }
+        .calc-btn-item.operator {
+            background-color: #f8f8f8;
+        }
+        .calc-btn-item.equals {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .calc-btn-item.clear {
+            background-color: #ff9800;
+            color: white;
+        }
+        @media (max-width: 480px) {
+            .input-group, .result-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            label, .result-label {
+                width: 100%;
+                margin-bottom: 5px;
+            }
+            input, .result-value {
+                width: 100%;
+                box-sizing: border-box;
+            }
+            .modal-content {
+                width: 90%;
+                margin: 30% auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Kalkulátor korekcí Sinumerik 840D</h1>
+        
+        <div class="axis-selector">
+            <button id="xAxis" class="axis-btn active">Osa X</button>
+            <button id="zAxis" class="axis-btn">Osa Z</button>
+            <button id="calcBtn" class="calc-btn"><i class="calc-icon">≡</i> Kalkulačka</button>
+        </div>
+        
+        <div class="input-group">
+            <label for="displayValue">Hodnota na displeji (osa <span class="axis-indicator">X</span>):</label>
+            <input type="number" id="displayValue" step="0.001" placeholder="Zadejte současnou hodnotu">
+        </div>
+        
+        <div class="input-group">
+            <label for="targetValue">Požadovaná hodnota (osa <span class="axis-indicator">X</span>):</label>
+            <input type="number" id="targetValue" step="0.001" placeholder="Zadejte cílovou hodnotu">
+        </div>
+        
+        <div class="input-group">
+            <label for="currentLValue">Aktuální hodnota <span id="currentLLabel">L1</span>:</label>
+            <input type="number" id="currentLValue" step="0.001" placeholder="Zadejte aktuální hodnotu L">
+        </div>
+        
+        <div class="result-group">
+            <div class="result-label">
+                Nová hodnota <span id="correctionLabel">L1</span>:
+            </div>
+            <div class="result-value" id="correctionValue">0.000</div>
+        </div>
+    </div>
+
+    <script>
+        // Získání reference na DOM elementy
+        const xAxisBtn = document.getElementById('xAxis');
+        const zAxisBtn = document.getElementById('zAxis');
+        const calcBtn = document.getElementById('calcBtn');
+        const displayValueInput = document.getElementById('displayValue');
+        const targetValueInput = document.getElementById('targetValue');
+        const currentLValue = document.getElementById('currentLValue');
+        const currentLLabel = document.getElementById('currentLLabel');
+        const correctionLabel = document.getElementById('correctionLabel');
+        const correctionValue = document.getElementById('correctionValue');
+        const axisIndicators = document.querySelectorAll('.axis-indicator');
+        
+        // Modální okno s kalkulačkou
+        const modal = document.getElementById('calculatorModal');
+        const closeBtn = document.querySelector('.close');
+        const calcScreen = document.getElementById('calcScreen');
+        const calcButtons = document.querySelectorAll('.calc-btn-item');
+        const transferBtn = document.getElementById('transferBtn');
+        
+        // Proměnná pro sledování aktivního vstupního pole pro přenos z kalkulačky
+        let activeInput = null;
+        
+        // Aktuální osa (výchozí X)
+        let currentAxis = 'X';
+        
+        // Přidání event listenerů pro přepínání os
+        xAxisBtn.addEventListener('click', () => {
+            currentAxis = 'X';
+            xAxisBtn.classList.add('active');
+            zAxisBtn.classList.remove('active');
+            correctionLabel.textContent = 'L1';
+            currentLLabel.textContent = 'L1';
+            axisIndicators.forEach(indicator => {
+                indicator.textContent = 'X';
+            });
+            calculateCorrection();
+        });
+        
+        zAxisBtn.addEventListener('click', () => {
+            currentAxis = 'Z';
+            zAxisBtn.classList.add('active');
+            xAxisBtn.classList.remove('active');
+            correctionLabel.textContent = 'L2';
+            currentLLabel.textContent = 'L2';
+            axisIndicators.forEach(indicator => {
+                indicator.textContent = 'Z';
+            });
+            calculateCorrection();
+        });
+        
+        // Event listenery pro vstupy
+        displayValueInput.addEventListener('input', calculateCorrection);
+        targetValueInput.addEventListener('input', calculateCorrection);
+        currentLValue.addEventListener('input', calculateCorrection);
+        
+        // Nastavení focus pro vstupní pole - použití pro přenos z kalkulačky
+        displayValueInput.addEventListener('focus', () => { activeInput = displayValueInput; });
+        targetValueInput.addEventListener('focus', () => { activeInput = targetValueInput; });
+        currentLValue.addEventListener('focus', () => { activeInput = currentLValue; });
+        
+        // Funkce pro výpočet korekce
+        function calculateCorrection() {
+            const displayVal = parseFloat(displayValueInput.value) || 0;
+            const targetVal = parseFloat(targetValueInput.value) || 0;
+            const currentL = parseFloat(currentLValue.value) || 0;
+            
+            // Výpočet nové hodnoty L - odečítáme rozdíl
+            const correction = currentL - (targetVal - displayVal);
+            
+            // Zobrazení výsledku s přesností na 3 desetinná místa
+            correctionValue.textContent = correction.toFixed(3);
+        }
+        
+        // Otevírání modálního okna s kalkulačkou
+        calcBtn.addEventListener('click', () => {
+            modal.style.display = 'block';
+        });
+        
+        // Zavírání modálního okna
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+        
+        // Zavření modálního okna při kliknutí mimo okno
+        window.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+        
+        // Funkcionalita kalkulačky
+        calcButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                if (button.classList.contains('clear')) {
+                    calcScreen.value = '';
+                } else if (button.classList.contains('equals')) {
+                    try {
+                        calcScreen.value = eval(calcScreen.value);
+                    } catch (error) {
+                        calcScreen.value = 'Chyba';
+                    }
+                } else if (button === transferBtn) {
+                    // Přenos výsledku do aktivního vstupního pole
+                    if (activeInput && calcScreen.value && calcScreen.value !== 'Chyba') {
+                        activeInput.value = calcScreen.value;
+                        calculateCorrection();
+                        modal.style.display = 'none';
+                    }
+                } else {
+                    calcScreen.value += button.innerText;
+                }
+            });
+        });
+        
+        // Počáteční výpočet
+        calculateCorrection();
+    </script>
+</body>
+</html>

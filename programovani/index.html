@@ -1,0 +1,567 @@
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="description" content="Mobilní HTML editor s AI asistencí a GitHub integrací" />
+
+    <!-- Cache Control - Force reload on mobile -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <link rel="manifest" href="manifest.webmanifest?v=2" />
+
+    <title>HTML Studio</title>
+
+    <link rel="stylesheet" href="src/styles/main.css?v=2.4.0" />
+
+    <!-- Model Selector (must be loaded before AIModule) -->
+    <script>
+      // 📱 Early console capture for Eruda
+      // Zachycuje všechny console logy před načtením Eruda
+      window.__earlyLogs = [];
+      const originalMethods = {};
+      ['log', 'warn', 'error', 'info', 'debug'].forEach(method => {
+        originalMethods[method] = console[method].bind(console);
+        console[method] = (...args) => {
+          window.__earlyLogs.push({ method, args, timestamp: Date.now() });
+          originalMethods[method](...args);
+        };
+      });
+    </script>
+    <script src="src/modules/ai/core/ModelSelector.js"></script>
+
+    <!-- AI Module -->
+    <script src="src/modules/ai/core/AIModule.js"></script>
+
+    <!-- AI Agents System -->
+    <script src="src/modules/ai/agents/AIAgents.js"></script>
+
+    <!-- CrewAI Connector -->
+    <script src="src/modules/ai/integrations/CrewAIConnector.js"></script>
+
+    <!-- Markdown Parser -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
+
+    <!-- Eruda DevTools for Mobile (loaded but not auto-initialized) -->
+    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+    <script>
+      // DevTools setup - Eruda pro mobilní i PC debug
+      window.initDevTools = function () {
+        if (typeof eruda !== 'undefined' && !eruda._isInit) {
+          eruda.init({
+            defaults: {
+              displaySize: 50,
+              transparency: 0.9,
+              theme: 'Dark',
+            },
+          });
+
+          // Replay early logs that were captured before Eruda loaded
+          if (window.__earlyLogs && window.__earlyLogs.length > 0) {
+            console.log('📋 Replaying', window.__earlyLogs.length, 'early logs...');
+            window.__earlyLogs.forEach(({ method, args }) => {
+              // Eruda is now listening, so just re-log
+              console[method](...args);
+            });
+          }
+
+          // Show useful debug info
+          console.log('═══════════════════════════════════════');
+          console.log('🛠️ HTML Studio DevTools');
+          console.log('═══════════════════════════════════════');
+          console.log('📱 Device:', navigator.userAgent.includes('Mobile') ? 'Mobile' : 'Desktop');
+          console.log('🌐 Screen:', window.innerWidth, 'x', window.innerHeight);
+          console.log('🔗 URL:', location.href);
+          console.log('💾 LocalStorage keys:', Object.keys(localStorage).length);
+          console.log('═══════════════════════════════════════');
+
+          eruda.show();
+        }
+      };
+
+      // Toggle DevTools (otevře/zavře)
+      window.toggleDevTools = function () {
+        if (typeof eruda === 'undefined') {
+          alert('DevTools (Eruda) není dostupný');
+          return;
+        }
+
+        // Pokud není inicializován, inicializuj a ukaž
+        if (!eruda._isInit) {
+          window.initDevTools();
+          return;
+        }
+
+        // Toggle - pokud je vidět, schovej, jinak ukaž
+        if (eruda._devTools && eruda._devTools._isShow) {
+          eruda.hide();
+          console.log('🛠️ DevTools skryty');
+        } else {
+          eruda.show();
+          console.log('🛠️ DevTools zobrazeny');
+        }
+      };
+
+      console.log('📱 DevTools ready - open via Menu > DevTools or call initDevTools()');
+    </script>
+
+    <!-- Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- App Container -->
+    <div class="app view-preview">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-left">
+          <button class="logo" id="logoBtn" title="Rychlé akce">
+            <span class="logo-icon">⚡</span>
+            <span class="logo-text">Akce</span>
+          </button>
+        </div>
+
+        <div class="header-right">
+          <!-- View Switcher -->
+          <button class="nav-btn" id="viewEditorBtn" title="Kód">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+          </button>
+          <button class="nav-btn" id="viewPreviewBtn" title="Náhled">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </button>
+
+          <!-- Actions -->
+          <button class="nav-btn" id="refreshBtn" title="Obnovit náhled (F5)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path
+                d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"
+              />
+            </svg>
+          </button>
+          <button class="nav-btn" id="consoleBtn" title="Konzole (Ctrl+`)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 17l6-6-6-6M12 19h8" />
+            </svg>
+          </button>
+          <button class="nav-btn" id="sidebarBtn" title="GitHub a Soubory">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" />
+              <path d="M13 2v7h7" />
+            </svg>
+          </button>
+          <button class="nav-btn" id="aiBtn" title="AI asistent">
+            <span class="ai-emoji">🤖</span>
+          </button>
+          <button class="nav-btn" id="shortcutsBtn" title="Menu (Ctrl+K)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 7h16M4 12h16M4 17h16" />
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <div class="toolbar-group">
+          <button class="toolbar-btn" id="newFileBtn" title="Nový soubor (Ctrl+N)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <path d="M14 2v6h6M12 18v-6m-3 3h6" />
+            </svg>
+            <span>Nový</span>
+          </button>
+          <button class="toolbar-btn" id="saveBtn" title="Uložit (Ctrl+S)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+              <path d="M17 21v-8H7v8M7 3v5h8" />
+            </svg>
+            <span>Uložit</span>
+          </button>
+        </div>
+
+        <div class="toolbar-group">
+          <button class="toolbar-btn" id="copyCodeBtn" title="Kopírovat kód (Ctrl+Shift+C)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span>Kopírovat</span>
+          </button>
+          <button class="toolbar-btn" id="findReplaceBtn" title="Najít a nahradit text (Ctrl+H)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8" />
+              <path d="M21 21l-4.35-4.35" />
+              <path d="M11 8v6" />
+              <path d="M8 11h6" />
+            </svg>
+            <span>Najít a nahradit</span>
+          </button>
+        </div>
+
+        <div class="toolbar-group">
+          <button class="toolbar-btn" id="undoBtn" title="Zpět (Ctrl+Z)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 7v6h6" />
+              <path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13" />
+            </svg>
+          </button>
+          <button class="toolbar-btn" id="redoBtn" title="Vpřed (Ctrl+Y)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 7v6h-6" />
+              <path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 2.7" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="toolbar-spacer"></div>
+
+        <div class="toolbar-group">
+          <button class="toolbar-btn" id="devToolsBtn" title="DevTools (Eruda)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path
+                d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"
+              />
+            </svg>
+            <span>DevTools</span>
+          </button>
+          <button class="toolbar-btn" id="toolbarEditorBtn" title="Editor">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+            <span>Kód</span>
+          </button>
+          <button class="toolbar-btn" id="toolbarPreviewBtn" title="Náhled">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+            <span>Náhled</span>
+          </button>
+        </div>
+
+        <div class="toolbar-group">
+          <button class="toolbar-btn" id="searchBtn" title="Hledat (Ctrl+F)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8" />
+              <path d="M21 21l-4.35-4.35" />
+            </svg>
+            <span>Hledat</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Editor Section -->
+        <section class="editor-section">
+          <div class="editor-tabs-container">
+            <button
+              class="tabs-layout-toggle"
+              id="tabsLayoutToggle"
+              title="Přepínání zobrazení tabů (horizontálně/vertikálně)"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 12h18M3 6h18M3 18h18" />
+              </svg>
+            </button>
+            <div class="editor-tabs" id="editorTabs">
+              <!-- Tabs will be dynamically added here -->
+            </div>
+          </div>
+          <div id="editorContainer" class="editor-container"></div>
+        </section>
+
+        <!-- Preview Section -->
+        <section class="preview-section">
+          <div id="previewContainer" class="preview-container"></div>
+        </section>
+      </main>
+
+      <!-- Console Panel -->
+      <div class="console-panel">
+        <div class="console-header">
+          <h3>Konzole</h3>
+          <button class="console-close" id="consoleCloseBtn" title="Zavřít konzoli">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div class="console-content" id="consoleContent">
+          <!-- Console messages will appear here -->
+        </div>
+        <div class="console-footer">
+          <button class="console-clear" id="consoleClearBtn" title="Vymazat konzoli">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path
+                d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+              />
+            </svg>
+            Vymazat
+          </button>
+          <button class="console-send-ai" id="consoleSendAIBtn" title="Poslat chyby do AI k opravě">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z" />
+              <path d="M12 6v6l4 2" />
+            </svg>
+            🤖 Opravit chyby
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main App Script (Module) -->
+    <script type="module" src="./src/core/app.js"></script>
+    <script>
+      // Cache buster - force reload on version change
+      const APP_VERSION = '2.4.0-ai-settings-modal';
+      const lastVersion = localStorage.getItem('app_version');
+
+      // Detect mobile device
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
+
+      if (lastVersion !== APP_VERSION) {
+        console.log('🔄 Detekována nová verze, mazání cache...');
+        console.log('📱 Mobilní zařízení:', isMobile);
+
+        // Unregister all service workers
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.getRegistrations().then(registrations => {
+            registrations.forEach(registration => {
+              console.log('🚫 Unregistering service worker:', registration);
+              registration.unregister();
+            });
+          });
+        }
+
+        // Clear ALL browser cache
+        if ('caches' in window) {
+          caches.keys().then(names => {
+            console.log('🗑️ Clearing caches:', names);
+            names.forEach(name => caches.delete(name));
+          });
+        }
+
+        // Clear sessionStorage too
+        try {
+          sessionStorage.clear();
+          console.log('✅ SessionStorage cleared');
+        } catch (e) {
+          console.error('SessionStorage clear failed:', e);
+        }
+
+        // Force hard reload with cache bypass
+        if (lastVersion && lastVersion !== APP_VERSION) {
+          console.log('🔄 Vynucený hard reload...');
+          localStorage.setItem('app_version', APP_VERSION);
+
+          // Extra aggressive reload for mobile
+          if (isMobile) {
+            console.log('📱 Mobilní hard reload s cache bypass...');
+            // Add timestamp to URL to force fresh load
+            const url = new URL(window.location.href);
+            url.searchParams.set('_t', Date.now());
+            url.searchParams.set('_v', APP_VERSION);
+            // Use location.replace for harder reload
+            window.location.replace(url.toString());
+          } else {
+            // Add timestamp to URL to force fresh load
+            const url = new URL(window.location.href);
+            url.searchParams.set('_t', Date.now());
+            window.location.href = url.toString();
+          }
+          // Stop execution after redirect
+        } else {
+          // DŮLEŽITÉ: localStorage NEMAZAT - obsahuje důležitá uživatelská data!
+          // Maže se jen browser cache (obrázky, CSS, JS soubory)
+          // localStorage zůstává zachován včetně:
+          // - github_token, github_username
+          // - htmlStudio:state (vaše soubory a nastavení)
+          // - ai_module_* (AI konverzace a nastavení)
+          // - github_repos (seznam repozitářů)
+
+          localStorage.setItem('app_version', APP_VERSION);
+          console.log(
+            '✅ Cache vymazána (localStorage zachován), verze aktualizována na',
+            APP_VERSION
+          );
+        }
+      }
+
+      // Wait for eventBus to be ready
+      let eventBusReady = false;
+      let pendingEvents = [];
+
+      // Poll for eventBus availability
+      const checkEventBus = setInterval(() => {
+        if (window.eventBus) {
+          eventBusReady = true;
+          clearInterval(checkEventBus);
+
+          // Emit pending events
+          pendingEvents.forEach(({ event, data }) => {
+            window.eventBus.emit(event, data);
+          });
+          pendingEvents = [];
+        }
+      }, 50);
+
+      // Helper function to safely emit events
+      function safeEmit(event, data) {
+        if (eventBusReady && window.eventBus) {
+          window.eventBus.emit(event, data);
+        } else {
+          pendingEvents.push({ event, data });
+        }
+      }
+
+      // Setup basic UI interactions
+      document.addEventListener('DOMContentLoaded', () => {
+        // View switchers - both header and toolbar buttons
+        const viewEditorBtns = [
+          document.getElementById('viewEditorBtn'),
+          document.getElementById('toolbarEditorBtn'),
+        ];
+        const viewPreviewBtns = [
+          document.getElementById('viewPreviewBtn'),
+          document.getElementById('toolbarPreviewBtn'),
+        ];
+
+        viewEditorBtns.forEach(btn => {
+          btn?.addEventListener('click', () => {
+            safeEmit('view:change', { view: 'editor' });
+          });
+        });
+
+        viewPreviewBtns.forEach(btn => {
+          btn?.addEventListener('click', () => {
+            safeEmit('view:change', { view: 'preview' });
+          });
+        });
+
+        // Refresh preview
+        document.getElementById('refreshBtn')?.addEventListener('click', () => {
+          safeEmit('preview:refresh');
+        });
+
+        // Toolbar actions
+        document.getElementById('newFileBtn')?.addEventListener('click', () => {
+          safeEmit('action:newTab');
+        });
+        document.getElementById('saveBtn')?.addEventListener('click', () => {
+          safeEmit('action:save');
+        });
+        document.getElementById('copyCodeBtn')?.addEventListener('click', () => {
+          safeEmit('action:copyCode');
+        });
+        document.getElementById('undoBtn')?.addEventListener('click', () => {
+          safeEmit('action:undo');
+        });
+        document.getElementById('redoBtn')?.addEventListener('click', () => {
+          safeEmit('action:redo');
+        });
+        document.getElementById('searchBtn')?.addEventListener('click', () => {
+          safeEmit('action:search');
+        });
+
+        // DevTools button (Eruda) - toggle open/close
+        document.getElementById('devToolsBtn')?.addEventListener('click', () => {
+          if (typeof window.toggleDevTools === 'function') {
+            window.toggleDevTools();
+          } else if (typeof eruda !== 'undefined') {
+            // Fallback
+            if (eruda._isInit && eruda._devTools?._isShow) {
+              eruda.hide();
+            } else {
+              if (!eruda._isInit) eruda.init();
+              eruda.show();
+            }
+          } else {
+            alert('DevTools (Eruda) není dostupný');
+          }
+        });
+
+        // Console controls
+        document.getElementById('consoleBtn')?.addEventListener('click', () => {
+          safeEmit('console:toggle');
+        });
+        document.getElementById('consoleCloseBtn')?.addEventListener('click', () => {
+          safeEmit('console:toggle');
+        });
+        document.getElementById('consoleClearBtn')?.addEventListener('click', () => {
+          safeEmit('console:clear');
+        });
+        document.getElementById('consoleSendAIBtn')?.addEventListener('click', () => {
+          safeEmit('console:sendErrorsToAI');
+        });
+
+        // Sidebar
+        document.getElementById('sidebarBtn')?.addEventListener('click', () => {
+          safeEmit('sidebar:toggle');
+        });
+
+        // Shortcuts panel
+        document.getElementById('shortcutsBtn')?.addEventListener('click', () => {
+          safeEmit('menu:show');
+        });
+
+        // Logo button - Quick Actions
+        document.getElementById('logoBtn')?.addEventListener('click', () => {
+          safeEmit('shortcuts:show');
+        });
+
+        // Tabs layout toggle (vertical/horizontal)
+        document.getElementById('tabsLayoutToggle')?.addEventListener('click', () => {
+          const tabsContainer = document.querySelector('.editor-tabs-container');
+          const toggleBtn = document.getElementById('tabsLayoutToggle');
+          if (tabsContainer && toggleBtn) {
+            tabsContainer.classList.toggle('vertical-layout');
+            toggleBtn.classList.toggle('vertical');
+
+            // Save preference
+            const isVertical = tabsContainer.classList.contains('vertical-layout');
+            localStorage.setItem('tabs-layout', isVertical ? 'vertical' : 'horizontal');
+          }
+        });
+
+        // Restore tabs layout preference
+        const savedLayout = localStorage.getItem('tabs-layout');
+        if (savedLayout === 'vertical') {
+          const tabsContainer = document.querySelector('.editor-tabs-container');
+          const toggleBtn = document.getElementById('tabsLayoutToggle');
+          if (tabsContainer && toggleBtn) {
+            tabsContainer.classList.add('vertical-layout');
+            toggleBtn.classList.add('vertical');
+          }
+        }
+
+        // AI panel
+        document.getElementById('aiBtn')?.addEventListener('click', () => {
+          safeEmit('ai:show');
+        });
+
+        // Find and Replace panel
+        document.getElementById('findReplaceBtn')?.addEventListener('click', () => {
+          safeEmit('findreplace:show');
+        });
+      });
+    </script>
+  </body>
+</html>

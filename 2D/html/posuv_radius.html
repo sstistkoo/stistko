@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Posuv Kruhové Interpolace</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3, h4 {
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+            margin-top: 10px;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .results {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        .results h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .diagram {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+        .radio-option {
+            display: flex;
+            align-items: center;
+        }
+        .radio-option input {
+            margin-right: 5px;
+        }
+        .calculation-info {
+            margin-top: 20px;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+            background-color: #f0f8ff;
+            border-radius: 4px;
+        }
+        .calculation-info h4 {
+            margin-top: 0;
+            color: #333;
+        }
+        .g-code {
+            font-family: "Courier New", monospace;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 20px;
+            white-space: pre-wrap;
+        }
+        .history-container {
+            margin-top: 30px;
+        }
+        .history-item {
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .history-item:hover {
+            background-color: #e9e9e9;
+        }
+        .arc-animation {
+            margin: 20px auto;
+            text-align: center;
+        }
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 10px 15px;
+            cursor: pointer;
+            background-color: #f1f1f1;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+        }
+        .tab.active {
+            background-color: white;
+            border-bottom-color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Responzivní design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+                width: 100%;
+                margin: 0;
+                border-radius: 0;
+            }
+
+            h1 {
+                font-size: 20px;
+                margin-bottom: 15px;
+            }
+
+            .form-group {
+                margin-bottom: 10px;
+            }
+
+            input[type="number"],
+            input[type="text"],
+            select {
+                font-size: 16px; /* Předejít iOS zoom na input */
+                padding: 12px; /* Větší touch target */
+            }
+
+            .radio-group {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .actions {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            button {
+                width: 100%;
+                padding: 12px;
+                margin: 0;
+                font-size: 16px;
+            }
+
+            .diagram {
+                margin: 10px -10px;
+                overflow-x: auto;
+            }
+
+            #diagramSvg {
+                max-width: 100%;
+                height: auto;
+            }
+
+            .results {
+                margin: 10px -10px;
+                padding: 10px;
+                border-radius: 0;
+                font-size: 14px;
+            }
+
+            .calculation-info {
+                margin: 10px -10px;
+                padding: 10px;
+                border-radius: 0;
+                font-size: 14px;
+            }
+
+            .tabs {
+                margin: 0 -10px 15px;
+            }
+
+            .tab {
+                padding: 8px 12px;
+                font-size: 14px;
+            }
+        }
+
+        /* Styly pro velmi malé displeje */
+        @media (max-width: 360px) {
+            h1 {
+                font-size: 18px;
+            }
+
+            .diagram text {
+                font-size: 12px;
+            }
+        }
+
+        /* Vylepšení pro dotykové ovládání */
+        @media (hover: none) {
+            button:hover {
+                background-color: #4CAF50; /* Odstranit hover efekt na dotykových zařízeních */
+            }
+
+            .history-item {
+                padding: 15px; /* Větší touch target */
+            }
+
+            input[type="radio"] {
+                width: 20px; /* Větší radio button */
+                height: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Posuv Kruhové Interpolace</h1>
+
+        <div class="tabs">
+            <div class="tab active" data-tab="calculator">Kalkulačka</div>
+            <div class="tab" data-tab="history">Historie</div>
+        </div>
+
+        <div class="tab-content active" id="calculator-tab">
+            <div class="form-group">
+                <label for="interpolationType">Typ kruhové interpolace:</label>
+                <select id="interpolationType">
+                    <option value="G2">G2 (ve směru hodinových ručiček)</option>
+                    <option value="G3">G3 (proti směru hodinových ručiček)</option>
+                </select>
+            </div>
+
+            <div class="radio-group">
+                <div class="radio-option">
+                    <input type="radio" id="innerRadius" name="radiusType" value="inner" checked>
+                    <label for="innerRadius">Vnitřní rádius</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="outerRadius" name="radiusType" value="outer">
+                    <label for="outerRadius">Vnější rádius</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="radius">CR radius (střed platku):</label>
+                <input type="number" id="radius" step="0.001" min="0" placeholder="Zadejte rádius">
+            </div>
+
+            <div class="form-group">
+                <label for="toolRadius">Rádius plátku nástroje (mm):</label>
+                <input type="number" id="toolRadius" step="0.001" min="0" value="8" placeholder="Zadejte rádius plátku">
+            </div>
+
+            <div class="form-group" id="resultFeedGroup">
+                <label for="resultFeed">Posuv (mm/otáčku):</label>
+                <input type="number" id="resultFeed" step="0.001" min="0" value="0.8" placeholder="Zadejte posuv">
+            </div>
+
+            <div class="actions">
+                <button id="calculateBtn">Vypočítat</button>
+                <button id="saveSettingsBtn">Uložit nastavení</button>
+            </div>
+
+            <div class="diagram">
+                <svg id="diagramSvg" width="300" height="200" style="display: none;"></svg>
+            </div>
+
+            <div class="results" id="results" style="display: none;">
+                <h3>Výsledky výpočtu:</h3>
+                <p><strong>Původní rádius:</strong> <span id="originalRadius"></span> mm</p>
+                <p><strong>Skutečný rádius pro střed nástroje:</strong> <span id="toolCenterRadius"></span> mm</p>
+                <p><strong>Délka původního oblouku:</strong> <span id="originalArcLength"></span> mm</p>
+                <p><strong>Délka oblouku pro střed nástroje:</strong> <span id="toolCenterArcLength"></span> mm</p>
+                <p><strong>Posuv:</strong> <span id="resultFeedDisplay"></span> mm/otáčku</p>
+                <p><strong>Posuv středu nástroje:</strong> <span id="toolCenterFeedDisplay"></span> mm/otáčku</p>
+
+                <div class="calculation-info">
+                    <h4>Použité výpočty:</h4>
+                    <p><strong>Délka původního oblouku:</strong> π × průměr × (úhel/360°) = π × 2 × rádius × (180°/360°) = π × rádius</p>
+                    <p>Konkrétně: <span id="arcLengthCalculation"></span></p>
+
+                    <p><strong>Délka oblouku středu nástroje:</strong> π × rádius středu nástroje</p>
+                    <p>Konkrétně: <span id="toolCenterArcLengthCalculation"></span></p>
+
+                    <p><strong>Poměr délek:</strong> délka oblouku středu nástroje / délka původního oblouku</p>
+                    <p>Konkrétně: <span id="lengthRatioCalculation"></span></p>
+
+                    <p id="feedCalcTitle"><strong>Výpočet posuvu:</strong></p>
+                    <p>Konkrétně: <span id="feedCalculation"></span></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="history-tab">
+            <h3>Historie výpočtů</h3>
+            <p>Kliknutím na položku načtete dříve použité hodnoty.</p>
+            <div class="history-container" id="historyContainer">
+                <p>Zatím nejsou žádné uložené výpočty.</p>
+            </div>
+            <button id="clearHistoryBtn">Vymazat historii</button>
+        </div>
+    </div>
+
+    <script>
+        // Všechny funkce musí být definovány před jejich použitím
+        // Připojit event listenery až po načtení DOM
+        document.addEventListener('DOMContentLoaded', function() {
+            // Připojit event listenery k tlačítkům pomocí ID
+            document.getElementById('calculateBtn')
+                .addEventListener('click', calculate);
+            document.getElementById('saveSettingsBtn')
+                .addEventListener('click', saveSettings);
+            document.getElementById('clearHistoryBtn')
+                .addEventListener('click', clearHistory);
+
+            // Původní inicializace
+            loadSettings();
+            setupTabs();
+            updateHistoryDisplay();
+        });
+
+        // Oprava funkce drawDiagram - odstranit duplicitní deklarace
+        function drawDiagram(radius, toolRadius, radiusType, resultFeed, toolCenterFeed) {
+            const svg = document.getElementById('diagramSvg');
+            svg.style.display = 'block';
+            svg.innerHTML = '';
+
+            // Základní nastavení
+            svg.setAttribute('width', '500');
+            svg.setAttribute('height', '260');
+
+            // Vykreslit oba rámečky pro posuvy - s větší šířkou
+            // Modrý rámeček pro výsledný posuv
+            const feedBackground = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            feedBackground.setAttribute('x', 245);  // Posunuto více vlevo z 345
+            feedBackground.setAttribute('y', 145);
+            feedBackground.setAttribute('width', 190);  // Zvětšeno ze 160 na 190
+            feedBackground.setAttribute('height', 30);
+            feedBackground.setAttribute('fill', '#e6f3ff');
+            feedBackground.setAttribute('stroke', 'blue');
+            feedBackground.setAttribute('stroke-width', '1');
+            feedBackground.setAttribute('rx', '5');
+            svg.appendChild(feedBackground);
+
+            // Červený rámeček pro zadaný posuv
+            const inputFeedBackground = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            inputFeedBackground.setAttribute('x', 245);  // Stejná X pozice jako modrý
+            inputFeedBackground.setAttribute('y', 85);   // Výše než modrý
+            inputFeedBackground.setAttribute('width', 190);  // Zvětšeno ze 160 na 190
+            feedBackground.setAttribute('height', 30);
+            inputFeedBackground.setAttribute('fill', '#ffe6e6');
+            inputFeedBackground.setAttribute('stroke', 'red');
+            inputFeedBackground.setAttribute('stroke-width', '1');
+            inputFeedBackground.setAttribute('rx', '5');
+            svg.appendChild(inputFeedBackground);
+
+            const centerX = 150;
+            const centerY = 100;
+            const scale = 80 / Math.max(radius, radius + toolRadius); // Přizpůsobení měřítka velikosti SVG
+
+            // Vykreslit referenční bod (střed)
+            const centerPoint = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            centerPoint.setAttribute('cx', centerX);
+            centerPoint.setAttribute('cy', centerY);
+            centerPoint.setAttribute('r', 3);
+            centerPoint.setAttribute('fill', 'black');
+            svg.appendChild(centerPoint);
+
+            // Vykreslit požadovaný rádius
+            const originalCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            originalCircle.setAttribute('cx', centerX);
+            originalCircle.setAttribute('cy', centerY);
+            originalCircle.setAttribute('r', radius * scale);
+            originalCircle.setAttribute('fill', 'none');
+            originalCircle.setAttribute('stroke', 'blue');
+            originalCircle.setAttribute('stroke-width', '2');
+            svg.appendChild(originalCircle);
+
+            // Vykreslit rádius středu nástroje
+            let toolCenterRadius;
+            if (radiusType === 'outer') {
+                toolCenterRadius = radius + toolRadius;
+            } else {
+                toolCenterRadius = radius - toolRadius;
+            }
+
+            const toolCenterCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            toolCenterCircle.setAttribute('cx', centerX);
+            toolCenterCircle.setAttribute('cy', centerY);
+            toolCenterCircle.setAttribute('r', toolCenterRadius * scale);
+            toolCenterCircle.setAttribute('fill', 'none');
+            toolCenterCircle.setAttribute('stroke', 'red');
+            toolCenterCircle.setAttribute('stroke-width', '2');
+            toolCenterCircle.setAttribute('stroke-dasharray', '4');
+            svg.appendChild(toolCenterCircle);
+
+            // Vykreslit nástroj (pouze příklad pozice)
+            const toolPositionAngle = Math.PI / 4; // 45 stupňů
+            let toolCenterX, toolCenterY;
+
+            toolCenterX = centerX + toolCenterRadius * scale * Math.cos(toolPositionAngle);
+            toolCenterY = centerY + toolCenterRadius * scale * Math.sin(toolPositionAngle);
+
+            const tool = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            tool.setAttribute('cx', toolCenterX);
+            tool.setAttribute('cy', toolCenterY);
+            tool.setAttribute('r', toolRadius * scale);
+            tool.setAttribute('fill', 'rgba(255, 0, 0, 0.3)');
+            tool.setAttribute('stroke', 'red');
+            tool.setAttribute('stroke-width', '1');
+            svg.appendChild(tool);
+
+            // Krok 2: Legenda
+            const legendCR = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            legendCR.setAttribute('x', 10);
+            legendCR.setAttribute('y', 20);
+            legendCR.setAttribute('fill', 'red');  // CR radius červeně
+            legendCR.textContent = 'CR radius';
+            svg.appendChild(legendCR);
+
+            const legendRequired = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            legendRequired.setAttribute('x', 10);
+            legendRequired.setAttribute('y', 40);
+            legendRequired.setAttribute('fill', 'blue');
+            legendRequired.textContent = 'Výsledný radius'; // Změněno z 'Požadovaný rádius'
+            svg.appendChild(legendRequired);
+
+            // Krok 3: Hodnoty radiusů (bez posuvů)
+            const crRadiusText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            crRadiusText.setAttribute('x', 10);
+            crRadiusText.setAttribute('y', 180);
+            crRadiusText.setAttribute('fill', 'red');  // CR radius červeně
+            crRadiusText.textContent = `R = ${radius.toFixed(3)} mm`;
+            svg.appendChild(crRadiusText);
+
+            const requiredRadiusText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            requiredRadiusText.setAttribute('x', 10);
+            requiredRadiusText.setAttribute('y', 200);
+            requiredRadiusText.setAttribute('fill', 'blue');  // Požadovaný radius modře
+            requiredRadiusText.textContent = `R = ${(radiusType === 'inner' ? radius + toolRadius : radius - toolRadius).toFixed(3)} mm`;
+            svg.appendChild(requiredRadiusText);
+
+            // Krok 4: Rt hodnota
+            const rtValue = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            rtValue.setAttribute('x', 10);
+            rtValue.setAttribute('y', 220);
+            rtValue.setAttribute('fill', 'black');
+            rtValue.textContent = `Rt = ${toolRadius.toFixed(2)} mm`;
+            svg.appendChild(rtValue);
+
+            // Zadaný (červený) posuv
+            const inputFeedValue = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            inputFeedValue.setAttribute('x', 250);  // Posunuto více vlevo z 350
+            inputFeedValue.setAttribute('y', 105);
+            inputFeedValue.setAttribute('fill', 'red');
+            inputFeedValue.setAttribute('font-size', '24');
+            inputFeedValue.setAttribute('font-weight', 'bold');
+            inputFeedValue.textContent = `F = ${resultFeed.toFixed(3)} mm/ot`;
+            svg.appendChild(inputFeedValue);
+
+            // Vypočítaný (modrý) posuv
+            const calculatedFeedValue = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            calculatedFeedValue.setAttribute('x', 250);  // Posunuto více vlevo z 350
+            calculatedFeedValue.setAttribute('y', 165);
+            calculatedFeedValue.setAttribute('fill', 'blue');
+            calculatedFeedValue.setAttribute('font-size', '24');
+            calculatedFeedValue.setAttribute('font-weight', 'bold');
+            calculatedFeedValue.textContent = `F = ${toolCenterFeed.toFixed(3)} mm/ot`;
+            svg.appendChild(calculatedFeedValue);
+
+            // Přidat viewport a viewBox pro lepší škálování
+            svg.setAttribute('viewBox', '0 0 500 260');
+            svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+
+            // Přizpůsobit velikost textu pro mobilní zobrazení
+            if (window.innerWidth <= 768) {
+                legendCR.setAttribute('font-size', '12');
+                legendRequired.setAttribute('font-size', '12');
+                crRadiusText.setAttribute('font-size', '12');
+                requiredRadiusText.setAttribute('font-size', '12');
+                rtValue.setAttribute('font-size', '12');
+                calculatedFeedValue.setAttribute('font-size', '18'); // Menší než desktop verze
+            }
+        }
+
+        // Přidat chybějící funkce pro zobrazení historie
+        function updateHistoryDisplay() {
+            const historyContainer = document.getElementById('historyContainer');
+            const history = JSON.parse(localStorage.getItem('calculationHistory') || '[]');
+
+            if (history.length === 0) {
+                historyContainer.innerHTML = '<p>Zatím nejsou žádné uložené výpočty.</p>';
+                return;
+            }
+
+            historyContainer.innerHTML = history.map((item, index) => `
+                <div class="history-item" onclick="loadFromHistory(${index})">
+                    <h4>${item.name}</h4>
+                    <p>Datum: ${new Date(item.timestamp).toLocaleString()}</p>
+                    <p>CR rádius: ${parseFloat(item.radius).toFixed(3)} mm</p>
+                    <p>Rádius nástroje: ${parseFloat(item.toolRadius).toFixed(3)} mm</p>
+                    <p>Výsledný rádius: ${parseFloat(item.resultRadius).toFixed(3)} mm</p>
+                    <p>Zadaný posuv: ${parseFloat(item.inputFeed).toFixed(3)} mm/otáčku</p>
+                    <p>Výpočet posuvu: ${parseFloat(item.toolCenterFeed).toFixed(3)} mm/otáčku</p>
+                </div>
+            `).join('');
+        }
+
+        // Upravit funkci calculate pro správné výpočty a zobrazení
+        function calculate() {
+            // Získat hodnoty z formuláře
+            const interpolationType = document.getElementById('interpolationType').value;
+            const radiusType = document.querySelector('input[name="radiusType"]:checked').value;
+            const radius = parseFloat(document.getElementById('radius').value);
+            const toolRadius = parseFloat(document.getElementById('toolRadius').value);
+            const resultFeed = parseFloat(document.getElementById('resultFeed').value);
+
+            let toolCenterFeed;
+
+            // Kontrola vstupních dat
+            if (isNaN(radius) || isNaN(toolRadius)) {
+                alert("Prosím vyplňte všechna povinná pole.");
+                return;
+            }
+
+            if (radius <= 0 || toolRadius <= 0) {
+                alert("Všechny hodnoty musí být větší než nula.");
+                return;
+            }
+
+            // Vypočítat rádius středu nástroje - obrácená logika
+            let toolCenterRadius;
+            if (radiusType === 'inner') {
+                toolCenterRadius = radius + toolRadius; // Pro vnitřní přičítáme
+            } else { // vnější rádius
+                toolCenterRadius = radius - toolRadius; // Pro vnější odečítáme
+                if (toolCenterRadius <= 0) {
+                    alert("Rádius plátku je příliš velký pro požadovaný vnější rádius.");
+                    return;
+                }
+            }
+
+            // Správný výpočet délek oblouků
+            const pi = 3.14159;
+            const originalArcLength = pi * radius;  // Délka původního oblouku (π × radius)
+            const toolCenterArcLength = pi * toolCenterRadius;  // Délka oblouku středu nástroje (π × toolCenterRadius)
+            const lengthRatio = toolCenterArcLength / originalArcLength;  // Poměr délek
+
+            // Přidat výpočty obvodů
+            const originalCircumference = 2 * pi * radius;  // Obvod původní kružnice
+            const toolCenterCircumference = 2 * pi * toolCenterRadius;  // Obvod kružnice středu nástroje
+
+            // Výpočet posuvů
+            toolCenterFeed = resultFeed * lengthRatio;
+
+            // Změnit logiku popisu - použít "výsledný" místo vnitřní/vnější
+            const radiusLabel = 'výsledný';
+            const radiusDescription = 'Výsledný';
+
+            // Nejprve vytvořit HTML strukturu a pak ji nastavit
+            const resultsHtml = `
+                <h3>Výsledky výpočtu:</h3>
+                <p><strong>CR radius:</strong> <span id="originalRadius">${radius.toFixed(3)}</span> mm</p>
+                <p><strong>${radiusLabel} radius:</strong> <span id="toolCenterRadius">${toolCenterRadius.toFixed(3)}</span> mm</p>
+                <p><strong>Délka středu plátku po oblouku:</strong> <span id="originalArcLength">${originalArcLength.toFixed(3)}</span> mm</p>
+                <p><strong>Délka oblouku s ${radiusLabel} stranou:</strong> <span id="toolCenterArcLength">${toolCenterArcLength.toFixed(3)}</span> mm</p>
+                <p><strong>Posuv CR:</strong> <span id="resultFeedDisplay" style="font-weight: bold;">${resultFeed.toFixed(3)}</span> mm/otáčku</p>
+                <p><strong>Posuv ${radiusLabel} strany:</strong> <span id="toolCenterFeedDisplay" style="font-weight: bold;">${toolCenterFeed.toFixed(3)}</span> mm/otáčku</p>
+
+                <div class="calculation-info">
+                    <h4>Použité výpočty:</h4>
+                    <p><strong>Délka původního oblouku:</strong> π × průměr × (úhel/360°) = π × 2 × rádius × (180°/360°) = π × rádius</p>
+                    <p>Konkrétně: <span id="arcLengthCalculation"></span></p>
+
+                    <p><strong>Délka oblouku ${radiusLabel} strany:</strong> π × rádius ${radiusLabel} strany</p>
+                    <p>Konkrétně: <span id="toolCenterArcLengthCalculation"></span></p>
+
+                    <p><strong>Poměr délek:</strong> délka oblouku ${radiusLabel} strany / délka původního oblouku</p>
+                    <p>Konkrétně: <span id="lengthRatioCalculation"></span></p>
+
+                    <p id="feedCalcTitle">${feedCalcTitle}</p>
+                    <p>Konkrétně: <span id="feedCalculation"></span></p>
+                </div>`;
+
+            // Nastavit HTML obsah
+            document.getElementById('results').innerHTML = resultsHtml;
+            document.getElementById('results').style.display = 'block';
+
+            // Nyní můžeme nastavit výpočty, protože elementy už existují
+            document.getElementById('arcLengthCalculation').textContent =
+                `3.14159 × ${radius.toFixed(3)} = ${originalArcLength.toFixed(3)} mm ` +
+                `[obvod kružnice: π × (2 × ${radius.toFixed(3)}) = ${originalCircumference.toFixed(3)} mm]`;
+
+            document.getElementById('toolCenterArcLengthCalculation').textContent =
+                `3.14159 × ${toolCenterRadius.toFixed(3)} = ${toolCenterArcLength.toFixed(3)} mm ` +
+                `[obvod kružnice: π × (2 × ${toolCenterRadius.toFixed(3)}) = ${toolCenterCircumference.toFixed(3)} mm]`;
+
+            document.getElementById('lengthRatioCalculation').textContent =
+                `${toolCenterArcLength.toFixed(3)} / ${originalArcLength.toFixed(3)} = ${lengthRatio.toFixed(3)} ` +
+                `(stejný poměr přes obvody: ${toolCenterCircumference.toFixed(3)} / ${originalCircumference.toFixed(3)} = ${lengthRatio.toFixed(3)})`;
+
+            // Dynamicky změnit popisek výpočtu posuvu podle zvoleného typu
+            document.getElementById('feedCalcTitle').innerHTML =
+                '<strong>Výpočet posuvu výsledné strany:</strong> posuv × poměr délek';
+            document.getElementById('feedCalculation').textContent =
+                `${resultFeed.toFixed(3)} × ${lengthRatio.toFixed(3)} = ${toolCenterFeed.toFixed(3)} mm/otáčku`;
+
+            document.getElementById('results').style.display = 'block';
+
+            // Vykreslit diagram - předat hodnoty posuvů
+            drawDiagram(radius, toolRadius, radiusType, resultFeed, toolCenterFeed);
+
+            // Po dokončení výpočtu uložit do historie
+            saveToHistory();
+        }
+
+        // Přidat chybějící funkce pro práci s historií
+        function loadFromHistory(index) {
+            const history = JSON.parse(localStorage.getItem('calculationHistory') || '[]');
+            const item = history[index];
+
+            if (item) {
+                document.getElementById('interpolationType').value = item.interpolationType || 'G2';
+                document.getElementById('radius').value = item.radius;
+                document.getElementById('toolRadius').value = item.toolRadius;
+                document.getElementById('resultFeed').value = item.inputFeed;
+                document.querySelector(`input[name="radiusType"][value="${item.radiusType}"]`).checked = true;
+
+                // Přepnout zpět na kalkulačku a provést výpočet
+                document.querySelector('.tab[data-tab="calculator"]').click();
+                calculate();
+            }
+        }
+
+        function clearHistory() {
+            if (confirm('Opravdu chcete vymazat celou historii výpočtů?')) {
+                localStorage.removeItem('calculationHistory');
+                updateHistoryDisplay();
+            }
+        }
+
+        // Přidat funkci pro ukládání do historie
+        function saveToHistory() {
+            const history = JSON.parse(localStorage.getItem('calculationHistory') || '[]');
+
+            const newItem = {
+                name: `Výpočet ${history.length + 1}`,
+                timestamp: new Date().toISOString(),
+                interpolationType: document.getElementById('interpolationType').value,
+                radiusType: document.querySelector('input[name="radiusType"]:checked').value,
+                radius: document.getElementById('radius').value,
+                toolRadius: document.getElementById('toolRadius').value,
+                resultRadius: document.getElementById('toolCenterRadius').textContent,
+                inputFeed: document.getElementById('resultFeed').value,
+                toolCenterFeed: document.getElementById('toolCenterFeedDisplay').textContent
+            };
+
+            history.unshift(newItem); // Přidat na začátek pole
+            if (history.length > 10) history.pop(); // Omezit na posledních 10 záznamů
+
+            localStorage.setItem('calculationHistory', JSON.stringify(history));
+            updateHistoryDisplay();
+        }
+
+        // Přepínání záložek
+        function setupTabs() {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Deaktivovat všechny záložky
+                    tabs.forEach(t => t.classList.remove('active'));
+                    // Aktivovat kliknutou záložku
+                    this.classList.add('active');
+
+                    // Skrýt všechny obsahy záložek
+                    const tabContents = document.querySelectorAll('.tab-content');
+                    tabContents.forEach(content => content.classList.remove('active'));
+
+                    // Zobrazit obsah vybrané záložky
+                    const tabName = this.getAttribute('data-tab');
+                    document.getElementById(tabName + '-tab').classList.add('active');
+
+                    // Pokud je to záložka s animací, aktualizovat vizualizaci
+                    if (tabName === 'animation') {
+                        updateAnimation();
+                    }
+                });
+            });
+        }
+
+        // Uložení nastavení do localStorage
+        function saveSettings() {
+            const settings = {
+                interpolationType: document.getElementById('interpolationType').value,
+                radiusType: document.querySelector('input[name="radiusType"]:checked').value,
+                radius: document.getElementById('radius').value,
+                toolRadius: document.getElementById('toolRadius').value,
+                resultFeed: document.getElementById('resultFeed').value
+            };
+
+            localStorage.setItem('cncSettings', JSON.stringify(settings));
+            alert('Nastavení bylo úspěšně uloženo.');
+        }
+
+        // Načtení nastavení z localStorage
+        function loadSettings() {
+            const savedSettings = localStorage.getItem('cncSettings');
+            if (savedSettings) {
+                const settings = JSON.parse(savedSettings);
+
+                // Nastavit hodnoty formuláře
+                document.getElementById('interpolationType').value = settings.interpolationType;
+                document.querySelector(`input[name="radiusType"][value="${settings.radiusType}"]`).checked = true;
+                document.getElementById('radius').value = settings.radius;
+                document.getElementById('toolRadius').value = settings.toolRadius;
+                document.getElementById('resultFeed').value = settings.resultFeed;
+            }
+        }
+
+        // Přidat event listener pro změnu orientace
+        window.addEventListener('orientationchange', function() {
+            // Přepočítat diagram při otočení zařízení
+            if (document.getElementById('results').style.display !== 'none') {
+                setTimeout(function() {
+                    calculate();
+                }, 100);
+            }
+        });
+    </script>
+</body>
+</html>

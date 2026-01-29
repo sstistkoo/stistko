@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📱 Mobilní Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #000;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .box {
+            width: 90%;
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 40px 20px;
+            border-radius: 20px;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        #test1 {
+            background: red;
+        }
+
+        #test2 {
+            background: blue;
+        }
+
+        /* MOBILNÍ CSS - mělo by se zobrazit na šířce <= 768px */
+        @media (max-width: 768px) {
+            #test1 {
+                background: green;
+            }
+
+            #test2 {
+                background: purple;
+            }
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 30px;
+        }
+
+        .info {
+            font-size: 24px;
+            margin: 20px 0;
+            padding: 20px;
+            background: #333;
+            border-radius: 10px;
+        }
+
+        .number {
+            font-size: 48px;
+            color: yellow;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>📱 MOBILNÍ TEST</h1>
+
+    <div class="info">
+        Šířka obrazovky:<br>
+        <span class="number" id="width">-</span> px
+    </div>
+
+    <h2 style="font-size: 24px; margin: 30px 0;">Jakou barvu vidíte?</h2>
+
+    <div class="box" id="test1">
+        BOX 1
+    </div>
+
+    <div class="box" id="test2">
+        BOX 2
+    </div>
+
+    <div class="info" style="margin-top: 40px; font-size: 20px; text-align: left;">
+        <strong style="color: yellow;">NAPIŠTE MI:</strong><br><br>
+
+        1️⃣ Šířka: <span id="width2" style="color: yellow;">-</span> px<br><br>
+
+        2️⃣ BOX 1 je:<br>
+        &nbsp;&nbsp;&nbsp;🟥 ČERVENÝ = CSS nefunguje<br>
+        &nbsp;&nbsp;&nbsp;🟩 ZELENÝ = CSS funguje!<br><br>
+
+        3️⃣ BOX 2 je:<br>
+        &nbsp;&nbsp;&nbsp;🟦 MODRÝ = CSS nefunguje<br>
+        &nbsp;&nbsp;&nbsp;🟪 FIALOVÝ = CSS funguje!
+    </div>
+
+    <script>
+        function updateInfo() {
+            const width = window.innerWidth;
+            document.getElementById('width').textContent = width;
+            document.getElementById('width2').textContent = width;
+        }
+
+        updateInfo();
+        window.addEventListener('resize', updateInfo);
+    </script>
+</body>
+</html>

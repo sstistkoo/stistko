@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pravoúhlý trojúhelník - Kalkulátor</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .sloupec {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            flex: 1;
+            min-width: 250px;
+        }
+        input {
+            width: 80px;
+            margin: 5px;
+            padding: 8px;
+            font-size: 16px;
+        }
+        canvas {
+            border: 1px solid #333;
+            margin: 20px;
+        }
+        canvas#platno {
+            width: 100% !important;
+            height: auto !important;
+            max-width: 800px;
+            margin: 10px 0;
+        }
+        .buttons {
+            margin: 10px 0;
+        }
+        button {
+            padding: 12px 20px;
+            margin: 5px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            background: #007bff;
+            color: white;
+            width: calc(50% - 10px);
+        }
+        .vypocet {
+            color: #666;
+            font-style: italic;
+        }
+        .navod {
+            background: #e8f4ff;
+            padding: 15px;
+            margin: 20px;
+            border-radius: 5px;
+        }
+        .vzorovy-trojuhelnik {
+            margin: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .prepinac {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .prepinac label {
+            flex: 1;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        /* Přidat styl pro navigační ikonu */
+        .home-link {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            color: #333;
+            text-decoration: none;
+            font-size: 24px;
+            z-index: 1000;
+            background: white;
+            padding: 8px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .home-link:hover {
+            color: #666;
+            background: #f5f5f5;
+        }
+
+        /* Mobilní zařízení */
+        @media (max-width: 600px) {
+            .container {
+                flex-direction: column;
+            }
+            .sloupec {
+                width: 100%;
+                min-width: auto;
+            }
+            input {
+                width: 100%;
+                margin: 5px 0;
+                box-sizing: border-box;
+            }
+            button {
+                width: 100%;
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="home-link">
+        <i class="fas fa-home"></i>
+    </a>
+    <div class="prepinac">
+        <label>
+            <input type="radio" name="zobrazeni" value="trojuhelnik" onchange="prepniZobrazeni(this.value)"> Trojúhelník
+        </label>
+        <label>
+            <input type="radio" name="zobrazeni" value="kuzel" checked onchange="prepniZobrazeni(this.value)"> Kužel
+        </label>
+    </div>
+    <div class="container">
+        <div class="sloupec">
+            <h3>Délky stran</h3>
+            <label>a: <input type="number" id="stranaA" step="any"></label><br>
+            <label>b: <input type="number" id="stranaB" step="any"></label><br>
+            <label>c: <input type="number" id="stranaC" step="any"></label><br>
+            <div class="vypocet" id="delkyInfo"></div>
+        </div>
+        <div class="sloupec">
+            <h3>Úhly</h3>
+            <label>α: <input type="number" id="uhelAlfa" step="any" max="89.99"></label>°<br>
+            <label>β: <input type="number" id="uhelBeta" step="any" max="89.99"></label>°<br>
+            <label>γ: <input type="text" value="90" readonly></label>°<br>
+            <div class="vypocet" id="uhlyInfo"></div>
+        </div>
+        <div class="sloupec" id="kuzelParams">
+            <h3>Parametry kužele</h3>
+            <label>D₁ (horní ⌀): <input type="number" id="prumer" step="any"></label><br>
+            <label>Výška (a): <input type="number" id="kuzelVyska" step="any"></label><br>
+            <label>Úhel β: <input type="number" id="kuzelUhel" step="any" max="89.99"></label>°<br>
+            <label>D₂ (spodní ⌀): <input type="number" id="spodniPrumer" disabled></label><br>
+            <div class="vypocet" id="kuzelInfo"></div>
+        </div>
+    </div>
+    <div class="buttons">
+        <button onclick="vypocitat()">Vypočítat</button>
+        <button onclick="resetovat()">Vymazat vše</button>
+    </div>
+    <div id="chybovaHlaska" style="color: red; margin: 10px 0; text-align: center;"></div>
+    <canvas id="platno" width="400" height="400"></canvas>
+    <script src="trojuhelnik.js"></script>
+</body>
+</html>

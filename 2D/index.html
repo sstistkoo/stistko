@@ -1,0 +1,1680 @@
+<!DOCTYPE html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="theme-color" content="#0a0a0a" />
+    <title>Soustružník - Parametrické kreslení + AI</title>
+
+    <!--
+    ✅ DEMO API KLÍČE JSOU PŘEDVYPLNĚNÉ!
+    Aplikace funguje okamžitě po otevření - máte Gemini, Groq, OpenRouter i Mistral!
+
+    Klíče jsou rozdělené na 2 části (v globals.js):
+    - Gemini: EMBEDDED_API_KEY = část1 + část2
+    - Groq: EMBEDDED_GROQ_API_KEY = část1 + část2
+    - OpenRouter: EMBEDDED_OPENROUTER_API_KEY = část1 + část2
+    - Mistral: EMBEDDED_MISTRAL_API_KEY = část1 + část2
+
+    Pro vlastní klíče:
+    - Klikněte na ✨ AI → ⚙️ Settings
+    - Gemini tab: https://aistudio.google.com/app/apikey
+    - Groq tab: https://console.groq.com/keys
+    - OpenRouter tab: https://openrouter.ai/keys
+    - Mistral tab: https://console.mistral.ai/api-keys/
+    -->
+
+    <link rel="stylesheet" href="styles.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "@google/genai": "https://esm.sh/@google/genai@^1.33.0"
+        }
+      }
+    </script>
+    <!-- GLOBALS + KEYBOARD MUSÍ BÝT PRVNÍ! -->
+    <script src="src/globals.js"></script>
+    <script src="src/keyboard.js"></script>
+    <script>console.log("✅ index.html loaded");</script>
+    <script src="src/utils.js"></script>
+    <script src="src/drawing.js"></script>
+    <script src="src/canvas.js?v=4"></script>
+    <script src="src/ui.js"></script>
+    <script src="src/polar-line.js"></script>
+    <script src="src/controller.js"></script>
+    <script src="src/ai.js"></script>
+    <script src="lib/init.js"></script>
+  </head>
+  <body>
+    <div class="canvas-area">
+      <!-- Ovládání plátna vpravo nahoře -->
+      <div class="canvas-controls">
+        <button
+          class="canvas-btn"
+          onclick="window.togglePan()"
+          id="btnPanCanvas"
+          title="Posun (Klikni pro zapnutí/vypnutí)"
+        >
+          <span>✋</span>
+          <div>Posun</div>
+        </button>
+        <button
+          class="canvas-btn"
+          onclick="window.resetView()"
+          title="Zobrazit všechny objekty (Fit All)"
+        >
+          <span>⌖</span>
+          <div>Fit All</div>
+        </button>
+        <button
+          class="canvas-btn"
+          onclick="window.undo()"
+          id="btnUndo"
+          title="Zpět - vrátit poslední akci (Ctrl+Z)"
+        >
+          <span>↶</span>
+          <div>Zpět</div>
+        </button>
+        <button
+          class="canvas-btn"
+          onclick="window.redo()"
+          id="btnRedo"
+          title="Vpřed - obnovit vrácenou akci (Ctrl+Y)"
+        >
+          <span>↷</span>
+          <div>Vpřed</div>
+        </button>
+        <button
+          class="canvas-btn"
+          onclick="window.toggleAiSelect()"
+          id="btnSelectCanvas"
+          title="Přepnout režim výběru"
+        >
+          <span>👆</span>
+          <div>Výběr</div>
+        </button>
+      </div>
+
+      <!-- AI PANEL -->
+      <div
+        class="tool-submenu ai-overlay"
+        id="toolsAi"
+        style="display: none;"
+      >
+        <div
+          id="aiPanel"
+          class="ai-panel"
+        >
+          <!-- AI Header s nastavením -->
+          <div
+            id="aiHeaderRow"
+            class="ai-header-row"
+          >
+            <div id="aiHeaderFirstRow" class="ai-header-first-row">
+              <!-- Levá část: Provider + Model + AI Type + Settings -->
+              <div class="ai-header-left">
+                <!-- Provider + Model + AI Type (vertikálně) -->
+                <div class="ai-header-selects">
+                  <!-- AI Provider (Gemini / Groq / OpenRouter / Mistral) -->
+                  <select
+                    id="aiProviderSelect"
+                    onchange="if(window.updateModelsForProvider) window.updateModelsForProvider()"
+                    class="ai-select"
+                    title="Vyberte AI poskytovatele"
+                  >
+                    <option value="gemini" selected>🤖 Gemini</option>
+                    <option value="groq">⚡ Groq</option>
+                    <option value="openrouter">🌐 OpenRouter</option>
+                    <option value="mistral">🔥 Mistral</option>
+                  </select>
+
+                  <!-- AI Model -->
+                  <select
+                    id="aiModelSelect"
+                    class="ai-select"
+                  >
+                    <option value="gemini-2.5-flash-lite" selected>
+                      ⚡ Gemini 2.5 Flash-Lite (Vyšší limit)
+                    </option>
+                    <option value="gemini-2.5-flash">
+                      ⚡ Gemini 2.5 Flash (Rychlý)
+                    </option>
+                    <option value="gemini-3-pro-preview">
+                      🧪 Gemini 3 Pro (Nejchytřejší)
+                    </option>
+                    <option value="gemini-2.0-flash-exp">
+                      ⚡ Gemini 2.0 Flash (Exp)
+                    </option>
+                  </select>
+
+                  <!-- AI Type (2D / CNC / Chat) -->
+                  <select
+                    id="aiTypeSelect"
+                    class="ai-select"
+                    title="Vyberte režim AI: 2D = kreslení, CNC = generování G-kódu/tvarů, Chat = běžný chat"
+                  >
+                    <option value="2d" selected>✏️ 2D (kreslení)</option>
+                    <option value="cnc">🛠️ CNC (kódování)</option>
+                    <option value="chat">💬 Chat (pokec)</option>
+                  </select>
+                </div>
+
+                <!-- Settings Button -->
+                <button
+                  onclick="window.openSettings()"
+                  title="Nastavení API klíče"
+                  class="ai-header-btn ai-settings-btn ai-btn-transparent"
+                >
+                  <span class="ai-btn-icon">⚙️</span>
+                </button>
+              </div>
+
+              <!-- Pravá část: Tlačítka ve sloupcích -->
+              <div class="ai-header-right">
+                <!-- Horní řádek: Minimize a Close -->
+                <div class="ai-header-top-buttons">
+                  <!-- Minimize Button -->
+                  <button
+                    onclick="window.minimizeAI()"
+                    title="Minimalizovat AI (pokračuje v práci)"
+                    class="ai-header-btn ai-action-btn ai-btn-action ai-btn-minimize"
+                  >
+                    <span>−</span>
+                  </button>
+
+                  <!-- Close Button -->
+                  <button
+                    onclick="window.closeAI()"
+                    title="Zavřít AI a ukončit činnost"
+                    class="ai-header-btn ai-action-btn ai-btn-action ai-btn-close"
+                  >
+                    <span>×</span>
+                  </button>
+                </div>
+
+                <!-- Dolní řádek: Memory, Preferences, Metrics -->
+                <div class="ai-header-bottom-buttons">
+                  <!-- AI Memory Button -->
+                  <button
+                    onclick="showAIMemory()"
+                    title="AI Paměť - Co se AI naučila"
+                    class="ai-header-btn ai-btn-transparent"
+                  >
+                    <span class="ai-btn-icon-sm">🧠</span>
+                  </button>
+
+                  <!-- AI Preferences Button -->
+                  <button
+                    onclick="openAIPreferences()"
+                    title="Nastavit preference AI (učí se)"
+                    class="ai-header-btn ai-btn-transparent"
+                  >
+                    <span class="ai-btn-icon-sm">🎓</span>
+                  </button>
+
+                  <!-- Debug Metrics Button -->
+                  <button
+                    onclick="showAIMetrics()"
+                    title="Zobrazit AI statistiky"
+                    class="ai-header-btn ai-btn-transparent"
+                  >
+                    <span class="ai-btn-icon-sm">📊</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chat história -->
+          <div id="aiChatHistory" class="chat-container">
+            <div class="ai-chat-placeholder">
+              Začátek konverzace. Zeptejte se na cokoliv nebo popište tvar.
+            </div>
+
+            <!-- Info o povolení -->
+            <div
+              id="permissionInfo"
+              class="ai-permission-info"
+            >
+              <div class="ai-permission-title">
+                ℹ️ Pro plnou funkčnost na mobilu:
+              </div>
+              <div class="ai-permission-item">
+                📷 <strong>Kamera</strong> - pro focení náčrtů
+              </div>
+              <div class="ai-permission-item">🎤 <strong>Mikrofon</strong> - pro hlasové zadávání</div>
+              <div class="ai-permission-note">
+                Povolení se vyžádají při prvním použití.
+              </div>
+              <button
+                onclick="document.getElementById('permissionInfo').style.display='none'"
+                class="ai-permission-btn"
+              >
+                Rozumím
+              </button>
+            </div>
+          </div>
+
+          <!-- Selection & Tools Toolbar -->
+          <div class="ai-toolbar">
+            <button
+              id="btnAiSelect"
+              onclick="window.toggleAiSelect(); document.getElementById('toolsAi').style.display='none'; document.getElementById('btnCatAi').classList.remove('active')"
+              class="ai-toolbar-btn ai-toolbar-btn-select"
+              title="Přepnout režim výběru"
+            >
+              <span class="ai-toolbar-btn-icon-sm">👆</span> Výběr
+            </button>
+
+            <button
+              onclick="window.openQuickInput()"
+              class="ai-toolbar-btn ai-toolbar-btn-keyboard"
+              title="Rychlé zadání (Klávesnice)"
+            >
+              <span class="ai-toolbar-btn-icon-md">⌨️</span> Klávesnice
+            </button>
+
+            <button
+              onclick="window.aiUndo()"
+              class="ai-toolbar-btn ai-toolbar-btn-icon"
+              title="Zpět (Undo)"
+            >
+              ↶
+            </button>
+
+            <button
+              onclick="window.aiRedo()"
+              class="ai-toolbar-btn ai-toolbar-btn-icon"
+              title="Vpřed (Redo)"
+            >
+              ↷
+            </button>
+
+            <!-- Camera Button -->
+            <button
+              onclick="document.getElementById('aiImageInput').click()"
+              title="Nahrát obrázek / Vyfotit"
+              class="ai-toolbar-btn ai-toolbar-btn-icon"
+            >
+              📷
+            </button>
+            <input
+              type="file"
+              id="aiImageInput"
+              accept="image/*"
+              capture="environment"
+              class="hidden-input"
+              onchange="window.handleImageSelect(this)"
+            />
+
+            <!-- Voice Button -->
+            <button
+              onclick="window.toggleVoice()"
+              id="btnVoice"
+              title="Hlasové zadání"
+              class="ai-toolbar-btn ai-toolbar-btn-icon"
+            >
+              🎤
+            </button>
+
+            <button
+              onclick="window.clearSelection()"
+              id="btnClearSelection"
+              class="ai-toolbar-btn ai-toolbar-btn-clear"
+              title="Zrušit výběr"
+            >
+              ✕
+            </button>
+          </div>
+
+          <!-- Selection List -->
+          <div
+            id="aiSelectionList"
+            class="selection-list"
+            class="d-none"
+          ></div>
+
+          <!-- Chat Window -->
+          <div id="chatWindow" class="ai-chat-window"></div>
+
+          <!-- Input zóna -->
+          <div id="aiInputZone" class="ai-input-zone">
+            <!-- Deep Think Checkbox + Image Upload -->
+            <div class="ai-input-options">
+              <label class="ai-deep-think-label">
+                <input
+                  type="checkbox"
+                  id="useThinking"
+                  class="ai-deep-think-checkbox"
+                />
+                <span>🧠 Deep Think
+                  <span class="ai-opacity-light">(Gemini 3 Pro)</span></span>
+              </label>
+
+              <!-- Image Upload Container (zobrazí se jen pro Groq Vision modely) -->
+              <div id="imageUploadContainer" class="ai-image-upload-container">
+                <label class="ai-image-upload-label">
+                  <span>📷 Obrázek</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onchange="if(window.handleImageSelect) window.handleImageSelect(this)"
+                    class="hidden-input"
+                  />
+                </label>
+              </div>
+
+              <span id="aiFileName" class="ai-file-name"></span>
+            </div>
+
+            <!-- Image Preview -->
+            <div id="aiImagePreview" class="ai-image-preview">
+              <img id="aiPreviewImg" class="ai-preview-img" />
+              <button onclick="window.clearImage()" class="ai-preview-close-btn">
+                ✕
+              </button>
+            </div>
+
+            <div class="ai-input-row">
+              <div class="ai-input-wrapper">
+                <textarea
+                  id="aiPrompt"
+                  rows="1"
+                  placeholder="Zpráva pro Gemini..."
+                  onkeydown="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); if(window.callGemini) { window.callGemini(); } }"
+                  class="ai-prompt-textarea"
+                ></textarea>
+                <div id="cncInputError" class="ai-input-error"></div>
+              </div>
+
+              <button
+                onclick="if(!window.processingAI && window.callGemini) { window.callGemini(); } else { alert('AI už zpracovává request nebo test běží!'); }"
+                id="btnGenerate"
+                class="ai-btn-send"
+                title="Odeslat do AI"
+              >
+                ➤
+              </button>
+
+              <button
+                onclick="if(window.cancelAIRequest) { window.cancelAIRequest(); }"
+                id="btnCancel"
+                class="ai-btn-cancel"
+                title="Zrušit požadavek"
+              >
+                ⊗
+              </button>
+
+              <!-- Test Button -->
+              <button
+                onclick="if(window.showAITestPanel) window.showAITestPanel()"
+                class="ai-btn-test"
+                title="Spustit AI test suite"
+              >
+                🧪
+              </button>
+            </div>
+
+            <div id="aiStatus" class="ai-status">
+              <span id="keyIndicator" style="display: none;">API Klíč: Žádný</span>
+            </div>
+
+            <!-- API Usage Stats -->
+            <div id="apiUsageInfo" class="ai-usage-info"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kreslení panel -->
+      <div class="tool-submenu d-none" id="toolsDrawing" style="display: none;">
+        <div class="drawing-panel drawing-panel-wrapper">
+        <!-- Header: polar snap angle + grip -->
+        <div class="tool-header drawing-panel-header">
+          <div class="drawing-panel-header-left">
+            <label class="drawing-panel-label">Polární krok čára (°):
+              <input type="number" id="polarLineAngle" min="0" max="360" value="" placeholder="vypnuto" oninput="window.updatePolarLineAngle(this.value)" class="drawing-panel-input">
+            </label>
+          </div>
+          <div class="drawing-panel-header-right">
+            <div class="panel-grip drawing-panel-grip">≡</div>
+          </div>
+        </div>
+        <div class="tools-content">
+          <div class="drawing-tools-grid">
+            <!-- Základní nástroje -->
+            <button
+              class="tool-btn tool-btn-drawing"
+              onclick="window.setMode('line')"
+              id="btnLine"
+              title="Nakreslit čáru"
+            >
+              <span class="tool-btn-icon">📏</span>
+              <div class="tool-btn-label">Čára</div>
+            </button>
+
+            <!-- Kružnice - rozbalovací menu -->
+            <div class="dropdown-container">
+              <button
+                class="tool-btn tool-btn-drawing"
+                id="btnCircle"
+                onclick="document.getElementById('circleMenu').style.display = document.getElementById('circleMenu').style.display === 'none' ? 'flex' : 'none'"
+                title="Nakreslit kružnici"
+              >
+                <span class="tool-btn-icon">⭕</span>
+                <div class="tool-btn-label">Kružnice ▼</div>
+              </button>
+              <div
+                id="circleMenu"
+                class="dropdown-menu"
+                style="display: none;"
+                  border-radius: 6px;
+                  display: none;
+                  flex-direction: column;
+                  gap: 4px;
+                  padding: 6px;
+                  min-width: 140px;
+                  z-index: 1000;
+                "
+              >
+                <button
+                  class="tool-btn"
+                  onclick="window.setMode('circle'); document.getElementById('circleMenu').style.display='none'"
+                  style="
+                    width: 100%;
+                    margin: 0;
+                    background: #333;
+                    border: 1px solid #444;
+                    padding: 8px;
+                    border-radius: 4px;
+                    color: #ccc;
+                    font-size: 11px;
+                    cursor: pointer;
+                    text-align: left;
+                  "
+                  title="Běžná kružnice (střed → obvod)"
+                >
+                  📍→⭕ Normální
+                </button>
+                <button
+                  class="tool-btn"
+                  onclick="window.setMode('circumcircle'); document.getElementById('circleMenu').style.display='none'"
+                  style="
+                    width: 100%;
+                    margin: 0;
+                    background: #333;
+                    border: 1px solid #444;
+                    padding: 8px;
+                    border-radius: 4px;
+                    color: #ccc;
+                    font-size: 11px;
+                    cursor: pointer;
+                    text-align: left;
+                  "
+                  title="Kružnice procházející 3 body"
+                >
+                  3️⃣ Skrze 3 body
+                </button>
+              </div>
+            </div>
+
+            <button class="tool-btn no-margin" onclick="window.setMode('arc')" id="btnArc" title="Nakreslit oblouk">
+              <span class="tool-btn-icon">🌙</span>
+              <div class="tool-btn-label">Oblouk</div>
+            </button>
+            <button class="tool-btn no-margin" onclick="window.setMode('point')" id="btnPoint" title="Vytvořit bod">
+              <span class="tool-btn-icon">📍</span>
+              <div class="tool-btn-label">Bod</div>
+            </button>
+            <button class="tool-btn no-margin" onclick="window.setMode('rectangle')" id="btnRectangle" title="Nakreslit obdélník">
+              <span class="tool-btn-icon">▭</span>
+              <div class="tool-btn-label">Obdélník</div>
+            </button>
+
+            <!-- Konstrukce -->
+            <button class="tool-btn no-margin" onclick="window.setMode('tangent')" id="btnTangent" title="Tečna ke kružnici">
+              <span class="tool-btn-icon">⟂</span>
+              <div class="tool-btn-label">Tečna</div>
+            </button>
+            <button class="tool-btn no-margin" onclick="window.setMode('perpendicular')" id="btnPerpendicular" title="Kolmice">
+              <span class="tool-btn-icon">┴</span>
+              <div class="tool-btn-label">Kolmice</div>
+            </button>
+            <button class="tool-btn no-margin" onclick="window.setMode('parallel')" id="btnParallel" title="Rovnoběžka">
+              <span class="tool-btn-icon">∥</span>
+              <div class="tool-btn-label">Rovnoběžka</div>
+            </button>
+          </div>
+          <div class="section-divider">
+            <label class="checkbox-label">
+              <input type="checkbox" id="polarSnapCheckboxLegacy" onchange="window.togglePolarSnapLegacy()" checked />
+              Polární přichycení (15°, 30°, 45°...)
+            </label>
+            <label class="checkbox-label mt-8">
+              Polární krok (°):
+              <input type="number" id="polarSnapStep" min="1" max="90" value="45" class="polar-step-input">
+            </label>
+          </div>
+        </div>
+        </div>
+      </div>
+
+      <!-- Úpravy panel -->
+      <div class="tool-submenu d-none" id="toolsEdit" style="display: none;">
+        <div class="tool-submenu-panel max-w-500">
+          <div class="flex-wrap-center">
+            <!-- Editace -->
+            <button class="tool-btn no-margin" onclick="window.setMode('trim')" id="btnTrim" title="Ořezat čáru">
+              <span class="tool-btn-icon">✂️</span>
+              <div class="tool-btn-label">Oříznutí</div>
+            </button>
+            <button class="tool-btn no-margin" onclick="window.setMode('extend')" id="btnExtend" title="Protáhnout čáru">
+              <span class="tool-btn-icon">↔️</span>
+              <div class="tool-btn-label">Protažení</div>
+            </button>
+            <button class="tool-btn no-margin" onclick="window.setMode('offset')" id="btnOffset" title="Odsadit objekt">
+              <span class="tool-btn-icon">⇄</span>
+              <div class="tool-btn-label">Odsazení</div>
+            </button>
+            <button class="tool-btn no-margin" onclick="window.setMode('mirror')" id="btnMirror" title="Zrcadlit objekt">
+              <span class="tool-btn-icon">🪞</span>
+              <div class="tool-btn-label">Zrcadlit</div>
+            </button>
+            <button class="tool-btn no-margin" onclick="window.setMode('erase')" id="btnErase" title="Smazat objekt">
+              <span class="tool-btn-icon">🗑️</span>
+              <div class="tool-btn-label">Guma</div>
+            </button>
+            <button class="tool-btn no-margin" onclick="calculateIntersections()" id="btnIntersect" title="Spočítat průsečíky">
+              <span class="tool-btn-icon">⊗</span>
+              <div class="tool-btn-label">Průsečíky</div>
+            </button>
+            <button class="tool-btn no-margin" onclick="window.setMode('measure')" id="btnMeasure" title="Změřit rozměry">
+              <span class="tool-btn-icon">📏</span>
+              <div class="tool-btn-label">Měření</div>
+            </button>
+            <button class="tool-btn no-margin" onclick="window.showConstraintModal()" id="btnConstraint" title="Fixace - aretování">
+              <span class="tool-btn-icon">🔒</span>
+              <div class="tool-btn-label">Fixace</div>
+            </button>
+            <button class="tool-btn no-margin" onclick="window.setMode('dimension')" id="btnDimension" title="Kótovat objekt">
+              <span class="tool-btn-icon">📐</span>
+              <div class="tool-btn-label">Kóta</div>
+            </button>
+            <button class="tool-btn no-margin" onclick="window.deleteAllDimensions()" id="btnDeleteDimensions" title="Smazat všechny kóty">
+              <span class="tool-btn-icon">❌</span>
+              <div class="tool-btn-label">Smazat kóty</div>
+            </button>
+            <button class="tool-btn no-margin" onclick="window.dimensionAll()" id="btnDimensionAll" title="Okotovat všechny čáry a kružnice">
+              <span class="tool-btn-icon">📏✨</span>
+              <div class="tool-btn-label">Okotovat vše</div>
+            </button>
+
+            <!-- Transformace -->
+            <button class="tool-btn no-margin" onclick="window.setMode('align')" title="Zarovnat a posunout">
+              <span class="tool-btn-icon">⚖️</span>
+              <div class="tool-btn-label">Zarovnání</div>
+            </button>
+            <button class="tool-btn no-margin" onclick="window.setMode('rotate')" title="Otočit objekty">
+              <span class="tool-btn-icon">🔁</span>
+              <div class="tool-btn-label">Rotace</div>
+            </button>
+            <button class="tool-btn no-margin" onclick="window.showColorPicker()" title="Změnit barvu a typ čáry">
+              <span class="tool-btn-icon">🎨</span>
+              <div class="tool-btn-label">Barva, typ</div>
+            </button>
+
+            <!-- Booleovské operace -->
+            <button class="tool-btn no-margin" onclick="window.booleanUnion()" title="Sjednocení">
+              <span class="tool-btn-icon">∪</span>
+              <div class="tool-btn-label">Sjednocení</div>
+            </button>
+            <button class="tool-btn no-margin" onclick="window.booleanIntersect()" title="Průnik">
+              <span class="tool-btn-icon">∩</span>
+              <div class="tool-btn-label">Průnik</div>
+            </button>
+            <button class="tool-btn no-margin" onclick="window.booleanDifference()" title="Rozdíl">
+              <span class="tool-btn-icon">−</span>
+              <div class="tool-btn-label">Rozdíl</div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Souřadnice panel -->
+      <div class="tool-submenu coords-panel d-none" id="toolsCoords" style="display: none;">
+        <div class="tool-submenu-panel max-w-400">
+          <!-- Bod -->
+          <div class="section-wrapper">
+            <div class="section-header" onclick="window.toggleCoordSection('coordBod')">
+              <strong class="section-title">📍 Bod</strong>
+              <span id="coordBodToggle" class="section-toggle">▼</span>
+            </div>
+            <div id="coordBod" class="section-content">
+              <div class="flex-gap-8 mb-8">
+                <input type="number" id="quickPointZ" placeholder="Z" step="0.01" class="coord-input" />
+                <input type="number" id="quickPointX" placeholder="X" step="0.01" class="coord-input" />
+              </div>
+              <div class="flex-gap-8">
+                <button class="btn-secondary" onclick="window.setPointFromCursor()">📍 Z kurzoru</button>
+                <button class="btn-primary" onclick="window.quickAddPoint()">+ Přidat</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Čára -->
+          <div class="section-wrapper">
+            <div class="section-header" onclick="window.toggleCoordSection('coordLine')">
+              <strong class="section-title">📏 Čára</strong>
+              <span id="coordLineToggle" class="section-toggle">▼</span>
+            </div>
+            <div id="coordLine" class="section-content">
+              <div class="input-label">Bod 1:</div>
+              <div class="flex-gap-8 mb-8">
+                <input type="number" id="lineZ1" placeholder="Z1" step="0.01" class="coord-input-sm" />
+                <input type="number" id="lineX1" placeholder="X1" step="0.01" class="coord-input-sm" />
+              </div>
+              <div class="input-label">Bod 2:</div>
+              <div class="flex-gap-8 mb-8">
+                <input type="number" id="lineZ2" placeholder="Z2" step="0.01" class="coord-input-sm" />
+                <input type="number" id="lineX2" placeholder="X2" step="0.01" class="coord-input-sm" />
+              </div>
+              <button class="btn-primary full-width" onclick="window.addLineByCoords()">+ Nakreslit</button>
+            </div>
+          </div>
+
+          <!-- Kružnice -->
+          <div class="section-wrapper">
+            <div class="section-header" onclick="window.toggleCoordSection('coordCircle')">
+              <strong class="section-title">⭕ Kružnice</strong>
+              <span id="coordCircleToggle" class="section-toggle">▼</span>
+            </div>
+            <div id="coordCircle" class="section-content">
+              <div class="input-label">Střed:</div>
+              <div class="flex-gap-8 mb-8">
+                <input type="number" id="quickCircleZ" placeholder="Z" step="0.01" class="coord-input" />
+                <input type="number" id="quickCircleX" placeholder="X" step="0.01" class="coord-input" />
+              </div>
+              <div class="input-label">Poloměr:</div>
+              <input type="number" id="quickCircleR" placeholder="R" step="0.01" class="coord-input-full" />
+              <button class="btn-primary full-width" onclick="window.quickAddCircle()">+ Nakreslit</button>
+            </div>
+          </div>
+
+          <!-- Polární souřadnice -->
+          <div class="section-wrapper">
+            <div class="section-header" onclick="window.toggleCoordSection('coordPolar')">
+              <strong class="section-title">📐 Polární</strong>
+              <span id="coordPolarToggle" class="section-toggle">▼</span>
+            </div>
+            <div id="coordPolar" class="section-content">
+              <div class="input-label">Počáteční bod:</div>
+              <div class="flex-gap-8 mb-8">
+                <input type="number" id="polarStartZ" placeholder="Z" step="0.01" class="coord-input" />
+                <input type="number" id="polarStartX" placeholder="X" step="0.01" class="coord-input" />
+              </div>
+              <div class="flex-gap-8 mb-8">
+                <div class="flex-1">
+                  <div class="input-label-sm">Vzdálenost:</div>
+                  <input type="number" id="polarDist" placeholder="mm" step="0.1" class="coord-input-full" />
+                </div>
+                <div class="flex-1">
+                  <div class="input-label-sm">Úhel:</div>
+                  <input type="number" id="polarAngle" placeholder="°" step="1" class="coord-input-full" />
+                </div>
+              </div>
+              <div class="input-hint">0° = vpravo, 90° = nahoru</div>
+              <div class="flex-gap-8">
+                <button class="btn-primary" onclick="window.addLinePolar()">+ Čára</button>
+                <button class="btn-primary" onclick="window.addPointPolar()">+ Bod</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ostatní panel -->
+      <div class="tool-submenu d-none" id="toolsOther" style="display: none;">
+        <div class="tool-submenu-panel max-w-500 max-h-70vh">
+          <!-- Akce -->
+          <div class="section-wrapper">
+            <div class="section-header-static">
+              <strong class="section-title">⚡ Akce</strong>
+            </div>
+            <div class="flex-wrap-center mt-8">
+              <button class="tool-btn no-margin flex-1 min-w-80" onclick="window.undo()" title="Zpět">
+                <span class="tool-btn-icon-lg">↶</span>
+                <div class="tool-btn-label-sm">Zpět</div>
+              </button>
+              <button class="tool-btn no-margin flex-1 min-w-80" onclick="window.clearAll()" title="Vymazat vše">
+                <span class="tool-btn-icon-lg">🗑️</span>
+                <div class="tool-btn-label-sm">Vymazat</div>
+              </button>
+              <button class="tool-btn no-margin flex-1 min-w-80" onclick="window.exportPNG()" title="Exportovat PNG">
+                <span class="tool-btn-icon-lg">💾</span>
+                <div class="tool-btn-label-sm">Export PNG</div>
+              </button>
+            </div>
+            <div class="flex-wrap-center mt-8">
+              <button class="tool-btn no-margin flex-1 min-w-100" onclick="window.saveProject()" title="Uložit projekt">
+                <span class="tool-btn-icon-lg">💾</span>
+                <div class="tool-btn-label">Uložit</div>
+              </button>
+              <button class="tool-btn no-margin flex-1 min-w-100" onclick="document.getElementById('loadProjectInput').click()" title="Načíst projekt">
+                <span class="tool-btn-icon-lg">📂</span>
+                <div class="tool-btn-label">Načíst</div>
+              </button>
+              <button class="tool-btn no-margin flex-1 min-w-120" onclick="document.getElementById('importSimDxfInput').click()" title="Importovat z SimDxf JSON">
+                <span class="tool-btn-icon-lg">📥</span>
+                <div class="tool-btn-label">Import SimDxf</div>
+              </button>
+              <input type="file" id="loadProjectInput" accept=".json" class="d-none" onchange="window.loadProject(this)" />
+              <input type="file" id="importSimDxfInput" accept=".json" class="d-none" onchange="window.importSimDxfProject(this)" />
+            </div>
+          </div>
+
+          <!-- Přichycení -->
+          <div class="section-wrapper">
+            <div class="section-header" onclick="window.toggleCoordSection('otherHelpers')">
+              <strong class="section-title">📍 Přichycení</strong>
+              <span id="otherHelpersToggle" class="section-toggle">▼</span>
+            </div>
+            <div id="otherHelpers" class="section-content">
+              <label class="checkbox-label mb-8">
+                <input type="checkbox" id="snapGrid" onchange="window.updateSnapSettings()" class="checkbox-lg" />
+                <span>Přichycení k mřížce</span>
+              </label>
+              <label class="checkbox-label mb-8">
+                <input type="checkbox" id="snapPoints" checked onchange="window.updateSnapSettings()" class="checkbox-lg" />
+                <span>Přichycení k bodům</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" id="orthoMode" checked onchange="window.updateSnapSettings()" class="checkbox-lg" />
+                <span>Ortogonální (↔↕)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Zobrazení -->
+          <div class="section-wrapper">
+            <div class="section-header" onclick="window.toggleCoordSection('otherDisplay')">
+              <strong class="section-title">🎨 Zobrazení</strong>
+              <span id="otherDisplayToggle" class="section-toggle">▼</span>
+            </div>
+            <div id="otherDisplay" class="section-content">
+              <label class="checkbox-label mb-8">
+                <input type="checkbox" id="showGrid" checked onchange="window.draw()" class="checkbox-lg" />
+                <span>Mřížka</span>
+              </label>
+              <label class="checkbox-label mb-8">
+                <input type="checkbox" id="showAxes" checked onchange="window.draw()" class="checkbox-lg" />
+                <span>Osy (X, Z)</span>
+              </label>
+              <label class="checkbox-label mb-8">
+                <input type="checkbox" id="showPoints" checked onchange="window.draw()" class="checkbox-lg" />
+                <span>Body</span>
+              </label>
+              <label class="checkbox-label mb-8">
+                <input type="checkbox" id="enableMeasureInput" onchange="window.toggleMeasureInput()" class="checkbox-lg" />
+                <span>Míra - zadání rozměrů</span>
+              </label>
+              <!-- Mřížka -->
+              <div class="section-divider">
+                <label class="input-label" style="display: block; margin-bottom: 6px">Rozestup mřížky (mm):</label>
+                <input type="number" id="gridSpacing" value="10" min="0.01" max="100" step="0.01" onchange="window.updateGridSpacing()" class="coord-input-full" />
+                <div class="flex-gap-8" style="margin-top: 6px">
+                  <button class="btn-grid-preset" onclick="window.setGridSpacing(0.1)">0.1mm</button>
+                  <button class="btn-grid-preset" onclick="window.setGridSpacing(1)">1mm</button>
+                  <button class="btn-grid-preset" onclick="window.setGridSpacing(5)">5mm</button>
+                  <button class="btn-grid-preset" onclick="window.setGridSpacing(10)">10mm</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <canvas id="canvas"></canvas>
+
+      <!-- Touch cursor -->
+      <div class="touch-cursor" id="touchCursor">
+        <div class="touch-cursor-center"></div>
+      </div>
+
+      <!-- Precision mode elements -->
+      <div class="precision-line" id="precisionLine"></div>
+      <div class="precision-finger-indicator" id="precisionFinger"></div>
+
+      <div class="coords" id="coords">Z: 0.00 | X: 0.00 mm</div>
+      <div class="snap-info" id="snapInfo"></div>
+      <div class="mode-info" id="modeInfo"></div>
+    </div>
+
+    <!-- Toolbar dole -->
+    <div class="toolbar">
+      <button class="tool-btn" onclick="window.showControllerModal()" id="btnController" title="Ovladač pro kreslení">
+        <span class="toolbar-btn-icon">🎮</span>
+        <div class="toolbar-btn-label">Ovladač</div>
+      </button>
+      <button class="tool-btn" onclick="window.showToolCategory('drawing')" id="btnCatDrawing" title="Kreslení">
+        <span class="toolbar-btn-icon">✏️</span>
+        <div class="toolbar-btn-label">Kreslení</div>
+      </button>
+      <button class="tool-btn" onclick="window.showToolCategory('edit')" id="btnCatEdit" title="Úpravy">
+        <span class="toolbar-btn-icon">🔧</span>
+        <div class="toolbar-btn-label">Úpravy</div>
+      </button>
+      <button class="tool-btn" onclick="window.showToolCategory('coords')" id="btnCatCoords" title="Souřadnice">
+        <span class="toolbar-btn-icon">📐</span>
+        <div class="toolbar-btn-label">Souřadnice</div>
+      </button>
+      <button class="tool-btn" onclick="window.showToolCategory('other')" id="btnCatOther" title="Ostatní">
+        <span class="toolbar-btn-icon">⚙️</span>
+        <div class="toolbar-btn-label">Ostatní</div>
+      </button>
+
+      <div class="toolbar-divider"></div>
+
+      <button class="tool-btn ai-btn" onclick="window.showToolCategory('ai')" id="btnCatAi" title="AI Asistent">
+        <span class="toolbar-btn-icon">✨</span>
+        <div class="toolbar-btn-label">AI</div>
+      </button>
+    </div>
+    <div id="settingsModal" class="modal-overlay">
+      <div class="modal-window">
+        <!-- Křížek na zavření -->
+        <button class="modal-close-btn" onclick="closeSettings()" title="Zavřít">×</button>
+
+        <h2 class="modal-title">
+          ⚙️ Nastavení API Klíčů
+        </h2>
+
+        <p class="modal-subtitle">
+          Pro použití AI funkcí vložte API klíče. Klíče jsou uloženy
+          pouze ve vašem prohlížeči.
+        </p>
+
+        <!-- Provider Tabs -->
+        <div class="provider-tabs">
+          <button id="tabGemini" onclick="window.switchProviderTab('gemini')" class="provider-tab active">
+            🤖 Gemini
+          </button>
+          <button id="tabGroq" onclick="window.switchProviderTab('groq')" class="provider-tab">
+            ⚡ Groq
+          </button>
+          <button id="tabOpenRouter" onclick="window.switchProviderTab('openrouter')" class="provider-tab">
+            🌐 OpenRouter
+          </button>
+          <button id="tabMistral" onclick="window.switchProviderTab('mistral')" class="provider-tab">
+            🔥 Mistral
+          </button>
+        </div>
+
+        <!-- Gemini Tab Content -->
+        <div id="geminiTabContent">
+          <p class="modal-description">
+            <a href="https://aistudio.google.com/app/apikey" target="_blank" class="link-primary">Získat Gemini klíč zde</a>
+          </p>
+
+          <div class="modal-description">Gemini klíče:</div>
+          <div id="keyList" class="key-list">
+            <div class="empty-state">Žádné klíče</div>
+          </div>
+
+          <div class="key-form-container">
+            <div class="form-group">
+              <label class="form-label">Název:</label>
+              <input type="text" id="newKeyName" placeholder="Můj Gemini klíč" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">API Key:</label>
+              <input type="password" id="newKeyValue" placeholder="AIza..." class="form-input" />
+            </div>
+            <button onclick="addApiKey()" class="btn-full">+ Přidat a použít</button>
+          </div>
+        </div>
+
+        <!-- Groq Tab Content -->
+        <div id="groqTabContent" class="d-none">
+          <p class="modal-description">
+            <a href="https://console.groq.com/keys" target="_blank" class="link-primary">Získat Groq klíč zde</a>
+          </p>
+
+          <div class="modal-description">Groq klíče:</div>
+          <div id="groqKeyList" class="key-list">
+            <div class="empty-state">Žádné klíče</div>
+          </div>
+
+          <div class="key-form-container">
+            <div class="form-group">
+              <label class="form-label">Název:</label>
+              <input type="text" id="newGroqKeyName" placeholder="Můj Groq klíč" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">API Key:</label>
+              <input type="password" id="newGroqKeyValue" placeholder="gsk_..." class="form-input" />
+            </div>
+            <button onclick="addGroqApiKey()" class="btn-full">+ Přidat a použít</button>
+          </div>
+        </div>
+
+        <!-- OpenRouter Tab Content -->
+        <div id="openrouterTabContent" class="d-none">
+          <p class="modal-description">
+            <a href="https://openrouter.ai/keys" target="_blank" class="link-primary">Získat OpenRouter klíč zde</a>
+          </p>
+
+          <div class="modal-description">OpenRouter klíče:</div>
+          <div id="openrouterKeyList" class="key-list">
+            <div class="empty-state">Žádné klíče</div>
+          </div>
+
+          <div class="key-form-container">
+            <div class="form-group">
+              <label class="form-label">Název:</label>
+              <input type="text" id="newOpenRouterKeyName" placeholder="Můj OpenRouter klíč" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">API Key:</label>
+              <input type="password" id="newOpenRouterKeyValue" placeholder="sk-or-v1-..." class="form-input" />
+            </div>
+            <button onclick="addOpenRouterApiKey()" class="btn-full">+ Přidat a použít</button>
+          </div>
+        </div>
+
+        <!-- Mistral Tab Content -->
+        <div id="mistralTabContent" class="d-none">
+          <p class="modal-description">
+            <a href="https://console.mistral.ai/api-keys/" target="_blank" class="link-primary">Získat Mistral klíč zde</a>
+          </p>
+
+          <div class="modal-description">Mistral klíče:</div>
+          <div id="mistralKeyList" class="key-list">
+            <div class="empty-state">Žádné klíče</div>
+          </div>
+
+          <div class="key-form-container">
+            <div class="form-group">
+              <label class="form-label">Název:</label>
+              <input type="text" id="newMistralKeyName" placeholder="Můj Mistral klíč" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">API Key:</label>
+              <input type="password" id="newMistralKeyValue" placeholder="Tvwm..." class="form-input" />
+            </div>
+            <button onclick="addMistralApiKey()" class="btn-full">+ Přidat a použít</button>
+          </div>
+        </div>
+
+        <!-- Test a správa AI modelů -->
+        <div class="test-panel">
+          <h3 class="test-panel-title">
+            <span class="tool-btn-icon">🧪</span>
+            Test a správa modelů
+          </h3>
+          <p class="test-panel-description">
+            Otestuj modely nebo vyber které chceš používat.
+          </p>
+          <div class="flex-gap-8">
+            <button onclick="window.testAllAIModels()" class="btn-test">🚀 Test modelů</button>
+            <button onclick="window.openModelManager()" class="btn-manage">⚙️ Správa modelů</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI PREFERENCES MODAL -->
+    <div id="aiPreferencesModal" class="modal-overlay d-none">
+      <div class="modal-window">
+        <h2 class="modal-title">🎓 AI Preference</h2>
+
+        <p class="modal-subtitle">
+          Nastavte své preference a AI se naučí je respektovat.
+        </p>
+
+        <div class="key-form-container mb-8">
+          <h3 class="section-title mb-8">📝 Preference:</h3>
+          <div id="preferencesList" class="preferences-list">
+            <div class="empty-state">Žádné preference</div>
+          </div>
+        </div>
+
+        <div class="key-form-container">
+          <h3 class="section-title mb-8">➕ Přidat preferenci:</h3>
+          <div class="form-group">
+            <label class="form-label">Klíč:</label>
+            <input type="text" id="newPrefKey" class="form-input"
+              placeholder="např. material"
+              style="
+                width: 100%;
+                background: #111;
+                border: 1px solid #444;
+                color: white;
+                padding: 6px;
+                border-radius: 4px;
+              "
+            />
+          </div>
+          <div class="mb-8">
+            <label style="font-size: 11px; display: block; margin-bottom: 2px"
+              >Hodnota:</label
+            >
+            <input
+              type="text"
+              id="newPrefValue"
+              placeholder="např. ocel"
+              style="
+                width: 100%;
+                background: #111;
+                border: 1px solid #444;
+                color: white;
+                padding: 6px;
+                border-radius: 4px;
+              "
+            />
+          </div>
+          <button
+            onclick="addAIPreference()"
+            style="
+              width: 100%;
+              padding: 8px;
+              background: #3a7bc8;
+              color: white;
+              border: none;
+              border-radius: 4px;
+              cursor: pointer;
+              font-size: 13px;
+            "
+          >
+            + Přidat
+          </button>
+        </div>
+
+        <div style="margin-top: 15px; text-align: right">
+          <button
+            onclick="closeAIPreferences()"
+            style="
+              padding: 8px 16px;
+              background: #444;
+              color: white;
+              border: none;
+              border-radius: 4px;
+              cursor: pointer;
+            "
+          >
+            Zavřít
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI MODEL TEST RESULTS MODAL -->
+    <div id="aiTestResultsModal" class="modal-overlay d-none">
+      <div class="modal-window modal-lg">
+        <div class="modal-header">
+          <h2 class="modal-header-title">
+            <span class="toolbar-btn-icon">🧪</span>
+            Výsledky testování AI modelů
+          </h2>
+          <button onclick="window.closeAITestResults()" class="modal-close-btn-simple">&times;</button>
+        </div>
+
+        <div id="aiTestResultsContent" class="mb-20">
+          <!-- Obsah se vyplní dynamicky -->
+        </div>
+
+        <div class="modal-footer">
+          <button onclick="window.copyAITestReport()" class="btn-copy-report">📋 Zkopírovat Report</button>
+          <button onclick="window.closeAITestResults()" class="btn-cancel">Zavřít</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI MODEL MANAGER MODAL -->
+    <div id="modelManagerModal" class="modal-overlay d-none">
+      <div class="modal-window modal-md">
+        <div class="modal-header">
+          <h2 class="modal-header-title">
+            <span class="toolbar-btn-icon">⚙️</span>
+            Správa AI modelů
+          </h2>
+          <button onclick="window.closeModelManager()" class="modal-close-btn-simple">&times;</button>
+        </div>
+
+        <div class="info-panel">
+          <p class="info-panel-text">📌 Zaškrtni modely, které chceš používat. Ostatní budou skryté v seznamu modelů.</p>
+        </div>
+
+        <div id="modelManagerContent">
+          <!-- Obsah se vyplní dynamicky -->
+        </div>
+
+        <div class="modal-footer-space-between">
+          <div class="flex-gap-8">
+            <button onclick="window.selectAllModels(true)" class="btn-select-all">✓ Vše</button>
+            <button onclick="window.selectAllModels(false)" class="btn-select-none">✗ Nic</button>
+          </div>
+          <button onclick="window.closeModelManager()" class="btn-cancel">Zavřít</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CIRCLE MODAL -->
+    <div id="circleModal" class="modal-overlay">
+      <div class="modal-window">
+        <h2 class="modal-title">⭕ Zadání kružnice</h2>
+        <div class="circle-input-row">
+          <label>Poloměr (R):</label>
+          <input type="number" id="circleInputR" step="0.01" oninput="window.updateCircleInputs('R')" onkeydown="if(event.key==='Enter') window.confirmCircle()" />
+        </div>
+        <div class="circle-input-row">
+          <label>Průměr (D):</label>
+          <input type="number" id="circleInputD" step="0.01" oninput="window.updateCircleInputs('D')" onkeydown="if(event.key==='Enter') window.confirmCircle()" />
+        </div>
+        <div class="modal-footer mt-15">
+          <button onclick="window.closeCircleModal()" class="btn-cancel">Zrušit</button>
+          <button onclick="window.confirmCircle()" class="btn-confirm">Vytvořit</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONSTRAINT MODAL -->
+    <!-- COLOR & STYLE MODAL -->
+    <div id="colorStyleModal" class="modal-overlay d-none">
+      <div class="modal-window modal-md">
+        <h2 class="modal-title">🎨 Barva a Styl Čáry</h2>
+
+        <!-- BARVY -->
+        <div class="mb-20">
+          <h3 class="section-header-sm">🎨 Barva</h3>
+          <div class="flex-wrap-gap-10">
+            <button onclick="window.selectColor('#FF0000', this)" id="colorBtn_FF0000" class="color-btn" style="background: #FF0000" title="Červená"></button>
+            <button onclick="window.selectColor('#00FF00', this)" id="colorBtn_00FF00" class="color-btn" style="background: #00FF00" title="Zelená"></button>
+            <button onclick="window.selectColor('#0000FF', this)" id="colorBtn_0000FF" class="color-btn" style="background: #0000FF" title="Modrá"></button>
+            <button onclick="window.selectColor('#FFFF00', this)" id="colorBtn_FFFF00" class="color-btn" style="background: #FFFF00" title="Žlutá"></button>
+            <button onclick="window.selectColor('#FF00FF', this)" id="colorBtn_FF00FF" class="color-btn" style="background: #FF00FF" title="Fialová"></button>
+            <button onclick="window.selectColor('#00FFFF', this)" id="colorBtn_00FFFF" class="color-btn" style="background: #00FFFF" title="Azurová"></button>
+            <button onclick="window.selectColor('#FFA500', this)" id="colorBtn_FFA500" class="color-btn" style="background: #FFA500" title="Oranžová"></button>
+            <button onclick="window.selectColor('#800080', this)" id="colorBtn_800080" class="color-btn" style="background: #800080" title="Purpura"></button>
+            <button onclick="window.selectColor('#FFFFFF', this)" id="colorBtn_FFFFFF" class="color-btn" style="background: #FFFFFF" title="Bílá"></button>
+            <button onclick="window.selectColor('#000000', this)" id="colorBtn_000000" class="color-btn color-btn-dark" style="background: #000000" title="Černá"></button>
+            <button onclick="window.selectColor('#808080', this)" id="colorBtn_808080" class="color-btn" style="background: #808080" title="Šedá"></button>
+            <button onclick="window.selectColor('#FF69B4', this)" id="colorBtn_FF69B4" class="color-btn" style="background: #FF69B4" title="Růžová"></button>
+          </div>
+        </div>
+
+        <!-- STYL ČÁRY -->
+        <div class="mb-20">
+          <h3 class="section-header-sm">📏 Styl Čáry</h3>
+          <div class="flex-wrap-gap-10">
+            <button onclick="window.selectLineStyle('solid', this)" id="styleBtn_solid" class="line-style-btn">━━ Klasická</button>
+            <button onclick="window.selectLineStyle('thick', this)" id="styleBtn_thick" class="line-style-btn">━━━ Tlustá</button>
+            <button onclick="window.selectLineStyle('thin', this)" id="styleBtn_thin" class="line-style-btn">─ Tenká</button>
+            <button onclick="window.selectLineStyle('dashed', this)" id="styleBtn_dashed" class="line-style-btn">╌ ╌ Čárkovaná</button>
+            <button onclick="window.selectLineStyle('dotted', this)" id="styleBtn_dotted" class="line-style-btn">· · Tečkovaná</button>
+          </div>
+        </div>
+
+        <!-- NASTAVENÍ VÝCHOZÍCH BAREV A STYLU -->
+        <div class="settings-section">
+          <h3 class="section-header-sm">⚙️ Nastavení Kreslení Nových Objektů</h3>
+          <p class="settings-description">Vyberte výchozí barvu a styl pro nově kreslené objekty. Nastavení se uloží automaticky.</p>
+
+          <div class="settings-grid">
+            <!-- Výchozí barva -->
+            <div>
+              <label class="settings-label">🎨 Výchozí barva:</label>
+              <select id="defaultColorSelect" onchange="window.setDefaultColor(this.value)" class="settings-select">
+                <option value="#4a9eff">🔵 Modrá (výchozí)</option>
+                <option value="#FF0000">🔴 Červená</option>
+                <option value="#00FF00">🟢 Zelená</option>
+                <option value="#FFFF00">🟡 Žlutá</option>
+                <option value="#FF00FF">🟣 Fialová</option>
+                <option value="#00FFFF">⚪ Azurová</option>
+                <option value="#FFA500">🟠 Oranžová</option>
+                <option value="#800080">⬛ Purpura</option>
+                <option value="#FFFFFF">⚫ Bílá</option>
+                <option value="#000000">⬜ Černá</option>
+                <option value="#808080">◼️ Šedá</option>
+                <option value="#FF69B4">🩷 Růžová</option>
+              </select>
+            </div>
+
+            <!-- Výchozí styl čáry -->
+            <div>
+              <label class="settings-label">📏 Výchozí styl čáry:</label>
+              <select id="defaultLineStyleSelect" onchange="window.setDefaultLineStyle(this.value)" class="settings-select">
+                <option value="solid">━━ Klasická</option>
+                <option value="thick">━━━ Tlustá</option>
+                <option value="thin">─ Tenká</option>
+                <option value="dashed">╌ ╌ Čárkovaná</option>
+                <option value="dotted">· · Tečkovaná</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- NASTAVENÍ BAREV KÓT -->
+        <div class="settings-section">
+          <h3 class="section-header-sm">📏 Nastavení Barev Kót</h3>
+          <p class="settings-description">Vyberte barvy pro kóty a jejich hodnoty. Nastavení se uloží automaticky.</p>
+
+          <div class="settings-grid">
+            <!-- Barva čar kót -->
+            <div>
+              <label class="settings-label">📐 Barva čar kót:</label>
+              <select id="dimensionLineColorSelect" onchange="window.setDimensionLineColor(this.value)" class="settings-select">
+                <option value="#ffa500">🟠 Oranžová (výchozí)</option>
+                <option value="#FF0000">🔴 Červená</option>
+                <option value="#00FF00">🟢 Zelená</option>
+                <option value="#4a9eff">🔵 Modrá</option>
+                <option value="#FFFF00">🟡 Žlutá</option>
+                <option value="#FF00FF">🟣 Fialová</option>
+                <option value="#00FFFF">⚪ Azurová</option>
+                <option value="#FFFFFF">⚫ Bílá</option>
+                <option value="#000000">⬜ Černá</option>
+                <option value="#808080">◼️ Šedá</option>
+              </select>
+            </div>
+
+            <!-- Barva hodnot kót -->
+            <div>
+              <label class="settings-label">🔤 Barva hodnot kót:</label>
+              <select id="dimensionTextColorSelect" onchange="window.setDimensionTextColor(this.value)" class="settings-select">
+                <option value="#ffff99">🟡 Světle žlutá (výchozí)</option>
+                <option value="#FFFFFF">⚫ Bílá</option>
+                <option value="#000000">⬜ Černá</option>
+                <option value="#FF0000">🔴 Červená</option>
+                <option value="#00FF00">🟢 Zelená</option>
+                <option value="#4a9eff">🔵 Modrá</option>
+                <option value="#FFA500">🟠 Oranžová</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button onclick="window.closeColorStyleModal()" class="btn-cancel">Zrušit</button>
+          <button onclick="window.confirmColorStyle()" class="btn-confirm">Potvrdit</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="constraintModal" class="modal-overlay">
+      <div class="modal-window">
+        <h2 class="modal-title">🔒 Fixace - Aretování objektů</h2>
+        <p class="modal-description">Vyberte typ fixace pro aretování vybraných objektů</p>
+        <div class="constraint-btn-container">
+          <button onclick="window.applyConstraint('point')" class="constraint-btn">📍 Bod</button>
+          <button onclick="window.applyConstraint('distance')" class="constraint-btn">📏 Vzdálenost</button>
+          <button onclick="window.applyConstraint('radius')" class="constraint-btn">⭕ Radius</button>
+          <button onclick="window.applyConstraint('polarAngle')" class="constraint-btn">⟲ Pol. Úhel</button>
+          <button onclick="window.applyConstraint('horizontal')" class="constraint-btn">➡️ Vodorovně</button>
+          <button onclick="window.applyConstraint('vertical')" class="constraint-btn">⬆️ Svisle</button>
+          <button onclick="window.removeConstraint('all')" class="constraint-btn-delete">❌ Smazat</button>
+        </div>
+        <div class="modal-footer mt-15">
+          <button onclick="window.closeConstraintModal()" class="btn-cancel">Zavřít</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONSTRAINT POINT MODAL -->
+    <div id="constraintPointModal" class="modal-overlay">
+      <div class="modal-window">
+        <h2 class="modal-title">📍 Fixace Bodu - Zadání Souřadnic</h2>
+        <div class="circle-input-row">
+          <label>Z (Horizontálně):</label>
+          <input type="number" id="constraintPointZ" step="0.01" value="0" />
+        </div>
+        <div class="circle-input-row">
+          <label>X (Vertikálně):</label>
+          <input type="number" id="constraintPointX" step="0.01" value="0" />
+        </div>
+        <div class="modal-footer mt-15">
+          <button onclick="window.cancelConstraintValue()" class="btn-cancel">Zrušit</button>
+          <button onclick="window.confirmConstraintPoint()" class="btn-confirm">Potvrdit</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONSTRAINT DISTANCE MODAL -->
+    <div id="constraintDistanceModal" class="modal-overlay">
+      <div class="modal-window">
+        <h2 class="modal-title">📏 Fixace Vzdálenosti</h2>
+        <div class="circle-input-row">
+          <label>Vzdálenost:</label>
+          <input type="number" id="constraintDistanceValue" step="0.01" value="10" />
+        </div>
+        <div class="modal-footer mt-15">
+          <button onclick="window.cancelConstraintValue()" class="btn-cancel">Zrušit</button>
+          <button onclick="window.confirmConstraintDistance()" class="btn-confirm">Potvrdit</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONSTRAINT RADIUS MODAL -->
+    <div id="constraintRadiusModal" class="modal-overlay">
+      <div class="modal-window">
+        <h2 class="modal-title">⭕ Fixace Radiusu</h2>
+        <div class="circle-input-row">
+          <label>Radius:</label>
+          <input type="number" id="constraintRadiusValue" step="0.01" value="5" />
+        </div>
+        <div class="modal-footer mt-15">
+          <button onclick="window.cancelConstraintValue()" class="btn-cancel">Zrušit</button>
+          <button onclick="window.confirmConstraintRadius()" class="btn-confirm">Potvrdit</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONSTRAINT POLAR ANGLE MODAL -->
+    <div id="constraintPolarAngleModal" class="modal-overlay">
+      <div class="modal-window">
+        <h2 class="modal-title">⟲ Fixace Polárního Úhlu</h2>
+        <div class="circle-input-row">
+          <label>Polární Úhel (°):</label>
+          <input type="number" id="constraintPolarAngleValue" step="0.1" value="0" min="0" max="360" />
+        </div>
+        <div class="modal-footer mt-15">
+          <button onclick="window.cancelConstraintValue()" class="btn-cancel">Zrušit</button>
+          <button onclick="window.confirmConstraintPolarAngle()" class="btn-confirm">Potvrdit</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODALS PLACEHOLDER - Ostatní modály se načítají z external souborů -->
+    <div id="quickInputHelpModal" class="modal-overlay"></div>
+    <div id="controllerModal" class="modal-overlay controller-modal">
+      <div class="modal-window controller-window">
+        <div class="controller-header">
+          <h2 class="modal-title no-margin">🎮 Ovladač - Rychlé kreslení úseček</h2>
+          <button onclick="window.closeControllerModal()" class="modal-close-btn-simple">&times;</button>
+        </div>
+
+        <!-- Input Display & Mode Selector -->
+        <div class="mb-12">
+          <div class="flex-gap-8 mb-8">
+            <button id="btnG90" onclick="window.setControllerMode('G90')" class="controller-mode-btn active">
+              G90<br /><span class="ctrl-btn-sublabel">Absolutní</span>
+            </button>
+            <button id="btnG91" onclick="window.setControllerMode('G91')" class="controller-mode-btn inactive">
+              G91<br /><span class="ctrl-btn-sublabel">Přírůstkové</span>
+            </button>
+            <input type="text" id="controllerInput" readonly placeholder="Zadání..." class="controller-input" />
+          </div>
+          <div class="flex-gap-10 text-info">
+            <div><strong class="text-primary">Režim:</strong> <span id="controllerModeDisplay">G90 (Absolutní)</span></div>
+            <div><strong class="text-primary">Poslední bod:</strong> <span id="controllerLastPointInline">—</span></div>
+          </div>
+        </div>
+
+        <!-- Controller Layout - KLÁVESNICE -->
+        <div style="background: #1a1a1a; padding: 12px; border-radius: 10px; border: 1px solid #444">
+          <h4 style="color: #90cdf4; margin: 0 0 8px 0; text-align: center; font-size: 12px">⌨️ CNC Zadání</h4>
+
+          <!-- G-Codes Row -->
+          <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 3px; margin-bottom: 3px">
+            <button onclick="window.insertControllerToken('G90 ')" class="ctrl-btn ctrl-btn-gcode">G90<span class="ctrl-btn-sublabel">Abs</span></button>
+            <button onclick="window.insertControllerToken('G91 ')" class="ctrl-btn ctrl-btn-gcode">G91<span class="ctrl-btn-sublabel">Přír</span></button>
+            <button onclick="window.insertControllerToken('G0 ')" class="ctrl-btn ctrl-btn-gcode">G0<span class="ctrl-btn-sublabel">Bod</span></button>
+            <button onclick="window.insertControllerToken('G1 ')" class="ctrl-btn ctrl-btn-gcode">G1<span class="ctrl-btn-sublabel">Čára</span></button>
+            <button onclick="window.insertControllerToken('G2 ')" class="ctrl-btn ctrl-btn-gcode">G2<span class="ctrl-btn-sublabel">CW</span></button>
+            <button onclick="window.insertControllerToken('G3 ')" class="ctrl-btn ctrl-btn-gcode">G3<span class="ctrl-btn-sublabel">CCW</span></button>
+          </div>
+
+          <!-- Row 1: X, Z, 7, 8, 9, ; -->
+          <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 3px; margin-bottom: 3px">
+            <button onclick="window.insertControllerToken('X')" class="ctrl-btn">X<span class="ctrl-btn-sublabel">Osa</span></button>
+            <button onclick="window.insertControllerToken('Z')" class="ctrl-btn">Z<span class="ctrl-btn-sublabel">Osa</span></button>
+            <button onclick="window.insertControllerToken('7')" class="ctrl-btn ctrl-btn-num">7</button>
+            <button onclick="window.insertControllerToken('8')" class="ctrl-btn ctrl-btn-num">8</button>
+            <button onclick="window.insertControllerToken('9')" class="ctrl-btn ctrl-btn-num">9</button>
+            <button onclick="window.insertControllerToken(';')" class="ctrl-btn">;<span class="ctrl-btn-sublabel">Odd</span></button>
+          </div>
+
+          <!-- Row 2: R, CR, 4, 5, 6, Space -->
+          <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 3px; margin-bottom: 3px">
+            <button onclick="window.insertControllerToken('R')" class="ctrl-btn">R<span class="ctrl-btn-sublabel">Rad</span></button>
+            <button onclick="window.insertControllerToken('CR')" class="ctrl-btn">CR<span class="ctrl-btn-sublabel">Min</span></button>
+            <button onclick="window.insertControllerToken('4')" class="ctrl-btn ctrl-btn-num">4</button>
+            <button onclick="window.insertControllerToken('5')" class="ctrl-btn ctrl-btn-num">5</button>
+            <button onclick="window.insertControllerToken('6')" class="ctrl-btn ctrl-btn-num">6</button>
+            <button onclick="window.insertControllerToken(' ')" class="ctrl-btn">␣<span class="ctrl-btn-sublabel">Mezera</span></button>
+          </div>
+
+          <!-- Row 3: L, A, 1, 2, 3, Backspace -->
+          <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 3px; margin-bottom: 3px">
+            <button onclick="window.insertControllerToken('L')" class="ctrl-btn">L<span class="ctrl-btn-sublabel">Dél</span></button>
+            <button onclick="window.insertControllerToken('A')" class="ctrl-btn">A<span class="ctrl-btn-sublabel">Úhel</span></button>
+            <button onclick="window.insertControllerToken('1')" class="ctrl-btn ctrl-btn-num">1</button>
+            <button onclick="window.insertControllerToken('2')" class="ctrl-btn ctrl-btn-num">2</button>
+            <button onclick="window.insertControllerToken('3')" class="ctrl-btn ctrl-btn-num">3</button>
+            <button onclick="window.backspaceControllerToken()" class="ctrl-btn ctrl-btn-delete">⌫</button>
+          </div>
+
+          <!-- Row 4: RP, AP, -, 0, . -->
+          <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 3px; margin-bottom: 6px">
+            <button onclick="window.insertControllerToken('RP')" class="ctrl-btn">RP<span class="ctrl-btn-sublabel">Pol</span></button>
+            <button onclick="window.insertControllerToken('AP')" class="ctrl-btn">AP<span class="ctrl-btn-sublabel">Úhel</span></button>
+            <button onclick="window.insertControllerToken('-')" class="ctrl-btn ctrl-btn-num">-</button>
+            <button onclick="window.insertControllerToken('0')" class="ctrl-btn ctrl-btn-num">0</button>
+            <button onclick="window.insertControllerToken('.')" class="ctrl-btn ctrl-btn-num">.</button>
+            <button onclick="window.clearControllerInput()" class="ctrl-btn">C<span class="ctrl-btn-sublabel">Clear</span></button>
+          </div>
+
+          <!-- Row 5: Směry, Sražení, Zaoblení -->
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; margin-bottom: 6px">
+            <button onclick="window.showControllerDirectionModal()" class="ctrl-btn ctrl-btn-action">🧭<span class="ctrl-btn-sublabel">Směry</span></button>
+            <button onclick="window.showControllerLengthModal()" class="ctrl-btn ctrl-btn-action">📏<span class="ctrl-btn-sublabel">Délka</span></button>
+            <button onclick="window.insertControllerToken('Zaob ')" class="ctrl-btn ctrl-btn-action">◯<span class="ctrl-btn-sublabel">Zaob</span></button>
+          </div>
+
+          <!-- Action Buttons -->
+          <div style="margin-top: 6px">
+            <button onclick="window.confirmControllerInput()" style="width: 100%; padding: 10px; background: #22c55e; border: none; border-radius: 6px; color: white; cursor: pointer; font-size: 14px; font-weight: bold">✓ Potvrdit</button>
+          </div>
+        </div>
+
+        <!-- Help Text -->
+        <div style="margin-top: 12px; padding: 10px; background: #1a1a1a; border-radius: 6px; border-left: 3px solid #6ab0ff; font-size: 11px; color: #aaa">
+          <strong style="color: #6ab0ff">💡 Tip:</strong> Použij <strong>G-kódy</strong>: <code style="color: #90ee90">G0 X50 Z100</code> (bod), <code style="color: #90ee90">G1 X100</code> (čára), <code style="color: #90ee90">G2 R20</code> (oblouk)
+        </div>
+      </div>
+    </div>
+    <div id="directionModal" class="modal-overlay d-none">
+      <div class="modal-window" style="max-width: 350px">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px">
+          <h2 style="color: #6ab0ff; font-size: 18px; margin: 0">🧭 Směrové kreslení</h2>
+          <button onclick="window.closeDirectionModal()" style="background: transparent; border: none; color: #888; font-size: 20px; cursor: pointer">&times;</button>
+        </div>
+
+        <p style="color: #aaa; font-size: 12px; margin-bottom: 15px">Klikni na šipku, automaticky se vloží příkaz do zadání:</p>
+
+        <!-- Direction Pad (8-way) -->
+        <div style="display: grid; grid-template-columns: repeat(3, 80px); grid-template-rows: repeat(3, 80px); gap: 5px; justify-content: center">
+          <!-- Row 1: ↖ ↑ ↗ -->
+          <button onclick="window.insertDirectionCommand('NW')" title="Šikmo vlevo nahoru (↖)" class="direction-btn">↖</button>
+          <button onclick="window.insertDirectionCommand('N')" title="Nahoru (↑)" class="direction-btn">↑</button>
+          <button onclick="window.insertDirectionCommand('NE')" title="Šikmo vpravo nahoru (↗)" class="direction-btn">↗</button>
+
+          <!-- Row 2: ← · → -->
+          <button onclick="window.insertDirectionCommand('W')" title="Doleva (←)" class="direction-btn">←</button>
+          <div class="direction-center">●</div>
+          <button onclick="window.insertDirectionCommand('E')" title="Doprava (→)" class="direction-btn">→</button>
+
+          <!-- Row 3: ↙ ↓ ↘ -->
+          <button onclick="window.insertDirectionCommand('SW')" title="Šikmo vlevo dolů (↙)" class="direction-btn">↙</button>
+          <button onclick="window.insertDirectionCommand('S')" title="Dolů (↓)" class="direction-btn">↓</button>
+          <button onclick="window.insertDirectionCommand('SE')" title="Šikmo vpravo dolů (↘)" class="direction-btn">↘</button>
+        </div>
+
+        <div class="mt-15 text-center">
+          <button onclick="window.closeDirectionModal()" class="btn-primary">Zavřít</button>
+        </div>
+      </div>
+    </div>
+    <div id="controllerHelpModal" class="modal-overlay d-none">
+      <div class="modal-window modal-lg">
+        <div class="modal-header">
+          <h2 class="modal-header-title no-margin">❓ Nápověda - Ovladač</h2>
+          <button onclick="window.closeControllerHelp()" class="modal-close-btn-simple">&times;</button>
+        </div>
+
+        <div class="help-section">
+          <h3 class="help-title">📐 Základní příkazy</h3>
+          <div class="help-block">
+            <div class="mb-8"><code class="help-code">X80 Z120</code> - Bod na souřadnicích X=80, Z=120</div>
+            <div class="mb-8"><code class="help-code">G1 X100 Z200</code> - Čára do bodu X=100, Z=200</div>
+            <div class="mb-8"><code class="help-code">G0 X50</code> - Skok (bez čáry) na X=50</div>
+          </div>
+
+          <h3 class="help-title">⭕ Kružnice a oblouky</h3>
+          <div class="help-block">
+            <div class="mb-8"><code class="help-code">R50</code> - Kružnice s poloměrem 50mm</div>
+            <div class="mb-8"><code class="help-code">CR30</code> - Kružnice s minimálním poloměrem</div>
+            <div class="mb-8"><code class="help-code">G2 X100 Z150 R25</code> - Oblouk CW</div>
+          </div>
+
+          <h3 class="help-title">📏 Polární souřadnice</h3>
+          <div class="help-block">
+            <div class="mb-8"><code class="help-code">AP0 RP120</code> - Čára úhel 0°, délka 120mm</div>
+            <div class="mb-8"><code class="help-code">L50 A90</code> - Délka 50, úhel 90°</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK INPUT MODAL - Klávesnice pro CNC příkazy -->
+    <div id="quickInputModal" class="modal-overlay d-none">
+      <div class="modal-window modal-md">
+        <div class="modal-header">
+          <h2 class="modal-header-title no-margin">⌨️ Rychlé zadání (CNC)</h2>
+          <button onclick="window.closeQuickInput()" class="modal-close-btn-simple">&times;</button>
+        </div>
+
+        <!-- TEXT DISPLAY -->
+        <textarea id="quickInputDisplay" class="qi-display" placeholder="Zde se zobrazuje zadání..." readonly></textarea>
+
+        <!-- ERROR DISPLAY -->
+        <div id="quickInputError" class="qi-error"></div>
+
+        <!-- KEYPAD GRID -->
+        <div class="qi-grid">
+          <!-- G-Codes -->
+          <button onclick="window.insertToken('G90 ')" class="qi-btn qi-btn-gcode">G90<span class="ctrl-btn-sublabel">Abs</span></button>
+          <button onclick="window.insertToken('G91 ')" class="qi-btn qi-btn-gcode">G91<span class="ctrl-btn-sublabel">Přír</span></button>
+          <button onclick="window.insertToken('G0 ')" class="qi-btn qi-btn-gcode">G0<span class="ctrl-btn-sublabel">Bod</span></button>
+          <button onclick="window.insertToken('G1 ')" class="qi-btn qi-btn-gcode">G1<span class="ctrl-btn-sublabel">Přímka</span></button>
+          <button onclick="window.insertToken('G2 ')" class="qi-btn qi-btn-gcode">G2<span class="ctrl-btn-sublabel">CW</span></button>
+          <button onclick="window.insertToken('G3 ')" class="qi-btn qi-btn-gcode">G3<span class="ctrl-btn-sublabel">CCW</span></button>
+
+          <!-- Row 1: X, Z, 7, 8, 9, ; -->
+          <button onclick="window.insertToken('X')" class="qi-btn">X<span class="ctrl-btn-sublabel">Osa</span></button>
+          <button onclick="window.insertToken('Z')" class="qi-btn">Z<span class="ctrl-btn-sublabel">Osa</span></button>
+          <button onclick="window.insertToken('7')" class="qi-btn">7</button>
+          <button onclick="window.insertToken('8')" class="qi-btn">8</button>
+          <button onclick="window.insertToken('9')" class="qi-btn">9</button>
+          <button onclick="window.insertToken(';')" class="qi-btn">;</button>
+
+          <!-- Row 2: R, D, 4, 5, 6, Space -->
+          <button onclick="window.insertToken('R')" class="qi-btn">R<span class="ctrl-btn-sublabel">Poloměr</span></button>
+          <button onclick="window.insertToken('D')" class="qi-btn">D<span class="ctrl-btn-sublabel">Průměr</span></button>
+          <button onclick="window.insertToken('4')" class="qi-btn">4</button>
+          <button onclick="window.insertToken('5')" class="qi-btn">5</button>
+          <button onclick="window.insertToken('6')" class="qi-btn">6</button>
+          <button onclick="window.insertToken(' ')" class="qi-btn">Mezera</button>
+
+          <!-- Row 3: L, A, 1, 2, 3, ? -->
+          <button onclick="window.insertToken('L')" class="qi-btn">L<span class="ctrl-btn-sublabel">Délka</span></button>
+          <button onclick="window.insertToken('A')" class="qi-btn">A<span class="ctrl-btn-sublabel">Úhel</span></button>
+          <button onclick="window.insertToken('1')" class="qi-btn">1</button>
+          <button onclick="window.insertToken('2')" class="qi-btn">2</button>
+          <button onclick="window.insertToken('3')" class="qi-btn">3</button>
+          <button onclick="window.showQuickInputHelp()" style="padding: 6px; background: #444; border: 1px solid #666; border-radius: 4px; color: #aaa; cursor: pointer; font-size: 9px">?<span class="ctrl-btn-sublabel">Nápověda</span></button>
+
+          <!-- Row 4: RP, AP, -, 0, ., ⌫ -->
+          <button onclick="window.insertToken('RP ')" class="qi-btn">RP<span class="ctrl-btn-sublabel">Pol. poloměr</span></button>
+          <button onclick="window.insertToken('AP ')" class="qi-btn">AP<span class="ctrl-btn-sublabel">Pol. úhel</span></button>
+          <button onclick="window.insertToken('-')" class="qi-btn">-</button>
+          <button onclick="window.insertToken('0')" class="qi-btn">0</button>
+          <button onclick="window.insertToken('.')" class="qi-btn">.</button>
+          <button onclick="window.backspaceToken()" style="padding: 6px; background: #c53030; border: 1px solid #e53e3e; border-radius: 4px; color: white; cursor: pointer; font-size: 9px">⌫</button>
+
+          <!-- Row 5: Směry, Sražení, Zaoblení, Výběr, Vložit -->
+          <button onclick="window.showDirectionModal()" class="qi-btn qi-btn-gcode">🧭<span class="ctrl-btn-sublabel">Směry</span></button>
+          <button onclick="window.openLengthModal()" class="qi-btn qi-btn-gcode">📏<span class="ctrl-btn-sublabel">Délka</span></button>
+          <button onclick="window.insertToken('Sraž ')" class="qi-btn">Sraž<span class="ctrl-btn-sublabel">Sražení</span></button>
+          <button onclick="window.insertToken('Zaob ')" class="qi-btn">Zaob<span class="ctrl-btn-sublabel">Zaoblení</span></button>
+          <button onclick="window.insertToken('Výběr ')" class="qi-btn">Výběr<span class="ctrl-btn-sublabel">Vybrané</span></button>
+          <button onclick="window.confirmQuickInput()" style="padding: 6px; background: #22c55e; border: 1px solid #4ade80; border-radius: 4px; color: white; cursor: pointer; font-size: 9px; grid-column: span 2">✓ Vložit<span class="ctrl-btn-sublabel">do chatu</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIRECTION MODAL - Výběr směru pro usečky -->
+    <div id="directionModal" class="modal-overlay d-none">
+      <div class="modal-window" style="max-width: 280px">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px">
+          <h2 style="color: #6ab0ff; font-size: 16px; margin: 0">🧭 Směr usečky</h2>
+          <button onclick="window.closeDirectionModal()" style="background: transparent; border: none; color: #888; font-size: 20px; cursor: pointer">&times;</button>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px">
+          <button onclick="window.insertDirection(45)" style="padding: 8px; background: #2d5a8f; border: 1px solid #5a7aaf; border-radius: 4px; color: #90cdf4; cursor: pointer; font-size: 16px">↖</button>
+          <button onclick="window.insertDirection(90)" style="padding: 8px; background: #2d5a8f; border: 1px solid #5a7aaf; border-radius: 4px; color: #90cdf4; cursor: pointer; font-size: 16px">↑</button>
+          <button onclick="window.insertDirection(135)" style="padding: 8px; background: #2d5a8f; border: 1px solid #5a7aaf; border-radius: 4px; color: #90cdf4; cursor: pointer; font-size: 16px">↗</button>
+
+          <button onclick="window.insertDirection(180)" style="padding: 8px; background: #2d5a8f; border: 1px solid #5a7aaf; border-radius: 4px; color: #90cdf4; cursor: pointer; font-size: 16px">←</button>
+          <button onclick="window.closeDirectionModal()" style="padding: 8px; background: #333; border: 1px solid #444; border-radius: 4px; color: #888; cursor: pointer; font-size: 14px">●</button>
+          <button onclick="window.insertDirection(0)" style="padding: 8px; background: #2d5a8f; border: 1px solid #5a7aaf; border-radius: 4px; color: #90cdf4; cursor: pointer; font-size: 16px">→</button>
+
+          <button onclick="window.insertDirection(225)" style="padding: 8px; background: #2d5a8f; border: 1px solid #5a7aaf; border-radius: 4px; color: #90cdf4; cursor: pointer; font-size: 16px">↙</button>
+          <button onclick="window.insertDirection(270)" style="padding: 8px; background: #2d5a8f; border: 1px solid #5a7aaf; border-radius: 4px; color: #90cdf4; cursor: pointer; font-size: 16px">↓</button>
+          <button onclick="window.insertDirection(315)" style="padding: 8px; background: #2d5a8f; border: 1px solid #5a7aaf; border-radius: 4px; color: #90cdf4; cursor: pointer; font-size: 16px">↘</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- LENGTH MODAL - Zadání délky usečky -->
+    <div id="lengthModal" class="modal-overlay d-none">
+      <div class="modal-window" style="max-width: 300px">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px">
+          <h2 style="color: #6ab0ff; font-size: 16px; margin: 0">📏 Délka usečky</h2>
+          <button onclick="window.closeLengthModal()" style="background: transparent; border: none; color: #888; font-size: 20px; cursor: pointer">&times;</button>
+        </div>
+        <input id="lengthInput" type="number" placeholder="Zadej délku..." style="width: 100%; padding: 10px; background: #111; border: 1px solid #444; color: #90ee90; border-radius: 4px; font-family: monospace; margin-bottom: 10px"/>
+        <div style="display: flex; gap: 8px">
+          <button onclick="window.insertLengthToken('L')" style="flex: 1; padding: 8px; background: #333; border: 1px solid #444; border-radius: 4px; color: white; cursor: pointer">L (Délka)</button>
+          <button onclick="window.insertLengthToken('RP')" style="flex: 1; padding: 8px; background: #333; border: 1px solid #444; border-radius: 4px; color: white; cursor: pointer">RP (Pol. poloměr)</button>
+        </div>
+        <button onclick="window.confirmLength()" style="width: 100%; padding: 8px; margin-top: 8px; background: #22c55e; border: 1px solid #4ade80; border-radius: 4px; color: white; cursor: pointer; font-weight: bold">✓ Vložit</button>
+      </div>
+    </div>
+
+    <!-- AI TEST SUITE MODAL -->
+    <div id="aiTestModal" class="modal-overlay d-none">
+      <div class="modal-window" style="max-width: 700px; max-height: 85vh; overflow-y: auto">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #3a7bc8; padding-bottom: 10px">
+          <h2 style="color: #6ab0ff; font-size: 18px; margin: 0">🧪 AI TEST SUITE</h2>
+          <button onclick="window.closeAITestModal()" style="background: transparent; border: none; color: #888; font-size: 20px; cursor: pointer">&times;</button>
+        </div>
+
+        <div id="aiTestContent" style="margin-bottom: 20px">
+          <!-- Obsah se vyplní dynamicky z JavaScriptu -->
+        </div>
+
+        <div style="display: flex; gap: 10px; justify-content: center; border-top: 1px solid #333; padding-top: 15px">
+          <button onclick="window.closeAITestModal()" style="padding: 10px 20px; background: #444; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px">❌ Zrušit</button>
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>
+```

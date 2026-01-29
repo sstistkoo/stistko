@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>opotrebeni.html</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 10px;
+            margin: 0;
+            max-width: 100%;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .section {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        h2 {
+            margin: 0 0 15px 0;
+            font-size: 1.2em;
+        }
+        .effect {
+            margin-top: 10px;
+            padding: 10px;
+            border-left: 4px solid #666;
+            background: white;
+        }
+        ul {
+            margin: 5px 0;
+            padding-left: 20px;
+        }
+        li {
+            margin: 5px 0;
+        }
+        svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="display: inline-block; margin-left: 20px;">
+            <a href="index.html"><i class="fas fa-home fa-lg"></i></a>
+        </div>
+        <!-- Kladné opotřebení -->
+        <div class="section">
+            <h2>Opotřebení (X): +0,3</h2>
+            <svg width="300" height="300" viewBox="0 0 300 300">
+                <!-- STŘED -->
+                <line x1="145" y1="150" x2="155" y2="150" stroke="black" stroke-width="2"/>
+                <line x1="150" y1="145" x2="150" y2="155" stroke="black" stroke-width="2"/>
+                <text x="140" y="170" font-weight="bold">STŘED</text>
+                
+                <!-- Původní kružnice -->
+                <circle cx="150" cy="150" r="80" fill="none" stroke="#666" stroke-width="1"/>
+                
+                <!-- Původní pozice -->
+                <circle cx="150" cy="70" r="4" fill="red"/>
+                <text x="160" y="75" fill="red" font-size="12">Původní</text>
+                
+                <!-- Nová pozice s částí kružnice -->
+                <circle cx="150" cy="60" r="4" fill="blue"/>
+                <text x="160" y="65" fill="blue" font-size="12">Nová (+0,3)</text>
+                
+                <!-- Část kružnice pro novou pozici -->
+                <path d="M 150,60 A 90,90 0 0 1 240,150" fill="none" stroke="blue" stroke-width="2" stroke-dasharray="4,4"/>
+                
+                <!-- Šipka -->
+                <line x1="150" y1="70" x2="150" y2="60" stroke="blue" stroke-width="2" marker-end="url(#arrowhead-blue)"/>
+            </svg>
+            
+            <div class="effect">
+                <strong>Pro vnitřní obrábění (díra):</strong>
+                <ul>
+                    <li>Nástroj jde OD středu</li>
+                    <li>Díra bude o 0,6 VĚTŠÍ</li>
+                </ul>
+            </div>
+            
+            <div class="effect">
+                <strong>Pro vnější obrábění:</strong>
+                <ul>
+                    <li>Nástroj jde OD středu</li>
+                    <li>Průměr bude o 0,6 VĚTŠÍ</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Záporné opotřebení -->
+        <div class="section">
+            <h2>Opotřebení (X): -0,3</h2>
+            <svg width="300" height="300" viewBox="0 0 300 300">
+                <!-- STŘED -->
+                <line x1="145" y1="150" x2="155" y2="150" stroke="black" stroke-width="2"/>
+                <line x1="150" y1="145" x2="150" y2="155" stroke="black" stroke-width="2"/>
+                <text x="140" y="170" font-weight="bold">STŘED</text>
+                
+                <!-- Původní kružnice -->
+                <circle cx="150" cy="150" r="80" fill="none" stroke="#666" stroke-width="1"/>
+                
+                <!-- Původní pozice -->
+                <circle cx="150" cy="70" r="4" fill="red"/>
+                <text x="160" y="75" fill="red" font-size="12">Původní</text>
+                
+                <!-- Nová pozice s částí kružnice -->
+                <circle cx="150" cy="80" r="4" fill="green"/>
+                <text x="160" y="85" fill="green" font-size="12">Nová (-0,3)</text>
+                
+                <!-- Část kružnice pro novou pozici -->
+                <path d="M 150,80 A 70,70 0 0 1 220,150" fill="none" stroke="green" stroke-width="2" stroke-dasharray="4,4"/>
+                
+                <!-- Šipka -->
+                <line x1="150" y1="70" x2="150" y2="80" stroke="green" stroke-width="2" marker-end="url(#arrowhead-green)"/>
+            </svg>
+            
+            <div class="effect">
+                <strong>Pro vnitřní obrábění (díra):</strong>
+                <ul>
+                    <li>Nástroj jde KE středu</li>
+                    <li>Díra bude o 0,6 MENŠÍ</li>
+                </ul>
+            </div>
+            
+            <div class="effect">
+                <strong>Pro vnější obrábění:</strong>
+                <ul>
+                    <li>Nástroj jde KE středu</li>
+                    <li>Průměr bude o 0,6 MENŠÍ</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Definice šipek -->
+    <defs>
+        <marker id="arrowhead-blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="blue"/>
+        </marker>
+        <marker id="arrowhead-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="green"/>
+        </marker>
+    </defs>
+</body>
+</html>

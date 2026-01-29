@@ -1,0 +1,1979 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G kódy</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            padding: 20px;
+            background-color: white;  /* Změněno z #f4f4f4 na white */
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px auto;
+            width: 100%;
+            color: #2c3e50;
+            font-size: 2em;
+            padding: 10px 0;
+        }
+
+        .search-box {
+            width: calc(100% - 40px);
+            max-width: 600px;
+            margin: 20px auto;
+            display: block;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .commands-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            padding: 20px;
+            margin: 0 auto;
+            max-width: 1200px;
+        }
+
+        .command-button {
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .command-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            background: #f8f8f8;
+        }
+
+        .command-name {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 1.2em;
+            margin-bottom: 8px;
+        }
+
+        .command-brief {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .commands-grid {
+                grid-template-columns: 1fr;
+                padding: 10px;
+            }
+            .search-box {
+                width: 90%;
+            }
+        }
+
+        /* Nové styly pro vysouvací menu */
+        .search-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            gap: 10px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .search-box {
+            width: 50%;
+            max-width: 400px;
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin: 0; /* Odstranit margin pro lepší zarovnání */
+        }
+
+        .menu-toggle, .quick-codes-toggle {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            white-space: nowrap;
+            transition: background-color 0.3s;
+        }
+
+        .menu-toggle:hover, .quick-codes-toggle:hover {
+            background-color: #45a049;
+        }
+
+        .side-menu {
+            position: fixed;
+            top: 0;
+            height: 100%;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            z-index: 99;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .categories-menu {
+            left: 0;
+            width: 250px;
+            transform: translateX(-100%);
+        }
+
+        .quick-codes-menu {
+            right: 0;
+            width: 200px;
+            transform: translateX(100%);
+        }
+
+        .categories-menu.active,
+        .quick-codes-menu.active {
+            transform: translateX(0);
+        }
+
+        .menu-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+
+        .menu-item:hover {
+            background: #f0f0f0;
+        }
+
+        .menu-close {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* Responzivní úpravy */
+        @media (max-width: 768px) {
+            .search-box {
+                width: 70%;
+            }
+
+            .side-menu {
+                width: 80%;
+            }
+
+            .categories-menu {
+                transform: translateX(-100%);
+            }
+
+            .quick-codes-menu {
+                transform: translateX(100%);
+            }
+        }
+
+        .reset-view {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .reset-view:hover {
+            background: #ff5252;
+        }
+
+        .reset-view.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sinumerik 840D G kód</h1>
+
+    <div class="search-container">
+        <button class="menu-toggle" onclick="toggleCategoriesMenu()">
+            <i class="fas fa-bars"></i> Kategorie
+        </button>
+
+        <input type="text"
+               class="search-box"
+               id="searchBox"
+               placeholder="Hledat G kód..."
+               oninput="filterCommands(this.value)">
+
+        <button class="quick-codes-toggle" onclick="toggleQuickCodesMenu()">
+            <i class="fas fa-list"></i> G kódy
+        </button>
+    </div>
+
+    <!-- Přidat vysouvací menu pro kategorie -->
+    <div class="side-menu categories-menu" id="categoriesMenu">
+        <button class="menu-close" onclick="toggleCategoriesMenu()">&times;</button>
+        <div id="categoriesList">
+            <!-- Kategorie se vygenerují dynamicky -->
+        </div>
+    </div>
+
+    <!-- Přidat vysouvací menu pro rychlý výběr G kódů -->
+    <div class="side-menu quick-codes-menu" id="quickCodesMenu">
+        <button class="menu-close" onclick="toggleQuickCodesMenu()">&times;</button>
+        <div id="quickCodesList">
+            <!-- G kódy se vygenerují dynamicky -->
+        </div>
+    </div>
+
+    <div class="commands-grid" id="commandList">
+        <!-- Obsah se generuje dynamicky pomocí JavaScriptu -->
+    </div>
+
+    <button id="resetView" class="reset-view" onclick="resetViewToAll()">
+        Zobrazit vše
+    </button>
+
+    <script>
+        const commandGroups = {
+            'Programování': [
+                'G90', 'G91', 'G94', 'G95', 'G96', 'G97', 'G195', 'G196'  // přidány nové kódy
+            ],
+            'Základní pohyby': [
+                'G0', 'G1', 'G2', 'G3', 'CIP', 'G4', 'G9', 'G14', 'G15'  // přidány G14, G15
+            ],
+            'Přesné najetí': [
+                'G60', 'G601', 'G602', 'G603'
+            ],
+            'Korekce nástroje': [
+                'G40', 'G41', 'G42', 'G43', 'G44', 'G45', 'G46', 'G47'  // přidány G45-G47
+            ],
+            'Nulové body': [
+                'G53', 'G54', 'G55', 'G56', 'G57', 'G500', 'G54.1', 'G505', 'G507'
+            ],
+            'Limitní hodnoty': [
+                'G25', 'G26', 'G927'  // přidán G927
+            ],
+            'Řízení dráhy': [
+                'G64', 'G641', 'G642', 'G643', 'G644',  // Přidány G642-G644
+                'G808', 'G915', 'G961', 'G973'
+            ],
+            'Cykly': [  // Nová skupina
+                'G81', 'G82', 'G83', 'G84', 'G85', 'G86', 'G87', 'G88', 'G89'
+            ],
+            'Transformace': [  // Nová skupina
+                'G51', 'G51.1', 'G52', 'G68', 'G69', 'G50'
+            ],
+            'Měrové jednotky': [
+                'G70', 'G71', 'G700', 'G710'  // přidány G700, G710
+            ],
+            'Měření a kontrola': [
+                'G990', 'G995', 'G993', 'G994'  // Přidány nové měřící cykly
+            ],
+            'Vrtací cykly': [
+                'G971', 'G974', 'G975', 'G977', 'G979'  // Přidán G979
+            ],
+            'Speciální funkce': [
+                'G928', 'G952', 'G962', 'G964', 'G965'  // Přidány G964, G965
+            ],
+            'Závity': [  // Přesunuto na konec
+                'G33', 'G331', 'G332', 'G63', 'G932', 'G335'
+            ]
+        };
+
+        const commandsList = [
+            {
+                name: 'G0',
+                syntax: 'G0 X.. Z..',
+                description: 'Rychloposuv. Lineární pohyb maximální rychlostí stroje.',
+                examples: [
+                    {
+                        title: 'Základní použití:',
+                        code: 'G0 X100 Z2     ; Rychlé najetí nad obrobek\nG0 Z0          ; Najetí k čelu',
+                        description: 'Rychlé polohování nástroje před obráběním'
+                    }
+                ]
+            },
+            {
+                name: 'G1',
+                syntax: 'G1 X.. Z.. F..',
+                description: 'Pracovní posuv pro soustružení.',
+                examples: [
+                    {
+                        title: 'Podélné soustružení:',
+                        code: 'G1 Z-50 F0.2   ; Podélné soustružení s posuvem 0.2mm/ot',
+                        description: 'Základní podélné soustružení'
+                    },
+                    {
+                        title: 'Čelní soustružení:',
+                        code: 'G1 X0 F0.15    ; Zarovnání čela s posuvem 0.15mm/ot',
+                        description: 'Soustružení čela'
+                    }
+                ]
+            },
+            {
+                name: 'G2',
+                syntax: 'G2 X.. Z.. CR=.. F..\nG2 X.. Z.. I.. K.. F..\nG2 AR=.. I.. K.. F..\nG2 CT X.. Z.. F..',
+                description: 'Kruhová interpolace ve směru hodinových ručiček (CW). Několik možností zadání kruhového pohybu.',
+                examples: [
+                    {
+                        title: 'Zadání pomocí poloměru (CR):',
+                        code: 'G0 X40 Z0\nG2 X60 Z-20 CR=14.14 F0.2  ; Vnější rádius\n; CR= přímo určuje velikost rádiusu',
+                        description: 'Nejjednodušší způsob zadání - přímo hodnota rádiusu'
+                    },
+                    {
+                        title: 'Zadání pomocí středu (I,K):',
+                        code: '; Výpočet rádiusu z I,K:\nG0 X40 Z0\nG2 X60 Z-20 I10 K-10 F0.2  ; Vnější rádius\n; I = 10mm (vzdálenost středu v ose X)\n; K = -10mm (vzdálenost středu v ose Z)\n; Systém vypočítá radius = √(I² + K²) = √(10² + (-10)²) = 14.14mm',
+                        description: 'Zadání pomocí souřadnic středu, rádius se vypočítá pomocí Pythagorovy věty: R = √(I² + K²)'
+                    },
+                    {
+                        title: 'Tečné napojení (CT):',
+                        code: 'G1 X40 Z0 F0.2     ; Přímý pohyb\nG2 CT X60 Z-20     ; Automatické tečné napojení\n; Systém sám vypočítá střed pro plynulé napojení',
+                        description: 'Automatický výpočet tečného napojení na předchozí pohyb'
+                    }
+                ]
+            },
+            {
+                name: 'G3',
+                syntax: 'G3 X.. Z.. I.. K.. F..\nG3 X.. Z.. CR=.. F..\nG3 AR=.. I.. K.. F..\nG3 CT X.. Z.. F..',
+                description: 'Kruhová interpolace proti směru hodinových ručiček (CCW). Stejné možnosti programování jako u G2.',
+                examples: [
+                    {
+                        title: 'Zadání pomocí středu (I,K):',
+                        code: 'G0 X60 Z0\nG3 X40 Z-20 I-10 K-10 F0.2  ; Vnitřní rádius pomocí středu\n; I,K jsou relativní vzdálenosti středu\n; Záporné hodnoty pro vnitřní obrábění\n\n; Alternativně pomocí R:\nG3 X40 Z-20 R10 F0.2     ; Stejný rádius zadaný pomocí R\n; R>0 menší oblouk (<180°)\n; R<0 větší oblouk (>180°)',
+                        description: 'Standardní programování vnitřního rádiusu - pomocí středu (I,K) nebo přímo rádiusem (R)'
+                    },
+                    {
+                        title: 'Tečné napojení (CT):',
+                        code: 'G1 X80 Z0 F0.2     ; Přímý pohyb\nG3 CT X60 Z-20    ; Tečné napojení oblouku\n; Směr určen pomocí G3',
+                        description: 'Automatické tečné napojení pro vnitřní konturu'
+                    },
+                    {
+                        title: 'Komplexní vnitřní tvar:',
+                        code: 'G0 X30 Z2\nG1 Z0 F0.2\nG1 X80            ; Vrtání\nG3 X100 Z-10 CR=15 ; První vnitřní rádius\nG3 CT X90 Z-20     ; Tečně napojený druhý rádius\nRND=3\nG1 X70             ; Dokončení s zaoblením',
+                        description: 'Kombinace různých typů zadání pro vnitřní tvar'
+                    },
+                    {
+                        title: 'Přechodový rádius s RND:',
+                        code: 'G1 X100 Z0 F0.2\nRND=8            ; Definice zaoblení\nG3 X80 Z-30      ; Velký vnitřní rádius\nRND=5\nG1 X60             ; Dokončení se zaoblením',
+                        description: 'Použití RND pro plynulé přechody'
+                    },
+                    {
+                        title: 'Kombinace G2/G3 s CT:',
+                        code: 'G1 X40 Z0 F0.2\nG2 X60 Z-10 CR=12  ; Vnější rádius CW\nG3 CT X80 Z-30    ; Tečně napojený vnitřní CCW\nG1 X100            ; Dokončení kontury',
+                        description: 'Vytvoření S-křivky pomocí tečného napojení'
+                    }
+                ]
+            },
+            {
+                name: 'CIP',
+                syntax: 'CIP X.. Z.. I1=.. K1=.. F..',
+                description: 'Kruhová interpolace přes mezibod. Umožňuje vytvořit oblouk zadáním koncového bodu a bodu, kterým má oblouk procházet.',
+                examples: [
+                    {
+                        title: 'Základní použití:',
+                        code: 'G0 X50 Z0\nCIP X100 Z-30 I1=70 K1=-10 F0.2  ; Oblouk přes bod I1,K1\n; I1,K1 jsou souřadnice průchozího bodu\n; X,Z je koncový bod oblouku',
+                        description: 'Vytvoření oblouku pomocí průchozího bodu'
+                    },
+                    {
+                        title: 'Složitá kontura:',
+                        code: 'G1 X40 Z0 F0.2\nCIP X80 Z-20 I1=60 K1=-5   ; První oblouk\nCIP X100 Z-50 I1=85 K1=-35  ; Druhý oblouk\nG1 Z-60                    ; Dokončení',
+                        description: 'Plynulé napojení více oblouků pomocí CIP'
+                    },
+                    {
+                        title: 'Praktický příklad:',
+                        code: 'G0 X100 Z2\nG1 Z0 F0.2                     ; Zarovnání čela\nG1 X60                       ; Soustružení průměru\nCIP X40 Z-20 I1=50 K1=-10    ; Plynulý přechod\nG1 Z-50                      ; Dokončení kontury',
+                        description: 'Použití CIP pro vytvoření plynulého přechodu v kontuře'
+                    }
+                ]
+            },
+            {
+                name: 'G4',
+                syntax: 'G4 F.. nebo G4 S..',
+                description: 'Časová prodleva (dwell). Pozastaví program na zadanou dobu. F určuje čas v sekundách, S určuje počet otáček vřetene.',
+                examples: [
+                    {
+                        title: 'Prodleva v sekundách:',
+                        code: 'G4 F2.5     ; Prodleva 2.5 sekundy\nG1 X50      ; Pokračování programu',
+                        description: 'Použití pro čekání určitý čas'
+                    },
+                    {
+                        title: 'Prodleva v otáčkách:',
+                        code: 'M3 S1000    ; Start vřetena 1000 ot/min\nG4 S5       ; Čekání 5 otáček vřetene\nG1 Z-20     ; Pokračování programu',
+                        description: 'Čekání definované počtem otáček vřetene'
+                    },
+                    {
+                        title: 'Praktické použití:',
+                        code: 'G0 X100 Z2\nG1 Z0 F0.2        ; Zarovnání čela\nG4 F1            ; Prodleva pro dokončení řezu\nG0 X120          ; Odjezd',
+                        description: 'Prodleva pro lepší kvalitu povrchu'
+                    }
+                ]
+            },
+            {
+                name: 'G9',
+                syntax: 'G9',
+                description: 'Přesné najetí - působí v jedné větě. Zajistí přesné najetí na naprogramovanou pozici před pokračováním programu.',
+                examples: [
+                    {
+                        title: 'Základní použití:',
+                        code: 'G0 X100 Z50         ; Rychlý přejezd\nG9 G1 X80 Z40 F0.2  ; Přesné najetí na pozici\nG1 Z0              ; Pokračování normálně',
+                        description: 'Přesné najetí při kritických operacích'
+                    },
+                    {
+                        title: 'Kombinace s rychloposuvem:',
+                        code: 'G9 G0 X50           ; Přesné najetí rychloposuvem\nG1 Z-30 F0.15       ; Následný pracovní posuv',
+                        description: 'G9 lze použít i s rychloposuvem G0'
+                    },
+                    {
+                        title: 'Praktický příklad:',
+                        code: 'G0 X100 Z2\nG9 G1 Z0 F0.1      ; Přesné najetí k čelu\nG4 F0.5           ; Krátká prodleva\nG1 X0              ; Zarovnání čela',
+                        description: 'Přesné najetí k čelu s prodlevou pro stabilizaci'
+                    }
+                ]
+            },
+            {
+                name: 'G25',
+                syntax: 'G25 X.. Z.. S..',
+                description: 'Dolní omezení pracovního pole. Definuje minimální hodnoty pro pohyby os a omezení minimálních otáček vřetene.',
+                examples: [
+                    {
+                        title: 'Omezení pracovního prostoru:',
+                        code: 'G25 X50 Z10        ; Minimální hodnoty os\n; X=50 minimální průměr\n; Z=10 minimální vzdálenost v Z',
+                        description: 'Zabránění kolizi s upínači nebo sklíčidlem'
+                    },
+                    {
+                        title: 'Omezení otáček:',
+                        code: 'G25 S500           ; Minimální otáčky 500/min\nG96 S200 LIMS=2000 ; Konstantní řezná rychlost\n; Otáčky budou mezi 500-2000/min',
+                        description: 'Bezpečné omezení minimálních otáček při konstantní řezné rychlosti'
+                    }
+                ]
+            },
+            {
+                name: 'G26',
+                syntax: 'G26 X.. Z.. S..',
+                description: 'Horní omezení pracovního pole. Definuje maximální hodnoty pro pohyby os a omezení maximálních otáček vřetene.',
+                examples: [
+                    {
+                        title: 'Omezení pracovního prostoru:',
+                        code: 'G26 X400 Z500      ; Maximální hodnoty os\n; X=400 maximální průměr\n; Z=500 maximální vzdálenost v Z',
+                        description: 'Ochrana proti přejetí koncových poloh'
+                    },
+                    {
+                        title: 'Kombinace G25/G26:',
+                        code: 'G25 X50 Z10        ; Minimální hodnoty\nG26 X400 Z500      ; Maximální hodnoty\nG0 X200 Z100      ; Bezpečný pohyb v povoleném rozsahu',
+                        description: 'Kompletní definice bezpečného pracovního prostoru'
+                    },
+                    {
+                        title: 'Praktický příklad:',
+                        code: 'G25 S100           ; Min. otáčky 100/min\nG26 S2500          ; Max. otáčky 2500/min\nG96 S200           ; Konstantní řezná rychlost\nLIMS=2000          ; Další omezení otáček\nG1 X20 F0.2        ; Obrábění s řízenými otáčkami',
+                        description: 'Komplexní nastavení limitů pro bezpečné obrábění'
+                    }
+                ]
+            },
+            {
+                name: 'G33',
+                syntax: 'G33 Z.. K.. SF=..',
+                description: 'Řezání závitu s konstantním stoupáním. K určuje stoupání závitu v mm, SF určuje počáteční úhel závitu.',
+                examples: [
+                    {
+                        title: 'Základní řezání závitu:',
+                        code: 'G0 X22 Z2         ; Nájezd nad závit\nG33 Z-30 K2       ; Řezání závitu, stoupání 2mm\nG0 X24           ; Odjezd od závitu',
+                        description: 'Jednoduchý metrický závit'
+                    },
+                    {
+                        title: 'Závit s definovaným startem:',
+                        code: 'G0 X22 Z2\nSF=180           ; Start v 180°\nG33 Z-30 K2       ; První řez\nG0 X24 Z2\nX21.5            ; Přiblížení\nG33 Z-30 K2       ; Druhý řez',
+                        description: 'Vícechodý závit s definovaným úhlem startu'
+                    }
+                ]
+            },
+            {
+                name: 'G331',
+                syntax: 'G331 Z.. K.. S..',
+                description: 'Vrtání závitu bez vyrovnávací hlavy. S určuje otáčky vřetene, K stoupání závitu.',
+                examples: [
+                    {
+                        title: 'Vrtání závitu:',
+                        code: 'G0 X0 Z2\nSPOS=0           ; Orientace vřetene\nG331 Z-20 K1.5 S600  ; Vrtání závitu M10\nG332 Z2             ; Zpětný pohyb',
+                        description: 'Vrtání metrického závitu M10'
+                    }
+                ]
+            },
+            {
+                name: 'G332',
+                syntax: 'G332 Z.. K..',
+                description: 'Zpětný pohyb při vrtání závitu. Používá se v páru s G331.',
+                examples: [
+                    {
+                        title: 'Kompletní cyklus:',
+                        code: 'G0 X0 Z2\nG331 Z-25 K1.5 S500  ; Vrtání závitu\nG332 Z2 K1.5        ; Zpětný pohyb\nM3 S1000           ; Normální režim vřetene',
+                        description: 'Kompletní cyklus vrtání závitu'
+                    }
+                ]
+            },
+            {
+                name: 'G40',
+                syntax: 'G40',
+                description: 'Vypnutí korekce poloměru nástroje. Zruší aktivní G41/G42.',
+                examples: [
+                    {
+                        title: 'Vypnutí korekce:',
+                        code: 'G1 X100 Z0 F0.2    ; Obrábění s korekcí\nG40 G1 X120        ; Vypnutí korekce a odjezd',
+                        description: 'Bezpečné vypnutí korekce nástroje'
+                    }
+                ]
+            },
+            {
+                name: 'G41',
+                syntax: 'G41 D..',
+                description: 'Korekce poloměru nástroje vlevo od kontury. D určuje číslo korekce.',
+                examples: [
+                    {
+                        title: 'Vnější kontura:',
+                        code: 'G0 X100 Z2\nG41 D1             ; Aktivace korekce vlevo\nG1 Z0 F0.2         ; Nájezd k čelu\nX60                ; Soustružení průměru',
+                        description: 'Použití korekce pro vnější konturu'
+                    },
+                    {
+                        title: 'Složitější tvar:',
+                        code: 'G0 X100 Z2\nG41 D1 G1 X80 F0.2  ; Aktivace s pohybem\nZ-20               ; Podélný řez\nX60 Z-30           ; Šikmá plocha\nG40 G1 X100         ; Vypnutí korekce',
+                        description: 'Korekce při obrábění složitějšího tvaru'
+                    }
+                ]
+            },
+            {
+                name: 'G42',
+                syntax: 'G42 D..',
+                description: 'Korekce poloměru nástroje vpravo od kontury. D určuje číslo korekce.',
+                examples: [
+                    {
+                        title: 'Vnitřní kontura:',
+                        code: 'G0 X40 Z2\nG42 D1             ; Aktivace korekce vpravo\nG1 Z-30 F0.2       ; Vnitřní soustružení\nX60                ; Rozšíření průměru',
+                        description: 'Použití korekce pro vnitřní konturu'
+                    },
+                    {
+                        title: 'Komplexní příklad:',
+                        code: 'G0 X30 Z2\nG42 D1             ; Aktivace korekce\nG1 Z0 F0.2         ; Nájezd k čelu\nX50 Z-10           ; Šikmá plocha\nZ-40               ; Vnitřní průměr\nG40 G0 X30         ; Vypnutí a odjezd',
+                        description: 'Obrábění vnitřního tvaru s korekcí'
+                    }
+                ]
+            },
+            {
+                name: 'G43',
+                syntax: 'G43 H..',
+                description: 'Kladná korekce délky nástroje. Aktivuje délkovou korekci nástroje v kladném směru.',
+                examples: [
+                    {
+                        title: 'Délková korekce:',
+                        code: 'G43 H01           ; Aktivace korekce číslo 1\nG0 Z100           ; Pohyb s korekcí délky\nG0 X50 Y30        ; Polohování v XY',
+                        description: 'Použití kladné délkové korekce nástroje'
+                    }
+                ]
+            },
+            {
+                name: 'G44',
+                syntax: 'G44 H..',
+                description: 'Záporná korekce délky nástroje. Aktivuje délkovou korekci nástroje v záporném směru.',
+                examples: [
+                    {
+                        title: 'Záporná korekce:',
+                        code: 'G44 H02           ; Aktivace záporné korekce č.2\nG0 Z-50           ; Pohyb se zápornou korekcí\nG0 X100 Y50       ; Polohování v XY',
+                        description: 'Použití záporné délkové korekce nástroje'
+                    }
+                ]
+            },
+            {
+                name: 'G45',
+                syntax: 'G45 D..',
+                description: 'Zvětšení poloměru nástroje. Přičte hodnotu korekce k programované dráze.',
+                examples: [
+                    {
+                        title: 'Zvětšení poloměru:',
+                        code: 'G45 D1           ; Aktivace zvětšení korekce\nG1 X100 F0.2     ; Pohyb se zvětšeným poloměrem',
+                        description: 'Kompenzace opotřebení nástroje'
+                    }
+                ]
+            },
+            {
+                name: 'G46',
+                syntax: 'G46 D..',
+                description: 'Zmenšení poloměru nástroje. Odečte hodnotu korekce od programované dráhy.',
+                examples: [
+                    {
+                        title: 'Zmenšení poloměru:',
+                        code: 'G46 D1           ; Aktivace zmenšení korekce\nG1 X100 F0.2     ; Pohyb se zmenšeným poloměrem',
+                        description: 'Jemné doladění rozměrů'
+                    }
+                ]
+            },
+            {
+                name: 'G47',
+                syntax: 'G47 D..',
+                description: 'Dvojnásobná korekce nástroje. Pro speciální případy obrábění.',
+                examples: [
+                    {
+                        title: 'Dvojitá korekce:',
+                        code: 'G47 D1           ; Aktivace dvojité korekce\nG1 X100 F0.2     ; Obrábění s dvojitou korekcí',
+                        description: 'Speciální případy kompenzace'
+                    }
+                ]
+            },
+            {
+                name: 'G53',
+                syntax: 'G53',
+                description: 'Zrušení posunutí nulového bodu - působí v jedné větě. Pohyb se vztahuje k nulovému bodu stroje.',
+                examples: [
+                    {
+                        title: 'Přejezd do výměny nástroje:',
+                        code: 'G53 G0 X400 Z500  ; Přejezd do absolutní pozice stroje\nM6                ; Výměna nástroje\nG54              ; Návrat do posunutí G54',
+                        description: 'Bezpečný přejezd do výměny nástroje'
+                    },
+                    {
+                        title: 'Praktický příklad:',
+                        code: 'G54 G0 X100 Z2    ; Práce v posunutí G54\nG53 G0 Z500      ; Odjezd do bezpečné Z-pozice stroje\nG53 G0 X600      ; Přejezd v X do pozice stroje',
+                        description: 'Kombinace pohybů v různých souřadných systémech'
+                    }
+                ]
+            },
+            {
+                name: 'G54',
+                syntax: 'G54',
+                description: 'První nastavitelné posunutí nulového bodu (Work Offset). Standardní posunutí pro běžné obrábění. V Sinumerik 840D je to součást tabulky posunutí nulových bodů, kde lze definovat posunutí ve všech osách, základní rotaci a měřítko.',
+                examples: [
+                    {
+                        title: 'Základní použití G54:',
+                        code: 'G54              ; Aktivace prvního posunutí\nG0 X100 Z2      ; Nájezd k obrobku v G54\nG1 Z0 F0.2       ; Zarovnání čela',
+                        description: 'Běžné obrábění v prvním posunutí'
+                    },
+                    {
+                        title: 'Nastavení posunutí v Offsetech:',
+                        code: '; Menu pro nastavení:\n; 1. Stisknout tlačítko MENU SELECT\n; 2. Vybrat PARAMETER\n; 3. Vybrat WORK OFFSET\n\n; V tabulce G54 lze nastavit:\nX: 100           ; Posunutí v ose X\nY: 0             ; Posunutí v ose Y\nZ: 50            ; Posunutí v ose Z\nBasic rotation: 0 ; Základní natočení\nScale: 1         ; Měřítko\nMirror: OFF      ; Zrcadlení',
+                        description: 'Navigace a nastavení v menu posunutí nulových bodů'
+                    },
+                    {
+                        title: 'Měření a automatické nastavení:',
+                        code: '; Pomocí měřící sondy:\nCYCLE976        ; Cyklus měření\nX=100 Z=50       ; Měřený bod\n; Systém automaticky zapíše hodnoty do G54\n\n; Ruční škrábnutí:\n; 1. Najet na známou pozici\n; 2. MENU SELECT -> PARAMETER -> WORK OFFSET\n; 3. Kurzor na požadovanou osu v G54\n; 4. Stisknout "Set POS"\n; 5. Zadat skutečný rozměr\n; 6. Potvrdit tlačítkem INPUT',
+                        description: 'Různé způsoby nastavení posunutí nulového bodu'
+                    },
+                    {
+                        title: 'Praktické tipy:',
+                        code: '; Kontrola aktivního posunutí:\nG54\nGET_WCS         ; Zobrazí aktivní posunutí\n\n; Přičtení hodnoty k posunutí:\n$P_UIFR[1,X]=100  ; Přičte 100mm k X v G54\n\n; Kopírování posunutí:\nG54\nG59              ; Aktivace cílového posunutí\nCOPYWO           ; Zkopíruje G54 do G59',
+                        description: 'Užitečné příkazy pro práci s posunutími'
+                    },
+                    {
+                        title: 'Bezpečnostní poznámky:',
+                        code: '; Před aktivací nového posunutí:\nG0 Z100          ; Bezpečná výška\nG54              ; Změna posunutí\nGET_WCS          ; Kontrola hodnot\n\n; Uložení posunutí:\nNEWMP            ; Uložení do paměti\n; nebo pomocí:\n; MENU SELECT -> PARAMETER -> Work Offset\n; -> Vertical softkey "Save"',
+                        description: 'Bezpečné postupy při práci s posunutími'
+                    }
+                ]
+            },
+            {
+                name: 'G54.1',
+                syntax: 'G54.1 P1-48',
+                description: 'Rozšířené uživatelské posunutí nulového bodu. Umožňuje definovat až 48 dodatečných nulových bodů.',
+                examples: [
+                    {
+                        title: 'Použití rozšířeného posunutí:',
+                        code: 'G54.1 P1          ; Aktivace prvního rozšířeného posunutí\nG0 X100 Z50       ; Pohyb v novém souřadném systému\nG54.1 P2          ; Přepnutí na druhé rozšířené posunutí',
+                        description: 'Práce s více nulovými body'
+                    }
+                ]
+            },
+            {
+                name: 'G500',
+                syntax: 'G500',
+                description: 'Zrušení všech nastavitelných posunutí nulového bodu. Návrat k základnímu nulovému bodu.',
+                examples: [
+                    {
+                        title: 'Reset posunutí:',
+                        code: 'G54 G0 X100 Z2    ; Práce v posunutí\nG500             ; Zrušení všech posunutí\nG0 X0 Z0         ; Nájezd do základního nulového bodu',
+                        description: 'Bezpečné zrušení všech aktivních posunutí'
+                    }
+                ]
+            },
+            {
+                name: 'G60',
+                syntax: 'G60',
+                description: 'Přesné najetí - zpomalení rychlosti, zvýšená přesnost polohování.',
+                examples: [
+                    {
+                        title: 'Přesné soustružení:',
+                        code: 'G60 G1 X50.000 Z0 F0.1  ; Přesné najetí na rozměr\nG1 Z-30                 ; Soustružení na přesný průměr',
+                        description: 'Použití pro přesné rozměry'
+                    }
+                ]
+            },
+            {
+                name: 'G601',
+                syntax: 'G601',
+                description: 'Jemné přesné najetí - čeká na dosažení přesné pozice v malém okně.',
+                examples: [
+                    {
+                        title: 'Velmi přesné polohování:',
+                        code: 'G601             ; Aktivace jemného přesného najetí\nG60 G1 X30 F0.1  ; Najetí s vysokou přesností',
+                        description: 'Pro nejvyšší požadavky na přesnost'
+                    }
+                ]
+            },
+            {
+                name: 'G602',
+                syntax: 'G602',
+                description: 'Hrubé přesné najetí - čeká na dosažení pozice ve větším okně.',
+                examples: [
+                    {
+                        title: 'Standardní přesnost:',
+                        code: 'G602             ; Aktivace hrubého přesného najetí\nG60 G1 X100 F0.2  ; Najetí se standardní přesností',
+                        description: 'Pro běžné obrábění'
+                    }
+                ]
+            },
+            {
+                name: 'G603',
+                syntax: 'G603',
+                description: 'Najetí bez kontroly okna - pokračuje při dosažení požadované hodnoty.',
+                examples: [
+                    {
+                        title: 'Rychlé polohování:',
+                        code: 'G603             ; Aktivace rychlého najetí\nG60 G0 X200      ; Rychlé polohování bez čekání',
+                        description: 'Pro méně přesné operace s důrazem na rychlost'
+                    },
+                    {
+                        title: 'Praktické použití:',
+                        code: 'G603 G0 X100    ; Rychlý přejezd\nG601            ; Přepnutí na přesné najetí\nG60 G1 X50 F0.1  ; Přesné dokončení',
+                        description: 'Kombinace různých režimů přesnosti'
+                    }
+                ]
+            },
+            {
+                name: 'G90',
+                syntax: 'G90',
+                description: 'Absolutní programování. Všechny rozměry jsou vztaženy k nulovému bodu.',
+                examples: [
+                    {
+                        title: 'Základní použití:',
+                        code: 'G90               ; Aktivace absolutního programování\nG0 X100 Z2      ; Nájezd na absolutní pozici X=100, Z=2\nG1 Z0 F0.2       ; Pohyb na Z=0\nX80              ; Pohyb na X=80',
+                        description: 'Standardní způsob programování s absolutními rozměry'
+                    },
+                    {
+                        title: 'Praktický příklad:',
+                        code: 'G90 G54          ; Absolutní programování v G54\nG0 X100 Z50     ; Bezpečná pozice\nG1 Z0 F0.2       ; Zarovnání čela\nX80              ; Soustružení na průměr 80\nZ-50            ; Podélné soustružení na délku 50',
+                        description: 'Kompletní sekvence soustružení s absolutními rozměry'
+                    }
+                ]
+            },
+            {
+                name: 'G91',
+                syntax: 'G91',
+                description: 'Přírůstkové (inkrementální) programování. Rozměry jsou vztaženy k předchozí pozici.',
+                examples: [
+                    {
+                        title: 'Základní použití:',
+                        code: 'G91               ; Aktivace přírůstkového programování\nG1 X-20 F0.2    ; Pohyb o -20mm v X\nZ-30            ; Pohyb o -30mm v Z\nX-10            ; Další pohyb o -10mm v X',
+                        description: 'Programování pomocí přírůstků od aktuální pozice'
+                    },
+                    {
+                        title: 'Opakované úběry:',
+                        code: 'G91               ; Přírůstkové programování\nG1 X-2 F0.15     ; Úběr 2mm v X\nG0 X2             ; Návrat o 2mm\nZ-5              ; Posun o 5mm v Z\nG1 X-2            ; Další úběr',
+                        description: 'Využití pro opakované úběry materiálu'
+                    }
+                ]
+            },
+            {
+                name: 'G94',
+                syntax: 'G94 F..',
+                description: 'Posuv v mm za minutu (mm/min). Rychlost posuvu není závislá na otáčkách.',
+                examples: [
+                    {
+                        title: 'Konstantní rychlost:',
+                        code: 'G94               ; Aktivace posuvu v mm/min\nG1 X100 F300     ; Posuv 300mm/min\nZ-50 F200        ; Změna na 200mm/min',
+                        description: 'Použití konstantní rychlosti posuvu'
+                    }
+                ]
+            },
+            {
+                name: 'G95',
+                syntax: 'G95 F..',
+                description: 'Posuv v mm na otáčku (mm/ot). Standardní režim pro soustružení.',
+                examples: [
+                    {
+                        title: 'Běžné soustružení:',
+                        code: 'G95               ; Aktivace posuvu v mm/ot\nM3 S1000         ; Spuštění vřetena 1000 ot/min\nG1 X50 F0.2      ; Posuv 0.2mm/ot\nZ-100 F0.15      ; Jemnější posuv 0.15mm/ot',
+                        description: 'Typické nastavení pro soustružení'
+                    }
+                ]
+            },
+            {
+                name: 'G96',
+                syntax: 'G96 S.. LIMS=..',
+                description: 'Konstantní řezná rychlost v m/min. Automaticky upravuje otáčky podle průměru.',
+                examples: [
+                    {
+                        title: 'Základní použití:',
+                        code: 'G96 S200         ; Řezná rychlost 200 m/min\nLIMS=2000        ; Limit otáček 2000/min\nG1 X20 F0.2      ; Při malém průměru se omezí otáčky',
+                        description: 'Konstantní řezná rychlost s omezením otáček'
+                    },
+                    {
+                        title: 'Komplexní obrábění:',
+                        code: 'G96 S250 LIMS=3000  ; Vysoká řezná rychlost\nG1 X100 F0.2        ; Vnější průměr\nX20                 ; Automatická změna otáček\nG97 S800           ; Přepnutí na konstantní otáčky',
+                        description: 'Kombinace G96/G97 pro optimální obrábění'
+                    }
+                ]
+            },
+            {
+                name: 'G97',
+                syntax: 'G97 S..',
+                description: 'Konstantní otáčky vřetene. Vypne režim konstantní řezné rychlosti.',
+                examples: [
+                    {
+                        title: 'Konstantní otáčky:',
+                        code: 'G97 S1000        ; Nastavení 1000 ot/min\nG1 X50 F0.2      ; Soustružení s konstantními otáčkami',
+                        description: 'Použití pevných otáček vřetene'
+                    }
+                ]
+            },
+            {
+                name: 'G195',
+                syntax: 'G195 F..',
+                description: 'Posuv v otáčkách za sekundu (ot/s). Pro vysokorychlostní obrábění.',
+                examples: [
+                    {
+                        title: 'Rychlostní obrábění:',
+                        code: 'G195             ; Aktivace posuvu v ot/s\nF5.5            ; 5.5 otáček za sekundu\nG1 X100         ; Pohyb s definovanou rychlostí',
+                        description: 'Přesné řízení rychlosti pro HSC obrábění'
+                    }
+                ]
+            },
+            {
+                name: 'G196',
+                syntax: 'G196 S.. F..',
+                description: 'Konstantní obvodová rychlost s posuvem v ot/s. Kombinuje G96 a G195.',
+                examples: [
+                    {
+                        title: 'Konstantní řezání:',
+                        code: 'G196 S200       ; Rychlost 200m/min\nF3.5            ; 3.5 ot/s\nG1 X50          ; Obrábění s konstantní řeznou rychlostí',
+                        description: 'Vysokorychlostní obrábění s konstantní řeznou rychlostí'
+                    }
+                ]
+            },
+            {
+                name: 'G70',
+                syntax: 'G70',
+                description: 'Programování v palcích. Přepne vstupní hodnoty na palcový systém.',
+                examples: [
+                    {
+                        title: 'Palcové rozměry:',
+                        code: 'G70               ; Přepnutí na palce\nG0 X1.5 Z0.1     ; Rozměry v palcích\nG1 X1.0 F0.005   ; Posuv v palcích/ot',
+                        description: 'Programování v palcovém systému'
+                    }
+                ]
+            },
+            {
+                name: 'G71',
+                syntax: 'G71',
+                description: 'Programování v milimetrech. Přepne vstupní hodnoty na metrický systém.',
+                examples: [
+                    {
+                        title: 'Metrické rozměry:',
+                        code: 'G71               ; Přepnutí na milimetry\nG0 X40 Z2       ; Rozměry v mm\nG1 X30 F0.2      ; Posuv v mm/ot',
+                        description: 'Standardní metrické programování'
+                    }
+                ]
+            },
+            {
+                name: 'G700',
+                syntax: 'G700',
+                description: 'Programování v palcích s automatickou konverzí. Zachovává interní metrické výpočty.',
+                examples: [
+                    {
+                        title: 'Palcové programování:',
+                        code: 'G700             ; Aktivace palcového zadávání\nG1 X1.5 F0.005  ; Rozměry v palcích, interně v mm',
+                        description: 'Moderní způsob palcového programování'
+                    }
+                ]
+            },
+            {
+                name: 'G64',
+                syntax: 'G64',
+                description: 'Režim řízení dráhy - plynulé řízení rychlosti. Pro plynulé přechody mezi bloky.',
+                examples: [
+                    {
+                        title: 'Základní použití:',
+                        code: 'G64              ; Aktivace plynulého režimu\nG1 X100 F0.2    ; První pohyb\nZ-20            ; Plynulý přechod na další blok\nX80             ; Další plynulý přechod',
+                        description: 'Standardní režim pro plynulé obrábění'
+                    },
+                    {
+                        title: 'Kombinace s přesným najetím:',
+                        code: 'G64              ; Plynulé řízení\nG1 X50 F0.2     ; Hrubování\nG9 G1 X40       ; Přesné najetí pro kritický rozměr\nG64 G1 Z-30    ; Zpět na plynulé řízení',
+                        description: 'Kombinace různých režimů řízení'
+                    }
+                ]
+            },
+            {
+                name: 'G641',
+                syntax: 'G641 ADIS=..',
+                description: 'Režim řízení dráhy s programovatelným přechodem. ADIS určuje maximální odchylku od kontury.',
+                examples: [
+                    {
+                        title: 'Řízený přechod:',
+                        code: 'G641 ADIS=0.1    ; Max odchylka 0.1mm\nG1 X100 F0.2    ; První pohyb\nZ-30            ; Kontrolovaný přechod\nX80             ; Další přechod',
+                        description: 'Přesně definovaná odchylka při přechodech'
+                    },
+                    {
+                        title: 'Komplexní obrábění:',
+                        code: 'G641 ADIS=0.05   ; Velmi přesné přechody\nG1 X100 Z0 F0.2  ; Start kontury\nX80 Z-10        ; Šikmá plocha\nZ-50            ; Podélné soustružení',
+                        description: 'Přesné obrábění s kontrolovanými přechody'
+                    }
+                ]
+            },
+            {
+                name: 'G642',
+                syntax: 'G642 [ADIS=..]',
+                description: 'Režim řízení dráhy s plynulým přechodem a omezením trhnutí. Zajišťuje plynulý pohyb s kontrolou zrychlení.',
+                examples: [
+                    {
+                        title: 'Plynulý přechod:',
+                        code: 'G642 ADIS=0.1     ; Max. odchylka 0.1mm\nG1 X100 F1000     ; První pohyb\nY50              ; Plynulý přechod\nX0               ; Další plynulý přechod',
+                        description: 'Optimalizované přechody mezi bloky'
+                    }
+                ]
+            },
+            {
+                name: 'G643',
+                syntax: 'G643 [ADIS=..]',
+                description: 'Režim řízení dráhy uvnitř bloku. Optimalizuje dráhu nástroje v rámci jednoho bloku programu.',
+                examples: [
+                    {
+                        title: 'Vnitrobloková optimalizace:',
+                        code: 'G643 ADIS=0.05    ; Přesná optimalizace\nG1 X100 Y100 F500 ; Diagonální pohyb\nG1 X0 Y0          ; Návrat s optimalizací',
+                        description: 'Zlepšení přesnosti v rámci bloku'
+                    }
+                ]
+            },
+            {
+                name: 'G644',
+                syntax: 'G644 [ADIS=..]',
+                description: 'Režim řízení dráhy s optimálním zrychlením. Zajišťuje nejlepší možnou dynamiku stroje.',
+                examples: [
+                    {
+                        title: 'Dynamická optimalizace:',
+                        code: 'G644 ADIS=0.2     ; Dynamická optimalizace\nG1 X200 F2000     ; Rychlý pohyb\nY100             ; Optimalizovaný přechod',
+                        description: 'Maximální využití dynamiky stroje'
+                    }
+                ]
+            },
+            {
+                name: 'G17',
+                syntax: 'G17',
+                description: 'Volba pracovní roviny XY. Určuje rovinu pro kruhové interpolace a korekce nástroje.',
+                examples: [
+                    {
+                        title: 'Frézování v rovině XY:',
+                        code: 'G17              ; Aktivace roviny XY\nG2 X50 Y30 I20   ; Kruhová interpolace v XY',
+                        description: 'Standardní rovina pro frézování'
+                    }
+                ]
+            },
+            {
+                name: 'G18',
+                syntax: 'G18',
+                description: 'Volba pracovní roviny XZ. Standardní rovina pro soustružení.',
+                examples: [
+                    {
+                        title: 'Soustružení:',
+                        code: 'G18              ; Aktivace roviny XZ\nG2 X60 Z-20 I10 K-10  ; Kruhová interpolace v XZ',
+                        description: 'Výchozí rovina pro soustružnické operace'
+                    }
+                ]
+            },
+            {
+                name: 'G19',
+                syntax: 'G19',
+                description: 'Volba pracovní roviny YZ. Pro speciální aplikace.',
+                examples: [
+                    {
+                        title: 'Speciální obrábění:',
+                        code: 'G19              ; Aktivace roviny YZ\nG2 Y40 Z-30 J15 K-10  ; Kruhová interpolace v YZ',
+                        description: 'Rovina pro speciální případy obrábění'
+                    }
+                ]
+            },
+            {
+                name: 'G63',
+                syntax: 'G63 Z.. K..',
+                description: 'Řezání závitu bez synchronizace. Pro řezání závitů bez synchronizace s vřetenem.',
+                examples: [
+                    {
+                        title: 'Řezání závitu:',
+                        code: 'G63 Z-30 K1.5   ; Řezání závitu\nG0 Z2           ; Rychlý návrat',
+                        description: 'Jednoduchý závit bez synchronizace'
+                    }
+                ]
+            },
+            {
+                name: 'G110',
+                syntax: 'G110 X.. Z..',
+                description: 'Programování v polárních souřadnicích relativně. Vztaženo k poslednímu programovanému bodu.',
+                examples: [
+                    {
+                        title: 'Relativní polární programování:',
+                        code: 'G110             ; Aktivace relativních polárních souřadnic\nAP=45 RP=20     ; Úhel 45°, vzdálenost 20mm od posledního bodu\nAP=90 RP=30     ; Další bod 90° a 30mm',
+                        description: 'Využití pro programování úhlů a vzdáleností'
+                    }
+                ]
+            },
+            {
+                name: 'G111',
+                syntax: 'G111',
+                description: 'Programování v polárních souřadnicích absolutně. Vztaženo k aktivnímu nulovému bodu.',
+                examples: [
+                    {
+                        title: 'Absolutní polární programování:',
+                        code: 'G111             ; Aktivace absolutních polárních souřadnic\nRP=100 AP=30    ; Bod 100mm od nuly pod úhlem 30°\nRP=50 AP=60     ; Další bod 50mm pod úhlem 60°',
+                        description: 'Pro přesné polohování vzhledem k nulovému bodu'
+                    }
+                ]
+            },
+            {
+                name: 'G140',
+                syntax: 'G140',
+                description: 'Měkké najetí a odjetí. Aktivace plynulého přechodu při najetí a odjetí od kontury.',
+                examples: [
+                    {
+                        title: 'Plynulý nájezd:',
+                        code: 'G140 G41        ; Měkké najetí s korekcí vlevo\nG1 X100 F0.2    ; Start kontury\nG1 Z-50         ; Obrábění',
+                        description: 'Bezpečné najetí na konturu'
+                    }
+                ]
+            },
+            {
+                name: 'G247',
+                syntax: 'G247',
+                description: 'Najetí po čtvrtkružnici. Definuje obloukový nájezd na konturu.',
+                examples: [
+                    {
+                        title: 'Nájezd obloukem:',
+                        code: 'G247 G41 D1     ; Nájezd po čtvrtkružnici s korekcí\nG1 X100 F0.2    ; Pokračování v kontuře',
+                        description: 'Plynulý nájezd na konturu po oblouku'
+                    }
+                ]
+            },
+            {
+                name: 'G340',
+                syntax: 'G340',
+                description: 'Prostorové najetí a odjetí (3D). Pro komplexní nájezd v prostoru.',
+                examples: [
+                    {
+                        title: 'Prostorový nájezd:',
+                        code: 'G340 G41 D1     ; Aktivace 3D nájezdu\nX100 Y50 Z-20    ; Cílový bod\nG1 F0.2         ; Start obrábění',
+                        description: '3D nájezd pro složité kontury'
+                    }
+                ]
+            },
+            {
+                name: 'G450',
+                syntax: 'G450',
+                description: 'Najetí a odjetí po kružnici. Standardní způsob nájezdu na konturu.',
+                examples: [
+                    {
+                        title: 'Kruhový nájezd:',
+                        code: 'G450 G41 D1     ; Najetí po kružnici\nG1 X100 Z0 F0.2  ; Start kontury\nX80 Z-30        ; Obrábění',
+                        description: 'Standardní způsob nájezdu pro většinu aplikací'
+                    }
+                ]
+            },
+            {
+                name: 'G34',
+                syntax: 'G34 Z.. K.. X..',
+                description: 'Řezání závitu s proměnným stoupáním. Umožňuje vytvořit závit, jehož stoupání se lineárně mění.',
+                examples: [
+                    {
+                        title: 'Základní použití:',
+                        code: 'G0 X20 Z2\nG34 Z-50 K2 X1    ; Závit délky 50mm\n; K2 = základní stoupání 2mm\n; X1 = změna stoupání o 1mm',
+                        description: 'Vytvoření závitu s proměnným stoupáním'
+                    },
+                    {
+                        title: 'Praktický příklad:',
+                        code: 'G97 S500           ; Konstantní otáčky\nG0 X20 Z2\nG34 Z-100 K3 X-0.5  ; Závit s klesajícím stoupáním\n; Stoupání se mění z 3mm na 2.5mm\nG0 X22              ; Odjezd',
+                        description: 'Závit s klesajícím stoupáním pro speciální aplikace'
+                    }
+                ]
+            },
+            {
+                name: 'G35',
+                syntax: 'G35 Z.. I.. J..',
+                description: 'Kruhová interpolace se zadáním středového úhlu. Umožňuje přesné programování oblouků pomocí úhlu.',
+                examples: [
+                    {
+                        title: 'Oblouk se středovým úhlem:',
+                        code: 'G0 X50 Z0\nG35 Z-20 I10 J45   ; Oblouk 45°\n; I10 = vzdálenost středu\n; J45 = úhel 45°',
+                        description: 'Přesné programování oblouků pomocí úhlu'
+                    },
+                    {
+                        title: 'Komplexní tvar:',
+                        code: 'G1 X100 Z0 F0.2\nG35 Z-30 I15 J120  ; Oblouk 120°\nG1 X80              ; Dokončení tvaru',
+                        description: 'Kombinace přímých a kruhových pohybů'
+                    }
+                ]
+            },
+            {
+                name: 'G36',
+                syntax: 'G36 X.. Z.. CR=..',
+                description: 'Automatické zaoblení rohu. Vkládá tangenciální přechod mezi dvě kontury.',
+                examples: [
+                    {
+                        title: 'Zaoblení rohu:',
+                        code: 'G1 X100 Z0 F0.2\nG36 X80 Z-20 CR=5   ; Zaoblení R5\nG1 Z-50             ; Pokračování kontury',
+                        description: 'Plynulý přechod mezi konturami'
+                    },
+                    {
+                        title: 'Série zaoblení:',
+                        code: 'G1 X100 Z0 F0.2\nG36 X80 Z-20 CR=8   ; První zaoblení\nG36 X60 Z-40 CR=5   ; Druhé zaoblení\nG1 Z-60             ; Dokončení',
+                        description: 'Více zaoblení v jedné kontuře'
+                    }
+                ]
+            },
+            {
+                name: 'G335',
+                syntax: 'G335 Z.. K..',
+                description: 'Řezání závitu s proměnnou hloubkou řezu. Optimalizuje zatížení nástroje.',
+                examples: [
+                    {
+                        title: 'Optimalizované řezání závitu:',
+                        code: 'G0 X20 Z2\nG335 Z-30 K1.5     ; Závit M10\n; První řez hlubší\n; Další řezy se zmenšují',
+                        description: 'Efektivní řezání závitu s proměnnou hloubkou'
+                    },
+                    {
+                        title: 'Kompletní cyklus:',
+                        code: 'G0 X20 Z2\nG335 Z-30 K1.5     ; První průchod\nG0 X19\nG33 Z-30 K1.5      ; Dokončovací řez\nG0 X22 Z2',
+                        description: 'Kombinace hrubování a dokončování závitu'
+                    }
+                ]
+            },
+            {
+                name: 'G72',
+                syntax: 'G72 P.. Q.. U.. W.. R.. F.. S..',
+                description: 'Hrubovací cyklus podélný. Automatické hrubování kontury v podélném směru.',
+                examples: [
+                    {
+                        title: 'Základní hrubování:',
+                        code: 'G72 P100 Q200 U0.3 W0.1     ; Hrubovací cyklus\n; P100 = začátek kontury\n; Q200 = konec kontury\n; U0.3 = přídavek v X\n; W0.1 = přídavek v Z\nN100 G1 X50 F0.2           ; Start kontury\nZ-30\nX80\nN200 Z-50                  ; Konec kontury',
+                        description: 'Automatické hrubování vnější kontury'
+                    },
+                    {
+                        title: 'Komplexní hrubování:',
+                        code: 'G72 P10 Q20 U0.2 W0.1 R1 F0.3 S200\n; R1 = návrat po každém řezu\n; F0.3 = posuv hrubování\n; S200 = omezení otáček',
+                        description: 'Hrubování s definovanými parametry'
+                    }
+                ]
+            },
+            {
+                name: 'G73',
+                syntax: 'G73 P.. Q.. U.. W.. I.. K.. F..',
+                description: 'Hrubovací cyklus s paralelní konturou. Kopíruje tvar obrobku s přídavkem.',
+                examples: [
+                    {
+                        title: 'Paralelní hrubování:',
+                        code: 'G73 P100 Q200 U0.5 W0.2 I5 K3\n; I5 = počet řezů\n; K3 = rozdělení přídavku\nN100 G1 X60 F0.2    ; Začátek kontury\nX80 Z-20\nN200 Z-50           ; Konec kontury',
+                        description: 'Hrubování s rovnoměrným rozdělením řezů'
+                    }
+                ]
+            },
+            {
+                name: 'G74',
+                syntax: 'G74 P.. Q.. U.. W.. R.. F..',
+                description: 'Zapichovací cyklus. Automatické zapichování s definovaným posuvem a přídavky.',
+                examples: [
+                    {
+                        title: 'Základní zapichování:',
+                        code: 'G74 X40 Z-50 P2000 Q500 F0.1\n; P2000 = hloubka přísuvu v 0.001mm\n; Q500 = zpětný pohyb v 0.001mm\n; F0.1 = posuv zapichování',
+                        description: 'Vytvoření zápichu s definovanými parametry'
+                    }
+                ]
+            },
+            {
+                name: 'G75',
+                syntax: 'G75 P.. Q.. U.. W.. F..',
+                description: 'Vyvrtávací cyklus. Automatické vyvrtávání s definovaným posuvem.',
+                examples: [
+                    {
+                        title: 'Vyvrtávání:',
+                        code: 'G75 X100 Z-80 P1000 Q200 F0.2\n; P1000 = radiální přísuv\n; Q200 = zpětný pohyb\n; F0.2 = posuv vyvrtávání',
+                        description: 'Vyvrtávání díry s definovanými parametry'
+                    }
+                ]
+            },
+            {
+                name: 'G76',
+                syntax: 'G76 P.. Q.. U.. W.. R.. I.. K.. F..',
+                description: 'Závitovací cyklus vícechodý. Automatické řezání závitu s více chody.',
+                examples: [
+                    {
+                        title: 'Vícechodý závit:',
+                        code: 'G76 P011560 Q3 U0.1 W0.05 R0.2 I45 K2\n; P011560: typ závitu a úhel\n; Q3: počet chodů\n; I45: úhel přísuvu\n; K2: výška závitu',
+                        description: 'Komplexní řezání závitu s více parametry'
+                    },
+                    {
+                        title: 'Praktický příklad:',
+                        code: 'G0 X50 Z2\nG76 P011560 Q2 U0.05 W0.02 R0.1 I30 K1.5 F2\n; Dvouchodý metrický závit\n; Stoupání 2mm',
+                        description: 'Dvouchodý metrický závit s dokončovacím přídavkem'
+                    }
+                ]
+            },
+            {
+                name: 'G77',
+                syntax: 'G77 X.. Z.. I.. K.. F..',
+                description: 'Podélný hrubovací cyklus s radiálním přísuvem. Pro efektivní hrubování.',
+                examples: [
+                    {
+                        title: 'Podélné hrubování:',
+                        code: 'G77 X80 Z-50 I2 K1 F0.3\n; I2 = radiální přísuv 2mm\n; K1 = axiální přísuv 1mm\n; F0.3 = posuv hrubování',
+                        description: 'Hrubování s definovaným přísuvem v obou osách'
+                    }
+                ]
+            },
+            {
+                name: 'G147',
+                syntax: 'G147 D.. Z.. X.. SC=..',
+                description: 'Měkké najetí pro soustružení. Definuje bezpečné najetí k obrobku s plynulým přechodem.',
+                examples: [
+                    {
+                        title: 'Základní najetí:',
+                        code: 'G147 D2 Z2 X2 SC=1   ; Měkké najetí\n; D2 = číslo korekce\n; Z2, X2 = bezpečnostní vzdálenost\n; SC=1 = velikost zaoblení',
+                        description: 'Bezpečné najetí k obrobku s plynulým přechodem'
+                    },
+                    {
+                        title: 'Praktický příklad:',
+                        code: 'G147 D1 Z5 X5 SC=2   ; Definice najetí\nG41                  ; Korekce vlevo\nG1 X100 Z0 F0.2      ; Start obrábění',
+                        description: 'Kombinace s korekcí nástroje'
+                    }
+                ]
+            },
+            {
+                name: 'G148',
+                syntax: 'G148 D.. Z.. X.. SC=..',
+                description: 'Měkké odjetí pro soustružení. Definuje bezpečné odjetí od obrobku s plynulým přechodem.',
+                examples: [
+                    {
+                        title: 'Základní odjetí:',
+                        code: 'G148 D2 Z2 X2 SC=1   ; Měkké odjetí\n; D2 = číslo korekce\n; Z2, X2 = bezpečnostní vzdálenost\n; SC=1 = velikost zaoblení',
+                        description: 'Bezpečné odjetí od obrobku'
+                    },
+                    {
+                        title: 'Komplexní příklad:',
+                        code: 'G1 X100 Z-50 F0.2    ; Konec obrábění\nG148 D1 Z5 X5 SC=2   ; Plynulé odjetí\nG40                  ; Vypnutí korekce',
+                        description: 'Bezpečné ukončení obrábění'
+                    }
+                ]
+            },
+            {
+                name: 'G290',
+                syntax: 'G290',
+                description: 'Aktivace zrcadlení pro všechny osy. Invertuje směr pohybu ve všech osách.',
+                examples: [
+                    {
+                        title: 'Kompletní zrcadlení:',
+                        code: 'G290              ; Aktivace zrcadlení\nG1 X50 Z-30 F0.2  ; Pohyby jsou zrcadleny\nG291              ; Vypnutí zrcadlení',
+                        description: 'Vytvoření zrcadlového obrazu programu'
+                    }
+                ]
+            },
+            {
+                name: 'G291',
+                syntax: 'G291',
+                description: 'Deaktivace zrcadlení. Vrací směry pohybu do původního stavu.',
+                examples: [
+                    {
+                        title: 'Ukončení zrcadlení:',
+                        code: 'G290              ; Start zrcadlení\nG1 X100 Z-50 F0.2  ; Zrcadlené pohyby\nG291              ; Konec zrcadlení\nG1 X50             ; Normální pohyb',
+                        description: 'Přepínání mezi zrcadleným a normálním režimem'
+                    }
+                ]
+            },
+            {
+                name: 'G58',
+                syntax: 'G58 X.. Z..',
+                description: 'Osové paralelní posunutí. Přidává posunutí k aktivnímu nulovému bodu.',
+                examples: [
+                    {
+                        title: 'Přídavné posunutí:',
+                        code: 'G54                ; Základní nulový bod\nG58 X10 Z5         ; Přídavné posunutí\nG1 X100 Z0 F0.2     ; Obrábění s posunutím',
+                        description: 'Dodatečné posunutí pro jemné korekce'
+                    },
+                    {
+                        title: 'Série obrobků:',
+                        code: 'G54                ; První obrobek\nMAIN:               ; Začátek cyklu\nG1 X50 F0.2\nG58 Z50             ; Posunutí na další kus\nGOTOB MAIN          ; Opakování',
+                        description: 'Obrábění série identických kusů'
+                    }
+                ]
+            },
+            {
+                name: 'G153',
+                syntax: 'G153 X.. Y.. Z..',
+                description: 'Přesun do polohy definované ve strojních souřadnicích. Absolutní pohyb v souřadném systému stroje.',
+                examples: [
+                    {
+                        title: 'Přejezd do výchozí polohy:',
+                        code: 'G153 X0 Y0 Z0      ; Přejezd do nulového bodu stroje\nG153 Z500         ; Bezpečná Z pozice stroje',
+                        description: 'Bezpečné polohování ve strojních souřadnicích'
+                    }
+                ]
+            },
+            {
+                name: 'G505',
+                syntax: 'G505',
+                description: 'Páté nastavitelné posunutí nulového bodu. Umožňuje definovat další polohu nulového bodu obrobku.',
+                examples: [
+                    {
+                        title: 'Změna nulového bodu:',
+                        code: 'G54               ; První upnutí\nG1 X100 Z0 F0.2\nG505              ; Přepnutí na páté posunutí\nG0 X100 Z2       ; Pohyb v novém nulovém bodě',
+                        description: 'Využití více nulových bodů pro složité obrobky'
+                    }
+                ]
+            },
+            {
+                name: 'G507',
+                syntax: 'G507',
+                description: 'Sedmé nastavitelné posunutí nulového bodu. Pro komplexní vícestranné obrábění.',
+                examples: [
+                    {
+                        title: 'Vícestranné obrábění:',
+                        code: 'G507              ; Aktivace sedmého posunutí\nT1 D1\nG0 X100 Z2       ; Pohyb v novém souřadném systému\nG1 Z0 F0.2',
+                        description: 'Obrábění z různých stran obrobku'
+                    }
+                ]
+            },
+            {
+                name: 'G808',
+                syntax: 'G808 X.. Z.. I.. K..',
+                description: 'Zpomalení rychlosti v rozích. Redukuje rychlost pro přesnější obrábění rohů.',
+                examples: [
+                    {
+                        title: 'Přesné rohy:',
+                        code: 'G808              ; Aktivace zpomalení\nG1 X100 Z0 F0.3   ; Pohyb se zpomaleným průjezdem rohem\nX80 Z-20          ; Další pohyb',
+                        description: 'Zvýšení přesnosti v kritických místech'
+                    },
+                    {
+                        title: 'Komplexní kontura:',
+                        code: 'G808 X0.1 Z0.1    ; Definice zpomalení\nG1 X50 F0.2       ; První úsek\nZ-30              ; Zpomalený průjezd rohem\nX80               ; Další úsek',
+                        description: 'Optimalizace rychlosti pro přesné tvary'
+                    }
+                ]
+            },
+            {
+                name: 'G973',
+                syntax: 'G973 X.. Z.. I.. K..',
+                description: 'Synchronizovaný pohyb os. Umožňuje synchronizaci pohybu více os pro složité kontury.',
+                examples: [
+                    {
+                        title: 'Synchronní pohyb:',
+                        code: 'G973 X100 Z-50 I1 K1  ; Synchronizovaný pohyb\n; I1 = poměr rychlosti v X\n; K1 = poměr rychlosti v Z',
+                        description: 'Koordinovaný pohyb os pro speciální aplikace'
+                    }
+                ]
+            },
+            {
+                name: 'G932',
+                syntax: 'G932 Z.. K.. F..',
+                description: 'Řezání kuželového závitu s konstantní řeznou rychlostí. Umožňuje vytvářet přesné kuželové závity.',
+                examples: [
+                    {
+                        title: 'Základní kuželový závit:',
+                        code: 'G96 S200           ; Konstantní řezná rychlost\nG932 Z-50 K1.5 F2  ; Kuželový závit\n; K1.5 = stoupání závitu\n; F2 = úhel kužele',
+                        description: 'Vytvoření kuželového závitu s konstantní řeznou rychlostí'
+                    }
+                ]
+            },
+            {
+                name: 'G952',
+                syntax: 'G952 P.. Q.. I.. K..',
+                description: 'Dokončovací cyklus pro kužel. Automaticky vytvoří přesný kuželový tvar.',
+                examples: [
+                    {
+                        title: 'Dokončování kužele:',
+                        code: 'G952 P1 Q3 I30 K2   ; Dokončovací cyklus\n; P1 = počet průchodů\n; Q3 = přídavek na dokončení\n; I30 = úhel kužele\n; K2 = délka kužele',
+                        description: 'Přesné dokončení kuželové plochy'
+                    }
+                ]
+            },
+            {
+                name: 'G961',
+                syntax: 'G961 X.. Z.. I.. K..',
+                description: 'Lineární interpolace s přesným časováním. Pro synchronizaci pohybu s externími událostmi.',
+                examples: [
+                    {
+                        title: 'Synchronizovaný pohyb:',
+                        code: 'G961 X100 Z-50 I1000 K500  ; Časovaný pohyb\n; I1000 = čas v X ose (ms)\n; K500 = čas v Z ose (ms)',
+                        description: 'Přesně časovaný lineární pohyb'
+                    }
+                ]
+            },
+            {
+                name: 'G974',
+                syntax: 'G974 S.. D.. F..',
+                description: 'Vrtací cyklus s lomem třísky. Automaticky přerušuje třísku během vrtání.',
+                examples: [
+                    {
+                        title: 'Vrtání s přerušením:',
+                        code: 'G974 S20 D2 F0.1    ; Vrtací cyklus\n; S20 = celková hloubka\n; D2 = hloubka přísuvu\n; F0.1 = posuv vrtání',
+                        description: 'Efektivní vrtání s kontrolovaným lámáním třísky'
+                    },
+                    {
+                        title: 'Komplexní vrtání:',
+                        code: 'G974 S30 D5 F0.15   ; Hluboké vrtání\nM8                   ; Zapnutí chlazení\nG4 F1                ; Prodleva pro stabilizaci\nM9                   ; Vypnutí chlazení',
+                        description: 'Vrtání s chlazením a prodlevou'
+                    }
+                ]
+            },
+            {
+                name: 'G990',
+                syntax: 'G990 X.. Z.. I.. K..',
+                description: 'Přesné měření v osách. Umožňuje přesné měření rozměrů obrobku během obrábění.',
+                examples: [
+                    {
+                        title: 'Měření průměru:',
+                        code: 'G990 X100 Z0 I0.01    ; Měření s přesností 0.01mm\n; X100 = měřený průměr\n; I0.01 = tolerance měření',
+                        description: 'Přesné měření průměru obrobku'
+                    },
+                    {
+                        title: 'Komplexní měření:',
+                        code: 'G990 X50 Z-30 I0.01 K0.02  ; Měření v X a Z\nIF R100<49.9 GOTOF ERROR    ; Kontrola rozměru',
+                        description: 'Měření s kontrolou tolerance'
+                    }
+                ]
+            },
+            {
+                name: 'G995',
+                syntax: 'G995 S.. P.. Q..',
+                description: 'Adaptivní řízení řezné rychlosti. Automaticky upravuje řeznou rychlost podle zatížení.',
+                examples: [
+                    {
+                        title: 'Adaptivní obrábění:',
+                        code: 'G995 S200 P80 Q120   ; Adaptivní řezná rychlost\n; S200 = základní rychlost\n; P80 = minimální %\n; Q120 = maximální %',
+                        description: 'Optimalizace řezné rychlosti podle zatížení'
+                    }
+                ]
+            },
+            {
+                name: 'G962',
+                syntax: 'G962 X.. Z.. F..',
+                description: 'Konstantní obvodová rychlost při frézování. Pro zachování stejné řezné rychlosti na obvodu nástroje.',
+                examples: [
+                    {
+                        title: 'Frézování s konstantní rychlostí:',
+                        code: 'G962 S150 F0.1       ; Konstantní obvodová rychlost\nG1 X100 Z-50         ; Frézování s adaptací otáček',
+                        description: 'Udržování konstantní řezné rychlosti při frézování'
+                    }
+                ]
+            },
+            {
+                name: 'G971',
+                syntax: 'G971 P.. Q.. F..',
+                description: 'Vyvrtávací cyklus s přerušením. Automatické přerušování třísky při vyvrtávání.',
+                examples: [
+                    {
+                        title: 'Vyvrtávání s přerušením:',
+                        code: 'G971 P30 Q2 F0.2     ; Vyvrtávací cyklus\n; P30 = celková hloubka\n; Q2 = hloubka přísuvu\n; F0.2 = posuv vrtání',
+                        description: 'Efektivní vyvrtávání s kontrolovaným odvodem třísek'
+                    }
+                ]
+            },
+            {
+                name: 'G928',
+                syntax: 'G928 X.. Z.. F..',
+                description: 'Referenční najetí s programovatelnou rychlostí. Umožňuje pomalé a kontrolované najetí referenčních bodů.',
+                examples: [
+                    {
+                        title: 'Bezpečné referencování:',
+                        code: 'G928 Z-200 F1000   ; Najetí reference v Z s F=1000mm/min\nG928 X300 F500    ; Najetí reference v X s F=500mm/min',
+                        description: 'Kontrolované najetí referenčních bodů s definovanou rychlostí'
+                    }
+                ]
+            },
+            {
+                name: 'G915',
+                syntax: 'G915 X.. Z.. I.. K..',
+                description: 'Synchronizovaný pohyb os s časovým řízením. Pro přesné řízení pohybu podle času.',
+                examples: [
+                    {
+                        title: 'Časově řízený pohyb:',
+                        code: 'G915 X100 Z-50 I2000 K1500  ; Synchronizovaný pohyb\n; I2000 = čas pohybu v X (2 sekundy)\n; K1500 = čas pohybu v Z (1.5 sekundy)',
+                        description: 'Přesné časování pohybů pro speciální aplikace'
+                    }
+                ]
+            },
+            {
+                name: 'G975',
+                syntax: 'G975 S.. P.. Q.. F..',
+                description: 'Vrtací cyklus s proměnnou hloubkou přísuvu. Optimalizuje vrtání hlubokých děr.',
+                examples: [
+                    {
+                        title: 'Optimalizované vrtání:',
+                        code: 'G975 S100 P10 Q15 F0.1    ; Vrtací cyklus\n; S100 = celková hloubka\n; P10 = první přísuv\n; Q15 = maximální přísuv\n; F0.1 = posuv',
+                        description: 'Efektivní vrtání s proměnnou hloubkou přísuvu'
+                    }
+                ]
+            },
+            {
+                name: 'G977',
+                syntax: 'G977 X.. Z.. I.. K.. F..',
+                description: 'Hrubovací cyklus s adaptivním řízením. Automaticky upravuje řezné podmínky podle zatížení.',
+                examples: [
+                    {
+                        title: 'Adaptivní hrubování:',
+                        code: 'G977 X100 Z-50 I2 K1 F0.3  ; Hrubovací cyklus\n; I2 = max. hloubka třísky\n; K1 = min. hloubka třísky\n; Systém upravuje hodnoty podle zatížení',
+                        description: 'Inteligentní hrubování s optimalizací řezných podmínek'
+                    }
+                ]
+            },
+            {
+                name: 'G993',
+                syntax: 'G993 X.. Z.. I.. K..',
+                description: 'Měření s automatickou korekcí nástroje. Měří a automaticky upravuje korekce nástroje.',
+                examples: [
+                    {
+                        title: 'Měření s korekcí:',
+                        code: 'G993 X100 Z0 I0.01 K1  ; Měření průměru\n; I0.01 = tolerance\n; K1 = číslo korekce',
+                        description: 'Automatická korekce nástroje na základě měření'
+                    }
+                ]
+            },
+            {
+                name: 'G994',
+                syntax: 'G994 X.. Z.. Q..',
+                description: 'Diferenciální měření. Měří rozdíl mezi dvěma body.',
+                examples: [
+                    {
+                        title: 'Měření rozdílu:',
+                        code: 'G994 X100 Z0 Q2    ; Měření rozdílu\n; Q2 = referenční hodnota\nIF R100>0.1 GOTOF ERROR',
+                        description: 'Kontrola rozdílu rozměrů'
+                    }
+                ]
+            },
+            {
+                name: 'G979',
+                syntax: 'G979 P.. Q.. F..',
+                description: 'Vrtací cyklus s řízeným odvodem třísky. Optimalizuje odvod třísek při hlubokém vrtání.',
+                examples: [
+                    {
+                        title: 'Hluboké vrtání:',
+                        code: 'G979 P100 Q10 F0.1    ; Vrtací cyklus\n; P100 = celková hloubka\n; Q10 = hloubka přísuvu\nM8                   ; Zapnutí chlazení',
+                        description: 'Efektivní vrtání hlubokých děr'
+                    }
+                ]
+            },
+            {
+                name: 'G964',
+                syntax: 'G964 X.. Z.. F..',
+                description: 'Přesné polohování s kompenzací vůlí. Eliminuje vůle v mechanických částech stroje.',
+                examples: [
+                    {
+                        title: 'Přesné polohování:',
+                        code: 'G964 X100 Z0 F0.1    ; Polohování s kompenzací\nG1 X90              ; Následný pohyb',
+                        description: 'Eliminace vůlí pro přesné obrábění'
+                    }
+                ]
+            },
+            {
+                name: 'G965',
+                syntax: 'G965 S.. P.. Q..',
+                description: 'Adaptivní řízení zrychlení. Optimalizuje zrychlení os podle zatížení.',
+                examples: [
+                    {
+                        title: 'Optimalizace pohybu:',
+                        code: 'G965 S1000 P70 Q120  ; Adaptivní zrychlení\n; S1000 = základní hodnota\n; P70 = minimum\n; Q120 = maximum',
+                        description: 'Dynamická optimalizace pohybů'
+                    }
+                ]
+            },
+            {
+                name: 'G81',
+                syntax: 'G81 X.. Y.. Z.. R.. F..',
+                description: 'Vrtací cyklus. Základní cyklus pro vrtání děr bez přerušení posuvu.',
+                examples: [
+                    {
+                        title: 'Jednoduché vrtání:',
+                        code: 'G81 X100 Y50 Z-20 R2 F200  ; Vrtací cyklus\n; R2 = nájezdová rovina\n; Z-20 = hloubka díry\n; F200 = posuv vrtání',
+                        description: 'Základní vrtací operace'
+                    }
+                ]
+            },
+            {
+                name: 'G82',
+                syntax: 'G82 X.. Y.. Z.. R.. P.. F..',
+                description: 'Vrtací cyklus s časovou prodlevou na dně. Pro přesné díry a zahlubování.',
+                examples: [
+                    {
+                        title: 'Vrtání s prodlevou:',
+                        code: 'G82 X100 Y50 Z-15 R2 P0.5 F150\n; P0.5 = prodleva 0.5s na dně\n; Pro lepší kvalitu dna díry',
+                        description: 'Vrtání s časovou prodlevou'
+                    }
+                ]
+            },
+            {
+                name: 'G83',
+                syntax: 'G83 X.. Y.. Z.. R.. Q.. F..',
+                description: 'Hluboké vrtání s přerušením třísky. Pro hluboké díry s lepším odvodem třísek.',
+                examples: [
+                    {
+                        title: 'Hluboké vrtání:',
+                        code: 'G83 X100 Y50 Z-50 R2 Q5 F100\n; Q5 = hloubka přísuvu\n; Automatické vyjíždění pro odvod třísek',
+                        description: 'Vrtání hlubokých děr'
+                    }
+                ]
+            },
+            {
+                name: 'G84',
+                syntax: 'G84 X.. Y.. Z.. R.. F..',
+                description: 'Závitovací cyklus. Pro řezání vnitřních závitů.',
+                examples: [
+                    {
+                        title: 'Řezání závitu:',
+                        code: 'G84 X100 Y50 Z-20 R2 F1.5\n; F1.5 = stoupání závitu 1.5mm\n; Automatická synchronizace s vřetenem',
+                        description: 'Řezání metrického závitu'
+                    }
+                ]
+            },
+            {
+                name: 'G85',
+                syntax: 'G85 X.. Y.. Z.. R.. F..',
+                description: 'Vystružovací cyklus. Pro přesné vystružování děr s konstantním posuvem.',
+                examples: [
+                    {
+                        title: 'Vystružování:',
+                        code: 'G85 X100 Y50 Z-25 R2 F50\n; Stejný posuv při zajíždění i vyjíždění\n; Pro lepší kvalitu povrchu',
+                        description: 'Přesné vystružování děr'
+                    }
+                ]
+            },
+            {
+                name: 'G51',
+                syntax: 'G51 X.. Y.. P.. [I.. J.. K..]',
+                description: 'Programovatelné měřítko. Umožňuje změnu velikosti programovaných hodnot.',
+                examples: [
+                    {
+                        title: 'Změna měřítka:',
+                        code: 'G51 X0 Y0 P2.0    ; Dvojnásobné zvětšení\nG1 X50            ; X se pohne o 100mm\nG50              ; Zrušení měřítka',
+                        description: 'Proporcionální změna velikosti'
+                    }
+                ]
+            },
+            {
+                name: 'G51.1',
+                syntax: 'G51.1 X.. Y.. Z.. I.. J.. K..',
+                description: 'Zrcadlení os. Vytváří zrcadlový obraz programu kolem zadané osy.',
+                examples: [
+                    {
+                        title: 'Zrcadlení podle osy:',
+                        code: 'G51.1 X100        ; Zrcadlení podle X=100\nG1 X50 Y30        ; Původní pohyb\nG1 X150 Y30       ; Zrcadlený pohyb',
+                        description: 'Vytvoření symetrických tvarů'
+                    }
+                ]
+            },
+            {
+                name: 'G68',
+                syntax: 'G68 X.. Y.. R..',
+                description: 'Rotace souřadného systému. Otáčí programované souřadnice o zadaný úhel.',
+                examples: [
+                    {
+                        title: 'Rotace programu:',
+                        code: 'G68 X0 Y0 R45     ; Rotace o 45°\nG1 X100           ; Pohyb pod úhlem 45°\nG69              ; Zrušení rotace',
+                        description: 'Obrábění pod úhlem'
+                    }
+                ]
+            }
+        ];
+
+        // Přidat funkce pro zobrazení a filtrování
+        function createCommandList(commands) {
+            const container = document.getElementById('commandList');
+            container.innerHTML = '';
+
+            for (const [groupName, commandNames] of Object.entries(commandGroups)) {
+                const groupDiv = document.createElement('div');
+                groupDiv.className = 'command-group';
+
+                const titleDiv = document.createElement('div');
+                titleDiv.className = 'group-title';
+                titleDiv.textContent = groupName;
+                titleDiv.style.cssText = 'font-size: 1.5em; color: #2c3e50; margin: 20px 0; padding-bottom: 10px; border-bottom: 2px solid #4CAF50; grid-column: 1 / -1;';
+                groupDiv.appendChild(titleDiv);
+
+                const filteredCommands = commands.filter(cmd =>
+                    commandNames.includes(cmd.name)
+                );
+
+                filteredCommands.forEach(cmd => {
+                    const cmdDiv = document.createElement('div');
+                    cmdDiv.className = 'command-button';
+                    cmdDiv.onclick = () => showDetails(cmd.name);
+                    cmdDiv.innerHTML = `
+                        <div class="command-name">${cmd.name}</div>
+                        <div class="command-brief">${cmd.description}</div>
+                    `;
+                    groupDiv.appendChild(cmdDiv);
+                });
+
+                container.appendChild(groupDiv);
+            }
+        }
+
+        function filterCommands(searchText) {
+            const searchTerm = searchText.toLowerCase();
+            const filteredCommands = commandsList.filter(cmd =>
+                cmd.name.toLowerCase().includes(searchTerm) ||
+                cmd.description.toLowerCase().includes(searchTerm)
+            );
+            createCommandList(filteredCommands);
+        }
+
+        // Přidat modal pro zobrazení detailů
+        const modalHtml = `
+            <div id="commandModal" class="modal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); z-index: 1000; width: 80%; max-width: 600px; max-height: 80vh; overflow-y: auto;">
+                <button class="close-button" onclick="closeModal()" style="position: absolute; right: 10px; top: 10px; border: none; background: none; font-size: 24px; cursor: pointer;">&times;</button>
+                <div class="modal-content" id="modalContent"></div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+        function showDetails(cmdName) {
+            const command = commandsList.find(cmd => cmd.name === cmdName);
+            const modal = document.getElementById('commandModal');
+            const content = document.getElementById('modalContent');
+
+            content.innerHTML = `
+                <h2>${command.name}</h2>
+                <div style="background: #fff8dc; padding: 15px; border-radius: 5px; margin: 10px 0;">
+                    <h3>Syntax:</h3>
+                    <div style="background: #f8f8f8; padding: 15px; font-family: monospace;">${command.syntax}</div>
+                    <p>${command.description}</p>
+                </div>
+                <div style="margin: 20px 0;">
+                    <h3>Příklady použití:</h3>
+                    ${command.examples.map(example => `
+                        <div style="margin-top: 10px;">
+                            <div style="color: #2c3e50; font-weight: bold;">${example.title}</div>
+                            <div style="background: #f8f8f8; padding: 15px; font-family: monospace; white-space: pre;">${example.code}</div>
+                            <div style="color: #666; margin-top: 5px;">${example.description}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('commandModal').style.display = 'none';
+        }
+
+        // Inicializace při načtení stránky
+        createCommandList(commandsList);
+
+        function clearSearch() {
+            document.getElementById('searchBox').value = '';
+            // Vyvolat událost input pro aktualizaci seznamu
+            document.getElementById('searchBox').dispatchEvent(new Event('input'));
+        }
+
+        // Přidat nové definice do commandsList
+        const newCommands = [
+            {
+                name: 'G86',
+                syntax: 'G86 X.. Y.. Z.. R.. F..',
+                description: 'Vrtací cyklus s orientovaným zastavením vřetena. Pro speciální vrtací operace.',
+                examples: [
+                    {
+                        title: 'Vrtání s orientací:',
+                        code: 'G86 X100 Y50 Z-30 R2 F200  ; Vrtací cyklus\n; Vřeteno se zastaví v definované pozici na dně',
+                        description: 'Vrtání s řízeným zastavením vřetena'
+                    }
+                ]
+            },
+            {
+                name: 'G87',
+                syntax: 'G87 X.. Y.. Z.. R.. Q.. F..',
+                description: 'Vyvrtávací cyklus se zpětným zahloubením. Pro vytváření přesných děr s čelním zahloubením.',
+                examples: [
+                    {
+                        title: 'Zpětné zahloubení:',
+                        code: 'G87 X100 Y50 Z-40 R2 Q5 F100\n; R2 = bezpečná rovina\n; Q5 = hloubka zpětného zahloubení',
+                        description: 'Vytvoření zahloubení na zadní straně'
+                    }
+                ]
+            },
+            {
+                name: 'G88',
+                syntax: 'G88 X.. Y.. Z.. R.. P.. F..',
+                description: 'Vrtací cyklus s prodlevou a programovatelným přerušením. Umožňuje ruční zásah během cyklu.',
+                examples: [
+                    {
+                        title: 'Vrtání s přerušením:',
+                        code: 'G88 X100 Y50 Z-25 R2 P1.5 F150\n; P1.5 = prodleva 1.5s\n; Program čeká na potvrzení obsluhy',
+                        description: 'Vrtání s možností kontroly procesu'
+                    }
+                ]
+            },
+            {
+                name: 'G89',
+                syntax: 'G89 X.. Y.. Z.. R.. P.. F..',
+                description: 'Vystružovací cyklus s prodlevou. Kombinuje vystružování G85 s časovou prodlevou na dně.',
+                examples: [
+                    {
+                        title: 'Vystružování s prodlevou:',
+                        code: 'G89 X100 Y50 Z-30 R2 P0.5 F50\n; P0.5 = prodleva 0.5s na dně\n; Pro nejvyšší kvalitu povrchu',
+                        description: 'Přesné vystružování s prodlevou pro lepší kvalitu'
+                    }
+                ]
+            },
+            {
+                name: 'G50',
+                syntax: 'G50',
+                description: 'Zrušení měřítka (scale). Vypíná účinek G51.',
+                examples: [
+                    {
+                        title: 'Zrušení měřítka:',
+                        code: 'G51 X0 Y0 P2.0    ; Nastavení měřítka 2:1\nG1 X100           ; Pohyb se zdvojnásobí\nG50              ; Vypnutí měřítka\nG1 X100           ; Normální pohyb',
+                        description: 'Návrat k původnímu měřítku programování'
+                    }
+                ]
+            },
+            {
+                name: 'G52',
+                syntax: 'G52 X.. Y.. Z..',
+                description: 'Lokální souřadný systém. Nastavení dočasného posunutí nulového bodu.',
+                examples: [
+                    {
+                        title: 'Lokální posun:',
+                        code: 'G54              ; Základní nulový bod\nG52 X100          ; Lokální posun v X\nG0 X0             ; Nájezd do lokálního nulového bodu\nG52 X0            ; Zrušení lokálního posunu',
+                        description: 'Dočasné posunutí souřadného systému'
+                    }
+                ]
+            }
+        ];
+
+        commandsList.push(...newCommands);
+
+        // Přidat nové funkce pro menu
+        function toggleCategoriesMenu() {
+            document.getElementById('categoriesMenu').classList.toggle('active');
+        }
+
+        function toggleQuickCodesMenu() {
+            document.getElementById('quickCodesMenu').classList.toggle('active');
+        }
+
+        // Funkce pro naplnění kategorií
+        function initializeCategoriesMenu() {
+            const categoriesList = document.getElementById('categoriesList');
+            Object.keys(commandGroups).forEach(category => {
+                const div = document.createElement('div');
+                div.className = 'menu-item';
+                div.textContent = category;
+                div.onclick = () => {
+                    filterByCategory(category);
+                    toggleCategoriesMenu();
+                };
+                categoriesList.appendChild(div);
+            });
+        }
+
+        // Funkce pro naplnění rychlého menu G kódů
+        function initializeQuickCodesMenu() {
+            const quickCodesList = document.getElementById('quickCodesList');
+            const allCodes = commandsList.map(cmd => cmd.name).sort();
+            allCodes.forEach(code => {
+                const div = document.createElement('div');
+                div.className = 'menu-item';
+                div.textContent = code;
+                div.onclick = () => {
+                    showDetails(code);
+                    toggleQuickCodesMenu();
+                };
+                quickCodesList.appendChild(div);
+            });
+        }
+
+        // Funkce pro filtrování podle kategorie
+        function filterByCategory(category) {
+            const container = document.getElementById('commandList');
+            container.innerHTML = '';
+
+            const groupDiv = document.createElement('div');
+            groupDiv.className = 'command-group';
+
+            const titleDiv = document.createElement('div');
+            titleDiv.className = 'group-title';
+            titleDiv.textContent = category;
+            groupDiv.appendChild(titleDiv);
+
+            const filteredCommands = commandsList.filter(cmd =>
+                commandGroups[category].includes(cmd.name)
+            );
+
+            filteredCommands.forEach(cmd => {
+                const cmdDiv = document.createElement('div');
+                cmdDiv.className = 'command-button';
+                cmdDiv.onclick = () => showDetails(cmd.name);
+                cmdDiv.innerHTML = `
+                    <div class="command-name">${cmd.name}</div>
+                    <div class="command-brief">${cmd.description}</div>
+                `;
+                groupDiv.appendChild(cmdDiv);
+            });
+
+            container.appendChild(groupDiv);
+            document.getElementById('resetView').classList.add('active');
+        }
+
+        function resetViewToAll() {
+            createCommandList(commandsList);
+            document.getElementById('resetView').classList.remove('active');
+        }
+
+        // Inicializace po načtení stránky
+        document.addEventListener('DOMContentLoaded', () => {
+            createCommandList(commandsList);
+            initializeCategoriesMenu();
+            initializeQuickCodesMenu();
+        });
+
+        // Zavření menu při kliknutí mimo
+        document.addEventListener('click', (e) => {
+            const categoriesMenu = document.getElementById('categoriesMenu');
+            const quickCodesMenu = document.getElementById('quickCodesMenu');
+            const categoriesToggle = document.querySelector('.menu-toggle');
+            const quickCodesToggle = document.querySelector('.quick-codes-toggle');
+
+            if (!categoriesMenu.contains(e.target) && !categoriesToggle.contains(e.target)) {
+                categoriesMenu.classList.remove('active');
+            }
+            if (!quickCodesMenu.contains(e.target) && !quickCodesToggle.contains(e.target)) {
+                quickCodesMenu.classList.remove('active');
+            }
+        });
+
+        // Počáteční zobrazení všech příkazů
+        createCommandList(commandsList);
+    </script>
+
+    <!-- Přidání uzavíracích tagů -->
+</body>
+</html>

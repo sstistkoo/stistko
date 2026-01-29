@@ -1,0 +1,3387 @@
+<!DOCTYPE html>
+<html lang="cs">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>CNC Kalkulátor</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            line-height: 1.5;
+            margin: 0;
+            padding: 10px;
+            background: #f5f5f5;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #1976d2;
+            font-size: 1.5rem;
+            margin: 0 0 15px 0;
+            padding: 0;
+        }
+
+        h2 {
+            color: #424242;
+            font-size: 1.2rem;
+            margin: 0 0 10px 0;
+            padding: 0;
+        }
+
+        .input-group {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .start-end-group {
+            background: #e3f2fd;
+        }
+
+        .center-group {
+            background: #e8f5e9;
+        }
+
+        .conditions-group {
+            background: #fff3e0;
+        }
+
+        .results-group {
+            background: #f5f5f5;
+        }
+
+        label {
+            display: block;
+            color: #616161;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+            /* Prevent iOS zoom on focus */
+            -webkit-appearance: none;
+            appearance: none;
+            background: white;
+        }
+
+        select {
+            background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23424242'%3E%3Cpath d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 30px;
+        }
+
+        .result-item {
+            margin-bottom: 15px;
+        }
+
+        .result-label {
+            color: #616161;
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+        }
+
+        .result-value {
+            font-weight: 500;
+            color: #2196f3;
+            font-size: 1.1rem;
+        }
+
+        #error-message {
+            color: #f44336;
+            margin-bottom: 10px;
+            font-weight: 500;
+            padding: 10px;
+            border-radius: 8px;
+            background: #ffebee;
+            display: none;
+        }
+
+        #error-message:not(:empty) {
+            display: block;
+        }
+
+        #diagram {
+            width: 100%;
+            height: 300px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin-top: 15px;
+            background: white;
+            touch-action: none;
+            cursor: grab;
+        }
+
+        #diagram:active {
+            cursor: grabbing;
+        }
+
+        .diagram-controls {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 5px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .diagram-button {
+            background: #2196f3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .diagram-button:hover {
+            background: #1976d2;
+        }
+
+        #debug {
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 15px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0;
+        }
+
+        @media (min-width: 500px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Vylepšení pro dotykové ovládání */
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Zabránění dvojitému klepnutí pro zoom na iOS */
+        * {
+            touch-action: manipulation;
+        }
+
+        /* Přidat nové styly pro rozdělení */
+        .input-section {
+            position: relative;
+            padding: 10px;
+        }
+
+        .input-section:first-child::after {
+            content: '';
+            position: absolute;
+            right: -5px;
+            top: 10px;
+            bottom: 10px;
+            width: 1px;
+            background-color: #bbb;
+        }
+
+        .input-group h3 {
+            color: #666;
+            font-size: 0.9rem;
+            margin: 0 0 10px 0;
+            font-weight: 500;
+        }
+
+        .calc-button {
+            background-color: #2196f3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.2s;
+            margin-bottom: 15px;
+        }
+
+        .calc-button:hover {
+            background-color: #1976d2;
+        }
+
+        .debug-panel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #ccc;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            transform: translateY(calc(100% - 30px));
+            transition: transform 0.3s;
+            z-index: 1000;
+        }
+
+        .debug-panel.expanded {
+            transform: translateY(0);
+        }
+
+        .debug-header {
+            padding: 5px 15px;
+            background: #f8f9fa;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .debug-header h3 {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .debug-content {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .debug-toggle {
+            color: #666;
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+
+        .debug-panel.expanded .debug-toggle {
+            transform: rotate(180deg);
+        }
+
+        .header-with-button {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .header-with-button h2 {
+            margin: 0;
+        }
+
+        .calc-button {
+            padding: 4px 12px;
+            font-size: 0.85rem;
+            margin: 0;
+            /* Odstranit margin-bottom */
+        }
+
+        .cnc-input-group {
+            background: #f0f4f8;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+
+        .cnc-editor {
+            width: 100%;
+            height: 100px;
+            font-family: monospace;
+            font-size: 14px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+        .cnc-parse-button {
+            background-color: #4caf50;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .cnc-parse-button:hover {
+            background-color: #45a049;
+        }
+
+        .speed-mode-toggle {
+            margin-bottom: 15px;
+        }
+
+        .speed-mode-toggle label {
+            display: block;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        .speed-mode-toggle input[type="radio"] {
+            width: auto;
+            margin-right: 8px;
+        }
+
+        #g96conditions,
+        #g97conditions {
+            transition: opacity 0.3s;
+        }
+
+        /* Přidat nové styly pro tlačítko */
+        .speed-mode-button {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: #fff;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #333;
+            transition: all 0.3s;
+        }
+
+        .speed-mode-button:hover {
+            background: #f0f0f0;
+        }
+
+        .speed-mode-button.g97 {
+            background: #e3f2fd;
+            border-color: #2196f3;
+            color: #1976d2;
+        }
+
+        /* Optimalizace pro mobilní zařízení */
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+                margin: 0;
+                max-width: 100%;
+                border-radius: 0;
+            }
+
+            .input-group {
+                padding: 10px;
+                margin-bottom: 10px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            input,
+            select {
+                height: 44px;
+                /* Větší výška pro lepší dotykové ovládání */
+                font-size: 16px;
+                margin-bottom: 10px;
+            }
+
+            .calc-button {
+                height: 44px;
+                padding: 0 15px;
+                font-size: 16px;
+            }
+
+            .speed-mode-button {
+                height: 44px;
+                font-size: 16px;
+            }
+
+            /* Odstranit dělící čáru mezi sekcemi na mobilu */
+            .input-section:first-child::after {
+                display: none;
+            }
+
+            /* Přizpůsobit velikost SVG diagramu */
+            #diagram {
+                height: 250px;
+            }
+
+            /* Upravit debug panel */
+            .debug-panel {
+                transform: translateY(calc(100% - 40px));
+            }
+
+            .debug-header {
+                height: 40px;
+                padding: 0 15px;
+            }
+
+            .debug-toggle {
+                font-size: 20px;
+            }
+
+            /* Zvětšit písmo pro lepší čitelnost */
+            .result-label {
+                font-size: 14px;
+            }
+
+            .result-value {
+                font-size: 16px;
+            }
+
+            /* Přidat podporu pro safe-area-inset na iOS */
+            .container {
+                padding-top: env(safe-area-inset-top);
+                padding-bottom: env(safe-area-inset-bottom);
+                padding-left: env(safe-area-inset-left);
+                padding-right: env(safe-area-inset-right);
+            }
+        }
+
+        /* Vylepšení dotykového ovládání */
+        @media (hover: none) {
+            input[type="number"] {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+
+            .calc-button:active,
+            .speed-mode-button:active {
+                opacity: 0.7;
+            }
+        }
+
+        /* Zabránění označení textu při dvojitém klepnutí */
+        * {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+
+        /* Povolit výběr textu pouze v textových polích */
+        input,
+        textarea {
+            user-select: text;
+        }
+
+        /* Zrušit zákaz výběru textu a vrátit výchozí chování */
+        * {
+            user-select: auto;
+            -webkit-user-select: auto;
+            -moz-user-select: auto;
+            -ms-user-select: auto;
+        }
+
+        /* Zakázat výběr textu pouze pro specifické elementy */
+        .speed-mode-button,
+        .calc-button,
+        .debug-header,
+        .result-label,
+        svg text,
+        .line-numbers {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        /* Explicitně povolit výběr textu pro důležitá pole */
+        textarea,
+        input,
+        .result-value,
+        #debug {
+            user-select: text !important;
+            -webkit-user-select: text !important;
+            -moz-user-select: text !important;
+            -ms-user-select: text !important;
+            cursor: text;
+        }
+
+        .speed-mode-button {
+            width: 100%;
+            height: 44px;
+            /* Stejná výška jako input */
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background: #fff;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #333;
+            transition: all 0.3s;
+        }
+
+        .conditions-group .grid {
+            gap: 15px;
+            /* Mezera mezi sloupci */
+        }
+
+        .conditions-group label {
+            margin-bottom: 8px;
+        }
+
+        .diamoff-toggle {
+            margin: 15px 0;
+        }
+
+        .diamoff-toggle label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .diamoff-toggle input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+
+        .diam-mode-button {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background: #fff;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #333;
+            transition: all 0.3s;
+            height: 44px;
+            white-space: nowrap;
+        }
+
+        .diam-mode-button:hover {
+            background: #f0f0f0;
+        }
+
+        .diam-mode-button.diamoff {
+            background: #e3f2fd;
+            border-color: #2196f3;
+            color: #1976d2;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .calculated-value {
+            font-weight: 500;
+            color: #2196f3;
+            font-size: 1.1rem;
+            padding: 8px;
+            background: #f5f5f5;
+            border-radius: 4px;
+            margin-top: 4px;
+        }
+
+        .diagram-container {
+            position: relative;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin-top: 15px;
+            background: white;
+        }
+
+        #diagram {
+            width: 100%;
+            height: 300px;
+            touch-action: none;
+        }
+
+        .zoom-controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 5px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .zoom-button {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #ccc;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #666;
+        }
+
+        .zoom-button:hover {
+            background: #f0f0f0;
+        }
+
+        .switch-center-button {
+            width: 24px;
+            height: 24px;
+            padding: 0;
+            margin-left: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+            font-size: 16px;
+            vertical-align: middle;
+        }
+
+        .switch-center-button.active {
+            background: #2196f3;
+            color: white;
+            border-color: #1976d2;
+        }
+
+        .cnc-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .cnc-parse-button {
+            background-color: #4caf50;
+            flex: 1;
+            /* Změna na flex: 1 místo width: 100% */
+        }
+
+        .cnc-help-button {
+            background-color: #2196f3;
+            flex: 1;
+        }
+
+        .remove-point-button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-left: 8px;
+        }
+
+        .point-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        /* Přidat nové styly pro maximalizaci diagramu */
+        .diagram-container.maximized {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1000;
+            background: white;
+            padding: 20px;
+            margin: 0;
+            border: none;
+            border-radius: 0;
+        }
+
+        .diagram-container.maximized #diagram {
+            height: calc(100vh - 40px);
+        }
+
+        .maximize-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 30px;
+            height: 30px;
+            border: 1px solid #ccc;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #666;
+            z-index: 1001;
+        }
+
+        /* Upravené styly pro posuv */
+        .feed-container {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-top: -15px; /* Zvětšit odsazení nahoru pro lepší zarovnání */
+        }
+
+        .feed-mode-button {
+            flex: 0 0 80px;
+            height: 44px;
+            padding: 0 8px;
+            border: 1px solid #ccc;
+            border-radius: 8px; /* Sjednotit radius s ostatními prvky */
+            background: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            margin-top: 0; /* Odstranit horní margin */
+        }
+
+        .feed-input {
+            flex: 1;
+            /* Zabere zbývající prostor */
+            min-width: 0;
+            /* Zabrání přetečení */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>CNC Kalkulátor</h1>
+        <div id="error-message"></div>
+
+        <!-- 1. Vstupní metoda -->
+        <div class="input-group method-group">
+            <div class="header-with-button">
+                <h2>Způsob zadání</h2>
+            </div>
+            <div class="input-section">
+                <select id="inputMethod" class="full-width">
+                    <option value="manual">Ruční zadání bodů</option>
+                    <option value="cnc">Načíst z CNC kódu</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- 2. CNC kód (původně cnc-input-group) -->
+        <div id="cncInputSection" class="input-group cnc-input-group" style="display: none;">
+            <div class="header-with-button">
+                <h2>CNC Kód</h2>
+            </div>
+            <textarea id="cncCode" class="cnc-editor"
+                placeholder="Vložte CNC kód (např.: N10 G1 X100 Z25 F0.2&#10;N20 G2 X50 Z50 CR=25 F0.15)"></textarea>
+            <div class="cnc-buttons">
+                <button id="parseCodeButton" class="calc-button cnc-parse-button">Načíst hodnoty</button>
+                <button id="generateCodeButton" class="calc-button cnc-help-button">Do CNC kódu</button>
+            </div>
+        </div>
+
+        <!-- 3. Manuální zadání bodů (původně start-end-group) -->
+        <div id="manualInputSection" class="input-group start-end-group">
+            <div class="header-with-button">
+                <h2>Počáteční a koncový bod</h2>
+                <button id="g1ModeButton" class="calc-button">G1</button>
+            </div>
+            <div>
+                <div id="prevPointSection" class="input-section" style="display: none;">
+                    <h3>Počáteční bod (před radiusem):</h3>
+                    <div class="grid">
+                        <div>
+                            <label>X [mm] (poloměr)</label>
+                            <input type="number" id="prevX" value="30" step="any" inputmode="decimal">
+                        </div>
+                        <div>
+                            <label>Z [mm]</label>
+                            <input type="number" id="prevZ" value="10" step="any" inputmode="decimal">
+                        </div>
+                    </div>
+                </div>
+                <div class="input-section">
+                    <div class="point-header">
+                        <h3 id="startTitle">Začátek radiusu:</h3>
+                        <button class="remove-point-button" style="display: none;">Odebrat</button>
+                    </div>
+                    <div class="grid">
+                        <div>
+                            <label>X [mm] (poloměr)</label>
+                            <input type="number" id="startX" value="30" step="any" inputmode="decimal">
+                        </div>
+                        <div>
+                            <label>Z [mm]</label>
+                            <input type="number" id="startZ" value="30" step="any" inputmode="decimal">
+                        </div>
+                    </div>
+                </div>
+                <!-- Přidat novou sekci pro průchozí bod -->
+                <div id="throughPointSection" class="input-section" style="display: none;">
+                    <h3>Průchozí bod:</h3>
+                    <div class="grid">
+                        <div>
+                            <label>X [mm] (poloměr)</label>
+                            <input type="number" id="throughX" value="25" step="any" inputmode="decimal">
+                        </div>
+                        <div>
+                            <label>Z [mm]</label>
+                            <input type="number" id="throughZ" value="90" step="any" inputmode="decimal">
+                        </div>
+                    </div>
+                </div>
+                <div class="input-section">
+                    <div class="point-header">
+                        <h3 id="endTitle">Konec radiusu:</h3>
+                        <button class="remove-point-button" style="display: none;">Odebrat</button>
+                    </div>
+                    <div class="grid">
+                        <div>
+                            <label>X [mm] (poloměr)</label>
+                            <input type="number" id="endX" value="20" step="any" inputmode="decimal">
+                        </div>
+                        <div>
+                            <label>Z [mm]</label>
+                            <input type="number" id="endZ" value="150" step="any" inputmode="decimal">
+                        </div>
+                    </div>
+                </div>
+                <!-- Přidat kontejner pro G1 body -->
+                <div id="g1PointsContainer" style="display: none;">
+                    <div class="g1-point">
+                        <div class="point-header">
+                            <h3>Bod 1:</h3>
+                            <button class="remove-point-button">Odebrat</button>
+                        </div>
+                        <div class="grid">
+                            <div>
+                                <label>X [mm] (poloměr)</label>
+                                <input type="number" class="g1-x" value="0" step="any">
+                            </div>
+                            <div>
+                                <label>Z [mm]</label>
+                                <input type="number" class="g1-z" value="0" step="any">
+                            </div>
+                        </div>
+                    </div>
+                    <button id="addG1PointButton" class="calc-button">Přidat bod</button>
+                    <button id="calculateG1Button" class="calc-button">Vypočítat</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Výpočet geometrie (původně center-group) -->
+        <div class="input-group center-group">
+            <div class="header-with-button">
+                <h2>Střed a radius</h2>
+                <div class="button-group">
+                    <button id="calcCenterButton" class="calc-button">Vypočítat (CR)</button>
+                    <button id="ctButton" class="calc-button">CT</button>
+                    <button id="ikButton" class="calc-button">IK</button>
+                    <button id="arButton" class="calc-button">AR</button>
+                    <button id="cipButton" class="calc-button">CIP</button>
+                </div>
+            </div>
+            <div class="grid">
+                <div class="input-section">
+                    <h3>Střed</h3>
+                    <div id="calculatedRadius" style="display: none; margin-bottom: 10px;">
+                        <label>Vypočtený radius [mm]:</label>
+                        <div class="calculated-value">0.000</div>
+                    </div>
+                    <label>X (I) [mm] (poloměr)</label>
+                    <input type="number" id="centerX" value="50" step="any" inputmode="decimal">
+                    <label>Z (K) [mm]</label>
+                    <input type="number" id="centerZ" value="50" step="any" inputmode="decimal">
+                </div>
+                <div class="input-section">
+                    <h3>Radius a směr</h3>
+                    <label>Typ zadání</label>
+                    <select id="radiusType">
+                        <option value="CR">CR= (Radius)</option>
+                        <option value="AR">AR= (Úhel)</option>
+                        <option value="IK">I K (Střed inkrementálně)</option>
+                        <option value="CT">CT= (Tečné napojení)</option>
+                        <option value="CIP">CIP= (Průchozí bod)</option>
+                    </select>
+
+                    <div id="radiusInputCR">
+                        <label>Radius [mm]</label>
+                        <input type="number" id="radius" value="25" step="any" inputmode="decimal">
+                    </div>
+
+                    <div id="radiusInputAR" style="display: none;">
+                        <label>Úhel [°]</label>
+                        <input type="number" id="arcAngle" value="90" step="any" inputmode="decimal">
+                    </div>
+
+                    <div id="radiusInputIK" style="display: none;">
+                        <label>I - přírůstek v X [mm]</label>
+                        <input type="number" id="centerDX" step="any" inputmode="decimal">
+                        <label>K - přírůstek v Z [mm]</label>
+                        <input type="number" id="centerDZ" step="any" inputmode="decimal">
+                    </div>
+
+                    <div id="radiusInputCT" style="display: none;">
+                        <!-- Odstraníme původní sekci pro předchozí pohyb, protože je nyní v hlavní sekci -->
+                    </div>
+
+                    <div id="radiusInputCIP" style="display: none;">
+                        <!-- Odstraníme duplicitní pole, protože už jsou v hlavní sekci throughPointSection -->
+                    </div>
+
+                    <label>Směr</label>
+                    <select id="direction">
+                        <option value="G2">G2 (ve směru hod. ručiček)</option>
+                        <option value="G3">G3 (proti směru hod. ručiček)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Geometrické výsledky (nová sekce) -->
+        <div class="input-group geometry-results-group">
+            <h2>Geometrické výsledky</h2>
+            <div class="grid">
+                <div class="result-item">
+                    <div class="result-label">Střed oblouku:
+                        <button id="switchCenterButton" class="switch-center-button" style="display: none;">↺</button>
+                    </div>
+                    <div class="result-value" id="arcCenter">I: 0.000, K: 0.000</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">Úhly:</div>
+                    <div class="result-value" id="angles">Start: 0.0°, Konec: 0.0°</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. Řezné podmínky (původně conditions-group) -->
+        <div class="input-group conditions-group">
+            <h2>Řezné podmínky</h2>
+            <div class="grid">
+                <div>
+                    <label>Režim:</label>
+                    <button id="speedModeButton" class="speed-mode-button">G96 (konstantní řezná rychlost)</button>
+                </div>
+                <div>
+                    <label>Posuv:</label>
+                    <div class="feed-container">
+                        <button id="feedModeButton" class="feed-mode-button">mm/ot</button>
+                        <input type="number" id="feed" class="feed-input" value="0.8" step="any" inputmode="decimal">
+                    </div>
+                </div>
+            </div>
+            <!-- Podmínky pro G96 -->
+            <div id="g96conditions">
+                <div class="grid">
+                    <div>
+                        <label>Řezná rychlost [m/min]</label>
+                        <input type="number" id="cuttingSpeed" value="170" step="any" inputmode="decimal">
+                    </div>
+                    <div>
+                        <label>LIMS - Max. otáčky [ot/min]</label>
+                        <input type="number" id="speedLimit" value="190" step="any" inputmode="decimal">
+                    </div>
+                </div>
+            </div>
+            <!-- Podmínky pro G97 -->
+            <div id="g97conditions" style="display: none;">
+                <div class="grid">
+                    <div>
+                        <label>Otáčky [ot/min]</label>
+                        <input type="number" id="constantSpeed" value="1000" step="any" inputmode="decimal">
+                    </div>
+                    <div></div><!-- Prázdný div pro zarovnání -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. Technologické výsledky (upravená results-group) -->
+        <div class="input-group results-group">
+            <h2>Technologické výsledky</h2>
+            <div class="grid">
+                <div>
+                    <div class="result-item">
+                        <div class="result-label">Efektivní průměr:</div>
+                        <div class="result-value" id="effectiveDiameter">0.00 mm</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Průměrné otáčky:</div>
+                        <div class="result-value" id="rpm">0 ot/min</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Rychlost posuvu:</div>
+                        <div class="result-value" id="feedRate">0 mm/min</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="result-item">
+                        <div class="result-label">Čas obrábění:</div>
+                        <div class="result-value" id="machiningTime">0.00 s</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label" id="lengthLabel">Délka oblouku:</div>
+                        <div class="result-value" id="arcLength">0.00 mm</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. Vizualizace (původní diagram-container) -->
+        <div class="diagram-container">
+            <button class="maximize-button" id="maximizeButton">⛶</button>
+            <svg id="diagram" viewBox="-100 -100 200 200"></svg>
+            <div class="zoom-controls">
+                <button class="zoom-button" id="zoomIn">+</button>
+                <button class="zoom-button" id="zoomOut">-</button>
+                <button class="zoom-button" id="zoomReset">↺</button>
+            </div>
+        </div>
+
+        <!-- 9. Debug panel -->
+        <div class="debug-panel" id="debugPanel">
+            <div class="debug-header" id="debugHeader">
+                <h3>Debug výstup</h3>
+                <span class="debug-toggle">▼</span>
+            </div>
+            <div class="debug-content">
+                <div id="debug"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript zůstává stejný -->
+    <script>
+        // Pomocná funkce pro debugování
+        function debug(msg) {
+            const debugEl = document.getElementById('debug');
+            if (debugEl) {
+                const timestamp = new Date().toISOString().split('T')[1].split('.')[0];
+                debugEl.textContent += `[${timestamp}] ${msg}\n`;
+
+                // Scrollovat na konec pouze pokud je panel otevřený
+                const debugPanel = document.getElementById('debugPanel');
+                if (debugPanel.classList.contains('expanded')) {
+                    debugEl.scrollTop = debugEl.scrollHeight;
+                }
+            }
+            console.log(msg);
+        }
+
+        function getDiameterRadius(diameter) {
+            return diameter / 2;
+        }
+
+        function calculateAngle(z, x, centerZ, centerX) {
+            const deltaZ = z - centerZ;
+            const deltaX = x - centerX;
+            const angle = Math.atan2(deltaX, deltaZ);
+
+            debug(`Výpočet úhlu: deltaZ=${deltaZ.toFixed(3)}, deltaX=${deltaX.toFixed(3)}, úhel=${(angle * 180 / Math.PI).toFixed(2)}°`);
+            return angle;
+        }
+
+        // Upravit calculateIJK pro správný výpočet relativních hodnot
+        function calculateIJK(startZ, startX, centerZ, centerX) {
+            // Změna na relativní hodnoty - opačný výpočet než předtím
+            const i = -(centerX - startX);  // Změna znaménka pro správný směr
+            const k = -(centerZ - startZ);  // Změna znaménka pro správný směr
+
+            debug(`IJK parametry (relativní k počátku):`);
+            debug(`I(X) = ${i.toFixed(3)} (-(${centerX} - ${startX}))`);
+            debug(`K(Z) = ${k.toFixed(3)} (-(${centerZ} - ${startZ}))`);
+
+            return { i, k };
+        }
+
+        function formatTime(time) {
+            if (time < 60) {
+                return `${time.toFixed(1)} s`;
+            } else if (time < 3600) {
+                const minutes = Math.floor(time / 60);
+                const seconds = time % 60;
+                return `${minutes}:${seconds.toFixed(0).padStart(2, '0')} min`;
+            } else {
+                const hours = Math.floor(time / 3600);
+                const minutes = Math.floor((time % 3600) / 60);
+                const seconds = time % 60;
+                return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toFixed(0).padStart(2, '0')} h`;
+            }
+        }
+
+        // Přesunout deklaraci na začátek skriptu (před všechny funkce)
+        let isG1Mode = false;
+
+        function calculateAll() {
+            if (isG1Mode) {
+                document.getElementById('calculateG1Button').click();
+                return;
+            }
+            debug('\n--- Začátek nového výpočtu ---');
+            try {
+                const isG96 = !document.getElementById('speedModeButton').classList.contains('g97');
+                const params = {
+                    startZ: parseFloat(document.getElementById('startZ').value),
+                    startX: parseFloat(document.getElementById('startX').value), // Už je poloměr
+                    endZ: parseFloat(document.getElementById('endZ').value),
+                    endX: parseFloat(document.getElementById('endX').value), // Už je poloměr
+                    centerZ: parseFloat(document.getElementById('centerZ').value),
+                    centerX: parseFloat(document.getElementById('centerX').value), // Už je poloměr
+                    radius: parseFloat(document.getElementById('radius').value),
+                    cuttingSpeed: parseFloat(document.getElementById('cuttingSpeed').value),
+                    feed: parseFloat(document.getElementById('feed').value),
+                    direction: document.getElementById('direction').value
+                };
+
+                debug('Načtené parametry:');
+                debug(JSON.stringify(params, null, 2));
+
+                const numericParams = Object.entries(params).filter(([key]) => key !== 'direction');
+                if (numericParams.some(([_, value]) => isNaN(value))) {
+                    document.getElementById('error-message').textContent =
+                        'Chyba: Všechny hodnoty musí být čísla!';
+                    debug('Chyba: Neplatné vstupní hodnoty');
+                    return;
+                }
+
+                if (!validateInputs(params)) {
+                    document.getElementById('error-message').textContent =
+                        'Chyba: Neplatné vstupní hodnoty (záporné nebo nulové hodnoty)';
+                    return;
+                }
+
+                if (!validateArc(params)) {
+                    document.getElementById('error-message').textContent =
+                        'Chyba: Body neleží na kružnici s daným radiusem!';
+                    return;
+                }
+
+                document.getElementById('error-message').textContent = '';
+
+                const startAngle = calculateAngle(params.startZ, params.startX, params.centerZ, params.centerX);
+                const endAngle = calculateAngle(params.endZ, params.endX, params.centerZ, params.centerX);
+
+                let angleDiff = endAngle - startAngle;
+                if (params.direction === 'G2') {
+                    while (angleDiff > 0) angleDiff -= 2 * Math.PI;
+                    while (angleDiff <= -2 * Math.PI) angleDiff += 2 * Math.PI;
+                } else {
+                    while (angleDiff < 0) angleDiff += 2 * Math.PI;
+                    while (angleDiff >= 2 * Math.PI) angleDiff -= 2 * Math.PI;
+                }
+
+                debug(`Úhlový rozdíl: ${(angleDiff * 180 / Math.PI).toFixed(2)}°`);
+
+                const segments = 100;
+                let totalLength = 0;
+                let totalTime = 0;
+
+                const maxDiameter = Math.max(params.startX, params.endX) * 2;  // Dvojnásobek poloměru
+                const minDiameter = Math.min(params.startX, params.endX) * 2;  // Dvojnásobek poloměru
+
+                for (let i = 0; i < segments; i++) {
+                    const angle = startAngle + (angleDiff * i) / segments;
+                    const currentRadius = params.centerX + params.radius * Math.sin(angle);
+                    const currentDiameter = currentRadius * 2;
+
+                    const arcLength = Math.abs(params.radius * angleDiff) / segments;
+                    totalLength += arcLength;
+
+                    if (isG96) {
+                        const speedLimit = parseFloat(document.getElementById('speedLimit').value);
+                        const theoreticalRPM = (params.cuttingSpeed * 1000) / (Math.PI * currentDiameter);
+                        const actualRPM = Math.min(theoreticalRPM, speedLimit);
+
+                        const segmentTime = arcLength / (actualRPM * params.feed);
+                        totalTime += segmentTime;
+                    } else {
+                        const constantSpeed = parseFloat(document.getElementById('constantSpeed').value);
+                        const segmentTime = arcLength / (constantSpeed * params.feed);
+                        totalTime += segmentTime;
+                    }
+                }
+
+                const effectiveDiameter = (params.cuttingSpeed * 1000 * totalTime * params.feed) / (Math.PI * totalLength);
+                let rpmMin, rpmMax, rpmAvg;
+
+                if (isG96) {
+                    const speedLimit = parseFloat(document.getElementById('speedLimit').value);
+                    rpmMax = Math.min(
+                        (params.cuttingSpeed * 1000) / (Math.PI * minDiameter),
+                        speedLimit
+                    );
+                    rpmMin = Math.min(
+                        (params.cuttingSpeed * 1000) / (Math.PI * maxDiameter),
+                        speedLimit
+                    );
+                    rpmAvg = Math.min(
+                        (params.cuttingSpeed * 1000) / (Math.PI * effectiveDiameter),
+                        speedLimit
+                    );
+                } else {
+                    const constantSpeed = parseFloat(document.getElementById('constantSpeed').value);
+                    rpmMin = rpmMax = rpmAvg = constantSpeed;
+                }
+
+                document.getElementById('effectiveDiameter').textContent =
+                    `${effectiveDiameter.toFixed(2)} mm`;
+
+                const theoreticalRpmAvg = Math.round((params.cuttingSpeed * 1000) / (Math.PI * effectiveDiameter));
+                const theoreticalRpmMin = Math.round((params.cuttingSpeed * 1000) / (Math.PI * maxDiameter));
+                const theoreticalRpmMax = Math.round((params.cuttingSpeed * 1000) / (Math.PI * minDiameter));
+
+                document.getElementById('rpm').innerHTML =
+                    `${Math.round(rpmAvg)} ot/min (${theoreticalRpmAvg})
+                    <div style="font-size: 0.9em; color: #666; margin-top: 5px;">
+                        ${isG96 ?
+                        `Otáčky na Ø${maxDiameter.toFixed(1)}mm: ${Math.round(rpmMin)} ot/min (${theoreticalRpmMin})<br>
+                            Otáčky na Ø${minDiameter.toFixed(1)}mm: ${Math.round(rpmMax)} ot/min (${theoreticalRpmMax})` :
+                        'Konstantní otáčky (G97)'}
+                    </div>`;
+
+                document.getElementById('arcLength').textContent = `${totalLength.toFixed(2)} mm`;
+                document.getElementById('machiningTime').textContent = formatTime(totalTime * 60);
+
+                const ijkParams = calculateIJK(params.startZ, params.startX, params.centerZ, params.centerX);
+                document.getElementById('arcCenter').textContent =
+                    `I: ${ijkParams.i.toFixed(3)}, K: ${ijkParams.k.toFixed(3)}`;
+
+                // Aktualizace úhlů v geometrických výsledcích
+                document.getElementById('angles').textContent =
+                    `Start: ${(startAngle * 180 / Math.PI).toFixed(1)}°, Konec: ${(endAngle * 180 / Math.PI).toFixed(1)}°`;
+
+                // Použít existující element s ID 'ijkParams'
+                const ijkElement = document.getElementById('ijkParams');
+                if (ijkElement) {
+                    ijkElement.textContent = `I: ${ijkParams.i.toFixed(3)}, K: ${ijkParams.k.toFixed(3)}`;
+                } else {
+                    debug('Chyba: Nenalezen element pro IJK parametry');
+                }
+
+                // Stejná kontrola pro ostatní elementy
+                const anglesElement = document.getElementById('angles');
+                if (anglesElement) {
+                    anglesElement.textContent = `Start: ${(startAngle * 180 / Math.PI).toFixed(1)}°, Konec: ${(endAngle * 180 / Math.PI).toFixed(1)}°`;
+                }
+
+                const arcLengthElement = document.getElementById('arcLength');
+                if (arcLengthElement) {
+                    arcLengthElement.textContent = `${totalLength.toFixed(2)} mm`;
+                }
+
+                updateDiagram(params, startAngle, angleDiff);
+
+                // Před koncem funkce přidáme kontrolu výpočtu
+                debug(`Geometrické výsledky:`);
+                debug(`I: ${ijkParams.i.toFixed(3)}, K: ${ijkParams.k.toFixed(3)}`);
+                debug(`Úhly: Start=${(startAngle * 180 / Math.PI).toFixed(1)}°, Konec=${(endAngle * 180 / Math.PI).toFixed(1)}°`);
+                debug(`Délka oblouku: ${totalLength.toFixed(2)} mm`);
+
+                // Přidat výpočet a zobrazení rychlosti posuvu
+                const feedInput = parseFloat(document.getElementById('feed').value);
+                const rpm = getCurrentRPM();
+                let feedRate;
+
+                if (isFeedPerMin) {
+                    feedRate = feedInput;
+                    document.getElementById('feedRate').textContent = `${feedRate.toFixed(1)} mm/min`;
+                } else {
+                    feedRate = feedInput * rpm;
+                    document.getElementById('feedRate').textContent = `${feedInput.toFixed(3)} mm/ot (${feedRate.toFixed(1)} mm/min)`;
+                }
+
+            } catch (error) {
+                debug(`Chyba při výpočtu: ${error.message}`);
+                document.getElementById('error-message').textContent = `Chyba při výpočtu: ${error.message}`;
+            }
+        }
+
+        function updateDiagram(params, startAngle, angleDiff) {
+            debug('\nAktualizace diagramu');
+            const svg = document.getElementById('diagram');
+            svg.innerHTML = '';
+
+            const isCTMode = document.getElementById('radiusType').value === 'CT';
+            const prevX = isCTMode ? parseFloat(document.getElementById('prevX').value) : null;
+            const prevZ = isCTMode ? parseFloat(document.getElementById('prevZ').value) : null;
+
+            // Body dráhy (bez středu)
+            const pathPoints = [
+                ...(isCTMode ? [{ z: prevZ, x: -prevX, label: 'P0' }] : []),
+                { z: params.startZ, x: -params.startX, label: 'S' },
+                { z: params.endZ, x: -params.endX, label: 'E' }
+            ];
+
+            // Výpočet rozsahu pohledu pouze pro dráhu
+            let minZ = Math.min(...pathPoints.map(p => p.z));
+            let maxZ = Math.max(...pathPoints.map(p => p.z));
+            let minX = Math.min(...pathPoints.map(p => p.x));
+            let maxX = Math.max(...pathPoints.map(p => p.x));
+
+            // Přidat trochu prostoru kolem dráhy
+            const paddingZ = (maxZ - minZ) * 0.3;  // Zvětšit padding
+            const paddingX = (maxX - minX) * 0.3;  // Zvětšit padding
+            const extraBottomPadding = (maxX - minX) * 0.2;  // Extra prostor dole
+            const viewBoxWidth = maxZ - minZ + 2 * paddingZ;
+            const viewBoxHeight = maxX - minX + 2 * paddingX + extraBottomPadding;
+
+            // Nastavit viewBox pro maximální využití prostoru kolem dráhy
+            const svgRect = svg.getBoundingClientRect();
+            const aspectRatio = svgRect.width / svgRect.height;
+            const viewBoxAspectRatio = viewBoxWidth / viewBoxHeight;
+
+            let finalViewBox;
+            if (viewBoxAspectRatio > aspectRatio) {
+                const newHeight = viewBoxWidth / aspectRatio;
+                const extraPadding = (newHeight - viewBoxHeight) / 2;
+                finalViewBox = `${minZ - paddingZ} ${minX - paddingX - extraPadding - extraBottomPadding} ${viewBoxWidth} ${newHeight}`;
+            } else {
+                const newWidth = viewBoxHeight * aspectRatio;
+                const extraPadding = (newWidth - viewBoxWidth) / 2;
+                finalViewBox = `${minZ - paddingZ - extraPadding} ${minX - paddingX - extraBottomPadding} ${newWidth} ${viewBoxHeight}`;
+            }
+            svg.setAttribute('viewBox', finalViewBox);
+
+            // Přidat středový bod do seznamu bodů pro vykreslení (ale ne pro výpočet viewBoxu)
+            const allPoints = [
+                ...pathPoints,
+                { z: params.centerZ, x: -params.centerX, label: 'C' }
+            ];
+
+            // Vykreslení předchozího pohybu pro CT
+            if (isCTMode) {
+                const prevLine = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                prevLine.setAttribute("d", `M ${prevZ} ${-prevX} L ${params.startZ} ${-params.startX}`);
+                prevLine.setAttribute("stroke", "#666");
+                prevLine.setAttribute("stroke-width", viewBoxWidth / 150);
+                prevLine.setAttribute("stroke-dasharray", "5,5");
+                svg.appendChild(prevLine);
+            }
+
+            // Vykreslení oblouku
+            const segments = 50;
+            const startPoint = {
+                z: params.startZ,
+                x: -params.startX
+            };
+            let pathData = `M ${startPoint.z} ${startPoint.x}`;
+            for (let i = 1; i <= segments; i++) {
+                const angle = startAngle + (angleDiff * i) / segments;
+                const z = params.centerZ + params.radius * Math.cos(angle);
+                const x = params.centerX + params.radius * Math.sin(angle);
+                pathData += ` L ${z} ${-x}`;
+            }
+            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            path.setAttribute("d", pathData);
+            path.setAttribute("stroke", "#2196f3");
+            path.setAttribute("fill", "none");
+            path.setAttribute("stroke-width", viewBoxWidth / 100);
+            svg.appendChild(path);
+
+            // Vykreslení pomocných čar ke středu (tenčí a průhledné)
+            const centerLines = document.createElementNS("http://www.w3.org/2000/svg", "g");
+            centerLines.setAttribute("stroke", "rgba(255,0,0,0.3)");
+            centerLines.setAttribute("stroke-width", viewBoxWidth / 200);
+            centerLines.setAttribute("stroke-dasharray", "5,5");
+            centerLines.innerHTML = `
+                <line x1="${params.centerZ}" y1="${-params.centerX}" x2="${params.startZ}" y2="${-params.startX}" />
+                <line x1="${params.centerZ}" y1="${-params.centerX}" x2="${params.endZ}" y2="${-params.endX}" />
+            `;
+            svg.appendChild(centerLines);
+
+            // Určit, na kterou stranu umístit popisek středu
+            const centerAlignLeft = params.centerZ < (minZ + (maxZ - minZ) / 2);
+
+            // Vykreslení bodů s jejich souřadnicemi - speciální zacházení pro střed
+            allPoints.forEach(point => {
+                const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                circle.setAttribute("cx", point.z);
+                circle.setAttribute("cy", point.x);
+                circle.setAttribute("r", viewBoxWidth / 150);
+                circle.setAttribute("fill", point.label === 'P0' ? "#666" : point.label === 'C' ? "#f44336" : "#2196f3");
+                svg.appendChild(circle);
+
+                const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                const isCenter = point.label === 'C';
+
+                if (isCenter) {
+                    const textOffset = centerAlignLeft ? -viewBoxWidth / 20 : viewBoxWidth / 40;
+                    const anchor = centerAlignLeft ? "end" : "start";
+                    text.setAttribute("x", point.z + textOffset);
+                    text.setAttribute("y", point.x - viewBoxHeight / 40);
+                    text.setAttribute("text-anchor", anchor);
+                } else {
+                    text.setAttribute("x", point.z + viewBoxWidth / 40);
+                    text.setAttribute("y", point.x - viewBoxHeight / 40);
+                }
+                text.setAttribute("font-size", viewBoxWidth / 35);
+                text.setAttribute("fill", "#333");
+
+                if (isCenter) {
+                    const ik = calculateIJK(params.startZ, params.startX, params.centerZ, params.centerX);
+                    text.innerHTML = `${point.label}
+                        <tspan x="${point.z + (centerAlignLeft ? -viewBoxWidth / 20 : viewBoxWidth / 40)}"
+                               dy="1.2em"
+                               font-size="${viewBoxWidth / 45}"
+                               fill="#666">
+                            (${(-point.x).toFixed(1)}, ${point.z.toFixed(1)})
+                        </tspan>
+                        <tspan x="${point.z + (centerAlignLeft ? -viewBoxWidth / 20 : viewBoxWidth / 40)}"
+                               dy="1.2em"
+                               font-size="${viewBoxWidth / 45}"
+                               fill="#666">
+                            I:${ik.i.toFixed(1)}, K:${ik.k.toFixed(1)}
+                        </tspan>`;
+                } else {
+                    text.innerHTML = `${point.label}
+                        <tspan x="${point.z + viewBoxWidth / 40}"
+                               dy="1.2em"
+                               font-size="${viewBoxWidth / 45}"
+                               fill="#666">
+                            (${(-point.x).toFixed(1)}, ${point.z.toFixed(1)})
+                        </tspan>`;
+                }
+                svg.appendChild(text);
+            });
+
+            debug('Diagram aktualizován');
+            svg.dataset.originalViewBox = finalViewBox;
+        }
+
+        // Přidat funkci pro aktualizaci diagramu v G1 módu
+        function updateG1Diagram(points) {
+            const svg = document.getElementById('diagram');
+            svg.innerHTML = '';
+
+            if (points.length < 2) return;
+
+            // Výpočet rozsahu pohledu pro všechny body
+            let minZ = Math.min(...points.map(p => p.z));
+            let maxZ = Math.max(...points.map(p => p.z));
+            let minX = Math.min(...points.map(p => p.x));
+            let maxX = Math.max(...points.map(p => p.x));
+
+            // Vypočítat rozměry a padding
+            const width = maxZ - minZ;
+            const height = maxX - minX;
+            const padding = Math.max(width, height) * 0.2; // Jednotný padding 20%
+
+            // Přidat padding ke všem stranám
+            minZ -= padding;
+            maxZ += padding;
+            minX -= padding;
+            maxX += padding;
+
+            // Vypočítat poměr stran SVG elementu
+            const svgRect = svg.getBoundingClientRect();
+            const aspectRatio = svgRect.width / svgRect.height;
+
+            // Upravit viewBox tak, aby zachoval poměr stran
+            const viewBoxWidth = maxZ - minZ;
+            const viewBoxHeight = maxX - minX;
+            const viewBoxAspectRatio = viewBoxWidth / viewBoxHeight;
+
+            if (viewBoxAspectRatio > aspectRatio) {
+                // Příliš široký - upravit výšku
+                const newHeight = viewBoxWidth / aspectRatio;
+                const heightDiff = newHeight - viewBoxHeight;
+                minX -= heightDiff / 2;
+                maxX += heightDiff / 2;
+            } else {
+                // Příliš vysoký - upravit šířku
+                const newWidth = viewBoxHeight * aspectRatio;
+                const widthDiff = newWidth - viewBoxWidth;
+                minZ -= widthDiff / 2;
+                maxZ += widthDiff / 2;
+            }
+
+            // Nastavit finální viewBox
+            const finalViewBox = `${minZ} ${-maxX} ${maxZ - minZ} ${maxX - minX}`;
+            svg.setAttribute('viewBox', finalViewBox);
+            svg.dataset.originalViewBox = finalViewBox;
+
+            // Vykreslit dráhu s fixní tloušťkou čáry
+            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            let pathData = `M ${points[0].z} ${-points[0].x}`;
+            points.slice(1).forEach(point => {
+                pathData += ` L ${point.z} ${-point.x}`;
+            });
+
+            path.setAttribute("d", pathData);
+            path.setAttribute("stroke", "#2196f3");
+            path.setAttribute("fill", "none");
+            path.setAttribute("stroke-width", (maxZ - minZ) / 100);
+            svg.appendChild(path);
+
+            // Vykreslit body s fixní velikostí
+            points.forEach((point, index) => {
+                const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                circle.setAttribute("cx", point.z);
+                circle.setAttribute("cy", -point.x);
+                circle.setAttribute("r", (maxZ - minZ) / 150);
+                circle.setAttribute("fill", "#2196f3");
+                svg.appendChild(circle);
+
+                // Popisky bodů s fixní velikostí
+                const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                text.setAttribute("x", point.z + (maxZ - minZ) / 40);
+                text.setAttribute("y", -point.x - (maxX - minX) / 40);
+                text.setAttribute("font-size", (maxZ - minZ) / 35);
+                text.setAttribute("fill", "#333");
+                text.innerHTML = `P${index + 1}
+                    <tspan x="${point.z + (maxZ - minZ) / 40}"
+                           dy="1.2em"
+                           font-size="${(maxZ - minZ) / 45}"
+                           fill="#666">
+                        (${(-point.x).toFixed(1)}, ${point.z.toFixed(1)})
+                    </tspan>`;
+                svg.appendChild(text);
+            });
+
+            debug('G1 diagram aktualizován');
+        }
+
+        // Upravit calculateCenter, aby používala správný radius
+        function calculateCenter(forceRecalc = false) {
+            const radiusType = document.getElementById('radiusType').value;
+            const startX = parseFloat(document.getElementById('startX').value);
+            const startZ = parseFloat(document.getElementById('startZ').value);
+            const endX = parseFloat(document.getElementById('endX').value);
+            const endZ = parseFloat(document.getElementById('endZ').value);
+            const direction = document.getElementById('direction').value;
+
+            try {
+                let center;
+                let radius = parseFloat(document.getElementById('radius').value);
+
+                switch (radiusType) {
+                    case 'CR':
+                        // Použít aktuální radius z pole
+                        center = calculateCenterFromRadius(startX, startZ, endX, endZ, radius, direction);
+                        break;
+                    case 'AR':
+                        const angle = parseFloat(document.getElementById('arcAngle').value);
+                        center = calculateCenterFromAngle(startX, startZ, endX, endZ, angle, direction);
+                        break;
+                    case 'IK':
+                        const i = parseFloat(document.getElementById('centerDX').value);
+                        const k = parseFloat(document.getElementById('centerDZ').value);
+                        center = {
+                            x: startX + i,
+                            z: startZ + k
+                        };
+                        // Aktualizovat radius při výpočtu
+                        const ikRadius = Math.sqrt(i * i + k * k); // Přejmenováno na ikRadius
+                        document.getElementById('radius').value = ikRadius.toFixed(3);
+                        document.getElementById('calculatedRadius').querySelector('.calculated-value').textContent = ikRadius.toFixed(3);
+                        break;
+                    case 'CT':
+                        const prevX = parseFloat(document.getElementById('prevX').value);
+                        const prevZ = parseFloat(document.getElementById('prevZ').value);
+                        center = calculateCenterFromTangent(
+                            prevX, prevZ,
+                            startX, startZ,
+                            endX, endZ
+                        );
+                        break;
+                    case 'CIP':
+                        const throughX = parseFloat(document.getElementById('throughX').value);
+                        const throughZ = parseFloat(document.getElementById('throughZ').value);
+                        center = calculateCenterFromCIP(startX, startZ, throughX, throughZ, endX, endZ);
+                        break;
+                }
+
+                if (center) {
+                    document.getElementById('centerX').value = center.x.toFixed(3);
+                    document.getElementById('centerZ').value = center.z.toFixed(3);
+                    // Zachovat původní radius pro CR mód
+                    calculateAll();
+                }
+
+                if (radiusType === 'CT' && center) {
+                    const ctRadius = Math.hypot(center.z - startZ, center.x - startX); // Přejmenováno na ctRadius
+                    document.getElementById('calculatedRadius').querySelector('.calculated-value').textContent = ctRadius.toFixed(3);
+                    document.getElementById('radius').value = ctRadius.toFixed(3);
+                }
+            } catch (error) {
+                document.getElementById('error-message').textContent = error.message;
+                debug(`Chyba: ${error.message}`);
+            }
+        }
+
+        document.getElementById('calcCenterButton').addEventListener('click', () => {
+            calculateCenter(true);
+        });
+
+        document.querySelectorAll('input, select').forEach(input => {
+            if (['centerX', 'centerZ', 'radius'].includes(input.id)) {
+                input.addEventListener('input', () => {
+                    calculateAll();
+                });
+            } else {
+                input.addEventListener('input', calculateAll);
+            }
+        });
+
+        document.getElementById('direction').addEventListener('change', calculateAll);
+
+        document.getElementById('calcCenterButton').addEventListener('click', () => {
+            calculateCenter();
+        });
+
+        calculateAll();
+
+        const debugPanel = document.getElementById('debugPanel');
+        const debugHeader = document.getElementById('debugHeader');
+
+        debugHeader.addEventListener('click', () => {
+            debugPanel.classList.toggle('expanded');
+        });
+
+        function calculateAngleBetween(start, end, center) {
+            const startAngle = Math.atan2(
+                -(start.x - center.x),
+                start.z - center.z
+            );
+            const endAngle = Math.atan2(
+                -(end.x - center.x),
+                end.z - center.z
+            );
+
+            let angle = endAngle - startAngle;
+            if (angle > Math.PI) angle -= 2 * Math.PI;
+            if (angle < -Math.PI) angle += 2 * Math.PI;
+
+            debug(`\nÚhly v kartézských souřadnicích:`);
+            debug(`Start: ${(startAngle * 180 / Math.PI).toFixed(2)}°`);
+            debug(`End: ${(endAngle * 180 / Math.PI).toFixed(2)}°`);
+            debug(`Rozdíl: ${(angle * 180 / Math.PI).toFixed(2)}°`);
+
+            return angle;
+        }
+
+        function roundToThree(num) {
+            return parseFloat(parseFloat(num).toFixed(3));
+        }
+
+        function parseBlock(line) {
+            return {
+                x: line.match(/X([-\d.]+)/)?.[1],
+                z: line.match(/Z([-\d.]+)/)?.[1],
+                i: line.match(/I([-\d.]+)/)?.[1],
+                k: line.match(/K([-\d.]+)/)?.[1],
+                cr: line.match(/CR=([-\d.]+)/)?.[1],
+                ar: line.match(/AR=([-\d.]+)/)?.[1],
+                ct: line.includes('CT'),
+                cip: line.match(/CIP=\(([-\d.]+),([-\d.]+)\)/),
+                g0: line.includes('G0'),
+                g1: line.includes('G1'),
+                g2: line.includes('G2'),
+                g3: line.includes('G3')
+            };
+        }
+
+        function detectCommandType(line) {
+            debug('Detekuji typ příkazu z řádku: ' + line);
+
+            if (line.includes('CT')) {
+                debug('Detekován typ: CT');
+                return 'CT';
+            }
+            if (line.includes('CR=')) {
+                debug('Detekován typ: CR');
+                return 'CR';
+            }
+            if (line.includes('CIP=')) {
+                debug('Detekován typ: CIP');
+                return 'CIP';
+            }
+            if (line.includes('AR=')) {
+                debug('Detekován typ: AR');
+                return 'AR';
+            }
+            if (line.includes('I') && line.includes('K')) {
+                debug('Detekován typ: IK');
+                return 'IK';
+            }
+
+            debug('Žádný specifický typ nebyl detekován');
+            return null;
+        }
+
+        function parseCncCode() {
+            const codeText = document.getElementById('cncCode').value.trim();
+            debug('Parsování CNC kódu:\n' + codeText);
+
+            const lines = codeText.split('\n').filter(line => line.trim() && !line.trim().startsWith(';'));
+
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                const block = parseBlock(line);
+
+                if (block.g2 || block.g3) {
+                    if (!block.x || !block.z) {
+                        debug('Chybí potřebné údaje v G2/G3 bloku');
+                        continue;
+                    }
+
+                    // Najít předchozí pohybový blok
+                    let prevBlock = null;
+                    let prevIndex = i - 1;
+                    while (prevIndex >= 0) {
+                        const pb = parseBlock(lines[prevIndex]);
+                        if (pb.x && pb.z) {
+                            prevBlock = pb;
+                            break;
+                        }
+                        prevIndex--;
+                    }
+
+                    if (!prevBlock) {
+                        debug('Nenalezen předchozí blok');
+                        continue;
+                    }
+
+                    const commandType = detectCommandType(line);
+                    debug('Zjištěný typ příkazu: ' + commandType);
+
+                    // 1. Nejprve nastavíme typ a vyvoláme událost změny
+                    const radiusTypeSelect = document.getElementById('radiusType');
+                    radiusTypeSelect.value = commandType;
+                    radiusTypeSelect.dispatchEvent(new Event('change'));
+
+                    // 2. Připravíme základní hodnoty
+                    const values = {
+                        startX: roundToThree(parseFloat(prevBlock.x)),
+                        startZ: roundToThree(parseFloat(prevBlock.z)),
+                        endX: roundToThree(parseFloat(block.x)),
+                        endZ: roundToThree(parseFloat(block.z)),
+                        direction: block.g3 ? 'G3' : 'G2',
+                        type: commandType
+                    };
+
+                    // 3. Pro CT najdeme předchozí bod až po nastavení typu
+                    if (commandType === 'CT') {
+                        let prevPrevIndex = prevIndex - 1;
+                        while (prevPrevIndex >= 0) {
+                            const ppb = parseBlock(lines[prevPrevIndex]);
+                            if (ppb.x && ppb.z) {
+                                values.prevX = roundToThree(parseFloat(ppb.x));
+                                values.prevZ = roundToThree(parseFloat(ppb.z));
+                                break;
+                            }
+                            prevPrevIndex--;
+                        }
+
+                        if (!values.prevX || !values.prevZ) {
+                            debug('Nenalezen druhý předchozí blok pro CT');
+                            continue;
+                        }
+                    }
+
+                    // 4. Doplníme specifické hodnoty podle typu
+                    switch (commandType) {
+                        case 'CR':
+                            values.radius = roundToThree(parseFloat(block.cr));
+                            break;
+                        case 'AR':
+                            values.angle = roundToThree(parseFloat(block.ar));
+                            break;
+                        case 'CIP':
+                            if (block.cip) {
+                                values.throughX = roundToThree(parseFloat(block.cip[1]));
+                                values.throughZ = roundToThree(parseFloat(block.cip[2]));
+                            }
+                            break;
+                        case 'IK':
+                            values.centerDX = roundToThree(parseFloat(block.i || '0'));
+                            values.centerDZ = roundToThree(parseFloat(block.k || '0'));
+                            break;
+                    }
+
+                    debug('Nalezeny hodnoty:\n' + JSON.stringify(values, null, 2));
+
+                    // 5. Nakonec aktualizujeme hodnoty
+                    updateValues(values);
+                    calculateCenter(true);
+                    return;
+                }
+            }
+            debug('Nenalezen platný G2/G3 blok');
+        }
+
+        function updateValues(values) {
+            debug('Aktualizuji hodnoty:\n' + JSON.stringify(values, null, 2));
+
+            // Už nenastavujeme typ tady, protože to děláme před voláním této funkce
+            document.getElementById('direction').value = values.direction;
+            document.getElementById('startX').value = values.startX;
+            document.getElementById('startZ').value = values.startZ;
+            document.getElementById('endX').value = values.endX;
+            document.getElementById('endZ').value = values.endZ;
+
+            switch (values.type) {
+                case 'CR':
+                    document.getElementById('radius').value = values.radius;
+                    break;
+                case 'IK':
+                    document.getElementById('centerDX').value = values.centerDX;
+                    document.getElementById('centerDZ').value = values.centerDZ;
+                    break;
+                case 'CT':
+                    document.getElementById('prevX').value = values.prevX;
+                    document.getElementById('prevZ').value = values.prevZ;
+                    break;
+                case 'AR':
+                    document.getElementById('arcAngle').value = values.angle;
+                    break;
+                case 'CIP':
+                    document.getElementById('throughX').value = values.throughX;
+                    document.getElementById('throughZ').value = values.throughZ;
+                    break;
+            }
+
+            calculateCenter(true);
+        }
+
+        document.getElementById('cncCode').addEventListener('input', function () {
+            debug('CNC kód změněn');
+        });
+
+        document.getElementById('parseCodeButton').addEventListener('click', parseCncCode);
+
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('change', (e) => {
+                const value = parseFloat(e.target.value);
+                if (!isNaN(value)) {
+                    e.target.value = roundToThree(value);
+                }
+            });
+        });
+
+        document.getElementById('speedModeButton').addEventListener('click', function () {
+            const button = this;
+            const isG96 = !button.classList.contains('g97');
+
+            if (isG96) {
+                button.classList.add('g97');
+                button.textContent = 'G97 (konstantní otáčky)';
+                document.getElementById('g96conditions').style.display = 'none';
+                document.getElementById('g97conditions').style.display = 'block';
+            } else {
+                button.classList.remove('g97');
+                button.textContent = 'G96 (konstantní řezná rychlost)';
+                document.getElementById('g96conditions').style.display = 'block';
+                document.getElementById('g97conditions').style.display = 'none';
+            }
+
+            calculateAll();
+        });
+
+        document.getElementById('radiusType').addEventListener('change', function () {
+            const type = this.value;
+            const ctButton = document.getElementById('ctButton');
+            const ikButton = document.getElementById('ikButton');
+            const arButton = document.getElementById('arButton');
+            const cipButton = document.getElementById('cipButton');
+            const calcCenterButton = document.getElementById('calcCenterButton');
+            const prevPointSection = document.getElementById('prevPointSection');
+            const calculatedRadius = document.getElementById('calculatedRadius');
+            const throughPointSection = document.getElementById('throughPointSection');
+
+            prevPointSection.style.display = type === 'CT' ? 'block' : 'none';
+            throughPointSection.style.display = type === 'CIP' ? 'block' : 'none';
+            // Změna: Zobrazíme radius pro všechny módy kromě CR
+            calculatedRadius.style.display = ['CT', 'IK', 'AR', 'CIP'].includes(type) ? 'block' : 'none';
+
+            // Aktualizovat text všech tlačítek
+            ctButton.textContent = type === 'CT' ? 'Vypočítat CT' : 'CT';
+            ikButton.textContent = type === 'IK' ? 'Vypočítat IK' : 'IK';
+            arButton.textContent = type === 'AR' ? 'Vypočítat AR' : 'AR';
+            cipButton.textContent = type === 'CIP' ? 'Vypočítat CIP' : 'CIP';
+            calcCenterButton.textContent = type === 'CR' ? 'Vypočítat CR' : 'CR';
+
+            // Předvyplnit hodnoty pro IK
+            if (type === 'IK') {
+                const startX = parseFloat(document.getElementById('startX').value);
+                const startZ = parseFloat(document.getElementById('startZ').value);
+                const centerX = parseFloat(document.getElementById('centerX').value);
+                const centerZ = parseFloat(document.getElementById('centerZ').value);
+
+                // Výpočet relativních souřadnic středu vůči počátečnímu bodu
+                const i = centerX - startX;
+                const k = centerZ - startZ;
+
+                // Vypočet radiusu - správná vzdálenost od středu k začátku oblouku
+                const radius = Math.sqrt(i * i + k * k);  // Přímá vzdálenost od středu k začátku
+
+                // Nastavení vypočtených hodnot
+                document.getElementById('centerDX').value = i.toFixed(3);
+                document.getElementById('centerDZ').value = k.toFixed(3);
+                calculatedRadius.querySelector('.calculated-value').textContent = radius.toFixed(3);
+                document.getElementById('radius').value = radius.toFixed(3);
+
+                debug(`Předvyplnění IK parametrů:`);
+                debug(`I = ${i.toFixed(3)} (${centerX} - ${startX})`);
+                debug(`K = ${k.toFixed(3)} (${centerZ} - ${startZ})`);
+                debug(`Vypočtený radius = ${radius.toFixed(3)} (odmocnina z I² + K²)`);
+            }
+
+            document.querySelectorAll('[id^="radiusInput"]').forEach(el => {
+                el.style.display = 'none';
+            });
+            document.getElementById(`radiusInput${type}`).style.display = 'block';
+        });
+
+        document.getElementById('calcCenterButton').addEventListener('click', function () {
+            const radiusType = document.getElementById('radiusType');
+            if (radiusType.value === 'CR') {
+                calculateCenter(true);
+            } else {
+                radiusType.value = 'CR';
+                radiusType.dispatchEvent(new Event('change'));
+            }
+        });
+
+        document.getElementById('ctButton').addEventListener('click', function () {
+            const radiusType = document.getElementById('radiusType');
+            if (radiusType.value === 'CT') {
+                const prevX = parseFloat(document.getElementById('prevX').value);
+                const prevZ = parseFloat(document.getElementById('prevZ').value);
+                const startX = parseFloat(document.getElementById('startX').value);
+                const startZ = parseFloat(document.getElementById('startZ').value);
+                const endX = parseFloat(document.getElementById('endX').value);
+                const endZ = parseFloat(document.getElementById('endZ').value);
+
+                try {
+                    const result = calculateCenterFromTangent(prevX, prevZ, startX, startZ, endX, endZ);
+
+                    // Určení správného směru
+                    const direction = checkArcDirection(
+                        prevX, prevZ, startX, startZ, endX, endZ,
+                        result.x, result.z
+                    );
+
+                    // Nastavit správný směr
+                    document.getElementById('direction').value = direction;
+
+                    document.getElementById('centerX').value = result.x.toFixed(3);
+                    document.getElementById('centerZ').value = result.z.toFixed(3);
+                    document.getElementById('radius').value = result.radius.toFixed(3);
+                    document.getElementById('calculatedRadius').querySelector('.calculated-value').textContent =
+                        result.radius.toFixed(3);
+
+                    calculateAll();
+                } catch (error) {
+                    document.getElementById('error-message').textContent = error.message;
+                    debug(`Chyba: ${error.message}`);
+                }
+            } else {
+                radiusType.value = 'CT';
+                radiusType.dispatchEvent(new Event('change'));
+            }
+        });
+
+        document.getElementById('ikButton').addEventListener('click', function () {
+            const radiusType = document.getElementById('radiusType');
+            if (radiusType.value === 'IK') {
+                calculateCenter(true);
+            } else {
+                radiusType.value = 'IK';
+                radiusType.dispatchEvent(new Event('change'));
+            }
+        });
+
+        document.getElementById('arButton').addEventListener('click', function () {
+            const radiusType = document.getElementById('radiusType');
+            if (radiusType.value === 'AR') {
+                calculateCenter(true);
+            } else {
+                radiusType.value = 'AR';
+                radiusType.dispatchEvent(new Event('change'));
+            }
+        });
+
+        document.getElementById('cipButton').addEventListener('click', function () {
+            const radiusType = document.getElementById('radiusType');
+            if (radiusType.value === 'CIP') {
+                calculateCenter(true);
+            } else {
+                radiusType.value = 'CIP';
+                radiusType.dispatchEvent(new Event('change'));
+            }
+        });
+
+        (function setupDiagramControls() {
+            const svg = document.getElementById('diagram');
+            const zoomIn = document.getElementById('zoomIn');
+            const zoomOut = document.getElementById('zoomOut');
+            const zoomReset = document.getElementById('zoomReset');
+            let viewBox = { x: 0, y: 0, width: 200, height: 200 };
+            let isPanning = false;
+            let startPoint = { x: 0, y: 0 };
+            let pointStart = { x: 0, y: 0 };
+            const ZOOM_STEP = 0.1;
+            const MIN_ZOOM = 0.5;
+            const MAX_ZOOM = 5;
+
+            function setViewBox() {
+                svg.setAttribute('viewBox',
+                    `${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`);
+            }
+
+            function zoom(factor, centerX, centerY) {
+                const oldWidth = viewBox.width;
+                const oldHeight = viewBox.height;
+                const newWidth = viewBox.width * factor;
+                const newHeight = viewBox.height * factor;
+
+                if (newWidth / 200 < MIN_ZOOM || newWidth / 200 > MAX_ZOOM) return;
+
+                viewBox.x = centerX - (centerX - viewBox.x) * factor;
+                viewBox.y = centerY - (centerY - viewBox.y) * factor;
+                viewBox.width = newWidth;
+                viewBox.height = newHeight;
+
+                setViewBox();
+            }
+
+            zoomIn.addEventListener('click', () => zoom(0.9, viewBox.x + viewBox.width / 2, viewBox.y + viewBox.height / 2));
+            zoomOut.addEventListener('click', () => zoom(1.1, viewBox.x + viewBox.width / 2, viewBox.y + viewBox.height / 2));
+            zoomReset.addEventListener('click', () => {
+                const svg = document.getElementById('diagram');
+                const originalViewBox = svg.dataset.originalViewBox;
+                if (originalViewBox) {
+                    const [x, y, width, height] = originalViewBox.split(' ').map(Number);
+                    viewBox = { x, y, width, height };
+                    setViewBox();
+                }
+            });
+
+            svg.addEventListener('mousedown', (e) => {
+                isPanning = true;
+                startPoint = { x: e.clientX, y: e.clientY };
+                pointStart = { x: viewBox.x, y: viewBox.y };
+                svg.style.cursor = 'grabbing';
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isPanning) return;
+
+                const rect = svg.getBoundingClientRect();
+                const dx = (e.clientX - startPoint.x) * (viewBox.width / rect.width);
+                const dy = (e.clientY - startPoint.y) * (viewBox.height / rect.height);
+
+                viewBox.x = pointStart.x - dx;
+                viewBox.y = pointStart.y - dy;
+                setViewBox();
+            });
+
+            window.addEventListener('mouseup', () => {
+                isPanning = false;
+                svg.style.cursor = 'default';
+            });
+
+            let lastDistance = 0;
+            let touchStartViewBox = null;
+
+            svg.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 2) {
+                    lastDistance = Math.hypot(
+                        e.touches[0].clientX - e.touches[1].clientX,
+                        e.touches[0].clientY - e.touches[1].clientY
+                    );
+                    touchStartViewBox = { ...viewBox };
+                } else if (e.touches.length === 1) {
+                    isPanning = true;
+                    startPoint = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+                    pointStart = { x: viewBox.x, y: viewBox.y };
+                }
+            });
+
+            svg.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+
+                if (e.touches.length === 2) {
+                    const distance = Math.hypot(
+                        e.touches[0].clientX - e.touches[1].clientX,
+                        e.touches[0].clientY - e.touches[1].clientY
+                    );
+                    const center = {
+                        x: (e.touches[0].clientX + e.touches[1].clientX) / 2,
+                        y: (e.touches[0].clientY + e.touches[1].clientY) / 2
+                    };
+                    const rect = svg.getBoundingClientRect();
+                    const svgPoint = {
+                        x: viewBox.x + (center.x - rect.left) / rect.width * viewBox.width,
+                        y: viewBox.y + (center.y - rect.top) / rect.height * viewBox.height
+                    };
+
+                    const factor = distance / lastDistance;
+                    zoom(1 / factor, svgPoint.x, svgPoint.y);
+                    lastDistance = distance;
+                } else if (e.touches.length === 1 && isPanning) {
+                    const rect = svg.getBoundingClientRect();
+                    const dx = (e.touches[0].clientX - startPoint.x) * (viewBox.width / rect.width);
+                    const dy = (e.touches[0].clientY - startPoint.y) * (viewBox.height / rect.height);
+
+                    viewBox.x = pointStart.x - dx;
+                    viewBox.y = pointStart.y - dy;
+                    setViewBox();
+                }
+            });
+
+            svg.addEventListener('touchend', () => {
+                isPanning = false;
+                lastDistance = 0;
+                touchStartViewBox = null;
+            });
+        })();
+
+        function validateArc(params) {
+            // Nejdříve zkontrolovat G1 mód
+            if (document.getElementById('g1PointsContainer').style.display === 'block') {
+                return true; // V G1 módu přeskočit validaci oblouku
+            }
+
+            // Přidat kontrolu G1 módu
+            if (isG1Mode) {
+                return true;
+            }
+
+            const radiusType = document.getElementById('radiusType').value;
+
+            // Přidáme vyjímku i pro IK mód
+            if (radiusType === 'CT' || radiusType === 'IK') {
+                return true;
+            }
+
+            const startDist = Math.hypot(
+                params.startZ - params.centerZ,
+                params.startX - params.centerX
+            );
+            const endDist = Math.hypot(
+                params.endZ - params.centerZ,
+                params.endX - params.centerX
+            );
+
+            // Zvětšíme toleranci pro větší radiusy
+            const tolerance = Math.max(0.1, params.radius * 0.01);
+
+            debug(`\nValidace oblouku:`);
+            debug(`Start bod: X=${params.startX}, Z=${params.startZ}`);
+            debug(`End bod: X=${params.endX}, Z=${params.endZ}`);
+            debug(`Střed: X=${params.centerX}, Z=${params.centerZ}`);
+            debug(`Vzdálenosti od středu: Start=${startDist.toFixed(3)}, End=${endDist.toFixed(3)}, Radius=${params.radius}`);
+            debug(`Použitá tolerance: ${tolerance.toFixed(3)}`);
+
+            const startDiff = Math.abs(startDist - params.radius);
+            const endDiff = Math.abs(endDist - params.radius);
+
+            debug(`Odchylka na začátku: ${startDiff.toFixed(3)}`);
+            debug(`Odchylka na konci: ${endDiff.toFixed(3)}`);
+
+            if (startDiff > tolerance || endDiff > tolerance) {
+                debug('Validace oblouku: NEPLATNÝ - body neleží na kružnici s daným radiusem');
+                return false;
+            }
+
+            debug('Validace oblouku: OK');
+            return true;
+        }
+
+        document.getElementById('inputMethod').addEventListener('change', function (e) {
+            const cncSection = document.getElementById('cncInputSection');
+            const manualSection = document.getElementById('manualInputSection');
+
+            if (e.target.value === 'cnc') {
+                cncSection.style.display = 'block';
+                manualSection.style.display = 'none';
+            } else {
+                cncSection.style.display = 'none';
+                manualSection.style.display = 'block';
+
+                // Načíst poslední hodnoty z localStorage
+                const lastValues = localStorage.getItem('lastParsedValues');
+                const lastMethod = localStorage.getItem('lastInputMethod');
+
+                if (lastValues && lastMethod) {
+                    debug('Načítám uložené hodnoty:');
+                    const values = JSON.parse(lastValues);
+                    debug(JSON.stringify(values, null, 2));
+
+                    // Použít updateValues místo setValuesAndCalculate
+                    updateValues({
+                        ...values,
+                        type: lastMethod
+                    });
+                }
+            }
+        });
+
+        function validateInputs(params) {
+            // Základní kontroly hodnot
+            if (params.radius <= 0) {
+                debug('Chyba: Radius musí být větší než 0');
+                return false;
+            }
+
+            // Kontrola řezných podmínek
+            if (params.feed <= 0) {
+                debug('Chyba: Posuv musí být větší než 0');
+                return false;
+            }
+
+            if (params.cuttingSpeed <= 0) {
+                debug('Chyba: Řezná rychlost musí být větší než 0');
+                return false;
+            }
+
+            // Kontrola souřadnic
+            const coordinates = [
+                params.startX, params.startZ,
+                params.endX, params.endZ,
+                params.centerX, params.centerZ
+            ];
+
+            if (coordinates.some(coord => !isFinite(coord))) {
+                debug('Chyba: Neplatné souřadnice');
+                return false;
+            }
+
+            // Kontrola vzdálenosti bodů
+            const startEndDist = Math.hypot(
+                params.endX - params.startX,
+                params.endZ - params.startZ
+            );
+
+            if (startEndDist < 0.001) {
+                debug('Chyba: Začátek a konec radiusu nemohou být stejné');
+                return false;
+            }
+
+            debug('Validace vstupů: OK');
+            return true;
+        }
+
+        // Také upravíme calculateCenter, aby vracel správné hodnoty pro CT
+        function calculateCenterFromTangent(prevX, prevZ, startX, startZ, endX, endZ) {
+            // 1. Výpočet směrového vektoru první přímky
+            const v1x = startX - prevX;
+            const v1z = startZ - prevZ;
+            const len1 = Math.sqrt(v1x * v1x + v1z * v1z);
+
+            if (len1 === 0) {
+                throw new Error("Počáteční bod a začátek radiusu nemohou být stejné");
+            }
+
+            // 2. Normalizace vektoru
+            const n1x = v1x / len1;
+            const n1z = v1z / len1;
+
+            debug(`Směrový vektor první přímky: (${n1x.toFixed(4)}, ${n1z.toFixed(4)})`);
+
+            // 3. Výpočet kolmice (normálového vektoru) - pro soustruh otáčíme o 90° doprava
+            const p1x = -n1z;  // Kolmice pro soustruh
+            const p1z = n1x;   // Kolmice pro soustruh
+
+            debug(`Kolmý vektor k první přímce: (${p1x.toFixed(4)}, ${p1z.toFixed(4)})`);
+
+            // 4. Výpočet vektoru ke koncovému bodu
+            const v2x = endX - startX;
+            const v2z = endZ - startZ;
+            const dist = Math.sqrt(v2x * v2x + v2z * v2z);
+
+            debug(`Vektor od začátku ke konci radiusu: (${v2x.toFixed(4)}, ${v2z.toFixed(4)})`);
+            debug(`Vzdálenost mezi začátkem a koncem radiusu: ${dist.toFixed(4)}`);
+
+            // 5. Výpočet parametru t pro střed oblouku
+            const numerator = (v2x * v2x + v2z * v2z);
+            const denominator = 2 * (v2x * p1x + v2z * p1z);
+
+            if (Math.abs(denominator) < 0.0001) {
+                throw new Error("Nelze najít střed - zkuste jiné body nebo směr");
+            }
+
+            const t = numerator / denominator;
+
+            // Přidat kontrolu velikosti radiusu vzhledem k vzdálenosti bodů
+            if (Math.abs(t) < dist * 0.1) {
+                throw new Error("Vypočtený radius je příliš malý vzhledem ke vzdálenosti bodů");
+            }
+
+            if (Math.abs(t) > dist * 10) {
+                throw new Error("Vypočtený radius je příliš velký vzhledem ke vzdálenosti bodů");
+            }
+
+            debug(`Parametr t pro vzdálenost středu po kolmici: ${t.toFixed(4)}`);
+
+            // 6. Výpočet středu a radiusu
+            const centerX = startX + t * p1x;
+            const centerZ = startZ + t * p1z;
+            const radius = Math.abs(t); // Pro CT je radius roven absolutní hodnotě parametru t
+
+            debug(`Vypočtený střed: X=${centerX.toFixed(4)}, Z=${centerZ.toFixed(4)}`);
+            debug(`Vypočtený poloměr: ${radius.toFixed(4)}`);
+
+            const t2 = -t; // Alternativní střed s opačným znaménkem parametru t
+
+            const center1 = {
+                x: startX + t * p1x,
+                z: startZ + t * p1z,
+                radius: Math.abs(t)
+            };
+
+            const center2 = {
+                x: startX + t2 * p1x,
+                z: startZ + t2 * p1z,
+                radius: Math.abs(t2)
+            };
+
+            const angle1 = calculateArcAngle(startX, startZ, endX, endZ, center1.x, center1.z);
+            const angle2 = calculateArcAngle(startX, startZ, endX, endZ, center2.x, center2.z);
+
+            return useAlternativeCenter ? center2 : center1;
+        }
+
+        function checkArcDirection(prevX, prevZ, startX, startZ, endX, endZ, centerX, centerZ) {
+            // Výpočet vektorů
+            const v1x = startX - prevX;
+            const v1z = startZ - prevZ;
+
+            // Vektor od středu k počátku oblouku
+            const sc1x = startX - centerX;
+            const sc1z = startZ - centerZ;
+
+            // Vektor od středu ke konci oblouku
+            const sc2x = endX - centerX;
+            const sc2z = endZ - centerZ;
+
+            // Vektorový součin pro určení orientace
+            const cross1 = v1x * sc1z - v1z * sc1x;
+            const cross2 = sc1x * sc2z - sc1z * sc2x;
+
+            debug(`Kontrola směru oblouku:`);
+            debug(`Cross1: ${cross1.toFixed(4)}`);
+            debug(`Cross2: ${cross2.toFixed(4)}`);
+
+            // Pro soustruh je orientace opačná než v běžném kartézském systému
+            return (cross1 * cross2 >= 0) ? 'G3' : 'G2';
+        }
+
+        function calculateCenterFromRadius(startX, startZ, endX, endZ, radius, direction) {
+            debug('\nVýpočet středu pomocí radiusu:');
+            debug(`Start bod: X=${startX}, Z=${startZ}`);
+            debug(`Konec bod: X=${endX}, Z=${endZ}`);
+            debug(`Radius: ${radius}`);
+            debug(`Směr: ${direction}`);
+
+            // Výpočet středové úsečky
+            const midX = (startX + endX) / 2;
+            const midZ = (startZ + endZ) / 2;
+
+            // Vektor od počátku ke konci
+            const vx = endX - startX;
+            const vz = endZ - startZ;
+
+            // Délka tětivy (vzdálenost mezi body)
+            const chord = Math.sqrt(vx * vx + vz * vz);
+
+            if (chord === 0) {
+                throw new Error("Počáteční a koncový bod nemohou být stejné");
+            }
+
+            if (chord > 2 * radius) {
+                throw new Error(`Radius ${radius} je příliš malý pro vzdálenost bodů ${chord.toFixed(3)}`);
+            }
+
+            // Výška od středu tětivy ke středu kružnice (Pythagorova věta)
+            const h = Math.sqrt(radius * radius - (chord * chord) / 4);
+
+            // Normalizovaný kolmý vektor k tětivě
+            const nx = -vz / chord;  // Pro soustruh otáčíme o 90° doprava
+            const nz = vx / chord;   // Pro soustruh otáčíme o 90° doprava
+
+            debug(`Normálový vektor: (${nx.toFixed(4)}, ${nz.toFixed(4)})`);
+
+            // Znaménko výšky podle směru (G2/G3)
+            // Změna: Otočíme znaménko pro větší úhel
+            const sign = direction === 'G2' ? 1 : -1;
+
+            // Výpočet středu
+            const centerX = midX + sign * h * nx;
+            const centerZ = midZ + sign * h * nz;
+
+            debug(`Vypočtený střed: X=${centerX.toFixed(4)}, Z=${centerZ.toFixed(4)}`);
+
+            return {
+                x: centerX,
+                z: centerZ
+            };
+        }
+
+        function calculateCenterFromAngle(startX, startZ, endX, endZ, angle, direction) {
+            debug('\nVýpočet středu pomocí úhlu:');
+            debug(`Start bod: X=${startX}, Z=${startZ}`);
+            debug(`Konec bod: X=${endX}, Z=${endZ}`);
+            debug(`Úhel: ${angle}°`);
+            debug(`Směr: ${direction}`);
+
+            // Délka tětivy (vzdálenost mezi body)
+            const dx = endX - startX;
+            const dz = endZ - startZ;
+            const chord = Math.sqrt(dx * dx + dz * dz);
+
+            if (chord === 0) {
+                throw new Error("Počáteční a koncový bod nemohou být stejné");
+            }
+
+            // Výpočet radiusu z úhlu a délky tětivy
+            const angleRad = (angle * Math.PI) / 180;
+            // Změna: Pro větší úhel použijeme doplněk do 360°
+            const angleToUse = (360 - angle) * Math.PI / 180;
+            const radius = chord / (2 * Math.sin(angleToUse / 2));
+
+            if (!isFinite(radius)) {
+                throw new Error("Neplatný úhel pro danou konfiguraci bodů");
+            }
+
+            // Použijeme existující funkci pro výpočet středu z radiusu
+            const center = calculateCenterFromRadius(startX, startZ, endX, endZ, Math.abs(radius), direction);
+            return { ...center, radius: Math.abs(radius) };
+        }
+
+        function calculateCenterFromCIP(startX, startZ, throughX, throughZ, endX, endZ) {
+            debug('\nVýpočet středu pomocí průchozího bodu:');
+            debug(`Start bod: X=${startX}, Z=${startZ}`);
+            debug(`Průchozí bod: X=${throughX}, Z=${throughZ}`);
+            debug(`Konec bod: X=${endX}, Z=${endZ}`);
+
+            // Výpočet determinantu
+            const d = 2 * (startX * (throughZ - endZ) + throughX * (endZ - startZ) + endX * (startZ - throughZ));
+
+            if (d === 0) {
+                throw new Error("Body leží na přímce nebo jsou příliš blízko u sebe");
+            }
+
+            const centerX = ((startX * startX + startZ * startZ) * (throughZ - endZ) +
+                (throughX * throughX + throughZ * throughZ) * (endZ - startZ) +
+                (endX * endX + endZ * endZ) * (startZ - throughZ)) / d;
+
+            const centerZ = ((startX * startX + startZ * startZ) * (endX - throughX) +
+                (throughX * throughX + throughZ * throughZ) * (startX - endX) +
+                (endX * endX + endZ * endZ) * (throughX - startX)) / d;
+
+            // Výpočet radiusu jako vzdálenosti od středu k libovolnému bodu
+            const radius = Math.sqrt(
+                Math.pow(centerX - startX, 2) +
+                Math.pow(centerZ - startZ, 2)
+            );
+
+            // Určení směru oblouku
+            const direction = determineArcDirection(startX, startZ, throughX, throughZ, endX, endZ);
+
+            debug(`Vypočtený střed: X=${centerX.toFixed(4)}, Z=${centerZ.toFixed(4)}`);
+            debug(`Vypočtený radius: ${radius.toFixed(4)}`);
+            debug(`Určený směr: ${direction}`);
+
+            return { x: centerX, z: centerZ, radius, direction };
+        }
+
+        function determineArcDirection(startX, startZ, throughX, throughZ, endX, endZ) {
+            // Výpočet determinantu pro určení orientace
+            const det = (throughZ - startZ) * (endX - throughX) -
+                (throughX - startX) * (endZ - throughZ);
+
+            // Pro soustruh je orientace opačná než v běžném kartézském systému
+            return det > 0 ? 'G3' : 'G2';
+        }
+
+        // Upravit handler pro AR tlačítko
+        document.getElementById('arButton').addEventListener('click', function () {
+            const radiusType = document.getElementById('radiusType');
+            if (radiusType.value === 'AR') {
+                const startX = parseFloat(document.getElementById('startX').value);
+                const startZ = parseFloat(document.getElementById('startZ').value);
+                const endX = parseFloat(document.getElementById('endX').value);
+                const endZ = parseFloat(document.getElementById('endZ').value);
+                const angle = parseFloat(document.getElementById('arcAngle').value);
+                const direction = document.getElementById('direction').value;
+
+                try {
+                    const result = calculateCenterFromAngle(startX, startZ, endX, endZ, angle, direction);
+                    document.getElementById('centerX').value = result.x.toFixed(3);
+                    document.getElementById('centerZ').value = result.z.toFixed(3);
+                    document.getElementById('radius').value = result.radius.toFixed(3);
+                    document.getElementById('calculatedRadius').querySelector('.calculated-value').textContent =
+                        result.radius.toFixed(3);
+                    calculateAll();
+                } catch (error) {
+                    document.getElementById('error-message').textContent = error.message;
+                    debug(`Chyba: ${error.message}`);
+                }
+            } else {
+                radiusType.value = 'AR';
+                radiusType.dispatchEvent(new Event('change'));
+            }
+        });
+
+        // Upravit handler pro CIP tlačítko
+        document.getElementById('cipButton').addEventListener('click', function () {
+            const radiusType = document.getElementById('radiusType');
+            if (radiusType.value === 'CIP') {
+                const startX = parseFloat(document.getElementById('startX').value);
+                const startZ = parseFloat(document.getElementById('startZ').value);
+                const throughX = parseFloat(document.getElementById('throughX').value);
+                const throughZ = parseFloat(document.getElementById('throughZ').value);
+                const endX = parseFloat(document.getElementById('endX').value);
+                const endZ = parseFloat(document.getElementById('endZ').value);
+
+                try {
+                    const result = calculateCenterFromCIP(startX, startZ, throughX, throughZ, endX, endZ);
+                    document.getElementById('centerX').value = result.x.toFixed(3);
+                    document.getElementById('centerZ').value = result.z.toFixed(3);
+                    document.getElementById('direction').value = result.direction;
+                    document.getElementById('radius').value = result.radius.toFixed(3);
+                    document.getElementById('calculatedRadius').querySelector('.calculated-value').textContent =
+                        result.radius.toFixed(3);
+                    calculateAll();
+                } catch (error) {
+                    document.getElementById('error-message').textContent = error.message;
+                    debug(`Chyba: ${error.message}`);
+                }
+            } else {
+                radiusType.value = 'CIP';
+                radiusType.dispatchEvent(new Event('change'));
+            }
+        });
+
+        document.getElementById('radiusType').addEventListener('change', function () {
+            const type = this.value;
+            const ctButton = document.getElementById('ctButton');
+            const ikButton = document.getElementById('ikButton');
+            const arButton = document.getElementById('arButton');
+            const cipButton = document.getElementById('cipButton');
+            const calcCenterButton = document.getElementById('calcCenterButton');
+            const prevPointSection = document.getElementById('prevPointSection');
+            const calculatedRadius = document.getElementById('calculatedRadius');
+
+            prevPointSection.style.display = type === 'CT' ? 'block' : 'none';
+            // Změna: Zobrazíme radius pro všechny módy kromě CR
+            calculatedRadius.style.display = ['CT', 'IK', 'AR', 'CIP'].includes(type) ? 'block' : 'none';
+
+            // Aktualizovat text všech tlačítek
+            ctButton.textContent = type === 'CT' ? 'Vypočítat CT' : 'CT';
+            ikButton.textContent = type === 'IK' ? 'Vypočítat IK' : 'IK';
+            arButton.textContent = type === 'AR' ? 'Vypočítat AR' : 'AR';
+            cipButton.textContent = type === 'CIP' ? 'Vypočítat CIP' : 'CIP';
+            calcCenterButton.textContent = type === 'CR' ? 'Vypočítat CR' : 'CR';
+
+            // Předvyplnit hodnoty pro IK
+            if (type === 'IK') {
+                const startX = parseFloat(document.getElementById('startX').value);
+                const startZ = parseFloat(document.getElementById('startZ').value);
+                const centerX = parseFloat(document.getElementById('centerX').value);
+                const centerZ = parseFloat(document.getElementById('centerZ').value);
+
+                // Výpočet relativních souřadnic středu vůči počátečnímu bodu
+                const i = centerX - startX;
+                const k = centerZ - startZ;
+
+                // Vypočet radiusu - správná vzdálenost od středu k začátku oblouku
+                const radius = Math.sqrt(i * i + k * k);  // Přímá vzdálenost od středu k začátku
+
+                // Nastavení vypočtených hodnot
+                document.getElementById('centerDX').value = i.toFixed(3);
+                document.getElementById('centerDZ').value = k.toFixed(3);
+                calculatedRadius.querySelector('.calculated-value').textContent = radius.toFixed(3);
+                document.getElementById('radius').value = radius.toFixed(3);
+
+                debug(`Předvyplnění IK parametrů:`);
+                debug(`I = ${i.toFixed(3)} (${centerX} - ${startX})`);
+                debug(`K = ${k.toFixed(3)} (${centerZ} - ${startZ})`);
+                debug(`Vypočtený radius = ${radius.toFixed(3)} (odmocnina z I² + K²)`);
+            }
+
+            document.querySelectorAll('[id^="radiusInput"]').forEach(el => {
+                el.style.display = 'none';
+            });
+            document.getElementById(`radiusInput${type}`).style.display = 'block';
+        });
+
+        // Přidat globální proměnnou pro sledování alternativního středu
+        let useAlternativeCenter = false;
+
+        // Přidat funkci pro výpočet úhlu oblouku
+        function calculateArcAngle(startX, startZ, endX, endZ, centerX, centerZ) {
+            const startAngle = Math.atan2(-(startX - centerX), startZ - centerZ);
+            const endAngle = Math.atan2(-(endX - centerX), endZ - centerZ);
+
+            let angleDiff = endAngle - startAngle;
+
+            // Normalizace úhlu do rozsahu -π až π
+            while (angleDiff > Math.PI) angleDiff -= 2 * Math.PI;
+            while (angleDiff <= -Math.PI) angleDiff += 2 * Math.PI;
+
+            return Math.abs(angleDiff);
+        }
+
+        // Přidat tlačítko pro přepínání středů do HTML
+        document.getElementById('switchCenterButton').style.display = 'inline-block';
+
+        // Upravit handler pro tlačítko přepínání středů
+        document.getElementById('switchCenterButton').addEventListener('click', function () {
+            const startX = parseFloat(document.getElementById('startX').value);
+            const startZ = parseFloat(document.getElementById('startZ').value);
+            const endX = parseFloat(document.getElementById('endX').value);
+            const endZ = parseFloat(document.getElementById('endZ').value);
+            const radius = parseFloat(document.getElementById('radius').value);
+            const direction = document.getElementById('direction').value;
+
+            try {
+                // Vypočítat aktuální střed
+                const currentCenterX = parseFloat(document.getElementById('centerX').value);
+                const currentCenterZ = parseFloat(document.getElementById('centerZ').value);
+
+                // Vypočítat středovou úsečku
+                const midX = (startX + endX) / 2;
+                const midZ = (startZ + endZ) / 2;
+
+                // Vypočítat vektor od středové úsečky k aktuálnímu středu
+                const vx = currentCenterX - midX;
+                const vz = currentCenterZ - midZ;
+
+                // Vypočítat alternativní střed (opačný vektor)
+                const altCenterX = midX - vx;
+                const altCenterZ = midZ - vz;
+
+                // Nastavit nové hodnoty
+                document.getElementById('centerX').value = altCenterX.toFixed(3);
+                document.getElementById('centerZ').value = altCenterZ.toFixed(3);
+
+                // Přepnout stav a vizuální indikaci
+                useAlternativeCenter = !useAlternativeCenter;
+                this.classList.toggle('active');
+
+                // Přepočítat vše s novým středem
+                calculateAll();
+            } catch (error) {
+                document.getElementById('error-message').textContent = error.message;
+                debug(`Chyba při přepínání středu: ${error.message}`);
+            }
+        });
+
+        // Definice funkce pro generování CNC kódu
+        function generateCncCode() {
+            const radiusType = document.getElementById('radiusType').value;
+            const startX = document.getElementById('startX').value;
+            const startZ = document.getElementById('startZ').value;
+            const endX = document.getElementById('endX').value;
+            const endZ = document.getElementById('endZ').value;
+            const direction = document.getElementById('direction').value;
+
+            let cncCode = '';
+            cncCode += `N10 G1 X${startX} Z${startZ}\n`;
+
+            switch (radiusType) {
+                case 'CR':
+                    const radius = document.getElementById('radius').value;
+                    cncCode += `N20 ${direction} X${endX} Z${endZ} CR=${radius}`;
+                    break;
+                case 'AR':
+                    const angle = document.getElementById('arcAngle').value;
+                    cncCode += `N20 ${direction} X${endX} Z${endZ} AR=${angle}`;
+                    break;
+                case 'IK':
+                    const i = document.getElementById('centerDX').value;
+                    const k = document.getElementById('centerDZ').value;
+                    cncCode += `N20 ${direction} X${endX} Z${endZ} I${i} K${k}`;
+                    break;
+                case 'CT':
+                    cncCode += `N20 ${direction} X${endX} Z=${endZ} CT`;
+                    break;
+                case 'CIP':
+                    const throughX = document.getElementById('throughX').value;
+                    const throughZ = document.getElementById('throughZ').value;
+                    cncCode += `N20 ${direction} X${endX} Z=${endZ} CIP=(${throughX},${throughZ})`;
+                    break;
+            }
+
+            // Nastavit vygenerovaný kód do editoru
+            document.getElementById('cncCode').value = cncCode;
+
+            // Přepnout na CNC vstup
+            document.getElementById('inputMethod').value = 'cnc';
+            document.getElementById('inputMethod').dispatchEvent(new Event('change'));
+        }
+
+        // Inicializovat všechny event listenery až po načtení dokumentu
+        document.addEventListener('DOMContentLoaded', function () {
+            // Přidat handler pro generování CNC kódu
+            const generateButton = document.getElementById('generateCodeButton');
+            if (generateButton) {
+                generateButton.addEventListener('click', generateCncCode);
+            }
+
+            // Spustit původní inicializaci
+            calculateAll();
+        });
+
+        const g1ModeButton = document.getElementById('g1ModeButton');
+        const centerGroup = document.querySelector('.center-group');
+        const g1PointsContainer = document.getElementById('g1PointsContainer');
+
+        g1ModeButton.addEventListener('click', () => {
+            isG1Mode = !isG1Mode;
+            g1ModeButton.classList.toggle('active');
+            centerGroup.style.display = isG1Mode ? 'none' : 'block';
+            g1PointsContainer.style.display = isG1Mode ? 'block' : 'none';
+            document.querySelector('.geometry-results-group').style.display = isG1Mode ? 'none' : 'block';
+
+            // Přidat přepínání popisku délky
+            const lengthLabel = document.getElementById('lengthLabel');
+            lengthLabel.textContent = isG1Mode ? 'Délka dráhy:' : 'Délka oblouku:';
+
+            if (isG1Mode) {
+                // Načíst počáteční body z předchozích hodnot
+                const startPoint = {
+                    x: parseFloat(document.getElementById('startX').value),
+                    z: parseFloat(document.getElementById('startZ').value)
+                };
+                const endPoint = {
+                    x: parseFloat(document.getElementById('endX').value),
+                    z: parseFloat(document.getElementById('endZ').value)
+                };
+
+                // Aktualizovat vizualizaci s počátečními body
+                updateG1Diagram([startPoint, endPoint]);
+            } else {
+                // Vrátit se k původní vizualizaci
+                calculateAll();
+            }
+
+            // Přepnout názvy a tlačítka
+            const startTitle = document.getElementById('startTitle');
+            const endTitle = document.getElementById('endTitle');
+            const removeButtons = document.querySelectorAll('.remove-point-button');
+
+            if (isG1Mode) {
+                startTitle.textContent = "Bod 1:";
+                endTitle.textContent = "Bod 2:";
+                removeButtons.forEach(btn => btn.style.display = 'block');
+
+                // Odstranit existující G1 body
+                const g1Points = document.querySelectorAll('.g1-point');
+                g1Points.forEach(point => point.remove());
+
+                // Již nepřidáváme automaticky bod 3
+            } else {
+                startTitle.textContent = "Začátek radiusu:";
+                endTitle.textContent = "Konec radiusu:";
+                removeButtons.forEach(btn => btn.style.display = 'none');
+            }
+        });
+
+        document.getElementById('addG1PointButton').addEventListener('click', () => {
+            const points = document.querySelectorAll('.point-header h3');
+            const pointNumber = points.length + 1;
+            const newPoint = document.createElement('div');
+            newPoint.className = 'g1-point';
+            newPoint.innerHTML = `
+                <div class="point-header">
+                    <h3>Bod ${pointNumber}:</h3>
+                    <button class="remove-point-button">Odebrat</button>
+                </div>
+                <div class="grid">
+                    <div>
+                        <label>X [mm] (poloměr)</label>
+                        <input type="number" class="g1-x" value="0" step="any">
+                    </div>
+                    <div>
+                        <label>Z [mm]</label>
+                        <input type="number" class="g1-z" value="0" step="any">
+                    </div>
+                </div>
+            `;
+
+            const removeButton = newPoint.querySelector('.remove-point-button');
+            removeButton.addEventListener('click', () => {
+                newPoint.remove();
+                updatePointNumbers();
+            });
+
+            document.getElementById('addG1PointButton').parentNode.insertBefore(
+                newPoint,
+                document.getElementById('addG1PointButton')
+            );
+        });
+
+        // Přidat funkci pro aktualizaci čísel bodů
+        function updatePointNumbers() {
+            const points = document.querySelectorAll('.point-header h3');
+            points.forEach((point, index) => {
+                point.textContent = `Bod ${index + 1}:`;
+            });
+        }
+
+        // Přidat handlery pro existující tlačítka odstranění
+        document.querySelectorAll('.remove-point-button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const pointSection = e.target.closest('.input-section, .g1-point');
+                if (pointSection && document.querySelectorAll('.point-header h3').length > 2) {
+                    pointSection.remove();
+                    updatePointNumbers();
+                }
+            });
+        });
+
+        document.getElementById('calculateG1Button').addEventListener('click', () => {
+            // Přidat vyčištění chybové zprávy
+            document.getElementById('error-message').textContent = '';
+
+            // Získat všechny body včetně prvních dvou ze základních vstupů
+            const startPoint = {
+                x: parseFloat(document.getElementById('startX').value),
+                z: parseFloat(document.getElementById('startZ').value)
+            };
+
+            const endPoint = {
+                x: parseFloat(document.getElementById('endX').value),
+                z: parseFloat(document.getElementById('endZ').value)
+            };
+
+            // Získat dodatečné body z G1 módu
+            const additionalPoints = Array.from(document.querySelectorAll('.g1-point')).map(point => ({
+                x: parseFloat(point.querySelector('.g1-x').value),
+                z: parseFloat(point.querySelector('.g1-z').value)
+            }));
+
+            // Spojit všechny body dohromady
+            const points = [startPoint, endPoint, ...additionalPoints].filter(point =>
+                !isNaN(point.x) && !isNaN(point.z)
+            );
+
+            if (points.length < 2) {
+                document.getElementById('error-message').textContent = 'Potřeba alespoň 2 platné body';
+                return;
+            }
+
+            // Výpočet celkové délky dráhy
+            let totalLength = 0;
+            for (let i = 1; i < points.length; i++) {
+                const dx = points[i].x - points[i-1].x;
+                const dz = points[i].z - points[i-1].z;
+                totalLength += Math.sqrt(dx*dx + dz*dz);
+            }
+
+            // Výpočet technologických parametrů
+            const feedValue = parseFloat(document.getElementById('feed').value);
+            const isG96Mode = !document.getElementById('speedModeButton').classList.contains('g97');
+            let totalTime = 0;
+
+            if (isG96Mode) {
+                const cuttingSpeed = parseFloat(document.getElementById('cuttingSpeed').value);
+                const speedLimit = parseFloat(document.getElementById('speedLimit').value);
+
+                // Výpočet pro každý úsek dráhy
+                for (let i = 1; i < points.length; i++) {
+                    const currentX = points[i].x;
+                    const currentDiameter = Math.abs(currentX) * 2;
+                    const prevX = points[i-1].x;
+                    const prevDiameter = Math.abs(prevX) * 2;
+
+                    // Průměrný průměr pro daný úsek
+                    const avgDiameter = (currentDiameter + prevDiameter) / 2;
+
+                    // Výpočet aktuálních otáček s limitem
+                    const rpm = Math.min((cuttingSpeed * 1000) / (Math.PI * avgDiameter), speedLimit);
+
+                    // Délka aktuálního úseku
+                    const dx = points[i].x - points[i-1].x;
+                    const dz = points[i].z - points[i-1].z;
+                    const segmentLength = Math.sqrt(dx*dx + dz*dz);
+
+                    // Čas pro tento úsek
+                    totalTime += segmentLength / (rpm * feedValue);
+                }
+            } else {
+                const constantSpeed = parseFloat(document.getElementById('constantSpeed').value);
+                totalTime = totalLength / (constantSpeed * feedValue);
+            }
+
+            // Výpočet efektivního průměru
+            const effectiveDiameter = points.reduce((sum, point) => sum + Math.abs(point.x), 0) * 2 / points.length;
+
+            // Aktualizace všech výsledků
+            document.getElementById('arcLength').textContent = `${totalLength.toFixed(2)} mm`;
+            document.getElementById('machiningTime').textContent = formatTime(totalTime * 60);
+            document.getElementById('effectiveDiameter').textContent = `${effectiveDiameter.toFixed(2)} mm`;
+
+            // Najít největší a nejmenší průměr
+            const diameters = points.map(p => Math.abs(p.x) * 2);
+            const maxDiameter = Math.max(...diameters);
+            const minDiameter = Math.min(...diameters);
+
+            // Výpočet průměrných otáček
+            if (isG96Mode) {
+                const cuttingSpeed = parseFloat(document.getElementById('cuttingSpeed').value);
+                const speedLimit = parseFloat(document.getElementById('speedLimit').value);
+
+                // Výpočet teoretických otáček pro každý segment dráhy
+                let segmentRpms = [];
+                for (let i = 1; i < points.length; i++) {
+                    const segmentStart = points[i-1];
+                    const segmentEnd = points[i];
+
+                    // Výpočet průměrů na začátku a konci segmentu
+                    const startDiameter = Math.abs(segmentStart.x) * 2;
+                    const endDiameter = Math.abs(segmentEnd.x) * 2;
+
+                    // Výpočet teoretických otáček pro začátek a konec segmentu (bez limitu)
+                    const theorStartRpm = (cuttingSpeed * 1000) / (Math.PI * startDiameter);
+                    const theorEndRpm = (cuttingSpeed * 1000) / (Math.PI * endDiameter);
+
+                    // Výpočet skutečných otáček (s limitem)
+                    const actualStartRpm = Math.min(theorStartRpm, speedLimit);
+                    const actualEndRpm = Math.min(theorEndRpm, speedLimit);
+
+                    // Uložit informace o segmentu
+                    segmentRpms.push({
+                        startDiameter,
+                        endDiameter,
+                        startRpm: actualStartRpm,
+                        endRpm: actualEndRpm,
+                        theoreticalStartRpm: Math.round(theorStartRpm),
+                        theoreticalEndRpm: Math.round(theorEndRpm)
+                    });
+                }
+
+                // Najít globální maxima a minima
+                let maxRealRpm = Math.max(...segmentRpms.flatMap(s => [s.startRpm, s.endRpm]));
+                let minRealRpm = Math.min(...segmentRpms.flatMap(s => [s.startRpm, s.endRpm]));
+
+                // Najít průměry pro maximální a minimální otáčky
+                const maxRpmDiameter = Math.min(...diameters);
+                const minRpmDiameter = Math.max(...diameters);
+
+                // Výpočet teoretických otáček pro minimální a maximální průměr
+                const theorMaxRpm = Math.round((cuttingSpeed * 1000) / (Math.PI * maxRpmDiameter)); // Pro nejmenší průměr
+                const theorMinRpm = Math.round((cuttingSpeed * 1000) / (Math.PI * minRpmDiameter)); // Pro největší průměr
+
+                // Výpočet skutečných otáček (s limitem)
+                const actualMaxRpm = Math.min(theorMaxRpm, speedLimit);
+                const actualMinRpm = Math.min(theorMinRpm, speedLimit);
+
+                // Aktualizace zobrazení otáček se správným pořadím hodnot
+                document.getElementById('rpm').innerHTML = `
+                    ${Math.round((actualMaxRpm + actualMinRpm) / 2)} ot/min (${Math.round((theorMaxRpm + theorMinRpm) / 2)})
+                    <div style="font-size: 0.9em; color: #666; margin-top: 5px;">
+                        Otáčky na Ø${minRpmDiameter.toFixed(1)}mm: ${Math.round(actualMinRpm)} ot/min (${theorMinRpm})<br>
+                        Otáčky na Ø${maxRpmDiameter.toFixed(1)}mm: ${Math.round(actualMaxRpm)} ot/min (${theorMaxRpm})
+                    </div>`;
+
+                // Pro debugging
+                debug('\nVýpočet otáček pro G1 dráhu:');
+                segmentRpms.forEach((segment, i) => {
+                    debug(`Segment ${i + 1}:`);
+                    debug(`  Start Ø${segment.startDiameter.toFixed(1)}mm: ${Math.round(segment.startRpm)} ot/min (${segment.theoreticalStartRpm})`);
+                    debug(`  End Ø${segment.endDiameter.toFixed(1)}mm: ${Math.round(segment.endRpm)} ot/min (${segment.theoreticalEndRpm})`);
+                });
+            } else {
+                // Pro G97 zůstává stejné
+                const constantSpeed = parseFloat(document.getElementById('constantSpeed').value);
+                document.getElementById('rpm').innerHTML = `
+                    ${Math.round(constantSpeed)} ot/min
+                    <div style="font-size: 0.9em; color: #666; margin-top: 5px;">
+                        Konstantní otáčky (G97)
+                    </div>`;
+            }
+
+            // Vykreslit dráhu v diagramu
+            updateG1Diagram(points);
+        });
+
+        // Přidat automatickou aktualizaci vizualizace při změně hodnot v G1 módu
+        document.addEventListener('input', (e) => {
+            if (isG1Mode && (e.target.classList.contains('g1-x') || e.target.classList.contains('g1-z') ||
+                e.target.id === 'startX' || e.target.id === 'startZ' ||
+                e.target.id === 'endX' || e.target.id === 'endZ')) {
+
+                // Získat všechny aktuální body
+                const points = [
+                    {
+                        x: parseFloat(document.getElementById('startX').value),
+                        z: parseFloat(document.getElementById('startZ').value)
+                    },
+                    {
+                        x: parseFloat(document.getElementById('endX').value),
+                        z: parseFloat(document.getElementById('endZ').value)
+                    },
+                    ...Array.from(document.querySelectorAll('.g1-point')).map(point => ({
+                        x: parseFloat(point.querySelector('.g1-x').value),
+                        z: parseFloat(point.querySelector('.g1-z').value)
+                    }))
+                ].filter(point => !isNaN(point.x) && !isNaN(point.z));
+
+                // Aktualizovat vizualizaci
+                updateG1Diagram(points);
+            }
+        });
+
+        // Přidat globální proměnnou pro sledování módu posuvu
+        let isFeedPerMin = false;
+
+        // Přidat handler pro přepínání módu posuvu
+        document.getElementById('feedModeButton').addEventListener('click', function() {
+            isFeedPerMin = !isFeedPerMin;
+            const feedInput = document.getElementById('feed');
+            const currentValue = parseFloat(feedInput.value);
+            const rpm = getCurrentRPM();
+
+            if (isFeedPerMin) {
+                this.textContent = 'mm/min';
+                // Převést mm/ot na mm/min
+                if (!isNaN(currentValue) && rpm > 0) {
+                    feedInput.value = (currentValue * rpm).toFixed(1);
+                }
+            } else {
+                this.textContent = 'mm/ot';
+                // Převést mm/min na mm/ot
+                if (!isNaN(currentValue) && rpm > 0) {
+                    feedInput.value = (currentValue / rpm).toFixed(3);
+                }
+            }
+            calculateAll();
+        });
+
+        // Přidat handler pro maximalizaci diagramu
+        document.getElementById('maximizeButton').addEventListener('click', function() {
+            const container = document.querySelector('.diagram-container');
+            const svg = document.getElementById('diagram');
+            container.classList.toggle('maximized');
+            this.textContent = container.classList.contains('maximized') ? '⛶' : '⛶';
+
+            if (svg.dataset.originalViewBox) {
+                const [x, y, width, height] = svg.dataset.originalViewBox.split(' ').map(Number);
+                const viewBox = { x, y, width, height };
+                setViewBox(svg, viewBox);
+            }
+        });
+
+        // Přidat novou pomocnou funkci pro získání aktuálních otáček
+        function getCurrentRPM() {
+            const rpmText = document.getElementById('rpm').textContent;
+            const match = rpmText.match(/(\d+)\s+ot\/min/);
+            return match ? parseFloat(match[1]) : 0;
+        }
+
+        // Přidat definici funkce setViewBox pro manipulaci s viewBoxem
+        function setViewBox(svg, viewBox) {
+            if (svg && viewBox) {
+                svg.setAttribute('viewBox',
+                    `${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`);
+            }
+        }
+
+        // Upravit funkci calculateG1Button pro správný výpočet a zobrazení posuvu
+        document.getElementById('calculateG1Button').addEventListener('click', () => {
+            // Přidat vyčištění chybové zprávy
+            document.getElementById('error-message').textContent = '';
+
+            // Získat všechny body včetně prvních dvou ze základních vstupů
+            const startPoint = {
+                x: parseFloat(document.getElementById('startX').value),
+                z: parseFloat(document.getElementById('startZ').value)
+            };
+
+            const endPoint = {
+                x: parseFloat(document.getElementById('endX').value),
+                z: parseFloat(document.getElementById('endZ').value)
+            };
+
+            // Získat dodatečné body z G1 módu
+            const additionalPoints = Array.from(document.querySelectorAll('.g1-point')).map(point => ({
+                x: parseFloat(point.querySelector('.g1-x').value),
+                z: parseFloat(point.querySelector('.g1-z').value)
+            }));
+
+            // Spojit všechny body dohromady
+            const points = [startPoint, endPoint, ...additionalPoints].filter(point =>
+                !isNaN(point.x) && !isNaN(point.z)
+            );
+
+            if (points.length < 2) {
+                document.getElementById('error-message').textContent = 'Potřeba alespoň 2 platné body';
+                return;
+            }
+
+            // Výpočet celkové délky dráhy
+            let totalLength = 0;
+            for (let i = 1; i < points.length; i++) {
+                const dx = points[i].x - points[i-1].x;
+                const dz = points[i].z - points[i-1].z;
+                totalLength += Math.sqrt(dx*dx + dz*dz);
+            }
+
+            // Výpočet technologických parametrů
+            const feedValue = parseFloat(document.getElementById('feed').value);
+            const isG96Mode = !document.getElementById('speedModeButton').classList.contains('g97');
+            let totalTime = 0;
+
+            if (isG96Mode) {
+                const cuttingSpeed = parseFloat(document.getElementById('cuttingSpeed').value);
+                const speedLimit = parseFloat(document.getElementById('speedLimit').value);
+
+                // Výpočet pro každý úsek dráhy
+                for (let i = 1; i < points.length; i++) {
+                    const currentX = points[i].x;
+                    const currentDiameter = Math.abs(currentX) * 2;
+                    const prevX = points[i-1].x;
+                    const prevDiameter = Math.abs(prevX) * 2;
+
+                    // Průměrný průměr pro daný úsek
+                    const avgDiameter = (currentDiameter + prevDiameter) / 2;
+
+                    // Výpočet aktuálních otáček s limitem
+                    const rpm = Math.min((cuttingSpeed * 1000) / (Math.PI * avgDiameter), speedLimit);
+
+                    // Délka aktuálního úseku
+                    const dx = points[i].x - points[i-1].x;
+                    const dz = points[i].z - points[i-1].z;
+                    const segmentLength = Math.sqrt(dx*dx + dz*dz);
+
+                    // Čas pro tento úsek
+                    totalTime += segmentLength / (rpm * feedValue);
+                }
+            } else {
+                const constantSpeed = parseFloat(document.getElementById('constantSpeed').value);
+                totalTime = totalLength / (constantSpeed * feedValue);
+            }
+
+            // Výpočet efektivního průměru
+            const effectiveDiameter = points.reduce((sum, point) => sum + Math.abs(point.x), 0) * 2 / points.length;
+
+            // Aktualizace všech výsledků
+            document.getElementById('arcLength').textContent = `${totalLength.toFixed(2)} mm`;
+            document.getElementById('machiningTime').textContent = formatTime(totalTime * 60);
+            document.getElementById('effectiveDiameter').textContent = `${effectiveDiameter.toFixed(2)} mm`;
+
+            // Najít největší a nejmenší průměr
+            const diameters = points.map(p => Math.abs(p.x) * 2);
+            const maxDiameter = Math.max(...diameters);
+            const minDiameter = Math.min(...diameters);
+
+            // Výpočet průměrných otáček
+            if (isG96Mode) {
+                const cuttingSpeed = parseFloat(document.getElementById('cuttingSpeed').value);
+                const speedLimit = parseFloat(document.getElementById('speedLimit').value);
+
+                // Výpočet teoretických otáček pro každý segment dráhy
+                let segmentRpms = [];
+                for (let i = 1; i < points.length; i++) {
+                    const segmentStart = points[i-1];
+                    const segmentEnd = points[i];
+
+                    // Výpočet průměrů na začátku a konci segmentu
+                    const startDiameter = Math.abs(segmentStart.x) * 2;
+                    const endDiameter = Math.abs(segmentEnd.x) * 2;
+
+                    // Výpočet teoretických otáček pro začátek a konec segmentu (bez limitu)
+                    const theorStartRpm = (cuttingSpeed * 1000) / (Math.PI * startDiameter);
+                    const theorEndRpm = (cuttingSpeed * 1000) / (Math.PI * endDiameter);
+
+                    // Výpočet skutečných otáček (s limitem)
+                    const actualStartRpm = Math.min(theorStartRpm, speedLimit);
+                    const actualEndRpm = Math.min(theorEndRpm, speedLimit);
+
+                    // Uložit informace o segmentu
+                    segmentRpms.push({
+                        startDiameter,
+                        endDiameter,
+                        startRpm: actualStartRpm,
+                        endRpm: actualEndRpm,
+                        theoreticalStartRpm: Math.round(theorStartRpm),
+                        theoreticalEndRpm: Math.round(theorEndRpm)
+                    });
+                }
+
+                // Najít globální maxima a minima
+                let maxRealRpm = Math.max(...segmentRpms.flatMap(s => [s.startRpm, s.endRpm]));
+                let minRealRpm = Math.min(...segmentRpms.flatMap(s => [s.startRpm, s.endRpm]));
+
+                // Najít průměry pro maximální a minimální otáčky
+                const maxRpmDiameter = Math.min(...diameters);
+                const minRpmDiameter = Math.max(...diameters);
+
+                // Výpočet teoretických otáček pro minimální a maximální průměr
+                const theorMaxRpm = Math.round((cuttingSpeed * 1000) / (Math.PI * maxRpmDiameter)); // Pro nejmenší průměr
+                const theorMinRpm = Math.round((cuttingSpeed * 1000) / (Math.PI * minRpmDiameter)); // Pro největší průměr
+
+                // Výpočet skutečných otáček (s limitem)
+                const actualMaxRpm = Math.min(theorMaxRpm, speedLimit);
+                const actualMinRpm = Math.min(theorMinRpm, speedLimit);
+
+                // Aktualizace zobrazení otáček se správným pořadím hodnot
+                document.getElementById('rpm').innerHTML = `
+                    ${Math.round((actualMaxRpm + actualMinRpm) / 2)} ot/min (${Math.round((theorMaxRpm + theorMinRpm) / 2)})
+                    <div style="font-size: 0.9em; color: #666; margin-top: 5px;">
+                        Otáčky na Ø${minRpmDiameter.toFixed(1)}mm: ${Math.round(actualMinRpm)} ot/min (${theorMinRpm})<br>
+                        Otáčky na Ø${maxRpmDiameter.toFixed(1)}mm: ${Math.round(actualMaxRpm)} ot/min (${theorMaxRpm})
+                    </div>`;
+
+                // Pro debugging
+                debug('\nVýpočet otáček pro G1 dráhu:');
+                segmentRpms.forEach((segment, i) => {
+                    debug(`Segment ${i + 1}:`);
+                    debug(`  Start Ø${segment.startDiameter.toFixed(1)}mm: ${Math.round(segment.startRpm)} ot/min (${segment.theoreticalStartRpm})`);
+                    debug(`  End Ø${segment.endDiameter.toFixed(1)}mm: ${Math.round(segment.endRpm)} ot/min (${segment.theoreticalEndRpm})`);
+                });
+            } else {
+                // Pro G97 zůstává stejné
+                const constantSpeed = parseFloat(document.getElementById('constantSpeed').value);
+                document.getElementById('rpm').innerHTML = `
+                    ${Math.round(constantSpeed)} ot/min
+                    <div style="font-size: 0.9em; color: #666; margin-top: 5px;">
+                        Konstantní otáčky (G97)
+                    </div>`;
+            }
+
+            // Vykreslit dráhu v diagramu
+            updateG1Diagram(points);
+
+            // Výpočet a zobrazení rychlosti posuvu pro G1
+            let feedRate;
+            if (isG96Mode) {
+                const rpm = parseFloat(document.getElementById('rpm').textContent);
+                if (isFeedPerMin) {
+                    feedRate = feedValue;
+                    document.getElementById('feedRate').textContent = `${feedRate.toFixed(1)} mm/min`;
+                } else {
+                    feedRate = feedValue * rpm;
+                    document.getElementById('feedRate').textContent = `${feedValue.toFixed(3)} mm/ot (${feedRate.toFixed(1)} mm/min)`;
+                }
+            } else {
+                const constantSpeed = parseFloat(document.getElementById('constantSpeed').value);
+                if (isFeedPerMin) {
+                    feedRate = feedValue;
+                    document.getElementById('feedRate').textContent = `${feedRate.toFixed(1)} mm/min`;
+                } else {
+                    feedRate = feedValue * constantSpeed;
+                    document.getElementById('feedRate').textContent = `${feedValue.toFixed(3)} mm/ot (${feedRate.toFixed(1)} mm/min)`;
+                }
+            }
+        });
+
+        // Upravit funkci updateG1Diagram pro správné centrování dráhy
+        function updateG1Diagram(points) {
+            const svg = document.getElementById('diagram');
+            svg.innerHTML = '';
+
+            if (points.length < 2) return;
+
+            // Výpočet rozsahu pohledu pro všechny body
+            let minZ = Math.min(...points.map(p => p.z));
+            let maxZ = Math.max(...points.map(p => p.z));
+            let minX = Math.min(...points.map(p => p.x));
+            let maxX = Math.max(...points.map(p => p.x));
+
+            // Vypočítat rozměry a padding
+            const width = maxZ - minZ;
+            const height = maxX - minX;
+            const padding = Math.max(width, height) * 0.2; // Jednotný padding 20%
+
+            // Přidat padding ke všem stranám
+            minZ -= padding;
+            maxZ += padding;
+            minX -= padding;
+            maxX += padding;
+
+            // Vypočítat poměr stran SVG elementu
+            const svgRect = svg.getBoundingClientRect();
+            const aspectRatio = svgRect.width / svgRect.height;
+
+            // Upravit viewBox tak, aby zachoval poměr stran
+            const viewBoxWidth = maxZ - minZ;
+            const viewBoxHeight = maxX - minX;
+            const viewBoxAspectRatio = viewBoxWidth / viewBoxHeight;
+
+            if (viewBoxAspectRatio > aspectRatio) {
+                // Příliš široký - upravit výšku
+                const newHeight = viewBoxWidth / aspectRatio;
+                const heightDiff = newHeight - viewBoxHeight;
+                minX -= heightDiff / 2;
+                maxX += heightDiff / 2;
+            } else {
+                // Příliš vysoký - upravit šířku
+                const newWidth = viewBoxHeight * aspectRatio;
+                const widthDiff = newWidth - viewBoxWidth;
+                minZ -= widthDiff / 2;
+                maxZ += widthDiff / 2;
+            }
+
+            // Nastavit finální viewBox
+            const finalViewBox = `${minZ} ${-maxX} ${maxZ - minZ} ${maxX - minX}`;
+            svg.setAttribute('viewBox', finalViewBox);
+            svg.dataset.originalViewBox = finalViewBox;
+
+            // Vykreslit dráhu s fixní tloušťkou čáry
+            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            let pathData = `M ${points[0].z} ${-points[0].x}`;
+            points.slice(1).forEach(point => {
+                pathData += ` L ${point.z} ${-point.x}`;
+            });
+
+            path.setAttribute("d", pathData);
+            path.setAttribute("stroke", "#2196f3");
+            path.setAttribute("fill", "none");
+            path.setAttribute("stroke-width", (maxZ - minZ) / 100);
+            svg.appendChild(path);
+
+            // Vykreslit body s fixní velikostí
+            points.forEach((point, index) => {
+                const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                circle.setAttribute("cx", point.z);
+                circle.setAttribute("cy", -point.x);
+                circle.setAttribute("r", (maxZ - minZ) / 150);
+                circle.setAttribute("fill", "#2196f3");
+                svg.appendChild(circle);
+
+                // Popisky bodů s fixní velikostí
+                const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                text.setAttribute("x", point.z + (maxZ - minZ) / 40);
+                text.setAttribute("y", -point.x - (maxX - minX) / 40);
+                text.setAttribute("font-size", (maxZ - minZ) / 35);
+                text.setAttribute("fill", "#333");
+                text.innerHTML = `P${index + 1}
+                    <tspan x="${point.z + (maxZ - minZ) / 40}"
+                           dy="1.2em"
+                           font-size="${(maxZ - minZ) / 45}"
+                           fill="#666">
+                        (${(-point.x).toFixed(1)}, ${point.z.toFixed(1)})
+                    </tspan>`;
+                svg.appendChild(text);
+            });
+
+            debug('G1 diagram aktualizován');
+        }
+    </script>
+</body>
+</html>

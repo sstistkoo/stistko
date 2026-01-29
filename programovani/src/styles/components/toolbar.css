@@ -1,0 +1,106 @@
+/* Toolbar */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+  overflow-x: auto;
+  flex-shrink: 0;
+  min-height: fit-content;
+  height: auto;
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.toolbar-group {
+  display: flex;
+  gap: 4px;
+  padding: 0 8px;
+  border-right: 1px solid var(--border);
+}
+
+.toolbar-group:last-child {
+  border-right: none;
+}
+
+.toolbar-spacer {
+  flex: 1;
+}
+
+.toolbar-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.toolbar-btn:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.toolbar-btn:active {
+  transform: scale(0.98);
+}
+
+.toolbar-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.toolbar-btn span {
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .toolbar {
+    padding: 6px 8px;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    gap: 4px;
+  }
+
+  .toolbar-btn span {
+    display: none;
+  }
+
+  .toolbar-btn {
+    padding: 8px;
+    min-width: 40px;
+    min-height: 40px;
+  }
+
+  .toolbar-group {
+    gap: 2px;
+    padding: 0 4px;
+  }
+
+  /* Skrýt některé skupiny na velmi malých obrazovkách */
+  @media (max-width: 480px) {
+    .toolbar-group:nth-child(2) {
+      display: none; /* Format, Validate, Minify */
+    }
+
+    /* Zmenšit další skupiny */
+    .toolbar-group:nth-child(3) {
+      padding: 0 2px;
+    }
+  }
+
+  /* Na velmi malých displejích (<400px) skrýt i undo/redo */
+  @media (max-width: 400px) {
+    .toolbar-group:nth-child(3) {
+      display: none; /* Undo/Redo */
+    }
+  }
+}

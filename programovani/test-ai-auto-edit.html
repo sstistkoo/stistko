@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalkulačka elixírů</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+    h1 {
+      color: #667eea;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .input-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #333;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #ddd;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5);
+    }
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f0f0f0;
+      border-radius: 6px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      color: #667eea;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Elixírka</h1>
+
+    <div class="input-group">
+      <label for="ingredient1">Přísada 1 (ml):</label>
+      <input type="number" id="ingredient1" value="10">
+    </div>
+
+    <div class="input-group">
+      <label for="ingredient2">Přísada 2 (ml):</label>
+      <input type="number" id="ingredient2" value="20">
+    </div>
+
+    <div class="input-group">
+      <label for="ingredient3">Přísada 3 (ml):</label>
+      <input type="number" id="ingredient3" value="30">
+    </div>
+
+    <button onclick="calculate()">Spočítat celkový objem</button>
+
+    <div class="result" id="result">Výsledek se zobrazí zde</div>
+  </div>
+
+  <script>
+    function calculate() {
+      const ing1 = parseFloat(document.getElementById('ingredient1').value) || 0;
+      const ing2 = parseFloat(document.getElementById('ingredient2').value) || 0;
+      const ing3 = parseFloat(document.getElementById('ingredient3').value) || 0;
+
+      const total = ing1 + ing2 + ing3;
+
+      document.getElementById('result').textContent = `Celkový objem: ${total} ml`;
+    }
+  </script>
+</body>
+</html>

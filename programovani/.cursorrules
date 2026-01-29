@@ -1,0 +1,226 @@
+# Pravidla pro AI asistenty v tomto projektu
+
+## 📋 Přehled projektu
+
+Toto je **webový HTML/CSS/JavaScript editor** s AI integrací, preview funkcionalitou a pokročilým tool systémem.
+
+## 🏗️ Technologie
+
+- **Frontend:** Vanilla JavaScript (ES6+ moduly)
+- **CSS:** Modulární CSS s CSS variables
+- **Build:** Vite (dev server)
+- **AI:** Multiple providers (Claude, GPT-4, Gemini, atd.)
+- **State Management:** Custom state management pattern
+- **Events:** Event-driven architecture
+
+## 📁 Struktura projektu
+
+```
+src/
+├── core/           # Jádro aplikace (state, events, config)
+├── modules/        # Funkční moduly (AI, editor, preview)
+│   ├── ai/        # AI panel a nástroje
+│   ├── editor/    # Code editor
+│   └── preview/   # Live preview
+├── styles/         # CSS soubory
+└── utils/          # Utility funkce
+```
+
+## ✅ Coding Standards
+
+### JavaScript
+
+- **Moduly:** Vždy používej ES6 import/export
+- **Naming:** camelCase pro proměnné, PascalCase pro třídy
+- **Komentáře:** VŽDY česky
+- **Indent:** 2 mezery
+- **Strings:** Single quotes pro jednoduché řetězce
+- **Arrow functions:** Preferuj oproti function keyword
+- **Async/await:** Preferuj oproti .then()
+
+### Příklad správného kódu:
+
+```javascript
+/**
+ * Získá data z API
+ * @param {string} url - URL endpoint
+ * @returns {Promise<Object>} Data z API
+ */
+async function fetchData(url) {
+  try {
+    const response = await fetch(url);
+    return await response.json();
+  } catch (error) {
+    console.error('Chyba při načítání:', error);
+    throw error;
+  }
+}
+```
+
+### CSS
+
+- **Variables:** Používej CSS custom properties
+- **Naming:** kebab-case
+- **Organization:** Komponenty v separátních souborech
+- **Mobile-first:** Mobilní styly jako základ
+
+### Příklad:
+
+```css
+.ai-panel {
+  padding: var(--spacing-md);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+}
+
+@media (max-width: 768px) {
+  .ai-panel {
+    padding: var(--spacing-sm);
+  }
+}
+```
+
+## 🔧 Důležité patterny
+
+### State Management
+
+```javascript
+// Získání hodnoty
+const value = state.get('editor.code');
+
+// Nastavení hodnoty
+state.set('editor.code', newCode);
+
+// Subscribe na změny
+state.subscribe('editor.code', newValue => {
+  console.log('Kód změněn:', newValue);
+});
+```
+
+### Event Bus
+
+```javascript
+// Emitování eventu
+eventBus.emit('file:changed', { fileId: 123 });
+
+// Listening
+eventBus.on('file:changed', data => {
+  console.log('Soubor změněn:', data.fileId);
+});
+```
+
+### Toast Notifications
+
+```javascript
+import { toast } from './ui/components/Toast.js';
+
+toast.show('✅ Úspěch!', 'success');
+toast.show('⚠️ Varování', 'warning');
+toast.show('❌ Chyba', 'error');
+toast.show('ℹ️ Info', 'info');
+```
+
+## 🤖 AI System
+
+### Tool System (VS Code Mode)
+
+- Nachází se v `src/modules/ai/tools/`
+- Tools: read_file, search, analyze, edit, atd.
+- Pattern: Každý tool je samostatný soubor
+
+### AI Providers
+
+- Claude (Anthropic)
+- GPT-4 (OpenAI)
+- Gemini (Google)
+- Local models (LM Studio, Ollama)
+
+### Prompt Engineering
+
+- Vždy používej system prompts z `src/modules/ai/prompts.js`
+- Pro tool calling: Tool System prompt
+- Pro code editing: Používej EDIT blocks
+
+## 🚫 Co NIKDY nedělat
+
+1. **Nepoužívej jQuery** - Jen vanilla JS
+2. **Nepoužívej inline styles** - Vždy přes CSS třídy
+3. **Nezapomeň na error handling** - Vždy try/catch pro async
+4. **Nepoužívej console.log v produkci** - Používej console.error pro errory
+5. **Nemíchej czechy a englishe v komentářích** - Vždy česky
+6. **Nevytvářej globální proměnné** - Vždy moduly
+7. **Nezapomeň na mobile-first** - Vždy responzivní design
+
+## ✨ Best Practices
+
+### Při vytváření nové komponenty:
+
+1. Vytvoř soubor v `src/modules/[kategorie]/`
+2. Export jako ES6 modul
+3. Přidej JSDoc komentáře
+4. Používej state management pro data
+5. Emituj eventy pro komunikaci
+6. Vytvoř CSS v `src/styles/components/`
+
+### Při práci s AI:
+
+1. Vždy zkontroluj Tool System je aktivní
+2. Používej structured outputs (EDIT blocks)
+3. Validuj AI odpovědi před aplikací
+4. Loguj důležité kroky do console
+
+### Při editaci kódu:
+
+1. Zachovej existující coding style
+2. Přidej komentáře pro složitou logiku
+3. Otestuj změny v preview
+4. Zkontroluj mobile view
+
+## 📝 Commit Messages
+
+```
+feat: nová funkce
+fix: oprava bugu
+refactor: refaktoring kódu
+docs: dokumentace
+style: CSS/formátování
+test: testy
+chore: údržba
+```
+
+## 🔍 Debugování
+
+- DevTools Console pro logs
+- Network tab pro API calls
+- Sources tab pro breakpoints
+- Application tab pro localStorage
+
+## 🎯 Prioritní oblasti pro AI pomoc
+
+1. **Code Review** - Zkontroluj že kód následuje standards
+2. **Refactoring** - Zlepši čitelnost a performance
+3. **Documentation** - Přidej/uprav JSDoc komentáře
+4. **Error Handling** - Zajisti robust error handling
+5. **Mobile Optimization** - Zlepši mobile UX
+6. **Accessibility** - Přidej ARIA labels a keyboard navigation
+
+## 💡 Když nevíš co dělat:
+
+1. Přečti existující kód v podobných komponentách
+2. Podívej se do `docs/` složky
+3. Zkontroluj console pro errory
+4. Použij semantic search pro hledání podobných funkcí
+
+## 🌟 Cíl projektu
+
+Vytvořit **nejlepší webový editor s AI integrací**, který je:
+
+- 🚀 Rychlý a responzivní
+- 🎨 Krásně navržený
+- 🤖 S pokročilou AI podporou
+- 📱 Mobile-friendly
+- ♿ Přístupný
+
+---
+
+**Vždy se ptej, pokud si nejsi jistý!** 🙋‍♂️

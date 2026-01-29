@@ -1,0 +1,395 @@
+/* Mobile-specific optimizations */
+
+/* Prevent text size adjustment on orientation change */
+html {
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Improve tap targets - minimum 44x44px */
+button,
+a,
+.clickable,
+.nav-btn,
+.action-btn {
+  min-width: 44px;
+  min-height: 44px;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Disable pull-to-refresh on mobile */
+body {
+  overscroll-behavior-y: contain;
+}
+
+/* Improve scrolling performance */
+.scrollable {
+  -webkit-overflow-scrolling: touch;
+  overflow-y: auto;
+}
+
+/* Mobile keyboard handling */
+@media (max-width: 768px) {
+  /* When keyboard opens, adjust layout */
+  .ai-chat-input textarea,
+  .agent-chat-input textarea {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+
+  /* Larger touch targets for modal close buttons */
+  .modal-close {
+    min-width: 48px;
+    min-height: 48px;
+    padding: 12px;
+  }
+
+  /* AI Modal - Fullscreen on mobile portrait */
+  .modal-overlay.ai-modal {
+    justify-content: center !important;
+  }
+
+  .modal-overlay.ai-modal .modal-container {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 0 !important;
+    animation: fadeIn 0.2s ease !important;
+  }
+
+  /* Improve spacing for finger navigation */
+  .quick-action-btn,
+  .template-btn,
+  .github-action-btn {
+    min-height: 48px;
+    padding: 12px 16px;
+    font-size: 16px;
+  }
+
+  /* Larger tabs for easier switching */
+  .ai-tab {
+    min-height: 48px;
+    padding: 12px 20px;
+    font-size: 16px;
+  }
+
+  /* AI Modal - Full screen na mobilu */
+  .modal-overlay.ai-modal {
+    padding: 0;
+    justify-content: center !important;
+  }
+
+  .modal-overlay.ai-modal .modal-container {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    animation: fadeIn 0.2s ease !important;
+  }
+
+  .modal.ai-modal .modal-content {
+    max-width: 100%;
+    max-height: 100vh;
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    border-radius: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .modal.ai-modal .modal-header {
+    flex-shrink: 0;
+    cursor: default !important; /* Disable dragging on mobile */
+  }
+
+  .modal.ai-modal .modal-body {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Mobile indicator badge */
+  .mobile-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    color: white;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+    animation: pulse-mobile 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-mobile {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+  }
+
+  /* AI Chat - roztáhnout na celou šířku */
+  .ai-chat-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .ai-chat-messages {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 1 !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .ai-chat-input {
+    flex-shrink: 0 !important;
+  }
+
+  /* Code preview v chatu - roztáhnout */
+  .code-preview {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .code-preview pre {
+    width: 100% !important;
+    overflow-x: auto !important;
+  }
+
+  /* Agent cards na plnou šířku */
+  .agent-card {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* AI Chat buttons - horizontal layout on mobile */
+  .ai-chat-buttons {
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+  }
+
+  /* Compact buttons on mobile - smaller */
+  .ai-chat-buttons button.compact {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+  }
+
+  /* Error indicator compact on mobile */
+  .ai-chat-buttons .ai-error-indicator {
+    padding: 6px 8px !important;
+    font-size: 12px !important;
+  }
+
+  .ai-chat-buttons .ai-error-indicator .error-count {
+    display: none !important;
+  }
+
+  .ai-chat-buttons .ai-error-indicator .error-icon {
+    margin-right: 0 !important;
+  }
+
+  /* Send button - shorter text */
+  .ai-chat-buttons .ai-send-btn {
+    flex: 0 1 auto !important;
+    max-width: none !important;
+    height: 36px !important;
+    padding: 0 12px !important;
+    font-size: 13px !important;
+  }
+
+  .ai-chat-buttons .ai-send-btn svg {
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  /* Orchestrator button on mobile */
+  .ai-chat-buttons .ai-orchestrator-btn {
+    flex: 0 1 auto !important;
+    max-width: none !important;
+    height: 36px !important;
+    padding: 0 10px !important;
+    font-size: 13px !important;
+  }
+
+  .ai-chat-buttons .ai-orchestrator-btn svg {
+    width: 14px !important;
+    height: 14px !important;
+  }
+
+  /* Pokec prompt button */
+  .pokec-prompt-btn {
+    height: 36px !important;
+    padding: 0 10px !important;
+    font-size: 13px !important;
+  }
+}
+
+/* Mobile landscape mode */
+@media (max-height: 500px) and (orientation: landscape) {
+  .header {
+    height: 48px;
+  }
+
+  .nav-btn {
+    min-width: 40px;
+    min-height: 40px;
+  }
+}
+
+/* Small phones (< 375px) */
+@media (max-width: 374px) {
+  .header {
+    padding: 0 8px;
+  }
+
+  .logo span {
+    display: none;
+  }
+
+  .header-right {
+    gap: 4px;
+  }
+
+  /* AI chat buttons - hide text on very small screens */
+  .ai-chat-buttons .ai-send-btn span,
+  .ai-chat-buttons .ai-orchestrator-btn span,
+  .pokec-prompt-btn span {
+    display: none !important;
+  }
+
+  .ai-chat-buttons .ai-send-btn,
+  .ai-chat-buttons .ai-orchestrator-btn {
+    width: 40px !important;
+    min-width: 40px !important;
+    padding: 0 !important;
+    justify-content: center !important;
+  }
+
+  .pokec-prompt-btn {
+    width: 40px !important;
+    min-width: 40px !important;
+    padding: 0 !important;
+  }
+
+  .pokec-prompt-btn svg:last-child {
+    display: none !important;
+  }
+}
+
+/* Touch-friendly modal animations */
+@media (hover: none) {
+  .modal-overlay {
+    animation-duration: 0.2s;
+  }
+
+  /* No hover effects on touch devices */
+  .nav-btn:hover {
+    background: transparent;
+  }
+
+  .nav-btn:active {
+    background: var(--bg-tertiary);
+    transform: scale(0.95);
+  }
+}
+
+/* iOS safe area insets */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  .app {
+    padding-bottom: max(var(--safe-bottom), env(safe-area-inset-bottom));
+  }
+
+  .header {
+    padding-top: env(safe-area-inset-top);
+  }
+}
+
+/* PWA fullscreen mode */
+@media (display-mode: standalone) {
+  .header {
+    padding-top: 20px; /* Extra space for status bar */
+  }
+}
+
+/* Improve readability on small screens */
+@media (max-width: 480px) {
+  :root {
+    --font-size-base: 15px;
+    --font-size-small: 13px;
+    --font-size-large: 18px;
+  }
+
+  /* Larger input fields */
+  input[type="text"],
+  input[type="search"],
+  textarea {
+    font-size: 16px !important; /* Prevents iOS zoom */
+  }
+
+  /* Better spacing */
+  .ai-chat-messages {
+    padding: 12px;
+  }
+
+  .ai-message {
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+}
+
+/* Orientation change handling */
+@media (orientation: portrait) {
+  .view-toggle {
+    display: flex;
+  }
+}
+
+@media (orientation: landscape) {
+  .app.view-split {
+    flex-direction: row;
+  }
+}
+
+/* Android Chrome address bar compensation */
+@media screen and (max-width: 768px) {
+  .app {
+    height: 100dvh; /* Dynamic viewport height */
+  }
+}
+
+/* Accessibility - high contrast mode */
+@media (prefers-contrast: high) {
+  button,
+  .nav-btn {
+    border: 2px solid currentColor;
+  }
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,3555 @@
+/* ===== RESET & BASE STYLES ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+html {
+  /* Zabránit double-tap zoom na mobilech */
+  touch-action: manipulation;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #0a0a0a;
+  color: #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  /* Zabránit pull-to-refresh a swipe back na mobilech */
+  overscroll-behavior: none;
+}
+
+/* Deaktivovat hover efekty na touch zařízeních - zabrání "sticky" hover stavům */
+@media (hover: none) and (pointer: coarse) {
+  .tool-btn:hover,
+  .canvas-btn:hover,
+  .btn:hover,
+  .controller-btn:hover,
+  .preset-btn:hover,
+  .ai-header-btn:hover,
+  .ai-btn-transparent:hover {
+    transform: none !important;
+    /* Neměnit background - nechat původní */
+  }
+
+  /* Zajistit že active stavy fungují správně */
+  .tool-btn:active,
+  .canvas-btn:active,
+  .btn:active,
+  .controller-btn:active,
+  .ai-header-btn:active {
+    transform: scale(0.95) !important;
+    opacity: 0.8;
+  }
+}
+
+/* ===== TOOL GROUPS ===== */
+.tool-group {
+  margin-bottom: 15px;
+  background: #222;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #333;
+}
+
+.tool-group h3 {
+  color: #6ab0ff;
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.tool-group h3[onclick] {
+  transition: color 0.2s;
+}
+
+.tool-group h3[onclick]:hover {
+  color: #8ac0ff;
+}
+
+.tool-group > div[id$="Section"] {
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+/* ===== INPUT/FORM ELEMENTS ===== */
+.input-group {
+  margin-bottom: 10px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 4px;
+  color: #b0b0b0;
+  font-size: 12px;
+}
+
+.input-group input,
+.input-group select {
+  width: 100%;
+  padding: 12px;
+  background: #0a0a0a;
+  border: 1px solid #444;
+  border-radius: 4px;
+  color: #e0e0e0;
+  font-size: 16px;
+}
+
+.btn {
+  width: 100%;
+  padding: 10px;
+  background: #3a7bc8;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 8px;
+  transition: background 0.2s;
+}
+
+.btn:active {
+  background: #5a9be8;
+}
+
+.preset-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin: 8px 0;
+}
+
+.preset-btn {
+  padding: 8px;
+  background: #2a4a4a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.preset-btn:active {
+  background: #3a5a5a;
+}
+
+.calc-result {
+  background: #1a2a1a;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+  border: 1px solid #2a4a2a;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.result-title {
+  color: #90ee90;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+/* ===== CANVAS AREA ===== */
+.canvas-area {
+  flex: 1;
+  position: relative;
+  overflow: visible;
+  background: #0a0a0a;
+  width: 100%;
+  height: 100%;
+}
+
+canvas {
+  display: block;
+  touch-action: none;
+  width: 100%;
+  height: 100%;
+  /* Zabránit kontextovému menu na dlouhé stisknutí */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* ===== TOOLBAR ===== */
+.toolbar {
+  position: absolute;
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  background: rgba(15, 15, 15, 0.98);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid #333;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+}
+
+/* Desktop a tablet - dole */
+@media (min-width: 769px) {
+  .toolbar {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    flex-direction: row;
+    border-top: 1px solid #333;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    padding: 10px;
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+  }
+}
+
+/* Mobil na šířku - vpravo */
+@media (max-width: 768px) and (orientation: landscape) {
+  .toolbar {
+    top: 10px;
+    bottom: 10px;
+    right: 10px;
+    left: auto;
+    flex-direction: column;
+    padding: 10px 8px;
+    border-radius: 12px;
+    gap: 12px;
+    max-height: calc(100vh - 20px);
+    overflow-y: auto;
+  }
+}
+
+/* Mobil na výšku - dole */
+@media (max-width: 768px) and (orientation: portrait) {
+  .toolbar {
+    bottom: max(30px, calc(20px + env(safe-area-inset-bottom)));
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    flex-direction: row;
+    flex-wrap: nowrap;
+    padding: 8px 5px;
+    border-radius: 12px;
+    gap: 6px;
+    width: auto;
+    max-width: 98%;
+    justify-content: center;
+  }
+}
+
+/* ===== SUBMENU ===== */
+.tool-submenu {
+  position: absolute;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  z-index: 999;
+  justify-content: center;
+  animation: slideUp 0.2s ease-out;
+  pointer-events: none;
+}
+
+/* AI panel NENÍ normální submenu - má jiné chování */
+.tool-submenu#toolsAi {
+  position: fixed !important;
+  pointer-events: auto !important;
+  animation: none !important;
+}
+
+.tool-submenu > * {
+  pointer-events: auto;
+}
+
+@media (min-width: 769px) {
+  .tool-submenu {
+    bottom: 70px;
+    left: 10px;
+    right: 10px;
+  }
+}
+
+@media (max-width: 768px) and (orientation: landscape) {
+  .tool-submenu {
+    top: 50%;
+    right: 80px;
+    left: 10px;
+    transform: translateY(-50%);
+    animation: slideLeft 0.2s ease-out;
+  }
+
+  /* AI panel má vlastní pozicování - nepřebírat z .tool-submenu */
+  .tool-submenu#toolsAi {
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  @keyframes slideLeft {
+    from {
+      transform: translateY(-50%) translateX(10px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(-50%) translateX(0);
+      opacity: 1;
+    }
+  }
+}
+
+@media (max-width: 768px) and (orientation: portrait) {
+  .tool-submenu {
+    bottom: max(120px, calc(110px + env(safe-area-inset-bottom)));
+    left: 10px;
+    right: 10px;
+  }
+
+  /* AI panel má vlastní pozicování - nepřebírat z .tool-submenu */
+  .tool-submenu#toolsAi {
+    bottom: 0 !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+  }
+}
+
+/* Specific layout for the Drawing panel: make header stack above tools */
+#toolsDrawing {
+  flex-direction: column !important;
+  align-items: stretch !important;
+}
+
+#toolsDrawing .tool-header {
+  max-width: 500px;
+  width: auto;
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+#toolsDrawing .drawing-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: stretch;
+}
+
+#toolsDrawing .tools-content {
+  padding: 0;
+}
+
+#toolsDrawing .panel-grip {
+  cursor: move;
+  touch-action: none;
+}
+
+#toolsAi {
+  z-index: 1001;
+  position: fixed !important;
+  pointer-events: auto !important;
+}
+
+/* Ensure AI panel can be displayed */
+#toolsAi[style*="display: flex"],
+#toolsAi[style*="display:flex"] {
+  display: flex !important;
+  pointer-events: auto !important;
+}
+
+#toolsAi *,
+#toolsAi button,
+#toolsAi select,
+#toolsAi input,
+#toolsAi textarea {
+  pointer-events: auto !important;
+}
+
+/* Make specific modals overlay transparent so canvas remains visible */
+#quickInputModal.modal-overlay,
+#controllerModal.modal-overlay,
+#controllerHelpModal.modal-overlay {
+  background: transparent !important;
+  backdrop-filter: none !important;
+}
+
+/* ===== TOUCH CURSOR ===== */
+.touch-cursor {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  pointer-events: none;
+  z-index: 10000;
+  display: none;
+  transform: translate(-50%, -50%);
+}
+
+.touch-cursor.active {
+  display: block;
+  animation: touchCursorAppear 0.2s ease-out;
+}
+
+@keyframes touchCursorAppear {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.touch-cursor::before,
+.touch-cursor::after {
+  content: "";
+  position: absolute;
+  background: #ff4444;
+  box-shadow: 0 0 10px rgba(255, 68, 68, 0.8), 0 0 3px rgba(255, 255, 255, 0.9);
+}
+
+.touch-cursor::before {
+  width: 2px;
+  height: 40px;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+}
+
+.touch-cursor::after {
+  width: 40px;
+  height: 2px;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
+
+.touch-cursor-center {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #ff4444;
+  border: 2px solid white;
+  border-radius: 50%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 5px rgba(255, 68, 68, 0.8);
+}
+
+/* ===== PRECISION MODE ===== */
+.touch-cursor.precision-mode {
+  display: block !important;
+  width: 60px;
+  height: 60px;
+  animation: precisionModeActivate 0.2s ease-out;
+}
+
+.touch-cursor.precision-mode::before {
+  height: 60px;
+  background: #00ff88;
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.9), 0 0 5px rgba(255, 255, 255, 0.9);
+}
+
+.touch-cursor.precision-mode::after {
+  width: 60px;
+  background: #00ff88;
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.9), 0 0 5px rgba(255, 255, 255, 0.9);
+}
+
+.touch-cursor.precision-mode .touch-cursor-center {
+  width: 12px;
+  height: 12px;
+  background: #00ff88;
+  border: 3px solid white;
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.9), 0 0 20px rgba(0, 255, 136, 0.5);
+}
+
+/* Spojovací čára od prstu ke kurzoru */
+.precision-line {
+  position: absolute;
+  pointer-events: none;
+  z-index: 9999;
+  display: none;
+  width: 2px;
+  background: linear-gradient(to top, rgba(0, 255, 136, 0.8), rgba(0, 255, 136, 0.2));
+  transform-origin: bottom center;
+}
+
+.precision-line.active {
+  display: block;
+}
+
+/* Indikátor pozice prstu */
+.precision-finger-indicator {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px dashed rgba(0, 255, 136, 0.6);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  display: none;
+  transform: translate(-50%, -50%);
+}
+
+.precision-finger-indicator.active {
+  display: block;
+}
+
+@keyframes precisionModeActivate {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.coords-panel {
+  justify-content: center;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* ===== CANVAS CONTROLS ===== */
+.canvas-controls {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1001;
+}
+
+.canvas-btn {
+  background: rgba(42, 42, 42, 0.9);
+  border: 1px solid #555;
+  color: white;
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  transition: all 0.2s;
+}
+
+.canvas-btn span {
+  font-size: 20px;
+}
+
+.canvas-btn div {
+  font-size: 9px;
+  margin-top: 2px;
+}
+
+.canvas-btn:active {
+  transform: scale(0.95);
+}
+
+.canvas-btn.active {
+  background: #3a7bc8;
+  border-color: #5a9be8;
+  box-shadow: 0 0 10px rgba(58, 123, 200, 0.5);
+}
+
+@media (max-width: 768px) {
+  .toolbar {
+    gap: 10px;
+  }
+
+  @media (orientation: portrait) {
+    .toolbar {
+      bottom: max(30px, calc(20px + env(safe-area-inset-bottom)));
+      left: 50%;
+      right: auto;
+      transform: translateX(-50%);
+      width: auto;
+      max-width: 98%;
+    }
+
+    .toolbar .tool-btn {
+      min-width: 48px !important;
+      max-width: 48px !important;
+      min-height: 56px !important;
+      width: 48px !important;
+      height: auto !important;
+      padding: 4px 2px !important;
+      flex: 0 0 auto;
+    }
+
+    .toolbar .tool-btn span {
+      font-size: 20px !important;
+      margin: 0 !important;
+    }
+
+    .toolbar .tool-btn div {
+      font-size: 8px !important;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 48px;
+      margin-top: 2px !important;
+    }
+  }
+
+  @media (orientation: landscape) {
+    .tool-btn {
+      min-width: 60px;
+      min-height: 60px;
+      padding: 6px 8px;
+    }
+
+    .tool-btn span {
+      font-size: 20px !important;
+    }
+
+    .tool-btn div {
+      font-size: 10px !important;
+    }
+  }
+
+  #controllerModal .modal-window {
+    width: 95%;
+    max-width: 100%;
+    padding: 15px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  #controllerLayout {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 15px !important;
+  }
+
+  .controller-btn {
+    width: 55px !important;
+    height: 55px !important;
+  }
+
+  .controller-btn span {
+    font-size: 24px !important;
+  }
+
+  #directionPad {
+    grid-template-columns: repeat(3, 55px) !important;
+    grid-template-rows: repeat(3, 55px) !important;
+    gap: 3px !important;
+  }
+
+  .mini-key,
+  .mini-key-action,
+  .mini-key-back {
+    padding: 5px !important;
+    font-size: 11px !important;
+  }
+
+  .mini-key span,
+  .mini-key-action span {
+    font-size: 6px !important;
+  }
+
+  #controllerModal h2 {
+    font-size: 14px !important;
+  }
+
+  #controllerModal h4 {
+    font-size: 10px !important;
+  }
+
+  #controllerInput {
+    font-size: 13px !important;
+    padding: 7px !important;
+  }
+
+  #btnG90,
+  #btnG91 {
+    padding: 6px 8px !important;
+    font-size: 10px !important;
+  }
+
+  #controllerModal button[onclick="confirmControllerInput()"] {
+    padding: 8px 12px !important;
+    font-size: 14px !important;
+  }
+
+  .keypad-btn {
+    padding: 8px 0 !important;
+    font-size: 14px !important;
+  }
+
+  .keypad-btn span {
+    font-size: 8px !important;
+  }
+
+  #quickInputModal .modal-window {
+    width: 95%;
+    max-width: 100%;
+  }
+
+  .canvas-btn {
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  .canvas-btn span {
+    font-size: 18px !important;
+  }
+
+  .canvas-btn small {
+    font-size: 9px !important;
+  }
+}
+
+/* Velmi malé displeje */
+@media (max-width: 480px) {
+  .toolbar {
+    gap: 6px;
+    padding: 8px;
+  }
+
+  .tool-btn {
+    min-width: 50px;
+    min-height: 50px;
+    padding: 4px 6px;
+  }
+
+  .tool-btn span {
+    font-size: 18px !important;
+  }
+
+  .tool-btn div {
+    font-size: 9px !important;
+  }
+
+  .controller-btn {
+    width: 48px !important;
+    height: 48px !important;
+  }
+
+  .controller-btn span {
+    font-size: 20px !important;
+  }
+
+  #directionPad {
+    grid-template-columns: repeat(3, 48px) !important;
+    grid-template-rows: repeat(3, 48px) !important;
+    gap: 2px !important;
+  }
+
+  #controllerModal .modal-window {
+    max-height: 95vh;
+    overflow-y: auto;
+  }
+
+  .mini-key,
+  .mini-key-action,
+  .mini-key-back {
+    padding: 4px !important;
+    font-size: 10px !important;
+  }
+
+  .mini-key span,
+  .mini-key-action span {
+    font-size: 5px !important;
+  }
+
+  #controllerInput {
+    font-size: 12px !important;
+    padding: 6px !important;
+  }
+
+  #btnG90,
+  #btnG91 {
+    padding: 5px 6px !important;
+    font-size: 9px !important;
+  }
+
+  #controllerModal h2 {
+    font-size: 12px !important;
+  }
+
+  #controllerModal h4 {
+    font-size: 9px !important;
+  }
+
+  .modal-window {
+    width: 98%;
+    padding: 12px;
+  }
+
+  #controllerModal h2 {
+    font-size: 13px !important;
+  }
+
+  .keypad-grid {
+    gap: 5px !important;
+  }
+
+  .keypad-btn {
+    padding: 6px 0 !important;
+    font-size: 13px !important;
+  }
+}
+
+/* ===== CONTROLLER MODAL - SPECIAL STYLING ===== */
+#controllerModal {
+  background: transparent !important;
+  backdrop-filter: none !important;
+}
+
+/* Portrait mode na mobilu - ovladač na dně, kompaktnější */
+@media (max-width: 768px) and (orientation: portrait) {
+  #controllerModal {
+    bottom: 0 !important;
+    top: auto !important;
+    background: transparent !important;
+  }
+
+  #controllerModal .modal-window {
+    max-height: 55vh;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 12px 12px 0 0;
+    margin: 0;
+    padding: 12px;
+    overflow-y: auto;
+  }
+
+  #controllerModal h2 {
+    font-size: 14px !important;
+    margin-bottom: 8px !important;
+  }
+
+  #controllerModal h4 {
+    font-size: 10px !important;
+    margin: 6px 0 6px 0 !important;
+  }
+
+  #controllerInput {
+    font-size: 11px !important;
+    height: 28px !important;
+  }
+
+  #btnG90,
+  #btnG91 {
+    padding: 4px 8px !important;
+    font-size: 10px !important;
+  }
+
+  #controllerModal .modal-window > div:nth-child(2) {
+    margin-bottom: 8px;
+  }
+
+  /* Zmenšit tlačítka v klávesnici */
+  #controllerModal button {
+    font-size: 8px !important;
+    padding: 3px 2px !important;
+  }
+
+  /* Zmenšit řádky s tlačítky */
+  #controllerModal [style*="grid-template-columns"] {
+    gap: 2px !important;
+    margin-bottom: 2px !important;
+  }
+
+  /* Help text zmenšit */
+  #controllerModal [style*="margin-top: 12px"] {
+    margin-top: 8px !important;
+    padding: 8px !important;
+    font-size: 10px !important;
+  }
+}
+
+.tool-btn {
+  background: rgba(42, 42, 42, 1);
+  border: 1px solid #444;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  min-width: 65px;
+  min-height: 65px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  -webkit-user-select: none;
+  user-select: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.tool-btn:hover {
+  background: rgba(58, 123, 200, 0.8);
+  border-color: #5a9be8;
+  transform: translateY(-2px);
+}
+
+.tool-btn:active,
+.tool-btn.active {
+  background: #3a7bc8;
+  border-color: #5a9be8;
+  box-shadow: 0 0 15px rgba(58, 123, 200, 0.6);
+  transform: translateY(0);
+}
+
+.tool-btn.ai-btn {
+  border-color: #8b5cf6;
+  color: #e9d5ff;
+}
+
+.tool-btn.ai-btn.active {
+  background: #7c3aed;
+  border-color: #a78bfa;
+  box-shadow: 0 0 15px rgba(124, 58, 237, 0.6);
+}
+
+/* ===== AI INDICATOR ANIMATION ===== */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.1);
+  }
+}
+
+.ai-indicator {
+  animation: pulse 2s infinite;
+}
+
+/* ===== CHAT STYLES ===== */
+.chat-container {
+  max-height: 60vh;
+  min-height: 200px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  overscroll-behavior: contain;
+  background: #111;
+  border: 1px solid #444;
+  border-radius: 6px;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chat-msg {
+  padding: 10px 14px;
+  border-radius: 12px;
+  max-width: 85%;
+  font-size: 13px;
+  line-height: 1.4;
+  word-wrap: break-word;
+  position: relative;
+}
+
+.chat-msg.user {
+  align-self: flex-end;
+  background: #3a7bc8;
+  color: white;
+  border-bottom-right-radius: 2px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.chat-msg.model {
+  align-self: flex-start;
+  background: #2a2a2a;
+  color: #e0e0e0;
+  border-bottom-left-radius: 2px;
+  border: 1px solid #444;
+}
+
+.chat-msg .shape-tag {
+  display: inline-block;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  margin-right: 4px;
+  margin-top: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.loading-dots {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.loading-dots div {
+  width: 6px;
+  height: 6px;
+  background: #aaa;
+  border-radius: 50%;
+  animation: bounce 1.4s infinite ease-in-out both;
+}
+
+.loading-dots div:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.loading-dots div:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes bounce {
+  0%,
+  80%,
+  100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+.loading-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid #fff;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.recording-pulse {
+  animation: pulse-red 1.5s infinite;
+  background: #ef4444 !important;
+  border-color: #dc2626 !important;
+}
+
+@keyframes pulse-red {
+  0% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
+}
+
+.selection-list {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  margin-bottom: 8px;
+}
+
+.selection-chip {
+  background: #2a2a2a;
+  border: 1px solid #ff66ff;
+  color: #ffccff;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.selection-chip .letter-badge {
+  background: #ff66ff;
+  color: #000;
+  font-weight: bold;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+}
+
+/* ===== MODAL STYLES ===== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  z-index: 3500;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-window {
+  position: relative;
+  background: #1a1a1a;
+  border: 1px solid #444;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 450px;
+  max-height: 90vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+  color: #e0e0e0;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}
+
+/* Settings modal vyšší z-index */
+#settingsModal {
+  z-index: 3500 !important;
+}
+
+@media (max-width: 360px) {
+  .modal-window {
+    width: 95%;
+    padding: 15px;
+  }
+}
+
+.quick-input-display {
+  width: 100%;
+  background: #000;
+  color: #0f0;
+  font-family: "Courier New", monospace;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 12px;
+  border: 1px solid #444;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  resize: none;
+  outline: none;
+  height: 60px;
+}
+
+.keypad-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  margin-top: 5px;
+}
+
+.keypad-btn {
+  background: #2a2a2a;
+  border: 1px solid #444;
+  color: white;
+  padding: 12px 0;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.1s;
+  min-height: 44px;
+}
+
+.keypad-btn:active {
+  background: #666;
+  transform: translateY(2px);
+}
+
+.keypad-btn span {
+  font-size: 9px;
+  font-weight: normal;
+  color: #888;
+  margin-top: 2px;
+}
+
+.keypad-btn.action {
+  background: #333;
+  border-color: #555;
+}
+
+.keypad-btn.cnc-code {
+  background: #2d3748;
+  border-color: #4a5568;
+  color: #90cdf4;
+}
+
+.keypad-btn.confirm {
+  grid-column: span 3;
+  background: #3a7bc8;
+  border-color: #5a9be8;
+  padding: 12px;
+}
+
+.keypad-btn.backspace {
+  background: #7f1d1d;
+  border-color: #991b1b;
+}
+
+.keypad-btn.help {
+  background: #1e3a5f;
+  border-color: #2d5a8f;
+  color: #90cdf4;
+}
+
+.controller-btn {
+  background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+  border: 2px solid #4a5568;
+  color: #e2e8f0;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.controller-btn:hover {
+  background: linear-gradient(135deg, #3d4758 0%, #2a303c 100%);
+  border-color: #6b7280;
+  transform: scale(1.05);
+}
+
+.controller-btn:active {
+  background: linear-gradient(135deg, #4a5568 0%, #374151 100%);
+  transform: scale(0.98);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.mini-key,
+.mini-key-action,
+.mini-key-back {
+  background: #2d3748;
+  border: 1px solid #4a5568;
+  color: #e2e8f0;
+  border-radius: 6px;
+  padding: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: all 0.15s;
+}
+
+.mini-key:hover,
+.mini-key-action:hover {
+  background: #374151;
+  border-color: #6b7280;
+}
+
+.mini-key:active,
+.mini-key-action:active {
+  background: #4a5568;
+  transform: scale(0.95);
+}
+
+.mini-key-action {
+  background: #1e3a5f;
+  border-color: #2d5a8f;
+  color: #90cdf4;
+}
+
+.mini-key-back {
+  background: #7f1d1d;
+  border-color: #991b1b;
+  color: white;
+}
+
+.mini-key-back:hover {
+  background: #991b1b;
+}
+
+.key-list {
+  max-height: 200px;
+  overflow-y: auto;
+  margin: 10px 0;
+  background: #111;
+  border: 1px solid #333;
+  border-radius: 6px;
+}
+
+.key-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #333;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.key-item:last-child {
+  border-bottom: none;
+}
+
+.key-item:hover {
+  background: #252525;
+}
+
+.key-item.active {
+  background: #2a3a2a;
+  border-left: 3px solid #4ade80;
+}
+
+.key-item.demo-active {
+  background: #2a2a3a;
+  border-left: 3px solid #a78bfa;
+}
+
+.key-name {
+  font-weight: bold;
+  font-size: 14px;
+  color: #fff;
+}
+
+.key-val {
+  font-size: 11px;
+  color: #777;
+  font-family: monospace;
+}
+
+.key-delete {
+  padding: 4px 8px;
+  background: #991b1b;
+  color: white;
+  border-radius: 4px;
+  font-size: 11px;
+  border: none;
+  cursor: pointer;
+}
+
+.key-save {
+  padding: 4px 8px;
+  background: #3a7bc8;
+  color: white;
+  border-radius: 4px;
+  font-size: 11px;
+  border: none;
+  cursor: pointer;
+}
+
+/* ===== INFO PANELS ===== */
+.coords {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  bottom: auto;
+  background: rgba(26, 26, 26, 0.8);
+  backdrop-filter: blur(4px);
+  padding: 8px 12px;
+  border-radius: 5px;
+  font-family: "Courier New", monospace;
+  font-size: 12px;
+  border: 1px solid #444;
+  pointer-events: none;
+}
+
+.snap-info {
+  position: absolute;
+  top: 45px;
+  left: 10px;
+  bottom: auto;
+  right: auto;
+  transform: none;
+  background: rgba(26, 26, 26, 0.9);
+  padding: 8px 12px;
+  border-radius: 5px;
+  font-family: "Courier New", monospace;
+  font-size: 12px;
+  font-weight: normal;
+  color: #ffd700;
+  border: 1px solid #ffd700;
+  display: none;
+  z-index: 200;
+  pointer-events: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.snap-info.show {
+  display: block;
+}
+
+.mode-info {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(74, 158, 255, 0.9);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  color: white;
+  display: none;
+  z-index: 90;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+.mode-info.show {
+  display: block;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: auto;
+  margin: 0;
+}
+
+.circle-input-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.circle-input-row label {
+  width: 80px;
+  font-size: 13px;
+  color: #ccc;
+}
+
+.circle-input-row input {
+  flex: 1;
+  background: #111;
+  border: 1px solid #444;
+  color: white;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+/* ===== AI PANEL - PC STYLY ===== */
+/* Základní velikost tlačítek na PC */
+.ai-action-btn {
+  padding: 4px 10px !important;
+  font-size: 18px !important;
+  min-width: auto !important;
+  min-height: auto !important;
+}
+
+.ai-header-btn {
+  padding: 3px !important;
+}
+
+.ai-header-btn span {
+  font-size: 14px !important;
+}
+
+.ai-settings-btn span {
+  font-size: 18px !important;
+}
+
+/* ===== AI PANEL - MOBILNÍ ZAŘÍZENÍ ===== */
+@media (max-width: 768px) {
+  /* Drawing panel responsivní */
+  .drawing-panel {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  /* KRITICKÉ: Když je AI panel otevřený, skrýt ostatní panely */
+  #toolsAi[style*="display: flex"] ~ .tool-submenu,
+  #toolsAi[style*="display:flex"] ~ .tool-submenu {
+    display: none !important;
+  }
+
+  /* KRITICKÉ: AI panel musí být fullscreen overlay na mobilu */
+  #toolsAi {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    z-index: 9999 !important;
+    background: rgba(0, 0, 0, 0.95) !important;
+    pointer-events: auto !important;
+    display: none;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+  }
+
+  #toolsAi[style*="display: flex"],
+  #toolsAi[style*="display:flex"] {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    padding: 10px !important;
+    overflow-y: auto !important;
+  }
+
+  #aiPanel {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+    width: 100% !important;
+    max-width: 500px !important;
+    height: auto !important;
+    max-height: calc(100vh - 40px) !important;
+    max-height: calc(100dvh - 40px) !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    z-index: 1 !important;
+    padding: 12px !important;
+    pointer-events: auto !important;
+    background: rgba(26, 26, 26, 0.98) !important;
+    border-radius: 12px !important;
+    border: 1px solid #444 !important;
+  }
+
+  /* KRITICKÉ: Skrýt VŠECHNY ostatní panely na mobilu když je AI otevřený */
+  #toolsDrawing,
+  #toolsEdit,
+  #toolsCoords,
+  #toolsOther {
+    z-index: 900 !important;
+  }
+
+  /* Když je AI panel viditelný, ostatní panely MUSÍ být skryté */
+  body:has(#toolsAi[style*="display: flex"]) #toolsDrawing,
+  body:has(#toolsAi[style*="display: flex"]) #toolsEdit,
+  body:has(#toolsAi[style*="display: flex"]) #toolsCoords,
+  body:has(#toolsAi[style*="display: flex"]) #toolsOther,
+  body:has(#toolsAi[style*="display:flex"]) #toolsDrawing,
+  body:has(#toolsAi[style*="display:flex"]) #toolsEdit,
+  body:has(#toolsAi[style*="display:flex"]) #toolsCoords,
+  body:has(#toolsAi[style*="display:flex"]) #toolsOther {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+  }
+
+  #aiHeaderRow {
+    cursor: default !important;
+    margin-bottom: 8px !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    justify-content: space-between !important;
+  }
+
+  #aiHeaderFirstRow {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    align-items: center !important;
+  }
+
+  /* Akční tlačítka (Minimize, Close) - větší a na konci řádku */
+  .ai-action-btn {
+    min-width: 50px !important;
+    min-height: 40px !important;
+    font-size: 26px !important;
+    padding: 6px 12px !important;
+  }
+
+  .ai-action-btn:active {
+    transform: scale(0.95);
+  }
+
+  /* Settings tlačítko větší na mobilech */
+  .ai-settings-btn span {
+    font-size: 20px !important;
+  }
+
+  /* Zmenšit header tlačítka na mobilech */
+  #aiPanel .ai-header-btn:not(.ai-action-btn):not(.ai-settings-btn) {
+    padding: 4px !important;
+    min-width: 32px !important;
+  }
+
+  #aiPanel .ai-header-btn:not(.ai-action-btn):not(.ai-settings-btn) span {
+    font-size: 14px !important;
+  }
+
+  /* Chat container - opravené scrollování */
+  #aiPanel .chat-container {
+    max-height: calc(100vh - 340px) !important;
+    min-height: 25vh !important;
+    overflow-y: scroll !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-y !important;
+  }
+
+  /* API Usage Info viditelné na mobilech */
+  #apiUsageInfo {
+    display: block !important;
+    margin-top: 8px !important;
+    padding: 8px !important;
+    font-size: 9px !important;
+    line-height: 1.4 !important;
+  }
+
+  /* AI selecty menší na mobilech */
+  #aiPanel select {
+    font-size: 9px !important;
+    padding: 3px 5px !important;
+  }
+}
+
+/* ===== MODÁLNÍ OKNA - OVERFLOW FIX ===== */
+.modal-window {
+  max-height: 90vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+  .modal-window {
+    max-height: 80vh !important;
+    overflow-y: scroll !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-y !important;
+    width: 95% !important;
+    max-width: 95% !important;
+    padding: 15px !important;
+  }
+
+  /* Settings modal na mobilu */
+  #settingsModal .modal-window {
+    max-height: 75vh !important;
+  }
+}
+
+/* ===== ULTRA SMALL SCREENS (< 320px) ===== */
+@media (max-width: 320px) {
+  .toolbar .tool-btn span {
+    font-size: 16px !important;
+  }
+
+  .toolbar .tool-btn div {
+    font-size: 7px !important;
+  }
+
+  .keypad-btn {
+    padding: 10px 0;
+    min-height: 40px;
+    font-size: 14px;
+  }
+
+  .modal-window {
+    width: 98%;
+    padding: 12px;
+  }
+}
+
+/* ===== AI PANEL OVERLAY ===== */
+.ai-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  z-index: 3000;
+}
+
+.ai-panel {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(26, 26, 26, 0.98);
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid #555;
+  width: 95%;
+  max-width: 500px;
+  max-height: calc(100vh - 20px);
+  overflow-y: auto;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.6);
+  z-index: 3001;
+}
+
+/* ===== AI HEADER ===== */
+.ai-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  cursor: move;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.ai-header-first-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.ai-header-left {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.ai-header-selects {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ai-header-right {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-end;
+}
+
+.ai-header-top-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.ai-header-bottom-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+/* ===== AI SELECTS ===== */
+.ai-select {
+  background: #111;
+  color: #888;
+  border: 1px solid #444;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+  outline: none;
+}
+
+.ai-select:focus {
+  border-color: #666;
+}
+
+/* ===== AI BUTTONS ===== */
+.ai-btn-transparent {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #888;
+  transition: color 0.2s;
+  padding: 4px;
+}
+
+.ai-btn-transparent:hover {
+  color: #ccc;
+}
+
+.ai-btn-icon {
+  font-size: 20px;
+}
+
+.ai-btn-icon-sm {
+  font-size: 16px;
+}
+
+.ai-btn-action {
+  background: transparent;
+  border: 1px solid #444;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #888;
+  transition: all 0.2s;
+  padding: 6px 12px;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.ai-btn-action:hover {
+  border-color: #666;
+}
+
+.ai-btn-minimize:hover {
+  color: #ffa500;
+}
+
+.ai-btn-close:hover {
+  color: #ff4444;
+}
+
+/* ===== AI TOOLBAR ===== */
+.ai-toolbar {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.ai-toolbar-btn {
+  padding: 8px 4px;
+  background: #333;
+  border: 1px solid #444;
+  border-radius: 6px;
+  color: #ccc;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-size: 11px;
+  transition: all 0.2s;
+}
+
+.ai-toolbar-btn:hover {
+  background: #444;
+  border-color: #555;
+}
+
+.ai-toolbar-btn-select {
+  flex: 0 0 70px;
+}
+
+.ai-toolbar-btn-keyboard {
+  flex: 1;
+  color: white;
+  min-width: 90px;
+}
+
+.ai-toolbar-btn-icon {
+  flex: 0 0 36px;
+  padding: 8px 0;
+  color: white;
+  font-size: 16px;
+}
+
+.ai-toolbar-btn-clear {
+  flex: 0 0 36px;
+  padding: 8px 0;
+  background: #991b1b;
+  border: 1px solid #991b1b;
+  color: white;
+  font-size: 14px;
+  display: none;
+}
+
+.ai-toolbar-btn-icon-sm {
+  font-size: 14px;
+}
+
+.ai-toolbar-btn-icon-md {
+  font-size: 16px;
+}
+
+/* ===== AI CHAT ===== */
+.ai-chat-placeholder {
+  color: #666;
+  font-size: 11px;
+  text-align: center;
+  margin-top: auto;
+}
+
+.ai-chat-window {
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+  background: #0a0a0a;
+  border: 1px solid #444;
+  border-radius: 6px;
+  padding: 10px;
+  display: none;
+}
+
+/* ===== AI PERMISSION INFO ===== */
+.ai-permission-info {
+  margin: 15px auto;
+  padding: 10px;
+  background: #1a2332;
+  border: 1px solid #2563eb;
+  border-radius: 8px;
+  max-width: 90%;
+  font-size: 10px;
+  color: #93c5fd;
+}
+
+.ai-permission-title {
+  margin-bottom: 6px;
+  font-weight: bold;
+  color: #60a5fa;
+  font-size: 11px;
+}
+
+.ai-permission-item {
+  margin-bottom: 4px;
+}
+
+.ai-permission-note {
+  margin-top: 6px;
+  font-size: 9px;
+  opacity: 0.7;
+}
+
+.ai-permission-btn {
+  margin-top: 8px;
+  padding: 4px 8px;
+  background: #1e40af;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.ai-permission-btn:hover {
+  background: #2563eb;
+}
+
+/* ===== AI INPUT ZONE ===== */
+.ai-input-zone {
+  /* Container for input elements */
+}
+
+.ai-input-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.ai-deep-think-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #a78bfa;
+  cursor: pointer;
+  user-select: none;
+}
+
+.ai-deep-think-checkbox {
+  width: 14px;
+  height: 14px;
+  accent-color: #7c3aed;
+}
+
+.ai-opacity-light {
+  opacity: 0.7;
+}
+
+/* ===== AI IMAGE UPLOAD ===== */
+.ai-image-upload-container {
+  display: none;
+}
+
+.ai-image-upload-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #888;
+  cursor: pointer;
+  padding: 4px 8px;
+  background: #222;
+  border: 1px solid #444;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.ai-image-upload-label:hover {
+  background: #333;
+}
+
+.ai-file-name {
+  font-size: 10px;
+  color: #888;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ===== AI IMAGE PREVIEW ===== */
+.ai-image-preview {
+  display: none;
+  margin-bottom: 6px;
+  position: relative;
+  background: #111;
+  padding: 4px;
+  border-radius: 4px;
+  width: fit-content;
+}
+
+.ai-preview-img {
+  max-height: 60px;
+  max-width: 100%;
+  border-radius: 2px;
+  display: block;
+}
+
+.ai-preview-close-btn {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #ef4444;
+  color: white;
+  border: 1px solid #991b1b;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.ai-preview-close-btn:hover {
+  background: #dc2626;
+}
+
+/* ===== AI PROMPT INPUT ===== */
+.ai-input-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.ai-input-wrapper {
+  flex: 1;
+  position: relative;
+}
+
+.ai-prompt-textarea {
+  resize: none;
+  width: 100%;
+  padding: 10px;
+  background: #0a0a0a;
+  border: 1px solid #444;
+  border-radius: 6px;
+  color: #fff;
+  font-family: inherit;
+  font-size: 16px;
+  max-height: 80px;
+  overflow-y: auto;
+}
+
+.ai-prompt-textarea:focus {
+  border-color: #666;
+  outline: none;
+}
+
+.ai-input-error {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 4px;
+  padding: 8px;
+  background: #3a1a1a;
+  border: 1px solid #ff6b6b;
+  border-radius: 4px;
+  color: #ff6b6b;
+  font-size: 11px;
+  z-index: 100;
+  word-break: break-word;
+}
+
+/* ===== AI ACTION BUTTONS ===== */
+.ai-btn-send {
+  padding: 10px;
+  background: #7c3aed;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.ai-btn-send:hover {
+  background: #8b5cf6;
+}
+
+.ai-btn-cancel {
+  padding: 10px;
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  display: none;
+}
+
+.ai-btn-cancel:hover {
+  background: #dc2626;
+}
+
+.ai-btn-test {
+  padding: 10px;
+  background: #8b5cf6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.ai-btn-test:hover {
+  background: #9d76fa;
+}
+
+/* ===== AI STATUS ===== */
+.ai-status {
+  margin-top: 8px;
+  font-size: 10px;
+  color: #555;
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.ai-usage-info {
+  margin-top: 12px;
+  color: #888;
+  font-size: 10px;
+  padding: 10px;
+  background: #1a1a1a;
+  border-radius: 6px;
+  border: 1px solid #333;
+  line-height: 1.6;
+}
+
+/* ===== DRAWING PANEL ===== */
+.drawing-panel-wrapper {
+  background: rgba(26, 26, 26, 0.95);
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  max-width: 500px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  margin: 0 auto;
+}
+
+.drawing-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+  padding: 4px 0;
+  background: transparent;
+  border-radius: 6px;
+  max-width: 100%;
+  box-shadow: none;
+}
+
+.drawing-panel-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.drawing-panel-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 8px;
+}
+
+.drawing-panel-label {
+  font-size: 12px;
+  color: #ccc;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.drawing-panel-input {
+  width: 70px;
+  margin-left: 8px;
+  background: #222;
+  color: #fff;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 4px;
+}
+
+.drawing-panel-grip {
+  cursor: move;
+  padding: 8px 12px;
+  text-align: center;
+  color: #aaa;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.drawing-tools-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+/* ===== TOOL BUTTONS IN DRAWING PANEL ===== */
+.tool-btn-drawing {
+  margin: 0;
+}
+
+.tool-btn-icon {
+  font-size: 20px;
+}
+
+.tool-btn-label {
+  font-size: 10px;
+  margin-top: 2px;
+}
+
+/* ===== HIDDEN INPUTS ===== */
+.hidden-input {
+  display: none;
+}
+
+/* ===== DROPDOWN MENUS ===== */
+.dropdown-container {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: rgba(26, 26, 26, 0.98);
+  border: 1px solid #444;
+  border-radius: 6px;
+  padding: 8px;
+  z-index: 100;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 120px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.dropdown-menu-item {
+  padding: 8px 12px;
+  background: #333;
+  border: 1px solid #444;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  font-size: 11px;
+  text-align: left;
+  transition: all 0.2s;
+}
+
+.dropdown-menu-item:hover {
+  background: #444;
+  border-color: #555;
+}
+
+/* ===== ERROR NOTIFICATION ===== */
+.error-notification {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #3a1a1a;
+  border: 1px solid #ff6b6b;
+  border-radius: 8px;
+  padding: 12px 20px;
+  color: #ff6b6b;
+  font-size: 12px;
+  z-index: 10000;
+  max-width: 90%;
+  text-align: center;
+  animation: errorFadeIn 0.3s ease-out;
+}
+
+@keyframes errorFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.error-notification-close {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  background: none;
+  border: none;
+  color: #ff6b6b;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* ===== SUCCESS NOTIFICATION ===== */
+.success-notification {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1a3a1a;
+  border: 1px solid #6bff6b;
+  border-radius: 8px;
+  padding: 12px 20px;
+  color: #6bff6b;
+  font-size: 12px;
+  z-index: 10000;
+  max-width: 90%;
+  text-align: center;
+}
+
+/* ===== TOOL BUTTONS & PANELS ===== */
+.tool-btn-icon {
+  font-size: 20px;
+}
+
+.tool-btn-icon-lg {
+  font-size: 24px;
+}
+
+.tool-btn-label {
+  font-size: 10px;
+  margin-top: 2px;
+}
+
+.tool-btn-label-sm {
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.tool-btn.no-margin {
+  margin: 0;
+}
+
+.tool-btn.flex-1 {
+  flex: 1;
+}
+
+.tool-btn.min-w-80 {
+  min-width: 80px;
+}
+
+.tool-btn.min-w-100 {
+  min-width: 100px;
+}
+
+.tool-btn.min-w-120 {
+  min-width: 120px;
+}
+
+/* ===== TOOL SUBMENU PANELS ===== */
+.tool-submenu-panel {
+  background: rgba(26, 26, 26, 0.95);
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.tool-submenu-panel.max-w-400 {
+  max-width: 400px;
+  width: 100%;
+}
+
+.tool-submenu-panel.max-w-500 {
+  max-width: 500px;
+}
+
+.tool-submenu-panel.max-h-70vh {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+/* ===== FLEX UTILITIES ===== */
+.flex-wrap-center {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.flex-gap-8 {
+  display: flex;
+  gap: 8px;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== SECTION STYLES ===== */
+.section-divider {
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid #444;
+}
+
+.section-header {
+  cursor: pointer;
+  padding: 10px;
+  background: #2a2a2a;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-header-static {
+  padding: 8px 10px;
+  background: #2a2a2a;
+  border-radius: 6px;
+}
+
+.section-title {
+  color: #6ab0ff;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.section-toggle {
+  color: #888;
+}
+
+.section-content {
+  display: none;
+  padding: 10px;
+  background: #1a1a1a;
+  border-radius: 6px;
+  margin-top: 4px;
+}
+
+.section-wrapper {
+  margin-bottom: 8px;
+}
+
+/* ===== FORM INPUTS ===== */
+.coord-input {
+  flex: 1;
+  padding: 8px;
+  background: #0a0a0a;
+  border: 1px solid #444;
+  color: white;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.coord-input-sm {
+  flex: 1;
+  padding: 8px;
+  background: #0a0a0a;
+  border: 1px solid #444;
+  color: white;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.coord-input-full {
+  width: 100%;
+  padding: 8px;
+  background: #0a0a0a;
+  border: 1px solid #444;
+  color: white;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.input-label {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 4px;
+}
+
+.input-label-sm {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 2px;
+}
+
+.input-hint {
+  font-size: 11px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+/* ===== BUTTONS ===== */
+.btn-secondary {
+  padding: 10px;
+  background: #4a4a4a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  flex: 1;
+}
+
+.btn-secondary:hover {
+  background: #5a5a5a;
+}
+
+.btn-primary {
+  padding: 10px;
+  background: #3a7bc8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  flex: 1;
+}
+
+.btn-primary:hover {
+  background: #4a8bd8;
+}
+
+.btn-primary.full-width {
+  width: 100%;
+  flex: none;
+}
+
+/* ===== CHECKBOX LABEL ===== */
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ccc;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.checkbox-label.mt-8 {
+  margin-top: 8px;
+}
+
+/* ===== POLAR SNAP INPUT ===== */
+.polar-step-input {
+  width: 70px;
+  background: #222;
+  color: #fff;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 4px;
+}
+
+/* ===== HIDDEN UTILITIES ===== */
+.hidden {
+  display: none !important;
+}
+
+.d-none {
+  display: none !important;
+}
+
+/* ===== KEY INDICATOR ===== */
+#keyIndicator.hidden {
+  display: none;
+}
+
+/* ===== DROPDOWN STYLES ===== */
+.simple-dropdown {
+  padding: 8px;
+  background: #1a1a1a;
+  border: 1px solid #444;
+  border-radius: 6px;
+  color: #e0e0e0;
+  font-size: 12px;
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+
+/* ===== MOBILE SPECIFIC ===== */
+@media (max-width: 768px) {
+  .tool-btn-icon {
+    font-size: 18px;
+  }
+
+  .tool-btn-label {
+    font-size: 9px;
+  }
+
+  .coord-input {
+    font-size: 16px; /* Prevents iOS zoom */
+    padding: 10px;
+  }
+}
+
+/* ===== CHECKBOX LARGE ===== */
+.checkbox-lg {
+  width: 16px;
+  height: 16px;
+}
+
+/* ===== GRID PRESET BUTTONS ===== */
+.btn-grid-preset {
+  flex: 1;
+  padding: 6px;
+  background: #3a3a3a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.btn-grid-preset:hover {
+  background: #4a4a4a;
+}
+
+/* ===== FLEX UTILITIES ===== */
+.flex-1 {
+  flex: 1;
+}
+
+/* ===== MARGIN UTILITIES ===== */
+.mb-8 {
+  margin-bottom: 8px;
+}
+
+.mt-8 {
+  margin-top: 8px;
+}
+
+.mt-6 {
+  margin-top: 6px;
+}
+
+.mb-6 {
+  margin-bottom: 6px;
+}
+
+/* ===== TOOLBAR BOTTOM BUTTONS ===== */
+.toolbar-btn-icon {
+  font-size: 24px;
+}
+
+.toolbar-btn-label {
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+.toolbar-divider {
+  width: 1px;
+  height: 40px;
+  background: #333;
+  margin: 0 5px;
+}
+
+/* ===== MODAL STYLES ===== */
+.modal-close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: transparent;
+  border: 1px solid #444;
+  color: #888;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.modal-close-btn:hover {
+  color: #ff4444;
+  border-color: #ff4444;
+}
+
+.modal-title {
+  margin-bottom: 15px;
+  color: #6ab0ff;
+  font-size: 18px;
+  padding-right: 40px;
+}
+
+.modal-subtitle {
+  font-size: 13px;
+  color: #aaa;
+  margin-bottom: 10px;
+}
+
+.modal-description {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 10px;
+}
+
+/* ===== PROVIDER TABS ===== */
+.provider-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #333;
+}
+
+.provider-tab {
+  padding: 6px 12px;
+  background: #444;
+  color: #aaa;
+  border: none;
+  border-radius: 4px 4px 0 0;
+  cursor: pointer;
+  font-size: 11px;
+  flex: 1 1 auto;
+  min-width: 60px;
+}
+
+.provider-tab.active {
+  background: #3a7bc8;
+  color: white;
+  font-weight: bold;
+}
+
+.provider-tab:hover:not(.active) {
+  background: #555;
+  color: #ccc;
+}
+
+/* ===== KEY LIST & FORM ===== */
+.key-form-container {
+  background: #222;
+  padding: 12px;
+  border-radius: 6px;
+  margin-top: 15px;
+}
+
+.form-group {
+  margin-bottom: 8px;
+}
+
+.form-label {
+  font-size: 11px;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.form-input {
+  width: 100%;
+  background: #111;
+  border: 1px solid #444;
+  color: white;
+  padding: 6px;
+  border-radius: 4px;
+}
+
+.form-input:focus {
+  border-color: #6ab0ff;
+  outline: none;
+}
+
+.btn-full {
+  width: 100%;
+  padding: 8px;
+  background: #3a7bc8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-full:hover {
+  background: #4a8bd8;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+  padding: 10px;
+  color: #555;
+  font-style: italic;
+  text-align: center;
+}
+
+/* ===== LINK STYLES ===== */
+.link-primary {
+  color: #6ab0ff;
+  text-decoration: none;
+}
+
+.link-primary:hover {
+  text-decoration: underline;
+}
+
+/* ===== TEST PANEL ===== */
+.test-panel {
+  margin-top: 20px;
+  padding: 15px;
+  background: #1a2332;
+  border: 1px solid #2563eb;
+  border-radius: 8px;
+}
+
+.test-panel-title {
+  color: #60a5fa;
+  font-size: 14px;
+  margin: 0 0 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.test-panel-description {
+  font-size: 11px;
+  color: #93c5fd;
+  margin-bottom: 12px;
+}
+
+.btn-test {
+  flex: 1;
+  padding: 8px 12px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.btn-test:hover {
+  background: #3b82f6;
+}
+
+.btn-manage {
+  flex: 1;
+  padding: 8px 12px;
+  background: #1e3a5f;
+  color: #60a5fa;
+  border: 1px solid #2563eb;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.btn-manage:hover {
+  background: #2563eb;
+  color: white;
+}
+
+/* ===== MODAL VARIANTS ===== */
+.modal-window.modal-lg {
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-window.modal-md {
+  max-width: 700px;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.modal-window.modal-sm {
+  max-width: 600px;
+}
+
+/* ===== MODAL HEADER ===== */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #3a7bc8;
+  padding-bottom: 10px;
+}
+
+.modal-header-title {
+  color: #6ab0ff;
+  font-size: 18px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ===== MODAL FOOTER ===== */
+.modal-footer {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  border-top: 1px solid #333;
+  padding-top: 15px;
+}
+
+.modal-footer-space-between {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  border-top: 1px solid #333;
+  padding-top: 15px;
+  margin-top: 15px;
+}
+
+/* ===== BUTTON VARIANTS ===== */
+.btn-cancel {
+  padding: 8px 16px;
+  background: #444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-cancel:hover {
+  background: #555;
+}
+
+.btn-confirm {
+  padding: 8px 16px;
+  background: #3a7bc8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-confirm:hover {
+  background: #4a8bd8;
+}
+
+.btn-retest {
+  padding: 8px 16px;
+  background: #3a7bc8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.btn-retest:hover {
+  background: #4a8bd8;
+}
+
+/* ===== COLOR PICKER BUTTONS ===== */
+.color-btn {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #555;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.color-btn:hover {
+  transform: scale(1.1);
+}
+
+.color-btn.selected {
+  border-color: white;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* ===== INFO PANEL ===== */
+.info-panel {
+  margin-bottom: 15px;
+  padding: 12px;
+  background: #1a2332;
+  border: 1px solid #2563eb;
+  border-radius: 8px;
+}
+
+.info-panel-text {
+  font-size: 12px;
+  color: #93c5fd;
+  margin: 0;
+}
+
+/* ===== MARGIN UTILITIES (more) ===== */
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+.mt-15 {
+  margin-top: 15px;
+}
+
+.mb-15 {
+  margin-bottom: 15px;
+}
+
+/* ===== SECTION HEADER SMALL ===== */
+.section-header-sm {
+  color: #888;
+  font-size: 12px;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+/* ===== FLEX UTILITIES (more) ===== */
+.flex-wrap-gap-10 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* ===== MODAL HEADERS & FOOTERS ===== */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #3a7bc8;
+  padding-bottom: 10px;
+}
+
+.modal-header-title {
+  color: #6ab0ff;
+  font-size: 18px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal-header-title .toolbar-btn-icon {
+  font-size: 24px;
+}
+
+.modal-close-btn-simple {
+  background: transparent;
+  border: none;
+  color: #888;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.modal-close-btn-simple:hover {
+  color: #fff;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  border-top: 1px solid #333;
+  padding-top: 15px;
+}
+
+.modal-footer-space-between {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  border-top: 1px solid #333;
+  padding-top: 15px;
+  margin-top: 15px;
+}
+
+/* ===== MODAL ACTION BUTTONS ===== */
+.btn-copy-report {
+  padding: 10px 20px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-copy-report:hover {
+  background: #1d4ed8;
+}
+
+.btn-select-all {
+  padding: 8px 16px;
+  background: #22c55e;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.btn-select-all:hover {
+  background: #16a34a;
+}
+
+.btn-select-none {
+  padding: 8px 16px;
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.btn-select-none:hover {
+  background: #dc2626;
+}
+
+/* ===== COLOR BUTTONS (extended) ===== */
+.color-btn-dark {
+  border-color: #aaa !important;
+}
+
+/* ===== LINE STYLE BUTTONS ===== */
+.line-style-btn {
+  padding: 10px 16px;
+  background: #2a3a4a;
+  color: #aaa;
+  border: 1px solid #555;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s;
+}
+
+.line-style-btn:hover {
+  background: #3a5a7a;
+  color: #fff;
+}
+
+.line-style-btn.selected {
+  background: #3a5a7a;
+  color: #fff;
+  border-color: #7ab0ff;
+}
+
+/* ===== SETTINGS SECTION ===== */
+.settings-section {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #555;
+  margin-bottom: 20px;
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.settings-label {
+  display: block;
+  color: #888;
+  font-size: 11px;
+  margin-bottom: 8px;
+}
+
+.settings-select {
+  width: 100%;
+  padding: 8px;
+  background: #1a1a1a;
+  border: 1px solid #555;
+  border-radius: 4px;
+  color: #e0e0e0;
+  font-size: 12px;
+}
+
+.settings-description {
+  color: #666;
+  font-size: 11px;
+  margin-bottom: 15px;
+}
+
+/* ===== CONSTRAINT BUTTONS ===== */
+.constraint-btn {
+  padding: 10px 12px;
+  background: #2a3a4a;
+  color: #aaa;
+  border: 1px solid #555;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  min-width: 70px;
+  transition: all 0.2s;
+}
+
+.constraint-btn:hover {
+  background: #3a5a7a;
+  color: #fff;
+}
+
+.constraint-btn-delete {
+  padding: 10px 12px;
+  background: #3a2a2a;
+  color: #ff6b6b;
+  border: 1px solid #555;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  min-width: 70px;
+  transition: all 0.2s;
+}
+
+.constraint-btn-delete:hover {
+  background: #5a3a3a;
+  color: #ff8888;
+}
+
+/* ===== CONSTRAINT MODAL LAYOUT ===== */
+.constraint-btn-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.modal-description {
+  color: #aaa;
+  font-size: 12px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+/* ===== CONTROLLER MODAL ===== */
+.controller-modal {
+  display: none;
+  bottom: 0;
+  top: auto;
+  align-items: flex-end;
+  justify-content: center;
+  background: transparent;
+}
+
+.controller-window {
+  max-width: 700px;
+  border-radius: 10px 10px 0 0;
+  margin: 0;
+}
+
+.controller-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.controller-mode-btn {
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.controller-mode-btn.active {
+  background: #3a7bc8;
+  border: 1px solid #5a9be8;
+  color: white;
+  font-weight: bold;
+}
+
+.controller-mode-btn.inactive {
+  background: #2a2a2a;
+  border: 1px solid #444;
+  color: #888;
+}
+
+.controller-input {
+  flex: 1;
+  padding: 10px;
+  background: #000;
+  border: 1px solid #444;
+  border-radius: 6px;
+  color: #0f0;
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.controller-keyboard {
+  background: #1a1a1a;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #444;
+}
+
+.controller-grid {
+  display: grid;
+  gap: 3px;
+  margin-bottom: 3px;
+}
+
+.controller-grid-6 {
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.controller-grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.ctrl-btn {
+  padding: 4px;
+  background: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 4px;
+  color: #aaa;
+  cursor: pointer;
+  font-size: 9px;
+}
+
+.ctrl-btn:hover {
+  background: #3a3a3a;
+  color: #fff;
+}
+
+.ctrl-btn-gcode {
+  background: #1e3a5f;
+}
+
+.ctrl-btn-delete {
+  background: #8b2a2a;
+  border: 1px solid #5a4444;
+  color: #ff6b6b;
+}
+
+.ctrl-btn-action {
+  padding: 6px;
+  background: #2d5a8f;
+  border: 1px solid #5a7aaf;
+  color: #90cdf4;
+  font-weight: bold;
+}
+
+.ctrl-btn-confirm {
+  width: 100%;
+  padding: 10px;
+  background: #22c55e;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.ctrl-btn-confirm:hover {
+  background: #16a34a;
+}
+
+.ctrl-btn-sublabel {
+  font-size: 7px;
+  display: block;
+}
+
+.controller-tip {
+  margin-top: 12px;
+  padding: 10px;
+  background: #1a1a1a;
+  border-radius: 6px;
+  border-left: 3px solid #6ab0ff;
+  font-size: 11px;
+  color: #aaa;
+}
+
+/* ===== DIRECTION MODAL ===== */
+.direction-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 80px);
+  grid-template-rows: repeat(3, 80px);
+  gap: 5px;
+  justify-content: center;
+}
+
+.direction-btn {
+  padding: 0;
+  background: #2d5a8f;
+  border: 1px solid #5a7aaf;
+  border-radius: 8px;
+  color: #90cdf4;
+  cursor: pointer;
+  font-size: 32px;
+}
+
+.direction-btn:hover {
+  background: #3d6a9f;
+}
+
+.direction-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1a1a1a;
+  border-radius: 8px;
+  color: #666;
+  font-size: 36px;
+}
+
+/* ===== TEXT UTILITIES ===== */
+.text-primary { color: #6ab0ff; }
+.text-info { font-size: 11px; color: #888; }
+.text-muted { color: #aaa; }
+.text-center { text-align: center; }
+
+/* ===== FLEX UTILITIES (extended) ===== */
+.flex-gap-8 { display: flex; gap: 8px; align-items: center; }
+.flex-gap-10 { display: flex; gap: 10px; }
+.flex-center { display: flex; justify-content: center; }
+
+/* ===== MARGIN UTILITIES (extended) ===== */
+.mb-12 { margin-bottom: 12px; }
+
+/* ===== QUICK INPUT KEYPAD ===== */
+.qi-btn {
+  padding: 6px;
+  background: #333;
+  border: 1px solid #444;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  font-size: 9px;
+}
+
+.qi-btn:hover {
+  background: #444;
+}
+
+.qi-btn-gcode {
+  background: #2d5a8f;
+  border: 1px solid #5a7aaf;
+  color: #90cdf4;
+}
+
+.qi-btn-gcode:hover {
+  background: #3d6a9f;
+}
+
+.qi-btn-delete {
+  background: #4a1010;
+  border: 1px solid #8a3030;
+  color: #ff6b6b;
+}
+
+.qi-btn-delete:hover {
+  background: #5a2020;
+}
+
+.qi-display {
+  width: 100%;
+  height: 60px;
+  background: #111;
+  color: #90ee90;
+  border: 1px solid #444;
+  padding: 8px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 13px;
+  margin-bottom: 12px;
+  resize: none;
+}
+
+.qi-error {
+  display: none;
+  padding: 8px;
+  background: #3a1a1a;
+  border: 1px solid #ff6b6b;
+  border-radius: 4px;
+  color: #ff6b6b;
+  font-size: 11px;
+  margin-bottom: 12px;
+  word-break: break-word;
+}
+
+.qi-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+/* ===== HELP MODAL ===== */
+.help-section {
+  background: #1a1a1a;
+  padding: 15px;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #ccc;
+}
+
+.help-title {
+  color: #90cdf4;
+  margin-top: 0;
+}
+
+.help-block {
+  background: #222;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.help-code {
+  color: #22c55e;
+}

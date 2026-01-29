@@ -1,0 +1,2694 @@
+<!DOCTYPE html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Obráběcí plátky - rozdělení a značení</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 10px;
+        color: #333;
+        max-width: 100%;
+      }
+      header {
+        background-color: #2c3e50;
+        color: white;
+        padding: 15px;
+        text-align: center;
+        margin-bottom: 20px;
+        border-radius: 5px;
+      }
+      h1,
+      h2,
+      h3 {
+        color: #2c3e50;
+      }
+      header h1 {
+        color: white;
+        font-size: clamp(1.2rem, 5vw, 2rem);
+        margin: 0;
+      }
+      h2 {
+        font-size: clamp(1.1rem, 4vw, 1.8rem);
+      }
+      h3 {
+        font-size: clamp(1rem, 3.5vw, 1.5rem);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 15px 0;
+        font-size: 0.9rem;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 6px;
+        text-align: left;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+      tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+      .section {
+        margin-bottom: 25px;
+        padding: 10px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .znaceni-schema {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 15px 0;
+      }
+      .znaceni-box {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 5px;
+        width: 100%;
+        margin-bottom: 15px;
+      }
+      .znaceni-item {
+        border: 2px solid #3498db;
+        padding: 8px;
+        text-align: center;
+        min-width: 60px;
+        border-radius: 5px;
+        margin: 2px;
+        background-color: #ecf0f1;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+      }
+      .znaceni-item:hover {
+        background-color: #3498db;
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+      }
+      .material-colors {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+        margin-top: 15px;
+      }
+      .color-box {
+        width: calc(50% - 10px);
+        max-width: 150px;
+        text-align: center;
+        border: 1px solid #ddd;
+        padding: 5px;
+        font-size: 0.9rem;
+      }
+      @media (max-width: 480px) {
+        .color-box {
+          width: calc(100% - 10px);
+        }
+      }
+      .color-sample {
+        height: 25px;
+        margin-bottom: 5px;
+      }
+      img {
+        max-width: 100%;
+        height: auto;
+        margin: 10px 0;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .note {
+        background-color: #ffffcc;
+        padding: 10px;
+        border-left: 4px solid #ffcc00;
+        margin: 10px 0;
+        font-size: 0.9rem;
+      }
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.7);
+      }
+      .modal-content {
+        background-color: white;
+        margin: 5% auto;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        width: 90%;
+        max-width: 600px;
+        position: relative;
+        animation: modalopen 0.4s;
+      }
+      @keyframes modalopen {
+        from {
+          opacity: 0;
+          transform: scale(0.8);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      .close-btn {
+        color: #aaa;
+        float: right;
+        font-size: 24px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      .close-btn:hover {
+        color: black;
+      }
+      .option-btn {
+        background-color: #3498db;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        margin: 3px;
+        border-radius: 3px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        font-size: 0.9rem;
+        width: 100%;
+        text-align: left;
+      }
+      .option-btn:hover {
+        background-color: #2980b9;
+      }
+      .result-display {
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #f2f6fc;
+        border-radius: 5px;
+        border-left: 5px solid #3498db;
+        font-size: 1rem;
+        color: #333;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      }
+      .znaceni-result {
+        letter-spacing: 2px;
+        font-weight: bold;
+        font-size: 1.1rem;
+      }
+      .interactive-section {
+        background-color: #2c3e50;
+        color: white;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+      .selection-box {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin: 15px 0;
+      }
+      .selection-item {
+        background-color: #34495e;
+        border: 2px solid #3498db;
+        border-radius: 5px;
+        padding: 8px 10px;
+        min-width: 30px;
+        text-align: center;
+        font-weight: bold;
+        font-size: 1rem;
+        color: white;
+      }
+      button {
+        background-color: #e74c3c;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+        font-weight: bold;
+        transition: background-color 0.3s;
+      }
+      button:hover {
+        background-color: #c0392b;
+      }
+
+      /* Mobilní optimalizace */
+      @media (max-width: 768px) {
+        body {
+          padding: 8px;
+        }
+        .section {
+          padding: 8px;
+        }
+        .znaceni-item {
+          min-width: 45px;
+          padding: 6px 4px;
+          font-size: 0.8rem;
+        }
+        .selection-item {
+          min-width: 25px;
+          padding: 6px 8px;
+          font-size: 0.9rem;
+        }
+        .modal-content {
+          margin: 10% auto;
+          padding: 10px;
+          width: 95%;
+        }
+        table {
+          font-size: 0.8rem;
+        }
+        th,
+        td {
+          padding: 4px;
+        }
+        .option-btn {
+          padding: 8px 6px;
+          font-size: 0.8rem;
+        }
+        .result-display {
+          padding: 8px;
+          font-size: 0.9rem;
+        }
+        .znaceni-result {
+          font-size: 1rem;
+        }
+      }
+
+      /* Velmi malé displeje */
+      @media (max-width: 480px) {
+        header h1 {
+          font-size: 1.2rem;
+        }
+        h2 {
+          font-size: 1.1rem;
+        }
+        h3 {
+          font-size: 1rem;
+        }
+        .znaceni-box {
+          justify-content: flex-start;
+          overflow-x: auto;
+          padding-bottom: 5px;
+        }
+        .selection-box {
+          overflow-x: auto;
+          justify-content: flex-start;
+          padding-bottom: 5px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Obráběcí plátky - rozdělení a značení</h1>
+    </header>
+    <div style="text-align: center; margin-bottom: 20px">
+      <a
+        href="index.html"
+        style="
+          display: inline-block;
+          background-color: #2c3e50;
+          color: white;
+          padding: 10px 20px;
+          text-decoration: none;
+          border-radius: 5px;
+          margin: 10px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        "
+        >← Zpět na hlavní stránku</a
+      >
+    </div>
+
+    <div class="section">
+      <h2>Tvary obráběcích plátků s ilustracemi</h2>
+      <p>
+        Vizuální přehled nejběžnějších tvarů vyměnitelných břitových destiček:
+      </p>
+
+      <div
+        style="
+          display: flex;
+          flex-wrap: wrap;
+          gap: 20px;
+          justify-content: center;
+          margin-top: 20px;
+        "
+      >
+        <div
+          style="
+            text-align: center;
+            width: 200px;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+          "
+        >
+          <h3>C - Kosočtverec 80°</h3>
+          <svg
+            width="140"
+            height="140"
+            viewBox="0 0 140 140"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <polygon
+              points="70,10 107,70 70,130 33,70"
+              fill="#3498db"
+              stroke="#333"
+              stroke-width="2"
+            />
+            <circle
+              cx="70"
+              cy="70"
+              r="10"
+              fill="#f8f9fa"
+              stroke="#333"
+              stroke-width="2"
+            />
+            <text
+              x="70"
+              y="75"
+              font-size="16"
+              font-weight="bold"
+              text-anchor="middle"
+            >
+              C
+            </text>
+          </svg>
+          <p>Používá se pro dokončovací soustružení</p>
+        </div>
+
+        <div
+          style="
+            text-align: center;
+            width: 200px;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+          "
+        >
+          <h3>D - Kosočtverec 55°</h3>
+          <svg
+            width="140"
+            height="140"
+            viewBox="0 0 140 140"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <polygon
+              points="70,15 110,70 70,125 30,70"
+              fill="#e74c3c"
+              stroke="#333"
+              stroke-width="2"
+            />
+            <circle
+              cx="70"
+              cy="70"
+              r="10"
+              fill="#f8f9fa"
+              stroke="#333"
+              stroke-width="2"
+            />
+            <text
+              x="70"
+              y="75"
+              font-size="16"
+              font-weight="bold"
+              text-anchor="middle"
+            >
+              D
+            </text>
+          </svg>
+          <p>Vhodný pro kopírovací soustružení</p>
+        </div>
+
+        <div
+          style="
+            text-align: center;
+            width: 200px;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+          "
+        >
+          <h3>S - Čtverec</h3>
+          <svg
+            width="140"
+            height="140"
+            viewBox="0 0 140 140"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect
+              x="35"
+              y="35"
+              width="70"
+              height="70"
+              fill="#2ecc71"
+              stroke="#333"
+              stroke-width="2"
+            />
+            <circle
+              cx="70"
+              cy="70"
+              r="10"
+              fill="#f8f9fa"
+              stroke="#333"
+              stroke-width="2"
+            />
+            <text
+              x="70"
+              y="75"
+              font-size="16"
+              font-weight="bold"
+              text-anchor="middle"
+            >
+              S
+            </text>
+          </svg>
+          <p>Univerzální soustružení, srážení hran</p>
+        </div>
+
+        <div
+          style="
+            text-align: center;
+            width: 200px;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+          "
+        >
+          <h3>T - Trojúhelník</h3>
+          <svg
+            width="140"
+            height="140"
+            viewBox="0 0 140 140"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <polygon
+              points="70,25 110,105 30,105"
+              fill="#f1c40f"
+              stroke="#333"
+              stroke-width="2"
+            />
+            <circle
+              cx="70"
+              cy="70"
+              r="10"
+              fill="#f8f9fa"
+              stroke="#333"
+              stroke-width="2"
+            />
+            <text
+              x="70"
+              y="75"
+              font-size="16"
+              font-weight="bold"
+              text-anchor="middle"
+            >
+              T
+            </text>
+          </svg>
+          <p>Dokončovací soustružení, malé úběry</p>
+        </div>
+
+        <div
+          style="
+            text-align: center;
+            width: 200px;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+          "
+        >
+          <h3>R - Kruhový</h3>
+          <svg
+            width="140"
+            height="140"
+            viewBox="0 0 140 140"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="70"
+              cy="70"
+              r="45"
+              fill="#9b59b6"
+              stroke="#333"
+              stroke-width="2"
+            />
+            <circle
+              cx="70"
+              cy="70"
+              r="10"
+              fill="#f8f9fa"
+              stroke="#333"
+              stroke-width="2"
+            />
+            <text
+              x="70"
+              y="75"
+              font-size="16"
+              font-weight="bold"
+              text-anchor="middle"
+            >
+              R
+            </text>
+          </svg>
+          <p>Pro kopírovací operace a různorodé kontury</p>
+        </div>
+
+        <div
+          style="
+            text-align: center;
+            width: 200px;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+          "
+        >
+          <h3>V - Kosočtverec 35°</h3>
+          <svg
+            width="140"
+            height="140"
+            viewBox="0 0 140 140"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <polygon
+              points="70,30 105,70 70,110 35,70"
+              fill="#1abc9c"
+              stroke="#333"
+              stroke-width="2"
+            />
+            <circle
+              cx="70"
+              cy="70"
+              r="10"
+              fill="#f8f9fa"
+              stroke="#333"
+              stroke-width="2"
+            />
+            <text
+              x="70"
+              y="75"
+              font-size="16"
+              font-weight="bold"
+              text-anchor="middle"
+            >
+              V
+            </text>
+          </svg>
+          <p>Přesné kopírovací soustružení</p>
+        </div>
+
+        <div
+          style="
+            text-align: center;
+            width: 200px;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+          "
+        >
+          <h3>W - Šestiúhelníkový</h3>
+          <svg
+            width="140"
+            height="140"
+            viewBox="0 0 140 140"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <polygon
+              points="70,25 105,45 105,85 70,105 35,85 35,45"
+              fill="#e67e22"
+              stroke="#333"
+              stroke-width="2"
+            />
+            <circle
+              cx="70"
+              cy="70"
+              r="10"
+              fill="#f8f9fa"
+              stroke="#333"
+              stroke-width="2"
+            />
+            <text
+              x="70"
+              y="75"
+              font-size="16"
+              font-weight="bold"
+              text-anchor="middle"
+            >
+              W
+            </text>
+          </svg>
+          <p>Speciální aplikace</p>
+        </div>
+      </div>
+
+      <div class="note" style="margin-top: 20px">
+        <p>
+          <strong>Poznámka:</strong> Obrázky jsou ilustrační. Skutečné plátky
+          mohou mít různé provedení podle výrobce a konkrétní aplikace. Středový
+          otvor umožňuje upnutí destičky v držáku pomocí šroubu.
+        </p>
+      </div>
+    </div>
+
+    <div class="interactive-section">
+      <h2>Interaktivní schéma značení ISO</h2>
+      <p>
+        Klikněte na jednotlivé pozice značení pro zobrazení možností a výběr
+        hodnoty
+      </p>
+      <div class="selection-box">
+        <div class="selection-item" id="sel-pos1">-</div>
+        <div class="selection-item" id="sel-pos2">-</div>
+        <div class="selection-item" id="sel-pos3">-</div>
+        <div class="selection-item" id="sel-pos4">-</div>
+        <div class="selection-item" id="sel-pos5">-</div>
+        <div class="selection-item" id="sel-pos6">-</div>
+        <div class="selection-item" id="sel-pos7">-</div>
+        <div class="selection-item" id="sel-pos8">-</div>
+        <div class="selection-item" id="sel-pos9">-</div>
+      </div>
+      <div class="result-display">
+        <p>
+          Vámi vybraný plátek:
+          <span class="znaceni-result" id="result-code">---------</span>
+        </p>
+        <p id="result-description">Zde se zobrazí popis vašeho výběru</p>
+        <div
+          id="holder-recommendation"
+          style="
+            display: none;
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #e6f7e6;
+            border-radius: 5px;
+            border-left: 5px solid #28a745;
+          "
+        >
+          <h4 style="margin-top: 0; color: #28a745">Doporučený držák:</h4>
+          <p id="holder-description">
+            Informace o vhodném držáku se zobrazí zde
+          </p>
+        </div>
+      </div>
+      <button id="resetSelection">Resetovat výběr</button>
+    </div>
+
+    <div
+      class="interactive-section"
+      style="background-color: #34495e; margin-top: 30px"
+    >
+      <h2>Interaktivní výběr držáku nástroje</h2>
+      <p>
+        Klikněte na jednotlivé pozice značení pro zobrazení možností a výběr
+        hodnoty
+      </p>
+      <div class="selection-box">
+        <div class="selection-item" id="holder-pos1">-</div>
+        <div class="selection-item" id="holder-pos2">-</div>
+        <div class="selection-item" id="holder-pos3">-</div>
+        <div class="selection-item" id="holder-pos4">-</div>
+        <div class="selection-item" id="holder-pos5">-</div>
+        <div class="selection-item" id="holder-pos6">-</div>
+      </div>
+      <div class="result-display">
+        <p>
+          Vámi vybraný držák:
+          <span class="znaceni-result" id="holder-result-code">------</span>
+        </p>
+        <p id="holder-result-description">Zde se zobrazí popis vašeho držáku</p>
+        <div
+          id="insert-recommendation"
+          style="
+            display: none;
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #e6eaff;
+            border-radius: 5px;
+            border-left: 5px solid #3f51b5;
+          "
+        >
+          <h4 style="margin-top: 0; color: #3f51b5">
+            Vhodné plátky pro tento držák:
+          </h4>
+          <p id="insert-description">
+            Informace o vhodných plátkách se zobrazí zde
+          </p>
+        </div>
+      </div>
+      <button id="resetHolderSelection" style="background-color: #c0392b">
+        Resetovat výběr držáku
+      </button>
+    </div>
+
+    <div class="section">
+      <h2>Úvod do obráběcích plátků</h2>
+      <p>
+        Obráběcí plátky (vyměnitelné břitové destičky) jsou důležitou součástí
+        moderních obráběcích nástrojů. Používají se především pro soustružení,
+        frézování a vrtání kovových materiálů. Díky své vyměnitelnosti umožňují
+        rychlou výměnu bez nutnosti měnit celý nástroj, což zvyšuje efektivitu
+        výroby.
+      </p>
+      <p>
+        Správný výběr obráběcího plátku je klíčový pro dosažení požadované
+        kvality povrchu, přesnosti obrábění a životnosti nástroje.
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>Rozdělení obráběcích plátků</h2>
+
+      <h3>Podle materiálu</h3>
+      <ul>
+        <li>
+          <strong>Slinuté karbidy (SK)</strong> - nejčastěji používaný materiál,
+          kombinace karbidů (především wolframu) a pojiva (obvykle kobalt)
+        </li>
+        <li>
+          <strong>Řezná keramika</strong> - na bázi oxidu hlinitého
+          (Al<sub>2</sub>O<sub>3</sub>) nebo nitridu křemíku
+          (Si<sub>3</sub>N<sub>4</sub>)
+        </li>
+        <li>
+          <strong>Polykrystalický diamant (PKD)</strong> - pro vysoce abrazivní
+          neželezné materiály
+        </li>
+        <li>
+          <strong>Polykrystalický kubický nitrid boru (PKNB)</strong> - pro
+          obrábění tvrdých materiálů
+        </li>
+        <li><strong>Cermety</strong> - keramické částice v kovovém pojivu</li>
+      </ul>
+
+      <h3>Podle tvaru</h3>
+      <table>
+        <tr>
+          <th>Označení</th>
+          <th>Tvar</th>
+          <th>Použití</th>
+        </tr>
+        <tr>
+          <td>C</td>
+          <td>Kosočtverec (Diamond) - 80°</td>
+          <td>Dokončovací soustružení</td>
+        </tr>
+        <tr>
+          <td>D</td>
+          <td>Kosočtverec (Diamond) - 55°</td>
+          <td>Kopírovací soustružení</td>
+        </tr>
+        <tr>
+          <td>K</td>
+          <td>Kosočtverec (Diamond) - 55° (s dírou)</td>
+          <td>Speciální aplikace</td>
+        </tr>
+        <tr>
+          <td>R</td>
+          <td>Kruh (Round)</td>
+          <td>Kopírovací operace, různorodé kontury</td>
+        </tr>
+        <tr>
+          <td>S</td>
+          <td>Čtverec (Square)</td>
+          <td>Univerzální soustružení, srážení hran</td>
+        </tr>
+        <tr>
+          <td>T</td>
+          <td>Trojúhelník (Triangle)</td>
+          <td>Dokončovací soustružení, malé úběry</td>
+        </tr>
+        <tr>
+          <td>V</td>
+          <td>Kosočtverec (Diamond) - 35°</td>
+          <td>Přesné kopírovací soustružení</td>
+        </tr>
+        <tr>
+          <td>W</td>
+          <td>Šestiúhelník (Hexagon)</td>
+          <td>Speciální aplikace</td>
+        </tr>
+      </table>
+
+      <h3>Podle způsobu upnutí</h3>
+      <ul>
+        <li><strong>Destičky s otvorem</strong> - upínané pomocí šroubu</li>
+        <li>
+          <strong>Destičky bez otvoru</strong> - upínané pomocí příchytek nebo
+          upínek
+        </li>
+        <li>
+          <strong>Destičky se speciálním upínáním</strong> - různé speciální
+          mechanismy
+        </li>
+      </ul>
+
+      <h3>Podle geometrie břitu</h3>
+      <ul>
+        <li>
+          <strong>Pozitivní geometrie</strong> - menší řezné síly, vhodné pro
+          méně výkonné stroje a nestabilní podmínky
+        </li>
+        <li>
+          <strong>Negativní geometrie</strong> - vyšší pevnost břitu, vhodné pro
+          přerušované řezy a vysoce výkonné obrábění
+        </li>
+        <li>
+          <strong>Neutrální geometrie</strong> - kompromis mezi pozitivní a
+          negativní geometrií
+        </li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Systém značení obráběcích plátků</h2>
+      <p>
+        Značení obráběcích plátků je standardizováno normou ISO a obsahuje
+        informace o tvaru, úhlu hřbetu, tolerancích, typu destičky, velikosti,
+        tloušťce, geometrii břitu a směru řezu.
+      </p>
+
+      <div class="znaceni-schema">
+        <h3>Schéma značení ISO</h3>
+        <div class="znaceni-box">
+          <div class="znaceni-item" data-position="1">1<br />Tvar</div>
+          <div class="znaceni-item" data-position="2">2<br />Úhel hřbetu</div>
+          <div class="znaceni-item" data-position="3">3<br />Tolerance</div>
+          <div class="znaceni-item" data-position="4">4<br />Typ destičky</div>
+          <div class="znaceni-item" data-position="5">5<br />Velikost</div>
+          <div class="znaceni-item" data-position="6">6<br />Tloušťka</div>
+          <div class="znaceni-item" data-position="7">7<br />Rádius špičky</div>
+          <div class="znaceni-item" data-position="8">8<br />Úprava břitu</div>
+          <div class="znaceni-item" data-position="9">9<br />Směr řezu</div>
+        </div>
+        <p><strong>Příklad:</strong> CNMG 120408-PM</p>
+      </div>
+
+      <h3>1. Tvar destičky</h3>
+      <table>
+        <tr>
+          <th>Kód</th>
+          <th>Tvar</th>
+        </tr>
+        <tr>
+          <td>C</td>
+          <td>Kosočtverec 80°</td>
+        </tr>
+        <tr>
+          <td>D</td>
+          <td>Kosočtverec 55°</td>
+        </tr>
+        <tr>
+          <td>R</td>
+          <td>Kruhový</td>
+        </tr>
+        <tr>
+          <td>S</td>
+          <td>Čtvercový</td>
+        </tr>
+        <tr>
+          <td>T</td>
+          <td>Trojúhelníkový</td>
+        </tr>
+        <tr>
+          <td>V</td>
+          <td>Kosočtverec 35°</td>
+        </tr>
+        <tr>
+          <td>W</td>
+          <td>Šestiúhelníkový</td>
+        </tr>
+      </table>
+
+      <h3>2. Úhel hřbetu</h3>
+      <table>
+        <tr>
+          <th>Kód</th>
+          <th>Úhel</th>
+          <th>Popis</th>
+        </tr>
+        <tr>
+          <td>N</td>
+          <td>0°</td>
+          <td>Negativní</td>
+        </tr>
+        <tr>
+          <td>B</td>
+          <td>5°</td>
+          <td>Positivní</td>
+        </tr>
+        <tr>
+          <td>P</td>
+          <td>11°</td>
+          <td>Positivní</td>
+        </tr>
+        <tr>
+          <td>C, E, M, A</td>
+          <td>7°, 20°, 15°, 25°</td>
+          <td>Speciální hodnoty</td>
+        </tr>
+      </table>
+
+      <h3>3. Tolerance</h3>
+      <table>
+        <tr>
+          <th>Kód</th>
+          <th>Tolerance</th>
+        </tr>
+        <tr>
+          <td>A</td>
+          <td>±0.05 mm na tloušťku, ±0.13 mm na průměr vepsané kružnice</td>
+        </tr>
+        <tr>
+          <td>C</td>
+          <td>±0.08 mm na tloušťku, ±0.25 mm na průměr vepsané kružnice</td>
+        </tr>
+        <tr>
+          <td>G</td>
+          <td>±0.13 mm na tloušťku, ±0.25 mm na průměr vepsané kružnice</td>
+        </tr>
+        <tr>
+          <td>U</td>
+          <td>±0.13 mm na tloušťku, ±0.18 mm na průměr vepsané kružnice</td>
+        </tr>
+      </table>
+
+      <h3>4. Typ destičky</h3>
+      <table>
+        <tr>
+          <th>Kód</th>
+          <th>Popis</th>
+        </tr>
+        <tr>
+          <td>M</td>
+          <td>Destička s dírou se závitem</td>
+        </tr>
+        <tr>
+          <td>G</td>
+          <td>Destička s dírou a utvařečem třísky na horní straně</td>
+        </tr>
+        <tr>
+          <td>N</td>
+          <td>Destička s dírou, ale bez utvařeče třísky</td>
+        </tr>
+        <tr>
+          <td>T</td>
+          <td>Destička s dírou a utvařečem třísky na horní i spodní straně</td>
+        </tr>
+      </table>
+
+      <h3>5. Velikost destičky</h3>
+      <p>
+        Velikost je udávána jako délka řezné hrany nebo průměr vepsané kružnice
+        v mm.
+      </p>
+
+      <h3>6. Tloušťka destičky</h3>
+      <p>Tloušťka se uvádí v mm, např. 04 znamená 4 mm.</p>
+
+      <h3>7. Rádius špičky</h3>
+      <p>Rádius špičky v desetinách mm, např. 08 znamená 0,8 mm.</p>
+
+      <h3>8-9. Úprava břitu a směr řezu</h3>
+      <p>Závisí na výrobci, obvykle se používají písmena jako:</p>
+      <ul>
+        <li><strong>F</strong> - jemné obrábění</li>
+        <li><strong>M</strong> - střední obrábění</li>
+        <li><strong>R</strong> - hrubé obrábění</li>
+        <li>
+          <strong>PR, PM, PF</strong> - kombinace typu utvařeče třísky a
+          aplikace
+        </li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Barevné značení materiálů VBD dle ISO</h2>
+      <p>
+        Pro rychlou orientaci se používá barevné značení podle skupin obráběných
+        materiálů:
+      </p>
+      <div class="material-colors">
+        <div class="color-box">
+          <div class="color-sample" style="background-color: #0000ff"></div>
+          <p>P - Modrá</p>
+          <p>Oceli</p>
+        </div>
+        <div class="color-box">
+          <div class="color-sample" style="background-color: #ffff00"></div>
+          <p>M - Žlutá</p>
+          <p>Korozivzdorné oceli</p>
+        </div>
+        <div class="color-box">
+          <div class="color-sample" style="background-color: #ff0000"></div>
+          <p>K - Červená</p>
+          <p>Litina</p>
+        </div>
+        <div class="color-box">
+          <div class="color-sample" style="background-color: #00ff00"></div>
+          <p>N - Zelená</p>
+          <p>Neželezné kovy</p>
+        </div>
+        <div class="color-box">
+          <div class="color-sample" style="background-color: #a52a2a"></div>
+          <p>S - Hnědá</p>
+          <p>Žáruvzdorné slitiny</p>
+        </div>
+        <div class="color-box">
+          <div class="color-sample" style="background-color: #808080"></div>
+          <p>H - Šedá</p>
+          <p>Kalené materiály</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Doporučené řezné podmínky</h2>
+      <div style="margin-bottom: 15px">
+        <label
+          for="material-select"
+          style="font-weight: bold; margin-right: 10px"
+          >Vyberte obráběný materiál:</label
+        >
+        <select
+          id="material-select"
+          style="padding: 5px 10px; border-radius: 4px; border: 1px solid #ddd"
+        >
+          <option value="none">Vyberte materiál...</option>
+          <option value="steel">Ocel (nelegovaná)</option>
+          <option value="stainless">Korozivzdorná ocel</option>
+          <option value="cast-iron">Šedá litina</option>
+          <option value="aluminum">Hliník a slitiny</option>
+          <option value="titanium">Titan a slitiny</option>
+          <option value="hardened">Kalené materiály (>45 HRC)</option>
+        </select>
+      </div>
+
+      <div
+        id="cutting-conditions"
+        style="
+          background-color: #f8f9fa;
+          padding: 15px;
+          border-radius: 5px;
+          border: 1px solid #ddd;
+          display: none;
+        "
+      >
+        <h3 id="material-heading">Doporučené řezné podmínky</h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 15px">
+          <div style="flex: 1; min-width: 250px">
+            <h4>Pro hrubování</h4>
+            <ul id="roughing-conditions">
+              <li>Řezná rychlost: <span>0</span> m/min</li>
+              <li>Posuv: <span>0</span> mm/ot</li>
+              <li>Hloubka řezu: <span>0</span> mm</li>
+              <li>Doporučený typ VBD: <span>-</span></li>
+            </ul>
+          </div>
+          <div style="flex: 1; min-width: 250px">
+            <h4>Pro dokončování</h4>
+            <ul id="finishing-conditions">
+              <li>Řezná rychlost: <span>0</span> m/min</li>
+              <li>Posuv: <span>0</span> mm/ot</li>
+              <li>Hloubka řezu: <span>0</span> mm</li>
+              <li>Doporučený typ VBD: <span>-</span></li>
+            </ul>
+          </div>
+        </div>
+        <p class="note">
+          Poznámka: Tyto hodnoty jsou orientační a mohou se lišit podle
+          konkrétního stroje, chlazení a dalších podmínek.
+        </p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Příklady použití a vzorové aplikace</h2>
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 15px">
+        <div
+          style="
+            flex: 1;
+            min-width: 300px;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          "
+        >
+          <h3>Soustružení hřídele</h3>
+          <table style="width: 100%; border-collapse: collapse; margin: 10px 0">
+            <tr style="background-color: #e9ecef">
+              <th
+                style="padding: 8px; border: 1px solid #ddd; text-align: left"
+              >
+                Operace
+              </th>
+              <th
+                style="padding: 8px; border: 1px solid #ddd; text-align: left"
+              >
+                Doporučený platek
+              </th>
+              <th
+                style="padding: 8px; border: 1px solid #ddd; text-align: left"
+              >
+                Řezné podmínky
+              </th>
+            </tr>
+            <tr>
+              <td style="padding: 8px; border: 1px solid #ddd">Hrubování</td>
+              <td style="padding: 8px; border: 1px solid #ddd">
+                CNMG 120408-PM
+              </td>
+              <td style="padding: 8px; border: 1px solid #ddd">
+                vc = 180 m/min, f = 0.3 mm/ot, ap = 3 mm
+              </td>
+            </tr>
+            <tr style="background-color: #f8f9fa">
+              <td style="padding: 8px; border: 1px solid #ddd">Dokončování</td>
+              <td style="padding: 8px; border: 1px solid #ddd">
+                DNMG 110404-PF
+              </td>
+              <td style="padding: 8px; border: 1px solid #ddd">
+                vc = 240 m/min, f = 0.15 mm/ot, ap = 0.8 mm
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 8px; border: 1px solid #ddd">Zapichování</td>
+              <td style="padding: 8px; border: 1px solid #ddd">MGMN 300-M</td>
+              <td style="padding: 8px; border: 1px solid #ddd">
+                vc = 120 m/min, f = 0.08 mm/ot
+              </td>
+            </tr>
+          </table>
+          <p>Vhodné držáky: PCLNR 2525M12, MDJNR 2525M11, MGN 300-M</p>
+        </div>
+
+        <div
+          style="
+            flex: 1;
+            min-width: 300px;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          "
+        >
+          <h3>Frézování rovinných ploch</h3>
+          <table style="width: 100%; border-collapse: collapse; margin: 10px 0">
+            <tr style="background-color: #e9ecef">
+              <th
+                style="padding: 8px; border: 1px solid #ddd; text-align: left"
+              >
+                Operace
+              </th>
+              <th
+                style="padding: 8px; border: 1px solid #ddd; text-align: left"
+              >
+                Doporučený platek
+              </th>
+              <th
+                style="padding: 8px; border: 1px solid #ddd; text-align: left"
+              >
+                Řezné podmínky
+              </th>
+            </tr>
+            <tr>
+              <td style="padding: 8px; border: 1px solid #ddd">Hrubování</td>
+              <td style="padding: 8px; border: 1px solid #ddd">SNMG 120408</td>
+              <td style="padding: 8px; border: 1px solid #ddd">
+                vc = 160 m/min, fz = 0.15 mm/zub, ap = 4 mm
+              </td>
+            </tr>
+            <tr style="background-color: #f8f9fa">
+              <td style="padding: 8px; border: 1px solid #ddd">Dokončování</td>
+              <td style="padding: 8px; border: 1px solid #ddd">SEEX 1204AFN</td>
+              <td style="padding: 8px; border: 1px solid #ddd">
+                vc = 220 m/min, fz = 0.1 mm/zub, ap = 1 mm
+              </td>
+            </tr>
+          </table>
+          <p>Vhodné držáky: Čelní fréza Ø63mm s VBD, Čelní fréza Ø50mm s VBD</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Porovnání běžných materiálů VBD</h2>
+      <div style="overflow-x: auto">
+        <table style="width: 100%; border-collapse: collapse; margin: 15px 0">
+          <tr style="background-color: #2c3e50; color: white">
+            <th style="padding: 10px; border: 1px solid #ddd; text-align: left">
+              Materiál VBD
+            </th>
+            <th
+              style="padding: 10px; border: 1px solid #ddd; text-align: center"
+            >
+              Tvrdost
+            </th>
+            <th
+              style="padding: 10px; border: 1px solid #ddd; text-align: center"
+            >
+              Houževnatost
+            </th>
+            <th
+              style="padding: 10px; border: 1px solid #ddd; text-align: center"
+            >
+              Tepelná odolnost
+            </th>
+            <th
+              style="padding: 10px; border: 1px solid #ddd; text-align: center"
+            >
+              Typické použití
+            </th>
+            <th
+              style="padding: 10px; border: 1px solid #ddd; text-align: center"
+            >
+              Řezná rychlost
+            </th>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ddd">
+              <strong>Slinutý karbid (nepovlakovaný)</strong>
+            </td>
+            <td
+              style="padding: 10px; border: 1px solid #ddd; text-align: center"
+            >
+              ★★★☆☆
+            </td>
+            <td
+              style="padding: 10px; border: 1px solid #ddd; text-align: center"
+            >
+              ★★★★☆
+            </td>
+            <td
+              style="padding: 10px; border: 1px solid #ddd; text-align: center"
+            >
+              ★★☆☆☆
+            </td>
+            <td style="padding: 10px; border: 1px solid #ddd">
+              Všeobecné obrábění, přerušované řezy
+            </td>
+            <td
+              style="padding: 10px; border: 1px solid #ddd; text-align: center"
+            >
+              80-150 m/min
+            </td>
+          </tr>
+          <tr style="background-color: #f8f9fa">
+            <td style="padding: 10px; border: 1px solid #ddd">
+              <strong>Slinutý karbid (povlakovaný)</strong>
+            </td>
+            <td
+              style="padding: 10px; border: 1px solid #ddd; text-align: center"
+            >
+              ★★★☆☆
+            </td>
+            <td
+              style="padding: 10px; border: 1px solid #ddd; text-align: center"
+            >
+              ★★★★☆
+            </td>
+            <td
+              style="padding: 10px; border: 1px solid #ddd; text-align: center"
+            >
+              ★★★★☆
+            </td>
+            <td style="padding: 10px; border: 1px solid #ddd">
+              Univerzální použití, vyšší rychlosti
+            </td>
+            <td
+              style="padding: 10px; border: 1px solid #ddd; text-align: center"
+            >
+              150-350 m/min
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ddd">
+              <strong>Řezná keramika (Al₂O₃)</strong>
+            </td>
+            <td
+              style="padding: 10px; border: 1px solid #ddd; text-align: center"
+            >
+              ★★★★☆
+            </td>
+            <td
+              style="padding: 10px; border: 1px solid #ddd; text-align: center"
+            >
+              ★★☆☆☆
+            </td>
+            <td
+              style="padding: 10px; border: 1px solid #ddd; text-align: center"
+            >
+              ★★★★★
+            </td>
+            <td style="padding: 10px; border: 1px solid #ddd">
+              Vysokorychlostní obrábění, litina, kalená ocel
+            </td>
+            <td
+              style="padding: 10px; border: 1px solid #ddd; text-align: center"
+            >
+              400-800 m/min
+            </td>
+          </tr>
+          <tr style="background-color: #f8f9fa">
+            <td style="padding: 10px; border: 1px solid #ddd">
+              <strong>Kubický nitrid boru (CBN)</strong>
+            </td>
+            <td
+              style="padding: 10px; border: 1px solid #ddd; text-align: center"
+            >
+              ★★★★★
+            </td>
+            <td
+              style="padding: 10px; border: 1px solid #ddd; text-align: center"
+            >
+              ★★★☆☆
+            </td>
+            <td
+              style="padding: 10px; border: 1px solid #ddd; text-align: center"
+            >
+              ★★★★★
+            </td>
+            <td style="padding: 10px; border: 1px solid #ddd">
+              Tvrzené materiály nad 45 HRC, superslitimy
+            </td>
+            <td
+              style="padding: 10px; border: 1px solid #ddd; text-align: center"
+            >
+              200-400 m/min
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ddd">
+              <strong>Polykrystalický diamant (PCD)</strong>
+            </td>
+            <td
+              style="padding: 10px; border: 1px solid #ddd; text-align: center"
+            >
+              ★★★★★
+            </td>
+            <td
+              style="padding: 10px; border: 1px solid #ddd; text-align: center"
+            >
+              ★★☆☆☆
+            </td>
+            <td
+              style="padding: 10px; border: 1px solid #ddd; text-align: center"
+            >
+              ★★☆☆☆
+            </td>
+            <td style="padding: 10px; border: 1px solid #ddd">
+              Neželezné kovy, kompozity, abrazivní materiály
+            </td>
+            <td
+              style="padding: 10px; border: 1px solid #ddd; text-align: center"
+            >
+              300-1000 m/min
+            </td>
+          </tr>
+          <tr style="background-color: #f8f9fa">
+            <td style="padding: 10px; border: 1px solid #ddd">
+              <strong>Cermety</strong>
+            </td>
+            <td
+              style="padding: 10px; border: 1px solid #ddd; text-align: center"
+            >
+              ★★★★☆
+            </td>
+            <td
+              style="padding: 10px; border: 1px solid #ddd; text-align: center"
+            >
+              ★★★☆☆
+            </td>
+            <td
+              style="padding: 10px; border: 1px solid #ddd; text-align: center"
+            >
+              ★★★★☆
+            </td>
+            <td style="padding: 10px; border: 1px solid #ddd">
+              Dokončovací operace, vysoké řezné rychlosti
+            </td>
+            <td
+              style="padding: 10px; border: 1px solid #ddd; text-align: center"
+            >
+              200-400 m/min
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="note">
+        <p>
+          <strong>Poznámka:</strong> Výběr materiálu VBD by měl zohledňovat
+          konkrétní podmínky obrábění, obráběný materiál, způsob řezu (plynulý
+          vs. přerušovaný) a požadavky na kvalitu povrchu.
+        </p>
+      </div>
+    </div>
+
+    <div
+      class="section"
+      style="background-color: #ecf0f1; padding: 20px; border-radius: 5px"
+    >
+      <h2 style="margin-top: 0">Rady pro prodloužení životnosti VBD</h2>
+      <div style="display: flex; flex-wrap: wrap; gap: 15px">
+        <div
+          style="
+            flex: 1;
+            min-width: 250px;
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          "
+        >
+          <h3 style="color: #3498db">
+            <i class="fa fa-check-circle"></i> Správná volba řezných podmínek
+          </h3>
+          <ul style="padding-left: 20px">
+            <li>Nepřekračujte doporučené řezné rychlosti</li>
+            <li>Upravte posuv podle materiálu a stavu stroje</li>
+            <li>Zvolte vhodnou hloubku řezu podle výkonu stroje</li>
+            <li>Dodržujte katalogové hodnoty pro konkrétní typ VBD</li>
+          </ul>
+        </div>
+        <div
+          style="
+            flex: 1;
+            min-width: 250px;
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          "
+        >
+          <h3 style="color: #3498db">
+            <i class="fa fa-tint"></i> Efektivní chlazení
+          </h3>
+          <ul style="padding-left: 20px">
+            <li>Používejte dostatečné množství chladicí kapaliny</li>
+            <li>Zajistěte správný směr přívodu chladicí kapaliny</li>
+            <li>Pravidelně vyměňujte a udržujte chladicí kapalinu</li>
+            <li>U vysokorychlostního obrábění zvažte vysokotlaké chlazení</li>
+          </ul>
+        </div>
+        <div
+          style="
+            flex: 1;
+            min-width: 250px;
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          "
+        >
+          <h3 style="color: #3498db">
+            <i class="fa fa-wrench"></i> Správná instalace a údržba
+          </h3>
+          <ul style="padding-left: 20px">
+            <li>Důkladně vyčistěte dosedací plochy před instalací VBD</li>
+            <li>Zajistěte správné dotažení upínacích prvků</li>
+            <li>Kontrolujte opotřebení upínacích prvků</li>
+            <li>Pravidelně otáčejte nebo měňte břity VBD</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Časté otázky k obráběcím plátkům</h2>
+      <div
+        style="
+          background-color: #f8f9fa;
+          padding: 0;
+          border-radius: 5px;
+          overflow: hidden;
+        "
+      >
+        <div class="faq-item" style="border-bottom: 1px solid #ddd">
+          <div
+            class="faq-question"
+            style="
+              padding: 15px;
+              cursor: pointer;
+              font-weight: bold;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            "
+          >
+            <span>Jak dlouho vydrží břitová destička?</span>
+            <span class="toggle">+</span>
+          </div>
+          <div
+            class="faq-answer"
+            style="
+              padding: 0 15px;
+              max-height: 0;
+              overflow: hidden;
+              transition: max-height 0.3s ease;
+            "
+          >
+            <p>Životnost břitové destičky závisí na mnoha faktorech, včetně:</p>
+            <ul>
+              <li>
+                Materiálu obrobku - tvrdší materiály vedou k rychlejšímu
+                opotřebení
+              </li>
+              <li>Řezných podmínek - rychlost, posuv a hloubka řezu</li>
+              <li>
+                Materiálu destičky - slinuté karbidy mají jinou životnost než
+                keramika
+              </li>
+              <li>Typu obrábění - přerušované řezy způsobují větší namáhání</li>
+              <li>Chlazení - správné chlazení může prodloužit životnost</li>
+            </ul>
+            <p>
+              Typická životnost se může pohybovat od několika minut až po
+              několik hodin řezného času. U moderních povlakovaných destiček lze
+              očekávat vyšší životnost.
+            </p>
+          </div>
+        </div>
+        <div class="faq-item" style="border-bottom: 1px solid #ddd">
+          <div
+            class="faq-question"
+            style="
+              padding: 15px;
+              cursor: pointer;
+              font-weight: bold;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            "
+          >
+            <span
+              >Jaký je rozdíl mezi povlakovanými a nepovlakovanými
+              destičkami?</span
+            >
+            <span class="toggle">+</span>
+          </div>
+          <div
+            class="faq-answer"
+            style="
+              padding: 0 15px;
+              max-height: 0;
+              overflow: hidden;
+              transition: max-height 0.3s ease;
+            "
+          >
+            <p><strong>Nepovlakované destičky:</strong></p>
+            <ul>
+              <li>Jednodušší výroba a nižší cena</li>
+              <li>Vhodné pro méně náročné aplikace</li>
+              <li>Kratší životnost</li>
+              <li>Nižší možné řezné rychlosti</li>
+            </ul>
+            <p><strong>Povlakované destičky:</strong></p>
+            <ul>
+              <li>Vyšší odolnost proti opotřebení</li>
+              <li>Nižší tření při obrábění</li>
+              <li>Vyšší tepelná odolnost</li>
+              <li>Možnost použití vyšších řezných rychlostí</li>
+              <li>Delší životnost</li>
+              <li>Vyšší pořizovací cena, ale lepší ekonomika provozu</li>
+            </ul>
+            <p>
+              Nejčastější typy povlaků jsou TiN (nitrid titanu - zlatá barva),
+              TiCN (karbonitrid titanu), TiAlN (nitrid titanu a hliníku) a
+              povlaky na bázi Al2O3 (oxid hlinitý).
+            </p>
+          </div>
+        </div>
+        <div class="faq-item" style="border-bottom: 1px solid #ddd">
+          <div
+            class="faq-question"
+            style="
+              padding: 15px;
+              cursor: pointer;
+              font-weight: bold;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            "
+          >
+            <span>Jak poznat, že je destička opotřebovaná?</span>
+            <span class="toggle">+</span>
+          </div>
+          <div
+            class="faq-answer"
+            style="
+              padding: 0 15px;
+              max-height: 0;
+              overflow: hidden;
+              transition: max-height 0.3s ease;
+            "
+          >
+            <p>Typické znaky opotřebení břitové destičky:</p>
+            <ul>
+              <li>Zhoršená kvalita obrobeného povrchu - vyšší drsnost</li>
+              <li>Změna rozměrů obrobku - nedodržení tolerancí</li>
+              <li>
+                Viditelné opotřebení hřbetu destičky (při vizuální kontrole)
+              </li>
+              <li>Tvorba nárůstku na břitu</li>
+              <li>Vyštípnutí nebo lom břitu</li>
+              <li>Zvýšený hluk nebo vibrace během obrábění</li>
+              <li>Změna tvaru nebo barvy třísky</li>
+            </ul>
+            <p>
+              Doporučuje se pravidelná kontrola destičky a její výměna před
+              dosažením kritického opotřebení, které by mohlo vést k selhání
+              během obrábění.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>
+        &copy; 2025 - Vytvořeno jako informační stránka o obráběcích plátkách a
+        jejich značení
+      </p>
+      <script>
+        // Přidání interaktivity pro FAQ sekci
+        document.querySelectorAll(".faq-question").forEach((question) => {
+          question.addEventListener("click", () => {
+            const answer = question.nextElementSibling;
+            const toggle = question.querySelector(".toggle");
+
+            if (
+              answer.style.maxHeight === "0px" ||
+              answer.style.maxHeight === ""
+            ) {
+              answer.style.maxHeight = answer.scrollHeight + 30 + "px";
+              answer.style.padding = "15px";
+              toggle.textContent = "-";
+            } else {
+              answer.style.maxHeight = "0px";
+              answer.style.padding = "0 15px";
+              toggle.textContent = "+";
+            }
+          });
+        });
+      </script>
+    </footer>
+
+    <!-- Modální okno pro výběr možností -->
+    <div id="optionsModal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2 id="modal-title">Vyberte možnost</h2>
+        <div id="options-container"></div>
+        <div id="option-description"></div>
+      </div>
+    </div>
+
+    <script>
+      // Přidání interaktivity pro sekci řezných podmínek
+      document
+        .getElementById("material-select")
+        .addEventListener("change", function () {
+          const materialValue = this.value;
+          const cuttingConditionsDiv =
+            document.getElementById("cutting-conditions");
+          const materialHeading = document.getElementById("material-heading");
+          const roughingConditions = document
+            .getElementById("roughing-conditions")
+            .getElementsByTagName("span");
+          const finishingConditions = document
+            .getElementById("finishing-conditions")
+            .getElementsByTagName("span");
+
+          if (materialValue === "none") {
+            cuttingConditionsDiv.style.display = "none";
+            return;
+          }
+
+          // Zobrazit sekci
+          cuttingConditionsDiv.style.display = "block";
+
+          // Nastavit hodnoty podle vybraného materiálu
+          if (materialValue === "steel") {
+            materialHeading.textContent = "Doporučené řezné podmínky pro ocel";
+            // Hrubování [rychlost, posuv, hloubka, typ VBD]
+            setValues(roughingConditions, [180, 0.3, 4, "CNMG/SNMG"]);
+            // Dokončování [rychlost, posuv, hloubka, typ VBD]
+            setValues(finishingConditions, [250, 0.15, 1, "CCMT/DCMT"]);
+          } else if (materialValue === "stainless") {
+            materialHeading.textContent =
+              "Doporučené řezné podmínky pro korozivzdornou ocel";
+            setValues(roughingConditions, [120, 0.25, 3, "CNMG/TNMG"]);
+            setValues(finishingConditions, [180, 0.12, 0.8, "CCMT/VBMT"]);
+          } else if (materialValue === "cast-iron") {
+            materialHeading.textContent =
+              "Doporučené řezné podmínky pro šedou litinu";
+            setValues(roughingConditions, [150, 0.35, 5, "SNMG/CNMG"]);
+            setValues(finishingConditions, [220, 0.18, 1.2, "CCMT/DCMT"]);
+          } else if (materialValue === "aluminum") {
+            materialHeading.textContent =
+              "Doporučené řezné podmínky pro hliník a slitiny";
+            setValues(roughingConditions, [300, 0.4, 5, "DCGT/CCGT"]);
+            setValues(finishingConditions, [450, 0.2, 1.5, "VCGT/DCGT"]);
+          } else if (materialValue === "titanium") {
+            materialHeading.textContent =
+              "Doporučené řezné podmínky pro titan a slitiny";
+            setValues(roughingConditions, [50, 0.15, 2, "CNMG/SNMG"]);
+            setValues(finishingConditions, [70, 0.1, 0.5, "CCMT/VCMT"]);
+          } else if (materialValue === "hardened") {
+            materialHeading.textContent =
+              "Doporučené řezné podmínky pro kalené materiály";
+            setValues(roughingConditions, [80, 0.15, 2, "CNGA/SNGA"]);
+            setValues(finishingConditions, [120, 0.08, 0.3, "CNGA/VNGA"]);
+          }
+        });
+
+      // Pomocná funkce pro nastavení hodnot
+      function setValues(elements, values) {
+        for (let i = 0; i < elements.length; i++) {
+          elements[i].textContent = values[i];
+        }
+      }
+
+      // Přidat vyhledávací funkcionalitu
+      function addSearch() {
+        const searchBox = document.createElement("div");
+        searchBox.innerHTML = `
+                <div style="margin: 20px 0; background-color: #e9ecef; padding: 15px; border-radius: 5px;">
+                    <h3 style="margin-top: 0;">Rychlé vyhledávání</h3>
+                    <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                        <input type="text" id="search-input" placeholder="Zadejte kód plátku nebo držáku..."
+                               style="flex: 1; padding: 8px; border: 1px solid #ced4da; border-radius: 4px;">
+                        <button id="search-button" style="background-color: #3498db; color: white; border: none;
+                                 padding: 8px 15px; border-radius: 4px; cursor: pointer;">Vyhledat</button>
+                    </div>
+                    <div id="search-results" style="display: none; background-color: white; padding: 10px; border-radius: 4px;"></div>
+                </div>
+            `;
+        document
+          .querySelector("header")
+          .insertAdjacentElement("afterend", searchBox);
+
+        document
+          .getElementById("search-button")
+          .addEventListener("click", performSearch);
+        document
+          .getElementById("search-input")
+          .addEventListener("keypress", function (e) {
+            if (e.key === "Enter") {
+              performSearch();
+            }
+          });
+      }
+
+      function performSearch() {
+        const searchInput = document
+          .getElementById("search-input")
+          .value.toUpperCase();
+        const searchResults = document.getElementById("search-results");
+        searchResults.style.display = "block";
+
+        if (searchInput.length < 2) {
+          searchResults.innerHTML =
+            "<p>Zadejte alespoň 2 znaky pro vyhledávání.</p>";
+          return;
+        }
+
+        // Vyhledávání v datech plátků
+        let foundInInserts = false;
+        let insertResults = "<h4>Výsledky pro plátky:</h4>";
+
+        // Procházení dat plátků
+        for (const posKey in isoData) {
+          const position = isoData[posKey];
+          for (const option of position.options) {
+            if (
+              option.value.includes(searchInput) ||
+              option.description.toUpperCase().includes(searchInput)
+            ) {
+              insertResults += `<p><strong>${position.title}:</strong> ${option.value} - ${option.description}</p>`;
+              foundInInserts = true;
+            }
+          }
+        }
+
+        // Vyhledávání v datech držáků
+        let foundInHolders = false;
+        let holderResults = "<h4>Výsledky pro držáky:</h4>";
+
+        // Procházení dat držáků
+        for (const posKey in holderIsoData) {
+          const position = holderIsoData[posKey];
+          for (const option of position.options) {
+            if (
+              option.value.includes(searchInput) ||
+              option.description.toUpperCase().includes(searchInput)
+            ) {
+              holderResults += `<p><strong>${position.title}:</strong> ${option.value} - ${option.description}</p>`;
+              foundInHolders = true;
+            }
+          }
+        }
+
+        if (!foundInInserts && !foundInHolders) {
+          searchResults.innerHTML = "<p>Nebyly nalezeny žádné shody.</p>";
+        } else {
+          searchResults.innerHTML =
+            (foundInInserts ? insertResults : "") +
+            (foundInHolders ? holderResults : "");
+        }
+      }
+
+      // Volání funkce pro přidání vyhledávání po načtení stránky
+      window.addEventListener("load", addSearch);
+
+      // Data pro doporučené držáky
+      const holderData = {
+        // Pro tvar C (kosočtverec 80°)
+        C: {
+          N: "CCLNR/L, DCLNR/L",
+          P: "CCPGR/L, DCPGR/L",
+          M: "CCMNR/L, DCMNR/L",
+        },
+        // Pro tvar D (kosočtverec 55°)
+        D: {
+          N: "DDJNR/L, PDJNR/L",
+          P: "DDPNR/L, PDPNR/L",
+          M: "DDMNR/L, PDMNR/L",
+        },
+        // Pro tvar S (čtvercový)
+        S: {
+          N: "SSKNR/L, MSKNR/L",
+          P: "SSPGR/L, MSPGR/L",
+          M: "SSMNR/L, MSMNR/L",
+        },
+        // Pro tvar T (trojúhelníkový)
+        T: {
+          N: "TTJNR/L, MTJNR/L",
+          P: "TTPGR/L, MTPGR/L",
+          M: "TTMNR/L, MTMNR/L",
+        },
+        // Pro tvar R (kruhový)
+        R: {
+          N: "RRDNR/L, SRRNR/L",
+          P: "RRPGR/L, SRPGR/L",
+          M: "RRMNR/L, SRMNR/L",
+        },
+        // Pro tvar V (kosočtverec 35°)
+        V: {
+          N: "SVJNR/L, MVJNR/L",
+          P: "SVPGR/L, MVPGR/L",
+          M: "SVMNR/L, MVMNR/L",
+        },
+        // Pro tvar W (šestiúhelníkový)
+        W: {
+          N: "WWLNR/L, MWLNR/L",
+          P: "WWPGR/L, MWPGR/L",
+          M: "WWMNR/L, MWMNR/L",
+        },
+      };
+
+      // Data pro značení držáku
+      const holderIsoData = {
+        1: {
+          // První písmeno - způsob upnutí
+          title: "Způsob upnutí destičky",
+          options: [
+            {
+              value: "C",
+              description: "Upínka shora",
+              details: "Upnutí destičky upínkou působící shora",
+            },
+            {
+              value: "D",
+              description: "Upínací klín",
+              details: "Upnutí přes otvor pomocí klínu",
+            },
+            {
+              value: "M",
+              description: "Upínací šroub",
+              details: "Upnutí destičky šroubem přes otvor",
+            },
+            {
+              value: "P",
+              description: "Páčka",
+              details: "Upnutí destičky páčkou",
+            },
+            {
+              value: "S",
+              description: "Šroub",
+              details: "Upnutí bočním šroubem",
+            },
+          ],
+        },
+        2: {
+          // Druhé písmeno - tvar destičky
+          title: "Tvar destičky",
+          options: [
+            {
+              value: "C",
+              description: "Kosočtverec 80°",
+              details: "Pro dokončovací soustružení",
+            },
+            {
+              value: "D",
+              description: "Kosočtverec 55°",
+              details: "Pro kopírovací soustružení",
+            },
+            {
+              value: "R",
+              description: "Kruhový",
+              details: "Pro kopírovací operace a různorodé kontury",
+            },
+            {
+              value: "S",
+              description: "Čtvercový",
+              details: "Univerzální soustružení, srážení hran",
+            },
+            {
+              value: "T",
+              description: "Trojúhelníkový",
+              details: "Dokončovací soustružení, malé úběry",
+            },
+            {
+              value: "V",
+              description: "Kosočtverec 35°",
+              details: "Přesné kopírovací soustružení",
+            },
+            {
+              value: "W",
+              description: "Šestiúhelníkový",
+              details: "Speciální aplikace",
+            },
+          ],
+        },
+        3: {
+          // Třetí písmeno - úhel hřbetu
+          title: "Úhel hřbetu",
+          options: [
+            {
+              value: "L",
+              description: "Levé provedení",
+              details: "Pro levostranné operace",
+            },
+            {
+              value: "N",
+              description: "Neutrální",
+              details: "Pro standardní operace",
+            },
+            {
+              value: "R",
+              description: "Pravé provedení",
+              details: "Pro pravostranné operace",
+            },
+          ],
+        },
+        4: {
+          // Čtvrté písmeno - provedení držáku
+          title: "Provedení držáku",
+          options: [
+            {
+              value: "K",
+              description: "Standardní",
+              details: "Standardní provedení držáku",
+            },
+            {
+              value: "M",
+              description: "S vnitřním přívodem kapaliny",
+              details: "Držák s kanálky pro chlazení",
+            },
+            {
+              value: "S",
+              description: "Speciální",
+              details: "Speciální provedení",
+            },
+          ],
+        },
+        5: {
+          // Páté písmeno - výška držáku (číslice)
+          title: "Výška držáku",
+          options: [
+            {
+              value: "16",
+              description: "16 mm",
+              details: "Menší držák pro přesné obrábění",
+            },
+            {
+              value: "20",
+              description: "20 mm",
+              details: "Standardní velikost pro běžné operace",
+            },
+            {
+              value: "25",
+              description: "25 mm",
+              details: "Větší držák pro středně náročné operace",
+            },
+            {
+              value: "32",
+              description: "32 mm",
+              details: "Velký držák pro náročné operace",
+            },
+            {
+              value: "40",
+              description: "40 mm",
+              details: "Velmi velký držák pro těžké obrábění",
+            },
+          ],
+        },
+        6: {
+          // Šesté písmeno - šířka držáku (číslice)
+          title: "Šířka držáku",
+          options: [
+            {
+              value: "16",
+              description: "16 mm",
+              details: "Úzký držák pro omezené prostory",
+            },
+            { value: "20", description: "20 mm", details: "Standardní šířka" },
+            {
+              value: "25",
+              description: "25 mm",
+              details: "Širší držák pro lepší stabilitu",
+            },
+            {
+              value: "32",
+              description: "32 mm",
+              details: "Velmi široký držák pro maximální tuhost",
+            },
+          ],
+        },
+      };
+
+      // Data pro jednotlivé pozice značení
+      const isoData = {
+        1: {
+          // Tvar destičky
+          title: "Tvar destičky",
+          options: [
+            {
+              value: "C",
+              description: "Kosočtverec 80°",
+              details: "Používaný pro dokončovací soustružení",
+            },
+            {
+              value: "D",
+              description: "Kosočtverec 55°",
+              details: "Vhodný pro kopírovací soustružení",
+            },
+            {
+              value: "R",
+              description: "Kruhový",
+              details: "Pro kopírovací operace a různorodé kontury",
+            },
+            {
+              value: "S",
+              description: "Čtvercový",
+              details: "Univerzální soustružení, srážení hran",
+            },
+            {
+              value: "T",
+              description: "Trojúhelníkový",
+              details: "Dokončovací soustružení, malé úběry",
+            },
+            {
+              value: "V",
+              description: "Kosočtverec 35°",
+              details: "Přesné kopírovací soustružení",
+            },
+            {
+              value: "W",
+              description: "Šestiúhelníkový",
+              details: "Speciální aplikace",
+            },
+          ],
+        },
+        2: {
+          // Úhel hřbetu
+          title: "Úhel hřbetu",
+          options: [
+            {
+              value: "N",
+              description: "0° - Negativní",
+              details: "Vhodné pro vysoké řezné rychlosti a přerušované řezy",
+            },
+            {
+              value: "B",
+              description: "5° - Positivní",
+              details: "Kompromis mezi negativním a pozitivním úhlem",
+            },
+            {
+              value: "P",
+              description: "11° - Positivní",
+              details: "Menší řezné síly, lepší odvod třísek",
+            },
+            {
+              value: "C",
+              description: "7° - Speciální",
+              details: "Používaný pro speciální aplikace",
+            },
+            {
+              value: "E",
+              description: "20° - Speciální",
+              details: "Pro velmi přesné obrábění",
+            },
+            {
+              value: "M",
+              description: "15° - Speciální",
+              details: "Pro středně náročné obrábění",
+            },
+            {
+              value: "A",
+              description: "25° - Speciální",
+              details: "Pro dokončovací operace s minimálními řeznými silami",
+            },
+          ],
+        },
+        3: {
+          // Tolerance
+          title: "Tolerance",
+          options: [
+            {
+              value: "A",
+              description: "±0.05 mm na tloušťku, ±0.13 mm na průměr",
+              details: "Velmi přesné destičky",
+            },
+            {
+              value: "C",
+              description: "±0.08 mm na tloušťku, ±0.25 mm na průměr",
+              details: "Střední přesnost",
+            },
+            {
+              value: "G",
+              description: "±0.13 mm na tloušťku, ±0.25 mm na průměr",
+              details: "Běžné tolerance",
+            },
+            {
+              value: "U",
+              description: "±0.13 mm na tloušťku, ±0.18 mm na průměr",
+              details: "Speciální tolerance",
+            },
+          ],
+        },
+        4: {
+          // Typ destičky
+          title: "Typ destičky",
+          options: [
+            {
+              value: "M",
+              description: "Destička s dírou se závitem",
+              details: "Pro upínání šroubem",
+            },
+            {
+              value: "G",
+              description:
+                "Destička s dírou a utvařečem třísky na horní straně",
+              details: "Pro lepší kontrolu třísky",
+            },
+            {
+              value: "N",
+              description: "Destička s dírou, ale bez utvařeče třísky",
+              details: "Pro speciální aplikace",
+            },
+            {
+              value: "T",
+              description:
+                "Destička s dírou a utvařečem třísky na obou stranách",
+              details: "Oboustranně použitelná",
+            },
+          ],
+        },
+        5: {
+          // Velikost
+          title: "Velikost destičky",
+          options: [
+            {
+              value: "06",
+              description: "6 mm",
+              details: "Malá destička pro přesné obrábění",
+            },
+            {
+              value: "08",
+              description: "8 mm",
+              details: "Malá destička pro přesné obrábění",
+            },
+            {
+              value: "10",
+              description: "10 mm",
+              details: "Středně velká destička",
+            },
+            {
+              value: "12",
+              description: "12 mm",
+              details: "Středně velká destička",
+            },
+            {
+              value: "16",
+              description: "16 mm",
+              details: "Velká destička pro hrubování",
+            },
+            {
+              value: "20",
+              description: "20 mm",
+              details: "Velká destička pro hrubování",
+            },
+            {
+              value: "25",
+              description: "25 mm",
+              details: "Velmi velká destička pro těžké hrubování",
+            },
+          ],
+        },
+        6: {
+          // Tloušťka
+          title: "Tloušťka destičky",
+          options: [
+            {
+              value: "02",
+              description: "2 mm",
+              details: "Velmi tenká destička",
+            },
+            { value: "03", description: "3 mm", details: "Tenká destička" },
+            {
+              value: "04",
+              description: "4 mm",
+              details: "Standardní tloušťka",
+            },
+            { value: "05", description: "5 mm", details: "Silnější destička" },
+            {
+              value: "06",
+              description: "6 mm",
+              details: "Tlustá destička pro náročné podmínky",
+            },
+          ],
+        },
+        7: {
+          // Rádius špičky
+          title: "Rádius špičky",
+          options: [
+            { value: "00", description: "0.0 mm", details: "Ostrá špička" },
+            {
+              value: "04",
+              description: "0.4 mm",
+              details: "Malý rádius pro jemné obrábění",
+            },
+            {
+              value: "08",
+              description: "0.8 mm",
+              details: "Standardní rádius",
+            },
+            {
+              value: "12",
+              description: "1.2 mm",
+              details: "Větší rádius pro lepší kvalitu povrchu",
+            },
+            {
+              value: "16",
+              description: "1.6 mm",
+              details: "Velký rádius pro vysokou kvalitu povrchu",
+            },
+          ],
+        },
+        8: {
+          // Úprava břitu
+          title: "Úprava břitu",
+          options: [
+            {
+              value: "F",
+              description: "Jemné obrábění",
+              details: "Pro dokončovací operace",
+            },
+            {
+              value: "M",
+              description: "Střední obrábění",
+              details: "Pro běžné obrábění",
+            },
+            {
+              value: "R",
+              description: "Hrubé obrábění",
+              details: "Pro hrubovací operace",
+            },
+            {
+              value: "P",
+              description: "Pozitivní geometrie",
+              details: "Pro nižší řezné síly",
+            },
+          ],
+        },
+        9: {
+          // Směr řezu
+          title: "Směr řezu",
+          options: [
+            {
+              value: "R",
+              description: "Pravý směr",
+              details: "Pro pravotočivé nástroje",
+            },
+            {
+              value: "L",
+              description: "Levý směr",
+              details: "Pro levotočivé nástroje",
+            },
+            {
+              value: "N",
+              description: "Neutrální",
+              details: "Pro obousměrné nástroje",
+            },
+          ],
+        },
+      };
+
+      // Aktuální výběr uživatele pro držák
+      let holderSelection = {
+        1: "-",
+        2: "-",
+        3: "-",
+        4: "-",
+        5: "-",
+        6: "-",
+      };
+
+      // Modální okno pro držák
+      const holderModal = document.getElementById("optionsModal");
+
+      // DOM elementy pro držák
+      const holderResultCode = document.getElementById("holder-result-code");
+      const holderResultDescription = document.getElementById(
+        "holder-result-description"
+      );
+      const resetHolderBtn = document.getElementById("resetHolderSelection");
+
+      // Přidání interaktivity k položkám v interaktivní sekci držáku
+      for (let i = 1; i <= 6; i++) {
+        const holderSelItem = document.getElementById(`holder-pos${i}`);
+        holderSelItem.addEventListener("click", function () {
+          openHolderModal(i);
+        });
+      }
+
+      // Funkce pro otevření modálního okna pro držák
+      function openHolderModal(position) {
+        modalTitle.textContent = `${position}. ${holderIsoData[position].title}`;
+        optionsContainer.innerHTML = "";
+        optionDescription.textContent = "";
+
+        holderIsoData[position].options.forEach((option) => {
+          const btn = document.createElement("button");
+          btn.classList.add("option-btn");
+          btn.textContent = `${option.value} - ${option.description}`;
+          btn.addEventListener("click", function () {
+            // Nastavení vybrané hodnoty
+            holderSelection[position] = option.value;
+            updateHolderDisplay();
+
+            // Zobrazení popisu
+            optionDescription.textContent = option.details;
+
+            // Zavření modálního okna po krátké prodlevě
+            setTimeout(() => {
+              modal.style.display = "none";
+            }, 1000);
+          });
+          optionsContainer.appendChild(btn);
+        });
+
+        modal.style.display = "block";
+      }
+
+      // Aktualizace zobrazení výběru držáku
+      function updateHolderDisplay() {
+        // Aktualizace kódu
+        holderResultCode.textContent = `${holderSelection[1]}${holderSelection[2]}${holderSelection[3]}${holderSelection[4]}${holderSelection[5]}${holderSelection[6]}`;
+
+        // Aktualizace tlačítek výběru
+        for (let i = 1; i <= 6; i++) {
+          document.getElementById(`holder-pos${i}`).textContent =
+            holderSelection[i];
+        }
+
+        // Aktualizace popisu
+        updateHolderDescription();
+      }
+
+      // Aktualizace popisu vybraného držáku
+      function updateHolderDescription() {
+        let description = "Váš vybraný držák znamená: ";
+        let validEntries = 0;
+
+        for (let i = 1; i <= 6; i++) {
+          if (holderSelection[i] !== "-") {
+            validEntries++;
+            const selectedOption = holderIsoData[i].options.find(
+              (opt) => opt.value === holderSelection[i]
+            );
+            if (selectedOption) {
+              description += `${i}. ${holderIsoData[i].title}: ${selectedOption.description}. `;
+            }
+          }
+        }
+
+        if (validEntries === 0) {
+          description = "Zde se zobrazí popis vašeho výběru držáku";
+          document.getElementById("insert-recommendation").style.display =
+            "none";
+        }
+
+        holderResultDescription.textContent = description;
+
+        // Zobrazení doporučených plátků, pokud jsou zadány tvar a úhel hřbetu v držáku
+        if (holderSelection[2] !== "-" && holderSelection[3] !== "-") {
+          const shape = holderSelection[2]; // Tvar destičky pro držák
+          const direction = holderSelection[3]; // Směr držáku (L/R)
+
+          const insertElement = document.getElementById(
+            "insert-recommendation"
+          );
+          const insertDesc = document.getElementById("insert-description");
+
+          // Určení vhodných úhlů hřbetu pro tento typ držáku
+          let suitableAngles = [];
+          if (holderSelection[1] === "C" || holderSelection[1] === "P") {
+            suitableAngles = ["P", "N"]; // Pro upínky a páčky jsou vhodné jak pozitivní, tak negativní úhly
+          } else if (holderSelection[1] === "M" || holderSelection[1] === "S") {
+            suitableAngles = ["N"]; // Pro šrouby spíše negativní
+          } else if (holderSelection[1] === "D") {
+            suitableAngles = ["N", "P"]; // Pro klíny obojí
+          }
+
+          let insertHTML = `<strong>Pro držák typu ${holderSelection[1]}${holderSelection[2]}${holderSelection[3]} doporučujeme plátky:</strong><br>`;
+
+          if (suitableAngles.length > 0) {
+            suitableAngles.forEach((angle) => {
+              insertHTML += `<span style="display: block; margin: 5px 0; padding: 3px 8px; background-color: #f5f7ff; border-radius: 3px;">
+                        <strong>${shape}${angle}</strong> - plátky tvaru ${shape} s úhlem hřbetu ${
+                angle === "N" ? "negativním (0°)" : "pozitivním (11°)"
+              }</span>`;
+            });
+
+            // Přidání informace o tolerancích a typech
+            insertHTML += `<span style="font-size: 0.9em; margin-top: 8px; display: block;">
+                    Doporučené tolerance: M (střední), G (běžná)<br>
+                    Doporučené typy: M (s dírou), G (s utvařečem třísky)<br>
+                    Vhodné kombinace: ${shape}${suitableAngles[0]}MG, ${shape}${suitableAngles[0]}MM</span>`;
+          } else {
+            insertHTML +=
+              "Pro tento držák nejsou dostupné specifické doporučení plátků.";
+          }
+
+          insertDesc.innerHTML = insertHTML;
+          insertElement.style.display = "block";
+        } else {
+          document.getElementById("insert-recommendation").style.display =
+            "none";
+        }
+      }
+
+      // Reset výběru držáku
+      resetHolderBtn.addEventListener("click", function () {
+        for (let i = 1; i <= 6; i++) {
+          holderSelection[i] = "-";
+        }
+        updateHolderDisplay();
+      });
+
+      // Aktuální výběr uživatele
+      let userSelection = {
+        1: "-",
+        2: "-",
+        3: "-",
+        4: "-",
+        5: "-",
+        6: "-",
+        7: "-",
+        8: "-",
+        9: "-",
+      };
+
+      // DOM elementy
+      const modal = document.getElementById("optionsModal");
+      const modalTitle = document.getElementById("modal-title");
+      const optionsContainer = document.getElementById("options-container");
+      const optionDescription = document.getElementById("option-description");
+      const closeBtn = document.querySelector(".close-btn");
+      const resultCode = document.getElementById("result-code");
+      const resultDescription = document.getElementById("result-description");
+      const resetBtn = document.getElementById("resetSelection");
+
+      // Přidání interaktivity ke schématu
+      document.querySelectorAll(".znaceni-item").forEach((item) => {
+        item.addEventListener("click", function () {
+          const position = this.getAttribute("data-position");
+          openModal(position);
+        });
+      });
+
+      // Přidání interaktivity k položkám v interaktivní sekci
+      for (let i = 1; i <= 9; i++) {
+        const selItem = document.getElementById(`sel-pos${i}`);
+        selItem.addEventListener("click", function () {
+          openModal(i);
+        });
+      }
+
+      // Funkce pro otevření modálního okna
+      function openModal(position) {
+        modalTitle.textContent = `${position}. ${isoData[position].title}`;
+        optionsContainer.innerHTML = "";
+        optionDescription.textContent = "";
+
+        isoData[position].options.forEach((option) => {
+          const btn = document.createElement("button");
+          btn.classList.add("option-btn");
+          btn.textContent = `${option.value} - ${option.description}`;
+          btn.addEventListener("click", function () {
+            // Nastavení vybrané hodnoty
+            userSelection[position] = option.value;
+            updateDisplay();
+
+            // Zobrazení popisu
+            optionDescription.textContent = option.details;
+
+            // Zavření modálního okna po krátké prodlevě
+            setTimeout(() => {
+              modal.style.display = "none";
+            }, 1000);
+          });
+          optionsContainer.appendChild(btn);
+        });
+
+        modal.style.display = "block";
+      }
+
+      // Zavření modálního okna kliknutím na tlačítko zavřít
+      closeBtn.addEventListener("click", function () {
+        modal.style.display = "none";
+      });
+
+      // Zavření modálního okna kliknutím mimo okno
+      window.addEventListener("click", function (event) {
+        if (event.target === modal) {
+          modal.style.display = "none";
+        }
+      });
+
+      // Aktualizace zobrazení výběru
+      function updateDisplay() {
+        // Aktualizace kódu
+        resultCode.textContent = `${userSelection[1]}${userSelection[2]}${userSelection[3]}${userSelection[4]} ${userSelection[5]}${userSelection[6]}${userSelection[7]}-${userSelection[8]}${userSelection[9]}`;
+
+        // Aktualizace tlačítek výběru
+        for (let i = 1; i <= 9; i++) {
+          document.getElementById(`sel-pos${i}`).textContent = userSelection[i];
+        }
+
+        // Aktualizace popisu
+        updateDescription();
+      }
+
+      // Aktualizace popisu vybraného kódu
+      function updateDescription() {
+        let description = "Váš vybraný kód znamená: ";
+        let validEntries = 0;
+
+        for (let i = 1; i <= 9; i++) {
+          if (userSelection[i] !== "-") {
+            validEntries++;
+            const selectedOption = isoData[i].options.find(
+              (opt) => opt.value === userSelection[i]
+            );
+            if (selectedOption) {
+              description += `${i}. ${isoData[i].title}: ${selectedOption.description}. `;
+            }
+          }
+        }
+
+        if (validEntries === 0) {
+          description = "Zde se zobrazí popis vašeho výběru";
+          document.getElementById("holder-recommendation").style.display =
+            "none";
+        }
+
+        resultDescription.textContent = description;
+
+        // Zobrazení doporučeného držáku, pokud jsou zadány tvar a úhel hřbetu
+        if (userSelection[1] !== "-" && userSelection[2] !== "-") {
+          const shape = userSelection[1]; // Tvar destičky
+          const angle = userSelection[2]; // Úhel hřbetu
+
+          if (holderData[shape] && holderData[shape][angle]) {
+            const holderElement = document.getElementById(
+              "holder-recommendation"
+            );
+            const holderDesc = document.getElementById("holder-description");
+
+            holderDesc.innerHTML = `<strong>Pro VBD tvaru ${shape} s úhlem hřbetu ${angle} doporučujeme držáky:</strong> ${holderData[shape][angle]}<br>
+                                          <span style="font-size: 0.9em; color: #555;">Poznámka: R/L označuje pravý/levý držák, závisí na orientaci soustruhu a způsobu obrábění.</span>`;
+
+            holderElement.style.display = "block";
+          } else {
+            document.getElementById("holder-recommendation").style.display =
+              "none";
+          }
+        } else {
+          document.getElementById("holder-recommendation").style.display =
+            "none";
+        }
+      }
+
+      // Reset výběru
+      resetBtn.addEventListener("click", function () {
+        for (let i = 1; i <= 9; i++) {
+          userSelection[i] = "-";
+        }
+        updateDisplay();
+      });
+    </script>
+  </body>
+</html>

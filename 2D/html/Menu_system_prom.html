@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Systémové proměnné</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .vars-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .var-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 10px;
+        }
+
+        .var-name {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .var-desc {
+            margin-top: 5px;
+            color: #666;
+        }
+
+        .variable-container {
+            background: white;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .variable-name {
+            font-weight: bold;
+            color: #2c3e50;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+
+        .variable-description {
+            color: #666;
+            margin-left: 20px;
+        }
+
+        .category {
+            background: #4CAF50;
+            color: white;
+            padding: 10px;
+            margin: 20px 0 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 10px;
+            margin: 20px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="vars-list">
+        <h2>Systémové proměnné Sinumerik 840D</h2>
+        <input type="text"
+               class="search-box"
+               placeholder="Vyhledat proměnnou..."
+               oninput="filterVariables(this.value)">
+
+        <div class="category">Geometrické Osy</div>
+        <div class="variable-container">
+            <div class="variable-name">$P_AXN1</div>
+            <div class="variable-description">Aktuální adresa geometrické osy - souřadnice</div>
+        </div>
+        <div class="variable-container">
+            <div class="variable-name">$P_AXN2</div>
+            <div class="variable-description">Aktuální adresa geometrické osy - pořadnice</div>
+        </div>
+        <div class="variable-container">
+            <div class="variable-name">$P_AXN3</div>
+            <div class="variable-description">Aktuální adresa geometrické osy - použití</div>
+        </div>
+
+        <div class="category">Frame Proměnné</div>
+        <div class="variable-container">
+            <div class="variable-name">$P_IFRAME</div>
+            <div class="variable-description">Aktuální nastavitelný Frame</div>
+        </div>
+        <div class="variable-container">
+            <div class="variable-name">$P_PFRAME</div>
+            <div class="variable-description">Aktuální programovatelný Frame</div>
+        </div>
+        <div class="variable-container">
+            <div class="variable-name">$P_BFRAME</div>
+            <div class="variable-description">Aktuální proměnná základní Frame</div>
+        </div>
+        <div class="variable-container">
+            <div class="variable-name">$P_ACTFRAME</div>
+            <div class="variable-description">Aktuální celkový Frame</div>
+        </div>
+        <div class="variable-container">
+            <div class="variable-name">$P_UIFR[]</div>
+            <div class="variable-description">Nastavitelné Frame (např. G54)</div>
+        </div>
+
+        <div class="category">Systémové Informace</div>
+        <div class="variable-container">
+            <div class="variable-name">$P_F</div>
+            <div class="variable-description">
+                <h3>Popis:</h3>
+                <p>Aktuálně aktivní posuv</p>
+
+                <h3>Použití:</h3>
+                <pre><code>R10=$P_F           ; Uložení aktivního posuvu do R10
+IF $P_F < 0.1       ; Kontrola minimálního posuvu
+    MSG("Příliš malý posuv!")
+ENDIF</code></pre>
+
+                <h3>Poznámky:</h3>
+                <ul>
+                    <li>Hodnota závisí na G94/G95 režimu</li>
+                    <li>V G94: mm/min nebo inch/min</li>
+                    <li>V G95: mm/ot nebo inch/ot</li>
+                </ul>
+            </div>
+        </div>
+        <div class="variable-container">
+            <div class="variable-name">$P_DRYRUN</div>
+            <div class="variable-description">0 (CHYBA): Zkušební chod ZAP<br>1 (OK): Zkušební chod VYP</div>
+        </div>
+        <div class="variable-container">
+            <div class="variable-name">$P_SEARCH</div>
+            <div class="variable-description">1 (OK): Vyhledání věty (s výpočtem nebo bez něj) je aktivní</div>
+        </div>
+
+        <div class="category">Nástrojové Proměnné</div>
+        <div class="variable-container">
+            <div class="variable-name">$P_TOOLR</div>
+            <div class="variable-description">Aktivní poloměr nástroje (WZ) (celkem)</div>
+        </div>
+        <div class="variable-container">
+            <div class="variable-name">$P_TOOLNO</div>
+            <div class="variable-description">Aktivní číslo WZ (T0 - T32000)</div>
+        </div>
+
+        <div class="category">Vřeteno a Osy</div>
+        <div class="variable-container">
+            <div class="variable-name">$AC_MSNUM</div>
+            <div class="variable-description">Číslo řídicího (Master) vřetena</div>
+        </div>
+        <div class="variable-container">
+            <div class="variable-name">$AA_S</div>
+            <div class="variable-description">Skutečný počet otáček vřetena (Znaménko odpovídá směru otáčení)</div>
+        </div>
+
+        <div class="category">Měrový Systém</div>
+        <div class="variable-container">
+            <div class="variable-name">$MN_SCALING_SYSTEM_IS_METRIC</div>
+            <div class="variable-description">Základní systém metrický (1: Metrický, 2: palcový)</div>
+        </div>
+        <div class="variable-container">
+            <div class="variable-name">$MN_SCALING_VALUE_INCH</div>
+            <div class="variable-description">Konverzní faktor z metr. na palcový systém (25,4)</div>
+        </div>
+
+        <div class="category">PLC Komunikace</div>
+        <div class="variable-container">
+            <div class="variable-name">$A_IN[]</div>
+            <div class="variable-description">Digitální signály PLC-čtení (1-16)</div>
+        </div>
+        <div class="variable-container">
+            <div class="variable-name">$A_OUT[]</div>
+            <div class="variable-description">Digitální signály PLC-psaní</div>
+        </div>
+        <div class="variable-container">
+            <div class="variable-name">$A_INA[]</div>
+            <div class="variable-description">Reálná hodnota PLC-čtení (1-4)</div>
+        </div>
+
+        <div class="variable-container">
+            <div class="variable-name">$AA_IW[X]</div>
+            <div class="variable-description">
+                <h3>Popis:</h3>
+                <p>Skutečná pozice osy v souřadném systému obrobku (Internal Window)</p>
+
+                <h3>Použití:</h3>
+                <pre><code>R1=$AA_IW[X]       ; Uložení aktuální X pozice do R1
+IF $AA_IW[X] > 100  ; Kontrola pozice X
+    MSG("X je větší než 100mm")
+ENDIF</code></pre>
+
+                <h3>Poznámky:</h3>
+                <ul>
+                    <li>Aktualizuje se v reálném čase</li>
+                    <li>Hodnota je v mm nebo palcích podle aktivního nastavení</li>
+                    <li>Lze použít pro všechny osy (X, Y, Z, atd.)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function filterVariables(searchText) {
+            const containers = document.querySelectorAll('.variable-container');
+            const searchLower = searchText.toLowerCase();
+
+            containers.forEach(container => {
+                const name = container.querySelector('.variable-name').textContent.toLowerCase();
+                const description = container.querySelector('.variable-description').textContent.toLowerCase();
+
+                if (name.includes(searchLower) || description.includes(searchLower)) {
+                    container.style.display = 'block';
+                } else {
+                    container.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
