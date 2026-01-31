@@ -1,17 +1,20 @@
 {
   "name": "soustruznik-2d",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Parametrické kreslení CAD aplikace s AI asistencí",
   "type": "module",
   "main": "index.html",
   "scripts": {
-    "start": "python -m http.server 8000",
-    "dev": "echo 'Use VS Code Live Server extension'",
-    "build": "echo 'Minify: npm install -g minifier && minify *.js *.css'",
+    "start": "python -m http.server 8080",
+    "dev": "python -m http.server 8080",
+    "build": "node scripts/build.js",
+    "build:prod": "node scripts/build.js && echo 'Production build ready in dist/'",
     "test": "node tests/run-tests.cjs",
-    "test:watch": "node -w tests/run-tests.cjs",
-    "serve": "npx http-server",
-    "format": "echo 'Add Prettier: npm install --save-dev prettier'"
+    "test:watch": "node --watch tests/run-tests.cjs",
+    "serve": "npx http-server -p 8080",
+    "serve:dist": "cd dist && python -m http.server 8080",
+    "format": "npx prettier --write \"src/**/*.js\" \"lib/**/*.js\"",
+    "lint": "echo 'Add ESLint: npm install --save-dev eslint'"
   },
   "keywords": [
     "CAD",

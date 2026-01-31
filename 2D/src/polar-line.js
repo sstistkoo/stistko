@@ -1,3 +1,12 @@
+/**
+ * POLAR-LINE.JS - Polární kreslení (ES6 hybridní)
+ * Fixní úhel a délka pro kreslení čar
+ * @module polar-line
+ */
+
+// ===== ES6 EXPORT PLACEHOLDER =====
+// export const POLAR_LINE = {}; // Bude aktivováno po plné migraci
+
 // ===== POLÁRNÍ KROK ČÁRA - Fixní úhel (šedá) =====
 
 window.updatePolarLineAngle = function (value) {

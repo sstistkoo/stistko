@@ -1,10 +1,14 @@
 /**
- * UI.JS - Uživatelské rozhraní a event handlery
+ * UI.JS - Uživatelské rozhraní a event handlery (ES6 hybridní)
  * - Modal management
  * - Button handlers
  * - User interactions
  * - Settings panels
+ * @module ui
  */
+
+// ===== ES6 EXPORT PLACEHOLDER =====
+// export const UI = {}; // Bude aktivováno po plné migraci
 
 // Globální proměnné jsou inicializovány v globals.js
 
@@ -450,111 +454,8 @@ window.closeModelManager = function () {
   if (modal) modal.style.display = "none";
 };
 
-// ===== TEST FUNCTIONS =====
-window.test1 = function() {
-  const m = document.getElementById("modelManagerModal");
-  m.style.display = "block";
-  console.log("TEST 1: display = block");
-};
-
-window.test2 = function() {
-  const m = document.getElementById("modelManagerModal");
-  m.style.display = "grid";
-  console.log("TEST 2: display = grid");
-};
-
-window.test3 = function() {
-  const m = document.getElementById("modelManagerModal");
-  m.style.visibility = "visible";
-  m.style.display = "flex";
-  console.log("TEST 3: visibility + display");
-};
-
-window.test4 = function() {
-  const m = document.getElementById("modelManagerModal");
-  m.removeAttribute("style");
-  m.style.display = "flex";
-  m.style.position = "fixed";
-  m.style.inset = "0";
-  m.style.background = "rgba(0,0,0,0.8)";
-  m.style.zIndex = "9999";
-  console.log("TEST 4: removeAttribute + rebuild");
-};
-
-window.test5 = function() {
-  const m = document.getElementById("modelManagerModal");
-  m.setAttribute("style", "display: flex !important; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 9999;");
-  console.log("TEST 5: setAttribute");
-};
-
-window.test6 = function() {
-  const m = document.getElementById("modelManagerModal");
-  m.style.cssText = "display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999;";
-  console.log("TEST 6: cssText");
-};
-
-window.test7 = function() {
-  const m = document.getElementById("modelManagerModal");
-  m.hidden = false;
-  m.style.display = "flex";
-  console.log("TEST 7: hidden = false");
-};
-
-window.test8 = function() {
-  const m = document.getElementById("modelManagerModal");
-  m.style.setProperty("display", "flex", "important");
-  console.log("TEST 8: setProperty important");
-};
-
-window.test9 = function() {
-  const m = document.getElementById("modelManagerModal");
-  Object.assign(m.style, {
-    display: "flex",
-    position: "fixed",
-    top: "0",
-    left: "0",
-    width: "100vw",
-    height: "100vh",
-    background: "rgba(0,0,0,0.8)",
-    zIndex: "9999"
-  });
-  console.log("TEST 9: Object.assign");
-};
-
-window.test10 = function() {
-  const m = document.getElementById("modelManagerModal");
-  const styles = window.getComputedStyle(m);
-  console.log("TEST 10: Current computed styles:", {
-    display: styles.display,
-    position: styles.position,
-    width: styles.width,
-    height: styles.height,
-    visibility: styles.visibility,
-    opacity: styles.opacity
-  });
-  m.style.display = "flex";
-  setTimeout(() => {
-    const newStyles = window.getComputedStyle(m);
-    console.log("TEST 10: After flex:", {
-      display: newStyles.display,
-      width: newStyles.width,
-      height: newStyles.height
-    });
-  }, 100);
-};
-
-window.openAIPreferences = function () {
-  const modal = document.getElementById("aiPreferencesModal");
-  if (modal) {
-    modal.style.display = "flex";
-    if (window.renderPreferencesList) window.renderPreferencesList();
-  }
-};
-
-window.closeAIPreferences = function () {
-  const modal = document.getElementById("aiPreferencesModal");
-  if (modal) modal.style.display = "none";
-};
+// (DEV TEST FUNCTIONS REMOVED - see git history if needed)
+// openAIPreferences & closeAIPreferences jsou v ai-ui.js
 
 // ===== VIEW CONTROLS =====
 
@@ -1599,21 +1500,6 @@ window.confirmCircle = function () {
   // TODO: Implementovat
 };
 
-// ===== HELP MODAL =====
-window.showQuickInputHelp = function () {
-  const helpModal = document.getElementById("quickInputHelpModal");
-  if (helpModal) {
-    helpModal.style.display = "flex";
-  }
-};
-
-window.closeQuickInputHelp = function () {
-  const helpModal = document.getElementById("quickInputHelpModal");
-  if (helpModal) {
-    helpModal.style.display = "none";
-  }
-};
-
 // ===== MAKE MODALS DRAGGABLE =====
 window.makeModalDraggable = function (modalId) {
   const overlay = document.getElementById(modalId);
@@ -1793,3 +1679,1367 @@ if (typeof module !== "undefined" && module.exports) {
     closeSettings,
   };
 }
+// ═══════════════════════════════════════════════════════════════════════════════
+// SMART AI SETTINGS - Funkce pro ovládání AI Module v3.0
+// ═══════════════════════════════════════════════════════════════════════════════
+
+// State pro Smart AI Settings
+window.smartAIState = {
+  currentProvider: 'gemini',
+  autoSwitch: true,
+  selectedModel: null,
+  apiKeysExpanded: false
+};
+
+// Provider ikony a limity
+const SMART_AI_PROVIDERS = {
+  gemini: { icon: '🤖', name: 'Gemini', rpm: 15 },
+  groq: { icon: '⚡', name: 'Groq', rpm: 30 },
+  openrouter: { icon: '🌐', name: 'OpenRouter', rpm: 20 },
+  mistral: { icon: '🔥', name: 'Mistral', rpm: 10 }
+};
+
+// Otevře Smart AI Settings modal
+window.openSmartAISettings = function() {
+  const modal = document.getElementById('smartAISettingsModal');
+  if (!modal) return;
+
+  modal.style.display = 'flex';
+  modal.classList.remove('d-none');
+
+  // Auto-load demo klíčů pokud nejsou vlastní
+  window.autoLoadDemoKeys();
+
+  // Inicializuj UI
+  window.updateSmartBestModels();
+  window.updateSmartModelSelect();
+  window.updateSmartRpmMonitor();
+  window.updateSmartKeyStatuses();
+  window.updateSmartUsageStats();
+  window.loadSmartKeys();
+  window.updateCurrentProviderLabel();
+};
+
+// Update current provider label
+window.updateCurrentProviderLabel = function() {
+  const label = document.getElementById('smartCurrentProviderLabel');
+  if (label) {
+    const provider = window.smartAIState.currentProvider;
+    const info = SMART_AI_PROVIDERS[provider];
+    label.textContent = info ? info.name : provider;
+  }
+};
+
+// Zavře Smart AI Settings modal
+window.closeSmartAISettings = function() {
+  const modal = document.getElementById('smartAISettingsModal');
+  if (modal) {
+    modal.style.display = 'none';
+    modal.classList.add('d-none');
+  }
+};
+
+// Přepne providera
+window.switchSmartProvider = function(provider) {
+  window.smartAIState.currentProvider = provider;
+
+  // Update tabs
+  document.querySelectorAll('.smart-ai-tab').forEach(tab => {
+    tab.classList.toggle('active', tab.dataset.provider === provider);
+  });
+
+  // Update provider label
+  window.updateCurrentProviderLabel();
+
+  // Update model select
+  window.updateSmartModelSelect();
+
+  // Sync s AI modulem
+  if (typeof AI !== 'undefined') {
+    AI.setDefaultProvider(provider);
+  }
+};
+
+// Update best models grid
+window.updateSmartBestModels = function() {
+  const grid = document.getElementById('smartBestModelsGrid');
+  if (!grid || typeof AI === 'undefined') return;
+
+  // Získej nejlepší modely z AI modulu
+  const bestModels = AI.getBestModels ? AI.getBestModels(6) : AI.getAllModelsSorted().slice(0, 6);
+
+  grid.innerHTML = bestModels.map((m, i) => {
+    const remaining = AI.rateLimit?.remaining(m.provider, m.model) || m.rpm;
+    const rpm = m.rpm || 15;
+    const fillPercent = Math.round((remaining / rpm) * 100);
+    const rankClass = i === 0 ? '' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
+    const isSelected = window.smartAIState.selectedModel === `${m.provider}:${m.model}`;
+    const hasKey = AI.getKey(m.provider);
+    const providerInfo = SMART_AI_PROVIDERS[m.provider] || { icon: '🤖', name: m.provider };
+
+    return `
+      <div class="smart-ai-model-card ${isSelected ? 'selected' : ''} ${!hasKey ? 'unavailable' : ''}"
+           onclick="window.selectSmartModel('${m.provider}', '${m.model}')"
+           title="${!hasKey ? 'Chybí API klíč pro ' + m.provider : 'Klikni pro výběr'}">
+        ${i < 3 ? `<div class="smart-ai-model-rank ${rankClass}">#${i + 1}</div>` : ''}
+        <div class="smart-ai-model-icon">${providerInfo.icon}</div>
+        <div class="smart-ai-model-name">${m.name?.split(' - ')[1] || m.model?.split('/').pop() || m.model}</div>
+        <div class="smart-ai-model-quality">Kvalita: ${m.quality}%</div>
+        <div class="smart-ai-model-rpm-bar">
+          <div class="smart-ai-model-rpm-fill" style="width: ${fillPercent}%"></div>
+        </div>
+      </div>
+    `;
+  }).join('');
+};
+
+// Vyber model
+window.selectSmartModel = function(provider, model) {
+  window.smartAIState.selectedModel = `${provider}:${model}`;
+  window.smartAIState.currentProvider = provider;
+
+  // Update UI
+  window.updateSmartBestModels();
+
+  // Update tabs
+  document.querySelectorAll('.smart-ai-tab').forEach(tab => {
+    tab.classList.toggle('active', tab.dataset.provider === provider);
+  });
+
+  // Update model select
+  const select = document.getElementById('smartModelSelect');
+  if (select) select.value = model;
+
+  window.updateSmartModelInfo(model);
+
+  // Sync s AI modulem
+  if (typeof AI !== 'undefined') {
+    AI.setDefaultProvider(provider);
+    AI.setModel(provider, model);
+  }
+
+  console.log(`🎯 Smart AI: Vybrán ${provider}/${model}`);
+};
+
+// Update model select dropdown
+window.updateSmartModelSelect = function() {
+  const select = document.getElementById('smartModelSelect');
+  if (!select || typeof AI === 'undefined') return;
+
+  const provider = window.smartAIState.currentProvider;
+  const models = AI.ALL_MODELS[provider] || [];
+
+  select.innerHTML = models.map(m => {
+    const name = m.name || m.value;
+    return `<option value="${m.value}">${name} (${m.rpm} RPM)</option>`;
+  }).join('');
+
+  // Select první nebo aktuálně vybraný
+  if (models.length > 0) {
+    const currentModel = AI.config?.models[provider] || models[0].value;
+    select.value = currentModel;
+    window.updateSmartModelInfo(currentModel);
+  }
+};
+
+// On model change
+window.onSmartModelChange = function() {
+  const select = document.getElementById('smartModelSelect');
+  if (!select) return;
+
+  const model = select.value;
+  const provider = window.smartAIState.currentProvider;
+
+  window.smartAIState.selectedModel = `${provider}:${model}`;
+  window.updateSmartModelInfo(model);
+  window.updateSmartBestModels();
+
+  // Sync s AI modulem
+  if (typeof AI !== 'undefined') {
+    AI.setModel(provider, model);
+  }
+};
+
+// Update model info
+window.updateSmartModelInfo = function(model) {
+  const infoEl = document.getElementById('smartModelInfo');
+  if (!infoEl || typeof AI === 'undefined') return;
+
+  const provider = window.smartAIState.currentProvider;
+  const models = AI.ALL_MODELS[provider] || [];
+  const modelInfo = models.find(m => m.value === model);
+
+  if (modelInfo) {
+    infoEl.innerHTML = `
+      <span class="smart-ai-rpm">${modelInfo.rpm} RPM</span>
+      <span class="smart-ai-quality">${modelInfo.quality}%</span>
+    `;
+  }
+};
+
+// Toggle auto switch
+window.toggleSmartAutoSwitch = function() {
+  window.smartAIState.autoSwitch = !window.smartAIState.autoSwitch;
+  const toggle = document.getElementById('smartAutoSwitchToggle');
+  if (toggle) {
+    toggle.classList.toggle('active', window.smartAIState.autoSwitch);
+  }
+  console.log(`🎯 Auto-Switch: ${window.smartAIState.autoSwitch ? 'zapnut' : 'vypnut'}`);
+};
+
+// Update RPM monitor
+window.updateSmartRpmMonitor = function() {
+  const container = document.getElementById('smartRpmProviders');
+  if (!container || typeof AI === 'undefined') return;
+
+  container.innerHTML = Object.entries(SMART_AI_PROVIDERS).map(([provider, info]) => {
+    const hasKey = AI.getKey(provider);
+    if (!hasKey) return '';
+
+    const remaining = AI.rateLimit?.remaining(provider) || info.rpm;
+    const limit = info.rpm;
+    const percent = (remaining / limit) * 100;
+    const dotClass = percent > 50 ? '' : percent > 20 ? 'warning' : 'danger';
+
+    return `
+      <div class="smart-ai-rpm-item">
+        <span class="smart-ai-rpm-dot ${dotClass}"></span>
+        <span>${info.icon} ${remaining}/${limit}</span>
+      </div>
+    `;
+  }).filter(Boolean).join('');
+};
+
+// Toggle collapsible sections
+window.toggleSmartSection = function(sectionId) {
+  const content = document.getElementById(sectionId);
+  const arrow = document.getElementById(sectionId + 'Arrow');
+
+  if (content) {
+    content.classList.toggle('open');
+  }
+  if (arrow) {
+    arrow.textContent = content.classList.contains('open') ? '▼' : '▶';
+  }
+};
+
+// Load keys from AI module
+window.loadSmartKeys = function() {
+  if (typeof AI === 'undefined') return;
+
+  ['gemini', 'groq', 'openrouter', 'mistral'].forEach(provider => {
+    const input = document.getElementById(`smartKey${provider.charAt(0).toUpperCase() + provider.slice(1)}`);
+    if (input) {
+      const key = AI.config?.keys[provider] || '';
+      // Zobraz jen pokud je vlastní klíč (ne demo)
+      if (key && !AI.isUsingDemoKey(provider)) {
+        input.value = key.substring(0, 8) + '...' + key.substring(key.length - 4);
+      }
+    }
+  });
+
+  window.updateSmartKeyStatuses();
+};
+
+// Update key statuses - s novými ikonami
+window.updateSmartKeyStatuses = function() {
+  if (typeof AI === 'undefined') return;
+
+  ['gemini', 'groq', 'openrouter', 'mistral'].forEach(provider => {
+    const statusEl = document.getElementById(`smartStatus${provider.charAt(0).toUpperCase() + provider.slice(1)}`);
+    if (!statusEl) return;
+
+    const hasKey = AI.getKey(provider);
+    const isDemo = AI.isUsingDemoKey ? AI.isUsingDemoKey(provider) : false;
+
+    if (hasKey && !isDemo) {
+      // Vlastní klíč - zelené kolečko
+      statusEl.textContent = '●';
+      statusEl.className = 'smart-ai-status-icon ok';
+      statusEl.title = 'Vlastní klíč nastaven';
+    } else if (isDemo || (hasKey && AI._getDemoKey && AI._getDemoKey(provider))) {
+      // Demo klíč - žlutý trojúhelník
+      statusEl.textContent = '▲';
+      statusEl.className = 'smart-ai-status-icon demo';
+      statusEl.title = 'Demo klíč (omezený)';
+    } else {
+      // Žádný klíč - šedé prázdné kolečko
+      statusEl.textContent = '○';
+      statusEl.className = 'smart-ai-status-icon none';
+      statusEl.title = 'Žádný klíč nastaven';
+    }
+  });
+};
+
+// Auto-load demo keys if no custom key (called on init)
+window.autoLoadDemoKeys = function() {
+  if (typeof AI === 'undefined') return;
+
+  ['gemini', 'groq', 'openrouter', 'mistral'].forEach(provider => {
+    const hasCustomKey = AI.config?.keys[provider];
+    const hasDemo = AI._getDemoKey && AI._getDemoKey(provider);
+
+    // Pokud nemá vlastní klíč a existuje demo, použij ho automaticky
+    if (!hasCustomKey && hasDemo) {
+      console.log(`🎁 Auto-load demo klíč pro ${provider}`);
+    }
+  });
+
+  window.updateSmartKeyStatuses();
+};
+
+// Save single key
+window.saveSmartKey = function(provider, key) {
+  if (typeof AI === 'undefined' || !key.trim()) return;
+
+  AI.setKey(provider, key.trim());
+  window.updateSmartKeyStatuses();
+  window.updateSmartBestModels();
+  window.updateSmartRpmMonitor();
+  console.log(`🔑 Klíč pro ${provider} uložen`);
+};
+
+// Save all keys
+window.saveAllSmartKeys = function() {
+  ['gemini', 'groq', 'openrouter', 'mistral'].forEach(provider => {
+    const input = document.getElementById(`smartKey${provider.charAt(0).toUpperCase() + provider.slice(1)}`);
+    if (input && input.value && !input.value.includes('...')) {
+      AI.setKey(provider, input.value.trim());
+    }
+  });
+
+  window.updateSmartKeyStatuses();
+  window.updateSmartBestModels();
+  window.updateSmartRpmMonitor();
+
+  alert('✅ API klíče uloženy!');
+};
+
+// ===== DISCOVER MODELS =====
+
+// Discover models state
+window.discoverState = {
+  currentProvider: null,
+  freeModels: [],
+  paidModels: [],
+  currentTab: 'free'
+};
+
+// Discover models from provider API
+window.discoverModels = async function(provider) {
+  const loadingEl = document.getElementById('smartDiscoverLoading');
+  const tabsEl = document.getElementById('smartDiscoverTabs');
+  const listEl = document.getElementById('smartDiscoverModelsList');
+
+  // Update button states
+  document.querySelectorAll('.smart-ai-discover-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.provider === provider);
+  });
+
+  // Show loading
+  if (loadingEl) loadingEl.textContent = `⏳ Načítám modely z ${provider}...`;
+  if (listEl) listEl.innerHTML = '';
+  if (tabsEl) tabsEl.classList.remove('visible');
+
+  window.discoverState.currentProvider = provider;
+
+  try {
+    // Získej API klíč
+    const apiKey = typeof AI !== 'undefined' ? AI.getKey(provider) : null;
+
+    if (!apiKey) {
+      if (loadingEl) loadingEl.textContent = `❌ Pro ${provider} není nastaven API klíč`;
+      return;
+    }
+
+    // Fetch models z API
+    let models = [];
+
+    switch (provider) {
+      case 'gemini':
+        models = await window.fetchGeminiModels(apiKey);
+        break;
+      case 'groq':
+        models = await window.fetchGroqModels(apiKey);
+        break;
+      case 'openrouter':
+        models = await window.fetchOpenRouterModels(apiKey);
+        break;
+      case 'mistral':
+        models = await window.fetchMistralModels(apiKey);
+        break;
+    }
+
+    // Rozděl na FREE a PAID a seřaď podle kvality
+    window.discoverState.freeModels = models.filter(m => m.isFree).sort((a, b) => b.quality - a.quality);
+    window.discoverState.paidModels = models.filter(m => !m.isFree).sort((a, b) => b.quality - a.quality);
+
+    // Update counts
+    document.getElementById('smartDiscoverFreeCount').textContent = `(${window.discoverState.freeModels.length})`;
+    document.getElementById('smartDiscoverPaidCount').textContent = `(${window.discoverState.paidModels.length})`;
+
+    // Show tabs
+    if (tabsEl) tabsEl.classList.add('visible');
+    if (loadingEl) loadingEl.style.display = 'none';
+
+    // Render current tab
+    window.switchDiscoverTab(window.discoverState.currentTab);
+
+    console.log(`📊 ${provider}: Nalezeno ${window.discoverState.freeModels.length} free + ${window.discoverState.paidModels.length} placených modelů`);
+
+  } catch (err) {
+    console.error('❌ Discover error:', err);
+    if (loadingEl) {
+      loadingEl.style.display = 'block';
+      loadingEl.textContent = `❌ Chyba: ${err.message}`;
+    }
+  }
+};
+
+// Switch discover tab
+window.switchDiscoverTab = function(tab) {
+  window.discoverState.currentTab = tab;
+
+  // Update tab buttons
+  document.getElementById('smartDiscoverTabFree').classList.toggle('active', tab === 'free');
+  document.getElementById('smartDiscoverTabPaid').classList.toggle('active', tab === 'paid');
+
+  // Render models - grouped for OpenRouter, flat for others
+  const models = tab === 'free' ? window.discoverState.freeModels : window.discoverState.paidModels;
+
+  if (window.discoverState.currentProvider === 'openrouter') {
+    window.renderGroupedModels(models, tab === 'paid');
+  } else {
+    window.renderDiscoverModels(models);
+  }
+};
+
+// Render grouped models (for OpenRouter)
+window.renderGroupedModels = function(models, showPrice) {
+  const listEl = document.getElementById('smartDiscoverModelsList');
+  if (!listEl) return;
+
+  if (!models || models.length === 0) {
+    listEl.innerHTML = '<div class="smart-ai-discover-loading">Žádné modely nenalezeny</div>';
+    return;
+  }
+
+  // Group by provider (first part of id before /)
+  const groups = {};
+  models.forEach(m => {
+    const parts = m.id.split('/');
+    const providerName = parts.length > 1 ? parts[0] : 'Ostatní';
+    if (!groups[providerName]) groups[providerName] = [];
+    groups[providerName].push(m);
+  });
+
+  // Sort groups alphabetically
+  const sortedGroups = Object.keys(groups).sort();
+
+  // Zkontroluj které modely už máme v projektu
+  const existingModels = typeof AI !== 'undefined' ?
+    (AI.ALL_MODELS[window.discoverState.currentProvider] || []).map(m => m.value) : [];
+  const provider = window.discoverState.currentProvider;
+
+  let html = '';
+  sortedGroups.forEach(groupName => {
+    html += `<div class="smart-ai-provider-group">`;
+    html += `<div class="smart-ai-provider-name">📦 ${groupName} (${groups[groupName].length})</div>`;
+    groups[groupName].forEach(m => {
+      const isExisting = existingModels.some(existing =>
+        m.id.toLowerCase().includes(existing.toLowerCase()) || existing.toLowerCase().includes(m.id.toLowerCase())
+      );
+      const qualityClass = m.quality >= 90 ? 'high' : m.quality >= 70 ? 'medium' : 'low';
+      const escapedId = m.id.replace(/'/g, "\\'");
+      const escapedName = (m.name || m.id).replace(/'/g, "\\'");
+
+      html += `
+        <div class="smart-ai-model-row">
+          <div class="smart-ai-model-row-left">
+            <span class="smart-ai-model-name" title="${m.id}">${m.name || m.id}</span>
+          </div>
+          <div class="smart-ai-model-row-right">
+            <span class="smart-ai-badge smart-ai-badge-quality ${qualityClass}">${m.quality}%</span>
+            ${isExisting
+              ? '<span class="smart-ai-badge smart-ai-badge-status have">✓ Máme</span>'
+              : '<span class="smart-ai-badge smart-ai-badge-new">+ Nový</span>'
+            }
+            <button class="smart-ai-model-row-btn use" onclick="window.useDiscoveredModel('${provider}', '${escapedId}', '${escapedName}')" title="Použít v AI panelu">▶️ Použít</button>
+          </div>
+        </div>
+      `;
+    });
+    html += `</div>`;
+  });
+
+  listEl.innerHTML = html;
+};
+
+// Render discovered models (flat list)
+window.renderDiscoverModels = function(models) {
+  const listEl = document.getElementById('smartDiscoverModelsList');
+  if (!listEl) return;
+
+  if (models.length === 0) {
+    listEl.innerHTML = '<div class="smart-ai-discover-loading">Žádné modely nenalezeny</div>';
+    return;
+  }
+
+  // Zkontroluj které modely už máme v projektu
+  const existingModels = typeof AI !== 'undefined' ?
+    (AI.ALL_MODELS[window.discoverState.currentProvider] || []).map(m => m.value) : [];
+  const provider = window.discoverState.currentProvider;
+
+  listEl.innerHTML = models.map(m => {
+    const isExisting = existingModels.some(existing =>
+      m.id.toLowerCase().includes(existing.toLowerCase()) || existing.toLowerCase().includes(m.id.toLowerCase())
+    );
+    const qualityClass = m.quality >= 90 ? 'high' : m.quality >= 70 ? 'medium' : 'low';
+    const escapedId = m.id.replace(/'/g, "\\'");
+    const escapedName = (m.name || m.id).replace(/'/g, "\\'");
+
+    return `
+      <div class="smart-ai-model-row">
+        <div class="smart-ai-model-row-left">
+          <span class="smart-ai-model-name" title="${m.id}">${m.name || m.id}</span>
+        </div>
+        <div class="smart-ai-model-row-right">
+          <span class="smart-ai-badge smart-ai-badge-quality ${qualityClass}">${m.quality}%</span>
+          ${isExisting
+            ? '<span class="smart-ai-badge smart-ai-badge-status have">✓ Máme</span>'
+            : '<span class="smart-ai-badge smart-ai-badge-new">+ Nový</span>'
+          }
+          <button class="smart-ai-model-row-btn use" onclick="window.useDiscoveredModel('${provider}', '${escapedId}', '${escapedName}')" title="Použít v AI panelu">▶️ Použít</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+};
+
+// Fetch models from provider APIs
+window.fetchGeminiModels = async function(apiKey) {
+  const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
+  const data = await response.json();
+
+  if (!data.models) throw new Error('Invalid response');
+
+  // Bereme všechny modely, nefiltrujeme podle supportedGenerationMethods
+  return data.models.map(m => ({
+    id: m.name.replace('models/', ''),
+    name: m.displayName || m.name.replace('models/', ''),
+    description: m.description || '',
+    quality: window.estimateModelQuality(m.name, 'gemini'),
+    isFree: !m.name.includes('ultra') && !m.name.includes('pro-vision'),
+    contextLength: m.inputTokenLimit || null
+  }));
+};
+
+window.fetchGroqModels = async function(apiKey) {
+  const response = await fetch('https://api.groq.com/openai/v1/models', {
+    headers: { 'Authorization': `Bearer ${apiKey}` }
+  });
+  const data = await response.json();
+
+  if (!data.data) throw new Error('Invalid response');
+
+  return data.data.map(m => ({
+    id: m.id,
+    name: m.id,
+    description: m.owned_by || '',
+    quality: window.estimateModelQuality(m.id, 'groq'),
+    isFree: true, // Groq je free tier
+    contextLength: m.context_window || null
+  }));
+};
+
+window.fetchOpenRouterModels = async function(apiKey) {
+  const response = await fetch('https://openrouter.ai/api/v1/models', {
+    headers: { 'Authorization': `Bearer ${apiKey}` }
+  });
+  const data = await response.json();
+
+  if (!data.data) throw new Error('Invalid response');
+
+  // Vezmi VŠECHNY modely, ne jen prvních 100
+  return data.data.map(m => ({
+    id: m.id,
+    name: m.name || m.id,
+    description: m.description || '',
+    quality: window.estimateModelQuality(m.id, 'openrouter'),
+    // Model je free pokud končí na :free NEBO má nulovou cenu
+    isFree: m.id.endsWith(':free') ||
+            (m.pricing && parseFloat(m.pricing.prompt || '1') === 0 && parseFloat(m.pricing.completion || '1') === 0),
+    pricing: m.pricing,
+    contextLength: m.context_length || null
+  }));
+};
+
+window.fetchMistralModels = async function(apiKey) {
+  const response = await fetch('https://api.mistral.ai/v1/models', {
+    headers: { 'Authorization': `Bearer ${apiKey}` }
+  });
+  const data = await response.json();
+
+  if (!data.data) throw new Error('Invalid response');
+
+  return data.data.map(m => ({
+    id: m.id,
+    name: m.id,
+    description: m.owned_by || '',
+    quality: window.estimateModelQuality(m.id, 'mistral'),
+    isFree: m.id.includes('open') || m.id.includes('small') || m.id.includes('tiny'),
+    contextLength: m.max_context_length || null
+  }));
+};
+
+// Estimate model quality based on name
+window.estimateModelQuality = function(modelId, provider) {
+  const id = modelId.toLowerCase();
+  let quality = 70;
+
+  // Top tier models
+  if (id.includes('gpt-4') || id.includes('claude-3-opus') || id.includes('gemini-1.5-pro') ||
+      id.includes('gemini-2') || id.includes('llama-3.3')) {
+    quality = 95;
+  }
+  // High tier
+  else if (id.includes('claude-3') || id.includes('gpt-3.5') || id.includes('gemini-pro') ||
+           id.includes('llama-3.1') || id.includes('mixtral') || id.includes('mistral-large')) {
+    quality = 90;
+  }
+  // Medium-high tier
+  else if (id.includes('llama-3') || id.includes('gemini') || id.includes('qwen') ||
+           id.includes('deepseek') || id.includes('yi-')) {
+    quality = 85;
+  }
+  // Medium tier
+  else if (id.includes('llama') || id.includes('mistral') || id.includes('phi') ||
+           id.includes('gemma') || id.includes('solar')) {
+    quality = 80;
+  }
+  // Lower tier
+  else if (id.includes('tiny') || id.includes('small') || id.includes('mini')) {
+    quality = 70;
+  }
+
+  return quality;
+};
+
+// Test discovered model
+window.testDiscoverModel = async function(modelId) {
+  const provider = window.discoverState.currentProvider;
+  if (typeof AI === 'undefined') {
+    alert('❌ AI modul není načten');
+    return;
+  }
+
+  alert(`🧪 Test model: ${modelId}\n\nTestování v konzoli...`);
+
+  try {
+    // Dočasně nastav model
+    const oldModel = AI.config.models[provider];
+    AI.config.models[provider] = modelId;
+
+    const result = await AI.ask('Řekni "Test OK" pokud funguje.');
+    console.log(`✅ Test ${provider}/${modelId}:`, result);
+
+    // Vrať zpět
+    AI.config.models[provider] = oldModel;
+
+    alert(`✅ Model funguje!\n\nOdpověď: ${result.substring(0, 100)}...`);
+  } catch (err) {
+    console.error(`❌ Test failed:`, err);
+    alert(`❌ Test selhal: ${err.message}`);
+  }
+};
+
+// Add discovered model to project
+window.addDiscoverModel = function(modelId, modelName) {
+  const provider = window.discoverState.currentProvider;
+  if (typeof AI === 'undefined') {
+    alert('❌ AI modul není načten');
+    return;
+  }
+
+  // Přidej do AI.ALL_MODELS
+  if (!AI.ALL_MODELS[provider]) {
+    AI.ALL_MODELS[provider] = [];
+  }
+
+  AI.ALL_MODELS[provider].push({
+    value: modelId,
+    name: modelName,
+    rpm: 15,
+    quality: 80
+  });
+
+  // Refresh UI
+  window.updateSmartModelSelect();
+  window.updateSmartBestModels();
+
+  // Re-render discover to update badges
+  window.renderDiscoverModels(
+    window.discoverState.currentTab === 'free'
+      ? window.discoverState.freeModels
+      : window.discoverState.paidModels
+  );
+
+  alert(`✅ Model "${modelName}" přidán do projektu!`);
+};
+
+// Update usage stats
+window.updateSmartUsageStats = function() {
+  if (typeof AI === 'undefined') return;
+
+  const stats = AI.stats?.get() || { dailyCalls: 0, totalCalls: 0 };
+  const cacheStats = AI.cache?.stats() || { hitRate: 0 };
+
+  const callsEl = document.getElementById('smartStatCalls');
+  const totalEl = document.getElementById('smartStatTotal');
+  const cacheEl = document.getElementById('smartStatCache');
+
+  if (callsEl) callsEl.textContent = stats.dailyCalls || 0;
+  if (totalEl) totalEl.textContent = stats.totalCalls || 0;
+  if (cacheEl) cacheEl.textContent = Math.round(cacheStats.hitRate || 0) + '%';
+};
+
+// Apply settings
+window.applySmartAISettings = function() {
+  if (typeof AI === 'undefined') return;
+
+  const provider = window.smartAIState.currentProvider;
+  const modelSelect = document.getElementById('smartModelSelect');
+  const model = modelSelect?.value;
+
+  // Nastav v AI modulu
+  AI.setDefaultProvider(provider);
+  if (model) {
+    AI.setModel(provider, model);
+  }
+
+  // Sync s hlavním UI (aiProviderSelect, aiModelSelect)
+  const providerSelect = document.getElementById('aiProviderSelect');
+  if (providerSelect) {
+    providerSelect.value = provider;
+    if (window.updateModelsForProvider) {
+      window.updateModelsForProvider();
+    }
+  }
+
+  const mainModelSelect = document.getElementById('aiModelSelect');
+  if (mainModelSelect && model) {
+    // Najdi odpovídající model v hlavním selectu
+    const options = Array.from(mainModelSelect.options);
+    const matchingOption = options.find(opt => opt.value === model);
+    if (matchingOption) {
+      mainModelSelect.value = model;
+    }
+  }
+
+  console.log(`✅ Smart AI Settings aplikováno: ${provider}/${model}`);
+  window.closeSmartAISettings();
+};
+
+// Test AI module connection
+window.testAIModule = async function() {
+  if (typeof AI === 'undefined') {
+    alert('❌ AI modul není načten!');
+    return;
+  }
+
+  const provider = window.smartAIState.currentProvider;
+  const modelSelect = document.getElementById('smartModelSelect');
+  const model = modelSelect?.value;
+
+  try {
+    const result = await AI.ask('Řekni "Test OK" jedním slovem.', {
+      provider: provider,
+      model: model,
+      maxTokens: 10
+    });
+
+    alert(`✅ Test úspěšný!\n\nProvider: ${provider}\nModel: ${model}\nOdpověď: ${result.substring(0, 100)}`);
+  } catch (err) {
+    alert(`❌ Test selhal!\n\nProvider: ${provider}\nModel: ${model}\nChyba: ${err.message}`);
+  }
+};
+
+// Auto-refresh interval
+setInterval(() => {
+  const modal = document.getElementById('smartAISettingsModal');
+  if (modal && modal.style.display !== 'none') {
+    window.updateSmartRpmMonitor();
+    window.updateSmartUsageStats();
+    window.updateSmartBestModels();
+  }
+}, 5000);
+
+// Keyboard shortcut pro otevření (Alt+S)
+document.addEventListener('keydown', (e) => {
+  if (e.altKey && e.key === 's') {
+    e.preventDefault();
+    window.openSmartAISettings();
+  }
+});
+
+// ===== AI PANEL MENU A MODE TOGGLE =====
+
+// Stav AI módu (manual/auto)
+window.aiModelMode = localStorage.getItem('aiModelMode') || 'manual';
+
+// Toggle dropdown menu
+window.toggleAIMenu = function() {
+  const menu = document.getElementById('aiMenuDropdown');
+  const toggle = document.getElementById('aiMenuToggle');
+  if (!menu) return;
+
+  const isOpen = menu.style.display !== 'none';
+  menu.style.display = isOpen ? 'none' : 'block';
+  toggle?.classList.toggle('open', !isOpen);
+
+  // Zavřít při kliknutí mimo
+  if (!isOpen) {
+    setTimeout(() => {
+      document.addEventListener('click', closeAIMenuOnOutsideClick);
+    }, 10);
+  }
+};
+
+function closeAIMenuOnOutsideClick(e) {
+  const menu = document.getElementById('aiMenuDropdown');
+  const toggle = document.getElementById('aiMenuToggle');
+  if (menu && !menu.contains(e.target) && !toggle?.contains(e.target)) {
+    menu.style.display = 'none';
+    toggle?.classList.remove('open');
+    document.removeEventListener('click', closeAIMenuOnOutsideClick);
+  }
+}
+
+// Nastavit AI Type z menu
+window.setAIType = function(type) {
+  const select = document.getElementById('aiTypeSelect');
+  if (select) select.value = type;
+
+  // Aktualizovat menu label a ikonu
+  const icons = { '2d': '✏️', 'cnc': '🛠️', 'chat': '💬' };
+  const labels = { '2d': '2D (kreslení)', 'cnc': 'CNC (kódování)', 'chat': 'Chat (pokec)' };
+
+  document.getElementById('aiMenuIcon').textContent = icons[type] || '✏️';
+  document.getElementById('aiMenuLabel').textContent = labels[type] || '2D (kreslení)';
+
+  // Aktualizovat checkmarky - ID mapování
+  const checkIds = { '2d': 'aiTypeCheck2d', 'cnc': 'aiTypeCheckCnc', 'chat': 'aiTypeCheckChat' };
+  Object.keys(checkIds).forEach(t => {
+    const check = document.getElementById(checkIds[t]);
+    if (check) check.style.display = t === type ? 'inline' : 'none';
+  });
+
+  // Zavřít menu
+  const menu = document.getElementById('aiMenuDropdown');
+  if (menu) menu.style.display = 'none';
+  document.getElementById('aiMenuToggle')?.classList.remove('open');
+};
+
+// Toggle mezi manual a auto módem
+window.toggleAIModelMode = function() {
+  window.aiModelMode = window.aiModelMode === 'manual' ? 'auto' : 'manual';
+  localStorage.setItem('aiModelMode', window.aiModelMode);
+  window.updateAIModelModeUI();
+
+  // Aktualizuj modely podle módu
+  const provider = document.getElementById('aiProviderSelect')?.value || 'gemini';
+  if (window.aiModelMode === 'auto') {
+    window.loadAutoModeModels(provider);
+  } else {
+    window.loadManualModeModels(provider);
+  }
+};
+
+// Aktualizace UI pro mód
+window.updateAIModelModeUI = function() {
+  const toggle = document.getElementById('aiModeToggle');
+  const icon = document.getElementById('aiModeIcon');
+  const label = document.getElementById('aiModeLabel');
+  const autoInfo = document.getElementById('aiAutoInfo');
+  const providerSelect = document.getElementById('aiProviderSelect');
+  const modelSelect = document.getElementById('aiModelSelect');
+
+  if (window.aiModelMode === 'auto') {
+    toggle?.classList.add('auto');
+    if (icon) icon.textContent = '🤖';
+    if (label) label.textContent = 'Auto';
+    if (autoInfo) autoInfo.style.display = 'flex';
+    // V auto módu je provider/model select disabled
+    if (providerSelect) providerSelect.disabled = true;
+    if (modelSelect) modelSelect.disabled = true;
+  } else {
+    toggle?.classList.remove('auto');
+    if (icon) icon.textContent = '✋';
+    if (label) label.textContent = 'Manual';
+    if (autoInfo) autoInfo.style.display = 'none';
+    // V manual módu jsou selecty aktivní
+    if (providerSelect) providerSelect.disabled = false;
+    if (modelSelect) modelSelect.disabled = false;
+  }
+};
+
+// Načíst modely pro MANUAL mód - dynamicky z API
+window.loadManualModeModels = async function(provider) {
+  const modelSelect = document.getElementById('aiModelSelect');
+  if (!modelSelect) return;
+
+  modelSelect.innerHTML = '<option value="" disabled>⏳ Načítám FREE modely...</option>';
+
+  try {
+    const apiKey = typeof AI !== 'undefined' ? AI.getKey(provider) : null;
+    if (!apiKey) {
+      modelSelect.innerHTML = '<option value="" disabled>❌ Chybí API klíč</option>';
+      return;
+    }
+
+    // Fetch modely z API
+    let models = [];
+    switch (provider) {
+      case 'gemini':
+        models = await window.fetchGeminiModels(apiKey);
+        break;
+      case 'groq':
+        models = await window.fetchGroqModels(apiKey);
+        break;
+      case 'openrouter':
+        models = await window.fetchOpenRouterModels(apiKey);
+        break;
+      case 'mistral':
+        models = await window.fetchMistralModels(apiKey);
+        break;
+    }
+
+    // Filtruj pouze FREE modely a seřaď podle kvality
+    const freeModels = models.filter(m => m.isFree).sort((a, b) => b.quality - a.quality);
+
+    if (freeModels.length === 0) {
+      modelSelect.innerHTML = '<option value="" disabled>Žádné FREE modely</option>';
+      return;
+    }
+
+    modelSelect.innerHTML = '';
+
+    // Pro OpenRouter - seskupit podle providera
+    if (provider === 'openrouter') {
+      const groups = {};
+      freeModels.forEach(m => {
+        const parts = m.id.split('/');
+        const groupName = parts.length > 1 ? parts[0] : 'Ostatní';
+        if (!groups[groupName]) groups[groupName] = [];
+        groups[groupName].push(m);
+      });
+
+      Object.keys(groups).sort().forEach(groupName => {
+        // Přidej optgroup
+        const optgroup = document.createElement('optgroup');
+        optgroup.label = `📦 ${groupName} (${groups[groupName].length})`;
+
+        groups[groupName].forEach(m => {
+          const option = document.createElement('option');
+          option.value = m.id;
+          const qualityIcon = m.quality >= 90 ? '🏆' : m.quality >= 80 ? '⭐' : '⚡';
+          // Zobraz context length pokud je k dispozici
+          const ctx = m.contextLength ? `${Math.round(m.contextLength/1000)}k` : '';
+          option.textContent = `${qualityIcon} ${m.name || m.id.split('/').pop()}${ctx ? ' ('+ctx+')' : ''}`;
+          optgroup.appendChild(option);
+        });
+
+        modelSelect.appendChild(optgroup);
+      });
+    } else {
+      // Pro ostatní providery - plochý seznam
+      freeModels.forEach((m, idx) => {
+        const option = document.createElement('option');
+        option.value = m.id;
+        const qualityIcon = m.quality >= 90 ? '🏆' : m.quality >= 80 ? '⭐' : '⚡';
+        // Zobraz context length pokud je k dispozici
+        const ctx = m.contextLength ? `${Math.round(m.contextLength/1000)}k` : '';
+        option.textContent = `${qualityIcon} ${m.name || m.id}${ctx ? ' ('+ctx+')' : ''}`;
+        modelSelect.appendChild(option);
+        if (idx === 0) option.selected = true;
+      });
+    }
+
+    // Vyber první model
+    if (modelSelect.options.length > 0) {
+      modelSelect.selectedIndex = 0;
+    }
+
+    console.log(`📋 Manual mód: Načteno ${freeModels.length} FREE modelů pro ${provider}`);
+
+  } catch (err) {
+    console.error('Chyba při načítání modelů:', err);
+    modelSelect.innerHTML = `<option value="" disabled>❌ Chyba: ${err.message}</option>`;
+  }
+};
+
+// Načíst modely pro AUTO mód - vybere nejlepší
+window.loadAutoModeModels = async function(provider) {
+  const autoModel = document.getElementById('aiAutoModel');
+  if (autoModel) autoModel.textContent = 'Načítám...';
+
+  try {
+    // Získej nejlepší dostupný model
+    if (typeof AI !== 'undefined') {
+      const bestModels = AI.getBestModels ? AI.getBestModels(3) : [];
+
+      if (bestModels.length > 0) {
+        const best = bestModels[0];
+        if (autoModel) autoModel.textContent = best.name || best.model;
+        window.autoSelectedModel = best;
+
+        // Nastav v AI modulu
+        AI.setDefaultProvider(best.provider);
+        AI.setModel(best.provider, best.model);
+
+        console.log(`🤖 Auto mód: Vybrán ${best.provider}/${best.model}`);
+      } else {
+        if (autoModel) autoModel.textContent = 'Gemini Flash';
+        window.autoSelectedModel = { provider: 'gemini', model: 'gemini-2.0-flash', name: 'Gemini Flash' };
+      }
+    }
+  } catch (err) {
+    console.error('Chyba v auto módu:', err);
+    if (autoModel) autoModel.textContent = 'Chyba';
+  }
+};
+
+// Použít model z Discover sekce přímo v AI panelu
+window.useDiscoveredModel = function(provider, modelId, modelName) {
+  // Přepnout na Manual mód
+  window.aiModelMode = 'manual';
+  localStorage.setItem('aiModelMode', 'manual');
+  window.updateAIModelModeUI();
+
+  // Nastavit provider
+  const providerSelect = document.getElementById('aiProviderSelect');
+  if (providerSelect) {
+    providerSelect.value = provider;
+  }
+
+  // Nastavit model
+  const modelSelect = document.getElementById('aiModelSelect');
+  if (modelSelect) {
+    // Zkontroluj jestli model existuje v selectu
+    let optionExists = false;
+    for (let opt of modelSelect.options) {
+      if (opt.value === modelId) {
+        optionExists = true;
+        break;
+      }
+    }
+
+    // Pokud neexistuje, přidej ho
+    if (!optionExists) {
+      const option = document.createElement('option');
+      option.value = modelId;
+      option.textContent = `🆕 ${modelName}`;
+      modelSelect.insertBefore(option, modelSelect.firstChild);
+    }
+
+    modelSelect.value = modelId;
+  }
+
+  // Nastav v AI modulu
+  if (typeof AI !== 'undefined') {
+    AI.setDefaultProvider(provider);
+    AI.setModel(provider, modelId);
+  }
+
+  // Zavři Smart AI Settings modal
+  window.closeSmartAISettings();
+
+  // Zobraz notifikaci
+  window.showToast?.(`✅ Model "${modelName}" připraven!`) ||
+    console.log(`✅ Model "${modelName}" připraven k použití`);
+};
+
+// Toast notifikace
+window.showToast = function(message, duration = 3000) {
+  // Odstraň existující toast
+  const existing = document.querySelector('.toast-notification');
+  if (existing) existing.remove();
+
+  const toast = document.createElement('div');
+  toast.className = 'toast-notification';
+  toast.textContent = message;
+  toast.style.cssText = `
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    z-index: 10000;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    animation: toastIn 0.3s ease-out;
+  `;
+
+  document.body.appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.animation = 'toastOut 0.3s ease-in forwards';
+    setTimeout(() => toast.remove(), 300);
+  }, duration);
+};
+
+// Otevřít AI Module Settings (integrace z test-ai-module.html)
+window.openAIModuleSettings = function() {
+  // Zavřít dropdown menu
+  const menu = document.getElementById('aiMenuDropdown');
+  if (menu) menu.style.display = 'none';
+
+  // Vytvořit nebo otevřít modal
+  let modal = document.getElementById('aiModuleSettingsModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'aiModuleSettingsModal';
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+      <div class="modal-window" style="max-width: 700px; max-height: 90vh; overflow-y: auto;">
+        <div class="modal-header">
+          <h2>🔧 AI Modul Settings</h2>
+          <button onclick="document.getElementById('aiModuleSettingsModal').style.display='none'" class="modal-close">×</button>
+        </div>
+        <div class="modal-content" style="padding: 20px;">
+
+          <!-- Provider Tabs -->
+          <div class="ai-module-tabs" style="display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap;">
+            <button class="ai-module-tab active" onclick="window.switchAIModuleTab('gemini')" data-provider="gemini">🤖 Gemini</button>
+            <button class="ai-module-tab" onclick="window.switchAIModuleTab('groq')" data-provider="groq">⚡ Groq</button>
+            <button class="ai-module-tab" onclick="window.switchAIModuleTab('openrouter')" data-provider="openrouter">🌐 OpenRouter</button>
+            <button class="ai-module-tab" onclick="window.switchAIModuleTab('mistral')" data-provider="mistral">🔥 Mistral</button>
+          </div>
+
+          <!-- API Key Section -->
+          <div class="ai-module-section" style="background: rgba(30, 41, 59, 0.6); padding: 16px; border-radius: 10px; margin-bottom: 16px;">
+            <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #888;">API klíč pro <span id="aiModuleProviderName">Gemini</span>:</label>
+            <div style="display: flex; gap: 8px;">
+              <input type="password" id="aiModuleApiKey" placeholder="Zadejte API klíč..." style="flex: 1; padding: 10px; background: #111; border: 1px solid #444; border-radius: 6px; color: #ccc;">
+              <button onclick="window.toggleAIModuleKeyVisibility()" style="padding: 10px; background: #333; border: 1px solid #444; border-radius: 6px; cursor: pointer;">👁️</button>
+              <button onclick="window.saveAIModuleKey()" style="padding: 10px 16px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); border: none; border-radius: 6px; color: white; cursor: pointer;">Uložit</button>
+            </div>
+            <div id="aiModuleKeyStatus" style="margin-top: 8px; font-size: 12px; color: #888;"></div>
+          </div>
+
+          <!-- Model List -->
+          <div class="ai-module-section" style="background: rgba(30, 41, 59, 0.6); padding: 16px; border-radius: 10px; margin-bottom: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <span style="font-weight: 600;">Dostupné modely</span>
+              <button onclick="window.refreshAIModuleModels()" style="padding: 6px 12px; background: #333; border: 1px solid #444; border-radius: 6px; cursor: pointer; font-size: 12px;">🔄 Obnovit</button>
+            </div>
+            <div id="aiModuleModelList" style="max-height: 200px; overflow-y: auto;">
+              <div style="color: #666; text-align: center; padding: 20px;">Načítám modely...</div>
+            </div>
+          </div>
+
+          <!-- RPM Monitor -->
+          <div class="ai-module-section" style="background: rgba(30, 41, 59, 0.6); padding: 16px; border-radius: 10px; margin-bottom: 16px;">
+            <div style="font-weight: 600; margin-bottom: 12px;">📊 RPM Monitor</div>
+            <div id="aiModuleRpmMonitor" style="display: flex; gap: 12px; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 6px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #22c55e;"></span> Gemini: 15 RPM</div>
+              <div style="display: flex; align-items: center; gap: 6px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #22c55e;"></span> Groq: 30 RPM</div>
+            </div>
+          </div>
+
+          <!-- Test Section -->
+          <div style="display: flex; gap: 10px;">
+            <button onclick="window.testAIModuleConnection()" style="flex: 1; padding: 12px; background: linear-gradient(135deg, #22c55e, #16a34a); border: none; border-radius: 8px; color: white; cursor: pointer; font-weight: 600;">🧪 Test připojení</button>
+            <button onclick="window.resetAIModuleSettings()" style="padding: 12px 20px; background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; color: #f87171; cursor: pointer;">🗑️ Reset</button>
+          </div>
+
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  }
+
+  modal.style.display = 'flex';
+  window.switchAIModuleTab('gemini');
+};
+
+// AI Module Settings funkce
+window.currentAIModuleProvider = 'gemini';
+
+window.switchAIModuleTab = function(provider) {
+  window.currentAIModuleProvider = provider;
+
+  // Aktualizovat aktivní tab
+  document.querySelectorAll('.ai-module-tab').forEach(tab => {
+    tab.classList.toggle('active', tab.dataset.provider === provider);
+  });
+
+  // Aktualizovat název providera
+  const names = { gemini: 'Gemini', groq: 'Groq', openrouter: 'OpenRouter', mistral: 'Mistral' };
+  document.getElementById('aiModuleProviderName').textContent = names[provider] || provider;
+
+  // Načíst API klíč
+  const keyInput = document.getElementById('aiModuleApiKey');
+  const savedKey = localStorage.getItem(`ai_${provider}_key`) || '';
+  if (keyInput) keyInput.value = savedKey;
+
+  // Aktualizovat status
+  window.updateAIModuleKeyStatus(savedKey);
+
+  // Načíst modely
+  window.refreshAIModuleModels();
+};
+
+window.toggleAIModuleKeyVisibility = function() {
+  const input = document.getElementById('aiModuleApiKey');
+  if (input) input.type = input.type === 'password' ? 'text' : 'password';
+};
+
+window.saveAIModuleKey = function() {
+  const input = document.getElementById('aiModuleApiKey');
+  const key = input?.value || '';
+  localStorage.setItem(`ai_${window.currentAIModuleProvider}_key`, key);
+  window.updateAIModuleKeyStatus(key);
+
+  // Aktualizovat i v AI modulu
+  if (typeof AI !== 'undefined' && AI.setApiKey) {
+    AI.setApiKey(window.currentAIModuleProvider, key);
+  }
+};
+
+window.updateAIModuleKeyStatus = function(key) {
+  const status = document.getElementById('aiModuleKeyStatus');
+  if (!status) return;
+
+  if (key && key.length > 10) {
+    status.innerHTML = '✅ <span style="color: #22c55e;">API klíč nastaven</span>';
+  } else if (key) {
+    status.innerHTML = '⚠️ <span style="color: #f59e0b;">Demo klíč</span>';
+  } else {
+    status.innerHTML = '❌ <span style="color: #888;">Žádný klíč</span>';
+  }
+};
+
+window.refreshAIModuleModels = async function() {
+  const list = document.getElementById('aiModuleModelList');
+  if (!list) return;
+
+  list.innerHTML = '<div style="color: #666; text-align: center; padding: 20px;">Načítám modely...</div>';
+
+  try {
+    // Získat modely z AI modulu nebo použít výchozí
+    const modelsByProvider = {
+      gemini: [
+        { id: 'gemini-2.5-flash-lite', name: 'Gemini 2.5 Flash-Lite', rpm: 15, free: true },
+        { id: 'gemini-2.5-flash', name: 'Gemini 2.5 Flash', rpm: 10, free: true },
+        { id: 'gemini-3-pro-preview', name: 'Gemini 3 Pro', rpm: 5, free: true }
+      ],
+      groq: [
+        { id: 'llama-3.3-70b-versatile', name: 'Llama 3.3 70B', rpm: 30, free: true },
+        { id: 'llama-3.1-8b-instant', name: 'Llama 3.1 8B', rpm: 30, free: true },
+        { id: 'qwen/qwen3-32b', name: 'Qwen 3 32B', rpm: 30, free: true }
+      ],
+      openrouter: [
+        { id: 'google/gemini-2.0-flash-exp:free', name: 'Gemini 2.0 Flash', rpm: 20, free: true },
+        { id: 'meta-llama/llama-3.2-3b-instruct:free', name: 'Llama 3.2 3B', rpm: 20, free: true }
+      ],
+      mistral: [
+        { id: 'mistral-small-latest', name: 'Mistral Small', rpm: 5, free: false },
+        { id: 'open-mistral-7b', name: 'Mistral 7B', rpm: 10, free: true }
+      ]
+    };
+
+    const models = modelsByProvider[window.currentAIModuleProvider] || [];
+
+    if (models.length === 0) {
+      list.innerHTML = '<div style="color: #666; text-align: center; padding: 20px;">Žádné modely</div>';
+      return;
+    }
+
+    list.innerHTML = models.map(m => `
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: rgba(15, 23, 42, 0.6); border-radius: 6px; margin-bottom: 6px;">
+        <div>
+          <div style="font-size: 13px; color: #ccc;">${m.name}</div>
+          <div style="font-size: 11px; color: #666;">${m.id}</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 11px; color: ${m.free ? '#22c55e' : '#888'};">${m.free ? 'FREE' : 'PAID'}</span>
+          <span style="font-size: 11px; color: #888;">${m.rpm} RPM</span>
+        </div>
+      </div>
+    `).join('');
+
+  } catch (err) {
+    list.innerHTML = `<div style="color: #f87171; text-align: center; padding: 20px;">Chyba: ${err.message}</div>`;
+  }
+};
+
+window.testAIModuleConnection = async function() {
+  try {
+    if (typeof AI === 'undefined') {
+      alert('❌ AI modul není načten!');
+      return;
+    }
+
+    const result = await AI.ask('Řekni "OK"', {
+      provider: window.currentAIModuleProvider,
+      maxTokens: 10
+    });
+
+    alert(`✅ Test úspěšný!\n\nProvider: ${window.currentAIModuleProvider}\nOdpověď: ${result.substring(0, 50)}`);
+  } catch (err) {
+    alert(`❌ Test selhal!\n\nProvider: ${window.currentAIModuleProvider}\nChyba: ${err.message}`);
+  }
+};
+
+window.resetAIModuleSettings = function() {
+  if (!confirm('Opravdu chcete resetovat nastavení AI modulu?')) return;
+
+  ['gemini', 'groq', 'openrouter', 'mistral'].forEach(p => {
+    localStorage.removeItem(`ai_${p}_key`);
+  });
+
+  alert('✅ Nastavení resetováno');
+  window.switchAIModuleTab(window.currentAIModuleProvider);
+};
+
+// Inicializace při načtení stránky
+document.addEventListener('DOMContentLoaded', () => {
+  // Aktualizuj AI model mode UI
+  window.updateAIModelModeUI();
+
+  // Načti modely podle aktuálního módu
+  const provider = document.getElementById('aiProviderSelect')?.value || 'gemini';
+  if (window.aiModelMode === 'auto') {
+    if (window.loadAutoModeModels) window.loadAutoModeModels(provider);
+  } else {
+    if (window.loadManualModeModels) window.loadManualModeModels(provider);
+  }
+
+  // Inicializuj AI modul pokud je dostupný
+  if (typeof AI !== 'undefined') {
+    console.log('🤖 AI Modul detekován, verze:', AI.VERSION || 'neznámá');
+
+    // Načti uložené klíče z localStorage
+    ['gemini', 'groq', 'openrouter', 'mistral'].forEach(provider => {
+      const savedKey = localStorage.getItem(`ai_${provider}_key`);
+      if (savedKey && savedKey.length > 10) {
+        AI.setKey(provider, savedKey);
+        console.log(`🔑 Načten uložený klíč pro ${provider}`);
+      }
+    });
+
+    // Aktualizuj statusy klíčů po chvíli (aby se UI stihlo načíst)
+    setTimeout(() => {
+      if (window.updateSmartKeyStatuses) window.updateSmartKeyStatuses();
+    }, 500);
+  }
+
+  // Aktualizuj modely při změně providera
+  setTimeout(() => {
+    if (window.updateModelsForProvider) window.updateModelsForProvider();
+  }, 100);
+});

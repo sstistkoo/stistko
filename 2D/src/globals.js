@@ -1,7 +1,11 @@
 /**
- * GLOBALS.JS - Centralizované globální proměnné a konstanty
- * Musí se načíst PRVNÍ, aby ostatní moduly mohly používat
+ * GLOBALS.JS - Centralizované globální proměnné a konstanty (ES6 hybridní)
+ * Musí se načíst PRVÍ, aby ostatní moduly mohly používat
+ * @module globals
  */
+
+// ===== ES6 EXPORT PLACEHOLDER =====
+// export const GLOBALS = {}; // Bude aktivováno po plné migraci
 
 // ===== API KEYS & STORAGE =====
 window.API_STORAGE_KEY = "soustruznik_api_keys";

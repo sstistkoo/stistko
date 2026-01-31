@@ -76,6 +76,7 @@ window.enableAIDragging = function () {
       if (pos.left) panel.style.left = pos.left;
       if (pos.top) panel.style.top = pos.top;
       panel.style.right = 'auto';
+      panel.style.transform = 'none'; // Důležité: zrušit translateX(-50%)
     }
   } catch (e) {}
 
@@ -90,6 +91,8 @@ window.enableAIDragging = function () {
     origX = rect.left;
     origY = rect.top;
     document.body.style.userSelect = 'none';
+    // Při začátku přetahování zrušit transform pro přesné pozicování
+    panel.style.transform = 'none';
   };
 
   const onMove = (clientX, clientY) => {
@@ -99,6 +102,7 @@ window.enableAIDragging = function () {
     panel.style.left = (origX + dx) + 'px';
     panel.style.top = (origY + dy) + 'px';
     panel.style.right = 'auto';
+    panel.style.transform = 'none'; // Zajistit že transform je vypnutý
   };
 
   const onEnd = () => {
@@ -106,16 +110,33 @@ window.enableAIDragging = function () {
     dragging = false;
     document.body.style.userSelect = '';
     try {
-      localStorage.setItem('aiPanelPosition', JSON.stringify({ left: panel.style.left, top: panel.style.top }));
+      localStorage.setItem('aiPanelPosition', JSON.stringify({
+        left: panel.style.left,
+        top: panel.style.top,
+        transform: 'none' // Uložit info že panel byl přesunut
+      }));
     } catch (e) {}
   };
 
-  header.addEventListener('mousedown', (e) => { onStart(e.clientX, e.clientY); });
+  // Kontrola zda cíl není interaktivní prvek
+  const isInteractive = (el) => {
+    const tag = el.tagName.toLowerCase();
+    return tag === 'select' || tag === 'button' || tag === 'input' || tag === 'textarea' || tag === 'a' || el.closest('select, button, input, textarea, a');
+  };
+
+  header.addEventListener('mousedown', (e) => {
+    if (isInteractive(e.target)) return; // Nekreslit při kliknutí na interaktivní prvky
+    onStart(e.clientX, e.clientY);
+  });
   document.addEventListener('mousemove', (e) => { onMove(e.clientX, e.clientY); });
   document.addEventListener('mouseup', onEnd);
 
   // Touch support - pouze na desktopu
-  header.addEventListener('touchstart', (e) => { const t = e.touches[0]; onStart(t.clientX, t.clientY); }, { passive: true });
+  header.addEventListener('touchstart', (e) => {
+    if (isInteractive(e.target)) return;
+    const t = e.touches[0];
+    onStart(t.clientX, t.clientY);
+  }, { passive: true });
   document.addEventListener('touchmove', (e) => { const t = e.touches[0]; if (t) onMove(t.clientX, t.clientY); }, { passive: false });
   document.addEventListener('touchend', onEnd);
 };
@@ -209,18 +230,29 @@ function scheduleMidnightReset() {
   }, timeUntilReset);
 }
 
-// Ruční reset API stats
-window.resetApiStats = function () {
-  if (confirm("Opravdu resetovat API statistiky?")) {
-    apiUsageStats = {
-      totalCalls: 0,
-      totalTokensIn: 0,
-      totalTokensOut: 0,
-      dailyCalls: 0,
-      lastReset: new Date().toISOString(),
-    };
-    saveApiStats();
-    alert("✅ API statistiky resetovány");
+// Vymazání AI chatu
+window.clearAIChat = function () {
+  const modal = document.getElementById('clearChatModal');
+  if (modal) {
+    modal.classList.remove('d-none');
+    modal.style.display = 'flex';
+  }
+};
+
+window.confirmClearChat = function() {
+  const chatWindow = document.getElementById('chatWindow');
+  if (chatWindow) {
+    chatWindow.innerHTML = '';
+    chatWindow.style.display = 'none';
+  }
+  window.closeClearChatModal();
+};
+
+window.closeClearChatModal = function() {
+  const modal = document.getElementById('clearChatModal');
+  if (modal) {
+    modal.style.display = 'none';
+    modal.classList.add('d-none');
   }
 };
 
@@ -256,11 +288,10 @@ function updateApiUsageUI() {
       : "#44ff44";
 
   usage.innerHTML = `
-    <div style="font-size: 11px; color: #aaa; text-align: center;">
-      🔑 ${providerIcon} ${keyName}<br/>
-      📊 API limit: <span style="color: ${color}; font-weight: bold">${apiCallsCount}/${API_FREE_LIMIT}</span> za minutu<br/>
-      <div style="margin-top: 4px; font-size: 10px; color: #666;">📈 Dnes: <span style="color: #888">${apiUsageStats.dailyCalls || 0}</span> | Celkem: <span style="color: #888">${apiUsageStats.totalCalls}</span></div><br/>
-      <button onclick="window.resetApiStats()" style="font-size: 9px; padding: 2px 6px; margin-top: 2px; background: #333; border: 1px solid #555; color: #aaa; cursor: pointer; border-radius: 3px; width: 100%; margin-right: 0;">🔄 Reset</button>
+    <div style="font-size: 10px; color: #aaa; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px;">
+      <span>🔑 ${keyName}</span>
+      <span style="color: ${color}; font-weight: bold">${apiCallsCount}/${API_FREE_LIMIT}</span>
+      <span style="color: #666;">Dnes: ${apiUsageStats.dailyCalls || 0} | Celkem: ${apiUsageStats.totalCalls}</span>
     </div>
   `;
 }
@@ -316,6 +347,7 @@ window.GROQ_VISION_MODELS = [
 ];
 
 // Aktualizuj modely podle vybraného providera
+// Podporuje dynamické načítání free modelů z AI modulu
 window.updateModelsForProvider = function() {
   const providerSelect = document.getElementById("aiProviderSelect");
   const modelSelect = document.getElementById("aiModelSelect");
@@ -323,18 +355,130 @@ window.updateModelsForProvider = function() {
   if (!providerSelect || !modelSelect) return;
 
   const provider = providerSelect.value;
+
+  // V Auto módu - použij loadAutoModeModels
+  if (window.aiModelMode === 'auto') {
+    if (window.loadAutoModeModels) {
+      window.loadAutoModeModels(provider);
+    }
+    return;
+  }
+
+  // V Manual módu - načti FREE modely z API
+  if (window.loadManualModeModels) {
+    window.loadManualModeModels(provider);
+    return;
+  }
+
+  // Fallback na statické modely
   modelSelect.innerHTML = ""; // Vyčisti stávající modely
 
   // Načti enabled modely
   const enabledModels = window.loadEnabledModels ? window.loadEnabledModels() : null;
 
+  // Získej modely z AI modulu pokud je dostupný
+  if (typeof AI !== 'undefined' && AI.ALL_MODELS && AI.ALL_MODELS[provider]) {
+    const aiModels = AI.ALL_MODELS[provider];
+    let firstEnabled = null;
+
+    // Přidej "Načítám..." placeholder pokud budeme dynamicky načítat
+    if (aiModels.length === 0) {
+      const loadingOpt = document.createElement("option");
+      loadingOpt.value = "";
+      loadingOpt.textContent = "⏳ Načítám modely...";
+      loadingOpt.disabled = true;
+      modelSelect.appendChild(loadingOpt);
+      return;
+    }
+
+    aiModels.forEach(model => {
+      if (!enabledModels || enabledModels.has(model.value)) {
+        const option = document.createElement("option");
+        option.value = model.value;
+        // Zobraz FREE tag u free modelů
+        const freeTag = model.free ? ' 🆓' : '';
+        const rpmInfo = model.rpm ? ` (${model.rpm} RPM)` : '';
+        option.textContent = `${model.name || model.value}${rpmInfo}${freeTag}`;
+        modelSelect.appendChild(option);
+        if (!firstEnabled) firstEnabled = option;
+      }
+    });
+
+    if (firstEnabled) firstEnabled.selected = true;
+
+  } else {
+    // Fallback na statické modely pokud AI modul není dostupný
+    window.loadStaticModels(provider, modelSelect, enabledModels);
+  }
+
+  // Aktualizuj upload tlačítko viditelnost podle modelu
+  if (window.updateImageUploadVisibility) window.updateImageUploadVisibility();
+
+  // Aktualizuj API usage UI
+  if (updateApiUsageUI) updateApiUsageUI();
+};
+
+// Načti dynamické free modely z AI modulu/API
+window.loadDynamicModels = async function(provider, modelSelect) {
+  // Zobraz loading stav
+  modelSelect.innerHTML = '<option value="" disabled>⏳ Načítám free modely...</option>';
+
+  try {
+    if (typeof AI !== 'undefined') {
+      // Získej všechny modely pro providera
+      let models = AI.ALL_MODELS[provider] || [];
+
+      // Filtruj pouze free modely
+      const freeModels = models.filter(m => m.free !== false && (m.rpm > 0 || m.free === true));
+
+      if (freeModels.length > 0) {
+        modelSelect.innerHTML = '';
+
+        // Přidej header
+        const headerOpt = document.createElement("option");
+        headerOpt.disabled = true;
+        headerOpt.textContent = `═══ FREE MODELY (${freeModels.length}) ═══`;
+        headerOpt.style.fontWeight = "bold";
+        modelSelect.appendChild(headerOpt);
+
+        freeModels.forEach((model, idx) => {
+          const option = document.createElement("option");
+          option.value = model.value;
+          const qualityIcon = model.quality >= 90 ? '🏆' : model.quality >= 70 ? '⭐' : '⚡';
+          option.textContent = `${qualityIcon} ${model.name || model.value} (${model.rpm || '?'} RPM)`;
+          modelSelect.appendChild(option);
+          if (idx === 0) option.selected = true;
+        });
+
+        // Aktualizuj auto info
+        const autoModel = document.getElementById('aiAutoModel');
+        if (autoModel && freeModels[0]) {
+          autoModel.textContent = freeModels[0].name || freeModels[0].value;
+        }
+      } else {
+        // Žádné free modely
+        modelSelect.innerHTML = '<option value="" disabled>❌ Žádné free modely</option>';
+      }
+    }
+  } catch (err) {
+    console.error('Chyba při načítání dynamických modelů:', err);
+    modelSelect.innerHTML = '<option value="" disabled>❌ Chyba načítání</option>';
+  }
+
+  // Aktualizuj UI
+  if (window.updateImageUploadVisibility) window.updateImageUploadVisibility();
+  if (updateApiUsageUI) updateApiUsageUI();
+};
+
+// Fallback - statické modely
+window.loadStaticModels = function(provider, modelSelect, enabledModels) {
   if (provider === "gemini") {
     // Gemini modely
     const geminiModels = [
-      { value: "gemini-2.5-flash-lite", label: "⚡ Gemini 2.5 Flash-Lite (Vyšší limit)" },
-      { value: "gemini-2.5-flash", label: "⚡ Gemini 2.5 Flash (Rychlý)" },
+      { value: "gemini-2.5-flash-lite", label: "⚡ Gemini 2.5 Flash-Lite (Vyšší limit) 🆓" },
+      { value: "gemini-2.5-flash", label: "⚡ Gemini 2.5 Flash (Rychlý) 🆓" },
       { value: "gemini-3-pro-preview", label: "🧪 Gemini 3 Pro (Nejchytřejší)" },
-      { value: "gemini-2.0-flash-exp", label: "⚡ Gemini 2.0 Flash (Exp)" }
+      { value: "gemini-2.0-flash-exp", label: "⚡ Gemini 2.0 Flash (Exp) 🆓" }
     ];
 
     let firstEnabled = null;
@@ -443,13 +587,7 @@ window.updateModelsForProvider = function() {
     });
     if (firstEnabled) firstEnabled.selected = true;
   }
-
-  // Aktualizuj upload tlačítko viditelnost podle modelu
-  if (window.updateImageUploadVisibility) window.updateImageUploadVisibility();
-
-  // Aktualizuj API usage UI
-  if (updateApiUsageUI) updateApiUsageUI();
-};
+}; // Konec loadStaticModels
 
 // Zobraz/skryj upload obrázků podle modelu
 window.updateImageUploadVisibility = function() {
@@ -557,6 +695,7 @@ window.toggleAiSelect = function () {
 window.openQuickInput = function () {
   const modal = document.getElementById("quickInputModal");
   if (modal) {
+    modal.classList.remove('d-none');
     modal.style.display = "flex";
   }
 };
@@ -565,6 +704,7 @@ window.closeQuickInput = function () {
   const modal = document.getElementById("quickInputModal");
   if (modal) {
     modal.style.display = "none";
+    modal.classList.add('d-none');
   }
 };
 
@@ -598,13 +738,20 @@ window.backspaceToken = function () {
 
 // ===== QUICK INPUT HELP =====
 window.showQuickInputHelp = function () {
-  const modal = document.getElementById("quickInputHelpModal");
-  if (modal) modal.style.display = "flex";
+  // Použijeme controller help modal který má obsah
+  const modal = document.getElementById("controllerHelpModal");
+  if (modal) {
+    modal.classList.remove('d-none');
+    modal.style.display = "flex";
+  }
 };
 
 window.closeQuickInputHelp = function () {
-  const modal = document.getElementById("quickInputHelpModal");
-  if (modal) modal.style.display = "none";
+  const modal = document.getElementById("controllerHelpModal");
+  if (modal) {
+    modal.style.display = "none";
+    modal.classList.add('d-none');
+  }
 };
 
 // ===== VOICE INPUT =====
@@ -1007,6 +1154,144 @@ window.retryWithBackoff = async function (apiCall, maxRetries = 3) {
   }
 };
 
+// ═══════════════════════════════════════════════════════════════════════════════
+// PROCESS AI RESPONSE - Zpracuje odpověď z AI modulu
+// ═══════════════════════════════════════════════════════════════════════════════
+
+/**
+ * Zpracuje AI odpověď (z AI modulu nebo původní implementace)
+ * Parsuje JSON, přidá tvary na canvas, zobrazí v chatu
+ */
+window.processAIResponse = async function(aiResponseText, originalPrompt) {
+  const container = document.getElementById("aiChatHistory");
+  const promptInput = document.getElementById("aiPrompt");
+  const aiType = document.getElementById('aiTypeSelect')?.value || 'cnc';
+
+  if (!container) return;
+
+  try {
+    window.processingAI = true;
+    if (promptInput) promptInput.disabled = true;
+
+    // Zobraz user zprávu
+    const userMsgDiv = document.createElement("div");
+    userMsgDiv.className = "chat-msg user";
+    userMsgDiv.style.marginBottom = "10px";
+    userMsgDiv.innerHTML = `<strong>Ty:</strong> ${escapeHtml(originalPrompt)}`;
+    container.appendChild(userMsgDiv);
+
+    // Ulož raw odpověď pro debugging
+    window.lastRawAI = aiResponseText;
+
+    // Pro Chat mode - zobraz jako plain text
+    if (aiType === 'chat') {
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'chat-msg model';
+      msgDiv.style.marginBottom = '10px';
+      msgDiv.innerHTML = `<strong>AI:</strong> ${escapeHtml(aiResponseText)}`;
+      container.appendChild(msgDiv);
+      container.scrollTop = container.scrollHeight;
+
+      if (promptInput) {
+        promptInput.value = '';
+        promptInput.disabled = false;
+      }
+      window.processingAI = false;
+      return;
+    }
+
+    // Pro CNC/2D mode - parsuj JSON
+    const result = window.parseAIReply(aiResponseText);
+
+    if (!result) {
+      throw new Error('Nepodařilo se parsovat AI odpověď');
+    }
+
+    const replyText = result.response_text || "Hotovo.";
+    const newShapes = result.shapes || [];
+
+    // Ulož pro debugging
+    window.lastAIResponse = {
+      rawResponse: aiResponseText,
+      parsedResult: result,
+      replyText: replyText,
+      shapes: newShapes,
+      timestamp: new Date().toISOString()
+    };
+
+    // Přidej tvary na canvas
+    if (Array.isArray(newShapes) && newShapes.length > 0) {
+      newShapes.forEach((s) => {
+        try {
+          if (s.type === "line" && typeof s.x1 === "number" && typeof s.y1 === "number" &&
+              typeof s.x2 === "number" && typeof s.y2 === "number") {
+            window.shapes.push({ type: "line", x1: s.x1, y1: s.y1, x2: s.x2, y2: s.y2 });
+          } else if (s.type === "circle" && typeof s.cx === "number" && typeof s.cy === "number" &&
+                     typeof s.r === "number" && s.r > 0) {
+            window.shapes.push({ type: "circle", cx: s.cx, cy: s.cy, r: s.r });
+          } else if (s.type === "arc" && typeof s.cx === "number" && typeof s.cy === "number" &&
+                     typeof s.r === "number" && s.r > 0) {
+            window.shapes.push({
+              type: "arc", cx: s.cx, cy: s.cy, r: s.r,
+              startAngle: s.startAngle, endAngle: s.endAngle,
+              counterclockwise: s.counterclockwise || false
+            });
+          } else if (s.type === "point" && typeof s.x === "number" && typeof s.y === "number") {
+            window.points.push({ x: s.x, y: s.y });
+          }
+        } catch (e) {
+          console.warn('⚠️ Chyba při přidávání tvaru:', e);
+        }
+      });
+
+      if (window.updateSnapPoints) window.updateSnapPoints();
+      if (window.draw) window.draw();
+      window.recordAISuccess(originalPrompt, newShapes);
+    }
+
+    // Zobraz v chatu
+    const msgDiv = document.createElement("div");
+    msgDiv.className = "chat-msg model";
+    if (newShapes.length > 0) {
+      msgDiv.innerHTML = `<span class="shape-tag">✏️ +${newShapes.length} tvarů</span><br>${escapeHtml(replyText)}`;
+    } else {
+      msgDiv.innerHTML = escapeHtml(replyText);
+    }
+    container.appendChild(msgDiv);
+    container.scrollTop = container.scrollHeight;
+
+    if (promptInput) {
+      promptInput.value = '';
+    }
+
+    // Update stats
+    if (typeof apiUsageStats !== 'undefined') {
+      apiUsageStats.totalCalls = (apiUsageStats.totalCalls || 0) + 1;
+      apiUsageStats.dailyCalls = (apiUsageStats.dailyCalls || 0) + 1;
+      if (typeof saveApiStats === 'function') saveApiStats();
+    }
+
+  } catch (err) {
+    console.error('❌ processAIResponse error:', err);
+
+    const errorDiv = document.createElement("div");
+    errorDiv.className = "chat-msg model";
+    errorDiv.style.color = "#ff6b6b";
+    errorDiv.textContent = "❌ " + err.message;
+    container.appendChild(errorDiv);
+    container.scrollTop = container.scrollHeight;
+
+  } finally {
+    window.processingAI = false;
+    if (promptInput) promptInput.disabled = false;
+
+    const btnCancel = document.getElementById("btnCancel");
+    const btnGenerate = document.getElementById("btnGenerate");
+    if (btnCancel) btnCancel.style.display = "none";
+    if (btnGenerate) btnGenerate.style.display = "inline-block";
+  }
+};
+
 // ===== JSON PARSING HELPER =====
 
 /**
@@ -1103,7 +1388,111 @@ window.recordAISuccess = function (prompt, shapes) {
   }
 };
 
+// ═══════════════════════════════════════════════════════════════════════════════
+// INTEGRACE S AI MODULE v3.0
+// Nová funkce využívající sdílený AI modul pro lepší správu modelů a fallback
+// ═══════════════════════════════════════════════════════════════════════════════
+
+/**
+ * Zavolá AI pomocí sdíleného AI Module v3.0
+ * Podporuje auto-fallback, smart retry a rate limit management
+ * @param {string} prompt - Uživatelský dotaz
+ * @param {object} options - Volitelné nastavení
+ * @returns {Promise<string>} AI odpověď
+ */
+window.callAIWithModule = async function(prompt, options = {}) {
+  // Zkontroluj zda je AI modul načten
+  if (typeof AI === 'undefined') {
+    console.warn('⚠️ AI modul není načten, používám původní metodu');
+    return null; // Vrátí null = použij původní metodu
+  }
+
+  // Zjisti aktuální nastavení z UI
+  const providerSelect = document.getElementById("aiProviderSelect");
+  const modelSelect = document.getElementById("aiModelSelect");
+  const aiTypeSelect = document.getElementById("aiTypeSelect");
+
+  const provider = options.provider || providerSelect?.value || 'gemini';
+  const model = options.model || modelSelect?.value || AI.config?.models[provider];
+  const aiType = options.aiType || aiTypeSelect?.value || 'cnc';
+
+  // Pokud je auto-switch zapnutý a máme Smart AI State
+  if (window.smartAIState?.autoSwitch && !options.provider) {
+    const best = AI.selectBestModel();
+    if (best) {
+      options.provider = best.provider;
+      options.model = best.model;
+    }
+  }
+
+  // Nastav system prompt podle typu
+  let systemPrompt = options.system;
+  if (!systemPrompt) {
+    if (aiType === 'chat') {
+      systemPrompt = 'Jsi přátelský AI asistent. Odpovídej v češtině.';
+    } else {
+      // Pro CNC/2D použij původní komplexní system prompt
+      systemPrompt = window.buildCADSystemPrompt ? window.buildCADSystemPrompt() : null;
+    }
+  }
+
+  try {
+    // Použij AI.ask() nebo AI.smartAsk() pro automatický fallback
+    const response = await AI.smartAsk(prompt, {
+      provider: provider,
+      model: model,
+      system: systemPrompt,
+      maxTokens: options.maxTokens || 4096,
+      temperature: options.temperature || 0.7,
+      ...options
+    });
+
+    console.log(`✅ AI Module: Odpověď od ${provider}/${model}`);
+    return response;
+
+  } catch (err) {
+    console.error('❌ AI Module error:', err.message);
+    throw err;
+  }
+};
+
+/**
+ * Wrapper pro callGemini který zkusí nejdřív AI modul
+ * Pokud selže nebo není dostupný, použije původní implementaci
+ */
+window.callGeminiWithFallback = async function() {
+  const promptInput = document.getElementById("aiPrompt");
+  const prompt = promptInput?.value?.trim();
+
+  if (!prompt) {
+    alert("Zadej prosím příkaz pro AI!");
+    return;
+  }
+
+  // Zkus AI modul
+  try {
+    const moduleResponse = await window.callAIWithModule(prompt);
+    if (moduleResponse !== null) {
+      // AI modul vrátil odpověď, zpracuj ji
+      await window.processAIResponse(moduleResponse, prompt);
+      return;
+    }
+  } catch (err) {
+    console.warn('⚠️ AI modul selhal, zkouším původní metodu:', err.message);
+  }
+
+  // Fallback na původní implementaci
+  window.callGeminiDirect();
+};
+
 // ===== MAIN AI CALL =====
+
+/**
+ * Hlavní vstupní bod pro volání AI.
+ * Zpracuje uživatelský prompt a předá ho správnému provideru.
+ * @async
+ * @returns {Promise<void>}
+ */
 window.callGemini = async function () {
   console.log("🔵 [DEBUG] callGemini() SPUŠTĚNO", new Date().toISOString());
   const promptInput = document.getElementById("aiPrompt");
@@ -1132,7 +1521,12 @@ window.callGemini = async function () {
   window.callGeminiDirect();
 };
 
-// Volání AI - pošle request přímo na API
+/**
+ * Router pro AI volání - směruje request na správného providera.
+ * Podporuje: gemini, groq, openrouter, mistral
+ * @async
+ * @returns {Promise<void>}
+ */
 window.callGeminiDirect = async function () {
   console.log("🟡 [DEBUG] callGeminiDirect() SPUŠTĚNO", new Date().toISOString());
 
@@ -1152,7 +1546,12 @@ window.callGeminiDirect = async function () {
   }
 };
 
-// Původní Gemini volání
+/**
+ * Volání Google Gemini API.
+ * Zpracuje prompt, odešle na API a zpracuje odpověď.
+ * @async
+ * @returns {Promise<void>}
+ */
 window.callGeminiDirectOriginal = async function () {
   console.log("🟡 [DEBUG] callGeminiDirectOriginal() SPUŠTĚNO", new Date().toISOString());
   const promptInput = document.getElementById("aiPrompt");
@@ -1692,6 +2091,13 @@ Uživatel: ${prompt}`;
 };
 
 // ===== GROQ API CALL =====
+
+/**
+ * Volání Groq API (LPU inference).
+ * Podporuje LLaMA, Mixtral a další modely.
+ * @async
+ * @returns {Promise<void>}
+ */
 window.callGroqDirect = async function () {
   console.log("⚡ [DEBUG] callGroqDirect() SPUŠTĚNO", new Date().toISOString());
   const promptInput = document.getElementById("aiPrompt");
@@ -1959,6 +2365,13 @@ Uživatel: ${prompt}`;
 };
 
 // ===== OPENROUTER API CALL =====
+
+/**
+ * Volání OpenRouter API.
+ * Umožňuje přístup k mnoha modelům (GPT-4, Claude, LLaMA, atd.)
+ * @async
+ * @returns {Promise<void>}
+ */
 window.callOpenRouterDirect = async function () {
   console.log("🌐 [DEBUG] callOpenRouterDirect() SPUŠTĚNO", new Date().toISOString());
   const promptInput = document.getElementById("aiPrompt");
@@ -2162,6 +2575,13 @@ Uživatel: ${prompt}`;
 };
 
 // ===== MISTRAL API CALL =====
+
+/**
+ * Volání Mistral AI API.
+ * Podporuje Mistral modely (Small, Medium, Large).
+ * @async
+ * @returns {Promise<void>}
+ */
 window.callMistralDirect = async function () {
   console.log("🔥 [DEBUG] callMistralDirect() SPUŠTĚNO", new Date().toISOString());
   const promptInput = document.getElementById("aiPrompt");

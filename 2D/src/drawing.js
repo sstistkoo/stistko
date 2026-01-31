@@ -1,10 +1,14 @@
 /**
- * DRAWING.JS - Kreslicí engine a geometrické operace
+ * DRAWING.JS - Kreslicí engine a geometrické operace (ES6 hybridní)
  * - Canvas rendering
  * - Shape management
  * - Intersection calculations
  * - Snap points
+ * @module drawing
  */
+
+// ===== ES6 EXPORT PLACEHOLDER =====
+// export const DRAWING = {}; // Bude aktivováno po plné migraci
 
 // Globální proměnné jsou inicializovány v globals.js
 // Pouze se zde odkažují!
@@ -635,6 +639,28 @@ function drawShape(ctx, s, canvas) {
 
   ctx.strokeStyle = strokeColor;
   ctx.lineWidth = 2;
+
+  // === BOD (point) ===
+  if (s.type === "point") {
+    const p = worldToScreen(s.x, s.y);
+    const pointSize = 6;
+
+    // Vnější kroužek
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, pointSize, 0, Math.PI * 2);
+    ctx.fillStyle = s.color || "#4ade80";
+    ctx.fill();
+    ctx.strokeStyle = "#166534";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Vnitřní tečka
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+    ctx.fillStyle = "#fff";
+    ctx.fill();
+    return;
+  }
 
   // Aplikovat styl čáry
   if (s.lineStyle === "thick") {

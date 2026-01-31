@@ -1,8 +1,12 @@
 /**
- * Unified Keyboard Handler
+ * KEYBOARD.JS - Unified Keyboard Handler (ES6 hybridní)
  * Centralizovaná správa všech keyboard shortcutů
  * Tunable konfigurace pro všechny kombinace
+ * @module keyboard
  */
+
+// ===== ES6 EXPORT PLACEHOLDER =====
+// export const KEYBOARD = {}; // Bude aktivováno po plné migraci
 
 // ===== KEYBOARD CONFIGURATION (TUNABLE) =====
 window.keyboardConfig = {

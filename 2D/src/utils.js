@@ -1,10 +1,14 @@
 /**
- * UTILS.JS - Utility funkce
+ * UTILS.JS - Utility funkce (ES6 hybridní)
  * - API Key management (Gemini + Groq)
  * - localStorage operace
  * - Geometrické kalkulace
  * - Pomocné funkce
+ * @module utils
  */
+
+// ===== ES6 EXPORT PLACEHOLDER =====
+// export const UTILS = {}; // Bude aktivováno po plné migraci
 
 // Globální proměnné jsou inicializovány v globals.js
 // Zde pouze používáme window.API_STORAGE_KEY atd.
