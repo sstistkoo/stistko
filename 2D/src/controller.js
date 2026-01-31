@@ -13,12 +13,41 @@ window.controllerInputBuffer = ""; // Aktuální vstup do controlleru
 window.pendingDirection = null; // Čekající směr z directionModal
 window.displayDecimals = 2; // Počet desetinných míst
 
+// ===== INICIALIZACE INPUT EVENT LISTENERU =====
+// Přidá event listenery pro přímé psaní do inputu
+document.addEventListener("DOMContentLoaded", function() {
+  const input = document.getElementById("controllerInput");
+  if (input) {
+    // Synchronizace při přímém psaní
+    input.addEventListener("input", function(e) {
+      window.controllerInputBuffer = e.target.value;
+    });
+
+    // Enter pro potvrzení
+    input.addEventListener("keydown", function(e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        window.confirmControllerInput();
+      } else if (e.key === "Escape") {
+        e.preventDefault();
+        window.closeControllerModal();
+      }
+    });
+  }
+});
+
 // ===== MODAL FUNKCE =====
 
 window.showControllerModal = function () {
   const modal = document.getElementById("controllerModal");
   if (modal) modal.style.display = "flex";
   updateControllerLastPoint();
+
+  // Focus na input po otevření
+  setTimeout(() => {
+    const input = document.getElementById("controllerInput");
+    if (input) input.focus();
+  }, 100);
 };
 
 window.closeControllerModal = function () {
@@ -312,13 +341,20 @@ window.hidePickPointToast = function () {
  */
 window.findNearestSnapPoint = function (mouseX, mouseY, threshold = 20) {
   const candidates = [];
-  const scale = window.scale || 1;
-  const offsetX = window.offsetX || 0;
-  const offsetY = window.offsetY || 0;
 
-  // Konverze mouse souřadnic na world souřadnice
-  const worldX = (mouseX - offsetX) / scale;
-  const worldY = (mouseY - offsetY) / scale;
+  // Použijeme správné proměnné pro viewport
+  const canvas = document.getElementById("canvas");
+  if (!canvas) return null;
+
+  const zoom = window.zoom || 2;
+  const panX = window.panX || 0;
+  const panY = window.panY || 0;
+  const width = canvas.width;
+  const height = canvas.height;
+
+  // Konverze mouse souřadnic na world souřadnice (stejně jako v snapPoint)
+  const worldX = (mouseX - width / 2) / zoom - panX;
+  const worldY = -(mouseY - height / 2) / zoom - panY;
 
   // 1. Explicitní body
   if (window.points && window.points.length > 0) {
@@ -375,7 +411,7 @@ window.findNearestSnapPoint = function (mouseX, mouseY, threshold = 20) {
 
   // Najít nejbližší bod
   let nearest = null;
-  let minDist = threshold / scale; // threshold v world souřadnicích
+  let minDist = threshold / zoom; // threshold v world souřadnicích
 
   for (const c of candidates) {
     const dist = Math.sqrt((c.x - worldX) ** 2 + (c.y - worldY) ** 2);
@@ -652,10 +688,18 @@ window.parseGCode = function (input, mode) {
     // Detekce G-kódu
     const gMatch = cmd.match(/^G(\d+)/);
     if (!gMatch) {
-      // Pokud není G-kód, zkusit implicitně G1 pro:
-      // - Souřadnice: X50 Z100
-      // - Polární: L54 AP0, AP45 L80, RP100 AP90
-      // - Poloměr: R50
+      // Pokud není G-kód, zkusit implicitně:
+      // - Souřadnice: X50 Z100 -> G1
+      // - Polární: L54 AP0, AP45 L80 -> G1
+      // - Poloměr: R50 nebo D100 -> G2 (kružnice)
+
+      // Kontrola zda je to jen poloměr (R nebo D) bez souřadnic - pak to je kružnice
+      const isCircleOnly = cmd.match(/^(R|D|CR)\d+\.?\d*$/i);
+      if (isCircleOnly) {
+        // Je to kružnice - použij G2
+        return window.parseGCode("G2 " + cmd, mode);
+      }
+
       if (cmd.match(/[XZLARPC]/i)) {
         // Rekurzivně zavolat s G1
         return window.parseGCode("G1" + cmd, mode);
