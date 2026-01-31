@@ -742,10 +742,10 @@ function drawShape(ctx, s, canvas) {
     // 🔍 Auto-detect tangential fillet: check if circle is between two lines
     const adjacentLines = findAdjacentLines(s, window.shapes);
 
-    if (adjacentLines.length === 2) {
+    if (adjacentLines.length >= 2) {
       // Draw only the arc portion that connects the two lines
       const angles = calculateTangentAngles(s, adjacentLines[0], adjacentLines[1]);
-      if (angles) {
+      if (angles && angles.start !== undefined && angles.end !== undefined) {
         ctx.beginPath();
         ctx.arc(c.x, c.y, s.r * zoom, angles.start, angles.end, false);
         ctx.stroke();
@@ -753,7 +753,7 @@ function drawShape(ctx, s, canvas) {
       }
     }
 
-    // Default: draw full circle
+    // Default: draw full circle (když není 2 sousední čáry NEBO selhala detekce úhlů)
     ctx.beginPath();
     ctx.arc(c.x, c.y, s.r * zoom, 0, Math.PI * 2);
     ctx.stroke();

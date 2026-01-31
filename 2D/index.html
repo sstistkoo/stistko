@@ -1422,10 +1422,10 @@
           <button onclick="window.showGCodePopup('controller')" class="kb-help-btn">G</button>
           <button onclick="window.showParamPopup('controller')" class="kb-help-btn">P</button>
           <button onclick="window.openFreeContourModal()" class="kb-help-btn" title="Volná Kontura (FK)">FK</button>
-          <input type="text" id="controllerInput" placeholder="Zadej příkaz..." class="controller-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-          <!-- Desktop only: help and close -->
+          <!-- Desktop only: help and close - přesunuté doprava -->
           <button onclick="window.showControllerHelp()" class="kb-help-btn desktop-only">?</button>
           <button onclick="window.closeControllerModal()" class="modal-close-btn-simple desktop-only">&times;</button>
+          <input type="text" id="controllerInput" placeholder="Zadej příkaz..." class="controller-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
         </div>
 
         <!-- Last point info -->
@@ -1464,9 +1464,9 @@
             <button onclick="window.insertControllerToken('3')" class="ctrl-btn ctrl-btn-num">3</button>
           </div>
 
-          <!-- Row 4: C, ⌫, 0, 0, ✓ -->
+          <!-- Row 4: 🧮, ⌫, 0, 0, ✓ -->
           <div class="controller-grid controller-grid-5">
-            <button onclick="window.clearControllerInput()" class="ctrl-btn">C</button>
+            <button onclick="window.showCalculator()" class="ctrl-btn" title="Kalkulačka">🧮</button>
             <button onclick="window.backspaceControllerToken()" class="ctrl-btn ctrl-btn-delete">⌫</button>
             <button onclick="window.insertControllerToken('0')" class="ctrl-btn ctrl-btn-num" style="grid-column: span 2">0</button>
             <button onclick="window.confirmControllerInput()" class="ctrl-btn ctrl-btn-confirm" style="padding: 8px">✓</button>
@@ -1553,6 +1553,50 @@
       </div>
     </div>
 
+    <!-- CALCULATOR MODAL -->
+    <div id="calculatorModal" class="modal-overlay d-none">
+      <div class="modal-window" style="max-width: 400px; border-radius: 12px; background: #1a1a2a;">
+        <div class="modal-header" style="margin-bottom: 10px;">
+          <h2 class="modal-header-title no-margin">🧮 Kalkulačka</h2>
+          <button onclick="window.closeCalculator()" class="modal-close-btn-simple">&times;</button>
+        </div>
+
+        <!-- Display -->
+        <div id="calcDisplay" style="background: #0a0a1a; color: #4ade80; padding: 20px; font-size: 28px; font-family: 'Courier New', monospace; text-align: right; border-radius: 8px; margin-bottom: 15px; min-height: 60px; border: 2px solid #2a2a3a; word-wrap: break-word;">0</div>
+
+        <!-- Buttons -->
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+          <!-- Row 1 -->
+          <button onclick="window.calcClear()" class="calc-btn calc-btn-operator">C</button>
+          <button onclick="window.calcBackspace()" class="calc-btn calc-btn-operator">⌫</button>
+          <button onclick="window.calcInsert('/')" class="calc-btn calc-btn-operator">÷</button>
+          <button onclick="window.calcInsert('*')" class="calc-btn calc-btn-operator">×</button>
+
+          <!-- Row 2 -->
+          <button onclick="window.calcInsert('7')" class="calc-btn">7</button>
+          <button onclick="window.calcInsert('8')" class="calc-btn">8</button>
+          <button onclick="window.calcInsert('9')" class="calc-btn">9</button>
+          <button onclick="window.calcInsert('-')" class="calc-btn calc-btn-operator">−</button>
+
+          <!-- Row 3 -->
+          <button onclick="window.calcInsert('4')" class="calc-btn">4</button>
+          <button onclick="window.calcInsert('5')" class="calc-btn">5</button>
+          <button onclick="window.calcInsert('6')" class="calc-btn">6</button>
+          <button onclick="window.calcInsert('+')" class="calc-btn calc-btn-operator">+</button>
+
+          <!-- Row 4 -->
+          <button onclick="window.calcInsert('1')" class="calc-btn">1</button>
+          <button onclick="window.calcInsert('2')" class="calc-btn">2</button>
+          <button onclick="window.calcInsert('3')" class="calc-btn">3</button>
+          <button onclick="window.calcInsertToController()" class="calc-btn calc-btn-confirm" style="grid-row: span 2; font-size: 24px;">✓<br><small style="font-size: 12px;">Vlož</small></button>
+
+          <!-- Row 5 -->
+          <button onclick="window.calcInsert('0')" class="calc-btn" style="grid-column: span 2;">0</button>
+          <button onclick="window.calcInsert('.')" class="calc-btn">.</button>
+        </div>
+      </div>
+    </div>
+
     <div id="directionModal" class="modal-overlay d-none">
       <div class="modal-window modal-sm">
         <div class="flex-between mb-15">
@@ -1601,13 +1645,13 @@
     </div>
 
     <div id="controllerHelpModal" class="modal-overlay d-none">
-      <div class="modal-window modal-lg" style="max-height: 85vh; overflow-y: auto;">
+      <div class="modal-window modal-lg" style="max-height: 70vh; overflow-y: auto;">
         <div class="modal-header">
-          <h2 class="modal-header-title no-margin">❓ Nápověda - Ovladač CNC</h2>
+          <h2 class="modal-header-title no-margin">❓ Nápověda</h2>
           <button onclick="window.closeControllerHelp(); window.closeQuickInputHelp();" class="modal-close-btn-simple">&times;</button>
         </div>
 
-        <div class="help-section" style="font-size: 13px;">
+        <div class="help-section" style="font-size: 13px; overflow-y: auto; max-height: calc(70vh - 80px);">
 
           <h3 class="help-title">🎮 Režimy souřadnic</h3>
           <div class="help-block">
