@@ -6239,3 +6239,145 @@ canvas {
     font-size: 16px;
   }
 }
+
+/* ===== CONTROLLER MOBILE OPTIMIZATIONS ===== */
+@media (max-width: 768px) {
+  /* Controller modal - větší výška na mobilu */
+  .controller-modal {
+    align-items: flex-end !important;
+  }
+
+  .controller-window {
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 75vh !important;
+    min-height: 50vh !important;
+    border-radius: 16px 16px 0 0 !important;
+    padding: 12px !important;
+    overflow-y: auto !important;
+  }
+
+  /* Header - větší tlačítka */
+  .kb-header {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    padding: 8px !important;
+  }
+
+  .kb-mode-toggle {
+    min-width: 60px !important;
+    min-height: 44px !important;
+    padding: 10px 14px !important;
+    font-size: 14px !important;
+  }
+
+  .kb-help-btn {
+    min-width: 44px !important;
+    min-height: 44px !important;
+    padding: 10px 12px !important;
+    font-size: 14px !important;
+  }
+
+  /* Input pole */
+  .controller-input {
+    min-height: 48px !important;
+    font-size: 18px !important;
+    padding: 12px !important;
+  }
+
+  /* Last point info */
+  .kb-input-hint {
+    flex-wrap: wrap !important;
+    padding: 10px !important;
+    font-size: 13px !important;
+  }
+
+  .kb-input-hint code {
+    font-size: 14px !important;
+  }
+
+  /* Klávesnice - větší tlačítka */
+  .controller-keyboard {
+    padding: 12px !important;
+  }
+
+  .controller-grid {
+    gap: 6px !important;
+    margin-bottom: 6px !important;
+  }
+
+  .ctrl-btn {
+    min-height: 52px !important;
+    font-size: 18px !important;
+    padding: 12px 8px !important;
+  }
+
+  .ctrl-btn-num {
+    font-size: 20px !important;
+  }
+
+  .ctrl-btn-confirm {
+    min-height: 56px !important;
+    font-size: 20px !important;
+  }
+
+  /* Modal close button */
+  .modal-close-btn-simple {
+    min-width: 44px !important;
+    min-height: 44px !important;
+    font-size: 28px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+}
+
+/* Velmi malé telefony */
+@media (max-width: 400px) {
+  .controller-window {
+    max-height: 80vh !important;
+    min-height: 60vh !important;
+  }
+
+  .kb-header {
+    gap: 4px !important;
+  }
+
+  .kb-mode-toggle {
+    min-width: 50px !important;
+    padding: 8px 10px !important;
+    font-size: 12px !important;
+  }
+
+  .kb-help-btn {
+    min-width: 38px !important;
+    min-height: 38px !important;
+    padding: 8px !important;
+    font-size: 12px !important;
+  }
+
+  .ctrl-btn {
+    min-height: 48px !important;
+    font-size: 16px !important;
+  }
+}
+
+/* Controller Help Modal - mobilní optimalizace */
+@media (max-width: 768px) {
+  #controllerHelpModal .modal-window {
+    width: 95% !important;
+    max-width: 95% !important;
+    max-height: 80vh !important;
+    padding: 16px !important;
+  }
+
+  #controllerHelpModal .help-section {
+    font-size: 14px !important;
+  }
+
+  #controllerHelpModal .modal-close-btn-simple {
+    position: absolute !important;
+    top: 10px !important;
+    right: 10px !important;
+  }
+}
