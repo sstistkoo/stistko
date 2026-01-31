@@ -6241,20 +6241,87 @@ canvas {
 }
 
 /* ===== CONTROLLER MOBILE OPTIMIZATIONS ===== */
+
+/* Mobilní header - skrytý na desktopu */
+.controller-mobile-header {
+  display: none;
+}
+
+.desktop-only {
+  display: inline-flex;
+}
+
 @media (max-width: 768px) {
-  /* Controller modal - větší výška na mobilu */
+  /* Skrýt desktop tlačítka na mobilu */
+  .desktop-only {
+    display: none !important;
+  }
+
+  /* Zobrazit mobilní header */
+  .controller-mobile-header {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #1a2a3a 0%, #0f1a2a 100%);
+    border-bottom: 1px solid #2a3a4a;
+    margin: -12px -12px 12px -12px;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .controller-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #4ade80;
+  }
+
+  .controller-mobile-actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  .mobile-help-btn {
+    padding: 10px 16px !important;
+    font-size: 14px !important;
+    background: #2a3a5a !important;
+    border: 1px solid #4a6a9a !important;
+    border-radius: 8px !important;
+    color: #90cdf4 !important;
+  }
+
+  .kb-close-btn {
+    padding: 10px 16px !important;
+    font-size: 14px !important;
+    background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%) !important;
+    border: 1px solid #dc2626 !important;
+    border-radius: 8px !important;
+    color: white !important;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  /* Controller modal - FIXNÍ pozice na mobilu portrait */
   .controller-modal {
     align-items: flex-end !important;
+    position: fixed !important;
   }
 
   .controller-window {
     width: 100% !important;
     max-width: 100% !important;
-    max-height: 75vh !important;
-    min-height: 50vh !important;
+    max-height: 80vh !important;
+    min-height: 55vh !important;
     border-radius: 16px 16px 0 0 !important;
     padding: 12px !important;
     overflow-y: auto !important;
+    position: relative !important;
+    /* DŮLEŽITÉ: Odstranit dragging na mobilu */
+    cursor: default !important;
+  }
+
+  /* Skrýt grip ikonu na mobilu */
+  .controller-window .modal-grip {
+    display: none !important;
   }
 
   /* Header - větší tlačítka */
@@ -6262,38 +6329,49 @@ canvas {
     flex-wrap: wrap !important;
     gap: 8px !important;
     padding: 8px !important;
+    cursor: default !important;
   }
 
   .kb-mode-toggle {
     min-width: 60px !important;
-    min-height: 44px !important;
-    padding: 10px 14px !important;
-    font-size: 14px !important;
+    min-height: 48px !important;
+    padding: 12px 16px !important;
+    font-size: 16px !important;
+    /* DŮLEŽITÉ: Touch eventy */
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: rgba(74, 222, 128, 0.3) !important;
   }
 
   .kb-help-btn {
-    min-width: 44px !important;
-    min-height: 44px !important;
-    padding: 10px 12px !important;
-    font-size: 14px !important;
+    min-width: 48px !important;
+    min-height: 48px !important;
+    padding: 12px 14px !important;
+    font-size: 16px !important;
+    /* DŮLEŽITÉ: Touch eventy */
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: rgba(74, 222, 128, 0.3) !important;
   }
 
   /* Input pole */
   .controller-input {
-    min-height: 48px !important;
+    min-height: 52px !important;
     font-size: 18px !important;
-    padding: 12px !important;
+    padding: 14px !important;
+    /* DŮLEŽITÉ: Umožnit focus a kurzor */
+    touch-action: manipulation !important;
+    -webkit-user-select: text !important;
+    user-select: text !important;
   }
 
   /* Last point info */
   .kb-input-hint {
     flex-wrap: wrap !important;
-    padding: 10px !important;
-    font-size: 13px !important;
+    padding: 12px !important;
+    font-size: 14px !important;
   }
 
   .kb-input-hint code {
-    font-size: 14px !important;
+    font-size: 15px !important;
   }
 
   /* Klávesnice - větší tlačítka */
@@ -6302,33 +6380,26 @@ canvas {
   }
 
   .controller-grid {
-    gap: 6px !important;
-    margin-bottom: 6px !important;
+    gap: 8px !important;
+    margin-bottom: 8px !important;
   }
 
   .ctrl-btn {
-    min-height: 52px !important;
-    font-size: 18px !important;
-    padding: 12px 8px !important;
+    min-height: 56px !important;
+    font-size: 20px !important;
+    padding: 14px 10px !important;
+    /* DŮLEŽITÉ: Touch eventy */
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0.2) !important;
   }
 
   .ctrl-btn-num {
-    font-size: 20px !important;
+    font-size: 22px !important;
   }
 
   .ctrl-btn-confirm {
-    min-height: 56px !important;
-    font-size: 20px !important;
-  }
-
-  /* Modal close button */
-  .modal-close-btn-simple {
-    min-width: 44px !important;
-    min-height: 44px !important;
-    font-size: 28px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+    min-height: 60px !important;
+    font-size: 24px !important;
   }
 }
 
