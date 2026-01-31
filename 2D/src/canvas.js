@@ -59,23 +59,26 @@ function setupCanvasEvents() {
 
 function onCanvasMouseDown(e) {
   // === PICK POINT MODE ===
-  // Speciální režim pro výběr bodu z mapy (pro controller)
+  // Speciální režim pro výběr EXISTUJÍCÍHO bodu z mapy (pro controller)
+  // NEVYTVÁŘÍ nové body - pouze vybírá existující snap pointy
   if (window.pickPointMode && window.pickPointCallback) {
     const canvas = e.target;
     const rect = canvas.getBoundingClientRect();
     const screenX = e.clientX - rect.left;
     const screenY = e.clientY - rect.top;
 
-    // Najít nejbližší snap point
-    const nearestPoint = window.findNearestSnapPoint(screenX, screenY, 25);
+    // Najít nejbližší snap point (pouze existující body)
+    const nearestPoint = window.findNearestSnapPoint(screenX, screenY, 30);
 
     if (nearestPoint) {
+      // Vybraný existující bod
       window.pickPointCallback(nearestPoint);
     } else {
-      // Pokud není blízko žádný bod, použij přesné souřadnice kliknutí
-      const worldPt = window.screenToWorld(screenX, screenY);
-      const snapped = window.snapPoint ? window.snapPoint(worldPt.x, worldPt.y) : worldPt;
-      window.pickPointCallback({ x: snapped.x, y: snapped.y, type: "custom", label: "Vlastní bod" });
+      // Žádný bod v dosahu - zobrazit zprávu, NEVYTVÁŘET nový bod
+      if (typeof window.showToast === "function") {
+        window.showToast("⚠️ Žádný bod v dosahu. Klikni blíže k existujícímu bodu.", 2000);
+      }
+      // Nepokračovat - neukončit pick mode
     }
     return;
   }
@@ -201,6 +204,18 @@ function onCanvasMouseMove(e) {
   const rect = canvas.getBoundingClientRect();
   const screenX = e.clientX - rect.left;
   const screenY = e.clientY - rect.top;
+
+  // === PICK POINT MODE - Vizuální highlighting snap pointů ===
+  if (window.pickPointMode) {
+    const nearestPoint = window.findNearestSnapPoint(screenX, screenY, 40);
+
+    // Uložíme pro vykreslení v draw()
+    window.highlightedSnapPoint = nearestPoint;
+
+    // Překreslit pro aktualizaci highlightu
+    if (window.draw) window.draw();
+    return; // V pick point mode neprovádět ostatní operace
+  }
 
   // Pokud máme připravený panStart ale panning ještě nebyl aktivován, aktivujeme
   if (window.panStart && !window.panning) {
@@ -2070,7 +2085,12 @@ function handleMirrorMode(x, y) {
 
     if (found) {
       window.selectedShape = found;
-      // TODO: Zvýraznit vybraný objekt vizuálně
+      // Zvýraznit vybraný objekt vizuálně
+      found._highlighted = true;
+      if (typeof window.showToast === "function") {
+        window.showToast("Objekt vybrán. Nyní klikni na osu zrcadlení (čáru).", 3000);
+      }
+      if (window.draw) window.draw();
     }
   }
   // KROK 2: Vybrat osu zrcadlení (musí to být Line)

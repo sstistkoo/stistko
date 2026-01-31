@@ -1354,7 +1354,15 @@ window.toggleCoordSection = function (sectionId) {
 };
 
 window.setPointFromCursor = function () {
-  // TODO: Implementovat - vezmi aktuální pozici myši a nastav ji jako bod
+  // Vezmi aktuální pozici myši (uloženou jako snapPoint) a nastav ji jako bod
+  if (window.snapPoint) {
+    const xInput = document.getElementById("coordPointX");
+    const yInput = document.getElementById("coordPointY");
+    if (xInput) xInput.value = window.snapPoint.x.toFixed(window.displayDecimals || 2);
+    if (yInput) yInput.value = window.snapPoint.y.toFixed(window.displayDecimals || 2);
+  } else if (typeof window.showToast === "function") {
+    window.showToast("Nejprve najeď kurzorem na canvas", 2000);
+  }
 };
 
 window.quickAddPoint = function () {
@@ -1371,11 +1379,27 @@ window.quickAddPoint = function () {
 };
 
 window.setLineStart = function () {
-  // TODO: Implementovat - vezmi aktuální pozici myši pro počátek čáry
+  // Vezmi aktuální pozici myši pro počátek čáry
+  if (window.snapPoint) {
+    const x1Input = document.getElementById("coordLineX1");
+    const y1Input = document.getElementById("coordLineY1");
+    if (x1Input) x1Input.value = window.snapPoint.x.toFixed(window.displayDecimals || 2);
+    if (y1Input) y1Input.value = window.snapPoint.y.toFixed(window.displayDecimals || 2);
+  } else if (typeof window.showToast === "function") {
+    window.showToast("Nejprve najeď kurzorem na canvas", 2000);
+  }
 };
 
 window.setLineEnd = function () {
-  // TODO: Implementovat - vezmi aktuální pozici myši pro konec čáry
+  // Vezmi aktuální pozici myši pro konec čáry
+  if (window.snapPoint) {
+    const x2Input = document.getElementById("coordLineX2");
+    const y2Input = document.getElementById("coordLineY2");
+    if (x2Input) x2Input.value = window.snapPoint.x.toFixed(window.displayDecimals || 2);
+    if (y2Input) y2Input.value = window.snapPoint.y.toFixed(window.displayDecimals || 2);
+  } else if (typeof window.showToast === "function") {
+    window.showToast("Nejprve najeď kurzorem na canvas", 2000);
+  }
 };
 
 window.addLineByCoords = function () {
@@ -1390,7 +1414,15 @@ window.addLineByCoords = function () {
 };
 
 window.setCircleCenter = function () {
-  // TODO: Implementovat - vezmi aktuální pozici myši pro střed
+  // Vezmi aktuální pozici myši pro střed kružnice
+  if (window.snapPoint) {
+    const cxInput = document.getElementById("coordCircleCX");
+    const cyInput = document.getElementById("coordCircleCY");
+    if (cxInput) cxInput.value = window.snapPoint.x.toFixed(window.displayDecimals || 2);
+    if (cyInput) cyInput.value = window.snapPoint.y.toFixed(window.displayDecimals || 2);
+  } else if (typeof window.showToast === "function") {
+    window.showToast("Nejprve najeď kurzorem na canvas", 2000);
+  }
 };
 
 window.quickAddCircle = function () {
@@ -1404,11 +1436,60 @@ window.quickAddCircle = function () {
 };
 
 window.addLinePolar = function () {
-  // TODO: Implementovat polární souřadnice
+  // Přidá čáru pomocí polárních souřadnic (délka a úhel)
+  const lengthInput = document.getElementById("coordPolarLength");
+  const angleInput = document.getElementById("coordPolarAngle");
+  const startXInput = document.getElementById("coordPolarStartX");
+  const startYInput = document.getElementById("coordPolarStartY");
+
+  const length = parseFloat(lengthInput?.value) || 0;
+  const angleDeg = parseFloat(angleInput?.value) || 0;
+  const startX = parseFloat(startXInput?.value) || 0;
+  const startY = parseFloat(startYInput?.value) || 0;
+
+  if (length <= 0) {
+    if (typeof window.showToast === "function") window.showToast("Délka musí být kladná", 2000);
+    return;
+  }
+
+  const angleRad = (angleDeg * Math.PI) / 180;
+  const endX = startX + length * Math.cos(angleRad);
+  const endY = startY + length * Math.sin(angleRad);
+
+  if (!window.shapes) window.shapes = [];
+  window.shapes.push({
+    type: "line",
+    x1: startX,
+    y1: startY,
+    x2: endX,
+    y2: endY,
+    color: window.defaultDrawColor || "#4a9eff",
+    lineStyle: window.defaultDrawLineStyle || "solid"
+  });
+  window.saveState();
+  window.draw();
 };
 
 window.addPointPolar = function () {
-  // TODO: Implementovat polární souřadnice
+  // Přidá bod pomocí polárních souřadnic (vzdálenost a úhel od počátku)
+  const distInput = document.getElementById("coordPolarPointDist");
+  const angleInput = document.getElementById("coordPolarPointAngle");
+  const originXInput = document.getElementById("coordPolarOriginX");
+  const originYInput = document.getElementById("coordPolarOriginY");
+
+  const dist = parseFloat(distInput?.value) || 0;
+  const angleDeg = parseFloat(angleInput?.value) || 0;
+  const originX = parseFloat(originXInput?.value) || 0;
+  const originY = parseFloat(originYInput?.value) || 0;
+
+  const angleRad = (angleDeg * Math.PI) / 180;
+  const x = originX + dist * Math.cos(angleRad);
+  const y = originY + dist * Math.sin(angleRad);
+
+  if (!window.points) window.points = [];
+  window.points.push({ x, y });
+  window.saveState();
+  window.draw();
 };
 
 // ===== CONSTRAINT FUNCTIONS =====
@@ -1475,19 +1556,69 @@ window.cancelConstraintValue = function () {
 };
 
 window.confirmConstraintPoint = function () {
-  // TODO: Implementovat
+  // Potvrdí constraint pro fixaci bodu na pozici
+  const xInput = document.getElementById("constraintPointX");
+  const yInput = document.getElementById("constraintPointY");
+  const x = parseFloat(xInput?.value);
+  const y = parseFloat(yInput?.value);
+
+  if (isNaN(x) || isNaN(y)) {
+    if (typeof window.showToast === "function") window.showToast("Zadej platné souřadnice", 2000);
+    return;
+  }
+
+  if (!window.constraints) window.constraints = [];
+  window.constraints.push({ type: "point", x, y });
+  window.closeConstraintModal();
+  if (window.draw) window.draw();
 };
 
 window.confirmConstraintDistance = function () {
-  // TODO: Implementovat
+  // Potvrdí constraint pro vzdálenost mezi dvěma body
+  const distInput = document.getElementById("constraintDistance");
+  const dist = parseFloat(distInput?.value);
+
+  if (isNaN(dist) || dist < 0) {
+    if (typeof window.showToast === "function") window.showToast("Zadej platnou vzdálenost", 2000);
+    return;
+  }
+
+  if (!window.constraints) window.constraints = [];
+  window.constraints.push({ type: "distance", value: dist });
+  window.closeConstraintModal();
+  if (window.draw) window.draw();
 };
 
 window.confirmConstraintRadius = function () {
-  // TODO: Implementovat
+  // Potvrdí constraint pro poloměr kružnice
+  const radiusInput = document.getElementById("constraintRadius");
+  const radius = parseFloat(radiusInput?.value);
+
+  if (isNaN(radius) || radius <= 0) {
+    if (typeof window.showToast === "function") window.showToast("Zadej platný poloměr", 2000);
+    return;
+  }
+
+  if (!window.constraints) window.constraints = [];
+  window.constraints.push({ type: "radius", value: radius });
+  window.closeConstraintModal();
+  if (window.draw) window.draw();
 };
 
 window.confirmConstraintPolarAngle = function () {
-  // TODO: Implementovat
+  // Potvrdí constraint pro polární úhel
+  const angleInput = document.getElementById("constraintPolarAngle");
+  const angle = parseFloat(angleInput?.value);
+
+  if (isNaN(angle)) {
+    if (typeof window.showToast === "function") window.showToast("Zadej platný úhel", 2000);
+    return;
+  }
+
+  if (!window.constraints) window.constraints = [];
+  window.constraints.push({ type: "polarAngle", value: angle });
+  window.closeConstraintModal();
+  if (window.draw) window.draw();
 };
 
 // ===== CIRCLE MODAL =====
@@ -1497,7 +1628,33 @@ window.closeCircleModal = function () {
 };
 
 window.confirmCircle = function () {
-  // TODO: Implementovat
+  // Vytvoří kružnici z hodnot v circle modalu
+  const cxInput = document.getElementById("circleModalCX");
+  const cyInput = document.getElementById("circleModalCY");
+  const rInput = document.getElementById("circleModalR");
+
+  const cx = parseFloat(cxInput?.value) || 0;
+  const cy = parseFloat(cyInput?.value) || 0;
+  const r = parseFloat(rInput?.value) || 1;
+
+  if (r <= 0) {
+    if (typeof window.showToast === "function") window.showToast("Poloměr musí být kladný", 2000);
+    return;
+  }
+
+  if (!window.shapes) window.shapes = [];
+  window.shapes.push({
+    type: "circle",
+    cx,
+    cy,
+    r,
+    color: window.defaultDrawColor || "#4a9eff",
+    lineStyle: window.defaultDrawLineStyle || "solid"
+  });
+
+  window.closeCircleModal();
+  window.saveState();
+  window.draw();
 };
 
 // ===== MAKE MODALS DRAGGABLE =====

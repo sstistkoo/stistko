@@ -1191,6 +1191,7 @@ canvas {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.75);
+  -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   z-index: 3500;
   display: none;
@@ -5258,4 +5259,983 @@ canvas {
   font-size: 11px;
   color: #94a3b8;
   text-align: center;
+}
+
+/* ===== FREE CONTOUR (FK) STYLES ===== */
+
+/* FK Modal specifická nastavení */
+#freeContourModal {
+  z-index: 3600;
+}
+
+#freeContourModal.modal-overlay {
+  padding: 0;
+}
+
+@media (max-width: 768px) {
+  #freeContourModal.modal-overlay {
+    padding: 0;
+    align-items: stretch;
+  }
+
+  #freeContourModal .modal-window {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    max-height: 100%;
+    border-radius: 0;
+    margin: 0;
+  }
+}
+
+.fc-modal {
+  max-width: 800px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.fc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #1e3a5f, #0f2942);
+  border-bottom: 1px solid #2a4a6a;
+}
+
+.fc-header h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #4ade80;
+}
+
+.fc-header-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.fc-content {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 16px;
+  padding: 16px;
+  flex: 1;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .fc-content {
+    grid-template-columns: 1fr;
+  }
+  .fc-preview {
+    order: -1;
+  }
+}
+
+.fc-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  max-height: 60vh;
+}
+
+.fc-section {
+  background: #1a2a3a;
+  border-radius: 8px;
+  padding: 12px;
+  border: 1px solid #2a3a4a;
+}
+
+.fc-section-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #4ade80;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.fc-elements-section {
+  flex: 1;
+  min-height: 150px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* Start Point */
+.fc-start-point {
+  display: flex;
+  gap: 12px;
+}
+
+/* Mode Toggle G90/G91 */
+.fc-mode-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+#fcModeToggle {
+  padding: 6px 14px;
+  border: 1px solid #4ade80;
+  border-radius: 4px;
+  background: #4ade8022;
+  color: #4ade80;
+  cursor: pointer;
+  font-weight: bold;
+  font-family: monospace;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+#fcModeToggle:hover {
+  background: #4ade8044;
+}
+
+#fcModeToggle.g91-mode {
+  border-color: #f59e0b;
+  background: #f59e0b22;
+  color: #f59e0b;
+}
+
+#fcModeToggle.g91-mode:hover {
+  background: #f59e0b44;
+}
+
+#fcModeInfo {
+  font-size: 11px;
+  color: #888;
+  flex: 1;
+}
+
+.fc-field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+}
+
+.fc-field label {
+  font-size: 12px;
+  color: #888;
+  min-width: 20px;
+}
+
+.fc-field input,
+.fc-field select {
+  flex: 1;
+  padding: 6px 8px;
+  background: #0a1a2a;
+  border: 1px solid #2a3a4a;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 12px;
+  font-family: monospace;
+}
+
+.fc-field input:focus,
+.fc-field select:focus {
+  border-color: #4ade80;
+  outline: none;
+}
+
+.fc-field input::placeholder {
+  color: #4a5a6a;
+  font-style: italic;
+}
+
+/* Element List */
+.fc-element-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.fc-empty {
+  color: #666;
+  font-size: 12px;
+  text-align: center;
+  padding: 20px;
+  font-style: italic;
+}
+
+.fc-element {
+  background: #0a1a2a;
+  border-radius: 6px;
+  border: 1px solid #2a3a4a;
+  overflow: hidden;
+}
+
+.fc-element.fc-solved {
+  border-color: #22c55e44;
+}
+
+.fc-element.fc-unsolved {
+  border-color: #f9731644;
+}
+
+.fc-element-header {
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+  background: #1a2a3a;
+  border-bottom: 1px solid #2a3a4a;
+  gap: 8px;
+}
+
+.fc-element-type {
+  flex: 1;
+  font-size: 12px;
+  font-weight: 600;
+  color: #4a9eff;
+}
+
+/* G90/G91 tlačítko u elementu */
+.fc-mode-btn {
+  padding: 2px 8px;
+  font-size: 10px;
+  font-weight: bold;
+  border: 1px solid;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: monospace;
+}
+
+.fc-mode-btn.g90 {
+  background: #22c55e22;
+  border-color: #22c55e;
+  color: #22c55e;
+}
+
+.fc-mode-btn.g91 {
+  background: #f59e0b22;
+  border-color: #f59e0b;
+  color: #f59e0b;
+}
+
+.fc-mode-btn:hover {
+  filter: brightness(1.2);
+}
+
+.fc-element-status {
+  font-size: 12px;
+}
+
+.fc-remove-btn {
+  background: none;
+  border: none;
+  color: #f87171;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.fc-remove-btn:hover {
+  background: #f8717133;
+}
+
+.fc-element-fields {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.fc-field-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.fc-field-row label {
+  font-size: 11px;
+  color: #888;
+  min-width: 55px;
+}
+
+.fc-field-row select {
+  flex: 1;
+  padding: 4px 8px;
+  background: #0a1a2a;
+  border: 1px solid #2a3a4a;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 11px;
+}
+
+/* Napojení row - select na celou šířku */
+.fc-connection-row {
+  display: flex;
+}
+
+.fc-connection-row label {
+  min-width: 55px;
+}
+
+.fc-connection-row select {
+  flex: 1;
+}
+
+/* Koordinátní a parametrová pole - stejná šířka */
+.fc-coords,
+.fc-line-params,
+.fc-arc-params {
+  display: flex;
+  gap: 12px;
+}
+
+.fc-field-coord,
+.fc-field-param {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.fc-field-coord label,
+.fc-field-param label {
+  min-width: 40px;
+  font-size: 11px;
+}
+
+.fc-field-coord input,
+.fc-field-param input,
+.fc-field-param select {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  padding: 5px 6px;
+  background: #0a1a2a;
+  border: 1px solid #2a3a4a;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 11px;
+  font-family: monospace;
+}
+
+/* Input s tlačítkem ? */
+.fc-input-wrap {
+  display: flex;
+  flex: 1;
+  gap: 2px;
+}
+
+.fc-input-wrap input {
+  flex: 1;
+  min-width: 0;
+  border-radius: 4px 0 0 4px;
+}
+
+.fc-q-btn {
+  padding: 0 8px;
+  background: #2a3a4a;
+  border: 1px solid #3a4a5a;
+  border-left: none;
+  border-radius: 0 4px 4px 0;
+  color: #f59e0b;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.fc-q-btn:hover {
+  background: #f59e0b33;
+  color: #fbbf24;
+}
+
+/* Hint text */
+.fc-hint {
+  justify-content: flex-end;
+}
+
+.fc-hint span {
+  font-size: 10px;
+  color: #666;
+  font-style: italic;
+}
+
+.fc-hint-row {
+  padding: 4px 0;
+}
+
+.fc-hint-row .fc-hint {
+  font-size: 11px;
+  color: #60a5fa;
+  padding: 4px 8px;
+  background: #60a5fa15;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+/* Tangent radius row */
+.fc-tangent-radius {
+  background: #1a2a3a;
+  padding: 6px 8px;
+  border-radius: 4px;
+  margin-top: 4px;
+}
+
+/* Blend row - RND/CHF */
+.fc-blend-row {
+  background: #1a2a3a;
+  padding: 6px 8px;
+  border-radius: 4px;
+  margin-top: 4px;
+  gap: 12px;
+}
+
+.fc-blend-row .fc-field {
+  flex: 1;
+}
+
+.fc-blend-row input {
+  width: 100%;
+}
+
+.fc-error {
+  font-size: 11px;
+  color: #f87171;
+  padding: 4px 8px;
+  background: #f8717122;
+  border-radius: 4px;
+}
+
+.fc-calculated {
+  font-size: 10px;
+  color: #4ade80;
+  padding: 4px 8px;
+  background: #4ade8022;
+  border-radius: 4px;
+  margin-top: 4px;
+}
+
+.fc-unknown {
+  background: #f59e0b22 !important;
+  border-color: #f59e0b !important;
+  color: #f59e0b !important;
+}
+
+.fc-unknown::placeholder {
+  color: #4ade80 !important;
+  font-weight: bold;
+}
+
+/* Add Buttons */
+.fc-add-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.fc-quick-buttons {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.fc-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.fc-btn-line {
+  background: linear-gradient(135deg, #1e3a5f, #2a4a7a);
+  color: #4a9eff;
+  border: 1px solid #4a9eff44;
+  flex: 1;
+}
+
+.fc-btn-line:hover {
+  background: linear-gradient(135deg, #2a4a7a, #3a5a8a);
+}
+
+.fc-btn-arc {
+  background: linear-gradient(135deg, #3a2a1a, #5a3a2a);
+  color: #f97316;
+  border: 1px solid #f9731644;
+  flex: 1;
+}
+
+.fc-btn-arc:hover {
+  background: linear-gradient(135deg, #5a3a2a, #6a4a3a);
+}
+
+.fc-btn-small {
+  padding: 6px 12px;
+  background: #2a3a4a;
+  color: #888;
+  border: 1px solid #3a4a5a;
+  font-size: 14px;
+}
+
+.fc-btn-small:hover {
+  background: #3a4a5a;
+  color: #fff;
+}
+
+.fc-btn-primary {
+  background: linear-gradient(135deg, #166534, #22c55e);
+  color: #fff;
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
+}
+
+.fc-btn-primary:hover {
+  background: linear-gradient(135deg, #22c55e, #4ade80);
+}
+
+.fc-btn-secondary {
+  background: #2a3a4a;
+  color: #4a9eff;
+  border: 1px solid #4a9eff44;
+  padding: 6px 12px;
+}
+
+.fc-btn-secondary:hover {
+  background: #3a4a5a;
+}
+
+/* Preview */
+.fc-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#fcPreviewCanvas {
+  background: #1a1a2e;
+  border-radius: 8px;
+  border: 1px solid #2a3a4a;
+  width: 100%;
+  height: auto;
+}
+
+.fc-legend {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  font-size: 11px;
+  color: #888;
+}
+
+.fc-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.fc-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.fc-dot-start {
+  background: #4ade80;
+}
+
+.fc-dot-line {
+  background: #4a9eff;
+}
+
+.fc-dot-arc {
+  background: #f97316;
+}
+
+/* Help */
+.fc-help {
+  padding: 12px 16px;
+  border-top: 1px solid #2a3a4a;
+}
+
+.fc-help summary {
+  cursor: pointer;
+  font-size: 12px;
+  color: #4ade80;
+}
+
+.fc-help-content {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #888;
+  line-height: 1.6;
+}
+
+.fc-help-content p {
+  margin: 8px 0;
+}
+
+.fc-help-content ul {
+  margin: 4px 0 4px 20px;
+}
+
+.fc-help-content strong {
+  color: #fff;
+}
+
+/* CC Row */
+.fc-cc-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+/* Transform Buttons */
+.fc-transform-buttons {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* Zoom Buttons in Preview Title */
+.fc-section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.fc-zoom-buttons {
+  display: flex;
+  gap: 4px;
+}
+
+.fc-btn-tiny {
+  padding: 2px 8px;
+  background: #2a3a4a;
+  color: #888;
+  border: 1px solid #3a4a5a;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  min-width: 24px;
+}
+
+.fc-btn-tiny:hover {
+  background: #3a4a5a;
+  color: #fff;
+}
+
+/* Arc CC Info */
+.fc-arc-cc-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.fc-cc-label {
+  background: linear-gradient(135deg, #3a2a4a, #5a3a6a);
+  color: #c084fc;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  border: 1px solid #7c3aed44;
+}
+
+/* Actions Row */
+.fc-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.fc-actions .fc-btn-primary {
+  flex: 1;
+}
+
+.fc-actions .fc-btn-secondary {
+  white-space: nowrap;
+}
+
+/* Blend Buttons */
+.fc-blend-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+/* Utility Buttons */
+.fc-utility-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+/* ===== MOBILE STYLES FOR FREE CONTOUR ===== */
+@media (max-width: 768px) {
+  .fc-modal {
+    max-width: 100vw;
+    max-height: 100vh;
+    height: 100%;
+    border-radius: 0;
+  }
+
+  .fc-content {
+    grid-template-columns: 1fr;
+    padding: 8px;
+    gap: 8px;
+    overflow-y: auto;
+    max-height: calc(100vh - 120px);
+  }
+
+  .fc-preview {
+    order: -1;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: #0a1a2a;
+  }
+
+  #fcPreviewCanvas {
+    height: 150px;
+    min-height: 150px;
+  }
+
+  .fc-controls {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .fc-section {
+    padding: 10px;
+  }
+
+  .fc-section-title {
+    font-size: 11px;
+  }
+
+  /* Větší tlačítka pro dotyk (min 44px) */
+  .fc-btn {
+    min-height: 44px;
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+
+  .fc-btn-small {
+    min-height: 40px;
+    min-width: 40px;
+    padding: 8px 10px;
+    font-size: 14px;
+  }
+
+  .fc-btn-tiny {
+    min-height: 36px;
+    min-width: 36px;
+    padding: 6px 10px;
+    font-size: 16px;
+  }
+
+  .fc-quick-buttons,
+  .fc-cc-row,
+  .fc-transform-buttons,
+  .fc-blend-buttons,
+  .fc-utility-buttons {
+    flex-wrap: wrap;
+  }
+
+  .fc-add-buttons {
+    flex-direction: column;
+  }
+
+  .fc-add-buttons .fc-btn {
+    width: 100%;
+  }
+
+  /* Větší inputy pro dotyk */
+  .fc-field input,
+  .fc-field select {
+    min-height: 40px;
+    font-size: 14px;
+    padding: 8px 10px;
+  }
+
+  .fc-field-row select {
+    min-height: 38px;
+    font-size: 13px;
+  }
+
+  /* Mode button větší */
+  .fc-mode-btn {
+    min-height: 32px;
+    padding: 4px 10px;
+    font-size: 12px;
+  }
+
+  /* Remove button větší hit area */
+  .fc-remove-btn {
+    min-width: 36px;
+    min-height: 36px;
+    font-size: 18px;
+  }
+
+  /* Element header */
+  .fc-element-header {
+    padding: 10px 12px;
+  }
+
+  /* Actions full width */
+  .fc-actions {
+    flex-direction: column;
+  }
+
+  .fc-actions .fc-btn {
+    width: 100%;
+  }
+
+  /* Q button pro neznámé */
+  .fc-q-btn {
+    min-width: 36px;
+    min-height: 36px;
+  }
+
+  /* Start point inputy */
+  .fc-start-point {
+    flex-direction: column;
+  }
+
+  .fc-start-point .fc-field {
+    width: 100%;
+  }
+
+  /* Zoom buttons */
+  .fc-zoom-buttons {
+    gap: 6px;
+  }
+
+  /* Header menší padding */
+  .fc-header {
+    padding: 10px 12px;
+  }
+
+  .fc-header h3 {
+    font-size: 14px;
+  }
+
+  /* Help section */
+  .fc-help {
+    padding: 10px 12px;
+  }
+
+  .fc-help summary {
+    font-size: 13px;
+  }
+
+  .fc-help-content {
+    font-size: 13px;
+  }
+}
+
+/* Malé telefony */
+@media (max-width: 480px) {
+  .fc-content {
+    padding: 6px;
+  }
+
+  #fcPreviewCanvas {
+    height: 120px;
+    min-height: 120px;
+  }
+
+  .fc-section {
+    padding: 8px;
+  }
+
+  .fc-btn-small {
+    padding: 6px 8px;
+    font-size: 12px;
+    min-width: 36px;
+  }
+
+  .fc-element-fields {
+    padding: 8px;
+  }
+
+  .fc-field-row {
+    flex-wrap: wrap;
+  }
+
+  .fc-field-row label {
+    min-width: 100%;
+    margin-bottom: 4px;
+  }
+
+  .fc-line-params,
+  .fc-arc-params,
+  .fc-coords {
+    flex-direction: column;
+  }
+
+  .fc-line-params .fc-field,
+  .fc-arc-params .fc-field,
+  .fc-coords .fc-field {
+    width: 100%;
+  }
+
+  .fc-blend-row {
+    flex-direction: column;
+  }
+}
+
+/* Landscape orientation */
+@media (max-width: 768px) and (orientation: landscape) {
+  .fc-modal {
+    max-height: 100vh;
+  }
+
+  .fc-content {
+    grid-template-columns: 1fr 1fr;
+    max-height: calc(100vh - 100px);
+  }
+
+  .fc-preview {
+    order: 0;
+    position: relative;
+  }
+
+  #fcPreviewCanvas {
+    height: 200px;
+  }
+
+  .fc-controls {
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+  }
+}
+
+/* Touch device improvements */
+@media (hover: none) and (pointer: coarse) {
+  .fc-btn:hover,
+  .fc-btn-small:hover,
+  .fc-btn-tiny:hover,
+  .fc-mode-btn:hover,
+  .fc-remove-btn:hover {
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .fc-btn:active,
+  .fc-btn-small:active,
+  .fc-btn-tiny:active {
+    transform: scale(0.95) !important;
+    opacity: 0.8;
+  }
+
+  /* Větší touch targets */
+  .fc-input-wrap {
+    gap: 6px;
+  }
+
+  .fc-q-btn {
+    min-width: 40px;
+    min-height: 40px;
+    font-size: 16px;
+  }
 }

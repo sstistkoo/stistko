@@ -55,6 +55,8 @@
     <script src="src/ui.js"></script>
     <script src="src/polar-line.js"></script>
     <script src="src/controller.js"></script>
+    <script src="src/quick-input.js"></script>
+    <script src="src/free-contour.js"></script>
     <!-- AI moduly - ES6 kompatibilní (zachovávají window.* pro zpětnou kompatibilitu) -->
     <script type="module" src="src/ai/ai-config.js"></script>
     <script type="module" src="src/ai/ai-utils.js"></script>
@@ -1410,6 +1412,7 @@
           <button id="btnControllerModeToggle" onclick="window.toggleControllerMode()" class="kb-mode-toggle g90">G90</button>
           <button onclick="window.showGCodePopup('controller')" class="kb-help-btn">G</button>
           <button onclick="window.showParamPopup('controller')" class="kb-help-btn">P</button>
+          <button onclick="window.openFreeContourModal()" class="kb-help-btn" title="Volná Kontura (FK)">FK</button>
           <input type="text" id="controllerInput" readonly placeholder="Zadej příkaz..." class="controller-input" />
           <button onclick="window.showControllerHelp()" class="kb-help-btn">?</button>
           <button onclick="window.closeControllerModal()" class="modal-close-btn-simple">&times;</button>
@@ -1417,8 +1420,7 @@
 
         <!-- Last point info -->
         <div id="controllerLastPoint" class="kb-input-hint" style="background: #1a2a1a; border-left: 3px solid #4ade80;">
-          <span>📍</span>
-          <span>Poslední bod:</span>
+          <span id="controllerLastPointLabel">📍 Poslední bod:</span>
           <code id="controllerLastPointValue">X0 Z0</code>
           <button onclick="window.startPickPointMode()" class="kb-help-btn" style="margin-left: auto; background: #2a3a2a; border-color: #4ade80;" title="Vybrat bod z mapy">🎯</button>
         </div>
@@ -1665,6 +1667,151 @@
             <div class="mb-8">• <strong>X = průměr/poloměr</strong> podle nastavení v Settings</div>
           </div>
 
+        </div>
+      </div>
+    </div>
+
+    <!-- FREE CONTOUR MODAL - Volná kontura s dopočítáváním (Heidenhain FK style) -->
+    <div id="freeContourModal" class="modal-overlay d-none">
+      <div class="modal-window modal-lg fc-modal">
+        <!-- Header -->
+        <div class="fc-header">
+          <h3>🔧 Volná Kontura (FK)</h3>
+          <div class="fc-header-buttons">
+            <button onclick="window.exportFreeContourToGCode()" class="fc-btn fc-btn-secondary" title="Export do G-kódu">📋 Export G-kód</button>
+            <button onclick="window.closeFreeContourModal()" class="modal-close-btn-simple">&times;</button>
+          </div>
+        </div>
+
+        <!-- Main content - 2 columns -->
+        <div class="fc-content">
+          <!-- Left: Controls -->
+          <div class="fc-controls">
+            <!-- Start Point -->
+            <div class="fc-section">
+              <div class="fc-section-title">📍 Počáteční bod</div>
+              <div class="fc-start-point">
+                <div class="fc-field">
+                  <label>X:</label>
+                  <input type="number" id="fcStartX" step="0.01" value="0" onchange="window.updateFreeContourStartPoint()">
+                </div>
+                <div class="fc-field">
+                  <label>Z:</label>
+                  <input type="number" id="fcStartZ" step="0.01" value="0" onchange="window.updateFreeContourStartPoint()">
+                </div>
+              </div>
+            </div>
+
+            <!-- Element List -->
+            <div class="fc-section fc-elements-section">
+              <div class="fc-section-title">📐 Elementy kontury</div>
+              <div id="fcElementList" class="fc-element-list">
+                <div class="fc-empty">Přidej elementy kontury pomocí tlačítek níže</div>
+              </div>
+            </div>
+
+            <!-- Add Element Buttons -->
+            <div class="fc-section">
+              <div class="fc-section-title">➕ Přidat element</div>
+              <div class="fc-add-buttons">
+                <button onclick="window.addFreeContourElement('line')" class="fc-btn fc-btn-line">📏 Úsečka</button>
+                <button onclick="window.addFreeContourElement('arc')" class="fc-btn fc-btn-arc">🔄 Oblouk</button>
+              </div>
+              <div class="fc-quick-buttons">
+                <button onclick="window.fcAddHorizontalLine()" class="fc-btn fc-btn-small" title="Horizontální úsečka (Z směr)">→Z</button>
+                <button onclick="window.fcAddVerticalLine()" class="fc-btn fc-btn-small" title="Vertikální úsečka (X směr)">↑X</button>
+                <button onclick="window.fcAddPerpendicularLine()" class="fc-btn fc-btn-small" title="Kolmá úsečka (AN)">⊥AN</button>
+                <button onclick="window.fcAddTangentArc('CW')" class="fc-btn fc-btn-small" title="Tangenciální oblouk CW">↻</button>
+                <button onclick="window.fcAddTangentArc('CCW')" class="fc-btn fc-btn-small" title="Tangenciální oblouk CCW">↺</button>
+              </div>
+              <!-- CC - Circle Center -->
+              <div class="fc-cc-row">
+                <button onclick="window.showCCDialog()" class="fc-btn fc-btn-small" title="Definovat střed kružnice (CC)">CC</button>
+                <button onclick="window.addArcWithCC('CW')" class="fc-btn fc-btn-small" title="Oblouk se středem CC (CW)">CC↻</button>
+                <button onclick="window.addArcWithCC('CCW')" class="fc-btn fc-btn-small" title="Oblouk se středem CC (CCW)">CC↺</button>
+              </div>
+            </div>
+
+            <!-- Transformace -->
+            <div class="fc-section">
+              <div class="fc-section-title">🔄 Transformace</div>
+              <div class="fc-transform-buttons">
+                <button onclick="window.mirrorFreeContour('X')" class="fc-btn fc-btn-small" title="Zrcadlit kolem osy X">⬌X</button>
+                <button onclick="window.mirrorFreeContour('Z')" class="fc-btn fc-btn-small" title="Zrcadlit kolem osy Z">⬍Z</button>
+                <button onclick="window.rotateFreeContour(90)" class="fc-btn fc-btn-small" title="Otočit o 90°">↻90°</button>
+                <button onclick="window.scaleFreeContour(2)" class="fc-btn fc-btn-small" title="Zvětšit 2×">2×</button>
+                <button onclick="window.scaleFreeContour(0.5)" class="fc-btn fc-btn-small" title="Zmenšit 0.5×">½×</button>
+              </div>
+            </div>
+
+            <!-- RND/CHF hromadně -->
+            <div class="fc-section">
+              <div class="fc-section-title">🔘 Zaoblení/Sražení</div>
+              <div class="fc-blend-buttons">
+                <button onclick="window.fcRoundAllCorners()" class="fc-btn fc-btn-small" title="RND na všechny rohy">RND ∀</button>
+                <button onclick="window.fcChamferAllCorners()" class="fc-btn fc-btn-small" title="CHF na všechny rohy">CHF ∀</button>
+                <button onclick="window.fcClearAllBlends()" class="fc-btn fc-btn-small" title="Odstranit všechna zaoblení">❌</button>
+              </div>
+            </div>
+
+            <!-- Utility -->
+            <div class="fc-section">
+              <div class="fc-section-title">🛠️ Nástroje</div>
+              <div class="fc-utility-buttons">
+                <button onclick="window.fcDuplicateLastElement()" class="fc-btn fc-btn-small" title="Duplikovat poslední">📋 Dup</button>
+                <button onclick="window.fcReverseContour()" class="fc-btn fc-btn-small" title="Obrátit konturu">🔄 Rev</button>
+              </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="fc-actions">
+              <button onclick="window.applyFreeContour()" class="fc-btn fc-btn-primary">✅ Aplikovat konturu</button>
+              <button onclick="window.exportFreeContourToGCode()" class="fc-btn fc-btn-secondary" title="Exportovat do G-kódu">📋 G-kód</button>
+            </div>
+          </div>
+
+          <!-- Right: Preview -->
+          <div class="fc-preview">
+            <div class="fc-section-title">👁️ Náhled (soustruh: Z→, X↑)
+              <div class="fc-zoom-buttons">
+                <button onclick="window.fcZoom(0.2)" class="fc-btn fc-btn-tiny" title="Přiblížit">+</button>
+                <button onclick="window.fcZoom(-0.2)" class="fc-btn fc-btn-tiny" title="Oddálit">−</button>
+                <button onclick="window.fcResetView()" class="fc-btn fc-btn-tiny" title="Reset zobrazení">⟲</button>
+              </div>
+            </div>
+            <canvas id="fcPreviewCanvas" width="350" height="300"></canvas>
+            <div class="fc-legend">
+              <span class="fc-legend-item"><span class="fc-dot fc-dot-start"></span> Start</span>
+              <span class="fc-legend-item"><span class="fc-dot fc-dot-line"></span> Úsečka</span>
+              <span class="fc-legend-item"><span class="fc-dot fc-dot-arc"></span> Oblouk</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Help -->
+        <div class="fc-help">
+          <details>
+            <summary>💡 Nápověda - jak používat Volnou Konturu</summary>
+            <div class="fc-help-content">
+              <p><strong>Princip:</strong> Zadávej elementy postupně. Nemusíš vyplnit všechny hodnoty - systém dopočítá chybějící.</p>
+              <p><strong>Režimy:</strong></p>
+              <ul>
+                <li><strong>G90 (Absolutní)</strong> - souřadnice jsou absolutní od nuly</li>
+                <li><strong>G91 (Přírůstkové)</strong> - souřadnice jsou relativní k předchozímu bodu</li>
+              </ul>
+              <p><strong>Napojení:</strong></p>
+              <ul>
+                <li><strong>Tangenciální (←)</strong> - plynule navazuje na předchozí (stejný směr)</li>
+                <li><strong>Tangenciální (→)</strong> - plynule navazuje na následující</li>
+                <li><strong>Kolmé</strong> - navazuje pod pravým úhlem</li>
+              </ul>
+              <p><strong>CC (Circle Center):</strong> Definuj střed kružnice, pak přidej oblouk CC↻/CC↺</p>
+              <p><strong>Neznámé hodnoty:</strong> Zadej <code>?</code> pro hodnotu, kterou chceš dopočítat.</p>
+              <p><strong>Pro úsečku stačí 2 z 4:</strong> X, Z, Úhel, Délka</p>
+              <p><strong>Pro oblouk:</strong> Poloměr + (koncový bod NEBO tangenciální napojení)</p>
+              <p><strong>RND/CHF:</strong> Zaoblení nebo sražení rohu na konci elementu</p>
+            </div>
+          </details>
         </div>
       </div>
     </div>
