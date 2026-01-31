@@ -67,16 +67,23 @@ function onCanvasMouseDown(e) {
     const screenX = e.clientX - rect.left;
     const screenY = e.clientY - rect.top;
 
-    // Najít nejbližší snap point (pouze existující body)
-    const nearestPoint = window.findNearestSnapPoint(screenX, screenY, 30);
+    console.log('[PICK POINT] Click at screen:', screenX, screenY);
+    console.log('[PICK POINT] Available snap points:', window.cachedSnapPoints?.length || 0);
+
+    // Najít nejbližší snap point (zvětšený dosah na 50px)
+    const nearestPoint = window.findNearestSnapPoint(screenX, screenY, 50);
+
+    console.log('[PICK POINT] Nearest point found:', nearestPoint);
 
     if (nearestPoint) {
       // Vybraný existující bod
+      console.log('[PICK POINT] ✅ Point selected:', nearestPoint.x, nearestPoint.y);
       window.pickPointCallback(nearestPoint);
     } else {
       // Žádný bod v dosahu - zobrazit zprávu, NEVYTVÁŘET nový bod
+      console.log('[PICK POINT] ❌ No point in range');
       if (typeof window.showToast === "function") {
-        window.showToast("⚠️ Žádný bod v dosahu. Klikni blíže k existujícímu bodu.", 2000);
+        window.showToast("⚠️ Žádný bod v dosahu (50px). Klikni blíže k existujícímu bodu.", 2000);
       }
       // Nepokračovat - neukončit pick mode
     }

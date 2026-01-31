@@ -6240,6 +6240,69 @@ canvas {
   }
 }
 
+/* ===== CALCULATOR STYLES ===== */
+.calc-btn {
+  background: linear-gradient(135deg, #2a2a3a 0%, #1a1a2a 100%);
+  border: 1px solid #3a3a4a;
+  color: #fff;
+  padding: 20px;
+  font-size: 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: bold;
+  min-height: 60px;
+}
+
+.calc-btn:hover {
+  background: linear-gradient(135deg, #3a3a4a 0%, #2a2a3a 100%);
+  border-color: #4a4a5a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.calc-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.calc-btn-operator {
+  background: linear-gradient(135deg, #2a3a5a 0%, #1a2a4a 100%);
+  border-color: #3a4a6a;
+  color: #90cdf4;
+}
+
+.calc-btn-operator:hover {
+  background: linear-gradient(135deg, #3a4a6a 0%, #2a3a5a 100%);
+  border-color: #4a5a7a;
+}
+
+.calc-btn-confirm {
+  background: linear-gradient(135deg, #166534 0%, #15803d 100%) !important;
+  border-color: #4ade80 !important;
+  color: #fff !important;
+}
+
+.calc-btn-confirm:hover {
+  background: linear-gradient(135deg, #15803d 0%, #16a34a 100%) !important;
+  border-color: #86efac !important;
+}
+
+@media (max-width: 768px) {
+  .calc-btn {
+    padding: 16px;
+    font-size: 18px;
+    min-height: 50px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(74, 222, 128, 0.3);
+  }
+
+  #calcDisplay {
+    font-size: 24px !important;
+    padding: 15px !important;
+  }
+}
+
 /* ===== CONTROLLER MOBILE OPTIMIZATIONS ===== */
 
 /* Mobilní header - skrytý na desktopu */
@@ -6309,12 +6372,13 @@ canvas {
   .controller-window {
     width: 100% !important;
     max-width: 100% !important;
-    max-height: 80vh !important;
-    min-height: 55vh !important;
+    max-height: 65vh !important;
+    min-height: 50vh !important;
     border-radius: 16px 16px 0 0 !important;
     padding: 12px !important;
     overflow-y: auto !important;
     position: relative !important;
+    margin-bottom: 60px !important;
     /* DŮLEŽITÉ: Odstranit dragging na mobilu */
     cursor: default !important;
   }
