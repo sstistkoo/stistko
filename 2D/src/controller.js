@@ -223,18 +223,22 @@ window.pickPointCallback = null;
  */
 window.startPickPointMode = function () {
   window.pickPointMode = true;
+  window.highlightedSnapPoint = null; // Reset pro nový výběr
 
   // Zavřít controller modal dočasně
   window.closeControllerModal();
 
   // Změnit kurzor
-  const canvas = document.getElementById("myCanvas");
+  const canvas = document.getElementById("canvas");
   if (canvas) {
     canvas.style.cursor = "crosshair";
   }
 
   // Zobrazit instrukce
   window.showPickPointToast();
+
+  // Okamžitě překreslit pro zobrazení instrukcí
+  if (window.draw) window.draw();
 
   // Nastavit callback pro kliknutí
   window.pickPointCallback = function (point) {
@@ -818,6 +822,8 @@ window.parseGCode = function (input, mode) {
           cx: lastPoint.x,
           cy: lastPoint.y,
           r: r,
+          color: window.defaultDrawColor || "#4a9eff",
+          lineStyle: window.defaultDrawLineStyle || "solid"
         });
 
         commandExecuted = true;

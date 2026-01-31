@@ -1748,7 +1748,15 @@ window.makeModalDraggable = function (modalId) {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  ['quickInputModal','quickInputHelpModal','controllerModal','controllerHelpModal','directionModal'].forEach(id => {
+  // Detekce mobilního zařízení
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+
+  // Na mobilech NEPOUŽÍVAT draggable pro controller - blokuje touch eventy
+  const modalsToMakeDraggable = isMobile
+    ? ['quickInputModal','quickInputHelpModal','directionModal'] // Controller vynechán na mobilu
+    : ['quickInputModal','quickInputHelpModal','controllerModal','controllerHelpModal','directionModal'];
+
+  modalsToMakeDraggable.forEach(id => {
     try { window.makeModalDraggable(id); } catch (e) {}
   });
   // Make toolsDrawing draggable via its panel-grip
