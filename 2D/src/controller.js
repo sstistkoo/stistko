@@ -38,12 +38,18 @@ window.closeDirectionModal = function () {
 
 window.showControllerHelp = function () {
   const modal = document.getElementById("controllerHelpModal");
-  if (modal) modal.style.display = "flex";
+  if (modal) {
+    modal.classList.remove("d-none");
+    modal.style.display = "flex";
+  }
 };
 
 window.closeControllerHelp = function () {
   const modal = document.getElementById("controllerHelpModal");
-  if (modal) modal.style.display = "none";
+  if (modal) {
+    modal.classList.add("d-none");
+    modal.style.display = "none";
+  }
 };
 
 // ===== CONTROLLER MODE =====
@@ -152,6 +158,203 @@ window.updateControllerLastPoint = function () {
       inlineDisplay.textContent = "—";
     }
   }
+};
+
+// ===== PICK POINT MODE =====
+window.pickPointMode = false;
+window.pickPointCallback = null;
+
+/**
+ * Aktivuje režim výběru bodu z mapy
+ * Umožňuje vybrat: bod, průsečík, konec úsečky, střed kružnice
+ */
+window.startPickPointMode = function () {
+  window.pickPointMode = true;
+
+  // Zavřít controller modal dočasně
+  window.closeControllerModal();
+
+  // Změnit kurzor
+  const canvas = document.getElementById("myCanvas");
+  if (canvas) {
+    canvas.style.cursor = "crosshair";
+  }
+
+  // Zobrazit instrukce
+  window.showPickPointToast();
+
+  // Nastavit callback pro kliknutí
+  window.pickPointCallback = function (point) {
+    if (point) {
+      // Vytvořit nový počáteční bod (G0)
+      if (!window.shapes) window.shapes = [];
+      window.shapes.push({
+        type: "point",
+        x: point.x,
+        y: point.y,
+        label: `Vybraný bod`
+      });
+
+      // Překreslit
+      if (typeof window.drawAll === "function") {
+        window.drawAll();
+      }
+
+      // Aktualizovat poslední bod
+      window.updateControllerLastPoint();
+
+      // Zobrazit potvrzení
+      if (typeof window.showToast === "function") {
+        window.showToast(`✅ Bod nastaven: X${(point.y * (window.xMeasureMode === "diameter" ? 2 : 1)).toFixed(2)} Z${point.x.toFixed(2)}`);
+      }
+    }
+
+    // Ukončit režim
+    window.endPickPointMode();
+
+    // Znovu otevřít controller
+    setTimeout(() => window.showControllerModal(), 100);
+  };
+};
+
+/**
+ * Ukončí režim výběru bodu
+ */
+window.endPickPointMode = function () {
+  window.pickPointMode = false;
+  window.pickPointCallback = null;
+
+  const canvas = document.getElementById("myCanvas");
+  if (canvas) {
+    canvas.style.cursor = "default";
+  }
+
+  // Skrýt instrukce
+  window.hidePickPointToast();
+};
+
+/**
+ * Zobrazí toast s instrukcemi pro výběr bodu
+ */
+window.showPickPointToast = function () {
+  let toast = document.getElementById("pickPointToast");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "pickPointToast";
+    toast.style.cssText = `
+      position: fixed;
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #2a3a4a, #1a2a3a);
+      color: #4ade80;
+      padding: 12px 24px;
+      border-radius: 8px;
+      border: 1px solid #4ade80;
+      font-size: 14px;
+      z-index: 10000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    `;
+    document.body.appendChild(toast);
+  }
+  toast.innerHTML = `
+    🎯 <strong>Vyber bod na mapě</strong><br>
+    <span style="font-size: 12px; color: #888;">Klikni na: bod, průsečík, konec úsečky, střed kružnice</span><br>
+    <button onclick="window.endPickPointMode(); window.showControllerModal();" style="margin-top: 8px; padding: 4px 12px; background: #444; border: 1px solid #666; border-radius: 4px; color: #ccc; cursor: pointer;">Zrušit</button>
+  `;
+  toast.style.display = "block";
+};
+
+/**
+ * Skryje toast pro výběr bodu
+ */
+window.hidePickPointToast = function () {
+  const toast = document.getElementById("pickPointToast");
+  if (toast) {
+    toast.style.display = "none";
+  }
+};
+
+/**
+ * Najde nejbližší bod k danému místu kliknutí
+ * Hledá: body, průsečíky, konce úseček, středy kružnic
+ */
+window.findNearestSnapPoint = function (mouseX, mouseY, threshold = 20) {
+  const candidates = [];
+  const scale = window.scale || 1;
+  const offsetX = window.offsetX || 0;
+  const offsetY = window.offsetY || 0;
+
+  // Konverze mouse souřadnic na world souřadnice
+  const worldX = (mouseX - offsetX) / scale;
+  const worldY = (mouseY - offsetY) / scale;
+
+  // 1. Explicitní body
+  if (window.points && window.points.length > 0) {
+    for (const p of window.points) {
+      candidates.push({ x: p.x, y: p.y, type: "point", label: p.label || "Bod" });
+    }
+  }
+
+  // 2. Body z shapes (point type)
+  if (window.shapes && window.shapes.length > 0) {
+    for (const shape of window.shapes) {
+      if (shape.type === "point") {
+        candidates.push({ x: shape.x, y: shape.y, type: "point", label: shape.label || "Bod" });
+      } else if (shape.type === "line") {
+        // Počáteční a koncový bod úsečky
+        candidates.push({ x: shape.x1, y: shape.y1, type: "line-start", label: "Začátek úsečky" });
+        candidates.push({ x: shape.x2, y: shape.y2, type: "line-end", label: "Konec úsečky" });
+      } else if (shape.type === "circle") {
+        // Střed kružnice
+        candidates.push({ x: shape.cx, y: shape.cy, type: "circle-center", label: "Střed kružnice" });
+        // Kardinální body na kružnici
+        candidates.push({ x: shape.cx + shape.r, y: shape.cy, type: "circle-quad", label: "Kružnice E" });
+        candidates.push({ x: shape.cx - shape.r, y: shape.cy, type: "circle-quad", label: "Kružnice W" });
+        candidates.push({ x: shape.cx, y: shape.cy + shape.r, type: "circle-quad", label: "Kružnice N" });
+        candidates.push({ x: shape.cx, y: shape.cy - shape.r, type: "circle-quad", label: "Kružnice S" });
+      } else if (shape.type === "arc") {
+        // Střed oblouku
+        candidates.push({ x: shape.cx, y: shape.cy, type: "arc-center", label: "Střed oblouku" });
+        // Počáteční a koncový bod oblouku
+        const startAngle = shape.startAngle || shape.angle1 || 0;
+        const endAngle = shape.endAngle || shape.angle2 || 0;
+        candidates.push({
+          x: shape.cx + shape.r * Math.cos(startAngle),
+          y: shape.cy + shape.r * Math.sin(startAngle),
+          type: "arc-start",
+          label: "Začátek oblouku"
+        });
+        candidates.push({
+          x: shape.cx + shape.r * Math.cos(endAngle),
+          y: shape.cy + shape.r * Math.sin(endAngle),
+          type: "arc-end",
+          label: "Konec oblouku"
+        });
+      }
+    }
+  }
+
+  // 3. Průsečíky (pokud existují)
+  if (window.intersections && window.intersections.length > 0) {
+    for (const inter of window.intersections) {
+      candidates.push({ x: inter.x, y: inter.y, type: "intersection", label: "Průsečík" });
+    }
+  }
+
+  // Najít nejbližší bod
+  let nearest = null;
+  let minDist = threshold / scale; // threshold v world souřadnicích
+
+  for (const c of candidates) {
+    const dist = Math.sqrt((c.x - worldX) ** 2 + (c.y - worldY) ** 2);
+    if (dist < minDist) {
+      minDist = dist;
+      nearest = c;
+    }
+  }
+
+  return nearest;
 };
 
 window.updateControllerInputDisplay = function () {

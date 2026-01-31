@@ -1420,7 +1420,7 @@
           <span>📍</span>
           <span>Poslední bod:</span>
           <code id="controllerLastPointValue">X0 Z0</code>
-          <span style="color: #888; margin-left: auto;" id="controllerModeLabel">G90</span>
+          <button onclick="window.startPickPointMode()" class="kb-help-btn" style="margin-left: auto; background: #2a3a2a; border-color: #4ade80;" title="Vybrat bod z mapy">🎯</button>
         </div>
 
         <!-- Controller Layout - KOMPAKTNÍ KLÁVESNICE -->
@@ -1589,32 +1589,82 @@
     </div>
 
     <div id="controllerHelpModal" class="modal-overlay d-none">
-      <div class="modal-window modal-lg">
+      <div class="modal-window modal-lg" style="max-height: 85vh; overflow-y: auto;">
         <div class="modal-header">
-          <h2 class="modal-header-title no-margin">❓ Nápověda - Ovladač</h2>
+          <h2 class="modal-header-title no-margin">❓ Nápověda - Ovladač CNC</h2>
           <button onclick="window.closeControllerHelp(); window.closeQuickInputHelp();" class="modal-close-btn-simple">&times;</button>
         </div>
 
-        <div class="help-section">
+        <div class="help-section" style="font-size: 13px;">
+
+          <h3 class="help-title">🎮 Režimy souřadnic</h3>
+          <div class="help-block">
+            <div class="mb-8"><code class="help-code">G90</code> - <strong>Absolutní</strong> - souřadnice od počátku (0,0)</div>
+            <div class="mb-8"><code class="help-code">G91</code> - <strong>Přírůstkové</strong> - souřadnice od posledního bodu</div>
+            <div class="mb-8" style="color: #888; font-size: 12px;">💡 Přepínač G90/G91 je v záhlaví ovladače</div>
+          </div>
+
           <h3 class="help-title">📐 Základní příkazy</h3>
           <div class="help-block">
-            <div class="mb-8"><code class="help-code">X80 Z120</code> - Bod na souřadnicích X=80, Z=120</div>
-            <div class="mb-8"><code class="help-code">G1 X100 Z200</code> - Čára do bodu X=100, Z=200</div>
-            <div class="mb-8"><code class="help-code">G0 X50</code> - Skok (bez čáry) na X=50</div>
+            <div class="mb-8"><code class="help-code">G0 X80 Z120</code> - <strong>Skok</strong> na bod (bez kreslení čáry)</div>
+            <div class="mb-8"><code class="help-code">G1 X100 Z200</code> - <strong>Čára</strong> z posledního bodu do X100, Z200</div>
+            <div class="mb-8"><code class="help-code">X80 Z120</code> - Implicitně G1 (čára) do bodu</div>
+            <div class="mb-8" style="color: #4ade80; font-size: 12px;">✅ Kreslí se vždy z "Posledního bodu" zobrazeného v záhlaví</div>
+          </div>
+
+          <h3 class="help-title">📏 Polární souřadnice (úhel + délka)</h3>
+          <div class="help-block">
+            <div class="mb-8"><code class="help-code">L50 AP0</code> - Čára délky 50mm, směr 0° (vpravo/+Z)</div>
+            <div class="mb-8"><code class="help-code">L30 AP90</code> - Čára délky 30mm, směr 90° (nahoru/+X)</div>
+            <div class="mb-8"><code class="help-code">L40 AP180</code> - Čára délky 40mm, směr 180° (vlevo/-Z)</div>
+            <div class="mb-8"><code class="help-code">L25 AP270</code> - Čára délky 25mm, směr 270° (dolů/-X)</div>
+            <div class="mb-8"><code class="help-code">L50 AP45</code> - Čára délky 50mm, směr 45° (šikmo)</div>
+            <div class="mb-8" style="border-top: 1px solid #333; padding-top: 8px;">
+              <code class="help-code">RP120 AP0</code> - Alternativní zápis: RP = polární poloměr
+            </div>
+            <div class="mb-8"><code class="help-code">L50 A90</code> - Alternativní zápis: A = úhel (bez P)</div>
           </div>
 
           <h3 class="help-title">⭕ Kružnice a oblouky</h3>
           <div class="help-block">
-            <div class="mb-8"><code class="help-code">R50</code> - Kružnice s poloměrem 50mm</div>
-            <div class="mb-8"><code class="help-code">CR30</code> - Kružnice s minimálním poloměrem</div>
-            <div class="mb-8"><code class="help-code">G2 X100 Z150 R25</code> - Oblouk CW</div>
+            <div class="mb-8"><code class="help-code">R50</code> - Kružnice s poloměrem 50mm (střed = poslední bod)</div>
+            <div class="mb-8"><code class="help-code">CR30</code> - Kružnice s minimálním poloměrem zaoblení</div>
+            <div class="mb-8"><code class="help-code">G2 X100 Z150 R25</code> - <strong>Oblouk CW</strong> (po směru hodinových ručiček)</div>
+            <div class="mb-8"><code class="help-code">G3 X100 Z150 R25</code> - <strong>Oblouk CCW</strong> (proti směru hodinových ručiček)</div>
+            <div class="mb-8" style="color: #888; font-size: 12px;">💡 R = poloměr oblouku, X/Z = koncový bod</div>
           </div>
 
-          <h3 class="help-title">📏 Polární souřadnice</h3>
+          <h3 class="help-title">🔗 Řetězení příkazů</h3>
           <div class="help-block">
-            <div class="mb-8"><code class="help-code">AP0 RP120</code> - Čára úhel 0°, délka 120mm</div>
-            <div class="mb-8"><code class="help-code">L50 A90</code> - Délka 50, úhel 90°</div>
+            <div class="mb-8"><code class="help-code">G0 X0 Z0; L50 AP0; L30 AP90</code></div>
+            <div class="mb-8" style="color: #888; font-size: 12px;">Více příkazů oddělených středníkem ; se vykonají za sebou</div>
           </div>
+
+          <h3 class="help-title">🎯 Výběr bodu z mapy</h3>
+          <div class="help-block">
+            <div class="mb-8">Tlačítko <code class="help-code">🎯</code> vedle "Poslední bod" umožní vybrat bod kliknutím na mapu:</div>
+            <div class="mb-8" style="padding-left: 15px;">• Body (G0)</div>
+            <div class="mb-8" style="padding-left: 15px;">• Konce úseček</div>
+            <div class="mb-8" style="padding-left: 15px;">• Středy kružnic</div>
+            <div class="mb-8" style="padding-left: 15px;">• Průsečíky</div>
+          </div>
+
+          <h3 class="help-title">⌨️ Klávesové zkratky v hlavní aplikaci</h3>
+          <div class="help-block">
+            <div class="mb-8"><code class="help-code">Q</code> - Otevřít rychlý vstup (Quick Input)</div>
+            <div class="mb-8"><code class="help-code">C</code> - Otevřít ovladač (Controller)</div>
+            <div class="mb-8"><code class="help-code">Esc</code> - Zrušit aktuální režim / zavřít modal</div>
+          </div>
+
+          <h3 class="help-title" style="color: #f97316;">⚠️ Důležité poznámky</h3>
+          <div class="help-block" style="background: #2a2a1a; border-left: 3px solid #f97316;">
+            <div class="mb-8">• <strong>Poslední bod</strong> se aktualizuje po každém příkazu</div>
+            <div class="mb-8">• <strong>G0</strong> vytvoří nový počáteční bod (nepřipojí se k předchozímu)</div>
+            <div class="mb-8">• <strong>G1/L/AP</strong> kreslí čáru Z posledního bodu</div>
+            <div class="mb-8">• Při <strong>G91</strong> jsou souřadnice relativní k poslednímu bodu</div>
+            <div class="mb-8">• <strong>X = průměr/poloměr</strong> podle nastavení v Settings</div>
+          </div>
+
         </div>
       </div>
     </div>

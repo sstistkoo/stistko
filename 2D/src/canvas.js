@@ -58,6 +58,28 @@ function setupCanvasEvents() {
 // ===== MOUSE HANDLERS =====
 
 function onCanvasMouseDown(e) {
+  // === PICK POINT MODE ===
+  // Speciální režim pro výběr bodu z mapy (pro controller)
+  if (window.pickPointMode && window.pickPointCallback) {
+    const canvas = e.target;
+    const rect = canvas.getBoundingClientRect();
+    const screenX = e.clientX - rect.left;
+    const screenY = e.clientY - rect.top;
+
+    // Najít nejbližší snap point
+    const nearestPoint = window.findNearestSnapPoint(screenX, screenY, 25);
+
+    if (nearestPoint) {
+      window.pickPointCallback(nearestPoint);
+    } else {
+      // Pokud není blízko žádný bod, použij přesné souřadnice kliknutí
+      const worldPt = window.screenToWorld(screenX, screenY);
+      const snapped = window.snapPoint ? window.snapPoint(worldPt.x, worldPt.y) : worldPt;
+      window.pickPointCallback({ x: snapped.x, y: snapped.y, type: "custom", label: "Vlastní bod" });
+    }
+    return;
+  }
+
   if (!window.snapPoint) {
     console.error("[onCanvasMouseDown] ❌ snapPoint chybí!", { snapPoint: !!window.snapPoint });
     return;
