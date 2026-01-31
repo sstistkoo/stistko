@@ -96,7 +96,16 @@ window.setControllerMode = function (mode) {
 // ===== LAST POINT TRACKING =====
 
 // Pomocná funkce pro nalezení posledního bodu
+// Preferuje vybraný snap point z pick point mode
 window.getLastPoint = function () {
+  // Preferuj vybraný snap point (pokud existuje)
+  if (window.selectedSnapPoint) {
+    return {
+      x: window.selectedSnapPoint.x,
+      y: window.selectedSnapPoint.y
+    };
+  }
+
   let lastPoint = null;
 
   if (window.shapes && window.shapes.length > 0) {
@@ -129,11 +138,25 @@ window.getLastPoint = function () {
 };
 
 window.updateControllerLastPoint = function () {
-  const lastPoint = window.getLastPoint();
+  // Preferujeme vybraný snap point, jinak použijeme getLastPoint()
+  let lastPoint = window.selectedSnapPoint || null;
+  let pointLabel = lastPoint ? lastPoint.label : "Poslední bod";
 
-  // Aktualizovat nový element
+  // Pokud nemáme vybraný snap point, použijeme automatickou detekci
+  if (!lastPoint) {
+    lastPoint = window.getLastPoint();
+    pointLabel = "Poslední bod";
+  }
+
+  // Aktualizovat nový element - popis typu bodu
+  const lastPointLabel = document.getElementById("controllerLastPointLabel");
   const lastPointValue = document.getElementById("controllerLastPointValue");
   const modeLabel = document.getElementById("controllerModeLabel");
+
+  // Aktualizovat label typu bodu
+  if (lastPointLabel) {
+    lastPointLabel.textContent = `📍 ${pointLabel}:`;
+  }
 
   if (lastPointValue) {
     if (lastPoint) {
@@ -167,6 +190,7 @@ window.pickPointCallback = null;
 /**
  * Aktivuje režim výběru bodu z mapy
  * Umožňuje vybrat: bod, průsečík, konec úsečky, střed kružnice
+ * NEVYTVÁŘÍ nové body - pouze vybírá existující
  */
 window.startPickPointMode = function () {
   window.pickPointMode = true;
@@ -186,26 +210,27 @@ window.startPickPointMode = function () {
   // Nastavit callback pro kliknutí
   window.pickPointCallback = function (point) {
     if (point) {
-      // Vytvořit nový počáteční bod (G0)
-      if (!window.shapes) window.shapes = [];
-      window.shapes.push({
-        type: "point",
+      // NEUVYTVÁŘET nový bod - pouze uložit vybraný snap point
+      // Uložíme do window.selectedSnapPoint pro další použití
+      window.selectedSnapPoint = {
         x: point.x,
         y: point.y,
-        label: `Vybraný bod`
-      });
+        type: point.type || "point",
+        label: point.label || "Bod"
+      };
 
-      // Překreslit
+      // Překreslit (pro zvýraznění vybraného bodu)
       if (typeof window.drawAll === "function") {
         window.drawAll();
       }
 
-      // Aktualizovat poslední bod
+      // Aktualizovat poslední bod s popisným labelem
       window.updateControllerLastPoint();
 
-      // Zobrazit potvrzení
+      // Zobrazit potvrzení s popisem typu bodu
       if (typeof window.showToast === "function") {
-        window.showToast(`✅ Bod nastaven: X${(point.y * (window.xMeasureMode === "diameter" ? 2 : 1)).toFixed(2)} Z${point.x.toFixed(2)}`);
+        const displayY = point.y * (window.xMeasureMode === "diameter" ? 2 : 1);
+        window.showToast(`✅ ${point.label}: X${displayY.toFixed(2)} Z${point.x.toFixed(2)}`);
       }
     }
 
@@ -223,6 +248,7 @@ window.startPickPointMode = function () {
 window.endPickPointMode = function () {
   window.pickPointMode = false;
   window.pickPointCallback = null;
+  window.highlightedSnapPoint = null; // Reset vizuálního highlightu
 
   const canvas = document.getElementById("myCanvas");
   if (canvas) {
@@ -231,6 +257,11 @@ window.endPickPointMode = function () {
 
   // Skrýt instrukce
   window.hidePickPointToast();
+
+  // Překreslit pro odstranění highlightu
+  if (typeof window.draw === "function") {
+    window.draw();
+  }
 };
 
 /**
@@ -401,9 +432,10 @@ window.confirmControllerInput = function () {
   const parsed = window.parseGCode(input, window.controllerMode);
 
   if (parsed) {
-    // Reset
+    // Reset - vyčistit selectedSnapPoint, protože teď máme nový poslední bod
     window.controllerInputBuffer = "";
     window.pendingDirection = null;
+    window.selectedSnapPoint = null; // Reset po úspěšném příkazu
     window.updateControllerInputDisplay();
     window.updateControllerLastPoint();
 
@@ -419,6 +451,7 @@ window.confirmControllerInput = function () {
       );
       window.controllerInputBuffer = "";
       window.pendingDirection = null;
+      window.selectedSnapPoint = null; // Reset po úspěšném příkazu
       window.updateControllerInputDisplay();
 
       // Zavřít modal a vycentrovat

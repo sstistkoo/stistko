@@ -399,6 +399,58 @@ function draw() {
     ctx.setLineDash([]);
   }
 
+  // ===== PICK POINT MODE - Zvýraznění nejbližšího snap bodu =====
+  if (window.pickPointMode && window.highlightedSnapPoint) {
+    const snap = window.highlightedSnapPoint;
+    const sp = worldToScreen(snap.x, snap.y);
+
+    // Pulzující efekt
+    const time = Date.now() / 200;
+    const pulseRadius = 12 + Math.sin(time) * 4;
+
+    // Vnější kruh (zelený glow)
+    ctx.save();
+    ctx.fillStyle = "rgba(74, 222, 128, 0.3)";
+    ctx.beginPath();
+    ctx.arc(sp.x, sp.y, pulseRadius + 8, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Střední kruh (zelený)
+    ctx.fillStyle = "#4ade80";
+    ctx.beginPath();
+    ctx.arc(sp.x, sp.y, pulseRadius, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Vnitřní kruh (tmavý)
+    ctx.fillStyle = "#1a2a1a";
+    ctx.beginPath();
+    ctx.arc(sp.x, sp.y, 6, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Label typu bodu
+    if (snap.label) {
+      ctx.font = "bold 12px Arial";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "bottom";
+
+      // Pozadí labelu
+      const textWidth = ctx.measureText(snap.label).width + 12;
+      ctx.fillStyle = "rgba(26, 42, 26, 0.9)";
+      ctx.fillRect(sp.x - textWidth / 2, sp.y - pulseRadius - 26, textWidth, 20);
+
+      // Okraj
+      ctx.strokeStyle = "#4ade80";
+      ctx.lineWidth = 1;
+      ctx.strokeRect(sp.x - textWidth / 2, sp.y - pulseRadius - 26, textWidth, 20);
+
+      // Text
+      ctx.fillStyle = "#4ade80";
+      ctx.fillText(snap.label, sp.x, sp.y - pulseRadius - 10);
+    }
+
+    ctx.restore();
+  }
+
   // Pokud není nic vybráno, zruš perzistentní info (pokud bylo nastaveno)
   try {
     if (!window.selectedItems || window.selectedItems.length === 0) {
