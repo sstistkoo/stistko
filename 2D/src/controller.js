@@ -1,7 +1,11 @@
 /**
- * CONTROLLER.JS - 🎮 Ovladač pro rychlé kreslení úseček a CNC příkazy
+ * CONTROLLER.JS - 🎮 Ovladač pro rychlé kreslení úseček a CNC příkazy (ES6 hybridní)
  * Plná funkcionalita ze originálního AI_2D_full.html
+ * @module controller
  */
+
+// ===== ES6 EXPORT PLACEHOLDER =====
+// export const CONTROLLER = {}; // Bude aktivováno po plné migraci
 
 // ===== GLOBÁLNÍ STÁTY =====
 window.controllerMode = "G90"; // G90 = absolutní, G91 = přírůstkové
@@ -85,36 +89,65 @@ window.setControllerMode = function (mode) {
 
 // ===== LAST POINT TRACKING =====
 
-window.updateControllerLastPoint = function () {
-  // Najít poslední bod
+// Pomocná funkce pro nalezení posledního bodu
+window.getLastPoint = function () {
   let lastPoint = null;
 
   if (window.shapes && window.shapes.length > 0) {
-    const lastShape = window.shapes[window.shapes.length - 1];
-    if (lastShape.type === "line") {
-      lastPoint = { x: lastShape.x2, y: lastShape.y2 };
-    } else if (lastShape.type === "circle") {
-      lastPoint = { x: lastShape.cx, y: lastShape.cy };
+    // Projít shapes od konce a najít první použitelný bod
+    for (let i = window.shapes.length - 1; i >= 0 && !lastPoint; i--) {
+      const shape = window.shapes[i];
+      if (shape.type === "point") {
+        lastPoint = { x: shape.x, y: shape.y };
+      } else if (shape.type === "line") {
+        lastPoint = { x: shape.x2, y: shape.y2 };
+      } else if (shape.type === "circle") {
+        lastPoint = { x: shape.cx, y: shape.cy };
+      } else if (shape.type === "arc") {
+        const endAngle = shape.endAngle || shape.angle2 || 0;
+        lastPoint = {
+          x: shape.cx + shape.r * Math.cos(endAngle),
+          y: shape.cy + shape.r * Math.sin(endAngle)
+        };
+      }
     }
   }
 
+  // Záloha: zkusit window.points
   if (!lastPoint && window.points && window.points.length > 0) {
     const p = window.points[window.points.length - 1];
     lastPoint = { x: p.x, y: p.y };
   }
 
-  const inlineDisplay = document.getElementById(
-    "controllerLastPointInline"
-  );
+  return lastPoint;
+};
+
+window.updateControllerLastPoint = function () {
+  const lastPoint = window.getLastPoint();
+
+  // Aktualizovat nový element
+  const lastPointValue = document.getElementById("controllerLastPointValue");
+  const modeLabel = document.getElementById("controllerModeLabel");
+
+  if (lastPointValue) {
+    if (lastPoint) {
+      const displayY = window.xMeasureMode === "diameter" ? lastPoint.y * 2 : lastPoint.y;
+      lastPointValue.textContent = `X${displayY.toFixed(window.displayDecimals || 2)} Z${lastPoint.x.toFixed(window.displayDecimals || 2)}`;
+    } else {
+      lastPointValue.textContent = "X0 Z0";
+    }
+  }
+
+  if (modeLabel) {
+    modeLabel.textContent = window.controllerMode || "G90";
+  }
+
+  // Zpětná kompatibilita - starý element
+  const inlineDisplay = document.getElementById("controllerLastPointInline");
   if (inlineDisplay) {
     if (lastPoint) {
-      const displayY =
-        window.xMeasureMode === "diameter"
-          ? lastPoint.y * 2
-          : lastPoint.y;
-      inlineDisplay.textContent = `Z${lastPoint.x.toFixed(
-        window.displayDecimals
-      )} X${displayY.toFixed(window.displayDecimals)}`;
+      const displayY = window.xMeasureMode === "diameter" ? lastPoint.y * 2 : lastPoint.y;
+      inlineDisplay.textContent = `Z${lastPoint.x.toFixed(window.displayDecimals || 2)} X${displayY.toFixed(window.displayDecimals || 2)}`;
     } else {
       inlineDisplay.textContent = "—";
     }
@@ -158,6 +191,9 @@ window.confirmControllerInput = function () {
     return;
   }
 
+  // Zapamatovat počet tvarů před vytvořením
+  const shapeCountBefore = window.shapes ? window.shapes.length : 0;
+
   // Zkusit zpracovat jako G-kód příkaz
   const parsed = window.parseGCode(input, window.controllerMode);
 
@@ -167,6 +203,10 @@ window.confirmControllerInput = function () {
     window.pendingDirection = null;
     window.updateControllerInputDisplay();
     window.updateControllerLastPoint();
+
+    // Zavřít modal a vycentrovat na nový objekt
+    window.closeControllerModal();
+    window.centerOnLastCreatedObject(shapeCountBefore);
   } else {
     // Pokud není G-kód a máme pendingDirection, použít směrový režim
     if (window.pendingDirection) {
@@ -177,12 +217,169 @@ window.confirmControllerInput = function () {
       window.controllerInputBuffer = "";
       window.pendingDirection = null;
       window.updateControllerInputDisplay();
+
+      // Zavřít modal a vycentrovat
+      window.closeControllerModal();
+      window.centerOnLastCreatedObject(shapeCountBefore);
     } else {
       alert(
         "Neplatný příkaz! Použij G-kód (G0, G1, G2, G3) nebo klikni na šipku a zadej parametry."
       );
     }
   }
+};
+
+// ===== CENTER ON CREATED OBJECT =====
+
+window.centerOnPoint = function (x, y, animate = true) {
+  const canvas = document.getElementById("canvas");
+  if (!canvas) return;
+
+  // Výpočet nové pozice panování pro vycentrování na bod
+  const targetPanX = canvas.width / 2 - x * (window.zoom || 2);
+  const targetPanY = canvas.height / 2 + y * (window.zoom || 2);
+
+  if (animate && window.panX !== undefined) {
+    // Animované posunutí
+    const startPanX = window.panX;
+    const startPanY = window.panY;
+    const duration = 300; // ms
+    const startTime = performance.now();
+
+    function animatePan(currentTime) {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+
+      // Easing funkce (ease-out)
+      const eased = 1 - Math.pow(1 - progress, 3);
+
+      window.panX = startPanX + (targetPanX - startPanX) * eased;
+      window.panY = startPanY + (targetPanY - startPanY) * eased;
+
+      if (window.draw) window.draw();
+
+      if (progress < 1) {
+        requestAnimationFrame(animatePan);
+      }
+    }
+
+    requestAnimationFrame(animatePan);
+  } else {
+    // Okamžité posunutí
+    if (window.panX !== undefined) window.panX = targetPanX;
+    if (window.panY !== undefined) window.panY = targetPanY;
+    if (window.draw) window.draw();
+  }
+};
+
+window.centerOnLastCreatedObject = function (shapeCountBefore) {
+  if (!window.shapes || window.shapes.length === 0) return;
+
+  // Najít nově vytvořené tvary
+  const newShapes = window.shapes.slice(shapeCountBefore);
+
+  if (newShapes.length === 0) {
+    // Pokud nebyl vytvořen nový tvar, zkontrolovat body
+    if (window.points && window.points.length > 0) {
+      const lastPoint = window.points[window.points.length - 1];
+      window.centerOnPoint(lastPoint.x, lastPoint.y);
+      window.showSuccessToast("✓ Bod vytvořen");
+    }
+    return;
+  }
+
+  // Vypočítat střed všech nových tvarů
+  let sumX = 0, sumY = 0, count = 0;
+  let objectType = "";
+
+  newShapes.forEach(shape => {
+    if (shape.type === "point") {
+      // Pro bod
+      sumX += shape.x;
+      sumY += shape.y;
+      count++;
+      objectType = "Bod";
+    } else if (shape.type === "line") {
+      // Pro čáru - střed čáry nebo koncový bod
+      sumX += shape.x2;
+      sumY += shape.y2;
+      count++;
+      objectType = "Čára";
+    } else if (shape.type === "circle") {
+      sumX += shape.cx;
+      sumY += shape.cy;
+      count++;
+      objectType = "Kružnice";
+    } else if (shape.type === "arc") {
+      sumX += shape.cx;
+      sumY += shape.cy;
+      count++;
+      objectType = "Oblouk";
+    }
+  });
+
+  if (count > 0) {
+    const centerX = sumX / count;
+    const centerY = sumY / count;
+    window.centerOnPoint(centerX, centerY);
+
+    // Zobrazit úspěšnou zprávu
+    const message = count === 1 ? `✓ ${objectType} vytvořena` : `✓ Vytvořeno ${count} objektů`;
+    window.showSuccessToast(message);
+  }
+};
+
+// ===== SUCCESS TOAST =====
+
+window.showSuccessToast = function (message) {
+  // Odstranit existující toast
+  const existingToast = document.getElementById("successToast");
+  if (existingToast) existingToast.remove();
+
+  // Vytvořit nový toast
+  const toast = document.createElement("div");
+  toast.id = "successToast";
+  toast.style.cssText = `
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #166534 0%, #22c55e 100%);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    box-shadow: 0 4px 20px rgba(34, 197, 94, 0.4);
+    z-index: 10200;
+    animation: toastSlideUp 0.3s ease-out;
+  `;
+  toast.textContent = message;
+
+  // Přidat animaci do stylu dokumentu (jednou)
+  if (!document.getElementById("toastAnimStyle")) {
+    const style = document.createElement("style");
+    style.id = "toastAnimStyle";
+    style.textContent = `
+      @keyframes toastSlideUp {
+        from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+        to { opacity: 1; transform: translateX(-50%) translateY(0); }
+      }
+      @keyframes toastFadeOut {
+        from { opacity: 1; }
+        to { opacity: 0; }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  document.body.appendChild(toast);
+
+  // Automaticky zmizí po 2 sekundách
+  setTimeout(() => {
+    toast.style.animation = "toastFadeOut 0.3s ease-out";
+    setTimeout(() => toast.remove(), 300);
+  }, 2000);
 };
 
 // ===== G-CODE PARSING - KOMPLEXNÍ LOGIKA =====
@@ -202,23 +399,10 @@ window.parseGCode = function (input, mode) {
     return false;
   }
 
-  // Najít poslední bod
-  let lastPoint = null;
-  if (window.shapes && window.shapes.length > 0) {
-    const lastShape = window.shapes[window.shapes.length - 1];
-    if (lastShape.type === "line") {
-      lastPoint = { x: lastShape.x2, y: lastShape.y2 };
-    } else if (lastShape.type === "circle") {
-      lastPoint = { x: lastShape.cx, y: lastShape.cy };
-    }
-  }
-  if (!lastPoint && window.points && window.points.length > 0) {
-    const p = window.points[window.points.length - 1];
-    lastPoint = { x: p.x, y: p.y };
-  }
-  if (!lastPoint) {
-    lastPoint = { x: 0, y: 0 }; // Default
-  }
+  // Najít poslední bod - použít sdílenou funkci
+  let lastPoint = window.getLastPoint() || { x: 0, y: 0 };
+
+  console.log("[parseGCode] lastPoint:", lastPoint);
 
   // Rozdělit na příkazy (středník)
   const commands = input
@@ -232,9 +416,11 @@ window.parseGCode = function (input, mode) {
     // Detekce G-kódu
     const gMatch = cmd.match(/^G(\d+)/);
     if (!gMatch) {
-      // Pokud není G-kód, zkusit pouze souřadnice (např. X50Z100)
-      // To znamená použít G1 (přímku) implicitně
-      if (cmd.match(/[XZ]/)) {
+      // Pokud není G-kód, zkusit implicitně G1 pro:
+      // - Souřadnice: X50 Z100
+      // - Polární: L54 AP0, AP45 L80, RP100 AP90
+      // - Poloměr: R50
+      if (cmd.match(/[XZLARPC]/i)) {
         // Rekurzivně zavolat s G1
         return window.parseGCode("G1" + cmd, mode);
       }
@@ -243,16 +429,16 @@ window.parseGCode = function (input, mode) {
 
     const gCode = parseInt(gMatch[1]);
 
-    // Parse parametrů
+    // Parse parametrů - pořadí je důležité! Delší patterny první.
     const xMatch = cmd.match(/X(-?\d+\.?\d*)/);
     const zMatch = cmd.match(/Z(-?\d+\.?\d*)/);
+    const crMatch = cmd.match(/CR(-?\d+\.?\d*)/); // CR první (před R)
     const rMatch = cmd.match(/(?<![C])R(-?\d+\.?\d*)/); // R ale ne CR
-    const crMatch = cmd.match(/CR(-?\d+\.?\d*)/); // CR - radius menšího úhlu
     const dMatch = cmd.match(/D(-?\d+\.?\d*)/);
     const lMatch = cmd.match(/L(-?\d+\.?\d*)/);
-    const aMatch = cmd.match(/A(-?\d+\.?\d*)/);
-    const rpMatch = cmd.match(/RP(-?\d+\.?\d*)/);
-    const apMatch = cmd.match(/AP(-?\d+\.?\d*)/);
+    const rpMatch = cmd.match(/RP(-?\d+\.?\d*)/); // RP první (před R)
+    const apMatch = cmd.match(/AP(-?\d+\.?\d*)/); // AP první (před A)
+    const aMatch = cmd.match(/(?<![R])A(?!P)(-?\d+\.?\d*)/); // A ale ne AP ani RA
     const iMatch = cmd.match(/I(-?\d+\.?\d*)/);
     const jMatch = cmd.match(/J(-?\d+\.?\d*)/);
 
@@ -291,10 +477,17 @@ window.parseGCode = function (input, mode) {
         ? parseFloat(aMatch[1])
         : null;
 
+      console.log("[G1] length:", length, "angle:", angle, "from cmd:", cmd);
+
       if (length !== null && angle !== null) {
         const rad = (angle * Math.PI) / 180;
         x = lastPoint.x + length * Math.cos(rad);
         y = lastPoint.y + length * Math.sin(rad);
+        console.log("[G1 Polar] new point:", x, y);
+      } else if (length !== null || angle !== null) {
+        // Pokud je zadaná jen délka nebo jen úhel - chyba
+        alert("❌ Pro polární souřadnice zadej oba parametry!\n\nPříklad: L54 AP0 nebo AP45 L80");
+        return false;
       } else {
         if (mode === "G91") {
           x += zMatch ? parseFloat(zMatch[1]) : 0;
@@ -633,6 +826,114 @@ window.processMeasureInput = function (measureData) {
 
   alert("Neplatný vstup!");
   return null;
+};
+
+// ===== G90/G91 MODE TOGGLE =====
+
+// Aktivní popup kontext ('controller' nebo 'qi')
+window.activePopupContext = null;
+
+// Toggle mode pro Controller
+window.toggleControllerMode = function () {
+  const btn = document.getElementById("btnControllerModeToggle");
+  const modeLabel = document.getElementById("controllerModeLabel");
+  if (!btn) return;
+
+  if (window.controllerMode === "G90") {
+    window.controllerMode = "G91";
+    btn.textContent = "G91";
+    btn.classList.remove("g90");
+    btn.classList.add("g91");
+  } else {
+    window.controllerMode = "G90";
+    btn.textContent = "G90";
+    btn.classList.remove("g91");
+    btn.classList.add("g90");
+  }
+
+  // Aktualizovat mode label
+  if (modeLabel) {
+    modeLabel.textContent = window.controllerMode;
+  }
+};
+
+// Toggle mode pro QuickInput
+window.qiMode = "G90";
+
+window.toggleQiMode = function () {
+  const btn = document.getElementById("btnQiModeToggle");
+  if (!btn) return;
+
+  if (window.qiMode === "G90") {
+    window.qiMode = "G91";
+    btn.textContent = "G91";
+    btn.classList.remove("g90");
+    btn.classList.add("g91");
+  } else {
+    window.qiMode = "G90";
+    btn.textContent = "G90";
+    btn.classList.remove("g91");
+    btn.classList.add("g90");
+  }
+};
+
+// ===== G-CODE POPUP =====
+
+window.showGCodePopup = function (context) {
+  window.activePopupContext = context;
+  const overlay = document.getElementById("gCodePopupOverlay");
+  const popup = document.getElementById("gCodePopup");
+  if (overlay) overlay.classList.add("active");
+  if (popup) popup.classList.add("active");
+};
+
+window.closeGCodePopup = function () {
+  const overlay = document.getElementById("gCodePopupOverlay");
+  const popup = document.getElementById("gCodePopup");
+  if (overlay) overlay.classList.remove("active");
+  if (popup) popup.classList.remove("active");
+  window.activePopupContext = null;
+};
+
+// ===== PARAM POPUP =====
+
+window.showParamPopup = function (context) {
+  window.activePopupContext = context;
+  const overlay = document.getElementById("paramPopupOverlay");
+  const popup = document.getElementById("paramPopup");
+  if (overlay) overlay.classList.add("active");
+  if (popup) popup.classList.add("active");
+};
+
+window.closeParamPopup = function () {
+  const overlay = document.getElementById("paramPopupOverlay");
+  const popup = document.getElementById("paramPopup");
+  if (overlay) overlay.classList.remove("active");
+  if (popup) popup.classList.remove("active");
+  window.activePopupContext = null;
+};
+
+// ===== INSERT FROM POPUP =====
+
+window.insertPopupToken = function (token) {
+  const context = window.activePopupContext;
+
+  if (context === "controller") {
+    window.insertControllerToken(token);
+  } else if (context === "qi") {
+    window.insertToken(token);
+  }
+
+  // Zavřít oba popupy
+  window.closeGCodePopup();
+  window.closeParamPopup();
+};
+
+// ===== CLEAR FUNCTIONS =====
+
+window.clearQuickInput = function () {
+  const display = document.getElementById("quickInputDisplay");
+  if (display) display.value = "";
 };
 
 // ✅ Keyboard events nyní spravuje unified keyboard.js

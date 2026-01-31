@@ -1,11 +1,15 @@
 /**
- * INIT.JS - Inicializace aplikace
+ * INIT.JS - Inicializace aplikace (ES6 hybridní)
  * - Setup canvas
  * - Load saved data
  * - Initialize UI
  * - Start animation loop
  * - Error boundaries
+ * @module init
  */
+
+// ===== ES6 EXPORT PLACEHOLDER =====
+// export const INIT = {}; // Bude aktivováno po plné migraci
 
 let animationFrameId = null;
 

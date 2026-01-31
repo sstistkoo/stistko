@@ -1,11 +1,15 @@
 /**
- * CANVAS.JS - Canvas event handlers a kreslicí logika
+ * CANVAS.JS - Canvas event handlers a kreslicí logika (ES6 hybridní)
  * - Mouse events (draw, pan, select)
  * - Touch events
  * - Keyboard shortcuts
  * - Drawing operations
  * - Error boundaries for all event handlers
+ * @module canvas
  */
+
+// ===== ES6 EXPORT PLACEHOLDER =====
+// export const CANVAS = {}; // Bude aktivováno po plné migraci
 
 // ===== CANVAS SETUP =====
 
