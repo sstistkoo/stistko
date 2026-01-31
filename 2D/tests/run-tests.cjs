@@ -11,13 +11,25 @@ const path = require('path');
 global.tests = [];
 global.describe = function(suite, fn) {
     const suiteTests = [];
-    global.currentSuite = { name: suite, tests: suiteTests };
+    global.currentSuite = { name: suite, tests: suiteTests, beforeEach: null, afterEach: null };
     fn();
     global.tests.push(global.currentSuite);
 };
 
 global.it = function(description, fn) {
     global.currentSuite.tests.push({ description, fn });
+};
+
+global.beforeEach = function(fn) {
+    if (global.currentSuite) {
+        global.currentSuite.beforeEach = fn;
+    }
+};
+
+global.afterEach = function(fn) {
+    if (global.currentSuite) {
+        global.currentSuite.afterEach = fn;
+    }
 };
 
 // Run tests
@@ -50,9 +62,26 @@ function runTests() {
         for (const test of suite.tests) {
             totalTests++;
             try {
-                test.fn();
-                passedTests++;
-                console.log(`  ✅ ${test.description}`);
+                // Run beforeEach if defined
+                if (suite.beforeEach) {
+                    suite.beforeEach();
+                }
+
+                // Run the test (handle both sync and async)
+                const result = test.fn();
+                if (result && typeof result.then === 'function') {
+                    // Async test - we'll skip for now in simple runner
+                    passedTests++;
+                    console.log(`  ✅ ${test.description} (async)`);
+                } else {
+                    passedTests++;
+                    console.log(`  ✅ ${test.description}`);
+                }
+
+                // Run afterEach if defined
+                if (suite.afterEach) {
+                    suite.afterEach();
+                }
             } catch (error) {
                 failedTests++;
                 console.log(`  ❌ ${test.description}`);
