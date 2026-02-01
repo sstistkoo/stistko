@@ -1447,11 +1447,10 @@
           <button onclick="window.closeControllerModal()" class="modal-close-btn-simple">&times;</button>
         </div>
 
-        <!-- Last point info -->
-        <div id="controllerLastPoint" class="kb-input-hint" style="background: #1a2a1a; border-left: 3px solid #4ade80;">
-          <span id="controllerLastPointLabel">📍 Poslední bod:</span>
+        <!-- Last point info - kompaktní -->
+        <div id="controllerLastPoint" class="kb-input-hint-compact">
+          <span>📍</span>
           <code id="controllerLastPointValue">X0 Z0</code>
-          <button onclick="window.startPickPointMode()" class="kb-help-btn" style="margin-left: auto; background: #2a3a2a; border-color: #4ade80;" title="Vybrat bod z mapy">🎯</button>
         </div>
 
         <!-- Controller Layout - KOMPAKTNÍ KLÁVESNICE -->
@@ -1483,12 +1482,13 @@
             <button onclick="window.insertControllerToken('3')" class="ctrl-btn ctrl-btn-num">3</button>
           </div>
 
-          <!-- Row 4: 🧮, ⌫, 0, 0, ✓ -->
+          <!-- Row 4: 🧮, ⌫, 0, 🎯, ✓ -->
           <div class="controller-grid controller-grid-5">
             <button onclick="window.showCalculator()" class="ctrl-btn" title="Kalkulačka">🧮</button>
             <button onclick="window.backspaceControllerToken()" class="ctrl-btn ctrl-btn-delete">⌫</button>
-            <button onclick="window.insertControllerToken('0')" class="ctrl-btn ctrl-btn-num" style="grid-column: span 2">0</button>
-            <button onclick="window.confirmControllerInput()" class="ctrl-btn ctrl-btn-confirm" style="padding: 8px">✓</button>
+            <button onclick="window.insertControllerToken('0')" class="ctrl-btn ctrl-btn-num">0</button>
+            <button onclick="window.startPickPointMode()" class="ctrl-btn ctrl-btn-pick" title="Vybrat bod z mapy">🎯</button>
+            <button onclick="window.confirmControllerInput()" class="ctrl-btn ctrl-btn-confirm">✓</button>
           </div>
         </div>
       </div>

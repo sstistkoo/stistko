@@ -288,17 +288,17 @@ canvas {
 /* Mobil na výšku - dole */
 @media (max-width: 768px) and (orientation: portrait) {
   .toolbar {
-    bottom: max(30px, calc(20px + env(safe-area-inset-bottom)));
+    bottom: max(10px, calc(5px + env(safe-area-inset-bottom)));
     left: 50%;
     right: auto;
     transform: translateX(-50%);
     flex-direction: row;
     flex-wrap: nowrap;
-    padding: 8px 5px;
+    padding: 6px 4px;
     border-radius: 12px;
-    gap: 6px;
+    gap: 4px;
     width: auto;
-    max-width: 98%;
+    max-width: 100%;
     justify-content: center;
   }
 }
@@ -3755,8 +3755,11 @@ canvas {
 /* ===== CONTROLLER MODAL ===== */
 .controller-modal {
   display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   bottom: 0;
-  top: auto;
   align-items: flex-end;
   justify-content: center;
   background: transparent;
@@ -3764,9 +3767,13 @@ canvas {
 }
 
 .controller-window {
-  max-width: 700px;
+  max-width: 600px;
+  width: 95%;
   border-radius: 10px 10px 0 0;
-  margin: 0;
+  margin: 0 0 80px 0; /* Prostor pro toolbar */
+  background: #1a1a1a;
+  border: 1px solid #444;
+  padding: 12px;
 }
 
 .controller-header {
@@ -4097,6 +4104,37 @@ canvas {
   font-size: 16px;
   font-weight: bold;
   transition: all 0.2s;
+}
+
+/* Tlačítko pro výběr bodu z mapy */
+.ctrl-btn-pick {
+  background: linear-gradient(135deg, #1a4a3a 0%, #2a6a5a 100%);
+  border-color: #4ade80;
+  color: #4ade80;
+}
+
+.ctrl-btn-pick:hover {
+  background: linear-gradient(135deg, #2a5a4a 0%, #3a7a6a 100%);
+}
+
+/* Kompaktní info o posledním bodu */
+.kb-input-hint-compact {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: #1a2a1a;
+  border-left: 3px solid #4ade80;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: #4ade80;
+}
+
+.kb-input-hint-compact code {
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  color: #4ade80;
 }
 
 .ctrl-btn-confirm:hover {
@@ -6439,14 +6477,14 @@ canvas {
   .controller-window {
     width: 100% !important;
     max-width: 100% !important;
-    max-height: calc(100vh - 120px) !important;
-    min-height: 350px !important;
+    max-height: calc(100vh - 100px) !important;
+    min-height: 320px !important;
     border-radius: 16px 16px 0 0 !important;
-    padding: 12px !important;
+    padding: 10px !important;
     overflow-y: auto !important;
     position: relative !important;
     margin-top: 0 !important;
-    margin-bottom: 85px !important; /* Nad toolbar tlačítky */
+    margin-bottom: 70px !important; /* Nad toolbar tlačítky */
     /* DŮLEŽITÉ: Odstranit dragging na mobilu */
     cursor: default !important;
   }
@@ -6531,46 +6569,49 @@ canvas {
   }
 
   /* Last point info - kompaktnější */
-  .kb-input-hint {
-    flex-wrap: wrap !important;
-    padding: 8px 12px !important;
-    font-size: 14px !important;
-    min-height: 40px !important;
+  .kb-input-hint-compact {
+    padding: 4px 8px !important;
+    font-size: 12px !important;
+    margin-bottom: 6px !important;
   }
 
-  .kb-input-hint code {
-    font-size: 15px !important;
+  .kb-input-hint-compact code {
+    font-size: 13px !important;
   }
 
-  /* Klávesnice - VĚTŠÍ tlačítka s větším fontem */
+  /* Klávesnice - VELKÉ tlačítka s VELKÝMI popisky pro slepce */
   .controller-keyboard {
-    padding: 10px !important;
+    padding: 8px !important;
   }
 
   .controller-grid {
-    gap: 8px !important;
-    margin-bottom: 8px !important;
+    gap: 6px !important;
+    margin-bottom: 6px !important;
   }
 
   .ctrl-btn {
-    min-height: 56px !important;
-    font-size: 28px !important;
-    padding: 12px 10px !important;
+    min-height: 60px !important;
+    font-size: 36px !important;
+    padding: 8px 6px !important;
     touch-action: manipulation !important;
     -webkit-tap-highlight-color: rgba(255, 255, 255, 0.2) !important;
   }
 
   .ctrl-btn-num {
-    font-size: 30px !important;
+    font-size: 40px !important;
   }
 
   .ctrl-btn-coord {
-    font-size: 28px !important;
+    font-size: 38px !important;
     font-weight: bold !important;
   }
 
   .ctrl-btn-confirm {
-    min-height: 56px !important;
+    min-height: 60px !important;
+    font-size: 44px !important;
+  }
+
+  .ctrl-btn-pick {
     font-size: 32px !important;
   }
 }
