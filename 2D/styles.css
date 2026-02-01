@@ -3755,9 +3755,9 @@ canvas {
 /* ===== CONTROLLER MODAL ===== */
 .controller-modal {
   display: none;
-  bottom: 0;
-  top: auto;
-  align-items: flex-end;
+  bottom: auto;
+  top: 0;
+  align-items: flex-start;
   justify-content: center;
   background: transparent;
   z-index: 999; /* Nižší než toolbar */
@@ -3786,6 +3786,11 @@ canvas {
   background: #1a1a2a;
   border-radius: 8px;
   margin-bottom: 8px;
+}
+
+/* Spacer pro posunutí × úplně doprava */
+.kb-header-spacer {
+  flex-grow: 1;
 }
 
 .kb-mode-toggle {
@@ -6395,22 +6400,23 @@ canvas {
     font-weight: bold;
   }
 
-  /* Controller modal - FIXNÍ pozice na mobilu portrait */
+  /* Controller modal - FIXNÍ pozice nahoře na mobilu portrait */
   .controller-modal {
-    align-items: flex-end !important;
+    align-items: flex-start !important;
     position: fixed !important;
   }
 
   .controller-window {
     width: 100% !important;
     max-width: 100% !important;
-    max-height: 50vh !important;
+    max-height: calc(100vh - 120px) !important;
     min-height: auto !important;
-    border-radius: 16px 16px 0 0 !important;
+    border-radius: 0 0 16px 16px !important;
     padding: 12px !important;
     overflow-y: auto !important;
     position: relative !important;
-    margin-bottom: 100px !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
     /* DŮLEŽITÉ: Odstranit dragging na mobilu */
     cursor: default !important;
   }
