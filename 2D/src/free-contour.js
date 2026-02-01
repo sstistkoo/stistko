@@ -164,6 +164,124 @@ window.exportFreeContourToGCode = function () {
 };
 
 /**
+ * Exportuje FK konturu do Controller formátu (středníkový zápis)
+ * Výstup: "G1X50Z100; G1L80AP45; G2X60Z80CR20"
+ */
+window.exportFreeContourToController = function() {
+  const elements = window.freeContourElements;
+  const startPoint = window.freeContourStartPoint;
+
+  if (!startPoint || elements.length === 0) {
+    window.showToast("Kontura je prázdná", "warning");
+    return null;
+  }
+
+  // Zkontrolovat zda jsou všechny prvky vyřešeny
+  const unsolved = elements.filter(el => !el.solved);
+  if (unsolved.length > 0) {
+    window.showToast(`${unsolved.length} prvků není vyřešeno`, "warning");
+    return null;
+  }
+
+  let commands = [];
+
+  // Start bod - G0
+  const startX = startPoint.z * (window.xMeasureMode === "diameter" ? 2 : 1);
+  const startZ = startPoint.x;
+  commands.push(`G0X${startX.toFixed(2)}Z${startZ.toFixed(2)}`);
+
+  elements.forEach((el, i) => {
+    if (!el.computed || !el.solved) return;
+
+    const endX = el.computed.endX * (window.xMeasureMode === "diameter" ? 2 : 1);
+    const endZ = el.computed.endZ;
+
+    if (el.type === "line") {
+      // Preferovat polární formát pokud máme úhel a délku
+      if (el.angle !== null && el.angle !== "?" && el.length !== null && el.length !== "?") {
+        commands.push(`G1L${parseFloat(el.length).toFixed(2)}AP${parseFloat(el.angle).toFixed(0)}`);
+      } else if (el.computed.length && el.computed.angle !== undefined) {
+        // Použít computed hodnoty
+        commands.push(`G1L${el.computed.length.toFixed(2)}AP${el.computed.angle.toFixed(0)}`);
+      } else {
+        // Klasické X, Z souřadnice
+        commands.push(`G1X${endX.toFixed(2)}Z${endZ.toFixed(2)}`);
+      }
+    } else if (el.type === "arc" || el.type === "arc-cc") {
+      const isCW = el.direction === "CW";
+      const gCmd = isCW ? "G2" : "G3";
+      const radius = el.computed.radius || el.radius;
+
+      if (radius) {
+        // Použít CR (poloměr) formát - kratší a čitelnější
+        commands.push(`${gCmd}X${endX.toFixed(2)}Z${endZ.toFixed(2)}CR${Math.abs(radius).toFixed(2)}`);
+      } else {
+        // Fallback na X, Z bez poloměru
+        commands.push(`${gCmd}X${endX.toFixed(2)}Z${endZ.toFixed(2)}`);
+      }
+    }
+  });
+
+  const controllerCode = commands.join("; ");
+  return controllerCode;
+};
+
+/**
+ * Zkopíruje FK konturu do schránky v controller formátu
+ */
+window.copyFreeContourToController = function() {
+  const code = window.exportFreeContourToController();
+  if (!code) return;
+
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(code).then(() => {
+      window.showToast("✅ Zkopírováno do schránky (controller formát)", "success");
+    }).catch(() => {
+      window.showToast("❌ Nepodařilo se zkopírovat", "error");
+    });
+  } else {
+    // Fallback - zobrazit v alertu
+    prompt("Zkopíruj tento kód:", code);
+  }
+};
+
+/**
+ * Vloží FK konturu do ovladače
+ */
+window.insertFreeContourToController = function() {
+  const code = window.exportFreeContourToController();
+  if (!code) return;
+
+  // Vložit do controller input bufferu
+  window.controllerInputBuffer = code;
+  window.updateControllerInputDisplay();
+
+  // Zavřít FK a otevřít controller
+  window.closeFreeContourModal();
+  window.showControllerModal();
+
+  window.showToast("✅ Vloženo do ovladače", "success");
+};
+
+/**
+ * Vloží FK konturu do AI klávesnice
+ */
+window.insertFreeContourToAI = function() {
+  const code = window.exportFreeContourToController();
+  if (!code) return;
+
+  // Vložit do AI keyboard bufferu
+  window.aiKeyboardBuffer = "Nakresli konturu: " + code;
+  window.updateAIKeyboardDisplay();
+
+  // Zavřít FK a otevřít AI keyboard
+  window.closeFreeContourModal();
+  window.openAIKeyboard();
+
+  window.showToast("✅ Vloženo do AI klávesnice", "success");
+};
+
+/**
  * Použije FK konturu - přidá všechny prvky do mapy
  */
 window.applyFreeContour = function () {

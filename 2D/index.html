@@ -1834,7 +1834,9 @@
         <div class="fc-header">
           <h3>🔧 Volná Kontura (FK)</h3>
           <div class="fc-header-buttons">
-            <button onclick="window.exportFreeContourToGCode()" class="fc-btn fc-btn-secondary" title="Export do G-kódu">📋 Export G-kód</button>
+            <button onclick="window.exportFreeContourToGCode()" class="fc-btn fc-btn-secondary" title="Export do standardního G-kódu">📋 G-kód</button>
+            <button onclick="window.insertFreeContourToController()" class="fc-btn fc-btn-primary" title="Vložit do Ovladače">🎮 Ovladač</button>
+            <button onclick="window.insertFreeContourToAI()" class="fc-btn fc-btn-ai" title="Vložit do AI">🤖 AI</button>
             <button onclick="window.closeFreeContourModal()" class="modal-close-btn-simple">&times;</button>
           </div>
         </div>
@@ -1921,8 +1923,9 @@
 
             <!-- Actions -->
             <div class="fc-actions">
-              <button onclick="window.applyFreeContour()" class="fc-btn fc-btn-primary">✅ Aplikovat konturu</button>
-              <button onclick="window.exportFreeContourToGCode()" class="fc-btn fc-btn-secondary" title="Exportovat do G-kódu">📋 G-kód</button>
+              <button onclick="window.applyFreeContour()" class="fc-btn fc-btn-primary">✅ Aplikovat</button>
+              <button onclick="window.insertFreeContourToController()" class="fc-btn fc-btn-secondary" title="Vložit do Ovladače">🎮 Ovladač</button>
+              <button onclick="window.insertFreeContourToAI()" class="fc-btn fc-btn-ai" title="Odeslat do AI">🤖 AI</button>
             </div>
           </div>
 
