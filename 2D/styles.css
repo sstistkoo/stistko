@@ -4169,6 +4169,11 @@ canvas {
   color: #4ade80;
 }
 
+.kb-input-hint-compact span {
+  color: #90ee90;
+  font-size: 12px;
+}
+
 .kb-input-hint-compact code {
   font-family: 'Courier New', monospace;
   font-weight: bold;
@@ -6631,25 +6636,29 @@ canvas {
   }
 
   .ctrl-btn {
-    min-height: 65px !important;
-    font-size: 44px !important; /* Velké texty pro portrait */
-    padding: 8px 4px !important;
+    min-height: 52px !important;
+    max-height: 52px !important;
+    height: 52px !important;
+    font-size: 32px !important; /* Velké texty pro portrait */
+    padding: 4px !important;
     touch-action: manipulation !important;
     -webkit-tap-highlight-color: rgba(255, 255, 255, 0.2) !important;
   }
 
   .ctrl-btn-num {
-    font-size: 48px !important; /* Větší pro čísla */
+    font-size: 34px !important; /* Čísla */
   }
 
   .ctrl-btn-coord {
-    font-size: 44px !important; /* Velké X, Z */
+    font-size: 32px !important; /* X, Z */
     font-weight: bold !important;
   }
 
   .ctrl-btn-confirm {
-    min-height: 65px !important;
-    font-size: 48px !important; /* Velká fajfka */
+    min-height: 52px !important;
+    max-height: 52px !important;
+    height: 52px !important;
+    font-size: 36px !important; /* Fajfka */
   }
 
   .ctrl-btn-pick {
@@ -6693,20 +6702,25 @@ canvas {
   }
 
   .ctrl-btn {
-    min-height: 50px !important;
-    font-size: 44px !important; /* Velké jako v portrait! */
+    min-height: 48px !important;
+    max-height: 48px !important;
+    height: 48px !important;
+    font-size: 28px !important; /* Čtverečky */
   }
 
   .ctrl-btn-num {
-    font-size: 48px !important;
+    font-size: 30px !important;
   }
 
   .ctrl-btn-coord {
-    font-size: 44px !important;
+    font-size: 28px !important;
   }
 
   .ctrl-btn-confirm {
-    font-size: 48px !important;
+    min-height: 48px !important;
+    max-height: 48px !important;
+    height: 48px !important;
+    font-size: 32px !important;
   }
 }
 
