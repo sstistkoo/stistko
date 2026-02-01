@@ -653,14 +653,14 @@ function onCanvasTouchStart(e) {
     // === PICK POINT MODE - Touch podpora s precision mode ===
     if (window.pickPointMode && window.pickPointCallback) {
       console.log('[PICK POINT] Touch start - waiting for precision mode or tap');
-      
+
       // Spustit timer pro precision mode
       precisionModeTimer = setTimeout(() => {
         if (touchStart && !touchIsPanning && !touchActionStarted) {
           activatePrecisionMode(touch, canvas);
         }
       }, PRECISION_MODE_DELAY);
-      
+
       // NEPROVEDEME pick point hned - počkáme na touchEnd
       return;
     }
@@ -929,12 +929,12 @@ function onCanvasTouchEnd(e) {
     // === PICK POINT MODE ===
     if (window.pickPointMode && window.pickPointCallback) {
       console.log('[PICK POINT] Touch end - searching for point at:', finalScreenX, finalScreenY);
-      
+
       // Najít nejbližší snap point (dosah 60px pro mobil)
       const nearestPoint = window.findNearestSnapPoint(finalScreenX, finalScreenY, 60);
-      
+
       console.log('[PICK POINT] Nearest point found:', nearestPoint);
-      
+
       if (nearestPoint) {
         console.log('[PICK POINT] ✅ Point selected:', nearestPoint.x, nearestPoint.y);
         window.pickPointCallback(nearestPoint);
@@ -944,7 +944,7 @@ function onCanvasTouchEnd(e) {
           window.showToast("⚠️ Žádný bod v dosahu. Zkus podržet prst pro přesný výběr.", 2500);
         }
       }
-      
+
       // Deaktivovat precision mode a reset
       deactivatePrecisionMode();
       touchStart = null;
