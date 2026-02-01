@@ -1455,6 +1455,15 @@
 
         <!-- Controller Layout - KOMPAKTNÍ KLÁVESNICE -->
         <div class="controller-keyboard">
+          <!-- Row 0: G, L, AP, R, A - G-kódy a parametry -->
+          <div class="controller-grid controller-grid-5">
+            <button onclick="window.insertControllerToken('G')" class="ctrl-btn ctrl-btn-gcode">G</button>
+            <button onclick="window.insertControllerToken('L')" class="ctrl-btn ctrl-btn-gcode">L</button>
+            <button onclick="window.insertControllerToken('AP')" class="ctrl-btn ctrl-btn-param">AP</button>
+            <button onclick="window.insertControllerToken('R')" class="ctrl-btn ctrl-btn-param">R</button>
+            <button onclick="window.insertControllerToken('A')" class="ctrl-btn ctrl-btn-param">A</button>
+          </div>
+
           <!-- Row 1: X, Z, 7, 8, 9 -->
           <div class="controller-grid controller-grid-5">
             <button onclick="window.insertControllerToken('X')" class="ctrl-btn ctrl-btn-coord">X</button>
