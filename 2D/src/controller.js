@@ -51,13 +51,13 @@ window.showControllerModal = function () {
   if (modal) {
     modal.style.display = "flex";
 
-    // Na PC: Nastavit výchozí pozici uprostřed dole (pokud není uložená)
+    // Na PC: Obnovit uloženou pozici NEBO nastavit výchozí
     const isMobile = window.innerWidth <= 768;
     if (!isMobile) {
       const modalWindow = modal.querySelector('.controller-window');
       if (modalWindow) {
         // Zkontrolovat jestli existuje uložená pozice
-        let hasPosition = false;
+        let hasValidPosition = false;
         try {
           const saved = localStorage.getItem('controllerModal_pos');
           if (saved) {
@@ -66,34 +66,36 @@ window.showControllerModal = function () {
               const left = parseInt(pos.left, 10);
               const top = parseInt(pos.top, 10);
               // Validovat pozici
-              if (left > -500 && left < window.innerWidth - 50 &&
+              if (left > -400 && left < window.innerWidth - 50 &&
                   top >= 0 && top < window.innerHeight - 50) {
-                hasPosition = true;
+                // Obnovit pozici
+                modal.style.alignItems = 'flex-start';
+                modal.style.justifyContent = 'flex-start';
+                modalWindow.style.position = 'fixed';
+                modalWindow.style.left = pos.left;
+                modalWindow.style.top = pos.top;
+                modalWindow.style.right = 'auto';
+                modalWindow.style.bottom = 'auto';
+                modalWindow.style.margin = '0';
+                modalWindow.style.transform = 'none';
+                hasValidPosition = true;
               }
             }
           }
         } catch(e) {}
 
-        // Pokud není validní pozice, nastavit výchozí (uprostřed dole)
-        if (!hasPosition) {
-          setTimeout(() => {
-            const viewportHeight = window.innerHeight;
-            const viewportWidth = window.innerWidth;
-            const modalWidth = modalWindow.offsetWidth || 600;
-            const modalHeight = modalWindow.offsetHeight || 400;
-
-            // Pozice: horizontálně uprostřed, vertikálně nad toolbarem (80px od spodu)
-            const left = Math.max(10, (viewportWidth - modalWidth) / 2);
-            const top = Math.max(10, viewportHeight - modalHeight - 100);
-
-            modal.style.alignItems = 'flex-start';
-            modal.style.justifyContent = 'flex-start';
-            modalWindow.style.position = 'fixed';
-            modalWindow.style.left = left + 'px';
-            modalWindow.style.top = top + 'px';
-            modalWindow.style.right = 'auto';
-            modalWindow.style.margin = '0';
-          }, 50);
+        // Pokud není validní pozice, nechat CSS výchozí (centrováno dole)
+        if (!hasValidPosition) {
+          // Reset na výchozí CSS pozicování
+          modalWindow.style.position = '';
+          modalWindow.style.left = '';
+          modalWindow.style.top = '';
+          modalWindow.style.right = '';
+          modalWindow.style.bottom = '';
+          modalWindow.style.margin = '';
+          modalWindow.style.transform = '';
+          modal.style.alignItems = '';
+          modal.style.justifyContent = '';
         }
       }
     }

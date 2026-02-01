@@ -1676,6 +1676,7 @@ window.makeModalDraggable = function (modalId) {
 
   let dragging = false;
   let pointerOffsetX = 0, pointerOffsetY = 0;
+  let initialLeft = 0, initialTop = 0;
 
   // add small grip visual if none
   if (!modal.querySelector('.modal-grip')) {
@@ -1689,18 +1690,28 @@ window.makeModalDraggable = function (modalId) {
   const startDrag = (clientX, clientY) => {
     const rect = modal.getBoundingClientRect();
     dragging = true;
-    // Přesný offset od pozice kurzoru k levému hornímu rohu modalu
+
+    // Uložit aktuální pozici modalu
+    initialLeft = rect.left;
+    initialTop = rect.top;
+
+    // Offset od kurzoru k levému hornímu rohu
     pointerOffsetX = clientX - rect.left;
     pointerOffsetY = clientY - rect.top;
 
-    // Nastavit modal na fixed positioning
-    overlay.style.alignItems = 'flex-start';
-    overlay.style.justifyContent = 'flex-start';
+    // OKAMŽITĚ nastavit fixed pozici NA STEJNÉM MÍSTĚ
     modal.style.position = 'fixed';
     modal.style.left = rect.left + 'px';
     modal.style.top = rect.top + 'px';
     modal.style.right = 'auto';
+    modal.style.bottom = 'auto';
     modal.style.margin = '0';
+    modal.style.transform = 'none';
+
+    // Overlay nastavit pro absolutní pozicování
+    overlay.style.alignItems = 'flex-start';
+    overlay.style.justifyContent = 'flex-start';
+
     document.body.style.userSelect = 'none';
   };
 
@@ -1710,30 +1721,15 @@ window.makeModalDraggable = function (modalId) {
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
     const modalWidth = modal.offsetWidth;
-    const modalHeight = modal.offsetHeight;
 
-    // Vypočítat novou pozici - přesně sledovat kurzor
+    // Nová pozice = kurzor - offset
     let newLeft = clientX - pointerOffsetX;
     let newTop = clientY - pointerOffsetY;
 
-    // Minimálně 50px modalu musí být vidět
-    const minVisible = 50;
-
-    // Omezit horizontálně
-    if (newLeft < -modalWidth + minVisible) {
-      newLeft = -modalWidth + minVisible;
-    }
-    if (newLeft > viewportWidth - minVisible) {
-      newLeft = viewportWidth - minVisible;
-    }
-
-    // Omezit vertikálně
-    if (newTop < 0) {
-      newTop = 0;
-    }
-    if (newTop > viewportHeight - minVisible) {
-      newTop = viewportHeight - minVisible;
-    }
+    // Omezení - minimálně 100px viditelné
+    const minVisible = 100;
+    newLeft = Math.max(-modalWidth + minVisible, Math.min(newLeft, viewportWidth - minVisible));
+    newTop = Math.max(0, Math.min(newTop, viewportHeight - minVisible));
 
     modal.style.left = newLeft + 'px';
     modal.style.top = newTop + 'px';
@@ -1750,10 +1746,10 @@ window.makeModalDraggable = function (modalId) {
     const viewportHeight = window.innerHeight;
 
     // Pouze uložit pokud je modal většinou viditelný
-    if (modalRect.left > -modalRect.width + 50 &&
-        modalRect.left < viewportWidth - 50 &&
+    if (modalRect.left > -modalRect.width + 100 &&
+        modalRect.left < viewportWidth - 100 &&
         modalRect.top >= 0 &&
-        modalRect.top < viewportHeight - 50) {
+        modalRect.top < viewportHeight - 100) {
       try {
         const saved = { left: modal.style.left, top: modal.style.top };
         localStorage.setItem(modalId + '_pos', JSON.stringify(saved));
