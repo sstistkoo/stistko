@@ -979,11 +979,12 @@ canvas {
     margin-bottom: 8px;
   }
 
-  /* Zmenšit tlačítka v klávesnici */
+  /* ODSTRANĚNO - kolidovalo s .ctrl-btn styly
   #controllerModal button {
     font-size: 8px !important;
     padding: 3px 2px !important;
   }
+  */
 
   /* Zmenšit řádky s tlačítky */
   #controllerModal [style*="grid-template-columns"] {
