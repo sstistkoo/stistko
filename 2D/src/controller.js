@@ -50,17 +50,17 @@ window.debugControllerCSS = function() {
   const height = window.innerHeight;
   const orientation = width > height ? 'landscape' : 'portrait';
   const isMobile = width <= 768;
-  
+
   console.log('📱 === CONTROLLER CSS DEBUG ===');
   console.log(`📐 Rozměry: ${width}x${height}`);
   console.log(`🔄 Orientace: ${orientation}`);
   console.log(`📱 Je mobil (<=768px): ${isMobile}`);
-  
+
   // Zkontrolovat tlačítka
   const xBtn = document.querySelector('.ctrl-btn-coord');
   const numBtn = document.querySelector('.ctrl-btn-num');
   const toolbar = document.querySelector('.toolbar');
-  
+
   if (xBtn) {
     const styles = window.getComputedStyle(xBtn);
     console.log('🔤 X/Z tlačítko (.ctrl-btn-coord):');
@@ -68,14 +68,14 @@ window.debugControllerCSS = function() {
     console.log(`   min-height: ${styles.minHeight}`);
     console.log(`   padding: ${styles.padding}`);
   }
-  
+
   if (numBtn) {
     const styles = window.getComputedStyle(numBtn);
     console.log('🔢 Číselné tlačítko (.ctrl-btn-num):');
     console.log(`   font-size: ${styles.fontSize}`);
     console.log(`   min-height: ${styles.minHeight}`);
   }
-  
+
   if (toolbar) {
     const styles = window.getComputedStyle(toolbar);
     console.log('🛠️ Toolbar:');
@@ -85,7 +85,7 @@ window.debugControllerCSS = function() {
     console.log(`   right: ${styles.right}`);
     console.log(`   max-width: ${styles.maxWidth}`);
   }
-  
+
   console.log('📱 === END DEBUG ===');
 };
 
@@ -103,7 +103,7 @@ window.showControllerModal = function () {
   const modal = document.getElementById("controllerModal");
   if (modal) {
     modal.style.display = "flex";
-    
+
     // Debug při otevření
     setTimeout(window.debugControllerCSS, 100);
 
