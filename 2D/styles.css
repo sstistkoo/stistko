@@ -5989,6 +5989,17 @@ canvas {
   background: #3a4a5a;
 }
 
+.fc-btn-ai {
+  background: linear-gradient(135deg, #4a2a6a, #7c3aed);
+  color: #fff;
+  border: 1px solid #7c3aed44;
+  padding: 6px 12px;
+}
+
+.fc-btn-ai:hover {
+  background: linear-gradient(135deg, #5a3a7a, #8b5cf6);
+}
+
 /* Preview */
 .fc-preview {
   display: flex;
