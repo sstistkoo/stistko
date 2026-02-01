@@ -269,19 +269,37 @@ canvas {
   }
 }
 
-/* Mobil na šířku - vpravo */
+/* Mobil na šířku - vpravo nahoře, kompaktní */
 @media (max-width: 768px) and (orientation: landscape) {
   .toolbar {
-    top: 10px;
-    bottom: 10px;
-    right: 10px;
+    top: 5px;
+    bottom: auto;
+    right: 5px;
     left: auto;
-    flex-direction: column;
-    padding: 10px 8px;
-    border-radius: 12px;
-    gap: 12px;
-    max-height: calc(100vh - 20px);
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 6px;
+    border-radius: 10px;
+    gap: 4px;
+    max-width: 70px;
+    max-height: calc(100vh - 10px);
     overflow-y: auto;
+    justify-content: center;
+  }
+
+  .toolbar .tool-btn {
+    min-width: 28px !important;
+    max-width: 28px !important;
+    min-height: 28px !important;
+    padding: 2px !important;
+  }
+
+  .toolbar .tool-btn span {
+    font-size: 14px !important;
+  }
+
+  .toolbar .tool-btn div {
+    display: none !important;
   }
 }
 
@@ -336,11 +354,40 @@ canvas {
 
 @media (max-width: 768px) and (orientation: landscape) {
   .tool-submenu {
-    top: 50%;
-    right: 80px;
-    left: 10px;
-    transform: translateY(-50%);
-    animation: slideLeft 0.2s ease-out;
+    position: fixed;
+    top: 5px;
+    bottom: 5px;
+    right: 85px;
+    left: 5px;
+    transform: none;
+    overflow-y: auto;
+    max-height: calc(100vh - 10px);
+    align-items: flex-start;
+    align-content: flex-start;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tool-submenu .tool-submenu-panel,
+  .tool-submenu .drawing-panel-wrapper {
+    max-height: calc(100vh - 20px) !important;
+    overflow-y: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Drawing tools - menší v landscape */
+  .tool-submenu .drawing-tools-grid .tool-btn {
+    min-width: 60px !important;
+    min-height: 50px !important;
+    padding: 4px !important;
+  }
+
+  .tool-submenu .drawing-tools-grid .tool-btn span {
+    font-size: 18px !important;
+  }
+
+  .tool-submenu .drawing-tools-grid .tool-btn div {
+    font-size: 9px !important;
   }
 
   /* AI panel má vlastní pozicování - nepřebírat z .tool-submenu */
@@ -350,18 +397,6 @@ canvas {
     left: 0 !important;
     right: 0 !important;
     transform: none !important;
-    animation: none !important;
-  }
-
-  @keyframes slideLeft {
-    from {
-      transform: translateY(-50%) translateX(10px);
-      opacity: 0;
-    }
-    to {
-      transform: translateY(-50%) translateX(0);
-      opacity: 1;
-    }
   }
 }
 
@@ -6593,29 +6628,29 @@ canvas {
   }
 
   .ctrl-btn {
-    min-height: 60px !important;
-    font-size: 52px !important; /* VELKÝ TEXT pro portrait */
-    padding: 6px 4px !important;
+    min-height: 65px !important;
+    font-size: 44px !important; /* Velké texty pro portrait */
+    padding: 8px 4px !important;
     touch-action: manipulation !important;
     -webkit-tap-highlight-color: rgba(255, 255, 255, 0.2) !important;
   }
 
   .ctrl-btn-num {
-    font-size: 56px !important; /* VĚTŠÍ pro čísla */
+    font-size: 48px !important; /* Větší pro čísla */
   }
 
   .ctrl-btn-coord {
-    font-size: 52px !important; /* VELKÉ X, Z */
+    font-size: 44px !important; /* Velké X, Z */
     font-weight: bold !important;
   }
 
   .ctrl-btn-confirm {
-    min-height: 60px !important;
-    font-size: 56px !important; /* VELKÁ FAJFKA */
+    min-height: 65px !important;
+    font-size: 48px !important; /* Velká fajfka */
   }
 
   .ctrl-btn-pick {
-    font-size: 46px !important;
+    font-size: 38px !important;
   }
 
   /* Křížek stejně velký */
@@ -6672,12 +6707,21 @@ canvas {
   }
 }
 
-/* Mobile LANDSCAPE - menší tlačítka aby se vešly */
+/* Mobile LANDSCAPE - controller okno vpravo */
 @media (max-width: 768px) and (orientation: landscape) {
+  .controller-modal {
+    align-items: center !important;
+    justify-content: flex-end !important;
+  }
+
   .controller-window {
-    max-height: calc(100vh - 80px) !important;
-    min-height: 200px !important;
-    margin-bottom: 60px !important;
+    max-height: calc(100vh - 20px) !important;
+    min-height: auto !important;
+    max-width: 320px !important;
+    width: auto !important;
+    margin: 10px !important;
+    margin-right: 85px !important;
+    border-radius: 12px !important;
   }
 
   .kb-mode-toggle {
