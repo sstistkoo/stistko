@@ -1418,21 +1418,15 @@
     <!-- MODALS -->
     <div id="controllerModal" class="modal-overlay controller-modal">
       <div class="modal-window controller-window">
-        <!-- MOBILE HEADER - nápověda a zavření nahoře -->
-        <div class="controller-mobile-header">
-          <span class="controller-title">🎮 Ovladač</span>
-          <div class="controller-mobile-actions">
-            <button onclick="window.showControllerHelp()" class="kb-help-btn mobile-help-btn">❓ Nápověda</button>
-            <button onclick="window.closeControllerModal()" class="kb-close-btn">✕ Zavřít</button>
-          </div>
-        </div>
-
-        <!-- COMPACT HEADER s přepínačem a G/P/FK -->
+        <!-- COMPACT HEADER s přepínačem, G/P/FK a na mobilu také ?/× -->
         <div class="kb-header">
           <button id="btnControllerModeToggle" onclick="window.toggleControllerMode()" class="kb-mode-toggle g90">G90</button>
           <button onclick="window.showGCodePopup('controller')" class="kb-help-btn">G</button>
           <button onclick="window.showParamPopup('controller')" class="kb-help-btn">P</button>
           <button onclick="window.openFreeContourModal()" class="kb-help-btn" title="Volná Kontura (FK)">FK</button>
+          <!-- Mobile: help and close v tomto řádku -->
+          <button onclick="window.showControllerHelp()" class="kb-help-btn mobile-only">?</button>
+          <button onclick="window.closeControllerModal()" class="kb-close-btn-small mobile-only">×</button>
           <input type="text" id="controllerInput" placeholder="Zadej příkaz..." class="controller-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
           <!-- Desktop only: help and close na konci -->
           <button onclick="window.showControllerHelp()" class="kb-help-btn desktop-only">?</button>
