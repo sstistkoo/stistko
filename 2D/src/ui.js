@@ -1706,18 +1706,63 @@ window.makeModalDraggable = function (modalId) {
 
   const doDrag = (clientX, clientY) => {
     if (!dragging) return;
-    modal.style.left = (clientX - pointerOffsetX) + 'px';
-    modal.style.top = (clientY - pointerOffsetY) + 'px';
+
+    // BOUNDARY CHECK - zabránit zmizení mimo viewport
+    const modalRect = modal.getBoundingClientRect();
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    let newLeft = clientX - pointerOffsetX;
+    let newTop = clientY - pointerOffsetY;
+
+    // Minimálně 100px modalu musí být vidět
+    const minVisible = 100;
+
+    // Omezit horizontálně
+    if (newLeft < -modalRect.width + minVisible) {
+      newLeft = -modalRect.width + minVisible;
+    }
+    if (newLeft > viewportWidth - minVisible) {
+      newLeft = viewportWidth - minVisible;
+    }
+
+    // Omezit vertikálně
+    if (newTop < 0) {
+      newTop = 0;
+    }
+    if (newTop > viewportHeight - minVisible) {
+      newTop = viewportHeight - minVisible;
+    }
+
+    modal.style.left = newLeft + 'px';
+    modal.style.top = newTop + 'px';
   };
 
   const endDrag = () => {
     if (!dragging) return;
     dragging = false;
     document.body.style.userSelect = '';
-    try {
-      const saved = { left: modal.style.left, top: modal.style.top };
-      localStorage.setItem(modalId + '_pos', JSON.stringify(saved));
-    } catch (e) {}
+
+    // Validovat pozici před uložením
+    const modalRect = modal.getBoundingClientRect();
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    // Pouze uložit pokud je modal většinou viditelný
+    if (modalRect.left > -modalRect.width + 100 &&
+        modalRect.left < viewportWidth - 100 &&
+        modalRect.top >= 0 &&
+        modalRect.top < viewportHeight - 100) {
+      try {
+        const saved = { left: modal.style.left, top: modal.style.top };
+        localStorage.setItem(modalId + '_pos', JSON.stringify(saved));
+      } catch (e) {}
+    } else {
+      // Reset na defaultní pozici a smazat uloženou
+      try {
+        localStorage.removeItem(modalId + '_pos');
+      } catch (e) {}
+    }
   };
 
   header.addEventListener('mousedown', (e) => { e.preventDefault(); startDrag(e.clientX, e.clientY); });
@@ -1738,21 +1783,61 @@ window.makeModalDraggable = function (modalId) {
   }, { passive: false });
   document.addEventListener('touchend', endDrag);
 
-  // Restore saved pos
+  // Restore saved pos - s validací
   try {
     const raw = localStorage.getItem(modalId + '_pos');
     if (raw) {
       const pos = JSON.parse(raw);
-      if (pos && pos.left) {
-        overlay.style.alignItems = 'flex-start';
-        overlay.style.justifyContent = 'flex-start';
-        modal.style.position = 'fixed';
-        modal.style.left = pos.left;
-        modal.style.top = pos.top;
-        modal.style.right = 'auto';
+      if (pos && pos.left && pos.top) {
+        const left = parseInt(pos.left, 10);
+        const top = parseInt(pos.top, 10);
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+
+        // Validovat - modal musí být většinou viditelný
+        // Pokud je pozice mimo viewport, neobnovovat
+        if (left > -500 && left < viewportWidth - 100 &&
+            top >= 0 && top < viewportHeight - 100) {
+          overlay.style.alignItems = 'flex-start';
+          overlay.style.justifyContent = 'flex-start';
+          modal.style.position = 'fixed';
+          modal.style.left = pos.left;
+          modal.style.top = pos.top;
+          modal.style.right = 'auto';
+        } else {
+          // Neplatná pozice - smazat
+          localStorage.removeItem(modalId + '_pos');
+        }
       }
     }
   } catch (e) {}
+};
+
+// Reset pozice modalu na výchozí (pro případ že zmizí mimo viewport)
+window.resetModalPosition = function(modalId) {
+  try {
+    localStorage.removeItem(modalId + '_pos');
+    const overlay = document.getElementById(modalId);
+    if (overlay) {
+      const modal = overlay.querySelector('.modal-window');
+      if (modal) {
+        modal.style.position = '';
+        modal.style.left = '';
+        modal.style.top = '';
+        modal.style.right = '';
+        overlay.style.alignItems = '';
+        overlay.style.justifyContent = '';
+      }
+    }
+    console.log('✅ Pozice modalu ' + modalId + ' resetována');
+  } catch (e) {
+    console.error('Chyba při resetování pozice:', e);
+  }
+};
+
+// Pomocná funkce pro reset controlleru
+window.resetControllerPosition = function() {
+  window.resetModalPosition('controllerModal');
 };
 
 document.addEventListener('DOMContentLoaded', () => {

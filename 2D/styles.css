@@ -3788,6 +3788,35 @@ canvas {
   margin-bottom: 8px;
 }
 
+/* DESKTOP: jednořádkový header - zobrazit jen na desktopu */
+.kb-header-desktop {
+  display: flex;
+}
+
+/* MOBILE: dvouřádkový header - skrýt na desktopu */
+.kb-header-mobile {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.kb-header-mobile .kb-header-row1 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.kb-header-mobile .kb-header-row2 {
+  display: flex;
+  width: 100%;
+}
+
+.kb-header-mobile .kb-header-row2 .controller-input {
+  width: 100%;
+  flex-grow: 1;
+}
+
 /* Spacer pro posunutí × úplně doprava */
 .kb-header-spacer {
   flex-grow: 1;
@@ -6410,14 +6439,14 @@ canvas {
   .controller-window {
     width: 100% !important;
     max-width: 100% !important;
-    max-height: calc(100vh - 140px) !important;
-    min-height: 400px !important;
+    max-height: calc(100vh - 120px) !important;
+    min-height: 350px !important;
     border-radius: 16px 16px 0 0 !important;
     padding: 12px !important;
     overflow-y: auto !important;
     position: relative !important;
     margin-top: 0 !important;
-    margin-bottom: 90px !important;
+    margin-bottom: 85px !important; /* Nad toolbar tlačítky */
     /* DŮLEŽITÉ: Odstranit dragging na mobilu */
     cursor: default !important;
   }
@@ -6427,27 +6456,50 @@ canvas {
     display: none !important;
   }
 
-  /* Header - vše na jednom řádku */
-  .kb-header {
-    flex-wrap: nowrap !important;
-    gap: 6px !important;
-    padding: 8px !important;
+  /* MOBILE: Zobrazit dvouřádkový header, skrýt desktopový */
+  .kb-header-desktop {
+    display: none !important;
+  }
+
+  .kb-header-mobile {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    padding: 10px !important;
     cursor: default !important;
-    overflow-x: auto !important;
+  }
+
+  .kb-header-mobile .kb-header-row1 {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
+    align-items: center !important;
+  }
+
+  .kb-header-mobile .kb-header-row2 {
+    display: flex !important;
+    width: 100% !important;
+  }
+
+  .kb-header-mobile .kb-header-row2 .controller-input {
+    width: 100% !important;
+    min-height: 52px !important;
+    font-size: 18px !important;
+    padding: 12px !important;
   }
 
   .kb-mode-toggle {
-    min-width: 50px !important;
-    min-height: 48px !important;
-    padding: 8px 10px !important;
-    font-size: 16px !important;
+    min-width: 55px !important;
+    min-height: 50px !important;
+    padding: 10px 12px !important;
+    font-size: 18px !important;
     touch-action: manipulation !important;
     -webkit-tap-highlight-color: rgba(74, 222, 128, 0.3) !important;
     flex-shrink: 0 !important;
   }
 
   .kb-help-btn {
-    min-width: 48px !important;
+    min-width: 50px !important;
     min-height: 48px !important;
     padding: 8px 10px !important;
     font-size: 18px !important;
@@ -6481,45 +6533,45 @@ canvas {
   /* Last point info - kompaktnější */
   .kb-input-hint {
     flex-wrap: wrap !important;
-    padding: 6px 10px !important;
-    font-size: 12px !important;
-    min-height: 36px !important;
+    padding: 8px 12px !important;
+    font-size: 14px !important;
+    min-height: 40px !important;
   }
 
   .kb-input-hint code {
-    font-size: 13px !important;
+    font-size: 15px !important;
   }
 
-  /* Klávesnice - větší tlačítka s větším fontem */
+  /* Klávesnice - VĚTŠÍ tlačítka s větším fontem */
   .controller-keyboard {
-    padding: 8px !important;
+    padding: 10px !important;
   }
 
   .controller-grid {
-    gap: 6px !important;
-    margin-bottom: 6px !important;
+    gap: 8px !important;
+    margin-bottom: 8px !important;
   }
 
   .ctrl-btn {
-    min-height: 50px !important;
-    font-size: 24px !important;
-    padding: 10px 8px !important;
+    min-height: 56px !important;
+    font-size: 28px !important;
+    padding: 12px 10px !important;
     touch-action: manipulation !important;
     -webkit-tap-highlight-color: rgba(255, 255, 255, 0.2) !important;
   }
 
   .ctrl-btn-num {
-    font-size: 26px !important;
+    font-size: 30px !important;
   }
 
   .ctrl-btn-coord {
-    font-size: 24px !important;
+    font-size: 28px !important;
     font-weight: bold !important;
   }
 
   .ctrl-btn-confirm {
-    min-height: 50px !important;
-    font-size: 28px !important;
+    min-height: 56px !important;
+    font-size: 32px !important;
   }
 }
 

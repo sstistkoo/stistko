@@ -1418,22 +1418,33 @@
     <!-- MODALS -->
     <div id="controllerModal" class="modal-overlay controller-modal">
       <div class="modal-window controller-window">
-        <!-- COMPACT HEADER s přepínačem, G/P/FK, input, ? uprostřed, × úplně vpravo -->
-        <div class="kb-header">
-          <button id="btnControllerModeToggle" onclick="window.toggleControllerMode()" class="kb-mode-toggle g90">G90</button>
+        <!-- MOBILE: Dvouřádkový header - 1.řádek: G90,G,P,FK + ? + × | 2.řádek: input -->
+        <div class="kb-header kb-header-mobile">
+          <!-- ŘÁDEK 1: G90, G, P, FK, spacer, ?, × -->
+          <div class="kb-header-row1">
+            <button id="btnControllerModeToggle" onclick="window.toggleControllerMode()" class="kb-mode-toggle g90">G90</button>
+            <button onclick="window.showGCodePopup('controller')" class="kb-help-btn">G</button>
+            <button onclick="window.showParamPopup('controller')" class="kb-help-btn">P</button>
+            <button onclick="window.openFreeContourModal()" class="kb-help-btn" title="Volná Kontura (FK)">FK</button>
+            <div class="kb-header-spacer"></div>
+            <button onclick="window.showControllerHelp()" class="kb-help-btn">?</button>
+            <button onclick="window.closeControllerModal()" class="kb-close-btn-small">×</button>
+          </div>
+          <!-- ŘÁDEK 2: Input pole -->
+          <div class="kb-header-row2">
+            <input type="text" id="controllerInput" placeholder="Zadej příkaz..." class="controller-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </div>
+        </div>
+
+        <!-- DESKTOP: Jednořádkový header -->
+        <div class="kb-header kb-header-desktop">
+          <button onclick="window.toggleControllerMode()" class="kb-mode-toggle g90" id="btnControllerModeToggleDesktop">G90</button>
           <button onclick="window.showGCodePopup('controller')" class="kb-help-btn">G</button>
           <button onclick="window.showParamPopup('controller')" class="kb-help-btn">P</button>
           <button onclick="window.openFreeContourModal()" class="kb-help-btn" title="Volná Kontura (FK)">FK</button>
-          <input type="text" id="controllerInput" placeholder="Zadej příkaz..." class="controller-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-          <!-- Mobile: help uprostřed -->
-          <button onclick="window.showControllerHelp()" class="kb-help-btn mobile-only">?</button>
-          <!-- Spacer pro posun × úplně doprava -->
-          <div class="kb-header-spacer mobile-only"></div>
-          <!-- Mobile: close úplně vpravo -->
-          <button onclick="window.closeControllerModal()" class="kb-close-btn-small mobile-only">×</button>
-          <!-- Desktop only: help and close na konci -->
-          <button onclick="window.showControllerHelp()" class="kb-help-btn desktop-only">?</button>
-          <button onclick="window.closeControllerModal()" class="modal-close-btn-simple desktop-only">&times;</button>
+          <input type="text" id="controllerInputDesktop" placeholder="Zadej příkaz..." class="controller-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          <button onclick="window.showControllerHelp()" class="kb-help-btn">?</button>
+          <button onclick="window.closeControllerModal()" class="modal-close-btn-simple">&times;</button>
         </div>
 
         <!-- Last point info -->
