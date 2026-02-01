@@ -405,7 +405,7 @@ window.hidePickPointToast = function () {
  * Najde nejbližší bod k danému místu kliknutí
  * Hledá: body, průsečíky, konce úseček, středy kružnic
  * @param {number} mouseX - X souřadnice v SCREEN pixelech
- * @param {number} mouseY - Y souřadnice v SCREEN pixelech  
+ * @param {number} mouseY - Y souřadnice v SCREEN pixelech
  * @param {number} threshold - Dosah v SCREEN pixelech (výchozí 50)
  */
 window.findNearestSnapPoint = function (mouseX, mouseY, threshold = 50) {
@@ -492,7 +492,7 @@ window.findNearestSnapPoint = function (mouseX, mouseY, threshold = 50) {
     // Převod world -> screen: screenX = c.x * zoom + panX, screenY = panY - c.y * zoom
     const candidateScreenX = c.x * zoom + panX;
     const candidateScreenY = panY - c.y * zoom;
-    
+
     // Vzdálenost v SCREEN pixelech
     const dist = Math.sqrt((candidateScreenX - mouseX) ** 2 + (candidateScreenY - mouseY) ** 2);
     console.log('[findNearestSnapPoint] Candidate:', c.x, c.y, 'screenPos:', candidateScreenX.toFixed(0), candidateScreenY.toFixed(0), 'dist:', dist.toFixed(1), 'threshold:', threshold);
