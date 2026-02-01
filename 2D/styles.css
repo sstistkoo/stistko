@@ -6426,37 +6426,42 @@ canvas {
     display: none !important;
   }
 
-  /* Header - větší tlačítka */
+  /* Header - vše na jednom řádku */
   .kb-header {
-    flex-wrap: wrap !important;
-    gap: 8px !important;
+    flex-wrap: nowrap !important;
+    gap: 6px !important;
     padding: 8px !important;
     cursor: default !important;
+    overflow-x: auto !important;
   }
 
   .kb-mode-toggle {
-    min-width: 60px !important;
-    min-height: 50px !important;
-    padding: 10px 14px !important;
-    font-size: 20px !important;
+    min-width: 50px !important;
+    min-height: 48px !important;
+    padding: 8px 10px !important;
+    font-size: 16px !important;
     touch-action: manipulation !important;
     -webkit-tap-highlight-color: rgba(74, 222, 128, 0.3) !important;
+    flex-shrink: 0 !important;
   }
 
   .kb-help-btn {
-    min-width: 50px !important;
-    min-height: 50px !important;
-    padding: 10px 14px !important;
-    font-size: 20px !important;
+    min-width: 48px !important;
+    min-height: 48px !important;
+    padding: 8px 10px !important;
+    font-size: 18px !important;
     touch-action: manipulation !important;
     -webkit-tap-highlight-color: rgba(74, 222, 128, 0.3) !important;
+    flex-shrink: 0 !important;
   }
 
   /* Input pole */
   .controller-input {
-    min-height: 52px !important;
-    font-size: 20px !important;
-    padding: 14px !important;
+    min-height: 48px !important;
+    font-size: 16px !important;
+    padding: 10px !important;
+    flex-grow: 1 !important;
+    min-width: 100px !important;
     /* DŮLEŽITÉ: Umožnit focus a kurzor */
     touch-action: manipulation !important;
     -webkit-user-select: text !important;
@@ -6465,10 +6470,11 @@ canvas {
 
   /* Křížek stejně velký jako ostatní tlačítka */
   .kb-close-btn-small {
-    min-width: 50px !important;
-    min-height: 50px !important;
-    padding: 10px 14px !important;
-    font-size: 24px !important;
+    min-width: 48px !important;
+    min-height: 48px !important;
+    padding: 8px 10px !important;
+    font-size: 22px !important;
+    flex-shrink: 0 !important;
   }
 
   /* Last point info - kompaktnější */
