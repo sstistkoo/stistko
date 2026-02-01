@@ -795,10 +795,12 @@ canvas {
     font-size: 10px !important;
   }
 
+  /* ODSTRANĚNO - koliduje s .controller-input
   #controllerInput {
     font-size: 13px !important;
     padding: 7px !important;
   }
+  */
 
   #btnG90,
   #btnG91 {
@@ -892,10 +894,12 @@ canvas {
     font-size: 5px !important;
   }
 
+  /* ODSTRANĚNO - koliduje s .controller-input
   #controllerInput {
     font-size: 12px !important;
     padding: 6px !important;
   }
+  */
 
   #btnG90,
   #btnG91 {
@@ -964,10 +968,12 @@ canvas {
     margin: 6px 0 6px 0 !important;
   }
 
+  /* ODSTRANĚNO - kolidovalo s .controller-input styly
   #controllerInput {
     font-size: 11px !important;
     height: 28px !important;
   }
+  */
 
   #btnG90,
   #btnG91 {
