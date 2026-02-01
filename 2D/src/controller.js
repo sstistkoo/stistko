@@ -102,13 +102,18 @@ window.showControllerModal = function () {
   }
   updateControllerLastPoint();
 
-  // Focus na správný input po otevření (mobilní nebo desktopový)
+  // Focus na správný input po otevření - POUZE na PC!
+  // Na mobilu NECHCEME focus, aby se neotevírala systémová klávesnice
   setTimeout(() => {
-    const isMobile = window.innerWidth <= 768;
-    const input = isMobile
-      ? document.getElementById("controllerInput")
-      : document.getElementById("controllerInputDesktop");
-    if (input) input.focus();
+    const isMobile = window.innerWidth <= 768 ||
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+    if (!isMobile) {
+      // Pouze na PC - focus na input
+      const input = document.getElementById("controllerInputDesktop");
+      if (input) input.focus();
+    }
+    // Na mobilu - žádný focus, používáme virtuální klávesnici v ovladači
   }, 100);
 };
 
@@ -607,9 +612,21 @@ window.confirmControllerInput = function () {
 
 // ===== CENTER ON CREATED OBJECT =====
 
-window.centerOnPoint = function (x, y, animate = true) {
+window.centerOnPoint = function (x, y, animate = true, setZoom = true) {
   const canvas = document.getElementById("canvas");
   if (!canvas) return;
+
+  // Nastavit zoom tak, aby bylo vidět ~500mm šířky (pokud je zoom příliš velký)
+  if (setZoom) {
+    const targetVisibleWidth = 500; // mm
+    const desiredZoom = canvas.width / targetVisibleWidth;
+    // Zoom by měl být mezi 0.5 a 10
+    const clampedZoom = Math.max(0.5, Math.min(10, desiredZoom));
+    // Pouze zmenšit zoom pokud je moc velký, nezměnšovat pokud uživatel oddálil
+    if (window.zoom > clampedZoom) {
+      window.zoom = clampedZoom;
+    }
+  }
 
   // Výpočet nové pozice panování pro vycentrování na bod
   const targetPanX = canvas.width / 2 - x * (window.zoom || 2);
