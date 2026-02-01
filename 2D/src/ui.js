@@ -1727,14 +1727,14 @@ window.makeModalDraggable = function (modalId) {
   document.addEventListener('mouseup', endDrag);
 
   header.addEventListener('touchstart', (e) => { const t = e.touches[0]; if (t) { e.preventDefault(); startDrag(t.clientX, t.clientY); } }, { passive: false });
-  document.addEventListener('touchmove', (e) => { 
+  document.addEventListener('touchmove', (e) => {
     // DŮLEŽITÉ: preventDefault POUZE když táhneme modal, jinak blokuje scroll všude!
     if (!dragging) return;
-    const t = e.touches[0]; 
-    if (t) { 
-      e.preventDefault(); 
-      doDrag(t.clientX, t.clientY); 
-    } 
+    const t = e.touches[0];
+    if (t) {
+      e.preventDefault();
+      doDrag(t.clientX, t.clientY);
+    }
   }, { passive: false });
   document.addEventListener('touchend', endDrag);
 
@@ -1826,11 +1826,11 @@ window.makeElementDraggable = function(elementId, handleSelector) {
   document.addEventListener('mousemove', (e)=> move(e.clientX, e.clientY));
   document.addEventListener('mouseup', () => { end(); try { localStorage.setItem(elementId + '_pos', JSON.stringify({ left: el.style.left, top: el.style.top })); } catch(e){} });
   handle.addEventListener('touchstart', (e)=> { const t=e.touches[0]; if(t){ e.preventDefault(); start(t.clientX,t.clientY);} }, {passive:false});
-  document.addEventListener('touchmove', (e)=> { 
+  document.addEventListener('touchmove', (e)=> {
     // DŮLEŽITÉ: preventDefault POUZE když táhneme!
     if (!dragging) return;
-    const t=e.touches[0]; 
-    if(t){ e.preventDefault(); move(t.clientX,t.clientY);} 
+    const t=e.touches[0];
+    if(t){ e.preventDefault(); move(t.clientX,t.clientY);}
   }, {passive:false});
   document.addEventListener('touchend', () => { end(); try { localStorage.setItem(elementId + '_pos', JSON.stringify({ left: el.style.left, top: el.style.top })); } catch(e){} });
   // Restore saved pos if available
