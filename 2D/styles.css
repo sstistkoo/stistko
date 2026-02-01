@@ -3808,6 +3808,66 @@ canvas {
   z-index: 1100; /* Vyšší než canvas-controls (1001) */
 }
 
+/* ===== AI KEYBOARD MODAL ===== */
+.ai-keyboard-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  align-items: flex-start; /* Nahoře */
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10200; /* Vyšší než AI panel (10100) */
+}
+
+.ai-keyboard-window {
+  max-width: 400px;
+  width: 95%;
+  border-radius: 0 0 16px 16px; /* Zaoblení dole */
+  background: #1a1a1a;
+  border: 1px solid #444;
+  padding: 10px;
+  position: relative;
+  margin-top: 0; /* Přilepené k hornímu okraji */
+}
+
+.ai-kb-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #90cdf4;
+}
+
+/* Mobile portrait - AI keyboard */
+@media (max-width: 768px) and (orientation: portrait) {
+  .ai-keyboard-modal {
+    align-items: flex-start !important;
+  }
+
+  .ai-keyboard-window {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 0 0 16px 16px !important;
+    margin-top: 0 !important;
+  }
+}
+
+/* Mobile landscape - AI keyboard */
+@media (max-width: 768px) and (orientation: landscape) {
+  .ai-keyboard-modal {
+    align-items: flex-start !important;
+    justify-content: center !important;
+  }
+
+  .ai-keyboard-window {
+    max-width: 450px !important;
+    width: 90% !important;
+    margin-top: 10px !important;
+    border-radius: 12px !important;
+  }
+}
+
 .controller-window {
   max-width: 400px;
   width: 90%;

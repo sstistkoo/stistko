@@ -325,9 +325,9 @@
             </button>
 
             <button
-              onclick="window.openQuickInput()"
+              onclick="window.openAIKeyboard()"
               class="ai-toolbar-btn ai-toolbar-btn-keyboard"
-              title="Rychlé zadání (Klávesnice)"
+              title="AI Klávesnice"
             >
               <span class="ai-toolbar-btn-icon-md">⌨️</span> Klávesnice
             </button>
@@ -1668,6 +1668,80 @@
         <div class="flex-center flex-gap-10">
           <button onclick="window.closeClearChatModal()" class="btn-secondary">Zrušit</button>
           <button onclick="window.confirmClearChat()" class="btn-danger">Vymazat</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI KEYBOARD MODAL - podobné jako controller -->
+    <div id="aiKeyboardModal" class="modal-overlay ai-keyboard-modal">
+      <div class="modal-window ai-keyboard-window">
+        <!-- Header -->
+        <div class="kb-header kb-header-mobile">
+          <div class="kb-header-row1">
+            <span class="ai-kb-title">⌨️ AI Klávesnice</span>
+            <div class="kb-header-spacer"></div>
+            <button onclick="window.clearAIKeyboardInput()" class="kb-help-btn" title="Vymazat">🗑️</button>
+            <button onclick="window.closeAIKeyboard()" class="kb-close-btn-small">×</button>
+          </div>
+          <div class="kb-header-row2">
+            <input type="text" id="aiKeyboardInput" placeholder="Napiš zprávu pro AI..." class="controller-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </div>
+        </div>
+
+        <!-- Klávesnice -->
+        <div class="controller-keyboard">
+          <!-- Row 0: Příkazy pro AI -->
+          <div class="controller-grid controller-grid-5">
+            <button onclick="window.insertAIToken('Nakresli ')" class="ctrl-btn ctrl-btn-gcode">✏️</button>
+            <button onclick="window.insertAIToken('Vysvětli ')" class="ctrl-btn ctrl-btn-gcode">💡</button>
+            <button onclick="window.insertAIToken('Změň ')" class="ctrl-btn ctrl-btn-param">🔄</button>
+            <button onclick="window.insertAIToken('Smaž ')" class="ctrl-btn ctrl-btn-param">🗑️</button>
+            <button onclick="window.insertAIToken('Posuň ')" class="ctrl-btn ctrl-btn-param">↔️</button>
+          </div>
+
+          <!-- Row 1: Tvary -->
+          <div class="controller-grid controller-grid-5">
+            <button onclick="window.insertAIToken('úsečku ')" class="ctrl-btn">čáru</button>
+            <button onclick="window.insertAIToken('kruh ')" class="ctrl-btn">kruh</button>
+            <button onclick="window.insertAIToken('oblouk ')" class="ctrl-btn">oblouk</button>
+            <button onclick="window.insertAIToken('bod ')" class="ctrl-btn">bod</button>
+            <button onclick="window.insertAIToken('obdélník ')" class="ctrl-btn">obdél</button>
+          </div>
+
+          <!-- Row 2: Souřadnice -->
+          <div class="controller-grid controller-grid-5">
+            <button onclick="window.insertAIToken('X')" class="ctrl-btn ctrl-btn-coord">X</button>
+            <button onclick="window.insertAIToken('Z')" class="ctrl-btn ctrl-btn-coord">Z</button>
+            <button onclick="window.insertAIToken('7')" class="ctrl-btn ctrl-btn-num">7</button>
+            <button onclick="window.insertAIToken('8')" class="ctrl-btn ctrl-btn-num">8</button>
+            <button onclick="window.insertAIToken('9')" class="ctrl-btn ctrl-btn-num">9</button>
+          </div>
+
+          <!-- Row 3: Parametry -->
+          <div class="controller-grid controller-grid-5">
+            <button onclick="window.insertAIToken('do bodu ')" class="ctrl-btn">do</button>
+            <button onclick="window.insertAIToken('z bodu ')" class="ctrl-btn">z</button>
+            <button onclick="window.insertAIToken('4')" class="ctrl-btn ctrl-btn-num">4</button>
+            <button onclick="window.insertAIToken('5')" class="ctrl-btn ctrl-btn-num">5</button>
+            <button onclick="window.insertAIToken('6')" class="ctrl-btn ctrl-btn-num">6</button>
+          </div>
+
+          <!-- Row 4: Mínus, tečka, 1, 2, 3 -->
+          <div class="controller-grid controller-grid-5">
+            <button onclick="window.insertAIToken('-')" class="ctrl-btn ctrl-btn-num">−</button>
+            <button onclick="window.insertAIToken('.')" class="ctrl-btn ctrl-btn-num">.</button>
+            <button onclick="window.insertAIToken('1')" class="ctrl-btn ctrl-btn-num">1</button>
+            <button onclick="window.insertAIToken('2')" class="ctrl-btn ctrl-btn-num">2</button>
+            <button onclick="window.insertAIToken('3')" class="ctrl-btn ctrl-btn-num">3</button>
+          </div>
+
+          <!-- Row 5: Speciální + 0 + Backspace + Odeslat -->
+          <div class="controller-grid controller-grid-4">
+            <button onclick="window.insertAIToken(' ')" class="ctrl-btn">␣</button>
+            <button onclick="window.insertAIToken('0')" class="ctrl-btn ctrl-btn-num">0</button>
+            <button onclick="window.backspaceAIToken()" class="ctrl-btn ctrl-btn-delete">⌫</button>
+            <button onclick="window.sendAIKeyboardMessage()" class="ctrl-btn ctrl-btn-confirm">✓</button>
+          </div>
         </div>
       </div>
     </div>
