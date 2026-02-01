@@ -14,13 +14,17 @@ window.pendingDirection = null; // Čekající směr z directionModal
 window.displayDecimals = 2; // Počet desetinných míst
 
 // ===== INICIALIZACE INPUT EVENT LISTENERU =====
-// Přidá event listenery pro přímé psaní do inputu
+// Přidá event listenery pro přímé psaní do inputu (podpora mobilního i desktopového)
 document.addEventListener("DOMContentLoaded", function() {
-  const input = document.getElementById("controllerInput");
-  if (input) {
+  // Funkce pro nastavení event listenerů na input
+  function setupControllerInput(input) {
+    if (!input) return;
+
     // Synchronizace při přímém psaní
     input.addEventListener("input", function(e) {
       window.controllerInputBuffer = e.target.value;
+      // Synchronizovat i druhý input
+      window.updateControllerInputDisplay();
     });
 
     // Enter pro potvrzení
@@ -34,6 +38,10 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     });
   }
+
+  // Nastavit oba inputy
+  setupControllerInput(document.getElementById("controllerInput"));
+  setupControllerInput(document.getElementById("controllerInputDesktop"));
 });
 
 // ===== MODAL FUNKCE =====
@@ -43,9 +51,12 @@ window.showControllerModal = function () {
   if (modal) modal.style.display = "flex";
   updateControllerLastPoint();
 
-  // Focus na input po otevření
+  // Focus na správný input po otevření (mobilní nebo desktopový)
   setTimeout(() => {
-    const input = document.getElementById("controllerInput");
+    const isMobile = window.innerWidth <= 768;
+    const input = isMobile
+      ? document.getElementById("controllerInput")
+      : document.getElementById("controllerInputDesktop");
     if (input) input.focus();
   }, 100);
 };
@@ -434,10 +445,33 @@ window.findNearestSnapPoint = function (mouseX, mouseY, threshold = 20) {
   return nearest;
 };
 
+// Helper: získat aktivní input (mobilní nebo desktopový)
+function getActiveControllerInput() {
+  // Mobilní input má přednost pokud je viditelný
+  const mobileInput = document.getElementById("controllerInput");
+  const desktopInput = document.getElementById("controllerInputDesktop");
+
+  // Zkontrolovat který je viditelný
+  if (mobileInput && mobileInput.offsetParent !== null) {
+    return mobileInput;
+  }
+  if (desktopInput && desktopInput.offsetParent !== null) {
+    return desktopInput;
+  }
+  // Fallback
+  return mobileInput || desktopInput;
+}
+
 window.updateControllerInputDisplay = function () {
-  const input = document.getElementById("controllerInput");
-  if (input) {
-    input.value = window.controllerInputBuffer;
+  // Aktualizovat oba inputy
+  const mobileInput = document.getElementById("controllerInput");
+  const desktopInput = document.getElementById("controllerInputDesktop");
+
+  if (mobileInput) {
+    mobileInput.value = window.controllerInputBuffer;
+  }
+  if (desktopInput) {
+    desktopInput.value = window.controllerInputBuffer;
   }
 };
 
@@ -1144,23 +1178,31 @@ window.processMeasureInput = function (measureData) {
 // Aktivní popup kontext ('controller' nebo 'qi')
 window.activePopupContext = null;
 
-// Toggle mode pro Controller
+// Toggle mode pro Controller (aktualizuje oba toggle buttony - mobilní i desktopový)
 window.toggleControllerMode = function () {
   const btn = document.getElementById("btnControllerModeToggle");
+  const btnDesktop = document.getElementById("btnControllerModeToggleDesktop");
   const modeLabel = document.getElementById("controllerModeLabel");
-  if (!btn) return;
 
   if (window.controllerMode === "G90") {
     window.controllerMode = "G91";
-    btn.textContent = "G91";
-    btn.classList.remove("g90");
-    btn.classList.add("g91");
   } else {
     window.controllerMode = "G90";
-    btn.textContent = "G90";
-    btn.classList.remove("g91");
-    btn.classList.add("g90");
   }
+
+  // Aktualizovat oba buttony
+  [btn, btnDesktop].forEach(b => {
+    if (b) {
+      b.textContent = window.controllerMode;
+      if (window.controllerMode === "G90") {
+        b.classList.remove("g91");
+        b.classList.add("g90");
+      } else {
+        b.classList.remove("g90");
+        b.classList.add("g91");
+      }
+    }
+  });
 
   // Aktualizovat mode label
   if (modeLabel) {
