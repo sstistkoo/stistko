@@ -351,14 +351,17 @@ window.findNearestSnapPoint = function (mouseX, mouseY, threshold = 20) {
   if (!canvas) return null;
 
   const zoom = window.zoom || 2;
-  const panX = window.panX || 0;
-  const panY = window.panY || 0;
-  const width = canvas.width;
-  const height = canvas.height;
+  const panX = window.panX || canvas.width / 2;
+  const panY = window.panY || canvas.height / 2;
 
-  // Konverze mouse souřadnic na world souřadnice (stejně jako v snapPoint)
-  const worldX = (mouseX - width / 2) / zoom - panX;
-  const worldY = -(mouseY - height / 2) / zoom - panY;
+  // Použít STEJNOU konverzi jako screenToWorld v drawing.js!
+  // screenToWorld: x = (sx - panX) / zoom, y = (panY - sy) / zoom
+  const worldX = (mouseX - panX) / zoom;
+  const worldY = (panY - mouseY) / zoom;
+
+  console.log('[findNearestSnapPoint] Mouse:', mouseX, mouseY);
+  console.log('[findNearestSnapPoint] World:', worldX, worldY);
+  console.log('[findNearestSnapPoint] Zoom:', zoom, 'PanX:', panX, 'PanY:', panY);
 
   // 1. Explicitní body
   if (window.points && window.points.length > 0) {
@@ -413,11 +416,20 @@ window.findNearestSnapPoint = function (mouseX, mouseY, threshold = 20) {
     }
   }
 
-  // Najít nejbližší bod
+  console.log('[findNearestSnapPoint] Candidates:', candidates.length);
+
+  // Najít nejbližší bod - použít WORLD souřadnice
   let nearest = null;
   let minDist = threshold / zoom; // threshold v world souřadnicích
 
   for (const c of candidates) {
+    const dist = Math.sqrt((c.x - worldX) ** 2 + (c.y - worldY) ** 2);
+    console.log('[findNearestSnapPoint] Candidate:', c.x, c.y, 'dist:', dist, 'threshold:', minDist);
+    if (dist < minDist) {
+      minDist = dist;
+      nearest = c;
+    }
+  }
     const dist = Math.sqrt((c.x - worldX) ** 2 + (c.y - worldY) ** 2);
     if (dist < minDist) {
       minDist = dist;
