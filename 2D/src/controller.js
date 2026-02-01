@@ -1330,4 +1330,7 @@ window.calcInsertToController = function() {
     window.showControllerModal();
   } catch (e) {
     alert("❌ Chyba ve výpočtu: " + e.message);
-  }
+  }};
+
+// ✅ Keyboard events nyní spravuje unified keyboard.js
+// Controller funkce jsou volány z keyboard.js

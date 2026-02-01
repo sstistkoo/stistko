@@ -36,6 +36,17 @@
     -->
 
     <link rel="stylesheet" href="styles.css" />
+
+    <!-- 🐛 ERUDA - Mobilní konzole pro debugování -->
+    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+    <script>
+      // Inicializovat Eruda pouze na mobilních zařízeních
+      if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768) {
+        eruda.init();
+        console.log("🐛 Eruda mobilní konzole aktivována - klikni na zelené tlačítko vpravo dole!");
+      }
+    </script>
+
     <script type="importmap">
       {
         "imports": {
