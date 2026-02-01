@@ -430,12 +430,6 @@ window.findNearestSnapPoint = function (mouseX, mouseY, threshold = 20) {
       nearest = c;
     }
   }
-    const dist = Math.sqrt((c.x - worldX) ** 2 + (c.y - worldY) ** 2);
-    if (dist < minDist) {
-      minDist = dist;
-      nearest = c;
-    }
-  }
 
   return nearest;
 };
