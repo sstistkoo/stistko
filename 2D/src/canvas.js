@@ -64,11 +64,22 @@ function onCanvasMouseDown(e) {
   if (window.pickPointMode && window.pickPointCallback) {
     const canvas = e.target;
     const rect = canvas.getBoundingClientRect();
-    const screenX = e.clientX - rect.left;
-    const screenY = e.clientY - rect.top;
+
+    // Podpora pro touch i mouse
+    let screenX, screenY;
+    if (e.touches && e.touches.length > 0) {
+      screenX = e.touches[0].clientX - rect.left;
+      screenY = e.touches[0].clientY - rect.top;
+      console.log('[PICK POINT] TOUCH event');
+    } else {
+      screenX = e.clientX - rect.left;
+      screenY = e.clientY - rect.top;
+      console.log('[PICK POINT] MOUSE event');
+    }
 
     console.log('[PICK POINT] Click at screen:', screenX, screenY);
     console.log('[PICK POINT] Available snap points:', window.cachedSnapPoints?.length || 0);
+    console.log('[PICK POINT] Snap points:', window.cachedSnapPoints);
 
     // Najít nejbližší snap point (zvětšený dosah na 50px)
     const nearestPoint = window.findNearestSnapPoint(screenX, screenY, 50);
@@ -83,7 +94,7 @@ function onCanvasMouseDown(e) {
       // Žádný bod v dosahu - zobrazit zprávu, NEVYTVÁŘET nový bod
       console.log('[PICK POINT] ❌ No point in range');
       if (typeof window.showToast === "function") {
-        window.showToast("⚠️ Žádný bod v dosahu (50px). Klikni blíže k existujícímu bodu.", 2000);
+        window.showToast("⚠️ Žádný bod v dosahu (50px). Klikni blíže k bodu.", 2500);
       }
       // Nepokračovat - neukončit pick mode
     }
@@ -624,6 +635,14 @@ function onCanvasTouchStart(e) {
   // Vždy použijeme canvas element přímo, ne e.target
   const canvas = document.getElementById("canvas");
   if (!canvas) return;
+
+  // === PICK POINT MODE - Touch podpora ===
+  if (window.pickPointMode && window.pickPointCallback && e.touches.length === 1) {
+    console.log('[PICK POINT] Touch start - calling onCanvasMouseDown');
+    // Volat mouseDown handler s touch eventem
+    onCanvasMouseDown(e);
+    return;
+  }
 
   // Zrušit předchozí precision mode timer
   if (precisionModeTimer) {

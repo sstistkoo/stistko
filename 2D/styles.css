@@ -5339,8 +5339,9 @@ canvas {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  overflow-y: auto;
+  overflow-y: auto !important;
   max-height: 60vh;
+  -webkit-overflow-scrolling: touch;
 }
 
 .fc-section {
@@ -6000,8 +6001,9 @@ canvas {
   }
 
   .fc-controls {
-    max-height: none;
-    overflow: visible;
+    max-height: calc(100vh - 200px) !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 
   .fc-section {
@@ -6372,13 +6374,13 @@ canvas {
   .controller-window {
     width: 100% !important;
     max-width: 100% !important;
-    max-height: 65vh !important;
-    min-height: 50vh !important;
+    max-height: 55vh !important;
+    min-height: 45vh !important;
     border-radius: 16px 16px 0 0 !important;
     padding: 12px !important;
     overflow-y: auto !important;
     position: relative !important;
-    margin-bottom: 60px !important;
+    margin-bottom: 80px !important;
     /* DŮLEŽITÉ: Odstranit dragging na mobilu */
     cursor: default !important;
   }

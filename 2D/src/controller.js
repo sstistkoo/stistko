@@ -817,6 +817,14 @@ window.parseGCode = function (input, mode) {
       }
 
       if (r) {
+        console.log('[R50 DEBUG] Creating circle:', {
+          cx: lastPoint.x,
+          cy: lastPoint.y,
+          r: r,
+          color: window.defaultDrawColor || "#4a9eff",
+          lineStyle: window.defaultDrawLineStyle || "solid"
+        });
+
         window.shapes.push({
           type: "circle",
           cx: lastPoint.x,
@@ -826,9 +834,20 @@ window.parseGCode = function (input, mode) {
           lineStyle: window.defaultDrawLineStyle || "solid"
         });
 
+        console.log('[R50 DEBUG] Shapes array length:', window.shapes.length);
+        console.log('[R50 DEBUG] Last shape:', window.shapes[window.shapes.length - 1]);
+
         commandExecuted = true;
-        window.updateSnapPoints?.();
-        window.draw?.();
+
+        if (window.updateSnapPoints) {
+          window.updateSnapPoints();
+          console.log('[R50 DEBUG] Snap points updated');
+        }
+
+        if (window.draw) {
+          window.draw();
+          console.log('[R50 DEBUG] Draw called');
+        }
       }
     }
 
@@ -1224,10 +1243,8 @@ window.clearQuickInput = function () {
 
 // ===== CALCULATOR FUNCTIONS =====
 
-window.calculatorBuffer = "0"; // Buffer pro kalkulačku
-window.calculatorLastOperator = null;
-window.calculatorLastValue = null;
-window.calculatorWaitingForOperand = false;
+window.calculatorExpression = "0"; // Celý výraz (např. "25+15×2")
+window.calculatorResult = null;
 
 window.showCalculator = function() {
   const modal = document.getElementById("calculatorModal");
@@ -1235,10 +1252,8 @@ window.showCalculator = function() {
     modal.classList.remove("d-none");
     modal.style.display = "flex";
   }
-  window.calculatorBuffer = "0";
-  window.calculatorLastOperator = null;
-  window.calculatorLastValue = null;
-  window.calculatorWaitingForOperand = false;
+  window.calculatorExpression = "0";
+  window.calculatorResult = null;
   window.updateCalcDisplay();
 };
 
@@ -1253,8 +1268,8 @@ window.closeCalculator = function() {
 window.updateCalcDisplay = function() {
   const display = document.getElementById("calcDisplay");
   if (display) {
-    // Zobrazit buffer nebo výsledek
-    display.textContent = window.calculatorBuffer;
+    // Zobrazit celý výraz
+    display.textContent = window.calculatorExpression;
   }
 };
 
@@ -1262,93 +1277,57 @@ window.calcInsert = function(char) {
   const operators = ['+', '-', '*', '/'];
 
   if (operators.includes(char)) {
-    // Operátor
-    if (window.calculatorLastOperator && !window.calculatorWaitingForOperand) {
-      // Vypočítat předchozí operaci
-      window.calcExecute();
+    // Operátor - přidat k výrazu
+    if (window.calculatorExpression === "0") {
+      window.calculatorExpression = "0" + char;
+    } else {
+      // Nahradit × a ÷ za * a /
+      const displayOp = char === '*' ? '×' : char === '/' ? '÷' : char;
+      window.calculatorExpression += displayOp;
     }
-    window.calculatorLastOperator = char;
-    window.calculatorLastValue = parseFloat(window.calculatorBuffer);
-    window.calculatorWaitingForOperand = true;
   } else {
     // Číslice nebo tečka
-    if (window.calculatorWaitingForOperand) {
-      window.calculatorBuffer = char;
-      window.calculatorWaitingForOperand = false;
+    if (window.calculatorExpression === "0" && char !== ".") {
+      window.calculatorExpression = char;
     } else {
-      if (window.calculatorBuffer === "0" && char !== ".") {
-        window.calculatorBuffer = char;
-      } else if (char === "." && window.calculatorBuffer.includes(".")) {
-        // Už je tečka - ignorovat
-        return;
-      } else {
-        window.calculatorBuffer += char;
-      }
+      window.calculatorExpression += char;
     }
   }
 
   window.updateCalcDisplay();
 };
 
-window.calcExecute = function() {
-  if (window.calculatorLastOperator && window.calculatorLastValue !== null) {
-    const current = parseFloat(window.calculatorBuffer);
-    let result = 0;
-
-    switch(window.calculatorLastOperator) {
-      case '+':
-        result = window.calculatorLastValue + current;
-        break;
-      case '-':
-        result = window.calculatorLastValue - current;
-        break;
-      case '*':
-        result = window.calculatorLastValue * current;
-        break;
-      case '/':
-        result = window.calculatorLastValue / current;
-        break;
-    }
-
-    // Zaokrouhlit na 6 desetinných míst
-    result = Math.round(result * 1000000) / 1000000;
-
-    window.calculatorBuffer = result.toString();
-    window.calculatorLastOperator = null;
-    window.calculatorLastValue = null;
-    window.updateCalcDisplay();
-  }
-};
-
 window.calcClear = function() {
-  window.calculatorBuffer = "0";
-  window.calculatorLastOperator = null;
-  window.calculatorLastValue = null;
-  window.calculatorWaitingForOperand = false;
+  window.calculatorExpression = "0";
+  window.calculatorResult = null;
   window.updateCalcDisplay();
 };
 
 window.calcBackspace = function() {
-  if (window.calculatorBuffer.length > 1) {
-    window.calculatorBuffer = window.calculatorBuffer.slice(0, -1);
+  if (window.calculatorExpression.length > 1) {
+    window.calculatorExpression = window.calculatorExpression.slice(0, -1);
   } else {
-    window.calculatorBuffer = "0";
+    window.calculatorExpression = "0";
   }
   window.updateCalcDisplay();
 };
 
 window.calcInsertToController = function() {
-  // Provést finální výpočet pokud čeká operace
-  if (window.calculatorLastOperator) {
-    window.calcExecute();
+  // Vypočítat výsledek
+  try {
+    // Nahradit × a ÷ za * a / pro eval
+    let expr = window.calculatorExpression.replace(/×/g, '*').replace(/÷/g, '/');
+    let result = eval(expr);
+
+    // Zaokrouhlit na 6 desetinných míst
+    result = Math.round(result * 1000000) / 1000000;
+
+    // Vložit VÝSLEDEK do controlleru
+    window.insertControllerToken(result.toString());
+
+    // Zavřít kalkulačku a otevřít controller
+    window.closeCalculator();
+    window.showControllerModal();
+  } catch (e) {
+    alert("❌ Chyba ve výpočtu: " + e.message);
   }
-
-  // Vložit výsledek do controlleru
-  const result = window.calculatorBuffer;
-  window.insertControllerToken(result);
-
-  // Zavřít kalkulačku a otevřít controller
-  window.closeCalculator();
-  window.showControllerModal();
-};
-
