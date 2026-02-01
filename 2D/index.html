@@ -1422,10 +1422,10 @@
           <button onclick="window.showGCodePopup('controller')" class="kb-help-btn">G</button>
           <button onclick="window.showParamPopup('controller')" class="kb-help-btn">P</button>
           <button onclick="window.openFreeContourModal()" class="kb-help-btn" title="Volná Kontura (FK)">FK</button>
-          <!-- Desktop only: help and close - přesunuté doprava -->
+          <input type="text" id="controllerInput" placeholder="Zadej příkaz..." class="controller-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          <!-- Desktop only: help and close na konci -->
           <button onclick="window.showControllerHelp()" class="kb-help-btn desktop-only">?</button>
           <button onclick="window.closeControllerModal()" class="modal-close-btn-simple desktop-only">&times;</button>
-          <input type="text" id="controllerInput" placeholder="Zadej příkaz..." class="controller-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
         </div>
 
         <!-- Last point info -->
