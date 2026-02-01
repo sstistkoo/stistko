@@ -48,7 +48,56 @@ document.addEventListener("DOMContentLoaded", function() {
 
 window.showControllerModal = function () {
   const modal = document.getElementById("controllerModal");
-  if (modal) modal.style.display = "flex";
+  if (modal) {
+    modal.style.display = "flex";
+
+    // Na PC: Nastavit výchozí pozici uprostřed dole (pokud není uložená)
+    const isMobile = window.innerWidth <= 768;
+    if (!isMobile) {
+      const modalWindow = modal.querySelector('.controller-window');
+      if (modalWindow) {
+        // Zkontrolovat jestli existuje uložená pozice
+        let hasPosition = false;
+        try {
+          const saved = localStorage.getItem('controllerModal_pos');
+          if (saved) {
+            const pos = JSON.parse(saved);
+            if (pos && pos.left && pos.top) {
+              const left = parseInt(pos.left, 10);
+              const top = parseInt(pos.top, 10);
+              // Validovat pozici
+              if (left > -500 && left < window.innerWidth - 50 &&
+                  top >= 0 && top < window.innerHeight - 50) {
+                hasPosition = true;
+              }
+            }
+          }
+        } catch(e) {}
+
+        // Pokud není validní pozice, nastavit výchozí (uprostřed dole)
+        if (!hasPosition) {
+          setTimeout(() => {
+            const viewportHeight = window.innerHeight;
+            const viewportWidth = window.innerWidth;
+            const modalWidth = modalWindow.offsetWidth || 600;
+            const modalHeight = modalWindow.offsetHeight || 400;
+
+            // Pozice: horizontálně uprostřed, vertikálně nad toolbarem (80px od spodu)
+            const left = Math.max(10, (viewportWidth - modalWidth) / 2);
+            const top = Math.max(10, viewportHeight - modalHeight - 100);
+
+            modal.style.alignItems = 'flex-start';
+            modal.style.justifyContent = 'flex-start';
+            modalWindow.style.position = 'fixed';
+            modalWindow.style.left = left + 'px';
+            modalWindow.style.top = top + 'px';
+            modalWindow.style.right = 'auto';
+            modalWindow.style.margin = '0';
+          }, 50);
+        }
+      }
+    }
+  }
   updateControllerLastPoint();
 
   // Focus na správný input po otevření (mobilní nebo desktopový)

@@ -1675,7 +1675,6 @@ window.makeModalDraggable = function (modalId) {
   header.style.userSelect = 'none';
 
   let dragging = false;
-  let startX = 0, startY = 0, origLeft = 0, origTop = 0;
   let pointerOffsetX = 0, pointerOffsetY = 0;
 
   // add small grip visual if none
@@ -1690,37 +1689,39 @@ window.makeModalDraggable = function (modalId) {
   const startDrag = (clientX, clientY) => {
     const rect = modal.getBoundingClientRect();
     dragging = true;
+    // Přesný offset od pozice kurzoru k levému hornímu rohu modalu
     pointerOffsetX = clientX - rect.left;
     pointerOffsetY = clientY - rect.top;
-    origLeft = modal.style.left ? parseInt(modal.style.left,10) || rect.left : rect.left;
-    origTop = modal.style.top ? parseInt(modal.style.top,10) || rect.top : rect.top;
 
+    // Nastavit modal na fixed positioning
     overlay.style.alignItems = 'flex-start';
     overlay.style.justifyContent = 'flex-start';
     modal.style.position = 'fixed';
-    modal.style.left = origLeft + 'px';
-    modal.style.top = origTop + 'px';
+    modal.style.left = rect.left + 'px';
+    modal.style.top = rect.top + 'px';
     modal.style.right = 'auto';
+    modal.style.margin = '0';
     document.body.style.userSelect = 'none';
   };
 
   const doDrag = (clientX, clientY) => {
     if (!dragging) return;
 
-    // BOUNDARY CHECK - zabránit zmizení mimo viewport
-    const modalRect = modal.getBoundingClientRect();
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
+    const modalWidth = modal.offsetWidth;
+    const modalHeight = modal.offsetHeight;
 
+    // Vypočítat novou pozici - přesně sledovat kurzor
     let newLeft = clientX - pointerOffsetX;
     let newTop = clientY - pointerOffsetY;
 
-    // Minimálně 100px modalu musí být vidět
-    const minVisible = 100;
+    // Minimálně 50px modalu musí být vidět
+    const minVisible = 50;
 
     // Omezit horizontálně
-    if (newLeft < -modalRect.width + minVisible) {
-      newLeft = -modalRect.width + minVisible;
+    if (newLeft < -modalWidth + minVisible) {
+      newLeft = -modalWidth + minVisible;
     }
     if (newLeft > viewportWidth - minVisible) {
       newLeft = viewportWidth - minVisible;
@@ -1749,10 +1750,10 @@ window.makeModalDraggable = function (modalId) {
     const viewportHeight = window.innerHeight;
 
     // Pouze uložit pokud je modal většinou viditelný
-    if (modalRect.left > -modalRect.width + 100 &&
-        modalRect.left < viewportWidth - 100 &&
+    if (modalRect.left > -modalRect.width + 50 &&
+        modalRect.left < viewportWidth - 50 &&
         modalRect.top >= 0 &&
-        modalRect.top < viewportHeight - 100) {
+        modalRect.top < viewportHeight - 50) {
       try {
         const saved = { left: modal.style.left, top: modal.style.top };
         localStorage.setItem(modalId + '_pos', JSON.stringify(saved));
