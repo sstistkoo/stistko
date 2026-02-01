@@ -3760,7 +3760,7 @@ canvas {
   align-items: flex-end;
   justify-content: center;
   background: transparent;
-  z-index: 999; /* Nižší než toolbar */
+  z-index: 1100; /* Vyšší než canvas-controls (1001) */
 }
 
 .controller-window {
@@ -6404,6 +6404,7 @@ canvas {
   .controller-modal {
     align-items: flex-end !important;
     position: fixed !important;
+    bottom: 0 !important;
   }
 
   .controller-window {
@@ -6416,7 +6417,7 @@ canvas {
     overflow-y: auto !important;
     position: relative !important;
     margin-top: 0 !important;
-    margin-bottom: 10px !important;
+    margin-bottom: 90px !important;
     /* DŮLEŽITÉ: Odstranit dragging na mobilu */
     cursor: default !important;
   }
