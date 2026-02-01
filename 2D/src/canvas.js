@@ -636,14 +636,6 @@ function onCanvasTouchStart(e) {
   const canvas = document.getElementById("canvas");
   if (!canvas) return;
 
-  // === PICK POINT MODE - Touch podpora ===
-  if (window.pickPointMode && window.pickPointCallback && e.touches.length === 1) {
-    console.log('[PICK POINT] Touch start - calling onCanvasMouseDown');
-    // Volat mouseDown handler s touch eventem
-    onCanvasMouseDown(e);
-    return;
-  }
-
   // Zrušit předchozí precision mode timer
   if (precisionModeTimer) {
     clearTimeout(precisionModeTimer);
@@ -657,6 +649,21 @@ function onCanvasTouchStart(e) {
     touchStart = { x: screenX, y: screenY, time: Date.now(), touch: touch };
     touchIsPanning = false;
     touchActionStarted = false;
+
+    // === PICK POINT MODE - Touch podpora s precision mode ===
+    if (window.pickPointMode && window.pickPointCallback) {
+      console.log('[PICK POINT] Touch start - waiting for precision mode or tap');
+      
+      // Spustit timer pro precision mode
+      precisionModeTimer = setTimeout(() => {
+        if (touchStart && !touchIsPanning && !touchActionStarted) {
+          activatePrecisionMode(touch, canvas);
+        }
+      }, PRECISION_MODE_DELAY);
+      
+      // NEPROVEDEME pick point hned - počkáme na touchEnd
+      return;
+    }
 
     // Spustit timer pro precision mode (pokud nejsme v pan módu)
     if (window.mode !== "pan") {
@@ -916,6 +923,34 @@ function onCanvasTouchEnd(e) {
       const coords = getPrecisionCoords(touch, canvas);
       finalScreenX = coords.screenX;
       finalScreenY = coords.screenY;
+      console.log('[PICK POINT] Using precision mode coords:', finalScreenX, finalScreenY);
+    }
+
+    // === PICK POINT MODE ===
+    if (window.pickPointMode && window.pickPointCallback) {
+      console.log('[PICK POINT] Touch end - searching for point at:', finalScreenX, finalScreenY);
+      
+      // Najít nejbližší snap point (dosah 60px pro mobil)
+      const nearestPoint = window.findNearestSnapPoint(finalScreenX, finalScreenY, 60);
+      
+      console.log('[PICK POINT] Nearest point found:', nearestPoint);
+      
+      if (nearestPoint) {
+        console.log('[PICK POINT] ✅ Point selected:', nearestPoint.x, nearestPoint.y);
+        window.pickPointCallback(nearestPoint);
+      } else {
+        console.log('[PICK POINT] ❌ No point in range');
+        if (typeof window.showToast === "function") {
+          window.showToast("⚠️ Žádný bod v dosahu. Zkus podržet prst pro přesný výběr.", 2500);
+        }
+      }
+      
+      // Deaktivovat precision mode a reset
+      deactivatePrecisionMode();
+      touchStart = null;
+      touchIsPanning = false;
+      touchActionStarted = false;
+      return;
     }
 
     const worldPt = window.screenToWorld ? window.screenToWorld(finalScreenX, finalScreenY) : { x: 0, y: 0 };

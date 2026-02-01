@@ -404,8 +404,11 @@ window.hidePickPointToast = function () {
 /**
  * Najde nejbližší bod k danému místu kliknutí
  * Hledá: body, průsečíky, konce úseček, středy kružnic
+ * @param {number} mouseX - X souřadnice v SCREEN pixelech
+ * @param {number} mouseY - Y souřadnice v SCREEN pixelech  
+ * @param {number} threshold - Dosah v SCREEN pixelech (výchozí 50)
  */
-window.findNearestSnapPoint = function (mouseX, mouseY, threshold = 20) {
+window.findNearestSnapPoint = function (mouseX, mouseY, threshold = 50) {
   const candidates = [];
 
   // Použijeme správné proměnné pro viewport
@@ -480,13 +483,19 @@ window.findNearestSnapPoint = function (mouseX, mouseY, threshold = 20) {
 
   console.log('[findNearestSnapPoint] Candidates:', candidates.length);
 
-  // Najít nejbližší bod - použít WORLD souřadnice
+  // Najít nejbližší bod - porovnáváme v SCREEN souřadnicích!
+  // Převedeme kandidáty na screen souřadnice a porovnáme s pozicí myši
   let nearest = null;
-  let minDist = threshold / zoom; // threshold v world souřadnicích
+  let minDist = threshold; // threshold je v SCREEN pixelech
 
   for (const c of candidates) {
-    const dist = Math.sqrt((c.x - worldX) ** 2 + (c.y - worldY) ** 2);
-    console.log('[findNearestSnapPoint] Candidate:', c.x, c.y, 'dist:', dist, 'threshold:', minDist);
+    // Převod world -> screen: screenX = c.x * zoom + panX, screenY = panY - c.y * zoom
+    const candidateScreenX = c.x * zoom + panX;
+    const candidateScreenY = panY - c.y * zoom;
+    
+    // Vzdálenost v SCREEN pixelech
+    const dist = Math.sqrt((candidateScreenX - mouseX) ** 2 + (candidateScreenY - mouseY) ** 2);
+    console.log('[findNearestSnapPoint] Candidate:', c.x, c.y, 'screenPos:', candidateScreenX.toFixed(0), candidateScreenY.toFixed(0), 'dist:', dist.toFixed(1), 'threshold:', threshold);
     if (dist < minDist) {
       minDist = dist;
       nearest = c;
