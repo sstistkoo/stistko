@@ -1460,5 +1460,96 @@ window.calcInsertToController = function() {
     alert("❌ Chyba ve výpočtu: " + e.message);
   }};
 
+// ===== AI KEYBOARD FUNKCE =====
+window.aiKeyboardBuffer = "";
+
+window.openAIKeyboard = function() {
+  const modal = document.getElementById("aiKeyboardModal");
+  if (modal) {
+    modal.style.display = "flex";
+    window.aiKeyboardBuffer = "";
+    window.updateAIKeyboardDisplay();
+    // Focus na input
+    setTimeout(() => {
+      const input = document.getElementById("aiKeyboardInput");
+      if (input) input.focus();
+    }, 100);
+  }
+};
+
+window.closeAIKeyboard = function() {
+  const modal = document.getElementById("aiKeyboardModal");
+  if (modal) {
+    modal.style.display = "none";
+  }
+};
+
+window.insertAIToken = function(text) {
+  window.aiKeyboardBuffer += text;
+  window.updateAIKeyboardDisplay();
+};
+
+window.backspaceAIToken = function() {
+  if (window.aiKeyboardBuffer.length > 0) {
+    window.aiKeyboardBuffer = window.aiKeyboardBuffer.slice(0, -1);
+    window.updateAIKeyboardDisplay();
+  }
+};
+
+window.clearAIKeyboardInput = function() {
+  window.aiKeyboardBuffer = "";
+  window.updateAIKeyboardDisplay();
+};
+
+window.updateAIKeyboardDisplay = function() {
+  const input = document.getElementById("aiKeyboardInput");
+  if (input) {
+    input.value = window.aiKeyboardBuffer;
+  }
+};
+
+window.sendAIKeyboardMessage = function() {
+  if (!window.aiKeyboardBuffer.trim()) {
+    if (typeof window.showToast === "function") {
+      window.showToast("⚠️ Napiš nějakou zprávu", 2000);
+    }
+    return;
+  }
+
+  // Vložit text do AI promptu
+  const aiPrompt = document.getElementById("aiPrompt");
+  if (aiPrompt) {
+    aiPrompt.value = window.aiKeyboardBuffer;
+  }
+
+  // Zavřít klávesnici
+  window.closeAIKeyboard();
+
+  // Odeslat do AI
+  if (typeof window.callGemini === "function") {
+    window.callGemini();
+  }
+};
+
+// Event listener pro AI keyboard input
+document.addEventListener("DOMContentLoaded", function() {
+  const aiKbInput = document.getElementById("aiKeyboardInput");
+  if (aiKbInput) {
+    aiKbInput.addEventListener("input", function(e) {
+      window.aiKeyboardBuffer = e.target.value;
+    });
+
+    aiKbInput.addEventListener("keydown", function(e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        window.sendAIKeyboardMessage();
+      } else if (e.key === "Escape") {
+        e.preventDefault();
+        window.closeAIKeyboard();
+      }
+    });
+  }
+});
+
 // ✅ Keyboard events nyní spravuje unified keyboard.js
 // Controller funkce jsou volány z keyboard.js
