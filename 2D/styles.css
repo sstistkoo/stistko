@@ -6566,8 +6566,8 @@ canvas {
 
   .kb-header-mobile .kb-header-row2 .controller-input {
     width: 100% !important;
-    min-height: 48px !important;
-    font-size: 18px !important;
+    min-height: 56px !important;
+    font-size: 32px !important;
     padding: 10px !important;
   }
 
@@ -6594,8 +6594,8 @@ canvas {
 
   /* Input pole */
   .controller-input {
-    min-height: 48px !important;
-    font-size: 16px !important;
+    min-height: 56px !important;
+    font-size: 32px !important;
     padding: 10px !important;
     flex-grow: 1 !important;
     min-width: 100px !important;
