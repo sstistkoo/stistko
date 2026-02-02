@@ -47,9 +47,12 @@ document.addEventListener("DOMContentLoaded", function() {
 // ===== MODAL FUNKCE =====
 
 window.showControllerModal = function () {
+  console.log("🎮 showControllerModal called");
   const modal = document.getElementById("controllerModal");
+  console.log("🎮 controllerModal element:", modal);
   if (modal) {
     modal.style.display = "flex";
+    console.log("🎮 Modal display set to flex");
 
     // Debug při otevření
     setTimeout(window.debugControllerCSS, 100);
