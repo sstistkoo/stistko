@@ -2166,6 +2166,19 @@ canvas {
   min-width: 90px;
 }
 
+.ai-toolbar-btn-controller {
+  flex: 1;
+  color: white;
+  min-width: 90px;
+  background: linear-gradient(135deg, #1a4a2e, #22c55e33);
+  border-color: #22c55e44;
+}
+
+.ai-toolbar-btn-controller:hover {
+  background: linear-gradient(135deg, #22633a, #22c55e55);
+  border-color: #22c55e66;
+}
+
 .ai-toolbar-btn-icon {
   flex: 0 0 36px;
   padding: 8px 0;
