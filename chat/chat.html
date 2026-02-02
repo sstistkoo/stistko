@@ -479,6 +479,16 @@
         color: #f87171;
       }
 
+      /* Input Wrapper */
+      .chat-input-wrapper {
+        margin-top: auto;
+      }
+
+      .chat-input-wrapper .token-counter {
+        text-align: right;
+        margin-bottom: 8px;
+      }
+
       /* Input Area */
       .chat-input-area {
         display: flex;
@@ -543,6 +553,78 @@
       .mode-btn.active {
         background: var(--accent-blue);
         color: white;
+      }
+
+      /* Kompaktní mode toggle tlačítko v headeru */
+      .mode-toggle-btn {
+        background: linear-gradient(
+          135deg,
+          var(--accent-blue),
+          var(--accent-purple)
+        );
+        border: none;
+        border-radius: 8px;
+        padding: 6px 12px;
+        color: white;
+        font-size: 12px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s;
+        font-weight: 500;
+      }
+      .mode-toggle-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+      }
+      .mode-toggle-btn.manual {
+        background: linear-gradient(
+          135deg,
+          var(--accent-purple),
+          var(--accent-blue)
+        );
+      }
+
+      /* Zobrazení aktuálního modelu */
+      .current-model-display {
+        font-size: 11px;
+        color: var(--text-secondary);
+        background: rgba(34, 197, 94, 0.15);
+        padding: 4px 10px;
+        border-radius: 12px;
+        border: 1px solid rgba(34, 197, 94, 0.3);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 150px;
+      }
+
+      /* Model capabilities badges */
+      .model-caps {
+        display: flex;
+        gap: 4px;
+        flex-wrap: wrap;
+        margin-top: 4px;
+      }
+      .cap-badge {
+        font-size: 9px;
+        padding: 2px 5px;
+        border-radius: 4px;
+        background: rgba(59, 130, 246, 0.2);
+        color: #60a5fa;
+      }
+      .cap-badge.vision {
+        background: rgba(139, 92, 246, 0.2);
+        color: #a78bfa;
+      }
+      .cap-badge.code {
+        background: rgba(34, 197, 94, 0.2);
+        color: #4ade80;
+      }
+      .cap-badge.reasoning {
+        background: rgba(245, 158, 11, 0.2);
+        color: #fbbf24;
       }
 
       .chat-model-selectors {
@@ -1961,14 +2043,57 @@
 
       /* Responsive */
       @media (max-width: 768px) {
-        .container {
-          padding: 10px;
+        body {
+          padding: 0;
+          background: var(--bg-primary);
         }
+        .container {
+          padding: 0;
+          max-width: 100%;
+        }
+
+        /* Hlavní karta - fullscreen na mobilu */
+        .card {
+          border-radius: 0;
+          border: none;
+          margin: 0;
+          padding: 0;
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          background: var(--bg-primary);
+        }
+
+        /* Header na mobilu */
+        .card-title {
+          padding: 12px 16px;
+          background: linear-gradient(
+            135deg,
+            rgba(59, 130, 246, 0.15),
+            rgba(139, 92, 246, 0.15)
+          );
+          border-bottom: 1px solid var(--border-color);
+          margin-bottom: 0 !important;
+          position: sticky;
+          top: 0;
+          z-index: 100;
+          backdrop-filter: blur(10px);
+        }
+
         .best-models-grid {
           grid-template-columns: repeat(2, 1fr);
         }
         .chat-bubble {
-          max-width: 90%;
+          max-width: 85%;
+          border-radius: 18px;
+          padding: 10px 14px;
+          font-size: 15px;
+        }
+        .chat-message.user .chat-bubble {
+          border-bottom-right-radius: 6px;
+        }
+        .chat-message.assistant .chat-bubble {
+          border-bottom-left-radius: 6px;
         }
         .rate-limits-grid {
           grid-template-columns: 1fr;
@@ -1981,67 +2106,145 @@
 
         /* Modální okna na mobilu */
         .menu-modal {
-          padding: 10px;
+          padding: 0;
         }
         .menu-modal-content {
           max-width: 100%;
-          max-height: 90vh;
+          max-height: 100vh;
+          height: 100vh;
+          border-radius: 0;
         }
         .content-modal {
-          padding: 10px;
+          padding: 0;
         }
         .content-modal-box {
           max-width: 100%;
-          margin: 10px 0;
-          border-radius: 12px;
+          margin: 0;
+          border-radius: 0;
+          height: 100vh;
         }
         .content-modal-header {
           padding: 16px;
-          border-radius: 12px 12px 0 0;
+          border-radius: 0;
         }
         .content-modal-header h2 {
           font-size: 16px;
         }
         .content-modal-body {
           padding: 16px;
-          max-height: 75vh;
+          max-height: calc(100vh - 70px);
         }
 
-        /* Chat na mobilu */
+        /* Chat model bar na mobilu - kompaktnější */
         .chat-model-bar {
           flex-direction: column;
           gap: 10px;
+          margin: 12px;
+          padding: 12px;
+          border-radius: 16px;
+          background: rgba(30, 41, 59, 0.95);
         }
         .model-mode-toggle {
           width: 100%;
           justify-content: center;
+          background: rgba(0, 0, 0, 0.4);
+          border-radius: 12px;
+          padding: 4px;
+        }
+        .mode-btn {
+          flex: 1;
+          padding: 10px 14px;
+          font-size: 13px;
+          font-weight: 500;
+          border-radius: 10px;
         }
         .chat-model-selectors {
           width: 100%;
           flex-direction: column;
+          gap: 8px;
         }
         .chat-model-selectors select {
           width: 100%;
           min-width: unset;
+          padding: 12px 14px;
+          font-size: 14px;
+          border-radius: 12px;
+          background: var(--bg-tertiary);
         }
         .chat-auto-info {
           width: 100%;
           justify-content: center;
-        }
-        .chat-input-area {
-          flex-wrap: wrap;
-        }
-        .chat-input-area textarea {
-          min-height: 60px;
+          padding: 8px;
+          background: rgba(34, 197, 94, 0.1);
+          border-radius: 10px;
         }
 
-        /* Tlačítka na mobilu - větší pro dotyk */
+        /* Chat container na mobilu */
+        .chat-container {
+          flex: 1;
+          min-height: 0;
+          max-height: none;
+          border-radius: 0;
+          margin: 0;
+          padding: 16px;
+          padding-bottom: 120px; /* Prostor pro fixní input */
+          background: transparent;
+        }
+
+        .chat-empty {
+          padding: 40px 20px;
+        }
+
+        /* Input area na mobilu - fixní dole */
+        .chat-input-wrapper {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          background: linear-gradient(
+            to top,
+            var(--bg-primary) 90%,
+            transparent
+          );
+          padding: 8px 12px 32px 12px;
+          z-index: 50;
+        }
+        .chat-input-wrapper .token-counter {
+          text-align: center;
+          margin-bottom: 8px;
+          font-size: 11px;
+          color: var(--text-secondary);
+        }
+        .chat-input-area {
+          background: transparent;
+          padding: 0;
+          margin: 0;
+          gap: 10px;
+          flex-wrap: nowrap;
+        }
+        .chat-input-area textarea {
+          min-height: 44px;
+          max-height: 100px;
+          border-radius: 24px;
+          padding: 10px 16px;
+          font-size: 16px;
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+        }
+        .chat-input-area textarea:focus {
+          border-color: var(--accent-blue);
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        /* Tlačítka na mobilu - větší a kulatější */
         .main-menu-btn {
           padding: 10px 16px;
           font-size: 14px;
+          border-radius: 10px;
         }
         .chat-actions-btn {
-          padding: 8px 14px;
+          padding: 10px 14px;
+          border-radius: 10px;
         }
         .discover-provider-btn {
           padding: 14px 18px;
@@ -2049,6 +2252,15 @@
         }
         .discover-tab-btn {
           padding: 12px 20px;
+        }
+
+        /* Send button */
+        .btn-upload,
+        .btn-primary {
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          flex-shrink: 0;
         }
 
         /* Provider buttons grid na mobilu */
@@ -2066,25 +2278,37 @@
 
         /* Modal close button */
         .modal-close {
-          width: 40px;
-          height: 40px;
-          font-size: 22px;
+          width: 44px;
+          height: 44px;
+          font-size: 24px;
+          border-radius: 50%;
+        }
+
+        /* Status bar */
+        .status-badge {
+          padding: 6px 12px;
+          border-radius: 20px;
+          font-size: 12px;
         }
       }
 
       /* Extra malé obrazovky (telefony na výšku) */
       @media (max-width: 480px) {
         body {
-          padding: 8px;
+          padding: 0;
         }
         .card {
-          padding: 16px;
-          border-radius: 12px;
+          padding: 0;
+          border-radius: 0;
         }
         .card-title {
           font-size: 14px;
           flex-wrap: wrap;
           gap: 8px;
+          padding: 10px 12px;
+        }
+        .card-title .icon {
+          font-size: 18px;
         }
         .keys-grid {
           grid-template-columns: 1fr;
@@ -2104,13 +2328,42 @@
           font-size: 12px;
         }
         .chat-container {
-          min-height: 250px;
-          max-height: 350px;
+          min-height: 0;
+          max-height: none;
+          flex: 1;
         }
         .status-bar {
-          flex-direction: column;
+          flex-direction: row;
           gap: 8px;
           text-align: center;
+          flex-wrap: wrap;
+          justify-content: center;
+          padding: 8px 12px;
+        }
+
+        /* Chat model bar ještě kompaktnější */
+        .chat-model-bar {
+          margin: 8px;
+          padding: 10px;
+          gap: 8px;
+        }
+        .mode-btn {
+          padding: 8px 12px;
+          font-size: 12px;
+        }
+        .chat-model-selectors select {
+          padding: 10px 12px;
+          font-size: 13px;
+        }
+
+        /* Input area */
+        .chat-input-area {
+          padding: 10px 12px 16px 12px;
+        }
+        .chat-input-area textarea {
+          min-height: 44px;
+          padding: 10px 16px;
+          font-size: 15px;
         }
 
         /* Features grid */
@@ -2130,6 +2383,19 @@
         /* Discover modely na mobilu */
         #modalDiscoverModelsList > div {
           flex-wrap: wrap;
+        }
+
+        /* Zprávy */
+        .chat-bubble {
+          max-width: 88%;
+          padding: 10px 12px;
+          font-size: 14px;
+        }
+
+        /* Menu button */
+        .main-menu-btn {
+          padding: 8px 12px;
+          font-size: 13px;
         }
       }
 
@@ -2165,6 +2431,75 @@
         .menu-modal-body,
         #modalDiscoverModelsList {
           -webkit-overflow-scrolling: touch;
+          overscroll-behavior: contain;
+        }
+
+        /* Aktivní stavy pro touch */
+        button:active,
+        .btn-primary:active,
+        .main-menu-btn:active {
+          transform: scale(0.96);
+          opacity: 0.9;
+        }
+
+        .chat-bubble {
+          -webkit-user-select: text;
+          user-select: text;
+        }
+      }
+
+      /* Safe area pro telefony s notchem */
+      @supports (padding: env(safe-area-inset-bottom)) {
+        @media (max-width: 768px) {
+          .chat-input-wrapper {
+            padding-bottom: calc(32px + env(safe-area-inset-bottom));
+          }
+          .card-title {
+            padding-top: calc(12px + env(safe-area-inset-top));
+          }
+        }
+      }
+
+      /* Landscape mód na mobilu */
+      @media (max-width: 896px) and (orientation: landscape) {
+        .chat-container {
+          max-height: 50vh;
+        }
+        .chat-model-bar {
+          flex-direction: row;
+          flex-wrap: wrap;
+        }
+        .model-mode-toggle {
+          width: auto;
+        }
+        .chat-model-selectors {
+          flex-direction: row;
+          width: auto;
+          flex: 1;
+        }
+      }
+
+      /* Animace pro moderní feel */
+      @media (max-width: 768px) {
+        .chat-message {
+          animation: slideIn 0.2s ease-out;
+        }
+        @keyframes slideIn {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .mode-btn {
+          transition: all 0.2s ease;
+        }
+        .mode-btn.active {
+          box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
         }
       }
     </style>
@@ -2191,6 +2526,15 @@
             >
               ☰ Menu
             </button>
+            <button
+              class="mode-toggle-btn"
+              id="modeToggleBtn"
+              onclick="toggleChatMode()"
+              title="Přepnout Auto/Manual režim"
+            >
+              🎯 Auto
+            </button>
+            <span id="currentModelDisplay" class="current-model-display"></span>
             <div class="chat-actions-dropdown">
               <button class="chat-actions-btn" onclick="toggleChatMenu()">
                 ⚙️ <span style="font-size: 10px">▼</span>
@@ -2258,106 +2602,58 @@
         </div>
         <div>
           <!-- Model Selection Bar -->
-          <div class="chat-model-bar">
-            <div class="model-mode-toggle">
-              <button
-                class="mode-btn active"
-                id="modeAutoBtn"
-                onclick="setChatMode('auto')"
-              >
-                🎯 Auto
-              </button>
-              <button
-                class="mode-btn"
-                id="modeManualBtn"
-                onclick="setChatMode('manual')"
-              >
-                ✋ Manual
-              </button>
-            </div>
-
-            <div
-              class="chat-model-selectors"
-              id="chatModelSelectors"
-              style="display: none"
-            >
+          <div class="chat-model-bar" id="chatModelBar" style="display: none">
+            <div class="chat-model-selectors" id="chatModelSelectors">
               <select id="chatProviderSelect" onchange="onChatProviderChange()">
                 <option value="gemini">🤖 Gemini</option>
                 <option value="groq">⚡ Groq</option>
                 <option value="openrouter">🌐 OpenRouter</option>
                 <option value="mistral">🔥 Mistral</option>
-                <option value="cohere">🧬 Cohere</option>
-                <option value="huggingface">🤗 HuggingFace</option>
               </select>
               <select id="chatModelSelect" style="min-width: 200px">
                 <!-- Dynamicky naplněno z API -->
               </select>
-              <button
-                onclick="refreshChatModels()"
-                title="Obnovit seznam modelů z API"
-                style="
-                  padding: 6px 10px;
-                  background: var(--bg-tertiary);
-                  border: 1px solid var(--border-color);
-                  border-radius: 6px;
-                  color: var(--text-secondary);
-                  cursor: pointer;
-                  font-size: 12px;
-                "
-              >
-                🔄
-              </button>
             </div>
-
-            <div class="chat-auto-info" id="chatAutoInfo">
-              <span class="auto-badge">🎯 Auto</span>
-              <span id="autoSelectedModel">Nejlepší dostupný model</span>
-            </div>
-          </div>
-
-          <div class="status-bar">
-            <div>
-              <span id="currentProvider">gemini</span> /
-              <span id="currentModel">-</span>
-            </div>
-            <div class="status-badge ready" id="statusBadge">● Připraven</div>
           </div>
 
           <div class="chat-container" id="chatContainer">
             <div class="chat-empty" id="chatEmpty">Začni konverzaci...</div>
           </div>
 
-          <div class="chat-input-area">
-            <button
-              class="btn-upload"
-              onclick="document.getElementById('fileInput').click()"
-              title="Nahrát soubor"
-            >
-              📎
-            </button>
-            <input
-              type="file"
-              id="fileInput"
-              accept="image/*,.txt,.md,.json"
-              style="display: none"
-              onchange="handleFileSelect(event)"
-            />
-            <textarea
-              id="userPrompt"
-              placeholder="Napiš zprávu..."
-              oninput="updateTokenCount()"
-            ></textarea>
-            <button
-              class="btn-primary"
-              id="btnSend"
-              onclick="sendRequest()"
-              style="height: 50px; padding: 0 20px"
-            >
-              📤
-            </button>
-          </div>
-          <div class="token-counter">
-            <span id="tokenCount">~0 tokenů</span>
+          <div class="chat-input-wrapper">
+            <div class="token-counter">
+              <span id="tokenCount">~0 tokenů</span>
+            </div>
+            <div class="chat-input-area">
+              <button
+                class="btn-upload"
+                onclick="document.getElementById('fileInput').click()"
+                title="Nahrát soubor"
+              >
+                📎
+              </button>
+              <input
+                type="file"
+                id="fileInput"
+                accept="image/*,.txt,.md,.json"
+                style="display: none"
+                onchange="handleFileSelect(event)"
+              />
+              <textarea
+                id="userPrompt"
+                placeholder="Napiš zprávu..."
+                oninput="updateTokenCount()"
+                onkeydown="handlePromptKeydown(event)"
+              ></textarea>
+              <button
+                class="btn-primary"
+                id="btnSend"
+                onclick="sendRequest()"
+                style="height: 50px; padding: 0 20px"
+              >
+                📤
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -2473,6 +2769,23 @@
               <span class="menu-accordion-arrow">➔</span>
             </div>
           </div>
+
+          <!-- DevTools -->
+          <div
+            class="menu-accordion-item"
+            onclick="
+              toggleDevTools();
+              closeMainMenu();
+            "
+            style="cursor: pointer"
+          >
+            <div class="menu-accordion-header">
+              <div class="menu-accordion-title">
+                <span class="icon">🛠️</span> DevTools
+              </div>
+              <span class="menu-accordion-arrow">➔</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -2575,14 +2888,6 @@
         <div id="devConsoleOutput"></div>
       </div>
     </div>
-    <button
-      id="devToolsToggle"
-      onclick="toggleDevTools()"
-      title="Mobile DevTools"
-      style="display: none"
-    >
-      🛠️
-    </button>
 
     <input
       type="file"
@@ -3424,10 +3729,11 @@
         document.getElementById("modelSelect").value = model;
         updateModelInfo();
 
-        document.getElementById("currentProvider").textContent = provider;
-        document.getElementById("currentModel").textContent = model
-          .split("/")
-          .pop();
+        // Aktualizovat zobrazení modelu
+        const display = document.getElementById("currentModelDisplay");
+        if (display) {
+          display.textContent = `${PROVIDER_LIMITS[provider]?.icon || ""} ${model.split("/").pop().split(":")[0]}`;
+        }
 
         logToConsole("info", `Vybrán model: ${provider}/${model}`);
       }
@@ -3456,31 +3762,37 @@
       const cachedFreeModels = {};
       const modelsLoadingState = {};
 
+      // Toggle funkce pro přepínání režimů
+      function toggleChatMode() {
+        const newMode = chatMode === "auto" ? "manual" : "auto";
+        setChatMode(newMode);
+      }
+
       function setChatMode(mode) {
         chatMode = mode;
 
-        // Update buttons
-        document
-          .getElementById("modeAutoBtn")
-          .classList.toggle("active", mode === "auto");
-        document
-          .getElementById("modeManualBtn")
-          .classList.toggle("active", mode === "manual");
+        // Update toggle button
+        const toggleBtn = document.getElementById("modeToggleBtn");
+        if (toggleBtn) {
+          if (mode === "auto") {
+            toggleBtn.innerHTML = "🎯 Auto";
+            toggleBtn.classList.remove("manual");
+          } else {
+            toggleBtn.innerHTML = "✋ Manual";
+            toggleBtn.classList.add("manual");
+          }
+        }
 
-        // Show/hide selectors
-        const selectors = document.getElementById("chatModelSelectors");
-        const autoInfo = document.getElementById("chatAutoInfo");
+        // Show/hide model bar
+        const modelBar = document.getElementById("chatModelBar");
 
         if (mode === "manual") {
-          selectors.style.display = "flex";
-          autoInfo.style.display = "none";
+          modelBar.style.display = "flex";
           // Sync with current provider/model
           document.getElementById("chatProviderSelect").value = currentProvider;
           updateChatModelSelect();
         } else {
-          selectors.style.display = "none";
-          autoInfo.style.display = "flex";
-          updateAutoModelInfo();
+          modelBar.style.display = "none";
         }
 
         logToConsole(
@@ -3498,8 +3810,6 @@
         document.querySelectorAll(".provider-tab").forEach((tab) => {
           tab.classList.toggle("active", tab.dataset.provider === provider);
         });
-
-        document.getElementById("currentProvider").textContent = provider;
       }
 
       // Načte FREE modely z API pro daného providera
@@ -3604,28 +3914,33 @@
           return;
         }
 
+        // Formát capabilities ikon
+        const capIcons = {
+          text: "📝",
+          vision: "👁️",
+          code: "💻",
+          reasoning: "🧠",
+          "image-gen": "🎨",
+        };
+
         select.innerHTML = models
-          .map(
-            (m) =>
-              `<option value="${m.value}">${m.name} (${m.quality}%)</option>`,
-          )
+          .map((m) => {
+            const caps = m.caps
+              ? m.caps.map((c) => capIcons[c] || "").join("")
+              : "";
+            return `<option value="${m.value}">${m.name} ${caps}</option>`;
+          })
           .join("");
 
         if (models.length > 0) {
           const model = select.value;
           AI.setModel(provider, model);
-          document.getElementById("currentModel").textContent = model
-            .split("/")
-            .pop();
         }
 
         // Add change listener
         select.onchange = () => {
           const model = select.value;
           AI.setModel(currentProvider, model);
-          document.getElementById("currentModel").textContent = model
-            .split("/")
-            .pop();
           logToConsole("info", `Model změněn: ${currentProvider}/${model}`);
         };
       }
@@ -3647,15 +3962,12 @@
 
       function updateAutoModelInfo() {
         const best = AI.selectBestModel();
-        if (best) {
+        const display = document.getElementById("currentModelDisplay");
+        if (best && display) {
           const providerInfo = PROVIDER_LIMITS[best.provider];
-          document.getElementById("autoSelectedModel").textContent =
-            `${providerInfo?.icon || ""} ${best.provider}/${best.model.split("/").pop()}`;
-          document.getElementById("currentProvider").textContent =
-            best.provider;
-          document.getElementById("currentModel").textContent = best.model
-            .split("/")
-            .pop();
+          const modelName = best.model.split("/").pop().split(":")[0];
+          display.textContent = `${providerInfo?.icon || ""} ${modelName}`;
+          display.title = `${best.provider}/${best.model}`;
         }
       }
 
@@ -3799,7 +4111,6 @@
           }
         }, 50);
 
-        document.getElementById("currentProvider").textContent = provider;
         logToConsole("info", `Vybrán model: ${provider}/${model}`);
       }
 
@@ -4405,10 +4716,12 @@
         // Vybrat model
         modelSelect.value = modelId;
         AI.setModel(provider, modelId);
-        document.getElementById("currentProvider").textContent = provider;
-        document.getElementById("currentModel").textContent = modelId
-          .split("/")
-          .pop();
+
+        // Aktualizovat zobrazení modelu
+        const display = document.getElementById("currentModelDisplay");
+        if (display) {
+          display.textContent = `${PROVIDER_LIMITS[provider]?.icon || ""} ${modelId.split("/").pop().split(":")[0]}`;
+        }
 
         // Otevřít chat sekci
         const chatSection = document.getElementById("chatSection");
@@ -4534,8 +4847,6 @@
               .forEach((t) => t.classList.remove("active"));
             tab.classList.add("active");
             currentProvider = tab.dataset.provider;
-            document.getElementById("currentProvider").textContent =
-              currentProvider;
             updateModels();
             selectedBestModel = null;
             updateBestModelsGrid();
@@ -4564,12 +4875,13 @@
         if (!model) return;
 
         const limit = AI.getModelLimit(model);
-        document.getElementById("modelRpm").textContent = limit;
-        document.getElementById("currentModel").textContent = model
-          .split("/")
-          .pop();
-        document.getElementById("currentSettingsInfo").textContent =
-          `(${currentProvider} / ${model.split("/").pop()})`;
+        const rpmEl = document.getElementById("modelRpm");
+        if (rpmEl) rpmEl.textContent = limit;
+
+        const settingsInfo = document.getElementById("currentSettingsInfo");
+        if (settingsInfo) {
+          settingsInfo.textContent = `(${currentProvider} / ${model.split("/").pop()})`;
+        }
       }
 
       // ============================================================
@@ -4753,6 +5065,14 @@
         }
       }
 
+      // Handler pro Enter - odešle zprávu
+      function handlePromptKeydown(event) {
+        if (event.key === "Enter" && !event.shiftKey) {
+          event.preventDefault();
+          sendRequest();
+        }
+      }
+
       async function sendRequest() {
         const promptInput = document.getElementById("userPrompt");
         const prompt = promptInput?.value.trim();
@@ -4785,11 +5105,11 @@
             system: "Odpovídej česky. Jsi přátelský asistent.",
           });
 
-          document.getElementById("currentProvider").textContent =
-            selected.provider;
-          document.getElementById("currentModel").textContent = selected.model
-            .split("/")
-            .pop();
+          // Aktualizovat zobrazení modelu
+          const display = document.getElementById("currentModelDisplay");
+          if (display) {
+            display.textContent = `${PROVIDER_LIMITS[selected.provider]?.icon || ""} ${selected.model.split("/").pop().split(":")[0]}`;
+          }
 
           const elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
           updateLastBubble(response);
@@ -6460,10 +6780,8 @@ ${results.map((r, i) => `${i + 1}. ${r.success ? r.response?.trim() : "❌ " + r
 
       function toggleDevTools() {
         const panel = document.getElementById("devToolsPanel");
-        const toggle = document.getElementById("devToolsToggle");
         devToolsVisible = !devToolsVisible;
         panel.style.display = devToolsVisible ? "block" : "none";
-        toggle.classList.toggle("active", devToolsVisible);
       }
 
       function switchDevTab(tab) {
@@ -6600,18 +6918,6 @@ ${results.map((r, i) => `${i + 1}. ${r.success ? r.response?.trim() : "❌ " + r
         }
         // Na PC F12 otevře normální DevTools prohlížeče
       });
-
-      // Skrýt DevTools tlačítko na PC, zobrazit pouze na mobilu
-      function updateDevToolsButtonVisibility() {
-        const btn = document.getElementById("devToolsToggle");
-        if (btn) {
-          btn.style.display = isMobileDevice() ? "flex" : "none";
-        }
-      }
-
-      // Aktualizovat při načtení a změně velikosti okna
-      window.addEventListener("load", updateDevToolsButtonVisibility);
-      window.addEventListener("resize", updateDevToolsButtonVisibility);
 
       // Capture errors
       window.onerror = (msg, url, line) =>
