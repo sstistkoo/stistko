@@ -938,6 +938,7 @@ canvas {
 #controllerModal {
   background: transparent !important;
   backdrop-filter: none !important;
+  z-index: 10300 !important; /* Vyšší než AI panel (10100) a AI keyboard (10200) */
 }
 
 /* Portrait mode na mobilu - ovladač na dně, kompaktnější */
