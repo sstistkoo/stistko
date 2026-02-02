@@ -807,43 +807,44 @@ const AI = {
     },
 
     // ============== VŠECHNY MODELY (seřazené od nejlepších) ==============
+    // caps: text, vision, code, reasoning, image-gen
     ALL_MODELS: {
         gemini: [
-            { value: "gemini-2.5-flash", name: "🧠 Gemini 2.5 Flash (Hybrid)", rpm: 15, quality: 95, free: true },
-            { value: "gemini-2.5-flash-lite", name: "⚡ Gemini 2.5 Flash-Lite", rpm: 30, quality: 85, free: true },
-            { value: "gemini-2.5-pro", name: "🏆 Gemini 2.5 Pro", rpm: 5, quality: 98, free: true },
-            { value: "gemini-3-flash-preview", name: "🔥 Gemini 3.0 Flash Preview", rpm: 15, quality: 96, free: true },
-            { value: "gemini-2.0-flash", name: "👁️ Gemini 2.0 Flash (Image-Gen)", rpm: 15, quality: 92, free: true },
-            { value: "gemini-2.0-flash-lite", name: "⚡ Gemini 2.0 Flash-Lite", rpm: 20, quality: 82, free: true },
-            { value: "gemma-3-27b-it", name: "🤖 Gemma 3 27B (Open)", rpm: 15, quality: 88, free: true },
-            { value: "gemini-robotics-er-1.5-preview", name: "🤖 Gemini Robotics-ER 1.5", rpm: 5, quality: 85, free: true }
+            { value: "gemini-2.5-flash", name: "🧠 Gemini 2.5 Flash (Hybrid)", rpm: 15, quality: 95, free: true, caps: ["text", "vision", "code", "reasoning"] },
+            { value: "gemini-2.5-flash-lite", name: "⚡ Gemini 2.5 Flash-Lite", rpm: 30, quality: 85, free: true, caps: ["text", "code"] },
+            { value: "gemini-2.5-pro", name: "🏆 Gemini 2.5 Pro", rpm: 5, quality: 98, free: true, caps: ["text", "vision", "code", "reasoning"] },
+            { value: "gemini-3-flash-preview", name: "🔥 Gemini 3.0 Flash Preview", rpm: 15, quality: 96, free: true, caps: ["text", "vision", "code", "reasoning"] },
+            { value: "gemini-2.0-flash", name: "👁️ Gemini 2.0 Flash (Image-Gen)", rpm: 15, quality: 92, free: true, caps: ["text", "vision", "image-gen"] },
+            { value: "gemini-2.0-flash-lite", name: "⚡ Gemini 2.0 Flash-Lite", rpm: 20, quality: 82, free: true, caps: ["text"] },
+            { value: "gemma-3-27b-it", name: "🤖 Gemma 3 27B (Open)", rpm: 15, quality: 88, free: true, caps: ["text", "code"] },
+            { value: "gemini-robotics-er-1.5-preview", name: "🤖 Gemini Robotics-ER 1.5", rpm: 5, quality: 85, free: true, caps: ["text", "vision"] }
         ],
         groq: [
-            { value: "llama-3.3-70b-versatile", name: "🏆 Llama 3.3 70B", rpm: 30, quality: 90, free: true },
-            { value: "llama-3.1-8b-instant", name: "⚡ Llama 3.1 8B Instant", rpm: 30, quality: 75, free: true },
-            { value: "meta-llama/llama-4-scout-17b-16e-instruct", name: "🔥 Llama 4 Scout 17B", rpm: 30, quality: 88, free: true },
-            { value: "meta-llama/llama-4-maverick-17b-128e-instruct", name: "🔥 Llama 4 Maverick 17B", rpm: 30, quality: 90, free: true },
-            { value: "qwen/qwen3-32b", name: "💻 Qwen3 32B", rpm: 60, quality: 85, free: true },
-            { value: "moonshotai/kimi-k2-instruct", name: "🎯 Kimi K2 Instruct", rpm: 60, quality: 82, free: true },
-            { value: "openai/gpt-oss-120b", name: "🧠 GPT-OSS 120B", rpm: 30, quality: 88, free: true },
-            { value: "allam-2-7b", name: "🌍 Allam 2 7B (Arabic)", rpm: 30, quality: 70, free: true }
+            { value: "llama-3.3-70b-versatile", name: "🏆 Llama 3.3 70B", rpm: 30, quality: 90, free: true, caps: ["text", "code", "reasoning"] },
+            { value: "llama-3.1-8b-instant", name: "⚡ Llama 3.1 8B Instant", rpm: 30, quality: 75, free: true, caps: ["text"] },
+            { value: "meta-llama/llama-4-scout-17b-16e-instruct", name: "🔥 Llama 4 Scout 17B", rpm: 30, quality: 88, free: true, caps: ["text", "vision", "code"] },
+            { value: "meta-llama/llama-4-maverick-17b-128e-instruct", name: "🔥 Llama 4 Maverick 17B", rpm: 30, quality: 90, free: true, caps: ["text", "vision", "code", "reasoning"] },
+            { value: "qwen/qwen3-32b", name: "💻 Qwen3 32B", rpm: 60, quality: 85, free: true, caps: ["text", "code"] },
+            { value: "moonshotai/kimi-k2-instruct", name: "🎯 Kimi K2 Instruct", rpm: 60, quality: 82, free: true, caps: ["text"] },
+            { value: "openai/gpt-oss-120b", name: "🧠 GPT-OSS 120B", rpm: 30, quality: 88, free: true, caps: ["text", "code", "reasoning"] },
+            { value: "allam-2-7b", name: "🌍 Allam 2 7B (Arabic)", rpm: 30, quality: 70, free: true, caps: ["text"] }
         ],
         openrouter: [
-            { value: "deepseek/deepseek-r1-0528:free", name: "🧠 DeepSeek R1 (o1-level)", rpm: 20, quality: 96, free: true },
-            { value: "meta-llama/llama-3.3-70b-instruct:free", name: "🦙 Llama 3.3 70B", rpm: 20, quality: 88, free: true },
-            { value: "google/gemma-3-27b-it:free", name: "🤖 Gemma 3 27B", rpm: 20, quality: 86, free: true },
-            { value: "nvidia/nemotron-3-nano-30b-a3b:free", name: "⚡ NVIDIA Nemotron 3 Nano", rpm: 20, quality: 85, free: true },
-            { value: "nvidia/nemotron-nano-12b-v2-vl:free", name: "👁️ NVIDIA Nemotron VL", rpm: 20, quality: 83, free: true },
-            { value: "tngtech/deepseek-r1t2-chimera:free", name: "🧬 DeepSeek R1T2 Chimera", rpm: 20, quality: 92, free: true },
-            { value: "tngtech/deepseek-r1t-chimera:free", name: "🧬 DeepSeek R1T Chimera", rpm: 20, quality: 90, free: true },
-            { value: "tngtech/tng-r1t-chimera:free", name: "🎭 TNG R1T Chimera", rpm: 20, quality: 88, free: true },
-            { value: "z-ai/glm-4.5-air:free", name: "💭 GLM 4.5 Air", rpm: 20, quality: 84, free: true },
-            { value: "mistralai/mistral-small-3.1-24b-instruct:free", name: "🔥 Mistral Small 3.1", rpm: 20, quality: 82, free: true }
+            { value: "deepseek/deepseek-r1-0528:free", name: "🧠 DeepSeek R1 (o1-level)", rpm: 20, quality: 96, free: true, caps: ["text", "code", "reasoning"] },
+            { value: "meta-llama/llama-3.3-70b-instruct:free", name: "🦙 Llama 3.3 70B", rpm: 20, quality: 88, free: true, caps: ["text", "code"] },
+            { value: "google/gemma-3-27b-it:free", name: "🤖 Gemma 3 27B", rpm: 20, quality: 86, free: true, caps: ["text", "code"] },
+            { value: "nvidia/nemotron-3-nano-30b-a3b:free", name: "⚡ NVIDIA Nemotron 3 Nano", rpm: 20, quality: 85, free: true, caps: ["text", "code"] },
+            { value: "nvidia/nemotron-nano-12b-v2-vl:free", name: "👁️ NVIDIA Nemotron VL", rpm: 20, quality: 83, free: true, caps: ["text", "vision"] },
+            { value: "tngtech/deepseek-r1t2-chimera:free", name: "🧬 DeepSeek R1T2 Chimera", rpm: 20, quality: 92, free: true, caps: ["text", "code", "reasoning"] },
+            { value: "tngtech/deepseek-r1t-chimera:free", name: "🧬 DeepSeek R1T Chimera", rpm: 20, quality: 90, free: true, caps: ["text", "code", "reasoning"] },
+            { value: "tngtech/tng-r1t-chimera:free", name: "🎭 TNG R1T Chimera", rpm: 20, quality: 88, free: true, caps: ["text", "code"] },
+            { value: "z-ai/glm-4.5-air:free", name: "💭 GLM 4.5 Air", rpm: 20, quality: 84, free: true, caps: ["text"] },
+            { value: "mistralai/mistral-small-3.1-24b-instruct:free", name: "🔥 Mistral Small 3.1", rpm: 20, quality: 82, free: true, caps: ["text", "code"] }
         ],
         mistral: [
-            { value: "mistral-small-latest", name: "🧠 Mistral Small", rpm: 10, quality: 85, free: true },
-            { value: "open-mistral-7b", name: "🤖 Mistral 7B (Open)", rpm: 10, quality: 75, free: true },
-            { value: "codestral-latest", name: "💻 Codestral", rpm: 10, quality: 88, free: true }
+            { value: "mistral-small-latest", name: "🧠 Mistral Small", rpm: 10, quality: 85, free: true, caps: ["text", "code"] },
+            { value: "open-mistral-7b", name: "🤖 Mistral 7B (Open)", rpm: 10, quality: 75, free: true, caps: ["text"] },
+            { value: "codestral-latest", name: "💻 Codestral", rpm: 10, quality: 88, free: true, caps: ["code"] }
         ]
         // POZNÁMKA: Cohere a HuggingFace odstraněny - API nefunkční (leden 2026)
         // Cohere: 404 Not Found na v2/chat
