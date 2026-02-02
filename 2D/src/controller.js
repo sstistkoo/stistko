@@ -47,12 +47,9 @@ document.addEventListener("DOMContentLoaded", function() {
 // ===== MODAL FUNKCE =====
 
 window.showControllerModal = function () {
-  console.log("🎮 showControllerModal called");
   const modal = document.getElementById("controllerModal");
-  console.log("🎮 controllerModal element:", modal);
   if (modal) {
     modal.style.display = "flex";
-    console.log("🎮 Modal display set to flex");
 
     // Debug při otevření
     setTimeout(window.debugControllerCSS, 100);
@@ -612,6 +609,47 @@ window.confirmControllerInput = function () {
       alert(
         "Neplatný příkaz! Použij G-kód (G0, G1, G2, G3) nebo klikni na šipku a zadej parametry."
       );
+    }
+  }
+};
+
+// ===== ODESLAT DO AI =====
+
+window.sendControllerToAI = function() {
+  const input = window.controllerInputBuffer.trim();
+  
+  if (!input) {
+    if (typeof window.showToast === "function") {
+      window.showToast("⚠️ Zadej příkaz pro odeslání do AI", "warning");
+    }
+    return;
+  }
+  
+  // Najít AI textarea
+  const aiTextarea = document.querySelector("#aiPanel .ai-prompt-textarea") ||
+                     document.getElementById("aiPrompt");
+  
+  if (aiTextarea) {
+    // Přidat text do AI textarey s prefixem
+    const prefix = "Nakresli: ";
+    aiTextarea.value = prefix + input;
+    aiTextarea.focus();
+    
+    // Zavřít controller modal
+    window.closeControllerModal();
+    
+    // Ujistit se, že AI panel je viditelný
+    const toolsAi = document.getElementById("toolsAi");
+    if (toolsAi && toolsAi.style.display !== "flex") {
+      toolsAi.style.display = "flex";
+    }
+    
+    if (typeof window.showToast === "function") {
+      window.showToast("📝 Příkaz vložen do AI - můžeš přidat poznámku a odeslat", "success");
+    }
+  } else {
+    if (typeof window.showToast === "function") {
+      window.showToast("❌ AI panel nenalezen", "error");
     }
   }
 };

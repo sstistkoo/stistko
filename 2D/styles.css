@@ -3998,7 +3998,7 @@ canvas {
   border: 1px solid #4a6a9a;
   border-radius: 12px;
   padding: 16px;
-  z-index: 10100;
+  z-index: 10400; /* Vyšší než controller (10300) */
   min-width: 280px;
   max-width: 400px;
   box-shadow: 0 10px 40px rgba(0,0,0,0.6);
@@ -4078,7 +4078,7 @@ canvas {
   right: 0;
   bottom: 0;
   background: rgba(0,0,0,0.5);
-  z-index: 10099;
+  z-index: 10399; /* Těsně pod popup (10400) */
   display: none;
 }
 
@@ -4233,6 +4233,17 @@ canvas {
 
 .ctrl-btn-pick:hover {
   background: linear-gradient(135deg, #2a5a4a 0%, #3a7a6a 100%);
+}
+
+/* Tlačítko pro odeslání do AI */
+.ctrl-btn-ai {
+  background: linear-gradient(135deg, #4a2a6a 0%, #7c3aed 100%);
+  border-color: #a78bfa;
+  color: #c4b5fd;
+}
+
+.ctrl-btn-ai:hover {
+  background: linear-gradient(135deg, #5a3a7a 0%, #8b5cf6 100%);
 }
 
 /* Kompaktní info o posledním bodu */

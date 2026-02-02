@@ -1463,13 +1463,13 @@
 
         <!-- Controller Layout - KOMPAKTNÍ KLÁVESNICE -->
         <div class="controller-keyboard">
-          <!-- Row 0: G, L, AP, R, A - G-kódy a parametry -->
+          <!-- Row 0: G, L, AP, R, 🎯 - G-kódy, parametry a pick point -->
           <div class="controller-grid controller-grid-5">
             <button onclick="window.insertControllerToken('G')" class="ctrl-btn ctrl-btn-gcode">G</button>
             <button onclick="window.insertControllerToken('L')" class="ctrl-btn ctrl-btn-gcode">L</button>
             <button onclick="window.insertControllerToken('AP')" class="ctrl-btn ctrl-btn-param">AP</button>
             <button onclick="window.insertControllerToken('R')" class="ctrl-btn ctrl-btn-param">R</button>
-            <button onclick="window.insertControllerToken('A')" class="ctrl-btn ctrl-btn-param">A</button>
+            <button onclick="window.startPickPointMode()" class="ctrl-btn ctrl-btn-pick" title="Vybrat bod z mapy">🎯</button>
           </div>
 
           <!-- Row 1: X, Z, 7, 8, 9 -->
@@ -1499,12 +1499,12 @@
             <button onclick="window.insertControllerToken('3')" class="ctrl-btn ctrl-btn-num">3</button>
           </div>
 
-          <!-- Row 4: 🧮, ⌫, 0, 🎯, ✓ -->
+          <!-- Row 4: 🧮, ⌫, 0, 🤖, ✓ -->
           <div class="controller-grid controller-grid-5">
             <button onclick="window.showCalculator()" class="ctrl-btn" title="Kalkulačka">🧮</button>
             <button onclick="window.backspaceControllerToken()" class="ctrl-btn ctrl-btn-delete">⌫</button>
             <button onclick="window.insertControllerToken('0')" class="ctrl-btn ctrl-btn-num">0</button>
-            <button onclick="window.startPickPointMode()" class="ctrl-btn ctrl-btn-pick" title="Vybrat bod z mapy">🎯</button>
+            <button onclick="window.sendControllerToAI()" class="ctrl-btn ctrl-btn-ai" title="Odeslat do AI">🤖</button>
             <button onclick="window.confirmControllerInput()" class="ctrl-btn ctrl-btn-confirm">✓</button>
           </div>
         </div>
