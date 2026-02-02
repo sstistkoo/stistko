@@ -617,33 +617,33 @@ window.confirmControllerInput = function () {
 
 window.sendControllerToAI = function() {
   const input = window.controllerInputBuffer.trim();
-  
+
   if (!input) {
     if (typeof window.showToast === "function") {
       window.showToast("⚠️ Zadej příkaz pro odeslání do AI", "warning");
     }
     return;
   }
-  
+
   // Najít AI textarea
   const aiTextarea = document.querySelector("#aiPanel .ai-prompt-textarea") ||
                      document.getElementById("aiPrompt");
-  
+
   if (aiTextarea) {
     // Přidat text do AI textarey s prefixem
     const prefix = "Nakresli: ";
     aiTextarea.value = prefix + input;
     aiTextarea.focus();
-    
+
     // Zavřít controller modal
     window.closeControllerModal();
-    
+
     // Ujistit se, že AI panel je viditelný
     const toolsAi = document.getElementById("toolsAi");
     if (toolsAi && toolsAi.style.display !== "flex") {
       toolsAi.style.display = "flex";
     }
-    
+
     if (typeof window.showToast === "function") {
       window.showToast("📝 Příkaz vložen do AI - můžeš přidat poznámku a odeslat", "success");
     }
