@@ -3802,9 +3802,10 @@
           modelBar.style.display = "flex";
           // Sync with current provider/model
           document.getElementById("chatProviderSelect").value = currentProvider;
-          updateChatModelSelect();
+          updateChatModelSelect(); // Toto zavolá updateAutoModelInfo() po načtení
         } else {
           modelBar.style.display = "none";
+          updateAutoModelInfo(); // Aktualizuj zobrazení pro Auto režim
         }
 
         logToConsole(
@@ -4044,11 +4045,14 @@
             const providerInfo = PROVIDER_LIMITS[provider];
             const modelName = model.split("/").pop().split(":")[0];
             // Najdi kvalitu z option
-            const selectedOption = modelSelect.options[modelSelect.selectedIndex];
+            const selectedOption =
+              modelSelect.options[modelSelect.selectedIndex];
             const optionText = selectedOption?.text || "";
             const qualityMatch = optionText.match(/\((\d+)%\)/);
             const quality = qualityMatch ? qualityMatch[1] : null;
-            const qualityStr = quality ? ` <span style="color: var(--accent-green); font-size: 11px;">(${quality}%)</span>` : "";
+            const qualityStr = quality
+              ? ` <span style="color: var(--accent-green); font-size: 11px;">(${quality}%)</span>`
+              : "";
             display.innerHTML = `${providerInfo?.icon || "🤖"} <strong>${providerInfo?.name || provider}</strong> / ${modelName}${qualityStr}`;
             display.title = `${provider}/${model}`;
           }
@@ -4060,7 +4064,9 @@
             const providerName = providerInfo?.name || best.provider;
             const modelName = best.model.split("/").pop().split(":")[0];
             const quality = best.quality || null;
-            const qualityStr = quality ? ` <span style="color: var(--accent-green); font-size: 11px;">(${quality}%)</span>` : "";
+            const qualityStr = quality
+              ? ` <span style="color: var(--accent-green); font-size: 11px;">(${quality}%)</span>`
+              : "";
             display.innerHTML = `${providerInfo?.icon || "🤖"} <strong>${providerName}</strong> / ${modelName}${qualityStr}`;
             display.title = `${best.provider}/${best.model}`;
           }
