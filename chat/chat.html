@@ -3798,7 +3798,10 @@
         }
 
         // Text (default for all)
-        if (!caps.length || /text|chat|gpt|llama|mistral|gemma/i.test(combined)) {
+        if (
+          !caps.length ||
+          /text|chat|gpt|llama|mistral|gemma/i.test(combined)
+        ) {
           caps.push("text");
         }
 
