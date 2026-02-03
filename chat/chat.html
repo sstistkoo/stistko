@@ -3926,13 +3926,29 @@
           return;
         }
 
-        // Pro OpenRouter seřadíme podle provideru (první část ID)
+        // Pro OpenRouter seřadíme podle provideru - skupiny podle nejvyšší kvality
         let sortedModels = [...models];
         if (provider === "openrouter") {
+          // Najdi nejvyšší kvalitu pro každého providera
+          const providerMaxQuality = {};
+          models.forEach((m) => {
+            const prov = m.value.split("/")[0] || "other";
+            const q = m.quality || 0;
+            if (!providerMaxQuality[prov] || q > providerMaxQuality[prov]) {
+              providerMaxQuality[prov] = q;
+            }
+          });
+          // Seřaď podle nejvyšší kvality providera, pak podle kvality modelu
           sortedModels.sort((a, b) => {
-            const provA = a.value.split("/")[0] || "";
-            const provB = b.value.split("/")[0] || "";
+            const provA = a.value.split("/")[0] || "other";
+            const provB = b.value.split("/")[0] || "other";
+            // Nejdřív podle max kvality providera (sestupně)
+            const maxA = providerMaxQuality[provA] || 0;
+            const maxB = providerMaxQuality[provB] || 0;
+            if (maxA !== maxB) return maxB - maxA;
+            // Pak abecedně provider
             if (provA !== provB) return provA.localeCompare(provB);
+            // Pak podle kvality modelu
             return (b.quality || 0) - (a.quality || 0);
           });
         }
@@ -3991,7 +4007,13 @@
           const model = select.value;
           AI.setModel(currentProvider, model);
           logToConsole("info", `Model změněn: ${currentProvider}/${model}`);
+          updateAutoModelInfo(); // Aktualizuj zobrazení v headeru
         };
+
+        // Aktualizuj zobrazení v headeru po načtení modelů
+        if (chatMode === "manual") {
+          updateAutoModelInfo();
+        }
       }
 
       // Obnoví seznam modelů z API (vymaže cache)
@@ -4010,15 +4032,38 @@
       }
 
       function updateAutoModelInfo() {
-        const best = AI.selectBestModel();
         const display = document.getElementById("currentModelDisplay");
-        if (best && display) {
-          const providerInfo = PROVIDER_LIMITS[best.provider];
-          const providerName = providerInfo?.name || best.provider;
-          const modelName = best.model.split("/").pop().split(":")[0];
-          const quality = best.quality || "?";
-          display.innerHTML = `${providerInfo?.icon || "🤖"} <strong>${providerName}</strong> / ${modelName} <span style="color: var(--accent-green); font-size: 11px;">(${quality}%)</span>`;
-          display.title = `${best.provider}/${best.model}`;
+        if (!display) return;
+
+        if (chatMode === "manual") {
+          // V Manual režimu zobraz vybraný model z selectů
+          const provider = document.getElementById("chatProviderSelect")?.value;
+          const modelSelect = document.getElementById("chatModelSelect");
+          const model = modelSelect?.value;
+          if (provider && model) {
+            const providerInfo = PROVIDER_LIMITS[provider];
+            const modelName = model.split("/").pop().split(":")[0];
+            // Najdi kvalitu z option
+            const selectedOption = modelSelect.options[modelSelect.selectedIndex];
+            const optionText = selectedOption?.text || "";
+            const qualityMatch = optionText.match(/\((\d+)%\)/);
+            const quality = qualityMatch ? qualityMatch[1] : null;
+            const qualityStr = quality ? ` <span style="color: var(--accent-green); font-size: 11px;">(${quality}%)</span>` : "";
+            display.innerHTML = `${providerInfo?.icon || "🤖"} <strong>${providerInfo?.name || provider}</strong> / ${modelName}${qualityStr}`;
+            display.title = `${provider}/${model}`;
+          }
+        } else {
+          // V Auto režimu zobraz nejlepší model
+          const best = AI.selectBestModel();
+          if (best) {
+            const providerInfo = PROVIDER_LIMITS[best.provider];
+            const providerName = providerInfo?.name || best.provider;
+            const modelName = best.model.split("/").pop().split(":")[0];
+            const quality = best.quality || null;
+            const qualityStr = quality ? ` <span style="color: var(--accent-green); font-size: 11px;">(${quality}%)</span>` : "";
+            display.innerHTML = `${providerInfo?.icon || "🤖"} <strong>${providerName}</strong> / ${modelName}${qualityStr}`;
+            display.title = `${best.provider}/${best.model}`;
+          }
         }
       }
 
