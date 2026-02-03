@@ -588,16 +588,16 @@
 
       /* Zobrazení aktuálního modelu */
       .current-model-display {
-        font-size: 11px;
-        color: var(--text-secondary);
+        font-size: 12px;
+        color: var(--text-primary);
         background: rgba(34, 197, 94, 0.15);
-        padding: 4px 10px;
+        padding: 6px 12px;
         border-radius: 12px;
         border: 1px solid rgba(34, 197, 94, 0.3);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 150px;
+        white-space: normal;
+        word-break: break-word;
+        width: 100%;
+        text-align: center;
       }
 
       /* Model capabilities badges */
@@ -2206,7 +2206,7 @@
             var(--bg-primary) 90%,
             transparent
           );
-          padding: 8px 12px 32px 12px;
+          padding: 8px 12px 64px 12px;
           z-index: 50;
         }
         .chat-input-wrapper .token-counter {
@@ -2452,7 +2452,7 @@
       @supports (padding: env(safe-area-inset-bottom)) {
         @media (max-width: 768px) {
           .chat-input-wrapper {
-            padding-bottom: calc(32px + env(safe-area-inset-bottom));
+            padding-bottom: calc(64px + env(safe-area-inset-bottom));
           }
           .card-title {
             padding-top: calc(12px + env(safe-area-inset-top));
@@ -2517,25 +2517,24 @@
             margin-bottom: 16px;
           "
         >
-          <div style="display: flex; align-items: center; gap: 10px">
-            <span class="icon">💬</span> Chat
-            <button
-              class="main-menu-btn"
-              onclick="openMainMenu()"
-              title="Hlavní menu"
-            >
-              ☰ Menu
-            </button>
-            <button
-              class="mode-toggle-btn"
-              id="modeToggleBtn"
-              onclick="toggleChatMode()"
-              title="Přepnout Auto/Manual režim"
-            >
-              🎯 Auto
-            </button>
-            <span id="currentModelDisplay" class="current-model-display"></span>
-            <div class="chat-actions-dropdown">
+          <div style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <button
+                class="main-menu-btn"
+                onclick="openMainMenu()"
+                title="Hlavní menu"
+              >
+                ☰ Menu
+              </button>
+              <button
+                class="mode-toggle-btn"
+                id="modeToggleBtn"
+                onclick="toggleChatMode()"
+                title="Přepnout Auto/Manual režim"
+              >
+                🎯 Auto
+              </button>
+              <div class="chat-actions-dropdown">
               <button class="chat-actions-btn" onclick="toggleChatMenu()">
                 ⚙️ <span style="font-size: 10px">▼</span>
               </button>
@@ -2598,6 +2597,9 @@
                 </div>
               </div>
             </div>
+            </div>
+            <!-- Řádek s aktuálním modelem -->
+            <div id="currentModelDisplay" class="current-model-display"></div>
           </div>
         </div>
         <div>
@@ -3732,7 +3734,8 @@
         // Aktualizovat zobrazení modelu
         const display = document.getElementById("currentModelDisplay");
         if (display) {
-          display.textContent = `${PROVIDER_LIMITS[provider]?.icon || ""} ${model.split("/").pop().split(":")[0]}`;
+          const providerInfo = PROVIDER_LIMITS[provider];
+          display.innerHTML = `${providerInfo?.icon || "🤖"} <strong>${providerInfo?.name || provider}</strong> / ${model.split("/").pop().split(":")[0]}`;
         }
 
         logToConsole("info", `Vybrán model: ${provider}/${model}`);
@@ -3965,8 +3968,9 @@
         const display = document.getElementById("currentModelDisplay");
         if (best && display) {
           const providerInfo = PROVIDER_LIMITS[best.provider];
+          const providerName = providerInfo?.name || best.provider;
           const modelName = best.model.split("/").pop().split(":")[0];
-          display.textContent = `${providerInfo?.icon || ""} ${modelName}`;
+          display.innerHTML = `${providerInfo?.icon || "🤖"} <strong>${providerName}</strong> / ${modelName}`;
           display.title = `${best.provider}/${best.model}`;
         }
       }
@@ -4720,7 +4724,8 @@
         // Aktualizovat zobrazení modelu
         const display = document.getElementById("currentModelDisplay");
         if (display) {
-          display.textContent = `${PROVIDER_LIMITS[provider]?.icon || ""} ${modelId.split("/").pop().split(":")[0]}`;
+          const providerInfo = PROVIDER_LIMITS[provider];
+          display.innerHTML = `${providerInfo?.icon || "🤖"} <strong>${providerInfo?.name || provider}</strong> / ${modelId.split("/").pop().split(":")[0]}`;
         }
 
         // Otevřít chat sekci
@@ -5108,7 +5113,8 @@
           // Aktualizovat zobrazení modelu
           const display = document.getElementById("currentModelDisplay");
           if (display) {
-            display.textContent = `${PROVIDER_LIMITS[selected.provider]?.icon || ""} ${selected.model.split("/").pop().split(":")[0]}`;
+            const providerInfo = PROVIDER_LIMITS[selected.provider];
+            display.innerHTML = `${providerInfo?.icon || "🤖"} <strong>${providerInfo?.name || selected.provider}</strong> / ${selected.model.split("/").pop().split(":")[0]}`;
           }
 
           const elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
