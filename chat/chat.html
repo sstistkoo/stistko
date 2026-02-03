@@ -2517,8 +2517,17 @@
             margin-bottom: 16px;
           "
         >
-          <div style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
-            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <div
+            style="display: flex; flex-direction: column; gap: 8px; width: 100%"
+          >
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                flex-wrap: wrap;
+              "
+            >
               <button
                 class="main-menu-btn"
                 onclick="openMainMenu()"
@@ -2535,68 +2544,68 @@
                 🎯 Auto
               </button>
               <div class="chat-actions-dropdown">
-              <button class="chat-actions-btn" onclick="toggleChatMenu()">
-                ⚙️ <span style="font-size: 10px">▼</span>
-              </button>
-              <div class="chat-actions-menu" id="chatActionsMenu">
-                <div
-                  class="chat-action-item"
-                  onclick="
-                    sendStream();
-                    closeChatMenu();
-                  "
-                >
-                  📡 Stream odpověď
-                </div>
-                <div
-                  class="chat-action-item"
-                  onclick="
-                    copyResponse();
-                    closeChatMenu();
-                  "
-                >
-                  📋 Kopírovat odpověď
-                </div>
-                <div class="chat-action-divider"></div>
-                <div
-                  class="chat-action-item"
-                  onclick="
-                    testAllModels();
-                    closeChatMenu();
-                  "
-                >
-                  🧪 Test modelů
-                </div>
-                <div
-                  class="chat-action-item"
-                  onclick="
-                    testFreeModels();
-                    closeChatMenu();
-                  "
-                >
-                  🆓 Test FREE modelů
-                </div>
-                <div
-                  class="chat-action-item"
-                  onclick="
-                    showStats();
-                    closeChatMenu();
-                  "
-                >
-                  📊 Statistiky
-                </div>
-                <div class="chat-action-divider"></div>
-                <div
-                  class="chat-action-item danger"
-                  onclick="
-                    clearChat();
-                    closeChatMenu();
-                  "
-                >
-                  🧹 Vyčistit chat
+                <button class="chat-actions-btn" onclick="toggleChatMenu()">
+                  ⚙️ <span style="font-size: 10px">▼</span>
+                </button>
+                <div class="chat-actions-menu" id="chatActionsMenu">
+                  <div
+                    class="chat-action-item"
+                    onclick="
+                      sendStream();
+                      closeChatMenu();
+                    "
+                  >
+                    📡 Stream odpověď
+                  </div>
+                  <div
+                    class="chat-action-item"
+                    onclick="
+                      copyResponse();
+                      closeChatMenu();
+                    "
+                  >
+                    📋 Kopírovat odpověď
+                  </div>
+                  <div class="chat-action-divider"></div>
+                  <div
+                    class="chat-action-item"
+                    onclick="
+                      testAllModels();
+                      closeChatMenu();
+                    "
+                  >
+                    🧪 Test modelů
+                  </div>
+                  <div
+                    class="chat-action-item"
+                    onclick="
+                      testFreeModels();
+                      closeChatMenu();
+                    "
+                  >
+                    🆓 Test FREE modelů
+                  </div>
+                  <div
+                    class="chat-action-item"
+                    onclick="
+                      showStats();
+                      closeChatMenu();
+                    "
+                  >
+                    📊 Statistiky
+                  </div>
+                  <div class="chat-action-divider"></div>
+                  <div
+                    class="chat-action-item danger"
+                    onclick="
+                      clearChat();
+                      closeChatMenu();
+                    "
+                  >
+                    🧹 Vyčistit chat
+                  </div>
                 </div>
               </div>
-            </div>
             </div>
             <!-- Řádek s aktuálním modelem -->
             <div id="currentModelDisplay" class="current-model-display"></div>
