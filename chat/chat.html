@@ -3954,17 +3954,19 @@
             const modelProvider = m.value.split("/")[0] || "other";
             if (modelProvider !== currentGroup) {
               if (currentGroup !== "") {
-                html += '</optgroup>';
+                html += "</optgroup>";
               }
               currentGroup = modelProvider;
               html += `<optgroup label="📦 ${modelProvider}">`;
             }
-            const caps = m.caps ? m.caps.map((c) => capIcons[c] || "").join("") : "";
+            const caps = m.caps
+              ? m.caps.map((c) => capIcons[c] || "").join("")
+              : "";
             const qualityStr = m.quality ? ` (${m.quality}%)` : "";
             html += `<option value="${m.value}">${m.name}${qualityStr} ${caps}</option>`;
           });
           if (currentGroup !== "") {
-            html += '</optgroup>';
+            html += "</optgroup>";
           }
           select.innerHTML = html;
         } else {
