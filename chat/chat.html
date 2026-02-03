@@ -479,6 +479,82 @@
         color: #f87171;
       }
 
+      /* Markdown v odpovědích */
+      .chat-bubble h1,
+      .chat-bubble h2,
+      .chat-bubble h3 {
+        margin: 16px 0 8px 0;
+        color: var(--accent-blue);
+      }
+      .chat-bubble h1 {
+        font-size: 1.5em;
+      }
+      .chat-bubble h2 {
+        font-size: 1.3em;
+      }
+      .chat-bubble h3 {
+        font-size: 1.1em;
+      }
+
+      .chat-bubble code {
+        background: rgba(0, 0, 0, 0.3);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: "Consolas", "Monaco", monospace;
+        font-size: 0.9em;
+        color: var(--accent-green);
+      }
+
+      .chat-bubble pre {
+        background: rgba(0, 0, 0, 0.5);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 12px;
+        overflow-x: auto;
+        margin: 12px 0;
+      }
+
+      .chat-bubble pre code {
+        background: none;
+        padding: 0;
+        color: var(--text-primary);
+      }
+
+      .chat-bubble ul,
+      .chat-bubble ol {
+        margin: 8px 0;
+        padding-left: 24px;
+      }
+
+      .chat-bubble li {
+        margin: 4px 0;
+      }
+
+      .chat-bubble blockquote {
+        border-left: 3px solid var(--accent-blue);
+        padding-left: 12px;
+        margin: 12px 0;
+        color: var(--text-secondary);
+      }
+
+      .chat-bubble table {
+        border-collapse: collapse;
+        margin: 12px 0;
+        width: 100%;
+      }
+
+      .chat-bubble th,
+      .chat-bubble td {
+        border: 1px solid var(--border-color);
+        padding: 8px;
+        text-align: left;
+      }
+
+      .chat-bubble th {
+        background: rgba(0, 0, 0, 0.3);
+        font-weight: 600;
+      }
+
       /* Input Wrapper */
       .chat-input-wrapper {
         margin-top: auto;
@@ -646,6 +722,70 @@
 
       .chat-model-selectors select:hover {
         border-color: var(--accent-blue);
+      }
+
+      /* Filtry modelů */
+      .model-filters {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 8px;
+        flex-wrap: wrap;
+      }
+
+      .filter-btn {
+        padding: 4px 10px;
+        border: 1px solid var(--border-color);
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 6px;
+        color: var(--text-secondary);
+        font-size: 11px;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .filter-btn:hover {
+        border-color: var(--accent-blue);
+        color: var(--text-primary);
+      }
+
+      .filter-btn.active {
+        background: var(--accent-blue);
+        border-color: var(--accent-blue);
+        color: white;
+      }
+
+      /* Preview nahraného obrázku */
+      .image-preview {
+        position: relative;
+        display: inline-block;
+        margin: 8px 0;
+      }
+
+      .image-preview img {
+        max-width: 200px;
+        max-height: 150px;
+        border-radius: 8px;
+        border: 2px solid var(--border-color);
+      }
+
+      .image-preview .remove-btn {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background: var(--error);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
       .chat-auto-info {
@@ -2614,6 +2754,23 @@
         <div>
           <!-- Model Selection Bar -->
           <div class="chat-model-bar" id="chatModelBar" style="display: none">
+            <div class="model-filters" id="modelFilters">
+              <button class="filter-btn active" onclick="filterModels('all')" data-filter="all">
+                🔍 Všechny
+              </button>
+              <button class="filter-btn" onclick="filterModels('vision')" data-filter="vision">
+                👁️ Vision
+              </button>
+              <button class="filter-btn" onclick="filterModels('code')" data-filter="code">
+                💻 Code
+              </button>
+              <button class="filter-btn" onclick="filterModels('reasoning')" data-filter="reasoning">
+                🧠 Reasoning
+              </button>
+              <button class="filter-btn" onclick="filterModels('text')" data-filter="text">
+                📝 Text
+              </button>
+            </div>
             <div class="chat-model-selectors" id="chatModelSelectors">
               <select id="chatProviderSelect" onchange="onChatProviderChange()">
                 <option value="gemini">🤖 Gemini</option>
@@ -2635,18 +2792,21 @@
             <div class="token-counter">
               <span id="tokenCount">~0 tokenů</span>
             </div>
+            <div id="imagePreviewContainer"></div>
             <div class="chat-input-area">
               <button
                 class="btn-upload"
+                id="btnUpload"
                 onclick="document.getElementById('fileInput').click()"
-                title="Nahrát soubor"
+                title="Nahrát obrázek"
               >
                 📎
               </button>
               <input
                 type="file"
                 id="fileInput"
-                accept="image/*,.txt,.md,.json"
+                accept="image/*"
+                capture="environment"
                 style="display: none"
                 onchange="handleFileSelect(event)"
               />
@@ -2911,6 +3071,9 @@
     <!-- AI Module v3.0 -->
     <script src="ai_module.js"></script>
 
+    <!-- Marked.js pro Markdown rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
+
     <script>
       // ============================================================
       // GLOBAL STATE
@@ -2919,6 +3082,9 @@
       let autoSwitch = true;
       let selectedBestModel = null;
       let lastResponse = "";
+      let uploadedImage = null; // Nahraný obrázek
+      let currentModelFilter = "all"; // Aktuální filtr modelů
+      let allModelsCache = []; // Cache všech modelů pro filtrování
 
       // ============================================================
       // PROVIDER LIMITS DATA
@@ -3989,8 +4155,12 @@
 
         if (models.length === 0) {
           select.innerHTML = '<option value="">❌ Žádné FREE modely</option>';
+          allModelsCache = [];
           return;
         }
+
+        // Ulož do cache pro filtrování
+        allModelsCache = models;
 
         // Pro OpenRouter seřadíme podle provideru - skupiny podle nejvyšší kvality
         let sortedModels = [...models];
@@ -4017,6 +4187,7 @@
             // Pak podle kvality modelu
             return (b.quality || 0) - (a.quality || 0);
           });
+          allModelsCache = sortedModels; // Update cache with sorted
         }
 
         // Formát capabilities ikon
@@ -4045,7 +4216,10 @@
               ? m.caps.map((c) => capIcons[c] || "").join("")
               : "";
             const qualityStr = m.quality ? ` (${m.quality}%)` : "";
-            html += `<option value="${m.value}">${m.name}${qualityStr} ${caps}</option>`;
+            const contextStr = m.contextLength
+              ? ` [${formatContextLength(m.contextLength)}]`
+              : "";
+            html += `<option value="${m.value}">${m.name}${qualityStr}${contextStr} ${caps}</option>`;
           });
           if (currentGroup !== "") {
             html += "</optgroup>";
@@ -4058,7 +4232,10 @@
                 ? m.caps.map((c) => capIcons[c] || "").join("")
                 : "";
               const qualityStr = m.quality ? ` (${m.quality}%)` : "";
-              return `<option value="${m.value}">${m.name}${qualityStr} ${caps}</option>`;
+              const contextStr = m.contextLength
+                ? ` [${formatContextLength(m.contextLength)}]`
+                : "";
+              return `<option value="${m.value}">${m.name}${qualityStr}${contextStr} ${caps}</option>`;
             })
             .join("");
         }
@@ -4074,12 +4251,16 @@
           AI.setModel(currentProvider, model);
           logToConsole("info", `Model změněn: ${currentProvider}/${model}`);
           updateAutoModelInfo(); // Aktualizuj zobrazení v headeru
+          updateUploadButtonIcon(); // Aktualizuj ikonu upload tlačítka
         };
 
         // Aktualizuj zobrazení v headeru po načtení modelů
         if (chatMode === "manual") {
           updateAutoModelInfo();
         }
+
+        // Aktualizuj ikonu upload tlačítka
+        updateUploadButtonIcon();
       }
 
       // Obnoví seznam modelů z API (vymaže cache)
@@ -5212,7 +5393,13 @@
 
         const bubble = document.createElement("div");
         bubble.className = `chat-bubble ${isError ? "error" : ""}`;
-        bubble.textContent = text;
+        
+        // Pro uživatele prostý text, pro asistenta markdown
+        if (isUser || isError) {
+          bubble.textContent = text;
+        } else {
+          bubble.innerHTML = marked.parse(text || "");
+        }
 
         msgDiv.appendChild(bubble);
         container.appendChild(msgDiv);
@@ -5228,7 +5415,11 @@
         const bubble =
           messages[messages.length - 1].querySelector(".chat-bubble");
         if (bubble) {
-          bubble.textContent = text;
+          if (isError) {
+            bubble.textContent = text;
+          } else {
+            bubble.innerHTML = marked.parse(text || "");
+          }
           bubble.classList.toggle("error", isError);
         }
       }
@@ -5350,6 +5541,123 @@
           empty.style.display = "block";
         }
         lastResponse = "";
+        uploadedImage = null;
+        document.getElementById("imagePreviewContainer").innerHTML = "";
+      }
+
+      // ============================================================
+      // IMAGE UPLOAD
+      // ============================================================
+      function handleFileSelect(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        if (!file.type.startsWith("image/")) {
+          alert("Podporovány jsou pouze obrázky");
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          uploadedImage = e.target.result;
+          showImagePreview(e.target.result);
+        };
+        reader.readAsDataURL(file);
+      }
+
+      function showImagePreview(dataUrl) {
+        const container = document.getElementById("imagePreviewContainer");
+        container.innerHTML = `
+          <div class="image-preview">
+            <img src="${dataUrl}" alt="Preview">
+            <button class="remove-btn" onclick="removeImage()">×</button>
+          </div>
+        `;
+      }
+
+      function removeImage() {
+        uploadedImage = null;
+        document.getElementById("imagePreviewContainer").innerHTML = "";
+        document.getElementById("fileInput").value = "";
+      }
+
+      // ============================================================
+      // MODEL FILTERS
+      // ============================================================
+      function filterModels(filterType) {
+        currentModelFilter = filterType;
+
+        // Update active button
+        document.querySelectorAll(".filter-btn").forEach((btn) => {
+          btn.classList.toggle("active", btn.dataset.filter === filterType);
+        });
+
+        // Re-populate select with filtered models
+        populateFilteredModels();
+      }
+
+      function populateFilteredModels() {
+        const select = document.getElementById("chatModelSelect");
+        if (!allModelsCache || allModelsCache.length === 0) return;
+
+        let filteredModels = allModelsCache;
+
+        if (currentModelFilter !== "all") {
+          filteredModels = allModelsCache.filter((m) =>
+            m.caps?.includes(currentModelFilter),
+          );
+        }
+
+        const capIcons = {
+          text: "📝",
+          vision: "👁️",
+          code: "💻",
+          reasoning: "🧠",
+          "image-gen": "🎨",
+        };
+
+        select.innerHTML = filteredModels
+          .map((m) => {
+            const caps = m.caps
+              ? m.caps.map((c) => capIcons[c] || "").join("")
+              : "";
+            const qualityStr = m.quality ? ` (${m.quality}%)` : "";
+            const contextStr = m.contextLength
+              ? ` [${formatContextLength(m.contextLength)}]`
+              : "";
+            return `<option value="${m.value}">${m.name}${qualityStr}${contextStr} ${caps}</option>`;
+          })
+          .join("");
+
+        if (filteredModels.length === 0) {
+          select.innerHTML =
+            '<option value="">❌ Žádné modely pro tento filtr</option>';
+        }
+      }
+
+      function formatContextLength(length) {
+        if (length >= 1000000) return `${(length / 1000000).toFixed(1)}M`;
+        if (length >= 1000) return `${Math.round(length / 1000)}K`;
+        return length;
+      }
+
+      // Update upload button icon based on model capabilities
+      function updateUploadButtonIcon() {
+        const selected = getSelectedModelForChat();
+        const provider = selected?.provider || currentProvider;
+        const model = selected?.model;
+
+        // Check if current model has vision capability
+        const hasVision =
+          allModelsCache.find(
+            (m) => m.value === model && m.caps?.includes("vision"),
+          ) || false;
+
+        const uploadBtn = document.getElementById("btnUpload");
+        if (uploadBtn) {
+          uploadBtn.textContent = hasVision ? "📷" : "📎";
+          uploadBtn.title = hasVision ? "Nahrát obrázek" : "Nahrát soubor";
+        }
       }
 
       // ============================================================
