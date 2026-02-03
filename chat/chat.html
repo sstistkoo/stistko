@@ -3926,6 +3926,17 @@
           return;
         }
 
+        // Pro OpenRouter seřadíme podle provideru (první část ID)
+        let sortedModels = [...models];
+        if (provider === "openrouter") {
+          sortedModels.sort((a, b) => {
+            const provA = a.value.split("/")[0] || "";
+            const provB = b.value.split("/")[0] || "";
+            if (provA !== provB) return provA.localeCompare(provB);
+            return (b.quality || 0) - (a.quality || 0);
+          });
+        }
+
         // Formát capabilities ikon
         const capIcons = {
           text: "📝",
@@ -3935,14 +3946,38 @@
           "image-gen": "🎨",
         };
 
-        select.innerHTML = models
-          .map((m) => {
-            const caps = m.caps
-              ? m.caps.map((c) => capIcons[c] || "").join("")
-              : "";
-            return `<option value="${m.value}">${m.name} ${caps}</option>`;
-          })
-          .join("");
+        // Pro OpenRouter přidáme groupování
+        if (provider === "openrouter") {
+          let currentGroup = "";
+          let html = "";
+          sortedModels.forEach((m) => {
+            const modelProvider = m.value.split("/")[0] || "other";
+            if (modelProvider !== currentGroup) {
+              if (currentGroup !== "") {
+                html += '</optgroup>';
+              }
+              currentGroup = modelProvider;
+              html += `<optgroup label="📦 ${modelProvider}">`;
+            }
+            const caps = m.caps ? m.caps.map((c) => capIcons[c] || "").join("") : "";
+            const qualityStr = m.quality ? ` (${m.quality}%)` : "";
+            html += `<option value="${m.value}">${m.name}${qualityStr} ${caps}</option>`;
+          });
+          if (currentGroup !== "") {
+            html += '</optgroup>';
+          }
+          select.innerHTML = html;
+        } else {
+          select.innerHTML = sortedModels
+            .map((m) => {
+              const caps = m.caps
+                ? m.caps.map((c) => capIcons[c] || "").join("")
+                : "";
+              const qualityStr = m.quality ? ` (${m.quality}%)` : "";
+              return `<option value="${m.value}">${m.name}${qualityStr} ${caps}</option>`;
+            })
+            .join("");
+        }
 
         if (models.length > 0) {
           const model = select.value;
@@ -3979,7 +4014,8 @@
           const providerInfo = PROVIDER_LIMITS[best.provider];
           const providerName = providerInfo?.name || best.provider;
           const modelName = best.model.split("/").pop().split(":")[0];
-          display.innerHTML = `${providerInfo?.icon || "🤖"} <strong>${providerName}</strong> / ${modelName}`;
+          const quality = best.quality || "?";
+          display.innerHTML = `${providerInfo?.icon || "🤖"} <strong>${providerName}</strong> / ${modelName} <span style="color: var(--accent-green); font-size: 11px;">(${quality}%)</span>`;
           display.title = `${best.provider}/${best.model}`;
         }
       }
