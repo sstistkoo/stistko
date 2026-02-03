@@ -3780,7 +3780,7 @@
         setChatMode(newMode);
       }
 
-      function setChatMode(mode) {
+      async function setChatMode(mode) {
         chatMode = mode;
 
         // Update toggle button
@@ -3802,7 +3802,8 @@
           modelBar.style.display = "flex";
           // Sync with current provider/model
           document.getElementById("chatProviderSelect").value = currentProvider;
-          updateChatModelSelect(); // Toto zavolá updateAutoModelInfo() po načtení
+          await updateChatModelSelect(); // Počkej na načtení modelů
+          updateAutoModelInfo(); // Teď aktualizuj zobrazení
         } else {
           modelBar.style.display = "none";
           updateAutoModelInfo(); // Aktualizuj zobrazení pro Auto režim
