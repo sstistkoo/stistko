@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="Lokální správce GitHub repozitářů přes Personal Access Token." />
+<link rel="icon" data-uri="data:image/svg+xml," href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230e0f11'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-size='20'%3E📁%3C/text%3E%3C/svg%3E" />
+<title>GitHub Manager</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Syne:wght@400;500;700;800&display=swap');
+
+  :root {
+    --bg:        #0e0f11;
+    --surface:   #161719;
+    --surface2:  #1e2025;
+    --border:    #2a2d34;
+    --text:      #d4d6db;
+    --text-dim:  #5a5d66;
+    --accent:    #00e5a0;
+    --accent-dim:#00b87a;
+    --red:       #ff4b4b;
+    --red-dim:   #cc3333;
+    --blue:      #4da6ff;
+    --yellow:    #f5c842;
+    --radius:    6px;
+    --font-ui:   'Syne', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    min-height: 100vh;
+    user-select: none;
+  }
+
+  /* ─── TOP BAR ─── */
+  .topbar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .topbar .logo {
+    font-family: var(--font-ui);
+    font-weight: 800;
+    font-size: 18px;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+  }
+  .topbar .logo span { color: var(--text-dim); font-weight: 400; }
+  .topbar .sep { width:1px; height:22px; background:var(--border); }
+  .topbar .status-dot {
+    width:8px; height:8px; border-radius:50%;
+    background: var(--text-dim);
+    transition: background .3s;
+  }
+  .topbar .status-dot.connected { background: var(--accent); box-shadow: 0 0 6px var(--accent); }
+  .topbar .status-label { color: var(--text-dim); font-size:11px; }
+
+  /* ─── LAYOUT ─── */
+  .layout { display: flex; min-height: calc(100vh - 44px); }
+
+  /* ─── SIDEBAR (repozitáře) ─── */
+  .sidebar {
+    width: 260px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+  }
+  .sidebar-head {
+    padding: 14px 16px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+  .sidebar-head .label {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-dim);
+  }
+  .btn-icon {
+    width:26px; height:26px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--accent);
+    font-size: 18px;
+    cursor: pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition: background .15s, border-color .15s;
+  }
+  .btn-icon:hover { background: var(--surface2); border-color: var(--accent); }
+
+  .repo-list { flex:1; overflow-y:auto; padding: 6px 8px; }
+  .repo-item {
+    display:flex; align-items:center; gap:10px;
+    padding: 8px 10px;
+    border-radius: var(--radius);
+    cursor:pointer;
+    transition: background .15s;
+    position: relative;
+  }
+  .repo-item:hover { background: var(--surface2); }
+  .repo-item.active { background: var(--surface2); border-left: 3px solid var(--accent); }
+  .repo-item .icon { font-size:15px; color: var(--blue); }
+  .repo-item .name { flex:1; font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .repo-item .visibility {
+    font-size:9px; font-family: var(--font-ui);
+    text-transform:uppercase; letter-spacing:.8px; font-weight:600;
+    padding: 2px 5px; border-radius:3px;
+  }
+  .repo-item .visibility.pub { color: var(--accent); background: rgba(0,229,160,.1); }
+  .repo-item .visibility.priv { color: var(--yellow); background: rgba(245,200,66,.1); }
+  .repo-item .delete-btn {
+    position:absolute; right:6px; top:50%; transform:translateY(-50%);
+    background:none; border:none; color:var(--red); font-size:14px;
+    cursor:pointer; opacity:0; transition: opacity .15s;
+    padding: 2px 6px; border-radius:3px;
+  }
+  .repo-item:hover .delete-btn { opacity:1; }
+  .repo-item .delete-btn:hover { background: rgba(255,75,75,.15); }
+
+  /* ─── MAIN ─── */
+  .main { flex:1; display:flex; flex-direction:column; }
+
+  /* ─── LOGIN PANEL ─── */
+  .login-panel {
+    flex:1; display:flex; align-items:center; justify-content:center;
+  }
+  .login-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 36px 40px;
+    width: 420px;
+    max-width: 90vw;
+  }
+  .login-box h2 {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 20px;
+    margin-bottom: 6px;
+    color: #fff;
+  }
+  .login-box p { color: var(--text-dim); font-size:12px; margin-bottom:22px; line-height:1.5; }
+  .login-box label { display:block; font-size:11px; color:var(--text-dim); margin-bottom:5px; font-family:var(--font-ui); font-weight:600; text-transform:uppercase; letter-spacing:.8px; }
+  .login-box input {
+    width:100%;
+    padding: 10px 12px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    outline:none;
+    transition: border-color .2s;
+  }
+  .login-box input:focus { border-color: var(--accent); }
+  .login-box input[type=password] { letter-spacing: 3px; }
+
+  .btn-primary {
+    width:100%; margin-top:18px;
+    padding: 11px;
+    background: var(--accent);
+    color: #0e0f11;
+    border: none;
+    border-radius: var(--radius);
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing:.5px;
+    cursor:pointer;
+    transition: background .2s, transform .1s;
+  }
+  .btn-primary:hover { background: var(--accent-dim); }
+  .btn-primary:active { transform:scale(.98); }
+
+  .login-box .hint {
+    margin-top:16px; font-size:11px; color:var(--text-dim); line-height:1.6;
+  }
+  .login-box .hint a { color: var(--blue); text-decoration:none; }
+  .login-box .hint a:hover { text-decoration:underline; }
+
+  /* ─── CONTENT (po přihlášení) ─── */
+  .content { flex:1; padding:24px; overflow-y:auto; }
+
+  /* breadcrumb */
+  .breadcrumb {
+    display:flex; align-items:center; gap:6px;
+    font-size:12px; color:var(--text-dim);
+    margin-bottom:18px;
+  }
+  .breadcrumb .sep { color: var(--border); }
+  .breadcrumb .active { color: var(--accent); font-weight:600; }
+  .breadcrumb span { cursor:pointer; }
+  .breadcrumb span:hover { color: var(--text); }
+
+  /* repo info header */
+  .repo-header {
+    display:flex; align-items:center; gap:14px;
+    margin-bottom:20px;
+  }
+  .repo-header h3 {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size:17px;
+    color:#fff;
+  }
+  .repo-header .desc { color:var(--text-dim); font-size:12px; margin-top:2px; }
+  .repo-header .stats { margin-left:auto; display:flex; gap:14px; }
+  .repo-header .stat { font-size:11px; color:var(--text-dim); }
+  .repo-header .stat span { color: var(--text); font-weight:600; }
+
+  /* file table */
+  .file-table { width:100%; border-collapse:collapse; }
+  .file-table thead th {
+    text-align:left; padding:8px 12px;
+    font-size:10px; text-transform:uppercase; letter-spacing:1px;
+    color:#9a9da6; font-family:var(--font-ui); font-weight:600;
+    border-bottom: 1px solid var(--border);
+  }
+  .file-table tbody tr {
+    border-bottom: 1px solid rgba(42,45,52,.5);
+    transition: background .12s;
+    cursor:pointer;
+  }
+  .file-table tbody tr:hover { background: var(--surface2); }
+  .file-table td { padding: 9px 12px; }
+  .file-table .icon { font-size:15px; margin-right:8px; }
+  .file-table .file-name { color: var(--blue); }
+  .file-table .folder-name { color: var(--yellow); }
+  .file-table .meta { color:#9a9da6; font-size:12px; }
+
+  /* ─── NEW REPO MODAL ─── */
+  .modal-overlay {
+    position:fixed; inset:0;
+    background: rgba(0,0,0,.55);
+    display:flex; align-items:center; justify-content:center;
+    z-index:200;
+    backdrop-filter:blur(3px);
+  }
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius:12px;
+    padding:32px;
+    width:400px; max-width:90vw;
+  }
+  .modal h3 { font-family:var(--font-ui); font-weight:700; font-size:17px; color:#fff; margin-bottom:18px; }
+  .modal label { display:block; font-size:11px; color:var(--text-dim); margin-bottom:5px; margin-top:14px; font-family:var(--font-ui); font-weight:600; text-transform:uppercase; letter-spacing:.8px; }
+  .modal input, .modal textarea, .modal select {
+    width:100%; padding:10px 12px;
+    background:var(--bg); border:1px solid var(--border);
+    border-radius:var(--radius); color:var(--text);
+    font-family:var(--font-mono); font-size:13px; outline:none;
+    transition:border-color .2s;
+  }
+  .modal input:focus, .modal textarea:focus, .modal select:focus { border-color:var(--accent); }
+  .modal select { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%235a5d66'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; padding-right:30px; }
+  .modal select option { background:var(--surface); color:var(--text); }
+  .modal textarea { resize:vertical; min-height:60px; }
+  .modal-btns { display:flex; gap:10px; margin-top:22px; justify-content:flex-end; }
+  .btn-cancel {
+    padding:9px 18px; background:transparent; border:1px solid var(--border);
+    border-radius:var(--radius); color:var(--text); font-family:var(--font-ui);
+    font-size:13px; cursor:pointer; transition:background .15s;
+  }
+  .btn-cancel:hover { background:var(--surface2); }
+  .btn-confirm {
+    padding:9px 22px; background:var(--accent); border:none;
+    border-radius:var(--radius); color:#0e0f11; font-family:var(--font-ui);
+    font-weight:700; font-size:13px; cursor:pointer; transition:background .2s;
+  }
+  .btn-confirm:hover { background:var(--accent-dim); }
+  .btn-danger {
+    padding:9px 22px; background:var(--red); border:none;
+    border-radius:var(--radius); color:#fff; font-family:var(--font-ui);
+    font-weight:700; font-size:13px; cursor:pointer; transition:background .2s;
+  }
+  .btn-danger:hover { background:var(--red-dim); }
+
+  /* ─── TOAST ─── */
+  .toast {
+    position:fixed; bottom:24px; right:24px;
+    background: var(--surface); border:1px solid var(--border);
+    border-radius:8px; padding:12px 18px;
+    font-size:13px; color:var(--text);
+    box-shadow: 0 4px 20px rgba(0,0,0,.4);
+    transform:translateY(80px); opacity:0;
+    transition: transform .3s cubic-bezier(.34,1.56,.64,1), opacity .3s;
+    z-index:300;
+    max-width:320px;
+  }
+  .toast.show { transform:translateY(0); opacity:1; }
+  .toast.success { border-color: var(--accent); }
+  .toast.error { border-color: var(--red); }
+  .toast .toast-title { font-family:var(--font-ui); font-weight:700; font-size:12px; margin-bottom:2px; }
+  .toast.success .toast-title { color:var(--accent); }
+  .toast.error .toast-title { color:var(--red); }
+
+  /* ─── CONTEXT MENU (file actions) ─── */
+  .ctx-actions { display:flex; flex-direction:column; gap:6px; margin-top:8px; }
+  .ctx-btn {
+    display:flex; align-items:center; gap:12px;
+    padding:11px 14px;
+    background:var(--bg); border:1px solid var(--border);
+    border-radius:var(--radius); color:var(--text);
+    font-family:var(--font-mono); font-size:13px;
+    cursor:pointer; transition:background .15s, border-color .15s;
+    text-align:left; width:100%;
+  }
+  .ctx-btn:hover { background:var(--surface2); border-color:var(--accent); }
+  .ctx-btn.danger:hover { border-color:var(--red); }
+  .ctx-btn .ctx-icon { font-size:18px; width:22px; text-align:center; }
+  .ctx-btn .ctx-label { flex:1; }
+  .ctx-btn .ctx-desc { font-size:11px; color:#9a9da6; margin-top:1px; }
+
+  /* ─── RENAME INPUT ROW ─── */
+  .rename-row { display:none; flex-direction:column; gap:8px; margin-top:4px; }
+  .rename-row.show { display:flex; }
+  .rename-row input {
+    width:100%; padding:9px 11px;
+    background:var(--bg); border:1px solid var(--border);
+    border-radius:var(--radius); color:var(--text);
+    font-family:var(--font-mono); font-size:13px; outline:none;
+  }
+  .rename-row input:focus { border-color:var(--accent); }
+  .rename-row .rename-btns { display:flex; gap:8px; }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width:6px; }
+  ::-webkit-scrollbar-track { background:transparent; }
+  ::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+  ::-webkit-scrollbar-thumb:hover { background:var(--text-dim); }
+
+  /* ─── LOADING ─── */
+  .spinner {
+    width:18px; height:18px; border:2px solid var(--border);
+    border-top-color:var(--accent); border-radius:50%;
+    animation:spin .6s linear infinite; display:inline-block;
+  }
+  @keyframes spin { to { transform:rotate(360deg); } }
+
+  .empty-state {
+    text-align:center; padding:60px 20px; color:var(--text-dim);
+  }
+  .empty-state .big { font-size:38px; margin-bottom:10px; }
+  .empty-state p { font-size:13px; }
+
+  .confirm-name-row { margin-top:12px; }
+  .confirm-name-row input { border-color:var(--red) !important; }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="logo">GitHub<span>Manager</span></div>
+  <div class="sep"></div>
+  <div class="status-dot" id="statusDot"></div>
+  <div class="status-label" id="statusLabel">Nepřihlášen</div>
+  <div style="margin-left:auto;" id="logoutArea" style="display:none;">
+    <button class="btn-cancel" id="logoutBtn" style="display:none; padding:6px 14px; font-size:12px;">Logout</button>
+  </div>
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar" style="display:none;">
+    <div class="sidebar-head">
+      <div class="label">Repozitáře</div>
+      <div style="display:flex; gap:6px;">
+        <button class="btn-icon" id="backupBtn" title="Stáhnut všechny repo jako ZIP" style="color:var(--yellow); font-size:15px;">💾</button>
+        <button class="btn-icon" id="newRepoBtn" title="Nový repozitář">+</button>
+      </div>
+    </div>
+    <div class="repo-list" id="repoList">
+      <div class="empty-state" style="padding:40px 10px;">
+        <div class="big">📭</div>
+        <p>Žádné repo</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- LOGIN PANEL -->
+    <div class="login-panel" id="loginPanel">
+      <div class="login-box">
+        <h2>Přihlášení přes GitHub Token</h2>
+        <p>Zadáš tvój personal access token a máš plný přístup ke všem repozitářům – číst i pisat.</p>
+        <label>GitHub Personal Access Token</label>
+        <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxx" autocomplete="off" />
+        <button class="btn-primary" id="loginBtn">Přihlásit se</button>
+        <div class="hint">
+          Nemáš token? Vytvoř si ho <a href="https://github.com/settings/tokens/new" target="_blank">tady na GitHubu →</a><br>
+          Potřebuš permissions: <strong>repo</strong> (full), <strong>user:read</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTENT (po přihlášení) -->
+    <div class="content" id="mainContent" style="display:none;">
+      <div class="breadcrumb" id="breadcrumb">
+        <span>🏠 Home</span>
+      </div>
+      <div id="repoView"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- NEW REPO MODAL -->
+<div class="modal-overlay" id="newRepoModal" style="display:none;">
+  <div class="modal">
+    <h3>✨ Nový Repozitář</h3>
+    <label>Název repozitáře</label>
+    <input type="text" id="newRepoName" placeholder="moj-projekt" />
+    <label>Popis (volitelné)</label>
+    <textarea id="newRepoDesc" placeholder="Krátký popis projektu..."></textarea>
+    <label>Viditelnost</label>
+    <select id="newRepoVisibility">
+      <option value="false">🌐 Public – viditelný pro všechny</option>
+      <option value="true">🔒 Private – viditelný jen pro tebe</option>
+    </select>
+    <label>
+      <input type="checkbox" id="newRepoReadme" style="margin-right:6px; accent-color:var(--accent);" checked />
+      Přidej README.md (tak repo ne bude prázdné)
+    </label>
+    <div class="modal-btns">
+      <button class="btn-cancel" id="cancelNewRepo">Zrušit</button>
+      <button class="btn-confirm" id="confirmNewRepo">Vytvořit</button>
+    </div>
+  </div>
+</div>
+
+<!-- DELETE REPO MODAL -->
+<div class="modal-overlay" id="deleteRepoModal" style="display:none;">
+  <div class="modal">
+    <h3 style="color:var(--red);">🗑️ Smazat repozitář</h3>
+    <p style="color:var(--text-dim); font-size:12px; margin-bottom:4px;">
+      Toto akci nelze vrátit. Potvrdil ji zadáním posledních dvou písmen název:
+    </p>
+    <p style="color:var(--yellow); font-weight:600; font-size:13px; margin-bottom:4px;" id="deleteRepoNameShow"></p>
+    <p style="color:var(--text-dim); font-size:11px; margin-bottom:10px;">
+      👉 Doplň poslední dvě písmena: <strong style="color:var(--accent); font-size:13px;" id="deleteHintLetters"></strong>
+    </p>
+    <label>Poslední dvě písmena název</label>
+    <input type="text" id="deleteRepoConfirm" placeholder="Npr. ak" maxlength="2" />
+    <div class="modal-btns">
+      <button class="btn-cancel" id="cancelDeleteRepo">Zrušit</button>
+      <button class="btn-danger" id="confirmDeleteRepo" disabled>Smazat</button>
+    </div>
+  </div>
+</div>
+
+<!-- BACKUP PROGRESS MODAL -->
+<div class="modal-overlay" id="backupModal" style="display:none;">
+  <div class="modal" style="width:440px;">
+    <h3>💾 Backup všech repozitářů</h3>
+    <p style="color:var(--text-dim); font-size:12px; margin-bottom:16px;">Stahuje se obsah všech repo a balí do ZIP...</p>
+    <div id="backupRepoList" style="max-height:200px; overflow-y:auto; margin-bottom:14px;"></div>
+    <!-- progress bar -->
+    <div style="background:var(--bg); border-radius:4px; height:6px; overflow:hidden; margin-bottom:8px;">
+      <div id="backupProgressBar" style="height:100%; width:0%; background:var(--accent); transition:width .3s; border-radius:4px;"></div>
+    </div>
+    <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-dim);">
+      <span id="backupStatus">Čeká na začátek...</span>
+      <span id="backupPercent">0%</span>
+    </div>
+    <div class="modal-btns" style="margin-top:18px;">
+      <button class="btn-cancel" id="cancelBackup">Zrušit</button>
+    </div>
+  </div>
+</div>
+
+<!-- FILE CONTEXT MENU MODAL -->
+<div class="modal-overlay" id="ctxModal" style="display:none;">
+  <div class="modal" style="width:380px;">
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;">
+      <span id="ctxFileIcon" style="font-size:24px;">📄</span>
+      <div>
+        <div style="color:#fff; font-weight:600; font-size:14px;" id="ctxFileName"></div>
+        <div style="color:#9a9da6; font-size:11px;" id="ctxFileMeta"></div>
+      </div>
+    </div>
+    <div class="ctx-actions" id="ctxActions"></div>
+    <!-- rename input (hidden by default) -->
+    <div class="rename-row" id="renameRow">
+      <input type="text" id="renameInput" placeholder="Nový název..." />
+      <div class="rename-btns">
+        <button class="btn-confirm" id="confirmRename" style="flex:1;">Přejmenovat</button>
+        <button class="btn-cancel" id="cancelRename">Zrušit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <div class="toast-title" id="toastTitle"></div>
+  <div id="toastMsg"></div>
+</div>
+
+<script>
+// ═══════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════
+let TOKEN = '';
+let USERNAME = '';
+let REPOS = [];
+let CURRENT_REPO = null;
+let CURRENT_PATH = '';
+let DELETE_TARGET = '';
+
+const API = 'https://api.github.com';
+const STORAGE_KEY = 'gh_mgr_token';
+
+function saveToken(token) { localStorage.setItem(STORAGE_KEY, btoa(token)); }
+function loadToken() { const v = localStorage.getItem(STORAGE_KEY); return v ? atob(v) : null; }
+function clearToken() { localStorage.removeItem(STORAGE_KEY); }
+
+// ═══════════════════════════════════════
+//  UTILS
+// ═══════════════════════════════════════
+function toast(msg, type = 'success', duration = 3200) {
+  const t = document.getElementById('toast');
+  const title = document.getElementById('toastTitle');
+  const body = document.getElementById('toastMsg');
+  title.textContent = type === 'success' ? '✓ Úspěch' : '✕ Chyba';
+  body.textContent = msg;
+  t.className = 'toast ' + type;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), duration);
+}
+
+async function ghFetch(endpoint, options = {}) {
+  const res = await fetch(API + endpoint, {
+    ...options,
+    headers: {
+      'Authorization': 'token ' + TOKEN,
+      'Accept': 'application/vnd.github.v3+json',
+      'Content-Type': 'application/json',
+      ...(options.headers || {})
+    }
+  });
+  if (res.status === 204) return null;
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || 'GitHub API error');
+  return data;
+}
+
+// ═══════════════════════════════════════
+//  LOGIN / LOGOUT
+// ═══════════════════════════════════════
+document.getElementById('loginBtn').onclick = async () => {
+  const token = document.getElementById('tokenInput').value.trim();
+  if (!token) return toast('Zadáš token prosím.', 'error');
+  TOKEN = token;
+
+  try {
+    const user = await ghFetch('/user');
+    USERNAME = user.login;
+    saveToken(TOKEN);
+    await loadRepos();
+    // UI switch
+    document.getElementById('loginPanel').style.display = 'none';
+    document.getElementById('sidebar').style.display = 'flex';
+    document.getElementById('mainContent').style.display = 'block';
+    document.getElementById('statusDot').classList.add('connected');
+    document.getElementById('statusLabel').textContent = 'Přihlášen jako ' + USERNAME;
+    document.getElementById('logoutBtn').style.display = 'inline-block';
+    document.getElementById('logoutArea').style.display = 'block';
+    showHomeView();
+    toast('Přihlášen jako ' + USERNAME);
+  } catch (e) {
+    toast('Neplatný token nebo chyba: ' + e.message, 'error');
+    TOKEN = '';
+  }
+};
+
+document.getElementById('logoutBtn').onclick = () => {
+  TOKEN = ''; USERNAME = ''; REPOS = []; CURRENT_REPO = null; CURRENT_PATH = '';
+  clearToken();
+  document.getElementById('tokenInput').value = '';
+  document.getElementById('loginPanel').style.display = 'flex';
+  document.getElementById('sidebar').style.display = 'none';
+  document.getElementById('mainContent').style.display = 'none';
+  document.getElementById('statusDot').classList.remove('connected');
+  document.getElementById('statusLabel').textContent = 'Nepřihlášen';
+  document.getElementById('logoutBtn').style.display = 'none';
+  toast('Odhlášen.');
+};
+
+// ═══════════════════════════════════════
+//  REPOS
+// ═══════════════════════════════════════
+async function loadRepos() {
+  REPOS = await ghFetch('/user/repos?per_page=100&sort=updated');
+  renderRepoList();
+}
+
+function renderRepoList() {
+  const list = document.getElementById('repoList');
+  if (!REPOS.length) {
+    list.innerHTML = '<div class="empty-state" style="padding:40px 10px;"><div class="big">📭</div><p>Žádné repo</p></div>';
+    return;
+  }
+  list.innerHTML = REPOS.map(r => `
+    <div class="repo-item ${CURRENT_REPO === r.name ? 'active' : ''}" data-repo="${r.name}">
+      <span class="icon">📁</span>
+      <span class="name">${r.name}</span>
+      <span class="visibility ${r.private ? 'priv' : 'pub'}">${r.private ? '🔒' : '🌐'}</span>
+      <button class="delete-btn" data-repo="${r.name}">✕</button>
+    </div>
+  `).join('');
+
+  // click → open repo
+  list.querySelectorAll('.repo-item').forEach(el => {
+    el.addEventListener('click', (e) => {
+      if (e.target.classList.contains('delete-btn')) return;
+      openRepo(el.dataset.repo);
+    });
+  });
+  // delete buttons
+  list.querySelectorAll('.delete-btn').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openDeleteModal(el.dataset.repo);
+    });
+  });
+}
+
+// ═══════════════════════════════════════
+//  OPEN REPO / BROWSE FILES
+// ═══════════════════════════════════════
+async function openRepo(repoName, path = '') {
+  CURRENT_REPO = repoName;
+  CURRENT_PATH = path;
+  renderRepoList(); // highlight
+
+  const view = document.getElementById('repoView');
+  view.innerHTML = '<div class="spinner"></div>';
+
+  try {
+    const endpoint = path
+      ? `/repos/${USERNAME}/${repoName}/contents/${path}`
+      : `/repos/${USERNAME}/${repoName}/contents`;
+    const contents = await ghFetch(endpoint);
+    const repoInfo = await ghFetch(`/repos/${USERNAME}/${repoName}`);
+
+    // sort: folders first, then files
+    const sorted = [...contents].sort((a, b) => {
+      if (a.type === 'dir' && b.type !== 'dir') return -1;
+      if (a.type !== 'dir' && b.type === 'dir') return 1;
+      return a.name.localeCompare(b.name);
+    });
+
+    // breadcrumb
+    let bc = `<span onclick="showHomeView()" style="cursor:pointer;">🏠 Home</span>`;
+    bc += ` <span class="sep">›</span> <span onclick="openRepo('${repoName}')" style="cursor:pointer;" ${!path ? 'class="active"' : ''}>${repoName}</span>`;
+    if (path) {
+      const parts = path.split('/');
+      let cumul = '';
+      parts.forEach((p, i) => {
+        cumul += (cumul ? '/' : '') + p;
+        const isLast = i === parts.length - 1;
+        bc += ` <span class="sep">›</span> <span ${isLast ? 'class="active"' : `onclick="openRepo('${repoName}','${cumul}')" style="cursor:pointer;"`}>${p}</span>`;
+      });
+    }
+    document.getElementById('breadcrumb').innerHTML = bc;
+
+    // table
+    let html = `
+      <div class="repo-header">
+        <div>
+          <h3>📁 ${repoName} <span class="visibility ${repoInfo.private ? 'priv' : 'pub'}" style="font-size:11px; vertical-align:middle;">${repoInfo.private ? '🔒 Private' : '🌐 Public'}</span></h3>
+          <div class="desc">${repoInfo.description || 'Bez popisu'}</div>
+        </div>
+        <div class="stats">
+          <div class="stat">⭐ <span>${repoInfo.stargazers_count}</span></div>
+          <div class="stat">🔀 <span>${repoInfo.forks_count}</span></div>
+          <div class="stat">📝 <span>${repoInfo.open_issues_count} issues</span></div>
+        </div>
+      </div>
+      <table class="file-table">
+        <thead><tr>
+          <th>Název</th>
+          <th>Typ</th>
+          <th>Velikost</th>
+        </tr></thead>
+        <tbody>
+    `;
+    sorted.forEach(item => {
+      const isDir = item.type === 'dir';
+      const iconEmoji = isDir ? '📂' : getFileIcon(item.name);
+      const nameClass = isDir ? 'folder-name' : 'file-name';
+      const size = isDir ? '—' : formatBytes(item.size);
+      html += `
+        <tr class="file-row" data-name="${item.name}" data-path="${item.path}" data-type="${item.type}" data-size="${item.size || 0}">
+          <td><span class="icon">${iconEmoji}</span><span class="${nameClass}">${item.name}</span></td>
+          <td class="meta">${isDir ? 'Složka' : 'Soubor'}</td>
+          <td class="meta">${size}</td>
+        </tr>
+      `;
+    });
+    html += '</tbody></table>';
+    view.innerHTML = html;
+
+    // bind click events on rows
+    view.querySelectorAll('.file-row').forEach(row => {
+      let clickTimer = null;
+      row.addEventListener('click', () => {
+        const isDir = row.dataset.type === 'dir';
+        if (isDir) {
+          if (clickTimer) {
+            clearTimeout(clickTimer);
+            clickTimer = null;
+            openRepo(repoName, row.dataset.path);
+          } else {
+            clickTimer = setTimeout(() => {
+              clickTimer = null;
+              openFileContext(row.dataset.name, row.dataset.path, row.dataset.type, parseInt(row.dataset.size), repoName);
+            }, 280);
+          }
+        } else {
+          openFileContext(row.dataset.name, row.dataset.path, row.dataset.type, parseInt(row.dataset.size), repoName);
+        }
+      });
+    });
+
+  } catch (e) {
+    view.innerHTML = `<div class="empty-state"><div class="big">⚠️</div><p>${e.message}</p></div>`;
+  }
+}
+
+function showHomeView() {
+  CURRENT_REPO = null;
+  CURRENT_PATH = '';
+  renderRepoList();
+  document.getElementById('breadcrumb').innerHTML = '<span class="active">🏠 Home</span>';
+
+  const view = document.getElementById('repoView');
+  if (!REPOS.length) {
+    view.innerHTML = `<div class="empty-state"><div class="big">🚀</div><p>Nemáš žádné repozitář. Klikni <strong>+</strong> a vytvoř první!</p></div>`;
+    return;
+  }
+  view.innerHTML = `
+    <div class="repo-header"><div><h3>👋 Ahoj, ${USERNAME}!</h3><div class="desc">Tvoje repozitáře</div></div></div>
+    <table class="file-table">
+      <thead><tr><th>Repozitář</th><th>Viditelnost</th><th>Popis</th><th>Aktualizován</th></tr></thead>
+      <tbody>
+        ${REPOS.map(r => `
+          <tr onclick="openRepo('${r.name}')" style="cursor:pointer;">
+            <td><span class="icon">📁</span><span class="folder-name">${r.name}</span></td>
+            <td><span class="visibility ${r.private ? 'priv' : 'pub'}">${r.private ? '🔒 Private' : '🌐 Public'}</span></td>
+            <td class="meta">${r.description || '—'}</td>
+            <td class="meta">${new Date(r.updated_at).toLocaleDateString('cs-CZ')}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+// ═══════════════════════════════════════
+//  NEW REPO
+// ═══════════════════════════════════════
+document.getElementById('newRepoBtn').onclick = () => {
+  document.getElementById('newRepoName').value = '';
+  document.getElementById('newRepoDesc').value = '';
+  document.getElementById('newRepoModal').style.display = 'flex';
+};
+document.getElementById('cancelNewRepo').onclick = () => {
+  document.getElementById('newRepoModal').style.display = 'none';
+};
+document.getElementById('confirmNewRepo').onclick = async () => {
+  const name = document.getElementById('newRepoName').value.trim();
+  if (!name) return toast('Zadáš název repozitáře.', 'error');
+
+  const payload = {
+    name,
+    description: document.getElementById('newRepoDesc').value.trim(),
+    private: document.getElementById('newRepoVisibility').value === 'true',
+    auto_init: document.getElementById('newRepoReadme').checked
+  };
+
+  try {
+    await ghFetch('/user/repos', { method: 'POST', body: JSON.stringify(payload) });
+    document.getElementById('newRepoModal').style.display = 'none';
+    toast('Repozitář „' + name + '" vytvořen!');
+    await loadRepos();
+    openRepo(name);
+  } catch (e) {
+    toast('Chyba: ' + e.message, 'error');
+  }
+};
+
+// ═══════════════════════════════════════
+//  DELETE REPO
+// ═══════════════════════════════════════
+function openDeleteModal(name) {
+  DELETE_TARGET = name;
+  const lastTwo = name.slice(-2);
+  document.getElementById('deleteRepoNameShow').textContent = name;
+  document.getElementById('deleteHintLetters').textContent = lastTwo;
+  document.getElementById('deleteRepoConfirm').value = '';
+  document.getElementById('confirmDeleteRepo').disabled = true;
+  document.getElementById('deleteRepoModal').style.display = 'flex';
+  document.getElementById('deleteRepoConfirm').focus();
+}
+document.getElementById('cancelDeleteRepo').onclick = () => {
+  document.getElementById('deleteRepoModal').style.display = 'none';
+};
+document.getElementById('deleteRepoConfirm').oninput = function() {
+  document.getElementById('confirmDeleteRepo').disabled = this.value.trim() !== DELETE_TARGET.slice(-2);
+};
+document.getElementById('confirmDeleteRepo').onclick = async () => {
+  try {
+    await ghFetch(`/repos/${USERNAME}/${DELETE_TARGET}`, { method: 'DELETE' });
+    document.getElementById('deleteRepoModal').style.display = 'none';
+    toast('Repozitář „' + DELETE_TARGET + '" smazán.');
+    await loadRepos();
+    showHomeView();
+  } catch (e) {
+    toast('Chyba při mazání: ' + e.message, 'error');
+  }
+};
+
+// ═══════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════
+function formatBytes(bytes) {
+  if (!bytes) return '0 B';
+  const k = 1024;
+  const sizes = ['B', 'KB', 'MB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+}
+
+function getFileIcon(name) {
+  const ext = name.split('.').pop().toLowerCase();
+  const icons = {
+    html:'🌐', css:'🎨', js:'⚡', ts:'💎', json:'📋',
+    md:'📝', png:'🖼️', jpg:'🖼️', jpeg:'🖼️', gif:'🖼️', svg:'🖼️',
+    py:'🐍', rb:'💎', java:'☕', txt:'📄', yml:'⚙️', yaml:'⚙️',
+    gitignore:'🙈', env:'🔐', lock:'🔒', xml:'📋', csv:'📊'
+  };
+  return icons[ext] || '📄';
+}
+
+// ═══════════════════════════════════════
+//  BACKUP (download all repos as ZIP)
+// ═══════════════════════════════════════
+let BACKUP_CANCELLED = false;
+
+document.getElementById('backupBtn').onclick = () => {
+  if (!REPOS.length) return toast('Nemáš žádné repozitář na stáhnoutí.', 'error');
+  BACKUP_CANCELLED = false;
+  document.getElementById('backupModal').style.display = 'flex';
+  document.getElementById('backupProgressBar').style.width = '0%';
+  document.getElementById('backupPercent').textContent = '0%';
+  document.getElementById('backupStatus').textContent = 'Začíná...';
+  document.getElementById('backupRepoList').innerHTML = REPOS.map(r =>
+    `<div id="backupItem-${r.name}" style="display:flex; align-items:center; gap:8px; padding:5px 0; border-bottom:1px solid var(--border); font-size:12px;">
+      <span id="backupIcon-${r.name}" style="width:16px; text-align:center;">⏳</span>
+      <span style="flex:1; color:var(--text);">${r.name}</span>
+      <span id="backupCount-${r.name}" style="color:var(--text-dim); font-size:11px;">—</span>
+    </div>`
+  ).join('');
+  startBackup();
+};
+
+document.getElementById('cancelBackup').onclick = () => {
+  BACKUP_CANCELLED = true;
+  document.getElementById('backupModal').style.display = 'none';
+  toast('Backup zrušen.');
+};
+
+// ── recursively fetch all files in a repo ──
+async function fetchAllFiles(repoName, path = '') {
+  const endpoint = path
+    ? `/repos/${USERNAME}/${repoName}/contents/${path}`
+    : `/repos/${USERNAME}/${repoName}/contents`;
+  const items = await ghFetch(endpoint);
+  let files = [];
+  for (const item of items) {
+    if (BACKUP_CANCELLED) return [];
+    if (item.type === 'dir') {
+      const sub = await fetchAllFiles(repoName, item.path);
+      files = files.concat(sub);
+    } else {
+      // fetch file content (base64)
+      const fileData = await ghFetch(`/repos/${USERNAME}/${repoName}/contents/${item.path}`);
+      files.push({ path: repoName + '/' + item.path, content: fileData.content });
+    }
+  }
+  return files;
+}
+
+async function startBackup() {
+  const totalRepos = REPOS.length;
+  let allFiles = [];
+
+  for (let i = 0; i < totalRepos; i++) {
+    if (BACKUP_CANCELLED) return;
+    const repo = REPOS[i];
+    document.getElementById('backupStatus').textContent = `Stahuje: ${repo.name}...`;
+    document.getElementById('backupIcon-' + repo.name).textContent = '📥';
+
+    try {
+      const files = await fetchAllFiles(repo.name);
+      if (BACKUP_CANCELLED) return;
+      allFiles = allFiles.concat(files);
+      document.getElementById('backupIcon-' + repo.name).textContent = '✅';
+      document.getElementById('backupCount-' + repo.name).textContent = files.length + ' soubor' + (files.length === 1 ? '' : 'ů');
+    } catch (e) {
+      document.getElementById('backupIcon-' + repo.name).textContent = '❌';
+      document.getElementById('backupCount-' + repo.name).textContent = 'chyba';
+    }
+
+    const pct = Math.round(((i + 1) / totalRepos) * 100);
+    document.getElementById('backupProgressBar').style.width = pct + '%';
+    document.getElementById('backupPercent').textContent = pct + '%';
+  }
+
+  if (BACKUP_CANCELLED) return;
+
+  // build ZIP and download
+  document.getElementById('backupStatus').textContent = 'Balí do ZIP...';
+  const zipBlob = buildZip(allFiles);
+  downloadBlob(zipBlob, `github-backup-${USERNAME}-${new Date().toISOString().slice(0,10)}.zip`);
+  document.getElementById('backupModal').style.display = 'none';
+  toast(`Backup hotov – ${allFiles.length} soubor` + (allFiles.length === 1 ? '' : 'ů') + ` v ZIP.`);
+}
+
+// ── manual ZIP builder (no external library) ──
+function buildZip(files) {
+  const localHeaders = [];
+  const centralHeaders = [];
+  let offset = 0;
+
+  for (const file of files) {
+    const nameBytes = new TextEncoder().encode(file.path);
+    const contentBytes = Uint8Array.from(atob(file.content), c => c.charCodeAt(0));
+    const crc = crc32(contentBytes);
+
+    // Local file header
+    const local = new Uint8Array(30 + nameBytes.length);
+    const localView = new DataView(local.buffer);
+    localView.setUint32(0, 0x04034b50, true);   // signature
+    localView.setUint16(4, 20, true);            // version needed
+    localView.setUint16(6, 0, true);             // flags
+    localView.setUint16(8, 0, true);             // compression = stored
+    localView.setUint16(10, 0, true);            // mod time
+    localView.setUint16(12, 0, true);            // mod date
+    localView.setUint32(14, crc, true);          // crc32
+    localView.setUint32(18, contentBytes.length, true); // compressed size
+    localView.setUint32(22, contentBytes.length, true); // uncompressed size
+    localView.setUint16(26, nameBytes.length, true);    // filename length
+    localView.setUint16(28, 0, true);            // extra field length
+    local.set(nameBytes, 30);
+    localHeaders.push({ header: local, content: contentBytes, nameBytes, crc, offset });
+
+    // Central directory header
+    const central = new Uint8Array(46 + nameBytes.length);
+    const centralView = new DataView(central.buffer);
+    centralView.setUint32(0, 0x02014b50, true);  // signature
+    centralView.setUint16(4, 20, true);           // version made by
+    centralView.setUint16(6, 20, true);           // version needed
+    centralView.setUint16(8, 0, true);            // flags
+    centralView.setUint16(10, 0, true);           // compression
+    centralView.setUint16(12, 0, true);           // mod time
+    centralView.setUint16(14, 0, true);           // mod date
+    centralView.setUint32(16, crc, true);         // crc32
+    centralView.setUint32(20, contentBytes.length, true);
+    centralView.setUint32(24, contentBytes.length, true);
+    centralView.setUint16(28, nameBytes.length, true);
+    centralView.setUint16(30, 0, true);           // extra length
+    centralView.setUint16(32, 0, true);           // comment length
+    centralView.setUint16(34, 0, true);           // disk number
+    centralView.setUint16(36, 0, true);           // internal attr
+    centralView.setUint32(38, 0, true);           // external attr
+    centralView.setUint32(42, offset, true);      // local header offset
+    central.set(nameBytes, 46);
+    centralHeaders.push(central);
+
+    offset += local.length + contentBytes.length;
+  }
+
+  // End of central directory
+  let centralSize = 0;
+  centralHeaders.forEach(c => centralSize += c.length);
+  const eocd = new Uint8Array(22);
+  const eocdView = new DataView(eocd.buffer);
+  eocdView.setUint32(0, 0x06054b50, true);
+  eocdView.setUint16(4, 0, true);
+  eocdView.setUint16(6, 0, true);
+  eocdView.setUint16(8, files.length, true);
+  eocdView.setUint16(10, files.length, true);
+  eocdView.setUint32(12, centralSize, true);
+  eocdView.setUint32(16, offset, true);
+  eocdView.setUint16(20, 0, true);
+
+  // Concatenate everything
+  const totalSize = offset + centralSize + eocd.length;
+  const zip = new Uint8Array(totalSize);
+  let pos = 0;
+  localHeaders.forEach(({ header, content }) => {
+    zip.set(header, pos); pos += header.length;
+    zip.set(content, pos); pos += content.length;
+  });
+  centralHeaders.forEach(c => { zip.set(c, pos); pos += c.length; });
+  zip.set(eocd, pos);
+
+  return new Blob([zip], { type: 'application/zip' });
+}
+
+// ── CRC32 ──
+function crc32(buf) {
+  let crc = 0xFFFFFFFF;
+  for (let i = 0; i < buf.length; i++) {
+    crc = crc ^ buf[i];
+    for (let j = 0; j < 8; j++) {
+      crc = (crc >>> 1) ^ (crc & 1 ? 0xEDB88320 : 0);
+    }
+  }
+  return (crc ^ 0xFFFFFFFF) >>> 0;
+}
+
+// ── trigger browser download ──
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// ═══════════════════════════════════════
+//  FILE CONTEXT MENU
+// ═══════════════════════════════════════
+let CTX_FILE = {}; // { name, path, type, size, repo }
+
+function openFileContext(name, path, type, size, repo) {
+  CTX_FILE = { name, path, type, size, repo };
+  const isDir  = type === 'dir';
+  const isHtml = /\.html?$/i.test(name);
+
+  document.getElementById('ctxFileName').textContent = name;
+  document.getElementById('ctxFileMeta').textContent = isDir ? 'Složka' : (formatBytes(size) + ' · ' + name.split('.').pop().toUpperCase());
+  document.getElementById('ctxFileIcon').textContent = isDir ? '📂' : getFileIcon(name);
+
+  // hide rename row
+  document.getElementById('renameRow').classList.remove('show');
+
+  // build action buttons
+  let btns = '';
+  if (isHtml) {
+    btns += `<button class="ctx-btn" id="ctxPreview">
+      <span class="ctx-icon">🌐</span>
+      <div><div class="ctx-label">Spustit v browseru</div><div class="ctx-desc">Otevře HTML stránku v novém tabu</div></div>
+    </button>`;
+  }
+  if (!isDir) {
+    btns += `<button class="ctx-btn" id="ctxDownload">
+      <span class="ctx-icon">⬇️</span>
+      <div><div class="ctx-label">Stáhnout soubor</div><div class="ctx-desc">Uloží soubor na tvůj počítač</div></div>
+    </button>`;
+  }
+  btns += `<button class="ctx-btn" id="ctxRename">
+    <span class="ctx-icon">✏️</span>
+    <div><div class="ctx-label">Přejmenovat</div><div class="ctx-desc">Změni název ${isDir ? 'složky' : 'souboru'}</div></div>
+  </button>`;
+  btns += `<button class="ctx-btn danger" id="ctxDelete">
+    <span class="ctx-icon">🗑️</span>
+    <div><div class="ctx-label" style="color:var(--red);">Smazat</div><div class="ctx-desc">Navždy smazá ${isDir ? 'složku a vše uvnitř' : 'tento soubor'}</div></div>
+  </button>`;
+
+  document.getElementById('ctxActions').innerHTML = btns;
+  document.getElementById('ctxModal').style.display = 'flex';
+
+  // ── bind action handlers ──
+
+  // Preview HTML
+  const previewBtn = document.getElementById('ctxPreview');
+  if (previewBtn) {
+    previewBtn.onclick = async () => {
+      try {
+        const fileData = await ghFetch(`/repos/${USERNAME}/${CTX_FILE.repo}/contents/${CTX_FILE.path}`);
+        const html = atob(fileData.content);
+        const blob = new Blob([html], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+        document.getElementById('ctxModal').style.display = 'none';
+      } catch (e) { toast('Chyba při preview: ' + e.message, 'error'); }
+    };
+  }
+
+  // Download
+  const dlBtn = document.getElementById('ctxDownload');
+  if (dlBtn) {
+    dlBtn.onclick = async () => {
+      try {
+        const fileData = await ghFetch(`/repos/${USERNAME}/${CTX_FILE.repo}/contents/${CTX_FILE.path}`);
+        const bytes = Uint8Array.from(atob(fileData.content), c => c.charCodeAt(0));
+        const blob = new Blob([bytes]);
+        downloadBlob(blob, CTX_FILE.name);
+        document.getElementById('ctxModal').style.display = 'none';
+        toast('Soubor „' + CTX_FILE.name + '" stáhnut.');
+      } catch (e) { toast('Chyba při stáhnutí: ' + e.message, 'error'); }
+    };
+  }
+
+  // Rename – show input
+  document.getElementById('ctxRename').onclick = () => {
+    document.getElementById('renameRow').classList.add('show');
+    document.getElementById('renameInput').value = CTX_FILE.name;
+    document.getElementById('renameInput').focus();
+    // select just the name part (before extension)
+    const dotIdx = CTX_FILE.name.lastIndexOf('.');
+    if (dotIdx > 0) document.getElementById('renameInput').setSelectionRange(0, dotIdx);
+  };
+
+  document.getElementById('cancelRename').onclick = () => {
+    document.getElementById('renameRow').classList.remove('show');
+  };
+
+  document.getElementById('confirmRename').onclick = async () => {
+    const newName = document.getElementById('renameInput').value.trim();
+    if (!newName || newName === CTX_FILE.name) return toast('Název nezměněn.', 'error');
+    // compute new path: replace last segment
+    const parts = CTX_FILE.path.split('/');
+    parts[parts.length - 1] = newName;
+    const newPath = parts.join('/');
+    try {
+      // GitHub rename = get content → delete old → create new at new path
+      const fileData = await ghFetch(`/repos/${USERNAME}/${CTX_FILE.repo}/contents/${CTX_FILE.path}`);
+      // delete old
+      await ghFetch(`/repos/${USERNAME}/${CTX_FILE.repo}/contents/${CTX_FILE.path}`, {
+        method: 'DELETE',
+        body: JSON.stringify({ message: `rename: ${CTX_FILE.name} → ${newName}`, sha: fileData.sha })
+      });
+      // create new (only for files; folders can't be created empty on GitHub)
+      if (CTX_FILE.type !== 'dir') {
+        await ghFetch(`/repos/${USERNAME}/${CTX_FILE.repo}/contents/${newPath}`, {
+          method: 'POST',
+          body: JSON.stringify({ message: `rename: ${CTX_FILE.name} → ${newName}`, content: fileData.content })
+        });
+      }
+      document.getElementById('ctxModal').style.display = 'none';
+      toast('Přejmenováno na „' + newName + '"');
+      // refresh current folder
+      openRepo(CTX_FILE.repo, CTX_FILE.path.split('/').slice(0, -1).join('/'));
+    } catch (e) { toast('Chyba při přejmenování: ' + e.message, 'error'); }
+  };
+
+  // Delete
+  document.getElementById('ctxDelete').onclick = async () => {
+    if (!confirm(`Smazat „${CTX_FILE.name}"? Toto nelze vrátit.`)) return;
+    try {
+      if (CTX_FILE.type === 'dir') {
+        // folders: need to delete all files inside recursively
+        await deleteDir(CTX_FILE.repo, CTX_FILE.path);
+      } else {
+        const fileData = await ghFetch(`/repos/${USERNAME}/${CTX_FILE.repo}/contents/${CTX_FILE.path}`);
+        await ghFetch(`/repos/${USERNAME}/${CTX_FILE.repo}/contents/${CTX_FILE.path}`, {
+          method: 'DELETE',
+          body: JSON.stringify({ message: `delete: ${CTX_FILE.name}`, sha: fileData.sha })
+        });
+      }
+      document.getElementById('ctxModal').style.display = 'none';
+      toast('„' + CTX_FILE.name + '" smazán.');
+      openRepo(CTX_FILE.repo, CTX_FILE.path.split('/').slice(0, -1).join('/'));
+    } catch (e) { toast('Chyba při mazání: ' + e.message, 'error'); }
+  };
+}
+
+// recursively delete a folder (GitHub has no folder-delete endpoint)
+async function deleteDir(repo, dirPath) {
+  const items = await ghFetch(`/repos/${USERNAME}/${repo}/contents/${dirPath}`);
+  for (const item of items) {
+    if (item.type === 'dir') {
+      await deleteDir(repo, item.path);
+    } else {
+      await ghFetch(`/repos/${USERNAME}/${repo}/contents/${item.path}`, {
+        method: 'DELETE',
+        body: JSON.stringify({ message: `delete: ${item.path}`, sha: item.sha })
+      });
+    }
+  }
+}
+
+// close context modal on overlay click
+document.getElementById('ctxModal').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('ctxModal')) {
+    document.getElementById('ctxModal').style.display = 'none';
+  }
+});
+
+// ═══════════════════════════════════════
+//  AUTO LOGIN (page load)
+// ═══════════════════════════════════════
+(async () => {
+  const saved = loadToken();
+  if (!saved) return;
+  TOKEN = saved;
+  try {
+    const user = await ghFetch('/user');
+    USERNAME = user.login;
+    await loadRepos();
+    document.getElementById('loginPanel').style.display = 'none';
+    document.getElementById('sidebar').style.display = 'flex';
+    document.getElementById('mainContent').style.display = 'block';
+    document.getElementById('statusDot').classList.add('connected');
+    document.getElementById('statusLabel').textContent = 'Přihlášen jako ' + USERNAME;
+    document.getElementById('logoutBtn').style.display = 'inline-block';
+    document.getElementById('logoutArea').style.display = 'block';
+    showHomeView();
+  } catch (e) {
+    clearToken();
+    TOKEN = '';
+  }
+})();
+</script>
+</body>
+</html>
