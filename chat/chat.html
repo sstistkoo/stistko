@@ -3795,18 +3795,20 @@
           }
         }
 
-        // Show/hide model bar
+        // Show/hide model bar a model display
         const modelBar = document.getElementById("chatModelBar");
+        const modelDisplay = document.getElementById("currentModelDisplay");
 
         if (mode === "manual") {
           modelBar.style.display = "flex";
+          if (modelDisplay) modelDisplay.style.display = "none"; // Skryj v Manual
           // Sync with current provider/model
           document.getElementById("chatProviderSelect").value = currentProvider;
-          await updateChatModelSelect(); // Počkej na načtení modelů
-          updateAutoModelInfo(); // Teď aktualizuj zobrazení
+          await updateChatModelSelect();
         } else {
           modelBar.style.display = "none";
-          updateAutoModelInfo(); // Aktualizuj zobrazení pro Auto režim
+          if (modelDisplay) modelDisplay.style.display = "block"; // Zobraz v Auto
+          updateAutoModelInfo();
         }
 
         logToConsole(
