@@ -3765,6 +3765,46 @@
         }
       }
 
+      // Detekce capabilities pro model
+      function detectModelCapabilities(model, provider) {
+        const caps = [];
+        const modelId = (model.value || model.id || "").toLowerCase();
+        const modelName = (model.name || "").toLowerCase();
+        const combined = modelId + " " + modelName;
+
+        // Vision/Multimodal
+        if (
+          model.vision ||
+          /vision|multimodal|gemini-2\.0|gpt-4o|claude-3|pixtral|llava|molmo/i.test(
+            combined,
+          )
+        ) {
+          caps.push("vision");
+        }
+
+        // Code
+        if (/code|programming|deepseek-coder/i.test(combined)) {
+          caps.push("code");
+        }
+
+        // Reasoning
+        if (/reason|o1|deepseek-r1|qwen.*qwq/i.test(combined)) {
+          caps.push("reasoning");
+        }
+
+        // Image generation
+        if (/image-gen|dall-e|stable-diffusion|flux/i.test(combined)) {
+          caps.push("image-gen");
+        }
+
+        // Text (default for all)
+        if (!caps.length || /text|chat|gpt|llama|mistral|gemma/i.test(combined)) {
+          caps.push("text");
+        }
+
+        return caps;
+      }
+
       // ============================================================
       // CHAT MODE (Auto/Manual)
       // ============================================================
@@ -3871,7 +3911,14 @@
             options.headers = api.headers(key);
           }
 
+          // Timeout pro API request (10 sekund)
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 10000);
+          options.signal = controller.signal;
+
           const response = await fetch(url, options);
+          clearTimeout(timeoutId);
+
           if (!response.ok) {
             throw new Error(`HTTP ${response.status}`);
           }
@@ -3883,23 +3930,6 @@
           const freeModels = allModels
             .filter((m) => m.free)
             .map((m) => {
-              const caps = [];
-              // Detekce capabilities z API dat nebo názvu modelu
-              if (m.vision || /vision|multimodal|gemini-2\.0|gpt-4o|claude-3/i.test(m.id || m.name)) {
-                caps.push("vision");
-              }
-              if (/code|programming/i.test(m.id || m.name)) {
-                caps.push("code");
-              }
-              if (/reason|o1|deepseek/i.test(m.id || m.name)) {
-                caps.push("reasoning");
-              }
-              if (/image-gen|dall-e|stable-diffusion/i.test(m.id || m.name)) {
-                caps.push("image-gen");
-              }
-              if (!caps.length || /text|chat|gpt|llama|mistral|gemma/i.test(m.id || m.name)) {
-                caps.push("text");
-              }
               return {
                 name: m.name || m.id,
                 value: m.id,
@@ -3907,7 +3937,7 @@
                 rpm: 20,
                 free: true,
                 contextLength: m.contextLength,
-                caps: caps,
+                caps: detectModelCapabilities(m, provider),
               };
             })
             .sort((a, b) => b.quality - a.quality)
@@ -3928,7 +3958,16 @@
             `${provider}: Nelze načíst z API, používám fallback: ${error.message}`,
           );
           modelsLoadingState[provider] = false;
-          return PROVIDER_MODELS[provider] || [];
+
+          // Použij statické modely a přidej k nim capabilities
+          const staticModels = PROVIDER_MODELS[provider] || [];
+          const modelsWithCaps = staticModels.map((m) => ({
+            ...m,
+            caps: m.caps || detectModelCapabilities(m, provider),
+          }));
+
+          cachedFreeModels[provider] = modelsWithCaps;
+          return modelsWithCaps;
         }
       }
 
@@ -5231,7 +5270,8 @@
             system: "Odpovídej česky. Jsi přátelský asistent.",
           });
 
-          response = typeof result === 'string' ? result : result.response || result;
+          response =
+            typeof result === "string" ? result : result.response || result;
           const tokensIn = result.tokensIn || 0;
           const tokensOut = result.tokensOut || 0;
 
@@ -5245,9 +5285,10 @@
           const elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
           updateLastBubble(response);
           lastResponse = response;
-          
+
           // Zobrazení tokenů
-          const tokenInfo = tokensIn && tokensOut ? ` • ${tokensIn}→${tokensOut} tok.` : '';
+          const tokenInfo =
+            tokensIn && tokensOut ? ` • ${tokensIn}→${tokensOut} tok.` : "";
           setStatus("ready", `✓ ${elapsed}s${tokenInfo}`);
         } catch (error) {
           updateLastBubble(`Chyba: ${error.message}`, true);
