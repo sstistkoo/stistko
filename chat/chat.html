@@ -2755,19 +2755,39 @@
           <!-- Model Selection Bar -->
           <div class="chat-model-bar" id="chatModelBar" style="display: none">
             <div class="model-filters" id="modelFilters">
-              <button class="filter-btn active" onclick="filterModels('all')" data-filter="all">
+              <button
+                class="filter-btn active"
+                onclick="filterModels('all')"
+                data-filter="all"
+              >
                 🔍 Všechny
               </button>
-              <button class="filter-btn" onclick="filterModels('vision')" data-filter="vision">
+              <button
+                class="filter-btn"
+                onclick="filterModels('vision')"
+                data-filter="vision"
+              >
                 👁️ Vision
               </button>
-              <button class="filter-btn" onclick="filterModels('code')" data-filter="code">
+              <button
+                class="filter-btn"
+                onclick="filterModels('code')"
+                data-filter="code"
+              >
                 💻 Code
               </button>
-              <button class="filter-btn" onclick="filterModels('reasoning')" data-filter="reasoning">
+              <button
+                class="filter-btn"
+                onclick="filterModels('reasoning')"
+                data-filter="reasoning"
+              >
                 🧠 Reasoning
               </button>
-              <button class="filter-btn" onclick="filterModels('text')" data-filter="text">
+              <button
+                class="filter-btn"
+                onclick="filterModels('text')"
+                data-filter="text"
+              >
                 📝 Text
               </button>
             </div>
@@ -5393,7 +5413,7 @@
 
         const bubble = document.createElement("div");
         bubble.className = `chat-bubble ${isError ? "error" : ""}`;
-        
+
         // Pro uživatele prostý text, pro asistenta markdown
         if (isUser || isError) {
           bubble.textContent = text;
