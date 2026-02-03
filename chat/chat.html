@@ -3879,17 +3879,37 @@
           const data = await response.json();
           const allModels = api.parse(data);
 
-          // Filtruj pouze FREE modely a přidej quality
+          // Filtruj pouze FREE modely a přidej quality a capabilities
           const freeModels = allModels
             .filter((m) => m.free)
-            .map((m) => ({
-              name: m.name || m.id,
-              value: m.id,
-              quality: estimateQuality(m, provider),
-              rpm: 20,
-              free: true,
-              contextLength: m.contextLength,
-            }))
+            .map((m) => {
+              const caps = [];
+              // Detekce capabilities z API dat nebo názvu modelu
+              if (m.vision || /vision|multimodal|gemini-2\.0|gpt-4o|claude-3/i.test(m.id || m.name)) {
+                caps.push("vision");
+              }
+              if (/code|programming/i.test(m.id || m.name)) {
+                caps.push("code");
+              }
+              if (/reason|o1|deepseek/i.test(m.id || m.name)) {
+                caps.push("reasoning");
+              }
+              if (/image-gen|dall-e|stable-diffusion/i.test(m.id || m.name)) {
+                caps.push("image-gen");
+              }
+              if (!caps.length || /text|chat|gpt|llama|mistral|gemma/i.test(m.id || m.name)) {
+                caps.push("text");
+              }
+              return {
+                name: m.name || m.id,
+                value: m.id,
+                quality: estimateQuality(m, provider),
+                rpm: 20,
+                free: true,
+                contextLength: m.contextLength,
+                caps: caps,
+              };
+            })
             .sort((a, b) => b.quality - a.quality)
             .slice(0, 30); // Max 30 modelů
 
@@ -5205,11 +5225,15 @@
           let response;
           const selected = getSelectedModelForChat();
 
-          response = await AI.ask(prompt, {
+          const result = await AI.ask(prompt, {
             provider: selected.provider,
             model: selected.model,
             system: "Odpovídej česky. Jsi přátelský asistent.",
           });
+
+          response = typeof result === 'string' ? result : result.response || result;
+          const tokensIn = result.tokensIn || 0;
+          const tokensOut = result.tokensOut || 0;
 
           // Aktualizovat zobrazení modelu
           const display = document.getElementById("currentModelDisplay");
@@ -5221,7 +5245,10 @@
           const elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
           updateLastBubble(response);
           lastResponse = response;
-          setStatus("ready", `✓ ${elapsed}s`);
+          
+          // Zobrazení tokenů
+          const tokenInfo = tokensIn && tokensOut ? ` • ${tokensIn}→${tokensOut} tok.` : '';
+          setStatus("ready", `✓ ${elapsed}s${tokenInfo}`);
         } catch (error) {
           updateLastBubble(`Chyba: ${error.message}`, true);
           setStatus("error", "Chyba");
