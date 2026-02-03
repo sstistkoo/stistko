@@ -2877,6 +2877,20 @@
             </div>
           </div>
 
+          <!-- Historie konverzací -->
+          <div
+            class="menu-accordion-item"
+            onclick="openContentModal('history')"
+            style="cursor: pointer"
+          >
+            <div class="menu-accordion-header">
+              <div class="menu-accordion-title">
+                <span class="icon">📚</span> Historie konverzací
+              </div>
+              <span class="menu-accordion-arrow">➔</span>
+            </div>
+          </div>
+
           <!-- Objevit modely -->
           <div
             class="menu-accordion-item"
@@ -5504,6 +5518,9 @@
           const tokenInfo =
             tokensIn && tokensOut ? ` • ${tokensIn}→${tokensOut} tok.` : "";
           setStatus("ready", `✓ ${elapsed}s${tokenInfo}`);
+
+          // Automaticky ulož konverzaci
+          setTimeout(() => saveCurrentConversation(), 1000);
         } catch (error) {
           updateLastBubble(`Chyba: ${error.message}`, true);
           setStatus("error", "Chyba");
@@ -5563,6 +5580,176 @@
         lastResponse = "";
         uploadedImage = null;
         document.getElementById("imagePreviewContainer").innerHTML = "";
+      }
+
+      // ============================================================
+      // HISTORIE KONVERZACÍ
+      // ============================================================
+      function saveCurrentConversation() {
+        const messages = [];
+        document.querySelectorAll(".chat-message").forEach((msg) => {
+          const isUser = msg.classList.contains("user");
+          const bubble = msg.querySelector(".chat-bubble");
+          if (bubble && bubble.textContent.trim()) {
+            messages.push({
+              isUser: isUser,
+              text: bubble.textContent.trim(),
+            });
+          }
+        });
+
+        if (messages.length === 0) return;
+
+        const conversations = JSON.parse(
+          localStorage.getItem("chatHistory") || "[]",
+        );
+
+        const conversation = {
+          id: Date.now(),
+          timestamp: new Date().toISOString(),
+          messages: messages,
+          provider: currentProvider,
+          title: messages[0]?.text.substring(0, 50) + "...",
+        };
+
+        conversations.unshift(conversation);
+
+        // Uchovej pouze posledních 50 konverzací
+        if (conversations.length > 50) {
+          conversations.length = 50;
+        }
+
+        localStorage.setItem("chatHistory", JSON.stringify(conversations));
+        showToast("💾 Konverzace uložena");
+      }
+
+      function loadConversation(id) {
+        const conversations = JSON.parse(
+          localStorage.getItem("chatHistory") || "[]",
+        );
+        const conv = conversations.find((c) => c.id === id);
+
+        if (!conv) return;
+
+        clearChat();
+
+        conv.messages.forEach((msg) => {
+          addChatMessage(msg.text, msg.isUser);
+        });
+
+        closeContentModal();
+        showToast("✅ Konverzace načtena");
+      }
+
+      function deleteConversation(id) {
+        if (!confirm("Opravdu smazat tuto konverzaci?")) return;
+
+        let conversations = JSON.parse(
+          localStorage.getItem("chatHistory") || "[]",
+        );
+        conversations = conversations.filter((c) => c.id !== id);
+        localStorage.setItem("chatHistory", JSON.stringify(conversations));
+
+        // Refresh zobrazení
+        openContentModal("history");
+        showToast("🗑️ Konverzace smazána");
+      }
+
+      function clearAllHistory() {
+        if (
+          !confirm(
+            "Opravdu smazat celou historii konverzací? Tuto akci nelze vrátit zpět.",
+          )
+        )
+          return;
+
+        localStorage.removeItem("chatHistory");
+        openContentModal("history");
+        showToast("🗑️ Historie vymazána");
+      }
+
+      function exportConversation(id) {
+        const conversations = JSON.parse(
+          localStorage.getItem("chatHistory") || "[]",
+        );
+        const conv = conversations.find((c) => c.id === id);
+
+        if (!conv) return;
+
+        let markdown = `# Konverzace - ${new Date(conv.timestamp).toLocaleString("cs-CZ")}\n\n`;
+        markdown += `**Provider:** ${conv.provider}\n\n---\n\n`;
+
+        conv.messages.forEach((msg) => {
+          markdown += msg.isUser ? "## 👤 Uživatel\n\n" : "## 🤖 Asistent\n\n";
+          markdown += msg.text + "\n\n";
+        });
+
+        const blob = new Blob([markdown], { type: "text/markdown" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `konverzace-${conv.id}.md`;
+        a.click();
+        URL.revokeObjectURL(url);
+
+        showToast("📥 Konverzace exportována");
+      }
+
+      function generateHistoryContent() {
+        const conversations = JSON.parse(
+          localStorage.getItem("chatHistory") || "[]",
+        );
+
+        if (conversations.length === 0) {
+          return `
+            <div style="text-align: center; padding: 40px; color: var(--text-secondary);">
+              <div style="font-size: 48px; margin-bottom: 16px;">📚</div>
+              <p>Žádné uložené konverzace</p>
+              <p style="font-size: 12px; margin-top: 8px;">Konverzace se automaticky ukládají po odeslání zprávy</p>
+            </div>
+          `;
+        }
+
+        return `
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div style="color: var(--text-secondary); font-size: 14px;">
+              Celkem: ${conversations.length} konverzací
+            </div>
+            <button onclick="clearAllHistory()" class="btn-danger" style="padding: 8px 16px;">
+              🗑️ Vymazat vše
+            </button>
+          </div>
+          
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            ${conversations
+              .map(
+                (conv) => `
+              <div style="background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px;">
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
+                  <div style="flex: 1;">
+                    <div style="font-weight: 500; margin-bottom: 4px;">${conv.title}</div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">
+                      ${new Date(conv.timestamp).toLocaleString("cs-CZ")} • ${conv.provider} • ${conv.messages.length} zpráv
+                    </div>
+                  </div>
+                </div>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                  <button onclick="loadConversation(${conv.id})" class="btn-primary" style="padding: 6px 12px; font-size: 12px;">
+                    📂 Načíst
+                  </button>
+                  <button onclick="exportConversation(${conv.id})" class="btn-secondary" style="padding: 6px 12px; font-size: 12px;">
+                    📥 Export
+                  </button>
+                  <button onclick="deleteConversation(${conv.id})" class="btn-danger" style="padding: 6px 12px; font-size: 12px;">
+                    🗑️ Smazat
+                  </button>
+                </div>
+              </div>
+            `,
+              )
+              .join("")}
+          </div>
+        `;
       }
 
       // ============================================================
@@ -5734,6 +5921,10 @@
           case "stats":
             title.innerHTML = "📊 Statistiky použití";
             body.innerHTML = generateStatsContent();
+            break;
+          case "history":
+            title.innerHTML = "📚 Historie konverzací";
+            body.innerHTML = generateHistoryContent();
             break;
           case "features":
             title.innerHTML = "🚀 Nové funkce v3.0";
