@@ -1,0 +1,881 @@
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🔍 Hlídací pes pracovních příležitostí</title>
+    <script src="ai_module.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(
+          135deg,
+          #0a0a2e 0%,
+          #1a1a4e 50%,
+          #2d1b69 100%
+        );
+        min-height: 100vh;
+        color: #e0e0ff;
+      }
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      header {
+        text-align: center;
+        padding: 30px 0;
+      }
+      header h1 {
+        font-size: 2.2em;
+        background: linear-gradient(90deg, #00d4ff, #7b2ffc, #ff6b9d);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 8px;
+      }
+      header p {
+        color: #8888cc;
+        font-size: 1.05em;
+      }
+      .search-panel {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 28px;
+        margin-bottom: 28px;
+        backdrop-filter: blur(10px);
+      }
+      .form-row {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+      }
+      .form-group {
+        flex: 1;
+        min-width: 200px;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 6px;
+        color: #aaaadd;
+        font-size: 0.92em;
+        font-weight: 600;
+      }
+      .form-group input {
+        width: 100%;
+        padding: 12px 16px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 10px;
+        color: #fff;
+        font-size: 1em;
+        transition: border-color 0.3s;
+      }
+      .form-group input:focus {
+        outline: none;
+        border-color: #7b2ffc;
+        box-shadow: 0 0 12px rgba(123, 47, 252, 0.3);
+      }
+      .btn-primary {
+        width: 100%;
+        padding: 14px 36px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.05em;
+        font-weight: 700;
+        cursor: pointer;
+        background: linear-gradient(135deg, #7b2ffc, #00d4ff);
+        color: #fff;
+        transition: all 0.3s;
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(123, 47, 252, 0.4);
+      }
+      .btn-primary:disabled {
+        opacity: 0.5;
+        transform: none;
+        cursor: not-allowed;
+      }
+      .status-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 20px;
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 10px;
+        margin-bottom: 20px;
+        font-size: 0.9em;
+      }
+      .mode {
+        color: #00d4ff;
+        font-weight: 600;
+      }
+      .results-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+      }
+      .results-header h2 {
+        font-size: 1.3em;
+        color: #ccc;
+      }
+      .results-count {
+        background: rgba(123, 47, 252, 0.25);
+        color: #c8a8ff;
+        padding: 5px 14px;
+        border-radius: 20px;
+        font-size: 0.9em;
+        font-weight: 600;
+      }
+      .job-card {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 14px;
+        padding: 22px;
+        margin-bottom: 14px;
+        transition: all 0.3s;
+        position: relative;
+      }
+      .job-card:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(123, 47, 252, 0.4);
+        transform: translateX(4px);
+      }
+      .portal-badge {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.75em;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+      .badge-jobs {
+        background: #e53935;
+        color: #fff;
+      }
+      .badge-prace {
+        background: #1e88e5;
+        color: #fff;
+      }
+      .badge-indeed {
+        background: #6a1b9a;
+        color: #fff;
+      }
+      .badge-profesia {
+        background: #ff6f00;
+        color: #fff;
+      }
+      .badge-kariera {
+        background: #00897b;
+        color: #fff;
+      }
+      .badge-linkedin {
+        background: #0077b5;
+        color: #fff;
+      }
+      .badge-startup {
+        background: #43a047;
+        color: #fff;
+      }
+      .badge-dobra {
+        background: #8e24aa;
+        color: #fff;
+      }
+      .badge-volna {
+        background: #5c6bc0;
+        color: #fff;
+      }
+      .badge-google {
+        background: #4caf50;
+        color: #fff;
+      }
+      .badge-firma {
+        background: #ff7043;
+        color: #fff;
+      }
+      .badge-other {
+        background: #555;
+        color: #fff;
+      }
+      .job-card h3 {
+        font-size: 1.15em;
+        color: #fff;
+        margin-bottom: 8px;
+        padding-right: 100px;
+      }
+      .job-card .company {
+        color: #00d4ff;
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+      .job-card .location {
+        color: #aaa;
+        font-size: 0.9em;
+        margin-bottom: 6px;
+      }
+      .job-card .description {
+        color: #bbb;
+        font-size: 0.9em;
+        margin-bottom: 10px;
+        line-height: 1.5;
+      }
+      .job-card .salary {
+        color: #4caf50;
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+      .job-link {
+        display: inline-block;
+        padding: 8px 20px;
+        background: linear-gradient(135deg, #7b2ffc, #5a1fbc);
+        color: #fff;
+        text-decoration: none;
+        border-radius: 8px;
+        font-size: 0.9em;
+        font-weight: 600;
+        transition: all 0.3s;
+      }
+      .job-link:hover {
+        background: linear-gradient(135deg, #9b4ffc, #7b2ffc);
+        box-shadow: 0 4px 15px rgba(123, 47, 252, 0.4);
+      }
+      .loading {
+        text-align: center;
+        padding: 50px;
+      }
+      .spinner {
+        width: 50px;
+        height: 50px;
+        border: 4px solid rgba(255, 255, 255, 0.1);
+        border-top-color: #7b2ffc;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        margin: 0 auto 16px;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .error-msg {
+        background: rgba(229, 57, 53, 0.15);
+        border: 1px solid rgba(229, 57, 53, 0.3);
+        border-radius: 10px;
+        padding: 16px;
+        color: #ff8a80;
+        margin-bottom: 16px;
+      }
+      .info-msg {
+        background: rgba(0, 212, 255, 0.1);
+        border: 1px solid rgba(0, 212, 255, 0.2);
+        border-radius: 10px;
+        padding: 14px;
+        color: #80d8ff;
+        margin-bottom: 16px;
+        font-size: 0.9em;
+      }
+      .info-msg a {
+        color: #80d8ff;
+      }
+      .sources-section {
+        margin-top: 20px;
+        padding: 16px;
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .sources-section h3 {
+        color: #aaa;
+        font-size: 0.95em;
+        margin-bottom: 10px;
+      }
+      .source-link {
+        display: inline-block;
+        margin: 4px 8px 4px 0;
+        padding: 4px 12px;
+        background: rgba(123, 47, 252, 0.15);
+        border-radius: 6px;
+        color: #c8a8ff;
+        text-decoration: none;
+        font-size: 0.85em;
+        transition: background 0.2s;
+      }
+      .source-link:hover {
+        background: rgba(123, 47, 252, 0.3);
+      }
+      @media (max-width: 600px) {
+        .form-row {
+          flex-direction: column;
+        }
+        header h1 {
+          font-size: 1.5em;
+        }
+        .container {
+          padding: 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>🔍 Hlídací pes pracovních příležitostí</h1>
+        <p>Portály + firemní weby + AI</p>
+      </header>
+      <div class="search-panel">
+        <div class="form-row">
+          <div class="form-group">
+            <label>🎯 Co hledáš? (klíčová slova)</label>
+            <input
+              type="text"
+              id="keywords"
+              value="cnc obraběč kovu"
+              placeholder="např. svářeč, programátor..."
+            />
+          </div>
+          <div class="form-group">
+            <label>📍 Kde? (místo / lokalita)</label>
+            <input
+              type="text"
+              id="location"
+              value="ostrava"
+              placeholder="např. Praha, Brno..."
+            />
+          </div>
+        </div>
+        <button class="btn-primary" id="searchBtn" onclick="searchJobs()">
+          🚀 Vyhledat nabídky
+        </button>
+      </div>
+      <div class="status-bar">
+        <span id="statusText">Připraveno k vyhledávání</span>
+        <span class="mode">Gemini AI + portály + firemní weby</span>
+      </div>
+      <div id="results"></div>
+    </div>
+    <script>
+      // Přímé volání Gemini API s Google Search grounding
+      async function callGeminiWithSearch(prompt, systemPrompt) {
+        // Získej API klíč z AI modulu
+        const key = AI.getKey("gemini");
+        if (!key)
+          throw new Error(
+            "Gemini API klíč není dostupný. Zkontroluj AI modul.",
+          );
+
+        const model = "gemini-2.5-flash";
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
+
+        const body = {
+          contents: [{ parts: [{ text: prompt }] }],
+          // Google Search grounding - AI může prohledat web!
+          tools: [{ google_search: {} }],
+          generationConfig: {
+            temperature: 0.3,
+            maxOutputTokens: 16384,
+          },
+        };
+
+        if (systemPrompt) {
+          body.systemInstruction = { parts: [{ text: systemPrompt }] };
+        }
+
+        const response = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+
+        if (!response.ok) {
+          const err = await response.json().catch(() => ({}));
+          throw new Error(
+            err.error?.message || `Gemini HTTP ${response.status}`,
+          );
+        }
+
+        const data = await response.json();
+        console.log("Gemini raw response:", data);
+
+        // Extrahuj text odpovědi
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+
+        // Extrahuj grounding metadata (skutečné zdroje z webu!)
+        const grounding = data.candidates?.[0]?.groundingMetadata || {};
+        const groundingChunks = grounding.groundingChunks || [];
+        const searchQueries = grounding.webSearchQueries || [];
+
+        console.log("Grounding chunks (zdroje z webu):", groundingChunks);
+        console.log("Search queries:", searchQueries);
+
+        return { text, groundingChunks, searchQueries, grounding };
+      }
+
+      // Přímé volání server API pro scraping portálů
+      async function fetchServerJobs(keywords, location) {
+        try {
+          const resp = await fetch(
+            `http://localhost:3000/api/search?q=${encodeURIComponent(keywords)}&l=${encodeURIComponent(location)}`,
+          );
+          if (!resp.ok) return [];
+          const data = await resp.json();
+          return data.success ? data.jobs || [] : [];
+        } catch (e) {
+          console.warn("Server API nedostupný (spusť server.js):", e.message);
+          return [];
+        }
+      }
+
+      // Vytvoř fungující vyhledávací odkaz na portál (fallback pro nefunkční URL)
+      function buildPortalSearchUrl(source, keywords, location) {
+        const q = encodeURIComponent(keywords);
+        const l = encodeURIComponent(location);
+        const src = (source || "").toLowerCase();
+        if (src.includes("jobs"))
+          return `https://www.jobs.cz/prace/${l.toLowerCase()}/?q=${q}`;
+        if (src.includes("prace") || src.includes("práce"))
+          return `https://www.prace.cz/nabidky/?q=${q}&l=${l}`;
+        if (src.includes("indeed"))
+          return `https://cz.indeed.com/jobs?q=${q}&l=${l}`;
+        if (src.includes("linkedin"))
+          return `https://www.linkedin.com/jobs/search/?keywords=${q}&location=${l}`;
+        if (src.includes("profesia"))
+          return `https://www.profesia.cz/prace/?search_anywhere=${q}&search_place=${l}`;
+        if (src.includes("startup"))
+          return `https://www.startupjobs.cz/nabidky?q=${q}`;
+        if (src.includes("kariera") || src.includes("kariéra"))
+          return `https://www.kariera.cz/hledani/?q=${q}&l=${l}`;
+        if (src.includes("dobra"))
+          return `https://www.dobraprace.cz/nabidky-prace?qs=${q}&ql=${l}`;
+        if (src.includes("voln"))
+          return `https://www.volnamista.cz/hledani?q=${q}&l=${l}`;
+        return `https://www.google.com/search?q=${q}+${l}+práce`;
+      }
+
+      // Validace URL - ověří, zda URL vypadá reálně
+      function validateJobUrl(url, source) {
+        if (!url || url.length < 10) return false;
+        try {
+          new URL(url);
+        } catch {
+          return false;
+        }
+        // Odmítni URL co vypadají jako vymyšlené (typické vzory halucinací)
+        if (url.includes("example.com")) return false;
+        // Zkontroluj zda URL odpovídá danému portálu
+        const src = (source || "").toLowerCase();
+        if (src.includes("jobs") && !url.includes("jobs.cz")) return false;
+        if (
+          (src.includes("prace") || src.includes("práce")) &&
+          !url.includes("prace.cz")
+        )
+          return false;
+        if (src.includes("indeed") && !url.includes("indeed.com")) return false;
+        if (src.includes("linkedin") && !url.includes("linkedin.com"))
+          return false;
+        if (src.includes("profesia") && !url.includes("profesia.cz"))
+          return false;
+        if (src.includes("startup") && !url.includes("startupjobs.cz"))
+          return false;
+        return true;
+      }
+
+      // Oprav URL nabídek: nefunkční nahraď vyhledávacím odkazem
+      function fixJobUrls(jobs, keywords, location, groundingChunks) {
+        // Extrahuj ověřené URL z grounding (skutečné Google Search výsledky)
+        const verifiedUrls = (groundingChunks || [])
+          .filter((c) => c.web?.uri)
+          .map((c) => ({
+            uri: c.web.uri,
+            title: (c.web.title || "").toLowerCase(),
+          }));
+
+        return jobs.map((j) => {
+          // Zkus najít odpovídající grounding URL
+          const titleLower = (j.title || "").toLowerCase();
+          const companyLower = (j.company || "").toLowerCase();
+          const groundMatch = verifiedUrls.find(
+            (v) =>
+              v.title.includes(titleLower.substring(0, 20)) ||
+              (companyLower.length > 3 && v.title.includes(companyLower)),
+          );
+
+          if (groundMatch) {
+            j.url = groundMatch.uri;
+            j._verified = true;
+          } else if (!validateJobUrl(j.url, j.source)) {
+            // URL je podezřelá/halucinovaná - nahraď fungujícím vyhledáváním
+            j.url = buildPortalSearchUrl(
+              j.source,
+              j.title || keywords,
+              location,
+            );
+            j._searchFallback = true;
+          }
+          return j;
+        });
+      }
+
+      // Deduplikace nabídek - odstraní duplicity podle URL a podobných názvů
+      function deduplicateJobs(jobs) {
+        const seen = new Set();
+        return jobs.filter((j) => {
+          // Normalizuj URL
+          const urlKey = (j.url || "")
+            .replace(/[?#].*$/, "")
+            .replace(/\/+$/, "")
+            .toLowerCase();
+          // Normalizuj název
+          const titleKey = (j.title || "")
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/\s+/g, " ")
+            .trim();
+          const key = urlKey || titleKey;
+          if (!key || seen.has(key)) return false;
+          seen.add(key);
+          // Přidej i titleKey pro kontrolu duplicitních názvů s jiným URL
+          if (urlKey && titleKey) seen.add(titleKey);
+          return true;
+        });
+      }
+
+      async function searchJobs() {
+        const keywords = document.getElementById("keywords").value.trim();
+        const loc = document.getElementById("location").value.trim();
+        const btn = document.getElementById("searchBtn");
+        const rd = document.getElementById("results");
+        const st = document.getElementById("statusText");
+
+        if (!keywords) {
+          alert("Zadej klíčová slova!");
+          return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = "⏳ Prohledávám web...";
+        st.textContent = "🔄 Prohledávám portály + firemní weby...";
+        rd.innerHTML =
+          '<div class="loading"><div class="spinner"></div><p>Prohledávám Jobs.cz, Prace.cz, Indeed, LinkedIn, firemní kariérní stránky...</p><p style="color:#666;margin-top:8px">Gemini AI + přímé prohledávání portálů + firemní weby</p></div>';
+
+        try {
+          const prompt = `Hledej pracovní nabídky v České republice – prohledej PRACOVNÍ PORTÁLY i FIREMNÍ WEBY:
+
+Pozice: ${keywords}
+Lokalita: ${loc || "Celá ČR"}
+
+=== ČÁST 1: PRACOVNÍ PORTÁLY (použij site: operátor) ===
+1. site:jobs.cz ${keywords} ${loc}
+2. site:prace.cz ${keywords} ${loc}
+3. site:indeed.com ${keywords} ${loc}
+4. site:linkedin.com/jobs ${keywords} ${loc}
+5. site:profesia.cz ${keywords} ${loc}
+6. site:startupjobs.cz ${keywords} ${loc}
+7. site:kariera.cz ${keywords} ${loc}
+8. site:dobraprace.cz ${keywords} ${loc}
+9. site:nabidky-prace.cz ${keywords} ${loc}
+10. site:volnamista.cz ${keywords} ${loc}
+
+=== ČÁST 2: FIREMNÍ KARIÉRNÍ STRÁNKY ===
+Hledej také přímo na webech firem v regionu ${loc}:
+- "${keywords}" "${loc}" kariéra OR volné místo OR nabídka práce
+- "${keywords}" "${loc}" site:*.cz/kariera OR site:*.cz/volna-mista OR site:*.cz/career
+- Hledej kariérní sekce firem v dané lokalitě, které nabízejí pozici "${keywords}"
+
+=== ČÁST 3: OBECNÉ HLEDÁNÍ ===
+- "${keywords}" "${loc}" nabídka práce
+- "${keywords}" "${loc}" zaměstnání
+
+Pro KAŽDOU nalezenou nabídku uveď:
+- Přesný název pozice
+- Název firmy (zaměstnavatele)
+- Skutečnou lokalitu/město kde je práce
+- Plat/mzdu pokud je uvedena
+- Krátký popis (1-2 věty)
+- PŘESNÝ a KOMPLETNÍ odkaz (URL) na konkrétní nabídku
+- Zdroj: název portálu NEBO "Firemní web" pokud je nabídka přímo na webu firmy
+
+Vrať výsledky jako JSON pole:
+[
+  {
+    "title": "přesný název pozice",
+    "company": "název firmy",
+    "location": "město",
+    "salary": "plat pokud je uveden, jinak prázdný string",
+    "description": "krátký popis",
+    "url": "přesný odkaz na nabídku",
+    "source": "název portálu nebo Firemní web"
+  }
+]
+
+DŮLEŽITÉ:
+- Hledej na pracovních portálech I na firemních kariérních stránkách
+- Hledej POUZE nabídky relevantní k "${keywords}"
+- U pole "url" uveď odkaz POUZE pokud jsi si 100% jistý, že existuje. Pokud si nejsi jistý, nech url prázdný string ""
+- Nikdy NEVYMÝŠLEJ URL adresy! Raději nech url prázdné než abys vymyslel falešnou adresu
+- Vrať co NEJVÍCE výsledků z RŮZNÝCH zdrojů (portály + firemní weby, ideálně 15-25)
+- Vrať POUZE validní JSON, žádný jiný text`;
+
+          const systemPrompt = `Jsi expert na vyhledávání pracovních nabídek v České republice. Tvým úkolem je najít co nejvíce relevantních nabídek ze DVOU typů zdrojů:
+1) PRACOVNÍ PORTÁLY: jobs.cz, prace.cz, indeed.com, linkedin.com/jobs, profesia.cz, startupjobs.cz, kariera.cz, dobraprace.cz, nabidky-prace.cz, volnamista.cz
+2) FIREMNÍ KARIÉRNÍ WEBY: hledej přímo na webech firem v dané lokalitě (sekce kariéra, volná místa, career pages)
+Použij operátor site: pro cílené vyhledávání. U každé nabídky uveď zdroj – buď název portálu, nebo "Firemní web" + název firmy. KRITICKY DŮLEŽITÉ: NIKDY nevymýšlej URL adresy! Pokud nemáš jistotu o přesné URL, nech pole url jako prázdný string. Vracíš POUZE validní JSON pole s co nejvíce výsledky.`;
+
+          const { text, groundingChunks, searchQueries } =
+            await callGeminiWithSearch(prompt, systemPrompt);
+
+          // Paralelně získej nabídky ze server scrapingu
+          let serverJobs = [];
+          try {
+            serverJobs = await fetchServerJobs(keywords, loc);
+            console.log(
+              `Server scraping: ${serverJobs.length} nabídek z portálů`,
+            );
+          } catch (e) {
+            console.warn("Server scraping nedostupný:", e.message);
+          }
+
+          // Parsuj JSON z Gemini odpovědi
+          let jobs = [];
+          try {
+            // Vyčisti text od markdown bloků
+            let cleanText = text
+              .replace(/```json\s*/g, "")
+              .replace(/```\s*/g, "")
+              .trim();
+            jobs = JSON.parse(cleanText);
+            if (!Array.isArray(jobs)) jobs = [];
+          } catch (parseErr) {
+            console.warn(
+              "JSON parse error, zkouším opravit:",
+              parseErr.message,
+            );
+            // Zkus najít JSON v textu
+            let jsonStr = text.match(/\[[\s\S]*\]/);
+            if (jsonStr) {
+              try {
+                jobs = JSON.parse(jsonStr[0]);
+              } catch (e) {
+                // JSON je oříznutý - zkus ho opravit
+                try {
+                  let fixedJson = jsonStr[0];
+                  // Odstraň poslední neúplný objekt
+                  const lastComplete = fixedJson.lastIndexOf("},");
+                  const lastObj = fixedJson.lastIndexOf("}");
+                  if (lastComplete > 0) {
+                    fixedJson = fixedJson.substring(0, lastComplete + 1) + "]";
+                  } else if (lastObj > 0) {
+                    fixedJson = fixedJson.substring(0, lastObj + 1) + "]";
+                  }
+                  jobs = JSON.parse(fixedJson);
+                  console.log("JSON opraven, nalezeno", jobs.length, "nabídek");
+                } catch (e2) {
+                  // Zkus extrahovat jednotlivé objekty regexem
+                  const objRegex =
+                    /\{\s*"title"\s*:\s*"([^"]*?)"\s*,\s*"company"\s*:\s*"([^"]*?)"\s*,\s*"location"\s*:\s*"([^"]*?)"\s*,\s*"salary"\s*:\s*"([^"]*?)"\s*,\s*"description"\s*:\s*"([^"]*?)"\s*,\s*"url"\s*:\s*"([^"]*?)"\s*,\s*"source"\s*:\s*"([^"]*?)"\s*\}/g;
+                  let m;
+                  while ((m = objRegex.exec(text)) !== null) {
+                    jobs.push({
+                      title: m[1],
+                      company: m[2],
+                      location: m[3],
+                      salary: m[4],
+                      description: m[5],
+                      url: m[6],
+                      source: m[7],
+                    });
+                  }
+                  console.log("Regex extrakce:", jobs.length, "nabídek");
+                }
+              }
+            }
+          }
+
+          // Přidej nabídky ze server scrapingu portálů
+          if (serverJobs.length > 0) {
+            serverJobs.forEach((sj) => {
+              jobs.push({
+                title: sj.title,
+                company: sj.company || "Neuvedeno",
+                location: sj.location || loc,
+                salary: sj.salary || "",
+                description: sj.description || "",
+                url: sj.url,
+                source: sj.portal || sj.source || "Portál",
+              });
+            });
+          }
+
+          // Oprav URL: nahraď halucinované odkazy fungujícími
+          jobs = fixJobUrls(jobs, keywords, loc, groundingChunks);
+
+          // Deduplikace nabídek podle URL
+          jobs = deduplicateJobs(jobs);
+
+          // Přidej grounding zdroje jako extra nabídky pokud jsou
+          const groundingUrls = groundingChunks
+            .filter((c) => c.web?.uri)
+            .map((c) => ({ uri: c.web.uri, title: c.web.title || "" }));
+
+          console.log(
+            "Nalezené nabídky:",
+            jobs.length,
+            "Grounding zdroje:",
+            groundingUrls.length,
+          );
+
+          // Spočítej nabídky z portálů vs AI
+          const portalCounts = {};
+          jobs.forEach((j) => {
+            const s = (j.source || "Web").toLowerCase();
+            const name = s.includes("jobs")
+              ? "Jobs.cz"
+              : s.includes("prace") || s.includes("práce")
+                ? "Prace.cz"
+                : s.includes("indeed")
+                  ? "Indeed"
+                  : s.includes("profesia")
+                    ? "Profesia.cz"
+                    : s.includes("kariera") || s.includes("kariéra")
+                      ? "Kariera.cz"
+                      : s.includes("dobra")
+                        ? "DobraPrace.cz"
+                        : s.includes("voln")
+                          ? "VolnaMista.cz"
+                          : s.includes("linkedin")
+                            ? "LinkedIn"
+                            : s.includes("startup")
+                              ? "StartupJobs"
+                              : s.includes("firem") ||
+                                  s.includes("firma") ||
+                                  s.includes("company")
+                                ? "Firemní web"
+                                : j.source || "Web";
+            portalCounts[name] = (portalCounts[name] || 0) + 1;
+          });
+          const portalSummary = Object.entries(portalCounts)
+            .map(([k, v]) => `${k}: ${v}`)
+            .join(", ");
+          console.log("Portály:", portalSummary);
+
+          if (jobs.length === 0 && groundingUrls.length === 0) {
+            rd.innerHTML = `
+                <div class="info-msg">
+                    ℹ️ Nenalezeny žádné nabídky. Zkus upravit klíčová slova nebo hledej přímo:
+                    <ul style="margin-top:8px;padding-left:20px">
+                        <li><a href="https://www.jobs.cz/prace/${encodeURIComponent(loc)}/?q=${encodeURIComponent(keywords)}" target="_blank" style="color:#80d8ff">Jobs.cz</a></li>
+                        <li><a href="https://www.prace.cz/nabidky/?q=${encodeURIComponent(keywords)}&l=${encodeURIComponent(loc)}" target="_blank" style="color:#80d8ff">Prace.cz</a></li>
+                        <li><a href="https://cz.indeed.com/jobs?q=${encodeURIComponent(keywords)}&l=${encodeURIComponent(loc)}" target="_blank" style="color:#80d8ff">Indeed</a></li>
+                        <li><a href="https://www.profesia.cz/prace/?search_anywhere=${encodeURIComponent(keywords)}" target="_blank" style="color:#80d8ff">Profesia.cz</a></li>
+                    </ul>
+                </div>`;
+            st.textContent = "⚠️ 0 nabídek";
+          } else {
+            let h = `<div class="results-header"><h2>Nalezené nabídky</h2><span class="results-count">${jobs.length} nabídek z ${Object.keys(portalCounts).length} zdrojů</span></div>`;
+            if (portalSummary)
+              h += `<div class="info-msg" style="margin-bottom:16px">📊 <strong>Zdroje:</strong> ${esc(portalSummary)}</div>`;
+
+            jobs.forEach((j) => {
+              const src = (j.source || "").toLowerCase();
+              const bc = src.includes("jobs")
+                ? "badge-jobs"
+                : src.includes("prace") || src.includes("práce")
+                  ? "badge-prace"
+                  : src.includes("indeed")
+                    ? "badge-indeed"
+                    : src.includes("profesia")
+                      ? "badge-profesia"
+                      : src.includes("kariera") || src.includes("kariéra")
+                        ? "badge-kariera"
+                        : src.includes("linkedin")
+                          ? "badge-linkedin"
+                          : src.includes("startup")
+                            ? "badge-startup"
+                            : src.includes("dobra")
+                              ? "badge-dobra"
+                              : src.includes("voln")
+                                ? "badge-volna"
+                                : src.includes("google")
+                                  ? "badge-google"
+                                  : src.includes("firem") ||
+                                      src.includes("firma") ||
+                                      src.includes("company") ||
+                                      src.includes("web")
+                                    ? "badge-firma"
+                                    : "badge-other";
+              const sal = j.salary
+                ? `<div class="salary">💰 ${esc(j.salary)}</div>`
+                : "";
+              const desc = j.description
+                ? `<div class="description">${esc(j.description)}</div>`
+                : "";
+              h += `<div class="job-card">
+                    <span class="portal-badge ${bc}">${esc(j.source || "Web")}</span>
+                    <h3>${esc(j.title)}</h3>
+                    <div class="company">🏢 ${esc(j.company || "Neuvedeno")}</div>
+                    <div class="location">📍 ${esc(j.location || loc)}</div>
+                    ${sal}${desc}
+                    ${j.url ? `<a href="${esc(j.url)}" target="_blank" rel="noopener" class="job-link">${j._searchFallback ? "🔍 Hledat na portálu" : j._verified ? "✅ Ověřený odkaz" : "🔗 Zobrazit nabídku"}</a>` : ""}
+                </div>`;
+            });
+
+            // Přidej sekci se zdroji z Google Search grounding
+            if (groundingUrls.length > 0) {
+              h += `<div class="sources-section"><h3>📎 Zdroje nalezené na webu (Google Search):</h3>`;
+              groundingUrls.forEach((s) => {
+                h += `<a href="${esc(s.uri)}" target="_blank" rel="noopener" class="source-link">${esc(s.title || s.uri)}</a>`;
+              });
+              h += `</div>`;
+            }
+
+            rd.innerHTML = h;
+            st.textContent = `✅ Nalezeno ${jobs.length} nabídek z ${Object.keys(portalCounts).length} zdrojů`;
+          }
+        } catch (err) {
+          console.error("Chyba:", err);
+          rd.innerHTML = `<div class="error-msg">❌ <strong>Chyba:</strong> ${esc(err.message)}</div>
+            <div class="info-msg">
+                💡 Zkus hledat přímo na portálech:
+                <ul style="margin-top:8px;padding-left:20px">
+                    <li><a href="https://www.jobs.cz/prace/${encodeURIComponent(loc)}/?q=${encodeURIComponent(keywords)}" target="_blank" style="color:#80d8ff">Jobs.cz – ${esc(keywords)}</a></li>
+                    <li><a href="https://cz.indeed.com/jobs?q=${encodeURIComponent(keywords)}&l=${encodeURIComponent(loc)}" target="_blank" style="color:#80d8ff">Indeed – ${esc(keywords)}</a></li>
+                </ul>
+            </div>`;
+          st.textContent = "❌ Chyba";
+        }
+        btn.disabled = false;
+        btn.textContent = "🚀 Vyhledat nabídky";
+      }
+
+      function esc(t) {
+        const d = document.createElement("div");
+        d.textContent = t || "";
+        return d.innerHTML;
+      }
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") searchJobs();
+      });
+
+      // Inicializace
+      if (typeof AI === "undefined") {
+        document.getElementById("results").innerHTML =
+          '<div class="error-msg">❌ AI modul (ai_module.js) není načten!</div>';
+      } else {
+        console.log(
+          "✅ AI Module v" + AI.version + " načten, Gemini klíč:",
+          AI.getKey("gemini") ? "OK" : "CHYBÍ",
+        );
+      }
+    </script>
+  </body>
+</html>
