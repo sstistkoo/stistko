@@ -6,8 +6,9 @@ const path = require('path');
 
 const PORT = 3000;
 
-function fetchPage(pageUrl) {
+function fetchPage(pageUrl, maxRedirects = 5) {
     return new Promise((resolve, reject) => {
+        if (maxRedirects <= 0) return reject(new Error('Příliš mnoho přesměrování'));
         const parsedUrl = new URL(pageUrl);
         const options = {
             hostname: parsedUrl.hostname,
@@ -24,7 +25,7 @@ function fetchPage(pageUrl) {
             if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
                 let redirectUrl = res.headers.location;
                 if (redirectUrl.startsWith('/')) redirectUrl = `https://${parsedUrl.hostname}${redirectUrl}`;
-                return fetchPage(redirectUrl).then(resolve).catch(reject);
+                return fetchPage(redirectUrl, maxRedirects - 1).then(resolve).catch(reject);
             }
             let data = '';
             res.setEncoding('utf8');
@@ -51,8 +52,8 @@ function isRelevant(title, keywords) {
 
 async function scrapeJobsCz(keywords, location) {
     const query = encodeURIComponent(keywords);
-    const loc = encodeURIComponent(location);
-    const pageUrl = `https://www.jobs.cz/prace/${loc.toLowerCase()}/?q=${query}`;
+    const loc = location.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
+    const pageUrl = `https://www.jobs.cz/prace/${loc}/?q=${query}`;
     try {
         const html = await fetchPage(pageUrl);
         const jobs = [];
@@ -370,6 +371,10 @@ const server = http.createServer(async (req, res) => {
 
     // Servíruj statické soubory
     const filePath = path.join(__dirname, parsedUrl.pathname);
+    // Ochrana proti path traversal
+    if (!path.resolve(filePath).startsWith(path.resolve(__dirname))) {
+        res.writeHead(403); res.end('Forbidden'); return;
+    }
     const ext = path.extname(filePath);
     const mime = { '.html': 'text/html; charset=utf-8', '.js': 'application/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8' };
     try {
