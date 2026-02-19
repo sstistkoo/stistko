@@ -2235,7 +2235,7 @@ function showLanguageDetail(lang) {
 const SEARCH_STATE = {
   type: 'code',  // Přednastaveno na kód
   query: '',
-  filters: { language: 'HTML' },  // Přednastaveno HTML
+  filters: { language: 'HTML', extension: 'html' },  // Přednastaveno HTML
   page: 1,
   totalCount: 0,
   perPage: 15,
@@ -2285,7 +2285,7 @@ function renderSearchFilters() {
   const container = document.getElementById('searchFilters');
   const filters = SEARCH_FILTERS_CONFIG[SEARCH_STATE.type] || [];
 
-  container.innerHTML = filters.map(f => {
+  let html = filters.map(f => {
     let input = '';
     const isLanguageFilter = f.id === 'language' && f.type === 'select';
 
@@ -2311,6 +2311,14 @@ function renderSearchFilters() {
     }
     return `<div class="search-filter-group"><label>${f.label}</label>${input}</div>`;
   }).join('');
+
+  // Přidat tlačítko nápovědy k jazykům (jen pro typy s jazykem)
+  const hasLanguage = filters.some(f => f.id === 'language');
+  if (hasLanguage) {
+    html += `<button class="btn-secondary lang-help-btn" onclick="openLanguageHelpModal()">❓ Nápověda k jazykům</button>`;
+  }
+
+  container.innerHTML = html;
 }
 
 function updateSearchFilter(id, value) {
@@ -2318,6 +2326,18 @@ function updateSearchFilter(id, value) {
     SEARCH_STATE.filters[id] = value;
   } else {
     delete SEARCH_STATE.filters[id];
+  }
+
+  // Automaticky nastavit příponu podle jazyka
+  if (id === 'language' && SEARCH_STATE.type === 'code') {
+    const help = LANGUAGE_HELP[value];
+    if (help && help.fileExt) {
+      // Vezmi první příponu (bez tečky)
+      const ext = help.fileExt.split(',')[0].trim().replace('.', '');
+      SEARCH_STATE.filters.extension = ext;
+      const extInput = document.getElementById('filter_extension');
+      if (extInput) extInput.value = ext;
+    }
   }
 }
 

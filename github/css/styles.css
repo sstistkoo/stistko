@@ -1407,7 +1407,7 @@ body {
     display: block;
     width: 100%;
     padding: 8px 12px;
-    margin-bottom: 10px;
+    margin-top: 10px;
     font-size: 11px;
     text-align: center;
     background: var(--surface2);
@@ -1744,6 +1744,7 @@ body {
     flex-direction: column;
     padding: 0;
     overflow: hidden;
+    user-select: text;
 }
 
 .language-help-modal .lang-help-header {
@@ -1916,6 +1917,8 @@ body {
     font-family: var(--font-mono);
     font-size: 12px;
     color: var(--yellow);
+    user-select: all;
+    cursor: text;
 }
 
 .lang-detail-section ul {
@@ -1951,6 +1954,8 @@ body {
     overflow-x: auto;
     white-space: pre-wrap;
     line-height: 1.5;
+    user-select: all;
+    cursor: text;
 }
 
 .lang-detail-section pre.code-example {
