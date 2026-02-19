@@ -1,0 +1,2422 @@
+// ═══════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════
+let TOKEN = "";
+let USERNAME = "";
+let REPOS = [];
+let CURRENT_REPO = null;
+let CURRENT_PATH = "";
+let DELETE_TARGET = "";
+
+const API = "https://api.github.com";
+const STORAGE_KEY = "gh_mgr_token";
+
+function saveToken(token) {
+  localStorage.setItem(STORAGE_KEY, btoa(token));
+}
+function loadToken() {
+  const v = localStorage.getItem(STORAGE_KEY);
+  return v ? atob(v) : null;
+}
+function clearToken() {
+  localStorage.removeItem(STORAGE_KEY);
+}
+
+// ═══════════════════════════════════════
+//  MOBILE PANEL SWITCHER
+// ═══════════════════════════════════════
+const MOBILE_BREAKPOINT = 640;
+
+function isMobile() {
+  return window.innerWidth <= MOBILE_BREAKPOINT;
+}
+
+function setMobilePanel(panel) {
+  if (!isMobile()) return;
+  const sidebar = document.getElementById('sidebar');
+  const mainPanel = document.getElementById('mainPanel');
+  const tabSidebar = document.getElementById('mobileTabSidebar');
+  const tabMain = document.getElementById('mobileTabMain');
+  if (!sidebar || !mainPanel) return;
+
+  if (panel === 'sidebar') {
+    // Sidebar zobraz jen pokud je přihlášen (má display:flex normálně)
+    if (TOKEN) sidebar.style.display = 'flex';
+    mainPanel.style.display = 'none';
+    tabSidebar.classList.add('active');
+    tabMain.classList.remove('active');
+  } else {
+    if (TOKEN) sidebar.style.display = 'none';
+    mainPanel.style.display = 'flex';
+    tabSidebar.classList.remove('active');
+    tabMain.classList.add('active');
+  }
+}
+
+function initMobileTabs() {
+  const tabs = document.getElementById('mobileTabs');
+  if (isMobile()) {
+    tabs.style.display = 'flex';
+    setMobilePanel('main');
+  } else {
+    tabs.style.display = 'none';
+  }
+  // Aktualizuj badge s počtem repo
+  const badge = document.getElementById('mobileRepoBadge');
+  if (badge) badge.textContent = REPOS.length || '';
+}
+
+window.addEventListener('resize', () => {
+  const tabs = document.getElementById('mobileTabs');
+  const sidebar = document.getElementById('sidebar');
+  const mainPanel = document.getElementById('mainPanel');
+  if (!TOKEN) return;
+  if (!isMobile()) {
+    tabs.style.display = 'none';
+    sidebar.style.display = 'flex';
+    mainPanel.style.display = 'flex';
+  } else {
+    tabs.style.display = 'flex';
+    // Nastav aktuální aktivní tab
+    const activeTab = document.getElementById('mobileTabMain').classList.contains('active') ? 'main' : 'sidebar';
+    setMobilePanel(activeTab);
+  }
+});
+
+// ═══════════════════════════════════════
+//  UTILS
+// ═══════════════════════════════════════
+function toast(msg, type = "success", duration = 3200) {
+  const t = document.getElementById("toast");
+  const title = document.getElementById("toastTitle");
+  const body = document.getElementById("toastMsg");
+  title.textContent = type === "success" ? "✓ Úspěch" : "✕ Chyba";
+  body.textContent = msg;
+  t.className = "toast " + type;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), duration);
+}
+
+async function ghFetch(endpoint, options = {}) {
+  const res = await fetch(API + endpoint, {
+    ...options,
+    headers: {
+      Authorization: "token " + TOKEN,
+      Accept: "application/vnd.github.v3+json",
+      "Content-Type": "application/json",
+      ...(options.headers || {}),
+    },
+  });
+  if (res.status === 204) return null;
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "GitHub API error");
+  return data;
+}
+
+// ═══════════════════════════════════════
+//  LOGIN / LOGOUT
+// ═══════════════════════════════════════
+document.getElementById("loginBtn").onclick = async () => {
+  const token = document.getElementById("tokenInput").value.trim();
+  if (!token) return toast("Zadáš token prosím.", "error");
+  TOKEN = token;
+
+  try {
+    const user = await ghFetch("/user");
+    USERNAME = user.login;
+    saveToken(TOKEN);
+    await loadRepos();
+    // UI switch
+    document.getElementById("loginPanel").style.display = "none";
+    document.getElementById("sidebar").style.display = "flex";
+    document.getElementById("mainContent").style.display = "block";
+    document.getElementById("statusDot").classList.add("connected");
+    document.getElementById("statusLabel").textContent =
+      "Přihlášen jako " + USERNAME;
+    document.getElementById("logoutBtn").style.display = "inline-block";
+    document.getElementById("searchBtn").style.display = "inline-block";
+    document.getElementById("logoutArea").style.display = "block";
+    showHomeView();
+    initMobileTabs();
+    toast("Přihlášen jako " + USERNAME);
+  } catch (e) {
+    toast("Neplatný token nebo chyba: " + e.message, "error");
+    TOKEN = "";
+  }
+};
+
+document.getElementById("logoutBtn").onclick = () => {
+  TOKEN = "";
+  USERNAME = "";
+  REPOS = [];
+  CURRENT_REPO = null;
+  CURRENT_PATH = "";
+  clearToken();
+  document.getElementById("tokenInput").value = "";
+  document.getElementById("loginPanel").style.display = "flex";
+  document.getElementById("sidebar").style.display = "none";
+  document.getElementById("mainContent").style.display = "none";
+  document.getElementById("statusDot").classList.remove("connected");
+  document.getElementById("statusLabel").textContent = "Nepřihlášen";
+  document.getElementById("logoutBtn").style.display = "none";
+  document.getElementById("searchBtn").style.display = "none";
+  document.getElementById("mobileTabs").style.display = "none";
+  toast("Odhlášen.");
+};
+
+// ═══════════════════════════════════════
+//  REPOS
+// ═══════════════════════════════════════
+async function loadRepos() {
+  REPOS = await ghFetch("/user/repos?per_page=100&sort=updated");
+  renderRepoList();
+}
+
+function renderRepoList() {
+  const list = document.getElementById("repoList");
+  if (!REPOS.length) {
+    list.innerHTML =
+      '<div class="empty-state" style="padding:40px 10px;"><div class="big">📭</div><p>Žádné repo</p></div>';
+    return;
+  }
+  list.innerHTML = REPOS.map(
+    (r) => `
+  <div class="repo-item ${CURRENT_REPO === r.name ? "active" : ""}" data-repo="${r.name}">
+    <span class="icon">📁</span>
+    <span class="name">${r.name}</span>
+    <span class="visibility ${r.private ? "priv" : "pub"}">${r.private ? "🔒" : "🌐"}</span>
+  </div>
+`,
+  ).join("");
+
+  // click → open repo
+  list.querySelectorAll(".repo-item").forEach((el) => {
+    el.addEventListener("click", (e) => {
+      openRepo(el.dataset.repo);
+    });
+  });
+}
+
+// ═══════════════════════════════════════
+//  OPEN REPO / BROWSE FILES
+// ═══════════════════════════════════════
+// Globální proměnné pro filtrování a třídění
+let ALL_FILES = [];
+let CURRENT_SORT = "name-asc";
+let CURRENT_FILTER = "";
+
+async function openRepo(repoName, path = "") {
+  CURRENT_REPO = repoName;
+  CURRENT_PATH = path;
+  renderRepoList(); // highlight
+  setMobilePanel('main'); // na mobilu přepni na obsah
+
+  const view = document.getElementById("repoView");
+  const toolbar = document.getElementById("fileToolbar");
+  view.innerHTML = '<div class="spinner"></div>';
+  toolbar.style.display = "flex";
+
+  try {
+    const endpoint = path
+      ? `/repos/${USERNAME}/${repoName}/contents/${path}`
+      : `/repos/${USERNAME}/${repoName}/contents`;
+    const contents = await ghFetch(endpoint);
+    const repoInfo = await ghFetch(`/repos/${USERNAME}/${repoName}`);
+
+    ALL_FILES = contents;
+    renderFileList(repoInfo, repoName, path);
+  } catch (e) {
+    view.innerHTML = `<div class="empty-state"><div class="big">⚠️</div><p>Chyba: ${e.message}</p></div>`;
+    toolbar.style.display = "none";
+  }
+}
+
+function renderFileList(repoInfo, repoName, path) {
+  const view = document.getElementById("repoView");
+
+  // Filtrování
+  let filtered = ALL_FILES;
+  if (CURRENT_FILTER) {
+    const filter = CURRENT_FILTER.toLowerCase();
+    filtered = ALL_FILES.filter((item) =>
+      item.name.toLowerCase().includes(filter),
+    );
+  }
+
+  // Třídění
+  let sorted = [...filtered];
+  switch (CURRENT_SORT) {
+    case "name-asc":
+      sorted.sort((a, b) => {
+        if (a.type === "dir" && b.type !== "dir") return -1;
+        if (a.type !== "dir" && b.type === "dir") return 1;
+        return a.name.localeCompare(b.name);
+      });
+      break;
+    case "name-desc":
+      sorted.sort((a, b) => {
+        if (a.type === "dir" && b.type !== "dir") return -1;
+        if (a.type !== "dir" && b.type === "dir") return 1;
+        return b.name.localeCompare(a.name);
+      });
+      break;
+    case "size-asc":
+      sorted.sort((a, b) => (a.size || 0) - (b.size || 0));
+      break;
+    case "size-desc":
+      sorted.sort((a, b) => (b.size || 0) - (a.size || 0));
+      break;
+    case "type-asc":
+      sorted.sort((a, b) => {
+        const extA = a.name.split(".").pop().toLowerCase();
+        const extB = b.name.split(".").pop().toLowerCase();
+        return extA.localeCompare(extB);
+      });
+      break;
+  }
+
+  // breadcrumb with up button
+  let bc = "";
+
+  // Přidat tlačítko "o složku výš" pokud nejsme v root
+  if (path) {
+    const parts = path.split("/");
+    const parentPath = parts.slice(0, -1).join("/");
+    bc += `<button class="up-btn" onclick="openRepo('${repoName}', '${parentPath}')" title="O složku výš">↑</button>`;
+  } else if (CURRENT_REPO) {
+    bc += `<button class="up-btn" onclick="showHomeView()" title="Zpět na home">↑</button>`;
+  }
+
+  bc += `<span onclick="showHomeView()" style="cursor:pointer;">🏠 Home</span>`;
+  bc += ` <span class="sep">›</span> <span onclick="openRepo('${repoName}')" style="cursor:pointer;" ${!path ? 'class="active"' : ""}>${repoName}</span>`;
+  if (path) {
+    const parts = path.split("/");
+    let cumul = "";
+    parts.forEach((p, i) => {
+      cumul += (cumul ? "/" : "") + p;
+      const isLast = i === parts.length - 1;
+      bc += ` <span class="sep">›</span> <span ${isLast ? 'class="active"' : `onclick="openRepo('${repoName}','${cumul}')" style="cursor:pointer;"`}>${p}</span>`;
+    });
+  }
+  document.getElementById("breadcrumb").innerHTML = bc;
+
+  // table
+  let html = `
+    <div class="repo-header">
+      <div>
+        <h3>📁 ${repoName} <span class="visibility ${repoInfo.private ? "priv" : "pub"} visibility-toggle"
+          data-repo="${repoName}" data-private="${repoInfo.private}"
+          style="font-size:11px; vertical-align:middle;"
+          title="Klikni pro změnu viditelnosti">${repoInfo.private ? "🔒 Private" : "🌐 Public"}</span></h3>
+        <div class="desc" data-repo="${repoName}" data-desc="${repoInfo.description || ""}" title="Klikni pro úpravu popisu">${repoInfo.description || "<em>Klikni pro přidání popisu</em>"}</div>
+      </div>
+      <div class="stats">
+        <div class="stat">⭐ <span>${repoInfo.stargazers_count}</span></div>
+        <div class="stat">🔀 <span>${repoInfo.forks_count}</span></div>
+        <div class="stat">📝 <span>${repoInfo.open_issues_count} issues</span></div>
+      </div>
+    </div>
+    <div class="toolbar-actions">
+      <button class="btn-secondary" id="uploadFilesBtn">
+        <span>📤</span> Nahrát soubory
+      </button>
+      <button class="btn-secondary" id="selectAllBtn">
+        <span>☑️</span> Vybrat vše
+      </button>
+      <button class="btn-secondary" id="deselectAllBtn" style="display:none;">
+        <span>⬜</span> Zrušit výběr
+      </button>
+    </div>
+    <table class="file-table">
+      <thead><tr>
+        <th style="width:40px;"><input type="checkbox" id="selectAllCheckbox" class="file-checkbox" /></th>
+        <th>Název</th>
+        <th>Typ</th>
+        <th>Velikost</th>
+      </tr></thead>
+      <tbody>
+  `;
+  sorted.forEach((item) => {
+    const isDir = item.type === "dir";
+    const iconEmoji = isDir ? "📂" : getFileIcon(item.name);
+    const nameClass = isDir ? "folder-name" : "file-name";
+    const size = isDir ? "—" : formatBytes(item.size);
+    html += `
+      <tr class="file-row" data-name="${item.name}" data-path="${item.path}" data-type="${item.type}" data-size="${item.size || 0}">
+        <td class="checkbox-cell"><input type="checkbox" class="file-checkbox row-checkbox" data-path="${item.path}" /></td>
+        <td><span class="icon">${iconEmoji}</span><span class="${nameClass}">${item.name}</span></td>
+        <td class="meta">${isDir ? "Složka" : "Soubor"}</td>
+        <td class="meta">${size}</td>
+      </tr>
+    `;
+  });
+  html += "</tbody></table>";
+  view.innerHTML = html;
+
+  // bind click events on rows
+  view.querySelectorAll(".file-row").forEach((row) => {
+    // Levý klik: otevřít soubor/složku
+    row.addEventListener("click", (e) => {
+      // Pokud klikl na checkbox, neotvírej soubor
+      if (
+        e.target.classList.contains("file-checkbox") ||
+        e.target.classList.contains("checkbox-cell")
+      ) {
+        return;
+      }
+      e.preventDefault();
+      const isDir = row.dataset.type === "dir";
+      if (isDir) {
+        // Otevřít složku
+        openRepo(repoName, row.dataset.path);
+      } else {
+        // Otevřít soubor (zobrazit obsah nebo preview)
+        openFile(row.dataset.name, row.dataset.path, repoName);
+      }
+    });
+
+    // Pravý klik: kontextové menu
+    row.addEventListener("contextmenu", (e) => {
+      e.preventDefault();
+      openFileContext(
+        row.dataset.name,
+        row.dataset.path,
+        row.dataset.type,
+        parseInt(row.dataset.size),
+        repoName,
+      );
+    });
+
+    // Touch podpora (dlouhý stisk) pro mobil
+    let touchTimer = null;
+    row.addEventListener("touchstart", (e) => {
+      touchTimer = setTimeout(() => {
+        e.preventDefault();
+        openFileContext(
+          row.dataset.name,
+          row.dataset.path,
+          row.dataset.type,
+          parseInt(row.dataset.size),
+          repoName,
+        );
+      }, 500);
+    });
+    row.addEventListener("touchend", () => {
+      if (touchTimer) clearTimeout(touchTimer);
+    });
+    row.addEventListener("touchmove", () => {
+      if (touchTimer) clearTimeout(touchTimer);
+    });
+  });
+
+  // Bind visibility toggle
+  const visToggle = view.querySelector(".visibility-toggle");
+  if (visToggle) {
+    visToggle.addEventListener("click", async (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      const repo = e.currentTarget.dataset.repo;
+      const isPrivate = e.currentTarget.dataset.private === "true";
+      try {
+        await ghFetch(`/repos/${USERNAME}/${repo}`, {
+          method: "PATCH",
+          body: JSON.stringify({ private: !isPrivate }),
+        });
+        toast(
+          `Viditelnost změněna na ${!isPrivate ? "Private" : "Public"}`,
+        );
+        await loadRepos();
+        openRepo(repo, path);
+      } catch (err) {
+        toast("Chyba při změně viditelnosti: " + err.message, "error");
+      }
+    });
+  }
+
+  // Bind description edit
+  const descEl = view.querySelector(".desc");
+  if (descEl) {
+    descEl.addEventListener("click", (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      const repo = e.currentTarget.dataset.repo;
+      const currentDesc = e.currentTarget.dataset.desc;
+      document.getElementById("editDescInput").value = currentDesc;
+      document.getElementById("editDescModal").style.display = "flex";
+      document.getElementById("editDescInput").focus();
+
+      // Store for later
+      window.EDIT_DESC_REPO = repo;
+      window.EDIT_DESC_PATH = path;
+    });
+  }
+
+  // Bind checkbox selection
+  const selectAllCb = document.getElementById("selectAllCheckbox");
+  const rowCheckboxes = view.querySelectorAll(".row-checkbox");
+  const selectAllBtn = document.getElementById("selectAllBtn");
+  const deselectAllBtn = document.getElementById("deselectAllBtn");
+
+  function updateSelectionUI() {
+    const checkedCount = Array.from(rowCheckboxes).filter(
+      (cb) => cb.checked,
+    ).length;
+    if (checkedCount > 0) {
+      deselectAllBtn.style.display = "inline-flex";
+      selectAllBtn.style.display = "none";
+      selectAllCb.checked = checkedCount === rowCheckboxes.length;
+    } else {
+      deselectAllBtn.style.display = "none";
+      selectAllBtn.style.display = "inline-flex";
+      selectAllCb.checked = false;
+    }
+  }
+
+  selectAllCb.addEventListener("change", () => {
+    rowCheckboxes.forEach((cb) => (cb.checked = selectAllCb.checked));
+    updateSelectionUI();
+  });
+
+  selectAllBtn.addEventListener("click", () => {
+    rowCheckboxes.forEach((cb) => (cb.checked = true));
+    selectAllCb.checked = true;
+    updateSelectionUI();
+  });
+
+  deselectAllBtn.addEventListener("click", () => {
+    rowCheckboxes.forEach((cb) => (cb.checked = false));
+    selectAllCb.checked = false;
+    updateSelectionUI();
+  });
+
+  rowCheckboxes.forEach((cb) => {
+    cb.addEventListener("change", (e) => {
+      e.stopPropagation();
+      updateSelectionUI();
+    });
+    // Zabránit kliknutí na checkbox od otevření souboru
+    cb.addEventListener("click", (e) => {
+      e.stopPropagation();
+    });
+  });
+
+  // Upload button
+  const uploadBtn = document.getElementById("uploadFilesBtn");
+  if (uploadBtn) {
+    uploadBtn.addEventListener("click", () => {
+      openFileUploadDialog(repoName, path);
+    });
+  }
+}
+
+// ═══════════════════════════════════════
+//  OPEN FILE (not context menu)
+// ═══════════════════════════════════════
+function openFile(name, path, repo) {
+  const isHtml = /\.html?$/i.test(name);
+
+  if (isHtml) {
+    // Otevřít HTML soubor v novém tabu s GitHub Pages URL
+    const githubPagesUrl = `https://${USERNAME}.github.io/${repo}/${path}`;
+    window.open(githubPagesUrl, "_blank");
+    toast(`Otevírám ${name} v novém tabu...`);
+  } else {
+    // Pro ostatní soubory zobrazit kontextové menu
+    openFileContext(name, path, "file", 0, repo);
+  }
+}
+
+function showHomeView() {
+  CURRENT_REPO = null;
+  CURRENT_PATH = "";
+  renderRepoList();
+  setMobilePanel('main'); // na mobilu přepni na obsah
+  document.getElementById("fileToolbar").style.display = "none";
+  document.getElementById("breadcrumb").innerHTML =
+    '<span class="active">🏠 Home</span>';
+
+  const view = document.getElementById("repoView");
+  if (!REPOS.length) {
+    view.innerHTML = `<div class="empty-state"><div class="big">🚀</div><p>Nemáš žádné repozitář. Klikni <strong>+</strong> a vytvoř první!</p></div>`;
+    return;
+  }
+  view.innerHTML = `
+  <div class="repo-header"><div><h3>👋 Ahoj, ${USERNAME}!</h3><div class="desc">Tvoje repozitáře</div></div></div>
+  <table class="file-table">
+    <thead><tr><th>Repozitář</th><th>Viditelnost</th><th>Popis</th><th>Aktualizován</th></tr></thead>
+    <tbody>
+      ${REPOS.map(
+        (r) => `
+        <tr class="repo-row" data-repo="${r.name}" style="cursor:pointer;">
+          <td><span class="icon">📁</span><span class="folder-name">${r.name}</span></td>
+          <td><span class="visibility ${r.private ? "priv" : "pub"}">${r.private ? "🔒 Private" : "🌐 Public"}</span></td>
+          <td class="meta">${r.description || "—"}</td>
+          <td class="meta">${new Date(r.updated_at).toLocaleDateString("cs-CZ")}</td>
+        </tr>
+      `,
+      ).join("")}
+    </tbody>
+  </table>
+`;
+
+  // Bind events na repo rows
+  view.querySelectorAll(".repo-row").forEach((row) => {
+    // Levý klik - otevřít repo
+    row.addEventListener("click", () => {
+      openRepo(row.dataset.repo);
+    });
+
+    // Pravý klik - context menu
+    row.addEventListener("contextmenu", (e) => {
+      e.preventDefault();
+      openRepoContext(row.dataset.repo);
+    });
+
+    // Touch podpora (dlouhý stisk) pro mobil
+    let touchTimer = null;
+    row.addEventListener("touchstart", (e) => {
+      touchTimer = setTimeout(() => {
+        e.preventDefault();
+        openRepoContext(row.dataset.repo);
+      }, 500);
+    });
+    row.addEventListener("touchend", () => {
+      if (touchTimer) clearTimeout(touchTimer);
+    });
+    row.addEventListener("touchmove", () => {
+      if (touchTimer) clearTimeout(touchTimer);
+    });
+  });
+}
+
+// ═══════════════════════════════════════
+//  NEW REPO
+// ═══════════════════════════════════════
+document.getElementById("newRepoBtn").onclick = () => {
+  document.getElementById("newRepoName").value = "";
+  document.getElementById("newRepoDesc").value = "";
+  document.getElementById("newRepoModal").style.display = "flex";
+};
+document.getElementById("cancelNewRepo").onclick = () => {
+  document.getElementById("newRepoModal").style.display = "none";
+};
+// ═══════════════════════════════════════
+//  NEW FILE/FOLDER
+// ═══════════════════════════════════════
+document.getElementById("newFileBtn").onclick = () => {
+  if (!CURRENT_REPO) return;
+  document.getElementById("newFileModal").style.display = "flex";
+  document.getElementById("newItemName").value = "";
+  document.getElementById("newFileContent").value = "";
+  document.getElementById("newItemType").value = "file";
+  document.getElementById("fileContentSection").style.display = "block";
+  document.getElementById("newItemName").focus();
+};
+
+document.getElementById("newItemType").addEventListener("change", (e) => {
+  const isFolder = e.target.value === "folder";
+  document.getElementById("fileContentSection").style.display = isFolder
+    ? "none"
+    : "block";
+  document.getElementById("newItemName").placeholder = isFolder
+    ? "nazev-slozky/"
+    : "nazev.txt";
+});
+
+document.getElementById("cancelNewItem").onclick = () => {
+  document.getElementById("newFileModal").style.display = "none";
+};
+
+document.getElementById("confirmNewItem").onclick = async () => {
+  const type = document.getElementById("newItemType").value;
+  let name = document.getElementById("newItemName").value.trim();
+  const content = document.getElementById("newFileContent").value;
+
+  if (!name) {
+    toast("Zadej název", "error");
+    return;
+  }
+
+  try {
+    if (type === "folder") {
+      // GitHub nemá prázdné složky, vytvoříme .gitkeep
+      if (!name.endsWith("/")) name += "/";
+      const filePath = CURRENT_PATH
+        ? `${CURRENT_PATH}/${name}.gitkeep`
+        : `${name}.gitkeep`;
+      await ghFetch(
+        `/repos/${USERNAME}/${CURRENT_REPO}/contents/${filePath}`,
+        {
+          method: "PUT",
+          body: JSON.stringify({
+            message: `Create folder: ${name}`,
+            content: btoa(""),
+          }),
+        },
+      );
+      toast(`Složka "${name}" vytvořena`);
+    } else {
+      // Vytvořit soubor
+      const filePath = CURRENT_PATH ? `${CURRENT_PATH}/${name}` : name;
+      await ghFetch(
+        `/repos/${USERNAME}/${CURRENT_REPO}/contents/${filePath}`,
+        {
+          method: "PUT",
+          body: JSON.stringify({
+            message: `Create file: ${name}`,
+            content: btoa(unescape(encodeURIComponent(content || ""))),
+          }),
+        },
+      );
+      toast(`Soubor "${name}" vytvořen`);
+    }
+
+    document.getElementById("newFileModal").style.display = "none";
+    openRepo(CURRENT_REPO, CURRENT_PATH);
+  } catch (e) {
+    toast("Chyba při vytváření: " + e.message, "error");
+  }
+};
+
+// Close modal on overlay click
+document.getElementById("newFileModal").addEventListener("click", (e) => {
+  if (e.target === document.getElementById("newFileModal")) {
+    document.getElementById("newFileModal").style.display = "none";
+  }
+});
+
+document.getElementById("confirmNewRepo").onclick = async () => {
+  const name = document.getElementById("newRepoName").value.trim();
+  if (!name) return toast("Zadáš název repozitáře.", "error");
+
+  const payload = {
+    name,
+    description: document.getElementById("newRepoDesc").value.trim(),
+    private:
+      document.getElementById("newRepoVisibility").value === "true",
+    auto_init: document.getElementById("newRepoReadme").checked,
+  };
+
+  try {
+    await ghFetch("/user/repos", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+    document.getElementById("newRepoModal").style.display = "none";
+    toast("Repozitář „" + name + '" vytvořen!');
+    await loadRepos();
+    openRepo(name);
+  } catch (e) {
+    toast("Chyba: " + e.message, "error");
+  }
+};
+
+// ═══════════════════════════════════════
+//  DELETE REPO
+// ═══════════════════════════════════════
+function openDeleteModal(name) {
+  DELETE_TARGET = name;
+  const lastTwo = name.slice(-2);
+  document.getElementById("deleteRepoNameShow").textContent = name;
+  document.getElementById("deleteHintLetters").textContent = lastTwo;
+  document.getElementById("deleteRepoConfirm").value = "";
+  document.getElementById("confirmDeleteRepo").disabled = true;
+  document.getElementById("deleteRepoModal").style.display = "flex";
+  document.getElementById("deleteRepoConfirm").focus();
+}
+document.getElementById("cancelDeleteRepo").onclick = () => {
+  document.getElementById("deleteRepoModal").style.display = "none";
+};
+document.getElementById("deleteRepoConfirm").oninput = function () {
+  document.getElementById("confirmDeleteRepo").disabled =
+    this.value.trim() !== DELETE_TARGET.slice(-2);
+};
+document.getElementById("confirmDeleteRepo").onclick = async () => {
+  try {
+    await ghFetch(`/repos/${USERNAME}/${DELETE_TARGET}`, {
+      method: "DELETE",
+    });
+    document.getElementById("deleteRepoModal").style.display = "none";
+    toast("Repozitář „" + DELETE_TARGET + '" smazán.');
+    await loadRepos();
+    showHomeView();
+  } catch (e) {
+    toast("Chyba při mazání: " + e.message, "error");
+  }
+};
+
+// ═══════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════
+function formatBytes(bytes) {
+  if (!bytes) return "0 B";
+  const k = 1024;
+  const sizes = ["B", "KB", "MB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + " " + sizes[i];
+}
+
+function getFileIcon(name) {
+  const ext = name.split(".").pop().toLowerCase();
+  const icons = {
+    html: "🌐",
+    css: "🎨",
+    js: "⚡",
+    ts: "💎",
+    json: "📋",
+    md: "📝",
+    png: "🖼️",
+    jpg: "🖼️",
+    jpeg: "🖼️",
+    gif: "🖼️",
+    svg: "🖼️",
+    py: "🐍",
+    rb: "💎",
+    java: "☕",
+    txt: "📄",
+    yml: "⚙️",
+    yaml: "⚙️",
+    gitignore: "🙈",
+    env: "🔐",
+    lock: "🔒",
+    xml: "📋",
+    csv: "📊",
+  };
+  return icons[ext] || "📄";
+}
+
+// ═══════════════════════════════════════
+//  BACKUP (download all repos as ZIP)
+// ═══════════════════════════════════════
+let BACKUP_CANCELLED = false;
+
+document.getElementById("backupBtn").onclick = () => {
+  if (!REPOS.length)
+    return toast("Nemáš žádné repozitář na stáhnoutí.", "error");
+  BACKUP_CANCELLED = false;
+  document.getElementById("backupModal").style.display = "flex";
+  document.getElementById("backupProgressBar").style.width = "0%";
+  document.getElementById("backupPercent").textContent = "0%";
+  document.getElementById("backupStatus").textContent = "Začíná...";
+  document.getElementById("backupRepoList").innerHTML = REPOS.map(
+    (r) =>
+      `<div id="backupItem-${r.name}" style="display:flex; align-items:center; gap:8px; padding:5px 0; border-bottom:1px solid var(--border); font-size:12px;">
+    <span id="backupIcon-${r.name}" style="width:16px; text-align:center;">⏳</span>
+    <span style="flex:1; color:var(--text);">${r.name}</span>
+    <span id="backupCount-${r.name}" style="color:var(--text-dim); font-size:11px;">—</span>
+  </div>`,
+  ).join("");
+  startBackup();
+};
+
+document.getElementById("cancelBackup").onclick = () => {
+  BACKUP_CANCELLED = true;
+  document.getElementById("backupModal").style.display = "none";
+  toast("Backup zrušen.");
+};
+
+// ── recursively fetch all files in a repo ──
+async function fetchAllFiles(repoName, path = "") {
+  const endpoint = path
+    ? `/repos/${USERNAME}/${repoName}/contents/${path}`
+    : `/repos/${USERNAME}/${repoName}/contents`;
+  const items = await ghFetch(endpoint);
+  let files = [];
+  for (const item of items) {
+    if (BACKUP_CANCELLED) return [];
+    if (item.type === "dir") {
+      const sub = await fetchAllFiles(repoName, item.path);
+      files = files.concat(sub);
+    } else {
+      // fetch file content (base64)
+      const fileData = await ghFetch(
+        `/repos/${USERNAME}/${repoName}/contents/${item.path}`,
+      );
+      files.push({
+        path: repoName + "/" + item.path,
+        content: fileData.content,
+      });
+    }
+  }
+  return files;
+}
+
+async function startBackup() {
+  const totalRepos = REPOS.length;
+  let allFiles = [];
+
+  for (let i = 0; i < totalRepos; i++) {
+    if (BACKUP_CANCELLED) return;
+    const repo = REPOS[i];
+    document.getElementById("backupStatus").textContent =
+      `Stahuje: ${repo.name}...`;
+    document.getElementById("backupIcon-" + repo.name).textContent = "📥";
+
+    try {
+      const files = await fetchAllFiles(repo.name);
+      if (BACKUP_CANCELLED) return;
+      allFiles = allFiles.concat(files);
+      document.getElementById("backupIcon-" + repo.name).textContent =
+        "✅";
+      document.getElementById("backupCount-" + repo.name).textContent =
+        files.length + " soubor" + (files.length === 1 ? "" : "ů");
+    } catch (e) {
+      document.getElementById("backupIcon-" + repo.name).textContent =
+        "❌";
+      document.getElementById("backupCount-" + repo.name).textContent =
+        "chyba";
+    }
+
+    const pct = Math.round(((i + 1) / totalRepos) * 100);
+    document.getElementById("backupProgressBar").style.width = pct + "%";
+    document.getElementById("backupPercent").textContent = pct + "%";
+  }
+
+  if (BACKUP_CANCELLED) return;
+
+  // build ZIP and download
+  document.getElementById("backupStatus").textContent = "Balí do ZIP...";
+  const zipBlob = buildZip(allFiles);
+  downloadBlob(
+    zipBlob,
+    `github-backup-${USERNAME}-${new Date().toISOString().slice(0, 10)}.zip`,
+  );
+  document.getElementById("backupModal").style.display = "none";
+  toast(
+    `Backup hotov – ${allFiles.length} soubor` +
+      (allFiles.length === 1 ? "" : "ů") +
+      ` v ZIP.`,
+  );
+}
+
+// ── manual ZIP builder (no external library) ──
+function buildZip(files) {
+  const localHeaders = [];
+  const centralHeaders = [];
+  let offset = 0;
+
+  for (const file of files) {
+    const nameBytes = new TextEncoder().encode(file.path);
+    const contentBytes = Uint8Array.from(atob(file.content), (c) =>
+      c.charCodeAt(0),
+    );
+    const crc = crc32(contentBytes);
+
+    // Local file header
+    const local = new Uint8Array(30 + nameBytes.length);
+    const localView = new DataView(local.buffer);
+    localView.setUint32(0, 0x04034b50, true); // signature
+    localView.setUint16(4, 20, true); // version needed
+    localView.setUint16(6, 0, true); // flags
+    localView.setUint16(8, 0, true); // compression = stored
+    localView.setUint16(10, 0, true); // mod time
+    localView.setUint16(12, 0, true); // mod date
+    localView.setUint32(14, crc, true); // crc32
+    localView.setUint32(18, contentBytes.length, true); // compressed size
+    localView.setUint32(22, contentBytes.length, true); // uncompressed size
+    localView.setUint16(26, nameBytes.length, true); // filename length
+    localView.setUint16(28, 0, true); // extra field length
+    local.set(nameBytes, 30);
+    localHeaders.push({
+      header: local,
+      content: contentBytes,
+      nameBytes,
+      crc,
+      offset,
+    });
+
+    // Central directory header
+    const central = new Uint8Array(46 + nameBytes.length);
+    const centralView = new DataView(central.buffer);
+    centralView.setUint32(0, 0x02014b50, true); // signature
+    centralView.setUint16(4, 20, true); // version made by
+    centralView.setUint16(6, 20, true); // version needed
+    centralView.setUint16(8, 0, true); // flags
+    centralView.setUint16(10, 0, true); // compression
+    centralView.setUint16(12, 0, true); // mod time
+    centralView.setUint16(14, 0, true); // mod date
+    centralView.setUint32(16, crc, true); // crc32
+    centralView.setUint32(20, contentBytes.length, true);
+    centralView.setUint32(24, contentBytes.length, true);
+    centralView.setUint16(28, nameBytes.length, true);
+    centralView.setUint16(30, 0, true); // extra length
+    centralView.setUint16(32, 0, true); // comment length
+    centralView.setUint16(34, 0, true); // disk number
+    centralView.setUint16(36, 0, true); // internal attr
+    centralView.setUint32(38, 0, true); // external attr
+    centralView.setUint32(42, offset, true); // local header offset
+    central.set(nameBytes, 46);
+    centralHeaders.push(central);
+
+    offset += local.length + contentBytes.length;
+  }
+
+  // End of central directory
+  let centralSize = 0;
+  centralHeaders.forEach((c) => (centralSize += c.length));
+  const eocd = new Uint8Array(22);
+  const eocdView = new DataView(eocd.buffer);
+  eocdView.setUint32(0, 0x06054b50, true);
+  eocdView.setUint16(4, 0, true);
+  eocdView.setUint16(6, 0, true);
+  eocdView.setUint16(8, files.length, true);
+  eocdView.setUint16(10, files.length, true);
+  eocdView.setUint32(12, centralSize, true);
+  eocdView.setUint32(16, offset, true);
+  eocdView.setUint16(20, 0, true);
+
+  // Concatenate everything
+  const totalSize = offset + centralSize + eocd.length;
+  const zip = new Uint8Array(totalSize);
+  let pos = 0;
+  localHeaders.forEach(({ header, content }) => {
+    zip.set(header, pos);
+    pos += header.length;
+    zip.set(content, pos);
+    pos += content.length;
+  });
+  centralHeaders.forEach((c) => {
+    zip.set(c, pos);
+    pos += c.length;
+  });
+  zip.set(eocd, pos);
+
+  return new Blob([zip], { type: "application/zip" });
+}
+
+// ── CRC32 ──
+function crc32(buf) {
+  let crc = 0xffffffff;
+  for (let i = 0; i < buf.length; i++) {
+    crc = crc ^ buf[i];
+    for (let j = 0; j < 8; j++) {
+      crc = (crc >>> 1) ^ (crc & 1 ? 0xedb88320 : 0);
+    }
+  }
+  return (crc ^ 0xffffffff) >>> 0;
+}
+
+// ── trigger browser download ──
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// ═══════════════════════════════════════
+//  REPO CONTEXT MENU
+// ═══════════════════════════════════════
+function openRepoContext(repoName) {
+  const repo = REPOS.find((r) => r.name === repoName);
+  if (!repo) return;
+
+  document.getElementById("repoCtxName").textContent = repoName;
+  document.getElementById("repoCtxMeta").textContent = repo.private
+    ? "🔒 Private"
+    : "🌐 Public";
+  document.getElementById("repoCtxModal").style.display = "flex";
+
+  // Rename button
+  document.getElementById("repoCtxRename").onclick = () => {
+    document.getElementById("repoCtxModal").style.display = "none";
+    const newName = prompt(
+      `Přejmenovat repozitář "${repoName}" na:`,
+      repoName,
+    );
+    if (newName && newName !== repoName) {
+      renameRepo(repoName, newName);
+    }
+  };
+
+  // Delete button
+  document.getElementById("repoCtxDelete").onclick = () => {
+    document.getElementById("repoCtxModal").style.display = "none";
+    openDeleteModal(repoName);
+  };
+}
+
+// Close repo context modal on overlay click
+document.getElementById("repoCtxModal").addEventListener("click", (e) => {
+  if (e.target === document.getElementById("repoCtxModal")) {
+    document.getElementById("repoCtxModal").style.display = "none";
+  }
+});
+
+async function renameRepo(oldName, newName) {
+  try {
+    await ghFetch(`/repos/${USERNAME}/${oldName}`, {
+      method: "PATCH",
+      body: JSON.stringify({ name: newName }),
+    });
+    toast(`Repozitář přejmenován na "${newName}"`);
+    await loadRepos();
+    if (CURRENT_REPO === oldName) {
+      openRepo(newName, CURRENT_PATH);
+    } else {
+      showHomeView();
+    }
+  } catch (e) {
+    toast("Chyba při přejmenování: " + e.message, "error");
+  }
+}
+
+// ═══════════════════════════════════════
+//  EDIT DESCRIPTION MODAL
+// ═══════════════════════════════════════
+document.getElementById("cancelEditDesc").onclick = () => {
+  document.getElementById("editDescModal").style.display = "none";
+};
+
+document.getElementById("confirmEditDesc").onclick = async () => {
+  const newDesc = document.getElementById("editDescInput").value.trim();
+  const repo = window.EDIT_DESC_REPO;
+  const path = window.EDIT_DESC_PATH;
+
+  try {
+    await ghFetch(`/repos/${USERNAME}/${repo}`, {
+      method: "PATCH",
+      body: JSON.stringify({ description: newDesc }),
+    });
+    document.getElementById("editDescModal").style.display = "none";
+    toast("Popis aktualizován");
+    await loadRepos();
+    openRepo(repo, path);
+  } catch (e) {
+    toast("Chyba při úpravě popisu: " + e.message, "error");
+  }
+};
+
+document
+  .getElementById("editDescModal")
+  .addEventListener("click", (e) => {
+    if (e.target === document.getElementById("editDescModal")) {
+      document.getElementById("editDescModal").style.display = "none";
+    }
+  });
+
+// ═══════════════════════════════════════
+//  FILE VIEWER MODAL
+// ═══════════════════════════════════════
+let VIEWER_FILE = {};
+let VIEWER_ORIGINAL_CONTENT = "";
+let VIEWER_SEARCH_MATCHES = [];
+let VIEWER_CURRENT_MATCH = -1;
+
+async function openFileViewer(name, path, repo) {
+  VIEWER_FILE = { name, path, repo };
+  VIEWER_SEARCH_MATCHES = [];
+  VIEWER_CURRENT_MATCH = -1;
+
+  document.getElementById("viewerFileName").textContent = name;
+  document.getElementById("viewerFileMeta").textContent =
+    `${repo}/${path}`;
+  document.getElementById("viewerFileIcon").textContent =
+    getFileIcon(name);
+  document.getElementById("fileViewerModal").style.display = "flex";
+  document.getElementById("fileViewerContent").textContent = "Načítám...";
+  document.getElementById("searchInput").value = "";
+  document.getElementById("replaceInput").value = "";
+  document.getElementById("replaceControls").style.display = "none";
+  document.getElementById("searchCounter").textContent = "";
+
+  try {
+    const fileData = await ghFetch(
+      `/repos/${USERNAME}/${repo}/contents/${path}`,
+    );
+
+    // Správné dekódování UTF-8 (podpora českých znaků)
+    const binaryString = atob(fileData.content);
+    const bytes = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    const content = new TextDecoder("utf-8").decode(bytes);
+
+    VIEWER_ORIGINAL_CONTENT = content;
+    document.getElementById("fileViewerContent").textContent = content;
+    document.getElementById("viewerFileMeta").textContent =
+      formatBytes(content.length) +
+      " · " +
+      name.split(".").pop().toUpperCase();
+  } catch (e) {
+    document.getElementById("fileViewerContent").textContent =
+      "Chyba při načítání: " + e.message;
+  }
+}
+
+// Search functionality
+function performSearch() {
+  const searchTerm = document.getElementById("searchInput").value;
+  const content = VIEWER_ORIGINAL_CONTENT;
+  const contentEl = document.getElementById("fileViewerContent");
+
+  if (!searchTerm) {
+    contentEl.textContent = content;
+    document.getElementById("searchCounter").textContent = "";
+    VIEWER_SEARCH_MATCHES = [];
+    VIEWER_CURRENT_MATCH = -1;
+    return;
+  }
+
+  // Find all matches
+  VIEWER_SEARCH_MATCHES = [];
+  let index = 0;
+  while ((index = content.indexOf(searchTerm, index)) !== -1) {
+    VIEWER_SEARCH_MATCHES.push(index);
+    index += searchTerm.length;
+  }
+
+  if (VIEWER_SEARCH_MATCHES.length === 0) {
+    document.getElementById("searchCounter").textContent = "Nenalezeno";
+    contentEl.textContent = content;
+    VIEWER_CURRENT_MATCH = -1;
+    return;
+  }
+
+  VIEWER_CURRENT_MATCH = 0;
+  highlightMatches();
+}
+
+function highlightMatches() {
+  const searchTerm = document.getElementById("searchInput").value;
+  const content = VIEWER_ORIGINAL_CONTENT;
+  const contentEl = document.getElementById("fileViewerContent");
+
+  if (VIEWER_SEARCH_MATCHES.length === 0) return;
+
+  // Build HTML with highlighted matches
+  let html = "";
+  let lastIndex = 0;
+
+  VIEWER_SEARCH_MATCHES.forEach((matchIndex, i) => {
+    // Add text before match
+    html += escapeHtml(content.substring(lastIndex, matchIndex));
+
+    // Add highlighted match
+    const isCurrent = i === VIEWER_CURRENT_MATCH;
+    const style = isCurrent
+      ? "background: var(--accent); color: var(--bg); font-weight: 700;"
+      : "background: var(--yellow); color: var(--bg);";
+    html += `<mark style="${style}">${escapeHtml(content.substring(matchIndex, matchIndex + searchTerm.length))}</mark>`;
+
+    lastIndex = matchIndex + searchTerm.length;
+  });
+
+  // Add remaining text
+  html += escapeHtml(content.substring(lastIndex));
+
+  contentEl.innerHTML = html;
+  document.getElementById("searchCounter").textContent =
+    `${VIEWER_CURRENT_MATCH + 1} z ${VIEWER_SEARCH_MATCHES.length}`;
+
+  // Scroll to current match
+  const marks = contentEl.querySelectorAll("mark");
+  if (marks[VIEWER_CURRENT_MATCH]) {
+    marks[VIEWER_CURRENT_MATCH].scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
+  }
+}
+
+function escapeHtml(text) {
+  const div = document.createElement("div");
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function findNext() {
+  if (VIEWER_SEARCH_MATCHES.length === 0) return;
+  VIEWER_CURRENT_MATCH =
+    (VIEWER_CURRENT_MATCH + 1) % VIEWER_SEARCH_MATCHES.length;
+  highlightMatches();
+}
+
+function findPrevious() {
+  if (VIEWER_SEARCH_MATCHES.length === 0) return;
+  VIEWER_CURRENT_MATCH =
+    (VIEWER_CURRENT_MATCH - 1 + VIEWER_SEARCH_MATCHES.length) %
+    VIEWER_SEARCH_MATCHES.length;
+  highlightMatches();
+}
+
+function replaceCurrentMatch() {
+  const searchTerm = document.getElementById("searchInput").value;
+  const replaceTerm = document.getElementById("replaceInput").value;
+
+  if (!searchTerm || VIEWER_SEARCH_MATCHES.length === 0) {
+    toast("Nejprve vyhledej text", "error");
+    return;
+  }
+
+  const matchIndex = VIEWER_SEARCH_MATCHES[VIEWER_CURRENT_MATCH];
+  VIEWER_ORIGINAL_CONTENT =
+    VIEWER_ORIGINAL_CONTENT.substring(0, matchIndex) +
+    replaceTerm +
+    VIEWER_ORIGINAL_CONTENT.substring(matchIndex + searchTerm.length);
+
+  document.getElementById("fileViewerContent").textContent =
+    VIEWER_ORIGINAL_CONTENT;
+  toast("Nahrazeno 1 výskyt");
+
+  // Re-search
+  performSearch();
+}
+
+function replaceAllMatches() {
+  const searchTerm = document.getElementById("searchInput").value;
+  const replaceTerm = document.getElementById("replaceInput").value;
+
+  if (!searchTerm || VIEWER_SEARCH_MATCHES.length === 0) {
+    toast("Nejprve vyhledej text", "error");
+    return;
+  }
+
+  const count = VIEWER_SEARCH_MATCHES.length;
+  VIEWER_ORIGINAL_CONTENT =
+    VIEWER_ORIGINAL_CONTENT.split(searchTerm).join(replaceTerm);
+  document.getElementById("fileViewerContent").textContent =
+    VIEWER_ORIGINAL_CONTENT;
+
+  toast(`Nahrazeno ${count} výskyt${count > 1 ? "ů" : ""}`);
+
+  // Clear search
+  document.getElementById("searchInput").value = "";
+  VIEWER_SEARCH_MATCHES = [];
+  VIEWER_CURRENT_MATCH = -1;
+  document.getElementById("searchCounter").textContent = "";
+}
+
+// Event listeners for search
+document
+  .getElementById("searchInput")
+  .addEventListener("input", performSearch);
+document
+  .getElementById("searchInput")
+  .addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      if (e.shiftKey) {
+        findPrevious();
+      } else {
+        findNext();
+      }
+    }
+  });
+document.getElementById("findNextBtn").onclick = findNext;
+document.getElementById("findPrevBtn").onclick = findPrevious;
+document.getElementById("toggleReplaceBtn").onclick = () => {
+  const controls = document.getElementById("replaceControls");
+  controls.style.display =
+    controls.style.display === "none" ? "flex" : "none";
+};
+document.getElementById("replaceBtn").onclick = replaceCurrentMatch;
+document.getElementById("replaceAllBtn").onclick = replaceAllMatches;
+
+// Save file changes
+document.getElementById("saveFileBtn").onclick = async () => {
+  try {
+    const content =
+      document.getElementById("fileViewerContent").textContent;
+    const base64Content = btoa(unescape(encodeURIComponent(content)));
+
+    await ghFetch(
+      `/repos/${USERNAME}/${VIEWER_FILE.repo}/contents/${VIEWER_FILE.path}`,
+      {
+        method: "PUT",
+        body: JSON.stringify({
+          message: `Update: ${VIEWER_FILE.name}`,
+          content: base64Content,
+          sha: VIEWER_FILE_SHA,
+        }),
+      },
+    );
+
+    toast("Soubor uložen!");
+    VIEWER_IS_MODIFIED = false;
+    document.getElementById("saveFileBtn").style.display = "none";
+    document.getElementById("fileViewerModal").style.display = "none";
+
+    // Refresh current folder
+    if (CURRENT_REPO) {
+      openRepo(CURRENT_REPO, CURRENT_PATH);
+    }
+  } catch (e) {
+    toast("Chyba při ukládání: " + e.message, "error");
+  }
+};
+
+// Sledování změn v obsahu
+document
+  .getElementById("fileViewerContent")
+  .addEventListener("input", () => {
+    VIEWER_IS_MODIFIED = true;
+    // Zobrazit tlačítko Uložit když jsou změny
+    document.getElementById("saveFileBtn").style.display = "inline-block";
+  });
+
+document.getElementById("closeFileViewer").onclick = () => {
+  if (
+    VIEWER_IS_MODIFIED &&
+    !confirm("Máš neuložené změny. Opravdu zavřít?")
+  ) {
+    return;
+  }
+  document.getElementById("fileViewerModal").style.display = "none";
+};
+
+document.getElementById("downloadFromViewer").onclick = async () => {
+  try {
+    const fileData = await ghFetch(
+      `/repos/${USERNAME}/${VIEWER_FILE.repo}/contents/${VIEWER_FILE.path}`,
+    );
+    const bytes = Uint8Array.from(atob(fileData.content), (c) =>
+      c.charCodeAt(0),
+    );
+    const blob = new Blob([bytes]);
+    downloadBlob(blob, VIEWER_FILE.name);
+    toast("Soubor stáhnut");
+  } catch (e) {
+    toast("Chyba při stáhnutí: " + e.message, "error");
+  }
+};
+
+document
+  .getElementById("fileViewerModal")
+  .addEventListener("click", (e) => {
+    if (e.target === document.getElementById("fileViewerModal")) {
+      document.getElementById("fileViewerModal").style.display = "none";
+    }
+  });
+
+// ═══════════════════════════════════════
+//  FILE CONTEXT MENU
+// ═══════════════════════════════════════
+let CTX_FILE = {}; // { name, path, type, size, repo }
+
+function openFileContext(name, path, type, size, repo) {
+  CTX_FILE = { name, path, type, size, repo };
+  const isDir = type === "dir";
+  const isHtml = /\.html?$/i.test(name);
+  const ext = name.split(".").pop().toLowerCase();
+  const isTextFile = [
+    "txt",
+    "md",
+    "json",
+    "js",
+    "ts",
+    "css",
+    "html",
+    "xml",
+    "yml",
+    "yaml",
+    "py",
+    "java",
+    "rb",
+    "php",
+    "c",
+    "cpp",
+    "h",
+    "cs",
+    "go",
+    "rs",
+    "kt",
+    "swift",
+  ].includes(ext);
+
+  document.getElementById("ctxFileName").textContent = name;
+  document.getElementById("ctxFileMeta").textContent = isDir
+    ? "Složka"
+    : formatBytes(size) + " · " + name.split(".").pop().toUpperCase();
+  document.getElementById("ctxFileIcon").textContent = isDir
+    ? "📂"
+    : getFileIcon(name);
+
+  // hide rename row
+  document.getElementById("renameRow").classList.remove("show");
+
+  // build action buttons
+  let btns = "";
+  if (isHtml) {
+    btns += `<button class="ctx-btn" id="ctxPreview">
+    <span class="ctx-icon">🌐</span>
+    <div><div class="ctx-label">Spustit v browseru</div><div class="ctx-desc">Otevře HTML stránku v novém tabu</div></div>
+  </button>`;
+  }
+  if (!isDir && isTextFile) {
+    btns += `<button class="ctx-btn" id="ctxView">
+    <span class="ctx-icon">👁️</span>
+    <div><div class="ctx-label">Zobrazit obsah</div><div class="ctx-desc">Otevře soubor v prohlížeči</div></div>
+  </button>`;
+  }
+  if (!isDir) {
+    btns += `<button class="ctx-btn" id="ctxDownload">
+    <span class="ctx-icon">⬇️</span>
+    <div><div class="ctx-label">Stáhnout soubor</div><div class="ctx-desc">Uloží soubor na tvůj počítač</div></div>
+  </button>`;
+  }
+  btns += `<button class="ctx-btn" id="ctxRename">
+  <span class="ctx-icon">✏️</span>
+  <div><div class="ctx-label">Přejmenovat</div><div class="ctx-desc">Změni název ${isDir ? "složky" : "souboru"}</div></div>
+</button>`;
+  btns += `<button class="ctx-btn danger" id="ctxDelete">
+  <span class="ctx-icon">🗑️</span>
+  <div><div class="ctx-label" style="color:var(--red);">Smazat</div><div class="ctx-desc">Navždy smazá ${isDir ? "složku a vše uvnitř" : "tento soubor"}</div></div>
+</button>`;
+
+  document.getElementById("ctxActions").innerHTML = btns;
+  document.getElementById("ctxModal").style.display = "flex";
+
+  // ── bind action handlers ──
+
+  // Preview HTML - open in GitHub Pages
+  const previewBtn = document.getElementById("ctxPreview");
+  if (previewBtn) {
+    previewBtn.onclick = () => {
+      // Otevřít v GitHub Pages
+      const githubPagesUrl = `https://${USERNAME}.github.io/${CTX_FILE.repo}/${CTX_FILE.path}`;
+      window.open(githubPagesUrl, "_blank");
+      document.getElementById("ctxModal").style.display = "none";
+      toast(`Otevírám ${CTX_FILE.name} v GitHub Pages...`);
+    };
+  }
+
+  // View file content
+  const viewBtn = document.getElementById("ctxView");
+  if (viewBtn) {
+    viewBtn.onclick = () => {
+      document.getElementById("ctxModal").style.display = "none";
+      openFileViewer(CTX_FILE.name, CTX_FILE.path, CTX_FILE.repo);
+    };
+  }
+
+  // Download
+  const dlBtn = document.getElementById("ctxDownload");
+  if (dlBtn) {
+    dlBtn.onclick = async () => {
+      try {
+        const fileData = await ghFetch(
+          `/repos/${USERNAME}/${CTX_FILE.repo}/contents/${CTX_FILE.path}`,
+        );
+        const bytes = Uint8Array.from(atob(fileData.content), (c) =>
+          c.charCodeAt(0),
+        );
+        const blob = new Blob([bytes]);
+        downloadBlob(blob, CTX_FILE.name);
+        document.getElementById("ctxModal").style.display = "none";
+        toast("Soubor „" + CTX_FILE.name + '" stáhnut.');
+      } catch (e) {
+        toast("Chyba při stáhnutí: " + e.message, "error");
+      }
+    };
+  }
+
+  // Rename – show input
+  document.getElementById("ctxRename").onclick = () => {
+    document.getElementById("renameRow").classList.add("show");
+    document.getElementById("renameInput").value = CTX_FILE.name;
+    document.getElementById("renameInput").focus();
+    // select just the name part (before extension)
+    const dotIdx = CTX_FILE.name.lastIndexOf(".");
+    if (dotIdx > 0)
+      document.getElementById("renameInput").setSelectionRange(0, dotIdx);
+  };
+
+  document.getElementById("cancelRename").onclick = () => {
+    document.getElementById("renameRow").classList.remove("show");
+  };
+
+  document.getElementById("confirmRename").onclick = async () => {
+    const newName = document.getElementById("renameInput").value.trim();
+    if (!newName || newName === CTX_FILE.name)
+      return toast("Název nezměněn.", "error");
+    // compute new path: replace last segment
+    const parts = CTX_FILE.path.split("/");
+    parts[parts.length - 1] = newName;
+    const newPath = parts.join("/");
+    try {
+      // GitHub rename = get content → delete old → create new at new path
+      const fileData = await ghFetch(
+        `/repos/${USERNAME}/${CTX_FILE.repo}/contents/${CTX_FILE.path}`,
+      );
+      // delete old
+      await ghFetch(
+        `/repos/${USERNAME}/${CTX_FILE.repo}/contents/${CTX_FILE.path}`,
+        {
+          method: "DELETE",
+          body: JSON.stringify({
+            message: `rename: ${CTX_FILE.name} → ${newName}`,
+            sha: fileData.sha,
+          }),
+        },
+      );
+      // create new (only for files; folders can't be created empty on GitHub)
+      if (CTX_FILE.type !== "dir") {
+        await ghFetch(
+          `/repos/${USERNAME}/${CTX_FILE.repo}/contents/${newPath}`,
+          {
+            method: "POST",
+            body: JSON.stringify({
+              message: `rename: ${CTX_FILE.name} → ${newName}`,
+              content: fileData.content,
+            }),
+          },
+        );
+      }
+      document.getElementById("ctxModal").style.display = "none";
+      toast("Přejmenováno na „" + newName + '"');
+      // refresh current folder
+      openRepo(
+        CTX_FILE.repo,
+        CTX_FILE.path.split("/").slice(0, -1).join("/"),
+      );
+    } catch (e) {
+      toast("Chyba při přejmenování: " + e.message, "error");
+    }
+  };
+
+  // Delete
+  document.getElementById("ctxDelete").onclick = async () => {
+    if (!confirm(`Smazat „${CTX_FILE.name}"? Toto nelze vrátit.`)) return;
+    try {
+      if (CTX_FILE.type === "dir") {
+        // folders: need to delete all files inside recursively
+        await deleteDir(CTX_FILE.repo, CTX_FILE.path);
+      } else {
+        const fileData = await ghFetch(
+          `/repos/${USERNAME}/${CTX_FILE.repo}/contents/${CTX_FILE.path}`,
+        );
+        await ghFetch(
+          `/repos/${USERNAME}/${CTX_FILE.repo}/contents/${CTX_FILE.path}`,
+          {
+            method: "DELETE",
+            body: JSON.stringify({
+              message: `delete: ${CTX_FILE.name}`,
+              sha: fileData.sha,
+            }),
+          },
+        );
+      }
+      document.getElementById("ctxModal").style.display = "none";
+      toast("„" + CTX_FILE.name + '" smazán.');
+      openRepo(
+        CTX_FILE.repo,
+        CTX_FILE.path.split("/").slice(0, -1).join("/"),
+      );
+    } catch (e) {
+      toast("Chyba při mazání: " + e.message, "error");
+    }
+  };
+}
+
+// recursively delete a folder (GitHub has no folder-delete endpoint)
+async function deleteDir(repo, dirPath) {
+  const items = await ghFetch(
+    `/repos/${USERNAME}/${repo}/contents/${dirPath}`,
+  );
+  for (const item of items) {
+    if (item.type === "dir") {
+      await deleteDir(repo, item.path);
+    } else {
+      await ghFetch(`/repos/${USERNAME}/${repo}/contents/${item.path}`, {
+        method: "DELETE",
+        body: JSON.stringify({
+          message: `delete: ${item.path}`,
+          sha: item.sha,
+        }),
+      });
+    }
+  }
+}
+
+// close context modal on overlay click
+document.getElementById("ctxModal").addEventListener("click", (e) => {
+  if (e.target === document.getElementById("ctxModal")) {
+    document.getElementById("ctxModal").style.display = "none";
+  }
+});
+
+// ═══════════════════════════════════════
+//  FILE UPLOAD
+// ═══════════════════════════════════════
+function openFileUploadDialog(repo, path) {
+  const input = document.createElement("input");
+  input.type = "file";
+  input.multiple = true;
+  input.onchange = async (e) => {
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
+
+    toast(
+      `Nahrávám ${files.length} soubor${files.length > 1 ? "ů" : ""}...`,
+    );
+
+    let uploaded = 0;
+    for (const file of files) {
+      try {
+        const content = await readFileAsBase64(file);
+        const uploadPath = path ? `${path}/${file.name}` : file.name;
+
+        await ghFetch(
+          `/repos/${USERNAME}/${repo}/contents/${uploadPath}`,
+          {
+            method: "PUT",
+            body: JSON.stringify({
+              message: `Upload: ${file.name}`,
+              content: content,
+            }),
+          },
+        );
+        uploaded++;
+      } catch (err) {
+        toast(`Chyba při nahrání ${file.name}: ${err.message}`, "error");
+      }
+    }
+
+    if (uploaded > 0) {
+      toast(
+        `Nahráno ${uploaded} z ${files.length} soubor${uploaded > 1 ? "ů" : ""}!`,
+      );
+      openRepo(repo, path);
+    }
+  };
+  input.click();
+}
+
+function readFileAsBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64 = reader.result.split(",")[1];
+      resolve(base64);
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+// ═══════════════════════════════════════
+//  DRAG & DROP FUNCTIONALITY
+// ═══════════════════════════════════════
+function setupDragAndDrop() {
+  const overlay = document.getElementById("dragDropOverlay");
+  const content = document.getElementById("mainContent");
+  let dragCounter = 0;
+
+  // Prevent default drag behaviors
+  ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+    document.body.addEventListener(eventName, preventDefaults, false);
+  });
+
+  function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  // Show overlay when dragging over
+  document.body.addEventListener("dragenter", (e) => {
+    // Only activate if user is logged in and viewing a repo
+    if (!CURRENT_REPO) return;
+
+    dragCounter++;
+    overlay.classList.add("active");
+    if (content) content.classList.add("drag-over");
+  });
+
+  document.body.addEventListener("dragleave", (e) => {
+    dragCounter--;
+    if (dragCounter === 0) {
+      overlay.classList.remove("active");
+      if (content) content.classList.remove("drag-over");
+    }
+  });
+
+  // Handle drop
+  document.body.addEventListener("drop", async (e) => {
+    dragCounter = 0;
+    overlay.classList.remove("active");
+    if (content) content.classList.remove("drag-over");
+
+    // Only process if user is logged in and viewing a repo
+    if (!CURRENT_REPO) return;
+
+    const items = e.dataTransfer.items;
+    const files = [];
+
+    // Process dropped items
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      if (item.kind === "file") {
+        const entry = item.webkitGetAsEntry();
+        if (entry) {
+          await processEntry(entry, "", files);
+        }
+      }
+    }
+
+    if (files.length > 0) {
+      await uploadFilesFromDrop(files);
+    }
+  });
+
+  // Process directory entry recursively
+  async function processEntry(entry, path, files) {
+    if (entry.isFile) {
+      return new Promise((resolve) => {
+        entry.file((file) => {
+          files.push({ file, path: path + file.name });
+          resolve();
+        });
+      });
+    } else if (entry.isDirectory) {
+      const dirReader = entry.createReader();
+      return new Promise((resolve) => {
+        dirReader.readEntries(async (entries) => {
+          for (const entry of entries) {
+            await processEntry(entry, path + entry.name + "/", files);
+          }
+          resolve();
+        });
+      });
+    }
+  }
+
+  // Upload files from drop
+  async function uploadFilesFromDrop(files) {
+    toast(
+      `Nahrávám ${files.length} soubor${files.length > 1 ? "ů" : ""}...`,
+    );
+    let uploaded = 0;
+
+    for (const { file, path: filePath } of files) {
+      try {
+        const content = await readFileAsBase64(file);
+        const uploadPath = CURRENT_PATH
+          ? `${CURRENT_PATH}/${filePath}`
+          : filePath;
+
+        await ghFetch(
+          `/repos/${USERNAME}/${CURRENT_REPO}/contents/${uploadPath}`,
+          {
+            method: "PUT",
+            body: JSON.stringify({
+              message: `Upload: ${filePath}`,
+              content: content,
+            }),
+          },
+        );
+        uploaded++;
+      } catch (err) {
+        toast(`Chyba při nahrání ${filePath}: ${err.message}`, "error");
+      }
+    }
+
+    if (uploaded > 0) {
+      toast(
+        `Nahráno ${uploaded} z ${files.length} soubor${uploaded > 1 ? "ů" : ""}!`,
+      );
+      openRepo(CURRENT_REPO, CURRENT_PATH);
+    }
+  }
+}
+
+// Initialize drag & drop after login
+setupDragAndDrop();
+
+// ═══════════════════════════════════════
+//  FILE FILTERING & SORTING
+// ═══════════════════════════════════════
+document
+  .getElementById("fileFilterInput")
+  .addEventListener("input", (e) => {
+    CURRENT_FILTER = e.target.value.trim();
+    if (CURRENT_REPO && ALL_FILES.length > 0) {
+      // Re-render bez nového API callu
+      const repoInfo = REPOS.find((r) => r.name === CURRENT_REPO);
+      if (repoInfo) {
+        renderFileList(repoInfo, CURRENT_REPO, CURRENT_PATH);
+      }
+    }
+  });
+
+document
+  .getElementById("fileSortSelect")
+  .addEventListener("change", (e) => {
+    CURRENT_SORT = e.target.value;
+    if (CURRENT_REPO && ALL_FILES.length > 0) {
+      const repoInfo = REPOS.find((r) => r.name === CURRENT_REPO);
+      if (repoInfo) {
+        renderFileList(repoInfo, CURRENT_REPO, CURRENT_PATH);
+      }
+    }
+  });
+
+// ═══════════════════════════════════════
+//  GITHUB SEARCH
+// ═══════════════════════════════════════
+const SEARCH_STATE = {
+  type: 'code',  // Přednastaveno na kód
+  query: '',
+  filters: { language: 'HTML' },  // Přednastaveno HTML
+  page: 1,
+  totalCount: 0,
+  perPage: 15,
+  filtersOpen: false
+};
+
+const SEARCH_FILTERS_CONFIG = {
+  repositories: [
+    { id: 'language', label: 'Jazyk', type: 'select', options: ['', 'HTML', 'JavaScript', 'TypeScript', 'Python', 'Java', 'C#', 'C++', 'Go', 'Rust', 'PHP', 'Ruby', 'CSS'] },
+    { id: 'stars', label: 'Hvězdy min', type: 'number', placeholder: '100' },
+    { id: 'user', label: 'Uživatel', type: 'text', placeholder: 'user' },
+    { id: 'topic', label: 'Téma', type: 'text', placeholder: 'topic' }
+  ],
+  code: [
+    { id: 'language', label: 'Jazyk', type: 'select', options: ['HTML', 'JavaScript', 'TypeScript', 'CSS', 'Python', 'Java', 'JSON', 'Markdown'] },
+    { id: 'extension', label: 'Přípona', type: 'text', placeholder: 'html' },
+    { id: 'user', label: 'Uživatel', type: 'text', placeholder: 'user' },
+    { id: 'repo', label: 'Repo', type: 'text', placeholder: 'user/repo' }
+  ],
+  issues: [
+    { id: 'state', label: 'Stav', type: 'select', options: ['', 'open', 'closed'] },
+    { id: 'is', label: 'Typ', type: 'select', options: ['', 'issue', 'pr'] },
+    { id: 'label', label: 'Label', type: 'text', placeholder: 'bug' }
+  ],
+  users: [
+    { id: 'type', label: 'Typ', type: 'select', options: ['', 'user', 'org'] },
+    { id: 'repos', label: 'Repo min', type: 'number', placeholder: '5' },
+    { id: 'followers', label: 'Followers', type: 'number', placeholder: '100' },
+    { id: 'language', label: 'Jazyk', type: 'text', placeholder: 'HTML' }
+  ]
+};
+
+function toggleSearchFilters() {
+  SEARCH_STATE.filtersOpen = !SEARCH_STATE.filtersOpen;
+  const filters = document.getElementById('searchFilters');
+  const toggle = document.getElementById('filtersToggle');
+  if (SEARCH_STATE.filtersOpen) {
+    filters.classList.add('open');
+    toggle.classList.add('open');
+  } else {
+    filters.classList.remove('open');
+    toggle.classList.remove('open');
+  }
+}
+
+function renderSearchFilters() {
+  const container = document.getElementById('searchFilters');
+  const filters = SEARCH_FILTERS_CONFIG[SEARCH_STATE.type] || [];
+
+  container.innerHTML = filters.map(f => {
+    let input = '';
+    if (f.type === 'select') {
+      input = `<select id="filter_${f.id}" onchange="updateSearchFilter('${f.id}', this.value)">
+        ${f.options.map(o => `<option value="${o}" ${SEARCH_STATE.filters[f.id] === o ? 'selected' : ''}>${o || '-- vše --'}</option>`).join('')}
+      </select>`;
+    } else if (f.type === 'number') {
+      input = `<input type="number" id="filter_${f.id}" placeholder="${f.placeholder || ''}" value="${SEARCH_STATE.filters[f.id] || ''}" onchange="updateSearchFilter('${f.id}', this.value)" />`;
+    } else {
+      input = `<input type="text" id="filter_${f.id}" placeholder="${f.placeholder || ''}" value="${SEARCH_STATE.filters[f.id] || ''}" onchange="updateSearchFilter('${f.id}', this.value)" />`;
+    }
+    return `<div class="search-filter-group"><label>${f.label}</label>${input}</div>`;
+  }).join('');
+}
+
+function updateSearchFilter(id, value) {
+  if (value) {
+    SEARCH_STATE.filters[id] = value;
+  } else {
+    delete SEARCH_STATE.filters[id];
+  }
+  // Query preview already removed from UI
+}
+
+function buildSearchQuery() {
+  let q = SEARCH_STATE.query.trim();
+  const filters = SEARCH_STATE.filters;
+  const type = SEARCH_STATE.type;
+
+  // Build query based on type
+  if (type === 'repositories') {
+    if (filters.language) q += ` language:${filters.language}`;
+    if (filters.stars) q += ` stars:>=${filters.stars}`;
+    if (filters.forks) q += ` forks:>=${filters.forks}`;
+    if (filters.user) q += ` user:${filters.user}`;
+    if (filters.topic) q += ` topic:${filters.topic}`;
+    if (filters.license) q += ` license:${filters.license}`;
+    if (filters.archived) q += ` archived:${filters.archived}`;
+    if (filters.pushed) q += ` pushed:${filters.pushed}`;
+  } else if (type === 'code') {
+    if (filters.language) q += ` language:${filters.language}`;
+    if (filters.repo) q += ` repo:${filters.repo}`;
+    if (filters.path) q += ` path:${filters.path}`;
+    if (filters.filename) q += ` filename:${filters.filename}`;
+    if (filters.extension) q += ` extension:${filters.extension}`;
+    if (filters.size) q += ` size:${filters.size}`;
+    if (filters.user) q += ` user:${filters.user}`;
+  } else if (type === 'issues') {
+    if (filters.state) q += ` state:${filters.state}`;
+    if (filters.is) q += ` is:${filters.is}`;
+    if (filters.repo) q += ` repo:${filters.repo}`;
+    if (filters.author) q += ` author:${filters.author}`;
+    if (filters.assignee) q += ` assignee:${filters.assignee}`;
+    if (filters.label) q += ` label:${filters.label}`;
+    if (filters.comments) q += ` comments:>=${filters.comments}`;
+    if (filters.created) q += ` created:${filters.created}`;
+  } else if (type === 'users') {
+    if (filters.type) q += ` type:${filters.type}`;
+    if (filters.repos) q += ` repos:>=${filters.repos}`;
+    if (filters.followers) q += ` followers:>=${filters.followers}`;
+    if (filters.location) q += ` location:${filters.location}`;
+    if (filters.language) q += ` language:${filters.language}`;
+  }
+
+  return q.trim();
+}
+
+function updateQueryPreview() {
+  // Query preview removed from UI - function kept for compatibility
+}
+
+async function executeSearch() {
+  const query = buildSearchQuery();
+  if (!query) {
+    toast('Zadej hledaný výraz', 'error');
+    return;
+  }
+
+  const resultsEl = document.getElementById('searchResults');
+  const statsEl = document.getElementById('searchStats');
+  resultsEl.innerHTML = '<div class="search-empty"><div class="spinner"></div><p>Hledám...</p></div>';
+  statsEl.textContent = '';
+
+  try {
+    const endpoint = `/search/${SEARCH_STATE.type}?q=${encodeURIComponent(query)}&per_page=${SEARCH_STATE.perPage}&page=${SEARCH_STATE.page}`;
+    // Pro code search přidáme Accept header pro text_matches (úryvky kódu)
+    const options = SEARCH_STATE.type === 'code' ? { headers: { Accept: 'application/vnd.github.text-match+json' } } : {};
+    const data = await ghFetch(endpoint, options);
+
+    SEARCH_STATE.totalCount = data.total_count;
+    const totalPages = Math.ceil(data.total_count / SEARCH_STATE.perPage);
+
+    statsEl.textContent = `Nalezeno ${data.total_count.toLocaleString()} výsledků`;
+
+    if (data.items.length === 0) {
+      resultsEl.innerHTML = '<div class="search-empty"><div class="icon">🔍</div><p>Žádné výsledky</p></div>';
+      document.getElementById('searchPagination').style.display = 'none';
+      return;
+    }
+
+    resultsEl.innerHTML = data.items.map(item => renderSearchResult(item)).join('');
+
+    // Pagination
+    const paginationEl = document.getElementById('searchPagination');
+    paginationEl.style.display = totalPages > 1 ? 'flex' : 'none';
+    document.getElementById('searchPageInfo').textContent = `${SEARCH_STATE.page} / ${totalPages}`;
+    document.getElementById('searchPrevPage').disabled = SEARCH_STATE.page <= 1;
+    document.getElementById('searchNextPage').disabled = SEARCH_STATE.page >= totalPages;
+
+  } catch (e) {
+    resultsEl.innerHTML = `<div class="search-empty"><div class="icon">⚠️</div><p>Chyba: ${e.message}</p></div>`;
+  }
+}
+
+function renderSearchResult(item) {
+  const type = SEARCH_STATE.type;
+  const isHtml = SEARCH_STATE.filters.language === 'HTML' || /\.html?$/i.test(item.name || '');
+
+  if (type === 'repositories') {
+    const owner = item.owner?.login || item.full_name?.split('/')[0] || '';
+    return `
+      <div class="search-result-item" data-repo="${item.full_name}" data-owner="${owner}">
+        <div class="search-result-icon">📁</div>
+        <div class="search-result-content">
+          <div class="search-result-title">${item.full_name}</div>
+          <div class="search-result-desc">${item.description || 'Bez popisu'}</div>
+          <div class="search-result-meta">
+            <span>⭐ ${item.stargazers_count?.toLocaleString() || 0}</span>
+            <span>💻 ${item.language || 'N/A'}</span>
+          </div>
+          <div class="search-result-actions">
+            <button onclick="event.stopPropagation(); browseUserRepo('${owner}', '${item.name}')" class="primary">📂 Procházet</button>
+            <button onclick="event.stopPropagation(); window.open('${item.html_url}', '_blank')">🔗 GitHub</button>
+          </div>
+        </div>
+      </div>
+    `;
+  } else if (type === 'code') {
+    const repoFullName = item.repository?.full_name || '';
+    const owner = repoFullName.split('/')[0];
+    const repoName = repoFullName.split('/')[1];
+    const filePath = item.path || '';
+    const isHtmlFile = /\.html?$/i.test(item.name || '');
+
+    return `
+      <div class="search-result-item">
+        <div class="search-result-icon">${getFileIcon(item.name)}</div>
+        <div class="search-result-content">
+          <div class="search-result-title">${item.name}</div>
+          <div class="search-result-desc">${repoFullName}/${filePath}</div>
+          ${item.text_matches ? `<div class="search-code-snippet">${escapeHtml(item.text_matches[0]?.fragment || '').substring(0, 200)}</div>` : ''}
+          <div class="search-result-actions">
+            ${isHtmlFile ? `<button onclick="event.stopPropagation(); previewHtmlFile('${owner}', '${repoName}', '${filePath}')" class="primary">▶️ Spustit</button>` : ''}
+            <button onclick="event.stopPropagation(); browseUserRepo('${owner}', '${repoName}', '${filePath}')">📂 Procházet</button>
+            <button onclick="event.stopPropagation(); window.open('${item.html_url}', '_blank')">🔗 GitHub</button>
+          </div>
+        </div>
+      </div>
+    `;
+  } else if (type === 'issues') {
+    const isPR = item.pull_request !== undefined;
+    return `
+      <div class="search-result-item" onclick="window.open('${item.html_url}', '_blank')">
+        <div class="search-result-icon">${isPR ? '🔀' : (item.state === 'open' ? '🟢' : '🔴')}</div>
+        <div class="search-result-content">
+          <div class="search-result-title">${item.title}</div>
+          <div class="search-result-desc">${item.repository_url?.split('/').slice(-2).join('/') || ''} #${item.number}</div>
+          <div class="search-result-meta">
+            <span>${isPR ? 'PR' : 'Issue'}</span>
+            <span>👤 ${item.user?.login || ''}</span>
+            <span>💬 ${item.comments || 0}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  } else if (type === 'users') {
+    return `
+      <div class="search-result-item" data-user="${item.login}">
+        <div class="search-result-icon"><img src="${item.avatar_url}" style="width:28px; height:28px; border-radius:50%;" /></div>
+        <div class="search-result-content">
+          <div class="search-result-title">${item.login}</div>
+          <div class="search-result-desc">${item.type === 'Organization' ? '🏢 Organizace' : '👤 Uživatel'}</div>
+          <div class="search-result-actions">
+            <button onclick="event.stopPropagation(); showUserRepos('${item.login}')" class="primary">📁 Repozitáře</button>
+            <button onclick="event.stopPropagation(); window.open('${item.html_url}', '_blank')">🔗 GitHub</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  return '';
+}
+
+// Zobrazit repozitáře uživatele přímo v search results
+async function showUserRepos(username) {
+  const resultsEl = document.getElementById('searchResults');
+  const statsEl = document.getElementById('searchStats');
+  resultsEl.innerHTML = '<div class="search-empty"><div class="spinner"></div><p>Načítám repozitáře...</p></div>';
+
+  try {
+    const repos = await ghFetch(`/users/${username}/repos?per_page=30&sort=updated`);
+    statsEl.textContent = `📁 Repozitáře uživatele ${username} (${repos.length})`;
+
+    if (repos.length === 0) {
+      resultsEl.innerHTML = '<div class="search-empty"><div class="icon">📭</div><p>Žádné repozitáře</p></div>';
+      return;
+    }
+
+    resultsEl.innerHTML = `
+      <button class="btn-secondary" onclick="executeSearch()" style="margin-bottom: 10px; font-size: 11px;">← Zpět na výsledky</button>
+      ${repos.map(repo => `
+        <div class="search-result-item">
+          <div class="search-result-icon">📁</div>
+          <div class="search-result-content">
+            <div class="search-result-title">${repo.name}</div>
+            <div class="search-result-desc">${repo.description || 'Bez popisu'}</div>
+            <div class="search-result-meta">
+              <span>⭐ ${repo.stargazers_count}</span>
+              <span>💻 ${repo.language || 'N/A'}</span>
+              <span>${repo.private ? '🔒' : '🌐'}</span>
+            </div>
+            <div class="search-result-actions">
+              <button onclick="event.stopPropagation(); browseUserRepo('${username}', '${repo.name}')" class="primary">📂 Procházet</button>
+              <button onclick="event.stopPropagation(); window.open('${repo.html_url}', '_blank')">🔗 GitHub</button>
+            </div>
+          </div>
+        </div>
+      `).join('')}
+    `;
+    document.getElementById('searchPagination').style.display = 'none';
+  } catch (e) {
+    resultsEl.innerHTML = `<div class="search-empty"><div class="icon">⚠️</div><p>Chyba: ${e.message}</p></div>`;
+  }
+}
+
+// Procházet repo cizího uživatele
+let BROWSE_USER = '';
+let BROWSE_REPO = '';
+let BROWSE_PATH = '';
+
+async function browseUserRepo(owner, repoName, path = '') {
+  BROWSE_USER = owner;
+  BROWSE_REPO = repoName;
+  BROWSE_PATH = path;
+
+  const resultsEl = document.getElementById('searchResults');
+  const statsEl = document.getElementById('searchStats');
+  resultsEl.innerHTML = '<div class="search-empty"><div class="spinner"></div><p>Načítám...</p></div>';
+
+  try {
+    const endpoint = path
+      ? `/repos/${owner}/${repoName}/contents/${path}`
+      : `/repos/${owner}/${repoName}/contents`;
+    const contents = await ghFetch(endpoint);
+
+    // Pokud je to soubor, zobraz ho
+    if (!Array.isArray(contents)) {
+      if (/\.html?$/i.test(contents.name)) {
+        previewHtmlFile(owner, repoName, contents.path);
+      } else {
+        window.open(contents.html_url, '_blank');
+      }
+      return;
+    }
+
+    const pathParts = path ? path.split('/') : [];
+    const parentPath = pathParts.slice(0, -1).join('/');
+
+    statsEl.textContent = `📂 ${owner}/${repoName}${path ? '/' + path : ''}`;
+
+    resultsEl.innerHTML = `
+      <div style="display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap;">
+        <button class="btn-secondary" onclick="executeSearch()" style="font-size: 11px;">← Hledání</button>
+        ${path ? `<button class="btn-secondary" onclick="browseUserRepo('${owner}', '${repoName}', '${parentPath}')" style="font-size: 11px;">↑ Nahoru</button>` : ''}
+      </div>
+      ${contents.sort((a, b) => {
+        if (a.type === 'dir' && b.type !== 'dir') return -1;
+        if (a.type !== 'dir' && b.type === 'dir') return 1;
+        return a.name.localeCompare(b.name);
+      }).map(item => {
+        const isDir = item.type === 'dir';
+        const isHtml = /\.html?$/i.test(item.name);
+        return `
+          <div class="search-result-item">
+            <div class="search-result-icon">${isDir ? '📂' : getFileIcon(item.name)}</div>
+            <div class="search-result-content">
+              <div class="search-result-title">${item.name}</div>
+              <div class="search-result-desc">${isDir ? 'Složka' : formatBytes(item.size)}</div>
+              <div class="search-result-actions">
+                ${isDir ? `
+                  <button onclick="event.stopPropagation(); browseUserRepo('${owner}', '${repoName}', '${item.path}')" class="primary">📂 Otevřít</button>
+                ` : `
+                  ${isHtml ? `<button onclick="event.stopPropagation(); previewHtmlFile('${owner}', '${repoName}', '${item.path}')" class="primary">▶️ Spustit</button>` : ''}
+                  <button onclick="event.stopPropagation(); window.open('${item.html_url}', '_blank')">🔗 GitHub</button>
+                `}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('')}
+    `;
+    document.getElementById('searchPagination').style.display = 'none';
+  } catch (e) {
+    resultsEl.innerHTML = `<div class="search-empty"><div class="icon">⚠️</div><p>Chyba: ${e.message}</p></div>`;
+  }
+}
+
+// Preview HTML souboru v iframe
+function previewHtmlFile(owner, repoName, filePath) {
+  // Otevře HTML soubor v novém okně prohlížeče přes htmlpreview.github.io
+  const githubUrl = `https://github.com/${owner}/${repoName}/blob/main/${filePath}`;
+  const previewUrl = `https://htmlpreview.github.io/?${githubUrl}`;
+  window.open(previewUrl, '_blank');
+}
+
+// Search modal event listeners
+document.getElementById('searchBtn').onclick = () => {
+  document.getElementById('searchModal').style.display = 'flex';
+  // Přednastavit code + HTML
+  SEARCH_STATE.type = 'code';
+  SEARCH_STATE.filters = { language: 'HTML' };
+  document.querySelectorAll('.search-type-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.type === 'code');
+  });
+  renderSearchFilters();
+  document.getElementById('searchQueryInput').focus();
+};
+
+document.getElementById('closeSearchModal').onclick = () => {
+  document.getElementById('searchModal').style.display = 'none';
+};
+
+document.getElementById('searchModal').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('searchModal')) {
+    document.getElementById('searchModal').style.display = 'none';
+  }
+});
+
+// Search type tabs
+document.querySelectorAll('.search-type-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.search-type-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    SEARCH_STATE.type = tab.dataset.type;
+    // Přednastavit HTML pro code
+    SEARCH_STATE.filters = tab.dataset.type === 'code' ? { language: 'HTML' } : {};
+    SEARCH_STATE.page = 1;
+    renderSearchFilters();
+    document.getElementById('searchResults').innerHTML = '<div class="search-empty"><div class="icon">🔎</div><p>Zadej hledaný výraz</p></div>';
+    document.getElementById('searchStats').textContent = '';
+    document.getElementById('searchPagination').style.display = 'none';
+  });
+});
+
+// Execute search
+document.getElementById('executeSearchBtn').onclick = () => {
+  SEARCH_STATE.page = 1;
+  executeSearch();
+};
+
+document.getElementById('searchQueryInput').addEventListener('input', (e) => {
+  SEARCH_STATE.query = e.target.value;
+});
+
+document.getElementById('searchQueryInput').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    SEARCH_STATE.page = 1;
+    executeSearch();
+  }
+});
+
+// Pagination
+document.getElementById('searchPrevPage').onclick = () => {
+  if (SEARCH_STATE.page > 1) {
+    SEARCH_STATE.page--;
+    executeSearch();
+  }
+};
+
+document.getElementById('searchNextPage').onclick = () => {
+  const totalPages = Math.ceil(SEARCH_STATE.totalCount / SEARCH_STATE.perPage);
+  if (SEARCH_STATE.page < totalPages) {
+    SEARCH_STATE.page++;
+    executeSearch();
+  }
+};
+
+// ═══════════════════════════════════════
+//  KEYBOARD SHORTCUTS
+// ═══════════════════════════════════════
+document.addEventListener("keydown", (e) => {
+  // Ctrl+Shift+F - Otevřít GitHub Search
+  if (e.ctrlKey && e.shiftKey && e.key === 'F' && TOKEN) {
+    e.preventDefault();
+    document.getElementById('searchBtn').click();
+  }
+  // Ctrl+F - Fokus na filtrování
+  if (e.ctrlKey && e.key === "f" && CURRENT_REPO) {
+    e.preventDefault();
+    document.getElementById("fileFilterInput").focus();
+  }
+
+  // Delete - Smazat vybrané soubory (v contextu repozitáře)
+  if (e.key === "Delete" && CURRENT_REPO) {
+    const selectedRows = document.querySelectorAll(
+      ".row-checkbox:checked",
+    );
+    if (selectedRows.length > 0) {
+      e.preventDefault();
+      if (confirm(`Smazat ${selectedRows.length} vybraných položek?`)) {
+        selectedRows.forEach(async (checkbox) => {
+          const row = checkbox.closest(".file-row");
+          if (row) {
+            const name = row.dataset.name;
+            const path = row.dataset.path;
+            const type = row.dataset.type;
+            try {
+              if (type === "dir") {
+                await deleteDir(CURRENT_REPO, path);
+              } else {
+                const fileData = await ghFetch(
+                  `/repos/${USERNAME}/${CURRENT_REPO}/contents/${path}`,
+                );
+                await ghFetch(
+                  `/repos/${USERNAME}/${CURRENT_REPO}/contents/${path}`,
+                  {
+                    method: "DELETE",
+                    body: JSON.stringify({
+                      message: `Delete: ${name}`,
+                      sha: fileData.sha,
+                    }),
+                  },
+                );
+              }
+            } catch (err) {
+              toast(`Chyba při mazání ${name}: ${err.message}`, "error");
+            }
+          }
+        });
+        setTimeout(() => openRepo(CURRENT_REPO, CURRENT_PATH), 1000);
+      }
+    }
+  }
+
+  // F2 - Přejmenovat první vybraný soubor
+  if (e.key === "F2" && CURRENT_REPO) {
+    e.preventDefault();
+    const selectedRow = document.querySelector(".row-checkbox:checked");
+    if (selectedRow) {
+      const row = selectedRow.closest(".file-row");
+      if (row) {
+        const name = row.dataset.name;
+        const path = row.dataset.path;
+        const type = row.dataset.type;
+        openFileContext(
+          name,
+          path,
+          type,
+          row.dataset.size || 0,
+          CURRENT_REPO,
+        );
+        // Automaticky otevřít rename
+        setTimeout(() => {
+          const renameBtn = document.getElementById("ctxRename");
+          if (renameBtn) renameBtn.click();
+        }, 100);
+      }
+    }
+  }
+
+  // Escape - Zavřít modaly
+  if (e.key === "Escape") {
+    document.getElementById("fileViewerModal").style.display = "none";
+    document.getElementById("ctxModal").style.display = "none";
+    document.getElementById("newFileModal").style.display = "none";
+    document.getElementById("newRepoModal").style.display = "none";
+    document.getElementById("repoCtxModal").style.display = "none";
+    document.getElementById("editDescModal").style.display = "none";
+    document.getElementById("searchModal").style.display = "none";
+  }
+});
+
+// ═══════════════════════════════════════
+//  AUTO LOGIN (page load)
+// ═══════════════════════════════════════
+(async () => {
+  const saved = loadToken();
+  if (!saved) return;
+  TOKEN = saved;
+  try {
+    const user = await ghFetch("/user");
+    USERNAME = user.login;
+    await loadRepos();
+    document.getElementById("loginPanel").style.display = "none";
+    document.getElementById("sidebar").style.display = "flex";
+    document.getElementById("mainContent").style.display = "block";
+    document.getElementById("statusDot").classList.add("connected");
+    document.getElementById("statusLabel").textContent =
+      "Přihlášen jako " + USERNAME;
+    document.getElementById("logoutBtn").style.display = "inline-block";
+    document.getElementById("searchBtn").style.display = "inline-block";
+    document.getElementById("logoutArea").style.display = "block";
+    showHomeView();
+    initMobileTabs();
+  } catch (e) {
+    clearToken();
+    TOKEN = "";
+  }
+})();
