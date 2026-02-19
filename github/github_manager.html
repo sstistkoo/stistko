@@ -982,6 +982,69 @@
         border-radius: 6px;
         margin: 12px 0;
       }
+
+      /* ─── MOBILE TABS ─── */
+      .mobile-tabs {
+        display: none;
+        background: var(--surface);
+        border-bottom: 2px solid var(--border);
+        position: sticky;
+        top: 44px;
+        z-index: 98;
+      }
+      .mobile-tab-btn {
+        flex: 1;
+        padding: 13px 0;
+        background: transparent;
+        border: none;
+        border-bottom: 2px solid transparent;
+        margin-bottom: -2px;
+        color: var(--text-dim);
+        font-family: var(--font-ui);
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: color 0.2s, border-color 0.2s;
+        letter-spacing: 0.3px;
+      }
+      .mobile-tab-btn.active {
+        color: var(--accent);
+        border-bottom-color: var(--accent);
+      }
+      .mobile-tab-btn .tab-badge {
+        display: inline-block;
+        background: var(--accent);
+        color: var(--bg);
+        font-size: 10px;
+        font-weight: 700;
+        padding: 1px 6px;
+        border-radius: 10px;
+        margin-left: 5px;
+        vertical-align: middle;
+      }
+
+      @media (max-width: 640px) {
+        .mobile-tabs {
+          display: flex;
+        }
+        .sidebar {
+          width: 100% !important;
+          border-right: none;
+          border-bottom: 1px solid var(--border);
+        }
+        .main {
+          width: 100%;
+        }
+        .content {
+          padding: 14px;
+        }
+        .toolbar-actions {
+          flex-wrap: wrap;
+        }
+        .repo-header .stats {
+          display: none;
+        }
+      }
     </style>
   </head>
   <body>
@@ -1000,6 +1063,16 @@
           Logout
         </button>
       </div>
+    </div>
+
+    <!-- MOBILE TABS -->
+    <div class="mobile-tabs" id="mobileTabs" style="display: none">
+      <button class="mobile-tab-btn" id="mobileTabSidebar" onclick="setMobilePanel('sidebar')">
+        📁 Repozitáře <span class="tab-badge" id="mobileRepoBadge"></span>
+      </button>
+      <button class="mobile-tab-btn active" id="mobileTabMain" onclick="setMobilePanel('main')">
+        📄 Obsah
+      </button>
     </div>
 
     <!-- LAYOUT -->
@@ -1031,7 +1104,7 @@
       </div>
 
       <!-- MAIN -->
-      <div class="main">
+      <div class="main" id="mainPanel">
         <!-- LOGIN PANEL -->
         <div class="login-panel" id="loginPanel">
           <div class="login-box">
@@ -1574,6 +1647,67 @@
       }
 
       // ═══════════════════════════════════════
+      //  MOBILE PANEL SWITCHER
+      // ═══════════════════════════════════════
+      const MOBILE_BREAKPOINT = 640;
+
+      function isMobile() {
+        return window.innerWidth <= MOBILE_BREAKPOINT;
+      }
+
+      function setMobilePanel(panel) {
+        if (!isMobile()) return;
+        const sidebar = document.getElementById('sidebar');
+        const mainPanel = document.getElementById('mainPanel');
+        const tabSidebar = document.getElementById('mobileTabSidebar');
+        const tabMain = document.getElementById('mobileTabMain');
+        if (!sidebar || !mainPanel) return;
+
+        if (panel === 'sidebar') {
+          // Sidebar zobraz jen pokud je přihlášen (má display:flex normálně)
+          if (TOKEN) sidebar.style.display = 'flex';
+          mainPanel.style.display = 'none';
+          tabSidebar.classList.add('active');
+          tabMain.classList.remove('active');
+        } else {
+          if (TOKEN) sidebar.style.display = 'none';
+          mainPanel.style.display = 'flex';
+          tabSidebar.classList.remove('active');
+          tabMain.classList.add('active');
+        }
+      }
+
+      function initMobileTabs() {
+        const tabs = document.getElementById('mobileTabs');
+        if (isMobile()) {
+          tabs.style.display = 'flex';
+          setMobilePanel('main');
+        } else {
+          tabs.style.display = 'none';
+        }
+        // Aktualizuj badge s počtem repo
+        const badge = document.getElementById('mobileRepoBadge');
+        if (badge) badge.textContent = REPOS.length || '';
+      }
+
+      window.addEventListener('resize', () => {
+        const tabs = document.getElementById('mobileTabs');
+        const sidebar = document.getElementById('sidebar');
+        const mainPanel = document.getElementById('mainPanel');
+        if (!TOKEN) return;
+        if (!isMobile()) {
+          tabs.style.display = 'none';
+          sidebar.style.display = 'flex';
+          mainPanel.style.display = 'flex';
+        } else {
+          tabs.style.display = 'flex';
+          // Nastav aktuální aktivní tab
+          const activeTab = document.getElementById('mobileTabMain').classList.contains('active') ? 'main' : 'sidebar';
+          setMobilePanel(activeTab);
+        }
+      });
+
+      // ═══════════════════════════════════════
       //  UTILS
       // ═══════════════════════════════════════
       function toast(msg, type = "success", duration = 3200) {
@@ -1626,6 +1760,7 @@
           document.getElementById("logoutBtn").style.display = "inline-block";
           document.getElementById("logoutArea").style.display = "block";
           showHomeView();
+          initMobileTabs();
           toast("Přihlášen jako " + USERNAME);
         } catch (e) {
           toast("Neplatný token nebo chyba: " + e.message, "error");
@@ -1647,6 +1782,7 @@
         document.getElementById("statusDot").classList.remove("connected");
         document.getElementById("statusLabel").textContent = "Nepřihlášen";
         document.getElementById("logoutBtn").style.display = "none";
+        document.getElementById("mobileTabs").style.display = "none";
         toast("Odhlášen.");
       };
 
@@ -1695,6 +1831,7 @@
         CURRENT_REPO = repoName;
         CURRENT_PATH = path;
         renderRepoList(); // highlight
+        setMobilePanel('main'); // na mobilu přepni na obsah
 
         const view = document.getElementById("repoView");
         const toolbar = document.getElementById("fileToolbar");
@@ -2015,6 +2152,7 @@
         CURRENT_REPO = null;
         CURRENT_PATH = "";
         renderRepoList();
+        setMobilePanel('main'); // na mobilu přepni na obsah
         document.getElementById("fileToolbar").style.display = "none";
         document.getElementById("breadcrumb").innerHTML =
           '<span class="active">🏠 Home</span>';
@@ -3523,6 +3661,7 @@
           document.getElementById("logoutBtn").style.display = "inline-block";
           document.getElementById("logoutArea").style.display = "block";
           showHomeView();
+          initMobileTabs();
         } catch (e) {
           clearToken();
           TOKEN = "";
