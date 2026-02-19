@@ -2244,23 +2244,46 @@ const SEARCH_STATE = {
 
 const SEARCH_FILTERS_CONFIG = {
   repositories: [
+    { id: 'sort', label: 'Řadit', type: 'select', options: [
+      { value: '', label: '⭐ Nejlepší shoda' },
+      { value: 'stars', label: '🌟 Hvězdy' },
+      { value: 'forks', label: '🍴 Forky' },
+      { value: 'updated', label: '🕐 Aktualizace' }
+    ]},
     { id: 'language', label: 'Jazyk', type: 'select', options: ['', 'HTML', 'JavaScript', 'TypeScript', 'Python', 'Java', 'C#', 'C++', 'Go', 'Rust', 'PHP', 'Ruby', 'CSS'] },
     { id: 'stars', label: 'Hvězdy min', type: 'number', placeholder: '100' },
     { id: 'user', label: 'Uživatel', type: 'text', placeholder: 'user' },
     { id: 'topic', label: 'Téma', type: 'text', placeholder: 'topic' }
   ],
   code: [
+    { id: 'sort', label: 'Řadit', type: 'select', options: [
+      { value: '', label: '⭐ Nejlepší shoda' },
+      { value: 'indexed', label: '🕐 Nejnovější index' }
+    ]},
     { id: 'language', label: 'Jazyk', type: 'select', options: ['HTML', 'JavaScript', 'TypeScript', 'CSS', 'Python', 'Java', 'JSON', 'Markdown'] },
     { id: 'extension', label: 'Přípona', type: 'text', placeholder: 'html' },
     { id: 'user', label: 'Uživatel', type: 'text', placeholder: 'user' },
     { id: 'repo', label: 'Repo', type: 'text', placeholder: 'user/repo' }
   ],
   issues: [
+    { id: 'sort', label: 'Řadit', type: 'select', options: [
+      { value: '', label: '⭐ Nejlepší shoda' },
+      { value: 'comments', label: '💬 Komentáře' },
+      { value: 'reactions', label: '👍 Reakce' },
+      { value: 'created', label: '📅 Vytvořeno' },
+      { value: 'updated', label: '🕐 Aktualizace' }
+    ]},
     { id: 'state', label: 'Stav', type: 'select', options: ['', 'open', 'closed'] },
     { id: 'is', label: 'Typ', type: 'select', options: ['', 'issue', 'pr'] },
     { id: 'label', label: 'Label', type: 'text', placeholder: 'bug' }
   ],
   users: [
+    { id: 'sort', label: 'Řadit', type: 'select', options: [
+      { value: '', label: '⭐ Nejlepší shoda' },
+      { value: 'followers', label: '👥 Followers' },
+      { value: 'repositories', label: '📁 Repozitáře' },
+      { value: 'joined', label: '📅 Registrace' }
+    ]},
     { id: 'type', label: 'Typ', type: 'select', options: ['', 'user', 'org'] },
     { id: 'repos', label: 'Repo min', type: 'number', placeholder: '5' },
     { id: 'followers', label: 'Followers', type: 'number', placeholder: '100' },
@@ -2298,6 +2321,11 @@ function renderSearchFilters() {
             const icon = help ? help.icon + ' ' : '';
             return `<option value="${o}" ${SEARCH_STATE.filters[f.id] === o ? 'selected' : ''}>${icon}${o || '-- vše --'}</option>`;
           }).join('')}
+        </select>`;
+      } else if (typeof f.options[0] === 'object') {
+        // Objektové options (pro řazení apod.)
+        input = `<select id="filter_${f.id}" onchange="updateSearchFilter('${f.id}', this.value)">
+          ${f.options.map(o => `<option value="${o.value}" ${SEARCH_STATE.filters[f.id] === o.value ? 'selected' : ''}>${o.label}</option>`).join('')}
         </select>`;
       } else {
         input = `<select id="filter_${f.id}" onchange="updateSearchFilter('${f.id}', this.value)">
@@ -2401,7 +2429,11 @@ async function executeSearch() {
   statsEl.textContent = '';
 
   try {
-    const endpoint = `/search/${SEARCH_STATE.type}?q=${encodeURIComponent(query)}&per_page=${SEARCH_STATE.perPage}&page=${SEARCH_STATE.page}`;
+    let endpoint = `/search/${SEARCH_STATE.type}?q=${encodeURIComponent(query)}&per_page=${SEARCH_STATE.perPage}&page=${SEARCH_STATE.page}`;
+    // Přidej řazení pokud je nastaveno
+    if (SEARCH_STATE.filters.sort) {
+      endpoint += `&sort=${SEARCH_STATE.filters.sort}&order=desc`;
+    }
     // Pro code search přidáme Accept header pro text_matches (úryvky kódu)
     const options = SEARCH_STATE.type === 'code' ? { headers: { Accept: 'application/vnd.github.text-match+json' } } : {};
     const data = await ghFetch(endpoint, options);
