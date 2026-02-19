@@ -1858,6 +1858,380 @@ document
 // ═══════════════════════════════════════
 //  GITHUB SEARCH
 // ═══════════════════════════════════════
+
+// Detailní nápověda k programovacím jazykům
+const LANGUAGE_HELP = {
+  'HTML': {
+    icon: '🌐',
+    name: 'HTML (HyperText Markup Language)',
+    desc: 'Základní jazyk pro tvorbu webových stránek. Definuje strukturu a obsah webu - nadpisy, odstavce, obrázky, odkazy, formuláře.',
+    difficulty: '🟢 Začátečník',
+    useFor: 'Webové stránky, e-maily, dokumentace',
+    fileExt: '.html, .htm',
+    run: [
+      'Otevři soubor přímo v prohlížeči (Chrome, Firefox, Edge)',
+      'V této aplikaci klikni na ▶️ Spustit',
+      'Ve VS Code použij Live Server rozšíření pro automatické obnovování'
+    ],
+    tools: 'VS Code (zdarma), Notepad++, Sublime Text',
+    install: 'Není potřeba žádná instalace - stačí textový editor a prohlížeč',
+    example: '<!DOCTYPE html>\n<html>\n  <head><title>Moje stránka</title></head>\n  <body><h1>Ahoj světe!</h1></body>\n</html>',
+    links: [
+      { title: 'MDN Web Docs', url: 'https://developer.mozilla.org/cs/docs/Web/HTML' },
+      { title: 'W3Schools', url: 'https://www.w3schools.com/html/' }
+    ]
+  },
+  'CSS': {
+    icon: '🎨',
+    name: 'CSS (Cascading Style Sheets)',
+    desc: 'Jazyk pro definování vzhledu webových stránek. Určuje barvy, fonty, rozložení, animace a responzivní design.',
+    difficulty: '🟢 Začátečník',
+    useFor: 'Stylizace HTML stránek, animace, responzivní design',
+    fileExt: '.css',
+    run: [
+      'CSS se připojuje k HTML souboru přes <link> tag',
+      'Nebo se píše přímo do HTML v <style> tagu',
+      'Změny vidíš po obnovování stránky v prohlížeči'
+    ],
+    tools: 'VS Code, Chrome DevTools (F12)',
+    install: 'Není potřeba instalace',
+    example: 'body {\n  background: #1a1a2e;\n  color: white;\n  font-family: Arial;\n}\n\nh1 {\n  color: #00e5a0;\n}',
+    links: [
+      { title: 'CSS-Tricks', url: 'https://css-tricks.com/' },
+      { title: 'Flexbox Froggy (hra)', url: 'https://flexboxfroggy.com/' }
+    ]
+  },
+  'JavaScript': {
+    icon: '⚡',
+    name: 'JavaScript',
+    desc: 'Programovací jazyk webu. Umožňuje interaktivitu - tlačítka, formuláře, animace, hry. Funguje v prohlížeči i na serveru (Node.js).',
+    difficulty: '🟡 Střední',
+    useFor: 'Webové aplikace, hry, serverové aplikace, mobilní apps',
+    fileExt: '.js, .mjs',
+    run: [
+      'V prohlížeči: připoj do HTML přes <script src="app.js">',
+      'V terminálu: node soubor.js',
+      'Konzole prohlížeče (F12) pro testování'
+    ],
+    tools: 'VS Code, Node.js, npm (správce balíčků)',
+    install: 'Pro prohlížeč: nic\nPro server: stáhni Node.js z nodejs.org',
+    example: '// Zobrazení zprávy\nalert("Ahoj světe!");\n\n// Změna textu na stránce\ndocument.getElementById("nadpis").textContent = "Nový text";',
+    links: [
+      { title: 'JavaScript.info', url: 'https://javascript.info/' },
+      { title: 'freeCodeCamp', url: 'https://www.freecodecamp.org/' }
+    ]
+  },
+  'TypeScript': {
+    icon: '💎',
+    name: 'TypeScript',
+    desc: 'Nadstavba JavaScriptu s typy. Pomáhá předcházet chybám a zpehledňuje kód. Kompiluje se do JavaScriptu.',
+    difficulty: '🟡 Střední',
+    useFor: 'Velké webové aplikace, týmové projekty',
+    fileExt: '.ts, .tsx',
+    run: [
+      '1. Nainstaluj: npm install -g typescript',
+      '2. Kompiluj: npx tsc soubor.ts',
+      '3. Spusť: node soubor.js'
+    ],
+    tools: 'VS Code (skvělá podpora), npm, Node.js',
+    install: 'npm install -g typescript',
+    example: 'function pozdrav(jmeno: string): string {\n  return `Ahoj ${jmeno}!`;\n}\n\nconsole.log(pozdrav("Světe"));',
+    links: [
+      { title: 'TypeScript Docs', url: 'https://www.typescriptlang.org/docs/' },
+      { title: 'TypeScript Playground', url: 'https://www.typescriptlang.org/play' }
+    ]
+  },
+  'Python': {
+    icon: '🐍',
+    name: 'Python',
+    desc: 'Univerzální jazyk s jednoduchou syntaxí. Populární pro AI, machine learning, automatizaci, analýzu dat a webové aplikace.',
+    difficulty: '🟢 Začátečník',
+    useFor: 'AI/ML, data science, automatizace, web (Django, Flask)',
+    fileExt: '.py',
+    run: [
+      'V terminálu: python soubor.py',
+      'Nebo: python3 soubor.py (na macOS/Linux)',
+      'Interaktivně: napiš "python" a pak píš kód'
+    ],
+    tools: 'VS Code + Python rozšíření, PyCharm, Jupyter Notebook',
+    install: 'Stáhni z python.org a nainstaluj\nBalíčky: pip install nazev_balicku',
+    example: '# Výpis textu\nprint("Ahoj světe!")\n\n# Cyklus\nfor i in range(5):\n    print(f"Číslo: {i}")\n\n# Funkce\ndef secti(a, b):\n    return a + b',
+    links: [
+      { title: 'Python.org', url: 'https://www.python.org/' },
+      { title: 'Real Python', url: 'https://realpython.com/' }
+    ]
+  },
+  'Java': {
+    icon: '☕',
+    name: 'Java',
+    desc: 'Robustní objektově orientovaný jazyk. Používá se pro enterprise aplikace, Android vývoj, a velké systémy.',
+    difficulty: '🟠 Pokročilý',
+    useFor: 'Android aplikace, enterprise software, bac kend',
+    fileExt: '.java',
+    run: [
+      '1. Kompiluj: javac Soubor.java',
+      '2. Spusť: java Soubor',
+      'Nebo použij IDE které to udělá automaticky'
+    ],
+    tools: 'IntelliJ IDEA (doporučeno), Eclipse, VS Code + Java Pack',
+    install: 'Stáhni JDK (Java Development Kit) z adoptium.net nebo oracle.com',
+    example: 'public class Hello {\n    public static void main(String[] args) {\n        System.out.println("Ahoj světe!");\n    }\n}',
+    links: [
+      { title: 'Java Docs', url: 'https://docs.oracle.com/en/java/' },
+      { title: 'Codecademy Java', url: 'https://www.codecademy.com/learn/learn-java' }
+    ]
+  },
+  'C#': {
+    icon: '🔷',
+    name: 'C# (C-Sharp)',
+    desc: 'Moderní jazyk od Microsoftu. Používá se pro Windows aplikace, hry v Unity, webové API a cross-platform apps.',
+    difficulty: '🟡 Střední',
+    useFor: 'Unity hry, Windows aplikace, web API, .NET aplikace',
+    fileExt: '.cs',
+    run: [
+      'S .NET CLI: dotnet new console && dotnet run',
+      'Ve Visual Studiu: F5 pro spuštění',
+      'Unity: kód se spouští v enginu'
+    ],
+    tools: 'Visual Studio (Windows), VS Code + C# rozšíření, Rider',
+    install: 'Stáhni .NET SDK z dotnet.microsoft.com\nPro hry: Unity z unity.com',
+    example: 'using System;\n\nclass Program {\n    static void Main() {\n        Console.WriteLine("Ahoj světe!");\n    }\n}',
+    links: [
+      { title: 'Microsoft C# Docs', url: 'https://learn.microsoft.com/cs-cz/dotnet/csharp/' },
+      { title: 'Unity Learn', url: 'https://learn.unity.com/' }
+    ]
+  },
+  'C++': {
+    icon: '⚙️',
+    name: 'C++',
+    desc: 'Výkonný systémový jazyk. Používá se pro hry (Unreal Engine), operační systémy, embedded systémy a výkonově kritické aplikace.',
+    difficulty: '🔴 Expert',
+    useFor: 'Hry (AAA tituly), OS, drivery, embedded, HPC',
+    fileExt: '.cpp, .h, .hpp',
+    run: [
+      'S g++: g++ soubor.cpp -o program && ./program',
+      'Na Windows: cl soubor.cpp (MSVC)',
+      'Ve Visual Studiu: F5'
+    ],
+    tools: 'Visual Studio, CLion, VS Code + C++ rozšíření',
+    install: 'Windows: Visual Studio s C++ workload\nLinux: sudo apt install build-essential\nmacOS: xcode-select --install',
+    example: '#include <iostream>\n\nint main() {\n    std::cout << "Ahoj světe!" << std::endl;\n    return 0;\n}',
+    links: [
+      { title: 'cppreference', url: 'https://cppreference.com/' },
+      { title: 'Learn C++', url: 'https://www.learncpp.com/' }
+    ]
+  },
+  'Go': {
+    icon: '🐹',
+    name: 'Go (Golang)',
+    desc: 'Moderní jazyk od Google. Jednoduchý, rychlý, skvělý pro serverové aplikace, mikroservicy a CLI nástroje.',
+    difficulty: '🟡 Střední',
+    useFor: 'Backend, mikroservicy, CLI nástroje, cloud',
+    fileExt: '.go',
+    run: [
+      'Spuštění: go run soubor.go',
+      'Kompilace: go build soubor.go',
+      'Instalace balíčku: go get nazev'
+    ],
+    tools: 'VS Code + Go rozšíření, GoLand',
+    install: 'Stáhni z go.dev/dl a nainstaluj',
+    example: 'package main\n\nimport "fmt"\n\nfunc main() {\n    fmt.Println("Ahoj světe!")\n}',
+    links: [
+      { title: 'Go by Example', url: 'https://gobyexample.com/' },
+      { title: 'Tour of Go', url: 'https://go.dev/tour/' }
+    ]
+  },
+  'Rust': {
+    icon: '🦀',
+    name: 'Rust',
+    desc: 'Bezpečný systémový jazyk bez garbage collectoru. Garantuje paměťovou bezpečnost. Oblíbený pro systémové programování a WebAssembly.',
+    difficulty: '🔴 Expert',
+    useFor: 'Systémové programování, WebAssembly, CLI, bezpečný kód',
+    fileExt: '.rs',
+    run: [
+      'Nový projekt: cargo new projekt',
+      'Spuštění: cargo run',
+      'Kompilace: cargo build --release'
+    ],
+    tools: 'VS Code + rust-analyzer, RustRover',
+    install: 'curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs | sh\nNebo na Windows: rustup-init.exe z rustup.rs',
+    example: 'fn main() {\n    println!("Ahoj světe!");\n    \n    let cislo = 42;\n    println!("Odpověď je: {}", cislo);\n}',
+    links: [
+      { title: 'Rust Book', url: 'https://doc.rust-lang.org/book/' },
+      { title: 'Rust by Example', url: 'https://doc.rust-lang.org/rust-by-example/' }
+    ]
+  },
+  'PHP': {
+    icon: '🐘',
+    name: 'PHP',
+    desc: 'Serverový skriptovací jazyk. Pohání WordPress, Laravel, a velkou část internetu. Snadný pro začátečníky.',
+    difficulty: '🟢 Začátečník',
+    useFor: 'Webové stránky, WordPress, e-shopy, CMS',
+    fileExt: '.php',
+    run: [
+      'Lokálně: php soubor.php',
+      'Webový server: XAMPP, WAMP, MAMP, Laragon',
+      'Vestavěný server: php -S localhost:8000'
+    ],
+    tools: 'VS Code + PHP Intelephense, PhpStorm, XAMPP',
+    install: 'Stáhni XAMPP z apachefriends.org (obsahuje PHP + MySQL + Apache)',
+    example: '<?php\necho "Ahoj světe!";\n\n$jmeno = "Petr";\necho "Ahoj $jmeno!";\n?>',
+    links: [
+      { title: 'PHP.net', url: 'https://www.php.net/manual/en/' },
+      { title: 'Laravel', url: 'https://laravel.com/docs' }
+    ]
+  },
+  'Ruby': {
+    icon: '💎',
+    name: 'Ruby',
+    desc: 'Elegantní dynamický jazyk. Známý díky Ruby on Rails frameworku pro rychlý vývoj webových aplikací.',
+    difficulty: '🟡 Střední',
+    useFor: 'Webové aplikace (Rails), automatizace, skripty',
+    fileExt: '.rb',
+    run: [
+      'Spuštění: ruby soubor.rb',
+      'Interaktivně: irb',
+      'Rails: rails server'
+    ],
+    tools: 'VS Code + Ruby rozšíření, RubyMine',
+    install: 'Windows: RubyInstaller.org\nmacOS/Linux: rbenv nebo rvm',
+    example: 'puts "Ahoj světe!"\n\n5.times do |i|\n  puts "Číslo #{i}"\nend',
+    links: [
+      { title: 'Ruby Docs', url: 'https://www.ruby-lang.org/en/documentation/' },
+      { title: 'Rails Guides', url: 'https://guides.rubyonrails.org/' }
+    ]
+  },
+  'JSON': {
+    icon: '📋',
+    name: 'JSON (JavaScript Object Notation)',
+    desc: 'Textový formát pro výměnu dat. Používá se pro konfigurace, API odpovědi, ukládání dat.',
+    difficulty: '🟢 Začátečník',
+    useFor: 'Konfigurace (package.json), API, datová výměna',
+    fileExt: '.json',
+    run: [
+      'JSON není spustitelný - jsou to jen data',
+      'Čte se jinými programy (JavaScript, Python, ...)',
+      'Validace: jsonlint.com'
+    ],
+    tools: 'VS Code (formátování: Shift+Alt+F)',
+    install: 'Není potřeba',
+    example: '{\n  "jmeno": "Jan",\n  "vek": 25,\n  "programator": true,\n  "jazyky": ["JavaScript", "Python"]\n}',
+    links: [
+      { title: 'JSON.org', url: 'https://www.json.org/' },
+      { title: 'JSON Lint', url: 'https://jsonlint.com/' }
+    ]
+  },
+  'Markdown': {
+    icon: '📝',
+    name: 'Markdown',
+    desc: 'Jednoduchý značkovací jazyk pro formátování textu. Používá se pro dokumentaci, README, poznámky.',
+    difficulty: '🟢 Začátečník',
+    useFor: 'README soubory, dokumentace, poznámky, blogy',
+    fileExt: '.md, .markdown',
+    run: [
+      'GitHub automaticky zobrazí README.md',
+      'VS Code: Ctrl+Shift+V pro náhled',
+      'Export do HTML/PDF přes různé nástroje'
+    ],
+    tools: 'VS Code + Markdown Preview, Obsidian, Typora',
+    install: 'Není potřeba',
+    example: '# Nadpis\n\n## Podnadpis\n\n**Tučný text** a *kurzíva*\n\n- Položka 1\n- Položka 2\n\n```javascript\nconsole.log("Kód");\n```',
+    links: [
+      { title: 'Markdown Guide', url: 'https://www.markdownguide.org/' },
+      { title: 'GitHub Markdown', url: 'https://docs.github.com/en/get-started/writing-on-github' }
+    ]
+  }
+};
+
+// Funkce pro otevření/zavření nápovědy
+function openLanguageHelpModal() {
+  document.getElementById('languageHelpModal').style.display = 'flex';
+  renderLanguageHelpList();
+}
+
+function closeLanguageHelpModal() {
+  document.getElementById('languageHelpModal').style.display = 'none';
+}
+
+function renderLanguageHelpList() {
+  const container = document.getElementById('languageHelpContent');
+  const languages = Object.keys(LANGUAGE_HELP);
+
+  container.innerHTML = languages.map(lang => {
+    const h = LANGUAGE_HELP[lang];
+    return `
+      <div class="lang-card" onclick="showLanguageDetail('${lang}')">
+        <div class="lang-card-icon">${h.icon}</div>
+        <div class="lang-card-info">
+          <div class="lang-card-name">${lang}</div>
+          <div class="lang-card-difficulty">${h.difficulty}</div>
+        </div>
+        <div class="lang-card-arrow">›</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function showLanguageDetail(lang) {
+  const h = LANGUAGE_HELP[lang];
+  const container = document.getElementById('languageHelpContent');
+
+  container.innerHTML = `
+    <button class="lang-back-btn" onclick="renderLanguageHelpList()">← Zpět na seznam</button>
+
+    <div class="lang-detail">
+      <div class="lang-detail-header">
+        <span class="lang-detail-icon">${h.icon}</span>
+        <div>
+          <h3>${h.name}</h3>
+          <span class="lang-detail-difficulty">${h.difficulty}</span>
+        </div>
+      </div>
+
+      <p class="lang-detail-desc">${h.desc}</p>
+
+      <div class="lang-detail-section">
+        <h4>🎯 K čemu se používá</h4>
+        <p>${h.useFor}</p>
+      </div>
+
+      <div class="lang-detail-section">
+        <h4>📁 Přípony souborů</h4>
+        <code>${h.fileExt}</code>
+      </div>
+
+      <div class="lang-detail-section">
+        <h4>▶️ Jak spustit</h4>
+        <ul>
+          ${h.run.map(r => `<li>${r}</li>`).join('')}
+        </ul>
+      </div>
+
+      <div class="lang-detail-section">
+        <h4>🛠️ Doporučené nástroje</h4>
+        <p>${h.tools}</p>
+      </div>
+
+      <div class="lang-detail-section">
+        <h4>📦 Instalace</h4>
+        <pre>${h.install}</pre>
+      </div>
+
+      <div class="lang-detail-section">
+        <h4>📝 Příklad kódu</h4>
+        <pre class="code-example">${escapeHtml(h.example)}</pre>
+      </div>
+
+      <div class="lang-detail-section">
+        <h4>🔗 Užitečné odkazy</h4>
+        <div class="lang-links">
+          ${h.links.map(l => `<a href="${l.url}" target="_blank">${l.title} ↗</a>`).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 const SEARCH_STATE = {
   type: 'code',  // Přednastaveno na kód
   query: '',
@@ -1913,10 +2287,23 @@ function renderSearchFilters() {
 
   container.innerHTML = filters.map(f => {
     let input = '';
+    const isLanguageFilter = f.id === 'language' && f.type === 'select';
+
     if (f.type === 'select') {
-      input = `<select id="filter_${f.id}" onchange="updateSearchFilter('${f.id}', this.value)">
-        ${f.options.map(o => `<option value="${o}" ${SEARCH_STATE.filters[f.id] === o ? 'selected' : ''}>${o || '-- vše --'}</option>`).join('')}
-      </select>`;
+      if (isLanguageFilter) {
+        // Jazyk s ikonami
+        input = `<select id="filter_${f.id}" onchange="updateSearchFilter('${f.id}', this.value)">
+          ${f.options.map(o => {
+            const help = LANGUAGE_HELP[o];
+            const icon = help ? help.icon + ' ' : '';
+            return `<option value="${o}" ${SEARCH_STATE.filters[f.id] === o ? 'selected' : ''}>${icon}${o || '-- vše --'}</option>`;
+          }).join('')}
+        </select>`;
+      } else {
+        input = `<select id="filter_${f.id}" onchange="updateSearchFilter('${f.id}', this.value)">
+          ${f.options.map(o => `<option value="${o}" ${SEARCH_STATE.filters[f.id] === o ? 'selected' : ''}>${o || '-- vše --'}</option>`).join('')}
+        </select>`;
+      }
     } else if (f.type === 'number') {
       input = `<input type="number" id="filter_${f.id}" placeholder="${f.placeholder || ''}" value="${SEARCH_STATE.filters[f.id] || ''}" onchange="updateSearchFilter('${f.id}', this.value)" />`;
     } else {
@@ -1932,7 +2319,6 @@ function updateSearchFilter(id, value) {
   } else {
     delete SEARCH_STATE.filters[id];
   }
-  // Query preview already removed from UI
 }
 
 function buildSearchQuery() {

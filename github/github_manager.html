@@ -601,6 +601,9 @@
           <button class="btn-confirm" id="executeSearchBtn">🔍</button>
         </div>
 
+        <!-- Language help button -->
+        <button class="btn-secondary lang-help-btn" onclick="openLanguageHelpModal()">❓ Nápověda k jazykům</button>
+
         <!-- Collapsible filters -->
         <button class="search-filters-toggle" id="filtersToggle" onclick="toggleSearchFilters()">
           <span>⚙️ Filtry</span>
@@ -628,6 +631,20 @@
 
         <div class="modal-btns" style="margin-top: 12px;">
           <button class="btn-cancel" id="closeSearchModal">Zavřít</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- LANGUAGE HELP MODAL -->
+    <div class="modal-overlay" id="languageHelpModal" style="display: none">
+      <div class="modal language-help-modal">
+        <div class="lang-help-header">
+          <h3>📚 Nápověda k programovacím jazykům</h3>
+          <button class="btn-icon" onclick="closeLanguageHelpModal()">✕</button>
+        </div>
+        <p class="lang-help-subtitle">Vyber jazyk pro detailní informace o tom, jak ho používat a spustit</p>
+        <div class="lang-help-content" id="languageHelpContent">
+          <!-- Content rendered by JS -->
         </div>
       </div>
     </div>
