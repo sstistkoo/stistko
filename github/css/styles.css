@@ -11,7 +11,7 @@
     --surface2: #1e2025;
     --border: #2a2d34;
     --text: #d4d6db;
-    --text-dim: #5a5d66;
+    --text-dim: #8a8d96;
     --accent: #00e5a0;
     --accent-dim: #00b87a;
     --red: #ff4b4b;
@@ -52,17 +52,32 @@ body {
     z-index: 100;
 }
 
+.topbar .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
 .topbar .logo {
     font-family: var(--font-ui);
     font-weight: 800;
-    font-size: 18px;
+    font-size: 16px;
     color: var(--accent);
     letter-spacing: -0.5px;
 }
 
-.topbar .logo span {
-    color: var(--text-dim);
-    font-weight: 400;
+.search-btn-header {
+    font-size: 16px;
+    padding: 4px 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: all 0.15s;
+}
+
+.search-btn-header:hover {
+    background: var(--accent);
+    border-color: var(--accent);
 }
 
 .topbar .sep {
@@ -126,6 +141,16 @@ body {
     text-transform: uppercase;
     letter-spacing: 1.2px;
     color: var(--text-dim);
+}
+
+.sidebar-sub {
+    font-size: 10px;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--text-dim);
+    margin-top: 2px;
+    opacity: 0.8;
 }
 
 .sidebar-actions {
@@ -688,7 +713,7 @@ body {
 
 .modal select {
     appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%235a5d66'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238a8d96'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 12px center;
     padding-right: 30px;

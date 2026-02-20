@@ -18,19 +18,21 @@
   <body>
     <!-- TOPBAR -->
     <div class="topbar">
-      <div class="logo">GitHub<span>Manager</span></div>
-      <div class="sep"></div>
-      <div class="status-dot" id="statusDot"></div>
-      <div class="status-label" id="statusLabel">Nepřihlášen</div>
-      <div style="margin-left: auto; display: flex; gap: 10px; align-items: center;" id="logoutArea">
+      <div class="logo-area">
+        <div class="logo">GitHub</div>
         <button
-          class="btn-icon"
+          class="btn-icon search-btn-header"
           id="searchBtn"
           title="Prohledat GitHub"
-          style="display: none; font-size: 16px;"
+          style="display: none;"
         >
           🔍
         </button>
+      </div>
+      <div class="sep"></div>
+      <div class="status-dot" id="statusDot"></div>
+      <div class="status-label" id="statusLabel">Nepřihlášen</div>
+      <div style="margin-left: auto;" id="logoutArea">
         <button
           class="btn-cancel"
           id="logoutBtn"
@@ -56,7 +58,9 @@
       <!-- SIDEBAR -->
       <div class="sidebar" id="sidebar" style="display: none">
         <div class="sidebar-head">
-          <div class="label">Repozitáře</div>
+          <div>
+            <div class="label" id="sidebarGreeting">Repozitáře</div>
+          </div>
           <div style="display: flex; gap: 6px">
             <button
               class="btn-icon"
