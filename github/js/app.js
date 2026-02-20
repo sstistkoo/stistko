@@ -10,6 +10,34 @@ let DELETE_TARGET = "";
 
 const API = "https://api.github.com";
 const STORAGE_KEY = "gh_mgr_token";
+const THEME_KEY = "gh_mgr_theme";
+
+// ═══════════════════════════════════════
+//  THEME
+// ═══════════════════════════════════════
+function applyTheme(theme) {
+  const btn = document.getElementById("themeToggleBtn");
+  if (theme === "light") {
+    document.body.classList.add("light");
+    if (btn) btn.textContent = "☀️";
+  } else {
+    document.body.classList.remove("light");
+    if (btn) btn.textContent = "🌙";
+  }
+}
+
+function toggleTheme() {
+  const isLight = document.body.classList.contains("light");
+  const next = isLight ? "dark" : "light";
+  localStorage.setItem(THEME_KEY, next);
+  applyTheme(next);
+}
+
+// Inicializuj motiv ihned
+(function initTheme() {
+  const saved = localStorage.getItem(THEME_KEY) || "dark";
+  applyTheme(saved);
+})();
 
 function saveToken(token) {
   localStorage.setItem(STORAGE_KEY, btoa(token));
@@ -131,8 +159,7 @@ document.getElementById("loginBtn").onclick = async () => {
     document.getElementById("sidebar").style.display = "flex";
     document.getElementById("mainContent").style.display = "block";
     document.getElementById("statusDot").classList.add("connected");
-    document.getElementById("statusLabel").textContent =
-      "Přihlášen jako " + USERNAME;
+    document.getElementById("statusLabel").textContent = USERNAME;
     document.getElementById("logoutBtn").style.display = "inline-block";
     document.getElementById("searchBtn").style.display = "inline-flex";
     document.getElementById("sidebarGreeting").innerHTML = `👋 Ahoj, ${USERNAME}!<div class="sidebar-sub">Tvoje repozitáře</div>`;
@@ -326,6 +353,9 @@ function renderFileList(repoInfo, repoName, path) {
       </button>
       <button class="btn-secondary" id="deselectAllBtn" style="display:none;">
         <span>⬜</span> Zrušit výběr
+      </button>
+      <button class="btn-secondary" id="newFileBtn" onclick="openNewFileModal()" style="background: var(--accent); color: var(--bg); border-color: var(--accent); font-weight: 600;">
+        <span>➕</span> Nový soubor/složka
       </button>
     </div>
     <table class="file-table">
@@ -603,7 +633,7 @@ document.getElementById("cancelNewRepo").onclick = () => {
 // ═══════════════════════════════════════
 //  NEW FILE/FOLDER
 // ═══════════════════════════════════════
-document.getElementById("newFileBtn").onclick = () => {
+function openNewFileModal() {
   if (!CURRENT_REPO) return;
   document.getElementById("newFileModal").style.display = "flex";
   document.getElementById("newItemName").value = "";
@@ -611,7 +641,7 @@ document.getElementById("newFileBtn").onclick = () => {
   document.getElementById("newItemType").value = "file";
   document.getElementById("fileContentSection").style.display = "block";
   document.getElementById("newItemName").focus();
-};
+}
 
 document.getElementById("newItemType").addEventListener("change", (e) => {
   const isFolder = e.target.value === "folder";
@@ -2852,8 +2882,7 @@ document.addEventListener("keydown", (e) => {
     document.getElementById("sidebar").style.display = "flex";
     document.getElementById("mainContent").style.display = "block";
     document.getElementById("statusDot").classList.add("connected");
-    document.getElementById("statusLabel").textContent =
-      "Přihlášen jako " + USERNAME;
+    document.getElementById("statusLabel").textContent = USERNAME;
     document.getElementById("logoutBtn").style.display = "inline-block";
     document.getElementById("searchBtn").style.display = "inline-block";
     document.getElementById("logoutArea").style.display = "block";

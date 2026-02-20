@@ -23,6 +23,38 @@
     --font-mono: "IBM Plex Mono", monospace;
 }
 
+/* ─── LIGHT THEME ─── */
+body.light {
+    --bg: #f5f6f8;
+    --surface: #ffffff;
+    --surface2: #eceef2;
+    --border: #d0d4dc;
+    --text: #1e2025;
+    --text-dim: #5c606e;
+    --accent: #00996b;
+    --accent-dim: #007a54;
+    --red: #d93030;
+    --red-dim: #b52626;
+    --blue: #1565c0;
+    --yellow: #a07800;
+}
+
+body.light .login-box h2,
+body.light .modal h3,
+body.light .repo-header h3,
+body.light .ctx-file-name,
+body.light .file-viewer-name {
+    color: var(--text);
+}
+
+body.light .search-code-snippet {
+    background: var(--surface2);
+}
+
+body.light .lang-detail-section pre.code-example {
+    background: #e8ecf0;
+}
+
 /* ─── RESET ─── */
 * {
     margin: 0;
