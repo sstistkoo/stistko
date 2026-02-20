@@ -13,7 +13,7 @@
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230e0f11'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-size='20'%3E📁%3C/text%3E%3C/svg%3E"
     />
     <title>GitHub Manager</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/styles.css" />
   </head>
   <body>
     <!-- TOPBAR -->
@@ -24,7 +24,7 @@
           class="btn-icon search-btn-header"
           id="searchBtn"
           title="Prohledat GitHub"
-          style="display: none;"
+          style="display: none"
         >
           🔍
         </button>
@@ -32,14 +32,19 @@
           class="btn-icon"
           id="themeToggleBtn"
           title="Přepnout motiv"
-          style="font-size: 15px; width: 30px; height: 30px;"
+          style="font-size: 15px; width: 30px; height: 30px"
           onclick="toggleTheme()"
-        >🌙</button>
+        >
+          🌙
+        </button>
       </div>
       <div class="sep"></div>
       <div class="status-dot" id="statusDot"></div>
       <div class="status-label" id="statusLabel">Nepřihlášen</div>
-      <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;" id="logoutArea">
+      <div
+        style="margin-left: auto; display: flex; align-items: center; gap: 8px"
+        id="logoutArea"
+      >
         <button
           class="btn-cancel"
           id="logoutBtn"
@@ -52,10 +57,18 @@
 
     <!-- MOBILE TABS -->
     <div class="mobile-tabs" id="mobileTabs" style="display: none">
-      <button class="mobile-tab-btn" id="mobileTabSidebar" onclick="setMobilePanel('sidebar')">
+      <button
+        class="mobile-tab-btn"
+        id="mobileTabSidebar"
+        onclick="setMobilePanel('sidebar')"
+      >
         📁 Repozitáře <span class="tab-badge" id="mobileRepoBadge"></span>
       </button>
-      <button class="mobile-tab-btn active" id="mobileTabMain" onclick="setMobilePanel('main')">
+      <button
+        class="mobile-tab-btn active"
+        id="mobileTabMain"
+        onclick="setMobilePanel('main')"
+      >
         📄 Obsah
       </button>
     </div>
@@ -586,9 +599,15 @@
 
         <!-- Search type tabs -->
         <div class="search-type-tabs">
-          <button class="search-type-tab" data-type="repositories">📁 Repo</button>
-          <button class="search-type-tab active" data-type="code">💻 Kód</button>
-          <button class="search-type-tab" data-type="users">👤 Uživatelé</button>
+          <button class="search-type-tab" data-type="repositories">
+            📁 Repo
+          </button>
+          <button class="search-type-tab active" data-type="code">
+            💻 Kód
+          </button>
+          <button class="search-type-tab" data-type="users">
+            👤 Uživatelé
+          </button>
           <button class="search-type-tab" data-type="issues">📋 Issues</button>
         </div>
 
@@ -599,7 +618,11 @@
         </div>
 
         <!-- Collapsible filters -->
-        <button class="search-filters-toggle" id="filtersToggle" onclick="toggleSearchFilters()">
+        <button
+          class="search-filters-toggle"
+          id="filtersToggle"
+          onclick="toggleSearchFilters()"
+        >
           <span>⚙️ Filtry</span>
           <span class="arrow">▼</span>
         </button>
@@ -612,18 +635,24 @@
         <div class="search-results" id="searchResults">
           <div class="search-empty">
             <div class="icon">🔎</div>
-            <p>Zadej hledaný výraz<br><small>Přednastaveno: HTML kód</small></p>
+            <p>
+              Zadej hledaný výraz<br /><small>Přednastaveno: HTML kód</small>
+            </p>
           </div>
         </div>
 
         <!-- Pagination -->
-        <div class="search-pagination" id="searchPagination" style="display: none;">
+        <div
+          class="search-pagination"
+          id="searchPagination"
+          style="display: none"
+        >
           <button id="searchPrevPage" disabled>←</button>
           <span id="searchPageInfo">1/1</span>
           <button id="searchNextPage">→</button>
         </div>
 
-        <div class="modal-btns" style="margin-top: 12px;">
+        <div class="modal-btns" style="margin-top: 12px">
           <button class="btn-cancel" id="closeSearchModal">Zavřít</button>
         </div>
       </div>
@@ -636,7 +665,9 @@
           <h3>📚 Nápověda k programovacím jazykům</h3>
           <button class="btn-icon" onclick="closeLanguageHelpModal()">✕</button>
         </div>
-        <p class="lang-help-subtitle">Vyber jazyk pro detailní informace o tom, jak ho používat a spustit</p>
+        <p class="lang-help-subtitle">
+          Vyber jazyk pro detailní informace o tom, jak ho používat a spustit
+        </p>
         <div class="lang-help-content" id="languageHelpContent">
           <!-- Content rendered by JS -->
         </div>
