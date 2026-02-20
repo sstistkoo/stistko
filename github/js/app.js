@@ -134,8 +134,8 @@ document.getElementById("loginBtn").onclick = async () => {
     document.getElementById("statusLabel").textContent =
       "Přihlášen jako " + USERNAME;
     document.getElementById("logoutBtn").style.display = "inline-block";
-    document.getElementById("searchBtn").style.display = "inline-block";
-    document.getElementById("logoutArea").style.display = "block";
+    document.getElementById("searchBtn").style.display = "inline-flex";
+    document.getElementById("sidebarGreeting").innerHTML = `👋 Ahoj, ${USERNAME}!<div class="sidebar-sub">Tvoje repozitáře</div>`;
     showHomeView();
     initMobileTabs();
     toast("Přihlášen jako " + USERNAME);
@@ -161,6 +161,7 @@ document.getElementById("logoutBtn").onclick = () => {
   document.getElementById("logoutBtn").style.display = "none";
   document.getElementById("searchBtn").style.display = "none";
   document.getElementById("mobileTabs").style.display = "none";
+  document.getElementById("sidebarGreeting").textContent = "Repozitáře";
   toast("Odhlášen.");
 };
 
@@ -541,8 +542,7 @@ function showHomeView() {
     return;
   }
   view.innerHTML = `
-  <div class="repo-header"><div><h3>👋 Ahoj, ${USERNAME}!</h3><div class="desc">Tvoje repozitáře</div></div></div>
-  <table class="file-table">
+  <table class="file-table repo-table-home">
     <thead><tr><th>Repozitář</th><th>Viditelnost</th><th>Popis</th><th>Aktualizován</th></tr></thead>
     <tbody>
       ${REPOS.map(
@@ -2491,6 +2491,7 @@ function renderSearchResult(item) {
     const owner = repoFullName.split('/')[0];
     const repoName = repoFullName.split('/')[1];
     const filePath = item.path || '';
+    const defaultBranch = item.repository?.default_branch || 'main';
     const isHtmlFile = /\.html?$/i.test(item.name || '');
 
     return `
@@ -2501,7 +2502,7 @@ function renderSearchResult(item) {
           <div class="search-result-desc">${repoFullName}/${filePath}</div>
           ${item.text_matches ? `<div class="search-code-snippet">${escapeHtml(item.text_matches[0]?.fragment || '').substring(0, 200)}</div>` : ''}
           <div class="search-result-actions">
-            ${isHtmlFile ? `<button onclick="event.stopPropagation(); previewHtmlFile('${owner}', '${repoName}', '${filePath}')" class="primary">▶️ Spustit</button>` : ''}
+            ${isHtmlFile ? `<button onclick="event.stopPropagation(); previewHtmlFile('${owner}', '${repoName}', '${filePath}', '${defaultBranch}')" class="primary">▶️ Spustit</button>` : ''}
             <button onclick="event.stopPropagation(); browseUserRepo('${owner}', '${repoName}', '${filePath}')">📂 Procházet</button>
             <button onclick="event.stopPropagation(); window.open('${item.html_url}', '_blank')">🔗 GitHub</button>
           </div>
@@ -2599,6 +2600,10 @@ async function browseUserRepo(owner, repoName, path = '') {
   resultsEl.innerHTML = '<div class="search-empty"><div class="spinner"></div><p>Načítám...</p></div>';
 
   try {
+    // Získat info o repo pro default branch
+    const repoInfo = await ghFetch(`/repos/${owner}/${repoName}`);
+    const defaultBranch = repoInfo.default_branch || 'main';
+
     const endpoint = path
       ? `/repos/${owner}/${repoName}/contents/${path}`
       : `/repos/${owner}/${repoName}/contents`;
@@ -2607,7 +2612,7 @@ async function browseUserRepo(owner, repoName, path = '') {
     // Pokud je to soubor, zobraz ho
     if (!Array.isArray(contents)) {
       if (/\.html?$/i.test(contents.name)) {
-        previewHtmlFile(owner, repoName, contents.path);
+        previewHtmlFile(owner, repoName, contents.path, defaultBranch);
       } else {
         window.open(contents.html_url, '_blank');
       }
@@ -2641,7 +2646,7 @@ async function browseUserRepo(owner, repoName, path = '') {
                 ${isDir ? `
                   <button onclick="event.stopPropagation(); browseUserRepo('${owner}', '${repoName}', '${item.path}')" class="primary">📂 Otevřít</button>
                 ` : `
-                  ${isHtml ? `<button onclick="event.stopPropagation(); previewHtmlFile('${owner}', '${repoName}', '${item.path}')" class="primary">▶️ Spustit</button>` : ''}
+                  ${isHtml ? `<button onclick="event.stopPropagation(); previewHtmlFile('${owner}', '${repoName}', '${item.path}', '${defaultBranch}')" class="primary">▶️ Spustit</button>` : ''}
                   <button onclick="event.stopPropagation(); window.open('${item.html_url}', '_blank')">🔗 GitHub</button>
                 `}
               </div>
@@ -2657,9 +2662,10 @@ async function browseUserRepo(owner, repoName, path = '') {
 }
 
 // Preview HTML souboru v iframe
-function previewHtmlFile(owner, repoName, filePath) {
+function previewHtmlFile(owner, repo, path, branch = 'main') {
   // Otevře HTML soubor v novém okně prohlížeče přes htmlpreview.github.io
-  const githubUrl = `https://github.com/${owner}/${repoName}/blob/main/${filePath}`;
+  // Funguje pro jakýkoliv veřejný repozitář, i bez GitHub Pages
+  const githubUrl = `https://github.com/${owner}/${repo}/blob/${branch}/${encodeURIComponent(path).replace(/%2F/g, '/')}`;
   const previewUrl = `https://htmlpreview.github.io/?${githubUrl}`;
   window.open(previewUrl, '_blank');
 }
