@@ -28,11 +28,18 @@
         >
           🔍
         </button>
+        <button
+          class="btn-icon"
+          id="themeToggleBtn"
+          title="Přepnout motiv"
+          style="font-size: 15px; width: 30px; height: 30px;"
+          onclick="toggleTheme()"
+        >🌙</button>
       </div>
       <div class="sep"></div>
       <div class="status-dot" id="statusDot"></div>
       <div class="status-label" id="statusLabel">Nepřihlášen</div>
-      <div style="margin-left: auto;" id="logoutArea">
+      <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;" id="logoutArea">
         <button
           class="btn-cancel"
           id="logoutBtn"
@@ -164,20 +171,6 @@
               <option value="size-desc">📏 Velikost (↓)</option>
               <option value="type-asc">📋 Typ (A-Z)</option>
             </select>
-            <button
-              class="btn-icon"
-              id="newFileBtn"
-              title="Vytvořit nový soubor/složku"
-              style="
-                padding: 8px 16px;
-                background: var(--accent);
-                color: var(--bg);
-                font-weight: 600;
-              "
-            >
-              ➕ Nový soubor/složka
-            </button>
-            </button>
           </div>
           <div id="repoView"></div>
         </div>
