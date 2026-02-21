@@ -11,6 +11,11 @@ let DELETE_TARGET = "";
 const API = "https://api.github.com";
 const STORAGE_KEY = "gh_mgr_token";
 const THEME_KEY = "gh_mgr_theme";
+const SEARCH_HISTORY_KEY = "gh_mgr_search_history";
+const SAVED_SEARCHES_KEY = "gh_mgr_saved_searches";
+const MAX_SEARCH_HISTORY = 12;
+let RATE_LIMIT = { remaining: null, limit: null, reset: null };
+let SEARCH_DEBOUNCE_TIMER = null;
 
 // ═══════════════════════════════════════
 //  THEME
@@ -135,6 +140,14 @@ async function ghFetch(endpoint, options = {}) {
       ...(options.headers || {}),
     },
   });
+  // Side effect: aktualizuj rate limit z response headers
+  const rlRemaining = res.headers.get('X-RateLimit-Remaining');
+  if (rlRemaining !== null) {
+    RATE_LIMIT.remaining = parseInt(rlRemaining);
+    RATE_LIMIT.limit = parseInt(res.headers.get('X-RateLimit-Limit') || '60');
+    RATE_LIMIT.reset = parseInt(res.headers.get('X-RateLimit-Reset') || '0');
+    updateRateLimitDisplay();
+  }
   if (res.status === 204) return null;
   const data = await res.json();
   if (!res.ok) throw new Error(data.message || "GitHub API error");
@@ -2472,6 +2485,7 @@ async function executeSearch() {
     const totalPages = Math.ceil(data.total_count / SEARCH_STATE.perPage);
 
     statsEl.textContent = `Nalezeno ${data.total_count.toLocaleString()} výsledků`;
+    saveToSearchHistory(query, SEARCH_STATE.type);
 
     if (data.items.length === 0) {
       resultsEl.innerHTML = '<div class="search-empty"><div class="icon">🔍</div><p>Žádné výsledky</p></div>';
@@ -2512,6 +2526,7 @@ function renderSearchResult(item) {
           <div class="search-result-actions">
             <button onclick="event.stopPropagation(); browseUserRepo('${owner}', '${item.name}')" class="primary">📂 Procházet</button>
             <button onclick="event.stopPropagation(); window.open('${item.html_url}', '_blank')">🔗 GitHub</button>
+            <button class="star-btn" data-starred="false" onclick="event.stopPropagation(); toggleStarRepo('${owner}', '${item.name}', this)">☆ Star</button>
           </div>
         </div>
       </div>
@@ -2530,7 +2545,22 @@ function renderSearchResult(item) {
         <div class="search-result-content">
           <div class="search-result-title">${item.name}</div>
           <div class="search-result-desc">${repoFullName}/${filePath}</div>
-          ${item.text_matches ? `<div class="search-code-snippet">${escapeHtml(item.text_matches[0]?.fragment || '').substring(0, 200)}</div>` : ''}
+          ${(() => {
+            if (!item.text_matches || !item.text_matches.length) return '';
+            const fragsHtml = item.text_matches.map(m => `<div class="search-code-snippet" style="margin-top:4px;">${escapeHtml(m.fragment || '').substring(0, 300)}</div>`).join('');
+            const firstFrag = item.text_matches[0];
+            const extraCount = item.text_matches.length - 1;
+            const fragId = 'frags_' + (item.sha || Math.random().toString(36).slice(2));
+            return `
+              <div class="search-code-snippet">${escapeHtml(firstFrag.fragment || '').substring(0, 300)}</div>
+              ${extraCount > 0 ? `
+                <div id="${fragId}" style="display:none;">
+                  ${item.text_matches.slice(1).map(m => `<div class="search-code-snippet" style="margin-top:4px;">${escapeHtml(m.fragment || '').substring(0, 300)}</div>`).join('')}
+                </div>
+                <button class="search-code-more-btn" onclick="event.stopPropagation(); toggleCodeFragments('${fragId}', this)">▼ ${extraCount} dalších shod</button>
+              ` : ''}
+            `;
+          })()}
           <div class="search-result-actions">
             ${isHtmlFile ? `<button onclick="event.stopPropagation(); previewHtmlFile('${owner}', '${repoName}', '${filePath}', '${defaultBranch}')" class="primary">▶️ Spustit</button>` : ''}
             <button onclick="event.stopPropagation(); browseUserRepo('${owner}', '${repoName}', '${filePath}')">📂 Procházet</button>
@@ -2700,6 +2730,190 @@ function previewHtmlFile(owner, repo, path, branch = 'main') {
   window.open(previewUrl, '_blank');
 }
 
+// ═══════════════════════════════════════
+//  SEARCH ENHANCEMENTS
+// ═══════════════════════════════════════
+
+// ── Rate Limit Display ──
+function updateRateLimitDisplay() {
+  const el = document.getElementById('rateLimitBadge');
+  if (!el || RATE_LIMIT.remaining === null) return;
+  const pct = RATE_LIMIT.limit ? RATE_LIMIT.remaining / RATE_LIMIT.limit : 1;
+  const color = pct > 0.4 ? 'var(--accent)' : pct > 0.15 ? 'var(--yellow)' : 'var(--red)';
+  const resetMin = RATE_LIMIT.reset
+    ? Math.max(0, Math.ceil((RATE_LIMIT.reset * 1000 - Date.now()) / 60000))
+    : '?';
+  el.style.display = 'flex';
+  el.innerHTML = `
+    <span style="color:${color}; font-size:10px;">⬤</span>
+    API: <strong style="color:${color}">${RATE_LIMIT.remaining}</strong><span style="opacity:.7;">/${RATE_LIMIT.limit}</span>
+    <span style="opacity:.6; font-size:10px; margin-left:4px;">reset za ${resetMin} min</span>
+  `;
+}
+
+// ── Search History ──
+function loadSearchHistory() {
+  try { return JSON.parse(localStorage.getItem(SEARCH_HISTORY_KEY) || '[]'); } catch { return []; }
+}
+
+function saveToSearchHistory(query, type) {
+  if (!query.trim()) return;
+  let history = loadSearchHistory();
+  history = history.filter(h => !(h.query === query && h.type === type));
+  history.unshift({ query, type, ts: Date.now() });
+  localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(history.slice(0, MAX_SEARCH_HISTORY)));
+}
+
+function renderSearchHistoryDropdown() {
+  const dropdown = document.getElementById('searchHistoryDropdown');
+  const input = document.getElementById('searchQueryInput');
+  if (!dropdown || !input) return;
+  const history = loadSearchHistory();
+  const val = input.value.toLowerCase();
+  const filtered = val ? history.filter(h => h.query.toLowerCase().includes(val)) : history;
+  if (!filtered.length) { dropdown.style.display = 'none'; return; }
+  dropdown.innerHTML = `
+    <div class="search-history-header">
+      🕐 Historie
+      <button onmousedown="clearSearchHistory()" class="search-history-clear">Vymazat</button>
+    </div>
+    ${filtered.slice(0, 8).map(h => `
+      <div class="search-history-item" onmousedown="applyHistoryItem(${JSON.stringify(h.query)}, '${h.type}')">
+        <span class="search-history-text">${escapeHtml(h.query)}</span>
+        <span class="search-history-type">${h.type}</span>
+      </div>
+    `).join('')}
+  `;
+  dropdown.style.display = 'block';
+}
+
+function applyHistoryItem(query, type) {
+  document.getElementById('searchQueryInput').value = query;
+  SEARCH_STATE.query = query;
+  SEARCH_STATE.type = type;
+  SEARCH_STATE.filters = type === 'code' ? { language: 'HTML' } : {};
+  SEARCH_STATE.page = 1;
+  document.querySelectorAll('.search-type-tab').forEach(t => t.classList.toggle('active', t.dataset.type === type));
+  renderSearchFilters();
+  const dd = document.getElementById('searchHistoryDropdown');
+  if (dd) dd.style.display = 'none';
+  executeSearch();
+}
+
+function clearSearchHistory() {
+  localStorage.removeItem(SEARCH_HISTORY_KEY);
+  const dd = document.getElementById('searchHistoryDropdown');
+  if (dd) dd.style.display = 'none';
+}
+
+// ── Saved Searches ──
+function loadSavedSearches() {
+  try { return JSON.parse(localStorage.getItem(SAVED_SEARCHES_KEY) || '[]'); } catch { return []; }
+}
+
+function saveCurrentSearch() {
+  const query = SEARCH_STATE.query.trim();
+  if (!query) { toast('Zadej nejdřív hledaný výraz', 'error'); return; }
+  const searches = loadSavedSearches();
+  if (searches.some(s => s.query === query && s.type === SEARCH_STATE.type)) {
+    toast('Toto hledání je již uloženo', 'error'); return;
+  }
+  searches.unshift({
+    label: query.length > 40 ? query.substring(0, 40) + '…' : query,
+    query, type: SEARCH_STATE.type,
+    filters: { ...SEARCH_STATE.filters },
+    ts: Date.now()
+  });
+  localStorage.setItem(SAVED_SEARCHES_KEY, JSON.stringify(searches));
+  renderSavedSearches();
+  toast('Hledání uloženo 💾');
+}
+
+function applySavedSearch(index) {
+  const s = loadSavedSearches()[index];
+  if (!s) return;
+  SEARCH_STATE.query = s.query;
+  SEARCH_STATE.type = s.type;
+  SEARCH_STATE.filters = { ...s.filters };
+  SEARCH_STATE.page = 1;
+  document.getElementById('searchQueryInput').value = s.query;
+  document.querySelectorAll('.search-type-tab').forEach(t => t.classList.toggle('active', t.dataset.type === s.type));
+  renderSearchFilters();
+  executeSearch();
+}
+
+function deleteSavedSearch(index, e) {
+  e.stopPropagation();
+  const searches = loadSavedSearches();
+  searches.splice(index, 1);
+  localStorage.setItem(SAVED_SEARCHES_KEY, JSON.stringify(searches));
+  renderSavedSearches();
+}
+
+function renderSavedSearches() {
+  const container = document.getElementById('savedSearchesList');
+  if (!container) return;
+  const searches = loadSavedSearches();
+  const toggle = document.getElementById('savedSearchesToggle');
+  if (toggle) {
+    const label = toggle.querySelector('.saved-toggle-label');
+    if (label) label.textContent = `🔖 Uložená hledání${searches.length ? ' (' + searches.length + ')' : ''}`;
+  }
+  if (!searches.length) {
+    container.innerHTML = '<div class="saved-searches-empty">Uložená hledání jsou prázdná. Klikni 💾 pro uložení.</div>';
+    return;
+  }
+  container.innerHTML = searches.map((s, i) => `
+    <div class="saved-search-item" onclick="applySavedSearch(${i})">
+      <span class="saved-search-type">${s.type}</span>
+      <span class="saved-search-label">${escapeHtml(s.label)}</span>
+      <button class="saved-search-del" onclick="deleteSavedSearch(${i}, event)" title="Smazat">✕</button>
+    </div>
+  `).join('');
+}
+
+function toggleSavedSearches() {
+  const section = document.getElementById('savedSearchesList');
+  const toggle = document.getElementById('savedSearchesToggle');
+  if (!section) return;
+  const open = section.style.display !== 'none';
+  section.style.display = open ? 'none' : 'block';
+  if (toggle) toggle.classList.toggle('open', !open);
+}
+
+// ── Code Fragments Toggle ──
+function toggleCodeFragments(id, btn) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const open = el.style.display !== 'none';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? `▼ ${el.children.length} dalších shod` : '▲ Skrýt';
+}
+
+// ── Star / Unstar Repo ──
+async function toggleStarRepo(owner, repo, btn) {
+  if (!TOKEN) return;
+  btn.disabled = true;
+  const starred = btn.dataset.starred === 'true';
+  try {
+    await fetch(`${API}/user/starred/${owner}/${repo}`, {
+      method: starred ? 'DELETE' : 'PUT',
+      headers: {
+        Authorization: 'token ' + TOKEN,
+        Accept: 'application/vnd.github.v3+json',
+        'Content-Length': '0'
+      }
+    });
+    btn.dataset.starred = String(!starred);
+    btn.textContent = starred ? '☆ Star' : '⭐ Starred';
+    btn.classList.toggle('starred', !starred);
+    toast(starred ? 'Hvězdička odebrána' : '⭐ Přidáno do oblíbených');
+  } catch(e) {
+    toast('Chyba: ' + e.message, 'error');
+  }
+  btn.disabled = false;
+}
+
 // Search modal event listeners
 document.getElementById('searchBtn').onclick = () => {
   document.getElementById('searchModal').style.display = 'flex';
@@ -2710,6 +2924,7 @@ document.getElementById('searchBtn').onclick = () => {
     t.classList.toggle('active', t.dataset.type === 'code');
   });
   renderSearchFilters();
+  renderSavedSearches();
   document.getElementById('searchQueryInput').focus();
 };
 
@@ -2747,6 +2962,26 @@ document.getElementById('executeSearchBtn').onclick = () => {
 
 document.getElementById('searchQueryInput').addEventListener('input', (e) => {
   SEARCH_STATE.query = e.target.value;
+  renderSearchHistoryDropdown();
+  // Auto-search s debounce pro ne-code typy (sníſení počtu API volání)
+  if (SEARCH_STATE.type !== 'code' && e.target.value.length >= 3) {
+    clearTimeout(SEARCH_DEBOUNCE_TIMER);
+    SEARCH_DEBOUNCE_TIMER = setTimeout(() => {
+      SEARCH_STATE.page = 1;
+      executeSearch();
+    }, 700);
+  }
+});
+
+document.getElementById('searchQueryInput').addEventListener('focus', () => {
+  renderSearchHistoryDropdown();
+});
+
+document.getElementById('searchQueryInput').addEventListener('blur', () => {
+  setTimeout(() => {
+    const dd = document.getElementById('searchHistoryDropdown');
+    if (dd) dd.style.display = 'none';
+  }, 200);
 });
 
 document.getElementById('searchQueryInput').addEventListener('keydown', (e) => {

@@ -2063,3 +2063,234 @@ body {
         font-size: 16px;
     }
 }
+
+/* ─── RATE LIMIT BADGE ─── */
+.rate-limit-badge {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-family: var(--font-ui);
+    color: var(--text-dim);
+    padding: 4px 10px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+}
+
+/* ─── SEARCH INPUT WRAPPER + HISTORY DROPDOWN ─── */
+.search-input-wrapper {
+    position: relative;
+    flex: 1;
+    min-width: 150px;
+}
+
+.search-input-wrapper input[type="text"] {
+    width: 100%;
+    flex: none;
+}
+
+.search-history-dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    z-index: 500;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+}
+
+.search-history-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 10px;
+    font-size: 10px;
+    font-family: var(--font-ui);
+    font-weight: 600;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+}
+
+.search-history-clear {
+    background: none;
+    border: none;
+    color: var(--red);
+    font-size: 10px;
+    font-family: var(--font-ui);
+    cursor: pointer;
+    padding: 2px 4px;
+}
+
+.search-history-clear:hover {
+    text-decoration: underline;
+}
+
+.search-history-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.12s;
+    border-bottom: 1px solid rgba(42, 45, 52, 0.3);
+}
+
+.search-history-item:last-child {
+    border-bottom: none;
+}
+
+.search-history-item:hover {
+    background: var(--surface2);
+}
+
+.search-history-text {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.search-history-type {
+    font-size: 9px;
+    font-family: var(--font-ui);
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(0, 229, 160, 0.1);
+    padding: 2px 5px;
+    border-radius: 3px;
+    margin-left: 8px;
+    flex-shrink: 0;
+}
+
+/* ─── SAVED SEARCHES ─── */
+.saved-searches-empty {
+    font-size: 11px;
+    color: var(--text-dim);
+    padding: 6px 4px;
+    line-height: 1.5;
+}
+
+.saved-search-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.12s;
+    border-bottom: 1px solid rgba(42, 45, 52, 0.3);
+}
+
+.saved-search-item:last-child {
+    border-bottom: none;
+}
+
+.saved-search-item:hover {
+    background: var(--surface2);
+}
+
+.saved-search-type {
+    font-size: 9px;
+    font-family: var(--font-ui);
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(0, 229, 160, 0.1);
+    padding: 2px 5px;
+    border-radius: 3px;
+    flex-shrink: 0;
+}
+
+.saved-search-label {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.saved-search-del {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 11px;
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: 3px;
+    flex-shrink: 0;
+    opacity: 0.6;
+    transition: opacity 0.15s, color 0.15s;
+}
+
+.saved-search-del:hover {
+    opacity: 1;
+    color: var(--red);
+}
+
+/* ─── CODE FRAGMENTS ─── */
+.search-code-more-btn {
+    background: none;
+    border: none;
+    color: var(--accent);
+    font-size: 10px;
+    font-family: var(--font-ui);
+    cursor: pointer;
+    padding: 3px 0;
+    margin-top: 2px;
+    display: block;
+    transition: opacity 0.15s;
+}
+
+.search-code-more-btn:hover {
+    opacity: 0.8;
+}
+
+/* ─── STAR BUTTON ─── */
+.star-btn {
+    padding: 6px 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text-dim);
+    font-size: 10px;
+    font-family: var(--font-ui);
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.star-btn:hover {
+    border-color: var(--yellow);
+    color: var(--yellow);
+}
+
+.star-btn.starred {
+    background: rgba(245, 200, 66, 0.12);
+    border-color: var(--yellow);
+    color: var(--yellow);
+}
+
+.star-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ─── LIGHT THEME SEARCH ADJUSTMENTS ─── */
+body.light .search-history-dropdown {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+body.light .search-history-item,
+body.light .saved-search-item {
+    border-bottom-color: rgba(208, 212, 220, 0.5);
+}

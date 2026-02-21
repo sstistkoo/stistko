@@ -596,6 +596,11 @@
     <div class="modal-overlay" id="searchModal" style="display: none">
       <div class="modal search-modal">
         <h3>🔍 Prohledat GitHub</h3>
+        <div
+          class="rate-limit-badge"
+          id="rateLimitBadge"
+          style="display: none"
+        ></div>
 
         <!-- Search type tabs -->
         <div class="search-type-tabs">
@@ -613,8 +618,24 @@
 
         <!-- Search input -->
         <div class="search-header">
-          <input type="text" id="searchQueryInput" placeholder="Hledat..." />
+          <div class="search-input-wrapper">
+            <input type="text" id="searchQueryInput" placeholder="Hledat..." />
+            <div
+              class="search-history-dropdown"
+              id="searchHistoryDropdown"
+              style="display: none"
+            ></div>
+          </div>
           <button class="btn-confirm" id="executeSearchBtn">🔍</button>
+          <button
+            class="btn-icon"
+            id="saveSearchBtn"
+            onclick="saveCurrentSearch()"
+            title="Uložit hledání"
+            style="width: 38px; height: 38px; font-size: 16px; flex-shrink: 0"
+          >
+            💾
+          </button>
         </div>
 
         <!-- Collapsible filters -->
@@ -629,6 +650,30 @@
         <div class="search-filters" id="searchFilters">
           <!-- Filters will be rendered dynamically -->
         </div>
+
+        <!-- Saved searches -->
+        <button
+          class="search-filters-toggle"
+          id="savedSearchesToggle"
+          onclick="toggleSavedSearches()"
+          style="margin-top: 4px"
+        >
+          <span class="saved-toggle-label">🔖 Uložená hledání</span>
+          <span class="arrow">▼</span>
+        </button>
+        <div
+          id="savedSearchesList"
+          style="
+            display: none;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 8px;
+            margin-bottom: 8px;
+            max-height: 140px;
+            overflow-y: auto;
+          "
+        ></div>
 
         <!-- Results -->
         <div class="search-stats" id="searchStats"></div>
