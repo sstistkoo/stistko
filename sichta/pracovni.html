@@ -1,420 +1,100 @@
-<!DOCTYPE html>
+﻿<!doctype html>
 <html lang="cs">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CNC Práce Ostrava</title>
-  <script>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CNC Práce Ostrava</title>
+    <link rel="stylesheet" href="pracovni.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>CNC Práce Ostrava</h1>
+        <p>Vyhledávač pracovních nabídek</p>
+      </header>
 
-    :root {
-      --slate-300: #cbd5e1;
-      --slate-400: #94a3b8;
-      --slate-500: #64748b;
-      --slate-600: #475569;
-      --slate-700: #334155;
-      --slate-800: #1e293b;
-      --slate-900: #0f172a;
-      --orange-300: #fdba74;
-      --orange-400: #fb923c;
-      --orange-500: #f97316;
-      --orange-600: #ea580c;
-    }
-
-    body {
-      min-height: 100vh;
-      background: linear-gradient(135deg, var(--slate-900) 0%, var(--slate-800) 50%, var(--slate-900) 100%);
-      padding: 1rem;
-      font-family: system-ui, -apple-system, sans-serif;
-      color: white;
-    }
-
-    @media (min-width: 768px) {
-      body { padding: 2rem; }
-    }
-
-    .container { max-width: 72rem; margin: 0 auto; }
-
-    /* Header */
-    header { margin-bottom: 2rem; }
-    header h1 { font-size: 1.875rem; font-weight: 700; color: white; margin-bottom: 0.5rem; }
-    @media (min-width: 768px) { header h1 { font-size: 2.25rem; } }
-    header p { color: var(--slate-400); }
-
-    /* Panel */
-    .panel {
-      background: rgba(30,41,59,0.5);
-      border: 1px solid var(--slate-700);
-      border-radius: 0.5rem;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .filter-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-    @media (min-width: 768px) { .filter-grid { grid-template-columns: repeat(3, 1fr); } }
-
-    .filter-label { font-size: 0.875rem; color: var(--slate-300); margin-bottom: 0.5rem; }
-
-    .tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-    .tag {
-      background: rgba(249,115,22,0.2);
-      color: var(--orange-300);
-      padding: 0.25rem 0.75rem;
-      border-radius: 9999px;
-      font-size: 0.875rem;
-    }
-
-    .icon-row { display: flex; align-items: center; gap: 0.5rem; color: white; }
-    .icon-orange { color: var(--orange-500); width: 1rem; height: 1rem; flex-shrink: 0; }
-    .icon-lg { color: var(--slate-500); width: 3rem; height: 3rem; }
-
-    /* Refresh button */
-    .btn-refresh {
-      width: 100%;
-      background: linear-gradient(to right, var(--orange-500), var(--orange-600));
-      color: white;
-      font-weight: 600;
-      padding: 0.75rem 1.5rem;
-      border-radius: 0.5rem;
-      border: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      transition: opacity 0.2s, background 0.2s;
-      font-size: 1rem;
-    }
-    .btn-refresh:hover:not(:disabled) { background: linear-gradient(to right, var(--orange-600), #c2410c); }
-    .btn-refresh:disabled { opacity: 0.5; cursor: not-allowed; }
-    .btn-refresh svg { width: 1.25rem; height: 1.25rem; }
-
-    .last-update { color: var(--slate-400); font-size: 0.875rem; margin-top: 0.75rem; }
-
-    /* Job list */
-    #jobList { display: flex; flex-direction: column; gap: 1rem; }
-
-    .job-card {
-      background: rgba(30,41,59,0.5);
-      border: 1px solid var(--slate-700);
-      border-radius: 0.5rem;
-      padding: 1.5rem;
-      transition: border-color 0.2s;
-    }
-    .job-card:hover { border-color: rgba(249,115,22,0.5); }
-
-    .job-card-header {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      margin-bottom: 1rem;
-    }
-    @media (min-width: 768px) {
-      .job-card-header { flex-direction: row; justify-content: space-between; align-items: flex-start; }
-    }
-
-    .job-title-row { display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 0.5rem; }
-    .job-title { font-size: 1.25rem; font-weight: 700; color: white; }
-    .job-source {
-      background: rgba(249,115,22,0.2);
-      color: var(--orange-300);
-      font-size: 0.75rem;
-      padding: 0.25rem 0.5rem;
-      border-radius: 0.25rem;
-      white-space: nowrap;
-    }
-    .job-company { color: var(--slate-300); font-weight: 600; }
-
-    .job-meta { display: flex; flex-wrap: wrap; gap: 1rem; color: var(--slate-400); font-size: 0.875rem; margin-bottom: 1rem; }
-    .job-meta-item { display: flex; align-items: center; gap: 0.5rem; }
-    .job-type { color: var(--orange-400); }
-
-    .job-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-
-    .btn-save {
-      padding: 0.5rem 1rem;
-      border-radius: 0.5rem;
-      font-weight: 600;
-      border: none;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s;
-      font-size: 0.875rem;
-    }
-    .btn-save-off { background: var(--slate-700); color: var(--slate-300); }
-    .btn-save-off:hover { background: var(--slate-600); }
-    .btn-save-on { background: var(--orange-500); color: white; }
-
-    .btn-link {
-      background: var(--slate-700);
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 0.5rem;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: background 0.2s;
-      font-size: 0.875rem;
-    }
-    .btn-link:hover { background: var(--slate-600); }
-    .btn-link svg { width: 1rem; height: 1rem; }
-
-    /* Results heading */
-    .results-heading { font-size: 1.5rem; font-weight: 700; color: white; margin-bottom: 1rem; }
-
-    /* Empty state */
-    .empty-state { text-align: center; padding: 3rem 1rem; }
-    .empty-state p { color: var(--slate-400); font-size: 1.125rem; margin-top: 1rem; }
-
-    /* Saved section */
-    #savedSection {
-      margin-top: 3rem;
-      padding-top: 2rem;
-      border-top: 1px solid var(--slate-700);
-    }
-    #savedList { display: flex; flex-direction: column; gap: 0.75rem; }
-
-    .saved-item {
-      background: rgba(30,41,59,0.5);
-      border: 1px solid var(--slate-700);
-      border-radius: 0.5rem;
-      padding: 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .saved-item-title { font-weight: 700; color: white; }
-    .saved-item-sub { color: var(--slate-400); font-size: 0.875rem; margin-top: 0.125rem; }
-
-    .btn-trash {
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--slate-400);
-      transition: color 0.2s;
-      padding: 0.25rem;
-    }
-    .btn-trash:hover { color: #f87171; }
-    .btn-trash svg { width: 1.25rem; height: 1.25rem; }
-
-    /* Utility */
-    .hidden { display: none !important; }
-
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-    .animate-spin { animation: spin 1s linear infinite; }
-  </style>
-</head>
-<body>
-
-  <div class="container">
-
-    <!-- Header -->
-    <header>
-      <h1>CNC Práce Ostrava</h1>
-      <p>Vyhledávač pracovních nabídek</p>
-    </header>
-
-    <!-- Filtr panel -->
-    <div class="panel">
-      <div class="filter-grid">
-        <div>
-          <p class="filter-label">Klíčová slova</p>
-          <div class="tags">
-            <span class="tag">Soustružník</span>
-            <span class="tag">Karusel</span>
-            <span class="tag">CNC</span>
+      <div class="panel">
+        <div class="filter-grid">
+          <div>
+            <p class="filter-label">Klíčová slova</p>
+            <div class="tags">
+              <span class="tag">Soustružník</span>
+              <span class="tag">Karusel</span>
+              <span class="tag">CNC</span>
+            </div>
+          </div>
+          <div>
+            <p class="filter-label">Lokace</p>
+            <div class="icon-row">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="icon-orange"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0116 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              <span>Ostrava</span>
+            </div>
+          </div>
+          <div>
+            <p class="filter-label">Minimální plat</p>
+            <div class="icon-row">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="icon-orange"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <line x1="12" y1="1" x2="12" y2="23" />
+                <path d="M17 5H9.5a3.5 3.5 0 100 7h5a3.5 3.5 0 110 7H6" />
+              </svg>
+              <span>35 000 Kč</span>
+            </div>
           </div>
         </div>
-        <div>
-          <p class="filter-label">Lokace</p>
-          <div class="icon-row">
-            <!-- MapPin icon -->
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0116 0z"/><circle cx="12" cy="10" r="3"/>
-            </svg>
-            <span>Ostrava</span>
-          </div>
-        </div>
-        <div>
-          <p class="filter-label">Minimální plat</p>
-          <div class="icon-row">
-            <!-- DollarSign icon -->
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 100 7h5a3.5 3.5 0 110 7H6"/>
-            </svg>
-            <span>35 000 Kč</span>
-          </div>
-        </div>
+
+        <button id="refreshBtn" onclick="handleRefresh()" class="btn-refresh">
+          <svg
+            id="refreshIcon"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8" />
+            <path d="M21 3v5h-5" />
+            <path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16" />
+            <path d="M8 16H3v5" />
+          </svg>
+          <span id="refreshText">Obnovit nabídky</span>
+        </button>
+
+        <p id="lastUpdate" class="last-update hidden"></p>
       </div>
 
-      <button id="refreshBtn" onclick="handleRefresh()" class="btn-refresh">
-        <svg id="refreshIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M8 16H3v5"/>
-        </svg>
-        <span id="refreshText">Obnovit nabídky</span>
-      </button>
+      <div id="jobList"></div>
 
-      <p id="lastUpdate" class="last-update hidden"></p>
+      <div id="savedSection" class="hidden">
+        <h2 class="results-heading">
+          Uložené nabídky (<span id="savedCount">0</span>)
+        </h2>
+        <div id="savedList"></div>
+      </div>
     </div>
 
-    <!-- Seznam nabídek -->
-    <div id="jobList"></div>
-
-    <!-- Uložené nabídky -->
-    <div id="savedSection" class="hidden">
-      <h2 class="results-heading">Uložené nabídky (<span id="savedCount">0</span>)</h2>
-      <div id="savedList"></div>
-    </div>
-
-  </div>
-
-  <script>
-    const mockJobs = [
-      { id: 1, title: 'CNC operátor', company: 'VOKD Ostrava', salary: 38000, location: 'Ostrava', url: 'https://www.prace.cz', type: 'Hlavní pracovní poměr', source: 'Práce.cz' },
-      { id: 2, title: 'Soustružník na CNC', company: 'Vítkovice Heavy Machinery', salary: 42000, location: 'Ostrava', url: 'https://www.jobs.cz', type: 'Hlavní pracovní poměr', source: 'Jobs.cz' },
-      { id: 3, title: 'Operátor karuselu', company: 'Průmyslová dílna Ostrava', salary: 36500, location: 'Ostrava', url: 'https://www.prace.cz', type: 'Dočasná práce', source: 'Průmyslové.cz' },
-      { id: 4, title: 'CNC strojvedoucí', company: 'Třinecké železárny', salary: 45000, location: 'Ostrava', url: 'https://www.jobs.cz', type: 'Hlavní pracovní poměr', source: 'Jobs.cz' },
-      { id: 5, title: 'Operátor CNC frézky', company: 'Průmyslové služby s.r.o.', salary: 37500, location: 'Ostrava', url: 'https://www.prace.cz', type: 'Hlavní pracovní poměr', source: 'Práce.cz' }
-    ];
-
-    let jobs = [];
-    let savedJobs = [];
-
-    const mapPinSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="icon-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0116 0z"/><circle cx="12" cy="10" r="3"/></svg>`;
-    const dollarSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="icon-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 100 7h5a3.5 3.5 0 110 7H6"/></svg>`;
-    const trashSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>`;
-    const externalLinkSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`;
-
-    function handleRefresh() {
-      const btn = document.getElementById('refreshBtn');
-      const icon = document.getElementById('refreshIcon');
-      const text = document.getElementById('refreshText');
-
-      btn.disabled = true;
-      btn.classList.add('opacity-50');
-      icon.classList.add('animate-spin');
-      text.textContent = 'Načítám...';
-
-      setTimeout(() => {
-        jobs = [...mockJobs];
-        renderJobs();
-
-        const now = new Date().toLocaleString('cs-CZ');
-        const lastUpdate = document.getElementById('lastUpdate');
-        lastUpdate.textContent = 'Poslední aktualizace: ' + now;
-        lastUpdate.classList.remove('hidden');
-
-        btn.disabled = false;
-        btn.classList.remove('opacity-50');
-        icon.classList.remove('animate-spin');
-        text.textContent = 'Obnovit nabídky';
-      }, 1000);
-    }
-
-    function isSaved(jobId) {
-      return savedJobs.some(j => j.id === jobId);
-    }
-
-    function toggleSave(jobId) {
-      const job = jobs.find(j => j.id === jobId) || savedJobs.find(j => j.id === jobId);
-      if (!job) return;
-      if (isSaved(jobId)) {
-        savedJobs = savedJobs.filter(j => j.id !== jobId);
-      } else {
-        savedJobs = [...savedJobs, job];
-      }
-      renderJobs();
-      renderSaved();
-    }
-
-    function renderJobs() {
-      const container = document.getElementById('jobList');
-      if (jobs.length === 0) {
-        container.innerHTML = `
-          <div class="empty-state">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon-lg" style="margin:0 auto;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-            </svg>
-            <p>Klikni na "Obnovit nabídky"</p>
-          </div>`;
-        return;
-      }
-
-      let html = `<h2 class="results-heading">Nalezeno ${jobs.length} nabídek</h2>`;
-
-      jobs.forEach(job => {
-        const saved = isSaved(job.id);
-        html += `
-          <div class="job-card">
-            <div class="job-card-header">
-              <div>
-                <div class="job-title-row">
-                  <h3 class="job-title">${job.title}</h3>
-                  <span class="job-source">${job.source}</span>
-                </div>
-                <p class="job-company">${job.company}</p>
-              </div>
-            </div>
-            <div class="job-meta">
-              <div class="job-meta-item">${mapPinSvg} ${job.location}</div>
-              <div class="job-meta-item">${dollarSvg} ${job.salary.toLocaleString('cs-CZ')} Kč</div>
-              <span class="job-type">${job.type}</span>
-            </div>
-            <div class="job-actions">
-              <button onclick="toggleSave(${job.id})" class="btn-save ${saved ? 'btn-save-on' : 'btn-save-off'}">
-                ${saved ? '★ Uloženo' : '☆ Uložit'}
-              </button>
-              <a href="${job.url}" target="_blank" rel="noopener noreferrer" class="btn-link">
-                ${externalLinkSvg} Přejít
-              </a>
-            </div>
-          </div>`;
-      });
-
-      container.innerHTML = html;
-    }
-
-    function renderSaved() {
-      const section = document.getElementById('savedSection');
-      const list = document.getElementById('savedList');
-      const count = document.getElementById('savedCount');
-
-      if (savedJobs.length === 0) {
-        section.classList.add('hidden');
-        return;
-      }
-
-      section.classList.remove('hidden');
-      count.textContent = savedJobs.length;
-
-      let html = '';
-      savedJobs.forEach(job => {
-        html += `
-          <div class="saved-item">
-            <div>
-              <p class="saved-item-title">${job.title}</p>
-              <p class="saved-item-sub">${job.company} • ${job.salary.toLocaleString('cs-CZ')} Kč</p>
-            </div>
-            <button onclick="toggleSave(${job.id})" class="btn-trash">
-              ${trashSvg}
-            </button>
-          </div>`;
-      });
-
-      list.innerHTML = html;
-    }
-
-    // Inicializace - prázdný stav
-    renderJobs();
-  </script>
-
-</body>
+    <script src="pracovni.js"></script>
+  </body>
 </html>
