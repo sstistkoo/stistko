@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CNC Práce Ostrava</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔧</text></svg>">
     <link rel="stylesheet" href="pracovni.css" />
   </head>
   <body>
@@ -120,7 +121,9 @@
         </div>
 
         <p id="lastUpdate" class="last-update hidden"></p>
-      <p id="fetchError" class="fetch-error hidden"></p>
+        <div id="progressBar" class="progress-bar hidden"><div class="progress-bar__fill"></div></div>
+        <p id="fetchError" class="fetch-error hidden"></p>
+      </div>
 
       <div id="jobList"></div>
 
@@ -130,6 +133,11 @@
         </h2>
         <div id="savedList"></div>
       </div>
+
+      <footer class="app-footer">
+        <p>Zdroje: Profesia.cz • Jobs.cz • Prace.cz • Inwork.cz • Indeed.cz • Jooble.cz</p>
+        <p>Data se automaticky aktualizují • Cache 15 min</p>
+      </footer>
     </div>
 
     <script src="pracovni.js"></script>

@@ -3,6 +3,12 @@ const cors = require("cors");
 const fetch = require("node-fetch");
 const cheerio = require("cheerio");
 
+// got-scraping je ESM-only, proto dynamický import
+let gotScraping;
+const gotScrapingReady = import("got-scraping")
+  .then(m => { gotScraping = m.gotScraping; })
+  .catch(err => { console.error("Nepodařilo se načíst got-scraping:", err.message); });
+
 const app = express();
 const PORT = 3001;
 
@@ -39,7 +45,9 @@ async function scrapeAlmaCareer(baseUrl, searchUrl, sourceLabel, idPrefix) {
     const company = $el.find("li.SearchResultCard__footerItem span[translate='no']").first().text().trim() || "viz nabídka";
     const loc = $el.find("li[data-test='serp-locality']").text().trim() || "";
     const salaryRaw = $el.find("div.SearchResultCard__body span").filter((i, el) => $(el).text().includes("Kč")).first().text().trim();
-    const salary = parseSalary(salaryRaw.replace(/\u200d/g, "").replace(/\u2060/g, ""));
+    let salary = parseSalary(salaryRaw.replace(/\u200d/g, "").replace(/\u2060/g, ""));
+    // Fallback: zkusit vytáhnout plat z titulku
+    if (!salary) salary = extractSalaryFromText(title);
 
     const jobUrl = href.startsWith("http") ? href : baseUrl + href;
 
@@ -108,7 +116,8 @@ async function scrapePraceCz(keywords, city, radius) {
     const location = $el.find("div.search-result__advert__box__item--location strong").first().text().trim() || "";
     const company = $el.find("div.search-result__advert__box__item--company").first().text().replace("•", "").trim() || "viz nabídka";
     const salaryRaw = $el.find("div.search-result__advert__box__item").filter((i, el) => $(el).text().includes("Kč")).first().text().trim();
-    const salary = parseSalary(salaryRaw);
+    let salary = parseSalary(salaryRaw);
+    if (!salary) salary = extractSalaryFromText(title);
 
     jobs.push({
       id: `pracecz-${jobId}`,
@@ -224,7 +233,9 @@ async function scrapeProfesia(keywords, city, radius) {
 
     // Plat se na listingu obvykle nezobrazuje - zkusíme stejně
     const salaryRaw = $el.find('[class*="salary"], [class*="amount"]').first().text().trim();
-    const salary = parseSalary(salaryRaw);
+    let salary = parseSalary(salaryRaw);
+    // Fallback: zkusit vytáhnout plat z titulku
+    if (!salary) salary = extractSalaryFromText(title);
 
     const jobUrl = href.startsWith("http") ? href : "https://www.profesia.cz" + href;
 
@@ -237,110 +248,6 @@ async function scrapeProfesia(keywords, city, radius) {
       url: jobUrl,
       type: "Hlavní pracovní poměr",
       source: "Profesia.cz",
-      description: "",
-    });
-  });
-
-  return jobs;
-}
-
-// ======================================================
-// Indeed.cz scraper (cz.indeed.com)
-// Pozn.: Indeed má anti-bot ochranu, scraping nemusí vždy fungovat
-// ======================================================
-async function scrapeIndeed(keywords, city, radius) {
-  const params = new URLSearchParams({
-    q: keywords,
-    l: city,
-  });
-  if (radius > 0) params.append('radius', radius);
-  const url = `https://cz.indeed.com/jobs?${params}`;
-  console.log("Scrapuji Indeed.cz:", url);
-
-  const res = await fetch(url, { headers: BROWSER_HEADERS, timeout: 15000 });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const html = await res.text();
-  const $ = cheerio.load(html);
-  const jobs = [];
-
-  $("div.job_seen_beacon").each((i, el) => {
-    const $el = $(el);
-    const titleEl = $el.find("h2 a").first();
-    const title = titleEl.find("span").last().text().trim() || titleEl.text().trim();
-    const href = titleEl.attr("href");
-    if (!title || !href) return;
-
-    const jk = titleEl.attr("data-jk") || $el.closest("[data-jk]").attr("data-jk") || `${i}`;
-    const company = $el.find('[data-testid="company-name"]').text().trim()
-      || $el.find(".companyName").text().trim()
-      || "viz nabídka";
-    const location = $el.find('[data-testid="text-location"]').text().trim()
-      || $el.find(".companyLocation").text().trim()
-      || city;
-    const salaryRaw = $el.find('[class*="salary"]').first().text().trim()
-      || $el.find(".metadata .attribute_snippet").text().trim();
-    const salary = parseSalary(salaryRaw);
-
-    const jobUrl = href.startsWith("http") ? href : "https://cz.indeed.com" + href;
-
-    jobs.push({
-      id: `indeed-${jk}`,
-      title,
-      company,
-      location,
-      salary,
-      url: jobUrl.split("?")[0],
-      type: "Hlavní pracovní poměr",
-      source: "Indeed.cz",
-      description: "",
-    });
-  });
-
-  return jobs;
-}
-
-// ======================================================
-// Jooble.cz scraper (cz.jooble.org)
-// Pozn.: Jooble má anti-bot ochranu, scraping nemusí vždy fungovat
-// ======================================================
-async function scrapeJooble(keywords, city, radius) {
-  const params = new URLSearchParams({
-    ukw: keywords,
-    loc: city,
-  });
-  const url = `https://cz.jooble.org/SearchResult?${params}`;
-  console.log("Scrapuji Jooble.cz:", url);
-
-  const res = await fetch(url, { headers: BROWSER_HEADERS, timeout: 15000 });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const html = await res.text();
-  const $ = cheerio.load(html);
-  const jobs = [];
-
-  // Jooble používá různé struktury – zkusíme běžné selektory
-  $("article, div[data-test*='serp'], div[class*='_item']").each((i, el) => {
-    const $el = $(el);
-    const titleEl = $el.find('a[href*="/desc/"], a[href*="/jdp/"], h2 a, h3 a').first();
-    const title = titleEl.text().trim();
-    const href = titleEl.attr("href");
-    if (!title || !href || title.length < 5) return;
-
-    const company = $el.find('[class*="company"], [data-test*="company"]').first().text().trim() || "viz nabídka";
-    const location = $el.find('[class*="location"], [data-test*="location"]').first().text().trim() || city;
-    const salaryRaw = $el.find('[class*="salary"]').first().text().trim();
-    const salary = parseSalary(salaryRaw);
-
-    const jobUrl = href.startsWith("http") ? href : "https://cz.jooble.org" + href;
-
-    jobs.push({
-      id: `jooble-${i}-${Date.now()}`,
-      title,
-      company,
-      location,
-      salary,
-      url: jobUrl.split("?")[0],
-      type: "Hlavní pracovní poměr",
-      source: "Jooble.cz",
       description: "",
     });
   });
@@ -389,7 +296,8 @@ async function scrapeInwork(keywords, city, radius) {
 
     // Zkusíme vytáhnout plat z titulku nebo popisu
     const salaryMatch = (title + " " + desc).match(/(\d[\d\s.,]*)\s*Kč/);
-    const salary = salaryMatch ? parseSalary(salaryMatch[0]) : null;
+    let salary = salaryMatch ? parseSalary(salaryMatch[0]) : null;
+    if (!salary) salary = extractSalaryFromText(title + " " + desc);
 
     const idMatch = href.match(/\/(\d{5,})-/);
     const jobId = idMatch ? idMatch[1] : `iw-${i}`;
@@ -412,9 +320,252 @@ async function scrapeInwork(keywords, city, radius) {
   return jobs;
 }
 
+// ======================================================
+// Indeed.cz scraper (got-scraping pro bypass Cloudflare)
+// ======================================================
+async function scrapeIndeed(keywords, city, radius) {
+  const params = new URLSearchParams({
+    q: keywords,
+    l: city || '',
+    radius: String(radius > 0 ? radius : 25),
+  });
+  const url = `https://cz.indeed.com/jobs?${params}`;
+  console.log("Scrapuji Indeed.cz:", url);
+
+  const { body, statusCode } = await gotScraping({
+    url,
+    headerGeneratorOptions: {
+      browsers: [{ name: "chrome", minVersion: 120 }],
+      operatingSystems: ["windows"],
+      locales: ["cs-CZ"],
+    },
+    timeout: { request: 20000 },
+  });
+  if (statusCode !== 200) throw new Error(`HTTP ${statusCode}`);
+
+  const jobs = [];
+
+  // Data jsou v window.mosaic.providerData["mosaic-provider-jobcards"] = {...}
+  const marker = 'window.mosaic.providerData["mosaic-provider-jobcards"]=';
+  const markerPos = body.indexOf(marker);
+  if (markerPos === -1) {
+    console.log("  Indeed: mosaic-provider-jobcards nenalezen");
+    return jobs;
+  }
+
+  // Extrahovat JSON s respektem ke stringům (jednoduché počítání závorek nefunguje kvůli escaped znakům v JSON)
+  const jsonStart = body.indexOf('{', markerPos + marker.length);
+  let depth = 0, inStr = false, esc = false, jsonEnd = -1;
+  for (let i = jsonStart; i < body.length; i++) {
+    const c = body[i];
+    if (esc) { esc = false; continue; }
+    if (c === '\\') { esc = true; continue; }
+    if (c === '"') { inStr = !inStr; continue; }
+    if (inStr) continue;
+    if (c === '{') depth++;
+    else if (c === '}') { depth--; if (depth === 0) { jsonEnd = i + 1; break; } }
+  }
+  if (jsonEnd === -1) {
+    console.log("  Indeed: nepodařilo se extrahovat JSON");
+    return jobs;
+  }
+
+  try {
+    const mosaicData = JSON.parse(body.substring(jsonStart, jsonEnd));
+    const results = mosaicData?.metaData?.mosaicProviderJobCardsModel?.results || mosaicData?.results || [];
+    console.log(`  Indeed: ${results.length} výsledků z mosaic`);
+
+    for (const r of results) {
+      const title = r.displayTitle || r.title || '';
+      if (!title) continue;
+
+      const company = r.company || 'viz nabídka';
+      const location = r.formattedLocation || city || '';
+      const jobKey = r.jobkey || r.jk || '';
+      const link = r.link ? `https://cz.indeed.com${r.link}` : (jobKey ? `https://cz.indeed.com/viewjob?jk=${jobKey}` : '');
+      if (!link) continue; // Přeskočit nabídky bez URL
+
+      // Plat z salarySnippet nebo z titulku/snippet
+      let salary = null;
+      if (r.salarySnippet && r.salarySnippet.text) {
+        salary = parseSalary(r.salarySnippet.text);
+      }
+      if (!salary) {
+        // Zkusit z titulku
+        salary = extractSalaryFromText(title);
+      }
+      if (!salary && r.snippet) {
+        // Zkusit z popisu
+        salary = extractSalaryFromText(r.snippet.replace(/<[^>]+>/g, ' '));
+      }
+
+      // Popis - vyčistit HTML
+      const desc = r.snippet ? r.snippet.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().substring(0, 200) : '';
+
+      jobs.push({
+        id: `indeed-${jobKey || Date.now() + '-' + jobs.length}`,
+        title,
+        company,
+        location,
+        salary,
+        url: link,
+        type: 'Hlavní pracovní poměr',
+        source: 'Indeed.cz',
+        description: desc,
+      });
+    }
+  } catch (e) {
+    console.error("  Indeed: chyba parsování mosaic:", e.message);
+  }
+
+  return jobs;
+}
+
+// ======================================================
+// Jooble.cz scraper (got-scraping pro bypass Cloudflare)
+// ======================================================
+async function scrapeJooble(keywords, city, radius) {
+  // Jooble: URL formát /práce-{keyword}/{city}
+  const kwSlug = encodeURIComponent(keywords.toLowerCase().replace(/\s+/g, '-'));
+  const cityPart = city ? '/' + encodeURIComponent(city) : '';
+  const url = `https://cz.jooble.org/pr%C3%A1ce-${kwSlug}${cityPart}`;
+  console.log("Scrapuji Jooble.cz:", url);
+
+  const { body, statusCode } = await gotScraping({
+    url,
+    headerGeneratorOptions: {
+      browsers: [{ name: "chrome", minVersion: 120 }],
+      operatingSystems: ["windows"],
+      locales: ["cs-CZ"],
+    },
+    timeout: { request: 20000 },
+  });
+  if (statusCode !== 200) throw new Error(`HTTP ${statusCode}`);
+
+  const jobs = [];
+
+  // Data jsou v window.__INITIAL_STATE__ = {...}
+  const marker2 = 'window.__INITIAL_STATE__=';
+  const marker2alt = 'window.__INITIAL_STATE__ = ';
+  let markerPos2 = body.indexOf(marker2);
+  let markerLen2 = marker2.length;
+  if (markerPos2 === -1) {
+    markerPos2 = body.indexOf(marker2alt);
+    markerLen2 = marker2alt.length;
+  }
+  if (markerPos2 === -1) {
+    console.log("  Jooble: __INITIAL_STATE__ nenalezena");
+    return jobs;
+  }
+
+  // String-aware brace matching
+  const jsonStart2 = body.indexOf('{', markerPos2 + markerLen2);
+  let depth2 = 0, inStr2 = false, esc2 = false, jsonEnd2 = -1;
+  for (let i = jsonStart2; i < body.length; i++) {
+    const c = body[i];
+    if (esc2) { esc2 = false; continue; }
+    if (c === '\\') { esc2 = true; continue; }
+    if (c === '"') { inStr2 = !inStr2; continue; }
+    if (inStr2) continue;
+    if (c === '{') depth2++;
+    else if (c === '}') { depth2--; if (depth2 === 0) { jsonEnd2 = i + 1; break; } }
+  }
+  if (jsonEnd2 === -1) {
+    console.log("  Jooble: nepodařilo se extrahovat JSON");
+    return jobs;
+  }
+
+  try {
+    const state = JSON.parse(body.substring(jsonStart2, jsonEnd2));
+    const serpJobs = state?.serpJobs?.jobs || [];
+    // serpJobs je pole stránek, vezmeme první
+    const items = serpJobs.length > 0 ? (serpJobs[0].items || []) : [];
+    console.log(`  Jooble: ${items.length} položek na stránce`);
+
+    for (const item of items) {
+      // Přeskočit reklamy (mají componentName, např. "AFS")
+      if (item.componentName) continue;
+
+      const title = item.position || '';
+      if (!title) continue;
+
+      const company = (item.company && item.company.name) ? item.company.name : 'viz nabídka';
+      const location = (item.location && item.location.name) ? item.location.name : (city || '');
+      const jobUrl = item.url || '';
+      if (!jobUrl) continue; // Přeskočit nabídky bez URL
+      const uid = item.uid || '';
+
+      // Plat: může být string ("41000 Kč") nebo objekt s .text ("27 000 - 40 000 Kč za měsíc")
+      let salary = null;
+      if (item.salary) {
+        if (typeof item.salary === 'string') {
+          salary = parseSalary(item.salary);
+        } else if (item.salary.text) {
+          salary = parseSalary(item.salary.text);
+        }
+      }
+      if (!salary && item.estimatedSalary) {
+        salary = parseSalary(String(item.estimatedSalary));
+      }
+      if (!salary) {
+        // Zkusit z titulku
+        salary = extractSalaryFromText(title);
+      }
+      if (!salary && item.content) {
+        salary = extractSalaryFromText(item.content.replace(/<[^>]+>/g, ' '));
+      }
+
+      // Popis
+      const desc = item.content ? item.content.replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim().substring(0, 200) : '';
+
+      jobs.push({
+        id: `jooble-${uid || Date.now() + '-' + jobs.length}`,
+        title,
+        company,
+        location,
+        salary,
+        url: jobUrl,
+        type: 'Hlavní pracovní poměr',
+        source: 'Jooble.cz',
+        description: desc,
+      });
+    }
+  } catch (e) {
+    console.error("  Jooble: chyba parsování state:", e.message);
+  }
+
+  return jobs;
+}
+
 function parseSalary(text) {
   if (!text) return null;
   const clean = text.replace(/\s/g, "").replace(",", ".");
+
+  // Hodinová sazba → přepočet na měsíc (160h)
+  const hourlyRange = clean.match(/(\d{2,4})[\s\-–—]*(?:Kč)?[\s\-–—]*(\d{2,4})\s*(?:Kč)?\s*\/?\s*(?:hod|h\b)/i);
+  if (hourlyRange) {
+    const lo = parseInt(hourlyRange[1]) * 160;
+    const hi = parseInt(hourlyRange[2]) * 160;
+    if (lo > 5000 && lo < 200000 && hi > 5000 && hi < 200000) {
+      return { min: Math.min(lo, hi), max: Math.max(lo, hi), avg: Math.round((lo + hi) / 2) };
+    }
+  }
+  const hourly = clean.match(/(\d{2,4})\s*(?:Kč)?\s*\/?\s*(?:hod|h\b)/i);
+  if (hourly) {
+    const n = parseInt(hourly[1]) * 160;
+    if (n > 5000 && n < 200000) return n;
+  }
+
+  // Zkusíme rozsah (např. "30000-45000" nebo "30.000–45.000")
+  const rangeMatch = clean.match(/(\d{4,6})[\s\-–—.]*(?:Kč)?[\s\-–—.]*(\d{4,6})/);
+  if (rangeMatch) {
+    const lo = parseInt(rangeMatch[1]);
+    const hi = parseInt(rangeMatch[2]);
+    if (lo > 5000 && lo < 200000 && hi > 5000 && hi < 200000) {
+      return { min: Math.min(lo, hi), max: Math.max(lo, hi), avg: Math.round((lo + hi) / 2) };
+    }
+  }
+  // Jedna hodnota
   const match = clean.match(/(\d{4,6})/);
   if (match) {
     const n = parseInt(match[1]);
@@ -423,210 +574,287 @@ function parseSalary(text) {
   return null;
 }
 
+// Vylepšené parsování platu z volného textu (popis, titulek)
+function extractSalaryFromText(text) {
+  if (!text) return null;
+  // Normalizace: non-breaking spaces, tečky jako oddělovače tisíců ("37.000" → "37 000")
+  const norm = text.replace(/\u00a0/g, ' ').replace(/&nbsp;/g, ' ')
+    .replace(/(\d)\.(\d{3})(?!\d)/g, '$1 $2');
+
+  // Hodinová sazba: "300 Kč/h", "250-350 Kč/hod"
+  const hourlyRange = norm.match(/(\d{2,4})\s*[-–—]\s*(\d{2,4})\s*Kč\s*\/?\s*(?:hod|h\b)/i);
+  if (hourlyRange) {
+    const lo = parseInt(hourlyRange[1]) * 160;
+    const hi = parseInt(hourlyRange[2]) * 160;
+    if (lo >= 15000 && hi <= 200000) return { min: Math.min(lo, hi), max: Math.max(lo, hi), avg: Math.round((lo + hi) / 2) };
+  }
+  const hourlySingle = norm.match(/(\d{2,4})\s*Kč\s*\/?\s*(?:hod|h\b)/i);
+  if (hourlySingle) {
+    const n = parseInt(hourlySingle[1]) * 160;
+    if (n >= 15000 && n <= 200000) return n;
+  }
+
+  // Rozsah s mezerami: "27 000 - 40 000 Kč", "30.000–45.000 Kč"
+  const rangeWithSpaces = norm.match(/(\d{2,3})\s?(\d{3})\s*[-–—]+\s*(\d{2,3})\s?(\d{3})\s*(?:Kč|CZK|,-)/i);
+  if (rangeWithSpaces) {
+    const lo = parseInt(rangeWithSpaces[1] + rangeWithSpaces[2]);
+    const hi = parseInt(rangeWithSpaces[3] + rangeWithSpaces[4]);
+    if (lo > 5000 && lo < 200000 && hi > 5000 && hi < 200000) {
+      return { min: Math.min(lo, hi), max: Math.max(lo, hi), avg: Math.round((lo + hi) / 2) };
+    }
+  }
+
+  // Rozsah bez mezer: "30000-45000 Kč"
+  const rangeNoSpaces = norm.match(/(\d{4,6})\s*[-–—]+\s*(\d{4,6})\s*(?:Kč|CZK|,-)?/i);
+  if (rangeNoSpaces) {
+    const lo = parseInt(rangeNoSpaces[1]);
+    const hi = parseInt(rangeNoSpaces[2]);
+    if (lo > 5000 && lo < 200000 && hi > 5000 && hi < 200000) {
+      return { min: Math.min(lo, hi), max: Math.max(lo, hi), avg: Math.round((lo + hi) / 2) };
+    }
+  }
+
+  // Klíčové fráze: "plat od 35 000", "mzda až 50 000", "od 35000 Kč"
+  const fromTo = norm.match(/(?:od|from|min|mzda|plat)\s*(\d{2,3})\s?(\d{3})/i);
+  if (fromTo) {
+    const n = parseInt(fromTo[1] + fromTo[2]);
+    if (n > 5000 && n < 200000) return n;
+  }
+
+  // Jednoduchá hodnota: "35 000 Kč" nebo "35000 Kč"
+  const singleWithSpaces = norm.match(/(\d{2,3})\s(\d{3})\s*(?:Kč|CZK|,-)/i);
+  if (singleWithSpaces) {
+    const n = parseInt(singleWithSpaces[1] + singleWithSpaces[2]);
+    if (n > 5000 && n < 200000) return n;
+  }
+  const singleNoSpaces = norm.match(/(\d{4,6})\s*(?:Kč|CZK|,-)/i);
+  if (singleNoSpaces) {
+    const n = parseInt(singleNoSpaces[1]);
+    if (n > 5000 && n < 200000) return n;
+  }
+
+  return null;
+}
+
+// Pomocná: extraktuje porovnatelné číslo z platu (number | {min,max,avg} | null)
+function salaryNum(salary) {
+  if (!salary) return 0;
+  if (typeof salary === 'number') return salary;
+  return salary.avg || salary.max || 0;
+}
+
+// Pomocná: vrátí MAX platu (pro filtr - ukazuje i nabídky s vyšším rozsahem)
+function salaryMax(salary) {
+  if (!salary) return 0;
+  if (typeof salary === 'number') return salary;
+  return salary.max || salary.avg || 0;
+}
+
+// ======================================================
+// Cache: ukládáme výsledky na 15 minut
+// ======================================================
+const CACHE_TTL = 15 * 60 * 1000; // 15 minut
+const cache = new Map();
+
+function getCacheKey(city, radius) {
+  return `${city.toLowerCase().trim()}_${radius}`;
+}
+
+// ======================================================
+// Pomocná funkce: paralelní scraping jednoho portálu (s retry)
+// ======================================================
+async function scrapePortal(scraperFn, keywords, city, radius, sourceName) {
+  const results = await Promise.allSettled(
+    keywords.map(async (kw) => {
+      try {
+        return await scraperFn(kw, city, radius);
+      } catch (firstErr) {
+        // Retry jednou po 2s
+        console.log(`  ${sourceName} retry (${kw}) po chybě: ${firstErr.message}`);
+        await new Promise(r => setTimeout(r, 2000));
+        return await scraperFn(kw, city, radius);
+      }
+    })
+  );
+  const jobs = [];
+  const errors = [];
+  results.forEach((r, i) => {
+    if (r.status === 'fulfilled') {
+      jobs.push(...r.value);
+      console.log(`  ${sourceName} (${keywords[i]}): ${r.value.length} nabídek`);
+    } else {
+      const msg = r.reason?.message || String(r.reason);
+      console.error(`  ${sourceName} chyba (${keywords[i]}): ${msg}`);
+      errors.push({ source: sourceName, keyword: keywords[i], error: msg });
+    }
+  });
+  return { jobs, errors };
+}
+
+// ======================================================
+// CNC relevance filtr
+// ======================================================
+const INCLUDE_KW = [
+  "cnc", "soustru", "karusel", "frézař", "frézk", "frezar",
+  "obráb", "obrab", "soustruh", "hrotov", "kovoobráb", "seřizova",
+  "číslicov", "vrtačk", "nc program", "nc oper",
+  "strojník", "strojní", "brusič", "brus", "zámečník", "svářeč", "svarec",
+  "lisov", "obsluha lis", "obsluha stroj", "operátor výroby", "operátor stroj",
+  "technolog obráb", "technolog výrob", "strojírensk", "programátor cnc",
+  "kovoobrábění", "nástrojář", "nastrojar",
+];
+const EXCLUDE_KW = [
+  "obchodník", "obchodní zástupce", "vodič", "řidič", "barman",
+  "barmanka", "účetní", "personalista", "developer", "devops", "marketing",
+  "prodejce", "medicinsk", "cnc laser", "call cent", "zákaznick",
+  "lektor", "učitel", "pokojsk", "kurýr", "strážn",
+];
+
+function isRelevantJob(j) {
+  const text = (j.title + " " + j.description).toLowerCase();
+  return INCLUDE_KW.some(kw => text.includes(kw)) && !EXCLUDE_KW.some(kw => text.includes(kw));
+}
+
 // API endpoint
 app.get("/api/jobs", async (req, res) => {
-  const errors = [];
-  let jobs = [];
+  try {
+  // Počkej na načtení got-scraping (ESM modul)
+  await gotScrapingReady;
 
-  // Parametry z frontendu
   const city = (req.query.city || 'Ostrava').trim();
   const radius = parseInt(req.query.radius) || 0;
-  console.log(`\nHledám: city="${city}", radius=${radius > 0 ? radius + ' km' : 'celá ČR'}`);
+  const startTime = Date.now();
+  console.log(`\n${'='.repeat(60)}`);
+  console.log(`Hledám: city="${city}", radius=${radius > 0 ? radius + ' km' : 'celá ČR'}`);
 
-  // --- Profesia.cz ---
-  const profesiaKeywords = [
-    "CNC soustružník",
-    "CNC frézař",
-    "CNC obráběč",
-    "soustružník",
-    "CNC operátor",
-  ];
+  // Zkontroluj cache
+  const cacheKey = getCacheKey(city, radius);
+  const cached = cache.get(cacheKey);
+  if (cached && (Date.now() - cached.timestamp < CACHE_TTL)) {
+    const age = Math.round((Date.now() - cached.timestamp) / 1000);
+    console.log(`  Vracím cache (stáří: ${age}s, nabídek: ${cached.data.jobs.length})`);
+    return res.json({ ...cached.data, fromCache: true, cacheAge: age });
+  }
 
-  for (const kw of profesiaKeywords) {
-    try {
-      const found = await scrapeProfesia(kw, city, radius);
-      jobs.push(...found);
-      console.log(` Profesia (${kw}): ${found.length} nabídek`);
-    } catch (err) {
-      console.error(` Profesia chyba: ${err.message}`);
-      errors.push({ source: "Profesia.cz", error: err.message });
+  // Definice klíčových slov pro portály
+  const cncKeywords = ["CNC soustružník", "CNC frézař", "CNC obráběč"];
+  const profesiaKeywords = [...cncKeywords, "soustružník", "CNC operátor"];
+  // Indeed a Jooble hledají jedním dotazem (fulltextový vyhledávač portálu)
+  const indeedKeywords = ["CNC", "CNC soustružník", "CNC frézař", "CNC obráběč", "CNC operátor"];
+  const joobleKeywords = ["CNC"];
+
+  // Paralelní scrapování všech portálů najednou
+  console.log("  Spouštím paralelní scrapování (6 portálů)...");
+  const [profesiaResult, jobsCzResult, praceCzResult, inworkResult, indeedResult, joobleResult] = await Promise.allSettled([
+    scrapePortal(scrapeProfesia, profesiaKeywords, city, radius, "Profesia.cz"),
+    scrapePortal(scrapeJobsCz, cncKeywords, city, radius, "Jobs.cz"),
+    scrapePortal(scrapePraceCz, cncKeywords, city, radius, "Prace.cz"),
+    scrapePortal(scrapeInwork, cncKeywords, city, radius, "Inwork.cz"),
+    scrapePortal(scrapeIndeed, indeedKeywords, city, radius, "Indeed.cz"),
+    scrapePortal(scrapeJooble, joobleKeywords, city, radius, "Jooble.cz"),
+  ]);
+
+  // Sesbírej výsledky
+  let jobs = [];
+  const errors = [];
+  for (const result of [profesiaResult, jobsCzResult, praceCzResult, inworkResult, indeedResult, joobleResult]) {
+    if (result.status === 'fulfilled') {
+      jobs.push(...result.value.jobs);
+      errors.push(...result.value.errors);
+    } else {
+      errors.push({ source: 'unknown', error: result.reason?.message || 'Fatal error' });
     }
   }
 
-  // --- Jobs.cz ---
-  const jobsCzKeywords = [
-    "CNC soustružník",
-    "CNC frézař",
-    "CNC obráběč",
-  ];
-
-  for (const kw of jobsCzKeywords) {
-    try {
-      const found = await scrapeJobsCz(kw, city, radius);
-      jobs.push(...found);
-      console.log(` Jobs.cz (${kw}): ${found.length} nabídek`);
-    } catch (err) {
-      console.error(` Jobs.cz chyba: ${err.message}`);
-      errors.push({ source: "Jobs.cz", error: err.message });
-    }
-  }
-
-  // --- Prace.cz ---
-  const praceCzKeywords = [
-    "CNC soustružník",
-    "CNC frézař",
-    "CNC obráběč",
-  ];
-
-  for (const kw of praceCzKeywords) {
-    try {
-      const found = await scrapePraceCz(kw, city, radius);
-      jobs.push(...found);
-      console.log(` Prace.cz (${kw}): ${found.length} nabídek`);
-    } catch (err) {
-      console.error(` Prace.cz chyba: ${err.message}`);
-      errors.push({ source: "Prace.cz", error: err.message });
-    }
-  }
-
-  // --- Indeed.cz ---
-  const indeedKeywords = [
-    "CNC soustružník",
-    "CNC frézař",
-    "CNC obráběč",
-  ];
-
-  for (const kw of indeedKeywords) {
-    try {
-      const found = await scrapeIndeed(kw, city, radius);
-      jobs.push(...found);
-      console.log(` Indeed.cz (${kw}): ${found.length} nabídek`);
-    } catch (err) {
-      console.error(` Indeed.cz chyba: ${err.message}`);
-      errors.push({ source: "Indeed.cz", error: err.message });
-    }
-  }
-
-  // --- Jooble.cz ---
-  const joobleKeywords = [
-    "CNC soustružník",
-    "CNC frézař",
-    "CNC obráběč",
-  ];
-
-  for (const kw of joobleKeywords) {
-    try {
-      const found = await scrapeJooble(kw, city, radius);
-      jobs.push(...found);
-      console.log(` Jooble.cz (${kw}): ${found.length} nabídek`);
-    } catch (err) {
-      console.error(` Jooble.cz chyba: ${err.message}`);
-      errors.push({ source: "Jooble.cz", error: err.message });
-    }
-  }
-
-  // --- Inwork.cz ---
-  const inworkKeywords = [
-    "CNC soustružník",
-    "CNC frézař",
-    "CNC obráběč",
-  ];
-
-  for (const kw of inworkKeywords) {
-    try {
-      const found = await scrapeInwork(kw, city, radius);
-      jobs.push(...found);
-      console.log(` Inwork.cz (${kw}): ${found.length} nabídek`);
-    } catch (err) {
-      console.error(` Inwork.cz chyba: ${err.message}`);
-      errors.push({ source: "Inwork.cz", error: err.message });
-    }
-  }
-
-  // Deduplicate podle základní URL (bez search_id query parametru)
+  // Deduplicate podle normalizované URL (zachovat query parametry pro Indeed apod.)
   const seen = new Set();
   const unique = jobs.filter(j => {
-    const baseUrl = j.url.split("?")[0];
-    if (seen.has(baseUrl)) return false;
-    seen.add(baseUrl);
-    j.url = baseUrl; // uložíme čistou URL
+    // Pro Indeed/Jooble nechat celou URL (jk parametr je unikátní identifikátor)
+    // Pro ostatní portály odstranit UTM a trackingové parametry
+    let dedupeKey;
+    try {
+      const u = new URL(j.url);
+      // Odstranit běžné tracking parametry, ale nechat identifikátory
+      ['utm_source','utm_medium','utm_campaign','utm_content','ref','fbclid'].forEach(p => u.searchParams.delete(p));
+      dedupeKey = u.toString();
+    } catch {
+      dedupeKey = j.url;
+    }
+    if (seen.has(dedupeKey)) return false;
+    seen.add(dedupeKey);
     return true;
   });
 
-  // Post-filtr: odstranit nabídky z jasně vzdálených lokalit (známé město v jiném kraji)
+  // Post-filtr: odstranit nabídky z jasně vzdálených lokalit
   const targetKraj = cityToKraj(city);
   const locationFiltered = targetKraj
     ? unique.filter(j => {
         const loc = j.location.toLowerCase();
-        // Bez lokality nebo neznámá → ponechat
         if (!loc || loc === 'viz nabídka' || loc === 'celá čr' || loc.includes('remote') || loc.includes('z domu')) return true;
-        // Obsahuje cílové město → ponechat
         if (loc.includes(city.toLowerCase())) return true;
-        // Zkontroluj zda lokace odpovídá městu ZNÁMÉMU jako jiný kraj
         for (const [knownCity, knownKraj] of Object.entries(CITY_TO_KRAJ)) {
-          if (loc.includes(knownCity) && knownKraj !== targetKraj) {
-            console.log(`  Mimo region: [${j.source}] "${j.title}" (${j.location})`);
-            return false;
-          }
+          if (loc.includes(knownCity) && knownKraj !== targetKraj) return false;
         }
-        // Neznámé město → ponechat (pravděpodobně je v okolí)
         return true;
       })
     : unique;
 
-  // Filtruj pouze nabídky s CNC / strojírenskou tématikou
-  const INCLUDE_KW = [
-    "cnc", "soustru", "karusel", "frézař", "frézk", "frezar",
-    "obráb", "obrab", "soustruh", "hrotov", "kovoobráb", "seřizova",
-    "číslicov", "vrtačk", "nc program", "nc oper",
-    // rozšířené strojírenské klíčové slovy
-    "strojník", "strojní", "brusič", "brus", "zámečník", "svářeč", "svarec",
-    "lisov", "obsluha lis", "obsluha stroj", "operátor výroby", "operátor stroj",
-    "technolog obráb", "technolog výrob", "strojírensk", "programátor cnc",
-    "kovoobrábění", "nástrojář", "nastrojar",
-  ];
-  const EXCLUDE_KW = ["obchodník", "obchodní zástupce", "vodič", "řidič", "barman",
-    "barmanka", "účetní", "personalista", "developer", "devops", "marketing",
-    "prodejce", "medicinsk", "cnc laser", "call cent", "zákaznick",
-    "lektor", "učitel", "pokojsk", "kurýr", "strážn",
-  ];
-  const relevant = locationFiltered.filter(j => {
-    const text = (j.title + " " + j.description).toLowerCase();
-    const hasInclude = INCLUDE_KW.some(kw => text.includes(kw));
-    const hasExclude = EXCLUDE_KW.some(kw => text.includes(kw));
-    return hasInclude && !hasExclude;
-  });
-
-  // Diagnostika: kolik nabídek z cílového města bylo odfiltrováno
-  const cityLowerDiag = city.toLowerCase();
-  const cityJobsAll = locationFiltered.filter(j => j.location.toLowerCase().includes(cityLowerDiag));
-  const cityJobsKept = relevant.filter(j => j.location.toLowerCase().includes(cityLowerDiag));
-  const cityJobsLost = cityJobsAll.filter(j => !relevant.includes(j));
-  console.log(`Lokalita "${city}": ${cityJobsAll.length} celkem, ${cityJobsKept.length} prošlo CNC filtrem, ${cityJobsLost.length} odfiltrováno`);
-  if (cityJobsLost.length > 0) {
-    cityJobsLost.forEach(j => console.log(`  ODFILTROVÁNO: [${j.source}] "${j.title}" (${j.location})`));
-  }
-
+  // CNC relevance filtr
+  const relevant = locationFiltered.filter(isRelevantJob);
   const finalJobs = relevant.length > 0 ? relevant : locationFiltered;
 
-  // Seřadíme výsledky: nabídky přímo z hledaného města budou nahoře
+  // Seřadíme: město nahoře, pak podle platu sestupně
   const cityLower = city.toLowerCase();
   finalJobs.sort((a, b) => {
-    const aLocal = a.location.toLowerCase();
-    const bLocal = b.location.toLowerCase();
-    const aMatch = aLocal.includes(cityLower) ? 0 : 1;
-    const bMatch = bLocal.includes(cityLower) ? 0 : 1;
-    return aMatch - bMatch;
+    const aLocal = a.location.toLowerCase().includes(cityLower) ? 0 : 1;
+    const bLocal = b.location.toLowerCase().includes(cityLower) ? 0 : 1;
+    if (aLocal !== bLocal) return aLocal - bLocal;
+    // V rámci stejné priority řaď podle platu sestupně
+    return salaryNum(b.salary) - salaryNum(a.salary);
   });
 
-  console.log(`Celkem: ${unique.length} unikátních, z toho ${relevant.length} relevantních CNC nabídek (${city}, radius=${radius}km, zdroje: Profesia.cz + Jobs.cz + Prace.cz + Indeed.cz + Jooble.cz + Inwork.cz)`);
+  // Statistiky per zdroj
+  const sourceStats = {};
+  finalJobs.forEach(j => {
+    sourceStats[j.source] = (sourceStats[j.source] || 0) + 1;
+  });
 
-  res.json({
+  // URL pro každý portál s předvyplněnými parametry vyhledávání
+  const citySlug = toCzechSlug(city);
+  const kraj = cityToKraj(city);
+  const krajPath = kraj ? `${kraj}/` : '';
+  const sourceUrls = {
+    'Profesia.cz': `https://www.profesia.cz/prace/${citySlug}/?search_anywhere=CNC`,
+    'Jobs.cz': `https://www.jobs.cz/prace/${krajPath}?q%5B0%5D=CNC${city ? '&locality%5Bname%5D=' + encodeURIComponent(city) : ''}${radius > 0 ? '&locality%5Bradius%5D=' + radius : ''}`,
+    'Prace.cz': `https://www.prace.cz/nabidky/${krajPath}?q=CNC${city ? '&locality%5Bname%5D=' + encodeURIComponent(city) : ''}${radius > 0 ? '&locality%5Bradius%5D=' + radius : ''}`,
+    'Inwork.cz': kraj ? `https://www.inwork.cz/prace/${kraj}/?keyword=CNC` : `https://www.inwork.cz/prace/?keyword=CNC`,
+    'Indeed.cz': `https://cz.indeed.com/jobs?q=CNC&l=${encodeURIComponent(city)}${radius > 0 ? '&radius=' + radius : ''}`,
+    'Jooble.cz': `https://cz.jooble.org/pr%C3%A1ce-cnc${city ? '/' + encodeURIComponent(city) : ''}`,
+  };
+
+  const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+  console.log(`  Hotovo za ${elapsed}s: ${unique.length} unikátních → ${locationFiltered.length} v regionu → ${relevant.length} CNC relevantních`);
+  console.log(`  Zdroje:`, sourceStats);
+
+  const responseData = {
     jobs: finalJobs,
     count: finalJobs.length,
+    sourceStats,
+    sourceUrls,
     errors,
+    elapsed: parseFloat(elapsed),
     fetchedAt: new Date().toISOString(),
-  });
+    fromCache: false,
+  };
+
+  // Ulož do cache
+  cache.set(cacheKey, { timestamp: Date.now(), data: responseData });
+
+  res.json(responseData);
+  } catch (err) {
+    console.error('Kritická chyba API:', err);
+    res.status(500).json({ error: 'Interní chyba serveru', message: err.message, jobs: [], sourceStats: {}, sourceUrls: {}, errors: [{ source: 'server', error: err.message }] });
+  }
 });
 
 app.get("/api/health", (req, res) => res.json({ status: "ok" }));
