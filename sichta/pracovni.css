@@ -112,12 +112,23 @@ header p { color: var(--slate-400); }
 .job-title-row { display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 0.5rem; }
 .job-title { font-size: 1.25rem; font-weight: 700; color: white; }
 .job-source {
-  background: rgba(249,115,22,0.2);
-  color: var(--orange-300);
   font-size: 0.75rem;
   padding: 0.25rem 0.5rem;
   border-radius: 0.25rem;
   white-space: nowrap;
+  font-weight: 600;
+}
+.job-source--profesia {
+  background: rgba(249,115,22,0.2);
+  color: var(--orange-300);
+}
+.job-source--jobscz {
+  background: rgba(56,189,248,0.15);
+  color: #7dd3fc;
+}
+.job-source--pracecz {
+  background: rgba(74,222,128,0.15);
+  color: #86efac;
 }
 .job-company { color: var(--slate-300); font-weight: 600; }
 
@@ -191,6 +202,115 @@ header p { color: var(--slate-400); }
 .btn-trash svg { width: 1.25rem; height: 1.25rem; }
 
 .hidden { display: none !important; }
+
+/* Řádek s tlačítky (Obnovit + Nastavení) */
+.btn-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: stretch;
+}
+.btn-row .btn-refresh { flex: 1; }
+
+/* Tlačítko ozubeného kola */
+.btn-settings-toggle {
+  background: var(--slate-700);
+  border: 1px solid var(--slate-600);
+  color: var(--slate-300);
+  border-radius: 0.5rem;
+  padding: 0 0.875rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  flex-shrink: 0;
+}
+.btn-settings-toggle svg { width: 1.25rem; height: 1.25rem; }
+.btn-settings-toggle:hover { background: var(--slate-600); color: white; }
+.btn-settings-toggle--active {
+  background: rgba(249,115,22,0.2);
+  border-color: var(--orange-500);
+  color: var(--orange-300);
+}
+
+/* Panel nastavení */
+.settings-panel {
+  background: rgba(15,23,42,0.6);
+  border: 1px solid var(--slate-600);
+  border-radius: 0.5rem;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+@media (min-width: 640px) { .settings-grid { grid-template-columns: repeat(3, 1fr); } }
+
+.setting-group { display: flex; flex-direction: column; gap: 0.375rem; }
+
+.setting-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--slate-300);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.setting-input {
+  background: var(--slate-800);
+  border: 1px solid var(--slate-600);
+  color: white;
+  border-radius: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9rem;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+.setting-input:focus { outline: none; border-color: var(--orange-500); }
+.setting-input option { background: var(--slate-800); }
+
+.settings-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.btn-settings-save {
+  background: linear-gradient(to right, var(--orange-500), var(--orange-600));
+  color: white;
+  font-weight: 600;
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.375rem;
+  border: none;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: opacity 0.2s;
+}
+.btn-settings-save:hover { opacity: 0.85; }
+
+.btn-settings-cancel {
+  background: var(--slate-700);
+  color: var(--slate-300);
+  font-weight: 600;
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.375rem;
+  border: 1px solid var(--slate-600);
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background 0.2s;
+}
+.btn-settings-cancel:hover { background: var(--slate-600); color: white; }
+
+/* Vzdálenost za názvem města */
+.display-radius {
+  font-size: 0.8rem;
+  color: var(--slate-400);
+}
+
 
 @keyframes spin {
   from { transform: rotate(0deg); }
