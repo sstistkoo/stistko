@@ -1,7 +1,11 @@
-﻿const API_URL = 'http://localhost:3001/api/jobs';
+﻿const API_URL = '/api/jobs';
 
 let jobs = [];
+let allJobs = []; // všechny načtené nabídky (bez texového filtru)
 let savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
+let currentSort = 'default'; // default | salary-desc | salary-asc | source
+let searchFilter = ''; // aktuální textový filtr
+let seenJobIds = new Set(JSON.parse(localStorage.getItem('seenJobIds') || '[]'));
 
 const DEFAULT_SETTINGS = { city: 'Ostrava', radius: 30, minSalary: 35000 };
 
@@ -38,6 +42,8 @@ function saveSettings() {
   updateSettingsDisplay(s);
   document.getElementById('settingsPanel').classList.add('hidden');
   document.getElementById('settingsToggleBtn').classList.remove('btn-settings-toggle--active');
+  // Automaticky obnovit nabídky po změně nastavení
+  handleRefresh();
 }
 
 function toggleSettings() {
@@ -45,6 +51,12 @@ function toggleSettings() {
   const btn = document.getElementById('settingsToggleBtn');
   panel.classList.toggle('hidden');
   btn.classList.toggle('btn-settings-toggle--active');
+}
+
+// HTML escape pro ochranu proti XSS (data z portálů mohou obsahovat HTML)
+function esc(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
 
 const mapPinSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="icon-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0116 0z"/><circle cx="12" cy="10" r="3"/></svg>`;
@@ -57,12 +69,14 @@ async function handleRefresh() {
   const icon = document.getElementById('refreshIcon');
   const text = document.getElementById('refreshText');
   const errorEl = document.getElementById('fetchError');
+  const progressEl = document.getElementById('progressBar');
 
   btn.disabled = true;
   btn.style.opacity = '0.5';
   icon.classList.add('animate-spin');
-  text.textContent = 'Načítám...';
+  text.textContent = 'Načítám ze 6 portálů...';
   if (errorEl) errorEl.classList.add('hidden');
+  if (progressEl) progressEl.classList.remove('hidden');
 
   try {
     const s = loadSettings();
@@ -71,20 +85,42 @@ async function handleRefresh() {
     if (!res.ok) throw new Error(`Server vrátil chybu ${res.status}`);
     const data = await res.json();
 
-    const allJobs = data.jobs || [];
-    // Filtruj plat na straně klienta (nezobrazovat nabídky s nižším platem, přičemž null = nevíme → necháme)
-    jobs = s.minSalary > 0
-      ? allJobs.filter(j => !j.salary || j.salary >= s.minSalary)
-      : allJobs;
+    const allJobsRaw = data.jobs || [];
+    allJobs = s.minSalary > 0
+      ? allJobsRaw.filter(j => !j.salary || salaryMax(j.salary) >= s.minSalary)
+      : allJobsRaw;
+    jobs = [...allJobs];
+    searchFilter = '';
+    // Resetovat vyhledávací pole
+    const searchInput = document.getElementById('jobSearchInput');
+    if (searchInput) searchInput.value = '';
 
     const now = new Date().toLocaleString('cs-CZ');
     const lastUpdate = document.getElementById('lastUpdate');
-    lastUpdate.textContent = `Poslední aktualizace: ${now}  načteno ${jobs.length} nabídek`;
+    const cacheInfo = data.fromCache ? `<span class="cache-badge">⚡ cache (${data.cacheAge}s)</span>` : '';
+    const elapsed = data.elapsed ? ` za ${data.elapsed}s` : '';
+    lastUpdate.innerHTML = `Poslední aktualizace: ${now}${elapsed} • ${jobs.length} nabídek ${cacheInfo}`;
     lastUpdate.classList.remove('hidden');
 
     if (data.errors && data.errors.length > 0) {
       console.warn('Chyby při načítání:', data.errors);
     }
+
+    // Store sourceStats and sourceUrls for rendering
+    window._sourceStats = data.sourceStats || {};
+    window._sourceUrls = data.sourceUrls || {};
+
+    // Označit nové nabídky (ty, co jsme ještě neviděli)
+    const newIds = [];
+    allJobs.forEach(j => {
+      j._isNew = !seenJobIds.has(j.id);
+      if (j._isNew) newIds.push(j.id);
+    });
+    // Uložit viděné ID (max 5000 aby localStorage nepřetekl)
+    newIds.forEach(id => seenJobIds.add(id));
+    const idsArray = [...seenJobIds];
+    if (idsArray.length > 5000) idsArray.splice(0, idsArray.length - 5000);
+    localStorage.setItem('seenJobIds', JSON.stringify(idsArray));
 
     renderJobs();
   } catch (err) {
@@ -98,6 +134,7 @@ async function handleRefresh() {
     btn.style.opacity = '1';
     icon.classList.remove('animate-spin');
     text.textContent = 'Obnovit nabídky';
+    if (progressEl) progressEl.classList.add('hidden');
   }
 }
 
@@ -120,7 +157,66 @@ function toggleSave(jobId) {
 
 function salaryText(salary) {
   if (!salary) return 'Plat neuvedeno';
-  return salary.toLocaleString('cs-CZ') + ' Kč';
+  if (typeof salary === 'object' && salary.min && salary.max) {
+    return salary.min.toLocaleString('cs-CZ') + ' – ' + salary.max.toLocaleString('cs-CZ') + ' Kč';
+  }
+  const num = typeof salary === 'number' ? salary : (salary.avg || salary.max || 0);
+  return num > 0 ? num.toLocaleString('cs-CZ') + ' Kč' : 'Plat neuvedeno';
+}
+
+function salaryNum(salary) {
+  if (!salary) return 0;
+  if (typeof salary === 'number') return salary;
+  return salary.avg || salary.max || 0;
+}
+
+// Vrátí MAX platu (pro filtr – nabídka s rozsahem 30-45k se zobrazí i při filtru 35k)
+function salaryMax(salary) {
+  if (!salary) return 0;
+  if (typeof salary === 'number') return salary;
+  return salary.max || salary.avg || 0;
+}
+
+function sortJobs(sortType) {
+  currentSort = sortType;
+  switch (sortType) {
+    case 'salary-desc':
+      jobs.sort((a, b) => salaryNum(b.salary) - salaryNum(a.salary));
+      break;
+    case 'salary-asc':
+      jobs.sort((a, b) => salaryNum(a.salary) - salaryNum(b.salary));
+      break;
+    case 'source':
+      jobs.sort((a, b) => a.source.localeCompare(b.source));
+      break;
+    default: // city-first je výchozí řazení ze serveru
+      break;
+  }
+  renderJobs();
+}
+
+function filterJobs(query) {
+  searchFilter = query.toLowerCase().trim();
+  if (!searchFilter) {
+    jobs = [...allJobs];
+  } else {
+    jobs = allJobs.filter(j => {
+      const text = (j.title + ' ' + j.company + ' ' + j.location + ' ' + (j.description || '')).toLowerCase();
+      return text.includes(searchFilter);
+    });
+  }
+  // Znovu aplikovat aktuální řazení
+  if (currentSort !== 'default') sortJobs(currentSort);
+  else renderJobs();
+}
+
+function getSourceClass(source) {
+  if (source === 'Jobs.cz') return 'jobscz';
+  if (source === 'Prace.cz') return 'pracecz';
+  if (source === 'Inwork.cz') return 'inwork';
+  if (source === 'Indeed.cz') return 'indeed';
+  if (source === 'Jooble.cz') return 'jooble';
+  return 'profesia';
 }
 
 function renderJobs() {
@@ -136,35 +232,82 @@ function renderJobs() {
     return;
   }
 
-  let html = `<h2 class="results-heading">Nalezeno ${jobs.length} nabídek</h2>`;
+  let html = '';
+
+  // Source stats (klikatelné - otevřou portál s předvyplněným vyhledáváním)
+  const stats = window._sourceStats || {};
+  const urls = window._sourceUrls || {};
+  if (Object.keys(stats).length > 0) {
+    html += '<div class="source-stats">';
+    for (const [src, cnt] of Object.entries(stats)) {
+      const cls = getSourceClass(src);
+      const url = urls[src];
+      if (url) {
+        html += `<a href="${url}" target="_blank" rel="noopener noreferrer" class="source-stat source-stat--${cls}" title="Otevřít ${src}">${src}: ${cnt} &#8599;</a>`;
+      } else {
+        html += `<span class="source-stat source-stat--${cls}">${src}: ${cnt}</span>`;
+      }
+    }
+    // Přidáme i portály s 0 výsledky (pokud mají URL)
+    for (const [src, url] of Object.entries(urls)) {
+      if (!stats[src]) {
+        const cls = getSourceClass(src);
+        html += `<a href="${url}" target="_blank" rel="noopener noreferrer" class="source-stat source-stat--${cls} source-stat--empty" title="Otevřít ${src}">${src}: 0 &#8599;</a>`;
+      }
+    }
+    html += '</div>';
+  }
+
+  // Search + Sort bar
+  html += `<div class="sort-bar">
+    <div class="search-box">
+      <svg xmlns="http://www.w3.org/2000/svg" class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="jobSearchInput" placeholder="Hledat v nabídkách..." value="${searchFilter}" oninput="filterJobs(this.value)" />
+    </div>
+    <label>Řadit:</label>
+    <select onchange="sortJobs(this.value)">
+      <option value="default" ${currentSort==='default'?'selected':''}>Město nahoře</option>
+      <option value="salary-desc" ${currentSort==='salary-desc'?'selected':''}>Plat ↓</option>
+      <option value="salary-asc" ${currentSort==='salary-asc'?'selected':''}>Plat ↑</option>
+      <option value="source" ${currentSort==='source'?'selected':''}>Podle zdroje</option>
+    </select>
+  </div>`;
+
+  const filterInfo = searchFilter ? ` <span class="filter-count">(filtr: ${allJobs.length} celkem)</span>` : '';
+  html += `<h2 class="results-heading">Nalezeno ${jobs.length} nabídek${filterInfo}</h2>`;
 
   jobs.forEach(job => {
     const saved = isSaved(job.id);
-    const descHtml = job.description ? `<p class="job-desc">${job.description}</p>` : '';
+    const descHtml = job.description ? `<p class="job-desc">${esc(job.description)}</p>` : '';
+    const srcClass = getSourceClass(job.source);
+    const newBadge = job._isNew ? '<span class="badge-new">NOVÉ</span>' : '';
+    const safeId = esc(job.id);
+    const linkBtn = job.url
+      ? `<a href="${esc(job.url)}" target="_blank" rel="noopener noreferrer" class="btn-link">${externalLinkSvg} Přejít na nabídku</a>`
+      : '';
     html += `
-      <div class="job-card">
+      <div class="job-card${job._isNew ? ' job-card--new' : ''}">
         <div class="job-card-header">
           <div>
             <div class="job-title-row">
-              <h3 class="job-title">${job.title}</h3>
-              <span class="job-source job-source--${job.source === 'Jobs.cz' ? 'jobscz' : job.source === 'Prace.cz' ? 'pracecz' : 'profesia'}">${job.source}</span>
+              <h3 class="job-title">${esc(job.title)}</h3>
+              ${newBadge}
+              <span class="job-source job-source--${srcClass}">${esc(job.source)}</span>
             </div>
-            <p class="job-company">${job.company}</p>
+            <p class="job-company">${esc(job.company)}</p>
           </div>
         </div>
         ${descHtml}
         <div class="job-meta">
-          <div class="job-meta-item">${mapPinSvg} ${job.location}</div>
+          <div class="job-meta-item">${mapPinSvg} ${esc(job.location)}</div>
           <div class="job-meta-item">${dollarSvg} ${salaryText(job.salary)}</div>
-          <span class="job-type">${job.type}</span>
+          <span class="job-type">${esc(job.type)}</span>
         </div>
         <div class="job-actions">
-          <button onclick="toggleSave('${job.id}')" class="btn-save ${saved ? 'btn-save-on' : 'btn-save-off'}">
+          <button onclick="toggleSave('${safeId}')" class="btn-save ${saved ? 'btn-save-on' : 'btn-save-off'}">
             ${saved ? ' Uloženo' : ' Uložit'}
           </button>
-          <a href="${job.url}" target="_blank" rel="noopener noreferrer" class="btn-link">
-            ${externalLinkSvg} Přejít na nabídku
-          </a>
+          ${linkBtn}
         </div>
       </div>`;
   });
@@ -186,15 +329,21 @@ function renderSaved() {
   section.classList.remove('hidden');
   count.textContent = savedJobs.length;
 
-  let html = '';
+  let html = `<div class="saved-actions">
+    <button onclick="exportSavedCSV()" class="btn-export" title="Exportovat do CSV">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Export CSV
+    </button>
+  </div>`;
   savedJobs.forEach(job => {
+    const safeId = esc(job.id);
     html += `
       <div class="saved-item">
         <div>
-          <p class="saved-item-title">${job.title}</p>
-          <p class="saved-item-sub">${job.company}  ${salaryText(job.salary)}</p>
+          <p class="saved-item-title">${esc(job.title)}</p>
+          <p class="saved-item-sub">${esc(job.company)}  ${salaryText(job.salary)}</p>
         </div>
-        <button onclick="toggleSave('${job.id}')" class="btn-trash">
+        <button onclick="toggleSave('${safeId}')" class="btn-trash">
           ${trashSvg}
         </button>
       </div>`;
@@ -206,3 +355,31 @@ function renderSaved() {
 renderJobs();
 renderSaved();
 initSettings();
+
+function exportSavedCSV() {
+  if (savedJobs.length === 0) return;
+  const header = 'Pozice;Firma;Lokalita;Plat;Zdroj;URL';
+  const csvEnc = (s) => `"${String(s || '').replace(/"/g, '""')}"`;
+  const csvSalary = (s) => {
+    if (!s) return '';
+    if (typeof s === 'number') return s;
+    if (s.min && s.max) return `${s.min}-${s.max}`;
+    return s.avg || s.max || '';
+  };
+  const rows = savedJobs.map(j =>
+    [csvEnc(j.title), csvEnc(j.company), csvEnc(j.location), csvSalary(j.salary), csvEnc(j.source), csvEnc(j.url)].join(';')
+  );
+  const csv = '\uFEFF' + header + '\n' + rows.join('\n'); // BOM for Excel
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `cnc-nabidky-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// Auto-load: pokud jsou prázdné výsledky, automaticky načíst po otevření stránky
+if (jobs.length === 0) {
+  handleRefresh();
+}
