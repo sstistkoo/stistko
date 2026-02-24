@@ -39,7 +39,8 @@
                 <path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0116 0z" />
                 <circle cx="12" cy="10" r="3" />
               </svg>
-              <span>Ostrava</span>
+              <span id="displayCity">Ostrava</span>
+              <span id="displayRadius" class="display-radius"></span>
             </div>
           </div>
           <div>
@@ -58,12 +59,41 @@
                 <line x1="12" y1="1" x2="12" y2="23" />
                 <path d="M17 5H9.5a3.5 3.5 0 100 7h5a3.5 3.5 0 110 7H6" />
               </svg>
-              <span>35 000 Kč</span>
+              <span id="displayMinSalary">35 000 Kč</span>
             </div>
           </div>
         </div>
 
-        <button id="refreshBtn" onclick="handleRefresh()" class="btn-refresh">
+        <div id="settingsPanel" class="settings-panel hidden">
+          <div class="settings-grid">
+            <div class="setting-group">
+              <label class="setting-label" for="settingCity">Město / Lokalita</label>
+              <input class="setting-input" type="text" id="settingCity" placeholder="např. Ostrava" />
+            </div>
+            <div class="setting-group">
+              <label class="setting-label" for="settingRadius">Vzdálenost</label>
+              <select class="setting-input" id="settingRadius">
+                <option value="0">Celá ČR</option>
+                <option value="10">do 10 km</option>
+                <option value="20">do 20 km</option>
+                <option value="30">do 30 km</option>
+                <option value="50">do 50 km</option>
+                <option value="100">do 100 km</option>
+              </select>
+            </div>
+            <div class="setting-group">
+              <label class="setting-label" for="settingMinSalary">Min. plat (Kč)</label>
+              <input class="setting-input" type="number" id="settingMinSalary" min="0" step="5000" placeholder="0 = bez filtru" />
+            </div>
+          </div>
+          <div class="settings-actions">
+            <button onclick="saveSettings()" class="btn-settings-save">Uložit nastavení</button>
+            <button onclick="toggleSettings()" class="btn-settings-cancel">Zrušit</button>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button id="refreshBtn" onclick="handleRefresh()" class="btn-refresh">
           <svg
             id="refreshIcon"
             xmlns="http://www.w3.org/2000/svg"
@@ -81,6 +111,13 @@
           </svg>
           <span id="refreshText">Obnovit nabídky</span>
         </button>
+          <button onclick="toggleSettings()" class="btn-settings-toggle" id="settingsToggleBtn" title="Nastavení vyhledávání">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+            </svg>
+          </button>
+        </div>
 
         <p id="lastUpdate" class="last-update hidden"></p>
       <p id="fetchError" class="fetch-error hidden"></p>
