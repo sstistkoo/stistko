@@ -18,10 +18,10 @@
         <div class="filter-grid">
           <div>
             <p class="filter-label">Klíčová slova</p>
-            <div class="tags">
-              <span class="tag">Soustružník</span>
-              <span class="tag">Karusel</span>
+            <div class="tags" id="displayKeywords">
               <span class="tag">CNC</span>
+              <span class="tag">soustružník</span>
+              <span class="tag">frézař</span>
             </div>
           </div>
           <div>
@@ -66,6 +66,11 @@
         </div>
 
         <div id="settingsPanel" class="settings-panel hidden">
+          <div class="setting-group setting-group--full">
+            <label class="setting-label" for="settingKeywords">Klíčová slova (oddělená čárkou)</label>
+            <input class="setting-input" type="text" id="settingKeywords" placeholder="např. CNC, soustružník, frézař, svářeč" />
+            <p class="setting-hint">Každé slovo se hledá na všech portálech. Více slov = více výsledků.</p>
+          </div>
           <div class="settings-grid">
             <div class="setting-group">
               <label class="setting-label" for="settingCity">Město / Lokalita</label>

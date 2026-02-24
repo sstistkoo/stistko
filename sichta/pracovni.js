@@ -1,4 +1,4 @@
-﻿const API_URL = '/api/jobs';
+﻿const API_URL = 'http://localhost:3001/api/jobs';
 
 let jobs = [];
 let allJobs = []; // všechny načtené nabídky (bez texového filtru)
@@ -7,7 +7,7 @@ let currentSort = 'default'; // default | salary-desc | salary-asc | source
 let searchFilter = ''; // aktuální textový filtr
 let seenJobIds = new Set(JSON.parse(localStorage.getItem('seenJobIds') || '[]'));
 
-const DEFAULT_SETTINGS = { city: 'Ostrava', radius: 30, minSalary: 35000 };
+const DEFAULT_SETTINGS = { city: 'Ostrava', radius: 30, minSalary: 35000, keywords: 'CNC, soustružník, frézař, obráběč, CNC operátor' };
 
 function loadSettings() {
   try {
@@ -22,10 +22,17 @@ function updateSettingsDisplay(s) {
   radiusEl.textContent = s.radius > 0 ? `(${s.radius} km)` : '(celá ČR)';
   const minSal = s.minSalary > 0 ? s.minSalary.toLocaleString('cs-CZ') + ' Kč' : 'bez filtru';
   document.getElementById('displayMinSalary').textContent = minSal;
+  // Zobrazit klíčová slova jako tagy
+  const kwContainer = document.getElementById('displayKeywords');
+  if (kwContainer) {
+    const kws = (s.keywords || '').split(',').map(k => k.trim()).filter(Boolean);
+    kwContainer.innerHTML = kws.map(k => `<span class="tag">${esc(k)}</span>`).join('');
+  }
 }
 
 function initSettings() {
   const s = loadSettings();
+  document.getElementById('settingKeywords').value = s.keywords || DEFAULT_SETTINGS.keywords;
   document.getElementById('settingCity').value = s.city;
   document.getElementById('settingRadius').value = s.radius;
   document.getElementById('settingMinSalary').value = s.minSalary;
@@ -34,6 +41,7 @@ function initSettings() {
 
 function saveSettings() {
   const s = {
+    keywords: document.getElementById('settingKeywords').value.trim() || DEFAULT_SETTINGS.keywords,
     city: document.getElementById('settingCity').value.trim() || 'Ostrava',
     radius: parseInt(document.getElementById('settingRadius').value) || 0,
     minSalary: parseInt(document.getElementById('settingMinSalary').value) || 0,
@@ -80,7 +88,8 @@ async function handleRefresh() {
 
   try {
     const s = loadSettings();
-    const url = `${API_URL}?city=${encodeURIComponent(s.city)}&radius=${s.radius}`;
+    const kw = encodeURIComponent(s.keywords || DEFAULT_SETTINGS.keywords);
+    const url = `${API_URL}?city=${encodeURIComponent(s.city)}&radius=${s.radius}&keywords=${kw}`;
     const res = await fetch(url);
     if (!res.ok) throw new Error(`Server vrátil chybu ${res.status}`);
     const data = await res.json();

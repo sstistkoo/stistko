@@ -284,6 +284,13 @@ header p { color: var(--slate-400); }
 @media (min-width: 640px) { .settings-grid { grid-template-columns: repeat(3, 1fr); } }
 
 .setting-group { display: flex; flex-direction: column; gap: 0.375rem; }
+.setting-group--full { margin-bottom: 1rem; }
+
+.setting-hint {
+  font-size: 0.7rem;
+  color: var(--slate-500);
+  margin-top: 0.25rem;
+}", "oldString": ".setting-group { display: flex; flex-direction: column; gap: 0.375rem; }
 
 .setting-label {
   font-size: 0.8rem;
