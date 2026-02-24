@@ -834,12 +834,15 @@ app.get("/api/jobs", async (req, res) => {
   const citySlug = toCzechSlug(city);
   const kraj = cityToKraj(city);
   const krajPath = kraj ? `${kraj}/` : '';
+  // Spojíme všechna klíčová slova do jednoho řetězce pro portálové URL
+  const allKeywords = portalKeywords.join(' ');
   const sourceUrls = {
-    'Profesia.cz': `https://www.profesia.cz/prace/${citySlug}/?search_anywhere=${encodeURIComponent(portalKeywords[0])}`,
-    'Jobs.cz': `https://www.jobs.cz/prace/${krajPath}?q%5B0%5D=${encodeURIComponent(portalKeywords[0])}${city ? '&locality%5Bname%5D=' + encodeURIComponent(city) : ''}${radius > 0 ? '&locality%5Bradius%5D=' + radius : ''}`,
-    'Prace.cz': `https://www.prace.cz/nabidky/${krajPath}?q=${encodeURIComponent(portalKeywords[0])}${city ? '&locality%5Bname%5D=' + encodeURIComponent(city) : ''}${radius > 0 ? '&locality%5Bradius%5D=' + radius : ''}`,
-    'Inwork.cz': kraj ? `https://www.inwork.cz/prace/${kraj}/?keyword=${encodeURIComponent(portalKeywords[0])}` : `https://www.inwork.cz/prace/?keyword=${encodeURIComponent(portalKeywords[0])}`,
-    'Indeed.cz': `https://cz.indeed.com/jobs?q=${encodeURIComponent(portalKeywords[0])}&l=${encodeURIComponent(city)}${radius > 0 ? '&radius=' + radius : ''}`,
+    'Profesia.cz': `https://www.profesia.cz/prace/${citySlug}/?search_anywhere=${encodeURIComponent(allKeywords)}`,
+    'Jobs.cz': `https://www.jobs.cz/prace/${krajPath}?q%5B0%5D=${encodeURIComponent(allKeywords)}${city ? '&locality%5Bname%5D=' + encodeURIComponent(city) : ''}${radius > 0 ? '&locality%5Bradius%5D=' + radius : ''}`,
+    // Prace.cz: locality[name] a locality[radius] v URL nefungují, používáme jen kraj path + keyword
+    'Prace.cz': `https://www.prace.cz/nabidky/${krajPath}?q=${encodeURIComponent(allKeywords)}`,
+    'Inwork.cz': kraj ? `https://www.inwork.cz/prace/${kraj}/?keyword=${encodeURIComponent(allKeywords)}` : `https://www.inwork.cz/prace/?keyword=${encodeURIComponent(allKeywords)}`,
+    'Indeed.cz': `https://cz.indeed.com/jobs?q=${encodeURIComponent(allKeywords)}&l=${encodeURIComponent(city)}${radius > 0 ? '&radius=' + radius : ''}`,
     'Jooble.cz': `https://cz.jooble.org/pr%C3%A1ce-${encodeURIComponent(portalKeywords[0].toLowerCase().replace(/\s+/g, '-'))}${city ? '/' + encodeURIComponent(city) : ''}`,
   };
 
