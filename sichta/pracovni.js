@@ -116,6 +116,17 @@ async function handleRefresh() {
 
     if (data.errors && data.errors.length > 0) {
       console.warn('Chyby při načítání:', data.errors);
+      // Zobrazit ve frontendu, které portály selhaly
+      if (errorEl) {
+        const failedSources = [...new Set(data.errors.map(e => e.source).filter(Boolean))];
+        if (failedSources.length > 0 && failedSources.length < 6) {
+          errorEl.innerHTML = `⚠️ Nepodařilo se načíst: ${failedSources.join(', ')}`;
+          errorEl.classList.remove('hidden');
+          errorEl.style.color = '#fbbf24';
+          errorEl.style.background = 'rgba(251,191,36,0.1)';
+          errorEl.style.borderColor = 'rgba(251,191,36,0.3)';
+        }
+      }
     }
 
     // Store sourceStats and sourceUrls for rendering

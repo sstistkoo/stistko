@@ -86,15 +86,15 @@ async function scrapeJobsCz(keywords, city, radius) {
 }
 
 async function scrapePraceCz(keywords, city, radius) {
-  const params = new URLSearchParams({ q: keywords });
-  // Prace.cz: přidáme locality parametry pro konkrétní město + radius
-  if (city) {
-    params.append("locality[name]", city);
-    if (radius > 0) params.append("locality[radius]", radius);
+  // Prace.cz: nový formát /hledat/ s searchForm parametry
+  const praceCzCode = cityToPraceCzCode(city);
+  const params = new URLSearchParams();
+  params.append('searchForm[profs]', keywords);
+  params.append('searchForm[search]', '');
+  if (praceCzCode) {
+    params.append('searchForm[locality_codes]', `${praceCzCode}=${radius > 0 ? radius : 30}`);
   }
-  const kraj = cityToKraj(city);
-  const regionPath = kraj ? `${kraj}/` : '';
-  const url = `https://www.prace.cz/nabidky/${regionPath}?${params}`;
+  const url = `https://www.prace.cz/hledat/?${params}`;
   console.log("Scrapuji prace.cz:", url);
 
   const res = await fetch(url, { headers: BROWSER_HEADERS, timeout: 15000 });
@@ -185,6 +185,26 @@ const CITY_TO_KRAJ = {
 function cityToKraj(city) {
   if (!city) return null;
   return CITY_TO_KRAJ[city.toLowerCase().trim()] || null;
+}
+
+// Kódy měst pro prace.cz (searchForm[locality_codes])
+const CITY_TO_PRACECZ_CODE = {
+  'ostrava':'M283941', 'opava':'M283797', 'havířov':'M283380', 'havirov':'M283380',
+  'karviná':'M283517', 'karvina':'M283517', 'frýdek-místek':'M283304', 'frydek-mistek':'M283304',
+  'kopřivnice':'M283614', 'koprivnice':'M283614', 'nový jičín':'M283771', 'novy jicin':'M283771',
+  'třinec':'M284050', 'trinec':'M284050',
+  'brno':'M282863', 'praha':'M282510', 'prague':'M282510',
+  'plzeň':'M283924', 'plzen':'M283924', 'olomouc':'M283789',
+  'zlín':'M284161', 'zlin':'M284161', 'liberec':'M283649',
+  'pardubice':'M283851', 'hradec králové':'M283412', 'hradec kralove':'M283412',
+  'české budějovice':'M283150', 'ceske budejovice':'M283150',
+  'ústí nad labem':'M284085', 'usti nad labem':'M284085',
+  'karlovy vary':'M283494', 'jihlava':'M283463', 'kladno':'M283550',
+};
+
+function cityToPraceCzCode(city) {
+  if (!city) return null;
+  return CITY_TO_PRACECZ_CODE[city.toLowerCase().trim()] || null;
 }
 
 // Převede název města na URL slug pro profesia.cz (bez diakritiky, malá písmena)
@@ -324,6 +344,7 @@ async function scrapeInwork(keywords, city, radius) {
 // Indeed.cz scraper (got-scraping pro bypass Cloudflare)
 // ======================================================
 async function scrapeIndeed(keywords, city, radius) {
+  if (!gotScraping) throw new Error('got-scraping modul není načtený');
   const params = new URLSearchParams({
     q: keywords,
     l: city || '',
@@ -425,22 +446,109 @@ async function scrapeIndeed(keywords, city, radius) {
 // Jooble.cz scraper (got-scraping pro bypass Cloudflare)
 // ======================================================
 async function scrapeJooble(keywords, city, radius) {
-  // Jooble: URL formát /práce-{keyword}/{city}
-  const kwSlug = encodeURIComponent(keywords.toLowerCase().replace(/\s+/g, '-'));
-  const cityPart = city ? '/' + encodeURIComponent(city) : '';
-  const url = `https://cz.jooble.org/pr%C3%A1ce-${kwSlug}${cityPart}`;
-  console.log("Scrapuji Jooble.cz:", url);
+  if (!gotScraping) throw new Error('got-scraping modul není načtený');
+  // Jooble: zkusíme několik přístupů postupně (anti-bot ochrana je agresivní)
+  let body = null;
+  let statusCode = 0;
 
-  const { body, statusCode } = await gotScraping({
-    url,
-    headerGeneratorOptions: {
-      browsers: [{ name: "chrome", minVersion: 120 }],
-      operatingSystems: ["windows"],
-      locales: ["cs-CZ"],
-    },
-    timeout: { request: 20000 },
-  });
-  if (statusCode !== 200) throw new Error(`HTTP ${statusCode}`);
+  // Přístup 1: SearchResult s got-scraping (rgns formát - funguje v prohlížeči)
+  const searchUrl = `https://cz.jooble.org/SearchResult?rgns=${encodeURIComponent(city || '')}&ukw=${encodeURIComponent(keywords)}`;
+  try {
+    console.log("Scrapuji Jooble.cz:", searchUrl);
+    const result = await gotScraping({
+      url: searchUrl,
+      headerGeneratorOptions: {
+        browsers: [{ name: "chrome", minVersion: 120 }],
+        operatingSystems: ["windows"],
+        locales: ["cs-CZ"],
+      },
+      timeout: { request: 20000 },
+    });
+    body = result.body;
+    statusCode = result.statusCode;
+    if (statusCode === 200) {
+      console.log(`  Jooble SearchResult: OK (${body.length} bytes)`);
+    } else {
+      console.log(`  Jooble SearchResult: HTTP ${statusCode}`);
+      body = null;
+    }
+  } catch (e) {
+    console.log(`  Jooble SearchResult selhalo: ${e.message}`);
+  }
+
+  // Přístup 2: Slug URL /práce-{keyword}/{city}
+  if (!body) {
+    const kwSlug = keywords.toLowerCase().replace(/\s+/g, '-');
+    const slugUrl = `https://cz.jooble.org/pr%C3%A1ce-${encodeURIComponent(kwSlug)}/${encodeURIComponent(city || '')}`;
+    try {
+      console.log("  Jooble fallback (slug):", slugUrl);
+      const result = await gotScraping({
+        url: slugUrl,
+        headerGeneratorOptions: {
+          browsers: [{ name: "chrome", minVersion: 120 }],
+          operatingSystems: ["windows"],
+          locales: ["cs-CZ"],
+        },
+        timeout: { request: 20000 },
+      });
+      if (result.statusCode === 200) {
+        body = result.body;
+        statusCode = 200;
+        console.log(`  Jooble slug: OK (${body.length} bytes)`);
+      } else {
+        console.log(`  Jooble slug: HTTP ${result.statusCode}`);
+      }
+    } catch (e) {
+      console.log(`  Jooble slug selhalo: ${e.message}`);
+    }
+  }
+
+  // Přístup 3: Jooble API (POST)
+  if (!body) {
+    try {
+      console.log("  Jooble fallback (API POST)");
+      const apiRes = await fetch("https://cz.jooble.org/api/", {
+        method: "POST",
+        headers: {
+          ...BROWSER_HEADERS,
+          "Content-Type": "application/json",
+          "Origin": "https://cz.jooble.org",
+          "Referer": "https://cz.jooble.org/",
+        },
+        body: JSON.stringify({
+          keywords: keywords,
+          location: city || "",
+          radius: radius > 0 ? String(radius) : "",
+          page: "1",
+        }),
+        timeout: 20000,
+      });
+      if (apiRes.ok) {
+        const apiData = await apiRes.json();
+        const apiJobs = apiData.jobs || [];
+        console.log(`  Jooble API: ${apiJobs.length} nabídek`);
+        if (apiJobs.length > 0) {
+          return apiJobs.map((item, i) => ({
+            id: `jooble-${item.id || Date.now() + '-' + i}`,
+            title: item.title || '',
+            company: item.company || 'viz nabídka',
+            location: item.location || city || '',
+            salary: parseSalary((item.salary || '').replace(/<[^>]+>/g, '')) || extractSalaryFromText(item.title || ''),
+            url: item.link || '',
+            type: 'Hlavní pracovní poměr',
+            source: 'Jooble.cz',
+            description: (item.snippet || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().substring(0, 200),
+          })).filter(j => j.url && j.title);
+        }
+      } else {
+        console.log(`  Jooble API: HTTP ${apiRes.status}`);
+      }
+    } catch (e) {
+      console.log(`  Jooble API selhalo: ${e.message}`);
+    }
+  }
+
+  if (!body) throw new Error(`Všechny přístupy k Jooble selhaly`);
 
   const jobs = [];
 
@@ -745,24 +853,20 @@ app.get("/api/jobs", async (req, res) => {
   }
 
   // Klíčová slova z nastavení uživatele → dotazy pro portály
-  // Pro Alma Career / Inwork: každé klíčové slovo jako samostatný dotaz
+  // Každé klíčové slovo jako samostatný dotaz na všech portálech
   const portalKeywords = userKeywords.length > 0 ? userKeywords : ["CNC"];
-  // Pro Profesia: přidáme i varianty bez prefixu
-  const profesiaKeywords = [...new Set([...portalKeywords])];
-  // Pro Indeed: všechna klíčová slova (fulltextový vyhledávač)
-  const indeedKeywords = [...new Set([...portalKeywords])];
-  // Pro Jooble: první klíčové slovo (nejobecnější)
-  const joobleKeywords = [portalKeywords[0]];
+  // Indeed a Jooble: kombinujeme klíčová slova do jednoho dotazu (agresivní anti-bot)
+  const combinedQuery = portalKeywords.join(', ');
 
   // Paralelní scrapování všech portálů najednou
   console.log("  Spouštím paralelní scrapování (6 portálů)...");
   const [profesiaResult, jobsCzResult, praceCzResult, inworkResult, indeedResult, joobleResult] = await Promise.allSettled([
-    scrapePortal(scrapeProfesia, profesiaKeywords, city, radius, "Profesia.cz"),
+    scrapePortal(scrapeProfesia, portalKeywords, city, radius, "Profesia.cz"),
     scrapePortal(scrapeJobsCz, portalKeywords, city, radius, "Jobs.cz"),
     scrapePortal(scrapePraceCz, portalKeywords, city, radius, "Prace.cz"),
     scrapePortal(scrapeInwork, portalKeywords, city, radius, "Inwork.cz"),
-    scrapePortal(scrapeIndeed, indeedKeywords, city, radius, "Indeed.cz"),
-    scrapePortal(scrapeJooble, joobleKeywords, city, radius, "Jooble.cz"),
+    scrapePortal(scrapeIndeed, [combinedQuery], city, radius, "Indeed.cz"),
+    scrapePortal(scrapeJooble, [combinedQuery], city, radius, "Jooble.cz"),
   ]);
 
   // Sesbírej výsledky
@@ -831,19 +935,42 @@ app.get("/api/jobs", async (req, res) => {
   });
 
   // URL pro každý portál s předvyplněnými parametry vyhledávání
+  // Každý portál má jiný formát - musíme odpovídat skutečnému vyhledávání
   const citySlug = toCzechSlug(city);
   const kraj = cityToKraj(city);
   const krajPath = kraj ? `${kraj}/` : '';
-  // Spojíme všechna klíčová slova do jednoho řetězce pro portálové URL
-  const allKeywords = portalKeywords.join(' ');
+
+  // Jobs.cz: každé klíčové slovo jako samostatný q[i] parametr (OR logika)
+  const jobsCzParams = new URLSearchParams();
+  portalKeywords.forEach((kw, i) => jobsCzParams.append(`q[${i}]`, kw));
+  if (city) jobsCzParams.append('locality[name]', city);
+  if (radius > 0) jobsCzParams.append('locality[radius]', radius);
+
+  // Prace.cz: nový formát /hledat/ s searchForm parametry
+  const praceCzCode = cityToPraceCzCode(city);
+  const praceCzProfs = portalKeywords.join(';');
+
+  // Indeed: čárkou oddělená klíčová slova (Indeed chápe čárku jako OR)
+  const indeedQuery = portalKeywords.join(', ');
+
+  // Jooble: SearchResult — rgns pro město, ukw mezerami oddělená klíčová slova
+  const joobleQuery = portalKeywords.join(' ');
+
+  // Inwork: všechna klíčová slova oddělená mezerou
+  const inworkQuery = portalKeywords.join(' ');
+
+  // Profesia: všechna klíčová slova oddělená mezerou (OR hledání)
+  const profesiaQuery = portalKeywords.join(' ');
+
   const sourceUrls = {
-    'Profesia.cz': `https://www.profesia.cz/prace/${citySlug}/?search_anywhere=${encodeURIComponent(allKeywords)}`,
-    'Jobs.cz': `https://www.jobs.cz/prace/${krajPath}?q%5B0%5D=${encodeURIComponent(allKeywords)}${city ? '&locality%5Bname%5D=' + encodeURIComponent(city) : ''}${radius > 0 ? '&locality%5Bradius%5D=' + radius : ''}`,
-    // Prace.cz: locality[name] a locality[radius] v URL nefungují, používáme jen kraj path + keyword
-    'Prace.cz': `https://www.prace.cz/nabidky/${krajPath}?q=${encodeURIComponent(allKeywords)}`,
-    'Inwork.cz': kraj ? `https://www.inwork.cz/prace/${kraj}/?keyword=${encodeURIComponent(allKeywords)}` : `https://www.inwork.cz/prace/?keyword=${encodeURIComponent(allKeywords)}`,
-    'Indeed.cz': `https://cz.indeed.com/jobs?q=${encodeURIComponent(allKeywords)}&l=${encodeURIComponent(city)}${radius > 0 ? '&radius=' + radius : ''}`,
-    'Jooble.cz': `https://cz.jooble.org/pr%C3%A1ce-${encodeURIComponent(portalKeywords[0].toLowerCase().replace(/\s+/g, '-'))}${city ? '/' + encodeURIComponent(city) : ''}`,
+    'Profesia.cz': `https://www.profesia.cz/prace/${citySlug}/?search_anywhere=${encodeURIComponent(profesiaQuery)}&count_days=90`,
+    'Jobs.cz': `https://www.jobs.cz/prace/${krajPath}?${jobsCzParams}`,
+    'Prace.cz': praceCzCode
+      ? `https://www.prace.cz/hledat/?searchForm%5Blocality_codes%5D=${praceCzCode}%3D${radius > 0 ? radius : 30}&searchForm%5Bprofs%5D=${encodeURIComponent(praceCzProfs)}&searchForm%5Bsearch%5D=`
+      : `https://www.prace.cz/hledat/?searchForm%5Bprofs%5D=${encodeURIComponent(praceCzProfs)}&searchForm%5Bsearch%5D=`,
+    'Inwork.cz': kraj ? `https://www.inwork.cz/prace/${kraj}/?keyword=${encodeURIComponent(inworkQuery)}` : `https://www.inwork.cz/prace/?keyword=${encodeURIComponent(inworkQuery)}`,
+    'Indeed.cz': `https://cz.indeed.com/jobs?q=${encodeURIComponent(indeedQuery)}&l=${encodeURIComponent(city)}${radius > 0 ? '&radius=' + radius : ''}`,
+    'Jooble.cz': `https://cz.jooble.org/SearchResult?rgns=${encodeURIComponent(city)}&ukw=${encodeURIComponent(joobleQuery)}`,
   };
 
   const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
