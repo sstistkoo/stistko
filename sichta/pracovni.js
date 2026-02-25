@@ -1,4 +1,7 @@
-﻿const API_URL = 'http://localhost:3001/api/jobs';
+﻿// Automatická detekce: lokálně = localhost:3001, z GitHubu/jiného hostingu = Render backend
+const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:3001/api/jobs'
+  : 'https://cnc-job-scraper.onrender.com/api/jobs';  // <-- po nasazení na Render sem dej svou URL
 
 let jobs = [];
 let allJobs = []; // všechny načtené nabídky (bez texového filtru)
