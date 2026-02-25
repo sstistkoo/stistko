@@ -10,7 +10,7 @@ const gotScrapingReady = import("got-scraping")
   .catch(err => { console.error("Nepodařilo se načíst got-scraping:", err.message); });
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.static("."));
