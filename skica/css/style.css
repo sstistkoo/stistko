@@ -360,6 +360,42 @@ body {
 }
 
 /* ── Statusbar ── */
+
+/* ── Pick button (numerical dialog) ── */
+.pick-col {
+  flex: 0 0 40px;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 2px;
+}
+
+.pick-btn {
+  background: #313244;
+  border: 1px solid #45475a;
+  color: #cdd6f4;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  width: 38px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.15s;
+  padding: 0;
+}
+
+.pick-btn:hover {
+  background: #89b4fa;
+  color: #1e1e2e;
+  border-color: #89b4fa;
+}
+
+.pick-btn:active {
+  background: #f9e2af;
+  color: #1e1e2e;
+}
+
 #statusbar {
   background: #181825;
   border-top: 1px solid #313244;
