@@ -2,6 +2,25 @@
 // ║  SKICA – Dialogy (měření, poloměr, čísla, polární)         ║
 // ╚══════════════════════════════════════════════════════════════╝
 
+// ── Helper: nastaví inputmode="decimal" na všechna numerická pole v elementu ──
+function applyMobileInputMode(container) {
+  container.querySelectorAll('input[type="number"]').forEach((inp) => {
+    inp.setAttribute("inputmode", "decimal");
+  });
+}
+
+// Auto-apply inputmode na nové dialogy
+const _dialogObserver = new MutationObserver((mutations) => {
+  for (const m of mutations) {
+    for (const node of m.addedNodes) {
+      if (node.nodeType === 1 && node.classList && node.classList.contains("input-overlay")) {
+        applyMobileInputMode(node);
+      }
+    }
+  }
+});
+_dialogObserver.observe(document.body, { childList: true });
+
 // ── Měření – dialog výsledku ──
 function showMeasureResult(p1, p2, d, angle) {
   const overlay = document.createElement("div");
@@ -53,7 +72,7 @@ function showCircleRadiusDialog() {
       <h3>Kružnice – zadání poloměru</h3>
       <label>Střed: X=${cp.x.toFixed(2)}, Z=${cp.y.toFixed(2)}</label>
       <label>Poloměr (mm):</label>
-      <input type="number" id="dlgRadius" step="0.1" min="0.001" value="10" autofocus>
+      <input type="number" id="dlgRadius" step="0.1" min="0.001" value="10" inputmode="decimal" autofocus>
       <div class="btn-row">
         <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
         <button class="btn-ok" id="dlgOk">OK</button>
@@ -256,6 +275,11 @@ function showNumericalInputDialog() {
 
     const first = fieldsDiv.querySelector("input");
     if (first) setTimeout(() => first.focus(), 50);
+
+    // Přidat inputmode="decimal" pro numerická pole (mobilní klávesnice)
+    fieldsDiv.querySelectorAll('input[type="number"]').forEach((inp) => {
+      inp.setAttribute("inputmode", "decimal");
+    });
   }
 
   typeSelect.addEventListener("change", updateFields);

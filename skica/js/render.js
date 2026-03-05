@@ -5,6 +5,8 @@
 function renderAll() {
   renderGrid();
   renderObjects();
+  // Aktualizovat mobilní Cancel tlačítko
+  if (typeof updateMobileCancelBtn === "function") updateMobileCancelBtn();
 }
 
 // ── Mřížka a osy ──

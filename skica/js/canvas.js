@@ -79,6 +79,10 @@ function snapPt(wx, wy) {
 
   // Body/průsečíky mají prioritu před mřížkou
   if (objX !== null) {
+    // Vibrace při snapnutí k bodu (jen pokud se snapType změnil)
+    if (state.mouse.snapType !== 'point' && navigator.vibrate) {
+      navigator.vibrate(15);
+    }
     state.mouse.snapped = true;
     state.mouse.snapType = 'point';
     return [objX, objY];

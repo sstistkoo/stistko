@@ -41,11 +41,25 @@ sidebarOverlay.addEventListener("click", () => {
 // ── Mobile: coord bar ──
 const mobileCoordBar = document.getElementById("mobileCoordBar");
 
+// Tap na coord bar → cyklovat velikost mřížky
+mobileCoordBar.addEventListener("click", (e) => {
+  e.stopPropagation();
+  cycleGridSize(1);
+});
+
 function updateMobileCoords(wx, wy, extra) {
   extra = extra || "";
-  const text = `X: ${wx.toFixed(3)}   Z: ${wy.toFixed(3)}${extra}`;
-  mobileCoordBar.textContent = text;
-  document.getElementById("coordDisplay").textContent = text;
+  const coords = `X: ${wx.toFixed(3)}   Z: ${wy.toFixed(3)}${extra}`;
+  // Desktop coord display – jen souřadnice
+  document.getElementById("coordDisplay").textContent = coords;
+  // Mobile coord bar – nástroj + souřadnice + zoom
+  if (isMobile()) {
+    const zoomPct = (state.zoom * 100).toFixed(0);
+    const tool = toolLabel(state.tool);
+    mobileCoordBar.textContent = `${tool}  |  ${coords}  |  ${zoomPct}%`;
+  } else {
+    mobileCoordBar.textContent = coords;
+  }
 }
 
 // ── Mobile: Numerický vstup tlačítko ──
@@ -84,6 +98,38 @@ document.getElementById("sidebarEditBtn").addEventListener("click", (e) => {
   sidebar.classList.remove("mobile-open");
   sidebarOverlay.classList.remove("active");
   showMobileEditDialog();
+});
+
+// ── Mobile: Cancel tlačítko ──
+const mobileCancelBtn = document.getElementById("mobileCancel");
+mobileCancelBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  if (state.dragging) {
+    const obj = state.objects[state.dragObjIdx];
+    Object.assign(obj, JSON.parse(state.dragObjSnapshot));
+    state.dragging = false;
+    state.dragObjIdx = null;
+  }
+  state.drawing = false;
+  state.tempPoints = [];
+  hidePrecisionCrosshair();
+  updateMobileCancelBtn();
+  renderAll();
+  resetHint();
+  showToast("Zrušeno");
+});
+
+// Zobrazit/skrýt Cancel tlačítko podle stavu kreslení
+function updateMobileCancelBtn() {
+  if (!isMobile()) return;
+  const show = state.drawing || state.dragging;
+  mobileCancelBtn.style.display = show ? "flex" : "none";
+}
+
+// ── Mobile: Undo tlačítko ──
+document.getElementById("mobileUndo").addEventListener("click", (e) => {
+  e.stopPropagation();
+  undo();
 });
 
 // ── Touch state ──

@@ -564,6 +564,54 @@ body {
   color: #1e1e2e;
 }
 
+#mobileCancel {
+  display: none;
+  position: fixed;
+  top: 28px;
+  left: 8px;
+  z-index: 60;
+  background: #f38ba8;
+  color: #1e1e2e;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  line-height: 40px;
+  text-align: center;
+  font-weight: bold;
+}
+
+#mobileCancel:active {
+  background: #eba0ac;
+}
+
+#mobileUndo {
+  display: none;
+  position: fixed;
+  top: 28px;
+  left: 56px;
+  z-index: 60;
+  background: #585b70;
+  color: #cdd6f4;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  line-height: 40px;
+  text-align: center;
+}
+
+#mobileUndo:active {
+  background: #89b4fa;
+  color: #1e1e2e;
+}
+
 
 
 #mobileSidebarToggle {
@@ -688,6 +736,18 @@ body {
 }
 
 @media (max-width: 900px) {
+  /* Safe area pro telefony s výřezem */
+  #mobileCoordBar {
+    padding-top: max(4px, env(safe-area-inset-top));
+  }
+
+  #mobileToolbarToggle,
+  #mobileSidebarToggle,
+  #mobileNumInput,
+  #mobileMeasure {
+    bottom: max(8px, env(safe-area-inset-bottom));
+  }
+
   #topbar {
     position: fixed;
     bottom: 0;
@@ -755,6 +815,12 @@ body {
   }
 
   #mobileAutoCenter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #mobileUndo {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -844,6 +910,11 @@ body {
   .input-dialog .input-row {
     flex-wrap: wrap;
     gap: 4px;
+  }
+
+  /* Toast nad mobilními tlačítky */
+  .toast {
+    bottom: 70px;
   }
 }
 

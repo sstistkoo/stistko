@@ -242,6 +242,10 @@ function setTool(tool) {
   // Sync mobile measure button
   const mmBtn = document.getElementById("mobileMeasure");
   if (mmBtn) mmBtn.classList.toggle("active", tool === "measure");
+  // Aktualizovat mobilní coord bar s novým nástrojem
+  if (typeof updateMobileCoords === "function") {
+    updateMobileCoords(state.mouse.x, state.mouse.y);
+  }
   resetHint();
   renderAll();
 }
