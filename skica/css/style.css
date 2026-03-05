@@ -842,7 +842,7 @@ body {
   }
 
   .input-dialog .input-row {
-    flex-direction: column;
+    flex-wrap: wrap;
     gap: 4px;
   }
 }

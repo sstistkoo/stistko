@@ -91,6 +91,7 @@ drawCanvas.addEventListener("mousedown", (e) => {
         state.dragObjIdx = null;
         drawCanvas.style.cursor = "crosshair";
         updateProperties();
+        calculateAllIntersections();
         resetHint();
       }
       break;
@@ -337,7 +338,7 @@ document.addEventListener("keydown", (e) => {
     state.selected = null;
     updateObjectList();
     updateProperties();
-    renderAll();
+    calculateAllIntersections();
   }
   if (e.key === "Enter" && state.drawing && state.tool === "circle") {
     e.preventDefault();
@@ -371,6 +372,7 @@ function handleCanvasClick(wx, wy) {
         state.dragging = false;
         state.dragObjIdx = null;
         updateProperties();
+        calculateAllIntersections();
         resetHint();
       }
       break;

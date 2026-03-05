@@ -7,7 +7,7 @@ function addObject(obj) {
   obj.id = state.nextId++;
   state.objects.push(obj);
   updateObjectList();
-  renderAll();
+  calculateAllIntersections(); // Auto-přepočet průsečíků (volá renderAll)
   // Auto-center na nový objekt (jen na mobilu)
   if (window.innerWidth <= 900) {
     autoCenterView();

@@ -254,6 +254,9 @@ drawCanvas.addEventListener(
 
       // Long-press timer pro precision crosshair
       if (touchState.longPressTimer) clearTimeout(touchState.longPressTimer);
+      // Uložit touch coords – reference na Touch objekt může být invalidní po eventu
+      const savedClientX = touches[0].clientX;
+      const savedClientY = touches[0].clientY;
       touchState.longPressTimer = setTimeout(() => {
         if (
           !touchState.touchMoved &&
@@ -262,7 +265,7 @@ drawCanvas.addEventListener(
         ) {
           touchState.precisionMode = true;
           if (navigator.vibrate) navigator.vibrate(30);
-          showPrecisionCrosshair(touches[0]);
+          showPrecisionCrosshair({ clientX: savedClientX, clientY: savedClientY });
         }
       }, 400);
 

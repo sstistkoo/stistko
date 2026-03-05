@@ -32,7 +32,7 @@ function updateObjectList() {
       else if (state.selected > idx) state.selected--;
       updateObjectList();
       updateProperties();
-      renderAll();
+      calculateAllIntersections();
     });
     ul.appendChild(li);
   });
