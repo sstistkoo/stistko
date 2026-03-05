@@ -1082,7 +1082,7 @@ function showEditObjectDialog(idx) {
     }
     updateObjectList();
     updateProperties();
-    renderAll();
+    calculateAllIntersections();
     overlay.remove();
     showToast("Objekt upraven ✓");
   });
@@ -1095,7 +1095,7 @@ function showEditObjectDialog(idx) {
     else if (state.selected > idx) state.selected--;
     updateObjectList();
     updateProperties();
-    renderAll();
+    calculateAllIntersections();
     overlay.remove();
     showToast("Objekt smazán");
   });
