@@ -57,11 +57,9 @@ function undo() {
   state.redoStack.push(JSON.stringify(state.objects));
   state.objects = JSON.parse(state.undoStack.pop());
   state.selected = null;
-  state.intersections = [];
   updateObjectList();
   updateProperties();
-  updateIntersectionList();
-  renderAll();
+  calculateAllIntersections();
   updateUndoButtons();
   showToast("Zpět");
 }
@@ -71,11 +69,9 @@ function redo() {
   state.undoStack.push(JSON.stringify(state.objects));
   state.objects = JSON.parse(state.redoStack.pop());
   state.selected = null;
-  state.intersections = [];
   updateObjectList();
   updateProperties();
-  updateIntersectionList();
-  renderAll();
+  calculateAllIntersections();
   updateUndoButtons();
   showToast("Vpřed");
 }

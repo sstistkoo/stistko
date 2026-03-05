@@ -10,13 +10,11 @@ function tryAutoLoad() {
       const data = JSON.parse(raw);
       if (data.objects && data.objects.length > 0) {
         state.objects = data.objects;
-        state.intersections = data.intersections || [];
         state.nextId = data.nextId || 1;
         if (data.gridSize && data.gridSize > 0)
           state.gridSize = data.gridSize;
         updateObjectList();
         updateProperties();
-        updateIntersectionList();
       }
     } catch (e) {}
   }
@@ -39,6 +37,7 @@ setInterval(() => {
 // ── Inicializace ──
 tryAutoLoad();
 resizeCanvases();
+if (state.objects.length > 0) calculateAllIntersections();
 resetHint();
 updateDimsBtn();
 

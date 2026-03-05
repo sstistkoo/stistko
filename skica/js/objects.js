@@ -8,8 +8,8 @@ function addObject(obj) {
   state.objects.push(obj);
   updateObjectList();
   calculateAllIntersections(); // Auto-přepočet průsečíků (volá renderAll)
-  // Auto-center na nový objekt (jen na mobilu)
-  if (window.innerWidth <= 900) {
+  // Auto-center jen při prvním objektu (na mobilu)
+  if (window.innerWidth <= 900 && state.objects.length === 1) {
     autoCenterView();
   }
   return obj;
