@@ -448,8 +448,7 @@ body {
   display: none;
   position: fixed;
   bottom: 8px;
-  left: 50%;
-  transform: translateX(-50%);
+  left: calc(50% - 30px);
   z-index: 60;
   background: #f9e2af;
   color: #1e1e2e;
@@ -460,6 +459,52 @@ body {
   font-size: 22px;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+#mobileMeasure {
+  display: none;
+  position: fixed;
+  bottom: 8px;
+  left: calc(50% + 30px);
+  z-index: 60;
+  background: #cba6f7;
+  color: #1e1e2e;
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+#mobileMeasure.active {
+  background: #f5c2e7;
+  box-shadow: 0 0 12px #cba6f766;
+}
+
+#mobileAutoCenter {
+  display: none;
+  position: fixed;
+  top: 28px;
+  right: 8px;
+  z-index: 60;
+  background: #585b70;
+  color: #cdd6f4;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  line-height: 40px;
+  text-align: center;
+}
+
+#mobileAutoCenter:active {
+  background: #89b4fa;
+  color: #1e1e2e;
 }
 
 #mobileSidebarToggle {
@@ -639,6 +684,18 @@ body {
   }
 
   #mobileNumInput {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #mobileMeasure {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #mobileAutoCenter {
     display: flex;
     align-items: center;
     justify-content: center;

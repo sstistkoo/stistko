@@ -83,3 +83,75 @@ function snapPt(wx, wy) {
   state.mouse.snapType = '';
   return [wx, wy];
 }
+
+// ── Auto-center: vycentrovat pohled na všechny objekty ──
+function autoCenterView() {
+  if (state.objects.length === 0) {
+    // Nic nakresleno – reset na výchozí pozici
+    state.zoom = 1;
+    state.panX = drawCanvas.width / 2;
+    state.panY = drawCanvas.height / 2;
+    renderAll();
+    showToast("Pohled vycentrován (prázdný)");
+    return;
+  }
+
+  // Najít bounding box všech objektů
+  let minX = Infinity, maxX = -Infinity;
+  let minY = Infinity, maxY = -Infinity;
+
+  for (const obj of state.objects) {
+    switch (obj.type) {
+      case "point":
+        minX = Math.min(minX, obj.x);
+        maxX = Math.max(maxX, obj.x);
+        minY = Math.min(minY, obj.y);
+        maxY = Math.max(maxY, obj.y);
+        break;
+      case "line":
+      case "constr":
+      case "rect":
+        minX = Math.min(minX, obj.x1, obj.x2);
+        maxX = Math.max(maxX, obj.x1, obj.x2);
+        minY = Math.min(minY, obj.y1, obj.y2);
+        maxY = Math.max(maxY, obj.y1, obj.y2);
+        break;
+      case "circle":
+        minX = Math.min(minX, obj.cx - obj.r);
+        maxX = Math.max(maxX, obj.cx + obj.r);
+        minY = Math.min(minY, obj.cy - obj.r);
+        maxY = Math.max(maxY, obj.cy + obj.r);
+        break;
+      case "arc":
+        minX = Math.min(minX, obj.cx - obj.r);
+        maxX = Math.max(maxX, obj.cx + obj.r);
+        minY = Math.min(minY, obj.cy - obj.r);
+        maxY = Math.max(maxY, obj.cy + obj.r);
+        break;
+    }
+  }
+
+  if (!isFinite(minX)) return;
+
+  const bboxW = maxX - minX || 1;
+  const bboxH = maxY - minY || 1;
+  const canvasW = drawCanvas.width;
+  const canvasH = drawCanvas.height;
+  const padding = 0.15; // 15% okraj
+
+  // Zoom aby se vše vešlo
+  const zoomX = (canvasW * (1 - 2 * padding)) / bboxW;
+  const zoomY = (canvasH * (1 - 2 * padding)) / bboxH;
+  state.zoom = Math.min(zoomX, zoomY);
+
+  // Pan aby střed bboxu byl uprostřed canvasu
+  const centerX = (minX + maxX) / 2;
+  const centerY = (minY + maxY) / 2;
+  state.panX = canvasW / 2 - centerX * state.zoom;
+  state.panY = canvasH / 2 + centerY * state.zoom;
+
+  document.getElementById("statusZoom").textContent =
+    `Zoom: ${(state.zoom * 100).toFixed(0)}%`;
+  renderAll();
+  showToast("Pohled vycentrován");
+}

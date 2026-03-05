@@ -59,6 +59,24 @@ document
     showNumericalInputDialog();
   });
 
+// ── Mobile: Měření tlačítko ──
+const mobileMeasureBtn = document.getElementById("mobileMeasure");
+mobileMeasureBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  topbar.classList.remove("mobile-open");
+  sidebar.classList.remove("mobile-open");
+  sidebarOverlay.classList.remove("active");
+  const newTool = state.tool === "measure" ? "select" : "measure";
+  setTool(newTool);
+  mobileMeasureBtn.classList.toggle("active", newTool === "measure");
+});
+
+// ── Mobile: Auto-center tlačítko ──
+document.getElementById("mobileAutoCenter").addEventListener("click", (e) => {
+  e.stopPropagation();
+  autoCenterView();
+});
+
 // ── Touch state ──
 const PRECISION_OFFSET_Y = -80; // crosshair 80px above finger
 
