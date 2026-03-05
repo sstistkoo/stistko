@@ -258,7 +258,7 @@ function resetHint() {
     circle: "Klikněte na střed kružnice",
     arc: "Klikněte na střed oblouku",
     rect: "Klikněte na první roh obdélníku",
-    measure: "Klikněte na počáteční bod měření",
+    measure: "Klepněte na objekt pro info, nebo na prázdné místo pro měření",
   };
   setHint(hints[state.tool] || "");
 }

@@ -18,10 +18,28 @@ function showMeasureResult(p1, p2, d, angle) {
         <tr><td style="color:#a6adc8">Bod 2:</td><td style="color:#89b4fa">X${p2.x.toFixed(4)} Z${p2.y.toFixed(4)}</td></tr>
       </table>
       <div class="btn-row">
+        <button class="btn-cancel" id="measureAddDim">📐 Přidat kótu</button>
         <button class="btn-ok" onclick="this.closest('.input-overlay').remove()">OK</button>
       </div>
     </div>`;
   document.body.appendChild(overlay);
+  overlay
+    .querySelector("#measureAddDim")
+    .addEventListener("click", () => {
+      // Přidat kótovací úsečku jako objekt
+      addObject({
+        type: "line",
+        x1: p1.x,
+        y1: p1.y,
+        x2: p2.x,
+        y2: p2.y,
+        name: `Kóta ${d.toFixed(2)}mm`,
+        isDimension: true,
+        color: "#9399b2",
+      });
+      showToast(`Kóta ${d.toFixed(2)}mm přidána`);
+      overlay.remove();
+    });
   overlay.querySelector(".btn-ok").focus();
 }
 
@@ -431,4 +449,248 @@ function showPolarDrawingDialog() {
   });
 
   polLen.focus();
+}
+
+// ── Měření – info o existujícím objektu ──
+function showMeasureObjectInfo(obj, wx, wy) {
+  // Detekce, zda jsme kliknuli blízko koncového bodu
+  const threshold = 8 / state.zoom;
+  const snapPoints = getObjectSnapPoints(obj);
+  let nearestPt = null;
+  let nearestDist = Infinity;
+  for (const pt of snapPoints) {
+    const d = Math.hypot(pt.x - wx, pt.y - wy);
+    if (d < nearestDist) {
+      nearestDist = d;
+      nearestPt = pt;
+    }
+  }
+
+  const clickedEndpoint = nearestDist < threshold;
+  let html = "";
+
+  if (clickedEndpoint && nearestPt) {
+    // Klik na koncový bod – zobrazit souřadnice
+    html = `
+      <div class="input-dialog">
+        <h3>📍 Souřadnice bodu</h3>
+        <table style="width:100%;font-family:Consolas;font-size:13px;">
+          <tr><td style="color:#a6adc8">X:</td><td style="color:#f9e2af">${nearestPt.x.toFixed(4)}</td></tr>
+          <tr><td style="color:#a6adc8">Z:</td><td style="color:#f9e2af">${nearestPt.y.toFixed(4)}</td></tr>
+        </table>
+        <div class="btn-row">
+          <button class="btn-cancel" id="ptCopy">📋 Kopírovat</button>
+          <button class="btn-cancel" id="ptAddPoint">📍 Vytvořit bod</button>
+          <button class="btn-ok" onclick="this.closest('.input-overlay').remove()">OK</button>
+        </div>
+      </div>`;
+  } else {
+    // Klik na tělo objektu – zobrazit info
+    html = buildObjectInfoDialog(obj);
+  }
+
+  const overlay = document.createElement("div");
+  overlay.className = "input-overlay";
+  overlay.innerHTML = html;
+  document.body.appendChild(overlay);
+
+  if (clickedEndpoint && nearestPt) {
+    overlay.querySelector("#ptCopy").addEventListener("click", () => {
+      const text = `X${nearestPt.x.toFixed(4)} Z${nearestPt.y.toFixed(4)}`;
+      navigator.clipboard
+        .writeText(text)
+        .then(() => showToast(`Zkopírováno: ${text}`));
+    });
+    overlay.querySelector("#ptAddPoint").addEventListener("click", () => {
+      addObject({
+        type: "point",
+        x: nearestPt.x,
+        y: nearestPt.y,
+        name: `Bod ${state.nextId}`,
+      });
+      showToast(
+        `Bod X${nearestPt.x.toFixed(2)} Z${nearestPt.y.toFixed(2)} vytvořen`,
+      );
+      overlay.remove();
+    });
+  }
+
+  overlay.querySelector(".btn-ok").focus();
+}
+
+function buildObjectInfoDialog(obj) {
+  let rows = "";
+  rows += `<tr><td style="color:#a6adc8">Typ:</td><td style="color:#cdd6f4">${typeLabel(obj.type)}</td></tr>`;
+  if (obj.name)
+    rows += `<tr><td style="color:#a6adc8">Název:</td><td style="color:#cdd6f4">${obj.name}</td></tr>`;
+
+  switch (obj.type) {
+    case "point":
+      rows += `<tr><td style="color:#a6adc8">X:</td><td style="color:#f9e2af">${obj.x.toFixed(4)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Z:</td><td style="color:#f9e2af">${obj.y.toFixed(4)}</td></tr>`;
+      break;
+    case "line":
+    case "constr": {
+      const len = Math.hypot(obj.x2 - obj.x1, obj.y2 - obj.y1);
+      const angle =
+        (Math.atan2(obj.y2 - obj.y1, obj.x2 - obj.x1) * 180) / Math.PI;
+      rows += `<tr><td style="color:#a6adc8">Bod 1:</td><td style="color:#89b4fa">X${obj.x1.toFixed(4)} Z${obj.y1.toFixed(4)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Bod 2:</td><td style="color:#89b4fa">X${obj.x2.toFixed(4)} Z${obj.y2.toFixed(4)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Délka:</td><td style="color:#f9e2af">${len.toFixed(4)} mm</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Úhel:</td><td style="color:#f9e2af">${angle.toFixed(2)}°</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">ΔX:</td><td style="color:#f5c2e7">${(obj.x2 - obj.x1).toFixed(4)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">ΔZ:</td><td style="color:#f5c2e7">${(obj.y2 - obj.y1).toFixed(4)}</td></tr>`;
+      break;
+    }
+    case "circle":
+      rows += `<tr><td style="color:#a6adc8">Střed:</td><td style="color:#89b4fa">X${obj.cx.toFixed(4)} Z${obj.cy.toFixed(4)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Poloměr:</td><td style="color:#f9e2af">${obj.r.toFixed(4)} mm</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Průměr:</td><td style="color:#f9e2af">${(obj.r * 2).toFixed(4)} mm</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Obvod:</td><td style="color:#f5c2e7">${(2 * Math.PI * obj.r).toFixed(4)} mm</td></tr>`;
+      break;
+    case "arc":
+      rows += `<tr><td style="color:#a6adc8">Střed:</td><td style="color:#89b4fa">X${obj.cx.toFixed(4)} Z${obj.cy.toFixed(4)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Poloměr:</td><td style="color:#f9e2af">${obj.r.toFixed(4)} mm</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Start:</td><td style="color:#f5c2e7">${((obj.startAngle * 180) / Math.PI).toFixed(2)}°</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Konec:</td><td style="color:#f5c2e7">${((obj.endAngle * 180) / Math.PI).toFixed(2)}°</td></tr>`;
+      break;
+    case "rect": {
+      const w = Math.abs(obj.x2 - obj.x1);
+      const h = Math.abs(obj.y2 - obj.y1);
+      rows += `<tr><td style="color:#a6adc8">Roh 1:</td><td style="color:#89b4fa">X${obj.x1.toFixed(4)} Z${obj.y1.toFixed(4)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Roh 2:</td><td style="color:#89b4fa">X${obj.x2.toFixed(4)} Z${obj.y2.toFixed(4)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Šířka:</td><td style="color:#f9e2af">${w.toFixed(4)} mm</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Výška:</td><td style="color:#f9e2af">${h.toFixed(4)} mm</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Obvod:</td><td style="color:#f5c2e7">${(2 * (w + h)).toFixed(4)} mm</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Plocha:</td><td style="color:#f5c2e7">${(w * h).toFixed(4)} mm²</td></tr>`;
+      break;
+    }
+  }
+
+  let addDimBtn = "";
+  if (obj.type === "line" || obj.type === "constr") {
+    addDimBtn = `<button class="btn-cancel" id="objAddDim">📐 Přidat kótu</button>`;
+  } else if (obj.type === "circle" || obj.type === "arc") {
+    addDimBtn = `<button class="btn-cancel" id="objAddDim">📐 Přidat kótu R</button>`;
+  } else if (obj.type === "rect") {
+    addDimBtn = `<button class="btn-cancel" id="objAddDim">📐 Přidat kóty</button>`;
+  }
+
+  let html = `
+    <div class="input-dialog">
+      <h3>📏 Info o objektu</h3>
+      <table style="width:100%;font-family:Consolas;font-size:13px;">
+        ${rows}
+      </table>
+      <div class="btn-row">
+        ${addDimBtn}
+        <button class="btn-cancel" id="objCopy">📋 Kopírovat</button>
+        <button class="btn-ok" onclick="this.closest('.input-overlay').remove()">OK</button>
+      </div>
+    </div>`;
+
+  // Přidat event listenery po připojení ke DOM (musí být přes setTimeout)
+  setTimeout(() => {
+    const overlay = document.querySelector(".input-overlay:last-child");
+    if (!overlay) return;
+
+    const copyBtn = overlay.querySelector("#objCopy");
+    if (copyBtn) {
+      copyBtn.addEventListener("click", () => {
+        const table = overlay.querySelector("table");
+        const text = table.innerText;
+        navigator.clipboard
+          .writeText(text)
+          .then(() => showToast("Info zkopírováno"));
+      });
+    }
+
+    const dimBtn = overlay.querySelector("#objAddDim");
+    if (dimBtn) {
+      dimBtn.addEventListener("click", () => {
+        addDimensionForObject(obj);
+        overlay.remove();
+      });
+    }
+  }, 0);
+
+  return html;
+}
+
+// ── Přidání kót k objektu ──
+function addDimensionForObject(obj) {
+  switch (obj.type) {
+    case "line":
+    case "constr": {
+      const len = Math.hypot(obj.x2 - obj.x1, obj.y2 - obj.y1);
+      addObject({
+        type: "line",
+        x1: obj.x1,
+        y1: obj.y1,
+        x2: obj.x2,
+        y2: obj.y2,
+        name: `Kóta ${len.toFixed(2)}mm`,
+        isDimension: true,
+        color: "#9399b2",
+      });
+      showToast(`Kóta ${len.toFixed(2)}mm přidána`);
+      break;
+    }
+    case "circle": {
+      addObject({
+        type: "line",
+        x1: obj.cx,
+        y1: obj.cy,
+        x2: obj.cx + obj.r,
+        y2: obj.cy,
+        name: `Kóta R${obj.r.toFixed(2)}`,
+        isDimension: true,
+        color: "#9399b2",
+      });
+      showToast(`Kóta R${obj.r.toFixed(2)} přidána`);
+      break;
+    }
+    case "arc": {
+      addObject({
+        type: "line",
+        x1: obj.cx,
+        y1: obj.cy,
+        x2: obj.cx + obj.r,
+        y2: obj.cy,
+        name: `Kóta R${obj.r.toFixed(2)}`,
+        isDimension: true,
+        color: "#9399b2",
+      });
+      showToast(`Kóta R${obj.r.toFixed(2)} přidána`);
+      break;
+    }
+    case "rect": {
+      const w = Math.abs(obj.x2 - obj.x1);
+      const h = Math.abs(obj.y2 - obj.y1);
+      // Šířka – horní hrana
+      addObject({
+        type: "line",
+        x1: obj.x1,
+        y1: Math.max(obj.y1, obj.y2),
+        x2: obj.x2,
+        y2: Math.max(obj.y1, obj.y2),
+        name: `Kóta ${w.toFixed(2)}mm`,
+        isDimension: true,
+        color: "#9399b2",
+      });
+      // Výška – pravá hrana
+      addObject({
+        type: "line",
+        x1: Math.max(obj.x1, obj.x2),
+        y1: obj.y1,
+        x2: Math.max(obj.x1, obj.x2),
+        y2: obj.y2,
+        name: `Kóta ${h.toFixed(2)}mm`,
+        isDimension: true,
+        color: "#9399b2",
+      });
+      showToast(`Kóty ${w.toFixed(2)} × ${h.toFixed(2)}mm přidány`);
+      break;
+    }
+  }
 }

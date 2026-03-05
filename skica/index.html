@@ -12,9 +12,19 @@
   <body>
     <!-- ── Mobile Controls ── -->
     <button id="mobileToolbarToggle" aria-label="Nástroje">🔧</button>
+    <button id="mobileNumInput" aria-label="Zadat">🔢</button>
     <button id="mobileSidebarToggle" aria-label="Panel">☰</button>
     <div id="mobileCoordBar">X: 0.000 &nbsp; Z: 0.000</div>
     <div id="sidebarOverlay"></div>
+
+    <!-- ── Precision Crosshair (long-press) ── -->
+    <div id="precisionCrosshair">
+      <div class="ch-h"></div>
+      <div class="ch-v"></div>
+      <div class="ch-dot"></div>
+      <div class="ch-connector"></div>
+      <div class="ch-label"></div>
+    </div>
 
     <!-- ── Toolbar ── -->
     <div id="topbar">
@@ -152,6 +162,9 @@
       </button>
       <button class="tool-btn" id="btnExport" title="Export CNC souřadnic">
         📋 CNC Export
+      </button>
+      <button class="tool-btn" id="btnGitHub" title="GitHub auto-save">
+        ☁️ GitHub<span id="ghStatusDot" class="gh-status"></span>
       </button>
       <div id="coordDisplay">X: 0.000 &nbsp; Z: 0.000</div>
     </div>
