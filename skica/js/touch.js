@@ -77,6 +77,15 @@ document.getElementById("mobileAutoCenter").addEventListener("click", (e) => {
   autoCenterView();
 });
 
+// ── Mobile: Edit tlačítko ──
+document.getElementById("mobileEdit").addEventListener("click", (e) => {
+  e.stopPropagation();
+  topbar.classList.remove("mobile-open");
+  sidebar.classList.remove("mobile-open");
+  sidebarOverlay.classList.remove("active");
+  showMobileEditDialog();
+});
+
 // ── Touch state ──
 const PRECISION_OFFSET_Y = -80; // crosshair 80px above finger
 

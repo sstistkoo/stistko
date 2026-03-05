@@ -503,7 +503,7 @@ body {
   bottom: 8px;
   left: calc(50% + 30px);
   z-index: 60;
-  background: #cba6f7;
+  background: #f38ba8;
   color: #1e1e2e;
   border: none;
   border-radius: 50%;
@@ -512,11 +512,12 @@ body {
   font-size: 22px;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  transition: background 0.2s, box-shadow 0.2s;
 }
 
 #mobileMeasure.active {
-  background: #f5c2e7;
-  box-shadow: 0 0 12px #cba6f766;
+  background: #a6e3a1;
+  box-shadow: 0 0 14px #a6e3a166;
 }
 
 #mobileAutoCenter {
@@ -735,6 +736,22 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  #mobileEdit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Hide duplicated toolbar items on mobile */
+  [data-tool="measure"].tool-btn,
+  #btnNumInput {
+    /* visible on desktop, hidden handled by mobile-specific override */
+  }
+
+  .mobile-hide {
+    display: none !important;
   }
 
   #mobileCoordBar {

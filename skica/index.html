@@ -15,6 +15,7 @@
     <button id="mobileNumInput" aria-label="Zadat">🔢</button>
     <button id="mobileMeasure" aria-label="Měření">📏</button>
     <button id="mobileSidebarToggle" aria-label="Panel">☰</button>
+    <button id="mobileEdit" aria-label="Upravit">✏️</button>
     <button id="mobileAutoCenter" aria-label="Vycentrovat">⊙</button>
     <div id="mobileCoordBar">X: 0.000 &nbsp; Z: 0.000</div>
     <div id="sidebarOverlay"></div>
@@ -121,7 +122,7 @@
         Obdélník
       </button>
       <div class="sep"></div>
-      <button class="tool-btn" data-tool="measure" title="Měření (M)">
+      <button class="tool-btn mobile-hide" data-tool="measure" title="Měření (M)">
         <svg viewBox="0 0 24 24">
           <path
             d="M3 21L21 3M8 21V16M13 21V13M18 21V10"
@@ -139,7 +140,7 @@
       <button class="tool-btn" id="btnDims" title="Zobrazit kóty (D)">
         📐 Kóty
       </button>
-      <button class="tool-btn" id="btnNumInput" title="Číselný vstup (N)">
+      <button class="tool-btn mobile-hide" id="btnNumInput" title="Číselný vstup (N)">
         🔢 Zadat
       </button>
       <button
