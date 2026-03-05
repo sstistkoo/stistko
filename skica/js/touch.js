@@ -415,6 +415,29 @@ drawCanvas.addEventListener(
       touchState.longPressTimer = null;
     }
 
+    // Po pinch zoomu (2→1 prst nebo 2→0): neskákat, resetovat stav
+    if (touchState.wasMultiTouch) {
+      if (e.touches.length === 1) {
+        // Zbyl jeden prst – přenastavit referenci aby nedošlo ke skoku
+        touchState.singleTouchStartX = e.touches[0].clientX;
+        touchState.singleTouchStartY = e.touches[0].clientY;
+        touchState.singleTouchStartPanX = state.panX;
+        touchState.singleTouchStartPanY = state.panY;
+        touchState.singlePanning = false;
+        touchState.touchMoved = true; // zabránit kliknutí
+        touchState.panActive = false;
+        return;
+      }
+      if (e.touches.length === 0) {
+        touchState.panActive = false;
+        touchState.wasMultiTouch = false;
+        touchState.singlePanning = false;
+        touchState.touchMoved = false;
+        hidePrecisionCrosshair();
+        return;
+      }
+    }
+
     if (e.touches.length === 0 && touchState.panActive) {
       touchState.panActive = false;
       hidePrecisionCrosshair();
