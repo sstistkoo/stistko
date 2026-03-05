@@ -12,7 +12,29 @@ const gotScrapingReady = import("got-scraping")
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-app.use(cors());
+// CORS — explicitně povolíme GitHub Pages origin i localhost
+app.use(cors({
+  origin: [
+    "https://sstistkoo.github.io",
+    /^http:\/\/localhost(:\d+)?$/,
+    /^http:\/\/127\.0\.0\.1(:\d+)?$/,
+  ],
+  methods: ["GET", "OPTIONS"],
+  allowedHeaders: ["Content-Type"],
+}));
+
+// Záložní CORS hlavičky — pojistka pro případ, že cors() middleware selže
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (origin === "https://sstistkoo.github.io" || /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  if (req.method === "OPTIONS") return res.sendStatus(204);
+  next();
+});
+
 app.use(express.static("."));
 
 const BROWSER_HEADERS = {
