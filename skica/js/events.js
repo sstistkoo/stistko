@@ -108,8 +108,21 @@ drawCanvas.addEventListener("mousedown", (e) => {
     case "constr":
     case "measure":
       if (!state.drawing) {
-        // Měření: pokud klikneme na existující objekt, zobrazit info
+        // Měření: nejdříve průsečíky, pak objekty
         if (state.tool === "measure") {
+          const intThreshold = 12 / state.zoom;
+          let nearestInt = null, nearestIntD = Infinity;
+          for (const pt of state.intersections) {
+            const d = Math.hypot(pt.x - wx, pt.y - wy);
+            if (d < intThreshold && d < nearestIntD) {
+              nearestIntD = d;
+              nearestInt = pt;
+            }
+          }
+          if (nearestInt) {
+            showIntersectionInfo(nearestInt);
+            return;
+          }
           const idx = findObjectAt(wx, wy);
           if (idx !== null) {
             showMeasureObjectInfo(state.objects[idx], wx, wy);
@@ -375,8 +388,21 @@ function handleCanvasClick(wx, wy) {
     case "constr":
     case "measure":
       if (!state.drawing) {
-        // Měření: pokud klikneme na existující objekt, zobrazit info
+        // Měření: nejdříve průsečíky, pak objekty
         if (state.tool === "measure") {
+          const intThreshold = 12 / state.zoom;
+          let nearestInt = null, nearestIntD = Infinity;
+          for (const pt of state.intersections) {
+            const d = Math.hypot(pt.x - wx, pt.y - wy);
+            if (d < intThreshold && d < nearestIntD) {
+              nearestIntD = d;
+              nearestInt = pt;
+            }
+          }
+          if (nearestInt) {
+            showIntersectionInfo(nearestInt);
+            return;
+          }
           const idx = findObjectAt(wx, wy);
           if (idx !== null) {
             showMeasureObjectInfo(state.objects[idx], wx, wy);
