@@ -42,43 +42,53 @@ function snap(val) {
 }
 
 function snapPt(wx, wy) {
-  // Snap k bodům objektů (koncové body, středy)
+  let objX = null, objY = null, objD = Infinity;
+
+  // Snap k bodům objektů a průsečíkům – větší poloměr zachycení
   if (state.snapToPoints) {
-    const threshold = 8 / state.zoom;
-    let bestD = threshold,
-      bestX = null,
-      bestY = null;
+    const threshold = 20 / state.zoom;
     for (const obj of state.objects) {
       const pts = getObjectSnapPoints(obj);
       for (const p of pts) {
         const d = Math.hypot(p.x - wx, p.y - wy);
-        if (d < bestD) {
-          bestD = d;
-          bestX = p.x;
-          bestY = p.y;
+        if (d < threshold && d < objD) {
+          objD = d;
+          objX = p.x;
+          objY = p.y;
         }
       }
     }
-    // Snap k průsečíkům
+    // Průsečíky mají bonus – při stejné vzdálenosti vyhrávají
     for (const pt of state.intersections) {
       const d = Math.hypot(pt.x - wx, pt.y - wy);
-      if (d < bestD) {
-        bestD = d;
-        bestX = pt.x;
-        bestY = pt.y;
+      if (d < threshold && d <= objD) {
+        objD = d;
+        objX = pt.x;
+        objY = pt.y;
       }
     }
-    if (bestX !== null) {
-      state.mouse.snapped = true;
-      state.mouse.snapType = 'point';
-      return [bestX, bestY];
-    }
   }
+
+  // Grid snap
+  let gridX = null, gridY = null, gridD = Infinity;
   if (state.snapToGrid) {
+    gridX = snap(wx);
+    gridY = snap(wy);
+    gridD = Math.hypot(gridX - wx, gridY - wy);
+  }
+
+  // Body/průsečíky mají prioritu před mřížkou
+  if (objX !== null) {
+    state.mouse.snapped = true;
+    state.mouse.snapType = 'point';
+    return [objX, objY];
+  }
+  if (gridX !== null) {
     state.mouse.snapped = true;
     state.mouse.snapType = 'grid';
-    return [snap(wx), snap(wy)];
+    return [gridX, gridY];
   }
+
   state.mouse.snapped = false;
   state.mouse.snapType = '';
   return [wx, wy];
