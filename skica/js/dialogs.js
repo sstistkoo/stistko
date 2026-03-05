@@ -91,6 +91,9 @@ document
   .getElementById("btnNumInput")
   .addEventListener("click", showNumericalInputDialog);
 
+// Stav pro chaining – pamatuje koncový bod posledně vytvořeného objektu
+let _numDialogChain = { x: null, y: null };
+
 function showNumericalInputDialog() {
   const overlay = document.createElement("div");
   overlay.className = "input-overlay";
@@ -108,7 +111,7 @@ function showNumericalInputDialog() {
       </select>
       <div id="numFields"></div>
       <div class="btn-row">
-        <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
+        <button class="btn-cancel" id="numCancel">Zrušit</button>
         <button class="btn-ok" id="numOk">Vytvořit</button>
       </div>
     </div>`;
@@ -117,48 +120,140 @@ function showNumericalInputDialog() {
   const typeSelect = overlay.querySelector("#numType");
   const fieldsDiv = overlay.querySelector("#numFields");
 
+  // -- Pick from map helper --
+  let _pickCallback = null;
+
+  function pickFromMap(callback) {
+    _pickCallback = callback;
+    overlay.style.display = "none";
+    showToast("Klikněte na mapu pro výběr bodu...");
+
+    function onPick(e) {
+      const rect = drawCanvas.getBoundingClientRect();
+      const sx = e.clientX - rect.left;
+      const sy = e.clientY - rect.top;
+      let [wx, wy] = screenToWorld(sx, sy);
+      if (state.snapToGrid || state.snapToPoints) [wx, wy] = snapPt(wx, wy);
+      drawCanvas.removeEventListener("click", onPick);
+      drawCanvas.removeEventListener("touchend", onTouch);
+      overlay.style.display = "flex";
+      callback(wx, wy);
+    }
+
+    function onTouch(e) {
+      if (e.changedTouches.length === 1) {
+        const t = e.changedTouches[0];
+        const rect = drawCanvas.getBoundingClientRect();
+        const sx = t.clientX - rect.left;
+        const sy = t.clientY - rect.top;
+        let [wx, wy] = screenToWorld(sx, sy);
+        if (state.snapToGrid || state.snapToPoints) [wx, wy] = snapPt(wx, wy);
+        drawCanvas.removeEventListener("click", onPick);
+        drawCanvas.removeEventListener("touchend", onTouch);
+        overlay.style.display = "flex";
+        e.preventDefault();
+        callback(wx, wy);
+      }
+    }
+
+    drawCanvas.addEventListener("click", onPick, { once: true });
+    drawCanvas.addEventListener("touchend", onTouch, { once: true });
+  }
+
+  function pickBtn(label) {
+    return `<button type="button" class="pick-btn" title="Vybrat z mapy">${label}</button>`;
+  }
+
+  // Chain values
+  const chainX = _numDialogChain.x !== null ? _numDialogChain.x.toFixed(4) : "0";
+  const chainY = _numDialogChain.y !== null ? _numDialogChain.y.toFixed(4) : "0";
+  const hasChain = _numDialogChain.x !== null;
+
   function updateFields() {
     const t = typeSelect.value;
     let html = "";
     switch (t) {
       case "point":
-        html = `<div class="input-row"><div><label>X:</label><input type="number" id="nx" step="0.1" value="0"></div>
-                <div><label>Z:</label><input type="number" id="ny" step="0.1" value="0"></div></div>`;
+        html = `<div class="input-row"><div><label>X:</label><input type="number" id="nx" step="0.1" value="${hasChain ? chainX : '0'}"></div>
+                <div><label>Z:</label><input type="number" id="ny" step="0.1" value="${hasChain ? chainY : '0'}"></div>
+                <div class="pick-col">${pickBtn("🎯")}</div></div>`;
         break;
       case "line":
       case "constr":
-        html = `<div class="input-row"><div><label>X1:</label><input type="number" id="nx1" step="0.1" value="0"></div>
-                <div><label>Z1:</label><input type="number" id="ny1" step="0.1" value="0"></div></div>
+        html = `<div class="input-row"><div><label>X1:</label><input type="number" id="nx1" step="0.1" value="${hasChain ? chainX : '0'}"></div>
+                <div><label>Z1:</label><input type="number" id="ny1" step="0.1" value="${hasChain ? chainY : '0'}"></div>
+                <div class="pick-col">${pickBtn("🎯1")}</div></div>
                 <div class="input-row"><div><label>X2:</label><input type="number" id="nx2" step="0.1" value="0"></div>
-                <div><label>Z2:</label><input type="number" id="ny2" step="0.1" value="0"></div></div>
+                <div><label>Z2:</label><input type="number" id="ny2" step="0.1" value="0"></div>
+                <div class="pick-col">${pickBtn("🎯2")}</div></div>
                 <label style="font-size:11px;color:#6c7086;margin-top:4px">Nebo: Délka + Úhel od bodu 1</label>
                 <div class="input-row"><div><label>Délka:</label><input type="number" id="nlen" step="0.1" value=""></div>
                 <div><label>Úhel (°):</label><input type="number" id="nang" step="0.1" value=""></div></div>`;
         break;
       case "circle":
-        html = `<div class="input-row"><div><label>Střed X:</label><input type="number" id="ncx" step="0.1" value="0"></div>
-                <div><label>Střed Z:</label><input type="number" id="ncy" step="0.1" value="0"></div></div>
+        html = `<div class="input-row"><div><label>Střed X:</label><input type="number" id="ncx" step="0.1" value="${hasChain ? chainX : '0'}"></div>
+                <div><label>Střed Z:</label><input type="number" id="ncy" step="0.1" value="${hasChain ? chainY : '0'}"></div>
+                <div class="pick-col">${pickBtn("🎯")}</div></div>
                 <div class="input-row"><div><label>Poloměr:</label><input type="number" id="nr" step="0.1" value="10"></div>
                 <div></div></div>`;
         break;
       case "arc":
-        html = `<div class="input-row"><div><label>Střed X:</label><input type="number" id="ncx" step="0.1" value="0"></div>
-                <div><label>Střed Z:</label><input type="number" id="ncy" step="0.1" value="0"></div></div>
+        html = `<div class="input-row"><div><label>Střed X:</label><input type="number" id="ncx" step="0.1" value="${hasChain ? chainX : '0'}"></div>
+                <div><label>Střed Z:</label><input type="number" id="ncy" step="0.1" value="${hasChain ? chainY : '0'}"></div>
+                <div class="pick-col">${pickBtn("🎯")}</div></div>
                 <div class="input-row"><div><label>Poloměr:</label><input type="number" id="nr" step="0.1" value="10"></div></div>
                 <div class="input-row"><div><label>Start (°):</label><input type="number" id="nsa" step="1" value="0"></div>
                 <div><label>Konec (°):</label><input type="number" id="nea" step="1" value="90"></div></div>`;
         break;
       case "rect":
-        html = `<div class="input-row"><div><label>X1:</label><input type="number" id="nx1" step="0.1" value="0"></div>
-                <div><label>Z1:</label><input type="number" id="ny1" step="0.1" value="0"></div></div>
+        html = `<div class="input-row"><div><label>X1:</label><input type="number" id="nx1" step="0.1" value="${hasChain ? chainX : '0'}"></div>
+                <div><label>Z1:</label><input type="number" id="ny1" step="0.1" value="${hasChain ? chainY : '0'}"></div>
+                <div class="pick-col">${pickBtn("🎯1")}</div></div>
                 <div class="input-row"><div><label>X2:</label><input type="number" id="nx2" step="0.1" value="0"></div>
-                <div><label>Z2:</label><input type="number" id="ny2" step="0.1" value="0"></div></div>
+                <div><label>Z2:</label><input type="number" id="ny2" step="0.1" value="0"></div>
+                <div class="pick-col">${pickBtn("🎯2")}</div></div>
                 <label style="font-size:11px;color:#6c7086;margin-top:4px">Nebo: Šířka × Výška od bodu 1</label>
                 <div class="input-row"><div><label>Šířka:</label><input type="number" id="nw" step="0.1" value=""></div>
                 <div><label>Výška:</label><input type="number" id="nh" step="0.1" value=""></div></div>`;
         break;
     }
     fieldsDiv.innerHTML = html;
+
+    // Wire pick buttons
+    const pickBtns = fieldsDiv.querySelectorAll(".pick-btn");
+    pickBtns.forEach((btn, i) => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        pickFromMap((wx, wy) => {
+          const t2 = typeSelect.value;
+          if (t2 === "point") {
+            const nx = overlay.querySelector("#nx");
+            const ny = overlay.querySelector("#ny");
+            if (nx) nx.value = wx.toFixed(4);
+            if (ny) ny.value = wy.toFixed(4);
+          } else if (t2 === "line" || t2 === "constr" || t2 === "rect") {
+            if (i === 0) {
+              const f1 = overlay.querySelector("#nx1");
+              const f2 = overlay.querySelector("#ny1");
+              if (f1) f1.value = wx.toFixed(4);
+              if (f2) f2.value = wy.toFixed(4);
+            } else {
+              const f1 = overlay.querySelector("#nx2");
+              const f2 = overlay.querySelector("#ny2");
+              if (f1) f1.value = wx.toFixed(4);
+              if (f2) f2.value = wy.toFixed(4);
+            }
+          } else if (t2 === "circle" || t2 === "arc") {
+            const f1 = overlay.querySelector("#ncx");
+            const f2 = overlay.querySelector("#ncy");
+            if (f1) f1.value = wx.toFixed(4);
+            if (f2) f2.value = wy.toFixed(4);
+          }
+          showToast(`Bod: X${wx.toFixed(2)} Z${wy.toFixed(2)}`);
+        });
+      });
+    });
+
     const first = fieldsDiv.querySelector("input");
     if (first) setTimeout(() => first.focus(), 50);
   }
@@ -166,7 +261,12 @@ function showNumericalInputDialog() {
   typeSelect.addEventListener("change", updateFields);
   updateFields();
 
-  overlay.querySelector("#numOk").addEventListener("click", () => {
+  // Highlight chained start point
+  if (hasChain) {
+    showToast(`Pokračování od X${_numDialogChain.x.toFixed(2)} Z${_numDialogChain.y.toFixed(2)}`);
+  }
+
+  function createObject() {
     const t = typeSelect.value;
     try {
       switch (t) {
@@ -174,6 +274,7 @@ function showNumericalInputDialog() {
           const x = parseFloat(overlay.querySelector("#nx").value);
           const y = parseFloat(overlay.querySelector("#ny").value);
           addObject({ type: "point", x, y, name: `Bod ${state.nextId}` });
+          _numDialogChain = { x, y };
           break;
         }
         case "line":
@@ -191,13 +292,11 @@ function showNumericalInputDialog() {
           }
           addObject({
             type: t,
-            x1,
-            y1,
-            x2,
-            y2,
+            x1, y1, x2, y2,
             name: `${t === "constr" ? "Konstr" : "Úsečka"} ${state.nextId}`,
             dashed: t === "constr",
           });
+          _numDialogChain = { x: x2, y: y2 };
           break;
         }
         case "circle": {
@@ -205,12 +304,10 @@ function showNumericalInputDialog() {
           const cy = parseFloat(overlay.querySelector("#ncy").value);
           const r = parseFloat(overlay.querySelector("#nr").value);
           addObject({
-            type: "circle",
-            cx,
-            cy,
-            r,
+            type: "circle", cx, cy, r,
             name: `Kružnice ${state.nextId}`,
           });
+          _numDialogChain = { x: cx, y: cy };
           break;
         }
         case "arc": {
@@ -218,20 +315,18 @@ function showNumericalInputDialog() {
           const cy = parseFloat(overlay.querySelector("#ncy").value);
           const r = parseFloat(overlay.querySelector("#nr").value);
           const sa =
-            (parseFloat(overlay.querySelector("#nsa").value) * Math.PI) /
-            180;
+            (parseFloat(overlay.querySelector("#nsa").value) * Math.PI) / 180;
           const ea =
-            (parseFloat(overlay.querySelector("#nea").value) * Math.PI) /
-            180;
+            (parseFloat(overlay.querySelector("#nea").value) * Math.PI) / 180;
           addObject({
-            type: "arc",
-            cx,
-            cy,
-            r,
-            startAngle: sa,
-            endAngle: ea,
+            type: "arc", cx, cy, r,
+            startAngle: sa, endAngle: ea,
             name: `Oblouk ${state.nextId}`,
           });
+          // Chain to arc endpoint
+          const endX = cx + r * Math.cos(ea);
+          const endY = cy + r * Math.sin(ea);
+          _numDialogChain = { x: endX, y: endY };
           break;
         }
         case "rect": {
@@ -246,25 +341,35 @@ function showNumericalInputDialog() {
             y2 = y1 + h;
           }
           addObject({
-            type: "rect",
-            x1,
-            y1,
-            x2,
-            y2,
+            type: "rect", x1, y1, x2, y2,
             name: `Obdélník ${state.nextId}`,
           });
+          _numDialogChain = { x: x2, y: y2 };
           break;
         }
       }
-      overlay.remove();
+      return true;
     } catch (err) {
       showToast("Chyba – zkontrolujte hodnoty");
+      return false;
     }
+  }
+
+  // Vytvořit a zavřít
+  overlay.querySelector("#numOk").addEventListener("click", () => {
+    if (createObject()) overlay.remove();
+  });
+
+  // Zrušit
+  overlay.querySelector("#numCancel").addEventListener("click", () => {
+    _numDialogChain = { x: null, y: null };
+    overlay.remove();
   });
 
   overlay.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" && e.target.tagName === "INPUT")
-      overlay.querySelector("#numOk").click();
+    if (e.key === "Enter" && e.target.tagName === "INPUT") {
+      if (createObject()) overlay.remove();
+    }
     if (e.key === "Escape") overlay.remove();
   });
 }
