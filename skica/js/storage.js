@@ -25,15 +25,13 @@ function loadProject() {
     const data = JSON.parse(raw);
     pushUndo();
     state.objects = data.objects || [];
-    state.intersections = data.intersections || [];
     state.nextId = data.nextId || 1;
     if (data.gridSize && data.gridSize > 0)
       state.gridSize = data.gridSize;
     state.selected = null;
     updateObjectList();
     updateProperties();
-    updateIntersectionList();
-    renderAll();
+    calculateAllIntersections();
     showToast(`Načteno ${state.objects.length} objektů`);
   } catch (e) {
     showToast("Chyba při načítání projektu");
@@ -72,15 +70,13 @@ function importProjectFile() {
         const data = JSON.parse(ev.target.result);
         pushUndo();
         state.objects = data.objects || [];
-        state.intersections = data.intersections || [];
         state.nextId = data.nextId || 1;
         if (data.gridSize && data.gridSize > 0)
           state.gridSize = data.gridSize;
         state.selected = null;
         updateObjectList();
         updateProperties();
-        updateIntersectionList();
-        renderAll();
+        calculateAllIntersections();
         showToast(`Importováno ${state.objects.length} objektů`);
       } catch (err) {
         showToast("Chyba při čtení souboru");
@@ -325,14 +321,12 @@ async function githubLoad() {
 
     pushUndo();
     state.objects = project.objects || [];
-    state.intersections = project.intersections || [];
     state.nextId = project.nextId || 1;
     if (project.gridSize > 0) state.gridSize = project.gridSize;
     state.selected = null;
     updateObjectList();
     updateProperties();
-    updateIntersectionList();
-    renderAll();
+    calculateAllIntersections();
     showToast(`GitHub: Načteno ${state.objects.length} objektů`);
   } catch (e) {
     showToast(`GitHub chyba: ${e.message}`);

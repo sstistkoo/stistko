@@ -13,7 +13,7 @@ function findObjectAt(wx, wy) {
       closest = idx;
     }
   });
-  const threshold = 8 / state.zoom;
+  const threshold = 15 / state.zoom;
   return closestDist < threshold ? closest : null;
 }
 
@@ -208,5 +208,4 @@ function calculateAllIntersections() {
   state.intersections = unique;
   updateIntersectionList();
   renderAll();
-  showToast(`Nalezeno ${unique.length} průsečíků`);
 }

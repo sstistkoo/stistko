@@ -590,7 +590,7 @@ function showIntersectionInfo(pt) {
 // ── Měření – info o existujícím objektu ──
 function showMeasureObjectInfo(obj, wx, wy) {
   // Detekce, zda jsme kliknuli blízko koncového bodu
-  const threshold = 8 / state.zoom;
+  const threshold = 15 / state.zoom;
   const snapPoints = getObjectSnapPoints(obj);
   let nearestPt = null;
   let nearestDist = Infinity;
