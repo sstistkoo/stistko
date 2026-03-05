@@ -556,6 +556,37 @@ function showPolarDrawingDialog() {
   polLen.focus();
 }
 
+// ── Měření – info o průsečíku ──
+function showIntersectionInfo(pt) {
+  const overlay = document.createElement("div");
+  overlay.className = "input-overlay";
+  overlay.innerHTML = `
+    <div class="input-dialog">
+      <h3>⨯ Průsečík</h3>
+      <table style="width:100%;font-family:Consolas;font-size:14px;">
+        <tr><td style="color:#a6adc8">X:</td><td style="color:#f9e2af;font-size:16px">${pt.x.toFixed(4)}</td></tr>
+        <tr><td style="color:#a6adc8">Z:</td><td style="color:#f9e2af;font-size:16px">${pt.y.toFixed(4)}</td></tr>
+      </table>
+      <div class="btn-row">
+        <button class="btn-cancel" id="intCopy">📋 Kopírovat</button>
+        <button class="btn-cancel" id="intAddPoint">📍 Vytvořit bod</button>
+        <button class="btn-ok" onclick="this.closest('.input-overlay').remove()">OK</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+
+  overlay.querySelector("#intCopy").addEventListener("click", () => {
+    const text = `X${pt.x.toFixed(4)} Z${pt.y.toFixed(4)}`;
+    navigator.clipboard.writeText(text).then(() => showToast(`Zkopírováno: ${text}`));
+  });
+  overlay.querySelector("#intAddPoint").addEventListener("click", () => {
+    addObject({ type: "point", x: pt.x, y: pt.y, name: `Bod ${state.nextId}` });
+    showToast(`Bod X${pt.x.toFixed(2)} Z${pt.y.toFixed(2)} vytvořen`);
+    overlay.remove();
+  });
+  overlay.querySelector(".btn-ok").focus();
+}
+
 // ── Měření – info o existujícím objektu ──
 function showMeasureObjectInfo(obj, wx, wy) {
   // Detekce, zda jsme kliknuli blízko koncového bodu

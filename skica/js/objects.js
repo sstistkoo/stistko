@@ -8,6 +8,10 @@ function addObject(obj) {
   state.objects.push(obj);
   updateObjectList();
   renderAll();
+  // Auto-center na nový objekt (jen na mobilu)
+  if (window.innerWidth <= 900) {
+    autoCenterView();
+  }
   return obj;
 }
 

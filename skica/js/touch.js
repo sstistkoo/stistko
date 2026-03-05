@@ -77,8 +77,8 @@ document.getElementById("mobileAutoCenter").addEventListener("click", (e) => {
   autoCenterView();
 });
 
-// ── Mobile: Edit tlačítko ──
-document.getElementById("mobileEdit").addEventListener("click", (e) => {
+// ── Sidebar: Edit tlačítko ──
+document.getElementById("sidebarEditBtn").addEventListener("click", (e) => {
   e.stopPropagation();
   topbar.classList.remove("mobile-open");
   sidebar.classList.remove("mobile-open");

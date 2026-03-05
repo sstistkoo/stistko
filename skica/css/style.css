@@ -117,6 +117,26 @@ body {
   flex-direction: column;
 }
 
+.sidebar-edit-btn {
+  display: block;
+  width: calc(100% - 16px);
+  margin: 8px;
+  padding: 10px;
+  background: #585b70;
+  color: #cdd6f4;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.2s;
+}
+.sidebar-edit-btn:hover,
+.sidebar-edit-btn:active {
+  background: #f9e2af;
+  color: #1e1e2e;
+}
+
 .panel-header {
   background: #313244;
   padding: 6px 10px;
@@ -544,29 +564,7 @@ body {
   color: #1e1e2e;
 }
 
-#mobileEdit {
-  display: none;
-  position: fixed;
-  top: 28px;
-  right: 56px;
-  z-index: 60;
-  background: #585b70;
-  color: #cdd6f4;
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  font-size: 20px;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-  line-height: 40px;
-  text-align: center;
-}
 
-#mobileEdit:active {
-  background: #f9e2af;
-  color: #1e1e2e;
-}
 
 #mobileSidebarToggle {
   display: none;
@@ -757,12 +755,6 @@ body {
   }
 
   #mobileAutoCenter {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  #mobileEdit {
     display: flex;
     align-items: center;
     justify-content: center;
