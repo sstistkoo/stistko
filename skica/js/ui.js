@@ -239,6 +239,9 @@ function setTool(tool) {
     );
   document.getElementById("statusTool").textContent =
     "Nástroj: " + toolLabel(tool);
+  // Sync mobile measure button
+  const mmBtn = document.getElementById("mobileMeasure");
+  if (mmBtn) mmBtn.classList.toggle("active", tool === "measure");
   resetHint();
   renderAll();
 }
