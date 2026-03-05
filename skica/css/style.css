@@ -444,6 +444,24 @@ body {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
+#mobileNumInput {
+  display: none;
+  position: fixed;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 60;
+  background: #f9e2af;
+  color: #1e1e2e;
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
 #mobileSidebarToggle {
   display: none;
   position: fixed;
@@ -481,6 +499,89 @@ body {
 /* ══════════════════════════════════════════
    Mobile responsive
    ══════════════════════════════════════════ */
+
+/* ── Precision Crosshair (long-press) ── */
+#precisionCrosshair {
+  display: none;
+  position: fixed;
+  z-index: 80;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+}
+
+#precisionCrosshair .ch-h {
+  position: absolute;
+  width: 80px;
+  height: 1px;
+  left: -40px;
+  top: 0;
+  background: #f9e2af;
+  box-shadow: 0 0 6px #f9e2af88;
+}
+
+#precisionCrosshair .ch-v {
+  position: absolute;
+  height: 80px;
+  width: 1px;
+  top: -40px;
+  left: 0;
+  background: #f9e2af;
+  box-shadow: 0 0 6px #f9e2af88;
+}
+
+#precisionCrosshair .ch-dot {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #f9e2af;
+  left: -3px;
+  top: -3px;
+  box-shadow: 0 0 8px #f9e2af;
+}
+
+#precisionCrosshair .ch-label {
+  position: absolute;
+  top: -28px;
+  left: 50%;
+  transform: translateX(-50%);
+  font: 11px Consolas;
+  color: #f9e2af;
+  white-space: nowrap;
+  background: #11111bee;
+  padding: 2px 6px;
+  border-radius: 3px;
+  border: 1px solid #f9e2af44;
+}
+
+#precisionCrosshair .ch-connector {
+  position: absolute;
+  width: 1px;
+  height: 80px;
+  left: 0;
+  top: 0;
+  background: linear-gradient(to bottom, #f9e2af44, transparent);
+}
+
+/* ── GitHub status indicator ── */
+.gh-status {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+.gh-status.saved { background: #a6e3a1; }
+.gh-status.error { background: #f38ba8; }
+.gh-status.saving { background: #f9e2af; animation: ghPulse 1s infinite; }
+
+@keyframes ghPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
 
 @media (max-width: 900px) {
   #topbar {
@@ -532,6 +633,12 @@ body {
   }
 
   #mobileSidebarToggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #mobileNumInput {
     display: flex;
     align-items: center;
     justify-content: center;

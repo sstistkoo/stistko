@@ -108,6 +108,14 @@ drawCanvas.addEventListener("mousedown", (e) => {
     case "constr":
     case "measure":
       if (!state.drawing) {
+        // Měření: pokud klikneme na existující objekt, zobrazit info
+        if (state.tool === "measure") {
+          const idx = findObjectAt(wx, wy);
+          if (idx !== null) {
+            showMeasureObjectInfo(state.objects[idx], wx, wy);
+            return;
+          }
+        }
         state.drawing = true;
         state.tempPoints = [{ x: wx, y: wy }];
         setHint(
@@ -367,6 +375,14 @@ function handleCanvasClick(wx, wy) {
     case "constr":
     case "measure":
       if (!state.drawing) {
+        // Měření: pokud klikneme na existující objekt, zobrazit info
+        if (state.tool === "measure") {
+          const idx = findObjectAt(wx, wy);
+          if (idx !== null) {
+            showMeasureObjectInfo(state.objects[idx], wx, wy);
+            return;
+          }
+        }
         state.drawing = true;
         state.tempPoints = [{ x: wx, y: wy }];
         setHint("Klepněte na koncový bod");
