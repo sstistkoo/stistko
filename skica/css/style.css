@@ -544,6 +544,30 @@ body {
   color: #1e1e2e;
 }
 
+#mobileEdit {
+  display: none;
+  position: fixed;
+  top: 28px;
+  right: 56px;
+  z-index: 60;
+  background: #585b70;
+  color: #cdd6f4;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  line-height: 40px;
+  text-align: center;
+}
+
+#mobileEdit:active {
+  background: #f9e2af;
+  color: #1e1e2e;
+}
+
 #mobileSidebarToggle {
   display: none;
   position: fixed;
