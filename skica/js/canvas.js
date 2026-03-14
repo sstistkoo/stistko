@@ -69,9 +69,9 @@ function snapPt(wx, wy) {
     }
   }
 
-  // Grid snap – jen pokud NEkreslíme (při kreslení snap jen k objektům/průsečíkům)
+  // Grid snap – jen pokud je mřížka viditelná a NEkreslíme
   let gridX = null, gridY = null, gridD = Infinity;
-  if (state.snapToGrid && !state.drawing) {
+  if (state.snapToGrid && state.showGrid && !state.drawing) {
     gridX = snap(wx);
     gridY = snap(wy);
     gridD = Math.hypot(gridX - wx, gridY - wy);

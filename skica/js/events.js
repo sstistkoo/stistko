@@ -84,8 +84,9 @@ drawCanvas.addEventListener(
   (e) => {
     e.preventDefault();
     const factor = e.deltaY < 0 ? 1.15 : 1 / 1.15;
-    const mx = state.mouse.sx,
-      my = state.mouse.sy;
+    const rect = drawCanvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
     state.panX = mx - (mx - state.panX) * factor;
     state.panY = my - (my - state.panY) * factor;
     state.zoom *= factor;

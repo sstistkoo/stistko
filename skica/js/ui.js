@@ -333,6 +333,18 @@ document.getElementById("btnDims").addEventListener("click", () => {
   renderAll();
 });
 
+// ── Mřížka tlačítko ──
+function updateGridBtn() {
+  document.getElementById("btnGrid").classList.toggle("active", state.showGrid);
+}
+
+document.getElementById("btnGrid").addEventListener("click", () => {
+  state.showGrid = !state.showGrid;
+  updateGridBtn();
+  renderAll();
+  showToast(state.showGrid ? "Mřížka: ON" : "Mřížka: OFF");
+});
+
 // ── Undo/Redo tlačítka ──
 document.getElementById("btnUndo").addEventListener("click", undo);
 document.getElementById("btnRedo").addEventListener("click", redo);

@@ -8,6 +8,17 @@
     />
     <title>SKICA – CAD pro CNC soustružník v3</title>
     <link rel="stylesheet" href="css/style.css" />
+    <!-- ── PWA ── -->
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#181825" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="SKICA" />
+    <link rel="apple-touch-icon" href="icons/icon-192.png" />
   </head>
   <body>
     <!-- ── Mobile Controls ── -->
@@ -145,6 +156,9 @@
       <button class="tool-btn" id="btnSnapPts" title="Přichytávání k bodům (S)">
         <span class="snap-ind snap-on"></span>Body
       </button>
+      <button class="tool-btn" id="btnGrid" title="Zobrazit/skrýt mřížku">
+        ▦ Mřížka
+      </button>
       <button class="tool-btn" id="btnDims" title="Zobrazit kóty (D)">
         📐 Kóty
       </button>
@@ -178,9 +192,7 @@
       <button class="tool-btn" id="btnExport" title="Export CNC souřadnic">
         📋 CNC Export
       </button>
-      <button class="tool-btn" id="btnGitHub" title="GitHub auto-save">
-        ☁️ GitHub<span id="ghStatusDot" class="gh-status"></span>
-      </button>
+
       <div id="coordDisplay">X: 0.000 &nbsp; Z: 0.000</div>
     </div>
 
@@ -252,5 +264,14 @@
     <script src="js/dialogs.js"></script>
     <script src="js/storage.js"></script>
     <script src="js/app.js"></script>
+    <!-- ── PWA Service Worker ── -->
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+          .register("./sw.js")
+          .then(() => console.log("SW: Registrován"))
+          .catch((e) => console.warn("SW: Chyba", e));
+      }
+    </script>
   </body>
 </html>
