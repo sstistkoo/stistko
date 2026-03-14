@@ -40,6 +40,7 @@ resizeCanvases();
 if (state.objects.length > 0) calculateAllIntersections();
 resetHint();
 updateDimsBtn();
+updateSnapPtsBtn();
 
 console.log(
   "%c SKICA – CAD pro CNC soustružník v3 (X,Z) ",

@@ -2,11 +2,16 @@
 // ║  SKICA – Renderování (mřížka, objekty, kóty, snap)         ║
 // ╚══════════════════════════════════════════════════════════════╝
 
+let _renderRAF = null;
 function renderAll() {
-  renderGrid();
-  renderObjects();
-  // Aktualizovat mobilní Cancel tlačítko
-  if (typeof updateMobileCancelBtn === "function") updateMobileCancelBtn();
+  if (_renderRAF) return;
+  _renderRAF = requestAnimationFrame(() => {
+    _renderRAF = null;
+    renderGrid();
+    renderObjects();
+    // Aktualizovat mobilní Cancel tlačítko
+    if (typeof updateMobileCancelBtn === "function") updateMobileCancelBtn();
+  });
 }
 
 // ── Mřížka a osy ──

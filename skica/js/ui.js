@@ -110,6 +110,25 @@ function updateProperties() {
     tbody.appendChild(tr);
   }
 
+  // Helper: přidá color picker
+  function addColorRow(label, value, onChange) {
+    const tr = document.createElement("tr");
+    const tdLabel = document.createElement("td");
+    tdLabel.textContent = label;
+    const tdVal = document.createElement("td");
+    const input = document.createElement("input");
+    input.type = "color";
+    input.className = "prop-color-input";
+    input.value = value;
+    input.addEventListener("input", () => {
+      onChange(input.value);
+    });
+    tdVal.appendChild(input);
+    tr.appendChild(tdLabel);
+    tr.appendChild(tdVal);
+    tbody.appendChild(tr);
+  }
+
   // Aktualizace computed polí bez rebuild
   function refreshComputedProps() {
     const computed = tbody.querySelectorAll(".prop-readonly");
@@ -147,6 +166,8 @@ function updateProperties() {
   addInfoRow("Typ", typeLabel(obj.type));
   // Název (editovatelný)
   addTextRow("Název", obj.name || "", (v) => { obj.name = v; });
+  // Barva (editovatelná)
+  addColorRow("Barva", obj.color || "#89b4fa", (v) => { obj.color = v; renderAll(); });
 
   switch (obj.type) {
     case "point":
@@ -282,6 +303,21 @@ document.getElementById("btnSnap").addEventListener("click", () => {
   state.snapToGrid = !state.snapToGrid;
   updateSnapBtn();
   renderAll();
+});
+
+// ── Snap k bodům tlačítko ──
+function updateSnapPtsBtn() {
+  const btn = document.getElementById("btnSnapPts");
+  const ind = btn.querySelector(".snap-ind");
+  ind.className =
+    "snap-ind " + (state.snapToPoints ? "snap-on" : "snap-off");
+}
+
+document.getElementById("btnSnapPts").addEventListener("click", () => {
+  state.snapToPoints = !state.snapToPoints;
+  updateSnapPtsBtn();
+  renderAll();
+  showToast(state.snapToPoints ? "Snap k bodům: ON" : "Snap k bodům: OFF");
 });
 
 // ── Kóty tlačítko ──

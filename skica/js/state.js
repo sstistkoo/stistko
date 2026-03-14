@@ -42,6 +42,10 @@ const state = {
   dragObjIdx: null,
   dragStartWorld: null,
   dragObjSnapshot: null,
+  // Clipboard
+  clipboard: null,
+  // Numerical dialog chaining
+  numDialogChain: { x: null, y: null },
 };
 
 // ── Undo / Redo ──
