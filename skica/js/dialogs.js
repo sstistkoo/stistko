@@ -204,7 +204,7 @@ function showNumericalInputDialog() {
                 <div class="input-row"><div><label>X2:</label><input type="number" id="nx2" step="0.1" value="0"></div>
                 <div><label>Z2:</label><input type="number" id="ny2" step="0.1" value="0"></div>
                 <div class="pick-col">${pickBtn("🎯2")}</div></div>
-                <label style="font-size:11px;color:#6c7086;margin-top:4px">Nebo: Délka + Úhel od bodu 1</label>
+                <label style="font-size:11px;color:#6c7086;margin-top:4px">Nebo: Délka a polární úhel</label>
                 <div class="input-row"><div><label>Délka:</label><input type="number" id="nlen" step="0.1" value=""></div>
                 <div><label>Úhel (°):</label><input type="number" id="nang" step="0.1" value=""></div></div>`;
         break;

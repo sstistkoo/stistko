@@ -400,7 +400,6 @@ body {
   flex: 0 0 40px;
   display: flex;
   align-items: flex-end;
-  padding-bottom: 2px;
 }
 
 .pick-btn {
@@ -730,24 +729,7 @@ body {
   background: linear-gradient(to bottom, #f9e2af44, transparent);
 }
 
-/* ── GitHub status indicator ── */
-.gh-status {
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  margin-left: 4px;
-  vertical-align: middle;
-}
 
-.gh-status.saved { background: #a6e3a1; }
-.gh-status.error { background: #f38ba8; }
-.gh-status.saving { background: #f9e2af; animation: ghPulse 1s infinite; }
-
-@keyframes ghPulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
-}
 
 @media (max-width: 900px) {
   /* Safe area pro telefony s výřezem */
@@ -781,6 +763,13 @@ body {
 
   #topbar.mobile-open {
     transform: translateY(0);
+  }
+
+  body.toolbar-open #mobileToolbarToggle,
+  body.toolbar-open #mobileNumInput,
+  body.toolbar-open #mobileMeasure,
+  body.toolbar-open #mobileSidebarToggle {
+    display: none !important;
   }
 
   .tool-btn {

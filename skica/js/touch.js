@@ -11,12 +11,16 @@ const topbar = document.getElementById("topbar");
 mobileToolbarToggle.addEventListener("click", (e) => {
   e.stopPropagation();
   topbar.classList.toggle("mobile-open");
+  document.body.classList.toggle("toolbar-open", topbar.classList.contains("mobile-open"));
   sidebar.classList.remove("mobile-open");
   sidebarOverlay.classList.remove("active");
 });
 topbar.addEventListener("click", (e) => {
   if (isMobile() && e.target.closest(".tool-btn")) {
-    setTimeout(() => topbar.classList.remove("mobile-open"), 150);
+    setTimeout(() => {
+      topbar.classList.remove("mobile-open");
+      document.body.classList.remove("toolbar-open");
+    }, 150);
   }
 });
 
@@ -32,6 +36,7 @@ mobileSidebarToggle.addEventListener("click", (e) => {
     sidebar.classList.contains("mobile-open"),
   );
   topbar.classList.remove("mobile-open");
+  document.body.classList.remove("toolbar-open");
 });
 sidebarOverlay.addEventListener("click", () => {
   sidebar.classList.remove("mobile-open");
@@ -68,6 +73,7 @@ document
   .addEventListener("click", (e) => {
     e.stopPropagation();
     topbar.classList.remove("mobile-open");
+    document.body.classList.remove("toolbar-open");
     sidebar.classList.remove("mobile-open");
     sidebarOverlay.classList.remove("active");
     showNumericalInputDialog();
@@ -78,6 +84,7 @@ const mobileMeasureBtn = document.getElementById("mobileMeasure");
 mobileMeasureBtn.addEventListener("click", (e) => {
   e.stopPropagation();
   topbar.classList.remove("mobile-open");
+  document.body.classList.remove("toolbar-open");
   sidebar.classList.remove("mobile-open");
   sidebarOverlay.classList.remove("active");
   const newTool = state.tool === "measure" ? "select" : "measure";
@@ -95,6 +102,7 @@ document.getElementById("mobileAutoCenter").addEventListener("click", (e) => {
 document.getElementById("sidebarEditBtn").addEventListener("click", (e) => {
   e.stopPropagation();
   topbar.classList.remove("mobile-open");
+  document.body.classList.remove("toolbar-open");
   sidebar.classList.remove("mobile-open");
   sidebarOverlay.classList.remove("active");
   showMobileEditDialog();

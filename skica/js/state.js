@@ -23,6 +23,7 @@ const state = {
   tool: "select",
   snapToGrid: true,
   snapToPoints: true,
+  showGrid: true,
   gridSize: 10,
   zoom: 1,
   panX: 0,

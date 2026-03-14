@@ -28,40 +28,42 @@ function renderGrid() {
     drawGridSize *= 2;
   }
 
-  // Sub-grid
-  if (drawStep > 30) {
-    g.strokeStyle = "#1a1a2e";
+  if (state.showGrid) {
+    // Sub-grid
+    if (drawStep > 30) {
+      g.strokeStyle = "#1a1a2e";
+      g.lineWidth = 0.5;
+      const subStep = drawStep / 5;
+      const subStartX = state.panX % subStep,
+        subStartY = state.panY % subStep;
+      g.beginPath();
+      for (let x = subStartX; x < w; x += subStep) {
+        g.moveTo(x, 0);
+        g.lineTo(x, h);
+      }
+      for (let y = subStartY; y < h; y += subStep) {
+        g.moveTo(0, y);
+        g.lineTo(w, y);
+      }
+      g.stroke();
+    }
+
+    // Hlavní mřížka
+    g.strokeStyle = "#252540";
     g.lineWidth = 0.5;
-    const subStep = drawStep / 5;
-    const startX = state.panX % subStep,
-      startY = state.panY % subStep;
+    const startXg = state.panX % drawStep,
+      startYg = state.panY % drawStep;
     g.beginPath();
-    for (let x = startX; x < w; x += subStep) {
+    for (let x = startXg; x < w; x += drawStep) {
       g.moveTo(x, 0);
       g.lineTo(x, h);
     }
-    for (let y = startY; y < h; y += subStep) {
+    for (let y = startYg; y < h; y += drawStep) {
       g.moveTo(0, y);
       g.lineTo(w, y);
     }
     g.stroke();
   }
-
-  // Hlavní mřížka
-  g.strokeStyle = "#252540";
-  g.lineWidth = 0.5;
-  const startX = state.panX % drawStep,
-    startY = state.panY % drawStep;
-  g.beginPath();
-  for (let x = startX; x < w; x += drawStep) {
-    g.moveTo(x, 0);
-    g.lineTo(x, h);
-  }
-  for (let y = startY; y < h; y += drawStep) {
-    g.moveTo(0, y);
-    g.lineTo(w, y);
-  }
-  g.stroke();
 
   // Osy
   g.lineWidth = 1.5;
@@ -77,26 +79,28 @@ function renderGrid() {
   g.stroke();
 
   // Popisky os
-  g.font = "10px Consolas";
+  const startX = state.panX % drawStep,
+    startY = state.panY % drawStep;
+  g.font = "20px Consolas";
   g.fillStyle = "#6c7086";
   for (let x = startX; x < w; x += drawStep) {
     const [wx] = screenToWorld(x, 0);
     const label = Math.round(wx / drawGridSize) * drawGridSize;
     if (label === 0) continue;
-    g.fillText(label.toString(), x + 2, state.panY - 4);
+    g.fillText(label.toString(), x + 3, state.panY - 6);
   }
   for (let y = startY; y < h; y += drawStep) {
     const [, wy] = screenToWorld(0, y);
     const label = Math.round(wy / drawGridSize) * drawGridSize;
     if (label === 0) continue;
-    g.fillText(label.toString(), state.panX + 4, y - 2);
+    g.fillText(label.toString(), state.panX + 5, y - 4);
   }
   g.fillStyle = "#f9e2af";
-  g.font = "11px Consolas";
-  g.fillText("0", state.panX + 4, state.panY - 4);
+  g.font = "20px Consolas";
+  g.fillText("0", state.panX + 5, state.panY - 6);
 
   // Popisky os X a Z
-  g.font = "bold 13px Consolas";
+  g.font = "bold 18px Consolas";
   g.fillStyle = "#f38ba8";
   g.fillText("X", w - 18, state.panY - 8);
   g.fillStyle = "#a6e3a1";
