@@ -137,8 +137,10 @@ document.getElementById("btnExport").addEventListener("click", () => {
         break;
       case "circle":
         out += `; ${obj.name} (R: ${obj.r.toFixed(4)})\n`;
+        // Split full circle into two half-circles for CNC compatibility
         out += `G00 X${(obj.cx + obj.r).toFixed(4)} Z${obj.cy.toFixed(4)}\n`;
-        out += `G02 X${(obj.cx + obj.r).toFixed(4)} Z${obj.cy.toFixed(4)} I${(-obj.r).toFixed(4)} K0.0000\n`;
+        out += `G02 X${(obj.cx - obj.r).toFixed(4)} Z${obj.cy.toFixed(4)} I${(-obj.r).toFixed(4)} K0.0000\n`;
+        out += `G02 X${(obj.cx + obj.r).toFixed(4)} Z${obj.cy.toFixed(4)} I${obj.r.toFixed(4)} K0.0000\n`;
         break;
       case "arc":
         out += `; ${obj.name} (R: ${obj.r.toFixed(4)})\n`;
@@ -370,6 +372,7 @@ document.getElementById("btnGitHub").addEventListener("click", () => {
   overlay.innerHTML = `
     <div class="input-dialog">
       <h3>☁️ GitHub Auto-Save</h3>
+      <p style="font-size:11px;color:#f38ba8;margin-bottom:8px">⚠️ Token je uložen v prohlížeči (localStorage). Používejte pouze na důvěryhodných zařízeních.</p>
       <label>Personal Access Token</label>
       <input type="password" id="ghToken" value="${config.token}" placeholder="github_pat_...">
       <label>Repozitář (owner/repo)</label>

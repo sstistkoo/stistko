@@ -136,12 +136,25 @@ function autoCenterView() {
         minY = Math.min(minY, obj.cy - obj.r);
         maxY = Math.max(maxY, obj.cy + obj.r);
         break;
-      case "arc":
-        minX = Math.min(minX, obj.cx - obj.r);
-        maxX = Math.max(maxX, obj.cx + obj.r);
-        minY = Math.min(minY, obj.cy - obj.r);
-        maxY = Math.max(maxY, obj.cy + obj.r);
+      case "arc": {
+        // Precise arc bounding box based on actual sweep
+        const pts = [
+          { x: obj.cx + obj.r * Math.cos(obj.startAngle), y: obj.cy + obj.r * Math.sin(obj.startAngle) },
+          { x: obj.cx + obj.r * Math.cos(obj.endAngle),   y: obj.cy + obj.r * Math.sin(obj.endAngle) },
+        ];
+        // Check cardinal angles (0, 90, 180, 270) within sweep
+        for (let ca = 0; ca < 4; ca++) {
+          const ang = ca * Math.PI / 2;
+          if (isAngleBetween(ang, obj.startAngle, obj.endAngle)) {
+            pts.push({ x: obj.cx + obj.r * Math.cos(ang), y: obj.cy + obj.r * Math.sin(ang) });
+          }
+        }
+        for (const p of pts) {
+          minX = Math.min(minX, p.x); maxX = Math.max(maxX, p.x);
+          minY = Math.min(minY, p.y); maxY = Math.max(maxY, p.y);
+        }
         break;
+      }
     }
   }
 

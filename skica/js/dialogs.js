@@ -110,8 +110,7 @@ document
   .getElementById("btnNumInput")
   .addEventListener("click", showNumericalInputDialog);
 
-// Stav pro chaining – pamatuje koncový bod posledně vytvořeného objektu
-let _numDialogChain = { x: null, y: null };
+// Stav pro chaining je uložen v state.numDialogChain
 
 function showNumericalInputDialog() {
   const overlay = document.createElement("div");
@@ -184,9 +183,9 @@ function showNumericalInputDialog() {
   }
 
   // Chain values
-  const chainX = _numDialogChain.x !== null ? _numDialogChain.x.toFixed(4) : "0";
-  const chainY = _numDialogChain.y !== null ? _numDialogChain.y.toFixed(4) : "0";
-  const hasChain = _numDialogChain.x !== null;
+  const chainX = state.numDialogChain.x !== null ? state.numDialogChain.x.toFixed(4) : "0";
+  const chainY = state.numDialogChain.y !== null ? state.numDialogChain.y.toFixed(4) : "0";
+  const hasChain = state.numDialogChain.x !== null;
 
   function updateFields() {
     const t = typeSelect.value;
@@ -287,7 +286,7 @@ function showNumericalInputDialog() {
 
   // Highlight chained start point
   if (hasChain) {
-    showToast(`Pokračování od X${_numDialogChain.x.toFixed(2)} Z${_numDialogChain.y.toFixed(2)}`);
+    showToast(`Pokračování od X${state.numDialogChain.x.toFixed(2)} Z${state.numDialogChain.y.toFixed(2)}`);
   }
 
   function createObject() {
@@ -298,7 +297,7 @@ function showNumericalInputDialog() {
           const x = parseFloat(overlay.querySelector("#nx").value);
           const y = parseFloat(overlay.querySelector("#ny").value);
           addObject({ type: "point", x, y, name: `Bod ${state.nextId}` });
-          _numDialogChain = { x, y };
+          state.numDialogChain = { x, y };
           break;
         }
         case "line":
@@ -320,7 +319,7 @@ function showNumericalInputDialog() {
             name: `${t === "constr" ? "Konstr" : "Úsečka"} ${state.nextId}`,
             dashed: t === "constr",
           });
-          _numDialogChain = { x: x2, y: y2 };
+          state.numDialogChain = { x: x2, y: y2 };
           break;
         }
         case "circle": {
@@ -331,7 +330,7 @@ function showNumericalInputDialog() {
             type: "circle", cx, cy, r,
             name: `Kružnice ${state.nextId}`,
           });
-          _numDialogChain = { x: cx, y: cy };
+          state.numDialogChain = { x: cx, y: cy };
           break;
         }
         case "arc": {
@@ -350,7 +349,7 @@ function showNumericalInputDialog() {
           // Chain to arc endpoint
           const endX = cx + r * Math.cos(ea);
           const endY = cy + r * Math.sin(ea);
-          _numDialogChain = { x: endX, y: endY };
+          state.numDialogChain = { x: endX, y: endY };
           break;
         }
         case "rect": {
@@ -368,7 +367,7 @@ function showNumericalInputDialog() {
             type: "rect", x1, y1, x2, y2,
             name: `Obdélník ${state.nextId}`,
           });
-          _numDialogChain = { x: x2, y: y2 };
+          state.numDialogChain = { x: x2, y: y2 };
           break;
         }
       }
@@ -386,7 +385,7 @@ function showNumericalInputDialog() {
 
   // Zrušit
   overlay.querySelector("#numCancel").addEventListener("click", () => {
-    _numDialogChain = { x: null, y: null };
+    state.numDialogChain = { x: null, y: null };
     overlay.remove();
   });
 

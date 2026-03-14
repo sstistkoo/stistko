@@ -29,8 +29,12 @@ drawCanvas.addEventListener("mousemove", (e) => {
     extra = `   |   d=${dist.toFixed(2)}  ∠=${ang.toFixed(1)}°`;
   }
 
-  document.getElementById("coordDisplay").textContent =
-    `X: ${wx.toFixed(3)}   Z: ${wy.toFixed(3)}${extra}`;
+  if (typeof updateMobileCoords === "function") {
+    updateMobileCoords(wx, wy, extra);
+  } else {
+    document.getElementById("coordDisplay").textContent =
+      `X: ${wx.toFixed(3)}   Z: ${wy.toFixed(3)}${extra}`;
+  }
 
   if (isPanning) {
     state.panX = panStartPX + (e.clientX - panStartX);
@@ -64,173 +68,7 @@ drawCanvas.addEventListener("mousedown", (e) => {
   }
   if (e.button !== 0) return;
 
-  const wx = state.mouse.x,
-    wy = state.mouse.y;
-
-  switch (state.tool) {
-    case "select":
-      selectObjectAt(wx, wy);
-      break;
-
-    case "move":
-      if (!state.dragging) {
-        const idx = findObjectAt(wx, wy);
-        if (idx !== null) {
-          pushUndo();
-          state.dragging = true;
-          state.dragObjIdx = idx;
-          state.dragStartWorld = { x: wx, y: wy };
-          state.dragObjSnapshot = JSON.stringify(state.objects[idx]);
-          state.selected = idx;
-          updateProperties();
-          drawCanvas.style.cursor = "move";
-          setHint("Táhněte objekt, klikněte pro umístění");
-        }
-      } else {
-        state.dragging = false;
-        state.dragObjIdx = null;
-        drawCanvas.style.cursor = "crosshair";
-        updateProperties();
-        calculateAllIntersections();
-        resetHint();
-      }
-      break;
-
-    case "point":
-      addObject({
-        type: "point",
-        x: wx,
-        y: wy,
-        name: `Bod ${state.nextId}`,
-      });
-      break;
-
-    case "line":
-    case "constr":
-    case "measure":
-      if (!state.drawing) {
-        // Měření: nejdříve průsečíky, pak objekty
-        if (state.tool === "measure") {
-          const intThreshold = 12 / state.zoom;
-          let nearestInt = null, nearestIntD = Infinity;
-          for (const pt of state.intersections) {
-            const d = Math.hypot(pt.x - wx, pt.y - wy);
-            if (d < intThreshold && d < nearestIntD) {
-              nearestIntD = d;
-              nearestInt = pt;
-            }
-          }
-          if (nearestInt) {
-            showIntersectionInfo(nearestInt);
-            return;
-          }
-          const idx = findObjectAt(wx, wy);
-          if (idx !== null) {
-            showMeasureObjectInfo(state.objects[idx], wx, wy);
-            return;
-          }
-        }
-        state.drawing = true;
-        state.tempPoints = [{ x: wx, y: wy }];
-        setHint(
-          "Klikněte na koncový bod" +
-            (state.tool === "constr" ? " konstrukční čáry" : ""),
-        );
-      } else {
-        const tp = state.tempPoints[0];
-        if (state.tool === "line" || state.tool === "constr") {
-          addObject({
-            type: state.tool === "constr" ? "constr" : "line",
-            x1: tp.x,
-            y1: tp.y,
-            x2: wx,
-            y2: wy,
-            name: `${state.tool === "constr" ? "Konstr" : "Úsečka"} ${state.nextId}`,
-            dashed: state.tool === "constr",
-          });
-        } else {
-          const d = Math.hypot(wx - tp.x, wy - tp.y);
-          const angle =
-            (Math.atan2(wy - tp.y, wx - tp.x) * 180) / Math.PI;
-          showMeasureResult(tp, { x: wx, y: wy }, d, angle);
-        }
-        state.drawing = false;
-        state.tempPoints = [];
-        resetHint();
-      }
-      break;
-
-    case "circle":
-      if (!state.drawing) {
-        state.drawing = true;
-        state.tempPoints = [{ x: wx, y: wy }];
-        setHint("Klikněte pro poloměr nebo Enter pro číselné zadání");
-      } else {
-        const cp = state.tempPoints[0];
-        const r = Math.hypot(wx - cp.x, wy - cp.y);
-        addObject({
-          type: "circle",
-          cx: cp.x,
-          cy: cp.y,
-          r,
-          name: `Kružnice ${state.nextId}`,
-        });
-        state.drawing = false;
-        state.tempPoints = [];
-        resetHint();
-      }
-      break;
-
-    case "arc":
-      if (!state.drawing) {
-        state.drawing = true;
-        state.tempPoints = [{ x: wx, y: wy }];
-        setHint("Klikněte na počáteční bod oblouku");
-      } else if (state.tempPoints.length === 1) {
-        state.tempPoints.push({ x: wx, y: wy });
-        setHint("Klikněte na koncový bod oblouku");
-      } else {
-        const ctr = state.tempPoints[0],
-          p1 = state.tempPoints[1];
-        const r = Math.hypot(p1.x - ctr.x, p1.y - ctr.y);
-        const startAngle = Math.atan2(p1.y - ctr.y, p1.x - ctr.x);
-        const endAngle = Math.atan2(wy - ctr.y, wx - ctr.x);
-        addObject({
-          type: "arc",
-          cx: ctr.x,
-          cy: ctr.y,
-          r,
-          startAngle,
-          endAngle,
-          name: `Oblouk ${state.nextId}`,
-        });
-        state.drawing = false;
-        state.tempPoints = [];
-        resetHint();
-      }
-      break;
-
-    case "rect":
-      if (!state.drawing) {
-        state.drawing = true;
-        state.tempPoints = [{ x: wx, y: wy }];
-        setHint("Klikněte na protější roh");
-      } else {
-        const rp = state.tempPoints[0];
-        addObject({
-          type: "rect",
-          x1: rp.x,
-          y1: rp.y,
-          x2: wx,
-          y2: wy,
-          name: `Obdélník ${state.nextId}`,
-        });
-        state.drawing = false;
-        state.tempPoints = [];
-        resetHint();
-      }
-      break;
-  }
+  handleCanvasClick(state.mouse.x, state.mouse.y);
 });
 
 drawCanvas.addEventListener("mouseup", (e) => {
@@ -277,19 +115,41 @@ document.addEventListener("keydown", (e) => {
     resetHint();
   }
 
-  if (e.ctrlKey && e.key === "z") {
+  if ((e.ctrlKey || e.metaKey) && e.key === "z") {
     e.preventDefault();
     undo();
     return;
   }
-  if (e.ctrlKey && e.key === "y") {
+  if ((e.ctrlKey || e.metaKey) && e.key === "y") {
     e.preventDefault();
     redo();
     return;
   }
-  if (e.ctrlKey && e.key === "s") {
+  if ((e.ctrlKey || e.metaKey) && e.key === "s") {
     e.preventDefault();
     saveProject();
+    return;
+  }
+  if ((e.ctrlKey || e.metaKey) && e.key === "c") {
+    if (state.selected !== null) {
+      state.clipboard = JSON.parse(JSON.stringify(state.objects[state.selected]));
+      showToast("Objekt zkopírován");
+    }
+    return;
+  }
+  if ((e.ctrlKey || e.metaKey) && e.key === "v") {
+    if (state.clipboard) {
+      const copy = JSON.parse(JSON.stringify(state.clipboard));
+      copy.id = state.nextId;
+      copy.name = (copy.name || copy.type) + " (kopie)";
+      // Offset pasted object slightly
+      moveObject(copy, 10, 10);
+      addObject(copy);
+      state.selected = state.objects.length - 1;
+      updateObjectList();
+      updateProperties();
+      showToast("Objekt vložen");
+    }
     return;
   }
 
@@ -313,6 +173,12 @@ document.addEventListener("keydown", (e) => {
     state.snapToGrid = !state.snapToGrid;
     updateSnapBtn();
     renderAll();
+  }
+  if (e.key.toLowerCase() === "s") {
+    state.snapToPoints = !state.snapToPoints;
+    updateSnapPtsBtn();
+    renderAll();
+    showToast(state.snapToPoints ? "Snap k bodům: ON" : "Snap k bodům: OFF");
   }
   if (e.key.toLowerCase() === "d") {
     state.showDimensions = !state.showDimensions;
