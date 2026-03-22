@@ -335,7 +335,7 @@ drawCanvas.addEventListener(
           !touchState.wasMultiTouch
         ) {
           touchState.precisionMode = true;
-          if (navigator.vibrate) navigator.vibrate(30);
+          try { if (navigator.vibrate) navigator.vibrate(30); } catch (_) {}
           showPrecisionCrosshair({ clientX: savedClientX, clientY: savedClientY });
         }
       }, 400);

@@ -65,7 +65,7 @@ function snapPt(wx, wy) {
   if (objX !== null) {
     // Vibrace při snapnutí k bodu (jen pokud se snapType změnil)
     if (state.mouse.snapType !== 'point' && navigator.vibrate) {
-      navigator.vibrate(15);
+      try { navigator.vibrate(15); } catch (_) {}
     }
     state.mouse.snapped = true;
     state.mouse.snapType = 'point';
