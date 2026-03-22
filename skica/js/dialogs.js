@@ -194,7 +194,8 @@ function showNumericalInputDialog() {
       case "point":
         html = `<div class="input-row"><div><label>X:</label><input type="number" id="nx" step="0.001" value="${hasChain ? chainX : '0'}"></div>
                 <div><label>Z:</label><input type="number" id="ny" step="0.001" value="${hasChain ? chainY : '0'}"></div>
-                <div class="pick-col">${pickBtn("🎯")}</div></div>`;
+                <div class="pick-col">${pickBtn("🎯")}</div></div>
+                ${hasChain ? '<div id="numChainInfo" style="font-size:11px;color:#9399b2;margin-top:4px"></div>' : ''}`;
         break;
       case "line":
       case "constr":
@@ -204,6 +205,7 @@ function showNumericalInputDialog() {
                 <div class="input-row"><div><label>X2:</label><input type="number" id="nx2" step="0.001" value="0"></div>
                 <div><label>Z2:</label><input type="number" id="ny2" step="0.001" value="0"></div>
                 <div class="pick-col">${pickBtn("🎯2")}</div></div>
+                <div id="numLineInfo" style="font-size:11px;color:#9399b2;margin-top:4px"></div>
                 <label style="font-size:11px;color:#6c7086;margin-top:4px">Nebo: Délka a polární úhel</label>
                 <div class="input-row"><div><label>Délka:</label><input type="number" id="nlen" step="0.001" value=""></div>
                 <div><label>Úhel (°):</label><input type="number" id="nang" step="0.001" value=""></div></div>`;
@@ -222,7 +224,9 @@ function showNumericalInputDialog() {
                 <div class="input-row"><div><label>Poloměr:</label><input type="number" id="nr" step="0.001" value="10"></div>
                 <div class="pick-col">${pickBtn("📏 R")}</div></div>
                 <div class="input-row"><div><label>Start (°):</label><input type="number" id="nsa" step="1" value="0"></div>
-                <div><label>Konec (°):</label><input type="number" id="nea" step="1" value="90"></div></div>`;
+                <div class="pick-col">${pickBtn("📐 S")}</div></div>
+                <div class="input-row"><div><label>Konec (°):</label><input type="number" id="nea" step="1" value="90"></div>
+                <div class="pick-col">${pickBtn("📐 E")}</div></div>`;
         break;
       case "rect":
         html = `<div class="input-row"><div><label>X1:</label><input type="number" id="nx1" step="0.001" value="${hasChain ? chainX : '0'}"></div>
@@ -250,6 +254,7 @@ function showNumericalInputDialog() {
             const ny = overlay.querySelector("#ny");
             if (nx) nx.value = wx.toFixed(3);
             if (ny) ny.value = wy.toFixed(3);
+            updateChainInfo();
           } else if (t2 === "line" || t2 === "constr" || t2 === "rect") {
             if (i === 0) {
               const f1 = overlay.querySelector("#nx1");
@@ -261,25 +266,43 @@ function showNumericalInputDialog() {
               const f2 = overlay.querySelector("#ny2");
               if (f1) f1.value = wx.toFixed(3);
               if (f2) f2.value = wy.toFixed(3);
+              // Auto-fill rect width/height
+              if (t2 === "rect") {
+                const x1v = parseFloat(overlay.querySelector("#nx1")?.value) || 0;
+                const y1v = parseFloat(overlay.querySelector("#ny1")?.value) || 0;
+                const nw = overlay.querySelector("#nw");
+                const nh = overlay.querySelector("#nh");
+                if (nw) nw.value = (wx - x1v).toFixed(3);
+                if (nh) nh.value = (wy - y1v).toFixed(3);
+              }
             }
+            updateLineInfo();
           } else if (t2 === "circle" || t2 === "arc") {
+            const cxInp = overlay.querySelector("#ncx");
+            const cyInp = overlay.querySelector("#ncy");
+            const rInp = overlay.querySelector("#nr");
+            const saInp = overlay.querySelector("#nsa");
+            const eaInp = overlay.querySelector("#nea");
+            const cx = parseFloat(cxInp ? cxInp.value : 0) || 0;
+            const cy = parseFloat(cyInp ? cyInp.value : 0) || 0;
             if (i === 0) {
               // Pick středu
-              const f1 = overlay.querySelector("#ncx");
-              const f2 = overlay.querySelector("#ncy");
-              if (f1) f1.value = wx.toFixed(3);
-              if (f2) f2.value = wy.toFixed(3);
-            } else {
+              if (cxInp) cxInp.value = wx.toFixed(3);
+              if (cyInp) cyInp.value = wy.toFixed(3);
+            } else if (i === 1) {
               // Pick bodu pro poloměr – vzdálenost od středu
-              const cxInp = overlay.querySelector("#ncx");
-              const cyInp = overlay.querySelector("#ncy");
-              const rInp = overlay.querySelector("#nr");
-              if (cxInp && cyInp && rInp) {
-                const cx = parseFloat(cxInp.value) || 0;
-                const cy = parseFloat(cyInp.value) || 0;
+              if (rInp) {
                 const r = Math.hypot(wx - cx, wy - cy);
                 rInp.value = r.toFixed(3);
               }
+            } else if (i === 2 && saInp) {
+              // Pick bodu pro start úhel
+              const ang = Math.atan2(wy - cy, wx - cx) * 180 / Math.PI;
+              saInp.value = ang.toFixed(2);
+            } else if (i === 3 && eaInp) {
+              // Pick bodu pro konec úhel
+              const ang = Math.atan2(wy - cy, wx - cx) * 180 / Math.PI;
+              eaInp.value = ang.toFixed(2);
             }
           }
           showToast(`Bod: X${wx.toFixed(2)} Z${wy.toFixed(2)}`);
@@ -294,6 +317,74 @@ function showNumericalInputDialog() {
     fieldsDiv.querySelectorAll('input[type="number"]').forEach((inp) => {
       inp.setAttribute("inputmode", "decimal");
     });
+
+    // Auto-update info pro úsečky/konstr.
+    function updateLineInfo() {
+      const info = fieldsDiv.querySelector("#numLineInfo");
+      if (!info) return;
+      const x1 = parseFloat(fieldsDiv.querySelector("#nx1")?.value);
+      const y1 = parseFloat(fieldsDiv.querySelector("#ny1")?.value);
+      const x2 = parseFloat(fieldsDiv.querySelector("#nx2")?.value);
+      const y2 = parseFloat(fieldsDiv.querySelector("#ny2")?.value);
+      if ([x1,y1,x2,y2].every(v => isFinite(v))) {
+        const d = Math.hypot(x2-x1, y2-y1);
+        const a = Math.atan2(y2-y1, x2-x1) * 180 / Math.PI;
+        info.textContent = `Délka: ${d.toFixed(3)} mm  |  Úhel: ${a.toFixed(2)}°`;
+      }
+    }
+    ["#nx1","#ny1","#nx2","#ny2"].forEach(sel => {
+      const inp = fieldsDiv.querySelector(sel);
+      if (inp) inp.addEventListener("input", updateLineInfo);
+    });
+    updateLineInfo();
+
+    // Auto-update info pro bod (chain distance)
+    function updateChainInfo() {
+      const info = fieldsDiv.querySelector("#numChainInfo");
+      if (!info || !hasChain) return;
+      const nx = parseFloat(fieldsDiv.querySelector("#nx")?.value);
+      const ny = parseFloat(fieldsDiv.querySelector("#ny")?.value);
+      if (isFinite(nx) && isFinite(ny)) {
+        const d = Math.hypot(nx - state.numDialogChain.x, ny - state.numDialogChain.y);
+        const a = Math.atan2(ny - state.numDialogChain.y, nx - state.numDialogChain.x) * 180 / Math.PI;
+        info.textContent = `Od předchozího: ${d.toFixed(3)} mm  |  Úhel: ${a.toFixed(2)}°`;
+      }
+    }
+    ["#nx","#ny"].forEach(sel => {
+      const inp = fieldsDiv.querySelector(sel);
+      if (inp) inp.addEventListener("input", updateChainInfo);
+    });
+    updateChainInfo();
+
+    // Rect: sync W/H ↔ X2/Z2
+    function syncRectWH() {
+      const nw = fieldsDiv.querySelector("#nw");
+      const nh = fieldsDiv.querySelector("#nh");
+      if (!nw || !nh) return;
+      const x1 = parseFloat(fieldsDiv.querySelector("#nx1")?.value);
+      const y1 = parseFloat(fieldsDiv.querySelector("#ny1")?.value);
+      const x2f = fieldsDiv.querySelector("#nx2");
+      const y2f = fieldsDiv.querySelector("#ny2");
+      // W/H → X2/Z2
+      nw.addEventListener("input", () => {
+        const w = parseFloat(nw.value);
+        if (isFinite(x1) && isFinite(w) && x2f) x2f.value = (x1 + w).toFixed(3);
+      });
+      nh.addEventListener("input", () => {
+        const h = parseFloat(nh.value);
+        if (isFinite(y1) && isFinite(h) && y2f) y2f.value = (y1 + h).toFixed(3);
+      });
+      // X2/Z2 → W/H
+      if (x2f) x2f.addEventListener("input", () => {
+        const v = parseFloat(x2f.value);
+        if (isFinite(x1) && isFinite(v)) nw.value = (v - x1).toFixed(3);
+      });
+      if (y2f) y2f.addEventListener("input", () => {
+        const v = parseFloat(y2f.value);
+        if (isFinite(y1) && isFinite(v)) nh.value = (v - y1).toFixed(3);
+      });
+    }
+    syncRectWH();
   }
 
   typeSelect.addEventListener("change", updateFields);
@@ -959,14 +1050,17 @@ function showEditObjectDialog(idx) {
           <div><label>Střed Z:</label><input type="number" id="editCY" step="0.001" value="${obj.cy.toFixed(3)}"></div>
           <div class="pick-col"><button type="button" class="pick-btn" data-pick="center">🎯</button></div></div>
           <div class="input-row"><div><label>Poloměr:</label><input type="number" id="editR" step="0.001" value="${obj.r.toFixed(3)}" min="0.001"></div>
-          <div><label>Průměr:</label><input type="number" id="editD" step="0.001" value="${(obj.r*2).toFixed(3)}" min="0.002"></div></div>`;
+          <div><label>Průměr:</label><input type="number" id="editD" step="0.001" value="${(obj.r*2).toFixed(3)}" min="0.002"></div>
+          <div class="pick-col"><button type="button" class="pick-btn" data-pick="radius">📏R</button></div></div>`;
         break;
       case "arc":
         fieldsHtml += `
           <div class="input-row"><div><label>Střed X:</label><input type="number" id="editCX" step="0.001" value="${obj.cx.toFixed(3)}"></div>
           <div><label>Střed Z:</label><input type="number" id="editCY" step="0.001" value="${obj.cy.toFixed(3)}"></div>
           <div class="pick-col"><button type="button" class="pick-btn" data-pick="center">🎯</button></div></div>
-          <div class="input-row"><div><label>Poloměr:</label><input type="number" id="editR" step="0.001" value="${obj.r.toFixed(3)}" min="0.001"></div></div>
+          <div class="input-row"><div><label>Poloměr:</label><input type="number" id="editR" step="0.001" value="${obj.r.toFixed(3)}" min="0.001"></div>
+          <div><label>Průměr:</label><input type="number" id="editD" step="0.001" value="${(obj.r*2).toFixed(3)}" min="0.002"></div>
+          <div class="pick-col"><button type="button" class="pick-btn" data-pick="radius">📏R</button></div></div>
           <div class="input-row"><div><label>Start (°):</label><input type="number" id="editSA" step="1" value="${(obj.startAngle*180/Math.PI).toFixed(2)}"></div>
           <div><label>Konec (°):</label><input type="number" id="editEA" step="1" value="${(obj.endAngle*180/Math.PI).toFixed(2)}"></div></div>`;
         break;
@@ -1064,10 +1158,47 @@ function showEditObjectDialog(idx) {
       const fy = overlay.querySelector("#editCY");
       if (fx) fx.value = wx.toFixed(3);
       if (fy) fy.value = wy.toFixed(3);
+    } else if (pickType === "radius") {
+      const cxV = parseFloat(overlay.querySelector("#editCX")?.value) || 0;
+      const cyV = parseFloat(overlay.querySelector("#editCY")?.value) || 0;
+      const r = Math.hypot(wx - cxV, wy - cyV);
+      const ri = overlay.querySelector("#editR");
+      const di = overlay.querySelector("#editD");
+      if (ri) ri.value = r.toFixed(3);
+      if (di) di.value = (r * 2).toFixed(3);
     }
+    updateEditInfo();
   }
 
   wirePickButtons();
+
+  // Auto-update line length & rect dims
+  function updateEditInfo() {
+    const lenSpan = overlay.querySelector("#editLen");
+    if (lenSpan) {
+      const x1 = parseFloat(overlay.querySelector("#editX1")?.value);
+      const y1 = parseFloat(overlay.querySelector("#editY1")?.value);
+      const x2 = parseFloat(overlay.querySelector("#editX2")?.value);
+      const y2 = parseFloat(overlay.querySelector("#editY2")?.value);
+      if ([x1,y1,x2,y2].every(v => isFinite(v))) {
+        lenSpan.textContent = Math.hypot(x2-x1, y2-y1).toFixed(3);
+      }
+    }
+    const dimSpan = overlay.querySelector("#editDim");
+    if (dimSpan) {
+      const x1 = parseFloat(overlay.querySelector("#editX1")?.value);
+      const y1 = parseFloat(overlay.querySelector("#editY1")?.value);
+      const x2 = parseFloat(overlay.querySelector("#editX2")?.value);
+      const y2 = parseFloat(overlay.querySelector("#editY2")?.value);
+      if ([x1,y1,x2,y2].every(v => isFinite(v))) {
+        dimSpan.textContent = `${Math.abs(x2-x1).toFixed(2)} × ${Math.abs(y2-y1).toFixed(2)}`;
+      }
+    }
+  }
+  ["#editX1","#editY1","#editX2","#editY2"].forEach(sel => {
+    const inp = overlay.querySelector(sel);
+    if (inp) inp.addEventListener("input", updateEditInfo);
+  });
 
   // Sync radius/diameter
   const rInput = overlay.querySelector("#editR");
