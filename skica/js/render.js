@@ -7,62 +7,26 @@ function renderAll() {
   if (_renderRAF) return;
   _renderRAF = requestAnimationFrame(() => {
     _renderRAF = null;
-    renderGrid();
     renderObjects();
+    renderAxes();
     // Aktualizovat mobilní Cancel tlačítko
     if (typeof updateMobileCancelBtn === "function") updateMobileCancelBtn();
   });
 }
 
-// ── Mřížka a osy ──
-function renderGrid() {
-  const w = gridCanvas.width,
-    h = gridCanvas.height;
-  const g = gridCtx;
-  g.clearRect(0, 0, w, h);
-  const step = state.gridSize * state.zoom;
-  let drawStep = step,
-    drawGridSize = state.gridSize;
+// ── Osy ──
+function renderAxes() {
+  const w = drawCanvas.width,
+    h = drawCanvas.height;
+  const g = ctx;
+
+  // Adaptive step for axis labels
+  const baseStep = 10 * state.zoom;
+  let drawStep = baseStep,
+    drawGridSize = 10;
   while (drawStep < 15) {
     drawStep *= 2;
     drawGridSize *= 2;
-  }
-
-  if (state.showGrid) {
-    // Sub-grid
-    if (drawStep > 30) {
-      g.strokeStyle = "#1a1a2e";
-      g.lineWidth = 0.5;
-      const subStep = drawStep / 5;
-      const subStartX = state.panX % subStep,
-        subStartY = state.panY % subStep;
-      g.beginPath();
-      for (let x = subStartX; x < w; x += subStep) {
-        g.moveTo(x, 0);
-        g.lineTo(x, h);
-      }
-      for (let y = subStartY; y < h; y += subStep) {
-        g.moveTo(0, y);
-        g.lineTo(w, y);
-      }
-      g.stroke();
-    }
-
-    // Hlavní mřížka
-    g.strokeStyle = "#252540";
-    g.lineWidth = 0.5;
-    const startXg = state.panX % drawStep,
-      startYg = state.panY % drawStep;
-    g.beginPath();
-    for (let x = startXg; x < w; x += drawStep) {
-      g.moveTo(x, 0);
-      g.lineTo(x, h);
-    }
-    for (let y = startYg; y < h; y += drawStep) {
-      g.moveTo(0, y);
-      g.lineTo(w, y);
-    }
-    g.stroke();
   }
 
   // Osy
@@ -81,26 +45,26 @@ function renderGrid() {
   // Popisky os
   const startX = state.panX % drawStep,
     startY = state.panY % drawStep;
-  g.font = "20px Consolas";
+  g.font = "13px Consolas";
   g.fillStyle = "#6c7086";
   for (let x = startX; x < w; x += drawStep) {
     const [wx] = screenToWorld(x, 0);
     const label = Math.round(wx / drawGridSize) * drawGridSize;
     if (label === 0) continue;
-    g.fillText(label.toString(), x + 3, state.panY - 6);
+    g.fillText(label.toString(), x + 2, state.panY - 5);
   }
   for (let y = startY; y < h; y += drawStep) {
     const [, wy] = screenToWorld(0, y);
     const label = Math.round(wy / drawGridSize) * drawGridSize;
     if (label === 0) continue;
-    g.fillText(label.toString(), state.panX + 5, y - 4);
+    g.fillText(label.toString(), state.panX + 4, y - 3);
   }
   g.fillStyle = "#f9e2af";
-  g.font = "20px Consolas";
-  g.fillText("0", state.panX + 5, state.panY - 6);
+  g.font = "14px Consolas";
+  g.fillText("0", state.panX + 4, state.panY - 5);
 
   // Popisky os X a Z
-  g.font = "bold 18px Consolas";
+  g.font = "bold 14px Consolas";
   g.fillStyle = "#f38ba8";
   g.fillText("X", w - 18, state.panY - 8);
   g.fillStyle = "#a6e3a1";
@@ -112,6 +76,9 @@ function renderObjects() {
   const w = drawCanvas.width,
     h = drawCanvas.height;
   ctx.clearRect(0, 0, w, h);
+
+  // Dynamická velikost písma podle zoomu
+  const labelSize = Math.round(Math.min(22, Math.max(14, 10 + state.zoom * 6)));
 
   state.objects.forEach((obj, idx) => {
     const isSel = idx === state.selected;
@@ -165,11 +132,11 @@ function renderObjects() {
     ctx.beginPath();
     ctx.arc(sx, sy, 2, 0, Math.PI * 2);
     ctx.fill();
-    ctx.font = "10px Consolas";
+    ctx.font = `${labelSize}px Consolas`;
     ctx.fillText(
       `X${pt.x.toFixed(2)} Z${pt.y.toFixed(2)}`,
       sx + 8,
-      sy - 6,
+      sy - 8,
     );
   });
 
@@ -197,7 +164,7 @@ function renderObjects() {
       const angle =
         (Math.atan2(my - tp[0].y, mx - tp[0].x) * 180) / Math.PI;
       ctx.setLineDash([]);
-      ctx.font = "12px Consolas";
+      ctx.font = `${labelSize}px Consolas`;
       ctx.fillText(
         `${d.toFixed(3)} mm  ${angle.toFixed(1)}°`,
         (sx1 + sx2) / 2 + 8,
@@ -212,7 +179,7 @@ function renderObjects() {
       ctx.arc(sx, sy, r, 0, Math.PI * 2);
       ctx.stroke();
       ctx.setLineDash([]);
-      ctx.font = "12px Consolas";
+      ctx.font = `${labelSize}px Consolas`;
       ctx.fillText(`R ${rw.toFixed(3)}`, sx + r + 6, sy);
     }
     if (state.tool === "rect") {
@@ -227,7 +194,7 @@ function renderObjects() {
       );
       ctx.stroke();
       ctx.setLineDash([]);
-      ctx.font = "12px Consolas";
+      ctx.font = `${labelSize}px Consolas`;
       ctx.fillText(
         `${Math.abs(mx - tp[0].x).toFixed(1)} × ${Math.abs(my - tp[0].y).toFixed(1)}`,
         Math.max(sx1, sx2) + 6,
@@ -266,19 +233,10 @@ function drawSnapIndicator() {
     ctx.rect(sx - 6, sy - 6, 12, 12);
     ctx.stroke();
     // Malý popisek
-    ctx.font = "9px Consolas";
+    const snapLabelSize = Math.round(Math.min(22, Math.max(14, 10 + state.zoom * 6)));
+    ctx.font = `${Math.max(9, snapLabelSize - 4)}px Consolas`;
     ctx.fillStyle = "#f9e2af";
     ctx.fillText("SNAP", sx + 9, sy - 3);
-  } else if (state.mouse.snapType === 'grid') {
-    // Snap k mřížce – malý křížek
-    ctx.strokeStyle = "#585b70";
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(sx - 4, sy);
-    ctx.lineTo(sx + 4, sy);
-    ctx.moveTo(sx, sy - 4);
-    ctx.lineTo(sx, sy + 4);
-    ctx.stroke();
   }
 
   // Vodící čára od raw pozice k snap pozici
@@ -300,7 +258,8 @@ function drawSnapIndicator() {
 
 // ── Kóty / rozměry ──
 function drawDimension(obj) {
-  ctx.font = "10px Consolas";
+  const dimSize = Math.round(Math.min(18, Math.max(12, 8 + state.zoom * 4)));
+  ctx.font = `${dimSize}px Consolas`;
   ctx.fillStyle = "#9399b2";
   const offset = 14;
   switch (obj.type) {

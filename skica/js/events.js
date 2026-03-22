@@ -14,7 +14,7 @@ drawCanvas.addEventListener("mousemove", (e) => {
   state.mouse.rawX = rawWx;
   state.mouse.rawY = rawWy;
   let [wx, wy] = [rawWx, rawWy];
-  if (state.snapToGrid || state.snapToPoints) [wx, wy] = snapPt(rawWx, rawWy);
+  if (state.snapToPoints) [wx, wy] = snapPt(rawWx, rawWy);
   state.mouse.x = wx;
   state.mouse.y = wy;
 
@@ -42,12 +42,14 @@ drawCanvas.addEventListener("mousemove", (e) => {
   }
 
   // Přetahování objektu
-  if (state.dragging && state.dragObjIdx !== null) {
+  if (state.dragging && state.dragObjIdx !== null && state.objects[state.dragObjIdx]) {
     const obj = state.objects[state.dragObjIdx];
     const dx = wx - state.dragStartWorld.x;
     const dy = wy - state.dragStartWorld.y;
-    const snapShot = JSON.parse(state.dragObjSnapshot);
-    Object.assign(obj, snapShot);
+    if (state.dragObjSnapshot) {
+      const snapShot = JSON.parse(state.dragObjSnapshot);
+      Object.assign(obj, snapShot);
+    }
     moveObject(obj, dx, dy);
   }
 
@@ -103,7 +105,9 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
     if (state.dragging) {
       const obj = state.objects[state.dragObjIdx];
-      Object.assign(obj, JSON.parse(state.dragObjSnapshot));
+      if (obj && state.dragObjSnapshot) {
+        Object.assign(obj, JSON.parse(state.dragObjSnapshot));
+      }
       state.dragging = false;
       state.dragObjIdx = null;
       drawCanvas.style.cursor = "crosshair";
@@ -170,11 +174,7 @@ document.addEventListener("keydown", (e) => {
   };
   if (shortcuts[e.key.toLowerCase()])
     setTool(shortcuts[e.key.toLowerCase()]);
-  if (e.key.toLowerCase() === "g") {
-    state.snapToGrid = !state.snapToGrid;
-    updateSnapBtn();
-    renderAll();
-  }
+
   if (e.key.toLowerCase() === "s") {
     state.snapToPoints = !state.snapToPoints;
     updateSnapPtsBtn();
@@ -186,12 +186,7 @@ document.addEventListener("keydown", (e) => {
     updateDimsBtn();
     renderAll();
   }
-  if (e.key === "[") {
-    cycleGridSize(-1);
-  }
-  if (e.key === "]") {
-    cycleGridSize(1);
-  }
+
   if (e.key.toLowerCase() === "n") {
     if (e.shiftKey) {
       showPolarDrawingDialog();

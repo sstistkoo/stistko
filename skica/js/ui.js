@@ -27,6 +27,13 @@ function updateObjectList() {
     li.querySelector(".del-btn").addEventListener("click", (e) => {
       e.stopPropagation();
       pushUndo();
+      // Reset drag pokud mažeme přetahovaný objekt
+      if (state.dragging && state.dragObjIdx === idx) {
+        state.dragging = false;
+        state.dragObjIdx = null;
+      } else if (state.dragging && state.dragObjIdx > idx) {
+        state.dragObjIdx--;
+      }
       state.objects.splice(idx, 1);
       if (state.selected === idx) state.selected = null;
       else if (state.selected > idx) state.selected--;
@@ -58,7 +65,7 @@ function updateProperties() {
     const input = document.createElement("input");
     input.type = "number";
     input.className = "prop-input";
-    input.value = parseFloat(value).toFixed(4);
+    input.value = parseFloat(value).toFixed(3);
     input.step = step || "0.1";
     input.addEventListener("change", () => {
       const v = parseFloat(input.value);
@@ -144,18 +151,18 @@ function updateProperties() {
       case "line":
       case "constr":
         return [
-          Math.hypot(o.x2 - o.x1, o.y2 - o.y1).toFixed(4),
+          Math.hypot(o.x2 - o.x1, o.y2 - o.y1).toFixed(3),
           ((Math.atan2(o.y2 - o.y1, o.x2 - o.x1) * 180) / Math.PI).toFixed(2) + "°"
         ];
       case "circle":
         return [
-          (o.r * 2).toFixed(4),
-          (2 * Math.PI * o.r).toFixed(4)
+          (o.r * 2).toFixed(3),
+          (2 * Math.PI * o.r).toFixed(3)
         ];
       case "rect":
         return [
-          Math.abs(o.x2 - o.x1).toFixed(4),
-          Math.abs(o.y2 - o.y1).toFixed(4)
+          Math.abs(o.x2 - o.x1).toFixed(3),
+          Math.abs(o.y2 - o.y1).toFixed(3)
         ];
       default:
         return [];
@@ -180,15 +187,15 @@ function updateProperties() {
       addEditRow("Z1", obj.y1, (v) => { obj.y1 = v; });
       addEditRow("X2", obj.x2, (v) => { obj.x2 = v; });
       addEditRow("Z2", obj.y2, (v) => { obj.y2 = v; });
-      addInfoRow("Délka", Math.hypot(obj.x2 - obj.x1, obj.y2 - obj.y1).toFixed(4));
+      addInfoRow("Délka", Math.hypot(obj.x2 - obj.x1, obj.y2 - obj.y1).toFixed(3));
       addInfoRow("Úhel", ((Math.atan2(obj.y2 - obj.y1, obj.x2 - obj.x1) * 180) / Math.PI).toFixed(2) + "°");
       break;
     case "circle":
       addEditRow("Střed X", obj.cx, (v) => { obj.cx = v; });
       addEditRow("Střed Z", obj.cy, (v) => { obj.cy = v; });
       addEditRow("Poloměr", obj.r, (v) => { if (v > 0) obj.r = v; }, "0.01");
-      addInfoRow("Průměr", (obj.r * 2).toFixed(4));
-      addInfoRow("Obvod", (2 * Math.PI * obj.r).toFixed(4));
+      addInfoRow("Průměr", (obj.r * 2).toFixed(3));
+      addInfoRow("Obvod", (2 * Math.PI * obj.r).toFixed(3));
       break;
     case "arc":
       addEditRow("Střed X", obj.cx, (v) => { obj.cx = v; });
@@ -202,8 +209,8 @@ function updateProperties() {
       addEditRow("Z1", obj.y1, (v) => { obj.y1 = v; });
       addEditRow("X2", obj.x2, (v) => { obj.x2 = v; });
       addEditRow("Z2", obj.y2, (v) => { obj.y2 = v; });
-      addInfoRow("Šířka", Math.abs(obj.x2 - obj.x1).toFixed(4));
-      addInfoRow("Výška", Math.abs(obj.y2 - obj.y1).toFixed(4));
+      addInfoRow("Šířka", Math.abs(obj.x2 - obj.x1).toFixed(3));
+      addInfoRow("Výška", Math.abs(obj.y2 - obj.y1).toFixed(3));
       break;
   }
 }
@@ -219,10 +226,10 @@ function updateIntersectionList() {
   }
   state.intersections.forEach((pt, i) => {
     const li = document.createElement("li");
-    li.innerHTML = `P${i + 1}:  X=${pt.x.toFixed(4)}  Z=${pt.y.toFixed(4)} <span class="copy-hint">klik=kopírovat</span>`;
+    li.innerHTML = `P${i + 1}:  X=${pt.x.toFixed(3)}  Z=${pt.y.toFixed(3)} <span class="copy-hint">klik=kopírovat</span>`;
     li.title = "Klikněte pro zkopírování souřadnic";
     li.addEventListener("click", () => {
-      const text = `X${pt.x.toFixed(4)} Z${pt.y.toFixed(4)}`;
+      const text = `X${pt.x.toFixed(3)} Z${pt.y.toFixed(3)}`;
       navigator.clipboard
         .writeText(text)
         .then(() => showToast(`Zkopírováno: ${text}`));
@@ -248,7 +255,9 @@ function setTool(tool) {
   state.tempPoints = [];
   if (state.dragging) {
     const obj = state.objects[state.dragObjIdx];
-    Object.assign(obj, JSON.parse(state.dragObjSnapshot));
+    if (obj && state.dragObjSnapshot) {
+      Object.assign(obj, JSON.parse(state.dragObjSnapshot));
+    }
     state.dragging = false;
     state.dragObjIdx = null;
   }
@@ -291,20 +300,6 @@ function resetHint() {
   setHint(hints[state.tool] || "");
 }
 
-// ── Snap tlačítko ──
-function updateSnapBtn() {
-  const btn = document.getElementById("btnSnap");
-  const ind = btn.querySelector(".snap-ind");
-  ind.className =
-    "snap-ind " + (state.snapToGrid ? "snap-on" : "snap-off");
-}
-
-document.getElementById("btnSnap").addEventListener("click", () => {
-  state.snapToGrid = !state.snapToGrid;
-  updateSnapBtn();
-  renderAll();
-});
-
 // ── Snap k bodům tlačítko ──
 function updateSnapPtsBtn() {
   const btn = document.getElementById("btnSnapPts");
@@ -333,18 +328,6 @@ document.getElementById("btnDims").addEventListener("click", () => {
   renderAll();
 });
 
-// ── Mřížka tlačítko ──
-function updateGridBtn() {
-  document.getElementById("btnGrid").classList.toggle("active", state.showGrid);
-}
-
-document.getElementById("btnGrid").addEventListener("click", () => {
-  state.showGrid = !state.showGrid;
-  updateGridBtn();
-  renderAll();
-  showToast(state.showGrid ? "Mřížka: ON" : "Mřížka: OFF");
-});
-
 // ── Undo/Redo tlačítka ──
 document.getElementById("btnUndo").addEventListener("click", undo);
 document.getElementById("btnRedo").addEventListener("click", redo);
@@ -371,35 +354,309 @@ document.getElementById("btnClearAll").addEventListener("click", () => {
   }
 });
 
-// ── Velikost mřížky ──
-const gridSizes = [1, 2, 5, 10, 20, 50];
+// ── Kalkulačka – popup ──
+function openCalculator() {
+  // Avoid duplicates
+  if (document.querySelector(".calc-overlay[data-type=calc]")) return;
 
-function updateGridDisplay() {
-  const el = document.getElementById("statusGrid");
-  if (el) el.textContent = `Mřížka: ${state.gridSize}`;
-}
+  const overlay = document.createElement("div");
+  overlay.className = "calc-overlay";
+  overlay.dataset.type = "calc";
+  overlay.innerHTML = `
+    <div class="calc-window">
+      <div class="calc-titlebar">
+        <h3>🔢 Kalkulačka</h3>
+        <button class="calc-close-btn">✕</button>
+      </div>
+      <div class="calc-body">
+        <input type="text" id="calcDisplay" readonly placeholder="0">
+        <div class="calc-buttons">
+          <button class="calc-btn" data-val="7">7</button>
+          <button class="calc-btn" data-val="8">8</button>
+          <button class="calc-btn" data-val="9">9</button>
+          <button class="calc-btn calc-op" data-val="/">÷</button>
+          <button class="calc-btn" data-val="4">4</button>
+          <button class="calc-btn" data-val="5">5</button>
+          <button class="calc-btn" data-val="6">6</button>
+          <button class="calc-btn calc-op" data-val="*">×</button>
+          <button class="calc-btn" data-val="1">1</button>
+          <button class="calc-btn" data-val="2">2</button>
+          <button class="calc-btn" data-val="3">3</button>
+          <button class="calc-btn calc-op" data-val="-">−</button>
+          <button class="calc-btn" data-val="0">0</button>
+          <button class="calc-btn" data-val=".">.</button>
+          <button class="calc-btn calc-eq" data-val="=">=</button>
+          <button class="calc-btn calc-op" data-val="+">+</button>
+          <button class="calc-btn calc-fn" data-val="sqrt">√</button>
+          <button class="calc-btn calc-fn" data-val="sin">sin</button>
+          <button class="calc-btn calc-fn" data-val="cos">cos</button>
+          <button class="calc-btn calc-fn" data-val="tan">tan</button>
+          <button class="calc-btn calc-fn" data-val="pi">π</button>
+          <button class="calc-btn calc-fn" data-val="pow">x²</button>
+          <button class="calc-btn calc-fn" data-val="(">(</button>
+          <button class="calc-btn calc-fn" data-val=")">)</button>
+          <button class="calc-btn calc-clear" data-val="C">C</button>
+          <button class="calc-btn calc-clear" data-val="CE">←</button>
+          <button class="calc-btn calc-copy" data-val="copy">📋</button>
+          <button class="calc-btn calc-fn" data-val="atan">atan</button>
+        </div>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
 
-function cycleGridSize(direction) {
-  const idx = gridSizes.indexOf(state.gridSize);
-  let newIdx;
-  if (idx === -1) {
-    // Aktuální hodnota není v seznamu, najdi nejbližší
-    newIdx = gridSizes.findIndex(s => s >= state.gridSize);
-    if (newIdx === -1) newIdx = gridSizes.length - 1;
-  } else {
-    newIdx = idx + direction;
+  const display = overlay.querySelector("#calcDisplay");
+  let expr = "";
+
+  function updateDisplay(text) { display.value = text || "0"; }
+
+  function safeEval(expression) {
+    let e = expression
+      .replace(/π/g, String(Math.PI))
+      .replace(/×/g, "*").replace(/−/g, "-").replace(/÷/g, "/");
+    if (!/^[\d+\-*/().eE\s]*$/.test(e)) return null;
+    try {
+      const r = new Function("return (" + e + ")")();
+      return (typeof r === "number" && isFinite(r)) ? r : null;
+    } catch (_) { return null; }
   }
-  newIdx = Math.max(0, Math.min(gridSizes.length - 1, newIdx));
-  state.gridSize = gridSizes[newIdx];
-  updateGridDisplay();
-  renderAll();
-  showToast(`Mřížka: ${state.gridSize}`);
+
+  function handleFn(fn) {
+    const cur = safeEval(expr);
+    if (cur === null) return;
+    let r;
+    switch (fn) {
+      case "sqrt": r = Math.sqrt(cur); break;
+      case "sin":  r = Math.sin(cur * Math.PI / 180); break;
+      case "cos":  r = Math.cos(cur * Math.PI / 180); break;
+      case "tan":  r = Math.tan(cur * Math.PI / 180); break;
+      case "atan": r = Math.atan(cur) * 180 / Math.PI; break;
+      case "pow":  r = cur * cur; break;
+      default: return;
+    }
+    if (typeof r !== "number" || !isFinite(r)) { updateDisplay("Chyba"); expr = ""; return; }
+    expr = String(parseFloat(r.toFixed(8)));
+    updateDisplay(expr);
+  }
+
+  overlay.querySelectorAll(".calc-btn").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const val = btn.dataset.val;
+      switch (val) {
+        case "C":    expr = ""; updateDisplay("0"); break;
+        case "CE":   expr = expr.slice(0, -1); updateDisplay(expr); break;
+        case "=": {
+          const r = safeEval(expr);
+          if (r === null) { updateDisplay("Chyba"); }
+          else { expr = String(parseFloat(r.toFixed(8))); updateDisplay(expr); }
+          break;
+        }
+        case "copy":  navigator.clipboard.writeText(display.value).then(() => showToast("Zkopírováno: " + display.value)); break;
+        case "pi":    expr += String(Math.PI); updateDisplay(expr); break;
+        case "sqrt": case "sin": case "cos": case "tan": case "atan": case "pow":
+          handleFn(val); break;
+        default: expr += val; updateDisplay(expr);
+      }
+    });
+  });
+
+  overlay.querySelector(".calc-close-btn").addEventListener("click", () => overlay.remove());
+  overlay.addEventListener("click", (e) => { if (e.target === overlay) overlay.remove(); });
 }
 
-document.getElementById("statusGrid").addEventListener("click", () => {
-  cycleGridSize(1);
-});
-document.getElementById("statusGrid").addEventListener("contextmenu", (e) => {
-  e.preventDefault();
-  cycleGridSize(-1);
-});
+// ── Trigonometrie – popup ──
+function openTrigCalc() {
+  if (document.querySelector(".calc-overlay[data-type=trig]")) return;
+
+  const overlay = document.createElement("div");
+  overlay.className = "calc-overlay";
+  overlay.dataset.type = "trig";
+  overlay.innerHTML = `
+    <div class="calc-window trig-window">
+      <div class="calc-titlebar">
+        <h3>📐 Trigonometrie – pravý trojúhelník</h3>
+        <button class="calc-close-btn">✕</button>
+      </div>
+      <div class="calc-body">
+        <div class="trig-svg-wrap">
+          <svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
+            <!-- Triangle -->
+            <polygon points="40,190 260,190 260,40" fill="none" stroke="#585b70" stroke-width="2"/>
+            <!-- Right angle marker -->
+            <polyline points="240,190 240,170 260,170" fill="none" stroke="#6c7086" stroke-width="1.5"/>
+            <!-- Side labels -->
+            <text x="150" y="210" text-anchor="middle" fill="#a6e3a1" font-size="16" font-weight="bold" font-family="Consolas">b</text>
+            <text x="275" y="120" text-anchor="start" fill="#f38ba8" font-size="16" font-weight="bold" font-family="Consolas">a</text>
+            <text x="140" y="105" text-anchor="end" fill="#89b4fa" font-size="16" font-weight="bold" font-family="Consolas">c</text>
+            <!-- Angle arcs -->
+            <path d="M 70,190 A 30,30 0 0,0 56,170" fill="none" stroke="#f38ba8" stroke-width="1.5"/>
+            <text x="78" y="178" fill="#f38ba8" font-size="13" font-family="Consolas">α</text>
+            <path d="M 260,65 A 25,25 0 0,0 243,53" fill="none" stroke="#a6e3a1" stroke-width="1.5"/>
+            <text x="244" y="75" fill="#a6e3a1" font-size="13" font-family="Consolas">β</text>
+            <text x="248" y="195" fill="#89b4fa" font-size="12" font-family="Consolas">90°</text>
+          </svg>
+        </div>
+        <div class="trig-fields">
+          <div class="trig-col">
+            <h4>Strany</h4>
+            <div class="trig-field">
+              <label class="label-a">a</label>
+              <input type="number" id="trigA" step="any" placeholder="protilehlá">
+              <span class="trig-unit">mm</span>
+            </div>
+            <div class="trig-field">
+              <label class="label-b">b</label>
+              <input type="number" id="trigB" step="any" placeholder="přilehlá">
+              <span class="trig-unit">mm</span>
+            </div>
+            <div class="trig-field">
+              <label class="label-c">c</label>
+              <input type="number" id="trigC" step="any" placeholder="přepona">
+              <span class="trig-unit">mm</span>
+            </div>
+          </div>
+          <div class="trig-col">
+            <h4>Úhly</h4>
+            <div class="trig-field">
+              <label class="label-alpha">α</label>
+              <input type="number" id="trigAlpha" step="any" placeholder="úhel u a">
+              <span class="trig-unit">°</span>
+            </div>
+            <div class="trig-field">
+              <label class="label-beta">β</label>
+              <input type="number" id="trigBeta" step="any" placeholder="úhel u b">
+              <span class="trig-unit">°</span>
+            </div>
+            <div class="trig-field">
+              <label class="label-gamma">γ</label>
+              <input type="number" id="trigGamma" value="90" disabled>
+              <span class="trig-unit">° ✓</span>
+            </div>
+          </div>
+        </div>
+        <div class="trig-actions">
+          <button class="trig-btn-solve">✅ Vypočítat</button>
+          <button class="trig-btn-clear">🗑 Vymazat</button>
+          <button class="trig-btn-copy">📋 Kopírovat</button>
+        </div>
+        <div class="trig-info">Zadejte 2 hodnoty a stiskněte Vypočítat</div>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+
+  const inpA = overlay.querySelector("#trigA");
+  const inpB = overlay.querySelector("#trigB");
+  const inpC = overlay.querySelector("#trigC");
+  const inpAlpha = overlay.querySelector("#trigAlpha");
+  const inpBeta  = overlay.querySelector("#trigBeta");
+  const inputs = [inpA, inpB, inpC, inpAlpha, inpBeta];
+  const deg = Math.PI / 180;
+
+  function val(inp) {
+    const v = parseFloat(inp.value);
+    return (isFinite(v) && v > 0) ? v : null;
+  }
+
+  function setComputed(inp, v) {
+    inp.value = parseFloat(v.toFixed(4));
+    inp.classList.add("computed");
+  }
+
+  function clearComputed() {
+    inputs.forEach(i => i.classList.remove("computed"));
+  }
+
+  function solve() {
+    clearComputed();
+    let a = val(inpA), b = val(inpB), c = val(inpC);
+    let alpha = val(inpAlpha), beta = val(inpBeta);
+
+    // Count known values
+    const known = [a, b, c, alpha, beta].filter(v => v !== null).length;
+    if (known < 2) return;
+
+    // Angles must be < 90 for non-right angle
+    if (alpha !== null && alpha >= 90) return;
+    if (beta !== null && beta >= 90) return;
+
+    // If both angles known → complement
+    if (alpha !== null && beta !== null) {
+      // Check consistency
+      if (Math.abs(alpha + beta - 90) > 0.01) return;
+    }
+
+    // Derive missing angle from one angle
+    if (alpha !== null && beta === null) { beta = 90 - alpha; setComputed(inpBeta, beta); }
+    if (beta !== null && alpha === null) { alpha = 90 - beta; setComputed(inpAlpha, alpha); }
+
+    // Two sides known → Pythagoras + trig
+    if (a !== null && b !== null && c === null) {
+      c = Math.sqrt(a * a + b * b);
+      setComputed(inpC, c);
+    }
+    if (a !== null && c !== null && b === null) {
+      if (c <= a) return;
+      b = Math.sqrt(c * c - a * a);
+      setComputed(inpB, b);
+    }
+    if (b !== null && c !== null && a === null) {
+      if (c <= b) return;
+      a = Math.sqrt(c * c - b * b);
+      setComputed(inpA, a);
+    }
+
+    // From sides → angles
+    if (a !== null && c !== null && alpha === null) {
+      alpha = Math.asin(a / c) / deg;
+      setComputed(inpAlpha, alpha);
+      if (beta === null) { beta = 90 - alpha; setComputed(inpBeta, beta); }
+    }
+    if (b !== null && c !== null && beta === null) {
+      beta = Math.asin(b / c) / deg;
+      setComputed(inpBeta, beta);
+      if (alpha === null) { alpha = 90 - beta; setComputed(inpAlpha, alpha); }
+    }
+    if (a !== null && b !== null && alpha === null) {
+      alpha = Math.atan(a / b) / deg;
+      setComputed(inpAlpha, alpha);
+      if (beta === null) { beta = 90 - alpha; setComputed(inpBeta, beta); }
+    }
+
+    // One side + one angle → all sides
+    if (alpha !== null && beta !== null) {
+      const sinA = Math.sin(alpha * deg);
+      const cosA = Math.cos(alpha * deg);
+      if (a !== null && b === null) { b = a / Math.tan(alpha * deg); setComputed(inpB, b); }
+      if (a !== null && c === null) { c = a / sinA; setComputed(inpC, c); }
+      if (b !== null && a === null) { a = b * Math.tan(alpha * deg); setComputed(inpA, a); }
+      if (b !== null && c === null) { c = b / cosA; setComputed(inpC, c); }
+      if (c !== null && a === null) { a = c * sinA; setComputed(inpA, a); }
+      if (c !== null && b === null) { b = c * cosA; setComputed(inpB, b); }
+    }
+  }
+
+  overlay.querySelector(".trig-btn-solve").addEventListener("click", solve);
+
+  overlay.querySelector(".trig-btn-clear").addEventListener("click", () => {
+    inputs.forEach(i => { i.value = ""; i.classList.remove("computed"); });
+  });
+
+  overlay.querySelector(".trig-btn-copy").addEventListener("click", () => {
+    const parts = [];
+    if (val(inpA)) parts.push("a=" + inpA.value);
+    if (val(inpB)) parts.push("b=" + inpB.value);
+    if (val(inpC)) parts.push("c=" + inpC.value);
+    if (val(inpAlpha)) parts.push("α=" + inpAlpha.value + "°");
+    if (val(inpBeta)) parts.push("β=" + inpBeta.value + "°");
+    parts.push("γ=90°");
+    navigator.clipboard.writeText(parts.join("  ")).then(() => showToast("Zkopírováno"));
+  });
+
+  overlay.querySelector(".calc-close-btn").addEventListener("click", () => overlay.remove());
+  overlay.addEventListener("click", (e) => { if (e.target === overlay) overlay.remove(); });
+}
+
+document.getElementById("btnOpenCalc").addEventListener("click", openCalculator);
+document.getElementById("btnOpenTrig").addEventListener("click", openTrigCalc);
+
+
