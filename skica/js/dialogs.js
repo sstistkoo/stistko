@@ -213,13 +213,14 @@ function showNumericalInputDialog() {
                 <div><label>Střed Z:</label><input type="number" id="ncy" step="0.001" value="${hasChain ? chainY : '0'}"></div>
                 <div class="pick-col">${pickBtn("🎯")}</div></div>
                 <div class="input-row"><div><label>Poloměr:</label><input type="number" id="nr" step="0.001" value="10"></div>
-                <div></div></div>`;
+                <div class="pick-col">${pickBtn("📏 R")}</div></div>`;
         break;
       case "arc":
         html = `<div class="input-row"><div><label>Střed X:</label><input type="number" id="ncx" step="0.001" value="${hasChain ? chainX : '0'}"></div>
                 <div><label>Střed Z:</label><input type="number" id="ncy" step="0.001" value="${hasChain ? chainY : '0'}"></div>
                 <div class="pick-col">${pickBtn("🎯")}</div></div>
-                <div class="input-row"><div><label>Poloměr:</label><input type="number" id="nr" step="0.001" value="10"></div></div>
+                <div class="input-row"><div><label>Poloměr:</label><input type="number" id="nr" step="0.001" value="10"></div>
+                <div class="pick-col">${pickBtn("📏 R")}</div></div>
                 <div class="input-row"><div><label>Start (°):</label><input type="number" id="nsa" step="1" value="0"></div>
                 <div><label>Konec (°):</label><input type="number" id="nea" step="1" value="90"></div></div>`;
         break;
@@ -262,10 +263,24 @@ function showNumericalInputDialog() {
               if (f2) f2.value = wy.toFixed(3);
             }
           } else if (t2 === "circle" || t2 === "arc") {
-            const f1 = overlay.querySelector("#ncx");
-            const f2 = overlay.querySelector("#ncy");
-            if (f1) f1.value = wx.toFixed(3);
-            if (f2) f2.value = wy.toFixed(3);
+            if (i === 0) {
+              // Pick středu
+              const f1 = overlay.querySelector("#ncx");
+              const f2 = overlay.querySelector("#ncy");
+              if (f1) f1.value = wx.toFixed(3);
+              if (f2) f2.value = wy.toFixed(3);
+            } else {
+              // Pick bodu pro poloměr – vzdálenost od středu
+              const cxInp = overlay.querySelector("#ncx");
+              const cyInp = overlay.querySelector("#ncy");
+              const rInp = overlay.querySelector("#nr");
+              if (cxInp && cyInp && rInp) {
+                const cx = parseFloat(cxInp.value) || 0;
+                const cy = parseFloat(cyInp.value) || 0;
+                const r = Math.hypot(wx - cx, wy - cy);
+                rInp.value = r.toFixed(3);
+              }
+            }
           }
           showToast(`Bod: X${wx.toFixed(2)} Z${wy.toFixed(2)}`);
         });
