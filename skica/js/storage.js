@@ -129,34 +129,34 @@ document.getElementById("btnExport").addEventListener("click", () => {
     if (obj.type === "constr") return;
     switch (obj.type) {
       case "point":
-        out += `; ${obj.name}\nG00 X${obj.x.toFixed(4)} Z${obj.y.toFixed(4)}\n`;
+        out += `; ${obj.name}\nG00 X${obj.x.toFixed(3)} Z${obj.y.toFixed(3)}\n`;
         break;
       case "line":
-        out += `; ${obj.name} (délka: ${Math.hypot(obj.x2 - obj.x1, obj.y2 - obj.y1).toFixed(4)})\n`;
-        out += `G00 X${obj.x1.toFixed(4)} Z${obj.y1.toFixed(4)}\nG01 X${obj.x2.toFixed(4)} Z${obj.y2.toFixed(4)}\n`;
+        out += `; ${obj.name} (délka: ${Math.hypot(obj.x2 - obj.x1, obj.y2 - obj.y1).toFixed(3)})\n`;
+        out += `G00 X${obj.x1.toFixed(3)} Z${obj.y1.toFixed(3)}\nG01 X${obj.x2.toFixed(3)} Z${obj.y2.toFixed(3)}\n`;
         break;
       case "circle":
-        out += `; ${obj.name} (R: ${obj.r.toFixed(4)})\n`;
+        out += `; ${obj.name} (R: ${obj.r.toFixed(3)})\n`;
         // Split full circle into two half-circles for CNC compatibility
-        out += `G00 X${(obj.cx + obj.r).toFixed(4)} Z${obj.cy.toFixed(4)}\n`;
-        out += `G02 X${(obj.cx - obj.r).toFixed(4)} Z${obj.cy.toFixed(4)} I${(-obj.r).toFixed(4)} K0.0000\n`;
-        out += `G02 X${(obj.cx + obj.r).toFixed(4)} Z${obj.cy.toFixed(4)} I${obj.r.toFixed(4)} K0.0000\n`;
+        out += `G00 X${(obj.cx + obj.r).toFixed(3)} Z${obj.cy.toFixed(3)}\n`;
+        out += `G02 X${(obj.cx - obj.r).toFixed(3)} Z${obj.cy.toFixed(3)} I${(-obj.r).toFixed(3)} K0.000\n`;
+        out += `G02 X${(obj.cx + obj.r).toFixed(3)} Z${obj.cy.toFixed(3)} I${obj.r.toFixed(3)} K0.000\n`;
         break;
       case "arc":
-        out += `; ${obj.name} (R: ${obj.r.toFixed(4)})\n`;
+        out += `; ${obj.name} (R: ${obj.r.toFixed(3)})\n`;
         const sx = obj.cx + obj.r * Math.cos(obj.startAngle),
           sy = obj.cy + obj.r * Math.sin(obj.startAngle);
         const ex = obj.cx + obj.r * Math.cos(obj.endAngle),
           ey = obj.cy + obj.r * Math.sin(obj.endAngle);
-        out += `G00 X${sx.toFixed(4)} Z${sy.toFixed(4)}\nG02 X${ex.toFixed(4)} Z${ey.toFixed(4)} R${obj.r.toFixed(4)}\n`;
+        out += `G00 X${sx.toFixed(3)} Z${sy.toFixed(3)}\nG02 X${ex.toFixed(3)} Z${ey.toFixed(3)} R${obj.r.toFixed(3)}\n`;
         break;
       case "rect":
         out += `; ${obj.name} (${Math.abs(obj.x2 - obj.x1).toFixed(2)} × ${Math.abs(obj.y2 - obj.y1).toFixed(2)})\n`;
-        out += `G00 X${obj.x1.toFixed(4)} Z${obj.y1.toFixed(4)}\n`;
-        out += `G01 X${obj.x2.toFixed(4)} Z${obj.y1.toFixed(4)}\n`;
-        out += `G01 X${obj.x2.toFixed(4)} Z${obj.y2.toFixed(4)}\n`;
-        out += `G01 X${obj.x1.toFixed(4)} Z${obj.y2.toFixed(4)}\n`;
-        out += `G01 X${obj.x1.toFixed(4)} Z${obj.y1.toFixed(4)}\n`;
+        out += `G00 X${obj.x1.toFixed(3)} Z${obj.y1.toFixed(3)}\n`;
+        out += `G01 X${obj.x2.toFixed(3)} Z${obj.y1.toFixed(3)}\n`;
+        out += `G01 X${obj.x2.toFixed(3)} Z${obj.y2.toFixed(3)}\n`;
+        out += `G01 X${obj.x1.toFixed(3)} Z${obj.y2.toFixed(3)}\n`;
+        out += `G01 X${obj.x1.toFixed(3)} Z${obj.y1.toFixed(3)}\n`;
         break;
     }
     out += "\n";
@@ -165,7 +165,7 @@ document.getElementById("btnExport").addEventListener("click", () => {
   if (state.intersections.length > 0) {
     out += "; --- Průsečíky ---\n";
     state.intersections.forEach((pt, i) => {
-      out += `; P${i + 1}: X${pt.x.toFixed(4)} Z${pt.y.toFixed(4)}\n`;
+      out += `; P${i + 1}: X${pt.x.toFixed(3)} Z${pt.y.toFixed(3)}\n`;
     });
   }
   out += "\n; === Konec ===\n";

@@ -3,18 +3,14 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 const wrap = document.getElementById("canvasWrap");
-const gridCanvas = document.getElementById("gridCanvas");
 const drawCanvas = document.getElementById("drawCanvas");
-const gridCtx = gridCanvas.getContext("2d");
 const ctx = drawCanvas.getContext("2d");
 
 function resizeCanvases() {
   const w = wrap.clientWidth,
     h = wrap.clientHeight;
-  [gridCanvas, drawCanvas].forEach((c) => {
-    c.width = w;
-    c.height = h;
-  });
+  drawCanvas.width = w;
+  drawCanvas.height = h;
   if (state.panX === 0 && state.panY === 0) {
     state.panX = w / 2;
     state.panY = h / 2;
@@ -30,15 +26,11 @@ function worldToScreen(wx, wy) {
 }
 
 function screenToWorld(sx, sy) {
+  const z = state.zoom || 1;
   return [
-    (sx - state.panX) / state.zoom,
-    -(sy - state.panY) / state.zoom,
+    (sx - state.panX) / z,
+    -(sy - state.panY) / z,
   ];
-}
-
-function snap(val) {
-  if (!state.snapToGrid) return val;
-  return Math.round(val / state.gridSize) * state.gridSize;
 }
 
 function snapPt(wx, wy) {
@@ -69,15 +61,7 @@ function snapPt(wx, wy) {
     }
   }
 
-  // Grid snap – jen pokud je mřížka viditelná a NEkreslíme
-  let gridX = null, gridY = null, gridD = Infinity;
-  if (state.snapToGrid && state.showGrid && !state.drawing) {
-    gridX = snap(wx);
-    gridY = snap(wy);
-    gridD = Math.hypot(gridX - wx, gridY - wy);
-  }
-
-  // Body/průsečíky mají prioritu před mřížkou
+  // Body/průsečíky – snap k bodům objektů
   if (objX !== null) {
     // Vibrace při snapnutí k bodu (jen pokud se snapType změnil)
     if (state.mouse.snapType !== 'point' && navigator.vibrate) {
@@ -86,11 +70,6 @@ function snapPt(wx, wy) {
     state.mouse.snapped = true;
     state.mouse.snapType = 'point';
     return [objX, objY];
-  }
-  if (gridX !== null) {
-    state.mouse.snapped = true;
-    state.mouse.snapType = 'grid';
-    return [gridX, gridY];
   }
 
   state.mouse.snapped = false;

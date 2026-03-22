@@ -24,6 +24,13 @@ topbar.addEventListener("click", (e) => {
   }
 });
 
+// ── Mobile: Toolbar close button ──
+document.getElementById("mobileToolbarClose").addEventListener("click", (e) => {
+  e.stopPropagation();
+  topbar.classList.remove("mobile-open");
+  document.body.classList.remove("toolbar-open");
+});
+
 // ── Mobile: Sidebar toggle ──
 const sidebar = document.getElementById("sidebar");
 const sidebarOverlay = document.getElementById("sidebarOverlay");
@@ -43,13 +50,19 @@ sidebarOverlay.addEventListener("click", () => {
   sidebarOverlay.classList.remove("active");
 });
 
+// ── Sidebar close button ──
+document.getElementById("sidebarCloseBtn").addEventListener("click", (e) => {
+  e.stopPropagation();
+  sidebar.classList.remove("mobile-open");
+  sidebarOverlay.classList.remove("active");
+});
+
 // ── Mobile: coord bar ──
 const mobileCoordBar = document.getElementById("mobileCoordBar");
 
-// Tap na coord bar → cyklovat velikost mřížky
+// Tap na coord bar (info pouze)
 mobileCoordBar.addEventListener("click", (e) => {
   e.stopPropagation();
-  cycleGridSize(1);
 });
 
 function updateMobileCoords(wx, wy, extra) {
@@ -114,7 +127,9 @@ mobileCancelBtn.addEventListener("click", (e) => {
   e.stopPropagation();
   if (state.dragging) {
     const obj = state.objects[state.dragObjIdx];
-    Object.assign(obj, JSON.parse(state.dragObjSnapshot));
+    if (obj && state.dragObjSnapshot) {
+      Object.assign(obj, JSON.parse(state.dragObjSnapshot));
+    }
     state.dragging = false;
     state.dragObjIdx = null;
   }
@@ -192,7 +207,7 @@ function showPrecisionCrosshair(touch) {
   const chSy = touch.clientY - rect.top + PRECISION_OFFSET_Y;
 
   let [wx, wy] = screenToWorld(chSx, chSy);
-  if (state.snapToGrid || state.snapToPoints) [wx, wy] = snapPt(wx, wy);
+  if (state.snapToPoints) [wx, wy] = snapPt(wx, wy);
   state.mouse.x = wx;
   state.mouse.y = wy;
   state.mouse.sx = chSx;
@@ -212,7 +227,7 @@ function updatePrecisionCrosshair(touch) {
   const chSy = touch.clientY - rect.top + PRECISION_OFFSET_Y;
 
   let [wx, wy] = screenToWorld(chSx, chSy);
-  if (state.snapToGrid || state.snapToPoints) [wx, wy] = snapPt(wx, wy);
+  if (state.snapToPoints) [wx, wy] = snapPt(wx, wy);
   state.mouse.x = wx;
   state.mouse.y = wy;
   state.mouse.sx = chSx;
@@ -229,17 +244,19 @@ function updatePrecisionCrosshair(touch) {
       ddy = wy - ref.y;
     const dist = Math.hypot(ddx, ddy);
     const ang = (Math.atan2(ddy, ddx) * 180) / Math.PI;
-    extra = `  d=${dist.toFixed(1)} ∠${ang.toFixed(1)}°`;
+    extra = `  d=${dist.toFixed(1)} ∠=${ang.toFixed(1)}°`;
   }
   updateMobileCoords(wx, wy, extra);
 
   // Přetahování objektu v precision mode
-  if (state.dragging && state.dragObjIdx !== null) {
+  if (state.dragging && state.dragObjIdx !== null && state.objects[state.dragObjIdx]) {
     const obj = state.objects[state.dragObjIdx];
     const dx = wx - state.dragStartWorld.x;
     const dy = wy - state.dragStartWorld.y;
-    const snapShot = JSON.parse(state.dragObjSnapshot);
-    Object.assign(obj, snapShot);
+    if (state.dragObjSnapshot) {
+      const snapShot = JSON.parse(state.dragObjSnapshot);
+      Object.assign(obj, snapShot);
+    }
     moveObject(obj, dx, dy);
   }
 
@@ -291,7 +308,7 @@ drawCanvas.addEventListener(
       state.mouse.sx = tp.sx;
       state.mouse.sy = tp.sy;
       let [wx, wy] = screenToWorld(tp.sx, tp.sy);
-      if (state.snapToGrid || state.snapToPoints)
+      if (state.snapToPoints)
         [wx, wy] = snapPt(wx, wy);
       state.mouse.x = wx;
       state.mouse.y = wy;
@@ -423,7 +440,7 @@ drawCanvas.addEventListener(
       state.mouse.sx = tp.sx;
       state.mouse.sy = tp.sy;
       let [wx, wy] = screenToWorld(tp.sx, tp.sy);
-      if (state.snapToGrid || state.snapToPoints)
+      if (state.snapToPoints)
         [wx, wy] = snapPt(wx, wy);
       state.mouse.x = wx;
       state.mouse.y = wy;
@@ -442,12 +459,14 @@ drawCanvas.addEventListener(
       updateMobileCoords(wx, wy, extra);
 
       // Přetahování objektu
-      if (state.dragging && state.dragObjIdx !== null) {
+      if (state.dragging && state.dragObjIdx !== null && state.objects[state.dragObjIdx]) {
         const obj = state.objects[state.dragObjIdx];
         const dx = wx - state.dragStartWorld.x;
         const dy = wy - state.dragStartWorld.y;
-        const snapShot = JSON.parse(state.dragObjSnapshot);
-        Object.assign(obj, snapShot);
+        if (state.dragObjSnapshot) {
+          const snapShot = JSON.parse(state.dragObjSnapshot);
+          Object.assign(obj, snapShot);
+        }
         moveObject(obj, dx, dy);
       }
 
@@ -531,7 +550,7 @@ drawCanvas.addEventListener(
       state.mouse.sx = tp.sx;
       state.mouse.sy = tp.sy;
       let [wx, wy] = screenToWorld(tp.sx, tp.sy);
-      if (state.snapToGrid || state.snapToPoints)
+      if (state.snapToPoints)
         [wx, wy] = snapPt(wx, wy);
       state.mouse.x = wx;
       state.mouse.y = wy;

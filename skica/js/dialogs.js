@@ -29,12 +29,12 @@ function showMeasureResult(p1, p2, d, angle) {
     <div class="input-dialog">
       <h3>📏 Výsledek měření</h3>
       <table style="width:100%;font-family:Consolas;font-size:13px;">
-        <tr><td style="color:#a6adc8">Vzdálenost:</td><td style="color:#f9e2af">${d.toFixed(4)} mm</td></tr>
+        <tr><td style="color:#a6adc8">Vzdálenost:</td><td style="color:#f9e2af">${d.toFixed(3)} mm</td></tr>
         <tr><td style="color:#a6adc8">Úhel:</td><td style="color:#f9e2af">${angle.toFixed(2)}°</td></tr>
-        <tr><td style="color:#a6adc8">ΔX:</td><td style="color:#f5c2e7">${(p2.x - p1.x).toFixed(4)}</td></tr>
-        <tr><td style="color:#a6adc8">ΔZ:</td><td style="color:#f5c2e7">${(p2.y - p1.y).toFixed(4)}</td></tr>
-        <tr><td style="color:#a6adc8">Bod 1:</td><td style="color:#89b4fa">X${p1.x.toFixed(4)} Z${p1.y.toFixed(4)}</td></tr>
-        <tr><td style="color:#a6adc8">Bod 2:</td><td style="color:#89b4fa">X${p2.x.toFixed(4)} Z${p2.y.toFixed(4)}</td></tr>
+        <tr><td style="color:#a6adc8">ΔX:</td><td style="color:#f5c2e7">${(p2.x - p1.x).toFixed(3)}</td></tr>
+        <tr><td style="color:#a6adc8">ΔZ:</td><td style="color:#f5c2e7">${(p2.y - p1.y).toFixed(3)}</td></tr>
+        <tr><td style="color:#a6adc8">Bod 1:</td><td style="color:#89b4fa">X${p1.x.toFixed(3)} Z${p1.y.toFixed(3)}</td></tr>
+        <tr><td style="color:#a6adc8">Bod 2:</td><td style="color:#89b4fa">X${p2.x.toFixed(3)} Z${p2.y.toFixed(3)}</td></tr>
       </table>
       <div class="btn-row">
         <button class="btn-cancel" id="measureAddDim">📐 Přidat kótu</button>
@@ -72,7 +72,7 @@ function showCircleRadiusDialog() {
       <h3>Kružnice – zadání poloměru</h3>
       <label>Střed: X=${cp.x.toFixed(2)}, Z=${cp.y.toFixed(2)}</label>
       <label>Poloměr (mm):</label>
-      <input type="number" id="dlgRadius" step="0.1" min="0.001" value="10" inputmode="decimal" autofocus>
+      <input type="number" id="dlgRadius" step="0.001" min="0.001" value="10" inputmode="decimal" autofocus>
       <div class="btn-row">
         <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
         <button class="btn-ok" id="dlgOk">OK</button>
@@ -151,7 +151,7 @@ function showNumericalInputDialog() {
       const sx = e.clientX - rect.left;
       const sy = e.clientY - rect.top;
       let [wx, wy] = screenToWorld(sx, sy);
-      if (state.snapToGrid || state.snapToPoints) [wx, wy] = snapPt(wx, wy);
+      if (state.snapToPoints) [wx, wy] = snapPt(wx, wy);
       drawCanvas.removeEventListener("click", onPick);
       drawCanvas.removeEventListener("touchend", onTouch);
       overlay.style.display = "flex";
@@ -165,7 +165,7 @@ function showNumericalInputDialog() {
         const sx = t.clientX - rect.left;
         const sy = t.clientY - rect.top;
         let [wx, wy] = screenToWorld(sx, sy);
-        if (state.snapToGrid || state.snapToPoints) [wx, wy] = snapPt(wx, wy);
+        if (state.snapToPoints) [wx, wy] = snapPt(wx, wy);
         drawCanvas.removeEventListener("click", onPick);
         drawCanvas.removeEventListener("touchend", onTouch);
         overlay.style.display = "flex";
@@ -183,8 +183,8 @@ function showNumericalInputDialog() {
   }
 
   // Chain values
-  const chainX = state.numDialogChain.x !== null ? state.numDialogChain.x.toFixed(4) : "0";
-  const chainY = state.numDialogChain.y !== null ? state.numDialogChain.y.toFixed(4) : "0";
+  const chainX = state.numDialogChain.x !== null ? state.numDialogChain.x.toFixed(3) : "0";
+  const chainY = state.numDialogChain.y !== null ? state.numDialogChain.y.toFixed(3) : "0";
   const hasChain = state.numDialogChain.x !== null;
 
   function updateFields() {
@@ -192,47 +192,47 @@ function showNumericalInputDialog() {
     let html = "";
     switch (t) {
       case "point":
-        html = `<div class="input-row"><div><label>X:</label><input type="number" id="nx" step="0.1" value="${hasChain ? chainX : '0'}"></div>
-                <div><label>Z:</label><input type="number" id="ny" step="0.1" value="${hasChain ? chainY : '0'}"></div>
+        html = `<div class="input-row"><div><label>X:</label><input type="number" id="nx" step="0.001" value="${hasChain ? chainX : '0'}"></div>
+                <div><label>Z:</label><input type="number" id="ny" step="0.001" value="${hasChain ? chainY : '0'}"></div>
                 <div class="pick-col">${pickBtn("🎯")}</div></div>`;
         break;
       case "line":
       case "constr":
-        html = `<div class="input-row"><div><label>X1:</label><input type="number" id="nx1" step="0.1" value="${hasChain ? chainX : '0'}"></div>
-                <div><label>Z1:</label><input type="number" id="ny1" step="0.1" value="${hasChain ? chainY : '0'}"></div>
+        html = `<div class="input-row"><div><label>X1:</label><input type="number" id="nx1" step="0.001" value="${hasChain ? chainX : '0'}"></div>
+                <div><label>Z1:</label><input type="number" id="ny1" step="0.001" value="${hasChain ? chainY : '0'}"></div>
                 <div class="pick-col">${pickBtn("🎯1")}</div></div>
-                <div class="input-row"><div><label>X2:</label><input type="number" id="nx2" step="0.1" value="0"></div>
-                <div><label>Z2:</label><input type="number" id="ny2" step="0.1" value="0"></div>
+                <div class="input-row"><div><label>X2:</label><input type="number" id="nx2" step="0.001" value="0"></div>
+                <div><label>Z2:</label><input type="number" id="ny2" step="0.001" value="0"></div>
                 <div class="pick-col">${pickBtn("🎯2")}</div></div>
                 <label style="font-size:11px;color:#6c7086;margin-top:4px">Nebo: Délka a polární úhel</label>
-                <div class="input-row"><div><label>Délka:</label><input type="number" id="nlen" step="0.1" value=""></div>
-                <div><label>Úhel (°):</label><input type="number" id="nang" step="0.1" value=""></div></div>`;
+                <div class="input-row"><div><label>Délka:</label><input type="number" id="nlen" step="0.001" value=""></div>
+                <div><label>Úhel (°):</label><input type="number" id="nang" step="0.001" value=""></div></div>`;
         break;
       case "circle":
-        html = `<div class="input-row"><div><label>Střed X:</label><input type="number" id="ncx" step="0.1" value="${hasChain ? chainX : '0'}"></div>
-                <div><label>Střed Z:</label><input type="number" id="ncy" step="0.1" value="${hasChain ? chainY : '0'}"></div>
+        html = `<div class="input-row"><div><label>Střed X:</label><input type="number" id="ncx" step="0.001" value="${hasChain ? chainX : '0'}"></div>
+                <div><label>Střed Z:</label><input type="number" id="ncy" step="0.001" value="${hasChain ? chainY : '0'}"></div>
                 <div class="pick-col">${pickBtn("🎯")}</div></div>
-                <div class="input-row"><div><label>Poloměr:</label><input type="number" id="nr" step="0.1" value="10"></div>
+                <div class="input-row"><div><label>Poloměr:</label><input type="number" id="nr" step="0.001" value="10"></div>
                 <div></div></div>`;
         break;
       case "arc":
-        html = `<div class="input-row"><div><label>Střed X:</label><input type="number" id="ncx" step="0.1" value="${hasChain ? chainX : '0'}"></div>
-                <div><label>Střed Z:</label><input type="number" id="ncy" step="0.1" value="${hasChain ? chainY : '0'}"></div>
+        html = `<div class="input-row"><div><label>Střed X:</label><input type="number" id="ncx" step="0.001" value="${hasChain ? chainX : '0'}"></div>
+                <div><label>Střed Z:</label><input type="number" id="ncy" step="0.001" value="${hasChain ? chainY : '0'}"></div>
                 <div class="pick-col">${pickBtn("🎯")}</div></div>
-                <div class="input-row"><div><label>Poloměr:</label><input type="number" id="nr" step="0.1" value="10"></div></div>
+                <div class="input-row"><div><label>Poloměr:</label><input type="number" id="nr" step="0.001" value="10"></div></div>
                 <div class="input-row"><div><label>Start (°):</label><input type="number" id="nsa" step="1" value="0"></div>
                 <div><label>Konec (°):</label><input type="number" id="nea" step="1" value="90"></div></div>`;
         break;
       case "rect":
-        html = `<div class="input-row"><div><label>X1:</label><input type="number" id="nx1" step="0.1" value="${hasChain ? chainX : '0'}"></div>
-                <div><label>Z1:</label><input type="number" id="ny1" step="0.1" value="${hasChain ? chainY : '0'}"></div>
+        html = `<div class="input-row"><div><label>X1:</label><input type="number" id="nx1" step="0.001" value="${hasChain ? chainX : '0'}"></div>
+                <div><label>Z1:</label><input type="number" id="ny1" step="0.001" value="${hasChain ? chainY : '0'}"></div>
                 <div class="pick-col">${pickBtn("🎯1")}</div></div>
-                <div class="input-row"><div><label>X2:</label><input type="number" id="nx2" step="0.1" value="0"></div>
-                <div><label>Z2:</label><input type="number" id="ny2" step="0.1" value="0"></div>
+                <div class="input-row"><div><label>X2:</label><input type="number" id="nx2" step="0.001" value="0"></div>
+                <div><label>Z2:</label><input type="number" id="ny2" step="0.001" value="0"></div>
                 <div class="pick-col">${pickBtn("🎯2")}</div></div>
                 <label style="font-size:11px;color:#6c7086;margin-top:4px">Nebo: Šířka × Výška od bodu 1</label>
-                <div class="input-row"><div><label>Šířka:</label><input type="number" id="nw" step="0.1" value=""></div>
-                <div><label>Výška:</label><input type="number" id="nh" step="0.1" value=""></div></div>`;
+                <div class="input-row"><div><label>Šířka:</label><input type="number" id="nw" step="0.001" value=""></div>
+                <div><label>Výška:</label><input type="number" id="nh" step="0.001" value=""></div></div>`;
         break;
     }
     fieldsDiv.innerHTML = html;
@@ -247,25 +247,25 @@ function showNumericalInputDialog() {
           if (t2 === "point") {
             const nx = overlay.querySelector("#nx");
             const ny = overlay.querySelector("#ny");
-            if (nx) nx.value = wx.toFixed(4);
-            if (ny) ny.value = wy.toFixed(4);
+            if (nx) nx.value = wx.toFixed(3);
+            if (ny) ny.value = wy.toFixed(3);
           } else if (t2 === "line" || t2 === "constr" || t2 === "rect") {
             if (i === 0) {
               const f1 = overlay.querySelector("#nx1");
               const f2 = overlay.querySelector("#ny1");
-              if (f1) f1.value = wx.toFixed(4);
-              if (f2) f2.value = wy.toFixed(4);
+              if (f1) f1.value = wx.toFixed(3);
+              if (f2) f2.value = wy.toFixed(3);
             } else {
               const f1 = overlay.querySelector("#nx2");
               const f2 = overlay.querySelector("#ny2");
-              if (f1) f1.value = wx.toFixed(4);
-              if (f2) f2.value = wy.toFixed(4);
+              if (f1) f1.value = wx.toFixed(3);
+              if (f2) f2.value = wy.toFixed(3);
             }
           } else if (t2 === "circle" || t2 === "arc") {
             const f1 = overlay.querySelector("#ncx");
             const f2 = overlay.querySelector("#ncy");
-            if (f1) f1.value = wx.toFixed(4);
-            if (f2) f2.value = wy.toFixed(4);
+            if (f1) f1.value = wx.toFixed(3);
+            if (f2) f2.value = wy.toFixed(3);
           }
           showToast(`Bod: X${wx.toFixed(2)} Z${wy.toFixed(2)}`);
         });
@@ -430,8 +430,8 @@ function showPolarDrawingDialog() {
       </p>
       <label>Referenční bod:</label>
       <div class="input-row">
-        <div><label>X:</label><input type="number" id="polRefX" step="0.1" value="${refX}"></div>
-        <div><label>Z:</label><input type="number" id="polRefZ" step="0.1" value="${refZ}"></div>
+        <div><label>X:</label><input type="number" id="polRefX" step="0.001" value="${refX}"></div>
+        <div><label>Z:</label><input type="number" id="polRefZ" step="0.001" value="${refZ}"></div>
       </div>
       <div style="display:flex;gap:6px;margin-bottom:10px">
         <button class="btn-ok" id="polMarkRef" style="font-size:11px;padding:3px 8px">📍 Označit ref. bod</button>
@@ -440,8 +440,8 @@ function showPolarDrawingDialog() {
       <hr style="border-color:#45475a;margin:8px 0">
       <label>Segment (polární souřadnice od ref. bodu):</label>
       <div class="input-row">
-        <div><label>Délka:</label><input type="number" id="polLen" step="0.1" value="10"></div>
-        <div><label>Úhel (°):</label><input type="number" id="polAng" step="0.1" value="0"></div>
+        <div><label>Délka:</label><input type="number" id="polLen" step="0.001" value="10"></div>
+        <div><label>Úhel (°):</label><input type="number" id="polAng" step="0.001" value="0"></div>
       </div>
       <div class="input-row">
         <div><label>Typ:</label>
@@ -557,8 +557,8 @@ function showPolarDrawingDialog() {
     polHistory.scrollTop = polHistory.scrollHeight;
 
     if (polChain.checked) {
-      polRefX.value = endX.toFixed(4);
-      polRefZ.value = endZ.toFixed(4);
+      polRefX.value = endX.toFixed(3);
+      polRefZ.value = endZ.toFixed(3);
     }
 
     polLen.focus();
@@ -587,8 +587,8 @@ function showIntersectionInfo(pt) {
     <div class="input-dialog">
       <h3>⨯ Průsečík</h3>
       <table style="width:100%;font-family:Consolas;font-size:14px;">
-        <tr><td style="color:#a6adc8">X:</td><td style="color:#f9e2af;font-size:16px">${pt.x.toFixed(4)}</td></tr>
-        <tr><td style="color:#a6adc8">Z:</td><td style="color:#f9e2af;font-size:16px">${pt.y.toFixed(4)}</td></tr>
+        <tr><td style="color:#a6adc8">X:</td><td style="color:#f9e2af;font-size:16px">${pt.x.toFixed(3)}</td></tr>
+        <tr><td style="color:#a6adc8">Z:</td><td style="color:#f9e2af;font-size:16px">${pt.y.toFixed(3)}</td></tr>
       </table>
       <div class="btn-row">
         <button class="btn-cancel" id="intCopy">📋 Kopírovat</button>
@@ -599,7 +599,7 @@ function showIntersectionInfo(pt) {
   document.body.appendChild(overlay);
 
   overlay.querySelector("#intCopy").addEventListener("click", () => {
-    const text = `X${pt.x.toFixed(4)} Z${pt.y.toFixed(4)}`;
+    const text = `X${pt.x.toFixed(3)} Z${pt.y.toFixed(3)}`;
     navigator.clipboard.writeText(text).then(() => showToast(`Zkopírováno: ${text}`));
   });
   overlay.querySelector("#intAddPoint").addEventListener("click", () => {
@@ -634,8 +634,8 @@ function showMeasureObjectInfo(obj, wx, wy) {
       <div class="input-dialog">
         <h3>📍 Souřadnice bodu</h3>
         <table style="width:100%;font-family:Consolas;font-size:13px;">
-          <tr><td style="color:#a6adc8">X:</td><td style="color:#f9e2af">${nearestPt.x.toFixed(4)}</td></tr>
-          <tr><td style="color:#a6adc8">Z:</td><td style="color:#f9e2af">${nearestPt.y.toFixed(4)}</td></tr>
+          <tr><td style="color:#a6adc8">X:</td><td style="color:#f9e2af">${nearestPt.x.toFixed(3)}</td></tr>
+          <tr><td style="color:#a6adc8">Z:</td><td style="color:#f9e2af">${nearestPt.y.toFixed(3)}</td></tr>
         </table>
         <div class="btn-row">
           <button class="btn-cancel" id="ptCopy">📋 Kopírovat</button>
@@ -655,7 +655,7 @@ function showMeasureObjectInfo(obj, wx, wy) {
 
   if (clickedEndpoint && nearestPt) {
     overlay.querySelector("#ptCopy").addEventListener("click", () => {
-      const text = `X${nearestPt.x.toFixed(4)} Z${nearestPt.y.toFixed(4)}`;
+      const text = `X${nearestPt.x.toFixed(3)} Z${nearestPt.y.toFixed(3)}`;
       navigator.clipboard
         .writeText(text)
         .then(() => showToast(`Zkopírováno: ${text}`));
@@ -685,43 +685,43 @@ function buildObjectInfoDialog(obj) {
 
   switch (obj.type) {
     case "point":
-      rows += `<tr><td style="color:#a6adc8">X:</td><td style="color:#f9e2af">${obj.x.toFixed(4)}</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Z:</td><td style="color:#f9e2af">${obj.y.toFixed(4)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">X:</td><td style="color:#f9e2af">${obj.x.toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Z:</td><td style="color:#f9e2af">${obj.y.toFixed(3)}</td></tr>`;
       break;
     case "line":
     case "constr": {
       const len = Math.hypot(obj.x2 - obj.x1, obj.y2 - obj.y1);
       const angle =
         (Math.atan2(obj.y2 - obj.y1, obj.x2 - obj.x1) * 180) / Math.PI;
-      rows += `<tr><td style="color:#a6adc8">Bod 1:</td><td style="color:#89b4fa">X${obj.x1.toFixed(4)} Z${obj.y1.toFixed(4)}</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Bod 2:</td><td style="color:#89b4fa">X${obj.x2.toFixed(4)} Z${obj.y2.toFixed(4)}</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Délka:</td><td style="color:#f9e2af">${len.toFixed(4)} mm</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Bod 1:</td><td style="color:#89b4fa">X${obj.x1.toFixed(3)} Z${obj.y1.toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Bod 2:</td><td style="color:#89b4fa">X${obj.x2.toFixed(3)} Z${obj.y2.toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Délka:</td><td style="color:#f9e2af">${len.toFixed(3)} mm</td></tr>`;
       rows += `<tr><td style="color:#a6adc8">Úhel:</td><td style="color:#f9e2af">${angle.toFixed(2)}°</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">ΔX:</td><td style="color:#f5c2e7">${(obj.x2 - obj.x1).toFixed(4)}</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">ΔZ:</td><td style="color:#f5c2e7">${(obj.y2 - obj.y1).toFixed(4)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">ΔX:</td><td style="color:#f5c2e7">${(obj.x2 - obj.x1).toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">ΔZ:</td><td style="color:#f5c2e7">${(obj.y2 - obj.y1).toFixed(3)}</td></tr>`;
       break;
     }
     case "circle":
-      rows += `<tr><td style="color:#a6adc8">Střed:</td><td style="color:#89b4fa">X${obj.cx.toFixed(4)} Z${obj.cy.toFixed(4)}</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Poloměr:</td><td style="color:#f9e2af">${obj.r.toFixed(4)} mm</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Průměr:</td><td style="color:#f9e2af">${(obj.r * 2).toFixed(4)} mm</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Obvod:</td><td style="color:#f5c2e7">${(2 * Math.PI * obj.r).toFixed(4)} mm</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Střed:</td><td style="color:#89b4fa">X${obj.cx.toFixed(3)} Z${obj.cy.toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Poloměr:</td><td style="color:#f9e2af">${obj.r.toFixed(3)} mm</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Průměr:</td><td style="color:#f9e2af">${(obj.r * 2).toFixed(3)} mm</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Obvod:</td><td style="color:#f5c2e7">${(2 * Math.PI * obj.r).toFixed(3)} mm</td></tr>`;
       break;
     case "arc":
-      rows += `<tr><td style="color:#a6adc8">Střed:</td><td style="color:#89b4fa">X${obj.cx.toFixed(4)} Z${obj.cy.toFixed(4)}</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Poloměr:</td><td style="color:#f9e2af">${obj.r.toFixed(4)} mm</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Střed:</td><td style="color:#89b4fa">X${obj.cx.toFixed(3)} Z${obj.cy.toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Poloměr:</td><td style="color:#f9e2af">${obj.r.toFixed(3)} mm</td></tr>`;
       rows += `<tr><td style="color:#a6adc8">Start:</td><td style="color:#f5c2e7">${((obj.startAngle * 180) / Math.PI).toFixed(2)}°</td></tr>`;
       rows += `<tr><td style="color:#a6adc8">Konec:</td><td style="color:#f5c2e7">${((obj.endAngle * 180) / Math.PI).toFixed(2)}°</td></tr>`;
       break;
     case "rect": {
       const w = Math.abs(obj.x2 - obj.x1);
       const h = Math.abs(obj.y2 - obj.y1);
-      rows += `<tr><td style="color:#a6adc8">Roh 1:</td><td style="color:#89b4fa">X${obj.x1.toFixed(4)} Z${obj.y1.toFixed(4)}</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Roh 2:</td><td style="color:#89b4fa">X${obj.x2.toFixed(4)} Z${obj.y2.toFixed(4)}</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Šířka:</td><td style="color:#f9e2af">${w.toFixed(4)} mm</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Výška:</td><td style="color:#f9e2af">${h.toFixed(4)} mm</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Obvod:</td><td style="color:#f5c2e7">${(2 * (w + h)).toFixed(4)} mm</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Plocha:</td><td style="color:#f5c2e7">${(w * h).toFixed(4)} mm²</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Roh 1:</td><td style="color:#89b4fa">X${obj.x1.toFixed(3)} Z${obj.y1.toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Roh 2:</td><td style="color:#89b4fa">X${obj.x2.toFixed(3)} Z${obj.y2.toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Šířka:</td><td style="color:#f9e2af">${w.toFixed(3)} mm</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Výška:</td><td style="color:#f9e2af">${h.toFixed(3)} mm</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Obvod:</td><td style="color:#f5c2e7">${(2 * (w + h)).toFixed(3)} mm</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Plocha:</td><td style="color:#f5c2e7">${(w * h).toFixed(3)} mm²</td></tr>`;
       break;
     }
   }
@@ -923,45 +923,45 @@ function showEditObjectDialog(idx) {
     switch (obj.type) {
       case "point":
         fieldsHtml += `
-          <div class="input-row"><div><label>X:</label><input type="number" id="editX" step="0.1" value="${obj.x.toFixed(4)}"></div>
-          <div><label>Z:</label><input type="number" id="editY" step="0.1" value="${obj.y.toFixed(4)}"></div>
+          <div class="input-row"><div><label>X:</label><input type="number" id="editX" step="0.001" value="${obj.x.toFixed(3)}"></div>
+          <div><label>Z:</label><input type="number" id="editY" step="0.001" value="${obj.y.toFixed(3)}"></div>
           <div class="pick-col"><button type="button" class="pick-btn" data-pick="xy">🎯</button></div></div>`;
         break;
       case "line":
       case "constr":
         fieldsHtml += `
-          <div class="input-row"><div><label>X1:</label><input type="number" id="editX1" step="0.1" value="${obj.x1.toFixed(4)}"></div>
-          <div><label>Z1:</label><input type="number" id="editY1" step="0.1" value="${obj.y1.toFixed(4)}"></div>
+          <div class="input-row"><div><label>X1:</label><input type="number" id="editX1" step="0.001" value="${obj.x1.toFixed(3)}"></div>
+          <div><label>Z1:</label><input type="number" id="editY1" step="0.001" value="${obj.y1.toFixed(3)}"></div>
           <div class="pick-col"><button type="button" class="pick-btn" data-pick="p1">🎯1</button></div></div>
-          <div class="input-row"><div><label>X2:</label><input type="number" id="editX2" step="0.1" value="${obj.x2.toFixed(4)}"></div>
-          <div><label>Z2:</label><input type="number" id="editY2" step="0.1" value="${obj.y2.toFixed(4)}"></div>
+          <div class="input-row"><div><label>X2:</label><input type="number" id="editX2" step="0.001" value="${obj.x2.toFixed(3)}"></div>
+          <div><label>Z2:</label><input type="number" id="editY2" step="0.001" value="${obj.y2.toFixed(3)}"></div>
           <div class="pick-col"><button type="button" class="pick-btn" data-pick="p2">🎯2</button></div></div>
           <div style="font-size:12px;color:#9399b2;margin-top:4px">Délka: <span id="editLen">${Math.hypot(obj.x2-obj.x1, obj.y2-obj.y1).toFixed(3)}</span> mm</div>`;
         break;
       case "circle":
         fieldsHtml += `
-          <div class="input-row"><div><label>Střed X:</label><input type="number" id="editCX" step="0.1" value="${obj.cx.toFixed(4)}"></div>
-          <div><label>Střed Z:</label><input type="number" id="editCY" step="0.1" value="${obj.cy.toFixed(4)}"></div>
+          <div class="input-row"><div><label>Střed X:</label><input type="number" id="editCX" step="0.001" value="${obj.cx.toFixed(3)}"></div>
+          <div><label>Střed Z:</label><input type="number" id="editCY" step="0.001" value="${obj.cy.toFixed(3)}"></div>
           <div class="pick-col"><button type="button" class="pick-btn" data-pick="center">🎯</button></div></div>
-          <div class="input-row"><div><label>Poloměr:</label><input type="number" id="editR" step="0.1" value="${obj.r.toFixed(4)}" min="0.001"></div>
-          <div><label>Průměr:</label><input type="number" id="editD" step="0.1" value="${(obj.r*2).toFixed(4)}" min="0.002"></div></div>`;
+          <div class="input-row"><div><label>Poloměr:</label><input type="number" id="editR" step="0.001" value="${obj.r.toFixed(3)}" min="0.001"></div>
+          <div><label>Průměr:</label><input type="number" id="editD" step="0.001" value="${(obj.r*2).toFixed(3)}" min="0.002"></div></div>`;
         break;
       case "arc":
         fieldsHtml += `
-          <div class="input-row"><div><label>Střed X:</label><input type="number" id="editCX" step="0.1" value="${obj.cx.toFixed(4)}"></div>
-          <div><label>Střed Z:</label><input type="number" id="editCY" step="0.1" value="${obj.cy.toFixed(4)}"></div>
+          <div class="input-row"><div><label>Střed X:</label><input type="number" id="editCX" step="0.001" value="${obj.cx.toFixed(3)}"></div>
+          <div><label>Střed Z:</label><input type="number" id="editCY" step="0.001" value="${obj.cy.toFixed(3)}"></div>
           <div class="pick-col"><button type="button" class="pick-btn" data-pick="center">🎯</button></div></div>
-          <div class="input-row"><div><label>Poloměr:</label><input type="number" id="editR" step="0.1" value="${obj.r.toFixed(4)}" min="0.001"></div></div>
+          <div class="input-row"><div><label>Poloměr:</label><input type="number" id="editR" step="0.001" value="${obj.r.toFixed(3)}" min="0.001"></div></div>
           <div class="input-row"><div><label>Start (°):</label><input type="number" id="editSA" step="1" value="${(obj.startAngle*180/Math.PI).toFixed(2)}"></div>
           <div><label>Konec (°):</label><input type="number" id="editEA" step="1" value="${(obj.endAngle*180/Math.PI).toFixed(2)}"></div></div>`;
         break;
       case "rect":
         fieldsHtml += `
-          <div class="input-row"><div><label>X1:</label><input type="number" id="editX1" step="0.1" value="${obj.x1.toFixed(4)}"></div>
-          <div><label>Z1:</label><input type="number" id="editY1" step="0.1" value="${obj.y1.toFixed(4)}"></div>
+          <div class="input-row"><div><label>X1:</label><input type="number" id="editX1" step="0.001" value="${obj.x1.toFixed(3)}"></div>
+          <div><label>Z1:</label><input type="number" id="editY1" step="0.001" value="${obj.y1.toFixed(3)}"></div>
           <div class="pick-col"><button type="button" class="pick-btn" data-pick="p1">🎯1</button></div></div>
-          <div class="input-row"><div><label>X2:</label><input type="number" id="editX2" step="0.1" value="${obj.x2.toFixed(4)}"></div>
-          <div><label>Z2:</label><input type="number" id="editY2" step="0.1" value="${obj.y2.toFixed(4)}"></div>
+          <div class="input-row"><div><label>X2:</label><input type="number" id="editX2" step="0.001" value="${obj.x2.toFixed(3)}"></div>
+          <div><label>Z2:</label><input type="number" id="editY2" step="0.001" value="${obj.y2.toFixed(3)}"></div>
           <div class="pick-col"><button type="button" class="pick-btn" data-pick="p2">🎯2</button></div></div>
           <div style="font-size:12px;color:#9399b2;margin-top:4px">Rozměr: <span id="editDim">${Math.abs(obj.x2-obj.x1).toFixed(2)} × ${Math.abs(obj.y2-obj.y1).toFixed(2)}</span> mm</div>`;
         break;
@@ -997,7 +997,7 @@ function showEditObjectDialog(idx) {
           const sx = e.clientX - rect.left;
           const sy = e.clientY - rect.top;
           let [wx, wy] = screenToWorld(sx, sy);
-          if (state.snapToGrid || state.snapToPoints) [wx, wy] = snapPt(wx, wy);
+          if (state.snapToPoints) [wx, wy] = snapPt(wx, wy);
           drawCanvas.removeEventListener("click", onPick);
           drawCanvas.removeEventListener("touchend", onTouch);
           overlay.style.display = "flex";
@@ -1012,7 +1012,7 @@ function showEditObjectDialog(idx) {
             const sx = t.clientX - rect.left;
             const sy = t.clientY - rect.top;
             let [wx, wy] = screenToWorld(sx, sy);
-            if (state.snapToGrid || state.snapToPoints) [wx, wy] = snapPt(wx, wy);
+            if (state.snapToPoints) [wx, wy] = snapPt(wx, wy);
             drawCanvas.removeEventListener("click", onPick);
             drawCanvas.removeEventListener("touchend", onTouch);
             overlay.style.display = "flex";
@@ -1032,23 +1032,23 @@ function showEditObjectDialog(idx) {
     if (pickType === "xy") {
       const fx = overlay.querySelector("#editX");
       const fy = overlay.querySelector("#editY");
-      if (fx) fx.value = wx.toFixed(4);
-      if (fy) fy.value = wy.toFixed(4);
+      if (fx) fx.value = wx.toFixed(3);
+      if (fy) fy.value = wy.toFixed(3);
     } else if (pickType === "p1") {
       const fx = overlay.querySelector("#editX1");
       const fy = overlay.querySelector("#editY1");
-      if (fx) fx.value = wx.toFixed(4);
-      if (fy) fy.value = wy.toFixed(4);
+      if (fx) fx.value = wx.toFixed(3);
+      if (fy) fy.value = wy.toFixed(3);
     } else if (pickType === "p2") {
       const fx = overlay.querySelector("#editX2");
       const fy = overlay.querySelector("#editY2");
-      if (fx) fx.value = wx.toFixed(4);
-      if (fy) fy.value = wy.toFixed(4);
+      if (fx) fx.value = wx.toFixed(3);
+      if (fy) fy.value = wy.toFixed(3);
     } else if (pickType === "center") {
       const fx = overlay.querySelector("#editCX");
       const fy = overlay.querySelector("#editCY");
-      if (fx) fx.value = wx.toFixed(4);
-      if (fy) fy.value = wy.toFixed(4);
+      if (fx) fx.value = wx.toFixed(3);
+      if (fy) fy.value = wy.toFixed(3);
     }
   }
 
@@ -1060,11 +1060,11 @@ function showEditObjectDialog(idx) {
   if (rInput && dInput) {
     rInput.addEventListener("input", () => {
       const r = parseFloat(rInput.value);
-      if (!isNaN(r) && r > 0) dInput.value = (r * 2).toFixed(4);
+      if (!isNaN(r) && r > 0) dInput.value = (r * 2).toFixed(3);
     });
     dInput.addEventListener("input", () => {
       const d = parseFloat(dInput.value);
-      if (!isNaN(d) && d > 0) rInput.value = (d / 2).toFixed(4);
+      if (!isNaN(d) && d > 0) rInput.value = (d / 2).toFixed(3);
     });
   }
 

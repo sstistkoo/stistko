@@ -43,6 +43,13 @@
 
     <!-- ── Toolbar ── -->
     <div id="topbar">
+      <button
+        class="tool-btn mobile-toolbar-close"
+        id="mobileToolbarClose"
+        title="Zavřít"
+      >
+        ✕
+      </button>
       <button class="tool-btn" id="btnUndo" title="Zpět (Ctrl+Z)" disabled>
         ↩ Zpět
       </button>
@@ -150,14 +157,8 @@
         Měření
       </button>
       <div class="sep"></div>
-      <button class="tool-btn" id="btnSnap" title="Přichytávání k mřížce (G)">
-        <span class="snap-ind snap-on"></span>Snap
-      </button>
       <button class="tool-btn" id="btnSnapPts" title="Přichytávání k bodům (S)">
         <span class="snap-ind snap-on"></span>Body
-      </button>
-      <button class="tool-btn" id="btnGrid" title="Zobrazit/skrýt mřížku">
-        ▦ Mřížka
       </button>
       <button class="tool-btn" id="btnDims" title="Zobrazit kóty (D)">
         📐 Kóty
@@ -199,10 +200,10 @@
     <!-- ── Main ── -->
     <div id="main">
       <div id="canvasWrap">
-        <canvas id="gridCanvas"></canvas>
         <canvas id="drawCanvas"></canvas>
       </div>
       <div id="sidebar">
+        <button id="sidebarCloseBtn" class="sidebar-close-btn">✕</button>
         <button id="sidebarEditBtn" class="sidebar-edit-btn">
           ✏️ Upravit objekt
         </button>
@@ -234,6 +235,25 @@
         <div class="panel-body" id="cncPanel">
           <pre id="cncOutput">Klikněte 📋 CNC Export</pre>
         </div>
+        <div class="panel-header" onclick="togglePanel('calcPanel')">
+          ▾ Kalkulačky
+        </div>
+        <div class="panel-body" id="calcPanel">
+          <div class="calc-launchers">
+            <button id="btnOpenCalc" class="calc-launch-btn" title="Kalkulačka">
+              <span class="calc-launch-icon">🔢</span>
+              <span>Kalkulačka</span>
+            </button>
+            <button
+              id="btnOpenTrig"
+              class="calc-launch-btn"
+              title="Trigonometrie"
+            >
+              <span class="calc-launch-icon">📐</span>
+              <span>Trigonometrie</span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -242,12 +262,6 @@
       <span id="statusTool">Nástroj: Výběr</span>
       <span id="statusHint">Klikněte pro výběr objektu</span>
       <span id="statusZoom">Zoom: 100%</span>
-      <span
-        id="statusGrid"
-        title="Klikněte pro změnu velikosti mřížky"
-        style="cursor: pointer"
-        >Mřížka: 10</span
-      >
       <span>Posun: Prostřední tlačítko / Shift+táhnutí</span>
     </div>
 
