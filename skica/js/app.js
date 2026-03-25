@@ -5,7 +5,7 @@
 import { state } from './state.js';
 import { resizeCanvases } from './canvas.js';
 import { calculateAllIntersections } from './geometry.js';
-import { updateObjectList, updateProperties, resetHint, updateDimsBtn, updateSnapPtsBtn, updateCoordModeBtn, togglePanel } from './ui.js';
+import { updateObjectList, updateProperties, resetHint, updateDimsBtn, updateSnapPtsBtn, updateCoordModeBtn, togglePanel, updateLayerList, updateStatusProject, checkFirstRunHelp } from './ui.js';
 import { initAutoSave } from './storage.js';
 
 // Side-effect imports — tyto moduly registrují event listenery při načtení
@@ -31,8 +31,17 @@ function tryAutoLoad() {
           state.gridSize = data.gridSize;
         if (data.coordMode) state.coordMode = data.coordMode;
         if (data.incReference) state.incReference = data.incReference;
+        // Layers backward compatibility
+        if (data.layers) {
+          state.layers = data.layers;
+          state.activeLayer = data.activeLayer || 0;
+          state.nextLayerId = data.nextLayerId || (Math.max(...data.layers.map(l => l.id)) + 1);
+        } else {
+          state.objects.forEach(obj => { if (obj.layer === undefined) obj.layer = 0; });
+        }
         updateObjectList();
         updateProperties();
+        updateLayerList();
       }
     } catch (e) {}
   }
@@ -42,13 +51,16 @@ function tryAutoLoad() {
 setInterval(() => {
   if (state.objects.length > 0) {
     const data = {
-      version: 2,
+      version: 3,
       objects: state.objects,
       intersections: state.intersections,
       nextId: state.nextId,
       gridSize: state.gridSize,
       coordMode: state.coordMode,
       incReference: state.incReference,
+      layers: state.layers,
+      activeLayer: state.activeLayer,
+      nextLayerId: state.nextLayerId,
     };
     localStorage.setItem("skica_project", JSON.stringify(data));
   }
@@ -62,7 +74,10 @@ resetHint();
 updateDimsBtn();
 updateSnapPtsBtn();
 updateCoordModeBtn();
+updateLayerList();
 initAutoSave();
+updateStatusProject();
+checkFirstRunHelp();
 
 // ── PWA Service Worker ──
 if ("serviceWorker" in navigator) {

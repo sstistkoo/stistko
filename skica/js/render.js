@@ -87,18 +87,23 @@ function renderObjects() {
   const labelSize = Math.round(Math.min(22, Math.max(14, 10 + state.zoom * 6)));
 
   state.objects.forEach((obj, idx) => {
+    // Skip objects on invisible layers
+    const layer = state.layers.find(l => l.id === obj.layer);
+    if (layer && !layer.visible) return;
+
     const isSel = idx === state.selected;
     const isConstr = obj.type === "constr";
+    const layerColor = layer ? layer.color : '#89b4fa';
     ctx.strokeStyle = isSel
       ? "#f9e2af"
       : isConstr
         ? "#6c7086"
-        : obj.color || "#89b4fa";
+        : obj.color || layerColor;
     ctx.fillStyle = isSel
       ? "#f9e2af"
       : isConstr
         ? "#6c7086"
-        : obj.color || "#89b4fa";
+        : obj.color || layerColor;
     ctx.lineWidth = isSel ? 2.5 : 1.5;
     ctx.setLineDash(isConstr || obj.dashed ? [6, 4] : []);
 

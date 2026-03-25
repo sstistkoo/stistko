@@ -10,6 +10,10 @@ import { autoCenterView } from './canvas.js';
 export function addObject(obj) {
   pushUndo();
   obj.id = state.nextId++;
+  // Assign layer: construction lines default to layer 1, others to active layer
+  if (obj.layer === undefined) {
+    obj.layer = (obj.type === 'constr') ? 1 : state.activeLayer;
+  }
   state.objects.push(obj);
   updateObjectList();
   calculateAllIntersections(); // Auto-přepočet průsečíků (volá renderAll)

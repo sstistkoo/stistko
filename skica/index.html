@@ -271,6 +271,17 @@
       <button class="tool-btn" id="btnExport" title="Export CNC souřadnic">
         📋 CNC Export
       </button>
+      <button class="tool-btn" id="btnExportImage" title="Export SVG/PNG">
+        🖼 Export obraz
+      </button>
+      <div class="sep"></div>
+      <button
+        class="tool-btn"
+        id="btnProjects"
+        title="Správa projektů (Ctrl+P)"
+      >
+        📁 Projekty
+      </button>
 
       <button
         class="tool-btn"
@@ -285,6 +296,9 @@
         title="Nastavit referenční bod klikem"
       >
         📍 Ref
+      </button>
+      <button class="tool-btn" id="btnHelp" title="Nápověda (? / F1)">
+        ❓
       </button>
       <div id="coordDisplay">X: 0.000 &nbsp; Z: 0.000</div>
     </div>
@@ -304,6 +318,28 @@
         </div>
         <div class="panel-body" id="objPanel">
           <ul id="objectList"></ul>
+        </div>
+        <div class="panel-header" onclick="togglePanel('layerPanel')">
+          ▾ Vrstvy
+        </div>
+        <div class="panel-body" id="layerPanel">
+          <ul id="layerList"></ul>
+          <div class="layer-actions">
+            <button
+              id="btnAddLayer"
+              class="layer-action-btn"
+              title="Nová vrstva"
+            >
+              + Nová vrstva
+            </button>
+            <button
+              id="btnDelLayer"
+              class="layer-action-btn layer-del-btn"
+              title="Smazat vrstvu"
+            >
+              🗑 Smazat
+            </button>
+          </div>
         </div>
         <div class="panel-header" onclick="togglePanel('propPanel')">
           ▾ Vlastnosti
@@ -351,10 +387,248 @@
 
     <!-- ── Statusbar ── -->
     <div id="statusbar">
+      <span id="statusProject">Projekt: Bez názvu</span>
       <span id="statusTool">Nástroj: Výběr</span>
       <span id="statusHint">Klikněte pro výběr objektu</span>
       <span id="statusZoom">Zoom: 100%</span>
       <span>Posun: Prostřední tlačítko / Shift+táhnutí</span>
+    </div>
+
+    <!-- ── Help Overlay ── -->
+    <div id="helpOverlay" class="help-overlay" style="display: none">
+      <div class="help-panel">
+        <div class="help-header">
+          <h2>❓ SKICA – Nápověda</h2>
+          <button id="helpCloseBtn" class="help-close-btn">✕</button>
+        </div>
+        <div class="help-content">
+          <h3>⌨️ Klávesové zkratky</h3>
+          <table class="help-table">
+            <tr>
+              <td>V</td>
+              <td>Výběr</td>
+            </tr>
+            <tr>
+              <td>W</td>
+              <td>Přesun objektu</td>
+            </tr>
+            <tr>
+              <td>P</td>
+              <td>Bod</td>
+            </tr>
+            <tr>
+              <td>L</td>
+              <td>Úsečka</td>
+            </tr>
+            <tr>
+              <td>K</td>
+              <td>Konstrukční čára</td>
+            </tr>
+            <tr>
+              <td>C</td>
+              <td>Kružnice</td>
+            </tr>
+            <tr>
+              <td>A</td>
+              <td>Oblouk</td>
+            </tr>
+            <tr>
+              <td>R</td>
+              <td>Obdélník</td>
+            </tr>
+            <tr>
+              <td>Q</td>
+              <td>Kontura (polyline)</td>
+            </tr>
+            <tr>
+              <td>T</td>
+              <td>Tečna</td>
+            </tr>
+            <tr>
+              <td>O</td>
+              <td>Offset</td>
+            </tr>
+            <tr>
+              <td>M</td>
+              <td>Měření</td>
+            </tr>
+            <tr>
+              <td>S</td>
+              <td>Snap k bodům zap/vyp</td>
+            </tr>
+            <tr>
+              <td>G</td>
+              <td>Snap na mřížku</td>
+            </tr>
+            <tr>
+              <td>Shift+G</td>
+              <td>Úhlový snap</td>
+            </tr>
+            <tr>
+              <td>D</td>
+              <td>Zobrazit/skrýt kóty</td>
+            </tr>
+            <tr>
+              <td>N</td>
+              <td>Číselný vstup souřadnic</td>
+            </tr>
+            <tr>
+              <td>Shift+N</td>
+              <td>Polární kreslení</td>
+            </tr>
+            <tr>
+              <td>I</td>
+              <td>Přepnout ABS/INC</td>
+            </tr>
+            <tr>
+              <td>B</td>
+              <td>Bulge (při kreslení kontury)</td>
+            </tr>
+            <tr>
+              <td>Enter</td>
+              <td>Dokončit konturu / zadat poloměr</td>
+            </tr>
+            <tr>
+              <td>Shift+Enter</td>
+              <td>Uzavřít konturu</td>
+            </tr>
+            <tr>
+              <td>Shift+M</td>
+              <td>Zrcadlit objekt</td>
+            </tr>
+            <tr>
+              <td>Ctrl+Z</td>
+              <td>Zpět</td>
+            </tr>
+            <tr>
+              <td>Ctrl+Y</td>
+              <td>Vpřed</td>
+            </tr>
+            <tr>
+              <td>Ctrl+S</td>
+              <td>Uložit projekt</td>
+            </tr>
+            <tr>
+              <td>Ctrl+Shift+S</td>
+              <td>Uložit jako…</td>
+            </tr>
+            <tr>
+              <td>Ctrl+P</td>
+              <td>Správa projektů</td>
+            </tr>
+            <tr>
+              <td>Ctrl+C / Ctrl+V</td>
+              <td>Kopírovat / Vložit objekt</td>
+            </tr>
+            <tr>
+              <td>Delete</td>
+              <td>Smazat vybraný objekt</td>
+            </tr>
+            <tr>
+              <td>Escape</td>
+              <td>Zrušit akci / Odznačit</td>
+            </tr>
+            <tr>
+              <td>? / F1</td>
+              <td>Zobrazit nápovědu</td>
+            </tr>
+          </table>
+
+          <h3>🛠 Popis nástrojů</h3>
+          <table class="help-table">
+            <tr>
+              <td>🖱 Výběr</td>
+              <td>Klikněte na objekt pro výběr a úpravu vlastností</td>
+            </tr>
+            <tr>
+              <td>✥ Přesun</td>
+              <td>Klikněte na objekt a přetáhněte na nové místo</td>
+            </tr>
+            <tr>
+              <td>· Bod</td>
+              <td>Kliknutím umístíte referenční bod</td>
+            </tr>
+            <tr>
+              <td>/ Úsečka</td>
+              <td>Dva kliky = počáteční a koncový bod</td>
+            </tr>
+            <tr>
+              <td>⁄ Konstr.</td>
+              <td>Nekonečná konstrukční čára (neexportuje se do CNC)</td>
+            </tr>
+            <tr>
+              <td>○ Kružnice</td>
+              <td>Klik = střed, druhý klik nebo Enter = poloměr</td>
+            </tr>
+            <tr>
+              <td>⌒ Oblouk</td>
+              <td>3 kliky: střed → start → konec oblouku</td>
+            </tr>
+            <tr>
+              <td>□ Obdélník</td>
+              <td>Dva kliky = protilehlé rohy</td>
+            </tr>
+            <tr>
+              <td>⛓ Kontura</td>
+              <td>Série bodů, B = zakřivení, Enter = dokončit</td>
+            </tr>
+            <tr>
+              <td>📐 Tečna</td>
+              <td>Vytvořit tečnu ke kružnici z bodu</td>
+            </tr>
+            <tr>
+              <td>⇔ Offset</td>
+              <td>Posunout kopii objektu o zadanou vzdálenost</td>
+            </tr>
+            <tr>
+              <td>📏 Měření</td>
+              <td>Změřit vzdálenost a úhel mezi dvěma body</td>
+            </tr>
+          </table>
+
+          <h3>📱 Dotykové ovládání</h3>
+          <table class="help-table">
+            <tr>
+              <td>Dlouhý stisk</td>
+              <td>Zapne přesný zaměřovač (crosshair) 80px nad prstem</td>
+            </tr>
+            <tr>
+              <td>Pinch zoom</td>
+              <td>Dva prsty – přiblížit/oddálit výkres</td>
+            </tr>
+            <tr>
+              <td>Dva prsty táhnout</td>
+              <td>Posunout zobrazení (pan)</td>
+            </tr>
+            <tr>
+              <td>Jeden prst táhnout</td>
+              <td>Posun zobrazení (pokud nekeslíte)</td>
+            </tr>
+            <tr>
+              <td>Spodní tlačítka</td>
+              <td>🔧 Nástroje, 🔢 Zadat, 📏 Měření, ☰ Panel</td>
+            </tr>
+          </table>
+
+          <h3>💡 Tipy</h3>
+          <ul class="help-tips">
+            <li>
+              Pravým klikem na canvasu – nastavení reference, zrcadlení, offset,
+              pole
+            </li>
+            <li>
+              Snap k bodům (S) automaticky přichytává kurzor k vrcholům a
+              průsečíkům
+            </li>
+            <li>
+              Inkrementální režim (I) zobrazuje souřadnice relativně k
+              referenčnímu bodu
+            </li>
+            <li>Export CNC generuje G-kód pro soustružnické operace</li>
+            <li>Kalkulačky a trigonometrie v bočním panelu</li>
+          </ul>
+        </div>
+      </div>
     </div>
 
     <!-- ── Skripty (ES Module entry point) ── -->
