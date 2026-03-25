@@ -265,27 +265,7 @@
       <span>Posun: Prostřední tlačítko / Shift+táhnutí</span>
     </div>
 
-    <!-- ── Skripty (pořadí načtení je důležité!) ── -->
-    <script src="js/state.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/canvas.js"></script>
-    <script src="js/geometry.js"></script>
-    <script src="js/render.js"></script>
-    <script src="js/objects.js"></script>
-    <script src="js/ui.js"></script>
-    <script src="js/events.js"></script>
-    <script src="js/touch.js"></script>
-    <script src="js/dialogs.js"></script>
-    <script src="js/storage.js"></script>
-    <script src="js/app.js"></script>
-    <!-- ── PWA Service Worker ── -->
-    <script>
-      if ("serviceWorker" in navigator) {
-        navigator.serviceWorker
-          .register("./sw.js")
-          .then(() => console.log("SW: Registrován"))
-          .catch((e) => console.warn("SW: Chyba", e));
-      }
-    </script>
+    <!-- ── Skripty (ES Module entry point) ── -->
+    <script type="module" src="js/app.js"></script>
   </body>
 </html>

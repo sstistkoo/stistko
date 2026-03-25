@@ -2,8 +2,18 @@
 // ║  SKICA – Dotyková podpora + mobilní ovládání               ║
 // ╚══════════════════════════════════════════════════════════════╝
 
+import { drawCanvas, screenToWorld, snapPt, autoCenterView } from './canvas.js';
+import { state, undo, showToast } from './state.js';
+import { renderAll } from './render.js';
+import { moveObject } from './objects.js';
+import { handleCanvasClick } from './events.js';
+import { setTool, resetHint } from './ui.js';
+import { toolLabel } from './utils.js';
+import { showNumericalInputDialog, showMobileEditDialog } from './dialogs.js';
+import { bridge } from './bridge.js';
+
 // ── Mobile: detekce ──
-const isMobile = () => window.innerWidth <= 900;
+export const isMobile = () => window.innerWidth <= 900;
 
 // ── Mobile: Toolbar toggle ──
 const mobileToolbarToggle = document.getElementById("mobileToolbarToggle");
@@ -65,7 +75,7 @@ mobileCoordBar.addEventListener("click", (e) => {
   e.stopPropagation();
 });
 
-function updateMobileCoords(wx, wy, extra) {
+export function updateMobileCoords(wx, wy, extra) {
   extra = extra || "";
   const coords = `X: ${wx.toFixed(3)}   Z: ${wy.toFixed(3)}${extra}`;
   // Desktop coord display – jen souřadnice
@@ -143,7 +153,7 @@ mobileCancelBtn.addEventListener("click", (e) => {
 });
 
 // Zobrazit/skrýt Cancel tlačítko podle stavu kreslení
-function updateMobileCancelBtn() {
+export function updateMobileCancelBtn() {
   if (!isMobile()) return;
   const show = state.drawing || state.dragging;
   mobileCancelBtn.style.display = show ? "flex" : "none";
@@ -582,3 +592,7 @@ document.body.addEventListener(
   },
   { passive: false },
 );
+
+// ── Bridge registrace pro cyklické závislosti ──
+bridge.updateMobileCancelBtn = updateMobileCancelBtn;
+bridge.updateMobileCoords = updateMobileCoords;

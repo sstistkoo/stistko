@@ -2,8 +2,12 @@
 // ║  SKICA – Ukládání / Načítání / CNC export                  ║
 // ╚══════════════════════════════════════════════════════════════╝
 
+import { state, showToast, pushUndo, setPushUndoHook } from './state.js';
+import { updateObjectList, updateProperties } from './ui.js';
+import { calculateAllIntersections } from './geometry.js';
+
 // ── Save / Load ──
-function saveProject() {
+export function saveProject() {
   const data = {
     version: 2,
     objects: state.objects,
@@ -15,7 +19,7 @@ function saveProject() {
   showToast("Projekt uložen");
 }
 
-function loadProject() {
+export function loadProject() {
   const raw = localStorage.getItem("skica_project");
   if (!raw) {
     showToast("Žádný uložený projekt");
@@ -38,7 +42,7 @@ function loadProject() {
   }
 }
 
-function exportProjectFile() {
+export function exportProjectFile() {
   const data = {
     version: 2,
     objects: state.objects,
@@ -57,7 +61,7 @@ function exportProjectFile() {
   showToast("Projekt exportován jako soubor");
 }
 
-function importProjectFile() {
+export function importProjectFile() {
   const input = document.createElement("input");
   input.type = "file";
   input.accept = ".json";
@@ -190,8 +194,6 @@ function scheduleAutoSave() {
 }
 
 // Hook do pushUndo – automaticky uložit po každé změně
-const _originalPushUndo = pushUndo;
-pushUndo = function () {
-  _originalPushUndo();
-  scheduleAutoSave();
-};
+export function initAutoSave() {
+  setPushUndoHook(scheduleAutoSave);
+}

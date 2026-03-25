@@ -2,11 +2,15 @@
 // ║  SKICA – Canvas setup, souřadnicové transformace, snap      ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-const wrap = document.getElementById("canvasWrap");
-const drawCanvas = document.getElementById("drawCanvas");
-const ctx = drawCanvas.getContext("2d");
+import { state, showToast } from './state.js';
+import { getObjectSnapPoints, isAngleBetween } from './utils.js';
+import { renderAll } from './render.js';
 
-function resizeCanvases() {
+export const wrap = document.getElementById("canvasWrap");
+export const drawCanvas = document.getElementById("drawCanvas");
+export const ctx = drawCanvas.getContext("2d");
+
+export function resizeCanvases() {
   const w = wrap.clientWidth,
     h = wrap.clientHeight;
   drawCanvas.width = w;
@@ -21,11 +25,11 @@ function resizeCanvases() {
 window.addEventListener("resize", resizeCanvases);
 
 // ── Souřadnicové transformace ──
-function worldToScreen(wx, wy) {
+export function worldToScreen(wx, wy) {
   return [wx * state.zoom + state.panX, -wy * state.zoom + state.panY];
 }
 
-function screenToWorld(sx, sy) {
+export function screenToWorld(sx, sy) {
   const z = state.zoom || 1;
   return [
     (sx - state.panX) / z,
@@ -33,7 +37,7 @@ function screenToWorld(sx, sy) {
   ];
 }
 
-function snapPt(wx, wy) {
+export function snapPt(wx, wy) {
   let objX = null, objY = null, objD = Infinity;
 
   // Snap k bodům objektů a průsečíkům – větší poloměr zachycení
@@ -78,7 +82,7 @@ function snapPt(wx, wy) {
 }
 
 // ── Auto-center: vycentrovat pohled na všechny objekty ──
-function autoCenterView() {
+export function autoCenterView() {
   if (state.objects.length === 0) {
     // Nic nakresleno – reset na výchozí pozici
     state.zoom = 1;

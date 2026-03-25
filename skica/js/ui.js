@@ -2,8 +2,15 @@
 // ║  SKICA – UI panely, toolbar, hinty                          ║
 // ╚══════════════════════════════════════════════════════════════╝
 
+import { state, showToast, pushUndo, undo, redo } from './state.js';
+import { typeLabel, toolLabel } from './utils.js';
+import { renderAll } from './render.js';
+import { calculateAllIntersections } from './geometry.js';
+import { drawCanvas } from './canvas.js';
+import { bridge } from './bridge.js';
+
 // ── Seznam objektů ──
-function updateObjectList() {
+export function updateObjectList() {
   const ul = document.getElementById("objectList");
   ul.innerHTML = "";
   const icons = {
@@ -46,7 +53,7 @@ function updateObjectList() {
 }
 
 // ── Vlastnosti objektu ──
-function updateProperties() {
+export function updateProperties() {
   const tbody = document.querySelector("#propTable tbody");
   tbody.innerHTML = "";
   if (state.selected === null) {
@@ -216,7 +223,7 @@ function updateProperties() {
 }
 
 // ── Seznam průsečíků ──
-function updateIntersectionList() {
+export function updateIntersectionList() {
   const ul = document.getElementById("intersectionList");
   ul.innerHTML = "";
   if (state.intersections.length === 0) {
@@ -239,7 +246,7 @@ function updateIntersectionList() {
 }
 
 // ── Panely ──
-function togglePanel(id) {
+export function togglePanel(id) {
   const el = document.getElementById(id);
   el.style.display = el.style.display === "none" ? "" : "none";
 }
@@ -249,7 +256,7 @@ document.querySelectorAll("[data-tool]").forEach((btn) => {
   btn.addEventListener("click", () => setTool(btn.dataset.tool));
 });
 
-function setTool(tool) {
+export function setTool(tool) {
   state.tool = tool;
   state.drawing = false;
   state.tempPoints = [];
@@ -273,19 +280,19 @@ function setTool(tool) {
   const mmBtn = document.getElementById("mobileMeasure");
   if (mmBtn) mmBtn.classList.toggle("active", tool === "measure");
   // Aktualizovat mobilní coord bar s novým nástrojem
-  if (typeof updateMobileCoords === "function") {
-    updateMobileCoords(state.mouse.x, state.mouse.y);
+  if (bridge.updateMobileCoords) {
+    bridge.updateMobileCoords(state.mouse.x, state.mouse.y);
   }
   resetHint();
   renderAll();
 }
 
 // ── Hinty ──
-function setHint(text) {
+export function setHint(text) {
   document.getElementById("statusHint").textContent = text;
 }
 
-function resetHint() {
+export function resetHint() {
   const hints = {
     select: "Klikněte pro výběr objektu",
     move: "Klikněte na objekt pro přesun",
@@ -301,7 +308,7 @@ function resetHint() {
 }
 
 // ── Snap k bodům tlačítko ──
-function updateSnapPtsBtn() {
+export function updateSnapPtsBtn() {
   const btn = document.getElementById("btnSnapPts");
   const ind = btn.querySelector(".snap-ind");
   ind.className =
@@ -316,7 +323,7 @@ document.getElementById("btnSnapPts").addEventListener("click", () => {
 });
 
 // ── Kóty tlačítko ──
-function updateDimsBtn() {
+export function updateDimsBtn() {
   document
     .getElementById("btnDims")
     .classList.toggle("active", state.showDimensions);
@@ -355,7 +362,7 @@ document.getElementById("btnClearAll").addEventListener("click", () => {
 });
 
 // ── Kalkulačka – popup ──
-function openCalculator() {
+export function openCalculator() {
   // Avoid duplicates
   if (document.querySelector(".calc-overlay[data-type=calc]")) return;
 

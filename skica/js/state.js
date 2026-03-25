@@ -2,8 +2,15 @@
 // ║  SKICA – Stav aplikace, Toast, Undo/Redo                   ║
 // ╚══════════════════════════════════════════════════════════════╝
 
+import { updateObjectList, updateProperties } from './ui.js';
+import { calculateAllIntersections } from './geometry.js';
+
+// ── Hook pro rozšíření pushUndo (autosave) ──
+let _pushUndoHook = null;
+export function setPushUndoHook(fn) { _pushUndoHook = fn; }
+
 // ── Toast notifikace ──
-function showToast(msg, duration = 2000) {
+export function showToast(msg, duration = 2000) {
   let t = document.querySelector(".toast");
   if (!t) {
     t = document.createElement("div");
@@ -17,7 +24,7 @@ function showToast(msg, duration = 2000) {
 }
 
 // ── Stav aplikace ──
-const state = {
+export const state = {
   objects: [],
   selected: null,
   tool: "select",
@@ -48,14 +55,15 @@ const state = {
 };
 
 // ── Undo / Redo ──
-function pushUndo() {
+export function pushUndo() {
   state.undoStack.push(JSON.stringify(state.objects));
   if (state.undoStack.length > state.maxUndo) state.undoStack.shift();
   state.redoStack = [];
   updateUndoButtons();
+  if (_pushUndoHook) _pushUndoHook();
 }
 
-function undo() {
+export function undo() {
   if (state.undoStack.length === 0) return;
   state.redoStack.push(JSON.stringify(state.objects));
   state.objects = JSON.parse(state.undoStack.pop());
@@ -67,7 +75,7 @@ function undo() {
   showToast("Zpět");
 }
 
-function redo() {
+export function redo() {
   if (state.redoStack.length === 0) return;
   state.undoStack.push(JSON.stringify(state.objects));
   state.objects = JSON.parse(state.redoStack.pop());
@@ -79,7 +87,7 @@ function redo() {
   showToast("Vpřed");
 }
 
-function updateUndoButtons() {
+export function updateUndoButtons() {
   document.getElementById("btnUndo").disabled =
     state.undoStack.length === 0;
   document.getElementById("btnRedo").disabled =
