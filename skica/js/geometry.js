@@ -2,8 +2,13 @@
 // ║  SKICA – Geometrie: vzdálenosti, průsečíky                  ║
 // ╚══════════════════════════════════════════════════════════════╝
 
+import { state } from './state.js';
+import { distPointToSegment, isAngleBetween } from './utils.js';
+import { renderAll } from './render.js';
+import { updateIntersectionList, updateProperties, updateObjectList } from './ui.js';
+
 // ── Hledání a výběr objektu ──
-function findObjectAt(wx, wy) {
+export function findObjectAt(wx, wy) {
   let closest = null,
     closestDist = Infinity;
   state.objects.forEach((obj, idx) => {
@@ -17,14 +22,14 @@ function findObjectAt(wx, wy) {
   return closestDist < threshold ? closest : null;
 }
 
-function selectObjectAt(wx, wy) {
+export function selectObjectAt(wx, wy) {
   state.selected = findObjectAt(wx, wy);
   updateProperties();
   updateObjectList();
   renderAll();
 }
 
-function distToObject(obj, wx, wy) {
+export function distToObject(obj, wx, wy) {
   switch (obj.type) {
     case "point":
       return Math.hypot(wx - obj.x, wy - obj.y);
@@ -58,7 +63,7 @@ function distToObject(obj, wx, wy) {
 // ── VÝPOČET PRŮSEČÍKŮ ──
 // ────────────────────────────────
 
-function getLines(obj) {
+export function getLines(obj) {
   if (obj.type === "line" || obj.type === "constr")
     return [
       {
@@ -79,7 +84,7 @@ function getLines(obj) {
   return [];
 }
 
-function getCircles(obj) {
+export function getCircles(obj) {
   if (obj.type === "circle")
     return [{ cx: obj.cx, cy: obj.cy, r: obj.r }];
   if (obj.type === "arc")
@@ -95,7 +100,7 @@ function getCircles(obj) {
   return [];
 }
 
-function intersectLineLine(l1, l2) {
+export function intersectLineLine(l1, l2) {
   const { x1, y1, x2, y2 } = l1;
   const { x1: x3, y1: y3, x2: x4, y2: y4 } = l2;
   const denom = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
@@ -110,7 +115,7 @@ function intersectLineLine(l1, l2) {
   return [];
 }
 
-function intersectLineCircle(line, circle) {
+export function intersectLineCircle(line, circle) {
   const { x1, y1, x2, y2 } = line;
   const { cx, cy, r } = circle;
   const dx = x2 - x1,
@@ -140,7 +145,7 @@ function intersectLineCircle(line, circle) {
   return results;
 }
 
-function intersectCircleCircle(c1, c2) {
+export function intersectCircleCircle(c1, c2) {
   const dx = c2.cx - c1.cx,
     dy = c2.cy - c1.cy;
   const d = Math.hypot(dx, dy);
@@ -180,7 +185,7 @@ function intersectCircleCircle(c1, c2) {
   return results;
 }
 
-function calculateAllIntersections() {
+export function calculateAllIntersections() {
   const pts = [];
   const objs = state.objects;
   for (let i = 0; i < objs.length; i++) {

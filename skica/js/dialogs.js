@@ -2,8 +2,16 @@
 // ║  SKICA – Dialogy (měření, poloměr, čísla, polární)         ║
 // ╚══════════════════════════════════════════════════════════════╝
 
+import { state, showToast, pushUndo } from './state.js';
+import { addObject } from './objects.js';
+import { screenToWorld, snapPt, drawCanvas } from './canvas.js';
+import { renderAll } from './render.js';
+import { typeLabel, getObjectSnapPoints } from './utils.js';
+import { updateObjectList, updateProperties, resetHint } from './ui.js';
+import { calculateAllIntersections } from './geometry.js';
+
 // ── Helper: nastaví inputmode="decimal" na všechna numerická pole v elementu ──
-function applyMobileInputMode(container) {
+export function applyMobileInputMode(container) {
   container.querySelectorAll('input[type="number"]').forEach((inp) => {
     inp.setAttribute("inputmode", "decimal");
   });
@@ -22,7 +30,7 @@ const _dialogObserver = new MutationObserver((mutations) => {
 _dialogObserver.observe(document.body, { childList: true });
 
 // ── Měření – dialog výsledku ──
-function showMeasureResult(p1, p2, d, angle) {
+export function showMeasureResult(p1, p2, d, angle) {
   const overlay = document.createElement("div");
   overlay.className = "input-overlay";
   overlay.innerHTML = `
@@ -63,7 +71,7 @@ function showMeasureResult(p1, p2, d, angle) {
 }
 
 // ── Dialog pro zadání poloměru kružnice ──
-function showCircleRadiusDialog() {
+export function showCircleRadiusDialog() {
   const cp = state.tempPoints[0];
   const overlay = document.createElement("div");
   overlay.className = "input-overlay";
@@ -112,7 +120,7 @@ document
 
 // Stav pro chaining je uložen v state.numDialogChain
 
-function showNumericalInputDialog() {
+export function showNumericalInputDialog() {
   const overlay = document.createElement("div");
   overlay.className = "input-overlay";
   overlay.innerHTML = `
@@ -508,7 +516,7 @@ document
   .getElementById("btnPolar")
   .addEventListener("click", showPolarDrawingDialog);
 
-function showPolarDrawingDialog() {
+export function showPolarDrawingDialog() {
   let refX = 0,
     refZ = 0;
   if (state.selected !== null) {
@@ -686,7 +694,7 @@ function showPolarDrawingDialog() {
 }
 
 // ── Měření – info o průsečíku ──
-function showIntersectionInfo(pt) {
+export function showIntersectionInfo(pt) {
   const overlay = document.createElement("div");
   overlay.className = "input-overlay";
   overlay.innerHTML = `
@@ -717,7 +725,7 @@ function showIntersectionInfo(pt) {
 }
 
 // ── Měření – info o existujícím objektu ──
-function showMeasureObjectInfo(obj, wx, wy) {
+export function showMeasureObjectInfo(obj, wx, wy) {
   // Detekce, zda jsme kliknuli blízko koncového bodu
   const threshold = 15 / state.zoom;
   const snapPoints = getObjectSnapPoints(obj);
@@ -961,7 +969,7 @@ function addDimensionForObject(obj) {
 }
 
 // ── Mobile Edit Dialog ──
-function showMobileEditDialog() {
+export function showMobileEditDialog() {
   if (state.objects.length === 0) {
     showToast("Žádné objekty k úpravě");
     return;

@@ -2,6 +2,16 @@
 // ║  SKICA – Myš, klávesnice, kolečko                          ║
 // ╚══════════════════════════════════════════════════════════════╝
 
+import { drawCanvas, screenToWorld, snapPt } from './canvas.js';
+import { state, pushUndo, undo, redo, showToast } from './state.js';
+import { renderAll } from './render.js';
+import { moveObject, addObject } from './objects.js';
+import { setTool, resetHint, setHint, updateProperties, updateObjectList, updateSnapPtsBtn, updateDimsBtn } from './ui.js';
+import { findObjectAt, selectObjectAt, calculateAllIntersections } from './geometry.js';
+import { showNumericalInputDialog, showPolarDrawingDialog, showMeasureResult, showCircleRadiusDialog, showIntersectionInfo, showMeasureObjectInfo } from './dialogs.js';
+import { saveProject } from './storage.js';
+import { bridge } from './bridge.js';
+
 let isPanning = false;
 let panStartX, panStartY, panStartPX, panStartPY;
 
@@ -29,8 +39,8 @@ drawCanvas.addEventListener("mousemove", (e) => {
     extra = `   |   d=${dist.toFixed(2)}  ∠=${ang.toFixed(1)}°`;
   }
 
-  if (typeof updateMobileCoords === "function") {
-    updateMobileCoords(wx, wy, extra);
+  if (bridge.updateMobileCoords) {
+    bridge.updateMobileCoords(wx, wy, extra);
   } else {
     document.getElementById("coordDisplay").textContent =
       `X: ${wx.toFixed(3)}   Z: ${wy.toFixed(3)}${extra}`;
@@ -211,7 +221,7 @@ document.addEventListener("keydown", (e) => {
 drawCanvas.addEventListener("contextmenu", (e) => e.preventDefault());
 
 // ── Klik logika sdílená s touch ──
-function handleCanvasClick(wx, wy) {
+export function handleCanvasClick(wx, wy) {
   switch (state.tool) {
     case "select":
       selectObjectAt(wx, wy);

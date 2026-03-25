@@ -2,15 +2,19 @@
 // ║  SKICA – Renderování (mřížka, objekty, kóty, snap)         ║
 // ╚══════════════════════════════════════════════════════════════╝
 
+import { drawCanvas, ctx, worldToScreen, screenToWorld } from './canvas.js';
+import { state } from './state.js';
+import { bridge } from './bridge.js';
+
 let _renderRAF = null;
-function renderAll() {
+export function renderAll() {
   if (_renderRAF) return;
   _renderRAF = requestAnimationFrame(() => {
     _renderRAF = null;
     renderObjects();
     renderAxes();
     // Aktualizovat mobilní Cancel tlačítko
-    if (typeof updateMobileCancelBtn === "function") updateMobileCancelBtn();
+    if (bridge.updateMobileCancelBtn) bridge.updateMobileCancelBtn();
   });
 }
 
@@ -307,7 +311,7 @@ function drawDimension(obj) {
 }
 
 // ── Kreslicí primitiva ──
-function drawPoint(obj) {
+export function drawPoint(obj) {
   const [sx, sy] = worldToScreen(obj.x, obj.y);
   ctx.beginPath();
   ctx.arc(sx, sy, 3, 0, Math.PI * 2);
@@ -320,7 +324,7 @@ function drawPoint(obj) {
   ctx.stroke();
 }
 
-function drawLine(obj) {
+export function drawLine(obj) {
   const [sx1, sy1] = worldToScreen(obj.x1, obj.y1);
   const [sx2, sy2] = worldToScreen(obj.x2, obj.y2);
 
@@ -348,7 +352,7 @@ function drawLine(obj) {
   ctx.fill();
 }
 
-function drawCircle(obj) {
+export function drawCircle(obj) {
   const [sx, sy] = worldToScreen(obj.cx, obj.cy);
   const r = obj.r * state.zoom;
   ctx.beginPath();
@@ -359,7 +363,7 @@ function drawCircle(obj) {
   ctx.fill();
 }
 
-function drawArc(obj) {
+export function drawArc(obj) {
   const [sx, sy] = worldToScreen(obj.cx, obj.cy);
   const r = obj.r * state.zoom;
   ctx.beginPath();
@@ -370,7 +374,7 @@ function drawArc(obj) {
   ctx.fill();
 }
 
-function drawRect(obj) {
+export function drawRect(obj) {
   const [sx1, sy1] = worldToScreen(obj.x1, obj.y1);
   const [sx2, sy2] = worldToScreen(obj.x2, obj.y2);
   ctx.beginPath();

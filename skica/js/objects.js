@@ -2,7 +2,12 @@
 // ║  SKICA – Správa objektů (přidání, přesun)                  ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-function addObject(obj) {
+import { state, pushUndo } from './state.js';
+import { updateObjectList } from './ui.js';
+import { calculateAllIntersections } from './geometry.js';
+import { autoCenterView } from './canvas.js';
+
+export function addObject(obj) {
   pushUndo();
   obj.id = state.nextId++;
   state.objects.push(obj);
@@ -15,7 +20,7 @@ function addObject(obj) {
   return obj;
 }
 
-function moveObject(obj, dx, dy) {
+export function moveObject(obj, dx, dy) {
   switch (obj.type) {
     case "point":
       obj.x += dx;

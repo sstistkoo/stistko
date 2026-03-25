@@ -1,6 +1,22 @@
 // ╔══════════════════════════════════════════════════════════════╗
-// ║  SKICA – Inicializace aplikace                              ║
+// ║  SKICA – Inicializace aplikace (ES Module entry point)      ║
 // ╚══════════════════════════════════════════════════════════════╝
+
+import { state } from './state.js';
+import { resizeCanvases } from './canvas.js';
+import { calculateAllIntersections } from './geometry.js';
+import { updateObjectList, updateProperties, resetHint, updateDimsBtn, updateSnapPtsBtn, togglePanel } from './ui.js';
+import { initAutoSave } from './storage.js';
+
+// Side-effect imports — tyto moduly registrují event listenery při načtení
+import './render.js';
+import './objects.js';
+import './events.js';
+import './touch.js';
+import './dialogs.js';
+
+// ── Expose togglePanel for inline onclick in HTML ──
+window.togglePanel = togglePanel;
 
 // ── Auto-load při startu ──
 function tryAutoLoad() {
@@ -41,6 +57,15 @@ if (state.objects.length > 0) calculateAllIntersections();
 resetHint();
 updateDimsBtn();
 updateSnapPtsBtn();
+initAutoSave();
+
+// ── PWA Service Worker ──
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker
+    .register("./sw.js")
+    .then(() => console.log("SW: Registrován"))
+    .catch((e) => console.warn("SW: Chyba", e));
+}
 
 console.log(
   "%c SKICA – CAD pro CNC soustružník v3 (X,Z) ",

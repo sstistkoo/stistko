@@ -3,7 +3,7 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 // ── Snap body objektů ──
-function getObjectSnapPoints(obj) {
+export function getObjectSnapPoints(obj) {
   switch (obj.type) {
     case "point":
       return [{ x: obj.x, y: obj.y }];
@@ -48,7 +48,7 @@ function getObjectSnapPoints(obj) {
 }
 
 // ── Vzdálenost bodu od úsečky ──
-function distPointToSegment(px, py, x1, y1, x2, y2) {
+export function distPointToSegment(px, py, x1, y1, x2, y2) {
   const dx = x2 - x1,
     dy = y2 - y1;
   const lenSq = dx * dx + dy * dy;
@@ -59,7 +59,7 @@ function distPointToSegment(px, py, x1, y1, x2, y2) {
 }
 
 // ── Test úhlu v rozsahu ──
-function isAngleBetween(angle, start, end) {
+export function isAngleBetween(angle, start, end) {
   const norm = (a) => ((a % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
   const a = norm(angle - start);
   const e = norm(end - start);
@@ -67,7 +67,7 @@ function isAngleBetween(angle, start, end) {
 }
 
 // ── Popisky typů ──
-function typeLabel(t) {
+export function typeLabel(t) {
   return (
     {
       point: "Bod",
@@ -80,7 +80,7 @@ function typeLabel(t) {
   );
 }
 
-function toolLabel(t) {
+export function toolLabel(t) {
   return (
     {
       select: "Výběr",
