@@ -6,6 +6,8 @@ import { state, showToast, pushUndo, setPushUndoHook } from './state.js';
 import { updateObjectList, updateProperties } from './ui.js';
 import { calculateAllIntersections } from './geometry.js';
 import { bulgeToArc } from './utils.js';
+import { parseDXF } from './dxf.js';
+import { autoCenterView } from './canvas.js';
 
 // ── Save / Load ──
 export function saveProject() {
@@ -100,6 +102,50 @@ export function importProjectFile() {
   input.click();
 }
 
+export function importDXFFile() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.dxf';
+  input.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const { entities, errors } = parseDXF(ev.target.result);
+        if (entities.length === 0) {
+          showToast(errors.length > 0 ? `Chyba: ${errors[0]}` : 'Žádné entity v DXF souboru');
+          return;
+        }
+        pushUndo();
+        const typeNames = {
+          point: 'Bod', line: 'Úsečka', circle: 'Kružnice',
+          arc: 'Oblouk', polyline: 'Kontura'
+        };
+        for (const entity of entities) {
+          entity.id = state.nextId++;
+          entity.name = `${typeNames[entity.type] || entity.type} ${entity.id}`;
+          state.objects.push(entity);
+        }
+        state.selected = null;
+        updateObjectList();
+        updateProperties();
+        calculateAllIntersections();
+        autoCenterView();
+        let msg = `Importováno ${entities.length} objektů z DXF`;
+        if (errors.length > 0) msg += ` (${errors.length} varování)`;
+        showToast(msg);
+        if (errors.length > 0) console.warn('DXF import warnings:', errors);
+      } catch (err) {
+        showToast('Chyba při čtení DXF souboru');
+        console.error('DXF import error:', err);
+      }
+    };
+    reader.readAsText(file);
+  });
+  input.click();
+}
+
 // ── Tlačítka Save/Load ──
 document.getElementById("btnSave").addEventListener("click", saveProject);
 document.getElementById("btnLoad").addEventListener("click", () => {
@@ -111,6 +157,7 @@ document.getElementById("btnLoad").addEventListener("click", () => {
       <div class="btn-row" style="flex-direction:column;gap:8px;align-items:stretch">
         <button class="btn-ok" id="loadLocal" style="width:100%">Načíst z paměti prohlížeče</button>
         <button class="btn-ok" id="loadFile" style="width:100%">Importovat ze souboru (.json)</button>
+        <button class="btn-ok" id="loadDXF" style="width:100%">📐 Importovat DXF soubor (.dxf)</button>
         <button class="btn-ok" id="exportFile" style="width:100%;background:#f9e2af;border-color:#f9e2af">Exportovat do souboru</button>
         <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()" style="width:100%">Zrušit</button>
       </div>
@@ -123,6 +170,10 @@ document.getElementById("btnLoad").addEventListener("click", () => {
   overlay.querySelector("#loadFile").addEventListener("click", () => {
     overlay.remove();
     importProjectFile();
+  });
+  overlay.querySelector("#loadDXF").addEventListener("click", () => {
+    overlay.remove();
+    importDXFFile();
   });
   overlay.querySelector("#exportFile").addEventListener("click", () => {
     overlay.remove();

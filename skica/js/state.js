@@ -2,8 +2,7 @@
 // ║  SKICA – Stav aplikace, Toast, Undo/Redo                   ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-import { updateObjectList, updateProperties } from './ui.js';
-import { calculateAllIntersections } from './geometry.js';
+import { bridge } from './bridge.js';
 
 // ── Hook pro rozšíření pushUndo (autosave) ──
 let _pushUndoHook = null;
@@ -71,9 +70,9 @@ export function undo() {
   state.redoStack.push(JSON.stringify(state.objects));
   state.objects = JSON.parse(state.undoStack.pop());
   state.selected = null;
-  updateObjectList();
-  updateProperties();
-  calculateAllIntersections();
+  if (bridge.updateObjectList) bridge.updateObjectList();
+  if (bridge.updateProperties) bridge.updateProperties();
+  if (bridge.calculateAllIntersections) bridge.calculateAllIntersections();
   updateUndoButtons();
   showToast("Zpět");
 }
@@ -83,9 +82,9 @@ export function redo() {
   state.undoStack.push(JSON.stringify(state.objects));
   state.objects = JSON.parse(state.redoStack.pop());
   state.selected = null;
-  updateObjectList();
-  updateProperties();
-  calculateAllIntersections();
+  if (bridge.updateObjectList) bridge.updateObjectList();
+  if (bridge.updateProperties) bridge.updateProperties();
+  if (bridge.calculateAllIntersections) bridge.calculateAllIntersections();
   updateUndoButtons();
   showToast("Vpřed");
 }
