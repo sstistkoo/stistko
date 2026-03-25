@@ -5,7 +5,7 @@
 import { state } from './state.js';
 import { distPointToSegment, isAngleBetween, bulgeToArc } from './utils.js';
 import { renderAll } from './render.js';
-import { updateIntersectionList, updateProperties, updateObjectList } from './ui.js';
+import { bridge } from './bridge.js';
 
 // ── Hledání a výběr objektu ──
 export function findObjectAt(wx, wy) {
@@ -24,8 +24,8 @@ export function findObjectAt(wx, wy) {
 
 export function selectObjectAt(wx, wy) {
   state.selected = findObjectAt(wx, wy);
-  updateProperties();
-  updateObjectList();
+  if (bridge.updateProperties) bridge.updateProperties();
+  if (bridge.updateObjectList) bridge.updateObjectList();
   renderAll();
 }
 
@@ -290,6 +290,9 @@ export function calculateAllIntersections() {
       unique.push(pt);
   }
   state.intersections = unique;
-  updateIntersectionList();
+  if (bridge.updateIntersectionList) bridge.updateIntersectionList();
   renderAll();
 }
+
+// ── Bridge registrace ──
+bridge.calculateAllIntersections = () => calculateAllIntersections();

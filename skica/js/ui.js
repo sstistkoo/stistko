@@ -5,9 +5,13 @@
 import { state, showToast, pushUndo, undo, redo } from './state.js';
 import { typeLabel, toolLabel, bulgeToArc } from './utils.js';
 import { renderAll } from './render.js';
-import { calculateAllIntersections } from './geometry.js';
 import { drawCanvas, screenToWorld, snapPt } from './canvas.js';
 import { bridge } from './bridge.js';
+
+// ── Bridge registrace (rozbíjí cyklickou závislost geometry ↔ ui) ──
+bridge.updateProperties = () => updateProperties();
+bridge.updateObjectList = () => updateObjectList();
+bridge.updateIntersectionList = () => updateIntersectionList();
 
 // ── Seznam objektů ──
 export function updateObjectList() {
@@ -47,7 +51,7 @@ export function updateObjectList() {
       else if (state.selected > idx) state.selected--;
       updateObjectList();
       updateProperties();
-      calculateAllIntersections();
+      if (bridge.calculateAllIntersections) bridge.calculateAllIntersections();
     });
     ul.appendChild(li);
   });
@@ -459,7 +463,7 @@ document.getElementById("btnRedo").addEventListener("click", redo);
 // ── Průsečíky ──
 document
   .getElementById("btnCalcInt")
-  .addEventListener("click", calculateAllIntersections);
+  .addEventListener("click", () => { if (bridge.calculateAllIntersections) bridge.calculateAllIntersections(); });
 
 // ── Smazat vše ──
 document.getElementById("btnClearAll").addEventListener("click", () => {
