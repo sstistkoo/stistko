@@ -10,6 +10,7 @@ import { parseDXF } from './dxf.js';
 import { autoCenterView } from './canvas.js';
 
 // ── Save / Load ──
+/** Uloží aktuální projekt do localStorage. */
 export function saveProject() {
   const data = {
     version: 3,
@@ -31,6 +32,7 @@ export function saveProject() {
   updateStatusProject();
 }
 
+/** Načte projekt z localStorage. */
 export function loadProject() {
   const raw = localStorage.getItem("skica_project");
   if (!raw) {
@@ -65,6 +67,7 @@ export function loadProject() {
   }
 }
 
+/** Exportuje projekt jako .skica JSON soubor. */
 export function exportProjectFile() {
   const data = {
     version: 3,
@@ -89,6 +92,7 @@ export function exportProjectFile() {
   showToast("Projekt exportován jako soubor");
 }
 
+/** Importuje .skica JSON soubor. */
 export function importProjectFile() {
   const input = document.createElement("input");
   input.type = "file";
@@ -129,6 +133,7 @@ export function importProjectFile() {
   input.click();
 }
 
+/** Importuje DXF soubor. */
 export function importDXFFile() {
   const input = document.createElement('input');
   input.type = 'file';
@@ -338,6 +343,7 @@ function scheduleAutoSave() {
 }
 
 // Hook do pushUndo – automaticky uložit po každé změně
+/** Inicializuje autosave (interval + pushUndo hook). */
 export function initAutoSave() {
   setPushUndoHook(scheduleAutoSave);
 }
@@ -402,6 +408,7 @@ function _loadProjectData(data) {
   calculateAllIntersections();
 }
 
+/** @param {string} name */
 export function openProject(name) {
   const projects = _getProjects();
   const data = projects[name];
@@ -412,6 +419,7 @@ export function openProject(name) {
   showToast(`Otevřen projekt: ${name}`);
 }
 
+/** @param {string} name */
 export function deleteProject(name) {
   const projects = _getProjects();
   delete projects[name];
@@ -419,6 +427,10 @@ export function deleteProject(name) {
   showToast(`Projekt "${name}" smazán`);
 }
 
+/**
+ * @param {string} oldName
+ * @param {string} newName
+ */
 export function renameProject(oldName, newName) {
   if (!newName || newName.trim() === '') return;
   newName = newName.trim();
@@ -435,6 +447,7 @@ export function renameProject(oldName, newName) {
   showToast(`Přejmenováno na "${newName}"`);
 }
 
+/** @param {string} name */
 export function duplicateProject(name) {
   const projects = _getProjects();
   if (!projects[name]) return;
@@ -447,6 +460,7 @@ export function duplicateProject(name) {
   showToast(`Vytvořena kopie: ${newName}`);
 }
 
+/** Vytvoří nový prázdný projekt. */
 export function newProject() {
   pushUndo();
   state.objects = [];
@@ -468,6 +482,7 @@ export function newProject() {
   showToast('Nový projekt');
 }
 
+/** Otevře dialog pro uložení projektu pod novým názvem. */
 export function showSaveAsDialog() {
   const overlay = document.createElement('div');
   overlay.className = 'input-overlay';
@@ -507,6 +522,7 @@ export function showSaveAsDialog() {
   overlay.querySelector('#saveAsCancel').addEventListener('click', () => overlay.remove());
 }
 
+/** Otevře dialog se správou projektů. */
 export function showProjectsDialog() {
   const projects = _getProjects();
   const names = Object.keys(projects).sort((a, b) => {
@@ -1000,6 +1016,7 @@ function exportPNG(scale, background) {
   }, 'image/png');
 }
 
+/** Otevře dialog pro export obrázku (PNG). */
 export function showExportImageDialog() {
   const overlay = document.createElement('div');
   overlay.className = 'input-overlay';

@@ -6,9 +6,14 @@ import { bridge } from './bridge.js';
 
 // ── Hook pro rozšíření pushUndo (autosave) ──
 let _pushUndoHook = null;
+/** @param {Function} fn */
 export function setPushUndoHook(fn) { _pushUndoHook = fn; }
 
 // ── Toast notifikace ──
+/**
+ * @param {string} msg
+ * @param {number} [duration=2000]
+ */
 export function showToast(msg, duration = 2000) {
   let t = document.querySelector(".toast");
   if (!t) {
@@ -23,6 +28,7 @@ export function showToast(msg, duration = 2000) {
 }
 
 // ── Stav aplikace ──
+/** @type {import('./types.js').AppState} */
 export const state = {
   objects: [],
   selected: null,
@@ -70,6 +76,7 @@ export const state = {
 };
 
 // ── Undo / Redo ──
+/** Uloží aktuální stav objektů na undo stack. */
 export function pushUndo() {
   state.undoStack.push(JSON.stringify(state.objects));
   if (state.undoStack.length > state.maxUndo) state.undoStack.shift();
@@ -78,6 +85,7 @@ export function pushUndo() {
   if (_pushUndoHook) _pushUndoHook();
 }
 
+/** Vrátí poslední změnu (undo). */
 export function undo() {
   if (state.undoStack.length === 0) return;
   state.redoStack.push(JSON.stringify(state.objects));
@@ -90,6 +98,7 @@ export function undo() {
   showToast("Zpět");
 }
 
+/** Zopakuje vrácenou změnu (redo). */
 export function redo() {
   if (state.redoStack.length === 0) return;
   state.undoStack.push(JSON.stringify(state.objects));
@@ -102,6 +111,7 @@ export function redo() {
   showToast("Vpřed");
 }
 
+/** Aktualizuje stav tlačítek undo/redo v toolbaru. */
 export function updateUndoButtons() {
   document.getElementById("btnUndo").disabled =
     state.undoStack.length === 0;
@@ -116,6 +126,12 @@ export function updateUndoButtons() {
 }
 
 // ── Inkrementální souřadnice – pomocné funkce ──
+/**
+ * Převede world souřadnice na zobrazované (abs / inc).
+ * @param {number} wx
+ * @param {number} wy
+ * @returns {{x: number, y: number}}
+ */
 export function toDisplayCoords(wx, wy) {
   if (state.coordMode === 'inc') {
     return { x: wx - state.incReference.x, y: wy - state.incReference.y };
@@ -123,6 +139,12 @@ export function toDisplayCoords(wx, wy) {
   return { x: wx, y: wy };
 }
 
+/**
+ * Převede inkrementální souřadnice na absolutní.
+ * @param {number} dx
+ * @param {number} dy
+ * @returns {{x: number, y: number}}
+ */
 export function fromIncToAbs(dx, dy) {
   return { x: state.incReference.x + dx, y: state.incReference.y + dy };
 }

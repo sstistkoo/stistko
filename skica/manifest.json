@@ -1,7 +1,7 @@
 {
   "name": "SKICA – CAD pro CNC soustružník",
   "short_name": "SKICA",
-  "description": "CAD aplikace pro CNC soustružník – X/Z souřadnice, průsečíky, CNC export",
+  "description": "CAD aplikace pro CNC soustružník – X/Z souřadnice, průsečíky, tečny, offset, kontury, CNC export",
   "start_url": "./",
   "display": "standalone",
   "orientation": "any",

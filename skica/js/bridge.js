@@ -2,6 +2,7 @@
 // ║  SKICA – Bridge (callback registry pro cyklické závislosti) ║
 // ╚══════════════════════════════════════════════════════════════╝
 
+/** @type {import('./types.js').Bridge} */
 export const bridge = {
   updateMobileCancelBtn: null,
   updateMobileCoords: null,

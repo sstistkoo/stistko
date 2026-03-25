@@ -15,6 +15,7 @@ bridge.updateIntersectionList = () => updateIntersectionList();
 bridge.updateLayerList = () => updateLayerList();
 
 // ── Seznam objektů ──
+/** Aktualizuje seznam objektů v panelu. */
 export function updateObjectList() {
   const ul = document.getElementById("objectList");
   ul.innerHTML = "";
@@ -59,6 +60,7 @@ export function updateObjectList() {
 }
 
 // ── Vlastnosti objektu ──
+/** Aktualizuje panel vlastností vybraného objektu. */
 export function updateProperties() {
   const tbody = document.querySelector("#propTable tbody");
   tbody.innerHTML = "";
@@ -288,6 +290,7 @@ export function updateProperties() {
 }
 
 // ── Seznam průsečíků ──
+/** Aktualizuje seznam průsečíků v panelu. */
 export function updateIntersectionList() {
   const ul = document.getElementById("intersectionList");
   ul.innerHTML = "";
@@ -311,12 +314,14 @@ export function updateIntersectionList() {
 }
 
 // ── Panely ──
+/** @param {string} id  ID kontejneru panelu */
 export function togglePanel(id) {
   const el = document.getElementById(id);
   el.style.display = el.style.display === "none" ? "" : "none";
 }
 
 // ── Vrstvy ──
+/** Aktualizuje seznam vrstev v panelu. */
 export function updateLayerList() {
   const ul = document.getElementById("layerList");
   if (!ul) return;
@@ -438,6 +443,7 @@ document.querySelectorAll("[data-tool]").forEach((btn) => {
   btn.addEventListener("click", () => setTool(btn.dataset.tool));
 });
 
+/** @param {import('./types.js').ToolType} tool */
 export function setTool(tool) {
   state.tool = tool;
   state.drawing = false;
@@ -470,10 +476,12 @@ export function setTool(tool) {
 }
 
 // ── Hinty ──
+/** @param {string} text */
 export function setHint(text) {
   document.getElementById("statusHint").textContent = text;
 }
 
+/** Obnoví nápovědu pro aktuální nástroj. */
 export function resetHint() {
   const hints = {
     select: "Klikněte pro výběr objektu",
@@ -491,6 +499,7 @@ export function resetHint() {
 }
 
 // ── Snap k bodům tlačítko ──
+/** Aktualizuje stav tlačítka snap k bodům. */
 export function updateSnapPtsBtn() {
   const btn = document.getElementById("btnSnapPts");
   const ind = btn.querySelector(".snap-ind");
@@ -506,6 +515,7 @@ document.getElementById("btnSnapPts").addEventListener("click", () => {
 });
 
 // ── Grid Snap tlačítko ──
+/** Aktualizuje stav tlačítka snap k mřížce. */
 export function updateSnapGridBtn() {
   document.getElementById("btnSnapGrid").classList.toggle("active", state.snapToGrid);
 }
@@ -523,6 +533,7 @@ document.getElementById("btnSnapGrid").addEventListener("contextmenu", (e) => {
 });
 
 // ── Angle Snap tlačítko ──
+/** Aktualizuje stav tlačítka úhlového snapu. */
 export function updateAngleSnapBtn() {
   document.getElementById("btnAngleSnap").classList.toggle("active", state.angleSnap);
 }
@@ -540,6 +551,7 @@ document.getElementById("btnAngleSnap").addEventListener("contextmenu", (e) => {
 });
 
 // ── Kóty tlačítko ──
+/** Aktualizuje stav tlačítka kót. */
 export function updateDimsBtn() {
   document
     .getElementById("btnDims")
@@ -553,6 +565,7 @@ document.getElementById("btnDims").addEventListener("click", () => {
 });
 
 // ── Coord Mode tlačítko (ABS/INC) ──
+/** Aktualizuje zobrazení módu souřadnic (ABS/INC). */
 export function updateCoordModeBtn() {
   const btn = document.getElementById("btnCoordMode");
   const mobileBtn = document.getElementById("mobileCoordMode");
@@ -579,6 +592,7 @@ export function updateCoordModeBtn() {
   }
 }
 
+/** Přepne mód souřadnic ABS ↔ INC. */
 export function toggleCoordMode() {
   state.coordMode = state.coordMode === 'abs' ? 'inc' : 'abs';
   updateCoordModeBtn();
@@ -664,6 +678,7 @@ document.getElementById("btnClearAll").addEventListener("click", () => {
 });
 
 // ── Kalkulačka – popup ──
+/** Otevře vestavnou kalkulačku. */
 export function openCalculator() {
   // Avoid duplicates
   if (document.querySelector(".calc-overlay[data-type=calc]")) return;
@@ -969,6 +984,7 @@ document.getElementById("btnOpenCalc").addEventListener("click", openCalculator)
 document.getElementById("btnOpenTrig").addEventListener("click", openTrigCalc);
 
 // ── Dialog: Grid Size ──
+/** Otevře dialog pro nastavení velikosti mřížky. */
 export function showGridSizeDialog() {
   const overlay = document.createElement("div");
   overlay.className = "input-overlay";
@@ -1004,6 +1020,7 @@ export function showGridSizeDialog() {
 }
 
 // ── Dialog: Angle Snap Step ──
+/** Otevře dialog pro nastavení kroku úhlového snapu. */
 export function showAngleSnapDialog() {
   const overlay = document.createElement("div");
   overlay.className = "input-overlay";
@@ -1059,6 +1076,7 @@ export function showAngleSnapDialog() {
 // ║  Statusbar – název projektu                                  ║
 // ╚══════════════════════════════════════════════════════════════╝
 
+/** Aktualizuje název projektu ve stavovém řádku. */
 export function updateStatusProject() {
   const el = document.getElementById('statusProject');
   if (el) el.textContent = 'Projekt: ' + (state.projectName || 'Bez názvu');
@@ -1068,16 +1086,19 @@ export function updateStatusProject() {
 // ║  Help overlay                                                ║
 // ╚══════════════════════════════════════════════════════════════╝
 
+/** Zobrazí nápovědu (modal). */
 export function showHelp() {
   const overlay = document.getElementById('helpOverlay');
   if (overlay) overlay.style.display = 'flex';
 }
 
+/** Skryje nápovědu. */
 export function hideHelp() {
   const overlay = document.getElementById('helpOverlay');
   if (overlay) overlay.style.display = 'none';
 }
 
+/** Přepne viditelnost nápovědy. */
 export function toggleHelp() {
   const overlay = document.getElementById('helpOverlay');
   if (!overlay) return;
@@ -1100,6 +1121,7 @@ document.getElementById('helpOverlay')?.addEventListener('click', (e) => {
 document.getElementById('btnHelp')?.addEventListener('click', toggleHelp);
 
 // ── First-run help ──
+/** Zkontroluje a zobrazí nápovědu při prvním spuštění. */
 export function checkFirstRunHelp() {
   if (!localStorage.getItem('skica_helpShown')) {
     showHelp();

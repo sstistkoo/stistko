@@ -11,6 +11,7 @@ import { updateObjectList, updateProperties, resetHint } from './ui.js';
 import { calculateAllIntersections, offsetObject, mirrorObject, linearArray } from './geometry.js';
 
 // ── Helper: nastaví inputmode="decimal" na všechna numerická pole v elementu ──
+/** @param {HTMLElement} container */
 export function applyMobileInputMode(container) {
   container.querySelectorAll('input[type="number"]').forEach((inp) => {
     inp.setAttribute("inputmode", "decimal");
@@ -30,6 +31,12 @@ const _dialogObserver = new MutationObserver((mutations) => {
 _dialogObserver.observe(document.body, { childList: true });
 
 // ── Měření – dialog výsledku ──
+/**
+ * @param {import('./types.js').Point2D} p1
+ * @param {import('./types.js').Point2D} p2
+ * @param {number} d
+ * @param {number} angle
+ */
 export function showMeasureResult(p1, p2, d, angle) {
   const dp1 = toDisplayCoords(p1.x, p1.y);
   const dp2 = toDisplayCoords(p2.x, p2.y);
@@ -80,6 +87,7 @@ export function showMeasureResult(p1, p2, d, angle) {
 }
 
 // ── Dialog pro zadání poloměru kružnice ──
+/** Otevře dialog pro přímé zadání poloměru kružnice. */
 export function showCircleRadiusDialog() {
   const cp = state.tempPoints[0];
   const overlay = document.createElement("div");
@@ -129,6 +137,7 @@ document
 
 // Stav pro chaining je uložen v state.numDialogChain
 
+/** Otevře dialog pro číselné zadání souřadnic objektu. */
 export function showNumericalInputDialog() {
   const overlay = document.createElement("div");
   overlay.className = "input-overlay";
@@ -637,6 +646,7 @@ document
   .getElementById("btnPolar")
   .addEventListener("click", showPolarDrawingDialog);
 
+/** Otevře dialog pro polární kreslení (délka + úhel). */
 export function showPolarDrawingDialog() {
   let refX = 0,
     refZ = 0;
@@ -820,6 +830,12 @@ export function showPolarDrawingDialog() {
 }
 
 // ── Dialog pro nastavení bulge (oblouk segmentu kontury) ──
+/**
+ * @param {import('./types.js').Point2D} p1
+ * @param {import('./types.js').Point2D} p2
+ * @param {number} currentBulge
+ * @param {function(number): void} onAccept
+ */
 export function showBulgeDialog(p1, p2, currentBulge, onAccept) {
   const d = Math.hypot(p2.x - p1.x, p2.y - p1.y);
   const minRadius = d / 2;
@@ -905,6 +921,10 @@ export function showBulgeDialog(p1, p2, currentBulge, onAccept) {
 }
 
 // ── Měření – info o průsečíku ──
+/**
+ * Zobrazí info o průsečíkovém bodu.
+ * @param {import('./types.js').Point2D} pt
+ */
 export function showIntersectionInfo(pt) {
   const overlay = document.createElement("div");
   overlay.className = "input-overlay";
@@ -936,6 +956,11 @@ export function showIntersectionInfo(pt) {
 }
 
 // ── Měření – info o existujícím objektu ──
+/**
+ * @param {import('./types.js').DrawObject} obj
+ * @param {number} wx
+ * @param {number} wy
+ */
 export function showMeasureObjectInfo(obj, wx, wy) {
   // Detekce, zda jsme kliknuli blízko koncového bodu
   const threshold = 15 / state.zoom;
@@ -1209,6 +1234,7 @@ function addDimensionForObject(obj) {
 }
 
 // ── Mobile Edit Dialog ──
+/** Otevře mobilní dialog pro editaci vybraného objektu. */
 export function showMobileEditDialog() {
   if (state.objects.length === 0) {
     showToast("Žádné objekty k úpravě");
@@ -1565,6 +1591,10 @@ function showEditObjectDialog(idx) {
 }
 
 // ── Dialog pro offset ──
+/**
+ * @param {import('./types.js').DrawObject} obj
+ * @param {function(number): void} onSideClick
+ */
 export function showOffsetDialog(obj, onSideClick) {
   const overlay = document.createElement("div");
   overlay.className = "input-overlay";
@@ -1599,6 +1629,11 @@ export function showOffsetDialog(obj, onSideClick) {
 }
 
 // ── Dialog pro zrcadlení ──
+// ── Dialog pro zrcadlení ──
+/**
+ * @param {import('./types.js').DrawObject} obj
+ * @param {function(string): void} callback  volané s 'x'|'z'|'custom'
+ */
 export function showMirrorDialog(obj, callback) {
   const overlay = document.createElement("div");
   overlay.className = "input-overlay";
@@ -1636,6 +1671,10 @@ export function showMirrorDialog(obj, callback) {
 }
 
 // ── Dialog pro lineární pole ──
+/**
+ * @param {import('./types.js').DrawObject} obj
+ * @param {function(number,number,number): void} callback  (dx, dz, count)
+ */
 export function showLinearArrayDialog(obj, callback) {
   const overlay = document.createElement("div");
   overlay.className = "input-overlay";
@@ -1677,6 +1716,10 @@ export function showLinearArrayDialog(obj, callback) {
 }
 
 // ── Dialog pro výběr tečny ──
+/**
+ * @param {import('./types.js').TangentLine[]} tangentLines
+ * @param {function(number[]): void} callback  indexy vybraných tečen
+ */
 export function showTangentChoiceDialog(tangentLines, callback) {
   if (tangentLines.length === 0) { showToast("Tečna neexistuje"); return; }
   if (tangentLines.length === 1) { callback([0]); return; }

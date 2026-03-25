@@ -402,6 +402,11 @@ drawCanvas.addEventListener("contextmenu", (e) => {
 });
 
 // ── Klik logika sdílená s touch ──
+/**
+ * Zpracování kliku na canvas (volané i z touch modulu).
+ * @param {number} wx
+ * @param {number} wy
+ */
 export function handleCanvasClick(wx, wy) {
   switch (state.tool) {
     case "select":
@@ -743,6 +748,7 @@ function handleOffsetClick(wx, wy) {
 }
 
 // ── Zrcadlení akce ──
+/** Spustí dialog pro zrcadlení vybraného objektu. */
 function startMirrorAction() {
   if (state.selected === null) { showToast("Nejdříve vyberte objekt"); return; }
   const obj = state.objects[state.selected];
@@ -796,6 +802,7 @@ function startMirrorAction() {
 }
 
 // ── Lineární pole akce ──
+/** Spustí dialog pro vytvoření lineárního pole z vybraného objektu. */
 function startLinearArrayAction() {
   if (state.selected === null) { showToast("Nejdříve vyberte objekt"); return; }
   const obj = state.objects[state.selected];
