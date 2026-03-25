@@ -12,6 +12,7 @@ import { bridge } from './bridge.js';
 bridge.updateProperties = () => updateProperties();
 bridge.updateObjectList = () => updateObjectList();
 bridge.updateIntersectionList = () => updateIntersectionList();
+bridge.updateLayerList = () => updateLayerList();
 
 // ── Seznam objektů ──
 export function updateObjectList() {
@@ -188,6 +189,33 @@ export function updateProperties() {
   // Barva (editovatelná)
   addColorRow("Barva", obj.color || "#89b4fa", (v) => { obj.color = v; renderAll(); });
 
+  // Vrstva (select)
+  {
+    const tr = document.createElement("tr");
+    const tdLabel = document.createElement("td");
+    tdLabel.textContent = "Vrstva";
+    const tdVal = document.createElement("td");
+    const sel = document.createElement("select");
+    sel.className = "prop-input";
+    state.layers.forEach(l => {
+      const opt = document.createElement("option");
+      opt.value = l.id;
+      opt.textContent = l.name;
+      if (l.id === obj.layer) opt.selected = true;
+      sel.appendChild(opt);
+    });
+    sel.addEventListener("change", () => {
+      pushUndo();
+      obj.layer = parseInt(sel.value, 10);
+      renderAll();
+    });
+    sel.addEventListener("keydown", (e) => e.stopPropagation());
+    tdVal.appendChild(sel);
+    tr.appendChild(tdLabel);
+    tr.appendChild(tdVal);
+    tbody.appendChild(tr);
+  }
+
   switch (obj.type) {
     case "point":
       addEditRow("X", obj.x, (v) => { obj.x = v; });
@@ -287,6 +315,123 @@ export function togglePanel(id) {
   const el = document.getElementById(id);
   el.style.display = el.style.display === "none" ? "" : "none";
 }
+
+// ── Vrstvy ──
+export function updateLayerList() {
+  const ul = document.getElementById("layerList");
+  if (!ul) return;
+  ul.innerHTML = "";
+  state.layers.forEach((layer) => {
+    const li = document.createElement("li");
+    li.className = "layer-row" + (layer.id === state.activeLayer ? " active" : "");
+
+    // Color dot
+    const colorDot = document.createElement("input");
+    colorDot.type = "color";
+    colorDot.className = "layer-color-dot";
+    colorDot.value = layer.color;
+    colorDot.title = "Změnit barvu vrstvy";
+    colorDot.addEventListener("input", () => {
+      layer.color = colorDot.value;
+      renderAll();
+    });
+
+    // Name (inline editable)
+    const nameSpan = document.createElement("span");
+    nameSpan.className = "layer-name";
+    nameSpan.textContent = layer.name;
+    nameSpan.title = "Klikněte pro přejmenování";
+    nameSpan.addEventListener("dblclick", () => {
+      const input = document.createElement("input");
+      input.type = "text";
+      input.className = "layer-name-input";
+      input.value = layer.name;
+      nameSpan.replaceWith(input);
+      input.focus();
+      input.select();
+      const finish = () => {
+        const val = input.value.trim();
+        if (val) layer.name = val;
+        input.replaceWith(nameSpan);
+        nameSpan.textContent = layer.name;
+      };
+      input.addEventListener("blur", finish);
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") input.blur();
+        if (e.key === "Escape") { input.value = layer.name; input.blur(); }
+        e.stopPropagation();
+      });
+    });
+
+    // Visibility toggle
+    const visBtn = document.createElement("button");
+    visBtn.className = "layer-icon-btn" + (layer.visible ? "" : " off");
+    visBtn.innerHTML = layer.visible ? "👁" : "👁‍🗨";
+    visBtn.title = layer.visible ? "Skrýt vrstvu" : "Zobrazit vrstvu";
+    visBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      layer.visible = !layer.visible;
+      updateLayerList();
+      renderAll();
+    });
+
+    // Lock toggle
+    const lockBtn = document.createElement("button");
+    lockBtn.className = "layer-icon-btn" + (layer.locked ? " on" : "");
+    lockBtn.innerHTML = layer.locked ? "🔒" : "🔓";
+    lockBtn.title = layer.locked ? "Odemknout vrstvu" : "Zamknout vrstvu";
+    lockBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      layer.locked = !layer.locked;
+      updateLayerList();
+    });
+
+    // Active radio
+    const radio = document.createElement("input");
+    radio.type = "radio";
+    radio.name = "activeLayer";
+    radio.className = "layer-radio";
+    radio.checked = layer.id === state.activeLayer;
+    radio.title = "Nastavit jako aktivní vrstvu";
+    radio.addEventListener("change", () => {
+      state.activeLayer = layer.id;
+      updateLayerList();
+    });
+
+    li.appendChild(radio);
+    li.appendChild(colorDot);
+    li.appendChild(nameSpan);
+    li.appendChild(visBtn);
+    li.appendChild(lockBtn);
+    ul.appendChild(li);
+  });
+}
+
+// Layer panel buttons
+document.getElementById("btnAddLayer").addEventListener("click", () => {
+  const id = state.nextLayerId++;
+  state.layers.push({ id, name: `Vrstva ${id}`, color: '#cdd6f4', visible: true, locked: false });
+  updateLayerList();
+  showToast(`Vrstva ${id} přidána`);
+});
+
+document.getElementById("btnDelLayer").addEventListener("click", () => {
+  if (state.activeLayer === 0) {
+    showToast("Nelze smazat vrstvu 0 (Kontura)");
+    return;
+  }
+  const idx = state.layers.findIndex(l => l.id === state.activeLayer);
+  if (idx === -1) return;
+  const delId = state.activeLayer;
+  state.layers.splice(idx, 1);
+  // Move objects from deleted layer to layer 0
+  state.objects.forEach(obj => { if (obj.layer === delId) obj.layer = 0; });
+  state.activeLayer = 0;
+  updateLayerList();
+  updateObjectList();
+  renderAll();
+  showToast("Vrstva smazána, objekty přesunuty na vrstvu Kontura");
+});
 
 // ── Toolbar ──
 document.querySelectorAll("[data-tool]").forEach((btn) => {
@@ -909,4 +1054,56 @@ export function showAngleSnapDialog() {
   overlay.addEventListener("click", (e) => { if (e.target === overlay) overlay.remove(); });
 }
 
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  Statusbar – název projektu                                  ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+export function updateStatusProject() {
+  const el = document.getElementById('statusProject');
+  if (el) el.textContent = 'Projekt: ' + (state.projectName || 'Bez názvu');
+}
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  Help overlay                                                ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+export function showHelp() {
+  const overlay = document.getElementById('helpOverlay');
+  if (overlay) overlay.style.display = 'flex';
+}
+
+export function hideHelp() {
+  const overlay = document.getElementById('helpOverlay');
+  if (overlay) overlay.style.display = 'none';
+}
+
+export function toggleHelp() {
+  const overlay = document.getElementById('helpOverlay');
+  if (!overlay) return;
+  if (overlay.style.display === 'none' || overlay.style.display === '') {
+    showHelp();
+  } else {
+    hideHelp();
+  }
+}
+
+// Help close button
+document.getElementById('helpCloseBtn')?.addEventListener('click', hideHelp);
+
+// Help overlay click on background
+document.getElementById('helpOverlay')?.addEventListener('click', (e) => {
+  if (e.target.id === 'helpOverlay') hideHelp();
+});
+
+// Help toolbar button
+document.getElementById('btnHelp')?.addEventListener('click', toggleHelp);
+
+// ── First-run help ──
+export function checkFirstRunHelp() {
+  if (!localStorage.getItem('skica_helpShown')) {
+    showHelp();
+    localStorage.setItem('skica_helpShown', '1');
+  }
+}
 

@@ -12,6 +12,10 @@ export function findObjectAt(wx, wy) {
   let closest = null,
     closestDist = Infinity;
   state.objects.forEach((obj, idx) => {
+    // Skip objects on locked or invisible layers
+    const layer = state.layers.find(l => l.id === obj.layer);
+    if (layer && (layer.locked || !layer.visible)) return;
+
     const d = distToObject(obj, wx, wy);
     if (d < closestDist) {
       closestDist = d;

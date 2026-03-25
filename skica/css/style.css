@@ -305,6 +305,131 @@ body {
   opacity: 0.6;
 }
 
+/* ── Seznam vrstev ── */
+#layerList {
+  list-style: none;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.layer-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-size: 12px;
+  cursor: default;
+}
+
+.layer-row:hover {
+  background: #313244;
+}
+
+.layer-row.active {
+  background: #89b4fa22;
+  outline: 1px solid #89b4fa44;
+}
+
+.layer-radio {
+  accent-color: #89b4fa;
+  margin: 0;
+  cursor: pointer;
+}
+
+.layer-color-dot {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 1px solid #45475a;
+  border-radius: 50%;
+  cursor: pointer;
+  background: none;
+  flex-shrink: 0;
+}
+
+.layer-color-dot::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.layer-color-dot::-webkit-color-swatch {
+  border: none;
+  border-radius: 50%;
+}
+
+.layer-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  color: #cdd6f4;
+}
+
+.layer-name-input {
+  flex: 1;
+  background: #1e1e2e;
+  color: #cdd6f4;
+  border: 1px solid #89b4fa;
+  border-radius: 3px;
+  padding: 1px 4px;
+  font-size: 12px;
+  outline: none;
+}
+
+.layer-icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 2px 4px;
+  border-radius: 3px;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+
+.layer-icon-btn:hover {
+  opacity: 1;
+  background: #45475a;
+}
+
+.layer-icon-btn.off {
+  opacity: 0.3;
+}
+
+.layer-icon-btn.on {
+  opacity: 1;
+  color: #f9e2af;
+}
+
+.layer-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.layer-action-btn {
+  flex: 1;
+  background: #313244;
+  border: 1px solid #45475a;
+  color: #cdd6f4;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  transition: 0.15s;
+}
+
+.layer-action-btn:hover {
+  background: #45475a;
+}
+
+.layer-del-btn:hover {
+  background: #f38ba844;
+  border-color: #f38ba8;
+  color: #f38ba8;
+}
+
 /* ── Seznam průsečíků ── */
 #intersectionList {
   list-style: none;
@@ -1247,5 +1372,232 @@ body {
   #topbar {
     flex-wrap: wrap;
     justify-content: center;
+  }
+}
+
+/* ══════════════════════════════════════════
+   Help overlay
+   ══════════════════════════════════════════ */
+.help-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: helpFadeIn 0.2s ease;
+}
+
+@keyframes helpFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.help-panel {
+  background: #1e1e2e;
+  border: 1px solid #45475a;
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+  width: 640px;
+  max-width: 95vw;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.help-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: #181825;
+  border-radius: 12px 12px 0 0;
+  border-bottom: 1px solid #313244;
+}
+
+.help-header h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #89b4fa;
+}
+
+.help-close-btn {
+  background: none;
+  border: none;
+  color: #6c7086;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: 0.15s;
+}
+
+.help-close-btn:hover {
+  background: #f38ba8;
+  color: #1e1e2e;
+}
+
+.help-content {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.help-content h3 {
+  color: #f9e2af;
+  font-size: 14px;
+  margin: 16px 0 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #313244;
+}
+
+.help-content h3:first-child {
+  margin-top: 0;
+}
+
+.help-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 12px;
+}
+
+.help-table td {
+  padding: 4px 10px;
+  font-size: 13px;
+  border-bottom: 1px solid #31324488;
+}
+
+.help-table td:first-child {
+  width: 140px;
+  color: #89b4fa;
+  font-family: "Consolas", monospace;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.help-table td:last-child {
+  color: #cdd6f4;
+}
+
+.help-table tr:hover {
+  background: #31324444;
+}
+
+.help-tips {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px;
+}
+
+.help-tips li {
+  padding: 4px 0;
+  font-size: 13px;
+  color: #a6adc8;
+}
+
+.help-tips li::before {
+  content: "• ";
+  color: #a6e3a1;
+}
+
+/* ══════════════════════════════════════════
+   Project dialog
+   ══════════════════════════════════════════ */
+.project-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.project-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-bottom: 1px solid #31324488;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.project-item:hover {
+  background: #313244;
+}
+
+.project-item.active {
+  background: #89b4fa22;
+  outline: 1px solid #89b4fa44;
+}
+
+.project-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.project-name {
+  font-size: 14px;
+  color: #cdd6f4;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.project-meta {
+  font-size: 11px;
+  color: #6c7086;
+  margin-top: 2px;
+}
+
+.project-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.project-action-btn {
+  background: #313244;
+  border: 1px solid #45475a;
+  color: #cdd6f4;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  transition: 0.15s;
+}
+
+.project-action-btn:hover {
+  background: #45475a;
+}
+
+.project-action-btn.del:hover {
+  background: #f38ba844;
+  border-color: #f38ba8;
+  color: #f38ba8;
+}
+
+@media (max-width: 900px) {
+  .help-panel {
+    width: 95vw;
+    max-height: 90vh;
+    border-radius: 8px;
+  }
+
+  .help-header {
+    border-radius: 8px 8px 0 0;
+    padding: 12px 14px;
+  }
+
+  .help-content {
+    padding: 12px;
+  }
+
+  .help-table td:first-child {
+    width: 100px;
   }
 }

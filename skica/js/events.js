@@ -6,10 +6,10 @@ import { drawCanvas, screenToWorld, snapPt, applyAngleSnap } from './canvas.js';
 import { state, pushUndo, undo, redo, showToast, toDisplayCoords } from './state.js';
 import { renderAll } from './render.js';
 import { moveObject, addObject } from './objects.js';
-import { setTool, resetHint, setHint, updateProperties, updateObjectList, updateSnapPtsBtn, updateDimsBtn, toggleCoordMode, updateCoordModeBtn, updateSnapGridBtn, updateAngleSnapBtn, showGridSizeDialog, showAngleSnapDialog } from './ui.js';
+import { setTool, resetHint, setHint, updateProperties, updateObjectList, updateSnapPtsBtn, updateDimsBtn, toggleCoordMode, updateCoordModeBtn, updateSnapGridBtn, updateAngleSnapBtn, showGridSizeDialog, showAngleSnapDialog, toggleHelp } from './ui.js';
 import { findObjectAt, selectObjectAt, calculateAllIntersections, tangentsFromPointToCircle, tangentsTwoCircles, offsetObject, mirrorObject, linearArray } from './geometry.js';
 import { showNumericalInputDialog, showPolarDrawingDialog, showMeasureResult, showCircleRadiusDialog, showIntersectionInfo, showMeasureObjectInfo, showBulgeDialog, showTangentChoiceDialog, showOffsetDialog, showMirrorDialog, showLinearArrayDialog } from './dialogs.js';
-import { saveProject } from './storage.js';
+import { saveProject, showExportImageDialog, showProjectsDialog, showSaveAsDialog } from './storage.js';
 import { bridge } from './bridge.js';
 
 let isPanning = false;
@@ -125,6 +125,12 @@ drawCanvas.addEventListener(
 // ── Klávesnice ──
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
+    // Close help overlay if open
+    const helpOverlay = document.getElementById('helpOverlay');
+    if (helpOverlay && helpOverlay.style.display !== 'none') {
+      helpOverlay.style.display = 'none';
+      return;
+    }
     if (state.dragging) {
       const obj = state.objects[state.dragObjIdx];
       if (obj && state.dragObjSnapshot) {
@@ -153,9 +159,19 @@ document.addEventListener("keydown", (e) => {
     redo();
     return;
   }
+  if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === "S") {
+    e.preventDefault();
+    showSaveAsDialog();
+    return;
+  }
   if ((e.ctrlKey || e.metaKey) && e.key === "s") {
     e.preventDefault();
     saveProject();
+    return;
+  }
+  if ((e.ctrlKey || e.metaKey) && e.key === "p") {
+    e.preventDefault();
+    showProjectsDialog();
     return;
   }
   if ((e.ctrlKey || e.metaKey) && e.key === "c") {
@@ -181,8 +197,19 @@ document.addEventListener("keydown", (e) => {
     return;
   }
 
+  if (e.key === "F1") {
+    e.preventDefault();
+    toggleHelp();
+    return;
+  }
+
   if (e.target.tagName === "INPUT" || e.target.tagName === "SELECT")
     return;
+
+  if (e.key === "?") {
+    toggleHelp();
+    return;
+  }
 
   const shortcuts = {
     v: "select",

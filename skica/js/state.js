@@ -57,6 +57,16 @@ export const state = {
   // Inkrementální souřadnice
   coordMode: 'abs',
   incReference: { x: 0, y: 0 },
+  // Projekt
+  projectName: 'Bez názvu',
+  // Vrstvy
+  layers: [
+    { id: 0, name: 'Kontura', color: '#89b4fa', visible: true, locked: false },
+    { id: 1, name: 'Konstrukce', color: '#6c7086', visible: true, locked: false },
+    { id: 2, name: 'Kóty', color: '#a6e3a1', visible: true, locked: false },
+  ],
+  activeLayer: 0,
+  nextLayerId: 3,
 };
 
 // ── Undo / Redo ──
