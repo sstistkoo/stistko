@@ -6,7 +6,7 @@ import { state, showToast, pushUndo, undo, redo } from './state.js';
 import { typeLabel, toolLabel } from './utils.js';
 import { renderAll } from './render.js';
 import { calculateAllIntersections } from './geometry.js';
-import { drawCanvas } from './canvas.js';
+import { drawCanvas, screenToWorld, snapPt } from './canvas.js';
 import { bridge } from './bridge.js';
 
 // ── Seznam objektů ──
@@ -333,6 +333,91 @@ document.getElementById("btnDims").addEventListener("click", () => {
   state.showDimensions = !state.showDimensions;
   updateDimsBtn();
   renderAll();
+});
+
+// ── Coord Mode tlačítko (ABS/INC) ──
+export function updateCoordModeBtn() {
+  const btn = document.getElementById("btnCoordMode");
+  const mobileBtn = document.getElementById("mobileCoordMode");
+  const isInc = state.coordMode === 'inc';
+  const label = isInc ? 'INC' : 'ABS';
+  btn.textContent = label;
+  btn.classList.toggle('active', isInc);
+  if (isInc) {
+    btn.style.background = '#f9e2af';
+    btn.style.color = '#1e1e2e';
+  } else {
+    btn.style.background = '';
+    btn.style.color = '';
+  }
+  if (mobileBtn) {
+    mobileBtn.textContent = label;
+    if (isInc) {
+      mobileBtn.style.background = '#f9e2af';
+      mobileBtn.style.color = '#1e1e2e';
+    } else {
+      mobileBtn.style.background = '';
+      mobileBtn.style.color = '';
+    }
+  }
+}
+
+export function toggleCoordMode() {
+  state.coordMode = state.coordMode === 'abs' ? 'inc' : 'abs';
+  updateCoordModeBtn();
+  renderAll();
+  showToast(state.coordMode === 'inc' ? 'Inkrementální souřadnice (INC)' : 'Absolutní souřadnice (ABS)');
+}
+
+document.getElementById("btnCoordMode").addEventListener("click", toggleCoordMode);
+
+// ── Ref tlačítko – klik na canvas nastaví referenční bod ──
+let _refPickActive = false;
+document.getElementById("btnSetRef").addEventListener("click", () => {
+  if (_refPickActive) return;
+  _refPickActive = true;
+  showToast("Klikněte na canvas pro nastavení referenčního bodu...");
+  const canvas = document.getElementById("drawCanvas");
+  function onRefPick(e) {
+    const rect = canvas.getBoundingClientRect();
+    const sx = e.clientX - rect.left;
+    const sy = e.clientY - rect.top;
+    let [wx, wy] = screenToWorld(sx, sy);
+    if (state.snapToPoints) [wx, wy] = snapPt(wx, wy);
+    state.incReference = { x: wx, y: wy };
+    if (state.coordMode !== 'inc') {
+      state.coordMode = 'inc';
+      updateCoordModeBtn();
+    }
+    renderAll();
+    showToast(`Reference: X=${wx.toFixed(3)} Z=${wy.toFixed(3)}`);
+    canvas.removeEventListener("click", onRefPick);
+    canvas.removeEventListener("touchend", onRefTouch);
+    _refPickActive = false;
+  }
+  function onRefTouch(e) {
+    if (e.changedTouches.length === 1) {
+      const t = e.changedTouches[0];
+      const rect = canvas.getBoundingClientRect();
+      const sx = t.clientX - rect.left;
+      const sy = t.clientY - rect.top;
+      let [wx, wy] = screenToWorld(sx, sy);
+      if (state.snapToPoints) [wx, wy] = snapPt(wx, wy);
+      state.incReference = { x: wx, y: wy };
+      if (state.coordMode !== 'inc') {
+        state.coordMode = 'inc';
+        updateCoordModeBtn();
+      }
+      renderAll();
+      showToast(`Reference: X=${wx.toFixed(3)} Z=${wy.toFixed(3)}`);
+      canvas.removeEventListener("click", onRefPick);
+      canvas.removeEventListener("touchend", onRefTouch);
+      e.preventDefault();
+      _refPickActive = false;
+    }
+  }
+  canvas.addEventListener("click", onRefPick, { once: true });
+  canvas.addEventListener("touchend", onRefTouch, { once: true });
 });
 
 // ── Undo/Redo tlačítka ──

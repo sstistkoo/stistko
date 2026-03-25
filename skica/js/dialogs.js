@@ -2,7 +2,7 @@
 // ║  SKICA – Dialogy (měření, poloměr, čísla, polární)         ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-import { state, showToast, pushUndo } from './state.js';
+import { state, showToast, pushUndo, toDisplayCoords, fromIncToAbs } from './state.js';
 import { addObject } from './objects.js';
 import { screenToWorld, snapPt, drawCanvas } from './canvas.js';
 import { renderAll } from './render.js';
@@ -31,6 +31,14 @@ _dialogObserver.observe(document.body, { childList: true });
 
 // ── Měření – dialog výsledku ──
 export function showMeasureResult(p1, p2, d, angle) {
+  const dp1 = toDisplayCoords(p1.x, p1.y);
+  const dp2 = toDisplayCoords(p2.x, p2.y);
+  const pf = state.coordMode === 'inc' ? 'Δ' : '';
+  const incRow = state.coordMode === 'inc' ? `
+        <tr><td colspan="2" style="color:#585b70;font-size:11px;padding-top:6px">── Inkrementální (od reference) ──</td></tr>
+        <tr><td style="color:#a6adc8">${pf}Bod 1:</td><td style="color:#f5c2e7">${pf}X${dp1.x.toFixed(3)} ${pf}Z${dp1.y.toFixed(3)}</td></tr>
+        <tr><td style="color:#a6adc8">${pf}Bod 2:</td><td style="color:#f5c2e7">${pf}X${dp2.x.toFixed(3)} ${pf}Z${dp2.y.toFixed(3)}</td></tr>
+  ` : '';
   const overlay = document.createElement("div");
   overlay.className = "input-overlay";
   overlay.innerHTML = `
@@ -43,6 +51,7 @@ export function showMeasureResult(p1, p2, d, angle) {
         <tr><td style="color:#a6adc8">ΔZ:</td><td style="color:#f5c2e7">${(p2.y - p1.y).toFixed(3)}</td></tr>
         <tr><td style="color:#a6adc8">Bod 1:</td><td style="color:#89b4fa">X${p1.x.toFixed(3)} Z${p1.y.toFixed(3)}</td></tr>
         <tr><td style="color:#a6adc8">Bod 2:</td><td style="color:#89b4fa">X${p2.x.toFixed(3)} Z${p2.y.toFixed(3)}</td></tr>
+        ${incRow}
       </table>
       <div class="btn-row">
         <button class="btn-cancel" id="measureAddDim">📐 Přidat kótu</button>
@@ -126,6 +135,9 @@ export function showNumericalInputDialog() {
   overlay.innerHTML = `
     <div class="input-dialog" style="min-width:400px">
       <h3>🔢 Číselné zadání objektu</h3>
+      <div id="numModeInfo" style="font-size:11px;margin-bottom:8px;padding:4px 8px;border-radius:4px;font-family:Consolas;${state.coordMode === 'inc' ? 'background:#f9e2af22;color:#f9e2af' : 'color:#6c7086'}">
+        Režim: ${state.coordMode === 'inc' ? 'INC (přírůstkový) – hodnoty jsou Δ od reference X=' + state.incReference.x.toFixed(3) + ' Z=' + state.incReference.y.toFixed(3) : 'ABS (absolutní)'}
+      </div>
       <label>Typ objektu:</label>
       <select id="numType">
         <option value="point">Bod</option>
@@ -194,24 +206,29 @@ export function showNumericalInputDialog() {
   const chainX = state.numDialogChain.x !== null ? state.numDialogChain.x.toFixed(3) : "0";
   const chainY = state.numDialogChain.y !== null ? state.numDialogChain.y.toFixed(3) : "0";
   const hasChain = state.numDialogChain.x !== null;
+  const isInc = state.coordMode === 'inc';
+  const lbl = (name) => isInc ? 'Δ' + name : name;
+  // V INC režimu chain hodnoty zobrazit jako delta od reference
+  const chainDispX = hasChain ? (isInc ? (state.numDialogChain.x - state.incReference.x).toFixed(3) : chainX) : "0";
+  const chainDispY = hasChain ? (isInc ? (state.numDialogChain.y - state.incReference.y).toFixed(3) : chainY) : "0";
 
   function updateFields() {
     const t = typeSelect.value;
     let html = "";
     switch (t) {
       case "point":
-        html = `<div class="input-row"><div><label>X:</label><input type="number" id="nx" step="0.001" value="${hasChain ? chainX : '0'}"></div>
-                <div><label>Z:</label><input type="number" id="ny" step="0.001" value="${hasChain ? chainY : '0'}"></div>
+        html = `<div class="input-row"><div><label>${lbl('X')}:</label><input type="number" id="nx" step="0.001" value="${hasChain ? chainDispX : '0'}"></div>
+                <div><label>${lbl('Z')}:</label><input type="number" id="ny" step="0.001" value="${hasChain ? chainDispY : '0'}"></div>
                 <div class="pick-col">${pickBtn("🎯")}</div></div>
                 ${hasChain ? '<div id="numChainInfo" style="font-size:11px;color:#9399b2;margin-top:4px"></div>' : ''}`;
         break;
       case "line":
       case "constr":
-        html = `<div class="input-row"><div><label>X1:</label><input type="number" id="nx1" step="0.001" value="${hasChain ? chainX : '0'}"></div>
-                <div><label>Z1:</label><input type="number" id="ny1" step="0.001" value="${hasChain ? chainY : '0'}"></div>
+        html = `<div class="input-row"><div><label>${lbl('X1')}:</label><input type="number" id="nx1" step="0.001" value="${hasChain ? chainDispX : '0'}"></div>
+                <div><label>${lbl('Z1')}:</label><input type="number" id="ny1" step="0.001" value="${hasChain ? chainDispY : '0'}"></div>
                 <div class="pick-col">${pickBtn("🎯1")}</div></div>
-                <div class="input-row"><div><label>X2:</label><input type="number" id="nx2" step="0.001" value="0"></div>
-                <div><label>Z2:</label><input type="number" id="ny2" step="0.001" value="0"></div>
+                <div class="input-row"><div><label>${lbl('X2')}:</label><input type="number" id="nx2" step="0.001" value="0"></div>
+                <div><label>${lbl('Z2')}:</label><input type="number" id="ny2" step="0.001" value="0"></div>
                 <div class="pick-col">${pickBtn("🎯2")}</div></div>
                 <div id="numLineInfo" style="font-size:11px;color:#9399b2;margin-top:4px"></div>
                 <label style="font-size:11px;color:#6c7086;margin-top:4px">Nebo: Délka a polární úhel</label>
@@ -219,15 +236,15 @@ export function showNumericalInputDialog() {
                 <div><label>Úhel (°):</label><input type="number" id="nang" step="0.001" value=""></div></div>`;
         break;
       case "circle":
-        html = `<div class="input-row"><div><label>Střed X:</label><input type="number" id="ncx" step="0.001" value="${hasChain ? chainX : '0'}"></div>
-                <div><label>Střed Z:</label><input type="number" id="ncy" step="0.001" value="${hasChain ? chainY : '0'}"></div>
+        html = `<div class="input-row"><div><label>${lbl('Střed X')}:</label><input type="number" id="ncx" step="0.001" value="${hasChain ? chainDispX : '0'}"></div>
+                <div><label>${lbl('Střed Z')}:</label><input type="number" id="ncy" step="0.001" value="${hasChain ? chainDispY : '0'}"></div>
                 <div class="pick-col">${pickBtn("🎯")}</div></div>
                 <div class="input-row"><div><label>Poloměr:</label><input type="number" id="nr" step="0.001" value="10"></div>
                 <div class="pick-col">${pickBtn("📏 R")}</div></div>`;
         break;
       case "arc":
-        html = `<div class="input-row"><div><label>Střed X:</label><input type="number" id="ncx" step="0.001" value="${hasChain ? chainX : '0'}"></div>
-                <div><label>Střed Z:</label><input type="number" id="ncy" step="0.001" value="${hasChain ? chainY : '0'}"></div>
+        html = `<div class="input-row"><div><label>${lbl('Střed X')}:</label><input type="number" id="ncx" step="0.001" value="${hasChain ? chainDispX : '0'}"></div>
+                <div><label>${lbl('Střed Z')}:</label><input type="number" id="ncy" step="0.001" value="${hasChain ? chainDispY : '0'}"></div>
                 <div class="pick-col">${pickBtn("🎯")}</div></div>
                 <div class="input-row"><div><label>Poloměr:</label><input type="number" id="nr" step="0.001" value="10"></div>
                 <div class="pick-col">${pickBtn("📏 R")}</div></div>
@@ -237,11 +254,11 @@ export function showNumericalInputDialog() {
                 <div class="pick-col">${pickBtn("📐 E")}</div></div>`;
         break;
       case "rect":
-        html = `<div class="input-row"><div><label>X1:</label><input type="number" id="nx1" step="0.001" value="${hasChain ? chainX : '0'}"></div>
-                <div><label>Z1:</label><input type="number" id="ny1" step="0.001" value="${hasChain ? chainY : '0'}"></div>
+        html = `<div class="input-row"><div><label>${lbl('X1')}:</label><input type="number" id="nx1" step="0.001" value="${hasChain ? chainDispX : '0'}"></div>
+                <div><label>${lbl('Z1')}:</label><input type="number" id="ny1" step="0.001" value="${hasChain ? chainDispY : '0'}"></div>
                 <div class="pick-col">${pickBtn("🎯1")}</div></div>
-                <div class="input-row"><div><label>X2:</label><input type="number" id="nx2" step="0.001" value="0"></div>
-                <div><label>Z2:</label><input type="number" id="ny2" step="0.001" value="0"></div>
+                <div class="input-row"><div><label>${lbl('X2')}:</label><input type="number" id="nx2" step="0.001" value="0"></div>
+                <div><label>${lbl('Z2')}:</label><input type="number" id="ny2" step="0.001" value="0"></div>
                 <div class="pick-col">${pickBtn("🎯2")}</div></div>
                 <label style="font-size:11px;color:#6c7086;margin-top:4px">Nebo: Šířka × Výška od bodu 1</label>
                 <div class="input-row"><div><label>Šířka:</label><input type="number" id="nw" step="0.001" value=""></div>
@@ -405,83 +422,115 @@ export function showNumericalInputDialog() {
 
   function createObject() {
     const t = typeSelect.value;
+    // Konverze INC → ABS
+    const toAbs = (vx, vy) => isInc ? fromIncToAbs(vx, vy) : { x: vx, y: vy };
     try {
       switch (t) {
         case "point": {
-          const x = parseFloat(overlay.querySelector("#nx").value);
-          const y = parseFloat(overlay.querySelector("#ny").value);
-          addObject({ type: "point", x, y, name: `Bod ${state.nextId}` });
-          state.numDialogChain = { x, y };
+          const raw = toAbs(
+            parseFloat(overlay.querySelector("#nx").value),
+            parseFloat(overlay.querySelector("#ny").value)
+          );
+          addObject({ type: "point", x: raw.x, y: raw.y, name: `Bod ${state.nextId}` });
+          state.numDialogChain = { x: raw.x, y: raw.y };
           break;
         }
         case "line":
         case "constr": {
-          const x1 = parseFloat(overlay.querySelector("#nx1").value);
-          const y1 = parseFloat(overlay.querySelector("#ny1").value);
-          let x2 = parseFloat(overlay.querySelector("#nx2").value);
-          let y2 = parseFloat(overlay.querySelector("#ny2").value);
+          let p1 = toAbs(
+            parseFloat(overlay.querySelector("#nx1").value),
+            parseFloat(overlay.querySelector("#ny1").value)
+          );
+          let x2r = parseFloat(overlay.querySelector("#nx2").value);
+          let y2r = parseFloat(overlay.querySelector("#ny2").value);
           const len = parseFloat(overlay.querySelector("#nlen").value);
           const ang = parseFloat(overlay.querySelector("#nang").value);
           if (!isNaN(len) && !isNaN(ang) && len > 0) {
             const rad = (ang * Math.PI) / 180;
-            x2 = x1 + len * Math.cos(rad);
-            y2 = y1 + len * Math.sin(rad);
+            // Polární vždy od bodu 1 (absolutního)
+            x2r = (isInc ? 0 : p1.x) + len * Math.cos(rad);
+            y2r = (isInc ? 0 : p1.y) + len * Math.sin(rad);
+            if (isInc) {
+              // Polar délka+úhel v INC = delta od bodu 1
+              const abs2 = { x: p1.x + len * Math.cos(rad), y: p1.y + len * Math.sin(rad) };
+              addObject({
+                type: t,
+                x1: p1.x, y1: p1.y, x2: abs2.x, y2: abs2.y,
+                name: `${t === "constr" ? "Konstr" : "Úsečka"} ${state.nextId}`,
+                dashed: t === "constr",
+              });
+              state.numDialogChain = { x: abs2.x, y: abs2.y };
+              break;
+            }
           }
+          let p2 = toAbs(x2r, y2r);
           addObject({
             type: t,
-            x1, y1, x2, y2,
+            x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y,
             name: `${t === "constr" ? "Konstr" : "Úsečka"} ${state.nextId}`,
             dashed: t === "constr",
           });
-          state.numDialogChain = { x: x2, y: y2 };
+          state.numDialogChain = { x: p2.x, y: p2.y };
           break;
         }
         case "circle": {
-          const cx = parseFloat(overlay.querySelector("#ncx").value);
-          const cy = parseFloat(overlay.querySelector("#ncy").value);
+          const c = toAbs(
+            parseFloat(overlay.querySelector("#ncx").value),
+            parseFloat(overlay.querySelector("#ncy").value)
+          );
           const r = parseFloat(overlay.querySelector("#nr").value);
           addObject({
-            type: "circle", cx, cy, r,
+            type: "circle", cx: c.x, cy: c.y, r,
             name: `Kružnice ${state.nextId}`,
           });
-          state.numDialogChain = { x: cx, y: cy };
+          state.numDialogChain = { x: c.x, y: c.y };
           break;
         }
         case "arc": {
-          const cx = parseFloat(overlay.querySelector("#ncx").value);
-          const cy = parseFloat(overlay.querySelector("#ncy").value);
+          const c = toAbs(
+            parseFloat(overlay.querySelector("#ncx").value),
+            parseFloat(overlay.querySelector("#ncy").value)
+          );
           const r = parseFloat(overlay.querySelector("#nr").value);
           const sa =
             (parseFloat(overlay.querySelector("#nsa").value) * Math.PI) / 180;
           const ea =
             (parseFloat(overlay.querySelector("#nea").value) * Math.PI) / 180;
           addObject({
-            type: "arc", cx, cy, r,
+            type: "arc", cx: c.x, cy: c.y, r,
             startAngle: sa, endAngle: ea,
             name: `Oblouk ${state.nextId}`,
           });
-          // Chain to arc endpoint
-          const endX = cx + r * Math.cos(ea);
-          const endY = cy + r * Math.sin(ea);
+          const endX = c.x + r * Math.cos(ea);
+          const endY = c.y + r * Math.sin(ea);
           state.numDialogChain = { x: endX, y: endY };
           break;
         }
         case "rect": {
-          const x1 = parseFloat(overlay.querySelector("#nx1").value);
-          const y1 = parseFloat(overlay.querySelector("#ny1").value);
-          let x2 = parseFloat(overlay.querySelector("#nx2").value);
-          let y2 = parseFloat(overlay.querySelector("#ny2").value);
+          let p1 = toAbs(
+            parseFloat(overlay.querySelector("#nx1").value),
+            parseFloat(overlay.querySelector("#ny1").value)
+          );
+          let x2r = parseFloat(overlay.querySelector("#nx2").value);
+          let y2r = parseFloat(overlay.querySelector("#ny2").value);
           const w = parseFloat(overlay.querySelector("#nw").value);
           const h = parseFloat(overlay.querySelector("#nh").value);
           if (!isNaN(w) && !isNaN(h) && w > 0 && h > 0) {
-            x2 = x1 + w;
-            y2 = y1 + h;
+            // Šířka/výška je vždy relativní delta
+            const p2 = { x: p1.x + w, y: p1.y + h };
+            addObject({
+              type: "rect", x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y,
+              name: `Obdélník ${state.nextId}`,
+            });
+            state.numDialogChain = { x: p2.x, y: p2.y };
+            break;
           }
+          let p2 = toAbs(x2r, y2r);
           addObject({
-            type: "rect", x1, y1, x2, y2,
+            type: "rect", x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y,
             name: `Obdélník ${state.nextId}`,
           });
-          state.numDialogChain = { x: x2, y: y2 };
+          state.numDialogChain = { x: p2.x, y: p2.y };
           break;
         }
       }
@@ -519,6 +568,11 @@ document
 export function showPolarDrawingDialog() {
   let refX = 0,
     refZ = 0;
+  // V INC režimu použít incReference jako výchozí referenční bod
+  if (state.coordMode === 'inc') {
+    refX = state.incReference.x;
+    refZ = state.incReference.y;
+  }
   if (state.selected !== null) {
     const sel = state.objects[state.selected];
     if (sel.type === "point") {

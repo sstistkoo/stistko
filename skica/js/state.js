@@ -52,6 +52,9 @@ export const state = {
   clipboard: null,
   // Numerical dialog chaining
   numDialogChain: { x: null, y: null },
+  // Inkrementální souřadnice
+  coordMode: 'abs',
+  incReference: { x: 0, y: 0 },
 };
 
 // ── Undo / Redo ──
@@ -98,4 +101,16 @@ export function updateUndoButtons() {
   document
     .getElementById("btnRedo")
     .classList.toggle("disabled", state.redoStack.length === 0);
+}
+
+// ── Inkrementální souřadnice – pomocné funkce ──
+export function toDisplayCoords(wx, wy) {
+  if (state.coordMode === 'inc') {
+    return { x: wx - state.incReference.x, y: wy - state.incReference.y };
+  }
+  return { x: wx, y: wy };
+}
+
+export function fromIncToAbs(dx, dy) {
+  return { x: state.incReference.x + dx, y: state.incReference.y + dy };
 }
