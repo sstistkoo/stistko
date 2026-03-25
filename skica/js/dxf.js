@@ -130,6 +130,11 @@ function parseEntity(type, data) {
  * @param {string} text - obsah DXF souboru (ASCII)
  * @returns {{ entities: object[], errors: string[] }}
  */
+/**
+ * Parsuje DXF text a vrací entity.
+ * @param {string} text
+ * @returns {import('./types.js').DXFParseResult}
+ */
 export function parseDXF(text) {
   const entities = [];
   const errors = [];

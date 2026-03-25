@@ -10,6 +10,7 @@ export const wrap = document.getElementById("canvasWrap");
 export const drawCanvas = document.getElementById("drawCanvas");
 export const ctx = drawCanvas.getContext("2d");
 
+/** Přizpůsobí canvas velikosti okna. */
 export function resizeCanvases() {
   const w = wrap.clientWidth,
     h = wrap.clientHeight;
@@ -25,10 +26,20 @@ export function resizeCanvases() {
 window.addEventListener("resize", resizeCanvases);
 
 // ── Souřadnicové transformace ──
+/**
+ * @param {number} wx
+ * @param {number} wy
+ * @returns {[number, number]}
+ */
 export function worldToScreen(wx, wy) {
   return [wx * state.zoom + state.panX, -wy * state.zoom + state.panY];
 }
 
+/**
+ * @param {number} sx
+ * @param {number} sy
+ * @returns {[number, number]}
+ */
 export function screenToWorld(sx, sy) {
   const z = state.zoom || 1;
   return [
@@ -37,6 +48,12 @@ export function screenToWorld(sx, sy) {
   ];
 }
 
+/**
+ * Snap kurzoru k bodům objektů / mřížce.
+ * @param {number} wx
+ * @param {number} wy
+ * @returns {[number, number]}
+ */
 export function snapPt(wx, wy) {
   let objX = null, objY = null, objD = Infinity;
 
@@ -92,6 +109,12 @@ export function snapPt(wx, wy) {
 }
 
 // ── Angle snap – zaokrouhlení úhlu na násobek angleSnapStep ──
+/**
+ * @param {number} wx
+ * @param {number} wy
+ * @param {import('./types.js').Point2D|null} refPoint
+ * @returns {[number, number]}
+ */
 export function applyAngleSnap(wx, wy, refPoint) {
   if (!state.angleSnap || !refPoint) return [wx, wy];
   const dx = wx - refPoint.x;
@@ -108,6 +131,7 @@ export function applyAngleSnap(wx, wy, refPoint) {
 }
 
 // ── Auto-center: vycentrovat pohled na všechny objekty ──
+/** Vycentruje pohled tak, aby byly vidět všechny objekty. */
 export function autoCenterView() {
   if (state.objects.length === 0) {
     // Nic nakresleno – reset na výchozí pozici

@@ -7,6 +7,11 @@ import { updateObjectList } from './ui.js';
 import { calculateAllIntersections } from './geometry.js';
 import { autoCenterView } from './canvas.js';
 
+/**
+ * Přidá objekt do výkresu (push undo, přiřazení ID a vrstvy).
+ * @param {import('./types.js').DrawObject} obj
+ * @returns {import('./types.js').DrawObject}
+ */
 export function addObject(obj) {
   pushUndo();
   obj.id = state.nextId++;
@@ -24,6 +29,12 @@ export function addObject(obj) {
   return obj;
 }
 
+/**
+ * Posune objekt o delta.
+ * @param {import('./types.js').DrawObject} obj
+ * @param {number} dx
+ * @param {number} dy
+ */
 export function moveObject(obj, dx, dy) {
   switch (obj.type) {
     case "point":

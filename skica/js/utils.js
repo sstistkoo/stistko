@@ -3,6 +3,11 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 // ── Snap body objektů ──
+/**
+ * Vrátí snap body daného objektu.
+ * @param {import('./types.js').DrawObject} obj
+ * @returns {import('./types.js').Point2D[]}
+ */
 export function getObjectSnapPoints(obj) {
   switch (obj.type) {
     case "point":
@@ -90,6 +95,15 @@ function normalizeAngleDiff(diff, ccw) {
 }
 
 // ── Vzdálenost bodu od úsečky ──
+/**
+ * @param {number} px
+ * @param {number} py
+ * @param {number} x1
+ * @param {number} y1
+ * @param {number} x2
+ * @param {number} y2
+ * @returns {number}
+ */
 export function distPointToSegment(px, py, x1, y1, x2, y2) {
   const dx = x2 - x1,
     dy = y2 - y1;
@@ -101,6 +115,12 @@ export function distPointToSegment(px, py, x1, y1, x2, y2) {
 }
 
 // ── Test úhlu v rozsahu ──
+/**
+ * @param {number} angle
+ * @param {number} start
+ * @param {number} end
+ * @returns {boolean}
+ */
 export function isAngleBetween(angle, start, end) {
   const norm = (a) => ((a % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
   const a = norm(angle - start);
@@ -109,6 +129,10 @@ export function isAngleBetween(angle, start, end) {
 }
 
 // ── Popisky typů ──
+/**
+ * @param {string} t
+ * @returns {string}
+ */
 export function typeLabel(t) {
   return (
     {
@@ -123,6 +147,10 @@ export function typeLabel(t) {
   );
 }
 
+/**
+ * @param {string} t
+ * @returns {string}
+ */
 export function toolLabel(t) {
   return (
     {
@@ -144,6 +172,12 @@ export function toolLabel(t) {
 
 // ── Bulge → Arc konverze (DXF standard) ──
 // bulge = tan(θ/4), kladný = CCW, záporný = CW
+/**
+ * @param {import('./types.js').Point2D} p1
+ * @param {import('./types.js').Point2D} p2
+ * @param {number} bulge
+ * @returns {import('./types.js').BulgeArc|null}
+ */
 export function bulgeToArc(p1, p2, bulge) {
   const dx = p2.x - p1.x;
   const dy = p2.y - p1.y;
@@ -172,6 +206,13 @@ export function bulgeToArc(p1, p2, bulge) {
 }
 
 // ── Radius + direction → bulge ──
+/**
+ * @param {import('./types.js').Point2D} p1
+ * @param {import('./types.js').Point2D} p2
+ * @param {number} radius
+ * @param {boolean} cw
+ * @returns {number}
+ */
 export function radiusToBulge(p1, p2, radius, cw) {
   const d = Math.hypot(p2.x - p1.x, p2.y - p1.y);
   if (d < 1e-10 || radius < d / 2 - 1e-10) return 0;

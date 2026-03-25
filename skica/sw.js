@@ -2,12 +2,13 @@
 // ║  SKICA – Service Worker (PWA offline cache)                 ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-const CACHE_NAME = 'skica-v14';
+const CACHE_NAME = 'skica-v15';
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
   './css/style.css',
+  './js/types.js',
   './js/state.js',
   './js/utils.js',
   './js/bridge.js',
@@ -23,6 +24,8 @@ const ASSETS = [
   './js/dxf.js',
   './js/app.js',
   './icons/icon.svg',
+  './icons/icon-192.png',
+  './icons/icon-512.png',
 ];
 
 // ── Install: nacachovat všechny assets ──

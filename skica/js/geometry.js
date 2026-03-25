@@ -8,6 +8,12 @@ import { renderAll } from './render.js';
 import { bridge } from './bridge.js';
 
 // ── Hledání a výběr objektu ──
+/**
+ * Najde index objektu nejblíž bodu [wx,wy].
+ * @param {number} wx
+ * @param {number} wy
+ * @returns {number|null}
+ */
 export function findObjectAt(wx, wy) {
   let closest = null,
     closestDist = Infinity;
@@ -26,6 +32,11 @@ export function findObjectAt(wx, wy) {
   return closestDist < threshold ? closest : null;
 }
 
+/**
+ * Vybere objekt na pozici [wx,wy].
+ * @param {number} wx
+ * @param {number} wy
+ */
 export function selectObjectAt(wx, wy) {
   state.selected = findObjectAt(wx, wy);
   if (bridge.updateProperties) bridge.updateProperties();
@@ -33,6 +44,13 @@ export function selectObjectAt(wx, wy) {
   renderAll();
 }
 
+/**
+ * Vzdálenost bodu od objektu.
+ * @param {import('./types.js').DrawObject} obj
+ * @param {number} wx
+ * @param {number} wy
+ * @returns {number}
+ */
 export function distToObject(obj, wx, wy) {
   switch (obj.type) {
     case "point":
@@ -110,6 +128,11 @@ function isAngleBetweenArc(angle, start, end, ccw) {
 // ── VÝPOČET PRŮSEČÍKŮ ──
 // ────────────────────────────────
 
+/**
+ * Vrátí úsečkové segmenty objektu.
+ * @param {import('./types.js').DrawObject} obj
+ * @returns {import('./types.js').LineSeg[]}
+ */
 export function getLines(obj) {
   if (obj.type === "line" || obj.type === "constr")
     return [
@@ -144,6 +167,11 @@ export function getLines(obj) {
   return [];
 }
 
+/**
+ * Vrátí kružnicové/obloukové segmenty objektu.
+ * @param {import('./types.js').DrawObject} obj
+ * @returns {import('./types.js').CircleSeg[]}
+ */
 export function getCircles(obj) {
   if (obj.type === "circle")
     return [{ cx: obj.cx, cy: obj.cy, r: obj.r }];
@@ -183,6 +211,12 @@ export function getCircles(obj) {
   return [];
 }
 
+/**
+ * Průsečík dvou úseček / konstrukčních přímek.
+ * @param {import('./types.js').LineSeg} l1
+ * @param {import('./types.js').LineSeg} l2
+ * @returns {import('./types.js').Point2D[]}
+ */
 export function intersectLineLine(l1, l2) {
   const { x1, y1, x2, y2 } = l1;
   const { x1: x3, y1: y3, x2: x4, y2: y4 } = l2;
@@ -198,6 +232,12 @@ export function intersectLineLine(l1, l2) {
   return [];
 }
 
+/**
+ * Průsečíky přímky a kružnice/oblouku.
+ * @param {import('./types.js').LineSeg} line
+ * @param {import('./types.js').CircleSeg} circle
+ * @returns {import('./types.js').Point2D[]}
+ */
 export function intersectLineCircle(line, circle) {
   const { x1, y1, x2, y2 } = line;
   const { cx, cy, r } = circle;
@@ -228,6 +268,12 @@ export function intersectLineCircle(line, circle) {
   return results;
 }
 
+/**
+ * Průsečíky dvou kružnic/oblouků.
+ * @param {import('./types.js').CircleSeg} c1
+ * @param {import('./types.js').CircleSeg} c2
+ * @returns {import('./types.js').Point2D[]}
+ */
 export function intersectCircleCircle(c1, c2) {
   const dx = c2.cx - c1.cx,
     dy = c2.cy - c1.cy;
@@ -268,6 +314,7 @@ export function intersectCircleCircle(c1, c2) {
   return results;
 }
 
+/** Přepočítá všechny průsečíky mezi objekty. */
 export function calculateAllIntersections() {
   const pts = [];
   const objs = state.objects;
@@ -299,6 +346,14 @@ export function calculateAllIntersections() {
 }
 
 // ── Tečny z bodu ke kružnici ──
+/**
+ * @param {number} px
+ * @param {number} py
+ * @param {number} cx
+ * @param {number} cy
+ * @param {number} r
+ * @returns {import('./types.js').TangentLine[]}
+ */
 export function tangentsFromPointToCircle(px, py, cx, cy, r) {
   const dx = px - cx, dy = py - cy;
   const d = Math.hypot(dx, dy);
@@ -322,6 +377,15 @@ export function tangentsFromPointToCircle(px, py, cx, cy, r) {
 }
 
 // ── Tečny dvou kružnic (vnější + vnitřní) ──
+/**
+ * @param {number} cx1
+ * @param {number} cy1
+ * @param {number} r1
+ * @param {number} cx2
+ * @param {number} cy2
+ * @param {number} r2
+ * @returns {import('./types.js').TangentLine[]}
+ */
 export function tangentsTwoCircles(cx1, cy1, r1, cx2, cy2, r2) {
   const results = [];
   const d = Math.hypot(cx2 - cx1, cy2 - cy1);
@@ -362,6 +426,13 @@ export function tangentsTwoCircles(cx1, cy1, r1, cx2, cy2, r2) {
 }
 
 // ── Offset objektu ──
+/**
+ * Vytvoří offsetovanou kopii objektu.
+ * @param {import('./types.js').DrawObject} obj
+ * @param {number} dist
+ * @param {number} side  1 = vně/vpravo, -1 = uvnitř/vlevo
+ * @returns {import('./types.js').DrawObject|null}
+ */
 export function offsetObject(obj, dist, side) {
   // side: 1 = vně/vpravo, -1 = uvnitř/vlevo
   const d = dist * side;
@@ -477,6 +548,13 @@ function lineLineIntersect(l1, l2) {
 }
 
 // ── Zrcadlení objektu ──
+/**
+ * @param {import('./types.js').DrawObject} obj
+ * @param {'x'|'z'|'custom'} axis
+ * @param {import('./types.js').Point2D} [p1]
+ * @param {import('./types.js').Point2D} [p2]
+ * @returns {import('./types.js').DrawObject}
+ */
 export function mirrorObject(obj, axis, p1, p2) {
   // axis: 'x' (horizontální), 'z' (vertikální), 'custom' (2 body p1,p2)
   const copy = JSON.parse(JSON.stringify(obj));
@@ -551,6 +629,13 @@ export function mirrorObject(obj, axis, p1, p2) {
 }
 
 // ── Lineární pole ──
+/**
+ * @param {import('./types.js').DrawObject} obj
+ * @param {number} dx
+ * @param {number} dy
+ * @param {number} count
+ * @returns {import('./types.js').DrawObject[]}
+ */
 export function linearArray(obj, dx, dy, count) {
   const copies = [];
   for (let i = 1; i <= count; i++) {

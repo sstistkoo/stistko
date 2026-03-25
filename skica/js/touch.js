@@ -13,6 +13,7 @@ import { showNumericalInputDialog, showMobileEditDialog } from './dialogs.js';
 import { bridge } from './bridge.js';
 
 // ── Mobile: detekce ──
+/** @returns {boolean} */
 export const isMobile = () => window.innerWidth <= 900;
 
 // ── Mobile: Toolbar toggle ──
@@ -75,6 +76,12 @@ mobileCoordBar.addEventListener("click", (e) => {
   e.stopPropagation();
 });
 
+/**
+ * Aktualizuje mobilní stavový řádek se souřadnicemi.
+ * @param {number} wx
+ * @param {number} wy
+ * @param {string} [extra]
+ */
 export function updateMobileCoords(wx, wy, extra) {
   extra = extra || "";
   const d = toDisplayCoords(wx, wy);
@@ -155,6 +162,7 @@ mobileCancelBtn.addEventListener("click", (e) => {
 });
 
 // Zobrazit/skrýt Cancel tlačítko podle stavu kreslení
+/** Aktualizuje viditelnost mobilního Cancel tlačítka. */
 export function updateMobileCancelBtn() {
   if (!isMobile()) return;
   const show = state.drawing || state.dragging;

@@ -8,6 +8,7 @@ import { bridge } from './bridge.js';
 import { bulgeToArc } from './utils.js';
 
 let _renderRAF = null;
+/** Naplánuje překreslení celého canvasu (requestAnimationFrame). */
 export function renderAll() {
   if (_renderRAF) return;
   _renderRAF = requestAnimationFrame(() => {
@@ -428,6 +429,7 @@ function drawDimension(obj) {
 }
 
 // ── Kreslicí primitiva ──
+/** @param {import('./types.js').PointObject} obj */
 export function drawPoint(obj) {
   const [sx, sy] = worldToScreen(obj.x, obj.y);
   ctx.beginPath();
@@ -441,9 +443,8 @@ export function drawPoint(obj) {
   ctx.stroke();
 }
 
+/** @param {import('./types.js').LineObject} obj */
 export function drawLine(obj) {
-  const [sx1, sy1] = worldToScreen(obj.x1, obj.y1);
-  const [sx2, sy2] = worldToScreen(obj.x2, obj.y2);
 
   if (obj.type === "constr") {
     const dx = sx2 - sx1,
@@ -469,6 +470,7 @@ export function drawLine(obj) {
   ctx.fill();
 }
 
+/** @param {import('./types.js').CircleObject} obj */
 export function drawCircle(obj) {
   const [sx, sy] = worldToScreen(obj.cx, obj.cy);
   const r = obj.r * state.zoom;
@@ -480,9 +482,8 @@ export function drawCircle(obj) {
   ctx.fill();
 }
 
+/** @param {import('./types.js').ArcObject} obj */
 export function drawArc(obj) {
-  const [sx, sy] = worldToScreen(obj.cx, obj.cy);
-  const r = obj.r * state.zoom;
   ctx.beginPath();
   ctx.arc(sx, sy, r, -obj.endAngle, -obj.startAngle);
   ctx.stroke();
@@ -491,6 +492,7 @@ export function drawArc(obj) {
   ctx.fill();
 }
 
+/** @param {import('./types.js').RectObject} obj */
 export function drawRect(obj) {
   const [sx1, sy1] = worldToScreen(obj.x1, obj.y1);
   const [sx2, sy2] = worldToScreen(obj.x2, obj.y2);
@@ -504,8 +506,8 @@ export function drawRect(obj) {
   ctx.stroke();
 }
 
+/** @param {import('./types.js').PolylineObject} obj */
 export function drawPolyline(obj) {
-  const n = obj.vertices.length;
   if (n < 2) return;
   const segCount = obj.closed ? n : n - 1;
 
