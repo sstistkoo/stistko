@@ -3,7 +3,7 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 import { state, showToast, pushUndo, undo, redo } from './state.js';
-import { typeLabel, toolLabel } from './utils.js';
+import { typeLabel, toolLabel, bulgeToArc } from './utils.js';
 import { renderAll } from './render.js';
 import { calculateAllIntersections } from './geometry.js';
 import { drawCanvas, screenToWorld, snapPt } from './canvas.js';
@@ -20,6 +20,7 @@ export function updateObjectList() {
     circle: "○",
     arc: "⌒",
     rect: "□",
+    polyline: "⛓",
   };
   state.objects.forEach((obj, idx) => {
     const li = document.createElement("li");
@@ -219,6 +220,38 @@ export function updateProperties() {
       addInfoRow("Šířka", Math.abs(obj.x2 - obj.x1).toFixed(3));
       addInfoRow("Výška", Math.abs(obj.y2 - obj.y1).toFixed(3));
       break;
+    case "polyline": {
+      addInfoRow("Vrcholů", obj.vertices.length);
+      addInfoRow("Uzavřená", obj.closed ? "Ano" : "Ne");
+      // Total length
+      let polyLen = 0;
+      const pn = obj.vertices.length;
+      const pSegCnt = obj.closed ? pn : pn - 1;
+      let arcCount = 0;
+      for (let i = 0; i < pSegCnt; i++) {
+        const pp1 = obj.vertices[i];
+        const pp2 = obj.vertices[(i + 1) % pn];
+        const pb = obj.bulges[i] || 0;
+        if (pb === 0) {
+          polyLen += Math.hypot(pp2.x - pp1.x, pp2.y - pp1.y);
+        } else {
+          arcCount++;
+          const parc = bulgeToArc(pp1, pp2, pb);
+          if (parc) {
+            const theta = 4 * Math.atan(Math.abs(pb));
+            polyLen += parc.r * theta;
+          }
+        }
+      }
+      addInfoRow("Celková délka", polyLen.toFixed(3));
+      addInfoRow("Segmentů", pSegCnt + " (" + arcCount + " oblouků)");
+      // Show vertices
+      obj.vertices.forEach((v, vi) => {
+        addEditRow(`V${vi + 1} X`, v.x, (val) => { v.x = val; });
+        addEditRow(`V${vi + 1} Z`, v.y, (val) => { v.y = val; });
+      });
+      break;
+    }
   }
 }
 
@@ -301,8 +334,7 @@ export function resetHint() {
     constr: "Klikněte na počáteční bod konstrukční čáry",
     circle: "Klikněte na střed kružnice",
     arc: "Klikněte na střed oblouku",
-    rect: "Klikněte na první roh obdélníku",
-    measure: "Klepněte na objekt pro info, nebo na prázdné místo pro měření",
+    rect: "Klikněte na první roh obdélníku",    polyline: "Klepněte na první bod kontury",    measure: "Klepněte na objekt pro info, nebo na prázdné místo pro měření",
   };
   setHint(hints[state.tool] || "");
 }

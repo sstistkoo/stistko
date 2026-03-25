@@ -5,6 +5,7 @@
 import { drawCanvas, ctx, worldToScreen, screenToWorld } from './canvas.js';
 import { state, toDisplayCoords } from './state.js';
 import { bridge } from './bridge.js';
+import { bulgeToArc } from './utils.js';
 
 let _renderRAF = null;
 export function renderAll() {
@@ -117,6 +118,9 @@ function renderObjects() {
       case "rect":
         drawRect(obj);
         break;
+      case "polyline":
+        drawPolyline(obj);
+        break;
     }
     ctx.setLineDash([]);
 
@@ -219,6 +223,66 @@ function renderObjects() {
       ctx.arc(scx, scy, rr, startAngle, endAngle);
       ctx.stroke();
     }
+    if (state.tool === "polyline" && tp.length >= 1) {
+      // Draw already placed segments
+      ctx.strokeStyle = "#f5c2e7";
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4, 4]);
+      const tempBulges = state._polylineBulges || [];
+      for (let i = 0; i < tp.length - 1; i++) {
+        const p1 = tp[i], p2 = tp[i + 1];
+        const b = tempBulges[i] || 0;
+        const [sx1, sy1] = worldToScreen(p1.x, p1.y);
+        const [sx2, sy2] = worldToScreen(p2.x, p2.y);
+        if (b === 0) {
+          ctx.beginPath();
+          ctx.moveTo(sx1, sy1);
+          ctx.lineTo(sx2, sy2);
+          ctx.stroke();
+        } else {
+          const arc = bulgeToArc(p1, p2, b);
+          if (arc) {
+            const [scx, scy] = worldToScreen(arc.cx, arc.cy);
+            const sr = arc.r * state.zoom;
+            ctx.beginPath();
+            ctx.arc(scx, scy, sr, -arc.endAngle, -arc.startAngle, b < 0);
+            ctx.stroke();
+          }
+        }
+        // Vertex dots
+        ctx.fillStyle = "#f5c2e7";
+        ctx.beginPath();
+        ctx.arc(sx1, sy1, 3, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      // Last placed vertex
+      const lastPt = tp[tp.length - 1];
+      const [slx, sly] = worldToScreen(lastPt.x, lastPt.y);
+      ctx.fillStyle = "#f5c2e7";
+      ctx.beginPath();
+      ctx.arc(slx, sly, 3, 0, Math.PI * 2);
+      ctx.fill();
+      // Preview line to cursor
+      ctx.setLineDash([4, 4]);
+      ctx.strokeStyle = "#f5c2e7";
+      ctx.lineWidth = 1;
+      const [smx, smy] = worldToScreen(mx, my);
+      ctx.beginPath();
+      ctx.moveTo(slx, sly);
+      ctx.lineTo(smx, smy);
+      ctx.stroke();
+      // Distance info
+      const dd = Math.hypot(mx - lastPt.x, my - lastPt.y);
+      const ang = (Math.atan2(my - lastPt.y, mx - lastPt.x) * 180) / Math.PI;
+      ctx.setLineDash([]);
+      ctx.font = `${labelSize}px Consolas`;
+      ctx.fillStyle = "#f5c2e7";
+      ctx.fillText(
+        `${dd.toFixed(3)} mm  ${ang.toFixed(1)}°  [${tp.length} bodů]`,
+        (slx + smx) / 2 + 8,
+        (sly + smy) / 2 - 8,
+      );
+    }
     ctx.setLineDash([]);
   }
 
@@ -309,6 +373,31 @@ function drawDimension(obj) {
       );
       break;
     }
+    case "polyline": {
+      // Total length
+      let totalLen = 0;
+      const pn = obj.vertices.length;
+      const pSegCount = obj.closed ? pn : pn - 1;
+      for (let i = 0; i < pSegCount; i++) {
+        const pp1 = obj.vertices[i];
+        const pp2 = obj.vertices[(i + 1) % pn];
+        const pb = obj.bulges[i] || 0;
+        if (pb === 0) {
+          totalLen += Math.hypot(pp2.x - pp1.x, pp2.y - pp1.y);
+        } else {
+          const parc = bulgeToArc(pp1, pp2, pb);
+          if (parc) {
+            const theta = 4 * Math.atan(Math.abs(pb));
+            totalLen += parc.r * theta;
+          }
+        }
+      }
+      if (pn >= 1) {
+        const [psx, psy] = worldToScreen(obj.vertices[0].x, obj.vertices[0].y);
+        ctx.fillText(`L${totalLen.toFixed(2)} [${pn}v]`, psx + 8, psy - 8);
+      }
+      break;
+    }
   }
 }
 
@@ -387,4 +476,41 @@ export function drawRect(obj) {
     Math.abs(sy2 - sy1),
   );
   ctx.stroke();
+}
+
+export function drawPolyline(obj) {
+  const n = obj.vertices.length;
+  if (n < 2) return;
+  const segCount = obj.closed ? n : n - 1;
+
+  for (let i = 0; i < segCount; i++) {
+    const p1 = obj.vertices[i];
+    const p2 = obj.vertices[(i + 1) % n];
+    const b = obj.bulges[i] || 0;
+    const [sx1, sy1] = worldToScreen(p1.x, p1.y);
+    const [sx2, sy2] = worldToScreen(p2.x, p2.y);
+
+    if (b === 0) {
+      ctx.beginPath();
+      ctx.moveTo(sx1, sy1);
+      ctx.lineTo(sx2, sy2);
+      ctx.stroke();
+    } else {
+      const arc = bulgeToArc(p1, p2, b);
+      if (arc) {
+        const [scx, scy] = worldToScreen(arc.cx, arc.cy);
+        const sr = arc.r * state.zoom;
+        ctx.beginPath();
+        ctx.arc(scx, scy, sr, -arc.endAngle, -arc.startAngle, b < 0);
+        ctx.stroke();
+      }
+    }
+  }
+  // Vertex dots
+  for (const v of obj.vertices) {
+    const [sx, sy] = worldToScreen(v.x, v.y);
+    ctx.beginPath();
+    ctx.arc(sx, sy, 2.5, 0, Math.PI * 2);
+    ctx.fill();
+  }
 }

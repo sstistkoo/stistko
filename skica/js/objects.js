@@ -47,5 +47,11 @@ export function moveObject(obj, dx, dy) {
       obj.x2 += dx;
       obj.y2 += dy;
       break;
+    case "polyline":
+      for (const v of obj.vertices) {
+        v.x += dx;
+        v.y += dy;
+      }
+      break;
   }
 }
