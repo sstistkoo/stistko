@@ -6,7 +6,7 @@ import { state, showToast, pushUndo, toDisplayCoords, fromIncToAbs } from './sta
 import { addObject } from './objects.js';
 import { screenToWorld, snapPt, drawCanvas } from './canvas.js';
 import { renderAll } from './render.js';
-import { typeLabel, getObjectSnapPoints } from './utils.js';
+import { typeLabel, getObjectSnapPoints, bulgeToArc, radiusToBulge } from './utils.js';
 import { updateObjectList, updateProperties, resetHint } from './ui.js';
 import { calculateAllIntersections } from './geometry.js';
 
@@ -146,6 +146,7 @@ export function showNumericalInputDialog() {
         <option value="circle">Kružnice</option>
         <option value="arc">Oblouk</option>
         <option value="rect">Obdélník</option>
+        <option value="polyline">Kontura</option>
       </select>
       <div id="numFields"></div>
       <div class="btn-row">
@@ -264,6 +265,19 @@ export function showNumericalInputDialog() {
                 <div class="input-row"><div><label>Šířka:</label><input type="number" id="nw" step="0.001" value=""></div>
                 <div><label>Výška:</label><input type="number" id="nh" step="0.001" value=""></div></div>`;
         break;
+      case "polyline":
+        html = `<div style="font-size:12px;color:#a6adc8;margin-bottom:8px">Zadávejte body po jednom. Klikněte "Přidat bod" pro každý vrchol kontury.</div>
+                <div class="input-row"><div><label>${lbl('X')}:</label><input type="number" id="nx" step="0.001" value="${hasChain ? chainDispX : '0'}"></div>
+                <div><label>${lbl('Z')}:</label><input type="number" id="ny" step="0.001" value="${hasChain ? chainDispY : '0'}"></div>
+                <div class="pick-col">${pickBtn("🎯")}</div></div>
+                <div id="polyVertexList" style="max-height:150px;overflow-y:auto;font-size:11px;font-family:Consolas;color:#a6adc8;margin:8px 0;padding:4px;background:#11111b;border-radius:4px;display:none"></div>
+                <div style="display:flex;gap:6px;margin-bottom:8px">
+                  <button class="btn-ok" id="polyAddVtx" style="font-size:11px;padding:3px 8px;flex:1">➕ Přidat bod</button>
+                  <label style="font-size:11px;display:flex;align-items:center;gap:4px;cursor:pointer;white-space:nowrap">
+                    <input type="checkbox" id="polyClosed"> Uzavřená
+                  </label>
+                </div>`;
+        break;
     }
     fieldsDiv.innerHTML = html;
 
@@ -274,31 +288,33 @@ export function showNumericalInputDialog() {
         e.preventDefault();
         pickFromMap((wx, wy) => {
           const t2 = typeSelect.value;
+          // V INC režimu převést absolutní souřadnice na delta pro pole
+          const dp = isInc ? toDisplayCoords(wx, wy) : { x: wx, y: wy };
           if (t2 === "point") {
             const nx = overlay.querySelector("#nx");
             const ny = overlay.querySelector("#ny");
-            if (nx) nx.value = wx.toFixed(3);
-            if (ny) ny.value = wy.toFixed(3);
+            if (nx) nx.value = dp.x.toFixed(3);
+            if (ny) ny.value = dp.y.toFixed(3);
             updateChainInfo();
           } else if (t2 === "line" || t2 === "constr" || t2 === "rect") {
             if (i === 0) {
               const f1 = overlay.querySelector("#nx1");
               const f2 = overlay.querySelector("#ny1");
-              if (f1) f1.value = wx.toFixed(3);
-              if (f2) f2.value = wy.toFixed(3);
+              if (f1) f1.value = dp.x.toFixed(3);
+              if (f2) f2.value = dp.y.toFixed(3);
             } else {
               const f1 = overlay.querySelector("#nx2");
               const f2 = overlay.querySelector("#ny2");
-              if (f1) f1.value = wx.toFixed(3);
-              if (f2) f2.value = wy.toFixed(3);
-              // Auto-fill rect width/height
+              if (f1) f1.value = dp.x.toFixed(3);
+              if (f2) f2.value = dp.y.toFixed(3);
+              // Auto-fill rect width/height (delta od delta = absolutní rozdíl)
               if (t2 === "rect") {
                 const x1v = parseFloat(overlay.querySelector("#nx1")?.value) || 0;
                 const y1v = parseFloat(overlay.querySelector("#ny1")?.value) || 0;
                 const nw = overlay.querySelector("#nw");
                 const nh = overlay.querySelector("#nh");
-                if (nw) nw.value = (wx - x1v).toFixed(3);
-                if (nh) nh.value = (wy - y1v).toFixed(3);
+                if (nw) nw.value = (dp.x - x1v).toFixed(3);
+                if (nh) nh.value = (dp.y - y1v).toFixed(3);
               }
             }
             updateLineInfo();
@@ -310,23 +326,25 @@ export function showNumericalInputDialog() {
             const eaInp = overlay.querySelector("#nea");
             const cx = parseFloat(cxInp ? cxInp.value : 0) || 0;
             const cy = parseFloat(cyInp ? cyInp.value : 0) || 0;
+            // Pro výpočet poloměru/úhlu potřebujeme absolutní střed
+            const absCenter = isInc ? fromIncToAbs(cx, cy) : { x: cx, y: cy };
             if (i === 0) {
               // Pick středu
-              if (cxInp) cxInp.value = wx.toFixed(3);
-              if (cyInp) cyInp.value = wy.toFixed(3);
+              if (cxInp) cxInp.value = dp.x.toFixed(3);
+              if (cyInp) cyInp.value = dp.y.toFixed(3);
             } else if (i === 1) {
-              // Pick bodu pro poloměr – vzdálenost od středu
+              // Pick bodu pro poloměr – vzdálenost od absolutního středu
               if (rInp) {
-                const r = Math.hypot(wx - cx, wy - cy);
+                const r = Math.hypot(wx - absCenter.x, wy - absCenter.y);
                 rInp.value = r.toFixed(3);
               }
             } else if (i === 2 && saInp) {
               // Pick bodu pro start úhel
-              const ang = Math.atan2(wy - cy, wx - cx) * 180 / Math.PI;
+              const ang = Math.atan2(wy - absCenter.y, wx - absCenter.x) * 180 / Math.PI;
               saInp.value = ang.toFixed(2);
             } else if (i === 3 && eaInp) {
               // Pick bodu pro konec úhel
-              const ang = Math.atan2(wy - cy, wx - cx) * 180 / Math.PI;
+              const ang = Math.atan2(wy - absCenter.y, wx - absCenter.x) * 180 / Math.PI;
               eaInp.value = ang.toFixed(2);
             }
           }
@@ -370,8 +388,10 @@ export function showNumericalInputDialog() {
       const nx = parseFloat(fieldsDiv.querySelector("#nx")?.value);
       const ny = parseFloat(fieldsDiv.querySelector("#ny")?.value);
       if (isFinite(nx) && isFinite(ny)) {
-        const d = Math.hypot(nx - state.numDialogChain.x, ny - state.numDialogChain.y);
-        const a = Math.atan2(ny - state.numDialogChain.y, nx - state.numDialogChain.x) * 180 / Math.PI;
+        // V INC režimu pole obsahuje delta – převést na absolutní pro porovnání s chain
+        const abs = isInc ? fromIncToAbs(nx, ny) : { x: nx, y: ny };
+        const d = Math.hypot(abs.x - state.numDialogChain.x, abs.y - state.numDialogChain.y);
+        const a = Math.atan2(abs.y - state.numDialogChain.y, abs.x - state.numDialogChain.x) * 180 / Math.PI;
         info.textContent = `Od předchozího: ${d.toFixed(3)} mm  |  Úhel: ${a.toFixed(2)}°`;
       }
     }
@@ -410,6 +430,38 @@ export function showNumericalInputDialog() {
       });
     }
     syncRectWH();
+
+    // Polyline vertex management
+    const polyAddBtn = fieldsDiv.querySelector("#polyAddVtx");
+    if (polyAddBtn) {
+      if (!overlay._polyVerts) overlay._polyVerts = [];
+      if (!overlay._polyBulges) overlay._polyBulges = [];
+      const vtxList = fieldsDiv.querySelector("#polyVertexList");
+
+      function updateVtxList() {
+        if (overlay._polyVerts.length > 0) {
+          vtxList.style.display = "";
+          vtxList.innerHTML = overlay._polyVerts.map((v, vi) =>
+            `<div>V${vi + 1}: X${v.x.toFixed(3)} Z${v.y.toFixed(3)}</div>`
+          ).join("");
+          vtxList.scrollTop = vtxList.scrollHeight;
+        }
+      }
+
+      polyAddBtn.addEventListener("click", () => {
+        const vx = parseFloat(fieldsDiv.querySelector("#nx")?.value);
+        const vy = parseFloat(fieldsDiv.querySelector("#ny")?.value);
+        if (!isFinite(vx) || !isFinite(vy)) return;
+        const abs = isInc ? fromIncToAbs(vx, vy) : { x: vx, y: vy };
+        overlay._polyVerts.push(abs);
+        if (overlay._polyVerts.length > 1) {
+          overlay._polyBulges.push(0);
+        }
+        updateVtxList();
+        showToast(`Bod ${overlay._polyVerts.length}: X${abs.x.toFixed(2)} Z${abs.y.toFixed(2)}`);
+      });
+      updateVtxList();
+    }
   }
 
   typeSelect.addEventListener("change", updateFields);
@@ -531,6 +583,26 @@ export function showNumericalInputDialog() {
             name: `Obdélník ${state.nextId}`,
           });
           state.numDialogChain = { x: p2.x, y: p2.y };
+          break;
+        }
+        case "polyline": {
+          const verts = overlay._polyVerts || [];
+          if (verts.length < 2) {
+            showToast("Kontura potřebuje alespoň 2 body");
+            return false;
+          }
+          const closed = overlay.querySelector("#polyClosed")?.checked || false;
+          const bulges = overlay._polyBulges || [];
+          while (bulges.length < (closed ? verts.length : verts.length - 1)) bulges.push(0);
+          addObject({
+            type: "polyline",
+            vertices: verts.slice(),
+            bulges: bulges.slice(0, closed ? verts.length : verts.length - 1),
+            closed,
+            name: `Kontura ${state.nextId}`,
+          });
+          const lastV = verts[verts.length - 1];
+          state.numDialogChain = { x: lastV.x, y: lastV.y };
           break;
         }
       }
@@ -747,6 +819,91 @@ export function showPolarDrawingDialog() {
   polLen.focus();
 }
 
+// ── Dialog pro nastavení bulge (oblouk segmentu kontury) ──
+export function showBulgeDialog(p1, p2, currentBulge, onAccept) {
+  const d = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+  const minRadius = d / 2;
+  // Compute current radius from bulge
+  let currentRadius = '';
+  let currentCW = false;
+  if (currentBulge !== 0) {
+    const theta = 4 * Math.atan(Math.abs(currentBulge));
+    currentRadius = (d / (2 * Math.sin(theta / 2))).toFixed(3);
+    currentCW = currentBulge < 0;
+  }
+
+  const overlay = document.createElement('div');
+  overlay.className = 'input-overlay';
+  overlay.innerHTML = `
+    <div class="input-dialog" style="min-width:360px">
+      <h3>⌒ Oblouk segmentu</h3>
+      <table style="width:100%;font-family:Consolas;font-size:12px;margin-bottom:8px">
+        <tr><td style="color:#a6adc8">Bod 1:</td><td style="color:#89b4fa">X${p1.x.toFixed(3)} Z${p1.y.toFixed(3)}</td></tr>
+        <tr><td style="color:#a6adc8">Bod 2:</td><td style="color:#89b4fa">X${p2.x.toFixed(3)} Z${p2.y.toFixed(3)}</td></tr>
+        <tr><td style="color:#a6adc8">Tětiva:</td><td style="color:#f9e2af">${d.toFixed(3)} mm</td></tr>
+        <tr><td style="color:#a6adc8">Min. R:</td><td style="color:#f5c2e7">${minRadius.toFixed(3)} mm</td></tr>
+      </table>
+      <label>Poloměr oblouku (mm):</label>
+      <input type="number" id="dlgBulgeR" step="0.001" min="${minRadius.toFixed(3)}" value="${currentRadius || (minRadius * 2).toFixed(3)}" inputmode="decimal" autofocus>
+      <label style="margin-top:8px">Směr:</label>
+      <select id="dlgBulgeDir">
+        <option value="ccw" ${!currentCW ? 'selected' : ''}>CCW (proti směru hodinových ručiček)</option>
+        <option value="cw" ${currentCW ? 'selected' : ''}>CW (po směru hodinových ručiček)</option>
+      </select>
+      <div id="dlgBulgeInfo" style="font-size:11px;color:#9399b2;margin-top:8px;font-family:Consolas"></div>
+      <div class="btn-row" style="margin-top:12px">
+        <button class="btn-cancel" id="dlgBulgeRemove" style="background:#f38ba8;border-color:#f38ba8">Rovný seg.</button>
+        <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
+        <button class="btn-ok" id="dlgBulgeOk">OK</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+
+  const rInput = overlay.querySelector('#dlgBulgeR');
+  const dirSelect = overlay.querySelector('#dlgBulgeDir');
+  const infoDiv = overlay.querySelector('#dlgBulgeInfo');
+
+  function updateInfo() {
+    const r = parseFloat(rInput.value);
+    if (!isFinite(r) || r < minRadius - 0.001) {
+      infoDiv.textContent = 'Poloměr příliš malý';
+      return;
+    }
+    const cw = dirSelect.value === 'cw';
+    const b = radiusToBulge(p1, p2, r, cw);
+    const theta = 4 * Math.atan(Math.abs(b));
+    infoDiv.textContent = `Bulge: ${b.toFixed(4)} | Úhel: ${(theta * 180 / Math.PI).toFixed(1)}° | ${cw ? 'CW' : 'CCW'}`;
+  }
+  rInput.addEventListener('input', updateInfo);
+  dirSelect.addEventListener('change', updateInfo);
+  updateInfo();
+
+  rInput.focus();
+  rInput.select();
+
+  const accept = () => {
+    const r = parseFloat(rInput.value);
+    if (!isFinite(r) || r < minRadius - 0.001) {
+      showToast('Poloměr příliš malý (min: ' + minRadius.toFixed(3) + ')');
+      return;
+    }
+    const cw = dirSelect.value === 'cw';
+    const b = radiusToBulge(p1, p2, r, cw);
+    onAccept(b);
+    overlay.remove();
+  };
+
+  overlay.querySelector('#dlgBulgeOk').addEventListener('click', accept);
+  overlay.querySelector('#dlgBulgeRemove').addEventListener('click', () => {
+    onAccept(0);
+    overlay.remove();
+  });
+  overlay.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') accept();
+    if (e.key === 'Escape') overlay.remove();
+  });
+}
+
 // ── Měření – info o průsečíku ──
 export function showIntersectionInfo(pt) {
   const overlay = document.createElement("div");
@@ -890,6 +1047,35 @@ function buildObjectInfoDialog(obj) {
       rows += `<tr><td style="color:#a6adc8">Výška:</td><td style="color:#f9e2af">${h.toFixed(3)} mm</td></tr>`;
       rows += `<tr><td style="color:#a6adc8">Obvod:</td><td style="color:#f5c2e7">${(2 * (w + h)).toFixed(3)} mm</td></tr>`;
       rows += `<tr><td style="color:#a6adc8">Plocha:</td><td style="color:#f5c2e7">${(w * h).toFixed(3)} mm²</td></tr>`;
+      break;
+    }
+    case "polyline": {
+      const pn = obj.vertices.length;
+      const pSegCnt = obj.closed ? pn : pn - 1;
+      let pTotalLen = 0;
+      let pArcCnt = 0;
+      for (let i = 0; i < pSegCnt; i++) {
+        const pp1 = obj.vertices[i];
+        const pp2 = obj.vertices[(i + 1) % pn];
+        const pb = obj.bulges[i] || 0;
+        if (pb === 0) {
+          pTotalLen += Math.hypot(pp2.x - pp1.x, pp2.y - pp1.y);
+        } else {
+          pArcCnt++;
+          const parc = bulgeToArc(pp1, pp2, pb);
+          if (parc) {
+            const theta = 4 * Math.atan(Math.abs(pb));
+            pTotalLen += parc.r * theta;
+          }
+        }
+      }
+      rows += `<tr><td style="color:#a6adc8">Vrcholů:</td><td style="color:#f9e2af">${pn}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Segmentů:</td><td style="color:#f9e2af">${pSegCnt} (${pArcCnt} oblouků)</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Uzavřená:</td><td style="color:#f9e2af">${obj.closed ? 'Ano' : 'Ne'}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Celk. délka:</td><td style="color:#f9e2af">${pTotalLen.toFixed(3)} mm</td></tr>`;
+      for (let i = 0; i < pn; i++) {
+        rows += `<tr><td style="color:#a6adc8">V${i + 1}:</td><td style="color:#89b4fa">X${obj.vertices[i].x.toFixed(3)} Z${obj.vertices[i].y.toFixed(3)}</td></tr>`;
+      }
       break;
     }
   }
@@ -1040,7 +1226,7 @@ export function showMobileEditDialog() {
   overlay.className = "input-overlay";
 
   let listHtml = state.objects.map((obj, idx) => {
-    const icon = { point: "·", line: "╱", constr: "┄", circle: "○", arc: "◜", rect: "▭" }[obj.type] || "?";
+    const icon = { point: "·", line: "╱", constr: "┄", circle: "○", arc: "◜", rect: "▭", polyline: "⛓" }[obj.type] || "?";
     return `<div class="edit-obj-item" data-idx="${idx}" style="padding:10px 12px;cursor:pointer;border-bottom:1px solid #313244;display:flex;align-items:center;gap:8px;transition:background 0.15s">
       <span style="font-size:18px;width:24px;text-align:center">${icon}</span>
       <span style="flex:1;color:#cdd6f4">${obj.name || typeLabel(obj.type)}</span>
@@ -1136,11 +1322,30 @@ function showEditObjectDialog(idx) {
           <div class="pick-col"><button type="button" class="pick-btn" data-pick="p2">🎯2</button></div></div>
           <div style="font-size:12px;color:#9399b2;margin-top:4px">Rozměr: <span id="editDim">${Math.abs(obj.x2-obj.x1).toFixed(2)} × ${Math.abs(obj.y2-obj.y1).toFixed(2)}</span> mm</div>`;
         break;
+      case "polyline": {
+        const verts = obj.vertices || [];
+        const bulges = obj.bulges || [];
+        fieldsHtml += `<div style="margin-bottom:6px">
+          <label><input type="checkbox" id="editClosed" ${obj.closed ? "checked" : ""}> Uzavřená kontura</label></div>`;
+        fieldsHtml += `<div id="polyVertList" style="max-height:220px;overflow-y:auto">`;
+        for (let i = 0; i < verts.length; i++) {
+          const b = bulges[i] || 0;
+          fieldsHtml += `<div class="input-row" style="margin-bottom:2px">
+            <div><label>V${i+1} X:</label><input type="number" class="polyVX" data-idx="${i}" step="0.001" value="${verts[i].x.toFixed(3)}"></div>
+            <div><label>Z:</label><input type="number" class="polyVY" data-idx="${i}" step="0.001" value="${verts[i].y.toFixed(3)}"></div>
+            <div style="width:60px"><label>B:</label><input type="number" class="polyVB" data-idx="${i}" step="0.01" value="${b.toFixed(4)}" style="width:55px"></div>
+          </div>`;
+        }
+        fieldsHtml += `</div>`;
+        const arcCount = bulges.filter(b => b !== 0).length;
+        fieldsHtml += `<div style="font-size:12px;color:#9399b2;margin-top:4px">Vrcholů: ${verts.length}, Segmentů: ${Math.max(0, verts.length - (obj.closed ? 0 : 1))}, Oblouků: ${arcCount}</div>`;
+        break;
+      }
     }
     return fieldsHtml;
   }
 
-  const icon = { point: "·", line: "╱", constr: "┄", circle: "○", arc: "◜", rect: "▭" }[obj.type] || "?";
+  const icon = { point: "·", line: "╱", constr: "┄", circle: "○", arc: "◜", rect: "▭", polyline: "⛓" }[obj.type] || "?";
 
   overlay.innerHTML = `
     <div class="input-dialog">
@@ -1310,6 +1515,20 @@ function showEditObjectDialog(idx) {
         obj.x2 = parseFloat(overlay.querySelector("#editX2").value);
         obj.y2 = parseFloat(overlay.querySelector("#editY2").value);
         break;
+      case "polyline": {
+        obj.closed = overlay.querySelector("#editClosed")?.checked || false;
+        const vxInputs = overlay.querySelectorAll(".polyVX");
+        const vyInputs = overlay.querySelectorAll(".polyVY");
+        const vbInputs = overlay.querySelectorAll(".polyVB");
+        for (let i = 0; i < vxInputs.length; i++) {
+          obj.vertices[i] = {
+            x: parseFloat(vxInputs[i].value) || 0,
+            y: parseFloat(vyInputs[i].value) || 0
+          };
+          obj.bulges[i] = parseFloat(vbInputs[i].value) || 0;
+        }
+        break;
+      }
     }
     updateObjectList();
     updateProperties();

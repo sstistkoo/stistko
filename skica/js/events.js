@@ -8,7 +8,7 @@ import { renderAll } from './render.js';
 import { moveObject, addObject } from './objects.js';
 import { setTool, resetHint, setHint, updateProperties, updateObjectList, updateSnapPtsBtn, updateDimsBtn, toggleCoordMode, updateCoordModeBtn } from './ui.js';
 import { findObjectAt, selectObjectAt, calculateAllIntersections } from './geometry.js';
-import { showNumericalInputDialog, showPolarDrawingDialog, showMeasureResult, showCircleRadiusDialog, showIntersectionInfo, showMeasureObjectInfo } from './dialogs.js';
+import { showNumericalInputDialog, showPolarDrawingDialog, showMeasureResult, showCircleRadiusDialog, showIntersectionInfo, showMeasureObjectInfo, showBulgeDialog } from './dialogs.js';
 import { saveProject } from './storage.js';
 import { bridge } from './bridge.js';
 
@@ -126,6 +126,7 @@ document.addEventListener("keydown", (e) => {
     }
     state.drawing = false;
     state.tempPoints = [];
+    state._polylineBulges = [];
     state.selected = null;
     updateProperties();
     renderAll();
@@ -182,6 +183,7 @@ document.addEventListener("keydown", (e) => {
     c: "circle",
     a: "arc",
     r: "rect",
+    q: "polyline",
     m: "measure",
   };
   if (shortcuts[e.key.toLowerCase()])
@@ -222,6 +224,45 @@ document.addEventListener("keydown", (e) => {
     e.preventDefault();
     showCircleRadiusDialog();
   }
+  // Polyline: Enter = ukončit (otevřená), Shift+Enter = uzavřít
+  if (e.key === "Enter" && state.drawing && state.tool === "polyline") {
+    e.preventDefault();
+    if (state.tempPoints.length >= 2) {
+      const closed = e.shiftKey;
+      const bulges = state._polylineBulges || [];
+      // Ensure bulges array matches segment count
+      if (closed) {
+        while (bulges.length < state.tempPoints.length) bulges.push(0);
+      } else {
+        while (bulges.length < state.tempPoints.length - 1) bulges.push(0);
+      }
+      addObject({
+        type: 'polyline',
+        vertices: state.tempPoints.slice(),
+        bulges: bulges.slice(0, closed ? state.tempPoints.length : state.tempPoints.length - 1),
+        closed,
+        name: `Kontura ${state.nextId}`,
+      });
+      state.drawing = false;
+      state.tempPoints = [];
+      state._polylineBulges = [];
+      resetHint();
+      showToast(closed ? 'Kontura uzavřena' : 'Kontura dokončena');
+    }
+  }
+  // Polyline: B = bulge dialog pro poslední segment
+  if (e.key.toLowerCase() === "b" && state.drawing && state.tool === "polyline") {
+    if (state.tempPoints.length >= 2) {
+      const idx = state.tempPoints.length - 2;
+      const p1 = state.tempPoints[idx];
+      const p2 = state.tempPoints[idx + 1];
+      showBulgeDialog(p1, p2, state._polylineBulges[idx] || 0, (newBulge) => {
+        if (!state._polylineBulges) state._polylineBulges = [];
+        state._polylineBulges[idx] = newBulge;
+        renderAll();
+      });
+    }
+  }
 });
 
 drawCanvas.addEventListener("contextmenu", (e) => {
@@ -231,6 +272,19 @@ drawCanvas.addEventListener("contextmenu", (e) => {
   const sy = e.clientY - rect.top;
   let [wx, wy] = screenToWorld(sx, sy);
   if (state.snapToPoints) [wx, wy] = snapPt(wx, wy);
+
+  // Polyline: pravý klik = bulge dialog pro poslední segment
+  if (state.drawing && state.tool === "polyline" && state.tempPoints.length >= 2) {
+    const idx = state.tempPoints.length - 2;
+    const p1 = state.tempPoints[idx];
+    const p2 = state.tempPoints[idx + 1];
+    showBulgeDialog(p1, p2, state._polylineBulges[idx] || 0, (newBulge) => {
+      if (!state._polylineBulges) state._polylineBulges = [];
+      state._polylineBulges[idx] = newBulge;
+      renderAll();
+    });
+    return;
+  }
 
   // Zobrazit kontextové menu pro nastavení reference
   const existing = document.querySelector('.skica-context-menu');
@@ -426,5 +480,43 @@ export function handleCanvasClick(wx, wy) {
         resetHint();
       }
       break;
+
+    case "polyline":
+      if (!state.drawing) {
+        state.drawing = true;
+        state.tempPoints = [{ x: wx, y: wy }];
+        state._polylineBulges = [];
+        setHint("Klepněte na další bod kontury (Enter = dokončit, Shift+Enter = uzavřít, B = oblouk)");
+      } else {
+        state.tempPoints.push({ x: wx, y: wy });
+        // Add bulge=0 for the new segment
+        if (!state._polylineBulges) state._polylineBulges = [];
+        state._polylineBulges.push(0);
+        setHint(`Bod ${state.tempPoints.length} přidán (Enter = dokončit, Shift+Enter = uzavřít, B = oblouk)`);
+      }
+      break;
   }
 }
+
+// ── Double-click: dokončit konturu ──
+drawCanvas.addEventListener("dblclick", (e) => {
+  if (state.drawing && state.tool === "polyline" && state.tempPoints.length >= 2) {
+    e.preventDefault();
+    // Remove the last point that was added by the second click of dblclick
+    // (the first click of dblclick already added a point via mousedown)
+    const bulges = state._polylineBulges || [];
+    while (bulges.length < state.tempPoints.length - 1) bulges.push(0);
+    addObject({
+      type: 'polyline',
+      vertices: state.tempPoints.slice(),
+      bulges: bulges.slice(0, state.tempPoints.length - 1),
+      closed: false,
+      name: `Kontura ${state.nextId}`,
+    });
+    state.drawing = false;
+    state.tempPoints = [];
+    state._polylineBulges = [];
+    resetHint();
+    showToast('Kontura dokončena');
+  }
+});

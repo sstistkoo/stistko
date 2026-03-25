@@ -3,7 +3,7 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 import { state, showToast } from './state.js';
-import { getObjectSnapPoints, isAngleBetween } from './utils.js';
+import { getObjectSnapPoints, isAngleBetween, bulgeToArc } from './utils.js';
 import { renderAll } from './render.js';
 
 export const wrap = document.getElementById("canvasWrap");
@@ -135,6 +135,27 @@ export function autoCenterView() {
         for (const p of pts) {
           minX = Math.min(minX, p.x); maxX = Math.max(maxX, p.x);
           minY = Math.min(minY, p.y); maxY = Math.max(maxY, p.y);
+        }
+        break;
+      }
+      case "polyline": {
+        for (const v of obj.vertices) {
+          minX = Math.min(minX, v.x); maxX = Math.max(maxX, v.x);
+          minY = Math.min(minY, v.y); maxY = Math.max(maxY, v.y);
+        }
+        const n = obj.vertices.length;
+        const segCount = obj.closed ? n : n - 1;
+        for (let i = 0; i < segCount; i++) {
+          const b = (obj.bulges && obj.bulges[i]) || 0;
+          if (b !== 0) {
+            const p1 = obj.vertices[i];
+            const p2 = obj.vertices[(i + 1) % n];
+            const arc = bulgeToArc(p1, p2, b);
+            if (arc) {
+              minX = Math.min(minX, arc.cx - arc.r); maxX = Math.max(maxX, arc.cx + arc.r);
+              minY = Math.min(minY, arc.cy - arc.r); maxY = Math.max(maxY, arc.cy + arc.r);
+            }
+          }
         }
         break;
       }

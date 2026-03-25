@@ -5,6 +5,7 @@
 import { state, showToast, pushUndo, setPushUndoHook } from './state.js';
 import { updateObjectList, updateProperties } from './ui.js';
 import { calculateAllIntersections } from './geometry.js';
+import { bulgeToArc } from './utils.js';
 
 // ── Save / Load ──
 export function saveProject() {
@@ -199,6 +200,31 @@ document.getElementById("btnExport").addEventListener("click", () => {
         out += `G01 ${fmtCoord(obj.x1, obj.y2)}\n`;
         out += `G01 ${fmtCoord(obj.x1, obj.y1)}\n`;
         break;
+      case "polyline": {
+        const pn = obj.vertices.length;
+        const pSegCnt = obj.closed ? pn : pn - 1;
+        out += `; ${obj.name} (${pn} vrcholů${obj.closed ? ', uzavřená' : ''})\n`;
+        // Rapid to first vertex
+        out += `G00 ${fmtCoord(obj.vertices[0].x, obj.vertices[0].y)}\n`;
+        // Segments
+        for (let i = 0; i < pSegCnt; i++) {
+          const pp2 = obj.vertices[(i + 1) % pn];
+          const pb = obj.bulges[i] || 0;
+          if (pb === 0) {
+            out += `G01 ${fmtCoord(pp2.x, pp2.y)}\n`;
+          } else {
+            const pp1 = obj.vertices[i];
+            const parc = bulgeToArc(pp1, pp2, pb);
+            if (parc) {
+              const gCode = pb < 0 ? 'G02' : 'G03'; // CW = G02, CCW = G03
+              out += `${gCode} ${fmtCoord(pp2.x, pp2.y)} R${parc.r.toFixed(3)}\n`;
+            } else {
+              out += `G01 ${fmtCoord(pp2.x, pp2.y)}\n`;
+            }
+          }
+        }
+        break;
+      }
     }
     out += "\n";
   });

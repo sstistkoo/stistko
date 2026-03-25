@@ -3,7 +3,7 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 import { state } from './state.js';
-import { distPointToSegment, isAngleBetween } from './utils.js';
+import { distPointToSegment, isAngleBetween, bulgeToArc } from './utils.js';
 import { renderAll } from './render.js';
 import { updateIntersectionList, updateProperties, updateObjectList } from './ui.js';
 
@@ -54,8 +54,51 @@ export function distToObject(obj, wx, wy) {
       const d4 = distPointToSegment(wx, wy, obj.x1, obj.y2, obj.x1, obj.y1);
       return Math.min(d1, d2, d3, d4);
     }
+    case "polyline": {
+      let minD = Infinity;
+      const n = obj.vertices.length;
+      const segCount = obj.closed ? n : n - 1;
+      for (let i = 0; i < segCount; i++) {
+        const p1 = obj.vertices[i];
+        const p2 = obj.vertices[(i + 1) % n];
+        const b = obj.bulges[i] || 0;
+        let d;
+        if (b === 0) {
+          d = distPointToSegment(wx, wy, p1.x, p1.y, p2.x, p2.y);
+        } else {
+          const arc = bulgeToArc(p1, p2, b);
+          if (arc) {
+            const distToCircle = Math.abs(Math.hypot(wx - arc.cx, wy - arc.cy) - arc.r);
+            const angle = Math.atan2(wy - arc.cy, wx - arc.cx);
+            if (isAngleBetweenArc(angle, arc.startAngle, arc.endAngle, arc.ccw)) {
+              d = distToCircle;
+            } else {
+              d = Math.min(Math.hypot(wx - p1.x, wy - p1.y), Math.hypot(wx - p2.x, wy - p2.y));
+            }
+          } else {
+            d = distPointToSegment(wx, wy, p1.x, p1.y, p2.x, p2.y);
+          }
+        }
+        if (d < minD) minD = d;
+      }
+      return minD;
+    }
     default:
       return Infinity;
+  }
+}
+
+// ── Test úhlu v rozsahu oblouku (s podporou CW/CCW) ──
+function isAngleBetweenArc(angle, start, end, ccw) {
+  const norm = (a) => ((a % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+  if (ccw) {
+    const a = norm(angle - start);
+    const e = norm(end - start);
+    return a <= e + 1e-9;
+  } else {
+    const a = norm(start - angle);
+    const e = norm(start - end);
+    return a <= e + 1e-9;
   }
 }
 
@@ -81,6 +124,19 @@ export function getLines(obj) {
       { x1: obj.x2, y1: obj.y2, x2: obj.x1, y2: obj.y2 },
       { x1: obj.x1, y1: obj.y2, x2: obj.x1, y2: obj.y1 },
     ];
+  if (obj.type === "polyline") {
+    const lines = [];
+    const n = obj.vertices.length;
+    const segCount = obj.closed ? n : n - 1;
+    for (let i = 0; i < segCount; i++) {
+      if ((obj.bulges[i] || 0) === 0) {
+        const p1 = obj.vertices[i];
+        const p2 = obj.vertices[(i + 1) % n];
+        lines.push({ x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y });
+      }
+    }
+    return lines;
+  }
   return [];
 }
 
@@ -97,6 +153,29 @@ export function getCircles(obj) {
         endAngle: obj.endAngle,
       },
     ];
+  if (obj.type === "polyline") {
+    const arcs = [];
+    const n = obj.vertices.length;
+    const segCount = obj.closed ? n : n - 1;
+    for (let i = 0; i < segCount; i++) {
+      const b = obj.bulges[i] || 0;
+      if (b !== 0) {
+        const p1 = obj.vertices[i];
+        const p2 = obj.vertices[(i + 1) % n];
+        const arc = bulgeToArc(p1, p2, b);
+        if (arc) {
+          arcs.push({
+            cx: arc.cx,
+            cy: arc.cy,
+            r: arc.r,
+            startAngle: arc.startAngle,
+            endAngle: arc.endAngle,
+          });
+        }
+      }
+    }
+    return arcs;
+  }
   return [];
 }
 
