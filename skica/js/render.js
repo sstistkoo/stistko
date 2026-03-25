@@ -14,6 +14,7 @@ export function renderAll() {
     _renderRAF = null;
     renderObjects();
     renderAxes();
+    renderAngleSnapGuide();
     // Aktualizovat mobilní Cancel tlačítko
     if (bridge.updateMobileCancelBtn) bridge.updateMobileCancelBtn();
   });
@@ -283,6 +284,17 @@ function renderObjects() {
         (sly + smy) / 2 - 8,
       );
     }
+    if (state.tool === "tangent" && tp.length === 1) {
+      // Preview: bod tečny – zobrazit bod
+      const [sx1, sy1] = worldToScreen(tp[0].x, tp[0].y);
+      ctx.fillStyle = "#fab387";
+      ctx.beginPath();
+      ctx.arc(sx1, sy1, 5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.setLineDash([]);
+      ctx.font = `${labelSize}px Consolas`;
+      ctx.fillText("Bod tečny", sx1 + 8, sy1 - 8);
+    }
     ctx.setLineDash([]);
   }
 
@@ -294,6 +306,7 @@ function renderObjects() {
 function drawSnapIndicator() {
   if (!state.mouse.snapped) return;
   const [sx, sy] = worldToScreen(state.mouse.x, state.mouse.y);
+  const snapLabelSize = Math.round(Math.min(22, Math.max(14, 10 + state.zoom * 6)));
 
   if (state.mouse.snapType === 'point') {
     // Snap k bodu – žlutý čtvereček
@@ -302,11 +315,19 @@ function drawSnapIndicator() {
     ctx.beginPath();
     ctx.rect(sx - 6, sy - 6, 12, 12);
     ctx.stroke();
-    // Malý popisek
-    const snapLabelSize = Math.round(Math.min(22, Math.max(14, 10 + state.zoom * 6)));
     ctx.font = `${Math.max(9, snapLabelSize - 4)}px Consolas`;
     ctx.fillStyle = "#f9e2af";
     ctx.fillText("SNAP", sx + 9, sy - 3);
+  } else if (state.mouse.snapType === 'grid') {
+    // Snap na mřížku – menší indikátor, jiná barva
+    ctx.strokeStyle = "#a6adc8";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.rect(sx - 4, sy - 4, 8, 8);
+    ctx.stroke();
+    ctx.font = `${Math.max(9, snapLabelSize - 4)}px Consolas`;
+    ctx.fillStyle = "#a6adc8";
+    ctx.fillText("GRID", sx + 7, sy - 3);
   }
 
   // Vodící čára od raw pozice k snap pozici
@@ -513,4 +534,48 @@ export function drawPolyline(obj) {
     ctx.arc(sx, sy, 2.5, 0, Math.PI * 2);
     ctx.fill();
   }
+}
+
+// ── Vodící čára pro angle snap ──
+function renderAngleSnapGuide() {
+  if (!state.angleSnap || !state.drawing || state.tempPoints.length === 0) return;
+  const tools = ['line', 'constr', 'polyline', 'measure'];
+  if (!tools.includes(state.tool)) return;
+
+  const ref = state.tempPoints[state.tempPoints.length - 1];
+  const mx = state.mouse.x, my = state.mouse.y;
+  const dx = mx - ref.x, dy = my - ref.y;
+  const dist = Math.hypot(dx, dy);
+  if (dist < 1e-9) return;
+
+  const angle = Math.atan2(dy, dx);
+  const stepRad = (state.angleSnapStep * Math.PI) / 180;
+  const snappedAngle = Math.round(angle / stepRad) * stepRad;
+
+  // Vodící čára – tečkovaná zelená
+  const guideLen = Math.max(dist * 1.5, 200 / state.zoom);
+  const gx = ref.x + guideLen * Math.cos(snappedAngle);
+  const gy = ref.y + guideLen * Math.sin(snappedAngle);
+  const [sx1, sy1] = worldToScreen(ref.x, ref.y);
+  const [sx2, sy2] = worldToScreen(gx, gy);
+
+  ctx.save();
+  ctx.strokeStyle = "#a6e3a1";
+  ctx.lineWidth = 1;
+  ctx.setLineDash([6, 4]);
+  ctx.beginPath();
+  ctx.moveTo(sx1, sy1);
+  ctx.lineTo(sx2, sy2);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Label s úhlem
+  const angleDeg = ((snappedAngle * 180) / Math.PI);
+  const labelSize = Math.round(Math.min(22, Math.max(14, 10 + state.zoom * 6)));
+  ctx.font = `${Math.max(10, labelSize - 2)}px Consolas`;
+  ctx.fillStyle = "#a6e3a1";
+  const labelX = (sx1 + sx2) / 2 + 8;
+  const labelY = (sy1 + sy2) / 2 - 8;
+  ctx.fillText(`${angleDeg.toFixed(1)}°`, labelX, labelY);
+  ctx.restore();
 }

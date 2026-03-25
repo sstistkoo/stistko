@@ -294,5 +294,286 @@ export function calculateAllIntersections() {
   renderAll();
 }
 
+// ── Tečny z bodu ke kružnici ──
+export function tangentsFromPointToCircle(px, py, cx, cy, r) {
+  const dx = px - cx, dy = py - cy;
+  const d = Math.hypot(dx, dy);
+  if (d < r - 1e-9) return []; // bod uvnitř
+  if (d < r + 1e-9) {
+    // bod na kružnici – jedna tečna (kolmice)
+    const nx = -dy / d, ny = dx / d;
+    return [{ x1: px, y1: py, x2: px + nx * r, y2: py + ny * r }];
+  }
+  const L = Math.sqrt(d * d - r * r);
+  const baseAngle = Math.atan2(dy, dx);
+  const halfAngle = Math.acos(r / d);
+  const results = [];
+  for (const sign of [-1, 1]) {
+    const a = baseAngle + Math.PI + sign * halfAngle;
+    const tx = cx + r * Math.cos(a);
+    const ty = cy + r * Math.sin(a);
+    results.push({ x1: px, y1: py, x2: tx, y2: ty });
+  }
+  return results;
+}
+
+// ── Tečny dvou kružnic (vnější + vnitřní) ──
+export function tangentsTwoCircles(cx1, cy1, r1, cx2, cy2, r2) {
+  const results = [];
+  const d = Math.hypot(cx2 - cx1, cy2 - cy1);
+  if (d < 1e-9) return [];
+  const angle = Math.atan2(cy2 - cy1, cx2 - cx1);
+
+  // Vnější tečny
+  if (d >= Math.abs(r1 - r2) - 1e-9) {
+    const ratio = (r1 - r2) / d;
+    const clampedRatio = Math.max(-1, Math.min(1, ratio));
+    const alpha = Math.asin(clampedRatio);
+    for (const sign of [-1, 1]) {
+      const beta = angle + sign * (Math.PI / 2 - alpha);
+      const tx1 = cx1 + r1 * Math.cos(beta);
+      const ty1 = cy1 + r1 * Math.sin(beta);
+      const tx2 = cx2 + r2 * Math.cos(beta);
+      const ty2 = cy2 + r2 * Math.sin(beta);
+      results.push({ x1: tx1, y1: ty1, x2: tx2, y2: ty2 });
+    }
+  }
+
+  // Vnitřní tečny
+  if (d >= r1 + r2 - 1e-9) {
+    const ratio = (r1 + r2) / d;
+    const clampedRatio = Math.max(-1, Math.min(1, ratio));
+    const alpha = Math.asin(clampedRatio);
+    for (const sign of [-1, 1]) {
+      const beta = angle + sign * (Math.PI / 2 - alpha);
+      const tx1 = cx1 + r1 * Math.cos(beta);
+      const ty1 = cy1 + r1 * Math.sin(beta);
+      const tx2 = cx2 - r2 * Math.cos(beta);
+      const ty2 = cy2 - r2 * Math.sin(beta);
+      results.push({ x1: tx1, y1: ty1, x2: tx2, y2: ty2 });
+    }
+  }
+
+  return results;
+}
+
+// ── Offset objektu ──
+export function offsetObject(obj, dist, side) {
+  // side: 1 = vně/vpravo, -1 = uvnitř/vlevo
+  const d = dist * side;
+  switch (obj.type) {
+    case 'line':
+    case 'constr': {
+      const dx = obj.x2 - obj.x1, dy = obj.y2 - obj.y1;
+      const len = Math.hypot(dx, dy);
+      if (len < 1e-10) return null;
+      const nx = -dy / len * d, ny = dx / len * d;
+      return {
+        type: obj.type,
+        x1: obj.x1 + nx, y1: obj.y1 + ny,
+        x2: obj.x2 + nx, y2: obj.y2 + ny,
+        name: `${obj.name || obj.type} (offset)`,
+        dashed: obj.dashed,
+        color: obj.color,
+      };
+    }
+    case 'circle': {
+      const newR = obj.r + d;
+      if (newR < 1e-10) return null;
+      return {
+        type: 'circle',
+        cx: obj.cx, cy: obj.cy, r: newR,
+        name: `${obj.name || 'Kružnice'} (offset)`,
+        color: obj.color,
+      };
+    }
+    case 'arc': {
+      const newR = obj.r + d;
+      if (newR < 1e-10) return null;
+      return {
+        type: 'arc',
+        cx: obj.cx, cy: obj.cy, r: newR,
+        startAngle: obj.startAngle, endAngle: obj.endAngle,
+        name: `${obj.name || 'Oblouk'} (offset)`,
+        color: obj.color,
+      };
+    }
+    case 'rect': {
+      const x1 = Math.min(obj.x1, obj.x2), y1 = Math.min(obj.y1, obj.y2);
+      const x2 = Math.max(obj.x1, obj.x2), y2 = Math.max(obj.y1, obj.y2);
+      const nx1 = x1 - d, ny1 = y1 - d;
+      const nx2 = x2 + d, ny2 = y2 + d;
+      if (nx2 <= nx1 || ny2 <= ny1) return null;
+      return {
+        type: 'rect',
+        x1: nx1, y1: ny1, x2: nx2, y2: ny2,
+        name: `${obj.name || 'Obdélník'} (offset)`,
+        color: obj.color,
+      };
+    }
+    case 'polyline': {
+      const verts = obj.vertices;
+      const n = verts.length;
+      const segCount = obj.closed ? n : n - 1;
+      // Offset each segment and compute new vertices
+      const offsetLines = [];
+      for (let i = 0; i < segCount; i++) {
+        const p1 = verts[i];
+        const p2 = verts[(i + 1) % n];
+        const sdx = p2.x - p1.x, sdy = p2.y - p1.y;
+        const slen = Math.hypot(sdx, sdy);
+        if (slen < 1e-10) { offsetLines.push(null); continue; }
+        const nx = -sdy / slen * d, ny = sdx / slen * d;
+        offsetLines.push({
+          x1: p1.x + nx, y1: p1.y + ny,
+          x2: p2.x + nx, y2: p2.y + ny,
+        });
+      }
+      // Trim/extend at corners
+      const newVerts = [];
+      for (let i = 0; i < segCount; i++) {
+        const curr = offsetLines[i];
+        const prev = offsetLines[(i - 1 + segCount) % segCount];
+        if (!curr) continue;
+        if (obj.closed || i > 0) {
+          if (prev) {
+            const inter = lineLineIntersect(prev, curr);
+            if (inter) { newVerts.push({ x: inter.x, y: inter.y }); continue; }
+          }
+        }
+        newVerts.push({ x: curr.x1, y: curr.y1 });
+      }
+      // Přidat koncový bod
+      if (!obj.closed && offsetLines.length > 0) {
+        const last = offsetLines[offsetLines.length - 1];
+        if (last) newVerts.push({ x: last.x2, y: last.y2 });
+      }
+      if (newVerts.length < 2) return null;
+      return {
+        type: 'polyline',
+        vertices: newVerts,
+        bulges: new Array(obj.closed ? newVerts.length : newVerts.length - 1).fill(0),
+        closed: obj.closed,
+        name: `${obj.name || 'Kontura'} (offset)`,
+        color: obj.color,
+      };
+    }
+    default:
+      return null;
+  }
+}
+
+function lineLineIntersect(l1, l2) {
+  const dx1 = l1.x2 - l1.x1, dy1 = l1.y2 - l1.y1;
+  const dx2 = l2.x2 - l2.x1, dy2 = l2.y2 - l2.y1;
+  const denom = dx1 * dy2 - dy1 * dx2;
+  if (Math.abs(denom) < 1e-10) return null;
+  const t = ((l2.x1 - l1.x1) * dy2 - (l2.y1 - l1.y1) * dx2) / denom;
+  return { x: l1.x1 + t * dx1, y: l1.y1 + t * dy1 };
+}
+
+// ── Zrcadlení objektu ──
+export function mirrorObject(obj, axis, p1, p2) {
+  // axis: 'x' (horizontální), 'z' (vertikální), 'custom' (2 body p1,p2)
+  const copy = JSON.parse(JSON.stringify(obj));
+  delete copy.id;
+
+  function mirrorPoint(px, py) {
+    if (axis === 'x') return { x: px, y: -py };
+    if (axis === 'z') return { x: -px, y: py };
+    // Vlastní osa: reflexe přes přímku p1-p2
+    const dx = p2.x - p1.x, dy = p2.y - p1.y;
+    const lenSq = dx * dx + dy * dy;
+    if (lenSq < 1e-10) return { x: px, y: py };
+    const t = ((px - p1.x) * dx + (py - p1.y) * dy) / lenSq;
+    const projX = p1.x + t * dx, projY = p1.y + t * dy;
+    return { x: 2 * projX - px, y: 2 * projY - py };
+  }
+
+  switch (copy.type) {
+    case 'point': {
+      const m = mirrorPoint(copy.x, copy.y);
+      copy.x = m.x; copy.y = m.y;
+      break;
+    }
+    case 'line':
+    case 'constr': {
+      const m1 = mirrorPoint(copy.x1, copy.y1);
+      const m2 = mirrorPoint(copy.x2, copy.y2);
+      copy.x1 = m1.x; copy.y1 = m1.y;
+      copy.x2 = m2.x; copy.y2 = m2.y;
+      break;
+    }
+    case 'circle': {
+      const m = mirrorPoint(copy.cx, copy.cy);
+      copy.cx = m.x; copy.cy = m.y;
+      break;
+    }
+    case 'arc': {
+      const m = mirrorPoint(copy.cx, copy.cy);
+      copy.cx = m.x; copy.cy = m.y;
+      // Zrcadlení flipne direction – prohodíme start/end a obrátíme
+      const sP = mirrorPoint(
+        obj.cx + obj.r * Math.cos(obj.startAngle),
+        obj.cy + obj.r * Math.sin(obj.startAngle)
+      );
+      const eP = mirrorPoint(
+        obj.cx + obj.r * Math.cos(obj.endAngle),
+        obj.cy + obj.r * Math.sin(obj.endAngle)
+      );
+      copy.startAngle = Math.atan2(eP.y - m.y, eP.x - m.x);
+      copy.endAngle = Math.atan2(sP.y - m.y, sP.x - m.x);
+      break;
+    }
+    case 'rect': {
+      const m1 = mirrorPoint(copy.x1, copy.y1);
+      const m2 = mirrorPoint(copy.x2, copy.y2);
+      copy.x1 = m1.x; copy.y1 = m1.y;
+      copy.x2 = m2.x; copy.y2 = m2.y;
+      break;
+    }
+    case 'polyline': {
+      copy.vertices = copy.vertices.map(v => {
+        const m = mirrorPoint(v.x, v.y);
+        return { x: m.x, y: m.y };
+      });
+      // Zrcadlení obrací bulge znaménka
+      copy.bulges = copy.bulges.map(b => -b);
+      break;
+    }
+  }
+  copy.name = `${obj.name || obj.type} (zrcadlo)`;
+  return copy;
+}
+
+// ── Lineární pole ──
+export function linearArray(obj, dx, dy, count) {
+  const copies = [];
+  for (let i = 1; i <= count; i++) {
+    const copy = JSON.parse(JSON.stringify(obj));
+    delete copy.id;
+    switch (copy.type) {
+      case 'point':
+        copy.x += dx * i; copy.y += dy * i; break;
+      case 'line': case 'constr':
+        copy.x1 += dx * i; copy.y1 += dy * i;
+        copy.x2 += dx * i; copy.y2 += dy * i; break;
+      case 'circle':
+        copy.cx += dx * i; copy.cy += dy * i; break;
+      case 'arc':
+        copy.cx += dx * i; copy.cy += dy * i; break;
+      case 'rect':
+        copy.x1 += dx * i; copy.y1 += dy * i;
+        copy.x2 += dx * i; copy.y2 += dy * i; break;
+      case 'polyline':
+        copy.vertices = copy.vertices.map(v => ({ x: v.x + dx * i, y: v.y + dy * i }));
+        break;
+    }
+    copy.name = `${obj.name || obj.type} (pole ${i + 1})`;
+    copies.push(copy);
+  }
+  return copies;
+}
+
 // ── Bridge registrace ──
 bridge.calculateAllIntersections = () => calculateAllIntersections();

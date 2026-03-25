@@ -65,7 +65,7 @@ export function snapPt(wx, wy) {
     }
   }
 
-  // Body/průsečíky – snap k bodům objektů
+  // Body/průsečíky – snap k bodům objektů (nejvyšší priorita)
   if (objX !== null) {
     // Vibrace při snapnutí k bodu (jen pokud se snapType změnil)
     if (state.mouse.snapType !== 'point' && navigator.vibrate) {
@@ -76,9 +76,35 @@ export function snapPt(wx, wy) {
     return [objX, objY];
   }
 
+  // Grid snap (nižší priorita než object snap)
+  if (state.snapToGrid) {
+    const g = state.gridSize;
+    const gx = Math.round(wx / g) * g;
+    const gy = Math.round(wy / g) * g;
+    state.mouse.snapped = true;
+    state.mouse.snapType = 'grid';
+    return [gx, gy];
+  }
+
   state.mouse.snapped = false;
   state.mouse.snapType = '';
   return [wx, wy];
+}
+
+// ── Angle snap – zaokrouhlení úhlu na násobek angleSnapStep ──
+export function applyAngleSnap(wx, wy, refPoint) {
+  if (!state.angleSnap || !refPoint) return [wx, wy];
+  const dx = wx - refPoint.x;
+  const dy = wy - refPoint.y;
+  const dist = Math.hypot(dx, dy);
+  if (dist < 1e-9) return [wx, wy];
+  const angle = Math.atan2(dy, dx);
+  const stepRad = (state.angleSnapStep * Math.PI) / 180;
+  const snappedAngle = Math.round(angle / stepRad) * stepRad;
+  return [
+    refPoint.x + dist * Math.cos(snappedAngle),
+    refPoint.y + dist * Math.sin(snappedAngle),
+  ];
 }
 
 // ── Auto-center: vycentrovat pohled na všechny objekty ──

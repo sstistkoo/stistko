@@ -2,13 +2,13 @@
 // ║  SKICA – Myš, klávesnice, kolečko                          ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-import { drawCanvas, screenToWorld, snapPt } from './canvas.js';
+import { drawCanvas, screenToWorld, snapPt, applyAngleSnap } from './canvas.js';
 import { state, pushUndo, undo, redo, showToast, toDisplayCoords } from './state.js';
 import { renderAll } from './render.js';
 import { moveObject, addObject } from './objects.js';
-import { setTool, resetHint, setHint, updateProperties, updateObjectList, updateSnapPtsBtn, updateDimsBtn, toggleCoordMode, updateCoordModeBtn } from './ui.js';
-import { findObjectAt, selectObjectAt, calculateAllIntersections } from './geometry.js';
-import { showNumericalInputDialog, showPolarDrawingDialog, showMeasureResult, showCircleRadiusDialog, showIntersectionInfo, showMeasureObjectInfo, showBulgeDialog } from './dialogs.js';
+import { setTool, resetHint, setHint, updateProperties, updateObjectList, updateSnapPtsBtn, updateDimsBtn, toggleCoordMode, updateCoordModeBtn, updateSnapGridBtn, updateAngleSnapBtn, showGridSizeDialog, showAngleSnapDialog } from './ui.js';
+import { findObjectAt, selectObjectAt, calculateAllIntersections, tangentsFromPointToCircle, tangentsTwoCircles, offsetObject, mirrorObject, linearArray } from './geometry.js';
+import { showNumericalInputDialog, showPolarDrawingDialog, showMeasureResult, showCircleRadiusDialog, showIntersectionInfo, showMeasureObjectInfo, showBulgeDialog, showTangentChoiceDialog, showOffsetDialog, showMirrorDialog, showLinearArrayDialog } from './dialogs.js';
 import { saveProject } from './storage.js';
 import { bridge } from './bridge.js';
 
@@ -25,6 +25,16 @@ drawCanvas.addEventListener("mousemove", (e) => {
   state.mouse.rawY = rawWy;
   let [wx, wy] = [rawWx, rawWy];
   if (state.snapToPoints) [wx, wy] = snapPt(rawWx, rawWy);
+
+  // Angle snap – jen při kreslení, a jen pokud object snap nezachytil bod
+  if (state.angleSnap && state.drawing && state.tempPoints.length > 0
+      && ['line', 'constr', 'polyline', 'measure'].includes(state.tool)) {
+    if (state.mouse.snapType !== 'point') {
+      const ref = state.tempPoints[state.tempPoints.length - 1];
+      [wx, wy] = applyAngleSnap(wx, wy, ref);
+    }
+  }
+
   state.mouse.x = wx;
   state.mouse.y = wy;
 
@@ -185,8 +195,11 @@ document.addEventListener("keydown", (e) => {
     r: "rect",
     q: "polyline",
     m: "measure",
+    t: "tangent",
+    o: "offset",
   };
-  if (shortcuts[e.key.toLowerCase()])
+  // Shift+M = mirror, Shift+N = polar, Shift+G = angle snap – skip tool shortcuts
+  if (!(e.shiftKey && ['m','n','g'].includes(e.key.toLowerCase())) && shortcuts[e.key.toLowerCase()])
     setTool(shortcuts[e.key.toLowerCase()]);
 
   if (e.key.toLowerCase() === "s") {
@@ -212,6 +225,19 @@ document.addEventListener("keydown", (e) => {
       showNumericalInputDialog();
     }
   }
+  if (e.key.toLowerCase() === "g") {
+    if (e.shiftKey) {
+      state.angleSnap = !state.angleSnap;
+      updateAngleSnapBtn();
+      renderAll();
+      showToast(state.angleSnap ? `Úhlový snap: ON (${state.angleSnapStep}°)` : "Úhlový snap: OFF");
+    } else {
+      state.snapToGrid = !state.snapToGrid;
+      updateSnapGridBtn();
+      renderAll();
+      showToast(state.snapToGrid ? `Snap na mřížku: ON (${state.gridSize})` : "Snap na mřížku: OFF");
+    }
+  }
   if (e.key === "Delete" && state.selected !== null) {
     pushUndo();
     state.objects.splice(state.selected, 1);
@@ -219,6 +245,12 @@ document.addEventListener("keydown", (e) => {
     updateObjectList();
     updateProperties();
     calculateAllIntersections();
+  }
+
+  // Shift+M: Zrcadlení vybraného objektu
+  if (e.key === "M" && e.shiftKey && state.selected !== null) {
+    e.preventDefault();
+    startMirrorAction();
   }
   if (e.key === "Enter" && state.drawing && state.tool === "circle") {
     e.preventDefault();
@@ -290,28 +322,50 @@ drawCanvas.addEventListener("contextmenu", (e) => {
   const existing = document.querySelector('.skica-context-menu');
   if (existing) existing.remove();
 
+  // Detekce objektu pod kurzorem pro kontextové akce
+  const ctxIdx = findObjectAt(wx, wy);
+
   const menu = document.createElement('div');
   menu.className = 'skica-context-menu';
   menu.style.cssText = `position:fixed;left:${e.clientX}px;top:${e.clientY}px;background:#313244;border:1px solid #585b70;border-radius:6px;padding:4px 0;z-index:9999;font-size:13px;font-family:Consolas,monospace;box-shadow:0 4px 12px rgba(0,0,0,.5);`;
-  menu.innerHTML = `<div class="ctx-item" style="padding:6px 16px;cursor:pointer;color:#cdd6f4;white-space:nowrap;">📍 Nastavit jako referenci (INC)</div>`;
+
+  const itemStyle = 'padding:6px 16px;cursor:pointer;color:#cdd6f4;white-space:nowrap;';
+  let menuItems = `<div class="ctx-item" data-action="ref" style="${itemStyle}">📍 Nastavit jako referenci (INC)</div>`;
+  if (ctxIdx !== null) {
+    state.selected = ctxIdx;
+    updateObjectList();
+    updateProperties();
+    renderAll();
+    menuItems += `<div style="border-top:1px solid #45475a;margin:2px 0"></div>`;
+    menuItems += `<div class="ctx-item" data-action="mirror" style="${itemStyle}">🪞 Zrcadlit (Shift+M)</div>`;
+    menuItems += `<div class="ctx-item" data-action="array" style="${itemStyle}">📏 Lineární pole</div>`;
+    menuItems += `<div class="ctx-item" data-action="offset" style="${itemStyle}">⇔ Offset</div>`;
+  }
+  menu.innerHTML = menuItems;
   document.body.appendChild(menu);
 
-  menu.querySelector('.ctx-item').addEventListener('click', () => {
-    state.incReference = { x: wx, y: wy };
-    if (state.coordMode !== 'inc') {
-      state.coordMode = 'inc';
-    }
-    updateCoordModeBtn();
-    renderAll();
-    showToast(`Reference: X=${wx.toFixed(3)} Z=${wy.toFixed(3)}`);
-    menu.remove();
-  });
-
-  menu.querySelector('.ctx-item').addEventListener('mouseenter', function() {
-    this.style.background = '#45475a';
-  });
-  menu.querySelector('.ctx-item').addEventListener('mouseleave', function() {
-    this.style.background = '';
+  menu.querySelectorAll('.ctx-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const action = item.dataset.action;
+      menu.remove();
+      if (action === 'ref') {
+        state.incReference = { x: wx, y: wy };
+        if (state.coordMode !== 'inc') state.coordMode = 'inc';
+        updateCoordModeBtn();
+        renderAll();
+        showToast(`Reference: X=${wx.toFixed(3)} Z=${wy.toFixed(3)}`);
+      } else if (action === 'mirror') {
+        startMirrorAction();
+      } else if (action === 'array') {
+        startLinearArrayAction();
+      } else if (action === 'offset') {
+        if (ctxIdx !== null && state.objects[ctxIdx]) {
+          handleOffsetClick(wx, wy);
+        }
+      }
+    });
+    item.addEventListener('mouseenter', function() { this.style.background = '#45475a'; });
+    item.addEventListener('mouseleave', function() { this.style.background = ''; });
   });
 
   const closeMenu = (ev) => {
@@ -495,8 +549,241 @@ export function handleCanvasClick(wx, wy) {
         setHint(`Bod ${state.tempPoints.length} přidán (Enter = dokončit, Shift+Enter = uzavřít, B = oblouk)`);
       }
       break;
+
+    case "tangent":
+      handleTangentClick(wx, wy);
+      break;
+
+    case "offset":
+      handleOffsetClick(wx, wy);
+      break;
   }
 }
+
+// ── Tečna – click logika ──
+function handleTangentClick(wx, wy) {
+  if (!state.drawing) {
+    // První klik: bod nebo kružnice?
+    const idx = findObjectAt(wx, wy);
+    if (idx !== null) {
+      const obj = state.objects[idx];
+      if (obj.type === 'circle' || obj.type === 'arc') {
+        // Režim B: první kružnice
+        state.drawing = true;
+        state._tangentMode = 'circle-circle';
+        state._tangentFirstCircle = idx;
+        setHint("Klepněte na druhou kružnici/oblouk pro tečny");
+        return;
+      }
+    }
+    // Režim A: bod
+    state.drawing = true;
+    state._tangentMode = 'point-circle';
+    state.tempPoints = [{ x: wx, y: wy }];
+    setHint("Klepněte na kružnici/oblouk pro tečnu z bodu");
+  } else {
+    if (state._tangentMode === 'point-circle') {
+      // Druhý klik: musí být na kružnici/oblouk
+      const idx = findObjectAt(wx, wy);
+      if (idx === null) { showToast("Klepněte na kružnici nebo oblouk"); return; }
+      const obj = state.objects[idx];
+      if (obj.type !== 'circle' && obj.type !== 'arc') {
+        showToast("Vyberte kružnici nebo oblouk");
+        return;
+      }
+      const p = state.tempPoints[0];
+      const tangents = tangentsFromPointToCircle(p.x, p.y, obj.cx, obj.cy, obj.r);
+      if (tangents.length === 0) {
+        showToast("Tečna neexistuje (bod uvnitř kružnice)");
+      } else {
+        showTangentChoiceDialog(tangents, (indices) => {
+          for (const i of indices) {
+            const t = tangents[i];
+            addObject({
+              type: 'line',
+              x1: t.x1, y1: t.y1, x2: t.x2, y2: t.y2,
+              name: `Tečna ${state.nextId}`,
+            });
+          }
+          showToast(`Vytvořeno ${indices.length} tečn${indices.length === 1 ? 'a' : indices.length < 5 ? 'y' : ''}`);
+        });
+      }
+    } else if (state._tangentMode === 'circle-circle') {
+      // Druhý klik: druhá kružnice
+      const idx = findObjectAt(wx, wy);
+      if (idx === null) { showToast("Klepněte na kružnici nebo oblouk"); return; }
+      const obj = state.objects[idx];
+      if (obj.type !== 'circle' && obj.type !== 'arc') {
+        showToast("Vyberte kružnici nebo oblouk");
+        return;
+      }
+      if (idx === state._tangentFirstCircle) {
+        showToast("Vyberte jinou kružnici");
+        return;
+      }
+      const c1 = state.objects[state._tangentFirstCircle];
+      const tangents = tangentsTwoCircles(c1.cx, c1.cy, c1.r, obj.cx, obj.cy, obj.r);
+      if (tangents.length === 0) {
+        showToast("Tečny neexistují");
+      } else {
+        showTangentChoiceDialog(tangents, (indices) => {
+          for (const i of indices) {
+            const t = tangents[i];
+            addObject({
+              type: 'line',
+              x1: t.x1, y1: t.y1, x2: t.x2, y2: t.y2,
+              name: `Tečna ${state.nextId}`,
+            });
+          }
+          showToast(`Vytvořeno ${indices.length} tečen`);
+        });
+      }
+    }
+    state.drawing = false;
+    state.tempPoints = [];
+    state._tangentMode = null;
+    state._tangentFirstCircle = null;
+    resetHint();
+  }
+}
+
+// ── Offset – click logika ──
+function handleOffsetClick(wx, wy) {
+  const idx = findObjectAt(wx, wy);
+  if (idx === null) { showToast("Klepněte na objekt pro offset"); return; }
+  const obj = state.objects[idx];
+  if (obj.type === 'point') { showToast("Offset nelze použít na bod"); return; }
+
+  showOffsetDialog(obj, (dist) => {
+    // Pro circle/arc: klikni na stranu (vně/uvnitř)
+    showToast("Klepněte na stranu pro směr offsetu");
+    setHint("Klepněte na stranu objektu pro směr offsetu");
+
+    function cleanupSideListeners() {
+      drawCanvas.removeEventListener("click", onSideClick);
+      drawCanvas.removeEventListener("touchend", onSideTouch);
+    }
+
+    function onSideClick(e) {
+      const rect = drawCanvas.getBoundingClientRect();
+      const sx = (e.clientX || e.changedTouches?.[0]?.clientX) - rect.left;
+      const sy = (e.clientY || e.changedTouches?.[0]?.clientY) - rect.top;
+      const [cwx, cwy] = screenToWorld(sx, sy);
+      cleanupSideListeners();
+
+      // Determine side
+      let side = 1;
+      if (obj.type === 'circle' || obj.type === 'arc') {
+        const dToCenter = Math.hypot(cwx - obj.cx, cwy - obj.cy);
+        side = dToCenter > obj.r ? 1 : -1;
+      } else if (obj.type === 'line' || obj.type === 'constr') {
+        const dx = obj.x2 - obj.x1, dy = obj.y2 - obj.y1;
+        const cross = dx * (cwy - obj.y1) - dy * (cwx - obj.x1);
+        side = cross > 0 ? 1 : -1;
+      } else if (obj.type === 'rect') {
+        const cx = (obj.x1 + obj.x2) / 2, cy = (obj.y1 + obj.y2) / 2;
+        const dToCenter = Math.max(Math.abs(cwx - cx), Math.abs(cwy - cy));
+        const halfW = Math.abs(obj.x2 - obj.x1) / 2, halfH = Math.abs(obj.y2 - obj.y1) / 2;
+        side = dToCenter > Math.max(halfW, halfH) ? 1 : -1;
+      } else if (obj.type === 'polyline' && obj.vertices.length >= 2) {
+        const p1 = obj.vertices[0], p2 = obj.vertices[1];
+        const dx = p2.x - p1.x, dy = p2.y - p1.y;
+        const cross = dx * (cwy - p1.y) - dy * (cwx - p1.x);
+        side = cross > 0 ? 1 : -1;
+      }
+
+      const result = offsetObject(obj, dist, side);
+      if (result) {
+        addObject(result);
+        showToast(`Offset ${dist}mm vytvořen`);
+      } else {
+        showToast("Offset nelze vytvořit (příliš malý poloměr?)");
+      }
+      resetHint();
+    }
+
+    function onSideTouch(e) {
+      if (e.changedTouches.length === 1) {
+        e.preventDefault();
+        cleanupSideListeners();
+        onSideClick(e);
+      }
+    }
+
+    drawCanvas.addEventListener("click", onSideClick);
+    drawCanvas.addEventListener("touchend", onSideTouch);
+  });
+}
+
+// ── Zrcadlení akce ──
+function startMirrorAction() {
+  if (state.selected === null) { showToast("Nejdříve vyberte objekt"); return; }
+  const obj = state.objects[state.selected];
+
+  showMirrorDialog(obj, (axis) => {
+    if (axis === 'custom') {
+      showToast("Klepněte na první bod osy zrcadlení");
+      setHint("Klepněte na první bod osy zrcadlení");
+      state._mirrorObj = obj;
+      state._mirrorStep = 'p1';
+      state._mirrorAxisPoints = [];
+
+      function handleMirrorClick(e) {
+        const rect = drawCanvas.getBoundingClientRect();
+        const sx = (e.clientX || e.changedTouches?.[0]?.clientX) - rect.left;
+        const sy = (e.clientY || e.changedTouches?.[0]?.clientY) - rect.top;
+        let [mwx, mwy] = screenToWorld(sx, sy);
+        if (state.snapToPoints) [mwx, mwy] = snapPt(mwx, mwy);
+
+        if (state._mirrorStep === 'p1') {
+          state._mirrorAxisPoints.push({ x: mwx, y: mwy });
+          state._mirrorStep = 'p2';
+          setHint("Klepněte na druhý bod osy zrcadlení");
+        } else {
+          drawCanvas.removeEventListener("click", handleMirrorClick);
+          drawCanvas.removeEventListener("touchend", handleMirrorTouch);
+          const p1 = state._mirrorAxisPoints[0];
+          const p2 = { x: mwx, y: mwy };
+          const copy = mirrorObject(state._mirrorObj, 'custom', p1, p2);
+          addObject(copy);
+          showToast("Objekt zrcadlen ✓");
+          resetHint();
+          state._mirrorObj = null;
+          state._mirrorStep = null;
+          state._mirrorAxisPoints = null;
+        }
+      }
+
+      function handleMirrorTouch(e) {
+        if (e.changedTouches.length === 1) { e.preventDefault(); handleMirrorClick(e); }
+      }
+
+      drawCanvas.addEventListener("click", handleMirrorClick);
+      drawCanvas.addEventListener("touchend", handleMirrorTouch);
+    } else {
+      const copy = mirrorObject(obj, axis, null, null);
+      addObject(copy);
+      showToast(`Objekt zrcadlen podle osy ${axis === 'x' ? 'X' : 'Z'} ✓`);
+    }
+  });
+}
+
+// ── Lineární pole akce ──
+function startLinearArrayAction() {
+  if (state.selected === null) { showToast("Nejdříve vyberte objekt"); return; }
+  const obj = state.objects[state.selected];
+
+  showLinearArrayDialog(obj, (dx, dz, count) => {
+    const copies = linearArray(obj, dx, dz, count);
+    for (const copy of copies) {
+      addObject(copy);
+    }
+    showToast(`Vytvořeno ${copies.length} kopií`);
+  });
+}
+
+// Export pro ui.js context menu
+export { startMirrorAction, startLinearArrayAction };
 
 // ── Double-click: dokončit konturu ──
 drawCanvas.addEventListener("dblclick", (e) => {

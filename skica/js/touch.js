@@ -2,7 +2,7 @@
 // ║  SKICA – Dotyková podpora + mobilní ovládání               ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-import { drawCanvas, screenToWorld, snapPt, autoCenterView } from './canvas.js';
+import { drawCanvas, screenToWorld, snapPt, autoCenterView, applyAngleSnap } from './canvas.js';
 import { state, undo, showToast, toDisplayCoords } from './state.js';
 import { renderAll } from './render.js';
 import { moveObject } from './objects.js';
@@ -229,6 +229,11 @@ function showPrecisionCrosshair(touch) {
 
   let [wx, wy] = screenToWorld(chSx, chSy);
   if (state.snapToPoints) [wx, wy] = snapPt(wx, wy);
+  if (state.angleSnap && state.drawing && state.tempPoints.length > 0
+      && ['line', 'constr', 'polyline', 'measure'].includes(state.tool)
+      && state.mouse.snapType !== 'point') {
+    [wx, wy] = applyAngleSnap(wx, wy, state.tempPoints[state.tempPoints.length - 1]);
+  }
   state.mouse.x = wx;
   state.mouse.y = wy;
   state.mouse.sx = chSx;
@@ -251,6 +256,11 @@ function updatePrecisionCrosshair(touch) {
 
   let [wx, wy] = screenToWorld(chSx, chSy);
   if (state.snapToPoints) [wx, wy] = snapPt(wx, wy);
+  if (state.angleSnap && state.drawing && state.tempPoints.length > 0
+      && ['line', 'constr', 'polyline', 'measure'].includes(state.tool)
+      && state.mouse.snapType !== 'point') {
+    [wx, wy] = applyAngleSnap(wx, wy, state.tempPoints[state.tempPoints.length - 1]);
+  }
   state.mouse.x = wx;
   state.mouse.y = wy;
   state.mouse.sx = chSx;
