@@ -649,6 +649,33 @@ body {
   color: #1e1e2e;
 }
 
+#mobileCoordMode {
+  display: none;
+  position: fixed;
+  top: 28px;
+  left: 102px;
+  z-index: 60;
+  background: #585b70;
+  color: #cdd6f4;
+  border: none;
+  border-radius: 16px;
+  width: auto;
+  padding: 0 10px;
+  height: 40px;
+  font-size: 13px;
+  font-family: "Consolas", monospace;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  line-height: 40px;
+  text-align: center;
+}
+
+#mobileCoordMode:active {
+  background: #89b4fa;
+  color: #1e1e2e;
+}
+
 
 
 #mobileSidebarToggle {
@@ -867,6 +894,12 @@ body {
   }
 
   #mobileUndo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #mobileCoordMode {
     display: flex;
     align-items: center;
     justify-content: center;

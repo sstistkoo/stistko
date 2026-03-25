@@ -3,11 +3,11 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 import { drawCanvas, screenToWorld, snapPt, autoCenterView } from './canvas.js';
-import { state, undo, showToast } from './state.js';
+import { state, undo, showToast, toDisplayCoords } from './state.js';
 import { renderAll } from './render.js';
 import { moveObject } from './objects.js';
 import { handleCanvasClick } from './events.js';
-import { setTool, resetHint } from './ui.js';
+import { setTool, resetHint, toggleCoordMode } from './ui.js';
 import { toolLabel } from './utils.js';
 import { showNumericalInputDialog, showMobileEditDialog } from './dialogs.js';
 import { bridge } from './bridge.js';
@@ -77,7 +77,9 @@ mobileCoordBar.addEventListener("click", (e) => {
 
 export function updateMobileCoords(wx, wy, extra) {
   extra = extra || "";
-  const coords = `X: ${wx.toFixed(3)}   Z: ${wy.toFixed(3)}${extra}`;
+  const d = toDisplayCoords(wx, wy);
+  const prefix = state.coordMode === 'inc' ? 'Δ' : '';
+  const coords = `${prefix}X: ${d.x.toFixed(3)}   ${prefix}Z: ${d.y.toFixed(3)}${extra}`;
   // Desktop coord display – jen souřadnice
   document.getElementById("coordDisplay").textContent = coords;
   // Mobile coord bar – nástroj + souřadnice + zoom
@@ -165,6 +167,15 @@ document.getElementById("mobileUndo").addEventListener("click", (e) => {
   undo();
 });
 
+// ── Mobile: Coord Mode tlačítko ──
+const mobileCoordModeBtn = document.getElementById("mobileCoordMode");
+if (mobileCoordModeBtn) {
+  mobileCoordModeBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleCoordMode();
+  });
+}
+
 // ── Touch state ──
 const PRECISION_OFFSET_Y = -80; // crosshair 80px above finger
 
@@ -225,7 +236,9 @@ function showPrecisionCrosshair(touch) {
 
   precisionEl.style.left = touch.clientX + "px";
   precisionEl.style.top = touch.clientY + PRECISION_OFFSET_Y + "px";
-  precisionLabel.textContent = `X${wx.toFixed(3)} Z${wy.toFixed(3)}`;
+  const dp = toDisplayCoords(wx, wy);
+  const pf = state.coordMode === 'inc' ? 'Δ' : '';
+  precisionLabel.textContent = `${pf}X${dp.x.toFixed(3)} ${pf}Z${dp.y.toFixed(3)}`;
   precisionEl.style.display = "block";
   updateMobileCoords(wx, wy);
   renderAll();
@@ -245,7 +258,9 @@ function updatePrecisionCrosshair(touch) {
 
   precisionEl.style.left = touch.clientX + "px";
   precisionEl.style.top = touch.clientY + PRECISION_OFFSET_Y + "px";
-  precisionLabel.textContent = `X${wx.toFixed(3)} Z${wy.toFixed(3)}`;
+  const dp2 = toDisplayCoords(wx, wy);
+  const pf2 = state.coordMode === 'inc' ? 'Δ' : '';
+  precisionLabel.textContent = `${pf2}X${dp2.x.toFixed(3)} ${pf2}Z${dp2.y.toFixed(3)}`;
 
   let extra = "";
   if (state.drawing && state.tempPoints.length > 0) {

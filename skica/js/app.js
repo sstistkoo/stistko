@@ -5,7 +5,7 @@
 import { state } from './state.js';
 import { resizeCanvases } from './canvas.js';
 import { calculateAllIntersections } from './geometry.js';
-import { updateObjectList, updateProperties, resetHint, updateDimsBtn, updateSnapPtsBtn, togglePanel } from './ui.js';
+import { updateObjectList, updateProperties, resetHint, updateDimsBtn, updateSnapPtsBtn, updateCoordModeBtn, togglePanel } from './ui.js';
 import { initAutoSave } from './storage.js';
 
 // Side-effect imports — tyto moduly registrují event listenery při načtení
@@ -29,6 +29,8 @@ function tryAutoLoad() {
         state.nextId = data.nextId || 1;
         if (data.gridSize && data.gridSize > 0)
           state.gridSize = data.gridSize;
+        if (data.coordMode) state.coordMode = data.coordMode;
+        if (data.incReference) state.incReference = data.incReference;
         updateObjectList();
         updateProperties();
       }
@@ -45,6 +47,8 @@ setInterval(() => {
       intersections: state.intersections,
       nextId: state.nextId,
       gridSize: state.gridSize,
+      coordMode: state.coordMode,
+      incReference: state.incReference,
     };
     localStorage.setItem("skica_project", JSON.stringify(data));
   }
@@ -57,6 +61,7 @@ if (state.objects.length > 0) calculateAllIntersections();
 resetHint();
 updateDimsBtn();
 updateSnapPtsBtn();
+updateCoordModeBtn();
 initAutoSave();
 
 // ── PWA Service Worker ──
@@ -72,5 +77,5 @@ console.log(
   "background:#89b4fa;color:#1e1e2e;font-size:18px;font-weight:bold;padding:4px 12px;border-radius:4px;",
 );
 console.log(
-  "Klávesové zkratky: V=Výběr, W=Přesun, P=Bod, L=Úsečka, K=Konstr., C=Kružnice, A=Oblouk, R=Obdélník, M=Měření, S=Snap, D=Kóty, N=Čísla, Shift+N=Polární, Ctrl+Z=Zpět, Ctrl+Y=Vpřed, Ctrl+S=Uložit, Del=Smazat",
+  "Klávesové zkratky: V=Výběr, W=Přesun, P=Bod, L=Úsečka, K=Konstr., C=Kružnice, A=Oblouk, R=Obdélník, M=Měření, S=Snap, D=Kóty, N=Čísla, Shift+N=Polární, I=ABS/INC, Ctrl+Z=Zpět, Ctrl+Y=Vpřed, Ctrl+S=Uložit, Del=Smazat",
 );

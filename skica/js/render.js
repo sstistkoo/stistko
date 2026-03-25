@@ -3,7 +3,7 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 import { drawCanvas, ctx, worldToScreen, screenToWorld } from './canvas.js';
-import { state } from './state.js';
+import { state, toDisplayCoords } from './state.js';
 import { bridge } from './bridge.js';
 
 let _renderRAF = null;
@@ -137,8 +137,10 @@ function renderObjects() {
     ctx.arc(sx, sy, 2, 0, Math.PI * 2);
     ctx.fill();
     ctx.font = `${labelSize}px Consolas`;
+    const dp = toDisplayCoords(pt.x, pt.y);
+    const pf = state.coordMode === 'inc' ? 'Δ' : '';
     ctx.fillText(
-      `X${pt.x.toFixed(2)} Z${pt.y.toFixed(2)}`,
+      `${pf}X${dp.x.toFixed(2)} ${pf}Z${dp.y.toFixed(2)}`,
       sx + 8,
       sy - 8,
     );

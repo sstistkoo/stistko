@@ -3,10 +3,10 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 import { drawCanvas, screenToWorld, snapPt } from './canvas.js';
-import { state, pushUndo, undo, redo, showToast } from './state.js';
+import { state, pushUndo, undo, redo, showToast, toDisplayCoords } from './state.js';
 import { renderAll } from './render.js';
 import { moveObject, addObject } from './objects.js';
-import { setTool, resetHint, setHint, updateProperties, updateObjectList, updateSnapPtsBtn, updateDimsBtn } from './ui.js';
+import { setTool, resetHint, setHint, updateProperties, updateObjectList, updateSnapPtsBtn, updateDimsBtn, toggleCoordMode, updateCoordModeBtn } from './ui.js';
 import { findObjectAt, selectObjectAt, calculateAllIntersections } from './geometry.js';
 import { showNumericalInputDialog, showPolarDrawingDialog, showMeasureResult, showCircleRadiusDialog, showIntersectionInfo, showMeasureObjectInfo } from './dialogs.js';
 import { saveProject } from './storage.js';
@@ -42,8 +42,10 @@ drawCanvas.addEventListener("mousemove", (e) => {
   if (bridge.updateMobileCoords) {
     bridge.updateMobileCoords(wx, wy, extra);
   } else {
+    const d = toDisplayCoords(wx, wy);
+    const prefix = state.coordMode === 'inc' ? 'Δ' : '';
     document.getElementById("coordDisplay").textContent =
-      `X: ${wx.toFixed(3)}   Z: ${wy.toFixed(3)}${extra}`;
+      `${prefix}X: ${d.x.toFixed(3)}   ${prefix}Z: ${d.y.toFixed(3)}${extra}`;
   }
 
   if (isPanning) {
@@ -197,6 +199,10 @@ document.addEventListener("keydown", (e) => {
     renderAll();
   }
 
+  if (e.key.toLowerCase() === "i") {
+    toggleCoordMode();
+  }
+
   if (e.key.toLowerCase() === "n") {
     if (e.shiftKey) {
       showPolarDrawingDialog();
@@ -218,7 +224,47 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-drawCanvas.addEventListener("contextmenu", (e) => e.preventDefault());
+drawCanvas.addEventListener("contextmenu", (e) => {
+  e.preventDefault();
+  const rect = drawCanvas.getBoundingClientRect();
+  const sx = e.clientX - rect.left;
+  const sy = e.clientY - rect.top;
+  let [wx, wy] = screenToWorld(sx, sy);
+  if (state.snapToPoints) [wx, wy] = snapPt(wx, wy);
+
+  // Zobrazit kontextové menu pro nastavení reference
+  const existing = document.querySelector('.skica-context-menu');
+  if (existing) existing.remove();
+
+  const menu = document.createElement('div');
+  menu.className = 'skica-context-menu';
+  menu.style.cssText = `position:fixed;left:${e.clientX}px;top:${e.clientY}px;background:#313244;border:1px solid #585b70;border-radius:6px;padding:4px 0;z-index:9999;font-size:13px;font-family:Consolas,monospace;box-shadow:0 4px 12px rgba(0,0,0,.5);`;
+  menu.innerHTML = `<div class="ctx-item" style="padding:6px 16px;cursor:pointer;color:#cdd6f4;white-space:nowrap;">📍 Nastavit jako referenci (INC)</div>`;
+  document.body.appendChild(menu);
+
+  menu.querySelector('.ctx-item').addEventListener('click', () => {
+    state.incReference = { x: wx, y: wy };
+    if (state.coordMode !== 'inc') {
+      state.coordMode = 'inc';
+    }
+    updateCoordModeBtn();
+    renderAll();
+    showToast(`Reference: X=${wx.toFixed(3)} Z=${wy.toFixed(3)}`);
+    menu.remove();
+  });
+
+  menu.querySelector('.ctx-item').addEventListener('mouseenter', function() {
+    this.style.background = '#45475a';
+  });
+  menu.querySelector('.ctx-item').addEventListener('mouseleave', function() {
+    this.style.background = '';
+  });
+
+  const closeMenu = (ev) => {
+    if (!menu.contains(ev.target)) { menu.remove(); document.removeEventListener('click', closeMenu); }
+  };
+  setTimeout(() => document.addEventListener('click', closeMenu), 0);
+});
 
 // ── Klik logika sdílená s touch ──
 export function handleCanvasClick(wx, wy) {
