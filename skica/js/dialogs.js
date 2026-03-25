@@ -8,7 +8,7 @@ import { screenToWorld, snapPt, drawCanvas } from './canvas.js';
 import { renderAll } from './render.js';
 import { typeLabel, getObjectSnapPoints, bulgeToArc, radiusToBulge } from './utils.js';
 import { updateObjectList, updateProperties, resetHint } from './ui.js';
-import { calculateAllIntersections } from './geometry.js';
+import { calculateAllIntersections, offsetObject, mirrorObject, linearArray } from './geometry.js';
 
 // ── Helper: nastaví inputmode="decimal" na všechna numerická pole v elementu ──
 export function applyMobileInputMode(container) {
@@ -1562,4 +1562,158 @@ function showEditObjectDialog(idx) {
     }
     if (e.key === "Escape") overlay.remove();
   });
+}
+
+// ── Dialog pro offset ──
+export function showOffsetDialog(obj, onSideClick) {
+  const overlay = document.createElement("div");
+  overlay.className = "input-overlay";
+  overlay.innerHTML = `
+    <div class="input-dialog">
+      <h3>Offset – paralelní kopie</h3>
+      <label>Objekt: ${obj.name || typeLabel(obj.type)}</label>
+      <label>Vzdálenost offsetu (mm):</label>
+      <input type="number" id="dlgOffsetDist" step="0.1" min="0.001" value="5" inputmode="decimal" autofocus>
+      <div class="btn-row">
+        <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
+        <button class="btn-ok" id="dlgOffsetOk">OK – klikni na stranu</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  const inp = overlay.querySelector("#dlgOffsetDist");
+  inp.focus();
+  inp.select();
+
+  function accept() {
+    const dist = parseFloat(inp.value);
+    if (isNaN(dist) || dist <= 0) { showToast("Zadejte kladnou vzdálenost"); return; }
+    overlay.remove();
+    onSideClick(dist);
+  }
+  overlay.querySelector("#dlgOffsetOk").addEventListener("click", accept);
+  inp.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") accept();
+    if (e.key === "Escape") overlay.remove();
+    e.stopPropagation();
+  });
+}
+
+// ── Dialog pro zrcadlení ──
+export function showMirrorDialog(obj, callback) {
+  const overlay = document.createElement("div");
+  overlay.className = "input-overlay";
+  overlay.innerHTML = `
+    <div class="input-dialog">
+      <h3>🪞 Zrcadlit objekt</h3>
+      <label>Objekt: ${obj.name || typeLabel(obj.type)}</label>
+      <div style="margin:10px 0">
+        <label style="display:block;margin-bottom:6px;font-weight:bold;color:#a6adc8">Zrcadlit podle:</label>
+        <div class="btn-row" style="flex-direction:column;gap:6px">
+          <button class="btn-ok mirror-opt" data-axis="x" style="width:100%">↔ Osa X (horizontální)</button>
+          <button class="btn-ok mirror-opt" data-axis="z" style="width:100%">↕ Osa Z (vertikální)</button>
+          <button class="btn-ok mirror-opt" data-axis="custom" style="width:100%">📐 Vlastní osa (2 body)</button>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+
+  overlay.querySelectorAll(".mirror-opt").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const axis = btn.dataset.axis;
+      overlay.remove();
+      callback(axis);
+    });
+  });
+
+  overlay.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") overlay.remove();
+  });
+  overlay.setAttribute("tabindex", "-1");
+  overlay.focus();
+}
+
+// ── Dialog pro lineární pole ──
+export function showLinearArrayDialog(obj, callback) {
+  const overlay = document.createElement("div");
+  overlay.className = "input-overlay";
+  overlay.innerHTML = `
+    <div class="input-dialog">
+      <h3>📏 Lineární pole</h3>
+      <label>Objekt: ${obj.name || typeLabel(obj.type)}</label>
+      <label>Počet kopií:</label>
+      <input type="number" id="dlgArrayCount" step="1" min="1" value="5" inputmode="numeric">
+      <label>Posun ΔX (mm):</label>
+      <input type="number" id="dlgArrayDX" step="0.1" value="10" inputmode="decimal">
+      <label>Posun ΔZ (mm):</label>
+      <input type="number" id="dlgArrayDZ" step="0.1" value="0" inputmode="decimal">
+      <div class="btn-row">
+        <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
+        <button class="btn-ok" id="dlgArrayOk">Vytvořit</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  overlay.querySelector("#dlgArrayCount").focus();
+
+  function accept() {
+    const count = parseInt(overlay.querySelector("#dlgArrayCount").value);
+    const dx = parseFloat(overlay.querySelector("#dlgArrayDX").value);
+    const dz = parseFloat(overlay.querySelector("#dlgArrayDZ").value);
+    if (isNaN(count) || count < 1) { showToast("Zadejte kladný počet"); return; }
+    if (isNaN(dx) && isNaN(dz)) { showToast("Zadejte posun"); return; }
+    overlay.remove();
+    callback(dx || 0, dz || 0, count);
+  }
+  overlay.querySelector("#dlgArrayOk").addEventListener("click", accept);
+  overlay.querySelectorAll("input").forEach(inp => {
+    inp.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") accept();
+      if (e.key === "Escape") overlay.remove();
+      e.stopPropagation();
+    });
+  });
+}
+
+// ── Dialog pro výběr tečny ──
+export function showTangentChoiceDialog(tangentLines, callback) {
+  if (tangentLines.length === 0) { showToast("Tečna neexistuje"); return; }
+  if (tangentLines.length === 1) { callback([0]); return; }
+
+  const overlay = document.createElement("div");
+  overlay.className = "input-overlay";
+  const btns = tangentLines.map((_, i) =>
+    `<button class="btn-ok tangent-choice" data-idx="${i}" style="width:100%">Tečna ${i + 1}</button>`
+  ).join("");
+  overlay.innerHTML = `
+    <div class="input-dialog">
+      <h3>Tečny – výběr</h3>
+      <label>Nalezeno ${tangentLines.length} tečen. Vyberte:</label>
+      <div class="btn-row" style="flex-direction:column;gap:6px">
+        ${btns}
+        <button class="btn-ok tangent-all" style="width:100%;background:#a6e3a1;color:#1e1e2e">✓ Vytvořit všechny</button>
+      </div>
+      <div class="btn-row">
+        <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+
+  overlay.querySelectorAll(".tangent-choice").forEach(btn => {
+    btn.addEventListener("click", () => {
+      overlay.remove();
+      callback([parseInt(btn.dataset.idx)]);
+    });
+  });
+  overlay.querySelector(".tangent-all").addEventListener("click", () => {
+    overlay.remove();
+    callback(tangentLines.map((_, i) => i));
+  });
+
+  overlay.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") overlay.remove();
+  });
+  overlay.setAttribute("tabindex", "-1");
+  overlay.focus();
 }

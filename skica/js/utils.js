@@ -136,6 +136,8 @@ export function toolLabel(t) {
       rect: "Obdélník",
       polyline: "Kontura",
       measure: "Měření",
+      tangent: "Tečna",
+      offset: "Offset",
     }[t] || t
   );
 }

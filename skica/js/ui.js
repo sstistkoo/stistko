@@ -339,6 +339,8 @@ export function resetHint() {
     circle: "Klikněte na střed kružnice",
     arc: "Klikněte na střed oblouku",
     rect: "Klikněte na první roh obdélníku",    polyline: "Klepněte na první bod kontury",    measure: "Klepněte na objekt pro info, nebo na prázdné místo pro měření",
+    tangent: "Klepněte na bod nebo na první kružnici",
+    offset: "Klepněte na objekt pro offset",
   };
   setHint(hints[state.tool] || "");
 }
@@ -356,6 +358,40 @@ document.getElementById("btnSnapPts").addEventListener("click", () => {
   updateSnapPtsBtn();
   renderAll();
   showToast(state.snapToPoints ? "Snap k bodům: ON" : "Snap k bodům: OFF");
+});
+
+// ── Grid Snap tlačítko ──
+export function updateSnapGridBtn() {
+  document.getElementById("btnSnapGrid").classList.toggle("active", state.snapToGrid);
+}
+
+document.getElementById("btnSnapGrid").addEventListener("click", () => {
+  state.snapToGrid = !state.snapToGrid;
+  updateSnapGridBtn();
+  renderAll();
+  showToast(state.snapToGrid ? `Snap na mřížku: ON (${state.gridSize})` : "Snap na mřížku: OFF");
+});
+
+document.getElementById("btnSnapGrid").addEventListener("contextmenu", (e) => {
+  e.preventDefault();
+  showGridSizeDialog();
+});
+
+// ── Angle Snap tlačítko ──
+export function updateAngleSnapBtn() {
+  document.getElementById("btnAngleSnap").classList.toggle("active", state.angleSnap);
+}
+
+document.getElementById("btnAngleSnap").addEventListener("click", () => {
+  state.angleSnap = !state.angleSnap;
+  updateAngleSnapBtn();
+  renderAll();
+  showToast(state.angleSnap ? `Úhlový snap: ON (${state.angleSnapStep}°)` : "Úhlový snap: OFF");
+});
+
+document.getElementById("btnAngleSnap").addEventListener("contextmenu", (e) => {
+  e.preventDefault();
+  showAngleSnapDialog();
 });
 
 // ── Kóty tlačítko ──
@@ -786,5 +822,91 @@ function openTrigCalc() {
 
 document.getElementById("btnOpenCalc").addEventListener("click", openCalculator);
 document.getElementById("btnOpenTrig").addEventListener("click", openTrigCalc);
+
+// ── Dialog: Grid Size ──
+export function showGridSizeDialog() {
+  const overlay = document.createElement("div");
+  overlay.className = "input-overlay";
+  overlay.innerHTML = `
+    <div class="input-dialog">
+      <h3># Velikost mřížky</h3>
+      <label>Velikost kroku (mm):</label>
+      <input type="number" id="dlgGridSize" step="0.1" min="0.1" value="${state.gridSize}" inputmode="decimal" autofocus>
+      <div class="btn-row">
+        <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
+        <button class="btn-ok" id="dlgGridOk">OK</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  const inp = overlay.querySelector("#dlgGridSize");
+  inp.focus();
+  inp.select();
+  function confirm() {
+    const v = parseFloat(inp.value);
+    if (!isNaN(v) && v > 0) {
+      state.gridSize = v;
+      showToast(`Mřížka: ${v} mm`);
+    }
+    overlay.remove();
+  }
+  overlay.querySelector("#dlgGridOk").addEventListener("click", confirm);
+  inp.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") confirm();
+    if (e.key === "Escape") overlay.remove();
+    e.stopPropagation();
+  });
+  overlay.addEventListener("click", (e) => { if (e.target === overlay) overlay.remove(); });
+}
+
+// ── Dialog: Angle Snap Step ──
+export function showAngleSnapDialog() {
+  const overlay = document.createElement("div");
+  overlay.className = "input-overlay";
+  overlay.innerHTML = `
+    <div class="input-dialog">
+      <h3>∠ Krok úhlového snapu</h3>
+      <div class="btn-row" style="flex-wrap:wrap;gap:6px;margin-bottom:12px;">
+        <button class="btn-cancel angle-preset" data-deg="15">15°</button>
+        <button class="btn-cancel angle-preset" data-deg="30">30°</button>
+        <button class="btn-cancel angle-preset" data-deg="45">45°</button>
+        <button class="btn-cancel angle-preset" data-deg="90">90°</button>
+      </div>
+      <label>Vlastní krok (°):</label>
+      <input type="number" id="dlgAngleStep" step="1" min="1" max="180" value="${state.angleSnapStep}" inputmode="decimal" autofocus>
+      <div class="btn-row">
+        <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
+        <button class="btn-ok" id="dlgAngleOk">OK</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  const inp = overlay.querySelector("#dlgAngleStep");
+  inp.focus();
+  inp.select();
+
+  overlay.querySelectorAll(".angle-preset").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const deg = parseInt(btn.dataset.deg);
+      state.angleSnapStep = deg;
+      showToast(`Úhlový snap: ${deg}°`);
+      overlay.remove();
+    });
+  });
+
+  function confirm() {
+    const v = parseFloat(inp.value);
+    if (!isNaN(v) && v > 0 && v <= 180) {
+      state.angleSnapStep = v;
+      showToast(`Úhlový snap: ${v}°`);
+    }
+    overlay.remove();
+  }
+  overlay.querySelector("#dlgAngleOk").addEventListener("click", confirm);
+  inp.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") confirm();
+    if (e.key === "Escape") overlay.remove();
+    e.stopPropagation();
+  });
+  overlay.addEventListener("click", (e) => { if (e.target === overlay) overlay.remove(); });
+}
 
 

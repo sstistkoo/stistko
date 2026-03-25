@@ -156,6 +156,62 @@
         </svg>
         Kontura
       </button>
+      <button class="tool-btn" data-tool="tangent" title="Tečna (T)">
+        <svg viewBox="0 0 24 24">
+          <circle
+            cx="16"
+            cy="12"
+            r="6"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <line
+            x1="2"
+            y1="20"
+            x2="12.5"
+            y2="7.5"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <circle cx="2" cy="20" r="2" fill="currentColor" />
+        </svg>
+        Tečna
+      </button>
+      <button class="tool-btn" data-tool="offset" title="Offset (O)">
+        <svg viewBox="0 0 24 24">
+          <line
+            x1="4"
+            y1="6"
+            x2="4"
+            y2="18"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <line
+            x1="12"
+            y1="6"
+            x2="12"
+            y2="18"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-dasharray="3 2"
+          />
+          <path
+            d="M6 12h4"
+            stroke="currentColor"
+            stroke-width="1.5"
+            fill="none"
+          />
+          <path
+            d="M8 10l2 2-2 2"
+            stroke="currentColor"
+            stroke-width="1.5"
+            fill="none"
+          />
+        </svg>
+        Offset
+      </button>
       <div class="sep"></div>
       <button
         class="tool-btn mobile-hide"
@@ -175,6 +231,12 @@
       <div class="sep"></div>
       <button class="tool-btn" id="btnSnapPts" title="Přichytávání k bodům (S)">
         <span class="snap-ind snap-on"></span>Body
+      </button>
+      <button class="tool-btn" id="btnSnapGrid" title="Snap na mřížku (G)">
+        # Mřížka
+      </button>
+      <button class="tool-btn" id="btnAngleSnap" title="Úhlový snap (Shift+G)">
+        ∠ Úhel
       </button>
       <button class="tool-btn" id="btnDims" title="Zobrazit kóty (D)">
         📐 Kóty
