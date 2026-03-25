@@ -445,6 +445,8 @@ export function drawPoint(obj) {
 
 /** @param {import('./types.js').LineObject} obj */
 export function drawLine(obj) {
+  const [sx1, sy1] = worldToScreen(obj.x1, obj.y1);
+  const [sx2, sy2] = worldToScreen(obj.x2, obj.y2);
 
   if (obj.type === "constr") {
     const dx = sx2 - sx1,
