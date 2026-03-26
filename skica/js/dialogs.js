@@ -1760,3 +1760,77 @@ export function showTangentChoiceDialog(tangentLines, callback) {
   overlay.setAttribute("tabindex", "-1");
   overlay.focus();
 }
+
+// ── Dialog pro rotaci ──
+/**
+ * @param {import('./types.js').DrawObject} obj
+ * @param {function(number): void} callback  volané s úhlem ve stupních
+ */
+export function showRotateDialog(obj, callback) {
+  const overlay = document.createElement("div");
+  overlay.className = "input-overlay";
+  overlay.innerHTML = `
+    <div class="input-dialog">
+      <h3>Otočit objekt</h3>
+      <label>Objekt: ${obj.name || typeLabel(obj.type)}</label>
+      <label>Úhel otočení (°):</label>
+      <input type="number" id="dlgRotateAngle" step="1" value="90" inputmode="decimal" autofocus>
+      <div class="btn-row">
+        <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
+        <button class="btn-ok" id="dlgRotateOk">Otočit</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  const inp = overlay.querySelector("#dlgRotateAngle");
+  inp.focus();
+  inp.select();
+
+  function accept() {
+    const deg = parseFloat(inp.value);
+    if (isNaN(deg)) { showToast("Zadejte platný úhel"); return; }
+    overlay.remove();
+    callback(deg);
+  }
+  overlay.querySelector("#dlgRotateOk").addEventListener("click", accept);
+  inp.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") accept();
+    if (e.key === "Escape") overlay.remove();
+    e.stopPropagation();
+  });
+}
+
+// ── Dialog pro zaoblení ──
+/**
+ * @param {function(number): void} callback  volané s poloměrem
+ */
+export function showFilletDialog(callback) {
+  const overlay = document.createElement("div");
+  overlay.className = "input-overlay";
+  overlay.innerHTML = `
+    <div class="input-dialog">
+      <h3>Zaoblení (Fillet)</h3>
+      <label>Poloměr zaoblení (mm):</label>
+      <input type="number" id="dlgFilletRadius" step="0.1" min="0.001" value="2" inputmode="decimal" autofocus>
+      <div class="btn-row">
+        <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
+        <button class="btn-ok" id="dlgFilletOk">OK – klikněte na 2. úsečku</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  const inp = overlay.querySelector("#dlgFilletRadius");
+  inp.focus();
+  inp.select();
+
+  function accept() {
+    const r = parseFloat(inp.value);
+    if (isNaN(r) || r <= 0) { showToast("Zadejte kladný poloměr"); return; }
+    overlay.remove();
+    callback(r);
+  }
+  overlay.querySelector("#dlgFilletOk").addEventListener("click", accept);
+  inp.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") accept();
+    if (e.key === "Escape") overlay.remove();
+    e.stopPropagation();
+  });
+}

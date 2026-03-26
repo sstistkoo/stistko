@@ -149,7 +149,7 @@
 // ── Stav aplikace ──
 
 /**
- * @typedef {'select'|'move'|'point'|'line'|'constr'|'circle'|'arc'|'rect'|'polyline'|'measure'|'tangent'|'offset'} ToolType
+ * @typedef {'select'|'move'|'point'|'line'|'constr'|'circle'|'arc'|'rect'|'polyline'|'measure'|'tangent'|'offset'|'trim'|'extend'|'fillet'} ToolType
  */
 
 /**

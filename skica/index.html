@@ -213,6 +213,94 @@
         </svg>
         Offset
       </button>
+      <button class="tool-btn" data-tool="trim" title="Oříznout úsečku (X)">
+        <svg viewBox="0 0 24 24">
+          <line
+            x1="4"
+            y1="20"
+            x2="20"
+            y2="4"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <line
+            x1="12"
+            y1="4"
+            x2="12"
+            y2="20"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-dasharray="3 2"
+          />
+          <line
+            x1="4"
+            y1="20"
+            x2="12"
+            y2="12"
+            stroke="#f38ba8"
+            stroke-width="2.5"
+          />
+        </svg>
+        Oříz
+      </button>
+      <button class="tool-btn" data-tool="extend" title="Prodloužit úsečku (E)">
+        <svg viewBox="0 0 24 24">
+          <line
+            x1="4"
+            y1="16"
+            x2="14"
+            y2="8"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <line
+            x1="14"
+            y1="8"
+            x2="20"
+            y2="4"
+            stroke="#a6e3a1"
+            stroke-width="2"
+            stroke-dasharray="3 2"
+          />
+          <line
+            x1="2"
+            y1="4"
+            x2="2"
+            y2="20"
+            stroke="currentColor"
+            stroke-width="1.5"
+          />
+        </svg>
+        Prodl.
+      </button>
+      <button class="tool-btn" data-tool="fillet" title="Zaoblení / Sražení (F)">
+        <svg viewBox="0 0 24 24">
+          <line x1="4" y1="20" x2="4" y2="10" stroke="currentColor" stroke-width="2" />
+          <path d="M4 10 Q4 4 10 4" fill="none" stroke="currentColor" stroke-width="2" />
+          <line x1="10" y1="4" x2="20" y2="4" stroke="currentColor" stroke-width="2" />
+        </svg>
+        Zaoblení
+      </button>
+      <div class="sep"></div>
+      <button class="tool-btn" id="btnDelete" title="Smazat vybraný objekt (Del)">
+        <svg viewBox="0 0 24 24">
+          <path d="M6 7h12l-1 13H7L6 7z" fill="none" stroke="currentColor" stroke-width="2" />
+          <line x1="4" y1="5" x2="20" y2="5" stroke="currentColor" stroke-width="2" />
+          <line x1="9" y1="3" x2="15" y2="3" stroke="currentColor" stroke-width="2" />
+          <line x1="10" y1="10" x2="10" y2="17" stroke="currentColor" stroke-width="1.5" />
+          <line x1="14" y1="10" x2="14" y2="17" stroke="currentColor" stroke-width="1.5" />
+        </svg>
+        Smazat
+      </button>
+      <button class="tool-btn" id="btnRotate" title="Otočit vybraný objekt">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 4a8 8 0 0 1 7.75 6" fill="none" stroke="currentColor" stroke-width="2" />
+          <path d="M19.75 10l1.25-4-4 1.25" fill="none" stroke="currentColor" stroke-width="2" />
+          <path d="M12 20a8 8 0 0 1-7.75-6" fill="none" stroke="currentColor" stroke-width="2" />
+          <path d="M4.25 14l-1.25 4 4-1.25" fill="none" stroke="currentColor" stroke-width="2" />
+        </svg>
+        Otočit
+      </button>
       <div class="sep"></div>
       <button
         class="tool-btn mobile-hide"
@@ -458,6 +546,18 @@
               <td>Offset</td>
             </tr>
             <tr>
+              <td>X</td>
+              <td>Oříznout úsečku</td>
+            </tr>
+            <tr>
+              <td>E</td>
+              <td>Prodloužit úsečku</td>
+            </tr>
+            <tr>
+              <td>F</td>
+              <td>Zaoblení / Sražení</td>
+            </tr>
+            <tr>
               <td>M</td>
               <td>Měření</td>
             </tr>
@@ -592,6 +692,26 @@
             <tr>
               <td>📏 Měření</td>
               <td>Změřit vzdálenost a úhel mezi dvěma body</td>
+            </tr>
+            <tr>
+              <td>✂ Ořez</td>
+              <td>Klikněte na úsečku – ořízne se k nejbližšímu průsečíku</td>
+            </tr>
+            <tr>
+              <td>↗ Prodl.</td>
+              <td>Klikněte na úsečku – prodlouží se k nejbližšímu objektu</td>
+            </tr>
+            <tr>
+              <td>⌒ Zaoblení</td>
+              <td>Klikněte na dvě úsečky – vytvoří zaoblení se zadaným poloměrem</td>
+            </tr>
+            <tr>
+              <td>🗑 Smazat</td>
+              <td>Smaže vybraný objekt (nebo klávesa Delete)</td>
+            </tr>
+            <tr>
+              <td>🔄 Otočit</td>
+              <td>Otočí vybraný objekt o zadaný úhel kolem jeho středu</td>
             </tr>
           </table>
 
