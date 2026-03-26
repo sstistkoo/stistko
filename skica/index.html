@@ -30,6 +30,7 @@
     <button id="mobileAutoCenter" aria-label="Vycentrovat">⊙</button>
     <button id="mobileCancel" aria-label="Zrušit">✕</button>
     <button id="mobileUndo" aria-label="Zpět">↩</button>
+    <button id="mobileSnap" aria-label="Přichycení">🧲</button>
     <button id="mobileCoordMode" aria-label="ABS/INC">ABS</button>
     <div id="mobileCoordBar">X: 0.000 &nbsp; Z: 0.000</div>
     <div id="sidebarOverlay"></div>
@@ -73,6 +74,39 @@
           />
         </svg>
         Přesun
+      </button>
+      <button class="tool-btn" data-tool="snapPoint" title="Přichytit bod (B)">
+        <svg viewBox="0 0 24 24">
+          <circle
+            cx="6"
+            cy="18"
+            r="3"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <circle
+            cx="18"
+            cy="6"
+            r="3"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <path
+            d="M8.5 15.5L15.5 8.5"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-dasharray="3 2"
+          />
+          <path
+            d="M13 11l3-3M16 8l-3 0M16 8l0 3"
+            stroke="currentColor"
+            stroke-width="1.5"
+            fill="none"
+          />
+        </svg>
+        Přichytit
       </button>
       <button class="tool-btn" data-tool="point" title="Bod (P)">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" /></svg> Bod
@@ -520,9 +554,6 @@
       >
         📐 Polární
       </button>
-      <button class="tool-btn" id="btnCalcInt" title="Vypočítat průsečíky">
-        ⊗ Průsečíky
-      </button>
       <div class="sep"></div>
       <button class="tool-btn" id="btnSave" title="Uložit projekt (Ctrl+S)">
         💾 Uložit
@@ -619,7 +650,7 @@
         </div>
         <div class="panel-body" id="intPanel">
           <ul id="intersectionList">
-            <li style="color: #6c7086">Klikněte ⊗ Průsečíky</li>
+            <li style="color: #6c7086">Rozbalte panel pro výpočet</li>
           </ul>
         </div>
         <div class="panel-header cnc-header" onclick="togglePanel('cncPanel')">
@@ -684,6 +715,10 @@
             <tr>
               <td>W</td>
               <td>Přesun objektu</td>
+            </tr>
+            <tr>
+              <td>B</td>
+              <td>Přichytit bod k bodu</td>
             </tr>
             <tr>
               <td>P</td>
@@ -840,6 +875,10 @@
             <tr>
               <td>✥ Přesun</td>
               <td>Klikněte na objekt a přetáhněte na nové místo</td>
+            </tr>
+            <tr>
+              <td>🧲 Přichytit</td>
+              <td>Přesune koncový bod objektu k jinému snap bodu</td>
             </tr>
             <tr>
               <td>· Bod</td>

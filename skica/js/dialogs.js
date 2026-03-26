@@ -1773,6 +1773,51 @@ export function showTangentChoiceDialog(tangentLines, callback) {
   overlay.focus();
 }
 
+// ── Dialog pro výběr tečné pozice kružnice ──
+export function showTangentPositionDialog(positions, circle, callback) {
+  if (positions.length === 0) { showToast("Žádná tečná pozice"); return; }
+  if (positions.length === 1) { callback(0); return; }
+
+  // Seřadit podle vzdálenosti od aktuální pozice kružnice
+  const sorted = positions.map((p, i) => ({
+    idx: i,
+    dist: Math.hypot(p.cx - circle.cx, p.cy - circle.cy)
+  })).sort((a, b) => a.dist - b.dist);
+
+  const overlay = document.createElement("div");
+  overlay.className = "input-overlay";
+  const btns = sorted.map((s, i) => {
+    const p = positions[s.idx];
+    const label = i === 0 ? "Nejbližší pozice" : `Pozice ${i + 1}`;
+    return `<button class="btn-ok tangent-pos" data-idx="${s.idx}" style="width:100%">${label} (${p.cx.toFixed(1)}, ${p.cy.toFixed(1)})</button>`;
+  }).join("");
+  overlay.innerHTML = `
+    <div class="input-dialog">
+      <h3>Tečné napojení – pozice</h3>
+      <label>Vyberte pozici kružnice:</label>
+      <div class="btn-row" style="flex-direction:column;gap:6px">
+        ${btns}
+      </div>
+      <div class="btn-row">
+        <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+
+  overlay.querySelectorAll(".tangent-pos").forEach(btn => {
+    btn.addEventListener("click", () => {
+      overlay.remove();
+      callback(parseInt(btn.dataset.idx));
+    });
+  });
+
+  overlay.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") overlay.remove();
+  });
+  overlay.setAttribute("tabindex", "-1");
+  overlay.focus();
+}
+
 // ── Dialog pro rotaci ──
 /**
  * @param {import('./types.js').DrawObject} obj

@@ -7,7 +7,7 @@ import { state, undo, showToast, toDisplayCoords } from './state.js';
 import { renderAll } from './render.js';
 import { moveObject } from './objects.js';
 import { handleCanvasClick } from './events.js';
-import { setTool, resetHint, toggleCoordMode } from './ui.js';
+import { setTool, resetHint, toggleCoordMode, updateSnapPtsBtn } from './ui.js';
 import { toolLabel } from './utils.js';
 import { showNumericalInputDialog, showMobileEditDialog } from './dialogs.js';
 import { bridge } from './bridge.js';
@@ -124,6 +124,21 @@ mobileMeasureBtn.addEventListener("click", (e) => {
   mobileMeasureBtn.classList.toggle("active", newTool === "measure");
 });
 
+// ── Mobile: Snap toggle tlačítko ──
+const mobileSnapBtn = document.getElementById("mobileSnap");
+function updateMobileSnapBtn() {
+  mobileSnapBtn.classList.toggle("snap-active", state.snapToPoints);
+}
+updateMobileSnapBtn();
+mobileSnapBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  state.snapToPoints = !state.snapToPoints;
+  updateMobileSnapBtn();
+  updateSnapPtsBtn();
+  renderAll();
+  showToast(state.snapToPoints ? "Přichycení: ON" : "Přichycení: OFF");
+});
+
 // ── Mobile: Auto-center tlačítko ──
 document.getElementById("mobileAutoCenter").addEventListener("click", (e) => {
   e.stopPropagation();
@@ -154,6 +169,9 @@ mobileCancelBtn.addEventListener("click", (e) => {
   }
   state.drawing = false;
   state.tempPoints = [];
+  state._tangentMode = null;
+  state._tangentFirstCircle = null;
+  state._tangentFirstLine = null;
   hidePrecisionCrosshair();
   updateMobileCancelBtn();
   renderAll();

@@ -323,6 +323,9 @@ export function togglePanel(id) {
   if (opening && id === 'cncPanel' && bridge.runCncExport) {
     bridge.runCncExport();
   }
+  if (opening && id === 'intPanel' && bridge.calculateAllIntersections) {
+    bridge.calculateAllIntersections();
+  }
 }
 
 // ── Vrstvy ──
@@ -469,6 +472,7 @@ export function setTool(tool) {
   state.tempPoints = [];
   state._perpRefIdx = null;
   state._parallelRefIdx = null;
+  state._snapPointState = null;
   if (state.dragging) {
     const obj = state.objects[state.dragObjIdx];
     if (obj && state.dragObjSnapshot) {
@@ -515,6 +519,7 @@ export function resetHint() {
     rect: "Klikněte na první roh obdélníku",    polyline: "Klepněte na první bod kontury",    measure: "Klepněte na objekt pro info, nebo na prázdné místo pro měření",
     tangent: "Klepněte na bod nebo na první kružnici",
     offset: "Klepněte na objekt pro offset",
+    snapPoint: "Klepněte na koncový bod objektu pro přichycení",
   };
   setHint(hints[state.tool] || "");
 }
@@ -526,6 +531,9 @@ export function updateSnapPtsBtn() {
   const ind = btn.querySelector(".snap-ind");
   ind.className =
     "snap-ind " + (state.snapToPoints ? "snap-on" : "snap-off");
+  // Sync mobile snap button
+  const mobileSnap = document.getElementById("mobileSnap");
+  if (mobileSnap) mobileSnap.classList.toggle("snap-active", state.snapToPoints);
 }
 
 document.getElementById("btnSnapPts").addEventListener("click", () => {
@@ -676,10 +684,9 @@ document.getElementById("btnSetRef").addEventListener("click", () => {
 document.getElementById("btnUndo").addEventListener("click", undo);
 document.getElementById("btnRedo").addEventListener("click", redo);
 
-// ── Průsečíky ──
-document
-  .getElementById("btnCalcInt")
-  .addEventListener("click", () => { if (bridge.calculateAllIntersections) bridge.calculateAllIntersections(); });
+// ── Průsečíky (automaticky při rozbalení panelu) ──
+const _btnCalcInt = document.getElementById("btnCalcInt");
+if (_btnCalcInt) _btnCalcInt.addEventListener("click", () => { if (bridge.calculateAllIntersections) bridge.calculateAllIntersections(); });
 
 // ── Smazat vše ──
 document.getElementById("btnClearAll").addEventListener("click", () => {

@@ -379,6 +379,31 @@ function renderObjects() {
     ctx.setLineDash([]);
   }
 
+  // Indikátor vybraného bodu (snapPoint nástroj)
+  if (state._snapPointState) {
+    const sp = state._snapPointState;
+    const [spx, spy] = worldToScreen(sp.x, sp.y);
+    ctx.strokeStyle = "#fab387";
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.arc(spx, spy, 8, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(spx, spy, 3, 0, Math.PI * 2);
+    ctx.fillStyle = "#fab387";
+    ctx.fill();
+    // Vodící čára ke kurzoru
+    const [mx, my] = worldToScreen(state.mouse.x, state.mouse.y);
+    ctx.strokeStyle = "rgba(250, 179, 135, 0.4)";
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 3]);
+    ctx.beginPath();
+    ctx.moveTo(spx, spy);
+    ctx.lineTo(mx, my);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
   // Snap indikátor
   drawSnapIndicator();
 }
@@ -409,6 +434,16 @@ function drawSnapIndicator() {
     ctx.font = `${Math.max(9, snapLabelSize - 4)}px Consolas`;
     ctx.fillStyle = "#a6adc8";
     ctx.fillText("GRID", sx + 7, sy - 3);
+  } else if (state.mouse.snapType === 'edge') {
+    // Snap k hraně objektu – kolečko + trojúhelník
+    ctx.strokeStyle = "#cba6f7";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(sx, sy, 5, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.font = `${Math.max(9, snapLabelSize - 4)}px Consolas`;
+    ctx.fillStyle = "#cba6f7";
+    ctx.fillText("EDGE", sx + 9, sy - 3);
   }
 
   // Vodící čára od raw pozice k snap pozici

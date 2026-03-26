@@ -7,8 +7,8 @@ import { state, pushUndo, undo, redo, showToast, toDisplayCoords } from './state
 import { renderAll } from './render.js';
 import { moveObject, addObject } from './objects.js';
 import { setTool, resetHint, setHint, updateProperties, updateObjectList, updateSnapPtsBtn, updateDimsBtn, toggleCoordMode, updateCoordModeBtn, updateSnapGridBtn, updateAngleSnapBtn, showGridSizeDialog, showAngleSnapDialog, toggleHelp } from './ui.js';
-import { findObjectAt, selectObjectAt, calculateAllIntersections, tangentsFromPointToCircle, tangentsTwoCircles, offsetObject, mirrorObject, linearArray, getLines, getCircles, intersectLineLine, intersectLineCircle, rotateObject, filletTwoLines, projectPointToLine } from './geometry.js';
-import { showNumericalInputDialog, showPolarDrawingDialog, showMeasureResult, showCircleRadiusDialog, showIntersectionInfo, showMeasureObjectInfo, showBulgeDialog, showTangentChoiceDialog, showOffsetDialog, showMirrorDialog, showLinearArrayDialog, showRotateDialog, showFilletDialog, addDimensionForObject } from './dialogs.js';
+import { findObjectAt, selectObjectAt, calculateAllIntersections, tangentsFromPointToCircle, tangentsTwoCircles, offsetObject, mirrorObject, linearArray, getLines, getCircles, intersectLineLine, intersectLineCircle, rotateObject, filletTwoLines, projectPointToLine, circlePositionsTangentToLine, circlePositionsTangentToTwoLines } from './geometry.js';
+import { showNumericalInputDialog, showPolarDrawingDialog, showMeasureResult, showCircleRadiusDialog, showIntersectionInfo, showMeasureObjectInfo, showBulgeDialog, showTangentChoiceDialog, showTangentPositionDialog, showOffsetDialog, showMirrorDialog, showLinearArrayDialog, showRotateDialog, showFilletDialog, addDimensionForObject } from './dialogs.js';
 import { saveProject, showExportImageDialog, showProjectsDialog, showSaveAsDialog } from './storage.js';
 import { bridge } from './bridge.js';
 
@@ -145,6 +145,10 @@ document.addEventListener("keydown", (e) => {
     state._polylineBulges = [];
     state._perpRefIdx = null;
     state._parallelRefIdx = null;
+    state._snapPointState = null;
+    state._tangentMode = null;
+    state._tangentFirstCircle = null;
+    state._tangentFirstLine = null;
     state.selected = null;
     updateProperties();
     renderAll();
@@ -232,9 +236,13 @@ document.addEventListener("keydown", (e) => {
     j: "perp",
     h: "parallel",
     u: "dimension",
+    b: "snapPoint",
   };
   // Shift+M = mirror, Shift+N = polar, Shift+G = angle snap – skip tool shortcuts
-  if (!(e.shiftKey && ['m','n','g'].includes(e.key.toLowerCase())) && shortcuts[e.key.toLowerCase()])
+  // B is only snapPoint when not drawing polyline
+  if (e.key.toLowerCase() === 'b' && state.drawing && state.tool === 'polyline') {
+    // handled separately below for bulge
+  } else if (!(e.shiftKey && ['m','n','g'].includes(e.key.toLowerCase())) && shortcuts[e.key.toLowerCase()])
     setTool(shortcuts[e.key.toLowerCase()]);
 
   if (e.key.toLowerCase() === "s") {
@@ -628,6 +636,10 @@ export function handleCanvasClick(wx, wy) {
     case "dimension":
       handleDimensionClick(wx, wy);
       break;
+
+    case "snapPoint":
+      handleSnapPointClick(wx, wy);
+      break;
   }
 }
 
@@ -641,9 +653,9 @@ function handleTangentClick(wx, wy) {
       if (obj.type === 'circle' || obj.type === 'arc') {
         // Režim B: první kružnice
         state.drawing = true;
-        state._tangentMode = 'circle-circle';
+        state._tangentMode = 'circle-first';
         state._tangentFirstCircle = idx;
-        setHint("Klepněte na druhou kružnici/oblouk pro tečny");
+        setHint("Klepněte na kružnici pro tečny, nebo úsečku pro tečné napojení");
         return;
       }
     }
@@ -679,41 +691,98 @@ function handleTangentClick(wx, wy) {
           showToast(`Vytvořeno ${indices.length} tečn${indices.length === 1 ? 'a' : indices.length < 5 ? 'y' : ''}`);
         });
       }
-    } else if (state._tangentMode === 'circle-circle') {
-      // Druhý klik: druhá kružnice
+    } else if (state._tangentMode === 'circle-first') {
       const idx = findObjectAt(wx, wy);
-      if (idx === null) { showToast("Klepněte na kružnici nebo oblouk"); return; }
+      if (idx === null) { showToast("Klepněte na kružnici, oblouk nebo úsečku"); return; }
       const obj = state.objects[idx];
-      if (obj.type !== 'circle' && obj.type !== 'arc') {
-        showToast("Vyberte kružnici nebo oblouk");
-        return;
-      }
-      if (idx === state._tangentFirstCircle) {
-        showToast("Vyberte jinou kružnici");
-        return;
-      }
-      const c1 = state.objects[state._tangentFirstCircle];
-      const tangents = tangentsTwoCircles(c1.cx, c1.cy, c1.r, obj.cx, obj.cy, obj.r);
-      if (tangents.length === 0) {
-        showToast("Tečny neexistují");
+
+      if (obj.type === 'circle' || obj.type === 'arc') {
+        // Režim B1: kružnice → kružnice (tečné úsečky)
+        if (idx === state._tangentFirstCircle) {
+          showToast("Vyberte jinou kružnici nebo úsečku");
+          return;
+        }
+        const c1 = state.objects[state._tangentFirstCircle];
+        const tangents = tangentsTwoCircles(c1.cx, c1.cy, c1.r, obj.cx, obj.cy, obj.r);
+        if (tangents.length === 0) {
+          showToast("Tečny neexistují");
+        } else {
+          showTangentChoiceDialog(tangents, (indices) => {
+            for (const i of indices) {
+              const t = tangents[i];
+              addObject({
+                type: 'line',
+                x1: t.x1, y1: t.y1, x2: t.x2, y2: t.y2,
+                name: `Tečna ${state.nextId}`,
+              });
+            }
+            showToast(`Vytvořeno ${indices.length} tečen`);
+          });
+        }
+      } else if (obj.type === 'line' || obj.type === 'constr') {
+        // Režim B2: kružnice → úsečka (přesun kružnice tečně k úsečce)
+        const circIdx = state._tangentFirstCircle;
+        const circ = state.objects[circIdx];
+        const lineIdx = idx;
+        const positions = circlePositionsTangentToLine(circ.cx, circ.cy, circ.r, obj.x1, obj.y1, obj.x2, obj.y2);
+        if (positions.length === 0) {
+          showToast("Tečnou pozici nelze vypočítat");
+        } else {
+          showTangentPositionDialog(positions, circ, (chosenIdx) => {
+            pushUndo();
+            circ.cx = positions[chosenIdx].cx;
+            circ.cy = positions[chosenIdx].cy;
+            calculateAllIntersections();
+            renderAll();
+            showToast("Kružnice přesunuta tečně k úsečce");
+            // Nabídnout druhou úsečku
+            state.drawing = true;
+            state._tangentMode = 'circle-line-2';
+            state._tangentFirstCircle = circIdx;
+            state._tangentFirstLine = lineIdx;
+            setHint("Klepněte na druhou úsečku pro tečnost s oběma, nebo Esc/zrušit");
+          });
+          return; // dialog řídí další stav
+        }
       } else {
-        showTangentChoiceDialog(tangents, (indices) => {
-          for (const i of indices) {
-            const t = tangents[i];
-            addObject({
-              type: 'line',
-              x1: t.x1, y1: t.y1, x2: t.x2, y2: t.y2,
-              name: `Tečna ${state.nextId}`,
-            });
-          }
-          showToast(`Vytvořeno ${indices.length} tečen`);
+        showToast("Vyberte kružnici, oblouk nebo úsečku");
+        return;
+      }
+    } else if (state._tangentMode === 'circle-line-2') {
+      // Třetí klik: druhá úsečka pro tečnost se dvěma úsečkami
+      const idx = findObjectAt(wx, wy);
+      if (idx === null) { showToast("Klepněte na úsečku"); return; }
+      const obj = state.objects[idx];
+      if (obj.type !== 'line' && obj.type !== 'constr') {
+        showToast("Vyberte úsečku");
+        return;
+      }
+      if (idx === state._tangentFirstLine) {
+        showToast("Vyberte jinou úsečku");
+        return;
+      }
+      const circ = state.objects[state._tangentFirstCircle];
+      const line1 = state.objects[state._tangentFirstLine];
+      const positions = circlePositionsTangentToTwoLines(circ.r, line1, obj);
+      if (positions.length === 0) {
+        showToast("Tečnou pozici ke dvěma úsečkám nelze najít");
+      } else {
+        showTangentPositionDialog(positions, circ, (chosenIdx) => {
+          pushUndo();
+          circ.cx = positions[chosenIdx].cx;
+          circ.cy = positions[chosenIdx].cy;
+          calculateAllIntersections();
+          renderAll();
+          showToast("Kružnice přesunuta tečně ke dvěma úsečkám");
         });
       }
     }
+    // Reset stavu
     state.drawing = false;
     state.tempPoints = [];
     state._tangentMode = null;
     state._tangentFirstCircle = null;
+    state._tangentFirstLine = null;
     resetHint();
   }
 }
@@ -1194,6 +1263,108 @@ function startLinearArrayAction() {
 
 // Export pro ui.js context menu
 export { startMirrorAction, startLinearArrayAction, startRotateAction, deleteSelected };
+
+// ── Přichytit bod – přesun koncového bodu k jinému snap bodu ──
+/**
+ * Najde nejbližší koncový/klíčový bod objektu k zadaným souřadnicím.
+ * Vrátí { objIdx, propKey (nebo vertexIdx), x, y, dist }.
+ */
+function findNearestEndpoint(wx, wy) {
+  const threshold = 20 / state.zoom;
+  let best = null;
+  state.objects.forEach((obj, idx) => {
+    const layer = state.layers ? state.layers.find(l => l.id === obj.layer) : null;
+    if (layer && (layer.locked || !layer.visible)) return;
+    const candidates = [];
+    switch (obj.type) {
+      case 'point':
+        candidates.push({ key: 'xy', x: obj.x, y: obj.y });
+        break;
+      case 'line':
+      case 'constr':
+        candidates.push({ key: 'p1', x: obj.x1, y: obj.y1 });
+        candidates.push({ key: 'p2', x: obj.x2, y: obj.y2 });
+        break;
+      case 'circle':
+        candidates.push({ key: 'center', x: obj.cx, y: obj.cy });
+        break;
+      case 'arc':
+        candidates.push({ key: 'center', x: obj.cx, y: obj.cy });
+        break;
+      case 'rect':
+        candidates.push({ key: 'p1', x: obj.x1, y: obj.y1 });
+        candidates.push({ key: 'p2', x: obj.x2, y: obj.y2 });
+        break;
+      case 'polyline':
+        obj.vertices.forEach((v, vi) => {
+          candidates.push({ key: 'v' + vi, x: v.x, y: v.y, vertexIdx: vi });
+        });
+        break;
+    }
+    for (const c of candidates) {
+      const d = Math.hypot(c.x - wx, c.y - wy);
+      if (d < threshold && (!best || d < best.dist)) {
+        best = { objIdx: idx, key: c.key, x: c.x, y: c.y, dist: d, vertexIdx: c.vertexIdx };
+      }
+    }
+  });
+  return best;
+}
+
+/** Přesune koncový bod objektu na novou pozici. */
+function moveEndpoint(objIdx, key, nx, ny) {
+  const obj = state.objects[objIdx];
+  switch (key) {
+    case 'xy':
+      obj.x = nx; obj.y = ny;
+      break;
+    case 'p1':
+      obj.x1 = nx; obj.y1 = ny;
+      break;
+    case 'p2':
+      obj.x2 = nx; obj.y2 = ny;
+      break;
+    case 'center':
+      obj.cx = nx; obj.cy = ny;
+      break;
+    default:
+      if (key.startsWith('v') && obj.type === 'polyline') {
+        const vi = parseInt(key.substring(1), 10);
+        if (obj.vertices[vi]) {
+          obj.vertices[vi].x = nx;
+          obj.vertices[vi].y = ny;
+        }
+      }
+      break;
+  }
+}
+
+function handleSnapPointClick(wx, wy) {
+  if (!state._snapPointState) {
+    // Krok 1: vyber koncový bod
+    const ep = findNearestEndpoint(wx, wy);
+    if (!ep) {
+      showToast("Klepněte blíž ke koncovému bodu objektu");
+      return;
+    }
+    state._snapPointState = ep;
+    state.selected = ep.objIdx;
+    updateProperties();
+    setHint("Klepněte na cílový bod (snap) pro přichycení");
+    showToast("Bod vybrán – klepněte na cílový bod");
+    renderAll();
+  } else {
+    // Krok 2: přesuň na cílový bod
+    pushUndo();
+    const src = state._snapPointState;
+    moveEndpoint(src.objIdx, src.key, wx, wy);
+    calculateAllIntersections();
+    showToast("Bod přichycen");
+    state._snapPointState = null;
+    resetHint();
+    renderAll();
+  }
+}
 
 // ── Tlačítka Smazat a Otočit ──
 document.getElementById("btnDelete").addEventListener("click", deleteSelected);

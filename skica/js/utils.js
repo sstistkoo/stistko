@@ -94,6 +94,72 @@ function normalizeAngleDiff(diff, ccw) {
   return diff;
 }
 
+// ── Nejbližší bod na objektu (pro snap k hraně) ──
+/**
+ * Vrátí nejbližší bod na hraně objektu (úsečka, kružnice, oblouk, obdélník).
+ * @param {import('./types.js').DrawObject} obj
+ * @param {number} wx
+ * @param {number} wy
+ * @returns {{x: number, y: number, dist: number}|null}
+ */
+export function getNearestPointOnObject(obj, wx, wy) {
+  switch (obj.type) {
+    case "line":
+    case "constr": {
+      const p = nearestOnSegment(wx, wy, obj.x1, obj.y1, obj.x2, obj.y2);
+      return { x: p.x, y: p.y, dist: Math.hypot(wx - p.x, wy - p.y) };
+    }
+    case "circle": {
+      const dx = wx - obj.cx, dy = wy - obj.cy;
+      const d = Math.hypot(dx, dy);
+      if (d < 1e-10) return { x: obj.cx + obj.r, y: obj.cy, dist: obj.r };
+      return { x: obj.cx + (dx / d) * obj.r, y: obj.cy + (dy / d) * obj.r, dist: Math.abs(d - obj.r) };
+    }
+    case "arc": {
+      const dx = wx - obj.cx, dy = wy - obj.cy;
+      const d = Math.hypot(dx, dy);
+      const angle = Math.atan2(dy, dx);
+      if (d < 1e-10) return null;
+      if (isAngleBetween(angle, obj.startAngle, obj.endAngle)) {
+        return { x: obj.cx + (dx / d) * obj.r, y: obj.cy + (dy / d) * obj.r, dist: Math.abs(d - obj.r) };
+      }
+      // Mimo oblouk – nejbližší koncový bod
+      const s = { x: obj.cx + obj.r * Math.cos(obj.startAngle), y: obj.cy + obj.r * Math.sin(obj.startAngle) };
+      const e = { x: obj.cx + obj.r * Math.cos(obj.endAngle), y: obj.cy + obj.r * Math.sin(obj.endAngle) };
+      const ds = Math.hypot(wx - s.x, wy - s.y);
+      const de = Math.hypot(wx - e.x, wy - e.y);
+      return ds < de ? { x: s.x, y: s.y, dist: ds } : { x: e.x, y: e.y, dist: de };
+    }
+    case "rect": {
+      const segs = [
+        [obj.x1, obj.y1, obj.x2, obj.y1],
+        [obj.x2, obj.y1, obj.x2, obj.y2],
+        [obj.x2, obj.y2, obj.x1, obj.y2],
+        [obj.x1, obj.y2, obj.x1, obj.y1],
+      ];
+      let best = null;
+      for (const [x1, y1, x2, y2] of segs) {
+        const p = nearestOnSegment(wx, wy, x1, y1, x2, y2);
+        const d = Math.hypot(wx - p.x, wy - p.y);
+        if (!best || d < best.dist) best = { x: p.x, y: p.y, dist: d };
+      }
+      return best;
+    }
+    default:
+      return null;
+  }
+}
+
+/** Nejbližší bod na úsečce. */
+function nearestOnSegment(px, py, x1, y1, x2, y2) {
+  const dx = x2 - x1, dy = y2 - y1;
+  const lenSq = dx * dx + dy * dy;
+  if (lenSq === 0) return { x: x1, y: y1 };
+  let t = ((px - x1) * dx + (py - y1) * dy) / lenSq;
+  t = Math.max(0, Math.min(1, t));
+  return { x: x1 + t * dx, y: y1 + t * dy };
+}
+
 // ── Vzdálenost bodu od úsečky ──
 /**
  * @param {number} px
@@ -172,6 +238,7 @@ export function toolLabel(t) {
       perp: "Kolmice",
       parallel: "Rovnoběžka",
       dimension: "Kóta",
+      snapPoint: "Přichytit bod",
     }[t] || t
   );
 }

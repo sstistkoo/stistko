@@ -433,6 +433,54 @@ export function tangentsTwoCircles(cx1, cy1, r1, cx2, cy2, r2) {
  * @param {number} side  1 = vně/vpravo, -1 = uvnitř/vlevo
  * @returns {import('./types.js').DrawObject|null}
  */
+// ── Pozice kružnice tečné k úsečce ──
+export function circlePositionsTangentToLine(cx, cy, r, x1, y1, x2, y2) {
+  const dx = x2 - x1, dy = y2 - y1;
+  const len = Math.hypot(dx, dy);
+  if (len < 1e-10) return [];
+  const nx = -dy / len, ny = dx / len;
+  const t = ((cx - x1) * dx + (cy - y1) * dy) / (len * len);
+  const footX = x1 + t * dx, footY = y1 + t * dy;
+  return [
+    { cx: footX + nx * r, cy: footY + ny * r },
+    { cx: footX - nx * r, cy: footY - ny * r }
+  ];
+}
+
+// ── Pozice kružnice tečné ke dvěma úsečkám ──
+export function circlePositionsTangentToTwoLines(r, l1, l2) {
+  const results = [];
+  const offsets1 = lineOffsets(l1.x1, l1.y1, l1.x2, l1.y2, r);
+  const offsets2 = lineOffsets(l2.x1, l2.y1, l2.x2, l2.y2, r);
+  for (const o1 of offsets1) {
+    for (const o2 of offsets2) {
+      const pt = intersectInfiniteLines(o1, o2);
+      if (pt) results.push({ cx: pt.x, cy: pt.y });
+    }
+  }
+  return results;
+}
+
+function lineOffsets(x1, y1, x2, y2, d) {
+  const dx = x2 - x1, dy = y2 - y1;
+  const len = Math.hypot(dx, dy);
+  if (len < 1e-10) return [];
+  const nx = -dy / len * d, ny = dx / len * d;
+  return [
+    { x1: x1 + nx, y1: y1 + ny, x2: x2 + nx, y2: y2 + ny },
+    { x1: x1 - nx, y1: y1 - ny, x2: x2 - nx, y2: y2 - ny }
+  ];
+}
+
+function intersectInfiniteLines(l1, l2) {
+  const d1x = l1.x2 - l1.x1, d1y = l1.y2 - l1.y1;
+  const d2x = l2.x2 - l2.x1, d2y = l2.y2 - l2.y1;
+  const denom = d1x * d2y - d1y * d2x;
+  if (Math.abs(denom) < 1e-10) return null;
+  const t = ((l2.x1 - l1.x1) * d2y - (l2.y1 - l1.y1) * d2x) / denom;
+  return { x: l1.x1 + t * d1x, y: l1.y1 + t * d1y };
+}
+
 /**
  * Projekce bodu na přímku (pata kolmice).
  * @param {number} px
