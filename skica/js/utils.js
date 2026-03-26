@@ -169,6 +169,9 @@ export function toolLabel(t) {
       trim: "Oříznout",
       extend: "Prodloužit",
       fillet: "Zaoblení",
+      perp: "Kolmice",
+      parallel: "Rovnoběžka",
+      dimension: "Kóta",
     }[t] || t
   );
 }

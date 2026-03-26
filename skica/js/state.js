@@ -37,6 +37,7 @@ export const state = {
   snapToGrid: false,
   angleSnap: false,
   angleSnapStep: 15,
+  angleSnapTolerance: 1,
   gridSize: 10,
   zoom: 1,
   panX: 0,

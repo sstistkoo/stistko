@@ -124,9 +124,18 @@ export function applyAngleSnap(wx, wy, refPoint) {
   const angle = Math.atan2(dy, dx);
   const stepRad = (state.angleSnapStep * Math.PI) / 180;
   const snappedAngle = Math.round(angle / stepRad) * stepRad;
+  // Magnetický snap – přichytit jen když je úhel blízko přednastaveného
+  const toleranceRad = (state.angleSnapTolerance * Math.PI) / 180;
+  const diff = Math.abs(angle - snappedAngle);
+  if (diff > toleranceRad) return [wx, wy];
+  // Projekce kurzoru na přichycenou úhlovou linii (délka = kolmý průmět, ne vzdálenost)
+  const dirX = Math.cos(snappedAngle);
+  const dirY = Math.sin(snappedAngle);
+  const projDist = dx * dirX + dy * dirY;
+  if (projDist < 0) return [wx, wy];
   return [
-    refPoint.x + dist * Math.cos(snappedAngle),
-    refPoint.y + dist * Math.sin(snappedAngle),
+    refPoint.x + projDist * dirX,
+    refPoint.y + projDist * dirY,
   ];
 }
 

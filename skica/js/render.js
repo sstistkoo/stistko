@@ -6,6 +6,7 @@ import { drawCanvas, ctx, worldToScreen, screenToWorld } from './canvas.js';
 import { state, toDisplayCoords } from './state.js';
 import { bridge } from './bridge.js';
 import { bulgeToArc } from './utils.js';
+import { projectPointToLine } from './geometry.js';
 
 let _renderRAF = null;
 /** Naplánuje překreslení celého canvasu (requestAnimationFrame). */
@@ -301,6 +302,80 @@ function renderObjects() {
       ctx.font = `${labelSize}px Consolas`;
       ctx.fillText("Bod tečny", sx1 + 8, sy1 - 8);
     }
+    // Preview: Kolmice
+    if (state.tool === "perp" && state._perpRefIdx != null) {
+      const refObj = state.objects[state._perpRefIdx];
+      if (refObj) {
+        const foot = projectPointToLine(mx, my, refObj.x1, refObj.y1, refObj.x2, refObj.y2);
+        const [sx1, sy1] = worldToScreen(mx, my);
+        const [sx2, sy2] = worldToScreen(foot.x, foot.y);
+        ctx.strokeStyle = "#a6e3a1";
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([6, 4]);
+        ctx.beginPath();
+        ctx.moveTo(sx1, sy1);
+        ctx.lineTo(sx2, sy2);
+        ctx.stroke();
+        // Pata kolmice
+        ctx.fillStyle = "#a6e3a1";
+        ctx.beginPath();
+        ctx.arc(sx2, sy2, 4, 0, Math.PI * 2);
+        ctx.fill();
+        // Info
+        const d = Math.hypot(mx - foot.x, my - foot.y);
+        ctx.setLineDash([]);
+        ctx.font = `${labelSize}px Consolas`;
+        ctx.fillText(`⊥ ${d.toFixed(2)}mm`, (sx1 + sx2) / 2 + 8, (sy1 + sy2) / 2 - 8);
+      }
+    }
+    // Preview: Rovnoběžka
+    if (state.tool === "parallel" && state._parallelRefIdx != null) {
+      const refObj = state.objects[state._parallelRefIdx];
+      if (refObj) {
+        const dx = refObj.x2 - refObj.x1;
+        const dy = refObj.y2 - refObj.y1;
+        const px1 = mx - dx / 2, py1 = my - dy / 2;
+        const px2 = mx + dx / 2, py2 = my + dy / 2;
+        const [sx1, sy1] = worldToScreen(px1, py1);
+        const [sx2, sy2] = worldToScreen(px2, py2);
+        ctx.strokeStyle = "#89b4fa";
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([6, 4]);
+        ctx.beginPath();
+        ctx.moveTo(sx1, sy1);
+        ctx.lineTo(sx2, sy2);
+        ctx.stroke();
+        // Vzdálenost od referenční úsečky
+        const foot = projectPointToLine(mx, my, refObj.x1, refObj.y1, refObj.x2, refObj.y2);
+        const dist = Math.hypot(mx - foot.x, my - foot.y);
+        ctx.setLineDash([]);
+        ctx.font = `${labelSize}px Consolas`;
+        ctx.fillStyle = "#89b4fa";
+        ctx.fillText(`∥ d=${dist.toFixed(2)}mm`, (sx1 + sx2) / 2 + 8, (sy1 + sy2) / 2 - 8);
+      }
+    }
+    // Preview: Kóta (2 body)
+    if (state.tool === "dimension" && tp.length === 1) {
+      const [sx1, sy1] = worldToScreen(tp[0].x, tp[0].y);
+      const [sx2, sy2] = worldToScreen(mx, my);
+      const d = Math.hypot(mx - tp[0].x, my - tp[0].y);
+      ctx.strokeStyle = "#9399b2";
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([6, 4]);
+      ctx.beginPath();
+      ctx.moveTo(sx1, sy1);
+      ctx.lineTo(sx2, sy2);
+      ctx.stroke();
+      // Šipky
+      drawDimArrow(sx1, sy1, sx2, sy2);
+      drawDimArrow(sx2, sy2, sx1, sy1);
+      ctx.setLineDash([]);
+      ctx.font = `${labelSize}px Consolas`;
+      ctx.fillStyle = "#9399b2";
+      const angle = Math.atan2(sy2 - sy1, sx2 - sx1);
+      const nx = -Math.sin(angle) * 14, ny = Math.cos(angle) * 14;
+      ctx.fillText(`${d.toFixed(2)}mm`, (sx1 + sx2) / 2 + nx, (sy1 + sy2) / 2 + ny);
+    }
     ctx.setLineDash([]);
   }
 
@@ -351,6 +426,19 @@ function drawSnapIndicator() {
       ctx.setLineDash([]);
     }
   }
+}
+
+// ── Šipka kóty ──
+function drawDimArrow(fromX, fromY, toX, toY) {
+  const angle = Math.atan2(toY - fromY, toX - fromX);
+  const arrowLen = 8;
+  const arrowAngle = Math.PI / 7;
+  ctx.beginPath();
+  ctx.moveTo(fromX, fromY);
+  ctx.lineTo(fromX + arrowLen * Math.cos(angle + arrowAngle), fromY + arrowLen * Math.sin(angle + arrowAngle));
+  ctx.moveTo(fromX, fromY);
+  ctx.lineTo(fromX + arrowLen * Math.cos(angle - arrowAngle), fromY + arrowLen * Math.sin(angle - arrowAngle));
+  ctx.stroke();
 }
 
 // ── Kóty / rozměry ──
@@ -447,6 +535,38 @@ export function drawPoint(obj) {
 export function drawLine(obj) {
   const [sx1, sy1] = worldToScreen(obj.x1, obj.y1);
   const [sx2, sy2] = worldToScreen(obj.x2, obj.y2);
+
+  if (obj.isDimension) {
+    // Kótovací úsečka: šipky + text + odkazové čáry
+    const extLen = 6;
+    const angle = Math.atan2(sy2 - sy1, sx2 - sx1);
+    const nx = -Math.sin(angle) * extLen, ny = Math.cos(angle) * extLen;
+    // Odkazové čáry
+    ctx.lineWidth = 0.8;
+    ctx.beginPath();
+    ctx.moveTo(sx1 + nx, sy1 + ny);
+    ctx.lineTo(sx1 - nx, sy1 - ny);
+    ctx.moveTo(sx2 + nx, sy2 + ny);
+    ctx.lineTo(sx2 - nx, sy2 - ny);
+    ctx.stroke();
+    // Hlavní čára
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.moveTo(sx1, sy1);
+    ctx.lineTo(sx2, sy2);
+    ctx.stroke();
+    // Šipky
+    drawDimArrow(sx1, sy1, sx2, sy2);
+    drawDimArrow(sx2, sy2, sx1, sy1);
+    // Text
+    const len = Math.hypot(obj.x2 - obj.x1, obj.y2 - obj.y1);
+    const dimSize = Math.round(Math.min(16, Math.max(11, 8 + state.zoom * 3)));
+    ctx.font = `${dimSize}px Consolas`;
+    ctx.fillStyle = obj.color || "#9399b2";
+    const tnx = -Math.sin(angle) * 12, tny = Math.cos(angle) * 12;
+    ctx.fillText(`${len.toFixed(2)}`, (sx1 + sx2) / 2 + tnx, (sy1 + sy2) / 2 + tny);
+    return;
+  }
 
   if (obj.type === "constr") {
     const dx = sx2 - sx1,
@@ -551,7 +671,7 @@ export function drawPolyline(obj) {
 // ── Vodící čára pro angle snap ──
 function renderAngleSnapGuide() {
   if (!state.angleSnap || !state.drawing || state.tempPoints.length === 0) return;
-  const tools = ['line', 'constr', 'polyline', 'measure'];
+  const tools = ['line', 'constr', 'polyline', 'measure', 'dimension'];
   if (!tools.includes(state.tool)) return;
 
   const ref = state.tempPoints[state.tempPoints.length - 1];
@@ -563,6 +683,11 @@ function renderAngleSnapGuide() {
   const angle = Math.atan2(dy, dx);
   const stepRad = (state.angleSnapStep * Math.PI) / 180;
   const snappedAngle = Math.round(angle / stepRad) * stepRad;
+
+  // Zobrazit vodítko jen když je úhel v toleranci (magnetický snap)
+  const toleranceRad = (state.angleSnapTolerance * Math.PI) / 180;
+  const diff = Math.abs(angle - snappedAngle);
+  if (diff > toleranceRad) return;
 
   // Vodící čára – tečkovaná zelená
   const guideLen = Math.max(dist * 1.5, 200 / state.zoom);

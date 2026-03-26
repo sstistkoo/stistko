@@ -433,6 +433,24 @@ export function tangentsTwoCircles(cx1, cy1, r1, cx2, cy2, r2) {
  * @param {number} side  1 = vně/vpravo, -1 = uvnitř/vlevo
  * @returns {import('./types.js').DrawObject|null}
  */
+/**
+ * Projekce bodu na přímku (pata kolmice).
+ * @param {number} px
+ * @param {number} py
+ * @param {number} x1
+ * @param {number} y1
+ * @param {number} x2
+ * @param {number} y2
+ * @returns {{x: number, y: number}}
+ */
+export function projectPointToLine(px, py, x1, y1, x2, y2) {
+  const dx = x2 - x1, dy = y2 - y1;
+  const len2 = dx * dx + dy * dy;
+  if (len2 < 1e-20) return { x: x1, y: y1 };
+  const t = ((px - x1) * dx + (py - y1) * dy) / len2;
+  return { x: x1 + t * dx, y: y1 + t * dy };
+}
+
 export function offsetObject(obj, dist, side) {
   // side: 1 = vně/vpravo, -1 = uvnitř/vlevo
   const d = dist * side;

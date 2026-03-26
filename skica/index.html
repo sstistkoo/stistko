@@ -273,31 +273,207 @@
         </svg>
         Prodl.
       </button>
-      <button class="tool-btn" data-tool="fillet" title="Zaoblení / Sražení (F)">
+      <button
+        class="tool-btn"
+        data-tool="fillet"
+        title="Zaoblení / Sražení (F)"
+      >
         <svg viewBox="0 0 24 24">
-          <line x1="4" y1="20" x2="4" y2="10" stroke="currentColor" stroke-width="2" />
-          <path d="M4 10 Q4 4 10 4" fill="none" stroke="currentColor" stroke-width="2" />
-          <line x1="10" y1="4" x2="20" y2="4" stroke="currentColor" stroke-width="2" />
+          <line
+            x1="4"
+            y1="20"
+            x2="4"
+            y2="10"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <path
+            d="M4 10 Q4 4 10 4"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <line
+            x1="10"
+            y1="4"
+            x2="20"
+            y2="4"
+            stroke="currentColor"
+            stroke-width="2"
+          />
         </svg>
         Zaoblení
       </button>
-      <div class="sep"></div>
-      <button class="tool-btn" id="btnDelete" title="Smazat vybraný objekt (Del)">
+      <button class="tool-btn" data-tool="perp" title="Kolmice (J)">
         <svg viewBox="0 0 24 24">
-          <path d="M6 7h12l-1 13H7L6 7z" fill="none" stroke="currentColor" stroke-width="2" />
-          <line x1="4" y1="5" x2="20" y2="5" stroke="currentColor" stroke-width="2" />
-          <line x1="9" y1="3" x2="15" y2="3" stroke="currentColor" stroke-width="2" />
-          <line x1="10" y1="10" x2="10" y2="17" stroke="currentColor" stroke-width="1.5" />
-          <line x1="14" y1="10" x2="14" y2="17" stroke="currentColor" stroke-width="1.5" />
+          <line
+            x1="4"
+            y1="20"
+            x2="20"
+            y2="20"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <line
+            x1="12"
+            y1="20"
+            x2="12"
+            y2="4"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <rect
+            x="10"
+            y="16"
+            width="4"
+            height="4"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+          />
         </svg>
-        Smazat
+        Kolm.
+      </button>
+      <button class="tool-btn" data-tool="parallel" title="Rovnoběžka (H)">
+        <svg viewBox="0 0 24 24">
+          <line
+            x1="4"
+            y1="8"
+            x2="20"
+            y2="8"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <line
+            x1="4"
+            y1="16"
+            x2="20"
+            y2="16"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <path
+            d="M11 11l2 2M11 13l2-2"
+            stroke="currentColor"
+            stroke-width="1.5"
+          />
+        </svg>
+        Rovnob.
+      </button>
+      <button class="tool-btn" data-tool="dimension" title="Kóta (U)">
+        <svg viewBox="0 0 24 24">
+          <line
+            x1="4"
+            y1="18"
+            x2="4"
+            y2="6"
+            stroke="currentColor"
+            stroke-width="1.5"
+          />
+          <line
+            x1="20"
+            y1="18"
+            x2="20"
+            y2="6"
+            stroke="currentColor"
+            stroke-width="1.5"
+          />
+          <line
+            x1="4"
+            y1="10"
+            x2="20"
+            y2="10"
+            stroke="currentColor"
+            stroke-width="1.5"
+          />
+          <path d="M4 10l4-3v6z" fill="currentColor" />
+          <path d="M20 10l-4-3v6z" fill="currentColor" />
+          <text
+            x="12"
+            y="8"
+            text-anchor="middle"
+            font-size="7"
+            fill="currentColor"
+          >
+            50
+          </text>
+        </svg>
+        Kóta
+      </button>
+      <div class="sep"></div>
+      <button
+        class="tool-btn"
+        id="btnDelete"
+        title="Smazat vybraný objekt (Del)"
+      >
+        <svg viewBox="0 0 24 24">
+          <path
+            d="M6 7h12l-1 13H7L6 7z"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <line
+            x1="4"
+            y1="5"
+            x2="20"
+            y2="5"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <line
+            x1="9"
+            y1="3"
+            x2="15"
+            y2="3"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <line
+            x1="10"
+            y1="10"
+            x2="10"
+            y2="17"
+            stroke="currentColor"
+            stroke-width="1.5"
+          />
+          <line
+            x1="14"
+            y1="10"
+            x2="14"
+            y2="17"
+            stroke="currentColor"
+            stroke-width="1.5"
+          />
+        </svg>
+        Smaž obj.
       </button>
       <button class="tool-btn" id="btnRotate" title="Otočit vybraný objekt">
         <svg viewBox="0 0 24 24">
-          <path d="M12 4a8 8 0 0 1 7.75 6" fill="none" stroke="currentColor" stroke-width="2" />
-          <path d="M19.75 10l1.25-4-4 1.25" fill="none" stroke="currentColor" stroke-width="2" />
-          <path d="M12 20a8 8 0 0 1-7.75-6" fill="none" stroke="currentColor" stroke-width="2" />
-          <path d="M4.25 14l-1.25 4 4-1.25" fill="none" stroke="currentColor" stroke-width="2" />
+          <path
+            d="M12 4a8 8 0 0 1 7.75 6"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <path
+            d="M19.75 10l1.25-4-4 1.25"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <path
+            d="M12 20a8 8 0 0 1-7.75-6"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <path
+            d="M4.25 14l-1.25 4 4-1.25"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          />
         </svg>
         Otočit
       </button>
@@ -558,6 +734,18 @@
               <td>Zaoblení / Sražení</td>
             </tr>
             <tr>
+              <td>J</td>
+              <td>Kolmice k úsečce</td>
+            </tr>
+            <tr>
+              <td>H</td>
+              <td>Rovnoběžka s úsečkou</td>
+            </tr>
+            <tr>
+              <td>U</td>
+              <td>Kóta (rozměr)</td>
+            </tr>
+            <tr>
               <td>M</td>
               <td>Měření</td>
             </tr>
@@ -703,7 +891,9 @@
             </tr>
             <tr>
               <td>⌒ Zaoblení</td>
-              <td>Klikněte na dvě úsečky – vytvoří zaoblení se zadaným poloměrem</td>
+              <td>
+                Klikněte na dvě úsečky – vytvoří zaoblení se zadaným poloměrem
+              </td>
             </tr>
             <tr>
               <td>🗑 Smazat</td>
@@ -712,6 +902,18 @@
             <tr>
               <td>🔄 Otočit</td>
               <td>Otočí vybraný objekt o zadaný úhel kolem jeho středu</td>
+            </tr>
+            <tr>
+              <td>⊥ Kolmice</td>
+              <td>Klikněte na úsečku, pak bod – vytvoří kolmici z bodu</td>
+            </tr>
+            <tr>
+              <td>∥ Rovnob.</td>
+              <td>Klikněte na úsečku, pak bod – vytvoří rovnoběžku bodem</td>
+            </tr>
+            <tr>
+              <td>↔ Kóta</td>
+              <td>Dva kliky = kótovaný rozměr (trvalá kóta v kresbě)</td>
             </tr>
           </table>
 
