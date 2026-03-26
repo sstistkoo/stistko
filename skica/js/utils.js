@@ -166,6 +166,9 @@ export function toolLabel(t) {
       measure: "Měření",
       tangent: "Tečna",
       offset: "Offset",
+      trim: "Oříznout",
+      extend: "Prodloužit",
+      fillet: "Zaoblení",
     }[t] || t
   );
 }

@@ -7,8 +7,8 @@ import { state, pushUndo, undo, redo, showToast, toDisplayCoords } from './state
 import { renderAll } from './render.js';
 import { moveObject, addObject } from './objects.js';
 import { setTool, resetHint, setHint, updateProperties, updateObjectList, updateSnapPtsBtn, updateDimsBtn, toggleCoordMode, updateCoordModeBtn, updateSnapGridBtn, updateAngleSnapBtn, showGridSizeDialog, showAngleSnapDialog, toggleHelp } from './ui.js';
-import { findObjectAt, selectObjectAt, calculateAllIntersections, tangentsFromPointToCircle, tangentsTwoCircles, offsetObject, mirrorObject, linearArray } from './geometry.js';
-import { showNumericalInputDialog, showPolarDrawingDialog, showMeasureResult, showCircleRadiusDialog, showIntersectionInfo, showMeasureObjectInfo, showBulgeDialog, showTangentChoiceDialog, showOffsetDialog, showMirrorDialog, showLinearArrayDialog } from './dialogs.js';
+import { findObjectAt, selectObjectAt, calculateAllIntersections, tangentsFromPointToCircle, tangentsTwoCircles, offsetObject, mirrorObject, linearArray, getLines, getCircles, intersectLineLine, intersectLineCircle, rotateObject, filletTwoLines } from './geometry.js';
+import { showNumericalInputDialog, showPolarDrawingDialog, showMeasureResult, showCircleRadiusDialog, showIntersectionInfo, showMeasureObjectInfo, showBulgeDialog, showTangentChoiceDialog, showOffsetDialog, showMirrorDialog, showLinearArrayDialog, showRotateDialog, showFilletDialog } from './dialogs.js';
 import { saveProject, showExportImageDialog, showProjectsDialog, showSaveAsDialog } from './storage.js';
 import { bridge } from './bridge.js';
 
@@ -224,6 +224,9 @@ document.addEventListener("keydown", (e) => {
     m: "measure",
     t: "tangent",
     o: "offset",
+    x: "trim",
+    e: "extend",
+    f: "fillet",
   };
   // Shift+M = mirror, Shift+N = polar, Shift+G = angle snap – skip tool shortcuts
   if (!(e.shiftKey && ['m','n','g'].includes(e.key.toLowerCase())) && shortcuts[e.key.toLowerCase()])
@@ -365,8 +368,11 @@ drawCanvas.addEventListener("contextmenu", (e) => {
     renderAll();
     menuItems += `<div style="border-top:1px solid #45475a;margin:2px 0"></div>`;
     menuItems += `<div class="ctx-item" data-action="mirror" style="${itemStyle}">🪞 Zrcadlit (Shift+M)</div>`;
+    menuItems += `<div class="ctx-item" data-action="rotate" style="${itemStyle}">🔄 Otočit</div>`;
     menuItems += `<div class="ctx-item" data-action="array" style="${itemStyle}">📏 Lineární pole</div>`;
     menuItems += `<div class="ctx-item" data-action="offset" style="${itemStyle}">⇔ Offset</div>`;
+    menuItems += `<div style="border-top:1px solid #45475a;margin:2px 0"></div>`;
+    menuItems += `<div class="ctx-item" data-action="delete" style="${itemStyle};color:#f38ba8">🗑 Smazat</div>`;
   }
   menu.innerHTML = menuItems;
   document.body.appendChild(menu);
@@ -383,12 +389,16 @@ drawCanvas.addEventListener("contextmenu", (e) => {
         showToast(`Reference: X=${wx.toFixed(3)} Z=${wy.toFixed(3)}`);
       } else if (action === 'mirror') {
         startMirrorAction();
+      } else if (action === 'rotate') {
+        startRotateAction();
       } else if (action === 'array') {
         startLinearArrayAction();
       } else if (action === 'offset') {
         if (ctxIdx !== null && state.objects[ctxIdx]) {
           handleOffsetClick(wx, wy);
         }
+      } else if (action === 'delete') {
+        deleteSelected();
       }
     });
     item.addEventListener('mouseenter', function() { this.style.background = '#45475a'; });
@@ -589,6 +599,18 @@ export function handleCanvasClick(wx, wy) {
     case "offset":
       handleOffsetClick(wx, wy);
       break;
+
+    case "trim":
+      handleTrimClick(wx, wy);
+      break;
+
+    case "extend":
+      handleExtendClick(wx, wy);
+      break;
+
+    case "fillet":
+      handleFilletClick(wx, wy);
+      break;
   }
 }
 
@@ -747,6 +769,224 @@ function handleOffsetClick(wx, wy) {
   });
 }
 
+// ── Oříznutí úsečky ──
+/** Ořízne úsečku k nejbližšímu průsečíku na straně kliknutí. */
+function handleTrimClick(wx, wy) {
+  const idx = findObjectAt(wx, wy);
+  if (idx === null) { showToast("Klepněte na úsečku k oříznutí"); return; }
+  const obj = state.objects[idx];
+  if (obj.type !== "line" && obj.type !== "constr") {
+    showToast("Oříznutí funguje pouze pro úsečky");
+    return;
+  }
+
+  // Collect all intersection points on this line segment from other objects
+  const pts = [];
+  const lineSeg = { x1: obj.x1, y1: obj.y1, x2: obj.x2, y2: obj.y2, isConstr: false };
+  for (let i = 0; i < state.objects.length; i++) {
+    if (i === idx) continue;
+    const other = state.objects[i];
+    for (const seg of getLines(other)) {
+      pts.push(...intersectLineLine(lineSeg, seg));
+    }
+    for (const circ of getCircles(other)) {
+      pts.push(...intersectLineCircle(lineSeg, circ));
+    }
+  }
+
+  if (pts.length === 0) { showToast("Žádný průsečík pro oříznutí"); return; }
+
+  // Determine which end of the line is closer to click point
+  const d1 = Math.hypot(wx - obj.x1, wy - obj.y1);
+  const d2 = Math.hypot(wx - obj.x2, wy - obj.y2);
+  const trimEnd = d1 < d2 ? 1 : 2; // 1 = trim start(x1,y1), 2 = trim end(x2,y2)
+
+  // Find intersection closest to the trimmed end
+  let bestPt = null, bestDist = Infinity;
+  for (const p of pts) {
+    const d = trimEnd === 1
+      ? Math.hypot(p.x - obj.x1, p.y - obj.y1)
+      : Math.hypot(p.x - obj.x2, p.y - obj.y2);
+    if (d < bestDist && d > 1e-9) {
+      bestDist = d;
+      bestPt = p;
+    }
+  }
+  if (!bestPt) { showToast("Žádný vhodný průsečík"); return; }
+
+  pushUndo();
+  if (trimEnd === 1) { obj.x1 = bestPt.x; obj.y1 = bestPt.y; }
+  else { obj.x2 = bestPt.x; obj.y2 = bestPt.y; }
+
+  calculateAllIntersections();
+  renderAll();
+  showToast("Úsečka oříznuta ✓");
+}
+
+// ── Prodloužení úsečky ──
+/** Prodlouží úsečku k nejbližšímu průsečíku s jiným objektem na straně kliknutí. */
+function handleExtendClick(wx, wy) {
+  const idx = findObjectAt(wx, wy);
+  if (idx === null) { showToast("Klepněte na úsečku k prodloužení"); return; }
+  const obj = state.objects[idx];
+  if (obj.type !== "line" && obj.type !== "constr") {
+    showToast("Prodloužení funguje pouze pro úsečky");
+    return;
+  }
+
+  // Which end to extend (closer to click)
+  const d1 = Math.hypot(wx - obj.x1, wy - obj.y1);
+  const d2 = Math.hypot(wx - obj.x2, wy - obj.y2);
+  const extEnd = d1 < d2 ? 1 : 2;
+
+  // Create an infinite line (construction) to find intersections beyond the segment
+  const infLine = { x1: obj.x1, y1: obj.y1, x2: obj.x2, y2: obj.y2, isConstr: true };
+
+  const pts = [];
+  for (let i = 0; i < state.objects.length; i++) {
+    if (i === idx) continue;
+    const other = state.objects[i];
+    for (const seg of getLines(other)) {
+      pts.push(...intersectLineLine(infLine, seg));
+    }
+    for (const circ of getCircles(other)) {
+      pts.push(...intersectLineCircle(infLine, circ));
+    }
+  }
+
+  if (pts.length === 0) { showToast("Žádný objekt pro prodloužení"); return; }
+
+  // Filter: only points beyond the extended end (along the line direction)
+  const dx = obj.x2 - obj.x1, dy = obj.y2 - obj.y1;
+  const len2 = dx * dx + dy * dy;
+  const candidates = [];
+  for (const p of pts) {
+    const t = ((p.x - obj.x1) * dx + (p.y - obj.y1) * dy) / len2;
+    // extEnd=1: we extend beyond x1, so t < 0
+    // extEnd=2: we extend beyond x2, so t > 1
+    if (extEnd === 1 && t < 1e-9) {
+      candidates.push({ pt: p, dist: Math.hypot(p.x - obj.x1, p.y - obj.y1) });
+    } else if (extEnd === 2 && t > 1 - 1e-9) {
+      candidates.push({ pt: p, dist: Math.hypot(p.x - obj.x2, p.y - obj.y2) });
+    }
+  }
+
+  if (candidates.length === 0) { showToast("Žádný průsečík ve směru prodloužení"); return; }
+
+  // Pick closest
+  candidates.sort((a, b) => a.dist - b.dist);
+  const best = candidates[0].pt;
+
+  pushUndo();
+  if (extEnd === 1) { obj.x1 = best.x; obj.y1 = best.y; }
+  else { obj.x2 = best.x; obj.y2 = best.y; }
+
+  calculateAllIntersections();
+  renderAll();
+  showToast("Úsečka prodloužena ✓");
+}
+
+// ── Zaoblení (Fillet) ──
+/** Klik na první úsečku → dialog → klik na druhou → zaoblení. */
+function handleFilletClick(wx, wy) {
+  const idx = findObjectAt(wx, wy);
+  if (idx === null) { showToast("Klepněte na první úsečku pro zaoblení"); return; }
+  const obj1 = state.objects[idx];
+  if (obj1.type !== "line" && obj1.type !== "constr") {
+    showToast("Zaoblení funguje pouze mezi úsečkami");
+    return;
+  }
+
+  state.selected = idx;
+  renderAll();
+  setHint("Zadejte poloměr zaoblení");
+
+  showFilletDialog((radius) => {
+    setHint("Klepněte na druhou úsečku");
+    showToast("Klepněte na druhou úsečku");
+
+    function onSecondClick(e) {
+      const rect = drawCanvas.getBoundingClientRect();
+      const sx = (e.clientX || e.changedTouches?.[0]?.clientX) - rect.left;
+      const sy = (e.clientY || e.changedTouches?.[0]?.clientY) - rect.top;
+      let [wx2, wy2] = screenToWorld(sx, sy);
+      if (state.snapToPoints) [wx2, wy2] = snapPt(wx2, wy2);
+
+      const idx2 = findObjectAt(wx2, wy2);
+      if (idx2 === null || idx2 === idx) { showToast("Klepněte na jinou úsečku"); return; }
+      const obj2 = state.objects[idx2];
+      if (obj2.type !== "line" && obj2.type !== "constr") { showToast("Zaoblení funguje pouze mezi úsečkami"); return; }
+
+      drawCanvas.removeEventListener("click", onSecondClick);
+      drawCanvas.removeEventListener("touchend", onSecondTouch);
+
+      pushUndo();
+      const result = filletTwoLines(obj1, obj2, radius);
+      if (!result.ok) { showToast(result.msg); return; }
+
+      result.arc.name = `Zaoblení R${radius}`;
+      addObject(result.arc);
+      calculateAllIntersections();
+      renderAll();
+      resetHint();
+      showToast(`Zaoblení R${radius} vytvořeno ✓`);
+    }
+
+    function onSecondTouch(e) {
+      if (e.changedTouches.length === 1) { e.preventDefault(); onSecondClick(e); }
+    }
+
+    drawCanvas.addEventListener("click", onSecondClick);
+    drawCanvas.addEventListener("touchend", onSecondTouch);
+  });
+}
+
+// ── Rotace akce ──
+/** Spustí dialog pro rotaci vybraného objektu. */
+function startRotateAction() {
+  if (state.selected === null) { showToast("Nejdříve vyberte objekt"); return; }
+  const obj = state.objects[state.selected];
+
+  showRotateDialog(obj, (deg) => {
+    pushUndo();
+    // Rotate around object center
+    let cx, cy;
+    switch (obj.type) {
+      case 'point': cx = obj.x; cy = obj.y; break;
+      case 'line': case 'constr':
+        cx = (obj.x1 + obj.x2) / 2; cy = (obj.y1 + obj.y2) / 2; break;
+      case 'circle': case 'arc':
+        cx = obj.cx; cy = obj.cy; break;
+      case 'rect':
+        cx = (obj.x1 + obj.x2) / 2; cy = (obj.y1 + obj.y2) / 2; break;
+      case 'polyline': {
+        const vs = obj.vertices;
+        cx = vs.reduce((s, v) => s + v.x, 0) / vs.length;
+        cy = vs.reduce((s, v) => s + v.y, 0) / vs.length;
+        break;
+      }
+      default: cx = 0; cy = 0;
+    }
+    rotateObject(obj, cx, cy, deg * Math.PI / 180);
+    calculateAllIntersections();
+    renderAll();
+    showToast(`Otočeno o ${deg}° ✓`);
+  });
+}
+
+// ── Smazání vybraného objektu ──
+function deleteSelected() {
+  if (state.selected === null) { showToast("Nejdříve vyberte objekt"); return; }
+  pushUndo();
+  state.objects.splice(state.selected, 1);
+  state.selected = null;
+  updateObjectList();
+  updateProperties();
+  calculateAllIntersections();
+  renderAll();
+  showToast("Objekt smazán ✓");
+}
+
 // ── Zrcadlení akce ──
 /** Spustí dialog pro zrcadlení vybraného objektu. */
 function startMirrorAction() {
@@ -817,7 +1057,11 @@ function startLinearArrayAction() {
 }
 
 // Export pro ui.js context menu
-export { startMirrorAction, startLinearArrayAction };
+export { startMirrorAction, startLinearArrayAction, startRotateAction, deleteSelected };
+
+// ── Tlačítka Smazat a Otočit ──
+document.getElementById("btnDelete").addEventListener("click", deleteSelected);
+document.getElementById("btnRotate").addEventListener("click", startRotateAction);
 
 // ── Double-click: dokončit konturu ──
 drawCanvas.addEventListener("dblclick", (e) => {

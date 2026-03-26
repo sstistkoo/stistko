@@ -664,5 +664,132 @@ export function linearArray(obj, dx, dy, count) {
   return copies;
 }
 
+// ── Rotace objektu ──
+/**
+ * Otočí objekt kolem bodu [cx,cy] o úhel (radiány).
+ * Modifikuje objekt in-place.
+ * @param {import('./types.js').DrawObject} obj
+ * @param {number} cx  střed rotace X
+ * @param {number} cy  střed rotace Y
+ * @param {number} angle  úhel v radiánech
+ */
+export function rotateObject(obj, cx, cy, angle) {
+  const cos = Math.cos(angle), sin = Math.sin(angle);
+  function rp(px, py) {
+    const dx = px - cx, dy = py - cy;
+    return { x: cx + dx * cos - dy * sin, y: cy + dx * sin + dy * cos };
+  }
+  switch (obj.type) {
+    case 'point': {
+      const m = rp(obj.x, obj.y);
+      obj.x = m.x; obj.y = m.y; break;
+    }
+    case 'line': case 'constr': {
+      const m1 = rp(obj.x1, obj.y1), m2 = rp(obj.x2, obj.y2);
+      obj.x1 = m1.x; obj.y1 = m1.y; obj.x2 = m2.x; obj.y2 = m2.y; break;
+    }
+    case 'circle': {
+      const m = rp(obj.cx, obj.cy);
+      obj.cx = m.x; obj.cy = m.y; break;
+    }
+    case 'arc': {
+      const m = rp(obj.cx, obj.cy);
+      obj.cx = m.x; obj.cy = m.y;
+      obj.startAngle += angle; obj.endAngle += angle;
+      break;
+    }
+    case 'rect': {
+      const m1 = rp(obj.x1, obj.y1), m2 = rp(obj.x2, obj.y2);
+      obj.x1 = m1.x; obj.y1 = m1.y; obj.x2 = m2.x; obj.y2 = m2.y; break;
+    }
+    case 'polyline': {
+      obj.vertices = obj.vertices.map(v => rp(v.x, v.y));
+      break;
+    }
+  }
+}
+
+// ── Zaoblení dvou úseček ──
+/**
+ * Vytvoří zaoblení (fillet) mezi dvěma úsečkami.
+ * Najde průsečík, ořízne obě úsečky a vrátí oblouk.
+ * @param {import('./types.js').DrawObject} line1
+ * @param {import('./types.js').DrawObject} line2
+ * @param {number} radius
+ * @returns {{ arc: import('./types.js').DrawObject, ok: boolean, msg?: string }}
+ */
+export function filletTwoLines(line1, line2, radius) {
+  // Find intersection of infinite lines
+  const d1x = line1.x2 - line1.x1, d1y = line1.y2 - line1.y1;
+  const d2x = line2.x2 - line2.x1, d2y = line2.y2 - line2.y1;
+  const denom = d1x * d2y - d1y * d2x;
+  if (Math.abs(denom) < 1e-10) return { ok: false, msg: "Úsečky jsou rovnoběžné" };
+
+  const t = ((line2.x1 - line1.x1) * d2y - (line2.y1 - line1.y1) * d2x) / denom;
+  const ix = line1.x1 + t * d1x, iy = line1.y1 + t * d1y;
+
+  // Unit direction vectors
+  const len1 = Math.hypot(d1x, d1y), len2 = Math.hypot(d2x, d2y);
+  const u1x = d1x / len1, u1y = d1y / len1;
+  const u2x = d2x / len2, u2y = d2y / len2;
+
+  // Angle between lines
+  const halfAngle = Math.acos(Math.min(1, Math.abs(u1x * u2x + u1y * u2y)));
+  if (halfAngle < 1e-9) return { ok: false, msg: "Úsečky jsou téměř rovnoběžné" };
+
+  const tanHalf = Math.tan(Math.PI / 2 - halfAngle);
+  if (Math.abs(tanHalf) < 1e-9) return { ok: false, msg: "Nelze vytvořit zaoblení" };
+  const dist = radius / tanHalf; // distance from intersection to tangent point
+
+  // Determine directions: point AWAY from intersection along each line
+  // We need to figure out which direction on each line goes away from intersection
+  const d1a = Math.hypot(line1.x1 - ix, line1.y1 - iy);
+  const d1b = Math.hypot(line1.x2 - ix, line1.y2 - iy);
+  const dir1x = d1a > d1b ? (line1.x1 - ix) : (line1.x2 - ix);
+  const dir1y = d1a > d1b ? (line1.y1 - iy) : (line1.y2 - iy);
+  const dlen1 = Math.hypot(dir1x, dir1y);
+  const n1x = dir1x / dlen1, n1y = dir1y / dlen1;
+
+  const d2a = Math.hypot(line2.x1 - ix, line2.y1 - iy);
+  const d2b = Math.hypot(line2.x2 - ix, line2.y2 - iy);
+  const dir2x = d2a > d2b ? (line2.x1 - ix) : (line2.x2 - ix);
+  const dir2y = d2a > d2b ? (line2.y1 - iy) : (line2.y2 - iy);
+  const dlen2 = Math.hypot(dir2x, dir2y);
+  const n2x = dir2x / dlen2, n2y = dir2y / dlen2;
+
+  // Tangent points on each line
+  const tp1x = ix + n1x * dist, tp1y = iy + n1y * dist;
+  const tp2x = ix + n2x * dist, tp2y = iy + n2y * dist;
+
+  // Arc center: offset from intersection along bisector
+  const bx = n1x + n2x, by = n1y + n2y;
+  const blen = Math.hypot(bx, by);
+  if (blen < 1e-10) return { ok: false, msg: "Nelze určit střed zaoblení" };
+  const centerDist = Math.sqrt(radius * radius + dist * dist);
+  const cX = ix + (bx / blen) * centerDist;
+  const cY = iy + (by / blen) * centerDist;
+
+  // Start and end angles
+  const startAngle = Math.atan2(tp1y - cY, tp1x - cX);
+  const endAngle = Math.atan2(tp2y - cY, tp2x - cX);
+
+  // Trim lines: move the endpoint closer to intersection to the tangent point
+  if (d1a < d1b) { line1.x1 = tp1x; line1.y1 = tp1y; }
+  else { line1.x2 = tp1x; line1.y2 = tp1y; }
+
+  if (d2a < d2b) { line2.x1 = tp2x; line2.y1 = tp2y; }
+  else { line2.x2 = tp2x; line2.y2 = tp2y; }
+
+  return {
+    ok: true,
+    arc: {
+      type: 'arc',
+      cx: cX, cy: cY,
+      r: radius,
+      startAngle, endAngle,
+    }
+  };
+}
+
 // ── Bridge registrace ──
 bridge.calculateAllIntersections = () => calculateAllIntersections();
