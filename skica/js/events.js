@@ -1030,7 +1030,7 @@ function handleFilletClick(wx, wy) {
 // ── Kolmice – click logika ──
 function handlePerpClick(wx, wy) {
   if (!state.drawing) {
-    // 1. klik: vyber referenční úsečku
+    // 1. klik: vyber úsečku (buď tu co chceš otočit, nebo referenční)
     const idx = findObjectAt(wx, wy);
     if (idx === null) { showToast("Klepněte na úsečku"); return; }
     const obj = state.objects[idx];
@@ -1042,12 +1042,38 @@ function handlePerpClick(wx, wy) {
     state._perpRefIdx = idx;
     state.selected = idx;
     renderAll();
-    setHint("Klepněte na bod – kolmice z bodu na úsečku");
+    setHint("Klepněte na úsečku → otočí první do kolmosti, nebo na bod → kolmice z bodu");
   } else {
-    // 2. klik: bod, ze kterého se vede kolmice
     const refObj = state.objects[state._perpRefIdx];
     if (!refObj) { state.drawing = false; resetHint(); return; }
 
+    // Podívat se, zda 2. klik je na jinou úsečku
+    const idx2 = findObjectAt(wx, wy);
+    if (idx2 !== null && idx2 !== state._perpRefIdx) {
+      const obj2 = state.objects[idx2];
+      if (obj2.type === 'line' || obj2.type === 'constr') {
+        // Režim: otočit první úsečku do kolmosti k druhé
+        const refAngle = Math.atan2(obj2.y2 - obj2.y1, obj2.x2 - obj2.x1);
+        const perpAngle = refAngle + Math.PI / 2;
+        const mx = (refObj.x1 + refObj.x2) / 2;
+        const my = (refObj.y1 + refObj.y2) / 2;
+        const halfLen = Math.hypot(refObj.x2 - refObj.x1, refObj.y2 - refObj.y1) / 2;
+        pushUndo();
+        refObj.x1 = mx - halfLen * Math.cos(perpAngle);
+        refObj.y1 = my - halfLen * Math.sin(perpAngle);
+        refObj.x2 = mx + halfLen * Math.cos(perpAngle);
+        refObj.y2 = my + halfLen * Math.sin(perpAngle);
+        showToast("Úsečka otočena do kolmosti ✓");
+        state.drawing = false;
+        state._perpRefIdx = null;
+        calculateAllIntersections();
+        renderAll();
+        resetHint();
+        return;
+      }
+    }
+
+    // Režim: kolmice z bodu na referenční úsečku (původní chování)
     const foot = projectPointToLine(wx, wy, refObj.x1, refObj.y1, refObj.x2, refObj.y2);
     pushUndo();
     addObject({
@@ -1068,7 +1094,7 @@ function handlePerpClick(wx, wy) {
 // ── Rovnoběžka – click logika ──
 function handleParallelClick(wx, wy) {
   if (!state.drawing) {
-    // 1. klik: vyber referenční úsečku
+    // 1. klik: vyber úsečku
     const idx = findObjectAt(wx, wy);
     if (idx === null) { showToast("Klepněte na úsečku"); return; }
     const obj = state.objects[idx];
@@ -1080,15 +1106,39 @@ function handleParallelClick(wx, wy) {
     state._parallelRefIdx = idx;
     state.selected = idx;
     renderAll();
-    setHint("Klepněte na bod – rovnoběžka procházející bodem");
+    setHint("Klepněte na úsečku → otočí první do rovnoběžnosti, nebo na bod → nová rovnoběžka");
   } else {
-    // 2. klik: bod, kterým prochází rovnoběžka
     const refObj = state.objects[state._parallelRefIdx];
     if (!refObj) { state.drawing = false; resetHint(); return; }
 
+    // Podívat se, zda 2. klik je na jinou úsečku
+    const idx2 = findObjectAt(wx, wy);
+    if (idx2 !== null && idx2 !== state._parallelRefIdx) {
+      const obj2 = state.objects[idx2];
+      if (obj2.type === 'line' || obj2.type === 'constr') {
+        // Režim: otočit první úsečku do rovnoběžnosti s druhou
+        const refAngle = Math.atan2(obj2.y2 - obj2.y1, obj2.x2 - obj2.x1);
+        const mx = (refObj.x1 + refObj.x2) / 2;
+        const my = (refObj.y1 + refObj.y2) / 2;
+        const halfLen = Math.hypot(refObj.x2 - refObj.x1, refObj.y2 - refObj.y1) / 2;
+        pushUndo();
+        refObj.x1 = mx - halfLen * Math.cos(refAngle);
+        refObj.y1 = my - halfLen * Math.sin(refAngle);
+        refObj.x2 = mx + halfLen * Math.cos(refAngle);
+        refObj.y2 = my + halfLen * Math.sin(refAngle);
+        showToast("Úsečka otočena do rovnoběžnosti ✓");
+        state.drawing = false;
+        state._parallelRefIdx = null;
+        calculateAllIntersections();
+        renderAll();
+        resetHint();
+        return;
+      }
+    }
+
+    // Režim: nová rovnoběžka procházející bodem (původní chování)
     const dx = refObj.x2 - refObj.x1;
     const dy = refObj.y2 - refObj.y1;
-    // Rovnoběžka procházející bodem [wx,wy] se stejným směrem, stejná délka
     pushUndo();
     addObject({
       type: 'line',
