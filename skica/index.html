@@ -358,11 +358,19 @@
             <li style="color: #6c7086">Klikněte ⊗ Průsečíky</li>
           </ul>
         </div>
-        <div class="panel-header" onclick="togglePanel('cncPanel')">
-          ▾ CNC Souřadnice
+        <div class="panel-header cnc-header" onclick="togglePanel('cncPanel')">
+          <span>▾ CNC Souřadnice</span>
+          <button
+            id="btnCncCopy"
+            class="cnc-copy-btn"
+            title="Kopírovat G-kód do schránky"
+            onclick="event.stopPropagation()"
+          >
+            📋
+          </button>
         </div>
         <div class="panel-body" id="cncPanel">
-          <pre id="cncOutput">Klikněte 📋 CNC Export</pre>
+          <pre id="cncOutput"></pre>
         </div>
         <div class="panel-header" onclick="togglePanel('calcPanel')">
           ▾ Kalkulačky

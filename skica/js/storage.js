@@ -8,6 +8,7 @@ import { calculateAllIntersections } from './geometry.js';
 import { bulgeToArc } from './utils.js';
 import { parseDXF } from './dxf.js';
 import { autoCenterView } from './canvas.js';
+import { bridge } from './bridge.js';
 
 // ── Save / Load ──
 /** Uloží aktuální projekt do localStorage. */
@@ -217,7 +218,7 @@ document.getElementById("btnLoad").addEventListener("click", () => {
 });
 
 // ── CNC Export ──
-document.getElementById("btnExport").addEventListener("click", () => {
+function runCncExport() {
   const isInc = state.coordMode === 'inc';
   let out = "; === SKICA – CNC Soustružník (X,Z) ===\n";
   out += `; Datum: ${new Date().toLocaleString("cs")}\n`;
@@ -230,6 +231,8 @@ document.getElementById("btnExport").addEventListener("click", () => {
 
   let prevX = isInc ? state.incReference.x : 0;
   let prevY = isInc ? state.incReference.y : 0;
+  let lastEndX = null;
+  let lastEndY = null;
 
   function fmtCoord(x, y) {
     if (isInc) {
@@ -242,57 +245,142 @@ document.getElementById("btnExport").addEventListener("click", () => {
     return `X${x.toFixed(3)} Z${y.toFixed(3)}`;
   }
 
-  out += "; --- Objekty ---\n";
-  state.objects.forEach((obj) => {
-    if (obj.type === "constr") return;
+  function needsRapid(x, y) {
+    if (lastEndX === null) return true;
+    return Math.abs(x - lastEndX) > 5e-4 || Math.abs(y - lastEndY) > 5e-4;
+  }
+
+  // ── Helpers: trimming to intersections ──
+  function isInsideAnyCircle(px, py) {
+    return state.objects.some(o =>
+      o.type === 'circle' && Math.hypot(px - o.cx, py - o.cy) < o.r - 0.01
+    );
+  }
+
+  function ptOnSegment(px, py, ax, ay, bx, by) {
+    const segLen = Math.hypot(bx - ax, by - ay);
+    if (segLen < 1e-9) return false;
+    const d1 = Math.hypot(px - ax, py - ay);
+    const d2 = Math.hypot(px - bx, py - by);
+    return Math.abs(d1 + d2 - segLen) < 0.1;
+  }
+
+  function nearestPt(pts, rx, ry) {
+    let best = null, bestD = Infinity;
+    for (const pt of pts) {
+      const d = Math.hypot(pt.x - rx, pt.y - ry);
+      if (d < bestD) { best = pt; bestD = d; }
+    }
+    return best;
+  }
+
+  // ── Pre-process: trim + orient right-to-left + sort ──
+  const items = [];
+  for (const obj of state.objects) {
+    if (obj.type === 'constr') continue;
+
+    if (obj.type === 'line') {
+      let x1 = obj.x1, y1 = obj.y1, x2 = obj.x2, y2 = obj.y2;
+
+      // Trim endpoints that are inside circles
+      const onSeg = state.intersections.filter(pt =>
+        ptOnSegment(pt.x, pt.y, x1, y1, x2, y2)
+      );
+      if (onSeg.length > 0) {
+        if (isInsideAnyCircle(x1, y1)) {
+          const p = nearestPt(onSeg, x1, y1);
+          if (p) { x1 = p.x; y1 = p.y; }
+        }
+        if (isInsideAnyCircle(x2, y2)) {
+          const p = nearestPt(onSeg, x2, y2);
+          if (p) { x2 = p.x; y2 = p.y; }
+        }
+      }
+
+      // Orient right to left (higher X first)
+      if (x1 < x2) { [x1, x2] = [x2, x1]; [y1, y2] = [y2, y1]; }
+
+      items.push({
+        type: 'line', name: obj.name,
+        x1, y1, x2, y2,
+        _sortX: Math.max(x1, x2)
+      });
+    } else if (obj.type === 'point') {
+      items.push({ ...obj, _sortX: obj.x });
+    } else if (obj.type === 'circle') {
+      items.push({ ...obj, _sortX: obj.cx + obj.r });
+    } else if (obj.type === 'arc') {
+      items.push({ ...obj, _sortX: obj.cx + obj.r });
+    } else if (obj.type === 'rect') {
+      // Orient right to left
+      let rx1 = obj.x1, ry1 = obj.y1, rx2 = obj.x2, ry2 = obj.y2;
+      if (rx1 < rx2) { [rx1, rx2] = [rx2, rx1]; [ry1, ry2] = [ry2, ry1]; }
+      items.push({ ...obj, x1: rx1, y1: ry1, x2: rx2, y2: ry2, _sortX: Math.max(rx1, rx2) });
+    } else if (obj.type === 'polyline') {
+      items.push({ ...obj, _sortX: Math.max(...obj.vertices.map(v => v.x)) });
+    }
+  }
+
+  // Sort right to left (highest X first)
+  items.sort((a, b) => b._sortX - a._sortX);
+
+  out += "; --- Objekty (zprava doleva) ---\n";
+  items.forEach((obj) => {
     switch (obj.type) {
       case "point":
-        out += `; ${obj.name}\nG00 ${fmtCoord(obj.x, obj.y)}\n`;
+        out += `; ${obj.name}\n`;
+        if (needsRapid(obj.x, obj.y)) out += `G00 ${fmtCoord(obj.x, obj.y)}\n`;
+        lastEndX = obj.x; lastEndY = obj.y;
         break;
       case "line":
         out += `; ${obj.name} (délka: ${Math.hypot(obj.x2 - obj.x1, obj.y2 - obj.y1).toFixed(3)})\n`;
-        out += `G00 ${fmtCoord(obj.x1, obj.y1)}\nG01 ${fmtCoord(obj.x2, obj.y2)}\n`;
+        if (needsRapid(obj.x1, obj.y1)) out += `G00 ${fmtCoord(obj.x1, obj.y1)}\n`;
+        out += `G01 ${fmtCoord(obj.x2, obj.y2)}\n`;
+        lastEndX = obj.x2; lastEndY = obj.y2;
         break;
-      case "circle":
+      case "circle": {
         out += `; ${obj.name} (R: ${obj.r.toFixed(3)})\n`;
+        const cStartX = obj.cx + obj.r, cStartY = obj.cy;
+        if (needsRapid(cStartX, cStartY)) out += `G00 ${fmtCoord(cStartX, cStartY)}\n`;
         if (isInc) {
-          // V INC režimu: přesun na startovní bod, pak 2 půlkruhy s I,K offsety
-          out += `G00 ${fmtCoord(obj.cx + obj.r, obj.cy)}\n`;
-          // Půlkruh 1: I,K jsou relativní k aktuální pozici vždy
           out += `G02 X${(-2 * obj.r).toFixed(3)} Z0.000 I${(-obj.r).toFixed(3)} K0.000\n`;
           prevX = obj.cx - obj.r; prevY = obj.cy;
           out += `G02 X${(2 * obj.r).toFixed(3)} Z0.000 I${obj.r.toFixed(3)} K0.000\n`;
           prevX = obj.cx + obj.r; prevY = obj.cy;
         } else {
-          out += `G00 X${(obj.cx + obj.r).toFixed(3)} Z${obj.cy.toFixed(3)}\n`;
           out += `G02 X${(obj.cx - obj.r).toFixed(3)} Z${obj.cy.toFixed(3)} I${(-obj.r).toFixed(3)} K0.000\n`;
           out += `G02 X${(obj.cx + obj.r).toFixed(3)} Z${obj.cy.toFixed(3)} I${obj.r.toFixed(3)} K0.000\n`;
         }
+        lastEndX = cStartX; lastEndY = cStartY;
         break;
+      }
       case "arc": {
         out += `; ${obj.name} (R: ${obj.r.toFixed(3)})\n`;
         const sx = obj.cx + obj.r * Math.cos(obj.startAngle),
           sy = obj.cy + obj.r * Math.sin(obj.startAngle);
         const ex = obj.cx + obj.r * Math.cos(obj.endAngle),
           ey = obj.cy + obj.r * Math.sin(obj.endAngle);
-        out += `G00 ${fmtCoord(sx, sy)}\nG02 ${fmtCoord(ex, ey)} R${obj.r.toFixed(3)}\n`;
+        if (needsRapid(sx, sy)) out += `G00 ${fmtCoord(sx, sy)}\n`;
+        out += `G02 ${fmtCoord(ex, ey)} R${obj.r.toFixed(3)}\n`;
+        lastEndX = ex; lastEndY = ey;
         break;
       }
       case "rect":
         out += `; ${obj.name} (${Math.abs(obj.x2 - obj.x1).toFixed(2)} × ${Math.abs(obj.y2 - obj.y1).toFixed(2)})\n`;
-        out += `G00 ${fmtCoord(obj.x1, obj.y1)}\n`;
+        if (needsRapid(obj.x1, obj.y1)) out += `G00 ${fmtCoord(obj.x1, obj.y1)}\n`;
         out += `G01 ${fmtCoord(obj.x2, obj.y1)}\n`;
         out += `G01 ${fmtCoord(obj.x2, obj.y2)}\n`;
         out += `G01 ${fmtCoord(obj.x1, obj.y2)}\n`;
         out += `G01 ${fmtCoord(obj.x1, obj.y1)}\n`;
+        lastEndX = obj.x1; lastEndY = obj.y1;
         break;
       case "polyline": {
         const pn = obj.vertices.length;
         const pSegCnt = obj.closed ? pn : pn - 1;
         out += `; ${obj.name} (${pn} vrcholů${obj.closed ? ', uzavřená' : ''})\n`;
-        // Rapid to first vertex
-        out += `G00 ${fmtCoord(obj.vertices[0].x, obj.vertices[0].y)}\n`;
-        // Segments
+        if (needsRapid(obj.vertices[0].x, obj.vertices[0].y)) {
+          out += `G00 ${fmtCoord(obj.vertices[0].x, obj.vertices[0].y)}\n`;
+        }
         for (let i = 0; i < pSegCnt; i++) {
           const pp2 = obj.vertices[(i + 1) % pn];
           const pb = obj.bulges[i] || 0;
@@ -302,13 +390,15 @@ document.getElementById("btnExport").addEventListener("click", () => {
             const pp1 = obj.vertices[i];
             const parc = bulgeToArc(pp1, pp2, pb);
             if (parc) {
-              const gCode = pb < 0 ? 'G02' : 'G03'; // CW = G02, CCW = G03
+              const gCode = pb < 0 ? 'G02' : 'G03';
               out += `${gCode} ${fmtCoord(pp2.x, pp2.y)} R${parc.r.toFixed(3)}\n`;
             } else {
               out += `G01 ${fmtCoord(pp2.x, pp2.y)}\n`;
             }
           }
         }
+        const lastV = obj.closed ? obj.vertices[0] : obj.vertices[pn - 1];
+        lastEndX = lastV.x; lastEndY = lastV.y;
         break;
       }
     }
@@ -323,11 +413,27 @@ document.getElementById("btnExport").addEventListener("click", () => {
   }
   out += "\n; === Konec ===\n";
   document.getElementById("cncOutput").textContent = out;
+  return out;
+}
+
+function copyCncToClipboard() {
+  const out = document.getElementById("cncOutput").textContent;
+  if (!out) {
+    runCncExport();
+  }
+  const text = document.getElementById("cncOutput").textContent;
   navigator.clipboard
-    .writeText(out)
+    .writeText(text)
     .then(() => showToast("CNC export zkopírován do schránky"))
-    .catch(() => showToast("CNC export vygenerován v panelu"));
+    .catch(() => showToast("Nelze zkopírovat do schránky"));
+}
+
+document.getElementById("btnExport").addEventListener("click", () => {
+  runCncExport();
+  copyCncToClipboard();
 });
+document.getElementById("btnCncCopy").addEventListener("click", copyCncToClipboard);
+bridge.runCncExport = runCncExport;
 
 // ╔══════════════════════════════════════════════════════════════╗
 // ║  Automatické ukládání do localStorage                       ║
