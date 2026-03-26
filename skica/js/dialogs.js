@@ -961,7 +961,7 @@ export function showIntersectionInfo(pt) {
  * @param {number} wx
  * @param {number} wy
  */
-export function showMeasureObjectInfo(obj, wx, wy) {
+export function showMeasureObjectInfo(obj, wx, wy, objIdx) {
   // Detekce, zda jsme kliknuli blízko koncového bodu
   const threshold = 15 / state.zoom;
   const snapPoints = getObjectSnapPoints(obj);
@@ -995,7 +995,7 @@ export function showMeasureObjectInfo(obj, wx, wy) {
       </div>`;
   } else {
     // Klik na tělo objektu – zobrazit info
-    html = buildObjectInfoDialog(obj);
+    html = buildObjectInfoDialog(obj, objIdx);
   }
 
   const overlay = document.createElement("div");
@@ -1027,7 +1027,7 @@ export function showMeasureObjectInfo(obj, wx, wy) {
   overlay.querySelector(".btn-ok").focus();
 }
 
-function buildObjectInfoDialog(obj) {
+function buildObjectInfoDialog(obj, objIdx) {
   let rows = "";
   rows += `<tr><td style="color:#a6adc8">Typ:</td><td style="color:#cdd6f4">${typeLabel(obj.type)}</td></tr>`;
   if (obj.name)
@@ -1123,6 +1123,7 @@ function buildObjectInfoDialog(obj) {
       <div class="btn-row">
         ${addDimBtn}
         <button class="btn-cancel" id="objCopy">📋 Kopírovat</button>
+        ${objIdx !== undefined ? '<button class="btn-cancel" id="objEdit" style="color:#a6e3a1;border-color:#a6e3a155">✏️ Upravit</button>' : ''}
         <button class="btn-ok" onclick="this.closest('.input-overlay').remove()">OK</button>
       </div>
     </div>`;
@@ -1150,13 +1151,24 @@ function buildObjectInfoDialog(obj) {
         overlay.remove();
       });
     }
+
+    const editBtn = overlay.querySelector("#objEdit");
+    if (editBtn && objIdx !== undefined) {
+      editBtn.addEventListener("click", () => {
+        state.selected = objIdx;
+        updateObjectList();
+        renderAll();
+        overlay.remove();
+        showEditObjectDialog(objIdx);
+      });
+    }
   }, 0);
 
   return html;
 }
 
 // ── Přidání kót k objektu ──
-function addDimensionForObject(obj) {
+export function addDimensionForObject(obj) {
   switch (obj.type) {
     case "line":
     case "constr": {

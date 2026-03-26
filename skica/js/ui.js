@@ -7,6 +7,7 @@ import { typeLabel, toolLabel, bulgeToArc } from './utils.js';
 import { renderAll } from './render.js';
 import { drawCanvas, screenToWorld, snapPt } from './canvas.js';
 import { bridge } from './bridge.js';
+import { addObject } from './objects.js';
 
 // ── Bridge registrace (rozbíjí cyklickou závislost geometry ↔ ui) ──
 bridge.updateProperties = () => updateProperties();
@@ -449,9 +450,25 @@ document.querySelectorAll("[data-tool]").forEach((btn) => {
 
 /** @param {import('./types.js').ToolType} tool */
 export function setTool(tool) {
+  // Auto-uložit rozpracovanou konturu při přepnutí nástroje
+  if (state.tool === 'polyline' && state.drawing && state.tempPoints.length >= 2) {
+    const bulges = state._polylineBulges || [];
+    while (bulges.length < state.tempPoints.length - 1) bulges.push(0);
+    pushUndo();
+    addObject({
+      type: 'polyline',
+      vertices: state.tempPoints.slice(),
+      bulges: bulges.slice(0, state.tempPoints.length - 1),
+      closed: false,
+      name: `Kontura ${state.nextId}`,
+    });
+    showToast(`Kontura uložena (${state.tempPoints.length} bodů)`);
+  }
   state.tool = tool;
   state.drawing = false;
   state.tempPoints = [];
+  state._perpRefIdx = null;
+  state._parallelRefIdx = null;
   if (state.dragging) {
     const obj = state.objects[state.dragObjIdx];
     if (obj && state.dragObjSnapshot) {
@@ -1039,6 +1056,8 @@ export function showAngleSnapDialog() {
       </div>
       <label>Vlastní krok (°):</label>
       <input type="number" id="dlgAngleStep" step="1" min="1" max="180" value="${state.angleSnapStep}" inputmode="decimal" autofocus>
+      <label style="margin-top:8px">Tolerance přichycení (°):</label>
+      <input type="number" id="dlgAngleTol" step="1" min="1" max="45" value="${state.angleSnapTolerance}" inputmode="decimal">
       <div class="btn-row">
         <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
         <button class="btn-ok" id="dlgAngleOk">OK</button>
@@ -1060,10 +1079,15 @@ export function showAngleSnapDialog() {
 
   function confirm() {
     const v = parseFloat(inp.value);
+    const tolInp = overlay.querySelector("#dlgAngleTol");
+    const tol = parseFloat(tolInp.value);
     if (!isNaN(v) && v > 0 && v <= 180) {
       state.angleSnapStep = v;
-      showToast(`Úhlový snap: ${v}°`);
     }
+    if (!isNaN(tol) && tol > 0 && tol <= 45) {
+      state.angleSnapTolerance = tol;
+    }
+    showToast(`Úhlový snap: ${state.angleSnapStep}° (tolerance ${state.angleSnapTolerance}°)`);
     overlay.remove();
   }
   overlay.querySelector("#dlgAngleOk").addEventListener("click", confirm);

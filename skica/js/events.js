@@ -7,8 +7,8 @@ import { state, pushUndo, undo, redo, showToast, toDisplayCoords } from './state
 import { renderAll } from './render.js';
 import { moveObject, addObject } from './objects.js';
 import { setTool, resetHint, setHint, updateProperties, updateObjectList, updateSnapPtsBtn, updateDimsBtn, toggleCoordMode, updateCoordModeBtn, updateSnapGridBtn, updateAngleSnapBtn, showGridSizeDialog, showAngleSnapDialog, toggleHelp } from './ui.js';
-import { findObjectAt, selectObjectAt, calculateAllIntersections, tangentsFromPointToCircle, tangentsTwoCircles, offsetObject, mirrorObject, linearArray, getLines, getCircles, intersectLineLine, intersectLineCircle, rotateObject, filletTwoLines } from './geometry.js';
-import { showNumericalInputDialog, showPolarDrawingDialog, showMeasureResult, showCircleRadiusDialog, showIntersectionInfo, showMeasureObjectInfo, showBulgeDialog, showTangentChoiceDialog, showOffsetDialog, showMirrorDialog, showLinearArrayDialog, showRotateDialog, showFilletDialog } from './dialogs.js';
+import { findObjectAt, selectObjectAt, calculateAllIntersections, tangentsFromPointToCircle, tangentsTwoCircles, offsetObject, mirrorObject, linearArray, getLines, getCircles, intersectLineLine, intersectLineCircle, rotateObject, filletTwoLines, projectPointToLine } from './geometry.js';
+import { showNumericalInputDialog, showPolarDrawingDialog, showMeasureResult, showCircleRadiusDialog, showIntersectionInfo, showMeasureObjectInfo, showBulgeDialog, showTangentChoiceDialog, showOffsetDialog, showMirrorDialog, showLinearArrayDialog, showRotateDialog, showFilletDialog, addDimensionForObject } from './dialogs.js';
 import { saveProject, showExportImageDialog, showProjectsDialog, showSaveAsDialog } from './storage.js';
 import { bridge } from './bridge.js';
 
@@ -28,7 +28,7 @@ drawCanvas.addEventListener("mousemove", (e) => {
 
   // Angle snap – jen při kreslení, a jen pokud object snap nezachytil bod
   if (state.angleSnap && state.drawing && state.tempPoints.length > 0
-      && ['line', 'constr', 'polyline', 'measure'].includes(state.tool)) {
+      && ['line', 'constr', 'polyline', 'measure', 'dimension'].includes(state.tool)) {
     if (state.mouse.snapType !== 'point') {
       const ref = state.tempPoints[state.tempPoints.length - 1];
       [wx, wy] = applyAngleSnap(wx, wy, ref);
@@ -143,6 +143,8 @@ document.addEventListener("keydown", (e) => {
     state.drawing = false;
     state.tempPoints = [];
     state._polylineBulges = [];
+    state._perpRefIdx = null;
+    state._parallelRefIdx = null;
     state.selected = null;
     updateProperties();
     renderAll();
@@ -227,6 +229,9 @@ document.addEventListener("keydown", (e) => {
     x: "trim",
     e: "extend",
     f: "fillet",
+    j: "perp",
+    h: "parallel",
+    u: "dimension",
   };
   // Shift+M = mirror, Shift+N = polar, Shift+G = angle snap – skip tool shortcuts
   if (!(e.shiftKey && ['m','n','g'].includes(e.key.toLowerCase())) && shortcuts[e.key.toLowerCase()])
@@ -475,7 +480,7 @@ export function handleCanvasClick(wx, wy) {
           }
           const idx = findObjectAt(wx, wy);
           if (idx !== null) {
-            showMeasureObjectInfo(state.objects[idx], wx, wy);
+            showMeasureObjectInfo(state.objects[idx], wx, wy, idx);
             return;
           }
         }
@@ -610,6 +615,18 @@ export function handleCanvasClick(wx, wy) {
 
     case "fillet":
       handleFilletClick(wx, wy);
+      break;
+
+    case "perp":
+      handlePerpClick(wx, wy);
+      break;
+
+    case "parallel":
+      handleParallelClick(wx, wy);
+      break;
+
+    case "dimension":
+      handleDimensionClick(wx, wy);
       break;
   }
 }
@@ -939,6 +956,125 @@ function handleFilletClick(wx, wy) {
     drawCanvas.addEventListener("click", onSecondClick);
     drawCanvas.addEventListener("touchend", onSecondTouch);
   });
+}
+
+// ── Kolmice – click logika ──
+function handlePerpClick(wx, wy) {
+  if (!state.drawing) {
+    // 1. klik: vyber referenční úsečku
+    const idx = findObjectAt(wx, wy);
+    if (idx === null) { showToast("Klepněte na úsečku"); return; }
+    const obj = state.objects[idx];
+    if (obj.type !== 'line' && obj.type !== 'constr') {
+      showToast("Kolmice funguje pouze pro úsečky");
+      return;
+    }
+    state.drawing = true;
+    state._perpRefIdx = idx;
+    state.selected = idx;
+    renderAll();
+    setHint("Klepněte na bod – kolmice z bodu na úsečku");
+  } else {
+    // 2. klik: bod, ze kterého se vede kolmice
+    const refObj = state.objects[state._perpRefIdx];
+    if (!refObj) { state.drawing = false; resetHint(); return; }
+
+    const foot = projectPointToLine(wx, wy, refObj.x1, refObj.y1, refObj.x2, refObj.y2);
+    pushUndo();
+    addObject({
+      type: 'line',
+      x1: wx, y1: wy,
+      x2: foot.x, y2: foot.y,
+      name: `Kolmice ${state.nextId}`,
+    });
+    showToast("Kolmice vytvořena ✓");
+    state.drawing = false;
+    state._perpRefIdx = null;
+    calculateAllIntersections();
+    renderAll();
+    resetHint();
+  }
+}
+
+// ── Rovnoběžka – click logika ──
+function handleParallelClick(wx, wy) {
+  if (!state.drawing) {
+    // 1. klik: vyber referenční úsečku
+    const idx = findObjectAt(wx, wy);
+    if (idx === null) { showToast("Klepněte na úsečku"); return; }
+    const obj = state.objects[idx];
+    if (obj.type !== 'line' && obj.type !== 'constr') {
+      showToast("Rovnoběžka funguje pouze pro úsečky");
+      return;
+    }
+    state.drawing = true;
+    state._parallelRefIdx = idx;
+    state.selected = idx;
+    renderAll();
+    setHint("Klepněte na bod – rovnoběžka procházející bodem");
+  } else {
+    // 2. klik: bod, kterým prochází rovnoběžka
+    const refObj = state.objects[state._parallelRefIdx];
+    if (!refObj) { state.drawing = false; resetHint(); return; }
+
+    const dx = refObj.x2 - refObj.x1;
+    const dy = refObj.y2 - refObj.y1;
+    // Rovnoběžka procházející bodem [wx,wy] se stejným směrem, stejná délka
+    pushUndo();
+    addObject({
+      type: 'line',
+      x1: wx - dx / 2, y1: wy - dy / 2,
+      x2: wx + dx / 2, y2: wy + dy / 2,
+      name: `Rovnoběžka ${state.nextId}`,
+    });
+    showToast("Rovnoběžka vytvořena ✓");
+    state.drawing = false;
+    state._parallelRefIdx = null;
+    calculateAllIntersections();
+    renderAll();
+    resetHint();
+  }
+}
+
+// ── Kóta – click logika ──
+function handleDimensionClick(wx, wy) {
+  if (!state.drawing) {
+    // Režim B: klik na existující objekt → přidá kótu
+    const idx = findObjectAt(wx, wy);
+    if (idx !== null) {
+      const obj = state.objects[idx];
+      pushUndo();
+      addDimensionForObject(obj);
+      calculateAllIntersections();
+      renderAll();
+      return;
+    }
+    // Režim A: 2 body – 1. klik
+    state.drawing = true;
+    state.tempPoints = [{ x: wx, y: wy }];
+    setHint("Klepněte na druhý bod pro kótu");
+  } else {
+    // 2. klik – dokončit kótu mezi body
+    const p1 = state.tempPoints[0];
+    const d = Math.hypot(wx - p1.x, wy - p1.y);
+    if (d < 1e-6) { showToast("Body jsou totožné"); return; }
+    pushUndo();
+    addObject({
+      type: 'line',
+      x1: p1.x, y1: p1.y,
+      x2: wx, y2: wy,
+      name: `Kóta ${d.toFixed(2)}mm`,
+      isDimension: true,
+      color: '#9399b2',
+      layer: 2,
+    });
+    showToast(`Kóta ${d.toFixed(2)}mm přidána ✓`);
+    state.drawing = false;
+    state.tempPoints = [];
+    calculateAllIntersections();
+    renderAll();
+    resetHint();
+  }
 }
 
 // ── Rotace akce ──
