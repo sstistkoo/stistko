@@ -797,6 +797,36 @@ body {
   color: #1e1e2e;
 }
 
+#mobileSnap {
+  display: none;
+  position: fixed;
+  top: 28px;
+  right: 56px;
+  z-index: 60;
+  background: #585b70;
+  color: #cdd6f4;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  line-height: 40px;
+  text-align: center;
+  transition: background 0.2s;
+}
+
+#mobileSnap.snap-active {
+  background: #a6e3a1;
+  color: #1e1e2e;
+  box-shadow: 0 0 14px #a6e3a166;
+}
+
+#mobileSnap:active {
+  opacity: 0.8;
+}
+
 #mobileCoordMode {
   display: none;
   position: fixed;
@@ -944,7 +974,8 @@ body {
   #mobileToolbarToggle,
   #mobileSidebarToggle,
   #mobileNumInput,
-  #mobileMeasure {
+  #mobileMeasure,
+  #mobileSnap {
     bottom: max(8px, env(safe-area-inset-bottom));
   }
 
@@ -986,7 +1017,8 @@ body {
   body.toolbar-open #mobileToolbarToggle,
   body.toolbar-open #mobileNumInput,
   body.toolbar-open #mobileMeasure,
-  body.toolbar-open #mobileSidebarToggle {
+  body.toolbar-open #mobileSidebarToggle,
+  body.toolbar-open #mobileSnap {
     display: none !important;
   }
 
@@ -1042,6 +1074,12 @@ body {
   }
 
   #mobileUndo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #mobileSnap {
     display: flex;
     align-items: center;
     justify-content: center;

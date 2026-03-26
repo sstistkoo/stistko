@@ -3,7 +3,7 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 import { state, showToast } from './state.js';
-import { getObjectSnapPoints, isAngleBetween, bulgeToArc } from './utils.js';
+import { getObjectSnapPoints, isAngleBetween, bulgeToArc, getNearestPointOnObject } from './utils.js';
 import { renderAll } from './render.js';
 
 export const wrap = document.getElementById("canvasWrap");
@@ -91,6 +91,30 @@ export function snapPt(wx, wy) {
     state.mouse.snapped = true;
     state.mouse.snapType = 'point';
     return [objX, objY];
+  }
+
+  // Snap k nejbližšímu bodu na hraně objektu (nižší priorita než snap body)
+  if (state.snapToPoints) {
+    const edgeThreshold = 12 / state.zoom;
+    let edgeX = null, edgeY = null, edgeD = Infinity;
+    for (const obj of state.objects) {
+      const layer = state.layers ? state.layers.find(l => l.id === obj.layer) : null;
+      if (layer && (layer.locked || !layer.visible)) continue;
+      const np = getNearestPointOnObject(obj, wx, wy);
+      if (np && np.dist < edgeThreshold && np.dist < edgeD) {
+        edgeD = np.dist;
+        edgeX = np.x;
+        edgeY = np.y;
+      }
+    }
+    if (edgeX !== null) {
+      if (state.mouse.snapType !== 'edge' && navigator.vibrate) {
+        try { navigator.vibrate(10); } catch (_) {}
+      }
+      state.mouse.snapped = true;
+      state.mouse.snapType = 'edge';
+      return [edgeX, edgeY];
+    }
   }
 
   // Grid snap (nižší priorita než object snap)
