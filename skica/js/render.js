@@ -486,6 +486,8 @@ export function drawCircle(obj) {
 
 /** @param {import('./types.js').ArcObject} obj */
 export function drawArc(obj) {
+  const [sx, sy] = worldToScreen(obj.cx, obj.cy);
+  const r = obj.r * state.zoom;
   ctx.beginPath();
   ctx.arc(sx, sy, r, -obj.endAngle, -obj.startAngle);
   ctx.stroke();
@@ -510,6 +512,7 @@ export function drawRect(obj) {
 
 /** @param {import('./types.js').PolylineObject} obj */
 export function drawPolyline(obj) {
+  const n = obj.vertices.length;
   if (n < 2) return;
   const segCount = obj.closed ? n : n - 1;
 

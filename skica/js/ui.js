@@ -317,7 +317,11 @@ export function updateIntersectionList() {
 /** @param {string} id  ID kontejneru panelu */
 export function togglePanel(id) {
   const el = document.getElementById(id);
-  el.style.display = el.style.display === "none" ? "" : "none";
+  const opening = el.style.display === "none";
+  el.style.display = opening ? "" : "none";
+  if (opening && id === 'cncPanel' && bridge.runCncExport) {
+    bridge.runCncExport();
+  }
 }
 
 // ── Vrstvy ──
