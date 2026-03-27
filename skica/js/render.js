@@ -71,6 +71,19 @@ function renderAxes() {
   g.font = "14px Consolas";
   g.fillText("0", state.panX + 4, state.panY - 5);
 
+  // Origin marker – terčík na 0,0
+  g.strokeStyle = "#f9e2af88";
+  g.lineWidth = 1.5;
+  g.beginPath();
+  g.arc(state.panX, state.panY, 6, 0, Math.PI * 2);
+  g.stroke();
+  g.beginPath();
+  g.moveTo(state.panX - 10, state.panY);
+  g.lineTo(state.panX + 10, state.panY);
+  g.moveTo(state.panX, state.panY - 10);
+  g.lineTo(state.panX, state.panY + 10);
+  g.stroke();
+
   // Popisky os X a Z
   g.font = "bold 14px Consolas";
   g.fillStyle = "#f38ba8";

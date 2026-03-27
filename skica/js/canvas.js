@@ -60,6 +60,15 @@ export function snapPt(wx, wy) {
   // Snap k bodům objektů a průsečíkům – větší poloměr zachycení
   if (state.snapToPoints) {
     const threshold = 20 / state.zoom;
+
+    // Snap k počátku (0,0)
+    const dOrigin = Math.hypot(wx, wy);
+    if (dOrigin < threshold) {
+      objD = dOrigin;
+      objX = 0;
+      objY = 0;
+    }
+
     for (const obj of state.objects) {
       const pts = getObjectSnapPoints(obj);
       for (const p of pts) {
