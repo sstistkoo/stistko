@@ -1197,14 +1197,23 @@ export function addDimensionForObject(obj) {
     case "line":
     case "constr": {
       const len = Math.hypot(obj.x2 - obj.x1, obj.y2 - obj.y1);
+      // Offset kolmo k úsečce (ve world coords)
+      const dimOffset = 8;
+      const ang = Math.atan2(obj.y2 - obj.y1, obj.x2 - obj.x1);
+      const nx = -Math.sin(ang) * dimOffset;
+      const ny = Math.cos(ang) * dimOffset;
       addObject({
         type: "line",
-        x1: obj.x1,
-        y1: obj.y1,
-        x2: obj.x2,
-        y2: obj.y2,
-        name: `Kóta ${len.toFixed(2)}mm`,
+        x1: obj.x1 + nx,
+        y1: obj.y1 + ny,
+        x2: obj.x2 + nx,
+        y2: obj.y2 + ny,
         isDimension: true,
+        dimSrcX1: obj.x1,
+        dimSrcY1: obj.y1,
+        dimSrcX2: obj.x2,
+        dimSrcY2: obj.y2,
+        name: `Kóta ${len.toFixed(2)}mm`,
         color: "#9399b2",
       });
       showToast(`Kóta ${len.toFixed(2)}mm přidána`);
