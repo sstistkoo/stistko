@@ -77,6 +77,8 @@ export function findObjectAt(wx, wy) {
     // Skip objects on locked or invisible layers
     const layer = state.layers.find(l => l.id === obj.layer);
     if (layer && (layer.locked || !layer.visible)) return;
+    // Skip hidden dimension objects
+    if (!state.showDimensions && (obj.isDimension || obj.isCoordLabel)) return;
 
     const d = distToObject(obj, wx, wy);
     if (d < closestDist) {
