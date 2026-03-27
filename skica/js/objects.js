@@ -13,6 +13,13 @@ import { autoCenterView } from './canvas.js';
  * @returns {import('./types.js').DrawObject}
  */
 export function addObject(obj) {
+  // Validate numeric coordinates are finite
+  for (const key of ['x','y','x1','y1','x2','y2','cx','cy','r','startAngle','endAngle']) {
+    if (key in obj && !isFinite(obj[key])) {
+      console.warn(`addObject: neplatná hodnota ${key}=${obj[key]}, objekt nebyl přidán`);
+      return null;
+    }
+  }
   pushUndo();
   obj.id = state.nextId++;
   // Assign layer: construction lines default to layer 1, others to active layer

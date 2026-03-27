@@ -127,7 +127,7 @@ function renderObjects() {
         drawRect(obj);
         break;
       case "polyline":
-        drawPolyline(obj);
+        drawPolyline(obj, isSel);
         break;
     }
     ctx.setLineDash([]);
@@ -666,10 +666,16 @@ export function drawRect(obj) {
 }
 
 /** @param {import('./types.js').PolylineObject} obj */
-export function drawPolyline(obj) {
+export function drawPolyline(obj, isSel) {
   const n = obj.vertices.length;
   if (n < 2) return;
   const segCount = obj.closed ? n : n - 1;
+  const selSeg = state.selectedSegment;
+  const hasSelSeg = isSel && selSeg !== null && selSeg >= 0 && selSeg < segCount;
+
+  // Save current styles for non-selected segments
+  const baseStroke = ctx.strokeStyle;
+  const baseWidth = ctx.lineWidth;
 
   for (let i = 0; i < segCount; i++) {
     const p1 = obj.vertices[i];
@@ -677,6 +683,15 @@ export function drawPolyline(obj) {
     const b = obj.bulges[i] || 0;
     const [sx1, sy1] = worldToScreen(p1.x, p1.y);
     const [sx2, sy2] = worldToScreen(p2.x, p2.y);
+
+    // Highlight selected segment
+    if (hasSelSeg && i === selSeg) {
+      ctx.strokeStyle = "#f38ba8";  // Pink for selected segment
+      ctx.lineWidth = 3.5;
+    } else if (hasSelSeg) {
+      ctx.strokeStyle = baseStroke;
+      ctx.lineWidth = baseWidth;
+    }
 
     if (b === 0) {
       ctx.beginPath();
@@ -694,13 +709,24 @@ export function drawPolyline(obj) {
       }
     }
   }
+
+  // Restore styles
+  ctx.strokeStyle = baseStroke;
+  ctx.lineWidth = baseWidth;
+
   // Vertex dots
-  for (const v of obj.vertices) {
+  for (let vi = 0; vi < n; vi++) {
+    const v = obj.vertices[vi];
     const [sx, sy] = worldToScreen(v.x, v.y);
+    // Highlight vertices of selected segment
+    const isSegVertex = hasSelSeg && (vi === selSeg || vi === (selSeg + 1) % n);
+    ctx.fillStyle = isSegVertex ? "#f38ba8" : ctx.strokeStyle;
     ctx.beginPath();
-    ctx.arc(sx, sy, 2.5, 0, Math.PI * 2);
+    ctx.arc(sx, sy, isSegVertex ? 4.5 : 2.5, 0, Math.PI * 2);
     ctx.fill();
   }
+  // Restore fillStyle
+  ctx.fillStyle = baseStroke;
 }
 
 // ── Vodící čára pro angle snap ──

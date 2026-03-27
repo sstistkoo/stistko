@@ -171,10 +171,18 @@ export function showNumericalInputDialog() {
   // -- Pick from map helper --
   let _pickCallback = null;
 
+  let _pickCleanup = null;
+
   function pickFromMap(callback) {
     _pickCallback = callback;
     overlay.style.display = "none";
     showToast("Klikněte na mapu pro výběr bodu...");
+
+    function cleanup() {
+      drawCanvas.removeEventListener("click", onPick);
+      drawCanvas.removeEventListener("touchend", onTouch);
+      _pickCleanup = null;
+    }
 
     function onPick(e) {
       const rect = drawCanvas.getBoundingClientRect();
@@ -182,8 +190,7 @@ export function showNumericalInputDialog() {
       const sy = e.clientY - rect.top;
       let [wx, wy] = screenToWorld(sx, sy);
       if (state.snapToPoints) [wx, wy] = snapPt(wx, wy);
-      drawCanvas.removeEventListener("click", onPick);
-      drawCanvas.removeEventListener("touchend", onTouch);
+      cleanup();
       overlay.style.display = "flex";
       callback(wx, wy);
     }
@@ -196,16 +203,16 @@ export function showNumericalInputDialog() {
         const sy = t.clientY - rect.top;
         let [wx, wy] = screenToWorld(sx, sy);
         if (state.snapToPoints) [wx, wy] = snapPt(wx, wy);
-        drawCanvas.removeEventListener("click", onPick);
-        drawCanvas.removeEventListener("touchend", onTouch);
+        cleanup();
         overlay.style.display = "flex";
         e.preventDefault();
         callback(wx, wy);
       }
     }
 
-    drawCanvas.addEventListener("click", onPick, { once: true });
-    drawCanvas.addEventListener("touchend", onTouch, { once: true });
+    drawCanvas.addEventListener("click", onPick);
+    drawCanvas.addEventListener("touchend", onTouch);
+    _pickCleanup = cleanup;
   }
 
   function pickBtn(label) {
@@ -624,20 +631,21 @@ export function showNumericalInputDialog() {
 
   // Vytvořit a zavřít
   overlay.querySelector("#numOk").addEventListener("click", () => {
-    if (createObject()) overlay.remove();
+    if (createObject()) { if (_pickCleanup) _pickCleanup(); overlay.remove(); }
   });
 
   // Zrušit
   overlay.querySelector("#numCancel").addEventListener("click", () => {
     state.numDialogChain = { x: null, y: null };
+    if (_pickCleanup) _pickCleanup();
     overlay.remove();
   });
 
   overlay.addEventListener("keydown", (e) => {
     if (e.key === "Enter" && e.target.tagName === "INPUT") {
-      if (createObject()) overlay.remove();
+      if (createObject()) { if (_pickCleanup) _pickCleanup(); overlay.remove(); }
     }
-    if (e.key === "Escape") overlay.remove();
+    if (e.key === "Escape") { if (_pickCleanup) _pickCleanup(); overlay.remove(); }
   });
 }
 
@@ -1030,8 +1038,10 @@ export function showMeasureObjectInfo(obj, wx, wy, objIdx) {
 function buildObjectInfoDialog(obj, objIdx) {
   let rows = "";
   rows += `<tr><td style="color:#a6adc8">Typ:</td><td style="color:#cdd6f4">${typeLabel(obj.type)}</td></tr>`;
-  if (obj.name)
-    rows += `<tr><td style="color:#a6adc8">Název:</td><td style="color:#cdd6f4">${obj.name}</td></tr>`;
+  if (obj.name) {
+    const safeName = obj.name.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    rows += `<tr><td style="color:#a6adc8">Název:</td><td style="color:#cdd6f4">${safeName}</td></tr>`;
+  }
 
   switch (obj.type) {
     case "point":
@@ -1170,6 +1180,31 @@ function buildObjectInfoDialog(obj, objIdx) {
 // ── Přidání kót k objektu ──
 export function addDimensionForObject(obj) {
   switch (obj.type) {
+    case "point": {
+      // Kóta bodu: souřadnice X a Z od počátku
+      if (Math.abs(obj.x) > 1e-6) {
+        addObject({
+          type: "line",
+          x1: 0, y1: obj.y,
+          x2: obj.x, y2: obj.y,
+          name: `Kóta X${obj.x.toFixed(2)}`,
+          isDimension: true,
+          color: "#9399b2",
+        });
+      }
+      if (Math.abs(obj.y) > 1e-6) {
+        addObject({
+          type: "line",
+          x1: obj.x, y1: 0,
+          x2: obj.x, y2: obj.y,
+          name: `Kóta Z${obj.y.toFixed(2)}`,
+          isDimension: true,
+          color: "#9399b2",
+        });
+      }
+      showToast(`Kóta X${obj.x.toFixed(2)} Z${obj.y.toFixed(2)} přidána`);
+      break;
+    }
     case "line":
     case "constr": {
       const len = Math.hypot(obj.x2 - obj.x1, obj.y2 - obj.y1);
@@ -1242,6 +1277,55 @@ export function addDimensionForObject(obj) {
       showToast(`Kóty ${w.toFixed(2)} × ${h.toFixed(2)}mm přidány`);
       break;
     }
+    case "polyline": {
+      if (!obj.vertices || obj.vertices.length < 2) {
+        showToast("Kontura nemá dostatek bodů");
+        break;
+      }
+      const verts = obj.vertices;
+      const n = verts.length;
+      const segCount = obj.closed ? n : n - 1;
+      let dimCount = 0;
+      for (let i = 0; i < segCount; i++) {
+        const p1 = verts[i];
+        const p2 = verts[(i + 1) % n];
+        const b = (obj.bulges && obj.bulges[i]) || 0;
+        if (Math.abs(b) > 1e-6) {
+          // Obloukový segment – kóta poloměru
+          const arc = bulgeToArc(p1, p2, b);
+          if (arc) {
+            addObject({
+              type: "line",
+              x1: arc.cx, y1: arc.cy,
+              x2: arc.cx + arc.r, y2: arc.cy,
+              name: `Kóta R${arc.r.toFixed(2)}`,
+              isDimension: true,
+              color: "#9399b2",
+            });
+            dimCount++;
+          }
+        } else {
+          // Přímý segment – kóta délky
+          const len = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+          if (len > 1e-6) {
+            addObject({
+              type: "line",
+              x1: p1.x, y1: p1.y,
+              x2: p2.x, y2: p2.y,
+              name: `Kóta ${len.toFixed(2)}mm`,
+              isDimension: true,
+              color: "#9399b2",
+            });
+            dimCount++;
+          }
+        }
+      }
+      showToast(`${dimCount} kót přidáno ke kontuře`);
+      break;
+    }
+    default:
+      showToast("Pro tento typ objektu nelze přidat kótu");
+      break;
   }
 }
 

@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
     <title>SKICA – CAD pro CNC soustružník v3</title>
     <link rel="icon" type="image/svg+xml" href="icons/icon.svg" />
@@ -30,8 +30,8 @@
     <button id="mobileAutoCenter" aria-label="Vycentrovat">⊙</button>
     <button id="mobileCancel" aria-label="Zrušit">✕</button>
     <button id="mobileUndo" aria-label="Zpět">↩</button>
+    <button id="mobileRedo" aria-label="Vpřed">↪</button>
     <button id="mobileSnap" aria-label="Přichycení">🧲</button>
-    <button id="mobileCoordMode" aria-label="ABS/INC">ABS</button>
     <div id="mobileCoordBar">X: 0.000 &nbsp; Z: 0.000</div>
     <div id="sidebarOverlay"></div>
 
@@ -53,10 +53,10 @@
       >
         ✕
       </button>
-      <button class="tool-btn" id="btnUndo" title="Zpět (Ctrl+Z)" disabled>
+      <button class="tool-btn mobile-hide" id="btnUndo" title="Zpět (Ctrl+Z)" disabled>
         ↩ Zpět
       </button>
-      <button class="tool-btn" id="btnRedo" title="Vpřed (Ctrl+Y)" disabled>
+      <button class="tool-btn mobile-hide" id="btnRedo" title="Vpřed (Ctrl+Y)" disabled>
         ↪ Vpřed
       </button>
       <div class="sep"></div>
@@ -699,7 +699,7 @@
     </div>
 
     <!-- ── Help Overlay ── -->
-    <div id="helpOverlay" class="help-overlay" style="display: none">
+    <div id="helpOverlay" class="help-overlay">
       <div class="help-panel">
         <div class="help-header">
           <h2>❓ SKICA – Nápověda</h2>
