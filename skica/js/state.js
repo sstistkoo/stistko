@@ -32,6 +32,7 @@ export function showToast(msg, duration = 2000) {
 export const state = {
   objects: [],
   selected: null,
+  selectedSegment: null,
   tool: "select",
   snapToPoints: true,
   snapToGrid: false,
@@ -124,6 +125,7 @@ export function updateUndoButtons() {
   document
     .getElementById("btnRedo")
     .classList.toggle("disabled", state.redoStack.length === 0);
+  if (bridge.updateMobileRedoBtn) bridge.updateMobileRedoBtn();
 }
 
 // ── Inkrementální souřadnice – pomocné funkce ──

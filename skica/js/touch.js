@@ -3,11 +3,11 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 import { drawCanvas, screenToWorld, snapPt, autoCenterView, applyAngleSnap } from './canvas.js';
-import { state, undo, showToast, toDisplayCoords } from './state.js';
+import { state, undo, redo, showToast, toDisplayCoords } from './state.js';
 import { renderAll } from './render.js';
 import { moveObject } from './objects.js';
 import { handleCanvasClick } from './events.js';
-import { setTool, resetHint, toggleCoordMode, updateSnapPtsBtn } from './ui.js';
+import { setTool, resetHint, updateSnapPtsBtn } from './ui.js';
 import { toolLabel } from './utils.js';
 import { showNumericalInputDialog, showMobileEditDialog } from './dialogs.js';
 import { bridge } from './bridge.js';
@@ -191,16 +191,25 @@ export function updateMobileCancelBtn() {
 document.getElementById("mobileUndo").addEventListener("click", (e) => {
   e.stopPropagation();
   undo();
+  updateMobileRedoBtn();
 });
 
-// ── Mobile: Coord Mode tlačítko ──
-const mobileCoordModeBtn = document.getElementById("mobileCoordMode");
-if (mobileCoordModeBtn) {
-  mobileCoordModeBtn.addEventListener("click", (e) => {
+// ── Mobile: Redo tlačítko ──
+const mobileRedoBtn = document.getElementById("mobileRedo");
+if (mobileRedoBtn) {
+  mobileRedoBtn.addEventListener("click", (e) => {
     e.stopPropagation();
-    toggleCoordMode();
+    redo();
+    updateMobileRedoBtn();
   });
 }
+
+/** Zobrazí/skryje mobileRedo tlačítko podle stavu redoStack. */
+export function updateMobileRedoBtn() {
+  if (!isMobile() || !mobileRedoBtn) return;
+  mobileRedoBtn.style.display = state.redoStack.length > 0 ? 'flex' : 'none';
+}
+bridge.updateMobileRedoBtn = updateMobileRedoBtn;
 
 // ── Touch state ──
 const PRECISION_OFFSET_Y = -80; // crosshair 80px above finger

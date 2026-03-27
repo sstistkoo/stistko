@@ -797,6 +797,30 @@ body {
   color: #1e1e2e;
 }
 
+#mobileRedo {
+  display: none;
+  position: fixed;
+  top: 28px;
+  left: 102px;
+  z-index: 60;
+  background: #585b70;
+  color: #cdd6f4;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  line-height: 40px;
+  text-align: center;
+}
+
+#mobileRedo:active {
+  background: #89b4fa;
+  color: #1e1e2e;
+}
+
 #mobileSnap {
   display: none;
   position: fixed;
@@ -825,33 +849,6 @@ body {
 
 #mobileSnap:active {
   opacity: 0.8;
-}
-
-#mobileCoordMode {
-  display: none;
-  position: fixed;
-  top: 28px;
-  left: 102px;
-  z-index: 60;
-  background: #585b70;
-  color: #cdd6f4;
-  border: none;
-  border-radius: 16px;
-  width: auto;
-  padding: 0 10px;
-  height: 40px;
-  font-size: 13px;
-  font-family: "Consolas", monospace;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-  line-height: 40px;
-  text-align: center;
-}
-
-#mobileCoordMode:active {
-  background: #89b4fa;
-  color: #1e1e2e;
 }
 
 
@@ -1018,7 +1015,8 @@ body {
   body.toolbar-open #mobileNumInput,
   body.toolbar-open #mobileMeasure,
   body.toolbar-open #mobileSidebarToggle,
-  body.toolbar-open #mobileSnap {
+  body.toolbar-open #mobileSnap,
+  body.toolbar-open #mobileRedo {
     display: none !important;
   }
 
@@ -1085,17 +1083,9 @@ body {
     justify-content: center;
   }
 
-  #mobileCoordMode {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  /* mobileRedo: hidden by default, shown by JS when redo is available */
 
-  /* Hide duplicated toolbar items on mobile */
-  [data-tool="measure"].tool-btn,
-  #btnNumInput {
-    /* visible on desktop, hidden handled by mobile-specific override */
-  }
+  /* Hide duplicated toolbar items on mobile – handled by mobile-specific overrides */
 
   .mobile-hide {
     display: none !important;
@@ -1310,6 +1300,60 @@ body {
 .calc-clear { background: #45475a; color: #f38ba8; }
 .calc-copy { background: #45475a; color: #f9e2af; }
 
+/* ── Calculator expression display ── */
+.calc-expr {
+  font-size: 12px;
+  color: #6c7086;
+  font-family: "Consolas", monospace;
+  text-align: right;
+  padding: 2px 14px 0;
+  min-height: 18px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Calculator / Trig history ── */
+.calc-history,
+.trig-history {
+  max-height: 120px;
+  overflow-y: auto;
+  margin-top: 8px;
+  border-top: 1px solid #313244;
+}
+.calc-history:empty,
+.trig-history:empty {
+  display: none;
+}
+.calc-history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-family: "Consolas", monospace;
+  color: #a6adc8;
+  cursor: pointer;
+  border-bottom: 1px solid #18182522;
+  transition: background 0.1s;
+}
+.calc-history-item:hover {
+  background: #313244;
+  color: #cdd6f4;
+}
+.calc-hist-expr {
+  color: #6c7086;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-right: 8px;
+}
+.calc-hist-result {
+  color: #f9e2af;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
 /* ── Trig calculator ── */
 .trig-window {
   min-width: 380px;
@@ -1447,10 +1491,14 @@ body {
   bottom: 0;
   background: rgba(0, 0, 0, 0.7);
   z-index: 300;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   animation: helpFadeIn 0.2s ease;
+}
+
+.help-overlay.visible {
+  display: flex;
 }
 
 @keyframes helpFadeIn {

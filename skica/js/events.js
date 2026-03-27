@@ -7,9 +7,10 @@ import { state, pushUndo, undo, redo, showToast, toDisplayCoords } from './state
 import { renderAll } from './render.js';
 import { moveObject, addObject } from './objects.js';
 import { setTool, resetHint, setHint, updateProperties, updateObjectList, updateSnapPtsBtn, updateDimsBtn, toggleCoordMode, updateCoordModeBtn, updateSnapGridBtn, updateAngleSnapBtn, showGridSizeDialog, showAngleSnapDialog, toggleHelp } from './ui.js';
-import { findObjectAt, selectObjectAt, calculateAllIntersections, tangentsFromPointToCircle, tangentsTwoCircles, offsetObject, mirrorObject, linearArray, getLines, getCircles, intersectLineLine, intersectLineCircle, rotateObject, filletTwoLines, projectPointToLine, circlePositionsTangentToLine, circlePositionsTangentToTwoLines } from './geometry.js';
+import { findObjectAt, selectObjectAt, calculateAllIntersections, tangentsFromPointToCircle, tangentsTwoCircles, offsetObject, mirrorObject, linearArray, getLines, getCircles, intersectLineLine, intersectLineCircle, rotateObject, filletTwoLines, projectPointToLine, circlePositionsTangentToLine, circlePositionsTangentToTwoLines, findSegmentAt } from './geometry.js';
 import { showNumericalInputDialog, showPolarDrawingDialog, showMeasureResult, showCircleRadiusDialog, showIntersectionInfo, showMeasureObjectInfo, showBulgeDialog, showTangentChoiceDialog, showTangentPositionDialog, showOffsetDialog, showMirrorDialog, showLinearArrayDialog, showRotateDialog, showFilletDialog, addDimensionForObject } from './dialogs.js';
 import { saveProject, showExportImageDialog, showProjectsDialog, showSaveAsDialog } from './storage.js';
+import { bulgeToArc } from './utils.js';
 import { bridge } from './bridge.js';
 
 let isPanning = false;
@@ -127,8 +128,15 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
     // Close help overlay if open
     const helpOverlay = document.getElementById('helpOverlay');
-    if (helpOverlay && helpOverlay.style.display !== 'none') {
-      helpOverlay.style.display = 'none';
+    if (helpOverlay && helpOverlay.classList.contains('visible')) {
+      helpOverlay.classList.remove('visible');
+      return;
+    }
+    // Exit segment editing mode first
+    if (state.selectedSegment !== null) {
+      state.selectedSegment = null;
+      updateProperties();
+      renderAll();
       return;
     }
     if (state.dragging) {
@@ -150,6 +158,7 @@ document.addEventListener("keydown", (e) => {
     state._tangentFirstCircle = null;
     state._tangentFirstLine = null;
     state.selected = null;
+    state.selectedSegment = null;
     updateProperties();
     renderAll();
     resetHint();
@@ -282,9 +291,17 @@ document.addEventListener("keydown", (e) => {
     }
   }
   if (e.key === "Delete" && state.selected !== null) {
+    const obj = state.objects[state.selected];
+    // Delete individual segment from polyline
+    if (obj && obj.type === 'polyline' && state.selectedSegment !== null) {
+      e.preventDefault();
+      deleteSelectedSegment();
+      return;
+    }
     pushUndo();
     state.objects.splice(state.selected, 1);
     state.selected = null;
+    state.selectedSegment = null;
     updateObjectList();
     updateProperties();
     calculateAllIntersections();
@@ -338,6 +355,22 @@ document.addEventListener("keydown", (e) => {
       });
     }
   }
+  // B key in segment editing mode: bulge dialog for selected segment
+  if (e.key.toLowerCase() === "b" && !state.drawing && state.selected !== null && state.selectedSegment !== null) {
+    const obj = state.objects[state.selected];
+    if (obj && obj.type === 'polyline') {
+      const si = state.selectedSegment;
+      const pn = obj.vertices.length;
+      const p1 = obj.vertices[si];
+      const p2 = obj.vertices[(si + 1) % pn];
+      showBulgeDialog(p1, p2, obj.bulges[si] || 0, (newBulge) => {
+        pushUndo();
+        obj.bulges[si] = newBulge;
+        updateProperties();
+        renderAll();
+      });
+    }
+  }
 });
 
 drawCanvas.addEventListener("contextmenu", (e) => {
@@ -384,6 +417,9 @@ drawCanvas.addEventListener("contextmenu", (e) => {
     menuItems += `<div class="ctx-item" data-action="rotate" style="${itemStyle}">🔄 Otočit</div>`;
     menuItems += `<div class="ctx-item" data-action="array" style="${itemStyle}">📏 Lineární pole</div>`;
     menuItems += `<div class="ctx-item" data-action="offset" style="${itemStyle}">⇔ Offset</div>`;
+    if (state.objects[ctxIdx] && state.objects[ctxIdx].type === 'polyline') {
+      menuItems += `<div class="ctx-item" data-action="explode" style="${itemStyle}">💥 Rozložit konturu</div>`;
+    }
     menuItems += `<div style="border-top:1px solid #45475a;margin:2px 0"></div>`;
     menuItems += `<div class="ctx-item" data-action="delete" style="${itemStyle};color:#f38ba8">🗑 Smazat</div>`;
   }
@@ -410,6 +446,8 @@ drawCanvas.addEventListener("contextmenu", (e) => {
         if (ctxIdx !== null && state.objects[ctxIdx]) {
           handleOffsetClick(wx, wy);
         }
+      } else if (action === 'explode') {
+        explodeSelectedPolyline();
       } else if (action === 'delete') {
         deleteSelected();
       }
@@ -1235,11 +1273,155 @@ function deleteSelected() {
   pushUndo();
   state.objects.splice(state.selected, 1);
   state.selected = null;
+  state.selectedSegment = null;
   updateObjectList();
   updateProperties();
   calculateAllIntersections();
   renderAll();
   showToast("Objekt smazán ✓");
+}
+
+// ── Smazání vybraného segmentu kontury ──
+function deleteSelectedSegment() {
+  if (state.selected === null || state.selectedSegment === null) return;
+  const obj = state.objects[state.selected];
+  if (!obj || obj.type !== 'polyline') return;
+  const segIdx = state.selectedSegment;
+  const n = obj.vertices.length;
+  const segCount = obj.closed ? n : n - 1;
+  if (segIdx < 0 || segIdx >= segCount) return;
+
+  pushUndo();
+
+  if (n <= 2) {
+    // Only 2 vertices = 1 segment → delete the whole polyline
+    state.objects.splice(state.selected, 1);
+    state.selected = null;
+    state.selectedSegment = null;
+  } else if (obj.closed) {
+    // Closed polyline: remove vertex at segIdx+1 (or segIdx for last segment), open the polyline
+    // Remove the end vertex of this segment, reorder so segIdx+1 becomes the break point
+    const removeIdx = (segIdx + 1) % n;
+    obj.vertices.splice(removeIdx, 1);
+    obj.bulges.splice(segIdx, 1);
+    obj.closed = false;
+    // Reorder so the break is at start/end
+    if (removeIdx > 0 && removeIdx < obj.vertices.length) {
+      const newVerts = [...obj.vertices.slice(removeIdx), ...obj.vertices.slice(0, removeIdx)];
+      const newBulges = [...obj.bulges.slice(removeIdx), ...obj.bulges.slice(0, removeIdx)];
+      obj.vertices = newVerts;
+      obj.bulges = newBulges;
+    }
+    state.selectedSegment = null;
+  } else {
+    // Open polyline: remove vertex to delete segment
+    if (segIdx === 0) {
+      // First segment → remove the first vertex
+      obj.vertices.splice(0, 1);
+      obj.bulges.splice(0, 1);
+    } else if (segIdx === segCount - 1) {
+      // Last segment → remove the last vertex
+      obj.vertices.splice(n - 1, 1);
+      obj.bulges.splice(segIdx, 1);
+    } else {
+      // Middle segment → split into two polylines
+      const verts1 = obj.vertices.slice(0, segIdx + 1);
+      const bulges1 = obj.bulges.slice(0, segIdx);
+      const verts2 = obj.vertices.slice(segIdx + 1);
+      const bulges2 = obj.bulges.slice(segIdx + 1);
+
+      // Replace current object with first half
+      obj.vertices = verts1;
+      obj.bulges = bulges1;
+      obj.closed = false;
+
+      // Add second half as new object
+      if (verts2.length >= 2) {
+        const newObj = {
+          type: 'polyline',
+          vertices: verts2,
+          bulges: bulges2,
+          closed: false,
+          name: `Kontura ${state.nextId}`,
+          layer: obj.layer,
+          color: obj.color,
+        };
+        addObject(newObj);
+      }
+    }
+    state.selectedSegment = null;
+  }
+
+  updateObjectList();
+  updateProperties();
+  calculateAllIntersections();
+  renderAll();
+  showToast("Segment smazán ✓");
+}
+
+// ── Rozložení kontury na segmenty ──
+function explodeSelectedPolyline() {
+  if (state.selected === null) return;
+  const obj = state.objects[state.selected];
+  if (!obj || obj.type !== 'polyline') { showToast("Vyberte konturu"); return; }
+
+  const n = obj.vertices.length;
+  const segCount = obj.closed ? n : n - 1;
+  if (segCount < 1) return;
+
+  pushUndo();
+
+  const newObjects = [];
+  for (let i = 0; i < segCount; i++) {
+    const p1 = obj.vertices[i];
+    const p2 = obj.vertices[(i + 1) % n];
+    const b = obj.bulges[i] || 0;
+
+    if (b === 0) {
+      // Straight segment → line
+      newObjects.push({
+        type: 'line',
+        x1: p1.x, y1: p1.y,
+        x2: p2.x, y2: p2.y,
+        name: `Úsečka ${state.nextId + newObjects.length}`,
+        layer: obj.layer,
+        color: obj.color,
+      });
+    } else {
+      // Arc segment → arc
+      const arc = bulgeToArc(p1, p2, b);
+      if (arc) {
+        newObjects.push({
+          type: 'arc',
+          cx: arc.cx, cy: arc.cy,
+          r: arc.r,
+          startAngle: arc.startAngle,
+          endAngle: arc.endAngle,
+          name: `Oblouk ${state.nextId + newObjects.length}`,
+          layer: obj.layer,
+          color: obj.color,
+        });
+      }
+    }
+  }
+
+  // Remove the polyline
+  state.objects.splice(state.selected, 1);
+  state.selected = null;
+  state.selectedSegment = null;
+
+  // Add new individual objects (without pushUndo, already done)
+  for (const no of newObjects) {
+    no.id = state.nextId++;
+    if (no.layer === undefined) no.layer = state.activeLayer;
+    state.objects.push(no);
+  }
+
+  updateObjectList();
+  updateProperties();
+  calculateAllIntersections();
+  renderAll();
+  showToast(`Kontura rozložena na ${newObjects.length} segmentů ✓`);
 }
 
 // ── Zrcadlení akce ──
@@ -1420,7 +1602,7 @@ function handleSnapPointClick(wx, wy) {
 document.getElementById("btnDelete").addEventListener("click", deleteSelected);
 document.getElementById("btnRotate").addEventListener("click", startRotateAction);
 
-// ── Double-click: dokončit konturu ──
+// ── Double-click: dokončit konturu / vybrat segment ──
 drawCanvas.addEventListener("dblclick", (e) => {
   if (state.drawing && state.tool === "polyline" && state.tempPoints.length >= 2) {
     e.preventDefault();
@@ -1440,5 +1622,24 @@ drawCanvas.addEventListener("dblclick", (e) => {
     state._polylineBulges = [];
     resetHint();
     showToast('Kontura dokončena');
+    return;
+  }
+
+  // Double-click on polyline: enter segment editing mode
+  if (!state.drawing && state.tool === 'select') {
+    const rect = drawCanvas.getBoundingClientRect();
+    const sx = e.clientX - rect.left;
+    const sy = e.clientY - rect.top;
+    let [wx, wy] = screenToWorld(sx, sy);
+    if (state.snapToPoints) [wx, wy] = snapPt(wx, wy);
+    const idx = findObjectAt(wx, wy);
+    if (idx !== null && state.objects[idx].type === 'polyline') {
+      state.selected = idx;
+      state.selectedSegment = findSegmentAt(state.objects[idx], wx, wy);
+      updateProperties();
+      updateObjectList();
+      renderAll();
+      showToast(`Segment ${(state.selectedSegment || 0) + 1} vybrán`);
+    }
   }
 });

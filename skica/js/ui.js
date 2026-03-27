@@ -32,14 +32,25 @@ export function updateObjectList() {
   state.objects.forEach((obj, idx) => {
     const li = document.createElement("li");
     li.className = idx === state.selected ? "selected" : "";
-    li.innerHTML = `<span><span class="obj-icon">${icons[obj.type] || "?"}</span>${obj.name || obj.type + " " + obj.id}</span><button class="del-btn" title="Smazat">✕</button>`;
-    li.querySelector("span").addEventListener("click", () => {
+    const span = document.createElement("span");
+    const iconSpan = document.createElement("span");
+    iconSpan.className = "obj-icon";
+    iconSpan.textContent = icons[obj.type] || "?";
+    span.appendChild(iconSpan);
+    span.appendChild(document.createTextNode(obj.name || obj.type + " " + obj.id));
+    li.appendChild(span);
+    const delBtn = document.createElement("button");
+    delBtn.className = "del-btn";
+    delBtn.title = "Smazat";
+    delBtn.textContent = "✕";
+    li.appendChild(delBtn);
+    span.addEventListener("click", () => {
       state.selected = idx;
       updateObjectList();
       updateProperties();
       renderAll();
     });
-    li.querySelector(".del-btn").addEventListener("click", (e) => {
+    delBtn.addEventListener("click", (e) => {
       e.stopPropagation();
       pushUndo();
       // Reset drag pokud mažeme přetahovaný objekt
@@ -105,7 +116,13 @@ export function updateProperties() {
   // Helper: přidá read-only řádek
   function addInfoRow(label, value) {
     const tr = document.createElement("tr");
-    tr.innerHTML = `<td>${label}</td><td class="prop-readonly">${value}</td>`;
+    const tdLabel = document.createElement("td");
+    tdLabel.textContent = label;
+    const tdValue = document.createElement("td");
+    tdValue.className = "prop-readonly";
+    tdValue.textContent = value;
+    tr.appendChild(tdLabel);
+    tr.appendChild(tdValue);
     tbody.appendChild(tr);
   }
 
@@ -256,35 +273,129 @@ export function updateProperties() {
       addInfoRow("Výška", Math.abs(obj.y2 - obj.y1).toFixed(3));
       break;
     case "polyline": {
-      addInfoRow("Vrcholů", obj.vertices.length);
-      addInfoRow("Uzavřená", obj.closed ? "Ano" : "Ne");
-      // Total length
-      let polyLen = 0;
       const pn = obj.vertices.length;
       const pSegCnt = obj.closed ? pn : pn - 1;
-      let arcCount = 0;
-      for (let i = 0; i < pSegCnt; i++) {
-        const pp1 = obj.vertices[i];
-        const pp2 = obj.vertices[(i + 1) % pn];
-        const pb = obj.bulges[i] || 0;
-        if (pb === 0) {
-          polyLen += Math.hypot(pp2.x - pp1.x, pp2.y - pp1.y);
+      const selSeg = state.selectedSegment;
+      const hasSelSeg = selSeg !== null && selSeg >= 0 && selSeg < pSegCnt;
+
+      if (hasSelSeg) {
+        // ── Segment detail mode ──
+        const si = selSeg;
+        const p1 = obj.vertices[si];
+        const p2 = obj.vertices[(si + 1) % pn];
+        const b = obj.bulges[si] || 0;
+
+        addInfoRow("Režim", "Editace segmentu");
+        addInfoRow("Segment", `${si + 1} / ${pSegCnt}`);
+        addInfoRow("Typ", b === 0 ? "Úsečka" : "Oblouk");
+
+        // Editable start vertex
+        addEditRow(`Start X`, p1.x, (val) => { p1.x = val; });
+        addEditRow(`Start Z`, p1.y, (val) => { p1.y = val; });
+        // Editable end vertex
+        addEditRow(`Konec X`, p2.x, (val) => { p2.x = val; });
+        addEditRow(`Konec Z`, p2.y, (val) => { p2.y = val; });
+
+        if (b === 0) {
+          // Straight segment info
+          const segLen = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+          const segAngle = (Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180) / Math.PI;
+          addInfoRow("Délka", segLen.toFixed(3));
+          addInfoRow("Úhel", segAngle.toFixed(2) + "°");
         } else {
-          arcCount++;
-          const parc = bulgeToArc(pp1, pp2, pb);
+          // Arc segment info
+          const parc = bulgeToArc(p1, p2, b);
           if (parc) {
-            const theta = 4 * Math.atan(Math.abs(pb));
-            polyLen += parc.r * theta;
+            const theta = 4 * Math.atan(Math.abs(b));
+            addInfoRow("Poloměr", parc.r.toFixed(3));
+            addInfoRow("Délka oblouku", (parc.r * theta).toFixed(3));
+            addInfoRow("Střed X", parc.cx.toFixed(3));
+            addInfoRow("Střed Z", parc.cy.toFixed(3));
           }
         }
+        addEditRow("Bulge", b, (val) => { obj.bulges[si] = val; }, "0.01");
+
+        // Button: back to polyline overview
+        {
+          const tr = document.createElement("tr");
+          const td = document.createElement("td");
+          td.colSpan = 2;
+          td.style.paddingTop = "8px";
+          const btn = document.createElement("button");
+          btn.textContent = "← Zpět na konturu";
+          btn.className = "prop-input";
+          btn.style.cssText = "cursor:pointer;background:#45475a;color:#cdd6f4;border:1px solid #585b70;border-radius:4px;padding:4px 8px;width:100%";
+          btn.addEventListener("click", () => {
+            state.selectedSegment = null;
+            updateProperties();
+            renderAll();
+          });
+          td.appendChild(btn);
+          tr.appendChild(td);
+          tbody.appendChild(tr);
+        }
+      } else {
+        // ── Polyline overview mode ──
+        addInfoRow("Vrcholů", pn);
+        addInfoRow("Uzavřená", obj.closed ? "Ano" : "Ne");
+        // Total length
+        let polyLen = 0;
+        let arcCount = 0;
+        for (let i = 0; i < pSegCnt; i++) {
+          const pp1 = obj.vertices[i];
+          const pp2 = obj.vertices[(i + 1) % pn];
+          const pb = obj.bulges[i] || 0;
+          if (pb === 0) {
+            polyLen += Math.hypot(pp2.x - pp1.x, pp2.y - pp1.y);
+          } else {
+            arcCount++;
+            const parc = bulgeToArc(pp1, pp2, pb);
+            if (parc) {
+              const theta = 4 * Math.atan(Math.abs(pb));
+              polyLen += parc.r * theta;
+            }
+          }
+        }
+        addInfoRow("Celková délka", polyLen.toFixed(3));
+        addInfoRow("Segmentů", pSegCnt + " (" + arcCount + " oblouků)");
+
+        // Clickable segment list
+        for (let i = 0; i < pSegCnt; i++) {
+          const sp1 = obj.vertices[i];
+          const sp2 = obj.vertices[(i + 1) % pn];
+          const sb = obj.bulges[i] || 0;
+          const segType = sb === 0 ? "úsečka" : "oblouk";
+          const segLen = sb === 0
+            ? Math.hypot(sp2.x - sp1.x, sp2.y - sp1.y)
+            : (() => { const a = bulgeToArc(sp1, sp2, sb); return a ? a.r * 4 * Math.atan(Math.abs(sb)) : 0; })();
+
+          const tr = document.createElement("tr");
+          tr.style.cursor = "pointer";
+          tr.title = "Klikněte pro výběr segmentu";
+          const tdLabel = document.createElement("td");
+          tdLabel.textContent = `S${i + 1}`;
+          tdLabel.style.color = "#89b4fa";
+          const tdVal = document.createElement("td");
+          tdVal.textContent = `${segType}, ${segLen.toFixed(2)} mm`;
+          tdVal.className = "prop-readonly";
+          tr.appendChild(tdLabel);
+          tr.appendChild(tdVal);
+          tr.addEventListener("click", () => {
+            state.selectedSegment = i;
+            updateProperties();
+            renderAll();
+          });
+          tr.addEventListener("mouseenter", () => { tr.style.background = "#45475a"; });
+          tr.addEventListener("mouseleave", () => { tr.style.background = ""; });
+          tbody.appendChild(tr);
+        }
+
+        // Show vertices
+        obj.vertices.forEach((v, vi) => {
+          addEditRow(`V${vi + 1} X`, v.x, (val) => { v.x = val; });
+          addEditRow(`V${vi + 1} Z`, v.y, (val) => { v.y = val; });
+        });
       }
-      addInfoRow("Celková délka", polyLen.toFixed(3));
-      addInfoRow("Segmentů", pSegCnt + " (" + arcCount + " oblouků)");
-      // Show vertices
-      obj.vertices.forEach((v, vi) => {
-        addEditRow(`V${vi + 1} X`, v.x, (val) => { v.x = val; });
-        addEditRow(`V${vi + 1} Z`, v.y, (val) => { v.y = val; });
-      });
       break;
     }
   }
@@ -597,7 +708,6 @@ document.getElementById("btnDims").addEventListener("click", () => {
 /** Aktualizuje zobrazení módu souřadnic (ABS/INC). */
 export function updateCoordModeBtn() {
   const btn = document.getElementById("btnCoordMode");
-  const mobileBtn = document.getElementById("mobileCoordMode");
   const isInc = state.coordMode === 'inc';
   const label = isInc ? 'INC' : 'ABS';
   btn.textContent = label;
@@ -608,16 +718,6 @@ export function updateCoordModeBtn() {
   } else {
     btn.style.background = '';
     btn.style.color = '';
-  }
-  if (mobileBtn) {
-    mobileBtn.textContent = label;
-    if (isInc) {
-      mobileBtn.style.background = '#f9e2af';
-      mobileBtn.style.color = '#1e1e2e';
-    } else {
-      mobileBtn.style.background = '';
-      mobileBtn.style.color = '';
-    }
   }
 }
 
@@ -721,7 +821,9 @@ export function openCalculator() {
         <button class="calc-close-btn">✕</button>
       </div>
       <div class="calc-body">
-        <input type="text" id="calcDisplay" readonly placeholder="0">
+        <div class="calc-expr" id="calcExpr">&nbsp;</div>
+        <input type="text" id="calcDisplay" placeholder="0">
+        <div class="calc-history" id="calcHistory"></div>
         <div class="calc-buttons">
           <button class="calc-btn" data-val="7">7</button>
           <button class="calc-btn" data-val="8">8</button>
@@ -745,27 +847,70 @@ export function openCalculator() {
           <button class="calc-btn calc-fn" data-val="tan">tan</button>
           <button class="calc-btn calc-fn" data-val="pi">π</button>
           <button class="calc-btn calc-fn" data-val="pow">x²</button>
-          <button class="calc-btn calc-fn" data-val="(">(</button>
-          <button class="calc-btn calc-fn" data-val=")">)</button>
+          <button class="calc-btn calc-fn" data-val="ans">ANS</button>
+          <button class="calc-btn calc-fn" data-val="%">%</button>
           <button class="calc-btn calc-clear" data-val="C">C</button>
           <button class="calc-btn calc-clear" data-val="CE">←</button>
           <button class="calc-btn calc-copy" data-val="copy">📋</button>
           <button class="calc-btn calc-fn" data-val="atan">atan</button>
+          <button class="calc-btn calc-fn" data-val="(">(</button>
+          <button class="calc-btn calc-fn" data-val=")">)</button>
+          <button class="calc-btn calc-fn" data-val="asin">asin</button>
+          <button class="calc-btn calc-fn" data-val="acos">acos</button>
         </div>
       </div>
     </div>`;
   document.body.appendChild(overlay);
 
   const display = overlay.querySelector("#calcDisplay");
+  const exprDisplay = overlay.querySelector("#calcExpr");
+  const historyEl = overlay.querySelector("#calcHistory");
   let expr = "";
+  let lastAnswer = 0;
+  const history = [];
 
   function updateDisplay(text) { display.value = text || "0"; }
+  function updateExprDisplay(text) { exprDisplay.textContent = text || "\u00a0"; }
+
+  function addHistory(expression, result) {
+    history.unshift({ expr: expression, result });
+    if (history.length > 20) history.pop();
+    renderHistory();
+  }
+
+  function renderHistory() {
+    historyEl.innerHTML = "";
+    for (const item of history) {
+      const row = document.createElement("div");
+      row.className = "calc-history-item";
+      const exprSpan = document.createElement("span");
+      exprSpan.className = "calc-hist-expr";
+      exprSpan.textContent = item.expr;
+      const resSpan = document.createElement("span");
+      resSpan.className = "calc-hist-result";
+      resSpan.textContent = "= " + item.result;
+      row.appendChild(exprSpan);
+      row.appendChild(resSpan);
+      row.addEventListener("click", () => {
+        expr = String(item.result);
+        updateDisplay(expr);
+        updateExprDisplay("← historie");
+      });
+      historyEl.appendChild(row);
+    }
+  }
+
+  function formatExpr(e) {
+    return e.replace(/\*/g, "×").replace(/\//g, "÷").replace(/-/g, "−");
+  }
 
   function safeEval(expression) {
     let e = expression
       .replace(/π/g, String(Math.PI))
       .replace(/×/g, "*").replace(/−/g, "-").replace(/÷/g, "/");
-    if (!/^[\d+\-*/().eE\s]*$/.test(e)) return null;
+    if (!/^[\d+\-*/().eE\s%]*$/.test(e)) return null;
+    // Handle % as /100
+    e = e.replace(/(\d+(?:\.\d+)?)%/g, "($1/100)");
     try {
       const r = new Function("return (" + e + ")")();
       return (typeof r === "number" && isFinite(r)) ? r : null;
@@ -776,17 +921,36 @@ export function openCalculator() {
     const cur = safeEval(expr);
     if (cur === null) return;
     let r;
+    const fnExpr = fn + "(" + formatExpr(expr) + ")";
     switch (fn) {
       case "sqrt": r = Math.sqrt(cur); break;
       case "sin":  r = Math.sin(cur * Math.PI / 180); break;
       case "cos":  r = Math.cos(cur * Math.PI / 180); break;
       case "tan":  r = Math.tan(cur * Math.PI / 180); break;
       case "atan": r = Math.atan(cur) * 180 / Math.PI; break;
+      case "asin": r = (cur >= -1 && cur <= 1) ? Math.asin(cur) * 180 / Math.PI : NaN; break;
+      case "acos": r = (cur >= -1 && cur <= 1) ? Math.acos(cur) * 180 / Math.PI : NaN; break;
       case "pow":  r = cur * cur; break;
       default: return;
     }
     if (typeof r !== "number" || !isFinite(r)) { updateDisplay("Chyba"); expr = ""; return; }
-    expr = String(parseFloat(r.toFixed(8)));
+    const result = parseFloat(r.toFixed(8));
+    updateExprDisplay(fnExpr + " =");
+    addHistory(fnExpr, result);
+    lastAnswer = result;
+    expr = String(result);
+    updateDisplay(expr);
+  }
+
+  function doEval() {
+    const displayExpr = formatExpr(expr);
+    const r = safeEval(expr);
+    if (r === null) { updateDisplay("Chyba"); return; }
+    const result = parseFloat(r.toFixed(8));
+    updateExprDisplay(displayExpr + " =");
+    addHistory(displayExpr, result);
+    lastAnswer = result;
+    expr = String(result);
     updateDisplay(expr);
   }
 
@@ -795,21 +959,29 @@ export function openCalculator() {
       e.stopPropagation();
       const val = btn.dataset.val;
       switch (val) {
-        case "C":    expr = ""; updateDisplay("0"); break;
+        case "C":    expr = ""; updateDisplay("0"); updateExprDisplay(""); break;
         case "CE":   expr = expr.slice(0, -1); updateDisplay(expr); break;
-        case "=": {
-          const r = safeEval(expr);
-          if (r === null) { updateDisplay("Chyba"); }
-          else { expr = String(parseFloat(r.toFixed(8))); updateDisplay(expr); }
-          break;
-        }
+        case "=":    doEval(); break;
         case "copy":  navigator.clipboard.writeText(display.value).then(() => showToast("Zkopírováno: " + display.value)); break;
         case "pi":    expr += String(Math.PI); updateDisplay(expr); break;
-        case "sqrt": case "sin": case "cos": case "tan": case "atan": case "pow":
+        case "ans":   expr += String(lastAnswer); updateDisplay(expr); break;
+        case "%":     expr += "%"; updateDisplay(expr); break;
+        case "sqrt": case "sin": case "cos": case "tan": case "atan": case "asin": case "acos": case "pow":
           handleFn(val); break;
         default: expr += val; updateDisplay(expr);
       }
     });
+  });
+
+  // Keyboard input
+  display.removeAttribute("readonly");
+  display.addEventListener("input", () => {
+    expr = display.value;
+  });
+  display.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") { e.preventDefault(); doEval(); }
+    if (e.key === "Escape") { expr = ""; updateDisplay("0"); updateExprDisplay(""); }
+    e.stopPropagation();
   });
 
   overlay.querySelector(".calc-close-btn").addEventListener("click", () => overlay.remove());
@@ -891,7 +1063,8 @@ function openTrigCalc() {
           <button class="trig-btn-clear">🗑 Vymazat</button>
           <button class="trig-btn-copy">📋 Kopírovat</button>
         </div>
-        <div class="trig-info">Zadejte 2 hodnoty a stiskněte Vypočítat</div>
+        <div class="trig-info">Zadejte 2 hodnoty – výpočet proběhne automaticky</div>
+        <div class="trig-history" id="trigHistory"></div>
       </div>
     </div>`;
   document.body.appendChild(overlay);
@@ -989,7 +1162,39 @@ function openTrigCalc() {
 
   overlay.querySelector(".trig-btn-solve").addEventListener("click", solve);
 
+  // Auto-solve on input change
+  inputs.forEach(inp => {
+    inp.addEventListener("input", () => {
+      const known = inputs.filter(i => { const v = parseFloat(i.value); return isFinite(v) && v > 0; }).length;
+      if (known >= 2) solve();
+    });
+  });
+
+  const trigHistoryEl = overlay.querySelector("#trigHistory");
+  const trigHistory = [];
+
+  function addTrigHistory() {
+    const a = val(inpA), b = val(inpB), c = val(inpC);
+    const alpha = val(inpAlpha), beta = val(inpBeta);
+    if (!a || !b || !c || !alpha || !beta) return;
+    const entry = `a=${inpA.value}  b=${inpB.value}  c=${inpC.value}  α=${inpAlpha.value}°  β=${inpBeta.value}°  γ=90°`;
+    trigHistory.unshift(entry);
+    if (trigHistory.length > 10) trigHistory.pop();
+    trigHistoryEl.innerHTML = "";
+    for (const item of trigHistory) {
+      const row = document.createElement("div");
+      row.className = "calc-history-item";
+      row.textContent = item;
+      row.addEventListener("click", () => {
+        navigator.clipboard.writeText(item).then(() => showToast("Zkopírováno"));
+      });
+      trigHistoryEl.appendChild(row);
+    }
+  }
+
   overlay.querySelector(".trig-btn-clear").addEventListener("click", () => {
+    // Save current result to history before clearing
+    addTrigHistory();
     inputs.forEach(i => { i.value = ""; i.classList.remove("computed"); });
   });
 
@@ -1001,7 +1206,9 @@ function openTrigCalc() {
     if (val(inpAlpha)) parts.push("α=" + inpAlpha.value + "°");
     if (val(inpBeta)) parts.push("β=" + inpBeta.value + "°");
     parts.push("γ=90°");
-    navigator.clipboard.writeText(parts.join("  ")).then(() => showToast("Zkopírováno"));
+    const text = parts.join("  ");
+    navigator.clipboard.writeText(text).then(() => showToast("Zkopírováno"));
+    addTrigHistory();
   });
 
   overlay.querySelector(".calc-close-btn").addEventListener("click", () => overlay.remove());
@@ -1124,23 +1331,23 @@ export function updateStatusProject() {
 /** Zobrazí nápovědu (modal). */
 export function showHelp() {
   const overlay = document.getElementById('helpOverlay');
-  if (overlay) overlay.style.display = 'flex';
+  if (overlay) overlay.classList.add('visible');
 }
 
 /** Skryje nápovědu. */
 export function hideHelp() {
   const overlay = document.getElementById('helpOverlay');
-  if (overlay) overlay.style.display = 'none';
+  if (overlay) overlay.classList.remove('visible');
 }
 
 /** Přepne viditelnost nápovědy. */
 export function toggleHelp() {
   const overlay = document.getElementById('helpOverlay');
   if (!overlay) return;
-  if (overlay.style.display === 'none' || overlay.style.display === '') {
-    showHelp();
-  } else {
+  if (overlay.classList.contains('visible')) {
     hideHelp();
+  } else {
+    showHelp();
   }
 }
 

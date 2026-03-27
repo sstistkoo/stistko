@@ -38,10 +38,56 @@ export function findObjectAt(wx, wy) {
  * @param {number} wy
  */
 export function selectObjectAt(wx, wy) {
-  state.selected = findObjectAt(wx, wy);
+  const newSel = findObjectAt(wx, wy);
+  // If clicking on already-selected polyline, select the nearest segment
+  if (newSel !== null && newSel === state.selected && state.objects[newSel].type === 'polyline') {
+    state.selectedSegment = findSegmentAt(state.objects[newSel], wx, wy);
+  } else {
+    state.selected = newSel;
+    state.selectedSegment = null;
+  }
   if (bridge.updateProperties) bridge.updateProperties();
   if (bridge.updateObjectList) bridge.updateObjectList();
   renderAll();
+}
+
+/**
+ * Najde index segmentu polyline nejblíž bodu [wx,wy].
+ * @param {import('./types.js').PolylineObject} obj
+ * @param {number} wx
+ * @param {number} wy
+ * @returns {number|null}
+ */
+export function findSegmentAt(obj, wx, wy) {
+  if (obj.type !== 'polyline') return null;
+  const n = obj.vertices.length;
+  if (n < 2) return null;
+  const segCount = obj.closed ? n : n - 1;
+  let minD = Infinity, bestIdx = null;
+  for (let i = 0; i < segCount; i++) {
+    const p1 = obj.vertices[i];
+    const p2 = obj.vertices[(i + 1) % n];
+    const b = obj.bulges[i] || 0;
+    let d;
+    if (b === 0) {
+      d = distPointToSegment(wx, wy, p1.x, p1.y, p2.x, p2.y);
+    } else {
+      const arc = bulgeToArc(p1, p2, b);
+      if (arc) {
+        const distToCircle = Math.abs(Math.hypot(wx - arc.cx, wy - arc.cy) - arc.r);
+        const angle = Math.atan2(wy - arc.cy, wx - arc.cx);
+        if (isAngleBetweenArc(angle, arc.startAngle, arc.endAngle, arc.ccw)) {
+          d = distToCircle;
+        } else {
+          d = Math.min(Math.hypot(wx - p1.x, wy - p1.y), Math.hypot(wx - p2.x, wy - p2.y));
+        }
+      } else {
+        d = distPointToSegment(wx, wy, p1.x, p1.y, p2.x, p2.y);
+      }
+    }
+    if (d < minD) { minD = d; bestIdx = i; }
+  }
+  return bestIdx;
 }
 
 /**

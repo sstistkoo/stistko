@@ -94,6 +94,26 @@ export function exportProjectFile() {
 }
 
 /** Importuje .skica JSON soubor. */
+const VALID_OBJ_TYPES = ['point', 'line', 'constr', 'circle', 'arc', 'rect', 'polyline'];
+const MAX_IMPORT_SIZE = 10 * 1024 * 1024; // 10 MB
+const MAX_OBJECTS = 10000;
+
+function validateImportData(data) {
+  if (!data || typeof data !== 'object') throw new Error("Neplatná data");
+  const objs = data.objects;
+  if (!Array.isArray(objs)) throw new Error("Chybí pole objektů");
+  if (objs.length > MAX_OBJECTS) throw new Error(`Příliš mnoho objektů (max ${MAX_OBJECTS})`);
+  for (let i = 0; i < objs.length; i++) {
+    const o = objs[i];
+    if (!o || typeof o !== 'object') throw new Error(`Neplatný objekt #${i}`);
+    if (!VALID_OBJ_TYPES.includes(o.type)) throw new Error(`Neznámý typ "${o.type}" u objektu #${i}`);
+    // Validate all numeric properties are finite
+    for (const key of ['x','y','x1','y1','x2','y2','cx','cy','r','startAngle','endAngle']) {
+      if (key in o && !isFinite(o[key])) throw new Error(`Neplatná souřadnice ${key} u objektu #${i}`);
+    }
+  }
+}
+
 export function importProjectFile() {
   const input = document.createElement("input");
   input.type = "file";
@@ -101,10 +121,15 @@ export function importProjectFile() {
   input.addEventListener("change", (e) => {
     const file = e.target.files[0];
     if (!file) return;
+    if (file.size > MAX_IMPORT_SIZE) {
+      showToast(`Soubor je příliš velký (max ${MAX_IMPORT_SIZE / 1024 / 1024} MB)`);
+      return;
+    }
     const reader = new FileReader();
     reader.onload = (ev) => {
       try {
         const data = JSON.parse(ev.target.result);
+        validateImportData(data);
         pushUndo();
         state.objects = data.objects || [];
         state.nextId = data.nextId || 1;
@@ -657,7 +682,7 @@ export function showProjectsDialog() {
         html += `
           <li class="project-item${isActive ? ' active' : ''}" data-name="${name.replace(/"/g, '&quot;')}">
             <div class="project-info">
-              <div class="project-name">${name}</div>
+              <div class="project-name">${name.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}</div>
               <div class="project-meta">${date} · ${count} objektů</div>
             </div>
             <div class="project-actions">
