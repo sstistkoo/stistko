@@ -496,18 +496,9 @@ function drawDimension(obj) {
   ctx.fillStyle = "#9399b2";
   const offset = 14;
   switch (obj.type) {
-    case "line": {
-      const [sx1, sy1] = worldToScreen(obj.x1, obj.y1);
-      const [sx2, sy2] = worldToScreen(obj.x2, obj.y2);
-      const len = Math.hypot(obj.x2 - obj.x1, obj.y2 - obj.y1);
-      const mx = (sx1 + sx2) / 2,
-        my = (sy1 + sy2) / 2;
-      const angle = Math.atan2(sy2 - sy1, sx2 - sx1);
-      const nx = -Math.sin(angle) * offset,
-        ny = Math.cos(angle) * offset;
-      ctx.fillText(len.toFixed(2), mx + nx, my + ny);
+    case "line":
+      // Délka úsečky se zobrazuje jen přes explicitní kótu (isDimension)
       break;
-    }
     case "circle": {
       const [sx, sy] = worldToScreen(obj.cx, obj.cy);
       ctx.fillText(`R${obj.r.toFixed(2)}`, sx + 6, sy - 6);
@@ -652,16 +643,24 @@ export function drawLine(obj) {
     drawDimArrow(sx1, sy1, sx2, sy2);
     drawDimArrow(sx2, sy2, sx1, sy1);
 
-    // Text délky
+    // Text délky – rotovaný rovnoběžně s kótou
     const len = Math.hypot(ox2 - ox1, oy2 - oy1);
     const dimSize = Math.round(Math.min(16, Math.max(11, 8 + state.zoom * 3)));
     ctx.font = dimSize + 'px Consolas';
     ctx.fillStyle = obj.color || '#9399b2';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'bottom';
-    const tnx = -Math.sin(angle) * 4;
-    const tny = Math.cos(angle) * 4;
-    ctx.fillText(len.toFixed(2), (sx1 + sx2) / 2 + tnx, (sy1 + sy2) / 2 + tny);
+    const mx = (sx1 + sx2) / 2;
+    const my = (sy1 + sy2) / 2;
+    // Rotace textu podél kóty; zajistit čitelnost (text nikdy vzhůru nohama)
+    let textAngle = angle;
+    if (textAngle > Math.PI / 2) textAngle -= Math.PI;
+    if (textAngle < -Math.PI / 2) textAngle += Math.PI;
+    ctx.save();
+    ctx.translate(mx, my);
+    ctx.rotate(textAngle);
+    ctx.fillText(len.toFixed(2), 0, -4);
+    ctx.restore();
     ctx.textAlign = 'start';
     ctx.textBaseline = 'alphabetic';
     return;
