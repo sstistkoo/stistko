@@ -1704,6 +1704,52 @@ body {
   font-weight: 700;
 }
 
+/* ── Thread detail box ── */
+.thr-detail {
+  background: #181825;
+  border: 1px solid #313244;
+  border-radius: 6px;
+  padding: 10px;
+  margin-top: 8px;
+}
+.thr-detail-hint {
+  color: #6c7086;
+  font-size: 12px;
+  text-align: center;
+}
+.thr-detail-title {
+  font-weight: 700;
+  color: #89b4fa;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+.thr-detail-tbl {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: "Consolas", monospace;
+  font-size: 12px;
+}
+.thr-detail-tbl td {
+  padding: 3px 4px;
+}
+.thr-detail-tbl td:first-child {
+  color: #a6adc8;
+  white-space: nowrap;
+}
+.thr-detail-tbl td:last-child {
+  color: #cdd6f4;
+  text-align: right;
+  white-space: nowrap;
+}
+.thr-detail-tbl tr.thr-sep td {
+  padding: 0;
+  border-top: 1px solid #313244;
+  height: 6px;
+}
+.thr-row-active {
+  background: #313244 !important;
+}
+
 /* ── Trig calculator ── */
 .trig-window {
   min-width: 380px;
