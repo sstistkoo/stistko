@@ -149,6 +149,9 @@ function renderObjects() {
     if (state.showDimensions && !isConstr) drawDimension(obj);
   });
 
+  // ── Vazební značky (constraints) ──
+  drawConstraintMarkers();
+
   // Průsečíky
   state.intersections.forEach((pt) => {
     const [sx, sy] = worldToScreen(pt.x, pt.y);
@@ -187,6 +190,15 @@ function renderObjects() {
     ) {
       const [sx1, sy1] = worldToScreen(tp[0].x, tp[0].y);
       const [sx2, sy2] = worldToScreen(mx, my);
+      // Počáteční bod – zvýrazněný
+      ctx.setLineDash([]);
+      ctx.fillStyle = "#f5c2e7";
+      ctx.beginPath();
+      ctx.arc(sx1, sy1, 4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "#f5c2e7";
+      ctx.lineWidth = 1;
+      ctx.setLineDash([4, 4]);
       ctx.beginPath();
       ctx.moveTo(sx1, sy1);
       ctx.lineTo(sx2, sy2);
@@ -250,6 +262,14 @@ function renderObjects() {
       ctx.lineWidth = 1.5;
       ctx.setLineDash([4, 4]);
       const tempBulges = state._polylineBulges || [];
+      // Zvýrazněný startovací bod kontury
+      const [sfx, sfy] = worldToScreen(tp[0].x, tp[0].y);
+      ctx.setLineDash([]);
+      ctx.fillStyle = "#f9e2af";
+      ctx.beginPath();
+      ctx.arc(sfx, sfy, 5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.setLineDash([4, 4]);
       for (let i = 0; i < tp.length - 1; i++) {
         const p1 = tp[i], p2 = tp[i + 1];
         const b = tempBulges[i] || 0;
@@ -292,6 +312,12 @@ function renderObjects() {
       ctx.moveTo(slx, sly);
       ctx.lineTo(smx, smy);
       ctx.stroke();
+      // Koncový bod preview – zvýrazněný
+      ctx.setLineDash([]);
+      ctx.fillStyle = "#f5c2e7";
+      ctx.beginPath();
+      ctx.arc(smx, smy, 3.5, 0, Math.PI * 2);
+      ctx.fill();
       // Distance info
       const dd = Math.hypot(mx - lastPt.x, my - lastPt.y);
       const ang = (Math.atan2(my - lastPt.y, mx - lastPt.x) * 180) / Math.PI;
@@ -315,38 +341,12 @@ function renderObjects() {
       ctx.font = `${labelSize}px Consolas`;
       ctx.fillText("Bod tečny", sx1 + 8, sy1 - 8);
     }
-    // Preview: Kolmice
-    if (state.tool === "perp" && state._perpRefIdx != null) {
-      const refObj = state.objects[state._perpRefIdx];
-      if (refObj) {
-        const foot = projectPointToLine(mx, my, refObj.x1, refObj.y1, refObj.x2, refObj.y2);
-        const [sx1, sy1] = worldToScreen(mx, my);
-        const [sx2, sy2] = worldToScreen(foot.x, foot.y);
-        ctx.strokeStyle = "#a6e3a1";
-        ctx.lineWidth = 1.5;
-        ctx.setLineDash([6, 4]);
-        ctx.beginPath();
-        ctx.moveTo(sx1, sy1);
-        ctx.lineTo(sx2, sy2);
-        ctx.stroke();
-        // Pata kolmice
-        ctx.fillStyle = "#a6e3a1";
-        ctx.beginPath();
-        ctx.arc(sx2, sy2, 4, 0, Math.PI * 2);
-        ctx.fill();
-        // Info
-        const d = Math.hypot(mx - foot.x, my - foot.y);
-        ctx.setLineDash([]);
-        ctx.font = `${labelSize}px Consolas`;
-        ctx.fillText(`⊥ ${d.toFixed(2)}mm`, (sx1 + sx2) / 2 + 8, (sy1 + sy2) / 2 - 8);
-      }
-    }
     // Preview: Rovnoběžka
     if (state.tool === "parallel" && state._parallelRefIdx != null) {
-      const refObj = state.objects[state._parallelRefIdx];
-      if (refObj) {
-        const dx = refObj.x2 - refObj.x1;
-        const dy = refObj.y2 - refObj.y1;
+      const refSeg = state._parallelRefSeg;
+      if (refSeg) {
+        const dx = refSeg.seg.x2 - refSeg.seg.x1;
+        const dy = refSeg.seg.y2 - refSeg.seg.y1;
         const px1 = mx - dx / 2, py1 = my - dy / 2;
         const px2 = mx + dx / 2, py2 = my + dy / 2;
         const [sx1, sy1] = worldToScreen(px1, py1);
@@ -359,7 +359,7 @@ function renderObjects() {
         ctx.lineTo(sx2, sy2);
         ctx.stroke();
         // Vzdálenost od referenční úsečky
-        const foot = projectPointToLine(mx, my, refObj.x1, refObj.y1, refObj.x2, refObj.y2);
+        const foot = projectPointToLine(mx, my, refSeg.seg.x1, refSeg.seg.y1, refSeg.seg.x2, refSeg.seg.y2);
         const dist = Math.hypot(mx - foot.x, my - foot.y);
         ctx.setLineDash([]);
         ctx.font = `${labelSize}px Consolas`;
@@ -742,6 +742,85 @@ export function drawPolyline(obj, isSel) {
   ctx.fillStyle = baseStroke;
 }
 
+// ── Vazební značky (constraints) ──
+/** Offset značky od segmentu (v pixelech na obrazovce). */
+const CONSTRAINT_OFFSET_PX = 22;
+
+/** Spočítá world-souřadnice značky vazby – kolmo od středu segmentu. */
+function _constraintMarkerPos(x1, y1, x2, y2) {
+  const mx = (x1 + x2) / 2;
+  const my = (y1 + y2) / 2;
+  const dx = x2 - x1, dy = y2 - y1;
+  const len = Math.hypot(dx, dy) || 1;
+  // Normála (kolmice) – vždy směrem "nahoru" v screen (tj. kladné Y ve world)
+  let nx = -dy / len, ny = dx / len;
+  if (ny < 0) { nx = -nx; ny = -ny; }
+  const off = CONSTRAINT_OFFSET_PX / state.zoom;
+  return { x: mx + nx * off, y: my + ny * off };
+}
+
+/** Vykreslí symboly vazeb (═ vodorovná, ║ svislá, ∥ rovnoběžná) u segmentů. */
+function drawConstraintMarkers() {
+  const markerSize = Math.max(10, Math.min(18, 8 + state.zoom * 4));
+  const isSelConstr = state._selectedConstraint;
+
+  state.objects.forEach((obj, idx) => {
+    const layer = state.layers.find(l => l.id === obj.layer);
+    if (layer && !layer.visible) return;
+
+    // Úsečky s vazbou
+    if (obj.constraint && (obj.type === 'line' || obj.type === 'constr')) {
+      const pos = _constraintMarkerPos(obj.x1, obj.y1, obj.x2, obj.y2);
+      const isSel = isSelConstr && isSelConstr.objIdx === idx && isSelConstr.segIdx === null;
+      _drawConstraintIcon(pos.x, pos.y, obj.constraint, markerSize, isSel);
+    }
+
+    // Kontury se segmentovými vazbami
+    if (obj.segConstraints && obj.type === 'polyline') {
+      const n = obj.vertices.length;
+      for (const [si, type] of Object.entries(obj.segConstraints)) {
+        const i = parseInt(si);
+        const p1 = obj.vertices[i];
+        const p2 = obj.vertices[(i + 1) % n];
+        if (!p1 || !p2) continue;
+        const pos = _constraintMarkerPos(p1.x, p1.y, p2.x, p2.y);
+        const isSel = isSelConstr && isSelConstr.objIdx === idx && isSelConstr.segIdx === i;
+        _drawConstraintIcon(pos.x, pos.y, type, markerSize, isSel);
+      }
+    }
+  });
+}
+
+/** Vykreslí ikonu vazby na daných world-souřadnicích (přímo, bez dalšího offsetu). */
+function _drawConstraintIcon(wx, wy, type, size, isSelected) {
+  const [sx, sy] = worldToScreen(wx, wy);
+
+  ctx.save();
+  const bw = size + 8, bh = size + 4;
+  const rx = sx - bw / 2, ry = sy - bh / 2;
+
+  // Pozadí značky
+  ctx.fillStyle = isSelected ? '#f38ba8' : 'rgba(30, 30, 46, 0.85)';
+  ctx.fillRect(rx, ry, bw, bh);
+
+  // Obrys
+  ctx.strokeStyle = isSelected ? '#f38ba8' : '#cdd6f4';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(rx, ry, bw, bh);
+
+  // Symbol
+  ctx.fillStyle = isSelected ? '#1e1e2e' : '#f9e2af';
+  ctx.font = `bold ${size}px Consolas`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  let symbol = '?';
+  if (type === 'horizontal') symbol = '═';
+  else if (type === 'vertical') symbol = '║';
+  else if (type === 'parallel') symbol = '∥';
+  ctx.fillText(symbol, sx, sy);
+  ctx.restore();
+}
+
 // ── Vodící čára pro angle snap ──
 function renderAngleSnapGuide() {
   if (!state.angleSnap || !state.drawing || state.tempPoints.length === 0) return;
@@ -763,10 +842,9 @@ function renderAngleSnapGuide() {
   const diff = Math.abs(angle - snappedAngle);
   if (diff > toleranceRad) return;
 
-  // Vodící čára – tečkovaná zelená
-  const guideLen = Math.max(dist * 1.5, 200 / state.zoom);
-  const gx = ref.x + guideLen * Math.cos(snappedAngle);
-  const gy = ref.y + guideLen * Math.sin(snappedAngle);
+  // Vodící čára – tečkovaná zelená (jen po délku ke kurzoru, neprodlužovat)
+  const gx = ref.x + dist * Math.cos(snappedAngle);
+  const gy = ref.y + dist * Math.sin(snappedAngle);
   const [sx1, sy1] = worldToScreen(ref.x, ref.y);
   const [sx2, sy2] = worldToScreen(gx, gy);
 
@@ -780,13 +858,19 @@ function renderAngleSnapGuide() {
   ctx.stroke();
   ctx.setLineDash([]);
 
+  // Koncový bod snap čáry – zvýrazněný
+  ctx.fillStyle = "#a6e3a1";
+  ctx.beginPath();
+  ctx.arc(sx2, sy2, 4, 0, Math.PI * 2);
+  ctx.fill();
+
   // Label s úhlem
   const angleDeg = ((snappedAngle * 180) / Math.PI);
   const labelSize = Math.round(Math.min(22, Math.max(14, 10 + state.zoom * 6)));
   ctx.font = `${Math.max(10, labelSize - 2)}px Consolas`;
   ctx.fillStyle = "#a6e3a1";
-  const labelX = (sx1 + sx2) / 2 + 8;
-  const labelY = (sy1 + sy2) / 2 - 8;
+  const labelX = sx2 + 10;
+  const labelY = sy2 - 10;
   ctx.fillText(`${angleDeg.toFixed(1)}°`, labelX, labelY);
   ctx.restore();
 }

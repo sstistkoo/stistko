@@ -1362,42 +1362,47 @@ body {
 /* ── Calculator / Trig history ── */
 .calc-history,
 .trig-history {
-  max-height: 120px;
+  height: 100px;
+  min-height: 60px;
+  max-height: 140px;
   overflow-y: auto;
-  margin-top: 8px;
-  border-top: 1px solid #313244;
+  margin-bottom: 6px;
+  border: 1px solid #313244;
+  border-radius: 6px;
+  background: #11111b;
 }
 .calc-history:empty,
 .trig-history:empty {
-  display: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.calc-history:empty::after {
+  content: "Historie výpočtů";
+  color: #45475a;
+  font-size: 12px;
+  font-family: "Consolas", monospace;
 }
 .calc-history-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: block;
   padding: 4px 10px;
   font-size: 12px;
   font-family: "Consolas", monospace;
   color: #a6adc8;
   cursor: pointer;
-  border-bottom: 1px solid #18182522;
+  border-bottom: 1px solid #1e1e2e;
   transition: background 0.1s;
+}
+.calc-history-item:last-child {
+  border-bottom: none;
 }
 .calc-history-item:hover {
   background: #313244;
   color: #cdd6f4;
 }
-.calc-hist-expr {
-  color: #6c7086;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  margin-right: 8px;
-}
-.calc-hist-result {
-  color: #f9e2af;
-  font-weight: 600;
-  white-space: nowrap;
+.calc-hist-full {
+  color: #cdd6f4;
+  font-size: 12px;
 }
 
 /* ── Trig calculator ── */
