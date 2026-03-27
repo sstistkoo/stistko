@@ -431,6 +431,17 @@ export function togglePanel(id) {
   const el = document.getElementById(id);
   const opening = el.style.display === "none";
   el.style.display = opening ? "" : "none";
+  // Update header arrow
+  const header = el.previousElementSibling;
+  if (header && header.classList.contains('panel-header')) {
+    const textNode = header.childNodes;
+    for (const n of textNode) {
+      if (n.nodeType === 3) {
+        n.textContent = n.textContent.replace(/[▾▸]/, opening ? '▾' : '▸');
+        break;
+      }
+    }
+  }
   if (opening && id === 'cncPanel' && bridge.runCncExport) {
     bridge.runCncExport();
   }

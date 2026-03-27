@@ -46,13 +46,57 @@
 
     <!-- ── Toolbar ── -->
     <div id="topbar">
-      <button
-        class="tool-btn mobile-toolbar-close"
-        id="mobileToolbarClose"
-        title="Zavřít"
-      >
-        ✕
-      </button>
+      <div class="toolbar-header">
+        <button
+          class="tool-btn toolbar-setting"
+          id="btnCoordMode"
+          title="Přepnout ABS/INC souřadnice (I)"
+        >
+          ABS
+        </button>
+        <button
+          class="tool-btn toolbar-setting"
+          id="btnSnapPts"
+          title="Přichytávání k bodům (S)"
+        >
+          <span class="snap-ind snap-on"></span> Body
+        </button>
+        <button
+          class="tool-btn toolbar-setting"
+          id="btnSnapGrid"
+          title="Snap na mřížku (G)"
+        >
+          # Mřížka
+        </button>
+        <button
+          class="tool-btn toolbar-setting"
+          id="btnAngleSnap"
+          title="Úhlový snap (Shift+G)"
+        >
+          ∠ Úhel
+        </button>
+        <button
+          class="tool-btn toolbar-setting"
+          id="btnDims"
+          title="Zobrazit kóty (D)"
+        >
+          📐 Kóty
+        </button>
+        <button
+          class="tool-btn toolbar-setting"
+          id="btnPolar"
+          title="Polární kreslení z bodu (Shift+N)"
+        >
+          📐 Polární
+        </button>
+        <button
+          class="toolbar-close-btn"
+          id="mobileToolbarClose"
+          title="Zavřít"
+        >
+          ✕
+        </button>
+      </div>
       <button
         class="tool-btn mobile-hide"
         id="btnUndo"
@@ -118,6 +162,7 @@
         </svg>
         Přichytit
       </button>
+      <div class="sep"></div>
       <button class="tool-btn" data-tool="point" title="Bod (P)">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" /></svg> Bod
       </button>
@@ -201,6 +246,7 @@
         </svg>
         Kontura
       </button>
+      <div class="sep"></div>
       <button class="tool-btn" data-tool="tangent" title="Tečna (T)">
         <svg viewBox="0 0 24 24">
           <circle
@@ -451,43 +497,38 @@
         title="Smazat vybraný objekt (Del)"
       >
         <svg viewBox="0 0 24 24">
-          <path
-            d="M6 7h12l-1 13H7L6 7z"
+          <rect
+            x="3"
+            y="14"
+            width="12"
+            height="6"
+            rx="1"
             fill="none"
             stroke="currentColor"
             stroke-width="2"
+            transform="rotate(-30 9 17)"
           />
           <line
-            x1="4"
-            y1="5"
-            x2="20"
-            y2="5"
-            stroke="currentColor"
-            stroke-width="2"
-          />
-          <line
-            x1="9"
-            y1="3"
-            x2="15"
-            y2="3"
-            stroke="currentColor"
-            stroke-width="2"
-          />
-          <line
-            x1="10"
+            x1="8"
             y1="10"
-            x2="10"
+            x2="4"
             y2="17"
             stroke="currentColor"
-            stroke-width="1.5"
+            stroke-width="2"
           />
           <line
             x1="14"
-            y1="10"
-            x2="14"
-            y2="17"
+            y1="7"
+            x2="10"
+            y2="14"
             stroke="currentColor"
-            stroke-width="1.5"
+            stroke-width="2"
+          />
+          <path
+            d="M16 5l3-3 4 4-3 3z"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
           />
         </svg>
         Smaž obj.
@@ -537,32 +578,12 @@
         </svg>
         Měření
       </button>
-      <div class="sep"></div>
-      <button class="tool-btn" id="btnSnapPts" title="Přichytávání k bodům (S)">
-        <span class="snap-ind snap-on"></span>Body
-      </button>
-      <button class="tool-btn" id="btnSnapGrid" title="Snap na mřížku (G)">
-        # Mřížka
-      </button>
-      <button class="tool-btn" id="btnAngleSnap" title="Úhlový snap (Shift+G)">
-        ∠ Úhel
-      </button>
-      <button class="tool-btn" id="btnDims" title="Zobrazit kóty (D)">
-        📐 Kóty
-      </button>
       <button
         class="tool-btn mobile-hide"
         id="btnNumInput"
         title="Číselný vstup (N)"
       >
         🔢 Zadat
-      </button>
-      <button
-        class="tool-btn"
-        id="btnPolar"
-        title="Polární kreslení z bodu (Shift+N)"
-      >
-        📐 Polární
       </button>
       <div class="sep"></div>
       <button class="tool-btn" id="btnSave" title="Uložit projekt (Ctrl+S)">
@@ -588,14 +609,6 @@
       >
         📁 Projekty
       </button>
-
-      <button
-        class="tool-btn"
-        id="btnCoordMode"
-        title="Přepnout ABS/INC souřadnice (I)"
-      >
-        ABS
-      </button>
       <button
         class="tool-btn"
         id="btnSetRef"
@@ -615,20 +628,28 @@
         <canvas id="drawCanvas"></canvas>
       </div>
       <div id="sidebar">
-        <button id="sidebarCloseBtn" class="sidebar-close-btn">✕</button>
-        <button id="sidebarEditBtn" class="sidebar-edit-btn">
-          ✏️ Upravit objekt
-        </button>
-        <div class="panel-header" onclick="togglePanel('objPanel')">
-          ▾ Objekty
+        <div class="sidebar-top-bar">
+          <span class="sidebar-top-title">Menu</span>
+          <button id="sidebarCloseBtn" class="sidebar-close-btn">✕</button>
+        </div>
+        <div class="panel-header obj-header" onclick="togglePanel('objPanel')">
+          <span>▾ Objekty</span>
+          <button
+            id="sidebarEditBtn"
+            class="obj-edit-btn"
+            title="Upravit objekt"
+            onclick="event.stopPropagation()"
+          >
+            ✏️
+          </button>
         </div>
         <div class="panel-body" id="objPanel">
           <ul id="objectList"></ul>
         </div>
         <div class="panel-header" onclick="togglePanel('layerPanel')">
-          ▾ Vrstvy
+          ▸ Vrstvy
         </div>
-        <div class="panel-body" id="layerPanel">
+        <div class="panel-body" id="layerPanel" style="display: none">
           <ul id="layerList"></ul>
           <div class="layer-actions">
             <button
@@ -656,9 +677,9 @@
           </table>
         </div>
         <div class="panel-header" onclick="togglePanel('intPanel')">
-          ▾ Průsečíky
+          ▸ Průsečíky
         </div>
-        <div class="panel-body" id="intPanel">
+        <div class="panel-body" id="intPanel" style="display: none">
           <ul id="intersectionList">
             <li style="color: #6c7086">Rozbalte panel pro výpočet</li>
           </ul>
