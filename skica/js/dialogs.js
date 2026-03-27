@@ -1181,27 +1181,16 @@ function buildObjectInfoDialog(obj, objIdx) {
 export function addDimensionForObject(obj) {
   switch (obj.type) {
     case "point": {
-      // Kóta bodu: souřadnice X a Z od počátku
-      if (Math.abs(obj.x) > 1e-6) {
-        addObject({
-          type: "line",
-          x1: 0, y1: obj.y,
-          x2: obj.x, y2: obj.y,
-          name: `Kóta X${obj.x.toFixed(2)}`,
-          isDimension: true,
-          color: "#9399b2",
-        });
-      }
-      if (Math.abs(obj.y) > 1e-6) {
-        addObject({
-          type: "line",
-          x1: obj.x, y1: 0,
-          x2: obj.x, y2: obj.y,
-          name: `Kóta Z${obj.y.toFixed(2)}`,
-          isDimension: true,
-          color: "#9399b2",
-        });
-      }
+      // Kóta bodu: odkazová čára se souřadnicemi (leader)
+      addObject({
+        type: "point",
+        x: obj.x,
+        y: obj.y,
+        name: `Kóta [${obj.x.toFixed(2)}, ${obj.y.toFixed(2)}]`,
+        isDimension: true,
+        isCoordLabel: true,
+        color: "#9399b2",
+      });
       showToast(`Kóta X${obj.x.toFixed(2)} Z${obj.y.toFixed(2)} přidána`);
       break;
     }

@@ -568,6 +568,37 @@ function drawDimension(obj) {
 /** @param {import('./types.js').PointObject} obj */
 export function drawPoint(obj) {
   const [sx, sy] = worldToScreen(obj.x, obj.y);
+
+  if (obj.isCoordLabel) {
+    // Odkazová čára (leader) se souřadnicemi
+    const leaderLen = 30;
+    const shelfLen = 40;
+    const ex = sx + leaderLen;
+    const ey = sy - leaderLen;
+    // Šikmá čára od bodu
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(sx, sy);
+    ctx.lineTo(ex, ey);
+    // Vodorovná polička
+    ctx.lineTo(ex + shelfLen, ey);
+    ctx.stroke();
+    // Kroužek na bodě
+    ctx.beginPath();
+    ctx.arc(sx, sy, 3, 0, Math.PI * 2);
+    ctx.stroke();
+    // Text souřadnic
+    const dimSize = Math.round(Math.min(14, Math.max(10, 7 + state.zoom * 2.5)));
+    ctx.font = dimSize + 'px Consolas';
+    ctx.fillStyle = obj.color || '#9399b2';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'bottom';
+    ctx.fillText('X' + obj.x.toFixed(2) + '  Z' + obj.y.toFixed(2), ex + 2, ey - 3);
+    ctx.textAlign = 'start';
+    ctx.textBaseline = 'alphabetic';
+    return;
+  }
+
   ctx.beginPath();
   ctx.arc(sx, sy, 3, 0, Math.PI * 2);
   ctx.fill();
