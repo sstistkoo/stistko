@@ -882,36 +882,56 @@ export function openCalculator() {
   const historyEl = overlay.querySelector("#calcHistory");
   let expr = "";
   let lastAnswer = 0;
-  const history = [];
+  const history = JSON.parse(localStorage.getItem("calcHistory") || "[]");
 
   function updateDisplay(text) { display.value = text || "0"; }
   function updateExprDisplay(text) { exprDisplay.textContent = text || "\u00a0"; }
 
+  function saveHistory() {
+    localStorage.setItem("calcHistory", JSON.stringify(history));
+  }
+
   function addHistory(expression, result) {
     history.push({ expr: expression, result });
     if (history.length > 50) history.shift();
+    saveHistory();
+    renderHistory();
+  }
+
+  function removeHistoryItem(index) {
+    history.splice(index, 1);
+    saveHistory();
     renderHistory();
   }
 
   function renderHistory() {
     historyEl.innerHTML = "";
-    for (const item of history) {
+    history.forEach((item, i) => {
       const row = document.createElement("div");
       row.className = "calc-history-item";
       const fullExpr = document.createElement("span");
       fullExpr.className = "calc-hist-full";
       fullExpr.textContent = item.expr + " = " + item.result;
       row.appendChild(fullExpr);
+      const delBtn = document.createElement("button");
+      delBtn.className = "calc-hist-del";
+      delBtn.textContent = "✕";
+      delBtn.title = "Smazat";
+      delBtn.addEventListener("click", (e) => { e.stopPropagation(); removeHistoryItem(i); });
+      row.appendChild(delBtn);
       row.addEventListener("click", () => {
         expr = String(item.result);
         updateDisplay(expr);
         updateExprDisplay("← " + item.result);
       });
       historyEl.appendChild(row);
-    }
+    });
     // Auto-scroll dolů k nejnovějšímu
     historyEl.scrollTop = historyEl.scrollHeight;
   }
+
+  // Načíst historii při otevření
+  renderHistory();
 
   function formatExpr(e) {
     return e.replace(/\*/g, "×").replace(/\//g, "÷").replace(/-/g, "−");
