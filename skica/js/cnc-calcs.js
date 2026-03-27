@@ -205,78 +205,135 @@ export function openTaperCalc() {
 }
 
 // ══════════════════════════════════════════════════════════════
-// ► Závity
+// ► Závity – ISO 261 metrické hrubé (M1–M68)
 // ══════════════════════════════════════════════════════════════
 export function openThreadCalc() {
-  const threads = [
-    { n: "M1", p: 0.25, d: 0.75 }, { n: "M1.2", p: 0.25, d: 0.95 },
-    { n: "M1.6", p: 0.35, d: 1.25 }, { n: "M2", p: 0.4, d: 1.6 },
-    { n: "M2.5", p: 0.45, d: 2.05 }, { n: "M3", p: 0.5, d: 2.5 },
-    { n: "M4", p: 0.7, d: 3.3 }, { n: "M5", p: 0.8, d: 4.2 },
-    { n: "M6", p: 1.0, d: 5.0 }, { n: "M8", p: 1.25, d: 6.8 },
-    { n: "M10", p: 1.5, d: 8.5 }, { n: "M12", p: 1.75, d: 10.2 },
-    { n: "M14", p: 2.0, d: 12.0 }, { n: "M16", p: 2.0, d: 14.0 },
-    { n: "M18", p: 2.5, d: 15.5 }, { n: "M20", p: 2.5, d: 17.5 },
-    { n: "M22", p: 2.5, d: 19.5 }, { n: "M24", p: 3.0, d: 21.0 },
-    { n: "M27", p: 3.0, d: 24.0 }, { n: "M30", p: 3.5, d: 26.5 },
+  // ISO 261 metrické závity – hrubé stoupání, kompletní řada M1–M68
+  // { D: jmenovitý průměr, P: stoupání }
+  var threads = [
+    {D:1,P:0.25},{D:1.1,P:0.25},{D:1.2,P:0.25},{D:1.4,P:0.3},{D:1.6,P:0.35},
+    {D:1.8,P:0.35},{D:2,P:0.4},{D:2.2,P:0.45},{D:2.5,P:0.45},{D:3,P:0.5},
+    {D:3.5,P:0.6},{D:4,P:0.7},{D:4.5,P:0.75},{D:5,P:0.8},{D:6,P:1},
+    {D:7,P:1},{D:8,P:1.25},{D:9,P:1.25},{D:10,P:1.5},{D:11,P:1.5},
+    {D:12,P:1.75},{D:14,P:2},{D:16,P:2},{D:18,P:2.5},{D:20,P:2.5},
+    {D:22,P:2.5},{D:24,P:3},{D:27,P:3},{D:30,P:3.5},{D:33,P:3.5},
+    {D:36,P:4},{D:39,P:4},{D:42,P:4.5},{D:45,P:4.5},{D:48,P:5},
+    {D:52,P:5},{D:56,P:5.5},{D:60,P:5.5},{D:64,P:6},{D:68,P:6},
   ];
-  var rows = "";
-  for (var ti = 0; ti < threads.length; ti++) {
-    var t = threads[ti];
-    var tpi = (25.4 / t.p).toFixed(1);
-    rows += '<tr data-text="' + t.n + '  P=' + t.p + 'mm  vrt\u00E1k=' + t.d + 'mm">' +
-      '<td>' + t.n + '</td><td>' + t.p + '</td><td>' + t.d + '</td><td>' + tpi + '</td></tr>';
+
+  var rows = '';
+  for (var i = 0; i < threads.length; i++) {
+    var t = threads[i];
+    rows += '<tr data-idx="' + i + '">' +
+      '<td>M' + t.D + '</td><td>' + t.P + '</td><td>' + t.D + '</td></tr>';
   }
 
-  const body =
-    '<input type="text" class="cnc-filter" placeholder="Filtr (nap\u0159. M10)..." id="threadFilter">' +
+  var body =
+    '<input type="text" class="cnc-filter" placeholder="Filtr (nap\u0159. M10, 1.5)..." id="threadFilter">' +
     '<div class="cnc-table-wrap cnc-table-tall">' +
       '<table class="cnc-table" id="threadTable">' +
-        '<thead><tr><th>Z\u00E1vit</th><th>Stoup\u00E1n\u00ED<br><small>mm</small></th><th>Vrt\u00E1k<br><small>mm</small></th><th>TPI<br><small>ref</small></th></tr></thead>' +
+        '<thead><tr><th>Z\u00E1vit</th><th>P <small>mm</small></th><th>D <small>mm</small></th></tr></thead>' +
         '<tbody>' + rows + '</tbody>' +
       '</table>' +
     '</div>' +
-    '<div class="cnc-table-label">Ru\u010Dn\u00ED v\u00FDpo\u010Det</div>' +
+    '<div class="thr-detail" id="thrDetail">' +
+      '<div class="thr-detail-hint">Klikn\u011Bte na z\u00E1vit\u2026</div>' +
+    '</div>' +
+    '<div class="cnc-table-label" style="margin-top:10px">Vlastn\u00ED z\u00E1vit</div>' +
     '<div class="cnc-fields">' +
-      '<label class="cnc-field"><span>D <small>mm</small></span><input type="number" data-id="tD" step="any" placeholder="Vn\u011Bj\u0161\u00ED \u00D8"></label>' +
-      '<label class="cnc-field"><span>P <small>mm</small></span><input type="number" data-id="tP" step="any" placeholder="Stoup\u00E1n\u00ED"></label>' +
-      '<label class="cnc-field"><span>Vrt\u00E1k <small>mm</small></span><input type="number" data-id="tDrill" step="any" placeholder="D \u2212 P" readonly></label>' +
-      '<label class="cnc-field"><span>TPI <small>ref</small></span><input type="number" data-id="tTPI" step="any" placeholder="25.4/P" readonly></label>' +
-    '</div>';
+      '<label class="cnc-field"><span>D <small>mm</small></span>' +
+        '<input type="number" data-id="tD" step="any" placeholder="Vn\u011Bj\u0161\u00ED \u00F8"></label>' +
+      '<label class="cnc-field"><span>P <small>mm</small></span>' +
+        '<input type="number" data-id="tP" step="any" placeholder="Stoup\u00E1n\u00ED"></label>' +
+    '</div>' +
+    '<div class="cnc-actions"><button class="cnc-btn cnc-btn-copy" id="thrCopy">' +
+      '\uD83D\uDCCB Kop\u00EDrovat detail</button></div>';
 
-  const overlay = makeOverlay("thread", "\uD83D\uDD29 Z\u00E1vity", body);
+  var overlay = makeOverlay("thread", "\uD83D\uDD29 Metrick\u00E9 z\u00E1vity ISO 261", body);
   if (!overlay) return;
 
-  const filter = overlay.querySelector("#threadFilter");
-  const tbody = overlay.querySelector("#threadTable tbody");
-  const inpD = overlay.querySelector('[data-id="tD"]');
-  const inpP = overlay.querySelector('[data-id="tP"]');
-  const inpDrill = overlay.querySelector('[data-id="tDrill"]');
-  const inpTPI = overlay.querySelector('[data-id="tTPI"]');
+  var filter = overlay.querySelector("#threadFilter");
+  var tbody = overlay.querySelector("#threadTable tbody");
+  var detail = overlay.querySelector("#thrDetail");
+  var inpD = overlay.querySelector('[data-id="tD"]');
+  var inpP = overlay.querySelector('[data-id="tP"]');
+  var lastActiveRow = null;
 
-  filter.addEventListener("input", () => {
-    const q = filter.value.toLowerCase();
-    tbody.querySelectorAll("tr").forEach(tr => {
-      tr.style.display = tr.children[0].textContent.toLowerCase().includes(q) ? "" : "none";
-    });
-  });
+  // ── Výpočet a zobrazení detailu ──
+  function showDetail(D, P, label) {
+    // ISO 68-1 vzorce
+    var H    = 0.866025 * P;           // výška základního trojúhelníku
+    var d2   = D - 0.6495 * P;         // střední ø
+    var d3   = D - 1.2269 * P;         // malý ø šroubu
+    var D1   = D - 1.0825 * P;         // malý ø matice
+    var hExt = 0.6134 * P;             // hloubka profilu vnější závit (5/8 H)
+    var hInt = 0.5413 * P;             // hloubka profilu vnitřní závit
+    var drill = D - P;                 // přibližné předvrtání
 
-  tbody.querySelectorAll("tr").forEach(tr => {
-    tr.addEventListener("click", () => {
-      navigator.clipboard.writeText(tr.dataset.text).then(() => showToast("Zkop\u00EDrov\u00E1no: " + tr.dataset.text));
-    });
-  });
-
-  function calcManual() {
-    const D = inpD.value !== "" ? parseFloat(inpD.value) : null;
-    const P = inpP.value !== "" ? parseFloat(inpP.value) : null;
-    inpDrill.value = (D !== null && P !== null) ? parseFloat((D - P).toFixed(3)) : "";
-    inpTPI.value = P ? parseFloat((25.4 / P).toFixed(1)) : "";
-    if (inpDrill.value) inpDrill.classList.add("computed"); else inpDrill.classList.remove("computed");
-    if (inpTPI.value) inpTPI.classList.add("computed"); else inpTPI.classList.remove("computed");
+    detail.innerHTML =
+      '<div class="thr-detail-title">' + label + '</div>' +
+      '<table class="thr-detail-tbl">' +
+        '<tr><td>Stoup\u00E1n\u00ED P</td><td><strong>' + P + '</strong> mm</td></tr>' +
+        '<tr><td>Vrcholov\u00FD \u00FAhel</td><td><strong>60\u00B0</strong></td></tr>' +
+        '<tr><td>V\u00FD\u0161ka troj\u00FAheln\u00EDku H</td><td>' + H.toFixed(3) + ' mm</td></tr>' +
+        '<tr class="thr-sep"><td colspan="2"></td></tr>' +
+        '<tr><td>Vn\u011Bj\u0161\u00ED \u00F8 D (jmenovit\u00FD)</td><td><strong>' + D.toFixed(3) + '</strong> mm</td></tr>' +
+        '<tr><td>St\u0159edn\u00ED \u00F8 d\u2082</td><td><strong>' + d2.toFixed(3) + '</strong> mm</td></tr>' +
+        '<tr><td>Mal\u00FD \u00F8 \u0161roub d\u2083</td><td><strong>' + d3.toFixed(3) + '</strong> mm</td></tr>' +
+        '<tr><td>Mal\u00FD \u00F8 matice D\u2081</td><td><strong>' + D1.toFixed(3) + '</strong> mm</td></tr>' +
+        '<tr class="thr-sep"><td colspan="2"></td></tr>' +
+        '<tr><td>Hloubka z\u00E1v. vn\u011Bj\u0161\u00ED</td><td><strong>' + hExt.toFixed(3) + '</strong> mm</td></tr>' +
+        '<tr><td>Hloubka z\u00E1v. vnit\u0159n\u00ED</td><td><strong>' + hInt.toFixed(3) + '</strong> mm</td></tr>' +
+        '<tr class="thr-sep"><td colspan="2"></td></tr>' +
+        '<tr><td>P\u0159edvrtan\u00ED (D\u2212P)</td><td><strong>' + drill.toFixed(2) + '</strong> mm</td></tr>' +
+        '<tr><td>P\u0159edvrtan\u00ED p\u0159esn\u011B (D\u2081)</td><td><strong>' + D1.toFixed(3) + '</strong> mm</td></tr>' +
+        '<tr><td>P\u0159eds. \u00F8 \u0161roubu (d\u2083)</td><td><strong>' + d3.toFixed(3) + '</strong> mm</td></tr>' +
+      '</table>';
   }
-  inpD.addEventListener("input", calcManual);
-  inpP.addEventListener("input", calcManual);
+
+  // ── Filtr ──
+  filter.addEventListener("input", function() {
+    var q = filter.value.toLowerCase();
+    var trs = tbody.querySelectorAll("tr");
+    for (var i = 0; i < trs.length; i++) {
+      var tr = trs[i];
+      var txt = tr.children[0].textContent.toLowerCase() + ' ' + tr.children[1].textContent;
+      tr.style.display = txt.indexOf(q) >= 0 ? "" : "none";
+    }
+  });
+
+  // ── Klik na řádek → detail ──
+  tbody.addEventListener("click", function(e) {
+    var tr = e.target.closest("tr");
+    if (!tr || !tr.dataset.idx) return;
+    var idx = parseInt(tr.dataset.idx);
+    var t = threads[idx];
+    if (!t) return;
+    if (lastActiveRow) lastActiveRow.classList.remove("thr-row-active");
+    tr.classList.add("thr-row-active");
+    lastActiveRow = tr;
+    showDetail(t.D, t.P, "M" + t.D + " \u2013 hrub\u00E9 stoup\u00E1n\u00ED");
+  });
+
+  // ── Vlastní závit ──
+  function calcCustom() {
+    var D = inpD.value !== "" ? parseFloat(inpD.value) : null;
+    var P = inpP.value !== "" ? parseFloat(inpP.value) : null;
+    if (D !== null && P !== null && P > 0 && D > 0) {
+      if (lastActiveRow) { lastActiveRow.classList.remove("thr-row-active"); lastActiveRow = null; }
+      showDetail(D, P, "M" + D + "\u00D7" + P + " (vlastn\u00ED)");
+    }
+  }
+  inpD.addEventListener("input", calcCustom);
+  inpP.addEventListener("input", calcCustom);
+
+  // ── Kopírovat detail ──
+  overlay.querySelector("#thrCopy").addEventListener("click", function() {
+    var txt = detail.textContent;
+    if (txt && txt.indexOf("Klikn\u011Bte") < 0) {
+      navigator.clipboard.writeText(txt).then(function() { showToast("Zkop\u00EDrov\u00E1no"); });
+    }
+  });
 }
 
 // ══════════════════════════════════════════════════════════════
