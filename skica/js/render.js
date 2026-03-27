@@ -164,7 +164,8 @@ function renderObjects() {
     ctx.beginPath();
     ctx.arc(sx, sy, 2, 0, Math.PI * 2);
     ctx.fill();
-    ctx.font = `${labelSize}px Consolas`;
+    const intSize = Math.round(Math.min(24, Math.max(11, 8 + state.zoom * 4.5)));
+    ctx.font = intSize + 'px Consolas';
     const dp = toDisplayCoords(pt.x, pt.y);
     const pf = state.coordMode === 'inc' ? 'Δ' : '';
     ctx.fillText(
