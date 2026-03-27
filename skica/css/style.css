@@ -1633,6 +1633,35 @@ body {
   flex-shrink: 0;
 }
 
+/* ── Tolerance toggle ── */
+.tol-toggle-row {
+  display: flex;
+  gap: 0;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #313244;
+}
+.tol-toggle {
+  flex: 1;
+  padding: 8px 0;
+  border: none;
+  background: #181825;
+  color: #6c7086;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.tol-toggle.tol-active {
+  background: #89b4fa;
+  color: #1e1e2e;
+}
+.tol-toggle:hover:not(.tol-active) {
+  background: #313244;
+  color: #cdd6f4;
+}
+
 /* ── Trig calculator ── */
 .trig-window {
   min-width: 380px;
