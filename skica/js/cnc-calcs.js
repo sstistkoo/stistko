@@ -547,13 +547,13 @@ export function openToleranceCalc() {
   var itOpts = '';
   for (var it = 1; it <= 18; it++) {
     var sel3 = (it === 7) ? ' selected' : '';
-    itOpts += '<option value="' + it + '"' + sel3 + '>IT' + it + '</option>';
+    itOpts += '<option value="' + it + '"' + sel3 + '>' + it + '</option>';
   }
 
   var body =
-    '<div class="cnc-table-label">Voln\u00E9 m\u00EDry \u2013 ISO 2768-1</div>' +
+    '<div class="cnc-table-label">Voln\u00E9 m\u00EDry \u2013 \u010CSN EN ISO 2768-1</div>' +
     '<div class="cnc-table-wrap">' + freeHTML + '</div>' +
-    '<div class="cnc-table-label" style="margin-top:12px">Tolerovan\u00E9 rozm\u011Bry \u2013 ISO 286</div>' +
+    '<div class="cnc-table-label" style="margin-top:12px">Tolerovan\u00E9 rozm\u011Bry \u2013 \u010CSN EN ISO 286-1</div>' +
     '<div class="cnc-fields">' +
       '<label class="cnc-field cnc-field-full"><span>Jmenovit\u00FD rozm\u011Br <small>mm</small></span>' +
         '<input type="number" data-id="tolDim" step="any" placeholder="nap\u0159. 25"></label>' +
@@ -565,7 +565,7 @@ export function openToleranceCalc() {
     '<div class="cnc-fields">' +
       '<label class="cnc-field"><span>T\u0159\u00EDda</span>' +
         '<select data-id="tolClass" id="tolClassSel">' + holeOpts + '</select></label>' +
-      '<label class="cnc-field"><span>Stupe\u0148 (IT)</span>' +
+      '<label class="cnc-field"><span>Stupe\u0148</span>' +
         '<select data-id="tolIT">' + itOpts + '</select></label>' +
     '</div>' +
     '<div class="cnc-result" id="tolResult">Zadejte rozm\u011Br\u2026</div>' +

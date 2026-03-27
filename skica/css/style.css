@@ -1269,7 +1269,8 @@ body {
   min-width: 320px;
   max-width: 95vw;
   max-height: 95vh;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
   animation: calcFadeIn 0.15s ease;
 }
 @keyframes calcFadeIn {
@@ -1305,6 +1306,10 @@ body {
 }
 .calc-body {
   padding: 12px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  flex: 1;
+  min-height: 0;
 }
 
 /* ── Basic calculator ── */
@@ -1466,6 +1471,13 @@ body {
   font-size: 14px;
   font-family: "Consolas", monospace;
   outline: none;
+}
+.cnc-field select {
+  font-size: 16px;
+  -webkit-appearance: menulist;
+  appearance: menulist;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 .cnc-field input:focus {
   border-color: #89b4fa;
