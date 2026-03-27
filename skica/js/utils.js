@@ -236,6 +236,7 @@ export function toolLabel(t) {
       extend: "Prodloužit",
       fillet: "Zaoblení",
       perp: "Kolmice",
+      horizontal: "Vodorovnost",
       parallel: "Rovnoběžka",
       dimension: "Kóta",
       snapPoint: "Přichytit bod",

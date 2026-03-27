@@ -151,14 +151,15 @@ document.addEventListener("keydown", (e) => {
     state.drawing = false;
     state.tempPoints = [];
     state._polylineBulges = [];
-    state._perpRefIdx = null;
     state._parallelRefIdx = null;
+    state._parallelRefSeg = null;
     state._snapPointState = null;
     state._tangentMode = null;
     state._tangentFirstCircle = null;
     state._tangentFirstLine = null;
     state.selected = null;
     state.selectedSegment = null;
+    state._selectedConstraint = null;
     updateProperties();
     renderAll();
     resetHint();
@@ -243,6 +244,7 @@ document.addEventListener("keydown", (e) => {
     e: "extend",
     f: "fillet",
     j: "perp",
+    z: "horizontal",
     h: "parallel",
     u: "dimension",
     b: "snapPoint",
@@ -667,6 +669,10 @@ export function handleCanvasClick(wx, wy) {
       handlePerpClick(wx, wy);
       break;
 
+    case "horizontal":
+      handleHorizontalClick(wx, wy);
+      break;
+
     case "parallel":
       handleParallelClick(wx, wy);
       break;
@@ -893,20 +899,53 @@ function handleOffsetClick(wx, wy) {
   });
 }
 
+// ── Helper: get line-like segment from object (line, constr, or polyline segment) ──
+/**
+ * Vrátí segment (x1,y1,x2,y2) a setter funkce pro úpravy.
+ * @returns {{ seg: {x1,y1,x2,y2}, setP1: function, setP2: function, segIdx: number|null } | null}
+ */
+function getLineSegment(obj, wx, wy) {
+  if (obj.type === 'line' || obj.type === 'constr') {
+    return {
+      seg: { x1: obj.x1, y1: obj.y1, x2: obj.x2, y2: obj.y2 },
+      setP1: (x, y) => { obj.x1 = x; obj.y1 = y; },
+      setP2: (x, y) => { obj.x2 = x; obj.y2 = y; },
+      segIdx: null
+    };
+  }
+  if (obj.type === 'polyline') {
+    const si = findSegmentAt(obj, wx, wy);
+    if (si === null) return null;
+    const b = obj.bulges[si] || 0;
+    if (b !== 0) return null; // arc segments not supported
+    const n = obj.vertices.length;
+    const p1 = obj.vertices[si];
+    const p2 = obj.vertices[(si + 1) % n];
+    return {
+      seg: { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y },
+      setP1: (x, y) => { p1.x = x; p1.y = y; },
+      setP2: (x, y) => { p2.x = x; p2.y = y; },
+      segIdx: si
+    };
+  }
+  return null;
+}
+
 // ── Oříznutí úsečky ──
 /** Ořízne úsečku k nejbližšímu průsečíku na straně kliknutí. */
 function handleTrimClick(wx, wy) {
   const idx = findObjectAt(wx, wy);
   if (idx === null) { showToast("Klepněte na úsečku k oříznutí"); return; }
   const obj = state.objects[idx];
-  if (obj.type !== "line" && obj.type !== "constr") {
-    showToast("Oříznutí funguje pouze pro úsečky");
+  const ls = getLineSegment(obj, wx, wy);
+  if (!ls) {
+    showToast("Oříznutí funguje pouze pro úsečky a rovné segmenty kontur");
     return;
   }
 
   // Collect all intersection points on this line segment from other objects
   const pts = [];
-  const lineSeg = { x1: obj.x1, y1: obj.y1, x2: obj.x2, y2: obj.y2, isConstr: false };
+  const lineSeg = { x1: ls.seg.x1, y1: ls.seg.y1, x2: ls.seg.x2, y2: ls.seg.y2, isConstr: false };
   for (let i = 0; i < state.objects.length; i++) {
     if (i === idx) continue;
     const other = state.objects[i];
@@ -921,16 +960,16 @@ function handleTrimClick(wx, wy) {
   if (pts.length === 0) { showToast("Žádný průsečík pro oříznutí"); return; }
 
   // Determine which end of the line is closer to click point
-  const d1 = Math.hypot(wx - obj.x1, wy - obj.y1);
-  const d2 = Math.hypot(wx - obj.x2, wy - obj.y2);
+  const d1 = Math.hypot(wx - ls.seg.x1, wy - ls.seg.y1);
+  const d2 = Math.hypot(wx - ls.seg.x2, wy - ls.seg.y2);
   const trimEnd = d1 < d2 ? 1 : 2; // 1 = trim start(x1,y1), 2 = trim end(x2,y2)
 
   // Find intersection closest to the trimmed end
   let bestPt = null, bestDist = Infinity;
   for (const p of pts) {
     const d = trimEnd === 1
-      ? Math.hypot(p.x - obj.x1, p.y - obj.y1)
-      : Math.hypot(p.x - obj.x2, p.y - obj.y2);
+      ? Math.hypot(p.x - ls.seg.x1, p.y - ls.seg.y1)
+      : Math.hypot(p.x - ls.seg.x2, p.y - ls.seg.y2);
     if (d < bestDist && d > 1e-9) {
       bestDist = d;
       bestPt = p;
@@ -939,12 +978,12 @@ function handleTrimClick(wx, wy) {
   if (!bestPt) { showToast("Žádný vhodný průsečík"); return; }
 
   pushUndo();
-  if (trimEnd === 1) { obj.x1 = bestPt.x; obj.y1 = bestPt.y; }
-  else { obj.x2 = bestPt.x; obj.y2 = bestPt.y; }
+  if (trimEnd === 1) { ls.setP1(bestPt.x, bestPt.y); }
+  else { ls.setP2(bestPt.x, bestPt.y); }
 
   calculateAllIntersections();
   renderAll();
-  showToast("Úsečka oříznuta ✓");
+  showToast("Oříznuto ✓");
 }
 
 // ── Prodloužení úsečky ──
@@ -953,18 +992,19 @@ function handleExtendClick(wx, wy) {
   const idx = findObjectAt(wx, wy);
   if (idx === null) { showToast("Klepněte na úsečku k prodloužení"); return; }
   const obj = state.objects[idx];
-  if (obj.type !== "line" && obj.type !== "constr") {
-    showToast("Prodloužení funguje pouze pro úsečky");
+  const ls = getLineSegment(obj, wx, wy);
+  if (!ls) {
+    showToast("Prodloužení funguje pouze pro úsečky a rovné segmenty kontur");
     return;
   }
 
   // Which end to extend (closer to click)
-  const d1 = Math.hypot(wx - obj.x1, wy - obj.y1);
-  const d2 = Math.hypot(wx - obj.x2, wy - obj.y2);
+  const d1 = Math.hypot(wx - ls.seg.x1, wy - ls.seg.y1);
+  const d2 = Math.hypot(wx - ls.seg.x2, wy - ls.seg.y2);
   const extEnd = d1 < d2 ? 1 : 2;
 
   // Create an infinite line (construction) to find intersections beyond the segment
-  const infLine = { x1: obj.x1, y1: obj.y1, x2: obj.x2, y2: obj.y2, isConstr: true };
+  const infLine = { x1: ls.seg.x1, y1: ls.seg.y1, x2: ls.seg.x2, y2: ls.seg.y2, isConstr: true };
 
   const pts = [];
   for (let i = 0; i < state.objects.length; i++) {
@@ -981,17 +1021,17 @@ function handleExtendClick(wx, wy) {
   if (pts.length === 0) { showToast("Žádný objekt pro prodloužení"); return; }
 
   // Filter: only points beyond the extended end (along the line direction)
-  const dx = obj.x2 - obj.x1, dy = obj.y2 - obj.y1;
+  const dx = ls.seg.x2 - ls.seg.x1, dy = ls.seg.y2 - ls.seg.y1;
   const len2 = dx * dx + dy * dy;
   const candidates = [];
   for (const p of pts) {
-    const t = ((p.x - obj.x1) * dx + (p.y - obj.y1) * dy) / len2;
+    const t = ((p.x - ls.seg.x1) * dx + (p.y - ls.seg.y1) * dy) / len2;
     // extEnd=1: we extend beyond x1, so t < 0
     // extEnd=2: we extend beyond x2, so t > 1
     if (extEnd === 1 && t < 1e-9) {
-      candidates.push({ pt: p, dist: Math.hypot(p.x - obj.x1, p.y - obj.y1) });
+      candidates.push({ pt: p, dist: Math.hypot(p.x - ls.seg.x1, p.y - ls.seg.y1) });
     } else if (extEnd === 2 && t > 1 - 1e-9) {
-      candidates.push({ pt: p, dist: Math.hypot(p.x - obj.x2, p.y - obj.y2) });
+      candidates.push({ pt: p, dist: Math.hypot(p.x - ls.seg.x2, p.y - ls.seg.y2) });
     }
   }
 
@@ -1002,12 +1042,12 @@ function handleExtendClick(wx, wy) {
   const best = candidates[0].pt;
 
   pushUndo();
-  if (extEnd === 1) { obj.x1 = best.x; obj.y1 = best.y; }
-  else { obj.x2 = best.x; obj.y2 = best.y; }
+  if (extEnd === 1) { ls.setP1(best.x, best.y); }
+  else { ls.setP2(best.x, best.y); }
 
   calculateAllIntersections();
   renderAll();
-  showToast("Úsečka prodloužena ✓");
+  showToast("Prodlouženo ✓");
 }
 
 // ── Zaoblení (Fillet) ──
@@ -1016,8 +1056,9 @@ function handleFilletClick(wx, wy) {
   const idx = findObjectAt(wx, wy);
   if (idx === null) { showToast("Klepněte na první úsečku pro zaoblení"); return; }
   const obj1 = state.objects[idx];
-  if (obj1.type !== "line" && obj1.type !== "constr") {
-    showToast("Zaoblení funguje pouze mezi úsečkami");
+  const ls1 = getLineSegment(obj1, wx, wy);
+  if (!ls1) {
+    showToast("Zaoblení funguje pouze pro úsečky a rovné segmenty kontur");
     return;
   }
 
@@ -1037,16 +1078,30 @@ function handleFilletClick(wx, wy) {
       if (state.snapToPoints) [wx2, wy2] = snapPt(wx2, wy2);
 
       const idx2 = findObjectAt(wx2, wy2);
-      if (idx2 === null || idx2 === idx) { showToast("Klepněte na jinou úsečku"); return; }
+      if (idx2 === null) { showToast("Klepněte na úsečku"); return; }
+      if (idx2 === idx && ls1.segIdx === null) { showToast("Klepněte na jinou úsečku"); return; }
       const obj2 = state.objects[idx2];
-      if (obj2.type !== "line" && obj2.type !== "constr") { showToast("Zaoblení funguje pouze mezi úsečkami"); return; }
+      const ls2 = getLineSegment(obj2, wx2, wy2);
+      if (!ls2) { showToast("Zaoblení funguje pouze pro úsečky a rovné segmenty kontur"); return; }
+      // Same polyline, same segment?
+      if (idx2 === idx && ls1.segIdx !== null && ls2.segIdx === ls1.segIdx) { showToast("Klepněte na jiný segment"); return; }
 
       drawCanvas.removeEventListener("click", onSecondClick);
       drawCanvas.removeEventListener("touchend", onSecondTouch);
 
+      // Create proxy objects for filletTwoLines
+      const proxy1 = { x1: ls1.seg.x1, y1: ls1.seg.y1, x2: ls1.seg.x2, y2: ls1.seg.y2 };
+      const proxy2 = { x1: ls2.seg.x1, y1: ls2.seg.y1, x2: ls2.seg.x2, y2: ls2.seg.y2 };
+
       pushUndo();
-      const result = filletTwoLines(obj1, obj2, radius);
+      const result = filletTwoLines(proxy1, proxy2, radius);
       if (!result.ok) { showToast(result.msg); return; }
+
+      // Write back trimmed endpoints
+      ls1.setP1(proxy1.x1, proxy1.y1);
+      ls1.setP2(proxy1.x2, proxy1.y2);
+      ls2.setP1(proxy2.x1, proxy2.y1);
+      ls2.setP2(proxy2.x2, proxy2.y2);
 
       result.arc.name = `Zaoblení R${radius}`;
       addObject(result.arc);
@@ -1065,108 +1120,171 @@ function handleFilletClick(wx, wy) {
   });
 }
 
-// ── Kolmice – click logika ──
-function handlePerpClick(wx, wy) {
-  if (!state.drawing) {
-    // 1. klik: vyber úsečku (buď tu co chceš otočit, nebo referenční)
-    const idx = findObjectAt(wx, wy);
-    if (idx === null) { showToast("Klepněte na úsečku"); return; }
-    const obj = state.objects[idx];
-    if (obj.type !== 'line' && obj.type !== 'constr') {
-      showToast("Kolmice funguje pouze pro úsečky");
-      return;
-    }
-    state.drawing = true;
-    state._perpRefIdx = idx;
-    state.selected = idx;
-    renderAll();
-    setHint("Klepněte na úsečku → otočí první do kolmosti, nebo na bod → kolmice z bodu");
+// ── Vazby (constraints) – helper ──
+/** Nastaví vazbu na objekt/segment.
+ *  Pro úsečky: obj.constraint = type
+ *  Pro kontury: obj.segConstraints = { segIdx: type, ... }
+ */
+function setConstraint(obj, segIdx, type) {
+  if (segIdx !== null && segIdx !== undefined) {
+    if (!obj.segConstraints) obj.segConstraints = {};
+    obj.segConstraints[segIdx] = type;
   } else {
-    const refObj = state.objects[state._perpRefIdx];
-    if (!refObj) { state.drawing = false; resetHint(); return; }
-
-    // Podívat se, zda 2. klik je na jinou úsečku
-    const idx2 = findObjectAt(wx, wy);
-    if (idx2 !== null && idx2 !== state._perpRefIdx) {
-      const obj2 = state.objects[idx2];
-      if (obj2.type === 'line' || obj2.type === 'constr') {
-        // Režim: otočit první úsečku do kolmosti k druhé
-        const refAngle = Math.atan2(obj2.y2 - obj2.y1, obj2.x2 - obj2.x1);
-        const perpAngle = refAngle + Math.PI / 2;
-        const mx = (refObj.x1 + refObj.x2) / 2;
-        const my = (refObj.y1 + refObj.y2) / 2;
-        const halfLen = Math.hypot(refObj.x2 - refObj.x1, refObj.y2 - refObj.y1) / 2;
-        pushUndo();
-        refObj.x1 = mx - halfLen * Math.cos(perpAngle);
-        refObj.y1 = my - halfLen * Math.sin(perpAngle);
-        refObj.x2 = mx + halfLen * Math.cos(perpAngle);
-        refObj.y2 = my + halfLen * Math.sin(perpAngle);
-        showToast("Úsečka otočena do kolmosti ✓");
-        state.drawing = false;
-        state._perpRefIdx = null;
-        calculateAllIntersections();
-        renderAll();
-        resetHint();
-        return;
-      }
-    }
-
-    // Režim: kolmice z bodu na referenční úsečku (původní chování)
-    const foot = projectPointToLine(wx, wy, refObj.x1, refObj.y1, refObj.x2, refObj.y2);
-    pushUndo();
-    addObject({
-      type: 'line',
-      x1: wx, y1: wy,
-      x2: foot.x, y2: foot.y,
-      name: `Kolmice ${state.nextId}`,
-    });
-    showToast("Kolmice vytvořena ✓");
-    state.drawing = false;
-    state._perpRefIdx = null;
-    calculateAllIntersections();
-    renderAll();
-    resetHint();
+    obj.constraint = type;
   }
+}
+
+/** Odstraní vazbu z objektu/segmentu. */
+function removeConstraint(obj, segIdx) {
+  if (segIdx !== null && segIdx !== undefined) {
+    if (obj.segConstraints) {
+      delete obj.segConstraints[segIdx];
+      if (Object.keys(obj.segConstraints).length === 0) delete obj.segConstraints;
+    }
+  } else {
+    delete obj.constraint;
+  }
+}
+
+// ── Vodorovnost – click logika ──
+/** Vyrovná úsečku/segment kontury do vodorovné polohy.
+ *  Kotevní bod = koncový bod bližší ke kliknutí (zůstane na místě),
+ *  druhý koncový bod se posune vodorovně ve stejném směru. */
+function handleHorizontalClick(wx, wy) {
+  const idx = findObjectAt(wx, wy);
+  if (idx === null) { showToast("Klepněte na úsečku nebo segment kontury"); return; }
+  const obj = state.objects[idx];
+  const ls = getLineSegment(obj, wx, wy);
+  if (!ls) {
+    showToast("Vodorovnost funguje pouze pro úsečky a rovné segmenty kontur");
+    return;
+  }
+
+  const len = Math.hypot(ls.seg.x2 - ls.seg.x1, ls.seg.y2 - ls.seg.y1);
+  // Zjistit, ke kterému konci je klik blíž → ten bude kotva
+  const d1 = Math.hypot(wx - ls.seg.x1, wy - ls.seg.y1);
+  const d2 = Math.hypot(wx - ls.seg.x2, wy - ls.seg.y2);
+  // Zachovat původní směr (dx kladné/záporné)
+  const sign = (ls.seg.x2 - ls.seg.x1) >= 0 ? 1 : -1;
+
+  pushUndo();
+  if (d1 <= d2) {
+    // P1 je kotva, P2 se posune
+    ls.setP2(ls.seg.x1 + sign * len, ls.seg.y1);
+  } else {
+    // P2 je kotva, P1 se posune
+    ls.setP1(ls.seg.x2 - sign * len, ls.seg.y2);
+  }
+
+  // Uložit vazbu na objekt
+  setConstraint(obj, ls.segIdx, 'horizontal');
+
+  calculateAllIntersections();
+  renderAll();
+  showToast("Vyrovnáno vodorovně ✓");
+}
+
+// ── Kolmost – click logika ──
+/** Vyrovná úsečku/segment kontury do svislé polohy.
+ *  Kotevní bod = koncový bod bližší ke kliknutí (zůstane na místě),
+ *  druhý koncový bod se posune svisle ve stejném směru. */
+function handlePerpClick(wx, wy) {
+  const idx = findObjectAt(wx, wy);
+  if (idx === null) { showToast("Klepněte na úsečku nebo segment kontury"); return; }
+  const obj = state.objects[idx];
+  const ls = getLineSegment(obj, wx, wy);
+  if (!ls) {
+    showToast("Kolmost funguje pouze pro úsečky a rovné segmenty kontur");
+    return;
+  }
+
+  const len = Math.hypot(ls.seg.x2 - ls.seg.x1, ls.seg.y2 - ls.seg.y1);
+  // Zjistit, ke kterému konci je klik blíž → ten bude kotva
+  const d1 = Math.hypot(wx - ls.seg.x1, wy - ls.seg.y1);
+  const d2 = Math.hypot(wx - ls.seg.x2, wy - ls.seg.y2);
+  // Zachovat původní směr (dy kladné/záporné)
+  const sign = (ls.seg.y2 - ls.seg.y1) >= 0 ? 1 : -1;
+
+  pushUndo();
+  if (d1 <= d2) {
+    // P1 je kotva, P2 se posune svisle
+    ls.setP2(ls.seg.x1, ls.seg.y1 + sign * len);
+  } else {
+    // P2 je kotva, P1 se posune svisle
+    ls.setP1(ls.seg.x2, ls.seg.y2 - sign * len);
+  }
+
+  // Uložit vazbu na objekt
+  setConstraint(obj, ls.segIdx, 'vertical');
+
+  calculateAllIntersections();
+  renderAll();
+  showToast("Vyrovnáno svisle ✓");
 }
 
 // ── Rovnoběžka – click logika ──
 function handleParallelClick(wx, wy) {
   if (!state.drawing) {
-    // 1. klik: vyber úsečku
+    // 1. klik: vyber úsečku nebo segment kontury
     const idx = findObjectAt(wx, wy);
     if (idx === null) { showToast("Klepněte na úsečku"); return; }
     const obj = state.objects[idx];
-    if (obj.type !== 'line' && obj.type !== 'constr') {
-      showToast("Rovnoběžka funguje pouze pro úsečky");
+    const ls = getLineSegment(obj, wx, wy);
+    if (!ls) {
+      showToast("Rovnoběžka funguje pouze pro úsečky a rovné segmenty kontur");
       return;
     }
     state.drawing = true;
     state._parallelRefIdx = idx;
+    state._parallelRefSeg = ls;
+    state._parallelClickX = wx;
+    state._parallelClickY = wy;
     state.selected = idx;
+    state.selectedSegment = ls.segIdx;  // zvýrazní jen kliknutý segment kontury
     renderAll();
     setHint("Klepněte na úsečku → otočí první do rovnoběžnosti, nebo na bod → nová rovnoběžka");
   } else {
-    const refObj = state.objects[state._parallelRefIdx];
-    if (!refObj) { state.drawing = false; resetHint(); return; }
+    const refSeg = state._parallelRefSeg;
+    if (!refSeg) { state.drawing = false; resetHint(); return; }
 
-    // Podívat se, zda 2. klik je na jinou úsečku
+    // Podívat se, zda 2. klik je na jinou úsečku/segment
     const idx2 = findObjectAt(wx, wy);
-    if (idx2 !== null && idx2 !== state._parallelRefIdx) {
+    if (idx2 !== null) {
       const obj2 = state.objects[idx2];
-      if (obj2.type === 'line' || obj2.type === 'constr') {
-        // Režim: otočit první úsečku do rovnoběžnosti s druhou
-        const refAngle = Math.atan2(obj2.y2 - obj2.y1, obj2.x2 - obj2.x1);
-        const mx = (refObj.x1 + refObj.x2) / 2;
-        const my = (refObj.y1 + refObj.y2) / 2;
-        const halfLen = Math.hypot(refObj.x2 - refObj.x1, refObj.y2 - refObj.y1) / 2;
+      const ls2 = getLineSegment(obj2, wx, wy);
+      if (ls2 && !(idx2 === state._parallelRefIdx && ls2.segIdx === refSeg.segIdx)) {
+        // Režim: otočit první segment do rovnoběžnosti s druhým
+        const refAngle = Math.atan2(ls2.seg.y2 - ls2.seg.y1, ls2.seg.x2 - ls2.seg.x1);
+        const curAngle = Math.atan2(refSeg.seg.y2 - refSeg.seg.y1, refSeg.seg.x2 - refSeg.seg.x1);
+        // Vybrat bližší z refAngle a refAngle+π (obojí je rovnoběžné)
+        let targetAngle = refAngle;
+        const diff1 = Math.abs(Math.atan2(Math.sin(refAngle - curAngle), Math.cos(refAngle - curAngle)));
+        const alt = refAngle + Math.PI;
+        const diff2 = Math.abs(Math.atan2(Math.sin(alt - curAngle), Math.cos(alt - curAngle)));
+        if (diff2 < diff1) targetAngle = alt;
+
+        const len = Math.hypot(refSeg.seg.x2 - refSeg.seg.x1, refSeg.seg.y2 - refSeg.seg.y1);
+        // Kotevní bod = konec bližší k prvnímu kliknutí (zachová propojení kontury)
+        const cx = state._parallelClickX, cy = state._parallelClickY;
+        const d1 = Math.hypot(cx - refSeg.seg.x1, cy - refSeg.seg.y1);
+        const d2 = Math.hypot(cx - refSeg.seg.x2, cy - refSeg.seg.y2);
+
         pushUndo();
-        refObj.x1 = mx - halfLen * Math.cos(refAngle);
-        refObj.y1 = my - halfLen * Math.sin(refAngle);
-        refObj.x2 = mx + halfLen * Math.cos(refAngle);
-        refObj.y2 = my + halfLen * Math.sin(refAngle);
-        showToast("Úsečka otočena do rovnoběžnosti ✓");
+        if (d1 <= d2) {
+          // P1 je kotva
+          refSeg.setP2(refSeg.seg.x1 + len * Math.cos(targetAngle), refSeg.seg.y1 + len * Math.sin(targetAngle));
+        } else {
+          // P2 je kotva
+          refSeg.setP1(refSeg.seg.x2 - len * Math.cos(targetAngle), refSeg.seg.y2 - len * Math.sin(targetAngle));
+        }
+        // Uložit vazbu na objekt
+        setConstraint(state.objects[state._parallelRefIdx], refSeg.segIdx, 'parallel');
+
+        showToast("Otočeno do rovnoběžnosti ✓");
         state.drawing = false;
         state._parallelRefIdx = null;
+        state._parallelRefSeg = null;
+        state.selectedSegment = null;
         calculateAllIntersections();
         renderAll();
         resetHint();
@@ -1175,8 +1293,8 @@ function handleParallelClick(wx, wy) {
     }
 
     // Režim: nová rovnoběžka procházející bodem (původní chování)
-    const dx = refObj.x2 - refObj.x1;
-    const dy = refObj.y2 - refObj.y1;
+    const dx = refSeg.seg.x2 - refSeg.seg.x1;
+    const dy = refSeg.seg.y2 - refSeg.seg.y1;
     pushUndo();
     addObject({
       type: 'line',
@@ -1187,6 +1305,8 @@ function handleParallelClick(wx, wy) {
     showToast("Rovnoběžka vytvořena ✓");
     state.drawing = false;
     state._parallelRefIdx = null;
+    state._parallelRefSeg = null;
+    state.selectedSegment = null;
     calculateAllIntersections();
     renderAll();
     resetHint();
@@ -1267,8 +1387,21 @@ function startRotateAction() {
   });
 }
 
-// ── Smazání vybraného objektu ──
+// ── Smazání vybraného objektu nebo vazby ──
 function deleteSelected() {
+  // Pokud je vybrána vazební značka, smazat jen vazbu
+  if (state._selectedConstraint) {
+    const c = state._selectedConstraint;
+    const obj = state.objects[c.objIdx];
+    if (obj) {
+      pushUndo();
+      removeConstraint(obj, c.segIdx);
+      state._selectedConstraint = null;
+      renderAll();
+      showToast("Vazba odstraněna ✓");
+    }
+    return;
+  }
   if (state.selected === null) { showToast("Nejdříve vyberte objekt"); return; }
   pushUndo();
   state.objects.splice(state.selected, 1);

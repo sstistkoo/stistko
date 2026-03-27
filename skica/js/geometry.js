@@ -8,6 +8,62 @@ import { renderAll } from './render.js';
 import { bridge } from './bridge.js';
 
 // ── Hledání a výběr objektu ──
+
+/**
+ * Najde vazební značku na pozici [wx,wy].
+ * Značky jsou odsazeny kolmo od segmentu (stejný offset jako v rendereru).
+ * @returns {{ objIdx: number, segIdx: number|null }|null}
+ */
+const CONSTRAINT_OFFSET_PX = 22;  // musí odpovídat render.js
+
+function _constraintPos(x1, y1, x2, y2) {
+  const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+  const dx = x2 - x1, dy = y2 - y1;
+  const len = Math.hypot(dx, dy) || 1;
+  let nx = -dy / len, ny = dx / len;
+  if (ny < 0) { nx = -nx; ny = -ny; }
+  const off = CONSTRAINT_OFFSET_PX / state.zoom;
+  return { x: mx + nx * off, y: my + ny * off };
+}
+
+export function findConstraintAt(wx, wy) {
+  const threshold = 20 / state.zoom;
+  let best = null, bestDist = Infinity;
+
+  state.objects.forEach((obj, idx) => {
+    const layer = state.layers.find(l => l.id === obj.layer);
+    if (layer && !layer.visible) return;
+
+    // Úsečky s vazbou
+    if (obj.constraint && (obj.type === 'line' || obj.type === 'constr')) {
+      const pos = _constraintPos(obj.x1, obj.y1, obj.x2, obj.y2);
+      const d = Math.hypot(wx - pos.x, wy - pos.y);
+      if (d < threshold && d < bestDist) {
+        bestDist = d;
+        best = { objIdx: idx, segIdx: null };
+      }
+    }
+
+    // Kontury se segmentovými vazbami
+    if (obj.segConstraints && obj.type === 'polyline') {
+      const n = obj.vertices.length;
+      for (const [si, type] of Object.entries(obj.segConstraints)) {
+        const i = parseInt(si);
+        const p1 = obj.vertices[i];
+        const p2 = obj.vertices[(i + 1) % n];
+        if (!p1 || !p2) continue;
+        const pos = _constraintPos(p1.x, p1.y, p2.x, p2.y);
+        const d = Math.hypot(wx - pos.x, wy - pos.y);
+        if (d < threshold && d < bestDist) {
+          bestDist = d;
+          best = { objIdx: idx, segIdx: i };
+        }
+      }
+    }
+  });
+  return best;
+}
+
 /**
  * Najde index objektu nejblíž bodu [wx,wy].
  * @param {number} wx
@@ -38,6 +94,19 @@ export function findObjectAt(wx, wy) {
  * @param {number} wy
  */
 export function selectObjectAt(wx, wy) {
+  // Nejdřív zkontrolovat, zda klik je na vazební značku
+  const constr = findConstraintAt(wx, wy);
+  if (constr) {
+    state._selectedConstraint = constr;
+    state.selected = constr.objIdx;
+    state.selectedSegment = constr.segIdx;
+    if (bridge.updateProperties) bridge.updateProperties();
+    if (bridge.updateObjectList) bridge.updateObjectList();
+    renderAll();
+    return;
+  }
+  state._selectedConstraint = null;
+
   const newSel = findObjectAt(wx, wy);
   // If clicking on already-selected polyline, select the nearest segment
   if (newSel !== null && newSel === state.selected && state.objects[newSel].type === 'polyline') {

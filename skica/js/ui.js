@@ -592,9 +592,10 @@ export function setTool(tool) {
   state.tool = tool;
   state.drawing = false;
   state.tempPoints = [];
-  state._perpRefIdx = null;
   state._parallelRefIdx = null;
+  state._parallelRefSeg = null;
   state._snapPointState = null;
+  state._selectedConstraint = null;
   if (state.dragging) {
     const obj = state.objects[state.dragObjIdx];
     if (obj && state.dragObjSnapshot) {
@@ -642,6 +643,9 @@ export function resetHint() {
     tangent: "Klepněte na bod nebo na první kružnici",
     offset: "Klepněte na objekt pro offset",
     snapPoint: "Klepněte na koncový bod objektu pro přichycení",
+    horizontal: "Klepněte na úsečku/segment – vyrovná se vodorovně",
+    perp: "Klepněte na úsečku/segment – vyrovná se svisle (kolmo)",
+    parallel: "Klepněte na úsečku kterou chcete otočit → pak na referenční úsečku pro rovnoběžnost",
   };
   setHint(hints[state.tool] || "");
 }
@@ -832,9 +836,9 @@ export function openCalculator() {
         <button class="calc-close-btn">✕</button>
       </div>
       <div class="calc-body">
+        <div class="calc-history" id="calcHistory"></div>
         <div class="calc-expr" id="calcExpr">&nbsp;</div>
         <input type="text" id="calcDisplay" placeholder="0">
-        <div class="calc-history" id="calcHistory"></div>
         <div class="calc-buttons">
           <button class="calc-btn" data-val="7">7</button>
           <button class="calc-btn" data-val="8">8</button>
@@ -884,8 +888,8 @@ export function openCalculator() {
   function updateExprDisplay(text) { exprDisplay.textContent = text || "\u00a0"; }
 
   function addHistory(expression, result) {
-    history.unshift({ expr: expression, result });
-    if (history.length > 20) history.pop();
+    history.push({ expr: expression, result });
+    if (history.length > 50) history.shift();
     renderHistory();
   }
 
@@ -894,21 +898,19 @@ export function openCalculator() {
     for (const item of history) {
       const row = document.createElement("div");
       row.className = "calc-history-item";
-      const exprSpan = document.createElement("span");
-      exprSpan.className = "calc-hist-expr";
-      exprSpan.textContent = item.expr;
-      const resSpan = document.createElement("span");
-      resSpan.className = "calc-hist-result";
-      resSpan.textContent = "= " + item.result;
-      row.appendChild(exprSpan);
-      row.appendChild(resSpan);
+      const fullExpr = document.createElement("span");
+      fullExpr.className = "calc-hist-full";
+      fullExpr.textContent = item.expr + " = " + item.result;
+      row.appendChild(fullExpr);
       row.addEventListener("click", () => {
         expr = String(item.result);
         updateDisplay(expr);
-        updateExprDisplay("← historie");
+        updateExprDisplay("← " + item.result);
       });
       historyEl.appendChild(row);
     }
+    // Auto-scroll dolů k nejnovějšímu
+    historyEl.scrollTop = historyEl.scrollHeight;
   }
 
   function formatExpr(e) {
@@ -946,8 +948,8 @@ export function openCalculator() {
     }
     if (typeof r !== "number" || !isFinite(r)) { updateDisplay("Chyba"); expr = ""; return; }
     const result = parseFloat(r.toFixed(8));
-    updateExprDisplay(fnExpr + " =");
     addHistory(fnExpr, result);
+    updateExprDisplay(fnExpr + " = " + result);
     lastAnswer = result;
     expr = String(result);
     updateDisplay(expr);
@@ -958,9 +960,10 @@ export function openCalculator() {
     const r = safeEval(expr);
     if (r === null) { updateDisplay("Chyba"); return; }
     const result = parseFloat(r.toFixed(8));
-    updateExprDisplay(displayExpr + " =");
     addHistory(displayExpr, result);
     lastAnswer = result;
+    // Zobrazit celý zápis: výraz = výsledek
+    updateExprDisplay(displayExpr + " = " + result);
     expr = String(result);
     updateDisplay(expr);
   }
