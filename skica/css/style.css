@@ -1673,6 +1673,36 @@ body {
   background: #313244;
   color: #cdd6f4;
 }
+/* ── Tolerance grid buttons ── */
+.tol-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  margin-top: 4px;
+}
+.tol-it-grid {
+  grid-template-columns: repeat(6, 1fr);
+}
+.tol-g-btn {
+  background: #181825;
+  border: 1px solid #313244;
+  color: #cdd6f4;
+  padding: 7px 2px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: "Consolas", monospace;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+.tol-g-btn:hover {
+  border-color: #89b4fa;
+}
+.tol-g-btn.tol-g-active {
+  background: #89b4fa;
+  color: #1e1e2e;
+  border-color: #89b4fa;
+  font-weight: 700;
+}
 
 /* ── Trig calculator ── */
 .trig-window {
