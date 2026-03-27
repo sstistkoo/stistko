@@ -1384,7 +1384,9 @@ body {
   font-family: "Consolas", monospace;
 }
 .calc-history-item {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 4px 10px;
   font-size: 12px;
   font-family: "Consolas", monospace;
@@ -1403,6 +1405,29 @@ body {
 .calc-hist-full {
   color: #cdd6f4;
   font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+.calc-hist-del {
+  background: none;
+  border: none;
+  color: #585b70;
+  cursor: pointer;
+  font-size: 11px;
+  padding: 0 0 0 8px;
+  line-height: 1;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s;
+}
+.calc-history-item:hover .calc-hist-del {
+  opacity: 1;
+}
+.calc-hist-del:hover {
+  color: #f38ba8;
 }
 
 /* ── Trig calculator ── */
