@@ -8,7 +8,7 @@ import { renderAll } from './render.js';
 import { drawCanvas, screenToWorld, snapPt } from './canvas.js';
 import { bridge } from './bridge.js';
 import { addObject } from './objects.js';
-import { openCuttingCalc, openTaperCalc, openThreadCalc, openConvertCalc, openWeightCalc } from './cnc-calcs.js';
+import { openCuttingCalc, openTaperCalc, openThreadCalc, openConvertCalc, openWeightCalc, openToleranceCalc } from './cnc-calcs.js';
 
 // ── Bridge registrace (rozbíjí cyklickou závislost geometry ↔ ui) ──
 bridge.updateProperties = () => updateProperties();
@@ -1257,6 +1257,7 @@ document.getElementById("btnOpenTaper").addEventListener("click", openTaperCalc)
 document.getElementById("btnOpenThread").addEventListener("click", openThreadCalc);
 document.getElementById("btnOpenConvert").addEventListener("click", openConvertCalc);
 document.getElementById("btnOpenWeight").addEventListener("click", openWeightCalc);
+document.getElementById("btnOpenTolerance").addEventListener("click", openToleranceCalc);
 
 // ── Dialog: Grid Size ──
 /** Otevře dialog pro nastavení velikosti mřížky. */
