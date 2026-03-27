@@ -1705,6 +1705,13 @@ body {
 }
 
 /* ── Thread detail box ── */
+.thr-type-row {
+  margin-bottom: 8px;
+}
+.thr-type-row .tol-toggle {
+  font-size: 11px;
+  padding: 7px 0;
+}
 .thr-detail {
   background: #181825;
   border: 1px solid #313244;
