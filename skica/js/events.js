@@ -1316,6 +1316,14 @@ function handleParallelClick(wx, wy) {
 // ── Kóta – click logika ──
 function handleDimensionClick(wx, wy) {
   if (!state.drawing) {
+    // Snap k bodu (endpoint/midpoint) → kóta souřadnic bodu
+    if (state.mouse.snapType === 'point') {
+      pushUndo();
+      addDimensionForObject({ type: 'point', x: wx, y: wy });
+      calculateAllIntersections();
+      renderAll();
+      return;
+    }
     // Režim B: klik na existující objekt → přidá kótu
     const idx = findObjectAt(wx, wy);
     if (idx !== null) {

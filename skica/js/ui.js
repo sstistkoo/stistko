@@ -597,6 +597,12 @@ export function setTool(tool) {
   state._parallelRefSeg = null;
   state._snapPointState = null;
   state._selectedConstraint = null;
+  state._tangentMode = null;
+  state._tangentFirstCircle = null;
+  state._tangentFirstLine = null;
+  state._trimLine = null;
+  state._extendLine = null;
+  state._filletFirstLine = null;
   if (state.dragging) {
     const obj = state.objects[state.dragObjIdx];
     if (obj && state.dragObjSnapshot) {

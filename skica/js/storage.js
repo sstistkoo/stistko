@@ -53,7 +53,7 @@ export function loadProject() {
     if (data.layers) {
       state.layers = data.layers;
       state.activeLayer = data.activeLayer || 0;
-      state.nextLayerId = data.nextLayerId || (Math.max(...data.layers.map(l => l.id)) + 1);
+      state.nextLayerId = data.nextLayerId || (data.layers.length > 0 ? Math.max(...data.layers.map(l => l.id)) + 1 : 1);
     } else {
       state.objects.forEach(obj => { if (obj.layer === undefined) obj.layer = 0; });
     }
@@ -140,7 +140,7 @@ export function importProjectFile() {
         if (data.layers) {
           state.layers = data.layers;
           state.activeLayer = data.activeLayer || 0;
-          state.nextLayerId = data.nextLayerId || (Math.max(...data.layers.map(l => l.id)) + 1);
+          state.nextLayerId = data.nextLayerId || (data.layers.length > 0 ? Math.max(...data.layers.map(l => l.id)) + 1 : 1);
         } else {
           state.objects.forEach(obj => { if (obj.layer === undefined) obj.layer = 0; });
         }
@@ -528,7 +528,7 @@ function _loadProjectData(data) {
   if (data.layers) {
     state.layers = data.layers;
     state.activeLayer = data.activeLayer || 0;
-    state.nextLayerId = data.nextLayerId || (Math.max(...data.layers.map(l => l.id)) + 1);
+    state.nextLayerId = data.nextLayerId || (data.layers.length > 0 ? Math.max(...data.layers.map(l => l.id)) + 1 : 1);
   } else {
     state.objects.forEach(obj => { if (obj.layer === undefined) obj.layer = 0; });
   }
