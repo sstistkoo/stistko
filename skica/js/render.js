@@ -616,34 +616,54 @@ export function drawLine(obj) {
   const [sx2, sy2] = worldToScreen(obj.x2, obj.y2);
 
   if (obj.isDimension) {
-    // Kótovací úsečka: šipky + text + odkazové čáry
-    const extLen = 6;
+    // Klasické kótování: odkazové čáry + odsazená kóta + šipky + text
+    const hasSrc = obj.dimSrcX1 !== undefined;
+    // Zdrojové body (původní úsečka)
+    const ox1 = hasSrc ? obj.dimSrcX1 : obj.x1;
+    const oy1 = hasSrc ? obj.dimSrcY1 : obj.y1;
+    const ox2 = hasSrc ? obj.dimSrcX2 : obj.x2;
+    const oy2 = hasSrc ? obj.dimSrcY2 : obj.y2;
+    const [osx1, osy1] = worldToScreen(ox1, oy1);
+    const [osx2, osy2] = worldToScreen(ox2, oy2);
+
+    // Kótovací čára (odsazená)
     const angle = Math.atan2(sy2 - sy1, sx2 - sx1);
-    const nx = -Math.sin(angle) * extLen, ny = Math.cos(angle) * extLen;
-    // Odkazové čáry
-    ctx.lineWidth = 0.8;
+    const extOver = 4; // přesah odkazové čáry za kótu
+    const enx = -Math.sin(angle) * extOver;
+    const eny = Math.cos(angle) * extOver;
+
+    // Odkazové čáry (od zdrojových bodů ke kótě + přesah)
+    ctx.lineWidth = 0.7;
     ctx.beginPath();
-    ctx.moveTo(sx1 + nx, sy1 + ny);
-    ctx.lineTo(sx1 - nx, sy1 - ny);
-    ctx.moveTo(sx2 + nx, sy2 + ny);
-    ctx.lineTo(sx2 - nx, sy2 - ny);
+    ctx.moveTo(osx1, osy1);
+    ctx.lineTo(sx1 + enx, sy1 + eny);
+    ctx.moveTo(osx2, osy2);
+    ctx.lineTo(sx2 + enx, sy2 + eny);
     ctx.stroke();
-    // Hlavní čára
+
+    // Hlavní kótovací čára
     ctx.lineWidth = 1.2;
     ctx.beginPath();
     ctx.moveTo(sx1, sy1);
     ctx.lineTo(sx2, sy2);
     ctx.stroke();
+
     // Šipky
     drawDimArrow(sx1, sy1, sx2, sy2);
     drawDimArrow(sx2, sy2, sx1, sy1);
-    // Text
-    const len = Math.hypot(obj.x2 - obj.x1, obj.y2 - obj.y1);
+
+    // Text délky
+    const len = Math.hypot(ox2 - ox1, oy2 - oy1);
     const dimSize = Math.round(Math.min(16, Math.max(11, 8 + state.zoom * 3)));
-    ctx.font = `${dimSize}px Consolas`;
-    ctx.fillStyle = obj.color || "#9399b2";
-    const tnx = -Math.sin(angle) * 12, tny = Math.cos(angle) * 12;
-    ctx.fillText(`${len.toFixed(2)}`, (sx1 + sx2) / 2 + tnx, (sy1 + sy2) / 2 + tny);
+    ctx.font = dimSize + 'px Consolas';
+    ctx.fillStyle = obj.color || '#9399b2';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'bottom';
+    const tnx = -Math.sin(angle) * 4;
+    const tny = Math.cos(angle) * 4;
+    ctx.fillText(len.toFixed(2), (sx1 + sx2) / 2 + tnx, (sy1 + sy2) / 2 + tny);
+    ctx.textAlign = 'start';
+    ctx.textBaseline = 'alphabetic';
     return;
   }
 
