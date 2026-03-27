@@ -533,21 +533,21 @@ export function openToleranceCalc() {
     }
   }
 
-  // Build select options
-  var shaftOpts = '', holeOpts = '';
+  // Build grid buttons instead of selects
+  var shaftBtns = '', holeBtns = '';
   for (var si = 0; si < shaftLetters.length; si++) {
-    var sel = shaftLetters[si] === 'h' ? ' selected' : '';
-    shaftOpts += '<option value="' + shaftLetters[si] + '"' + sel + '>' + shaftLetters[si] + '</option>';
+    var act = shaftLetters[si] === 'h' ? ' tol-g-active' : '';
+    shaftBtns += '<button class="tol-g-btn' + act + '" data-val="' + shaftLetters[si] + '">' + shaftLetters[si] + '</button>';
   }
   for (var hi2 = 0; hi2 < holeLetters.length; hi2++) {
-    var sel2 = holeLetters[hi2] === 'H' ? ' selected' : '';
-    holeOpts += '<option value="' + holeLetters[hi2] + '"' + sel2 + '>' + holeLetters[hi2] + '</option>';
+    var act2 = holeLetters[hi2] === 'H' ? ' tol-g-active' : '';
+    holeBtns += '<button class="tol-g-btn' + act2 + '" data-val="' + holeLetters[hi2] + '">' + holeLetters[hi2] + '</button>';
   }
 
-  var itOpts = '';
+  var itBtns = '';
   for (var it = 1; it <= 18; it++) {
-    var sel3 = (it === 7) ? ' selected' : '';
-    itOpts += '<option value="' + it + '"' + sel3 + '>' + it + '</option>';
+    var act3 = (it === 7) ? ' tol-g-active' : '';
+    itBtns += '<button class="tol-g-btn' + act3 + '" data-val="' + it + '">' + it + '</button>';
   }
 
   var body =
@@ -562,12 +562,10 @@ export function openToleranceCalc() {
       '<button class="tol-toggle tol-active" data-mode="hole">D\u00EDra</button>' +
       '<button class="tol-toggle" data-mode="shaft">H\u0159\u00EDdel</button>' +
     '</div>' +
-    '<div class="cnc-fields">' +
-      '<label class="cnc-field"><span>T\u0159\u00EDda</span>' +
-        '<select data-id="tolClass" id="tolClassSel">' + holeOpts + '</select></label>' +
-      '<label class="cnc-field"><span>Stupe\u0148</span>' +
-        '<select data-id="tolIT">' + itOpts + '</select></label>' +
-    '</div>' +
+    '<div class="cnc-field cnc-field-full"><span>T\u0159\u00EDda</span>' +
+      '<div class="tol-grid tol-class-grid" data-id="tolClass">' + holeBtns + '</div></div>' +
+    '<div class="cnc-field cnc-field-full"><span>Stupe\u0148</span>' +
+      '<div class="tol-grid tol-it-grid" data-id="tolIT">' + itBtns + '</div></div>' +
     '<div class="cnc-result" id="tolResult">Zadejte rozm\u011Br\u2026</div>' +
     '<div class="cnc-actions"><button class="cnc-btn cnc-btn-copy">\uD83D\uDCCB Kopírovat</button></div>';
 
@@ -575,19 +573,37 @@ export function openToleranceCalc() {
   if (!overlay) return;
 
   var inpDim = overlay.querySelector('[data-id="tolDim"]');
-  var selClass = overlay.querySelector('[data-id="tolClass"]');
-  var selIT = overlay.querySelector('[data-id="tolIT"]');
+  var gridClass = overlay.querySelector('[data-id="tolClass"]');
+  var gridIT = overlay.querySelector('[data-id="tolIT"]');
   var resultEl = overlay.querySelector("#tolResult");
   var btnHole = overlay.querySelector('[data-mode="hole"]');
   var btnShaft = overlay.querySelector('[data-mode="shaft"]');
   var isHole = true;
 
+  function getGridVal(grid) {
+    var a = grid.querySelector('.tol-g-active');
+    return a ? a.dataset.val : null;
+  }
+
+  function initGrid(grid, onChange) {
+    grid.addEventListener('click', function(e) {
+      var btn = e.target.closest('.tol-g-btn');
+      if (!btn) return;
+      var prev = grid.querySelector('.tol-g-active');
+      if (prev) prev.classList.remove('tol-g-active');
+      btn.classList.add('tol-g-active');
+      if (onChange) onChange();
+    });
+  }
+
+  initGrid(gridClass, calc);
+  initGrid(gridIT, calc);
+
   function setMode(hole) {
     isHole = hole;
     btnHole.classList.toggle("tol-active", hole);
     btnShaft.classList.toggle("tol-active", !hole);
-    // swap options
-    selClass.innerHTML = hole ? holeOpts : shaftOpts;
+    gridClass.innerHTML = hole ? holeBtns : shaftBtns;
     calc();
   }
   btnHole.addEventListener("click", function() { setMode(true); });
@@ -609,10 +625,10 @@ export function openToleranceCalc() {
     if (dim === 1) ri = 0;
     if (ri < 0) { resultEl.textContent = "Rozm\u011Br mimo rozsah"; return; }
 
-    var itGrade = parseInt(selIT.value); // 1..18
+    var itGrade = parseInt(getGridVal(gridIT)); // 1..18
     var tol = itTable[ri][itGrade - 1]; // µm
 
-    var letter = selClass.value;
+    var letter = getGridVal(gridClass);
     var devTable = isHole ? holeDev : shaftDev;
     var dev = devTable[letter];
     if (!dev) { resultEl.textContent = "Neplatn\u00E1 t\u0159\u00EDda"; return; }
@@ -665,8 +681,6 @@ export function openToleranceCalc() {
   }
 
   inpDim.addEventListener("input", calc);
-  selClass.addEventListener("change", calc);
-  selIT.addEventListener("change", calc);
 
   overlay.querySelector(".cnc-btn-copy").addEventListener("click", function() {
     if (resultEl.textContent && resultEl.textContent !== "Zadejte rozm\u011Br\u2026") {
