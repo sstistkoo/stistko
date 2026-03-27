@@ -579,7 +579,7 @@ export function drawPoint(obj) {
     ctx.arc(sx, sy, 3, 0, Math.PI * 2);
     ctx.stroke();
     // Text souřadnic
-    const dimSize = Math.round(Math.min(14, Math.max(10, 7 + state.zoom * 2.5)));
+    const dimSize = Math.round(Math.min(21, Math.max(10, 7 + state.zoom * 4)));
     ctx.font = dimSize + 'px Consolas';
     ctx.fillStyle = '#cdd6f4';
     ctx.textAlign = 'left';
@@ -645,7 +645,7 @@ export function drawLine(obj) {
 
     // Text délky – rotovaný rovnoběžně s kótou
     const len = Math.hypot(ox2 - ox1, oy2 - oy1);
-    const dimSize = Math.round(Math.min(16, Math.max(11, 8 + state.zoom * 3)));
+    const dimSize = Math.round(Math.min(24, Math.max(11, 8 + state.zoom * 4.5)));
     ctx.font = dimSize + 'px Consolas';
     ctx.fillStyle = '#cdd6f4';
     ctx.textAlign = 'center';
