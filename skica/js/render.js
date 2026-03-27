@@ -106,6 +106,9 @@ function renderObjects() {
     const layer = state.layers.find(l => l.id === obj.layer);
     if (layer && !layer.visible) return;
 
+    // Skrýt kótovací objekty, pokud jsou kóty vypnuté
+    if (!state.showDimensions && (obj.isDimension || obj.isCoordLabel)) return;
+
     const isSel = idx === state.selected;
     const isConstr = obj.type === "constr";
     const layerColor = layer ? layer.color : '#89b4fa';
