@@ -68,6 +68,19 @@ document.getElementById("sidebarCloseBtn").addEventListener("click", (e) => {
   sidebarOverlay.classList.remove("active");
 });
 
+// ── Klik na canvas zavře otevřené panely ──
+drawCanvas.addEventListener("pointerdown", () => {
+  if (!isMobile()) return;
+  if (sidebar.classList.contains("mobile-open")) {
+    sidebar.classList.remove("mobile-open");
+    sidebarOverlay.classList.remove("active");
+  }
+  if (topbar.classList.contains("mobile-open")) {
+    topbar.classList.remove("mobile-open");
+    document.body.classList.remove("toolbar-open");
+  }
+});
+
 // ── Mobile: coord bar ──
 const mobileCoordBar = document.getElementById("mobileCoordBar");
 
