@@ -581,7 +581,7 @@ export function drawPoint(obj) {
     // Text souřadnic
     const dimSize = Math.round(Math.min(14, Math.max(10, 7 + state.zoom * 2.5)));
     ctx.font = dimSize + 'px Consolas';
-    ctx.fillStyle = obj.color || '#9399b2';
+    ctx.fillStyle = '#cdd6f4';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'bottom';
     ctx.fillText('X' + obj.x.toFixed(2) + '  Z' + obj.y.toFixed(2), ex + 2, ey - 3);
@@ -647,7 +647,7 @@ export function drawLine(obj) {
     const len = Math.hypot(ox2 - ox1, oy2 - oy1);
     const dimSize = Math.round(Math.min(16, Math.max(11, 8 + state.zoom * 3)));
     ctx.font = dimSize + 'px Consolas';
-    ctx.fillStyle = obj.color || '#9399b2';
+    ctx.fillStyle = '#cdd6f4';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'bottom';
     const mx = (sx1 + sx2) / 2;
