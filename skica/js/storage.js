@@ -9,63 +9,27 @@ import { bulgeToArc } from './utils.js';
 import { parseDXF } from './dxf.js';
 import { autoCenterView } from './canvas.js';
 import { bridge } from './bridge.js';
+import { saveProjectToDB, loadProjectFromDB, deleteProjectFromDB, getAllProjects, setMeta, getMeta } from './idb.js';
 
 // ── Save / Load ──
-/** Uloží aktuální projekt do localStorage. */
-export function saveProject() {
-  const data = {
-    version: 3,
-    objects: state.objects,
-    intersections: state.intersections,
-    nextId: state.nextId,
-    gridSize: state.gridSize,
-    coordMode: state.coordMode,
-    incReference: state.incReference,
-    machineType: state.machineType,
-    xDisplayMode: state.xDisplayMode,
-    layers: state.layers,
-    activeLayer: state.activeLayer,
-    nextLayerId: state.nextLayerId,
-  };
-  // Uložit do single-project slotu (backward compat)
-  localStorage.setItem("skica_project", JSON.stringify(data));
-  // Uložit do multi-project storage
-  _saveToProjects(state.projectName, data);
+/** Uloží aktuální projekt do IndexedDB. */
+export async function saveProject() {
+  const data = _buildProjectData();
+  await setMeta('currentProjectData', data);
+  await _saveToProjects(state.projectName, data);
   showToast("Projekt uložen");
   updateStatusProject();
 }
 
-/** Načte projekt z localStorage. */
-export function loadProject() {
-  const raw = localStorage.getItem("skica_project");
-  if (!raw) {
-    showToast("Žádný uložený projekt");
-    return;
-  }
+/** Načte projekt z IndexedDB. */
+export async function loadProject() {
   try {
-    const data = JSON.parse(raw);
-    pushUndo();
-    state.objects = data.objects || [];
-    state.nextId = data.nextId || 1;
-    if (data.gridSize && data.gridSize > 0)
-      state.gridSize = data.gridSize;
-    if (data.coordMode) state.coordMode = data.coordMode;
-    if (data.incReference) state.incReference = data.incReference;
-    if (data.machineType) state.machineType = data.machineType;
-    // Layers backward compatibility
-    if (data.layers) {
-      state.layers = data.layers;
-      state.activeLayer = data.activeLayer || 0;
-      state.nextLayerId = data.nextLayerId || (data.layers.length > 0 ? Math.max(...data.layers.map(l => l.id)) + 1 : 1);
-    } else {
-      state.objects.forEach(obj => { if (obj.layer === undefined) obj.layer = 0; });
+    const data = await getMeta('currentProjectData');
+    if (!data) {
+      showToast("Žádný uložený projekt");
+      return;
     }
-    state.selected = null;
-    updateObjectList();
-    updateProperties();
-    updateLayerList();
-    calculateAllIntersections();
-    updateMachineTypeBtn();
+    _loadProjectData(data);
     showToast(`Načteno ${state.objects.length} objektů`);
   } catch (e) {
     showToast("Chyba při načítání projektu");
@@ -478,7 +442,7 @@ document.getElementById("btnCncCopy").addEventListener("click", copyCncToClipboa
 bridge.runCncExport = runCncExport;
 
 // ╔══════════════════════════════════════════════════════════════╗
-// ║  Automatické ukládání do localStorage                       ║
+// ║  Automatické ukládání do IndexedDB                          ║
 // ╚══════════════════════════════════════════════════════════════╝
 
 let _autoSaveTimer = null;
@@ -500,24 +464,12 @@ export function initAutoSave() {
 // ║  Správa projektů (multi-project)                            ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-function _getProjects() {
-  try {
-    return JSON.parse(localStorage.getItem('skica_projects') || '{}');
-  } catch { return {}; }
-}
-
-function _setProjects(projects) {
-  localStorage.setItem('skica_projects', JSON.stringify(projects));
-}
-
-function _saveToProjects(name, data) {
-  const projects = _getProjects();
-  projects[name] = {
+async function _saveToProjects(name, data) {
+  await saveProjectToDB(name, {
     ...data,
     savedAt: new Date().toISOString(),
     objectCount: (data.objects || []).length,
-  };
-  _setProjects(projects);
+  });
 }
 
 function _buildProjectData() {
@@ -563,9 +515,8 @@ function _loadProjectData(data) {
 }
 
 /** @param {string} name */
-export function openProject(name) {
-  const projects = _getProjects();
-  const data = projects[name];
+export async function openProject(name) {
+  const data = await loadProjectFromDB(name);
   if (!data) { showToast('Projekt nenalezen'); return; }
   _loadProjectData(data);
   state.projectName = name;
@@ -574,10 +525,8 @@ export function openProject(name) {
 }
 
 /** @param {string} name */
-export function deleteProject(name) {
-  const projects = _getProjects();
-  delete projects[name];
-  _setProjects(projects);
+export async function deleteProject(name) {
+  await deleteProjectFromDB(name);
   showToast(`Projekt "${name}" smazán`);
 }
 
@@ -585,15 +534,15 @@ export function deleteProject(name) {
  * @param {string} oldName
  * @param {string} newName
  */
-export function renameProject(oldName, newName) {
+export async function renameProject(oldName, newName) {
   if (!newName || newName.trim() === '') return;
   newName = newName.trim();
-  const projects = _getProjects();
-  if (!projects[oldName]) return;
-  if (projects[newName]) { showToast('Projekt s tímto názvem již existuje'); return; }
-  projects[newName] = projects[oldName];
-  delete projects[oldName];
-  _setProjects(projects);
+  const data = await loadProjectFromDB(oldName);
+  if (!data) return;
+  const existing = await loadProjectFromDB(newName);
+  if (existing) { showToast('Projekt s tímto názvem již existuje'); return; }
+  await saveProjectToDB(newName, data);
+  await deleteProjectFromDB(oldName);
   if (state.projectName === oldName) {
     state.projectName = newName;
     updateStatusProject();
@@ -602,15 +551,16 @@ export function renameProject(oldName, newName) {
 }
 
 /** @param {string} name */
-export function duplicateProject(name) {
-  const projects = _getProjects();
-  if (!projects[name]) return;
+export async function duplicateProject(name) {
+  const data = await loadProjectFromDB(name);
+  if (!data) return;
+  const allProjects = await getAllProjects();
   let newName = name + ' (kopie)';
   let i = 2;
-  while (projects[newName]) { newName = name + ` (kopie ${i++})`; }
-  projects[newName] = JSON.parse(JSON.stringify(projects[name]));
-  projects[newName].savedAt = new Date().toISOString();
-  _setProjects(projects);
+  while (allProjects[newName]) { newName = name + ` (kopie ${i++})`; }
+  const copy = JSON.parse(JSON.stringify(data));
+  copy.savedAt = new Date().toISOString();
+  await saveProjectToDB(newName, copy);
   showToast(`Vytvořena kopie: ${newName}`);
 }
 
@@ -660,13 +610,13 @@ export function showSaveAsDialog() {
     if (e.key === 'Escape') overlay.remove();
   });
 
-  function doSave() {
+  async function doSave() {
     const name = inp.value.trim();
     if (!name) return;
     state.projectName = name;
     const data = _buildProjectData();
-    localStorage.setItem('skica_project', JSON.stringify(data));
-    _saveToProjects(name, data);
+    await setMeta('currentProjectData', data);
+    await _saveToProjects(name, data);
     updateStatusProject();
     overlay.remove();
     showToast(`Uloženo jako "${name}"`);
@@ -677,28 +627,22 @@ export function showSaveAsDialog() {
 }
 
 /** Otevře dialog se správou projektů. */
-export function showProjectsDialog() {
-  const projects = _getProjects();
-  const names = Object.keys(projects).sort((a, b) => {
-    const da = projects[b].savedAt || '';
-    const db = projects[a].savedAt || '';
-    return da.localeCompare(db);
-  });
+export async function showProjectsDialog() {
+  const projects = await getAllProjects();
 
   const overlay = document.createElement('div');
   overlay.className = 'input-overlay';
 
-  function buildList() {
+  function buildList(projs) {
     let html = '';
-    const sortedNames = Object.keys(_getProjects()).sort((a, b) => {
-      const pa = _getProjects();
-      return (pa[b].savedAt || '').localeCompare(pa[a].savedAt || '');
+    const sortedNames = Object.keys(projs).sort((a, b) => {
+      return (projs[b].savedAt || '').localeCompare(projs[a].savedAt || '');
     });
     if (sortedNames.length === 0) {
       html = '<li style="color:#6c7086;padding:12px;text-align:center">Žádné uložené projekty</li>';
     } else {
       for (const name of sortedNames) {
-        const p = _getProjects()[name];
+        const p = projs[name];
         const date = p.savedAt ? new Date(p.savedAt).toLocaleString('cs') : '–';
         const count = p.objectCount || (p.objects || []).length;
         const isActive = name === state.projectName;
@@ -723,7 +667,7 @@ export function showProjectsDialog() {
   overlay.innerHTML = `
     <div class="input-dialog" style="min-width:400px;max-width:520px">
       <h3>📁 Správa projektů</h3>
-      <ul class="project-list">${buildList()}</ul>
+      <ul class="project-list">${buildList(projects)}</ul>
       <div class="btn-row" style="flex-direction:column;gap:8px;align-items:stretch">
         <button class="btn-ok" id="projNew" style="width:100%">➕ Nový projekt</button>
         <button class="btn-cancel" id="projClose" style="width:100%">Zavřít</button>
@@ -731,8 +675,9 @@ export function showProjectsDialog() {
     </div>`;
   document.body.appendChild(overlay);
 
-  function refreshList() {
-    overlay.querySelector('.project-list').innerHTML = buildList();
+  async function refreshList() {
+    const freshProjs = await getAllProjects();
+    overlay.querySelector('.project-list').innerHTML = buildList(freshProjs);
     attachListeners();
   }
 
@@ -740,32 +685,32 @@ export function showProjectsDialog() {
     overlay.querySelectorAll('.project-item').forEach(item => {
       const name = item.dataset.name;
       item.querySelectorAll('.project-action-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
+        btn.addEventListener('click', async (e) => {
           e.stopPropagation();
           const act = btn.dataset.act;
           if (act === 'open') {
-            openProject(name);
+            await openProject(name);
             overlay.remove();
           } else if (act === 'rename') {
             const newName = prompt('Nový název:', name);
             if (newName && newName.trim()) {
-              renameProject(name, newName.trim());
-              refreshList();
+              await renameProject(name, newName.trim());
+              await refreshList();
             }
           } else if (act === 'duplicate') {
-            duplicateProject(name);
-            refreshList();
+            await duplicateProject(name);
+            await refreshList();
           } else if (act === 'delete') {
             if (confirm(`Opravdu smazat "${name}"?`)) {
-              deleteProject(name);
-              refreshList();
+              await deleteProject(name);
+              await refreshList();
             }
           }
         });
       });
       // Double-click to open
-      item.addEventListener('dblclick', () => {
-        openProject(name);
+      item.addEventListener('dblclick', async () => {
+        await openProject(name);
         overlay.remove();
       });
     });
