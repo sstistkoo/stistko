@@ -3,6 +3,7 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 import { showToast } from "./state.js";
+import { safeEvalMath } from "./utils.js";
 
 // ── Helper ──
 function makeOverlay(type, title, bodyHTML, windowClass) {
@@ -84,7 +85,7 @@ export function openCuttingCalc() {
   const infoEl = overlay.querySelector("#cuttingInfo");
   const extraEl = overlay.querySelector("#cuttingExtra");
 
-  function val(inp) { return inp.value !== "" ? parseFloat(inp.value) : null; }
+  function val(inp) { return inp.value !== "" ? safeEvalMath(inp.value) : null; }
   function setC(inp, v) { inp.value = parseFloat(v.toFixed(4)); inp.classList.add("computed"); }
 
   // Materiálová předvolba
@@ -250,7 +251,7 @@ export function openTaperCalc() {
   const infoEl = overlay.querySelector("#taperInfo");
   const slideEl = overlay.querySelector("#taperSlide");
 
-  function v(inp) { return inp.value !== "" ? parseFloat(inp.value) : null; }
+  function v(inp) { return inp.value !== "" ? safeEvalMath(inp.value) : null; }
   function sc(inp, val) { inp.value = parseFloat(val.toFixed(4)); inp.classList.add("computed"); }
 
   function solve() {
@@ -1023,8 +1024,8 @@ export function openThreadCalc() {
 
   // ── Vlastní závit ──
   function calcCustom() {
-    var D = inpD.value !== "" ? parseFloat(inpD.value) : null;
-    var P = inpP.value !== "" ? parseFloat(inpP.value) : null;
+    var D = inpD.value !== "" ? safeEvalMath(inpD.value) : null;
+    var P = inpP.value !== "" ? safeEvalMath(inpP.value) : null;
     if (D !== null && P !== null && P > 0 && D > 0) {
       if (lastActiveRow) { lastActiveRow.classList.remove("thr-row-active"); lastActiveRow = null; }
       if (currentType === 'tr') {
@@ -1150,7 +1151,7 @@ export function openConvertCalc() {
       // Re-trigger conversion
       var raInp = gc("ra");
       if (raInp.value !== "") {
-        gc("rz").value = parseFloat((parseFloat(raInp.value) * raRzRatio).toFixed(6));
+        gc("rz").value = parseFloat((safeEvalMath(raInp.value) * raRzRatio).toFixed(6));
       }
     });
   });
@@ -1164,11 +1165,11 @@ export function openConvertCalc() {
   pairs.forEach(function(pair) {
     pair.a.addEventListener("input", () => {
       if (pair.a.value === "") { pair.b.value = ""; return; }
-      pair.b.value = parseFloat(pair.aToB(parseFloat(pair.a.value)).toFixed(6));
+      pair.b.value = parseFloat(pair.aToB(safeEvalMath(pair.a.value)).toFixed(6));
     });
     pair.b.addEventListener("input", () => {
       if (pair.b.value === "") { pair.a.value = ""; return; }
-      pair.a.value = parseFloat(pair.bToA(parseFloat(pair.b.value)).toFixed(6));
+      pair.a.value = parseFloat(pair.bToA(safeEvalMath(pair.b.value)).toFixed(6));
     });
   });
 
@@ -1176,11 +1177,11 @@ export function openConvertCalc() {
   var raInp = gc("ra"), rzInp = gc("rz");
   raInp.addEventListener("input", () => {
     if (raInp.value === "") { rzInp.value = ""; return; }
-    rzInp.value = parseFloat((parseFloat(raInp.value) * raRzRatio).toFixed(6));
+    rzInp.value = parseFloat((safeEvalMath(raInp.value) * raRzRatio).toFixed(6));
   });
   rzInp.addEventListener("input", () => {
     if (rzInp.value === "") { raInp.value = ""; return; }
-    raInp.value = parseFloat((parseFloat(rzInp.value) / raRzRatio).toFixed(6));
+    raInp.value = parseFloat((safeEvalMath(rzInp.value) / raRzRatio).toFixed(6));
   });
 
   // Hardness: HRC ↔ HB (interpolated), HV ≈ HB × 1.05 (approximate)
@@ -1211,20 +1212,20 @@ export function openConvertCalc() {
 
   hrcInp.addEventListener("input", () => {
     if (hrcInp.value === "") { hbInp.value = ""; hvInp.value = ""; return; }
-    var hrc = parseFloat(hrcInp.value);
+    var hrc = safeEvalMath(hrcInp.value);
     var hb = hrcToHb(hrc);
     hbInp.value = Math.round(hb);
     hvInp.value = Math.round(hb * 1.05);
   });
   hbInp.addEventListener("input", () => {
     if (hbInp.value === "") { hrcInp.value = ""; hvInp.value = ""; return; }
-    var hb = parseFloat(hbInp.value);
+    var hb = safeEvalMath(hbInp.value);
     hrcInp.value = parseFloat(hbToHrc(hb).toFixed(1));
     hvInp.value = Math.round(hb * 1.05);
   });
   hvInp.addEventListener("input", () => {
     if (hvInp.value === "") { hrcInp.value = ""; hbInp.value = ""; return; }
-    var hv = parseFloat(hvInp.value);
+    var hv = safeEvalMath(hvInp.value);
     var hb = hv / 1.05;
     hbInp.value = Math.round(hb);
     hrcInp.value = parseFloat(hbToHrc(hb).toFixed(1));
@@ -1314,32 +1315,32 @@ export function openWeightCalc() {
   function calc() {
     const s = shape.value;
     const rho = parseFloat(mat.value);
-    const L = inpL.value !== "" ? parseFloat(inpL.value) : null;
+    const L = inpL.value !== "" ? safeEvalMath(inpL.value) : null;
     var vol = null;
 
     if (s === "rod") {
-      const D = inpD.value !== "" ? parseFloat(inpD.value) : null;
+      const D = inpD.value !== "" ? safeEvalMath(inpD.value) : null;
       if (D && L) vol = Math.PI / 4 * D * D * L;
     } else if (s === "tube") {
-      const D = inpD.value !== "" ? parseFloat(inpD.value) : null;
-      const d = inpd.value !== "" ? parseFloat(inpd.value) : null;
+      const D = inpD.value !== "" ? safeEvalMath(inpD.value) : null;
+      const d = inpd.value !== "" ? safeEvalMath(inpd.value) : null;
       if (D && d && L) vol = Math.PI / 4 * (D * D - d * d) * L;
     } else if (s === "hex") {
       // Šestihran: plocha = (3√3/2) × (SW/2)² × 2 = (3√3/2) × SW²/4... no:
       // Regular hexagon with flat-to-flat = SW: area = (√3/2) × SW²
-      const SW = inpW.value !== "" ? parseFloat(inpW.value) : null;
+      const SW = inpW.value !== "" ? safeEvalMath(inpW.value) : null;
       if (SW && L) {
         var area = (Math.sqrt(3) / 2) * SW * SW;
         vol = area * L;
       }
     } else if (s === "cone") {
       // Komolý kužel: V = π/12 × L × (D² + D×d + d²)
-      const D = inpD.value !== "" ? parseFloat(inpD.value) : null;
-      const d = inpd.value !== "" ? parseFloat(inpd.value) : null;
+      const D = inpD.value !== "" ? safeEvalMath(inpD.value) : null;
+      const d = inpd.value !== "" ? safeEvalMath(inpd.value) : null;
       if (D && d && L) vol = Math.PI / 12 * L * (D * D + D * d + d * d);
     } else {
-      const W = inpW.value !== "" ? parseFloat(inpW.value) : null;
-      const H = inpH.value !== "" ? parseFloat(inpH.value) : null;
+      const W = inpW.value !== "" ? safeEvalMath(inpW.value) : null;
+      const H = inpH.value !== "" ? safeEvalMath(inpH.value) : null;
       if (W && H && L) vol = W * H * L;
     }
 
@@ -1553,7 +1554,7 @@ export function openToleranceCalc() {
   btnShaft.addEventListener("click", function() { setMode(false); });
 
   function calc() {
-    var dim = inpDim.value !== "" ? parseFloat(inpDim.value) : null;
+    var dim = inpDim.value !== "" ? safeEvalMath(inpDim.value) : null;
     if (dim === null || dim < 1 || dim > 500) {
       resultEl.textContent = dim !== null ? "Rozm\u011Br mimo rozsah (1\u2013500 mm)" : "Zadejte rozm\u011Br\u2026";
       return;
@@ -1664,7 +1665,7 @@ export function openToleranceCalc() {
   }
 
   function calcFit() {
-    var dim = inpDim.value !== "" ? parseFloat(inpDim.value) : null;
+    var dim = inpDim.value !== "" ? safeEvalMath(inpDim.value) : null;
     if (dim === null || dim < 1 || dim > 500) {
       fitResult.innerHTML = dim !== null ? "Zadejte rozměr 1–500 mm" : "";
       return;
@@ -1923,9 +1924,9 @@ export function openRoughnessCalc() {
 
   // ── Hlavní výpočet ──
   function calc() {
-    var f  = inpF.value !== '' ? parseFloat(inpF.value) : null;
-    var re = inpRe.value !== '' ? parseFloat(inpRe.value) : null;
-    var vc = inpVc.value !== '' ? parseFloat(inpVc.value) : null;
+    var f  = inpF.value !== '' ? safeEvalMath(inpF.value) : null;
+    var re = inpRe.value !== '' ? safeEvalMath(inpRe.value) : null;
+    var vc = inpVc.value !== '' ? safeEvalMath(inpVc.value) : null;
     var kMat  = workMaterials[parseInt(selMat.value)].k;
     var kTool = toolMaterials[parseInt(selTool.value)].k;
     var kVc   = vc !== null && vc > 0 ? getKvc(vc) : 1.0;
@@ -1995,15 +1996,15 @@ export function openRoughnessCalc() {
 
   // ── Zpětný výpočet ──
   function calcReverse() {
-    var raTarget = inpRaTarget.value !== '' ? parseFloat(inpRaTarget.value) : null;
-    var re       = inpRe.value !== '' ? parseFloat(inpRe.value) : null;
+    var raTarget = inpRaTarget.value !== '' ? safeEvalMath(inpRaTarget.value) : null;
+    var re       = inpRe.value !== '' ? safeEvalMath(inpRe.value) : null;
     if (raTarget === null || re === null || raTarget <= 0 || re <= 0) {
       inpFmax.value = '';
       return;
     }
     var kMat  = workMaterials[parseInt(selMat.value)].k;
     var kTool = toolMaterials[parseInt(selTool.value)].k;
-    var vc    = inpVc.value !== '' ? parseFloat(inpVc.value) : null;
+    var vc    = inpVc.value !== '' ? safeEvalMath(inpVc.value) : null;
     var kVc   = vc !== null && vc > 0 ? getKvc(vc) : 1.0;
     var kTotal = kMat * kTool * kVc;
 

@@ -99,7 +99,11 @@ export function updateMobileCoords(wx, wy, extra) {
   extra = extra || "";
   const d = toDisplayCoords(wx, wy);
   const prefix = state.coordMode === 'inc' ? 'Δ' : '';
-  const coords = `${prefix}X: ${d.x.toFixed(3)}   ${prefix}Z: ${d.y.toFixed(3)}${extra}`;
+  const isKarusel = state.machineType === 'karusel';
+  // Soustruh: horizontal=Z(dp.x), vertical=X(dp.y); Karusel: horizontal=X(dp.x), vertical=Z(dp.y)
+  const coords = isKarusel
+    ? `${prefix}X: ${d.x.toFixed(3)}   ${prefix}Z: ${d.y.toFixed(3)}${extra}`
+    : `${prefix}Z: ${d.x.toFixed(3)}   ${prefix}X: ${d.y.toFixed(3)}${extra}`;
   // Desktop coord display – jen souřadnice
   document.getElementById("coordDisplay").textContent = coords;
   // Mobile coord bar – nástroj + souřadnice + zoom

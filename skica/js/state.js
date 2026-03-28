@@ -67,6 +67,8 @@ export const state = {
   incReference: { x: 0, y: 0 },
   // Projekt
   projectName: 'Bez názvu',
+  // Typ stroje: 'soustruh' = Z vodorovně, X svisle; 'karusel' = X vodorovně, Z svisle
+  machineType: 'soustruh',
   // Vrstvy
   layers: [
     { id: 0, name: 'Kontura', color: '#89b4fa', visible: true, locked: false },
@@ -150,4 +152,13 @@ export function toDisplayCoords(wx, wy) {
  */
 export function fromIncToAbs(dx, dy) {
   return { x: state.incReference.x + dx, y: state.incReference.y + dy };
+}
+
+/**
+ * Vrací popisky os podle typu stroje.
+ * H = popisek vodorovné osy (wx), V = popisek svislé osy (wy).
+ * @returns {[string, string]} [H, V]
+ */
+export function axisLabels() {
+  return state.machineType === 'karusel' ? ['X', 'Z'] : ['Z', 'X'];
 }

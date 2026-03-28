@@ -1,29 +1,47 @@
-// ╔══════════════════════════════════════════════════════════════╗
+﻿// ╔══════════════════════════════════════════════════════════════╗
 // ║  SKICA – Dialogy (měření, poloměr, čísla, polární)         ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-import { state, showToast, pushUndo, toDisplayCoords, fromIncToAbs } from './state.js';
+import { state, showToast, pushUndo, toDisplayCoords, fromIncToAbs, axisLabels } from './state.js';
 import { addObject } from './objects.js';
 import { screenToWorld, snapPt, drawCanvas } from './canvas.js';
 import { renderAll } from './render.js';
-import { typeLabel, getObjectSnapPoints, bulgeToArc, radiusToBulge } from './utils.js';
+import { typeLabel, getObjectSnapPoints, bulgeToArc, radiusToBulge, safeEvalMath } from './utils.js';
 import { updateObjectList, updateProperties, resetHint } from './ui.js';
 import { calculateAllIntersections, offsetObject, mirrorObject, linearArray } from './geometry.js';
+
+// Re-export pro zpětnou kompatibilitu
+export { safeEvalMath };
+
+// ── Helper: auto-select + vyhodnocení mat. výrazů při blur ──
+/** @param {HTMLElement} container */
+function wireExprInputs(container) {
+  container.querySelectorAll('input[type="text"]').forEach(inp => {
+    inp.addEventListener("focus", () => inp.select());
+    inp.addEventListener("blur", () => {
+      const raw = inp.value.trim();
+      if (raw === '' || /^-?\d+\.?\d*$/.test(raw)) return;
+      const result = safeEvalMath(raw);
+      if (isFinite(result)) inp.value = result;
+    });
+  });
+}
 
 // ── Helper: nastaví inputmode="decimal" na všechna numerická pole v elementu ──
 /** @param {HTMLElement} container */
 export function applyMobileInputMode(container) {
-  container.querySelectorAll('input[type="number"]').forEach((inp) => {
+  container.querySelectorAll('input[type="text"]').forEach((inp) => {
     inp.setAttribute("inputmode", "decimal");
   });
 }
 
-// Auto-apply inputmode na nové dialogy
+// Auto-apply inputmode + auto-select + blur-eval na nové dialogy
 const _dialogObserver = new MutationObserver((mutations) => {
   for (const m of mutations) {
     for (const node of m.addedNodes) {
-      if (node.nodeType === 1 && node.classList && node.classList.contains("input-overlay")) {
+      if (node.nodeType === 1 && node.classList && (node.classList.contains("input-overlay") || node.classList.contains("calc-overlay"))) {
         applyMobileInputMode(node);
+        wireExprInputs(node);
       }
     }
   }
@@ -41,10 +59,11 @@ export function showMeasureResult(p1, p2, d, angle) {
   const dp1 = toDisplayCoords(p1.x, p1.y);
   const dp2 = toDisplayCoords(p2.x, p2.y);
   const pf = state.coordMode === 'inc' ? 'Δ' : '';
+  const [H, V] = axisLabels();
   const incRow = state.coordMode === 'inc' ? `
         <tr><td colspan="2" style="color:#585b70;font-size:11px;padding-top:6px">── Inkrementální (od reference) ──</td></tr>
-        <tr><td style="color:#a6adc8">${pf}Bod 1:</td><td style="color:#f5c2e7">${pf}X${dp1.x.toFixed(3)} ${pf}Z${dp1.y.toFixed(3)}</td></tr>
-        <tr><td style="color:#a6adc8">${pf}Bod 2:</td><td style="color:#f5c2e7">${pf}X${dp2.x.toFixed(3)} ${pf}Z${dp2.y.toFixed(3)}</td></tr>
+        <tr><td style="color:#a6adc8">${pf}Bod 1:</td><td style="color:#f5c2e7">${pf}${H}${dp1.x.toFixed(3)} ${pf}${V}${dp1.y.toFixed(3)}</td></tr>
+        <tr><td style="color:#a6adc8">${pf}Bod 2:</td><td style="color:#f5c2e7">${pf}${H}${dp2.x.toFixed(3)} ${pf}${V}${dp2.y.toFixed(3)}</td></tr>
   ` : '';
   const overlay = document.createElement("div");
   overlay.className = "input-overlay";
@@ -54,10 +73,10 @@ export function showMeasureResult(p1, p2, d, angle) {
       <table style="width:100%;font-family:Consolas;font-size:13px;">
         <tr><td style="color:#a6adc8">Vzdálenost:</td><td style="color:#f9e2af">${d.toFixed(3)} mm</td></tr>
         <tr><td style="color:#a6adc8">Úhel:</td><td style="color:#f9e2af">${angle.toFixed(2)}°</td></tr>
-        <tr><td style="color:#a6adc8">ΔX:</td><td style="color:#f5c2e7">${(p2.x - p1.x).toFixed(3)}</td></tr>
-        <tr><td style="color:#a6adc8">ΔZ:</td><td style="color:#f5c2e7">${(p2.y - p1.y).toFixed(3)}</td></tr>
-        <tr><td style="color:#a6adc8">Bod 1:</td><td style="color:#89b4fa">X${p1.x.toFixed(3)} Z${p1.y.toFixed(3)}</td></tr>
-        <tr><td style="color:#a6adc8">Bod 2:</td><td style="color:#89b4fa">X${p2.x.toFixed(3)} Z${p2.y.toFixed(3)}</td></tr>
+        <tr><td style="color:#a6adc8">Δ${H}:</td><td style="color:#f5c2e7">${(p2.x - p1.x).toFixed(3)}</td></tr>
+        <tr><td style="color:#a6adc8">Δ${V}:</td><td style="color:#f5c2e7">${(p2.y - p1.y).toFixed(3)}</td></tr>
+        <tr><td style="color:#a6adc8">Bod 1:</td><td style="color:#89b4fa">${H}${p1.x.toFixed(3)} ${V}${p1.y.toFixed(3)}</td></tr>
+        <tr><td style="color:#a6adc8">Bod 2:</td><td style="color:#89b4fa">${H}${p2.x.toFixed(3)} ${V}${p2.y.toFixed(3)}</td></tr>
         ${incRow}
       </table>
       <div class="btn-row">
@@ -95,9 +114,9 @@ export function showCircleRadiusDialog() {
   overlay.innerHTML = `
     <div class="input-dialog">
       <h3>Kružnice – zadání poloměru</h3>
-      <label>Střed: X=${cp.x.toFixed(2)}, Z=${cp.y.toFixed(2)}</label>
+      <label>Střed: ${axisLabels()[0]}=${cp.x.toFixed(2)}, ${axisLabels()[1]}=${cp.y.toFixed(2)}</label>
       <label>Poloměr (mm):</label>
-      <input type="number" id="dlgRadius" step="0.001" min="0.001" value="10" inputmode="decimal" autofocus>
+      <input type="text" id="dlgRadius" value="10" inputmode="decimal" autofocus>
       <div class="btn-row">
         <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
         <button class="btn-ok" id="dlgOk">OK</button>
@@ -108,7 +127,7 @@ export function showCircleRadiusDialog() {
   inp.focus();
   inp.select();
   const accept = () => {
-    const r = parseFloat(inp.value);
+    const r = safeEvalMath(inp.value);
     if (r > 0) {
       addObject({
         type: "circle",
@@ -145,8 +164,9 @@ export function showNumericalInputDialog() {
     <div class="input-dialog" style="min-width:400px">
       <h3>🔢 Číselné zadání objektu</h3>
       <div id="numModeInfo" style="font-size:11px;margin-bottom:8px;padding:4px 8px;border-radius:4px;font-family:Consolas;${state.coordMode === 'inc' ? 'background:#f9e2af22;color:#f9e2af' : 'color:#6c7086'}">
-        Režim: ${state.coordMode === 'inc' ? 'INC (přírůstkový) – hodnoty jsou Δ od reference X=' + state.incReference.x.toFixed(3) + ' Z=' + state.incReference.y.toFixed(3) : 'ABS (absolutní)'}
+        Režim: ${state.coordMode === 'inc' ? 'INC (přírůstkový) – hodnoty jsou Δ od reference ' + axisLabels()[0] + '=' + state.incReference.x.toFixed(3) + ' ' + axisLabels()[1] + '=' + state.incReference.y.toFixed(3) : 'ABS (absolutní)'}
       </div>
+      <div style="font-size:10px;color:#585b70;margin-bottom:6px;font-style:italic">💡 Pole podporují matematické výrazy: 123+56, 200/3, (10+5)*2</div>
       <label>Typ objektu:</label>
       <select id="numType">
         <option value="point">Bod</option>
@@ -224,6 +244,7 @@ export function showNumericalInputDialog() {
   const chainY = state.numDialogChain.y !== null ? state.numDialogChain.y.toFixed(3) : "0";
   const hasChain = state.numDialogChain.x !== null;
   const isInc = state.coordMode === 'inc';
+  const [H, V] = axisLabels();
   const lbl = (name) => isInc ? 'Δ' + name : name;
   // V INC režimu chain hodnoty zobrazit jako delta od reference
   const chainDispX = hasChain ? (isInc ? (state.numDialogChain.x - state.incReference.x).toFixed(3) : chainX) : "0";
@@ -234,57 +255,57 @@ export function showNumericalInputDialog() {
     let html = "";
     switch (t) {
       case "point":
-        html = `<div class="input-row"><div><label>${lbl('X')}:</label><input type="number" id="nx" step="0.001" value="${hasChain ? chainDispX : '0'}"></div>
-                <div><label>${lbl('Z')}:</label><input type="number" id="ny" step="0.001" value="${hasChain ? chainDispY : '0'}"></div>
+        html = `<div class="input-row"><div><label>${lbl(H)}:</label><input type="text" id="nx" value="${hasChain ? chainDispX : '0'}"></div>
+                <div><label>${lbl(V)}:</label><input type="text" id="ny" value="${hasChain ? chainDispY : '0'}"></div>
                 <div class="pick-col">${pickBtn("🎯")}</div></div>
                 ${hasChain ? '<div id="numChainInfo" style="font-size:11px;color:#9399b2;margin-top:4px"></div>' : ''}`;
         break;
       case "line":
       case "constr":
-        html = `<div class="input-row"><div><label>${lbl('X1')}:</label><input type="number" id="nx1" step="0.001" value="${hasChain ? chainDispX : '0'}"></div>
-                <div><label>${lbl('Z1')}:</label><input type="number" id="ny1" step="0.001" value="${hasChain ? chainDispY : '0'}"></div>
+        html = `<div class="input-row"><div><label>${lbl(H+'1')}:</label><input type="text" id="nx1" value="${hasChain ? chainDispX : '0'}"></div>
+                <div><label>${lbl(V+'1')}:</label><input type="text" id="ny1" value="${hasChain ? chainDispY : '0'}"></div>
                 <div class="pick-col">${pickBtn("🎯1")}</div></div>
-                <div class="input-row"><div><label>${lbl('X2')}:</label><input type="number" id="nx2" step="0.001" value="0"></div>
-                <div><label>${lbl('Z2')}:</label><input type="number" id="ny2" step="0.001" value="0"></div>
+                <div class="input-row"><div><label>${lbl(H+'2')}:</label><input type="text" id="nx2" value="0"></div>
+                <div><label>${lbl(V+'2')}:</label><input type="text" id="ny2" value="0"></div>
                 <div class="pick-col">${pickBtn("🎯2")}</div></div>
                 <div id="numLineInfo" style="font-size:11px;color:#9399b2;margin-top:4px"></div>
                 <label style="font-size:11px;color:#6c7086;margin-top:4px">Nebo: Délka a polární úhel</label>
-                <div class="input-row"><div><label>Délka:</label><input type="number" id="nlen" step="0.001" value=""></div>
-                <div><label>Úhel (°):</label><input type="number" id="nang" step="0.001" value=""></div></div>`;
+                <div class="input-row"><div><label>Délka:</label><input type="text" id="nlen" value=""></div>
+                <div><label>Úhel (°):</label><input type="text" id="nang" value=""></div></div>`;
         break;
       case "circle":
-        html = `<div class="input-row"><div><label>${lbl('Střed X')}:</label><input type="number" id="ncx" step="0.001" value="${hasChain ? chainDispX : '0'}"></div>
-                <div><label>${lbl('Střed Z')}:</label><input type="number" id="ncy" step="0.001" value="${hasChain ? chainDispY : '0'}"></div>
+        html = `<div class="input-row"><div><label>${lbl('Střed '+H)}:</label><input type="text" id="ncx" value="${hasChain ? chainDispX : '0'}"></div>
+                <div><label>${lbl('Střed '+V)}:</label><input type="text" id="ncy" value="${hasChain ? chainDispY : '0'}"></div>
                 <div class="pick-col">${pickBtn("🎯")}</div></div>
-                <div class="input-row"><div><label>Poloměr:</label><input type="number" id="nr" step="0.001" value="10"></div>
+                <div class="input-row"><div><label>Poloměr:</label><input type="text" id="nr" value="10"></div>
                 <div class="pick-col">${pickBtn("📏 R")}</div></div>`;
         break;
       case "arc":
-        html = `<div class="input-row"><div><label>${lbl('Střed X')}:</label><input type="number" id="ncx" step="0.001" value="${hasChain ? chainDispX : '0'}"></div>
-                <div><label>${lbl('Střed Z')}:</label><input type="number" id="ncy" step="0.001" value="${hasChain ? chainDispY : '0'}"></div>
+        html = `<div class="input-row"><div><label>${lbl('Střed '+H)}:</label><input type="text" id="ncx" value="${hasChain ? chainDispX : '0'}"></div>
+                <div><label>${lbl('Střed '+V)}:</label><input type="text" id="ncy" value="${hasChain ? chainDispY : '0'}"></div>
                 <div class="pick-col">${pickBtn("🎯")}</div></div>
-                <div class="input-row"><div><label>Poloměr:</label><input type="number" id="nr" step="0.001" value="10"></div>
+                <div class="input-row"><div><label>Poloměr:</label><input type="text" id="nr" value="10"></div>
                 <div class="pick-col">${pickBtn("📏 R")}</div></div>
-                <div class="input-row"><div><label>Start (°):</label><input type="number" id="nsa" step="1" value="0"></div>
+                <div class="input-row"><div><label>Start (°):</label><input type="text" id="nsa" value="0"></div>
                 <div class="pick-col">${pickBtn("📐 S")}</div></div>
-                <div class="input-row"><div><label>Konec (°):</label><input type="number" id="nea" step="1" value="90"></div>
+                <div class="input-row"><div><label>Konec (°):</label><input type="text" id="nea" value="90"></div>
                 <div class="pick-col">${pickBtn("📐 E")}</div></div>`;
         break;
       case "rect":
-        html = `<div class="input-row"><div><label>${lbl('X1')}:</label><input type="number" id="nx1" step="0.001" value="${hasChain ? chainDispX : '0'}"></div>
-                <div><label>${lbl('Z1')}:</label><input type="number" id="ny1" step="0.001" value="${hasChain ? chainDispY : '0'}"></div>
+        html = `<div class="input-row"><div><label>${lbl(H+'1')}:</label><input type="text" id="nx1" value="${hasChain ? chainDispX : '0'}"></div>
+                <div><label>${lbl(V+'1')}:</label><input type="text" id="ny1" value="${hasChain ? chainDispY : '0'}"></div>
                 <div class="pick-col">${pickBtn("🎯1")}</div></div>
-                <div class="input-row"><div><label>${lbl('X2')}:</label><input type="number" id="nx2" step="0.001" value="0"></div>
-                <div><label>${lbl('Z2')}:</label><input type="number" id="ny2" step="0.001" value="0"></div>
+                <div class="input-row"><div><label>${lbl(H+'2')}:</label><input type="text" id="nx2" value="0"></div>
+                <div><label>${lbl(V+'2')}:</label><input type="text" id="ny2" value="0"></div>
                 <div class="pick-col">${pickBtn("🎯2")}</div></div>
                 <label style="font-size:11px;color:#6c7086;margin-top:4px">Nebo: Šířka × Výška od bodu 1</label>
-                <div class="input-row"><div><label>Šířka:</label><input type="number" id="nw" step="0.001" value=""></div>
-                <div><label>Výška:</label><input type="number" id="nh" step="0.001" value=""></div></div>`;
+                <div class="input-row"><div><label>Šířka:</label><input type="text" id="nw" value=""></div>
+                <div><label>Výška:</label><input type="text" id="nh" value=""></div></div>`;
         break;
       case "polyline":
         html = `<div style="font-size:12px;color:#a6adc8;margin-bottom:8px">Zadávejte body po jednom. Klikněte "Přidat bod" pro každý vrchol kontury.</div>
-                <div class="input-row"><div><label>${lbl('X')}:</label><input type="number" id="nx" step="0.001" value="${hasChain ? chainDispX : '0'}"></div>
-                <div><label>${lbl('Z')}:</label><input type="number" id="ny" step="0.001" value="${hasChain ? chainDispY : '0'}"></div>
+                <div class="input-row"><div><label>${lbl(H)}:</label><input type="text" id="nx" value="${hasChain ? chainDispX : '0'}"></div>
+                <div><label>${lbl(V)}:</label><input type="text" id="ny" value="${hasChain ? chainDispY : '0'}"></div>
                 <div class="pick-col">${pickBtn("🎯")}</div></div>
                 <div id="polyVertexList" style="max-height:150px;overflow-y:auto;font-size:11px;font-family:Consolas;color:#a6adc8;margin:8px 0;padding:4px;background:#11111b;border-radius:4px;display:none"></div>
                 <div style="display:flex;gap:6px;margin-bottom:8px">
@@ -325,8 +346,8 @@ export function showNumericalInputDialog() {
               if (f2) f2.value = dp.y.toFixed(3);
               // Auto-fill rect width/height (delta od delta = absolutní rozdíl)
               if (t2 === "rect") {
-                const x1v = parseFloat(overlay.querySelector("#nx1")?.value) || 0;
-                const y1v = parseFloat(overlay.querySelector("#ny1")?.value) || 0;
+                const x1v = safeEvalMath(overlay.querySelector("#nx1")?.value) || 0;
+                const y1v = safeEvalMath(overlay.querySelector("#ny1")?.value) || 0;
                 const nw = overlay.querySelector("#nw");
                 const nh = overlay.querySelector("#nh");
                 if (nw) nw.value = (dp.x - x1v).toFixed(3);
@@ -340,8 +361,8 @@ export function showNumericalInputDialog() {
             const rInp = overlay.querySelector("#nr");
             const saInp = overlay.querySelector("#nsa");
             const eaInp = overlay.querySelector("#nea");
-            const cx = parseFloat(cxInp ? cxInp.value : 0) || 0;
-            const cy = parseFloat(cyInp ? cyInp.value : 0) || 0;
+            const cx = safeEvalMath(cxInp ? cxInp.value : 0) || 0;
+            const cy = safeEvalMath(cyInp ? cyInp.value : 0) || 0;
             // Pro výpočet poloměru/úhlu potřebujeme absolutní střed
             const absCenter = isInc ? fromIncToAbs(cx, cy) : { x: cx, y: cy };
             if (i === 0) {
@@ -372,19 +393,17 @@ export function showNumericalInputDialog() {
     const first = fieldsDiv.querySelector("input");
     if (first) setTimeout(() => first.focus(), 50);
 
-    // Přidat inputmode="decimal" pro numerická pole (mobilní klávesnice)
-    fieldsDiv.querySelectorAll('input[type="number"]').forEach((inp) => {
-      inp.setAttribute("inputmode", "decimal");
-    });
+    // Auto-select obsahu při kliknutí + vyhodnocení výrazu při opuštění pole
+    wireExprInputs(fieldsDiv);
 
     // Auto-update info pro úsečky/konstr.
     function updateLineInfo() {
       const info = fieldsDiv.querySelector("#numLineInfo");
       if (!info) return;
-      const x1 = parseFloat(fieldsDiv.querySelector("#nx1")?.value);
-      const y1 = parseFloat(fieldsDiv.querySelector("#ny1")?.value);
-      const x2 = parseFloat(fieldsDiv.querySelector("#nx2")?.value);
-      const y2 = parseFloat(fieldsDiv.querySelector("#ny2")?.value);
+      const x1 = safeEvalMath(fieldsDiv.querySelector("#nx1")?.value);
+      const y1 = safeEvalMath(fieldsDiv.querySelector("#ny1")?.value);
+      const x2 = safeEvalMath(fieldsDiv.querySelector("#nx2")?.value);
+      const y2 = safeEvalMath(fieldsDiv.querySelector("#ny2")?.value);
       if ([x1,y1,x2,y2].every(v => isFinite(v))) {
         const d = Math.hypot(x2-x1, y2-y1);
         const a = Math.atan2(y2-y1, x2-x1) * 180 / Math.PI;
@@ -401,8 +420,8 @@ export function showNumericalInputDialog() {
     function updateChainInfo() {
       const info = fieldsDiv.querySelector("#numChainInfo");
       if (!info || !hasChain) return;
-      const nx = parseFloat(fieldsDiv.querySelector("#nx")?.value);
-      const ny = parseFloat(fieldsDiv.querySelector("#ny")?.value);
+      const nx = safeEvalMath(fieldsDiv.querySelector("#nx")?.value);
+      const ny = safeEvalMath(fieldsDiv.querySelector("#ny")?.value);
       if (isFinite(nx) && isFinite(ny)) {
         // V INC režimu pole obsahuje delta – převést na absolutní pro porovnání s chain
         const abs = isInc ? fromIncToAbs(nx, ny) : { x: nx, y: ny };
@@ -422,26 +441,26 @@ export function showNumericalInputDialog() {
       const nw = fieldsDiv.querySelector("#nw");
       const nh = fieldsDiv.querySelector("#nh");
       if (!nw || !nh) return;
-      const x1 = parseFloat(fieldsDiv.querySelector("#nx1")?.value);
-      const y1 = parseFloat(fieldsDiv.querySelector("#ny1")?.value);
+      const x1 = safeEvalMath(fieldsDiv.querySelector("#nx1")?.value);
+      const y1 = safeEvalMath(fieldsDiv.querySelector("#ny1")?.value);
       const x2f = fieldsDiv.querySelector("#nx2");
       const y2f = fieldsDiv.querySelector("#ny2");
       // W/H → X2/Z2
       nw.addEventListener("input", () => {
-        const w = parseFloat(nw.value);
+        const w = safeEvalMath(nw.value);
         if (isFinite(x1) && isFinite(w) && x2f) x2f.value = (x1 + w).toFixed(3);
       });
       nh.addEventListener("input", () => {
-        const h = parseFloat(nh.value);
+        const h = safeEvalMath(nh.value);
         if (isFinite(y1) && isFinite(h) && y2f) y2f.value = (y1 + h).toFixed(3);
       });
       // X2/Z2 → W/H
       if (x2f) x2f.addEventListener("input", () => {
-        const v = parseFloat(x2f.value);
+        const v = safeEvalMath(x2f.value);
         if (isFinite(x1) && isFinite(v)) nw.value = (v - x1).toFixed(3);
       });
       if (y2f) y2f.addEventListener("input", () => {
-        const v = parseFloat(y2f.value);
+        const v = safeEvalMath(y2f.value);
         if (isFinite(y1) && isFinite(v)) nh.value = (v - y1).toFixed(3);
       });
     }
@@ -458,15 +477,15 @@ export function showNumericalInputDialog() {
         if (overlay._polyVerts.length > 0) {
           vtxList.style.display = "";
           vtxList.innerHTML = overlay._polyVerts.map((v, vi) =>
-            `<div>V${vi + 1}: X${v.x.toFixed(3)} Z${v.y.toFixed(3)}</div>`
+            `<div>V${vi + 1}: ${H}${v.x.toFixed(3)} ${V}${v.y.toFixed(3)}</div>`
           ).join("");
           vtxList.scrollTop = vtxList.scrollHeight;
         }
       }
 
       polyAddBtn.addEventListener("click", () => {
-        const vx = parseFloat(fieldsDiv.querySelector("#nx")?.value);
-        const vy = parseFloat(fieldsDiv.querySelector("#ny")?.value);
+        const vx = safeEvalMath(fieldsDiv.querySelector("#nx")?.value);
+        const vy = safeEvalMath(fieldsDiv.querySelector("#ny")?.value);
         if (!isFinite(vx) || !isFinite(vy)) return;
         const abs = isInc ? fromIncToAbs(vx, vy) : { x: vx, y: vy };
         overlay._polyVerts.push(abs);
@@ -474,7 +493,7 @@ export function showNumericalInputDialog() {
           overlay._polyBulges.push(0);
         }
         updateVtxList();
-        showToast(`Bod ${overlay._polyVerts.length}: X${abs.x.toFixed(2)} Z${abs.y.toFixed(2)}`);
+        showToast(`Bod ${overlay._polyVerts.length}: ${H}${abs.x.toFixed(2)} ${V}${abs.y.toFixed(2)}`);
       });
       updateVtxList();
     }
@@ -485,7 +504,7 @@ export function showNumericalInputDialog() {
 
   // Highlight chained start point
   if (hasChain) {
-    showToast(`Pokračování od X${state.numDialogChain.x.toFixed(2)} Z${state.numDialogChain.y.toFixed(2)}`);
+    showToast(`Pokračování od ${H}${state.numDialogChain.x.toFixed(2)} ${V}${state.numDialogChain.y.toFixed(2)}`);
   }
 
   function createObject() {
@@ -496,8 +515,8 @@ export function showNumericalInputDialog() {
       switch (t) {
         case "point": {
           const raw = toAbs(
-            parseFloat(overlay.querySelector("#nx").value),
-            parseFloat(overlay.querySelector("#ny").value)
+            safeEvalMath(overlay.querySelector("#nx").value),
+            safeEvalMath(overlay.querySelector("#ny").value)
           );
           addObject({ type: "point", x: raw.x, y: raw.y, name: `Bod ${state.nextId}` });
           state.numDialogChain = { x: raw.x, y: raw.y };
@@ -506,13 +525,13 @@ export function showNumericalInputDialog() {
         case "line":
         case "constr": {
           let p1 = toAbs(
-            parseFloat(overlay.querySelector("#nx1").value),
-            parseFloat(overlay.querySelector("#ny1").value)
+            safeEvalMath(overlay.querySelector("#nx1").value),
+            safeEvalMath(overlay.querySelector("#ny1").value)
           );
-          let x2r = parseFloat(overlay.querySelector("#nx2").value);
-          let y2r = parseFloat(overlay.querySelector("#ny2").value);
-          const len = parseFloat(overlay.querySelector("#nlen").value);
-          const ang = parseFloat(overlay.querySelector("#nang").value);
+          let x2r = safeEvalMath(overlay.querySelector("#nx2").value);
+          let y2r = safeEvalMath(overlay.querySelector("#ny2").value);
+          const len = safeEvalMath(overlay.querySelector("#nlen").value);
+          const ang = safeEvalMath(overlay.querySelector("#nang").value);
           if (!isNaN(len) && !isNaN(ang) && len > 0) {
             const rad = (ang * Math.PI) / 180;
             // Polární vždy od bodu 1 (absolutního)
@@ -543,10 +562,10 @@ export function showNumericalInputDialog() {
         }
         case "circle": {
           const c = toAbs(
-            parseFloat(overlay.querySelector("#ncx").value),
-            parseFloat(overlay.querySelector("#ncy").value)
+            safeEvalMath(overlay.querySelector("#ncx").value),
+            safeEvalMath(overlay.querySelector("#ncy").value)
           );
-          const r = parseFloat(overlay.querySelector("#nr").value);
+          const r = safeEvalMath(overlay.querySelector("#nr").value);
           addObject({
             type: "circle", cx: c.x, cy: c.y, r,
             name: `Kružnice ${state.nextId}`,
@@ -556,14 +575,14 @@ export function showNumericalInputDialog() {
         }
         case "arc": {
           const c = toAbs(
-            parseFloat(overlay.querySelector("#ncx").value),
-            parseFloat(overlay.querySelector("#ncy").value)
+            safeEvalMath(overlay.querySelector("#ncx").value),
+            safeEvalMath(overlay.querySelector("#ncy").value)
           );
-          const r = parseFloat(overlay.querySelector("#nr").value);
+          const r = safeEvalMath(overlay.querySelector("#nr").value);
           const sa =
-            (parseFloat(overlay.querySelector("#nsa").value) * Math.PI) / 180;
+            (safeEvalMath(overlay.querySelector("#nsa").value) * Math.PI) / 180;
           const ea =
-            (parseFloat(overlay.querySelector("#nea").value) * Math.PI) / 180;
+            (safeEvalMath(overlay.querySelector("#nea").value) * Math.PI) / 180;
           addObject({
             type: "arc", cx: c.x, cy: c.y, r,
             startAngle: sa, endAngle: ea,
@@ -576,13 +595,13 @@ export function showNumericalInputDialog() {
         }
         case "rect": {
           let p1 = toAbs(
-            parseFloat(overlay.querySelector("#nx1").value),
-            parseFloat(overlay.querySelector("#ny1").value)
+            safeEvalMath(overlay.querySelector("#nx1").value),
+            safeEvalMath(overlay.querySelector("#ny1").value)
           );
-          let x2r = parseFloat(overlay.querySelector("#nx2").value);
-          let y2r = parseFloat(overlay.querySelector("#ny2").value);
-          const w = parseFloat(overlay.querySelector("#nw").value);
-          const h = parseFloat(overlay.querySelector("#nh").value);
+          let x2r = safeEvalMath(overlay.querySelector("#nx2").value);
+          let y2r = safeEvalMath(overlay.querySelector("#ny2").value);
+          const w = safeEvalMath(overlay.querySelector("#nw").value);
+          const h = safeEvalMath(overlay.querySelector("#nh").value);
           if (!isNaN(w) && !isNaN(h) && w > 0 && h > 0) {
             // Šířka/výška je vždy relativní delta
             const p2 = { x: p1.x + w, y: p1.y + h };
@@ -688,8 +707,8 @@ export function showPolarDrawingDialog() {
       </p>
       <label>Referenční bod:</label>
       <div class="input-row">
-        <div><label>X:</label><input type="number" id="polRefX" step="0.001" value="${refX}"></div>
-        <div><label>Z:</label><input type="number" id="polRefZ" step="0.001" value="${refZ}"></div>
+        <div><label>${axisLabels()[0]}:</label><input type="text" id="polRefX" value="${refX}"></div>
+        <div><label>${axisLabels()[1]}:</label><input type="text" id="polRefZ" value="${refZ}"></div>
       </div>
       <div style="display:flex;gap:6px;margin-bottom:10px">
         <button class="btn-ok" id="polMarkRef" style="font-size:11px;padding:3px 8px">📍 Označit ref. bod</button>
@@ -698,8 +717,8 @@ export function showPolarDrawingDialog() {
       <hr style="border-color:#45475a;margin:8px 0">
       <label>Segment (polární souřadnice od ref. bodu):</label>
       <div class="input-row">
-        <div><label>Délka:</label><input type="number" id="polLen" step="0.001" value="10"></div>
-        <div><label>Úhel (°):</label><input type="number" id="polAng" step="0.001" value="0"></div>
+        <div><label>Délka:</label><input type="text" id="polLen" value="10"></div>
+        <div><label>Úhel (°):</label><input type="text" id="polAng" value="0"></div>
       </div>
       <div class="input-row">
         <div><label>Typ:</label>
@@ -733,8 +752,8 @@ export function showPolarDrawingDialog() {
   let segCount = 0;
 
   overlay.querySelector("#polMarkRef").addEventListener("click", () => {
-    const rx = parseFloat(polRefX.value);
-    const rz = parseFloat(polRefZ.value);
+    const rx = safeEvalMath(polRefX.value);
+    const rz = safeEvalMath(polRefZ.value);
     if (isNaN(rx) || isNaN(rz)) return;
     addObject({
       type: "point",
@@ -742,7 +761,7 @@ export function showPolarDrawingDialog() {
       y: rz,
       name: `Ref ${state.nextId}`,
     });
-    showToast(`Referenční bod X${rx} Z${rz} vytvořen`);
+    showToast(`Referenční bod ${axisLabels()[0]}${rx} ${axisLabels()[1]}${rz} vytvořen`);
   });
 
   overlay
@@ -770,10 +789,10 @@ export function showPolarDrawingDialog() {
     });
 
   overlay.querySelector("#polAdd").addEventListener("click", () => {
-    const rx = parseFloat(polRefX.value);
-    const rz = parseFloat(polRefZ.value);
-    const len = parseFloat(polLen.value);
-    const angDeg = parseFloat(polAng.value);
+    const rx = safeEvalMath(polRefX.value);
+    const rz = safeEvalMath(polRefZ.value);
+    const len = safeEvalMath(polLen.value);
+    const angDeg = safeEvalMath(polAng.value);
     if (
       isNaN(rx) ||
       isNaN(rz) ||
@@ -811,7 +830,7 @@ export function showPolarDrawingDialog() {
 
     segCount++;
     polHistory.style.display = "";
-    polHistory.innerHTML += `<div>#${segCount}: X${rx.toFixed(2)} Z${rz.toFixed(2)} → d=${len} ∠${angDeg}° → X${endX.toFixed(2)} Z${endZ.toFixed(2)}</div>`;
+    polHistory.innerHTML += `<div>#${segCount}: ${axisLabels()[0]}${rx.toFixed(2)} ${axisLabels()[1]}${rz.toFixed(2)} → d=${len} ∠${angDeg}° → ${axisLabels()[0]}${endX.toFixed(2)} ${axisLabels()[1]}${endZ.toFixed(2)}</div>`;
     polHistory.scrollTop = polHistory.scrollHeight;
 
     if (polChain.checked) {
@@ -862,13 +881,13 @@ export function showBulgeDialog(p1, p2, currentBulge, onAccept) {
     <div class="input-dialog" style="min-width:360px">
       <h3>⌒ Oblouk segmentu</h3>
       <table style="width:100%;font-family:Consolas;font-size:12px;margin-bottom:8px">
-        <tr><td style="color:#a6adc8">Bod 1:</td><td style="color:#89b4fa">X${p1.x.toFixed(3)} Z${p1.y.toFixed(3)}</td></tr>
-        <tr><td style="color:#a6adc8">Bod 2:</td><td style="color:#89b4fa">X${p2.x.toFixed(3)} Z${p2.y.toFixed(3)}</td></tr>
+        <tr><td style="color:#a6adc8">Bod 1:</td><td style="color:#89b4fa">${axisLabels()[0]}${p1.x.toFixed(3)} ${axisLabels()[1]}${p1.y.toFixed(3)}</td></tr>
+        <tr><td style="color:#a6adc8">Bod 2:</td><td style="color:#89b4fa">${axisLabels()[0]}${p2.x.toFixed(3)} ${axisLabels()[1]}${p2.y.toFixed(3)}</td></tr>
         <tr><td style="color:#a6adc8">Tětiva:</td><td style="color:#f9e2af">${d.toFixed(3)} mm</td></tr>
         <tr><td style="color:#a6adc8">Min. R:</td><td style="color:#f5c2e7">${minRadius.toFixed(3)} mm</td></tr>
       </table>
       <label>Poloměr oblouku (mm):</label>
-      <input type="number" id="dlgBulgeR" step="0.001" min="${minRadius.toFixed(3)}" value="${currentRadius || (minRadius * 2).toFixed(3)}" inputmode="decimal" autofocus>
+      <input type="text" id="dlgBulgeR" value="${currentRadius || (minRadius * 2).toFixed(3)}" inputmode="decimal" autofocus>
       <label style="margin-top:8px">Směr:</label>
       <select id="dlgBulgeDir">
         <option value="ccw" ${!currentCW ? 'selected' : ''}>CCW (proti směru hodinových ručiček)</option>
@@ -888,7 +907,7 @@ export function showBulgeDialog(p1, p2, currentBulge, onAccept) {
   const infoDiv = overlay.querySelector('#dlgBulgeInfo');
 
   function updateInfo() {
-    const r = parseFloat(rInput.value);
+    const r = safeEvalMath(rInput.value);
     if (!isFinite(r) || r < minRadius - 0.001) {
       infoDiv.textContent = 'Poloměr příliš malý';
       return;
@@ -906,7 +925,7 @@ export function showBulgeDialog(p1, p2, currentBulge, onAccept) {
   rInput.select();
 
   const accept = () => {
-    const r = parseFloat(rInput.value);
+    const r = safeEvalMath(rInput.value);
     if (!isFinite(r) || r < minRadius - 0.001) {
       showToast('Poloměr příliš malý (min: ' + minRadius.toFixed(3) + ')');
       return;
@@ -934,14 +953,15 @@ export function showBulgeDialog(p1, p2, currentBulge, onAccept) {
  * @param {import('./types.js').Point2D} pt
  */
 export function showIntersectionInfo(pt) {
+  const [H, V] = axisLabels();
   const overlay = document.createElement("div");
   overlay.className = "input-overlay";
   overlay.innerHTML = `
     <div class="input-dialog">
       <h3>⨯ Průsečík</h3>
       <table style="width:100%;font-family:Consolas;font-size:14px;">
-        <tr><td style="color:#a6adc8">X:</td><td style="color:#f9e2af;font-size:16px">${pt.x.toFixed(3)}</td></tr>
-        <tr><td style="color:#a6adc8">Z:</td><td style="color:#f9e2af;font-size:16px">${pt.y.toFixed(3)}</td></tr>
+        <tr><td style="color:#a6adc8">${H}:</td><td style="color:#f9e2af;font-size:16px">${pt.x.toFixed(3)}</td></tr>
+        <tr><td style="color:#a6adc8">${V}:</td><td style="color:#f9e2af;font-size:16px">${pt.y.toFixed(3)}</td></tr>
       </table>
       <div class="btn-row">
         <button class="btn-cancel" id="intCopy">📋 Kopírovat</button>
@@ -952,12 +972,12 @@ export function showIntersectionInfo(pt) {
   document.body.appendChild(overlay);
 
   overlay.querySelector("#intCopy").addEventListener("click", () => {
-    const text = `X${pt.x.toFixed(3)} Z${pt.y.toFixed(3)}`;
+    const text = `${H}${pt.x.toFixed(3)} ${V}${pt.y.toFixed(3)}`;
     navigator.clipboard.writeText(text).then(() => showToast(`Zkopírováno: ${text}`));
   });
   overlay.querySelector("#intAddPoint").addEventListener("click", () => {
     addObject({ type: "point", x: pt.x, y: pt.y, name: `Bod ${state.nextId}` });
-    showToast(`Bod X${pt.x.toFixed(2)} Z${pt.y.toFixed(2)} vytvořen`);
+    showToast(`Bod ${H}${pt.x.toFixed(2)} ${V}${pt.y.toFixed(2)} vytvořen`);
     overlay.remove();
   });
   overlay.querySelector(".btn-ok").focus();
@@ -992,8 +1012,8 @@ export function showMeasureObjectInfo(obj, wx, wy, objIdx) {
       <div class="input-dialog">
         <h3>📍 Souřadnice bodu</h3>
         <table style="width:100%;font-family:Consolas;font-size:13px;">
-          <tr><td style="color:#a6adc8">X:</td><td style="color:#f9e2af">${nearestPt.x.toFixed(3)}</td></tr>
-          <tr><td style="color:#a6adc8">Z:</td><td style="color:#f9e2af">${nearestPt.y.toFixed(3)}</td></tr>
+          <tr><td style="color:#a6adc8">${axisLabels()[0]}:</td><td style="color:#f9e2af">${nearestPt.x.toFixed(3)}</td></tr>
+          <tr><td style="color:#a6adc8">${axisLabels()[1]}:</td><td style="color:#f9e2af">${nearestPt.y.toFixed(3)}</td></tr>
         </table>
         <div class="btn-row">
           <button class="btn-cancel" id="ptCopy">📋 Kopírovat</button>
@@ -1013,7 +1033,8 @@ export function showMeasureObjectInfo(obj, wx, wy, objIdx) {
 
   if (clickedEndpoint && nearestPt) {
     overlay.querySelector("#ptCopy").addEventListener("click", () => {
-      const text = `X${nearestPt.x.toFixed(3)} Z${nearestPt.y.toFixed(3)}`;
+      const [H, V] = axisLabels();
+      const text = `${H}${nearestPt.x.toFixed(3)} ${V}${nearestPt.y.toFixed(3)}`;
       navigator.clipboard
         .writeText(text)
         .then(() => showToast(`Zkopírováno: ${text}`));
@@ -1025,8 +1046,9 @@ export function showMeasureObjectInfo(obj, wx, wy, objIdx) {
         y: nearestPt.y,
         name: `Bod ${state.nextId}`,
       });
+      const [H2, V2] = axisLabels();
       showToast(
-        `Bod X${nearestPt.x.toFixed(2)} Z${nearestPt.y.toFixed(2)} vytvořen`,
+        `Bod ${H2}${nearestPt.x.toFixed(2)} ${V2}${nearestPt.y.toFixed(2)} vytvořen`,
       );
       overlay.remove();
     });
@@ -1036,6 +1058,7 @@ export function showMeasureObjectInfo(obj, wx, wy, objIdx) {
 }
 
 function buildObjectInfoDialog(obj, objIdx) {
+  const [H, V] = axisLabels();
   let rows = "";
   rows += `<tr><td style="color:#a6adc8">Typ:</td><td style="color:#cdd6f4">${typeLabel(obj.type)}</td></tr>`;
   if (obj.name) {
@@ -1045,30 +1068,30 @@ function buildObjectInfoDialog(obj, objIdx) {
 
   switch (obj.type) {
     case "point":
-      rows += `<tr><td style="color:#a6adc8">X:</td><td style="color:#f9e2af">${obj.x.toFixed(3)}</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Z:</td><td style="color:#f9e2af">${obj.y.toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">${H}:</td><td style="color:#f9e2af">${obj.x.toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">${V}:</td><td style="color:#f9e2af">${obj.y.toFixed(3)}</td></tr>`;
       break;
     case "line":
     case "constr": {
       const len = Math.hypot(obj.x2 - obj.x1, obj.y2 - obj.y1);
       const angle =
         (Math.atan2(obj.y2 - obj.y1, obj.x2 - obj.x1) * 180) / Math.PI;
-      rows += `<tr><td style="color:#a6adc8">Bod 1:</td><td style="color:#89b4fa">X${obj.x1.toFixed(3)} Z${obj.y1.toFixed(3)}</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Bod 2:</td><td style="color:#89b4fa">X${obj.x2.toFixed(3)} Z${obj.y2.toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Bod 1:</td><td style="color:#89b4fa">${H}${obj.x1.toFixed(3)} ${V}${obj.y1.toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Bod 2:</td><td style="color:#89b4fa">${H}${obj.x2.toFixed(3)} ${V}${obj.y2.toFixed(3)}</td></tr>`;
       rows += `<tr><td style="color:#a6adc8">Délka:</td><td style="color:#f9e2af">${len.toFixed(3)} mm</td></tr>`;
       rows += `<tr><td style="color:#a6adc8">Úhel:</td><td style="color:#f9e2af">${angle.toFixed(2)}°</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">ΔX:</td><td style="color:#f5c2e7">${(obj.x2 - obj.x1).toFixed(3)}</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">ΔZ:</td><td style="color:#f5c2e7">${(obj.y2 - obj.y1).toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Δ${H}:</td><td style="color:#f5c2e7">${(obj.x2 - obj.x1).toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Δ${V}:</td><td style="color:#f5c2e7">${(obj.y2 - obj.y1).toFixed(3)}</td></tr>`;
       break;
     }
     case "circle":
-      rows += `<tr><td style="color:#a6adc8">Střed:</td><td style="color:#89b4fa">X${obj.cx.toFixed(3)} Z${obj.cy.toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Střed:</td><td style="color:#89b4fa">${H}${obj.cx.toFixed(3)} ${V}${obj.cy.toFixed(3)}</td></tr>`;
       rows += `<tr><td style="color:#a6adc8">Poloměr:</td><td style="color:#f9e2af">${obj.r.toFixed(3)} mm</td></tr>`;
       rows += `<tr><td style="color:#a6adc8">Průměr:</td><td style="color:#f9e2af">${(obj.r * 2).toFixed(3)} mm</td></tr>`;
       rows += `<tr><td style="color:#a6adc8">Obvod:</td><td style="color:#f5c2e7">${(2 * Math.PI * obj.r).toFixed(3)} mm</td></tr>`;
       break;
     case "arc":
-      rows += `<tr><td style="color:#a6adc8">Střed:</td><td style="color:#89b4fa">X${obj.cx.toFixed(3)} Z${obj.cy.toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Střed:</td><td style="color:#89b4fa">${H}${obj.cx.toFixed(3)} ${V}${obj.cy.toFixed(3)}</td></tr>`;
       rows += `<tr><td style="color:#a6adc8">Poloměr:</td><td style="color:#f9e2af">${obj.r.toFixed(3)} mm</td></tr>`;
       rows += `<tr><td style="color:#a6adc8">Start:</td><td style="color:#f5c2e7">${((obj.startAngle * 180) / Math.PI).toFixed(2)}°</td></tr>`;
       rows += `<tr><td style="color:#a6adc8">Konec:</td><td style="color:#f5c2e7">${((obj.endAngle * 180) / Math.PI).toFixed(2)}°</td></tr>`;
@@ -1076,8 +1099,8 @@ function buildObjectInfoDialog(obj, objIdx) {
     case "rect": {
       const w = Math.abs(obj.x2 - obj.x1);
       const h = Math.abs(obj.y2 - obj.y1);
-      rows += `<tr><td style="color:#a6adc8">Roh 1:</td><td style="color:#89b4fa">X${obj.x1.toFixed(3)} Z${obj.y1.toFixed(3)}</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Roh 2:</td><td style="color:#89b4fa">X${obj.x2.toFixed(3)} Z${obj.y2.toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Roh 1:</td><td style="color:#89b4fa">${H}${obj.x1.toFixed(3)} ${V}${obj.y1.toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Roh 2:</td><td style="color:#89b4fa">${H}${obj.x2.toFixed(3)} ${V}${obj.y2.toFixed(3)}</td></tr>`;
       rows += `<tr><td style="color:#a6adc8">Šířka:</td><td style="color:#f9e2af">${w.toFixed(3)} mm</td></tr>`;
       rows += `<tr><td style="color:#a6adc8">Výška:</td><td style="color:#f9e2af">${h.toFixed(3)} mm</td></tr>`;
       rows += `<tr><td style="color:#a6adc8">Obvod:</td><td style="color:#f5c2e7">${(2 * (w + h)).toFixed(3)} mm</td></tr>`;
@@ -1109,7 +1132,7 @@ function buildObjectInfoDialog(obj, objIdx) {
       rows += `<tr><td style="color:#a6adc8">Uzavřená:</td><td style="color:#f9e2af">${obj.closed ? 'Ano' : 'Ne'}</td></tr>`;
       rows += `<tr><td style="color:#a6adc8">Celk. délka:</td><td style="color:#f9e2af">${pTotalLen.toFixed(3)} mm</td></tr>`;
       for (let i = 0; i < pn; i++) {
-        rows += `<tr><td style="color:#a6adc8">V${i + 1}:</td><td style="color:#89b4fa">X${obj.vertices[i].x.toFixed(3)} Z${obj.vertices[i].y.toFixed(3)}</td></tr>`;
+        rows += `<tr><td style="color:#a6adc8">V${i + 1}:</td><td style="color:#89b4fa">${H}${obj.vertices[i].x.toFixed(3)} ${V}${obj.vertices[i].y.toFixed(3)}</td></tr>`;
       }
       break;
     }
@@ -1191,7 +1214,7 @@ export function addDimensionForObject(obj) {
         isCoordLabel: true,
         color: "#9399b2",
       });
-      showToast(`Kóta X${obj.x.toFixed(2)} Z${obj.y.toFixed(2)} přidána`);
+      showToast(`Kóta ${axisLabels()[0]}${obj.x.toFixed(2)} ${axisLabels()[1]}${obj.y.toFixed(2)} přidána`);
       break;
     }
     case "line":
@@ -1388,6 +1411,7 @@ function showEditObjectDialog(idx) {
   overlay.className = "input-overlay";
 
   function buildFields() {
+    const [H, V] = axisLabels();
     let fieldsHtml = "";
     const nameVal = obj.name || "";
 
@@ -1397,48 +1421,48 @@ function showEditObjectDialog(idx) {
     switch (obj.type) {
       case "point":
         fieldsHtml += `
-          <div class="input-row"><div><label>X:</label><input type="number" id="editX" step="0.001" value="${obj.x.toFixed(3)}"></div>
-          <div><label>Z:</label><input type="number" id="editY" step="0.001" value="${obj.y.toFixed(3)}"></div>
+          <div class="input-row"><div><label>${H}:</label><input type="text" id="editX" value="${obj.x.toFixed(3)}"></div>
+          <div><label>${V}:</label><input type="text" id="editY" value="${obj.y.toFixed(3)}"></div>
           <div class="pick-col"><button type="button" class="pick-btn" data-pick="xy">🎯</button></div></div>`;
         break;
       case "line":
       case "constr":
         fieldsHtml += `
-          <div class="input-row"><div><label>X1:</label><input type="number" id="editX1" step="0.001" value="${obj.x1.toFixed(3)}"></div>
-          <div><label>Z1:</label><input type="number" id="editY1" step="0.001" value="${obj.y1.toFixed(3)}"></div>
+          <div class="input-row"><div><label>${H}1:</label><input type="text" id="editX1" value="${obj.x1.toFixed(3)}"></div>
+          <div><label>${V}1:</label><input type="text" id="editY1" value="${obj.y1.toFixed(3)}"></div>
           <div class="pick-col"><button type="button" class="pick-btn" data-pick="p1">🎯1</button></div></div>
-          <div class="input-row"><div><label>X2:</label><input type="number" id="editX2" step="0.001" value="${obj.x2.toFixed(3)}"></div>
-          <div><label>Z2:</label><input type="number" id="editY2" step="0.001" value="${obj.y2.toFixed(3)}"></div>
+          <div class="input-row"><div><label>${H}2:</label><input type="text" id="editX2" value="${obj.x2.toFixed(3)}"></div>
+          <div><label>${V}2:</label><input type="text" id="editY2" value="${obj.y2.toFixed(3)}"></div>
           <div class="pick-col"><button type="button" class="pick-btn" data-pick="p2">🎯2</button></div></div>
           <div style="font-size:12px;color:#9399b2;margin-top:4px">Délka: <span id="editLen">${Math.hypot(obj.x2-obj.x1, obj.y2-obj.y1).toFixed(3)}</span> mm</div>`;
         break;
       case "circle":
         fieldsHtml += `
-          <div class="input-row"><div><label>Střed X:</label><input type="number" id="editCX" step="0.001" value="${obj.cx.toFixed(3)}"></div>
-          <div><label>Střed Z:</label><input type="number" id="editCY" step="0.001" value="${obj.cy.toFixed(3)}"></div>
+          <div class="input-row"><div><label>Střed ${H}:</label><input type="text" id="editCX" value="${obj.cx.toFixed(3)}"></div>
+          <div><label>Střed ${V}:</label><input type="text" id="editCY" value="${obj.cy.toFixed(3)}"></div>
           <div class="pick-col"><button type="button" class="pick-btn" data-pick="center">🎯</button></div></div>
-          <div class="input-row"><div><label>Poloměr:</label><input type="number" id="editR" step="0.001" value="${obj.r.toFixed(3)}" min="0.001"></div>
-          <div><label>Průměr:</label><input type="number" id="editD" step="0.001" value="${(obj.r*2).toFixed(3)}" min="0.002"></div>
+          <div class="input-row"><div><label>Poloměr:</label><input type="text" id="editR" value="${obj.r.toFixed(3)}"></div>
+          <div><label>Průměr:</label><input type="text" id="editD" value="${(obj.r*2).toFixed(3)}"></div>
           <div class="pick-col"><button type="button" class="pick-btn" data-pick="radius">📏R</button></div></div>`;
         break;
       case "arc":
         fieldsHtml += `
-          <div class="input-row"><div><label>Střed X:</label><input type="number" id="editCX" step="0.001" value="${obj.cx.toFixed(3)}"></div>
-          <div><label>Střed Z:</label><input type="number" id="editCY" step="0.001" value="${obj.cy.toFixed(3)}"></div>
+          <div class="input-row"><div><label>Střed ${H}:</label><input type="text" id="editCX" value="${obj.cx.toFixed(3)}"></div>
+          <div><label>Střed ${V}:</label><input type="text" id="editCY" value="${obj.cy.toFixed(3)}"></div>
           <div class="pick-col"><button type="button" class="pick-btn" data-pick="center">🎯</button></div></div>
-          <div class="input-row"><div><label>Poloměr:</label><input type="number" id="editR" step="0.001" value="${obj.r.toFixed(3)}" min="0.001"></div>
-          <div><label>Průměr:</label><input type="number" id="editD" step="0.001" value="${(obj.r*2).toFixed(3)}" min="0.002"></div>
+          <div class="input-row"><div><label>Poloměr:</label><input type="text" id="editR" value="${obj.r.toFixed(3)}"></div>
+          <div><label>Průměr:</label><input type="text" id="editD" value="${(obj.r*2).toFixed(3)}"></div>
           <div class="pick-col"><button type="button" class="pick-btn" data-pick="radius">📏R</button></div></div>
-          <div class="input-row"><div><label>Start (°):</label><input type="number" id="editSA" step="1" value="${(obj.startAngle*180/Math.PI).toFixed(2)}"></div>
-          <div><label>Konec (°):</label><input type="number" id="editEA" step="1" value="${(obj.endAngle*180/Math.PI).toFixed(2)}"></div></div>`;
+          <div class="input-row"><div><label>Start (°):</label><input type="text" id="editSA" value="${(obj.startAngle*180/Math.PI).toFixed(2)}"></div>
+          <div><label>Konec (°):</label><input type="text" id="editEA" value="${(obj.endAngle*180/Math.PI).toFixed(2)}"></div></div>`;
         break;
       case "rect":
         fieldsHtml += `
-          <div class="input-row"><div><label>X1:</label><input type="number" id="editX1" step="0.001" value="${obj.x1.toFixed(3)}"></div>
-          <div><label>Z1:</label><input type="number" id="editY1" step="0.001" value="${obj.y1.toFixed(3)}"></div>
+          <div class="input-row"><div><label>${H}1:</label><input type="text" id="editX1" value="${obj.x1.toFixed(3)}"></div>
+          <div><label>${V}1:</label><input type="text" id="editY1" value="${obj.y1.toFixed(3)}"></div>
           <div class="pick-col"><button type="button" class="pick-btn" data-pick="p1">🎯1</button></div></div>
-          <div class="input-row"><div><label>X2:</label><input type="number" id="editX2" step="0.001" value="${obj.x2.toFixed(3)}"></div>
-          <div><label>Z2:</label><input type="number" id="editY2" step="0.001" value="${obj.y2.toFixed(3)}"></div>
+          <div class="input-row"><div><label>${H}2:</label><input type="text" id="editX2" value="${obj.x2.toFixed(3)}"></div>
+          <div><label>${V}2:</label><input type="text" id="editY2" value="${obj.y2.toFixed(3)}"></div>
           <div class="pick-col"><button type="button" class="pick-btn" data-pick="p2">🎯2</button></div></div>
           <div style="font-size:12px;color:#9399b2;margin-top:4px">Rozměr: <span id="editDim">${Math.abs(obj.x2-obj.x1).toFixed(2)} × ${Math.abs(obj.y2-obj.y1).toFixed(2)}</span> mm</div>`;
         break;
@@ -1451,9 +1475,9 @@ function showEditObjectDialog(idx) {
         for (let i = 0; i < verts.length; i++) {
           const b = bulges[i] || 0;
           fieldsHtml += `<div class="input-row" style="margin-bottom:2px">
-            <div><label>V${i+1} X:</label><input type="number" class="polyVX" data-idx="${i}" step="0.001" value="${verts[i].x.toFixed(3)}"></div>
-            <div><label>Z:</label><input type="number" class="polyVY" data-idx="${i}" step="0.001" value="${verts[i].y.toFixed(3)}"></div>
-            <div style="width:60px"><label>B:</label><input type="number" class="polyVB" data-idx="${i}" step="0.01" value="${b.toFixed(4)}" style="width:55px"></div>
+            <div><label>V${i+1} ${H}:</label><input type="text" class="polyVX" data-idx="${i}" value="${verts[i].x.toFixed(3)}"></div>
+            <div><label>${V}:</label><input type="text" class="polyVY" data-idx="${i}" value="${verts[i].y.toFixed(3)}"></div>
+            <div style="width:60px"><label>B:</label><input type="text" class="polyVB" data-idx="${i}" value="${b.toFixed(4)}" style="width:55px"></div>
           </div>`;
         }
         fieldsHtml += `</div>`;
@@ -1546,8 +1570,8 @@ function showEditObjectDialog(idx) {
       if (fx) fx.value = wx.toFixed(3);
       if (fy) fy.value = wy.toFixed(3);
     } else if (pickType === "radius") {
-      const cxV = parseFloat(overlay.querySelector("#editCX")?.value) || 0;
-      const cyV = parseFloat(overlay.querySelector("#editCY")?.value) || 0;
+      const cxV = safeEvalMath(overlay.querySelector("#editCX")?.value) || 0;
+      const cyV = safeEvalMath(overlay.querySelector("#editCY")?.value) || 0;
       const r = Math.hypot(wx - cxV, wy - cyV);
       const ri = overlay.querySelector("#editR");
       const di = overlay.querySelector("#editD");
@@ -1563,20 +1587,20 @@ function showEditObjectDialog(idx) {
   function updateEditInfo() {
     const lenSpan = overlay.querySelector("#editLen");
     if (lenSpan) {
-      const x1 = parseFloat(overlay.querySelector("#editX1")?.value);
-      const y1 = parseFloat(overlay.querySelector("#editY1")?.value);
-      const x2 = parseFloat(overlay.querySelector("#editX2")?.value);
-      const y2 = parseFloat(overlay.querySelector("#editY2")?.value);
+      const x1 = safeEvalMath(overlay.querySelector("#editX1")?.value);
+      const y1 = safeEvalMath(overlay.querySelector("#editY1")?.value);
+      const x2 = safeEvalMath(overlay.querySelector("#editX2")?.value);
+      const y2 = safeEvalMath(overlay.querySelector("#editY2")?.value);
       if ([x1,y1,x2,y2].every(v => isFinite(v))) {
         lenSpan.textContent = Math.hypot(x2-x1, y2-y1).toFixed(3);
       }
     }
     const dimSpan = overlay.querySelector("#editDim");
     if (dimSpan) {
-      const x1 = parseFloat(overlay.querySelector("#editX1")?.value);
-      const y1 = parseFloat(overlay.querySelector("#editY1")?.value);
-      const x2 = parseFloat(overlay.querySelector("#editX2")?.value);
-      const y2 = parseFloat(overlay.querySelector("#editY2")?.value);
+      const x1 = safeEvalMath(overlay.querySelector("#editX1")?.value);
+      const y1 = safeEvalMath(overlay.querySelector("#editY1")?.value);
+      const x2 = safeEvalMath(overlay.querySelector("#editX2")?.value);
+      const y2 = safeEvalMath(overlay.querySelector("#editY2")?.value);
       if ([x1,y1,x2,y2].every(v => isFinite(v))) {
         dimSpan.textContent = `${Math.abs(x2-x1).toFixed(2)} × ${Math.abs(y2-y1).toFixed(2)}`;
       }
@@ -1592,11 +1616,11 @@ function showEditObjectDialog(idx) {
   const dInput = overlay.querySelector("#editD");
   if (rInput && dInput) {
     rInput.addEventListener("input", () => {
-      const r = parseFloat(rInput.value);
+      const r = safeEvalMath(rInput.value);
       if (!isNaN(r) && r > 0) dInput.value = (r * 2).toFixed(3);
     });
     dInput.addEventListener("input", () => {
-      const d = parseFloat(dInput.value);
+      const d = safeEvalMath(dInput.value);
       if (!isNaN(d) && d > 0) rInput.value = (d / 2).toFixed(3);
     });
   }
@@ -1607,33 +1631,33 @@ function showEditObjectDialog(idx) {
     obj.name = overlay.querySelector("#editName").value;
     switch (obj.type) {
       case "point":
-        obj.x = parseFloat(overlay.querySelector("#editX").value);
-        obj.y = parseFloat(overlay.querySelector("#editY").value);
+        obj.x = safeEvalMath(overlay.querySelector("#editX").value);
+        obj.y = safeEvalMath(overlay.querySelector("#editY").value);
         break;
       case "line":
       case "constr":
-        obj.x1 = parseFloat(overlay.querySelector("#editX1").value);
-        obj.y1 = parseFloat(overlay.querySelector("#editY1").value);
-        obj.x2 = parseFloat(overlay.querySelector("#editX2").value);
-        obj.y2 = parseFloat(overlay.querySelector("#editY2").value);
+        obj.x1 = safeEvalMath(overlay.querySelector("#editX1").value);
+        obj.y1 = safeEvalMath(overlay.querySelector("#editY1").value);
+        obj.x2 = safeEvalMath(overlay.querySelector("#editX2").value);
+        obj.y2 = safeEvalMath(overlay.querySelector("#editY2").value);
         break;
       case "circle":
-        obj.cx = parseFloat(overlay.querySelector("#editCX").value);
-        obj.cy = parseFloat(overlay.querySelector("#editCY").value);
-        obj.r = parseFloat(overlay.querySelector("#editR").value);
+        obj.cx = safeEvalMath(overlay.querySelector("#editCX").value);
+        obj.cy = safeEvalMath(overlay.querySelector("#editCY").value);
+        obj.r = safeEvalMath(overlay.querySelector("#editR").value);
         break;
       case "arc":
-        obj.cx = parseFloat(overlay.querySelector("#editCX").value);
-        obj.cy = parseFloat(overlay.querySelector("#editCY").value);
-        obj.r = parseFloat(overlay.querySelector("#editR").value);
-        obj.startAngle = parseFloat(overlay.querySelector("#editSA").value) * Math.PI / 180;
-        obj.endAngle = parseFloat(overlay.querySelector("#editEA").value) * Math.PI / 180;
+        obj.cx = safeEvalMath(overlay.querySelector("#editCX").value);
+        obj.cy = safeEvalMath(overlay.querySelector("#editCY").value);
+        obj.r = safeEvalMath(overlay.querySelector("#editR").value);
+        obj.startAngle = safeEvalMath(overlay.querySelector("#editSA").value) * Math.PI / 180;
+        obj.endAngle = safeEvalMath(overlay.querySelector("#editEA").value) * Math.PI / 180;
         break;
       case "rect":
-        obj.x1 = parseFloat(overlay.querySelector("#editX1").value);
-        obj.y1 = parseFloat(overlay.querySelector("#editY1").value);
-        obj.x2 = parseFloat(overlay.querySelector("#editX2").value);
-        obj.y2 = parseFloat(overlay.querySelector("#editY2").value);
+        obj.x1 = safeEvalMath(overlay.querySelector("#editX1").value);
+        obj.y1 = safeEvalMath(overlay.querySelector("#editY1").value);
+        obj.x2 = safeEvalMath(overlay.querySelector("#editX2").value);
+        obj.y2 = safeEvalMath(overlay.querySelector("#editY2").value);
         break;
       case "polyline": {
         obj.closed = overlay.querySelector("#editClosed")?.checked || false;
@@ -1642,10 +1666,10 @@ function showEditObjectDialog(idx) {
         const vbInputs = overlay.querySelectorAll(".polyVB");
         for (let i = 0; i < vxInputs.length; i++) {
           obj.vertices[i] = {
-            x: parseFloat(vxInputs[i].value) || 0,
-            y: parseFloat(vyInputs[i].value) || 0
+            x: safeEvalMath(vxInputs[i].value) || 0,
+            y: safeEvalMath(vyInputs[i].value) || 0
           };
-          obj.bulges[i] = parseFloat(vbInputs[i].value) || 0;
+          obj.bulges[i] = safeEvalMath(vbInputs[i].value) || 0;
         }
         break;
       }
@@ -1697,7 +1721,7 @@ export function showOffsetDialog(obj, onSideClick) {
       <h3>Offset – paralelní kopie</h3>
       <label>Objekt: ${obj.name || typeLabel(obj.type)}</label>
       <label>Vzdálenost offsetu (mm):</label>
-      <input type="number" id="dlgOffsetDist" step="0.1" min="0.001" value="5" inputmode="decimal" autofocus>
+      <input type="text" id="dlgOffsetDist" value="5" inputmode="decimal" autofocus>
       <div class="btn-row">
         <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
         <button class="btn-ok" id="dlgOffsetOk">OK – klikni na stranu</button>
@@ -1709,7 +1733,7 @@ export function showOffsetDialog(obj, onSideClick) {
   inp.select();
 
   function accept() {
-    const dist = parseFloat(inp.value);
+    const dist = safeEvalMath(inp.value);
     if (isNaN(dist) || dist <= 0) { showToast("Zadejte kladnou vzdálenost"); return; }
     overlay.remove();
     onSideClick(dist);
@@ -1777,11 +1801,11 @@ export function showLinearArrayDialog(obj, callback) {
       <h3>📏 Lineární pole</h3>
       <label>Objekt: ${obj.name || typeLabel(obj.type)}</label>
       <label>Počet kopií:</label>
-      <input type="number" id="dlgArrayCount" step="1" min="1" value="5" inputmode="numeric">
-      <label>Posun ΔX (mm):</label>
-      <input type="number" id="dlgArrayDX" step="0.1" value="10" inputmode="decimal">
-      <label>Posun ΔZ (mm):</label>
-      <input type="number" id="dlgArrayDZ" step="0.1" value="0" inputmode="decimal">
+      <input type="text" id="dlgArrayCount" value="5" inputmode="numeric">
+      <label>Posun Δ${axisLabels()[0]} (mm):</label>
+      <input type="text" id="dlgArrayDX" value="10" inputmode="decimal">
+      <label>Posun Δ${axisLabels()[1]} (mm):</label>
+      <input type="text" id="dlgArrayDZ" value="0" inputmode="decimal">
       <div class="btn-row">
         <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
         <button class="btn-ok" id="dlgArrayOk">Vytvořit</button>
@@ -1792,8 +1816,8 @@ export function showLinearArrayDialog(obj, callback) {
 
   function accept() {
     const count = parseInt(overlay.querySelector("#dlgArrayCount").value);
-    const dx = parseFloat(overlay.querySelector("#dlgArrayDX").value);
-    const dz = parseFloat(overlay.querySelector("#dlgArrayDZ").value);
+    const dx = safeEvalMath(overlay.querySelector("#dlgArrayDX").value);
+    const dz = safeEvalMath(overlay.querySelector("#dlgArrayDZ").value);
     if (isNaN(count) || count < 1) { showToast("Zadejte kladný počet"); return; }
     if (isNaN(dx) && isNaN(dz)) { showToast("Zadejte posun"); return; }
     overlay.remove();
@@ -1913,7 +1937,7 @@ export function showRotateDialog(obj, callback) {
       <h3>Otočit objekt</h3>
       <label>Objekt: ${obj.name || typeLabel(obj.type)}</label>
       <label>Úhel otočení (°):</label>
-      <input type="number" id="dlgRotateAngle" step="1" value="90" inputmode="decimal" autofocus>
+      <input type="text" id="dlgRotateAngle" value="90" inputmode="decimal" autofocus>
       <div class="btn-row">
         <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
         <button class="btn-ok" id="dlgRotateOk">Otočit</button>
@@ -1925,7 +1949,7 @@ export function showRotateDialog(obj, callback) {
   inp.select();
 
   function accept() {
-    const deg = parseFloat(inp.value);
+    const deg = safeEvalMath(inp.value);
     if (isNaN(deg)) { showToast("Zadejte platný úhel"); return; }
     overlay.remove();
     callback(deg);
@@ -1949,7 +1973,7 @@ export function showFilletDialog(callback) {
     <div class="input-dialog">
       <h3>Zaoblení (Fillet)</h3>
       <label>Poloměr zaoblení (mm):</label>
-      <input type="number" id="dlgFilletRadius" step="0.1" min="0.001" value="2" inputmode="decimal" autofocus>
+      <input type="text" id="dlgFilletRadius" value="2" inputmode="decimal" autofocus>
       <div class="btn-row">
         <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
         <button class="btn-ok" id="dlgFilletOk">OK – klikněte na 2. úsečku</button>
@@ -1961,7 +1985,7 @@ export function showFilletDialog(callback) {
   inp.select();
 
   function accept() {
-    const r = parseFloat(inp.value);
+    const r = safeEvalMath(inp.value);
     if (isNaN(r) || r <= 0) { showToast("Zadejte kladný poloměr"); return; }
     overlay.remove();
     callback(r);
