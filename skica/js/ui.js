@@ -9,6 +9,7 @@ import { drawCanvas, screenToWorld, snapPt } from './canvas.js';
 import { bridge } from './bridge.js';
 import { addObject } from './objects.js';
 import { openCuttingCalc, openTaperCalc, openThreadCalc, openConvertCalc, openWeightCalc, openToleranceCalc, openRoughnessCalc, openInsertCalc } from './cnc-calcs.js';
+import { getMeta, setMeta } from './idb.js';
 
 // ── Bridge registrace (rozbíjí cyklickou závislost geometry ↔ ui) ──
 bridge.updateProperties = () => updateProperties();
@@ -946,13 +947,16 @@ export function openCalculator() {
   const historyEl = overlay.querySelector("#calcHistory");
   let expr = "";
   let lastAnswer = 0;
-  const history = JSON.parse(localStorage.getItem("calcHistory") || "[]");
+  let history = [];
+  getMeta('calcHistory').then(h => {
+    if (Array.isArray(h)) { history = h; renderHistory(); }
+  });
 
   function updateDisplay(text) { display.value = text || "0"; }
   function updateExprDisplay(text) { exprDisplay.textContent = text || "\u00a0"; }
 
   function saveHistory() {
-    localStorage.setItem("calcHistory", JSON.stringify(history));
+    setMeta('calcHistory', history);
   }
 
   function addHistory(expression, result) {
@@ -1470,10 +1474,11 @@ document.getElementById('btnHelp')?.addEventListener('click', toggleHelp);
 
 // ── First-run help ──
 /** Zkontroluje a zobrazí nápovědu při prvním spuštění. */
-export function checkFirstRunHelp() {
-  if (!localStorage.getItem('skica_helpShown')) {
+export async function checkFirstRunHelp() {
+  const shown = await getMeta('helpShown');
+  if (!shown) {
     showHelp();
-    localStorage.setItem('skica_helpShown', '1');
+    setMeta('helpShown', '1');
   }
 }
 
