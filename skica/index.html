@@ -63,6 +63,13 @@
         </button>
         <button
           class="tool-btn toolbar-setting"
+          id="btnXDisplay"
+          title="Přepnout Poloměr/Průměr osy X"
+        >
+          R
+        </button>
+        <button
+          class="tool-btn toolbar-setting"
           id="btnSnapPts"
           title="Přichytávání k bodům (S)"
         >
@@ -661,7 +668,11 @@
     <!-- ── Main ── -->
     <div id="main">
       <div id="canvasWrap">
-        <canvas id="drawCanvas" aria-label="CAD kreslicí plátno" role="img"></canvas>
+        <canvas
+          id="drawCanvas"
+          aria-label="CAD kreslicí plátno"
+          role="img"
+        ></canvas>
       </div>
       <div id="sidebar">
         <div class="sidebar-top-bar">

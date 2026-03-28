@@ -3,7 +3,7 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 import { drawCanvas, screenToWorld, snapPt, applyAngleSnap } from './canvas.js';
-import { state, pushUndo, undo, redo, showToast, toDisplayCoords, resetDrawingState } from './state.js';
+import { state, pushUndo, undo, redo, showToast, toDisplayCoords, resetDrawingState, displayX, xPrefix } from './state.js';
 import { renderAll } from './render.js';
 import { moveObject, addObject } from './objects.js';
 import { setTool, resetHint, setHint, updateProperties, updateObjectList, updateSnapPtsBtn, updateDimsBtn, toggleCoordMode, updateCoordModeBtn, updateSnapGridBtn, updateAngleSnapBtn, showGridSizeDialog, showAngleSnapDialog, toggleHelp } from './ui.js';
@@ -56,9 +56,10 @@ drawCanvas.addEventListener("mousemove", (e) => {
     const d = toDisplayCoords(wx, wy);
     const prefix = state.coordMode === 'inc' ? 'Δ' : '';
     const isKarusel = state.machineType === 'karusel';
+    const xp = xPrefix();
     const coordText = isKarusel
-      ? `${prefix}X: ${d.x.toFixed(3)}   ${prefix}Z: ${d.y.toFixed(3)}${extra}`
-      : `${prefix}Z: ${d.x.toFixed(3)}   ${prefix}X: ${d.y.toFixed(3)}${extra}`;
+      ? `${prefix}${xp}X: ${displayX(d.x).toFixed(3)}   ${prefix}Z: ${d.y.toFixed(3)}${extra}`
+      : `${prefix}Z: ${d.x.toFixed(3)}   ${prefix}${xp}X: ${displayX(d.y).toFixed(3)}${extra}`;
     document.getElementById("coordDisplay").textContent = coordText;
   }
 
