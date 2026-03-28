@@ -37,14 +37,20 @@ function renderAxes() {
     drawGridSize *= 2;
   }
 
-  // Osy
+  // Osy – barvy podle typu stroje
+  const isKarusel = state.machineType === 'karusel';
+  const hColor = isKarusel ? '#f38ba8' : '#a6e3a1'; // horizontal: soustruh=Z(green), karusel=X(pink)
+  const vColor = isKarusel ? '#a6e3a1' : '#f38ba8'; // vertical: soustruh=X(pink), karusel=Z(green)
+  const hLabel = isKarusel ? 'X' : 'Z';
+  const vLabel = isKarusel ? 'Z' : 'X';
+
   g.lineWidth = 1.5;
-  g.strokeStyle = "#f38ba855";
+  g.strokeStyle = hColor + '55';
   g.beginPath();
   g.moveTo(0, state.panY);
   g.lineTo(w, state.panY);
   g.stroke();
-  g.strokeStyle = "#a6e3a155";
+  g.strokeStyle = vColor + '55';
   g.beginPath();
   g.moveTo(state.panX, 0);
   g.lineTo(state.panX, h);
@@ -86,10 +92,10 @@ function renderAxes() {
 
   // Popisky os X a Z
   g.font = "bold 14px Consolas";
-  g.fillStyle = "#f38ba8";
-  g.fillText("X", w - 18, state.panY - 8);
-  g.fillStyle = "#a6e3a1";
-  g.fillText("Z", state.panX + 8, 16);
+  g.fillStyle = hColor;
+  g.fillText(hLabel, w - 18, state.panY - 8);
+  g.fillStyle = vColor;
+  g.fillText(vLabel, state.panX + 8, 16);
 }
 
 // ── Vykreslení objektů ──
@@ -171,11 +177,10 @@ function renderObjects() {
     ctx.font = intSize + 'px Consolas';
     const dp = toDisplayCoords(pt.x, pt.y);
     const pf = state.coordMode === 'inc' ? 'Δ' : '';
-    ctx.fillText(
-      `${pf}X${dp.x.toFixed(2)} ${pf}Z${dp.y.toFixed(2)}`,
-      sx + 8,
-      sy - 8,
-    );
+    const ptLabel = state.machineType === 'karusel'
+      ? `${pf}X${dp.x.toFixed(2)} ${pf}Z${dp.y.toFixed(2)}`
+      : `${pf}Z${dp.x.toFixed(2)} ${pf}X${dp.y.toFixed(2)}`;
+    ctx.fillText(ptLabel, sx + 8, sy - 8);
   });
 
   // Dočasné kreslení
@@ -588,7 +593,8 @@ export function drawPoint(obj) {
     ctx.fillStyle = '#cdd6f4';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'bottom';
-    ctx.fillText('X' + obj.x.toFixed(2) + '  Z' + obj.y.toFixed(2), ex + 2, ey - 3);
+    const [_cH, _cV] = state.machineType === 'karusel' ? ['X','Z'] : ['Z','X'];
+    ctx.fillText(_cH + obj.x.toFixed(2) + '  ' + _cV + obj.y.toFixed(2), ex + 2, ey - 3);
     ctx.textAlign = 'start';
     ctx.textBaseline = 'alphabetic';
     return;

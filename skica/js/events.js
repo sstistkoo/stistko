@@ -55,8 +55,11 @@ drawCanvas.addEventListener("mousemove", (e) => {
   } else {
     const d = toDisplayCoords(wx, wy);
     const prefix = state.coordMode === 'inc' ? 'Δ' : '';
-    document.getElementById("coordDisplay").textContent =
-      `${prefix}X: ${d.x.toFixed(3)}   ${prefix}Z: ${d.y.toFixed(3)}${extra}`;
+    const isKarusel = state.machineType === 'karusel';
+    const coordText = isKarusel
+      ? `${prefix}X: ${d.x.toFixed(3)}   ${prefix}Z: ${d.y.toFixed(3)}${extra}`
+      : `${prefix}Z: ${d.x.toFixed(3)}   ${prefix}X: ${d.y.toFixed(3)}${extra}`;
+    document.getElementById("coordDisplay").textContent = coordText;
   }
 
   if (isPanning) {
@@ -437,7 +440,7 @@ drawCanvas.addEventListener("contextmenu", (e) => {
         if (state.coordMode !== 'inc') state.coordMode = 'inc';
         updateCoordModeBtn();
         renderAll();
-        showToast(`Reference: X=${wx.toFixed(3)} Z=${wy.toFixed(3)}`);
+        showToast(`Reference: ${state.machineType === 'karusel' ? 'X' : 'Z'}=${wx.toFixed(3)} ${state.machineType === 'karusel' ? 'Z' : 'X'}=${wy.toFixed(3)}`);
       } else if (action === 'mirror') {
         startMirrorAction();
       } else if (action === 'rotate') {

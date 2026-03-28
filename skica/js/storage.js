@@ -3,7 +3,7 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 import { state, showToast, pushUndo, setPushUndoHook } from './state.js';
-import { updateObjectList, updateProperties, updateLayerList, updateStatusProject } from './ui.js';
+import { updateObjectList, updateProperties, updateLayerList, updateStatusProject, updateMachineTypeBtn } from './ui.js';
 import { calculateAllIntersections } from './geometry.js';
 import { bulgeToArc } from './utils.js';
 import { parseDXF } from './dxf.js';
@@ -21,6 +21,7 @@ export function saveProject() {
     gridSize: state.gridSize,
     coordMode: state.coordMode,
     incReference: state.incReference,
+    machineType: state.machineType,
     layers: state.layers,
     activeLayer: state.activeLayer,
     nextLayerId: state.nextLayerId,
@@ -49,6 +50,7 @@ export function loadProject() {
       state.gridSize = data.gridSize;
     if (data.coordMode) state.coordMode = data.coordMode;
     if (data.incReference) state.incReference = data.incReference;
+    if (data.machineType) state.machineType = data.machineType;
     // Layers backward compatibility
     if (data.layers) {
       state.layers = data.layers;
@@ -62,6 +64,7 @@ export function loadProject() {
     updateProperties();
     updateLayerList();
     calculateAllIntersections();
+    updateMachineTypeBtn();
     showToast(`Načteno ${state.objects.length} objektů`);
   } catch (e) {
     showToast("Chyba při načítání projektu");
@@ -78,6 +81,7 @@ export function exportProjectFile() {
     gridSize: state.gridSize,
     coordMode: state.coordMode,
     incReference: state.incReference,
+    machineType: state.machineType,
     layers: state.layers,
     activeLayer: state.activeLayer,
     nextLayerId: state.nextLayerId,
@@ -137,6 +141,7 @@ export function importProjectFile() {
           state.gridSize = data.gridSize;
         if (data.coordMode) state.coordMode = data.coordMode;
         if (data.incReference) state.incReference = data.incReference;
+        if (data.machineType) state.machineType = data.machineType;
         if (data.layers) {
           state.layers = data.layers;
           state.activeLayer = data.activeLayer || 0;
@@ -149,6 +154,7 @@ export function importProjectFile() {
         updateProperties();
         updateLayerList();
         calculateAllIntersections();
+        updateMachineTypeBtn();
         showToast(`Importováno ${state.objects.length} objektů`);
       } catch (err) {
         showToast("Chyba při čtení souboru");
@@ -250,7 +256,8 @@ function runCncExport() {
   out += `; Počet objektů: ${state.objects.length}\n`;
   out += `; Průsečíků: ${state.intersections.length}\n`;
   out += `; Režim: ${isInc ? 'Inkrementální (INC)' : 'Absolutní (ABS)'}\n`;
-  if (isInc) out += `; Reference: X${state.incReference.x.toFixed(3)} Z${state.incReference.y.toFixed(3)}\n`;
+  const [_gH, _gV] = state.machineType === 'karusel' ? ['X','Z'] : ['Z','X'];
+  if (isInc) out += `; Reference: ${_gH}${state.incReference.x.toFixed(3)} ${_gV}${state.incReference.y.toFixed(3)}\n`;
   out += "\n";
   out += isInc ? "G91 ; Inkrementální režim\n\n" : "G90 ; Absolutní režim\n\n";
 
@@ -258,16 +265,15 @@ function runCncExport() {
   let prevY = isInc ? state.incReference.y : 0;
   let lastEndX = null;
   let lastEndY = null;
-
   function fmtCoord(x, y) {
     if (isInc) {
       const dx = x - prevX;
       const dy = y - prevY;
       prevX = x;
       prevY = y;
-      return `X${dx.toFixed(3)} Z${dy.toFixed(3)}`;
+      return `${_gH}${dx.toFixed(3)} ${_gV}${dy.toFixed(3)}`;
     }
-    return `X${x.toFixed(3)} Z${y.toFixed(3)}`;
+    return `${_gH}${x.toFixed(3)} ${_gV}${y.toFixed(3)}`;
   }
 
   function needsRapid(x, y) {
@@ -512,6 +518,7 @@ function _buildProjectData() {
     gridSize: state.gridSize,
     coordMode: state.coordMode,
     incReference: state.incReference,
+    machineType: state.machineType,
     layers: state.layers,
     activeLayer: state.activeLayer,
     nextLayerId: state.nextLayerId,
@@ -525,6 +532,7 @@ function _loadProjectData(data) {
   if (data.gridSize && data.gridSize > 0) state.gridSize = data.gridSize;
   if (data.coordMode) state.coordMode = data.coordMode;
   if (data.incReference) state.incReference = data.incReference;
+  if (data.machineType) state.machineType = data.machineType;
   if (data.layers) {
     state.layers = data.layers;
     state.activeLayer = data.activeLayer || 0;
@@ -537,6 +545,7 @@ function _loadProjectData(data) {
   updateProperties();
   updateLayerList();
   calculateAllIntersections();
+  updateMachineTypeBtn();
 }
 
 /** @param {string} name */

@@ -2,8 +2,8 @@
 // ║  SKICA – UI panely, toolbar, hinty                          ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-import { state, showToast, pushUndo, undo, redo } from './state.js';
-import { typeLabel, toolLabel, bulgeToArc } from './utils.js';
+import { state, showToast, pushUndo, undo, redo, axisLabels } from './state.js';
+import { typeLabel, toolLabel, bulgeToArc, safeEvalMath } from './utils.js';
 import { renderAll } from './render.js';
 import { drawCanvas, screenToWorld, snapPt } from './canvas.js';
 import { bridge } from './bridge.js';
@@ -91,12 +91,11 @@ export function updateProperties() {
     tdLabel.textContent = label;
     const tdVal = document.createElement("td");
     const input = document.createElement("input");
-    input.type = "number";
+    input.type = "text";
     input.className = "prop-input";
     input.value = parseFloat(value).toFixed(3);
-    input.step = step || "0.1";
     input.addEventListener("change", () => {
-      const v = parseFloat(input.value);
+      const v = safeEvalMath(input.value);
       if (!isNaN(v)) {
         pushUndo();
         onChange(v);
@@ -237,39 +236,41 @@ export function updateProperties() {
     tbody.appendChild(tr);
   }
 
+  const [H, V] = axisLabels();
+
   switch (obj.type) {
     case "point":
-      addEditRow("X", obj.x, (v) => { obj.x = v; });
-      addEditRow("Z", obj.y, (v) => { obj.y = v; });
+      addEditRow(H, obj.x, (v) => { obj.x = v; });
+      addEditRow(V, obj.y, (v) => { obj.y = v; });
       break;
     case "line":
     case "constr":
-      addEditRow("X1", obj.x1, (v) => { obj.x1 = v; });
-      addEditRow("Z1", obj.y1, (v) => { obj.y1 = v; });
-      addEditRow("X2", obj.x2, (v) => { obj.x2 = v; });
-      addEditRow("Z2", obj.y2, (v) => { obj.y2 = v; });
+      addEditRow(H + "1", obj.x1, (v) => { obj.x1 = v; });
+      addEditRow(V + "1", obj.y1, (v) => { obj.y1 = v; });
+      addEditRow(H + "2", obj.x2, (v) => { obj.x2 = v; });
+      addEditRow(V + "2", obj.y2, (v) => { obj.y2 = v; });
       addInfoRow("Délka", Math.hypot(obj.x2 - obj.x1, obj.y2 - obj.y1).toFixed(3));
       addInfoRow("Úhel", ((Math.atan2(obj.y2 - obj.y1, obj.x2 - obj.x1) * 180) / Math.PI).toFixed(2) + "°");
       break;
     case "circle":
-      addEditRow("Střed X", obj.cx, (v) => { obj.cx = v; });
-      addEditRow("Střed Z", obj.cy, (v) => { obj.cy = v; });
+      addEditRow("Střed " + H, obj.cx, (v) => { obj.cx = v; });
+      addEditRow("Střed " + V, obj.cy, (v) => { obj.cy = v; });
       addEditRow("Poloměr", obj.r, (v) => { if (v > 0) obj.r = v; }, "0.01");
       addInfoRow("Průměr", (obj.r * 2).toFixed(3));
       addInfoRow("Obvod", (2 * Math.PI * obj.r).toFixed(3));
       break;
     case "arc":
-      addEditRow("Střed X", obj.cx, (v) => { obj.cx = v; });
-      addEditRow("Střed Z", obj.cy, (v) => { obj.cy = v; });
+      addEditRow("Střed " + H, obj.cx, (v) => { obj.cx = v; });
+      addEditRow("Střed " + V, obj.cy, (v) => { obj.cy = v; });
       addEditRow("Poloměr", obj.r, (v) => { if (v > 0) obj.r = v; }, "0.01");
       addEditRow("Start°", (obj.startAngle * 180 / Math.PI), (v) => { obj.startAngle = v * Math.PI / 180; }, "1");
       addEditRow("Konec°", (obj.endAngle * 180 / Math.PI), (v) => { obj.endAngle = v * Math.PI / 180; }, "1");
       break;
     case "rect":
-      addEditRow("X1", obj.x1, (v) => { obj.x1 = v; });
-      addEditRow("Z1", obj.y1, (v) => { obj.y1 = v; });
-      addEditRow("X2", obj.x2, (v) => { obj.x2 = v; });
-      addEditRow("Z2", obj.y2, (v) => { obj.y2 = v; });
+      addEditRow(H + "1", obj.x1, (v) => { obj.x1 = v; });
+      addEditRow(V + "1", obj.y1, (v) => { obj.y1 = v; });
+      addEditRow(H + "2", obj.x2, (v) => { obj.x2 = v; });
+      addEditRow(V + "2", obj.y2, (v) => { obj.y2 = v; });
       addInfoRow("Šířka", Math.abs(obj.x2 - obj.x1).toFixed(3));
       addInfoRow("Výška", Math.abs(obj.y2 - obj.y1).toFixed(3));
       break;
@@ -291,11 +292,11 @@ export function updateProperties() {
         addInfoRow("Typ", b === 0 ? "Úsečka" : "Oblouk");
 
         // Editable start vertex
-        addEditRow(`Start X`, p1.x, (val) => { p1.x = val; });
-        addEditRow(`Start Z`, p1.y, (val) => { p1.y = val; });
+        addEditRow(`Start ${H}`, p1.x, (val) => { p1.x = val; });
+        addEditRow(`Start ${V}`, p1.y, (val) => { p1.y = val; });
         // Editable end vertex
-        addEditRow(`Konec X`, p2.x, (val) => { p2.x = val; });
-        addEditRow(`Konec Z`, p2.y, (val) => { p2.y = val; });
+        addEditRow(`Konec ${H}`, p2.x, (val) => { p2.x = val; });
+        addEditRow(`Konec ${V}`, p2.y, (val) => { p2.y = val; });
 
         if (b === 0) {
           // Straight segment info
@@ -414,10 +415,11 @@ export function updateIntersectionList() {
   }
   state.intersections.forEach((pt, i) => {
     const li = document.createElement("li");
-    li.innerHTML = `P${i + 1}:  X=${pt.x.toFixed(3)}  Z=${pt.y.toFixed(3)} <span class="copy-hint">klik=kopírovat</span>`;
+    const [_iH, _iV] = axisLabels();
+    li.innerHTML = `P${i + 1}:  ${_iH}=${pt.x.toFixed(3)}  ${_iV}=${pt.y.toFixed(3)} <span class="copy-hint">klik=kopírovat</span>`;
     li.title = "Klikněte pro zkopírování souřadnic";
     li.addEventListener("click", () => {
-      const text = `X${pt.x.toFixed(3)} Z${pt.y.toFixed(3)}`;
+      const text = `${_iH}${pt.x.toFixed(3)} ${_iV}${pt.y.toFixed(3)}`;
       navigator.clipboard
         .writeText(text)
         .then(() => showToast(`Zkopírováno: ${text}`));
@@ -753,6 +755,34 @@ export function toggleCoordMode() {
 
 document.getElementById("btnCoordMode").addEventListener("click", toggleCoordMode);
 
+// ── Machine Type tlačítko (Soustruh/Karusel) ──
+/** Aktualizuje zobrazení typu stroje. */
+export function updateMachineTypeBtn() {
+  const btn = document.getElementById("btnMachineType");
+  const isKarusel = state.machineType === 'karusel';
+  btn.textContent = isKarusel ? '⚙ Karusel' : '⚙ Soustruh';
+  btn.classList.toggle('active', isKarusel);
+  if (isKarusel) {
+    btn.style.background = '#a6e3a1';
+    btn.style.color = '#1e1e2e';
+  } else {
+    btn.style.background = '';
+    btn.style.color = '';
+  }
+}
+
+/** Přepne typ stroje Soustruh ↔ Karusel (prohodí osy). */
+export function toggleMachineType() {
+  state.machineType = state.machineType === 'soustruh' ? 'karusel' : 'soustruh';
+  updateMachineTypeBtn();
+  renderAll();
+  showToast(state.machineType === 'karusel'
+    ? 'Karusel – X vodorovně, Z svisle'
+    : 'Soustruh – Z vodorovně, X svisle');
+}
+
+document.getElementById("btnMachineType").addEventListener("click", toggleMachineType);
+
 // ── Ref tlačítko – klik na canvas nastaví referenční bod ──
 let _refPickActive = false;
 document.getElementById("btnSetRef").addEventListener("click", () => {
@@ -772,7 +802,7 @@ document.getElementById("btnSetRef").addEventListener("click", () => {
       updateCoordModeBtn();
     }
     renderAll();
-    showToast(`Reference: X=${wx.toFixed(3)} Z=${wy.toFixed(3)}`);
+    showToast(`Reference: ${axisLabels()[0]}=${wx.toFixed(3)} ${axisLabels()[1]}=${wy.toFixed(3)}`);
     canvas.removeEventListener("click", onRefPick);
     canvas.removeEventListener("touchend", onRefTouch);
     _refPickActive = false;
@@ -791,7 +821,7 @@ document.getElementById("btnSetRef").addEventListener("click", () => {
         updateCoordModeBtn();
       }
       renderAll();
-      showToast(`Reference: X=${wx.toFixed(3)} Z=${wy.toFixed(3)}`);
+      showToast(`Reference: ${axisLabels()[0]}=${wx.toFixed(3)} ${axisLabels()[1]}=${wy.toFixed(3)}`);
       canvas.removeEventListener("click", onRefPick);
       canvas.removeEventListener("touchend", onRefTouch);
       e.preventDefault();
@@ -1119,7 +1149,7 @@ function openTrigCalc() {
   const deg = Math.PI / 180;
 
   function val(inp) {
-    const v = parseFloat(inp.value);
+    const v = safeEvalMath(inp.value);
     return (isFinite(v) && v > 0) ? v : null;
   }
 
@@ -1206,7 +1236,7 @@ function openTrigCalc() {
   // Auto-solve on input change
   inputs.forEach(inp => {
     inp.addEventListener("input", () => {
-      const known = inputs.filter(i => { const v = parseFloat(i.value); return isFinite(v) && v > 0; }).length;
+      const known = inputs.filter(i => { const v = safeEvalMath(i.value); return isFinite(v) && v > 0; }).length;
       if (known >= 2) solve();
     });
   });
@@ -1287,7 +1317,7 @@ export function showGridSizeDialog() {
   inp.focus();
   inp.select();
   function confirm() {
-    const v = parseFloat(inp.value);
+    const v = safeEvalMath(inp.value);
     if (!isNaN(v) && v > 0) {
       state.gridSize = v;
       showToast(`Mřížka: ${v} mm`);
@@ -1341,9 +1371,9 @@ export function showAngleSnapDialog() {
   });
 
   function confirm() {
-    const v = parseFloat(inp.value);
+    const v = safeEvalMath(inp.value);
     const tolInp = overlay.querySelector("#dlgAngleTol");
-    const tol = parseFloat(tolInp.value);
+    const tol = safeEvalMath(tolInp.value);
     if (!isNaN(v) && v > 0 && v <= 180) {
       state.angleSnapStep = v;
     }

@@ -2,6 +2,32 @@
 // ║  SKICA – Pomocné funkce (snap body, geometrie, labely)      ║
 // ╚══════════════════════════════════════════════════════════════╝
 
+// ── Bezpečné vyhodnocení matematického výrazu z inputu ──
+/** @param {string} str - text z inputu, např. "123+56", "200/3", "(10+5)*2" */
+export function safeEvalMath(str) {
+  if (typeof str !== 'string') str = String(str ?? '');
+  str = str.trim().replace(/,/g, '.');
+  if (str === '') return NaN;
+  // Povolit pouze: čísla, operátory +−*/(), tečky, mezery
+  if (!/^[\d+\-*/().^\s]+$/.test(str)) return NaN;
+  // Kontrola závorek
+  let depth = 0;
+  for (const ch of str) {
+    if (ch === '(') depth++;
+    if (ch === ')') depth--;
+    if (depth < 0) return NaN;
+  }
+  if (depth !== 0) return NaN;
+  try {
+    // Nahradit ^ na ** (mocnina)
+    const expr = str.replace(/\^/g, '**');
+    const result = new Function('return (' + expr + ')')();
+    return typeof result === 'number' && isFinite(result) ? result : NaN;
+  } catch {
+    return NaN;
+  }
+}
+
 // ── Snap body objektů ──
 /**
  * Vrátí snap body daného objektu.
