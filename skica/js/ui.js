@@ -2,7 +2,7 @@
 // ║  SKICA – UI panely, toolbar, hinty                          ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-import { state, showToast, pushUndo, undo, redo, axisLabels } from './state.js';
+import { state, showToast, pushUndo, undo, redo, axisLabels, resetDrawingState } from './state.js';
 import { typeLabel, toolLabel, bulgeToArc, safeEvalMath } from './utils.js';
 import { renderAll } from './render.js';
 import { drawCanvas, screenToWorld, snapPt } from './canvas.js';
@@ -593,18 +593,7 @@ export function setTool(tool) {
     showToast(`Kontura uložena (${state.tempPoints.length} bodů)`);
   }
   state.tool = tool;
-  state.drawing = false;
-  state.tempPoints = [];
-  state._parallelRefIdx = null;
-  state._parallelRefSeg = null;
-  state._snapPointState = null;
-  state._selectedConstraint = null;
-  state._tangentMode = null;
-  state._tangentFirstCircle = null;
-  state._tangentFirstLine = null;
-  state._trimLine = null;
-  state._extendLine = null;
-  state._filletFirstLine = null;
+  resetDrawingState();
   if (state.dragging) {
     const obj = state.objects[state.dragObjIdx];
     if (obj && state.dragObjSnapshot) {

@@ -3,14 +3,14 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 import { drawCanvas, screenToWorld, snapPt, applyAngleSnap } from './canvas.js';
-import { state, pushUndo, undo, redo, showToast, toDisplayCoords } from './state.js';
+import { state, pushUndo, undo, redo, showToast, toDisplayCoords, resetDrawingState } from './state.js';
 import { renderAll } from './render.js';
 import { moveObject, addObject } from './objects.js';
 import { setTool, resetHint, setHint, updateProperties, updateObjectList, updateSnapPtsBtn, updateDimsBtn, toggleCoordMode, updateCoordModeBtn, updateSnapGridBtn, updateAngleSnapBtn, showGridSizeDialog, showAngleSnapDialog, toggleHelp } from './ui.js';
 import { findObjectAt, selectObjectAt, calculateAllIntersections, tangentsFromPointToCircle, tangentsTwoCircles, offsetObject, mirrorObject, linearArray, getLines, getCircles, intersectLineLine, intersectLineCircle, rotateObject, filletTwoLines, projectPointToLine, circlePositionsTangentToLine, circlePositionsTangentToTwoLines, findSegmentAt } from './geometry.js';
 import { showNumericalInputDialog, showPolarDrawingDialog, showMeasureResult, showCircleRadiusDialog, showIntersectionInfo, showMeasureObjectInfo, showBulgeDialog, showTangentChoiceDialog, showTangentPositionDialog, showOffsetDialog, showMirrorDialog, showLinearArrayDialog, showRotateDialog, showFilletDialog, addDimensionForObject } from './dialogs.js';
 import { saveProject, showExportImageDialog, showProjectsDialog, showSaveAsDialog } from './storage.js';
-import { bulgeToArc } from './utils.js';
+import { bulgeToArc, getObjectSnapPoints } from './utils.js';
 import { bridge } from './bridge.js';
 
 let isPanning = false;
@@ -151,18 +151,12 @@ document.addEventListener("keydown", (e) => {
       state.dragObjIdx = null;
       drawCanvas.style.cursor = "crosshair";
     }
-    state.drawing = false;
-    state.tempPoints = [];
-    state._polylineBulges = [];
-    state._parallelRefIdx = null;
-    state._parallelRefSeg = null;
-    state._snapPointState = null;
-    state._tangentMode = null;
-    state._tangentFirstCircle = null;
-    state._tangentFirstLine = null;
+    resetDrawingState();
+    // Odstranit dočasný měřicí bod
+    const mTempIdx = state.objects.findIndex(o => o.isMeasureTemp);
+    if (mTempIdx !== -1) state.objects.splice(mTempIdx, 1);
     state.selected = null;
     state.selectedSegment = null;
-    state._selectedConstraint = null;
     updateProperties();
     renderAll();
     resetHint();
@@ -514,30 +508,54 @@ export function handleCanvasClick(wx, wy) {
     case "constr":
     case "measure":
       if (!state.drawing) {
-        // Měření: nejdříve průsečíky, pak objekty
         if (state.tool === "measure") {
-          const intThreshold = 12 / state.zoom;
-          let nearestInt = null, nearestIntD = Infinity;
+          // Klik na snap point (koncový bod, průsečík, střed) → začne měření
+          // Klik na tělo objektu (ne snap point) → ukáže info o objektu
+          const snapThreshold = 20 / state.zoom;
+          let isOnSnapPoint = false;
+
+          // Kontrola průsečíků
           for (const pt of state.intersections) {
-            const d = Math.hypot(pt.x - wx, pt.y - wy);
-            if (d < intThreshold && d < nearestIntD) {
-              nearestIntD = d;
-              nearestInt = pt;
+            if (Math.hypot(pt.x - wx, pt.y - wy) < snapThreshold) {
+              isOnSnapPoint = true;
+              break;
             }
           }
-          if (nearestInt) {
-            showIntersectionInfo(nearestInt);
-            return;
+          // Kontrola snap bodů objektů (konce úseček, středy kružnic, ...)
+          if (!isOnSnapPoint) {
+            for (const obj of state.objects) {
+              for (const pt of getObjectSnapPoints(obj)) {
+                if (Math.hypot(pt.x - wx, pt.y - wy) < snapThreshold) {
+                  isOnSnapPoint = true;
+                  break;
+                }
+              }
+              if (isOnSnapPoint) break;
+            }
           }
-          const idx = findObjectAt(wx, wy);
-          if (idx !== null) {
-            showMeasureObjectInfo(state.objects[idx], wx, wy, idx);
-            return;
+
+          if (!isOnSnapPoint) {
+            // Klik na tělo objektu → info dialog
+            const idx = findObjectAt(wx, wy);
+            if (idx !== null) {
+              showMeasureObjectInfo(state.objects[idx], wx, wy, idx);
+              return;
+            }
           }
+          // Přidá dočasný coord label na 1. bod měření
+          addObject({
+            type: "point",
+            x: wx, y: wy,
+            name: `Měření bod 1`,
+            isDimension: true,
+            isCoordLabel: true,
+            isMeasureTemp: true,
+            color: "#9399b2",
+          });
         }
         state.drawing = true;
         state.tempPoints = [{ x: wx, y: wy }];
-        setHint("Klepněte na koncový bod");
+        setHint(state.tool === "measure" ? "Klepněte na 2. bod pro měření" : "Klepněte na koncový bod");
       } else {
         const tp = state.tempPoints[0];
         if (state.tool === "line" || state.tool === "constr") {
@@ -551,10 +569,34 @@ export function handleCanvasClick(wx, wy) {
             dashed: state.tool === "constr",
           });
         } else {
+          // Odstraní dočasný coord label z 1. bodu
+          const tempIdx = state.objects.findIndex(o => o.isMeasureTemp);
+          if (tempIdx !== -1) state.objects.splice(tempIdx, 1);
+
           const d = Math.hypot(wx - tp.x, wy - tp.y);
           const angle =
             (Math.atan2(wy - tp.y, wx - tp.x) * 180) / Math.PI;
-          showMeasureResult(tp, { x: wx, y: wy }, d, angle);
+          // Automaticky přidá kótu na výkres
+          const p1 = tp;
+          const p2 = { x: wx, y: wy };
+          // Odsazení kóty od měřené čáry
+          const dx = p2.x - p1.x;
+          const dy = p2.y - p1.y;
+          const len = Math.hypot(dx, dy);
+          const offset = Math.max(8, len * 0.15);
+          const nx = len > 0 ? (-dy / len) * offset : offset;
+          const ny = len > 0 ? (dx / len) * offset : 0;
+          addObject({
+            type: "line",
+            x1: p1.x + nx, y1: p1.y + ny,
+            x2: p2.x + nx, y2: p2.y + ny,
+            name: `Kóta ${d.toFixed(2)}mm`,
+            isDimension: true,
+            dimSrcX1: p1.x, dimSrcY1: p1.y,
+            dimSrcX2: p2.x, dimSrcY2: p2.y,
+            color: "#9399b2",
+          });
+          showMeasureResult(tp, p2, d, angle);
         }
         state.drawing = false;
         state.tempPoints = [];
@@ -1594,8 +1636,7 @@ function startMirrorAction() {
           state._mirrorStep = 'p2';
           setHint("Klepněte na druhý bod osy zrcadlení");
         } else {
-          drawCanvas.removeEventListener("click", handleMirrorClick);
-          drawCanvas.removeEventListener("touchend", handleMirrorTouch);
+          cleanupMirrorListeners();
           const p1 = state._mirrorAxisPoints[0];
           const p2 = { x: mwx, y: mwy };
           const copy = mirrorObject(state._mirrorObj, 'custom', p1, p2);
@@ -1605,6 +1646,7 @@ function startMirrorAction() {
           state._mirrorObj = null;
           state._mirrorStep = null;
           state._mirrorAxisPoints = null;
+          state._mirrorCleanup = null;
         }
       }
 
@@ -1612,8 +1654,15 @@ function startMirrorAction() {
         if (e.changedTouches.length === 1) { e.preventDefault(); handleMirrorClick(e); }
       }
 
+      function cleanupMirrorListeners() {
+        drawCanvas.removeEventListener("click", handleMirrorClick);
+        drawCanvas.removeEventListener("touchend", handleMirrorTouch);
+      }
+
       drawCanvas.addEventListener("click", handleMirrorClick);
       drawCanvas.addEventListener("touchend", handleMirrorTouch);
+      // Store cleanup so Escape/resetDrawingState can remove listeners
+      state._mirrorCleanup = cleanupMirrorListeners;
     } else {
       const copy = mirrorObject(obj, axis, null, null);
       addObject(copy);

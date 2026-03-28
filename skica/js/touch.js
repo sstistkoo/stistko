@@ -3,7 +3,7 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 import { drawCanvas, screenToWorld, snapPt, autoCenterView, applyAngleSnap } from './canvas.js';
-import { state, undo, redo, showToast, toDisplayCoords } from './state.js';
+import { state, undo, redo, showToast, toDisplayCoords, resetDrawingState } from './state.js';
 import { renderAll } from './render.js';
 import { moveObject } from './objects.js';
 import { handleCanvasClick } from './events.js';
@@ -184,11 +184,10 @@ mobileCancelBtn.addEventListener("click", (e) => {
     state.dragging = false;
     state.dragObjIdx = null;
   }
-  state.drawing = false;
-  state.tempPoints = [];
-  state._tangentMode = null;
-  state._tangentFirstCircle = null;
-  state._tangentFirstLine = null;
+  resetDrawingState();
+  // Odstranit dočasný měřicí bod
+  const mTempIdx = state.objects.findIndex(o => o.isMeasureTemp);
+  if (mTempIdx !== -1) state.objects.splice(mTempIdx, 1);
   hidePrecisionCrosshair();
   updateMobileCancelBtn();
   renderAll();
