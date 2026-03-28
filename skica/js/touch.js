@@ -107,11 +107,13 @@ export function updateMobileCoords(wx, wy, extra) {
     : `${prefix}Z: ${d.x.toFixed(3)}   ${prefix}${xp}X: ${displayX(d.y).toFixed(3)}${extra}`;
   // Desktop coord display – jen souřadnice
   document.getElementById("coordDisplay").textContent = coords;
-  // Mobile coord bar – nástroj + souřadnice + zoom
+  // Mobile coord bar – nástroj + mód + souřadnice + zoom
   if (isMobile()) {
     const zoomPct = (state.zoom * 100).toFixed(0);
-    const tool = toolLabel(state.tool);
-    mobileCoordBar.textContent = `${tool}  |  ${coords}  |  ${zoomPct}%`;
+    const machine = state.machineType === 'karusel' ? 'KAR' : 'SOU';
+    const cMode = state.coordMode === 'inc' ? 'INC' : 'ABS';
+    const xMode = state.xDisplayMode === 'diameter' ? '⌀' : 'R';
+    mobileCoordBar.textContent = `${machine} ${cMode} ${xMode}  |  ${coords}  |  ${zoomPct}%`;
   } else {
     mobileCoordBar.textContent = coords;
   }
