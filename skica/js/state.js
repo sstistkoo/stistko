@@ -79,6 +79,37 @@ export const state = {
   nextLayerId: 3,
 };
 
+// ── Reset dočasného drawing stavu ──
+/**
+ * Vyčistí všechny dočasné vlastnosti používané při kreslení a tool operacích.
+ * Volat při Escape, přepnutí nástroje a mobilním Cancel.
+ */
+export function resetDrawingState() {
+  state.drawing = false;
+  state.tempPoints = [];
+  state._polylineBulges = [];
+  state._parallelRefIdx = null;
+  state._parallelRefSeg = null;
+  state._parallelClickX = undefined;
+  state._parallelClickY = undefined;
+  state._snapPointState = null;
+  state._tangentMode = null;
+  state._tangentFirstCircle = null;
+  state._tangentFirstLine = null;
+  state._selectedConstraint = null;
+  state._trimLine = null;
+  state._extendLine = null;
+  state._filletFirstLine = null;
+  // Mirror – cleanup handler + state
+  if (state._mirrorCleanup) {
+    state._mirrorCleanup();
+    state._mirrorCleanup = null;
+  }
+  state._mirrorObj = null;
+  state._mirrorStep = null;
+  state._mirrorAxisPoints = null;
+}
+
 // ── Undo / Redo ──
 /** Uloží aktuální stav objektů na undo stack. */
 export function pushUndo() {

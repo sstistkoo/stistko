@@ -13,6 +13,25 @@ import { calculateAllIntersections, offsetObject, mirrorObject, linearArray } fr
 // Re-export pro zpětnou kompatibilitu
 export { safeEvalMath };
 
+// ── Focus trap pro dialogy ──
+// Zachytí Tab v otevřeném overlay dialogu, aby focus neutekl za dialog
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Tab') return;
+  const overlay = document.querySelector('.input-overlay, .calc-overlay');
+  if (!overlay) return;
+  const focusable = overlay.querySelectorAll(
+    'button, input, select, textarea, [tabindex]:not([tabindex="-1"])'
+  );
+  if (focusable.length === 0) return;
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  if (e.shiftKey) {
+    if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+  } else {
+    if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
+});
+
 // ── Helper: auto-select + vyhodnocení mat. výrazů při blur ──
 /** @param {HTMLElement} container */
 function wireExprInputs(container) {

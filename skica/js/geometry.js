@@ -363,6 +363,7 @@ export function intersectLineCircle(line, circle) {
   const fx = x1 - cx,
     fy = y1 - cy;
   const a = dx * dx + dy * dy;
+  if (a < 1e-12) return []; // Degenerovaná úsečka (nulová délka)
   const b = 2 * (fx * dx + fy * dy);
   const c = fx * fx + fy * fy - r * r;
   let disc = b * b - 4 * a * c;
