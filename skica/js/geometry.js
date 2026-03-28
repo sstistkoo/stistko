@@ -488,7 +488,7 @@ export function tangentsFromPointToCircle(px, py, cx, cy, r) {
   const halfAngle = Math.acos(r / d);
   const results = [];
   for (const sign of [-1, 1]) {
-    const a = baseAngle + Math.PI + sign * halfAngle;
+    const a = baseAngle + sign * halfAngle;
     const tx = cx + r * Math.cos(a);
     const ty = cy + r * Math.sin(a);
     results.push({ x1: px, y1: py, x2: tx, y2: ty });
@@ -923,7 +923,7 @@ export function filletTwoLines(line1, line2, radius) {
   const halfAngle = Math.acos(Math.min(1, Math.abs(u1x * u2x + u1y * u2y)));
   if (halfAngle < 1e-9) return { ok: false, msg: "Úsečky jsou téměř rovnoběžné" };
 
-  const tanHalf = Math.tan(Math.PI / 2 - halfAngle);
+  const tanHalf = Math.tan(halfAngle / 2);
   if (Math.abs(tanHalf) < 1e-9) return { ok: false, msg: "Nelze vytvořit zaoblení" };
   const dist = radius / tanHalf; // distance from intersection to tangent point
 
