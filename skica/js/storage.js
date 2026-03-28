@@ -2,8 +2,8 @@
 // ║  SKICA – Ukládání / Načítání / CNC export                  ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-import { state, showToast, pushUndo, setPushUndoHook } from './state.js';
-import { updateObjectList, updateProperties, updateLayerList, updateStatusProject, updateMachineTypeBtn } from './ui.js';
+import { state, showToast, pushUndo, setPushUndoHook, displayX } from './state.js';
+import { updateObjectList, updateProperties, updateLayerList, updateStatusProject, updateMachineTypeBtn, updateXDisplayBtn } from './ui.js';
 import { calculateAllIntersections } from './geometry.js';
 import { bulgeToArc } from './utils.js';
 import { parseDXF } from './dxf.js';
@@ -22,6 +22,7 @@ export function saveProject() {
     coordMode: state.coordMode,
     incReference: state.incReference,
     machineType: state.machineType,
+    xDisplayMode: state.xDisplayMode,
     layers: state.layers,
     activeLayer: state.activeLayer,
     nextLayerId: state.nextLayerId,
@@ -82,6 +83,7 @@ export function exportProjectFile() {
     coordMode: state.coordMode,
     incReference: state.incReference,
     machineType: state.machineType,
+    xDisplayMode: state.xDisplayMode,
     layers: state.layers,
     activeLayer: state.activeLayer,
     nextLayerId: state.nextLayerId,
@@ -142,6 +144,7 @@ export function importProjectFile() {
         if (data.coordMode) state.coordMode = data.coordMode;
         if (data.incReference) state.incReference = data.incReference;
         if (data.machineType) state.machineType = data.machineType;
+        state.xDisplayMode = data.xDisplayMode || 'radius';
         if (data.layers) {
           state.layers = data.layers;
           state.activeLayer = data.activeLayer || 0;
@@ -155,6 +158,7 @@ export function importProjectFile() {
         updateLayerList();
         calculateAllIntersections();
         updateMachineTypeBtn();
+        updateXDisplayBtn();
         showToast(`Importováno ${state.objects.length} objektů`);
       } catch (err) {
         showToast("Chyba při čtení souboru");
@@ -266,14 +270,19 @@ function runCncExport() {
   let lastEndX = null;
   let lastEndY = null;
   function fmtCoord(x, y) {
+    // V CNC exportu: soustruh → y je osa X, karusel → x je osa X
+    const xVal = state.machineType === 'karusel' ? displayX(x) : x;
+    const yVal = state.machineType === 'karusel' ? y : displayX(y);
     if (isInc) {
       const dx = x - prevX;
       const dy = y - prevY;
       prevX = x;
       prevY = y;
-      return `${_gH}${dx.toFixed(3)} ${_gV}${dy.toFixed(3)}`;
+      const dxDisp = state.machineType === 'karusel' ? displayX(dx) : dx;
+      const dyDisp = state.machineType === 'karusel' ? dy : displayX(dy);
+      return `${_gH}${dxDisp.toFixed(3)} ${_gV}${dyDisp.toFixed(3)}`;
     }
-    return `${_gH}${x.toFixed(3)} ${_gV}${y.toFixed(3)}`;
+    return `${_gH}${xVal.toFixed(3)} ${_gV}${yVal.toFixed(3)}`;
   }
 
   function needsRapid(x, y) {
@@ -439,7 +448,9 @@ function runCncExport() {
   if (state.intersections.length > 0) {
     out += "; --- Průsečíky ---\n";
     state.intersections.forEach((pt, i) => {
-      out += `; P${i + 1}: X${pt.x.toFixed(3)} Z${pt.y.toFixed(3)}\n`;
+      const _ipx = state.machineType === 'karusel' ? displayX(pt.x) : pt.x;
+      const _ipy = state.machineType === 'karusel' ? pt.y : displayX(pt.y);
+      out += `; P${i + 1}: ${_gH}${_ipx.toFixed(3)} ${_gV}${_ipy.toFixed(3)}\n`;
     });
   }
   out += "\n; === Konec ===\n";
@@ -519,6 +530,7 @@ function _buildProjectData() {
     coordMode: state.coordMode,
     incReference: state.incReference,
     machineType: state.machineType,
+    xDisplayMode: state.xDisplayMode,
     layers: state.layers,
     activeLayer: state.activeLayer,
     nextLayerId: state.nextLayerId,
@@ -533,6 +545,7 @@ function _loadProjectData(data) {
   if (data.coordMode) state.coordMode = data.coordMode;
   if (data.incReference) state.incReference = data.incReference;
   if (data.machineType) state.machineType = data.machineType;
+  state.xDisplayMode = data.xDisplayMode || 'radius';
   if (data.layers) {
     state.layers = data.layers;
     state.activeLayer = data.activeLayer || 0;
@@ -546,6 +559,7 @@ function _loadProjectData(data) {
   updateLayerList();
   calculateAllIntersections();
   updateMachineTypeBtn();
+  updateXDisplayBtn();
 }
 
 /** @param {string} name */

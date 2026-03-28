@@ -2,7 +2,7 @@
 // ║  SKICA – UI panely, toolbar, hinty                          ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-import { state, showToast, pushUndo, undo, redo, axisLabels, resetDrawingState } from './state.js';
+import { state, showToast, pushUndo, undo, redo, axisLabels, resetDrawingState, displayX, xPrefix } from './state.js';
 import { typeLabel, toolLabel, bulgeToArc, safeEvalMath } from './utils.js';
 import { renderAll } from './render.js';
 import { drawCanvas, screenToWorld, snapPt } from './canvas.js';
@@ -416,10 +416,16 @@ export function updateIntersectionList() {
   state.intersections.forEach((pt, i) => {
     const li = document.createElement("li");
     const [_iH, _iV] = axisLabels();
-    li.innerHTML = `P${i + 1}:  ${_iH}=${pt.x.toFixed(3)}  ${_iV}=${pt.y.toFixed(3)} <span class="copy-hint">klik=kopírovat</span>`;
+    const _isK = state.machineType === 'karusel';
+    const _xp = xPrefix();
+    const _Hp = _isK ? _xp : '';
+    const _Vp = _isK ? '' : _xp;
+    const _hv = _isK ? displayX(pt.x) : pt.x;
+    const _vv = _isK ? pt.y : displayX(pt.y);
+    li.innerHTML = `P${i + 1}:  ${_Hp}${_iH}=${_hv.toFixed(3)}  ${_Vp}${_iV}=${_vv.toFixed(3)} <span class="copy-hint">klik=kopírovat</span>`;
     li.title = "Klikněte pro zkopírování souřadnic";
     li.addEventListener("click", () => {
-      const text = `${_iH}${pt.x.toFixed(3)} ${_iV}${pt.y.toFixed(3)}`;
+      const text = `${_Hp}${_iH}${_hv.toFixed(3)} ${_Vp}${_iV}${_vv.toFixed(3)}`;
       navigator.clipboard
         .writeText(text)
         .then(() => showToast(`Zkopírováno: ${text}`));
@@ -744,6 +750,32 @@ export function toggleCoordMode() {
 
 document.getElementById("btnCoordMode").addEventListener("click", toggleCoordMode);
 
+// ── X Display Mode tlačítko (Poloměr/Průměr) ──
+/** Aktualizuje zobrazení režimu osy X (R/⌀). */
+export function updateXDisplayBtn() {
+  const btn = document.getElementById("btnXDisplay");
+  const isDiam = state.xDisplayMode === 'diameter';
+  btn.textContent = isDiam ? '⌀' : 'R';
+  btn.classList.toggle('active', isDiam);
+  if (isDiam) {
+    btn.style.background = '#f38ba8';
+    btn.style.color = '#1e1e2e';
+  } else {
+    btn.style.background = '';
+    btn.style.color = '';
+  }
+}
+
+/** Přepne režim osy X: Poloměr ↔ Průměr. */
+export function toggleXDisplay() {
+  state.xDisplayMode = state.xDisplayMode === 'radius' ? 'diameter' : 'radius';
+  updateXDisplayBtn();
+  renderAll();
+  showToast(state.xDisplayMode === 'diameter' ? 'Osa X: Průměr (⌀)' : 'Osa X: Poloměr (R)');
+}
+
+document.getElementById("btnXDisplay").addEventListener("click", toggleXDisplay);
+
 // ── Machine Type tlačítko (Soustruh/Karusel) ──
 /** Aktualizuje zobrazení typu stroje. */
 export function updateMachineTypeBtn() {
@@ -791,7 +823,10 @@ document.getElementById("btnSetRef").addEventListener("click", () => {
       updateCoordModeBtn();
     }
     renderAll();
-    showToast(`Reference: ${axisLabels()[0]}=${wx.toFixed(3)} ${axisLabels()[1]}=${wy.toFixed(3)}`);
+    const _rIsK = state.machineType === 'karusel';
+    const _rHv = _rIsK ? displayX(wx) : wx;
+    const _rVv = _rIsK ? wy : displayX(wy);
+    showToast(`Reference: ${xPrefix()}${axisLabels()[0]}=${_rHv.toFixed(3)} ${_rIsK ? '' : xPrefix()}${axisLabels()[1]}=${_rVv.toFixed(3)}`);
     canvas.removeEventListener("click", onRefPick);
     canvas.removeEventListener("touchend", onRefTouch);
     _refPickActive = false;
@@ -810,7 +845,10 @@ document.getElementById("btnSetRef").addEventListener("click", () => {
         updateCoordModeBtn();
       }
       renderAll();
-      showToast(`Reference: ${axisLabels()[0]}=${wx.toFixed(3)} ${axisLabels()[1]}=${wy.toFixed(3)}`);
+      const _rIsK = state.machineType === 'karusel';
+      const _rHv = _rIsK ? displayX(wx) : wx;
+      const _rVv = _rIsK ? wy : displayX(wy);
+      showToast(`Reference: ${xPrefix()}${axisLabels()[0]}=${_rHv.toFixed(3)} ${_rIsK ? '' : xPrefix()}${axisLabels()[1]}=${_rVv.toFixed(3)}`);
       canvas.removeEventListener("click", onRefPick);
       canvas.removeEventListener("touchend", onRefTouch);
       e.preventDefault();

@@ -3,7 +3,7 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 import { drawCanvas, screenToWorld, snapPt, autoCenterView, applyAngleSnap } from './canvas.js';
-import { state, undo, redo, showToast, toDisplayCoords, resetDrawingState } from './state.js';
+import { state, undo, redo, showToast, toDisplayCoords, resetDrawingState, displayX, xPrefix } from './state.js';
 import { renderAll } from './render.js';
 import { moveObject } from './objects.js';
 import { handleCanvasClick } from './events.js';
@@ -100,10 +100,11 @@ export function updateMobileCoords(wx, wy, extra) {
   const d = toDisplayCoords(wx, wy);
   const prefix = state.coordMode === 'inc' ? 'Δ' : '';
   const isKarusel = state.machineType === 'karusel';
+  const xp = xPrefix();
   // Soustruh: horizontal=Z(dp.x), vertical=X(dp.y); Karusel: horizontal=X(dp.x), vertical=Z(dp.y)
   const coords = isKarusel
-    ? `${prefix}X: ${d.x.toFixed(3)}   ${prefix}Z: ${d.y.toFixed(3)}${extra}`
-    : `${prefix}Z: ${d.x.toFixed(3)}   ${prefix}X: ${d.y.toFixed(3)}${extra}`;
+    ? `${prefix}${xp}X: ${displayX(d.x).toFixed(3)}   ${prefix}Z: ${d.y.toFixed(3)}${extra}`
+    : `${prefix}Z: ${d.x.toFixed(3)}   ${prefix}${xp}X: ${displayX(d.y).toFixed(3)}${extra}`;
   // Desktop coord display – jen souřadnice
   document.getElementById("coordDisplay").textContent = coords;
   // Mobile coord bar – nástroj + souřadnice + zoom

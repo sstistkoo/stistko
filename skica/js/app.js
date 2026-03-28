@@ -5,7 +5,7 @@
 import { state } from './state.js';
 import { resizeCanvases } from './canvas.js';
 import { calculateAllIntersections } from './geometry.js';
-import { updateObjectList, updateProperties, resetHint, updateDimsBtn, updateSnapPtsBtn, updateCoordModeBtn, updateMachineTypeBtn, togglePanel, updateLayerList, updateStatusProject, checkFirstRunHelp } from './ui.js';
+import { updateObjectList, updateProperties, resetHint, updateDimsBtn, updateSnapPtsBtn, updateCoordModeBtn, updateMachineTypeBtn, updateXDisplayBtn, togglePanel, updateLayerList, updateStatusProject, checkFirstRunHelp } from './ui.js';
 import { initAutoSave } from './storage.js';
 
 // Side-effect imports — tyto moduly registrují event listenery při načtení
@@ -32,6 +32,7 @@ function tryAutoLoad() {
         if (data.coordMode) state.coordMode = data.coordMode;
         if (data.incReference) state.incReference = data.incReference;
         if (data.machineType) state.machineType = data.machineType;
+        state.xDisplayMode = data.xDisplayMode || 'radius';
         // Layers backward compatibility
         if (data.layers) {
           state.layers = data.layers;
@@ -60,6 +61,7 @@ setInterval(() => {
       coordMode: state.coordMode,
       incReference: state.incReference,
       machineType: state.machineType,
+      xDisplayMode: state.xDisplayMode,
       layers: state.layers,
       activeLayer: state.activeLayer,
       nextLayerId: state.nextLayerId,
@@ -77,6 +79,7 @@ updateDimsBtn();
 updateSnapPtsBtn();
 updateCoordModeBtn();
 updateMachineTypeBtn();
+updateXDisplayBtn();
 updateLayerList();
 initAutoSave();
 updateStatusProject();

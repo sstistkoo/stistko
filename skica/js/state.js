@@ -69,6 +69,8 @@ export const state = {
   projectName: 'Bez názvu',
   // Typ stroje: 'soustruh' = Z vodorovně, X svisle; 'karusel' = X vodorovně, Z svisle
   machineType: 'soustruh',
+  // Zobrazení osy X: 'radius' = skutečná hodnota, 'diameter' = ×2 (průměr)
+  xDisplayMode: 'radius',
   // Vrstvy
   layers: [
     { id: 0, name: 'Kontura', color: '#89b4fa', visible: true, locked: false },
@@ -192,4 +194,30 @@ export function fromIncToAbs(dx, dy) {
  */
 export function axisLabels() {
   return state.machineType === 'karusel' ? ['X', 'Z'] : ['Z', 'X'];
+}
+
+/**
+ * Převede hodnotu osy X pro zobrazení (×2 v režimu průměr).
+ * @param {number} val
+ * @returns {number}
+ */
+export function displayX(val) {
+  return state.xDisplayMode === 'diameter' ? val * 2 : val;
+}
+
+/**
+ * Převede vstupní hodnotu osy X z režimu zobrazení na interní (÷2 v režimu průměr).
+ * @param {number} val
+ * @returns {number}
+ */
+export function inputX(val) {
+  return state.xDisplayMode === 'diameter' ? val / 2 : val;
+}
+
+/**
+ * Vrací prefix pro osu X ('⌀' v režimu průměr, '' v režimu poloměr).
+ * @returns {string}
+ */
+export function xPrefix() {
+  return state.xDisplayMode === 'diameter' ? '⌀' : '';
 }

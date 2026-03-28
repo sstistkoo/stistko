@@ -2,7 +2,7 @@
 // ║  SKICA – Dialogy (měření, poloměr, čísla, polární)         ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-import { state, showToast, pushUndo, toDisplayCoords, fromIncToAbs, axisLabels } from './state.js';
+import { state, showToast, pushUndo, toDisplayCoords, fromIncToAbs, axisLabels, displayX, xPrefix } from './state.js';
 import { addObject } from './objects.js';
 import { screenToWorld, snapPt, drawCanvas } from './canvas.js';
 import { renderAll } from './render.js';
@@ -79,10 +79,17 @@ export function showMeasureResult(p1, p2, d, angle) {
   const dp2 = toDisplayCoords(p2.x, p2.y);
   const pf = state.coordMode === 'inc' ? 'Δ' : '';
   const [H, V] = axisLabels();
+  const isK = state.machineType === 'karusel';
+  const xp = xPrefix();
+  // soustruh: V=X → vertical needs displayX; karusel: H=X → horizontal needs displayX
+  const fH = v => isK ? displayX(v) : v;
+  const fV = v => isK ? v : displayX(v);
+  const Hp = isK ? xp : '';
+  const Vp = isK ? '' : xp;
   const incRow = state.coordMode === 'inc' ? `
         <tr><td colspan="2" style="color:#585b70;font-size:11px;padding-top:6px">── Inkrementální (od reference) ──</td></tr>
-        <tr><td style="color:#a6adc8">${pf}Bod 1:</td><td style="color:#f5c2e7">${pf}${H}${dp1.x.toFixed(3)} ${pf}${V}${dp1.y.toFixed(3)}</td></tr>
-        <tr><td style="color:#a6adc8">${pf}Bod 2:</td><td style="color:#f5c2e7">${pf}${H}${dp2.x.toFixed(3)} ${pf}${V}${dp2.y.toFixed(3)}</td></tr>
+        <tr><td style="color:#a6adc8">${pf}Bod 1:</td><td style="color:#f5c2e7">${pf}${Hp}${H}${fH(dp1.x).toFixed(3)} ${pf}${Vp}${V}${fV(dp1.y).toFixed(3)}</td></tr>
+        <tr><td style="color:#a6adc8">${pf}Bod 2:</td><td style="color:#f5c2e7">${pf}${Hp}${H}${fH(dp2.x).toFixed(3)} ${pf}${Vp}${V}${fV(dp2.y).toFixed(3)}</td></tr>
   ` : '';
   const overlay = document.createElement("div");
   overlay.className = "input-overlay";
@@ -92,10 +99,10 @@ export function showMeasureResult(p1, p2, d, angle) {
       <table style="width:100%;font-family:Consolas;font-size:13px;">
         <tr><td style="color:#a6adc8">Vzdálenost:</td><td style="color:#f9e2af">${d.toFixed(3)} mm</td></tr>
         <tr><td style="color:#a6adc8">Úhel:</td><td style="color:#f9e2af">${angle.toFixed(2)}°</td></tr>
-        <tr><td style="color:#a6adc8">Δ${H}:</td><td style="color:#f5c2e7">${(p2.x - p1.x).toFixed(3)}</td></tr>
-        <tr><td style="color:#a6adc8">Δ${V}:</td><td style="color:#f5c2e7">${(p2.y - p1.y).toFixed(3)}</td></tr>
-        <tr><td style="color:#a6adc8">Bod 1:</td><td style="color:#89b4fa">${H}${p1.x.toFixed(3)} ${V}${p1.y.toFixed(3)}</td></tr>
-        <tr><td style="color:#a6adc8">Bod 2:</td><td style="color:#89b4fa">${H}${p2.x.toFixed(3)} ${V}${p2.y.toFixed(3)}</td></tr>
+        <tr><td style="color:#a6adc8">Δ${Hp}${H}:</td><td style="color:#f5c2e7">${fH(p2.x - p1.x).toFixed(3)}</td></tr>
+        <tr><td style="color:#a6adc8">Δ${Vp}${V}:</td><td style="color:#f5c2e7">${fV(p2.y - p1.y).toFixed(3)}</td></tr>
+        <tr><td style="color:#a6adc8">Bod 1:</td><td style="color:#89b4fa">${Hp}${H}${fH(p1.x).toFixed(3)} ${Vp}${V}${fV(p1.y).toFixed(3)}</td></tr>
+        <tr><td style="color:#a6adc8">Bod 2:</td><td style="color:#89b4fa">${Hp}${H}${fH(p2.x).toFixed(3)} ${Vp}${V}${fV(p2.y).toFixed(3)}</td></tr>
         ${incRow}
       </table>
       <div class="btn-row">
@@ -973,14 +980,20 @@ export function showBulgeDialog(p1, p2, currentBulge, onAccept) {
  */
 export function showIntersectionInfo(pt) {
   const [H, V] = axisLabels();
+  const isK = state.machineType === 'karusel';
+  const xp = xPrefix();
+  const Hp = isK ? xp : '';
+  const Vp = isK ? '' : xp;
+  const hv = isK ? displayX(pt.x) : pt.x;
+  const vv = isK ? pt.y : displayX(pt.y);
   const overlay = document.createElement("div");
   overlay.className = "input-overlay";
   overlay.innerHTML = `
     <div class="input-dialog">
       <h3>⨯ Průsečík</h3>
       <table style="width:100%;font-family:Consolas;font-size:14px;">
-        <tr><td style="color:#a6adc8">${H}:</td><td style="color:#f9e2af;font-size:16px">${pt.x.toFixed(3)}</td></tr>
-        <tr><td style="color:#a6adc8">${V}:</td><td style="color:#f9e2af;font-size:16px">${pt.y.toFixed(3)}</td></tr>
+        <tr><td style="color:#a6adc8">${Hp}${H}:</td><td style="color:#f9e2af;font-size:16px">${hv.toFixed(3)}</td></tr>
+        <tr><td style="color:#a6adc8">${Vp}${V}:</td><td style="color:#f9e2af;font-size:16px">${vv.toFixed(3)}</td></tr>
       </table>
       <div class="btn-row">
         <button class="btn-cancel" id="intCopy">📋 Kopírovat</button>
@@ -991,12 +1004,12 @@ export function showIntersectionInfo(pt) {
   document.body.appendChild(overlay);
 
   overlay.querySelector("#intCopy").addEventListener("click", () => {
-    const text = `${H}${pt.x.toFixed(3)} ${V}${pt.y.toFixed(3)}`;
+    const text = `${Hp}${H}${hv.toFixed(3)} ${Vp}${V}${vv.toFixed(3)}`;
     navigator.clipboard.writeText(text).then(() => showToast(`Zkopírováno: ${text}`));
   });
   overlay.querySelector("#intAddPoint").addEventListener("click", () => {
     addObject({ type: "point", x: pt.x, y: pt.y, name: `Bod ${state.nextId}` });
-    showToast(`Bod ${H}${pt.x.toFixed(2)} ${V}${pt.y.toFixed(2)} vytvořen`);
+    showToast(`Bod ${Hp}${H}${hv.toFixed(2)} ${Vp}${V}${vv.toFixed(2)} vytvořen`);
     overlay.remove();
   });
   overlay.querySelector(".btn-ok").focus();
@@ -1027,12 +1040,18 @@ export function showMeasureObjectInfo(obj, wx, wy, objIdx) {
 
   if (clickedEndpoint && nearestPt) {
     // Klik na koncový bod – zobrazit souřadnice
+    const isK = state.machineType === 'karusel';
+    const xp = xPrefix();
+    const ptHval = isK ? displayX(nearestPt.x) : nearestPt.x;
+    const ptVval = isK ? nearestPt.y : displayX(nearestPt.y);
+    const Hp = isK ? xp : '';
+    const Vp = isK ? '' : xp;
     html = `
       <div class="input-dialog">
         <h3>📍 Souřadnice bodu</h3>
         <table style="width:100%;font-family:Consolas;font-size:13px;">
-          <tr><td style="color:#a6adc8">${axisLabels()[0]}:</td><td style="color:#f9e2af">${nearestPt.x.toFixed(3)}</td></tr>
-          <tr><td style="color:#a6adc8">${axisLabels()[1]}:</td><td style="color:#f9e2af">${nearestPt.y.toFixed(3)}</td></tr>
+          <tr><td style="color:#a6adc8">${Hp}${axisLabels()[0]}:</td><td style="color:#f9e2af">${ptHval.toFixed(3)}</td></tr>
+          <tr><td style="color:#a6adc8">${Vp}${axisLabels()[1]}:</td><td style="color:#f9e2af">${ptVval.toFixed(3)}</td></tr>
         </table>
         <div class="btn-row">
           <button class="btn-cancel" id="ptCopy">📋 Kopírovat</button>
@@ -1053,7 +1072,11 @@ export function showMeasureObjectInfo(obj, wx, wy, objIdx) {
   if (clickedEndpoint && nearestPt) {
     overlay.querySelector("#ptCopy").addEventListener("click", () => {
       const [H, V] = axisLabels();
-      const text = `${H}${nearestPt.x.toFixed(3)} ${V}${nearestPt.y.toFixed(3)}`;
+      const isK2 = state.machineType === 'karusel';
+      const xp2 = xPrefix();
+      const hv = isK2 ? displayX(nearestPt.x) : nearestPt.x;
+      const vv = isK2 ? nearestPt.y : displayX(nearestPt.y);
+      const text = `${isK2 ? xp2 : ''}${H}${hv.toFixed(3)} ${isK2 ? '' : xp2}${V}${vv.toFixed(3)}`;
       navigator.clipboard
         .writeText(text)
         .then(() => showToast(`Zkopírováno: ${text}`));
@@ -1066,8 +1089,12 @@ export function showMeasureObjectInfo(obj, wx, wy, objIdx) {
         name: `Bod ${state.nextId}`,
       });
       const [H2, V2] = axisLabels();
+      const _isK2 = state.machineType === 'karusel';
+      const _xp2 = xPrefix();
+      const _hv2 = _isK2 ? displayX(nearestPt.x) : nearestPt.x;
+      const _vv2 = _isK2 ? nearestPt.y : displayX(nearestPt.y);
       showToast(
-        `Bod ${H2}${nearestPt.x.toFixed(2)} ${V2}${nearestPt.y.toFixed(2)} vytvořen`,
+        `Bod ${_isK2 ? _xp2 : ''}${H2}${_hv2.toFixed(2)} ${_isK2 ? '' : _xp2}${V2}${_vv2.toFixed(2)} vytvořen`,
       );
       overlay.remove();
     });
@@ -1078,6 +1105,12 @@ export function showMeasureObjectInfo(obj, wx, wy, objIdx) {
 
 function buildObjectInfoDialog(obj, objIdx) {
   const [H, V] = axisLabels();
+  const isK = state.machineType === 'karusel';
+  const xp = xPrefix();
+  const Hp = isK ? xp : '';
+  const Vp = isK ? '' : xp;
+  const fH = v => isK ? displayX(v) : v;
+  const fV = v => isK ? v : displayX(v);
   let rows = "";
   rows += `<tr><td style="color:#a6adc8">Typ:</td><td style="color:#cdd6f4">${typeLabel(obj.type)}</td></tr>`;
   if (obj.name) {
@@ -1087,30 +1120,30 @@ function buildObjectInfoDialog(obj, objIdx) {
 
   switch (obj.type) {
     case "point":
-      rows += `<tr><td style="color:#a6adc8">${H}:</td><td style="color:#f9e2af">${obj.x.toFixed(3)}</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">${V}:</td><td style="color:#f9e2af">${obj.y.toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">${Hp}${H}:</td><td style="color:#f9e2af">${fH(obj.x).toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">${Vp}${V}:</td><td style="color:#f9e2af">${fV(obj.y).toFixed(3)}</td></tr>`;
       break;
     case "line":
     case "constr": {
       const len = Math.hypot(obj.x2 - obj.x1, obj.y2 - obj.y1);
       const angle =
         (Math.atan2(obj.y2 - obj.y1, obj.x2 - obj.x1) * 180) / Math.PI;
-      rows += `<tr><td style="color:#a6adc8">Bod 1:</td><td style="color:#89b4fa">${H}${obj.x1.toFixed(3)} ${V}${obj.y1.toFixed(3)}</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Bod 2:</td><td style="color:#89b4fa">${H}${obj.x2.toFixed(3)} ${V}${obj.y2.toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Bod 1:</td><td style="color:#89b4fa">${Hp}${H}${fH(obj.x1).toFixed(3)} ${Vp}${V}${fV(obj.y1).toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Bod 2:</td><td style="color:#89b4fa">${Hp}${H}${fH(obj.x2).toFixed(3)} ${Vp}${V}${fV(obj.y2).toFixed(3)}</td></tr>`;
       rows += `<tr><td style="color:#a6adc8">Délka:</td><td style="color:#f9e2af">${len.toFixed(3)} mm</td></tr>`;
       rows += `<tr><td style="color:#a6adc8">Úhel:</td><td style="color:#f9e2af">${angle.toFixed(2)}°</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Δ${H}:</td><td style="color:#f5c2e7">${(obj.x2 - obj.x1).toFixed(3)}</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Δ${V}:</td><td style="color:#f5c2e7">${(obj.y2 - obj.y1).toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Δ${Hp}${H}:</td><td style="color:#f5c2e7">${fH(obj.x2 - obj.x1).toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Δ${Vp}${V}:</td><td style="color:#f5c2e7">${fV(obj.y2 - obj.y1).toFixed(3)}</td></tr>`;
       break;
     }
     case "circle":
-      rows += `<tr><td style="color:#a6adc8">Střed:</td><td style="color:#89b4fa">${H}${obj.cx.toFixed(3)} ${V}${obj.cy.toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Střed:</td><td style="color:#89b4fa">${Hp}${H}${fH(obj.cx).toFixed(3)} ${Vp}${V}${fV(obj.cy).toFixed(3)}</td></tr>`;
       rows += `<tr><td style="color:#a6adc8">Poloměr:</td><td style="color:#f9e2af">${obj.r.toFixed(3)} mm</td></tr>`;
       rows += `<tr><td style="color:#a6adc8">Průměr:</td><td style="color:#f9e2af">${(obj.r * 2).toFixed(3)} mm</td></tr>`;
       rows += `<tr><td style="color:#a6adc8">Obvod:</td><td style="color:#f5c2e7">${(2 * Math.PI * obj.r).toFixed(3)} mm</td></tr>`;
       break;
     case "arc":
-      rows += `<tr><td style="color:#a6adc8">Střed:</td><td style="color:#89b4fa">${H}${obj.cx.toFixed(3)} ${V}${obj.cy.toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Střed:</td><td style="color:#89b4fa">${Hp}${H}${fH(obj.cx).toFixed(3)} ${Vp}${V}${fV(obj.cy).toFixed(3)}</td></tr>`;
       rows += `<tr><td style="color:#a6adc8">Poloměr:</td><td style="color:#f9e2af">${obj.r.toFixed(3)} mm</td></tr>`;
       rows += `<tr><td style="color:#a6adc8">Start:</td><td style="color:#f5c2e7">${((obj.startAngle * 180) / Math.PI).toFixed(2)}°</td></tr>`;
       rows += `<tr><td style="color:#a6adc8">Konec:</td><td style="color:#f5c2e7">${((obj.endAngle * 180) / Math.PI).toFixed(2)}°</td></tr>`;
@@ -1118,8 +1151,8 @@ function buildObjectInfoDialog(obj, objIdx) {
     case "rect": {
       const w = Math.abs(obj.x2 - obj.x1);
       const h = Math.abs(obj.y2 - obj.y1);
-      rows += `<tr><td style="color:#a6adc8">Roh 1:</td><td style="color:#89b4fa">${H}${obj.x1.toFixed(3)} ${V}${obj.y1.toFixed(3)}</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Roh 2:</td><td style="color:#89b4fa">${H}${obj.x2.toFixed(3)} ${V}${obj.y2.toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Roh 1:</td><td style="color:#89b4fa">${Hp}${H}${fH(obj.x1).toFixed(3)} ${Vp}${V}${fV(obj.y1).toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:#a6adc8">Roh 2:</td><td style="color:#89b4fa">${Hp}${H}${fH(obj.x2).toFixed(3)} ${Vp}${V}${fV(obj.y2).toFixed(3)}</td></tr>`;
       rows += `<tr><td style="color:#a6adc8">Šířka:</td><td style="color:#f9e2af">${w.toFixed(3)} mm</td></tr>`;
       rows += `<tr><td style="color:#a6adc8">Výška:</td><td style="color:#f9e2af">${h.toFixed(3)} mm</td></tr>`;
       rows += `<tr><td style="color:#a6adc8">Obvod:</td><td style="color:#f5c2e7">${(2 * (w + h)).toFixed(3)} mm</td></tr>`;
@@ -1151,7 +1184,7 @@ function buildObjectInfoDialog(obj, objIdx) {
       rows += `<tr><td style="color:#a6adc8">Uzavřená:</td><td style="color:#f9e2af">${obj.closed ? 'Ano' : 'Ne'}</td></tr>`;
       rows += `<tr><td style="color:#a6adc8">Celk. délka:</td><td style="color:#f9e2af">${pTotalLen.toFixed(3)} mm</td></tr>`;
       for (let i = 0; i < pn; i++) {
-        rows += `<tr><td style="color:#a6adc8">V${i + 1}:</td><td style="color:#89b4fa">${H}${obj.vertices[i].x.toFixed(3)} ${V}${obj.vertices[i].y.toFixed(3)}</td></tr>`;
+        rows += `<tr><td style="color:#a6adc8">V${i + 1}:</td><td style="color:#89b4fa">${Hp}${H}${fH(obj.vertices[i].x).toFixed(3)} ${Vp}${V}${fV(obj.vertices[i].y).toFixed(3)}</td></tr>`;
       }
       break;
     }
