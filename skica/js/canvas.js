@@ -80,6 +80,17 @@ export function snapPt(wx, wy) {
         }
       }
     }
+    // Snap k bodům právě kreslené kontury (tempPoints)
+    if (state.drawing && state.tempPoints && state.tempPoints.length > 0) {
+      for (const p of state.tempPoints) {
+        const d = Math.hypot(p.x - wx, p.y - wy);
+        if (d < threshold && d < objD) {
+          objD = d;
+          objX = p.x;
+          objY = p.y;
+        }
+      }
+    }
     // Průsečíky mají bonus – při stejné vzdálenosti vyhrávají
     for (const pt of state.intersections) {
       const d = Math.hypot(pt.x - wx, pt.y - wy);

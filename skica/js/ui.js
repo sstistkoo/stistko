@@ -16,6 +16,8 @@ bridge.updateProperties = () => updateProperties();
 bridge.updateObjectList = () => updateObjectList();
 bridge.updateIntersectionList = () => updateIntersectionList();
 bridge.updateLayerList = () => updateLayerList();
+bridge.renderAll = () => renderAll();
+bridge.resetHint = () => resetHint();
 
 // ── Seznam objektů ──
 /** Aktualizuje seznam objektů v panelu. */
@@ -659,6 +661,7 @@ export function resetHint() {
 /** Aktualizuje stav tlačítka snap k bodům. */
 export function updateSnapPtsBtn() {
   const btn = document.getElementById("btnSnapPts");
+  if (!btn) return;
   const ind = btn.querySelector(".snap-ind");
   ind.className =
     "snap-ind " + (state.snapToPoints ? "snap-on" : "snap-off");
@@ -667,12 +670,15 @@ export function updateSnapPtsBtn() {
   if (mobileSnap) mobileSnap.classList.toggle("snap-active", state.snapToPoints);
 }
 
-document.getElementById("btnSnapPts").addEventListener("click", () => {
-  state.snapToPoints = !state.snapToPoints;
-  updateSnapPtsBtn();
-  renderAll();
-  showToast(state.snapToPoints ? "Snap k bodům: ON" : "Snap k bodům: OFF");
-});
+const btnSnapPts = document.getElementById("btnSnapPts");
+if (btnSnapPts) {
+  btnSnapPts.addEventListener("click", () => {
+    state.snapToPoints = !state.snapToPoints;
+    updateSnapPtsBtn();
+    renderAll();
+    showToast(state.snapToPoints ? "Snap k bodům: ON" : "Snap k bodům: OFF");
+  });
+}
 
 // ── Grid Snap tlačítko ──
 /** Aktualizuje stav tlačítka snap k mřížce. */

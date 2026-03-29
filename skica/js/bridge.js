@@ -11,4 +11,6 @@ export const bridge = {
   updateIntersectionList: null,
   calculateAllIntersections: null,
   runCncExport: null,
+  renderAll: null,
+  resetHint: null,
 };

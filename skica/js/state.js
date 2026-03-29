@@ -124,7 +124,60 @@ export function pushUndo() {
 
 /** Vrátí poslední změnu (undo). */
 export function undo() {
+  // Během kreslení kontury: vrátit poslední bod místo globálního undo
+  if (state.drawing && state.tool === "polyline") {
+    if (state.tempPoints.length > 1) {
+      state.tempPoints.pop();
+      if (state._polylineBulges && state._polylineBulges.length > 0) {
+        state._polylineBulges.pop();
+      }
+      // Přesunout kurzor na nový poslední bod, aby preview čára nezobrazovala odebraný segment
+      const lastPt = state.tempPoints[state.tempPoints.length - 1];
+      state.mouse.x = lastPt.x;
+      state.mouse.y = lastPt.y;
+      showToast(`Poslední bod odebrán (zbývá ${state.tempPoints.length})`);
+      if (bridge.renderAll) bridge.renderAll();
+      return;
+    }
+    // Zbyl jen 1 bod – zrušit kreslení
+    state.drawing = false;
+    state.tempPoints = [];
+    state._polylineBulges = [];
+    if (bridge.resetHint) bridge.resetHint();
+    if (bridge.renderAll) bridge.renderAll();
+    return;
+  }
   if (state.undoStack.length === 0) return;
+
+  // Krokové undo pro právě vytvořenou konturu:
+  // Pokud je poslední objekt polyline s >2 body a v předchozím stavu neexistuje,
+  // odeber jen poslední bod místo smazání celé kontury.
+  const lastObj = state.objects[state.objects.length - 1];
+  if (lastObj && lastObj.type === 'polyline' && lastObj.vertices && lastObj.vertices.length > 2) {
+    const undoTopObjs = JSON.parse(state.undoStack[state.undoStack.length - 1]);
+    const polyInUndo = undoTopObjs.find(o => o.id === lastObj.id);
+    if (!polyInUndo) {
+      // Kontura neexistuje v předchozím stavu → byla právě vytvořena
+      state.redoStack.push(JSON.stringify(state.objects));
+      if (lastObj.closed) {
+        // Nejdřív otevřít uzavřenou konturu
+        lastObj.closed = false;
+        while (lastObj.bulges.length > lastObj.vertices.length - 1) lastObj.bulges.pop();
+      } else {
+        // Odebrat poslední bod
+        lastObj.vertices.pop();
+        while (lastObj.bulges.length > lastObj.vertices.length - 1) lastObj.bulges.pop();
+      }
+      state.selected = null;
+      if (bridge.updateObjectList) bridge.updateObjectList();
+      if (bridge.updateProperties) bridge.updateProperties();
+      if (bridge.calculateAllIntersections) bridge.calculateAllIntersections();
+      updateUndoButtons();
+      showToast("Zpět (bod kontury)");
+      return;
+    }
+  }
+
   state.redoStack.push(JSON.stringify(state.objects));
   state.objects = JSON.parse(state.undoStack.pop());
   state.selected = null;
