@@ -2,7 +2,7 @@
 // ║  SKICA – Service Worker (PWA offline cache)                 ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-const CACHE_NAME = 'skica-v70';
+const CACHE_NAME = 'skica-v71';
 const ASSETS = [
   './',
   './index.html',
@@ -47,6 +47,15 @@ const ASSETS = [
   './js/tools/parallelClick.js',
   './js/tools/dimensionClick.js',
   './js/tools/snapPointClick.js',
+  './js/dialogs/measure.js',
+  './js/dialogs/circleRadius.js',
+  './js/dialogs/numericalInput.js',
+  './js/dialogs/polarDrawing.js',
+  './js/dialogs/bulge.js',
+  './js/dialogs/dimension.js',
+  './js/dialogs/mobileEdit.js',
+  './js/dialogs/objectDialogs.js',
+  './js/dialogs/tangentDialogs.js',
   './icons/icon.svg',
   './icons/icon-192.png',
   './icons/icon-512.png',
