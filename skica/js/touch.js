@@ -4,9 +4,9 @@
 
 import { MOBILE_BREAKPOINT, LONG_PRESS_MS, CROSSHAIR_OFFSET_Y, ZOOM_MIN, ZOOM_MAX, VIBRATE_LONG_PRESS, TOUCH_MOVE_THRESHOLD, PAN_ACTIVATE_THRESHOLD } from './constants.js';
 import { drawCanvas, screenToWorld, snapPt, autoCenterView, applyAngleSnap } from './canvas.js';
-import { state, undo, redo, showToast, toDisplayCoords, resetDrawingState, displayX, xPrefix } from './state.js';
+import { state, undo, redo, showToast, toDisplayCoords, resetDrawingState, displayX, xPrefix, fmtStatusCoords } from './state.js';
 import { renderAll } from './render.js';
-import { moveObject } from './objects.js';
+import { moveObject, addObject } from './objects.js';
 import { handleCanvasClick } from './events.js';
 import { setTool, resetHint, updateSnapPtsBtn } from './ui.js';
 import { toolLabel } from './utils.js';
@@ -98,14 +98,7 @@ mobileCoordBar.addEventListener("click", (e) => {
  */
 export function updateMobileCoords(wx, wy, extra) {
   extra = extra || "";
-  const d = toDisplayCoords(wx, wy);
-  const prefix = state.coordMode === 'inc' ? 'Δ' : '';
-  const isKarusel = state.machineType === 'karusel';
-  const xp = xPrefix();
-  // Soustruh: horizontal=Z(dp.x), vertical=X(dp.y); Karusel: horizontal=X(dp.x), vertical=Z(dp.y)
-  const coords = isKarusel
-    ? `${prefix}${xp}X: ${displayX(d.x).toFixed(3)}   ${prefix}Z: ${d.y.toFixed(3)}${extra}`
-    : `${prefix}Z: ${d.x.toFixed(3)}   ${prefix}${xp}X: ${displayX(d.y).toFixed(3)}${extra}`;
+  const coords = fmtStatusCoords(wx, wy, extra);
   // Desktop coord display – jen souřadnice
   document.getElementById("coordDisplay").textContent = coords;
   // Mobile coord bar – nástroj + mód + souřadnice + zoom
@@ -206,6 +199,59 @@ export function updateMobileCancelBtn() {
   const show = state.drawing || state.dragging;
   mobileCancelBtn.style.display = show ? "flex" : "none";
 }
+
+// ── Polyline: Dokončit / Uzavřít tlačítka ──
+const polylineConfirmBtn = document.getElementById("polylineConfirm");
+const polylineCloseBtn = document.getElementById("polylineClose");
+
+/** Aktualizuje viditelnost tlačítek Dokončit/Uzavřít konturu. */
+export function updatePolylineButtons() {
+  const show = state.drawing && state.tool === 'polyline' && state.tempPoints.length >= 2;
+  polylineConfirmBtn.style.display = show ? "flex" : "none";
+  polylineCloseBtn.style.display = show ? "flex" : "none";
+}
+
+polylineConfirmBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  if (!state.drawing || state.tool !== 'polyline' || state.tempPoints.length < 2) return;
+  const bulges = state._polylineBulges || [];
+  while (bulges.length < state.tempPoints.length - 1) bulges.push(0);
+  addObject({
+    type: 'polyline',
+    vertices: state.tempPoints.slice(),
+    bulges: bulges.slice(0, state.tempPoints.length - 1),
+    closed: false,
+    name: `Kontura ${state.nextId}`,
+  });
+  state.drawing = false;
+  state.tempPoints = [];
+  state._polylineBulges = [];
+  resetHint();
+  updatePolylineButtons();
+  showToast('Kontura dokončena');
+  renderAll();
+});
+
+polylineCloseBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  if (!state.drawing || state.tool !== 'polyline' || state.tempPoints.length < 2) return;
+  const bulges = state._polylineBulges || [];
+  while (bulges.length < state.tempPoints.length) bulges.push(0);
+  addObject({
+    type: 'polyline',
+    vertices: state.tempPoints.slice(),
+    bulges: bulges.slice(0, state.tempPoints.length),
+    closed: true,
+    name: `Kontura ${state.nextId}`,
+  });
+  state.drawing = false;
+  state.tempPoints = [];
+  state._polylineBulges = [];
+  resetHint();
+  updatePolylineButtons();
+  showToast('Kontura uzavřena');
+  renderAll();
+});
 
 // ── Mobile: Undo tlačítko ──
 document.getElementById("mobileUndo").addEventListener("click", (e) => {
@@ -675,3 +721,4 @@ document.body.addEventListener(
 // ── Bridge registrace pro cyklické závislosti ──
 bridge.updateMobileCancelBtn = updateMobileCancelBtn;
 bridge.updateMobileCoords = updateMobileCoords;
+bridge.updatePolylineButtons = updatePolylineButtons;

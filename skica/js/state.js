@@ -160,7 +160,15 @@ export function undo() {
   // odeber jen poslední bod místo smazání celé kontury.
   const lastObj = state.objects[state.objects.length - 1];
   if (lastObj && lastObj.type === 'polyline' && lastObj.vertices && lastObj.vertices.length > 2) {
-    const undoTopObjs = JSON.parse(state.undoStack[state.undoStack.length - 1]);
+    let undoTopObjs;
+    try {
+      undoTopObjs = JSON.parse(state.undoStack[state.undoStack.length - 1]);
+    } catch {
+      state.undoStack = [];
+      updateUndoButtons();
+      showToast('Chyba: historie poškozena');
+      return;
+    }
     const polyInUndo = undoTopObjs.find(o => o.id === lastObj.id);
     if (!polyInUndo) {
       // Kontura neexistuje v předchozím stavu → byla právě vytvořena
@@ -185,7 +193,15 @@ export function undo() {
   }
 
   state.redoStack.push(JSON.stringify(state.objects));
-  state.objects = JSON.parse(state.undoStack.pop());
+  try {
+    state.objects = JSON.parse(state.undoStack.pop());
+  } catch {
+    state.undoStack = [];
+    state.redoStack.pop();
+    updateUndoButtons();
+    showToast('Chyba: historie poškozena');
+    return;
+  }
   state.selected = null;
   if (bridge.updateObjectList) bridge.updateObjectList();
   if (bridge.updateProperties) bridge.updateProperties();
@@ -198,7 +214,15 @@ export function undo() {
 export function redo() {
   if (state.redoStack.length === 0) return;
   state.undoStack.push(JSON.stringify(state.objects));
-  state.objects = JSON.parse(state.redoStack.pop());
+  try {
+    state.objects = JSON.parse(state.redoStack.pop());
+  } catch {
+    state.redoStack = [];
+    state.undoStack.pop();
+    updateUndoButtons();
+    showToast('Chyba: historie poškozena');
+    return;
+  }
   state.selected = null;
   if (bridge.updateObjectList) bridge.updateObjectList();
   if (bridge.updateProperties) bridge.updateProperties();
@@ -279,4 +303,21 @@ export function inputX(val) {
  */
 export function xPrefix() {
   return state.xDisplayMode === 'diameter' ? '⌀' : '';
+}
+
+/**
+ * Formátuje souřadnice pro status bar/coord display.
+ * @param {number} wx - World X
+ * @param {number} wy - World Y
+ * @param {string} [extra] - Příp. extra text (distance, angle)
+ * @returns {string}
+ */
+export function fmtStatusCoords(wx, wy, extra = '') {
+  const d = toDisplayCoords(wx, wy);
+  const prefix = state.coordMode === 'inc' ? 'Δ' : '';
+  const isKarusel = state.machineType === 'karusel';
+  const xp = xPrefix();
+  return isKarusel
+    ? `${prefix}${xp}X: ${displayX(d.x).toFixed(3)}   ${prefix}Z: ${d.y.toFixed(3)}${extra}`
+    : `${prefix}Z: ${d.x.toFixed(3)}   ${prefix}${xp}X: ${displayX(d.y).toFixed(3)}${extra}`;
 }

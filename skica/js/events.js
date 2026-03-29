@@ -2,18 +2,18 @@
 // ║  SKICA – Myš, klávesnice, kolečko                          ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-import { COLORS, ZOOM_FACTOR, ZOOM_MIN, ZOOM_MAX, SNAP_POINT_THRESHOLD, PASTE_OFFSET } from './constants.js';
+import { COLORS, ZOOM_FACTOR, ZOOM_MIN, ZOOM_MAX, PASTE_OFFSET } from './constants.js';
 import { drawCanvas, screenToWorld, snapPt, applyAngleSnap } from './canvas.js';
-import { state, pushUndo, undo, redo, showToast, toDisplayCoords, resetDrawingState, displayX, xPrefix } from './state.js';
+import { state, pushUndo, undo, redo, showToast, resetDrawingState, fmtStatusCoords } from './state.js';
 import { renderAll } from './render.js';
 import { moveObject, addObject } from './objects.js';
 import { setTool, resetHint, setHint, updateProperties, updateObjectList, updateSnapPtsBtn, updateDimsBtn, toggleCoordMode, updateCoordModeBtn, updateSnapGridBtn, updateAngleSnapBtn, showGridSizeDialog, showAngleSnapDialog, toggleHelp } from './ui.js';
 import { findObjectAt, selectObjectAt, calculateAllIntersections, mirrorObject, linearArray, rotateObject, findSegmentAt } from './geometry.js';
-import { showNumericalInputDialog, showPolarDrawingDialog, showMeasureResult, showCircleRadiusDialog, showIntersectionInfo, showMeasureObjectInfo, showBulgeDialog, showMirrorDialog, showLinearArrayDialog, showRotateDialog } from './dialogs.js';
+import { showNumericalInputDialog, showPolarDrawingDialog, showCircleRadiusDialog, showBulgeDialog, showMirrorDialog, showLinearArrayDialog, showRotateDialog } from './dialogs.js';
 import { saveProject, showExportImageDialog, showProjectsDialog, showSaveAsDialog } from './storage.js';
-import { bulgeToArc, getObjectSnapPoints } from './utils.js';
+import { bulgeToArc, deepClone } from './utils.js';
 import { bridge } from './bridge.js';
-import { handleTangentClick, handleOffsetClick, handleTrimClick, handleExtendClick, handleFilletClick, handlePerpClick, handleHorizontalClick, handleParallelClick, handleDimensionClick, handleSnapPointClick } from './tools/index.js';
+import { handleTangentClick, handleOffsetClick, handleTrimClick, handleExtendClick, handleFilletClick, handlePerpClick, handleHorizontalClick, handleParallelClick, handleDimensionClick, handleSnapPointClick, handleMoveClick, handleLineClick, handleMeasureClick, handleCircleClick, handleArcClick, handleRectClick, handlePolylineClick } from './tools/index.js';
 
 let isPanning = false;
 let panStartX, panStartY, panStartPX, panStartPY;
@@ -55,14 +55,7 @@ drawCanvas.addEventListener("mousemove", (e) => {
   if (bridge.updateMobileCoords) {
     bridge.updateMobileCoords(wx, wy, extra);
   } else {
-    const d = toDisplayCoords(wx, wy);
-    const prefix = state.coordMode === 'inc' ? 'Δ' : '';
-    const isKarusel = state.machineType === 'karusel';
-    const xp = xPrefix();
-    const coordText = isKarusel
-      ? `${prefix}${xp}X: ${displayX(d.x).toFixed(3)}   ${prefix}Z: ${d.y.toFixed(3)}${extra}`
-      : `${prefix}Z: ${d.x.toFixed(3)}   ${prefix}${xp}X: ${displayX(d.y).toFixed(3)}${extra}`;
-    document.getElementById("coordDisplay").textContent = coordText;
+    document.getElementById("coordDisplay").textContent = fmtStatusCoords(wx, wy, extra);
   }
 
   if (isPanning) {
@@ -192,14 +185,14 @@ document.addEventListener("keydown", (e) => {
   }
   if ((e.ctrlKey || e.metaKey) && e.key === "c") {
     if (state.selected !== null) {
-      state.clipboard = JSON.parse(JSON.stringify(state.objects[state.selected]));
+      state.clipboard = deepClone(state.objects[state.selected]);
       showToast("Objekt zkopírován");
     }
     return;
   }
   if ((e.ctrlKey || e.metaKey) && e.key === "v") {
     if (state.clipboard) {
-      const copy = JSON.parse(JSON.stringify(state.clipboard));
+      const copy = deepClone(state.clipboard);
       copy.id = state.nextId;
       copy.name = (copy.name || copy.type) + " (kopie)";
       // Offset pasted object slightly
@@ -478,25 +471,7 @@ export function handleCanvasClick(wx, wy) {
       break;
 
     case "move":
-      if (!state.dragging) {
-        const idx = findObjectAt(wx, wy);
-        if (idx !== null) {
-          pushUndo();
-          state.dragging = true;
-          state.dragObjIdx = idx;
-          state.dragStartWorld = { x: wx, y: wy };
-          state.dragObjSnapshot = JSON.stringify(state.objects[idx]);
-          state.selected = idx;
-          updateProperties();
-          setHint("Klepněte pro umístění");
-        }
-      } else {
-        state.dragging = false;
-        state.dragObjIdx = null;
-        updateProperties();
-        calculateAllIntersections();
-        resetHint();
-      }
+      handleMoveClick(wx, wy);
       break;
 
     case "point":
@@ -510,223 +485,27 @@ export function handleCanvasClick(wx, wy) {
 
     case "line":
     case "constr":
+      handleLineClick(wx, wy);
+      break;
+
     case "measure":
-      if (!state.drawing) {
-        if (state.tool === "measure") {
-          // Klik na snap point (koncový bod, průsečík, střed) → začne měření
-          // Klik na tělo objektu (ne snap point) → ukáže info o objektu
-          const snapThreshold = SNAP_POINT_THRESHOLD / state.zoom;
-          let isOnSnapPoint = false;
-
-          // Kontrola průsečíků
-          for (const pt of state.intersections) {
-            if (Math.hypot(pt.x - wx, pt.y - wy) < snapThreshold) {
-              isOnSnapPoint = true;
-              break;
-            }
-          }
-          // Kontrola snap bodů objektů (konce úseček, středy kružnic, ...)
-          if (!isOnSnapPoint) {
-            for (const obj of state.objects) {
-              for (const pt of getObjectSnapPoints(obj)) {
-                if (Math.hypot(pt.x - wx, pt.y - wy) < snapThreshold) {
-                  isOnSnapPoint = true;
-                  break;
-                }
-              }
-              if (isOnSnapPoint) break;
-            }
-          }
-
-          if (!isOnSnapPoint) {
-            // Klik na tělo objektu → info dialog
-            const idx = findObjectAt(wx, wy);
-            if (idx !== null) {
-              showMeasureObjectInfo(state.objects[idx], wx, wy, idx);
-              return;
-            }
-          }
-          // Přidá dočasný coord label na 1. bod měření
-          addObject({
-            type: "point",
-            x: wx, y: wy,
-            name: `Měření bod 1`,
-            isDimension: true,
-            isCoordLabel: true,
-            isMeasureTemp: true,
-            color: COLORS.textSecondary,
-          });
-        }
-        state.drawing = true;
-        state.tempPoints = [{ x: wx, y: wy }];
-        setHint(state.tool === "measure" ? "Klepněte na 2. bod pro měření" : "Klepněte na koncový bod");
-        renderAll();
-      } else {
-        const tp = state.tempPoints[0];
-        if (state.tool === "line" || state.tool === "constr") {
-          if (Math.hypot(wx - tp.x, wy - tp.y) < 1e-9) {
-            showToast("Úsečka má nulovou délku");
-            state.drawing = false;
-            state.tempPoints = [];
-            resetHint();
-            break;
-          }
-          addObject({
-            type: state.tool === "constr" ? "constr" : "line",
-            x1: tp.x,
-            y1: tp.y,
-            x2: wx,
-            y2: wy,
-            name: `${state.tool === "constr" ? "Konstr" : "Úsečka"} ${state.nextId}`,
-            dashed: state.tool === "constr",
-          });
-        } else {
-          // Odstraní dočasný coord label z 1. bodu
-          const tempIdx = state.objects.findIndex(o => o.isMeasureTemp);
-          if (tempIdx !== -1) state.objects.splice(tempIdx, 1);
-
-          const d = Math.hypot(wx - tp.x, wy - tp.y);
-          const angle =
-            (Math.atan2(wy - tp.y, wx - tp.x) * 180) / Math.PI;
-          // Automaticky přidá kótu na výkres
-          const p1 = tp;
-          const p2 = { x: wx, y: wy };
-          // Odsazení kóty od měřené čáry
-          const dx = p2.x - p1.x;
-          const dy = p2.y - p1.y;
-          const len = Math.hypot(dx, dy);
-          const offset = Math.max(8, len * 0.15);
-          const nx = len > 0 ? (-dy / len) * offset : offset;
-          const ny = len > 0 ? (dx / len) * offset : 0;
-          addObject({
-            type: "line",
-            x1: p1.x + nx, y1: p1.y + ny,
-            x2: p2.x + nx, y2: p2.y + ny,
-            name: `Kóta ${d.toFixed(2)}mm`,
-            isDimension: true,
-            dimSrcX1: p1.x, dimSrcY1: p1.y,
-            dimSrcX2: p2.x, dimSrcY2: p2.y,
-            color: COLORS.textSecondary,
-          });
-          showMeasureResult(tp, p2, d, angle);
-        }
-        state.drawing = false;
-        state.tempPoints = [];
-        resetHint();
-      }
+      handleMeasureClick(wx, wy);
       break;
 
     case "circle":
-      if (!state.drawing) {
-        state.drawing = true;
-        state.tempPoints = [{ x: wx, y: wy }];
-        setHint("Klepněte pro poloměr");
-        renderAll();
-      } else {
-        const cp = state.tempPoints[0];
-        const r = Math.hypot(wx - cp.x, wy - cp.y);
-        if (r < 1e-9) {
-          showToast("Kružnice má nulový poloměr");
-          state.drawing = false;
-          state.tempPoints = [];
-          resetHint();
-          break;
-        }
-        addObject({
-          type: "circle",
-          cx: cp.x,
-          cy: cp.y,
-          r,
-          name: `Kružnice ${state.nextId}`,
-        });
-        state.drawing = false;
-        state.tempPoints = [];
-        resetHint();
-      }
+      handleCircleClick(wx, wy);
       break;
 
     case "arc":
-      if (!state.drawing) {
-        state.drawing = true;
-        state.tempPoints = [{ x: wx, y: wy }];
-        setHint("Klepněte na počáteční bod oblouku");
-        renderAll();
-      } else if (state.tempPoints.length === 1) {
-        state.tempPoints.push({ x: wx, y: wy });
-        setHint("Klepněte na koncový bod oblouku");
-        renderAll();
-      } else {
-        const ctr = state.tempPoints[0],
-          p1 = state.tempPoints[1];
-        const r = Math.hypot(p1.x - ctr.x, p1.y - ctr.y);
-        if (r < 1e-9) {
-          showToast("Oblouk má nulový poloměr");
-          state.drawing = false;
-          state.tempPoints = [];
-          resetHint();
-          break;
-        }
-        const startAngle = Math.atan2(p1.y - ctr.y, p1.x - ctr.x);
-        const endAngle = Math.atan2(wy - ctr.y, wx - ctr.x);
-        addObject({
-          type: "arc",
-          cx: ctr.x,
-          cy: ctr.y,
-          r,
-          startAngle,
-          endAngle,
-          name: `Oblouk ${state.nextId}`,
-        });
-        state.drawing = false;
-        state.tempPoints = [];
-        resetHint();
-      }
+      handleArcClick(wx, wy);
       break;
 
     case "rect":
-      if (!state.drawing) {
-        state.drawing = true;
-        state.tempPoints = [{ x: wx, y: wy }];
-        setHint("Klepněte na protější roh");
-        renderAll();
-      } else {
-        const rp = state.tempPoints[0];
-        if (Math.abs(wx - rp.x) < 1e-9 && Math.abs(wy - rp.y) < 1e-9) {
-          showToast("Obdélník má nulovou velikost");
-          state.drawing = false;
-          state.tempPoints = [];
-          resetHint();
-          break;
-        }
-        addObject({
-          type: "rect",
-          x1: rp.x,
-          y1: rp.y,
-          x2: wx,
-          y2: wy,
-          name: `Obdélník ${state.nextId}`,
-        });
-        state.drawing = false;
-        state.tempPoints = [];
-        resetHint();
-      }
+      handleRectClick(wx, wy);
       break;
 
     case "polyline":
-      if (!state.drawing) {
-        state.drawing = true;
-        state.tempPoints = [{ x: wx, y: wy }];
-        state._polylineBulges = [];
-        setHint("Klepněte na další bod kontury (Enter = dokončit, Shift+Enter = uzavřít, B = oblouk)");
-        renderAll();
-      } else {
-        state.tempPoints.push({ x: wx, y: wy });
-        // Add bulge=0 for the new segment
-        if (!state._polylineBulges) state._polylineBulges = [];
-        state._polylineBulges.push(0);
-        setHint(`Bod ${state.tempPoints.length} přidán (Enter = dokončit, Shift+Enter = uzavřít, B = oblouk)`);
-        renderAll();
-      }
+      handlePolylineClick(wx, wy);
       break;
 
     case "tangent":

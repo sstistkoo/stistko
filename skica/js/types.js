@@ -105,7 +105,27 @@
  */
 
 /**
- * @typedef {PointObject|LineObject|CircleObject|ArcObject|RectObject|PolylineObject} DrawObject
+ * @typedef {Object} DimensionObject
+ * @property {'line'} type
+ * @property {number} id
+ * @property {string} name
+ * @property {string} [color]
+ * @property {number} [layer]
+ * @property {boolean} isDimension
+ * @property {boolean} [isCoordLabel]
+ * @property {boolean} [isMeasureTemp]
+ * @property {number} x1
+ * @property {number} y1
+ * @property {number} x2
+ * @property {number} y2
+ * @property {number} [dimSrcX1]
+ * @property {number} [dimSrcY1]
+ * @property {number} [dimSrcX2]
+ * @property {number} [dimSrcY2]
+ */
+
+/**
+ * @typedef {PointObject|LineObject|CircleObject|ArcObject|RectObject|PolylineObject|DimensionObject} DrawObject
  */
 
 // ── Geometrie – přímky a kružnice pro průsečíky ──
@@ -157,6 +177,14 @@
  */
 
 /**
+ * @typedef {'soustruh'|'karusel'} MachineType
+ */
+
+/**
+ * @typedef {'radius'|'diameter'} XDisplayMode
+ */
+
+/**
  * @typedef {Object} MouseState
  * @property {number} x - World X
  * @property {number} y - World Y
@@ -198,6 +226,8 @@
  * @property {{x: number|null, y: number|null}} numDialogChain
  * @property {CoordMode} coordMode
  * @property {Point2D} incReference
+ * @property {MachineType} machineType
+ * @property {XDisplayMode} xDisplayMode
  * @property {string} projectName
  * @property {Layer[]} layers
  * @property {number} activeLayer
