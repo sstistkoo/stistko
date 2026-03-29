@@ -1915,6 +1915,33 @@ body {
 }
 
 /* â”€â”€ Roughness calculator â”€â”€ */
+
+/* -- Thread identification -- */
+.thr-ident-results {
+  max-height: 180px;
+  overflow-y: auto;
+  margin: 4px 0;
+}
+.thr-ident-item {
+  padding: 5px 8px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: .85rem;
+  color: var(--ctp-text);
+}
+.thr-ident-item:hover {
+  background: var(--ctp-surface1);
+}
+.thr-ident-info {
+  color: var(--ctp-subtext0);
+  font-size: .8rem;
+}
+.thr-ident-empty {
+  padding: 5px 8px;
+  color: var(--ctp-subtext0);
+  font-size: .85rem;
+  font-style: italic;
+}
 .rough-mode-row {
   display: flex;
   gap: 2px;

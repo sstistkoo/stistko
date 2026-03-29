@@ -624,6 +624,14 @@ export function openThreadCalc() {
     '<div class="thr-detail" id="thrDetail">' +
       '<div class="thr-detail-hint">Klikn\u011Bte na z\u00E1vit pro zobrazen\u00ED detailu\u2026</div>' +
     '</div>' +
+    '<div class="cnc-table-label" style="margin-top:10px">\uD83D\uDD0D Identifikace z\u00E1vitu</div>' +
+    '<div class="cnc-fields">' +
+      '<label class="cnc-field"><span>Zm\u011B\u0159en\u00FD \u00D8 <small>mm</small></span>' +
+        '<input type="number" data-id="tIdentD" step="any" placeholder="Nam\u011B\u0159en\u00FD pr\u016Fm\u011Br"></label>' +
+      '<label class="cnc-field"><span>Tolerance <small>mm</small></span>' +
+        '<input type="number" data-id="tIdentTol" step="any" value="0.3" placeholder="\u00B1"></label>' +
+    '</div>' +
+    '<div class="thr-ident-results" id="thrIdentResults"></div>' +
     '<div class="cnc-table-label" style="margin-top:10px">Vlastn\u00ED z\u00E1vit</div>' +
     '<div class="cnc-fields">' +
       '<label class="cnc-field"><span>D <small>mm</small></span>' +
@@ -784,6 +792,133 @@ export function openThreadCalc() {
   }
   inpD.addEventListener("input", calcCustom);
   inpP.addEventListener("input", calcCustom);
+
+  // ── Identifikace závitu ──────────────────────────────────
+  var identD   = overlay.querySelector('[data-id="tIdentD"]');
+  var identTol = overlay.querySelector('[data-id="tIdentTol"]');
+  var identRes = overlay.querySelector('#thrIdentResults');
+  var identHits = [];
+
+  function identifyThread() {
+    var dVal = identD.value !== '' ? parseFloat(identD.value) : null;
+    var tol  = identTol.value !== '' ? parseFloat(identTol.value) : 0.3;
+    if (dVal === null || isNaN(dVal) || dVal <= 0) { identRes.innerHTML = ''; identHits = []; return; }
+    if (isNaN(tol) || tol < 0) tol = 0;
+    var lo = dVal - tol, hi = dVal + tol;
+    var hits = [];
+
+    // M hrubé
+    for (var i = 0; i < mCoarse.length; i++) {
+      var t = mCoarse[i];
+      if (t.D >= lo && t.D <= hi)
+        hits.push({ label: 'M' + t.D + ' hrub\u00E9', info: 'D=' + t.D.toFixed(3) + ', P=' + t.P, tab: 'mc', D: t.D, P: t.P, type: 'M' });
+    }
+    // M jemné
+    for (var i = 0; i < mFine.length; i++) {
+      var t = mFine[i];
+      if (t.D >= lo && t.D <= hi)
+        hits.push({ label: 'M' + t.D + '\u00D7' + t.P + ' jemn\u00E9', info: 'D=' + t.D.toFixed(3) + ', P=' + t.P, tab: 'mf', D: t.D, P: t.P, type: 'M' });
+    }
+    // G (BSP)
+    for (var i = 0; i < gThreads.length; i++) {
+      var g = gThreads[i];
+      if (g.D >= lo && g.D <= hi)
+        hits.push({ label: g.n, info: 'D=' + g.D.toFixed(3) + ', TPI=' + g.tpi, tab: 'g', D: g.D, P: 25.4 / g.tpi, tpi: g.tpi, n: g.n, type: 'G' });
+    }
+    // Tr trapézový
+    for (var i = 0; i < trThreads.length; i++) {
+      var t = trThreads[i];
+      if (t.D >= lo && t.D <= hi)
+        hits.push({ label: 'Tr' + t.D + '\u00D7' + t.P, info: 'D=' + t.D.toFixed(3) + ', P=' + t.P, tab: 'tr', D: t.D, P: t.P, type: 'Tr' });
+    }
+    // UNC
+    for (var i = 0; i < uncThreads.length; i++) {
+      var t = uncThreads[i];
+      if (t.D >= lo && t.D <= hi)
+        hits.push({ label: 'UNC ' + t.n, info: 'D=' + t.D.toFixed(3) + ', TPI=' + t.tpi, tab: 'unc', D: t.D, P: 25.4 / t.tpi, tpi: t.tpi, n: t.n, type: 'UNC' });
+    }
+    // UNF
+    for (var i = 0; i < unfThreads.length; i++) {
+      var t = unfThreads[i];
+      if (t.D >= lo && t.D <= hi)
+        hits.push({ label: 'UNF ' + t.n, info: 'D=' + t.D.toFixed(3) + ', TPI=' + t.tpi, tab: 'unf', D: t.D, P: 25.4 / t.tpi, tpi: t.tpi, n: t.n, type: 'UNF' });
+    }
+    // BSW
+    for (var i = 0; i < bswThreads.length; i++) {
+      var t = bswThreads[i];
+      if (t.D >= lo && t.D <= hi)
+        hits.push({ label: 'BSW ' + t.n, info: 'D=' + t.D.toFixed(3) + ', TPI=' + t.tpi, tab: 'bsw', D: t.D, P: 25.4 / t.tpi, tpi: t.tpi, n: t.n, type: 'BSW' });
+    }
+    // NPT
+    for (var i = 0; i < nptThreads.length; i++) {
+      var t = nptThreads[i];
+      if (t.D >= lo && t.D <= hi)
+        hits.push({ label: 'NPT ' + t.n, info: 'D=' + t.D.toFixed(3) + ', TPI=' + t.tpi, tab: 'npt', D: t.D, P: 25.4 / t.tpi, tpi: t.tpi, n: t.n, type: 'NPT' });
+    }
+    // Acme
+    for (var i = 0; i < acmeThreads.length; i++) {
+      var t = acmeThreads[i];
+      if (t.D >= lo && t.D <= hi)
+        hits.push({ label: 'Acme ' + t.n, info: 'D=' + t.D.toFixed(3) + ', TPI=' + t.tpi, tab: 'acme', D: t.D, P: 25.4 / t.tpi, tpi: t.tpi, n: t.n, type: 'Acme' });
+    }
+
+    identHits = hits;
+    if (hits.length === 0) {
+      identRes.innerHTML = '<div class="thr-ident-empty">\u017D\u00E1dn\u00FD z\u00E1vit nenalezen</div>';
+      return;
+    }
+    var html = '';
+    for (var i = 0; i < hits.length; i++) {
+      var h = hits[i];
+      html += '<div class="thr-ident-item" data-idx="' + i + '">' +
+        '<strong>' + h.label + '</strong> <span class="thr-ident-info">(' + h.info + ')</span></div>';
+    }
+    identRes.innerHTML = html;
+  }
+  identD.addEventListener("input", identifyThread);
+  identTol.addEventListener("input", identifyThread);
+
+  // Klik na výsledek identifikace → přepni záložku + zobraz detail
+  identRes.addEventListener("click", function(e) {
+    var item = e.target.closest('.thr-ident-item');
+    if (!item) return;
+    var idx = parseInt(item.dataset.idx);
+    var h = identHits[idx];
+    if (!h) return;
+    switchType(h.tab);
+    if (h.type === 'M') {
+      var isFine = (h.tab === 'mf');
+      var lbl = 'M' + h.D + (isFine ? '\u00D7' + h.P + ' jemn\u00E9' : ' hrub\u00E9');
+      setDetail(detailMetric(h.D, h.P, lbl));
+    } else if (h.type === 'G') {
+      setDetail(detailG(h.D, h.P, h.tpi, h.n));
+    } else if (h.type === 'Tr') {
+      setDetail(detailTr(h.D, h.P, 'Tr' + h.D + '\u00D7' + h.P));
+    } else if (h.type === 'UNC') {
+      setDetail(detailUN(h.D, h.P, h.tpi, h.n, 'UNC \u2013 ASME B1.1'));
+    } else if (h.type === 'UNF') {
+      setDetail(detailUN(h.D, h.P, h.tpi, h.n, 'UNF \u2013 ASME B1.1'));
+    } else if (h.type === 'BSW') {
+      setDetail(detailBSW(h.D, h.P, h.tpi, h.n));
+    } else if (h.type === 'NPT') {
+      setDetail(detailNPT(h.D, h.P, h.tpi, h.n));
+    } else if (h.type === 'Acme') {
+      setDetail(detailAcme(h.D, h.P, h.tpi, h.n));
+    }
+    // Zvýrazni odpovídající řádek v tabulce
+    if (lastActiveRow) lastActiveRow.classList.remove("thr-row-active");
+    var rows = tbody.querySelectorAll('tr');
+    for (var r = 0; r < rows.length; r++) {
+      var rd = parseFloat(rows[r].dataset.d);
+      var rp = parseFloat(rows[r].dataset.p);
+      if (Math.abs(rd - h.D) < 0.001 && Math.abs(rp - h.P) < 0.001) {
+        rows[r].classList.add("thr-row-active");
+        lastActiveRow = rows[r];
+        rows[r].scrollIntoView({ block: 'center', behavior: 'smooth' });
+        break;
+      }
+    }
+  });
 
   // ── Kopírovat detail ──
   overlay.querySelector("#thrCopy").addEventListener("click", function() {
