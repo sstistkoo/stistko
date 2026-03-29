@@ -4,7 +4,7 @@
 
 import { COLORS } from './constants.js';
 import { state, showToast, pushUndo, undo, redo, axisLabels, resetDrawingState, displayX, xPrefix } from './state.js';
-import { typeLabel, toolLabel, bulgeToArc, safeEvalMath } from './utils.js';
+import { typeLabel, toolLabel, bulgeToArc, safeEvalMath, _parseMathExpr } from './utils.js';
 import { renderAll, renderAllDebounced } from './render.js';
 import { drawCanvas, screenToWorld, snapPt } from './canvas.js';
 import { bridge } from './bridge.js';
@@ -1020,7 +1020,7 @@ export function openCalculator() {
     // Handle % as /100
     e = e.replace(/(\d+(?:\.\d+)?)%/g, "($1/100)");
     try {
-      const r = new Function("return (" + e + ")")();
+      const r = _parseMathExpr(e);
       return (typeof r === "number" && isFinite(r)) ? r : null;
     } catch (_) { return null; }
   }
@@ -1346,7 +1346,7 @@ export function showGridSizeDialog() {
       <label>Velikost kroku (mm):</label>
       <input type="number" id="dlgGridSize" step="0.1" min="0.1" value="${state.gridSize}" inputmode="decimal" autofocus>
       <div class="btn-row">
-        <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
+        <button class="btn-cancel btn-cancel-overlay">Zrušit</button>
         <button class="btn-ok" id="dlgGridOk">OK</button>
       </div>
     </div>`;
@@ -1390,7 +1390,7 @@ export function showAngleSnapDialog() {
       <label style="margin-top:8px">Tolerance přichycení (°):</label>
       <input type="number" id="dlgAngleTol" step="1" min="1" max="45" value="${state.angleSnapTolerance}" inputmode="decimal">
       <div class="btn-row">
-        <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
+        <button class="btn-cancel btn-cancel-overlay">Zrušit</button>
         <button class="btn-ok" id="dlgAngleOk">OK</button>
       </div>
     </div>`;

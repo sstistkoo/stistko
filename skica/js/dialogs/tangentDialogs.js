@@ -27,7 +27,7 @@ export function showTangentChoiceDialog(tangentLines, callback) {
         <button class="btn-ok tangent-all" style="width:100%;background:${COLORS.dimension};color:${COLORS.bgDark}">✓ Vytvořit všechny</button>
       </div>
       <div class="btn-row">
-        <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
+        <button class="btn-cancel btn-cancel-overlay">Zrušit</button>
       </div>
     </div>`);
 
@@ -73,7 +73,7 @@ export function showTangentPositionDialog(positions, circle, callback) {
         ${btns}
       </div>
       <div class="btn-row">
-        <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
+        <button class="btn-cancel btn-cancel-overlay">Zrušit</button>
       </div>
     </div>`);
 

@@ -15,6 +15,7 @@ const { mockCanvas } = vi.hoisted(() => {
     classList: { toggle: () => {}, add: () => {}, remove: () => {} },
     appendChild: () => {},
     addEventListener: () => {},
+    setAttribute: () => {},
     style: {},
   });
 

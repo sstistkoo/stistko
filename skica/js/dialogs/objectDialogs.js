@@ -21,7 +21,7 @@ export function showOffsetDialog(obj, onSideClick) {
       <label>Vzdálenost offsetu (mm):</label>
       <input type="text" id="dlgOffsetDist" value="5" inputmode="decimal" autofocus>
       <div class="btn-row">
-        <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
+        <button class="btn-cancel btn-cancel-overlay">Zrušit</button>
         <button class="btn-ok" id="dlgOffsetOk">OK – klikni na stranu</button>
       </div>
     </div>`);
@@ -62,7 +62,7 @@ export function showMirrorDialog(obj, callback) {
         </div>
       </div>
       <div class="btn-row">
-        <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
+        <button class="btn-cancel btn-cancel-overlay">Zrušit</button>
       </div>
     </div>`);
 
@@ -98,7 +98,7 @@ export function showLinearArrayDialog(obj, callback) {
       <label>Posun Δ${axisLabels()[1]} (mm):</label>
       <input type="text" id="dlgArrayDZ" value="0" inputmode="decimal">
       <div class="btn-row">
-        <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
+        <button class="btn-cancel btn-cancel-overlay">Zrušit</button>
         <button class="btn-ok" id="dlgArrayOk">Vytvořit</button>
       </div>
     </div>`);
@@ -136,7 +136,7 @@ export function showRotateDialog(obj, callback) {
       <label>Úhel otočení (°):</label>
       <input type="text" id="dlgRotateAngle" value="90" inputmode="decimal" autofocus>
       <div class="btn-row">
-        <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
+        <button class="btn-cancel btn-cancel-overlay">Zrušit</button>
         <button class="btn-ok" id="dlgRotateOk">Otočit</button>
       </div>
     </div>`);
@@ -169,7 +169,7 @@ export function showFilletDialog(callback) {
       <label>Poloměr zaoblení (mm):</label>
       <input type="text" id="dlgFilletRadius" value="2" inputmode="decimal" autofocus>
       <div class="btn-row">
-        <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
+        <button class="btn-cancel btn-cancel-overlay">Zrušit</button>
         <button class="btn-ok" id="dlgFilletOk">OK – klikněte na 2. úsečku</button>
       </div>
     </div>`);

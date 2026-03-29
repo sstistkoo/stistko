@@ -19,7 +19,7 @@ export function showCircleRadiusDialog() {
       <label>Poloměr (mm):</label>
       <input type="text" id="dlgRadius" value="10" inputmode="decimal" autofocus>
       <div class="btn-row">
-        <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
+        <button class="btn-cancel btn-cancel-overlay">Zrušit</button>
         <button class="btn-ok" id="dlgOk">OK</button>
       </div>
     </div>`);

@@ -20,6 +20,8 @@ export function showToast(msg, duration = 2000) {
   if (!t) {
     t = document.createElement("div");
     t.className = "toast";
+    t.setAttribute("role", "status");
+    t.setAttribute("aria-live", "polite");
     document.body.appendChild(t);
   }
   t.textContent = msg;

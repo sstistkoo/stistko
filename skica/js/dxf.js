@@ -1,5 +1,5 @@
 // ╔══════════════════════════════════════════════════════════════╗
-// ║  SKICA – DXF Import Parser                                  ║
+// ║  SKICA – DXF Import / Export                                ║
 // ╚══════════════════════════════════════════════════════════════╝
 
 import { COLORS } from './constants.js';
@@ -179,4 +179,125 @@ export function parseDXF(text) {
   }
 
   return { entities, errors };
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ── DXF EXPORT ──
+// ═══════════════════════════════════════════════════════════════
+
+const RAD2DEG = 180 / Math.PI;
+
+function dxfPair(code, value) {
+  return `  ${code}\n${value}`;
+}
+
+function entityToString(obj) {
+  const lines = [];
+  const p = (code, val) => lines.push(dxfPair(code, val));
+
+  switch (obj.type) {
+    case 'point':
+      p(0, 'POINT');
+      p(8, '0');
+      p(10, obj.x.toFixed(6));
+      p(20, obj.y.toFixed(6));
+      p(30, '0.0');
+      break;
+
+    case 'line':
+    case 'constr':
+      if (obj.isDimension) break;
+      p(0, 'LINE');
+      p(8, '0');
+      p(10, obj.x1.toFixed(6));
+      p(20, obj.y1.toFixed(6));
+      p(30, '0.0');
+      p(11, obj.x2.toFixed(6));
+      p(21, obj.y2.toFixed(6));
+      p(31, '0.0');
+      break;
+
+    case 'circle':
+      p(0, 'CIRCLE');
+      p(8, '0');
+      p(10, obj.cx.toFixed(6));
+      p(20, obj.cy.toFixed(6));
+      p(30, '0.0');
+      p(40, obj.r.toFixed(6));
+      break;
+
+    case 'arc':
+      p(0, 'ARC');
+      p(8, '0');
+      p(10, obj.cx.toFixed(6));
+      p(20, obj.cy.toFixed(6));
+      p(30, '0.0');
+      p(40, obj.r.toFixed(6));
+      p(50, (obj.startAngle * RAD2DEG).toFixed(6));
+      p(51, (obj.endAngle * RAD2DEG).toFixed(6));
+      break;
+
+    case 'rect':
+      // Exportovat jako LWPOLYLINE (uzavřený obdélník)
+      p(0, 'LWPOLYLINE');
+      p(8, '0');
+      p(70, '1'); // closed
+      p(90, '4'); // vertex count
+      p(10, obj.x1.toFixed(6)); p(20, obj.y1.toFixed(6));
+      p(10, obj.x2.toFixed(6)); p(20, obj.y1.toFixed(6));
+      p(10, obj.x2.toFixed(6)); p(20, obj.y2.toFixed(6));
+      p(10, obj.x1.toFixed(6)); p(20, obj.y2.toFixed(6));
+      break;
+
+    case 'polyline':
+      p(0, 'LWPOLYLINE');
+      p(8, '0');
+      p(70, obj.closed ? '1' : '0');
+      p(90, String(obj.vertices.length));
+      for (let i = 0; i < obj.vertices.length; i++) {
+        p(10, obj.vertices[i].x.toFixed(6));
+        p(20, obj.vertices[i].y.toFixed(6));
+        if (obj.bulges && obj.bulges[i] && obj.bulges[i] !== 0) {
+          p(42, obj.bulges[i].toFixed(6));
+        }
+      }
+      break;
+
+    default:
+      return '';
+  }
+  return lines.join('\n');
+}
+
+/**
+ * Exportuje SKICA objekty do DXF textu (ASCII formát).
+ * @param {object[]} objects - pole SKICA objektů
+ * @returns {string} DXF text
+ */
+export function exportDXF(objects) {
+  const sections = [];
+
+  // HEADER
+  sections.push([
+    '  0', 'SECTION',
+    '  2', 'HEADER',
+    '  9', '$ACADVER', '  1', 'AC1009',
+    '  0', 'ENDSEC',
+  ].join('\n'));
+
+  // ENTITIES
+  const entityStrings = objects
+    .map(obj => entityToString(obj))
+    .filter(s => s.length > 0);
+
+  sections.push([
+    '  0', 'SECTION',
+    '  2', 'ENTITIES',
+    ...entityStrings,
+    '  0', 'ENDSEC',
+  ].join('\n'));
+
+  sections.push('  0\nEOF');
+
+  return sections.join('\n');
 }

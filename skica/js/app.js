@@ -2,13 +2,21 @@
 // ║  SKICA – Inicializace aplikace (ES Module entry point)      ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-import { state } from './state.js';
+import { state, showToast } from './state.js';
 import { resizeCanvases } from './canvas.js';
 import { calculateAllIntersections } from './geometry.js';
 import { updateObjectList, updateProperties, resetHint, updateDimsBtn, updateSnapPtsBtn, updateCoordModeBtn, updateMachineTypeBtn, updateXDisplayBtn, togglePanel, updateLayerList, updateStatusProject, checkFirstRunHelp } from './ui.js';
 import { initAutoSave } from './storage.js';
 import { getMeta, setMeta, migrateFromLocalStorage } from './idb.js';
 import { bridge } from './bridge.js';
+
+// ── Globální error handlery ──
+window.addEventListener('error', (e) => {
+  console.error('Neošetřená chyba:', e.error || e.message);
+});
+window.addEventListener('unhandledrejection', (e) => {
+  console.error('Neošetřený promise rejection:', e.reason);
+});
 
 // Side-effect imports — tyto moduly registrují event listenery při načtení
 import './render.js';
@@ -55,14 +63,16 @@ async function tryAutoLoad() {
       updateProperties();
       updateLayerList();
     }
-  } catch (e) {}
+  } catch (e) {
+    console.warn('Auto-load selhal:', e);
+  }
 }
 
 // ── Auto-save každých 30 s ──
 setInterval(() => {
   if (state.objects.length > 0) {
     const data = {
-      version: 3.1,
+      version: 1.1,
       objects: state.objects,
       intersections: state.intersections,
       nextId: state.nextId,
@@ -96,18 +106,55 @@ setInterval(() => {
   updateStatusProject();
   if (bridge.updateMobileCoords) bridge.updateMobileCoords(0, 0);
   checkFirstRunHelp();
-})();
+})().catch(e => {
+  console.error('Inicializace selhala:', e);
+});
 
 // ── PWA Service Worker ──
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker
     .register("./sw.js")
-    .then(() => console.log("SW: Registrován"))
+    .then((reg) => {
+      console.log("SW: Registrován");
+      // Detekce nové verze SW – upozornit uživatele
+      reg.addEventListener('updatefound', () => {
+        const newWorker = reg.installing;
+        if (!newWorker) return;
+        newWorker.addEventListener('statechange', () => {
+          if (newWorker.state === 'activated' && navigator.serviceWorker.controller) {
+            showToast('Nová verze dostupná – obnovte stránku (F5)', 5000);
+          }
+        });
+      });
+    })
     .catch((e) => console.warn("SW: Chyba", e));
 }
 
+// ── Offline indikátor ──
+const offlineBanner = document.getElementById('offlineBanner');
+function updateOnlineStatus() {
+  if (navigator.onLine) {
+    offlineBanner.hidden = true;
+  } else {
+    offlineBanner.hidden = false;
+  }
+}
+window.addEventListener('online', updateOnlineStatus);
+window.addEventListener('offline', updateOnlineStatus);
+updateOnlineStatus();
+
+// ── Delegovaný close handler pro overlay dialogy ──
+// Nahrazuje inline onclick="this.closest('.input-overlay').remove()"
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('.btn-cancel-overlay');
+  if (btn) {
+    const overlay = btn.closest('.input-overlay');
+    if (overlay) overlay.remove();
+  }
+});
+
 console.log(
-  "%c SKICA – CAD pro CNC soustružník v3 (X,Z) ",
+  "%c SKICA – CAD pro CNC soustružník v1.1 (X,Z) ",
   "background:#89b4fa;color:#1e1e2e;font-size:18px;font-weight:bold;padding:4px 12px;border-radius:4px;",
 );
 console.log(
