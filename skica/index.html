@@ -750,11 +750,9 @@
     <!-- ── Main ── -->
     <div id="main">
       <div id="canvasWrap">
-        <canvas
-          id="drawCanvas"
-          aria-label="CAD kreslicí plátno"
-          role="img"
-        ></canvas>
+        <canvas id="drawCanvas" aria-label="CAD kreslicí plátno" role="img">
+          <p>Váš prohlížeč nepodporuje element Canvas potřebný pro kreslení.</p>
+        </canvas>
       </div>
       <div id="sidebar" role="complementary" aria-label="Boční panel">
         <div class="sidebar-top-bar">
@@ -767,7 +765,12 @@
             ✕
           </button>
         </div>
-        <div class="panel-header obj-header" data-panel="objPanel">
+        <div
+          class="panel-header obj-header"
+          data-panel="objPanel"
+          role="button"
+          tabindex="0"
+        >
           <span>▾ Objekty</span>
           <button
             id="sidebarEditBtn"
@@ -853,10 +856,17 @@
           style="display: none"
         >
           <ul id="intersectionList">
-            <li style="color: #6c7086">Rozbalte panel pro výpočet</li>
+            <li style="color: var(--ctp-overlay0)">
+              Rozbalte panel pro výpočet
+            </li>
           </ul>
         </div>
-        <div class="panel-header cnc-header" data-panel="cncPanel">
+        <div
+          class="panel-header cnc-header"
+          data-panel="cncPanel"
+          role="button"
+          tabindex="0"
+        >
           <span>▾ CNC Souřadnice</span>
           <button
             id="btnCncCopy"

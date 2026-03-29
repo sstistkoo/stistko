@@ -6,6 +6,7 @@
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "sw": "node scripts/generate-sw-assets.js"
   },
   "keywords": [],

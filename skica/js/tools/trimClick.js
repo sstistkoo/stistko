@@ -18,6 +18,10 @@ export function handleTrimClick(wx, wy) {
     return;
   }
 
+  // Guard: zero-length segment
+  const dx0 = ls.seg.x2 - ls.seg.x1, dy0 = ls.seg.y2 - ls.seg.y1;
+  if (dx0 * dx0 + dy0 * dy0 < 1e-12) { showToast("Úsečka má nulovou délku"); return; }
+
   // Collect all intersection points on this line segment from other objects
   const pts = [];
   const lineSeg = { x1: ls.seg.x1, y1: ls.seg.y1, x2: ls.seg.x2, y2: ls.seg.y2, isConstr: false };

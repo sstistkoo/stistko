@@ -2,7 +2,7 @@
 // ║  SKICA – Myš, klávesnice, kolečko                          ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-import { COLORS, ZOOM_FACTOR, ZOOM_MIN, ZOOM_MAX, PASTE_OFFSET } from './constants.js';
+import { ZOOM_FACTOR, ZOOM_MIN, ZOOM_MAX, PASTE_OFFSET } from './constants.js';
 import { drawCanvas, screenToWorld, snapPt, applyAngleSnap } from './canvas.js';
 import { state, pushUndo, undo, redo, showToast, resetDrawingState, fmtStatusCoords } from './state.js';
 import { renderAll } from './render.js';
@@ -405,25 +405,25 @@ drawCanvas.addEventListener("contextmenu", (e) => {
 
   const menu = document.createElement('div');
   menu.className = 'skica-context-menu';
-  menu.style.cssText = `position:fixed;left:${e.clientX}px;top:${e.clientY}px;background:${COLORS.surface};border:1px solid ${COLORS.border};border-radius:6px;padding:4px 0;z-index:9999;font-size:13px;font-family:Consolas,monospace;box-shadow:0 4px 12px rgba(0,0,0,.5);`;
+  menu.style.left = `${e.clientX}px`;
+  menu.style.top = `${e.clientY}px`;
 
-  const itemStyle = `padding:6px 16px;cursor:pointer;color:${COLORS.text};white-space:nowrap;`;
-  let menuItems = `<div class="ctx-item" data-action="ref" style="${itemStyle}">📍 Nastavit jako referenci (INC)</div>`;
+  let menuItems = `<div class="ctx-item" data-action="ref">📍 Nastavit jako referenci (INC)</div>`;
   if (ctxIdx !== null) {
     state.selected = ctxIdx;
     updateObjectList();
     updateProperties();
     renderAll();
-    menuItems += `<div style="border-top:1px solid ${COLORS.surfaceHover};margin:2px 0"></div>`;
-    menuItems += `<div class="ctx-item" data-action="mirror" style="${itemStyle}">🪞 Zrcadlit (Shift+M)</div>`;
-    menuItems += `<div class="ctx-item" data-action="rotate" style="${itemStyle}">🔄 Otočit</div>`;
-    menuItems += `<div class="ctx-item" data-action="array" style="${itemStyle}">📏 Lineární pole</div>`;
-    menuItems += `<div class="ctx-item" data-action="offset" style="${itemStyle}">⇔ Offset</div>`;
+    menuItems += `<div class="ctx-sep"></div>`;
+    menuItems += `<div class="ctx-item" data-action="mirror">🪞 Zrcadlit (Shift+M)</div>`;
+    menuItems += `<div class="ctx-item" data-action="rotate">🔄 Otočit</div>`;
+    menuItems += `<div class="ctx-item" data-action="array">📏 Lineární pole</div>`;
+    menuItems += `<div class="ctx-item" data-action="offset">⇔ Offset</div>`;
     if (state.objects[ctxIdx] && state.objects[ctxIdx].type === 'polyline') {
-      menuItems += `<div class="ctx-item" data-action="explode" style="${itemStyle}">💥 Rozložit konturu</div>`;
+      menuItems += `<div class="ctx-item" data-action="explode">💥 Rozložit konturu</div>`;
     }
-    menuItems += `<div style="border-top:1px solid ${COLORS.surfaceHover};margin:2px 0"></div>`;
-    menuItems += `<div class="ctx-item" data-action="delete" style="${itemStyle};color:${COLORS.delete}">🗑 Smazat</div>`;
+    menuItems += `<div class="ctx-sep"></div>`;
+    menuItems += `<div class="ctx-item ctx-delete" data-action="delete">🗑 Smazat</div>`;
   }
   menu.innerHTML = menuItems;
   document.body.appendChild(menu);
@@ -454,8 +454,6 @@ drawCanvas.addEventListener("contextmenu", (e) => {
         deleteSelected();
       }
     });
-    item.addEventListener('mouseenter', function() { this.style.background = COLORS.surfaceHover; });
-    item.addEventListener('mouseleave', function() { this.style.background = ''; });
   });
 
   const closeMenu = (ev) => {
