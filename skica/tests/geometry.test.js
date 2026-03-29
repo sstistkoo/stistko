@@ -7,6 +7,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 // Mockujeme render.js (přistupuje k DOM přes canvas.js)
 vi.mock('../js/render.js', () => ({
   renderAll: vi.fn(),
+  renderAllDebounced: vi.fn(),
 }));
 
 import {

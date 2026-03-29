@@ -32,6 +32,7 @@ vi.stubGlobal('navigator', { vibrate: vi.fn() });
 // Mock render.js
 vi.mock('../js/render.js', () => ({
   renderAll: vi.fn(),
+  renderAllDebounced: vi.fn(),
 }));
 
 import { state, pushUndo, undo, redo, showToast } from '../js/state.js';

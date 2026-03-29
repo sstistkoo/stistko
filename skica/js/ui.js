@@ -5,7 +5,7 @@
 import { COLORS } from './constants.js';
 import { state, showToast, pushUndo, undo, redo, axisLabels, resetDrawingState, displayX, xPrefix } from './state.js';
 import { typeLabel, toolLabel, bulgeToArc, safeEvalMath } from './utils.js';
-import { renderAll } from './render.js';
+import { renderAll, renderAllDebounced } from './render.js';
 import { drawCanvas, screenToWorld, snapPt } from './canvas.js';
 import { bridge } from './bridge.js';
 import { addObject } from './objects.js';
@@ -211,7 +211,7 @@ export function updateProperties() {
   // Název (editovatelný)
   addTextRow("Název", obj.name || "", (v) => { obj.name = v; });
   // Barva (editovatelná)
-  addColorRow("Barva", obj.color || COLORS.primary, (v) => { obj.color = v; renderAll(); });
+  addColorRow("Barva", obj.color || COLORS.primary, (v) => { obj.color = v; renderAllDebounced(); });
 
   // Vrstva (select)
   {
@@ -481,7 +481,7 @@ export function updateLayerList() {
     colorDot.title = "Změnit barvu vrstvy";
     colorDot.addEventListener("input", () => {
       layer.color = colorDot.value;
-      renderAll();
+      renderAllDebounced();
     });
 
     // Name (inline editable)

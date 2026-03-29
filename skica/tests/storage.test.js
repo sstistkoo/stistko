@@ -33,7 +33,7 @@ vi.hoisted(() => {
 });
 
 // Mock render.js
-vi.mock('../js/render.js', () => ({ renderAll: vi.fn() }));
+vi.mock('../js/render.js', () => ({ renderAll: vi.fn(), renderAllDebounced: vi.fn() }));
 
 // Mock ui.js
 vi.mock('../js/ui.js', () => ({
@@ -176,7 +176,7 @@ describe('projectManager – renameProject', () => {
     state.projectName = 'original';
 
     await renameProject('original', 'nový název');
-    
+
     const oldData = await loadProjectFromDB('original');
     expect(oldData).toBeNull();
     const newData = await loadProjectFromDB('nový název');
