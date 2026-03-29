@@ -154,3 +154,16 @@ export const acmeThreads = [
   {n:'3"',    D:76.200, tpi:2},    {n:'3-1/2"',D:88.900,tpi:2},
   {n:'4"',    D:101.600,tpi:2},    {n:'5"',    D:127.000,tpi:2},
 ];
+
+// BSPT (R) – kuželový BSP – ISO 7 / DIN 2999, úhel 55°, kuželovitost 1:16
+export const bsptThreads = [
+  {n:"R 1/8",   D:9.728,  tpi:28},
+  {n:"R 1/4",   D:13.157, tpi:19},
+  {n:"R 3/8",   D:16.662, tpi:19},
+  {n:"R 1/2",   D:20.955, tpi:14},
+  {n:"R 3/4",   D:26.441, tpi:14},
+  {n:"R 1",     D:33.249, tpi:11},
+  {n:"R 1 1/4", D:41.910, tpi:11},
+  {n:"R 1 1/2", D:47.803, tpi:11},
+  {n:"R 2",     D:59.614, tpi:11},
+];
