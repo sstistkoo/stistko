@@ -1,23 +1,10 @@
 import { showToast } from '../state.js';
 import { safeEvalMath } from '../utils.js';
 import { makeOverlay } from '../dialogFactory.js';
-import { mCoarse, mFine, gThreads, trThreads, uncThreads, unfThreads, bswThreads, nptThreads, acmeThreads } from './threadData.js';
+import { mCoarse, mFine, gThreads, trThreads, uncThreads, unfThreads, bswThreads, nptThreads, acmeThreads, bsptThreads } from './threadData.js';
 
 export function openThreadCalc() {
   // ── DATA ──────────────────────────────────────────────────
-
-  // BSPT (R) – kuželový BSP – ISO 7 / DIN 2999, úhel 55°, kuželovitost 1:16
-  var bsptThreads = [
-    {n:"R 1/8",   D:9.728,  tpi:28},
-    {n:"R 1/4",   D:13.157, tpi:19},
-    {n:"R 3/8",   D:16.662, tpi:19},
-    {n:"R 1/2",   D:20.955, tpi:14},
-    {n:"R 3/4",   D:26.441, tpi:14},
-    {n:"R 1",     D:33.249, tpi:11},
-    {n:"R 1 1/4", D:41.910, tpi:11},
-    {n:"R 1 1/2", D:47.803, tpi:11},
-    {n:"R 2",     D:59.614, tpi:11},
-  ];
 
   // ── BUILD ROWS ────────────────────────────────────────────
   function buildMetricRows(arr, prefix) {
@@ -336,7 +323,7 @@ export function openThreadCalc() {
       {label: 'Hloubka vnit\u0159n\u00ED', value: '<strong>' + hInt.toFixed(3) + '</strong> mm', copyValue: hInt.toFixed(3) + ' mm'},
       {label: 'Ta\u017En\u00FD pr\u016F\u0159ez A\u209B', value: '<strong>' + As.toFixed(2) + '</strong> mm\u00B2', copyValue: As.toFixed(2) + ' mm\u00B2'},
       {sep: true},
-      {label: 'P\u0159eds. \u00F8 (d\u2083)', value: '<strong>' + d3.toFixed(3) + '</strong> mm', copyLabel: 'P\u0159edvrt\u00E1n\u00ED', copyValue: drill.toFixed(1) + ' mm'},
+      {label: 'P\u0159edvrt\u00E1n\u00ED', value: '<strong>' + drill.toFixed(1) + '</strong> mm', copyLabel: 'P\u0159edvrt\u00E1n\u00ED', copyValue: drill.toFixed(1) + ' mm'},
       {rawHtml: tolHTML, rawCopy: tolCopy},
       {rawHtml: drillRecommendHTML(D, D1, hInt)},
       {rawHtml: engagementLengthHTML(D), rawCopy: engagementLengthCopy(D)}
@@ -433,7 +420,7 @@ export function openThreadCalc() {
       {label: 'Hloubka vnit\u0159n\u00ED', value: '<strong>' + hInt.toFixed(3) + '</strong> mm', copyValue: hInt.toFixed(3) + ' mm'},
       {label: 'Ta\u017En\u00FD pr\u016F\u0159ez A\u209B', value: '<strong>' + As.toFixed(2) + '</strong> mm\u00B2', copyValue: As.toFixed(2) + ' mm\u00B2'},
       {sep: true},
-      {label: 'P\u0159eds. \u00F8', value: '<strong>' + d3.toFixed(3) + '</strong> mm', copyLabel: 'P\u0159edvrt\u00E1n\u00ED', copyValue: drill.toFixed(3) + ' mm'},
+      {label: 'P\u0159edvrt\u00E1n\u00ED', value: '<strong>' + drill.toFixed(1) + '</strong> mm', copyLabel: 'P\u0159edvrt\u00E1n\u00ED', copyValue: drill.toFixed(1) + ' mm'},
       {rawHtml: drillRecommendHTML(D, D1, hInt)},
       {rawHtml: engagementLengthHTML(D), rawCopy: engagementLengthCopy(D)}
     ], [
@@ -473,6 +460,7 @@ export function openThreadCalc() {
     var d2   = D - 0.6403 * P;
     var d1   = D - 1.2806 * P;
     var hExt = 0.6403 * P;
+    var drill = d1;
     var taperAngle = '1\u00B047\u203224"';
     var taperRate = '1:16 (6,25 %)';
     return buildDetailTable(name + ' \u2013 ISO 7 / DIN 2999', [
@@ -490,6 +478,8 @@ export function openThreadCalc() {
       {label: 'Mal\u00FD \u00F8 d\u2081', value: '<strong>' + d1.toFixed(3) + '</strong> mm', copyLabel: 'Mal\u00FD \u00D8 d\u2081', copyValue: d1.toFixed(3) + ' mm'},
       {sep: true},
       {label: 'Hloubka profilu', value: '<strong>' + hExt.toFixed(3) + '</strong> mm', copyValue: hExt.toFixed(3) + ' mm'},
+      {sep: true},
+      {label: 'P\u0159edvrt\u00E1n\u00ED', value: '<strong>' + drill.toFixed(1) + '</strong> mm', copyLabel: 'P\u0159edvrt\u00E1n\u00ED', copyValue: drill.toFixed(1) + ' mm'},
     ], [
       {depth: hExt, label: 'profil'}
     ], name + ' (ISO 7 / DIN 2999, 55\u00B0, ku\u017Eel 1:16)');
@@ -778,9 +768,12 @@ export function openThreadCalc() {
     }
     var oldRows = group.querySelectorAll('.thr-pass-row');
     for (var i = 0; i < oldRows.length; i++) oldRows[i].remove();
+    // Insert new rows before VC data (after toggle row)
+    var toggleTr = group.querySelector('.tol-toggle-row');
+    var refNode = toggleTr ? toggleTr.closest('tr').nextElementSibling : null;
     var temp = document.createElement('tbody');
     temp.innerHTML = threadPassesRows(totalDepth, nPasses, infeedType);
-    while (temp.firstChild) group.appendChild(temp.firstChild);
+    while (temp.firstChild) group.insertBefore(temp.firstChild, refNode);
   });
 
   // ── Switch thread type ──
@@ -867,24 +860,24 @@ export function openThreadCalc() {
       lastMetricD = D; lastMetricP = P; lastMetricLabel = lbl;
       setDetail(detailMetric(D, P, lbl, selExtClass.value, selIntClass.value));
     } else if (type === 'G') {
-      var tpi = parseInt(tr.dataset.tpi);
+      var tpi = parseFloat(tr.dataset.tpi);
       setDetail(detailG(D, P, tpi, tr.dataset.n));
     } else if (type === 'Tr') {
       var starts = parseInt(inpStarts.value) || 1;
       setDetail(detailTr(D, P, 'Tr' + D + '\u00D7' + P, starts));
     } else if (type === 'UNC') {
-      setDetail(detailUN(D, P, parseInt(tr.dataset.tpi), tr.dataset.n, 'UNC \u2013 ASME B1.1'));
+      setDetail(detailUN(D, P, parseFloat(tr.dataset.tpi), tr.dataset.n, 'UNC \u2013 ASME B1.1'));
     } else if (type === 'UNF') {
-      setDetail(detailUN(D, P, parseInt(tr.dataset.tpi), tr.dataset.n, 'UNF \u2013 ASME B1.1'));
+      setDetail(detailUN(D, P, parseFloat(tr.dataset.tpi), tr.dataset.n, 'UNF \u2013 ASME B1.1'));
     } else if (type === 'BSW') {
-      setDetail(detailBSW(D, P, parseInt(tr.dataset.tpi), tr.dataset.n));
+      setDetail(detailBSW(D, P, parseFloat(tr.dataset.tpi), tr.dataset.n));
     } else if (type === 'BSPT') {
-      setDetail(detailBSPT(D, P, parseInt(tr.dataset.tpi), tr.dataset.n));
+      setDetail(detailBSPT(D, P, parseFloat(tr.dataset.tpi), tr.dataset.n));
     } else if (type === 'NPT') {
-      setDetail(detailNPT(D, P, parseInt(tr.dataset.tpi), tr.dataset.n));
+      setDetail(detailNPT(D, P, parseFloat(tr.dataset.tpi), tr.dataset.n));
     } else if (type === 'Acme') {
       var starts = parseInt(inpStarts.value) || 1;
-      setDetail(detailAcme(D, P, parseInt(tr.dataset.tpi), tr.dataset.n, starts));
+      setDetail(detailAcme(D, P, parseFloat(tr.dataset.tpi), tr.dataset.n, starts));
     }
   });
 
