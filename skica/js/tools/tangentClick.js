@@ -107,10 +107,13 @@ export function handleTangentClick(wx, wy) {
             state._tangentFirstLine = lineIdx;
             setHint("Klepněte na druhou úsečku pro tečnost s oběma, nebo Esc/zrušit");
           });
-          return; // dialog řídí další stav
+          // Dialog řídí další stav – nesmíme spadnout do cleanup
+          // (cleanup by resetoval state.drawing, které callback právě nastavil)
+          return;
         }
       } else {
         showToast("Vyberte kružnici, oblouk nebo úsečku");
+        // Neukončovat drawing – uživatel může kliknout znovu
         return;
       }
     } else if (state._tangentMode === 'circle-line-2') {

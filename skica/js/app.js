@@ -8,6 +8,7 @@ import { calculateAllIntersections } from './geometry.js';
 import { updateObjectList, updateProperties, resetHint, updateDimsBtn, updateSnapPtsBtn, updateCoordModeBtn, updateMachineTypeBtn, updateXDisplayBtn, togglePanel, updateLayerList, updateStatusProject, checkFirstRunHelp } from './ui.js';
 import { initAutoSave } from './storage.js';
 import { getMeta, setMeta, migrateFromLocalStorage } from './idb.js';
+import { bridge } from './bridge.js';
 
 // Side-effect imports — tyto moduly registrují event listenery při načtení
 import './render.js';
@@ -82,6 +83,7 @@ setInterval(() => {
   updateLayerList();
   initAutoSave();
   updateStatusProject();
+  if (bridge.updateMobileCoords) bridge.updateMobileCoords(0, 0);
   checkFirstRunHelp();
 })();
 

@@ -7,7 +7,7 @@ import { renderAll } from '../render.js';
 import { addObject } from '../objects.js';
 import { setHint, resetHint } from '../ui.js';
 import { findObjectAt, calculateAllIntersections } from '../geometry.js';
-import { getLineSegment, setConstraint } from './helpers.js';
+import { getLineSegment, setConstraint, propagateConstraints } from './helpers.js';
 
 export function handleParallelClick(wx, wy) {
   if (!state.drawing) {
@@ -56,15 +56,20 @@ export function handleParallelClick(wx, wy) {
         const d2 = Math.hypot(cx - refSeg.seg.x2, cy - refSeg.seg.y2);
 
         pushUndo();
+        let movedEnd;
         if (d1 <= d2) {
           // P1 je kotva
           refSeg.setP2(refSeg.seg.x1 + len * Math.cos(targetAngle), refSeg.seg.y1 + len * Math.sin(targetAngle));
+          movedEnd = 'p2';
         } else {
           // P2 je kotva
           refSeg.setP1(refSeg.seg.x2 - len * Math.cos(targetAngle), refSeg.seg.y2 - len * Math.sin(targetAngle));
+          movedEnd = 'p1';
         }
         // Uložit vazbu na objekt
         setConstraint(state.objects[state._parallelRefIdx], refSeg.segIdx, 'parallel');
+        // Propagovat na sousední segmenty polyline
+        propagateConstraints(state.objects[state._parallelRefIdx], refSeg.segIdx, movedEnd);
 
         showToast("Otočeno do rovnoběžnosti ✓");
         state.drawing = false;

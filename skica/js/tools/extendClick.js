@@ -43,6 +43,7 @@ export function handleExtendClick(wx, wy) {
   // Filter: only points beyond the extended end (along the line direction)
   const dx = ls.seg.x2 - ls.seg.x1, dy = ls.seg.y2 - ls.seg.y1;
   const len2 = dx * dx + dy * dy;
+  if (len2 < 1e-12) { showToast("Úsečka má nulovou délku"); return; }
   const candidates = [];
   for (const p of pts) {
     const t = ((p.x - ls.seg.x1) * dx + (p.y - ls.seg.y1) * dy) / len2;

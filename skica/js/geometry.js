@@ -3,6 +3,7 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 import { state } from './state.js';
+import { SNAP_POINT_THRESHOLD, SELECT_THRESHOLD, CONSTRAINT_OFFSET_PX, ARC_OUTSIDE_PENALTY } from './constants.js';
 import { distPointToSegment, isAngleBetween, bulgeToArc } from './utils.js';
 import { renderAll } from './render.js';
 import { bridge } from './bridge.js';
@@ -14,7 +15,6 @@ import { bridge } from './bridge.js';
  * Značky jsou odsazeny kolmo od segmentu (stejný offset jako v rendereru).
  * @returns {{ objIdx: number, segIdx: number|null }|null}
  */
-const CONSTRAINT_OFFSET_PX = 22;  // musí odpovídat render.js
 
 function _constraintPos(x1, y1, x2, y2) {
   const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
@@ -27,7 +27,7 @@ function _constraintPos(x1, y1, x2, y2) {
 }
 
 export function findConstraintAt(wx, wy) {
-  const threshold = 20 / state.zoom;
+  const threshold = SNAP_POINT_THRESHOLD / state.zoom;
   let best = null, bestDist = Infinity;
 
   state.objects.forEach((obj, idx) => {
@@ -86,7 +86,7 @@ export function findObjectAt(wx, wy) {
       closest = idx;
     }
   });
-  const threshold = 15 / state.zoom;
+  const threshold = SELECT_THRESHOLD / state.zoom;
   return closestDist < threshold ? closest : null;
 }
 
@@ -184,7 +184,7 @@ export function distToObject(obj, wx, wy) {
       const angle = Math.atan2(wy - obj.cy, wx - obj.cx);
       return isAngleBetween(angle, obj.startAngle, obj.endAngle)
         ? dist
-        : dist + 100;
+        : dist + ARC_OUTSIDE_PENALTY;
     }
     case "rect": {
       const d1 = distPointToSegment(wx, wy, obj.x1, obj.y1, obj.x2, obj.y1);

@@ -7,6 +7,7 @@ import { state, pushUndo, showToast } from '../state.js';
 import { renderAll } from '../render.js';
 import { calculateAllIntersections } from '../geometry.js';
 import { setHint, resetHint, updateProperties } from '../ui.js';
+import { moveObject } from '../objects.js';
 
 /**
  * Najde nejbližší koncový/klíčový bod objektu k zadaným souřadnicím.
@@ -100,7 +101,21 @@ export function handleSnapPointClick(wx, wy) {
     // Krok 2: přesuň na cílový bod
     pushUndo();
     const src = state._snapPointState;
-    moveEndpoint(src.objIdx, src.key, wx, wy);
+    const srcObj = state.objects[src.objIdx];
+    if (!srcObj) {
+      showToast("Zdrojový objekt byl smazán");
+      state._snapPointState = null;
+      resetHint();
+      return;
+    }
+    if (srcObj.type === 'polyline') {
+      // Polyline: posunout celý objekt tak, aby vybraný bod dopadl na cíl
+      const dx = wx - src.x;
+      const dy = wy - src.y;
+      moveObject(srcObj, dx, dy);
+    } else {
+      moveEndpoint(src.objIdx, src.key, wx, wy);
+    }
     calculateAllIntersections();
     showToast("Bod přichycen");
     state._snapPointState = null;

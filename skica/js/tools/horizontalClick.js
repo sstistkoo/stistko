@@ -5,7 +5,7 @@
 import { state, pushUndo, showToast } from '../state.js';
 import { renderAll } from '../render.js';
 import { findObjectAt, calculateAllIntersections } from '../geometry.js';
-import { getLineSegment, setConstraint } from './helpers.js';
+import { getLineSegment, setConstraint, propagateConstraints } from './helpers.js';
 
 /** Vyrovná úsečku/segment kontury do vodorovné polohy.
  *  Kotevní bod = koncový bod bližší ke kliknutí (zůstane na místě),
@@ -21,6 +21,7 @@ export function handleHorizontalClick(wx, wy) {
   }
 
   const len = Math.hypot(ls.seg.x2 - ls.seg.x1, ls.seg.y2 - ls.seg.y1);
+  if (len < 1e-9) { showToast("Segment má nulovou délku"); return; }
   // Zjistit, ke kterému konci je klik blíž → ten bude kotva
   const d1 = Math.hypot(wx - ls.seg.x1, wy - ls.seg.y1);
   const d2 = Math.hypot(wx - ls.seg.x2, wy - ls.seg.y2);
@@ -28,16 +29,21 @@ export function handleHorizontalClick(wx, wy) {
   const sign = (ls.seg.x2 - ls.seg.x1) >= 0 ? 1 : -1;
 
   pushUndo();
+  let movedEnd;
   if (d1 <= d2) {
     // P1 je kotva, P2 se posune
     ls.setP2(ls.seg.x1 + sign * len, ls.seg.y1);
+    movedEnd = 'p2';
   } else {
     // P2 je kotva, P1 se posune
     ls.setP1(ls.seg.x2 - sign * len, ls.seg.y2);
+    movedEnd = 'p1';
   }
 
   // Uložit vazbu na objekt
   setConstraint(obj, ls.segIdx, 'horizontal');
+  // Propagovat na sousední segmenty polyline
+  propagateConstraints(obj, ls.segIdx, movedEnd);
 
   calculateAllIntersections();
   renderAll();

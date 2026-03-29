@@ -65,6 +65,11 @@ export const PREVIEW_DASH        = [4, 4];
 export const ARROW_LENGTH        = 8;     // px délka šipky kóty
 export const ARROW_ANGLE         = Math.PI / 7;
 
+// ── Geometrie / výběr ───────────────────────────────────────
+export const SELECT_THRESHOLD     = 15;   // px (děleno zoom) – výběr objektu klikem
+export const CONSTRAINT_OFFSET_PX = 22;   // px odsazení vazební značky od segmentu
+export const ARC_OUTSIDE_PENALTY  = 100;  // penalizace vzdálenosti mimo oblouk
+
 // ── Ostatní ─────────────────────────────────────────────────
 export const PASTE_OFFSET        = 10;    // px posun při vložení
 export const AUTO_CENTER_PADDING = 0.15;  // 15 % padding při zoomToFit

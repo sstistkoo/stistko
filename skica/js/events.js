@@ -564,6 +564,13 @@ export function handleCanvasClick(wx, wy) {
       } else {
         const tp = state.tempPoints[0];
         if (state.tool === "line" || state.tool === "constr") {
+          if (Math.hypot(wx - tp.x, wy - tp.y) < 1e-9) {
+            showToast("Úsečka má nulovou délku");
+            state.drawing = false;
+            state.tempPoints = [];
+            resetHint();
+            break;
+          }
           addObject({
             type: state.tool === "constr" ? "constr" : "line",
             x1: tp.x,
@@ -618,6 +625,13 @@ export function handleCanvasClick(wx, wy) {
       } else {
         const cp = state.tempPoints[0];
         const r = Math.hypot(wx - cp.x, wy - cp.y);
+        if (r < 1e-9) {
+          showToast("Kružnice má nulový poloměr");
+          state.drawing = false;
+          state.tempPoints = [];
+          resetHint();
+          break;
+        }
         addObject({
           type: "circle",
           cx: cp.x,
@@ -645,6 +659,13 @@ export function handleCanvasClick(wx, wy) {
         const ctr = state.tempPoints[0],
           p1 = state.tempPoints[1];
         const r = Math.hypot(p1.x - ctr.x, p1.y - ctr.y);
+        if (r < 1e-9) {
+          showToast("Oblouk má nulový poloměr");
+          state.drawing = false;
+          state.tempPoints = [];
+          resetHint();
+          break;
+        }
         const startAngle = Math.atan2(p1.y - ctr.y, p1.x - ctr.x);
         const endAngle = Math.atan2(wy - ctr.y, wx - ctr.x);
         addObject({
@@ -670,6 +691,13 @@ export function handleCanvasClick(wx, wy) {
         renderAll();
       } else {
         const rp = state.tempPoints[0];
+        if (Math.abs(wx - rp.x) < 1e-9 && Math.abs(wy - rp.y) < 1e-9) {
+          showToast("Obdélník má nulovou velikost");
+          state.drawing = false;
+          state.tempPoints = [];
+          resetHint();
+          break;
+        }
         addObject({
           type: "rect",
           x1: rp.x,

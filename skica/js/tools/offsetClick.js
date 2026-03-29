@@ -67,12 +67,12 @@ export function handleOffsetClick(wx, wy) {
     function onSideTouch(e) {
       if (e.changedTouches.length === 1) {
         e.preventDefault();
-        cleanupSideListeners();
         onSideClick(e);
       }
     }
 
     drawCanvas.addEventListener("click", onSideClick);
     drawCanvas.addEventListener("touchend", onSideTouch);
+    state._toolCleanup = cleanupSideListeners;
   });
 }
