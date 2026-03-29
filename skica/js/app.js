@@ -17,8 +17,19 @@ import './events.js';
 import './touch.js';
 import './dialogs.js';
 
-// ── Expose togglePanel for inline onclick in HTML ──
-window.togglePanel = togglePanel;
+// ── Panel toggle via data-panel attributes ──
+document.querySelectorAll('.panel-header[data-panel]').forEach(header => {
+  header.addEventListener('click', (e) => {
+    if (e.target.closest('.obj-edit-btn, .cnc-copy-btn')) return;
+    togglePanel(header.dataset.panel);
+  });
+  header.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      togglePanel(header.dataset.panel);
+    }
+  });
+});
 
 // ── Auto-load při startu ──
 async function tryAutoLoad() {
