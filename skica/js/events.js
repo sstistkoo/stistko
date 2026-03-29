@@ -125,6 +125,12 @@ drawCanvas.addEventListener(
 // ── Klávesnice ──
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
+    // Close topmost dialog overlay if open
+    const topOverlay = document.querySelector('.input-overlay, .calc-overlay');
+    if (topOverlay) {
+      topOverlay.remove();
+      return;
+    }
     // Close help overlay if open
     const helpOverlay = document.getElementById('helpOverlay');
     if (helpOverlay && helpOverlay.classList.contains('visible')) {
