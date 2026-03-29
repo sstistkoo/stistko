@@ -21,3 +21,18 @@ export function makeOverlay(type, title, bodyHTML, windowClass) {
   overlay.addEventListener("click", e => { if (e.target === overlay) overlay.remove(); });
   return overlay;
 }
+
+/**
+ * Vytvoří input-overlay s daným innerHTML, připojí do body
+ * a přidá dismiss kliknutím na pozadí.
+ */
+export function makeInputOverlay(innerHTML) {
+  const overlay = document.createElement('div');
+  overlay.className = 'input-overlay';
+  overlay.innerHTML = innerHTML;
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) overlay.remove();
+  });
+  return overlay;
+}

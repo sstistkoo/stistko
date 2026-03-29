@@ -3,6 +3,7 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 import { COLORS } from './constants.js';
+import { makeInputOverlay } from './dialogFactory.js';
 import { state, showToast, pushUndo, toDisplayCoords, fromIncToAbs, axisLabels, displayX, xPrefix } from './state.js';
 import { addObject } from './objects.js';
 import { screenToWorld, snapPt, drawCanvas } from './canvas.js';
@@ -92,9 +93,7 @@ export function showMeasureResult(p1, p2, d, angle) {
         <tr><td style="color:${COLORS.label}">${pf}Bod 1:</td><td style="color:${COLORS.preview}">${pf}${Hp}${H}${fH(dp1.x).toFixed(3)} ${pf}${Vp}${V}${fV(dp1.y).toFixed(3)}</td></tr>
         <tr><td style="color:${COLORS.label}">${pf}Bod 2:</td><td style="color:${COLORS.preview}">${pf}${Hp}${H}${fH(dp2.x).toFixed(3)} ${pf}${Vp}${V}${fV(dp2.y).toFixed(3)}</td></tr>
   ` : '';
-  const overlay = document.createElement("div");
-  overlay.className = "input-overlay";
-  overlay.innerHTML = `
+  const overlay = makeInputOverlay(`
     <div class="input-dialog">
       <h3>📏 Výsledek měření</h3>
       <table style="width:100%;font-family:Consolas;font-size:13px;">
@@ -110,8 +109,7 @@ export function showMeasureResult(p1, p2, d, angle) {
         <button class="btn-cancel" id="measureAddDim">📐 Přidat kótu</button>
         <button class="btn-ok" onclick="this.closest('.input-overlay').remove()">OK</button>
       </div>
-    </div>`;
-  document.body.appendChild(overlay);
+    </div>`);
   overlay
     .querySelector("#measureAddDim")
     .addEventListener("click", () => {
@@ -136,9 +134,7 @@ export function showMeasureResult(p1, p2, d, angle) {
 /** Otevře dialog pro přímé zadání poloměru kružnice. */
 export function showCircleRadiusDialog() {
   const cp = state.tempPoints[0];
-  const overlay = document.createElement("div");
-  overlay.className = "input-overlay";
-  overlay.innerHTML = `
+  const overlay = makeInputOverlay(`
     <div class="input-dialog">
       <h3>Kružnice – zadání poloměru</h3>
       <label>Střed: ${axisLabels()[0]}=${cp.x.toFixed(2)}, ${axisLabels()[1]}=${cp.y.toFixed(2)}</label>
@@ -148,8 +144,7 @@ export function showCircleRadiusDialog() {
         <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
         <button class="btn-ok" id="dlgOk">OK</button>
       </div>
-    </div>`;
-  document.body.appendChild(overlay);
+    </div>`);
   const inp = overlay.querySelector("#dlgRadius");
   inp.focus();
   inp.select();
@@ -185,9 +180,7 @@ document
 
 /** Otevře dialog pro číselné zadání souřadnic objektu. */
 export function showNumericalInputDialog() {
-  const overlay = document.createElement("div");
-  overlay.className = "input-overlay";
-  overlay.innerHTML = `
+  const overlay = makeInputOverlay(`
     <div class="input-dialog" style="min-width:400px">
       <h3>🔢 Číselné zadání objektu</h3>
       <div id="numModeInfo" style="font-size:11px;margin-bottom:8px;padding:4px 8px;border-radius:4px;font-family:Consolas;${state.coordMode === 'inc' ? `background:${COLORS.selected}22;color:${COLORS.selected}` : `color:${COLORS.textMuted}`}">
@@ -209,8 +202,7 @@ export function showNumericalInputDialog() {
         <button class="btn-cancel" id="numCancel">Zrušit</button>
         <button class="btn-ok" id="numOk">Vytvořit</button>
       </div>
-    </div>`;
-  document.body.appendChild(overlay);
+    </div>`);
 
   const typeSelect = overlay.querySelector("#numType");
   const fieldsDiv = overlay.querySelector("#numFields");
@@ -723,9 +715,7 @@ export function showPolarDrawingDialog() {
     }
   }
 
-  const overlay = document.createElement("div");
-  overlay.className = "input-overlay";
-  overlay.innerHTML = `
+  const overlay = makeInputOverlay(`
     <div class="input-dialog" style="min-width:460px">
       <h3>📐 Polární kreslení z bodu</h3>
       <p style="font-size:12px;color:${COLORS.textMuted};margin-bottom:10px">
@@ -767,8 +757,7 @@ export function showPolarDrawingDialog() {
         <button class="btn-cancel" id="polClose">Zavřít</button>
         <button class="btn-ok" id="polAdd">➕ Přidat segment</button>
       </div>
-    </div>`;
-  document.body.appendChild(overlay);
+    </div>`);
 
   const polRefX = overlay.querySelector("#polRefX");
   const polRefZ = overlay.querySelector("#polRefZ");
@@ -950,9 +939,7 @@ export function showBulgeDialog(p1, p2, currentBulge, onAccept) {
     currentCW = currentBulge < 0;
   }
 
-  const overlay = document.createElement('div');
-  overlay.className = 'input-overlay';
-  overlay.innerHTML = `
+  const overlay = makeInputOverlay(`
     <div class="input-dialog" style="min-width:360px">
       <h3>⌒ Oblouk segmentu</h3>
       <table style="width:100%;font-family:Consolas;font-size:12px;margin-bottom:8px">
@@ -974,8 +961,7 @@ export function showBulgeDialog(p1, p2, currentBulge, onAccept) {
         <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
         <button class="btn-ok" id="dlgBulgeOk">OK</button>
       </div>
-    </div>`;
-  document.body.appendChild(overlay);
+    </div>`);
 
   const rInput = overlay.querySelector('#dlgBulgeR');
   const dirSelect = overlay.querySelector('#dlgBulgeDir');
@@ -1035,9 +1021,7 @@ export function showIntersectionInfo(pt) {
   const Vp = isK ? '' : xp;
   const hv = isK ? displayX(pt.x) : pt.x;
   const vv = isK ? pt.y : displayX(pt.y);
-  const overlay = document.createElement("div");
-  overlay.className = "input-overlay";
-  overlay.innerHTML = `
+  const overlay = makeInputOverlay(`
     <div class="input-dialog">
       <h3>⨯ Průsečík</h3>
       <table style="width:100%;font-family:Consolas;font-size:14px;">
@@ -1049,8 +1033,7 @@ export function showIntersectionInfo(pt) {
         <button class="btn-cancel" id="intAddPoint">📍 Vytvořit bod</button>
         <button class="btn-ok" onclick="this.closest('.input-overlay').remove()">OK</button>
       </div>
-    </div>`;
-  document.body.appendChild(overlay);
+    </div>`);
 
   overlay.querySelector("#intCopy").addEventListener("click", () => {
     const text = `${Hp}${H}${hv.toFixed(3)} ${Vp}${V}${vv.toFixed(3)}`;
@@ -1113,10 +1096,7 @@ export function showMeasureObjectInfo(obj, wx, wy, objIdx) {
     html = buildObjectInfoDialog(obj, objIdx);
   }
 
-  const overlay = document.createElement("div");
-  overlay.className = "input-overlay";
-  overlay.innerHTML = html;
-  document.body.appendChild(overlay);
+  const overlay = makeInputOverlay(html);
 
   if (clickedEndpoint && nearestPt) {
     overlay.querySelector("#ptCopy").addEventListener("click", () => {
@@ -1466,9 +1446,6 @@ export function showMobileEditDialog() {
   }
 
   // Jinak nabídnout výběr
-  const overlay = document.createElement("div");
-  overlay.className = "input-overlay";
-
   let listHtml = state.objects.map((obj, idx) => {
     const icon = { point: "·", line: "╱", constr: "┄", circle: "○", arc: "◜", rect: "▭", polyline: "⛓" }[obj.type] || "?";
     return `<div class="edit-obj-item" data-idx="${idx}" style="padding:10px 12px;cursor:pointer;border-bottom:1px solid ${COLORS.surface};display:flex;align-items:center;gap:8px;transition:background 0.15s">
@@ -1478,7 +1455,7 @@ export function showMobileEditDialog() {
     </div>`;
   }).join("");
 
-  overlay.innerHTML = `
+  const overlay = makeInputOverlay(`
     <div class="input-dialog" style="max-height:80vh;overflow-y:auto">
       <h3>✏️ Vyberte objekt k úpravě</h3>
       <div style="max-height:50vh;overflow-y:auto;border:1px solid ${COLORS.surface};border-radius:4px;margin-bottom:12px">
@@ -1487,8 +1464,7 @@ export function showMobileEditDialog() {
       <div class="btn-row">
         <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
       </div>
-    </div>`;
-  document.body.appendChild(overlay);
+    </div>`);
 
   overlay.querySelectorAll(".edit-obj-item").forEach((item) => {
     item.addEventListener("click", () => {
@@ -1507,9 +1483,6 @@ export function showMobileEditDialog() {
 function showEditObjectDialog(idx) {
   const obj = state.objects[idx];
   if (!obj) { showToast("Objekt nenalezen"); return; }
-
-  const overlay = document.createElement("div");
-  overlay.className = "input-overlay";
 
   function buildFields() {
     const [H, V] = axisLabels();
@@ -1592,7 +1565,7 @@ function showEditObjectDialog(idx) {
 
   const icon = { point: "·", line: "╱", constr: "┄", circle: "○", arc: "◜", rect: "▭", polyline: "⛓" }[obj.type] || "?";
 
-  overlay.innerHTML = `
+  const overlay = makeInputOverlay(`
     <div class="input-dialog">
       <h3>✏️ Upravit: ${icon} ${obj.name || typeLabel(obj.type)}</h3>
       <div id="editFields">${buildFields()}</div>
@@ -1601,8 +1574,7 @@ function showEditObjectDialog(idx) {
         <button class="btn-cancel" id="editCancel">Zrušit</button>
         <button class="btn-ok" id="editOk">Uložit</button>
       </div>
-    </div>`;
-  document.body.appendChild(overlay);
+    </div>`);
 
   // Wire pick buttons
   function wirePickButtons() {
@@ -1815,9 +1787,7 @@ function showEditObjectDialog(idx) {
  * @param {function(number): void} onSideClick
  */
 export function showOffsetDialog(obj, onSideClick) {
-  const overlay = document.createElement("div");
-  overlay.className = "input-overlay";
-  overlay.innerHTML = `
+  const overlay = makeInputOverlay(`
     <div class="input-dialog">
       <h3>Offset – paralelní kopie</h3>
       <label>Objekt: ${obj.name || typeLabel(obj.type)}</label>
@@ -1827,8 +1797,7 @@ export function showOffsetDialog(obj, onSideClick) {
         <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
         <button class="btn-ok" id="dlgOffsetOk">OK – klikni na stranu</button>
       </div>
-    </div>`;
-  document.body.appendChild(overlay);
+    </div>`);
   const inp = overlay.querySelector("#dlgOffsetDist");
   inp.focus();
   inp.select();
@@ -1854,9 +1823,7 @@ export function showOffsetDialog(obj, onSideClick) {
  * @param {function(string): void} callback  volané s 'x'|'z'|'custom'
  */
 export function showMirrorDialog(obj, callback) {
-  const overlay = document.createElement("div");
-  overlay.className = "input-overlay";
-  overlay.innerHTML = `
+  const overlay = makeInputOverlay(`
     <div class="input-dialog">
       <h3>🪞 Zrcadlit objekt</h3>
       <label>Objekt: ${obj.name || typeLabel(obj.type)}</label>
@@ -1871,8 +1838,7 @@ export function showMirrorDialog(obj, callback) {
       <div class="btn-row">
         <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
       </div>
-    </div>`;
-  document.body.appendChild(overlay);
+    </div>`);
 
   overlay.querySelectorAll(".mirror-opt").forEach(btn => {
     btn.addEventListener("click", () => {
@@ -1895,9 +1861,7 @@ export function showMirrorDialog(obj, callback) {
  * @param {function(number,number,number): void} callback  (dx, dz, count)
  */
 export function showLinearArrayDialog(obj, callback) {
-  const overlay = document.createElement("div");
-  overlay.className = "input-overlay";
-  overlay.innerHTML = `
+  const overlay = makeInputOverlay(`
     <div class="input-dialog">
       <h3>📏 Lineární pole</h3>
       <label>Objekt: ${obj.name || typeLabel(obj.type)}</label>
@@ -1911,8 +1875,7 @@ export function showLinearArrayDialog(obj, callback) {
         <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
         <button class="btn-ok" id="dlgArrayOk">Vytvořit</button>
       </div>
-    </div>`;
-  document.body.appendChild(overlay);
+    </div>`);
   overlay.querySelector("#dlgArrayCount").focus();
 
   function accept() {
@@ -1943,12 +1906,10 @@ export function showTangentChoiceDialog(tangentLines, callback) {
   if (tangentLines.length === 0) { showToast("Tečna neexistuje"); return; }
   if (tangentLines.length === 1) { callback([0]); return; }
 
-  const overlay = document.createElement("div");
-  overlay.className = "input-overlay";
   const btns = tangentLines.map((_, i) =>
     `<button class="btn-ok tangent-choice" data-idx="${i}" style="width:100%">Tečna ${i + 1}</button>`
   ).join("");
-  overlay.innerHTML = `
+  const overlay = makeInputOverlay(`
     <div class="input-dialog">
       <h3>Tečny – výběr</h3>
       <label>Nalezeno ${tangentLines.length} tečen. Vyberte:</label>
@@ -1959,8 +1920,7 @@ export function showTangentChoiceDialog(tangentLines, callback) {
       <div class="btn-row">
         <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
       </div>
-    </div>`;
-  document.body.appendChild(overlay);
+    </div>`);
 
   overlay.querySelectorAll(".tangent-choice").forEach(btn => {
     btn.addEventListener("click", () => {
@@ -1991,14 +1951,12 @@ export function showTangentPositionDialog(positions, circle, callback) {
     dist: Math.hypot(p.cx - circle.cx, p.cy - circle.cy)
   })).sort((a, b) => a.dist - b.dist);
 
-  const overlay = document.createElement("div");
-  overlay.className = "input-overlay";
   const btns = sorted.map((s, i) => {
     const p = positions[s.idx];
     const label = i === 0 ? "Nejbližší pozice" : `Pozice ${i + 1}`;
     return `<button class="btn-ok tangent-pos" data-idx="${s.idx}" style="width:100%">${label} (${p.cx.toFixed(1)}, ${p.cy.toFixed(1)})</button>`;
   }).join("");
-  overlay.innerHTML = `
+  const overlay = makeInputOverlay(`
     <div class="input-dialog">
       <h3>Tečné napojení – pozice</h3>
       <label>Vyberte pozici kružnice:</label>
@@ -2008,8 +1966,7 @@ export function showTangentPositionDialog(positions, circle, callback) {
       <div class="btn-row">
         <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
       </div>
-    </div>`;
-  document.body.appendChild(overlay);
+    </div>`);
 
   overlay.querySelectorAll(".tangent-pos").forEach(btn => {
     btn.addEventListener("click", () => {
@@ -2031,9 +1988,7 @@ export function showTangentPositionDialog(positions, circle, callback) {
  * @param {function(number): void} callback  volané s úhlem ve stupních
  */
 export function showRotateDialog(obj, callback) {
-  const overlay = document.createElement("div");
-  overlay.className = "input-overlay";
-  overlay.innerHTML = `
+  const overlay = makeInputOverlay(`
     <div class="input-dialog">
       <h3>Otočit objekt</h3>
       <label>Objekt: ${obj.name || typeLabel(obj.type)}</label>
@@ -2043,8 +1998,7 @@ export function showRotateDialog(obj, callback) {
         <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
         <button class="btn-ok" id="dlgRotateOk">Otočit</button>
       </div>
-    </div>`;
-  document.body.appendChild(overlay);
+    </div>`);
   const inp = overlay.querySelector("#dlgRotateAngle");
   inp.focus();
   inp.select();
@@ -2068,9 +2022,7 @@ export function showRotateDialog(obj, callback) {
  * @param {function(number): void} callback  volané s poloměrem
  */
 export function showFilletDialog(callback) {
-  const overlay = document.createElement("div");
-  overlay.className = "input-overlay";
-  overlay.innerHTML = `
+  const overlay = makeInputOverlay(`
     <div class="input-dialog">
       <h3>Zaoblení (Fillet)</h3>
       <label>Poloměr zaoblení (mm):</label>
@@ -2079,8 +2031,7 @@ export function showFilletDialog(callback) {
         <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
         <button class="btn-ok" id="dlgFilletOk">OK – klikněte na 2. úsečku</button>
       </div>
-    </div>`;
-  document.body.appendChild(overlay);
+    </div>`);
   const inp = overlay.querySelector("#dlgFilletRadius");
   inp.focus();
   inp.select();
