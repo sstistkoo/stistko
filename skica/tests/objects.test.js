@@ -20,6 +20,7 @@ vi.stubGlobal('document', {
     classList: { add: vi.fn(), remove: vi.fn() },
     appendChild: vi.fn(),
     addEventListener: vi.fn(),
+    setAttribute: vi.fn(),
     style: {},
   }),
   body: { appendChild: vi.fn() },

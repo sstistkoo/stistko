@@ -15,6 +15,7 @@ vi.hoisted(() => {
     textContent: '', innerHTML: '', querySelectorAll: () => [],
     appendChild: () => {}, style: {},
     addEventListener: () => {},
+    setAttribute: () => {},
     querySelector: () => null,
   });
   globalThis.document = {

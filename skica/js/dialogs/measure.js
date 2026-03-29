@@ -51,7 +51,7 @@ export function showMeasureResult(p1, p2, d, angle) {
       </table>
       <div class="btn-row">
         <button class="btn-cancel" id="measureAddDim">📐 Přidat kótu</button>
-        <button class="btn-ok" onclick="this.closest('.input-overlay').remove()">OK</button>
+        <button class="btn-ok btn-cancel-overlay">OK</button>
       </div>
     </div>`);
   overlay
@@ -97,7 +97,7 @@ export function showIntersectionInfo(pt) {
       <div class="btn-row">
         <button class="btn-cancel" id="intCopy">📋 Kopírovat</button>
         <button class="btn-cancel" id="intAddPoint">📍 Vytvořit bod</button>
-        <button class="btn-ok" onclick="this.closest('.input-overlay').remove()">OK</button>
+        <button class="btn-ok btn-cancel-overlay">OK</button>
       </div>
     </div>`);
 
@@ -154,7 +154,7 @@ export function showMeasureObjectInfo(obj, wx, wy, objIdx) {
         <div class="btn-row">
           <button class="btn-cancel" id="ptCopy">📋 Kopírovat</button>
           <button class="btn-cancel" id="ptAddPoint">📍 Vytvořit bod</button>
-          <button class="btn-ok" onclick="this.closest('.input-overlay').remove()">OK</button>
+          <button class="btn-ok btn-cancel-overlay">OK</button>
         </div>
       </div>`;
   } else {
@@ -304,7 +304,7 @@ function buildObjectInfoDialog(obj, objIdx) {
         ${addDimBtn}
         <button class="btn-cancel" id="objCopy">📋 Kopírovat</button>
         ${objIdx !== undefined ? `<button class="btn-cancel" id="objEdit" style="color:${COLORS.dimension};border-color:${COLORS.dimension}55">✏️ Upravit</button>` : ''}
-        <button class="btn-ok" onclick="this.closest('.input-overlay').remove()">OK</button>
+        <button class="btn-ok btn-cancel-overlay">OK</button>
       </div>
     </div>`;
 

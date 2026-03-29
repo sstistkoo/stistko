@@ -16,6 +16,7 @@ vi.stubGlobal('document', {
     classList: { add: vi.fn(), remove: vi.fn() },
     appendChild: vi.fn(),
     addEventListener: vi.fn(),
+    setAttribute: vi.fn(),
   }),
   body: { appendChild: vi.fn() },
   querySelector: () => null,
@@ -35,7 +36,7 @@ vi.mock('../js/render.js', () => ({
   renderAllDebounced: vi.fn(),
 }));
 
-import { parseDXF } from '../js/dxf.js';
+import { parseDXF, exportDXF } from '../js/dxf.js';
 
 const PI = Math.PI;
 
@@ -469,5 +470,129 @@ describe('parseDXF – ACI barvy', () => {
       const { entities } = parseDXF(dxf);
       expect(entities[0].color).toBe(expectedColor);
     });
+  });
+});
+
+// ════════════════════════════════════════
+// ── exportDXF – základní scénáře ──
+// ════════════════════════════════════════
+describe('exportDXF', () => {
+  it('exportuje prázdný seznam objektů', () => {
+    const dxf = exportDXF([]);
+    expect(dxf).toContain('HEADER');
+    expect(dxf).toContain('ENTITIES');
+    expect(dxf).toContain('EOF');
+  });
+
+  it('exportuje bod', () => {
+    const dxf = exportDXF([{ type: 'point', x: 10, y: 20 }]);
+    expect(dxf).toContain('POINT');
+    expect(dxf).toContain('10.000000');
+    expect(dxf).toContain('20.000000');
+  });
+
+  it('exportuje úsečku', () => {
+    const dxf = exportDXF([{ type: 'line', x1: 0, y1: 0, x2: 100, y2: 50 }]);
+    expect(dxf).toContain('LINE');
+    expect(dxf).toContain('100.000000');
+    expect(dxf).toContain('50.000000');
+  });
+
+  it('exportuje kružnici', () => {
+    const dxf = exportDXF([{ type: 'circle', cx: 50, cy: 50, r: 25 }]);
+    expect(dxf).toContain('CIRCLE');
+    expect(dxf).toContain('25.000000');
+  });
+
+  it('exportuje oblouk s úhly v stupních', () => {
+    const obj = { type: 'arc', cx: 0, cy: 0, r: 10, startAngle: 0, endAngle: PI / 2 };
+    const dxf = exportDXF([obj]);
+    expect(dxf).toContain('ARC');
+    expect(dxf).toContain('0.000000');  // startAngle
+    expect(dxf).toContain('90.000000'); // endAngle
+  });
+
+  it('exportuje obdélník jako LWPOLYLINE', () => {
+    const dxf = exportDXF([{ type: 'rect', x1: 0, y1: 0, x2: 100, y2: 50 }]);
+    expect(dxf).toContain('LWPOLYLINE');
+    // closed flag
+    const lines = dxf.split('\n');
+    const idx70 = lines.findIndex(l => l.trim() === '70');
+    expect(lines[idx70 + 1].trim()).toBe('1');
+  });
+
+  it('exportuje polylajnu s bulge', () => {
+    const obj = {
+      type: 'polyline',
+      vertices: [{ x: 0, y: 0 }, { x: 10, y: 0 }, { x: 10, y: 10 }],
+      bulges: [0.5, 0, 0],
+      closed: false,
+    };
+    const dxf = exportDXF([obj]);
+    expect(dxf).toContain('LWPOLYLINE');
+    expect(dxf).toContain('0.500000'); // bulge value
+  });
+
+  it('přeskakuje dimension objekty', () => {
+    const dxf = exportDXF([{ type: 'line', x1: 0, y1: 0, x2: 10, y2: 10, isDimension: true }]);
+    expect(dxf).not.toContain('LINE');
+  });
+});
+
+// ════════════════════════════════════════
+// ── Round-trip: export → import ──
+// ════════════════════════════════════════
+describe('DXF round-trip', () => {
+  it('bod přežije export→import', () => {
+    const orig = [{ type: 'point', x: 42.5, y: -13.7 }];
+    const dxf = exportDXF(orig);
+    const { entities } = parseDXF(dxf);
+    expect(entities).toHaveLength(1);
+    expect(entities[0].type).toBe('point');
+    expect(entities[0].x).toBeCloseTo(42.5, 4);
+    expect(entities[0].y).toBeCloseTo(-13.7, 4);
+  });
+
+  it('úsečka přežije export→import', () => {
+    const orig = [{ type: 'line', x1: 1.5, y1: 2.5, x2: 99.9, y2: -10.1 }];
+    const dxf = exportDXF(orig);
+    const { entities } = parseDXF(dxf);
+    expect(entities).toHaveLength(1);
+    expect(entities[0].x1).toBeCloseTo(1.5, 4);
+    expect(entities[0].y1).toBeCloseTo(2.5, 4);
+    expect(entities[0].x2).toBeCloseTo(99.9, 4);
+    expect(entities[0].y2).toBeCloseTo(-10.1, 4);
+  });
+
+  it('kružnice přežije export→import', () => {
+    const orig = [{ type: 'circle', cx: 50.5, cy: -20, r: 15.75 }];
+    const dxf = exportDXF(orig);
+    const { entities } = parseDXF(dxf);
+    expect(entities).toHaveLength(1);
+    expect(entities[0].cx).toBeCloseTo(50.5, 4);
+    expect(entities[0].r).toBeCloseTo(15.75, 4);
+  });
+
+  it('oblouk přežije export→import', () => {
+    const orig = [{ type: 'arc', cx: 0, cy: 0, r: 10, startAngle: PI / 4, endAngle: 3 * PI / 4 }];
+    const dxf = exportDXF(orig);
+    const { entities } = parseDXF(dxf);
+    expect(entities).toHaveLength(1);
+    expect(entities[0].startAngle).toBeCloseTo(PI / 4, 4);
+    expect(entities[0].endAngle).toBeCloseTo(3 * PI / 4, 4);
+  });
+
+  it('více objektů přežije export→import', () => {
+    const orig = [
+      { type: 'point', x: 1, y: 2 },
+      { type: 'line', x1: 0, y1: 0, x2: 10, y2: 10 },
+      { type: 'circle', cx: 5, cy: 5, r: 3 },
+      { type: 'arc', cx: 0, cy: 0, r: 8, startAngle: 0, endAngle: PI },
+    ];
+    const dxf = exportDXF(orig);
+    const { entities, errors } = parseDXF(dxf);
+    expect(errors).toHaveLength(0);
+    expect(entities).toHaveLength(4);
+    expect(entities.map(e => e.type)).toEqual(['point', 'line', 'circle', 'arc']);
   });
 });

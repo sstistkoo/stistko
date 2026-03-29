@@ -66,7 +66,7 @@ export function showMobileEditDialog() {
         ${listHtml}
       </div>
       <div class="btn-row">
-        <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
+        <button class="btn-cancel btn-cancel-overlay">Zrušit</button>
       </div>
     </div>`);
 

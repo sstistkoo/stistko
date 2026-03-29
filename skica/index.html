@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
-    <title>SKICA – CAD pro CNC soustružník v3.1</title>
+    <title>SKICA – CAD pro CNC soustružník v1.1</title>
     <link rel="icon" type="image/svg+xml" href="icons/icon.svg" />
     <link rel="stylesheet" href="css/style.css" />
     <!-- ── PWA ── -->
@@ -20,6 +20,11 @@
     />
     <meta name="apple-mobile-web-app-title" content="SKICA" />
     <link rel="apple-touch-icon" href="icons/icon-192.png" />
+    <!-- ── CSP ── -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'sha256-vvt4KWwuNr51XfE5m+hzeNEGhiOfZzG97ccfqGsPwvE='; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:;"
+    />
   </head>
   <body>
     <!-- ── Mobile Controls ── -->
@@ -952,6 +957,11 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- ── Offline indikátor ── -->
+    <div id="offlineBanner" class="offline-banner" hidden>
+      ⚡ Offline režim – data se ukládají lokálně
     </div>
 
     <!-- ── Statusbar ── -->

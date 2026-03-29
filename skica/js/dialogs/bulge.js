@@ -45,7 +45,7 @@ export function showBulgeDialog(p1, p2, currentBulge, onAccept) {
       <div id="dlgBulgeInfo" style="font-size:11px;color:${COLORS.textSecondary};margin-top:8px;font-family:Consolas"></div>
       <div class="btn-row" style="margin-top:12px">
         <button class="btn-cancel" id="dlgBulgeRemove" style="background:${COLORS.delete};border-color:${COLORS.delete}">Rovný seg.</button>
-        <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
+        <button class="btn-cancel btn-cancel-overlay">Zrušit</button>
         <button class="btn-ok" id="dlgBulgeOk">OK</button>
       </div>
     </div>`);

@@ -7,7 +7,7 @@ import { COLORS } from '../constants.js';
 import { updateObjectList, updateProperties, updateLayerList, updateMachineTypeBtn, updateXDisplayBtn } from '../ui.js';
 import { calculateAllIntersections } from '../geometry.js';
 import { bulgeToArc } from '../utils.js';
-import { parseDXF } from '../dxf.js';
+import { parseDXF, exportDXF } from '../dxf.js';
 import { autoCenterView } from '../canvas.js';
 import { bridge } from '../bridge.js';
 import { loadProject } from './projectManager.js';
@@ -157,6 +157,22 @@ export function importDXFFile() {
   input.click();
 }
 
+/** Exportuje projekt jako DXF soubor. */
+export function exportDXFFile() {
+  if (state.objects.length === 0) {
+    showToast('Žádné objekty k exportu');
+    return;
+  }
+  const dxfText = exportDXF(state.objects);
+  const blob = new Blob([dxfText], { type: 'application/dxf' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'skica_export.dxf';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast(`Exportováno ${state.objects.length} objektů do DXF`);
+}
+
 // ── Tlačítko Load (overlay) ──
 document.getElementById("btnLoad").addEventListener("click", () => {
   const overlay = document.createElement("div");
@@ -169,7 +185,8 @@ document.getElementById("btnLoad").addEventListener("click", () => {
         <button class="btn-ok" id="loadFile" style="width:100%">Importovat ze souboru (.json)</button>
         <button class="btn-ok" id="loadDXF" style="width:100%">📐 Importovat DXF soubor (.dxf)</button>
         <button class="btn-ok" id="exportFile" style="width:100%;background:${COLORS.selected};border-color:${COLORS.selected}">Exportovat do souboru</button>
-        <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()" style="width:100%">Zrušit</button>
+        <button class="btn-ok" id="exportDXF" style="width:100%;background:${COLORS.selected};border-color:${COLORS.selected}">📐 Exportovat DXF</button>
+        <button class="btn-cancel btn-cancel-overlay" style="width:100%">Zrušit</button>
       </div>
     </div>`;
   document.body.appendChild(overlay);
@@ -188,6 +205,10 @@ document.getElementById("btnLoad").addEventListener("click", () => {
   overlay.querySelector("#exportFile").addEventListener("click", () => {
     overlay.remove();
     exportProjectFile();
+  });
+  overlay.querySelector("#exportDXF").addEventListener("click", () => {
+    overlay.remove();
+    exportDXFFile();
   });
 });
 

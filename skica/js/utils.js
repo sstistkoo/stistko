@@ -2,6 +2,77 @@
 // ║  SKICA – Pomocné funkce (snap body, geometrie, labely)      ║
 // ╚══════════════════════════════════════════════════════════════╝
 
+// ── Bezpečný parser matematických výrazů (bez eval / new Function) ──
+
+/**
+ * Rekurzivní sestupný parser aritmetických výrazů.
+ * Podporuje: +, -, *, /, ** (nebo ^), závorky, unární mínus, desetinná čísla, vědeckou notaci.
+ * @param {string} src
+ * @returns {number}
+ */
+export function _parseMathExpr(src) {
+  let pos = 0;
+  function skip() { while (pos < src.length && src[pos] === ' ') pos++; }
+
+  function parseNumber() {
+    skip();
+    const start = pos;
+    if (src[pos] === '+' || src[pos] === '-') pos++;
+    if (pos < src.length && src[pos] === '.' || (src[pos] >= '0' && src[pos] <= '9')) {
+      while (pos < src.length && src[pos] >= '0' && src[pos] <= '9') pos++;
+      if (pos < src.length && src[pos] === '.') { pos++; while (pos < src.length && src[pos] >= '0' && src[pos] <= '9') pos++; }
+    }
+    if (pos < src.length && (src[pos] === 'e' || src[pos] === 'E')) {
+      pos++;
+      if (pos < src.length && (src[pos] === '+' || src[pos] === '-')) pos++;
+      while (pos < src.length && src[pos] >= '0' && src[pos] <= '9') pos++;
+    }
+    const n = parseFloat(src.substring(start, pos));
+    if (isNaN(n)) throw new Error('num');
+    return n;
+  }
+
+  function parseAtom() {
+    skip();
+    if (src[pos] === '(') { pos++; const v = parseExpr(); skip(); if (src[pos] !== ')') throw new Error(')'); pos++; return v; }
+    return parseNumber();
+  }
+
+  function parseUnary() {
+    skip();
+    if (src[pos] === '-') { pos++; return -parseUnary(); }
+    if (src[pos] === '+') { pos++; return parseUnary(); }
+    return parseAtom();
+  }
+
+  function parsePower() {
+    let b = parseUnary(); skip();
+    if (pos < src.length - 1 && src[pos] === '*' && src[pos + 1] === '*') { pos += 2; return Math.pow(b, parsePower()); }
+    return b;
+  }
+
+  function parseTerm() {
+    let l = parsePower(); skip();
+    while (pos < src.length && (src[pos] === '*' || src[pos] === '/') && !(src[pos] === '*' && src[pos + 1] === '*')) {
+      const op = src[pos++]; const r = parsePower(); l = op === '*' ? l * r : l / r; skip();
+    }
+    return l;
+  }
+
+  function parseExpr() {
+    let l = parseTerm(); skip();
+    while (pos < src.length && (src[pos] === '+' || src[pos] === '-')) {
+      const op = src[pos++]; const r = parseTerm(); l = op === '+' ? l + r : l - r; skip();
+    }
+    return l;
+  }
+
+  const result = parseExpr();
+  skip();
+  if (pos !== src.length) throw new Error('end');
+  return result;
+}
+
 // ── Bezpečné vyhodnocení matematického výrazu z inputu ──
 /** @param {string} str - text z inputu, např. "123+56", "200/3", "(10+5)*2" */
 export function safeEvalMath(str) {
@@ -19,9 +90,8 @@ export function safeEvalMath(str) {
   }
   if (depth !== 0) return NaN;
   try {
-    // Nahradit ^ na ** (mocnina)
     const expr = str.replace(/\^/g, '**');
-    const result = new Function('return (' + expr + ')')();
+    const result = _parseMathExpr(expr);
     return typeof result === 'number' && isFinite(result) ? result : NaN;
   } catch {
     return NaN;

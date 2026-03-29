@@ -5,7 +5,8 @@
   "main": "sw.js",
   "scripts": {
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "sw": "node scripts/generate-sw-assets.js"
   },
   "keywords": [],
   "author": "",

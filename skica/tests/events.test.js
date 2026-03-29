@@ -12,6 +12,7 @@ vi.hoisted(() => {
     textContent: '', innerHTML: '', querySelectorAll: () => [],
     appendChild: () => {}, style: {},
     addEventListener: () => {},
+    setAttribute: () => {},
     getBoundingClientRect: () => ({ left: 0, top: 0, width: 800, height: 600 }),
     querySelector: () => null, closest: () => null, remove: () => {},
     focus: () => {}, select: () => {},

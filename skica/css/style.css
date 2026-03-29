@@ -666,6 +666,32 @@ body {
   opacity: 1;
 }
 
+/* ── Offline banner ── */
+.offline-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #f38ba8;
+  color: #1e1e2e;
+  text-align: center;
+  padding: 4px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  z-index: 10000;
+  transition: transform 0.3s ease;
+}
+
+.offline-banner[hidden] {
+  display: block;
+  transform: translateY(-100%);
+  pointer-events: none;
+}
+
+.offline-banner:not([hidden]) {
+  transform: translateY(0);
+}
+
 /* ── Dimension labels ── */
 .dim-label {
   font: 10px Consolas;
