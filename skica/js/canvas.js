@@ -5,6 +5,7 @@
 import { state, showToast } from './state.js';
 import { getObjectSnapPoints, isAngleBetween, bulgeToArc, getNearestPointOnObject } from './utils.js';
 import { renderAll } from './render.js';
+import { SNAP_POINT_THRESHOLD, SNAP_EDGE_THRESHOLD, VIBRATE_SNAP_POINT, VIBRATE_SNAP_EDGE, AUTO_CENTER_PADDING } from './constants.js';
 
 export const wrap = document.getElementById("canvasWrap");
 export const drawCanvas = document.getElementById("drawCanvas");
@@ -59,7 +60,7 @@ export function snapPt(wx, wy) {
 
   // Snap k bodům objektů a průsečíkům – větší poloměr zachycení
   if (state.snapToPoints) {
-    const threshold = 20 / state.zoom;
+    const threshold = SNAP_POINT_THRESHOLD / state.zoom;
 
     // Snap k počátku (0,0)
     const dOrigin = Math.hypot(wx, wy);
@@ -106,7 +107,7 @@ export function snapPt(wx, wy) {
   if (objX !== null) {
     // Vibrace při snapnutí k bodu (jen pokud se snapType změnil)
     if (state.mouse.snapType !== 'point' && navigator.vibrate) {
-      try { navigator.vibrate(15); } catch (_) {}
+      try { navigator.vibrate(VIBRATE_SNAP_POINT); } catch (_) {}
     }
     state.mouse.snapped = true;
     state.mouse.snapType = 'point';
@@ -115,7 +116,7 @@ export function snapPt(wx, wy) {
 
   // Snap k nejbližšímu bodu na hraně objektu (nižší priorita než snap body)
   if (state.snapToPoints) {
-    const edgeThreshold = 12 / state.zoom;
+    const edgeThreshold = SNAP_EDGE_THRESHOLD / state.zoom;
     let edgeX = null, edgeY = null, edgeD = Infinity;
     for (const obj of state.objects) {
       const layer = state.layers ? state.layers.find(l => l.id === obj.layer) : null;
@@ -129,7 +130,7 @@ export function snapPt(wx, wy) {
     }
     if (edgeX !== null) {
       if (state.mouse.snapType !== 'edge' && navigator.vibrate) {
-        try { navigator.vibrate(10); } catch (_) {}
+        try { navigator.vibrate(VIBRATE_SNAP_EDGE); } catch (_) {}
       }
       state.mouse.snapped = true;
       state.mouse.snapType = 'edge';
@@ -271,7 +272,7 @@ export function autoCenterView() {
   const bboxH = maxY - minY || 1;
   const canvasW = drawCanvas.width;
   const canvasH = drawCanvas.height;
-  const padding = 0.15; // 15% okraj
+  const padding = AUTO_CENTER_PADDING;
 
   // Zoom aby se vše vešlo
   const zoomX = (canvasW * (1 - 2 * padding)) / bboxW;

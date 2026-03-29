@@ -2,6 +2,7 @@
 // ║  SKICA – UI panely, toolbar, hinty                          ║
 // ╚══════════════════════════════════════════════════════════════╝
 
+import { COLORS } from './constants.js';
 import { state, showToast, pushUndo, undo, redo, axisLabels, resetDrawingState, displayX, xPrefix } from './state.js';
 import { typeLabel, toolLabel, bulgeToArc, safeEvalMath } from './utils.js';
 import { renderAll } from './render.js';
@@ -82,7 +83,7 @@ export function updateProperties() {
   tbody.innerHTML = "";
   if (state.selected === null) {
     tbody.innerHTML =
-      '<tr><td colspan="2" style="color:#6c7086">Není vybrán objekt</td></tr>';
+      `<tr><td colspan="2" style="color:${COLORS.textMuted}">Není vybrán objekt</td></tr>`;
     return;
   }
   const obj = state.objects[state.selected];
@@ -210,7 +211,7 @@ export function updateProperties() {
   // Název (editovatelný)
   addTextRow("Název", obj.name || "", (v) => { obj.name = v; });
   // Barva (editovatelná)
-  addColorRow("Barva", obj.color || "#89b4fa", (v) => { obj.color = v; renderAll(); });
+  addColorRow("Barva", obj.color || COLORS.primary, (v) => { obj.color = v; renderAll(); });
 
   // Vrstva (select)
   {
@@ -329,7 +330,7 @@ export function updateProperties() {
           const btn = document.createElement("button");
           btn.textContent = "← Zpět na konturu";
           btn.className = "prop-input";
-          btn.style.cssText = "cursor:pointer;background:#45475a;color:#cdd6f4;border:1px solid #585b70;border-radius:4px;padding:4px 8px;width:100%";
+          btn.style.cssText = `cursor:pointer;background:${COLORS.surfaceHover};color:${COLORS.text};border:1px solid ${COLORS.border};border-radius:4px;padding:4px 8px;width:100%`;
           btn.addEventListener("click", () => {
             state.selectedSegment = null;
             updateProperties();
@@ -379,7 +380,7 @@ export function updateProperties() {
           tr.title = "Klikněte pro výběr segmentu";
           const tdLabel = document.createElement("td");
           tdLabel.textContent = `S${i + 1}`;
-          tdLabel.style.color = "#89b4fa";
+          tdLabel.style.color = COLORS.primary;
           const tdVal = document.createElement("td");
           tdVal.textContent = `${segType}, ${segLen.toFixed(2)} mm`;
           tdVal.className = "prop-readonly";
@@ -390,7 +391,7 @@ export function updateProperties() {
             updateProperties();
             renderAll();
           });
-          tr.addEventListener("mouseenter", () => { tr.style.background = "#45475a"; });
+          tr.addEventListener("mouseenter", () => { tr.style.background = COLORS.surfaceHover; });
           tr.addEventListener("mouseleave", () => { tr.style.background = ""; });
           tbody.appendChild(tr);
         }
@@ -413,7 +414,7 @@ export function updateIntersectionList() {
   ul.innerHTML = "";
   if (state.intersections.length === 0) {
     ul.innerHTML =
-      '<li style="color:#6c7086;cursor:default">Žádné průsečíky</li>';
+      `<li style="color:${COLORS.textMuted};cursor:default">Žádné průsečíky</li>`;
     return;
   }
   state.intersections.forEach((pt, i) => {
@@ -557,7 +558,7 @@ export function updateLayerList() {
 // Layer panel buttons
 document.getElementById("btnAddLayer").addEventListener("click", () => {
   const id = state.nextLayerId++;
-  state.layers.push({ id, name: `Vrstva ${id}`, color: '#cdd6f4', visible: true, locked: false });
+  state.layers.push({ id, name: `Vrstva ${id}`, color: COLORS.text, visible: true, locked: false });
   updateLayerList();
   showToast(`Vrstva ${id} přidána`);
 });
@@ -739,8 +740,8 @@ export function updateCoordModeBtn() {
   btn.textContent = label;
   btn.classList.toggle('active', isInc);
   if (isInc) {
-    btn.style.background = '#f9e2af';
-    btn.style.color = '#1e1e2e';
+    btn.style.background = COLORS.selected;
+    btn.style.color = COLORS.bgDark;
   } else {
     btn.style.background = '';
     btn.style.color = '';
@@ -765,8 +766,8 @@ export function updateXDisplayBtn() {
   btn.textContent = isDiam ? '⌀' : 'R';
   btn.classList.toggle('active', isDiam);
   if (isDiam) {
-    btn.style.background = '#f38ba8';
-    btn.style.color = '#1e1e2e';
+    btn.style.background = COLORS.delete;
+    btn.style.color = COLORS.bgDark;
   } else {
     btn.style.background = '';
     btn.style.color = '';
@@ -791,8 +792,8 @@ export function updateMachineTypeBtn() {
   btn.textContent = isKarusel ? '⚙ Karusel' : '⚙ Soustruh';
   btn.classList.toggle('active', isKarusel);
   if (isKarusel) {
-    btn.style.background = '#a6e3a1';
-    btn.style.color = '#1e1e2e';
+    btn.style.background = COLORS.dimension;
+    btn.style.color = COLORS.bgDark;
   } else {
     btn.style.background = '';
     btn.style.color = '';
@@ -1113,19 +1114,19 @@ function openTrigCalc() {
         <div class="trig-svg-wrap">
           <svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
             <!-- Triangle -->
-            <polygon points="40,190 260,190 260,40" fill="none" stroke="#585b70" stroke-width="2"/>
+            <polygon points="40,190 260,190 260,40" fill="none" stroke="${COLORS.border}" stroke-width="2"/>
             <!-- Right angle marker -->
-            <polyline points="240,190 240,170 260,170" fill="none" stroke="#6c7086" stroke-width="1.5"/>
+            <polyline points="240,190 240,170 260,170" fill="none" stroke="${COLORS.textMuted}" stroke-width="1.5"/>
             <!-- Side labels -->
-            <text x="150" y="210" text-anchor="middle" fill="#a6e3a1" font-size="16" font-weight="bold" font-family="Consolas">b</text>
-            <text x="275" y="120" text-anchor="start" fill="#f38ba8" font-size="16" font-weight="bold" font-family="Consolas">a</text>
-            <text x="140" y="105" text-anchor="end" fill="#89b4fa" font-size="16" font-weight="bold" font-family="Consolas">c</text>
+            <text x="150" y="210" text-anchor="middle" fill="${COLORS.dimension}" font-size="16" font-weight="bold" font-family="Consolas">b</text>
+            <text x="275" y="120" text-anchor="start" fill="${COLORS.delete}" font-size="16" font-weight="bold" font-family="Consolas">a</text>
+            <text x="140" y="105" text-anchor="end" fill="${COLORS.primary}" font-size="16" font-weight="bold" font-family="Consolas">c</text>
             <!-- Angle arcs -->
-            <path d="M 70,190 A 30,30 0 0,0 56,170" fill="none" stroke="#f38ba8" stroke-width="1.5"/>
-            <text x="78" y="178" fill="#f38ba8" font-size="13" font-family="Consolas">α</text>
-            <path d="M 260,65 A 25,25 0 0,0 243,53" fill="none" stroke="#a6e3a1" stroke-width="1.5"/>
-            <text x="244" y="75" fill="#a6e3a1" font-size="13" font-family="Consolas">β</text>
-            <text x="248" y="195" fill="#89b4fa" font-size="12" font-family="Consolas">90°</text>
+            <path d="M 70,190 A 30,30 0 0,0 56,170" fill="none" stroke="${COLORS.delete}" stroke-width="1.5"/>
+            <text x="78" y="178" fill="${COLORS.delete}" font-size="13" font-family="Consolas">α</text>
+            <path d="M 260,65 A 25,25 0 0,0 243,53" fill="none" stroke="${COLORS.dimension}" stroke-width="1.5"/>
+            <text x="244" y="75" fill="${COLORS.dimension}" font-size="13" font-family="Consolas">β</text>
+            <text x="248" y="195" fill="${COLORS.primary}" font-size="12" font-family="Consolas">90°</text>
           </svg>
         </div>
         <div class="trig-fields">

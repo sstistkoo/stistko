@@ -7,6 +7,10 @@ import { state, toDisplayCoords, displayX, xPrefix } from './state.js';
 import { bridge } from './bridge.js';
 import { bulgeToArc } from './utils.js';
 import { projectPointToLine } from './geometry.js';
+import {
+  COLORS, GRID_BASE_STEP, GRID_MIN_PX, LINE_WIDTH, LINE_WIDTH_SELECTED,
+  CONSTRUCTION_DASH, PREVIEW_DASH, ARROW_LENGTH, ARROW_ANGLE
+} from './constants.js';
 
 let _renderRAF = null;
 /** Naplánuje překreslení celého canvasu (requestAnimationFrame). */
@@ -29,22 +33,22 @@ function renderAxes() {
   const g = ctx;
 
   // Adaptive step for axis labels
-  const baseStep = 10 * state.zoom;
+  const baseStep = GRID_BASE_STEP * state.zoom;
   let drawStep = baseStep,
-    drawGridSize = 10;
-  while (drawStep < 15) {
+    drawGridSize = GRID_BASE_STEP;
+  while (drawStep < GRID_MIN_PX) {
     drawStep *= 2;
     drawGridSize *= 2;
   }
 
   // Osy – barvy podle typu stroje
   const isKarusel = state.machineType === 'karusel';
-  const hColor = isKarusel ? '#f38ba8' : '#a6e3a1'; // horizontal: soustruh=Z(green), karusel=X(pink)
-  const vColor = isKarusel ? '#a6e3a1' : '#f38ba8'; // vertical: soustruh=X(pink), karusel=Z(green)
+  const hColor = isKarusel ? COLORS.axisV : COLORS.axisH;
+  const vColor = isKarusel ? COLORS.axisH : COLORS.axisV;
   const hLabel = isKarusel ? 'X' : 'Z';
   const vLabel = isKarusel ? 'Z' : 'X';
 
-  g.lineWidth = 1.5;
+  g.lineWidth = LINE_WIDTH;
   g.strokeStyle = hColor + '55';
   g.beginPath();
   g.moveTo(0, state.panY);
@@ -60,7 +64,7 @@ function renderAxes() {
   const startX = state.panX % drawStep,
     startY = state.panY % drawStep;
   g.font = "13px Consolas";
-  g.fillStyle = "#6c7086";
+  g.fillStyle = COLORS.textMuted;
   for (let x = startX; x < w; x += drawStep) {
     const [wx] = screenToWorld(x, 0);
     const label = Math.round(wx / drawGridSize) * drawGridSize;
@@ -75,12 +79,12 @@ function renderAxes() {
     const dispLabel = isKarusel ? label : displayX(label);
     g.fillText(dispLabel.toString(), state.panX + 4, y - 3);
   }
-  g.fillStyle = "#f9e2af";
+  g.fillStyle = COLORS.selected;
   g.font = "14px Consolas";
   g.fillText("0", state.panX + 4, state.panY - 5);
 
   // Origin marker – terčík na 0,0
-  g.strokeStyle = "#f9e2af88";
+  g.strokeStyle = COLORS.selected + '88';
   g.lineWidth = 1.5;
   g.beginPath();
   g.arc(state.panX, state.panY, 6, 0, Math.PI * 2);
@@ -119,19 +123,19 @@ function renderObjects() {
 
     const isSel = idx === state.selected;
     const isConstr = obj.type === "constr";
-    const layerColor = layer ? layer.color : '#89b4fa';
+    const layerColor = layer ? layer.color : COLORS.primary;
     ctx.strokeStyle = isSel
-      ? "#f9e2af"
+      ? COLORS.selected
       : isConstr
-        ? "#6c7086"
+        ? COLORS.construction
         : obj.color || layerColor;
     ctx.fillStyle = isSel
-      ? "#f9e2af"
+      ? COLORS.selected
       : isConstr
-        ? "#6c7086"
+        ? COLORS.construction
         : obj.color || layerColor;
-    ctx.lineWidth = isSel ? 2.5 : 1.5;
-    ctx.setLineDash(isConstr || obj.dashed ? [6, 4] : []);
+    ctx.lineWidth = isSel ? LINE_WIDTH_SELECTED : LINE_WIDTH;
+    ctx.setLineDash(isConstr || obj.dashed ? CONSTRUCTION_DASH : []);
 
     switch (obj.type) {
       case "point":
@@ -166,8 +170,8 @@ function renderObjects() {
   // Průsečíky
   state.intersections.forEach((pt) => {
     const [sx, sy] = worldToScreen(pt.x, pt.y);
-    ctx.fillStyle = "#a6e3a1";
-    ctx.strokeStyle = "#a6e3a1";
+    ctx.fillStyle = COLORS.dimension;
+    ctx.strokeStyle = COLORS.dimension;
     ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.arc(sx, sy, 5, 0, Math.PI * 2);
@@ -188,10 +192,10 @@ function renderObjects() {
 
   // Dočasné kreslení
   if (state.drawing && state.tempPoints.length > 0) {
-    ctx.strokeStyle = "#f5c2e7";
-    ctx.fillStyle = "#f5c2e7";
+    ctx.strokeStyle = COLORS.preview;
+    ctx.fillStyle = COLORS.preview;
     ctx.lineWidth = 1;
-    ctx.setLineDash([4, 4]);
+    ctx.setLineDash(PREVIEW_DASH);
     const tp = state.tempPoints;
     const [mx, my] = [state.mouse.x, state.mouse.y];
 
@@ -204,13 +208,13 @@ function renderObjects() {
       const [sx2, sy2] = worldToScreen(mx, my);
       // Počáteční bod – zvýrazněný
       ctx.setLineDash([]);
-      ctx.fillStyle = "#f5c2e7";
+      ctx.fillStyle = COLORS.preview;
       ctx.beginPath();
       ctx.arc(sx1, sy1, 4, 0, Math.PI * 2);
       ctx.fill();
-      ctx.strokeStyle = "#f5c2e7";
+      ctx.strokeStyle = COLORS.preview;
       ctx.lineWidth = 1;
-      ctx.setLineDash([4, 4]);
+      ctx.setLineDash(PREVIEW_DASH);
       ctx.beginPath();
       ctx.moveTo(sx1, sy1);
       ctx.lineTo(sx2, sy2);
@@ -270,18 +274,18 @@ function renderObjects() {
     }
     if (state.tool === "polyline" && tp.length >= 1) {
       // Draw already placed segments
-      ctx.strokeStyle = "#f5c2e7";
-      ctx.lineWidth = 1.5;
-      ctx.setLineDash([4, 4]);
+      ctx.strokeStyle = COLORS.preview;
+      ctx.lineWidth = LINE_WIDTH;
+      ctx.setLineDash(PREVIEW_DASH);
       const tempBulges = state._polylineBulges || [];
       // Zvýrazněný startovací bod kontury
       const [sfx, sfy] = worldToScreen(tp[0].x, tp[0].y);
       ctx.setLineDash([]);
-      ctx.fillStyle = "#f9e2af";
+      ctx.fillStyle = COLORS.selected;
       ctx.beginPath();
       ctx.arc(sfx, sfy, 5, 0, Math.PI * 2);
       ctx.fill();
-      ctx.setLineDash([4, 4]);
+      ctx.setLineDash(PREVIEW_DASH);
       for (let i = 0; i < tp.length - 1; i++) {
         const p1 = tp[i], p2 = tp[i + 1];
         const b = tempBulges[i] || 0;
@@ -303,7 +307,7 @@ function renderObjects() {
           }
         }
         // Vertex dots
-        ctx.fillStyle = "#f5c2e7";
+        ctx.fillStyle = COLORS.preview;
         ctx.beginPath();
         ctx.arc(sx1, sy1, 3, 0, Math.PI * 2);
         ctx.fill();
@@ -311,13 +315,13 @@ function renderObjects() {
       // Last placed vertex
       const lastPt = tp[tp.length - 1];
       const [slx, sly] = worldToScreen(lastPt.x, lastPt.y);
-      ctx.fillStyle = "#f5c2e7";
+      ctx.fillStyle = COLORS.preview;
       ctx.beginPath();
       ctx.arc(slx, sly, 3, 0, Math.PI * 2);
       ctx.fill();
       // Preview line to cursor
-      ctx.setLineDash([4, 4]);
-      ctx.strokeStyle = "#f5c2e7";
+      ctx.setLineDash(PREVIEW_DASH);
+      ctx.strokeStyle = COLORS.preview;
       ctx.lineWidth = 1;
       const [smx, smy] = worldToScreen(mx, my);
       ctx.beginPath();
@@ -326,7 +330,7 @@ function renderObjects() {
       ctx.stroke();
       // Koncový bod preview – zvýrazněný
       ctx.setLineDash([]);
-      ctx.fillStyle = "#f5c2e7";
+      ctx.fillStyle = COLORS.preview;
       ctx.beginPath();
       ctx.arc(smx, smy, 3.5, 0, Math.PI * 2);
       ctx.fill();
@@ -335,7 +339,7 @@ function renderObjects() {
       const ang = (Math.atan2(my - lastPt.y, mx - lastPt.x) * 180) / Math.PI;
       ctx.setLineDash([]);
       ctx.font = `${labelSize}px Consolas`;
-      ctx.fillStyle = "#f5c2e7";
+      ctx.fillStyle = COLORS.preview;
       ctx.fillText(
         `${dd.toFixed(3)} mm  ${ang.toFixed(1)}°  [${tp.length} bodů]`,
         (slx + smx) / 2 + 8,
@@ -345,7 +349,7 @@ function renderObjects() {
     if (state.tool === "tangent" && tp.length === 1) {
       // Preview: bod tečny – zobrazit bod
       const [sx1, sy1] = worldToScreen(tp[0].x, tp[0].y);
-      ctx.fillStyle = "#fab387";
+      ctx.fillStyle = COLORS.snapPoint;
       ctx.beginPath();
       ctx.arc(sx1, sy1, 5, 0, Math.PI * 2);
       ctx.fill();
@@ -363,7 +367,7 @@ function renderObjects() {
         const px2 = mx + dx / 2, py2 = my + dy / 2;
         const [sx1, sy1] = worldToScreen(px1, py1);
         const [sx2, sy2] = worldToScreen(px2, py2);
-        ctx.strokeStyle = "#89b4fa";
+        ctx.strokeStyle = COLORS.primary;
         ctx.lineWidth = 1.5;
         ctx.setLineDash([6, 4]);
         ctx.beginPath();
@@ -375,7 +379,7 @@ function renderObjects() {
         const dist = Math.hypot(mx - foot.x, my - foot.y);
         ctx.setLineDash([]);
         ctx.font = `${labelSize}px Consolas`;
-        ctx.fillStyle = "#89b4fa";
+        ctx.fillStyle = COLORS.primary;
         ctx.fillText(`∥ d=${dist.toFixed(2)}mm`, (sx1 + sx2) / 2 + 8, (sy1 + sy2) / 2 - 8);
       }
     }
@@ -384,7 +388,7 @@ function renderObjects() {
       const [sx1, sy1] = worldToScreen(tp[0].x, tp[0].y);
       const [sx2, sy2] = worldToScreen(mx, my);
       const d = Math.hypot(mx - tp[0].x, my - tp[0].y);
-      ctx.strokeStyle = "#9399b2";
+      ctx.strokeStyle = COLORS.textSecondary;
       ctx.lineWidth = 1.5;
       ctx.setLineDash([6, 4]);
       ctx.beginPath();
@@ -396,7 +400,7 @@ function renderObjects() {
       drawDimArrow(sx2, sy2, sx1, sy1);
       ctx.setLineDash([]);
       ctx.font = `${labelSize}px Consolas`;
-      ctx.fillStyle = "#9399b2";
+      ctx.fillStyle = COLORS.textSecondary;
       const angle = Math.atan2(sy2 - sy1, sx2 - sx1);
       const nx = -Math.sin(angle) * 14, ny = Math.cos(angle) * 14;
       ctx.fillText(`${d.toFixed(2)}mm`, (sx1 + sx2) / 2 + nx, (sy1 + sy2) / 2 + ny);
@@ -408,14 +412,14 @@ function renderObjects() {
   if (state._snapPointState) {
     const sp = state._snapPointState;
     const [spx, spy] = worldToScreen(sp.x, sp.y);
-    ctx.strokeStyle = "#fab387";
-    ctx.lineWidth = 2.5;
+      ctx.strokeStyle = COLORS.snapPoint;
+      ctx.lineWidth = LINE_WIDTH_SELECTED;
     ctx.beginPath();
     ctx.arc(spx, spy, 8, 0, Math.PI * 2);
     ctx.stroke();
     ctx.beginPath();
     ctx.arc(spx, spy, 3, 0, Math.PI * 2);
-    ctx.fillStyle = "#fab387";
+    ctx.fillStyle = COLORS.snapPoint;
     ctx.fill();
     // Vodící čára ke kurzoru
     const [mx, my] = worldToScreen(state.mouse.x, state.mouse.y);
@@ -441,33 +445,33 @@ function drawSnapIndicator() {
 
   if (state.mouse.snapType === 'point') {
     // Snap k bodu – žlutý čtvereček
-    ctx.strokeStyle = "#f9e2af";
+    ctx.strokeStyle = COLORS.selected;
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.rect(sx - 6, sy - 6, 12, 12);
     ctx.stroke();
     ctx.font = `${Math.max(9, snapLabelSize - 4)}px Consolas`;
-    ctx.fillStyle = "#f9e2af";
+    ctx.fillStyle = COLORS.selected;
     ctx.fillText("SNAP", sx + 9, sy - 3);
   } else if (state.mouse.snapType === 'grid') {
     // Snap na mřížku – menší indikátor, jiná barva
-    ctx.strokeStyle = "#a6adc8";
-    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = COLORS.label;
+    ctx.lineWidth = LINE_WIDTH;
     ctx.beginPath();
     ctx.rect(sx - 4, sy - 4, 8, 8);
     ctx.stroke();
     ctx.font = `${Math.max(9, snapLabelSize - 4)}px Consolas`;
-    ctx.fillStyle = "#a6adc8";
+    ctx.fillStyle = COLORS.label;
     ctx.fillText("GRID", sx + 7, sy - 3);
   } else if (state.mouse.snapType === 'edge') {
     // Snap k hraně objektu – kolečko + trojúhelník
-    ctx.strokeStyle = "#cba6f7";
+    ctx.strokeStyle = COLORS.snapEdge;
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.arc(sx, sy, 5, 0, Math.PI * 2);
     ctx.stroke();
     ctx.font = `${Math.max(9, snapLabelSize - 4)}px Consolas`;
-    ctx.fillStyle = "#cba6f7";
+    ctx.fillStyle = COLORS.snapEdge;
     ctx.fillText("EDGE", sx + 9, sy - 3);
   }
 
@@ -491,8 +495,8 @@ function drawSnapIndicator() {
 // ── Šipka kóty ──
 function drawDimArrow(fromX, fromY, toX, toY) {
   const angle = Math.atan2(toY - fromY, toX - fromX);
-  const arrowLen = 8;
-  const arrowAngle = Math.PI / 7;
+  const arrowLen = ARROW_LENGTH;
+  const arrowAngle = ARROW_ANGLE;
   ctx.beginPath();
   ctx.moveTo(fromX, fromY);
   ctx.lineTo(fromX + arrowLen * Math.cos(angle + arrowAngle), fromY + arrowLen * Math.sin(angle + arrowAngle));
@@ -505,7 +509,7 @@ function drawDimArrow(fromX, fromY, toX, toY) {
 function drawDimension(obj) {
   const dimSize = Math.round(Math.min(18, Math.max(12, 8 + state.zoom * 4)));
   ctx.font = `${dimSize}px Consolas`;
-  ctx.fillStyle = "#9399b2";
+  ctx.fillStyle = COLORS.textSecondary;
   const offset = 14;
   switch (obj.type) {
     case "line":
@@ -766,7 +770,7 @@ export function drawPolyline(obj, isSel) {
 
     // Highlight selected segment
     if (hasSelSeg && i === selSeg) {
-      ctx.strokeStyle = "#f38ba8";  // Pink for selected segment
+      ctx.strokeStyle = COLORS.delete;  // Pink for selected segment
       ctx.lineWidth = 3.5;
     } else if (hasSelSeg) {
       ctx.strokeStyle = baseStroke;
@@ -800,7 +804,7 @@ export function drawPolyline(obj, isSel) {
     const [sx, sy] = worldToScreen(v.x, v.y);
     // Highlight vertices of selected segment
     const isSegVertex = hasSelSeg && (vi === selSeg || vi === (selSeg + 1) % n);
-    ctx.fillStyle = isSegVertex ? "#f38ba8" : ctx.strokeStyle;
+    ctx.fillStyle = isSegVertex ? COLORS.delete : ctx.strokeStyle;
     ctx.beginPath();
     ctx.arc(sx, sy, isSegVertex ? 4.5 : 2.5, 0, Math.PI * 2);
     ctx.fill();
@@ -916,9 +920,9 @@ function renderAngleSnapGuide() {
   const [sx2, sy2] = worldToScreen(gx, gy);
 
   ctx.save();
-  ctx.strokeStyle = "#a6e3a1";
+  ctx.strokeStyle = COLORS.dimension;
   ctx.lineWidth = 1;
-  ctx.setLineDash([6, 4]);
+  ctx.setLineDash(CONSTRUCTION_DASH);
   ctx.beginPath();
   ctx.moveTo(sx1, sy1);
   ctx.lineTo(sx2, sy2);
@@ -926,7 +930,7 @@ function renderAngleSnapGuide() {
   ctx.setLineDash([]);
 
   // Koncový bod snap čáry – zvýrazněný
-  ctx.fillStyle = "#a6e3a1";
+  ctx.fillStyle = COLORS.dimension;
   ctx.beginPath();
   ctx.arc(sx2, sy2, 4, 0, Math.PI * 2);
   ctx.fill();
@@ -935,7 +939,7 @@ function renderAngleSnapGuide() {
   const angleDeg = ((snappedAngle * 180) / Math.PI);
   const labelSize = Math.round(Math.min(22, Math.max(14, 10 + state.zoom * 6)));
   ctx.font = `${Math.max(10, labelSize - 2)}px Consolas`;
-  ctx.fillStyle = "#a6e3a1";
+  ctx.fillStyle = COLORS.dimension;
   const labelX = sx2 + 10;
   const labelY = sy2 - 10;
   ctx.fillText(`${angleDeg.toFixed(1)}°`, labelX, labelY);
