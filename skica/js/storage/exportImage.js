@@ -3,6 +3,7 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 import { state, showToast } from '../state.js';
+import { COLORS } from '../constants.js';
 import { bulgeToArc } from '../utils.js';
 
 // ── Pomocné funkce ──
@@ -78,8 +79,8 @@ function isAngleBetweenExport(start, end, angle) {
 
 function getObjColor(obj) {
   const layer = state.layers.find(l => l.id === obj.layer);
-  const layerColor = layer ? layer.color : '#89b4fa';
-  if (obj.type === 'constr') return '#6c7086';
+  const layerColor = layer ? layer.color : COLORS.primary;
+  if (obj.type === 'constr') return COLORS.construction;
   return obj.color || layerColor;
 }
 
@@ -126,7 +127,7 @@ function exportSVG(background) {
     bgRect.setAttribute('y', vy);
     bgRect.setAttribute('width', vw);
     bgRect.setAttribute('height', vh);
-    bgRect.setAttribute('fill', background === 'dark' ? '#1e1e2e' : '#ffffff');
+    bgRect.setAttribute('fill', background === 'dark' ? COLORS.bgDark : '#ffffff');
     svg.appendChild(bgRect);
   }
 
@@ -258,7 +259,7 @@ function exportSVG(background) {
         const t = document.createElementNS(ns, 'text');
         t.setAttribute('x', dimText.x);
         t.setAttribute('y', -dimText.y);
-        t.setAttribute('fill', '#9399b2');
+        t.setAttribute('fill', COLORS.textSecondary);
         t.setAttribute('font-size', '4');
         t.setAttribute('font-family', 'Consolas, monospace');
         t.textContent = dimText.text;
@@ -302,7 +303,7 @@ function exportPNG(scale, background) {
   if (background === 'transparent') {
     g.clearRect(0, 0, canvasW, canvasH);
   } else {
-    g.fillStyle = background === 'dark' ? '#1e1e2e' : '#ffffff';
+    g.fillStyle = background === 'dark' ? COLORS.bgDark : '#ffffff';
     g.fillRect(0, 0, canvasW, canvasH);
   }
 
@@ -422,7 +423,7 @@ export function showExportImageDialog() {
       </div>
       <label>Pozadí:</label>
       <select id="expBg">
-        <option value="dark">Tmavé (#1e1e2e)</option>
+        <option value="dark">Tmavé (${COLORS.bgDark})</option>
         <option value="white">Bílé</option>
         <option value="transparent">Průhledné</option>
       </select>

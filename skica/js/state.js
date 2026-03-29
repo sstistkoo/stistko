@@ -3,6 +3,7 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 import { bridge } from './bridge.js';
+import { COLORS } from './constants.js';
 
 // ── Hook pro rozšíření pushUndo (autosave) ──
 let _pushUndoHook = null;
@@ -73,9 +74,9 @@ export const state = {
   xDisplayMode: 'radius',
   // Vrstvy
   layers: [
-    { id: 0, name: 'Kontura', color: '#89b4fa', visible: true, locked: false },
-    { id: 1, name: 'Konstrukce', color: '#6c7086', visible: true, locked: false },
-    { id: 2, name: 'Kóty', color: '#a6e3a1', visible: true, locked: false },
+    { id: 0, name: 'Kontura', color: COLORS.primary, visible: true, locked: false },
+    { id: 1, name: 'Konstrukce', color: COLORS.construction, visible: true, locked: false },
+    { id: 2, name: 'Kóty', color: COLORS.dimension, visible: true, locked: false },
   ],
   activeLayer: 0,
   nextLayerId: 3,
@@ -102,6 +103,11 @@ export function resetDrawingState() {
   state._trimLine = null;
   state._extendLine = null;
   state._filletFirstLine = null;
+  // Generic tool cleanup (fillet/offset listeners etc.)
+  if (state._toolCleanup) {
+    state._toolCleanup();
+    state._toolCleanup = null;
+  }
   // Mirror – cleanup handler + state
   if (state._mirrorCleanup) {
     state._mirrorCleanup();

@@ -3,6 +3,7 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 import { state, showToast, pushUndo, displayX } from '../state.js';
+import { COLORS } from '../constants.js';
 import { updateObjectList, updateProperties, updateLayerList, updateMachineTypeBtn, updateXDisplayBtn } from '../ui.js';
 import { calculateAllIntersections } from '../geometry.js';
 import { bulgeToArc } from '../utils.js';
@@ -167,7 +168,7 @@ document.getElementById("btnLoad").addEventListener("click", () => {
         <button class="btn-ok" id="loadLocal" style="width:100%">Načíst z paměti prohlížeče</button>
         <button class="btn-ok" id="loadFile" style="width:100%">Importovat ze souboru (.json)</button>
         <button class="btn-ok" id="loadDXF" style="width:100%">📐 Importovat DXF soubor (.dxf)</button>
-        <button class="btn-ok" id="exportFile" style="width:100%;background:#f9e2af;border-color:#f9e2af">Exportovat do souboru</button>
+        <button class="btn-ok" id="exportFile" style="width:100%;background:${COLORS.selected};border-color:${COLORS.selected}">Exportovat do souboru</button>
         <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()" style="width:100%">Zrušit</button>
       </div>
     </div>`;

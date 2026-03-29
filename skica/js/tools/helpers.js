@@ -49,3 +49,68 @@ export function setConstraint(obj, segIdx, type) {
     obj.constraint = type;
   }
 }
+
+/**
+ * Po úpravě segmentu polyline propaguje vazby na sousední segmenty,
+ * aby se zachovala konzistence (např. kolmost + vodorovnost vedle sebe).
+ *
+ * @param {object} obj      – polyline objekt
+ * @param {number} segIdx   – index právě upraveného segmentu
+ * @param {'p1'|'p2'} movedEnd – který konec segmentu se posunul
+ */
+export function propagateConstraints(obj, segIdx, movedEnd) {
+  if (obj.type !== 'polyline' || !obj.segConstraints) return;
+  const n = obj.vertices.length;
+  const segCount = obj.closed ? n : n - 1;
+
+  // Dopředná propagace: P2 se posunul → sousední segment vpravo sdílí ten vrchol
+  if (movedEnd === 'p2') {
+    for (let i = segIdx + 1; i < segCount; i++) {
+      const type = obj.segConstraints[i];
+      if (!type || type === 'parallel') break;
+      const p1 = obj.vertices[i];
+      const p2 = obj.vertices[(i + 1) % n];
+      _enforceConstraint(p1, p2, type);
+    }
+  }
+
+  // Zpětná propagace: P1 se posunul → sousední segment vlevo sdílí ten vrchol
+  if (movedEnd === 'p1') {
+    for (let i = segIdx - 1; i >= 0; i--) {
+      const type = obj.segConstraints[i];
+      if (!type || type === 'parallel') break;
+      const p1 = obj.vertices[i];
+      const p2 = obj.vertices[(i + 1) % n];
+      // Kotva je P2 (sdílený s upraveným segmentem), P1 se přizpůsobí
+      _enforceConstraintReverse(p1, p2, type);
+    }
+  }
+}
+
+/** Vynucení vazby; P1 je kotva, P2 se přizpůsobí. */
+function _enforceConstraint(anchor, target, type) {
+  const len = Math.hypot(target.x - anchor.x, target.y - anchor.y);
+  if (type === 'horizontal') {
+    const sign = (target.x - anchor.x) >= 0 ? 1 : -1;
+    target.x = anchor.x + sign * len;
+    target.y = anchor.y;
+  } else if (type === 'vertical') {
+    const sign = (target.y - anchor.y) >= 0 ? 1 : -1;
+    target.x = anchor.x;
+    target.y = anchor.y + sign * len;
+  }
+}
+
+/** Vynucení vazby; P2 je kotva, P1 se přizpůsobí. */
+function _enforceConstraintReverse(target, anchor, type) {
+  const len = Math.hypot(target.x - anchor.x, target.y - anchor.y);
+  if (type === 'horizontal') {
+    const sign = (target.x - anchor.x) >= 0 ? 1 : -1;
+    target.x = anchor.x + sign * len;
+    target.y = anchor.y;
+  } else if (type === 'vertical') {
+    const sign = (target.y - anchor.y) >= 0 ? 1 : -1;
+    target.x = anchor.x;
+    target.y = anchor.y + sign * len;
+  }
+}

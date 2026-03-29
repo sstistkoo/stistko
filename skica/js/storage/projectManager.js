@@ -3,6 +3,7 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 import { state, showToast, pushUndo } from '../state.js';
+import { COLORS } from '../constants.js';
 import { updateObjectList, updateProperties, updateLayerList, updateStatusProject, updateMachineTypeBtn, updateXDisplayBtn } from '../ui.js';
 import { calculateAllIntersections } from '../geometry.js';
 import { saveProjectToDB, loadProjectFromDB, deleteProjectFromDB, getAllProjects, setMeta, getMeta } from '../idb.js';
@@ -144,9 +145,9 @@ export function newProject() {
   state.intersections = [];
   state.projectName = 'Bez názvu';
   state.layers = [
-    { id: 0, name: 'Kontura', color: '#89b4fa', visible: true, locked: false },
-    { id: 1, name: 'Konstrukce', color: '#6c7086', visible: true, locked: false },
-    { id: 2, name: 'Kóty', color: '#a6e3a1', visible: true, locked: false },
+    { id: 0, name: 'Kontura', color: COLORS.primary, visible: true, locked: false },
+    { id: 1, name: 'Konstrukce', color: COLORS.construction, visible: true, locked: false },
+    { id: 2, name: 'Kóty', color: COLORS.dimension, visible: true, locked: false },
   ];
   state.activeLayer = 0;
   state.nextLayerId = 3;
@@ -210,7 +211,7 @@ export async function showProjectsDialog() {
       return (projs[b].savedAt || '').localeCompare(projs[a].savedAt || '');
     });
     if (sortedNames.length === 0) {
-      html = '<li style="color:#6c7086;padding:12px;text-align:center">Žádné uložené projekty</li>';
+      html = '<li style="color:' + COLORS.textMuted + ';padding:12px;text-align:center">Žádné uložené projekty</li>';
     } else {
       for (const name of sortedNames) {
         const p = projs[name];

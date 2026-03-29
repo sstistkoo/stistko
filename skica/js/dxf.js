@@ -2,8 +2,10 @@
 // ║  SKICA – DXF Import Parser                                  ║
 // ╚══════════════════════════════════════════════════════════════╝
 
+import { COLORS } from './constants.js';
+
 const MAX_ENTITIES = 10000;
-const DEFAULT_COLOR = '#89b4fa';
+const DEFAULT_COLOR = COLORS.primary;
 const DEG2RAD = Math.PI / 180;
 
 // DXF ACI (AutoCAD Color Index) → CSS barvy

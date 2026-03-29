@@ -77,5 +77,9 @@ export function handleFilletClick(wx, wy) {
 
     drawCanvas.addEventListener("click", onSecondClick);
     drawCanvas.addEventListener("touchend", onSecondTouch);
+    state._toolCleanup = () => {
+      drawCanvas.removeEventListener("click", onSecondClick);
+      drawCanvas.removeEventListener("touchend", onSecondTouch);
+    };
   });
 }
