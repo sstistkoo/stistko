@@ -23,6 +23,8 @@ export function renderAll() {
     renderAngleSnapGuide();
     // Aktualizovat mobilní Cancel tlačítko
     if (bridge.updateMobileCancelBtn) bridge.updateMobileCancelBtn();
+    // Aktualizovat tlačítka Dokončit/Uzavřít konturu
+    if (bridge.updatePolylineButtons) bridge.updatePolylineButtons();
   });
 }
 

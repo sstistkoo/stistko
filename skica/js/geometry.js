@@ -4,7 +4,7 @@
 
 import { state } from './state.js';
 import { SNAP_POINT_THRESHOLD, SELECT_THRESHOLD, CONSTRAINT_OFFSET_PX, ARC_OUTSIDE_PENALTY } from './constants.js';
-import { distPointToSegment, isAngleBetween, bulgeToArc } from './utils.js';
+import { distPointToSegment, isAngleBetween, bulgeToArc, deepClone } from './utils.js';
 import { renderAll } from './render.js';
 import { bridge } from './bridge.js';
 
@@ -743,7 +743,7 @@ function lineLineIntersect(l1, l2) {
  */
 export function mirrorObject(obj, axis, p1, p2) {
   // axis: 'x' (horizontální), 'z' (vertikální), 'custom' (2 body p1,p2)
-  const copy = JSON.parse(JSON.stringify(obj));
+  const copy = deepClone(obj);
   delete copy.id;
 
   function mirrorPoint(px, py) {
@@ -825,7 +825,7 @@ export function mirrorObject(obj, axis, p1, p2) {
 export function linearArray(obj, dx, dy, count) {
   const copies = [];
   for (let i = 1; i <= count; i++) {
-    const copy = JSON.parse(JSON.stringify(obj));
+    const copy = deepClone(obj);
     delete copy.id;
     switch (copy.type) {
       case 'point':

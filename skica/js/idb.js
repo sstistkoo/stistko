@@ -34,10 +34,28 @@ function openDB() {
 async function _put(storeName, key, value) {
   const db = await openDB();
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(storeName, 'readwrite');
-    tx.objectStore(storeName).put(value, key);
+    let tx;
+    try {
+      tx = db.transaction(storeName, 'readwrite');
+    } catch (e) {
+      return reject(e);
+    }
+    const req = tx.objectStore(storeName).put(value, key);
     tx.oncomplete = () => resolve();
-    tx.onerror = (e) => reject(e.target.error);
+    tx.onerror = (e) => {
+      const err = e.target.error;
+      if (err && err.name === 'QuotaExceededError') {
+        reject(new DOMException('Uložiště je plné – nelze uložit data', 'QuotaExceededError'));
+      } else {
+        reject(err);
+      }
+    };
+    req.onerror = (e) => {
+      const err = e.target.error;
+      if (err && err.name === 'QuotaExceededError') {
+        reject(new DOMException('Uložiště je plné – nelze uložit data', 'QuotaExceededError'));
+      }
+    };
   });
 }
 
@@ -139,7 +157,9 @@ export async function getMeta(key) {
 /** Jednorázově přesune data z localStorage do IndexedDB, pak je z localStorage smaže. */
 export async function migrateFromLocalStorage() {
   const migrated = await getMeta('_migrated');
-  if (migrated) return;
+  if (migrated) return { skipped: true };
+
+  const report = { projects: 0, errors: [] };
 
   // Migrate skica_projects
   try {
@@ -147,10 +167,17 @@ export async function migrateFromLocalStorage() {
     if (raw) {
       const projects = JSON.parse(raw);
       for (const [name, data] of Object.entries(projects)) {
-        await saveProjectToDB(name, data);
+        try {
+          await saveProjectToDB(name, data);
+          report.projects++;
+        } catch (e) {
+          report.errors.push(`Projekt '${name}': ${e.message}`);
+        }
       }
     }
-  } catch { /* localStorage corrupt or empty – skip */ }
+  } catch (e) {
+    report.errors.push(`skica_projects: ${e.message}`);
+  }
 
   // Migrate skica_project (single/current project)
   try {
@@ -158,19 +185,25 @@ export async function migrateFromLocalStorage() {
     if (raw) {
       await setMeta('currentProjectData', JSON.parse(raw));
     }
-  } catch { /* skip */ }
+  } catch (e) {
+    report.errors.push(`skica_project: ${e.message}`);
+  }
 
   // Migrate calcHistory
   try {
     const raw = localStorage.getItem('calcHistory');
     if (raw) await setMeta('calcHistory', JSON.parse(raw));
-  } catch { /* skip */ }
+  } catch (e) {
+    report.errors.push(`calcHistory: ${e.message}`);
+  }
 
   // Migrate helpShown flag
   try {
     const val = localStorage.getItem('skica_helpShown');
     if (val) await setMeta('helpShown', val);
-  } catch { /* skip */ }
+  } catch (e) {
+    report.errors.push(`helpShown: ${e.message}`);
+  }
 
   // Mark as migrated
   await setMeta('_migrated', true);
@@ -180,4 +213,9 @@ export async function migrateFromLocalStorage() {
   localStorage.removeItem('skica_projects');
   localStorage.removeItem('calcHistory');
   localStorage.removeItem('skica_helpShown');
+
+  if (report.errors.length > 0) {
+    console.warn('Migrace z localStorage - chyby:', report.errors);
+  }
+  return report;
 }

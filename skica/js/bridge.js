@@ -6,6 +6,7 @@
 export const bridge = {
   updateMobileCancelBtn: null,
   updateMobileCoords: null,
+  updatePolylineButtons: null,
   updateProperties: null,
   updateObjectList: null,
   updateIntersectionList: null,

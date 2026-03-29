@@ -104,20 +104,22 @@ function parseEntity(type, data) {
     case 'LWPOLYLINE': {
       const flags = parseInt(data.find(p => p.code === 70)?.value || '0', 10);
       const closed = !!(flags & 1);
-      const vertices = [];
-      const bulges = [];
 
-      // Zpracování v pořadí: 10→X, 20→Y, [42→bulge], 10→X, 20→Y, ...
+      // Sbírej vertex data do mezivrstvy – toleruje libovolné pořadí kódů
+      // DXF spec: kód 10 zahajuje nový vertex, 20/42 patří k poslednímu
+      const rawVerts = [];
       for (const p of data) {
         if (p.code === 10) {
-          vertices.push({ x: safeFloat(p.value), y: 0 });
-          bulges.push(0);
-        } else if (p.code === 20 && vertices.length > 0) {
-          vertices[vertices.length - 1].y = safeFloat(p.value);
-        } else if (p.code === 42 && bulges.length > 0) {
-          bulges[bulges.length - 1] = safeFloat(p.value);
+          rawVerts.push({ x: safeFloat(p.value), y: 0, bulge: 0 });
+        } else if (p.code === 20 && rawVerts.length > 0) {
+          rawVerts[rawVerts.length - 1].y = safeFloat(p.value);
+        } else if (p.code === 42 && rawVerts.length > 0) {
+          rawVerts[rawVerts.length - 1].bulge = safeFloat(p.value);
         }
       }
+
+      const vertices = rawVerts.map(v => ({ x: v.x, y: v.y }));
+      const bulges = rawVerts.map(v => v.bulge);
 
       return { type: 'polyline', vertices, bulges, closed, color };
     }

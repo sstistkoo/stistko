@@ -320,3 +320,13 @@ export function radiusToBulge(p1, p2, radius, cw) {
   const bulge = Math.tan(halfAngle / 2);
   return cw ? -bulge : bulge;
 }
+
+// ── Hluboká kopie objektu ──
+/**
+ * @template T
+ * @param {T} obj
+ * @returns {T}
+ */
+export function deepClone(obj) {
+  return structuredClone(obj);
+}

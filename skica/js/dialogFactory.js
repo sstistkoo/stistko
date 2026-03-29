@@ -19,6 +19,11 @@ export function makeOverlay(type, title, bodyHTML, windowClass) {
   document.body.appendChild(overlay);
   overlay.querySelector(".calc-close-btn").addEventListener("click", () => overlay.remove());
   overlay.addEventListener("click", e => { if (e.target === overlay) overlay.remove(); });
+  const _escHandler = (e) => { if (e.key === 'Escape') overlay.remove(); };
+  document.addEventListener('keydown', _escHandler);
+  new MutationObserver((_, obs) => {
+    if (!document.body.contains(overlay)) { document.removeEventListener('keydown', _escHandler); obs.disconnect(); }
+  }).observe(document.body, { childList: true });
   return overlay;
 }
 
@@ -34,5 +39,10 @@ export function makeInputOverlay(innerHTML) {
   overlay.addEventListener('click', e => {
     if (e.target === overlay) overlay.remove();
   });
+  const _escHandler = (e) => { if (e.key === 'Escape') overlay.remove(); };
+  document.addEventListener('keydown', _escHandler);
+  new MutationObserver((_, obs) => {
+    if (!document.body.contains(overlay)) { document.removeEventListener('keydown', _escHandler); obs.disconnect(); }
+  }).observe(document.body, { childList: true });
   return overlay;
 }

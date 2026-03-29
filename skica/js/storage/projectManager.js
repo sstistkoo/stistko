@@ -7,6 +7,7 @@ import { COLORS } from '../constants.js';
 import { updateObjectList, updateProperties, updateLayerList, updateStatusProject, updateMachineTypeBtn, updateXDisplayBtn } from '../ui.js';
 import { calculateAllIntersections } from '../geometry.js';
 import { saveProjectToDB, loadProjectFromDB, deleteProjectFromDB, getAllProjects, setMeta, getMeta } from '../idb.js';
+import { deepClone } from '../utils.js';
 
 // ── Pomocné funkce ──
 
@@ -130,7 +131,7 @@ export async function duplicateProject(name) {
   let newName = name + ' (kopie)';
   let i = 2;
   while (allProjects[newName]) { newName = name + ` (kopie ${i++})`; }
-  const copy = JSON.parse(JSON.stringify(data));
+  const copy = deepClone(data);
   copy.savedAt = new Date().toISOString();
   await saveProjectToDB(newName, copy);
   showToast(`Vytvořena kopie: ${newName}`);
