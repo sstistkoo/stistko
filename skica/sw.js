@@ -2,13 +2,14 @@
 // ║  SKICA – Service Worker (PWA offline cache)                 ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-const CACHE_NAME = 'skica-v66';
+const CACHE_NAME = 'skica-v67';
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
   './css/style.css',
   './js/types.js',
+  './js/constants.js',
   './js/state.js',
   './js/utils.js',
   './js/bridge.js',
@@ -18,6 +19,7 @@ const ASSETS = [
   './js/objects.js',
   './js/ui.js',
   './js/cnc-calcs.js',
+  './js/dialogFactory.js',
   './js/events.js',
   './js/touch.js',
   './js/dialogs.js',
@@ -25,6 +27,14 @@ const ASSETS = [
   './js/dxf.js',
   './js/idb.js',
   './js/app.js',
+  './js/calculators/convert.js',
+  './js/calculators/cutting.js',
+  './js/calculators/insert.js',
+  './js/calculators/roughness.js',
+  './js/calculators/taper.js',
+  './js/calculators/thread.js',
+  './js/calculators/tolerance.js',
+  './js/calculators/weight.js',
   './icons/icon.svg',
   './icons/icon-192.png',
   './icons/icon-512.png',
