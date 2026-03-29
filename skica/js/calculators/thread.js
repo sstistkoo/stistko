@@ -231,6 +231,50 @@ export function openThreadCalc() {
     return html;
   }
 
+  // ── STANDARD DRILL SIZES (ISO 235) ─────────────────────
+  var stdDrills = [1,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2,2.1,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,3,3.1,3.2,3.3,3.4,3.5,3.6,3.7,3.8,3.9,4,4.1,4.2,4.5,4.8,5,5.1,5.2,5.3,5.5,5.8,6,6.2,6.5,6.8,7,7.5,8,8.2,8.5,8.8,9,9.5,10,10.2,10.5,10.8,11,11.5,12,12.5,13,13.5,14,14.5,15,15.5,16,16.5,17,17.5,18,18.5,19,19.5,20,20.5,21,21.5,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,42,44,45,46,48,50,52,55,56,58,60,62,63,65,68,70];
+
+  function drillRecommendHTML(D, D1, hInt) {
+    // Find closest standard drills to theoretical drill diameter D1
+    // Filter: drill must be smaller than D (otherwise no thread)
+    var candidates = [];
+    for (var i = 0; i < stdDrills.length; i++) {
+      if (stdDrills[i] < D) {
+        candidates.push({ dia: stdDrills[i], diff: Math.abs(stdDrills[i] - D1) });
+      }
+    }
+    candidates.sort(function(a, b) { return a.diff - b.diff; });
+    // Take up to 3 closest, then sort by diameter
+    var picked = candidates.slice(0, 3);
+    picked.sort(function(a, b) { return a.dia - b.dia; });
+
+    var html = '<tr class="thr-sep"><td colspan="2"></td></tr>' +
+      '<tr><td colspan="2" style="color:#89b4fa;font-weight:600">\uD83D\uDD29 Doporu\u010Den\u00E9 vrt\u00E1ky pro p\u0159edvrt\u00E1n\u00ED</td></tr>' +
+      '<tr><td style="color:#6c7086">Teoretick\u00E9 D\u2081</td><td>' + D1.toFixed(3) + ' mm</td></tr>';
+    if (picked.length === 0) {
+      html += '<tr><td colspan="2" style="color:#6c7086">\u017D\u00E1dn\u00FD standardn\u00ED vrt\u00E1k \u2013 pou\u017Eijte \u00D8 ' + D1.toFixed(3) + ' mm</td></tr>';
+      return html;
+    }
+    for (var j = 0; j < picked.length; j++) {
+      var dia = picked[j].dia;
+      var pct = ((D - dia) / (2 * hInt)) * 100;
+      var label = '';
+      var style = '';
+      if (pct >= 70 && pct <= 80) {
+        label = ' \u2713 (doporu\u010Deno)';
+        style = 'color:#a6e3a1;font-weight:600';
+      } else if (pct > 85) {
+        label = ' (t\u011B\u017E\u0161\u00ED \u0159ez\u00E1n\u00ED)';
+        style = 'color:#fab387';
+      } else {
+        style = '';
+      }
+      html += '<tr><td style="' + style + '">\u00D8 ' + dia.toFixed(1) + ' mm</td>' +
+        '<td style="' + style + '">' + pct.toFixed(0) + '% z\u00E1vitu' + label + '</td></tr>';
+    }
+    return html;
+  }
+
   // ── DETAIL FUNCTIONS ──────────────────────────────────────
   function fmtCopy(lbl, val) {
     while (lbl.length < 16) lbl += ' ';
@@ -245,7 +289,6 @@ export function openThreadCalc() {
     var hExt = 0.6134 * P;
     var hInt = 0.5413 * P;
     var As   = (Math.PI / 4) * Math.pow((d2 + d3) / 2, 2);
-    var drill = D - P;
     var html = '<div class="thr-detail-title">' + label + '</div>' +
       '<table class="thr-detail-tbl">' +
         '<tr><td>Stoup\u00E1n\u00ED P</td><td><strong>' + P + '</strong> mm</td></tr>' +
@@ -261,9 +304,8 @@ export function openThreadCalc() {
         '<tr><td>Hloubka vnit\u0159n\u00ED</td><td><strong>' + hInt.toFixed(3) + '</strong> mm</td></tr>' +
         '<tr><td>Ta\u017En\u00FD pr\u016F\u0159ez A\u209B</td><td><strong>' + As.toFixed(2) + '</strong> mm\u00B2</td></tr>' +
         '<tr class="thr-sep"><td colspan="2"></td></tr>' +
-        '<tr><td>P\u0159edvrtan\u00ED (D\u2212P)</td><td><strong>' + drill.toFixed(2) + '</strong> mm</td></tr>' +
-        '<tr><td>P\u0159edvrtan\u00ED (D\u2081)</td><td><strong>' + D1.toFixed(3) + '</strong> mm</td></tr>' +
         '<tr><td>P\u0159eds. \u00F8 (d\u2083)</td><td><strong>' + d3.toFixed(3) + '</strong> mm</td></tr>' +
+        drillRecommendHTML(D, D1, hInt) +
         threadPassesHTML(hExt, 'vn\u011Bj\u0161\u00ED') +
         threadPassesHTML(hInt, 'vnit\u0159n\u00ED') +
       '</table>';
@@ -362,7 +404,6 @@ export function openThreadCalc() {
     var hExt = 0.6134 * P;
     var hInt = 0.5413 * P;
     var As   = (Math.PI / 4) * Math.pow((d2 + d3) / 2, 2);
-    var drill = D1;
     var html = '<div class="thr-detail-title">' + name + ' \u2013 ' + std + '</div>' +
       '<table class="thr-detail-tbl">' +
         '<tr><td>Z\u00E1vit\u016F/palec (TPI)</td><td><strong>' + tpi + '</strong></td></tr>' +
@@ -379,8 +420,8 @@ export function openThreadCalc() {
         '<tr><td>Hloubka vnit\u0159n\u00ED</td><td><strong>' + hInt.toFixed(3) + '</strong> mm</td></tr>' +
         '<tr><td>Ta\u017En\u00FD pr\u016F\u0159ez A\u209B</td><td><strong>' + As.toFixed(2) + '</strong> mm\u00B2</td></tr>' +
         '<tr class="thr-sep"><td colspan="2"></td></tr>' +
-        '<tr><td>P\u0159edvrtan\u00ED</td><td><strong>' + drill.toFixed(3) + '</strong> mm</td></tr>' +
         '<tr><td>P\u0159eds. \u00F8</td><td><strong>' + d3.toFixed(3) + '</strong> mm</td></tr>' +
+        drillRecommendHTML(D, D1, hInt) +
         threadPassesHTML(hExt, 'vn\u011Bj\u0161\u00ED') +
         threadPassesHTML(hInt, 'vnit\u0159n\u00ED') +
       '</table>';
