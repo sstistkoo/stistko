@@ -1,0 +1,62 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  Oříznutí úsečky – click logika                            ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+import { state, pushUndo, showToast } from '../state.js';
+import { renderAll } from '../render.js';
+import { findObjectAt, calculateAllIntersections, getLines, getCircles, intersectLineLine, intersectLineCircle } from '../geometry.js';
+import { getLineSegment } from './helpers.js';
+
+/** Ořízne úsečku k nejbližšímu průsečíku na straně kliknutí. */
+export function handleTrimClick(wx, wy) {
+  const idx = findObjectAt(wx, wy);
+  if (idx === null) { showToast("Klepněte na úsečku k oříznutí"); return; }
+  const obj = state.objects[idx];
+  const ls = getLineSegment(obj, wx, wy);
+  if (!ls) {
+    showToast("Oříznutí funguje pouze pro úsečky a rovné segmenty kontur");
+    return;
+  }
+
+  // Collect all intersection points on this line segment from other objects
+  const pts = [];
+  const lineSeg = { x1: ls.seg.x1, y1: ls.seg.y1, x2: ls.seg.x2, y2: ls.seg.y2, isConstr: false };
+  for (let i = 0; i < state.objects.length; i++) {
+    if (i === idx) continue;
+    const other = state.objects[i];
+    for (const seg of getLines(other)) {
+      pts.push(...intersectLineLine(lineSeg, seg));
+    }
+    for (const circ of getCircles(other)) {
+      pts.push(...intersectLineCircle(lineSeg, circ));
+    }
+  }
+
+  if (pts.length === 0) { showToast("Žádný průsečík pro oříznutí"); return; }
+
+  // Determine which end of the line is closer to click point
+  const d1 = Math.hypot(wx - ls.seg.x1, wy - ls.seg.y1);
+  const d2 = Math.hypot(wx - ls.seg.x2, wy - ls.seg.y2);
+  const trimEnd = d1 < d2 ? 1 : 2; // 1 = trim start(x1,y1), 2 = trim end(x2,y2)
+
+  // Find intersection closest to the trimmed end
+  let bestPt = null, bestDist = Infinity;
+  for (const p of pts) {
+    const d = trimEnd === 1
+      ? Math.hypot(p.x - ls.seg.x1, p.y - ls.seg.y1)
+      : Math.hypot(p.x - ls.seg.x2, p.y - ls.seg.y2);
+    if (d < bestDist && d > 1e-9) {
+      bestDist = d;
+      bestPt = p;
+    }
+  }
+  if (!bestPt) { showToast("Žádný vhodný průsečík"); return; }
+
+  pushUndo();
+  if (trimEnd === 1) { ls.setP1(bestPt.x, bestPt.y); }
+  else { ls.setP2(bestPt.x, bestPt.y); }
+
+  calculateAllIntersections();
+  renderAll();
+  showToast("Oříznuto ✓");
+}
