@@ -275,20 +275,84 @@ export function openThreadCalc() {
     return html;
   }
 
+  // ── ISO 965-1 TOLERANCE ─────────────────────────────────
+  function calcISO965(D, P, extClass, intClass) {
+    var extGrade = parseInt(extClass);
+    var extPos = extClass.replace(/\d/g, '');
+    var intGrade = parseInt(intClass);
+    var gradeK = {3:0.50, 4:0.63, 5:0.80, 6:1.00, 7:1.25, 8:1.60, 9:2.00};
+    // Fundamental deviation (µm)
+    var es = 0;
+    if (extPos === 'g') es = -Math.round(15 + 11 * P);
+    else if (extPos === 'e') es = -Math.round(50 + 11 * P);
+    var EI = 0; // H position
+    // Tolerances at grade 6 (µm)
+    var Td2_6 = 90 * Math.pow(P, 0.4) * Math.pow(D, 0.1);
+    var Td_6  = 180 * Math.pow(P, 2/3) - 3.15 * Math.sqrt(P);
+    if (Td_6 < 1.32 * Td2_6) Td_6 = 1.32 * Td2_6;
+    var TD1_6 = P <= 1
+      ? 433 * P - 190 * Math.pow(P, 1.22)
+      : 230 * Math.pow(P, 0.7);
+    var kExt = gradeK[extGrade] || 1;
+    var kInt = gradeK[intGrade] || 1;
+    var Td2 = Td2_6 * kExt;
+    var Td  = Td_6  * kExt;
+    var TD2 = Td2_6 * kInt;
+    var TD1 = TD1_6 * kInt;
+    // Nominal diameters
+    var d2  = D - 0.6495 * P;
+    var d3  = D - 1.2269 * P;
+    var D1  = D - 1.0825 * P;
+    // Convert µm → mm
+    var es_mm  = es  / 1000;
+    var Td2_mm = Td2 / 1000;
+    var Td_mm  = Td  / 1000;
+    var TD2_mm = TD2 / 1000;
+    var TD1_mm = TD1 / 1000;
+    return {
+      es: es,
+      d_max:  D  + es_mm,
+      d_min:  D  + es_mm - Td_mm,
+      d2_max: d2 + es_mm,
+      d2_min: d2 + es_mm - Td2_mm,
+      D1_min: D1 + EI / 1000,
+      D1_max: D1 + EI / 1000 + TD1_mm,
+      D2_min: d2 + EI / 1000,
+      D2_max: d2 + EI / 1000 + TD2_mm
+    };
+  }
+
   // ── DETAIL FUNCTIONS ──────────────────────────────────────
   function fmtCopy(lbl, val) {
     while (lbl.length < 16) lbl += ' ';
     return '  ' + lbl + '= ' + val;
   }
 
-  function detailMetric(D, P, label) {
+  function detailMetric(D, P, label, extClass, intClass) {
     var H    = 0.866025 * P;
     var d2   = D - 0.6495 * P;
     var d3   = D - 1.2269 * P;
     var D1   = D - 1.0825 * P;
+    var drill = D1;
     var hExt = 0.6134 * P;
     var hInt = 0.5413 * P;
     var As   = (Math.PI / 4) * Math.pow((d2 + d3) / 2, 2);
+    var tolHTML = '';
+    var tolCopy = '';
+    if (extClass && intClass) {
+      var tol = calcISO965(D, P, extClass, intClass);
+      tolHTML = '<tr class="thr-sep"><td colspan="2"></td></tr>' +
+        '<tr><td colspan="2" style="color:#89b4fa;font-weight:600">\uD83D\uDCCF Tolerance ' + extClass + '/' + intClass + ' (ISO 965)</td></tr>' +
+        '<tr><td>\u0160roub d</td><td>' + D.toFixed(3) + ' \u2192 <strong>' + tol.d_min.toFixed(3) + ' \u2026 ' + tol.d_max.toFixed(3) + '</strong> mm</td></tr>' +
+        '<tr><td>\u0160roub d\u2082</td><td>' + d2.toFixed(3) + ' \u2192 <strong>' + tol.d2_min.toFixed(3) + ' \u2026 ' + tol.d2_max.toFixed(3) + '</strong> mm</td></tr>' +
+        '<tr><td>Matice D\u2081</td><td>' + D1.toFixed(3) + ' \u2192 <strong>' + tol.D1_min.toFixed(3) + ' \u2026 ' + tol.D1_max.toFixed(3) + '</strong> mm</td></tr>' +
+        '<tr><td>Matice D\u2082</td><td>' + d2.toFixed(3) + ' \u2192 <strong>' + tol.D2_min.toFixed(3) + ' \u2026 ' + tol.D2_max.toFixed(3) + '</strong> mm</td></tr>';
+      tolCopy = '\n\u2500\u2500 Tolerance ' + extClass + '/' + intClass + ' \u2500\u2500\n' +
+        fmtCopy('\u0160roub d', tol.d_min.toFixed(3) + ' \u2026 ' + tol.d_max.toFixed(3) + ' mm') + '\n' +
+        fmtCopy('\u0160roub d\u2082', tol.d2_min.toFixed(3) + ' \u2026 ' + tol.d2_max.toFixed(3) + ' mm') + '\n' +
+        fmtCopy('Matice D\u2081', tol.D1_min.toFixed(3) + ' \u2026 ' + tol.D1_max.toFixed(3) + ' mm') + '\n' +
+        fmtCopy('Matice D\u2082', tol.D2_min.toFixed(3) + ' \u2026 ' + tol.D2_max.toFixed(3) + ' mm');
+    }
     var html = '<div class="thr-detail-title">' + label + '</div>' +
       '<table class="thr-detail-tbl">' +
         '<tr><td>Stoup\u00E1n\u00ED P</td><td><strong>' + P + '</strong> mm</td></tr>' +
@@ -305,6 +369,7 @@ export function openThreadCalc() {
         '<tr><td>Ta\u017En\u00FD pr\u016F\u0159ez A\u209B</td><td><strong>' + As.toFixed(2) + '</strong> mm\u00B2</td></tr>' +
         '<tr class="thr-sep"><td colspan="2"></td></tr>' +
         '<tr><td>P\u0159eds. \u00F8 (d\u2083)</td><td><strong>' + d3.toFixed(3) + '</strong> mm</td></tr>' +
+        tolHTML +
         drillRecommendHTML(D, D1, hInt) +
         threadPassesHTML(hExt, 'vn\u011Bj\u0161\u00ED') +
         threadPassesHTML(hInt, 'vnit\u0159n\u00ED') +
@@ -318,7 +383,7 @@ export function openThreadCalc() {
       fmtCopy('Hloubka vn\u011Bj\u0161\u00ED', hExt.toFixed(3) + ' mm') + '\n' +
       fmtCopy('Hloubka vnit\u0159n\u00ED', hInt.toFixed(3) + ' mm') + '\n' +
       fmtCopy('Ta\u017En\u00FD pr\u016F\u0159ez A\u209B', As.toFixed(2) + ' mm\u00B2') + '\n' +
-      fmtCopy('P\u0159edvrt\u00E1n\u00ED', drill.toFixed(1) + ' mm');
+      fmtCopy('P\u0159edvrt\u00E1n\u00ED', drill.toFixed(1) + ' mm') + tolCopy;
     return { html: html, copyText: copyText };
   }
 
@@ -401,6 +466,7 @@ export function openThreadCalc() {
     var d2   = D - 0.6495 * P;
     var d3   = D - 1.2269 * P;
     var D1   = D - 1.0825 * P;
+    var drill = D1;
     var hExt = 0.6134 * P;
     var hInt = 0.5413 * P;
     var As   = (Math.PI / 4) * Math.pow((d2 + d3) / 2, 2);
@@ -656,6 +722,21 @@ export function openThreadCalc() {
       '</div>' +
     '</div>' +
     '<input type="text" class="cnc-filter" placeholder="Filtr..." id="threadFilter">' +
+    '<div class="cnc-fields" id="thrTolClasses" style="margin-top:6px">' +
+      '<label class="cnc-field"><span>T\u0159\u00EDda vn\u011Bj\u0161\u00ED</span>' +
+        '<select data-id="tExtClass">' +
+          '<option value="6g" selected>6g</option>' +
+          '<option value="4g">4g</option>' +
+          '<option value="8g">8g</option>' +
+        '</select></label>' +
+      '<label class="cnc-field"><span>T\u0159\u00EDda vnit\u0159n\u00ED</span>' +
+        '<select data-id="tIntClass">' +
+          '<option value="6H" selected>6H</option>' +
+          '<option value="4H">4H</option>' +
+          '<option value="5H">5H</option>' +
+          '<option value="7H">7H</option>' +
+        '</select></label>' +
+    '</div>' +
     '<div class="cnc-table-wrap cnc-table-tall">' +
       '<table class="cnc-table" id="threadTable">' +
         '<thead id="thrHead">' + headerM + '</thead>' +
@@ -699,6 +780,10 @@ export function openThreadCalc() {
   var helpPanel= overlay.querySelector("#thrHelpPanel");
   var lastActiveRow = null;
   var currentType = 'mc';
+  var tolClassPanel = overlay.querySelector('#thrTolClasses');
+  var selExtClass = overlay.querySelector('[data-id="tExtClass"]');
+  var selIntClass = overlay.querySelector('[data-id="tIntClass"]');
+  var lastMetricD = null, lastMetricP = null, lastMetricLabel = null;
 
   function setDetail(result) {
     detail.innerHTML = result.html;
@@ -715,6 +800,9 @@ export function openThreadCalc() {
   // ── Switch thread type ──
   function switchType(type) {
     currentType = type;
+    var isMetric = (type === 'mc' || type === 'mf');
+    tolClassPanel.style.display = isMetric ? '' : 'none';
+    if (!isMetric) { lastMetricD = null; lastMetricP = null; lastMetricLabel = null; }
     for (var i = 0; i < typeBtns.length; i++) {
       typeBtns[i].classList.toggle('tol-active', typeBtns[i].dataset.thr === type);
     }
@@ -784,7 +872,8 @@ export function openThreadCalc() {
     if (type === 'M') {
       var isFine = (currentType === 'mf');
       var lbl = 'M' + D + (isFine ? '\u00D7' + P + ' jemn\u00E9' : ' hrub\u00E9');
-      setDetail(detailMetric(D, P, lbl));
+      lastMetricD = D; lastMetricP = P; lastMetricLabel = lbl;
+      setDetail(detailMetric(D, P, lbl, selExtClass.value, selIntClass.value));
     } else if (type === 'G') {
       var tpi = parseInt(tr.dataset.tpi);
       setDetail(detailG(D, P, tpi, tr.dataset.n));
@@ -827,7 +916,8 @@ export function openThreadCalc() {
         var tpi = Math.round(25.4 / P);
         setDetail(detailAcme(D, P, tpi, 'Acme vlastn\u00ED'));
       } else {
-        setDetail(detailMetric(D, P, 'M' + D + '\u00D7' + P + ' (vlastn\u00ED)'));
+        lastMetricD = D; lastMetricP = P; lastMetricLabel = 'M' + D + '\u00D7' + P + ' (vlastn\u00ED)';
+        setDetail(detailMetric(D, P, lastMetricLabel, selExtClass.value, selIntClass.value));
       }
     }
   }
@@ -930,7 +1020,8 @@ export function openThreadCalc() {
     if (h.type === 'M') {
       var isFine = (h.tab === 'mf');
       var lbl = 'M' + h.D + (isFine ? '\u00D7' + h.P + ' jemn\u00E9' : ' hrub\u00E9');
-      setDetail(detailMetric(h.D, h.P, lbl));
+      lastMetricD = h.D; lastMetricP = h.P; lastMetricLabel = lbl;
+      setDetail(detailMetric(h.D, h.P, lbl, selExtClass.value, selIntClass.value));
     } else if (h.type === 'G') {
       setDetail(detailG(h.D, h.P, h.tpi, h.n));
     } else if (h.type === 'Tr') {
@@ -960,6 +1051,15 @@ export function openThreadCalc() {
       }
     }
   });
+
+  // ── Změna třídy tolerance → přepočítat ──
+  function onTolClassChange() {
+    if (lastMetricD !== null && lastMetricP !== null && (currentType === 'mc' || currentType === 'mf')) {
+      setDetail(detailMetric(lastMetricD, lastMetricP, lastMetricLabel, selExtClass.value, selIntClass.value));
+    }
+  }
+  selExtClass.addEventListener('change', onTolClassChange);
+  selIntClass.addEventListener('change', onTolClassChange);
 
   // ── Kopírovat detail ──
   overlay.querySelector("#thrCopy").addEventListener("click", function() {
