@@ -49,6 +49,8 @@ export const GRID_MIN_PX         = 15;    // min px vzdálenost pro zobrazení
 export const MOBILE_BREAKPOINT   = 900;   // px šířka pro mobilní rozhraní
 export const LONG_PRESS_MS       = 400;   // ms pro aktivaci přesného kříže
 export const CROSSHAIR_OFFSET_Y  = -80;   // px posun kříže nad prst
+export const TOUCH_MOVE_THRESHOLD = 5;    // px min. pohyb prstu pro detekci tahu
+export const PAN_ACTIVATE_THRESHOLD = 10; // px min. pohyb pro aktivaci pannování
 
 // ── Vibrace (haptic) ────────────────────────────────────────
 export const VIBRATE_LONG_PRESS  = 30;    // ms

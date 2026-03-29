@@ -2,7 +2,7 @@
 // ║  SKICA – Service Worker (PWA offline cache)                 ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-const CACHE_NAME = 'skica-v69';
+const CACHE_NAME = 'skica-v70';
 const ASSETS = [
   './',
   './index.html',
@@ -35,6 +35,18 @@ const ASSETS = [
   './js/calculators/thread.js',
   './js/calculators/tolerance.js',
   './js/calculators/weight.js',
+  './js/tools/index.js',
+  './js/tools/helpers.js',
+  './js/tools/tangentClick.js',
+  './js/tools/offsetClick.js',
+  './js/tools/trimClick.js',
+  './js/tools/extendClick.js',
+  './js/tools/filletClick.js',
+  './js/tools/perpClick.js',
+  './js/tools/horizontalClick.js',
+  './js/tools/parallelClick.js',
+  './js/tools/dimensionClick.js',
+  './js/tools/snapPointClick.js',
   './icons/icon.svg',
   './icons/icon-192.png',
   './icons/icon-512.png',

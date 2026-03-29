@@ -2,7 +2,7 @@
 // ║  SKICA – Dotyková podpora + mobilní ovládání               ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-import { MOBILE_BREAKPOINT, LONG_PRESS_MS, CROSSHAIR_OFFSET_Y, ZOOM_MIN, ZOOM_MAX, VIBRATE_LONG_PRESS } from './constants.js';
+import { MOBILE_BREAKPOINT, LONG_PRESS_MS, CROSSHAIR_OFFSET_Y, ZOOM_MIN, ZOOM_MAX, VIBRATE_LONG_PRESS, TOUCH_MOVE_THRESHOLD, PAN_ACTIVATE_THRESHOLD } from './constants.js';
 import { drawCanvas, screenToWorld, snapPt, autoCenterView, applyAngleSnap } from './canvas.js';
 import { state, undo, redo, showToast, toDisplayCoords, resetDrawingState, displayX, xPrefix } from './state.js';
 import { renderAll } from './render.js';
@@ -491,7 +491,7 @@ drawCanvas.addEventListener(
       if (
         !touchState.precisionMode &&
         touchState.longPressTimer &&
-        moveDistPx > 5
+        moveDistPx > TOUCH_MOVE_THRESHOLD
       ) {
         clearTimeout(touchState.longPressTimer);
         touchState.longPressTimer = null;
@@ -507,7 +507,7 @@ drawCanvas.addEventListener(
       // Pokud můžeme panovat jedním prstem a pohyb překročí práh
       if (
         canSingleFingerPan() &&
-        (touchState.singlePanning || moveDistPx > 10)
+        (touchState.singlePanning || moveDistPx > PAN_ACTIVATE_THRESHOLD)
       ) {
         touchState.singlePanning = true;
         touchState.touchMoved = true;
@@ -534,7 +534,7 @@ drawCanvas.addEventListener(
       state.mouse.x = wx;
       state.mouse.y = wy;
 
-      if (moveDistPx > 5) touchState.touchMoved = true;
+      if (moveDistPx > TOUCH_MOVE_THRESHOLD) touchState.touchMoved = true;
 
       let extra = "";
       if (state.drawing && state.tempPoints.length > 0) {
