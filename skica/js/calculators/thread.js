@@ -1,162 +1,22 @@
 import { showToast } from '../state.js';
 import { safeEvalMath } from '../utils.js';
 import { makeOverlay } from '../dialogFactory.js';
+import { mCoarse, mFine, gThreads, trThreads, uncThreads, unfThreads, bswThreads, nptThreads, acmeThreads } from './threadData.js';
 
 export function openThreadCalc() {
   // ── DATA ──────────────────────────────────────────────────
-  // M hrubé – ISO 261, úhel 60°
-  var mCoarse = [
-    {D:1,P:0.25},{D:1.1,P:0.25},{D:1.2,P:0.25},{D:1.4,P:0.3},{D:1.6,P:0.35},
-    {D:1.8,P:0.35},{D:2,P:0.4},{D:2.2,P:0.45},{D:2.5,P:0.45},{D:3,P:0.5},
-    {D:3.5,P:0.6},{D:4,P:0.7},{D:4.5,P:0.75},{D:5,P:0.8},{D:6,P:1},
-    {D:7,P:1},{D:8,P:1.25},{D:9,P:1.25},{D:10,P:1.5},{D:11,P:1.5},
-    {D:12,P:1.75},{D:14,P:2},{D:16,P:2},{D:18,P:2.5},{D:20,P:2.5},
-    {D:22,P:2.5},{D:24,P:3},{D:27,P:3},{D:30,P:3.5},{D:33,P:3.5},
-    {D:36,P:4},{D:39,P:4},{D:42,P:4.5},{D:45,P:4.5},{D:48,P:5},
-    {D:52,P:5},{D:56,P:5.5},{D:60,P:5.5},{D:64,P:6},{D:68,P:6},
-  ];
 
-  // M jemné – ISO 261, úhel 60°
-  var mFine = [
-    {D:8,P:1},{D:8,P:0.75},{D:10,P:1.25},{D:10,P:1},{D:10,P:0.75},
-    {D:12,P:1.5},{D:12,P:1.25},{D:12,P:1},{D:14,P:1.5},{D:14,P:1.25},
-    {D:14,P:1},{D:16,P:1.5},{D:16,P:1},{D:18,P:2},{D:18,P:1.5},
-    {D:18,P:1},{D:20,P:2},{D:20,P:1.5},{D:20,P:1},{D:22,P:2},
-    {D:22,P:1.5},{D:22,P:1},{D:24,P:2},{D:24,P:1.5},{D:24,P:1},
-    {D:27,P:2},{D:27,P:1.5},{D:27,P:1},{D:30,P:2},{D:30,P:1.5},
-    {D:30,P:1},{D:33,P:2},{D:33,P:1.5},{D:36,P:3},{D:36,P:2},
-    {D:36,P:1.5},{D:39,P:3},{D:39,P:2},{D:39,P:1.5},{D:42,P:3},
-    {D:42,P:2},{D:42,P:1.5},{D:45,P:3},{D:45,P:2},{D:45,P:1.5},
-    {D:48,P:3},{D:48,P:2},{D:48,P:1.5},{D:52,P:3},{D:52,P:2},
-    {D:52,P:1.5},{D:56,P:3},{D:56,P:2},{D:56,P:1.5},{D:60,P:3},
-    {D:60,P:2},{D:60,P:1.5},{D:64,P:3},{D:64,P:2},{D:64,P:1.5},
-    {D:68,P:3},{D:68,P:2},{D:68,P:1.5},
-  ];
-
-  // G (BSP) trubkový válcový – ISO 228, úhel 55°, stoupání v TPI
-  var gThreads = [
-    {n:"G 1/8",    D:9.728,  tpi:28},
-    {n:"G 1/4",    D:13.157, tpi:19},
-    {n:"G 3/8",    D:16.662, tpi:19},
-    {n:"G 1/2",    D:20.955, tpi:14},
-    {n:"G 5/8",    D:22.911, tpi:14},
-    {n:"G 3/4",    D:26.441, tpi:14},
-    {n:"G 7/8",    D:30.201, tpi:14},
-    {n:"G 1",      D:33.249, tpi:11},
-    {n:"G 1 1/8",  D:37.897, tpi:11},
-    {n:"G 1 1/4",  D:41.910, tpi:11},
-    {n:"G 1 3/8",  D:44.323, tpi:11},
-    {n:"G 1 1/2",  D:47.803, tpi:11},
-    {n:"G 1 3/4",  D:53.746, tpi:11},
-    {n:"G 2",      D:59.614, tpi:11},
-    {n:"G 2 1/4",  D:65.710, tpi:11},
-    {n:"G 2 1/2",  D:75.184, tpi:11},
-    {n:"G 2 3/4",  D:81.534, tpi:11},
-    {n:"G 3",      D:87.884, tpi:11},
-    {n:"G 3 1/2",  D:100.330,tpi:11},
-    {n:"G 4",      D:113.030,tpi:11},
-  ];
-
-  // Tr trapézový – ISO 2904, úhel 30°
-  var trThreads = [
-    {D:8,P:1.5},{D:9,P:1.5},{D:9,P:2},{D:10,P:2},{D:10,P:3},
-    {D:11,P:2},{D:11,P:3},{D:12,P:2},{D:12,P:3},{D:14,P:2},
-    {D:14,P:3},{D:16,P:2},{D:16,P:4},{D:18,P:2},{D:18,P:4},
-    {D:20,P:2},{D:20,P:4},{D:22,P:3},{D:22,P:5},{D:24,P:3},
-    {D:24,P:5},{D:26,P:3},{D:26,P:5},{D:28,P:3},{D:28,P:5},
-    {D:30,P:3},{D:30,P:6},{D:32,P:3},{D:32,P:6},{D:34,P:3},
-    {D:34,P:6},{D:36,P:3},{D:36,P:6},{D:38,P:3},{D:38,P:7},
-    {D:40,P:3},{D:40,P:7},{D:42,P:3},{D:42,P:7},{D:44,P:3},
-    {D:44,P:7},{D:46,P:3},{D:46,P:8},{D:48,P:3},{D:48,P:8},
-    {D:50,P:3},{D:50,P:8},{D:52,P:3},{D:52,P:8},{D:55,P:3},
-    {D:55,P:9},{D:60,P:3},{D:60,P:9},{D:65,P:4},{D:65,P:10},
-    {D:70,P:4},{D:70,P:10},{D:75,P:4},{D:75,P:10},{D:80,P:4},
-    {D:80,P:10},{D:85,P:4},{D:85,P:12},{D:90,P:4},{D:90,P:12},
-    {D:95,P:4},{D:95,P:12},{D:100,P:4},{D:100,P:12},
-  ];
-
-  // UNC – Unified National Coarse (ASME B1.1), úhel 60°
-  var uncThreads = [
-    {n:'#1',   D:1.854, tpi:64},  {n:'#2',   D:2.184, tpi:56},
-    {n:'#3',   D:2.515, tpi:48},  {n:'#4',   D:2.845, tpi:40},
-    {n:'#5',   D:3.175, tpi:40},  {n:'#6',   D:3.505, tpi:32},
-    {n:'#8',   D:4.166, tpi:32},  {n:'#10',  D:4.826, tpi:24},
-    {n:'#12',  D:5.486, tpi:24},
-    {n:'1/4"',  D:6.350, tpi:20},  {n:'5/16"', D:7.938, tpi:18},
-    {n:'3/8"',  D:9.525, tpi:16},  {n:'7/16"', D:11.112,tpi:14},
-    {n:'1/2"',  D:12.700,tpi:13},  {n:'9/16"', D:14.288,tpi:12},
-    {n:'5/8"',  D:15.875,tpi:11},  {n:'3/4"',  D:19.050,tpi:10},
-    {n:'7/8"',  D:22.225,tpi:9},   {n:'1"',    D:25.400,tpi:8},
-    {n:'1-1/8"',D:28.575,tpi:7},   {n:'1-1/4"',D:31.750,tpi:7},
-    {n:'1-3/8"',D:34.925,tpi:6},   {n:'1-1/2"',D:38.100,tpi:6},
-    {n:'1-3/4"',D:44.450,tpi:5},   {n:'2"',    D:50.800,tpi:4.5},
-    {n:'2-1/4"',D:57.150,tpi:4.5}, {n:'2-1/2"',D:63.500,tpi:4},
-    {n:'2-3/4"',D:69.850,tpi:4},   {n:'3"',    D:76.200,tpi:4},
-    {n:'3-1/4"',D:82.550,tpi:4},   {n:'3-1/2"',D:88.900,tpi:4},
-    {n:'3-3/4"',D:95.250,tpi:4},   {n:'4"',    D:101.600,tpi:4},
-  ];
-
-  // UNF – Unified National Fine (ASME B1.1), úhel 60°
-  var unfThreads = [
-    {n:'#0',   D:1.524, tpi:80},  {n:'#1',   D:1.854, tpi:72},
-    {n:'#2',   D:2.184, tpi:64},  {n:'#3',   D:2.515, tpi:56},
-    {n:'#4',   D:2.845, tpi:48},  {n:'#5',   D:3.175, tpi:44},
-    {n:'#6',   D:3.505, tpi:40},  {n:'#8',   D:4.166, tpi:36},
-    {n:'#10',  D:4.826, tpi:32},  {n:'#12',  D:5.486, tpi:28},
-    {n:'1/4"',  D:6.350, tpi:28},  {n:'5/16"', D:7.938, tpi:24},
-    {n:'3/8"',  D:9.525, tpi:24},  {n:'7/16"', D:11.112,tpi:20},
-    {n:'1/2"',  D:12.700,tpi:20},  {n:'9/16"', D:14.288,tpi:18},
-    {n:'5/8"',  D:15.875,tpi:18},  {n:'3/4"',  D:19.050,tpi:16},
-    {n:'7/8"',  D:22.225,tpi:14},  {n:'1"',    D:25.400,tpi:12},
-    {n:'1-1/8"',D:28.575,tpi:12},  {n:'1-1/4"',D:31.750,tpi:12},
-    {n:'1-3/8"',D:34.925,tpi:12},  {n:'1-1/2"',D:38.100,tpi:12},
-  ];
-
-  // BSW – British Standard Whitworth (BS 84), úhel 55°
-  var bswThreads = [
-    {n:'1/8"',  D:3.175, tpi:40},   {n:'3/16"', D:4.762, tpi:24},
-    {n:'1/4"',  D:6.350, tpi:20},   {n:'5/16"', D:7.938, tpi:18},
-    {n:'3/8"',  D:9.525, tpi:16},   {n:'7/16"', D:11.112,tpi:14},
-    {n:'1/2"',  D:12.700,tpi:12},   {n:'9/16"', D:14.288,tpi:12},
-    {n:'5/8"',  D:15.875,tpi:11},   {n:'3/4"',  D:19.050,tpi:10},
-    {n:'7/8"',  D:22.225,tpi:9},    {n:'1"',    D:25.400,tpi:8},
-    {n:'1-1/8"',D:28.575,tpi:7},    {n:'1-1/4"',D:31.750,tpi:7},
-    {n:'1-3/8"',D:34.925,tpi:6},    {n:'1-1/2"',D:38.100,tpi:6},
-    {n:'1-5/8"',D:41.275,tpi:5},    {n:'1-3/4"',D:44.450,tpi:5},
-    {n:'2"',    D:50.800,tpi:4.5},   {n:'2-1/4"',D:57.150,tpi:4},
-    {n:'2-1/2"',D:63.500,tpi:4},     {n:'2-3/4"',D:69.850,tpi:3.5},
-    {n:'3"',    D:76.200,tpi:3.5},
-  ];
-
-  // NPT – National Pipe Taper (ASME B1.20.1), úhel 60°, kuželovitost 1:16 (1°47'24")
-  var nptThreads = [
-    {n:'1/16"',  D:7.938,  tpi:27},
-    {n:'1/8"',   D:10.287, tpi:27},
-    {n:'1/4"',   D:13.716, tpi:18},
-    {n:'3/8"',   D:17.145, tpi:18},
-    {n:'1/2"',   D:21.336, tpi:14},
-    {n:'3/4"',   D:26.670, tpi:14},
-    {n:'1"',     D:33.401, tpi:11.5},
-    {n:'1-1/4"', D:42.164, tpi:11.5},
-    {n:'1-1/2"', D:48.260, tpi:11.5},
-    {n:'2"',     D:60.325, tpi:11.5},
-    {n:'2-1/2"', D:73.025, tpi:8},
-    {n:'3"',     D:88.900, tpi:8},
-    {n:'3-1/2"', D:101.600,tpi:8},
-    {n:'4"',     D:114.300,tpi:8},
-  ];
-
-  // Acme – pilový/lichoběžníkový (ASME B1.5), úhel 29°
-  var acmeThreads = [
-    {n:'1/4"',  D:6.350,  tpi:16},  {n:'5/16"', D:7.938, tpi:14},
-    {n:'3/8"',  D:9.525,  tpi:12},  {n:'7/16"', D:11.112,tpi:12},
-    {n:'1/2"',  D:12.700, tpi:10},  {n:'5/8"',  D:15.875,tpi:8},
-    {n:'3/4"',  D:19.050, tpi:6},   {n:'7/8"',  D:22.225,tpi:6},
-    {n:'1"',    D:25.400, tpi:5},    {n:'1-1/4"',D:31.750,tpi:5},
-    {n:'1-1/2"',D:38.100, tpi:4},   {n:'1-3/4"',D:44.450,tpi:4},
-    {n:'2"',    D:50.800, tpi:4},    {n:'2-1/2"',D:63.500,tpi:3},
-    {n:'3"',    D:76.200, tpi:2},    {n:'3-1/2"',D:88.900,tpi:2},
-    {n:'4"',    D:101.600,tpi:2},    {n:'5"',    D:127.000,tpi:2},
+  // BSPT (R) – kuželový BSP – ISO 7 / DIN 2999, úhel 55°, kuželovitost 1:16
+  var bsptThreads = [
+    {n:"R 1/8",   D:9.728,  tpi:28},
+    {n:"R 1/4",   D:13.157, tpi:19},
+    {n:"R 3/8",   D:16.662, tpi:19},
+    {n:"R 1/2",   D:20.955, tpi:14},
+    {n:"R 3/4",   D:26.441, tpi:14},
+    {n:"R 1",     D:33.249, tpi:11},
+    {n:"R 1 1/4", D:41.910, tpi:11},
+    {n:"R 1 1/2", D:47.803, tpi:11},
+    {n:"R 2",     D:59.614, tpi:11},
   ];
 
   // ── BUILD ROWS ────────────────────────────────────────────
@@ -204,8 +64,44 @@ export function openThreadCalc() {
   }
 
   // ── THREAD PASSES (průchody soustružení závitu) ─────────
-  function threadPassesHTML(totalDepth, label) {
+  function threadPassesRows(totalDepth, nPasses, infeedType) {
+    var html = '';
+    var cos30 = 0.866025;
+    var sin30 = 0.5;
+    var cumDepth = 0;
+    for (var i = 1; i <= nPasses; i++) {
+      var target = totalDepth * Math.sqrt(i / nPasses);
+      var cut = target - cumDepth;
+      if (i === nPasses) { target = totalDepth; cut = totalDepth - cumDepth; }
+      if (infeedType === 'flank') {
+        var xInf = cut * cos30;
+        var zOff = cut * sin30;
+        html += '<tr class="thr-pass-row"><td style="color:#6c7086">' + i + '.</td>' +
+          '<td>ap=' + cut.toFixed(3) + '  X=' + xInf.toFixed(3) + '  Z=' + zOff.toFixed(3) + '  \u2211=' + target.toFixed(3) + ' mm</td></tr>';
+      } else if (infeedType === 'modified') {
+        var xInf = cut * cos30;
+        var zOff = cut * sin30;
+        var sign = (i % 2 === 1) ? '+' : '\u2212';
+        html += '<tr class="thr-pass-row"><td style="color:#6c7086">' + i + '.</td>' +
+          '<td>ap=' + cut.toFixed(3) + '  X=' + xInf.toFixed(3) + '  Z=' + sign + zOff.toFixed(3) + '  \u2211=' + target.toFixed(3) + ' mm</td></tr>';
+      } else {
+        html += '<tr class="thr-pass-row"><td style="color:#6c7086">' + i + '.</td>' +
+          '<td>ap=' + cut.toFixed(3) + '  \u2211=' + target.toFixed(3) + ' mm</td></tr>';
+      }
+      cumDepth = target;
+    }
+    html += '<tr class="thr-pass-row"><td style="color:#6c7086">' + (nPasses + 1) + '.</td>' +
+      '<td style="color:#a6e3a1">jisk\u0159iv\u00FD (ap=0, spring pass)</td></tr>';
+    return html;
+  }
+
+  function getMaterial() {
+    return selMaterial ? selMaterial.value : 'steel';
+  }
+
+  function threadPassesHTML(totalDepth, label, material) {
     if (totalDepth <= 0) return '';
+    material = material || 'steel';
     var nPasses;
     if (totalDepth <= 0.5) nPasses = 3;
     else if (totalDepth <= 1.0) nPasses = 5;
@@ -214,20 +110,45 @@ export function openThreadCalc() {
     else if (totalDepth <= 3.0) nPasses = 11;
     else nPasses = Math.ceil(totalDepth / 0.25);
 
-    var html = '<tr class="thr-sep"><td colspan="2"></td></tr>' +
-      '<tr><td colspan="2" style="color:#89b4fa;font-weight:600">\uD83D\uDD27 Pr\u016Fchody ' + label + ' (' + nPasses + '\u00D7)</td></tr>';
-
-    var cumDepth = 0;
-    for (var i = 1; i <= nPasses; i++) {
-      var target = totalDepth * Math.sqrt(i / nPasses);
-      var cut = target - cumDepth;
-      if (i === nPasses) { target = totalDepth; cut = totalDepth - cumDepth; }
-      html += '<tr><td style="color:#6c7086">' + i + '.</td>' +
-        '<td>ap=' + cut.toFixed(3) + '  \u2211=' + target.toFixed(3) + ' mm</td></tr>';
-      cumDepth = target;
+    var maxFirstCut = 0.15;
+    var materialNote = '';
+    if (material === 'stainless') {
+      nPasses = Math.ceil(nPasses * 1.3);
+      maxFirstCut = 0.10;
+      materialNote = '<tr><td colspan="2" style="color:#fab387">\u26A0 Nerez: n\u00EDzk\u00E9 ot\u00E1\u010Dky, \u0159ezn\u00FD olej</td></tr>';
+    } else if (material === 'aluminum') {
+      nPasses = Math.max(2, Math.ceil(nPasses * 0.8));
+      maxFirstCut = 0.20;
+      materialNote = '<tr><td colspan="2" style="color:#a6e3a1">\uD83D\uDCA1 Hlin\u00EDk: petroleum/IPA</td></tr>';
+    } else if (material === 'cast') {
+      materialNote = '<tr><td colspan="2" style="color:#89b4fa">\uD83D\uDCA1 Litina: nasucho nebo emulze</td></tr>';
     }
-    html += '<tr><td style="color:#6c7086">' + (nPasses + 1) + '.</td>' +
-      '<td style="color:#a6e3a1">jisk\u0159iv\u00FD (ap=0, spring pass)</td></tr>';
+    var firstCut = totalDepth * Math.sqrt(1 / nPasses);
+    while (firstCut > maxFirstCut && nPasses < 50) {
+      nPasses++;
+      firstCut = totalDepth * Math.sqrt(1 / nPasses);
+    }
+
+    var vcData = {steel:{vbd:'80\u2013120',hss:'15\u201325'},stainless:{vbd:'40\u201380',hss:'8\u201315'},aluminum:{vbd:'150\u2013300',hss:'30\u201360'},cast:{vbd:'60\u2013100',hss:'12\u201320'}};
+    var vc = vcData[material] || vcData.steel;
+    var vcHTML = '<tr class="thr-sep"><td colspan="2"></td></tr>' +
+      '<tr><td colspan="2" style="color:#cba6f7;font-weight:600">\uD83D\uDD04 \u0158ezn\u00E1 rychlost z\u00E1vitov\u00E1n\u00ED</td></tr>' +
+      '<tr><td>VBD (pl\u00E1tky)</td><td>Vc = <strong>' + vc.vbd + '</strong> m/min</td></tr>' +
+      '<tr><td>HSS (no\u017Ee)</td><td>Vc = <strong>' + vc.hss + '</strong> m/min</td></tr>';
+
+    var html = '</tbody><tbody class="thr-passes-group" data-depth="' + totalDepth + '" data-npasses="' + nPasses + '">' +
+      '<tr class="thr-sep"><td colspan="2"></td></tr>' +
+      '<tr><td colspan="2" style="color:#89b4fa;font-weight:600">\uD83D\uDD27 Pr\u016Fchody ' + label + ' (' + nPasses + '\u00D7)</td></tr>' +
+      materialNote +
+      '<tr><td colspan="2"><div class="tol-toggle-row" style="margin:4px 0">' +
+        '<button class="tol-toggle tol-active" data-infeed="radial">Radi\u00E1ln\u00ED</button>' +
+        '<button class="tol-toggle" data-infeed="flank">Bo\u010Dn\u00ED 30\u00B0</button>' +
+        '<button class="tol-toggle" data-infeed="modified">Mod. bo\u010Dn\u00ED</button>' +
+      '</div></td></tr>' +
+      threadPassesRows(totalDepth, nPasses, 'radial') +
+      vcHTML +
+    '</tbody><tbody>';
+
     return html;
   }
 
@@ -322,10 +243,58 @@ export function openThreadCalc() {
     };
   }
 
+  // ── ENGAGEMENT LENGTH (délka záběru závitu) ────────────
+  function engagementLengthHTML(D) {
+    var steelMin = (0.5 * D).toFixed(1);
+    var steelOpt = (0.8 * D).toFixed(1);
+    var alMin    = (1.0 * D).toFixed(1);
+    var alOpt    = (1.5 * D).toFixed(1);
+    var maxUse   = (1.5 * D).toFixed(1);
+    return '<tr class="thr-sep"><td colspan="2"></td></tr>' +
+      '<tr><td colspan="2" style="color:#89b4fa;font-weight:600">\uD83D\uDD29 D\u00E9lka z\u00E1b\u011Bru z\u00E1vitu</td></tr>' +
+      '<tr><td>Ocel min/opt</td><td><strong>' + steelMin + ' / ' + steelOpt + '</strong> mm</td></tr>' +
+      '<tr><td>Hlin\u00EDk min/opt</td><td><strong>' + alMin + ' / ' + alOpt + '</strong> mm</td></tr>' +
+      '<tr><td>Max u\u017Eite\u010Dn\u00E1</td><td><strong>' + maxUse + '</strong> mm</td></tr>';
+  }
+
+  function engagementLengthCopy(D) {
+    return '\n\u2500\u2500 D\u00E9lka z\u00E1b\u011Bru \u2500\u2500\n' +
+      fmtCopy('Ocel min/opt', (0.5 * D).toFixed(1) + ' / ' + (0.8 * D).toFixed(1) + ' mm') + '\n' +
+      fmtCopy('Hlin\u00EDk min/opt', (1.0 * D).toFixed(1) + ' / ' + (1.5 * D).toFixed(1) + ' mm') + '\n' +
+      fmtCopy('Max u\u017Eite\u010Dn\u00E1', (1.5 * D).toFixed(1) + ' mm');
+  }
+
   // ── DETAIL FUNCTIONS ──────────────────────────────────────
   function fmtCopy(lbl, val) {
     while (lbl.length < 16) lbl += ' ';
     return '  ' + lbl + '= ' + val;
+  }
+
+  function buildDetailTable(title, rows, passesConfig, copyHeader) {
+    var html = '<div class="thr-detail-title">' + title + '</div>' +
+      '<table class="thr-detail-tbl">';
+    var copyText = copyHeader;
+    for (var i = 0; i < rows.length; i++) {
+      var r = rows[i];
+      if (r.sep) {
+        html += '<tr class="thr-sep"><td colspan="2"></td></tr>';
+      } else if (r.rawHtml !== undefined) {
+        html += r.rawHtml;
+        if (r.rawCopy) copyText += r.rawCopy;
+      } else {
+        html += '<tr><td>' + r.label + '</td><td>' + r.value + '</td></tr>';
+        if (r.copyValue !== undefined) {
+          copyText += '\n' + fmtCopy(r.copyLabel || r.label, r.copyValue);
+        }
+      }
+    }
+    if (passesConfig) {
+      for (var j = 0; j < passesConfig.length; j++) {
+        html += threadPassesHTML(passesConfig[j].depth, passesConfig[j].label, getMaterial());
+      }
+    }
+    html += '</table>';
+    return { html: html, copyText: copyText };
   }
 
   function detailMetric(D, P, label, extClass, intClass) {
@@ -353,38 +322,28 @@ export function openThreadCalc() {
         fmtCopy('Matice D\u2081', tol.D1_min.toFixed(3) + ' \u2026 ' + tol.D1_max.toFixed(3) + ' mm') + '\n' +
         fmtCopy('Matice D\u2082', tol.D2_min.toFixed(3) + ' \u2026 ' + tol.D2_max.toFixed(3) + ' mm');
     }
-    var html = '<div class="thr-detail-title">' + label + '</div>' +
-      '<table class="thr-detail-tbl">' +
-        '<tr><td>Stoup\u00E1n\u00ED P</td><td><strong>' + P + '</strong> mm</td></tr>' +
-        '<tr><td>Vrcholov\u00FD \u00FAhel</td><td><strong>60\u00B0</strong></td></tr>' +
-        '<tr><td>V\u00FD\u0161ka troj. H</td><td>' + H.toFixed(3) + ' mm</td></tr>' +
-        '<tr class="thr-sep"><td colspan="2"></td></tr>' +
-        '<tr><td>Vn\u011Bj\u0161\u00ED \u00F8 D</td><td><strong>' + D.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr><td>St\u0159edn\u00ED \u00F8 d\u2082</td><td><strong>' + d2.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr><td>Mal\u00FD \u00F8 \u0161roub d\u2083</td><td><strong>' + d3.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr><td>Mal\u00FD \u00F8 matice D\u2081</td><td><strong>' + D1.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr class="thr-sep"><td colspan="2"></td></tr>' +
-        '<tr><td>Hloubka vn\u011Bj\u0161\u00ED</td><td><strong>' + hExt.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr><td>Hloubka vnit\u0159n\u00ED</td><td><strong>' + hInt.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr><td>Ta\u017En\u00FD pr\u016F\u0159ez A\u209B</td><td><strong>' + As.toFixed(2) + '</strong> mm\u00B2</td></tr>' +
-        '<tr class="thr-sep"><td colspan="2"></td></tr>' +
-        '<tr><td>P\u0159eds. \u00F8 (d\u2083)</td><td><strong>' + d3.toFixed(3) + '</strong> mm</td></tr>' +
-        tolHTML +
-        drillRecommendHTML(D, D1, hInt) +
-        threadPassesHTML(hExt, 'vn\u011Bj\u0161\u00ED') +
-        threadPassesHTML(hInt, 'vnit\u0159n\u00ED') +
-      '</table>';
-    var copyText = label + ' (ISO 261, 60\u00B0)\n' +
-      fmtCopy('Stoup\u00E1n\u00ED P', P.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('Vn\u011Bj\u0161\u00ED \u00D8 D', D.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('St\u0159edn\u00ED \u00D8 d\u2082', d2.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('Mal\u00FD \u00D8 \u0161roub d\u2083', d3.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('Mal\u00FD \u00D8 matice D\u2081', D1.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('Hloubka vn\u011Bj\u0161\u00ED', hExt.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('Hloubka vnit\u0159n\u00ED', hInt.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('Ta\u017En\u00FD pr\u016F\u0159ez A\u209B', As.toFixed(2) + ' mm\u00B2') + '\n' +
-      fmtCopy('P\u0159edvrt\u00E1n\u00ED', drill.toFixed(1) + ' mm') + tolCopy;
-    return { html: html, copyText: copyText };
+    return buildDetailTable(label, [
+      {label: 'Stoup\u00E1n\u00ED P', value: '<strong>' + P + '</strong> mm', copyValue: P.toFixed(3) + ' mm'},
+      {label: 'Vrcholov\u00FD \u00FAhel', value: '<strong>60\u00B0</strong>'},
+      {label: 'V\u00FD\u0161ka troj. H', value: H.toFixed(3) + ' mm'},
+      {sep: true},
+      {label: 'Vn\u011Bj\u0161\u00ED \u00F8 D', value: '<strong>' + D.toFixed(3) + '</strong> mm', copyLabel: 'Vn\u011Bj\u0161\u00ED \u00D8 D', copyValue: D.toFixed(3) + ' mm'},
+      {label: 'St\u0159edn\u00ED \u00F8 d\u2082', value: '<strong>' + d2.toFixed(3) + '</strong> mm', copyLabel: 'St\u0159edn\u00ED \u00D8 d\u2082', copyValue: d2.toFixed(3) + ' mm'},
+      {label: 'Mal\u00FD \u00F8 \u0161roub d\u2083', value: '<strong>' + d3.toFixed(3) + '</strong> mm', copyLabel: 'Mal\u00FD \u00D8 \u0161roub d\u2083', copyValue: d3.toFixed(3) + ' mm'},
+      {label: 'Mal\u00FD \u00F8 matice D\u2081', value: '<strong>' + D1.toFixed(3) + '</strong> mm', copyLabel: 'Mal\u00FD \u00D8 matice D\u2081', copyValue: D1.toFixed(3) + ' mm'},
+      {sep: true},
+      {label: 'Hloubka vn\u011Bj\u0161\u00ED', value: '<strong>' + hExt.toFixed(3) + '</strong> mm', copyValue: hExt.toFixed(3) + ' mm'},
+      {label: 'Hloubka vnit\u0159n\u00ED', value: '<strong>' + hInt.toFixed(3) + '</strong> mm', copyValue: hInt.toFixed(3) + ' mm'},
+      {label: 'Ta\u017En\u00FD pr\u016F\u0159ez A\u209B', value: '<strong>' + As.toFixed(2) + '</strong> mm\u00B2', copyValue: As.toFixed(2) + ' mm\u00B2'},
+      {sep: true},
+      {label: 'P\u0159eds. \u00F8 (d\u2083)', value: '<strong>' + d3.toFixed(3) + '</strong> mm', copyLabel: 'P\u0159edvrt\u00E1n\u00ED', copyValue: drill.toFixed(1) + ' mm'},
+      {rawHtml: tolHTML, rawCopy: tolCopy},
+      {rawHtml: drillRecommendHTML(D, D1, hInt)},
+      {rawHtml: engagementLengthHTML(D), rawCopy: engagementLengthCopy(D)}
+    ], [
+      {depth: hExt, label: 'vn\u011Bj\u0161\u00ED'},
+      {depth: hInt, label: 'vnit\u0159n\u00ED'}
+    ], label + ' (ISO 261, 60\u00B0)');
   }
 
   function detailG(D, P, tpi, name) {
@@ -393,34 +352,26 @@ export function openThreadCalc() {
     var d1   = D - 1.2806 * P;
     var hExt = 0.6403 * P;
     var drill = d1;
-    var html = '<div class="thr-detail-title">' + name + ' \u2013 ISO 228</div>' +
-      '<table class="thr-detail-tbl">' +
-        '<tr><td>Z\u00E1vit\u016F/palec (TPI)</td><td><strong>' + tpi + '</strong></td></tr>' +
-        '<tr><td>Stoup\u00E1n\u00ED P</td><td><strong>' + P.toFixed(4) + '</strong> mm</td></tr>' +
-        '<tr><td>Vrcholov\u00FD \u00FAhel</td><td><strong>55\u00B0</strong></td></tr>' +
-        '<tr><td>V\u00FD\u0161ka troj. H</td><td>' + H.toFixed(3) + ' mm</td></tr>' +
-        '<tr class="thr-sep"><td colspan="2"></td></tr>' +
-        '<tr><td>Vn\u011Bj\u0161\u00ED \u00F8 D</td><td><strong>' + D.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr><td>St\u0159edn\u00ED \u00F8 d\u2082</td><td><strong>' + d2.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr><td>Mal\u00FD \u00F8 d\u2081</td><td><strong>' + d1.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr class="thr-sep"><td colspan="2"></td></tr>' +
-        '<tr><td>Hloubka profilu</td><td><strong>' + hExt.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr class="thr-sep"><td colspan="2"></td></tr>' +
-        '<tr><td>P\u0159edvrtan\u00ED</td><td><strong>' + drill.toFixed(3) + '</strong> mm</td></tr>' +
-        threadPassesHTML(hExt, 'profil') +
-      '</table>';
-    var copyText = name + ' (ISO 228, 55\u00B0)\n' +
-      fmtCopy('TPI', tpi) + '\n' +
-      fmtCopy('Stoup\u00E1n\u00ED P', P.toFixed(4) + ' mm') + '\n' +
-      fmtCopy('Vn\u011Bj\u0161\u00ED \u00D8 D', D.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('St\u0159edn\u00ED \u00D8 d\u2082', d2.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('Mal\u00FD \u00D8 d\u2081', d1.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('Hloubka profilu', hExt.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('P\u0159edvrt\u00E1n\u00ED', drill.toFixed(3) + ' mm');
-    return { html: html, copyText: copyText };
+    return buildDetailTable(name + ' \u2013 ISO 228', [
+      {label: 'Z\u00E1vit\u016F/palec (TPI)', value: '<strong>' + tpi + '</strong>', copyLabel: 'TPI', copyValue: tpi},
+      {label: 'Stoup\u00E1n\u00ED P', value: '<strong>' + P.toFixed(4) + '</strong> mm', copyValue: P.toFixed(4) + ' mm'},
+      {label: 'Vrcholov\u00FD \u00FAhel', value: '<strong>55\u00B0</strong>'},
+      {label: 'V\u00FD\u0161ka troj. H', value: H.toFixed(3) + ' mm'},
+      {sep: true},
+      {label: 'Vn\u011Bj\u0161\u00ED \u00F8 D', value: '<strong>' + D.toFixed(3) + '</strong> mm', copyLabel: 'Vn\u011Bj\u0161\u00ED \u00D8 D', copyValue: D.toFixed(3) + ' mm'},
+      {label: 'St\u0159edn\u00ED \u00F8 d\u2082', value: '<strong>' + d2.toFixed(3) + '</strong> mm', copyLabel: 'St\u0159edn\u00ED \u00D8 d\u2082', copyValue: d2.toFixed(3) + ' mm'},
+      {label: 'Mal\u00FD \u00F8 d\u2081', value: '<strong>' + d1.toFixed(3) + '</strong> mm', copyLabel: 'Mal\u00FD \u00D8 d\u2081', copyValue: d1.toFixed(3) + ' mm'},
+      {sep: true},
+      {label: 'Hloubka profilu', value: '<strong>' + hExt.toFixed(3) + '</strong> mm', copyValue: hExt.toFixed(3) + ' mm'},
+      {sep: true},
+      {label: 'P\u0159edvrtan\u00ED', value: '<strong>' + drill.toFixed(3) + '</strong> mm', copyLabel: 'P\u0159edvrt\u00E1n\u00ED', copyValue: drill.toFixed(3) + ' mm'},
+    ], [
+      {depth: hExt, label: 'profil'}
+    ], name + ' (ISO 228, 55\u00B0)');
   }
 
-  function detailTr(D, P, label) {
+  function detailTr(D, P, label, starts) {
+    starts = starts || 1;
     var H1   = 0.5 * P;
     var ac   = 0.25;
     var d2   = D - 0.5 * P;
@@ -429,35 +380,32 @@ export function openThreadCalc() {
     var D1   = D - P;
     var hExt = H1 + ac;
     var drill = D - P - 0.5;
-    var html = '<div class="thr-detail-title">' + label + ' \u2013 ISO 2904</div>' +
-      '<table class="thr-detail-tbl">' +
-        '<tr><td>Stoup\u00E1n\u00ED P</td><td><strong>' + P + '</strong> mm</td></tr>' +
-        '<tr><td>Vrcholov\u00FD \u00FAhel</td><td><strong>30\u00B0</strong></td></tr>' +
-        '<tr><td>V\u00FD\u0161ka profilu H\u2081</td><td>' + H1.toFixed(3) + ' mm</td></tr>' +
-        '<tr class="thr-sep"><td colspan="2"></td></tr>' +
-        '<tr><td>Vn\u011Bj\u0161\u00ED \u00F8 D</td><td><strong>' + D.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr><td>St\u0159edn\u00ED \u00F8 d\u2082</td><td><strong>' + d2.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr><td>Mal\u00FD \u00F8 \u0161roub d\u2083</td><td><strong>' + d3.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr><td>Vn\u011Bj\u0161\u00ED \u00F8 matice D\u2084</td><td><strong>' + D4.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr><td>Vnit\u0159n\u00ED \u00F8 matice D\u2081</td><td><strong>' + D1.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr class="thr-sep"><td colspan="2"></td></tr>' +
-        '<tr><td>Hloubka profilu</td><td><strong>' + hExt.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr class="thr-sep"><td colspan="2"></td></tr>' +
-        '<tr><td>P\u0159edvrtan\u00ED (\u0161roub)</td><td><strong>' + d3.toFixed(2) + '</strong> mm</td></tr>' +
-        '<tr><td>P\u0159edvrtan\u00ED (matice)</td><td><strong>' + D1.toFixed(2) + '</strong> mm</td></tr>' +
-        threadPassesHTML(hExt, 'profil') +
-      '</table>';
-    var copyText = label + ' (ISO 2904, 30\u00B0)\n' +
-      fmtCopy('Stoup\u00E1n\u00ED P', P + ' mm') + '\n' +
-      fmtCopy('Vn\u011Bj\u0161\u00ED \u00D8 D', D.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('St\u0159edn\u00ED \u00D8 d\u2082', d2.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('Mal\u00FD \u00D8 \u0161roub d\u2083', d3.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('Vn\u011Bj. \u00D8 mat. D\u2084', D4.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('Vnit\u0159. \u00D8 mat. D\u2081', D1.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('Hloubka profilu', hExt.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('P\u0159edvrt. \u0161roub', d3.toFixed(2) + ' mm') + '\n' +
-      fmtCopy('P\u0159edvrt. matice', D1.toFixed(2) + ' mm');
-    return { html: html, copyText: copyText };
+    var lead  = P * starts;
+    var lambda = Math.atan(lead / (Math.PI * d2)) * (180 / Math.PI);
+    var startsNote = starts === 1 ? ' <span style="color:#6c7086">(jednochod\u00FD)</span>' : '';
+    var leadLabel  = starts === 1 ? P.toFixed(3) : lead.toFixed(3);
+    return buildDetailTable(label + ' \u2013 ISO 2904', [
+      {label: 'Stoup\u00E1n\u00ED P', value: '<strong>' + P + '</strong> mm', copyValue: P + ' mm'},
+      {label: 'Vrcholov\u00FD \u00FAhel', value: '<strong>30\u00B0</strong>'},
+      {label: 'V\u00FD\u0161ka profilu H\u2081', value: H1.toFixed(3) + ' mm'},
+      {sep: true},
+      {label: 'Po\u010Det chod\u016F', value: '<strong>' + starts + '</strong>' + startsNote, copyValue: starts + (starts === 1 ? ' (jednochod\u00FD)' : '')},
+      {label: 'Lead (zdvih)', value: '<strong>' + leadLabel + '</strong> mm', copyValue: leadLabel + ' mm'},
+      {label: '\u00DAhel stoup\u00E1n\u00ED \u03BB', value: '<strong>' + lambda.toFixed(2) + '\u00B0</strong>', copyLabel: '\u00DAhel stoup. \u03BB', copyValue: lambda.toFixed(2) + '\u00B0'},
+      {sep: true},
+      {label: 'Vn\u011Bj\u0161\u00ED \u00F8 D', value: '<strong>' + D.toFixed(3) + '</strong> mm', copyLabel: 'Vn\u011Bj\u0161\u00ED \u00D8 D', copyValue: D.toFixed(3) + ' mm'},
+      {label: 'St\u0159edn\u00ED \u00F8 d\u2082', value: '<strong>' + d2.toFixed(3) + '</strong> mm', copyLabel: 'St\u0159edn\u00ED \u00D8 d\u2082', copyValue: d2.toFixed(3) + ' mm'},
+      {label: 'Mal\u00FD \u00F8 \u0161roub d\u2083', value: '<strong>' + d3.toFixed(3) + '</strong> mm', copyLabel: 'Mal\u00FD \u00D8 \u0161roub d\u2083', copyValue: d3.toFixed(3) + ' mm'},
+      {label: 'Vn\u011Bj\u0161\u00ED \u00F8 matice D\u2084', value: '<strong>' + D4.toFixed(3) + '</strong> mm', copyLabel: 'Vn\u011Bj. \u00D8 mat. D\u2084', copyValue: D4.toFixed(3) + ' mm'},
+      {label: 'Vnit\u0159n\u00ED \u00F8 matice D\u2081', value: '<strong>' + D1.toFixed(3) + '</strong> mm', copyLabel: 'Vnit\u0159. \u00D8 mat. D\u2081', copyValue: D1.toFixed(3) + ' mm'},
+      {sep: true},
+      {label: 'Hloubka profilu', value: '<strong>' + hExt.toFixed(3) + '</strong> mm', copyValue: hExt.toFixed(3) + ' mm'},
+      {sep: true},
+      {label: 'P\u0159edvrtan\u00ED (\u0161roub)', value: '<strong>' + d3.toFixed(2) + '</strong> mm', copyLabel: 'P\u0159edvrt. \u0161roub', copyValue: d3.toFixed(2) + ' mm'},
+      {label: 'P\u0159edvrtan\u00ED (matice)', value: '<strong>' + D1.toFixed(2) + '</strong> mm', copyLabel: 'P\u0159edvrt. matice', copyValue: D1.toFixed(2) + ' mm'},
+    ], [
+      {depth: hExt, label: 'profil'}
+    ], label + ' (ISO 2904, 30\u00B0)');
   }
 
   // UNC/UNF – 60° profil, stejné vzorce jako metrický
@@ -470,39 +418,28 @@ export function openThreadCalc() {
     var hExt = 0.6134 * P;
     var hInt = 0.5413 * P;
     var As   = (Math.PI / 4) * Math.pow((d2 + d3) / 2, 2);
-    var html = '<div class="thr-detail-title">' + name + ' \u2013 ' + std + '</div>' +
-      '<table class="thr-detail-tbl">' +
-        '<tr><td>Z\u00E1vit\u016F/palec (TPI)</td><td><strong>' + tpi + '</strong></td></tr>' +
-        '<tr><td>Stoup\u00E1n\u00ED P</td><td><strong>' + P.toFixed(4) + '</strong> mm</td></tr>' +
-        '<tr><td>Vrcholov\u00FD \u00FAhel</td><td><strong>60\u00B0</strong></td></tr>' +
-        '<tr><td>V\u00FD\u0161ka troj. H</td><td>' + H.toFixed(3) + ' mm</td></tr>' +
-        '<tr class="thr-sep"><td colspan="2"></td></tr>' +
-        '<tr><td>Vn\u011Bj\u0161\u00ED \u00F8 D</td><td><strong>' + D.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr><td>St\u0159edn\u00ED \u00F8 d\u2082</td><td><strong>' + d2.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr><td>Mal\u00FD \u00F8 \u0161roub d\u2083</td><td><strong>' + d3.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr><td>Mal\u00FD \u00F8 matice D\u2081</td><td><strong>' + D1.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr class="thr-sep"><td colspan="2"></td></tr>' +
-        '<tr><td>Hloubka vn\u011Bj\u0161\u00ED</td><td><strong>' + hExt.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr><td>Hloubka vnit\u0159n\u00ED</td><td><strong>' + hInt.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr><td>Ta\u017En\u00FD pr\u016F\u0159ez A\u209B</td><td><strong>' + As.toFixed(2) + '</strong> mm\u00B2</td></tr>' +
-        '<tr class="thr-sep"><td colspan="2"></td></tr>' +
-        '<tr><td>P\u0159eds. \u00F8</td><td><strong>' + d3.toFixed(3) + '</strong> mm</td></tr>' +
-        drillRecommendHTML(D, D1, hInt) +
-        threadPassesHTML(hExt, 'vn\u011Bj\u0161\u00ED') +
-        threadPassesHTML(hInt, 'vnit\u0159n\u00ED') +
-      '</table>';
-    var copyText = name + ' (' + std + ', 60\u00B0)\n' +
-      fmtCopy('TPI', tpi) + '\n' +
-      fmtCopy('Stoup\u00E1n\u00ED P', P.toFixed(4) + ' mm') + '\n' +
-      fmtCopy('Vn\u011Bj\u0161\u00ED \u00D8 D', D.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('St\u0159edn\u00ED \u00D8 d\u2082', d2.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('Mal\u00FD \u00D8 \u0161roub d\u2083', d3.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('Mal\u00FD \u00D8 matice D\u2081', D1.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('Hloubka vn\u011Bj\u0161\u00ED', hExt.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('Hloubka vnit\u0159n\u00ED', hInt.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('Ta\u017En\u00FD pr\u016F\u0159ez A\u209B', As.toFixed(2) + ' mm\u00B2') + '\n' +
-      fmtCopy('P\u0159edvrt\u00E1n\u00ED', drill.toFixed(3) + ' mm');
-    return { html: html, copyText: copyText };
+    return buildDetailTable(name + ' \u2013 ' + std, [
+      {label: 'Z\u00E1vit\u016F/palec (TPI)', value: '<strong>' + tpi + '</strong>', copyLabel: 'TPI', copyValue: tpi},
+      {label: 'Stoup\u00E1n\u00ED P', value: '<strong>' + P.toFixed(4) + '</strong> mm', copyValue: P.toFixed(4) + ' mm'},
+      {label: 'Vrcholov\u00FD \u00FAhel', value: '<strong>60\u00B0</strong>'},
+      {label: 'V\u00FD\u0161ka troj. H', value: H.toFixed(3) + ' mm'},
+      {sep: true},
+      {label: 'Vn\u011Bj\u0161\u00ED \u00F8 D', value: '<strong>' + D.toFixed(3) + '</strong> mm', copyLabel: 'Vn\u011Bj\u0161\u00ED \u00D8 D', copyValue: D.toFixed(3) + ' mm'},
+      {label: 'St\u0159edn\u00ED \u00F8 d\u2082', value: '<strong>' + d2.toFixed(3) + '</strong> mm', copyLabel: 'St\u0159edn\u00ED \u00D8 d\u2082', copyValue: d2.toFixed(3) + ' mm'},
+      {label: 'Mal\u00FD \u00F8 \u0161roub d\u2083', value: '<strong>' + d3.toFixed(3) + '</strong> mm', copyLabel: 'Mal\u00FD \u00D8 \u0161roub d\u2083', copyValue: d3.toFixed(3) + ' mm'},
+      {label: 'Mal\u00FD \u00F8 matice D\u2081', value: '<strong>' + D1.toFixed(3) + '</strong> mm', copyLabel: 'Mal\u00FD \u00D8 matice D\u2081', copyValue: D1.toFixed(3) + ' mm'},
+      {sep: true},
+      {label: 'Hloubka vn\u011Bj\u0161\u00ED', value: '<strong>' + hExt.toFixed(3) + '</strong> mm', copyValue: hExt.toFixed(3) + ' mm'},
+      {label: 'Hloubka vnit\u0159n\u00ED', value: '<strong>' + hInt.toFixed(3) + '</strong> mm', copyValue: hInt.toFixed(3) + ' mm'},
+      {label: 'Ta\u017En\u00FD pr\u016F\u0159ez A\u209B', value: '<strong>' + As.toFixed(2) + '</strong> mm\u00B2', copyValue: As.toFixed(2) + ' mm\u00B2'},
+      {sep: true},
+      {label: 'P\u0159eds. \u00F8', value: '<strong>' + d3.toFixed(3) + '</strong> mm', copyLabel: 'P\u0159edvrt\u00E1n\u00ED', copyValue: drill.toFixed(3) + ' mm'},
+      {rawHtml: drillRecommendHTML(D, D1, hInt)},
+      {rawHtml: engagementLengthHTML(D), rawCopy: engagementLengthCopy(D)}
+    ], [
+      {depth: hExt, label: 'vn\u011Bj\u0161\u00ED'},
+      {depth: hInt, label: 'vnit\u0159n\u00ED'}
+    ], name + ' (' + std + ', 60\u00B0)');
   }
 
   // BSW – Whitworth 55° profil
@@ -512,31 +449,50 @@ export function openThreadCalc() {
     var d1   = D - 1.2806 * P;
     var hExt = 0.6403 * P;
     var drill = d1;
-    var html = '<div class="thr-detail-title">' + name + ' \u2013 BS 84 (Whitworth)</div>' +
-      '<table class="thr-detail-tbl">' +
-        '<tr><td>Z\u00E1vit\u016F/palec (TPI)</td><td><strong>' + tpi + '</strong></td></tr>' +
-        '<tr><td>Stoup\u00E1n\u00ED P</td><td><strong>' + P.toFixed(4) + '</strong> mm</td></tr>' +
-        '<tr><td>Vrcholov\u00FD \u00FAhel</td><td><strong>55\u00B0</strong></td></tr>' +
-        '<tr><td>V\u00FD\u0161ka troj. H</td><td>' + H.toFixed(3) + ' mm</td></tr>' +
-        '<tr class="thr-sep"><td colspan="2"></td></tr>' +
-        '<tr><td>Vn\u011Bj\u0161\u00ED \u00F8 D</td><td><strong>' + D.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr><td>St\u0159edn\u00ED \u00F8 d\u2082</td><td><strong>' + d2.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr><td>Mal\u00FD \u00F8 d\u2081</td><td><strong>' + d1.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr class="thr-sep"><td colspan="2"></td></tr>' +
-        '<tr><td>Hloubka profilu</td><td><strong>' + hExt.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr class="thr-sep"><td colspan="2"></td></tr>' +
-        '<tr><td>P\u0159edvrtan\u00ED</td><td><strong>' + drill.toFixed(3) + '</strong> mm</td></tr>' +
-        threadPassesHTML(hExt, 'profil') +
-      '</table>';
-    var copyText = name + ' (BS 84 Whitworth, 55\u00B0)\n' +
-      fmtCopy('TPI', tpi) + '\n' +
-      fmtCopy('Stoup\u00E1n\u00ED P', P.toFixed(4) + ' mm') + '\n' +
-      fmtCopy('Vn\u011Bj\u0161\u00ED \u00D8 D', D.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('St\u0159edn\u00ED \u00D8 d\u2082', d2.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('Mal\u00FD \u00D8 d\u2081', d1.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('Hloubka profilu', hExt.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('P\u0159edvrt\u00E1n\u00ED', drill.toFixed(3) + ' mm');
-    return { html: html, copyText: copyText };
+    return buildDetailTable(name + ' \u2013 BS 84 (Whitworth)', [
+      {label: 'Z\u00E1vit\u016F/palec (TPI)', value: '<strong>' + tpi + '</strong>', copyLabel: 'TPI', copyValue: tpi},
+      {label: 'Stoup\u00E1n\u00ED P', value: '<strong>' + P.toFixed(4) + '</strong> mm', copyValue: P.toFixed(4) + ' mm'},
+      {label: 'Vrcholov\u00FD \u00FAhel', value: '<strong>55\u00B0</strong>'},
+      {label: 'V\u00FD\u0161ka troj. H', value: H.toFixed(3) + ' mm'},
+      {sep: true},
+      {label: 'Vn\u011Bj\u0161\u00ED \u00F8 D', value: '<strong>' + D.toFixed(3) + '</strong> mm', copyLabel: 'Vn\u011Bj\u0161\u00ED \u00D8 D', copyValue: D.toFixed(3) + ' mm'},
+      {label: 'St\u0159edn\u00ED \u00F8 d\u2082', value: '<strong>' + d2.toFixed(3) + '</strong> mm', copyLabel: 'St\u0159edn\u00ED \u00D8 d\u2082', copyValue: d2.toFixed(3) + ' mm'},
+      {label: 'Mal\u00FD \u00F8 d\u2081', value: '<strong>' + d1.toFixed(3) + '</strong> mm', copyLabel: 'Mal\u00FD \u00D8 d\u2081', copyValue: d1.toFixed(3) + ' mm'},
+      {sep: true},
+      {label: 'Hloubka profilu', value: '<strong>' + hExt.toFixed(3) + '</strong> mm', copyValue: hExt.toFixed(3) + ' mm'},
+      {sep: true},
+      {label: 'P\u0159edvrtan\u00ED', value: '<strong>' + drill.toFixed(3) + '</strong> mm', copyLabel: 'P\u0159edvrt\u00E1n\u00ED', copyValue: drill.toFixed(3) + ' mm'},
+    ], [
+      {depth: hExt, label: 'profil'}
+    ], name + ' (BS 84 Whitworth, 55\u00B0)');
+  }
+
+  // BSPT (R) – 55° profil, kuželový 1:16
+  function detailBSPT(D, P, tpi, name) {
+    var H    = 0.960491 * P;
+    var d2   = D - 0.6403 * P;
+    var d1   = D - 1.2806 * P;
+    var hExt = 0.6403 * P;
+    var taperAngle = '1\u00B047\u203224"';
+    var taperRate = '1:16 (6,25 %)';
+    return buildDetailTable(name + ' \u2013 ISO 7 / DIN 2999', [
+      {label: 'Z\u00E1vit\u016F/palec (TPI)', value: '<strong>' + tpi + '</strong>', copyLabel: 'TPI', copyValue: tpi},
+      {label: 'Stoup\u00E1n\u00ED P', value: '<strong>' + P.toFixed(4) + '</strong> mm', copyValue: P.toFixed(4) + ' mm'},
+      {label: 'Vrcholov\u00FD \u00FAhel', value: '<strong>55\u00B0</strong>'},
+      {label: 'V\u00FD\u0161ka troj. H', value: H.toFixed(3) + ' mm'},
+      {sep: true},
+      {label: '\u26A0 Ku\u017Eelovitost', value: '<strong>' + taperRate + '</strong>', copyLabel: 'Ku\u017Eelovitost', copyValue: taperRate},
+      {label: '\u00DAhel ku\u017Eele', value: '<strong>' + taperAngle + '</strong>'},
+      {label: 'Pozn.', value: 'T\u011Bsn\u00ED z\u00E1vitem, vnit\u0159n\u00ED z\u00E1vit (Rp) je v\u00E1lcov\u00FD.', copyValue: 'T\u011Bsn\u00ED z\u00E1vitem, Rp v\u00E1lcov\u00FD'},
+      {sep: true},
+      {label: 'Vn\u011Bj\u0161\u00ED \u00F8 D', value: '<strong>' + D.toFixed(3) + '</strong> mm', copyLabel: 'Vn\u011Bj\u0161\u00ED \u00D8 D', copyValue: D.toFixed(3) + ' mm'},
+      {label: 'St\u0159edn\u00ED \u00F8 d\u2082', value: '<strong>' + d2.toFixed(3) + '</strong> mm', copyLabel: 'St\u0159edn\u00ED \u00D8 d\u2082', copyValue: d2.toFixed(3) + ' mm'},
+      {label: 'Mal\u00FD \u00F8 d\u2081', value: '<strong>' + d1.toFixed(3) + '</strong> mm', copyLabel: 'Mal\u00FD \u00D8 d\u2081', copyValue: d1.toFixed(3) + ' mm'},
+      {sep: true},
+      {label: 'Hloubka profilu', value: '<strong>' + hExt.toFixed(3) + '</strong> mm', copyValue: hExt.toFixed(3) + ' mm'},
+    ], [
+      {depth: hExt, label: 'profil'}
+    ], name + ' (ISO 7 / DIN 2999, 55\u00B0, ku\u017Eel 1:16)');
   }
 
   // NPT – 60° profil, kuželový 1:16
@@ -547,71 +503,60 @@ export function openThreadCalc() {
     var hExt = 0.6134 * P;
     var taperAngle = '1\u00B047\u203224"';
     var taperRate = '1:16 (6,25 %)';
-    var html = '<div class="thr-detail-title">' + name + ' \u2013 ASME B1.20.1</div>' +
-      '<table class="thr-detail-tbl">' +
-        '<tr><td>Z\u00E1vit\u016F/palec (TPI)</td><td><strong>' + tpi + '</strong></td></tr>' +
-        '<tr><td>Stoup\u00E1n\u00ED P</td><td><strong>' + P.toFixed(4) + '</strong> mm</td></tr>' +
-        '<tr><td>Vrcholov\u00FD \u00FAhel</td><td><strong>60\u00B0</strong></td></tr>' +
-        '<tr><td>V\u00FD\u0161ka troj. H</td><td>' + H.toFixed(3) + ' mm</td></tr>' +
-        '<tr class="thr-sep"><td colspan="2"></td></tr>' +
-        '<tr><td>\u26A0 Ku\u017Eelovitost</td><td><strong>' + taperRate + '</strong></td></tr>' +
-        '<tr><td>\u00DAhel ku\u017Eele</td><td><strong>' + taperAngle + '</strong></td></tr>' +
-        '<tr class="thr-sep"><td colspan="2"></td></tr>' +
-        '<tr><td>Vn\u011Bj\u0161\u00ED \u00F8 D</td><td><strong>' + D.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr><td>St\u0159edn\u00ED \u00F8 d\u2082</td><td><strong>' + d2.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr><td>Mal\u00FD \u00F8 d\u2083</td><td><strong>' + d3.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr class="thr-sep"><td colspan="2"></td></tr>' +
-        '<tr><td>Hloubka profilu</td><td><strong>' + hExt.toFixed(3) + '</strong> mm</td></tr>' +
-        threadPassesHTML(hExt, 'profil') +
-      '</table>';
-    var copyText = name + ' (ASME B1.20.1, 60\u00B0, ku\u017Eel 1:16)\n' +
-      fmtCopy('TPI', tpi) + '\n' +
-      fmtCopy('Stoup\u00E1n\u00ED P', P.toFixed(4) + ' mm') + '\n' +
-      fmtCopy('Ku\u017Eelovitost', taperRate) + '\n' +
-      fmtCopy('Vn\u011Bj\u0161\u00ED \u00D8 D', D.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('St\u0159edn\u00ED \u00D8 d\u2082', d2.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('Mal\u00FD \u00D8 d\u2083', d3.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('Hloubka profilu', hExt.toFixed(3) + ' mm');
-    return { html: html, copyText: copyText };
+    return buildDetailTable(name + ' \u2013 ASME B1.20.1', [
+      {label: 'Z\u00E1vit\u016F/palec (TPI)', value: '<strong>' + tpi + '</strong>', copyLabel: 'TPI', copyValue: tpi},
+      {label: 'Stoup\u00E1n\u00ED P', value: '<strong>' + P.toFixed(4) + '</strong> mm', copyValue: P.toFixed(4) + ' mm'},
+      {label: 'Vrcholov\u00FD \u00FAhel', value: '<strong>60\u00B0</strong>'},
+      {label: 'V\u00FD\u0161ka troj. H', value: H.toFixed(3) + ' mm'},
+      {sep: true},
+      {label: '\u26A0 Ku\u017Eelovitost', value: '<strong>' + taperRate + '</strong>', copyLabel: 'Ku\u017Eelovitost', copyValue: taperRate},
+      {label: '\u00DAhel ku\u017Eele', value: '<strong>' + taperAngle + '</strong>'},
+      {sep: true},
+      {label: 'Vn\u011Bj\u0161\u00ED \u00F8 D', value: '<strong>' + D.toFixed(3) + '</strong> mm', copyLabel: 'Vn\u011Bj\u0161\u00ED \u00D8 D', copyValue: D.toFixed(3) + ' mm'},
+      {label: 'St\u0159edn\u00ED \u00F8 d\u2082', value: '<strong>' + d2.toFixed(3) + '</strong> mm', copyLabel: 'St\u0159edn\u00ED \u00D8 d\u2082', copyValue: d2.toFixed(3) + ' mm'},
+      {label: 'Mal\u00FD \u00F8 d\u2083', value: '<strong>' + d3.toFixed(3) + '</strong> mm', copyLabel: 'Mal\u00FD \u00D8 d\u2083', copyValue: d3.toFixed(3) + ' mm'},
+      {sep: true},
+      {label: 'Hloubka profilu', value: '<strong>' + hExt.toFixed(3) + '</strong> mm', copyValue: hExt.toFixed(3) + ' mm'},
+    ], [
+      {depth: hExt, label: 'profil'}
+    ], name + ' (ASME B1.20.1, 60\u00B0, ku\u017Eel 1:16)');
   }
 
   // Acme – 29° profil
-  function detailAcme(D, P, tpi, name) {
+  function detailAcme(D, P, tpi, name, starts) {
+    starts = starts || 1;
     var H1   = 0.5 * P;
     var ac   = 0.25;
     var d2   = D - 0.5 * P;
     var d3   = D - P - 2 * ac;
     var D1   = D - P;
     var hExt = H1 + ac;
-    var html = '<div class="thr-detail-title">' + name + ' \u2013 ASME B1.5 (Acme)</div>' +
-      '<table class="thr-detail-tbl">' +
-        '<tr><td>Z\u00E1vit\u016F/palec (TPI)</td><td><strong>' + tpi + '</strong></td></tr>' +
-        '<tr><td>Stoup\u00E1n\u00ED P</td><td><strong>' + P.toFixed(4) + '</strong> mm</td></tr>' +
-        '<tr><td>Vrcholov\u00FD \u00FAhel</td><td><strong>29\u00B0</strong></td></tr>' +
-        '<tr><td>V\u00FD\u0161ka profilu H\u2081</td><td>' + H1.toFixed(3) + ' mm</td></tr>' +
-        '<tr class="thr-sep"><td colspan="2"></td></tr>' +
-        '<tr><td>Vn\u011Bj\u0161\u00ED \u00F8 D</td><td><strong>' + D.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr><td>St\u0159edn\u00ED \u00F8 d\u2082</td><td><strong>' + d2.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr><td>Mal\u00FD \u00F8 d\u2083</td><td><strong>' + d3.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr><td>Vnit\u0159n\u00ED \u00F8 matice D\u2081</td><td><strong>' + D1.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr class="thr-sep"><td colspan="2"></td></tr>' +
-        '<tr><td>Hloubka profilu</td><td><strong>' + hExt.toFixed(3) + '</strong> mm</td></tr>' +
-        '<tr class="thr-sep"><td colspan="2"></td></tr>' +
-        '<tr><td>P\u0159edvrtan\u00ED (\u0161roub)</td><td><strong>' + d3.toFixed(2) + '</strong> mm</td></tr>' +
-        '<tr><td>P\u0159edvrtan\u00ED (matice)</td><td><strong>' + D1.toFixed(2) + '</strong> mm</td></tr>' +
-        threadPassesHTML(hExt, 'profil') +
-      '</table>';
-    var copyText = name + ' (ASME B1.5 Acme, 29\u00B0)\n' +
-      fmtCopy('TPI', tpi) + '\n' +
-      fmtCopy('Stoup\u00E1n\u00ED P', P.toFixed(4) + ' mm') + '\n' +
-      fmtCopy('Vn\u011Bj\u0161\u00ED \u00D8 D', D.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('St\u0159edn\u00ED \u00D8 d\u2082', d2.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('Mal\u00FD \u00D8 d\u2083', d3.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('Vnit\u0159. \u00D8 mat. D\u2081', D1.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('Hloubka profilu', hExt.toFixed(3) + ' mm') + '\n' +
-      fmtCopy('P\u0159edvrt. \u0161roub', d3.toFixed(2) + ' mm') + '\n' +
-      fmtCopy('P\u0159edvrt. matice', D1.toFixed(2) + ' mm');
-    return { html: html, copyText: copyText };
+    var lead  = P * starts;
+    var lambda = Math.atan(lead / (Math.PI * d2)) * (180 / Math.PI);
+    var startsNote = starts === 1 ? ' <span style="color:#6c7086">(jednochod\u00FD)</span>' : '';
+    var leadLabel  = starts === 1 ? P.toFixed(4) : lead.toFixed(4);
+    return buildDetailTable(name + ' \u2013 ASME B1.5 (Acme)', [
+      {label: 'Z\u00E1vit\u016F/palec (TPI)', value: '<strong>' + tpi + '</strong>', copyLabel: 'TPI', copyValue: tpi},
+      {label: 'Stoup\u00E1n\u00ED P', value: '<strong>' + P.toFixed(4) + '</strong> mm', copyValue: P.toFixed(4) + ' mm'},
+      {label: 'Vrcholov\u00FD \u00FAhel', value: '<strong>29\u00B0</strong>'},
+      {label: 'V\u00FD\u0161ka profilu H\u2081', value: H1.toFixed(3) + ' mm'},
+      {sep: true},
+      {label: 'Po\u010Det chod\u016F', value: '<strong>' + starts + '</strong>' + startsNote, copyValue: starts + (starts === 1 ? ' (jednochod\u00FD)' : '')},
+      {label: 'Lead (zdvih)', value: '<strong>' + leadLabel + '</strong> mm', copyValue: leadLabel + ' mm'},
+      {label: '\u00DAhel stoup\u00E1n\u00ED \u03BB', value: '<strong>' + lambda.toFixed(2) + '\u00B0</strong>', copyLabel: '\u00DAhel stoup. \u03BB', copyValue: lambda.toFixed(2) + '\u00B0'},
+      {sep: true},
+      {label: 'Vn\u011Bj\u0161\u00ED \u00F8 D', value: '<strong>' + D.toFixed(3) + '</strong> mm', copyLabel: 'Vn\u011Bj\u0161\u00ED \u00D8 D', copyValue: D.toFixed(3) + ' mm'},
+      {label: 'St\u0159edn\u00ED \u00F8 d\u2082', value: '<strong>' + d2.toFixed(3) + '</strong> mm', copyLabel: 'St\u0159edn\u00ED \u00D8 d\u2082', copyValue: d2.toFixed(3) + ' mm'},
+      {label: 'Mal\u00FD \u00F8 d\u2083', value: '<strong>' + d3.toFixed(3) + '</strong> mm', copyLabel: 'Mal\u00FD \u00D8 d\u2083', copyValue: d3.toFixed(3) + ' mm'},
+      {label: 'Vnit\u0159n\u00ED \u00F8 matice D\u2081', value: '<strong>' + D1.toFixed(3) + '</strong> mm', copyLabel: 'Vnit\u0159. \u00D8 mat. D\u2081', copyValue: D1.toFixed(3) + ' mm'},
+      {sep: true},
+      {label: 'Hloubka profilu', value: '<strong>' + hExt.toFixed(3) + '</strong> mm', copyValue: hExt.toFixed(3) + ' mm'},
+      {sep: true},
+      {label: 'P\u0159edvrtan\u00ED (\u0161roub)', value: '<strong>' + d3.toFixed(2) + '</strong> mm', copyLabel: 'P\u0159edvrt. \u0161roub', copyValue: d3.toFixed(2) + ' mm'},
+      {label: 'P\u0159edvrtan\u00ED (matice)', value: '<strong>' + D1.toFixed(2) + '</strong> mm', copyLabel: 'P\u0159edvrt. matice', copyValue: D1.toFixed(2) + ' mm'},
+    ], [
+      {depth: hExt, label: 'profil'}
+    ], name + ' (ASME B1.5 Acme, 29\u00B0)');
   }
 
   // ── HEADERS per type ──
@@ -648,6 +593,12 @@ export function openThreadCalc() {
           'nap\u0159. G 1/2 m\u00E1 D\u00A0=\u00A020,955\u00A0mm. ' +
           'Pou\u017Eit\u00ED: t\u011Bsn\u011Bn\u00E9 spoje s O-krou\u017Ekem, hydraulika, pneumatika. ' +
           'T\u011Bsn\u00ED: p\u0159\u00EDtla\u010Dn\u00FD povrch nebo O-krou\u017Eek (ne z\u00E1vitem).</div>' +
+        '<div class="thr-help-item"><strong>BSPT (R) ku\u017Eelov\u00FD</strong> \u2013 ISO 7 / DIN 2999<br>' +
+          '\u00DAhel 55\u00B0 (Whitworthov profil), ku\u017Eelovitost 1:16 (1\u00B047\u203224"). ' +
+          'Vn\u011Bj\u0161\u00ED z\u00E1vit (R) je ku\u017Eelov\u00FD, vnit\u0159n\u00ED (Rp) je v\u00E1lcov\u00FD. ' +
+          'T\u011Bsn\u00ED se z\u00E1vitem. ' +
+          'Pou\u017Eit\u00ED: potrub\u00ED, plynov\u00E9 rozvody, hydraulika (Evropa, Asie). ' +
+          '<em>Kompatibiln\u00ED s G vnit\u0159n\u00EDm z\u00E1vitem (Rp).</em></div>' +
         '<div class="thr-help-item"><strong>NPT ku\u017Eelov\u00FD</strong> \u2013 ASME B1.20.1<br>' +
           '\u00DAhel 60\u00B0, ku\u017Eelovitost 1:16 (1\u00B047\u203224"). Am. standard. ' +
           'T\u011Bsn\u00ED se s\u00E1m z\u00E1vitem p\u0159i dota\u017Een\u00ED (+ teflon p\u00E1ska). ' +
@@ -711,6 +662,7 @@ export function openThreadCalc() {
       '<div class="thr-cat-label">Trubkov\u00E9</div>' +
       '<div class="tol-toggle-row thr-type-row">' +
         '<button class="tol-toggle" data-thr="g">G (BSP)</button>' +
+        '<button class="tol-toggle" data-thr="bspt">BSPT ku\u017E.</button>' +
         '<button class="tol-toggle" data-thr="npt">NPT ku\u017E.</button>' +
       '</div>' +
       '<div class="thr-cat-label">Palcov\u00E9 / pohybov\u00E9</div>' +
@@ -754,12 +706,23 @@ export function openThreadCalc() {
         '<input type="number" data-id="tIdentTol" step="any" value="0.3" placeholder="\u00B1"></label>' +
     '</div>' +
     '<div class="thr-ident-results" id="thrIdentResults"></div>' +
+    '<div class="cnc-fields" style="margin-top:6px">' +
+      '<label class="cnc-field"><span>Materi\u00E1l</span>' +
+        '<select data-id="tMaterial">' +
+          '<option value="steel">Ocel</option>' +
+          '<option value="stainless">Nerez</option>' +
+          '<option value="aluminum">Hlin\u00EDk</option>' +
+          '<option value="cast">Litina</option>' +
+        '</select></label>' +
+    '</div>' +
     '<div class="cnc-table-label" style="margin-top:10px">Vlastn\u00ED z\u00E1vit</div>' +
     '<div class="cnc-fields">' +
       '<label class="cnc-field"><span>D <small>mm</small></span>' +
         '<input type="number" data-id="tD" step="any" placeholder="Vn\u011Bj\u0161\u00ED \u00F8"></label>' +
       '<label class="cnc-field"><span>P <small>mm</small></span>' +
         '<input type="number" data-id="tP" step="any" placeholder="Stoup\u00E1n\u00ED"></label>' +
+      '<label class="cnc-field" id="thrStartsField" style="display:none"><span>Chod\u016F <small>n</small></span>' +
+        '<input type="number" data-id="tStarts" step="1" min="1" value="1" placeholder="1"></label>' +
     '</div>' +
     '<div class="cnc-actions">' +
       '<button class="cnc-btn cnc-btn-copy" id="thrCopy">\uD83D\uDCCB Kop\u00EDrovat</button>' +
@@ -776,6 +739,8 @@ export function openThreadCalc() {
   var detail   = overlay.querySelector("#thrDetail");
   var inpD     = overlay.querySelector('[data-id="tD"]');
   var inpP     = overlay.querySelector('[data-id="tP"]');
+  var inpStarts = overlay.querySelector('[data-id="tStarts"]');
+  var startsField = overlay.querySelector('#thrStartsField');
   var typeBtns = overlay.querySelectorAll('[data-thr]');
   var helpPanel= overlay.querySelector("#thrHelpPanel");
   var lastActiveRow = null;
@@ -783,6 +748,7 @@ export function openThreadCalc() {
   var tolClassPanel = overlay.querySelector('#thrTolClasses');
   var selExtClass = overlay.querySelector('[data-id="tExtClass"]');
   var selIntClass = overlay.querySelector('[data-id="tIntClass"]');
+  var selMaterial = overlay.querySelector('[data-id="tMaterial"]');
   var lastMetricD = null, lastMetricP = null, lastMetricLabel = null;
 
   function setDetail(result) {
@@ -797,11 +763,34 @@ export function openThreadCalc() {
     this.textContent = vis ? '\u2753 N\u00E1pov\u011Bda' : '\u2716 Zav\u0159\u00EDt n\u00E1pov\u011Bdu';
   });
 
+  // ── Infeed strategy toggle (event delegation) ──
+  detail.addEventListener('click', function(e) {
+    var btn = e.target.closest('[data-infeed]');
+    if (!btn) return;
+    var group = btn.closest('.thr-passes-group');
+    if (!group) return;
+    var infeedType = btn.dataset.infeed;
+    var totalDepth = parseFloat(group.dataset.depth);
+    var nPasses = parseInt(group.dataset.npasses);
+    var toggles = group.querySelectorAll('[data-infeed]');
+    for (var i = 0; i < toggles.length; i++) {
+      toggles[i].classList.toggle('tol-active', toggles[i] === btn);
+    }
+    var oldRows = group.querySelectorAll('.thr-pass-row');
+    for (var i = 0; i < oldRows.length; i++) oldRows[i].remove();
+    var temp = document.createElement('tbody');
+    temp.innerHTML = threadPassesRows(totalDepth, nPasses, infeedType);
+    while (temp.firstChild) group.appendChild(temp.firstChild);
+  });
+
   // ── Switch thread type ──
   function switchType(type) {
     currentType = type;
     var isMetric = (type === 'mc' || type === 'mf');
     tolClassPanel.style.display = isMetric ? '' : 'none';
+    var showStarts = (type === 'tr' || type === 'acme');
+    startsField.style.display = showStarts ? '' : 'none';
+    if (!showStarts) inpStarts.value = '1';
     if (!isMetric) { lastMetricD = null; lastMetricP = null; lastMetricLabel = null; }
     for (var i = 0; i < typeBtns.length; i++) {
       typeBtns[i].classList.toggle('tol-active', typeBtns[i].dataset.thr === type);
@@ -832,6 +821,9 @@ export function openThreadCalc() {
     } else if (type === 'bsw') {
       thead.innerHTML = headerTPI;
       tbody.innerHTML = buildImperialRows(bswThreads, 'BSW');
+    } else if (type === 'bspt') {
+      thead.innerHTML = headerTPI;
+      tbody.innerHTML = buildImperialRows(bsptThreads, 'BSPT');
     } else if (type === 'npt') {
       thead.innerHTML = headerTPI;
       tbody.innerHTML = buildImperialRows(nptThreads, 'NPT');
@@ -878,17 +870,21 @@ export function openThreadCalc() {
       var tpi = parseInt(tr.dataset.tpi);
       setDetail(detailG(D, P, tpi, tr.dataset.n));
     } else if (type === 'Tr') {
-      setDetail(detailTr(D, P, 'Tr' + D + '\u00D7' + P));
+      var starts = parseInt(inpStarts.value) || 1;
+      setDetail(detailTr(D, P, 'Tr' + D + '\u00D7' + P, starts));
     } else if (type === 'UNC') {
       setDetail(detailUN(D, P, parseInt(tr.dataset.tpi), tr.dataset.n, 'UNC \u2013 ASME B1.1'));
     } else if (type === 'UNF') {
       setDetail(detailUN(D, P, parseInt(tr.dataset.tpi), tr.dataset.n, 'UNF \u2013 ASME B1.1'));
     } else if (type === 'BSW') {
       setDetail(detailBSW(D, P, parseInt(tr.dataset.tpi), tr.dataset.n));
+    } else if (type === 'BSPT') {
+      setDetail(detailBSPT(D, P, parseInt(tr.dataset.tpi), tr.dataset.n));
     } else if (type === 'NPT') {
       setDetail(detailNPT(D, P, parseInt(tr.dataset.tpi), tr.dataset.n));
     } else if (type === 'Acme') {
-      setDetail(detailAcme(D, P, parseInt(tr.dataset.tpi), tr.dataset.n));
+      var starts = parseInt(inpStarts.value) || 1;
+      setDetail(detailAcme(D, P, parseInt(tr.dataset.tpi), tr.dataset.n, starts));
     }
   });
 
@@ -898,8 +894,9 @@ export function openThreadCalc() {
     var P = inpP.value !== "" ? safeEvalMath(inpP.value) : null;
     if (D !== null && P !== null && P > 0 && D > 0) {
       if (lastActiveRow) { lastActiveRow.classList.remove("thr-row-active"); lastActiveRow = null; }
+      var starts = parseInt(inpStarts.value) || 1;
       if (currentType === 'tr') {
-        setDetail(detailTr(D, P, 'Tr' + D + '\u00D7' + P + ' (vlastn\u00ED)'));
+        setDetail(detailTr(D, P, 'Tr' + D + '\u00D7' + P + ' (vlastn\u00ED)', starts));
       } else if (currentType === 'g') {
         var tpi = Math.round(25.4 / P);
         setDetail(detailG(D, P, tpi, 'G vlastn\u00ED'));
@@ -909,12 +906,15 @@ export function openThreadCalc() {
       } else if (currentType === 'bsw') {
         var tpi = Math.round(25.4 / P);
         setDetail(detailBSW(D, P, tpi, 'BSW vlastn\u00ED'));
+      } else if (currentType === 'bspt') {
+        var tpi = Math.round(25.4 / P);
+        setDetail(detailBSPT(D, P, tpi, 'BSPT vlastn\u00ED'));
       } else if (currentType === 'npt') {
         var tpi = Math.round(25.4 / P);
         setDetail(detailNPT(D, P, tpi, 'NPT vlastn\u00ED'));
       } else if (currentType === 'acme') {
         var tpi = Math.round(25.4 / P);
-        setDetail(detailAcme(D, P, tpi, 'Acme vlastn\u00ED'));
+        setDetail(detailAcme(D, P, tpi, 'Acme vlastn\u00ED', starts));
       } else {
         lastMetricD = D; lastMetricP = P; lastMetricLabel = 'M' + D + '\u00D7' + P + ' (vlastn\u00ED)';
         setDetail(detailMetric(D, P, lastMetricLabel, selExtClass.value, selIntClass.value));
@@ -923,6 +923,7 @@ export function openThreadCalc() {
   }
   inpD.addEventListener("input", calcCustom);
   inpP.addEventListener("input", calcCustom);
+  inpStarts.addEventListener("input", calcCustom);
 
   // ── Identifikace závitu ──────────────────────────────────
   var identD   = overlay.querySelector('[data-id="tIdentD"]');
@@ -980,6 +981,12 @@ export function openThreadCalc() {
       if (t.D >= lo && t.D <= hi)
         hits.push({ label: 'BSW ' + t.n, info: 'D=' + t.D.toFixed(3) + ', TPI=' + t.tpi, tab: 'bsw', D: t.D, P: 25.4 / t.tpi, tpi: t.tpi, n: t.n, type: 'BSW' });
     }
+    // BSPT
+    for (var i = 0; i < bsptThreads.length; i++) {
+      var t = bsptThreads[i];
+      if (t.D >= lo && t.D <= hi)
+        hits.push({ label: 'BSPT ' + t.n, info: 'D=' + t.D.toFixed(3) + ', TPI=' + t.tpi, tab: 'bspt', D: t.D, P: 25.4 / t.tpi, tpi: t.tpi, n: t.n, type: 'BSPT' });
+    }
     // NPT
     for (var i = 0; i < nptThreads.length; i++) {
       var t = nptThreads[i];
@@ -1032,6 +1039,8 @@ export function openThreadCalc() {
       setDetail(detailUN(h.D, h.P, h.tpi, h.n, 'UNF \u2013 ASME B1.1'));
     } else if (h.type === 'BSW') {
       setDetail(detailBSW(h.D, h.P, h.tpi, h.n));
+    } else if (h.type === 'BSPT') {
+      setDetail(detailBSPT(h.D, h.P, h.tpi, h.n));
     } else if (h.type === 'NPT') {
       setDetail(detailNPT(h.D, h.P, h.tpi, h.n));
     } else if (h.type === 'Acme') {
@@ -1061,7 +1070,16 @@ export function openThreadCalc() {
   selExtClass.addEventListener('change', onTolClassChange);
   selIntClass.addEventListener('change', onTolClassChange);
 
-  // ── Kopírovat detail ──
+  // ── Zm\u011Bna materi\u00E1lu \u2192 p\u0159epo\u010D\u00EDtat ──
+  selMaterial.addEventListener('change', function() {
+    if (lastActiveRow) {
+      lastActiveRow.click();
+    } else {
+      calcCustom();
+    }
+  });
+
+  // ── Kop\u00EDrovat detail ──
   overlay.querySelector("#thrCopy").addEventListener("click", function() {
     var txt = detail.dataset.copyText;
     if (txt) {
