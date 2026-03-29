@@ -28,6 +28,110 @@ export function renderAll() {
   });
 }
 
+let _renderDebounceTimer = null;
+/**
+ * Debounced renderAll — pro rychlé UI změny (barva, vlastnosti).
+ * Seskupí vícenásobná volání do jednoho renderAll po uplynutí delay.
+ */
+export function renderAllDebounced(delay = 32) {
+  clearTimeout(_renderDebounceTimer);
+  _renderDebounceTimer = setTimeout(() => {
+    _renderDebounceTimer = null;
+    renderAll();
+  }, delay);
+}
+
+// ── Viewport Culling ──
+
+/** Vrátí AABB objektu ve world souřadnicích, nebo null. */
+function getObjectBounds(obj) {
+  switch (obj.type) {
+    case 'point':
+      return { minX: obj.x - 1, minY: obj.y - 1, maxX: obj.x + 1, maxY: obj.y + 1 };
+    case 'line':
+    case 'constr': {
+      let lMinX = Math.min(obj.x1, obj.x2);
+      let lMinY = Math.min(obj.y1, obj.y2);
+      let lMaxX = Math.max(obj.x1, obj.x2);
+      let lMaxY = Math.max(obj.y1, obj.y2);
+      // Kóty mají zdrojové body pro odkazové čáry
+      if (obj.isDimension && obj.dimSrcX1 !== undefined) {
+        lMinX = Math.min(lMinX, obj.dimSrcX1, obj.dimSrcX2);
+        lMinY = Math.min(lMinY, obj.dimSrcY1, obj.dimSrcY2);
+        lMaxX = Math.max(lMaxX, obj.dimSrcX1, obj.dimSrcX2);
+        lMaxY = Math.max(lMaxY, obj.dimSrcY1, obj.dimSrcY2);
+      }
+      return { minX: lMinX, minY: lMinY, maxX: lMaxX, maxY: lMaxY };
+    }
+    case 'circle':
+      return {
+        minX: obj.cx - obj.r, minY: obj.cy - obj.r,
+        maxX: obj.cx + obj.r, maxY: obj.cy + obj.r,
+      };
+    case 'arc':
+      return {
+        minX: obj.cx - obj.r, minY: obj.cy - obj.r,
+        maxX: obj.cx + obj.r, maxY: obj.cy + obj.r,
+      };
+    case 'rect':
+      return {
+        minX: Math.min(obj.x1, obj.x2), minY: Math.min(obj.y1, obj.y2),
+        maxX: Math.max(obj.x1, obj.x2), maxY: Math.max(obj.y1, obj.y2),
+      };
+    case 'polyline': {
+      if (!obj.vertices || obj.vertices.length === 0) return null;
+      let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+      for (const v of obj.vertices) {
+        if (v.x < minX) minX = v.x;
+        if (v.y < minY) minY = v.y;
+        if (v.x > maxX) maxX = v.x;
+        if (v.y > maxY) maxY = v.y;
+      }
+      if (obj.bulges) {
+        const n = obj.vertices.length;
+        const segCount = obj.closed ? n : n - 1;
+        for (let i = 0; i < segCount; i++) {
+          const b = obj.bulges[i] || 0;
+          if (b !== 0) {
+            const p1 = obj.vertices[i];
+            const p2 = obj.vertices[(i + 1) % n];
+            const arc = bulgeToArc(p1, p2, b);
+            if (arc) {
+              if (arc.cx - arc.r < minX) minX = arc.cx - arc.r;
+              if (arc.cy - arc.r < minY) minY = arc.cy - arc.r;
+              if (arc.cx + arc.r > maxX) maxX = arc.cx + arc.r;
+              if (arc.cy + arc.r > maxY) maxY = arc.cy + arc.r;
+            }
+          }
+        }
+      }
+      return { minX, minY, maxX, maxY };
+    }
+    default:
+      return null;
+  }
+}
+
+/** Vrátí viewport bounds ve world souřadnicích s marginem pro hladký pohled. */
+function getViewportBounds() {
+  const [wx1, wy1] = screenToWorld(0, drawCanvas.height);
+  const [wx2, wy2] = screenToWorld(drawCanvas.width, 0);
+  const marginX = Math.abs(wx2 - wx1) * 0.05;
+  const marginY = Math.abs(wy2 - wy1) * 0.05;
+  return {
+    minX: Math.min(wx1, wx2) - marginX,
+    minY: Math.min(wy1, wy2) - marginY,
+    maxX: Math.max(wx1, wx2) + marginX,
+    maxY: Math.max(wy1, wy2) + marginY,
+  };
+}
+
+/** Testuje překrytí dvou AABB. */
+function boundsOverlap(a, b) {
+  return a.minX <= b.maxX && a.maxX >= b.minX &&
+         a.minY <= b.maxY && a.maxY >= b.minY;
+}
+
 // ── Osy ──
 function renderAxes() {
   const w = drawCanvas.width,
@@ -115,6 +219,9 @@ function renderObjects() {
   // Dynamická velikost písma podle zoomu
   const labelSize = Math.round(Math.min(22, Math.max(14, 10 + state.zoom * 6)));
 
+  // Viewport culling – spočítat viditelnou oblast
+  const vp = getViewportBounds();
+
   state.objects.forEach((obj, idx) => {
     // Skip objects on invisible layers
     const layer = state.layers.find(l => l.id === obj.layer);
@@ -122,6 +229,13 @@ function renderObjects() {
 
     // Skrýt kótovací objekty, pokud jsou kóty vypnuté
     if (!state.showDimensions && (obj.isDimension || obj.isCoordLabel)) return;
+
+    // Viewport culling – přeskočit objekty mimo viditelnou oblast
+    // Konstrukční čáry (nekonečné) se nekullují
+    if (obj.type !== 'constr') {
+      const bounds = getObjectBounds(obj);
+      if (bounds && !boundsOverlap(bounds, vp)) return;
+    }
 
     const isSel = idx === state.selected;
     const isConstr = obj.type === "constr";

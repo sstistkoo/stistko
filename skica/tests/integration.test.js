@@ -36,7 +36,7 @@ vi.hoisted(() => {
 });
 
 // Mock render.js
-vi.mock('../js/render.js', () => ({ renderAll: vi.fn() }));
+vi.mock('../js/render.js', () => ({ renderAll: vi.fn(), renderAllDebounced: vi.fn() }));
 
 // Mock ui.js
 vi.mock('../js/ui.js', () => ({
@@ -155,7 +155,7 @@ describe('Integrace: kreslení → stav', () => {
     addObject({ type: 'circle', cx: 5, cy: 5, r: 3, name: 'Kružnice 2' });
     // Přidat úsečku přímo
     addObject({ type: 'line', x1: 0, y1: 0, x2: 10, y2: 10, name: 'Úsečka 3' });
-    
+
     const ids = state.objects.map(o => o.id);
     const uniqueIds = new Set(ids);
     expect(uniqueIds.size).toBe(ids.length);

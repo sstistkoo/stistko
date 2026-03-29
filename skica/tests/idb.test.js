@@ -24,7 +24,7 @@ vi.stubGlobal('window', { innerWidth: 1024, innerHeight: 768, addEventListener: 
 vi.stubGlobal('navigator', { vibrate: vi.fn() });
 
 // Mock render.js
-vi.mock('../js/render.js', () => ({ renderAll: vi.fn() }));
+vi.mock('../js/render.js', () => ({ renderAll: vi.fn(), renderAllDebounced: vi.fn() }));
 
 import {
   saveProjectToDB, loadProjectFromDB, deleteProjectFromDB,

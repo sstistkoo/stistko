@@ -24,7 +24,7 @@ vi.stubGlobal('document', {
 vi.stubGlobal('window', { innerWidth: 1024, innerHeight: 768, addEventListener: vi.fn() });
 vi.stubGlobal('navigator', { vibrate: vi.fn() });
 
-vi.mock('../js/render.js', () => ({ renderAll: vi.fn() }));
+vi.mock('../js/render.js', () => ({ renderAll: vi.fn(), renderAllDebounced: vi.fn() }));
 vi.mock('../js/ui.js', () => ({
   updateObjectList: vi.fn(), updateProperties: vi.fn(),
 }));

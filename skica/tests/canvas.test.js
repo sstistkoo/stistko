@@ -52,6 +52,7 @@ const { mockCanvas } = vi.hoisted(() => {
 
 vi.mock('../js/render.js', () => ({
   renderAll: vi.fn(),
+  renderAllDebounced: vi.fn(),
 }));
 
 import { state } from '../js/state.js';
