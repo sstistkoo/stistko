@@ -2,6 +2,7 @@
 // ║  SKICA – Myš, klávesnice, kolečko                          ║
 // ╚══════════════════════════════════════════════════════════════╝
 
+import { COLORS } from './constants.js';
 import { drawCanvas, screenToWorld, snapPt, applyAngleSnap } from './canvas.js';
 import { state, pushUndo, undo, redo, showToast, toDisplayCoords, resetDrawingState, displayX, xPrefix } from './state.js';
 import { renderAll } from './render.js';
@@ -404,16 +405,16 @@ drawCanvas.addEventListener("contextmenu", (e) => {
 
   const menu = document.createElement('div');
   menu.className = 'skica-context-menu';
-  menu.style.cssText = `position:fixed;left:${e.clientX}px;top:${e.clientY}px;background:#313244;border:1px solid #585b70;border-radius:6px;padding:4px 0;z-index:9999;font-size:13px;font-family:Consolas,monospace;box-shadow:0 4px 12px rgba(0,0,0,.5);`;
+  menu.style.cssText = `position:fixed;left:${e.clientX}px;top:${e.clientY}px;background:${COLORS.surface};border:1px solid ${COLORS.border};border-radius:6px;padding:4px 0;z-index:9999;font-size:13px;font-family:Consolas,monospace;box-shadow:0 4px 12px rgba(0,0,0,.5);`;
 
-  const itemStyle = 'padding:6px 16px;cursor:pointer;color:#cdd6f4;white-space:nowrap;';
+  const itemStyle = `padding:6px 16px;cursor:pointer;color:${COLORS.text};white-space:nowrap;`;
   let menuItems = `<div class="ctx-item" data-action="ref" style="${itemStyle}">📍 Nastavit jako referenci (INC)</div>`;
   if (ctxIdx !== null) {
     state.selected = ctxIdx;
     updateObjectList();
     updateProperties();
     renderAll();
-    menuItems += `<div style="border-top:1px solid #45475a;margin:2px 0"></div>`;
+    menuItems += `<div style="border-top:1px solid ${COLORS.surfaceHover};margin:2px 0"></div>`;
     menuItems += `<div class="ctx-item" data-action="mirror" style="${itemStyle}">🪞 Zrcadlit (Shift+M)</div>`;
     menuItems += `<div class="ctx-item" data-action="rotate" style="${itemStyle}">🔄 Otočit</div>`;
     menuItems += `<div class="ctx-item" data-action="array" style="${itemStyle}">📏 Lineární pole</div>`;
@@ -421,8 +422,8 @@ drawCanvas.addEventListener("contextmenu", (e) => {
     if (state.objects[ctxIdx] && state.objects[ctxIdx].type === 'polyline') {
       menuItems += `<div class="ctx-item" data-action="explode" style="${itemStyle}">💥 Rozložit konturu</div>`;
     }
-    menuItems += `<div style="border-top:1px solid #45475a;margin:2px 0"></div>`;
-    menuItems += `<div class="ctx-item" data-action="delete" style="${itemStyle};color:#f38ba8">🗑 Smazat</div>`;
+    menuItems += `<div style="border-top:1px solid ${COLORS.surfaceHover};margin:2px 0"></div>`;
+    menuItems += `<div class="ctx-item" data-action="delete" style="${itemStyle};color:${COLORS.delete}">🗑 Smazat</div>`;
   }
   menu.innerHTML = menuItems;
   document.body.appendChild(menu);
@@ -453,7 +454,7 @@ drawCanvas.addEventListener("contextmenu", (e) => {
         deleteSelected();
       }
     });
-    item.addEventListener('mouseenter', function() { this.style.background = '#45475a'; });
+    item.addEventListener('mouseenter', function() { this.style.background = COLORS.surfaceHover; });
     item.addEventListener('mouseleave', function() { this.style.background = ''; });
   });
 
@@ -552,7 +553,7 @@ export function handleCanvasClick(wx, wy) {
             isDimension: true,
             isCoordLabel: true,
             isMeasureTemp: true,
-            color: "#9399b2",
+            color: COLORS.textSecondary,
           });
         }
         state.drawing = true;
@@ -597,7 +598,7 @@ export function handleCanvasClick(wx, wy) {
             isDimension: true,
             dimSrcX1: p1.x, dimSrcY1: p1.y,
             dimSrcX2: p2.x, dimSrcY2: p2.y,
-            color: "#9399b2",
+            color: COLORS.textSecondary,
           });
           showMeasureResult(tp, p2, d, angle);
         }
@@ -1404,7 +1405,7 @@ function handleDimensionClick(wx, wy) {
       x2: wx, y2: wy,
       name: `Kóta ${d.toFixed(2)}mm`,
       isDimension: true,
-      color: '#9399b2',
+      color: COLORS.textSecondary,
       layer: 2,
     });
     showToast(`Kóta ${d.toFixed(2)}mm přidána ✓`);

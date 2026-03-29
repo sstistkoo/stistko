@@ -2,6 +2,7 @@
 // ║  SKICA – Dialogy (měření, poloměr, čísla, polární)         ║
 // ╚══════════════════════════════════════════════════════════════╝
 
+import { COLORS } from './constants.js';
 import { state, showToast, pushUndo, toDisplayCoords, fromIncToAbs, axisLabels, displayX, xPrefix } from './state.js';
 import { addObject } from './objects.js';
 import { screenToWorld, snapPt, drawCanvas } from './canvas.js';
@@ -87,9 +88,9 @@ export function showMeasureResult(p1, p2, d, angle) {
   const Hp = isK ? xp : '';
   const Vp = isK ? '' : xp;
   const incRow = state.coordMode === 'inc' ? `
-        <tr><td colspan="2" style="color:#585b70;font-size:11px;padding-top:6px">── Inkrementální (od reference) ──</td></tr>
-        <tr><td style="color:#a6adc8">${pf}Bod 1:</td><td style="color:#f5c2e7">${pf}${Hp}${H}${fH(dp1.x).toFixed(3)} ${pf}${Vp}${V}${fV(dp1.y).toFixed(3)}</td></tr>
-        <tr><td style="color:#a6adc8">${pf}Bod 2:</td><td style="color:#f5c2e7">${pf}${Hp}${H}${fH(dp2.x).toFixed(3)} ${pf}${Vp}${V}${fV(dp2.y).toFixed(3)}</td></tr>
+        <tr><td colspan="2" style="color:${COLORS.border};font-size:11px;padding-top:6px">── Inkrementální (od reference) ──</td></tr>
+        <tr><td style="color:${COLORS.label}">${pf}Bod 1:</td><td style="color:${COLORS.preview}">${pf}${Hp}${H}${fH(dp1.x).toFixed(3)} ${pf}${Vp}${V}${fV(dp1.y).toFixed(3)}</td></tr>
+        <tr><td style="color:${COLORS.label}">${pf}Bod 2:</td><td style="color:${COLORS.preview}">${pf}${Hp}${H}${fH(dp2.x).toFixed(3)} ${pf}${Vp}${V}${fV(dp2.y).toFixed(3)}</td></tr>
   ` : '';
   const overlay = document.createElement("div");
   overlay.className = "input-overlay";
@@ -97,12 +98,12 @@ export function showMeasureResult(p1, p2, d, angle) {
     <div class="input-dialog">
       <h3>📏 Výsledek měření</h3>
       <table style="width:100%;font-family:Consolas;font-size:13px;">
-        <tr><td style="color:#a6adc8">Vzdálenost:</td><td style="color:#f9e2af">${d.toFixed(3)} mm</td></tr>
-        <tr><td style="color:#a6adc8">Úhel:</td><td style="color:#f9e2af">${angle.toFixed(2)}°</td></tr>
-        <tr><td style="color:#a6adc8">Δ${Hp}${H}:</td><td style="color:#f5c2e7">${fH(p2.x - p1.x).toFixed(3)}</td></tr>
-        <tr><td style="color:#a6adc8">Δ${Vp}${V}:</td><td style="color:#f5c2e7">${fV(p2.y - p1.y).toFixed(3)}</td></tr>
-        <tr><td style="color:#a6adc8">Bod 1:</td><td style="color:#89b4fa">${Hp}${H}${fH(p1.x).toFixed(3)} ${Vp}${V}${fV(p1.y).toFixed(3)}</td></tr>
-        <tr><td style="color:#a6adc8">Bod 2:</td><td style="color:#89b4fa">${Hp}${H}${fH(p2.x).toFixed(3)} ${Vp}${V}${fV(p2.y).toFixed(3)}</td></tr>
+        <tr><td style="color:${COLORS.label}">Vzdálenost:</td><td style="color:${COLORS.selected}">${d.toFixed(3)} mm</td></tr>
+        <tr><td style="color:${COLORS.label}">Úhel:</td><td style="color:${COLORS.selected}">${angle.toFixed(2)}°</td></tr>
+        <tr><td style="color:${COLORS.label}">Δ${Hp}${H}:</td><td style="color:${COLORS.preview}">${fH(p2.x - p1.x).toFixed(3)}</td></tr>
+        <tr><td style="color:${COLORS.label}">Δ${Vp}${V}:</td><td style="color:${COLORS.preview}">${fV(p2.y - p1.y).toFixed(3)}</td></tr>
+        <tr><td style="color:${COLORS.label}">Bod 1:</td><td style="color:${COLORS.primary}">${Hp}${H}${fH(p1.x).toFixed(3)} ${Vp}${V}${fV(p1.y).toFixed(3)}</td></tr>
+        <tr><td style="color:${COLORS.label}">Bod 2:</td><td style="color:${COLORS.primary}">${Hp}${H}${fH(p2.x).toFixed(3)} ${Vp}${V}${fV(p2.y).toFixed(3)}</td></tr>
         ${incRow}
       </table>
       <div class="btn-row">
@@ -123,7 +124,7 @@ export function showMeasureResult(p1, p2, d, angle) {
         y2: p2.y,
         name: `Kóta ${d.toFixed(2)}mm`,
         isDimension: true,
-        color: "#9399b2",
+        color: COLORS.textSecondary,
       });
       showToast(`Kóta ${d.toFixed(2)}mm přidána`);
       overlay.remove();
@@ -189,10 +190,10 @@ export function showNumericalInputDialog() {
   overlay.innerHTML = `
     <div class="input-dialog" style="min-width:400px">
       <h3>🔢 Číselné zadání objektu</h3>
-      <div id="numModeInfo" style="font-size:11px;margin-bottom:8px;padding:4px 8px;border-radius:4px;font-family:Consolas;${state.coordMode === 'inc' ? 'background:#f9e2af22;color:#f9e2af' : 'color:#6c7086'}">
+      <div id="numModeInfo" style="font-size:11px;margin-bottom:8px;padding:4px 8px;border-radius:4px;font-family:Consolas;${state.coordMode === 'inc' ? `background:${COLORS.selected}22;color:${COLORS.selected}` : `color:${COLORS.textMuted}`}">
         Režim: ${state.coordMode === 'inc' ? 'INC (přírůstkový) – hodnoty jsou Δ od reference ' + axisLabels()[0] + '=' + state.incReference.x.toFixed(3) + ' ' + axisLabels()[1] + '=' + state.incReference.y.toFixed(3) : 'ABS (absolutní)'}
       </div>
-      <div style="font-size:10px;color:#585b70;margin-bottom:6px;font-style:italic">💡 Pole podporují matematické výrazy: 123+56, 200/3, (10+5)*2</div>
+      <div style="font-size:10px;color:${COLORS.border};margin-bottom:6px;font-style:italic">💡 Pole podporují matematické výrazy: 123+56, 200/3, (10+5)*2</div>
       <label>Typ objektu:</label>
       <select id="numType">
         <option value="point">Bod</option>
@@ -284,7 +285,7 @@ export function showNumericalInputDialog() {
         html = `<div class="input-row"><div><label>${lbl(H)}:</label><input type="text" id="nx" value="${hasChain ? chainDispX : '0'}"></div>
                 <div><label>${lbl(V)}:</label><input type="text" id="ny" value="${hasChain ? chainDispY : '0'}"></div>
                 <div class="pick-col">${pickBtn("🎯")}</div></div>
-                ${hasChain ? '<div id="numChainInfo" style="font-size:11px;color:#9399b2;margin-top:4px"></div>' : ''}`;
+                ${hasChain ? `<div id="numChainInfo" style="font-size:11px;color:${COLORS.textSecondary};margin-top:4px"></div>` : ''}`;
         break;
       case "line":
       case "constr":
@@ -294,8 +295,8 @@ export function showNumericalInputDialog() {
                 <div class="input-row"><div><label>${lbl(H+'2')}:</label><input type="text" id="nx2" value="0"></div>
                 <div><label>${lbl(V+'2')}:</label><input type="text" id="ny2" value="0"></div>
                 <div class="pick-col">${pickBtn("🎯2")}</div></div>
-                <div id="numLineInfo" style="font-size:11px;color:#9399b2;margin-top:4px"></div>
-                <label style="font-size:11px;color:#6c7086;margin-top:4px">Nebo: Délka a polární úhel</label>
+                <div id="numLineInfo" style="font-size:11px;color:${COLORS.textSecondary};margin-top:4px"></div>
+                <label style="font-size:11px;color:${COLORS.textMuted};margin-top:4px">Nebo: Délka a polární úhel</label>
                 <div class="input-row"><div><label>Délka:</label><input type="text" id="nlen" value=""></div>
                 <div><label>Úhel (°):</label><input type="text" id="nang" value=""></div></div>`;
         break;
@@ -324,16 +325,16 @@ export function showNumericalInputDialog() {
                 <div class="input-row"><div><label>${lbl(H+'2')}:</label><input type="text" id="nx2" value="0"></div>
                 <div><label>${lbl(V+'2')}:</label><input type="text" id="ny2" value="0"></div>
                 <div class="pick-col">${pickBtn("🎯2")}</div></div>
-                <label style="font-size:11px;color:#6c7086;margin-top:4px">Nebo: Šířka × Výška od bodu 1</label>
+                <label style="font-size:11px;color:${COLORS.textMuted};margin-top:4px">Nebo: Šířka × Výška od bodu 1</label>
                 <div class="input-row"><div><label>Šířka:</label><input type="text" id="nw" value=""></div>
                 <div><label>Výška:</label><input type="text" id="nh" value=""></div></div>`;
         break;
       case "polyline":
-        html = `<div style="font-size:12px;color:#a6adc8;margin-bottom:8px">Zadávejte body po jednom. Klikněte "Přidat bod" pro každý vrchol kontury.</div>
+        html = `<div style="font-size:12px;color:${COLORS.label};margin-bottom:8px">Zadávejte body po jednom. Klikněte "Přidat bod" pro každý vrchol kontury.</div>
                 <div class="input-row"><div><label>${lbl(H)}:</label><input type="text" id="nx" value="${hasChain ? chainDispX : '0'}"></div>
                 <div><label>${lbl(V)}:</label><input type="text" id="ny" value="${hasChain ? chainDispY : '0'}"></div>
                 <div class="pick-col">${pickBtn("🎯")}</div></div>
-                <div id="polyVertexList" style="max-height:150px;overflow-y:auto;font-size:11px;font-family:Consolas;color:#a6adc8;margin:8px 0;padding:4px;background:#11111b;border-radius:4px;display:none"></div>
+                <div id="polyVertexList" style="max-height:150px;overflow-y:auto;font-size:11px;font-family:Consolas;color:${COLORS.label};margin:8px 0;padding:4px;background:${COLORS.bgDarker};border-radius:4px;display:none"></div>
                 <div style="display:flex;gap:6px;margin-bottom:8px">
                   <button class="btn-ok" id="polyAddVtx" style="font-size:11px;padding:3px 8px;flex:1">➕ Přidat bod</button>
                   <label style="font-size:11px;display:flex;align-items:center;gap:4px;cursor:pointer;white-space:nowrap">
@@ -727,7 +728,7 @@ export function showPolarDrawingDialog() {
   overlay.innerHTML = `
     <div class="input-dialog" style="min-width:460px">
       <h3>📐 Polární kreslení z bodu</h3>
-      <p style="font-size:12px;color:#6c7086;margin-bottom:10px">
+      <p style="font-size:12px;color:${COLORS.textMuted};margin-bottom:10px">
         Zadejte referenční bod a pak přidávejte segmenty pomocí délky a úhlu.<br>
         Vhodné pro překreslování z výkresů se zadanými hodnotami.
       </p>
@@ -738,10 +739,10 @@ export function showPolarDrawingDialog() {
       </div>
       <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap">
         <button class="btn-ok" id="polMarkRef" style="font-size:11px;padding:3px 8px">📍 Označit ref. bod</button>
-        <button class="btn-ok" id="polFromSelected" style="font-size:11px;padding:3px 8px;background:#a6e3a1;border-color:#a6e3a1">📌 Z vybraného objektu</button>
-        <button class="btn-ok" id="polPickFromMap" style="font-size:11px;padding:3px 8px;background:#f9e2af;border-color:#f9e2af;color:#1e1e2e">🎯 Kliknout z výkresu</button>
+        <button class="btn-ok" id="polFromSelected" style="font-size:11px;padding:3px 8px;background:${COLORS.dimension};border-color:${COLORS.dimension}">📌 Z vybraného objektu</button>
+        <button class="btn-ok" id="polPickFromMap" style="font-size:11px;padding:3px 8px;background:${COLORS.selected};border-color:${COLORS.selected};color:${COLORS.bgDark}">🎯 Kliknout z výkresu</button>
       </div>
-      <hr style="border-color:#45475a;margin:8px 0">
+      <hr style="border-color:${COLORS.surfaceHover};margin:8px 0">
       <label>Segment (polární souřadnice od ref. bodu):</label>
       <div class="input-row">
         <div><label>Délka:</label><input type="text" id="polLen" value="10"></div>
@@ -761,7 +762,7 @@ export function showPolarDrawingDialog() {
           </label>
         </div>
       </div>
-      <div id="polHistory" style="max-height:120px;overflow-y:auto;font-size:11px;font-family:Consolas;color:#a6adc8;margin:8px 0;padding:4px;background:#11111b;border-radius:4px;display:none"></div>
+      <div id="polHistory" style="max-height:120px;overflow-y:auto;font-size:11px;font-family:Consolas;color:${COLORS.label};margin:8px 0;padding:4px;background:${COLORS.bgDarker};border-radius:4px;display:none"></div>
       <div class="btn-row">
         <button class="btn-cancel" id="polClose">Zavřít</button>
         <button class="btn-ok" id="polAdd">➕ Přidat segment</button>
@@ -955,10 +956,10 @@ export function showBulgeDialog(p1, p2, currentBulge, onAccept) {
     <div class="input-dialog" style="min-width:360px">
       <h3>⌒ Oblouk segmentu</h3>
       <table style="width:100%;font-family:Consolas;font-size:12px;margin-bottom:8px">
-        <tr><td style="color:#a6adc8">Bod 1:</td><td style="color:#89b4fa">${axisLabels()[0]}${p1.x.toFixed(3)} ${axisLabels()[1]}${p1.y.toFixed(3)}</td></tr>
-        <tr><td style="color:#a6adc8">Bod 2:</td><td style="color:#89b4fa">${axisLabels()[0]}${p2.x.toFixed(3)} ${axisLabels()[1]}${p2.y.toFixed(3)}</td></tr>
-        <tr><td style="color:#a6adc8">Tětiva:</td><td style="color:#f9e2af">${d.toFixed(3)} mm</td></tr>
-        <tr><td style="color:#a6adc8">Min. R:</td><td style="color:#f5c2e7">${minRadius.toFixed(3)} mm</td></tr>
+        <tr><td style="color:${COLORS.label}">Bod 1:</td><td style="color:${COLORS.primary}">${axisLabels()[0]}${p1.x.toFixed(3)} ${axisLabels()[1]}${p1.y.toFixed(3)}</td></tr>
+        <tr><td style="color:${COLORS.label}">Bod 2:</td><td style="color:${COLORS.primary}">${axisLabels()[0]}${p2.x.toFixed(3)} ${axisLabels()[1]}${p2.y.toFixed(3)}</td></tr>
+        <tr><td style="color:${COLORS.label}">Tětiva:</td><td style="color:${COLORS.selected}">${d.toFixed(3)} mm</td></tr>
+        <tr><td style="color:${COLORS.label}">Min. R:</td><td style="color:${COLORS.preview}">${minRadius.toFixed(3)} mm</td></tr>
       </table>
       <label>Poloměr oblouku (mm):</label>
       <input type="text" id="dlgBulgeR" value="${currentRadius || (minRadius * 2).toFixed(3)}" inputmode="decimal" autofocus>
@@ -967,9 +968,9 @@ export function showBulgeDialog(p1, p2, currentBulge, onAccept) {
         <option value="ccw" ${!currentCW ? 'selected' : ''}>CCW (proti směru hodinových ručiček)</option>
         <option value="cw" ${currentCW ? 'selected' : ''}>CW (po směru hodinových ručiček)</option>
       </select>
-      <div id="dlgBulgeInfo" style="font-size:11px;color:#9399b2;margin-top:8px;font-family:Consolas"></div>
+      <div id="dlgBulgeInfo" style="font-size:11px;color:${COLORS.textSecondary};margin-top:8px;font-family:Consolas"></div>
       <div class="btn-row" style="margin-top:12px">
-        <button class="btn-cancel" id="dlgBulgeRemove" style="background:#f38ba8;border-color:#f38ba8">Rovný seg.</button>
+        <button class="btn-cancel" id="dlgBulgeRemove" style="background:${COLORS.delete};border-color:${COLORS.delete}">Rovný seg.</button>
         <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
         <button class="btn-ok" id="dlgBulgeOk">OK</button>
       </div>
@@ -1040,8 +1041,8 @@ export function showIntersectionInfo(pt) {
     <div class="input-dialog">
       <h3>⨯ Průsečík</h3>
       <table style="width:100%;font-family:Consolas;font-size:14px;">
-        <tr><td style="color:#a6adc8">${Hp}${H}:</td><td style="color:#f9e2af;font-size:16px">${hv.toFixed(3)}</td></tr>
-        <tr><td style="color:#a6adc8">${Vp}${V}:</td><td style="color:#f9e2af;font-size:16px">${vv.toFixed(3)}</td></tr>
+        <tr><td style="color:${COLORS.label}">${Hp}${H}:</td><td style="color:${COLORS.selected};font-size:16px">${hv.toFixed(3)}</td></tr>
+        <tr><td style="color:${COLORS.label}">${Vp}${V}:</td><td style="color:${COLORS.selected};font-size:16px">${vv.toFixed(3)}</td></tr>
       </table>
       <div class="btn-row">
         <button class="btn-cancel" id="intCopy">📋 Kopírovat</button>
@@ -1098,8 +1099,8 @@ export function showMeasureObjectInfo(obj, wx, wy, objIdx) {
       <div class="input-dialog">
         <h3>📍 Souřadnice bodu</h3>
         <table style="width:100%;font-family:Consolas;font-size:13px;">
-          <tr><td style="color:#a6adc8">${Hp}${axisLabels()[0]}:</td><td style="color:#f9e2af">${ptHval.toFixed(3)}</td></tr>
-          <tr><td style="color:#a6adc8">${Vp}${axisLabels()[1]}:</td><td style="color:#f9e2af">${ptVval.toFixed(3)}</td></tr>
+          <tr><td style="color:${COLORS.label}">${Hp}${axisLabels()[0]}:</td><td style="color:${COLORS.selected}">${ptHval.toFixed(3)}</td></tr>
+          <tr><td style="color:${COLORS.label}">${Vp}${axisLabels()[1]}:</td><td style="color:${COLORS.selected}">${ptVval.toFixed(3)}</td></tr>
         </table>
         <div class="btn-row">
           <button class="btn-cancel" id="ptCopy">📋 Kopírovat</button>
@@ -1160,51 +1161,51 @@ function buildObjectInfoDialog(obj, objIdx) {
   const fH = v => isK ? displayX(v) : v;
   const fV = v => isK ? v : displayX(v);
   let rows = "";
-  rows += `<tr><td style="color:#a6adc8">Typ:</td><td style="color:#cdd6f4">${typeLabel(obj.type)}</td></tr>`;
+  rows += `<tr><td style="color:${COLORS.label}">Typ:</td><td style="color:${COLORS.text}">${typeLabel(obj.type)}</td></tr>`;
   if (obj.name) {
     const safeName = obj.name.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-    rows += `<tr><td style="color:#a6adc8">Název:</td><td style="color:#cdd6f4">${safeName}</td></tr>`;
+    rows += `<tr><td style="color:${COLORS.label}">Název:</td><td style="color:${COLORS.text}">${safeName}</td></tr>`;
   }
 
   switch (obj.type) {
     case "point":
-      rows += `<tr><td style="color:#a6adc8">${Hp}${H}:</td><td style="color:#f9e2af">${fH(obj.x).toFixed(3)}</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">${Vp}${V}:</td><td style="color:#f9e2af">${fV(obj.y).toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:${COLORS.label}">${Hp}${H}:</td><td style="color:${COLORS.selected}">${fH(obj.x).toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:${COLORS.label}">${Vp}${V}:</td><td style="color:${COLORS.selected}">${fV(obj.y).toFixed(3)}</td></tr>`;
       break;
     case "line":
     case "constr": {
       const len = Math.hypot(obj.x2 - obj.x1, obj.y2 - obj.y1);
       const angle =
         (Math.atan2(obj.y2 - obj.y1, obj.x2 - obj.x1) * 180) / Math.PI;
-      rows += `<tr><td style="color:#a6adc8">Bod 1:</td><td style="color:#89b4fa">${Hp}${H}${fH(obj.x1).toFixed(3)} ${Vp}${V}${fV(obj.y1).toFixed(3)}</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Bod 2:</td><td style="color:#89b4fa">${Hp}${H}${fH(obj.x2).toFixed(3)} ${Vp}${V}${fV(obj.y2).toFixed(3)}</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Délka:</td><td style="color:#f9e2af">${len.toFixed(3)} mm</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Úhel:</td><td style="color:#f9e2af">${angle.toFixed(2)}°</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Δ${Hp}${H}:</td><td style="color:#f5c2e7">${fH(obj.x2 - obj.x1).toFixed(3)}</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Δ${Vp}${V}:</td><td style="color:#f5c2e7">${fV(obj.y2 - obj.y1).toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:${COLORS.label}">Bod 1:</td><td style="color:${COLORS.primary}">${Hp}${H}${fH(obj.x1).toFixed(3)} ${Vp}${V}${fV(obj.y1).toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:${COLORS.label}">Bod 2:</td><td style="color:${COLORS.primary}">${Hp}${H}${fH(obj.x2).toFixed(3)} ${Vp}${V}${fV(obj.y2).toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:${COLORS.label}">Délka:</td><td style="color:${COLORS.selected}">${len.toFixed(3)} mm</td></tr>`;
+      rows += `<tr><td style="color:${COLORS.label}">Úhel:</td><td style="color:${COLORS.selected}">${angle.toFixed(2)}°</td></tr>`;
+      rows += `<tr><td style="color:${COLORS.label}">Δ${Hp}${H}:</td><td style="color:${COLORS.preview}">${fH(obj.x2 - obj.x1).toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:${COLORS.label}">Δ${Vp}${V}:</td><td style="color:${COLORS.preview}">${fV(obj.y2 - obj.y1).toFixed(3)}</td></tr>`;
       break;
     }
     case "circle":
-      rows += `<tr><td style="color:#a6adc8">Střed:</td><td style="color:#89b4fa">${Hp}${H}${fH(obj.cx).toFixed(3)} ${Vp}${V}${fV(obj.cy).toFixed(3)}</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Poloměr:</td><td style="color:#f9e2af">${obj.r.toFixed(3)} mm</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Průměr:</td><td style="color:#f9e2af">${(obj.r * 2).toFixed(3)} mm</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Obvod:</td><td style="color:#f5c2e7">${(2 * Math.PI * obj.r).toFixed(3)} mm</td></tr>`;
+      rows += `<tr><td style="color:${COLORS.label}">Střed:</td><td style="color:${COLORS.primary}">${Hp}${H}${fH(obj.cx).toFixed(3)} ${Vp}${V}${fV(obj.cy).toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:${COLORS.label}">Poloměr:</td><td style="color:${COLORS.selected}">${obj.r.toFixed(3)} mm</td></tr>`;
+      rows += `<tr><td style="color:${COLORS.label}">Průměr:</td><td style="color:${COLORS.selected}">${(obj.r * 2).toFixed(3)} mm</td></tr>`;
+      rows += `<tr><td style="color:${COLORS.label}">Obvod:</td><td style="color:${COLORS.preview}">${(2 * Math.PI * obj.r).toFixed(3)} mm</td></tr>`;
       break;
     case "arc":
-      rows += `<tr><td style="color:#a6adc8">Střed:</td><td style="color:#89b4fa">${Hp}${H}${fH(obj.cx).toFixed(3)} ${Vp}${V}${fV(obj.cy).toFixed(3)}</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Poloměr:</td><td style="color:#f9e2af">${obj.r.toFixed(3)} mm</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Start:</td><td style="color:#f5c2e7">${((obj.startAngle * 180) / Math.PI).toFixed(2)}°</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Konec:</td><td style="color:#f5c2e7">${((obj.endAngle * 180) / Math.PI).toFixed(2)}°</td></tr>`;
+      rows += `<tr><td style="color:${COLORS.label}">Střed:</td><td style="color:${COLORS.primary}">${Hp}${H}${fH(obj.cx).toFixed(3)} ${Vp}${V}${fV(obj.cy).toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:${COLORS.label}">Poloměr:</td><td style="color:${COLORS.selected}">${obj.r.toFixed(3)} mm</td></tr>`;
+      rows += `<tr><td style="color:${COLORS.label}">Start:</td><td style="color:${COLORS.preview}">${((obj.startAngle * 180) / Math.PI).toFixed(2)}°</td></tr>`;
+      rows += `<tr><td style="color:${COLORS.label}">Konec:</td><td style="color:${COLORS.preview}">${((obj.endAngle * 180) / Math.PI).toFixed(2)}°</td></tr>`;
       break;
     case "rect": {
       const w = Math.abs(obj.x2 - obj.x1);
       const h = Math.abs(obj.y2 - obj.y1);
-      rows += `<tr><td style="color:#a6adc8">Roh 1:</td><td style="color:#89b4fa">${Hp}${H}${fH(obj.x1).toFixed(3)} ${Vp}${V}${fV(obj.y1).toFixed(3)}</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Roh 2:</td><td style="color:#89b4fa">${Hp}${H}${fH(obj.x2).toFixed(3)} ${Vp}${V}${fV(obj.y2).toFixed(3)}</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Šířka:</td><td style="color:#f9e2af">${w.toFixed(3)} mm</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Výška:</td><td style="color:#f9e2af">${h.toFixed(3)} mm</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Obvod:</td><td style="color:#f5c2e7">${(2 * (w + h)).toFixed(3)} mm</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Plocha:</td><td style="color:#f5c2e7">${(w * h).toFixed(3)} mm²</td></tr>`;
+      rows += `<tr><td style="color:${COLORS.label}">Roh 1:</td><td style="color:${COLORS.primary}">${Hp}${H}${fH(obj.x1).toFixed(3)} ${Vp}${V}${fV(obj.y1).toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:${COLORS.label}">Roh 2:</td><td style="color:${COLORS.primary}">${Hp}${H}${fH(obj.x2).toFixed(3)} ${Vp}${V}${fV(obj.y2).toFixed(3)}</td></tr>`;
+      rows += `<tr><td style="color:${COLORS.label}">Šířka:</td><td style="color:${COLORS.selected}">${w.toFixed(3)} mm</td></tr>`;
+      rows += `<tr><td style="color:${COLORS.label}">Výška:</td><td style="color:${COLORS.selected}">${h.toFixed(3)} mm</td></tr>`;
+      rows += `<tr><td style="color:${COLORS.label}">Obvod:</td><td style="color:${COLORS.preview}">${(2 * (w + h)).toFixed(3)} mm</td></tr>`;
+      rows += `<tr><td style="color:${COLORS.label}">Plocha:</td><td style="color:${COLORS.preview}">${(w * h).toFixed(3)} mm²</td></tr>`;
       break;
     }
     case "polyline": {
@@ -1227,12 +1228,12 @@ function buildObjectInfoDialog(obj, objIdx) {
           }
         }
       }
-      rows += `<tr><td style="color:#a6adc8">Vrcholů:</td><td style="color:#f9e2af">${pn}</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Segmentů:</td><td style="color:#f9e2af">${pSegCnt} (${pArcCnt} oblouků)</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Uzavřená:</td><td style="color:#f9e2af">${obj.closed ? 'Ano' : 'Ne'}</td></tr>`;
-      rows += `<tr><td style="color:#a6adc8">Celk. délka:</td><td style="color:#f9e2af">${pTotalLen.toFixed(3)} mm</td></tr>`;
+      rows += `<tr><td style="color:${COLORS.label}">Vrcholů:</td><td style="color:${COLORS.selected}">${pn}</td></tr>`;
+      rows += `<tr><td style="color:${COLORS.label}">Segmentů:</td><td style="color:${COLORS.selected}">${pSegCnt} (${pArcCnt} oblouků)</td></tr>`;
+      rows += `<tr><td style="color:${COLORS.label}">Uzavřená:</td><td style="color:${COLORS.selected}">${obj.closed ? 'Ano' : 'Ne'}</td></tr>`;
+      rows += `<tr><td style="color:${COLORS.label}">Celk. délka:</td><td style="color:${COLORS.selected}">${pTotalLen.toFixed(3)} mm</td></tr>`;
       for (let i = 0; i < pn; i++) {
-        rows += `<tr><td style="color:#a6adc8">V${i + 1}:</td><td style="color:#89b4fa">${Hp}${H}${fH(obj.vertices[i].x).toFixed(3)} ${Vp}${V}${fV(obj.vertices[i].y).toFixed(3)}</td></tr>`;
+        rows += `<tr><td style="color:${COLORS.label}">V${i + 1}:</td><td style="color:${COLORS.primary}">${Hp}${H}${fH(obj.vertices[i].x).toFixed(3)} ${Vp}${V}${fV(obj.vertices[i].y).toFixed(3)}</td></tr>`;
       }
       break;
     }
@@ -1256,7 +1257,7 @@ function buildObjectInfoDialog(obj, objIdx) {
       <div class="btn-row">
         ${addDimBtn}
         <button class="btn-cancel" id="objCopy">📋 Kopírovat</button>
-        ${objIdx !== undefined ? '<button class="btn-cancel" id="objEdit" style="color:#a6e3a1;border-color:#a6e3a155">✏️ Upravit</button>' : ''}
+        ${objIdx !== undefined ? `<button class="btn-cancel" id="objEdit" style="color:${COLORS.dimension};border-color:${COLORS.dimension}55">✏️ Upravit</button>` : ''}
         <button class="btn-ok" onclick="this.closest('.input-overlay').remove()">OK</button>
       </div>
     </div>`;
@@ -1312,7 +1313,7 @@ export function addDimensionForObject(obj) {
         name: `Kóta [${obj.x.toFixed(2)}, ${obj.y.toFixed(2)}]`,
         isDimension: true,
         isCoordLabel: true,
-        color: "#9399b2",
+        color: COLORS.textSecondary,
       });
       showToast(`Kóta ${axisLabels()[0]}${obj.x.toFixed(2)} ${axisLabels()[1]}${obj.y.toFixed(2)} přidána`);
       break;
@@ -1337,7 +1338,7 @@ export function addDimensionForObject(obj) {
         dimSrcX2: obj.x2,
         dimSrcY2: obj.y2,
         name: `Kóta ${len.toFixed(2)}mm`,
-        color: "#9399b2",
+        color: COLORS.textSecondary,
       });
       showToast(`Kóta ${len.toFixed(2)}mm přidána`);
       break;
@@ -1351,7 +1352,7 @@ export function addDimensionForObject(obj) {
         y2: obj.cy,
         name: `Kóta R${obj.r.toFixed(2)}`,
         isDimension: true,
-        color: "#9399b2",
+        color: COLORS.textSecondary,
       });
       showToast(`Kóta R${obj.r.toFixed(2)} přidána`);
       break;
@@ -1365,7 +1366,7 @@ export function addDimensionForObject(obj) {
         y2: obj.cy,
         name: `Kóta R${obj.r.toFixed(2)}`,
         isDimension: true,
-        color: "#9399b2",
+        color: COLORS.textSecondary,
       });
       showToast(`Kóta R${obj.r.toFixed(2)} přidána`);
       break;
@@ -1382,7 +1383,7 @@ export function addDimensionForObject(obj) {
         y2: Math.max(obj.y1, obj.y2),
         name: `Kóta ${w.toFixed(2)}mm`,
         isDimension: true,
-        color: "#9399b2",
+        color: COLORS.textSecondary,
       });
       // Výška – pravá hrana
       addObject({
@@ -1393,7 +1394,7 @@ export function addDimensionForObject(obj) {
         y2: obj.y2,
         name: `Kóta ${h.toFixed(2)}mm`,
         isDimension: true,
-        color: "#9399b2",
+        color: COLORS.textSecondary,
       });
       showToast(`Kóty ${w.toFixed(2)} × ${h.toFixed(2)}mm přidány`);
       break;
@@ -1421,7 +1422,7 @@ export function addDimensionForObject(obj) {
               x2: arc.cx + arc.r, y2: arc.cy,
               name: `Kóta R${arc.r.toFixed(2)}`,
               isDimension: true,
-              color: "#9399b2",
+              color: COLORS.textSecondary,
             });
             dimCount++;
           }
@@ -1435,7 +1436,7 @@ export function addDimensionForObject(obj) {
               x2: p2.x, y2: p2.y,
               name: `Kóta ${len.toFixed(2)}mm`,
               isDimension: true,
-              color: "#9399b2",
+              color: COLORS.textSecondary,
             });
             dimCount++;
           }
@@ -1470,17 +1471,17 @@ export function showMobileEditDialog() {
 
   let listHtml = state.objects.map((obj, idx) => {
     const icon = { point: "·", line: "╱", constr: "┄", circle: "○", arc: "◜", rect: "▭", polyline: "⛓" }[obj.type] || "?";
-    return `<div class="edit-obj-item" data-idx="${idx}" style="padding:10px 12px;cursor:pointer;border-bottom:1px solid #313244;display:flex;align-items:center;gap:8px;transition:background 0.15s">
+    return `<div class="edit-obj-item" data-idx="${idx}" style="padding:10px 12px;cursor:pointer;border-bottom:1px solid ${COLORS.surface};display:flex;align-items:center;gap:8px;transition:background 0.15s">
       <span style="font-size:18px;width:24px;text-align:center">${icon}</span>
-      <span style="flex:1;color:#cdd6f4">${obj.name || typeLabel(obj.type)}</span>
-      <span style="font-size:11px;color:#6c7086">${typeLabel(obj.type)}</span>
+      <span style="flex:1;color:${COLORS.text}">${obj.name || typeLabel(obj.type)}</span>
+      <span style="font-size:11px;color:${COLORS.textMuted}">${typeLabel(obj.type)}</span>
     </div>`;
   }).join("");
 
   overlay.innerHTML = `
     <div class="input-dialog" style="max-height:80vh;overflow-y:auto">
       <h3>✏️ Vyberte objekt k úpravě</h3>
-      <div style="max-height:50vh;overflow-y:auto;border:1px solid #313244;border-radius:4px;margin-bottom:12px">
+      <div style="max-height:50vh;overflow-y:auto;border:1px solid ${COLORS.surface};border-radius:4px;margin-bottom:12px">
         ${listHtml}
       </div>
       <div class="btn-row">
@@ -1498,7 +1499,7 @@ export function showMobileEditDialog() {
       renderAll();
       showEditObjectDialog(idx);
     });
-    item.addEventListener("mouseenter", () => item.style.background = "#313244");
+    item.addEventListener("mouseenter", () => item.style.background = COLORS.surface);
     item.addEventListener("mouseleave", () => item.style.background = "");
   });
 }
@@ -1534,7 +1535,7 @@ function showEditObjectDialog(idx) {
           <div class="input-row"><div><label>${H}2:</label><input type="text" id="editX2" value="${obj.x2.toFixed(3)}"></div>
           <div><label>${V}2:</label><input type="text" id="editY2" value="${obj.y2.toFixed(3)}"></div>
           <div class="pick-col"><button type="button" class="pick-btn" data-pick="p2">🎯2</button></div></div>
-          <div style="font-size:12px;color:#9399b2;margin-top:4px">Délka: <span id="editLen">${Math.hypot(obj.x2-obj.x1, obj.y2-obj.y1).toFixed(3)}</span> mm</div>`;
+          <div style="font-size:12px;color:${COLORS.textSecondary};margin-top:4px">Délka: <span id="editLen">${Math.hypot(obj.x2-obj.x1, obj.y2-obj.y1).toFixed(3)}</span> mm</div>`;
         break;
       case "circle":
         fieldsHtml += `
@@ -1564,7 +1565,7 @@ function showEditObjectDialog(idx) {
           <div class="input-row"><div><label>${H}2:</label><input type="text" id="editX2" value="${obj.x2.toFixed(3)}"></div>
           <div><label>${V}2:</label><input type="text" id="editY2" value="${obj.y2.toFixed(3)}"></div>
           <div class="pick-col"><button type="button" class="pick-btn" data-pick="p2">🎯2</button></div></div>
-          <div style="font-size:12px;color:#9399b2;margin-top:4px">Rozměr: <span id="editDim">${Math.abs(obj.x2-obj.x1).toFixed(2)} × ${Math.abs(obj.y2-obj.y1).toFixed(2)}</span> mm</div>`;
+          <div style="font-size:12px;color:${COLORS.textSecondary};margin-top:4px">Rozměr: <span id="editDim">${Math.abs(obj.x2-obj.x1).toFixed(2)} × ${Math.abs(obj.y2-obj.y1).toFixed(2)}</span> mm</div>`;
         break;
       case "polyline": {
         const verts = obj.vertices || [];
@@ -1582,7 +1583,7 @@ function showEditObjectDialog(idx) {
         }
         fieldsHtml += `</div>`;
         const arcCount = bulges.filter(b => b !== 0).length;
-        fieldsHtml += `<div style="font-size:12px;color:#9399b2;margin-top:4px">Vrcholů: ${verts.length}, Segmentů: ${Math.max(0, verts.length - (obj.closed ? 0 : 1))}, Oblouků: ${arcCount}</div>`;
+        fieldsHtml += `<div style="font-size:12px;color:${COLORS.textSecondary};margin-top:4px">Vrcholů: ${verts.length}, Segmentů: ${Math.max(0, verts.length - (obj.closed ? 0 : 1))}, Oblouků: ${arcCount}</div>`;
         break;
       }
     }
@@ -1596,7 +1597,7 @@ function showEditObjectDialog(idx) {
       <h3>✏️ Upravit: ${icon} ${obj.name || typeLabel(obj.type)}</h3>
       <div id="editFields">${buildFields()}</div>
       <div class="btn-row">
-        <button class="btn-cancel" id="editDelete" style="color:#f38ba8;border-color:#f38ba855">🗑 Smazat</button>
+        <button class="btn-cancel" id="editDelete" style="color:${COLORS.delete};border-color:${COLORS.delete}55">🗑 Smazat</button>
         <button class="btn-cancel" id="editCancel">Zrušit</button>
         <button class="btn-ok" id="editOk">Uložit</button>
       </div>
@@ -1860,7 +1861,7 @@ export function showMirrorDialog(obj, callback) {
       <h3>🪞 Zrcadlit objekt</h3>
       <label>Objekt: ${obj.name || typeLabel(obj.type)}</label>
       <div style="margin:10px 0">
-        <label style="display:block;margin-bottom:6px;font-weight:bold;color:#a6adc8">Zrcadlit podle:</label>
+        <label style="display:block;margin-bottom:6px;font-weight:bold;color:${COLORS.label}">Zrcadlit podle:</label>
         <div class="btn-row" style="flex-direction:column;gap:6px">
           <button class="btn-ok mirror-opt" data-axis="x" style="width:100%">↔ Osa X (horizontální)</button>
           <button class="btn-ok mirror-opt" data-axis="z" style="width:100%">↕ Osa Z (vertikální)</button>
@@ -1953,7 +1954,7 @@ export function showTangentChoiceDialog(tangentLines, callback) {
       <label>Nalezeno ${tangentLines.length} tečen. Vyberte:</label>
       <div class="btn-row" style="flex-direction:column;gap:6px">
         ${btns}
-        <button class="btn-ok tangent-all" style="width:100%;background:#a6e3a1;color:#1e1e2e">✓ Vytvořit všechny</button>
+        <button class="btn-ok tangent-all" style="width:100%;background:${COLORS.dimension};color:${COLORS.bgDark}">✓ Vytvořit všechny</button>
       </div>
       <div class="btn-row">
         <button class="btn-cancel" onclick="this.closest('.input-overlay').remove()">Zrušit</button>
