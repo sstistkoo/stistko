@@ -232,6 +232,11 @@ export function openThreadCalc() {
   }
 
   // ── DETAIL FUNCTIONS ──────────────────────────────────────
+  function fmtCopy(lbl, val) {
+    while (lbl.length < 16) lbl += ' ';
+    return '  ' + lbl + '= ' + val;
+  }
+
   function detailMetric(D, P, label) {
     var H    = 0.866025 * P;
     var d2   = D - 0.6495 * P;
@@ -240,7 +245,7 @@ export function openThreadCalc() {
     var hExt = 0.6134 * P;
     var hInt = 0.5413 * P;
     var drill = D - P;
-    return '<div class="thr-detail-title">' + label + '</div>' +
+    var html = '<div class="thr-detail-title">' + label + '</div>' +
       '<table class="thr-detail-tbl">' +
         '<tr><td>Stoup\u00E1n\u00ED P</td><td><strong>' + P + '</strong> mm</td></tr>' +
         '<tr><td>Vrcholov\u00FD \u00FAhel</td><td><strong>60\u00B0</strong></td></tr>' +
@@ -260,6 +265,16 @@ export function openThreadCalc() {
         threadPassesHTML(hExt, 'vn\u011Bj\u0161\u00ED') +
         threadPassesHTML(hInt, 'vnit\u0159n\u00ED') +
       '</table>';
+    var copyText = label + ' (ISO 261, 60\u00B0)\n' +
+      fmtCopy('Stoup\u00E1n\u00ED P', P.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('Vn\u011Bj\u0161\u00ED \u00D8 D', D.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('St\u0159edn\u00ED \u00D8 d\u2082', d2.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('Mal\u00FD \u00D8 \u0161roub d\u2083', d3.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('Mal\u00FD \u00D8 matice D\u2081', D1.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('Hloubka vn\u011Bj\u0161\u00ED', hExt.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('Hloubka vnit\u0159n\u00ED', hInt.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('P\u0159edvrt\u00E1n\u00ED', drill.toFixed(1) + ' mm');
+    return { html: html, copyText: copyText };
   }
 
   function detailG(D, P, tpi, name) {
@@ -268,7 +283,7 @@ export function openThreadCalc() {
     var d1   = D - 1.2806 * P;
     var hExt = 0.6403 * P;
     var drill = d1;
-    return '<div class="thr-detail-title">' + name + ' \u2013 ISO 228</div>' +
+    var html = '<div class="thr-detail-title">' + name + ' \u2013 ISO 228</div>' +
       '<table class="thr-detail-tbl">' +
         '<tr><td>Z\u00E1vit\u016F/palec (TPI)</td><td><strong>' + tpi + '</strong></td></tr>' +
         '<tr><td>Stoup\u00E1n\u00ED P</td><td><strong>' + P.toFixed(4) + '</strong> mm</td></tr>' +
@@ -284,6 +299,15 @@ export function openThreadCalc() {
         '<tr><td>P\u0159edvrtan\u00ED</td><td><strong>' + drill.toFixed(3) + '</strong> mm</td></tr>' +
         threadPassesHTML(hExt, 'profil') +
       '</table>';
+    var copyText = name + ' (ISO 228, 55\u00B0)\n' +
+      fmtCopy('TPI', tpi) + '\n' +
+      fmtCopy('Stoup\u00E1n\u00ED P', P.toFixed(4) + ' mm') + '\n' +
+      fmtCopy('Vn\u011Bj\u0161\u00ED \u00D8 D', D.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('St\u0159edn\u00ED \u00D8 d\u2082', d2.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('Mal\u00FD \u00D8 d\u2081', d1.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('Hloubka profilu', hExt.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('P\u0159edvrt\u00E1n\u00ED', drill.toFixed(3) + ' mm');
+    return { html: html, copyText: copyText };
   }
 
   function detailTr(D, P, label) {
@@ -295,7 +319,7 @@ export function openThreadCalc() {
     var D1   = D - P;
     var hExt = H1 + ac;
     var drill = D - P - 0.5;
-    return '<div class="thr-detail-title">' + label + ' \u2013 ISO 2904</div>' +
+    var html = '<div class="thr-detail-title">' + label + ' \u2013 ISO 2904</div>' +
       '<table class="thr-detail-tbl">' +
         '<tr><td>Stoup\u00E1n\u00ED P</td><td><strong>' + P + '</strong> mm</td></tr>' +
         '<tr><td>Vrcholov\u00FD \u00FAhel</td><td><strong>30\u00B0</strong></td></tr>' +
@@ -313,6 +337,17 @@ export function openThreadCalc() {
         '<tr><td>P\u0159edvrtan\u00ED (matice)</td><td><strong>' + D1.toFixed(2) + '</strong> mm</td></tr>' +
         threadPassesHTML(hExt, 'profil') +
       '</table>';
+    var copyText = label + ' (ISO 2904, 30\u00B0)\n' +
+      fmtCopy('Stoup\u00E1n\u00ED P', P + ' mm') + '\n' +
+      fmtCopy('Vn\u011Bj\u0161\u00ED \u00D8 D', D.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('St\u0159edn\u00ED \u00D8 d\u2082', d2.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('Mal\u00FD \u00D8 \u0161roub d\u2083', d3.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('Vn\u011Bj. \u00D8 mat. D\u2084', D4.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('Vnit\u0159. \u00D8 mat. D\u2081', D1.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('Hloubka profilu', hExt.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('P\u0159edvrt. \u0161roub', d3.toFixed(2) + ' mm') + '\n' +
+      fmtCopy('P\u0159edvrt. matice', D1.toFixed(2) + ' mm');
+    return { html: html, copyText: copyText };
   }
 
   // UNC/UNF – 60° profil, stejné vzorce jako metrický
@@ -324,7 +359,7 @@ export function openThreadCalc() {
     var hExt = 0.6134 * P;
     var hInt = 0.5413 * P;
     var drill = D1;
-    return '<div class="thr-detail-title">' + name + ' \u2013 ' + std + '</div>' +
+    var html = '<div class="thr-detail-title">' + name + ' \u2013 ' + std + '</div>' +
       '<table class="thr-detail-tbl">' +
         '<tr><td>Z\u00E1vit\u016F/palec (TPI)</td><td><strong>' + tpi + '</strong></td></tr>' +
         '<tr><td>Stoup\u00E1n\u00ED P</td><td><strong>' + P.toFixed(4) + '</strong> mm</td></tr>' +
@@ -344,6 +379,17 @@ export function openThreadCalc() {
         threadPassesHTML(hExt, 'vn\u011Bj\u0161\u00ED') +
         threadPassesHTML(hInt, 'vnit\u0159n\u00ED') +
       '</table>';
+    var copyText = name + ' (' + std + ', 60\u00B0)\n' +
+      fmtCopy('TPI', tpi) + '\n' +
+      fmtCopy('Stoup\u00E1n\u00ED P', P.toFixed(4) + ' mm') + '\n' +
+      fmtCopy('Vn\u011Bj\u0161\u00ED \u00D8 D', D.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('St\u0159edn\u00ED \u00D8 d\u2082', d2.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('Mal\u00FD \u00D8 \u0161roub d\u2083', d3.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('Mal\u00FD \u00D8 matice D\u2081', D1.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('Hloubka vn\u011Bj\u0161\u00ED', hExt.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('Hloubka vnit\u0159n\u00ED', hInt.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('P\u0159edvrt\u00E1n\u00ED', drill.toFixed(3) + ' mm');
+    return { html: html, copyText: copyText };
   }
 
   // BSW – Whitworth 55° profil
@@ -353,7 +399,7 @@ export function openThreadCalc() {
     var d1   = D - 1.2806 * P;
     var hExt = 0.6403 * P;
     var drill = d1;
-    return '<div class="thr-detail-title">' + name + ' \u2013 BS 84 (Whitworth)</div>' +
+    var html = '<div class="thr-detail-title">' + name + ' \u2013 BS 84 (Whitworth)</div>' +
       '<table class="thr-detail-tbl">' +
         '<tr><td>Z\u00E1vit\u016F/palec (TPI)</td><td><strong>' + tpi + '</strong></td></tr>' +
         '<tr><td>Stoup\u00E1n\u00ED P</td><td><strong>' + P.toFixed(4) + '</strong> mm</td></tr>' +
@@ -369,6 +415,15 @@ export function openThreadCalc() {
         '<tr><td>P\u0159edvrtan\u00ED</td><td><strong>' + drill.toFixed(3) + '</strong> mm</td></tr>' +
         threadPassesHTML(hExt, 'profil') +
       '</table>';
+    var copyText = name + ' (BS 84 Whitworth, 55\u00B0)\n' +
+      fmtCopy('TPI', tpi) + '\n' +
+      fmtCopy('Stoup\u00E1n\u00ED P', P.toFixed(4) + ' mm') + '\n' +
+      fmtCopy('Vn\u011Bj\u0161\u00ED \u00D8 D', D.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('St\u0159edn\u00ED \u00D8 d\u2082', d2.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('Mal\u00FD \u00D8 d\u2081', d1.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('Hloubka profilu', hExt.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('P\u0159edvrt\u00E1n\u00ED', drill.toFixed(3) + ' mm');
+    return { html: html, copyText: copyText };
   }
 
   // NPT – 60° profil, kuželový 1:16
@@ -379,7 +434,7 @@ export function openThreadCalc() {
     var hExt = 0.6134 * P;
     var taperAngle = '1\u00B047\u203224"';
     var taperRate = '1:16 (6,25 %)';
-    return '<div class="thr-detail-title">' + name + ' \u2013 ASME B1.20.1</div>' +
+    var html = '<div class="thr-detail-title">' + name + ' \u2013 ASME B1.20.1</div>' +
       '<table class="thr-detail-tbl">' +
         '<tr><td>Z\u00E1vit\u016F/palec (TPI)</td><td><strong>' + tpi + '</strong></td></tr>' +
         '<tr><td>Stoup\u00E1n\u00ED P</td><td><strong>' + P.toFixed(4) + '</strong> mm</td></tr>' +
@@ -396,6 +451,15 @@ export function openThreadCalc() {
         '<tr><td>Hloubka profilu</td><td><strong>' + hExt.toFixed(3) + '</strong> mm</td></tr>' +
         threadPassesHTML(hExt, 'profil') +
       '</table>';
+    var copyText = name + ' (ASME B1.20.1, 60\u00B0, ku\u017Eel 1:16)\n' +
+      fmtCopy('TPI', tpi) + '\n' +
+      fmtCopy('Stoup\u00E1n\u00ED P', P.toFixed(4) + ' mm') + '\n' +
+      fmtCopy('Ku\u017Eelovitost', taperRate) + '\n' +
+      fmtCopy('Vn\u011Bj\u0161\u00ED \u00D8 D', D.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('St\u0159edn\u00ED \u00D8 d\u2082', d2.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('Mal\u00FD \u00D8 d\u2083', d3.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('Hloubka profilu', hExt.toFixed(3) + ' mm');
+    return { html: html, copyText: copyText };
   }
 
   // Acme – 29° profil
@@ -406,7 +470,7 @@ export function openThreadCalc() {
     var d3   = D - P - 2 * ac;
     var D1   = D - P;
     var hExt = H1 + ac;
-    return '<div class="thr-detail-title">' + name + ' \u2013 ASME B1.5 (Acme)</div>' +
+    var html = '<div class="thr-detail-title">' + name + ' \u2013 ASME B1.5 (Acme)</div>' +
       '<table class="thr-detail-tbl">' +
         '<tr><td>Z\u00E1vit\u016F/palec (TPI)</td><td><strong>' + tpi + '</strong></td></tr>' +
         '<tr><td>Stoup\u00E1n\u00ED P</td><td><strong>' + P.toFixed(4) + '</strong> mm</td></tr>' +
@@ -424,6 +488,17 @@ export function openThreadCalc() {
         '<tr><td>P\u0159edvrtan\u00ED (matice)</td><td><strong>' + D1.toFixed(2) + '</strong> mm</td></tr>' +
         threadPassesHTML(hExt, 'profil') +
       '</table>';
+    var copyText = name + ' (ASME B1.5 Acme, 29\u00B0)\n' +
+      fmtCopy('TPI', tpi) + '\n' +
+      fmtCopy('Stoup\u00E1n\u00ED P', P.toFixed(4) + ' mm') + '\n' +
+      fmtCopy('Vn\u011Bj\u0161\u00ED \u00D8 D', D.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('St\u0159edn\u00ED \u00D8 d\u2082', d2.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('Mal\u00FD \u00D8 d\u2083', d3.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('Vnit\u0159. \u00D8 mat. D\u2081', D1.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('Hloubka profilu', hExt.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('P\u0159edvrt. \u0161roub', d3.toFixed(2) + ' mm') + '\n' +
+      fmtCopy('P\u0159edvrt. matice', D1.toFixed(2) + ' mm');
+    return { html: html, copyText: copyText };
   }
 
   // ── HEADERS per type ──
@@ -570,6 +645,11 @@ export function openThreadCalc() {
   var lastActiveRow = null;
   var currentType = 'mc';
 
+  function setDetail(result) {
+    detail.innerHTML = result.html;
+    detail.dataset.copyText = result.copyText;
+  }
+
   // ── Toggle nápověda ──
   overlay.querySelector("#thrHelp").addEventListener("click", function() {
     var vis = helpPanel.style.display !== 'none';
@@ -585,6 +665,7 @@ export function openThreadCalc() {
     }
     if (lastActiveRow) { lastActiveRow.classList.remove("thr-row-active"); lastActiveRow = null; }
     detail.innerHTML = '<div class="thr-detail-hint">Klikn\u011Bte na z\u00E1vit pro zobrazen\u00ED detailu\u2026</div>';
+    delete detail.dataset.copyText;
     filter.value = '';
 
     if (type === 'mc') {
@@ -648,22 +729,22 @@ export function openThreadCalc() {
     if (type === 'M') {
       var isFine = (currentType === 'mf');
       var lbl = 'M' + D + (isFine ? '\u00D7' + P + ' jemn\u00E9' : ' hrub\u00E9');
-      detail.innerHTML = detailMetric(D, P, lbl);
+      setDetail(detailMetric(D, P, lbl));
     } else if (type === 'G') {
       var tpi = parseInt(tr.dataset.tpi);
-      detail.innerHTML = detailG(D, P, tpi, tr.dataset.n);
+      setDetail(detailG(D, P, tpi, tr.dataset.n));
     } else if (type === 'Tr') {
-      detail.innerHTML = detailTr(D, P, 'Tr' + D + '\u00D7' + P);
+      setDetail(detailTr(D, P, 'Tr' + D + '\u00D7' + P));
     } else if (type === 'UNC') {
-      detail.innerHTML = detailUN(D, P, parseInt(tr.dataset.tpi), tr.dataset.n, 'UNC \u2013 ASME B1.1');
+      setDetail(detailUN(D, P, parseInt(tr.dataset.tpi), tr.dataset.n, 'UNC \u2013 ASME B1.1'));
     } else if (type === 'UNF') {
-      detail.innerHTML = detailUN(D, P, parseInt(tr.dataset.tpi), tr.dataset.n, 'UNF \u2013 ASME B1.1');
+      setDetail(detailUN(D, P, parseInt(tr.dataset.tpi), tr.dataset.n, 'UNF \u2013 ASME B1.1'));
     } else if (type === 'BSW') {
-      detail.innerHTML = detailBSW(D, P, parseInt(tr.dataset.tpi), tr.dataset.n);
+      setDetail(detailBSW(D, P, parseInt(tr.dataset.tpi), tr.dataset.n));
     } else if (type === 'NPT') {
-      detail.innerHTML = detailNPT(D, P, parseInt(tr.dataset.tpi), tr.dataset.n);
+      setDetail(detailNPT(D, P, parseInt(tr.dataset.tpi), tr.dataset.n));
     } else if (type === 'Acme') {
-      detail.innerHTML = detailAcme(D, P, parseInt(tr.dataset.tpi), tr.dataset.n);
+      setDetail(detailAcme(D, P, parseInt(tr.dataset.tpi), tr.dataset.n));
     }
   });
 
@@ -674,24 +755,24 @@ export function openThreadCalc() {
     if (D !== null && P !== null && P > 0 && D > 0) {
       if (lastActiveRow) { lastActiveRow.classList.remove("thr-row-active"); lastActiveRow = null; }
       if (currentType === 'tr') {
-        detail.innerHTML = detailTr(D, P, 'Tr' + D + '\u00D7' + P + ' (vlastn\u00ED)');
+        setDetail(detailTr(D, P, 'Tr' + D + '\u00D7' + P + ' (vlastn\u00ED)'));
       } else if (currentType === 'g') {
         var tpi = Math.round(25.4 / P);
-        detail.innerHTML = detailG(D, P, tpi, 'G vlastn\u00ED');
+        setDetail(detailG(D, P, tpi, 'G vlastn\u00ED'));
       } else if (currentType === 'unc' || currentType === 'unf') {
         var tpi = Math.round(25.4 / P);
-        detail.innerHTML = detailUN(D, P, tpi, 'Vlastn\u00ED ' + currentType.toUpperCase(), currentType.toUpperCase());
+        setDetail(detailUN(D, P, tpi, 'Vlastn\u00ED ' + currentType.toUpperCase(), currentType.toUpperCase()));
       } else if (currentType === 'bsw') {
         var tpi = Math.round(25.4 / P);
-        detail.innerHTML = detailBSW(D, P, tpi, 'BSW vlastn\u00ED');
+        setDetail(detailBSW(D, P, tpi, 'BSW vlastn\u00ED'));
       } else if (currentType === 'npt') {
         var tpi = Math.round(25.4 / P);
-        detail.innerHTML = detailNPT(D, P, tpi, 'NPT vlastn\u00ED');
+        setDetail(detailNPT(D, P, tpi, 'NPT vlastn\u00ED'));
       } else if (currentType === 'acme') {
         var tpi = Math.round(25.4 / P);
-        detail.innerHTML = detailAcme(D, P, tpi, 'Acme vlastn\u00ED');
+        setDetail(detailAcme(D, P, tpi, 'Acme vlastn\u00ED'));
       } else {
-        detail.innerHTML = detailMetric(D, P, 'M' + D + '\u00D7' + P + ' (vlastn\u00ED)');
+        setDetail(detailMetric(D, P, 'M' + D + '\u00D7' + P + ' (vlastn\u00ED)'));
       }
     }
   }
@@ -700,8 +781,8 @@ export function openThreadCalc() {
 
   // ── Kopírovat detail ──
   overlay.querySelector("#thrCopy").addEventListener("click", function() {
-    var txt = detail.textContent;
-    if (txt && txt.indexOf("Klikn\u011Bte") < 0) {
+    var txt = detail.dataset.copyText;
+    if (txt) {
       navigator.clipboard.writeText(txt).then(function() { showToast("Zkop\u00EDrov\u00E1no"); });
     }
   });
