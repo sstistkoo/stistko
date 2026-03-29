@@ -2,6 +2,7 @@
 // ║  SKICA – Dotyková podpora + mobilní ovládání               ║
 // ╚══════════════════════════════════════════════════════════════╝
 
+import { MOBILE_BREAKPOINT, LONG_PRESS_MS, CROSSHAIR_OFFSET_Y, ZOOM_MIN, ZOOM_MAX, VIBRATE_LONG_PRESS } from './constants.js';
 import { drawCanvas, screenToWorld, snapPt, autoCenterView, applyAngleSnap } from './canvas.js';
 import { state, undo, redo, showToast, toDisplayCoords, resetDrawingState, displayX, xPrefix } from './state.js';
 import { renderAll } from './render.js';
@@ -14,7 +15,7 @@ import { bridge } from './bridge.js';
 
 // ── Mobile: detekce ──
 /** @returns {boolean} */
-export const isMobile = () => window.innerWidth <= 900;
+export const isMobile = () => window.innerWidth <= MOBILE_BREAKPOINT;
 
 // ── Mobile: Toolbar toggle ──
 const mobileToolbarToggle = document.getElementById("mobileToolbarToggle");
@@ -231,9 +232,8 @@ export function updateMobileRedoBtn() {
 bridge.updateMobileRedoBtn = updateMobileRedoBtn;
 
 // ── Touch state ──
-const PRECISION_OFFSET_Y = -80; // crosshair 80px above finger
-
 let touchState = {
+// ── Touch state ──
   lastTap: 0,
   touches: [],
   pinchStartDist: 0,
@@ -279,7 +279,7 @@ const precisionLabel = precisionEl.querySelector(".ch-label");
 function showPrecisionCrosshair(touch) {
   const rect = drawCanvas.getBoundingClientRect();
   const chSx = touch.clientX - rect.left;
-  const chSy = touch.clientY - rect.top + PRECISION_OFFSET_Y;
+  const chSy = touch.clientY - rect.top + CROSSHAIR_OFFSET_Y;
 
   let [wx, wy] = screenToWorld(chSx, chSy);
   if (state.snapToPoints) [wx, wy] = snapPt(wx, wy);
@@ -294,7 +294,7 @@ function showPrecisionCrosshair(touch) {
   state.mouse.sy = chSy;
 
   precisionEl.style.left = touch.clientX + "px";
-  precisionEl.style.top = touch.clientY + PRECISION_OFFSET_Y + "px";
+  precisionEl.style.top = touch.clientY + CROSSHAIR_OFFSET_Y + "px";
   const dp = toDisplayCoords(wx, wy);
   const pf = state.coordMode === 'inc' ? 'Δ' : '';
   precisionLabel.textContent = `${pf}X${dp.x.toFixed(3)} ${pf}Z${dp.y.toFixed(3)}`;
@@ -306,7 +306,7 @@ function showPrecisionCrosshair(touch) {
 function updatePrecisionCrosshair(touch) {
   const rect = drawCanvas.getBoundingClientRect();
   const chSx = touch.clientX - rect.left;
-  const chSy = touch.clientY - rect.top + PRECISION_OFFSET_Y;
+  const chSy = touch.clientY - rect.top + CROSSHAIR_OFFSET_Y;
 
   let [wx, wy] = screenToWorld(chSx, chSy);
   if (state.snapToPoints) [wx, wy] = snapPt(wx, wy);
@@ -321,7 +321,7 @@ function updatePrecisionCrosshair(touch) {
   state.mouse.sy = chSy;
 
   precisionEl.style.left = touch.clientX + "px";
-  precisionEl.style.top = touch.clientY + PRECISION_OFFSET_Y + "px";
+  precisionEl.style.top = touch.clientY + CROSSHAIR_OFFSET_Y + "px";
   const dp2 = toDisplayCoords(wx, wy);
   const pf2 = state.coordMode === 'inc' ? 'Δ' : '';
   precisionLabel.textContent = `${pf2}X${dp2.x.toFixed(3)} ${pf2}Z${dp2.y.toFixed(3)}`;
@@ -424,10 +424,10 @@ drawCanvas.addEventListener(
           !touchState.wasMultiTouch
         ) {
           touchState.precisionMode = true;
-          try { if (navigator.vibrate) navigator.vibrate(30); } catch (_) {}
+          try { if (navigator.vibrate) navigator.vibrate(VIBRATE_LONG_PRESS); } catch (_) {}
           showPrecisionCrosshair({ clientX: savedClientX, clientY: savedClientY });
         }
-      }, 400);
+      }, LONG_PRESS_MS);
 
       renderAll();
     }
@@ -449,8 +449,8 @@ drawCanvas.addEventListener(
       const dist = Math.hypot(t1.sx - t2.sx, t1.sy - t2.sy);
       const factor = dist / touchState.pinchStartDist;
       const newZoom = Math.max(
-        0.05,
-        Math.min(200, touchState.pinchStartZoom * factor),
+        ZOOM_MIN,
+        Math.min(ZOOM_MAX, touchState.pinchStartZoom * factor),
       );
 
       // Zoom kolem středu pinche

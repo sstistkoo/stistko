@@ -2,7 +2,7 @@
 // ║  SKICA – Myš, klávesnice, kolečko                          ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-import { COLORS } from './constants.js';
+import { COLORS, ZOOM_FACTOR, ZOOM_MIN, ZOOM_MAX } from './constants.js';
 import { drawCanvas, screenToWorld, snapPt, applyAngleSnap } from './canvas.js';
 import { state, pushUndo, undo, redo, showToast, toDisplayCoords, resetDrawingState, displayX, xPrefix } from './state.js';
 import { renderAll } from './render.js';
@@ -113,14 +113,14 @@ drawCanvas.addEventListener(
   "wheel",
   (e) => {
     e.preventDefault();
-    const factor = e.deltaY < 0 ? 1.15 : 1 / 1.15;
+    const factor = e.deltaY < 0 ? ZOOM_FACTOR : 1 / ZOOM_FACTOR;
     const rect = drawCanvas.getBoundingClientRect();
     const mx = e.clientX - rect.left;
     const my = e.clientY - rect.top;
     state.panX = mx - (mx - state.panX) * factor;
     state.panY = my - (my - state.panY) * factor;
     state.zoom *= factor;
-    state.zoom = Math.max(0.05, Math.min(200, state.zoom));
+    state.zoom = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, state.zoom));
     document.getElementById("statusZoom").textContent =
       `Zoom: ${(state.zoom * 100).toFixed(0)}%`;
     renderAll();
