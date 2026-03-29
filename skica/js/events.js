@@ -305,6 +305,7 @@ document.addEventListener("keydown", (e) => {
     updateObjectList();
     updateProperties();
     calculateAllIntersections();
+    renderAll();
   }
 
   // Shift+M: Zrcadlení vybraného objektu
@@ -557,6 +558,7 @@ export function handleCanvasClick(wx, wy) {
         state.drawing = true;
         state.tempPoints = [{ x: wx, y: wy }];
         setHint(state.tool === "measure" ? "Klepněte na 2. bod pro měření" : "Klepněte na koncový bod");
+        renderAll();
       } else {
         const tp = state.tempPoints[0];
         if (state.tool === "line" || state.tool === "constr") {
@@ -610,6 +612,7 @@ export function handleCanvasClick(wx, wy) {
         state.drawing = true;
         state.tempPoints = [{ x: wx, y: wy }];
         setHint("Klepněte pro poloměr");
+        renderAll();
       } else {
         const cp = state.tempPoints[0];
         const r = Math.hypot(wx - cp.x, wy - cp.y);
@@ -631,9 +634,11 @@ export function handleCanvasClick(wx, wy) {
         state.drawing = true;
         state.tempPoints = [{ x: wx, y: wy }];
         setHint("Klepněte na počáteční bod oblouku");
+        renderAll();
       } else if (state.tempPoints.length === 1) {
         state.tempPoints.push({ x: wx, y: wy });
         setHint("Klepněte na koncový bod oblouku");
+        renderAll();
       } else {
         const ctr = state.tempPoints[0],
           p1 = state.tempPoints[1];
@@ -660,6 +665,7 @@ export function handleCanvasClick(wx, wy) {
         state.drawing = true;
         state.tempPoints = [{ x: wx, y: wy }];
         setHint("Klepněte na protější roh");
+        renderAll();
       } else {
         const rp = state.tempPoints[0];
         addObject({
@@ -682,12 +688,14 @@ export function handleCanvasClick(wx, wy) {
         state.tempPoints = [{ x: wx, y: wy }];
         state._polylineBulges = [];
         setHint("Klepněte na další bod kontury (Enter = dokončit, Shift+Enter = uzavřít, B = oblouk)");
+        renderAll();
       } else {
         state.tempPoints.push({ x: wx, y: wy });
         // Add bulge=0 for the new segment
         if (!state._polylineBulges) state._polylineBulges = [];
         state._polylineBulges.push(0);
         setHint(`Bod ${state.tempPoints.length} přidán (Enter = dokončit, Shift+Enter = uzavřít, B = oblouk)`);
+        renderAll();
       }
       break;
 
@@ -1457,6 +1465,12 @@ function deleteSelected() {
     return;
   }
   if (state.selected === null) { showToast("Nejdříve vyberte objekt"); return; }
+  // Pokud je vybrán segment kontury, smazat jen segment (případně rozdělit konturu)
+  const selObj = state.objects[state.selected];
+  if (selObj && selObj.type === 'polyline' && state.selectedSegment !== null) {
+    deleteSelectedSegment();
+    return;
+  }
   pushUndo();
   state.objects.splice(state.selected, 1);
   state.selected = null;
@@ -1522,18 +1536,18 @@ function deleteSelectedSegment() {
       obj.bulges = bulges1;
       obj.closed = false;
 
-      // Add second half as new object
+      // Add second half as new object (without addObject to avoid double pushUndo)
       if (verts2.length >= 2) {
         const newObj = {
           type: 'polyline',
           vertices: verts2,
           bulges: bulges2,
           closed: false,
-          name: `Kontura ${state.nextId}`,
+          name: `Kontura ${state.nextId++}`,
           layer: obj.layer,
           color: obj.color,
         };
-        addObject(newObj);
+        state.objects.push(newObj);
       }
     }
     state.selectedSegment = null;

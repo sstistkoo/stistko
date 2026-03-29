@@ -736,9 +736,10 @@ export function showPolarDrawingDialog() {
         <div><label>${axisLabels()[0]}:</label><input type="text" id="polRefX" value="${refX}"></div>
         <div><label>${axisLabels()[1]}:</label><input type="text" id="polRefZ" value="${refZ}"></div>
       </div>
-      <div style="display:flex;gap:6px;margin-bottom:10px">
+      <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap">
         <button class="btn-ok" id="polMarkRef" style="font-size:11px;padding:3px 8px">📍 Označit ref. bod</button>
         <button class="btn-ok" id="polFromSelected" style="font-size:11px;padding:3px 8px;background:#a6e3a1;border-color:#a6e3a1">📌 Z vybraného objektu</button>
+        <button class="btn-ok" id="polPickFromMap" style="font-size:11px;padding:3px 8px;background:#f9e2af;border-color:#f9e2af;color:#1e1e2e">🎯 Kliknout z výkresu</button>
       </div>
       <hr style="border-color:#45475a;margin:8px 0">
       <label>Segment (polární souřadnice od ref. bodu):</label>
@@ -814,6 +815,53 @@ export function showPolarDrawingDialog() {
       showToast("Ref. bod načten z vybraného objektu");
     });
 
+  // Pick referenčního bodu kliknutím na výkres
+  let _polPickCleanup = null;
+  overlay.querySelector("#polPickFromMap").addEventListener("click", () => {
+    overlay.style.display = "none";
+    showToast("Klikněte na výkres pro výběr ref. bodu...");
+
+    function cleanup() {
+      drawCanvas.removeEventListener("click", onPick);
+      drawCanvas.removeEventListener("touchend", onTouch);
+      _polPickCleanup = null;
+    }
+
+    function onPick(e) {
+      const rect = drawCanvas.getBoundingClientRect();
+      const sx = e.clientX - rect.left;
+      const sy = e.clientY - rect.top;
+      let [wx, wy] = screenToWorld(sx, sy);
+      if (state.snapToPoints) [wx, wy] = snapPt(wx, wy);
+      cleanup();
+      polRefX.value = parseFloat(wx.toFixed(3));
+      polRefZ.value = parseFloat(wy.toFixed(3));
+      overlay.style.display = "flex";
+      showToast(`Ref. bod nastaven: ${axisLabels()[0]}${polRefX.value} ${axisLabels()[1]}${polRefZ.value}`);
+    }
+
+    function onTouch(e) {
+      if (e.changedTouches.length === 1) {
+        const t = e.changedTouches[0];
+        const rect = drawCanvas.getBoundingClientRect();
+        const sx = t.clientX - rect.left;
+        const sy = t.clientY - rect.top;
+        let [wx, wy] = screenToWorld(sx, sy);
+        if (state.snapToPoints) [wx, wy] = snapPt(wx, wy);
+        cleanup();
+        polRefX.value = parseFloat(wx.toFixed(3));
+        polRefZ.value = parseFloat(wy.toFixed(3));
+        overlay.style.display = "flex";
+        e.preventDefault();
+        showToast(`Ref. bod nastaven: ${axisLabels()[0]}${polRefX.value} ${axisLabels()[1]}${polRefZ.value}`);
+      }
+    }
+
+    drawCanvas.addEventListener("click", onPick);
+    drawCanvas.addEventListener("touchend", onTouch);
+    _polPickCleanup = cleanup;
+  });
+
   overlay.querySelector("#polAdd").addEventListener("click", () => {
     const rx = safeEvalMath(polRefX.value);
     const rz = safeEvalMath(polRefZ.value);
@@ -871,12 +919,12 @@ export function showPolarDrawingDialog() {
 
   overlay
     .querySelector("#polClose")
-    .addEventListener("click", () => overlay.remove());
+    .addEventListener("click", () => { if (_polPickCleanup) _polPickCleanup(); overlay.remove(); });
 
   overlay.addEventListener("keydown", (e) => {
     if (e.key === "Enter" && e.target.tagName === "INPUT")
       overlay.querySelector("#polAdd").click();
-    if (e.key === "Escape") overlay.remove();
+    if (e.key === "Escape") { if (_polPickCleanup) _polPickCleanup(); overlay.remove(); }
   });
 
   polLen.focus();

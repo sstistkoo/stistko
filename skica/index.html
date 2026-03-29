@@ -70,13 +70,6 @@
         </button>
         <button
           class="tool-btn toolbar-setting"
-          id="btnSnapPts"
-          title="Přichytávání k bodům (S)"
-        >
-          <span class="snap-ind snap-on"></span> Body
-        </button>
-        <button
-          class="tool-btn toolbar-setting"
           id="btnSnapGrid"
           title="Snap na mřížku (G)"
         >
@@ -95,13 +88,6 @@
           title="Zobrazit kóty (D)"
         >
           📐 Kóty
-        </button>
-        <button
-          class="tool-btn toolbar-setting"
-          id="btnPolar"
-          title="Polární kreslení z bodu (Shift+N)"
-        >
-          📐 Polární
         </button>
         <button
           class="toolbar-close-btn"
@@ -206,6 +192,37 @@
           />
         </svg>
         Konstr.
+      </button>
+      <button
+        class="tool-btn"
+        id="btnPolar"
+        title="Polární kreslení z bodu (Shift+N)"
+      >
+        <svg viewBox="0 0 24 24">
+          <line
+            x1="12"
+            y1="20"
+            x2="20"
+            y2="6"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <circle cx="12" cy="20" r="2" fill="currentColor" />
+          <path
+            d="M16 13l4-7M18.5 7.5l1.5-1.5M18 9l2-3"
+            stroke="currentColor"
+            stroke-width="1.5"
+            fill="none"
+          />
+          <path
+            d="M14 18 A 8 8 0 0 1 19 10"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1"
+            stroke-dasharray="2 2"
+          />
+        </svg>
+        Polární
       </button>
       <button class="tool-btn" data-tool="circle" title="Kružnice (C)">
         <svg viewBox="0 0 24 24">
