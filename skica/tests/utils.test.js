@@ -394,4 +394,75 @@ describe('safeEvalMath', () => {
   it('Infinity → NaN', () => {
     expect(safeEvalMath('1/0')).toBeNaN();
   });
+
+  it('sin ve stupních', () => {
+    expect(safeEvalMath('sin(30)')).toBeCloseTo(0.5, 6);
+    expect(safeEvalMath('sin(90)')).toBeCloseTo(1, 6);
+  });
+
+  it('cos ve stupních', () => {
+    expect(safeEvalMath('cos(60)')).toBeCloseTo(0.5, 6);
+    expect(safeEvalMath('cos(0)')).toBeCloseTo(1, 6);
+  });
+
+  it('tan ve stupních', () => {
+    expect(safeEvalMath('tan(45)')).toBeCloseTo(1, 6);
+  });
+
+  it('inverzní goniometrické funkce (výsledek ve stupních)', () => {
+    expect(safeEvalMath('asin(0.5)')).toBeCloseTo(30, 6);
+    expect(safeEvalMath('acos(0.5)')).toBeCloseTo(60, 6);
+    expect(safeEvalMath('atan(1)')).toBeCloseTo(45, 6);
+  });
+
+  it('sqrt', () => {
+    expect(safeEvalMath('sqrt(144)')).toBe(12);
+    expect(safeEvalMath('sqrt(2)')).toBeCloseTo(1.41421356, 5);
+  });
+
+  it('abs', () => {
+    expect(safeEvalMath('abs(-5)')).toBe(5);
+  });
+
+  it('log (log10) a ln', () => {
+    expect(safeEvalMath('log(100)')).toBeCloseTo(2, 6);
+    expect(safeEvalMath('ln(1)')).toBeCloseTo(0, 6);
+  });
+
+  it('round, floor, ceil', () => {
+    expect(safeEvalMath('round(3.7)')).toBe(4);
+    expect(safeEvalMath('floor(3.7)')).toBe(3);
+    expect(safeEvalMath('ceil(3.2)')).toBe(4);
+  });
+
+  it('konstanty pi a e', () => {
+    expect(safeEvalMath('pi')).toBeCloseTo(Math.PI, 6);
+    expect(safeEvalMath('e')).toBeCloseTo(Math.E, 6);
+  });
+
+  it('kombinace: sqrt(2)*50', () => {
+    expect(safeEvalMath('sqrt(2)*50')).toBeCloseTo(70.71068, 3);
+  });
+
+  it('vnořené funkce: sin(atan(1))', () => {
+    expect(safeEvalMath('sin(atan(1))')).toBeCloseTo(Math.sin(45 * Math.PI / 180), 6);
+  });
+
+  it('výraz s pi: 2*pi', () => {
+    expect(safeEvalMath('2*pi')).toBeCloseTo(2 * Math.PI, 6);
+  });
+
+  it('neznámá funkce → NaN', () => {
+    expect(safeEvalMath('foo(1)')).toBeNaN();
+  });
+
+  it('neznámá konstanta → NaN', () => {
+    expect(safeEvalMath('xyz')).toBeNaN();
+  });
+
+  it('stále blokuje nebezpečný kód', () => {
+    expect(safeEvalMath('alert(1)')).toBeNaN();
+    expect(safeEvalMath('process.exit()')).toBeNaN();
+    expect(safeEvalMath('constructor')).toBeNaN();
+  });
 });

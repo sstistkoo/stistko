@@ -7,12 +7,46 @@
 /**
  * Rekurzivní sestupný parser aritmetických výrazů.
  * Podporuje: +, -, *, /, ** (nebo ^), závorky, unární mínus, desetinná čísla, vědeckou notaci.
+ * Matematické funkce: sin, cos, tan, asin, acos, atan, sqrt, abs, log, ln, round, floor, ceil.
+ * Konstanty: pi, e.
  * @param {string} src
  * @returns {number}
  */
 export function _parseMathExpr(src) {
   let pos = 0;
+  const deg = Math.PI / 180;
+
+  const FUNCS = {
+    sin:   v => Math.sin(v * deg),
+    cos:   v => Math.cos(v * deg),
+    tan:   v => Math.tan(v * deg),
+    asin:  v => Math.asin(v) / deg,
+    acos:  v => Math.acos(v) / deg,
+    atan:  v => Math.atan(v) / deg,
+    sinr:  v => Math.sin(v),
+    cosr:  v => Math.cos(v),
+    tanr:  v => Math.tan(v),
+    sqrt:  v => Math.sqrt(v),
+    abs:   v => Math.abs(v),
+    log:   v => Math.log10(v),
+    ln:    v => Math.log(v),
+    round: v => Math.round(v),
+    floor: v => Math.floor(v),
+    ceil:  v => Math.ceil(v),
+  };
+
+  const CONSTS = {
+    pi: Math.PI,
+    e:  Math.E,
+  };
+
   function skip() { while (pos < src.length && src[pos] === ' ') pos++; }
+
+  function parseIdent() {
+    const start = pos;
+    while (pos < src.length && ((src[pos] >= 'a' && src[pos] <= 'z') || (src[pos] >= 'A' && src[pos] <= 'Z'))) pos++;
+    return src.substring(start, pos).toLowerCase();
+  }
 
   function parseNumber() {
     skip();
@@ -22,7 +56,7 @@ export function _parseMathExpr(src) {
       while (pos < src.length && src[pos] >= '0' && src[pos] <= '9') pos++;
       if (pos < src.length && src[pos] === '.') { pos++; while (pos < src.length && src[pos] >= '0' && src[pos] <= '9') pos++; }
     }
-    if (pos < src.length && (src[pos] === 'e' || src[pos] === 'E')) {
+    if (pos < src.length && (src[pos] === 'e' || src[pos] === 'E') && (pos + 1 < src.length && (src[pos + 1] >= '0' && src[pos + 1] <= '9' || src[pos + 1] === '+' || src[pos + 1] === '-'))) {
       pos++;
       if (pos < src.length && (src[pos] === '+' || src[pos] === '-')) pos++;
       while (pos < src.length && src[pos] >= '0' && src[pos] <= '9') pos++;
@@ -35,6 +69,25 @@ export function _parseMathExpr(src) {
   function parseAtom() {
     skip();
     if (src[pos] === '(') { pos++; const v = parseExpr(); skip(); if (src[pos] !== ')') throw new Error(')'); pos++; return v; }
+    // Identifikátor – funkce nebo konstanta
+    if (pos < src.length && ((src[pos] >= 'a' && src[pos] <= 'z') || (src[pos] >= 'A' && src[pos] <= 'Z'))) {
+      const name = parseIdent();
+      skip();
+      // Funkce – očekáváme závorku
+      if (src[pos] === '(') {
+        const fn = FUNCS[name];
+        if (!fn) throw new Error('fn:' + name);
+        pos++; // skip '('
+        const arg = parseExpr();
+        skip();
+        if (src[pos] !== ')') throw new Error(')');
+        pos++;
+        return fn(arg);
+      }
+      // Konstanta
+      if (name in CONSTS) return CONSTS[name];
+      throw new Error('id:' + name);
+    }
     return parseNumber();
   }
 
@@ -79,8 +132,8 @@ export function safeEvalMath(str) {
   if (typeof str !== 'string') str = String(str ?? '');
   str = str.trim().replace(/,/g, '.');
   if (str === '') return NaN;
-  // Povolit pouze: čísla, operátory +−*/(), tečky, mezery
-  if (!/^[\d+\-*/().^\s]+$/.test(str)) return NaN;
+  // Povolit: čísla, operátory +−*/(), tečky, mezery, písmena (funkce/konstanty)
+  if (!/^[\d+\-*/().^\sa-zA-Z]+$/.test(str)) return NaN;
   // Kontrola závorek
   let depth = 0;
   for (const ch of str) {

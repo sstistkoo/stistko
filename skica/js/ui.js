@@ -1134,17 +1134,17 @@ function openTrigCalc() {
             <h4>Strany</h4>
             <div class="trig-field">
               <label class="label-a">a</label>
-              <input type="number" id="trigA" step="any" placeholder="protilehlá">
+              <input type="text" id="trigA" inputmode="text" placeholder="protilehlá">
               <span class="trig-unit">mm</span>
             </div>
             <div class="trig-field">
               <label class="label-b">b</label>
-              <input type="number" id="trigB" step="any" placeholder="přilehlá">
+              <input type="text" id="trigB" inputmode="text" placeholder="přilehlá">
               <span class="trig-unit">mm</span>
             </div>
             <div class="trig-field">
               <label class="label-c">c</label>
-              <input type="number" id="trigC" step="any" placeholder="přepona">
+              <input type="text" id="trigC" inputmode="text" placeholder="přepona">
               <span class="trig-unit">mm</span>
             </div>
           </div>
@@ -1152,17 +1152,17 @@ function openTrigCalc() {
             <h4>Úhly</h4>
             <div class="trig-field">
               <label class="label-alpha">α</label>
-              <input type="number" id="trigAlpha" step="any" placeholder="úhel u a">
+              <input type="text" id="trigAlpha" inputmode="text" placeholder="úhel u a">
               <span class="trig-unit">°</span>
             </div>
             <div class="trig-field">
               <label class="label-beta">β</label>
-              <input type="number" id="trigBeta" step="any" placeholder="úhel u b">
+              <input type="text" id="trigBeta" inputmode="text" placeholder="úhel u b">
               <span class="trig-unit">°</span>
             </div>
             <div class="trig-field">
               <label class="label-gamma">γ</label>
-              <input type="number" id="trigGamma" value="90" disabled>
+              <input type="text" id="trigGamma" value="90" disabled>
               <span class="trig-unit">° ✓</span>
             </div>
           </div>
@@ -1172,7 +1172,7 @@ function openTrigCalc() {
           <button class="trig-btn-clear">🗑 Vymazat</button>
           <button class="trig-btn-copy">📋 Kopírovat</button>
         </div>
-        <div class="trig-info">Zadejte 2 hodnoty – výpočet proběhne automaticky</div>
+        <div class="trig-info">Zadejte 2 hodnoty – výpočet proběhne automaticky<br><small>Funkce: sin, cos, tan, sqrt, abs, log · Příklad: sqrt(2)*50, atan(1)</small></div>
         <div class="trig-history" id="trigHistory"></div>
       </div>
     </div>`;
@@ -1270,14 +1270,6 @@ function openTrigCalc() {
   }
 
   overlay.querySelector(".trig-btn-solve").addEventListener("click", solve);
-
-  // Auto-solve on input change
-  inputs.forEach(inp => {
-    inp.addEventListener("input", () => {
-      const known = inputs.filter(i => { const v = safeEvalMath(i.value); return isFinite(v) && v > 0; }).length;
-      if (known >= 2) solve();
-    });
-  });
 
   const trigHistoryEl = overlay.querySelector("#trigHistory");
   const trigHistory = [];
