@@ -244,6 +244,7 @@ export function openThreadCalc() {
     var D1   = D - 1.0825 * P;
     var hExt = 0.6134 * P;
     var hInt = 0.5413 * P;
+    var As   = (Math.PI / 4) * Math.pow((d2 + d3) / 2, 2);
     var drill = D - P;
     var html = '<div class="thr-detail-title">' + label + '</div>' +
       '<table class="thr-detail-tbl">' +
@@ -258,6 +259,7 @@ export function openThreadCalc() {
         '<tr class="thr-sep"><td colspan="2"></td></tr>' +
         '<tr><td>Hloubka vn\u011Bj\u0161\u00ED</td><td><strong>' + hExt.toFixed(3) + '</strong> mm</td></tr>' +
         '<tr><td>Hloubka vnit\u0159n\u00ED</td><td><strong>' + hInt.toFixed(3) + '</strong> mm</td></tr>' +
+        '<tr><td>Ta\u017En\u00FD pr\u016F\u0159ez A\u209B</td><td><strong>' + As.toFixed(2) + '</strong> mm\u00B2</td></tr>' +
         '<tr class="thr-sep"><td colspan="2"></td></tr>' +
         '<tr><td>P\u0159edvrtan\u00ED (D\u2212P)</td><td><strong>' + drill.toFixed(2) + '</strong> mm</td></tr>' +
         '<tr><td>P\u0159edvrtan\u00ED (D\u2081)</td><td><strong>' + D1.toFixed(3) + '</strong> mm</td></tr>' +
@@ -273,6 +275,7 @@ export function openThreadCalc() {
       fmtCopy('Mal\u00FD \u00D8 matice D\u2081', D1.toFixed(3) + ' mm') + '\n' +
       fmtCopy('Hloubka vn\u011Bj\u0161\u00ED', hExt.toFixed(3) + ' mm') + '\n' +
       fmtCopy('Hloubka vnit\u0159n\u00ED', hInt.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('Ta\u017En\u00FD pr\u016F\u0159ez A\u209B', As.toFixed(2) + ' mm\u00B2') + '\n' +
       fmtCopy('P\u0159edvrt\u00E1n\u00ED', drill.toFixed(1) + ' mm');
     return { html: html, copyText: copyText };
   }
@@ -358,6 +361,7 @@ export function openThreadCalc() {
     var D1   = D - 1.0825 * P;
     var hExt = 0.6134 * P;
     var hInt = 0.5413 * P;
+    var As   = (Math.PI / 4) * Math.pow((d2 + d3) / 2, 2);
     var drill = D1;
     var html = '<div class="thr-detail-title">' + name + ' \u2013 ' + std + '</div>' +
       '<table class="thr-detail-tbl">' +
@@ -373,6 +377,7 @@ export function openThreadCalc() {
         '<tr class="thr-sep"><td colspan="2"></td></tr>' +
         '<tr><td>Hloubka vn\u011Bj\u0161\u00ED</td><td><strong>' + hExt.toFixed(3) + '</strong> mm</td></tr>' +
         '<tr><td>Hloubka vnit\u0159n\u00ED</td><td><strong>' + hInt.toFixed(3) + '</strong> mm</td></tr>' +
+        '<tr><td>Ta\u017En\u00FD pr\u016F\u0159ez A\u209B</td><td><strong>' + As.toFixed(2) + '</strong> mm\u00B2</td></tr>' +
         '<tr class="thr-sep"><td colspan="2"></td></tr>' +
         '<tr><td>P\u0159edvrtan\u00ED</td><td><strong>' + drill.toFixed(3) + '</strong> mm</td></tr>' +
         '<tr><td>P\u0159eds. \u00F8</td><td><strong>' + d3.toFixed(3) + '</strong> mm</td></tr>' +
@@ -388,6 +393,7 @@ export function openThreadCalc() {
       fmtCopy('Mal\u00FD \u00D8 matice D\u2081', D1.toFixed(3) + ' mm') + '\n' +
       fmtCopy('Hloubka vn\u011Bj\u0161\u00ED', hExt.toFixed(3) + ' mm') + '\n' +
       fmtCopy('Hloubka vnit\u0159n\u00ED', hInt.toFixed(3) + ' mm') + '\n' +
+      fmtCopy('Ta\u017En\u00FD pr\u016F\u0159ez A\u209B', As.toFixed(2) + ' mm\u00B2') + '\n' +
       fmtCopy('P\u0159edvrt\u00E1n\u00ED', drill.toFixed(3) + ' mm');
     return { html: html, copyText: copyText };
   }
