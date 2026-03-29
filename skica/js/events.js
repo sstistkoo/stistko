@@ -2,7 +2,7 @@
 // ║  SKICA – Myš, klávesnice, kolečko                          ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-import { COLORS, ZOOM_FACTOR, ZOOM_MIN, ZOOM_MAX } from './constants.js';
+import { COLORS, ZOOM_FACTOR, ZOOM_MIN, ZOOM_MAX, SNAP_POINT_THRESHOLD } from './constants.js';
 import { drawCanvas, screenToWorld, snapPt, applyAngleSnap } from './canvas.js';
 import { state, pushUndo, undo, redo, showToast, toDisplayCoords, resetDrawingState, displayX, xPrefix } from './state.js';
 import { renderAll } from './render.js';
@@ -514,7 +514,7 @@ export function handleCanvasClick(wx, wy) {
         if (state.tool === "measure") {
           // Klik na snap point (koncový bod, průsečík, střed) → začne měření
           // Klik na tělo objektu (ne snap point) → ukáže info o objektu
-          const snapThreshold = 20 / state.zoom;
+          const snapThreshold = SNAP_POINT_THRESHOLD / state.zoom;
           let isOnSnapPoint = false;
 
           // Kontrola průsečíků
@@ -1711,7 +1711,7 @@ export { startMirrorAction, startLinearArrayAction, startRotateAction, deleteSel
  * Vrátí { objIdx, propKey (nebo vertexIdx), x, y, dist }.
  */
 function findNearestEndpoint(wx, wy) {
-  const threshold = 20 / state.zoom;
+  const threshold = SNAP_POINT_THRESHOLD / state.zoom;
   let best = null;
   state.objects.forEach((obj, idx) => {
     const layer = state.layers ? state.layers.find(l => l.id === obj.layer) : null;
