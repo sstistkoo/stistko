@@ -150,22 +150,6 @@
         </svg>
         Kóta
       </button>
-      <button class="tool-btn" data-tool="text" title="Textová anotace (I)">
-        <svg viewBox="0 0 24 24">
-          <text
-            x="12"
-            y="18"
-            text-anchor="middle"
-            font-size="16"
-            font-weight="bold"
-            fill="currentColor"
-            font-family="serif"
-          >
-            T
-          </text>
-        </svg>
-        Text
-      </button>
       <button
         class="tool-btn"
         id="btnDelete"
@@ -732,6 +716,22 @@
         >
           🔢 Zadat
         </button>
+        <button class="tool-btn" data-tool="text" title="Textová anotace (I)">
+          <svg viewBox="0 0 24 24">
+            <text
+              x="12"
+              y="18"
+              text-anchor="middle"
+              font-size="16"
+              font-weight="bold"
+              fill="currentColor"
+              font-family="serif"
+            >
+              T
+            </text>
+          </svg>
+          Text
+        </button>
         <div class="sep"></div>
         <button
           class="tool-btn"
@@ -756,6 +756,14 @@
           aria-label="Smazat vše"
         >
           🗑 Smazat
+        </button>
+        <button
+          class="tool-btn"
+          id="btnHistory"
+          title="Historie smazaných výkresů"
+          aria-label="Historie smazaných výkresů"
+        >
+          🕓 Historie
         </button>
         <button
           class="tool-btn"
@@ -824,8 +832,6 @@
         <div
           class="panel-header obj-header"
           data-panel="objPanel"
-          role="button"
-          tabindex="0"
         >
           <span>▾ Objekty</span>
           <button
@@ -858,7 +864,6 @@
           id="layerPanel"
           role="region"
           aria-label="Vrstvy"
-          style="display: none"
         >
           <ul id="layerList"></ul>
           <div class="layer-actions">
@@ -899,8 +904,6 @@
         <div
           class="panel-header cnc-header"
           data-panel="cncPanel"
-          role="button"
-          tabindex="0"
         >
           <span>▾ CNC Souřadnice</span>
           <button

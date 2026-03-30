@@ -273,6 +273,10 @@ body {
   font-size: 13px;
 }
 
+#layerPanel {
+  display: none;
+}
+
 .panel-body table {
   width: 100%;
   border-collapse: collapse;
@@ -1178,8 +1182,7 @@ body {
   }
 
   body.toolbar-open #mobileBottomBar,
-  body.toolbar-open #mobileSnap,
-  body.toolbar-open #mobileRedo {
+  body.toolbar-open #mobileSnap {
     display: none !important;
   }
 
@@ -1435,7 +1438,6 @@ body {
 .calc-body {
   padding: 12px;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
   flex: 1;
   min-height: 0;
 }
@@ -1605,7 +1607,6 @@ body {
   -webkit-appearance: menulist;
   appearance: menulist;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
 }
 .cnc-field input:focus {
   border-color: var(--ctp-blue);
