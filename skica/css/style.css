@@ -231,6 +231,42 @@ body {
   background: var(--ctp-surface2);
 }
 
+/* Null point indicator */
+.null-point-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  margin: 4px 6px;
+  background: #fab38722;
+  border: 1px solid #fab387;
+  border-radius: 6px;
+  font-size: 11px;
+  font-family: Consolas, monospace;
+  color: #fab387;
+}
+.null-point-indicator span {
+  flex: 1;
+}
+.null-point-clear {
+  background: none;
+  border: none;
+  color: #fab387;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 0 2px;
+  line-height: 1;
+}
+.null-point-clear:hover {
+  color: #f38ba8;
+}
+
+/* Active nul. bod button */
+.tool-btn.null-active {
+  background: #fab387 !important;
+  color: #1e1e2e !important;
+}
+
 .panel-header {
   background: var(--ctp-surface0);
   padding: 6px 10px;
@@ -398,6 +434,27 @@ body {
   font-size: 10px;
   margin-right: 4px;
   opacity: 0.6;
+}
+
+/* ── Checkbox pro výběr objektů ── */
+#objectList li .obj-checkbox {
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
+  cursor: pointer;
+  accent-color: var(--ctp-blue, #89b4fa);
+  flex-shrink: 0;
+}
+
+#objectList li.select-all-row {
+  border-bottom: 1px solid var(--ctp-surface1, #45475a);
+  margin-bottom: 2px;
+  padding-bottom: 4px;
+  opacity: 0.85;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 #objectList li.seg-item {

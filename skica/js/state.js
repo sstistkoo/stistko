@@ -71,6 +71,8 @@ export const state = {
   // Inkrementální souřadnice
   coordMode: 'abs',
   incReference: { x: 0, y: 0 },
+  nullPointActive: false,
+  nullPointAngle: 0,
   // Projekt
   projectName: 'Bez názvu',
   // Typ stroje: 'soustruh' = Z vodorovně, X svisle; 'karusel' = X vodorovně, Z svisle
@@ -121,6 +123,7 @@ export function resetDrawingState() {
   state._mirrorObj = null;
   state._mirrorStep = null;
   state._mirrorAxisPoints = null;
+  // multiSelected se čistí při resetu (setTool si jej uloží pro move)
   state.multiSelected.clear();
   state.selectedPoint = null;
 }

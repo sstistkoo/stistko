@@ -189,8 +189,13 @@ export function applyAngleSnap(wx, wy, refPoint) {
   const dist = Math.hypot(dx, dy);
   if (dist < 1e-9) return [wx, wy];
   const angle = Math.atan2(dy, dx);
+  // Offset od natočeného nulového bodu
+  const offsetRad = (state.nullPointActive && state.nullPointAngle) ? (state.nullPointAngle * Math.PI / 180) : 0;
   const stepRad = (state.angleSnapStep * Math.PI) / 180;
-  const snappedAngle = Math.round(angle / stepRad) * stepRad;
+  // Snap relativně k offsetu
+  const relAngle = angle - offsetRad;
+  const snappedRel = Math.round(relAngle / stepRad) * stepRad;
+  const snappedAngle = snappedRel + offsetRad;
   // Magnetický snap – přichytit jen když je úhel blízko přednastaveného
   const toleranceRad = (state.angleSnapTolerance * Math.PI) / 180;
   const diff = Math.abs(angle - snappedAngle);

@@ -19,6 +19,8 @@ export function addDimensionForObject(obj) {
         name: `Kóta [${obj.x.toFixed(2)}, ${obj.y.toFixed(2)}]`,
         isDimension: true,
         isCoordLabel: true,
+        dimType: 'coord',
+        sourceObjId: obj.id || null,
         color: COLORS.textSecondary,
       });
       showToast(`Kóta ${axisLabels()[0]}${obj.x.toFixed(2)} ${axisLabels()[1]}${obj.y.toFixed(2)} přidána`);
@@ -28,7 +30,7 @@ export function addDimensionForObject(obj) {
     case "constr": {
       const len = Math.hypot(obj.x2 - obj.x1, obj.y2 - obj.y1);
       // Offset kolmo k úsečce (ve world coords)
-      const dimOffset = 8;
+      const dimOffset = 20;
       const ang = Math.atan2(obj.y2 - obj.y1, obj.x2 - obj.x1);
       const nx = -Math.sin(ang) * dimOffset;
       const ny = Math.cos(ang) * dimOffset;
@@ -41,6 +43,7 @@ export function addDimensionForObject(obj) {
         isDimension: true,
         dimType: 'linear',
         sourceObjId: obj.id || null,
+        dimOffset: dimOffset,
         dimSrcX1: obj.x1,
         dimSrcY1: obj.y1,
         dimSrcX2: obj.x2,
@@ -125,7 +128,7 @@ export function addDimensionForObject(obj) {
       const maxX = Math.max(obj.x1, obj.x2);
       const minY = Math.min(obj.y1, obj.y2);
       const maxY = Math.max(obj.y1, obj.y2);
-      const dimOff = 5;
+      const dimOff = 15;
       // Šířka – horní hrana (odsazená)
       addObject({
         type: "line",
@@ -137,6 +140,7 @@ export function addDimensionForObject(obj) {
         isDimension: true,
         dimType: 'linear',
         sourceObjId: obj.id || null,
+        dimOffset: dimOff,
         dimSrcX1: minX,
         dimSrcY1: maxY,
         dimSrcX2: maxX,
@@ -154,6 +158,7 @@ export function addDimensionForObject(obj) {
         isDimension: true,
         dimType: 'linear',
         sourceObjId: obj.id || null,
+        dimOffset: dimOff,
         dimSrcX1: maxX,
         dimSrcY1: minY,
         dimSrcX2: maxX,
@@ -202,7 +207,7 @@ export function addDimensionForObject(obj) {
           // Přímý segment – kóta délky (odsazená)
           const len = Math.hypot(p2.x - p1.x, p2.y - p1.y);
           if (len > 1e-6) {
-            const dimOffset = 5;
+            const dimOffset = 15;
             const ang = Math.atan2(p2.y - p1.y, p2.x - p1.x);
             const nx = -Math.sin(ang) * dimOffset;
             const ny = Math.cos(ang) * dimOffset;
@@ -214,6 +219,7 @@ export function addDimensionForObject(obj) {
               isDimension: true,
               dimType: 'linear',
               sourceObjId: obj.id || null,
+              dimOffset: dimOffset,
               dimSrcX1: p1.x, dimSrcY1: p1.y,
               dimSrcX2: p2.x, dimSrcY2: p2.y,
               color: COLORS.textSecondary,
@@ -244,7 +250,7 @@ export function updateAssociativeDimensions() {
     switch (dim.dimType) {
       case 'linear': {
         if (src.type === 'line' || src.type === 'constr') {
-          const dimOffset = 8;
+          const dimOffset = dim.dimOffset || 20;
           const ang = Math.atan2(src.y2 - src.y1, src.x2 - src.x1);
           const nx = -Math.sin(ang) * dimOffset;
           const ny = Math.cos(ang) * dimOffset;
@@ -263,7 +269,7 @@ export function updateAssociativeDimensions() {
           const isHoriz = Math.abs(dim.dimSrcY1 - dim.dimSrcY2) < 0.01;
           const minX = Math.min(src.x1, src.x2), maxX = Math.max(src.x1, src.x2);
           const minY = Math.min(src.y1, src.y2), maxY = Math.max(src.y1, src.y2);
-          const dimOff = 5;
+          const dimOff = dim.dimOffset || 15;
           if (isHoriz) {
             dim.x1 = minX; dim.y1 = maxY + dimOff;
             dim.x2 = maxX; dim.y2 = maxY + dimOff;
@@ -326,6 +332,15 @@ export function updateAssociativeDimensions() {
           dim.dimSrcX2 = dim.x2;
           dim.dimSrcY2 = dim.y2;
           dim.name = `Kóta ∠${(sweep * 180 / Math.PI).toFixed(1)}°`;
+        }
+        break;
+      }
+      case 'coord': {
+        // Kóta bodu – souřadnicový label sleduje zdrojový bod
+        if (src.type === 'point') {
+          dim.x = src.x;
+          dim.y = src.y;
+          dim.name = `Kóta [${src.x.toFixed(2)}, ${src.y.toFixed(2)}]`;
         }
         break;
       }

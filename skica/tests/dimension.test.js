@@ -69,9 +69,9 @@ describe('addDimensionForObject', () => {
     // x souřadnice by měly být stejné jako originál (offset kolmo = vertikálně)
     expect(arg.x1).toBeCloseTo(0, 5);
     expect(arg.x2).toBeCloseTo(100, 5);
-    // y souřadnice posunuté o 8 (dimOffset)
-    expect(arg.y1).toBeCloseTo(8, 5);
-    expect(arg.y2).toBeCloseTo(8, 5);
+    // y souřadnice posunuté o 20 (dimOffset)
+    expect(arg.y1).toBeCloseTo(20, 5);
+    expect(arg.y2).toBeCloseTo(20, 5);
   });
 
   // ── Circle ──

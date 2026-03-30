@@ -9,8 +9,9 @@ import { renderAll, renderAllDebounced } from './render.js';
 import { drawCanvas, screenToWorld, snapPt } from './canvas.js';
 import { bridge } from './bridge.js';
 import { addObject } from './objects.js';
+import { updateAssociativeDimensions } from './dialogs/dimension.js';
 import { openCuttingCalc, openTaperCalc, openThreadCalc, openConvertCalc, openWeightCalc, openToleranceCalc, openRoughnessCalc, openInsertCalc } from './cnc-calcs.js';
-import { makeOverlay } from './dialogFactory.js';
+import { makeOverlay, makeInputOverlay } from './dialogFactory.js';
 import { getMeta, setMeta } from './idb.js';
 
 // ── Bridge registrace (rozbíjí cyklickou závislost geometry ↔ ui) ──
@@ -35,13 +36,86 @@ export function updateObjectList() {
     rect: "□",
     polyline: "⛓",
   };
+
+  // ── Select-all checkbox (bez kót) ──
+  const nonDimObjects = state.objects.filter(o => !o.isDimension && !o.isCoordLabel);
+  if (nonDimObjects.length > 0) {
+    const selectAllLi = document.createElement("li");
+    selectAllLi.className = "select-all-row";
+    const selectAllCb = document.createElement("input");
+    selectAllCb.type = "checkbox";
+    selectAllCb.className = "obj-checkbox";
+    selectAllCb.title = "Vybrat vše";
+    const nonDimIndices = state.objects.map((o, i) => (!o.isDimension && !o.isCoordLabel) ? i : -1).filter(i => i >= 0);
+    const allChecked = nonDimIndices.length > 0 && nonDimIndices.every(i => i === state.selected || state.multiSelected.has(i));
+    selectAllCb.checked = allChecked;
+    selectAllCb.addEventListener("change", () => {
+      if (selectAllCb.checked) {
+        state.multiSelected.clear();
+        nonDimIndices.forEach(i => state.multiSelected.add(i));
+        state.selected = nonDimIndices[0] ?? null;
+      } else {
+        state.selected = null;
+        state.multiSelected.clear();
+      }
+      state.selectedSegment = null;
+      state._selectedSegmentObjIdx = null;
+      updateObjectList();
+      updateProperties();
+      renderAll();
+    });
+    const label = document.createElement("span");
+    label.textContent = "Vybrat vše";
+    label.style.opacity = "0.7";
+    selectAllLi.appendChild(selectAllCb);
+    selectAllLi.appendChild(label);
+    ul.appendChild(selectAllLi);
+  }
+
   state.objects.forEach((obj, idx) => {
     const li = document.createElement("li");
-    li.className = (idx === state.selected || state.multiSelected.has(idx)) ? "selected" : "";
+    const isChecked = idx === state.selected || state.multiSelected.has(idx);
+    li.className = isChecked ? "selected" : "";
+    const isDim = obj.isDimension || obj.isCoordLabel;
+
+    // ── Checkbox pro ne-kóty ──
+    if (!isDim) {
+      const cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.className = "obj-checkbox";
+      cb.checked = isChecked;
+      cb.addEventListener("change", (e) => {
+        e.stopPropagation();
+        if (cb.checked) {
+          if (state.selected !== null && state.selected !== idx) {
+            state.multiSelected.add(state.selected);
+          }
+          state.multiSelected.add(idx);
+          state.selected = idx;
+        } else {
+          state.multiSelected.delete(idx);
+          if (idx === state.selected) {
+            state.selected = state.multiSelected.size > 0
+              ? [...state.multiSelected].pop() : null;
+          }
+          if (state.multiSelected.size === 1) {
+            state.selected = state.multiSelected.values().next().value;
+            state.multiSelected.clear();
+          }
+        }
+        state.selectedSegment = null;
+        state._selectedSegmentObjIdx = null;
+        updateObjectList();
+        updateProperties();
+        renderAll();
+      });
+      li.appendChild(cb);
+    }
+
     const span = document.createElement("span");
     const iconSpan = document.createElement("span");
     iconSpan.className = "obj-icon";
-    iconSpan.textContent = icons[obj.type] || "?";
+    iconSpan.textContent = isDim ? "⌗" : (icons[obj.type] || "?");
     span.appendChild(iconSpan);
     span.appendChild(document.createTextNode(obj.name || obj.type + " " + obj.id));
     li.appendChild(span);
@@ -248,6 +322,7 @@ export function updateProperties() {
       if (!isNaN(v)) {
         pushUndo();
         onChange(v);
+        updateAssociativeDimensions();
         renderAll();
         refreshComputedProps();
       }
@@ -776,8 +851,15 @@ export function setTool(tool) {
     state.selectedPoint = null;
     if (bridge.updateProperties) bridge.updateProperties();
   }
+  // Uložit multiSelected před resetem – move zachovává výběr
+  const savedMulti = (tool === 'move') ? new Set(state.multiSelected) : null;
+  const savedSelected = (tool === 'move') ? state.selected : null;
   state.tool = tool;
   resetDrawingState();
+  if (savedMulti && savedMulti.size > 0) {
+    state.multiSelected = savedMulti;
+    state.selected = savedSelected;
+  }
   if (state.dragging) {
     const obj = state.objects[state.dragObjIdx];
     if (obj && state.dragObjSnapshot) {
@@ -1023,43 +1105,172 @@ export function toggleMachineType() {
 
 document.getElementById("btnMachineType").addEventListener("click", toggleMachineType);
 
-// ── Ref tlačítko – klik na canvas nastaví referenční bod ──
-let _refPickActive = false;
+// ── Nul. bod tlačítko – nastavení/zrušení nulového bodu ──
+
+/** Aktualizuje indikátor nulového bodu v levém panelu a styl tlačítka. */
+export function updateNullPointUI() {
+  const btn = document.getElementById("btnSetRef");
+  const indicator = document.getElementById("nullPointIndicator");
+  const coordsSpan = document.getElementById("nullPointCoords");
+  if (state.nullPointActive) {
+    btn.classList.add('null-active');
+    const isK = state.machineType === 'karusel';
+    let lbl = isK
+      ? `X: ${state.incReference.x.toFixed(3)}  Z: ${state.incReference.y.toFixed(3)}`
+      : `Z: ${state.incReference.x.toFixed(3)}  X: ${state.incReference.y.toFixed(3)}`;
+    if (state.nullPointAngle !== 0) lbl += `  ∠${state.nullPointAngle}°`;
+    coordsSpan.textContent = lbl;
+    indicator.hidden = false;
+  } else {
+    btn.classList.remove('null-active');
+    indicator.hidden = true;
+  }
+}
+
+/** Zruší nulový bod a vrátí se na ABS. */
+export function clearNullPoint() {
+  state.incReference = { x: 0, y: 0 };
+  state.nullPointActive = false;
+  state.nullPointAngle = 0;
+  state.coordMode = 'abs';
+  updateCoordModeBtn();
+  updateNullPointUI();
+  renderAll();
+  showToast('Nulový bod zrušen – ABS režim');
+}
+
+/** Aplikuje nový nulový bod. */
+function applyNullPoint(wx, wy, angle) {
+  state.incReference = { x: wx, y: wy };
+  state.nullPointAngle = angle || 0;
+  state.nullPointActive = true;
+  if (state.coordMode !== 'inc') {
+    state.coordMode = 'inc';
+    updateCoordModeBtn();
+  }
+  updateNullPointUI();
+  renderAll();
+  showToast(`Nulový bod: ${fmtStatusCoords(wx, wy)}${angle ? ' ∠' + angle + '°' : ''}`);
+}
+
+/** Zobrazí dialog pro nastavení nulového bodu. */
+function showNullPointDialog() {
+  const isK = state.machineType === 'karusel';
+  const hLabel = isK ? 'X' : 'Z';
+  const vLabel = isK ? 'Z' : 'X';
+
+  const overlay = makeInputOverlay(`
+    <div class="input-dialog" style="min-width:360px">
+      <h3>📍 Nastavení nulového bodu</h3>
+      <p style="font-size:11px;color:#9399b2;margin-bottom:10px">Zadejte souřadnice nebo vyberte bod z výkresu.</p>
+      <div class="input-row">
+        <div><label>${hLabel}:</label><input type="text" id="nullPtH" value="0"></div>
+        <div><label>${vLabel}:</label><input type="text" id="nullPtV" value="0"></div>
+        <div class="pick-col"><button type="button" class="pick-btn" id="nullPtPick" title="Vybrat z výkresu">🎯</button></div>
+      </div>
+      <div class="input-row" style="margin-top:4px">
+        <div><label>Natočení (°):</label><input type="text" id="nullPtAngle" value="0"></div>
+      </div>
+      <div style="font-size:10px;color:#585b70;margin:6px 0;font-style:italic">💡 Natočení otáčí osy nulového bodu (0° = bez natočení)</div>
+      <div class="btn-row">
+        <button class="btn-cancel" id="nullPtCancel">Zrušit</button>
+        <button class="btn-ok" id="nullPtOk">Potvrdit</button>
+      </div>
+    </div>`);
+
+  const inputH = overlay.querySelector('#nullPtH');
+  const inputV = overlay.querySelector('#nullPtV');
+  const inputAngle = overlay.querySelector('#nullPtAngle');
+
+  // Auto-focus
+  setTimeout(() => inputH.focus(), 50);
+
+  // -- Pick from map (stejný vzor jako v číselném zadání) --
+  function pickFromMap(callback) {
+    overlay.style.display = "none";
+    showToast("Klikněte na výkres pro výběr bodu...");
+
+    function cleanup() {
+      drawCanvas.removeEventListener("click", onPick);
+      drawCanvas.removeEventListener("touchend", onTouch);
+    }
+
+    function onPick(e) {
+      const rect = drawCanvas.getBoundingClientRect();
+      const sx = e.clientX - rect.left;
+      const sy = e.clientY - rect.top;
+      let [wx, wy] = screenToWorld(sx, sy);
+      if (state.snapToPoints) [wx, wy] = snapPt(wx, wy);
+      cleanup();
+      overlay.style.display = "flex";
+      callback(wx, wy);
+    }
+
+    function onTouch(e) {
+      if (e.changedTouches.length === 1) {
+        const t = e.changedTouches[0];
+        const rect = drawCanvas.getBoundingClientRect();
+        const sx = t.clientX - rect.left;
+        const sy = t.clientY - rect.top;
+        let [wx, wy] = screenToWorld(sx, sy);
+        if (state.snapToPoints) [wx, wy] = snapPt(wx, wy);
+        cleanup();
+        overlay.style.display = "flex";
+        e.preventDefault();
+        callback(wx, wy);
+      }
+    }
+
+    drawCanvas.addEventListener("click", onPick);
+    drawCanvas.addEventListener("touchend", onTouch);
+  }
+
+  // Pick button
+  overlay.querySelector('#nullPtPick').addEventListener('click', () => {
+    pickFromMap((wx, wy) => {
+      const isK2 = state.machineType === 'karusel';
+      inputH.value = (isK2 ? wx : wx).toFixed(3);
+      inputV.value = (isK2 ? wy : wy).toFixed(3);
+    });
+  });
+
+  // Potvrdit ručním zadáním
+  overlay.querySelector('#nullPtOk').addEventListener('click', () => {
+    const hVal = safeEvalMath(inputH.value);
+    const vVal = safeEvalMath(inputV.value);
+    const aVal = safeEvalMath(inputAngle.value);
+    if (hVal == null || vVal == null || isNaN(hVal) || isNaN(vVal)) {
+      showToast('Neplatné souřadnice');
+      return;
+    }
+    const angle = (aVal != null && !isNaN(aVal)) ? aVal : 0;
+    overlay.remove();
+    applyNullPoint(hVal, vVal, angle);
+  });
+
+  // Enter v inputech
+  function onEnter(e) {
+    if (e.key === 'Enter') overlay.querySelector('#nullPtOk').click();
+  }
+  inputH.addEventListener('keydown', onEnter);
+  inputV.addEventListener('keydown', onEnter);
+  inputAngle.addEventListener('keydown', onEnter);
+
+  // Zrušit
+  overlay.querySelector('#nullPtCancel').addEventListener('click', () => overlay.remove());
+}
+
 document.getElementById("btnSetRef").addEventListener("click", () => {
-  if (_refPickActive) return;
-  _refPickActive = true;
-  showToast("Klikněte na canvas pro nastavení referenčního bodu...");
-  const canvas = document.getElementById("drawCanvas");
-  function applyRef(clientX, clientY) {
-    const rect = canvas.getBoundingClientRect();
-    const sx = clientX - rect.left;
-    const sy = clientY - rect.top;
-    let [wx, wy] = screenToWorld(sx, sy);
-    if (state.snapToPoints) [wx, wy] = snapPt(wx, wy);
-    state.incReference = { x: wx, y: wy };
-    if (state.coordMode !== 'inc') {
-      state.coordMode = 'inc';
-      updateCoordModeBtn();
-    }
-    renderAll();
-    showToast(`Reference: ${fmtStatusCoords(wx, wy)}`);
-    canvas.removeEventListener("click", onRefPick);
-    canvas.removeEventListener("touchend", onRefTouch);
-    _refPickActive = false;
+  // Druhé kliknutí na aktivní nul. bod → zrušit
+  if (state.nullPointActive) {
+    clearNullPoint();
+    return;
   }
-  function onRefPick(e) {
-    applyRef(e.clientX, e.clientY);
-  }
-  function onRefTouch(e) {
-    if (e.changedTouches.length === 1) {
-      const t = e.changedTouches[0];
-      applyRef(t.clientX, t.clientY);
-      e.preventDefault();
-    }
-  }
-  canvas.addEventListener("click", onRefPick, { once: true });
-  canvas.addEventListener("touchend", onRefTouch, { once: true });
+  showNullPointDialog();
 });
+
+// Clear button v panelu
+document.getElementById("btnClearNullPoint").addEventListener("click", clearNullPoint);
 
 // ── Undo/Redo tlačítka ──
 document.getElementById("btnUndo").addEventListener("click", undo);

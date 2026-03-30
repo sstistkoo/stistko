@@ -7,12 +7,13 @@ import { drawCanvas, screenToWorld, snapPt, applyAngleSnap } from './canvas.js';
 import { state, pushUndo, undo, redo, showToast, resetDrawingState, fmtStatusCoords } from './state.js';
 import { renderAll } from './render.js';
 import { moveObject, addObject } from './objects.js';
-import { setTool, resetHint, setHint, updateProperties, updateObjectList, updateSnapPtsBtn, updateDimsBtn, toggleCoordMode, updateCoordModeBtn, updateSnapGridBtn, updateAngleSnapBtn, showGridSizeDialog, showAngleSnapDialog, toggleHelp } from './ui.js';
+import { setTool, resetHint, setHint, updateProperties, updateObjectList, updateSnapPtsBtn, updateDimsBtn, toggleCoordMode, updateCoordModeBtn, updateSnapGridBtn, updateAngleSnapBtn, showGridSizeDialog, showAngleSnapDialog, toggleHelp, updateNullPointUI } from './ui.js';
 import { findObjectAt, selectObjectAt, calculateAllIntersections, mirrorObject, linearArray, rotateObject, findSegmentAt } from './geometry.js';
 import { showNumericalInputDialog, showPolarDrawingDialog, showCircleRadiusDialog, showBulgeDialog, showMirrorDialog, showLinearArrayDialog, showRotateDialog } from './dialogs.js';
 import { saveProject, showExportImageDialog, showProjectsDialog, showSaveAsDialog } from './storage.js';
 import { bulgeToArc, deepClone } from './utils.js';
 import { bridge } from './bridge.js';
+import { updateAssociativeDimensions } from './dialogs/dimension.js';
 import { handleTangentClick, tangentFromSelection, handleOffsetClick, offsetFromSelection, handleTrimClick, trimFromSelection, handleExtendClick, extendFromSelection, handleFilletClick, filletFromSelection, handlePerpClick, perpFromSelection, handleHorizontalClick, horizontalFromSelection, handleParallelClick, parallelFromSelection, handleDimensionClick, handleSnapPointClick, handleMoveClick, handleLineClick, handleMeasureClick, handleCircleClick, handleArcClick, handleRectClick, handlePolylineClick, measureSelection, handleTextClick } from './tools/index.js';
 
 // Registrace measureSelection na bridge (aby ui.js nemusel importovat přímo – kruhová závislost)
@@ -80,14 +81,33 @@ drawCanvas.addEventListener("mousemove", (e) => {
     const dy = wy - state.dragStartWorld.y;
     try {
       if (state.dragObjIdx === -1 && state._multiDragSnapshots) {
-        // Multi-drag
+        // Multi-drag: nejprve obnovit vše ze snapshot
         for (const { idx, snapshot } of state._multiDragSnapshots) {
           const obj = state.objects[idx];
-          if (obj) {
-            Object.assign(obj, JSON.parse(snapshot));
-            moveObject(obj, dx, dy);
-          }
+          if (obj) Object.assign(obj, JSON.parse(snapshot));
         }
+        // Přesunout ne-kótové objekty + nenavázané kóty (bez sourceObjId)
+        for (const { idx } of state._multiDragSnapshots) {
+          const obj = state.objects[idx];
+          if (!obj) continue;
+          if (!obj.isDimension && !obj.isCoordLabel) {
+            // Běžný objekt → moveObject (aktualizuje i asociativní kóty)
+            moveObject(obj, dx, dy);
+          } else if (!obj.sourceObjId) {
+            // Nenavázaná kóta → přesunout přímo (bez asociativní aktualizace)
+            if (obj.type === 'point') { obj.x += dx; obj.y += dy; }
+            else if (obj.type === 'line') {
+              obj.x1 += dx; obj.y1 += dy;
+              obj.x2 += dx; obj.y2 += dy;
+              if (obj.dimSrcX1 != null) { obj.dimSrcX1 += dx; obj.dimSrcY1 += dy; }
+              if (obj.dimSrcX2 != null) { obj.dimSrcX2 += dx; obj.dimSrcY2 += dy; }
+              if (obj.dimCenterX != null) { obj.dimCenterX += dx; obj.dimCenterY += dy; }
+            }
+          }
+          // Asociativní kóty (s sourceObjId) se aktualizují přes updateAssociativeDimensions
+        }
+        // Finální aktualizace asociativních kót
+        updateAssociativeDimensions();
       } else if (state.objects[state.dragObjIdx]) {
         const obj = state.objects[state.dragObjIdx];
         if (state.dragObjSnapshot) {
@@ -515,10 +535,12 @@ drawCanvas.addEventListener("contextmenu", (e) => {
       menu.remove();
       if (action === 'ref') {
         state.incReference = { x: wx, y: wy };
+        state.nullPointActive = true;
         if (state.coordMode !== 'inc') state.coordMode = 'inc';
         updateCoordModeBtn();
+        updateNullPointUI();
         renderAll();
-        showToast(`Reference: ${state.machineType === 'karusel' ? 'X' : 'Z'}=${wx.toFixed(3)} ${state.machineType === 'karusel' ? 'Z' : 'X'}=${wy.toFixed(3)}`);
+        showToast(`Nulový bod: ${state.machineType === 'karusel' ? 'X' : 'Z'}=${wx.toFixed(3)} ${state.machineType === 'karusel' ? 'Z' : 'X'}=${wy.toFixed(3)}`);
       } else if (action === 'mirror') {
         startMirrorAction();
       } else if (action === 'rotate') {
