@@ -41,7 +41,7 @@ export const state = {
   tool: "select",
   snapToPoints: true,
   snapToGrid: false,
-  angleSnap: false,
+  angleSnap: true,
   angleSnapStep: 15,
   angleSnapTolerance: 1,
   gridSize: 10,
@@ -330,4 +330,38 @@ export function fmtStatusCoords(wx, wy, extra = '') {
   return isKarusel
     ? `${prefix}${xp}X: ${displayX(d.x).toFixed(3)}   ${prefix}Z: ${d.y.toFixed(3)}${extra}`
     : `${prefix}Z: ${d.x.toFixed(3)}   ${prefix}${xp}X: ${displayX(d.y).toFixed(3)}${extra}`;
+}
+
+/**
+ * Formátuje souřadnice pro canvas popisky (kóty, průsečíky, snap body).
+ * @param {number} wx - World X
+ * @param {number} wy - World Y
+ * @param {number} [decimals=2] - Počet desetinných míst
+ * @returns {string}
+ */
+export function fmtCoordLabel(wx, wy, decimals = 2) {
+  const d = toDisplayCoords(wx, wy);
+  const pf = state.coordMode === 'inc' ? 'Δ' : '';
+  const isK = state.machineType === 'karusel';
+  const xp = xPrefix();
+  return isK
+    ? `${pf}${xp}X${displayX(d.x).toFixed(decimals)} ${pf}Z${d.y.toFixed(decimals)}`
+    : `${pf}Z${d.x.toFixed(decimals)} ${pf}${xp}X${displayX(d.y).toFixed(decimals)}`;
+}
+
+/**
+ * Vrací formátovací helpery pro souřadnice relativní k ose X.
+ * @returns {{ xp: string, Hp: string, Vp: string, H: string, V: string, fH: (v: number) => number, fV: (v: number) => number }}
+ */
+export function coordHelpers() {
+  const [H, V] = axisLabels();
+  const isK = state.machineType === 'karusel';
+  const xp = xPrefix();
+  return {
+    xp, H, V,
+    Hp: isK ? xp : '',
+    Vp: isK ? '' : xp,
+    fH: v => isK ? displayX(v) : v,
+    fV: v => isK ? v : displayX(v),
+  };
 }

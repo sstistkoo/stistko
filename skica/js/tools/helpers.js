@@ -3,6 +3,32 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 import { findSegmentAt } from '../geometry.js';
+import { state } from '../state.js';
+import { renderAll } from '../render.js';
+import { resetHint, setHint } from '../ui.js';
+
+// ── Drawing state helpers ──
+/**
+ * Začne kreslení – nastaví state.drawing a první bod.
+ * @param {number} wx
+ * @param {number} wy
+ * @param {string} hint - text nápovědy
+ */
+export function startDrawing(wx, wy, hint) {
+  state.drawing = true;
+  state.tempPoints = [{ x: wx, y: wy }];
+  setHint(hint);
+  renderAll();
+}
+
+/**
+ * Ukončí kreslení – resetuje stav.
+ */
+export function finishDrawing() {
+  state.drawing = false;
+  state.tempPoints = [];
+  resetHint();
+}
 
 // ── Helper: get line-like segment from object (line, constr, or polyline segment) ──
 /**

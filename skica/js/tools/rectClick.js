@@ -1,7 +1,6 @@
 import { state, showToast } from '../state.js';
 import { addObject } from '../objects.js';
-import { renderAll } from '../render.js';
-import { resetHint, setHint } from '../ui.js';
+import { startDrawing, finishDrawing } from './helpers.js';
 
 /**
  * @param {number} wx
@@ -9,17 +8,12 @@ import { resetHint, setHint } from '../ui.js';
  */
 export function handleRectClick(wx, wy) {
   if (!state.drawing) {
-    state.drawing = true;
-    state.tempPoints = [{ x: wx, y: wy }];
-    setHint("Klepněte na protější roh");
-    renderAll();
+    startDrawing(wx, wy, "Klepněte na protější roh");
   } else {
     const rp = state.tempPoints[0];
     if (Math.abs(wx - rp.x) < 1e-9 && Math.abs(wy - rp.y) < 1e-9) {
       showToast("Obdélník má nulovou velikost");
-      state.drawing = false;
-      state.tempPoints = [];
-      resetHint();
+      finishDrawing();
       return;
     }
     addObject({
@@ -30,8 +24,6 @@ export function handleRectClick(wx, wy) {
       y2: wy,
       name: `Obdélník ${state.nextId}`,
     });
-    state.drawing = false;
-    state.tempPoints = [];
-    resetHint();
+    finishDrawing();
   }
 }

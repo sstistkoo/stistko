@@ -334,13 +334,28 @@ export function distPointToSegment(px, py, x1, y1, x2, y2) {
  * @param {number} angle
  * @param {number} start
  * @param {number} end
+ * @param {boolean} [ccw] - Pokud true/false, testuje s tolerancí v daném směru
  * @returns {boolean}
  */
-export function isAngleBetween(angle, start, end) {
+export function isAngleBetween(angle, start, end, ccw) {
   const norm = (a) => ((a % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
-  const a = norm(angle - start);
-  const e = norm(end - start);
-  return a <= e;
+  if (ccw === undefined) {
+    // Původní chování: CCW sweep, bez tolerance
+    const a = norm(angle - start);
+    const e = norm(end - start);
+    return a <= e;
+  }
+  if (ccw) {
+    // CCW sweep s tolerancí
+    const a = norm(angle - start);
+    const e = norm(end - start);
+    return a <= e + 1e-9;
+  } else {
+    // CW sweep s tolerancí
+    const a = norm(start - angle);
+    const e = norm(start - end);
+    return a <= e + 1e-9;
+  }
 }
 
 // ── Popisky typů ──

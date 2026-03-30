@@ -5,7 +5,7 @@
 
 import { COLORS } from '../constants.js';
 import { makeInputOverlay } from '../dialogFactory.js';
-import { state, showToast, toDisplayCoords, axisLabels, displayX, xPrefix } from '../state.js';
+import { state, showToast, toDisplayCoords, axisLabels, displayX, xPrefix, coordHelpers } from '../state.js';
 import { addObject } from '../objects.js';
 import { renderAll } from '../render.js';
 import { typeLabel, bulgeToArc } from '../utils.js';
@@ -24,14 +24,7 @@ export function showMeasureResult(p1, p2, d, angle) {
   const dp1 = toDisplayCoords(p1.x, p1.y);
   const dp2 = toDisplayCoords(p2.x, p2.y);
   const pf = state.coordMode === 'inc' ? 'Δ' : '';
-  const [H, V] = axisLabels();
-  const isK = state.machineType === 'karusel';
-  const xp = xPrefix();
-  // soustruh: V=X → vertical needs displayX; karusel: H=X → horizontal needs displayX
-  const fH = v => isK ? displayX(v) : v;
-  const fV = v => isK ? v : displayX(v);
-  const Hp = isK ? xp : '';
-  const Vp = isK ? '' : xp;
+  const { H, V, Hp, Vp, fH, fV } = coordHelpers();
   const incRow = state.coordMode === 'inc' ? `
         <tr><td colspan="2" style="color:${COLORS.border};font-size:11px;padding-top:6px">── Inkrementální (od reference) ──</td></tr>
         <tr><td style="color:${COLORS.label}">${pf}Bod 1:</td><td style="color:${COLORS.preview}">${pf}${Hp}${H}${fH(dp1.x).toFixed(3)} ${pf}${Vp}${V}${fV(dp1.y).toFixed(3)}</td></tr>
@@ -80,13 +73,9 @@ export function showMeasureResult(p1, p2, d, angle) {
  * @param {import('../types.js').Point2D} pt
  */
 export function showIntersectionInfo(pt) {
-  const [H, V] = axisLabels();
-  const isK = state.machineType === 'karusel';
-  const xp = xPrefix();
-  const Hp = isK ? xp : '';
-  const Vp = isK ? '' : xp;
-  const hv = isK ? displayX(pt.x) : pt.x;
-  const vv = isK ? pt.y : displayX(pt.y);
+  const { H, V, Hp, Vp, fH, fV } = coordHelpers();
+  const hv = fH(pt.x);
+  const vv = fV(pt.y);
   const overlay = makeInputOverlay(`
     <div class="input-dialog">
       <h3>⨯ Průsečík</h3>
@@ -126,13 +115,7 @@ export function showMeasureObjectInfo(obj, wx, wy, objIdx) {
 }
 
 function buildObjectInfoDialog(obj, objIdx) {
-  const [H, V] = axisLabels();
-  const isK = state.machineType === 'karusel';
-  const xp = xPrefix();
-  const Hp = isK ? xp : '';
-  const Vp = isK ? '' : xp;
-  const fH = v => isK ? displayX(v) : v;
-  const fV = v => isK ? v : displayX(v);
+  const { H, V, Hp, Vp, fH, fV } = coordHelpers();
   let rows = "";
   rows += `<tr><td style="color:${COLORS.label}">Typ:</td><td style="color:${COLORS.text}">${typeLabel(obj.type)}</td></tr>`;
   if (obj.name) {

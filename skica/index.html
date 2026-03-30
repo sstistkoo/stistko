@@ -87,63 +87,6 @@
 
     <!-- ── Toolbar ── -->
     <div id="topbar" role="toolbar" aria-label="Kreslicí nástroje">
-      <div class="toolbar-header">
-        <button
-          class="tool-btn toolbar-setting"
-          id="btnMachineType"
-          title="Přepnout Soustruh/Karusel"
-          aria-label="Přepnout Soustruh/Karusel"
-        >
-          ⚙ Soustruh
-        </button>
-        <button
-          class="tool-btn toolbar-setting"
-          id="btnCoordMode"
-          title="Přepnout ABS/INC souřadnice (I)"
-          aria-label="Přepnout ABS/INC souřadnice"
-        >
-          ABS
-        </button>
-        <button
-          class="tool-btn toolbar-setting"
-          id="btnXDisplay"
-          title="Přepnout Poloměr/Průměr osy X"
-          aria-label="Přepnout Poloměr/Průměr osy X"
-        >
-          R
-        </button>
-        <button
-          class="tool-btn toolbar-setting"
-          id="btnSnapGrid"
-          title="Snap na mřížku (G)"
-          aria-label="Snap na mřížku"
-        >
-          # Mřížka
-        </button>
-        <button
-          class="tool-btn toolbar-setting"
-          id="btnAngleSnap"
-          title="Úhlový snap (Shift+G)"
-          aria-label="Úhlový snap"
-        >
-          ∠ Úhel
-        </button>
-        <button
-          class="tool-btn toolbar-setting"
-          id="btnDims"
-          title="Zobrazit kóty (D)"
-          aria-label="Zobrazit kóty"
-        >
-          📐 Kóty
-        </button>
-        <button
-          class="toolbar-close-btn"
-          id="mobileToolbarClose"
-          title="Zavřít"
-        >
-          ✕
-        </button>
-      </div>
       <button
         class="tool-btn mobile-hide"
         id="btnUndo"
@@ -167,47 +110,91 @@
         </svg>
         Výběr
       </button>
-      <button class="tool-btn" data-tool="move" title="Přesun (W)">
+      <button class="tool-btn" data-tool="dimension" title="Kóta (U)">
         <svg viewBox="0 0 24 24">
-          <path
-            d="M12 2l3 3h-2v5h5v-2l3 3-3 3v-2h-5v5h2l-3 3-3-3h2v-5H5v2L2 12l3-3v2h5V6H8z"
+          <line
+            x1="4"
+            y1="18"
+            x2="4"
+            y2="6"
+            stroke="currentColor"
+            stroke-width="1.5"
+          />
+          <line
+            x1="20"
+            y1="18"
+            x2="20"
+            y2="6"
+            stroke="currentColor"
+            stroke-width="1.5"
+          />
+          <line
+            x1="4"
+            y1="10"
+            x2="20"
+            y2="10"
+            stroke="currentColor"
+            stroke-width="1.5"
+          />
+          <path d="M4 10l4-3v6z" fill="currentColor" />
+          <path d="M20 10l-4-3v6z" fill="currentColor" />
+          <text
+            x="12"
+            y="8"
+            text-anchor="middle"
+            font-size="7"
             fill="currentColor"
-          />
+          >
+            50
+          </text>
         </svg>
-        Přesun
+        Kóta
       </button>
-      <button class="tool-btn" data-tool="snapPoint" title="Přichytit bod (B)">
+      <button
+        class="tool-btn"
+        id="btnDelete"
+        title="Smazat vybraný objekt (Del)"
+        aria-label="Smazat vybraný objekt"
+      >
         <svg viewBox="0 0 24 24">
-          <circle
-            cx="6"
-            cy="18"
-            r="3"
+          <rect
+            x="3"
+            y="14"
+            width="12"
+            height="6"
+            rx="1"
             fill="none"
             stroke="currentColor"
             stroke-width="2"
+            transform="rotate(-30 9 17)"
           />
-          <circle
-            cx="18"
-            cy="6"
-            r="3"
-            fill="none"
+          <line
+            x1="8"
+            y1="10"
+            x2="4"
+            y2="17"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <line
+            x1="14"
+            y1="7"
+            x2="10"
+            y2="14"
             stroke="currentColor"
             stroke-width="2"
           />
           <path
-            d="M8.5 15.5L15.5 8.5"
-            stroke="currentColor"
-            stroke-width="1.5"
-            stroke-dasharray="3 2"
-          />
-          <path
-            d="M13 11l3-3M16 8l-3 0M16 8l0 3"
-            stroke="currentColor"
-            stroke-width="1.5"
+            d="M16 5l3-3 4 4-3 3z"
             fill="none"
+            stroke="currentColor"
+            stroke-width="2"
           />
         </svg>
-        Přichytit
+        Smaž obj.
+      </button>
+      <button class="toolbar-close-btn" id="mobileToolbarClose" title="Zavřít">
+        ✕
       </button>
       <div class="sep"></div>
       <button class="tool-btn" data-tool="point" title="Bod (P)">
@@ -557,221 +544,246 @@
         </svg>
         Rovnob.
       </button>
-      <button class="tool-btn" data-tool="dimension" title="Kóta (U)">
-        <svg viewBox="0 0 24 24">
-          <line
-            x1="4"
-            y1="18"
-            x2="4"
-            y2="6"
-            stroke="currentColor"
-            stroke-width="1.5"
-          />
-          <line
-            x1="20"
-            y1="18"
-            x2="20"
-            y2="6"
-            stroke="currentColor"
-            stroke-width="1.5"
-          />
-          <line
-            x1="4"
-            y1="10"
-            x2="20"
-            y2="10"
-            stroke="currentColor"
-            stroke-width="1.5"
-          />
-          <path d="M4 10l4-3v6z" fill="currentColor" />
-          <path d="M20 10l-4-3v6z" fill="currentColor" />
-          <text
-            x="12"
-            y="8"
-            text-anchor="middle"
-            font-size="7"
-            fill="currentColor"
+      <!-- ── Rozbalovací sekce: další nástroje ── -->
+      <div class="sep"></div>
+      <button
+        class="tool-btn toolbar-more-toggle"
+        id="btnToolbarMore"
+        title="Další nástroje"
+      >
+        ▸ Více nástrojů…
+      </button>
+      <div id="toolbarMore" class="toolbar-more">
+        <div class="toolbar-more-settings">
+          <button
+            class="tool-btn toolbar-setting"
+            id="btnMachineType"
+            title="Přepnout Soustruh/Karusel"
+            aria-label="Přepnout Soustruh/Karusel"
           >
-            50
-          </text>
-        </svg>
-        Kóta
-      </button>
-      <div class="sep"></div>
-      <button
-        class="tool-btn"
-        id="btnDelete"
-        title="Smazat vybraný objekt (Del)"
-        aria-label="Smazat vybraný objekt"
-      >
-        <svg viewBox="0 0 24 24">
-          <rect
-            x="3"
-            y="14"
-            width="12"
-            height="6"
-            rx="1"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            transform="rotate(-30 9 17)"
-          />
-          <line
-            x1="8"
-            y1="10"
-            x2="4"
-            y2="17"
-            stroke="currentColor"
-            stroke-width="2"
-          />
-          <line
-            x1="14"
-            y1="7"
-            x2="10"
-            y2="14"
-            stroke="currentColor"
-            stroke-width="2"
-          />
-          <path
-            d="M16 5l3-3 4 4-3 3z"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          />
-        </svg>
-        Smaž obj.
-      </button>
-      <button
-        class="tool-btn"
-        id="btnDeleteDims"
-        title="Smazat všechny kóty"
-        aria-label="Smazat kóty"
-      >
-        🗑️ Smaž kóty
-      </button>
-      <button
-        class="tool-btn"
-        id="btnRotate"
-        title="Otočit vybraný objekt"
-        aria-label="Otočit vybraný objekt"
-      >
-        <svg viewBox="0 0 24 24">
-          <path
-            d="M12 4a8 8 0 0 1 7.75 6"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          />
-          <path
-            d="M19.75 10l1.25-4-4 1.25"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          />
-          <path
-            d="M12 20a8 8 0 0 1-7.75-6"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          />
-          <path
-            d="M4.25 14l-1.25 4 4-1.25"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          />
-        </svg>
-        Otočit
-      </button>
-      <div class="sep"></div>
-      <button
-        class="tool-btn mobile-hide"
-        data-tool="measure"
-        title="Měření (M)"
-      >
-        <svg viewBox="0 0 24 24">
-          <path
-            d="M3 21L21 3M8 21V16M13 21V13M18 21V10"
-            stroke="currentColor"
-            stroke-width="2"
-            fill="none"
-          />
-        </svg>
-        Měření
-      </button>
-      <button
-        class="tool-btn mobile-hide"
-        id="btnNumInput"
-        title="Číselný vstup (N)"
-      >
-        🔢 Zadat
-      </button>
-      <div class="sep"></div>
-      <button
-        class="tool-btn"
-        id="btnSave"
-        title="Uložit projekt (Ctrl+S)"
-        aria-label="Uložit projekt"
-      >
-        💾 Uložit
-      </button>
-      <button
-        class="tool-btn"
-        id="btnLoad"
-        title="Načíst projekt"
-        aria-label="Načíst projekt"
-      >
-        📂 Načíst
-      </button>
-      <button
-        class="tool-btn"
-        id="btnClearAll"
-        title="Smazat vše"
-        aria-label="Smazat vše"
-      >
-        🗑 Smazat
-      </button>
-      <button
-        class="tool-btn"
-        id="btnExport"
-        title="Export CNC souřadnic"
-        aria-label="Export CNC souřadnic"
-      >
-        📋 CNC Export
-      </button>
-      <button
-        class="tool-btn"
-        id="btnExportImage"
-        title="Export SVG/PNG"
-        aria-label="Export obrázku"
-      >
-        🖼 Export obraz
-      </button>
-      <div class="sep"></div>
-      <button
-        class="tool-btn"
-        id="btnProjects"
-        title="Správa projektů (Ctrl+P)"
-        aria-label="Správa projektů"
-      >
-        📁 Projekty
-      </button>
-      <button
-        class="tool-btn"
-        id="btnSetRef"
-        title="Nastavit referenční bod klikem"
-        aria-label="Nastavit referenční bod"
-      >
-        📍 Ref
-      </button>
-      <button
-        class="tool-btn"
-        id="btnHelp"
-        title="Nápověda (? / F1)"
-        aria-label="Nápověda"
-      >
-        ❓
-      </button>
+            ⚙ Soustruh
+          </button>
+          <button
+            class="tool-btn toolbar-setting"
+            id="btnCoordMode"
+            title="Přepnout ABS/INC souřadnice (I)"
+            aria-label="Přepnout ABS/INC souřadnice"
+          >
+            ABS
+          </button>
+          <button
+            class="tool-btn toolbar-setting"
+            id="btnXDisplay"
+            title="Přepnout Poloměr/Průměr osy X"
+            aria-label="Přepnout Poloměr/Průměr osy X"
+          >
+            R
+          </button>
+          <button
+            class="tool-btn toolbar-setting"
+            id="btnSnapGrid"
+            title="Snap na mřížku (G)"
+            aria-label="Snap na mřížku"
+          >
+            # Mřížka
+          </button>
+          <button
+            class="tool-btn toolbar-setting"
+            id="btnAngleSnap"
+            title="Úhlový snap (Shift+G)"
+            aria-label="Úhlový snap"
+          >
+            ∠ Úhel
+          </button>
+          <button
+            class="tool-btn toolbar-setting"
+            id="btnDims"
+            title="Zobrazit kóty (D)"
+            aria-label="Zobrazit kóty"
+          >
+            📐 Kóty
+          </button>
+        </div>
+        <div class="sep"></div>
+        <button class="tool-btn" data-tool="move" title="Přesun (W)">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M12 2l3 3h-2v5h5v-2l3 3-3 3v-2h-5v5h2l-3 3-3-3h2v-5H5v2L2 12l3-3v2h5V6H8z"
+              fill="currentColor"
+            />
+          </svg>
+          Přesun
+        </button>
+        <button
+          class="tool-btn"
+          data-tool="snapPoint"
+          title="Přichytit bod (B)"
+        >
+          <svg viewBox="0 0 24 24">
+            <circle
+              cx="6"
+              cy="18"
+              r="3"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <circle
+              cx="18"
+              cy="6"
+              r="3"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <path
+              d="M8.5 15.5L15.5 8.5"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-dasharray="3 2"
+            />
+            <path
+              d="M13 11l3-3M16 8l-3 0M16 8l0 3"
+              stroke="currentColor"
+              stroke-width="1.5"
+              fill="none"
+            />
+          </svg>
+          Přichytit
+        </button>
+        <button
+          class="tool-btn"
+          id="btnDeleteDims"
+          title="Smazat všechny kóty"
+          aria-label="Smazat kóty"
+        >
+          🗑️ Smaž kóty
+        </button>
+        <button
+          class="tool-btn"
+          id="btnRotate"
+          title="Otočit vybraný objekt"
+          aria-label="Otočit vybraný objekt"
+        >
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M12 4a8 8 0 0 1 7.75 6"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <path
+              d="M19.75 10l1.25-4-4 1.25"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <path
+              d="M12 20a8 8 0 0 1-7.75-6"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <path
+              d="M4.25 14l-1.25 4 4-1.25"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+          </svg>
+          Otočit
+        </button>
+        <div class="sep"></div>
+        <button
+          class="tool-btn mobile-hide"
+          data-tool="measure"
+          title="Měření (M)"
+        >
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M3 21L21 3M8 21V16M13 21V13M18 21V10"
+              stroke="currentColor"
+              stroke-width="2"
+              fill="none"
+            />
+          </svg>
+          Měření
+        </button>
+        <button
+          class="tool-btn mobile-hide"
+          id="btnNumInput"
+          title="Číselný vstup (N)"
+        >
+          🔢 Zadat
+        </button>
+        <div class="sep"></div>
+        <button
+          class="tool-btn"
+          id="btnSave"
+          title="Uložit projekt (Ctrl+S)"
+          aria-label="Uložit projekt"
+        >
+          💾 Uložit
+        </button>
+        <button
+          class="tool-btn"
+          id="btnLoad"
+          title="Načíst projekt"
+          aria-label="Načíst projekt"
+        >
+          📂 Načíst
+        </button>
+        <button
+          class="tool-btn"
+          id="btnClearAll"
+          title="Smazat vše"
+          aria-label="Smazat vše"
+        >
+          🗑 Smazat
+        </button>
+        <button
+          class="tool-btn"
+          id="btnExport"
+          title="Export CNC souřadnic"
+          aria-label="Export CNC souřadnic"
+        >
+          📋 CNC Export
+        </button>
+        <button
+          class="tool-btn"
+          id="btnExportImage"
+          title="Export SVG/PNG"
+          aria-label="Export obrázku"
+        >
+          🖼 Export obraz
+        </button>
+        <div class="sep"></div>
+        <button
+          class="tool-btn"
+          id="btnProjects"
+          title="Správa projektů (Ctrl+P)"
+          aria-label="Správa projektů"
+        >
+          📁 Projekty
+        </button>
+        <button
+          class="tool-btn"
+          id="btnSetRef"
+          title="Nastavit referenční bod klikem"
+          aria-label="Nastavit referenční bod"
+        >
+          📍 Ref
+        </button>
+        <button
+          class="tool-btn"
+          id="btnHelp"
+          title="Nápověda (? / F1)"
+          aria-label="Nápověda"
+        >
+          ❓
+        </button>
+      </div>
+      <!-- /toolbarMore -->
       <div id="coordDisplay">X: 0.000 &nbsp; Z: 0.000</div>
     </div>
 

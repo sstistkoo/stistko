@@ -286,19 +286,30 @@ export function autoCenterView() {
   const bboxW = maxX - minX || 1;
   const bboxH = maxY - minY || 1;
   const canvasW = drawCanvas.width;
-  const canvasH = drawCanvas.height;
+  const fullCanvasH = drawCanvas.height;
+
+  // Při otevřeném toolbaru na mobilu zmenšit viditelnou výšku
+  let visibleH = fullCanvasH;
+  let topbarH = 0;
+  const topbar = document.getElementById("topbar");
+  if (topbar && topbar.classList.contains("mobile-open")) {
+    topbarH = topbar.offsetHeight || 0;
+    visibleH = fullCanvasH - topbarH;
+  }
+
   const padding = AUTO_CENTER_PADDING;
 
-  // Zoom aby se vše vešlo
+  // Zoom aby se vše vešlo do viditelné oblasti
   const zoomX = (canvasW * (1 - 2 * padding)) / bboxW;
-  const zoomY = (canvasH * (1 - 2 * padding)) / bboxH;
+  const zoomY = (visibleH * (1 - 2 * padding)) / bboxH;
   state.zoom = Math.min(zoomX, zoomY);
 
-  // Pan aby střed bboxu byl uprostřed canvasu
+  // Pan aby střed bboxu byl uprostřed viditelné části canvasu
+  // Viditelný střed Y = (fullCanvasH - topbarH) / 2
   const centerX = (minX + maxX) / 2;
   const centerY = (minY + maxY) / 2;
   state.panX = canvasW / 2 - centerX * state.zoom;
-  state.panY = canvasH / 2 + centerY * state.zoom;
+  state.panY = (fullCanvasH - topbarH) / 2 + centerY * state.zoom;
 
   document.getElementById("statusZoom").textContent =
     `Zoom: ${(state.zoom * 100).toFixed(0)}%`;

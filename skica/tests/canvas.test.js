@@ -12,7 +12,7 @@ const { mockCanvas } = vi.hoisted(() => {
 
   const mockEl = () => ({
     disabled: false, textContent: '', innerHTML: '',
-    classList: { toggle: () => {}, add: () => {}, remove: () => {} },
+    classList: { toggle: () => {}, add: () => {}, remove: () => {}, contains: () => false },
     appendChild: () => {},
     addEventListener: () => {},
     setAttribute: () => {},

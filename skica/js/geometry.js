@@ -261,7 +261,7 @@ export function findSegmentAt(obj, wx, wy) {
       if (arc) {
         const distToCircle = Math.abs(Math.hypot(wx - arc.cx, wy - arc.cy) - arc.r);
         const angle = Math.atan2(wy - arc.cy, wx - arc.cx);
-        if (isAngleBetweenArc(angle, arc.startAngle, arc.endAngle, arc.ccw)) {
+        if (isAngleBetween(angle, arc.startAngle, arc.endAngle, arc.ccw)) {
           d = distToCircle;
         } else {
           d = Math.min(Math.hypot(wx - p1.x, wy - p1.y), Math.hypot(wx - p2.x, wy - p2.y));
@@ -296,7 +296,7 @@ export function distToObject(obj, wx, wy) {
         Math.hypot(wx - obj.cx, wy - obj.cy) - obj.r,
       );
       const angle = Math.atan2(wy - obj.cy, wx - obj.cx);
-      return isAngleBetween(angle, obj.startAngle, obj.endAngle)
+      return isAngleBetween(angle, obj.startAngle, obj.endAngle, obj.ccw)
         ? dist
         : dist + ARC_OUTSIDE_PENALTY;
     }
@@ -323,7 +323,7 @@ export function distToObject(obj, wx, wy) {
           if (arc) {
             const distToCircle = Math.abs(Math.hypot(wx - arc.cx, wy - arc.cy) - arc.r);
             const angle = Math.atan2(wy - arc.cy, wx - arc.cx);
-            if (isAngleBetweenArc(angle, arc.startAngle, arc.endAngle, arc.ccw)) {
+            if (isAngleBetween(angle, arc.startAngle, arc.endAngle, arc.ccw)) {
               d = distToCircle;
             } else {
               d = Math.min(Math.hypot(wx - p1.x, wy - p1.y), Math.hypot(wx - p2.x, wy - p2.y));
@@ -338,20 +338,6 @@ export function distToObject(obj, wx, wy) {
     }
     default:
       return Infinity;
-  }
-}
-
-// ── Test úhlu v rozsahu oblouku (s podporou CW/CCW) ──
-function isAngleBetweenArc(angle, start, end, ccw) {
-  const norm = (a) => ((a % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
-  if (ccw) {
-    const a = norm(angle - start);
-    const e = norm(end - start);
-    return a <= e + 1e-9;
-  } else {
-    const a = norm(start - angle);
-    const e = norm(start - end);
-    return a <= e + 1e-9;
   }
 }
 
@@ -414,6 +400,7 @@ export function getCircles(obj) {
         r: obj.r,
         startAngle: obj.startAngle,
         endAngle: obj.endAngle,
+        ccw: obj.ccw,
       },
     ];
   if (obj.type === "polyline") {
@@ -433,6 +420,7 @@ export function getCircles(obj) {
             r: arc.r,
             startAngle: arc.startAngle,
             endAngle: arc.endAngle,
+            ccw: arc.ccw,
           });
         }
       }
@@ -491,7 +479,7 @@ export function intersectLineCircle(line, circle) {
       const pt = { x: x1 + t * dx, y: y1 + t * dy };
       if (circle.startAngle !== undefined) {
         const angle = Math.atan2(pt.y - cy, pt.x - cx);
-        if (!isAngleBetween(angle, circle.startAngle, circle.endAngle))
+        if (!isAngleBetween(angle, circle.startAngle, circle.endAngle, circle.ccw))
           continue;
       }
       results.push(pt);
@@ -529,11 +517,11 @@ export function intersectCircleCircle(c1, c2) {
     let ok = true;
     if (c1.startAngle !== undefined) {
       const ang = Math.atan2(pt.y - c1.cy, pt.x - c1.cx);
-      if (!isAngleBetween(ang, c1.startAngle, c1.endAngle)) ok = false;
+      if (!isAngleBetween(ang, c1.startAngle, c1.endAngle, c1.ccw)) ok = false;
     }
     if (c2.startAngle !== undefined) {
       const ang = Math.atan2(pt.y - c2.cy, pt.x - c2.cx);
-      if (!isAngleBetween(ang, c2.startAngle, c2.endAngle)) ok = false;
+      if (!isAngleBetween(ang, c2.startAngle, c2.endAngle, c2.ccw)) ok = false;
     }
     if (ok) results.push(pt);
   }
@@ -1065,7 +1053,7 @@ export function filletTwoLines(line1, line2, radius) {
   const bx = n1x + n2x, by = n1y + n2y;
   const blen = Math.hypot(bx, by);
   if (blen < 1e-10) return { ok: false, msg: "Nelze určit střed zaoblení" };
-  const centerDist = Math.sqrt(radius * radius + dist * dist);
+  const centerDist = Math.hypot(radius, dist);
   const cX = ix + (bx / blen) * centerDist;
   const cY = iy + (by / blen) * centerDist;
 
