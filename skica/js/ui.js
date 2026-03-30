@@ -49,31 +49,31 @@ export function updateObjectList() {
     delBtn.title = "Smazat";
     delBtn.textContent = "✕";
     li.appendChild(delBtn);
-    span.addEventListener("click", (e) => {
-      if (e.ctrlKey || e.metaKey) {
-        // Ctrl+klik: přidat/odebrat z multi-select
-        if (state.multiSelected.size === 0 && state.selected !== null && state.selected !== idx) {
-          state.multiSelected.add(state.selected);
+    span.addEventListener("click", () => {
+      if (state.multiSelected.has(idx) || (idx === state.selected && state.multiSelected.size > 0)) {
+        // Klik na vybraný → odebrat
+        state.multiSelected.delete(idx);
+        if (idx === state.selected) {
+          state.selected = state.multiSelected.size > 0
+            ? [...state.multiSelected].pop() : null;
         }
-        if (state.multiSelected.has(idx)) {
-          state.multiSelected.delete(idx);
-          if (state.multiSelected.size === 1) {
-            state.selected = state.multiSelected.values().next().value;
-            state.multiSelected.clear();
-          } else if (state.multiSelected.size === 0) {
-            state.selected = null;
-          } else {
-            const arr = [...state.multiSelected];
-            state.selected = arr[arr.length - 1];
-          }
-        } else {
-          state.multiSelected.add(idx);
-          state.selected = idx;
+        if (state.multiSelected.size === 1) {
+          state.selected = state.multiSelected.values().next().value;
+          state.multiSelected.clear();
         }
-      } else {
+      } else if (idx === state.selected && state.multiSelected.size === 0) {
+        // Klik na jediný vybraný → odznačit
+        state.selected = null;
+      } else if (state.selected !== null) {
+        // Už něco vybráno → přidat do multi
+        if (state.multiSelected.size === 0) state.multiSelected.add(state.selected);
+        state.multiSelected.add(idx);
         state.selected = idx;
-        state.multiSelected.clear();
+      } else {
+        // Nic nevybráno → single select
+        state.selected = idx;
       }
+      state.selectedSegment = null;
       updateObjectList();
       updateProperties();
       renderAll();
@@ -125,7 +125,7 @@ export function updateProperties() {
     tbody.innerHTML =
       `<tr><td colspan="2" style="color:${COLORS.selected};font-weight:bold">${count} objektů vybráno</td></tr>` +
       `<tr><td colspan="2" style="color:${COLORS.textMuted}">${summary}</td></tr>` +
-      `<tr><td colspan="2" style="color:${COLORS.textMuted}">Ctrl+klik = přidat/odebrat</td></tr>`;
+      `<tr><td colspan="2" style="color:${COLORS.textMuted}">Klik = přidat, znovu = odebrat</td></tr>`;
     return;
   }
 
@@ -688,7 +688,7 @@ export function setHint(text) {
 /** Obnoví nápovědu pro aktuální nástroj. */
 export function resetHint() {
   const hints = {
-    select: "Klikněte pro výběr (Ctrl+klik = multi výběr)",
+    select: "Klikněte pro výběr (další klik = přidat, znovu = odebrat)",
     move: "Klikněte na objekt pro přesun",
     point: "Klikněte pro umístění bodu",
     line: "Klikněte na počáteční bod úsečky",
@@ -808,34 +808,6 @@ document.getElementById("btnDeleteDims").addEventListener("click", () => {
   showToast(`Smazáno ${dimCount} kót`);
   if (bridge.updateObjectList) bridge.updateObjectList();
   renderAll();
-});
-
-// ── Multi-select tlačítko ──
-/** Aktualizuje zobrazení Multi-select tlačítka. */
-export function updateMultiSelectBtn() {
-  const btn = document.getElementById("btnMultiSelect");
-  if (!btn) return;
-  const active = state._multiSelectMode;
-  btn.classList.toggle("active", !!active);
-  if (active) {
-    btn.style.background = COLORS.selected;
-    btn.style.color = '#1e1e2e';
-    btn.style.borderColor = COLORS.selected;
-  } else {
-    btn.style.background = '';
-    btn.style.color = '';
-    btn.style.borderColor = '';
-  }
-}
-
-document.getElementById("btnMultiSelect").addEventListener("click", () => {
-  state._multiSelectMode = !state._multiSelectMode;
-  updateMultiSelectBtn();
-  if (state._multiSelectMode) {
-    showToast("Multi výběr: ON (klikej na objekty)");
-  } else {
-    showToast("Multi výběr: OFF");
-  }
 });
 
 // ── Coord Mode tlačítko (ABS/INC) ──

@@ -103,7 +103,7 @@ drawCanvas.addEventListener("mousedown", (e) => {
   }
   if (e.button !== 0) return;
 
-  handleCanvasClick(state.mouse.x, state.mouse.y, { addToSelection: e.ctrlKey || e.metaKey });
+  handleCanvasClick(state.mouse.x, state.mouse.y);
 });
 
 drawCanvas.addEventListener("mouseup", (e) => {
@@ -505,11 +505,10 @@ drawCanvas.addEventListener("contextmenu", (e) => {
  * @param {number} wy
  * @param {{ addToSelection?: boolean }} [opts]
  */
-export function handleCanvasClick(wx, wy, opts) {
-  const addToSel = !!(opts && opts.addToSelection) || !!state._multiSelectMode;
+export function handleCanvasClick(wx, wy) {
   switch (state.tool) {
     case "select":
-      selectObjectAt(wx, wy, addToSel);
+      selectObjectAt(wx, wy);
       break;
 
     case "move":

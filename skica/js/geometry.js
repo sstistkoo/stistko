@@ -93,11 +93,12 @@ export function findObjectAt(wx, wy) {
 
 /**
  * Vybere objekt na pozici [wx,wy].
+ * Automaticky přidává do multi-selection při kliku na další objekt.
+ * Opakovaný klik na vybraný objekt ho odebere z výběru.
  * @param {number} wx
  * @param {number} wy
- * @param {boolean} [addToSelection=false] Ctrl+klik → přidat/odebrat z multiSelected
  */
-export function selectObjectAt(wx, wy, addToSelection = false) {
+export function selectObjectAt(wx, wy) {
   // Nejdřív zkontrolovat, zda klik je na vazební značku
   const constr = findConstraintAt(wx, wy);
   if (constr) {
@@ -114,44 +115,44 @@ export function selectObjectAt(wx, wy, addToSelection = false) {
 
   const newSel = findObjectAt(wx, wy);
 
-  if (addToSelection) {
-    // Ctrl+klik: přidat/odebrat z multi-selection
-    if (newSel !== null) {
-      // Pokud máme single-select a začínáme multi, přidat stávající
-      if (state.multiSelected.size === 0 && state.selected !== null && state.selected !== newSel) {
-        state.multiSelected.add(state.selected);
-      }
-      // Toggle kliknutého objektu
-      if (state.multiSelected.has(newSel)) {
-        state.multiSelected.delete(newSel);
-        // Pokud zbyl jen jeden, vrátit se k single-select
-        if (state.multiSelected.size === 1) {
-          state.selected = state.multiSelected.values().next().value;
-          state.multiSelected.clear();
-        } else if (state.multiSelected.size === 0) {
-          state.selected = null;
-        } else {
-          state.selected = newSel;  // will be updated below
-          // Set selected to last remaining
-          const arr = [...state.multiSelected];
-          state.selected = arr[arr.length - 1];
-        }
-      } else {
-        state.multiSelected.add(newSel);
-        state.selected = newSel;
-      }
-    }
+  if (newSel === null) {
+    // Klik do prázdna → zrušit vše
+    state.selected = null;
     state.selectedSegment = null;
-  } else {
-    // Normální klik: single select, zrušit multi
     state.multiSelected.clear();
-    // If clicking on already-selected polyline, select the nearest segment
-    if (newSel !== null && newSel === state.selected && state.objects[newSel].type === 'polyline') {
+  } else if (newSel === state.selected && state.multiSelected.size === 0) {
+    // Klik na jediný vybraný objekt → toggle off / segment mode pro polyline
+    if (state.objects[newSel].type === 'polyline') {
       state.selectedSegment = findSegmentAt(state.objects[newSel], wx, wy);
     } else {
-      state.selected = newSel;
+      state.selected = null;
       state.selectedSegment = null;
     }
+  } else if (state.multiSelected.has(newSel) || (newSel === state.selected && state.multiSelected.size > 0)) {
+    // Klik na objekt v multi-výběru → odebrat
+    state.multiSelected.delete(newSel);
+    if (newSel === state.selected) {
+      state.selected = state.multiSelected.size > 0
+        ? [...state.multiSelected].pop()
+        : null;
+    }
+    if (state.multiSelected.size === 1) {
+      state.selected = state.multiSelected.values().next().value;
+      state.multiSelected.clear();
+    }
+    state.selectedSegment = null;
+  } else if (state.selected !== null) {
+    // Už něco vybráno + klik na nový objekt → přidat do multi
+    if (state.multiSelected.size === 0) {
+      state.multiSelected.add(state.selected);
+    }
+    state.multiSelected.add(newSel);
+    state.selected = newSel;
+    state.selectedSegment = null;
+  } else {
+    // Nic nevybráno → single select
+    state.selected = newSel;
+    state.selectedSegment = null;
   }
   if (bridge.updateProperties) bridge.updateProperties();
   if (bridge.updateObjectList) bridge.updateObjectList();
