@@ -107,13 +107,19 @@ export function showEditObjectDialog(idx) {
       case "line":
       case "constr":
         fieldsHtml += `
+          <div class="anchor-radio-row">
+            <span>📌 Fixní bod:</span>
+            <label><input type="radio" name="editAnchor" value="1" checked> Bod 1</label>
+            <label><input type="radio" name="editAnchor" value="2"> Bod 2</label>
+          </div>
           <div class="input-row"><div><label>${H}1:</label><input type="text" id="editX1" value="${obj.x1.toFixed(3)}"></div>
           <div><label>${V}1:</label><input type="text" id="editY1" value="${obj.y1.toFixed(3)}"></div>
           <div class="pick-col"><button type="button" class="pick-btn" data-pick="p1">🎯1</button></div></div>
           <div class="input-row"><div><label>${H}2:</label><input type="text" id="editX2" value="${obj.x2.toFixed(3)}"></div>
           <div><label>${V}2:</label><input type="text" id="editY2" value="${obj.y2.toFixed(3)}"></div>
           <div class="pick-col"><button type="button" class="pick-btn" data-pick="p2">🎯2</button></div></div>
-          <div style="font-size:12px;color:${COLORS.textSecondary};margin-top:4px">Délka: <span id="editLen">${Math.hypot(obj.x2-obj.x1, obj.y2-obj.y1).toFixed(3)}</span> mm</div>`;
+          <div class="input-row"><div><label>Délka:</label><input type="text" id="editLen" value="${Math.hypot(obj.x2-obj.x1, obj.y2-obj.y1).toFixed(3)}"></div>
+          <div><label>Úhel (°):</label><input type="text" id="editAng" value="${(((Math.atan2(obj.y2-obj.y1, obj.x2-obj.x1)*180/Math.PI)+360)%360).toFixed(2)}"></div></div>`;
         break;
       case "circle":
         fieldsHtml += `
@@ -137,13 +143,19 @@ export function showEditObjectDialog(idx) {
         break;
       case "rect":
         fieldsHtml += `
+          <div class="anchor-radio-row">
+            <span>📌 Fixní roh:</span>
+            <label><input type="radio" name="editAnchor" value="1" checked> Roh 1</label>
+            <label><input type="radio" name="editAnchor" value="2"> Roh 2</label>
+          </div>
           <div class="input-row"><div><label>${H}1:</label><input type="text" id="editX1" value="${obj.x1.toFixed(3)}"></div>
           <div><label>${V}1:</label><input type="text" id="editY1" value="${obj.y1.toFixed(3)}"></div>
           <div class="pick-col"><button type="button" class="pick-btn" data-pick="p1">🎯1</button></div></div>
           <div class="input-row"><div><label>${H}2:</label><input type="text" id="editX2" value="${obj.x2.toFixed(3)}"></div>
           <div><label>${V}2:</label><input type="text" id="editY2" value="${obj.y2.toFixed(3)}"></div>
           <div class="pick-col"><button type="button" class="pick-btn" data-pick="p2">🎯2</button></div></div>
-          <div style="font-size:12px;color:${COLORS.textSecondary};margin-top:4px">Rozměr: <span id="editDim">${Math.abs(obj.x2-obj.x1).toFixed(2)} × ${Math.abs(obj.y2-obj.y1).toFixed(2)}</span> mm</div>`;
+          <div class="input-row"><div><label>Šířka:</label><input type="text" id="editW" value="${Math.abs(obj.x2-obj.x1).toFixed(3)}"></div>
+          <div><label>Výška:</label><input type="text" id="editHt" value="${Math.abs(obj.y2-obj.y1).toFixed(3)}"></div></div>`;
         break;
       case "polyline": {
         const verts = obj.vertices || [];
@@ -261,33 +273,119 @@ export function showEditObjectDialog(idx) {
 
   wirePickButtons();
 
-  // Auto-update line length & rect dims
-  function updateEditInfo() {
-    const lenSpan = overlay.querySelector("#editLen");
-    if (lenSpan) {
-      const x1 = safeEvalMath(overlay.querySelector("#editX1")?.value);
-      const y1 = safeEvalMath(overlay.querySelector("#editY1")?.value);
-      const x2 = safeEvalMath(overlay.querySelector("#editX2")?.value);
-      const y2 = safeEvalMath(overlay.querySelector("#editY2")?.value);
-      if ([x1,y1,x2,y2].every(v => isFinite(v))) {
-        lenSpan.textContent = Math.hypot(x2-x1, y2-y1).toFixed(3);
-      }
-    }
-    const dimSpan = overlay.querySelector("#editDim");
-    if (dimSpan) {
-      const x1 = safeEvalMath(overlay.querySelector("#editX1")?.value);
-      const y1 = safeEvalMath(overlay.querySelector("#editY1")?.value);
-      const x2 = safeEvalMath(overlay.querySelector("#editX2")?.value);
-      const y2 = safeEvalMath(overlay.querySelector("#editY2")?.value);
-      if ([x1,y1,x2,y2].every(v => isFinite(v))) {
-        dimSpan.textContent = `${Math.abs(x2-x1).toFixed(2)} × ${Math.abs(y2-y1).toFixed(2)}`;
-      }
-    }
+  // ── Sync logic for lines (length/angle ↔ endpoints) ──
+  function getEditAnchor() {
+    const r = overlay.querySelector('input[name="editAnchor"]:checked');
+    return r ? r.value : '1';
   }
-  ["#editX1","#editY1","#editX2","#editY2"].forEach(sel => {
-    const inp = overlay.querySelector(sel);
-    if (inp) inp.addEventListener("input", updateEditInfo);
-  });
+
+  const eX1 = overlay.querySelector("#editX1");
+  const eY1 = overlay.querySelector("#editY1");
+  const eX2 = overlay.querySelector("#editX2");
+  const eY2 = overlay.querySelector("#editY2");
+  const eLenInp = overlay.querySelector("#editLen");
+  const eAngInp = overlay.querySelector("#editAng");
+  const eWInp = overlay.querySelector("#editW");
+  const eHtInp = overlay.querySelector("#editHt");
+
+  if ((obj.type === 'line' || obj.type === 'constr') && eLenInp && eAngInp) {
+    function syncLineFromPolar() {
+      const l = safeEvalMath(eLenInp.value);
+      const a = safeEvalMath(eAngInp.value);
+      if (!isFinite(l) || !isFinite(a)) return;
+      const rad = a * Math.PI / 180;
+      if (getEditAnchor() === '1') {
+        const x1 = safeEvalMath(eX1.value);
+        const y1 = safeEvalMath(eY1.value);
+        if (isFinite(x1) && isFinite(y1)) {
+          eX2.value = (x1 + l * Math.cos(rad)).toFixed(3);
+          eY2.value = (y1 + l * Math.sin(rad)).toFixed(3);
+        }
+      } else {
+        const x2 = safeEvalMath(eX2.value);
+        const y2 = safeEvalMath(eY2.value);
+        if (isFinite(x2) && isFinite(y2)) {
+          eX1.value = (x2 + l * Math.cos(rad)).toFixed(3);
+          eY1.value = (y2 + l * Math.sin(rad)).toFixed(3);
+        }
+      }
+    }
+    function syncLineFromEndpoints() {
+      const x1 = safeEvalMath(eX1.value);
+      const y1 = safeEvalMath(eY1.value);
+      const x2 = safeEvalMath(eX2.value);
+      const y2 = safeEvalMath(eY2.value);
+      if ([x1,y1,x2,y2].every(v => isFinite(v))) {
+        eLenInp.value = Math.hypot(x2-x1, y2-y1).toFixed(3);
+        if (getEditAnchor() === '1') {
+          eAngInp.value = (((Math.atan2(y2-y1, x2-x1)*180/Math.PI)+360)%360).toFixed(2);
+        } else {
+          eAngInp.value = (((Math.atan2(y1-y2, x1-x2)*180/Math.PI)+360)%360).toFixed(2);
+        }
+      }
+    }
+    eX1.addEventListener('input', syncLineFromEndpoints);
+    eY1.addEventListener('input', syncLineFromEndpoints);
+    eX2.addEventListener('input', syncLineFromEndpoints);
+    eY2.addEventListener('input', syncLineFromEndpoints);
+    eLenInp.addEventListener('input', syncLineFromPolar);
+    eAngInp.addEventListener('input', syncLineFromPolar);
+    overlay.querySelectorAll('input[name="editAnchor"]').forEach(r => {
+      r.addEventListener('change', syncLineFromEndpoints);
+    });
+  }
+
+  // ── Sync logic for rects (width/height ↔ corners) ──
+  if (obj.type === 'rect' && eWInp && eHtInp) {
+    eWInp.addEventListener('input', () => {
+      const wVal = safeEvalMath(eWInp.value);
+      if (!isFinite(wVal)) return;
+      if (getEditAnchor() === '1') {
+        const x1 = safeEvalMath(eX1.value);
+        if (isFinite(x1)) {
+          const sign = (safeEvalMath(eX2.value) >= x1) ? 1 : -1;
+          eX2.value = (x1 + sign * Math.abs(wVal)).toFixed(3);
+        }
+      } else {
+        const x2 = safeEvalMath(eX2.value);
+        if (isFinite(x2)) {
+          const sign = (safeEvalMath(eX1.value) <= x2) ? -1 : 1;
+          eX1.value = (x2 + sign * Math.abs(wVal)).toFixed(3);
+        }
+      }
+    });
+    eHtInp.addEventListener('input', () => {
+      const hVal = safeEvalMath(eHtInp.value);
+      if (!isFinite(hVal)) return;
+      if (getEditAnchor() === '1') {
+        const y1 = safeEvalMath(eY1.value);
+        if (isFinite(y1)) {
+          const sign = (safeEvalMath(eY2.value) >= y1) ? 1 : -1;
+          eY2.value = (y1 + sign * Math.abs(hVal)).toFixed(3);
+        }
+      } else {
+        const y2 = safeEvalMath(eY2.value);
+        if (isFinite(y2)) {
+          const sign = (safeEvalMath(eY1.value) <= y2) ? -1 : 1;
+          eY1.value = (y2 + sign * Math.abs(hVal)).toFixed(3);
+        }
+      }
+    });
+    function syncRectWH() {
+      const x1 = safeEvalMath(eX1.value);
+      const y1 = safeEvalMath(eY1.value);
+      const x2 = safeEvalMath(eX2.value);
+      const y2 = safeEvalMath(eY2.value);
+      if ([x1,y1,x2,y2].every(v => isFinite(v))) {
+        eWInp.value = Math.abs(x2 - x1).toFixed(3);
+        eHtInp.value = Math.abs(y2 - y1).toFixed(3);
+      }
+    }
+    eX1.addEventListener('input', syncRectWH);
+    eY1.addEventListener('input', syncRectWH);
+    eX2.addEventListener('input', syncRectWH);
+    eY2.addEventListener('input', syncRectWH);
+  }
 
   // Sync radius/diameter
   const rInput = overlay.querySelector("#editR");

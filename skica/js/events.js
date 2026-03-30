@@ -15,6 +15,7 @@ import { bulgeToArc, deepClone } from './utils.js';
 import { bridge } from './bridge.js';
 import { updateAssociativeDimensions } from './dialogs/dimension.js';
 import { handleTangentClick, tangentFromSelection, handleOffsetClick, offsetFromSelection, handleTrimClick, trimFromSelection, handleExtendClick, extendFromSelection, handleFilletClick, filletFromSelection, handlePerpClick, perpFromSelection, handleHorizontalClick, horizontalFromSelection, handleParallelClick, parallelFromSelection, handleDimensionClick, handleSnapPointClick, handleMoveClick, handleLineClick, handleMeasureClick, handleCircleClick, handleArcClick, handleRectClick, handlePolylineClick, measureSelection, handleTextClick, handleAnchorClick, removeAnchorsForObject, removeAnchorAt, hasAnchoredPoint } from './tools/index.js';
+import { showPostDrawPointDialog, showPostDrawPolylineDialog } from './dialogs/postDrawDialog.js';
 
 // Registrace measureSelection na bridge (aby ui.js nemusel importovat přímo – kruhová závislost)
 bridge.measureSelection = measureSelection;
@@ -414,7 +415,7 @@ document.addEventListener("keydown", (e) => {
       } else {
         while (bulges.length < state.tempPoints.length - 1) bulges.push(0);
       }
-      addObject({
+      const plObj = addObject({
         type: 'polyline',
         vertices: state.tempPoints.slice(),
         bulges: bulges.slice(0, closed ? state.tempPoints.length : state.tempPoints.length - 1),
@@ -426,6 +427,7 @@ document.addEventListener("keydown", (e) => {
       state._polylineBulges = [];
       resetHint();
       showToast(closed ? 'Kontura uzavřena' : 'Kontura dokončena');
+      if (plObj) showPostDrawPolylineDialog(plObj);
     }
   }
   // Polyline: B = bulge dialog pro poslední segment
@@ -582,14 +584,16 @@ export function handleCanvasClick(wx, wy) {
       handleMoveClick(wx, wy);
       break;
 
-    case "point":
-      addObject({
+    case "point": {
+      const ptObj = addObject({
         type: "point",
         x: wx,
         y: wy,
         name: `Bod ${state.nextId}`,
       });
+      if (ptObj) showPostDrawPointDialog(ptObj);
       break;
+    }
 
     case "line":
     case "constr":

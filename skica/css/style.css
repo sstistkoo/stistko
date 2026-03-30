@@ -711,6 +711,29 @@ body {
   color: var(--ctp-text);
 }
 
+/* ── Anchor-point radio (pin fixed point) ── */
+.anchor-radio-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 8px;
+  align-items: center;
+  font-size: 12px;
+  color: var(--ctp-subtext0);
+}
+.anchor-radio-row label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  margin-bottom: 0;
+}
+.anchor-radio-row input[type="radio"] {
+  width: auto;
+  margin: 0;
+  accent-color: var(--ctp-blue);
+}
+
 /* â”€â”€ Statusbar â”€â”€ */
 
 /* â”€â”€ Pick button (numerical dialog) â”€â”€ */
