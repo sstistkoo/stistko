@@ -171,7 +171,7 @@ describe('handleCanvasClick', () => {
   it('volá selectObjectAt při nástroji "select"', () => {
     state.tool = 'select';
     handleCanvasClick(10, 20);
-    expect(selectObjectAt).toHaveBeenCalledWith(10, 20, false);
+    expect(selectObjectAt).toHaveBeenCalledWith(10, 20);
   });
 
   // ── Point ──
