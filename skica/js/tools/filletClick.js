@@ -9,7 +9,7 @@ import { setHint, resetHint } from '../ui.js';
 import { drawCanvas, screenToWorld, snapPt } from '../canvas.js';
 import { findObjectAt, calculateAllIntersections, filletTwoLines } from '../geometry.js';
 import { showFilletDialog } from '../dialogs.js';
-import { getLineSegment } from './helpers.js';
+import { getLineSegment, analyzeSelection } from './helpers.js';
 
 /** Klik na první úsečku → dialog → klik na druhou → zaoblení. */
 export function handleFilletClick(wx, wy) {
@@ -82,4 +82,56 @@ export function handleFilletClick(wx, wy) {
       drawCanvas.removeEventListener("touchend", onSecondTouch);
     };
   });
+}
+
+/** Zaoblení z 2 předvybraných úseček. Vrací true pokud se operace provedla. */
+export function filletFromSelection() {
+  const { lines } = analyzeSelection();
+  if (lines.length !== 2) return false;
+
+  const info1 = lines[0], info2 = lines[1];
+  const obj1 = state.objects[info1.idx];
+  const obj2 = state.objects[info2.idx];
+  if (!obj1 || !obj2) return false;
+
+  // Získat segmenty
+  let ls1, ls2;
+  if (obj1.type === 'polyline' && info1.segIdx !== null) {
+    const v = obj1.vertices, si = info1.segIdx, n = v.length;
+    const p1 = v[si], p2 = v[(si + 1) % n];
+    if ((obj1.bulges?.[si] || 0) !== 0) { showToast("Zaoblení obloukového segmentu není podporováno"); return true; }
+    ls1 = { seg: { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y }, setP1: (x, y) => { p1.x = x; p1.y = y; }, setP2: (x, y) => { p2.x = x; p2.y = y; }, segIdx: si };
+  } else {
+    ls1 = getLineSegment(obj1, (obj1.x1 + obj1.x2) / 2, (obj1.y1 + obj1.y2) / 2);
+  }
+  if (obj2.type === 'polyline' && info2.segIdx !== null) {
+    const v = obj2.vertices, si = info2.segIdx, n = v.length;
+    const p1 = v[si], p2 = v[(si + 1) % n];
+    if ((obj2.bulges?.[si] || 0) !== 0) { showToast("Zaoblení obloukového segmentu není podporováno"); return true; }
+    ls2 = { seg: { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y }, setP1: (x, y) => { p1.x = x; p1.y = y; }, setP2: (x, y) => { p2.x = x; p2.y = y; }, segIdx: si };
+  } else {
+    ls2 = getLineSegment(obj2, (obj2.x1 + obj2.x2) / 2, (obj2.y1 + obj2.y2) / 2);
+  }
+  if (!ls1 || !ls2) return false;
+
+  showFilletDialog((radius) => {
+    const proxy1 = { x1: ls1.seg.x1, y1: ls1.seg.y1, x2: ls1.seg.x2, y2: ls1.seg.y2 };
+    const proxy2 = { x1: ls2.seg.x1, y1: ls2.seg.y1, x2: ls2.seg.x2, y2: ls2.seg.y2 };
+
+    pushUndo();
+    const result = filletTwoLines(proxy1, proxy2, radius);
+    if (!result.ok) { showToast(result.msg); return; }
+
+    ls1.setP1(proxy1.x1, proxy1.y1);
+    ls1.setP2(proxy1.x2, proxy1.y2);
+    ls2.setP1(proxy2.x1, proxy2.y1);
+    ls2.setP2(proxy2.x2, proxy2.y2);
+
+    result.arc.name = `Zaoblení R${radius}`;
+    addObject(result.arc);
+    calculateAllIntersections();
+    renderAll();
+    showToast(`Zaoblení R${radius} vytvořeno ✓`);
+  });
+  return true;
 }

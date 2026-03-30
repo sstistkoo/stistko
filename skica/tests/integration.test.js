@@ -92,10 +92,14 @@ vi.mock('../js/storage.js', () => ({
 
 // Mock tools/index.js – handlry přesměrovávají na mockované funkce
 vi.mock('../js/tools/index.js', () => ({
-  handleTangentClick: vi.fn(), tangentFromSelection: vi.fn(() => false), handleOffsetClick: vi.fn(),
-  handleTrimClick: vi.fn(), handleExtendClick: vi.fn(),
-  handleFilletClick: vi.fn(), handlePerpClick: vi.fn(),
-  handleHorizontalClick: vi.fn(), handleParallelClick: vi.fn(),
+  handleTangentClick: vi.fn(), tangentFromSelection: vi.fn(() => false),
+  handleOffsetClick: vi.fn(), offsetFromSelection: vi.fn(() => false),
+  handleTrimClick: vi.fn(), trimFromSelection: vi.fn(() => false),
+  handleExtendClick: vi.fn(), extendFromSelection: vi.fn(() => false),
+  handleFilletClick: vi.fn(), filletFromSelection: vi.fn(() => false),
+  handlePerpClick: vi.fn(), perpFromSelection: vi.fn(() => false),
+  handleHorizontalClick: vi.fn(), horizontalFromSelection: vi.fn(() => false),
+  handleParallelClick: vi.fn(), parallelFromSelection: vi.fn(() => false),
   handleDimensionClick: vi.fn(), handleSnapPointClick: vi.fn(),
   handleMoveClick: vi.fn(), handleLineClick: vi.fn(),
   handleMeasureClick: vi.fn(), handleCircleClick: vi.fn(),

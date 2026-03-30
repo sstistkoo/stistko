@@ -52,7 +52,6 @@ export function updateObjectList() {
     li.appendChild(delBtn);
     span.addEventListener("click", () => {
       if (state.multiSelected.has(idx) || (idx === state.selected && state.multiSelected.size > 0)) {
-        // Klik na vybraný → odebrat
         state.multiSelected.delete(idx);
         if (idx === state.selected) {
           state.selected = state.multiSelected.size > 0
@@ -63,15 +62,12 @@ export function updateObjectList() {
           state.multiSelected.clear();
         }
       } else if (idx === state.selected && state.multiSelected.size === 0) {
-        // Klik na jediný vybraný → odznačit
         state.selected = null;
       } else if (state.selected !== null) {
-        // Už něco vybráno → přidat do multi
         if (state.multiSelected.size === 0) state.multiSelected.add(state.selected);
         state.multiSelected.add(idx);
         state.selected = idx;
       } else {
-        // Nic nevybráno → single select
         state.selected = idx;
       }
       state.selectedSegment = null;
@@ -83,7 +79,6 @@ export function updateObjectList() {
     delBtn.addEventListener("click", (e) => {
       e.stopPropagation();
       pushUndo();
-      // Reset drag pokud mažeme přetahovaný objekt
       if (state.dragging && state.dragObjIdx === idx) {
         state.dragging = false;
         state.dragObjIdx = null;
@@ -93,12 +88,10 @@ export function updateObjectList() {
       state.objects.splice(idx, 1);
       if (state.selected === idx) state.selected = null;
       else if (state.selected > idx) state.selected--;
-      // Aktualizovat multiSelected indexy
       const newMulti = new Set();
       for (const mi of state.multiSelected) {
         if (mi < idx) newMulti.add(mi);
         else if (mi > idx) newMulti.add(mi - 1);
-        // mi === idx → odstraněn
       }
       state.multiSelected = newMulti;
       updateObjectList();
@@ -106,6 +99,108 @@ export function updateObjectList() {
       if (bridge.calculateAllIntersections) bridge.calculateAllIntersections();
     });
     ul.appendChild(li);
+
+    // ── Rozbalení segmentů kontury ──
+    if (obj.type === 'polyline' && (idx === state.selected || state.multiSelected.has(idx))) {
+      const n = obj.vertices.length;
+      const segCount = obj.closed ? n : n - 1;
+      for (let si = 0; si < segCount; si++) {
+        const p1 = obj.vertices[si];
+        const p2 = obj.vertices[(si + 1) % n];
+        const b = obj.bulges[si] || 0;
+        const segName = b === 0 ? `Úsečka ${si + 1}` : `Oblouk ${si + 1}`;
+
+        const segLi = document.createElement("li");
+        segLi.className = "seg-item" + (state.selectedSegment === si && state._selectedSegmentObjIdx === idx ? " seg-selected" : "");
+        const segSpan = document.createElement("span");
+        const segIcon = document.createElement("span");
+        segIcon.className = "obj-icon";
+        segIcon.textContent = b === 0 ? "/" : "⌒";
+        segSpan.appendChild(segIcon);
+        segSpan.appendChild(document.createTextNode(segName));
+        segLi.appendChild(segSpan);
+
+        // Delete segment button
+        const segDelBtn = document.createElement("button");
+        segDelBtn.className = "del-btn";
+        segDelBtn.title = "Smazat segment";
+        segDelBtn.textContent = "✕";
+        segLi.appendChild(segDelBtn);
+
+        // Click to select segment
+        segSpan.addEventListener("click", () => {
+          state.selected = idx;
+          state.selectedSegment = si;
+          state._selectedSegmentObjIdx = idx;
+          updateObjectList();
+          updateProperties();
+          renderAll();
+        });
+
+        // Delete segment – split contour if middle
+        segDelBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          pushUndo();
+          const vn = obj.vertices.length;
+          const sc = obj.closed ? vn : vn - 1;
+          if (si < 0 || si >= sc) return;
+
+          if (vn <= 2) {
+            // Only 1 segment → delete the whole polyline
+            state.objects.splice(idx, 1);
+            if (state.selected === idx) state.selected = null;
+            else if (state.selected > idx) state.selected--;
+          } else if (obj.closed) {
+            const removeIdx = (si + 1) % vn;
+            obj.vertices.splice(removeIdx, 1);
+            obj.bulges.splice(si, 1);
+            obj.closed = false;
+            if (removeIdx > 0 && removeIdx < obj.vertices.length) {
+              const newVerts = [...obj.vertices.slice(removeIdx), ...obj.vertices.slice(0, removeIdx)];
+              const newBulges = [...obj.bulges.slice(removeIdx), ...obj.bulges.slice(0, removeIdx)];
+              obj.vertices = newVerts;
+              obj.bulges = newBulges;
+            }
+          } else if (si === 0) {
+            obj.vertices.splice(0, 1);
+            obj.bulges.splice(0, 1);
+          } else if (si === sc - 1) {
+            obj.vertices.splice(vn - 1, 1);
+            obj.bulges.splice(si, 1);
+          } else {
+            // Middle segment → split into two polylines
+            const verts1 = obj.vertices.slice(0, si + 1);
+            const bulges1 = obj.bulges.slice(0, si);
+            const verts2 = obj.vertices.slice(si + 1);
+            const bulges2 = obj.bulges.slice(si + 1);
+            obj.vertices = verts1;
+            obj.bulges = bulges1;
+            obj.closed = false;
+            if (verts2.length >= 2) {
+              const newId = state.nextId++;
+              const newObj = {
+                type: 'polyline',
+                id: newId,
+                vertices: verts2,
+                bulges: bulges2,
+                closed: false,
+                name: `Kontura ${newId}`,
+                layer: obj.layer,
+                color: obj.color,
+              };
+              state.objects.splice(idx + 1, 0, newObj);
+            }
+          }
+          state.selectedSegment = null;
+          state._selectedSegmentObjIdx = null;
+          updateObjectList();
+          updateProperties();
+          if (bridge.calculateAllIntersections) bridge.calculateAllIntersections();
+          showToast("Segment smazán ✓");
+        });
+        ul.appendChild(segLi);
+      }
+    }
   });
 }
 
@@ -463,6 +558,7 @@ export function updateProperties() {
 /** Aktualizuje seznam průsečíků v panelu. */
 export function updateIntersectionList() {
   const ul = document.getElementById("intersectionList");
+  if (!ul) return;
   ul.innerHTML = "";
   if (state.intersections.length === 0) {
     ul.innerHTML =
@@ -636,6 +732,20 @@ document.querySelectorAll("[data-tool]").forEach((btn) => {
     if (btn.dataset.tool === 'measure' && bridge.measureSelection && bridge.measureSelection()) return;
     // Tečna: pokud je výběr → okamžitě provést
     if (btn.dataset.tool === 'tangent' && bridge.tangentFromSelection && bridge.tangentFromSelection()) return;
+    // Offset: pokud je výběr → okamžitě provést
+    if (btn.dataset.tool === 'offset' && bridge.offsetFromSelection && bridge.offsetFromSelection()) return;
+    // Oříznutí: pokud je výběr → okamžitě provést
+    if (btn.dataset.tool === 'trim' && bridge.trimFromSelection && bridge.trimFromSelection()) return;
+    // Prodloužení: pokud je výběr → okamžitě provést
+    if (btn.dataset.tool === 'extend' && bridge.extendFromSelection && bridge.extendFromSelection()) return;
+    // Zaoblení: pokud je výběr → okamžitě provést
+    if (btn.dataset.tool === 'fillet' && bridge.filletFromSelection && bridge.filletFromSelection()) return;
+    // Kolmost: pokud je výběr → okamžitě provést
+    if (btn.dataset.tool === 'perp' && bridge.perpFromSelection && bridge.perpFromSelection()) return;
+    // Vodorovnost: pokud je výběr → okamžitě provést
+    if (btn.dataset.tool === 'horizontal' && bridge.horizontalFromSelection && bridge.horizontalFromSelection()) return;
+    // Rovnoběžka: pokud je výběr → okamžitě provést
+    if (btn.dataset.tool === 'parallel' && bridge.parallelFromSelection && bridge.parallelFromSelection()) return;
     setTool(btn.dataset.tool);
   });
 });
