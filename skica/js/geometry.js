@@ -4,7 +4,7 @@
 
 import { state } from './state.js';
 import { SNAP_POINT_THRESHOLD, SELECT_THRESHOLD, CONSTRAINT_OFFSET_PX, ARC_OUTSIDE_PENALTY } from './constants.js';
-import { distPointToSegment, isAngleBetween, bulgeToArc, deepClone, getObjectSnapPoints } from './utils.js';
+import { distPointToSegment, isAngleBetween, bulgeToArc, deepClone, getObjectSnapPoints, getRectCorners } from './utils.js';
 import { renderAll } from './render.js';
 import { bridge } from './bridge.js';
 
@@ -312,10 +312,11 @@ export function distToObject(obj, wx, wy) {
         : dist + ARC_OUTSIDE_PENALTY;
     }
     case "rect": {
-      const d1 = distPointToSegment(wx, wy, obj.x1, obj.y1, obj.x2, obj.y1);
-      const d2 = distPointToSegment(wx, wy, obj.x2, obj.y1, obj.x2, obj.y2);
-      const d3 = distPointToSegment(wx, wy, obj.x2, obj.y2, obj.x1, obj.y2);
-      const d4 = distPointToSegment(wx, wy, obj.x1, obj.y2, obj.x1, obj.y1);
+      const rc = getRectCorners(obj);
+      const d1 = distPointToSegment(wx, wy, rc[0].x, rc[0].y, rc[1].x, rc[1].y);
+      const d2 = distPointToSegment(wx, wy, rc[1].x, rc[1].y, rc[2].x, rc[2].y);
+      const d3 = distPointToSegment(wx, wy, rc[2].x, rc[2].y, rc[3].x, rc[3].y);
+      const d4 = distPointToSegment(wx, wy, rc[3].x, rc[3].y, rc[0].x, rc[0].y);
       return Math.min(d1, d2, d3, d4);
     }
     case "polyline": {
@@ -375,13 +376,15 @@ export function getLines(obj) {
         isConstr: obj.type === "constr",
       },
     ];
-  if (obj.type === "rect")
+  if (obj.type === "rect") {
+    const rc = getRectCorners(obj);
     return [
-      { x1: obj.x1, y1: obj.y1, x2: obj.x2, y2: obj.y1 },
-      { x1: obj.x2, y1: obj.y1, x2: obj.x2, y2: obj.y2 },
-      { x1: obj.x2, y1: obj.y2, x2: obj.x1, y2: obj.y2 },
-      { x1: obj.x1, y1: obj.y2, x2: obj.x1, y2: obj.y1 },
+      { x1: rc[0].x, y1: rc[0].y, x2: rc[1].x, y2: rc[1].y },
+      { x1: rc[1].x, y1: rc[1].y, x2: rc[2].x, y2: rc[2].y },
+      { x1: rc[2].x, y1: rc[2].y, x2: rc[3].x, y2: rc[3].y },
+      { x1: rc[3].x, y1: rc[3].y, x2: rc[0].x, y2: rc[0].y },
     ];
+  }
   if (obj.type === "polyline") {
     const lines = [];
     const n = obj.vertices.length;

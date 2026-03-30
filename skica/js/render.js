@@ -5,7 +5,7 @@
 import { drawCanvas, ctx, worldToScreen, screenToWorld } from './canvas.js';
 import { state, toDisplayCoords, displayX, xPrefix, fmtCoordLabel } from './state.js';
 import { bridge } from './bridge.js';
-import { bulgeToArc } from './utils.js';
+import { bulgeToArc, getRectCorners } from './utils.js';
 import { projectPointToLine } from './geometry.js';
 import {
   COLORS, GRID_BASE_STEP, GRID_MIN_PX, LINE_WIDTH, LINE_WIDTH_SELECTED,
@@ -891,19 +891,21 @@ function drawDimension(obj) {
       break;
     }
     case "rect": {
-      const [sx1, sy1] = worldToScreen(obj.x1, obj.y1);
-      const [sx2, sy2] = worldToScreen(obj.x2, obj.y2);
+      const rc = getRectCorners(obj);
       const w = Math.abs(obj.x2 - obj.x1),
         h = Math.abs(obj.y2 - obj.y1);
+      const [sx1r, sy1r] = worldToScreen(rc[0].x, rc[0].y);
+      const [sx2r, sy2r] = worldToScreen(rc[1].x, rc[1].y);
+      const [sx3r, sy3r] = worldToScreen(rc[2].x, rc[2].y);
       ctx.fillText(
         w.toFixed(2),
-        (sx1 + sx2) / 2 - 15,
-        Math.min(sy1, sy2) - 4,
+        (sx1r + sx2r) / 2 - 15,
+        Math.min(sy1r, sy2r) - 4,
       );
       ctx.fillText(
         h.toFixed(2),
-        Math.max(sx1, sx2) + 4,
-        (sy1 + sy2) / 2 + 4,
+        Math.max(sx2r, sx3r) + 4,
+        (sy2r + sy3r) / 2 + 4,
       );
       break;
     }
@@ -1229,15 +1231,12 @@ export function drawArc(obj) {
 
 /** @param {import('./types.js').RectObject} obj */
 export function drawRect(obj) {
-  const [sx1, sy1] = worldToScreen(obj.x1, obj.y1);
-  const [sx2, sy2] = worldToScreen(obj.x2, obj.y2);
+  const c = getRectCorners(obj);
+  const sc = c.map(p => worldToScreen(p.x, p.y));
   ctx.beginPath();
-  ctx.rect(
-    Math.min(sx1, sx2),
-    Math.min(sy1, sy2),
-    Math.abs(sx2 - sx1),
-    Math.abs(sy2 - sy1),
-  );
+  ctx.moveTo(sc[0][0], sc[0][1]);
+  for (let i = 1; i < 4; i++) ctx.lineTo(sc[i][0], sc[i][1]);
+  ctx.closePath();
   ctx.stroke();
 }
 

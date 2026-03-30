@@ -3,6 +3,7 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 import { COLORS } from './constants.js';
+import { getRectCorners } from './utils.js';
 
 const MAX_ENTITIES = 10000;
 const DEFAULT_COLOR = COLORS.primary;
@@ -237,17 +238,18 @@ function entityToString(obj) {
       p(51, (obj.endAngle * RAD2DEG).toFixed(6));
       break;
 
-    case 'rect':
-      // Exportovat jako LWPOLYLINE (uzavřený obdélník)
+    case 'rect': {
+      // Exportovat jako LWPOLYLINE (uzavřený obdélník, respektuje rotaci)
+      const rc = getRectCorners(obj);
       p(0, 'LWPOLYLINE');
       p(8, '0');
       p(70, '1'); // closed
       p(90, '4'); // vertex count
-      p(10, obj.x1.toFixed(6)); p(20, obj.y1.toFixed(6));
-      p(10, obj.x2.toFixed(6)); p(20, obj.y1.toFixed(6));
-      p(10, obj.x2.toFixed(6)); p(20, obj.y2.toFixed(6));
-      p(10, obj.x1.toFixed(6)); p(20, obj.y2.toFixed(6));
+      for (const c of rc) {
+        p(10, c.x.toFixed(6)); p(20, c.y.toFixed(6));
+      }
       break;
+    }
 
     case 'polyline':
       p(0, 'LWPOLYLINE');
