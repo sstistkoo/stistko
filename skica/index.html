@@ -152,6 +152,51 @@
       </button>
       <button
         class="tool-btn"
+        data-tool="anchor"
+        title="Kotva – zakotvit/uvolnit snap body"
+      >
+        <svg viewBox="0 0 24 24">
+          <circle
+            cx="12"
+            cy="5"
+            r="2.5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+          />
+          <line
+            x1="12"
+            y1="7.5"
+            x2="12"
+            y2="20"
+            stroke="currentColor"
+            stroke-width="1.5"
+          />
+          <path
+            d="M12 20 Q12 22 10 22 L6 22"
+            stroke="currentColor"
+            stroke-width="1.5"
+            fill="none"
+          />
+          <path
+            d="M12 20 Q12 22 14 22 L18 22"
+            stroke="currentColor"
+            stroke-width="1.5"
+            fill="none"
+          />
+          <line
+            x1="8"
+            y1="12"
+            x2="16"
+            y2="12"
+            stroke="currentColor"
+            stroke-width="1.5"
+          />
+        </svg>
+        Kotva
+      </button>
+      <button
+        class="tool-btn"
         id="btnDelete"
         title="Smazat vybraný objekt (Del)"
         aria-label="Smazat vybraný objekt"
@@ -848,7 +893,13 @@
         >
           <div id="nullPointIndicator" class="null-point-indicator" hidden>
             📍 Nul. bod: <span id="nullPointCoords"></span>
-            <button id="btnClearNullPoint" class="null-point-clear" title="Zrušit nulový bod">✕</button>
+            <button
+              id="btnClearNullPoint"
+              class="null-point-clear"
+              title="Zrušit nulový bod"
+            >
+              ✕
+            </button>
           </div>
           <ul id="objectList"></ul>
         </div>
@@ -1314,16 +1365,16 @@
           <h3>💡 Tipy</h3>
           <ul class="help-tips">
             <li>
-              Pravým klikem na canvasu – nastavení nulového bodu, zrcadlení, offset,
-              pole
+              Pravým klikem na canvasu – nastavení nulového bodu, zrcadlení,
+              offset, pole
             </li>
             <li>
               Snap k bodům (S) automaticky přichytává kurzor k vrcholům a
               průsečíkům
             </li>
             <li>
-              Inkrementální režim (I) zobrazuje souřadnice relativně k
-              nulovému bodu
+              Inkrementální režim (I) zobrazuje souřadnice relativně k nulovému
+              bodu
             </li>
             <li>Export CNC generuje G-kód pro soustružnické operace</li>
             <li>Kalkulačky a trigonometrie v bočním panelu</li>

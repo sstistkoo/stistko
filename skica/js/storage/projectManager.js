@@ -35,6 +35,7 @@ function _buildProjectData() {
     layers: state.layers,
     activeLayer: state.activeLayer,
     nextLayerId: state.nextLayerId,
+    anchors: state.anchors,
   };
 }
 
@@ -56,6 +57,7 @@ function _loadProjectData(data) {
   } else {
     state.objects.forEach(obj => { if (obj.layer === undefined) obj.layer = 0; });
   }
+  state.anchors = data.anchors || [];
   state.selected = null;
   state.multiSelected.clear();
   state.selectedPoint = null;

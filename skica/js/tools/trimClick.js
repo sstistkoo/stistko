@@ -7,6 +7,8 @@ import { renderAll } from '../render.js';
 import { findObjectAt, calculateAllIntersections, getLines, getCircles, intersectLineLine, intersectLineCircle } from '../geometry.js';
 import { getLineSegment, analyzeSelection } from './helpers.js';
 import { showEndpointChoiceDialog } from '../dialogs.js';
+import { isAnchored } from './anchorClick.js';
+import { updateAssociativeDimensions } from '../dialogs/dimension.js';
 
 /** Ořízne úsečku k nejbližšímu průsečíku na straně kliknutí. */
 export function handleTrimClick(wx, wy) {
@@ -40,9 +42,18 @@ export function handleTrimClick(wx, wy) {
   if (pts.length === 0) { showToast("Žádný průsečík pro oříznutí"); return; }
 
   // Determine which end of the line is closer to click point
-  const d1 = Math.hypot(wx - ls.seg.x1, wy - ls.seg.y1);
-  const d2 = Math.hypot(wx - ls.seg.x2, wy - ls.seg.y2);
-  const trimEnd = d1 < d2 ? 1 : 2; // 1 = trim start(x1,y1), 2 = trim end(x2,y2)
+  // Zakotvený konec nemůže být oříznut
+  const a1 = isAnchored(ls.seg.x1, ls.seg.y1);
+  const a2 = isAnchored(ls.seg.x2, ls.seg.y2);
+  if (a1 && a2) { showToast("Oba konce jsou zakotveny – nelze oříznout"); return; }
+  let trimEnd;
+  if (a1) { trimEnd = 2; }       // P1 zakotveno → ořízni P2
+  else if (a2) { trimEnd = 1; }  // P2 zakotveno → ořízni P1
+  else {
+    const d1 = Math.hypot(wx - ls.seg.x1, wy - ls.seg.y1);
+    const d2 = Math.hypot(wx - ls.seg.x2, wy - ls.seg.y2);
+    trimEnd = d1 < d2 ? 1 : 2;
+  }
 
   // Find intersection closest to the trimmed end
   let bestPt = null, bestDist = Infinity;
@@ -62,6 +73,7 @@ export function handleTrimClick(wx, wy) {
   else { ls.setP2(bestPt.x, bestPt.y); }
 
   calculateAllIntersections();
+  updateAssociativeDimensions();
   renderAll();
   showToast("Oříznuto ✓");
 }
@@ -110,9 +122,18 @@ export function trimFromSelection() {
   }
   if (pts.length === 0) { showToast("Žádný průsečík pro oříznutí"); return true; }
 
+  // Kontrola kotev – zakotvený konec nelze ořezat
+  const a1 = isAnchored(ls.seg.x1, ls.seg.y1);
+  const a2 = isAnchored(ls.seg.x2, ls.seg.y2);
+  if (a1 && a2) { showToast("Oba konce jsou zakotveny – nelze oříznout"); return true; }
+
   showEndpointChoiceDialog("Oříznutí – výběr konce", ls.seg,
-    "Oříznout ze začátku", "Oříznout z konce",
+    a1 ? "⚓ Začátek (zakotven)" : "Oříznout ze začátku",
+    a2 ? "⚓ Konec (zakotven)" : "Oříznout z konce",
     (end) => {
+      // Zakotvenou stranu nelze ořezat
+      if (end === 1 && a1) { showToast("Tento konec je zakotven – nelze oříznout"); return; }
+      if (end === 2 && a2) { showToast("Tento konec je zakotven – nelze oříznout"); return; }
       let bestPt = null, bestDist = Infinity;
       for (const p of pts) {
         const d = end === 1
@@ -125,6 +146,7 @@ export function trimFromSelection() {
       if (end === 1) ls.setP1(bestPt.x, bestPt.y);
       else ls.setP2(bestPt.x, bestPt.y);
       calculateAllIntersections();
+      updateAssociativeDimensions();
       renderAll();
       showToast("Oříznuto ✓");
     }

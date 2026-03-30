@@ -2,11 +2,12 @@
 // ║  SKICA – Správa objektů (přidání, přesun)                  ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-import { state, pushUndo } from './state.js';
+import { state, pushUndo, showToast } from './state.js';
 import { updateObjectList } from './ui.js';
 import { calculateAllIntersections } from './geometry.js';
 import { autoCenterView } from './canvas.js';
 import { updateAssociativeDimensions } from './dialogs/dimension.js';
+import { hasAnchoredPoint } from './tools/anchorClick.js';
 
 /**
  * Přidá objekt do výkresu (push undo, přiřazení ID a vrstvy).
@@ -44,6 +45,11 @@ export function addObject(obj) {
  * @param {number} dy
  */
 export function moveObject(obj, dx, dy) {
+  // Zakotvené body blokují přesun celého objektu
+  if (hasAnchoredPoint(obj)) {
+    showToast("Objekt je zakotven – nelze přesunout");
+    return false;
+  }
   switch (obj.type) {
     case "point":
       obj.x += dx;

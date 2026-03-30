@@ -7,6 +7,8 @@ import { renderAll } from '../render.js';
 import { findObjectAt, calculateAllIntersections, getLines, getCircles, intersectLineLine, intersectLineCircle } from '../geometry.js';
 import { getLineSegment, analyzeSelection } from './helpers.js';
 import { showEndpointChoiceDialog } from '../dialogs.js';
+import { isAnchored } from './anchorClick.js';
+import { updateAssociativeDimensions } from '../dialogs/dimension.js';
 
 /** Prodlouží úsečku k nejbližšímu průsečíku s jiným objektem na straně kliknutí. */
 export function handleExtendClick(wx, wy) {
@@ -20,9 +22,18 @@ export function handleExtendClick(wx, wy) {
   }
 
   // Which end to extend (closer to click)
-  const d1 = Math.hypot(wx - ls.seg.x1, wy - ls.seg.y1);
-  const d2 = Math.hypot(wx - ls.seg.x2, wy - ls.seg.y2);
-  const extEnd = d1 < d2 ? 1 : 2;
+  // Zakotvený konec nemůže být prodloužen
+  const a1 = isAnchored(ls.seg.x1, ls.seg.y1);
+  const a2 = isAnchored(ls.seg.x2, ls.seg.y2);
+  if (a1 && a2) { showToast("Oba konce jsou zakotveny – nelze prodloužit"); return; }
+  let extEnd;
+  if (a1) { extEnd = 2; }       // P1 zakotveno → prodluž P2
+  else if (a2) { extEnd = 1; }  // P2 zakotveno → prodluž P1
+  else {
+    const d1 = Math.hypot(wx - ls.seg.x1, wy - ls.seg.y1);
+    const d2 = Math.hypot(wx - ls.seg.x2, wy - ls.seg.y2);
+    extEnd = d1 < d2 ? 1 : 2;
+  }
 
   // Create an infinite line (construction) to find intersections beyond the segment
   const infLine = { x1: ls.seg.x1, y1: ls.seg.y1, x2: ls.seg.x2, y2: ls.seg.y2, isConstr: true };
@@ -68,6 +79,7 @@ export function handleExtendClick(wx, wy) {
   else { ls.setP2(best.x, best.y); }
 
   calculateAllIntersections();
+  updateAssociativeDimensions();
   renderAll();
   showToast("Prodlouženo ✓");
 }
@@ -129,10 +141,17 @@ export function extendFromSelection() {
     return true;
   }
 
+  // Kontrola kotev
+  const a1 = isAnchored(ls.seg.x1, ls.seg.y1);
+  const a2 = isAnchored(ls.seg.x2, ls.seg.y2);
+  if (a1 && a2) { showToast("Oba konce jsou zakotveny – nelze prodloužit"); return true; }
+
   showEndpointChoiceDialog("Prodloužení – výběr konce", ls.seg,
-    cands1.length > 0 ? "Prodloužit ze začátku" : "⚠ Ze začátku (žádný průsečík)",
-    cands2.length > 0 ? "Prodloužit z konce" : "⚠ Z konce (žádný průsečík)",
+    a1 ? "⚓ Začátek (zakotven)" : (cands1.length > 0 ? "Prodloužit ze začátku" : "⚠ Ze začátku (žádný průsečík)"),
+    a2 ? "⚓ Konec (zakotven)" : (cands2.length > 0 ? "Prodloužit z konce" : "⚠ Z konce (žádný průsečík)"),
     (end) => {
+      if (end === 1 && a1) { showToast("Tento konec je zakotven – nelze prodloužit"); return; }
+      if (end === 2 && a2) { showToast("Tento konec je zakotven – nelze prodloužit"); return; }
       const candidates = end === 1 ? cands1 : cands2;
       if (candidates.length === 0) { showToast("Žádný průsečík ve směru prodloužení"); return; }
       candidates.sort((a, b) => a.dist - b.dist);
@@ -141,6 +160,7 @@ export function extendFromSelection() {
       if (end === 1) ls.setP1(best.x, best.y);
       else ls.setP2(best.x, best.y);
       calculateAllIntersections();
+      updateAssociativeDimensions();
       renderAll();
       showToast("Prodlouženo ✓");
     }

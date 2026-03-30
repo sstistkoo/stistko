@@ -55,6 +55,8 @@ export const state = {
   intersections: [],
   nextId: 1,
   showDimensions: 'all',  // 'all' | 'intersections' | 'none'
+  // Kotvení (anchor) – zafixované snap body
+  anchors: [],  // [{x, y}, ...] – zakotvené body
   // Undo/Redo
   undoStack: [],
   redoStack: [],
@@ -131,11 +133,23 @@ export function resetDrawingState() {
 // ── Undo / Redo ──
 /** Uloží aktuální stav objektů na undo stack. */
 export function pushUndo() {
-  state.undoStack.push(JSON.stringify(state.objects));
+  state.undoStack.push(JSON.stringify({ objects: state.objects, anchors: state.anchors }));
   if (state.undoStack.length > state.maxUndo) state.undoStack.shift();
   state.redoStack = [];
   updateUndoButtons();
   if (_pushUndoHook) _pushUndoHook();
+}
+
+/** Parsuje undo/redo záznam (kompatibilita se starým formátem). */
+function _parseUndoData(raw) {
+  const parsed = JSON.parse(raw);
+  if (Array.isArray(parsed)) return { objects: parsed, anchors: [] };
+  return { objects: parsed.objects || [], anchors: parsed.anchors || [] };
+}
+
+/** Serializuje aktuální stav pro undo/redo. */
+function _serializeState() {
+  return JSON.stringify({ objects: state.objects, anchors: state.anchors });
 }
 
 /** Vrátí poslední změnu (undo). */
@@ -172,7 +186,8 @@ export function undo() {
   if (lastObj && lastObj.type === 'polyline' && lastObj.vertices && lastObj.vertices.length > 2) {
     let undoTopObjs;
     try {
-      undoTopObjs = JSON.parse(state.undoStack[state.undoStack.length - 1]);
+      const undoTop = _parseUndoData(state.undoStack[state.undoStack.length - 1]);
+      undoTopObjs = undoTop.objects;
     } catch {
       state.undoStack = [];
       updateUndoButtons();
@@ -182,7 +197,7 @@ export function undo() {
     const polyInUndo = undoTopObjs.find(o => o.id === lastObj.id);
     if (!polyInUndo) {
       // Kontura neexistuje v předchozím stavu → byla právě vytvořena
-      state.redoStack.push(JSON.stringify(state.objects));
+      state.redoStack.push(_serializeState());
       if (lastObj.closed) {
         // Nejdřív otevřít uzavřenou konturu
         lastObj.closed = false;
@@ -202,9 +217,11 @@ export function undo() {
     }
   }
 
-  state.redoStack.push(JSON.stringify(state.objects));
+  state.redoStack.push(_serializeState());
   try {
-    state.objects = JSON.parse(state.undoStack.pop());
+    const undoData = _parseUndoData(state.undoStack.pop());
+    state.objects = undoData.objects;
+    state.anchors = undoData.anchors;
   } catch {
     state.undoStack = [];
     state.redoStack.pop();
@@ -225,9 +242,11 @@ export function undo() {
 /** Zopakuje vrácenou změnu (redo). */
 export function redo() {
   if (state.redoStack.length === 0) return;
-  state.undoStack.push(JSON.stringify(state.objects));
+  state.undoStack.push(_serializeState());
   try {
-    state.objects = JSON.parse(state.redoStack.pop());
+    const redoData = _parseUndoData(state.redoStack.pop());
+    state.objects = redoData.objects;
+    state.anchors = redoData.anchors;
   } catch {
     state.redoStack = [];
     state.undoStack.pop();

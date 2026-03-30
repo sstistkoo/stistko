@@ -14,7 +14,7 @@ import { saveProject, showExportImageDialog, showProjectsDialog, showSaveAsDialo
 import { bulgeToArc, deepClone } from './utils.js';
 import { bridge } from './bridge.js';
 import { updateAssociativeDimensions } from './dialogs/dimension.js';
-import { handleTangentClick, tangentFromSelection, handleOffsetClick, offsetFromSelection, handleTrimClick, trimFromSelection, handleExtendClick, extendFromSelection, handleFilletClick, filletFromSelection, handlePerpClick, perpFromSelection, handleHorizontalClick, horizontalFromSelection, handleParallelClick, parallelFromSelection, handleDimensionClick, handleSnapPointClick, handleMoveClick, handleLineClick, handleMeasureClick, handleCircleClick, handleArcClick, handleRectClick, handlePolylineClick, measureSelection, handleTextClick } from './tools/index.js';
+import { handleTangentClick, tangentFromSelection, handleOffsetClick, offsetFromSelection, handleTrimClick, trimFromSelection, handleExtendClick, extendFromSelection, handleFilletClick, filletFromSelection, handlePerpClick, perpFromSelection, handleHorizontalClick, horizontalFromSelection, handleParallelClick, parallelFromSelection, handleDimensionClick, handleSnapPointClick, handleMoveClick, handleLineClick, handleMeasureClick, handleCircleClick, handleArcClick, handleRectClick, handlePolylineClick, measureSelection, handleTextClick, handleAnchorClick, removeAnchorsForObject, removeAnchorAt, hasAnchoredPoint } from './tools/index.js';
 
 // Registrace measureSelection na bridge (aby ui.js nemusel importovat přímo – kruhová závislost)
 bridge.measureSelection = measureSelection;
@@ -660,16 +660,29 @@ export function handleCanvasClick(wx, wy) {
       handleTextClick(wx, wy);
       break;
 
+    case "anchor":
+      handleAnchorClick(wx, wy);
+      break;
+
     case "deleteObj": {
       const idx = findObjectAt(wx, wy);
       if (idx !== null) {
         pushUndo();
+        removeAnchorsForObject(state.objects[idx]);
         state.objects.splice(idx, 1);
         updateObjectList();
         updateProperties();
         calculateAllIntersections();
         renderAll();
         showToast("Objekt smazán ✓");
+      } else {
+        pushUndo();
+        if (removeAnchorAt(wx, wy)) {
+          renderAll();
+          showToast("Kotva odstraněna ✓");
+        } else {
+          state.undoStack.pop(); // nic se nezměnilo, vrátit undo
+        }
       }
       break;
     }
@@ -702,6 +715,10 @@ function startRotateAction() {
   showRotateDialog(refObj, (deg) => {
     pushUndo();
     for (const obj of objs) {
+      if (hasAnchoredPoint(obj)) {
+        showToast("Zakotvené objekty nelze otáčet");
+        continue;
+      }
       // Rotate around object center
       let cx, cy;
       switch (obj.type) {
@@ -749,6 +766,7 @@ function deleteSelected() {
     pushUndo();
     const indices = [...state.multiSelected].sort((a, b) => b - a); // sestupně
     for (const idx of indices) {
+      removeAnchorsForObject(state.objects[idx]);
       state.objects.splice(idx, 1);
     }
     state.selected = null;
@@ -772,6 +790,7 @@ function deleteSelected() {
     return;
   }
   pushUndo();
+  removeAnchorsForObject(state.objects[state.selected]);
   state.objects.splice(state.selected, 1);
   state.selected = null;
   state.selectedSegment = null;
@@ -798,6 +817,7 @@ function deleteSelectedSegment() {
 
   if (n <= 2) {
     // Only 2 vertices = 1 segment → delete the whole polyline
+    removeAnchorsForObject(state.objects[state.selected]);
     state.objects.splice(state.selected, 1);
     state.selected = null;
     state.selectedSegment = null;

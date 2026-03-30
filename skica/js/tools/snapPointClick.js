@@ -8,6 +8,7 @@ import { renderAll } from '../render.js';
 import { calculateAllIntersections } from '../geometry.js';
 import { setHint, resetHint, updateProperties } from '../ui.js';
 import { moveObject } from '../objects.js';
+import { isAnchored } from './anchorClick.js';
 
 /**
  * Najde nejbližší koncový/klíčový bod objektu k zadaným souřadnicím.
@@ -92,6 +93,12 @@ export function handleSnapPointClick(wx, wy) {
       return;
     }
     state._snapPointState = ep;
+    // Kontrola kotvy – zakotvený bod nelze přesunout
+    if (isAnchored(ep.x, ep.y)) {
+      showToast("Tento bod je zakotven – nelze přesunout");
+      state._snapPointState = null;
+      return;
+    }
     state.selected = ep.objIdx;
     updateProperties();
     setHint("Klepněte na cílový bod (snap) pro přichycení");

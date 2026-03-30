@@ -915,6 +915,7 @@ export function resetHint() {
     parallel: "Klepněte na úsečku kterou chcete otočit → pak na referenční úsečku pro rovnoběžnost",
     text: "Klepněte na místo, kam chcete umístit textovou anotaci",
     deleteObj: "Klepněte na objekt pro smazání",
+    anchor: "Klepněte na snap bod pro zakotvení/uvolnění",
   };
   setHint(hints[state.tool] || "");
 }

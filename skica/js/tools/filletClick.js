@@ -10,6 +10,8 @@ import { drawCanvas, screenToWorld, snapPt } from '../canvas.js';
 import { findObjectAt, calculateAllIntersections, filletTwoLines } from '../geometry.js';
 import { showFilletDialog } from '../dialogs.js';
 import { getLineSegment, analyzeSelection } from './helpers.js';
+import { isAnchored } from './anchorClick.js';
+import { updateAssociativeDimensions } from '../dialogs/dimension.js';
 
 /** Klik na první úsečku → dialog → klik na druhou → zaoblení. */
 export function handleFilletClick(wx, wy) {
@@ -57,15 +59,16 @@ export function handleFilletClick(wx, wy) {
       const result = filletTwoLines(proxy1, proxy2, radius);
       if (!result.ok) { showToast(result.msg); return; }
 
-      // Write back trimmed endpoints
-      ls1.setP1(proxy1.x1, proxy1.y1);
-      ls1.setP2(proxy1.x2, proxy1.y2);
-      ls2.setP1(proxy2.x1, proxy2.y1);
-      ls2.setP2(proxy2.x2, proxy2.y2);
+      // Write back trimmed endpoints (respektovat kotvy)
+      if (!isAnchored(ls1.seg.x1, ls1.seg.y1)) ls1.setP1(proxy1.x1, proxy1.y1);
+      if (!isAnchored(ls1.seg.x2, ls1.seg.y2)) ls1.setP2(proxy1.x2, proxy1.y2);
+      if (!isAnchored(ls2.seg.x1, ls2.seg.y1)) ls2.setP1(proxy2.x1, proxy2.y1);
+      if (!isAnchored(ls2.seg.x2, ls2.seg.y2)) ls2.setP2(proxy2.x2, proxy2.y2);
 
       result.arc.name = `Zaoblení R${radius}`;
       addObject(result.arc);
       calculateAllIntersections();
+      updateAssociativeDimensions();
       renderAll();
       resetHint();
       showToast(`Zaoblení R${radius} vytvořeno ✓`);
@@ -122,14 +125,15 @@ export function filletFromSelection() {
     const result = filletTwoLines(proxy1, proxy2, radius);
     if (!result.ok) { showToast(result.msg); return; }
 
-    ls1.setP1(proxy1.x1, proxy1.y1);
-    ls1.setP2(proxy1.x2, proxy1.y2);
-    ls2.setP1(proxy2.x1, proxy2.y1);
-    ls2.setP2(proxy2.x2, proxy2.y2);
+    if (!isAnchored(ls1.seg.x1, ls1.seg.y1)) ls1.setP1(proxy1.x1, proxy1.y1);
+    if (!isAnchored(ls1.seg.x2, ls1.seg.y2)) ls1.setP2(proxy1.x2, proxy1.y2);
+    if (!isAnchored(ls2.seg.x1, ls2.seg.y1)) ls2.setP1(proxy2.x1, proxy2.y1);
+    if (!isAnchored(ls2.seg.x2, ls2.seg.y2)) ls2.setP2(proxy2.x2, proxy2.y2);
 
     result.arc.name = `Zaoblení R${radius}`;
     addObject(result.arc);
     calculateAllIntersections();
+    updateAssociativeDimensions();
     renderAll();
     showToast(`Zaoblení R${radius} vytvořeno ✓`);
   });
