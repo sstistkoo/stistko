@@ -59,10 +59,13 @@ mobileSidebarToggle.addEventListener("click", (e) => {
   );
   topbar.classList.remove("mobile-open");
   document.body.classList.remove("toolbar-open");
+  // Po otevření/zavření panelu vycentrovat pohled
+  setTimeout(() => autoCenterView(), 260);
 });
 sidebarOverlay.addEventListener("click", () => {
   sidebar.classList.remove("mobile-open");
   sidebarOverlay.classList.remove("active");
+  setTimeout(() => autoCenterView(), 260);
 });
 
 // ── Sidebar close button ──
@@ -70,6 +73,7 @@ document.getElementById("sidebarCloseBtn").addEventListener("click", (e) => {
   e.stopPropagation();
   sidebar.classList.remove("mobile-open");
   sidebarOverlay.classList.remove("active");
+  setTimeout(() => autoCenterView(), 260);
 });
 
 // ── Klik na canvas zavře sidebar (toolbar se NEzavírá – jen přes ✕) ──
