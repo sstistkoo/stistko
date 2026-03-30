@@ -4,7 +4,7 @@
 
 import { state } from './state.js';
 import { SNAP_POINT_THRESHOLD, SELECT_THRESHOLD, CONSTRAINT_OFFSET_PX, ARC_OUTSIDE_PENALTY } from './constants.js';
-import { distPointToSegment, isAngleBetween, bulgeToArc, deepClone } from './utils.js';
+import { distPointToSegment, isAngleBetween, bulgeToArc, deepClone, getObjectSnapPoints } from './utils.js';
 import { renderAll } from './render.js';
 import { bridge } from './bridge.js';
 
@@ -92,6 +92,67 @@ export function findObjectAt(wx, wy) {
 }
 
 /**
+ * Najde průsečík nejblíž bodu [wx,wy].
+ * @param {number} wx
+ * @param {number} wy
+ * @returns {{x: number, y: number}|null}
+ */
+export function findIntersectionAt(wx, wy) {
+  const threshold = SELECT_THRESHOLD / state.zoom;
+  let best = null, bestDist = Infinity;
+  // Počátek (0,0)
+  const dOrigin = Math.hypot(wx, wy);
+  if (dOrigin < threshold) { bestDist = dOrigin; best = { x: 0, y: 0 }; }
+  // Snap body všech objektů (koncové, středové, čtvrtinové…)
+  for (const obj of state.objects) {
+    const layer = state.layers ? state.layers.find(l => l.id === obj.layer) : null;
+    if (layer && (layer.locked || !layer.visible)) continue;
+    if (state.showDimensions === 'none' && (obj.isDimension || obj.isCoordLabel)) continue;
+    const pts = getObjectSnapPoints(obj);
+    for (const p of pts) {
+      const d = Math.hypot(p.x - wx, p.y - wy);
+      if (d < bestDist) { bestDist = d; best = p; }
+    }
+  }
+  // Průsečíky (bonus – při stejné vzdálenosti vyhrávají)
+  if (state.showDimensions !== 'none') {
+    for (const pt of state.intersections) {
+      const d = Math.hypot(pt.x - wx, pt.y - wy);
+      if (d <= bestDist) { bestDist = d; best = pt; }
+    }
+  }
+  return bestDist < threshold ? { x: best.x, y: best.y } : null;
+}
+
+/**
+ * Najde nejbližší snap bod objektu k pozici [wx,wy].
+ */
+function findNearestEndpoint(obj, wx, wy) {
+  const pts = getObjectSnapPoints(obj);
+  let best = null, bestDist = Infinity;
+  for (const p of pts) {
+    const d = Math.hypot(p.x - wx, p.y - wy);
+    if (d < bestDist) { bestDist = d; best = p; }
+  }
+  return best;
+}
+
+const SEL_PT_TOL = 1e-4;
+/** Přidá/odebere bod z pole selectedPoint. */
+function _toggleSelectedPoint(pt) {
+  if (!state.selectedPoint) state.selectedPoint = [];
+  const idx = state.selectedPoint.findIndex(
+    p => Math.hypot(p.x - pt.x, p.y - pt.y) < SEL_PT_TOL
+  );
+  if (idx >= 0) {
+    state.selectedPoint.splice(idx, 1);
+    if (state.selectedPoint.length === 0) state.selectedPoint = null;
+  } else {
+    state.selectedPoint.push({ x: pt.x, y: pt.y });
+  }
+}
+
+/**
  * Vybere objekt na pozici [wx,wy].
  * Automaticky přidává do multi-selection při kliku na další objekt.
  * Opakovaný klik na vybraný objekt ho odebere z výběru.
@@ -106,6 +167,7 @@ export function selectObjectAt(wx, wy) {
     state.selected = constr.objIdx;
     state.selectedSegment = constr.segIdx;
     state.multiSelected.clear();
+    state.selectedPoint = null;
     if (bridge.updateProperties) bridge.updateProperties();
     if (bridge.updateObjectList) bridge.updateObjectList();
     renderAll();
@@ -113,46 +175,61 @@ export function selectObjectAt(wx, wy) {
   }
   state._selectedConstraint = null;
 
+  const snapPt = findIntersectionAt(wx, wy);
   const newSel = findObjectAt(wx, wy);
 
-  if (newSel === null) {
-    // Klik do prázdna → zrušit vše
+  // Rozhodnout, zda klik je primárně na snap bod nebo na objekt.
+  // Pokud snap bod existuje a je velmi blízko, preferovat bod (neoznačovat objekt).
+  const threshold = SELECT_THRESHOLD / state.zoom;
+  const preferPoint = snapPt && (() => {
+    if (newSel === null) return true;
+    const obj = state.objects[newSel];
+    if (obj.type === 'point') return false; // point objekt → vždy objekt
+    const snapDist = Math.hypot(snapPt.x - wx, snapPt.y - wy);
+    return snapDist < threshold * 0.5;
+  })();
+
+  // ── 1) Klik do prázdna → zrušit vše ──
+  if (newSel === null && !snapPt) {
     state.selected = null;
     state.selectedSegment = null;
     state.multiSelected.clear();
-  } else if (newSel === state.selected && state.multiSelected.size === 0) {
-    // Klik na jediný vybraný objekt → toggle off / segment mode pro polyline
-    if (state.objects[newSel].type === 'polyline') {
-      state.selectedSegment = findSegmentAt(state.objects[newSel], wx, wy);
+    state.selectedPoint = null;
+  } else if (preferPoint) {
+    // ── 2) Snap bod je blízko → toggle jen bod, objekty nechat ──
+    _toggleSelectedPoint(snapPt);
+  } else if (newSel !== null) {
+    // ── 3) Objekt nalezen (snap bod daleko nebo neexistuje) → toggle objekt, body nechat ──
+    if (newSel === state.selected && state.multiSelected.size === 0) {
+      if (state.objects[newSel].type === 'polyline') {
+        state.selectedSegment = findSegmentAt(state.objects[newSel], wx, wy);
+      } else {
+        state.selected = null;
+        state.selectedSegment = null;
+      }
+    } else if (state.multiSelected.has(newSel) || (newSel === state.selected && state.multiSelected.size > 0)) {
+      state.multiSelected.delete(newSel);
+      if (newSel === state.selected) {
+        state.selected = state.multiSelected.size > 0
+          ? [...state.multiSelected].pop()
+          : null;
+      }
+      if (state.multiSelected.size === 1) {
+        state.selected = state.multiSelected.values().next().value;
+        state.multiSelected.clear();
+      }
+      state.selectedSegment = null;
+    } else if (state.selected !== null) {
+      if (state.multiSelected.size === 0) {
+        state.multiSelected.add(state.selected);
+      }
+      state.multiSelected.add(newSel);
+      state.selected = newSel;
+      state.selectedSegment = null;
     } else {
-      state.selected = null;
+      state.selected = newSel;
       state.selectedSegment = null;
     }
-  } else if (state.multiSelected.has(newSel) || (newSel === state.selected && state.multiSelected.size > 0)) {
-    // Klik na objekt v multi-výběru → odebrat
-    state.multiSelected.delete(newSel);
-    if (newSel === state.selected) {
-      state.selected = state.multiSelected.size > 0
-        ? [...state.multiSelected].pop()
-        : null;
-    }
-    if (state.multiSelected.size === 1) {
-      state.selected = state.multiSelected.values().next().value;
-      state.multiSelected.clear();
-    }
-    state.selectedSegment = null;
-  } else if (state.selected !== null) {
-    // Už něco vybráno + klik na nový objekt → přidat do multi
-    if (state.multiSelected.size === 0) {
-      state.multiSelected.add(state.selected);
-    }
-    state.multiSelected.add(newSel);
-    state.selected = newSel;
-    state.selectedSegment = null;
-  } else {
-    // Nic nevybráno → single select
-    state.selected = newSel;
-    state.selectedSegment = null;
   }
   if (bridge.updateProperties) bridge.updateProperties();
   if (bridge.updateObjectList) bridge.updateObjectList();

@@ -12,6 +12,20 @@ import {
   CONSTRUCTION_DASH, PREVIEW_DASH, ARROW_LENGTH, ARROW_ANGLE
 } from './constants.js';
 
+const DIM_MATCH_TOL = 1e-4;
+/** Zjistí, zda kóta (isDimension) vychází z některého vybraného bodu. */
+function isDimConnectedToPoints(obj, pts) {
+  if (!obj.isDimension || !pts || pts.length === 0) return false;
+  const sx1 = obj.dimSrcX1 !== undefined ? obj.dimSrcX1 : obj.x1;
+  const sy1 = obj.dimSrcY1 !== undefined ? obj.dimSrcY1 : obj.y1;
+  const sx2 = obj.dimSrcX2 !== undefined ? obj.dimSrcX2 : obj.x2;
+  const sy2 = obj.dimSrcY2 !== undefined ? obj.dimSrcY2 : obj.y2;
+  return pts.some(pt =>
+    Math.hypot(sx1 - pt.x, sy1 - pt.y) < DIM_MATCH_TOL
+    || Math.hypot(sx2 - pt.x, sy2 - pt.y) < DIM_MATCH_TOL
+  );
+}
+
 let _renderRAF = null;
 // Kolekce umístěných popisků kót pro detekci kolizí
 let _dimLabelRects = [];
@@ -242,19 +256,22 @@ function renderObjects() {
     }
 
     const isSel = idx === state.selected || state.multiSelected.has(idx);
+    // Zvýraznění kót navázaných na vybraný bod/průsečík
+    const isConnectedDim = !isSel && obj.isDimension && state.selectedPoint != null
+      && isDimConnectedToPoints(obj, state.selectedPoint);
     const isConstr = obj.type === "constr";
     const layerColor = layer ? layer.color : COLORS.primary;
-    ctx.strokeStyle = isSel
+    ctx.strokeStyle = (isSel || isConnectedDim)
       ? COLORS.selected
       : isConstr
         ? COLORS.construction
         : obj.color || layerColor;
-    ctx.fillStyle = isSel
+    ctx.fillStyle = (isSel || isConnectedDim)
       ? COLORS.selected
       : isConstr
         ? COLORS.construction
         : obj.color || layerColor;
-    ctx.lineWidth = isSel ? LINE_WIDTH_SELECTED : LINE_WIDTH;
+    ctx.lineWidth = (isSel || isConnectedDim) ? LINE_WIDTH_SELECTED : LINE_WIDTH;
     ctx.setLineDash(isConstr || obj.dashed ? CONSTRUCTION_DASH : []);
 
     switch (obj.type) {
@@ -291,9 +308,12 @@ function renderObjects() {
   if (state.showDimensions !== 'none') {
     state.intersections.forEach((pt) => {
       const [sx, sy] = worldToScreen(pt.x, pt.y);
-      ctx.fillStyle = COLORS.dimension;
-      ctx.strokeStyle = COLORS.dimension;
-      ctx.lineWidth = 1.5;
+      const isSelPt = state.selectedPoint != null
+        && state.selectedPoint.some(sp => Math.hypot(pt.x - sp.x, pt.y - sp.y) < DIM_MATCH_TOL);
+      const ptColor = isSelPt ? COLORS.selected : COLORS.dimension;
+      ctx.fillStyle = ptColor;
+      ctx.strokeStyle = ptColor;
+      ctx.lineWidth = isSelPt ? 2.5 : 1.5;
       ctx.beginPath();
       ctx.arc(sx, sy, 5, 0, Math.PI * 2);
       ctx.stroke();
@@ -311,7 +331,7 @@ function renderObjects() {
       const labelW = ctx.measureText(ptLabel).width;
       const resolved = resolveDimLabelPos(sx + 8, sy - 8, labelW, intSize);
       if (resolved.collided) {
-        ctx.strokeStyle = COLORS.dimension;
+        ctx.strokeStyle = ptColor;
         ctx.lineWidth = 0.5;
         ctx.setLineDash([2, 2]);
         ctx.beginPath();
@@ -319,7 +339,7 @@ function renderObjects() {
         ctx.lineTo(sx + 8, resolved.y);
         ctx.stroke();
         ctx.setLineDash([]);
-        ctx.fillStyle = COLORS.dimension;
+        ctx.fillStyle = ptColor;
       }
       ctx.fillText(ptLabel, sx + 8, resolved.y);
     });
@@ -570,6 +590,75 @@ function renderObjects() {
 
   // Snap indikátor
   drawSnapIndicator();
+
+  // Indikátor vybraného bodu (pokud není průsečík)
+  drawSelectedPointIndicator();
+
+  // Počítadlo vybraných objektů
+  drawSelectionCounter();
+}
+
+// ── Indikátor vybraného bodu ──
+function drawSelectedPointIndicator() {
+  if (!state.selectedPoint || state.selectedPoint.length === 0) return;
+  for (const sp of state.selectedPoint) {
+    // Zkontrolovat, jestli je to průsečík (ten má vlastní label)
+    const isIntersection = state.intersections.some(
+      pt => Math.hypot(pt.x - sp.x, pt.y - sp.y) < DIM_MATCH_TOL
+    );
+    if (isIntersection) continue;
+    // Vykreslit kroužek + souřadnice
+    const [sx, sy] = worldToScreen(sp.x, sp.y);
+    ctx.strokeStyle = COLORS.selected;
+    ctx.fillStyle = COLORS.selected;
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.arc(sx, sy, 6, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(sx, sy, 2, 0, Math.PI * 2);
+    ctx.fill();
+    const intSize = Math.round(Math.min(24, Math.max(11, 8 + state.zoom * 4.5)));
+    ctx.font = intSize + 'px Consolas';
+    const dp = toDisplayCoords(sp.x, sp.y);
+    const pf = state.coordMode === 'inc' ? '\u0394' : '';
+    const xp = xPrefix();
+    const ptLabel = state.machineType === 'karusel'
+      ? `${pf}${xp}X${displayX(dp.x).toFixed(2)} ${pf}Z${dp.y.toFixed(2)}`
+      : `${pf}Z${dp.x.toFixed(2)} ${pf}${xp}X${displayX(dp.y).toFixed(2)}`;
+    ctx.fillText(ptLabel, sx + 10, sy - 10);
+  }
+}
+
+// ── Počítadlo výběru ──
+function drawSelectionCounter() {
+  let count = state.multiSelected.size > 0
+    ? state.multiSelected.size
+    : (state.selected !== null ? 1 : 0);
+  const ptCount = state.selectedPoint ? state.selectedPoint.length : 0;
+  if (ptCount > 0) count += ptCount;
+  if (count <= 0) return;
+  const parts = [];
+  const objCount = count - ptCount;
+  if (objCount > 0) parts.push(`${objCount} obj`);
+  if (ptCount > 0) parts.push(`${ptCount} bod${ptCount > 1 ? 'y' : ''}`);
+  const label = parts.join(' + ');
+  const fontSize = 14;
+  ctx.font = `bold ${fontSize}px Consolas`;
+  const w = ctx.measureText(label).width + 16;
+  const h = fontSize + 12;
+  const x = (drawCanvas.width - w) / 2;
+  const y = 50;
+  ctx.fillStyle = 'rgba(30,30,46,0.85)';
+  ctx.beginPath();
+  ctx.roundRect(x, y, w, h, 6);
+  ctx.fill();
+  ctx.fillStyle = COLORS.selected;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(label, x + w / 2, y + h / 2);
+  ctx.textAlign = 'start';
+  ctx.textBaseline = 'alphabetic';
 }
 
 // ── Snap indikátor u kurzoru ──

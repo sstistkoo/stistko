@@ -7,6 +7,26 @@
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
     <title>SKICA – CAD pro CNC soustružník v1.3</title>
+    <script>
+      // Vyčistit SW cache při vývoji na localhost
+      if (
+        location.hostname === "localhost" ||
+        location.hostname === "127.0.0.1"
+      ) {
+        if ("serviceWorker" in navigator) {
+          navigator.serviceWorker.getRegistrations().then(function (regs) {
+            regs.forEach(function (r) {
+              r.unregister();
+            });
+          });
+          caches.keys().then(function (keys) {
+            keys.forEach(function (k) {
+              caches.delete(k);
+            });
+          });
+        }
+      }
+    </script>
     <link rel="icon" type="image/svg+xml" href="icons/icon.svg" />
     <link rel="stylesheet" href="css/style.css" />
     <!-- ── PWA ── -->

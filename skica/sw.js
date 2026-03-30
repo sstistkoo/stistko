@@ -2,7 +2,7 @@
 // ║  SKICA – Service Worker (PWA offline cache)                 ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-const CACHE_NAME = 'skica-v86';
+const CACHE_NAME = 'skica-v87';
 const ASSETS = [
   './',
   './index.html',
@@ -94,13 +94,27 @@ self.addEventListener('activate', (e) => {
   self.clients.claim();
 });
 
-// ── Fetch: cache-first pro app soubory ──
+// ── Fetch: network-first pro localhost, cache-first pro produkci ──
 self.addEventListener('fetch', (e) => {
   const url = new URL(e.request.url);
 
   // Jen GET requesty ze stejného originu
   if (e.request.method !== 'GET') return;
   if (url.origin !== self.location.origin) return;
+
+  // Na localhostu preferovat síť (development)
+  if (url.hostname === 'localhost' || url.hostname === '127.0.0.1') {
+    e.respondWith(
+      fetch(e.request).then((resp) => {
+        if (resp && resp.status === 200) {
+          const clone = resp.clone();
+          caches.open(CACHE_NAME).then((c) => c.put(e.request, clone));
+        }
+        return resp;
+      }).catch(() => caches.match(e.request))
+    );
+    return;
+  }
 
   e.respondWith(
     caches.match(e.request).then((cached) => {

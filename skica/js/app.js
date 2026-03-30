@@ -112,22 +112,30 @@ setInterval(() => {
 
 // ── PWA Service Worker ──
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker
-    .register("./sw.js")
-    .then((reg) => {
-      console.log("SW: Registrován");
-      // Detekce nové verze SW – upozornit uživatele
-      reg.addEventListener('updatefound', () => {
-        const newWorker = reg.installing;
-        if (!newWorker) return;
-        newWorker.addEventListener('statechange', () => {
-          if (newWorker.state === 'activated' && navigator.serviceWorker.controller) {
-            showToast('Nová verze dostupná – obnovte stránku (F5)', 5000);
-          }
+  const isDev = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+  if (isDev) {
+    // Na localhostu odregistrovat SW a smazat cache (vývoj)
+    navigator.serviceWorker.getRegistrations().then(regs => {
+      regs.forEach(r => r.unregister());
+    });
+    caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+  } else {
+    navigator.serviceWorker
+      .register("./sw.js", { updateViaCache: 'none' })
+      .then((reg) => {
+        console.log("SW: Registrován");
+        reg.addEventListener('updatefound', () => {
+          const newWorker = reg.installing;
+          if (!newWorker) return;
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'activated' && navigator.serviceWorker.controller) {
+              showToast('Nová verze dostupná – obnovte stránku (F5)', 5000);
+            }
+          });
         });
-      });
-    })
-    .catch((e) => console.warn("SW: Chyba", e));
+      })
+      .catch((e) => console.warn("SW: Chyba", e));
+  }
 }
 
 // ── Offline indikátor ──
