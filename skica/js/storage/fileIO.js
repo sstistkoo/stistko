@@ -96,6 +96,7 @@ export function importProjectFile() {
         }
         state.selected = null;
         state.multiSelected.clear();
+        state.selectedPoint = null;
         updateObjectList();
         updateProperties();
         updateLayerList();
@@ -141,6 +142,7 @@ export function importDXFFile() {
         }
         state.selected = null;
         state.multiSelected.clear();
+        state.selectedPoint = null;
         updateObjectList();
         updateProperties();
         calculateAllIntersections();

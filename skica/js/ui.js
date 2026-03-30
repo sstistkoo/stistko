@@ -805,6 +805,7 @@ document.getElementById("btnDeleteDims").addEventListener("click", () => {
   state.objects = state.objects.filter(o => !o.isDimension && !o.isCoordLabel);
   state.selected = null;
   state.multiSelected.clear();
+  state.selectedPoint = null;
   showToast(`Smazáno ${dimCount} kót`);
   if (bridge.updateObjectList) bridge.updateObjectList();
   renderAll();
@@ -960,6 +961,7 @@ document.getElementById("btnClearAll").addEventListener("click", () => {
     pushUndo();
     state.objects = [];
     state.selected = null;
+    state.selectedPoint = null;
     state.intersections = [];
     state.nextId = 1;
     updateObjectList();

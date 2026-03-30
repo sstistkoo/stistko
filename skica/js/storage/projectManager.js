@@ -54,6 +54,7 @@ function _loadProjectData(data) {
   }
   state.selected = null;
   state.multiSelected.clear();
+  state.selectedPoint = null;
   updateObjectList();
   updateProperties();
   updateLayerList();
@@ -145,6 +146,7 @@ export function newProject() {
   state.nextId = 1;
   state.selected = null;
   state.multiSelected.clear();
+  state.selectedPoint = null;
   state.intersections = [];
   state.projectName = 'Bez názvu';
   state.layers = [

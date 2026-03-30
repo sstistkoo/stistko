@@ -37,6 +37,7 @@ export const state = {
   selected: null,
   selectedSegment: null,
   multiSelected: new Set(),
+  selectedPoint: null,  // [{x, y}, ...] – vybrané průsečíky/body (pole)
   tool: "select",
   snapToPoints: true,
   snapToGrid: false,
@@ -120,6 +121,7 @@ export function resetDrawingState() {
   state._mirrorStep = null;
   state._mirrorAxisPoints = null;
   state.multiSelected.clear();
+  state.selectedPoint = null;
 }
 
 // ── Undo / Redo ──
@@ -208,6 +210,7 @@ export function undo() {
   }
   state.selected = null;
   state.multiSelected.clear();
+  state.selectedPoint = null;
   if (bridge.updateObjectList) bridge.updateObjectList();
   if (bridge.updateProperties) bridge.updateProperties();
   if (bridge.calculateAllIntersections) bridge.calculateAllIntersections();
@@ -230,6 +233,7 @@ export function redo() {
   }
   state.selected = null;
   state.multiSelected.clear();
+  state.selectedPoint = null;
   if (bridge.updateObjectList) bridge.updateObjectList();
   if (bridge.updateProperties) bridge.updateProperties();
   if (bridge.calculateAllIntersections) bridge.calculateAllIntersections();

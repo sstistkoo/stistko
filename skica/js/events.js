@@ -180,6 +180,7 @@ document.addEventListener("keydown", (e) => {
     state.selected = null;
     state.selectedSegment = null;
     state.multiSelected.clear();
+    state.selectedPoint = null;
     updateProperties();
     renderAll();
     resetHint();
@@ -447,6 +448,7 @@ drawCanvas.addEventListener("contextmenu", (e) => {
   if (ctxIdx !== null) {
     state.selected = ctxIdx;
     state.multiSelected.clear();
+    state.selectedPoint = null;
     updateObjectList();
     updateProperties();
     renderAll();
@@ -669,6 +671,7 @@ function deleteSelected() {
     state.selected = null;
     state.selectedSegment = null;
     state.multiSelected.clear();
+    state.selectedPoint = null;
     updateObjectList();
     updateProperties();
     calculateAllIntersections();
@@ -688,6 +691,7 @@ function deleteSelected() {
   state.objects.splice(state.selected, 1);
   state.selected = null;
   state.selectedSegment = null;
+  state.selectedPoint = null;
   updateObjectList();
   updateProperties();
   calculateAllIntersections();
@@ -968,6 +972,7 @@ drawCanvas.addEventListener("dblclick", (e) => {
     if (idx !== null && state.objects[idx].type === 'polyline') {
       state.selected = idx;
       state.multiSelected.clear();
+      state.selectedPoint = null;
       state.selectedSegment = findSegmentAt(state.objects[idx], wx, wy);
       updateProperties();
       updateObjectList();

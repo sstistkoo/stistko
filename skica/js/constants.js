@@ -8,7 +8,7 @@ export const COLORS = {
   primary:       '#89b4fa',   // Modrá – výchozí barva vrstvy, obrysy
   construction:  '#6c7086',   // Šedá – konstrukční čáry
   dimension:     '#a6e3a1',   // Zelená – kótovací čáry, průsečíky
-  selected:      '#f9e2af',   // Žlutá – zvýrazněný výběr
+  selected:      '#ffffff',   // Bílá – zvýrazněný výběr
   preview:       '#f5c2e7',   // Růžová – dočasné čáry při kreslení
   snapPoint:     '#fab387',   // Oranžová – indikátor kurzorového přichycení
   snapEdge:      '#cba6f7',   // Fialová – snap k hraně objektu
