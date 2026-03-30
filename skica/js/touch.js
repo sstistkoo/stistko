@@ -11,6 +11,7 @@ import { handleCanvasClick } from './events.js';
 import { setTool, resetHint, updateSnapPtsBtn } from './ui.js';
 import { toolLabel } from './utils.js';
 import { showNumericalInputDialog, showMobileEditDialog } from './dialogs.js';
+import { measureSelection } from './tools/index.js';
 import { bridge } from './bridge.js';
 
 // ── Mobile: detekce ──
@@ -131,6 +132,9 @@ mobileMeasureBtn.addEventListener("click", (e) => {
   document.body.classList.remove("toolbar-open");
   sidebar.classList.remove("mobile-open");
   sidebarOverlay.classList.remove("active");
+  // Pokud je něco vybrané → okamžitě změřit
+  if (measureSelection()) return;
+  // Jinak toggle measure tool
   const newTool = state.tool === "measure" ? "select" : "measure";
   setTool(newTool);
   mobileMeasureBtn.classList.toggle("active", newTool === "measure");

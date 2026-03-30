@@ -14,4 +14,5 @@ export const bridge = {
   runCncExport: null,
   renderAll: null,
   resetHint: null,
+  measureSelection: null,
 };

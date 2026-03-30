@@ -8,7 +8,11 @@ import { applyMobileInputMode, wireExprInputs } from './dialogs/mobileEdit.js';
 export { safeEvalMath } from './utils.js';
 
 // ── Sub-moduly ──
-export { showMeasureResult, showIntersectionInfo, showMeasureObjectInfo } from './dialogs/measure.js';
+export { showMeasureResult, showIntersectionInfo, showMeasureObjectInfo,
+  showMeasureTwoPointsResult, showMeasureMultiPointResult,
+  showMeasureTwoLinesResult, showMeasureTwoCirclesResult,
+  showMeasurePointToLineResult, showMeasurePointToCircleResult,
+  showMeasureTwoObjectsResult } from './dialogs/measure.js';
 export { showCircleRadiusDialog } from './dialogs/circleRadius.js';
 export { showNumericalInputDialog } from './dialogs/numericalInput.js';
 export { showPolarDrawingDialog } from './dialogs/polarDrawing.js';

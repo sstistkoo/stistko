@@ -12,6 +12,7 @@ import { typeLabel, bulgeToArc } from '../utils.js';
 import { updateObjectList } from '../ui.js';
 import { addDimensionForObject } from './dimension.js';
 import { showEditObjectDialog } from './mobileEdit.js';
+import { projectPointToLine, distPointToInfiniteLine, angleBetweenLines, intersectInfiniteLines } from '../geometry.js';
 
 // ── Měření – dialog výsledku ──
 /**
@@ -255,4 +256,318 @@ function buildObjectInfoDialog(obj, objIdx) {
   }, 0);
 
   return html;
+}
+
+// ══════════════════════════════════════════════════════════════
+// Nové dialogy pro měření vybraných objektů / snap bodů
+// ══════════════════════════════════════════════════════════════
+
+// ── Pomocný builder pro kóta tlačítko + kopírování ──
+function _addCopyAndDimListeners(overlay, dimCallback) {
+  const copyBtn = overlay.querySelector("#msCopy");
+  if (copyBtn) {
+    copyBtn.addEventListener("click", () => {
+      const table = overlay.querySelector("table");
+      navigator.clipboard.writeText(table.innerText).then(() => showToast("Info zkopírováno"));
+    });
+  }
+  const dimBtn = overlay.querySelector("#msAddDim");
+  if (dimBtn && dimCallback) {
+    dimBtn.addEventListener("click", () => { dimCallback(); overlay.remove(); });
+  }
+}
+
+/**
+ * Měření vzdálenosti mezi dvěma snap body.
+ */
+export function showMeasureTwoPointsResult(p1, p2) {
+  const d = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+  const angle = Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI;
+  const { H, V, Hp, Vp, fH, fV } = coordHelpers();
+  const overlay = makeInputOverlay(`
+    <div class="input-dialog">
+      <h3>📏 Měření – 2 body</h3>
+      <table style="width:100%;font-family:Consolas;font-size:13px;">
+        <tr><td style="color:${COLORS.label}">Vzdálenost:</td><td style="color:${COLORS.selected}">${d.toFixed(3)} mm</td></tr>
+        <tr><td style="color:${COLORS.label}">Úhel:</td><td style="color:${COLORS.selected}">${angle.toFixed(2)}°</td></tr>
+        <tr><td style="color:${COLORS.label}">Δ${Hp}${H}:</td><td style="color:${COLORS.preview}">${fH(p2.x - p1.x).toFixed(3)}</td></tr>
+        <tr><td style="color:${COLORS.label}">Δ${Vp}${V}:</td><td style="color:${COLORS.preview}">${fV(p2.y - p1.y).toFixed(3)}</td></tr>
+        <tr><td style="color:${COLORS.label}">Bod 1:</td><td style="color:${COLORS.primary}">${Hp}${H}${fH(p1.x).toFixed(3)} ${Vp}${V}${fV(p1.y).toFixed(3)}</td></tr>
+        <tr><td style="color:${COLORS.label}">Bod 2:</td><td style="color:${COLORS.primary}">${Hp}${H}${fH(p2.x).toFixed(3)} ${Vp}${V}${fV(p2.y).toFixed(3)}</td></tr>
+      </table>
+      <div class="btn-row">
+        <button class="btn-cancel" id="msAddDim">📐 Přidat kótu</button>
+        <button class="btn-cancel" id="msCopy">📋 Kopírovat</button>
+        <button class="btn-ok btn-cancel-overlay">OK</button>
+      </div>
+    </div>`);
+  _addCopyAndDimListeners(overlay, () => {
+    addObject({
+      type: "line", x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y,
+      name: `Kóta ${d.toFixed(2)}mm`, isDimension: true,
+      dimSrcX1: p1.x, dimSrcY1: p1.y, dimSrcX2: p2.x, dimSrcY2: p2.y,
+      color: COLORS.textSecondary,
+    });
+    showToast(`Kóta ${d.toFixed(2)}mm přidána`);
+  });
+}
+
+/**
+ * Měření cesty přes 3+ snap bodů.
+ */
+export function showMeasureMultiPointResult(points) {
+  const { H, V, Hp, Vp, fH, fV } = coordHelpers();
+  let rows = '';
+  let totalLen = 0;
+  for (let i = 0; i < points.length - 1; i++) {
+    const a = points[i], b = points[i + 1];
+    const d = Math.hypot(b.x - a.x, b.y - a.y);
+    totalLen += d;
+    rows += `<tr><td style="color:${COLORS.label}">Bod ${i + 1}→${i + 2}:</td><td style="color:${COLORS.preview}">${d.toFixed(3)} mm</td></tr>`;
+  }
+  // první -> poslední
+  const first = points[0], last = points[points.length - 1];
+  const directDist = Math.hypot(last.x - first.x, last.y - first.y);
+  rows += `<tr><td colspan="2" style="border-top:1px solid ${COLORS.border};padding-top:4px"></td></tr>`;
+  rows += `<tr><td style="color:${COLORS.label}">Celková cesta:</td><td style="color:${COLORS.selected}">${totalLen.toFixed(3)} mm</td></tr>`;
+  rows += `<tr><td style="color:${COLORS.label}">Přímá vzd.:</td><td style="color:${COLORS.selected}">${directDist.toFixed(3)} mm</td></tr>`;
+  rows += `<tr><td colspan="2" style="border-top:1px solid ${COLORS.border};padding-top:4px"></td></tr>`;
+  points.forEach((p, i) => {
+    rows += `<tr><td style="color:${COLORS.label}">Bod ${i + 1}:</td><td style="color:${COLORS.primary}">${Hp}${H}${fH(p.x).toFixed(3)} ${Vp}${V}${fV(p.y).toFixed(3)}</td></tr>`;
+  });
+  const overlay = makeInputOverlay(`
+    <div class="input-dialog">
+      <h3>📏 Měření – ${points.length} bodů</h3>
+      <table style="width:100%;font-family:Consolas;font-size:13px;">
+        ${rows}
+      </table>
+      <div class="btn-row">
+        <button class="btn-cancel" id="msCopy">📋 Kopírovat</button>
+        <button class="btn-ok btn-cancel-overlay">OK</button>
+      </div>
+    </div>`);
+  _addCopyAndDimListeners(overlay);
+}
+
+/**
+ * Měření mezi dvěma úsečkami (line/constr).
+ */
+export function showMeasureTwoLinesResult(obj1, obj2) {
+  const { H, V, Hp, Vp, fH, fV } = coordHelpers();
+  const dx1 = obj1.x2 - obj1.x1, dy1 = obj1.y2 - obj1.y1;
+  const dx2 = obj2.x2 - obj2.x1, dy2 = obj2.y2 - obj2.y1;
+  const len1 = Math.hypot(dx1, dy1), len2 = Math.hypot(dx2, dy2);
+  const cross = (len1 > 1e-9 && len2 > 1e-9) ? Math.abs(dx1 * dy2 - dy1 * dx2) / (len1 * len2) : 1;
+  const isParallel = cross < 0.01;
+
+  let rows = '';
+  if (isParallel) {
+    const perpDist = distPointToInfiniteLine(obj2.x1, obj2.y1, obj1.x1, obj1.y1, obj1.x2, obj1.y2);
+    rows += `<tr><td style="color:${COLORS.label}">Typ:</td><td style="color:${COLORS.text}">Rovnoběžné úsečky</td></tr>`;
+    rows += `<tr><td style="color:${COLORS.label}">Kolmá vzd.:</td><td style="color:${COLORS.selected}">${perpDist.toFixed(3)} mm</td></tr>`;
+    rows += `<tr><td style="color:${COLORS.label}">Délka 1:</td><td style="color:${COLORS.preview}">${len1.toFixed(3)} mm</td></tr>`;
+    rows += `<tr><td style="color:${COLORS.label}">Délka 2:</td><td style="color:${COLORS.preview}">${len2.toFixed(3)} mm</td></tr>`;
+    const overlay = makeInputOverlay(`
+      <div class="input-dialog">
+        <h3>📏 Měření – 2 úsečky ∥</h3>
+        <table style="width:100%;font-family:Consolas;font-size:13px;">${rows}</table>
+        <div class="btn-row">
+          <button class="btn-cancel" id="msAddDim">📐 Přidat kótu</button>
+          <button class="btn-cancel" id="msCopy">📋 Kopírovat</button>
+          <button class="btn-ok btn-cancel-overlay">OK</button>
+        </div>
+      </div>`);
+    _addCopyAndDimListeners(overlay, () => {
+      const foot = projectPointToLine(obj2.x1, obj2.y1, obj1.x1, obj1.y1, obj1.x2, obj1.y2);
+      addObject({
+        type: "line", x1: obj2.x1, y1: obj2.y1, x2: foot.x, y2: foot.y,
+        name: `Kóta ${perpDist.toFixed(2)}mm`, isDimension: true,
+        dimSrcX1: obj2.x1, dimSrcY1: obj2.y1, dimSrcX2: foot.x, dimSrcY2: foot.y,
+        color: COLORS.textSecondary,
+      });
+      showToast(`Kóta ${perpDist.toFixed(2)}mm přidána`);
+    });
+  } else {
+    const angle = angleBetweenLines(obj1, obj2);
+    const intPt = intersectInfiniteLines(obj1, obj2);
+    rows += `<tr><td style="color:${COLORS.label}">Typ:</td><td style="color:${COLORS.text}">Různoběžné úsečky</td></tr>`;
+    rows += `<tr><td style="color:${COLORS.label}">Úhel:</td><td style="color:${COLORS.selected}">${angle.toFixed(2)}°</td></tr>`;
+    rows += `<tr><td style="color:${COLORS.label}">Doplněk:</td><td style="color:${COLORS.selected}">${(180 - angle).toFixed(2)}°</td></tr>`;
+    if (intPt) {
+      rows += `<tr><td style="color:${COLORS.label}">Průsečík:</td><td style="color:${COLORS.primary}">${Hp}${H}${fH(intPt.x).toFixed(3)} ${Vp}${V}${fV(intPt.y).toFixed(3)}</td></tr>`;
+    }
+    rows += `<tr><td style="color:${COLORS.label}">Délka 1:</td><td style="color:${COLORS.preview}">${len1.toFixed(3)} mm</td></tr>`;
+    rows += `<tr><td style="color:${COLORS.label}">Délka 2:</td><td style="color:${COLORS.preview}">${len2.toFixed(3)} mm</td></tr>`;
+    const overlay = makeInputOverlay(`
+      <div class="input-dialog">
+        <h3>📏 Měření – 2 úsečky ∠</h3>
+        <table style="width:100%;font-family:Consolas;font-size:13px;">${rows}</table>
+        <div class="btn-row">
+          ${intPt ? `<button class="btn-cancel" id="msAddPt">📍 Vytvořit průsečík</button>` : ''}
+          <button class="btn-cancel" id="msCopy">📋 Kopírovat</button>
+          <button class="btn-ok btn-cancel-overlay">OK</button>
+        </div>
+      </div>`);
+    _addCopyAndDimListeners(overlay);
+    if (intPt) {
+      const ptBtn = overlay.querySelector("#msAddPt");
+      if (ptBtn) ptBtn.addEventListener("click", () => {
+        addObject({ type: "point", x: intPt.x, y: intPt.y, name: `Průsečík ${state.nextId}` });
+        showToast("Průsečík vytvořen");
+        overlay.remove();
+      });
+    }
+  }
+}
+
+/**
+ * Měření mezi dvěma kružnicemi/oblouky.
+ */
+export function showMeasureTwoCirclesResult(obj1, obj2) {
+  const { H, V, Hp, Vp, fH, fV } = coordHelpers();
+  const centerDist = Math.hypot(obj2.cx - obj1.cx, obj2.cy - obj1.cy);
+  const edgeDist = centerDist - obj1.r - obj2.r;
+  let rows = '';
+  rows += `<tr><td style="color:${COLORS.label}">Střed 1:</td><td style="color:${COLORS.primary}">${Hp}${H}${fH(obj1.cx).toFixed(3)} ${Vp}${V}${fV(obj1.cy).toFixed(3)}</td></tr>`;
+  rows += `<tr><td style="color:${COLORS.label}">Střed 2:</td><td style="color:${COLORS.primary}">${Hp}${H}${fH(obj2.cx).toFixed(3)} ${Vp}${V}${fV(obj2.cy).toFixed(3)}</td></tr>`;
+  rows += `<tr><td style="color:${COLORS.label}">Vzd. středů:</td><td style="color:${COLORS.selected}">${centerDist.toFixed(3)} mm</td></tr>`;
+  rows += `<tr><td style="color:${COLORS.label}">Mezera okrajů:</td><td style="color:${COLORS.selected}">${edgeDist.toFixed(3)} mm</td></tr>`;
+  rows += `<tr><td style="color:${COLORS.label}">R₁:</td><td style="color:${COLORS.preview}">${obj1.r.toFixed(3)} mm</td></tr>`;
+  rows += `<tr><td style="color:${COLORS.label}">R₂:</td><td style="color:${COLORS.preview}">${obj2.r.toFixed(3)} mm</td></tr>`;
+  const overlay = makeInputOverlay(`
+    <div class="input-dialog">
+      <h3>📏 Měření – 2 kružnice</h3>
+      <table style="width:100%;font-family:Consolas;font-size:13px;">${rows}</table>
+      <div class="btn-row">
+        <button class="btn-cancel" id="msAddDim">📐 Přidat kótu</button>
+        <button class="btn-cancel" id="msCopy">📋 Kopírovat</button>
+        <button class="btn-ok btn-cancel-overlay">OK</button>
+      </div>
+    </div>`);
+  _addCopyAndDimListeners(overlay, () => {
+    addObject({
+      type: "line", x1: obj1.cx, y1: obj1.cy, x2: obj2.cx, y2: obj2.cy,
+      name: `Kóta ${centerDist.toFixed(2)}mm`, isDimension: true,
+      dimSrcX1: obj1.cx, dimSrcY1: obj1.cy, dimSrcX2: obj2.cx, dimSrcY2: obj2.cy,
+      color: COLORS.textSecondary,
+    });
+    showToast(`Kóta ${centerDist.toFixed(2)}mm přidána`);
+  });
+}
+
+/**
+ * Měření bod → úsečka (kolmá vzdálenost).
+ */
+export function showMeasurePointToLineResult(pt, lineObj) {
+  const { H, V, Hp, Vp, fH, fV } = coordHelpers();
+  const foot = projectPointToLine(pt.x, pt.y, lineObj.x1, lineObj.y1, lineObj.x2, lineObj.y2);
+  const perpDist = Math.hypot(pt.x - foot.x, pt.y - foot.y);
+  const angle = Math.atan2(pt.y - foot.y, pt.x - foot.x) * 180 / Math.PI;
+  let rows = '';
+  rows += `<tr><td style="color:${COLORS.label}">Kolmá vzd.:</td><td style="color:${COLORS.selected}">${perpDist.toFixed(3)} mm</td></tr>`;
+  rows += `<tr><td style="color:${COLORS.label}">Úhel:</td><td style="color:${COLORS.selected}">${angle.toFixed(2)}°</td></tr>`;
+  rows += `<tr><td style="color:${COLORS.label}">Bod:</td><td style="color:${COLORS.primary}">${Hp}${H}${fH(pt.x).toFixed(3)} ${Vp}${V}${fV(pt.y).toFixed(3)}</td></tr>`;
+  rows += `<tr><td style="color:${COLORS.label}">Pata kolmice:</td><td style="color:${COLORS.primary}">${Hp}${H}${fH(foot.x).toFixed(3)} ${Vp}${V}${fV(foot.y).toFixed(3)}</td></tr>`;
+  const overlay = makeInputOverlay(`
+    <div class="input-dialog">
+      <h3>📏 Měření – bod ↔ úsečka</h3>
+      <table style="width:100%;font-family:Consolas;font-size:13px;">${rows}</table>
+      <div class="btn-row">
+        <button class="btn-cancel" id="msAddDim">📐 Přidat kótu</button>
+        <button class="btn-cancel" id="msCopy">📋 Kopírovat</button>
+        <button class="btn-ok btn-cancel-overlay">OK</button>
+      </div>
+    </div>`);
+  _addCopyAndDimListeners(overlay, () => {
+    addObject({
+      type: "line", x1: pt.x, y1: pt.y, x2: foot.x, y2: foot.y,
+      name: `Kóta ${perpDist.toFixed(2)}mm`, isDimension: true,
+      dimSrcX1: pt.x, dimSrcY1: pt.y, dimSrcX2: foot.x, dimSrcY2: foot.y,
+      color: COLORS.textSecondary,
+    });
+    showToast(`Kóta ${perpDist.toFixed(2)}mm přidána`);
+  });
+}
+
+/**
+ * Měření bod → kružnice/oblouk.
+ */
+export function showMeasurePointToCircleResult(pt, circObj) {
+  const { H, V, Hp, Vp, fH, fV } = coordHelpers();
+  const centerDist = Math.hypot(pt.x - circObj.cx, pt.y - circObj.cy);
+  const edgeDist = Math.abs(centerDist - circObj.r);
+  let rows = '';
+  rows += `<tr><td style="color:${COLORS.label}">Vzd. od středu:</td><td style="color:${COLORS.selected}">${centerDist.toFixed(3)} mm</td></tr>`;
+  rows += `<tr><td style="color:${COLORS.label}">Vzd. od okraje:</td><td style="color:${COLORS.selected}">${edgeDist.toFixed(3)} mm</td></tr>`;
+  rows += `<tr><td style="color:${COLORS.label}">Bod:</td><td style="color:${COLORS.primary}">${Hp}${H}${fH(pt.x).toFixed(3)} ${Vp}${V}${fV(pt.y).toFixed(3)}</td></tr>`;
+  rows += `<tr><td style="color:${COLORS.label}">Střed:</td><td style="color:${COLORS.primary}">${Hp}${H}${fH(circObj.cx).toFixed(3)} ${Vp}${V}${fV(circObj.cy).toFixed(3)}</td></tr>`;
+  rows += `<tr><td style="color:${COLORS.label}">Poloměr:</td><td style="color:${COLORS.preview}">${circObj.r.toFixed(3)} mm</td></tr>`;
+  const overlay = makeInputOverlay(`
+    <div class="input-dialog">
+      <h3>📏 Měření – bod ↔ kružnice</h3>
+      <table style="width:100%;font-family:Consolas;font-size:13px;">${rows}</table>
+      <div class="btn-row">
+        <button class="btn-cancel" id="msAddDim">📐 Přidat kótu</button>
+        <button class="btn-cancel" id="msCopy">📋 Kopírovat</button>
+        <button class="btn-ok btn-cancel-overlay">OK</button>
+      </div>
+    </div>`);
+  _addCopyAndDimListeners(overlay, () => {
+    addObject({
+      type: "line", x1: pt.x, y1: pt.y, x2: circObj.cx, y2: circObj.cy,
+      name: `Kóta ${centerDist.toFixed(2)}mm`, isDimension: true,
+      dimSrcX1: pt.x, dimSrcY1: pt.y, dimSrcX2: circObj.cx, dimSrcY2: circObj.cy,
+      color: COLORS.textSecondary,
+    });
+    showToast(`Kóta ${centerDist.toFixed(2)}mm přidána`);
+  });
+}
+
+/**
+ * Generický fallback: měření mezi dvěma libovolnými objekty.
+ * Zobrazí vzdálenosti klíčových bodů.
+ */
+export function showMeasureTwoObjectsResult(obj1, obj2) {
+  const { H, V, Hp, Vp, fH, fV } = coordHelpers();
+
+  function _getCenter(o) {
+    switch (o.type) {
+      case 'point': return { x: o.x, y: o.y };
+      case 'line': case 'constr': return { x: (o.x1 + o.x2) / 2, y: (o.y1 + o.y2) / 2 };
+      case 'circle': case 'arc': return { x: o.cx, y: o.cy };
+      case 'rect': return { x: (o.x1 + o.x2) / 2, y: (o.y1 + o.y2) / 2 };
+      default: return { x: 0, y: 0 };
+    }
+  }
+  const c1 = _getCenter(obj1), c2 = _getCenter(obj2);
+  const d = Math.hypot(c2.x - c1.x, c2.y - c1.y);
+  const angle = Math.atan2(c2.y - c1.y, c2.x - c1.x) * 180 / Math.PI;
+  let rows = '';
+  rows += `<tr><td style="color:${COLORS.label}">Typ 1:</td><td style="color:${COLORS.text}">${typeLabel(obj1.type)}</td></tr>`;
+  rows += `<tr><td style="color:${COLORS.label}">Typ 2:</td><td style="color:${COLORS.text}">${typeLabel(obj2.type)}</td></tr>`;
+  rows += `<tr><td style="color:${COLORS.label}">Vzd. středů:</td><td style="color:${COLORS.selected}">${d.toFixed(3)} mm</td></tr>`;
+  rows += `<tr><td style="color:${COLORS.label}">Úhel:</td><td style="color:${COLORS.selected}">${angle.toFixed(2)}°</td></tr>`;
+  rows += `<tr><td style="color:${COLORS.label}">Δ${Hp}${H}:</td><td style="color:${COLORS.preview}">${fH(c2.x - c1.x).toFixed(3)}</td></tr>`;
+  rows += `<tr><td style="color:${COLORS.label}">Δ${Vp}${V}:</td><td style="color:${COLORS.preview}">${fV(c2.y - c1.y).toFixed(3)}</td></tr>`;
+  rows += `<tr><td style="color:${COLORS.label}">Střed 1:</td><td style="color:${COLORS.primary}">${Hp}${H}${fH(c1.x).toFixed(3)} ${Vp}${V}${fV(c1.y).toFixed(3)}</td></tr>`;
+  rows += `<tr><td style="color:${COLORS.label}">Střed 2:</td><td style="color:${COLORS.primary}">${Hp}${H}${fH(c2.x).toFixed(3)} ${Vp}${V}${fV(c2.y).toFixed(3)}</td></tr>`;
+  const overlay = makeInputOverlay(`
+    <div class="input-dialog">
+      <h3>📏 Měření – 2 objekty</h3>
+      <table style="width:100%;font-family:Consolas;font-size:13px;">${rows}</table>
+      <div class="btn-row">
+        <button class="btn-cancel" id="msAddDim">📐 Přidat kótu</button>
+        <button class="btn-cancel" id="msCopy">📋 Kopírovat</button>
+        <button class="btn-ok btn-cancel-overlay">OK</button>
+      </div>
+    </div>`);
+  _addCopyAndDimListeners(overlay, () => {
+    addObject({
+      type: "line", x1: c1.x, y1: c1.y, x2: c2.x, y2: c2.y,
+      name: `Kóta ${d.toFixed(2)}mm`, isDimension: true,
+      dimSrcX1: c1.x, dimSrcY1: c1.y, dimSrcX2: c2.x, dimSrcY2: c2.y,
+      color: COLORS.textSecondary,
+    });
+    showToast(`Kóta ${d.toFixed(2)}mm přidána`);
+  });
 }

@@ -5,7 +5,7 @@
 import { state, showToast } from './state.js';
 import { getObjectSnapPoints, isAngleBetween, bulgeToArc, getNearestPointOnObject } from './utils.js';
 import { renderAll } from './render.js';
-import { SNAP_POINT_THRESHOLD, SNAP_EDGE_THRESHOLD, VIBRATE_SNAP_POINT, VIBRATE_SNAP_EDGE, AUTO_CENTER_PADDING } from './constants.js';
+import { SNAP_POINT_THRESHOLD, SNAP_EDGE_THRESHOLD, VIBRATE_SNAP_POINT, VIBRATE_SNAP_EDGE, AUTO_CENTER_PADDING, ZOOM_MIN, ZOOM_MAX } from './constants.js';
 
 export const wrap = document.getElementById("canvasWrap");
 export const drawCanvas = document.getElementById("drawCanvas");
@@ -15,14 +15,17 @@ export const ctx = drawCanvas.getContext("2d");
 let _userHasInteracted = false;
 function onFirstInteraction() {
   _userHasInteracted = true;
-  document.removeEventListener('pointerdown', onFirstInteraction, true);
+  document.removeEventListener('click', onFirstInteraction, true);
+  document.removeEventListener('touchend', onFirstInteraction, true);
   document.removeEventListener('keydown', onFirstInteraction, true);
 }
-document.addEventListener('pointerdown', onFirstInteraction, true);
+document.addEventListener('click', onFirstInteraction, true);
+document.addEventListener('touchend', onFirstInteraction, true);
 document.addEventListener('keydown', onFirstInteraction, true);
 
 export function safeVibrate(pattern) {
   if (!_userHasInteracted) return;
+  if (navigator.userActivation && !navigator.userActivation.hasBeenActive) return;
   try { navigator.vibrate(pattern); } catch (_) {}
 }
 
@@ -302,7 +305,7 @@ export function autoCenterView() {
   // Zoom aby se vše vešlo do viditelné oblasti
   const zoomX = (canvasW * (1 - 2 * padding)) / bboxW;
   const zoomY = (visibleH * (1 - 2 * padding)) / bboxH;
-  state.zoom = Math.min(zoomX, zoomY);
+  state.zoom = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, Math.min(zoomX, zoomY)));
 
   // Pan aby střed bboxu byl uprostřed viditelné části canvasu
   // Viditelný střed Y = (fullCanvasH - topbarH) / 2

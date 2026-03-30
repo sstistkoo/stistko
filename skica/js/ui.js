@@ -628,7 +628,11 @@ document.getElementById("btnDelLayer").addEventListener("click", () => {
 
 // ── Toolbar ──
 document.querySelectorAll("[data-tool]").forEach((btn) => {
-  btn.addEventListener("click", () => setTool(btn.dataset.tool));
+  btn.addEventListener("click", () => {
+    // Měření: pokud je výběr → okamžitě změřit
+    if (btn.dataset.tool === 'measure' && bridge.measureSelection && bridge.measureSelection()) return;
+    setTool(btn.dataset.tool);
+  });
 });
 
 /** @param {import('./types.js').ToolType} tool */

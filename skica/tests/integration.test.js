@@ -101,6 +101,7 @@ vi.mock('../js/tools/index.js', () => ({
   handleMeasureClick: vi.fn(), handleCircleClick: vi.fn(),
   handleArcClick: vi.fn(), handleRectClick: vi.fn(),
   handlePolylineClick: vi.fn(),
+  measureSelection: vi.fn(() => false),
 }));
 
 import { state, pushUndo, undo, redo } from '../js/state.js';

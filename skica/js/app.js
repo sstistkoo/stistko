@@ -3,7 +3,7 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 import { state, showToast } from './state.js';
-import { resizeCanvases } from './canvas.js';
+import { resizeCanvases, autoCenterView } from './canvas.js';
 import { calculateAllIntersections } from './geometry.js';
 import { updateObjectList, updateProperties, resetHint, updateDimsBtn, updateSnapPtsBtn, updateCoordModeBtn, updateMachineTypeBtn, updateXDisplayBtn, togglePanel, updateLayerList, updateStatusProject, checkFirstRunHelp, updateAngleSnapBtn } from './ui.js';
 import { initAutoSave } from './storage.js';
@@ -94,7 +94,10 @@ setInterval(() => {
   await migrateFromLocalStorage();
   await tryAutoLoad();
   resizeCanvases();
-  if (state.objects.length > 0) calculateAllIntersections();
+  if (state.objects.length > 0) {
+    calculateAllIntersections();
+    autoCenterView();
+  }
   resetHint();
   updateDimsBtn();
   updateSnapPtsBtn();
