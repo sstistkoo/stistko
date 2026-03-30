@@ -22,9 +22,9 @@ document.addEventListener('pointerdown', onFirstInteraction, true);
 document.addEventListener('keydown', onFirstInteraction, true);
 
 export function safeVibrate(pattern) {
-  if (_userHasInteracted && navigator.vibrate) {
-    try { navigator.vibrate(pattern); } catch (_) {}
-  }
+  if (!_userHasInteracted) return;
+  const vib = navigator['vibrate'];
+  if (vib) { try { vib.call(navigator, pattern); } catch (_) {} }
 }
 
 /** Přizpůsobí canvas velikosti okna. */
