@@ -7,6 +7,8 @@ import { renderAll } from '../render.js';
 import { findObjectAt, calculateAllIntersections } from '../geometry.js';
 import { getLineSegment, setConstraint, propagateConstraints, analyzeSelection } from './helpers.js';
 import { showEndpointChoiceDialog } from '../dialogs.js';
+import { isAnchored } from './anchorClick.js';
+import { updateAssociativeDimensions } from '../dialogs/dimension.js';
 
 /** Vyrovná úsečku/segment kontury do svislé polohy.
  *  Kotevní bod = koncový bod bližší ke kliknutí (zůstane na místě),
@@ -23,9 +25,20 @@ export function handlePerpClick(wx, wy) {
 
   const len = Math.hypot(ls.seg.x2 - ls.seg.x1, ls.seg.y2 - ls.seg.y1);
   if (len < 1e-9) { showToast("Segment má nulovou délku"); return; }
-  // Zjistit, ke kterému konci je klik blíž → ten bude kotva
-  const d1 = Math.hypot(wx - ls.seg.x1, wy - ls.seg.y1);
-  const d2 = Math.hypot(wx - ls.seg.x2, wy - ls.seg.y2);
+
+  // Kontrola kotev – zakotvený konec musí zůstat fixní
+  const a1 = isAnchored(ls.seg.x1, ls.seg.y1);
+  const a2 = isAnchored(ls.seg.x2, ls.seg.y2);
+  if (a1 && a2) { showToast("Oba konce jsou zakotveny – nelze vyrovnat"); return; }
+
+  let fixP1;
+  if (a1) { fixP1 = true; }
+  else if (a2) { fixP1 = false; }
+  else {
+    const d1 = Math.hypot(wx - ls.seg.x1, wy - ls.seg.y1);
+    const d2 = Math.hypot(wx - ls.seg.x2, wy - ls.seg.y2);
+    fixP1 = d1 <= d2;
+  }
 
   // Úhel "svislého" směru – respektuje natočení nulového bodu (H + 90°)
   const vAngle = (state.nullPointActive && state.nullPointAngle)
@@ -38,7 +51,7 @@ export function handlePerpClick(wx, wy) {
 
   pushUndo();
   let movedEnd;
-  if (d1 <= d2) {
+  if (fixP1) {
     // P1 je kotva, P2 se posune podél svislé osy
     ls.setP2(ls.seg.x1 + sign * len * cosV, ls.seg.y1 + sign * len * sinV);
     movedEnd = 'p2';
@@ -54,6 +67,7 @@ export function handlePerpClick(wx, wy) {
   propagateConstraints(obj, ls.segIdx, movedEnd);
 
   calculateAllIntersections();
+  updateAssociativeDimensions();
   renderAll();
   showToast("Vyrovnáno svisle ✓");
 }
@@ -82,12 +96,41 @@ export function perpFromSelection() {
   const len = Math.hypot(ls.seg.x2 - ls.seg.x1, ls.seg.y2 - ls.seg.y1);
   if (len < 1e-9) { showToast("Segment má nulovou délku"); return true; }
 
+  // Kontrola kotev
+  const a1 = isAnchored(ls.seg.x1, ls.seg.y1);
+  const a2 = isAnchored(ls.seg.x2, ls.seg.y2);
+  if (a1 && a2) { showToast("Oba konce jsou zakotveny – nelze vyrovnat"); return true; }
+
   const vAngle2 = (state.nullPointActive && state.nullPointAngle)
     ? (state.nullPointAngle * Math.PI / 180 + Math.PI / 2) : (Math.PI / 2);
   const cosV2 = Math.cos(vAngle2);
   const sinV2 = Math.sin(vAngle2);
   const projDir2 = (ls.seg.x2 - ls.seg.x1) * cosV2 + (ls.seg.y2 - ls.seg.y1) * sinV2;
   const sign = projDir2 >= 0 ? 1 : -1;
+
+  // Pokud je jeden konec zakotvený, automaticky fixovat ten
+  if (a1) {
+    pushUndo();
+    ls.setP2(ls.seg.x1 + sign * len * cosV2, ls.seg.y1 + sign * len * sinV2);
+    setConstraint(obj, ls.segIdx, 'vertical');
+    propagateConstraints(obj, ls.segIdx, 'p2');
+    calculateAllIntersections();
+    updateAssociativeDimensions();
+    renderAll();
+    showToast("Vyrovnáno svisle ✓");
+    return true;
+  }
+  if (a2) {
+    pushUndo();
+    ls.setP1(ls.seg.x2 - sign * len * cosV2, ls.seg.y2 - sign * len * sinV2);
+    setConstraint(obj, ls.segIdx, 'vertical');
+    propagateConstraints(obj, ls.segIdx, 'p1');
+    calculateAllIntersections();
+    updateAssociativeDimensions();
+    renderAll();
+    showToast("Vyrovnáno svisle ✓");
+    return true;
+  }
 
   showEndpointChoiceDialog("Kolmost – výběr kotvy", ls.seg,
     "Kotva P1 (fixní)", "Kotva P2 (fixní)",
@@ -104,6 +147,7 @@ export function perpFromSelection() {
       setConstraint(obj, ls.segIdx, 'vertical');
       propagateConstraints(obj, ls.segIdx, movedEnd);
       calculateAllIntersections();
+      updateAssociativeDimensions();
       renderAll();
       showToast("Vyrovnáno svisle ✓");
     }

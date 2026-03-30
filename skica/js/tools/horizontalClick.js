@@ -7,10 +7,13 @@ import { renderAll } from '../render.js';
 import { findObjectAt, calculateAllIntersections } from '../geometry.js';
 import { getLineSegment, setConstraint, propagateConstraints, analyzeSelection } from './helpers.js';
 import { showEndpointChoiceDialog } from '../dialogs.js';
+import { isAnchored } from './anchorClick.js';
+import { updateAssociativeDimensions } from '../dialogs/dimension.js';
 
 /** Vyrovná úsečku/segment kontury do vodorovné polohy.
  *  Kotevní bod = koncový bod bližší ke kliknutí (zůstane na místě),
- *  druhý koncový bod se posune vodorovně ve stejném směru. */
+ *  druhý koncový bod se posune vodorovně ve stejném směru.
+ *  Zakotvené body (anchor) mají vždy přednost – zakotvený konec se nikdy nehýbe. */
 export function handleHorizontalClick(wx, wy) {
   const idx = findObjectAt(wx, wy);
   if (idx === null) { showToast("Klepněte na úsečku nebo segment kontury"); return; }
@@ -23,9 +26,23 @@ export function handleHorizontalClick(wx, wy) {
 
   const len = Math.hypot(ls.seg.x2 - ls.seg.x1, ls.seg.y2 - ls.seg.y1);
   if (len < 1e-9) { showToast("Segment má nulovou délku"); return; }
-  // Zjistit, ke kterému konci je klik blíž → ten bude kotva
-  const d1 = Math.hypot(wx - ls.seg.x1, wy - ls.seg.y1);
-  const d2 = Math.hypot(wx - ls.seg.x2, wy - ls.seg.y2);
+
+  // Kontrola kotev – zakotvený konec musí zůstat fixní
+  const a1 = isAnchored(ls.seg.x1, ls.seg.y1);
+  const a2 = isAnchored(ls.seg.x2, ls.seg.y2);
+  if (a1 && a2) { showToast("Oba konce jsou zakotveny – nelze vyrovnat"); return; }
+
+  // Zjistit, ke kterému konci je klik blíž → ten bude kotva (pokud kotva neříká jinak)
+  let fixP1;
+  if (a1) {
+    fixP1 = true;   // P1 zakotveno → P1 fixní
+  } else if (a2) {
+    fixP1 = false;   // P2 zakotveno → P2 fixní, P1 se hýbe
+  } else {
+    const d1 = Math.hypot(wx - ls.seg.x1, wy - ls.seg.y1);
+    const d2 = Math.hypot(wx - ls.seg.x2, wy - ls.seg.y2);
+    fixP1 = d1 <= d2;
+  }
 
   // Úhel "vodorovného" směru – respektuje natočení nulového bodu
   const hAngle = (state.nullPointActive && state.nullPointAngle)
@@ -38,7 +55,7 @@ export function handleHorizontalClick(wx, wy) {
 
   pushUndo();
   let movedEnd;
-  if (d1 <= d2) {
+  if (fixP1) {
     // P1 je kotva, P2 se posune podél osy
     ls.setP2(ls.seg.x1 + sign * len * cosH, ls.seg.y1 + sign * len * sinH);
     movedEnd = 'p2';
@@ -54,6 +71,7 @@ export function handleHorizontalClick(wx, wy) {
   propagateConstraints(obj, ls.segIdx, movedEnd);
 
   calculateAllIntersections();
+  updateAssociativeDimensions();
   renderAll();
   showToast("Vyrovnáno vodorovně ✓");
 }
@@ -82,12 +100,41 @@ export function horizontalFromSelection() {
   const len = Math.hypot(ls.seg.x2 - ls.seg.x1, ls.seg.y2 - ls.seg.y1);
   if (len < 1e-9) { showToast("Segment má nulovou délku"); return true; }
 
+  // Kontrola kotev
+  const a1 = isAnchored(ls.seg.x1, ls.seg.y1);
+  const a2 = isAnchored(ls.seg.x2, ls.seg.y2);
+  if (a1 && a2) { showToast("Oba konce jsou zakotveny – nelze vyrovnat"); return true; }
+
   const hAngle2 = (state.nullPointActive && state.nullPointAngle)
     ? (state.nullPointAngle * Math.PI / 180) : 0;
   const cosH2 = Math.cos(hAngle2);
   const sinH2 = Math.sin(hAngle2);
   const projDir2 = (ls.seg.x2 - ls.seg.x1) * cosH2 + (ls.seg.y2 - ls.seg.y1) * sinH2;
   const sign = projDir2 >= 0 ? 1 : -1;
+
+  // Pokud je jeden konec zakotvený, automaticky fixovat ten
+  if (a1) {
+    pushUndo();
+    ls.setP2(ls.seg.x1 + sign * len * cosH2, ls.seg.y1 + sign * len * sinH2);
+    setConstraint(obj, ls.segIdx, 'horizontal');
+    propagateConstraints(obj, ls.segIdx, 'p2');
+    calculateAllIntersections();
+    updateAssociativeDimensions();
+    renderAll();
+    showToast("Vyrovnáno vodorovně ✓");
+    return true;
+  }
+  if (a2) {
+    pushUndo();
+    ls.setP1(ls.seg.x2 - sign * len * cosH2, ls.seg.y2 - sign * len * sinH2);
+    setConstraint(obj, ls.segIdx, 'horizontal');
+    propagateConstraints(obj, ls.segIdx, 'p1');
+    calculateAllIntersections();
+    updateAssociativeDimensions();
+    renderAll();
+    showToast("Vyrovnáno vodorovně ✓");
+    return true;
+  }
 
   showEndpointChoiceDialog("Vodorovnost – výběr kotvy", ls.seg,
     "Kotva P1 (fixní)", "Kotva P2 (fixní)",
@@ -104,6 +151,7 @@ export function horizontalFromSelection() {
       setConstraint(obj, ls.segIdx, 'horizontal');
       propagateConstraints(obj, ls.segIdx, movedEnd);
       calculateAllIntersections();
+      updateAssociativeDimensions();
       renderAll();
       showToast("Vyrovnáno vodorovně ✓");
     }

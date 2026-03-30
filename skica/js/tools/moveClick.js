@@ -1,9 +1,10 @@
-import { state, pushUndo } from '../state.js';
+import { state, pushUndo, showToast } from '../state.js';
 import { findObjectAt, calculateAllIntersections } from '../geometry.js';
 import { updateProperties, resetHint, setHint } from '../ui.js';
 import { moveObject } from '../objects.js';
 import { renderAll } from '../render.js';
 import { updateAssociativeDimensions } from '../dialogs/dimension.js';
+import { hasAnchoredPoint } from './anchorClick.js';
 
 /**
  * @param {number} wx
@@ -53,6 +54,10 @@ export function handleMoveClick(wx, wy) {
     }
     const idx = findObjectAt(wx, wy);
     if (idx !== null) {
+      if (hasAnchoredPoint(state.objects[idx])) {
+        showToast("Objekt je zakotven – nelze přesunout");
+        return;
+      }
       pushUndo();
       state.dragging = true;
       state.dragObjIdx = idx;

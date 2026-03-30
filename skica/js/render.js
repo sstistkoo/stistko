@@ -423,6 +423,22 @@ function renderObjects() {
     });
   }
 
+  // Zakotvené body (červené kolečka)
+  if (state.anchors && state.anchors.length > 0) {
+    for (const a of state.anchors) {
+      const [ax, ay] = worldToScreen(a.x, a.y);
+      ctx.strokeStyle = COLORS.delete;  // červená
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.arc(ax, ay, 7, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(ax, ay, 2.5, 0, Math.PI * 2);
+      ctx.fillStyle = COLORS.delete;
+      ctx.fill();
+    }
+  }
+
   // Dočasné kreslení
   if (state.drawing && state.tempPoints.length > 0) {
     ctx.strokeStyle = COLORS.preview;

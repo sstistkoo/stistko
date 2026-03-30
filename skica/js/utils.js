@@ -409,6 +409,7 @@ export function toolLabel(t) {
       snapPoint: "Přichytit bod",
       text: "Text",
       deleteObj: "Smaž obj.",
+      anchor: "Kotva",
     }[t] || t
   );
 }

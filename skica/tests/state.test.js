@@ -56,8 +56,8 @@ describe('pushUndo', () => {
     pushUndo();
     expect(state.undoStack).toHaveLength(1);
     const saved = JSON.parse(state.undoStack[0]);
-    expect(saved).toHaveLength(1);
-    expect(saved[0].x).toBe(1);
+    expect(saved.objects).toHaveLength(1);
+    expect(saved.objects[0].x).toBe(1);
   });
 
   it('vymaže redo stack po pushUndo', () => {
@@ -71,7 +71,7 @@ describe('pushUndo', () => {
     pushUndo();
     state.objects[0].x = 99;
     const saved = JSON.parse(state.undoStack[0]);
-    expect(saved[0].x).toBe(5); // nepozměněný
+    expect(saved.objects[0].x).toBe(5); // nepozměněný
   });
 
   it('více pushUndo přidává na stack', () => {
@@ -114,7 +114,7 @@ describe('maxUndo limit', () => {
     }
     // Nejstarší stavy (0-4) by měly být odstraněny
     const oldest = JSON.parse(state.undoStack[0]);
-    expect(oldest[0].x).toBe(5); // 0,1,2,3,4 odstraněny
+    expect(oldest.objects[0].x).toBe(5); // 0,1,2,3,4 odstraněny
   });
 });
 
@@ -147,7 +147,7 @@ describe('undo', () => {
     undo();
     expect(state.redoStack).toHaveLength(1);
     const redoState = JSON.parse(state.redoStack[0]);
-    expect(redoState[0].x).toBe(2);
+    expect(redoState.objects[0].x).toBe(2);
   });
 
   it('na prázdném undo stacku se nic nestane', () => {
