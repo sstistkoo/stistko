@@ -8,7 +8,7 @@ import { state, pushUndo, undo, redo, showToast, resetDrawingState, fmtStatusCoo
 import { renderAll } from './render.js';
 import { moveObject, addObject } from './objects.js';
 import { setTool, resetHint, setHint, updateProperties, updateObjectList, updateSnapPtsBtn, updateDimsBtn, toggleCoordMode, updateCoordModeBtn, updateSnapGridBtn, updateAngleSnapBtn, showGridSizeDialog, showAngleSnapDialog, toggleHelp, updateNullPointUI } from './ui.js';
-import { findObjectAt, selectObjectAt, calculateAllIntersections, mirrorObject, linearArray, rotateObject, findSegmentAt } from './geometry.js';
+import { findObjectAt, selectObjectAt, calculateAllIntersections, mirrorObject, linearArray, rotateObject, findSegmentAt, findConstraintAt } from './geometry.js';
 import { showNumericalInputDialog, showPolarDrawingDialog, showCircleRadiusDialog, showBulgeDialog, showMirrorDialog, showLinearArrayDialog, showRotateDialog } from './dialogs.js';
 import { saveProject, showExportImageDialog, showProjectsDialog, showSaveAsDialog } from './storage.js';
 import { bulgeToArc, deepClone } from './utils.js';
@@ -665,6 +665,17 @@ export function handleCanvasClick(wx, wy) {
       break;
 
     case "deleteObj": {
+      // Nejprve zkusit vazbu (constraint marker)
+      const constr = findConstraintAt(wx, wy);
+      if (constr) {
+        pushUndo();
+        const cObj = state.objects[constr.objIdx];
+        if (cObj) removeConstraint(cObj, constr.segIdx);
+        renderAll();
+        showToast("Vazba odstraněna ✓");
+        break;
+      }
+      // Pak objekt
       const idx = findObjectAt(wx, wy);
       if (idx !== null) {
         pushUndo();
@@ -676,12 +687,13 @@ export function handleCanvasClick(wx, wy) {
         renderAll();
         showToast("Objekt smazán ✓");
       } else {
+        // Nakonec zkusit kotvu
         pushUndo();
         if (removeAnchorAt(wx, wy)) {
           renderAll();
           showToast("Kotva odstraněna ✓");
         } else {
-          state.undoStack.pop(); // nic se nezměnilo, vrátit undo
+          state.undoStack.pop();
         }
       }
       break;
