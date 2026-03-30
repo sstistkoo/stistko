@@ -857,8 +857,16 @@ export function drawPoint(obj) {
     // Odkazová čára (leader) se souřadnicemi
     const leaderLen = 30;
     const shelfLen = 40;
-    const ex = sx + leaderLen;
-    const ey = sy - leaderLen;
+    const dimSize = Math.round(Math.min(21, Math.max(10, 7 + state.zoom * 4)));
+    ctx.font = dimSize + 'px Consolas';
+    const labelText = fmtCoordLabel(obj.x, obj.y);
+    const labelW = ctx.measureText(labelText).width;
+    const baseEx = sx + leaderLen;
+    const baseEy = sy - leaderLen;
+    // Detekce kolize – posune výš při překryvu
+    const resolved = resolveDimLabelPos(baseEx + 2, baseEy - 3, labelW + shelfLen, dimSize);
+    const ey = resolved.collided ? resolved.y + 3 : baseEy;
+    const ex = baseEx;
     // Šikmá čára od bodu
     ctx.lineWidth = 1;
     ctx.beginPath();
@@ -872,12 +880,10 @@ export function drawPoint(obj) {
     ctx.arc(sx, sy, 3, 0, Math.PI * 2);
     ctx.stroke();
     // Text souřadnic
-    const dimSize = Math.round(Math.min(21, Math.max(10, 7 + state.zoom * 4)));
-    ctx.font = dimSize + 'px Consolas';
     ctx.fillStyle = '#cdd6f4';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'bottom';
-    ctx.fillText(fmtCoordLabel(obj.x, obj.y), ex + 2, ey - 3);
+    ctx.fillText(labelText, ex + 2, ey - 3);
     ctx.textAlign = 'start';
     ctx.textBaseline = 'alphabetic';
     return;
