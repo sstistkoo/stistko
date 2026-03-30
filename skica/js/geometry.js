@@ -548,6 +548,29 @@ export function intersectCircleCircle(c1, c2) {
   return results;
 }
 
+/** Koncové body objektu (pro filtrování napojení vs průsečíků). */
+function getObjectEndpoints(obj) {
+  switch (obj.type) {
+    case 'line':
+    case 'constr':
+      return [{ x: obj.x1, y: obj.y1 }, { x: obj.x2, y: obj.y2 }];
+    case 'arc':
+      return [
+        { x: obj.cx + obj.r * Math.cos(obj.startAngle), y: obj.cy + obj.r * Math.sin(obj.startAngle) },
+        { x: obj.cx + obj.r * Math.cos(obj.endAngle), y: obj.cy + obj.r * Math.sin(obj.endAngle) },
+      ];
+    case 'rect':
+      return [
+        { x: obj.x1, y: obj.y1 }, { x: obj.x2, y: obj.y1 },
+        { x: obj.x2, y: obj.y2 }, { x: obj.x1, y: obj.y2 },
+      ];
+    case 'polyline':
+      return obj.vertices.map(v => ({ x: v.x, y: v.y }));
+    default:
+      return [];
+  }
+}
+
 /** Přepočítá všechny průsečíky mezi objekty. */
 export function calculateAllIntersections() {
   const pts = [];
@@ -560,15 +583,31 @@ export function calculateAllIntersections() {
         lines2 = getLines(objs[j]);
       const circs1 = getCircles(objs[i]),
         circs2 = getCircles(objs[j]);
+
+      // Filtrování: bod na koncovém bodě obou objektů = napojení, ne průsečík
+      const eps1 = getObjectEndpoints(objs[i]);
+      const eps2 = getObjectEndpoints(objs[j]);
+      const EP_TOL = 1e-4;
+      const isSharedEndpoint = (pt) =>
+        eps1.some(ep => Math.hypot(pt.x - ep.x, pt.y - ep.y) < EP_TOL)
+        && eps2.some(ep => Math.hypot(pt.x - ep.x, pt.y - ep.y) < EP_TOL);
+
       for (const l1 of lines1)
-        for (const l2 of lines2) pts.push(...intersectLineLine(l1, l2));
+        for (const l2 of lines2)
+          for (const pt of intersectLineLine(l1, l2))
+            if (!isSharedEndpoint(pt)) pts.push(pt);
       for (const l of lines1)
-        for (const c of circs2) pts.push(...intersectLineCircle(l, c));
+        for (const c of circs2)
+          for (const pt of intersectLineCircle(l, c))
+            if (!isSharedEndpoint(pt)) pts.push(pt);
       for (const l of lines2)
-        for (const c of circs1) pts.push(...intersectLineCircle(l, c));
+        for (const c of circs1)
+          for (const pt of intersectLineCircle(l, c))
+            if (!isSharedEndpoint(pt)) pts.push(pt);
       for (const c1 of circs1)
         for (const c2 of circs2)
-          pts.push(...intersectCircleCircle(c1, c2));
+          for (const pt of intersectCircleCircle(c1, c2))
+            if (!isSharedEndpoint(pt)) pts.push(pt);
     }
   }
   const unique = [];
@@ -1104,21 +1143,7 @@ export function filletTwoLines(line1, line2, radius) {
   const t = ((line2.x1 - line1.x1) * d2y - (line2.y1 - line1.y1) * d2x) / denom;
   const ix = line1.x1 + t * d1x, iy = line1.y1 + t * d1y;
 
-  // Unit direction vectors
-  const len1 = Math.hypot(d1x, d1y), len2 = Math.hypot(d2x, d2y);
-  const u1x = d1x / len1, u1y = d1y / len1;
-  const u2x = d2x / len2, u2y = d2y / len2;
-
-  // Angle between lines
-  const halfAngle = Math.acos(Math.min(1, Math.abs(u1x * u2x + u1y * u2y)));
-  if (halfAngle < 1e-9) return { ok: false, msg: "Úsečky jsou téměř rovnoběžné" };
-
-  const tanHalf = Math.tan(halfAngle / 2);
-  if (Math.abs(tanHalf) < 1e-9) return { ok: false, msg: "Nelze vytvořit zaoblení" };
-  const dist = radius / tanHalf; // distance from intersection to tangent point
-
   // Determine directions: point AWAY from intersection along each line
-  // We need to figure out which direction on each line goes away from intersection
   const d1a = Math.hypot(line1.x1 - ix, line1.y1 - iy);
   const d1b = Math.hypot(line1.x2 - ix, line1.y2 - iy);
   const dir1x = d1a > d1b ? (line1.x1 - ix) : (line1.x2 - ix);
@@ -1133,6 +1158,15 @@ export function filletTwoLines(line1, line2, radius) {
   const dlen2 = Math.hypot(dir2x, dir2y);
   const n2x = dir2x / dlen2, n2y = dir2y / dlen2;
 
+  // Sector angle between directions away from intersection
+  const cosAngle = Math.max(-1, Math.min(1, n1x * n2x + n1y * n2y));
+  const sectorAngle = Math.acos(cosAngle);
+  if (sectorAngle < 1e-9 || sectorAngle > Math.PI - 1e-9)
+    return { ok: false, msg: "Úsečky jsou téměř rovnoběžné" };
+
+  const tanHalf = Math.tan(sectorAngle / 2);
+  const dist = radius / tanHalf; // distance from intersection to tangent point
+
   // Tangent points on each line
   const tp1x = ix + n1x * dist, tp1y = iy + n1y * dist;
   const tp2x = ix + n2x * dist, tp2y = iy + n2y * dist;
@@ -1146,8 +1180,14 @@ export function filletTwoLines(line1, line2, radius) {
   const cY = iy + (by / blen) * centerDist;
 
   // Start and end angles
-  const startAngle = Math.atan2(tp1y - cY, tp1x - cX);
-  const endAngle = Math.atan2(tp2y - cY, tp2x - cX);
+  let startAngle = Math.atan2(tp1y - cY, tp1x - cX);
+  let endAngle = Math.atan2(tp2y - cY, tp2x - cX);
+
+  // Ensure CCW sweep from startAngle to endAngle is the minor arc (< π)
+  const ccwSweep = ((endAngle - startAngle) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
+  if (ccwSweep > Math.PI) {
+    [startAngle, endAngle] = [endAngle, startAngle];
+  }
 
   // Trim lines: move the endpoint closer to intersection to the tangent point
   if (d1a < d1b) { line1.x1 = tp1x; line1.y1 = tp1y; }

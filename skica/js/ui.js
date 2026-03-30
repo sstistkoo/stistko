@@ -586,8 +586,9 @@ export function updateIntersectionList() {
 /** @param {string} id  ID kontejneru panelu */
 export function togglePanel(id) {
   const el = document.getElementById(id);
-  const opening = el.style.display === "none";
-  el.style.display = opening ? "" : "none";
+  const computed = getComputedStyle(el).display;
+  const opening = computed === "none";
+  el.style.display = opening ? "block" : "none";
   // Update header arrow
   const header = el.previousElementSibling;
   if (header && header.classList.contains('panel-header')) {
@@ -1056,8 +1057,22 @@ const _btnCalcInt = document.getElementById("btnCalcInt");
 if (_btnCalcInt) _btnCalcInt.addEventListener("click", () => { if (bridge.calculateAllIntersections) bridge.calculateAllIntersections(); });
 
 // ── Smazat vše ──
-document.getElementById("btnClearAll").addEventListener("click", () => {
+document.getElementById("btnClearAll").addEventListener("click", async () => {
+  if (state.objects.length === 0) return;
   if (confirm("Opravdu smazat všechny objekty?")) {
+    // Uložit do historie smazaných výkresů (max 5)
+    try {
+      const history = (await getMeta('deletedHistory')) || [];
+      const snapshot = {
+        date: new Date().toLocaleString('cs-CZ'),
+        objects: JSON.parse(JSON.stringify(state.objects)),
+        nextId: state.nextId,
+      };
+      history.unshift(snapshot);
+      if (history.length > 5) history.length = 5;
+      await setMeta('deletedHistory', history);
+    } catch (e) { /* ignore storage errors */ }
+
     pushUndo();
     state.objects = [];
     state.selected = null;
@@ -1071,6 +1086,47 @@ document.getElementById("btnClearAll").addEventListener("click", () => {
       "Klikněte 📋 CNC Export";
     renderAll();
   }
+});
+
+// ── Historie smazaných výkresů ──
+document.getElementById("btnHistory").addEventListener("click", async () => {
+  const history = (await getMeta('deletedHistory')) || [];
+  if (history.length === 0) {
+    showToast("Žádné smazané výkresy v historii");
+    return;
+  }
+  const items = history.map((h, i) =>
+    `<button class="calc-btn" style="width:100%;padding:10px 12px;margin:4px 0;font-size:14px;text-align:left;cursor:pointer" data-hidx="${i}">
+      ${h.date} — ${h.objects.length} objektů
+    </button>`
+  ).join('');
+  const bodyHTML = `
+    <div style="max-height:60vh;overflow-y:auto">
+      <p style="margin:0 0 8px;font-size:13px;color:var(--ctp-subtext0)">Posledních ${history.length} smazaných výkresů. Klikněte pro obnovení:</p>
+      ${items}
+    </div>`;
+  const { overlay, close } = makeOverlay("🕓 Historie smazaných výkresů", bodyHTML);
+  overlay.querySelectorAll('[data-hidx]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.dataset.hidx);
+      const entry = history[idx];
+      if (!entry) return;
+      if (state.objects.length > 0 && !confirm("Nahradit aktuální výkres obnoveným?")) return;
+      pushUndo();
+      state.objects = entry.objects;
+      state.nextId = entry.nextId || (Math.max(0, ...entry.objects.map(o => o.id || 0)) + 1);
+      state.selected = null;
+      state.selectedPoint = null;
+      state.intersections = [];
+      updateObjectList();
+      updateProperties();
+      updateIntersectionList();
+      if (bridge.calculateAllIntersections) bridge.calculateAllIntersections();
+      renderAll();
+      close();
+      showToast(`Výkres z ${entry.date} obnoven ✓`);
+    });
+  });
 });
 
 // ── Kalkulačka – popup ──

@@ -863,6 +863,57 @@ describe('filletTwoLines', () => {
     // Tečný bod na l1 je 5 od průsečíku (0,0) ve směru l1 (doleva)
     expect(Math.abs(l1EndX)).toBeCloseTo(5, 2);
   });
+
+  it('zaoblení tupého úhlu — oblouk se napojí přesně', () => {
+    // Dvě úsečky svírající tupý úhel (~120°)
+    const l1 = { type: 'line', x1: 0, y1: 0, x2: 10, y2: 0 };
+    const l2 = { type: 'line', x1: 0, y1: 0, x2: -5, y2: 8.66 };
+    const result = filletTwoLines(l1, l2, 3);
+    expect(result.ok).toBe(true);
+    const arc = result.arc;
+    // Ověříme, že tečné body oblouku leží přesně na kružnici oblouku
+    const startPt = {
+      x: arc.cx + arc.r * Math.cos(arc.startAngle),
+      y: arc.cy + arc.r * Math.sin(arc.startAngle),
+    };
+    const endPt = {
+      x: arc.cx + arc.r * Math.cos(arc.endAngle),
+      y: arc.cy + arc.r * Math.sin(arc.endAngle),
+    };
+    // Tečné body musí ležet na příslušných úsečkách (y≈0 pro l1, nebo na l2)
+    const onL1 = Math.abs(startPt.y) < 0.01 || Math.abs(endPt.y) < 0.01;
+    expect(onL1).toBe(true);
+    // CCW sweep musí být menší než π (minor arc)
+    const sweep = ((arc.endAngle - arc.startAngle) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
+    expect(sweep).toBeLessThan(Math.PI);
+    // Právě oříznutý koncový bod úsečky musí odpovídat tečnému bodu oblouku
+    // l1 se ořízne na end blíže k průsečíku → l1.x1 (bližší k 0,0)
+    const tp1 = { x: l1.x1, y: l1.y1 };
+    const tp2 = { x: l2.x1, y: l2.y1 };
+    const dTP1 = Math.hypot(tp1.x - arc.cx, tp1.y - arc.cy);
+    const dTP2 = Math.hypot(tp2.x - arc.cx, tp2.y - arc.cy);
+    expect(dTP1).toBeCloseTo(arc.r, 6);
+    expect(dTP2).toBeCloseTo(arc.r, 6);
+  });
+
+  it('zaoblení — oblouk vždy minor arc', () => {
+    // Test různých orientací úseček
+    const configs = [
+      // lines meeting at origin, various angles
+      { l1: {x1:0,y1:0,x2:10,y2:0}, l2: {x1:0,y1:0,x2:0,y2:10} },
+      { l1: {x1:10,y1:0,x2:0,y2:0}, l2: {x1:0,y1:0,x2:0,y2:10} },
+      { l1: {x1:0,y1:0,x2:10,y2:0}, l2: {x1:0,y1:10,x2:0,y2:0} },
+      { l1: {x1:10,y1:0,x2:0,y2:0}, l2: {x1:0,y1:10,x2:0,y2:0} },
+    ];
+    for (const cfg of configs) {
+      const result = filletTwoLines(cfg.l1, cfg.l2, 2);
+      expect(result.ok).toBe(true);
+      const arc = result.arc;
+      const sweep = ((arc.endAngle - arc.startAngle) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
+      expect(sweep).toBeLessThan(Math.PI);
+      expect(sweep).toBeGreaterThan(0);
+    }
+  });
 });
 
 // ════════════════════════════════════════

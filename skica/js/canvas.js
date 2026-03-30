@@ -90,6 +90,7 @@ export function snapPt(wx, wy) {
 
     const midThreshold = threshold * 0.3;  // Midpoints: ~30% of normal threshold
     for (const obj of state.objects) {
+      if (obj.isDimension || obj.isCoordLabel) continue;
       const pts = getObjectSnapPoints(obj);
       for (const p of pts) {
         const d = Math.hypot(p.x - wx, p.y - wy);
@@ -139,6 +140,7 @@ export function snapPt(wx, wy) {
     const edgeThreshold = SNAP_EDGE_THRESHOLD / state.zoom;
     let edgeX = null, edgeY = null, edgeD = Infinity;
     for (const obj of state.objects) {
+      if (obj.isDimension || obj.isCoordLabel) continue;
       const layer = state.layers ? state.layers.find(l => l.id === obj.layer) : null;
       if (layer && (layer.locked || !layer.visible)) continue;
       const np = getNearestPointOnObject(obj, wx, wy);
