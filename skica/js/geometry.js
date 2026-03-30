@@ -95,14 +95,16 @@ export function findObjectAt(wx, wy) {
  * Vybere objekt na pozici [wx,wy].
  * @param {number} wx
  * @param {number} wy
+ * @param {boolean} [addToSelection=false] Ctrl+klik → přidat/odebrat z multiSelected
  */
-export function selectObjectAt(wx, wy) {
+export function selectObjectAt(wx, wy, addToSelection = false) {
   // Nejdřív zkontrolovat, zda klik je na vazební značku
   const constr = findConstraintAt(wx, wy);
   if (constr) {
     state._selectedConstraint = constr;
     state.selected = constr.objIdx;
     state.selectedSegment = constr.segIdx;
+    state.multiSelected.clear();
     if (bridge.updateProperties) bridge.updateProperties();
     if (bridge.updateObjectList) bridge.updateObjectList();
     renderAll();
@@ -111,12 +113,45 @@ export function selectObjectAt(wx, wy) {
   state._selectedConstraint = null;
 
   const newSel = findObjectAt(wx, wy);
-  // If clicking on already-selected polyline, select the nearest segment
-  if (newSel !== null && newSel === state.selected && state.objects[newSel].type === 'polyline') {
-    state.selectedSegment = findSegmentAt(state.objects[newSel], wx, wy);
-  } else {
-    state.selected = newSel;
+
+  if (addToSelection) {
+    // Ctrl+klik: přidat/odebrat z multi-selection
+    if (newSel !== null) {
+      // Pokud máme single-select a začínáme multi, přidat stávající
+      if (state.multiSelected.size === 0 && state.selected !== null && state.selected !== newSel) {
+        state.multiSelected.add(state.selected);
+      }
+      // Toggle kliknutého objektu
+      if (state.multiSelected.has(newSel)) {
+        state.multiSelected.delete(newSel);
+        // Pokud zbyl jen jeden, vrátit se k single-select
+        if (state.multiSelected.size === 1) {
+          state.selected = state.multiSelected.values().next().value;
+          state.multiSelected.clear();
+        } else if (state.multiSelected.size === 0) {
+          state.selected = null;
+        } else {
+          state.selected = newSel;  // will be updated below
+          // Set selected to last remaining
+          const arr = [...state.multiSelected];
+          state.selected = arr[arr.length - 1];
+        }
+      } else {
+        state.multiSelected.add(newSel);
+        state.selected = newSel;
+      }
+    }
     state.selectedSegment = null;
+  } else {
+    // Normální klik: single select, zrušit multi
+    state.multiSelected.clear();
+    // If clicking on already-selected polyline, select the nearest segment
+    if (newSel !== null && newSel === state.selected && state.objects[newSel].type === 'polyline') {
+      state.selectedSegment = findSegmentAt(state.objects[newSel], wx, wy);
+    } else {
+      state.selected = newSel;
+      state.selectedSegment = null;
+    }
   }
   if (bridge.updateProperties) bridge.updateProperties();
   if (bridge.updateObjectList) bridge.updateObjectList();

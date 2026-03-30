@@ -64,15 +64,26 @@ drawCanvas.addEventListener("mousemove", (e) => {
   }
 
   // Přetahování objektu
-  if (state.dragging && state.dragObjIdx !== null && state.objects[state.dragObjIdx]) {
-    const obj = state.objects[state.dragObjIdx];
+  if (state.dragging && state.dragObjIdx !== null) {
     const dx = wx - state.dragStartWorld.x;
     const dy = wy - state.dragStartWorld.y;
-    if (state.dragObjSnapshot) {
-      const snapShot = JSON.parse(state.dragObjSnapshot);
-      Object.assign(obj, snapShot);
+    if (state.dragObjIdx === -1 && state._multiDragSnapshots) {
+      // Multi-drag
+      for (const { idx, snapshot } of state._multiDragSnapshots) {
+        const obj = state.objects[idx];
+        if (obj) {
+          Object.assign(obj, JSON.parse(snapshot));
+          moveObject(obj, dx, dy);
+        }
+      }
+    } else if (state.objects[state.dragObjIdx]) {
+      const obj = state.objects[state.dragObjIdx];
+      if (state.dragObjSnapshot) {
+        const snapShot = JSON.parse(state.dragObjSnapshot);
+        Object.assign(obj, snapShot);
+      }
+      moveObject(obj, dx, dy);
     }
-    moveObject(obj, dx, dy);
   }
 
   renderAll();
@@ -92,7 +103,7 @@ drawCanvas.addEventListener("mousedown", (e) => {
   }
   if (e.button !== 0) return;
 
-  handleCanvasClick(state.mouse.x, state.mouse.y);
+  handleCanvasClick(state.mouse.x, state.mouse.y, { addToSelection: e.ctrlKey || e.metaKey });
 });
 
 drawCanvas.addEventListener("mouseup", (e) => {
@@ -145,9 +156,18 @@ document.addEventListener("keydown", (e) => {
       return;
     }
     if (state.dragging) {
-      const obj = state.objects[state.dragObjIdx];
-      if (obj && state.dragObjSnapshot) {
-        Object.assign(obj, JSON.parse(state.dragObjSnapshot));
+      if (state.dragObjIdx === -1 && state._multiDragSnapshots) {
+        // Revert multi-drag
+        for (const { idx, snapshot } of state._multiDragSnapshots) {
+          const obj = state.objects[idx];
+          if (obj) Object.assign(obj, JSON.parse(snapshot));
+        }
+        state._multiDragSnapshots = null;
+      } else {
+        const obj = state.objects[state.dragObjIdx];
+        if (obj && state.dragObjSnapshot) {
+          Object.assign(obj, JSON.parse(state.dragObjSnapshot));
+        }
       }
       state.dragging = false;
       state.dragObjIdx = null;
@@ -159,6 +179,7 @@ document.addEventListener("keydown", (e) => {
     if (mTempIdx !== -1) state.objects.splice(mTempIdx, 1);
     state.selected = null;
     state.selectedSegment = null;
+    state.multiSelected.clear();
     updateProperties();
     renderAll();
     resetHint();
@@ -190,7 +211,10 @@ document.addEventListener("keydown", (e) => {
     return;
   }
   if ((e.ctrlKey || e.metaKey) && e.key === "c") {
-    if (state.selected !== null) {
+    if (state.multiSelected.size > 0) {
+      state.clipboard = [...state.multiSelected].map(i => deepClone(state.objects[i]));
+      showToast(`${state.multiSelected.size} objektů zkopírováno`);
+    } else if (state.selected !== null) {
       state.clipboard = deepClone(state.objects[state.selected]);
       showToast("Objekt zkopírován");
     }
@@ -198,16 +222,33 @@ document.addEventListener("keydown", (e) => {
   }
   if ((e.ctrlKey || e.metaKey) && e.key === "v") {
     if (state.clipboard) {
-      const copy = deepClone(state.clipboard);
-      copy.id = state.nextId;
-      copy.name = (copy.name || copy.type) + " (kopie)";
-      // Offset pasted object slightly
-      moveObject(copy, PASTE_OFFSET, PASTE_OFFSET);
-      addObject(copy);
-      state.selected = state.objects.length - 1;
-      updateObjectList();
-      updateProperties();
-      showToast("Objekt vložen");
+      if (Array.isArray(state.clipboard)) {
+        pushUndo();
+        state.multiSelected.clear();
+        for (const orig of state.clipboard) {
+          const copy = deepClone(orig);
+          copy.id = state.nextId;
+          copy.name = (copy.name || copy.type) + " (kopie)";
+          moveObject(copy, PASTE_OFFSET, PASTE_OFFSET);
+          addObject(copy);
+          state.multiSelected.add(state.objects.length - 1);
+        }
+        state.selected = state.objects.length - 1;
+        updateObjectList();
+        updateProperties();
+        showToast(`${state.clipboard.length} objektů vloženo`);
+      } else {
+        const copy = deepClone(state.clipboard);
+        copy.id = state.nextId;
+        copy.name = (copy.name || copy.type) + " (kopie)";
+        moveObject(copy, PASTE_OFFSET, PASTE_OFFSET);
+        addObject(copy);
+        state.selected = state.objects.length - 1;
+        state.multiSelected.clear();
+        updateObjectList();
+        updateProperties();
+        showToast("Objekt vložen");
+      }
     }
     return;
   }
@@ -292,26 +333,19 @@ document.addEventListener("keydown", (e) => {
       showToast(state.snapToGrid ? `Snap na mřížku: ON (${state.gridSize})` : "Snap na mřížku: OFF");
     }
   }
-  if (e.key === "Delete" && state.selected !== null) {
-    const obj = state.objects[state.selected];
-    // Delete individual segment from polyline
-    if (obj && obj.type === 'polyline' && state.selectedSegment !== null) {
+  if (e.key === "Delete" && (state.selected !== null || state.multiSelected.size > 0)) {
+    const obj = state.selected !== null ? state.objects[state.selected] : null;
+    // Delete individual segment from polyline (only in single-select mode)
+    if (state.multiSelected.size === 0 && obj && obj.type === 'polyline' && state.selectedSegment !== null) {
       e.preventDefault();
       deleteSelectedSegment();
       return;
     }
-    pushUndo();
-    state.objects.splice(state.selected, 1);
-    state.selected = null;
-    state.selectedSegment = null;
-    updateObjectList();
-    updateProperties();
-    calculateAllIntersections();
-    renderAll();
+    deleteSelected();
   }
 
   // Shift+M: Zrcadlení vybraného objektu
-  if (e.key === "M" && e.shiftKey && state.selected !== null) {
+  if (e.key === "M" && e.shiftKey && (state.selected !== null || state.multiSelected.size > 0)) {
     e.preventDefault();
     startMirrorAction();
   }
@@ -468,11 +502,13 @@ drawCanvas.addEventListener("contextmenu", (e) => {
  * Zpracování kliku na canvas (volané i z touch modulu).
  * @param {number} wx
  * @param {number} wy
+ * @param {{ addToSelection?: boolean }} [opts]
  */
-export function handleCanvasClick(wx, wy) {
+export function handleCanvasClick(wx, wy, opts) {
+  const addToSel = !!(opts && opts.addToSelection) || !!state._multiSelectMode;
   switch (state.tool) {
     case "select":
-      selectObjectAt(wx, wy);
+      selectObjectAt(wx, wy, addToSel);
       break;
 
     case "move":
@@ -569,32 +605,38 @@ function removeConstraint(obj, segIdx) {
 }
 
 // ── Rotace akce ──
-/** Spustí dialog pro rotaci vybraného objektu. */
+/** Spustí dialog pro rotaci vybraného objektu (podporuje multi-select). */
 function startRotateAction() {
-  if (state.selected === null) { showToast("Nejdříve vyberte objekt"); return; }
-  const obj = state.objects[state.selected];
+  const indices = state.multiSelected.size > 0
+    ? [...state.multiSelected]
+    : state.selected !== null ? [state.selected] : [];
+  if (indices.length === 0) { showToast("Nejdříve vyberte objekt"); return; }
+  const objs = indices.map(i => state.objects[i]);
+  const refObj = objs[0];
 
-  showRotateDialog(obj, (deg) => {
+  showRotateDialog(refObj, (deg) => {
     pushUndo();
-    // Rotate around object center
-    let cx, cy;
-    switch (obj.type) {
-      case 'point': cx = obj.x; cy = obj.y; break;
-      case 'line': case 'constr':
-        cx = (obj.x1 + obj.x2) / 2; cy = (obj.y1 + obj.y2) / 2; break;
-      case 'circle': case 'arc':
-        cx = obj.cx; cy = obj.cy; break;
-      case 'rect':
-        cx = (obj.x1 + obj.x2) / 2; cy = (obj.y1 + obj.y2) / 2; break;
-      case 'polyline': {
-        const vs = obj.vertices;
-        cx = vs.reduce((s, v) => s + v.x, 0) / vs.length;
-        cy = vs.reduce((s, v) => s + v.y, 0) / vs.length;
-        break;
+    for (const obj of objs) {
+      // Rotate around object center
+      let cx, cy;
+      switch (obj.type) {
+        case 'point': cx = obj.x; cy = obj.y; break;
+        case 'line': case 'constr':
+          cx = (obj.x1 + obj.x2) / 2; cy = (obj.y1 + obj.y2) / 2; break;
+        case 'circle': case 'arc':
+          cx = obj.cx; cy = obj.cy; break;
+        case 'rect':
+          cx = (obj.x1 + obj.x2) / 2; cy = (obj.y1 + obj.y2) / 2; break;
+        case 'polyline': {
+          const vs = obj.vertices;
+          cx = vs.reduce((s, v) => s + v.x, 0) / vs.length;
+          cy = vs.reduce((s, v) => s + v.y, 0) / vs.length;
+          break;
+        }
+        default: cx = 0; cy = 0;
       }
-      default: cx = 0; cy = 0;
+      rotateObject(obj, cx, cy, deg * Math.PI / 180);
     }
-    rotateObject(obj, cx, cy, deg * Math.PI / 180);
     calculateAllIntersections();
     renderAll();
     showToast(`Otočeno o ${deg}° ✓`);
@@ -616,6 +658,25 @@ function deleteSelected() {
     }
     return;
   }
+
+  // Multi-select smazání
+  if (state.multiSelected.size > 0) {
+    pushUndo();
+    const indices = [...state.multiSelected].sort((a, b) => b - a); // sestupně
+    for (const idx of indices) {
+      state.objects.splice(idx, 1);
+    }
+    state.selected = null;
+    state.selectedSegment = null;
+    state.multiSelected.clear();
+    updateObjectList();
+    updateProperties();
+    calculateAllIntersections();
+    renderAll();
+    showToast(`Smazáno ${indices.length} objektů ✓`);
+    return;
+  }
+
   if (state.selected === null) { showToast("Nejdříve vyberte objekt"); return; }
   // Pokud je vybrán segment kontury, smazat jen segment (případně rozdělit konturu)
   const selObj = state.objects[state.selected];
@@ -778,16 +839,21 @@ function explodeSelectedPolyline() {
 }
 
 // ── Zrcadlení akce ──
-/** Spustí dialog pro zrcadlení vybraného objektu. */
+/** Spustí dialog pro zrcadlení vybraného objektu (podporuje multi-select). */
 function startMirrorAction() {
-  if (state.selected === null) { showToast("Nejdříve vyberte objekt"); return; }
-  const obj = state.objects[state.selected];
+  // Získat objekty pro zrcadlení
+  const indices = state.multiSelected.size > 0
+    ? [...state.multiSelected]
+    : state.selected !== null ? [state.selected] : [];
+  if (indices.length === 0) { showToast("Nejdříve vyberte objekt"); return; }
+  const objs = indices.map(i => state.objects[i]);
+  const refObj = objs[0]; // pro dialog
 
-  showMirrorDialog(obj, (axis) => {
+  showMirrorDialog(refObj, (axis) => {
     if (axis === 'custom') {
       showToast("Klepněte na první bod osy zrcadlení");
       setHint("Klepněte na první bod osy zrcadlení");
-      state._mirrorObj = obj;
+      state._mirrorObj = objs;
       state._mirrorStep = 'p1';
       state._mirrorAxisPoints = [];
 
@@ -806,9 +872,11 @@ function startMirrorAction() {
           cleanupMirrorListeners();
           const p1 = state._mirrorAxisPoints[0];
           const p2 = { x: mwx, y: mwy };
-          const copy = mirrorObject(state._mirrorObj, 'custom', p1, p2);
-          addObject(copy);
-          showToast("Objekt zrcadlen ✓");
+          for (const o of state._mirrorObj) {
+            const copy = mirrorObject(o, 'custom', p1, p2);
+            addObject(copy);
+          }
+          showToast(`${state._mirrorObj.length > 1 ? state._mirrorObj.length + ' objektů zrcadleno' : 'Objekt zrcadlen'} ✓`);
           resetHint();
           state._mirrorObj = null;
           state._mirrorStep = null;
@@ -828,28 +896,34 @@ function startMirrorAction() {
 
       drawCanvas.addEventListener("click", handleMirrorClick);
       drawCanvas.addEventListener("touchend", handleMirrorTouch);
-      // Store cleanup so Escape/resetDrawingState can remove listeners
       state._mirrorCleanup = cleanupMirrorListeners;
     } else {
-      const copy = mirrorObject(obj, axis, null, null);
-      addObject(copy);
-      showToast(`Objekt zrcadlen podle osy ${axis === 'x' ? 'X' : 'Z'} ✓`);
+      for (const o of objs) {
+        const copy = mirrorObject(o, axis, null, null);
+        addObject(copy);
+      }
+      showToast(`${objs.length > 1 ? objs.length + ' objektů zrcadleno' : 'Objekt zrcadlen'} podle osy ${axis === 'x' ? 'X' : 'Z'} ✓`);
     }
   });
 }
 
 // ── Lineární pole akce ──
-/** Spustí dialog pro vytvoření lineárního pole z vybraného objektu. */
+/** Spustí dialog pro vytvoření lineárního pole (podporuje multi-select). */
 function startLinearArrayAction() {
-  if (state.selected === null) { showToast("Nejdříve vyberte objekt"); return; }
-  const obj = state.objects[state.selected];
+  const indices = state.multiSelected.size > 0
+    ? [...state.multiSelected]
+    : state.selected !== null ? [state.selected] : [];
+  if (indices.length === 0) { showToast("Nejdříve vyberte objekt"); return; }
+  const objs = indices.map(i => state.objects[i]);
 
-  showLinearArrayDialog(obj, (dx, dz, count) => {
-    const copies = linearArray(obj, dx, dz, count);
-    for (const copy of copies) {
-      addObject(copy);
+  showLinearArrayDialog(objs[0], (dx, dz, count) => {
+    for (const obj of objs) {
+      const copies = linearArray(obj, dx, dz, count);
+      for (const copy of copies) {
+        addObject(copy);
+      }
     }
-    showToast(`Vytvořeno ${copies.length} kopií`);
+    showToast(`Vytvořeno ${count} kopií${objs.length > 1 ? ` z ${objs.length} objektů` : ''}`);
   });
 }
 

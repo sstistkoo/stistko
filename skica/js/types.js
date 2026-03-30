@@ -200,6 +200,7 @@
  * @typedef {Object} AppState
  * @property {DrawObject[]} objects
  * @property {number|null} selected
+ * @property {Set<number>} multiSelected
  * @property {ToolType} tool
  * @property {boolean} snapToPoints
  * @property {boolean} snapToGrid

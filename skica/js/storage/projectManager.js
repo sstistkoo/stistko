@@ -53,6 +53,7 @@ function _loadProjectData(data) {
     state.objects.forEach(obj => { if (obj.layer === undefined) obj.layer = 0; });
   }
   state.selected = null;
+  state.multiSelected.clear();
   updateObjectList();
   updateProperties();
   updateLayerList();
@@ -143,6 +144,7 @@ export function newProject() {
   state.objects = [];
   state.nextId = 1;
   state.selected = null;
+  state.multiSelected.clear();
   state.intersections = [];
   state.projectName = 'Bez názvu';
   state.layers = [

@@ -36,7 +36,7 @@ export function updateObjectList() {
   };
   state.objects.forEach((obj, idx) => {
     const li = document.createElement("li");
-    li.className = idx === state.selected ? "selected" : "";
+    li.className = (idx === state.selected || state.multiSelected.has(idx)) ? "selected" : "";
     const span = document.createElement("span");
     const iconSpan = document.createElement("span");
     iconSpan.className = "obj-icon";
@@ -49,8 +49,31 @@ export function updateObjectList() {
     delBtn.title = "Smazat";
     delBtn.textContent = "✕";
     li.appendChild(delBtn);
-    span.addEventListener("click", () => {
-      state.selected = idx;
+    span.addEventListener("click", (e) => {
+      if (e.ctrlKey || e.metaKey) {
+        // Ctrl+klik: přidat/odebrat z multi-select
+        if (state.multiSelected.size === 0 && state.selected !== null && state.selected !== idx) {
+          state.multiSelected.add(state.selected);
+        }
+        if (state.multiSelected.has(idx)) {
+          state.multiSelected.delete(idx);
+          if (state.multiSelected.size === 1) {
+            state.selected = state.multiSelected.values().next().value;
+            state.multiSelected.clear();
+          } else if (state.multiSelected.size === 0) {
+            state.selected = null;
+          } else {
+            const arr = [...state.multiSelected];
+            state.selected = arr[arr.length - 1];
+          }
+        } else {
+          state.multiSelected.add(idx);
+          state.selected = idx;
+        }
+      } else {
+        state.selected = idx;
+        state.multiSelected.clear();
+      }
       updateObjectList();
       updateProperties();
       renderAll();
@@ -68,6 +91,14 @@ export function updateObjectList() {
       state.objects.splice(idx, 1);
       if (state.selected === idx) state.selected = null;
       else if (state.selected > idx) state.selected--;
+      // Aktualizovat multiSelected indexy
+      const newMulti = new Set();
+      for (const mi of state.multiSelected) {
+        if (mi < idx) newMulti.add(mi);
+        else if (mi > idx) newMulti.add(mi - 1);
+        // mi === idx → odstraněn
+      }
+      state.multiSelected = newMulti;
       updateObjectList();
       updateProperties();
       if (bridge.calculateAllIntersections) bridge.calculateAllIntersections();
@@ -81,6 +112,23 @@ export function updateObjectList() {
 export function updateProperties() {
   const tbody = document.querySelector("#propTable tbody");
   tbody.innerHTML = "";
+
+  // Multi-select: zobrazit přehled
+  if (state.multiSelected.size > 0) {
+    const count = state.multiSelected.size;
+    const types = {};
+    for (const i of state.multiSelected) {
+      const obj = state.objects[i];
+      if (obj) types[obj.type] = (types[obj.type] || 0) + 1;
+    }
+    const summary = Object.entries(types).map(([t, c]) => `${t}: ${c}`).join(', ');
+    tbody.innerHTML =
+      `<tr><td colspan="2" style="color:${COLORS.selected};font-weight:bold">${count} objektů vybráno</td></tr>` +
+      `<tr><td colspan="2" style="color:${COLORS.textMuted}">${summary}</td></tr>` +
+      `<tr><td colspan="2" style="color:${COLORS.textMuted}">Ctrl+klik = přidat/odebrat</td></tr>`;
+    return;
+  }
+
   if (state.selected === null) {
     tbody.innerHTML =
       `<tr><td colspan="2" style="color:${COLORS.textMuted}">Není vybrán objekt</td></tr>`;
@@ -640,7 +688,7 @@ export function setHint(text) {
 /** Obnoví nápovědu pro aktuální nástroj. */
 export function resetHint() {
   const hints = {
-    select: "Klikněte pro výběr objektu",
+    select: "Klikněte pro výběr (Ctrl+klik = multi výběr)",
     move: "Klikněte na objekt pro přesun",
     point: "Klikněte pro umístění bodu",
     line: "Klikněte na počáteční bod úsečky",
@@ -718,12 +766,22 @@ document.getElementById("btnAngleSnap").addEventListener("contextmenu", (e) => {
 });
 
 // ── Kóty tlačítko (3 stavy: all → intersections → none) ──
-const _dimsLabels = { all: '📐 Vše', intersections: '📐 Průsečíky', none: '📐 Skryté' };
 /** Aktualizuje stav tlačítka kót. */
 export function updateDimsBtn() {
   const btn = document.getElementById("btnDims");
-  btn.classList.toggle("active", state.showDimensions !== 'none');
-  btn.textContent = _dimsLabels[state.showDimensions] || _dimsLabels.all;
+  btn.textContent = '📐 Kóty';
+  btn.classList.remove("active");
+  btn.style.background = '';
+  btn.style.color = '';
+  btn.style.borderColor = '';
+  if (state.showDimensions === 'all') {
+    btn.classList.add("active");
+  } else if (state.showDimensions === 'intersections') {
+    btn.style.background = COLORS.dimension;
+    btn.style.color = '#1e1e2e';
+    btn.style.borderColor = COLORS.dimension;
+  }
+  // 'none' → výchozí neaktivní vzhled
 }
 
 document.getElementById("btnDims").addEventListener("click", () => {
@@ -746,9 +804,38 @@ document.getElementById("btnDeleteDims").addEventListener("click", () => {
   pushUndo();
   state.objects = state.objects.filter(o => !o.isDimension && !o.isCoordLabel);
   state.selected = null;
+  state.multiSelected.clear();
   showToast(`Smazáno ${dimCount} kót`);
   if (bridge.updateObjectList) bridge.updateObjectList();
   renderAll();
+});
+
+// ── Multi-select tlačítko ──
+/** Aktualizuje zobrazení Multi-select tlačítka. */
+export function updateMultiSelectBtn() {
+  const btn = document.getElementById("btnMultiSelect");
+  if (!btn) return;
+  const active = state._multiSelectMode;
+  btn.classList.toggle("active", !!active);
+  if (active) {
+    btn.style.background = COLORS.selected;
+    btn.style.color = '#1e1e2e';
+    btn.style.borderColor = COLORS.selected;
+  } else {
+    btn.style.background = '';
+    btn.style.color = '';
+    btn.style.borderColor = '';
+  }
+}
+
+document.getElementById("btnMultiSelect").addEventListener("click", () => {
+  state._multiSelectMode = !state._multiSelectMode;
+  updateMultiSelectBtn();
+  if (state._multiSelectMode) {
+    showToast("Multi výběr: ON (klikej na objekty)");
+  } else {
+    showToast("Multi výběr: OFF");
+  }
 });
 
 // ── Coord Mode tlačítko (ABS/INC) ──
