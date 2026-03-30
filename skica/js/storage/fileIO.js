@@ -95,6 +95,7 @@ export function importProjectFile() {
           state.objects.forEach(obj => { if (obj.layer === undefined) obj.layer = 0; });
         }
         state.selected = null;
+        state.multiSelected.clear();
         updateObjectList();
         updateProperties();
         updateLayerList();
@@ -139,6 +140,7 @@ export function importDXFFile() {
           state.objects.push(entity);
         }
         state.selected = null;
+        state.multiSelected.clear();
         updateObjectList();
         updateProperties();
         calculateAllIntersections();

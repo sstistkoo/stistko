@@ -13,6 +13,8 @@ import {
 } from './constants.js';
 
 let _renderRAF = null;
+// Kolekce umístěných popisků kót pro detekci kolizí
+let _dimLabelRects = [];
 /** Naplánuje překreslení celého canvasu (requestAnimationFrame). */
 export function renderAll() {
   if (_renderRAF) return;
@@ -215,6 +217,7 @@ function renderObjects() {
   const w = drawCanvas.width,
     h = drawCanvas.height;
   ctx.clearRect(0, 0, w, h);
+  _dimLabelRects = []; // Reset kolizních obdélníků kót
 
   // Dynamická velikost písma podle zoomu
   const labelSize = Math.round(Math.min(22, Math.max(14, 10 + state.zoom * 6)));
@@ -238,7 +241,7 @@ function renderObjects() {
       if (bounds && !boundsOverlap(bounds, vp)) return;
     }
 
-    const isSel = idx === state.selected;
+    const isSel = idx === state.selected || state.multiSelected.has(idx);
     const isConstr = obj.type === "constr";
     const layerColor = layer ? layer.color : COLORS.primary;
     ctx.strokeStyle = isSel
@@ -305,7 +308,20 @@ function renderObjects() {
       const ptLabel = state.machineType === 'karusel'
         ? `${pf}${xp}X${displayX(dp.x).toFixed(2)} ${pf}Z${dp.y.toFixed(2)}`
         : `${pf}Z${dp.x.toFixed(2)} ${pf}${xp}X${displayX(dp.y).toFixed(2)}`;
-      ctx.fillText(ptLabel, sx + 8, sy - 8);
+      const labelW = ctx.measureText(ptLabel).width;
+      const resolved = resolveDimLabelPos(sx + 8, sy - 8, labelW, intSize);
+      if (resolved.collided) {
+        ctx.strokeStyle = COLORS.dimension;
+        ctx.lineWidth = 0.5;
+        ctx.setLineDash([2, 2]);
+        ctx.beginPath();
+        ctx.moveTo(sx, sy);
+        ctx.lineTo(sx + 8, resolved.y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = COLORS.dimension;
+      }
+      ctx.fillText(ptLabel, sx + 8, resolved.y);
     });
   }
 
@@ -624,6 +640,46 @@ function drawDimArrow(fromX, fromY, toX, toY) {
   ctx.stroke();
 }
 
+// ── Kolize kótových popisků ──
+/**
+ * Ověří, zda se obdélník [x,y,w,h] překrývá s dříve umístěnými popisky.
+ * Pokud ano, vrátí odsazenou pozici s volným místem.
+ * Registruje výsledný obdélník do _dimLabelRects.
+ * @returns {{ x: number, y: number, collided: boolean }}
+ */
+function resolveDimLabelPos(x, y, textW, textH) {
+  const pad = 4; // mezera kolem textu
+  const rect = { x: x - pad, y: y - textH - pad, w: textW + pad * 2, h: textH + pad * 2 };
+
+  function overlaps(a, b) {
+    return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+  }
+
+  let collided = false;
+  let offsetY = 0;
+  const step = textH + pad * 2;
+  let maxTries = 8;
+
+  while (maxTries-- > 0) {
+    const testRect = { x: rect.x, y: rect.y + offsetY, w: rect.w, h: rect.h };
+    let hasCollision = false;
+    for (const existing of _dimLabelRects) {
+      if (overlaps(testRect, existing)) {
+        hasCollision = true;
+        collided = true;
+        break;
+      }
+    }
+    if (!hasCollision) break;
+    // Zkusit posunout nahoru (záporný Y ve screen = nahoru)
+    offsetY -= step;
+  }
+
+  const finalRect = { x: rect.x, y: rect.y + offsetY, w: rect.w, h: rect.h };
+  _dimLabelRects.push(finalRect);
+  return { x, y: y + offsetY, collided };
+}
+
 // ── Kóty / rozměry ──
 function drawDimension(obj) {
   const dimSize = Math.round(Math.min(18, Math.max(12, 8 + state.zoom * 4)));
@@ -636,13 +692,24 @@ function drawDimension(obj) {
       break;
     case "circle": {
       const [sx, sy] = worldToScreen(obj.cx, obj.cy);
-      ctx.fillText(`R${obj.r.toFixed(2)}`, sx + 6, sy - 6);
-      ctx.fillText(`⌀${(obj.r * 2).toFixed(2)}`, sx + 6, sy + 14);
+      const rText = `R${obj.r.toFixed(2)}`;
+      const dText = `⌀${(obj.r * 2).toFixed(2)}`;
+      const rW = ctx.measureText(rText).width;
+      const dW = ctx.measureText(dText).width;
+      const r1 = resolveDimLabelPos(sx + 6, sy - 6, rW, dimSize);
+      ctx.fillText(rText, sx + 6, r1.y);
+      if (r1.collided) { ctx.strokeStyle = COLORS.textSecondary; ctx.lineWidth = 0.5; ctx.setLineDash([2,2]); ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(sx + 6, r1.y); ctx.stroke(); ctx.setLineDash([]); }
+      const d1 = resolveDimLabelPos(sx + 6, sy + 14, dW, dimSize);
+      ctx.fillText(dText, sx + 6, d1.y);
       break;
     }
     case "arc": {
       const [sx, sy] = worldToScreen(obj.cx, obj.cy);
-      ctx.fillText(`R${obj.r.toFixed(2)}`, sx + 6, sy - 6);
+      const rText = `R${obj.r.toFixed(2)}`;
+      const rW = ctx.measureText(rText).width;
+      const r1 = resolveDimLabelPos(sx + 6, sy - 6, rW, dimSize);
+      ctx.fillText(rText, sx + 6, r1.y);
+      if (r1.collided) { ctx.strokeStyle = COLORS.textSecondary; ctx.lineWidth = 0.5; ctx.setLineDash([2,2]); ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(sx + 6, r1.y); ctx.stroke(); ctx.setLineDash([]); }
       break;
     }
     case "rect": {
@@ -783,7 +850,7 @@ export function drawLine(obj) {
     drawDimArrow(sx1, sy1, sx2, sy2);
     drawDimArrow(sx2, sy2, sx1, sy1);
 
-    // Text délky – rotovaný rovnoběžně s kótou
+    // Text délky – rotovaný rovnoběžně s kótou, s detekcí kolizí
     const len = Math.hypot(ox2 - ox1, oy2 - oy1);
     const dimSize = Math.round(Math.min(24, Math.max(11, 8 + state.zoom * 4.5)));
     ctx.font = dimSize + 'px Consolas';
@@ -792,14 +859,43 @@ export function drawLine(obj) {
     ctx.textBaseline = 'bottom';
     const mx = (sx1 + sx2) / 2;
     const my = (sy1 + sy2) / 2;
+    const labelText = len.toFixed(2);
+    const textW = ctx.measureText(labelText).width;
+    const textH = dimSize;
+
+    // Detekce kolize a případné odsazení
+    const resolved = resolveDimLabelPos(mx - textW / 2, my - 4, textW, textH);
+    const labelY = resolved.y;
+
+    if (resolved.collided) {
+      // Odkazová čára od středu kóty k odsazenému popisku
+      ctx.strokeStyle = COLORS.textSecondary;
+      ctx.lineWidth = 0.7;
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath();
+      ctx.moveTo(mx, my);
+      ctx.lineTo(mx, labelY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      // Kroužek na středu kóty
+      ctx.beginPath();
+      ctx.arc(mx, my, 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
     // Rotace textu podél kóty; zajistit čitelnost (text nikdy vzhůru nohama)
     let textAngle = angle;
     if (textAngle > Math.PI / 2) textAngle -= Math.PI;
     if (textAngle < -Math.PI / 2) textAngle += Math.PI;
+    // Pokud kolize → text bez rotace (aby leader line fungovala čistě)
     ctx.save();
-    ctx.translate(mx, my);
-    ctx.rotate(textAngle);
-    ctx.fillText(len.toFixed(2), 0, -4);
+    if (resolved.collided) {
+      ctx.translate(mx, labelY);
+    } else {
+      ctx.translate(mx, my);
+      ctx.rotate(textAngle);
+    }
+    ctx.fillText(labelText, 0, -4);
     ctx.restore();
     ctx.textAlign = 'start';
     ctx.textBaseline = 'alphabetic';

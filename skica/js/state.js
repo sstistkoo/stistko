@@ -36,6 +36,7 @@ export const state = {
   objects: [],
   selected: null,
   selectedSegment: null,
+  multiSelected: new Set(),
   tool: "select",
   snapToPoints: true,
   snapToGrid: false,
@@ -118,6 +119,7 @@ export function resetDrawingState() {
   state._mirrorObj = null;
   state._mirrorStep = null;
   state._mirrorAxisPoints = null;
+  state.multiSelected.clear();
 }
 
 // ── Undo / Redo ──
@@ -205,6 +207,7 @@ export function undo() {
     return;
   }
   state.selected = null;
+  state.multiSelected.clear();
   if (bridge.updateObjectList) bridge.updateObjectList();
   if (bridge.updateProperties) bridge.updateProperties();
   if (bridge.calculateAllIntersections) bridge.calculateAllIntersections();
@@ -226,6 +229,7 @@ export function redo() {
     return;
   }
   state.selected = null;
+  state.multiSelected.clear();
   if (bridge.updateObjectList) bridge.updateObjectList();
   if (bridge.updateProperties) bridge.updateProperties();
   if (bridge.calculateAllIntersections) bridge.calculateAllIntersections();

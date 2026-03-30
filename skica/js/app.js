@@ -72,7 +72,7 @@ async function tryAutoLoad() {
 setInterval(() => {
   if (state.objects.length > 0) {
     const data = {
-      version: 1.2,
+      version: 1.3,
       objects: state.objects,
       intersections: state.intersections,
       nextId: state.nextId,

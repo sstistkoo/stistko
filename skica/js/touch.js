@@ -174,9 +174,17 @@ const mobileCancelBtn = document.getElementById("mobileCancel");
 mobileCancelBtn.addEventListener("click", (e) => {
   e.stopPropagation();
   if (state.dragging) {
-    const obj = state.objects[state.dragObjIdx];
-    if (obj && state.dragObjSnapshot) {
-      Object.assign(obj, JSON.parse(state.dragObjSnapshot));
+    if (state.dragObjIdx === -1 && state._multiDragSnapshots) {
+      for (const { idx, snapshot } of state._multiDragSnapshots) {
+        const obj = state.objects[idx];
+        if (obj) Object.assign(obj, JSON.parse(snapshot));
+      }
+      state._multiDragSnapshots = null;
+    } else {
+      const obj = state.objects[state.dragObjIdx];
+      if (obj && state.dragObjSnapshot) {
+        Object.assign(obj, JSON.parse(state.dragObjSnapshot));
+      }
     }
     state.dragging = false;
     state.dragObjIdx = null;
@@ -384,15 +392,25 @@ function updatePrecisionCrosshair(touch) {
   updateMobileCoords(wx, wy, extra);
 
   // Přetahování objektu v precision mode
-  if (state.dragging && state.dragObjIdx !== null && state.objects[state.dragObjIdx]) {
-    const obj = state.objects[state.dragObjIdx];
+  if (state.dragging && state.dragObjIdx !== null) {
     const dx = wx - state.dragStartWorld.x;
     const dy = wy - state.dragStartWorld.y;
-    if (state.dragObjSnapshot) {
-      const snapShot = JSON.parse(state.dragObjSnapshot);
-      Object.assign(obj, snapShot);
+    if (state.dragObjIdx === -1 && state._multiDragSnapshots) {
+      for (const { idx, snapshot } of state._multiDragSnapshots) {
+        const obj = state.objects[idx];
+        if (obj) {
+          Object.assign(obj, JSON.parse(snapshot));
+          moveObject(obj, dx, dy);
+        }
+      }
+    } else if (state.objects[state.dragObjIdx]) {
+      const obj = state.objects[state.dragObjIdx];
+      if (state.dragObjSnapshot) {
+        const snapShot = JSON.parse(state.dragObjSnapshot);
+        Object.assign(obj, snapShot);
+      }
+      moveObject(obj, dx, dy);
     }
-    moveObject(obj, dx, dy);
   }
 
   renderAll();
@@ -594,15 +612,25 @@ drawCanvas.addEventListener(
       updateMobileCoords(wx, wy, extra);
 
       // Přetahování objektu
-      if (state.dragging && state.dragObjIdx !== null && state.objects[state.dragObjIdx]) {
-        const obj = state.objects[state.dragObjIdx];
+      if (state.dragging && state.dragObjIdx !== null) {
         const dx = wx - state.dragStartWorld.x;
         const dy = wy - state.dragStartWorld.y;
-        if (state.dragObjSnapshot) {
-          const snapShot = JSON.parse(state.dragObjSnapshot);
-          Object.assign(obj, snapShot);
+        if (state.dragObjIdx === -1 && state._multiDragSnapshots) {
+          for (const { idx, snapshot } of state._multiDragSnapshots) {
+            const obj = state.objects[idx];
+            if (obj) {
+              Object.assign(obj, JSON.parse(snapshot));
+              moveObject(obj, dx, dy);
+            }
+          }
+        } else if (state.objects[state.dragObjIdx]) {
+          const obj = state.objects[state.dragObjIdx];
+          if (state.dragObjSnapshot) {
+            const snapShot = JSON.parse(state.dragObjSnapshot);
+            Object.assign(obj, snapShot);
+          }
+          moveObject(obj, dx, dy);
         }
-        moveObject(obj, dx, dy);
       }
 
       renderAll();
