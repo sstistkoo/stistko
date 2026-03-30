@@ -39,6 +39,8 @@ export function addDimensionForObject(obj) {
         x2: obj.x2 + nx,
         y2: obj.y2 + ny,
         isDimension: true,
+        dimType: 'linear',
+        sourceObjId: obj.id || null,
         dimSrcX1: obj.x1,
         dimSrcY1: obj.y1,
         dimSrcX2: obj.x2,
@@ -50,56 +52,112 @@ export function addDimensionForObject(obj) {
       break;
     }
     case "circle": {
+      // Průměrová kóta (⌀) – vodorovná čára přes střed
       addObject({
         type: "line",
-        x1: obj.cx,
+        x1: obj.cx - obj.r,
         y1: obj.cy,
         x2: obj.cx + obj.r,
         y2: obj.cy,
-        name: `Kóta R${obj.r.toFixed(2)}`,
+        name: `Kóta ⌀${(obj.r * 2).toFixed(2)}`,
         isDimension: true,
+        dimType: 'diameter',
+        sourceObjId: obj.id || null,
+        dimRadius: obj.r,
+        dimCenterX: obj.cx,
+        dimCenterY: obj.cy,
         color: COLORS.textSecondary,
       });
-      showToast(`Kóta R${obj.r.toFixed(2)} přidána`);
+      showToast(`Kóta ⌀${(obj.r * 2).toFixed(2)} přidána`);
       break;
     }
     case "arc": {
+      // Radiální kóta (R) – čára od středu k oblouku
+      const midAngle = (obj.startAngle + obj.endAngle) / 2;
+      const mx = obj.cx + obj.r * Math.cos(midAngle);
+      const my = obj.cy + obj.r * Math.sin(midAngle);
       addObject({
         type: "line",
         x1: obj.cx,
         y1: obj.cy,
-        x2: obj.cx + obj.r,
-        y2: obj.cy,
+        x2: mx,
+        y2: my,
         name: `Kóta R${obj.r.toFixed(2)}`,
         isDimension: true,
+        dimType: 'radius',
+        sourceObjId: obj.id || null,
+        dimRadius: obj.r,
+        dimCenterX: obj.cx,
+        dimCenterY: obj.cy,
         color: COLORS.textSecondary,
       });
-      showToast(`Kóta R${obj.r.toFixed(2)} přidána`);
+      // Úhlová kóta oblouku
+      let sweep = obj.endAngle - obj.startAngle;
+      if (sweep < 0) sweep += 2 * Math.PI;
+      const sweepDeg = (sweep * 180 / Math.PI);
+      addObject({
+        type: "line",
+        x1: obj.cx + obj.r * Math.cos(obj.startAngle),
+        y1: obj.cy + obj.r * Math.sin(obj.startAngle),
+        x2: obj.cx + obj.r * Math.cos(obj.endAngle),
+        y2: obj.cy + obj.r * Math.sin(obj.endAngle),
+        name: `Kóta ∠${sweepDeg.toFixed(1)}°`,
+        isDimension: true,
+        dimType: 'angular',
+        sourceObjId: obj.id || null,
+        dimAngle: sweep,
+        dimCenterX: obj.cx,
+        dimCenterY: obj.cy,
+        dimRadius: obj.r,
+        dimSrcX1: obj.cx + obj.r * Math.cos(obj.startAngle),
+        dimSrcY1: obj.cy + obj.r * Math.sin(obj.startAngle),
+        dimSrcX2: obj.cx + obj.r * Math.cos(obj.endAngle),
+        dimSrcY2: obj.cy + obj.r * Math.sin(obj.endAngle),
+        color: COLORS.textSecondary,
+      });
+      showToast(`Kóty R${obj.r.toFixed(2)} a ∠${sweepDeg.toFixed(1)}° přidány`);
       break;
     }
     case "rect": {
       const w = Math.abs(obj.x2 - obj.x1);
       const h = Math.abs(obj.y2 - obj.y1);
-      // Šířka – horní hrana
+      const minX = Math.min(obj.x1, obj.x2);
+      const maxX = Math.max(obj.x1, obj.x2);
+      const minY = Math.min(obj.y1, obj.y2);
+      const maxY = Math.max(obj.y1, obj.y2);
+      const dimOff = 5;
+      // Šířka – horní hrana (odsazená)
       addObject({
         type: "line",
-        x1: obj.x1,
-        y1: Math.max(obj.y1, obj.y2),
-        x2: obj.x2,
-        y2: Math.max(obj.y1, obj.y2),
+        x1: minX,
+        y1: maxY + dimOff,
+        x2: maxX,
+        y2: maxY + dimOff,
         name: `Kóta ${w.toFixed(2)}mm`,
         isDimension: true,
+        dimType: 'linear',
+        sourceObjId: obj.id || null,
+        dimSrcX1: minX,
+        dimSrcY1: maxY,
+        dimSrcX2: maxX,
+        dimSrcY2: maxY,
         color: COLORS.textSecondary,
       });
-      // Výška – pravá hrana
+      // Výška – pravá hrana (odsazená)
       addObject({
         type: "line",
-        x1: Math.max(obj.x1, obj.x2),
-        y1: obj.y1,
-        x2: Math.max(obj.x1, obj.x2),
-        y2: obj.y2,
+        x1: maxX + dimOff,
+        y1: minY,
+        x2: maxX + dimOff,
+        y2: maxY,
         name: `Kóta ${h.toFixed(2)}mm`,
         isDimension: true,
+        dimType: 'linear',
+        sourceObjId: obj.id || null,
+        dimSrcX1: maxX,
+        dimSrcY1: minY,
+        dimSrcX2: maxX,
+        dimSrcY2: maxY,
         color: COLORS.textSecondary,
       });
       showToast(`Kóty ${w.toFixed(2)} × ${h.toFixed(2)}mm přidány`);
@@ -122,26 +180,42 @@ export function addDimensionForObject(obj) {
           // Obloukový segment – kóta poloměru
           const arc = bulgeToArc(p1, p2, b);
           if (arc) {
+            const midAngle = (arc.startAngle + arc.endAngle) / 2;
+            const mx = arc.cx + arc.r * Math.cos(midAngle);
+            const my = arc.cy + arc.r * Math.sin(midAngle);
             addObject({
               type: "line",
               x1: arc.cx, y1: arc.cy,
-              x2: arc.cx + arc.r, y2: arc.cy,
+              x2: mx, y2: my,
               name: `Kóta R${arc.r.toFixed(2)}`,
               isDimension: true,
+              dimType: 'radius',
+              sourceObjId: obj.id || null,
+              dimRadius: arc.r,
+              dimCenterX: arc.cx,
+              dimCenterY: arc.cy,
               color: COLORS.textSecondary,
             });
             dimCount++;
           }
         } else {
-          // Přímý segment – kóta délky
+          // Přímý segment – kóta délky (odsazená)
           const len = Math.hypot(p2.x - p1.x, p2.y - p1.y);
           if (len > 1e-6) {
+            const dimOffset = 5;
+            const ang = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+            const nx = -Math.sin(ang) * dimOffset;
+            const ny = Math.cos(ang) * dimOffset;
             addObject({
               type: "line",
-              x1: p1.x, y1: p1.y,
-              x2: p2.x, y2: p2.y,
+              x1: p1.x + nx, y1: p1.y + ny,
+              x2: p2.x + nx, y2: p2.y + ny,
               name: `Kóta ${len.toFixed(2)}mm`,
               isDimension: true,
+              dimType: 'linear',
+              sourceObjId: obj.id || null,
+              dimSrcX1: p1.x, dimSrcY1: p1.y,
+              dimSrcX2: p2.x, dimSrcY2: p2.y,
               color: COLORS.textSecondary,
             });
             dimCount++;
@@ -154,5 +228,107 @@ export function addDimensionForObject(obj) {
     default:
       showToast("Pro tento typ objektu nelze přidat kótu");
       break;
+  }
+}
+
+/**
+ * Aktualizuje asociativní kóty – zavolat po přesunu/změně zdrojového objektu.
+ * Projde všechny kóty s sourceObjId a aktualizuje jejich pozici.
+ */
+export function updateAssociativeDimensions() {
+  for (const dim of state.objects) {
+    if (!dim.isDimension || !dim.sourceObjId) continue;
+    const src = state.objects.find(o => o.id === dim.sourceObjId);
+    if (!src) continue;
+
+    switch (dim.dimType) {
+      case 'linear': {
+        if (src.type === 'line' || src.type === 'constr') {
+          const dimOffset = 8;
+          const ang = Math.atan2(src.y2 - src.y1, src.x2 - src.x1);
+          const nx = -Math.sin(ang) * dimOffset;
+          const ny = Math.cos(ang) * dimOffset;
+          dim.x1 = src.x1 + nx;
+          dim.y1 = src.y1 + ny;
+          dim.x2 = src.x2 + nx;
+          dim.y2 = src.y2 + ny;
+          dim.dimSrcX1 = src.x1;
+          dim.dimSrcY1 = src.y1;
+          dim.dimSrcX2 = src.x2;
+          dim.dimSrcY2 = src.y2;
+          const len = Math.hypot(src.x2 - src.x1, src.y2 - src.y1);
+          dim.name = `Kóta ${len.toFixed(2)}mm`;
+        } else if (src.type === 'rect') {
+          // Aktualizovat dle dimSrc bodů – zjistit, zda je to šířka nebo výška
+          const isHoriz = Math.abs(dim.dimSrcY1 - dim.dimSrcY2) < 0.01;
+          const minX = Math.min(src.x1, src.x2), maxX = Math.max(src.x1, src.x2);
+          const minY = Math.min(src.y1, src.y2), maxY = Math.max(src.y1, src.y2);
+          const dimOff = 5;
+          if (isHoriz) {
+            dim.x1 = minX; dim.y1 = maxY + dimOff;
+            dim.x2 = maxX; dim.y2 = maxY + dimOff;
+            dim.dimSrcX1 = minX; dim.dimSrcY1 = maxY;
+            dim.dimSrcX2 = maxX; dim.dimSrcY2 = maxY;
+            dim.name = `Kóta ${(maxX - minX).toFixed(2)}mm`;
+          } else {
+            dim.x1 = maxX + dimOff; dim.y1 = minY;
+            dim.x2 = maxX + dimOff; dim.y2 = maxY;
+            dim.dimSrcX1 = maxX; dim.dimSrcY1 = minY;
+            dim.dimSrcX2 = maxX; dim.dimSrcY2 = maxY;
+            dim.name = `Kóta ${(maxY - minY).toFixed(2)}mm`;
+          }
+        }
+        break;
+      }
+      case 'diameter': {
+        if (src.type === 'circle') {
+          dim.x1 = src.cx - src.r;
+          dim.y1 = src.cy;
+          dim.x2 = src.cx + src.r;
+          dim.y2 = src.cy;
+          dim.dimRadius = src.r;
+          dim.dimCenterX = src.cx;
+          dim.dimCenterY = src.cy;
+          dim.name = `Kóta ⌀${(src.r * 2).toFixed(2)}`;
+        }
+        break;
+      }
+      case 'radius': {
+        if (src.type === 'arc' || src.type === 'circle') {
+          const angle = src.type === 'arc'
+            ? (src.startAngle + src.endAngle) / 2
+            : 0;
+          dim.x1 = src.cx;
+          dim.y1 = src.cy;
+          dim.x2 = src.cx + src.r * Math.cos(angle);
+          dim.y2 = src.cy + src.r * Math.sin(angle);
+          dim.dimRadius = src.r;
+          dim.dimCenterX = src.cx;
+          dim.dimCenterY = src.cy;
+          dim.name = `Kóta R${src.r.toFixed(2)}`;
+        }
+        break;
+      }
+      case 'angular': {
+        if (src.type === 'arc') {
+          let sweep = src.endAngle - src.startAngle;
+          if (sweep < 0) sweep += 2 * Math.PI;
+          dim.x1 = src.cx + src.r * Math.cos(src.startAngle);
+          dim.y1 = src.cy + src.r * Math.sin(src.startAngle);
+          dim.x2 = src.cx + src.r * Math.cos(src.endAngle);
+          dim.y2 = src.cy + src.r * Math.sin(src.endAngle);
+          dim.dimAngle = sweep;
+          dim.dimCenterX = src.cx;
+          dim.dimCenterY = src.cy;
+          dim.dimRadius = src.r;
+          dim.dimSrcX1 = dim.x1;
+          dim.dimSrcY1 = dim.y1;
+          dim.dimSrcX2 = dim.x2;
+          dim.dimSrcY2 = dim.y2;
+          dim.name = `Kóta ∠${(sweep * 180 / Math.PI).toFixed(1)}°`;
+        }
+        break;
+      }
+    }
   }
 }

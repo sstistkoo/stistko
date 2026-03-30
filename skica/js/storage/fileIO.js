@@ -227,6 +227,7 @@ function runCncExport() {
   const [_gH, _gV] = state.machineType === 'karusel' ? ['X','Z'] : ['Z','X'];
   if (isInc) out += `; Reference: ${_gH}${state.incReference.x.toFixed(3)} ${_gV}${state.incReference.y.toFixed(3)}\n`;
   out += "\n";
+  out += "G28 ; Návrat do referenčního bodu\n";
   out += isInc ? "G91 ; Inkrementální režim\n\n" : "G90 ; Absolutní režim\n\n";
 
   let prevX = isInc ? state.incReference.x : 0;
@@ -282,6 +283,8 @@ function runCncExport() {
   const items = [];
   for (const obj of state.objects) {
     if (obj.type === 'constr') continue;
+    if (obj.type === 'text') continue;
+    if (obj.isDimension || obj.isCoordLabel) continue;
 
     if (obj.type === 'line') {
       let x1 = obj.x1, y1 = obj.y1, x2 = obj.x2, y2 = obj.y2;
@@ -365,7 +368,8 @@ function runCncExport() {
         const ex = obj.cx + obj.r * Math.cos(obj.endAngle),
           ey = obj.cy + obj.r * Math.sin(obj.endAngle);
         if (needsRapid(sx, sy)) out += `G00 ${fmtCoord(sx, sy)}\n`;
-        out += `G02 ${fmtCoord(ex, ey)} R${obj.r.toFixed(3)}\n`;
+        const arcG = obj.ccw ? 'G03' : 'G02';
+        out += `${arcG} ${fmtCoord(ex, ey)} R${obj.r.toFixed(3)}\n`;
         lastEndX = ex; lastEndY = ey;
         break;
       }
@@ -417,6 +421,7 @@ function runCncExport() {
       out += `; P${i + 1}: ${_gH}${_ipx.toFixed(3)} ${_gV}${_ipy.toFixed(3)}\n`;
     });
   }
+  out += "\nG28 ; Návrat do referenčního bodu\nM30 ; Konec programu\n";
   out += "\n; === Konec ===\n";
   document.getElementById("cncOutput").textContent = out;
   return out;

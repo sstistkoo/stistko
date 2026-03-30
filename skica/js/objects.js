@@ -6,6 +6,7 @@ import { state, pushUndo } from './state.js';
 import { updateObjectList } from './ui.js';
 import { calculateAllIntersections } from './geometry.js';
 import { autoCenterView } from './canvas.js';
+import { updateAssociativeDimensions } from './dialogs/dimension.js';
 
 /**
  * Přidá objekt do výkresu (push undo, přiřazení ID a vrstvy).
@@ -75,5 +76,11 @@ export function moveObject(obj, dx, dy) {
         v.y += dy;
       }
       break;
+    case "text":
+      obj.x += dx;
+      obj.y += dy;
+      break;
   }
+  // Aktualizovat asociativní kóty navázané na přesunutý objekt
+  updateAssociativeDimensions();
 }

@@ -347,6 +347,9 @@ export function distToObject(obj, wx, wy) {
       }
       return minD;
     }
+    case "text":
+      // Vzdálenost k kotevnímu bodu textu
+      return Math.hypot(wx - obj.x, wy - obj.y);
     default:
       return Infinity;
   }

@@ -123,6 +123,15 @@ function getObjectBounds(obj) {
       }
       return { minX, minY, maxX, maxY };
     }
+    case 'text': {
+      // Přibližné bounds textu (šířka závisí na délce textu)
+      const approxW = (obj.text || '').length * (obj.fontSize || 14) * 0.6;
+      const approxH = (obj.fontSize || 14);
+      return {
+        minX: obj.x, minY: obj.y - approxH,
+        maxX: obj.x + approxW, maxY: obj.y,
+      };
+    }
     default:
       return null;
   }
@@ -293,6 +302,9 @@ function renderObjects() {
         break;
       case "polyline":
         drawPolyline(obj, isSel, obj.color || layerColor, idx);
+        break;
+      case "text":
+        drawText(obj);
         break;
     }
     ctx.setLineDash([]);
@@ -888,9 +900,118 @@ export function drawLine(obj) {
   const [sx2, sy2] = worldToScreen(obj.x2, obj.y2);
 
   if (obj.isDimension) {
-    // Klasické kótování: odkazové čáry + odsazená kóta + šipky + text
+    const dimType = obj.dimType || 'linear';
+    const dimSize = Math.round(Math.min(24, Math.max(11, 8 + state.zoom * 4.5)));
+    ctx.font = dimSize + 'px Consolas';
+    ctx.fillStyle = '#cdd6f4';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'bottom';
+
+    if (dimType === 'angular') {
+      // ── Úhlová kóta – oblouk s popiskem úhlu ──
+      const cx = obj.dimCenterX, cy = obj.dimCenterY;
+      const [scx, scy] = worldToScreen(cx, cy);
+      const r = obj.dimRadius || 20;
+      const sr = r * state.zoom;
+      const startA = Math.atan2(obj.y1 - cy, obj.x1 - cx);
+      const endA = Math.atan2(obj.y2 - cy, obj.x2 - cx);
+      // Odkazové čáry od středu k oblouku
+      ctx.lineWidth = 0.7;
+      ctx.beginPath();
+      ctx.moveTo(scx, scy);
+      ctx.lineTo(sx1, sy1);
+      ctx.moveTo(scx, scy);
+      ctx.lineTo(sx2, sy2);
+      ctx.stroke();
+      // Oblouk kóty
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.arc(scx, scy, sr * 0.8, -startA, -endA, true);
+      ctx.stroke();
+      // Šipky na koncích oblouku
+      const aR = sr * 0.8;
+      const arrA1x = scx + aR * Math.cos(-startA);
+      const arrA1y = scy + aR * Math.sin(-startA);
+      const arrA2x = scx + aR * Math.cos(-endA);
+      const arrA2y = scy + aR * Math.sin(-endA);
+      drawDimArrow(arrA1x, arrA1y, scx, scy);
+      drawDimArrow(arrA2x, arrA2y, scx, scy);
+      // Text úhlu
+      let sweep = obj.dimAngle || (endA - startA);
+      if (sweep < 0) sweep += 2 * Math.PI;
+      const midA = startA + sweep / 2;
+      const labelX = scx + aR * Math.cos(-midA);
+      const labelY = scy + aR * Math.sin(-midA);
+      const labelText = `${(sweep * 180 / Math.PI).toFixed(1)}°`;
+      ctx.fillText(labelText, labelX, labelY - 4);
+      ctx.textAlign = 'start';
+      ctx.textBaseline = 'alphabetic';
+      return;
+    }
+
+    if (dimType === 'diameter') {
+      // ── Průměrová kóta – čára přes střed se symbolem ⌀ ──
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(sx1, sy1);
+      ctx.lineTo(sx2, sy2);
+      ctx.stroke();
+      // Šipky na obou koncích
+      drawDimArrow(sx1, sy1, sx2, sy2);
+      drawDimArrow(sx2, sy2, sx1, sy1);
+      // Text ⌀ hodnota
+      const diam = (obj.dimRadius || 0) * 2;
+      const mx = (sx1 + sx2) / 2;
+      const my = (sy1 + sy2) / 2;
+      const labelText = `⌀${diam.toFixed(2)}`;
+      const angle = Math.atan2(sy2 - sy1, sx2 - sx1);
+      let textAngle = angle;
+      if (textAngle > Math.PI / 2) textAngle -= Math.PI;
+      if (textAngle < -Math.PI / 2) textAngle += Math.PI;
+      ctx.save();
+      ctx.translate(mx, my);
+      ctx.rotate(textAngle);
+      ctx.fillText(labelText, 0, -4);
+      ctx.restore();
+      ctx.textAlign = 'start';
+      ctx.textBaseline = 'alphabetic';
+      return;
+    }
+
+    if (dimType === 'radius') {
+      // ── Radiální kóta – čára od středu k bodu s R ──
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(sx1, sy1);
+      ctx.lineTo(sx2, sy2);
+      ctx.stroke();
+      // Šipka pouze na vnějším konci (sx2, sy2)
+      drawDimArrow(sx2, sy2, sx1, sy1);
+      // Kroužek na středu
+      ctx.beginPath();
+      ctx.arc(sx1, sy1, 2.5, 0, Math.PI * 2);
+      ctx.stroke();
+      // Text R hodnota
+      const radius = obj.dimRadius || Math.hypot(obj.x2 - obj.x1, obj.y2 - obj.y1);
+      const mx = (sx1 + sx2) / 2;
+      const my = (sy1 + sy2) / 2;
+      const labelText = `R${radius.toFixed(2)}`;
+      const angle = Math.atan2(sy2 - sy1, sx2 - sx1);
+      let textAngle = angle;
+      if (textAngle > Math.PI / 2) textAngle -= Math.PI;
+      if (textAngle < -Math.PI / 2) textAngle += Math.PI;
+      ctx.save();
+      ctx.translate(mx, my);
+      ctx.rotate(textAngle);
+      ctx.fillText(labelText, 0, -4);
+      ctx.restore();
+      ctx.textAlign = 'start';
+      ctx.textBaseline = 'alphabetic';
+      return;
+    }
+
+    // ── Lineární kóta (výchozí) – odkazové čáry + odsazená kóta + šipky + text ──
     const hasSrc = obj.dimSrcX1 !== undefined;
-    // Zdrojové body (původní úsečka)
     const ox1 = hasSrc ? obj.dimSrcX1 : obj.x1;
     const oy1 = hasSrc ? obj.dimSrcY1 : obj.y1;
     const ox2 = hasSrc ? obj.dimSrcX2 : obj.x2;
@@ -898,13 +1019,12 @@ export function drawLine(obj) {
     const [osx1, osy1] = worldToScreen(ox1, oy1);
     const [osx2, osy2] = worldToScreen(ox2, oy2);
 
-    // Kótovací čára (odsazená)
     const angle = Math.atan2(sy2 - sy1, sx2 - sx1);
-    const extOver = 4; // přesah odkazové čáry za kótu
+    const extOver = 4;
     const enx = -Math.sin(angle) * extOver;
     const eny = Math.cos(angle) * extOver;
 
-    // Odkazové čáry (od zdrojových bodů ke kótě + přesah)
+    // Odkazové čáry
     ctx.lineWidth = 0.7;
     ctx.beginPath();
     ctx.moveTo(osx1, osy1);
@@ -926,23 +1046,16 @@ export function drawLine(obj) {
 
     // Text délky – rotovaný rovnoběžně s kótou, s detekcí kolizí
     const len = Math.hypot(ox2 - ox1, oy2 - oy1);
-    const dimSize = Math.round(Math.min(24, Math.max(11, 8 + state.zoom * 4.5)));
-    ctx.font = dimSize + 'px Consolas';
-    ctx.fillStyle = '#cdd6f4';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'bottom';
     const mx = (sx1 + sx2) / 2;
     const my = (sy1 + sy2) / 2;
     const labelText = len.toFixed(2);
     const textW = ctx.measureText(labelText).width;
     const textH = dimSize;
 
-    // Detekce kolize a případné odsazení
     const resolved = resolveDimLabelPos(mx - textW / 2, my - 4, textW, textH);
     const labelY = resolved.y;
 
     if (resolved.collided) {
-      // Odkazová čára od středu kóty k odsazenému popisku
       ctx.strokeStyle = COLORS.textSecondary;
       ctx.lineWidth = 0.7;
       ctx.setLineDash([3, 3]);
@@ -951,17 +1064,14 @@ export function drawLine(obj) {
       ctx.lineTo(mx, labelY);
       ctx.stroke();
       ctx.setLineDash([]);
-      // Kroužek na středu kóty
       ctx.beginPath();
       ctx.arc(mx, my, 2, 0, Math.PI * 2);
       ctx.fill();
     }
 
-    // Rotace textu podél kóty; zajistit čitelnost (text nikdy vzhůru nohama)
     let textAngle = angle;
     if (textAngle > Math.PI / 2) textAngle -= Math.PI;
     if (textAngle < -Math.PI / 2) textAngle += Math.PI;
-    // Pokud kolize → text bez rotace (aby leader line fungovala čistě)
     ctx.save();
     if (resolved.collided) {
       ctx.translate(mx, labelY);
@@ -1105,6 +1215,32 @@ export function drawPolyline(obj, isSel, normalColor, objIdx) {
   }
   // Restore fillStyle
   ctx.fillStyle = baseStroke;
+}
+
+/** @param {import('./types.js').TextObject} obj */
+export function drawText(obj) {
+  const [sx, sy] = worldToScreen(obj.x, obj.y);
+  const fontSize = obj.fontSize || 14;
+  const screenSize = Math.round(Math.min(48, Math.max(8, fontSize * state.zoom * 0.5)));
+  ctx.font = screenSize + 'px Consolas';
+  ctx.fillStyle = obj.color || '#cdd6f4';
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'bottom';
+  if (obj.rotation) {
+    ctx.save();
+    ctx.translate(sx, sy);
+    ctx.rotate(-obj.rotation);
+    ctx.fillText(obj.text || '', 0, 0);
+    ctx.restore();
+  } else {
+    ctx.fillText(obj.text || '', sx, sy);
+  }
+  // Malý marker na kotevním bodě
+  ctx.beginPath();
+  ctx.arc(sx, sy, 2, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.textAlign = 'start';
+  ctx.textBaseline = 'alphabetic';
 }
 
 // ── Vazební značky (constraints) ──
