@@ -3,13 +3,14 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 import { COLORS } from './constants.js';
-import { state, showToast, pushUndo, undo, redo, axisLabels, resetDrawingState, displayX, xPrefix } from './state.js';
+import { state, showToast, pushUndo, undo, redo, axisLabels, resetDrawingState, displayX, xPrefix, fmtStatusCoords, coordHelpers } from './state.js';
 import { typeLabel, toolLabel, bulgeToArc, safeEvalMath, _parseMathExpr } from './utils.js';
 import { renderAll, renderAllDebounced } from './render.js';
 import { drawCanvas, screenToWorld, snapPt } from './canvas.js';
 import { bridge } from './bridge.js';
 import { addObject } from './objects.js';
 import { openCuttingCalc, openTaperCalc, openThreadCalc, openConvertCalc, openWeightCalc, openToleranceCalc, openRoughnessCalc, openInsertCalc } from './cnc-calcs.js';
+import { makeOverlay } from './dialogFactory.js';
 import { getMeta, setMeta } from './idb.js';
 
 // ── Bridge registrace (rozbíjí cyklickou závislost geometry ↔ ui) ──
@@ -467,13 +468,9 @@ export function updateIntersectionList() {
   }
   state.intersections.forEach((pt, i) => {
     const li = document.createElement("li");
-    const [_iH, _iV] = axisLabels();
-    const _isK = state.machineType === 'karusel';
-    const _xp = xPrefix();
-    const _Hp = _isK ? _xp : '';
-    const _Vp = _isK ? '' : _xp;
-    const _hv = _isK ? displayX(pt.x) : pt.x;
-    const _vv = _isK ? pt.y : displayX(pt.y);
+    const { H: _iH, V: _iV, Hp: _Hp, Vp: _Vp, fH, fV } = coordHelpers();
+    const _hv = fH(pt.x);
+    const _vv = fV(pt.y);
     li.innerHTML = `P${i + 1}:  ${_Hp}${_iH}=${_hv.toFixed(3)}  ${_Vp}${_iV}=${_vv.toFixed(3)} <span class="copy-hint">klik=kopírovat</span>`;
     li.title = "Klikněte pro zkopírování souřadnic";
     li.addEventListener("click", () => {
@@ -899,10 +896,10 @@ document.getElementById("btnSetRef").addEventListener("click", () => {
   _refPickActive = true;
   showToast("Klikněte na canvas pro nastavení referenčního bodu...");
   const canvas = document.getElementById("drawCanvas");
-  function onRefPick(e) {
+  function applyRef(clientX, clientY) {
     const rect = canvas.getBoundingClientRect();
-    const sx = e.clientX - rect.left;
-    const sy = e.clientY - rect.top;
+    const sx = clientX - rect.left;
+    const sy = clientY - rect.top;
     let [wx, wy] = screenToWorld(sx, sy);
     if (state.snapToPoints) [wx, wy] = snapPt(wx, wy);
     state.incReference = { x: wx, y: wy };
@@ -911,36 +908,19 @@ document.getElementById("btnSetRef").addEventListener("click", () => {
       updateCoordModeBtn();
     }
     renderAll();
-    const _rIsK = state.machineType === 'karusel';
-    const _rHv = _rIsK ? displayX(wx) : wx;
-    const _rVv = _rIsK ? wy : displayX(wy);
-    showToast(`Reference: ${xPrefix()}${axisLabels()[0]}=${_rHv.toFixed(3)} ${_rIsK ? '' : xPrefix()}${axisLabels()[1]}=${_rVv.toFixed(3)}`);
+    showToast(`Reference: ${fmtStatusCoords(wx, wy)}`);
     canvas.removeEventListener("click", onRefPick);
     canvas.removeEventListener("touchend", onRefTouch);
     _refPickActive = false;
   }
+  function onRefPick(e) {
+    applyRef(e.clientX, e.clientY);
+  }
   function onRefTouch(e) {
     if (e.changedTouches.length === 1) {
       const t = e.changedTouches[0];
-      const rect = canvas.getBoundingClientRect();
-      const sx = t.clientX - rect.left;
-      const sy = t.clientY - rect.top;
-      let [wx, wy] = screenToWorld(sx, sy);
-      if (state.snapToPoints) [wx, wy] = snapPt(wx, wy);
-      state.incReference = { x: wx, y: wy };
-      if (state.coordMode !== 'inc') {
-        state.coordMode = 'inc';
-        updateCoordModeBtn();
-      }
-      renderAll();
-      const _rIsK = state.machineType === 'karusel';
-      const _rHv = _rIsK ? displayX(wx) : wx;
-      const _rVv = _rIsK ? wy : displayX(wy);
-      showToast(`Reference: ${xPrefix()}${axisLabels()[0]}=${_rHv.toFixed(3)} ${_rIsK ? '' : xPrefix()}${axisLabels()[1]}=${_rVv.toFixed(3)}`);
-      canvas.removeEventListener("click", onRefPick);
-      canvas.removeEventListener("touchend", onRefTouch);
+      applyRef(t.clientX, t.clientY);
       e.preventDefault();
-      _refPickActive = false;
     }
   }
   canvas.addEventListener("click", onRefPick, { once: true });
@@ -976,19 +956,7 @@ document.getElementById("btnClearAll").addEventListener("click", () => {
 // ── Kalkulačka – popup ──
 /** Otevře vestavnou kalkulačku. */
 export function openCalculator() {
-  // Avoid duplicates
-  if (document.querySelector(".calc-overlay[data-type=calc]")) return;
-
-  const overlay = document.createElement("div");
-  overlay.className = "calc-overlay";
-  overlay.dataset.type = "calc";
-  overlay.innerHTML = `
-    <div class="calc-window">
-      <div class="calc-titlebar">
-        <h3>🔢 Kalkulačka</h3>
-        <button class="calc-close-btn">✕</button>
-      </div>
-      <div class="calc-body">
+  const bodyHTML = `
         <div class="calc-history" id="calcHistory"></div>
         <div class="calc-expr" id="calcExpr">&nbsp;</div>
         <input type="text" id="calcDisplay" placeholder="0">
@@ -1025,10 +993,9 @@ export function openCalculator() {
           <button class="calc-btn calc-fn" data-val=")">)</button>
           <button class="calc-btn calc-fn" data-val="asin">asin</button>
           <button class="calc-btn calc-fn" data-val="acos">acos</button>
-        </div>
-      </div>
-    </div>`;
-  document.body.appendChild(overlay);
+        </div>`;
+  const overlay = makeOverlay("calc", "🔢 Kalkulačka", bodyHTML, "calc-window");
+  if (!overlay) return;
 
   const display = overlay.querySelector("#calcDisplay");
   const exprDisplay = overlay.querySelector("#calcExpr");
@@ -1173,25 +1140,11 @@ export function openCalculator() {
     if (e.key === "Escape") { expr = ""; updateDisplay("0"); updateExprDisplay(""); }
     e.stopPropagation();
   });
-
-  overlay.querySelector(".calc-close-btn").addEventListener("click", () => overlay.remove());
-  overlay.addEventListener("click", (e) => { if (e.target === overlay) overlay.remove(); });
 }
 
 // ── Trigonometrie – popup ──
 function openTrigCalc() {
-  if (document.querySelector(".calc-overlay[data-type=trig]")) return;
-
-  const overlay = document.createElement("div");
-  overlay.className = "calc-overlay";
-  overlay.dataset.type = "trig";
-  overlay.innerHTML = `
-    <div class="calc-window trig-window">
-      <div class="calc-titlebar">
-        <h3>📐 Trigonometrie – pravý trojúhelník</h3>
-        <button class="calc-close-btn">✕</button>
-      </div>
-      <div class="calc-body">
+  const bodyHTML = `
         <div class="trig-svg-wrap">
           <svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
             <!-- Triangle -->
@@ -1254,10 +1207,9 @@ function openTrigCalc() {
           <button class="trig-btn-copy">📋 Kopírovat</button>
         </div>
         <div class="trig-info">Zadejte 2 hodnoty – výpočet proběhne automaticky<br><small>Funkce: sin, cos, tan, sqrt, abs, log · Příklad: sqrt(2)*50, atan(1)</small></div>
-        <div class="trig-history" id="trigHistory"></div>
-      </div>
-    </div>`;
-  document.body.appendChild(overlay);
+        <div class="trig-history" id="trigHistory"></div>`;
+  const overlay = makeOverlay("trig", "📐 Trigonometrie – pravý trojúhelník", bodyHTML, "trig-window");
+  if (!overlay) return;
 
   const inpA = overlay.querySelector("#trigA");
   const inpB = overlay.querySelector("#trigB");
@@ -1392,9 +1344,6 @@ function openTrigCalc() {
     navigator.clipboard.writeText(text).then(() => showToast("Zkopírováno"));
     addTrigHistory();
   });
-
-  overlay.querySelector(".calc-close-btn").addEventListener("click", () => overlay.remove());
-  overlay.addEventListener("click", (e) => { if (e.target === overlay) overlay.remove(); });
 }
 
 document.getElementById("btnOpenCalc").addEventListener("click", openCalculator);

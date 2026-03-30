@@ -1,7 +1,8 @@
 import { state, showToast } from '../state.js';
 import { addObject } from '../objects.js';
 import { renderAll } from '../render.js';
-import { resetHint, setHint } from '../ui.js';
+import { setHint } from '../ui.js';
+import { startDrawing, finishDrawing } from './helpers.js';
 
 /**
  * @param {number} wx
@@ -9,10 +10,7 @@ import { resetHint, setHint } from '../ui.js';
  */
 export function handleArcClick(wx, wy) {
   if (!state.drawing) {
-    state.drawing = true;
-    state.tempPoints = [{ x: wx, y: wy }];
-    setHint("Klepněte na počáteční bod oblouku");
-    renderAll();
+    startDrawing(wx, wy, "Klepněte na počáteční bod oblouku");
   } else if (state.tempPoints.length === 1) {
     state.tempPoints.push({ x: wx, y: wy });
     setHint("Klepněte na koncový bod oblouku");
@@ -23,9 +21,7 @@ export function handleArcClick(wx, wy) {
     const r = Math.hypot(p1.x - ctr.x, p1.y - ctr.y);
     if (r < 1e-9) {
       showToast("Oblouk má nulový poloměr");
-      state.drawing = false;
-      state.tempPoints = [];
-      resetHint();
+      finishDrawing();
       return;
     }
     const startAngle = Math.atan2(p1.y - ctr.y, p1.x - ctr.x);
@@ -39,8 +35,6 @@ export function handleArcClick(wx, wy) {
       endAngle,
       name: `Oblouk ${state.nextId}`,
     });
-    state.drawing = false;
-    state.tempPoints = [];
-    resetHint();
+    finishDrawing();
   }
 }

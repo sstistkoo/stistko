@@ -60,6 +60,38 @@ body {
   margin: 0 4px;
 }
 
+/* ── Rozbalovací sekce toolbaru ── */
+.toolbar-more {
+  display: none;
+  flex-wrap: wrap;
+  gap: 6px;
+  width: 100%;
+  padding-top: 4px;
+}
+.toolbar-more.open {
+  display: flex;
+}
+.toolbar-more-toggle {
+  background: var(--ctp-surface1);
+  border: 1px dashed var(--ctp-overlay0);
+  color: var(--ctp-subtext0);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 4px 10px;
+}
+.toolbar-more-toggle:hover {
+  background: var(--ctp-surface2);
+  color: var(--ctp-text);
+}
+.toolbar-more-settings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  width: 100%;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--ctp-surface0);
+}
+
 .tool-btn {
   background: var(--ctp-surface0);
   border: 1px solid var(--ctp-surface1);
@@ -1142,6 +1174,17 @@ body {
   .tool-btn svg {
     width: 20px;
     height: 20px;
+  }
+
+  .toolbar-more {
+    gap: 4px;
+    padding-top: 2px;
+  }
+  .toolbar-more-toggle {
+    width: 100%;
+    text-align: center;
+    padding: 8px 12px;
+    font-size: 13px;
   }
 
   #topbar .sep {

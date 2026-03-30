@@ -3,7 +3,7 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 import { drawCanvas, ctx, worldToScreen, screenToWorld } from './canvas.js';
-import { state, toDisplayCoords, displayX, xPrefix } from './state.js';
+import { state, toDisplayCoords, displayX, xPrefix, fmtCoordLabel } from './state.js';
 import { bridge } from './bridge.js';
 import { bulgeToArc } from './utils.js';
 import { projectPointToLine } from './geometry.js';
@@ -322,12 +322,7 @@ function renderObjects() {
       ctx.fill();
       const intSize = Math.round(Math.min(24, Math.max(11, 8 + state.zoom * 4.5)));
       ctx.font = intSize + 'px Consolas';
-      const dp = toDisplayCoords(pt.x, pt.y);
-      const pf = state.coordMode === 'inc' ? 'Δ' : '';
-      const xp = xPrefix();
-      const ptLabel = state.machineType === 'karusel'
-        ? `${pf}${xp}X${displayX(dp.x).toFixed(2)} ${pf}Z${dp.y.toFixed(2)}`
-        : `${pf}Z${dp.x.toFixed(2)} ${pf}${xp}X${displayX(dp.y).toFixed(2)}`;
+      const ptLabel = fmtCoordLabel(pt.x, pt.y);
       const labelW = ctx.measureText(ptLabel).width;
       const resolved = resolveDimLabelPos(sx + 8, sy - 8, labelW, intSize);
       if (resolved.collided) {
@@ -620,12 +615,7 @@ function drawSelectedPointIndicator() {
     ctx.fill();
     const intSize = Math.round(Math.min(24, Math.max(11, 8 + state.zoom * 4.5)));
     ctx.font = intSize + 'px Consolas';
-    const dp = toDisplayCoords(sp.x, sp.y);
-    const pf = state.coordMode === 'inc' ? '\u0394' : '';
-    const xp = xPrefix();
-    const ptLabel = state.machineType === 'karusel'
-      ? `${pf}${xp}X${displayX(dp.x).toFixed(2)} ${pf}Z${dp.y.toFixed(2)}`
-      : `${pf}Z${dp.x.toFixed(2)} ${pf}${xp}X${displayX(dp.y).toFixed(2)}`;
+    const ptLabel = fmtCoordLabel(sp.x, sp.y);
     ctx.fillText(ptLabel, sx + 10, sy - 10);
   }
 }
@@ -875,12 +865,7 @@ export function drawPoint(obj) {
     ctx.fillStyle = '#cdd6f4';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'bottom';
-    const [_cH, _cV] = state.machineType === 'karusel' ? ['X','Z'] : ['Z','X'];
-    const _cXval = state.machineType === 'karusel' ? displayX(obj.x) : obj.x;
-    const _cYval = state.machineType === 'karusel' ? obj.y : displayX(obj.y);
-    const _cXpre = state.machineType === 'karusel' ? xPrefix() : '';
-    const _cYpre = state.machineType === 'karusel' ? '' : xPrefix();
-    ctx.fillText(_cXpre + _cH + _cXval.toFixed(2) + '  ' + _cYpre + _cV + _cYval.toFixed(2), ex + 2, ey - 3);
+    ctx.fillText(fmtCoordLabel(obj.x, obj.y), ex + 2, ey - 3);
     ctx.textAlign = 'start';
     ctx.textBaseline = 'alphabetic';
     return;

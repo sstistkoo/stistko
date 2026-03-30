@@ -27,13 +27,15 @@ mobileToolbarToggle.addEventListener("click", (e) => {
   sidebar.classList.remove("mobile-open");
   sidebarOverlay.classList.remove("active");
 });
-topbar.addEventListener("click", (e) => {
-  if (isMobile() && e.target.closest(".tool-btn")) {
-    setTimeout(() => {
-      topbar.classList.remove("mobile-open");
-      document.body.classList.remove("toolbar-open");
-    }, 150);
-  }
+// Tool-btn click již nezavírá toolbar – uživatel zavírá ručně přes ✕
+
+// ── Toolbar: rozbalovací sekce "Více nástrojů" ──
+const btnToolbarMore = document.getElementById("btnToolbarMore");
+const toolbarMore = document.getElementById("toolbarMore");
+btnToolbarMore.addEventListener("click", (e) => {
+  e.stopPropagation();
+  const open = toolbarMore.classList.toggle("open");
+  btnToolbarMore.textContent = open ? "▾ Méně nástrojů…" : "▸ Více nástrojů…";
 });
 
 // ── Mobile: Toolbar close button ──
@@ -69,16 +71,12 @@ document.getElementById("sidebarCloseBtn").addEventListener("click", (e) => {
   sidebarOverlay.classList.remove("active");
 });
 
-// ── Klik na canvas zavře otevřené panely ──
+// ── Klik na canvas zavře sidebar (toolbar se NEzavírá – jen přes ✕) ──
 drawCanvas.addEventListener("pointerdown", () => {
   if (!isMobile()) return;
   if (sidebar.classList.contains("mobile-open")) {
     sidebar.classList.remove("mobile-open");
     sidebarOverlay.classList.remove("active");
-  }
-  if (topbar.classList.contains("mobile-open")) {
-    topbar.classList.remove("mobile-open");
-    document.body.classList.remove("toolbar-open");
   }
 });
 

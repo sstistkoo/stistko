@@ -1,7 +1,6 @@
 import { state, showToast } from '../state.js';
 import { addObject } from '../objects.js';
-import { renderAll } from '../render.js';
-import { resetHint, setHint } from '../ui.js';
+import { startDrawing, finishDrawing } from './helpers.js';
 
 /**
  * @param {number} wx
@@ -9,17 +8,12 @@ import { resetHint, setHint } from '../ui.js';
  */
 export function handleLineClick(wx, wy) {
   if (!state.drawing) {
-    state.drawing = true;
-    state.tempPoints = [{ x: wx, y: wy }];
-    setHint("Klepněte na koncový bod");
-    renderAll();
+    startDrawing(wx, wy, "Klepněte na koncový bod");
   } else {
     const tp = state.tempPoints[0];
     if (Math.hypot(wx - tp.x, wy - tp.y) < 1e-9) {
       showToast("Úsečka má nulovou délku");
-      state.drawing = false;
-      state.tempPoints = [];
-      resetHint();
+      finishDrawing();
       return;
     }
     addObject({
@@ -31,8 +25,6 @@ export function handleLineClick(wx, wy) {
       name: `${state.tool === "constr" ? "Konstr" : "Úsečka"} ${state.nextId}`,
       dashed: state.tool === "constr",
     });
-    state.drawing = false;
-    state.tempPoints = [];
-    resetHint();
+    finishDrawing();
   }
 }
