@@ -14,7 +14,7 @@ export { handleDimensionClick } from './dimensionClick.js';
 export { handleSnapPointClick } from './snapPointClick.js';
 export { handleMoveClick } from './moveClick.js';
 export { handleLineClick } from './lineClick.js';
-export { handleMeasureClick } from './measureClick.js';
+export { handleMeasureClick, measureSelection } from './measureClick.js';
 export { handleCircleClick } from './circleClick.js';
 export { handleArcClick } from './arcClick.js';
 export { handleRectClick } from './rectClick.js';

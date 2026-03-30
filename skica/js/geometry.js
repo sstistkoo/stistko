@@ -694,7 +694,7 @@ function lineOffsets(x1, y1, x2, y2, d) {
   ];
 }
 
-function intersectInfiniteLines(l1, l2) {
+export function intersectInfiniteLines(l1, l2) {
   const d1x = l1.x2 - l1.x1, d1y = l1.y2 - l1.y1;
   const d2x = l2.x2 - l2.x1, d2y = l2.y2 - l2.y1;
   const denom = d1x * d2y - d1y * d2x;
@@ -719,6 +719,25 @@ export function projectPointToLine(px, py, x1, y1, x2, y2) {
   if (len2 < 1e-20) return { x: x1, y: y1 };
   const t = ((px - x1) * dx + (py - y1) * dy) / len2;
   return { x: x1 + t * dx, y: y1 + t * dy };
+}
+
+/** Kolmá vzdálenost bodu od nekonečné přímky definované dvěma body. */
+export function distPointToInfiniteLine(px, py, x1, y1, x2, y2) {
+  const dx = x2 - x1, dy = y2 - y1;
+  const len = Math.hypot(dx, dy);
+  if (len < 1e-20) return Math.hypot(px - x1, py - y1);
+  return Math.abs(dx * (y1 - py) - dy * (x1 - px)) / len;
+}
+
+/** Úhel mezi dvěma úsečkami (0–180°). */
+export function angleBetweenLines(l1, l2) {
+  const dx1 = l1.x2 - l1.x1, dy1 = l1.y2 - l1.y1;
+  const dx2 = l2.x2 - l2.x1, dy2 = l2.y2 - l2.y1;
+  const len1 = Math.hypot(dx1, dy1), len2 = Math.hypot(dx2, dy2);
+  if (len1 < 1e-10 || len2 < 1e-10) return 0;
+  const dot = dx1 * dx2 + dy1 * dy2;
+  const cos = Math.max(-1, Math.min(1, dot / (len1 * len2)));
+  return Math.acos(cos) * 180 / Math.PI;
 }
 
 export function offsetObject(obj, dist, side) {

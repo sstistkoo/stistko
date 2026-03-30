@@ -132,6 +132,7 @@ vi.mock('../js/tools/index.js', () => ({
   handleArcClick: vi.fn(),
   handleRectClick: vi.fn(),
   handlePolylineClick: vi.fn(),
+  measureSelection: vi.fn(() => false),
 }));
 
 import { state } from '../js/state.js';

@@ -4,74 +4,21 @@ import { addObject } from '../objects.js';
 import { renderAll } from '../render.js';
 import { resetHint, setHint } from '../ui.js';
 import { findObjectAt } from '../geometry.js';
-import { showMeasureResult, showMeasureObjectInfo } from '../dialogs.js';
-
-/**
- * Měření vzdálenosti mezi dvěma rovnoběžnými úsečkami.
- * Vrací null pokud nejsou rovnoběžné.
- */
-function measureParallelLines(obj1, obj2) {
-  const dx1 = obj1.x2 - obj1.x1, dy1 = obj1.y2 - obj1.y1;
-  const dx2 = obj2.x2 - obj2.x1, dy2 = obj2.y2 - obj2.y1;
-  const len1 = Math.hypot(dx1, dy1);
-  const len2 = Math.hypot(dx2, dy2);
-  if (len1 < 1e-9 || len2 < 1e-9) return null;
-  // Kontrola rovnoběžnosti (cross product ≈ 0)
-  const cross = Math.abs(dx1 * dy2 - dy1 * dx2) / (len1 * len2);
-  if (cross > 0.01) return null; // nejsou rovnoběžné (tolerance ~0.6°)
-  // Vzdálenost bodu (x1,y1) druhé úsečky od přímky první úsečky
-  const dist = Math.abs(dx1 * (obj1.y1 - obj2.y1) - dy1 * (obj1.x1 - obj2.x1)) / len1;
-  return dist;
-}
+import {
+  showMeasureResult, showMeasureObjectInfo, showIntersectionInfo,
+  showMeasureTwoPointsResult, showMeasureMultiPointResult,
+  showMeasureTwoLinesResult, showMeasureTwoCirclesResult,
+  showMeasurePointToLineResult, showMeasurePointToCircleResult,
+  showMeasureTwoObjectsResult,
+} from '../dialogs.js';
 
 /**
  * @param {number} wx
  * @param {number} wy
  */
 export function handleMeasureClick(wx, wy) {
-  // Multi-select: měření vzdálenosti mezi dvěma rovnoběžnými úsečkami
-  if (!state.drawing && state.multiSelected.size === 2) {
-    const indices = [...state.multiSelected];
-    const obj1 = state.objects[indices[0]];
-    const obj2 = state.objects[indices[1]];
-    if (obj1 && obj2 &&
-        (obj1.type === 'line' || obj1.type === 'constr') &&
-        (obj2.type === 'line' || obj2.type === 'constr')) {
-      const dist = measureParallelLines(obj1, obj2);
-      if (dist !== null) {
-        // Najít nejbližší body pro kótu
-        const mx1 = (obj1.x1 + obj1.x2) / 2, my1 = (obj1.y1 + obj1.y2) / 2;
-        const mx2 = (obj2.x1 + obj2.x2) / 2, my2 = (obj2.y1 + obj2.y2) / 2;
-        const dx = obj1.x2 - obj1.x1, dy = obj1.y2 - obj1.y1;
-        const len = Math.hypot(dx, dy);
-        // Kolmý směr
-        const nx = -dy / len, ny = dx / len;
-        // Projekce bodu obj2 na přímku obj1 aby kóta byla kolmá
-        const t = ((mx2 - mx1) * nx + (my2 - my1) * ny);
-        const p1 = { x: mx1, y: my1 };
-        const p2 = { x: mx1 + nx * t, y: my1 + ny * t };
-        addObject({
-          type: "line",
-          x1: p1.x, y1: p1.y,
-          x2: p2.x, y2: p2.y,
-          name: `Kóta ${dist.toFixed(3)}mm`,
-          isDimension: true,
-          dimSrcX1: p1.x, dimSrcY1: p1.y,
-          dimSrcX2: p2.x, dimSrcY2: p2.y,
-          color: COLORS.textSecondary,
-        });
-        const angle = (Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180) / Math.PI;
-        showMeasureResult(p1, p2, dist, angle);
-        state.multiSelected.clear();
-        state.selected = null;
-        renderAll();
-        return;
-      } else {
-        showToast("Úsečky nejsou rovnoběžné");
-        return;
-      }
-    }
-  }
+  // Pokud je výběr (objekty/body) → delegovat na measureSelection()
+  if (!state.drawing && measureSelection()) return;
 
   if (!state.drawing) {
     const snapThreshold = SNAP_POINT_THRESHOLD / state.zoom;
@@ -115,29 +62,138 @@ export function handleMeasureClick(wx, wy) {
 
     const d = Math.hypot(wx - tp.x, wy - tp.y);
     const angle = (Math.atan2(wy - tp.y, wx - tp.x) * 180) / Math.PI;
-    // Automaticky přidá kótu na výkres
     const p1 = tp;
     const p2 = { x: wx, y: wy };
-    // Odsazení kóty od měřené čáry
-    const dx = p2.x - p1.x;
-    const dy = p2.y - p1.y;
-    const len = Math.hypot(dx, dy);
-    const offset = Math.max(8, len * 0.15);
-    const nx = len > 0 ? (-dy / len) * offset : offset;
-    const ny = len > 0 ? (dx / len) * offset : 0;
-    addObject({
-      type: "line",
-      x1: p1.x + nx, y1: p1.y + ny,
-      x2: p2.x + nx, y2: p2.y + ny,
-      name: `Kóta ${d.toFixed(2)}mm`,
-      isDimension: true,
-      dimSrcX1: p1.x, dimSrcY1: p1.y,
-      dimSrcX2: p2.x, dimSrcY2: p2.y,
-      color: COLORS.textSecondary,
-    });
-    showMeasureResult(tp, p2, d, angle);
+    showMeasureResult(p1, p2, d, angle);
     state.drawing = false;
     state.tempPoints = [];
     resetHint();
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+// Měření vybraných objektů / snap bodů (bez klikání na canvas)
+// ══════════════════════════════════════════════════════════════
+
+function _clearSelection() {
+  state.multiSelected.clear();
+  state.selected = null;
+  state.selectedPoint = null;
+  renderAll();
+}
+
+function _isLine(o) { return o.type === 'line' || o.type === 'constr'; }
+function _isCircle(o) { return o.type === 'circle' || o.type === 'arc'; }
+function _isPoint(o) { return o.type === 'point'; }
+
+/**
+ * Změří aktuálně vybrané objekty / snap body.
+ * @returns {boolean} true pokud měření provedeno, false pokud nic nebylo vybrané
+ */
+export function measureSelection() {
+  const pts = state.selectedPoint ? state.selectedPoint.slice() : [];
+  const objIndices = state.multiSelected.size > 0
+    ? [...state.multiSelected]
+    : (state.selected !== null ? [state.selected] : []);
+  const objs = objIndices.map(i => state.objects[i]).filter(Boolean);
+
+  // ── Nic nevybráno ──
+  if (pts.length === 0 && objs.length === 0) return false;
+
+  // ── 2+ snap body ──
+  if (pts.length >= 2) {
+    if (pts.length === 2) {
+      showMeasureTwoPointsResult(pts[0], pts[1]);
+    } else {
+      showMeasureMultiPointResult(pts);
+    }
+    _clearSelection();
+    return true;
+  }
+
+  // ── 1 snap bod + 1 objekt ──
+  if (pts.length === 1 && objs.length === 1) {
+    const pt = pts[0], obj = objs[0];
+    if (_isLine(obj)) {
+      showMeasurePointToLineResult(pt, obj);
+    } else if (_isCircle(obj)) {
+      showMeasurePointToCircleResult(pt, obj);
+    } else if (_isPoint(obj)) {
+      showMeasureTwoPointsResult(pt, { x: obj.x, y: obj.y });
+    } else {
+      // Rect / polyline → generický
+      showMeasureTwoPointsResult(pt, _getCenter(obj));
+    }
+    _clearSelection();
+    return true;
+  }
+
+  // ── 2 objekty ──
+  if (objs.length === 2) {
+    const [a, b] = objs;
+    // 2 body
+    if (_isPoint(a) && _isPoint(b)) {
+      showMeasureTwoPointsResult({ x: a.x, y: a.y }, { x: b.x, y: b.y });
+    }
+    // 2 úsečky
+    else if (_isLine(a) && _isLine(b)) {
+      showMeasureTwoLinesResult(a, b);
+    }
+    // 2 kružnice/oblouky
+    else if (_isCircle(a) && _isCircle(b)) {
+      showMeasureTwoCirclesResult(a, b);
+    }
+    // úsečka + bod
+    else if (_isLine(a) && _isPoint(b)) {
+      showMeasurePointToLineResult({ x: b.x, y: b.y }, a);
+    } else if (_isPoint(a) && _isLine(b)) {
+      showMeasurePointToLineResult({ x: a.x, y: a.y }, b);
+    }
+    // kružnice + bod
+    else if (_isCircle(a) && _isPoint(b)) {
+      showMeasurePointToCircleResult({ x: b.x, y: b.y }, a);
+    } else if (_isPoint(a) && _isCircle(b)) {
+      showMeasurePointToCircleResult({ x: a.x, y: a.y }, b);
+    }
+    // úsečka + kružnice
+    else if (_isLine(a) && _isCircle(b)) {
+      showMeasurePointToLineResult({ x: b.cx, y: b.cy }, a);
+    } else if (_isCircle(a) && _isLine(b)) {
+      showMeasurePointToLineResult({ x: a.cx, y: a.cy }, b);
+    }
+    // generický fallback
+    else {
+      showMeasureTwoObjectsResult(a, b);
+    }
+    _clearSelection();
+    return true;
+  }
+
+  // ── 1 objekt, žádné body ──
+  if (objs.length === 1 && pts.length === 0) {
+    showMeasureObjectInfo(objs[0], 0, 0, objIndices[0]);
+    _clearSelection();
+    return true;
+  }
+
+  // ── 1 snap bod, žádné objekty ──
+  if (pts.length === 1 && objs.length === 0) {
+    showIntersectionInfo(pts[0]);
+    _clearSelection();
+    return true;
+  }
+
+  // ── 3+ objekty nebo nepodporovaný mix ──
+  showToast("Vyberte max 2 objekty nebo body pro měření");
+  return false;
+}
+
+function _getCenter(o) {
+  switch (o.type) {
+    case 'point': return { x: o.x, y: o.y };
+    case 'line': case 'constr': return { x: (o.x1 + o.x2) / 2, y: (o.y1 + o.y2) / 2 };
+    case 'circle': case 'arc': return { x: o.cx, y: o.cy };
+    case 'rect': return { x: (o.x1 + o.x2) / 2, y: (o.y1 + o.y2) / 2 };
+    default: return { x: 0, y: 0 };
   }
 }

@@ -13,7 +13,10 @@ import { showNumericalInputDialog, showPolarDrawingDialog, showCircleRadiusDialo
 import { saveProject, showExportImageDialog, showProjectsDialog, showSaveAsDialog } from './storage.js';
 import { bulgeToArc, deepClone } from './utils.js';
 import { bridge } from './bridge.js';
-import { handleTangentClick, handleOffsetClick, handleTrimClick, handleExtendClick, handleFilletClick, handlePerpClick, handleHorizontalClick, handleParallelClick, handleDimensionClick, handleSnapPointClick, handleMoveClick, handleLineClick, handleMeasureClick, handleCircleClick, handleArcClick, handleRectClick, handlePolylineClick } from './tools/index.js';
+import { handleTangentClick, handleOffsetClick, handleTrimClick, handleExtendClick, handleFilletClick, handlePerpClick, handleHorizontalClick, handleParallelClick, handleDimensionClick, handleSnapPointClick, handleMoveClick, handleLineClick, handleMeasureClick, handleCircleClick, handleArcClick, handleRectClick, handlePolylineClick, measureSelection } from './tools/index.js';
+
+// Registrace measureSelection na bridge (aby ui.js nemusel importovat přímo – kruhová závislost)
+bridge.measureSelection = measureSelection;
 
 let isPanning = false;
 let panStartX, panStartY, panStartPX, panStartPY;
@@ -294,8 +297,14 @@ document.addEventListener("keydown", (e) => {
   // B is only snapPoint when not drawing polyline
   if (e.key.toLowerCase() === 'b' && state.drawing && state.tool === 'polyline') {
     // handled separately below for bulge
-  } else if (!(e.shiftKey && ['m','n','g'].includes(e.key.toLowerCase())) && shortcuts[e.key.toLowerCase()])
-    setTool(shortcuts[e.key.toLowerCase()]);
+  } else if (!(e.shiftKey && ['m','n','g'].includes(e.key.toLowerCase())) && shortcuts[e.key.toLowerCase()]) {
+    // M (measure): pokud je výběr → okamžitě změřit
+    if (e.key.toLowerCase() === 'm' && !e.shiftKey && measureSelection()) {
+      // měření provedeno přes výběr
+    } else {
+      setTool(shortcuts[e.key.toLowerCase()]);
+    }
+  }
 
   if (e.key.toLowerCase() === "s") {
     state.snapToPoints = !state.snapToPoints;
