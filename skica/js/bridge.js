@@ -16,4 +16,11 @@ export const bridge = {
   resetHint: null,
   measureSelection: null,
   tangentFromSelection: null,
+  offsetFromSelection: null,
+  trimFromSelection: null,
+  extendFromSelection: null,
+  filletFromSelection: null,
+  perpFromSelection: null,
+  horizontalFromSelection: null,
+  parallelFromSelection: null,
 };

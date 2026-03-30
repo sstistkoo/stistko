@@ -13,11 +13,18 @@ import { showNumericalInputDialog, showPolarDrawingDialog, showCircleRadiusDialo
 import { saveProject, showExportImageDialog, showProjectsDialog, showSaveAsDialog } from './storage.js';
 import { bulgeToArc, deepClone } from './utils.js';
 import { bridge } from './bridge.js';
-import { handleTangentClick, tangentFromSelection, handleOffsetClick, handleTrimClick, handleExtendClick, handleFilletClick, handlePerpClick, handleHorizontalClick, handleParallelClick, handleDimensionClick, handleSnapPointClick, handleMoveClick, handleLineClick, handleMeasureClick, handleCircleClick, handleArcClick, handleRectClick, handlePolylineClick, measureSelection } from './tools/index.js';
+import { handleTangentClick, tangentFromSelection, handleOffsetClick, offsetFromSelection, handleTrimClick, trimFromSelection, handleExtendClick, extendFromSelection, handleFilletClick, filletFromSelection, handlePerpClick, perpFromSelection, handleHorizontalClick, horizontalFromSelection, handleParallelClick, parallelFromSelection, handleDimensionClick, handleSnapPointClick, handleMoveClick, handleLineClick, handleMeasureClick, handleCircleClick, handleArcClick, handleRectClick, handlePolylineClick, measureSelection } from './tools/index.js';
 
 // Registrace measureSelection na bridge (aby ui.js nemusel importovat přímo – kruhová závislost)
 bridge.measureSelection = measureSelection;
 bridge.tangentFromSelection = tangentFromSelection;
+bridge.offsetFromSelection = offsetFromSelection;
+bridge.trimFromSelection = trimFromSelection;
+bridge.extendFromSelection = extendFromSelection;
+bridge.filletFromSelection = filletFromSelection;
+bridge.perpFromSelection = perpFromSelection;
+bridge.horizontalFromSelection = horizontalFromSelection;
+bridge.parallelFromSelection = parallelFromSelection;
 
 let isPanning = false;
 let panStartX, panStartY, panStartPX, panStartPY;

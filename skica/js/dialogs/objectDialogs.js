@@ -190,3 +190,41 @@ export function showFilletDialog(callback) {
     e.stopPropagation();
   });
 }
+
+// ── Dialog pro výběr koncového bodu úsečky ──
+/**
+ * Zobrazí dialog se dvěma tlačítky pro výběr konce úsečky.
+ * @param {string} title     – titulek dialogu
+ * @param {{x1:number,y1:number,x2:number,y2:number}} seg – segment
+ * @param {string} label1    – popis akce pro P1
+ * @param {string} label2    – popis akce pro P2
+ * @param {function(1|2): void} callback – voláno s 1 nebo 2
+ */
+export function showEndpointChoiceDialog(title, seg, label1, label2, callback) {
+  const p1 = `(${seg.x1.toFixed(2)}, ${seg.y1.toFixed(2)})`;
+  const p2 = `(${seg.x2.toFixed(2)}, ${seg.y2.toFixed(2)})`;
+  const overlay = makeInputOverlay(`
+    <div class="input-dialog">
+      <h3>${title}</h3>
+      <div class="btn-row" style="flex-direction:column;gap:6px">
+        <button class="btn-ok ep-choice" data-end="1" style="width:100%">${label1} ${p1}</button>
+        <button class="btn-ok ep-choice" data-end="2" style="width:100%">${label2} ${p2}</button>
+      </div>
+      <div class="btn-row">
+        <button class="btn-cancel btn-cancel-overlay">Zrušit</button>
+      </div>
+    </div>`);
+
+  overlay.querySelectorAll(".ep-choice").forEach(btn => {
+    btn.addEventListener("click", () => {
+      overlay.remove();
+      callback(parseInt(btn.dataset.end));
+    });
+  });
+
+  overlay.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") overlay.remove();
+  });
+  overlay.setAttribute("tabindex", "-1");
+  overlay.focus();
+}

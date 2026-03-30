@@ -2,7 +2,7 @@
 // ║  Sdílené helpery pro tool handlery                         ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-import { findSegmentAt } from '../geometry.js';
+import { findSegmentAt, getPolylineSegmentAsLine } from '../geometry.js';
 import { state } from '../state.js';
 import { renderAll } from '../render.js';
 import { resetHint, setHint } from '../ui.js';
@@ -139,4 +139,49 @@ function _enforceConstraintReverse(target, anchor, type) {
     target.x = anchor.x;
     target.y = anchor.y + sign * len;
   }
+}
+
+// ── Sdílená analýza výběru pro *FromSelection funkce ──
+
+/**
+ * Analyzuje aktuální výběr (state.selected, state.multiSelected, state.selectedPoint)
+ * a vrátí kategorizované objekty.
+ * @returns {{ circles: Array, lines: Array, points: Array, allIndices: Set<number> }}
+ */
+export function analyzeSelection() {
+  const circles = [];
+  const lines = [];
+  const points = state.selectedPoint ? [...state.selectedPoint] : [];
+
+  const allIndices = new Set();
+  if (state.selected !== null) allIndices.add(state.selected);
+  for (const idx of state.multiSelected) allIndices.add(idx);
+
+  for (const idx of allIndices) {
+    const obj = state.objects[idx];
+    if (!obj) continue;
+
+    if (obj.type === 'circle' || obj.type === 'arc') {
+      circles.push({ idx, cx: obj.cx, cy: obj.cy, r: obj.r });
+    } else if (obj.type === 'line' || obj.type === 'constr') {
+      lines.push({ idx, segIdx: null, x1: obj.x1, y1: obj.y1, x2: obj.x2, y2: obj.y2 });
+    } else if (obj.type === 'polyline') {
+      if (state.selectedSegment !== null && state._selectedSegmentObjIdx === idx) {
+        const seg = getPolylineSegmentAsLine(obj, state.selectedSegment);
+        if (seg) {
+          lines.push({ idx, segIdx: state.selectedSegment, ...seg });
+        }
+      }
+    }
+  }
+
+  return { circles, lines, points, allIndices };
+}
+
+/**
+ * Zkontroluje, zda je libovolný objekt vybraný.
+ */
+export function hasSelection() {
+  return state.selected !== null || state.multiSelected.size > 0 ||
+    (state.selectedPoint && state.selectedPoint.length > 0);
 }

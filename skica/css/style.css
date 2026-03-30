@@ -353,7 +353,7 @@ body {
 /* â”€â”€ Seznam objektÅ¯ â”€â”€ */
 #objectList {
   list-style: none;
-  max-height: 200px;
+  max-height: 45vh;
   overflow-y: auto;
 }
 
@@ -394,6 +394,24 @@ body {
   font-size: 10px;
   margin-right: 4px;
   opacity: 0.6;
+}
+
+#objectList li.seg-item {
+  padding-left: 22px;
+  font-size: 11px;
+  opacity: 0.8;
+  border-left: 2px solid var(--ctp-surface1, #45475a);
+  margin-left: 8px;
+}
+
+#objectList li.seg-item:hover {
+  opacity: 1;
+}
+
+#objectList li.seg-selected {
+  background: #a6e3a122;
+  color: #a6e3a1;
+  opacity: 1;
 }
 
 /* â”€â”€ Seznam vrstev â”€â”€ */
