@@ -8,7 +8,7 @@ import { makeInputOverlay } from '../dialogFactory.js';
 import { state, showToast, toDisplayCoords, axisLabels, displayX, xPrefix } from '../state.js';
 import { addObject } from '../objects.js';
 import { renderAll } from '../render.js';
-import { typeLabel, getObjectSnapPoints, bulgeToArc } from '../utils.js';
+import { typeLabel, bulgeToArc } from '../utils.js';
 import { updateObjectList } from '../ui.js';
 import { addDimensionForObject } from './dimension.js';
 import { showEditObjectDialog } from './mobileEdit.js';
@@ -120,81 +120,8 @@ export function showIntersectionInfo(pt) {
  * @param {number} wy
  */
 export function showMeasureObjectInfo(obj, wx, wy, objIdx) {
-  // Detekce, zda jsme kliknuli blízko koncového bodu
-  const threshold = 15 / state.zoom;
-  const snapPoints = getObjectSnapPoints(obj);
-  let nearestPt = null;
-  let nearestDist = Infinity;
-  for (const pt of snapPoints) {
-    const d = Math.hypot(pt.x - wx, pt.y - wy);
-    if (d < nearestDist) {
-      nearestDist = d;
-      nearestPt = pt;
-    }
-  }
-
-  const clickedEndpoint = nearestDist < threshold;
-  let html = "";
-
-  if (clickedEndpoint && nearestPt) {
-    // Klik na koncový bod – zobrazit souřadnice
-    const isK = state.machineType === 'karusel';
-    const xp = xPrefix();
-    const ptHval = isK ? displayX(nearestPt.x) : nearestPt.x;
-    const ptVval = isK ? nearestPt.y : displayX(nearestPt.y);
-    const Hp = isK ? xp : '';
-    const Vp = isK ? '' : xp;
-    html = `
-      <div class="input-dialog">
-        <h3>📍 Souřadnice bodu</h3>
-        <table style="width:100%;font-family:Consolas;font-size:13px;">
-          <tr><td style="color:${COLORS.label}">${Hp}${axisLabels()[0]}:</td><td style="color:${COLORS.selected}">${ptHval.toFixed(3)}</td></tr>
-          <tr><td style="color:${COLORS.label}">${Vp}${axisLabels()[1]}:</td><td style="color:${COLORS.selected}">${ptVval.toFixed(3)}</td></tr>
-        </table>
-        <div class="btn-row">
-          <button class="btn-cancel" id="ptCopy">📋 Kopírovat</button>
-          <button class="btn-cancel" id="ptAddPoint">📍 Vytvořit bod</button>
-          <button class="btn-ok btn-cancel-overlay">OK</button>
-        </div>
-      </div>`;
-  } else {
-    // Klik na tělo objektu – zobrazit info
-    html = buildObjectInfoDialog(obj, objIdx);
-  }
-
+  const html = buildObjectInfoDialog(obj, objIdx);
   const overlay = makeInputOverlay(html);
-
-  if (clickedEndpoint && nearestPt) {
-    overlay.querySelector("#ptCopy").addEventListener("click", () => {
-      const [H, V] = axisLabels();
-      const isK2 = state.machineType === 'karusel';
-      const xp2 = xPrefix();
-      const hv = isK2 ? displayX(nearestPt.x) : nearestPt.x;
-      const vv = isK2 ? nearestPt.y : displayX(nearestPt.y);
-      const text = `${isK2 ? xp2 : ''}${H}${hv.toFixed(3)} ${isK2 ? '' : xp2}${V}${vv.toFixed(3)}`;
-      navigator.clipboard
-        .writeText(text)
-        .then(() => showToast(`Zkopírováno: ${text}`));
-    });
-    overlay.querySelector("#ptAddPoint").addEventListener("click", () => {
-      addObject({
-        type: "point",
-        x: nearestPt.x,
-        y: nearestPt.y,
-        name: `Bod ${state.nextId}`,
-      });
-      const [H2, V2] = axisLabels();
-      const _isK2 = state.machineType === 'karusel';
-      const _xp2 = xPrefix();
-      const _hv2 = _isK2 ? displayX(nearestPt.x) : nearestPt.x;
-      const _vv2 = _isK2 ? nearestPt.y : displayX(nearestPt.y);
-      showToast(
-        `Bod ${_isK2 ? _xp2 : ''}${H2}${_hv2.toFixed(2)} ${_isK2 ? '' : _xp2}${V2}${_vv2.toFixed(2)} vytvořen`,
-      );
-      overlay.remove();
-    });
-  }
-
   overlay.querySelector(".btn-ok").focus();
 }
 

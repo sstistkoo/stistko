@@ -4,7 +4,6 @@ import { addObject } from '../objects.js';
 import { renderAll } from '../render.js';
 import { resetHint, setHint } from '../ui.js';
 import { findObjectAt } from '../geometry.js';
-import { getObjectSnapPoints } from '../utils.js';
 import { showMeasureResult, showMeasureObjectInfo } from '../dialogs.js';
 
 /**
@@ -14,33 +13,21 @@ import { showMeasureResult, showMeasureObjectInfo } from '../dialogs.js';
 export function handleMeasureClick(wx, wy) {
   if (!state.drawing) {
     const snapThreshold = SNAP_POINT_THRESHOLD / state.zoom;
-    let isOnSnapPoint = false;
 
-    // Kontrola průsečíků
+    // 1) Průsečíky mají nejvyšší prioritu – měření od průsečíku
+    let isOnIntersection = false;
     for (const pt of state.intersections) {
       if (Math.hypot(pt.x - wx, pt.y - wy) < snapThreshold) {
-        isOnSnapPoint = true;
+        isOnIntersection = true;
         break;
       }
     }
-    // Kontrola snap bodů objektů (konce úseček, středy kružnic, ...)
-    if (!isOnSnapPoint) {
-      for (const obj of state.objects) {
-        for (const pt of getObjectSnapPoints(obj)) {
-          if (Math.hypot(pt.x - wx, pt.y - wy) < snapThreshold) {
-            isOnSnapPoint = true;
-            break;
-          }
-        }
-        if (isOnSnapPoint) break;
-      }
-    }
 
-    if (!isOnSnapPoint) {
-      // Klik na tělo objektu → info dialog
-      const idx = findObjectAt(wx, wy);
-      if (idx !== null) {
-        showMeasureObjectInfo(state.objects[idx], wx, wy, idx);
+    // 2) Klik na tělo objektu → info dialog (pokud to není průsečík)
+    if (!isOnIntersection) {
+      const bodyIdx = findObjectAt(wx, wy);
+      if (bodyIdx !== null) {
+        showMeasureObjectInfo(state.objects[bodyIdx], wx, wy, bodyIdx);
         return;
       }
     }

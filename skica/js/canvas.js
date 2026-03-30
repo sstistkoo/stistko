@@ -11,6 +11,22 @@ export const wrap = document.getElementById("canvasWrap");
 export const drawCanvas = document.getElementById("drawCanvas");
 export const ctx = drawCanvas.getContext("2d");
 
+// Vibrace až po první interakci uživatele (Chrome blokuje vibrate před gestem)
+let _userHasInteracted = false;
+function onFirstInteraction() {
+  _userHasInteracted = true;
+  document.removeEventListener('pointerdown', onFirstInteraction, true);
+  document.removeEventListener('keydown', onFirstInteraction, true);
+}
+document.addEventListener('pointerdown', onFirstInteraction, true);
+document.addEventListener('keydown', onFirstInteraction, true);
+
+export function safeVibrate(pattern) {
+  if (_userHasInteracted && navigator.vibrate) {
+    try { navigator.vibrate(pattern); } catch (_) {}
+  }
+}
+
 /** Přizpůsobí canvas velikosti okna. */
 export function resizeCanvases() {
   const w = wrap.clientWidth,
@@ -106,8 +122,8 @@ export function snapPt(wx, wy) {
   // Body/průsečíky – snap k bodům objektů (nejvyšší priorita)
   if (objX !== null) {
     // Vibrace při snapnutí k bodu (jen pokud se snapType změnil)
-    if (state.mouse.snapType !== 'point' && navigator.vibrate) {
-      try { navigator.vibrate(VIBRATE_SNAP_POINT); } catch (_) {}
+    if (state.mouse.snapType !== 'point') {
+      safeVibrate(VIBRATE_SNAP_POINT);
     }
     state.mouse.snapped = true;
     state.mouse.snapType = 'point';
@@ -129,8 +145,8 @@ export function snapPt(wx, wy) {
       }
     }
     if (edgeX !== null) {
-      if (state.mouse.snapType !== 'edge' && navigator.vibrate) {
-        try { navigator.vibrate(VIBRATE_SNAP_EDGE); } catch (_) {}
+      if (state.mouse.snapType !== 'edge') {
+        safeVibrate(VIBRATE_SNAP_EDGE);
       }
       state.mouse.snapped = true;
       state.mouse.snapType = 'edge';

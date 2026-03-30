@@ -214,7 +214,7 @@
  * @property {MouseState} mouse
  * @property {Point2D[]} intersections
  * @property {number} nextId
- * @property {boolean} showDimensions
+ * @property {'all'|'intersections'|'none'} showDimensions
  * @property {DrawObject[]} undoStack
  * @property {DrawObject[]} redoStack
  * @property {number} maxUndo

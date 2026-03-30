@@ -51,7 +51,7 @@ export const state = {
   mouse: { x: 0, y: 0, rawX: 0, rawY: 0, sx: 0, sy: 0, snapped: false, snapType: '' },
   intersections: [],
   nextId: 1,
-  showDimensions: true,
+  showDimensions: 'all',  // 'all' | 'intersections' | 'none'
   // Undo/Redo
   undoStack: [],
   redoStack: [],

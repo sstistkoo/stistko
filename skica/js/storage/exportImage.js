@@ -253,7 +253,7 @@ function exportSVG(background) {
     }
 
     // Kóty jako text
-    if (state.showDimensions && obj.type !== 'constr') {
+    if (state.showDimensions !== 'none' && obj.type !== 'constr') {
       const dimText = getDimensionText(obj);
       if (dimText) {
         const t = document.createElementNS(ns, 'text');

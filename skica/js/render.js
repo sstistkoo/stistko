@@ -227,8 +227,9 @@ function renderObjects() {
     const layer = state.layers.find(l => l.id === obj.layer);
     if (layer && !layer.visible) return;
 
-    // Skrýt kótovací objekty, pokud jsou kóty vypnuté
-    if (!state.showDimensions && (obj.isDimension || obj.isCoordLabel)) return;
+    // Skrýt kótovací objekty podle režimu zobrazení kót
+    if (state.showDimensions === 'none' && (obj.isDimension || obj.isCoordLabel)) return;
+    if (state.showDimensions === 'intersections' && obj.isDimension) return;
 
     // Viewport culling – přeskočit objekty mimo viditelnou oblast
     // Konstrukční čáry (nekonečné) se nekullují
@@ -277,34 +278,36 @@ function renderObjects() {
     ctx.setLineDash([]);
 
     // Kóty
-    if (state.showDimensions && !isConstr) drawDimension(obj);
+    if (state.showDimensions !== 'none' && !isConstr) drawDimension(obj);
   });
 
   // ── Vazební značky (constraints) ──
   drawConstraintMarkers();
 
   // Průsečíky
-  state.intersections.forEach((pt) => {
-    const [sx, sy] = worldToScreen(pt.x, pt.y);
-    ctx.fillStyle = COLORS.dimension;
-    ctx.strokeStyle = COLORS.dimension;
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    ctx.arc(sx, sy, 5, 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.arc(sx, sy, 2, 0, Math.PI * 2);
-    ctx.fill();
-    const intSize = Math.round(Math.min(24, Math.max(11, 8 + state.zoom * 4.5)));
-    ctx.font = intSize + 'px Consolas';
-    const dp = toDisplayCoords(pt.x, pt.y);
-    const pf = state.coordMode === 'inc' ? 'Δ' : '';
-    const xp = xPrefix();
-    const ptLabel = state.machineType === 'karusel'
-      ? `${pf}${xp}X${displayX(dp.x).toFixed(2)} ${pf}Z${dp.y.toFixed(2)}`
-      : `${pf}Z${dp.x.toFixed(2)} ${pf}${xp}X${displayX(dp.y).toFixed(2)}`;
-    ctx.fillText(ptLabel, sx + 8, sy - 8);
-  });
+  if (state.showDimensions !== 'none') {
+    state.intersections.forEach((pt) => {
+      const [sx, sy] = worldToScreen(pt.x, pt.y);
+      ctx.fillStyle = COLORS.dimension;
+      ctx.strokeStyle = COLORS.dimension;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(sx, sy, 5, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(sx, sy, 2, 0, Math.PI * 2);
+      ctx.fill();
+      const intSize = Math.round(Math.min(24, Math.max(11, 8 + state.zoom * 4.5)));
+      ctx.font = intSize + 'px Consolas';
+      const dp = toDisplayCoords(pt.x, pt.y);
+      const pf = state.coordMode === 'inc' ? 'Δ' : '';
+      const xp = xPrefix();
+      const ptLabel = state.machineType === 'karusel'
+        ? `${pf}${xp}X${displayX(dp.x).toFixed(2)} ${pf}Z${dp.y.toFixed(2)}`
+        : `${pf}Z${dp.x.toFixed(2)} ${pf}${xp}X${displayX(dp.y).toFixed(2)}`;
+      ctx.fillText(ptLabel, sx + 8, sy - 8);
+    });
+  }
 
   // Dočasné kreslení
   if (state.drawing && state.tempPoints.length > 0) {
