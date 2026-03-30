@@ -5,7 +5,7 @@
 import { state, showToast } from './state.js';
 import { resizeCanvases, autoCenterView } from './canvas.js';
 import { calculateAllIntersections } from './geometry.js';
-import { updateObjectList, updateProperties, resetHint, updateDimsBtn, updateSnapPtsBtn, updateCoordModeBtn, updateMachineTypeBtn, updateXDisplayBtn, togglePanel, updateLayerList, updateStatusProject, checkFirstRunHelp, updateAngleSnapBtn } from './ui.js';
+import { updateObjectList, updateProperties, resetHint, updateDimsBtn, updateSnapPtsBtn, updateCoordModeBtn, updateMachineTypeBtn, updateXDisplayBtn, togglePanel, updateLayerList, updateStatusProject, checkFirstRunHelp, updateAngleSnapBtn, updateNullPointUI } from './ui.js';
 import { initAutoSave } from './storage.js';
 import { getMeta, setMeta, migrateFromLocalStorage } from './idb.js';
 import { bridge } from './bridge.js';
@@ -50,6 +50,8 @@ async function tryAutoLoad() {
         state.gridSize = data.gridSize;
       if (data.coordMode) state.coordMode = data.coordMode;
       if (data.incReference) state.incReference = data.incReference;
+      state.nullPointActive = !!data.nullPointActive;
+      state.nullPointAngle = data.nullPointAngle || 0;
       if (data.machineType) state.machineType = data.machineType;
       state.xDisplayMode = data.xDisplayMode || 'radius';
       if (data.layers) {
@@ -79,6 +81,8 @@ setInterval(() => {
       gridSize: state.gridSize,
       coordMode: state.coordMode,
       incReference: state.incReference,
+      nullPointActive: state.nullPointActive,
+      nullPointAngle: state.nullPointAngle,
       machineType: state.machineType,
       xDisplayMode: state.xDisplayMode,
       layers: state.layers,
@@ -109,6 +113,7 @@ setInterval(() => {
   updateMachineTypeBtn();
   updateXDisplayBtn();
   updateAngleSnapBtn();
+  updateNullPointUI();
   updateLayerList();
   initAutoSave();
   updateStatusProject();

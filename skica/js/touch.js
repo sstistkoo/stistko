@@ -9,6 +9,7 @@ import { renderAll } from './render.js';
 import { moveObject, addObject } from './objects.js';
 import { handleCanvasClick } from './events.js';
 import { setTool, resetHint, updateSnapPtsBtn } from './ui.js';
+import { updateAssociativeDimensions } from './dialogs/dimension.js';
 import { toolLabel } from './utils.js';
 import { showNumericalInputDialog, showMobileEditDialog } from './dialogs.js';
 import { measureSelection } from './tools/index.js';
@@ -404,11 +405,25 @@ function updatePrecisionCrosshair(touch) {
     if (state.dragObjIdx === -1 && state._multiDragSnapshots) {
       for (const { idx, snapshot } of state._multiDragSnapshots) {
         const obj = state.objects[idx];
-        if (obj) {
-          Object.assign(obj, JSON.parse(snapshot));
+        if (obj) Object.assign(obj, JSON.parse(snapshot));
+      }
+      for (const { idx } of state._multiDragSnapshots) {
+        const obj = state.objects[idx];
+        if (!obj) continue;
+        if (!obj.isDimension && !obj.isCoordLabel) {
           moveObject(obj, dx, dy);
+        } else if (!obj.sourceObjId) {
+          if (obj.type === 'point') { obj.x += dx; obj.y += dy; }
+          else if (obj.type === 'line') {
+            obj.x1 += dx; obj.y1 += dy;
+            obj.x2 += dx; obj.y2 += dy;
+            if (obj.dimSrcX1 != null) { obj.dimSrcX1 += dx; obj.dimSrcY1 += dy; }
+            if (obj.dimSrcX2 != null) { obj.dimSrcX2 += dx; obj.dimSrcY2 += dy; }
+            if (obj.dimCenterX != null) { obj.dimCenterX += dx; obj.dimCenterY += dy; }
+          }
         }
       }
+      updateAssociativeDimensions();
     } else if (state.objects[state.dragObjIdx]) {
       const obj = state.objects[state.dragObjIdx];
       if (state.dragObjSnapshot) {
@@ -624,11 +639,25 @@ drawCanvas.addEventListener(
         if (state.dragObjIdx === -1 && state._multiDragSnapshots) {
           for (const { idx, snapshot } of state._multiDragSnapshots) {
             const obj = state.objects[idx];
-            if (obj) {
-              Object.assign(obj, JSON.parse(snapshot));
+            if (obj) Object.assign(obj, JSON.parse(snapshot));
+          }
+          for (const { idx } of state._multiDragSnapshots) {
+            const obj = state.objects[idx];
+            if (!obj) continue;
+            if (!obj.isDimension && !obj.isCoordLabel) {
               moveObject(obj, dx, dy);
+            } else if (!obj.sourceObjId) {
+              if (obj.type === 'point') { obj.x += dx; obj.y += dy; }
+              else if (obj.type === 'line') {
+                obj.x1 += dx; obj.y1 += dy;
+                obj.x2 += dx; obj.y2 += dy;
+                if (obj.dimSrcX1 != null) { obj.dimSrcX1 += dx; obj.dimSrcY1 += dy; }
+                if (obj.dimSrcX2 != null) { obj.dimSrcX2 += dx; obj.dimSrcY2 += dy; }
+                if (obj.dimCenterX != null) { obj.dimCenterX += dx; obj.dimCenterY += dy; }
+              }
             }
           }
+          updateAssociativeDimensions();
         } else if (state.objects[state.dragObjIdx]) {
           const obj = state.objects[state.dragObjIdx];
           if (state.dragObjSnapshot) {

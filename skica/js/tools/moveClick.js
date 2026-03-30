@@ -3,6 +3,7 @@ import { findObjectAt, calculateAllIntersections } from '../geometry.js';
 import { updateProperties, resetHint, setHint } from '../ui.js';
 import { moveObject } from '../objects.js';
 import { renderAll } from '../render.js';
+import { updateAssociativeDimensions } from '../dialogs/dimension.js';
 
 /**
  * @param {number} wx
@@ -12,11 +13,38 @@ export function handleMoveClick(wx, wy) {
   if (!state.dragging) {
     // Multi-select přesun
     if (state.multiSelected.size > 0) {
+      // Zajistit, že i state.selected je v setu
+      if (state.selected !== null) state.multiSelected.add(state.selected);
       pushUndo();
       state.dragging = true;
       state.dragObjIdx = -1; // signál pro multi-drag
       state.dragStartWorld = { x: wx, y: wy };
-      state._multiDragSnapshots = [...state.multiSelected].map(i => ({
+
+      // Indexy vybraných ne-kót
+      const selectedIndices = [...state.multiSelected].filter(i => {
+        const o = state.objects[i];
+        return o && !o.isDimension && !o.isCoordLabel;
+      });
+
+      // Najít ID vybraných objektů
+      const selectedIds = new Set(selectedIndices.map(i => state.objects[i].id).filter(id => id != null));
+
+      // Přidat kóty:
+      // - asociativní (sourceObjId odpovídá vybraným) → budou aktualizovány přes updateAssociativeDimensions
+      // - nenavázané (isDimension bez sourceObjId) → přesunout přímo
+      const dimIndices = [];
+      state.objects.forEach((o, i) => {
+        if (o.isDimension || o.isCoordLabel) {
+          if (o.sourceObjId && selectedIds.has(o.sourceObjId)) {
+            dimIndices.push(i); // asociativní kóta
+          } else if (!o.sourceObjId) {
+            dimIndices.push(i); // nenavázaná kóta – přesunout přímo
+          }
+        }
+      });
+
+      const allIndices = [...selectedIndices, ...dimIndices];
+      state._multiDragSnapshots = allIndices.map(i => ({
         idx: i,
         snapshot: JSON.stringify(state.objects[i]),
       }));
@@ -46,7 +74,24 @@ export function handleMoveClick(wx, wy) {
       return;
     }
     state.dragging = false;
+    // Pokud se přetahovala kóta, uložit nový offset
+    const draggedObj = state.objects[state.dragObjIdx];
+    if (draggedObj && draggedObj.isDimension && draggedObj.sourceObjId && draggedObj.dimType === 'linear') {
+      const src = state.objects.find(o => o.id === draggedObj.sourceObjId);
+      if (src && (src.type === 'line' || src.type === 'constr')) {
+        // Kolmá vzdálenost středu kóty od zdrojové úsečky
+        const mx = (draggedObj.x1 + draggedObj.x2) / 2;
+        const my = (draggedObj.y1 + draggedObj.y2) / 2;
+        const ang = Math.atan2(src.y2 - src.y1, src.x2 - src.x1);
+        const nx = -Math.sin(ang);
+        const ny = Math.cos(ang);
+        const smx = (src.x1 + src.x2) / 2;
+        const smy = (src.y1 + src.y2) / 2;
+        draggedObj.dimOffset = (mx - smx) * nx + (my - smy) * ny;
+      }
+    }
     state.dragObjIdx = null;
+    updateAssociativeDimensions();
     updateProperties();
     calculateAllIntersections();
     resetHint();

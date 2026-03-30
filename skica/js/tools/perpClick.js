@@ -26,18 +26,25 @@ export function handlePerpClick(wx, wy) {
   // Zjistit, ke kterému konci je klik blíž → ten bude kotva
   const d1 = Math.hypot(wx - ls.seg.x1, wy - ls.seg.y1);
   const d2 = Math.hypot(wx - ls.seg.x2, wy - ls.seg.y2);
-  // Zachovat původní směr (dy kladné/záporné)
-  const sign = (ls.seg.y2 - ls.seg.y1) >= 0 ? 1 : -1;
+
+  // Úhel "svislého" směru – respektuje natočení nulového bodu (H + 90°)
+  const vAngle = (state.nullPointActive && state.nullPointAngle)
+    ? (state.nullPointAngle * Math.PI / 180 + Math.PI / 2) : (Math.PI / 2);
+  const cosV = Math.cos(vAngle);
+  const sinV = Math.sin(vAngle);
+  // Zachovat původní směr podél svislé osy
+  const projDir = (ls.seg.x2 - ls.seg.x1) * cosV + (ls.seg.y2 - ls.seg.y1) * sinV;
+  const sign = projDir >= 0 ? 1 : -1;
 
   pushUndo();
   let movedEnd;
   if (d1 <= d2) {
-    // P1 je kotva, P2 se posune svisle
-    ls.setP2(ls.seg.x1, ls.seg.y1 + sign * len);
+    // P1 je kotva, P2 se posune podél svislé osy
+    ls.setP2(ls.seg.x1 + sign * len * cosV, ls.seg.y1 + sign * len * sinV);
     movedEnd = 'p2';
   } else {
-    // P2 je kotva, P1 se posune svisle
-    ls.setP1(ls.seg.x2, ls.seg.y2 - sign * len);
+    // P2 je kotva, P1 se posune
+    ls.setP1(ls.seg.x2 - sign * len * cosV, ls.seg.y2 - sign * len * sinV);
     movedEnd = 'p1';
   }
 
@@ -75,7 +82,12 @@ export function perpFromSelection() {
   const len = Math.hypot(ls.seg.x2 - ls.seg.x1, ls.seg.y2 - ls.seg.y1);
   if (len < 1e-9) { showToast("Segment má nulovou délku"); return true; }
 
-  const sign = (ls.seg.y2 - ls.seg.y1) >= 0 ? 1 : -1;
+  const vAngle2 = (state.nullPointActive && state.nullPointAngle)
+    ? (state.nullPointAngle * Math.PI / 180 + Math.PI / 2) : (Math.PI / 2);
+  const cosV2 = Math.cos(vAngle2);
+  const sinV2 = Math.sin(vAngle2);
+  const projDir2 = (ls.seg.x2 - ls.seg.x1) * cosV2 + (ls.seg.y2 - ls.seg.y1) * sinV2;
+  const sign = projDir2 >= 0 ? 1 : -1;
 
   showEndpointChoiceDialog("Kolmost – výběr kotvy", ls.seg,
     "Kotva P1 (fixní)", "Kotva P2 (fixní)",
@@ -83,10 +95,10 @@ export function perpFromSelection() {
       pushUndo();
       let movedEnd;
       if (end === 1) {
-        ls.setP2(ls.seg.x1, ls.seg.y1 + sign * len);
+        ls.setP2(ls.seg.x1 + sign * len * cosV2, ls.seg.y1 + sign * len * sinV2);
         movedEnd = 'p2';
       } else {
-        ls.setP1(ls.seg.x2, ls.seg.y2 - sign * len);
+        ls.setP1(ls.seg.x2 - sign * len * cosV2, ls.seg.y2 - sign * len * sinV2);
         movedEnd = 'p1';
       }
       setConstraint(obj, ls.segIdx, 'vertical');

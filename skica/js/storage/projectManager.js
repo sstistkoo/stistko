@@ -4,7 +4,7 @@
 
 import { state, showToast, pushUndo } from '../state.js';
 import { COLORS } from '../constants.js';
-import { updateObjectList, updateProperties, updateLayerList, updateStatusProject, updateMachineTypeBtn, updateXDisplayBtn } from '../ui.js';
+import { updateObjectList, updateProperties, updateLayerList, updateStatusProject, updateMachineTypeBtn, updateXDisplayBtn, updateNullPointUI } from '../ui.js';
 import { calculateAllIntersections } from '../geometry.js';
 import { saveProjectToDB, loadProjectFromDB, deleteProjectFromDB, getAllProjects, setMeta, getMeta } from '../idb.js';
 import { deepClone } from '../utils.js';
@@ -28,6 +28,8 @@ function _buildProjectData() {
     gridSize: state.gridSize,
     coordMode: state.coordMode,
     incReference: state.incReference,
+    nullPointActive: state.nullPointActive,
+    nullPointAngle: state.nullPointAngle,
     machineType: state.machineType,
     xDisplayMode: state.xDisplayMode,
     layers: state.layers,
@@ -43,6 +45,8 @@ function _loadProjectData(data) {
   if (data.gridSize && data.gridSize > 0) state.gridSize = data.gridSize;
   if (data.coordMode) state.coordMode = data.coordMode;
   if (data.incReference) state.incReference = data.incReference;
+  state.nullPointActive = !!data.nullPointActive;
+  state.nullPointAngle = data.nullPointAngle || 0;
   if (data.machineType) state.machineType = data.machineType;
   state.xDisplayMode = data.xDisplayMode || 'radius';
   if (data.layers) {
@@ -61,6 +65,7 @@ function _loadProjectData(data) {
   calculateAllIntersections();
   updateMachineTypeBtn();
   updateXDisplayBtn();
+  updateNullPointUI();
 }
 
 // ── Save / Load ──

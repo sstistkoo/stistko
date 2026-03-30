@@ -1171,13 +1171,32 @@ function lineLineIntersect(l1, l2) {
  * @returns {import('./types.js').DrawObject}
  */
 export function mirrorObject(obj, axis, p1, p2) {
-  // axis: 'x' (horizontální), 'z' (vertikální), 'custom' (2 body p1,p2)
+  // axis: 'x' (vodorovná osa), 'z' (svislá osa), 'custom' (2 body p1,p2)
   const copy = deepClone(obj);
   delete copy.id;
 
+  // Natočení nulového bodu
+  const npAngle = (state.nullPointActive && state.nullPointAngle)
+    ? (state.nullPointAngle * Math.PI / 180) : 0;
+
   function mirrorPoint(px, py) {
-    if (axis === 'x') return { x: px, y: -py };
-    if (axis === 'z') return { x: -px, y: py };
+    if (axis === 'x') {
+      // Zrcadlení přes vodorovnou osu (otočenou o npAngle)
+      // Transformace: otočit do lokálního systému, zrcadlit Y, otočit zpět
+      const cos = Math.cos(npAngle), sin = Math.sin(npAngle);
+      const lx = px * cos + py * sin;
+      const ly = -px * sin + py * cos;
+      const my = -ly; // zrcadlení Y
+      return { x: lx * cos - my * sin, y: lx * sin + my * cos };
+    }
+    if (axis === 'z') {
+      // Zrcadlení přes svislou osu (otočenou o npAngle)
+      const cos = Math.cos(npAngle), sin = Math.sin(npAngle);
+      const lx = px * cos + py * sin;
+      const ly = -px * sin + py * cos;
+      const mx = -lx; // zrcadlení X
+      return { x: mx * cos - ly * sin, y: mx * sin + ly * cos };
+    }
     // Vlastní osa: reflexe přes přímku p1-p2
     const dx = p2.x - p1.x, dy = p2.y - p1.y;
     const lenSq = dx * dx + dy * dy;

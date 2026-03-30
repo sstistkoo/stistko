@@ -5,7 +5,7 @@
 
 import { COLORS } from '../constants.js';
 import { makeInputOverlay } from '../dialogFactory.js';
-import { showToast, axisLabels } from '../state.js';
+import { state, showToast, axisLabels } from '../state.js';
 import { typeLabel, safeEvalMath } from '../utils.js';
 
 // ── Dialog pro offset ──
@@ -43,12 +43,57 @@ export function showOffsetDialog(obj, onSideClick) {
   });
 }
 
+// ── Dialog pro offset s polárním úhlem (multi-select) ──
+/**
+ * @param {string} label - popis výběru (např. "3 objekty")
+ * @param {function(number, number): void} callback - (dist, angleDeg)
+ */
+export function showOffsetAngleDialog(label, callback) {
+  const overlay = makeInputOverlay(`
+    <div class="input-dialog">
+      <h3>Offset – směrová kopie</h3>
+      <label>${label}</label>
+      <label>Vzdálenost (mm):</label>
+      <input type="text" id="dlgOffDist" value="5" inputmode="decimal" autofocus>
+      <label>Úhel směru (°):</label>
+      <input type="text" id="dlgOffAngle" value="90" inputmode="decimal">
+      <div style="font-size:11px;opacity:0.6;margin:4px 0">0°=vpravo, 90°=nahoru, 180°=vlevo, 270°=dolů</div>
+      <div class="btn-row">
+        <button class="btn-cancel btn-cancel-overlay">Zrušit</button>
+        <button class="btn-ok" id="dlgOffAngleOk">Vytvořit offset</button>
+      </div>
+    </div>`);
+  const inpDist = overlay.querySelector("#dlgOffDist");
+  const inpAngle = overlay.querySelector("#dlgOffAngle");
+  inpDist.focus();
+  inpDist.select();
+
+  function accept() {
+    const dist = safeEvalMath(inpDist.value);
+    const angle = safeEvalMath(inpAngle.value);
+    if (isNaN(dist) || dist <= 0) { showToast("Zadejte kladnou vzdálenost"); return; }
+    if (isNaN(angle)) { showToast("Zadejte úhel"); return; }
+    overlay.remove();
+    callback(dist, angle);
+  }
+  overlay.querySelector("#dlgOffAngleOk").addEventListener("click", accept);
+  const handleKey = (e) => {
+    if (e.key === "Enter") accept();
+    if (e.key === "Escape") overlay.remove();
+    e.stopPropagation();
+  };
+  inpDist.addEventListener("keydown", handleKey);
+  inpAngle.addEventListener("keydown", handleKey);
+}
+
 // ── Dialog pro zrcadlení ──
 /**
  * @param {import('../types.js').DrawObject} obj
  * @param {function(string): void} callback  volané s 'x'|'z'|'custom'
  */
 export function showMirrorDialog(obj, callback) {
+  const hasAngle = state.nullPointActive && state.nullPointAngle;
+  const angleNote = hasAngle ? ` (${state.nullPointAngle}°)` : '';
   const overlay = makeInputOverlay(`
     <div class="input-dialog">
       <h3>🪞 Zrcadlit objekt</h3>
@@ -56,8 +101,8 @@ export function showMirrorDialog(obj, callback) {
       <div style="margin:10px 0">
         <label style="display:block;margin-bottom:6px;font-weight:bold;color:${COLORS.label}">Zrcadlit podle:</label>
         <div class="btn-row" style="flex-direction:column;gap:6px">
-          <button class="btn-ok mirror-opt" data-axis="x" style="width:100%">↔ Osa X (horizontální)</button>
-          <button class="btn-ok mirror-opt" data-axis="z" style="width:100%">↕ Osa Z (vertikální)</button>
+          <button class="btn-ok mirror-opt" data-axis="x" style="width:100%">↔ Osa X (horizontální${angleNote})</button>
+          <button class="btn-ok mirror-opt" data-axis="z" style="width:100%">↕ Osa Z (vertikální${angleNote})</button>
           <button class="btn-ok mirror-opt" data-axis="custom" style="width:100%">📐 Vlastní osa (2 body)</button>
         </div>
       </div>

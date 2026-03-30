@@ -55,6 +55,9 @@ export function moveObject(obj, dx, dy) {
       obj.y1 += dy;
       obj.x2 += dx;
       obj.y2 += dy;
+      if (obj.dimSrcX1 != null) { obj.dimSrcX1 += dx; obj.dimSrcY1 += dy; }
+      if (obj.dimSrcX2 != null) { obj.dimSrcX2 += dx; obj.dimSrcY2 += dy; }
+      if (obj.dimCenterX != null) { obj.dimCenterX += dx; obj.dimCenterY += dy; }
       break;
     case "circle":
       obj.cx += dx;

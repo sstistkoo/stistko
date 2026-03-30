@@ -12,6 +12,7 @@ import { renderAll } from '../render.js';
 import { typeLabel, safeEvalMath } from '../utils.js';
 import { updateObjectList, updateProperties } from '../ui.js';
 import { calculateAllIntersections } from '../geometry.js';
+import { updateAssociativeDimensions } from './dimension.js';
 
 // ── Helper: auto-select + vyhodnocení mat. výrazů při blur ──
 /** @param {HTMLElement} container */
@@ -351,6 +352,7 @@ export function showEditObjectDialog(idx) {
         break;
       }
     }
+    updateAssociativeDimensions();
     updateObjectList();
     updateProperties();
     calculateAllIntersections();

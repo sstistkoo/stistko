@@ -233,6 +233,77 @@ function renderAxes() {
   g.fillText(hLabel, w - 18, state.panY - 8);
   g.fillStyle = vColor;
   g.fillText(vLabel, state.panX + 8, 16);
+
+  // ── Nulový bod – středový kříž v offsetové pozici ──
+  if (state.nullPointActive) {
+    const [npx, npy] = worldToScreen(state.incReference.x, state.incReference.y);
+    const npColor = '#fab387'; // Oranžová – odlišná od hlavního kříže
+    const angleRad = (state.nullPointAngle || 0) * Math.PI / 180;
+    const hasAngle = state.nullPointAngle !== 0;
+
+    // Čárkované osy přes celý canvas (rotované)
+    g.strokeStyle = npColor + '44';
+    g.lineWidth = 1;
+    g.setLineDash([8, 6]);
+
+    if (!hasAngle) {
+      // Bez natočení – vodorovná a svislá čára
+      g.beginPath();
+      g.moveTo(0, npy);
+      g.lineTo(w, npy);
+      g.stroke();
+      g.beginPath();
+      g.moveTo(npx, 0);
+      g.lineTo(npx, h);
+      g.stroke();
+    } else {
+      // S natočením – rotované osy
+      const maxLen = Math.hypot(w, h);
+      const cosA = Math.cos(angleRad);
+      const sinA = Math.sin(angleRad);
+      // Osa 1 (vodorovná rotovaná)
+      g.beginPath();
+      g.moveTo(npx - cosA * maxLen, npy + sinA * maxLen);
+      g.lineTo(npx + cosA * maxLen, npy - sinA * maxLen);
+      g.stroke();
+      // Osa 2 (svislá rotovaná = +90°)
+      g.beginPath();
+      g.moveTo(npx - sinA * maxLen, npy - cosA * maxLen);
+      g.lineTo(npx + sinA * maxLen, npy + cosA * maxLen);
+      g.stroke();
+    }
+    g.setLineDash([]);
+
+    // Terčík na nulový bod
+    g.strokeStyle = npColor + 'cc';
+    g.lineWidth = 2;
+    g.beginPath();
+    g.arc(npx, npy, 8, 0, Math.PI * 2);
+    g.stroke();
+
+    // Malý kříž (rotovaný)
+    g.beginPath();
+    if (!hasAngle) {
+      g.moveTo(npx - 13, npy);
+      g.lineTo(npx + 13, npy);
+      g.moveTo(npx, npy - 13);
+      g.lineTo(npx, npy + 13);
+    } else {
+      const c13 = 13 * Math.cos(angleRad);
+      const s13 = 13 * Math.sin(angleRad);
+      g.moveTo(npx - c13, npy + s13);
+      g.lineTo(npx + c13, npy - s13);
+      g.moveTo(npx - s13, npy - c13);
+      g.lineTo(npx + s13, npy + c13);
+    }
+    g.stroke();
+
+    // Popisek "0'" + úhel
+    g.font = "bold 12px Consolas";
+    g.fillStyle = npColor;
+    const angleLabel = hasAngle ? `0' ∠${state.nullPointAngle}°` : "0'";
+    g.fillText(angleLabel, npx + 10, npy - 10);
+  }
 }
 
 // ── Vykreslení objektů ──
@@ -1321,8 +1392,8 @@ function _drawConstraintIcon(wx, wy, type, size, isSelected) {
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   let symbol = '?';
-  if (type === 'horizontal') symbol = '═';
-  else if (type === 'vertical') symbol = '║';
+  if (type === 'horizontal') symbol = (state.nullPointActive && state.nullPointAngle) ? '═∡' : '═';
+  else if (type === 'vertical') symbol = (state.nullPointActive && state.nullPointAngle) ? '║∡' : '║';
   else if (type === 'parallel') symbol = '∥';
   ctx.fillText(symbol, sx, sy);
   ctx.restore();
@@ -1341,8 +1412,11 @@ function renderAngleSnapGuide() {
   if (dist < 1e-9) return;
 
   const angle = Math.atan2(dy, dx);
+  // Offset od natočeného nulového bodu
+  const offsetRad = (state.nullPointActive && state.nullPointAngle) ? (state.nullPointAngle * Math.PI / 180) : 0;
   const stepRad = (state.angleSnapStep * Math.PI) / 180;
-  const snappedAngle = Math.round(angle / stepRad) * stepRad;
+  const relAngle = angle - offsetRad;
+  const snappedAngle = Math.round(relAngle / stepRad) * stepRad + offsetRad;
 
   // Zobrazit vodítko jen když je úhel v toleranci (magnetický snap)
   const toleranceRad = (state.angleSnapTolerance * Math.PI) / 180;
@@ -1371,13 +1445,15 @@ function renderAngleSnapGuide() {
   ctx.arc(sx2, sy2, 4, 0, Math.PI * 2);
   ctx.fill();
 
-  // Label s úhlem
+  // Label s úhlem (zobrazit relativní úhel vůči natočení, pokud je aktivní)
   const angleDeg = ((snappedAngle * 180) / Math.PI);
+  const dispAngle = (state.nullPointActive && state.nullPointAngle)
+    ? (angleDeg - state.nullPointAngle) : angleDeg;
   const labelSize = Math.round(Math.min(22, Math.max(14, 10 + state.zoom * 6)));
   ctx.font = `${Math.max(10, labelSize - 2)}px Consolas`;
   ctx.fillStyle = COLORS.dimension;
   const labelX = sx2 + 10;
   const labelY = sy2 - 10;
-  ctx.fillText(`${angleDeg.toFixed(1)}°`, labelX, labelY);
+  ctx.fillText(`${dispAngle.toFixed(1)}°`, labelX, labelY);
   ctx.restore();
 }

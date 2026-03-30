@@ -26,18 +26,25 @@ export function handleHorizontalClick(wx, wy) {
   // Zjistit, ke kterému konci je klik blíž → ten bude kotva
   const d1 = Math.hypot(wx - ls.seg.x1, wy - ls.seg.y1);
   const d2 = Math.hypot(wx - ls.seg.x2, wy - ls.seg.y2);
-  // Zachovat původní směr (dx kladné/záporné)
-  const sign = (ls.seg.x2 - ls.seg.x1) >= 0 ? 1 : -1;
+
+  // Úhel "vodorovného" směru – respektuje natočení nulového bodu
+  const hAngle = (state.nullPointActive && state.nullPointAngle)
+    ? (state.nullPointAngle * Math.PI / 180) : 0;
+  const cosH = Math.cos(hAngle);
+  const sinH = Math.sin(hAngle);
+  // Zachovat původní směr podél osy
+  const projDir = (ls.seg.x2 - ls.seg.x1) * cosH + (ls.seg.y2 - ls.seg.y1) * sinH;
+  const sign = projDir >= 0 ? 1 : -1;
 
   pushUndo();
   let movedEnd;
   if (d1 <= d2) {
-    // P1 je kotva, P2 se posune
-    ls.setP2(ls.seg.x1 + sign * len, ls.seg.y1);
+    // P1 je kotva, P2 se posune podél osy
+    ls.setP2(ls.seg.x1 + sign * len * cosH, ls.seg.y1 + sign * len * sinH);
     movedEnd = 'p2';
   } else {
     // P2 je kotva, P1 se posune
-    ls.setP1(ls.seg.x2 - sign * len, ls.seg.y2);
+    ls.setP1(ls.seg.x2 - sign * len * cosH, ls.seg.y2 - sign * len * sinH);
     movedEnd = 'p1';
   }
 
@@ -75,7 +82,12 @@ export function horizontalFromSelection() {
   const len = Math.hypot(ls.seg.x2 - ls.seg.x1, ls.seg.y2 - ls.seg.y1);
   if (len < 1e-9) { showToast("Segment má nulovou délku"); return true; }
 
-  const sign = (ls.seg.x2 - ls.seg.x1) >= 0 ? 1 : -1;
+  const hAngle2 = (state.nullPointActive && state.nullPointAngle)
+    ? (state.nullPointAngle * Math.PI / 180) : 0;
+  const cosH2 = Math.cos(hAngle2);
+  const sinH2 = Math.sin(hAngle2);
+  const projDir2 = (ls.seg.x2 - ls.seg.x1) * cosH2 + (ls.seg.y2 - ls.seg.y1) * sinH2;
+  const sign = projDir2 >= 0 ? 1 : -1;
 
   showEndpointChoiceDialog("Vodorovnost – výběr kotvy", ls.seg,
     "Kotva P1 (fixní)", "Kotva P2 (fixní)",
@@ -83,10 +95,10 @@ export function horizontalFromSelection() {
       pushUndo();
       let movedEnd;
       if (end === 1) {
-        ls.setP2(ls.seg.x1 + sign * len, ls.seg.y1);
+        ls.setP2(ls.seg.x1 + sign * len * cosH2, ls.seg.y1 + sign * len * sinH2);
         movedEnd = 'p2';
       } else {
-        ls.setP1(ls.seg.x2 - sign * len, ls.seg.y2);
+        ls.setP1(ls.seg.x2 - sign * len * cosH2, ls.seg.y2 - sign * len * sinH2);
         movedEnd = 'p1';
       }
       setConstraint(obj, ls.segIdx, 'horizontal');

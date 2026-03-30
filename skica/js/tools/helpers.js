@@ -113,32 +113,35 @@ export function propagateConstraints(obj, segIdx, movedEnd) {
   }
 }
 
+/** Vrátí úhel vodorovné/svislé osy s ohledem na natočení nulového bodu. */
+function _constraintAngle(type) {
+  const offset = (state.nullPointActive && state.nullPointAngle)
+    ? (state.nullPointAngle * Math.PI / 180) : 0;
+  return type === 'horizontal' ? offset : offset + Math.PI / 2;
+}
+
 /** Vynucení vazby; P1 je kotva, P2 se přizpůsobí. */
 function _enforceConstraint(anchor, target, type) {
   const len = Math.hypot(target.x - anchor.x, target.y - anchor.y);
-  if (type === 'horizontal') {
-    const sign = (target.x - anchor.x) >= 0 ? 1 : -1;
-    target.x = anchor.x + sign * len;
-    target.y = anchor.y;
-  } else if (type === 'vertical') {
-    const sign = (target.y - anchor.y) >= 0 ? 1 : -1;
-    target.x = anchor.x;
-    target.y = anchor.y + sign * len;
-  }
+  const angle = _constraintAngle(type);
+  const cosA = Math.cos(angle);
+  const sinA = Math.sin(angle);
+  const proj = (target.x - anchor.x) * cosA + (target.y - anchor.y) * sinA;
+  const sign = proj >= 0 ? 1 : -1;
+  target.x = anchor.x + sign * len * cosA;
+  target.y = anchor.y + sign * len * sinA;
 }
 
 /** Vynucení vazby; P2 je kotva, P1 se přizpůsobí. */
 function _enforceConstraintReverse(target, anchor, type) {
   const len = Math.hypot(target.x - anchor.x, target.y - anchor.y);
-  if (type === 'horizontal') {
-    const sign = (target.x - anchor.x) >= 0 ? 1 : -1;
-    target.x = anchor.x + sign * len;
-    target.y = anchor.y;
-  } else if (type === 'vertical') {
-    const sign = (target.y - anchor.y) >= 0 ? 1 : -1;
-    target.x = anchor.x;
-    target.y = anchor.y + sign * len;
-  }
+  const angle = _constraintAngle(type);
+  const cosA = Math.cos(angle);
+  const sinA = Math.sin(angle);
+  const proj = (target.x - anchor.x) * cosA + (target.y - anchor.y) * sinA;
+  const sign = proj >= 0 ? 1 : -1;
+  target.x = anchor.x + sign * len * cosA;
+  target.y = anchor.y + sign * len * sinA;
 }
 
 // ── Sdílená analýza výběru pro *FromSelection funkce ──
