@@ -13,10 +13,11 @@ import { showNumericalInputDialog, showPolarDrawingDialog, showCircleRadiusDialo
 import { saveProject, showExportImageDialog, showProjectsDialog, showSaveAsDialog } from './storage.js';
 import { bulgeToArc, deepClone } from './utils.js';
 import { bridge } from './bridge.js';
-import { handleTangentClick, handleOffsetClick, handleTrimClick, handleExtendClick, handleFilletClick, handlePerpClick, handleHorizontalClick, handleParallelClick, handleDimensionClick, handleSnapPointClick, handleMoveClick, handleLineClick, handleMeasureClick, handleCircleClick, handleArcClick, handleRectClick, handlePolylineClick, measureSelection } from './tools/index.js';
+import { handleTangentClick, tangentFromSelection, handleOffsetClick, handleTrimClick, handleExtendClick, handleFilletClick, handlePerpClick, handleHorizontalClick, handleParallelClick, handleDimensionClick, handleSnapPointClick, handleMoveClick, handleLineClick, handleMeasureClick, handleCircleClick, handleArcClick, handleRectClick, handlePolylineClick, measureSelection } from './tools/index.js';
 
 // Registrace measureSelection na bridge (aby ui.js nemusel importovat přímo – kruhová závislost)
 bridge.measureSelection = measureSelection;
+bridge.tangentFromSelection = tangentFromSelection;
 
 let isPanning = false;
 let panStartX, panStartY, panStartPX, panStartPY;
@@ -154,6 +155,7 @@ document.addEventListener("keydown", (e) => {
     // Exit segment editing mode first
     if (state.selectedSegment !== null) {
       state.selectedSegment = null;
+      state._selectedSegmentObjIdx = null;
       updateProperties();
       renderAll();
       return;
@@ -182,6 +184,7 @@ document.addEventListener("keydown", (e) => {
     if (mTempIdx !== -1) state.objects.splice(mTempIdx, 1);
     state.selected = null;
     state.selectedSegment = null;
+    state._selectedSegmentObjIdx = null;
     state.multiSelected.clear();
     state.selectedPoint = null;
     updateProperties();
@@ -679,6 +682,7 @@ function deleteSelected() {
     }
     state.selected = null;
     state.selectedSegment = null;
+    state._selectedSegmentObjIdx = null;
     state.multiSelected.clear();
     state.selectedPoint = null;
     updateObjectList();
@@ -700,6 +704,7 @@ function deleteSelected() {
   state.objects.splice(state.selected, 1);
   state.selected = null;
   state.selectedSegment = null;
+  state._selectedSegmentObjIdx = null;
   state.selectedPoint = null;
   updateObjectList();
   updateProperties();
@@ -725,6 +730,7 @@ function deleteSelectedSegment() {
     state.objects.splice(state.selected, 1);
     state.selected = null;
     state.selectedSegment = null;
+    state._selectedSegmentObjIdx = null;
   } else if (obj.closed) {
     // Closed polyline: remove vertex at segIdx+1 (or segIdx for last segment), open the polyline
     // Remove the end vertex of this segment, reorder so segIdx+1 becomes the break point
@@ -740,6 +746,7 @@ function deleteSelectedSegment() {
       obj.bulges = newBulges;
     }
     state.selectedSegment = null;
+    state._selectedSegmentObjIdx = null;
   } else {
     // Open polyline: remove vertex to delete segment
     if (segIdx === 0) {
@@ -777,6 +784,7 @@ function deleteSelectedSegment() {
       }
     }
     state.selectedSegment = null;
+    state._selectedSegmentObjIdx = null;
   }
 
   updateObjectList();
@@ -836,6 +844,7 @@ function explodeSelectedPolyline() {
   state.objects.splice(state.selected, 1);
   state.selected = null;
   state.selectedSegment = null;
+  state._selectedSegmentObjIdx = null;
 
   // Add new individual objects (without pushUndo, already done)
   for (const no of newObjects) {
@@ -983,6 +992,7 @@ drawCanvas.addEventListener("dblclick", (e) => {
       state.multiSelected.clear();
       state.selectedPoint = null;
       state.selectedSegment = findSegmentAt(state.objects[idx], wx, wy);
+      state._selectedSegmentObjIdx = idx;
       updateProperties();
       updateObjectList();
       renderAll();

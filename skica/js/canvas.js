@@ -88,11 +88,13 @@ export function snapPt(wx, wy) {
       objY = 0;
     }
 
+    const midThreshold = threshold * 0.3;  // Midpoints: ~30% of normal threshold
     for (const obj of state.objects) {
       const pts = getObjectSnapPoints(obj);
       for (const p of pts) {
         const d = Math.hypot(p.x - wx, p.y - wy);
-        if (d < threshold && d < objD) {
+        const t = p.mid ? midThreshold : threshold;
+        if (d < t && d < objD) {
           objD = d;
           objX = p.x;
           objY = p.y;

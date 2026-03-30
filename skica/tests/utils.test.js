@@ -232,13 +232,13 @@ describe('getObjectSnapPoints', () => {
     expect(pts).toHaveLength(3);
     expect(pts[0]).toEqual({ x: 0, y: 0 });
     expect(pts[1]).toEqual({ x: 10, y: 0 });
-    expect(pts[2]).toEqual({ x: 5, y: 0 });
+    expect(pts[2]).toEqual({ x: 5, y: 0, mid: true });
   });
 
   it('konstrukční čára → 3 snap points', () => {
     const pts = getObjectSnapPoints({ type: 'constr', x1: 0, y1: 0, x2: 6, y2: 8 });
     expect(pts).toHaveLength(3);
-    expect(pts[2]).toEqual({ x: 3, y: 4 }); // midpoint
+    expect(pts[2]).toEqual({ x: 3, y: 4, mid: true }); // midpoint
   });
 
   it('kružnice → 5 snap points (střed + 4 kardinální)', () => {
@@ -267,7 +267,7 @@ describe('getObjectSnapPoints', () => {
   it('obdélník → 5 snap points (4 rohy + střed)', () => {
     const pts = getObjectSnapPoints({ type: 'rect', x1: 0, y1: 0, x2: 10, y2: 6 });
     expect(pts).toHaveLength(5);
-    expect(pts[4]).toEqual({ x: 5, y: 3 }); // center
+    expect(pts[4]).toEqual({ x: 5, y: 3, mid: true }); // center
   });
 
   it('polyline (otevřená, 3 body) → vrcholy + midpoints', () => {
@@ -279,8 +279,8 @@ describe('getObjectSnapPoints', () => {
     });
     // 3 vertices + 2 midpoints = 5
     expect(pts).toHaveLength(5);
-    expect(pts[3]).toEqual({ x: 5, y: 0 });   // mid seg 0
-    expect(pts[4]).toEqual({ x: 10, y: 5 });  // mid seg 1
+    expect(pts[3]).toEqual({ x: 5, y: 0, mid: true });   // mid seg 0
+    expect(pts[4]).toEqual({ x: 10, y: 5, mid: true });  // mid seg 1
   });
 
   it('neznámý typ → prázdné pole', () => {

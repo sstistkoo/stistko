@@ -292,7 +292,7 @@ function renderObjects() {
         drawRect(obj);
         break;
       case "polyline":
-        drawPolyline(obj, isSel);
+        drawPolyline(obj, isSel, obj.color || layerColor, idx);
         break;
     }
     ctx.setLineDash([]);
@@ -1039,14 +1039,15 @@ export function drawRect(obj) {
 }
 
 /** @param {import('./types.js').PolylineObject} obj */
-export function drawPolyline(obj, isSel) {
+export function drawPolyline(obj, isSel, normalColor, objIdx) {
   const n = obj.vertices.length;
   if (n < 2) return;
   const segCount = obj.closed ? n : n - 1;
   const selSeg = state.selectedSegment;
-  const hasSelSeg = isSel && selSeg !== null && selSeg >= 0 && selSeg < segCount;
+  const hasSelSeg = isSel && selSeg !== null && selSeg >= 0 && selSeg < segCount
+    && state._selectedSegmentObjIdx === objIdx;
 
-  // Save current styles for non-selected segments
+  // Save current styles
   const baseStroke = ctx.strokeStyle;
   const baseWidth = ctx.lineWidth;
 
@@ -1057,13 +1058,13 @@ export function drawPolyline(obj, isSel) {
     const [sx1, sy1] = worldToScreen(p1.x, p1.y);
     const [sx2, sy2] = worldToScreen(p2.x, p2.y);
 
-    // Highlight selected segment
+    // When a segment is selected: selected segment = white, rest = normal color
     if (hasSelSeg && i === selSeg) {
-      ctx.strokeStyle = COLORS.delete;  // Pink for selected segment
-      ctx.lineWidth = 3.5;
+      ctx.strokeStyle = COLORS.selected;  // White for selected segment
+      ctx.lineWidth = LINE_WIDTH_SELECTED;
     } else if (hasSelSeg) {
-      ctx.strokeStyle = baseStroke;
-      ctx.lineWidth = baseWidth;
+      ctx.strokeStyle = normalColor || COLORS.primary;
+      ctx.lineWidth = LINE_WIDTH;
     }
 
     if (b === 0) {
@@ -1091,9 +1092,13 @@ export function drawPolyline(obj, isSel) {
   for (let vi = 0; vi < n; vi++) {
     const v = obj.vertices[vi];
     const [sx, sy] = worldToScreen(v.x, v.y);
-    // Highlight vertices of selected segment
+    // Highlight vertices of selected segment in white, others in normal color
     const isSegVertex = hasSelSeg && (vi === selSeg || vi === (selSeg + 1) % n);
-    ctx.fillStyle = isSegVertex ? COLORS.delete : ctx.strokeStyle;
+    if (hasSelSeg) {
+      ctx.fillStyle = isSegVertex ? COLORS.selected : (normalColor || COLORS.primary);
+    } else {
+      ctx.fillStyle = baseStroke;
+    }
     ctx.beginPath();
     ctx.arc(sx, sy, isSegVertex ? 4.5 : 2.5, 0, Math.PI * 2);
     ctx.fill();

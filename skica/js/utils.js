@@ -166,7 +166,7 @@ export function getObjectSnapPoints(obj) {
       return [
         { x: obj.x1, y: obj.y1 },
         { x: obj.x2, y: obj.y2 },
-        { x: (obj.x1 + obj.x2) / 2, y: (obj.y1 + obj.y2) / 2 },
+        { x: (obj.x1 + obj.x2) / 2, y: (obj.y1 + obj.y2) / 2, mid: true },
       ];
     case "circle":
       return [
@@ -194,11 +194,11 @@ export function getObjectSnapPoints(obj) {
         { x: obj.x2, y: obj.y1 },
         { x: obj.x2, y: obj.y2 },
         { x: obj.x1, y: obj.y2 },
-        { x: (obj.x1 + obj.x2) / 2, y: (obj.y1 + obj.y2) / 2 },
+        { x: (obj.x1 + obj.x2) / 2, y: (obj.y1 + obj.y2) / 2, mid: true },
       ];
     case "polyline": {
       const pts = obj.vertices.map(v => ({ x: v.x, y: v.y }));
-      // Midpoints of each segment
+      // Midpoints of each segment (tagged with mid flag)
       const n = obj.vertices.length;
       const segCount = obj.closed ? n : n - 1;
       for (let i = 0; i < segCount; i++) {
@@ -206,7 +206,7 @@ export function getObjectSnapPoints(obj) {
         const p2 = obj.vertices[(i + 1) % n];
         const b = obj.bulges[i] || 0;
         if (b === 0) {
-          pts.push({ x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2 });
+          pts.push({ x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2, mid: true });
         } else {
           const arc = bulgeToArc(p1, p2, b);
           if (arc) {
@@ -218,9 +218,9 @@ export function getObjectSnapPoints(obj) {
             } else {
               ma = arc.startAngle + normalizeAngleDiff(arc.endAngle - arc.startAngle, false) / 2;
             }
-            pts.push({ x: arc.cx + arc.r * Math.cos(ma), y: arc.cy + arc.r * Math.sin(ma) });
+            pts.push({ x: arc.cx + arc.r * Math.cos(ma), y: arc.cy + arc.r * Math.sin(ma), mid: true });
           } else {
-            pts.push({ x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2 });
+            pts.push({ x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2, mid: true });
           }
         }
       }

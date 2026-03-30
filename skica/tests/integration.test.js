@@ -92,7 +92,7 @@ vi.mock('../js/storage.js', () => ({
 
 // Mock tools/index.js – handlry přesměrovávají na mockované funkce
 vi.mock('../js/tools/index.js', () => ({
-  handleTangentClick: vi.fn(), handleOffsetClick: vi.fn(),
+  handleTangentClick: vi.fn(), tangentFromSelection: vi.fn(() => false), handleOffsetClick: vi.fn(),
   handleTrimClick: vi.fn(), handleExtendClick: vi.fn(),
   handleFilletClick: vi.fn(), handlePerpClick: vi.fn(),
   handleHorizontalClick: vi.fn(), handleParallelClick: vi.fn(),

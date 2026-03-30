@@ -36,6 +36,7 @@ export const state = {
   objects: [],
   selected: null,
   selectedSegment: null,
+  _selectedSegmentObjIdx: null,
   multiSelected: new Set(),
   selectedPoint: null,  // [{x, y}, ...] – vybrané průsečíky/body (pole)
   tool: "select",

@@ -75,6 +75,7 @@ export function updateObjectList() {
         state.selected = idx;
       }
       state.selectedSegment = null;
+      state._selectedSegmentObjIdx = null;
       updateObjectList();
       updateProperties();
       renderAll();
@@ -382,6 +383,7 @@ export function updateProperties() {
           btn.style.cssText = `cursor:pointer;background:${COLORS.surfaceHover};color:${COLORS.text};border:1px solid ${COLORS.border};border-radius:4px;padding:4px 8px;width:100%`;
           btn.addEventListener("click", () => {
             state.selectedSegment = null;
+            state._selectedSegmentObjIdx = null;
             updateProperties();
             renderAll();
           });
@@ -437,6 +439,7 @@ export function updateProperties() {
           tr.appendChild(tdVal);
           tr.addEventListener("click", () => {
             state.selectedSegment = i;
+            state._selectedSegmentObjIdx = state.selected;
             updateProperties();
             renderAll();
           });
@@ -631,6 +634,8 @@ document.querySelectorAll("[data-tool]").forEach((btn) => {
   btn.addEventListener("click", () => {
     // Měření: pokud je výběr → okamžitě změřit
     if (btn.dataset.tool === 'measure' && bridge.measureSelection && bridge.measureSelection()) return;
+    // Tečna: pokud je výběr → okamžitě provést
+    if (btn.dataset.tool === 'tangent' && bridge.tangentFromSelection && bridge.tangentFromSelection()) return;
     setTool(btn.dataset.tool);
   });
 });

@@ -15,4 +15,5 @@ export const bridge = {
   renderAll: null,
   resetHint: null,
   measureSelection: null,
+  tangentFromSelection: null,
 };
