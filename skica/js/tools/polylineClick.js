@@ -1,6 +1,7 @@
 import { state } from '../state.js';
 import { renderAll } from '../render.js';
 import { setHint } from '../ui.js';
+import { showPolylineSegmentDialog } from '../dialogs/postDrawDialog.js';
 
 /**
  * @param {number} wx
@@ -19,5 +20,7 @@ export function handlePolylineClick(wx, wy) {
     state._polylineBulges.push(0);
     setHint(`Bod ${state.tempPoints.length} přidán (Enter = dokončit, Shift+Enter = uzavřít, B = oblouk)`);
     renderAll();
+    // Show segment dialog for editing + finish/close options
+    showPolylineSegmentDialog();
   }
 }

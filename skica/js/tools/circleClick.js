@@ -1,6 +1,7 @@
 import { state, showToast } from '../state.js';
 import { addObject } from '../objects.js';
 import { startDrawing, finishDrawing } from './helpers.js';
+import { showPostDrawCircleDialog } from '../dialogs/postDrawDialog.js';
 
 /**
  * @param {number} wx
@@ -17,7 +18,7 @@ export function handleCircleClick(wx, wy) {
       finishDrawing();
       return;
     }
-    addObject({
+    const circObj = addObject({
       type: "circle",
       cx: cp.x,
       cy: cp.y,
@@ -25,5 +26,6 @@ export function handleCircleClick(wx, wy) {
       name: `Kružnice ${state.nextId}`,
     });
     finishDrawing();
+    if (circObj) showPostDrawCircleDialog(circObj);
   }
 }

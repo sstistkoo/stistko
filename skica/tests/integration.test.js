@@ -90,6 +90,16 @@ vi.mock('../js/storage.js', () => ({
   showProjectsDialog: vi.fn(), showSaveAsDialog: vi.fn(),
 }));
 
+// Mock postDrawDialog.js
+vi.mock('../js/dialogs/postDrawDialog.js', () => ({
+  showPostDrawPointDialog: vi.fn(),
+  showPostDrawLineDialog: vi.fn(),
+  showPostDrawCircleDialog: vi.fn(),
+  showPostDrawRectDialog: vi.fn(),
+  showPostDrawPolylineDialog: vi.fn(),
+  showPolylineSegmentDialog: vi.fn(),
+}));
+
 // Mock tools/index.js – handlry přesměrovávají na mockované funkce
 vi.mock('../js/tools/index.js', () => ({
   handleTangentClick: vi.fn(), tangentFromSelection: vi.fn(() => false),

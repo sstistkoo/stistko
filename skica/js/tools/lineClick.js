@@ -1,6 +1,7 @@
 import { state, showToast } from '../state.js';
 import { addObject } from '../objects.js';
 import { startDrawing, finishDrawing } from './helpers.js';
+import { showPostDrawLineDialog } from '../dialogs/postDrawDialog.js';
 
 /**
  * @param {number} wx
@@ -16,7 +17,7 @@ export function handleLineClick(wx, wy) {
       finishDrawing();
       return;
     }
-    addObject({
+    const lineObj = addObject({
       type: state.tool === "constr" ? "constr" : "line",
       x1: tp.x,
       y1: tp.y,
@@ -26,5 +27,6 @@ export function handleLineClick(wx, wy) {
       dashed: state.tool === "constr",
     });
     finishDrawing();
+    if (lineObj) showPostDrawLineDialog(lineObj);
   }
 }

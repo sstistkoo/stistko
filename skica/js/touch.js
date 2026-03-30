@@ -13,6 +13,7 @@ import { updateAssociativeDimensions } from './dialogs/dimension.js';
 import { toolLabel } from './utils.js';
 import { showNumericalInputDialog, showMobileEditDialog } from './dialogs.js';
 import { measureSelection } from './tools/index.js';
+import { showPostDrawPolylineDialog } from './dialogs/postDrawDialog.js';
 import { bridge } from './bridge.js';
 
 // ── Mobile: detekce ──
@@ -231,7 +232,7 @@ polylineConfirmBtn.addEventListener("click", (e) => {
   if (!state.drawing || state.tool !== 'polyline' || state.tempPoints.length < 2) return;
   const bulges = state._polylineBulges || [];
   while (bulges.length < state.tempPoints.length - 1) bulges.push(0);
-  addObject({
+  const plObj = addObject({
     type: 'polyline',
     vertices: state.tempPoints.slice(),
     bulges: bulges.slice(0, state.tempPoints.length - 1),
@@ -245,6 +246,7 @@ polylineConfirmBtn.addEventListener("click", (e) => {
   updatePolylineButtons();
   showToast('Kontura dokončena');
   renderAll();
+  if (plObj) showPostDrawPolylineDialog(plObj);
 });
 
 polylineCloseBtn.addEventListener("click", (e) => {
@@ -252,7 +254,7 @@ polylineCloseBtn.addEventListener("click", (e) => {
   if (!state.drawing || state.tool !== 'polyline' || state.tempPoints.length < 2) return;
   const bulges = state._polylineBulges || [];
   while (bulges.length < state.tempPoints.length) bulges.push(0);
-  addObject({
+  const plObj = addObject({
     type: 'polyline',
     vertices: state.tempPoints.slice(),
     bulges: bulges.slice(0, state.tempPoints.length),
@@ -266,6 +268,7 @@ polylineCloseBtn.addEventListener("click", (e) => {
   updatePolylineButtons();
   showToast('Kontura uzavřena');
   renderAll();
+  if (plObj) showPostDrawPolylineDialog(plObj);
 });
 
 // ── Mobile: Undo tlačítko ──

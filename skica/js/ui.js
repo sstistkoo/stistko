@@ -284,22 +284,6 @@ export function updateProperties() {
   const tbody = document.querySelector("#propTable tbody");
   tbody.innerHTML = "";
 
-  // Multi-select: zobrazit přehled
-  if (state.multiSelected.size > 0) {
-    const count = state.multiSelected.size;
-    const types = {};
-    for (const i of state.multiSelected) {
-      const obj = state.objects[i];
-      if (obj) types[obj.type] = (types[obj.type] || 0) + 1;
-    }
-    const summary = Object.entries(types).map(([t, c]) => `${t}: ${c}`).join(', ');
-    tbody.innerHTML =
-      `<tr><td colspan="2" style="color:${COLORS.selected};font-weight:bold">${count} objektů vybráno</td></tr>` +
-      `<tr><td colspan="2" style="color:${COLORS.textMuted}">${summary}</td></tr>` +
-      `<tr><td colspan="2" style="color:${COLORS.textMuted}">Klik = přidat, znovu = odebrat</td></tr>`;
-    return;
-  }
-
   if (state.selected === null) {
     tbody.innerHTML =
       `<tr><td colspan="2" style="color:${COLORS.textMuted}">Není vybrán objekt</td></tr>`;
@@ -468,14 +452,144 @@ export function updateProperties() {
       addEditRow(V, obj.y, (v) => { obj.y = v; });
       break;
     case "line":
-    case "constr":
-      addEditRow(H + "1", obj.x1, (v) => { obj.x1 = v; });
-      addEditRow(V + "1", obj.y1, (v) => { obj.y1 = v; });
-      addEditRow(H + "2", obj.x2, (v) => { obj.x2 = v; });
-      addEditRow(V + "2", obj.y2, (v) => { obj.y2 = v; });
-      addInfoRow("Délka", Math.hypot(obj.x2 - obj.x1, obj.y2 - obj.y1).toFixed(3));
-      addInfoRow("Úhel", ((Math.atan2(obj.y2 - obj.y1, obj.x2 - obj.x1) * 180) / Math.PI).toFixed(2) + "°");
+    case "constr": {
+      function getPropAnchor() {
+        const r = tbody.querySelector('input[name="propAnchor"]:checked');
+        return r ? r.value : '1';
+      }
+
+      // Helper to create prop input, optionally with anchor radio
+      function makePropInput(label, value, decimals, radioVal) {
+        const tr = document.createElement("tr");
+        const tdLabel = document.createElement("td");
+        if (radioVal) {
+          tdLabel.style.whiteSpace = "nowrap";
+          const lbl = document.createElement("label");
+          lbl.style.cssText = "display:inline-flex;align-items:center;gap:3px;cursor:pointer";
+          const radio = document.createElement("input");
+          radio.type = "radio";
+          radio.name = "propAnchor";
+          radio.value = radioVal;
+          radio.checked = radioVal === '1';
+          radio.style.cssText = "accent-color:#4a9dff;margin:0";
+          lbl.appendChild(radio);
+          lbl.appendChild(document.createTextNode("📌 " + label));
+          tdLabel.appendChild(lbl);
+        } else {
+          tdLabel.textContent = label;
+        }
+        const tdVal = document.createElement("td");
+        const input = document.createElement("input");
+        input.type = "text";
+        input.className = "prop-input";
+        input.value = parseFloat(value).toFixed(decimals !== undefined ? decimals : 3);
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") input.blur();
+          e.stopPropagation();
+        });
+        tdVal.appendChild(input);
+        tr.appendChild(tdLabel);
+        tr.appendChild(tdVal);
+        tbody.appendChild(tr);
+        return input;
+      }
+
+      const inpX1 = makePropInput(H + "1", obj.x1, 3, '1');
+      const inpY1 = makePropInput(V + "1", obj.y1);
+      const inpX2 = makePropInput(H + "2", obj.x2, 3, '2');
+      const inpY2 = makePropInput(V + "2", obj.y2);
+
+      function computeAngle() {
+        if (getPropAnchor() === '1') {
+          return (((Math.atan2(obj.y2 - obj.y1, obj.x2 - obj.x1) * 180) / Math.PI) + 360) % 360;
+        } else {
+          return (((Math.atan2(obj.y1 - obj.y2, obj.x1 - obj.x2) * 180) / Math.PI) + 360) % 360;
+        }
+      }
+
+      const inpLen = makePropInput("Délka", Math.hypot(obj.x2 - obj.x1, obj.y2 - obj.y1));
+      const inpAng = makePropInput("Úhel (°)", computeAngle(), 2);
+
+      // Sync: polar → coordinates
+      function syncFromPolar() {
+        const l = safeEvalMath(inpLen.value);
+        const a = safeEvalMath(inpAng.value);
+        if (!isFinite(l) || !isFinite(a)) return;
+        const rad = a * Math.PI / 180;
+        if (getPropAnchor() === '1') {
+          obj.x2 = obj.x1 + l * Math.cos(rad);
+          obj.y2 = obj.y1 + l * Math.sin(rad);
+          inpX2.value = obj.x2.toFixed(3);
+          inpY2.value = obj.y2.toFixed(3);
+        } else {
+          obj.x1 = obj.x2 + l * Math.cos(rad);
+          obj.y1 = obj.y2 + l * Math.sin(rad);
+          inpX1.value = obj.x1.toFixed(3);
+          inpY1.value = obj.y1.toFixed(3);
+        }
+      }
+
+      // Sync: coordinates → polar
+      function syncPolarFromObj() {
+        inpLen.value = Math.hypot(obj.x2 - obj.x1, obj.y2 - obj.y1).toFixed(3);
+        inpAng.value = computeAngle().toFixed(2);
+      }
+
+      // Wire coordinate inputs
+      inpX1.addEventListener("change", () => {
+        const v = safeEvalMath(inpX1.value);
+        if (isNaN(v)) return;
+        pushUndo(); obj.x1 = v;
+        syncPolarFromObj();
+        updateAssociativeDimensions(); renderAll();
+      });
+      inpY1.addEventListener("change", () => {
+        const v = safeEvalMath(inpY1.value);
+        if (isNaN(v)) return;
+        pushUndo(); obj.y1 = v;
+        syncPolarFromObj();
+        updateAssociativeDimensions(); renderAll();
+      });
+      inpX2.addEventListener("change", () => {
+        const v = safeEvalMath(inpX2.value);
+        if (isNaN(v)) return;
+        pushUndo(); obj.x2 = v;
+        syncPolarFromObj();
+        updateAssociativeDimensions(); renderAll();
+      });
+      inpY2.addEventListener("change", () => {
+        const v = safeEvalMath(inpY2.value);
+        if (isNaN(v)) return;
+        pushUndo(); obj.y2 = v;
+        syncPolarFromObj();
+        updateAssociativeDimensions(); renderAll();
+      });
+
+      // Wire polar inputs
+      inpLen.addEventListener("change", () => {
+        const v = safeEvalMath(inpLen.value);
+        if (isNaN(v)) return;
+        pushUndo();
+        syncFromPolar();
+        updateAssociativeDimensions(); renderAll();
+      });
+      inpAng.addEventListener("change", () => {
+        const v = safeEvalMath(inpAng.value);
+        if (isNaN(v)) return;
+        pushUndo();
+        syncFromPolar();
+        updateAssociativeDimensions(); renderAll();
+      });
+
+      // When anchor changes, update angle display
+      tbody.querySelectorAll('input[name="propAnchor"]').forEach(r => {
+        r.addEventListener("change", () => {
+          inpAng.value = computeAngle().toFixed(2);
+        });
+      });
+
       break;
+    }
     case "circle":
       addEditRow("Střed " + H, obj.cx, (v) => { obj.cx = v; });
       addEditRow("Střed " + V, obj.cy, (v) => { obj.cy = v; });
