@@ -10,7 +10,10 @@ import {
   findObjectAt, findSegmentAt, calculateAllIntersections,
   tangentsFromPointToCircle, tangentsTwoCircles,
   circlePositionsTangentToLine, circlePositionsTangentToTwoLines,
-  circlePositionsTangentToLineAndPoint, getPolylineSegmentAsLine
+  circlePositionsTangentToLineAndPoint, getPolylineSegmentAsLine,
+  circleThrough3Points, circleTangentToLineAndTwoPoints,
+  circleTangentToTwoLinesAndPoint, circleTangentToThreeLines,
+  circleTangentToCircleAndTwoPoints
 } from '../geometry.js';
 import { showTangentChoiceDialog, showTangentPositionDialog } from '../dialogs.js';
 
@@ -87,6 +90,87 @@ export function tangentFromSelection() {
   if (!hasSelection && !hasPoints) return false;
 
   const { circles, lines, points } = analyzeSelection();
+  const totalConstraints = lines.length + points.length + Math.max(0, circles.length - 1);
+
+  // ════════════════════════════════════════════════════════════════
+  // 3 vazby → změní se poloměr i pozice kružnice
+  // ════════════════════════════════════════════════════════════════
+
+  if (circles.length >= 1 && totalConstraints >= 3) {
+    const circ = circles[0]; // kružnice, která se změní
+    const otherCircles = circles.slice(1);
+    let positions = [];
+
+    if (lines.length >= 3) {
+      // 1 kružnice + 3 úsečky → tečná ke třem přímkám
+      positions = circleTangentToThreeLines(lines[0], lines[1], lines[2]);
+    } else if (lines.length === 2 && points.length >= 1) {
+      // 1 kružnice + 2 úsečky + 1 bod → tečná ke dvěma přímkám přes bod
+      positions = circleTangentToTwoLinesAndPoint(lines[0], lines[1], points[0].x, points[0].y);
+    } else if (lines.length === 1 && points.length >= 2) {
+      // 1 kružnice + 1 úsečka + 2 body → tečná k přímce přes 2 body
+      positions = circleTangentToLineAndTwoPoints(
+        lines[0].x1, lines[0].y1, lines[0].x2, lines[0].y2,
+        points[0].x, points[0].y, points[1].x, points[1].y
+      );
+    } else if (lines.length === 0 && points.length >= 3) {
+      // 1 kružnice + 3 body → opsaná kružnice
+      positions = circleThrough3Points(
+        points[0].x, points[0].y, points[1].x, points[1].y, points[2].x, points[2].y
+      );
+    } else if (otherCircles.length >= 1 && points.length >= 2) {
+      // 1 kružnice + 1 jiná kružnice + 2 body → tečná ke kružnici přes 2 body
+      const oc = otherCircles[0];
+      positions = circleTangentToCircleAndTwoPoints(
+        oc.cx, oc.cy, oc.r, points[0].x, points[0].y, points[1].x, points[1].y
+      );
+    }
+
+    if (positions.length > 0) {
+      showTangentPositionDialog(positions, state.objects[circ.idx], (chosenIdx) => {
+        pushUndo();
+        const obj = state.objects[circ.idx];
+        obj.cx = positions[chosenIdx].cx;
+        obj.cy = positions[chosenIdx].cy;
+        obj.r = positions[chosenIdx].r;
+        calculateAllIntersections();
+        renderAll();
+        showToast("Kružnice upravena tečně ke třem objektům ✓");
+      });
+      return true;
+    }
+    if (totalConstraints >= 3 && positions.length === 0) {
+      showToast("Tečnou kružnici ke třem objektům nelze najít");
+      return true;
+    }
+  }
+
+  // ════════════════════════════════════════════════════════════════
+  // 3 body bez kružnice → vytvořit opsanou kružnici
+  // ════════════════════════════════════════════════════════════════
+  if (circles.length === 0 && lines.length === 0 && points.length >= 3) {
+    const positions = circleThrough3Points(
+      points[0].x, points[0].y, points[1].x, points[1].y, points[2].x, points[2].y
+    );
+    if (positions.length === 0) {
+      showToast("Body jsou kolineární, kružnice neexistuje");
+      return true;
+    }
+    pushUndo();
+    const p = positions[0];
+    addObject({
+      type: 'circle', cx: p.cx, cy: p.cy, r: p.r,
+      name: `Kružnice ${state.nextId}`,
+    });
+    calculateAllIntersections();
+    renderAll();
+    showToast("Vytvořena opsaná kružnice přes 3 body ✓");
+    return true;
+  }
+
+  // ════════════════════════════════════════════════════════════════
+  // 2 vazby → stávající logika (přesun bez změny poloměru)
+  // ════════════════════════════════════════════════════════════════
 
   // ── Kružnice + Úsečka + Bod → přesun kružnice tečně k úsečce a přes bod ──
   if (circles.length === 1 && lines.length >= 1 && points.length >= 1) {

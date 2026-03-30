@@ -63,7 +63,8 @@ export function showTangentPositionDialog(positions, circle, callback) {
   const btns = sorted.map((s, i) => {
     const p = positions[s.idx];
     const label = i === 0 ? "Nejbližší pozice" : `Pozice ${i + 1}`;
-    return `<button class="btn-ok tangent-pos" data-idx="${s.idx}" style="width:100%">${label} (${p.cx.toFixed(1)}, ${p.cy.toFixed(1)})</button>`;
+    const rInfo = p.r !== undefined ? ` r=${p.r.toFixed(2)}` : '';
+    return `<button class="btn-ok tangent-pos" data-idx="${s.idx}" style="width:100%">${label} (${p.cx.toFixed(1)}, ${p.cy.toFixed(1)}${rInfo})</button>`;
   }).join("");
   const overlay = makeInputOverlay(`
     <div class="input-dialog">
