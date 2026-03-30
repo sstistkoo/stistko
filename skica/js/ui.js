@@ -315,6 +315,7 @@ export function updateProperties() {
       if (e.key === "Enter") input.blur();
       e.stopPropagation();
     });
+    input.addEventListener("focus", () => input.select());
     tdVal.appendChild(input);
     tr.appendChild(tdLabel);
     tr.appendChild(tdVal);
@@ -348,6 +349,7 @@ export function updateProperties() {
       onChange(input.value);
       updateObjectList();
     });
+    input.addEventListener("focus", () => input.select());
     input.addEventListener("keydown", (e) => {
       if (e.key === "Enter") input.blur();
       e.stopPropagation();
@@ -484,6 +486,7 @@ export function updateProperties() {
           if (e.key === "Enter") input.blur();
           e.stopPropagation();
         });
+        input.addEventListener("focus", () => input.select());
         tdVal.appendChild(input);
         tr.appendChild(tdLabel);
         tr.appendChild(tdVal);
@@ -635,6 +638,7 @@ export function updateProperties() {
           if (e.key === "Enter") input.blur();
           e.stopPropagation();
         });
+        input.addEventListener("focus", () => input.select());
         tdVal.appendChild(input);
         tr.appendChild(tdLabel);
         tr.appendChild(tdVal);
@@ -648,6 +652,20 @@ export function updateProperties() {
       const rY2 = makeRectInput(V + "2", obj.y2);
       const rW = makeRectInput("Šířka", Math.abs(obj.x2 - obj.x1));
       const rH = makeRectInput("Výška", Math.abs(obj.y2 - obj.y1));
+
+      // Rotation pivot selector
+      {
+        const tr = document.createElement("tr");
+        const td = document.createElement("td");
+        td.colSpan = 2;
+        td.innerHTML = `<div class="anchor-radio-row" style="margin-top:4px">
+          <span>Otáčet kolem:</span>
+          <label><input type="radio" name="propRotPivot" value="anchor" checked> 📌 Fixní</label>
+          <label><input type="radio" name="propRotPivot" value="center"> ⊕ Střed</label>
+        </div>`;
+        tr.appendChild(td);
+        tbody.appendChild(tr);
+      }
       const rAng = makeRectInput("Úhel (°)", ((obj.rotation || 0) * 180 / Math.PI), 2);
 
       // Sync: width/height → coordinates
@@ -722,12 +740,33 @@ export function updateProperties() {
         updateAssociativeDimensions(); renderAll();
       });
 
-      // Wire angle (rotation)
+      // Wire angle (rotation) around selected pivot
       rAng.addEventListener("change", () => {
         const a = safeEvalMath(rAng.value);
         if (isNaN(a)) return;
         pushUndo();
-        obj.rotation = a * Math.PI / 180;
+        const newRot = a * Math.PI / 180;
+        const oldRot = obj.rotation || 0;
+        const pivotSel = tbody.querySelector('input[name="propRotPivot"]:checked');
+        const pivotMode = pivotSel ? pivotSel.value : 'anchor';
+
+        if (pivotMode === 'center') {
+          // Rotate around center – coords stay the same
+          obj.rotation = newRot;
+        } else {
+          // Rotate around fixed anchor point
+          const cornersOld = getRectCorners(obj);
+          const anchorIdx = getRectAnchor() === '1' ? 0 : 2;
+          const pivot = cornersOld[anchorIdx];
+          obj.rotation = newRot;
+          const cornersNew = getRectCorners(obj);
+          const newPivot = cornersNew[anchorIdx];
+          // Shift base coords so the anchor stays in place
+          const dx = pivot.x - newPivot.x;
+          const dy = pivot.y - newPivot.y;
+          obj.x1 += dx; obj.y1 += dy;
+          obj.x2 += dx; obj.y2 += dy;
+        }
         updateAssociativeDimensions(); renderAll();
         updateProperties();
       });
