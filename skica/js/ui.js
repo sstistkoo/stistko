@@ -717,17 +717,37 @@ document.getElementById("btnAngleSnap").addEventListener("contextmenu", (e) => {
   showAngleSnapDialog();
 });
 
-// ── Kóty tlačítko ──
+// ── Kóty tlačítko (3 stavy: all → intersections → none) ──
+const _dimsLabels = { all: '📐 Vše', intersections: '📐 Průsečíky', none: '📐 Skryté' };
 /** Aktualizuje stav tlačítka kót. */
 export function updateDimsBtn() {
-  document
-    .getElementById("btnDims")
-    .classList.toggle("active", state.showDimensions);
+  const btn = document.getElementById("btnDims");
+  btn.classList.toggle("active", state.showDimensions !== 'none');
+  btn.textContent = _dimsLabels[state.showDimensions] || _dimsLabels.all;
 }
 
 document.getElementById("btnDims").addEventListener("click", () => {
-  state.showDimensions = !state.showDimensions;
+  // Cyklus: all → intersections → none → all
+  const cycle = { all: 'intersections', intersections: 'none', none: 'all' };
+  state.showDimensions = cycle[state.showDimensions] || 'all';
+  const labels = { all: 'Kóty: vše', intersections: 'Kóty: pouze průsečíky', none: 'Kóty: skryté' };
+  showToast(labels[state.showDimensions]);
   updateDimsBtn();
+  renderAll();
+});
+
+// ── Smazat kóty tlačítko ──
+document.getElementById("btnDeleteDims").addEventListener("click", () => {
+  const dimCount = state.objects.filter(o => o.isDimension || o.isCoordLabel).length;
+  if (dimCount === 0) {
+    showToast("Žádné kóty ke smazání");
+    return;
+  }
+  pushUndo();
+  state.objects = state.objects.filter(o => !o.isDimension && !o.isCoordLabel);
+  state.selected = null;
+  showToast(`Smazáno ${dimCount} kót`);
+  if (bridge.updateObjectList) bridge.updateObjectList();
   renderAll();
 });
 

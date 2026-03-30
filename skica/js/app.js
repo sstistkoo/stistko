@@ -72,7 +72,7 @@ async function tryAutoLoad() {
 setInterval(() => {
   if (state.objects.length > 0) {
     const data = {
-      version: 1.1,
+      version: 1.2,
       objects: state.objects,
       intersections: state.intersections,
       nextId: state.nextId,
@@ -154,7 +154,7 @@ document.addEventListener('click', (e) => {
 });
 
 console.log(
-  "%c SKICA – CAD pro CNC soustružník v1.1 (X,Z) ",
+  "%c SKICA – CAD pro CNC soustružník v1.2 (X,Z) ",
   "background:#89b4fa;color:#1e1e2e;font-size:18px;font-weight:bold;padding:4px 12px;border-radius:4px;",
 );
 console.log(

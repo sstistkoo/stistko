@@ -3,7 +3,7 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 import { MOBILE_BREAKPOINT, LONG_PRESS_MS, CROSSHAIR_OFFSET_Y, ZOOM_MIN, ZOOM_MAX, VIBRATE_LONG_PRESS, TOUCH_MOVE_THRESHOLD, PAN_ACTIVATE_THRESHOLD } from './constants.js';
-import { drawCanvas, screenToWorld, snapPt, autoCenterView, applyAngleSnap } from './canvas.js';
+import { drawCanvas, screenToWorld, snapPt, autoCenterView, applyAngleSnap, safeVibrate } from './canvas.js';
 import { state, undo, redo, showToast, toDisplayCoords, resetDrawingState, displayX, xPrefix, fmtStatusCoords } from './state.js';
 import { renderAll } from './render.js';
 import { moveObject, addObject } from './objects.js';
@@ -470,7 +470,7 @@ drawCanvas.addEventListener(
           !touchState.wasMultiTouch
         ) {
           touchState.precisionMode = true;
-          try { if (navigator.vibrate) navigator.vibrate(VIBRATE_LONG_PRESS); } catch (_) {}
+          try { safeVibrate(VIBRATE_LONG_PRESS); } catch (_) {}
           showPrecisionCrosshair({ clientX: savedClientX, clientY: savedClientY });
         }
       }, LONG_PRESS_MS);

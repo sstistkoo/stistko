@@ -78,7 +78,8 @@ export function findObjectAt(wx, wy) {
     const layer = state.layers.find(l => l.id === obj.layer);
     if (layer && (layer.locked || !layer.visible)) return;
     // Skip hidden dimension objects
-    if (!state.showDimensions && (obj.isDimension || obj.isCoordLabel)) return;
+    if (state.showDimensions === 'none' && (obj.isDimension || obj.isCoordLabel)) return;
+    if (state.showDimensions === 'intersections' && obj.isDimension) return;
 
     const d = distToObject(obj, wx, wy);
     if (d < closestDist) {

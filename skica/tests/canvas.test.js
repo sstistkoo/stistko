@@ -34,6 +34,8 @@ const { mockCanvas } = vi.hoisted(() => {
     body: { appendChild: () => {} },
     querySelector: () => null,
     querySelectorAll: () => [],
+    addEventListener: () => {},
+    removeEventListener: () => {},
   };
 
   globalThis.window = {
