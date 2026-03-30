@@ -401,10 +401,7 @@ export function updateProperties() {
           (2 * Math.PI * o.r).toFixed(3)
         ];
       case "rect":
-        return [
-          Math.abs(o.x2 - o.x1).toFixed(3),
-          Math.abs(o.y2 - o.y1).toFixed(3)
-        ];
+        return [];
       default:
         return [];
     }
@@ -604,14 +601,138 @@ export function updateProperties() {
       addEditRow("Start°", (obj.startAngle * 180 / Math.PI), (v) => { obj.startAngle = v * Math.PI / 180; }, "1");
       addEditRow("Konec°", (obj.endAngle * 180 / Math.PI), (v) => { obj.endAngle = v * Math.PI / 180; }, "1");
       break;
-    case "rect":
-      addEditRow(H + "1", obj.x1, (v) => { obj.x1 = v; });
-      addEditRow(V + "1", obj.y1, (v) => { obj.y1 = v; });
-      addEditRow(H + "2", obj.x2, (v) => { obj.x2 = v; });
-      addEditRow(V + "2", obj.y2, (v) => { obj.y2 = v; });
-      addInfoRow("Šířka", Math.abs(obj.x2 - obj.x1).toFixed(3));
-      addInfoRow("Výška", Math.abs(obj.y2 - obj.y1).toFixed(3));
+    case "rect": {
+      function getRectAnchor() {
+        const r = tbody.querySelector('input[name="propRectAnchor"]:checked');
+        return r ? r.value : '1';
+      }
+
+      function makeRectInput(label, value, decimals, radioVal) {
+        const tr = document.createElement("tr");
+        const tdLabel = document.createElement("td");
+        if (radioVal) {
+          tdLabel.style.whiteSpace = "nowrap";
+          const lbl = document.createElement("label");
+          lbl.style.cssText = "display:inline-flex;align-items:center;gap:3px;cursor:pointer";
+          const radio = document.createElement("input");
+          radio.type = "radio";
+          radio.name = "propRectAnchor";
+          radio.value = radioVal;
+          radio.checked = radioVal === '1';
+          radio.style.cssText = "accent-color:#4a9dff;margin:0";
+          lbl.appendChild(radio);
+          lbl.appendChild(document.createTextNode("\ud83d\udccc " + label));
+          tdLabel.appendChild(lbl);
+        } else {
+          tdLabel.textContent = label;
+        }
+        const tdVal = document.createElement("td");
+        const input = document.createElement("input");
+        input.type = "text";
+        input.className = "prop-input";
+        input.value = parseFloat(value).toFixed(decimals !== undefined ? decimals : 3);
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") input.blur();
+          e.stopPropagation();
+        });
+        tdVal.appendChild(input);
+        tr.appendChild(tdLabel);
+        tr.appendChild(tdVal);
+        tbody.appendChild(tr);
+        return input;
+      }
+
+      const rX1 = makeRectInput(H + "1", obj.x1, 3, '1');
+      const rY1 = makeRectInput(V + "1", obj.y1);
+      const rX2 = makeRectInput(H + "2", obj.x2, 3, '2');
+      const rY2 = makeRectInput(V + "2", obj.y2);
+      const rW = makeRectInput("Šířka", Math.abs(obj.x2 - obj.x1));
+      const rH = makeRectInput("Výška", Math.abs(obj.y2 - obj.y1));
+      const rAng = makeRectInput("Úhel (°)", ((obj.rotation || 0) * 180 / Math.PI), 2);
+
+      // Sync: width/height → coordinates
+      function syncRectFromWH() {
+        const wVal = safeEvalMath(rW.value);
+        const hVal = safeEvalMath(rH.value);
+        if (!isFinite(wVal) || !isFinite(hVal)) return;
+        if (getRectAnchor() === '1') {
+          const signW = obj.x2 >= obj.x1 ? 1 : -1;
+          const signH = obj.y2 >= obj.y1 ? 1 : -1;
+          obj.x2 = obj.x1 + signW * Math.abs(wVal);
+          obj.y2 = obj.y1 + signH * Math.abs(hVal);
+          rX2.value = obj.x2.toFixed(3);
+          rY2.value = obj.y2.toFixed(3);
+        } else {
+          const signW = obj.x1 <= obj.x2 ? -1 : 1;
+          const signH = obj.y1 <= obj.y2 ? -1 : 1;
+          obj.x1 = obj.x2 + signW * Math.abs(wVal);
+          obj.y1 = obj.y2 + signH * Math.abs(hVal);
+          rX1.value = obj.x1.toFixed(3);
+          rY1.value = obj.y1.toFixed(3);
+        }
+      }
+
+      // Sync: coordinates → width/height
+      function syncRectWHFromCoords() {
+        rW.value = Math.abs(obj.x2 - obj.x1).toFixed(3);
+        rH.value = Math.abs(obj.y2 - obj.y1).toFixed(3);
+      }
+
+      // Wire coordinate inputs
+      rX1.addEventListener("change", () => {
+        const v = safeEvalMath(rX1.value);
+        if (isNaN(v)) return;
+        pushUndo(); obj.x1 = v;
+        syncRectWHFromCoords();
+        updateAssociativeDimensions(); renderAll();
+      });
+      rY1.addEventListener("change", () => {
+        const v = safeEvalMath(rY1.value);
+        if (isNaN(v)) return;
+        pushUndo(); obj.y1 = v;
+        syncRectWHFromCoords();
+        updateAssociativeDimensions(); renderAll();
+      });
+      rX2.addEventListener("change", () => {
+        const v = safeEvalMath(rX2.value);
+        if (isNaN(v)) return;
+        pushUndo(); obj.x2 = v;
+        syncRectWHFromCoords();
+        updateAssociativeDimensions(); renderAll();
+      });
+      rY2.addEventListener("change", () => {
+        const v = safeEvalMath(rY2.value);
+        if (isNaN(v)) return;
+        pushUndo(); obj.y2 = v;
+        syncRectWHFromCoords();
+        updateAssociativeDimensions(); renderAll();
+      });
+
+      // Wire width/height inputs
+      rW.addEventListener("change", () => {
+        if (isNaN(safeEvalMath(rW.value))) return;
+        pushUndo();
+        syncRectFromWH();
+        updateAssociativeDimensions(); renderAll();
+      });
+      rH.addEventListener("change", () => {
+        if (isNaN(safeEvalMath(rH.value))) return;
+        pushUndo();
+        syncRectFromWH();
+        updateAssociativeDimensions(); renderAll();
+      });
+
+      // Wire angle (rotation)
+      rAng.addEventListener("change", () => {
+        const a = safeEvalMath(rAng.value);
+        if (isNaN(a)) return;
+        pushUndo();
+        obj.rotation = a * Math.PI / 180;
+        updateAssociativeDimensions(); renderAll();
+      });
+
       break;
+    }
     case "polyline": {
       const pn = obj.vertices.length;
       const pSegCnt = obj.closed ? pn : pn - 1;

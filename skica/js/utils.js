@@ -153,6 +153,30 @@ export function safeEvalMath(str) {
 
 // ── Snap body objektů ──
 /**
+ * Vrátí 4 rohy obdélníku s respektováním rotace.
+ * @param {object} obj - objekt s x1,y1,x2,y2 a volitelným rotation (rad)
+ * @returns {{ x: number, y: number }[]}
+ */
+export function getRectCorners(obj) {
+  const corners = [
+    { x: obj.x1, y: obj.y1 },
+    { x: obj.x2, y: obj.y1 },
+    { x: obj.x2, y: obj.y2 },
+    { x: obj.x1, y: obj.y2 },
+  ];
+  const rot = obj.rotation || 0;
+  if (rot === 0) return corners;
+  const cx = (obj.x1 + obj.x2) / 2;
+  const cy = (obj.y1 + obj.y2) / 2;
+  const cos = Math.cos(rot);
+  const sin = Math.sin(rot);
+  return corners.map(c => ({
+    x: cx + (c.x - cx) * cos - (c.y - cy) * sin,
+    y: cy + (c.x - cx) * sin + (c.y - cy) * cos,
+  }));
+}
+
+/**
  * Vrátí snap body daného objektu.
  * @param {import('./types.js').DrawObject} obj
  * @returns {import('./types.js').Point2D[]}
@@ -188,14 +212,13 @@ export function getObjectSnapPoints(obj) {
           y: obj.cy + obj.r * Math.sin(obj.endAngle),
         },
       ];
-    case "rect":
+    case "rect": {
+      const c = getRectCorners(obj);
       return [
-        { x: obj.x1, y: obj.y1 },
-        { x: obj.x2, y: obj.y1 },
-        { x: obj.x2, y: obj.y2 },
-        { x: obj.x1, y: obj.y2 },
-        { x: (obj.x1 + obj.x2) / 2, y: (obj.y1 + obj.y2) / 2, mid: true },
+        ...c,
+        { x: (c[0].x + c[2].x) / 2, y: (c[0].y + c[2].y) / 2, mid: true },
       ];
+    }
     case "polyline": {
       const pts = obj.vertices.map(v => ({ x: v.x, y: v.y }));
       // Midpoints of each segment (tagged with mid flag)
