@@ -446,6 +446,7 @@ drawCanvas.addEventListener("contextmenu", (e) => {
   let menuItems = `<div class="ctx-item" data-action="ref">📍 Nastavit jako referenci (INC)</div>`;
   if (ctxIdx !== null) {
     state.selected = ctxIdx;
+    state.multiSelected.clear();
     updateObjectList();
     updateProperties();
     renderAll();
@@ -967,6 +968,7 @@ drawCanvas.addEventListener("dblclick", (e) => {
     const idx = findObjectAt(wx, wy);
     if (idx !== null && state.objects[idx].type === 'polyline') {
       state.selected = idx;
+      state.multiSelected.clear();
       state.selectedSegment = findSegmentAt(state.objects[idx], wx, wy);
       updateProperties();
       updateObjectList();
