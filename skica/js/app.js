@@ -96,7 +96,11 @@ setInterval(() => {
   resizeCanvases();
   if (state.objects.length > 0) {
     calculateAllIntersections();
-    autoCenterView();
+    // Odložit centrování – počkat na stabilní layout (sidebar, topbar…)
+    requestAnimationFrame(() => {
+      resizeCanvases();
+      autoCenterView();
+    });
   }
   resetHint();
   updateDimsBtn();
@@ -112,6 +116,14 @@ setInterval(() => {
   checkFirstRunHelp();
 })().catch(e => {
   console.error('Inicializace selhala:', e);
+});
+
+// ── Záloha: po úplném načtení stránky znovu vycentrovat ──
+window.addEventListener('load', () => {
+  resizeCanvases();
+  if (state.objects.length > 0) {
+    autoCenterView();
+  }
 });
 
 // ── PWA Service Worker ──
