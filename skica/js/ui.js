@@ -767,6 +767,15 @@ export function setTool(tool) {
     });
     showToast(`Kontura uložena (${state.tempPoints.length} bodů)`);
   }
+  // Pokud už jsme v select módu a klikne se znovu na Výběr → zrušit výběr
+  if (tool === 'select' && state.tool === 'select') {
+    state.selected = null;
+    state.selectedSegment = null;
+    state._selectedSegmentObjIdx = null;
+    state.multiSelected.clear();
+    state.selectedPoint = null;
+    if (bridge.updateProperties) bridge.updateProperties();
+  }
   state.tool = tool;
   resetDrawingState();
   if (state.dragging) {
@@ -783,6 +792,9 @@ export function setTool(tool) {
     .forEach((b) =>
       b.classList.toggle("active", b.dataset.tool === tool),
     );
+  // Toggle btnDelete active state for deleteObj mode
+  const btnDel = document.getElementById("btnDelete");
+  if (btnDel) btnDel.classList.toggle("active", tool === "deleteObj");
   document.getElementById("statusTool").textContent =
     "Nástroj: " + toolLabel(tool);
   // Sync mobile measure button
@@ -820,6 +832,7 @@ export function resetHint() {
     perp: "Klepněte na úsečku/segment – vyrovná se svisle (kolmo)",
     parallel: "Klepněte na úsečku kterou chcete otočit → pak na referenční úsečku pro rovnoběžnost",
     text: "Klepněte na místo, kam chcete umístit textovou anotaci",
+    deleteObj: "Klepněte na objekt pro smazání",
   };
   setHint(hints[state.tool] || "");
 }

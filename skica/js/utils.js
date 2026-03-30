@@ -408,6 +408,7 @@ export function toolLabel(t) {
       dimension: "Kóta",
       snapPoint: "Přichytit bod",
       text: "Text",
+      deleteObj: "Smaž obj.",
     }[t] || t
   );
 }

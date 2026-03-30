@@ -200,6 +200,8 @@ document.addEventListener("keydown", (e) => {
     state._selectedSegmentObjIdx = null;
     state.multiSelected.clear();
     state.selectedPoint = null;
+    // Escape z deleteObj módu → zpět na select
+    if (state.tool === 'deleteObj') setTool('select');
     updateProperties();
     renderAll();
     resetHint();
@@ -635,6 +637,20 @@ export function handleCanvasClick(wx, wy) {
     case "text":
       handleTextClick(wx, wy);
       break;
+
+    case "deleteObj": {
+      const idx = findObjectAt(wx, wy);
+      if (idx !== null) {
+        pushUndo();
+        state.objects.splice(idx, 1);
+        updateObjectList();
+        updateProperties();
+        calculateAllIntersections();
+        renderAll();
+        showToast("Objekt smazán ✓");
+      }
+      break;
+    }
   }
 }
 
@@ -986,7 +1002,19 @@ function startLinearArrayAction() {
 export { startMirrorAction, startLinearArrayAction, startRotateAction, deleteSelected };
 
 // ── Tlačítka Smazat a Otočit ──
-document.getElementById("btnDelete").addEventListener("click", deleteSelected);
+document.getElementById("btnDelete").addEventListener("click", () => {
+  // Pokud je něco vybrané, smazat rovnou
+  if (state.selected !== null || state.multiSelected.size > 0 || state._selectedConstraint) {
+    deleteSelected();
+    return;
+  }
+  // Nic nevybráno → toggle deleteObj mód
+  if (state.tool === 'deleteObj') {
+    setTool('select');
+  } else {
+    setTool('deleteObj');
+  }
+});
 document.getElementById("btnRotate").addEventListener("click", startRotateAction);
 
 // ── Double-click: dokončit konturu / vybrat segment ──
