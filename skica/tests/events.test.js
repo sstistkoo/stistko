@@ -116,6 +116,7 @@ vi.mock('../js/storage.js', () => ({
 // Mock tools/index.js
 vi.mock('../js/tools/index.js', () => ({
   handleTangentClick: vi.fn(),
+  tangentFromSelection: vi.fn(() => false),
   handleOffsetClick: vi.fn(),
   handleTrimClick: vi.fn(),
   handleExtendClick: vi.fn(),

@@ -104,6 +104,7 @@ export function findIntersectionAt(wx, wy) {
   const dOrigin = Math.hypot(wx, wy);
   if (dOrigin < threshold) { bestDist = dOrigin; best = { x: 0, y: 0 }; }
   // Snap body všech objektů (koncové, středové, čtvrtinové…)
+  const midThreshold = threshold * 0.3;  // Midpoints: snížený práh
   for (const obj of state.objects) {
     const layer = state.layers ? state.layers.find(l => l.id === obj.layer) : null;
     if (layer && (layer.locked || !layer.visible)) continue;
@@ -111,7 +112,8 @@ export function findIntersectionAt(wx, wy) {
     const pts = getObjectSnapPoints(obj);
     for (const p of pts) {
       const d = Math.hypot(p.x - wx, p.y - wy);
-      if (d < bestDist) { bestDist = d; best = p; }
+      const t = p.mid ? midThreshold : threshold;
+      if (d < t && d < bestDist) { bestDist = d; best = p; }
     }
   }
   // Průsečíky (bonus – při stejné vzdálenosti vyhrávají)
@@ -166,6 +168,7 @@ export function selectObjectAt(wx, wy) {
     state._selectedConstraint = constr;
     state.selected = constr.objIdx;
     state.selectedSegment = constr.segIdx;
+    state._selectedSegmentObjIdx = constr.objIdx;
     state.multiSelected.clear();
     state.selectedPoint = null;
     if (bridge.updateProperties) bridge.updateProperties();
@@ -193,6 +196,7 @@ export function selectObjectAt(wx, wy) {
   if (newSel === null && !snapPt) {
     state.selected = null;
     state.selectedSegment = null;
+    state._selectedSegmentObjIdx = null;
     state.multiSelected.clear();
     state.selectedPoint = null;
   } else if (preferPoint) {
@@ -203,9 +207,11 @@ export function selectObjectAt(wx, wy) {
     if (newSel === state.selected && state.multiSelected.size === 0) {
       if (state.objects[newSel].type === 'polyline') {
         state.selectedSegment = findSegmentAt(state.objects[newSel], wx, wy);
+        state._selectedSegmentObjIdx = newSel;
       } else {
         state.selected = null;
         state.selectedSegment = null;
+        state._selectedSegmentObjIdx = null;
       }
     } else if (state.multiSelected.has(newSel) || (newSel === state.selected && state.multiSelected.size > 0)) {
       state.multiSelected.delete(newSel);
@@ -218,17 +224,22 @@ export function selectObjectAt(wx, wy) {
         state.selected = state.multiSelected.values().next().value;
         state.multiSelected.clear();
       }
-      state.selectedSegment = null;
+      // Pokud odebereme objekt, který měl vybraný segment, zrušit
+      if (newSel === state._selectedSegmentObjIdx) {
+        state.selectedSegment = null;
+        state._selectedSegmentObjIdx = null;
+      }
     } else if (state.selected !== null) {
       if (state.multiSelected.size === 0) {
         state.multiSelected.add(state.selected);
       }
       state.multiSelected.add(newSel);
       state.selected = newSel;
-      state.selectedSegment = null;
+      // Zachovat selectedSegment – patří k původnímu objektu (_selectedSegmentObjIdx)
     } else {
       state.selected = newSel;
       state.selectedSegment = null;
+      state._selectedSegmentObjIdx = null;
     }
   }
   if (bridge.updateProperties) bridge.updateProperties();
@@ -681,6 +692,61 @@ export function circlePositionsTangentToTwoLines(r, l1, l2) {
     }
   }
   return results;
+}
+
+// ── Pozice kružnice tečné k úsečce A procházející bodem ──
+/**
+ * Najde středy kružnice s poloměrem r, která je tečná k přímce (x1,y1)-(x2,y2)
+ * a zároveň prochází bodem (px,py).
+ * Střed musí ležet ve vzdálenosti r od přímky A ve vzdálenosti r od bodu.
+ * @returns {{cx: number, cy: number}[]}
+ */
+export function circlePositionsTangentToLineAndPoint(r, x1, y1, x2, y2, px, py) {
+  const dx = x2 - x1, dy = y2 - y1;
+  const len = Math.hypot(dx, dy);
+  if (len < 1e-10) return [];
+  const nx = -dy / len, ny = dx / len; // normála k přímce
+
+  const results = [];
+  // Dvě rovnoběžky s přímkou ve vzdálenosti r
+  for (const sign of [1, -1]) {
+    // Bod na rovnoběžce: (x1 + sign*nx*r, y1 + sign*ny*r) + t*(dx, dy)
+    // Hledáme t tak, aby vzdálenost od (px, py) = r
+    // Parametrický bod: Qx = x1 + sign*nx*r + t*dx, Qy = y1 + sign*ny*r + t*dy
+    // (Qx - px)^2 + (Qy - py)^2 = r^2
+    const ox = x1 + sign * nx * r - px;
+    const oy = y1 + sign * ny * r - py;
+    // (ox + t*dx)^2 + (oy + t*dy)^2 = r^2
+    const a = dx * dx + dy * dy;
+    const b = 2 * (ox * dx + oy * dy);
+    const c = ox * ox + oy * oy - r * r;
+    const disc = b * b - 4 * a * c;
+    if (disc < -1e-9) continue;
+    const sqrtDisc = Math.sqrt(Math.max(0, disc));
+    for (const s of [-1, 1]) {
+      const t = (-b + s * sqrtDisc) / (2 * a);
+      const cx = x1 + sign * nx * r + t * dx;
+      const cy = y1 + sign * ny * r + t * dy;
+      results.push({ cx, cy });
+    }
+  }
+  return results;
+}
+
+// ── Extrakce úsečkových dat z polyline segmentu ──
+/**
+ * Vrátí úsečkové souřadnice pro daný segment polyline.
+ * @param {import('./types.js').PolylineObject} obj
+ * @param {number} segIdx
+ * @returns {{x1: number, y1: number, x2: number, y2: number}|null}
+ */
+export function getPolylineSegmentAsLine(obj, segIdx) {
+  if (!obj || obj.type !== 'polyline') return null;
+  const n = obj.vertices.length;
+  if (segIdx < 0 || segIdx >= (obj.closed ? n : n - 1)) return null;
+  const p1 = obj.vertices[segIdx];
+  const p2 = obj.vertices[(segIdx + 1) % n];
+  return { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y };
 }
 
 function lineOffsets(x1, y1, x2, y2, d) {

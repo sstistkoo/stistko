@@ -2,7 +2,7 @@
 // ║  js/tools – barrel re-export                               ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-export { handleTangentClick } from './tangentClick.js';
+export { handleTangentClick, tangentFromSelection } from './tangentClick.js';
 export { handleOffsetClick } from './offsetClick.js';
 export { handleTrimClick } from './trimClick.js';
 export { handleExtendClick } from './extendClick.js';
