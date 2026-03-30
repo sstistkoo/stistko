@@ -4,7 +4,7 @@
 
 import { COLORS } from './constants.js';
 import { state, showToast, pushUndo, undo, redo, axisLabels, resetDrawingState, displayX, xPrefix, fmtStatusCoords, coordHelpers } from './state.js';
-import { typeLabel, toolLabel, bulgeToArc, safeEvalMath, _parseMathExpr } from './utils.js';
+import { typeLabel, toolLabel, bulgeToArc, safeEvalMath, _parseMathExpr, getRectCorners } from './utils.js';
 import { renderAll, renderAllDebounced } from './render.js';
 import { drawCanvas, screenToWorld, snapPt } from './canvas.js';
 import { bridge } from './bridge.js';
@@ -729,7 +729,17 @@ export function updateProperties() {
         pushUndo();
         obj.rotation = a * Math.PI / 180;
         updateAssociativeDimensions(); renderAll();
+        updateProperties();
       });
+
+      // Show actual rotated corners when rotation ≠ 0
+      if (obj.rotation) {
+        const corners = getRectCorners(obj);
+        addInfoRow("── Skutečné rohy ──", "");
+        corners.forEach((c, i) => {
+          addInfoRow(`Roh ${i + 1}`, `${H}=${c.x.toFixed(3)}  ${V}=${c.y.toFixed(3)}`);
+        });
+      }
 
       break;
     }
