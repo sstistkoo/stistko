@@ -19,3 +19,4 @@ export { handleCircleClick } from './circleClick.js';
 export { handleArcClick } from './arcClick.js';
 export { handleRectClick } from './rectClick.js';
 export { handlePolylineClick } from './polylineClick.js';
+export { handleTextClick } from './textClick.js';

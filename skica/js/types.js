@@ -114,6 +114,8 @@
  * @property {boolean} isDimension
  * @property {boolean} [isCoordLabel]
  * @property {boolean} [isMeasureTemp]
+ * @property {'linear'|'diameter'|'radius'|'angular'} [dimType] - Typ kóty
+ * @property {number} [sourceObjId] - ID zdrojového objektu pro asociativní kóty
  * @property {number} x1
  * @property {number} y1
  * @property {number} x2
@@ -122,10 +124,28 @@
  * @property {number} [dimSrcY1]
  * @property {number} [dimSrcX2]
  * @property {number} [dimSrcY2]
+ * @property {number} [dimAngle] - Úhel v radiánech (pro úhlovou kótu)
+ * @property {number} [dimRadius] - Poloměr (pro radiální/průměrovou kótu)
+ * @property {number} [dimCenterX] - Střed kružnice/oblouku (pro radiální/průměrovou)
+ * @property {number} [dimCenterY]
  */
 
 /**
- * @typedef {PointObject|LineObject|CircleObject|ArcObject|RectObject|PolylineObject|DimensionObject} DrawObject
+ * @typedef {Object} TextObject
+ * @property {'text'} type
+ * @property {number} id
+ * @property {string} name
+ * @property {string} [color]
+ * @property {number} [layer]
+ * @property {number} x
+ * @property {number} y
+ * @property {string} text
+ * @property {number} [fontSize]
+ * @property {number} [rotation]
+ */
+
+/**
+ * @typedef {PointObject|LineObject|CircleObject|ArcObject|RectObject|PolylineObject|DimensionObject|TextObject} DrawObject
  */
 
 // ── Geometrie – přímky a kružnice pro průsečíky ──

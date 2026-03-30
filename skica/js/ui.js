@@ -818,6 +818,7 @@ export function resetHint() {
     horizontal: "Klepněte na úsečku/segment – vyrovná se vodorovně",
     perp: "Klepněte na úsečku/segment – vyrovná se svisle (kolmo)",
     parallel: "Klepněte na úsečku kterou chcete otočit → pak na referenční úsečku pro rovnoběžnost",
+    text: "Klepněte na místo, kam chcete umístit textovou anotaci",
   };
   setHint(hints[state.tool] || "");
 }

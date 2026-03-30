@@ -13,7 +13,7 @@ import { showNumericalInputDialog, showPolarDrawingDialog, showCircleRadiusDialo
 import { saveProject, showExportImageDialog, showProjectsDialog, showSaveAsDialog } from './storage.js';
 import { bulgeToArc, deepClone } from './utils.js';
 import { bridge } from './bridge.js';
-import { handleTangentClick, tangentFromSelection, handleOffsetClick, offsetFromSelection, handleTrimClick, trimFromSelection, handleExtendClick, extendFromSelection, handleFilletClick, filletFromSelection, handlePerpClick, perpFromSelection, handleHorizontalClick, horizontalFromSelection, handleParallelClick, parallelFromSelection, handleDimensionClick, handleSnapPointClick, handleMoveClick, handleLineClick, handleMeasureClick, handleCircleClick, handleArcClick, handleRectClick, handlePolylineClick, measureSelection } from './tools/index.js';
+import { handleTangentClick, tangentFromSelection, handleOffsetClick, offsetFromSelection, handleTrimClick, trimFromSelection, handleExtendClick, extendFromSelection, handleFilletClick, filletFromSelection, handlePerpClick, perpFromSelection, handleHorizontalClick, horizontalFromSelection, handleParallelClick, parallelFromSelection, handleDimensionClick, handleSnapPointClick, handleMoveClick, handleLineClick, handleMeasureClick, handleCircleClick, handleArcClick, handleRectClick, handlePolylineClick, measureSelection, handleTextClick } from './tools/index.js';
 
 // Registrace measureSelection na bridge (aby ui.js nemusel importovat přímo – kruhová závislost)
 bridge.measureSelection = measureSelection;
@@ -78,22 +78,28 @@ drawCanvas.addEventListener("mousemove", (e) => {
   if (state.dragging && state.dragObjIdx !== null) {
     const dx = wx - state.dragStartWorld.x;
     const dy = wy - state.dragStartWorld.y;
-    if (state.dragObjIdx === -1 && state._multiDragSnapshots) {
-      // Multi-drag
-      for (const { idx, snapshot } of state._multiDragSnapshots) {
-        const obj = state.objects[idx];
-        if (obj) {
-          Object.assign(obj, JSON.parse(snapshot));
-          moveObject(obj, dx, dy);
+    try {
+      if (state.dragObjIdx === -1 && state._multiDragSnapshots) {
+        // Multi-drag
+        for (const { idx, snapshot } of state._multiDragSnapshots) {
+          const obj = state.objects[idx];
+          if (obj) {
+            Object.assign(obj, JSON.parse(snapshot));
+            moveObject(obj, dx, dy);
+          }
         }
+      } else if (state.objects[state.dragObjIdx]) {
+        const obj = state.objects[state.dragObjIdx];
+        if (state.dragObjSnapshot) {
+          const snapShot = JSON.parse(state.dragObjSnapshot);
+          Object.assign(obj, snapShot);
+        }
+        moveObject(obj, dx, dy);
       }
-    } else if (state.objects[state.dragObjIdx]) {
-      const obj = state.objects[state.dragObjIdx];
-      if (state.dragObjSnapshot) {
-        const snapShot = JSON.parse(state.dragObjSnapshot);
-        Object.assign(obj, snapShot);
-      }
-      moveObject(obj, dx, dy);
+    } catch (e) {
+      console.warn('Chyba při přetahování:', e);
+      state.dragging = false;
+      state.dragObjIdx = null;
     }
   }
 
@@ -302,6 +308,7 @@ document.addEventListener("keydown", (e) => {
     h: "parallel",
     u: "dimension",
     b: "snapPoint",
+    i: "text",
   };
   // Shift+M = mirror, Shift+N = polar, Shift+G = angle snap – skip tool shortcuts
   // B is only snapPoint when not drawing polyline
@@ -463,7 +470,10 @@ drawCanvas.addEventListener("contextmenu", (e) => {
   menu.style.left = `${e.clientX}px`;
   menu.style.top = `${e.clientY}px`;
 
-  let menuItems = `<div class="ctx-item" data-action="ref">📍 Nastavit jako referenci (INC)</div>`;
+  // Build context menu items safely (no innerHTML)
+  const menuDef = [
+    { label: '📍 Nastavit jako referenci (INC)', action: 'ref' },
+  ];
   if (ctxIdx !== null) {
     state.selected = ctxIdx;
     state.multiSelected.clear();
@@ -471,18 +481,30 @@ drawCanvas.addEventListener("contextmenu", (e) => {
     updateObjectList();
     updateProperties();
     renderAll();
-    menuItems += `<div class="ctx-sep"></div>`;
-    menuItems += `<div class="ctx-item" data-action="mirror">🪞 Zrcadlit (Shift+M)</div>`;
-    menuItems += `<div class="ctx-item" data-action="rotate">🔄 Otočit</div>`;
-    menuItems += `<div class="ctx-item" data-action="array">📏 Lineární pole</div>`;
-    menuItems += `<div class="ctx-item" data-action="offset">⇔ Offset</div>`;
+    menuDef.push({ sep: true });
+    menuDef.push({ label: '🪞 Zrcadlit (Shift+M)', action: 'mirror' });
+    menuDef.push({ label: '🔄 Otočit', action: 'rotate' });
+    menuDef.push({ label: '📏 Lineární pole', action: 'array' });
+    menuDef.push({ label: '⇔ Offset', action: 'offset' });
     if (state.objects[ctxIdx] && state.objects[ctxIdx].type === 'polyline') {
-      menuItems += `<div class="ctx-item" data-action="explode">💥 Rozložit konturu</div>`;
+      menuDef.push({ label: '💥 Rozložit konturu', action: 'explode' });
     }
-    menuItems += `<div class="ctx-sep"></div>`;
-    menuItems += `<div class="ctx-item ctx-delete" data-action="delete">🗑 Smazat</div>`;
+    menuDef.push({ sep: true });
+    menuDef.push({ label: '🗑 Smazat', action: 'delete', cls: 'ctx-delete' });
   }
-  menu.innerHTML = menuItems;
+  for (const entry of menuDef) {
+    if (entry.sep) {
+      const sep = document.createElement('div');
+      sep.className = 'ctx-sep';
+      menu.appendChild(sep);
+    } else {
+      const item = document.createElement('div');
+      item.className = 'ctx-item' + (entry.cls ? ` ${entry.cls}` : '');
+      item.dataset.action = entry.action;
+      item.textContent = entry.label;
+      menu.appendChild(item);
+    }
+  }
   document.body.appendChild(menu);
 
   menu.querySelectorAll('.ctx-item').forEach(item => {
@@ -608,6 +630,10 @@ export function handleCanvasClick(wx, wy) {
 
     case "snapPoint":
       handleSnapPointClick(wx, wy);
+      break;
+
+    case "text":
+      handleTextClick(wx, wy);
       break;
   }
 }

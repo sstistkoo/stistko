@@ -75,27 +75,31 @@ describe('addDimensionForObject', () => {
   });
 
   // ── Circle ──
-  it('přidá kótu poloměru kružnice', () => {
+  it('přidá průměrovou kótu kružnice', () => {
     addDimensionForObject({ type: 'circle', cx: 5, cy: 10, r: 15 });
     expect(addObject).toHaveBeenCalledOnce();
     const arg = addObject.mock.calls[0][0];
     expect(arg.type).toBe('line');
-    expect(arg.x1).toBe(5);
+    expect(arg.x1).toBe(-10); // cx - r
     expect(arg.y1).toBe(10);
     expect(arg.x2).toBe(20); // cx + r
     expect(arg.y2).toBe(10);
-    expect(arg.name).toContain('R15.00');
+    expect(arg.name).toContain('⌀30.00');
     expect(arg.isDimension).toBe(true);
+    expect(arg.dimType).toBe('diameter');
   });
 
   // ── Arc ──
-  it('přidá kótu poloměru oblouku', () => {
-    addDimensionForObject({ type: 'arc', cx: 0, cy: 0, r: 7.5 });
-    expect(addObject).toHaveBeenCalledOnce();
-    const arg = addObject.mock.calls[0][0];
-    expect(arg.name).toContain('R7.50');
-    expect(arg.x2).toBe(7.5);
-    expect(arg.isDimension).toBe(true);
+  it('přidá kótu poloměru a úhlovou kótu oblouku', () => {
+    addDimensionForObject({ type: 'arc', cx: 0, cy: 0, r: 7.5, startAngle: 0, endAngle: Math.PI / 2 });
+    expect(addObject).toHaveBeenCalledTimes(2);
+    const rArg = addObject.mock.calls[0][0];
+    expect(rArg.name).toContain('R7.50');
+    expect(rArg.isDimension).toBe(true);
+    expect(rArg.dimType).toBe('radius');
+    const aArg = addObject.mock.calls[1][0];
+    expect(aArg.dimType).toBe('angular');
+    expect(aArg.name).toContain('∠90.0°');
   });
 
   // ── Rect ──

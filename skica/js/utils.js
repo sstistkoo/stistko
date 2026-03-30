@@ -226,6 +226,8 @@ export function getObjectSnapPoints(obj) {
       }
       return pts;
     }
+    case "text":
+      return [{ x: obj.x, y: obj.y }];
     default:
       return [];
   }
@@ -373,6 +375,7 @@ export function typeLabel(t) {
       arc: "Oblouk",
       rect: "Obdélník",
       polyline: "Kontura",
+      text: "Text",
     }[t] || t
   );
 }
@@ -404,6 +407,7 @@ export function toolLabel(t) {
       parallel: "Rovnoběžka",
       dimension: "Kóta",
       snapPoint: "Přichytit bod",
+      text: "Text",
     }[t] || t
   );
 }
