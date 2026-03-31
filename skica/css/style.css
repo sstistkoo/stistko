@@ -1462,9 +1462,9 @@ body {
     color: var(--ctp-text);
     border: 1px solid var(--ctp-surface2);
     border-radius: 4px;
-    font-size: 16px;
-    width: 32px;
-    height: 32px;
+    font-size: 14px;
+    width: 28px;
+    height: 28px;
     cursor: pointer;
     flex-shrink: 0;
     margin-left: auto;
@@ -1475,14 +1475,14 @@ body {
   }
 
   .tool-btn {
-    padding: 10px 12px;
-    font-size: 14px;
-    min-height: 40px;
+    padding: 8px 6px;
+    font-size: 12px;
+    min-height: 36px;
   }
 
   .tool-btn svg {
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
   }
 
   .toolbar-more {
