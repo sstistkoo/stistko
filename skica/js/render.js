@@ -196,19 +196,30 @@ function renderAxes() {
     startY = state.panY % drawStep;
   g.font = "13px Consolas";
   g.fillStyle = COLORS.textMuted;
+  const labelPad = 6; // min mezera mezi popisky
+  let lastLabelEndX = -Infinity;
   for (let x = startX; x < w; x += drawStep) {
     const [wx] = screenToWorld(x, 0);
     const label = Math.round(wx / drawGridSize) * drawGridSize;
     if (label === 0) continue;
     const dispLabel = isKarusel ? displayX(label) : label;
-    g.fillText(dispLabel.toString(), x + 2, state.panY - 5);
+    const txt = dispLabel.toString();
+    const tw = g.measureText(txt).width;
+    const drawX = x + 2;
+    if (drawX < lastLabelEndX + labelPad) continue; // přeskočit – překrývalo by se
+    g.fillText(txt, drawX, state.panY - 5);
+    lastLabelEndX = drawX + tw;
   }
+  let lastLabelEndY = -Infinity;
   for (let y = startY; y < h; y += drawStep) {
     const [, wy] = screenToWorld(0, y);
     const label = Math.round(wy / drawGridSize) * drawGridSize;
     if (label === 0) continue;
     const dispLabel = isKarusel ? label : displayX(label);
-    g.fillText(dispLabel.toString(), state.panX + 4, y - 3);
+    const drawY = y - 3;
+    if (drawY < lastLabelEndY + labelPad) continue; // přeskočit – překrývalo by se
+    g.fillText(dispLabel.toString(), state.panX + 4, drawY);
+    lastLabelEndY = drawY + 13; // přibližná výška fontu 13px
   }
   g.fillStyle = COLORS.selected;
   g.font = "14px Consolas";
