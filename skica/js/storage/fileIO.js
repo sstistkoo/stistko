@@ -145,6 +145,13 @@ export function importDXFFile() {
           entity.id = state.nextId++;
           entity.name = `${typeNames[entity.type] || entity.type} ${entity.id}`;
           if (entity.layer === undefined) entity.layer = state.activeLayer;
+          // Validate numeric coordinates before adding
+          const numProps = ['x1','y1','x2','y2','cx','cy','r','startAngle','endAngle','x','y','fontSize'];
+          let valid = true;
+          for (const p of numProps) {
+            if (p in entity && !isFinite(entity[p])) { valid = false; break; }
+          }
+          if (!valid) { errors.push(`Neplatné souřadnice v entitě ${entity.type}`); continue; }
           state.objects.push(entity);
         }
         state.selected = null;

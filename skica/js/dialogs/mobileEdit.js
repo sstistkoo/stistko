@@ -139,7 +139,11 @@ export function showEditObjectDialog(idx) {
           <div><label>Průměr:</label><input type="text" id="editD" value="${(obj.r*2).toFixed(3)}"></div>
           <div class="pick-col"><button type="button" class="pick-btn" data-pick="radius">📏R</button></div></div>
           <div class="input-row"><div><label>Start (°):</label><input type="text" id="editSA" value="${(obj.startAngle*180/Math.PI).toFixed(2)}"></div>
-          <div><label>Konec (°):</label><input type="text" id="editEA" value="${(obj.endAngle*180/Math.PI).toFixed(2)}"></div></div>`;
+          <div><label>Konec (°):</label><input type="text" id="editEA" value="${(obj.endAngle*180/Math.PI).toFixed(2)}"></div></div>
+          <div class="input-row"><div><label>Směr:</label><select id="editArcDir">
+            <option value="cw" ${!obj.ccw ? 'selected' : ''}>↻ CW (po směru)</option>
+            <option value="ccw" ${obj.ccw ? 'selected' : ''}>↺ CCW (proti směru)</option>
+          </select></div></div>`;
         break;
       case "rect":
         fieldsHtml += `
@@ -428,6 +432,7 @@ export function showEditObjectDialog(idx) {
         obj.r = safeEvalMath(overlay.querySelector("#editR").value);
         obj.startAngle = safeEvalMath(overlay.querySelector("#editSA").value) * Math.PI / 180;
         obj.endAngle = safeEvalMath(overlay.querySelector("#editEA").value) * Math.PI / 180;
+        obj.ccw = overlay.querySelector("#editArcDir")?.value === 'ccw';
         break;
       case "rect":
         obj.x1 = safeEvalMath(overlay.querySelector("#editX1").value);

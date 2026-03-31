@@ -1661,12 +1661,22 @@ document.querySelectorAll("[data-tool]").forEach((btn) => {
     if (btn.dataset.tool === 'extend' && bridge.extendFromSelection && bridge.extendFromSelection()) return;
     // Zaoblení: pokud je výběr → okamžitě provést
     if (btn.dataset.tool === 'fillet' && bridge.filletFromSelection && bridge.filletFromSelection()) return;
+    // Zkosení: pokud je výběr → okamžitě provést
+    if (btn.dataset.tool === 'chamfer' && bridge.chamferFromSelection && bridge.chamferFromSelection()) return;
     // Kolmost: pokud je výběr → okamžitě provést
     if (btn.dataset.tool === 'perp' && bridge.perpFromSelection && bridge.perpFromSelection()) return;
     // Vodorovnost: pokud je výběr → okamžitě provést
     if (btn.dataset.tool === 'horizontal' && bridge.horizontalFromSelection && bridge.horizontalFromSelection()) return;
     // Rovnoběžka: pokud je výběr → okamžitě provést
     if (btn.dataset.tool === 'parallel' && bridge.parallelFromSelection && bridge.parallelFromSelection()) return;
+    // Středová značka: pokud je výběr → okamžitě provést
+    if (btn.dataset.tool === 'centerMark' && bridge.centerMarkFromSelection && bridge.centerMarkFromSelection()) return;
+    // Škálování: pokud je výběr → okamžitě provést
+    if (btn.dataset.tool === 'scale' && bridge.scaleFromSelection && bridge.scaleFromSelection()) return;
+    // Zaoblení/Zkosení sdružené: pokud je výběr → okamžitě provést
+    if (btn.dataset.tool === 'filletChamfer' && bridge.filletChamferFromSelection && bridge.filletChamferFromSelection()) return;
+    // Zrcadlení: pokud je výběr → okamžitě provést
+    if (btn.dataset.tool === 'mirror' && bridge.mirrorFromSelection && bridge.mirrorFromSelection()) return;
     setTool(btn.dataset.tool);
   });
 });
@@ -1762,6 +1772,11 @@ export function resetHint() {
     text: "Klepněte na místo, kam chcete umístit textovou anotaci",
     deleteObj: "Klepněte na objekt pro smazání",
     anchor: "Klepněte na snap bod pro zakotvení/uvolnění",
+    break: "Klepněte na objekt – rozdělí se v daném místě",
+    centerMark: "Klepněte na kružnici/oblouk – přepne středovou značku",
+    scale: "Klepněte na objekt – otevře dialog škálování",
+    filletChamfer: "Klepněte na první úsečku – zaoblení nebo zkosení",
+    mirror: "Vyberte objekty pro zrcadlení (Shift+M)",
   };
   setHint(hints[state.tool] || "");
 }

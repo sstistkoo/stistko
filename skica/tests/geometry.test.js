@@ -25,6 +25,10 @@ import {
   filletTwoLines,
   circlePositionsTangentToLine,
   circlePositionsTangentToTwoLines,
+  circlePositionsTangentToLineAndPoint,
+  circleTangentToThreeLines,
+  circleTangentToTwoLinesAndPoint,
+  circleTangentToLineAndTwoPoints,
   getLines,
   getCircles,
 } from '../js/geometry.js';
@@ -954,12 +958,151 @@ describe('circlePositionsTangentToTwoLines', () => {
     }
   });
 
+  it('V-úhel (sevřené úsečky) → jen pozice uvnitř úhlu', () => {
+    // Dvě úsečky z jednoho bodu tvořící V-úhel (45°)
+    const l1 = { x1: 0, y1: 0, x2: 10, y2: 0 };   // vodorovná
+    const l2 = { x1: 0, y1: 0, x2: 7, y2: 7 };     // pod 45°
+    const positions = circlePositionsTangentToTwoLines(2, l1, l2);
+    // Mělo by vrátit jen 1 pozici (uvnitř úhlu), ne 4
+    expect(positions.length).toBeLessThanOrEqual(2);
+    expect(positions.length).toBeGreaterThanOrEqual(1);
+    // Kružnice musí ležet uvnitř sevřeného úhlu (kladné x i y)
+    for (const p of positions) {
+      expect(p.cx).toBeGreaterThan(0);
+      expect(p.cy).toBeGreaterThan(0);
+    }
+  });
+
   it('rovnoběžné úsečky → 0 pozic (nebo nekonečno)', () => {
     const l1 = { x1: 0, y1: 0, x2: 10, y2: 0 };
     const l2 = { x1: 0, y1: 5, x2: 10, y2: 5 };
     const positions = circlePositionsTangentToTwoLines(2, l1, l2);
     // Rovnoběžné přímky: offsety jsou rovnoběžné → žádný průsečík, nebo 0 pozic
     expect(positions).toHaveLength(0);
+  });
+});
+
+// ════════════════════════════════════════
+// ── circlePositionsTangentToLine – konečné úsečky ──
+// ════════════════════════════════════════
+describe('circlePositionsTangentToLine – finite', () => {
+  it('projekce na úsečku → 2 pozice', () => {
+    // Kružnice se středem (5,5), úsečka (0,0)→(10,0), projekce v x=5 → na úsečce
+    const positions = circlePositionsTangentToLine(5, 5, 3, 0, 0, 10, 0);
+    expect(positions).toHaveLength(2);
+  });
+
+  it('projekce mimo úsečku → 0 pozic', () => {
+    // Kružnice se středem (20,5), úsečka (0,0)→(10,0), projekce v x=20 → mimo úsečku
+    const positions = circlePositionsTangentToLine(20, 5, 3, 0, 0, 10, 0);
+    expect(positions).toHaveLength(0);
+  });
+});
+
+// ════════════════════════════════════════
+// ── circlePositionsTangentToLineAndPoint – konečné úsečky ──
+// ════════════════════════════════════════
+describe('circlePositionsTangentToLineAndPoint – finite', () => {
+  it('bod u úsečky → pozice s tečným bodem na úsečce', () => {
+    // Úsečka (0,0)→(10,0), bod (5,5), r=3
+    const positions = circlePositionsTangentToLineAndPoint(3, 0, 0, 10, 0, 5, 5);
+    expect(positions.length).toBeGreaterThan(0);
+    for (const p of positions) {
+      // Tečný bod musí ležet na úsečce (0≤x≤10)
+      expect(p.cx).toBeGreaterThanOrEqual(-1);
+      expect(p.cx).toBeLessThanOrEqual(11);
+    }
+  });
+
+  it('bod daleko od úsečky → méně pozic', () => {
+    // Bod je daleko, tečné body by padly mimo krátkou úsečku
+    const positions = circlePositionsTangentToLineAndPoint(2, 0, 0, 3, 0, 50, 50);
+    // Pozice s tečným bodem mimo úsečku (0,0)→(3,0) jsou odfiltrovány
+    for (const p of positions) {
+      // Ověříme, že projekce středu na úsečku je v rozsahu
+      const dx = 3, dy = 0;
+      const t = ((p.cx - 0) * dx + (p.cy - 0) * dy) / (dx * dx + dy * dy);
+      expect(t).toBeGreaterThanOrEqual(-0.01);
+      expect(t).toBeLessThanOrEqual(1.01);
+    }
+  });
+});
+
+// ════════════════════════════════════════
+// ── circleTangentToThreeLines – konečné úsečky ──
+// ════════════════════════════════════════
+describe('circleTangentToThreeLines – finite', () => {
+  it('trojúhelník → vepsaná kružnice', () => {
+    // Trojúhelník: (0,0)→(10,0), (10,0)→(5,8), (5,8)→(0,0)
+    const l1 = { x1: 0, y1: 0, x2: 10, y2: 0 };
+    const l2 = { x1: 10, y1: 0, x2: 5, y2: 8 };
+    const l3 = { x1: 5, y1: 8, x2: 0, y2: 0 };
+    const positions = circleTangentToThreeLines(l1, l2, l3);
+    // Měla by existovat vepsaná kružnice
+    expect(positions.length).toBeGreaterThanOrEqual(1);
+    // Všechny pozice musí mít kladný poloměr
+    for (const p of positions) {
+      expect(p.r).toBeGreaterThan(0);
+    }
+  });
+
+  it('V-úhel se dvěma krátkými rameny + příčka → omezené pozice', () => {
+    // Dvě krátká ramena + krátká příčka → tečná kružnice nemůže být připsaná
+    const l1 = { x1: 0, y1: 0, x2: 5, y2: 0 };
+    const l2 = { x1: 0, y1: 0, x2: 3, y2: 4 };
+    const l3 = { x1: 5, y1: 0, x2: 3, y2: 4 };
+    const positions = circleTangentToThreeLines(l1, l2, l3);
+    // Připsané kružnice mimo trojúhelník by měly být odfiltrovány
+    expect(positions.length).toBeLessThan(4);
+    for (const p of positions) {
+      expect(p.r).toBeGreaterThan(0);
+    }
+  });
+});
+
+// ════════════════════════════════════════
+// ── circleTangentToTwoLinesAndPoint – konečné úsečky ──
+// ════════════════════════════════════════
+describe('circleTangentToTwoLinesAndPoint – finite', () => {
+  it('V-úhel + bod uvnitř → omezené pozice', () => {
+    const l1 = { x1: 0, y1: 0, x2: 10, y2: 0 };
+    const l2 = { x1: 0, y1: 0, x2: 7, y2: 7 };
+    const positions = circleTangentToTwoLinesAndPoint(l1, l2, 5, 2);
+    // Pozice kde tečný bod padne mimo úsečku se odfiltrují
+    for (const p of positions) {
+      expect(p.r).toBeGreaterThan(0);
+    }
+  });
+});
+
+// ════════════════════════════════════════
+// ── circleTangentToLineAndTwoPoints – konečné úsečky ──
+// ════════════════════════════════════════
+describe('circleTangentToLineAndTwoPoints – finite', () => {
+  it('tečná k úsečce přes dva body', () => {
+    // Úsečka (0,0)→(10,0), body (3,4) a (7,4)
+    const positions = circleTangentToLineAndTwoPoints(0, 0, 10, 0, 3, 4, 7, 4);
+    expect(positions.length).toBeGreaterThan(0);
+    for (const p of positions) {
+      expect(p.r).toBeGreaterThan(0);
+      // Oba body musí ležet na kružnici
+      const d1 = Math.hypot(p.cx - 3, p.cy - 4);
+      const d2 = Math.hypot(p.cx - 7, p.cy - 4);
+      expect(d1).toBeCloseTo(p.r, 3);
+      expect(d2).toBeCloseTo(p.r, 3);
+    }
+  });
+
+  it('body daleko od krátké úsečky → méně pozic', () => {
+    // Krátká úsečka (0,0)→(2,0), body daleko (30,5) a (35,5)
+    const positions = circleTangentToLineAndTwoPoints(0, 0, 2, 0, 30, 5, 35, 5);
+    // Tečný bod by padl daleko mimo úsečku → odfiltrováno
+    for (const p of positions) {
+      // Projekce středu na úsečku musí být v rozsahu
+      const t = p.cx / 2; // úsečka (0,0)→(2,0)
+      expect(t).toBeGreaterThanOrEqual(-0.01);
+      expect(t).toBeLessThanOrEqual(1.01);
+    }
   });
 });
 

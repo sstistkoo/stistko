@@ -481,8 +481,8 @@
       </button>
       <button
         class="tool-btn"
-        data-tool="fillet"
-        title="Zaoblení / Sražení (F)"
+        data-tool="filletChamfer"
+        title="Zaoblení / Zkosení (F)"
       >
         <svg viewBox="0 0 24 24">
           <line
@@ -507,8 +507,44 @@
             stroke="currentColor"
             stroke-width="2"
           />
+          <line
+            x1="14"
+            y1="14"
+            x2="20"
+            y2="20"
+            stroke="currentColor"
+            stroke-width="1"
+            stroke-dasharray="2 1"
+            opacity="0.5"
+          />
         </svg>
-        Zaoblení
+        Zaob./Zkos.
+      </button>
+      <button class="tool-btn" data-tool="mirror" title="Zrcadlení (Shift+M)">
+        <svg viewBox="0 0 24 24">
+          <line
+            x1="12"
+            y1="2"
+            x2="12"
+            y2="22"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-dasharray="3 2"
+          />
+          <polygon
+            points="4,8 10,6 10,18 4,16"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+          />
+          <polygon
+            points="20,8 14,6 14,18 20,16"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+          />
+        </svg>
+        Zrcadlo
       </button>
       <button class="tool-btn" data-tool="perp" title="Kolmice (J)">
         <svg viewBox="0 0 24 24">
@@ -594,6 +630,94 @@
           />
         </svg>
         Rovnob.
+      </button>
+      <button class="tool-btn" data-tool="break" title="Rozdělit objekt">
+        <svg viewBox="0 0 24 24">
+          <line
+            x1="4"
+            y1="20"
+            x2="10"
+            y2="10"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <line
+            x1="14"
+            y1="10"
+            x2="20"
+            y2="20"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <line
+            x1="9"
+            y1="6"
+            x2="15"
+            y2="14"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-dasharray="2 2"
+          />
+        </svg>
+        Rozděl
+      </button>
+      <button class="tool-btn" data-tool="centerMark" title="Středová značka">
+        <svg viewBox="0 0 24 24">
+          <circle
+            cx="12"
+            cy="12"
+            r="8"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+          />
+          <line
+            x1="2"
+            y1="12"
+            x2="22"
+            y2="12"
+            stroke="currentColor"
+            stroke-width="1.5"
+          />
+          <line
+            x1="12"
+            y1="2"
+            x2="12"
+            y2="22"
+            stroke="currentColor"
+            stroke-width="1.5"
+          />
+        </svg>
+        Střed
+      </button>
+      <button class="tool-btn" data-tool="scale" title="Škálovat">
+        <svg viewBox="0 0 24 24">
+          <rect
+            x="8"
+            y="8"
+            width="12"
+            height="12"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-dasharray="2 2"
+          />
+          <rect
+            x="4"
+            y="4"
+            width="8"
+            height="8"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <path
+            d="M16 20l4 0M20 16l0 4"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+        </svg>
+        Škála
       </button>
       <!-- ── Rozbalovací sekce: další nástroje ── -->
       <div class="sep"></div>

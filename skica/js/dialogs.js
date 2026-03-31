@@ -19,7 +19,7 @@ export { showPolarDrawingDialog } from './dialogs/polarDrawing.js';
 export { showBulgeDialog } from './dialogs/bulge.js';
 export { addDimensionForObject } from './dialogs/dimension.js';
 export { applyMobileInputMode, wireExprInputs, showMobileEditDialog, showEditObjectDialog } from './dialogs/mobileEdit.js';
-export { showOffsetDialog, showOffsetAngleDialog, showMirrorDialog, showLinearArrayDialog, showRotateDialog, showFilletDialog, showEndpointChoiceDialog } from './dialogs/objectDialogs.js';
+export { showOffsetDialog, showOffsetAngleDialog, showMirrorDialog, showLinearArrayDialog, showRotateDialog, showFilletDialog, showChamferDialog, showFilletChamferDialog, showScaleDialog, showEndpointChoiceDialog } from './dialogs/objectDialogs.js';
 export { showTangentChoiceDialog, showTangentPositionDialog } from './dialogs/tangentDialogs.js';
 
 // ── Focus trap pro dialogy ──

@@ -14,7 +14,7 @@ import { saveProject, showExportImageDialog, showProjectsDialog, showSaveAsDialo
 import { bulgeToArc, deepClone } from './utils.js';
 import { bridge } from './bridge.js';
 import { updateAssociativeDimensions } from './dialogs/dimension.js';
-import { handleTangentClick, tangentFromSelection, handleOffsetClick, offsetFromSelection, handleTrimClick, trimFromSelection, handleExtendClick, extendFromSelection, handleFilletClick, filletFromSelection, handlePerpClick, perpFromSelection, handleHorizontalClick, horizontalFromSelection, handleParallelClick, parallelFromSelection, handleDimensionClick, handleSnapPointClick, handleMoveClick, handleLineClick, handleMeasureClick, handleCircleClick, handleArcClick, handleRectClick, handlePolylineClick, measureSelection, handleTextClick, handleGearClick, resetGearState, handleAnchorClick, removeAnchorsForObject, removeAnchorAt, hasAnchoredPoint, cleanupOrphanAnchors } from './tools/index.js';
+import { handleTangentClick, tangentFromSelection, handleOffsetClick, offsetFromSelection, handleTrimClick, trimFromSelection, handleExtendClick, extendFromSelection, handleFilletClick, filletFromSelection, handleChamferClick, chamferFromSelection, handlePerpClick, perpFromSelection, handleHorizontalClick, horizontalFromSelection, handleParallelClick, parallelFromSelection, handleDimensionClick, handleSnapPointClick, handleMoveClick, handleLineClick, handleMeasureClick, handleCircleClick, handleArcClick, handleRectClick, handlePolylineClick, measureSelection, handleTextClick, handleGearClick, resetGearState, handleAnchorClick, removeAnchorsForObject, removeAnchorAt, hasAnchoredPoint, cleanupOrphanAnchors, handleBreakClick, handleCenterMarkClick, centerMarkFromSelection, handleScaleClick, scaleFromSelection, handleFilletChamferClick, filletChamferFromSelection } from './tools/index.js';
 import { showPostDrawPointDialog } from './dialogs/postDrawDialog.js';
 
 // Registrace measureSelection na bridge (aby ui.js nemusel importovat přímo – kruhová závislost)
@@ -24,9 +24,43 @@ bridge.offsetFromSelection = offsetFromSelection;
 bridge.trimFromSelection = trimFromSelection;
 bridge.extendFromSelection = extendFromSelection;
 bridge.filletFromSelection = filletFromSelection;
+bridge.chamferFromSelection = chamferFromSelection;
 bridge.perpFromSelection = perpFromSelection;
 bridge.horizontalFromSelection = horizontalFromSelection;
 bridge.parallelFromSelection = parallelFromSelection;
+bridge.centerMarkFromSelection = centerMarkFromSelection;
+bridge.scaleFromSelection = scaleFromSelection;
+bridge.filletChamferFromSelection = filletChamferFromSelection;
+bridge.mirrorFromSelection = () => {
+  if (state.selected === null && state.multiSelected.size === 0) return false;
+  const indices = state.multiSelected.size > 0
+    ? [...state.multiSelected]
+    : state.selected !== null ? [state.selected] : [];
+  if (indices.length === 0) return false;
+
+  // Najdi konstrukční čáru ve výběru → osa zrcadlení
+  const constrIdx = indices.find(i => state.objects[i] && state.objects[i].type === 'constr');
+  if (constrIdx !== undefined) {
+    const axis = state.objects[constrIdx];
+    const p1 = { x: axis.x1, y: axis.y1 };
+    const p2 = { x: axis.x2, y: axis.y2 };
+    const toMirror = indices.filter(i => i !== constrIdx).map(i => state.objects[i]);
+    if (toMirror.length === 0) { showToast("Vyberte objekty k zrcadlení (kromě konstr. čáry)"); return true; }
+    pushUndo();
+    for (const o of toMirror) {
+      const copy = mirrorObject(o, 'custom', p1, p2);
+      addObject(copy);
+    }
+    calculateAllIntersections();
+    renderAll();
+    showToast(`${toMirror.length > 1 ? toMirror.length + ' objektů zrcadleno' : 'Objekt zrcadlen'} ✓`);
+    return true;
+  }
+
+  // Bez konstr. čáry → klasický dialog
+  startMirrorAction();
+  return true;
+};
 
 let isPanning = false;
 let panStartX, panStartY, panStartPX, panStartPY;
@@ -351,7 +385,8 @@ document.addEventListener("keydown", (e) => {
     o: "offset",
     x: "trim",
     e: "extend",
-    f: "fillet",
+    f: "filletChamfer",
+    y: "filletChamfer",
     j: "perp",
     z: "horizontal",
     h: "parallel",
@@ -699,6 +734,14 @@ export function handleCanvasClick(wx, wy) {
       handleFilletClick(wx, wy);
       break;
 
+    case "chamfer":
+      handleChamferClick(wx, wy);
+      break;
+
+    case "filletChamfer":
+      handleFilletChamferClick(wx, wy);
+      break;
+
     case "perp":
       handlePerpClick(wx, wy);
       break;
@@ -709,6 +752,18 @@ export function handleCanvasClick(wx, wy) {
 
     case "parallel":
       handleParallelClick(wx, wy);
+      break;
+
+    case "break":
+      handleBreakClick(wx, wy);
+      break;
+
+    case "centerMark":
+      handleCenterMarkClick(wx, wy);
+      break;
+
+    case "scale":
+      handleScaleClick(wx, wy);
       break;
 
     case "dimension":

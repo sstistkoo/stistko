@@ -77,6 +77,7 @@
  * @property {number} r
  * @property {number} startAngle
  * @property {number} endAngle
+ * @property {boolean} [ccw]
  */
 
 /**
@@ -189,7 +190,7 @@
 // ── Stav aplikace ──
 
 /**
- * @typedef {'select'|'move'|'point'|'line'|'constr'|'circle'|'arc'|'rect'|'polyline'|'measure'|'tangent'|'offset'|'trim'|'extend'|'fillet'|'perp'|'parallel'|'horizontal'|'dimension'|'deleteObj'|'anchor'} ToolType
+ * @typedef {'select'|'move'|'point'|'line'|'constr'|'circle'|'arc'|'rect'|'polyline'|'measure'|'tangent'|'offset'|'trim'|'extend'|'fillet'|'chamfer'|'filletChamfer'|'perp'|'parallel'|'horizontal'|'dimension'|'deleteObj'|'anchor'|'break'|'centerMark'|'scale'|'mirror'} ToolType
  */
 
 /**

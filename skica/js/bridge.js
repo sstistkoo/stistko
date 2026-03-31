@@ -20,7 +20,12 @@ export const bridge = {
   trimFromSelection: null,
   extendFromSelection: null,
   filletFromSelection: null,
+  chamferFromSelection: null,
   perpFromSelection: null,
   horizontalFromSelection: null,
   parallelFromSelection: null,
+  centerMarkFromSelection: null,
+  scaleFromSelection: null,
+  filletChamferFromSelection: null,
+  mirrorFromSelection: null,
 };
