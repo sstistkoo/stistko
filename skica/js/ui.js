@@ -22,6 +22,15 @@ bridge.updateLayerList = () => updateLayerList();
 bridge.renderAll = () => renderAll();
 bridge.resetHint = () => resetHint();
 
+// ── Scroll input do viditelné oblasti na mobilu (nad klávesnici) ──
+document.getElementById("sidebar").addEventListener("focus", (e) => {
+  if (e.target.tagName === "INPUT" || e.target.tagName === "SELECT") {
+    setTimeout(() => {
+      e.target.scrollIntoView({ block: "center", behavior: "smooth" });
+    }, 300);
+  }
+}, true);
+
 // ── Seznam objektů ──
 /** Aktualizuje seznam objektů v panelu. */
 export function updateObjectList() {
@@ -65,10 +74,29 @@ export function updateObjectList() {
       renderAll();
     });
     const label = document.createElement("span");
-    label.textContent = "Vybrat vše";
+    label.textContent = "Vše";
     label.style.opacity = "0.7";
     selectAllLi.appendChild(selectAllCb);
     selectAllLi.appendChild(label);
+
+    // Checkbox pro číslování objektů – na stejném řádku
+    const numCb = document.createElement("input");
+    numCb.type = "checkbox";
+    numCb.className = "obj-checkbox";
+    numCb.style.marginLeft = "auto";
+    numCb.title = "Zobrazit čísla objektů na výkrese";
+    numCb.checked = state.showObjectNumbers;
+    numCb.addEventListener("change", () => {
+      state.showObjectNumbers = numCb.checked;
+      renderAll();
+    });
+    const numLabel = document.createElement("span");
+    numLabel.textContent = "Č.";
+    numLabel.title = "Číslovat na výkrese";
+    numLabel.style.opacity = "0.7";
+    selectAllLi.appendChild(numCb);
+    selectAllLi.appendChild(numLabel);
+
     ul.appendChild(selectAllLi);
   }
 
@@ -400,6 +428,7 @@ export function updateProperties() {
     const tdVal = document.createElement("td");
     const input = document.createElement("input");
     input.type = "text";
+    input.inputMode = "decimal";
     input.className = "prop-input";
     input.value = parseFloat(value).toFixed(3);
     input.addEventListener("change", () => {
@@ -461,20 +490,58 @@ export function updateProperties() {
     tbody.appendChild(tr);
   }
 
-  // Helper: přidá color picker
+  // Helper: přidá color picker s 5 presety na jednom řádku
   function addColorRow(label, value, onChange) {
+    const COLOR_PRESETS = [
+      '#89b4fa', // modrá
+      '#f38ba8', // červená
+      '#a6e3a1', // zelená
+      '#f9e2af', // žlutá
+      '#ffffff', // bílá
+    ];
     const tr = document.createElement("tr");
     const tdLabel = document.createElement("td");
     tdLabel.textContent = label;
     const tdVal = document.createElement("td");
+    const wrap = document.createElement("div");
+    wrap.className = "color-inline-row";
+
+    // Color picker
     const input = document.createElement("input");
+
+    // Preset color buttons
+    function updatePresetActive() {
+      wrap.querySelectorAll('.color-preset-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.color === input.value);
+      });
+    }
+    COLOR_PRESETS.forEach(c => {
+      const btn = document.createElement("button");
+      btn.className = "color-preset-btn";
+      btn.dataset.color = c;
+      btn.style.background = c;
+      btn.title = c;
+      if (c === value) btn.classList.add('active');
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        input.value = c;
+        onChange(c);
+        updatePresetActive();
+      });
+      wrap.appendChild(btn);
+    });
+
+    // Color picker na konci
     input.type = "color";
     input.className = "prop-color-input";
     input.value = value;
     input.addEventListener("input", () => {
       onChange(input.value);
+      updatePresetActive();
     });
-    tdVal.appendChild(input);
+    wrap.appendChild(input);
+
+    tdVal.appendChild(wrap);
     tr.appendChild(tdLabel);
     tr.appendChild(tdVal);
     tbody.appendChild(tr);
@@ -558,47 +625,66 @@ export function updateProperties() {
         return r ? r.value : '1';
       }
 
-      // Helper to create prop input, optionally with anchor radio
-      function makePropInput(label, value, decimals, radioVal) {
-        const tr = document.createElement("tr");
-        const tdLabel = document.createElement("td");
-        if (radioVal) {
-          tdLabel.style.whiteSpace = "nowrap";
-          const lbl = document.createElement("label");
-          lbl.style.cssText = "display:inline-flex;align-items:center;gap:3px;cursor:pointer";
-          const radio = document.createElement("input");
-          radio.type = "radio";
-          radio.name = "propAnchor";
-          radio.value = radioVal;
-          radio.checked = radioVal === '1';
-          radio.style.cssText = "accent-color:#4a9dff;margin:0";
-          lbl.appendChild(radio);
-          lbl.appendChild(document.createTextNode("📌 " + label));
-          tdLabel.appendChild(lbl);
-        } else {
-          tdLabel.textContent = label;
-        }
-        const tdVal = document.createElement("td");
+      // Helper: vytvoří input element pro grid
+      function makeGridInput(value, decimals) {
         const input = document.createElement("input");
         input.type = "text";
+        input.inputMode = "decimal";
         input.className = "prop-input";
         input.value = parseFloat(value).toFixed(decimals !== undefined ? decimals : 3);
-        input.addEventListener("keydown", (e) => {
-          if (e.key === "Enter") input.blur();
-          e.stopPropagation();
-        });
+        input.addEventListener("keydown", (e) => { if (e.key === "Enter") input.blur(); e.stopPropagation(); });
         input.addEventListener("focus", () => input.select());
-        tdVal.appendChild(input);
-        tr.appendChild(tdLabel);
-        tr.appendChild(tdVal);
-        tbody.appendChild(tr);
         return input;
       }
 
-      const inpX1 = makePropInput(H + "1", obj.x1, 3, '1');
-      const inpY1 = makePropInput(V + "1", obj.y1);
-      const inpX2 = makePropInput(H + "2", obj.x2, 3, '2');
-      const inpY2 = makePropInput(V + "2", obj.y2);
+      // 3×2 grid: vlevo labely+inputy, vpravo labely+inputy
+      const gridTr = document.createElement("tr");
+      const gridTd = document.createElement("td");
+      gridTd.colSpan = 2;
+      const grid = document.createElement("div");
+      grid.className = "prop-grid-3x2";
+
+      // Row 1: 📌 Z1 [input]  X1 [input]
+      const anchor1 = document.createElement("label");
+      anchor1.className = "prop-grid-anchor";
+      const radio1 = document.createElement("input");
+      radio1.type = "radio"; radio1.name = "propAnchor"; radio1.value = "1"; radio1.checked = true;
+      radio1.style.cssText = "accent-color:#4a9dff;margin:0";
+      anchor1.appendChild(radio1);
+      anchor1.appendChild(document.createTextNode(" 📌"));
+      grid.appendChild(anchor1);
+
+      const lblH1 = document.createElement("span"); lblH1.className = "coord-label"; lblH1.textContent = H + "1";
+      grid.appendChild(lblH1);
+      const inpX1 = makeGridInput(obj.x1, 3); grid.appendChild(inpX1);
+      const lblV1 = document.createElement("span"); lblV1.className = "coord-label"; lblV1.textContent = V + "1";
+      grid.appendChild(lblV1);
+      const inpY1 = makeGridInput(obj.y1, 3); grid.appendChild(inpY1);
+
+      // Row 2: 📌 Z2 [input]  X2 [input]
+      const anchor2 = document.createElement("label");
+      anchor2.className = "prop-grid-anchor";
+      const radio2 = document.createElement("input");
+      radio2.type = "radio"; radio2.name = "propAnchor"; radio2.value = "2";
+      radio2.style.cssText = "accent-color:#4a9dff;margin:0";
+      anchor2.appendChild(radio2);
+      anchor2.appendChild(document.createTextNode(" 📌"));
+      grid.appendChild(anchor2);
+
+      const lblH2 = document.createElement("span"); lblH2.className = "coord-label"; lblH2.textContent = H + "2";
+      grid.appendChild(lblH2);
+      const inpX2 = makeGridInput(obj.x2, 3); grid.appendChild(inpX2);
+      const lblV2 = document.createElement("span"); lblV2.className = "coord-label"; lblV2.textContent = V + "2";
+      grid.appendChild(lblV2);
+      const inpY2 = makeGridInput(obj.y2, 3); grid.appendChild(inpY2);
+
+      // Row 3: Délka [input]  Úhel° [input]
+      const spacer = document.createElement("span"); grid.appendChild(spacer);
+      const lblLen = document.createElement("span"); lblLen.className = "coord-label"; lblLen.textContent = "Délka";
+      grid.appendChild(lblLen);
+      const inpLen = makeGridInput(Math.hypot(obj.x2 - obj.x1, obj.y2 - obj.y1), 3); grid.appendChild(inpLen);
+      const lblAng = document.createElement("span"); lblAng.className = "coord-label"; lblAng.textContent = "Úhel°";
+      grid.appendChild(lblAng);
 
       function computeAngle() {
         if (getPropAnchor() === '1') {
@@ -607,9 +693,11 @@ export function updateProperties() {
           return (((Math.atan2(obj.y1 - obj.y2, obj.x1 - obj.x2) * 180) / Math.PI) + 360) % 360;
         }
       }
+      const inpAng = makeGridInput(computeAngle(), 2); grid.appendChild(inpAng);
 
-      const inpLen = makePropInput("Délka", Math.hypot(obj.x2 - obj.x1, obj.y2 - obj.y1));
-      const inpAng = makePropInput("Úhel (°)", computeAngle(), 2);
+      gridTd.appendChild(grid);
+      gridTr.appendChild(gridTd);
+      tbody.appendChild(gridTr);
 
       // Sync: polar → coordinates
       function syncFromPolar() {
@@ -691,20 +779,111 @@ export function updateProperties() {
 
       break;
     }
-    case "circle":
-      addEditRow("Střed " + H, obj.cx, (v) => { obj.cx = v; });
-      addEditRow("Střed " + V, obj.cy, (v) => { obj.cy = v; });
-      addEditRow("Poloměr", obj.r, (v) => { if (v > 0) obj.r = v; }, "0.01");
-      addInfoRow("Průměr", (obj.r * 2).toFixed(3));
-      addInfoRow("Obvod", (2 * Math.PI * obj.r).toFixed(3));
+    case "circle": {
+      // Grid: Střed Z+X vedle sebe, Poloměr+Průměr vedle sebe
+      const cGridTr = document.createElement("tr");
+      const cGridTd = document.createElement("td"); cGridTd.colSpan = 2;
+      const cGrid = document.createElement("div"); cGrid.className = "prop-grid-2x2";
+
+      const cLblH = document.createElement("span"); cLblH.className = "coord-label"; cLblH.textContent = "S." + H;
+      cGrid.appendChild(cLblH);
+      const cInpH = document.createElement("input"); cInpH.type = "text"; cInpH.inputMode = "decimal"; cInpH.className = "prop-input";
+      cInpH.value = obj.cx.toFixed(3);
+      cInpH.addEventListener("keydown", (e) => { if (e.key === "Enter") cInpH.blur(); e.stopPropagation(); });
+      cInpH.addEventListener("focus", () => cInpH.select());
+      cInpH.addEventListener("change", () => { const v = safeEvalMath(cInpH.value); if (!isNaN(v)) { pushUndo(); obj.cx = v; updateAssociativeDimensions(); renderAll(); } });
+      cGrid.appendChild(cInpH);
+      const cLblV = document.createElement("span"); cLblV.className = "coord-label"; cLblV.textContent = "S." + V;
+      cGrid.appendChild(cLblV);
+      const cInpV = document.createElement("input"); cInpV.type = "text"; cInpV.inputMode = "decimal"; cInpV.className = "prop-input";
+      cInpV.value = obj.cy.toFixed(3);
+      cInpV.addEventListener("keydown", (e) => { if (e.key === "Enter") cInpV.blur(); e.stopPropagation(); });
+      cInpV.addEventListener("focus", () => cInpV.select());
+      cInpV.addEventListener("change", () => { const v = safeEvalMath(cInpV.value); if (!isNaN(v)) { pushUndo(); obj.cy = v; updateAssociativeDimensions(); renderAll(); } });
+      cGrid.appendChild(cInpV);
+
+      const cLblR = document.createElement("span"); cLblR.className = "coord-label"; cLblR.textContent = "r";
+      cGrid.appendChild(cLblR);
+      const cInpR = document.createElement("input"); cInpR.type = "text"; cInpR.inputMode = "decimal"; cInpR.className = "prop-input";
+      cInpR.value = obj.r.toFixed(3);
+      cInpR.addEventListener("keydown", (e) => { if (e.key === "Enter") cInpR.blur(); e.stopPropagation(); });
+      cInpR.addEventListener("focus", () => cInpR.select());
+      cInpR.addEventListener("change", () => { const v = safeEvalMath(cInpR.value); if (!isNaN(v) && v > 0) { pushUndo(); obj.r = v; updateAssociativeDimensions(); renderAll(); cInpD.value = (obj.r * 2).toFixed(3); cInpO.value = (2 * Math.PI * obj.r).toFixed(3); } });
+      cGrid.appendChild(cInpR);
+      const cLblD = document.createElement("span"); cLblD.className = "coord-label"; cLblD.textContent = "⌀";
+      cGrid.appendChild(cLblD);
+      const cInpD = document.createElement("span"); cInpD.className = "prop-readonly"; cInpD.textContent = (obj.r * 2).toFixed(3);
+      cGrid.appendChild(cInpD);
+
+      const cLblO = document.createElement("span"); cLblO.className = "coord-label"; cLblO.textContent = "Obvod";
+      cGrid.appendChild(cLblO);
+      const cInpO = document.createElement("span"); cInpO.className = "prop-readonly"; cInpO.textContent = (2 * Math.PI * obj.r).toFixed(3);
+      cGrid.appendChild(cInpO);
+      // empty cells to fill grid
+      cGrid.appendChild(document.createElement("span"));
+      cGrid.appendChild(document.createElement("span"));
+
+      cGridTd.appendChild(cGrid);
+      cGridTr.appendChild(cGridTd);
+      tbody.appendChild(cGridTr);
       break;
-    case "arc":
-      addEditRow("Střed " + H, obj.cx, (v) => { obj.cx = v; });
-      addEditRow("Střed " + V, obj.cy, (v) => { obj.cy = v; });
-      addEditRow("Poloměr", obj.r, (v) => { if (v > 0) obj.r = v; }, "0.01");
-      addEditRow("Start°", (obj.startAngle * 180 / Math.PI), (v) => { obj.startAngle = v * Math.PI / 180; }, "1");
-      addEditRow("Konec°", (obj.endAngle * 180 / Math.PI), (v) => { obj.endAngle = v * Math.PI / 180; }, "1");
+    }
+    case "arc": {
+      // Grid: Střed Z+X, Poloměr + empty, Start° + Konec°
+      const aGridTr = document.createElement("tr");
+      const aGridTd = document.createElement("td"); aGridTd.colSpan = 2;
+      const aGrid = document.createElement("div"); aGrid.className = "prop-grid-2x2";
+
+      const aLblH = document.createElement("span"); aLblH.className = "coord-label"; aLblH.textContent = "S." + H;
+      aGrid.appendChild(aLblH);
+      const aInpH = document.createElement("input"); aInpH.type = "text"; aInpH.inputMode = "decimal"; aInpH.className = "prop-input";
+      aInpH.value = obj.cx.toFixed(3);
+      aInpH.addEventListener("keydown", (e) => { if (e.key === "Enter") aInpH.blur(); e.stopPropagation(); });
+      aInpH.addEventListener("focus", () => aInpH.select());
+      aInpH.addEventListener("change", () => { const v = safeEvalMath(aInpH.value); if (!isNaN(v)) { pushUndo(); obj.cx = v; updateAssociativeDimensions(); renderAll(); } });
+      aGrid.appendChild(aInpH);
+      const aLblV = document.createElement("span"); aLblV.className = "coord-label"; aLblV.textContent = "S." + V;
+      aGrid.appendChild(aLblV);
+      const aInpV = document.createElement("input"); aInpV.type = "text"; aInpV.inputMode = "decimal"; aInpV.className = "prop-input";
+      aInpV.value = obj.cy.toFixed(3);
+      aInpV.addEventListener("keydown", (e) => { if (e.key === "Enter") aInpV.blur(); e.stopPropagation(); });
+      aInpV.addEventListener("focus", () => aInpV.select());
+      aInpV.addEventListener("change", () => { const v = safeEvalMath(aInpV.value); if (!isNaN(v)) { pushUndo(); obj.cy = v; updateAssociativeDimensions(); renderAll(); } });
+      aGrid.appendChild(aInpV);
+
+      const aLblR = document.createElement("span"); aLblR.className = "coord-label"; aLblR.textContent = "r";
+      aGrid.appendChild(aLblR);
+      const aInpR = document.createElement("input"); aInpR.type = "text"; aInpR.inputMode = "decimal"; aInpR.className = "prop-input";
+      aInpR.value = obj.r.toFixed(3);
+      aInpR.addEventListener("keydown", (e) => { if (e.key === "Enter") aInpR.blur(); e.stopPropagation(); });
+      aInpR.addEventListener("focus", () => aInpR.select());
+      aInpR.addEventListener("change", () => { const v = safeEvalMath(aInpR.value); if (!isNaN(v) && v > 0) { pushUndo(); obj.r = v; updateAssociativeDimensions(); renderAll(); } });
+      aGrid.appendChild(aInpR);
+      aGrid.appendChild(document.createElement("span")); // empty
+      aGrid.appendChild(document.createElement("span")); // empty
+
+      const aLblS = document.createElement("span"); aLblS.className = "coord-label"; aLblS.textContent = "Start°";
+      aGrid.appendChild(aLblS);
+      const aInpS = document.createElement("input"); aInpS.type = "text"; aInpS.inputMode = "decimal"; aInpS.className = "prop-input";
+      aInpS.value = (obj.startAngle * 180 / Math.PI).toFixed(2);
+      aInpS.addEventListener("keydown", (e) => { if (e.key === "Enter") aInpS.blur(); e.stopPropagation(); });
+      aInpS.addEventListener("focus", () => aInpS.select());
+      aInpS.addEventListener("change", () => { const v = safeEvalMath(aInpS.value); if (!isNaN(v)) { pushUndo(); obj.startAngle = v * Math.PI / 180; updateAssociativeDimensions(); renderAll(); } });
+      aGrid.appendChild(aInpS);
+      const aLblE = document.createElement("span"); aLblE.className = "coord-label"; aLblE.textContent = "Konec°";
+      aGrid.appendChild(aLblE);
+      const aInpE = document.createElement("input"); aInpE.type = "text"; aInpE.inputMode = "decimal"; aInpE.className = "prop-input";
+      aInpE.value = (obj.endAngle * 180 / Math.PI).toFixed(2);
+      aInpE.addEventListener("keydown", (e) => { if (e.key === "Enter") aInpE.blur(); e.stopPropagation(); });
+      aInpE.addEventListener("focus", () => aInpE.select());
+      aInpE.addEventListener("change", () => { const v = safeEvalMath(aInpE.value); if (!isNaN(v)) { pushUndo(); obj.endAngle = v * Math.PI / 180; updateAssociativeDimensions(); renderAll(); } });
+      aGrid.appendChild(aInpE);
+
+      aGridTd.appendChild(aGrid);
+      aGridTr.appendChild(aGridTd);
+      tbody.appendChild(aGridTr);
       break;
+    }
     case "rect": {
       function getRectAnchor() {
         const r = tbody.querySelector('input[name="propRectAnchor"]:checked');
@@ -733,6 +912,7 @@ export function updateProperties() {
         const tdVal = document.createElement("td");
         const input = document.createElement("input");
         input.type = "text";
+        input.inputMode = "decimal";
         input.className = "prop-input";
         input.value = parseFloat(value).toFixed(decimals !== undefined ? decimals : 3);
         input.addEventListener("keydown", (e) => {
@@ -1676,9 +1856,8 @@ function showNullPointDialog() {
   // Pick button
   overlay.querySelector('#nullPtPick').addEventListener('click', () => {
     pickFromMap((wx, wy) => {
-      const isK2 = state.machineType === 'karusel';
-      inputH.value = (isK2 ? wx : wx).toFixed(3);
-      inputV.value = (isK2 ? wy : wy).toFixed(3);
+      inputH.value = wx.toFixed(3);
+      inputV.value = wy.toFixed(3);
     });
   });
 

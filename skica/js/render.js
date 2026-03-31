@@ -391,15 +391,20 @@ function renderObjects() {
     }
     ctx.setLineDash([]);
 
-    // Kóty
-    if (state.showDimensions !== 'none' && !isConstr) drawDimension(obj);
+    // Kóty – skrýt když jsou zapnutá čísla objektů
+    if (state.showDimensions !== 'none' && !isConstr && !state.showObjectNumbers) drawDimension(obj);
   });
+
+  // ── Čísla objektů na výkrese ──
+  if (state.showObjectNumbers) {
+    drawObjectNumbers();
+  }
 
   // ── Vazební značky (constraints) ──
   drawConstraintMarkers();
 
-  // Průsečíky
-  if (state.showDimensions !== 'none') {
+  // Průsečíky (skrýt při číslování objektů)
+  if (state.showDimensions !== 'none' && !state.showObjectNumbers) {
     state.intersections.forEach((pt) => {
       const [sx, sy] = worldToScreen(pt.x, pt.y);
       const isSelPt = state.selectedPoint != null
@@ -870,6 +875,88 @@ function resolveDimLabelPos(x, y, textW, textH) {
   const finalRect = { x: rect.x, y: rect.y + offsetY, w: rect.w, h: rect.h };
   _dimLabelRects.push(finalRect);
   return { x, y: y + offsetY, collided };
+}
+
+// ── Čísla objektů na výkrese ──
+function drawObjectNumbers() {
+  const fontSize = Math.round(Math.min(20, Math.max(13, 10 + state.zoom * 5)));
+  ctx.font = `bold ${fontSize}px Consolas`;
+
+  // Counter only for non-dimension objects (matches object list numbering)
+  let num = 0;
+  state.objects.forEach((obj, idx) => {
+    if (obj.isDimension || obj.isCoordLabel) return;
+    num++;
+
+    const layer = state.layers.find(l => l.id === obj.layer);
+    if (layer && !layer.visible) return;
+
+    // Compute center position of object
+    let cx, cy;
+    switch (obj.type) {
+      case "point":
+        cx = obj.x; cy = obj.y;
+        break;
+      case "line":
+      case "constr":
+        cx = (obj.x1 + obj.x2) / 2; cy = (obj.y1 + obj.y2) / 2;
+        break;
+      case "circle":
+        cx = obj.cx; cy = obj.cy;
+        break;
+      case "arc":
+        { const midAngle = (obj.startAngle + obj.endAngle) / 2;
+          cx = obj.cx + obj.r * Math.cos(midAngle);
+          cy = obj.cy + obj.r * Math.sin(midAngle); }
+        break;
+      case "rect":
+        cx = (obj.x1 + obj.x2) / 2; cy = (obj.y1 + obj.y2) / 2;
+        break;
+      case "polyline":
+        if (obj.vertices && obj.vertices.length > 0) {
+          let sx = 0, sy = 0;
+          obj.vertices.forEach(v => { sx += v.x; sy += v.y; });
+          cx = sx / obj.vertices.length; cy = sy / obj.vertices.length;
+        } else { return; }
+        break;
+      default:
+        return;
+    }
+
+    const [scx, scy] = worldToScreen(cx, cy);
+    const label = String(num);
+    const tw = ctx.measureText(label).width;
+    const pad = 4;
+    const bw = tw + pad * 2;
+    const bh = fontSize + pad * 2;
+
+    // Background pill
+    const isSel = idx === state.selected || state.multiSelected.has(idx);
+    ctx.fillStyle = isSel ? COLORS.selected : '#f9e2af';
+    ctx.globalAlpha = 0.9;
+    ctx.beginPath();
+    const rx = scx - bw / 2, ry = scy - bh / 2;
+    const r = 4;
+    ctx.moveTo(rx + r, ry);
+    ctx.lineTo(rx + bw - r, ry);
+    ctx.arcTo(rx + bw, ry, rx + bw, ry + r, r);
+    ctx.lineTo(rx + bw, ry + bh - r);
+    ctx.arcTo(rx + bw, ry + bh, rx + bw - r, ry + bh, r);
+    ctx.lineTo(rx + r, ry + bh);
+    ctx.arcTo(rx, ry + bh, rx, ry + bh - r, r);
+    ctx.lineTo(rx, ry + r);
+    ctx.arcTo(rx, ry, rx + r, ry, r);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    // Number text
+    ctx.fillStyle = '#1e1e2e';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(label, scx, scy);
+    ctx.textAlign = 'start';
+    ctx.textBaseline = 'alphabetic';
+  });
 }
 
 // ── Kóty / rozměry ──
