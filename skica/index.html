@@ -705,35 +705,6 @@
       </button>
       <!-- ── Rozbalovací sekce: další nástroje ── -->
       <div id="toolbarMore" class="toolbar-more">
-        <button class="tool-btn" data-tool="centerMark" title="Středová značka">
-          <svg viewBox="0 0 24 24">
-            <circle
-              cx="12"
-              cy="12"
-              r="8"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-            />
-            <line
-              x1="2"
-              y1="12"
-              x2="22"
-              y2="12"
-              stroke="currentColor"
-              stroke-width="1.5"
-            />
-            <line
-              x1="12"
-              y1="2"
-              x2="12"
-              y2="22"
-              stroke="currentColor"
-              stroke-width="1.5"
-            />
-          </svg>
-          Střed
-        </button>
         <div class="toolbar-more-settings">
           <button
             class="tool-btn toolbar-setting"
@@ -912,6 +883,43 @@
           </svg>
           Text
         </button>
+        <button class="tool-btn" data-tool="centerMark" title="Středová značka">
+          <svg viewBox="0 0 24 24">
+            <circle
+              cx="12"
+              cy="12"
+              r="8"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            />
+            <line
+              x1="2"
+              y1="12"
+              x2="22"
+              y2="12"
+              stroke="currentColor"
+              stroke-width="1.5"
+            />
+            <line
+              x1="12"
+              y1="2"
+              x2="12"
+              y2="22"
+              stroke="currentColor"
+              stroke-width="1.5"
+            />
+          </svg>
+          Střed
+        </button>
+        <button
+          class="tool-btn"
+          id="btnSetRef"
+          title="Nastavit nulový bod (klikni znovu pro zrušení)"
+          aria-label="Nastavit nulový bod"
+        >
+          📍 Nul.bod
+        </button>
         <button class="tool-btn" data-tool="gear" title="Ozubené kolo">
           <svg viewBox="0 0 24 24">
             <path
@@ -964,7 +972,7 @@
           title="Export CNC souřadnic"
           aria-label="Export CNC souřadnic"
         >
-          📋 CNC Export
+          📋 CNC
         </button>
 
         <div class="sep"></div>
@@ -975,14 +983,6 @@
           aria-label="Správa projektů"
         >
           📁 Projekty
-        </button>
-        <button
-          class="tool-btn"
-          id="btnSetRef"
-          title="Nastavit nulový bod (klikni znovu pro zrušení)"
-          aria-label="Nastavit nulový bod"
-        >
-          📍 Nul. bod
         </button>
         <button
           class="tool-btn"
