@@ -1,7 +1,6 @@
 import { state, showToast } from '../state.js';
-import { addObject } from '../objects.js';
+import { addRectAsSegments } from '../objects.js';
 import { startDrawing, finishDrawing } from './helpers.js';
-import { showPostDrawRectDialog } from '../dialogs/postDrawDialog.js';
 
 /**
  * @param {number} wx
@@ -17,15 +16,7 @@ export function handleRectClick(wx, wy) {
       finishDrawing();
       return;
     }
-    const rectObj = addObject({
-      type: "rect",
-      x1: rp.x,
-      y1: rp.y,
-      x2: wx,
-      y2: wy,
-      name: `Obdélník ${state.nextId}`,
-    });
+    addRectAsSegments(rp.x, rp.y, wx, wy);
     finishDrawing();
-    if (rectObj) showPostDrawRectDialog(rectObj);
   }
 }

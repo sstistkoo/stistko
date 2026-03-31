@@ -10,7 +10,7 @@ import { safeEvalMath } from '../utils.js';
 import { calculateAllIntersections } from '../geometry.js';
 import { updateObjectList, resetHint } from '../ui.js';
 import { renderAll } from '../render.js';
-import { addObject } from '../objects.js';
+import { addObject, addPolylineAsSegments } from '../objects.js';
 
 /**
  * Zobrazí post-draw dialog pro úsečku (line/constr).
@@ -676,20 +676,13 @@ export function showPolylineSegmentDialog() {
     } else {
       while (bulges.length < pts.length - 1) bulges.push(0);
     }
-    const plObj = addObject({
-      type: 'polyline',
-      vertices: pts.slice(),
-      bulges: bulges.slice(0, closed ? pts.length : pts.length - 1),
-      closed,
-      name: `Kontura ${state.nextId}`,
-    });
+    addPolylineAsSegments(pts.slice(), bulges.slice(0, closed ? pts.length : pts.length - 1), closed);
     state.drawing = false;
     state.tempPoints = [];
     state._polylineBulges = [];
     resetHint();
     overlay.remove();
     showToast(closed ? 'Kontura uzavřena' : 'Kontura dokončena');
-    if (plObj) showPostDrawPolylineDialog(plObj);
   }
 
   // "Další bod" – confirm segment values, continue drawing

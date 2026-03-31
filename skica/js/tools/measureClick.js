@@ -115,7 +115,7 @@ export function measureSelection() {
   if (pts.length === 1 && objs.length === 1) {
     const pt = pts[0], obj = objs[0];
     if (_isLine(obj)) {
-      showMeasurePointToLineResult(pt, obj);
+      showMeasurePointToLineResult(pt, obj, undefined, objIndices[0]);
     } else if (_isCircle(obj)) {
       showMeasurePointToCircleResult(pt, obj);
     } else if (_isPoint(obj)) {
@@ -137,17 +137,17 @@ export function measureSelection() {
     }
     // 2 úsečky
     else if (_isLine(a) && _isLine(b)) {
-      showMeasureTwoLinesResult(a, b);
+      showMeasureTwoLinesResult(a, b, objIndices[0], objIndices[1]);
     }
     // 2 kružnice/oblouky
     else if (_isCircle(a) && _isCircle(b)) {
-      showMeasureTwoCirclesResult(a, b);
+      showMeasureTwoCirclesResult(a, b, objIndices[0], objIndices[1]);
     }
     // úsečka + bod
     else if (_isLine(a) && _isPoint(b)) {
-      showMeasurePointToLineResult({ x: b.x, y: b.y }, a);
+      showMeasurePointToLineResult({ x: b.x, y: b.y }, a, objIndices[1], objIndices[0]);
     } else if (_isPoint(a) && _isLine(b)) {
-      showMeasurePointToLineResult({ x: a.x, y: a.y }, b);
+      showMeasurePointToLineResult({ x: a.x, y: a.y }, b, objIndices[0], objIndices[1]);
     }
     // kružnice + bod
     else if (_isCircle(a) && _isPoint(b)) {
@@ -157,9 +157,9 @@ export function measureSelection() {
     }
     // úsečka + kružnice
     else if (_isLine(a) && _isCircle(b)) {
-      showMeasurePointToLineResult({ x: b.cx, y: b.cy }, a);
+      showMeasurePointToLineResult({ x: b.cx, y: b.cy }, a, undefined, objIndices[0]);
     } else if (_isCircle(a) && _isLine(b)) {
-      showMeasurePointToLineResult({ x: a.cx, y: a.cy }, b);
+      showMeasurePointToLineResult({ x: a.cx, y: a.cy }, b, undefined, objIndices[1]);
     }
     // generický fallback
     else {

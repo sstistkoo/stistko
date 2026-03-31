@@ -8,6 +8,7 @@ import { calculateAllIntersections } from './geometry.js';
 import { autoCenterView } from './canvas.js';
 import { updateAssociativeDimensions } from './dialogs/dimension.js';
 import { hasAnchoredPoint } from './tools/anchorClick.js';
+import { bulgeToArc } from './utils.js';
 
 /**
  * Přidá objekt do výkresu (push undo, přiřazení ID a vrstvy).
@@ -36,6 +37,96 @@ export function addObject(obj) {
     autoCenterView();
   }
   return obj;
+}
+
+/**
+ * Rozloží konturu (polyline) na nezávislé úsečky a oblouky.
+ * Jedna operace undo pro všechny segmenty.
+ */
+export function addPolylineAsSegments(vertices, bulges, closed) {
+  pushUndo();
+  const segments = [];
+  const count = closed ? vertices.length : vertices.length - 1;
+  for (let i = 0; i < count; i++) {
+    const p1 = vertices[i];
+    const p2 = vertices[(i + 1) % vertices.length];
+    const b = (bulges && bulges[i]) || 0;
+
+    let obj;
+    if (b !== 0) {
+      const arc = bulgeToArc(p1, p2, b);
+      if (arc) {
+        const id = state.nextId++;
+        obj = {
+          type: 'arc',
+          cx: arc.cx, cy: arc.cy,
+          r: arc.r,
+          startAngle: arc.startAngle,
+          endAngle: arc.endAngle,
+          name: `Oblouk ${id}`,
+          id,
+          layer: state.activeLayer,
+        };
+      }
+    } else {
+      const id = state.nextId++;
+      obj = {
+        type: 'line',
+        x1: p1.x, y1: p1.y,
+        x2: p2.x, y2: p2.y,
+        name: `Úsečka ${id}`,
+        id,
+        layer: state.activeLayer,
+      };
+    }
+
+    if (obj) {
+      state.objects.push(obj);
+      segments.push(obj);
+    }
+  }
+  updateObjectList();
+  calculateAllIntersections();
+  if (window.innerWidth <= 900 && state.objects.length === segments.length) {
+    autoCenterView();
+  }
+  return segments;
+}
+
+/**
+ * Rozloží obdélník na 4 nezávislé úsečky.
+ * Jedna operace undo pro všechny 4 strany.
+ */
+export function addRectAsSegments(x1, y1, x2, y2) {
+  pushUndo();
+  const corners = [
+    { x: x1, y: y1 },
+    { x: x2, y: y1 },
+    { x: x2, y: y2 },
+    { x: x1, y: y2 },
+  ];
+  const lines = [];
+  for (let i = 0; i < 4; i++) {
+    const p1 = corners[i];
+    const p2 = corners[(i + 1) % 4];
+    const id = state.nextId++;
+    const obj = {
+      type: 'line',
+      x1: p1.x, y1: p1.y,
+      x2: p2.x, y2: p2.y,
+      name: `Úsečka ${id}`,
+      id,
+      layer: state.activeLayer,
+    };
+    state.objects.push(obj);
+    lines.push(obj);
+  }
+  updateObjectList();
+  calculateAllIntersections();
+  if (window.innerWidth <= 900 && state.objects.length === 4) {
+    autoCenterView();
+  }
+  return lines;
 }
 
 /**

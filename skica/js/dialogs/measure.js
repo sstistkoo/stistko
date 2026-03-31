@@ -5,14 +5,14 @@
 
 import { COLORS } from '../constants.js';
 import { makeInputOverlay } from '../dialogFactory.js';
-import { state, showToast, toDisplayCoords, axisLabels, displayX, xPrefix, coordHelpers } from '../state.js';
+import { state, showToast, toDisplayCoords, axisLabels, displayX, xPrefix, coordHelpers, pushUndo } from '../state.js';
 import { addObject } from '../objects.js';
 import { renderAll } from '../render.js';
-import { typeLabel, bulgeToArc } from '../utils.js';
+import { typeLabel, bulgeToArc, safeEvalMath } from '../utils.js';
 import { updateObjectList } from '../ui.js';
-import { addDimensionForObject } from './dimension.js';
-import { showEditObjectDialog } from './mobileEdit.js';
-import { projectPointToLine, distPointToInfiniteLine, angleBetweenLines, intersectInfiniteLines } from '../geometry.js';
+import { addDimensionForObject, updateAssociativeDimensions } from './dimension.js';
+import { showEditObjectDialog, wireExprInputs } from './mobileEdit.js';
+import { projectPointToLine, distPointToInfiniteLine, angleBetweenLines, intersectInfiniteLines, calculateAllIntersections } from '../geometry.js';
 
 // ── Měření – dialog výsledku ──
 /**
@@ -351,14 +351,19 @@ export function showMeasureMultiPointResult(points) {
 
 /**
  * Měření mezi dvěma úsečkami (line/constr).
+ * @param {object} obj1
+ * @param {object} obj2
+ * @param {number} [idx1] – index obj1 v state.objects
+ * @param {number} [idx2] – index obj2 v state.objects
  */
-export function showMeasureTwoLinesResult(obj1, obj2) {
+export function showMeasureTwoLinesResult(obj1, obj2, idx1, idx2) {
   const { H, V, Hp, Vp, fH, fV } = coordHelpers();
   const dx1 = obj1.x2 - obj1.x1, dy1 = obj1.y2 - obj1.y1;
   const dx2 = obj2.x2 - obj2.x1, dy2 = obj2.y2 - obj2.y1;
   const len1 = Math.hypot(dx1, dy1), len2 = Math.hypot(dx2, dy2);
   const cross = (len1 > 1e-9 && len2 > 1e-9) ? Math.abs(dx1 * dy2 - dy1 * dx2) / (len1 * len2) : 1;
   const isParallel = cross < 0.01;
+  const canEdit = idx1 !== undefined && idx2 !== undefined;
 
   let rows = '';
   if (isParallel) {
@@ -371,12 +376,56 @@ export function showMeasureTwoLinesResult(obj1, obj2) {
       <div class="input-dialog">
         <h3>📏 Měření – 2 úsečky ∥</h3>
         <table style="width:100%;font-family:Consolas;font-size:13px;">${rows}</table>
+        ${canEdit ? `
+        <div style="margin-top:8px;padding-top:8px;border-top:1px solid ${COLORS.border}">
+          <div style="margin-bottom:6px;color:${COLORS.label};font-size:12px">✏️ Upravit kolmou vzdálenost:</div>
+          <div class="anchor-radio-row" style="margin-bottom:6px">
+            <span>📌 Fixní:</span>
+            <label><input type="radio" name="msFixLine" value="1" checked> Úsečka 1</label>
+            <label><input type="radio" name="msFixLine" value="2"> Úsečka 2</label>
+          </div>
+          <div class="input-row">
+            <div><label>Nová vzdálenost (mm):</label><input type="text" id="msNewDist" value="${perpDist.toFixed(3)}" style="width:120px"></div>
+          </div>
+          <div class="btn-row" style="margin-top:6px">
+            <button class="btn-ok" id="msApplyDist" style="font-size:13px">✅ Použít</button>
+          </div>
+        </div>` : ''}
         <div class="btn-row">
           <button class="btn-cancel" id="msAddDim">📐 Přidat kótu</button>
           <button class="btn-cancel" id="msCopy">📋 Kopírovat</button>
           <button class="btn-ok btn-cancel-overlay">OK</button>
         </div>
       </div>`);
+    if (canEdit) {
+      wireExprInputs(overlay);
+      const applyBtn = overlay.querySelector("#msApplyDist");
+      if (applyBtn) applyBtn.addEventListener("click", () => {
+        const raw = overlay.querySelector("#msNewDist").value.trim();
+        const newDist = safeEvalMath(raw);
+        if (!isFinite(newDist) || newDist < 0) { showToast("Neplatná vzdálenost"); return; }
+        const fixLine = overlay.querySelector('input[name="msFixLine"]:checked').value;
+        const fixObj = fixLine === '1' ? obj1 : obj2;
+        const moveObj = fixLine === '1' ? obj2 : obj1;
+        pushUndo();
+        // Compute perpendicular direction from fixObj
+        const fdx = fixObj.x2 - fixObj.x1, fdy = fixObj.y2 - fixObj.y1;
+        const flen = Math.hypot(fdx, fdy);
+        if (flen < 1e-10) { showToast("Úsečka je příliš krátká"); return; }
+        const nx = -fdy / flen, ny = fdx / flen;
+        // Current perpendicular distance (signed)
+        const curSignedDist = (moveObj.x1 - fixObj.x1) * nx + (moveObj.y1 - fixObj.y1) * ny;
+        const sign = curSignedDist >= 0 ? 1 : -1;
+        const shift = sign * newDist - curSignedDist;
+        moveObj.x1 += nx * shift; moveObj.y1 += ny * shift;
+        moveObj.x2 += nx * shift; moveObj.y2 += ny * shift;
+        updateAssociativeDimensions();
+        calculateAllIntersections();
+        renderAll();
+        overlay.remove();
+        showToast(`Vzdálenost změněna na ${newDist.toFixed(3)} mm`);
+      });
+    }
     _addCopyAndDimListeners(overlay, () => {
       const foot = projectPointToLine(obj2.x1, obj2.y1, obj1.x1, obj1.y1, obj1.x2, obj1.y2);
       addObject({
@@ -402,6 +451,21 @@ export function showMeasureTwoLinesResult(obj1, obj2) {
       <div class="input-dialog">
         <h3>📏 Měření – 2 úsečky ∠</h3>
         <table style="width:100%;font-family:Consolas;font-size:13px;">${rows}</table>
+        ${canEdit ? `
+        <div style="margin-top:8px;padding-top:8px;border-top:1px solid ${COLORS.border}">
+          <div style="margin-bottom:6px;color:${COLORS.label};font-size:12px">✏️ Upravit úhel mezi úsečkami:</div>
+          <div class="anchor-radio-row" style="margin-bottom:6px">
+            <span>📌 Fixní:</span>
+            <label><input type="radio" name="msFixAngle" value="1" checked> Úsečka 1</label>
+            <label><input type="radio" name="msFixAngle" value="2"> Úsečka 2</label>
+          </div>
+          <div class="input-row">
+            <div><label>Nový úhel (°):</label><input type="text" id="msNewAngle" value="${angle.toFixed(2)}" style="width:120px"></div>
+          </div>
+          <div class="btn-row" style="margin-top:6px">
+            <button class="btn-ok" id="msApplyAngle" style="font-size:13px">✅ Použít</button>
+          </div>
+        </div>` : ''}
         <div class="btn-row">
           ${intPt ? `<button class="btn-cancel" id="msAddPt">📍 Vytvořit průsečík</button>` : ''}
           <button class="btn-cancel" id="msCopy">📋 Kopírovat</button>
@@ -409,6 +473,50 @@ export function showMeasureTwoLinesResult(obj1, obj2) {
         </div>
       </div>`);
     _addCopyAndDimListeners(overlay);
+    if (canEdit) {
+      wireExprInputs(overlay);
+      const applyAngleBtn = overlay.querySelector("#msApplyAngle");
+      if (applyAngleBtn) applyAngleBtn.addEventListener("click", () => {
+        const raw = overlay.querySelector("#msNewAngle").value.trim();
+        const newAngleDeg = safeEvalMath(raw);
+        if (!isFinite(newAngleDeg) || newAngleDeg <= 0 || newAngleDeg >= 180) {
+          showToast("Neplatný úhel (0–180°)"); return;
+        }
+        const fixChoice = overlay.querySelector('input[name="msFixAngle"]:checked').value;
+        const fixObj = fixChoice === '1' ? obj1 : obj2;
+        const moveObj = fixChoice === '1' ? obj2 : obj1;
+        const pivot = intersectInfiniteLines(fixObj, moveObj);
+        if (!pivot) { showToast("Nelze najít průsečík"); return; }
+        pushUndo();
+        // Direction of the fixed line
+        const fDx = fixObj.x2 - fixObj.x1, fDy = fixObj.y2 - fixObj.y1;
+        const fixAngleRad = Math.atan2(fDy, fDx);
+        // Direction of the moving line
+        const mDx = moveObj.x2 - moveObj.x1, mDy = moveObj.y2 - moveObj.y1;
+        const movAngleRad = Math.atan2(mDy, mDx);
+        // Cross product to determine which side the moving line is
+        const crossVal = fDx * mDy - fDy * mDx;
+        const side = crossVal >= 0 ? 1 : -1;
+        // New direction angle for the moving line
+        const newAngleRad = newAngleDeg * Math.PI / 180;
+        const newMovAngleRad = fixAngleRad + side * newAngleRad;
+        // Rotation to apply
+        const rotationRad = newMovAngleRad - movAngleRad;
+        const cosR = Math.cos(rotationRad), sinR = Math.sin(rotationRad);
+        // Rotate both endpoints of the moving line around the pivot
+        const rx1 = moveObj.x1 - pivot.x, ry1 = moveObj.y1 - pivot.y;
+        moveObj.x1 = pivot.x + rx1 * cosR - ry1 * sinR;
+        moveObj.y1 = pivot.y + rx1 * sinR + ry1 * cosR;
+        const rx2 = moveObj.x2 - pivot.x, ry2 = moveObj.y2 - pivot.y;
+        moveObj.x2 = pivot.x + rx2 * cosR - ry2 * sinR;
+        moveObj.y2 = pivot.y + rx2 * sinR + ry2 * cosR;
+        updateAssociativeDimensions();
+        calculateAllIntersections();
+        renderAll();
+        overlay.remove();
+        showToast(`Úhel změněn na ${newAngleDeg.toFixed(2)}°`);
+      });
+    }
     if (intPt) {
       const ptBtn = overlay.querySelector("#msAddPt");
       if (ptBtn) ptBtn.addEventListener("click", () => {
@@ -422,11 +530,16 @@ export function showMeasureTwoLinesResult(obj1, obj2) {
 
 /**
  * Měření mezi dvěma kružnicemi/oblouky.
+ * @param {object} obj1
+ * @param {object} obj2
+ * @param {number} [idx1]
+ * @param {number} [idx2]
  */
-export function showMeasureTwoCirclesResult(obj1, obj2) {
+export function showMeasureTwoCirclesResult(obj1, obj2, idx1, idx2) {
   const { H, V, Hp, Vp, fH, fV } = coordHelpers();
   const centerDist = Math.hypot(obj2.cx - obj1.cx, obj2.cy - obj1.cy);
   const edgeDist = centerDist - obj1.r - obj2.r;
+  const canEdit = idx1 !== undefined && idx2 !== undefined;
   let rows = '';
   rows += `<tr><td style="color:${COLORS.label}">Střed 1:</td><td style="color:${COLORS.primary}">${Hp}${H}${fH(obj1.cx).toFixed(3)} ${Vp}${V}${fV(obj1.cy).toFixed(3)}</td></tr>`;
   rows += `<tr><td style="color:${COLORS.label}">Střed 2:</td><td style="color:${COLORS.primary}">${Hp}${H}${fH(obj2.cx).toFixed(3)} ${Vp}${V}${fV(obj2.cy).toFixed(3)}</td></tr>`;
@@ -438,12 +551,51 @@ export function showMeasureTwoCirclesResult(obj1, obj2) {
     <div class="input-dialog">
       <h3>📏 Měření – 2 kružnice</h3>
       <table style="width:100%;font-family:Consolas;font-size:13px;">${rows}</table>
+      ${canEdit ? `
+      <div style="margin-top:8px;padding-top:8px;border-top:1px solid ${COLORS.border}">
+        <div style="margin-bottom:6px;color:${COLORS.label};font-size:12px">✏️ Upravit vzdálenost středů:</div>
+        <div class="anchor-radio-row" style="margin-bottom:6px">
+          <span>📌 Fixní:</span>
+          <label><input type="radio" name="msFixCirc" value="1" checked> Kružnice 1</label>
+          <label><input type="radio" name="msFixCirc" value="2"> Kružnice 2</label>
+        </div>
+        <div class="input-row">
+          <div><label>Nová vzd. středů (mm):</label><input type="text" id="msNewCDist" value="${centerDist.toFixed(3)}" style="width:120px"></div>
+        </div>
+        <div class="btn-row" style="margin-top:6px">
+          <button class="btn-ok" id="msApplyCDist" style="font-size:13px">✅ Použít</button>
+        </div>
+      </div>` : ''}
       <div class="btn-row">
         <button class="btn-cancel" id="msAddDim">📐 Přidat kótu</button>
         <button class="btn-cancel" id="msCopy">📋 Kopírovat</button>
         <button class="btn-ok btn-cancel-overlay">OK</button>
       </div>
     </div>`);
+  if (canEdit) {
+    wireExprInputs(overlay);
+    const applyBtn = overlay.querySelector("#msApplyCDist");
+    if (applyBtn) applyBtn.addEventListener("click", () => {
+      const raw = overlay.querySelector("#msNewCDist").value.trim();
+      const newDist = safeEvalMath(raw);
+      if (!isFinite(newDist) || newDist < 0) { showToast("Neplatná vzdálenost"); return; }
+      const fixChoice = overlay.querySelector('input[name="msFixCirc"]:checked').value;
+      const fixObj = fixChoice === '1' ? obj1 : obj2;
+      const moveObj = fixChoice === '1' ? obj2 : obj1;
+      pushUndo();
+      const dirX = moveObj.cx - fixObj.cx, dirY = moveObj.cy - fixObj.cy;
+      const curDist = Math.hypot(dirX, dirY);
+      if (curDist < 1e-10) { showToast("Středy jsou totožné"); return; }
+      const ux = dirX / curDist, uy = dirY / curDist;
+      moveObj.cx = fixObj.cx + ux * newDist;
+      moveObj.cy = fixObj.cy + uy * newDist;
+      updateAssociativeDimensions();
+      calculateAllIntersections();
+      renderAll();
+      overlay.remove();
+      showToast(`Vzdálenost středů změněna na ${newDist.toFixed(3)} mm`);
+    });
+  }
   _addCopyAndDimListeners(overlay, () => {
     addObject({
       type: "line", x1: obj1.cx, y1: obj1.cy, x2: obj2.cx, y2: obj2.cy,
@@ -457,12 +609,17 @@ export function showMeasureTwoCirclesResult(obj1, obj2) {
 
 /**
  * Měření bod → úsečka (kolmá vzdálenost).
+ * @param {object} pt – snap bod {x,y}
+ * @param {object} lineObj
+ * @param {number} [ptIdx] – index bodu v state.objects (pokud je to objekt)
+ * @param {number} [lineIdx] – index úsečky v state.objects
  */
-export function showMeasurePointToLineResult(pt, lineObj) {
+export function showMeasurePointToLineResult(pt, lineObj, ptIdx, lineIdx) {
   const { H, V, Hp, Vp, fH, fV } = coordHelpers();
   const foot = projectPointToLine(pt.x, pt.y, lineObj.x1, lineObj.y1, lineObj.x2, lineObj.y2);
   const perpDist = Math.hypot(pt.x - foot.x, pt.y - foot.y);
   const angle = Math.atan2(pt.y - foot.y, pt.x - foot.x) * 180 / Math.PI;
+  const canEdit = lineIdx !== undefined;
   let rows = '';
   rows += `<tr><td style="color:${COLORS.label}">Kolmá vzd.:</td><td style="color:${COLORS.selected}">${perpDist.toFixed(3)} mm</td></tr>`;
   rows += `<tr><td style="color:${COLORS.label}">Úhel:</td><td style="color:${COLORS.selected}">${angle.toFixed(2)}°</td></tr>`;
@@ -472,12 +629,66 @@ export function showMeasurePointToLineResult(pt, lineObj) {
     <div class="input-dialog">
       <h3>📏 Měření – bod ↔ úsečka</h3>
       <table style="width:100%;font-family:Consolas;font-size:13px;">${rows}</table>
+      ${canEdit ? `
+      <div style="margin-top:8px;padding-top:8px;border-top:1px solid ${COLORS.border}">
+        <div style="margin-bottom:6px;color:${COLORS.label};font-size:12px">✏️ Upravit kolmou vzdálenost:</div>
+        <div class="anchor-radio-row" style="margin-bottom:6px">
+          <span>📌 Co posunout:</span>
+          <label><input type="radio" name="msMovePtL" value="pt" checked> Bod</label>
+          <label><input type="radio" name="msMovePtL" value="line"> Úsečku</label>
+        </div>
+        <div class="input-row">
+          <div><label>Nová vzdálenost (mm):</label><input type="text" id="msNewPLDist" value="${perpDist.toFixed(3)}" style="width:120px"></div>
+        </div>
+        <div class="btn-row" style="margin-top:6px">
+          <button class="btn-ok" id="msApplyPLDist" style="font-size:13px">✅ Použít</button>
+        </div>
+      </div>` : ''}
       <div class="btn-row">
         <button class="btn-cancel" id="msAddDim">📐 Přidat kótu</button>
         <button class="btn-cancel" id="msCopy">📋 Kopírovat</button>
         <button class="btn-ok btn-cancel-overlay">OK</button>
       </div>
     </div>`);
+  if (canEdit) {
+    wireExprInputs(overlay);
+    const applyBtn = overlay.querySelector("#msApplyPLDist");
+    if (applyBtn) applyBtn.addEventListener("click", () => {
+      const raw = overlay.querySelector("#msNewPLDist").value.trim();
+      const newDist = safeEvalMath(raw);
+      if (!isFinite(newDist) || newDist < 0) { showToast("Neplatná vzdálenost"); return; }
+      const moveWhat = overlay.querySelector('input[name="msMovePtL"]:checked').value;
+      pushUndo();
+      // Perpendicular direction from line
+      const ldx = lineObj.x2 - lineObj.x1, ldy = lineObj.y2 - lineObj.y1;
+      const llen = Math.hypot(ldx, ldy);
+      if (llen < 1e-10) { showToast("Úsečka je příliš krátká"); return; }
+      const nx = -ldy / llen, ny = ldx / llen;
+      // Current signed distance from line to point
+      const curSigned = (pt.x - lineObj.x1) * nx + (pt.y - lineObj.y1) * ny;
+      const sign = curSigned >= 0 ? 1 : -1;
+      if (moveWhat === 'pt' && ptIdx !== undefined) {
+        // Move the point object
+        const ptObj = state.objects[ptIdx];
+        if (ptObj && ptObj.type === 'point') {
+          const footP = projectPointToLine(ptObj.x, ptObj.y, lineObj.x1, lineObj.y1, lineObj.x2, lineObj.y2);
+          ptObj.x = footP.x + nx * sign * newDist;
+          ptObj.y = footP.y + ny * sign * newDist;
+        }
+      } else {
+        // Move the line
+        const shift = sign * newDist - curSigned;
+        // Move line in opposite direction (away from point → towards desired dist)
+        lineObj.x1 -= nx * shift; lineObj.y1 -= ny * shift;
+        lineObj.x2 -= nx * shift; lineObj.y2 -= ny * shift;
+      }
+      updateAssociativeDimensions();
+      calculateAllIntersections();
+      renderAll();
+      overlay.remove();
+      showToast(`Vzdálenost změněna na ${newDist.toFixed(3)} mm`);
+    });
+  }
   _addCopyAndDimListeners(overlay, () => {
     addObject({
       type: "line", x1: pt.x, y1: pt.y, x2: foot.x, y2: foot.y,

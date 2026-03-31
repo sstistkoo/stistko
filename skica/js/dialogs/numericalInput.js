@@ -5,7 +5,7 @@
 import { COLORS } from '../constants.js';
 import { makeInputOverlay } from '../dialogFactory.js';
 import { state, showToast, fromIncToAbs, axisLabels, toDisplayCoords } from '../state.js';
-import { addObject } from '../objects.js';
+import { addObject, addRectAsSegments, addPolylineAsSegments } from '../objects.js';
 import { screenToWorld, snapPt, drawCanvas } from '../canvas.js';
 import { safeEvalMath } from '../utils.js';
 import { wireExprInputs } from './mobileEdit.js';
@@ -463,18 +463,12 @@ export function showNumericalInputDialog() {
           if (!isNaN(w) && !isNaN(h) && w > 0 && h > 0) {
             // Šířka/výška je vždy relativní delta
             const p2 = { x: p1.x + w, y: p1.y + h };
-            addObject({
-              type: "rect", x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y,
-              name: `Obdélník ${state.nextId}`,
-            });
+            addRectAsSegments(p1.x, p1.y, p2.x, p2.y);
             state.numDialogChain = { x: p2.x, y: p2.y };
             break;
           }
           let p2 = toAbs(x2r, y2r);
-          addObject({
-            type: "rect", x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y,
-            name: `Obdélník ${state.nextId}`,
-          });
+          addRectAsSegments(p1.x, p1.y, p2.x, p2.y);
           state.numDialogChain = { x: p2.x, y: p2.y };
           break;
         }
@@ -487,13 +481,7 @@ export function showNumericalInputDialog() {
           const closed = overlay.querySelector("#polyClosed")?.checked || false;
           const bulges = overlay._polyBulges || [];
           while (bulges.length < (closed ? verts.length : verts.length - 1)) bulges.push(0);
-          addObject({
-            type: "polyline",
-            vertices: verts.slice(),
-            bulges: bulges.slice(0, closed ? verts.length : verts.length - 1),
-            closed,
-            name: `Kontura ${state.nextId}`,
-          });
+          addPolylineAsSegments(verts.slice(), bulges.slice(0, closed ? verts.length : verts.length - 1), closed);
           const lastV = verts[verts.length - 1];
           state.numDialogChain = { x: lastV.x, y: lastV.y };
           break;

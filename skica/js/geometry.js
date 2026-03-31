@@ -321,11 +321,20 @@ export function selectObjectAt(wx, wy) {
       }
     } else {
       // ── Objekt není vybrán ──
-      // Pokud klik je velmi blízko snap bodu → preferovat bod
+      // Pokud klik je velmi blízko snap bodu → preferovat bod,
+      // ALE pokud snap bod leží na kliknutém objektu (např. čtvrtinový bod kružnice),
+      // vybrat objekt místo bodu
       if (snapPt) {
         const snapDist = Math.hypot(snapPt.x - wx, snapPt.y - wy);
         if (snapDist < threshold * 0.35) {
-          _toggleSelectedPoint(snapPt);
+          // Zkontrolovat, jestli snap bod patří kliknutému objektu
+          const objPts = getObjectSnapPoints(obj);
+          const isOwnPt = objPts.some(p => Math.hypot(p.x - snapPt.x, p.y - snapPt.y) < 1e-6);
+          if (isOwnPt) {
+            _addObj(newSel);
+          } else {
+            _toggleSelectedPoint(snapPt);
+          }
         } else {
           _addObj(newSel);
         }

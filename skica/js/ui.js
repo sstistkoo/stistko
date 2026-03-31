@@ -1777,7 +1777,7 @@ document.getElementById("btnHistory").addEventListener("click", async () => {
       <p style="margin:0 0 8px;font-size:13px;color:var(--ctp-subtext0)">Posledních ${history.length} smazaných výkresů. Klikněte pro obnovení:</p>
       ${items}
     </div>`;
-  const { overlay, close } = makeOverlay("🕓 Historie smazaných výkresů", bodyHTML);
+  const overlay = makeOverlay("history", "🕓 Historie smazaných výkresů", bodyHTML);
   overlay.querySelectorAll('[data-hidx]').forEach(btn => {
     btn.addEventListener('click', () => {
       const idx = parseInt(btn.dataset.hidx);
@@ -1795,7 +1795,7 @@ document.getElementById("btnHistory").addEventListener("click", async () => {
       updateIntersectionList();
       if (bridge.calculateAllIntersections) bridge.calculateAllIntersections();
       renderAll();
-      close();
+      overlay.remove();
       showToast(`Výkres z ${entry.date} obnoven ✓`);
     });
   });
