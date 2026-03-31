@@ -280,7 +280,63 @@ export function updateObjectList() {
         ul.appendChild(segLi);
       }
     }
+
+    // ── Rozbalení segmentů obdélníku ──
+    if (obj.type === 'rect' && (idx === state.selected || state.multiSelected.has(idx))) {
+      const rc = getRectCorners(obj);
+      const sideNames = ["Horní", "Pravá", "Dolní", "Levá"];
+      for (let si = 0; si < 4; si++) {
+        const c1 = rc[si];
+        const c2 = rc[(si + 1) % 4];
+        const sideLen = Math.hypot(c2.x - c1.x, c2.y - c1.y);
+
+        const segLi = document.createElement("li");
+        const objSegsSet = state.multiSelectedSegments.get(idx);
+        const isSS = objSegsSet ? objSegsSet.has(si) : false;
+        segLi.className = "seg-item" + (isSS ? " seg-selected" : "");
+        const segSpan = document.createElement("span");
+        const segIcon = document.createElement("span");
+        segIcon.className = "obj-icon";
+        segIcon.textContent = "/";
+        segSpan.appendChild(segIcon);
+        segSpan.appendChild(document.createTextNode(`${sideNames[si]} (${sideLen.toFixed(1)})`));
+        segLi.appendChild(segSpan);
+
+        // Click to toggle segment selection
+        segSpan.addEventListener("click", () => {
+          _toggleSegmentSelection(idx, si);
+        });
+        ul.appendChild(segLi);
+      }
+    }
   });
+}
+
+// ── Helper: toggle segment ve výběru ──
+function _toggleSegmentSelection(objIdx, segIdx) {
+  let s = state.multiSelectedSegments.get(objIdx);
+  if (s && s.has(segIdx)) {
+    s.delete(segIdx);
+    if (s.size === 0) state.multiSelectedSegments.delete(objIdx);
+    // Aktualizovat selectedSegment
+    if (state.multiSelectedSegments.size === 0) {
+      state.selectedSegment = null;
+      state._selectedSegmentObjIdx = null;
+    } else {
+      const lastKey = [...state.multiSelectedSegments.keys()].pop();
+      const lastSet = state.multiSelectedSegments.get(lastKey);
+      state.selectedSegment = [...lastSet].pop();
+      state._selectedSegmentObjIdx = lastKey;
+    }
+  } else {
+    if (!s) { s = new Set(); state.multiSelectedSegments.set(objIdx, s); }
+    s.add(segIdx);
+    state.selectedSegment = segIdx;
+    state._selectedSegmentObjIdx = objIdx;
+  }
+  updateObjectList();
+  updateProperties();
+  renderAll();
 }
 
 // ── Vlastnosti objektu ──
@@ -782,6 +838,49 @@ export function updateProperties() {
         tbody.appendChild(tr);
       }
 
+      // Segment list with checkboxes (4 sides)
+      {
+        const rc = getRectCorners(obj);
+        const sideNames = ["Horní", "Pravá", "Dolní", "Levá"];
+        const rectIdx = state.selected;
+        for (let i = 0; i < 4; i++) {
+          const c1 = rc[i];
+          const c2 = rc[(i + 1) % 4];
+          const sideLen = Math.hypot(c2.x - c1.x, c2.y - c1.y);
+          const objSegs = state.multiSelectedSegments.get(rectIdx);
+          const isSegSel = objSegs ? objSegs.has(i) : false;
+
+          const tr = document.createElement("tr");
+          tr.style.cursor = "pointer";
+          tr.title = "Checkbox pro výběr strany";
+          const tdLabel = document.createElement("td");
+          tdLabel.style.cssText = "display:flex;align-items:center;gap:4px";
+          const cb = document.createElement("input");
+          cb.type = "checkbox";
+          cb.checked = isSegSel;
+          cb.style.cssText = "accent-color:#89b4fa;margin:0;cursor:pointer";
+          cb.title = "Přidat/odebrat stranu z výběru";
+          cb.addEventListener("click", (e) => {
+            e.stopPropagation();
+            _toggleSegmentSelection(rectIdx, i);
+          });
+          tdLabel.appendChild(cb);
+          const labelSpan = document.createElement("span");
+          labelSpan.textContent = `S${i + 1}`;
+          labelSpan.style.color = isSegSel ? COLORS.selected : COLORS.primary;
+          tdLabel.appendChild(labelSpan);
+          const tdVal = document.createElement("td");
+          tdVal.textContent = `${sideNames[i]}, ${sideLen.toFixed(2)} mm`;
+          tdVal.className = "prop-readonly";
+          if (isSegSel) tdVal.style.color = COLORS.selected;
+          tr.appendChild(tdLabel);
+          tr.appendChild(tdVal);
+          tr.addEventListener("mouseenter", () => { tr.style.background = COLORS.surfaceHover; });
+          tr.addEventListener("mouseleave", () => { tr.style.background = ""; });
+          tbody.appendChild(tr);
+        }
+      }
+
       break;
     }
     case "polyline": {
@@ -873,7 +972,7 @@ export function updateProperties() {
         addInfoRow("Celková délka", polyLen.toFixed(3));
         addInfoRow("Segmentů", pSegCnt + " (" + arcCount + " oblouků)");
 
-        // Clickable segment list
+        // Clickable segment list with checkboxes
         for (let i = 0; i < pSegCnt; i++) {
           const sp1 = obj.vertices[i];
           const sp2 = obj.vertices[(i + 1) % pn];
@@ -883,15 +982,33 @@ export function updateProperties() {
             ? Math.hypot(sp2.x - sp1.x, sp2.y - sp1.y)
             : (() => { const a = bulgeToArc(sp1, sp2, sb); return a ? a.r * 4 * Math.atan(Math.abs(sb)) : 0; })();
 
+          const objIdx = state.selected;
+          const objSegs = state.multiSelectedSegments.get(objIdx);
+          const isSegSel = objSegs ? objSegs.has(i) : false;
+
           const tr = document.createElement("tr");
           tr.style.cursor = "pointer";
-          tr.title = "Klikněte pro výběr segmentu";
+          tr.title = "Klikněte pro detail / checkbox pro výběr";
           const tdLabel = document.createElement("td");
-          tdLabel.textContent = `S${i + 1}`;
-          tdLabel.style.color = COLORS.primary;
+          tdLabel.style.cssText = "display:flex;align-items:center;gap:4px";
+          const cb = document.createElement("input");
+          cb.type = "checkbox";
+          cb.checked = isSegSel;
+          cb.style.cssText = "accent-color:#89b4fa;margin:0;cursor:pointer";
+          cb.title = "Přidat/odebrat segment z výběru";
+          cb.addEventListener("click", (e) => {
+            e.stopPropagation();
+            _toggleSegmentSelection(objIdx, i);
+          });
+          tdLabel.appendChild(cb);
+          const labelSpan = document.createElement("span");
+          labelSpan.textContent = `S${i + 1}`;
+          labelSpan.style.color = isSegSel ? COLORS.selected : COLORS.primary;
+          tdLabel.appendChild(labelSpan);
           const tdVal = document.createElement("td");
           tdVal.textContent = `${segType}, ${segLen.toFixed(2)} mm`;
           tdVal.className = "prop-readonly";
+          if (isSegSel) tdVal.style.color = COLORS.selected;
           tr.appendChild(tdLabel);
           tr.appendChild(tdVal);
           tr.addEventListener("click", () => {
