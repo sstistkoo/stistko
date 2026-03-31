@@ -118,6 +118,34 @@ export function removeAnchorsForObject(obj) {
 }
 
 /**
+ * Odstraní osiřelé kotvy – kotvy, které neleží na žádném snap bodu
+ * existujícího objektu ani na žádném aktuálním průsečíku.
+ * Volat po smazání objektů a přepočtu průsečíků.
+ */
+export function cleanupOrphanAnchors() {
+  if (state.anchors.length === 0) return;
+
+  // Sesbírat všechny platné snap body
+  const validPoints = [];
+  for (const obj of state.objects) {
+    if (obj.isDimension || obj.isCoordLabel) continue;
+    const pts = getObjectSnapPoints(obj);
+    for (const p of pts) {
+      if (!p.mid) validPoints.push(p);
+    }
+  }
+  // Přidat průsečíky
+  for (const pt of state.intersections) {
+    validPoints.push(pt);
+  }
+
+  // Filtrovat kotvy – ponechat jen ty, které leží na platném bodu
+  state.anchors = state.anchors.filter(a =>
+    validPoints.some(p => Math.abs(p.x - a.x) < ANCHOR_TOL && Math.abs(p.y - a.y) < ANCHOR_TOL)
+  );
+}
+
+/**
  * Pokusí se odstranit kotvu poblíž daných souřadnic (pro Smaž obj na kotvu).
  * @param {number} wx
  * @param {number} wy

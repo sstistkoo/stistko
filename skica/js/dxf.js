@@ -458,7 +458,8 @@ function entityLines(obj) {
 
 /**
  * Exportuje SKICA objekty do DXF textu (ASCII formát).
- * Minimální formát kompatibilní s Fusion 360, FreeCAD, LibreCAD, AutoCAD atd.
+ * Formát kompatibilní s Fusion 360, FreeCAD, LibreCAD, AutoCAD atd.
+ * Obsahuje $ACADVER AC1015 (AutoCAD 2000) a minimální TABLES sekci.
  * @param {object[]} objects - pole SKICA objektů
  * @param {object[]} [layers] - volitelné pole vrstev [{id, name}]
  * @returns {string} DXF text
@@ -480,8 +481,105 @@ export function exportDXF(objects, layers) {
     layerName: layerMap[obj.layer] || '0',
   }));
 
-  // ── HEADER (prázdný – maximální kompatibilita) ──
+  // Sesbírej unikátní jména vrstev
+  const layerNames = [...new Set(enriched.map(o => o.layerName))];
+  if (!layerNames.includes('0')) layerNames.unshift('0');
+
+  let handleCounter = 1;
+  function nextHandle() {
+    return (handleCounter++).toString(16).toUpperCase();
+  }
+
+  // ── HEADER – verze AC1015 (AutoCAD 2000) pro podporu LWPOLYLINE ──
   out.push(gc(0, 'SECTION'), gc(2, 'HEADER'));
+  out.push(gc(9, '$ACADVER'), gc(1, 'AC1015'));
+  out.push(gc(9, '$HANDSEED'), gc(5, 'FFFF'));
+  out.push(gc(9, '$INSUNITS'), gc(70, 4));  // 4 = milimetry
+  out.push(gc(0, 'ENDSEC'));
+
+  // ── CLASSES (povinná sekce pro AC1015, prázdná) ──
+  out.push(gc(0, 'SECTION'), gc(2, 'CLASSES'));
+  out.push(gc(0, 'ENDSEC'));
+
+  // ── TABLES – definice typů čar a vrstev ──
+  out.push(gc(0, 'SECTION'), gc(2, 'TABLES'));
+
+  // Tabulka VPORT
+  const vportH = nextHandle();
+  out.push(gc(0, 'TABLE'), gc(2, 'VPORT'), gc(5, vportH), gc(100, 'AcDbSymbolTable'), gc(70, 1));
+  const vportEntH = nextHandle();
+  out.push(gc(0, 'VPORT'), gc(5, vportEntH), gc(100, 'AcDbSymbolTableRecord'), gc(100, 'AcDbViewportTableRecord'));
+  out.push(gc(2, '*ACTIVE'), gc(70, 0));
+  out.push(gc(10, '0.0'), gc(20, '0.0'));   // center
+  out.push(gc(11, '1.0'), gc(21, '1.0'));   // snap spacing
+  out.push(gc(40, '1.0'));                   // view height
+  out.push(gc(41, '1.0'));                   // aspect ratio
+  out.push(gc(0, 'ENDTAB'));
+
+  // Tabulka LTYPE
+  const ltypeH = nextHandle();
+  out.push(gc(0, 'TABLE'), gc(2, 'LTYPE'), gc(5, ltypeH), gc(100, 'AcDbSymbolTable'), gc(70, 1));
+  const ltypeEntH = nextHandle();
+  out.push(gc(0, 'LTYPE'), gc(5, ltypeEntH), gc(100, 'AcDbSymbolTableRecord'), gc(100, 'AcDbLinetypeTableRecord'));
+  out.push(gc(2, 'CONTINUOUS'), gc(70, 0));
+  out.push(gc(3, 'Solid line'), gc(72, 65), gc(73, 0), gc(40, '0.0'));
+  out.push(gc(0, 'ENDTAB'));
+
+  // Tabulka LAYER
+  const layerH = nextHandle();
+  out.push(gc(0, 'TABLE'), gc(2, 'LAYER'), gc(5, layerH), gc(100, 'AcDbSymbolTable'), gc(70, layerNames.length));
+  for (const name of layerNames) {
+    const lH = nextHandle();
+    out.push(gc(0, 'LAYER'), gc(5, lH), gc(100, 'AcDbSymbolTableRecord'), gc(100, 'AcDbLayerTableRecord'));
+    out.push(gc(2, name), gc(70, 0));
+    out.push(gc(62, 7), gc(6, 'CONTINUOUS'));
+  }
+  out.push(gc(0, 'ENDTAB'));
+
+  // Tabulka STYLE
+  const styleH = nextHandle();
+  out.push(gc(0, 'TABLE'), gc(2, 'STYLE'), gc(5, styleH), gc(100, 'AcDbSymbolTable'), gc(70, 1));
+  const styleEntH = nextHandle();
+  out.push(gc(0, 'STYLE'), gc(5, styleEntH), gc(100, 'AcDbSymbolTableRecord'), gc(100, 'AcDbTextStyleTableRecord'));
+  out.push(gc(2, 'STANDARD'), gc(70, 0), gc(40, '0.0'), gc(41, '1.0'), gc(3, 'txt'));
+  out.push(gc(0, 'ENDTAB'));
+
+  // Tabulka APPID
+  const appidH = nextHandle();
+  out.push(gc(0, 'TABLE'), gc(2, 'APPID'), gc(5, appidH), gc(100, 'AcDbSymbolTable'), gc(70, 1));
+  const appidEntH = nextHandle();
+  out.push(gc(0, 'APPID'), gc(5, appidEntH), gc(100, 'AcDbSymbolTableRecord'), gc(100, 'AcDbRegAppTableRecord'));
+  out.push(gc(2, 'ACAD'), gc(70, 0));
+  out.push(gc(0, 'ENDTAB'));
+
+  // Tabulka BLOCK_RECORD
+  const brH = nextHandle();
+  out.push(gc(0, 'TABLE'), gc(2, 'BLOCK_RECORD'), gc(5, brH), gc(100, 'AcDbSymbolTable'), gc(70, 2));
+  const msRecH = nextHandle();
+  out.push(gc(0, 'BLOCK_RECORD'), gc(5, msRecH), gc(100, 'AcDbSymbolTableRecord'), gc(100, 'AcDbBlockTableRecord'));
+  out.push(gc(2, '*MODEL_SPACE'));
+  const psRecH = nextHandle();
+  out.push(gc(0, 'BLOCK_RECORD'), gc(5, psRecH), gc(100, 'AcDbSymbolTableRecord'), gc(100, 'AcDbBlockTableRecord'));
+  out.push(gc(2, '*PAPER_SPACE'));
+  out.push(gc(0, 'ENDTAB'));
+
+  out.push(gc(0, 'ENDSEC'));
+
+  // ── BLOCKS (povinná sekce pro AC1015) ──
+  out.push(gc(0, 'SECTION'), gc(2, 'BLOCKS'));
+
+  const msBlkH = nextHandle();
+  out.push(gc(0, 'BLOCK'), gc(5, msBlkH), gc(100, 'AcDbEntity'), gc(8, '0'), gc(100, 'AcDbBlockBegin'));
+  out.push(gc(2, '*MODEL_SPACE'), gc(70, 0), gc(10, '0.0'), gc(20, '0.0'), gc(30, '0.0'));
+  const msEndH = nextHandle();
+  out.push(gc(0, 'ENDBLK'), gc(5, msEndH), gc(100, 'AcDbEntity'), gc(8, '0'), gc(100, 'AcDbBlockEnd'));
+
+  const psBlkH = nextHandle();
+  out.push(gc(0, 'BLOCK'), gc(5, psBlkH), gc(100, 'AcDbEntity'), gc(8, '0'), gc(100, 'AcDbBlockBegin'));
+  out.push(gc(2, '*PAPER_SPACE'), gc(70, 0), gc(10, '0.0'), gc(20, '0.0'), gc(30, '0.0'));
+  const psEndH = nextHandle();
+  out.push(gc(0, 'ENDBLK'), gc(5, psEndH), gc(100, 'AcDbEntity'), gc(8, '0'), gc(100, 'AcDbBlockEnd'));
+
   out.push(gc(0, 'ENDSEC'));
 
   // ── ENTITIES ──
@@ -490,6 +588,12 @@ export function exportDXF(objects, layers) {
     const str = entityLines(obj);
     if (str.length > 0) out.push(str);
   }
+  out.push(gc(0, 'ENDSEC'));
+
+  // ── OBJECTS (povinná sekce pro AC1015) ──
+  out.push(gc(0, 'SECTION'), gc(2, 'OBJECTS'));
+  const dictH = nextHandle();
+  out.push(gc(0, 'DICTIONARY'), gc(5, dictH), gc(100, 'AcDbDictionary'));
   out.push(gc(0, 'ENDSEC'));
 
   out.push(gc(0, 'EOF'));

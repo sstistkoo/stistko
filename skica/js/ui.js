@@ -14,7 +14,7 @@ import { openCuttingCalc, openTaperCalc, openThreadCalc, openConvertCalc, openWe
 import { makeOverlay, makeInputOverlay } from './dialogFactory.js';
 import { getMeta, setMeta } from './idb.js';
 import { showEditObjectDialog } from './dialogs/mobileEdit.js';
-import { isAnchored, removeAnchorsForObject } from './tools/anchorClick.js';
+import { isAnchored, removeAnchorsForObject, cleanupOrphanAnchors } from './tools/anchorClick.js';
 
 // ── Bridge registrace (rozbíjí cyklickou závislost geometry ↔ ui) ──
 bridge.updateProperties = () => updateProperties();
@@ -244,6 +244,7 @@ export function updateObjectList() {
       updateObjectList();
       updateProperties();
       if (bridge.calculateAllIntersections) bridge.calculateAllIntersections();
+      cleanupOrphanAnchors();
     });
     ul.appendChild(li);
 
@@ -354,6 +355,7 @@ export function updateObjectList() {
           updateObjectList();
           updateProperties();
           if (bridge.calculateAllIntersections) bridge.calculateAllIntersections();
+          cleanupOrphanAnchors();
           showToast("Segment smazán ✓");
         });
         ul.appendChild(segLi);

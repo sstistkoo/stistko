@@ -20,4 +20,5 @@ export { handleArcClick } from './arcClick.js';
 export { handleRectClick } from './rectClick.js';
 export { handlePolylineClick } from './polylineClick.js';
 export { handleTextClick } from './textClick.js';
-export { handleAnchorClick, isAnchored, hasAnchoredPoint, removeAnchorsForObject, removeAnchorAt } from './anchorClick.js';
+export { handleGearClick, resetGearState } from './gearClick.js';
+export { handleAnchorClick, isAnchored, hasAnchoredPoint, removeAnchorsForObject, removeAnchorAt, cleanupOrphanAnchors } from './anchorClick.js';

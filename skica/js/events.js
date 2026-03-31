@@ -14,7 +14,7 @@ import { saveProject, showExportImageDialog, showProjectsDialog, showSaveAsDialo
 import { bulgeToArc, deepClone } from './utils.js';
 import { bridge } from './bridge.js';
 import { updateAssociativeDimensions } from './dialogs/dimension.js';
-import { handleTangentClick, tangentFromSelection, handleOffsetClick, offsetFromSelection, handleTrimClick, trimFromSelection, handleExtendClick, extendFromSelection, handleFilletClick, filletFromSelection, handlePerpClick, perpFromSelection, handleHorizontalClick, horizontalFromSelection, handleParallelClick, parallelFromSelection, handleDimensionClick, handleSnapPointClick, handleMoveClick, handleLineClick, handleMeasureClick, handleCircleClick, handleArcClick, handleRectClick, handlePolylineClick, measureSelection, handleTextClick, handleAnchorClick, removeAnchorsForObject, removeAnchorAt, hasAnchoredPoint } from './tools/index.js';
+import { handleTangentClick, tangentFromSelection, handleOffsetClick, offsetFromSelection, handleTrimClick, trimFromSelection, handleExtendClick, extendFromSelection, handleFilletClick, filletFromSelection, handlePerpClick, perpFromSelection, handleHorizontalClick, horizontalFromSelection, handleParallelClick, parallelFromSelection, handleDimensionClick, handleSnapPointClick, handleMoveClick, handleLineClick, handleMeasureClick, handleCircleClick, handleArcClick, handleRectClick, handlePolylineClick, measureSelection, handleTextClick, handleGearClick, resetGearState, handleAnchorClick, removeAnchorsForObject, removeAnchorAt, hasAnchoredPoint, cleanupOrphanAnchors } from './tools/index.js';
 import { showPostDrawPointDialog } from './dialogs/postDrawDialog.js';
 
 // Registrace measureSelection na bridge (aby ui.js nemusel importovat přímo – kruhová závislost)
@@ -237,6 +237,7 @@ document.addEventListener("keydown", (e) => {
       drawCanvas.style.cursor = "crosshair";
     }
     resetDrawingState();
+    resetGearState();
     // Odstranit dočasný měřicí bod
     const mTempIdx = state.objects.findIndex(o => o.isMeasureTemp);
     if (mTempIdx !== -1) state.objects.splice(mTempIdx, 1);
@@ -722,6 +723,10 @@ export function handleCanvasClick(wx, wy) {
       handleTextClick(wx, wy);
       break;
 
+    case "gear":
+      handleGearClick(wx, wy);
+      break;
+
     case "anchor":
       handleAnchorClick(wx, wy);
       break;
@@ -746,6 +751,7 @@ export function handleCanvasClick(wx, wy) {
         updateObjectList();
         updateProperties();
         calculateAllIntersections();
+        cleanupOrphanAnchors();
         renderAll();
         showToast("Objekt smazán ✓");
       } else {
@@ -852,6 +858,7 @@ function deleteSelected() {
     updateObjectList();
     updateProperties();
     calculateAllIntersections();
+    cleanupOrphanAnchors();
     renderAll();
     showToast(`Smazáno ${indices.length} objektů ✓`);
     return;
@@ -875,6 +882,7 @@ function deleteSelected() {
   updateObjectList();
   updateProperties();
   calculateAllIntersections();
+  cleanupOrphanAnchors();
   renderAll();
   showToast("Objekt smazán ✓");
 }
@@ -960,6 +968,7 @@ function deleteSelectedSegment() {
   updateObjectList();
   updateProperties();
   calculateAllIntersections();
+  cleanupOrphanAnchors();
   renderAll();
   showToast("Segment smazán ✓");
 }

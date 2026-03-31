@@ -437,6 +437,7 @@ export function typeLabel(t) {
       rect: "Obdélník",
       polyline: "Kontura",
       text: "Text",
+      gear: "Ozubené kolo",
     }[t] || t
   );
 }
@@ -469,6 +470,7 @@ export function toolLabel(t) {
       dimension: "Kóta",
       snapPoint: "Přichytit bod",
       text: "Text",
+      gear: "Ozubené kolo",
       deleteObj: "Smaž obj.",
       anchor: "Kotva",
     }[t] || t
