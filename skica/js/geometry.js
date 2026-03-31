@@ -694,9 +694,9 @@ export function calculateAllIntersections() {
   const pts = [];
   const objs = state.objects;
   for (let i = 0; i < objs.length; i++) {
-    if (objs[i].isDimension || objs[i].isCoordLabel) continue;
+    if (objs[i].isDimension || objs[i].isCoordLabel || objs[i].skipIntersections) continue;
     for (let j = i + 1; j < objs.length; j++) {
-      if (objs[j].isDimension || objs[j].isCoordLabel) continue;
+      if (objs[j].isDimension || objs[j].isCoordLabel || objs[j].skipIntersections) continue;
       const lines1 = getLines(objs[i]),
         lines2 = getLines(objs[j]);
       const circs1 = getCircles(objs[i]),
