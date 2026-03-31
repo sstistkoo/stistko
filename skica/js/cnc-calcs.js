@@ -11,3 +11,5 @@ export { openToleranceCalc } from './calculators/tolerance.js';
 export { openRoughnessCalc } from './calculators/roughness.js';
 export { openInsertCalc } from './calculators/insert.js';
 export { openGcodeReference } from './calculators/gcode.js';
+export { openMcodeReference } from './calculators/mcode.js';
+export { openSinumerikHub } from './calculators/sinumerikHub.js';

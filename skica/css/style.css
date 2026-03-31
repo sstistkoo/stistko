@@ -3266,3 +3266,120 @@ body {
     font-size: 15px;
   }
 }
+
+/* ── M-code accent & extras ──────────────────────────────── */
+.mc-window .mc-card-name {
+  color: var(--ctp-peach);
+}
+.mc-window .gc-chip-active {
+  background: var(--ctp-peach);
+}
+.mc-window .gc-search:focus {
+  border-color: var(--ctp-peach);
+}
+.mc-chip-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  margin-left: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  border-radius: 9px;
+  background: rgba(255,255,255,.12);
+  color: var(--ctp-subtext0);
+}
+.gc-chip-active .mc-chip-count {
+  background: rgba(0,0,0,.22);
+  color: var(--ctp-mantle);
+}
+.mc-copy-btn {
+  all: unset;
+  cursor: pointer;
+  margin-left: 8px;
+  font-size: 14px;
+  opacity: .55;
+  transition: opacity .15s;
+}
+.mc-copy-btn:hover {
+  opacity: 1;
+}
+
+/* ── Sinumerik Hub ───────────────────────────────────────── */
+.sn-window {
+  max-width: 560px;
+}
+.sn-subtitle {
+  text-align: center;
+  color: var(--ctp-subtext0);
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+.sn-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+}
+.sn-tile {
+  all: unset;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 18px 10px;
+  border-radius: 10px;
+  background: var(--ctp-surface0);
+  cursor: pointer;
+  text-align: center;
+  transition: background .15s, transform .1s;
+}
+.sn-tile:hover {
+  background: var(--ctp-surface1);
+  transform: translateY(-2px);
+}
+.sn-tile:active {
+  transform: translateY(0);
+}
+.sn-tile-icon {
+  font-size: 28px;
+  line-height: 1;
+}
+.sn-tile-title {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--ctp-text);
+}
+.sn-tile-desc {
+  font-size: 11px;
+  color: var(--ctp-subtext0);
+  line-height: 1.3;
+}
+
+/* ── Accent colors for sub-modules ───────────────────────── */
+.sv-window .sv-card-name { color: var(--ctp-mauve); }
+.sv-window .gc-chip-active { background: var(--ctp-mauve); }
+.sv-window .gc-search:focus { border-color: var(--ctp-mauve); }
+
+.sk-window .sk-card-keys { color: var(--ctp-yellow); font-family: 'Courier New', monospace; }
+.sk-window .gc-chip-active { background: var(--ctp-yellow); color: var(--ctp-mantle); }
+.sk-window .gc-search:focus { border-color: var(--ctp-yellow); }
+
+.cm-window .cm-card-name { color: var(--ctp-teal); }
+.cm-window .gc-chip-active { background: var(--ctp-teal); }
+.cm-window .gc-search:focus { border-color: var(--ctp-teal); }
+
+.ex-window .ex-card-name { color: var(--ctp-flamingo); font-size: 15px; }
+.ex-window .gc-chip-active { background: var(--ctp-flamingo); }
+.ex-window .gc-search:focus { border-color: var(--ctp-flamingo); }
+.ex-card-header { display: flex; align-items: center; justify-content: space-between; }
+.ex-notes {
+  margin: 8px 0 0;
+  padding-left: 20px;
+  font-size: 12px;
+  color: var(--ctp-subtext1);
+  line-height: 1.7;
+}
+.ex-code-block { max-height: 260px; overflow-y: auto; }
