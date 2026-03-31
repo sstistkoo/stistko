@@ -1425,8 +1425,8 @@ body {
     z-index: 55;
     border-bottom: none;
     border-top: 1px solid var(--ctp-surface0);
-    padding: 6px;
-    gap: 4px;
+    padding: 4px;
+    gap: 3px;
     max-height: 60vh;
     overflow-y: auto;
     transform: translateY(100%);
@@ -1478,14 +1478,14 @@ body {
   }
 
   .tool-btn {
-    padding: 6px 5px;
-    font-size: 11px;
-    min-height: 32px;
+    padding: 5px 3px;
+    font-size: 10px;
+    min-height: 28px;
   }
 
   .tool-btn svg {
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 12px;
   }
 
   .toolbar-version {
