@@ -78,14 +78,12 @@ export function updateObjectList() {
     label.style.opacity = "0.7";
     selectAllLi.appendChild(selectAllCb);
     selectAllLi.appendChild(label);
-    ul.appendChild(selectAllLi);
 
-    // Checkbox pro číslování objektů – vlastní centrovaný řádek
-    const numLi = document.createElement("li");
-    numLi.className = "select-all-row num-row";
+    // Checkbox pro číslování objektů – na stejném řádku
     const numCb = document.createElement("input");
     numCb.type = "checkbox";
     numCb.className = "obj-checkbox";
+    numCb.style.marginLeft = "auto";
     numCb.title = "Zobrazit čísla objektů na výkrese";
     numCb.checked = state.showObjectNumbers;
     numCb.addEventListener("change", () => {
@@ -93,11 +91,12 @@ export function updateObjectList() {
       renderAll();
     });
     const numLabel = document.createElement("span");
-    numLabel.textContent = "Číslovat na výkrese";
+    numLabel.textContent = "Číslovat";
     numLabel.style.opacity = "0.7";
-    numLi.appendChild(numCb);
-    numLi.appendChild(numLabel);
-    ul.appendChild(numLi);
+    selectAllLi.appendChild(numCb);
+    selectAllLi.appendChild(numLabel);
+
+    ul.appendChild(selectAllLi);
   }
 
   state.objects.forEach((obj, idx) => {
