@@ -5,10 +5,10 @@
 import { MOBILE_BREAKPOINT, LONG_PRESS_MS, CROSSHAIR_OFFSET_Y, ZOOM_MIN, ZOOM_MAX, VIBRATE_LONG_PRESS, TOUCH_MOVE_THRESHOLD, PAN_ACTIVATE_THRESHOLD } from './constants.js';
 import { drawCanvas, screenToWorld, snapPt, autoCenterView, applyAngleSnap, safeVibrate } from './canvas.js';
 import { state, undo, redo, showToast, toDisplayCoords, resetDrawingState, displayX, xPrefix, fmtStatusCoords } from './state.js';
-import { renderAll, getObjectBounds, boundsOverlap } from './render.js';
+import { renderAll } from './render.js';
 import { moveObject, addObject, addPolylineAsSegments } from './objects.js';
 import { handleCanvasClick, finishRectSelection } from './events.js';
-import { setTool, resetHint, updateSnapPtsBtn, updateObjectList, updateProperties } from './ui.js';
+import { setTool, resetHint, updateSnapPtsBtn } from './ui.js';
 import { updateAssociativeDimensions } from './dialogs/dimension.js';
 import { toolLabel } from './utils.js';
 import { showNumericalInputDialog, showMobileEditDialog } from './dialogs.js';
@@ -489,6 +489,26 @@ drawCanvas.addEventListener(
       touchState.touchMoved = false;
       touchState.touchStartTime = Date.now();
 
+      // Dvojtap na prázdné místo → obdélníkový výběr (detekce v touchstart, prst je ještě dole)
+      const now = Date.now();
+      const DOUBLE_TAP_MS = 400;
+      const DOUBLE_TAP_DIST = 30; // px
+      if (
+        state.tool === 'select' && !state.drawing && !state.dragging &&
+        now - touchState.lastTap < DOUBLE_TAP_MS &&
+        Math.hypot(touches[0].clientX - touchState.lastTapX, touches[0].clientY - touchState.lastTapY) < DOUBLE_TAP_DIST
+      ) {
+        const hitObj = findObjectAt(wx, wy);
+        if (hitObj === null) {
+          touchState.lastTap = 0; // reset
+          state._rectSelecting = true;
+          state._rectStart = { x: wx, y: wy };
+          showToast('Táhněte prstem pro výběr oblasti');
+          renderAll();
+          return; // neregistrovat long-press ani panning
+        }
+      }
+
       // Long-press timer pro precision crosshair
       if (touchState.longPressTimer) clearTimeout(touchState.longPressTimer);
       // Uložit touch coords – reference na Touch objekt může být invalidní po eventu
@@ -774,38 +794,11 @@ drawCanvas.addEventListener(
       state.mouse.x = wx;
       state.mouse.y = wy;
 
-      // Dvojtap na prázdné místo v select režimu → obdélníkový výběr
+      // Zapamatovat tap pro detekci double-tap (samotná detekce je v touchstart)
       const now = Date.now();
-      const DOUBLE_TAP_MS = 400;
-      const DOUBLE_TAP_DIST = 30; // px
-      if (
-        state.tool === 'select' && !state.drawing && !state.dragging &&
-        now - touchState.lastTap < DOUBLE_TAP_MS &&
-        Math.hypot(tp.sx - touchState.lastTapX, tp.sy - touchState.lastTapY) < DOUBLE_TAP_DIST
-      ) {
-        // Double-tap detekován – zahájit obdélníkový výběr
-        const hitObj = findObjectAt(wx, wy);
-        if (hitObj === null) {
-          touchState.lastTap = 0; // reset
-          state._rectSelecting = true;
-          state._rectStart = { x: wx, y: wy };
-          updateMobileCoords(wx, wy);
-          showToast('Táhněte prstem pro výběr oblasti');
-          renderAll();
-          // Neuvolňovat – čekat na touchmove/touchend
-          if (e.touches.length < 2) touchState.panActive = false;
-          if (e.touches.length === 0) {
-            touchState.wasMultiTouch = false;
-            touchState.singlePanning = false;
-            touchState.touchMoved = false;
-          }
-          return;
-        }
-      }
-      // Zapamatovat tap pro detekci double-tap
       touchState.lastTap = now;
-      touchState.lastTapX = tp.sx;
-      touchState.lastTapY = tp.sy;
+      touchState.lastTapX = e.changedTouches[0].clientX;
+      touchState.lastTapY = e.changedTouches[0].clientY;
 
       // Simulovat mousedown logiku
       handleCanvasClick(wx, wy);

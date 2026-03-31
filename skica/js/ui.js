@@ -339,6 +339,13 @@ export function updateObjectList() {
                 color: obj.color,
               };
               state.objects.splice(idx + 1, 0, newObj);
+              // Reindex multiSelected – insertion shifts indices > idx
+              const newMulti = new Set();
+              for (const mi of state.multiSelected) {
+                if (mi <= idx) newMulti.add(mi);
+                else newMulti.add(mi + 1);
+              }
+              state.multiSelected = newMulti;
             }
           }
           state.selectedSegment = null;
@@ -408,6 +415,13 @@ export function updateObjectList() {
           }
           // Nahradit obdélník třemi úsečkami
           state.objects.splice(idx, 1, ...newLines);
+          // Reindex multiSelected – replaced 1 with 3 (shift by +2)
+          const newMulti = new Set();
+          for (const mi of state.multiSelected) {
+            if (mi < idx) newMulti.add(mi);
+            else if (mi > idx) newMulti.add(mi + 2);
+          }
+          state.multiSelected = newMulti;
           state.selected = null;
           state.selectedSegment = null;
           state._selectedSegmentObjIdx = null;
