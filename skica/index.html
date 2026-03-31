@@ -243,9 +243,8 @@
               stroke-width="2"
             />
           </svg>
-          Smaž obj.
+          Smaž
         </button>
-        <span class="toolbar-version">v91</span>
         <button
           class="toolbar-close-btn"
           id="mobileToolbarClose"
@@ -668,35 +667,6 @@
         </svg>
         Rozděl
       </button>
-      <button class="tool-btn" data-tool="centerMark" title="Středová značka">
-        <svg viewBox="0 0 24 24">
-          <circle
-            cx="12"
-            cy="12"
-            r="8"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.5"
-          />
-          <line
-            x1="2"
-            y1="12"
-            x2="22"
-            y2="12"
-            stroke="currentColor"
-            stroke-width="1.5"
-          />
-          <line
-            x1="12"
-            y1="2"
-            x2="12"
-            y2="22"
-            stroke="currentColor"
-            stroke-width="1.5"
-          />
-        </svg>
-        Střed
-      </button>
       <button class="tool-btn" data-tool="scale" title="Škálovat">
         <svg viewBox="0 0 24 24">
           <rect
@@ -726,16 +696,44 @@
         </svg>
         Škála
       </button>
-      <!-- ── Rozbalovací sekce: další nástroje ── -->
-      <div class="sep"></div>
       <button
         class="tool-btn toolbar-more-toggle"
         id="btnToolbarMore"
         title="Další nástroje"
       >
-        ▸ Více nástrojů…
+        ▾
       </button>
+      <!-- ── Rozbalovací sekce: další nástroje ── -->
       <div id="toolbarMore" class="toolbar-more">
+        <button class="tool-btn" data-tool="centerMark" title="Středová značka">
+          <svg viewBox="0 0 24 24">
+            <circle
+              cx="12"
+              cy="12"
+              r="8"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            />
+            <line
+              x1="2"
+              y1="12"
+              x2="22"
+              y2="12"
+              stroke="currentColor"
+              stroke-width="1.5"
+            />
+            <line
+              x1="12"
+              y1="2"
+              x2="12"
+              y2="22"
+              stroke="currentColor"
+              stroke-width="1.5"
+            />
+          </svg>
+          Střed
+        </button>
         <div class="toolbar-more-settings">
           <button
             class="tool-btn toolbar-setting"

@@ -1393,9 +1393,6 @@ body {
 .toolbar-close-btn {
   display: none;
 }
-.toolbar-version {
-  display: none;
-}
 .toolbar-setting {
   font-size: 12px !important;
   padding: 4px 8px !important;
@@ -1488,25 +1485,15 @@ body {
     height: 12px;
   }
 
-  .toolbar-version {
-    display: inline-block;
-    font-size: 9px;
-    color: var(--ctp-subtext0);
-    background: var(--ctp-surface0);
-    padding: 2px 5px;
-    border-radius: 3px;
-    margin-left: auto;
-  }
-
   .toolbar-more {
     gap: 4px;
     padding-top: 2px;
   }
   .toolbar-more-toggle {
-    width: 100%;
+    width: auto;
     text-align: center;
-    padding: 8px 12px;
-    font-size: 13px;
+    padding: 5px 10px;
+    font-size: 12px;
   }
 
   #topbar .sep {
