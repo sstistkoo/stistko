@@ -1,34 +1,139 @@
 // ╔══════════════════════════════════════════════════════════════╗
-// ║  Prodloužení úsečky – click logika                         ║
+// ║  Prodloužení objektů – click logika                        ║
+// ║  Podporuje: úsečky, oblouky, rovné segmenty kontur         ║
 // ╚══════════════════════════════════════════════════════════════╝
 
 import { state, pushUndo, showToast } from '../state.js';
 import { renderAll } from '../render.js';
-import { findObjectAt, calculateAllIntersections, getLines, getCircles, intersectLineLine, intersectLineCircle } from '../geometry.js';
+import { findObjectAt, calculateAllIntersections, getLines, getCircles, intersectLineLine, intersectLineCircle, intersectCircleCircle } from '../geometry.js';
 import { getLineSegment, analyzeSelection } from './helpers.js';
 import { showEndpointChoiceDialog } from '../dialogs.js';
 import { isAnchored } from './anchorClick.js';
 import { updateAssociativeDimensions } from '../dialogs/dimension.js';
+import { isAngleBetween } from '../utils.js';
 
-/** Prodlouží úsečku k nejbližšímu průsečíku s jiným objektem na straně kliknutí. */
-export function handleExtendClick(wx, wy) {
-  const idx = findObjectAt(wx, wy);
-  if (idx === null) { showToast("Klepněte na úsečku k prodloužení"); return; }
-  const obj = state.objects[idx];
-  const ls = getLineSegment(obj, wx, wy);
-  if (!ls) {
-    showToast("Prodloužení funguje pouze pro úsečky a rovné segmenty kontur");
-    return;
+// ── Helpers ──
+
+/** Normalizuje úhel do [0, 2π). */
+function normalizeAngle(a) {
+  return ((a % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+}
+
+/**
+ * Sebere průsečíky plné kružnice (rozšířený oblouk) se všemi ostatními objekty.
+ * Vrací body na plné kružnici, ne jen na oblouku.
+ */
+function collectFullCircleIntersections(idx, cx, cy, r) {
+  const fullCircle = { cx, cy, r }; // bez startAngle/endAngle = plná kružnice
+  const pts = [];
+  for (let i = 0; i < state.objects.length; i++) {
+    if (i === idx) continue;
+    const other = state.objects[i];
+    if (other.isDimension || other.isCoordLabel || other.skipIntersections) continue;
+    for (const seg of getLines(other)) {
+      pts.push(...intersectLineCircle(seg, fullCircle));
+    }
+    for (const circ of getCircles(other)) {
+      pts.push(...intersectCircleCircle(fullCircle, circ));
+    }
+  }
+  // Deduplikace
+  const unique = [];
+  for (const pt of pts) {
+    if (!unique.some(u => Math.hypot(u.x - pt.x, u.y - pt.y) < 1e-6)) {
+      unique.push(pt);
+    }
+  }
+  return unique;
+}
+
+// ── Prodloužení oblouku ──
+
+function extendArc(idx, obj, wx, wy) {
+  const cx = obj.cx, cy = obj.cy, r = obj.r;
+  const ccw = obj.ccw !== false;
+
+  // Koncové body oblouku
+  const startPt = { x: cx + r * Math.cos(obj.startAngle), y: cy + r * Math.sin(obj.startAngle) };
+  const endPt = { x: cx + r * Math.cos(obj.endAngle), y: cy + r * Math.sin(obj.endAngle) };
+
+  // Určit, který konec je blíž kliknutí
+  const a1 = isAnchored(startPt.x, startPt.y);
+  const a2 = isAnchored(endPt.x, endPt.y);
+  if (a1 && a2) { showToast("Oba konce jsou zakotveny – nelze prodloužit"); return; }
+
+  let extEnd; // 1 = start, 2 = end
+  if (a1) { extEnd = 2; }
+  else if (a2) { extEnd = 1; }
+  else {
+    const d1 = Math.hypot(wx - startPt.x, wy - startPt.y);
+    const d2 = Math.hypot(wx - endPt.x, wy - endPt.y);
+    extEnd = d1 < d2 ? 1 : 2;
   }
 
+  // Najít průsečíky plné kružnice s ostatními objekty
+  const allPts = collectFullCircleIntersections(idx, cx, cy, r);
+  if (allPts.length === 0) { showToast("Žádný objekt pro prodloužení"); return; }
+
+  // Filtrovat: jen body MIMO aktuální oblouk (= body ve směru prodloužení)
+  const candidates = [];
+  for (const p of allPts) {
+    const angle = Math.atan2(p.y - cy, p.x - cx);
+    // Bod už je na oblouku → přeskočit
+    if (isAngleBetween(angle, obj.startAngle, obj.endAngle, ccw)) continue;
+
+    // Vzdálenost od prodlužovaného konce po oblouku
+    let dist;
+    if (extEnd === 1) {
+      // Prodlužujeme za startAngle (proti směru oblouku)
+      if (ccw) {
+        // CCW oblouk: start → end je CCW, prodloužení za start je CW
+        dist = normalizeAngle(obj.startAngle - angle);
+      } else {
+        dist = normalizeAngle(angle - obj.startAngle);
+      }
+    } else {
+      // Prodlužujeme za endAngle (ve směru oblouku)
+      if (ccw) {
+        dist = normalizeAngle(angle - obj.endAngle);
+      } else {
+        dist = normalizeAngle(obj.endAngle - angle);
+      }
+    }
+    if (dist > 1e-9) {
+      candidates.push({ pt: p, angle, dist });
+    }
+  }
+
+  if (candidates.length === 0) { showToast("Žádný průsečík ve směru prodloužení"); return; }
+
+  // Nejbližší bod
+  candidates.sort((a, b) => a.dist - b.dist);
+  const best = candidates[0];
+
+  pushUndo();
+  if (extEnd === 1) {
+    obj.startAngle = best.angle;
+  } else {
+    obj.endAngle = best.angle;
+  }
+
+  calculateAllIntersections();
+  updateAssociativeDimensions();
+  renderAll();
+  showToast("Oblouk prodloužen ✓");
+}
+
+// ── Prodloužení úsečky ──
+
+function extendLine(idx, obj, ls, wx, wy) {
   // Which end to extend (closer to click)
-  // Zakotvený konec nemůže být prodloužen
   const a1 = isAnchored(ls.seg.x1, ls.seg.y1);
   const a2 = isAnchored(ls.seg.x2, ls.seg.y2);
   if (a1 && a2) { showToast("Oba konce jsou zakotveny – nelze prodloužit"); return; }
   let extEnd;
-  if (a1) { extEnd = 2; }       // P1 zakotveno → prodluž P2
-  else if (a2) { extEnd = 1; }  // P2 zakotveno → prodluž P1
+  if (a1) { extEnd = 2; }
+  else if (a2) { extEnd = 1; }
   else {
     const d1 = Math.hypot(wx - ls.seg.x1, wy - ls.seg.y1);
     const d2 = Math.hypot(wx - ls.seg.x2, wy - ls.seg.y2);
@@ -42,6 +147,7 @@ export function handleExtendClick(wx, wy) {
   for (let i = 0; i < state.objects.length; i++) {
     if (i === idx) continue;
     const other = state.objects[i];
+    if (other.isDimension || other.isCoordLabel || other.skipIntersections) continue;
     for (const seg of getLines(other)) {
       pts.push(...intersectLineLine(infLine, seg));
     }
@@ -59,8 +165,6 @@ export function handleExtendClick(wx, wy) {
   const candidates = [];
   for (const p of pts) {
     const t = ((p.x - ls.seg.x1) * dx + (p.y - ls.seg.y1) * dy) / len2;
-    // extEnd=1: we extend beyond x1, so t < 0
-    // extEnd=2: we extend beyond x2, so t > 1
     if (extEnd === 1 && t < 1e-9) {
       candidates.push({ pt: p, dist: Math.hypot(p.x - ls.seg.x1, p.y - ls.seg.y1) });
     } else if (extEnd === 2 && t > 1 - 1e-9) {
@@ -84,9 +188,96 @@ export function handleExtendClick(wx, wy) {
   showToast("Prodlouženo ✓");
 }
 
+// ── Hlavní vstupní bod ──
+
+/** Prodlouží objekt k nejbližšímu průsečíku s jiným objektem na straně kliknutí. */
+export function handleExtendClick(wx, wy) {
+  const idx = findObjectAt(wx, wy);
+  if (idx === null) { showToast("Klepněte na objekt k prodloužení"); return; }
+  const obj = state.objects[idx];
+
+  // Oblouk
+  if (obj.type === 'arc') {
+    return extendArc(idx, obj, wx, wy);
+  }
+
+  // Úsečka / kontura (rovný segment)
+  const ls = getLineSegment(obj, wx, wy);
+  if (!ls) {
+    showToast("Prodloužení tohoto typu objektu není podporováno");
+    return;
+  }
+  extendLine(idx, obj, ls, wx, wy);
+}
+
 /** Prodloužení z předvybraného objektu. Vrací true pokud se operace provedla. */
 export function extendFromSelection() {
-  const { lines } = analyzeSelection();
+  const { lines, circles } = analyzeSelection();
+
+  // Prodloužení oblouku z výběru
+  if (circles.length === 1 && lines.length === 0) {
+    const circInfo = circles[0];
+    const idx = circInfo.idx;
+    const obj = state.objects[idx];
+    if (!obj) return false;
+    if (obj.type === 'circle') {
+      showToast("Kružnice je již uzavřená – nelze prodloužit");
+      return true;
+    }
+    if (obj.type !== 'arc') return false;
+
+    const cx = obj.cx, cy = obj.cy, r = obj.r;
+    const ccw = obj.ccw !== false;
+
+    const startPt = { x: cx + r * Math.cos(obj.startAngle), y: cy + r * Math.sin(obj.startAngle) };
+    const endPt = { x: cx + r * Math.cos(obj.endAngle), y: cy + r * Math.sin(obj.endAngle) };
+
+    const allPts = collectFullCircleIntersections(idx, cx, cy, r);
+    if (allPts.length === 0) { showToast("Žádný objekt pro prodloužení"); return true; }
+
+    const a1 = isAnchored(startPt.x, startPt.y);
+    const a2 = isAnchored(endPt.x, endPt.y);
+    if (a1 && a2) { showToast("Oba konce jsou zakotveny – nelze prodloužit"); return true; }
+
+    // Rozdělit průsečíky podle směru
+    const candsStart = [], candsEnd = [];
+    for (const p of allPts) {
+      const angle = Math.atan2(p.y - cy, p.x - cx);
+      if (isAngleBetween(angle, obj.startAngle, obj.endAngle, ccw)) continue;
+      const distStart = ccw ? normalizeAngle(obj.startAngle - angle) : normalizeAngle(angle - obj.startAngle);
+      const distEnd = ccw ? normalizeAngle(angle - obj.endAngle) : normalizeAngle(obj.endAngle - angle);
+      if (distStart > 1e-9) candsStart.push({ pt: p, angle, dist: distStart });
+      if (distEnd > 1e-9) candsEnd.push({ pt: p, angle, dist: distEnd });
+    }
+
+    if (candsStart.length === 0 && candsEnd.length === 0) {
+      showToast("Žádný průsečík ve směru prodloužení");
+      return true;
+    }
+
+    showEndpointChoiceDialog("Prodloužení oblouku – výběr konce",
+      { x1: startPt.x, y1: startPt.y, x2: endPt.x, y2: endPt.y },
+      a1 ? "⚓ Začátek (zakotven)" : (candsStart.length > 0 ? "Prodloužit ze začátku" : "⚠ Ze začátku (žádný průsečík)"),
+      a2 ? "⚓ Konec (zakotven)" : (candsEnd.length > 0 ? "Prodloužit z konce" : "⚠ Z konce (žádný průsečík)"),
+      (end) => {
+        if (end === 1 && a1) { showToast("Tento konec je zakotven – nelze prodloužit"); return; }
+        if (end === 2 && a2) { showToast("Tento konec je zakotven – nelze prodloužit"); return; }
+        const candidates = end === 1 ? candsStart : candsEnd;
+        if (candidates.length === 0) { showToast("Žádný průsečík ve směru prodloužení"); return; }
+        candidates.sort((a, b) => a.dist - b.dist);
+        const best = candidates[0];
+        pushUndo();
+        if (end === 1) obj.startAngle = best.angle;
+        else obj.endAngle = best.angle;
+        calculateAllIntersections();
+        updateAssociativeDimensions();
+        renderAll();
+        showToast("Oblouk prodloužen ✓");
+      }
+    );
+    return true;
+  }
+
   if (lines.length !== 1) return false;
 
   const lineInfo = lines[0];
@@ -123,6 +314,7 @@ export function extendFromSelection() {
   for (let i = 0; i < state.objects.length; i++) {
     if (i === idx) continue;
     const other = state.objects[i];
+    if (other.isDimension || other.isCoordLabel || other.skipIntersections) continue;
     for (const seg of getLines(other)) pts.push(...intersectLineLine(infLine, seg));
     for (const circ of getCircles(other)) pts.push(...intersectLineCircle(infLine, circ));
   }
