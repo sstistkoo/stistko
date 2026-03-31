@@ -473,6 +473,12 @@ export function toolLabel(t) {
       gear: "Ozubené kolo",
       deleteObj: "Smaž obj.",
       anchor: "Kotva",
+      break: "Rozdělit",
+      centerMark: "Střed. značka",
+      scale: "Škálovat",
+      chamfer: "Zkosení",
+      filletChamfer: "Zaob./Zkos.",
+      mirror: "Zrcadlení",
     }[t] || t
   );
 }

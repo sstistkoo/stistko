@@ -31,7 +31,7 @@ for (const [code, hex] of Object.entries(ACI_COLORS)) {
 
 function safeFloat(val) {
   const n = parseFloat(val);
-  return isNaN(n) ? 0 : n;
+  return isFinite(n) ? n : 0;
 }
 
 function aciColor(code) {
@@ -407,14 +407,18 @@ function entityLines(obj) {
       out.push(gc(40, obj.r.toFixed(6)));
       break;
 
-    case 'arc':
+    case 'arc': {
       out.push(gc(0, 'ARC'), gc(8, layerName));
       if (aci !== 7) out.push(gc(62, aci));
       out.push(gc(10, obj.cx.toFixed(6)), gc(20, obj.cy.toFixed(6)));
       out.push(gc(40, obj.r.toFixed(6)));
-      out.push(gc(50, (obj.startAngle * RAD2DEG).toFixed(6)));
-      out.push(gc(51, (obj.endAngle * RAD2DEG).toFixed(6)));
+      // DXF ARC is always CCW; for CW arcs (ccw===false) swap start/end
+      const dxfStart = obj.ccw === false ? obj.endAngle : obj.startAngle;
+      const dxfEnd = obj.ccw === false ? obj.startAngle : obj.endAngle;
+      out.push(gc(50, (dxfStart * RAD2DEG).toFixed(6)));
+      out.push(gc(51, (dxfEnd * RAD2DEG).toFixed(6)));
       break;
+    }
 
     case 'rect': {
       const rc = getRectCorners(obj);

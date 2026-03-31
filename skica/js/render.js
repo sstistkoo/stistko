@@ -375,9 +375,11 @@ function renderObjects() {
         break;
       case "circle":
         drawCircle(obj);
+        if (obj.showCenterMark) drawCenterMark(obj);
         break;
       case "arc":
         drawArc(obj);
+        if (obj.showCenterMark) drawCenterMark(obj);
         break;
       case "rect":
         drawRect(obj, isSel, obj.color || layerColor, idx);
@@ -557,8 +559,9 @@ function renderObjects() {
       const rr = r * state.zoom;
       const startAngle = -Math.atan2(tp[1].y - cy, tp[1].x - cx);
       const endAngle = -Math.atan2(my - cy, mx - cx);
+      // Default direction: ccw=false → CW in math → anticlockwise=true in screen
       ctx.beginPath();
-      ctx.arc(scx, scy, rr, startAngle, endAngle);
+      ctx.arc(scx, scy, rr, startAngle, endAngle, true);
       ctx.stroke();
     }
     if (state.tool === "polyline" && tp.length >= 1) {
@@ -1392,11 +1395,37 @@ export function drawArc(obj) {
   const [sx, sy] = worldToScreen(obj.cx, obj.cy);
   const r = obj.r * state.zoom;
   ctx.beginPath();
-  ctx.arc(sx, sy, r, -obj.endAngle, -obj.startAngle);
+  // ccw in math → canvas anticlockwise=true; default (no ccw) = CCW for backward compat
+  ctx.arc(sx, sy, r, -obj.startAngle, -obj.endAngle, obj.ccw !== false);
   ctx.stroke();
   ctx.beginPath();
   ctx.arc(sx, sy, 2, 0, Math.PI * 2);
   ctx.fill();
+}
+
+/** Středová značka (křížek) pro kružnice a oblouky. */
+function drawCenterMark(obj) {
+  if (!obj.r || obj.r <= 0) return;
+  const [sx, sy] = worldToScreen(obj.cx, obj.cy);
+  const r = obj.r * state.zoom;
+  const ext = Math.min(r * 0.15, 8); // přesah za kružnici
+  const halfLen = r + ext;
+  const savedStroke = ctx.strokeStyle;
+  const savedWidth = ctx.lineWidth;
+  ctx.strokeStyle = '#888';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(sx - halfLen, sy);
+  ctx.lineTo(sx + halfLen, sy);
+  ctx.moveTo(sx, sy - halfLen);
+  ctx.lineTo(sx, sy + halfLen);
+  ctx.stroke();
+  // Malé kolečko ve středu
+  ctx.beginPath();
+  ctx.arc(sx, sy, 3, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.strokeStyle = savedStroke;
+  ctx.lineWidth = savedWidth;
 }
 
 /** @param {import('./types.js').RectObject} obj */

@@ -834,6 +834,8 @@ export function circlePositionsTangentToLine(cx, cy, r, x1, y1, x2, y2) {
   const nx = -dy / len, ny = dx / len;
   const t = ((cx - x1) * dx + (cy - y1) * dy) / (len * len);
   const footX = x1 + t * dx, footY = y1 + t * dy;
+  // Filtrovat pozice kde tečný bod leží mimo konečnou úsečku
+  if (t < -1e-9 || t > 1 + 1e-9) return [];
   return [
     { cx: footX + nx * r, cy: footY + ny * r },
     { cx: footX - nx * r, cy: footY - ny * r }
@@ -851,7 +853,12 @@ export function circlePositionsTangentToTwoLines(r, l1, l2) {
       if (pt) results.push({ cx: pt.x, cy: pt.y });
     }
   }
-  return results;
+  // Filtrovat: tečný bod (projekce středu na úsečku) musí ležet na konečné úsečce
+  return results.filter(p => {
+    const t1 = projectionParam(p.cx, p.cy, l1.x1, l1.y1, l1.x2, l1.y2);
+    const t2 = projectionParam(p.cx, p.cy, l2.x1, l2.y1, l2.x2, l2.y2);
+    return t1 >= -1e-9 && t1 <= 1 + 1e-9 && t2 >= -1e-9 && t2 <= 1 + 1e-9;
+  });
 }
 
 // ── Pozice kružnice tečné k úsečce A procházející bodem ──
@@ -890,7 +897,11 @@ export function circlePositionsTangentToLineAndPoint(r, x1, y1, x2, y2, px, py) 
       results.push({ cx, cy });
     }
   }
-  return results;
+  // Filtrovat: tečný bod musí ležet na konečné úsečce
+  return results.filter(p => {
+    const tp = projectionParam(p.cx, p.cy, x1, y1, x2, y2);
+    return tp >= -1e-9 && tp <= 1 + 1e-9;
+  });
 }
 
 // ── Kružnice procházející třemi body ──
@@ -951,7 +962,11 @@ export function circleTangentToLineAndTwoPoints(lx1, ly1, lx2, ly2, p1x, p1y, p2
       if (r > 1e-10) results.push({ cx, cy, r });
     }
   }
-  return results;
+  // Filtrovat: tečný bod musí ležet na konečné úsečce
+  return results.filter(p => {
+    const tp = projectionParam(p.cx, p.cy, lx1, ly1, lx2, ly2);
+    return tp >= -1e-9 && tp <= 1 + 1e-9;
+  });
 }
 
 // ── Kružnice tečná ke dvěma úsečkám a procházející bodem ──
@@ -1010,7 +1025,12 @@ export function circleTangentToTwoLinesAndPoint(l1, l2, px, py) {
       }
     }
   }
-  return results;
+  // Filtrovat: tečný bod musí ležet na konečné úsečce u obou přímek
+  return results.filter(p => {
+    const t1 = projectionParam(p.cx, p.cy, l1.x1, l1.y1, l1.x2, l1.y2);
+    const t2 = projectionParam(p.cx, p.cy, l2.x1, l2.y1, l2.x2, l2.y2);
+    return t1 >= -1e-9 && t1 <= 1 + 1e-9 && t2 >= -1e-9 && t2 <= 1 + 1e-9;
+  });
 }
 
 // ── Kružnice tečná ke třem úsečkám ──
@@ -1047,7 +1067,13 @@ export function circleTangentToThreeLines(l1, l2, l3) {
       }
     }
   }
-  return results;
+  // Filtrovat: tečný bod musí ležet na konečné úsečce u všech tří přímek
+  return results.filter(p => {
+    const t1 = projectionParam(p.cx, p.cy, l1.x1, l1.y1, l1.x2, l1.y2);
+    const t2 = projectionParam(p.cx, p.cy, l2.x1, l2.y1, l2.x2, l2.y2);
+    const t3 = projectionParam(p.cx, p.cy, l3.x1, l3.y1, l3.x2, l3.y2);
+    return t1 >= -1e-9 && t1 <= 1 + 1e-9 && t2 >= -1e-9 && t2 <= 1 + 1e-9 && t3 >= -1e-9 && t3 <= 1 + 1e-9;
+  });
 }
 
 // ── Kružnice tečná k jiné kružnici a procházející dvěma body ──
@@ -1107,6 +1133,14 @@ export function getPolylineSegmentAsLine(obj, segIdx) {
   const p1 = obj.vertices[segIdx];
   const p2 = obj.vertices[(segIdx + 1) % n];
   return { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y };
+}
+
+/** Parametr projekce bodu na přímku: 0 = začátek úsečky, 1 = konec. */
+function projectionParam(px, py, x1, y1, x2, y2) {
+  const dx = x2 - x1, dy = y2 - y1;
+  const len2 = dx * dx + dy * dy;
+  if (len2 < 1e-20) return 0;
+  return ((px - x1) * dx + (py - y1) * dy) / len2;
 }
 
 function lineOffsets(x1, y1, x2, y2, d) {
@@ -1461,6 +1495,57 @@ export function rotateObject(obj, cx, cy, angle) {
   }
 }
 
+// ── Škálování objektu ──
+/**
+ * Škáluje objekt kolem bodu [cx,cy] o faktor.
+ * Modifikuje objekt in-place.
+ * @param {import('./types.js').DrawObject} obj
+ * @param {number} cx  střed škálování X
+ * @param {number} cy  střed škálování Y
+ * @param {number} factor  měřítkový faktor
+ */
+export function scaleObject(obj, cx, cy, factor) {
+  function sp(px, py) {
+    return { x: cx + (px - cx) * factor, y: cy + (py - cy) * factor };
+  }
+  switch (obj.type) {
+    case 'point': {
+      const m = sp(obj.x, obj.y);
+      obj.x = m.x; obj.y = m.y; break;
+    }
+    case 'line': case 'constr': {
+      const m1 = sp(obj.x1, obj.y1), m2 = sp(obj.x2, obj.y2);
+      obj.x1 = m1.x; obj.y1 = m1.y; obj.x2 = m2.x; obj.y2 = m2.y; break;
+    }
+    case 'circle': {
+      const m = sp(obj.cx, obj.cy);
+      obj.cx = m.x; obj.cy = m.y;
+      obj.r *= Math.abs(factor);
+      break;
+    }
+    case 'arc': {
+      const m = sp(obj.cx, obj.cy);
+      obj.cx = m.x; obj.cy = m.y;
+      obj.r *= Math.abs(factor);
+      break;
+    }
+    case 'rect': {
+      const m1 = sp(obj.x1, obj.y1), m2 = sp(obj.x2, obj.y2);
+      obj.x1 = m1.x; obj.y1 = m1.y; obj.x2 = m2.x; obj.y2 = m2.y; break;
+    }
+    case 'polyline': {
+      obj.vertices = obj.vertices.map(v => sp(v.x, v.y));
+      break;
+    }
+    case 'text': {
+      const m = sp(obj.x, obj.y);
+      obj.x = m.x; obj.y = m.y;
+      if (obj.fontSize) obj.fontSize *= Math.abs(factor);
+      break;
+    }
+  }
+}
+
 // ── Zaoblení dvou úseček ──
 /**
  * Vytvoří zaoblení (fillet) mezi dvěma úsečkami.
@@ -1540,6 +1625,66 @@ export function filletTwoLines(line1, line2, radius) {
       cx: cX, cy: cY,
       r: radius,
       startAngle, endAngle,
+    }
+  };
+}
+
+/**
+ * Vytvoří zkosení (chamfer) mezi dvěma úsečkami.
+ * Najde průsečík, ořízne obě úsečky a vrátí spojovací úsečku.
+ * @param {{x1:number,y1:number,x2:number,y2:number}} line1
+ * @param {{x1:number,y1:number,x2:number,y2:number}} line2
+ * @param {number} dist1 – vzdálenost ořezu na první úsečce od průsečíku
+ * @param {number} dist2 – vzdálenost ořezu na druhé úsečce od průsečíku
+ * @returns {{ line: {type:string,x1:number,y1:number,x2:number,y2:number}, ok: boolean, msg?: string }}
+ */
+export function chamferTwoLines(line1, line2, dist1, dist2) {
+  const d1x = line1.x2 - line1.x1, d1y = line1.y2 - line1.y1;
+  const d2x = line2.x2 - line2.x1, d2y = line2.y2 - line2.y1;
+  const denom = d1x * d2y - d1y * d2x;
+  if (Math.abs(denom) < 1e-10) return { ok: false, msg: "Úsečky jsou rovnoběžné" };
+
+  const t = ((line2.x1 - line1.x1) * d2y - (line2.y1 - line1.y1) * d2x) / denom;
+  const ix = line1.x1 + t * d1x, iy = line1.y1 + t * d1y;
+
+  // Directions pointing AWAY from intersection
+  const d1a = Math.hypot(line1.x1 - ix, line1.y1 - iy);
+  const d1b = Math.hypot(line1.x2 - ix, line1.y2 - iy);
+  const dlen1 = d1a > d1b ? d1a : d1b;
+  const dir1x = d1a > d1b ? (line1.x1 - ix) : (line1.x2 - ix);
+  const dir1y = d1a > d1b ? (line1.y1 - iy) : (line1.y2 - iy);
+  const n1x = dir1x / dlen1, n1y = dir1y / dlen1;
+
+  const d2a = Math.hypot(line2.x1 - ix, line2.y1 - iy);
+  const d2b = Math.hypot(line2.x2 - ix, line2.y2 - iy);
+  const dlen2 = d2a > d2b ? d2a : d2b;
+  const dir2x = d2a > d2b ? (line2.x1 - ix) : (line2.x2 - ix);
+  const dir2y = d2a > d2b ? (line2.y1 - iy) : (line2.y2 - iy);
+  const n2x = dir2x / dlen2, n2y = dir2y / dlen2;
+
+  // Check distances fit on the lines
+  const maxD1 = d1a > d1b ? d1a : d1b;
+  const maxD2 = d2a > d2b ? d2a : d2b;
+  if (dist1 > maxD1 + 1e-6) return { ok: false, msg: "Vzdálenost zkosení je větší než délka první úsečky" };
+  if (dist2 > maxD2 + 1e-6) return { ok: false, msg: "Vzdálenost zkosení je větší než délka druhé úsečky" };
+
+  // Cut points
+  const cp1x = ix + n1x * dist1, cp1y = iy + n1y * dist1;
+  const cp2x = ix + n2x * dist2, cp2y = iy + n2y * dist2;
+
+  // Trim lines
+  if (d1a < d1b) { line1.x1 = cp1x; line1.y1 = cp1y; }
+  else { line1.x2 = cp1x; line1.y2 = cp1y; }
+
+  if (d2a < d2b) { line2.x1 = cp2x; line2.y1 = cp2y; }
+  else { line2.x2 = cp2x; line2.y2 = cp2y; }
+
+  return {
+    ok: true,
+    line: {
+      type: 'line',
+      x1: cp1x, y1: cp1y,
+      x2: cp2x, y2: cp2y,
     }
   };
 }

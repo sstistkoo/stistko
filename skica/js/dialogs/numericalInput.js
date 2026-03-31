@@ -147,7 +147,11 @@ export function showNumericalInputDialog() {
                 <div class="input-row"><div><label>Start (°):</label><input type="text" id="nsa" value="0"></div>
                 <div class="pick-col">${pickBtn("📐 S")}</div></div>
                 <div class="input-row"><div><label>Konec (°):</label><input type="text" id="nea" value="90"></div>
-                <div class="pick-col">${pickBtn("📐 E")}</div></div>`;
+                <div class="pick-col">${pickBtn("📐 E")}</div></div>
+                <div class="input-row"><div><label>Směr:</label><select id="narcDir">
+                  <option value="cw">↻ CW (po směru)</option>
+                  <option value="ccw">↺ CCW (proti směru)</option>
+                </select></div></div>`;
         break;
       case "rect":
         html = `<div class="input-row"><div><label>${lbl(H+'1')}:</label><input type="text" id="nx1" value="${hasChain ? chainDispX : '0'}"></div>
@@ -441,9 +445,11 @@ export function showNumericalInputDialog() {
             (safeEvalMath(overlay.querySelector("#nsa").value) * Math.PI) / 180;
           const ea =
             (safeEvalMath(overlay.querySelector("#nea").value) * Math.PI) / 180;
+          const arcCcw = overlay.querySelector("#narcDir")?.value === 'ccw';
           addObject({
             type: "arc", cx: c.x, cy: c.y, r,
             startAngle: sa, endAngle: ea,
+            ccw: arcCcw,
             name: `Oblouk ${state.nextId}`,
           });
           const endX = c.x + r * Math.cos(ea);
