@@ -71,6 +71,12 @@ body {
 .toolbar-more.open {
   display: flex;
 }
+.toolbar-mid {
+  display: contents;
+}
+.toolbar-mid-toggle {
+  display: none;
+}
 .toolbar-more-toggle {
   background: var(--ctp-surface1);
   border: 1px dashed var(--ctp-overlay0);
@@ -1526,6 +1532,31 @@ body {
     text-align: center;
     padding: 5px 10px;
     font-size: 12px;
+  }
+
+  .toolbar-mid {
+    display: none;
+    flex-wrap: wrap;
+    gap: 3px;
+    width: 100%;
+  }
+  .toolbar-mid.open {
+    display: flex;
+  }
+  .toolbar-mid-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ctp-surface1);
+    border: 1px dashed var(--ctp-overlay0);
+    color: var(--ctp-subtext0);
+    font-size: 12px;
+    cursor: pointer;
+    padding: 5px 10px;
+  }
+  .toolbar-mid-toggle:hover {
+    background: var(--ctp-surface2);
+    color: var(--ctp-text);
   }
 
   #topbar .sep {

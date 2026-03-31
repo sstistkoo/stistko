@@ -42,6 +42,15 @@ btnToolbarMore.addEventListener("click", (e) => {
   btnToolbarMore.textContent = open ? "▴" : "▾";
 });
 
+// ── Toolbar: rozbalovací střední sekce (editace) ──
+const btnToolbarMid = document.getElementById("btnToolbarMid");
+const toolbarMid = document.getElementById("toolbarMid");
+btnToolbarMid.addEventListener("click", (e) => {
+  e.stopPropagation();
+  const open = toolbarMid.classList.toggle("open");
+  btnToolbarMid.textContent = open ? "▴" : "▾";
+});
+
 // ── Mobile: Toolbar close button ──
 document.getElementById("mobileToolbarClose").addEventListener("click", (e) => {
   e.stopPropagation();
