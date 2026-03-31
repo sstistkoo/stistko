@@ -2068,6 +2068,7 @@ function showNullPointDialog() {
       let [wx, wy] = screenToWorld(sx, sy);
       if (state.snapToPoints) [wx, wy] = snapPt(wx, wy);
       cleanup();
+      if (!document.body.contains(overlay)) return; // overlay removed by Escape
       overlay.style.display = "flex";
       callback(wx, wy);
     }
@@ -2081,6 +2082,7 @@ function showNullPointDialog() {
         let [wx, wy] = screenToWorld(sx, sy);
         if (state.snapToPoints) [wx, wy] = snapPt(wx, wy);
         cleanup();
+        if (!document.body.contains(overlay)) return; // overlay removed by Escape
         overlay.style.display = "flex";
         e.preventDefault();
         callback(wx, wy);
