@@ -57,7 +57,7 @@ async function tryAutoLoad() {
       if (data.layers) {
         state.layers = data.layers;
         state.activeLayer = data.activeLayer || 0;
-        state.nextLayerId = data.nextLayerId || (Math.max(...data.layers.map(l => l.id)) + 1);
+        state.nextLayerId = data.nextLayerId || (data.layers.length > 0 ? Math.max(...data.layers.map(l => l.id)) + 1 : 1);
       } else {
         state.objects.forEach(obj => { if (obj.layer === undefined) obj.layer = 0; });
       }
