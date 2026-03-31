@@ -1393,6 +1393,9 @@ body {
 .toolbar-close-btn {
   display: none;
 }
+.toolbar-version {
+  display: none;
+}
 .toolbar-setting {
   font-size: 12px !important;
   padding: 4px 8px !important;
@@ -1475,14 +1478,24 @@ body {
   }
 
   .tool-btn {
-    padding: 8px 6px;
-    font-size: 12px;
-    min-height: 36px;
+    padding: 6px 5px;
+    font-size: 11px;
+    min-height: 32px;
   }
 
   .tool-btn svg {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
+  }
+
+  .toolbar-version {
+    display: inline-block;
+    font-size: 9px;
+    color: var(--ctp-subtext0);
+    background: var(--ctp-surface0);
+    padding: 2px 5px;
+    border-radius: 3px;
+    margin-left: auto;
   }
 
   .toolbar-more {
