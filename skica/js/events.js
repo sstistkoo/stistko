@@ -6,7 +6,7 @@ import { ZOOM_FACTOR, ZOOM_MIN, ZOOM_MAX, PASTE_OFFSET } from './constants.js';
 import { drawCanvas, screenToWorld, snapPt, applyAngleSnap } from './canvas.js';
 import { state, pushUndo, undo, redo, showToast, resetDrawingState, fmtStatusCoords } from './state.js';
 import { renderAll } from './render.js';
-import { moveObject, addObject } from './objects.js';
+import { moveObject, addObject, addPolylineAsSegments } from './objects.js';
 import { setTool, resetHint, setHint, updateProperties, updateObjectList, updateSnapPtsBtn, updateDimsBtn, toggleCoordMode, updateCoordModeBtn, updateSnapGridBtn, updateAngleSnapBtn, showGridSizeDialog, showAngleSnapDialog, toggleHelp, updateNullPointUI } from './ui.js';
 import { findObjectAt, selectObjectAt, calculateAllIntersections, mirrorObject, linearArray, rotateObject, findSegmentAt, findConstraintAt } from './geometry.js';
 import { showNumericalInputDialog, showPolarDrawingDialog, showCircleRadiusDialog, showBulgeDialog, showMirrorDialog, showLinearArrayDialog, showRotateDialog } from './dialogs.js';
@@ -15,7 +15,7 @@ import { bulgeToArc, deepClone } from './utils.js';
 import { bridge } from './bridge.js';
 import { updateAssociativeDimensions } from './dialogs/dimension.js';
 import { handleTangentClick, tangentFromSelection, handleOffsetClick, offsetFromSelection, handleTrimClick, trimFromSelection, handleExtendClick, extendFromSelection, handleFilletClick, filletFromSelection, handlePerpClick, perpFromSelection, handleHorizontalClick, horizontalFromSelection, handleParallelClick, parallelFromSelection, handleDimensionClick, handleSnapPointClick, handleMoveClick, handleLineClick, handleMeasureClick, handleCircleClick, handleArcClick, handleRectClick, handlePolylineClick, measureSelection, handleTextClick, handleAnchorClick, removeAnchorsForObject, removeAnchorAt, hasAnchoredPoint } from './tools/index.js';
-import { showPostDrawPointDialog, showPostDrawPolylineDialog } from './dialogs/postDrawDialog.js';
+import { showPostDrawPointDialog } from './dialogs/postDrawDialog.js';
 
 // Registrace measureSelection na bridge (aby ui.js nemusel importovat přímo – kruhová závislost)
 bridge.measureSelection = measureSelection;
@@ -417,19 +417,12 @@ document.addEventListener("keydown", (e) => {
       } else {
         while (bulges.length < state.tempPoints.length - 1) bulges.push(0);
       }
-      const plObj = addObject({
-        type: 'polyline',
-        vertices: state.tempPoints.slice(),
-        bulges: bulges.slice(0, closed ? state.tempPoints.length : state.tempPoints.length - 1),
-        closed,
-        name: `Kontura ${state.nextId}`,
-      });
+      addPolylineAsSegments(state.tempPoints.slice(), bulges.slice(0, closed ? state.tempPoints.length : state.tempPoints.length - 1), closed);
       state.drawing = false;
       state.tempPoints = [];
       state._polylineBulges = [];
       resetHint();
       showToast(closed ? 'Kontura uzavřena' : 'Kontura dokončena');
-      if (plObj) showPostDrawPolylineDialog(plObj);
     }
   }
   // Polyline: B = bulge dialog pro poslední segment
@@ -1091,13 +1084,7 @@ drawCanvas.addEventListener("dblclick", (e) => {
     // (the first click of dblclick already added a point via mousedown)
     const bulges = state._polylineBulges || [];
     while (bulges.length < state.tempPoints.length - 1) bulges.push(0);
-    addObject({
-      type: 'polyline',
-      vertices: state.tempPoints.slice(),
-      bulges: bulges.slice(0, state.tempPoints.length - 1),
-      closed: false,
-      name: `Kontura ${state.nextId}`,
-    });
+    addPolylineAsSegments(state.tempPoints.slice(), bulges.slice(0, state.tempPoints.length - 1), false);
     state.drawing = false;
     state.tempPoints = [];
     state._polylineBulges = [];

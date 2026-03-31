@@ -7,7 +7,7 @@
  * Pokud overlay daného typu již existuje, vrátí null.
  */
 export function makeOverlay(type, title, bodyHTML, windowClass) {
-  if (document.querySelector(`.calc-overlay[data-type=${type}]`)) return null;
+  if (document.querySelector(`.calc-overlay[data-type="${CSS.escape(type)}"]`)) return null;
   const overlay = document.createElement("div");
   overlay.className = "calc-overlay";
   overlay.dataset.type = type;

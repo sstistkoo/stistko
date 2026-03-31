@@ -6,14 +6,14 @@ import { MOBILE_BREAKPOINT, LONG_PRESS_MS, CROSSHAIR_OFFSET_Y, ZOOM_MIN, ZOOM_MA
 import { drawCanvas, screenToWorld, snapPt, autoCenterView, applyAngleSnap, safeVibrate } from './canvas.js';
 import { state, undo, redo, showToast, toDisplayCoords, resetDrawingState, displayX, xPrefix, fmtStatusCoords } from './state.js';
 import { renderAll } from './render.js';
-import { moveObject, addObject } from './objects.js';
+import { moveObject, addObject, addPolylineAsSegments } from './objects.js';
 import { handleCanvasClick } from './events.js';
 import { setTool, resetHint, updateSnapPtsBtn } from './ui.js';
 import { updateAssociativeDimensions } from './dialogs/dimension.js';
 import { toolLabel } from './utils.js';
 import { showNumericalInputDialog, showMobileEditDialog } from './dialogs.js';
 import { measureSelection } from './tools/index.js';
-import { showPostDrawPolylineDialog } from './dialogs/postDrawDialog.js';
+
 import { bridge } from './bridge.js';
 
 // ── Mobile: detekce ──
@@ -232,13 +232,7 @@ polylineConfirmBtn.addEventListener("click", (e) => {
   if (!state.drawing || state.tool !== 'polyline' || state.tempPoints.length < 2) return;
   const bulges = state._polylineBulges || [];
   while (bulges.length < state.tempPoints.length - 1) bulges.push(0);
-  const plObj = addObject({
-    type: 'polyline',
-    vertices: state.tempPoints.slice(),
-    bulges: bulges.slice(0, state.tempPoints.length - 1),
-    closed: false,
-    name: `Kontura ${state.nextId}`,
-  });
+  addPolylineAsSegments(state.tempPoints.slice(), bulges.slice(0, state.tempPoints.length - 1), false);
   state.drawing = false;
   state.tempPoints = [];
   state._polylineBulges = [];
@@ -246,7 +240,6 @@ polylineConfirmBtn.addEventListener("click", (e) => {
   updatePolylineButtons();
   showToast('Kontura dokončena');
   renderAll();
-  if (plObj) showPostDrawPolylineDialog(plObj);
 });
 
 polylineCloseBtn.addEventListener("click", (e) => {
@@ -254,13 +247,7 @@ polylineCloseBtn.addEventListener("click", (e) => {
   if (!state.drawing || state.tool !== 'polyline' || state.tempPoints.length < 2) return;
   const bulges = state._polylineBulges || [];
   while (bulges.length < state.tempPoints.length) bulges.push(0);
-  const plObj = addObject({
-    type: 'polyline',
-    vertices: state.tempPoints.slice(),
-    bulges: bulges.slice(0, state.tempPoints.length),
-    closed: true,
-    name: `Kontura ${state.nextId}`,
-  });
+  addPolylineAsSegments(state.tempPoints.slice(), bulges.slice(0, state.tempPoints.length), true);
   state.drawing = false;
   state.tempPoints = [];
   state._polylineBulges = [];
@@ -268,7 +255,6 @@ polylineCloseBtn.addEventListener("click", (e) => {
   updatePolylineButtons();
   showToast('Kontura uzavřena');
   renderAll();
-  if (plObj) showPostDrawPolylineDialog(plObj);
 });
 
 // ── Mobile: Undo tlačítko ──
