@@ -2,7 +2,7 @@
 // ║  SKICA – Service Worker (PWA offline cache)                 ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-const CACHE_NAME = 'skica-v87';
+const CACHE_NAME = 'skica-v88';
 const ASSETS = [
   './',
   './index.html',
@@ -32,6 +32,8 @@ const ASSETS = [
   './js/dialogs/numericalInput.js',
   './js/dialogs/objectDialogs.js',
   './js/dialogs/polarDrawing.js',
+  './js/dialogs/postDrawDialog.js',
+  './js/dialogs/gearDialog.js',
   './js/dialogs/tangentDialogs.js',
   './js/dxf.js',
   './js/events.js',
@@ -50,6 +52,15 @@ const ASSETS = [
   './js/tools/dimensionClick.js',
   './js/tools/extendClick.js',
   './js/tools/filletClick.js',
+  './js/tools/chamferClick.js',
+  './js/tools/filletChamferClick.js',
+  './js/tools/breakClick.js',
+  './js/tools/centerMarkClick.js',
+  './js/tools/scaleClick.js',
+  './js/tools/gearClick.js',
+  './js/tools/gearGenerator.js',
+  './js/tools/anchorClick.js',
+  './js/tools/textClick.js',
   './js/tools/helpers.js',
   './js/tools/horizontalClick.js',
   './js/tools/index.js',
