@@ -774,3 +774,128 @@ document.body.addEventListener(
 bridge.updateMobileCancelBtn = updateMobileCancelBtn;
 bridge.updateMobileCoords = updateMobileCoords;
 bridge.updatePolylineButtons = updatePolylineButtons;
+
+// ── Sidebar Precision Pointer (long-press pro přesné klikání v panelu) ──
+{
+  const spEl = document.getElementById("sidebarPrecisionPointer");
+  const SIDEBAR_OFFSET_Y = -60; // pointer se ukáže NAD prstem
+  let spTimer = null;
+  let spActive = false;
+  let spStartX = 0, spStartY = 0;
+  let spHighlighted = null;
+
+  function showSidebarPointer(clientX, clientY) {
+    const pointerX = clientX;
+    const pointerY = clientY + SIDEBAR_OFFSET_Y;
+    spEl.style.left = pointerX + "px";
+    spEl.style.top = pointerY + "px";
+    spEl.style.display = "block";
+    highlightElementAt(pointerX, pointerY);
+  }
+
+  function updateSidebarPointer(clientX, clientY) {
+    const pointerX = clientX;
+    const pointerY = clientY + SIDEBAR_OFFSET_Y;
+    spEl.style.left = pointerX + "px";
+    spEl.style.top = pointerY + "px";
+    highlightElementAt(pointerX, pointerY);
+  }
+
+  function highlightElementAt(x, y) {
+    // Zrušit předchozí highlight
+    if (spHighlighted) {
+      spHighlighted.style.outline = "";
+      spHighlighted.style.outlineOffset = "";
+      spHighlighted = null;
+    }
+    // Najít element pod pointerem (skrýt pointer, aby nebyl v cestě)
+    spEl.style.display = "none";
+    const el = document.elementFromPoint(x, y);
+    spEl.style.display = "block";
+    if (el && sidebar.contains(el)) {
+      const clickable = el.closest("button, input[type=checkbox], input[type=radio], a, label, li, select");
+      if (clickable) {
+        clickable.style.outline = "2px solid #f9e2af";
+        clickable.style.outlineOffset = "1px";
+        spHighlighted = clickable;
+      }
+    }
+  }
+
+  function hideSidebarPointer() {
+    spEl.style.display = "none";
+    spActive = false;
+    if (spHighlighted) {
+      spHighlighted.style.outline = "";
+      spHighlighted.style.outlineOffset = "";
+      spHighlighted = null;
+    }
+    if (spTimer) { clearTimeout(spTimer); spTimer = null; }
+  }
+
+  function clickElementAt(x, y) {
+    spEl.style.display = "none";
+    const el = document.elementFromPoint(x, y);
+    spEl.style.display = "block";
+    if (el && sidebar.contains(el)) {
+      const clickable = el.closest("button, input[type=checkbox], input[type=radio], a, label, li");
+      if (clickable) {
+        if (clickable.tagName === "INPUT" && (clickable.type === "checkbox" || clickable.type === "radio")) {
+          clickable.click();
+        } else {
+          clickable.click();
+        }
+      }
+    }
+  }
+
+  sidebar.addEventListener("touchstart", (e) => {
+    if (!isMobile()) return;
+    if (e.touches.length !== 1) return;
+    const t = e.touches[0];
+    // Ignorovat pokud dotyk je na input polích kde se píše
+    if (e.target.tagName === "INPUT" && e.target.type !== "checkbox" && e.target.type !== "radio") return;
+    if (e.target.tagName === "SELECT") return;
+    spStartX = t.clientX;
+    spStartY = t.clientY;
+    spActive = false;
+    if (spTimer) clearTimeout(spTimer);
+    spTimer = setTimeout(() => {
+      spActive = true;
+      try { safeVibrate(VIBRATE_LONG_PRESS); } catch (_) {}
+      showSidebarPointer(t.clientX, t.clientY);
+      e.preventDefault();
+    }, LONG_PRESS_MS);
+  }, { passive: false });
+
+  sidebar.addEventListener("touchmove", (e) => {
+    if (!isMobile()) return;
+    if (e.touches.length !== 1) return;
+    const t = e.touches[0];
+    const dist = Math.hypot(t.clientX - spStartX, t.clientY - spStartY);
+    if (!spActive && dist > TOUCH_MOVE_THRESHOLD) {
+      if (spTimer) { clearTimeout(spTimer); spTimer = null; }
+      return;
+    }
+    if (spActive) {
+      e.preventDefault();
+      updateSidebarPointer(t.clientX, t.clientY);
+    }
+  }, { passive: false });
+
+  sidebar.addEventListener("touchend", (e) => {
+    if (spTimer) { clearTimeout(spTimer); spTimer = null; }
+    if (spActive) {
+      e.preventDefault();
+      const pointerX = (e.changedTouches[0]?.clientX || spStartX);
+      const pointerY = (e.changedTouches[0]?.clientY || spStartY) + SIDEBAR_OFFSET_Y;
+      clickElementAt(pointerX, pointerY);
+      hideSidebarPointer();
+    }
+    spActive = false;
+  }, { passive: false });
+
+  sidebar.addEventListener("touchcancel", () => {
+    hideSidebarPointer();
+  });
+}

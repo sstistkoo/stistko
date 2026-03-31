@@ -30,6 +30,8 @@ export function exportProjectFile() {
     activeLayer: state.activeLayer,
     nextLayerId: state.nextLayerId,
     showObjectNumbers: state.showObjectNumbers,
+    showIntersectionNumbers: state.showIntersectionNumbers,
+    anchors: state.anchors,
   };
   const blob = new Blob([JSON.stringify(data, null, 2)], {
     type: "application/json",
@@ -89,6 +91,8 @@ export function importProjectFile() {
         if (data.machineType) state.machineType = data.machineType;
         state.xDisplayMode = data.xDisplayMode || 'radius';
         if (data.showObjectNumbers !== undefined) state.showObjectNumbers = data.showObjectNumbers;
+        if (data.showIntersectionNumbers !== undefined) state.showIntersectionNumbers = data.showIntersectionNumbers;
+        state.anchors = data.anchors || [];
         if (data.layers) {
           state.layers = data.layers;
           state.activeLayer = data.activeLayer || 0;

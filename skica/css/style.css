@@ -245,6 +245,9 @@ body {
   font-family: Consolas, monospace;
   color: #fab387;
 }
+.null-point-indicator[hidden] {
+  display: none;
+}
 .null-point-indicator span {
   flex: 1;
 }
@@ -310,6 +313,10 @@ body {
 }
 
 #layerPanel {
+  display: none;
+}
+
+#intPanel {
   display: none;
 }
 
@@ -395,7 +402,7 @@ body {
 /* ── Grid rozložení souřadnic (3×2: anchor label input label input) ── */
 .prop-grid-3x2 {
   display: grid;
-  grid-template-columns: auto auto 1fr auto 1fr;
+  grid-template-columns: auto auto 1fr auto 1fr auto;
   gap: 2px 3px;
   align-items: center;
 }
@@ -414,6 +421,33 @@ body {
   gap: 1px;
   cursor: pointer;
   font-size: 11px;
+}
+
+.prop-grid-3x2 .prop-point-ctrl {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  justify-self: end;
+}
+
+.prop-grid-3x2 .prop-point-ctrl .anchor-badge {
+  font-size: 10px;
+  opacity: 0.8;
+  color: #fab387;
+  cursor: default;
+  user-select: none;
+}
+
+.prop-grid-3x2 .prop-point-ctrl input[type="checkbox"] {
+  width: 13px;
+  height: 13px;
+  cursor: pointer;
+  accent-color: var(--ctp-blue, #89b4fa);
+}
+
+.prop-grid-3x2 .prop-grid-anchor.anchored-point {
+  color: #fab387;
+  opacity: 0.9;
 }
 /* Grid 2×2 pro kružnici/oblouk (label input label input) */
 .prop-grid-2x2 {
@@ -491,6 +525,30 @@ body {
   color: var(--ctp-blue);
 }
 
+#objectList li.has-points {
+  background: #a6e3a112;
+}
+
+#objectList li.has-points .obj-checkbox {
+  accent-color: #a6e3a1;
+  opacity: 0.7;
+}
+
+#objectList li .edit-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 0 4px;
+  margin-right: 13px;
+  opacity: 0.5;
+  line-height: 1;
+}
+
+#objectList li .edit-btn:hover {
+  opacity: 1;
+}
+
 #objectList li .del-btn {
   background: none;
   border: none;
@@ -548,6 +606,52 @@ body {
   background: #a6e3a122;
   color: #a6e3a1;
   opacity: 1;
+}
+
+/* ── Seznam průsečíků ── */
+#intersectionList {
+  list-style: none;
+  max-height: 35vh;
+  overflow-y: auto;
+}
+
+#intersectionList li {
+  padding: 4px 8px;
+  cursor: pointer;
+  border-radius: 3px;
+  font-size: 11px;
+  font-family: Consolas, monospace;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+#intersectionList li:hover {
+  background: var(--ctp-surface0);
+}
+
+#intersectionList li.selected {
+  background: #89b4fa22;
+  color: var(--ctp-blue);
+}
+
+#intersectionList li .int-checkbox {
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+  accent-color: var(--ctp-blue, #89b4fa);
+  flex-shrink: 0;
+}
+
+#intersectionList li.select-all-row {
+  border-bottom: 1px solid var(--ctp-surface1, #45475a);
+  margin-bottom: 2px;
+  padding-bottom: 4px;
+  opacity: 0.85;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 /* â”€â”€ Seznam vrstev â”€â”€ */
@@ -1248,6 +1352,36 @@ body {
   left: 0;
   top: 0;
   background: linear-gradient(to bottom, #f9e2af44, transparent);
+}
+
+/* ── Sidebar Precision Pointer (long-press) ── */
+#sidebarPrecisionPointer {
+  position: fixed;
+  z-index: 90;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+}
+
+#sidebarPrecisionPointer .sp-dot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--ctp-yellow, #f9e2af);
+  background: #f9e2af44;
+  left: -5px;
+  top: -5px;
+  box-shadow: 0 0 10px var(--ctp-yellow, #f9e2af);
+}
+
+#sidebarPrecisionPointer .sp-connector {
+  position: absolute;
+  width: 1px;
+  height: 60px;
+  left: 0;
+  top: 0;
+  background: linear-gradient(to bottom, #f9e2af66, transparent);
 }
 
 

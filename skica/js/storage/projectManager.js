@@ -37,6 +37,7 @@ function _buildProjectData() {
     nextLayerId: state.nextLayerId,
     anchors: state.anchors,
     showObjectNumbers: state.showObjectNumbers,
+    showIntersectionNumbers: state.showIntersectionNumbers,
   };
 }
 
@@ -60,6 +61,7 @@ function _loadProjectData(data) {
   }
   state.anchors = data.anchors || [];
   if (data.showObjectNumbers !== undefined) state.showObjectNumbers = data.showObjectNumbers;
+  if (data.showIntersectionNumbers !== undefined) state.showIntersectionNumbers = data.showIntersectionNumbers;
   state.selected = null;
   state.multiSelected.clear();
   state.selectedPoint = null;

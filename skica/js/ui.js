@@ -2,17 +2,19 @@
 // ║  SKICA – UI panely, toolbar, hinty                          ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-import { COLORS } from './constants.js';
+import { COLORS, MOBILE_BREAKPOINT } from './constants.js';
 import { state, showToast, pushUndo, undo, redo, axisLabels, resetDrawingState, displayX, xPrefix, fmtStatusCoords, coordHelpers } from './state.js';
-import { typeLabel, toolLabel, bulgeToArc, safeEvalMath, _parseMathExpr, getRectCorners } from './utils.js';
+import { typeLabel, toolLabel, bulgeToArc, safeEvalMath, _parseMathExpr, getRectCorners, getObjectSnapPoints } from './utils.js';
 import { renderAll, renderAllDebounced } from './render.js';
-import { drawCanvas, screenToWorld, snapPt } from './canvas.js';
+import { drawCanvas, screenToWorld, snapPt, autoCenterView } from './canvas.js';
 import { bridge } from './bridge.js';
 import { addObject } from './objects.js';
 import { updateAssociativeDimensions } from './dialogs/dimension.js';
 import { openCuttingCalc, openTaperCalc, openThreadCalc, openConvertCalc, openWeightCalc, openToleranceCalc, openRoughnessCalc, openInsertCalc } from './cnc-calcs.js';
 import { makeOverlay, makeInputOverlay } from './dialogFactory.js';
 import { getMeta, setMeta } from './idb.js';
+import { showEditObjectDialog } from './dialogs/mobileEdit.js';
+import { isAnchored, removeAnchorsForObject } from './tools/anchorClick.js';
 
 // ── Bridge registrace (rozbíjí cyklickou závislost geometry ↔ ui) ──
 bridge.updateProperties = () => updateProperties();
@@ -89,6 +91,14 @@ export function updateObjectList() {
     numCb.addEventListener("change", () => {
       state.showObjectNumbers = numCb.checked;
       renderAll();
+      // Na mobilu zavřít panel aby byl vidět výkres s čísly
+      if (numCb.checked && window.innerWidth <= MOBILE_BREAKPOINT) {
+        const sidebar = document.getElementById("sidebar");
+        const sidebarOverlay = document.getElementById("sidebarOverlay");
+        sidebar.classList.remove("mobile-open");
+        sidebarOverlay.classList.remove("active");
+        setTimeout(() => autoCenterView(), 260);
+      }
     });
     const numLabel = document.createElement("span");
     numLabel.textContent = "Číslovat";
@@ -102,8 +112,17 @@ export function updateObjectList() {
   state.objects.forEach((obj, idx) => {
     const li = document.createElement("li");
     const isChecked = idx === state.selected || state.multiSelected.has(idx);
-    li.className = isChecked ? "selected" : "";
     const isDim = obj.isDimension || obj.isCoordLabel;
+
+    // Zjistit, jestli objekt má vybrané body (ale není sám vybraný)
+    const SEL_PT_TOL_OBJ = 1e-4;
+    let hasSelectedPoints = false;
+    if (!isChecked && state.selectedPoint && state.selectedPoint.length > 0 && !isDim) {
+      const pts = getObjectSnapPoints(obj);
+      hasSelectedPoints = pts.some(p => !p.mid && state.selectedPoint.some(sp => Math.hypot(sp.x - p.x, sp.y - p.y) < SEL_PT_TOL_OBJ));
+    }
+
+    li.className = isChecked ? "selected" : (hasSelectedPoints ? "has-points" : "");
 
     // ── Checkbox pro ne-kóty ──
     if (!isDim) {
@@ -111,6 +130,7 @@ export function updateObjectList() {
       cb.type = "checkbox";
       cb.className = "obj-checkbox";
       cb.checked = isChecked;
+      if (hasSelectedPoints && !isChecked) cb.indeterminate = true;
       cb.addEventListener("change", (e) => {
         e.stopPropagation();
         if (cb.checked) {
@@ -147,11 +167,34 @@ export function updateObjectList() {
     span.appendChild(iconSpan);
     span.appendChild(document.createTextNode(obj.name || obj.type + " " + obj.id));
     li.appendChild(span);
+
+    // ── Wrapper pro akční tlačítka (edit + delete) ──
+    const actionsWrap = document.createElement("span");
+    actionsWrap.style.display = "flex";
+    actionsWrap.style.alignItems = "center";
+    actionsWrap.style.flexShrink = "0";
+
+    const editBtn = document.createElement("button");
+    editBtn.className = "edit-btn";
+    editBtn.title = "Upravit objekt";
+    editBtn.textContent = "✏️";
+    editBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      state.selected = idx;
+      state.multiSelected.clear();
+      updateObjectList();
+      updateProperties();
+      renderAll();
+      showEditObjectDialog(idx);
+    });
+    actionsWrap.appendChild(editBtn);
+
     const delBtn = document.createElement("button");
     delBtn.className = "del-btn";
     delBtn.title = "Smazat";
     delBtn.textContent = "✕";
-    li.appendChild(delBtn);
+    actionsWrap.appendChild(delBtn);
+    li.appendChild(actionsWrap);
     span.addEventListener("click", () => {
       if (state.multiSelected.has(idx) || (idx === state.selected && state.multiSelected.size > 0)) {
         state.multiSelected.delete(idx);
@@ -188,6 +231,7 @@ export function updateObjectList() {
       } else if (state.dragging && state.dragObjIdx > idx) {
         state.dragObjIdx--;
       }
+      removeAnchorsForObject(state.objects[idx]);
       state.objects.splice(idx, 1);
       if (state.selected === idx) state.selected = null;
       else if (state.selected > idx) state.selected--;
@@ -252,6 +296,7 @@ export function updateObjectList() {
 
           if (vn <= 2) {
             // Only 1 segment → delete the whole polyline
+            removeAnchorsForObject(state.objects[idx]);
             state.objects.splice(idx, 1);
             if (state.selected === idx) state.selected = null;
             else if (state.selected > idx) state.selected--;
@@ -643,14 +688,15 @@ export function updateProperties() {
       const grid = document.createElement("div");
       grid.className = "prop-grid-3x2";
 
-      // Row 1: 📌 Z1 [input]  X1 [input]
+      // Row 1: 📌 Z1 [input]  X1 [input]  [⚓☑]
+      const pt1anchored = isAnchored(obj.x1, obj.y1);
       const anchor1 = document.createElement("label");
-      anchor1.className = "prop-grid-anchor";
+      anchor1.className = "prop-grid-anchor" + (pt1anchored ? " anchored-point" : "");
       const radio1 = document.createElement("input");
       radio1.type = "radio"; radio1.name = "propAnchor"; radio1.value = "1"; radio1.checked = true;
       radio1.style.cssText = "accent-color:#4a9dff;margin:0";
       anchor1.appendChild(radio1);
-      anchor1.appendChild(document.createTextNode(" 📌"));
+      anchor1.appendChild(document.createTextNode(pt1anchored ? " ⚓" : " 📌"));
       grid.appendChild(anchor1);
 
       const lblH1 = document.createElement("span"); lblH1.className = "coord-label"; lblH1.textContent = H + "1";
@@ -660,14 +706,48 @@ export function updateProperties() {
       grid.appendChild(lblV1);
       const inpY1 = makeGridInput(obj.y1, 3); grid.appendChild(inpY1);
 
-      // Row 2: 📌 Z2 [input]  X2 [input]
+      // Checkbox pro přidání bodu 1 do výběru + kotva indikátor
+      const ptCtrl1 = document.createElement("span");
+      ptCtrl1.className = "prop-point-ctrl";
+      if (pt1anchored) {
+        const badge1 = document.createElement("span");
+        badge1.className = "anchor-badge";
+        badge1.title = "Bod je zakotven";
+        badge1.textContent = "⚓";
+        ptCtrl1.appendChild(badge1);
+      }
+      const ptCb1 = document.createElement("input");
+      ptCb1.type = "checkbox";
+      ptCb1.title = "Přidat bod 1 do výběru";
+      const SEL_PT_TOL = 1e-4;
+      const _isPtSelected = (px, py) => state.selectedPoint && state.selectedPoint.some(p => Math.hypot(p.x - px, p.y - py) < SEL_PT_TOL);
+      const _togglePt = (px, py, add) => {
+        if (!state.selectedPoint) state.selectedPoint = [];
+        if (add) {
+          if (!_isPtSelected(px, py)) state.selectedPoint.push({ x: px, y: py });
+        } else {
+          const i = state.selectedPoint.findIndex(p => Math.hypot(p.x - px, p.y - py) < SEL_PT_TOL);
+          if (i >= 0) state.selectedPoint.splice(i, 1);
+          if (state.selectedPoint.length === 0) state.selectedPoint = null;
+        }
+      };
+      ptCb1.checked = _isPtSelected(obj.x1, obj.y1);
+      ptCb1.addEventListener("change", () => {
+        _togglePt(obj.x1, obj.y1, ptCb1.checked);
+        renderAll();
+      });
+      ptCtrl1.appendChild(ptCb1);
+      grid.appendChild(ptCtrl1);
+
+      // Row 2: 📌 Z2 [input]  X2 [input]  [⚓☑]
+      const pt2anchored = isAnchored(obj.x2, obj.y2);
       const anchor2 = document.createElement("label");
-      anchor2.className = "prop-grid-anchor";
+      anchor2.className = "prop-grid-anchor" + (pt2anchored ? " anchored-point" : "");
       const radio2 = document.createElement("input");
       radio2.type = "radio"; radio2.name = "propAnchor"; radio2.value = "2";
       radio2.style.cssText = "accent-color:#4a9dff;margin:0";
       anchor2.appendChild(radio2);
-      anchor2.appendChild(document.createTextNode(" 📌"));
+      anchor2.appendChild(document.createTextNode(pt2anchored ? " ⚓" : " 📌"));
       grid.appendChild(anchor2);
 
       const lblH2 = document.createElement("span"); lblH2.className = "coord-label"; lblH2.textContent = H + "2";
@@ -676,6 +756,27 @@ export function updateProperties() {
       const lblV2 = document.createElement("span"); lblV2.className = "coord-label"; lblV2.textContent = V + "2";
       grid.appendChild(lblV2);
       const inpY2 = makeGridInput(obj.y2, 3); grid.appendChild(inpY2);
+
+      // Checkbox pro přidání bodu 2 do výběru + kotva indikátor
+      const ptCtrl2 = document.createElement("span");
+      ptCtrl2.className = "prop-point-ctrl";
+      if (pt2anchored) {
+        const badge2 = document.createElement("span");
+        badge2.className = "anchor-badge";
+        badge2.title = "Bod je zakotven";
+        badge2.textContent = "⚓";
+        ptCtrl2.appendChild(badge2);
+      }
+      const ptCb2 = document.createElement("input");
+      ptCb2.type = "checkbox";
+      ptCb2.title = "Přidat bod 2 do výběru";
+      ptCb2.checked = _isPtSelected(obj.x2, obj.y2);
+      ptCb2.addEventListener("change", () => {
+        _togglePt(obj.x2, obj.y2, ptCb2.checked);
+        renderAll();
+      });
+      ptCtrl2.appendChild(ptCb2);
+      grid.appendChild(ptCtrl2);
 
       // Row 3: Délka [input]  Úhel° [input]
       const spacer = document.createElement("span"); grid.appendChild(spacer);
@@ -693,6 +794,7 @@ export function updateProperties() {
         }
       }
       const inpAng = makeGridInput(computeAngle(), 2); grid.appendChild(inpAng);
+      const spacer2 = document.createElement("span"); grid.appendChild(spacer2); // prázdná buňka v 6. sloupci
 
       gridTd.appendChild(grid);
       gridTr.appendChild(gridTd);
@@ -1265,19 +1367,121 @@ export function updateIntersectionList() {
       `<li style="color:${COLORS.textMuted};cursor:default">Žádné průsečíky</li>`;
     return;
   }
+
+  const SEL_PT_TOL = 1e-4;
+  const _isPtSel = (px, py) => state.selectedPoint && state.selectedPoint.some(p => Math.hypot(p.x - px, p.y - py) < SEL_PT_TOL);
+  const _togglePt = (px, py, add) => {
+    if (!state.selectedPoint) state.selectedPoint = [];
+    if (add) {
+      if (!_isPtSel(px, py)) state.selectedPoint.push({ x: px, y: py });
+    } else {
+      const i = state.selectedPoint.findIndex(p => Math.hypot(p.x - px, p.y - py) < SEL_PT_TOL);
+      if (i >= 0) state.selectedPoint.splice(i, 1);
+      if (state.selectedPoint.length === 0) state.selectedPoint = null;
+    }
+  };
+
+  // ── Select-all + Číslovat řádek ──
+  const selectAllLi = document.createElement("li");
+  selectAllLi.className = "select-all-row";
+
+  const selectAllCb = document.createElement("input");
+  selectAllCb.type = "checkbox";
+  selectAllCb.className = "int-checkbox";
+  selectAllCb.title = "Vybrat vše";
+  const allChecked = state.intersections.every(pt => _isPtSel(pt.x, pt.y));
+  selectAllCb.checked = allChecked;
+  selectAllCb.addEventListener("change", () => {
+    if (selectAllCb.checked) {
+      state.intersections.forEach(pt => {
+        if (!_isPtSel(pt.x, pt.y)) {
+          if (!state.selectedPoint) state.selectedPoint = [];
+          state.selectedPoint.push({ x: pt.x, y: pt.y });
+        }
+      });
+    } else {
+      state.intersections.forEach(pt => {
+        _togglePt(pt.x, pt.y, false);
+      });
+    }
+    updateIntersectionList();
+    renderAll();
+  });
+  const selLabel = document.createElement("span");
+  selLabel.textContent = "Vše";
+  selLabel.style.opacity = "0.7";
+  selectAllLi.appendChild(selectAllCb);
+  selectAllLi.appendChild(selLabel);
+
+  // Checkbox pro číslování průsečíků
+  const numCb = document.createElement("input");
+  numCb.type = "checkbox";
+  numCb.className = "int-checkbox";
+  numCb.style.marginLeft = "auto";
+  numCb.title = "Zobrazit čísla průsečíků na výkrese";
+  numCb.checked = !!state.showIntersectionNumbers;
+  numCb.addEventListener("change", () => {
+    state.showIntersectionNumbers = numCb.checked;
+    renderAll();
+    if (numCb.checked && window.innerWidth <= MOBILE_BREAKPOINT) {
+      const sidebar = document.getElementById("sidebar");
+      const sidebarOverlay = document.getElementById("sidebarOverlay");
+      sidebar.classList.remove("mobile-open");
+      sidebarOverlay.classList.remove("active");
+      setTimeout(() => autoCenterView(), 260);
+    }
+  });
+  const numLabel = document.createElement("span");
+  numLabel.textContent = "Číslovat";
+  numLabel.style.opacity = "0.7";
+  selectAllLi.appendChild(numCb);
+  selectAllLi.appendChild(numLabel);
+
+  ul.appendChild(selectAllLi);
+
+  // ── Jednotlivé průsečíky ──
+  const { H: _iH, V: _iV, Hp: _Hp, Vp: _Vp, fH, fV } = coordHelpers();
   state.intersections.forEach((pt, i) => {
     const li = document.createElement("li");
-    const { H: _iH, V: _iV, Hp: _Hp, Vp: _Vp, fH, fV } = coordHelpers();
+    const isSel = _isPtSel(pt.x, pt.y);
+    li.className = isSel ? "selected" : "";
+
+    // Checkbox pro výběr
+    const cb = document.createElement("input");
+    cb.type = "checkbox";
+    cb.className = "int-checkbox";
+    cb.checked = isSel;
+    cb.addEventListener("change", (e) => {
+      e.stopPropagation();
+      _togglePt(pt.x, pt.y, cb.checked);
+      updateIntersectionList();
+      renderAll();
+    });
+    li.appendChild(cb);
+
+    // Souřadnice + číslo
     const _hv = fH(pt.x);
     const _vv = fV(pt.y);
-    li.innerHTML = `P${i + 1}:  ${_Hp}${_iH}=${_hv.toFixed(3)}  ${_Vp}${_iV}=${_vv.toFixed(3)} <span class="copy-hint">klik=kopírovat</span>`;
-    li.title = "Klikněte pro zkopírování souřadnic";
-    li.addEventListener("click", () => {
+    const coordSpan = document.createElement("span");
+    coordSpan.style.flex = "1";
+    coordSpan.textContent = `${_Hp}${_iH}=${_hv.toFixed(3)}  ${_Vp}${_iV}=${_vv.toFixed(3)}`;
+    li.appendChild(coordSpan);
+
+    // Číslo průsečíku
+    const numSpan = document.createElement("span");
+    numSpan.style.cssText = "font-size:10px;opacity:0.5;margin-left:4px";
+    numSpan.textContent = `P${i + 1}`;
+    li.appendChild(numSpan);
+
+    // Klik na text = kopírovat souřadnice
+    coordSpan.addEventListener("click", () => {
       const text = `${_Hp}${_iH}${_hv.toFixed(3)} ${_Vp}${_iV}${_vv.toFixed(3)}`;
       navigator.clipboard
         .writeText(text)
         .then(() => showToast(`Zkopírováno: ${text}`));
     });
+    coordSpan.title = "Klikněte pro zkopírování souřadnic";
+
     ul.appendChild(li);
   });
 }
@@ -1750,6 +1954,7 @@ export function updateNullPointUI() {
     indicator.hidden = false;
   } else {
     btn.classList.remove('null-active');
+    coordsSpan.textContent = '';
     indicator.hidden = true;
   }
 }

@@ -85,6 +85,12 @@
       <div class="ch-label"></div>
     </div>
 
+    <!-- ── Sidebar Precision Pointer (long-press) ── -->
+    <div id="sidebarPrecisionPointer" style="display: none">
+      <div class="sp-dot"></div>
+      <div class="sp-connector"></div>
+    </div>
+
     <!-- ── Toolbar ── -->
     <div id="topbar" role="toolbar" aria-label="Kreslicí nástroje">
       <button
@@ -902,6 +908,22 @@
             </button>
           </div>
           <ul id="objectList"></ul>
+        </div>
+        <div
+          class="panel-header"
+          data-panel="intPanel"
+          role="button"
+          tabindex="0"
+        >
+          ▸ Průsečíky
+        </div>
+        <div
+          class="panel-body"
+          id="intPanel"
+          role="region"
+          aria-label="Průsečíky"
+        >
+          <ul id="intersectionList"></ul>
         </div>
         <div
           class="panel-header"
