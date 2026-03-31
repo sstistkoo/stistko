@@ -60,7 +60,7 @@ export function renderAllDebounced(delay = 32) {
 // ── Viewport Culling ──
 
 /** Vrátí AABB objektu ve world souřadnicích, nebo null. */
-function getObjectBounds(obj) {
+export function getObjectBounds(obj) {
   switch (obj.type) {
     case 'point':
       return { minX: obj.x - 1, minY: obj.y - 1, maxX: obj.x + 1, maxY: obj.y + 1 };
@@ -152,7 +152,7 @@ function getViewportBounds() {
 }
 
 /** Testuje překrytí dvou AABB. */
-function boundsOverlap(a, b) {
+export function boundsOverlap(a, b) {
   return a.minX <= b.maxX && a.maxX >= b.minX &&
          a.minY <= b.maxY && a.maxY >= b.minY;
 }
@@ -400,6 +400,11 @@ function renderObjects() {
     drawObjectNumbers();
   }
 
+  // ── Čísla průsečíků na výkrese ──
+  if (state.showIntersectionNumbers) {
+    drawIntersectionNumbers();
+  }
+
   // ── Vazební značky (constraints) ──
   drawConstraintMarkers();
 
@@ -453,6 +458,25 @@ function renderObjects() {
       ctx.fillStyle = COLORS.delete;
       ctx.fill();
     }
+  }
+
+  // ── Obdélníkový výběr ──
+  if (state._rectSelecting && state._rectStart) {
+    const [sx1, sy1] = worldToScreen(state._rectStart.x, state._rectStart.y);
+    const [sx2, sy2] = worldToScreen(state.mouse.x, state.mouse.y);
+    const rx = Math.min(sx1, sx2), ry = Math.min(sy1, sy2);
+    const rw = Math.abs(sx2 - sx1), rh = Math.abs(sy2 - sy1);
+    ctx.save();
+    ctx.strokeStyle = 'rgba(100, 180, 255, 0.7)';
+    ctx.fillStyle = 'rgba(100, 180, 255, 0.08)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([6, 4]);
+    ctx.beginPath();
+    ctx.rect(rx, ry, rw, rh);
+    ctx.stroke();
+    ctx.fill();
+    ctx.setLineDash([]);
+    ctx.restore();
   }
 
   // Dočasné kreslení
@@ -954,6 +978,51 @@ function drawObjectNumbers() {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(label, scx, scy);
+    ctx.textAlign = 'start';
+    ctx.textBaseline = 'alphabetic';
+  });
+}
+
+/** Vykreslí čísla průsečíků (P1, P2, …) na výkrese. */
+function drawIntersectionNumbers() {
+  if (state.intersections.length === 0) return;
+  const fontSize = Math.round(Math.min(20, Math.max(13, 10 + state.zoom * 5)));
+  ctx.font = `bold ${fontSize}px Consolas`;
+
+  state.intersections.forEach((pt, i) => {
+    const [scx, scy] = worldToScreen(pt.x, pt.y);
+    const label = `P${i + 1}`;
+    const tw = ctx.measureText(label).width;
+    const pad = 4;
+    const bw = tw + pad * 2;
+    const bh = fontSize + pad * 2;
+
+    const isSelPt = state.selectedPoint != null
+      && state.selectedPoint.some(sp => Math.hypot(pt.x - sp.x, pt.y - sp.y) < 1e-4);
+
+    // Background pill
+    ctx.fillStyle = isSelPt ? COLORS.selected : '#a6e3a1';
+    ctx.globalAlpha = 0.9;
+    ctx.beginPath();
+    const rx = scx - bw / 2, ry = scy - bh - 6;
+    const r = 4;
+    ctx.moveTo(rx + r, ry);
+    ctx.lineTo(rx + bw - r, ry);
+    ctx.arcTo(rx + bw, ry, rx + bw, ry + r, r);
+    ctx.lineTo(rx + bw, ry + bh - r);
+    ctx.arcTo(rx + bw, ry + bh, rx + bw - r, ry + bh, r);
+    ctx.lineTo(rx + r, ry + bh);
+    ctx.arcTo(rx, ry + bh, rx, ry + bh - r, r);
+    ctx.lineTo(rx, ry + r);
+    ctx.arcTo(rx, ry, rx + r, ry, r);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    // Number text
+    ctx.fillStyle = '#1e1e2e';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(label, scx, ry + bh / 2);
     ctx.textAlign = 'start';
     ctx.textBaseline = 'alphabetic';
   });

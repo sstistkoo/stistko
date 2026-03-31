@@ -57,6 +57,7 @@ export const state = {
   nextId: 1,
   showDimensions: 'all',  // 'all' | 'intersections' | 'none'
   showObjectNumbers: false, // zobrazit čísla objektů na výkrese
+  showIntersectionNumbers: false, // zobrazit čísla průsečíků na výkrese
   // Kotvení (anchor) – zafixované snap body
   anchors: [],  // [{x, y}, ...] – zakotvené body
   // Undo/Redo
@@ -130,6 +131,9 @@ export function resetDrawingState() {
   // multiSelected se čistí při resetu (setTool si jej uloží pro move)
   state.multiSelected.clear();
   state.selectedPoint = null;
+  // Rect selection cleanup
+  state._rectSelecting = false;
+  state._rectStart = null;
 }
 
 // ── Undo / Redo ──

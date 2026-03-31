@@ -5,7 +5,7 @@
 import { ZOOM_FACTOR, ZOOM_MIN, ZOOM_MAX, PASTE_OFFSET } from './constants.js';
 import { drawCanvas, screenToWorld, snapPt, applyAngleSnap } from './canvas.js';
 import { state, pushUndo, undo, redo, showToast, resetDrawingState, fmtStatusCoords } from './state.js';
-import { renderAll } from './render.js';
+import { renderAll, getObjectBounds, boundsOverlap } from './render.js';
 import { moveObject, addObject, addPolylineAsSegments } from './objects.js';
 import { setTool, resetHint, setHint, updateProperties, updateObjectList, updateSnapPtsBtn, updateDimsBtn, toggleCoordMode, updateCoordModeBtn, updateSnapGridBtn, updateAngleSnapBtn, showGridSizeDialog, showAngleSnapDialog, toggleHelp, updateNullPointUI } from './ui.js';
 import { findObjectAt, selectObjectAt, calculateAllIntersections, mirrorObject, linearArray, rotateObject, findSegmentAt, findConstraintAt } from './geometry.js';
@@ -141,10 +141,26 @@ drawCanvas.addEventListener("mousedown", (e) => {
   }
   if (e.button !== 0) return;
 
+  // Obdélníkový výběr: začít tažení z prázdného místa v select režimu
+  if (state.tool === "select" && !state.drawing && !state.dragging) {
+    const hitObj = findObjectAt(state.mouse.x, state.mouse.y);
+    if (hitObj === null) {
+      state._rectSelecting = true;
+      state._rectStart = { x: state.mouse.x, y: state.mouse.y };
+      return;
+    }
+  }
+
   handleCanvasClick(state.mouse.x, state.mouse.y);
 });
 
 drawCanvas.addEventListener("mouseup", (e) => {
+  // Dokončit obdélníkový výběr
+  if (state._rectSelecting && state._rectStart) {
+    _finishRectSelection();
+    renderAll();
+    return;
+  }
   if (isPanning) {
     isPanning = false;
     drawCanvas.style.cursor = "crosshair";
@@ -192,6 +208,13 @@ document.addEventListener("keydown", (e) => {
       state._selectedSegmentObjIdx = null;
       state.multiSelectedSegments.clear();
       updateProperties();
+      renderAll();
+      return;
+    }
+    // Cancel rectangle selection
+    if (state._rectSelecting) {
+      state._rectSelecting = false;
+      state._rectStart = null;
       renderAll();
       return;
     }
@@ -561,6 +584,46 @@ drawCanvas.addEventListener("contextmenu", (e) => {
   };
   setTimeout(() => document.addEventListener('click', closeMenu), 0);
 });
+
+// ── Obdélníkový výběr – dokončení ──
+function _finishRectSelection() {
+  if (!state._rectStart) { state._rectSelecting = false; return; }
+  const sx = state._rectStart.x, sy = state._rectStart.y;
+  const ex = state.mouse.x, ey = state.mouse.y;
+  // Pokud byl pohyb minimální, zachovat se jako klik do prázdna (deselect)
+  if (Math.hypot(ex - sx, ey - sy) < 0.5) {
+    state._rectSelecting = false;
+    state._rectStart = null;
+    selectObjectAt(sx, sy);
+    return;
+  }
+  const bbox = {
+    minX: Math.min(sx, ex), minY: Math.min(sy, ey),
+    maxX: Math.max(sx, ex), maxY: Math.max(sy, ey),
+  };
+  state.multiSelected.clear();
+  state.selected = null;
+  state.selectedPoint = null;
+  let firstIdx = null;
+  state.objects.forEach((obj, idx) => {
+    if (obj.isDimension || obj.isCoordLabel) return;
+    const layer = state.layers.find(l => l.id === obj.layer);
+    if (layer && (!layer.visible || layer.locked)) return;
+    const ob = getObjectBounds(obj);
+    if (ob && boundsOverlap(ob, bbox)) {
+      state.multiSelected.add(idx);
+      if (firstIdx === null) firstIdx = idx;
+    }
+  });
+  if (state.multiSelected.size === 1) {
+    state.selected = firstIdx;
+    state.multiSelected.clear();
+  }
+  state._rectSelecting = false;
+  state._rectStart = null;
+  updateObjectList();
+  updateProperties();
+}
 
 // ── Klik logika sdílená s touch ──
 /**
