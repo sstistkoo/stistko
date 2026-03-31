@@ -11,6 +11,7 @@ import { parseDXF, exportDXF } from '../dxf.js';
 import { autoCenterView } from '../canvas.js';
 import { bridge } from '../bridge.js';
 import { loadProject } from './projectManager.js';
+import { showExportImageDialog } from './exportImage.js';
 
 // ── Export / Import ──
 
@@ -45,7 +46,7 @@ export function exportProjectFile() {
 }
 
 /** Importuje .skica JSON soubor. */
-const VALID_OBJ_TYPES = ['point', 'line', 'constr', 'circle', 'arc', 'rect', 'polyline'];
+const VALID_OBJ_TYPES = ['point', 'line', 'constr', 'circle', 'arc', 'rect', 'polyline', 'text'];
 const MAX_IMPORT_SIZE = 10 * 1024 * 1024; // 10 MB
 const MAX_OBJECTS = 10000;
 
@@ -138,7 +139,7 @@ export function importDXFFile() {
         pushUndo();
         const typeNames = {
           point: 'Bod', line: 'Úsečka', circle: 'Kružnice',
-          arc: 'Oblouk', polyline: 'Kontura'
+          arc: 'Oblouk', polyline: 'Kontura', text: 'Text'
         };
         for (const entity of entities) {
           entity.id = state.nextId++;
@@ -173,7 +174,7 @@ export function exportDXFFile() {
     showToast('Žádné objekty k exportu');
     return;
   }
-  const dxfText = exportDXF(state.objects);
+  const dxfText = exportDXF(state.objects, state.layers);
   const blob = new Blob([dxfText], { type: 'application/dxf' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
@@ -183,19 +184,20 @@ export function exportDXFFile() {
   showToast(`Exportováno ${state.objects.length} objektů do DXF`);
 }
 
-// ── Tlačítko Load (overlay) ──
+// ── Tlačítko Soubor (overlay) ──
 document.getElementById("btnLoad").addEventListener("click", () => {
   const overlay = document.createElement("div");
   overlay.className = "input-overlay";
   overlay.innerHTML = `
     <div class="input-dialog">
-      <h3>📂 Načíst projekt</h3>
+      <h3>📂 Soubor</h3>
       <div class="btn-row" style="flex-direction:column;gap:8px;align-items:stretch">
         <button class="btn-ok" id="loadLocal" style="width:100%">Načíst z paměti prohlížeče</button>
         <button class="btn-ok" id="loadFile" style="width:100%">Importovat ze souboru (.json)</button>
         <button class="btn-ok" id="loadDXF" style="width:100%">📐 Importovat DXF soubor (.dxf)</button>
         <button class="btn-ok" id="exportFile" style="width:100%;background:${COLORS.selected};border-color:${COLORS.selected}">Exportovat do souboru</button>
         <button class="btn-ok" id="exportDXF" style="width:100%;background:${COLORS.selected};border-color:${COLORS.selected}">📐 Exportovat DXF</button>
+        <button class="btn-ok" id="exportImage" style="width:100%;background:${COLORS.selected};border-color:${COLORS.selected}">🖼 Export obrazu (SVG/PNG)</button>
         <button class="btn-cancel btn-cancel-overlay" style="width:100%">Zrušit</button>
       </div>
     </div>`;
@@ -219,6 +221,10 @@ document.getElementById("btnLoad").addEventListener("click", () => {
   overlay.querySelector("#exportDXF").addEventListener("click", () => {
     overlay.remove();
     exportDXFFile();
+  });
+  overlay.querySelector("#exportImage").addEventListener("click", () => {
+    overlay.remove();
+    showExportImageDialog();
   });
 });
 

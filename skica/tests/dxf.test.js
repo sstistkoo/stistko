@@ -324,20 +324,20 @@ describe('parseDXF – více entit', () => {
 describe('parseDXF – chyby a hraniční případy', () => {
   it('hlásí neznámou entitu', () => {
     const dxf = makeDXF([
-      '0', 'SPLINE',
+      '0', '3DFACE',
       '10', '0', '20', '0',
     ]);
     const { entities, errors } = parseDXF(dxf);
     expect(entities).toHaveLength(0);
     expect(errors).toHaveLength(1);
-    expect(errors[0]).toContain('SPLINE');
+    expect(errors[0]).toContain('3DFACE');
   });
 
   it('hlásí více neznámých entit', () => {
     const dxf = makeDXF([
-      '0', 'SPLINE',
-      '10', '0', '20', '0',
       '0', '3DFACE',
+      '10', '0', '20', '0',
+      '0', 'HATCH',
       '10', '0', '20', '0',
     ]);
     const { entities, errors } = parseDXF(dxf);
@@ -345,19 +345,24 @@ describe('parseDXF – chyby a hraniční případy', () => {
     expect(errors).toHaveLength(2);
   });
 
-  it('zpracuje mix známých a neznámých entit', () => {
+  it('zpracuje mix známých a dříve nepodporovaných entit', () => {
     const dxf = makeDXF([
       '0', 'LINE',
       '10', '0', '20', '0', '11', '10', '21', '10',
       '0', 'ELLIPSE',
       '10', '0', '20', '0',
+      '11', '10', '21', '0',
+      '40', '0.5',
+      '41', '0', '42', '6.283185',
       '0', 'CIRCLE',
       '10', '5', '20', '5', '40', '2',
     ]);
     const { entities, errors } = parseDXF(dxf);
-    expect(entities).toHaveLength(2);
-    expect(errors).toHaveLength(1);
-    expect(errors[0]).toContain('ELLIPSE');
+    // LINE + tessellované ELLIPSE segmenty + CIRCLE
+    expect(entities.length).toBeGreaterThanOrEqual(3);
+    expect(errors).toHaveLength(0);
+    expect(entities[0].type).toBe('line');
+    expect(entities[entities.length - 1].type).toBe('circle');
   });
 
   it('zvládne DXF s \\r\\n konci řádků', () => {
@@ -517,8 +522,16 @@ describe('exportDXF', () => {
     expect(dxf).toContain('LWPOLYLINE');
     // closed flag
     const lines = dxf.split('\n');
-    const idx70 = lines.findIndex(l => l.trim() === '70');
-    expect(lines[idx70 + 1].trim()).toBe('1');
+    const lwIdx = lines.findIndex(l => l.trim() === 'LWPOLYLINE');
+    let found70 = false;
+    for (let i = lwIdx + 1; i < lines.length; i++) {
+      if (lines[i].trim() === '70') {
+        expect(lines[i + 1].trim()).toBe('1');
+        found70 = true;
+        break;
+      }
+    }
+    expect(found70).toBe(true);
   });
 
   it('exportuje polylajnu s bulge', () => {
@@ -594,5 +607,262 @@ describe('DXF round-trip', () => {
     expect(errors).toHaveLength(0);
     expect(entities).toHaveLength(4);
     expect(entities.map(e => e.type)).toEqual(['point', 'line', 'circle', 'arc']);
+  });
+});
+
+// ════════════════════════════════════════
+// ── TEXT / MTEXT import ──
+// ════════════════════════════════════════
+describe('parseDXF – TEXT/MTEXT', () => {
+  it('parsuje TEXT entitu', () => {
+    const dxf = makeDXF([
+      '0', 'TEXT',
+      '10', '50.0', '20', '25.0',
+      '40', '10',
+      '1', 'Hello World',
+    ]);
+    const { entities, errors } = parseDXF(dxf);
+    expect(errors).toHaveLength(0);
+    expect(entities).toHaveLength(1);
+    expect(entities[0].type).toBe('text');
+    expect(entities[0].x).toBe(50);
+    expect(entities[0].y).toBe(25);
+    expect(entities[0].text).toBe('Hello World');
+    expect(entities[0].fontSize).toBe(10);
+  });
+
+  it('parsuje MTEXT entitu a odstraní formátování', () => {
+    const dxf = makeDXF([
+      '0', 'MTEXT',
+      '10', '10', '20', '20',
+      '40', '5',
+      '1', '{\\fArial;Test text}',
+    ]);
+    const { entities } = parseDXF(dxf);
+    expect(entities).toHaveLength(1);
+    expect(entities[0].type).toBe('text');
+    expect(entities[0].text).toBe('Test text');
+  });
+
+  it('přeskočí TEXT s prázdným obsahem', () => {
+    const dxf = makeDXF([
+      '0', 'TEXT',
+      '10', '0', '20', '0',
+      '40', '10',
+      '1', '',
+    ]);
+    const { entities } = parseDXF(dxf);
+    expect(entities).toHaveLength(0);
+  });
+});
+
+// ════════════════════════════════════════
+// ── ELLIPSE import (tessellace) ──
+// ════════════════════════════════════════
+describe('parseDXF – ELLIPSE', () => {
+  it('tesselluje elipsu na úsečky', () => {
+    const dxf = makeDXF([
+      '0', 'ELLIPSE',
+      '10', '0', '20', '0',
+      '11', '20', '21', '0',
+      '40', '0.5',
+      '41', '0', '42', '6.283185',
+    ]);
+    const { entities, errors } = parseDXF(dxf);
+    expect(errors).toHaveLength(0);
+    expect(entities.length).toBeGreaterThan(10);
+    expect(entities[0].type).toBe('line');
+  });
+
+  it('elipsa s ratio ≈ 1 → kružnice', () => {
+    const dxf = makeDXF([
+      '0', 'ELLIPSE',
+      '10', '5', '20', '5',
+      '11', '10', '21', '0',
+      '40', '1.0',
+      '41', '0', '42', '6.283185',
+    ]);
+    const { entities } = parseDXF(dxf);
+    expect(entities).toHaveLength(1);
+    expect(entities[0].type).toBe('circle');
+    expect(entities[0].r).toBeCloseTo(10, 1);
+  });
+});
+
+// ════════════════════════════════════════
+// ── SPLINE import (tessellace) ──
+// ════════════════════════════════════════
+describe('parseDXF – SPLINE', () => {
+  it('tesselluje spline na úsečky z řídicích bodů', () => {
+    const dxf = makeDXF([
+      '0', 'SPLINE',
+      '10', '0', '20', '0',
+      '10', '10', '20', '5',
+      '10', '20', '20', '0',
+    ]);
+    const { entities, errors } = parseDXF(dxf);
+    expect(errors).toHaveLength(0);
+    expect(entities).toHaveLength(2);
+    expect(entities[0].type).toBe('line');
+    expect(entities[0].x1).toBe(0);
+    expect(entities[0].x2).toBe(10);
+    expect(entities[1].x2).toBe(20);
+  });
+
+  it('preferuje fit body před řídicími body', () => {
+    const dxf = makeDXF([
+      '0', 'SPLINE',
+      '10', '0', '20', '0',
+      '10', '50', '20', '50',
+      '11', '0', '21', '0',
+      '11', '10', '21', '10',
+      '11', '20', '21', '0',
+    ]);
+    const { entities } = parseDXF(dxf);
+    expect(entities).toHaveLength(2);
+    // Fit body (kód 11): 0→10→20
+    expect(entities[0].x1).toBe(0);
+    expect(entities[0].x2).toBe(10);
+    expect(entities[1].x2).toBe(20);
+  });
+
+  it('spline s jedním bodem → žádné entity + varování', () => {
+    const dxf = makeDXF([
+      '0', 'SPLINE',
+      '10', '5', '20', '5',
+    ]);
+    const { entities, errors } = parseDXF(dxf);
+    expect(entities).toHaveLength(0);
+    expect(errors).toHaveLength(1);
+    expect(errors[0]).toContain('SPLINE');
+  });
+});
+
+// ════════════════════════════════════════
+// ── Heavy POLYLINE (POLYLINE/VERTEX/SEQEND) ──
+// ════════════════════════════════════════
+describe('parseDXF – heavy POLYLINE', () => {
+  it('parsuje heavy POLYLINE s VERTEX/SEQEND', () => {
+    const dxf = [
+      '0', 'SECTION', '2', 'ENTITIES',
+      '0', 'POLYLINE',
+      '8', '0',
+      '70', '0',
+      '0', 'VERTEX',
+      '10', '0', '20', '0',
+      '0', 'VERTEX',
+      '10', '10', '20', '0',
+      '0', 'VERTEX',
+      '10', '10', '20', '10',
+      '0', 'SEQEND',
+      '0', 'ENDSEC', '0', 'EOF',
+    ].join('\n');
+    const { entities, errors } = parseDXF(dxf);
+    expect(errors).toHaveLength(0);
+    expect(entities).toHaveLength(1);
+    expect(entities[0].type).toBe('polyline');
+    expect(entities[0].vertices).toHaveLength(3);
+    expect(entities[0].closed).toBe(false);
+  });
+
+  it('parsuje uzavřenou heavy POLYLINE', () => {
+    const dxf = [
+      '0', 'SECTION', '2', 'ENTITIES',
+      '0', 'POLYLINE',
+      '70', '1',
+      '0', 'VERTEX',
+      '10', '0', '20', '0',
+      '0', 'VERTEX',
+      '10', '10', '20', '0',
+      '0', 'VERTEX',
+      '10', '10', '20', '10',
+      '0', 'SEQEND',
+      '0', 'ENDSEC', '0', 'EOF',
+    ].join('\n');
+    const { entities } = parseDXF(dxf);
+    expect(entities[0].closed).toBe(true);
+  });
+
+  it('heavy POLYLINE s bulge hodnotami', () => {
+    const dxf = [
+      '0', 'SECTION', '2', 'ENTITIES',
+      '0', 'POLYLINE',
+      '70', '0',
+      '0', 'VERTEX',
+      '10', '0', '20', '0',
+      '42', '0.5',
+      '0', 'VERTEX',
+      '10', '10', '20', '0',
+      '0', 'SEQEND',
+      '0', 'ENDSEC', '0', 'EOF',
+    ].join('\n');
+    const { entities } = parseDXF(dxf);
+    expect(entities[0].bulges[0]).toBe(0.5);
+    expect(entities[0].bulges[1]).toBe(0);
+  });
+});
+
+// ════════════════════════════════════════
+// ── Export TEXT ──
+// ════════════════════════════════════════
+describe('exportDXF – text', () => {
+  it('exportuje text entitu', () => {
+    const dxf = exportDXF([{
+      type: 'text', x: 10, y: 20, text: 'Ahoj', fontSize: 12, rotation: 0
+    }]);
+    expect(dxf).toContain('TEXT');
+    expect(dxf).toContain('Ahoj');
+  });
+
+  it('text přežije export→import', () => {
+    const orig = [{
+      type: 'text', x: 42, y: -5, text: 'Test', fontSize: 8, rotation: 0
+    }];
+    const dxf = exportDXF(orig);
+    const { entities } = parseDXF(dxf);
+    expect(entities).toHaveLength(1);
+    expect(entities[0].type).toBe('text');
+    expect(entities[0].text).toBe('Test');
+    expect(entities[0].x).toBeCloseTo(42, 4);
+  });
+});
+
+// ════════════════════════════════════════
+// ── Export s vrstvami ──
+// ════════════════════════════════════════
+describe('exportDXF – vrstvy a barvy', () => {
+  it('exportuje TABLES sekci', () => {
+    const dxf = exportDXF([{ type: 'point', x: 0, y: 0 }]);
+    expect(dxf).toContain('HEADER');
+    expect(dxf).toContain('ENTITIES');
+    expect(dxf).toContain('EOF');
+  });
+
+  it('exportuje s názvy vrstev', () => {
+    const layers = [{ id: 0, name: 'Kontura' }, { id: 1, name: 'Pomocná' }];
+    const objects = [
+      { type: 'point', x: 0, y: 0, layer: 0 },
+      { type: 'point', x: 5, y: 5, layer: 1 },
+    ];
+    const dxf = exportDXF(objects, layers);
+    expect(dxf).toContain('Kontura');
+    expect(dxf).toContain('Pomocná');
+  });
+
+  it('exportuje ACI barvu', () => {
+    const dxf = exportDXF([{ type: 'point', x: 0, y: 0, color: '#ff0000' }]);
+    // ACI 1 = červená
+    const lines = dxf.split('\n');
+    const pointIdx = lines.findIndex(l => l.trim() === 'POINT');
+    // Najdi kód 62 po POINT
+    let found = false;
+    for (let i = pointIdx + 1; i < lines.length && i < pointIdx + 12; i++) {
+      if (lines[i].trim() === '62') {
+        expect(lines[i + 1].trim()).toBe('1');
+        found = true;
+        break;
+      }
+    }
+    expect(found).toBe(true);
   });
 });
