@@ -457,6 +457,3 @@ export function showExportImageDialog() {
     sel.addEventListener('keydown', e => e.stopPropagation());
   });
 }
-
-// ── Tlačítko ──
-document.getElementById("btnExportImage")?.addEventListener("click", () => showExportImageDialog());

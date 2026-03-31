@@ -8,6 +8,7 @@ import { getRectCorners } from './utils.js';
 const MAX_ENTITIES = 10000;
 const DEFAULT_COLOR = COLORS.primary;
 const DEG2RAD = Math.PI / 180;
+const RAD2DEG = 180 / Math.PI;
 
 // DXF ACI (AutoCAD Color Index) → CSS barvy
 const ACI_COLORS = {
@@ -22,6 +23,12 @@ const ACI_COLORS = {
   9: '#c0c0c0',   // světle šedá
 };
 
+// CSS barvy → ACI (pro export)
+const CSS_TO_ACI = {};
+for (const [code, hex] of Object.entries(ACI_COLORS)) {
+  CSS_TO_ACI[hex.toLowerCase()] = parseInt(code, 10);
+}
+
 function safeFloat(val) {
   const n = parseFloat(val);
   return isNaN(n) ? 0 : n;
@@ -30,6 +37,11 @@ function safeFloat(val) {
 function aciColor(code) {
   const c = parseInt(code, 10);
   return isNaN(c) ? DEFAULT_COLOR : (ACI_COLORS[c] || DEFAULT_COLOR);
+}
+
+function colorToAci(cssColor) {
+  if (!cssColor) return 7;
+  return CSS_TO_ACI[cssColor.toLowerCase()] || 7;
 }
 
 // Rozděl DXF text na páry (group code, value)
@@ -61,7 +73,87 @@ function findEntitiesSection(pairs) {
   return null;
 }
 
-// Parsuj jednu DXF entitu → SKICA objekt
+// ── Tessellace ELLIPSE na obloukové/úsečkové segmenty ──
+function tessellateEllipse(data, color) {
+  const cx = safeFloat(data.find(p => p.code === 10)?.value);
+  const cy = safeFloat(data.find(p => p.code === 20)?.value);
+  // Koncový bod hlavní osy (relativně k centru)
+  const mx = safeFloat(data.find(p => p.code === 11)?.value);
+  const my = safeFloat(data.find(p => p.code === 21)?.value);
+  const ratio = safeFloat(data.find(p => p.code === 40)?.value) || 1;
+  const startParam = safeFloat(data.find(p => p.code === 41)?.value);
+  const endParam = safeFloat(data.find(p => p.code === 42)?.value) || (2 * Math.PI);
+
+  const a = Math.sqrt(mx * mx + my * my); // hlavní poloosa
+  const b = a * ratio; // vedlejší poloosa
+  const rot = Math.atan2(my, mx); // rotace elipsy
+
+  // Pokud je ratio ≈ 1, je to kružnice/oblouk
+  if (Math.abs(ratio - 1) < 0.001) {
+    const isFullCircle = Math.abs(endParam - startParam - 2 * Math.PI) < 0.01 ||
+                         Math.abs(endParam - startParam) < 0.01;
+    if (isFullCircle) {
+      return [{ type: 'circle', cx, cy, r: a, color }];
+    }
+    return [{
+      type: 'arc', cx, cy, r: a,
+      startAngle: startParam + rot,
+      endAngle: endParam + rot,
+      color
+    }];
+  }
+
+  // Tessellace na úsečky
+  const segments = Math.max(32, Math.round(a * 4));
+  const step = (endParam - startParam) / segments;
+  const results = [];
+  for (let i = 0; i < segments; i++) {
+    const t1 = startParam + i * step;
+    const t2 = startParam + (i + 1) * step;
+    const cos1 = Math.cos(t1), sin1 = Math.sin(t1);
+    const cos2 = Math.cos(t2), sin2 = Math.sin(t2);
+    const cosR = Math.cos(rot), sinR = Math.sin(rot);
+    results.push({
+      type: 'line',
+      x1: cx + a * cos1 * cosR - b * sin1 * sinR,
+      y1: cy + a * cos1 * sinR + b * sin1 * cosR,
+      x2: cx + a * cos2 * cosR - b * sin2 * sinR,
+      y2: cy + a * cos2 * sinR + b * sin2 * cosR,
+      color
+    });
+  }
+  return results;
+}
+
+// ── Tessellace SPLINE na úsečky ──
+function tessellateSpline(data, color) {
+  // Sbírej řídicí body (kód 10/20) a fit body (kód 11/21)
+  const controlPts = [];
+  const fitPts = [];
+  for (const p of data) {
+    if (p.code === 10) controlPts.push({ x: safeFloat(p.value), y: 0 });
+    else if (p.code === 20 && controlPts.length > 0) controlPts[controlPts.length - 1].y = safeFloat(p.value);
+    else if (p.code === 11) fitPts.push({ x: safeFloat(p.value), y: 0 });
+    else if (p.code === 21 && fitPts.length > 0) fitPts[fitPts.length - 1].y = safeFloat(p.value);
+  }
+
+  // Preferuj fit body (přesnější aproximace), jinak řídicí body
+  const pts = fitPts.length >= 2 ? fitPts : controlPts;
+  if (pts.length < 2) return [];
+
+  const results = [];
+  for (let i = 0; i < pts.length - 1; i++) {
+    results.push({
+      type: 'line',
+      x1: pts[i].x, y1: pts[i].y,
+      x2: pts[i + 1].x, y2: pts[i + 1].y,
+      color
+    });
+  }
+  return results;
+}
+
+// Parsuj jednu DXF entitu → SKICA objekt(y)
 function parseEntity(type, data) {
   const colorPair = data.find(p => p.code === 62);
   const color = colorPair ? aciColor(colorPair.value) : DEFAULT_COLOR;
@@ -125,18 +217,50 @@ function parseEntity(type, data) {
       return { type: 'polyline', vertices, bulges, closed, color };
     }
 
+    case 'TEXT':
+    case 'MTEXT': {
+      const x = safeFloat(data.find(p => p.code === 10)?.value);
+      const y = safeFloat(data.find(p => p.code === 20)?.value);
+      let text = data.find(p => p.code === 1)?.value || '';
+      // MTEXT continuation text (kód 3) – připoj další části textu
+      if (type === 'MTEXT') {
+        for (const p of data) {
+          if (p.code === 3) text = p.value + text;
+        }
+      }
+      const height = safeFloat(data.find(p => p.code === 40)?.value) || 14;
+      const rotation = safeFloat(data.find(p => p.code === 50)?.value) || 0;
+      // MTEXT může mít formátovací kódy – odstraň je
+      if (type === 'MTEXT') {
+        text = text.replace(/\\[pPfFcChHwWaAqQtT][^;]*;/g, '')
+                   .replace(/\{|\}/g, '')
+                   .replace(/\\P/g, '\n');
+      }
+      if (!text.trim()) return null;
+      return {
+        type: 'text', x, y,
+        text: text.trim(),
+        fontSize: Math.round(height),
+        rotation: rotation * DEG2RAD,
+        color
+      };
+    }
+
+    case 'ELLIPSE':
+      return { _multi: tessellateEllipse(data, color) };
+
+    case 'SPLINE':
+      return { _multi: tessellateSpline(data, color) };
+
     default:
       return null;
   }
 }
 
 /**
- * Parsuj DXF text → SKICA objekty
- * @param {string} text - obsah DXF souboru (ASCII)
- * @returns {{ entities: object[], errors: string[] }}
- */
-/**
  * Parsuje DXF text a vrací entity.
+ * Podporuje: POINT, LINE, CIRCLE, ARC, LWPOLYLINE, POLYLINE (heavy),
+ *            TEXT, MTEXT, ELLIPSE (tessellace), SPLINE (tessellace)
  * @param {string} text
  * @returns {import('./types.js').DXFParseResult}
  */
@@ -152,6 +276,8 @@ export function parseDXF(text) {
     return { entities, errors };
   }
 
+  // ── První průchod: seskup heavy POLYLINE (POLYLINE/VERTEX/SEQEND) ──
+  const rawEntities = [];
   let i = section.start;
   while (i < section.end) {
     if (pairs[i].code !== 0) { i++; continue; }
@@ -159,16 +285,78 @@ export function parseDXF(text) {
     const entityType = pairs[i].value;
     i++;
 
-    // Sesbírej páry entity až do dalšího code 0
     const entityData = [];
     while (i < section.end && pairs[i].code !== 0) {
       entityData.push(pairs[i]);
       i++;
     }
 
+    if (entityType === 'POLYLINE') {
+      // Heavy POLYLINE: sbírej VERTEX entity až do SEQEND
+      const colorPair = entityData.find(p => p.code === 62);
+      const color = colorPair ? aciColor(colorPair.value) : DEFAULT_COLOR;
+      const flags = parseInt(entityData.find(p => p.code === 70)?.value || '0', 10);
+      const closed = !!(flags & 1);
+      const vertices = [];
+      const bulges = [];
+
+      while (i < section.end) {
+        if (pairs[i].code !== 0) { i++; continue; }
+        const vType = pairs[i].value;
+        i++;
+        if (vType === 'SEQEND') {
+          // Přeskoč data SEQEND
+          while (i < section.end && pairs[i].code !== 0) i++;
+          break;
+        }
+        if (vType === 'VERTEX') {
+          let vx = 0, vy = 0, vb = 0;
+          while (i < section.end && pairs[i].code !== 0) {
+            if (pairs[i].code === 10) vx = safeFloat(pairs[i].value);
+            else if (pairs[i].code === 20) vy = safeFloat(pairs[i].value);
+            else if (pairs[i].code === 42) vb = safeFloat(pairs[i].value);
+            i++;
+          }
+          vertices.push({ x: vx, y: vy });
+          bulges.push(vb);
+        } else {
+          // Neznámá sub-entita v POLYLINE
+          while (i < section.end && pairs[i].code !== 0) i++;
+        }
+      }
+
+      if (vertices.length >= 2) {
+        rawEntities.push({ entityType: 'LWPOLYLINE', entityData: [] });
+        entities.push({ type: 'polyline', vertices, bulges, closed, color });
+        if (entities.length >= MAX_ENTITIES) {
+          errors.push(`Dosažen limit ${MAX_ENTITIES} entit, zbytek ignorován`);
+          break;
+        }
+      }
+      continue;
+    }
+
+    rawEntities.push({ entityType, entityData });
+  }
+
+  // ── Druhý průchod: parsuj normální entity ──
+  for (const { entityType, entityData } of rawEntities) {
+    if (entityType === 'LWPOLYLINE' && entityData.length === 0) continue; // heavy polyline already processed
+
     const obj = parseEntity(entityType, entityData);
     if (obj) {
-      entities.push(obj);
+      if (obj._multi) {
+        // Tessellované entity (ELLIPSE, SPLINE) → více objektů
+        for (const sub of obj._multi) {
+          entities.push(sub);
+          if (entities.length >= MAX_ENTITIES) break;
+        }
+        if (obj._multi.length === 0) {
+          errors.push(`${entityType}: nedostatek dat pro tessellaci`);
+        }
+      } else {
+        entities.push(obj);
+      }
     } else {
       errors.push(`Neznámá/nepodporovaná entita: ${entityType}`);
     }
@@ -186,120 +374,125 @@ export function parseDXF(text) {
 // ── DXF EXPORT ──
 // ═══════════════════════════════════════════════════════════════
 
-const RAD2DEG = 180 / Math.PI;
-
-function dxfPair(code, value) {
-  return `  ${code}\n${value}`;
+// Group code → řádek bez paddingu (kompatibilní se všemi parsery)
+function gc(code, value) {
+  return code + '\n' + value;
 }
 
-function entityToString(obj) {
-  const lines = [];
-  const p = (code, val) => lines.push(dxfPair(code, val));
+function entityLines(obj) {
+  const out = [];
+  const layerName = obj.layerName || '0';
+  const aci = colorToAci(obj.color);
 
   switch (obj.type) {
     case 'point':
-      p(0, 'POINT');
-      p(8, '0');
-      p(10, obj.x.toFixed(6));
-      p(20, obj.y.toFixed(6));
-      p(30, '0.0');
+      out.push(gc(0, 'POINT'), gc(8, layerName));
+      if (aci !== 7) out.push(gc(62, aci));
+      out.push(gc(10, obj.x.toFixed(6)), gc(20, obj.y.toFixed(6)));
       break;
 
     case 'line':
     case 'constr':
       if (obj.isDimension) break;
-      p(0, 'LINE');
-      p(8, '0');
-      p(10, obj.x1.toFixed(6));
-      p(20, obj.y1.toFixed(6));
-      p(30, '0.0');
-      p(11, obj.x2.toFixed(6));
-      p(21, obj.y2.toFixed(6));
-      p(31, '0.0');
+      out.push(gc(0, 'LINE'), gc(8, layerName));
+      if (aci !== 7) out.push(gc(62, aci));
+      out.push(gc(10, obj.x1.toFixed(6)), gc(20, obj.y1.toFixed(6)));
+      out.push(gc(11, obj.x2.toFixed(6)), gc(21, obj.y2.toFixed(6)));
       break;
 
     case 'circle':
-      p(0, 'CIRCLE');
-      p(8, '0');
-      p(10, obj.cx.toFixed(6));
-      p(20, obj.cy.toFixed(6));
-      p(30, '0.0');
-      p(40, obj.r.toFixed(6));
+      out.push(gc(0, 'CIRCLE'), gc(8, layerName));
+      if (aci !== 7) out.push(gc(62, aci));
+      out.push(gc(10, obj.cx.toFixed(6)), gc(20, obj.cy.toFixed(6)));
+      out.push(gc(40, obj.r.toFixed(6)));
       break;
 
     case 'arc':
-      p(0, 'ARC');
-      p(8, '0');
-      p(10, obj.cx.toFixed(6));
-      p(20, obj.cy.toFixed(6));
-      p(30, '0.0');
-      p(40, obj.r.toFixed(6));
-      p(50, (obj.startAngle * RAD2DEG).toFixed(6));
-      p(51, (obj.endAngle * RAD2DEG).toFixed(6));
+      out.push(gc(0, 'ARC'), gc(8, layerName));
+      if (aci !== 7) out.push(gc(62, aci));
+      out.push(gc(10, obj.cx.toFixed(6)), gc(20, obj.cy.toFixed(6)));
+      out.push(gc(40, obj.r.toFixed(6)));
+      out.push(gc(50, (obj.startAngle * RAD2DEG).toFixed(6)));
+      out.push(gc(51, (obj.endAngle * RAD2DEG).toFixed(6)));
       break;
 
     case 'rect': {
-      // Exportovat jako LWPOLYLINE (uzavřený obdélník, respektuje rotaci)
       const rc = getRectCorners(obj);
-      p(0, 'LWPOLYLINE');
-      p(8, '0');
-      p(70, '1'); // closed
-      p(90, '4'); // vertex count
+      out.push(gc(0, 'LWPOLYLINE'), gc(8, layerName));
+      if (aci !== 7) out.push(gc(62, aci));
+      out.push(gc(90, 4), gc(70, 1));
       for (const c of rc) {
-        p(10, c.x.toFixed(6)); p(20, c.y.toFixed(6));
+        out.push(gc(10, c.x.toFixed(6)), gc(20, c.y.toFixed(6)));
       }
       break;
     }
 
     case 'polyline':
-      p(0, 'LWPOLYLINE');
-      p(8, '0');
-      p(70, obj.closed ? '1' : '0');
-      p(90, String(obj.vertices.length));
+      out.push(gc(0, 'LWPOLYLINE'), gc(8, layerName));
+      if (aci !== 7) out.push(gc(62, aci));
+      out.push(gc(90, obj.vertices.length));
+      out.push(gc(70, obj.closed ? 1 : 0));
       for (let i = 0; i < obj.vertices.length; i++) {
-        p(10, obj.vertices[i].x.toFixed(6));
-        p(20, obj.vertices[i].y.toFixed(6));
+        out.push(gc(10, obj.vertices[i].x.toFixed(6)));
+        out.push(gc(20, obj.vertices[i].y.toFixed(6)));
         if (obj.bulges && obj.bulges[i] && obj.bulges[i] !== 0) {
-          p(42, obj.bulges[i].toFixed(6));
+          out.push(gc(42, obj.bulges[i].toFixed(6)));
         }
       }
+      break;
+
+    case 'text':
+      out.push(gc(0, 'TEXT'), gc(8, layerName));
+      if (aci !== 7) out.push(gc(62, aci));
+      out.push(gc(10, obj.x.toFixed(6)), gc(20, obj.y.toFixed(6)));
+      out.push(gc(40, obj.fontSize || 14));
+      out.push(gc(1, obj.text || ''));
+      if (obj.rotation) out.push(gc(50, (obj.rotation * RAD2DEG).toFixed(6)));
       break;
 
     default:
       return '';
   }
-  return lines.join('\n');
+  return out.join('\n');
 }
 
 /**
  * Exportuje SKICA objekty do DXF textu (ASCII formát).
+ * Minimální formát kompatibilní s Fusion 360, FreeCAD, LibreCAD, AutoCAD atd.
  * @param {object[]} objects - pole SKICA objektů
+ * @param {object[]} [layers] - volitelné pole vrstev [{id, name}]
  * @returns {string} DXF text
  */
-export function exportDXF(objects) {
-  const sections = [];
+export function exportDXF(objects, layers) {
+  const out = [];
 
-  // HEADER
-  sections.push([
-    '  0', 'SECTION',
-    '  2', 'HEADER',
-    '  9', '$ACADVER', '  1', 'AC1009',
-    '  0', 'ENDSEC',
-  ].join('\n'));
+  // Připrav mapování layer ID → jméno pro export
+  const layerMap = {};
+  if (layers && layers.length > 0) {
+    for (const l of layers) {
+      layerMap[l.id] = l.name || `Vrstva_${l.id}`;
+    }
+  }
 
-  // ENTITIES
-  const entityStrings = objects
-    .map(obj => entityToString(obj))
-    .filter(s => s.length > 0);
+  // Přiřaď layerName ke každému objektu
+  const enriched = objects.map(obj => ({
+    ...obj,
+    layerName: layerMap[obj.layer] || '0',
+  }));
 
-  sections.push([
-    '  0', 'SECTION',
-    '  2', 'ENTITIES',
-    ...entityStrings,
-    '  0', 'ENDSEC',
-  ].join('\n'));
+  // ── HEADER (prázdný – maximální kompatibilita) ──
+  out.push(gc(0, 'SECTION'), gc(2, 'HEADER'));
+  out.push(gc(0, 'ENDSEC'));
 
-  sections.push('  0\nEOF');
+  // ── ENTITIES ──
+  out.push(gc(0, 'SECTION'), gc(2, 'ENTITIES'));
+  for (const obj of enriched) {
+    const str = entityLines(obj);
+    if (str.length > 0) out.push(str);
+  }
+  out.push(gc(0, 'ENDSEC'));
 
-  return sections.join('\n');
+  out.push(gc(0, 'EOF'));
+
+  return out.join('\n') + '\n';
 }
