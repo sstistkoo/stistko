@@ -531,9 +531,6 @@ body {
   align-items: center;
   gap: 4px;
 }
-#objectList li.num-row {
-  justify-content: center;
-}
 
 #objectList li.seg-item {
   padding-left: 22px;
