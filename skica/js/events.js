@@ -157,7 +157,7 @@ drawCanvas.addEventListener("mousedown", (e) => {
 drawCanvas.addEventListener("mouseup", (e) => {
   // Dokončit obdélníkový výběr
   if (state._rectSelecting && state._rectStart) {
-    _finishRectSelection();
+    finishRectSelection();
     renderAll();
     return;
   }
@@ -586,7 +586,7 @@ drawCanvas.addEventListener("contextmenu", (e) => {
 });
 
 // ── Obdélníkový výběr – dokončení ──
-function _finishRectSelection() {
+export function finishRectSelection() {
   if (!state._rectStart) { state._rectSelecting = false; return; }
   const sx = state._rectStart.x, sy = state._rectStart.y;
   const ex = state.mouse.x, ey = state.mouse.y;
