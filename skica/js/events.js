@@ -963,19 +963,21 @@ function deleteSelectedSegment() {
     state._selectedSegmentObjIdx = null;
     state.multiSelectedSegments.clear();
   } else if (obj.closed) {
-    // Closed polyline: remove vertex at segIdx+1 (or segIdx for last segment), open the polyline
-    // Remove the end vertex of this segment, reorder so segIdx+1 becomes the break point
-    const removeIdx = (segIdx + 1) % n;
-    obj.vertices.splice(removeIdx, 1);
-    obj.bulges.splice(segIdx, 1);
-    obj.closed = false;
-    // Reorder so the break is at start/end
-    if (removeIdx > 0 && removeIdx < obj.vertices.length) {
-      const newVerts = [...obj.vertices.slice(removeIdx), ...obj.vertices.slice(0, removeIdx)];
-      const newBulges = [...obj.bulges.slice(removeIdx), ...obj.bulges.slice(0, removeIdx)];
-      obj.vertices = newVerts;
-      obj.bulges = newBulges;
+    // Closed polyline: open by removing the segment at segIdx
+    // Reorder so resulting open polyline starts at vertex after the deleted segment
+    const startIdx = (segIdx + 1) % n;
+    const newVerts = [];
+    const newBulges = [];
+    for (let i = 0; i < n; i++) {
+      const vi = (startIdx + i) % n;
+      newVerts.push(obj.vertices[vi]);
+      if (i < n - 1) {
+        newBulges.push(obj.bulges[vi]);
+      }
     }
+    obj.vertices = newVerts;
+    obj.bulges = newBulges;
+    obj.closed = false;
     state.selectedSegment = null;
     state._selectedSegmentObjIdx = null;
     state.multiSelectedSegments.clear();

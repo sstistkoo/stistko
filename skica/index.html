@@ -372,274 +372,252 @@
         ▾
       </button>
       <div id="toolbarMid" class="toolbar-mid">
-      <button class="tool-btn" data-tool="tangent" title="Tečna (T)">
-        <svg viewBox="0 0 24 24">
-          <circle
-            cx="16"
-            cy="12"
-            r="6"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          />
-          <line
-            x1="2"
-            y1="20"
-            x2="12.5"
-            y2="7.5"
-            stroke="currentColor"
-            stroke-width="2"
-          />
-          <circle cx="2" cy="20" r="2" fill="currentColor" />
-        </svg>
-        Tečna
-      </button>
-      <button class="tool-btn" data-tool="offset" title="Offset (O)">
-        <svg viewBox="0 0 24 24">
-          <line
-            x1="4"
-            y1="6"
-            x2="4"
-            y2="18"
-            stroke="currentColor"
-            stroke-width="2"
-          />
-          <line
-            x1="12"
-            y1="6"
-            x2="12"
-            y2="18"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-dasharray="3 2"
-          />
-          <path
-            d="M6 12h4"
-            stroke="currentColor"
-            stroke-width="1.5"
-            fill="none"
-          />
-          <path
-            d="M8 10l2 2-2 2"
-            stroke="currentColor"
-            stroke-width="1.5"
-            fill="none"
-          />
-        </svg>
-        Offset
-      </button>
-      <button class="tool-btn" data-tool="trim" title="Oříznout úsečku (X)">
-        <svg viewBox="0 0 24 24">
-          <line
-            x1="4"
-            y1="20"
-            x2="20"
-            y2="4"
-            stroke="currentColor"
-            stroke-width="2"
-          />
-          <line
-            x1="12"
-            y1="4"
-            x2="12"
-            y2="20"
-            stroke="currentColor"
-            stroke-width="1.5"
-            stroke-dasharray="3 2"
-          />
-          <line
-            x1="4"
-            y1="20"
-            x2="12"
-            y2="12"
-            stroke="#f38ba8"
-            stroke-width="2.5"
-          />
-        </svg>
-        Oříz
-      </button>
-      <button class="tool-btn" data-tool="extend" title="Prodloužit úsečku (E)">
-        <svg viewBox="0 0 24 24">
-          <line
-            x1="4"
-            y1="16"
-            x2="14"
-            y2="8"
-            stroke="currentColor"
-            stroke-width="2"
-          />
-          <line
-            x1="14"
-            y1="8"
-            x2="20"
-            y2="4"
-            stroke="#a6e3a1"
-            stroke-width="2"
-            stroke-dasharray="3 2"
-          />
-          <line
-            x1="2"
-            y1="4"
-            x2="2"
-            y2="20"
-            stroke="currentColor"
-            stroke-width="1.5"
-          />
-        </svg>
-        Prodl.
-      </button>
-      <button
-        class="tool-btn"
-        data-tool="filletChamfer"
-        title="Zaoblení / Zkosení (F)"
-      >
-        <svg viewBox="0 0 24 24">
-          <line
-            x1="4"
-            y1="20"
-            x2="4"
-            y2="10"
-            stroke="currentColor"
-            stroke-width="2"
-          />
-          <path
-            d="M4 10 Q4 4 10 4"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          />
-          <line
-            x1="10"
-            y1="4"
-            x2="20"
-            y2="4"
-            stroke="currentColor"
-            stroke-width="2"
-          />
-          <line
-            x1="14"
-            y1="14"
-            x2="20"
-            y2="20"
-            stroke="currentColor"
-            stroke-width="1"
-            stroke-dasharray="2 1"
-            opacity="0.5"
-          />
-        </svg>
-        Zaob./Zkos.
-      </button>
-      <button class="tool-btn" data-tool="mirror" title="Zrcadlení (Shift+M)">
-        <svg viewBox="0 0 24 24">
-          <line
-            x1="12"
-            y1="2"
-            x2="12"
-            y2="22"
-            stroke="currentColor"
-            stroke-width="1.5"
-            stroke-dasharray="3 2"
-          />
-          <polygon
-            points="4,8 10,6 10,18 4,16"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.5"
-          />
-          <polygon
-            points="20,8 14,6 14,18 20,16"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.5"
-          />
-        </svg>
-        Zrcadlo
-      </button>
-      <button class="tool-btn" data-tool="perp" title="Kolmice (J)">
-        <svg viewBox="0 0 24 24">
-          <line
-            x1="4"
-            y1="20"
-            x2="20"
-            y2="20"
-            stroke="currentColor"
-            stroke-width="2"
-          />
-          <line
-            x1="12"
-            y1="20"
-            x2="12"
-            y2="4"
-            stroke="currentColor"
-            stroke-width="2"
-          />
-          <rect
-            x="10"
-            y="16"
-            width="4"
-            height="4"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.5"
-          />
-        </svg>
-        Kolm.
-      </button>
-      <button class="tool-btn" data-tool="horizontal" title="Vodorovnost (Z)">
-        <svg viewBox="0 0 24 24">
-          <line
-            x1="2"
-            y1="12"
-            x2="22"
-            y2="12"
-            stroke="currentColor"
-            stroke-width="2"
-          />
-          <line
-            x1="4"
-            y1="6"
-            x2="10"
-            y2="18"
-            stroke="currentColor"
-            stroke-width="1.5"
-            stroke-dasharray="3 2"
-          />
-          <path d="M7 9l0 6" stroke="#a6e3a1" stroke-width="1.5" />
-          <path
-            d="M5 12l2-3M5 12l2 3"
-            stroke="#a6e3a1"
-            stroke-width="1.5"
-            fill="none"
-          />
-        </svg>
-        Vodor.
-      </button>
-      <button class="tool-btn" data-tool="parallel" title="Rovnoběžka (H)">
-        <svg viewBox="0 0 24 24">
-          <line
-            x1="4"
-            y1="8"
-            x2="20"
-            y2="8"
-            stroke="currentColor"
-            stroke-width="2"
-          />
-          <line
-            x1="4"
-            y1="16"
-            x2="20"
-            y2="16"
-            stroke="currentColor"
-            stroke-width="2"
-          />
-          <path
-            d="M11 11l2 2M11 13l2-2"
-            stroke="currentColor"
-            stroke-width="1.5"
-          />
-        </svg>
-        Rovnob.
-      </button>
+        <button class="tool-btn" data-tool="tangent" title="Tečna (T)">
+          <svg viewBox="0 0 24 24">
+            <circle
+              cx="16"
+              cy="12"
+              r="6"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <line
+              x1="2"
+              y1="20"
+              x2="12.5"
+              y2="7.5"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <circle cx="2" cy="20" r="2" fill="currentColor" />
+          </svg>
+          Tečna
+        </button>
+        <button class="tool-btn" data-tool="offset" title="Offset (O)">
+          <svg viewBox="0 0 24 24">
+            <line
+              x1="4"
+              y1="6"
+              x2="4"
+              y2="18"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <line
+              x1="12"
+              y1="6"
+              x2="12"
+              y2="18"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-dasharray="3 2"
+            />
+            <path
+              d="M6 12h4"
+              stroke="currentColor"
+              stroke-width="1.5"
+              fill="none"
+            />
+            <path
+              d="M8 10l2 2-2 2"
+              stroke="currentColor"
+              stroke-width="1.5"
+              fill="none"
+            />
+          </svg>
+          Offset
+        </button>
+        <button class="tool-btn" data-tool="trim" title="Oříznout úsečku (X)">
+          <svg viewBox="0 0 24 24">
+            <line
+              x1="4"
+              y1="20"
+              x2="20"
+              y2="4"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <line
+              x1="12"
+              y1="4"
+              x2="12"
+              y2="20"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-dasharray="3 2"
+            />
+            <line
+              x1="4"
+              y1="20"
+              x2="12"
+              y2="12"
+              stroke="#f38ba8"
+              stroke-width="2.5"
+            />
+          </svg>
+          Oříz
+        </button>
+        <button
+          class="tool-btn"
+          data-tool="extend"
+          title="Prodloužit úsečku (E)"
+        >
+          <svg viewBox="0 0 24 24">
+            <line
+              x1="4"
+              y1="16"
+              x2="14"
+              y2="8"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <line
+              x1="14"
+              y1="8"
+              x2="20"
+              y2="4"
+              stroke="#a6e3a1"
+              stroke-width="2"
+              stroke-dasharray="3 2"
+            />
+            <line
+              x1="2"
+              y1="4"
+              x2="2"
+              y2="20"
+              stroke="currentColor"
+              stroke-width="1.5"
+            />
+          </svg>
+          Prodl.
+        </button>
+        <button
+          class="tool-btn"
+          data-tool="filletChamfer"
+          title="Zaoblení / Zkosení (F)"
+        >
+          <svg viewBox="0 0 24 24">
+            <line
+              x1="4"
+              y1="20"
+              x2="4"
+              y2="10"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <path
+              d="M4 10 Q4 4 10 4"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <line
+              x1="10"
+              y1="4"
+              x2="20"
+              y2="4"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <line
+              x1="14"
+              y1="14"
+              x2="20"
+              y2="20"
+              stroke="currentColor"
+              stroke-width="1"
+              stroke-dasharray="2 1"
+              opacity="0.5"
+            />
+          </svg>
+          Zaob./Zkos.
+        </button>
+        <button class="tool-btn" data-tool="mirror" title="Zrcadlení (Shift+M)">
+          <svg viewBox="0 0 24 24">
+            <line
+              x1="12"
+              y1="2"
+              x2="12"
+              y2="22"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-dasharray="3 2"
+            />
+            <polygon
+              points="4,8 10,6 10,18 4,16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            />
+            <polygon
+              points="20,8 14,6 14,18 20,16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            />
+          </svg>
+          Zrcadlo
+        </button>
+        <button class="tool-btn" data-tool="perp" title="Kolmice (J)">
+          <svg viewBox="0 0 24 24">
+            <line
+              x1="4"
+              y1="20"
+              x2="20"
+              y2="20"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <line
+              x1="12"
+              y1="20"
+              x2="12"
+              y2="4"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <rect
+              x="10"
+              y="16"
+              width="4"
+              height="4"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            />
+          </svg>
+          Kolm.
+        </button>
+        <button class="tool-btn" data-tool="horizontal" title="Vodorovnost (Z)">
+          <svg viewBox="0 0 24 24">
+            <line
+              x1="2"
+              y1="12"
+              x2="22"
+              y2="12"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <line
+              x1="4"
+              y1="6"
+              x2="10"
+              y2="18"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-dasharray="3 2"
+            />
+            <path d="M7 9l0 6" stroke="#a6e3a1" stroke-width="1.5" />
+            <path
+              d="M5 12l2-3M5 12l2 3"
+              stroke="#a6e3a1"
+              stroke-width="1.5"
+              fill="none"
+            />
+          </svg>
+          Vodor.
+        </button>
       </div>
       <button class="tool-btn" data-tool="break" title="Rozdělit objekt">
         <svg viewBox="0 0 24 24">
@@ -670,6 +648,32 @@
           />
         </svg>
         Rozděl
+      </button>
+      <button class="tool-btn" data-tool="parallel" title="Rovnoběžka (H)">
+        <svg viewBox="0 0 24 24">
+          <line
+            x1="4"
+            y1="8"
+            x2="20"
+            y2="8"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <line
+            x1="4"
+            y1="16"
+            x2="20"
+            y2="16"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <path
+            d="M11 11l2 2M11 13l2-2"
+            stroke="currentColor"
+            stroke-width="1.5"
+          />
+        </svg>
+        Rovnob.
       </button>
       <button class="tool-btn" data-tool="scale" title="Škálovat">
         <svg viewBox="0 0 24 24">
@@ -959,19 +963,19 @@
         </button>
         <button
           class="tool-btn"
+          id="btnExport"
+          title="Export CNC souřadnic"
+          aria-label="Export CNC souřadnic"
+        >
+          📋 CNC
+        </button>
+        <button
+          class="tool-btn"
           id="btnHistory"
           title="Historie smazaných výkresů"
           aria-label="Historie smazaných výkresů"
         >
           🕓 Historie
-        </button>
-        <button
-          class="tool-btn tool-btn-danger"
-          id="btnDeleteDims"
-          title="Smazat všechny kóty"
-          aria-label="Smazat kóty"
-        >
-          🗑️ Smaž kóty
         </button>
 
         <div class="sep"></div>
@@ -992,12 +996,12 @@
           📁 Projekty
         </button>
         <button
-          class="tool-btn"
-          id="btnExport"
-          title="Export CNC souřadnic"
-          aria-label="Export CNC souřadnic"
+          class="tool-btn tool-btn-danger"
+          id="btnDeleteDims"
+          title="Smazat všechny kóty"
+          aria-label="Smazat kóty"
         >
-          📋 CNC
+          🗑️ Smaž kóty
         </button>
         <button
           class="tool-btn"
