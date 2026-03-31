@@ -301,9 +301,50 @@ export function updateObjectList() {
         segSpan.appendChild(document.createTextNode(`Úsečka ${si + 1} (${sideLen.toFixed(1)})`));
         segLi.appendChild(segSpan);
 
+        // Delete segment button
+        const segDelBtn = document.createElement("button");
+        segDelBtn.className = "del-btn";
+        segDelBtn.title = "Smazat segment";
+        segDelBtn.textContent = "✕";
+        segLi.appendChild(segDelBtn);
+
         // Click to toggle segment selection
         segSpan.addEventListener("click", () => {
           _toggleSegmentSelection(idx, si);
+        });
+
+        // Delete segment – rozpad obdélníku na 3 úsečky
+        segDelBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          pushUndo();
+          const corners = getRectCorners(obj);
+          const newLines = [];
+          for (let j = 0; j < 4; j++) {
+            if (j === si) continue; // přeskočit smazaný segment
+            const ca = corners[j];
+            const cb = corners[(j + 1) % 4];
+            const lineId = state.nextId++;
+            newLines.push({
+              type: 'line',
+              id: lineId,
+              x1: ca.x, y1: ca.y,
+              x2: cb.x, y2: cb.y,
+              name: `Úsečka ${lineId}`,
+              layer: obj.layer,
+              color: obj.color,
+            });
+          }
+          // Nahradit obdélník třemi úsečkami
+          state.objects.splice(idx, 1, ...newLines);
+          state.selected = null;
+          state.selectedSegment = null;
+          state._selectedSegmentObjIdx = null;
+          state.multiSelectedSegments.clear();
+          updateObjectList();
+          updateProperties();
+          if (bridge.calculateAllIntersections) bridge.calculateAllIntersections();
+          renderAll();
+          showToast("Segment smazán – obdélník rozložen ✓");
         });
         ul.appendChild(segLi);
       }
