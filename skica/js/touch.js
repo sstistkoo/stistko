@@ -108,15 +108,27 @@ export function updateMobileCoords(wx, wy, extra) {
   // Desktop coord display – jen souřadnice
   document.getElementById("coordDisplay").textContent = coords;
   // Mobile coord bar – nástroj + mód + souřadnice + zoom
+  const coordBarText = document.getElementById("coordBarText");
   if (isMobile()) {
     const zoomPct = (state.zoom * 100).toFixed(0);
     const machine = state.machineType === 'karusel' ? 'KAR' : 'SOU';
     const cMode = state.coordMode === 'inc' ? 'INC' : 'ABS';
     const xMode = state.xDisplayMode === 'diameter' ? '⌀' : 'R';
-    mobileCoordBar.textContent = `${machine} ${cMode} ${xMode}  |  ${coords}  |  ${zoomPct}%`;
+    coordBarText.textContent = `${machine} ${cMode} ${xMode}  |  ${coords}  |  ${zoomPct}%`;
   } else {
-    mobileCoordBar.textContent = coords;
+    coordBarText.textContent = coords;
   }
+  updateCoordBarIndicators();
+}
+
+/** Aktualizuje indikátory mřížky, úhlu a kót v coord baru. */
+export function updateCoordBarIndicators() {
+  const g = document.getElementById("indGrid");
+  const a = document.getElementById("indAngle");
+  const d = document.getElementById("indDims");
+  if (g) g.classList.toggle("active", !!state.snapToGrid);
+  if (a) a.classList.toggle("active", !!state.angleSnap);
+  if (d) d.classList.toggle("active", state.showDimensions !== 'none');
 }
 
 // ── Mobile: Numerický vstup tlačítko ──
