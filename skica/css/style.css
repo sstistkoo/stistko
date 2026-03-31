@@ -358,6 +358,8 @@ body {
 .prop-readonly {
   color: var(--ctp-overlay0);
   font-style: italic;
+  user-select: text;
+  cursor: text;
 }
 
 .prop-name-input {
@@ -1261,8 +1263,7 @@ body {
     margin-left: auto;
   }
 
-  body.toolbar-open #mobileBottomBar,
-  body.toolbar-open #mobileSnap {
+  body.toolbar-open #mobileBottomBar {
     display: none !important;
   }
 

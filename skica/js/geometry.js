@@ -140,6 +140,19 @@ function findNearestEndpoint(obj, wx, wy) {
 }
 
 const SEL_PT_TOL = 1e-4;
+
+/** Najde nejbližší snap bod přímo na objektu, vrátí {x,y} nebo null. */
+function _findObjVertexAt(obj, wx, wy, threshold) {
+  const pts = getObjectSnapPoints(obj);
+  let best = null, bestDist = Infinity;
+  for (const p of pts) {
+    const t = p.mid ? threshold * 0.5 : threshold;
+    const d = Math.hypot(p.x - wx, p.y - wy);
+    if (d < t && d < bestDist) { bestDist = d; best = p; }
+  }
+  return best ? { x: best.x, y: best.y } : null;
+}
+
 /** Přidá/odebere bod z pole selectedPoint. */
 function _toggleSelectedPoint(pt) {
   if (!state.selectedPoint) state.selectedPoint = [];
@@ -151,6 +164,41 @@ function _toggleSelectedPoint(pt) {
     if (state.selectedPoint.length === 0) state.selectedPoint = null;
   } else {
     state.selectedPoint.push({ x: pt.x, y: pt.y });
+  }
+}
+
+/* ── Helpers pro Map<objIdx, Set<segIdx>> ─────────────────────────── */
+function _addSegToMap(objIdx, segIdx) {
+  let s = state.multiSelectedSegments.get(objIdx);
+  if (!s) { s = new Set(); state.multiSelectedSegments.set(objIdx, s); }
+  s.add(segIdx);
+  state.selectedSegment = segIdx;
+  state._selectedSegmentObjIdx = objIdx;
+}
+
+function _removeSegFromMap(objIdx, segIdx) {
+  const s = state.multiSelectedSegments.get(objIdx);
+  if (s) {
+    s.delete(segIdx);
+    if (s.size === 0) state.multiSelectedSegments.delete(objIdx);
+  }
+  if (state.multiSelectedSegments.size === 0) {
+    state.selectedSegment = null;
+    state._selectedSegmentObjIdx = null;
+  } else {
+    const lastKey = [...state.multiSelectedSegments.keys()].pop();
+    const lastSet = state.multiSelectedSegments.get(lastKey);
+    state.selectedSegment = [...lastSet].pop();
+    state._selectedSegmentObjIdx = lastKey;
+  }
+}
+
+function _toggleSegInMap(objIdx, segIdx) {
+  const s = state.multiSelectedSegments.get(objIdx);
+  if (s && s.has(segIdx)) {
+    _removeSegFromMap(objIdx, segIdx);
+  } else {
+    _addSegToMap(objIdx, segIdx);
   }
 }
 
@@ -170,6 +218,7 @@ export function selectObjectAt(wx, wy) {
     state.selectedSegment = constr.segIdx;
     state._selectedSegmentObjIdx = constr.objIdx;
     state.multiSelected.clear();
+    state.multiSelectedSegments.clear();
     state.selectedPoint = null;
     if (bridge.updateProperties) bridge.updateProperties();
     if (bridge.updateObjectList) bridge.updateObjectList();
@@ -180,68 +229,112 @@ export function selectObjectAt(wx, wy) {
 
   const snapPt = findIntersectionAt(wx, wy);
   const newSel = findObjectAt(wx, wy);
-
-  // Rozhodnout, zda klik je primárně na snap bod nebo na objekt.
-  // Pokud snap bod existuje a je velmi blízko, preferovat bod (neoznačovat objekt).
   const threshold = SELECT_THRESHOLD / state.zoom;
-  const preferPoint = snapPt && (() => {
-    if (newSel === null) return true;
-    const obj = state.objects[newSel];
-    if (obj.type === 'point') return false; // point objekt → vždy objekt
-    const snapDist = Math.hypot(snapPt.x - wx, snapPt.y - wy);
-    return snapDist < threshold * 0.5;
-  })();
 
-  // ── 1) Klik do prázdna → zrušit vše ──
-  if (newSel === null && !snapPt) {
-    state.selected = null;
-    state.selectedSegment = null;
-    state._selectedSegmentObjIdx = null;
-    state.multiSelected.clear();
-    state.selectedPoint = null;
-  } else if (preferPoint) {
-    // ── 2) Snap bod je blízko → toggle jen bod, objekty nechat ──
-    _toggleSelectedPoint(snapPt);
-  } else if (newSel !== null) {
-    // ── 3) Objekt nalezen (snap bod daleko nebo neexistuje) → toggle objekt, body nechat ──
-    if (newSel === state.selected && state.multiSelected.size === 0) {
-      if (state.objects[newSel].type === 'polyline') {
-        state.selectedSegment = findSegmentAt(state.objects[newSel], wx, wy);
-        state._selectedSegmentObjIdx = newSel;
-      } else {
-        state.selected = null;
-        state.selectedSegment = null;
-        state._selectedSegmentObjIdx = null;
-      }
-    } else if (state.multiSelected.has(newSel) || (newSel === state.selected && state.multiSelected.size > 0)) {
-      state.multiSelected.delete(newSel);
-      if (newSel === state.selected) {
-        state.selected = state.multiSelected.size > 0
-          ? [...state.multiSelected].pop()
-          : null;
-      }
-      if (state.multiSelected.size === 1) {
-        state.selected = state.multiSelected.values().next().value;
-        state.multiSelected.clear();
-      }
-      // Pokud odebereme objekt, který měl vybraný segment, zrušit
-      if (newSel === state._selectedSegmentObjIdx) {
-        state.selectedSegment = null;
-        state._selectedSegmentObjIdx = null;
-      }
-    } else if (state.selected !== null) {
-      if (state.multiSelected.size === 0) {
+  // Pomocné funkce
+  const isObjSelected = (idx) => idx === state.selected || state.multiSelected.has(idx);
+  const _addObj = (idx) => {
+    if (state.selected === null && state.multiSelected.size === 0) {
+      state.selected = idx;
+    } else {
+      if (state.selected !== null && state.multiSelected.size === 0) {
         state.multiSelected.add(state.selected);
       }
-      state.multiSelected.add(newSel);
-      state.selected = newSel;
-      // Zachovat selectedSegment – patří k původnímu objektu (_selectedSegmentObjIdx)
-    } else {
-      state.selected = newSel;
+      state.multiSelected.add(idx);
+      state.selected = idx;
+    }
+  };
+  const _removeObj = (idx) => {
+    state.multiSelected.delete(idx);
+    if (idx === state.selected) {
+      if (state.multiSelected.size > 0) {
+        state.selected = [...state.multiSelected].pop();
+        if (state.multiSelected.size === 1) {
+          state.selected = state.multiSelected.values().next().value;
+          state.multiSelected.clear();
+        }
+      } else {
+        state.selected = null;
+      }
+    }
+  };
+  const hasAnySelection = () =>
+    state.selected !== null || state.multiSelected.size > 0
+    || state.multiSelectedSegments.size > 0
+    || (state.selectedPoint && state.selectedPoint.length > 0);
+
+  // ───────────────────────────────────────────────────────────
+  // 1) Klik do prázdna (žádný objekt)
+  // ───────────────────────────────────────────────────────────
+  if (newSel === null) {
+    if (snapPt) {
+      // Blízko snap bodu bez objektu → toggle bod
+      _toggleSelectedPoint(snapPt);
+    }
+    // Prázdné místo → zachovat výběr objektů/bodů, ale vyčistit zombie segmenty
+    if (state.multiSelectedSegments.size > 0) {
       state.selectedSegment = null;
       state._selectedSegmentObjIdx = null;
+      state.multiSelectedSegments.clear();
     }
   }
+  // ───────────────────────────────────────────────────────────
+  // 2) Klik na objekt
+  // ───────────────────────────────────────────────────────────
+  else {
+    const obj = state.objects[newSel];
+    const isSegmentable = obj.type === 'polyline' || obj.type === 'rect';
+    const objAlreadySelected = isObjSelected(newSel);
+    const hasSegsForObj = state.multiSelectedSegments.has(newSel);
+
+    if (isSegmentable && hasSegsForObj) {
+      // ── Objekt už má segmenty ──
+      // Blízko snap bodu → toggle bod místo segmentu
+      const vertexPt = _findObjVertexAt(obj, wx, wy, threshold * 0.4);
+      if (vertexPt) {
+        _toggleSelectedPoint(vertexPt);
+      } else {
+        const clickedSeg = findSegmentAt(obj, wx, wy);
+        _toggleSegInMap(newSel, clickedSeg);
+      }
+    } else if (isSegmentable && objAlreadySelected) {
+      // ── Segmentovatelný objekt je vybrán celý, 2. klik ──
+      // Blízko snap bodu → toggle bod
+      const vertexPt = _findObjVertexAt(obj, wx, wy, threshold * 0.4);
+      if (vertexPt) {
+        _toggleSelectedPoint(vertexPt);
+      } else {
+        // Na těle segmentu → vstup do segment mode
+        _removeObj(newSel);
+        const clickedSeg = findSegmentAt(obj, wx, wy);
+        _addSegToMap(newSel, clickedSeg);
+      }
+    } else if (objAlreadySelected) {
+      // ── Non-segmentable objekt je vybrán, 2. klik ──
+      // Blízko snap bodu → toggle bod
+      const vertexPt = _findObjVertexAt(obj, wx, wy, threshold * 0.5);
+      if (vertexPt) {
+        _toggleSelectedPoint(vertexPt);
+      } else {
+        // Daleko → odebrat z výběru
+        _removeObj(newSel);
+      }
+    } else {
+      // ── Objekt není vybrán ──
+      // Pokud klik je velmi blízko snap bodu → preferovat bod
+      if (snapPt) {
+        const snapDist = Math.hypot(snapPt.x - wx, snapPt.y - wy);
+        if (snapDist < threshold * 0.35) {
+          _toggleSelectedPoint(snapPt);
+        } else {
+          _addObj(newSel);
+        }
+      } else {
+        _addObj(newSel);
+      }
+    }
+  }
+
   if (bridge.updateProperties) bridge.updateProperties();
   if (bridge.updateObjectList) bridge.updateObjectList();
   renderAll();
@@ -255,6 +348,15 @@ export function selectObjectAt(wx, wy) {
  * @returns {number|null}
  */
 export function findSegmentAt(obj, wx, wy) {
+  if (obj.type === 'rect') {
+    const rc = getRectCorners(obj);
+    let minD = Infinity, bestIdx = null;
+    for (let i = 0; i < 4; i++) {
+      const d = distPointToSegment(wx, wy, rc[i].x, rc[i].y, rc[(i + 1) % 4].x, rc[(i + 1) % 4].y);
+      if (d < minD) { minD = d; bestIdx = i; }
+    }
+    return bestIdx;
+  }
   if (obj.type !== 'polyline') return null;
   const n = obj.vertices.length;
   if (n < 2) return null;

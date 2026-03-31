@@ -187,9 +187,10 @@ document.addEventListener("keydown", (e) => {
       return;
     }
     // Exit segment editing mode first
-    if (state.selectedSegment !== null) {
+    if (state.selectedSegment !== null || state.multiSelectedSegments.size > 0) {
       state.selectedSegment = null;
       state._selectedSegmentObjIdx = null;
+      state.multiSelectedSegments.clear();
       updateProperties();
       renderAll();
       return;
@@ -220,6 +221,7 @@ document.addEventListener("keydown", (e) => {
     state.selectedSegment = null;
     state._selectedSegmentObjIdx = null;
     state.multiSelected.clear();
+    state.multiSelectedSegments.clear();
     state.selectedPoint = null;
     // Escape z deleteObj módu → zpět na select
     if (state.tool === 'deleteObj') setTool('select');
@@ -789,6 +791,7 @@ function deleteSelected() {
     state.selectedSegment = null;
     state._selectedSegmentObjIdx = null;
     state.multiSelected.clear();
+    state.multiSelectedSegments.clear();
     state.selectedPoint = null;
     updateObjectList();
     updateProperties();
@@ -811,6 +814,7 @@ function deleteSelected() {
   state.selected = null;
   state.selectedSegment = null;
   state._selectedSegmentObjIdx = null;
+  state.multiSelectedSegments.clear();
   state.selectedPoint = null;
   updateObjectList();
   updateProperties();
@@ -838,6 +842,7 @@ function deleteSelectedSegment() {
     state.selected = null;
     state.selectedSegment = null;
     state._selectedSegmentObjIdx = null;
+    state.multiSelectedSegments.clear();
   } else if (obj.closed) {
     // Closed polyline: remove vertex at segIdx+1 (or segIdx for last segment), open the polyline
     // Remove the end vertex of this segment, reorder so segIdx+1 becomes the break point
@@ -854,6 +859,7 @@ function deleteSelectedSegment() {
     }
     state.selectedSegment = null;
     state._selectedSegmentObjIdx = null;
+    state.multiSelectedSegments.clear();
   } else {
     // Open polyline: remove vertex to delete segment
     if (segIdx === 0) {
@@ -892,6 +898,7 @@ function deleteSelectedSegment() {
     }
     state.selectedSegment = null;
     state._selectedSegmentObjIdx = null;
+    state.multiSelectedSegments.clear();
   }
 
   updateObjectList();
@@ -952,6 +959,7 @@ function explodeSelectedPolyline() {
   state.selected = null;
   state.selectedSegment = null;
   state._selectedSegmentObjIdx = null;
+  state.multiSelectedSegments.clear();
 
   // Add new individual objects (without pushUndo, already done)
   for (const no of newObjects) {

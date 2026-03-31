@@ -76,6 +76,7 @@ export function handleParallelClick(wx, wy) {
         state._parallelRefIdx = null;
         state._parallelRefSeg = null;
         state.selectedSegment = null;
+        state.multiSelectedSegments.clear();
         calculateAllIntersections();
         renderAll();
         resetHint();
@@ -98,6 +99,7 @@ export function handleParallelClick(wx, wy) {
     state._parallelRefIdx = null;
     state._parallelRefSeg = null;
     state.selectedSegment = null;
+    state.multiSelectedSegments.clear();
     calculateAllIntersections();
     renderAll();
     resetHint();
