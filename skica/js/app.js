@@ -61,6 +61,9 @@ async function tryAutoLoad() {
       } else {
         state.objects.forEach(obj => { if (obj.layer === undefined) obj.layer = 0; });
       }
+      state.anchors = data.anchors || [];
+      if (data.showObjectNumbers !== undefined) state.showObjectNumbers = data.showObjectNumbers;
+      if (data.showIntersectionNumbers !== undefined) state.showIntersectionNumbers = data.showIntersectionNumbers;
       updateObjectList();
       updateProperties();
       updateLayerList();
@@ -88,6 +91,9 @@ setInterval(() => {
       layers: state.layers,
       activeLayer: state.activeLayer,
       nextLayerId: state.nextLayerId,
+      anchors: state.anchors,
+      showObjectNumbers: state.showObjectNumbers,
+      showIntersectionNumbers: state.showIntersectionNumbers,
     };
     setMeta('currentProjectData', data);
   }
