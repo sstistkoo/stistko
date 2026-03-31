@@ -21,13 +21,53 @@ const ACI_COLORS = {
   7: '#ffffff',   // bílá
   8: '#808080',   // tmavě šedá
   9: '#c0c0c0',   // světle šedá
+  10: '#ff0000',  // red
+  11: '#ff7f7f',  // light red
+  20: '#ff7f00',  // orange
+  30: '#ff7f00',  // orange
+  40: '#ffbf00',  // gold
+  50: '#ffff00',  // yellow
+  60: '#bfff00',  // yellow-green
+  70: '#00ff00',  // green
+  80: '#00ff7f',  // spring green
+  90: '#00ffbf',  // aquamarine
+  100: '#00ffff', // cyan
+  110: '#007fff', // azure
+  120: '#0000ff', // blue
+  130: '#7f00ff', // violet
+  140: '#bf00ff', // purple
+  150: '#ff00ff', // magenta
+  160: '#ff007f', // rose
+  170: '#333333', // dark gray
+  250: '#333333', // dark gray
+  251: '#555555', // gray
+  252: '#787878', // medium gray
+  253: '#a0a0a0', // lighter gray
+  254: '#c8c8c8', // lightest gray
+  255: '#ffffff', // white (ByBlock)
 };
 
 // CSS barvy → ACI (pro export)
+// Základní barvy mají prioritu (nižší ACI index)
 const CSS_TO_ACI = {};
 for (const [code, hex] of Object.entries(ACI_COLORS)) {
-  CSS_TO_ACI[hex.toLowerCase()] = parseInt(code, 10);
+  const key = hex.toLowerCase();
+  const aci = parseInt(code, 10);
+  // Preferuj nižší ACI kódy (základní barvy 1-9)
+  if (!CSS_TO_ACI[key] || aci < CSS_TO_ACI[key]) {
+    CSS_TO_ACI[key] = aci;
+  }
 }
+
+// Rozšířené mapování SKICA barev → ACI
+CSS_TO_ACI['#89b4fa'] = 5;   // primary → modrá
+CSS_TO_ACI['#6c7086'] = 8;   // construction → šedá
+CSS_TO_ACI['#a6e3a1'] = 3;   // dimension → zelená
+CSS_TO_ACI['#f5c2e7'] = 6;   // preview → magenta
+CSS_TO_ACI['#fab387'] = 30;  // snapPoint → oranžová
+CSS_TO_ACI['#cba6f7'] = 130; // snapEdge → fialová
+CSS_TO_ACI['#f38ba8'] = 1;   // delete/červená
+CSS_TO_ACI['#cdd6f4'] = 7;   // text → bílá
 
 function safeFloat(val) {
   const n = parseFloat(val);
@@ -379,39 +419,46 @@ function gc(code, value) {
   return code + '\n' + value;
 }
 
-function entityLines(obj) {
+function entityLines(obj, nextHandle) {
   const out = [];
   const layerName = obj.layerName || '0';
   const aci = colorToAci(obj.color);
 
+  // Společné hlavičkové group codes pro AC1015 entity
+  function entityHeader(entityType, acDbType) {
+    out.push(gc(0, entityType));
+    out.push(gc(5, nextHandle()));
+    out.push(gc(100, 'AcDbEntity'));
+    out.push(gc(8, layerName));
+    if (aci !== 7) out.push(gc(62, aci));
+    if (acDbType) out.push(gc(100, acDbType));
+  }
+
   switch (obj.type) {
     case 'point':
-      out.push(gc(0, 'POINT'), gc(8, layerName));
-      if (aci !== 7) out.push(gc(62, aci));
-      out.push(gc(10, obj.x.toFixed(6)), gc(20, obj.y.toFixed(6)));
+      entityHeader('POINT', 'AcDbPoint');
+      out.push(gc(10, obj.x.toFixed(6)), gc(20, obj.y.toFixed(6)), gc(30, '0.0'));
       break;
 
     case 'line':
     case 'constr':
       if (obj.isDimension) break;
-      out.push(gc(0, 'LINE'), gc(8, layerName));
-      if (aci !== 7) out.push(gc(62, aci));
-      out.push(gc(10, obj.x1.toFixed(6)), gc(20, obj.y1.toFixed(6)));
-      out.push(gc(11, obj.x2.toFixed(6)), gc(21, obj.y2.toFixed(6)));
+      entityHeader('LINE', 'AcDbLine');
+      out.push(gc(10, obj.x1.toFixed(6)), gc(20, obj.y1.toFixed(6)), gc(30, '0.0'));
+      out.push(gc(11, obj.x2.toFixed(6)), gc(21, obj.y2.toFixed(6)), gc(31, '0.0'));
       break;
 
     case 'circle':
-      out.push(gc(0, 'CIRCLE'), gc(8, layerName));
-      if (aci !== 7) out.push(gc(62, aci));
-      out.push(gc(10, obj.cx.toFixed(6)), gc(20, obj.cy.toFixed(6)));
+      entityHeader('CIRCLE', 'AcDbCircle');
+      out.push(gc(10, obj.cx.toFixed(6)), gc(20, obj.cy.toFixed(6)), gc(30, '0.0'));
       out.push(gc(40, obj.r.toFixed(6)));
       break;
 
     case 'arc': {
-      out.push(gc(0, 'ARC'), gc(8, layerName));
-      if (aci !== 7) out.push(gc(62, aci));
-      out.push(gc(10, obj.cx.toFixed(6)), gc(20, obj.cy.toFixed(6)));
+      entityHeader('ARC', 'AcDbCircle');
+      out.push(gc(10, obj.cx.toFixed(6)), gc(20, obj.cy.toFixed(6)), gc(30, '0.0'));
       out.push(gc(40, obj.r.toFixed(6)));
+      out.push(gc(100, 'AcDbArc'));
       // DXF ARC is always CCW; for CW arcs (ccw===false) swap start/end
       const dxfStart = obj.ccw === false ? obj.endAngle : obj.startAngle;
       const dxfEnd = obj.ccw === false ? obj.startAngle : obj.endAngle;
@@ -422,9 +469,8 @@ function entityLines(obj) {
 
     case 'rect': {
       const rc = getRectCorners(obj);
-      out.push(gc(0, 'LWPOLYLINE'), gc(8, layerName));
-      if (aci !== 7) out.push(gc(62, aci));
-      out.push(gc(90, 4), gc(70, 1));
+      entityHeader('LWPOLYLINE', 'AcDbPolyline');
+      out.push(gc(90, 4), gc(70, 1), gc(43, '0.0'));
       for (const c of rc) {
         out.push(gc(10, c.x.toFixed(6)), gc(20, c.y.toFixed(6)));
       }
@@ -432,10 +478,10 @@ function entityLines(obj) {
     }
 
     case 'polyline':
-      out.push(gc(0, 'LWPOLYLINE'), gc(8, layerName));
-      if (aci !== 7) out.push(gc(62, aci));
+      entityHeader('LWPOLYLINE', 'AcDbPolyline');
       out.push(gc(90, obj.vertices.length));
       out.push(gc(70, obj.closed ? 1 : 0));
+      out.push(gc(43, '0.0'));
       for (let i = 0; i < obj.vertices.length; i++) {
         out.push(gc(10, obj.vertices[i].x.toFixed(6)));
         out.push(gc(20, obj.vertices[i].y.toFixed(6)));
@@ -446,10 +492,9 @@ function entityLines(obj) {
       break;
 
     case 'text':
-      out.push(gc(0, 'TEXT'), gc(8, layerName));
-      if (aci !== 7) out.push(gc(62, aci));
-      out.push(gc(10, obj.x.toFixed(6)), gc(20, obj.y.toFixed(6)));
-      out.push(gc(40, obj.fontSize || 14));
+      entityHeader('TEXT', 'AcDbText');
+      out.push(gc(10, obj.x.toFixed(6)), gc(20, obj.y.toFixed(6)), gc(30, '0.0'));
+      out.push(gc(40, (obj.fontSize || 14).toFixed(6)));
       out.push(gc(1, obj.text || ''));
       if (obj.rotation) out.push(gc(50, (obj.rotation * RAD2DEG).toFixed(6)));
       break;
@@ -494,11 +539,55 @@ export function exportDXF(objects, layers) {
     return (handleCounter++).toString(16).toUpperCase();
   }
 
+  // ── Výpočet bounding boxu pro $EXTMIN/$EXTMAX ──
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  for (const obj of objects) {
+    switch (obj.type) {
+      case 'point':
+        minX = Math.min(minX, obj.x); minY = Math.min(minY, obj.y);
+        maxX = Math.max(maxX, obj.x); maxY = Math.max(maxY, obj.y);
+        break;
+      case 'line': case 'constr':
+        if (obj.isDimension) break;
+        minX = Math.min(minX, obj.x1, obj.x2); minY = Math.min(minY, obj.y1, obj.y2);
+        maxX = Math.max(maxX, obj.x1, obj.x2); maxY = Math.max(maxY, obj.y1, obj.y2);
+        break;
+      case 'circle':
+        minX = Math.min(minX, obj.cx - obj.r); minY = Math.min(minY, obj.cy - obj.r);
+        maxX = Math.max(maxX, obj.cx + obj.r); maxY = Math.max(maxY, obj.cy + obj.r);
+        break;
+      case 'arc':
+        minX = Math.min(minX, obj.cx - obj.r); minY = Math.min(minY, obj.cy - obj.r);
+        maxX = Math.max(maxX, obj.cx + obj.r); maxY = Math.max(maxY, obj.cy + obj.r);
+        break;
+      case 'rect':
+        minX = Math.min(minX, obj.x1, obj.x2); minY = Math.min(minY, obj.y1, obj.y2);
+        maxX = Math.max(maxX, obj.x1, obj.x2); maxY = Math.max(maxY, obj.y1, obj.y2);
+        break;
+      case 'polyline':
+        for (const v of obj.vertices) {
+          minX = Math.min(minX, v.x); minY = Math.min(minY, v.y);
+          maxX = Math.max(maxX, v.x); maxY = Math.max(maxY, v.y);
+        }
+        break;
+      case 'text':
+        minX = Math.min(minX, obj.x); minY = Math.min(minY, obj.y);
+        maxX = Math.max(maxX, obj.x); maxY = Math.max(maxY, obj.y);
+        break;
+    }
+  }
+  // Záchrana pro prázdný/minimální výkres
+  if (!isFinite(minX)) { minX = 0; minY = 0; maxX = 100; maxY = 100; }
+
   // ── HEADER – verze AC1015 (AutoCAD 2000) pro podporu LWPOLYLINE ──
   out.push(gc(0, 'SECTION'), gc(2, 'HEADER'));
   out.push(gc(9, '$ACADVER'), gc(1, 'AC1015'));
   out.push(gc(9, '$HANDSEED'), gc(5, 'FFFF'));
   out.push(gc(9, '$INSUNITS'), gc(70, 4));  // 4 = milimetry
+  out.push(gc(9, '$EXTMIN'), gc(10, minX.toFixed(6)), gc(20, minY.toFixed(6)), gc(30, '0.0'));
+  out.push(gc(9, '$EXTMAX'), gc(10, maxX.toFixed(6)), gc(20, maxY.toFixed(6)), gc(30, '0.0'));
+  out.push(gc(9, '$LIMMIN'), gc(10, minX.toFixed(6)), gc(20, minY.toFixed(6)));
+  out.push(gc(9, '$LIMMAX'), gc(10, maxX.toFixed(6)), gc(20, maxY.toFixed(6)));
   out.push(gc(0, 'ENDSEC'));
 
   // ── CLASSES (povinná sekce pro AC1015, prázdná) ──
@@ -514,15 +603,28 @@ export function exportDXF(objects, layers) {
   const vportEntH = nextHandle();
   out.push(gc(0, 'VPORT'), gc(5, vportEntH), gc(100, 'AcDbSymbolTableRecord'), gc(100, 'AcDbViewportTableRecord'));
   out.push(gc(2, '*ACTIVE'), gc(70, 0));
-  out.push(gc(10, '0.0'), gc(20, '0.0'));   // center
+  // Vycentruj pohled na bounding box
+  const cx = ((minX + maxX) / 2).toFixed(6);
+  const cy = ((minY + maxY) / 2).toFixed(6);
+  const viewH = Math.max(maxY - minY, maxX - minX, 1).toFixed(6);
+  out.push(gc(10, cx), gc(20, cy));   // view center
   out.push(gc(11, '1.0'), gc(21, '1.0'));   // snap spacing
-  out.push(gc(40, '1.0'));                   // view height
+  out.push(gc(40, viewH));                   // view height
   out.push(gc(41, '1.0'));                   // aspect ratio
   out.push(gc(0, 'ENDTAB'));
 
-  // Tabulka LTYPE
+  // Tabulka LTYPE (ByBlock, ByLayer, CONTINUOUS)
   const ltypeH = nextHandle();
-  out.push(gc(0, 'TABLE'), gc(2, 'LTYPE'), gc(5, ltypeH), gc(100, 'AcDbSymbolTable'), gc(70, 1));
+  out.push(gc(0, 'TABLE'), gc(2, 'LTYPE'), gc(5, ltypeH), gc(100, 'AcDbSymbolTable'), gc(70, 3));
+  // ByBlock
+  const ltBbH = nextHandle();
+  out.push(gc(0, 'LTYPE'), gc(5, ltBbH), gc(100, 'AcDbSymbolTableRecord'), gc(100, 'AcDbLinetypeTableRecord'));
+  out.push(gc(2, 'ByBlock'), gc(70, 0), gc(3, ''), gc(72, 65), gc(73, 0), gc(40, '0.0'));
+  // ByLayer
+  const ltBlH = nextHandle();
+  out.push(gc(0, 'LTYPE'), gc(5, ltBlH), gc(100, 'AcDbSymbolTableRecord'), gc(100, 'AcDbLinetypeTableRecord'));
+  out.push(gc(2, 'ByLayer'), gc(70, 0), gc(3, ''), gc(72, 65), gc(73, 0), gc(40, '0.0'));
+  // CONTINUOUS
   const ltypeEntH = nextHandle();
   out.push(gc(0, 'LTYPE'), gc(5, ltypeEntH), gc(100, 'AcDbSymbolTableRecord'), gc(100, 'AcDbLinetypeTableRecord'));
   out.push(gc(2, 'CONTINUOUS'), gc(70, 0));
@@ -548,12 +650,30 @@ export function exportDXF(objects, layers) {
   out.push(gc(2, 'STANDARD'), gc(70, 0), gc(40, '0.0'), gc(41, '1.0'), gc(3, 'txt'));
   out.push(gc(0, 'ENDTAB'));
 
+  // Tabulka VIEW
+  const viewTabH = nextHandle();
+  out.push(gc(0, 'TABLE'), gc(2, 'VIEW'), gc(5, viewTabH), gc(100, 'AcDbSymbolTable'), gc(70, 0));
+  out.push(gc(0, 'ENDTAB'));
+
+  // Tabulka UCS
+  const ucsH = nextHandle();
+  out.push(gc(0, 'TABLE'), gc(2, 'UCS'), gc(5, ucsH), gc(100, 'AcDbSymbolTable'), gc(70, 0));
+  out.push(gc(0, 'ENDTAB'));
+
   // Tabulka APPID
   const appidH = nextHandle();
   out.push(gc(0, 'TABLE'), gc(2, 'APPID'), gc(5, appidH), gc(100, 'AcDbSymbolTable'), gc(70, 1));
   const appidEntH = nextHandle();
   out.push(gc(0, 'APPID'), gc(5, appidEntH), gc(100, 'AcDbSymbolTableRecord'), gc(100, 'AcDbRegAppTableRecord'));
   out.push(gc(2, 'ACAD'), gc(70, 0));
+  out.push(gc(0, 'ENDTAB'));
+
+  // Tabulka DIMSTYLE
+  const dimstyleH = nextHandle();
+  out.push(gc(0, 'TABLE'), gc(2, 'DIMSTYLE'), gc(5, dimstyleH), gc(100, 'AcDbSymbolTable'), gc(70, 1));
+  const dimEntH = nextHandle();
+  out.push(gc(0, 'DIMSTYLE'), gc(105, dimEntH), gc(100, 'AcDbSymbolTableRecord'), gc(100, 'AcDbDimStyleTableRecord'));
+  out.push(gc(2, 'STANDARD'), gc(70, 0));
   out.push(gc(0, 'ENDTAB'));
 
   // Tabulka BLOCK_RECORD
@@ -589,7 +709,7 @@ export function exportDXF(objects, layers) {
   // ── ENTITIES ──
   out.push(gc(0, 'SECTION'), gc(2, 'ENTITIES'));
   for (const obj of enriched) {
-    const str = entityLines(obj);
+    const str = entityLines(obj, nextHandle);
     if (str.length > 0) out.push(str);
   }
   out.push(gc(0, 'ENDSEC'));

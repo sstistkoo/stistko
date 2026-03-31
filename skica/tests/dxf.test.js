@@ -866,3 +866,187 @@ describe('exportDXF – vrstvy a barvy', () => {
     expect(found).toBe(true);
   });
 });
+
+// ════════════════════════════════════════
+// ── Export AC1015 compliance ──
+// ════════════════════════════════════════
+describe('exportDXF – AC1015 compliance', () => {
+  it('entity má handle (kód 5) a AcDb subclass marker', () => {
+    const dxf = exportDXF([{ type: 'line', x1: 0, y1: 0, x2: 10, y2: 10 }]);
+    const lines = dxf.split('\n');
+    const lineIdx = lines.findIndex((l, i) => l.trim() === 'LINE' && i > 0 && lines[i - 1].trim() === '0');
+    expect(lineIdx).toBeGreaterThan(-1);
+    // Handle (kód 5) hned za entity type
+    expect(lines[lineIdx + 1].trim()).toBe('5');
+    expect(lines[lineIdx + 2].trim()).toMatch(/^[0-9A-F]+$/);
+    // AcDbEntity marker
+    expect(dxf).toContain('AcDbEntity');
+    expect(dxf).toContain('AcDbLine');
+  });
+
+  it('CIRCLE má AcDbCircle subclass', () => {
+    const dxf = exportDXF([{ type: 'circle', cx: 5, cy: 5, r: 3 }]);
+    expect(dxf).toContain('AcDbCircle');
+  });
+
+  it('ARC má AcDbCircle i AcDbArc subclass', () => {
+    const dxf = exportDXF([{ type: 'arc', cx: 0, cy: 0, r: 10, startAngle: 0, endAngle: PI / 2 }]);
+    expect(dxf).toContain('AcDbCircle');
+    expect(dxf).toContain('AcDbArc');
+  });
+
+  it('LWPOLYLINE má AcDbPolyline subclass', () => {
+    const dxf = exportDXF([{
+      type: 'polyline',
+      vertices: [{ x: 0, y: 0 }, { x: 10, y: 10 }],
+      bulges: [0, 0], closed: false,
+    }]);
+    expect(dxf).toContain('AcDbPolyline');
+  });
+
+  it('TEXT má AcDbText subclass', () => {
+    const dxf = exportDXF([{
+      type: 'text', x: 0, y: 0, text: 'Test', fontSize: 10, rotation: 0,
+    }]);
+    expect(dxf).toContain('AcDbText');
+  });
+
+  it('POINT má AcDbPoint subclass', () => {
+    const dxf = exportDXF([{ type: 'point', x: 0, y: 0 }]);
+    expect(dxf).toContain('AcDbPoint');
+  });
+
+  it('entity handles jsou unikátní', () => {
+    const dxf = exportDXF([
+      { type: 'point', x: 0, y: 0 },
+      { type: 'line', x1: 0, y1: 0, x2: 10, y2: 10 },
+      { type: 'circle', cx: 5, cy: 5, r: 3 },
+    ]);
+    const lines = dxf.split('\n');
+    const handles = [];
+    for (let i = 0; i < lines.length - 1; i++) {
+      if (lines[i].trim() === '5') {
+        handles.push(lines[i + 1].trim());
+      }
+    }
+    // Každý handle musí být unikátní
+    const unique = new Set(handles);
+    expect(unique.size).toBe(handles.length);
+  });
+});
+
+// ════════════════════════════════════════
+// ── Export HEADER bounding box ──
+// ════════════════════════════════════════
+describe('exportDXF – bounding box', () => {
+  it('HEADER obsahuje $EXTMIN a $EXTMAX', () => {
+    const dxf = exportDXF([
+      { type: 'line', x1: -50, y1: -30, x2: 150, y2: 80 },
+    ]);
+    expect(dxf).toContain('$EXTMIN');
+    expect(dxf).toContain('$EXTMAX');
+    expect(dxf).toContain('-50.000000');
+    expect(dxf).toContain('-30.000000');
+    expect(dxf).toContain('150.000000');
+    expect(dxf).toContain('80.000000');
+  });
+
+  it('HEADER obsahuje $LIMMIN a $LIMMAX', () => {
+    const dxf = exportDXF([{ type: 'point', x: 10, y: 20 }]);
+    expect(dxf).toContain('$LIMMIN');
+    expect(dxf).toContain('$LIMMAX');
+  });
+
+  it('bounding box pro kružnici zahrnuje poloměr', () => {
+    const dxf = exportDXF([{ type: 'circle', cx: 50, cy: 50, r: 25 }]);
+    expect(dxf).toContain('25.000000');  // EXTMIN x = 50-25
+    expect(dxf).toContain('75.000000');  // EXTMAX x = 50+25
+  });
+
+  it('prázdný export má výchozí bounding box', () => {
+    const dxf = exportDXF([]);
+    expect(dxf).toContain('$EXTMIN');
+    expect(dxf).toContain('$EXTMAX');
+  });
+});
+
+// ════════════════════════════════════════
+// ── Export Z souřadnice ──
+// ════════════════════════════════════════
+describe('exportDXF – Z souřadnice', () => {
+  it('LINE obsahuje Z souřadnice (kód 30/31)', () => {
+    const dxf = exportDXF([{ type: 'line', x1: 0, y1: 0, x2: 10, y2: 10 }]);
+    const lines = dxf.split('\n');
+    // Najdi entity sekci a ověř kód 30
+    const entIdx = lines.findIndex(l => l.trim() === 'ENTITIES');
+    let found30 = false;
+    for (let i = entIdx; i < lines.length; i++) {
+      if (lines[i].trim() === '30') { found30 = true; break; }
+    }
+    expect(found30).toBe(true);
+  });
+
+  it('CIRCLE obsahuje Z souřadnici', () => {
+    const dxf = exportDXF([{ type: 'circle', cx: 5, cy: 5, r: 3 }]);
+    const lines = dxf.split('\n');
+    const entIdx = lines.findIndex(l => l.trim() === 'ENTITIES');
+    let found30 = false;
+    for (let i = entIdx; i < lines.length; i++) {
+      if (lines[i].trim() === '30') { found30 = true; break; }
+    }
+    expect(found30).toBe(true);
+  });
+});
+
+// ════════════════════════════════════════
+// ── Export tabulky ──
+// ════════════════════════════════════════
+describe('exportDXF – rozšířené tabulky', () => {
+  it('obsahuje ByBlock a ByLayer LTYPE', () => {
+    const dxf = exportDXF([]);
+    expect(dxf).toContain('ByBlock');
+    expect(dxf).toContain('ByLayer');
+    expect(dxf).toContain('CONTINUOUS');
+  });
+
+  it('obsahuje VIEW tabulku', () => {
+    const dxf = exportDXF([]);
+    expect(dxf).toContain('VIEW');
+  });
+
+  it('obsahuje UCS tabulku', () => {
+    const dxf = exportDXF([]);
+    expect(dxf).toContain('UCS');
+  });
+
+  it('obsahuje DIMSTYLE tabulku', () => {
+    const dxf = exportDXF([]);
+    expect(dxf).toContain('DIMSTYLE');
+    expect(dxf).toContain('AcDbDimStyleTableRecord');
+  });
+});
+
+// ════════════════════════════════════════
+// ── Rozšířená paleta barev ──
+// ════════════════════════════════════════
+describe('exportDXF – rozšířená paleta barev', () => {
+  it('mapuje SKICA primary barvu na ACI', () => {
+    const dxf = exportDXF([{ type: 'point', x: 0, y: 0, color: '#89b4fa' }]);
+    // #89b4fa → ACI 5 (modrá)
+    expect(dxf).toContain('\n62\n5\n');
+  });
+
+  it('mapuje SKICA construction barvu na ACI', () => {
+    const dxf = exportDXF([{ type: 'point', x: 0, y: 0, color: '#6c7086' }]);
+    // #6c7086 → ACI 8 (šedá)
+    expect(dxf).toContain('\n62\n8\n');
+  });
+
+  it('TEXT fontSize je formátován jako float', () => {
+    const dxf = exportDXF([{
+      type: 'text', x: 0, y: 0, text: 'A', fontSize: 14, rotation: 0,
+    }]);
+    // fontSize musí být 14.000000, ne jen 14
+    expect(dxf).toContain('14.000000');
+  });
+});

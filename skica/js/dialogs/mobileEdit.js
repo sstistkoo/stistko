@@ -272,7 +272,10 @@ export function showEditObjectDialog(idx) {
       if (ri) ri.value = r.toFixed(3);
       if (di) di.value = (r * 2).toFixed(3);
     }
-    updateEditInfo();
+    // Trigger sync listeners (length/angle, width/height, radius/diameter)
+    overlay.querySelectorAll("input[type=text], input[type=number]").forEach(inp => {
+      if (inp.value !== "") inp.dispatchEvent(new Event("input", { bubbles: true }));
+    });
   }
 
   wirePickButtons();
