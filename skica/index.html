@@ -111,143 +111,147 @@
       </button>
       <div class="sep"></div>
       <div class="toolbar-header">
-      <button class="tool-btn active" data-tool="select" title="Výběr (V)">
-        <svg viewBox="0 0 24 24">
-          <path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51z" />
-        </svg>
-        Výběr
-      </button>
-      <button class="tool-btn" data-tool="dimension" title="Kóta (U)">
-        <svg viewBox="0 0 24 24">
-          <line
-            x1="4"
-            y1="18"
-            x2="4"
-            y2="6"
-            stroke="currentColor"
-            stroke-width="1.5"
-          />
-          <line
-            x1="20"
-            y1="18"
-            x2="20"
-            y2="6"
-            stroke="currentColor"
-            stroke-width="1.5"
-          />
-          <line
-            x1="4"
-            y1="10"
-            x2="20"
-            y2="10"
-            stroke="currentColor"
-            stroke-width="1.5"
-          />
-          <path d="M4 10l4-3v6z" fill="currentColor" />
-          <path d="M20 10l-4-3v6z" fill="currentColor" />
-          <text
-            x="12"
-            y="8"
-            text-anchor="middle"
-            font-size="7"
-            fill="currentColor"
-          >
-            50
-          </text>
-        </svg>
-        Kóta
-      </button>
-      <button
-        class="tool-btn"
-        data-tool="anchor"
-        title="Kotva – zakotvit/uvolnit snap body"
-      >
-        <svg viewBox="0 0 24 24">
-          <circle
-            cx="12"
-            cy="5"
-            r="2.5"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.5"
-          />
-          <line
-            x1="12"
-            y1="7.5"
-            x2="12"
-            y2="20"
-            stroke="currentColor"
-            stroke-width="1.5"
-          />
-          <path
-            d="M12 20 Q12 22 10 22 L6 22"
-            stroke="currentColor"
-            stroke-width="1.5"
-            fill="none"
-          />
-          <path
-            d="M12 20 Q12 22 14 22 L18 22"
-            stroke="currentColor"
-            stroke-width="1.5"
-            fill="none"
-          />
-          <line
-            x1="8"
-            y1="12"
-            x2="16"
-            y2="12"
-            stroke="currentColor"
-            stroke-width="1.5"
-          />
-        </svg>
-        Kotva
-      </button>
-      <button
-        class="tool-btn"
-        id="btnDelete"
-        title="Smazat vybraný objekt (Del)"
-        aria-label="Smazat vybraný objekt"
-      >
-        <svg viewBox="0 0 24 24">
-          <rect
-            x="3"
-            y="14"
-            width="12"
-            height="6"
-            rx="1"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            transform="rotate(-30 9 17)"
-          />
-          <line
-            x1="8"
-            y1="10"
-            x2="4"
-            y2="17"
-            stroke="currentColor"
-            stroke-width="2"
-          />
-          <line
-            x1="14"
-            y1="7"
-            x2="10"
-            y2="14"
-            stroke="currentColor"
-            stroke-width="2"
-          />
-          <path
-            d="M16 5l3-3 4 4-3 3z"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          />
-        </svg>
-        Smaž obj.
-      </button>
-      <button class="toolbar-close-btn" id="mobileToolbarClose" title="Zavřít">
-        ✕
-      </button>
+        <button class="tool-btn active" data-tool="select" title="Výběr (V)">
+          <svg viewBox="0 0 24 24">
+            <path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51z" />
+          </svg>
+          Výběr
+        </button>
+        <button class="tool-btn" data-tool="dimension" title="Kóta (U)">
+          <svg viewBox="0 0 24 24">
+            <line
+              x1="4"
+              y1="18"
+              x2="4"
+              y2="6"
+              stroke="currentColor"
+              stroke-width="1.5"
+            />
+            <line
+              x1="20"
+              y1="18"
+              x2="20"
+              y2="6"
+              stroke="currentColor"
+              stroke-width="1.5"
+            />
+            <line
+              x1="4"
+              y1="10"
+              x2="20"
+              y2="10"
+              stroke="currentColor"
+              stroke-width="1.5"
+            />
+            <path d="M4 10l4-3v6z" fill="currentColor" />
+            <path d="M20 10l-4-3v6z" fill="currentColor" />
+            <text
+              x="12"
+              y="8"
+              text-anchor="middle"
+              font-size="7"
+              fill="currentColor"
+            >
+              50
+            </text>
+          </svg>
+          Kóta
+        </button>
+        <button
+          class="tool-btn"
+          data-tool="anchor"
+          title="Kotva – zakotvit/uvolnit snap body"
+        >
+          <svg viewBox="0 0 24 24">
+            <circle
+              cx="12"
+              cy="5"
+              r="2.5"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            />
+            <line
+              x1="12"
+              y1="7.5"
+              x2="12"
+              y2="20"
+              stroke="currentColor"
+              stroke-width="1.5"
+            />
+            <path
+              d="M12 20 Q12 22 10 22 L6 22"
+              stroke="currentColor"
+              stroke-width="1.5"
+              fill="none"
+            />
+            <path
+              d="M12 20 Q12 22 14 22 L18 22"
+              stroke="currentColor"
+              stroke-width="1.5"
+              fill="none"
+            />
+            <line
+              x1="8"
+              y1="12"
+              x2="16"
+              y2="12"
+              stroke="currentColor"
+              stroke-width="1.5"
+            />
+          </svg>
+          Kotva
+        </button>
+        <button
+          class="tool-btn"
+          id="btnDelete"
+          title="Smazat vybraný objekt (Del)"
+          aria-label="Smazat vybraný objekt"
+        >
+          <svg viewBox="0 0 24 24">
+            <rect
+              x="3"
+              y="14"
+              width="12"
+              height="6"
+              rx="1"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              transform="rotate(-30 9 17)"
+            />
+            <line
+              x1="8"
+              y1="10"
+              x2="4"
+              y2="17"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <line
+              x1="14"
+              y1="7"
+              x2="10"
+              y2="14"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <path
+              d="M16 5l3-3 4 4-3 3z"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+          </svg>
+          Smaž obj.
+        </button>
+        <button
+          class="toolbar-close-btn"
+          id="mobileToolbarClose"
+          title="Zavřít"
+        >
+          ✕
+        </button>
       </div>
       <div class="sep"></div>
       <button class="tool-btn" data-tool="point" title="Bod (P)">
