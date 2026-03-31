@@ -47,6 +47,74 @@ function collectFullCircleIntersections(idx, cx, cy, r) {
   return unique;
 }
 
+// ── Tangenta oblouku v koncovém bodě ──
+
+/**
+ * Vrátí směr tečny (unit vector) na konci oblouku.
+ * extEnd=1 → tangenta na startAngle (směr ven od oblouku),
+ * extEnd=2 → tangenta na endAngle (směr ven od oblouku).
+ */
+function arcTangentDir(obj, extEnd) {
+  const ccw = obj.ccw !== false;
+  if (extEnd === 1) {
+    // Na startAngle: tangenta jde PROTI směru oblouku (ven)
+    // CCW: tangenta na start je CW → (-sin, cos) otočeno
+    const a = obj.startAngle;
+    if (ccw) {
+      return { dx: Math.sin(a), dy: -Math.cos(a) };
+    } else {
+      return { dx: -Math.sin(a), dy: Math.cos(a) };
+    }
+  } else {
+    // Na endAngle: tangenta jde VE směru oblouku (ven)
+    const a = obj.endAngle;
+    if (ccw) {
+      return { dx: -Math.sin(a), dy: Math.cos(a) };
+    } else {
+      return { dx: Math.sin(a), dy: -Math.cos(a) };
+    }
+  }
+}
+
+/**
+ * Najde průsečíky tangenciální přímky z konce oblouku s ostatními objekty.
+ * Vrací kandidáty seřazené podle vzdálenosti (jen ve směru tečny ven).
+ */
+function collectTangentIntersections(idx, origin, tangent) {
+  // Vytvoříme nekonečnou přímku: origin → origin + tangent * velké číslo
+  const far = 1e6;
+  const infLine = {
+    x1: origin.x, y1: origin.y,
+    x2: origin.x + tangent.dx * far, y2: origin.y + tangent.dy * far,
+    isConstr: true
+  };
+
+  const pts = [];
+  for (let i = 0; i < state.objects.length; i++) {
+    if (i === idx) continue;
+    const other = state.objects[i];
+    if (other.isDimension || other.isCoordLabel || other.skipIntersections) continue;
+    for (const seg of getLines(other)) {
+      pts.push(...intersectLineLine(infLine, seg));
+    }
+    for (const circ of getCircles(other)) {
+      pts.push(...intersectLineCircle(infLine, circ));
+    }
+  }
+
+  // Filtrovat: jen body ve směru tečny (t > 0)
+  const candidates = [];
+  for (const p of pts) {
+    const vx = p.x - origin.x, vy = p.y - origin.y;
+    const dot = vx * tangent.dx + vy * tangent.dy;
+    if (dot > 1e-9) {
+      candidates.push({ pt: p, dist: Math.hypot(vx, vy) });
+    }
+  }
+  candidates.sort((a, b) => a.dist - b.dist);
+  return candidates;
+}
+
 // ── Prodloužení oblouku ──
 
 function extendArc(idx, obj, wx, wy) {
@@ -71,57 +139,95 @@ function extendArc(idx, obj, wx, wy) {
     extEnd = d1 < d2 ? 1 : 2;
   }
 
-  // Najít průsečíky plné kružnice s ostatními objekty
+  // Zkoušíme obě varianty: prodloužení obloukem + tangenciální úsečkou
+  // 1) Obloukové prodloužení (po kružnici)
   const allPts = collectFullCircleIntersections(idx, cx, cy, r);
-  if (allPts.length === 0) { showToast("Žádný objekt pro prodloužení"); return; }
-
-  // Filtrovat: jen body MIMO aktuální oblouk (= body ve směru prodloužení)
-  const candidates = [];
+  const arcCandidates = [];
   for (const p of allPts) {
     const angle = Math.atan2(p.y - cy, p.x - cx);
-    // Bod už je na oblouku → přeskočit
     if (isAngleBetween(angle, obj.startAngle, obj.endAngle, ccw)) continue;
-
-    // Vzdálenost od prodlužovaného konce po oblouku
     let dist;
     if (extEnd === 1) {
-      // Prodlužujeme za startAngle (proti směru oblouku)
-      if (ccw) {
-        // CCW oblouk: start → end je CCW, prodloužení za start je CW
-        dist = normalizeAngle(obj.startAngle - angle);
-      } else {
-        dist = normalizeAngle(angle - obj.startAngle);
-      }
+      dist = ccw ? normalizeAngle(obj.startAngle - angle) : normalizeAngle(angle - obj.startAngle);
     } else {
-      // Prodlužujeme za endAngle (ve směru oblouku)
-      if (ccw) {
-        dist = normalizeAngle(angle - obj.endAngle);
-      } else {
-        dist = normalizeAngle(obj.endAngle - angle);
+      dist = ccw ? normalizeAngle(angle - obj.endAngle) : normalizeAngle(obj.endAngle - angle);
+    }
+    if (dist > 1e-9) arcCandidates.push({ pt: p, angle, dist });
+  }
+
+  // 2) Tangenciální prodloužení (úsečkou)
+  const origin = extEnd === 1 ? startPt : endPt;
+  const tangent = arcTangentDir(obj, extEnd);
+  const tanCandidates = collectTangentIntersections(idx, origin, tangent);
+
+  if (arcCandidates.length === 0 && tanCandidates.length === 0) {
+    showToast("Žádný průsečík ve směru prodloužení");
+    return;
+  }
+
+  // Nabídnout volbu: obloukem nebo tečnou
+  arcCandidates.sort((a, b) => a.dist - b.dist);
+  const hasArc = arcCandidates.length > 0;
+  const hasTan = tanCandidates.length > 0;
+
+  if (hasArc && hasTan) {
+    // Dialog: oblouk nebo tečna
+    const bestArc = arcCandidates[0];
+    const bestTan = tanCandidates[0];
+    showEndpointChoiceDialog("Prodloužení oblouku – způsob",
+      { x1: origin.x, y1: origin.y, x2: bestTan.pt.x, y2: bestTan.pt.y },
+      "⌒ Prodloužit obloukem",
+      "╱ Prodloužit tečnou (úsečkou)",
+      (choice) => {
+        pushUndo();
+        if (choice === 1) {
+          if (extEnd === 1) obj.startAngle = bestArc.angle;
+          else obj.endAngle = bestArc.angle;
+        } else {
+          const lineId = state.nextId++;
+          state.objects.push({
+            type: 'line',
+            x1: origin.x, y1: origin.y,
+            x2: bestTan.pt.x, y2: bestTan.pt.y,
+            name: `Úsečka ${lineId}`,
+            id: lineId,
+            layer: obj.layer,
+            ...(obj.color ? { color: obj.color } : {}),
+          });
+        }
+        calculateAllIntersections();
+        updateAssociativeDimensions();
+        renderAll();
+        showToast(choice === 1 ? "Oblouk prodloužen ✓" : "Tangenciální úsečka přidána ✓");
       }
-    }
-    if (dist > 1e-9) {
-      candidates.push({ pt: p, angle, dist });
-    }
-  }
-
-  if (candidates.length === 0) { showToast("Žádný průsečík ve směru prodloužení"); return; }
-
-  // Nejbližší bod
-  candidates.sort((a, b) => a.dist - b.dist);
-  const best = candidates[0];
-
-  pushUndo();
-  if (extEnd === 1) {
-    obj.startAngle = best.angle;
+    );
+  } else if (hasArc) {
+    const best = arcCandidates[0];
+    pushUndo();
+    if (extEnd === 1) obj.startAngle = best.angle;
+    else obj.endAngle = best.angle;
+    calculateAllIntersections();
+    updateAssociativeDimensions();
+    renderAll();
+    showToast("Oblouk prodloužen ✓");
   } else {
-    obj.endAngle = best.angle;
+    const best = tanCandidates[0];
+    pushUndo();
+    const lineId = state.nextId++;
+    state.objects.push({
+      type: 'line',
+      x1: origin.x, y1: origin.y,
+      x2: best.pt.x, y2: best.pt.y,
+      name: `Úsečka ${lineId}`,
+      id: lineId,
+      layer: obj.layer,
+      ...(obj.color ? { color: obj.color } : {}),
+    });
+    calculateAllIntersections();
+    updateAssociativeDimensions();
+    renderAll();
+    showToast("Tangenciální úsečka přidána ✓");
   }
-
-  calculateAllIntersections();
-  updateAssociativeDimensions();
-  renderAll();
-  showToast("Oblouk prodloužen ✓");
 }
 
 // ── Prodloužení úsečky ──
@@ -239,33 +345,73 @@ export function extendFromSelection() {
     const a2 = isAnchored(endPt.x, endPt.y);
     if (a1 && a2) { showToast("Oba konce jsou zakotveny – nelze prodloužit"); return true; }
 
-    // Rozdělit průsečíky podle směru
-    const candsStart = [], candsEnd = [];
+    // Rozdělit průsečíky podle směru (obloukové)
+    const candsStartArc = [], candsEndArc = [];
     for (const p of allPts) {
       const angle = Math.atan2(p.y - cy, p.x - cx);
       if (isAngleBetween(angle, obj.startAngle, obj.endAngle, ccw)) continue;
       const distStart = ccw ? normalizeAngle(obj.startAngle - angle) : normalizeAngle(angle - obj.startAngle);
       const distEnd = ccw ? normalizeAngle(angle - obj.endAngle) : normalizeAngle(obj.endAngle - angle);
-      if (distStart > 1e-9) candsStart.push({ pt: p, angle, dist: distStart });
-      if (distEnd > 1e-9) candsEnd.push({ pt: p, angle, dist: distEnd });
+      if (distStart > 1e-9) candsStartArc.push({ pt: p, angle, dist: distStart });
+      if (distEnd > 1e-9) candsEndArc.push({ pt: p, angle, dist: distEnd });
     }
 
-    if (candsStart.length === 0 && candsEnd.length === 0) {
+    // Tangenciální průsečíky
+    const tanStart = arcTangentDir(obj, 1);
+    const tanEnd = arcTangentDir(obj, 2);
+    const candsStartTan = a1 ? [] : collectTangentIntersections(idx, startPt, tanStart);
+    const candsEndTan = a2 ? [] : collectTangentIntersections(idx, endPt, tanEnd);
+
+    const hasStart = candsStartArc.length > 0 || candsStartTan.length > 0;
+    const hasEnd = candsEndArc.length > 0 || candsEndTan.length > 0;
+
+    if (!hasStart && !hasEnd) {
       showToast("Žádný průsečík ve směru prodloužení");
       return true;
     }
 
-    showEndpointChoiceDialog("Prodloužení oblouku – výběr konce",
-      { x1: startPt.x, y1: startPt.y, x2: endPt.x, y2: endPt.y },
-      a1 ? "⚓ Začátek (zakotven)" : (candsStart.length > 0 ? "Prodloužit ze začátku" : "⚠ Ze začátku (žádný průsečík)"),
-      a2 ? "⚓ Konec (zakotven)" : (candsEnd.length > 0 ? "Prodloužit z konce" : "⚠ Z konce (žádný průsečík)"),
-      (end) => {
-        if (end === 1 && a1) { showToast("Tento konec je zakotven – nelze prodloužit"); return; }
-        if (end === 2 && a2) { showToast("Tento konec je zakotven – nelze prodloužit"); return; }
-        const candidates = end === 1 ? candsStart : candsEnd;
-        if (candidates.length === 0) { showToast("Žádný průsečík ve směru prodloužení"); return; }
-        candidates.sort((a, b) => a.dist - b.dist);
-        const best = candidates[0];
+    // Pomocná funkce pro provedení prodloužení z jednoho konce
+    function doExtendEnd(end) {
+      const arcCands = end === 1 ? candsStartArc : candsEndArc;
+      const tanCands = end === 1 ? candsStartTan : candsEndTan;
+      const origin = end === 1 ? startPt : endPt;
+      arcCands.sort((a, b) => a.dist - b.dist);
+
+      const hasArcC = arcCands.length > 0;
+      const hasTanC = tanCands.length > 0;
+
+      if (hasArcC && hasTanC) {
+        const bestArc = arcCands[0];
+        const bestTan = tanCands[0];
+        showEndpointChoiceDialog("Prodloužení oblouku – způsob",
+          { x1: origin.x, y1: origin.y, x2: bestTan.pt.x, y2: bestTan.pt.y },
+          "⌒ Prodloužit obloukem",
+          "╱ Prodloužit tečnou (úsečkou)",
+          (choice) => {
+            pushUndo();
+            if (choice === 1) {
+              if (end === 1) obj.startAngle = bestArc.angle;
+              else obj.endAngle = bestArc.angle;
+            } else {
+              const lineId = state.nextId++;
+              state.objects.push({
+                type: 'line',
+                x1: origin.x, y1: origin.y,
+                x2: bestTan.pt.x, y2: bestTan.pt.y,
+                name: `Úsečka ${lineId}`,
+                id: lineId,
+                layer: obj.layer,
+                ...(obj.color ? { color: obj.color } : {}),
+              });
+            }
+            calculateAllIntersections();
+            updateAssociativeDimensions();
+            renderAll();
+            showToast(choice === 1 ? "Oblouk prodloužen ✓" : "Tangenciální úsečka přidána ✓");
+          }
+        );
+      } else if (hasArcC) {
+        const best = arcCands[0];
         pushUndo();
         if (end === 1) obj.startAngle = best.angle;
         else obj.endAngle = best.angle;
@@ -273,6 +419,36 @@ export function extendFromSelection() {
         updateAssociativeDimensions();
         renderAll();
         showToast("Oblouk prodloužen ✓");
+      } else {
+        const best = tanCands[0];
+        pushUndo();
+        const lineId = state.nextId++;
+        state.objects.push({
+          type: 'line',
+          x1: origin.x, y1: origin.y,
+          x2: best.pt.x, y2: best.pt.y,
+          name: `Úsečka ${lineId}`,
+          id: lineId,
+          layer: obj.layer,
+          ...(obj.color ? { color: obj.color } : {}),
+        });
+        calculateAllIntersections();
+        updateAssociativeDimensions();
+        renderAll();
+        showToast("Tangenciální úsečka přidána ✓");
+      }
+    }
+
+    showEndpointChoiceDialog("Prodloužení oblouku – výběr konce",
+      { x1: startPt.x, y1: startPt.y, x2: endPt.x, y2: endPt.y },
+      a1 ? "⚓ Začátek (zakotven)" : (hasStart ? "Prodloužit ze začátku" : "⚠ Ze začátku (žádný průsečík)"),
+      a2 ? "⚓ Konec (zakotven)" : (hasEnd ? "Prodloužit z konce" : "⚠ Z konce (žádný průsečík)"),
+      (end) => {
+        if (end === 1 && a1) { showToast("Tento konec je zakotven – nelze prodloužit"); return; }
+        if (end === 2 && a2) { showToast("Tento konec je zakotven – nelze prodloužit"); return; }
+        const available = end === 1 ? hasStart : hasEnd;
+        if (!available) { showToast("Žádný průsečík ve směru prodloužení"); return; }
+        doExtendEnd(end);
       }
     );
     return true;
