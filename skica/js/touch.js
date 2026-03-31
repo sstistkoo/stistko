@@ -39,7 +39,7 @@ const toolbarMore = document.getElementById("toolbarMore");
 btnToolbarMore.addEventListener("click", (e) => {
   e.stopPropagation();
   const open = toolbarMore.classList.toggle("open");
-  btnToolbarMore.textContent = open ? "▾ Méně nástrojů…" : "▸ Více nástrojů…";
+  btnToolbarMore.textContent = open ? "▴" : "▾";
 });
 
 // ── Mobile: Toolbar close button ──
