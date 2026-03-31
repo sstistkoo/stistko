@@ -48,6 +48,14 @@ const _dialogObserver = new MutationObserver((mutations) => {
       if (node.nodeType === 1 && node.classList && (node.classList.contains("input-overlay") || node.classList.contains("calc-overlay"))) {
         applyMobileInputMode(node);
         wireExprInputs(node);
+        // Scroll input do viditelné oblasti na mobilu (nad klávesnici)
+        node.addEventListener("focus", (e) => {
+          if (e.target.tagName === "INPUT" || e.target.tagName === "SELECT") {
+            setTimeout(() => {
+              e.target.scrollIntoView({ block: "center", behavior: "smooth" });
+            }, 300);
+          }
+        }, true);
       }
     }
   }

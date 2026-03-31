@@ -392,6 +392,79 @@ body {
   border-color: var(--ctp-surface2);
 }
 
+/* ── Grid rozložení souřadnic (3×2: anchor label input label input) ── */
+.prop-grid-3x2 {
+  display: grid;
+  grid-template-columns: auto auto 1fr auto 1fr;
+  gap: 2px 3px;
+  align-items: center;
+}
+.prop-grid-3x2 .coord-label {
+  font-size: 11px;
+  color: var(--ctp-subtext0);
+  white-space: nowrap;
+}
+.prop-grid-3x2 .prop-input {
+  min-width: 0;
+  width: 100%;
+}
+.prop-grid-3x2 .prop-grid-anchor {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+  cursor: pointer;
+  font-size: 11px;
+}
+/* Grid 2×2 pro kružnici/oblouk (label input label input) */
+.prop-grid-2x2 {
+  display: grid;
+  grid-template-columns: auto 1fr auto 1fr;
+  gap: 2px 3px;
+  align-items: center;
+}
+.prop-grid-2x2 .coord-label {
+  font-size: 11px;
+  color: var(--ctp-subtext0);
+  white-space: nowrap;
+}
+.prop-grid-2x2 .prop-input {
+  min-width: 0;
+  width: 100%;
+}
+.prop-grid-2x2 .prop-readonly {
+  font-size: 12px;
+}
+
+/* ── Inline řádek barvy (presety + picker) ── */
+.color-inline-row {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.color-inline-row .prop-color-input {
+  width: 26px;
+  height: 22px;
+  flex-shrink: 0;
+}
+.color-preset-btn {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--ctp-surface1);
+  border-radius: 3px;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: border-color 0.15s;
+}
+.color-preset-btn:hover {
+  border-color: var(--ctp-text);
+}
+.color-preset-btn.active {
+  border-color: var(--ctp-blue);
+  box-shadow: 0 0 3px var(--ctp-blue);
+}
+
+
 /* â”€â”€ Seznam objektÅ¯ â”€â”€ */
 #objectList {
   list-style: none;

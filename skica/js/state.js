@@ -56,6 +56,7 @@ export const state = {
   intersections: [],
   nextId: 1,
   showDimensions: 'all',  // 'all' | 'intersections' | 'none'
+  showObjectNumbers: false, // zobrazit čísla objektů na výkrese
   // Kotvení (anchor) – zafixované snap body
   anchors: [],  // [{x, y}, ...] – zakotvené body
   // Undo/Redo
