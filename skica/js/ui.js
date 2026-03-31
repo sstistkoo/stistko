@@ -284,7 +284,6 @@ export function updateObjectList() {
     // ── Rozbalení segmentů obdélníku ──
     if (obj.type === 'rect' && (idx === state.selected || state.multiSelected.has(idx))) {
       const rc = getRectCorners(obj);
-      const sideNames = ["Horní", "Pravá", "Dolní", "Levá"];
       for (let si = 0; si < 4; si++) {
         const c1 = rc[si];
         const c2 = rc[(si + 1) % 4];
@@ -299,7 +298,7 @@ export function updateObjectList() {
         segIcon.className = "obj-icon";
         segIcon.textContent = "/";
         segSpan.appendChild(segIcon);
-        segSpan.appendChild(document.createTextNode(`${sideNames[si]} (${sideLen.toFixed(1)})`));
+        segSpan.appendChild(document.createTextNode(`Úsečka ${si + 1} (${sideLen.toFixed(1)})`));
         segLi.appendChild(segSpan);
 
         // Click to toggle segment selection
@@ -841,7 +840,6 @@ export function updateProperties() {
       // Segment list with checkboxes (4 sides)
       {
         const rc = getRectCorners(obj);
-        const sideNames = ["Horní", "Pravá", "Dolní", "Levá"];
         const rectIdx = state.selected;
         for (let i = 0; i < 4; i++) {
           const c1 = rc[i];
@@ -870,7 +868,7 @@ export function updateProperties() {
           labelSpan.style.color = isSegSel ? COLORS.selected : COLORS.primary;
           tdLabel.appendChild(labelSpan);
           const tdVal = document.createElement("td");
-          tdVal.textContent = `${sideNames[i]}, ${sideLen.toFixed(2)} mm`;
+          tdVal.textContent = `\u00fasečka, ${sideLen.toFixed(2)} mm`;
           tdVal.className = "prop-readonly";
           if (isSegSel) tdVal.style.color = COLORS.selected;
           tr.appendChild(tdLabel);
@@ -887,7 +885,10 @@ export function updateProperties() {
       const pn = obj.vertices.length;
       const pSegCnt = obj.closed ? pn : pn - 1;
       const selSeg = state.selectedSegment;
-      const hasSelSeg = selSeg !== null && selSeg >= 0 && selSeg < pSegCnt;
+      // Detail mode jen pokud selectedSegment je nastaven a NEjsme v multi-seg checkbox mode
+      const objSegsForDetail = state.multiSelectedSegments.get(state.selected);
+      const inCheckboxMode = objSegsForDetail && objSegsForDetail.size > 0;
+      const hasSelSeg = selSeg !== null && selSeg >= 0 && selSeg < pSegCnt && !inCheckboxMode;
 
       if (hasSelSeg) {
         // ── Segment detail mode ──
