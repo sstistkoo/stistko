@@ -73,7 +73,14 @@
     <button id="mobileUndo" aria-label="Zpět">↩</button>
     <button id="mobileRedo" aria-label="Vpřed">↪</button>
     <button id="mobileSnap" aria-label="Přichycení">🧲</button>
-    <div id="mobileCoordBar"><span id="coordBarText">X: 0.000 &nbsp; Z: 0.000</span><span id="coordBarIndicators"><span id="indGrid" class="coord-ind" title="Mřížka">#</span><span id="indAngle" class="coord-ind" title="Úhlový snap">∠</span><span id="indDims" class="coord-ind" title="Kóty">📐</span></span></div>
+    <div id="mobileCoordBar">
+      <span id="coordBarText">X: 0.000 &nbsp; Z: 0.000</span
+      ><span id="coordBarIndicators"
+        ><span id="indGrid" class="coord-ind" title="Mřížka">#</span
+        ><span id="indAngle" class="coord-ind" title="Úhlový snap">∠</span
+        ><span id="indDims" class="coord-ind" title="Kóty">📐</span></span
+      >
+    </div>
     <div id="sidebarOverlay"></div>
 
     <!-- ── Precision Crosshair (long-press) ── -->
@@ -328,17 +335,6 @@
         </svg>
         Kružnice
       </button>
-      <button class="tool-btn" data-tool="arc" title="Oblouk (A)">
-        <svg viewBox="0 0 24 24">
-          <path
-            d="M4 20 A 12 12 0 0 1 20 4"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          />
-        </svg>
-        Oblouk
-      </button>
       <button class="tool-btn" data-tool="rect" title="Obdélník (R)">
         <svg viewBox="0 0 24 24">
           <rect
@@ -368,7 +364,14 @@
         </svg>
         Kontura
       </button>
-      <div class="sep"></div>
+      <button
+        class="tool-btn toolbar-mid-toggle"
+        id="btnToolbarMid"
+        title="Editace / úpravy"
+      >
+        ▾
+      </button>
+      <div id="toolbarMid" class="toolbar-mid">
       <button class="tool-btn" data-tool="tangent" title="Tečna (T)">
         <svg viewBox="0 0 24 24">
           <circle
@@ -637,6 +640,7 @@
         </svg>
         Rovnob.
       </button>
+      </div>
       <button class="tool-btn" data-tool="break" title="Rozdělit objekt">
         <svg viewBox="0 0 24 24">
           <line
@@ -786,13 +790,16 @@
           </svg>
           Otočit
         </button>
-        <button
-          class="tool-btn"
-          id="btnDeleteDims"
-          title="Smazat všechny kóty"
-          aria-label="Smazat kóty"
-        >
-          🗑️ Smaž kóty
+        <button class="tool-btn" data-tool="arc" title="Oblouk (A)">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M4 20 A 12 12 0 0 1 20 4"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+          </svg>
+          Oblouk
         </button>
         <div class="sep"></div>
         <button
@@ -957,6 +964,14 @@
           aria-label="Historie smazaných výkresů"
         >
           🕓 Historie
+        </button>
+        <button
+          class="tool-btn tool-btn-danger"
+          id="btnDeleteDims"
+          title="Smazat všechny kóty"
+          aria-label="Smazat kóty"
+        >
+          🗑️ Smaž kóty
         </button>
 
         <div class="sep"></div>
