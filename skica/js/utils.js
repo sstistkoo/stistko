@@ -305,17 +305,55 @@ export function getNearestPointOnObject(obj, wx, wy) {
       return ds < de ? { x: s.x, y: s.y, dist: ds } : { x: e.x, y: e.y, dist: de };
     }
     case "rect": {
-      const segs = [
-        [obj.x1, obj.y1, obj.x2, obj.y1],
-        [obj.x2, obj.y1, obj.x2, obj.y2],
-        [obj.x2, obj.y2, obj.x1, obj.y2],
-        [obj.x1, obj.y2, obj.x1, obj.y1],
-      ];
+      const rc = getRectCorners(obj);
       let best = null;
-      for (const [x1, y1, x2, y2] of segs) {
-        const p = nearestOnSegment(wx, wy, x1, y1, x2, y2);
+      for (let i = 0; i < 4; i++) {
+        const p = nearestOnSegment(wx, wy, rc[i].x, rc[i].y, rc[(i + 1) % 4].x, rc[(i + 1) % 4].y);
         const d = Math.hypot(wx - p.x, wy - p.y);
         if (!best || d < best.dist) best = { x: p.x, y: p.y, dist: d };
+      }
+      return best;
+    }
+    case "polyline": {
+      const n = obj.vertices.length;
+      if (n < 2) return null;
+      const segCount = obj.closed ? n : n - 1;
+      let best = null;
+      for (let i = 0; i < segCount; i++) {
+        const p1 = obj.vertices[i];
+        const p2 = obj.vertices[(i + 1) % n];
+        const b = obj.bulges[i] || 0;
+        let px, py, d;
+        if (b === 0) {
+          const np = nearestOnSegment(wx, wy, p1.x, p1.y, p2.x, p2.y);
+          px = np.x; py = np.y;
+          d = Math.hypot(wx - px, wy - py);
+        } else {
+          const arc = bulgeToArc(p1, p2, b);
+          if (arc) {
+            const ddx = wx - arc.cx, ddy = wy - arc.cy;
+            const dist = Math.hypot(ddx, ddy);
+            const angle = Math.atan2(ddy, ddx);
+            if (dist < 1e-10) {
+              px = arc.cx + arc.r; py = arc.cy;
+              d = arc.r;
+            } else if (isAngleBetween(angle, arc.startAngle, arc.endAngle, arc.ccw)) {
+              px = arc.cx + (ddx / dist) * arc.r;
+              py = arc.cy + (ddy / dist) * arc.r;
+              d = Math.abs(dist - arc.r);
+            } else {
+              const ds = Math.hypot(wx - p1.x, wy - p1.y);
+              const de = Math.hypot(wx - p2.x, wy - p2.y);
+              if (ds < de) { px = p1.x; py = p1.y; d = ds; }
+              else { px = p2.x; py = p2.y; d = de; }
+            }
+          } else {
+            const np = nearestOnSegment(wx, wy, p1.x, p1.y, p2.x, p2.y);
+            px = np.x; py = np.y;
+            d = Math.hypot(wx - px, wy - py);
+          }
+        }
+        if (!best || d < best.dist) best = { x: px, y: py, dist: d };
       }
       return best;
     }

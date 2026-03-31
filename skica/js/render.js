@@ -369,7 +369,7 @@ function renderObjects() {
         drawArc(obj);
         break;
       case "rect":
-        drawRect(obj);
+        drawRect(obj, isSel, obj.color || layerColor, idx);
         break;
       case "polyline":
         drawPolyline(obj, isSel, obj.color || layerColor, idx);
@@ -721,15 +721,18 @@ function drawSelectedPointIndicator() {
 
 // ── Počítadlo výběru ──
 function drawSelectionCounter() {
-  let count = state.multiSelected.size > 0
+  const objCount = state.multiSelected.size > 0
     ? state.multiSelected.size
     : (state.selected !== null ? 1 : 0);
   const ptCount = state.selectedPoint ? state.selectedPoint.length : 0;
-  if (ptCount > 0) count += ptCount;
-  if (count <= 0) return;
+  let segCount = 0;
+  for (const s of state.multiSelectedSegments.values()) segCount += s.size;
+
+  if (objCount <= 0 && segCount <= 0 && ptCount <= 0) return;
+
   const parts = [];
-  const objCount = count - ptCount;
   if (objCount > 0) parts.push(`${objCount} obj`);
+  if (segCount > 0) parts.push(`${segCount} seg`);
   if (ptCount > 0) parts.push(`${ptCount} bod${ptCount > 1 ? 'y' : ''}`);
   const label = parts.join(' + ');
   const fontSize = 14;
@@ -1230,14 +1233,48 @@ export function drawArc(obj) {
 }
 
 /** @param {import('./types.js').RectObject} obj */
-export function drawRect(obj) {
+export function drawRect(obj, isSel, normalColor, objIdx) {
   const c = getRectCorners(obj);
   const sc = c.map(p => worldToScreen(p.x, p.y));
-  ctx.beginPath();
-  ctx.moveTo(sc[0][0], sc[0][1]);
-  for (let i = 1; i < 4; i++) ctx.lineTo(sc[i][0], sc[i][1]);
-  ctx.closePath();
-  ctx.stroke();
+  const objSegs = state.multiSelectedSegments.get(objIdx);
+  const isSegMode = objSegs && objSegs.size > 0;
+  const isSegSelected = (i) => isSegMode && objSegs.has(i);
+
+  if (isSegMode) {
+    const baseStroke = ctx.strokeStyle;
+    const baseWidth = ctx.lineWidth;
+    for (let i = 0; i < 4; i++) {
+      const j = (i + 1) % 4;
+      if (isSegSelected(i)) {
+        ctx.strokeStyle = COLORS.selected;
+        ctx.lineWidth = LINE_WIDTH_SELECTED;
+      } else {
+        ctx.strokeStyle = normalColor || COLORS.primary;
+        ctx.lineWidth = LINE_WIDTH;
+      }
+      ctx.beginPath();
+      ctx.moveTo(sc[i][0], sc[i][1]);
+      ctx.lineTo(sc[j][0], sc[j][1]);
+      ctx.stroke();
+    }
+    // Vertex dots
+    for (let i = 0; i < 4; i++) {
+      const isVtxSel = isSegSelected(i) || isSegSelected((i + 3) % 4);
+      ctx.fillStyle = isVtxSel ? COLORS.selected : (normalColor || COLORS.primary);
+      ctx.beginPath();
+      ctx.arc(sc[i][0], sc[i][1], isVtxSel ? 4.5 : 2.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.strokeStyle = baseStroke;
+    ctx.lineWidth = baseWidth;
+    ctx.fillStyle = baseStroke;
+  } else {
+    ctx.beginPath();
+    ctx.moveTo(sc[0][0], sc[0][1]);
+    for (let i = 1; i < 4; i++) ctx.lineTo(sc[i][0], sc[i][1]);
+    ctx.closePath();
+    ctx.stroke();
+  }
 }
 
 /** @param {import('./types.js').PolylineObject} obj */
@@ -1245,9 +1282,9 @@ export function drawPolyline(obj, isSel, normalColor, objIdx) {
   const n = obj.vertices.length;
   if (n < 2) return;
   const segCount = obj.closed ? n : n - 1;
-  const selSeg = state.selectedSegment;
-  const hasSelSeg = isSel && selSeg !== null && selSeg >= 0 && selSeg < segCount
-    && state._selectedSegmentObjIdx === objIdx;
+  const objSegs = state.multiSelectedSegments.get(objIdx);
+  const isSegMode = objSegs && objSegs.size > 0;
+  const isSegSelected = (i) => isSegMode && objSegs.has(i);
 
   // Save current styles
   const baseStroke = ctx.strokeStyle;
@@ -1261,10 +1298,10 @@ export function drawPolyline(obj, isSel, normalColor, objIdx) {
     const [sx2, sy2] = worldToScreen(p2.x, p2.y);
 
     // When a segment is selected: selected segment = white, rest = normal color
-    if (hasSelSeg && i === selSeg) {
+    if (isSegSelected(i)) {
       ctx.strokeStyle = COLORS.selected;  // White for selected segment
       ctx.lineWidth = LINE_WIDTH_SELECTED;
-    } else if (hasSelSeg) {
+    } else if (isSegMode) {
       ctx.strokeStyle = normalColor || COLORS.primary;
       ctx.lineWidth = LINE_WIDTH;
     }
@@ -1294,15 +1331,15 @@ export function drawPolyline(obj, isSel, normalColor, objIdx) {
   for (let vi = 0; vi < n; vi++) {
     const v = obj.vertices[vi];
     const [sx, sy] = worldToScreen(v.x, v.y);
-    // Highlight vertices of selected segment in white, others in normal color
-    const isSegVertex = hasSelSeg && (vi === selSeg || vi === (selSeg + 1) % n);
-    if (hasSelSeg) {
-      ctx.fillStyle = isSegVertex ? COLORS.selected : (normalColor || COLORS.primary);
+    // Highlight vertices of selected segments in white, others in normal color
+    const isVtxSel = isSegMode && (isSegSelected(vi) || isSegSelected(((vi - 1) % n + n) % n));
+    if (isSegMode) {
+      ctx.fillStyle = isVtxSel ? COLORS.selected : (normalColor || COLORS.primary);
     } else {
       ctx.fillStyle = baseStroke;
     }
     ctx.beginPath();
-    ctx.arc(sx, sy, isSegVertex ? 4.5 : 2.5, 0, Math.PI * 2);
+    ctx.arc(sx, sy, isVtxSel ? 4.5 : 2.5, 0, Math.PI * 2);
     ctx.fill();
   }
   // Restore fillStyle

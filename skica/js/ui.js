@@ -105,6 +105,7 @@ export function updateObjectList() {
         }
         state.selectedSegment = null;
         state._selectedSegmentObjIdx = null;
+        state.multiSelectedSegments.clear();
         updateObjectList();
         updateProperties();
         renderAll();
@@ -146,6 +147,7 @@ export function updateObjectList() {
       }
       state.selectedSegment = null;
       state._selectedSegmentObjIdx = null;
+      state.multiSelectedSegments.clear();
       updateObjectList();
       updateProperties();
       renderAll();
@@ -185,7 +187,9 @@ export function updateObjectList() {
         const segName = b === 0 ? `Úsečka ${si + 1}` : `Oblouk ${si + 1}`;
 
         const segLi = document.createElement("li");
-        segLi.className = "seg-item" + (state.selectedSegment === si && state._selectedSegmentObjIdx === idx ? " seg-selected" : "");
+        const objSegsSet = state.multiSelectedSegments.get(idx);
+        const isSS = objSegsSet ? objSegsSet.has(si) : false;
+        segLi.className = "seg-item" + (isSS ? " seg-selected" : "");
         const segSpan = document.createElement("span");
         const segIcon = document.createElement("span");
         segIcon.className = "obj-icon";
@@ -267,6 +271,7 @@ export function updateObjectList() {
           }
           state.selectedSegment = null;
           state._selectedSegmentObjIdx = null;
+          state.multiSelectedSegments.clear();
           updateObjectList();
           updateProperties();
           if (bridge.calculateAllIntersections) bridge.calculateAllIntersections();
@@ -646,10 +651,14 @@ export function updateProperties() {
         return input;
       }
 
-      const rX1 = makeRectInput(H + "1", obj.x1, 3, '1');
-      const rY1 = makeRectInput(V + "1", obj.y1);
-      const rX2 = makeRectInput(H + "2", obj.x2, 3, '2');
-      const rY2 = makeRectInput(V + "2", obj.y2);
+      // Compute actual corner positions (respecting rotation)
+      const corners = getRectCorners(obj);
+
+      // Show actual rotated corner positions in Z1/X1/Z2/X2
+      const rX1 = makeRectInput(H + "1", corners[0].x, 3, '1');
+      const rY1 = makeRectInput(V + "1", corners[0].y);
+      const rX2 = makeRectInput(H + "2", corners[2].x, 3, '2');
+      const rY2 = makeRectInput(V + "2", corners[2].y);
       const rW = makeRectInput("Šířka", Math.abs(obj.x2 - obj.x1));
       const rH = makeRectInput("Výška", Math.abs(obj.y2 - obj.y1));
 
@@ -660,7 +669,7 @@ export function updateProperties() {
         td.colSpan = 2;
         td.innerHTML = `<div class="anchor-radio-row" style="margin-top:4px">
           <span>Otáčet kolem:</span>
-          <label><input type="radio" name="propRotPivot" value="anchor" checked> 📌 Fixní</label>
+          <label><input type="radio" name="propRotPivot" value="anchor" checked> \ud83d\udccc Fixní</label>
           <label><input type="radio" name="propRotPivot" value="center"> ⊕ Střed</label>
         </div>`;
         tr.appendChild(td);
@@ -668,63 +677,54 @@ export function updateProperties() {
       }
       const rAng = makeRectInput("Úhel (°)", ((obj.rotation || 0) * 180 / Math.PI), 2);
 
-      // Sync: width/height → coordinates
+      // Sync: width/height → coordinates (resize from anchor)
       function syncRectFromWH() {
         const wVal = safeEvalMath(rW.value);
         const hVal = safeEvalMath(rH.value);
         if (!isFinite(wVal) || !isFinite(hVal)) return;
+        // Save anchor position before change
+        const oldCorners = getRectCorners(obj);
+        const anchorIdx = getRectAnchor() === '1' ? 0 : 2;
+        const anchor = oldCorners[anchorIdx];
+        // Update base dimensions
         if (getRectAnchor() === '1') {
           const signW = obj.x2 >= obj.x1 ? 1 : -1;
           const signH = obj.y2 >= obj.y1 ? 1 : -1;
           obj.x2 = obj.x1 + signW * Math.abs(wVal);
           obj.y2 = obj.y1 + signH * Math.abs(hVal);
-          rX2.value = obj.x2.toFixed(3);
-          rY2.value = obj.y2.toFixed(3);
         } else {
           const signW = obj.x1 <= obj.x2 ? -1 : 1;
           const signH = obj.y1 <= obj.y2 ? -1 : 1;
           obj.x1 = obj.x2 + signW * Math.abs(wVal);
           obj.y1 = obj.y2 + signH * Math.abs(hVal);
-          rX1.value = obj.x1.toFixed(3);
-          rY1.value = obj.y1.toFixed(3);
+        }
+        // Restore anchor position (rotation shifts center)
+        if (obj.rotation) {
+          const newCorners = getRectCorners(obj);
+          const newAnchor = newCorners[anchorIdx];
+          obj.x1 += anchor.x - newAnchor.x; obj.y1 += anchor.y - newAnchor.y;
+          obj.x2 += anchor.x - newAnchor.x; obj.y2 += anchor.y - newAnchor.y;
         }
       }
 
-      // Sync: coordinates → width/height
-      function syncRectWHFromCoords() {
-        rW.value = Math.abs(obj.x2 - obj.x1).toFixed(3);
-        rH.value = Math.abs(obj.y2 - obj.y1).toFixed(3);
+      // Wire coordinate inputs – editing moves the whole rect
+      function wireCoordInput(input, cornerIdx, axis) {
+        input.addEventListener("change", () => {
+          const v = safeEvalMath(input.value);
+          if (isNaN(v)) return;
+          pushUndo();
+          const curCorners = getRectCorners(obj);
+          const delta = v - curCorners[cornerIdx][axis];
+          if (axis === 'x') { obj.x1 += delta; obj.x2 += delta; }
+          else { obj.y1 += delta; obj.y2 += delta; }
+          updateAssociativeDimensions(); renderAll();
+          updateProperties();
+        });
       }
-
-      // Wire coordinate inputs
-      rX1.addEventListener("change", () => {
-        const v = safeEvalMath(rX1.value);
-        if (isNaN(v)) return;
-        pushUndo(); obj.x1 = v;
-        syncRectWHFromCoords();
-        updateAssociativeDimensions(); renderAll();
-      });
-      rY1.addEventListener("change", () => {
-        const v = safeEvalMath(rY1.value);
-        if (isNaN(v)) return;
-        pushUndo(); obj.y1 = v;
-        syncRectWHFromCoords();
-        updateAssociativeDimensions(); renderAll();
-      });
-      rX2.addEventListener("change", () => {
-        const v = safeEvalMath(rX2.value);
-        if (isNaN(v)) return;
-        pushUndo(); obj.x2 = v;
-        syncRectWHFromCoords();
-        updateAssociativeDimensions(); renderAll();
-      });
-      rY2.addEventListener("change", () => {
-        const v = safeEvalMath(rY2.value);
-        if (isNaN(v)) return;
-        pushUndo(); obj.y2 = v;
-        syncRectWHFromCoords();
-        updateAssociativeDimensions(); renderAll();
-      });
+      wireCoordInput(rX1, 0, 'x');
+      wireCoordInput(rY1, 0, 'y');
+      wireCoordInput(rX2, 2, 'x');
+      wireCoordInput(rY2, 2, 'y');
 
       // Wire width/height inputs
       rW.addEventListener("change", () => {
@@ -732,12 +732,14 @@ export function updateProperties() {
         pushUndo();
         syncRectFromWH();
         updateAssociativeDimensions(); renderAll();
+        updateProperties();
       });
       rH.addEventListener("change", () => {
         if (isNaN(safeEvalMath(rH.value))) return;
         pushUndo();
         syncRectFromWH();
         updateAssociativeDimensions(); renderAll();
+        updateProperties();
       });
 
       // Wire angle (rotation) around selected pivot
@@ -746,12 +748,10 @@ export function updateProperties() {
         if (isNaN(a)) return;
         pushUndo();
         const newRot = a * Math.PI / 180;
-        const oldRot = obj.rotation || 0;
         const pivotSel = tbody.querySelector('input[name="propRotPivot"]:checked');
         const pivotMode = pivotSel ? pivotSel.value : 'anchor';
 
         if (pivotMode === 'center') {
-          // Rotate around center – coords stay the same
           obj.rotation = newRot;
         } else {
           // Rotate around fixed anchor point
@@ -761,23 +761,25 @@ export function updateProperties() {
           obj.rotation = newRot;
           const cornersNew = getRectCorners(obj);
           const newPivot = cornersNew[anchorIdx];
-          // Shift base coords so the anchor stays in place
-          const dx = pivot.x - newPivot.x;
-          const dy = pivot.y - newPivot.y;
-          obj.x1 += dx; obj.y1 += dy;
-          obj.x2 += dx; obj.y2 += dy;
+          obj.x1 += pivot.x - newPivot.x; obj.y1 += pivot.y - newPivot.y;
+          obj.x2 += pivot.x - newPivot.x; obj.y2 += pivot.y - newPivot.y;
         }
         updateAssociativeDimensions(); renderAll();
         updateProperties();
       });
 
-      // Show actual rotated corners when rotation ≠ 0
-      if (obj.rotation) {
-        const corners = getRectCorners(obj);
-        addInfoRow("── Skutečné rohy ──", "");
-        corners.forEach((c, i) => {
-          addInfoRow(`Roh ${i + 1}`, `${H}=${c.x.toFixed(3)}  ${V}=${c.y.toFixed(3)}`);
-        });
+      // Show all 4 corners as selectable text
+      {
+        const rc = getRectCorners(obj);
+        const tr = document.createElement("tr");
+        const td = document.createElement("td");
+        td.colSpan = 2;
+        td.style.cssText = "padding-top:6px;font-size:12px;user-select:text;cursor:text;color:" + COLORS.textMuted;
+        td.innerHTML = rc.map((c, i) =>
+          `Roh ${i + 1}: ${H}=${c.x.toFixed(3)} ${V}=${c.y.toFixed(3)}`
+        ).join('<br>');
+        tr.appendChild(td);
+        tbody.appendChild(tr);
       }
 
       break;
@@ -838,6 +840,7 @@ export function updateProperties() {
           btn.addEventListener("click", () => {
             state.selectedSegment = null;
             state._selectedSegmentObjIdx = null;
+            state.multiSelectedSegments.clear();
             updateProperties();
             renderAll();
           });
@@ -1132,6 +1135,7 @@ export function setTool(tool) {
     state.selectedSegment = null;
     state._selectedSegmentObjIdx = null;
     state.multiSelected.clear();
+    state.multiSelectedSegments.clear();
     state.selectedPoint = null;
     if (bridge.updateProperties) bridge.updateProperties();
   }

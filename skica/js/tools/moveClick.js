@@ -16,6 +16,10 @@ export function handleMoveClick(wx, wy) {
     if (state.multiSelected.size > 0) {
       // Zajistit, že i state.selected je v setu
       if (state.selected !== null) state.multiSelected.add(state.selected);
+      // Vyčistit segment mode při multi-drag
+      state.selectedSegment = null;
+      state._selectedSegmentObjIdx = null;
+      state.multiSelectedSegments.clear();
       pushUndo();
       state.dragging = true;
       state.dragObjIdx = -1; // signál pro multi-drag
