@@ -1813,6 +1813,7 @@ export function updateSnapGridBtn() {
 document.getElementById("btnSnapGrid").addEventListener("click", () => {
   state.snapToGrid = !state.snapToGrid;
   updateSnapGridBtn();
+  document.getElementById("indGrid")?.classList.toggle("active", state.snapToGrid);
   renderAll();
   showToast(state.snapToGrid ? `Snap na mřížku: ON (${state.gridSize})` : "Snap na mřížku: OFF");
 });
@@ -1831,6 +1832,7 @@ export function updateAngleSnapBtn() {
 document.getElementById("btnAngleSnap").addEventListener("click", () => {
   state.angleSnap = !state.angleSnap;
   updateAngleSnapBtn();
+  document.getElementById("indAngle")?.classList.toggle("active", state.angleSnap);
   renderAll();
   showToast(state.angleSnap ? `Úhlový snap: ON (${state.angleSnapStep}°)` : "Úhlový snap: OFF");
 });
@@ -1866,6 +1868,7 @@ document.getElementById("btnDims").addEventListener("click", () => {
   const labels = { all: 'Kóty: vše', intersections: 'Kóty: pouze průsečíky', none: 'Kóty: skryté' };
   showToast(labels[state.showDimensions]);
   updateDimsBtn();
+  document.getElementById("indDims")?.classList.toggle("active", state.showDimensions !== 'none');
   renderAll();
 });
 
