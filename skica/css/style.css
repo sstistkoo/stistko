@@ -121,6 +121,15 @@ body {
   pointer-events: none;
 }
 
+.tool-btn-danger {
+  background: var(--ctp-red);
+  color: var(--ctp-base);
+  border-color: var(--ctp-red);
+}
+.tool-btn-danger:hover {
+  background: #d94060;
+}
+
 .tool-btn svg {
   width: 16px;
   height: 16px;
