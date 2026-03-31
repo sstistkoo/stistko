@@ -29,6 +29,7 @@ export function exportProjectFile() {
     layers: state.layers,
     activeLayer: state.activeLayer,
     nextLayerId: state.nextLayerId,
+    showObjectNumbers: state.showObjectNumbers,
   };
   const blob = new Blob([JSON.stringify(data, null, 2)], {
     type: "application/json",
@@ -87,6 +88,7 @@ export function importProjectFile() {
         if (data.incReference) state.incReference = data.incReference;
         if (data.machineType) state.machineType = data.machineType;
         state.xDisplayMode = data.xDisplayMode || 'radius';
+        if (data.showObjectNumbers !== undefined) state.showObjectNumbers = data.showObjectNumbers;
         if (data.layers) {
           state.layers = data.layers;
           state.activeLayer = data.activeLayer || 0;
