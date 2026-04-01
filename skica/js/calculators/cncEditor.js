@@ -250,6 +250,7 @@ function buildEditorHTML() {
       <button class="cne-tb-btn cne-status" data-act="validate" data-el="statusBtn" title="Validace">●</button>
       <button class="cne-tb-btn cne-hide-m" data-act="settings" title="Nastavení parseru">⚙</button>
       <button class="cne-tb-btn cne-menu-btn" data-act="menu" title="Menu">⋮</button>
+      <button class="cne-tb-btn cne-close-btn" data-act="close" title="Zavřít editor">✕</button>
     </div>
   </div>
 
@@ -1063,6 +1064,7 @@ export function openCncEditor() {
         case 'keyboard':  editor.readOnly = false; editor.focus(); break;
         case 'menu':      $('menuModal').style.display = 'flex'; break;
         case 'menuClose': $('menuModal').style.display = 'none'; break;
+        case 'close':     persist(); overlay.remove(); break;
         case 'numCancel': numModal.style.display = 'none'; break;
         case 'numOk':     confirmNumpad(); break;
         case 'valClose':  valModal.style.display = 'none'; break;
