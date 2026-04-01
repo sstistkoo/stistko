@@ -146,7 +146,7 @@ function _findObjVertexAt(obj, wx, wy, threshold) {
   const pts = getObjectSnapPoints(obj);
   let best = null, bestDist = Infinity;
   for (const p of pts) {
-    const t = p.mid ? threshold * 0.5 : threshold;
+    const t = p.quarter ? threshold * 0.25 : (p.mid ? threshold * 0.5 : threshold);
     const d = Math.hypot(p.x - wx, p.y - wy);
     if (d < t && d < bestDist) { bestDist = d; best = p; }
   }
@@ -329,9 +329,16 @@ export function selectObjectAt(wx, wy) {
           // Zkontrolovat, jestli snap bod patří kliknutému objektu
           const objPts = getObjectSnapPoints(obj);
           const matchingPt = objPts.find(p => Math.hypot(p.x - snapPt.x, p.y - snapPt.y) < 1e-6);
-          if (matchingPt && !matchingPt.mid) {
+          if (matchingPt && !matchingPt.mid && !matchingPt.quarter) {
             // Koncový bod objektu – vybrat bod přímo
             _toggleSelectedPoint(snapPt);
+          } else if (matchingPt && matchingPt.quarter) {
+            // Quadrant kružnice – vybrat bod jen při velmi přesném kliku
+            if (snapDist < threshold * 0.15) {
+              _toggleSelectedPoint(snapPt);
+            } else {
+              _addObj(newSel);
+            }
           } else if (matchingPt) {
             // Midpoint/quarter – vybrat celý objekt
             _addObj(newSel);

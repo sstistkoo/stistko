@@ -195,10 +195,10 @@ export function getObjectSnapPoints(obj) {
     case "circle":
       return [
         { x: obj.cx, y: obj.cy },
-        { x: obj.cx + obj.r, y: obj.cy },
-        { x: obj.cx - obj.r, y: obj.cy },
-        { x: obj.cx, y: obj.cy + obj.r },
-        { x: obj.cx, y: obj.cy - obj.r },
+        { x: obj.cx + obj.r, y: obj.cy, quarter: true },
+        { x: obj.cx - obj.r, y: obj.cy, quarter: true },
+        { x: obj.cx, y: obj.cy + obj.r, quarter: true },
+        { x: obj.cx, y: obj.cy - obj.r, quarter: true },
       ];
     case "arc":
       return [
