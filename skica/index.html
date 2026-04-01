@@ -107,12 +107,19 @@
       <div class="sp-label"></div>
     </div>
 
+    <!-- ── Topbar Precision Pointer (long-press) ── -->
+    <div id="topbarPrecisionPointer" class="tp-pointer" style="display: none">
+      <div class="sp-dot"></div>
+      <div class="sp-connector"></div>
+      <div class="sp-label"></div>
+    </div>
+
     <!-- ── Toolbar ── -->
     <div id="topbar" role="toolbar" aria-label="Kreslicí nástroje">
       <button
         class="tool-btn mobile-hide"
         id="btnUndo"
-        title="Zpět (Ctrl+Z)"
+        title="Zpět – vrátí poslední akci"
         disabled
       >
         ↩ Zpět
@@ -120,20 +127,28 @@
       <button
         class="tool-btn mobile-hide"
         id="btnRedo"
-        title="Vpřed (Ctrl+Y)"
+        title="Vpřed – znovu provede vrácenou akci"
         disabled
       >
         ↪ Vpřed
       </button>
       <div class="sep"></div>
       <div class="toolbar-header">
-        <button class="tool-btn active" data-tool="select" title="Výběr (V)">
+        <button
+          class="tool-btn active"
+          data-tool="select"
+          title="Výběr – klikni na objekt pro označení, táhni pro přesun"
+        >
           <svg viewBox="0 0 24 24">
             <path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51z" />
           </svg>
           Výběr
         </button>
-        <button class="tool-btn" data-tool="dimension" title="Kóta (U)">
+        <button
+          class="tool-btn"
+          data-tool="dimension"
+          title="Kóta – klikni 2 body, třetí klik umístí kótu"
+        >
           <svg viewBox="0 0 24 24">
             <line
               x1="4"
@@ -221,7 +236,7 @@
         <button
           class="tool-btn"
           id="btnDelete"
-          title="Smazat vybraný objekt (Del)"
+          title="Smazat – vyber objekt a klikni pro smazání"
           aria-label="Smazat vybraný objekt"
         >
           <svg viewBox="0 0 24 24">
@@ -270,10 +285,18 @@
         </button>
       </div>
       <div class="sep"></div>
-      <button class="tool-btn" data-tool="point" title="Bod (P)">
+      <button
+        class="tool-btn"
+        data-tool="point"
+        title="Bod – klikni kam chceš umístit bod"
+      >
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" /></svg> Bod
       </button>
-      <button class="tool-btn" data-tool="line" title="Úsečka (L)">
+      <button
+        class="tool-btn"
+        data-tool="line"
+        title="Úsečka – klikni počátek a konec"
+      >
         <svg viewBox="0 0 24 24">
           <line
             x1="4"
@@ -286,7 +309,11 @@
         </svg>
         Úsečka
       </button>
-      <button class="tool-btn" data-tool="constr" title="Konstrukční čára (K)">
+      <button
+        class="tool-btn"
+        data-tool="constr"
+        title="Konstrukční čára – nekonečná pomocná čára, 2 body"
+      >
         <svg viewBox="0 0 24 24">
           <line
             x1="2"
@@ -303,7 +330,7 @@
       <button
         class="tool-btn"
         id="btnPolar"
-        title="Polární kreslení z bodu (Shift+N)"
+        title="Polární – zadej střed, úhel a vzdálenost"
       >
         <svg viewBox="0 0 24 24">
           <line
@@ -331,7 +358,11 @@
         </svg>
         Polární
       </button>
-      <button class="tool-btn" data-tool="circle" title="Kružnice (C)">
+      <button
+        class="tool-btn"
+        data-tool="circle"
+        title="Kružnice – klikni střed, pak poloměr"
+      >
         <svg viewBox="0 0 24 24">
           <circle
             cx="12"
@@ -344,7 +375,11 @@
         </svg>
         Kružnice
       </button>
-      <button class="tool-btn" data-tool="rect" title="Obdélník (R)">
+      <button
+        class="tool-btn"
+        data-tool="rect"
+        title="Obdélník – klikni 2 protilehlé rohy"
+      >
         <svg viewBox="0 0 24 24">
           <rect
             x="3"
@@ -358,7 +393,11 @@
         </svg>
         Obdélník
       </button>
-      <button class="tool-btn" data-tool="polyline" title="Kontura (Q)">
+      <button
+        class="tool-btn"
+        data-tool="polyline"
+        title="Kontura – klikej body, Enter/dvojklik uzavře"
+      >
         <svg viewBox="0 0 24 24">
           <polyline
             points="3,20 8,8 14,16 20,4"
@@ -381,7 +420,11 @@
         ▾
       </button>
       <div id="toolbarMid" class="toolbar-mid">
-        <button class="tool-btn" data-tool="tangent" title="Tečna (T)">
+        <button
+          class="tool-btn"
+          data-tool="tangent"
+          title="Tečna – klikni bod, pak kružnici"
+        >
           <svg viewBox="0 0 24 24">
             <circle
               cx="16"
@@ -403,7 +446,11 @@
           </svg>
           Tečna
         </button>
-        <button class="tool-btn" data-tool="offset" title="Offset (O)">
+        <button
+          class="tool-btn"
+          data-tool="offset"
+          title="Offset – vyber objekt, zadej vzdálenost"
+        >
           <svg viewBox="0 0 24 24">
             <line
               x1="4"
@@ -437,7 +484,11 @@
           </svg>
           Offset
         </button>
-        <button class="tool-btn" data-tool="trim" title="Oříznout úsečku (X)">
+        <button
+          class="tool-btn"
+          data-tool="trim"
+          title="Oříznutí – klikni na část za průsečíkem ke smazání"
+        >
           <svg viewBox="0 0 24 24">
             <line
               x1="4"
@@ -470,7 +521,7 @@
         <button
           class="tool-btn"
           data-tool="extend"
-          title="Prodloužit úsečku (E)"
+          title="Prodloužení – vyber úsečku, prodlouží se k nejbližšímu objektu"
         >
           <svg viewBox="0 0 24 24">
             <line
@@ -504,7 +555,7 @@
         <button
           class="tool-btn"
           data-tool="filletChamfer"
-          title="Zaoblení / Zkosení (F)"
+          title="Zaoblení/Zkosení – vyber 2 úsečky, zadej rádius nebo zkosení"
         >
           <svg viewBox="0 0 24 24">
             <line
@@ -542,7 +593,11 @@
           </svg>
           Zaob./Zkos.
         </button>
-        <button class="tool-btn" data-tool="mirror" title="Zrcadlení (Shift+M)">
+        <button
+          class="tool-btn"
+          data-tool="mirror"
+          title="Zrcadlení – vyber objekty + konstrukční čáru jako osu"
+        >
           <svg viewBox="0 0 24 24">
             <line
               x1="12"
@@ -568,7 +623,11 @@
           </svg>
           Zrcadlo
         </button>
-        <button class="tool-btn" data-tool="perp" title="Kolmice (J)">
+        <button
+          class="tool-btn"
+          data-tool="perp"
+          title="Kolmice – klikni na úsečku, pak vybereš bod"
+        >
           <svg viewBox="0 0 24 24">
             <line
               x1="4"
@@ -598,7 +657,11 @@
           </svg>
           Kolm.
         </button>
-        <button class="tool-btn" data-tool="horizontal" title="Vodorovnost (Z)">
+        <button
+          class="tool-btn"
+          data-tool="horizontal"
+          title="Vodorovná/svislá – zarovná úsečku vodorovně nebo svisle"
+        >
           <svg viewBox="0 0 24 24">
             <line
               x1="2"
@@ -658,7 +721,11 @@
         </svg>
         Rozděl
       </button>
-      <button class="tool-btn" data-tool="parallel" title="Rovnoběžka (H)">
+      <button
+        class="tool-btn"
+        data-tool="parallel"
+        title="Rovnoběžka – vyber úsečku, zadej vzdálenost"
+      >
         <svg viewBox="0 0 24 24">
           <line
             x1="4"
@@ -723,7 +790,11 @@
       <!-- ── Rozbalovací sekce: další nástroje ── -->
       <div id="toolbarMore" class="toolbar-more">
         <div class="sep"></div>
-        <button class="tool-btn" data-tool="move" title="Přesun (W)">
+        <button
+          class="tool-btn"
+          data-tool="move"
+          title="Přesun – vyber objekty, klikni odkud a kam"
+        >
           <svg viewBox="0 0 24 24">
             <path
               d="M12 2l3 3h-2v5h5v-2l3 3-3 3v-2h-5v5h2l-3 3-3-3h2v-5H5v2L2 12l3-3v2h5V6H8z"
@@ -735,7 +806,7 @@
         <button
           class="tool-btn"
           data-tool="snapPoint"
-          title="Přichytit bod (B)"
+          title="Přichytit bod – spojí koncový bod s jiným bodem"
         >
           <svg viewBox="0 0 24 24">
             <circle
@@ -803,7 +874,11 @@
           </svg>
           Otočit
         </button>
-        <button class="tool-btn" data-tool="arc" title="Oblouk (A)">
+        <button
+          class="tool-btn"
+          data-tool="arc"
+          title="Oblouk – klikni 3 body: počátek, bod na oblouku, konec"
+        >
           <svg viewBox="0 0 24 24">
             <path
               d="M4 20 A 12 12 0 0 1 20 4"
@@ -818,7 +893,7 @@
         <button
           class="tool-btn mobile-hide"
           data-tool="measure"
-          title="Měření (M)"
+          title="Měření – klikni 2 body pro vzdálenost a úhel"
         >
           <svg viewBox="0 0 24 24">
             <path
@@ -833,11 +908,15 @@
         <button
           class="tool-btn mobile-hide"
           id="btnNumInput"
-          title="Číselný vstup (N)"
+          title="Číselný vstup – zadej souřadnice ručně"
         >
           🔢 Zadat
         </button>
-        <button class="tool-btn" data-tool="text" title="Textová anotace (I)">
+        <button
+          class="tool-btn"
+          data-tool="text"
+          title="Text – klikni kam umístit textovou poznámku"
+        >
           <svg viewBox="0 0 24 24">
             <text
               x="12"
@@ -908,7 +987,7 @@
         <button
           class="tool-btn"
           id="btnSave"
-          title="Uložit projekt (Ctrl+S)"
+          title="Uložit projekt do prohlížeče"
           aria-label="Uložit projekt"
         >
           💾 Uložit
@@ -950,7 +1029,7 @@
         <button
           class="tool-btn"
           id="btnHelp"
-          title="Nápověda (? / F1)"
+          title="Nápověda ke všem nástrojům"
           aria-label="Nápověda"
         >
           ❓

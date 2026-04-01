@@ -1478,6 +1478,43 @@ body {
   text-overflow: ellipsis;
 }
 
+/* ── Topbar Precision Pointer ── */
+#topbarPrecisionPointer {
+  position: fixed;
+  z-index: 90;
+  pointer-events: none;
+  width: 0; height: 0;
+}
+#topbarPrecisionPointer .sp-dot {
+  position: absolute;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--ctp-yellow, #f9e2af);
+  background: #f9e2af44;
+  left: -5px; top: -5px;
+  box-shadow: 0 0 10px var(--ctp-yellow, #f9e2af);
+}
+#topbarPrecisionPointer .sp-connector {
+  position: absolute;
+  width: 1px; height: 60px;
+  left: 0; top: 0;
+  background: linear-gradient(to bottom, #f9e2af66, transparent);
+}
+#topbarPrecisionPointer .sp-label {
+  display: none;
+  position: absolute;
+  left: 14px; top: -12px;
+  white-space: nowrap;
+  font: 600 11px/1.3 system-ui, sans-serif;
+  color: var(--ctp-crust, #11111b);
+  background: var(--ctp-yellow, #f9e2af);
+  padding: 3px 8px;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.4);
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 
 /* Toolbar header - inline on desktop, row on mobile */
