@@ -3847,7 +3847,7 @@ body {
   position: relative;
 }
 .cne-line-nums {
-  width: 44px; flex-shrink: 0;
+  width: 52px; flex-shrink: 0;
   padding: 10px 6px 10px 0;
   text-align: right;
   font: 14px/20px "Consolas","Courier New",monospace;
@@ -4113,17 +4113,14 @@ select.cne-hdr-inp { padding: 3px 4px; text-align: left; }
   /* Quickbar: row flow, 6 columns, larger touch targets */
   .cne-quickbar {
     grid-template-columns: repeat(6, 1fr);
-    gap: 3px; padding: 4px 4px calc(4px + env(safe-area-inset-bottom, 6px));
+    gap: 3px; padding: 4px 4px calc(46px + env(safe-area-inset-bottom, 6px)) 4px;
   }
   .cne-qb { padding: 8px 2px; font-size: 13px; min-height: 36px; }
 
-  /* Line numbers — match textarea exactly to stay in sync */
-  .cne-line-nums { width: 30px; font-size: 12px; line-height: 20px; padding: 10px 3px 10px 0; }
-  .cne-backdrop, .cne-textarea { font-size: 12px; line-height: 20px; }
+  /* Line numbers + editor — must use identical font-size, line-height, padding-top */
+  .cne-line-nums { width: 38px; font: 11px/18px "Consolas","Courier New",monospace; padding: 8px 3px 8px 0; }
+  .cne-backdrop, .cne-textarea { font: 13px/18px "Consolas","Courier New",monospace; padding: 8px 8px; }
   .cne-textarea { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
-
-  /* Editor text slightly smaller */
-  .cne-backdrop, .cne-textarea { font-size: 13px; line-height: 19px; padding: 8px 8px; }
 
   /* Inner modals: fullwidth on mobile */
   .cne-im-card { min-width: auto; max-width: calc(100vw - 32px); width: 100%; }

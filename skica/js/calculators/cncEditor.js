@@ -552,9 +552,13 @@ export function openCncEditor() {
   }
 
   function updateLineNumbers() {
-    const c = editor.value.split('\n').length;
+    const lines = editor.value.split('\n');
     const a = [];
-    for (let i = 1; i <= c; i++) a.push(i);
+    let n = 10;
+    for (let i = 0; i < lines.length; i++) {
+      if (lines[i].trim() === '') { a.push(''); }
+      else { a.push('N' + n); n += 10; }
+    }
     lineNums.textContent = a.join('\n');
   }
 
@@ -646,14 +650,19 @@ export function openCncEditor() {
     if (!errs.length) {
       valList.innerHTML = '<div class="cne-val-ok">✓ Program je v pořádku</div>';
     } else {
-      valList.innerHTML = errs.map(e =>
-        `<div class="cne-val-row" data-ln="${e.lineIndex}">
+      const lines = editor.value.split('\n');
+      valList.innerHTML = errs.map(e => {
+        let n = 10, blk = '';
+        for (let i = 0; i <= e.lineIndex && i < lines.length; i++) {
+          if (lines[i].trim() !== '') { blk = 'N' + n; n += 10; }
+        }
+        return `<div class="cne-val-row" data-ln="${e.lineIndex}">
           <span class="cne-val-ic">⚠</span>
           <span class="cne-val-file">${esc(e.file)}</span>
-          <span class="cne-val-line">L${e.lineIndex + 1}</span>
+          <span class="cne-val-line">${blk}</span>
           <span class="cne-val-msg">${esc(e.msg)}</span>
-        </div>`
-      ).join('');
+        </div>`;
+      }).join('');
     }
     valModal.style.display = 'flex';
   }
