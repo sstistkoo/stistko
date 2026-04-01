@@ -3724,6 +3724,62 @@ body {
 .ex-code-block { max-height: 260px; overflow-y: auto; }
 
 /* ══════════════════════════════════════════════════════════════
+   NÁPOVĚDA (help overlay)
+   ══════════════════════════════════════════════════════════════ */
+.sn-help-window {
+  width: 94vw; max-width: 700px;
+  max-height: 90vh;
+}
+.sn-help-window .calc-body {
+  padding: 0; overflow-y: auto;
+}
+.sn-help-wrap { padding: 14px; }
+.sn-help-intro {
+  color: var(--ctp-subtext0); font-size: 13px;
+  margin-bottom: 12px; text-align: center;
+}
+.sn-help-section { margin-bottom: 16px; }
+.sn-help-sec-title {
+  font-size: 16px; font-weight: 700;
+  color: var(--ctp-blue); margin-bottom: 8px;
+  padding-bottom: 4px; border-bottom: 1px solid var(--ctp-surface1);
+}
+.sn-help-details {
+  margin-bottom: 4px; border-radius: 8px;
+  background: var(--ctp-surface0);
+  border: 1px solid var(--ctp-surface1);
+  overflow: hidden;
+}
+.sn-help-details[open] { background: var(--ctp-mantle); }
+.sn-help-summary {
+  padding: 10px 14px;
+  font-size: 13px; font-weight: 600;
+  color: var(--ctp-text); cursor: pointer;
+  list-style: none; display: flex; align-items: center; gap: 8px;
+  transition: background .12s;
+}
+.sn-help-summary:hover { background: var(--ctp-surface1); }
+.sn-help-summary::before {
+  content: '▸'; font-size: 11px; color: var(--ctp-overlay0);
+  transition: transform .15s; flex-shrink: 0;
+}
+.sn-help-details[open] > .sn-help-summary::before { transform: rotate(90deg); }
+.sn-help-summary::-webkit-details-marker { display: none; }
+.sn-help-body {
+  padding: 6px 14px 12px;
+  font-size: 12.5px; line-height: 1.7;
+  color: var(--ctp-subtext1);
+  border-top: 1px solid var(--ctp-surface1);
+  white-space: pre-line;
+}
+.sn-help-body b { color: var(--ctp-text); }
+.sn-help-body code {
+  background: var(--ctp-surface0); padding: 1px 5px;
+  border-radius: 3px; font-family: "Consolas",monospace;
+  font-size: 12px; color: var(--ctp-yellow);
+}
+
+/* ══════════════════════════════════════════════════════════════
    CNC EDITOR (cnc-editor overlay)
    ══════════════════════════════════════════════════════════════ */
 .cnc-editor-window {
