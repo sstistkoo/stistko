@@ -44,6 +44,8 @@ function _buildProjectData() {
     angleSnap: state.angleSnap,
     angleSnapStep: state.angleSnapStep,
     showDimensions: state.showDimensions,
+    snapQuadrants: state.snapQuadrants,
+    snapMidpoints: state.snapMidpoints,
   };
 }
 
@@ -73,6 +75,8 @@ function _loadProjectData(data) {
   if (data.angleSnap !== undefined) state.angleSnap = data.angleSnap;
   if (data.angleSnapStep !== undefined) state.angleSnapStep = data.angleSnapStep;
   if (data.showDimensions !== undefined) state.showDimensions = data.showDimensions;
+  if (data.snapQuadrants !== undefined) state.snapQuadrants = data.snapQuadrants;
+  if (data.snapMidpoints !== undefined) state.snapMidpoints = data.snapMidpoints;
   state.selected = null;
   state.multiSelected.clear();
   state.selectedPoint = null;

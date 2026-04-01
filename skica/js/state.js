@@ -88,6 +88,9 @@ export const state = {
   displayDecimals: 3,
   // Motiv: 'dark' nebo 'light'
   theme: 'dark',
+  // Snap body: quadranty kružnice a středy úseček
+  snapQuadrants: false,
+  snapMidpoints: false,
   // Vrstvy
   layers: [
     { id: 0, name: 'Kontura', color: COLORS.primary, visible: true, locked: false },

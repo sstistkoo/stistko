@@ -265,6 +265,7 @@ describe('snapPt', () => {
   });
 
   it('snap k středu úsečky', () => {
+    state.snapMidpoints = true;
     state.objects = [
       { type: 'line', x1: 0, y1: 0, x2: 20, y2: 0, id: 1, layer: 0 },
     ];
@@ -272,6 +273,7 @@ describe('snapPt', () => {
     const [rx, ry] = snapPt(10.5, 0.5);
     expect(rx).toBeCloseTo(10, 5);
     expect(ry).toBeCloseTo(0, 5);
+    state.snapMidpoints = false;
   });
 
   it('snap k bodům kružnice (střed)', () => {
