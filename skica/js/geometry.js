@@ -718,16 +718,24 @@ export function calculateAllIntersections() {
       const circs1 = getCircles(objs[i]),
         circs2 = getCircles(objs[j]);
 
-      // Bod ležící na jiném objektu = průsečík
+      // Bod ležící na jiném objektu = průsečík (přesune bod přesně na objekt)
       const PT_TOL = 0.5;
       if (objs[i].type === 'point' && objs[j].type !== 'point') {
         const near = getNearestPointOnObject(objs[j], objs[i].x, objs[i].y);
-        if (near && near.dist < PT_TOL) pts.push({ x: objs[i].x, y: objs[i].y });
+        if (near && near.dist < PT_TOL) {
+          objs[i].x = near.x;
+          objs[i].y = near.y;
+          pts.push({ x: near.x, y: near.y });
+        }
         continue;
       }
       if (objs[j].type === 'point' && objs[i].type !== 'point') {
         const near = getNearestPointOnObject(objs[i], objs[j].x, objs[j].y);
-        if (near && near.dist < PT_TOL) pts.push({ x: objs[j].x, y: objs[j].y });
+        if (near && near.dist < PT_TOL) {
+          objs[j].x = near.x;
+          objs[j].y = near.y;
+          pts.push({ x: near.x, y: near.y });
+        }
         continue;
       }
 
