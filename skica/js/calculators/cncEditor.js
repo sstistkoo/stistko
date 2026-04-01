@@ -219,22 +219,24 @@ class CNCParser {
 function buildEditorHTML() {
   return `
 <div class="cne-layout">
+  <div class="cne-sn-bar">SINUMERIK 840D sl &mdash; Program Editor</div>
   <div class="cne-toolbar">
     <div class="cne-toolbar-left">
       <button class="cne-tb-btn" data-act="sidebar" title="Soubory">☰</button>
       <span class="cne-filename" data-el="filename">—</span>
     </div>
     <div class="cne-toolbar-right">
-      <button class="cne-tb-btn cne-tb-new" data-act="new" title="Nový program">＋</button>
-      <button class="cne-tb-btn" data-act="copy" title="Kopírovat do schránky">📋</button>
-      <button class="cne-tb-btn" data-act="download" title="Stáhnout soubor">⬇</button>
-      <button class="cne-tb-btn" data-act="import" title="Import balíčku">📂</button>
-      <button class="cne-tb-btn" data-act="export" title="Export balíčku">📦</button>
-      <button class="cne-tb-btn" data-act="renum" title="Přečíslovat N-bloky">🔢</button>
-      <button class="cne-tb-btn cne-conv" data-act="convAbs" data-el="convAbsBtn" title="Převést na absolutní (G90)">ABS</button>
-      <button class="cne-tb-btn cne-conv" data-act="convInc" data-el="convIncBtn" title="Převést na přírůstkové (G91)">INC</button>
+      <button class="cne-tb-btn cne-tb-new cne-hide-m" data-act="new" title="Nový program">＋</button>
+      <button class="cne-tb-btn cne-hide-m" data-act="copy" title="Kopírovat do schránky">📋</button>
+      <button class="cne-tb-btn cne-hide-m" data-act="download" title="Stáhnout soubor">⬇</button>
+      <button class="cne-tb-btn cne-hide-m" data-act="import" title="Import balíčku">📂</button>
+      <button class="cne-tb-btn cne-hide-m" data-act="export" title="Export balíčku">📦</button>
+      <button class="cne-tb-btn cne-hide-m" data-act="renum" title="Přečíslovat N-bloky">🔢</button>
+      <button class="cne-tb-btn cne-conv cne-hide-m" data-act="convAbs" data-el="convAbsBtn" title="Převést na absolutní (G90)">ABS</button>
+      <button class="cne-tb-btn cne-conv cne-hide-m" data-act="convInc" data-el="convIncBtn" title="Převést na přírůstkové (G91)">INC</button>
       <button class="cne-tb-btn cne-status" data-act="validate" data-el="statusBtn" title="Validace">●</button>
-      <button class="cne-tb-btn" data-act="settings" title="Nastavení parseru">⚙</button>
+      <button class="cne-tb-btn cne-hide-m" data-act="settings" title="Nastavení parseru">⚙</button>
+      <button class="cne-tb-btn cne-menu-btn" data-act="menu" title="Menu">⋮</button>
     </div>
   </div>
 
@@ -288,6 +290,29 @@ function buildEditorHTML() {
     <button class="cne-qb accent" data-ins="M17">M17</button>
     <button class="cne-qb red" data-inp="LIMS=">LIMS</button>
     <button class="cne-qb accent" data-ins="STOPRE">STOP</button>
+
+    <button class="cne-qb cne-kb-btn" data-act="keyboard" title="Zobrazit klávesnici">⌨</button>
+  </div>
+
+  <!-- Menu modal (mobile full actions) -->
+  <div class="cne-inner-modal" data-el="menuModal" style="display:none">
+    <div class="cne-im-card cne-menu-card">
+      <div class="cne-im-title">Nástroje editoru</div>
+      <div class="cne-menu-list">
+        <button class="cne-menu-item" data-act="new"><span class="cne-mi-icon green">＋</span><span class="cne-mi-text"><b>Nový program</b><small>Vytvořit nový CNC soubor</small></span></button>
+        <button class="cne-menu-item" data-act="copy"><span class="cne-mi-icon">📋</span><span class="cne-mi-text"><b>Kopírovat</b><small>Zkopírovat kód do schránky</small></span></button>
+        <button class="cne-menu-item" data-act="download"><span class="cne-mi-icon">⬇</span><span class="cne-mi-text"><b>Stáhnout</b><small>Stáhnout aktuální soubor</small></span></button>
+        <button class="cne-menu-item" data-act="import"><span class="cne-mi-icon">📂</span><span class="cne-mi-text"><b>Import balíčku</b><small>Načíst soubory z balíčku</small></span></button>
+        <button class="cne-menu-item" data-act="export"><span class="cne-mi-icon">📦</span><span class="cne-mi-text"><b>Export balíčku</b><small>Exportovat všechny soubory</small></span></button>
+        <div class="cne-menu-sep"></div>
+        <button class="cne-menu-item" data-act="renum"><span class="cne-mi-icon">🔢</span><span class="cne-mi-text"><b>Přečíslovat N-bloky</b><small>Přečíslování bloků N10, N20…</small></span></button>
+        <button class="cne-menu-item" data-act="convAbs"><span class="cne-mi-icon sn">ABS</span><span class="cne-mi-text"><b>Převést na absolutní</b><small>G91 → G90 souřadnice</small></span></button>
+        <button class="cne-menu-item" data-act="convInc"><span class="cne-mi-icon sn">INC</span><span class="cne-mi-text"><b>Převést na přírůstkové</b><small>G90 → G91 souřadnice</small></span></button>
+        <div class="cne-menu-sep"></div>
+        <button class="cne-menu-item" data-act="settings"><span class="cne-mi-icon">⚙</span><span class="cne-mi-text"><b>Nastavení validace</b><small>Pravidla kontroly programu</small></span></button>
+      </div>
+      <button class="cne-im-btn cancel" data-act="menuClose" style="margin-top:10px;width:100%">Zavřít</button>
+    </div>
   </div>
 
   <!-- Numpad modal -->
@@ -691,6 +716,11 @@ export function openCncEditor() {
   }
 
   // ── Clipboard ──────────────────────────────────────────────
+  function closeMenu() {
+    const mm = $('menuModal');
+    if (mm) mm.style.display = 'none';
+  }
+
   function copyToClipboard() {
     if (!editor.value) return;
     navigator.clipboard.writeText(editor.value).catch(() => {});
@@ -852,14 +882,14 @@ export function openCncEditor() {
     if (ab) {
       switch (ab.dataset.act) {
         case 'sidebar':   sidebarEl.classList.toggle('open'); break;
-        case 'new':       createNew(); break;
-        case 'download':  downloadFile(); break;
-        case 'import':    fileInput.click(); break;
-        case 'export':    handleExport(); break;
+        case 'new':       createNew(); closeMenu(); break;
+        case 'download':  downloadFile(); closeMenu(); break;
+        case 'import':    fileInput.click(); closeMenu(); break;
+        case 'export':    handleExport(); closeMenu(); break;
         case 'validate':  showValidation(); break;
-        case 'settings':  showSettings(); break;
-        case 'copy':      copyToClipboard(); break;
-        case 'renum':     $('renumModal').style.display = 'flex'; break;
+        case 'settings':  showSettings(); closeMenu(); break;
+        case 'copy':      copyToClipboard(); closeMenu(); break;
+        case 'renum':     closeMenu(); $('renumModal').style.display = 'flex'; break;
         case 'renumCancel': $('renumModal').style.display = 'none'; break;
         case 'renumOk': {
           const s = parseInt($('renumStart').value) || 10;
@@ -874,9 +904,12 @@ export function openCncEditor() {
           if (codeBeforeRenum) { editor.value = codeBeforeRenum; codeBeforeRenum = ''; onInput(); }
           $('renumModal').style.display = 'none';
           break;
-        case 'convAbs':   convertToAbsolute(); break;
-        case 'convInc':   convertToIncremental(); break;
+        case 'convAbs':   convertToAbsolute(); closeMenu(); break;
+        case 'convInc':   convertToIncremental(); closeMenu(); break;
         case 'backspace': doBackspace(); break;
+        case 'keyboard':  editor.focus(); break;
+        case 'menu':      $('menuModal').style.display = 'flex'; break;
+        case 'menuClose': $('menuModal').style.display = 'none'; break;
         case 'numCancel': numModal.style.display = 'none'; break;
         case 'numOk':     confirmNumpad(); break;
         case 'valClose':  valModal.style.display = 'none'; break;
