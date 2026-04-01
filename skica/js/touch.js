@@ -877,6 +877,8 @@ bridge.updatePolylineButtons = updatePolylineButtons;
     highlightElementAt(pointerX, pointerY);
   }
 
+  const spLabel = spEl.querySelector(".sp-label");
+
   function highlightElementAt(x, y) {
     // Zrušit předchozí highlight
     if (spHighlighted) {
@@ -884,6 +886,7 @@ bridge.updatePolylineButtons = updatePolylineButtons;
       spHighlighted.style.outlineOffset = "";
       spHighlighted = null;
     }
+    spLabel.style.display = "none";
     // Najít element pod pointerem (skrýt pointer, aby nebyl v cestě)
     spEl.style.display = "none";
     const el = document.elementFromPoint(x, y);
@@ -894,6 +897,12 @@ bridge.updatePolylineButtons = updatePolylineButtons;
         clickable.style.outline = "2px solid #f9e2af";
         clickable.style.outlineOffset = "1px";
         spHighlighted = clickable;
+        // Zobrazit tooltip z title nebo aria-label
+        const tip = clickable.getAttribute("title") || clickable.getAttribute("aria-label");
+        if (tip) {
+          spLabel.textContent = tip;
+          spLabel.style.display = "block";
+        }
       }
     }
   }
