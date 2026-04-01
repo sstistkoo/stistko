@@ -1816,6 +1816,7 @@ export function resetHint() {
     filletChamfer: "Klepněte na první úsečku – zaoblení nebo zkosení",
     mirror: "Vyberte objekty pro zrcadlení (Shift+M)",
     boolean: "Klikněte na první uzavřenou konturu",
+    circularArray: "Klepněte na objekt pro kruhové pole",
   };
   setHint(hints[state.tool] || "");
 }

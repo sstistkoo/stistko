@@ -1569,6 +1569,32 @@ export function rotateObject(obj, cx, cy, angle) {
   }
 }
 
+// ── Kruhové pole ──
+/**
+ * Vytvoří kopie objektu rozmístěné po kruhu kolem středu [cx,cy].
+ * @param {import('./types.js').DrawObject} obj  zdrojový objekt
+ * @param {number} cx  střed rotace X
+ * @param {number} cy  střed rotace Y
+ * @param {number} count  počet kopií
+ * @param {number} totalAngleDeg  celkový úhel ve stupních
+ * @param {boolean} includeOriginal  zahrnout originál do počtu pozic
+ * @returns {import('./types.js').DrawObject[]}
+ */
+export function circularArray(obj, cx, cy, count, totalAngleDeg, includeOriginal) {
+  const copies = [];
+  const stepDeg = totalAngleDeg / count;
+  const numCopies = includeOriginal ? count - 1 : count;
+  for (let i = 1; i <= numCopies; i++) {
+    const copy = deepClone(obj);
+    delete copy.id;
+    const angleRad = (stepDeg * i) * Math.PI / 180;
+    rotateObject(copy, cx, cy, angleRad);
+    copy.name = `${obj.name || obj.type} (pole ${i})`;
+    copies.push(copy);
+  }
+  return copies;
+}
+
 // ── Škálování objektu ──
 /**
  * Škáluje objekt kolem bodu [cx,cy] o faktor.
