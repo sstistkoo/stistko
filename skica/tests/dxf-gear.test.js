@@ -23,7 +23,7 @@ import { exportDXF, parseDXF } from '../js/dxf.js';
 import { generateFullGearProfile } from '../js/tools/gearGenerator.js';
 
 describe('DXF gear export for Fusion 360', () => {
-  it('gear polyline exports with R12 format and required sections', () => {
+  it('gear polyline exports with AC1014 format for Fusion 360', () => {
     const profile = generateFullGearProfile(2, 20, 20, 0, 20, 0, 0);
     const gearObj = {
       type: 'polyline',
@@ -33,15 +33,21 @@ describe('DXF gear export for Fusion 360', () => {
     };
     const dxf = exportDXF([gearObj]);
 
-    // Required sections
+    // Required sections (Fusion 360 format)
     expect(dxf).toContain('$ACADVER');
-    expect(dxf).toContain('AC1009');
-    expect(dxf).toContain('POLYLINE');
-    expect(dxf).toContain('VERTEX');
-    expect(dxf).toContain('SEQEND');
+    expect(dxf).toContain('AC1014');
+    expect(dxf).toContain('BLOCKS');
+    expect(dxf).toContain('*MODEL_SPACE');
+    expect(dxf).toContain('*PAPER_SPACE');
+    expect(dxf).toContain('OBJECTS');
+    expect(dxf).toContain('DICTIONARY');
+    expect(dxf).toContain('BLOCK_RECORD');
+    expect(dxf).toContain('AcDbEntity');
+    expect(dxf).toContain('LWPOLYLINE');
     expect(dxf).toContain('LTYPE');
     expect(dxf).toContain('LAYER');
     expect(dxf).toContain('STYLE');
+    expect(dxf).toContain('APPID');
   });
 
   it('gear DXF round-trips correctly', () => {
@@ -86,23 +92,12 @@ describe('DXF gear export for Fusion 360', () => {
     expect(bulgeLines.length).toBe(40);
   });
 
-  it('DXF export includes extrusion direction (group code 30)', () => {
-    const profile = generateFullGearProfile(2, 20, 20, 0, 20, 0, 0);
-    const gearObj = {
-      type: 'polyline',
-      vertices: profile.vertices,
-      bulges: profile.bulges,
-      closed: true,
-    };
-    const dxf = exportDXF([gearObj]);
-    // R12 POLYLINE uses Z coord (code 30)
-    const lines = dxf.split('\n');
-    const entIdx = lines.findIndex(l => l.trim() === 'ENTITIES');
-    let found30 = false;
-    for (let i = entIdx; i < lines.length; i++) {
-      if (lines[i].trim() === '30') { found30 = true; break; }
-    }
-    expect(found30).toBe(true);
+  it('DXF export includes extrusion direction (210/220/230) for circles', () => {
+    // Test s circle entity, která má extrusion direction
+    const dxf = exportDXF([{ type: 'circle', cx: 0, cy: 0, r: 10 }]);
+    expect(dxf).toContain('210');
+    expect(dxf).toContain('220');
+    expect(dxf).toContain('230');
   });
 
   it('round-trip preserves all bulge values', () => {
