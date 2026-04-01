@@ -517,16 +517,14 @@ describe('exportDXF', () => {
     expect(dxf).toContain('90.000000'); // endAngle
   });
 
-  it('exportuje obdélník jako POLYLINE', () => {
+  it('exportuje obdélník jako LWPOLYLINE', () => {
     const dxf = exportDXF([{ type: 'rect', x1: 0, y1: 0, x2: 100, y2: 50 }]);
-    expect(dxf).toContain('POLYLINE');
-    expect(dxf).toContain('VERTEX');
-    expect(dxf).toContain('SEQEND');
+    expect(dxf).toContain('LWPOLYLINE');
     // closed flag
     const lines = dxf.split('\n');
-    const polyIdx = lines.findIndex((l, i) => l.trim() === 'POLYLINE' && i > 0 && lines[i - 1].trim() === '0');
+    const lwIdx = lines.findIndex(l => l.trim() === 'LWPOLYLINE');
     let found70 = false;
-    for (let i = polyIdx + 1; i < lines.length; i++) {
+    for (let i = lwIdx + 1; i < lines.length; i++) {
       if (lines[i].trim() === '70') {
         expect(lines[i + 1].trim()).toBe('1');
         found70 = true;
@@ -544,14 +542,18 @@ describe('exportDXF', () => {
       closed: false,
     };
     const dxf = exportDXF([obj]);
-    expect(dxf).toContain('POLYLINE');
-    expect(dxf).toContain('VERTEX');
+    expect(dxf).toContain('LWPOLYLINE');
     expect(dxf).toContain('0.500000'); // bulge value
   });
 
   it('přeskakuje dimension objekty', () => {
     const dxf = exportDXF([{ type: 'line', x1: 0, y1: 0, x2: 10, y2: 10, isDimension: true }]);
-    expect(dxf).not.toContain('LINE');
+    // V ENTITIES sekci nesmí být žádná LINE entita
+    const lines = dxf.split('\n');
+    const entIdx = lines.findIndex(l => l.trim() === 'ENTITIES');
+    const endIdx = lines.findIndex((l, i) => i > entIdx && l.trim() === 'ENDSEC');
+    const entitySection = lines.slice(entIdx, endIdx).join('\n');
+    expect(entitySection).not.toContain('\n0\nLINE\n');
   });
 });
 
@@ -871,91 +873,112 @@ describe('exportDXF – vrstvy a barvy', () => {
 });
 
 // ════════════════════════════════════════
-// ── Export R12 compliance ──
+// ── Export AC1014 compliance (Fusion 360 format) ──
 // ════════════════════════════════════════
-describe('exportDXF – R12 compliance', () => {
-  it('entity má layer (kód 8)', () => {
+describe('exportDXF – AC1014 compliance', () => {
+  it('entity má handle (kód 5) a AcDb subclass marker', () => {
     const dxf = exportDXF([{ type: 'line', x1: 0, y1: 0, x2: 10, y2: 10 }]);
     const lines = dxf.split('\n');
     const lineIdx = lines.findIndex((l, i) => l.trim() === 'LINE' && i > 0 && lines[i - 1].trim() === '0');
     expect(lineIdx).toBeGreaterThan(-1);
-    // Layer code (kód 8) za entity type
-    expect(lines[lineIdx + 1].trim()).toBe('8');
+    // Handle (kód 5) hned za entity type
+    expect(lines[lineIdx + 1].trim()).toBe('5');
+    expect(lines[lineIdx + 2].trim()).toMatch(/^[0-9A-F]+$/);
+    // AcDbEntity marker
+    expect(dxf).toContain('AcDbEntity');
+    expect(dxf).toContain('AcDbLine');
   });
 
-  it('CIRCLE exportuje správně', () => {
+  it('CIRCLE má AcDbCircle subclass', () => {
     const dxf = exportDXF([{ type: 'circle', cx: 5, cy: 5, r: 3 }]);
-    expect(dxf).toContain('CIRCLE');
+    expect(dxf).toContain('AcDbCircle');
   });
 
-  it('ARC exportuje správně', () => {
+  it('ARC má AcDbCircle i AcDbArc subclass', () => {
     const dxf = exportDXF([{ type: 'arc', cx: 0, cy: 0, r: 10, startAngle: 0, endAngle: PI / 2 }]);
-    expect(dxf).toContain('ARC');
+    expect(dxf).toContain('AcDbCircle');
+    expect(dxf).toContain('AcDbArc');
   });
 
-  it('POLYLINE má VERTEX a SEQEND', () => {
+  it('LWPOLYLINE má AcDbPolyline subclass', () => {
     const dxf = exportDXF([{
       type: 'polyline',
       vertices: [{ x: 0, y: 0 }, { x: 10, y: 10 }],
       bulges: [0, 0], closed: false,
     }]);
-    expect(dxf).toContain('POLYLINE');
-    expect(dxf).toContain('VERTEX');
-    expect(dxf).toContain('SEQEND');
+    expect(dxf).toContain('AcDbPolyline');
   });
 
-  it('TEXT exportuje správně', () => {
+  it('TEXT má AcDbText subclass', () => {
     const dxf = exportDXF([{
       type: 'text', x: 0, y: 0, text: 'Test', fontSize: 10, rotation: 0,
     }]);
-    expect(dxf).toContain('TEXT');
+    expect(dxf).toContain('AcDbText');
   });
 
-  it('POINT exportuje správně', () => {
+  it('POINT má AcDbPoint subclass', () => {
     const dxf = exportDXF([{ type: 'point', x: 0, y: 0 }]);
-    expect(dxf).toContain('POINT');
+    expect(dxf).toContain('AcDbPoint');
   });
 
-  it('používá R12 formát (AC1009)', () => {
+  it('entity handles jsou unikátní', () => {
+    const dxf = exportDXF([
+      { type: 'point', x: 0, y: 0 },
+      { type: 'line', x1: 0, y1: 0, x2: 10, y2: 10 },
+      { type: 'circle', cx: 5, cy: 5, r: 3 },
+    ]);
+    const lines = dxf.split('\n');
+    // Sbírej handles jen z ENTITIES sekce
+    const entIdx = lines.findIndex(l => l.trim() === 'ENTITIES');
+    const endIdx = lines.findIndex((l, i) => i > entIdx && l.trim() === 'ENDSEC');
+    const handles = [];
+    for (let i = entIdx; i < endIdx - 1; i++) {
+      if (lines[i].trim() === '5') {
+        handles.push(lines[i + 1].trim());
+      }
+    }
+    const unique = new Set(handles);
+    expect(unique.size).toBe(handles.length);
+  });
+
+  it('obsahuje BLOCKS sekci s MODEL_SPACE a PAPER_SPACE', () => {
     const dxf = exportDXF([{ type: 'point', x: 0, y: 0 }]);
-    expect(dxf).toContain('AC1009');
-    // R12 nemá AcDb subclass markery
-    expect(dxf).not.toContain('AcDbEntity');
+    expect(dxf).toContain('BLOCKS');
+    expect(dxf).toContain('*MODEL_SPACE');
+    expect(dxf).toContain('*PAPER_SPACE');
+    expect(dxf).toContain('BLOCK_RECORD');
+  });
+
+  it('obsahuje OBJECTS sekci s DICTIONARY', () => {
+    const dxf = exportDXF([{ type: 'point', x: 0, y: 0 }]);
+    expect(dxf).toContain('OBJECTS');
+    expect(dxf).toContain('DICTIONARY');
+    expect(dxf).toContain('ACAD_GROUP');
+  });
+
+  it('používá AC1014 formát', () => {
+    const dxf = exportDXF([{ type: 'point', x: 0, y: 0 }]);
+    expect(dxf).toContain('AC1014');
   });
 });
 
 // ════════════════════════════════════════
-// ── Export HEADER bounding box ──
+// ── Export HEADER ──
 // ════════════════════════════════════════
-describe('exportDXF – bounding box', () => {
-  it('HEADER obsahuje $EXTMIN a $EXTMAX', () => {
+describe('exportDXF – HEADER', () => {
+  it('HEADER obsahuje $ACADVER a $INSUNITS', () => {
     const dxf = exportDXF([
       { type: 'line', x1: -50, y1: -30, x2: 150, y2: 80 },
     ]);
-    expect(dxf).toContain('$EXTMIN');
-    expect(dxf).toContain('$EXTMAX');
-    expect(dxf).toContain('-50.000000');
-    expect(dxf).toContain('-30.000000');
-    expect(dxf).toContain('150.000000');
-    expect(dxf).toContain('80.000000');
+    expect(dxf).toContain('$ACADVER');
+    expect(dxf).toContain('AC1014');
+    expect(dxf).toContain('$INSUNITS');
   });
 
-  it('HEADER obsahuje $LIMMIN a $LIMMAX', () => {
+  it('HEADER obsahuje $HANDSEED', () => {
     const dxf = exportDXF([{ type: 'point', x: 10, y: 20 }]);
-    expect(dxf).toContain('$LIMMIN');
-    expect(dxf).toContain('$LIMMAX');
-  });
-
-  it('bounding box pro kružnici zahrnuje poloměr', () => {
-    const dxf = exportDXF([{ type: 'circle', cx: 50, cy: 50, r: 25 }]);
-    expect(dxf).toContain('25.000000');  // EXTMIN x = 50-25
-    expect(dxf).toContain('75.000000');  // EXTMAX x = 50+25
-  });
-
-  it('prázdný export má výchozí bounding box', () => {
-    const dxf = exportDXF([]);
-    expect(dxf).toContain('$EXTMIN');
-    expect(dxf).toContain('$EXTMAX');
+    expect(dxf).toContain('$HANDSEED');
+    expect(dxf).toContain('FFFF');
   });
 });
 
@@ -991,13 +1014,17 @@ describe('exportDXF – Z souřadnice', () => {
 // ── Export tabulky ──
 // ════════════════════════════════════════
 describe('exportDXF – rozšířené tabulky', () => {
-  it('obsahuje CONTINUOUS LTYPE', () => {
+  it('obsahuje BYBLOCK a BYLAYER LTYPE', () => {
     const dxf = exportDXF([]);
+    expect(dxf).toContain('BYBLOCK');
+    expect(dxf).toContain('BYLAYER');
     expect(dxf).toContain('CONTINUOUS');
   });
 
-  it('obsahuje STYLE tabulku', () => {
+  it('obsahuje VIEW a UCS tabulky', () => {
     const dxf = exportDXF([]);
+    expect(dxf).toContain('VIEW');
+    expect(dxf).toContain('UCS');
     expect(dxf).toContain('STYLE');
     expect(dxf).toContain('STANDARD');
   });
