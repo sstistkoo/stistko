@@ -463,7 +463,7 @@ function copyCncToClipboard() {
     .catch(() => showToast("Nelze zkopírovat do schránky"));
 }
 
-document.getElementById("btnExport").addEventListener("click", () => {
+document.getElementById("btnExport")?.addEventListener("click", () => {
   runCncExport();
   copyCncToClipboard();
 });

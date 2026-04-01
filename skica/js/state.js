@@ -84,6 +84,8 @@ export const state = {
   machineType: 'soustruh',
   // Zobrazení osy X: 'radius' = skutečná hodnota, 'diameter' = ×2 (průměr)
   xDisplayMode: 'radius',
+  // Přesnost zobrazení souřadnic a kót (počet desetinných míst)
+  displayDecimals: 3,
   // Vrstvy
   layers: [
     { id: 0, name: 'Kontura', color: COLORS.primary, visible: true, locked: false },
@@ -356,9 +358,10 @@ export function fmtStatusCoords(wx, wy, extra = '') {
   const prefix = state.coordMode === 'inc' ? 'Δ' : '';
   const isKarusel = state.machineType === 'karusel';
   const xp = xPrefix();
+  const dec = state.displayDecimals;
   return isKarusel
-    ? `${prefix}${xp}X: ${displayX(d.x).toFixed(3)}   ${prefix}Z: ${d.y.toFixed(3)}${extra}`
-    : `${prefix}Z: ${d.x.toFixed(3)}   ${prefix}${xp}X: ${displayX(d.y).toFixed(3)}${extra}`;
+    ? `${prefix}${xp}X: ${displayX(d.x).toFixed(dec)}   ${prefix}Z: ${d.y.toFixed(dec)}${extra}`
+    : `${prefix}Z: ${d.x.toFixed(dec)}   ${prefix}${xp}X: ${displayX(d.y).toFixed(dec)}${extra}`;
 }
 
 /**
@@ -368,14 +371,15 @@ export function fmtStatusCoords(wx, wy, extra = '') {
  * @param {number} [decimals=3] - Počet desetinných míst
  * @returns {string}
  */
-export function fmtCoordLabel(wx, wy, decimals = 3) {
+export function fmtCoordLabel(wx, wy, decimals) {
+  const dec = decimals !== undefined ? decimals : state.displayDecimals;
   const d = toDisplayCoords(wx, wy);
   const pf = state.coordMode === 'inc' ? 'Δ' : '';
   const isK = state.machineType === 'karusel';
   const xp = xPrefix();
   return isK
-    ? `${pf}${xp}X${displayX(d.x).toFixed(decimals)} ${pf}Z${d.y.toFixed(decimals)}`
-    : `${pf}Z${d.x.toFixed(decimals)} ${pf}${xp}X${displayX(d.y).toFixed(decimals)}`;
+    ? `${pf}${xp}X${displayX(d.x).toFixed(dec)} ${pf}Z${d.y.toFixed(dec)}`
+    : `${pf}Z${d.x.toFixed(dec)} ${pf}${xp}X${displayX(d.y).toFixed(dec)}`;
 }
 
 /**

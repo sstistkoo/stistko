@@ -1480,7 +1480,7 @@ export function updateIntersectionList() {
     const _vv = fV(pt.y);
     const coordSpan = document.createElement("span");
     coordSpan.style.flex = "1";
-    coordSpan.textContent = `${_Hp}${_iH}=${_hv.toFixed(3)}  ${_Vp}${_iV}=${_vv.toFixed(3)}`;
+    coordSpan.textContent = `${_Hp}${_iH}=${_hv.toFixed(state.displayDecimals)}  ${_Vp}${_iV}=${_vv.toFixed(state.displayDecimals)}`;
     li.appendChild(coordSpan);
 
     // Číslo průsečíku
@@ -1491,7 +1491,7 @@ export function updateIntersectionList() {
 
     // Klik na text = kopírovat souřadnice
     coordSpan.addEventListener("click", () => {
-      const text = `${_Hp}${_iH}${_hv.toFixed(3)} ${_Vp}${_iV}${_vv.toFixed(3)}`;
+      const text = `${_Hp}${_iH}${_hv.toFixed(state.displayDecimals)} ${_Vp}${_iV}${_vv.toFixed(state.displayDecimals)}`;
       navigator.clipboard
         .writeText(text)
         .then(() => showToast(`Zkopírováno: ${text}`));
@@ -2817,4 +2817,169 @@ export async function checkFirstRunHelp() {
     setMeta('helpShown', '1');
   }
 }
+
+// ══════════════════════════════════════════════════════════════
+// ║  Nastavení – dialog s konfigurací aplikace                ║
+// ══════════════════════════════════════════════════════════════
+
+function showSettingsDialog() {
+  const bodyHTML = `
+    <div style="display:flex;flex-direction:column;gap:16px;min-width:300px;max-width:420px">
+
+      <!-- Přesnost zobrazení -->
+      <fieldset style="border:1px solid var(--ctp-surface1);border-radius:8px;padding:10px 12px;margin:0">
+        <legend style="color:var(--ctp-blue);font-size:13px;padding:0 6px">📐 Přesnost zobrazení</legend>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:4px">
+          <label style="flex:1;font-size:13px;color:var(--ctp-text)">Desetinná místa:</label>
+          <select id="settDecimals" style="padding:6px 10px;border-radius:6px;border:1px solid var(--ctp-surface1);background:var(--ctp-surface0);color:var(--ctp-text);font-size:14px">
+            <option value="0"${state.displayDecimals === 0 ? ' selected' : ''}>0 &nbsp;(1 mm)</option>
+            <option value="1"${state.displayDecimals === 1 ? ' selected' : ''}>1 &nbsp;(0.1 mm)</option>
+            <option value="2"${state.displayDecimals === 2 ? ' selected' : ''}>2 &nbsp;(0.01 mm)</option>
+            <option value="3"${state.displayDecimals === 3 ? ' selected' : ''}>3 &nbsp;(0.001 mm)</option>
+          </select>
+        </div>
+        <p style="margin:6px 0 0;font-size:11px;color:var(--ctp-subtext0)">Ovlivňuje kóty, průsečíky, souřadnice a status bar.</p>
+      </fieldset>
+
+      <!-- Typ stroje -->
+      <fieldset style="border:1px solid var(--ctp-surface1);border-radius:8px;padding:10px 12px;margin:0">
+        <legend style="color:var(--ctp-blue);font-size:13px;padding:0 6px">🔧 Typ stroje</legend>
+        <div style="display:flex;gap:8px;margin-top:4px">
+          <button class="calc-btn" id="settMachSoustruh" style="flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid ${state.machineType === 'soustruh' ? 'var(--ctp-green)' : 'var(--ctp-surface1)'};background:${state.machineType === 'soustruh' ? 'var(--ctp-green)' : 'var(--ctp-surface0)'};color:${state.machineType === 'soustruh' ? 'var(--ctp-base)' : 'var(--ctp-text)'}">
+            Soustruh<br><span style="font-size:11px;opacity:0.8">Z↔ X↕</span>
+          </button>
+          <button class="calc-btn" id="settMachKarusel" style="flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid ${state.machineType === 'karusel' ? 'var(--ctp-green)' : 'var(--ctp-surface1)'};background:${state.machineType === 'karusel' ? 'var(--ctp-green)' : 'var(--ctp-surface0)'};color:${state.machineType === 'karusel' ? 'var(--ctp-base)' : 'var(--ctp-text)'}">
+            Karusel<br><span style="font-size:11px;opacity:0.8">X↔ Z↕</span>
+          </button>
+        </div>
+      </fieldset>
+
+      <!-- Osa X -->
+      <fieldset style="border:1px solid var(--ctp-surface1);border-radius:8px;padding:10px 12px;margin:0">
+        <legend style="color:var(--ctp-blue);font-size:13px;padding:0 6px">📏 Zobrazení osy X</legend>
+        <div style="display:flex;gap:8px;margin-top:4px">
+          <button class="calc-btn" id="settXRadius" style="flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid ${state.xDisplayMode === 'radius' ? 'var(--ctp-green)' : 'var(--ctp-surface1)'};background:${state.xDisplayMode === 'radius' ? 'var(--ctp-green)' : 'var(--ctp-surface0)'};color:${state.xDisplayMode === 'radius' ? 'var(--ctp-base)' : 'var(--ctp-text)'}">
+            R – Poloměr
+          </button>
+          <button class="calc-btn" id="settXDiam" style="flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid ${state.xDisplayMode === 'diameter' ? 'var(--ctp-green)' : 'var(--ctp-surface1)'};background:${state.xDisplayMode === 'diameter' ? 'var(--ctp-green)' : 'var(--ctp-surface0)'};color:${state.xDisplayMode === 'diameter' ? 'var(--ctp-base)' : 'var(--ctp-text)'}">
+            ⌀ – Průměr
+          </button>
+        </div>
+      </fieldset>
+
+      <!-- Mřížka a snap -->
+      <fieldset style="border:1px solid var(--ctp-surface1);border-radius:8px;padding:10px 12px;margin:0">
+        <legend style="color:var(--ctp-blue);font-size:13px;padding:0 6px"># Mřížka a snap</legend>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:4px">
+          <label style="flex:1;font-size:13px;color:var(--ctp-text)">Velikost mřížky (mm):</label>
+          <input id="settGrid" type="number" min="0.1" max="100" step="0.1" value="${state.gridSize}"
+            style="width:70px;padding:6px 8px;border-radius:6px;border:1px solid var(--ctp-surface1);background:var(--ctp-surface0);color:var(--ctp-text);font-size:14px;text-align:center">
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:8px">
+          <label style="flex:1;font-size:13px;color:var(--ctp-text)">Úhlový snap krok (°):</label>
+          <input id="settAngleStep" type="number" min="1" max="90" step="1" value="${state.angleSnapStep}"
+            style="width:70px;padding:6px 8px;border-radius:6px;border:1px solid var(--ctp-surface1);background:var(--ctp-surface0);color:var(--ctp-text);font-size:14px;text-align:center">
+        </div>
+      </fieldset>
+
+      <!-- Projekty a CNC -->
+      <fieldset style="border:1px solid var(--ctp-surface1);border-radius:8px;padding:10px 12px;margin:0">
+        <legend style="color:var(--ctp-blue);font-size:13px;padding:0 6px">📂 Projekty a export</legend>
+        <div style="display:flex;gap:8px;margin-top:4px">
+          <button class="calc-btn" id="settProjects" style="flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;background:var(--ctp-surface0);color:var(--ctp-text);border:1px solid var(--ctp-surface1)">
+            📁 Projekty
+          </button>
+          <button class="calc-btn" id="settCNC" style="flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;background:var(--ctp-surface0);color:var(--ctp-text);border:1px solid var(--ctp-surface1)">
+            📋 CNC Export
+          </button>
+        </div>
+      </fieldset>
+
+    </div>`;
+
+  const overlay = makeOverlay('settings', '⚙️ Nastavení', bodyHTML, 'cnc-window');
+  if (!overlay) return;
+
+  // ── Přesnost zobrazení ──
+  overlay.querySelector('#settDecimals').addEventListener('change', (e) => {
+    state.displayDecimals = parseInt(e.target.value);
+    renderAll();
+    showToast(`Přesnost: ${state.displayDecimals} des. míst`);
+  });
+
+  // ── Typ stroje ──
+  function updateMachBtns() {
+    const sBtn = overlay.querySelector('#settMachSoustruh');
+    const kBtn = overlay.querySelector('#settMachKarusel');
+    const activeStyle = 'border-color:var(--ctp-green);background:var(--ctp-green);color:var(--ctp-base)';
+    const inactiveStyle = 'border-color:var(--ctp-surface1);background:var(--ctp-surface0);color:var(--ctp-text)';
+    sBtn.style.cssText = `flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid transparent;${state.machineType === 'soustruh' ? activeStyle : inactiveStyle}`;
+    kBtn.style.cssText = `flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid transparent;${state.machineType === 'karusel' ? activeStyle : inactiveStyle}`;
+  }
+  overlay.querySelector('#settMachSoustruh').addEventListener('click', () => {
+    state.machineType = 'soustruh';
+    updateMachineTypeBtn();
+    updateMachBtns();
+    renderAll();
+  });
+  overlay.querySelector('#settMachKarusel').addEventListener('click', () => {
+    state.machineType = 'karusel';
+    updateMachineTypeBtn();
+    updateMachBtns();
+    renderAll();
+  });
+
+  // ── Osa X ──
+  function updateXBtns() {
+    const rBtn = overlay.querySelector('#settXRadius');
+    const dBtn = overlay.querySelector('#settXDiam');
+    const activeStyle = 'border-color:var(--ctp-green);background:var(--ctp-green);color:var(--ctp-base)';
+    const inactiveStyle = 'border-color:var(--ctp-surface1);background:var(--ctp-surface0);color:var(--ctp-text)';
+    rBtn.style.cssText = `flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid transparent;${state.xDisplayMode === 'radius' ? activeStyle : inactiveStyle}`;
+    dBtn.style.cssText = `flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid transparent;${state.xDisplayMode === 'diameter' ? activeStyle : inactiveStyle}`;
+  }
+  overlay.querySelector('#settXRadius').addEventListener('click', () => {
+    state.xDisplayMode = 'radius';
+    updateXDisplayBtn();
+    updateXBtns();
+    renderAll();
+  });
+  overlay.querySelector('#settXDiam').addEventListener('click', () => {
+    state.xDisplayMode = 'diameter';
+    updateXDisplayBtn();
+    updateXBtns();
+    renderAll();
+  });
+
+  // ── Mřížka ──
+  overlay.querySelector('#settGrid').addEventListener('change', (e) => {
+    const val = parseFloat(e.target.value);
+    if (val > 0 && val <= 100) {
+      state.gridSize = val;
+      renderAll();
+    }
+  });
+
+  // ── Úhlový snap ──
+  overlay.querySelector('#settAngleStep').addEventListener('change', (e) => {
+    const val = parseInt(e.target.value);
+    if (val >= 1 && val <= 90) {
+      state.angleSnapStep = val;
+    }
+  });
+
+  // ── Projekty ──
+  overlay.querySelector('#settProjects').addEventListener('click', () => {
+    overlay.remove();
+    if (bridge.showProjectsDialog) bridge.showProjectsDialog();
+  });
+
+  // ── CNC Export ──
+  overlay.querySelector('#settCNC').addEventListener('click', () => {
+    overlay.remove();
+    if (bridge.runCncExport) bridge.runCncExport();
+  });
+}
+
+document.getElementById('btnSettings')?.addEventListener('click', showSettingsDialog);
 
