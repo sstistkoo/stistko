@@ -153,12 +153,15 @@ if ("serviceWorker" in navigator) {
       .register("./sw.js", { updateViaCache: 'none' })
       .then((reg) => {
         console.log("SW: Registrován");
+        // Pravidelně kontrolovat aktualizace SW (každých 60s)
+        setInterval(() => reg.update(), 60000);
         reg.addEventListener('updatefound', () => {
           const newWorker = reg.installing;
           if (!newWorker) return;
           newWorker.addEventListener('statechange', () => {
             if (newWorker.state === 'activated' && navigator.serviceWorker.controller) {
-              showToast('Nová verze dostupná – obnovte stránku (F5)', 5000);
+              showToast('Aktualizace... stránka se obnoví', 2000);
+              setTimeout(() => location.reload(), 2000);
             }
           });
         });
