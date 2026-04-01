@@ -14,7 +14,7 @@ import { saveProject, showExportImageDialog, showProjectsDialog, showSaveAsDialo
 import { bulgeToArc, deepClone } from './utils.js';
 import { bridge } from './bridge.js';
 import { updateAssociativeDimensions } from './dialogs/dimension.js';
-import { handleTangentClick, tangentFromSelection, handleOffsetClick, offsetFromSelection, handleTrimClick, trimFromSelection, handleExtendClick, extendFromSelection, handleFilletClick, filletFromSelection, handleChamferClick, chamferFromSelection, handlePerpClick, perpFromSelection, handleHorizontalClick, horizontalFromSelection, handleParallelClick, parallelFromSelection, handleDimensionClick, handleSnapPointClick, handleMoveClick, handleLineClick, handleMeasureClick, handleCircleClick, handleArcClick, handleRectClick, handlePolylineClick, measureSelection, handleTextClick, handleGearClick, resetGearState, handleAnchorClick, removeAnchorsForObject, removeAnchorAt, hasAnchoredPoint, cleanupOrphanAnchors, handleBreakClick, handleCenterMarkClick, centerMarkFromSelection, handleScaleClick, scaleFromSelection, handleFilletChamferClick, filletChamferFromSelection } from './tools/index.js';
+import { handleTangentClick, tangentFromSelection, handleOffsetClick, offsetFromSelection, handleTrimClick, trimFromSelection, handleExtendClick, extendFromSelection, handleFilletClick, filletFromSelection, handleChamferClick, chamferFromSelection, handlePerpClick, perpFromSelection, handleHorizontalClick, horizontalFromSelection, handleParallelClick, parallelFromSelection, handleDimensionClick, handleSnapPointClick, handleMoveClick, handleLineClick, handleMeasureClick, handleCircleClick, handleArcClick, handleRectClick, handlePolylineClick, measureSelection, handleTextClick, handleGearClick, resetGearState, handleAnchorClick, removeAnchorsForObject, removeAnchorAt, hasAnchoredPoint, cleanupOrphanAnchors, handleBreakClick, handleCenterMarkClick, centerMarkFromSelection, handleScaleClick, scaleFromSelection, handleFilletChamferClick, filletChamferFromSelection, handleBooleanClick, resetBooleanState } from './tools/index.js';
 import { getLineSegment } from './tools/helpers.js';
 import { showPostDrawPointDialog } from './dialogs/postDrawDialog.js';
 
@@ -285,6 +285,7 @@ document.addEventListener("keydown", (e) => {
     }
     resetDrawingState();
     resetGearState();
+    resetBooleanState();
     // Odstranit dočasný měřicí bod
     const mTempIdx = state.objects.findIndex(o => o.isMeasureTemp);
     if (mTempIdx !== -1) state.objects.splice(mTempIdx, 1);
@@ -798,6 +799,10 @@ export function handleCanvasClick(wx, wy) {
 
     case "anchor":
       handleAnchorClick(wx, wy);
+      break;
+
+    case "boolean":
+      handleBooleanClick(wx, wy);
       break;
 
     case "deleteObj": {
@@ -1414,14 +1419,15 @@ function startLinearArrayAction() {
   if (indices.length === 0) { showToast("Nejdříve vyberte objekt"); return; }
   const objs = indices.map(i => state.objects[i]);
 
-  showLinearArrayDialog(objs[0], (dx, dz, count) => {
+  showLinearArrayDialog(objs[0], (dx, dz, count, dx2, dz2, count2) => {
     for (const obj of objs) {
-      const copies = linearArray(obj, dx, dz, count);
+      const copies = linearArray(obj, dx, dz, count, dx2, dz2, count2);
       for (const copy of copies) {
         addObject(copy);
       }
     }
-    showToast(`Vytvořeno ${count} kopií${objs.length > 1 ? ` z ${objs.length} objektů` : ''}`);
+    const total = count2 > 0 ? (count + 1) * count2 - 1 : count;
+    showToast(`Vytvořeno ${total} kopií${objs.length > 1 ? ` z ${objs.length} objektů` : ''}`);
   });
 }
 
@@ -1443,6 +1449,7 @@ document.getElementById("btnDelete").addEventListener("click", () => {
   }
 });
 document.getElementById("btnRotate").addEventListener("click", startRotateAction);
+document.getElementById("btnLinearArray").addEventListener("click", startLinearArrayAction);
 
 // ── Double-click: dokončit konturu / vybrat segment ──
 drawCanvas.addEventListener("dblclick", (e) => {

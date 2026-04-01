@@ -1815,6 +1815,7 @@ export function resetHint() {
     scale: "Klepněte na objekt – otevře dialog škálování",
     filletChamfer: "Klepněte na první úsečku – zaoblení nebo zkosení",
     mirror: "Vyberte objekty pro zrcadlení (Shift+M)",
+    boolean: "Klikněte na první uzavřenou konturu",
   };
   setHint(hints[state.tool] || "");
 }

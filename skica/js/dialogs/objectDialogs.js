@@ -129,19 +129,36 @@ export function showMirrorDialog(obj, callback) {
 // ── Dialog pro lineární pole ──
 /**
  * @param {import('../types.js').DrawObject} obj
- * @param {function(number,number,number): void} callback  (dx, dz, count)
+ * @param {function(number,number,number,number,number,number): void} callback  (dx, dz, count, dx2, dz2, count2)
  */
 export function showLinearArrayDialog(obj, callback) {
+  const labels = axisLabels();
   const overlay = makeInputOverlay(`
     <div class="input-dialog">
       <h3>📏 Lineární pole</h3>
       <label>Objekt: ${obj.name || typeLabel(obj.type)}</label>
+      <div class="btn-row" style="margin-bottom:8px;gap:4px">
+        <button class="btn-ok arr-mode-btn active" data-mode="1d" style="flex:1;font-size:0.85em">1D (řada)</button>
+        <button class="btn-cancel arr-mode-btn" data-mode="2d" style="flex:1;font-size:0.85em">2D (mřížka)</button>
+      </div>
+      <div class="btn-row" style="margin-bottom:8px;gap:4px">
+        <button class="btn-ok arr-spacing-btn active" data-spacing="pitch" style="flex:1;font-size:0.85em">Rozteč</button>
+        <button class="btn-cancel arr-spacing-btn" data-spacing="total" style="flex:1;font-size:0.85em">Celková délka</button>
+      </div>
       <label>Počet kopií:</label>
       <input type="text" id="dlgArrayCount" value="5" inputmode="numeric">
-      <label>Posun Δ${axisLabels()[0]} (mm):</label>
+      <label id="lblArrayDX">Posun Δ${labels[0]} (mm):</label>
       <input type="text" id="dlgArrayDX" value="10" inputmode="decimal">
-      <label>Posun Δ${axisLabels()[1]} (mm):</label>
+      <label id="lblArrayDZ">Posun Δ${labels[1]} (mm):</label>
       <input type="text" id="dlgArrayDZ" value="0" inputmode="decimal">
+      <div id="arr2dFields" style="display:none">
+        <label>Počet řad (2. směr):</label>
+        <input type="text" id="dlgArrayCount2" value="3" inputmode="numeric">
+        <label id="lblArrayDX2">Posun Δ2${labels[0]} (mm):</label>
+        <input type="text" id="dlgArrayDX2" value="0" inputmode="decimal">
+        <label id="lblArrayDZ2">Posun Δ2${labels[1]} (mm):</label>
+        <input type="text" id="dlgArrayDZ2" value="10" inputmode="decimal">
+      </div>
       <div class="btn-row">
         <button class="btn-cancel btn-cancel-overlay">Zrušit</button>
         <button class="btn-ok" id="dlgArrayOk">Vytvořit</button>
@@ -149,14 +166,72 @@ export function showLinearArrayDialog(obj, callback) {
     </div>`);
   overlay.querySelector("#dlgArrayCount").focus();
 
+  let mode = '1d';
+  let spacingMode = 'pitch';
+  const fields2d = overlay.querySelector("#arr2dFields");
+
+  // Mode toggle: 1D / 2D
+  overlay.querySelectorAll(".arr-mode-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      overlay.querySelectorAll(".arr-mode-btn").forEach(b => {
+        b.classList.toggle("active", b === btn);
+        b.className = b === btn ? 'btn-ok arr-mode-btn active' : 'btn-cancel arr-mode-btn';
+      });
+      mode = btn.dataset.mode;
+      fields2d.style.display = mode === '2d' ? '' : 'none';
+      updateSpacingLabels();
+    });
+  });
+
+  // Spacing toggle: pitch / total
+  function updateSpacingLabels() {
+    const pitchLabel = spacingMode === 'pitch' ? 'Posun' : 'Celk. délka';
+    overlay.querySelector("#lblArrayDX").textContent = `${pitchLabel} Δ${labels[0]} (mm):`;
+    overlay.querySelector("#lblArrayDZ").textContent = `${pitchLabel} Δ${labels[1]} (mm):`;
+    if (mode === '2d') {
+      overlay.querySelector("#lblArrayDX2").textContent = `${pitchLabel} Δ2${labels[0]} (mm):`;
+      overlay.querySelector("#lblArrayDZ2").textContent = `${pitchLabel} Δ2${labels[1]} (mm):`;
+    }
+  }
+  overlay.querySelectorAll(".arr-spacing-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      overlay.querySelectorAll(".arr-spacing-btn").forEach(b => {
+        b.classList.toggle("active", b === btn);
+        b.className = b === btn ? 'btn-ok arr-spacing-btn active' : 'btn-cancel arr-spacing-btn';
+      });
+      spacingMode = btn.dataset.spacing;
+      updateSpacingLabels();
+    });
+  });
+
   function accept() {
     const count = parseInt(overlay.querySelector("#dlgArrayCount").value);
-    const dx = safeEvalMath(overlay.querySelector("#dlgArrayDX").value);
-    const dz = safeEvalMath(overlay.querySelector("#dlgArrayDZ").value);
+    let dx = safeEvalMath(overlay.querySelector("#dlgArrayDX").value);
+    let dz = safeEvalMath(overlay.querySelector("#dlgArrayDZ").value);
     if (isNaN(count) || count < 1) { showToast("Zadejte kladný počet"); return; }
     if (isNaN(dx) && isNaN(dz)) { showToast("Zadejte posun"); return; }
+    dx = dx || 0;
+    dz = dz || 0;
+
+    if (spacingMode === 'total' && count > 1) {
+      dx = dx / (count);
+      dz = dz / (count);
+    }
+
+    let dx2 = 0, dz2 = 0, count2 = 0;
+    if (mode === '2d') {
+      count2 = parseInt(overlay.querySelector("#dlgArrayCount2").value);
+      dx2 = safeEvalMath(overlay.querySelector("#dlgArrayDX2").value) || 0;
+      dz2 = safeEvalMath(overlay.querySelector("#dlgArrayDZ2").value) || 0;
+      if (isNaN(count2) || count2 < 1) { showToast("Zadejte kladný počet řad"); return; }
+      if (spacingMode === 'total' && count2 > 1) {
+        dx2 = dx2 / (count2 - 1);
+        dz2 = dz2 / (count2 - 1);
+      }
+    }
+
     overlay.remove();
-    callback(dx || 0, dz || 0, count);
+    callback(dx, dz, count, dx2, dz2, count2);
   }
   overlay.querySelector("#dlgArrayOk").addEventListener("click", accept);
   overlay.querySelectorAll("input").forEach(inp => {
