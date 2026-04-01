@@ -3775,9 +3775,25 @@ body {
 .cne-conv-active { color: var(--ctp-base); background: var(--ctp-yellow); }
 .cne-conv:disabled { opacity: .35; pointer-events: none; }
 
+/* ── Sinumerik 840D bar ─────────────────────────────────────── */
+.cne-sn-bar {
+  background: linear-gradient(90deg, #d4760a 0%, #e8a030 50%, #d4760a 100%);
+  color: #1a1a1a; font: 700 10px/1 "Consolas","Courier New",monospace;
+  text-transform: uppercase; letter-spacing: 1.5px;
+  padding: 3px 12px; text-align: center; flex-shrink: 0;
+  user-select: none;
+}
+
+/* ── Menu button (visible only on mobile) ───────────────────── */
+.cne-menu-btn { display: none; font-size: 20px !important; font-weight: 700; }
+
+/* ── Keyboard button ────────────────────────────────────────── */
+.cne-kb-btn { color: var(--ctp-yellow) !important; background: var(--ctp-mantle) !important; }
+
 /* ── Main area ──────────────────────────────────────────────── */
 .cne-main {
   flex: 1; display: flex; overflow: hidden; min-height: 0;
+  position: relative;
 }
 
 /* ── Sidebar ────────────────────────────────────────────────── */
@@ -4019,10 +4035,74 @@ body {
   color: var(--ctp-green); background: rgba(166,227,161,.15);
 }
 
+/* ── Menu modal ─────────────────────────────────────────────── */
+.cne-menu-card { min-width: 280px; max-width: 360px; }
+.cne-menu-list { display: flex; flex-direction: column; gap: 2px; }
+.cne-menu-item {
+  all: unset; cursor: pointer;
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 12px; border-radius: 8px;
+  transition: background .12s;
+}
+.cne-menu-item:hover, .cne-menu-item:active { background: var(--ctp-surface0); }
+.cne-mi-icon {
+  font-size: 18px; width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 8px; background: var(--ctp-surface0);
+  flex-shrink: 0;
+}
+.cne-mi-icon.green { color: var(--ctp-green); }
+.cne-mi-icon.sn {
+  font-size: 11px; font-weight: 700; letter-spacing: .5px;
+  color: var(--ctp-yellow); font-family: "Consolas",monospace;
+}
+.cne-mi-text {
+  display: flex; flex-direction: column; gap: 1px; text-align: left;
+}
+.cne-mi-text b { color: var(--ctp-text); font-size: 13px; font-weight: 600; }
+.cne-mi-text small { color: var(--ctp-subtext0); font-size: 11px; }
+.cne-menu-sep {
+  height: 1px; background: var(--ctp-surface1);
+  margin: 4px 8px;
+}
+
 /* ── Responsive ─────────────────────────────────────────────── */
 @media (max-width: 600px) {
   .cnc-editor-window { width: 100vw; height: 100vh; max-width: 100vw; max-height: 100vh; border-radius: 0; }
-  .cne-sidebar.open { width: 180px; }
-  .cne-quickbar { grid-template-columns: repeat(7, 1fr); gap: 2px; padding: 4px; }
-  .cne-qb { padding: 5px 1px; font-size: 12px; min-height: 28px; }
+  .cnc-editor-window .calc-titlebar { display: none; }
+  .cne-sn-bar { font-size: 9px; padding: 4px 8px; }
+
+  /* Toolbar: hide overflow buttons, show menu */
+  .cne-hide-m { display: none !important; }
+  .cne-menu-btn { display: flex !important; }
+  .cne-toolbar { padding: 4px 6px; gap: 4px; }
+  .cne-toolbar-left { min-width: 0; flex: 1; overflow: hidden; }
+  .cne-filename { font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 140px; display: inline-block; }
+  .cne-tb-btn { padding: 6px; font-size: 15px; }
+
+  /* Sidebar overlay style on mobile */
+  .cne-sidebar {
+    position: absolute; z-index: 5; top: 0; bottom: 0; left: 0;
+    box-shadow: 4px 0 16px rgba(0,0,0,.4);
+  }
+  .cne-sidebar.open { width: 200px; }
+
+  /* Quickbar: row flow, 6 columns, larger touch targets */
+  .cne-quickbar {
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-flow: row;
+    gap: 3px; padding: 4px;
+  }
+  .cne-qb { padding: 8px 2px; font-size: 13px; min-height: 36px; }
+
+  /* Line numbers narrower */
+  .cne-line-nums { width: 30px; font-size: 11px; padding: 8px 3px 8px 0; }
+
+  /* Editor text slightly smaller */
+  .cne-backdrop, .cne-textarea { font-size: 13px; line-height: 19px; padding: 8px 8px; }
+
+  /* Inner modals: fullwidth on mobile */
+  .cne-im-card { min-width: auto; max-width: calc(100vw - 32px); width: 100%; }
+  .cne-val-card { min-width: auto; max-width: calc(100vw - 32px); width: 100%; }
+  .cne-menu-card { min-width: auto; max-width: calc(100vw - 32px); width: 100%; }
 }
