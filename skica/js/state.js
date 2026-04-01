@@ -365,10 +365,10 @@ export function fmtStatusCoords(wx, wy, extra = '') {
  * Formátuje souřadnice pro canvas popisky (kóty, průsečíky, snap body).
  * @param {number} wx - World X
  * @param {number} wy - World Y
- * @param {number} [decimals=2] - Počet desetinných míst
+ * @param {number} [decimals=3] - Počet desetinných míst
  * @returns {string}
  */
-export function fmtCoordLabel(wx, wy, decimals = 2) {
+export function fmtCoordLabel(wx, wy, decimals = 3) {
   const d = toDisplayCoords(wx, wy);
   const pf = state.coordMode === 'inc' ? 'Δ' : '';
   const isK = state.machineType === 'karusel';
