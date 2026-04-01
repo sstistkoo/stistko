@@ -38,6 +38,7 @@ function _buildProjectData() {
     anchors: state.anchors,
     showObjectNumbers: state.showObjectNumbers,
     showIntersectionNumbers: state.showIntersectionNumbers,
+    displayDecimals: state.displayDecimals,
   };
 }
 
@@ -62,6 +63,7 @@ function _loadProjectData(data) {
   state.anchors = data.anchors || [];
   if (data.showObjectNumbers !== undefined) state.showObjectNumbers = data.showObjectNumbers;
   if (data.showIntersectionNumbers !== undefined) state.showIntersectionNumbers = data.showIntersectionNumbers;
+  if (data.displayDecimals !== undefined) state.displayDecimals = data.displayDecimals;
   state.selected = null;
   state.multiSelected.clear();
   state.selectedPoint = null;
@@ -316,3 +318,6 @@ export async function showProjectsDialog() {
 // ── Tlačítka ──
 document.getElementById("btnSave").addEventListener("click", saveProject);
 document.getElementById("btnProjects")?.addEventListener("click", () => showProjectsDialog());
+
+import { bridge } from '../bridge.js';
+bridge.showProjectsDialog = showProjectsDialog;

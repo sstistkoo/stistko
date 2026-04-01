@@ -672,7 +672,7 @@ function renderObjects() {
         ctx.setLineDash([]);
         ctx.font = `${labelSize}px Consolas`;
         ctx.fillStyle = COLORS.primary;
-        ctx.fillText(`∥ d=${dist.toFixed(2)}mm`, (sx1 + sx2) / 2 + 8, (sy1 + sy2) / 2 - 8);
+        ctx.fillText(`∥ d=${dist.toFixed(state.displayDecimals)}mm`, (sx1 + sx2) / 2 + 8, (sy1 + sy2) / 2 - 8);
       }
     }
     // Preview: Kóta (2 body)
@@ -695,7 +695,7 @@ function renderObjects() {
       ctx.fillStyle = COLORS.textSecondary;
       const angle = Math.atan2(sy2 - sy1, sx2 - sx1);
       const nx = -Math.sin(angle) * 14, ny = Math.cos(angle) * 14;
-      ctx.fillText(`${d.toFixed(2)}mm`, (sx1 + sx2) / 2 + nx, (sy1 + sy2) / 2 + ny);
+      ctx.fillText(`${d.toFixed(state.displayDecimals)}mm`, (sx1 + sx2) / 2 + nx, (sy1 + sy2) / 2 + ny);
     }
     ctx.setLineDash([]);
   }
@@ -1043,8 +1043,8 @@ function drawDimension(obj) {
       break;
     case "circle": {
       const [sx, sy] = worldToScreen(obj.cx, obj.cy);
-      const rText = `R${obj.r.toFixed(2)}`;
-      const dText = `⌀${(obj.r * 2).toFixed(2)}`;
+      const rText = `R${obj.r.toFixed(state.displayDecimals)}`;
+      const dText = `⌀${(obj.r * 2).toFixed(state.displayDecimals)}`;
       const rW = ctx.measureText(rText).width;
       const dW = ctx.measureText(dText).width;
       const r1 = resolveDimLabelPos(sx + 6, sy - 6, rW, dimSize);
@@ -1056,7 +1056,7 @@ function drawDimension(obj) {
     }
     case "arc": {
       const [sx, sy] = worldToScreen(obj.cx, obj.cy);
-      const rText = `R${obj.r.toFixed(2)}`;
+      const rText = `R${obj.r.toFixed(state.displayDecimals)}`;
       const rW = ctx.measureText(rText).width;
       const r1 = resolveDimLabelPos(sx + 6, sy - 6, rW, dimSize);
       ctx.fillText(rText, sx + 6, r1.y);
@@ -1071,12 +1071,12 @@ function drawDimension(obj) {
       const [sx2r, sy2r] = worldToScreen(rc[1].x, rc[1].y);
       const [sx3r, sy3r] = worldToScreen(rc[2].x, rc[2].y);
       ctx.fillText(
-        w.toFixed(2),
+        w.toFixed(state.displayDecimals),
         (sx1r + sx2r) / 2 - 15,
         Math.min(sy1r, sy2r) - 4,
       );
       ctx.fillText(
-        h.toFixed(2),
+        h.toFixed(state.displayDecimals),
         Math.max(sx2r, sx3r) + 4,
         (sy2r + sy3r) / 2 + 4,
       );
@@ -1103,7 +1103,7 @@ function drawDimension(obj) {
       }
       if (pn >= 1) {
         const [psx, psy] = worldToScreen(obj.vertices[0].x, obj.vertices[0].y);
-        ctx.fillText(`L${totalLen.toFixed(2)} [${pn}v]`, psx + 8, psy - 8);
+        ctx.fillText(`L${totalLen.toFixed(state.displayDecimals)} [${pn}v]`, psx + 8, psy - 8);
       }
       break;
     }
@@ -1231,7 +1231,7 @@ export function drawLine(obj) {
       const diam = (obj.dimRadius || 0) * 2;
       const mx = (sx1 + sx2) / 2;
       const my = (sy1 + sy2) / 2;
-      const labelText = `⌀${diam.toFixed(2)}`;
+      const labelText = `⌀${diam.toFixed(state.displayDecimals)}`;
       const angle = Math.atan2(sy2 - sy1, sx2 - sx1);
       let textAngle = angle;
       if (textAngle > Math.PI / 2) textAngle -= Math.PI;
@@ -1263,7 +1263,7 @@ export function drawLine(obj) {
       const radius = obj.dimRadius || Math.hypot(obj.x2 - obj.x1, obj.y2 - obj.y1);
       const mx = (sx1 + sx2) / 2;
       const my = (sy1 + sy2) / 2;
-      const labelText = `R${radius.toFixed(2)}`;
+      const labelText = `R${radius.toFixed(state.displayDecimals)}`;
       const angle = Math.atan2(sy2 - sy1, sx2 - sx1);
       let textAngle = angle;
       if (textAngle > Math.PI / 2) textAngle -= Math.PI;
@@ -1316,7 +1316,7 @@ export function drawLine(obj) {
     const len = Math.hypot(ox2 - ox1, oy2 - oy1);
     const mx = (sx1 + sx2) / 2;
     const my = (sy1 + sy2) / 2;
-    const labelText = len.toFixed(2);
+    const labelText = len.toFixed(state.displayDecimals);
     const textW = ctx.measureText(labelText).width;
     const textH = dimSize;
 

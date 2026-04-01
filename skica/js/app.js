@@ -64,6 +64,7 @@ async function tryAutoLoad() {
       state.anchors = data.anchors || [];
       if (data.showObjectNumbers !== undefined) state.showObjectNumbers = data.showObjectNumbers;
       if (data.showIntersectionNumbers !== undefined) state.showIntersectionNumbers = data.showIntersectionNumbers;
+      if (data.displayDecimals !== undefined) state.displayDecimals = data.displayDecimals;
       updateObjectList();
       updateProperties();
       updateLayerList();
@@ -94,6 +95,7 @@ setInterval(() => {
       anchors: state.anchors,
       showObjectNumbers: state.showObjectNumbers,
       showIntersectionNumbers: state.showIntersectionNumbers,
+      displayDecimals: state.displayDecimals,
     };
     setMeta('currentProjectData', data);
   }
