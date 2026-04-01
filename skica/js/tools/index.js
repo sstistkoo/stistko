@@ -29,3 +29,4 @@ export { handleScaleClick, scaleFromSelection } from './scaleClick.js';
 export { handleFilletChamferClick, filletChamferFromSelection } from './filletChamferClick.js';
 export { handleBooleanClick, resetBooleanState } from './booleanClick.js';
 export { handleCircularArrayClick } from './circularArrayClick.js';
+export { handleCopyPlaceClick, copyPlaceFromSelection, resetCopyPlaceState } from './copyPlaceClick.js';

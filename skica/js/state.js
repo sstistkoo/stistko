@@ -135,6 +135,9 @@ export function resetDrawingState() {
   state._mirrorObj = null;
   state._mirrorStep = null;
   state._mirrorAxisPoints = null;
+  // CopyPlace cleanup
+  state._copyPlaceObjects = null;
+  state._copyPlaceRef = null;
   // multiSelected se čistí při resetu (setTool si jej uloží pro move)
   state.multiSelected.clear();
   state.selectedPoint = null;
