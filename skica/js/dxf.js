@@ -419,47 +419,35 @@ function gc(code, value) {
   return code + '\n' + value;
 }
 
-function entityLines(obj, nextHandle) {
+function entityLines(obj) {
   const out = [];
   const layerName = obj.layerName || '0';
-  const aci = colorToAci(obj.color);
-
-  // Hlavička entity – formát AC1014 (Fusion 360 kompatibilní)
-  function entityHeader(entityType, acDbType) {
-    out.push(gc(0, entityType));
-    out.push(gc(5, nextHandle()));
-    out.push(gc(100, 'AcDbEntity'));
-    out.push(gc(8, layerName));
-    if (aci !== 7) out.push(gc(62, aci));
-    if (acDbType) out.push(gc(100, acDbType));
-  }
+  const fmt = n => n.toFixed(6);
 
   switch (obj.type) {
     case 'point':
-      entityHeader('POINT', 'AcDbPoint');
-      out.push(gc(10, obj.x.toFixed(6)), gc(20, obj.y.toFixed(6)), gc(30, '0'));
+      out.push(gc(0, 'POINT'), gc(8, layerName));
+      out.push(gc(10, fmt(obj.x)), gc(20, fmt(obj.y)), gc(30, '0'));
       break;
 
     case 'line':
     case 'constr':
       if (obj.isDimension) break;
-      entityHeader('LINE', 'AcDbLine');
-      out.push(gc(10, obj.x1.toFixed(6)), gc(20, obj.y1.toFixed(6)), gc(30, '0'));
-      out.push(gc(11, obj.x2.toFixed(6)), gc(21, obj.y2.toFixed(6)), gc(31, '0'));
+      out.push(gc(0, 'LINE'), gc(8, layerName));
+      out.push(gc(10, fmt(obj.x1)), gc(20, fmt(obj.y1)), gc(30, '0'));
+      out.push(gc(11, fmt(obj.x2)), gc(21, fmt(obj.y2)), gc(31, '0'));
       break;
 
     case 'circle':
-      entityHeader('CIRCLE', 'AcDbCircle');
-      out.push(gc(10, obj.cx.toFixed(6)), gc(20, obj.cy.toFixed(6)), gc(30, '0'));
-      out.push(gc(40, obj.r.toFixed(6)));
-      out.push(gc(210, '0'), gc(220, '0'), gc(230, '1'));
+      out.push(gc(0, 'CIRCLE'), gc(8, layerName));
+      out.push(gc(10, fmt(obj.cx)), gc(20, fmt(obj.cy)), gc(30, '0'));
+      out.push(gc(40, fmt(obj.r)));
       break;
 
     case 'arc': {
-      entityHeader('ARC', 'AcDbCircle');
-      out.push(gc(10, obj.cx.toFixed(6)), gc(20, obj.cy.toFixed(6)), gc(30, '0'));
-      out.push(gc(40, obj.r.toFixed(6)));
-      out.push(gc(100, 'AcDbArc'));
+      out.push(gc(0, 'ARC'), gc(8, layerName));
+      out.push(gc(10, fmt(obj.cx)), gc(20, fmt(obj.cy)), gc(30, '0'));
+      out.push(gc(40, fmt(obj.r)));
       // DXF ARC is always CCW; for CW arcs (ccw===false) swap start/end
       const dxfStart = obj.ccw === false ? obj.endAngle : obj.startAngle;
       const dxfEnd = obj.ccw === false ? obj.startAngle : obj.endAngle;
@@ -470,31 +458,31 @@ function entityLines(obj, nextHandle) {
 
     case 'rect': {
       const rc = getRectCorners(obj);
-      entityHeader('LWPOLYLINE', 'AcDbPolyline');
+      out.push(gc(0, 'LWPOLYLINE'), gc(8, layerName));
       out.push(gc(90, 4), gc(70, 1), gc(43, '0.0'));
       for (const c of rc) {
-        out.push(gc(10, c.x.toFixed(6)), gc(20, c.y.toFixed(6)));
+        out.push(gc(10, fmt(c.x)), gc(20, fmt(c.y)));
       }
       break;
     }
 
     case 'polyline':
-      entityHeader('LWPOLYLINE', 'AcDbPolyline');
+      out.push(gc(0, 'LWPOLYLINE'), gc(8, layerName));
       out.push(gc(90, obj.vertices.length));
       out.push(gc(70, obj.closed ? 1 : 0));
       out.push(gc(43, '0.0'));
       for (let i = 0; i < obj.vertices.length; i++) {
-        out.push(gc(10, obj.vertices[i].x.toFixed(6)));
-        out.push(gc(20, obj.vertices[i].y.toFixed(6)));
+        out.push(gc(10, fmt(obj.vertices[i].x)));
+        out.push(gc(20, fmt(obj.vertices[i].y)));
         if (obj.bulges && obj.bulges[i] && obj.bulges[i] !== 0) {
-          out.push(gc(42, obj.bulges[i].toFixed(6)));
+          out.push(gc(42, fmt(obj.bulges[i])));
         }
       }
       break;
 
     case 'text':
-      entityHeader('TEXT', 'AcDbText');
-      out.push(gc(10, obj.x.toFixed(6)), gc(20, obj.y.toFixed(6)), gc(30, '0'));
+      out.push(gc(0, 'TEXT'), gc(8, layerName));
+      out.push(gc(10, fmt(obj.x)), gc(20, fmt(obj.y)), gc(30, '0'));
       out.push(gc(40, (obj.fontSize || 14).toFixed(6)));
       out.push(gc(1, obj.text || ''));
       if (obj.rotation) out.push(gc(50, (obj.rotation * RAD2DEG).toFixed(6)));
@@ -507,8 +495,8 @@ function entityLines(obj, nextHandle) {
 }
 
 /**
- * Exportuje SKICA objekty do DXF textu (ASCII formát).
- * Formát AC1014 – kopíruje přesnou strukturu DXF souborů z Fusion 360.
+ * Exportuje SKICA objekty do DXF textu (minimální AC1009 formát).
+ * Stejný styl jako DXF-JSON konvertor – funguje ve Fusion 360.
  * @param {object[]} objects - pole SKICA objektů
  * @param {object[]} [layers] - volitelné pole vrstev [{id, name}]
  * @returns {string} DXF text
@@ -530,163 +518,18 @@ export function exportDXF(objects, layers) {
     layerName: layerMap[obj.layer] || '0',
   }));
 
-  // Sesbírej unikátní jména vrstev
-  const layerNames = [...new Set(enriched.map(o => o.layerName))];
-  if (!layerNames.includes('0')) layerNames.unshift('0');
-
-  let handleCounter = 0x100;
-  function nextHandle() {
-    return (handleCounter++).toString(16).toUpperCase();
-  }
-
-  // ── Výpočet bounding boxu pro $EXTMIN/$EXTMAX ──
-  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-  for (const obj of objects) {
-    switch (obj.type) {
-      case 'point':
-        minX = Math.min(minX, obj.x); minY = Math.min(minY, obj.y);
-        maxX = Math.max(maxX, obj.x); maxY = Math.max(maxY, obj.y);
-        break;
-      case 'line': case 'constr':
-        if (obj.isDimension) break;
-        minX = Math.min(minX, obj.x1, obj.x2); minY = Math.min(minY, obj.y1, obj.y2);
-        maxX = Math.max(maxX, obj.x1, obj.x2); maxY = Math.max(maxY, obj.y1, obj.y2);
-        break;
-      case 'circle':
-        minX = Math.min(minX, obj.cx - obj.r); minY = Math.min(minY, obj.cy - obj.r);
-        maxX = Math.max(maxX, obj.cx + obj.r); maxY = Math.max(maxY, obj.cy + obj.r);
-        break;
-      case 'arc':
-        minX = Math.min(minX, obj.cx - obj.r); minY = Math.min(minY, obj.cy - obj.r);
-        maxX = Math.max(maxX, obj.cx + obj.r); maxY = Math.max(maxY, obj.cy + obj.r);
-        break;
-      case 'rect':
-        minX = Math.min(minX, obj.x1, obj.x2); minY = Math.min(minY, obj.y1, obj.y2);
-        maxX = Math.max(maxX, obj.x1, obj.x2); maxY = Math.max(maxY, obj.y1, obj.y2);
-        break;
-      case 'polyline':
-        for (const v of obj.vertices) {
-          minX = Math.min(minX, v.x); minY = Math.min(minY, v.y);
-          maxX = Math.max(maxX, v.x); maxY = Math.max(maxY, v.y);
-        }
-        break;
-      case 'text':
-        minX = Math.min(minX, obj.x); minY = Math.min(minY, obj.y);
-        maxX = Math.max(maxX, obj.x); maxY = Math.max(maxY, obj.y);
-        break;
-    }
-  }
-  // Záchrana pro prázdný/minimální výkres
-  if (!isFinite(minX)) { minX = 0; minY = 0; maxX = 100; maxY = 100; }
-
-  // ── HEADER (AC1014 – Fusion 360 format) ──
+  // ── HEADER (AC1009 – minimální) ──
   out.push(gc(0, 'SECTION'), gc(2, 'HEADER'));
+  out.push(gc(9, '$ACADVER'), gc(1, 'AC1009'));
   out.push(gc(9, '$INSUNITS'), gc(70, 4));  // 4 = milimetry
-  out.push(gc(9, '$ACADVER'), gc(1, 'AC1014'));
-  out.push(gc(9, '$HANDSEED'), gc(5, 'FFFF'));
-  out.push(gc(0, 'ENDSEC'));
-
-  // ── TABLES ──
-  out.push(gc(0, 'SECTION'), gc(2, 'TABLES'));
-
-  // VPORT (prázdná)
-  out.push(gc(0, 'TABLE'), gc(2, 'VPORT'), gc(5, '8'), gc(100, 'AcDbSymbolTable'));
-  out.push(gc(0, 'ENDTAB'));
-
-  // LTYPE
-  out.push(gc(0, 'TABLE'), gc(2, 'LTYPE'), gc(5, '5'), gc(100, 'AcDbSymbolTable'));
-  out.push(gc(0, 'LTYPE'), gc(5, '14'));
-  out.push(gc(100, 'AcDbSymbolTableRecord'), gc(100, 'AcDbLinetypeTableRecord'));
-  out.push(gc(2, 'BYBLOCK'), gc(70, 0));
-  out.push(gc(0, 'LTYPE'), gc(5, '15'));
-  out.push(gc(100, 'AcDbSymbolTableRecord'), gc(100, 'AcDbLinetypeTableRecord'));
-  out.push(gc(2, 'BYLAYER'), gc(70, 0));
-  out.push(gc(0, 'LTYPE'), gc(5, '16'));
-  out.push(gc(100, 'AcDbSymbolTableRecord'), gc(100, 'AcDbLinetypeTableRecord'));
-  out.push(gc(2, 'CONTINUOUS'), gc(70, 0));
-  out.push(gc(0, 'ENDTAB'));
-
-  // LAYER
-  out.push(gc(0, 'TABLE'), gc(2, 'LAYER'), gc(5, '2'), gc(100, 'AcDbSymbolTable'), gc(70, layerNames.length));
-  for (const name of layerNames) {
-    out.push(gc(0, 'LAYER'), gc(5, '50'));
-    out.push(gc(100, 'AcDbSymbolTableRecord'), gc(100, 'AcDbLayerTableRecord'));
-    out.push(gc(2, name), gc(70, 0));
-    out.push(gc(62, 7), gc(6, 'CONTINUOUS'));
-  }
-  out.push(gc(0, 'ENDTAB'));
-
-  // STYLE
-  out.push(gc(0, 'TABLE'), gc(2, 'STYLE'), gc(5, '3'), gc(100, 'AcDbSymbolTable'), gc(70, 1));
-  out.push(gc(0, 'STYLE'), gc(5, '11'));
-  out.push(gc(100, 'AcDbSymbolTableRecord'), gc(100, 'AcDbTextStyleTableRecord'));
-  out.push(gc(2, 'STANDARD'), gc(70, 0));
-  out.push(gc(0, 'ENDTAB'));
-
-  // VIEW
-  out.push(gc(0, 'TABLE'), gc(2, 'VIEW'), gc(5, '6'), gc(100, 'AcDbSymbolTable'), gc(70, 0));
-  out.push(gc(0, 'ENDTAB'));
-
-  // UCS
-  out.push(gc(0, 'TABLE'), gc(2, 'UCS'), gc(5, '7'), gc(100, 'AcDbSymbolTable'), gc(70, 0));
-  out.push(gc(0, 'ENDTAB'));
-
-  // APPID
-  out.push(gc(0, 'TABLE'), gc(2, 'APPID'), gc(5, '9'), gc(100, 'AcDbSymbolTable'), gc(70, 2));
-  out.push(gc(0, 'APPID'), gc(5, '12'));
-  out.push(gc(100, 'AcDbSymbolTableRecord'), gc(100, 'AcDbRegAppTableRecord'));
-  out.push(gc(2, 'ACAD'), gc(70, 0));
-  out.push(gc(0, 'ENDTAB'));
-
-  // DIMSTYLE
-  out.push(gc(0, 'TABLE'), gc(2, 'DIMSTYLE'), gc(5, 'A'), gc(100, 'AcDbSymbolTable'), gc(70, 1));
-  out.push(gc(0, 'ENDTAB'));
-
-  // BLOCK_RECORD
-  out.push(gc(0, 'TABLE'), gc(2, 'BLOCK_RECORD'), gc(5, '1'), gc(100, 'AcDbSymbolTable'), gc(70, 1));
-  out.push(gc(0, 'BLOCK_RECORD'), gc(5, '1F'));
-  out.push(gc(100, 'AcDbSymbolTableRecord'), gc(100, 'AcDbBlockTableRecord'));
-  out.push(gc(2, '*MODEL_SPACE'));
-  out.push(gc(0, 'BLOCK_RECORD'), gc(5, '1B'));
-  out.push(gc(100, 'AcDbSymbolTableRecord'), gc(100, 'AcDbBlockTableRecord'));
-  out.push(gc(2, '*PAPER_SPACE'));
-  out.push(gc(0, 'ENDTAB'));
-
-  out.push(gc(0, 'ENDSEC'));
-
-  // ── BLOCKS ──
-  out.push(gc(0, 'SECTION'), gc(2, 'BLOCKS'));
-
-  out.push(gc(0, 'BLOCK'), gc(5, '20'));
-  out.push(gc(100, 'AcDbEntity'), gc(100, 'AcDbBlockBegin'));
-  out.push(gc(2, '*MODEL_SPACE'));
-  out.push(gc(0, 'ENDBLK'), gc(5, '21'));
-  out.push(gc(100, 'AcDbEntity'), gc(100, 'AcDbBlockEnd'));
-
-  out.push(gc(0, 'BLOCK'), gc(5, '1C'));
-  out.push(gc(100, 'AcDbEntity'), gc(100, 'AcDbBlockBegin'));
-  out.push(gc(2, '*PAPER_SPACE'));
-  out.push(gc(0, 'ENDBLK'), gc(5, '1D'));
-  out.push(gc(100, 'AcDbEntity'), gc(100, 'AcDbBlockEnd'));
-
   out.push(gc(0, 'ENDSEC'));
 
   // ── ENTITIES ──
   out.push(gc(0, 'SECTION'), gc(2, 'ENTITIES'));
   for (const obj of enriched) {
-    const str = entityLines(obj, nextHandle);
+    const str = entityLines(obj);
     if (str.length > 0) out.push(str);
   }
-  out.push(gc(0, 'ENDSEC'));
-
-  // ── OBJECTS ──
-  out.push(gc(0, 'SECTION'), gc(2, 'OBJECTS'));
-  out.push(gc(0, 'DICTIONARY'), gc(5, 'C'), gc(100, 'AcDbDictionary'));
-  out.push(gc(3, 'ACAD_GROUP'), gc(350, 'D'));
-  out.push(gc(3, 'ACAD_MLINESTYLE'), gc(350, '17'));
-  out.push(gc(0, 'DICTIONARY'), gc(5, 'D'), gc(100, 'AcDbDictionary'));
-  out.push(gc(0, 'DICTIONARY'), gc(5, '1A'), gc(330, 'C'), gc(100, 'AcDbDictionary'));
-  out.push(gc(0, 'DICTIONARY'), gc(5, '17'), gc(100, 'AcDbDictionary'));
   out.push(gc(0, 'ENDSEC'));
 
   out.push(gc(0, 'EOF'));
