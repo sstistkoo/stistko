@@ -905,6 +905,18 @@
               row += "</div>";
               html += row;
               lineNum++;
+            } else if (obj.type === "rect") {
+              var row =
+                '<div class="gc-line"><span class="gc-num">' +
+                lineNum +
+                ".</span>";
+              row += '<span class="gc-cmd">G1</span> ';
+              row += '<span class="gc-coord">' +
+                Math.abs(obj.x2 - obj.x1).toFixed(1) + ' × ' +
+                Math.abs(obj.y2 - obj.y1).toFixed(1) + '</span>';
+              row += "</div>";
+              html += row;
+              lineNum++;
             }
           }
           html += "</div>";
@@ -994,12 +1006,79 @@
             setStatus("Načteno: " + f.name);
             analyzeDXF();
           } else if (ext === "json") {
-            document.getElementById("jsonContent").value = e.target.result;
-            setStatus("Načteno: " + f.name);
+            // Auto-detekce SimDxf formátu (points místo objects)
+            try {
+              var parsed = JSON.parse(e.target.result);
+              if (Array.isArray(parsed.points) && !Array.isArray(parsed.objects)) {
+                parsed = convertSimDxfToSkica(parsed);
+                document.getElementById("jsonContent").value = JSON.stringify(parsed, null, 2);
+                setStatus("Načteno (SimDxf formát zkonvertován): " + f.name);
+              } else {
+                document.getElementById("jsonContent").value = e.target.result;
+                setStatus("Načteno: " + f.name);
+              }
+            } catch(parseErr) {
+              document.getElementById("jsonContent").value = e.target.result;
+              setStatus("Načteno: " + f.name);
+            }
             drawPreviewFromJSON(true);
           }
         };
         r.readAsText(f);
+      }
+
+      /**
+       * Převádí SimDxf "points" formát na SKICA v3 objekty.
+       */
+      function convertSimDxfToSkica(data) {
+        var points = data.points || [];
+        var objects = [];
+        var idCounter = 1;
+
+        for (var i = 0; i < points.length - 1; i++) {
+          var curr = points[i];
+          var next = points[i + 1];
+          if (next.break) continue;
+
+          if (next.type === 'line') {
+            objects.push({
+              type: 'line', id: idCounter, name: 'Úsečka ' + idCounter,
+              x1: curr.x, y1: curr.z, x2: next.x, y2: next.z,
+              color: DEFAULT_COLOR, layer: 0,
+            });
+            idCounter++;
+          } else if (next.type === 'arc') {
+            var cx = next.cx, cy = next.cz, r = next.r;
+            var startAngle = Math.atan2(curr.z - cy, curr.x - cx);
+            var endAngle = Math.atan2(next.z - cy, next.x - cx);
+            objects.push({
+              type: 'arc', id: idCounter, name: 'Oblouk ' + idCounter,
+              cx: cx, cy: cy, r: r,
+              startAngle: next.cw ? endAngle : startAngle,
+              endAngle: next.cw ? startAngle : endAngle,
+              ccw: !next.cw,
+              color: DEFAULT_COLOR, layer: 0,
+            });
+            idCounter++;
+          }
+        }
+
+        return {
+          version: SKICA_VERSION,
+          objects: objects,
+          intersections: [],
+          nextId: idCounter,
+          gridSize: 10,
+          coordMode: 'abs',
+          machineType: (data.machineType || 'soustruh').toLowerCase(),
+          xDisplayMode: 'radius',
+          layers: [{ id: 0, name: 'Vrstva 0', color: DEFAULT_COLOR, visible: true }],
+          activeLayer: 0,
+          nextLayerId: 1,
+          showObjectNumbers: false,
+          showIntersectionNumbers: false,
+          anchors: [],
+        };
       }
 
       // ─── LOGIC ───
@@ -1379,6 +1458,21 @@
                 "\n20\n" +
                 fmt(obj.y * scale) +
                 "\n30\n0\n";
+            } else if (obj.type === "rect") {
+              var rx1 = obj.x1 * scale, ry1 = obj.y1 * scale;
+              var rx2 = obj.x2 * scale, ry2 = obj.y2 * scale;
+              dxf += "0\nLWPOLYLINE\n8\n0\n90\n4\n70\n1\n43\n0.0\n";
+              dxf += "10\n" + fmt(rx1) + "\n20\n" + fmt(ry1) + "\n";
+              dxf += "10\n" + fmt(rx2) + "\n20\n" + fmt(ry1) + "\n";
+              dxf += "10\n" + fmt(rx2) + "\n20\n" + fmt(ry2) + "\n";
+              dxf += "10\n" + fmt(rx1) + "\n20\n" + fmt(ry2) + "\n";
+            } else if (obj.type === "constr") {
+              dxf +=
+                "0\nLINE\n8\nCONSTR\n10\n" +
+                fmt(obj.x1 * scale) + "\n20\n" + fmt(obj.y1 * scale) +
+                "\n30\n0\n11\n" +
+                fmt(obj.x2 * scale) + "\n21\n" + fmt(obj.y2 * scale) +
+                "\n31\n0\n";
             }
           }
 
@@ -1501,7 +1595,7 @@
           minY = Infinity,
           maxY = -Infinity;
         objects.forEach(function (obj) {
-          if (obj.type === "line") {
+          if (obj.type === "line" || obj.type === "constr" || obj.type === "rect") {
             minX = Math.min(minX, obj.x1, obj.x2);
             maxX = Math.max(maxX, obj.x1, obj.x2);
             minY = Math.min(minY, obj.y1, obj.y2);
@@ -1664,8 +1758,53 @@
               ctx.fillStyle = "#74c7ec";
               ctx.fillText(idx, tx(obj.x) + 4, ty(obj.y) - 4);
             }
+          } else if (obj.type === "rect") {
+            ctx.beginPath();
+            ctx.moveTo(tx(obj.x1), ty(obj.y1));
+            ctx.lineTo(tx(obj.x2), ty(obj.y1));
+            ctx.lineTo(tx(obj.x2), ty(obj.y2));
+            ctx.lineTo(tx(obj.x1), ty(obj.y2));
+            ctx.closePath();
+            ctx.stroke();
+            if (showNums) {
+              ctx.fillStyle = "#74c7ec";
+              ctx.fillText(idx, (tx(obj.x1) + tx(obj.x2)) / 2 + 4, (ty(obj.y1) + ty(obj.y2)) / 2 - 4);
+            }
+          } else if (obj.type === "constr") {
+            ctx.save();
+            ctx.setLineDash([6, 4]);
+            ctx.strokeStyle = "#6c7086";
+            ctx.beginPath();
+            ctx.moveTo(tx(obj.x1), ty(obj.y1));
+            ctx.lineTo(tx(obj.x2), ty(obj.y2));
+            ctx.stroke();
+            ctx.restore();
+          } else if (obj.type === "text") {
+            ctx.fillStyle = obj.color || "#89b4fa";
+            var fs = Math.max(8, (obj.fontSize || 12) * view.k);
+            ctx.font = fs + "px monospace";
+            ctx.fillText(obj.text || "", tx(obj.x), ty(obj.y));
           }
         });
+
+        // Startovní bod (zelený čtverec)
+        if (objects.length > 0) {
+          var firstObj = objects[0];
+          var startX, startY;
+          if (firstObj.type === "line" || firstObj.type === "constr" || firstObj.type === "rect") {
+            startX = tx(firstObj.x1); startY = ty(firstObj.y1);
+          } else if (firstObj.type === "circle" || firstObj.type === "arc") {
+            startX = tx(firstObj.cx + firstObj.r); startY = ty(firstObj.cy);
+          } else if (firstObj.type === "polyline" && firstObj.vertices && firstObj.vertices.length > 0) {
+            startX = tx(firstObj.vertices[0].x); startY = ty(firstObj.vertices[0].y);
+          } else if (firstObj.type === "point") {
+            startX = tx(firstObj.x); startY = ty(firstObj.y);
+          }
+          if (startX !== undefined) {
+            ctx.fillStyle = "#a6e3a1";
+            ctx.fillRect(startX - 4, startY - 4, 8, 8);
+          }
+        }
 
         // Křížek na nule
         ctx.beginPath();
