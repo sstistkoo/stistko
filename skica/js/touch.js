@@ -901,7 +901,15 @@ bridge.updatePolylineButtons = updatePolylineButtons;
         const tip = clickable.getAttribute("title") || clickable.getAttribute("aria-label");
         if (tip) {
           spLabel.textContent = tip;
+          spLabel.style.left = "14px";
+          spLabel.style.right = "auto";
           spLabel.style.display = "block";
+          // Pokud přetéká přes pravý okraj, přepnout na levou stranu
+          const rect = spLabel.getBoundingClientRect();
+          if (rect.right > window.innerWidth - 4) {
+            spLabel.style.left = "auto";
+            spLabel.style.right = "14px";
+          }
         }
       }
     }
