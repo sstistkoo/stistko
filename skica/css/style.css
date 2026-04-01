@@ -3722,3 +3722,307 @@ body {
   line-height: 1.7;
 }
 .ex-code-block { max-height: 260px; overflow-y: auto; }
+
+/* ══════════════════════════════════════════════════════════════
+   CNC EDITOR (cnc-editor overlay)
+   ══════════════════════════════════════════════════════════════ */
+.cnc-editor-window {
+  width: 96vw; max-width: 1100px;
+  height: 94vh; max-height: 94vh;
+  position: relative;
+}
+.cnc-editor-window .calc-body {
+  padding: 0; display: flex; flex-direction: column;
+  overflow: hidden; flex: 1; min-height: 0;
+}
+
+/* ── Layout ─────────────────────────────────────────────────── */
+.cne-layout {
+  display: flex; flex-direction: column;
+  height: 100%; overflow: hidden;
+}
+
+/* ── Toolbar ────────────────────────────────────────────────── */
+.cne-toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 6px 10px; gap: 6px;
+  background: var(--ctp-mantle);
+  border-bottom: 1px solid var(--ctp-surface0);
+  flex-shrink: 0;
+}
+.cne-toolbar-left, .cne-toolbar-right {
+  display: flex; align-items: center; gap: 4px;
+}
+.cne-filename {
+  font-weight: 700; font-size: 14px;
+  color: var(--ctp-blue); cursor: pointer;
+  padding: 2px 6px; border-radius: 4px;
+}
+.cne-filename:hover { background: var(--ctp-surface0); }
+.cne-tb-btn {
+  all: unset; cursor: pointer;
+  padding: 4px 8px; border-radius: 6px;
+  font-size: 16px; text-align: center;
+  color: var(--ctp-subtext0);
+  transition: background .12s, color .12s;
+}
+.cne-tb-btn:hover { background: var(--ctp-surface1); color: var(--ctp-text); }
+.cne-tb-new { color: var(--ctp-green); font-weight: 700; }
+.cne-status { font-weight: 700; font-size: 13px; min-width: 24px; text-align: center; }
+.cne-st-ok  { color: var(--ctp-green); }
+.cne-st-err { color: var(--ctp-red); background: rgba(243,139,168,.12); border-radius: 6px; }
+.cne-conv { font-size: 11px; font-weight: 700; letter-spacing: .5px; }
+.cne-conv-active { color: var(--ctp-base); background: var(--ctp-yellow); }
+.cne-conv:disabled { opacity: .35; pointer-events: none; }
+
+/* ── Main area ──────────────────────────────────────────────── */
+.cne-main {
+  flex: 1; display: flex; overflow: hidden; min-height: 0;
+}
+
+/* ── Sidebar ────────────────────────────────────────────────── */
+.cne-sidebar {
+  width: 0; overflow: hidden;
+  background: var(--ctp-mantle);
+  border-right: 1px solid var(--ctp-surface0);
+  display: flex; flex-direction: column;
+  transition: width .2s;
+  flex-shrink: 0;
+}
+.cne-sidebar.open { width: 220px; }
+.cne-sb-section { padding: 8px; flex: 1; overflow-y: auto; }
+.cne-sb-title {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  color: var(--ctp-subtext0); letter-spacing: .5px;
+  margin-bottom: 6px; padding: 0 4px;
+}
+.cne-file-list, .cne-param-list { display: flex; flex-direction: column; gap: 2px; }
+
+/* File items */
+.cne-fi {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 5px 8px; border-radius: 6px; cursor: pointer;
+  font-size: 13px; color: var(--ctp-text);
+  transition: background .12s;
+}
+.cne-fi:hover { background: var(--ctp-surface0); }
+.cne-fi.active { background: var(--ctp-surface1); border-left: 3px solid var(--ctp-blue); }
+.cne-fi-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: "Consolas","Courier New",monospace; }
+.cne-fi-del {
+  all: unset; cursor: pointer; font-size: 11px;
+  color: var(--ctp-overlay0); padding: 2px 4px; border-radius: 4px;
+}
+.cne-fi-del:hover { color: var(--ctp-red); background: var(--ctp-surface0); }
+.cne-fi-empty { color: var(--ctp-subtext0); font-size: 12px; padding: 8px; text-align: center; font-style: italic; }
+
+/* Param items */
+.cne-pr {
+  display: flex; align-items: baseline; gap: 6px;
+  padding: 3px 6px; font-size: 12px;
+  font-family: "Consolas","Courier New",monospace;
+}
+.cne-pr-name { color: var(--ctp-mauve); font-weight: 700; min-width: 32px; }
+.cne-pr-val  { color: var(--ctp-yellow); }
+.cne-pr-src  { color: var(--ctp-subtext0); font-size: 10px; margin-left: auto; }
+
+/* ── Editor area ────────────────────────────────────────────── */
+.cne-editor-wrap {
+  flex: 1; display: flex; overflow: hidden; min-width: 0;
+  position: relative;
+}
+.cne-line-nums {
+  width: 44px; flex-shrink: 0;
+  padding: 10px 6px 10px 0;
+  text-align: right;
+  font: 14px/20px "Consolas","Courier New",monospace;
+  color: var(--ctp-overlay0);
+  background: var(--ctp-mantle);
+  border-right: 1px solid var(--ctp-surface0);
+  overflow: hidden; white-space: pre;
+  user-select: none;
+}
+.cne-editor-container {
+  position: relative; flex: 1; overflow: hidden;
+}
+.cne-backdrop, .cne-textarea {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  padding: 10px 12px;
+  font: 14px/20px "Consolas","Courier New",monospace;
+  white-space: pre; word-wrap: normal;
+  overflow: auto; box-sizing: border-box;
+  margin: 0; border: none;
+  tab-size: 4;
+}
+.cne-backdrop {
+  z-index: 1; pointer-events: none;
+  background: var(--ctp-base);
+  color: var(--ctp-text);
+}
+.cne-textarea {
+  z-index: 2;
+  color: transparent;
+  background: transparent;
+  caret-color: var(--ctp-text);
+  resize: none; outline: none;
+}
+.cne-textarea::selection { background: rgba(137,180,250,.25); color: transparent; }
+
+/* ── Syntax highlight classes ───────────────────────────────── */
+.hl-g       { color: var(--ctp-blue);   font-weight: 700; }
+.hl-m       { color: var(--ctp-pink);   font-weight: 700; }
+.hl-coord   { color: var(--ctp-green); }
+.hl-val     { color: var(--ctp-yellow); }
+.hl-feed    { color: var(--ctp-teal);   font-weight: 700; }
+.hl-param   { color: var(--ctp-mauve); }
+.hl-comment { color: var(--ctp-overlay0); font-style: italic; }
+.hl-msg     { color: var(--ctp-peach); }
+.hl-block   { color: var(--ctp-overlay1); font-size: .9em; }
+.hl-logic   { color: var(--ctp-red);    font-weight: 700; }
+.hl-sub     { color: var(--ctp-lavender); font-weight: 700; }
+.hl-error   { text-decoration: underline wavy var(--ctp-red); cursor: help; }
+
+/* ── Quick bar ──────────────────────────────────────────────── */
+.cne-quickbar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  grid-auto-flow: column;
+  gap: 3px; padding: 6px 8px;
+  background: var(--ctp-mantle);
+  border-top: 1px solid var(--ctp-surface0);
+  flex-shrink: 0;
+}
+.cne-qb {
+  all: unset; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  padding: 6px 2px; border-radius: 6px;
+  font: 700 13px/1 "Consolas","Courier New",monospace;
+  color: var(--ctp-text);
+  background: var(--ctp-surface0);
+  border: 1px solid var(--ctp-surface1);
+  transition: background .1s, transform .08s;
+  min-height: 32px; text-align: center;
+}
+.cne-qb:active { transform: translateY(1px); background: var(--ctp-surface1); }
+.cne-qb.blue   { color: var(--ctp-blue); }
+.cne-qb.green  { color: var(--ctp-green); }
+.cne-qb.red    { color: var(--ctp-red); }
+.cne-qb.accent { color: var(--ctp-sapphire); background: var(--ctp-mantle); }
+.cne-qb.del    { color: var(--ctp-red); background: rgba(243,139,168,.1); }
+.cne-qb.gray   { color: var(--ctp-subtext0); }
+
+/* ── Inner modals ───────────────────────────────────────────── */
+.cne-inner-modal {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,.45);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 10;
+}
+.cne-im-card {
+  background: var(--ctp-base);
+  border: 1px solid var(--ctp-surface1);
+  border-radius: 10px; padding: 14px;
+  min-width: 280px; max-width: 360px;
+  max-height: 70vh; overflow-y: auto;
+  box-shadow: 0 8px 24px rgba(0,0,0,.4);
+}
+.cne-im-title {
+  font-weight: 700; font-size: 14px;
+  color: var(--ctp-blue); margin-bottom: 10px;
+}
+.cne-im-input {
+  width: 100%; padding: 8px 12px; box-sizing: border-box;
+  background: var(--ctp-mantle);
+  border: 1px solid var(--ctp-surface1);
+  color: var(--ctp-text); border-radius: 6px;
+  font: 700 18px "Consolas",monospace;
+  text-align: center; margin-bottom: 8px; outline: none;
+}
+.cne-im-input:focus { border-color: var(--ctp-blue); }
+.cne-im-helpers {
+  max-height: 120px; overflow-y: auto;
+  margin-bottom: 8px;
+}
+.cne-helper {
+  padding: 5px 8px; font-size: 12px;
+  color: var(--ctp-subtext0); cursor: pointer;
+  border-radius: 4px; transition: background .1s;
+}
+.cne-helper:hover { background: var(--ctp-surface0); color: var(--ctp-text); }
+.cne-helper b { color: var(--ctp-blue); margin-right: 6px; }
+
+/* Numpad */
+.cne-numpad {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 4px; margin-bottom: 10px;
+}
+.cne-np {
+  all: unset; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  padding: 10px; border-radius: 6px;
+  font: 700 16px "Consolas",monospace;
+  color: var(--ctp-text);
+  background: var(--ctp-surface0);
+  border: 1px solid var(--ctp-surface1);
+  transition: background .1s;
+}
+.cne-np:active { background: var(--ctp-surface1); }
+.cne-np.sign { color: var(--ctp-blue); background: var(--ctp-mantle); }
+
+.cne-im-actions { display: flex; gap: 6px; }
+.cne-im-btn {
+  all: unset; cursor: pointer;
+  flex: 1; padding: 8px; text-align: center;
+  font-size: 13px; font-weight: 600;
+  border-radius: 6px; transition: background .12s;
+}
+.cne-im-btn.cancel { color: var(--ctp-subtext0); background: var(--ctp-surface0); }
+.cne-im-btn.cancel:hover { background: var(--ctp-surface1); }
+.cne-im-btn.ok     { color: #fff; background: var(--ctp-blue); }
+.cne-im-btn.ok:hover { filter: brightness(1.1); }
+
+/* ── Validation rows ────────────────────────────────────────── */
+.cne-val-card { min-width: 320px; max-width: 460px; }
+.cne-val-list { display: flex; flex-direction: column; gap: 4px; max-height: 50vh; overflow-y: auto; }
+.cne-val-ok {
+  color: var(--ctp-green); font-weight: 700;
+  text-align: center; padding: 20px; font-size: 16px;
+}
+.cne-val-row {
+  display: flex; align-items: flex-start; gap: 6px;
+  padding: 6px 8px; border-radius: 6px;
+  font-size: 12px; cursor: pointer;
+  transition: background .12s;
+}
+.cne-val-row:hover { background: var(--ctp-surface0); }
+.cne-val-ic   { color: var(--ctp-yellow); flex-shrink: 0; }
+.cne-val-file { color: var(--ctp-blue); font-weight: 600; font-family: "Consolas",monospace; font-size: 11px; }
+.cne-val-line { color: var(--ctp-mauve); font-weight: 600; font-family: "Consolas",monospace; font-size: 11px; min-width: 28px; }
+.cne-val-msg  { color: var(--ctp-text); flex: 1; line-height: 1.3; }
+
+/* ── Settings rows ──────────────────────────────────────────── */
+.cne-cfg-list { display: flex; flex-direction: column; gap: 4px; }
+.cne-cfg-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 6px 8px; border-radius: 6px;
+  font-size: 13px; color: var(--ctp-text);
+  background: var(--ctp-surface0);
+}
+.cne-cfg-tog {
+  all: unset; cursor: pointer;
+  padding: 3px 10px; border-radius: 10px;
+  font-size: 11px; font-weight: 700;
+  color: var(--ctp-red); background: rgba(243,139,168,.15);
+  transition: all .15s;
+}
+.cne-cfg-tog.on {
+  color: var(--ctp-green); background: rgba(166,227,161,.15);
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .cnc-editor-window { width: 100vw; height: 100vh; max-width: 100vw; max-height: 100vh; border-radius: 0; }
+  .cne-sidebar.open { width: 180px; }
+  .cne-quickbar { grid-template-columns: repeat(7, 1fr); gap: 2px; padding: 4px; }
+  .cne-qb { padding: 5px 1px; font-size: 12px; min-height: 28px; }
+}
