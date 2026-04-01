@@ -2,7 +2,7 @@
 // ║  SKICA – Service Worker (PWA offline cache)                 ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-const CACHE_NAME = 'skica-v141';
+const CACHE_NAME = 'skica-v142';
 const ASSETS = [
   './',
   './index.html',
@@ -63,6 +63,7 @@ const ASSETS = [
   './js/tools/centerMarkClick.js',
   './js/tools/circleClick.js',
   './js/tools/circularArrayClick.js',
+  './js/tools/copyPlaceClick.js',
   './js/tools/dimensionClick.js',
   './js/tools/extendClick.js',
   './js/tools/filletClick.js',

@@ -5,7 +5,7 @@
 import { drawCanvas, ctx, worldToScreen, screenToWorld } from './canvas.js';
 import { state, toDisplayCoords, displayX, xPrefix, fmtCoordLabel } from './state.js';
 import { bridge } from './bridge.js';
-import { bulgeToArc, getRectCorners } from './utils.js';
+import { bulgeToArc, getRectCorners, deepClone } from './utils.js';
 import { projectPointToLine } from './geometry.js';
 import {
   COLORS, GRID_BASE_STEP, GRID_MIN_PX, LINE_WIDTH, LINE_WIDTH_SELECTED,
@@ -744,6 +744,76 @@ function renderObjects() {
     ctx.lineTo(mx, my);
     ctx.stroke();
     ctx.setLineDash([]);
+  }
+
+  // ── CopyPlace preview (ghost kopií) ──
+  if (state.tool === 'copyPlace' && state._copyPlaceRef && state._copyPlaceObjects) {
+    const dx = state.mouse.x - state._copyPlaceRef.x;
+    const dy = state.mouse.y - state._copyPlaceRef.y;
+    const [refSx, refSy] = worldToScreen(state._copyPlaceRef.x, state._copyPlaceRef.y);
+    const [curSx, curSy] = worldToScreen(state.mouse.x, state.mouse.y);
+
+    // Vodící čára od ref bodu ke kurzoru
+    ctx.save();
+    ctx.strokeStyle = 'rgba(250, 179, 135, 0.5)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([6, 4]);
+    ctx.beginPath();
+    ctx.moveTo(refSx, refSy);
+    ctx.lineTo(curSx, curSy);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Ref bod – kolečko
+    ctx.fillStyle = COLORS.preview;
+    ctx.beginPath();
+    ctx.arc(refSx, refSy, 4, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Ghost kopie objektů
+    ctx.strokeStyle = COLORS.preview;
+    ctx.fillStyle = COLORS.preview;
+    ctx.lineWidth = 1;
+    ctx.setLineDash(PREVIEW_DASH);
+    ctx.globalAlpha = 0.5;
+    for (const idx of state._copyPlaceObjects) {
+      const orig = state.objects[idx];
+      if (!orig) continue;
+      const ghost = deepClone(orig);
+      // Posunout ghost o vektor
+      switch (ghost.type) {
+        case 'point':
+          ghost.x += dx; ghost.y += dy; break;
+        case 'line': case 'constr':
+          ghost.x1 += dx; ghost.y1 += dy;
+          ghost.x2 += dx; ghost.y2 += dy; break;
+        case 'circle': case 'arc':
+          ghost.cx += dx; ghost.cy += dy; break;
+        case 'rect':
+          ghost.x1 += dx; ghost.y1 += dy;
+          ghost.x2 += dx; ghost.y2 += dy; break;
+        case 'polyline':
+          for (const v of ghost.vertices) { v.x += dx; v.y += dy; }
+          break;
+        case 'text':
+          ghost.x += dx; ghost.y += dy; break;
+      }
+      // Potlačit kótové popisky pro preview
+      ghost.isDimension = false;
+      ghost.isCoordLabel = false;
+      switch (ghost.type) {
+        case 'point': drawPoint(ghost); break;
+        case 'line': case 'constr': drawLine(ghost); break;
+        case 'circle': drawCircle(ghost); break;
+        case 'arc': drawArc(ghost); break;
+        case 'rect': drawRect(ghost, false, COLORS.preview); break;
+        case 'polyline': drawPolyline(ghost, false, COLORS.preview); break;
+        case 'text': drawText(ghost); break;
+      }
+    }
+    ctx.globalAlpha = 1;
+    ctx.setLineDash([]);
+    ctx.restore();
   }
 
   // Snap indikátor

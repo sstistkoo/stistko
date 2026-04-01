@@ -14,7 +14,7 @@ import { saveProject, showExportImageDialog, showProjectsDialog, showSaveAsDialo
 import { bulgeToArc, deepClone } from './utils.js';
 import { bridge } from './bridge.js';
 import { updateAssociativeDimensions } from './dialogs/dimension.js';
-import { handleTangentClick, tangentFromSelection, handleOffsetClick, offsetFromSelection, handleTrimClick, trimFromSelection, handleExtendClick, extendFromSelection, handleFilletClick, filletFromSelection, handleChamferClick, chamferFromSelection, handlePerpClick, perpFromSelection, handleHorizontalClick, horizontalFromSelection, handleParallelClick, parallelFromSelection, handleDimensionClick, handleSnapPointClick, handleMoveClick, handleLineClick, handleMeasureClick, handleCircleClick, handleArcClick, handleRectClick, handlePolylineClick, measureSelection, handleTextClick, handleGearClick, resetGearState, handleAnchorClick, removeAnchorsForObject, removeAnchorAt, hasAnchoredPoint, cleanupOrphanAnchors, handleBreakClick, handleCenterMarkClick, centerMarkFromSelection, handleScaleClick, scaleFromSelection, handleFilletChamferClick, filletChamferFromSelection, handleBooleanClick, resetBooleanState, handleCircularArrayClick } from './tools/index.js';
+import { handleTangentClick, tangentFromSelection, handleOffsetClick, offsetFromSelection, handleTrimClick, trimFromSelection, handleExtendClick, extendFromSelection, handleFilletClick, filletFromSelection, handleChamferClick, chamferFromSelection, handlePerpClick, perpFromSelection, handleHorizontalClick, horizontalFromSelection, handleParallelClick, parallelFromSelection, handleDimensionClick, handleSnapPointClick, handleMoveClick, handleLineClick, handleMeasureClick, handleCircleClick, handleArcClick, handleRectClick, handlePolylineClick, measureSelection, handleTextClick, handleGearClick, resetGearState, handleAnchorClick, removeAnchorsForObject, removeAnchorAt, hasAnchoredPoint, cleanupOrphanAnchors, handleBreakClick, handleCenterMarkClick, centerMarkFromSelection, handleScaleClick, scaleFromSelection, handleFilletChamferClick, filletChamferFromSelection, handleBooleanClick, resetBooleanState, handleCircularArrayClick, handleCopyPlaceClick, copyPlaceFromSelection, resetCopyPlaceState } from './tools/index.js';
 import { getLineSegment } from './tools/helpers.js';
 import { showPostDrawPointDialog } from './dialogs/postDrawDialog.js';
 
@@ -286,6 +286,7 @@ document.addEventListener("keydown", (e) => {
     resetDrawingState();
     resetGearState();
     resetBooleanState();
+    resetCopyPlaceState();
     // Odstranit dočasný měřicí bod
     const mTempIdx = state.objects.findIndex(o => o.isMeasureTemp);
     if (mTempIdx !== -1) state.objects.splice(mTempIdx, 1);
@@ -295,8 +296,8 @@ document.addEventListener("keydown", (e) => {
     state.multiSelected.clear();
     state.multiSelectedSegments.clear();
     state.selectedPoint = null;
-    // Escape z deleteObj módu → zpět na select
-    if (state.tool === 'deleteObj') setTool('select');
+    // Escape z deleteObj/copyPlace módu → zpět na select
+    if (state.tool === 'deleteObj' || state.tool === 'copyPlace') setTool('select');
     updateProperties();
     renderAll();
     resetHint();
@@ -412,7 +413,7 @@ document.addEventListener("keydown", (e) => {
   // B is only snapPoint when not drawing polyline
   if (e.key.toLowerCase() === 'b' && state.drawing && state.tool === 'polyline') {
     // handled separately below for bulge
-  } else if (!(e.shiftKey && ['m','n','g','a'].includes(e.key.toLowerCase())) && shortcuts[e.key.toLowerCase()]) {
+  } else if (!(e.shiftKey && ['m','n','g','a','c'].includes(e.key.toLowerCase())) && shortcuts[e.key.toLowerCase()]) {
     // M (measure): pokud je výběr → okamžitě změřit
     if (e.key.toLowerCase() === 'm' && !e.shiftKey && measureSelection()) {
       // měření provedeno přes výběr
@@ -478,6 +479,11 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "A" && e.shiftKey && (state.selected !== null || state.multiSelected.size > 0)) {
     e.preventDefault();
     startCircularArrayAction();
+  }
+  // Shift+C: Kopírovat & umístit
+  if (e.key === "C" && e.shiftKey && !e.ctrlKey && !e.metaKey && (state.selected !== null || state.multiSelected.size > 0)) {
+    e.preventDefault();
+    copyPlaceFromSelection();
   }
   if (e.key === "Enter" && state.drawing && state.tool === "circle") {
     e.preventDefault();
@@ -583,6 +589,7 @@ drawCanvas.addEventListener("contextmenu", (e) => {
     menuDef.push({ label: '🔄 Otočit', action: 'rotate' });
     menuDef.push({ label: '📏 Lineární pole', action: 'array' });
     menuDef.push({ label: '🔄 Kruhové pole', action: 'circArray' });
+    menuDef.push({ label: '📋 Kopírovat sem', action: 'copyPlace' });
     menuDef.push({ label: '⇔ Offset', action: 'offset' });
     if (state.objects[ctxIdx] && state.objects[ctxIdx].type === 'polyline') {
       menuDef.push({ label: '💥 Rozložit konturu', action: 'explode' });
@@ -625,6 +632,8 @@ drawCanvas.addEventListener("contextmenu", (e) => {
         startLinearArrayAction();
       } else if (action === 'circArray') {
         startCircularArrayAction();
+      } else if (action === 'copyPlace') {
+        copyPlaceFromSelection();
       } else if (action === 'offset') {
         if (ctxIdx !== null && state.objects[ctxIdx]) {
           handleOffsetClick(wx, wy);
@@ -815,6 +824,10 @@ export function handleCanvasClick(wx, wy) {
 
     case "circularArray":
       handleCircularArrayClick(wx, wy);
+      break;
+
+    case "copyPlace":
+      handleCopyPlaceClick(wx, wy);
       break;
 
     case "deleteObj": {
@@ -1486,6 +1499,14 @@ document.getElementById("btnDelete").addEventListener("click", () => {
 document.getElementById("btnRotate").addEventListener("click", startRotateAction);
 document.getElementById("btnLinearArray").addEventListener("click", startLinearArrayAction);
 document.getElementById("btnCircularArray").addEventListener("click", startCircularArrayAction);
+document.getElementById("btnCopyPlace").addEventListener("click", () => {
+  if (state.selected !== null || state.multiSelected.size > 0) {
+    copyPlaceFromSelection();
+  } else {
+    setTool('copyPlace');
+    setHint('Vyberte objekty ke kopírování, pak klikněte referenční bod');
+  }
+});
 
 // ── Double-click: dokončit konturu / vybrat segment ──
 drawCanvas.addEventListener("dblclick", (e) => {
