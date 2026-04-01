@@ -1808,10 +1808,10 @@ if (btnSnapPts) {
 // ── Grid Snap tlačítko ──
 /** Aktualizuje stav tlačítka snap k mřížce. */
 export function updateSnapGridBtn() {
-  document.getElementById("btnSnapGrid").classList.toggle("active", state.snapToGrid);
+  document.getElementById("btnSnapGrid")?.classList.toggle("active", state.snapToGrid);
 }
 
-document.getElementById("btnSnapGrid").addEventListener("click", () => {
+document.getElementById("btnSnapGrid")?.addEventListener("click", () => {
   state.snapToGrid = !state.snapToGrid;
   updateSnapGridBtn();
   document.getElementById("indGrid")?.classList.toggle("active", state.snapToGrid);
@@ -1819,7 +1819,7 @@ document.getElementById("btnSnapGrid").addEventListener("click", () => {
   showToast(state.snapToGrid ? `Snap na mřížku: ON (${state.gridSize})` : "Snap na mřížku: OFF");
 });
 
-document.getElementById("btnSnapGrid").addEventListener("contextmenu", (e) => {
+document.getElementById("btnSnapGrid")?.addEventListener("contextmenu", (e) => {
   e.preventDefault();
   showGridSizeDialog();
 });
@@ -1827,10 +1827,10 @@ document.getElementById("btnSnapGrid").addEventListener("contextmenu", (e) => {
 // ── Angle Snap tlačítko ──
 /** Aktualizuje stav tlačítka úhlového snapu. */
 export function updateAngleSnapBtn() {
-  document.getElementById("btnAngleSnap").classList.toggle("active", state.angleSnap);
+  document.getElementById("btnAngleSnap")?.classList.toggle("active", state.angleSnap);
 }
 
-document.getElementById("btnAngleSnap").addEventListener("click", () => {
+document.getElementById("btnAngleSnap")?.addEventListener("click", () => {
   state.angleSnap = !state.angleSnap;
   updateAngleSnapBtn();
   document.getElementById("indAngle")?.classList.toggle("active", state.angleSnap);
@@ -1838,7 +1838,7 @@ document.getElementById("btnAngleSnap").addEventListener("click", () => {
   showToast(state.angleSnap ? `Úhlový snap: ON (${state.angleSnapStep}°)` : "Úhlový snap: OFF");
 });
 
-document.getElementById("btnAngleSnap").addEventListener("contextmenu", (e) => {
+document.getElementById("btnAngleSnap")?.addEventListener("contextmenu", (e) => {
   e.preventDefault();
   showAngleSnapDialog();
 });
@@ -1847,6 +1847,7 @@ document.getElementById("btnAngleSnap").addEventListener("contextmenu", (e) => {
 /** Aktualizuje stav tlačítka kót. */
 export function updateDimsBtn() {
   const btn = document.getElementById("btnDims");
+  if (!btn) return;
   btn.textContent = '📐 Kóty';
   btn.classList.remove("active");
   btn.style.background = '';
@@ -1862,7 +1863,7 @@ export function updateDimsBtn() {
   // 'none' → výchozí neaktivní vzhled
 }
 
-document.getElementById("btnDims").addEventListener("click", () => {
+document.getElementById("btnDims")?.addEventListener("click", () => {
   // Cyklus: all → intersections → none → all
   const cycle = { all: 'intersections', intersections: 'none', none: 'all' };
   state.showDimensions = cycle[state.showDimensions] || 'all';
@@ -1894,6 +1895,7 @@ document.getElementById("btnDeleteDims").addEventListener("click", () => {
 /** Aktualizuje zobrazení módu souřadnic (ABS/INC). */
 export function updateCoordModeBtn() {
   const btn = document.getElementById("btnCoordMode");
+  if (!btn) return;
   const isInc = state.coordMode === 'inc';
   const label = isInc ? 'INC' : 'ABS';
   btn.textContent = label;
@@ -1916,12 +1918,13 @@ export function toggleCoordMode() {
   showToast(state.coordMode === 'inc' ? 'Inkrementální souřadnice (INC)' : 'Absolutní souřadnice (ABS)');
 }
 
-document.getElementById("btnCoordMode").addEventListener("click", toggleCoordMode);
+document.getElementById("btnCoordMode")?.addEventListener("click", toggleCoordMode);
 
 // ── X Display Mode tlačítko (Poloměr/Průměr) ──
 /** Aktualizuje zobrazení režimu osy X (R/⌀). */
 export function updateXDisplayBtn() {
   const btn = document.getElementById("btnXDisplay");
+  if (!btn) return;
   const isDiam = state.xDisplayMode === 'diameter';
   btn.textContent = isDiam ? '⌀' : 'R';
   btn.classList.toggle('active', isDiam);
@@ -1943,12 +1946,13 @@ export function toggleXDisplay() {
   showToast(state.xDisplayMode === 'diameter' ? 'Osa X: Průměr (⌀)' : 'Osa X: Poloměr (R)');
 }
 
-document.getElementById("btnXDisplay").addEventListener("click", toggleXDisplay);
+document.getElementById("btnXDisplay")?.addEventListener("click", toggleXDisplay);
 
 // ── Machine Type tlačítko (Soustruh/Karusel) ──
 /** Aktualizuje zobrazení typu stroje. */
 export function updateMachineTypeBtn() {
   const btn = document.getElementById("btnMachineType");
+  if (!btn) return;
   const isKarusel = state.machineType === 'karusel';
   btn.textContent = isKarusel ? '⚙ Karusel' : '⚙ Soustruh';
   btn.classList.toggle('active', isKarusel);
@@ -1972,7 +1976,7 @@ export function toggleMachineType() {
     : 'Soustruh – Z vodorovně, X svisle');
 }
 
-document.getElementById("btnMachineType").addEventListener("click", toggleMachineType);
+document.getElementById("btnMachineType")?.addEventListener("click", toggleMachineType);
 
 // ── Nul. bod tlačítko – nastavení/zrušení nulového bodu ──
 
@@ -2896,7 +2900,15 @@ function showSettingsDialog() {
       <!-- Mřížka a snap -->
       <fieldset style="border:1px solid var(--ctp-surface1);border-radius:8px;padding:10px 12px;margin:0">
         <legend style="color:var(--ctp-blue);font-size:13px;padding:0 6px"># Mřížka a snap</legend>
-        <div style="display:flex;align-items:center;gap:10px;margin-top:4px">
+        <div style="display:flex;gap:8px;margin-top:4px">
+          <button class="calc-btn" id="settSnapGrid" style="flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid ${state.snapToGrid ? 'var(--ctp-green)' : 'var(--ctp-surface1)'};background:${state.snapToGrid ? 'var(--ctp-green)' : 'var(--ctp-surface0)'};color:${state.snapToGrid ? 'var(--ctp-base)' : 'var(--ctp-text)'}">
+            # Snap mřížka: ${state.snapToGrid ? 'ON' : 'OFF'}
+          </button>
+          <button class="calc-btn" id="settAngleSnap" style="flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid ${state.angleSnap ? 'var(--ctp-green)' : 'var(--ctp-surface1)'};background:${state.angleSnap ? 'var(--ctp-green)' : 'var(--ctp-surface0)'};color:${state.angleSnap ? 'var(--ctp-base)' : 'var(--ctp-text)'}">
+            ∠ Úhlový snap: ${state.angleSnap ? 'ON' : 'OFF'}
+          </button>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:8px">
           <label style="flex:1;font-size:13px;color:var(--ctp-text)">Velikost mřížky (mm):</label>
           <input id="settGrid" type="number" min="0.1" max="100" step="0.1" value="${state.gridSize}"
             style="width:70px;padding:6px 8px;border-radius:6px;border:1px solid var(--ctp-surface1);background:var(--ctp-surface0);color:var(--ctp-text);font-size:14px;text-align:center">
@@ -2905,6 +2917,35 @@ function showSettingsDialog() {
           <label style="flex:1;font-size:13px;color:var(--ctp-text)">Úhlový snap krok (°):</label>
           <input id="settAngleStep" type="number" min="1" max="90" step="1" value="${state.angleSnapStep}"
             style="width:70px;padding:6px 8px;border-radius:6px;border:1px solid var(--ctp-surface1);background:var(--ctp-surface0);color:var(--ctp-text);font-size:14px;text-align:center">
+        </div>
+      </fieldset>
+
+      <!-- Souřadnice -->
+      <fieldset style="border:1px solid var(--ctp-surface1);border-radius:8px;padding:10px 12px;margin:0">
+        <legend style="color:var(--ctp-blue);font-size:13px;padding:0 6px">🔢 Souřadnice</legend>
+        <div style="display:flex;gap:8px;margin-top:4px">
+          <button class="calc-btn" id="settCoordAbs" style="flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid ${state.coordMode === 'abs' ? 'var(--ctp-green)' : 'var(--ctp-surface1)'};background:${state.coordMode === 'abs' ? 'var(--ctp-green)' : 'var(--ctp-surface0)'};color:${state.coordMode === 'abs' ? 'var(--ctp-base)' : 'var(--ctp-text)'}">
+            ABS – Absolutní
+          </button>
+          <button class="calc-btn" id="settCoordInc" style="flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid ${state.coordMode === 'inc' ? 'var(--ctp-green)' : 'var(--ctp-surface1)'};background:${state.coordMode === 'inc' ? 'var(--ctp-green)' : 'var(--ctp-surface0)'};color:${state.coordMode === 'inc' ? 'var(--ctp-base)' : 'var(--ctp-text)'}">
+            INC – Inkrementální
+          </button>
+        </div>
+      </fieldset>
+
+      <!-- Kóty -->
+      <fieldset style="border:1px solid var(--ctp-surface1);border-radius:8px;padding:10px 12px;margin:0">
+        <legend style="color:var(--ctp-blue);font-size:13px;padding:0 6px">📐 Zobrazení kót</legend>
+        <div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap">
+          <button class="calc-btn" id="settDimsAll" style="flex:1;min-width:80px;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid ${state.showDimensions === 'all' ? 'var(--ctp-green)' : 'var(--ctp-surface1)'};background:${state.showDimensions === 'all' ? 'var(--ctp-green)' : 'var(--ctp-surface0)'};color:${state.showDimensions === 'all' ? 'var(--ctp-base)' : 'var(--ctp-text)'}">
+            Vše
+          </button>
+          <button class="calc-btn" id="settDimsIntersect" style="flex:1;min-width:80px;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid ${state.showDimensions === 'intersections' ? 'var(--ctp-green)' : 'var(--ctp-surface1)'};background:${state.showDimensions === 'intersections' ? 'var(--ctp-green)' : 'var(--ctp-surface0)'};color:${state.showDimensions === 'intersections' ? 'var(--ctp-base)' : 'var(--ctp-text)'}">
+            Průsečíky
+          </button>
+          <button class="calc-btn" id="settDimsNone" style="flex:1;min-width:80px;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid ${state.showDimensions === 'none' ? 'var(--ctp-green)' : 'var(--ctp-surface1)'};background:${state.showDimensions === 'none' ? 'var(--ctp-green)' : 'var(--ctp-surface0)'};color:${state.showDimensions === 'none' ? 'var(--ctp-base)' : 'var(--ctp-text)'}">
+            Skryté
+          </button>
         </div>
       </fieldset>
 
@@ -3002,6 +3043,40 @@ function showSettingsDialog() {
     renderAll();
   });
 
+  // ── Snap mřížka ON/OFF ──
+  function updateSnapGridSettBtn() {
+    const btn = overlay.querySelector('#settSnapGrid');
+    const activeStyle = 'border-color:var(--ctp-green);background:var(--ctp-green);color:var(--ctp-base)';
+    const inactiveStyle = 'border-color:var(--ctp-surface1);background:var(--ctp-surface0);color:var(--ctp-text)';
+    btn.style.cssText = `flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid transparent;${state.snapToGrid ? activeStyle : inactiveStyle}`;
+    btn.textContent = `# Snap mřížka: ${state.snapToGrid ? 'ON' : 'OFF'}`;
+  }
+  overlay.querySelector('#settSnapGrid').addEventListener('click', () => {
+    state.snapToGrid = !state.snapToGrid;
+    updateSnapGridBtn();
+    document.getElementById("indGrid")?.classList.toggle("active", state.snapToGrid);
+    updateSnapGridSettBtn();
+    renderAll();
+    showToast(state.snapToGrid ? `Snap na mřížku: ON (${state.gridSize})` : "Snap na mřížku: OFF");
+  });
+
+  // ── Úhlový snap ON/OFF ──
+  function updateAngleSnapSettBtn() {
+    const btn = overlay.querySelector('#settAngleSnap');
+    const activeStyle = 'border-color:var(--ctp-green);background:var(--ctp-green);color:var(--ctp-base)';
+    const inactiveStyle = 'border-color:var(--ctp-surface1);background:var(--ctp-surface0);color:var(--ctp-text)';
+    btn.style.cssText = `flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid transparent;${state.angleSnap ? activeStyle : inactiveStyle}`;
+    btn.textContent = `∠ Úhlový snap: ${state.angleSnap ? 'ON' : 'OFF'}`;
+  }
+  overlay.querySelector('#settAngleSnap').addEventListener('click', () => {
+    state.angleSnap = !state.angleSnap;
+    updateAngleSnapBtn();
+    document.getElementById("indAngle")?.classList.toggle("active", state.angleSnap);
+    updateAngleSnapSettBtn();
+    renderAll();
+    showToast(state.angleSnap ? `Úhlový snap: ON (${state.angleSnapStep}°)` : "Úhlový snap: OFF");
+  });
+
   // ── Mřížka ──
   overlay.querySelector('#settGrid').addEventListener('change', (e) => {
     const val = parseFloat(e.target.value);
@@ -3011,12 +3086,62 @@ function showSettingsDialog() {
     }
   });
 
-  // ── Úhlový snap ──
+  // ── Úhlový snap krok ──
   overlay.querySelector('#settAngleStep').addEventListener('change', (e) => {
     const val = parseInt(e.target.value);
     if (val >= 1 && val <= 90) {
       state.angleSnapStep = val;
     }
+  });
+
+  // ── Souřadnice ABS/INC ──
+  function updateCoordBtns() {
+    const aBtn = overlay.querySelector('#settCoordAbs');
+    const iBtn = overlay.querySelector('#settCoordInc');
+    const activeStyle = 'border-color:var(--ctp-green);background:var(--ctp-green);color:var(--ctp-base)';
+    const inactiveStyle = 'border-color:var(--ctp-surface1);background:var(--ctp-surface0);color:var(--ctp-text)';
+    aBtn.style.cssText = `flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid transparent;${state.coordMode === 'abs' ? activeStyle : inactiveStyle}`;
+    iBtn.style.cssText = `flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid transparent;${state.coordMode === 'inc' ? activeStyle : inactiveStyle}`;
+  }
+  overlay.querySelector('#settCoordAbs').addEventListener('click', () => {
+    state.coordMode = 'abs';
+    updateCoordModeBtn();
+    updateCoordBtns();
+    renderAll();
+    if (bridge.updateMobileCoords) bridge.updateMobileCoords(state.mouse.x, state.mouse.y);
+    showToast('Absolutní souřadnice (ABS)');
+  });
+  overlay.querySelector('#settCoordInc').addEventListener('click', () => {
+    state.coordMode = 'inc';
+    updateCoordModeBtn();
+    updateCoordBtns();
+    renderAll();
+    if (bridge.updateMobileCoords) bridge.updateMobileCoords(state.mouse.x, state.mouse.y);
+    showToast('Inkrementální souřadnice (INC)');
+  });
+
+  // ── Kóty režim ──
+  function updateDimsBtns() {
+    const modes = ['all', 'intersections', 'none'];
+    const ids = ['#settDimsAll', '#settDimsIntersect', '#settDimsNone'];
+    const activeStyle = 'border-color:var(--ctp-green);background:var(--ctp-green);color:var(--ctp-base)';
+    const inactiveStyle = 'border-color:var(--ctp-surface1);background:var(--ctp-surface0);color:var(--ctp-text)';
+    modes.forEach((m, i) => {
+      const btn = overlay.querySelector(ids[i]);
+      btn.style.cssText = `flex:1;min-width:80px;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid transparent;${state.showDimensions === m ? activeStyle : inactiveStyle}`;
+    });
+  }
+  ['all', 'intersections', 'none'].forEach((mode, i) => {
+    const ids = ['#settDimsAll', '#settDimsIntersect', '#settDimsNone'];
+    overlay.querySelector(ids[i]).addEventListener('click', () => {
+      state.showDimensions = mode;
+      updateDimsBtn();
+      document.getElementById("indDims")?.classList.toggle("active", state.showDimensions !== 'none');
+      updateDimsBtns();
+      renderAll();
+      const labels = { all: 'Kóty: vše', intersections: 'Kóty: pouze průsečíky', none: 'Kóty: skryté' };
+      showToast(labels[mode]);
+    });
   });
 
   // ── Projekty ──

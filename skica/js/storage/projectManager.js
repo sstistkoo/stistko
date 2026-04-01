@@ -39,6 +39,10 @@ function _buildProjectData() {
     showObjectNumbers: state.showObjectNumbers,
     showIntersectionNumbers: state.showIntersectionNumbers,
     displayDecimals: state.displayDecimals,
+    snapToGrid: state.snapToGrid,
+    angleSnap: state.angleSnap,
+    angleSnapStep: state.angleSnapStep,
+    showDimensions: state.showDimensions,
   };
 }
 
@@ -64,6 +68,10 @@ function _loadProjectData(data) {
   if (data.showObjectNumbers !== undefined) state.showObjectNumbers = data.showObjectNumbers;
   if (data.showIntersectionNumbers !== undefined) state.showIntersectionNumbers = data.showIntersectionNumbers;
   if (data.displayDecimals !== undefined) state.displayDecimals = data.displayDecimals;
+  if (data.snapToGrid !== undefined) state.snapToGrid = data.snapToGrid;
+  if (data.angleSnap !== undefined) state.angleSnap = data.angleSnap;
+  if (data.angleSnapStep !== undefined) state.angleSnapStep = data.angleSnapStep;
+  if (data.showDimensions) state.showDimensions = data.showDimensions;
   state.selected = null;
   state.multiSelected.clear();
   state.selectedPoint = null;
