@@ -1909,7 +1909,10 @@ export function updateCoordModeBtn() {
     }
   }
   const ind = document.getElementById("indCoordMode");
-  if (ind) ind.textContent = state.coordMode === 'inc' ? 'INC' : 'ABS';
+  if (ind) {
+    ind.textContent = state.coordMode === 'inc' ? 'INC' : 'ABS';
+    ind.classList.toggle('alt', state.coordMode === 'inc');
+  }
 }
 
 /** Přepne mód souřadnic ABS ↔ INC. */
@@ -1940,7 +1943,10 @@ export function updateXDisplayBtn() {
     }
   }
   const ind = document.getElementById("indXDisplay");
-  if (ind) ind.textContent = state.xDisplayMode === 'diameter' ? '⌀' : 'R';
+  if (ind) {
+    ind.textContent = state.xDisplayMode === 'diameter' ? '⌀' : 'R';
+    ind.classList.toggle('alt', state.xDisplayMode === 'diameter');
+  }
 }
 
 /** Přepne režim osy X: Poloměr ↔ Průměr. */
@@ -1971,7 +1977,10 @@ export function updateMachineTypeBtn() {
     }
   }
   const ind = document.getElementById("indMachine");
-  if (ind) ind.textContent = state.machineType === 'karusel' ? 'KAR' : 'SOU';
+  if (ind) {
+    ind.textContent = state.machineType === 'karusel' ? 'KAR' : 'SOU';
+    ind.classList.toggle('alt', state.machineType === 'karusel');
+  }
 }
 
 /** Přepne typ stroje Soustruh ↔ Karusel (prohodí osy). */
