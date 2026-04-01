@@ -601,7 +601,10 @@ export function intersectLineCircle(line, circle) {
   const b = 2 * (fx * dx + fy * dy);
   const c = fx * fx + fy * fy - r * r;
   let disc = b * b - 4 * a * c;
-  if (disc < 0) return [];
+  // Tolerance pro tečné případy – diskriminant může být mírně záporný
+  // kvůli floating-point nepřesnosti
+  if (disc < -1e-6) return [];
+  if (disc < 0) disc = 0;
   disc = Math.sqrt(disc);
   const results = [];
   for (const sign of [-1, 1]) {
@@ -616,6 +619,11 @@ export function intersectLineCircle(line, circle) {
       }
       results.push(pt);
     }
+  }
+  // Deduplikace tečných bodů – při tečnosti disc ≈ 0 vzniknou dva téměř totožné body
+  if (results.length === 2 &&
+      Math.hypot(results[0].x - results[1].x, results[0].y - results[1].y) < 1e-4) {
+    results.pop();
   }
   return results;
 }
@@ -660,7 +668,7 @@ export function intersectCircleCircle(c1, c2) {
   if (
     results.length === 2 &&
     Math.hypot(results[0].x - results[1].x, results[0].y - results[1].y) <
-      1e-8
+      1e-4
   )
     results.pop();
   return results;
