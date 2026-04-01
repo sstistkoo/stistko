@@ -1449,106 +1449,232 @@
             <summary>✏️ Kreslicí nástroje</summary>
             <div class="help-tools-list">
               <details class="help-tool-item">
-                <summary><span class="tool-icon">🖱</span> Výběr <kbd>V</kbd></summary>
+                <summary>
+                  <span class="tool-icon">🖱</span> Výběr <kbd>V</kbd>
+                </summary>
                 <div class="tool-detail">
-                  <p>Klikněte na objekt pro jeho výběr. Vybraný objekt lze přesunout tažením, smazat klávesou <kbd>Delete</kbd> nebo upravit vlastnosti v bočním panelu.</p>
+                  <p>
+                    Klikněte na objekt pro jeho výběr. Vybraný objekt lze
+                    přesunout tažením, smazat klávesou <kbd>Delete</kbd> nebo
+                    upravit vlastnosti v bočním panelu.
+                  </p>
                   <ul>
-                    <li><strong>Jeden klik</strong> – vybere objekt pod kurzorem</li>
+                    <li>
+                      <strong>Jeden klik</strong> – vybere objekt pod kurzorem
+                    </li>
                     <li><strong>Klik na prázdno</strong> – zruší výběr</li>
-                    <li><strong>Ctrl+klik</strong> – přidá/odebere objekt do/z vícenásobného výběru</li>
-                    <li><strong>Dvojklik (mobil)</strong> – zahájí obdélníkový výběr oblasti</li>
-                    <li><strong>Pravý klik</strong> – kontextové menu (nulový bod, zrcadlení, offset, pole)</li>
+                    <li>
+                      <strong>Ctrl+klik</strong> – přidá/odebere objekt do/z
+                      vícenásobného výběru
+                    </li>
+                    <li>
+                      <strong>Dvojklik (mobil)</strong> – zahájí obdélníkový
+                      výběr oblasti
+                    </li>
+                    <li>
+                      <strong>Pravý klik</strong> – kontextové menu (nulový bod,
+                      zrcadlení, offset, pole)
+                    </li>
                   </ul>
                 </div>
               </details>
               <details class="help-tool-item">
-                <summary><span class="tool-icon">·</span> Bod <kbd>P</kbd></summary>
+                <summary>
+                  <span class="tool-icon">·</span> Bod <kbd>P</kbd>
+                </summary>
                 <div class="tool-detail">
-                  <p>Kliknutím umístíte referenční bod do výkresu. Body slouží jako snap cíle pro ostatní nástroje.</p>
+                  <p>
+                    Kliknutím umístíte referenční bod do výkresu. Body slouží
+                    jako snap cíle pro ostatní nástroje.
+                  </p>
                   <ul>
                     <li>Bod se zobrazuje jako malý křížek</li>
                     <li>Lze použít jako referenci pro tečnu, kolmici apod.</li>
-                    <li>Zadání přes <kbd>N</kbd> (číselný vstup) pro přesné souřadnice</li>
+                    <li>
+                      Zadání přes <kbd>N</kbd> (číselný vstup) pro přesné
+                      souřadnice
+                    </li>
                   </ul>
                 </div>
               </details>
               <details class="help-tool-item">
-                <summary><span class="tool-icon">/</span> Úsečka <kbd>L</kbd></summary>
+                <summary>
+                  <span class="tool-icon">/</span> Úsečka <kbd>L</kbd>
+                </summary>
                 <div class="tool-detail">
-                  <p>Nakreslí úsečku mezi dvěma body. První klik = počáteční bod, druhý klik = koncový bod.</p>
+                  <p>
+                    Nakreslí úsečku mezi dvěma body. První klik = počáteční bod,
+                    druhý klik = koncový bod.
+                  </p>
                   <ul>
-                    <li><strong>Snap k bodům</strong> (<kbd>S</kbd>) – automaticky přichytí ke koncovým bodům a průsečíkům</li>
-                    <li><strong>Úhlový snap</strong> (<kbd>Shift+G</kbd>) – omezí úhel na násobky 15°</li>
-                    <li><strong>Číselný vstup</strong> (<kbd>N</kbd>) – zadání přesných souřadnic koncového bodu</li>
+                    <li>
+                      <strong>Snap k bodům</strong> (<kbd>S</kbd>) – automaticky
+                      přichytí ke koncovým bodům a průsečíkům
+                    </li>
+                    <li>
+                      <strong>Úhlový snap</strong> (<kbd>Shift+G</kbd>) – omezí
+                      úhel na násobky 15°
+                    </li>
+                    <li>
+                      <strong>Číselný vstup</strong> (<kbd>N</kbd>) – zadání
+                      přesných souřadnic koncového bodu
+                    </li>
                     <li>Ve stavovém řádku se zobrazuje délka a úhel úsečky</li>
                   </ul>
                 </div>
               </details>
               <details class="help-tool-item">
-                <summary><span class="tool-icon">⁄</span> Konstrukční čára <kbd>K</kbd></summary>
+                <summary>
+                  <span class="tool-icon">⁄</span> Konstrukční čára <kbd>K</kbd>
+                </summary>
                 <div class="tool-detail">
-                  <p>Nekonečná pomocná čára procházející dvěma body. Slouží jako vodítko při konstrukci.</p>
+                  <p>
+                    Nekonečná pomocná čára procházející dvěma body. Slouží jako
+                    vodítko při konstrukci.
+                  </p>
                   <ul>
                     <li>Zobrazuje se čárkovaně</li>
-                    <li><strong>Neexportuje se</strong> do DXF ani CNC výstupu</li>
+                    <li>
+                      <strong>Neexportuje se</strong> do DXF ani CNC výstupu
+                    </li>
                     <li>Vytváří průsečíky s ostatními objekty pro snap</li>
                     <li>Vhodné pro pomocné osy, osové čáry, rozměřování</li>
                   </ul>
                 </div>
               </details>
               <details class="help-tool-item">
-                <summary><span class="tool-icon">○</span> Kružnice <kbd>C</kbd></summary>
+                <summary>
+                  <span class="tool-icon">○</span> Kružnice <kbd>C</kbd>
+                </summary>
                 <div class="tool-detail">
-                  <p>Nakreslí kružnici. První klik = střed, druhý klik nebo <kbd>Enter</kbd> = poloměr.</p>
+                  <p>
+                    Nakreslí kružnici. První klik = střed, druhý klik nebo
+                    <kbd>Enter</kbd> = poloměr.
+                  </p>
                   <ul>
-                    <li><strong>Klik + klik</strong> – střed a bod na obvodu určí poloměr</li>
-                    <li><strong>Klik + Enter</strong> – zadáte poloměr číselně v dialogu</li>
-                    <li>Snap k bodům automaticky přichytí střed ke koncovým bodům</li>
-                    <li>Kružnice vytváří průsečíky a je cílem pro tečnu, offset atd.</li>
+                    <li>
+                      <strong>Klik + klik</strong> – střed a bod na obvodu určí
+                      poloměr
+                    </li>
+                    <li>
+                      <strong>Klik + Enter</strong> – zadáte poloměr číselně v
+                      dialogu
+                    </li>
+                    <li>
+                      Snap k bodům automaticky přichytí střed ke koncovým bodům
+                    </li>
+                    <li>
+                      Kružnice vytváří průsečíky a je cílem pro tečnu, offset
+                      atd.
+                    </li>
                   </ul>
                 </div>
               </details>
               <details class="help-tool-item">
-                <summary><span class="tool-icon">⌒</span> Oblouk <kbd>A</kbd></summary>
+                <summary>
+                  <span class="tool-icon">⌒</span> Oblouk <kbd>A</kbd>
+                </summary>
                 <div class="tool-detail">
-                  <p>Nakreslí kruhový oblouk třemi kliky: střed → počáteční bod → koncový bod.</p>
+                  <p>
+                    Nakreslí kruhový oblouk třemi kliky: střed → počáteční bod →
+                    koncový bod.
+                  </p>
                   <ul>
                     <li><strong>1. klik</strong> – střed oblouku</li>
-                    <li><strong>2. klik</strong> – určí poloměr a počáteční úhel</li>
-                    <li><strong>3. klik</strong> – určí koncový úhel (směr proti hodinovým ručičkám)</li>
-                    <li>Oblouk se chová jako část kružnice – lze na něj použít tečnu, středovou značku atd.</li>
+                    <li>
+                      <strong>2. klik</strong> – určí poloměr a počáteční úhel
+                    </li>
+                    <li>
+                      <strong>3. klik</strong> – určí koncový úhel (směr proti
+                      hodinovým ručičkám)
+                    </li>
+                    <li>
+                      Oblouk se chová jako část kružnice – lze na něj použít
+                      tečnu, středovou značku atd.
+                    </li>
                   </ul>
                 </div>
               </details>
               <details class="help-tool-item">
-                <summary><span class="tool-icon">□</span> Obdélník <kbd>R</kbd></summary>
+                <summary>
+                  <span class="tool-icon">□</span> Obdélník <kbd>R</kbd>
+                </summary>
                 <div class="tool-detail">
                   <p>Nakreslí obdélník dvěma kliky na protilehlé rohy.</p>
                   <ul>
                     <li>Vytvoří se jako 4 úsečky (ne jako jeden objekt)</li>
-                    <li>Snap k bodům přichytí ke koncovým bodům a průsečíkům</li>
+                    <li>
+                      Snap k bodům přichytí ke koncovým bodům a průsečíkům
+                    </li>
                     <li>Mřížkový snap (<kbd>G</kbd>) zarovná rohy na mřížku</li>
                   </ul>
                 </div>
               </details>
               <details class="help-tool-item">
-                <summary><span class="tool-icon">⛓</span> Kontura (polyline) <kbd>Q</kbd></summary>
+                <summary>
+                  <span class="tool-icon">⛓</span> Kontura (polyline)
+                  <kbd>Q</kbd>
+                </summary>
                 <div class="tool-detail">
-                  <p>Kreslí souvislou konturu (polyline) – sérii napojených úseček a oblouků.</p>
+                  <p>
+                    Kreslí souvislou konturu (polyline) – sérii napojených
+                    úseček a oblouků.
+                  </p>
                   <ul>
                     <li><strong>Klik</strong> – přidá další bod kontury</li>
-                    <li><strong><kbd>B</kbd></strong> – přepne následující segment na oblouk (bulge)</li>
-                    <li><strong><kbd>Enter</kbd></strong> – dokončí konturu (otevřená)</li>
-                    <li><strong><kbd>Shift+Enter</kbd></strong> – uzavře konturu (poslední bod → první bod)</li>
-                    <li>Na mobilu se zobrazí tlačítka „Dokončit" a „Uzavřít"</li>
-                    <li>Ideální pro soustružnické profily – exportuje se jako G-kód</li>
+                    <li>
+                      <strong><kbd>B</kbd></strong> – přepne následující segment
+                      na oblouk (bulge)
+                    </li>
+                    <li>
+                      <strong><kbd>Enter</kbd></strong> – dokončí konturu
+                      (otevřená)
+                    </li>
+                    <li>
+                      <strong><kbd>Shift+Enter</kbd></strong> – uzavře konturu
+                      (poslední bod → první bod)
+                    </li>
+                    <li>
+                      Na mobilu se zobrazí tlačítka „Dokončit" a „Uzavřít"
+                    </li>
                   </ul>
+
+                  <details class="help-sub-detail">
+                    <summary>Bulge – obloukové segmenty</summary>
+                    <div class="help-sub-content">
+                      <p>Stiskněte <kbd>B</kbd> během kreslení kontury pro přepnutí dalšího segmentu na oblouk.</p>
+                      <ul>
+                        <li><strong>Bulge faktor</strong> – hodnota zakřivení segmentu (0 = přímka, ±1 = půlkruh)</li>
+                        <li>Kladná hodnota = oblouk doleva, záporná = oblouk doprava</li>
+                        <li>Po zadání bodu se bulge automaticky resetuje na přímý segment</li>
+                        <li>Obloukové segmenty se zobrazují jako hladké křivky</li>
+                      </ul>
+                    </div>
+                  </details>
+
+                  <details class="help-sub-detail">
+                    <summary>CNC export kontury</summary>
+                    <div class="help-sub-content">
+                      <p>Kontura je ideální pro soustružnické profily – exportuje se jako G-kód.</p>
+                      <ul>
+                        <li><strong>Přímé segmenty</strong> → G01 (lineární interpolace)</li>
+                        <li><strong>Obloukové segmenty</strong> → G02/G03 (kruhová interpolace)</li>
+                        <li>Souřadnice se exportují v režimu R/D a ABS/INC podle nastavení</li>
+                        <li>Konturu lze exportovat i do DXF jako LWPOLYLINE</li>
+                      </ul>
+                    </div>
+                  </details>
                 </div>
               </details>
               <details class="help-tool-item">
-                <summary><span class="tool-icon">T</span> Text <kbd>I</kbd></summary>
+                <summary>
+                  <span class="tool-icon">T</span> Text <kbd>I</kbd>
+                </summary>
                 <div class="tool-detail">
-                  <p>Kliknutím umístíte textovou anotaci. Po kliknutí se zobrazí dialog pro zadání textu a velikosti.</p>
+                  <p>
+                    Kliknutím umístíte textovou anotaci. Po kliknutí se zobrazí
+                    dialog pro zadání textu a velikosti.
+                  </p>
                   <ul>
                     <li>Text se ukládá jako součást výkresu</li>
                     <li>Lze přesunout nástrojem Přesun (<kbd>W</kbd>)</li>
@@ -1557,9 +1683,14 @@
                 </div>
               </details>
               <details class="help-tool-item">
-                <summary><span class="tool-icon">⊕</span> Středová značka</summary>
+                <summary>
+                  <span class="tool-icon">⊕</span> Středová značka
+                </summary>
                 <div class="tool-detail">
-                  <p>Klikněte na kružnici nebo oblouk – vyznačí střed s osovým křížem.</p>
+                  <p>
+                    Klikněte na kružnici nebo oblouk – vyznačí střed s osovým
+                    křížem.
+                  </p>
                   <ul>
                     <li>Automaticky najde střed vybrané kružnice/oblouku</li>
                     <li>Vytvoří osový kříž ve středu</li>
@@ -1570,10 +1701,18 @@
               <details class="help-tool-item">
                 <summary><span class="tool-icon">⚙</span> Ozubené kolo</summary>
                 <div class="tool-detail">
-                  <p>Generátor profilu ozubeného kola s parametrickým zadáním.</p>
+                  <p>
+                    Generátor profilu ozubeného kola s parametrickým zadáním.
+                  </p>
                   <ul>
-                    <li><strong>Modul</strong> – velikost zubu (standardní řada: 0.5, 1, 1.5, 2, …)</li>
-                    <li><strong>Počet zubů</strong> – určuje průměr roztečné kružnice</li>
+                    <li>
+                      <strong>Modul</strong> – velikost zubu (standardní řada:
+                      0.5, 1, 1.5, 2, …)
+                    </li>
+                    <li>
+                      <strong>Počet zubů</strong> – určuje průměr roztečné
+                      kružnice
+                    </li>
                     <li><strong>Úhel záběru</strong> – standardně 20°</li>
                     <li>Generuje evolventy zubů jako polyline</li>
                     <li>Podpora vnějšího i vnitřního ozubení</li>
@@ -1581,28 +1720,120 @@
                 </div>
               </details>
               <details class="help-tool-item">
-                <summary><span class="tool-icon">↗</span> Tečna <kbd>T</kbd></summary>
+                <summary>
+                  <span class="tool-icon">↗</span> Tečna <kbd>T</kbd>
+                </summary>
                 <div class="tool-detail">
-                  <p>Nástroj pro tečné operace – vytváří tečné úsečky nebo přesouvá kružnice do tečné pozice.</p>
-                  <p><strong>Možnosti podle výběru:</strong></p>
-                  <ul>
-                    <li><strong>Bod + Kružnice</strong> – vytvoří tečné úsečky z bodu ke kružnici (nabídne výběr variant)</li>
-                    <li><strong>Kružnice + Kružnice</strong> – vytvoří vnější a vnitřní tečny mezi dvěma kružnicemi</li>
-                    <li><strong>Kružnice + Úsečka</strong> – přesune kružnici do tečné pozice k úsečce</li>
-                    <li><strong>Kružnice + Úsečka + Bod</strong> – přesune kružnici tečně k úsečce a zároveň přes bod</li>
-                    <li><strong>Kružnice + 2 Úsečky</strong> – přesune kružnici tečně k oběma úsečkám současně</li>
-                    <li><strong>3 Body (bez kružnice)</strong> – vytvoří opsanou kružnici procházející třemi body</li>
-                    <li><strong>Kružnice + 3 vazby</strong> – změní poloměr i pozici kružnice (tečná ke třem přímkám, ke dvěma přímkám přes bod, k přímce přes dva body, atd.)</li>
-                  </ul>
-                  <p><em>Postup:</em> Vyberte objekty (Ctrl+klik pro vícenásobný výběr nebo body), poté stiskněte <kbd>T</kbd>. Při více řešeních se zobrazí dialog pro výběr varianty.</p>
+                  <p>
+                    Nástroj pro tečné operace – vytváří tečné úsečky nebo
+                    přesouvá kružnice do tečné pozice. Vyberte objekty
+                    (Ctrl+klik pro vícenásobný výběr), poté stiskněte
+                    <kbd>T</kbd>. Při více řešeních se zobrazí dialog
+                    pro výběr varianty.
+                  </p>
+
+                  <details class="help-sub-detail">
+                    <summary>· + ○ Bod + Kružnice → tečné úsečky</summary>
+                    <div class="help-sub-content">
+                      <p>Vyberte snap bod a kružnici, poté <kbd>T</kbd>.</p>
+                      <ul>
+                        <li>Vytvoří 1–2 tečné úsečky z bodu ke kružnici</li>
+                        <li>Dialog nabídne výběr – levá tečna, pravá tečna, nebo obě</li>
+                        <li>Pokud je bod uvnitř kružnice, tečna neexistuje</li>
+                      </ul>
+                    </div>
+                  </details>
+
+                  <details class="help-sub-detail">
+                    <summary>○ + ○ Kružnice + Kružnice → tečné úsečky</summary>
+                    <div class="help-sub-content">
+                      <p>Vyberte dvě kružnice (Ctrl+klik), poté <kbd>T</kbd>.</p>
+                      <ul>
+                        <li>Vytvoří vnější a/nebo vnitřní společné tečny</li>
+                        <li>Až 4 tečné úsečky (2 vnější + 2 vnitřní)</li>
+                        <li>Dialog nabídne výběr konkrétních tečen</li>
+                        <li>Pokud se kružnice překrývají, některé tečny neexistují</li>
+                      </ul>
+                    </div>
+                  </details>
+
+                  <details class="help-sub-detail">
+                    <summary>○ + / Kružnice + Úsečka → přesun tečně</summary>
+                    <div class="help-sub-content">
+                      <p>Vyberte kružnici a úsečku, poté <kbd>T</kbd>.</p>
+                      <ul>
+                        <li>Přesune kružnici (zachová poloměr) do tečné pozice k úsečce</li>
+                        <li>Nabídne 2 pozice – na obou stranách úsečky</li>
+                        <li>Kružnice se posune kolmo k přímce o vzdálenost = poloměr</li>
+                      </ul>
+                    </div>
+                  </details>
+
+                  <details class="help-sub-detail">
+                    <summary>○ + / + · Kružnice + Úsečka + Bod</summary>
+                    <div class="help-sub-content">
+                      <p>Vyberte kružnici, úsečku a snap bod, poté <kbd>T</kbd>.</p>
+                      <ul>
+                        <li>Přesune kružnici tečně k úsečce a zároveň přes zadaný bod</li>
+                        <li>Kombinace dvou podmínek omezí možné pozice</li>
+                        <li>Dialog nabídne dostupné varianty</li>
+                      </ul>
+                    </div>
+                  </details>
+
+                  <details class="help-sub-detail">
+                    <summary>○ + / + / Kružnice + 2 Úsečky</summary>
+                    <div class="help-sub-content">
+                      <p>Vyberte kružnici a dvě úsečky (Ctrl+klik), poté <kbd>T</kbd>.</p>
+                      <ul>
+                        <li>Přesune kružnici do pozice tečné k oběma úsečkám současně</li>
+                        <li>Až 4 možné pozice (v rozích mezi úsečkami)</li>
+                        <li>Zachová poloměr kružnice</li>
+                      </ul>
+                    </div>
+                  </details>
+
+                  <details class="help-sub-detail">
+                    <summary>· + · + · Tři body → opsaná kružnice</summary>
+                    <div class="help-sub-content">
+                      <p>Vyberte 3 snap body (bez kružnice), poté <kbd>T</kbd>.</p>
+                      <ul>
+                        <li>Vytvoří novou kružnici procházející všemi třemi body</li>
+                        <li>Automaticky vypočítá střed a poloměr</li>
+                        <li>Pokud jsou body kolineární (na jedné přímce), kružnice neexistuje</li>
+                      </ul>
+                    </div>
+                  </details>
+
+                  <details class="help-sub-detail">
+                    <summary>○ + 3 vazby → změna poloměru i pozice</summary>
+                    <div class="help-sub-content">
+                      <p>Vyberte kružnici + 3 nebo více vazeb (úsečky, body, kružnice), poté <kbd>T</kbd>.</p>
+                      <ul>
+                        <li><strong>3 úsečky</strong> – kružnice tečná ke třem přímkám (vepsaná kružnice)</li>
+                        <li><strong>2 úsečky + bod</strong> – tečná ke dvěma přímkám procházející bodem</li>
+                        <li><strong>1 úsečka + 2 body</strong> – tečná k přímce procházející dvěma body</li>
+                        <li><strong>3 body</strong> – opsaná kružnice procházející třemi body</li>
+                        <li><strong>Kružnice + 2 body</strong> – tečná ke kružnici procházející dvěma body</li>
+                        <li>Změní se <em>poloměr i pozice</em> vybrané kružnice</li>
+                      </ul>
+                    </div>
+                  </details>
                 </div>
               </details>
               <details class="help-tool-item">
-                <summary><span class="tool-icon">📐</span> Polární kreslení <kbd>Shift+N</kbd></summary>
+                <summary>
+                  <span class="tool-icon">📐</span> Polární kreslení
+                  <kbd>Shift+N</kbd>
+                </summary>
                 <div class="tool-detail">
-                  <p>Kreslení z referenčního bodu zadáním úhlu a vzdálenosti.</p>
+                  <p>
+                    Kreslení z referenčního bodu zadáním úhlu a vzdálenosti.
+                  </p>
                   <ul>
-                    <li>Klikněte na referenční bod, poté zadejte úhel a vzdálenost</li>
+                    <li>
+                      Klikněte na referenční bod, poté zadejte úhel a vzdálenost
+                    </li>
                     <li>Vhodné pro přesné konstruování pod zadaným úhlem</li>
                     <li>Kombinovatelné se snap k bodům</li>
                   </ul>
@@ -1616,83 +1847,185 @@
             <summary>🛠 Editační nástroje</summary>
             <div class="help-tools-list">
               <details class="help-tool-item">
-                <summary><span class="tool-icon">✥</span> Přesun <kbd>W</kbd></summary>
+                <summary>
+                  <span class="tool-icon">✥</span> Přesun <kbd>W</kbd>
+                </summary>
                 <div class="tool-detail">
                   <p>Přesune vybraný objekt na nové místo tažením.</p>
                   <ul>
-                    <li><strong>Klik + táhnutí</strong> – uchopí objekt a přesune ho</li>
+                    <li>
+                      <strong>Klik + táhnutí</strong> – uchopí objekt a přesune
+                      ho
+                    </li>
                     <li>Snap k bodům automaticky přichytí k cílovému bodu</li>
                     <li>Funguje i pro vícenásobný výběr</li>
-                    <li>Na mobilu: dlouhý stisk aktivuje přesný režim (crosshair)</li>
+                    <li>
+                      Na mobilu: dlouhý stisk aktivuje přesný režim (crosshair)
+                    </li>
                   </ul>
                 </div>
               </details>
               <details class="help-tool-item">
-                <summary><span class="tool-icon">🧲</span> Přichytit bod <kbd>B</kbd></summary>
+                <summary>
+                  <span class="tool-icon">🧲</span> Přichytit bod <kbd>B</kbd>
+                </summary>
                 <div class="tool-detail">
                   <p>Přesune koncový bod objektu přesně k jinému snap bodu.</p>
                   <ul>
                     <li>Klikněte nejprve na bod, který chcete přesunout</li>
-                    <li>Poté klikněte na cílový bod (snap bod jiného objektu)</li>
+                    <li>
+                      Poté klikněte na cílový bod (snap bod jiného objektu)
+                    </li>
                     <li>Slouží k přesnému napojení úseček, oblouků atd.</li>
                   </ul>
                 </div>
               </details>
               <details class="help-tool-item">
-                <summary><span class="tool-icon">✂</span> Ořez <kbd>X</kbd></summary>
+                <summary>
+                  <span class="tool-icon">✂</span> Ořez <kbd>X</kbd>
+                </summary>
                 <div class="tool-detail">
                   <p>Ořízne úsečku nebo oblouk k nejbližšímu průsečíku.</p>
                   <ul>
-                    <li>Klikněte na část úsečky, kterou chcete <strong>odstranit</strong></li>
-                    <li>Úsečka se ořízne k nejbližšímu průsečíku z obou stran</li>
+                    <li>
+                      Klikněte na část úsečky, kterou chcete
+                      <strong>odstranit</strong>
+                    </li>
+                    <li>
+                      Úsečka se ořízne k nejbližšímu průsečíku z obou stran
+                    </li>
                     <li>Pokud nemá průsečík, nelze oříznout</li>
                     <li>Funguje i na oblouky a polyline segmenty</li>
                   </ul>
                 </div>
               </details>
               <details class="help-tool-item">
-                <summary><span class="tool-icon">↗</span> Prodloužit <kbd>E</kbd></summary>
+                <summary>
+                  <span class="tool-icon">↗</span> Prodloužit <kbd>E</kbd>
+                </summary>
                 <div class="tool-detail">
                   <p>Prodlouží úsečku k nejbližšímu objektu v jejím směru.</p>
                   <ul>
                     <li>Klikněte na konec úsečky, který chcete prodloužit</li>
-                    <li>Úsečka se prodlouží k nejbližšímu průsečíku s jiným objektem</li>
-                    <li>Pokud v daném směru není žádný objekt, nelze prodloužit</li>
+                    <li>
+                      Úsečka se prodlouží k nejbližšímu průsečíku s jiným
+                      objektem
+                    </li>
+                    <li>
+                      Pokud v daném směru není žádný objekt, nelze prodloužit
+                    </li>
                   </ul>
                 </div>
               </details>
               <details class="help-tool-item">
-                <summary><span class="tool-icon">⌒</span> Zaoblení / Zkosení <kbd>F</kbd></summary>
+                <summary>
+                  <span class="tool-icon">⌒</span> Zaoblení / Zkosení
+                  <kbd>F</kbd>
+                </summary>
                 <div class="tool-detail">
-                  <p>Vytvoří zaoblení (fillet) nebo zkosení (chamfer) mezi dvěma úsečkami.</p>
-                  <ul>
-                    <li><strong>1. klik</strong> – vyberte první úsečku</li>
-                    <li><strong>2. klik</strong> – vyberte druhou úsečku</li>
-                    <li>Zobrazí se dialog pro zadání poloměru zaoblení nebo rozměru zkosení</li>
-                    <li><strong>Zaoblení (R)</strong> – vytvoří oblouk mezi úsečkami</li>
-                    <li><strong>Zkosení (C)</strong> – vytvoří rovnou hranu pod 45° (nebo zadaný úhel)</li>
-                    <li>Úsečky se automaticky zkrátí/prodlouží k zaoblení/zkosení</li>
-                  </ul>
+                  <p>
+                    Vytvoří zaoblení (fillet) nebo zkosení (chamfer) mezi dvěma
+                    úsečkami. Klikněte postupně na dvě úsečky – zobrazí se
+                    dialog pro volbu typu a rozměru.
+                  </p>
+
+                  <details class="help-sub-detail">
+                    <summary>⌒ Zaoblení (Fillet)</summary>
+                    <div class="help-sub-content">
+                      <p>Vytvoří kruhový oblouk mezi dvěma úsečkami se zadaným poloměrem.</p>
+                      <ul>
+                        <li><strong>1. klik</strong> – vyberte první úsečku</li>
+                        <li><strong>2. klik</strong> – vyberte druhou úsečku</li>
+                        <li>V dialogu zadejte <strong>poloměr zaoblení</strong> (R)</li>
+                        <li>Obě úsečky se automaticky zkrátí k bodu dotyku</li>
+                        <li>Vytvoří se oblouk (arc) napojený tečně na obě úsečky</li>
+                        <li>Poloměr 0 = ostrý roh (úsečky se jen protáhnou do průsečíku)</li>
+                      </ul>
+                    </div>
+                  </details>
+
+                  <details class="help-sub-detail">
+                    <summary>⌿ Zkosení (Chamfer)</summary>
+                    <div class="help-sub-content">
+                      <p>Vytvoří rovnou zkosenou hranu mezi dvěma úsečkami.</p>
+                      <ul>
+                        <li><strong>1. klik</strong> – vyberte první úsečku</li>
+                        <li><strong>2. klik</strong> – vyberte druhou úsečku</li>
+                        <li>V dialogu přepněte na <strong>Zkosení</strong> a zadejte rozměr</li>
+                        <li>Zadává se délka zkosení na každé straně (nebo délka + úhel)</li>
+                        <li>Obě úsečky se zkrátí a propojí se novou úsečkou</li>
+                        <li>Standardně 45° – stejná vzdálenost na obou úsečkách</li>
+                      </ul>
+                    </div>
+                  </details>
                 </div>
               </details>
               <details class="help-tool-item">
-                <summary><span class="tool-icon">⇔</span> Offset <kbd>O</kbd></summary>
+                <summary>
+                  <span class="tool-icon">⇔</span> Offset <kbd>O</kbd>
+                </summary>
                 <div class="tool-detail">
-                  <p>Vytvoří kopii objektu posunutou o zadanou vzdálenost.</p>
-                  <ul>
-                    <li>Klikněte na objekt, poté zadejte vzdálenost offsetu</li>
-                    <li>Funguje na úsečky, kružnice, oblouky i kontury</li>
-                    <li>Směr offsetu se určí kliknutím na stranu, kam chcete posunout</li>
-                    <li>Dostupný i z kontextového menu (pravý klik)</li>
-                  </ul>
+                  <p>
+                    Vytvoří kopii objektu posunutou o zadanou vzdálenost.
+                    Klikněte na objekt, zadejte vzdálenost a kliknutím určete
+                    směr. Dostupný i z kontextového menu (pravý klik).
+                  </p>
+
+                  <details class="help-sub-detail">
+                    <summary>/ Offset úsečky</summary>
+                    <div class="help-sub-content">
+                      <ul>
+                        <li>Vytvoří rovnoběžnou kopii úsečky v zadané vzdálenosti</li>
+                        <li>Kliknutím na stranu určíte směr posunu (vlevo/vpravo)</li>
+                        <li>Nová úsečka má stejnou délku a směr jako originál</li>
+                      </ul>
+                    </div>
+                  </details>
+
+                  <details class="help-sub-detail">
+                    <summary>○ Offset kružnice</summary>
+                    <div class="help-sub-content">
+                      <ul>
+                        <li>Vytvoří soustřednou kružnici – zvětší nebo zmenší poloměr o zadanou vzdálenost</li>
+                        <li>Kliknutí vně kružnice = větší poloměr, uvnitř = menší</li>
+                        <li>Minimální poloměr = 0 (nelze vytvořit záporný)</li>
+                      </ul>
+                    </div>
+                  </details>
+
+                  <details class="help-sub-detail">
+                    <summary>⌒ Offset oblouku</summary>
+                    <div class="help-sub-content">
+                      <ul>
+                        <li>Vytvoří soustředný oblouk se zachováním úhlů</li>
+                        <li>Poloměr se zvětší/zmenší o zadanou vzdálenost</li>
+                        <li>Úhly oblouku (start, end) zůstanou stejné</li>
+                      </ul>
+                    </div>
+                  </details>
+
+                  <details class="help-sub-detail">
+                    <summary>⛓ Offset kontury (polyline)</summary>
+                    <div class="help-sub-content">
+                      <ul>
+                        <li>Posune celý profil kontury o zadanou vzdálenost</li>
+                        <li>Každý segment (přímý i obloukový) se posune paralelně</li>
+                        <li>Zachová napojení segmentů – automaticky přepočítá průsečíky</li>
+                      </ul>
+                    </div>
+                  </details>
                 </div>
               </details>
               <details class="help-tool-item">
-                <summary><span class="tool-icon">🪞</span> Zrcadlit <kbd>Shift+M</kbd></summary>
+                <summary>
+                  <span class="tool-icon">🪞</span> Zrcadlit <kbd>Shift+M</kbd>
+                </summary>
                 <div class="tool-detail">
                   <p>Zrcadlí vybraný objekt přes zvolenou osu.</p>
                   <ul>
-                    <li>Vyberte objekt(y), poté stiskněte <kbd>Shift+M</kbd></li>
+                    <li>
+                      Vyberte objekt(y), poté stiskněte <kbd>Shift+M</kbd>
+                    </li>
                     <li>Zvolte osu zrcadlení (X, Z nebo vlastní přímku)</li>
                     <li>Vytvoří zrcadlovou kopii – originál zůstane</li>
                     <li>Dostupný i z kontextového menu (pravý klik)</li>
@@ -1700,33 +2033,54 @@
                 </div>
               </details>
               <details class="help-tool-item">
-                <summary><span class="tool-icon">⊥</span> Kolmice <kbd>J</kbd></summary>
+                <summary>
+                  <span class="tool-icon">⊥</span> Kolmice <kbd>J</kbd>
+                </summary>
                 <div class="tool-detail">
                   <p>Vytvoří kolmici k úsečce. Podporuje dva režimy:</p>
                   <ul>
-                    <li><strong>Úsečka → Úsečka</strong> – nová úsečka kolmá k vybrané, procházející průsečíkem</li>
-                    <li><strong>Úsečka → Bod</strong> – kolmice z bodu na vybranou úsečku (pata kolmice)</li>
-                    <li>Snap k bodům se automaticky použije pro přesné umístění</li>
+                    <li>
+                      <strong>Úsečka → Úsečka</strong> – nová úsečka kolmá k
+                      vybrané, procházející průsečíkem
+                    </li>
+                    <li>
+                      <strong>Úsečka → Bod</strong> – kolmice z bodu na vybranou
+                      úsečku (pata kolmice)
+                    </li>
+                    <li>
+                      Snap k bodům se automaticky použije pro přesné umístění
+                    </li>
                   </ul>
                 </div>
               </details>
               <details class="help-tool-item">
-                <summary><span class="tool-icon">∥</span> Rovnoběžka <kbd>H</kbd></summary>
+                <summary>
+                  <span class="tool-icon">∥</span> Rovnoběžka <kbd>H</kbd>
+                </summary>
                 <div class="tool-detail">
                   <p>Vytvoří novou úsečku rovnoběžnou se zvolenou úsečkou.</p>
                   <ul>
                     <li>Klikněte na referenční úsečku</li>
-                    <li>Poté klikněte na místo, kudy má rovnoběžka procházet</li>
-                    <li>Nová úsečka bude mít stejný směr a délku jako originál</li>
+                    <li>
+                      Poté klikněte na místo, kudy má rovnoběžka procházet
+                    </li>
+                    <li>
+                      Nová úsečka bude mít stejný směr a délku jako originál
+                    </li>
                   </ul>
                 </div>
               </details>
               <details class="help-tool-item">
-                <summary><span class="tool-icon">↔</span> Vodorovnost <kbd>Z</kbd></summary>
+                <summary>
+                  <span class="tool-icon">↔</span> Vodorovnost <kbd>Z</kbd>
+                </summary>
                 <div class="tool-detail">
                   <p>Zarovná úsečku do přesně vodorovné nebo svislé polohy.</p>
                   <ul>
-                    <li>Klikněte na úsečku – automaticky se zarovná do nejbližšího směru (vodorovný/svislý)</li>
+                    <li>
+                      Klikněte na úsečku – automaticky se zarovná do nejbližšího
+                      směru (vodorovný/svislý)
+                    </li>
                     <li>Zachová délku úsečky</li>
                     <li>Vhodné pro zarovnání čar do pravoúhlého systému</li>
                   </ul>
@@ -1735,7 +2089,9 @@
               <details class="help-tool-item">
                 <summary><span class="tool-icon">✂</span> Rozdělit</summary>
                 <div class="tool-detail">
-                  <p>Rozdělí objekt v kliknutém bodě na dva samostatné objekty.</p>
+                  <p>
+                    Rozdělí objekt v kliknutém bodě na dva samostatné objekty.
+                  </p>
                   <ul>
                     <li>Klikněte na místo na úsečce nebo oblouku</li>
                     <li>Objekt se rozdělí na dvě části v kliknutém bodě</li>
@@ -1759,34 +2115,265 @@
                 <div class="tool-detail">
                   <p>Zvětší nebo zmenší vybraný objekt podle měřítka.</p>
                   <ul>
-                    <li>Vyberte objekt a zadejte měřítko (např. 2 = dvojnásobek, 0.5 = poloviční)</li>
+                    <li>
+                      Vyberte objekt a zadejte měřítko (např. 2 = dvojnásobek,
+                      0.5 = poloviční)
+                    </li>
                     <li>Změna se provede vzhledem ke středu objektu</li>
                     <li>Funguje na všechny typy objektů</li>
                   </ul>
                 </div>
               </details>
               <details class="help-tool-item">
-                <summary><span class="tool-icon">📐</span> Kóta <kbd>U</kbd></summary>
+                <summary>
+                  <span class="tool-icon">📐</span> Kóta <kbd>U</kbd>
+                </summary>
                 <div class="tool-detail">
-                  <p>Vytvoří kótu (trvalý rozměr v kresbě) mezi dvěma body.</p>
-                  <ul>
-                    <li><strong>2 kliky</strong> – vyberte počáteční a koncový bod kóty</li>
-                    <li>Kóta zobrazuje vzdálenost v mm (respektuje R/D režim na ose X)</li>
-                    <li>Asociativní kóty – při přesunu objektu se kóta automaticky aktualizuje</li>
-                    <li><strong><kbd>D</kbd></strong> – zobrazit/skrýt všechny kóty</li>
-                    <li>Exportují se do DXF</li>
-                  </ul>
+                  <p>
+                    Vytvoří trvalou kótu (rozměr) v kresbě. Klikněte na dva
+                    body – kóta zobrazí vzdálenost. Klávesa <kbd>D</kbd>
+                    zobrazí/skryje všechny kóty.
+                  </p>
+
+                  <details class="help-sub-detail">
+                    <summary>Typy kót</summary>
+                    <div class="help-sub-content">
+                      <ul>
+                        <li><strong>Vodorovná kóta</strong> – měří vzdálenost v ose X (nebo Z)</li>
+                        <li><strong>Svislá kóta</strong> – měří vzdálenost v kolmé ose</li>
+                        <li><strong>Šikmá kóta</strong> – měří skutečnou vzdálenost mezi body</li>
+                        <li>Typ kóty se automaticky určí podle orientace vybraných bodů</li>
+                        <li>Kóta respektuje režim R/D – na ose X zobrazí poloměr nebo průměr</li>
+                      </ul>
+                    </div>
+                  </details>
+
+                  <details class="help-sub-detail">
+                    <summary>Asociativní kóty</summary>
+                    <div class="help-sub-content">
+                      <p>Kóty vytvořené na snap bodech objektů jsou asociativní:</p>
+                      <ul>
+                        <li>Při přesunu zdrojového objektu se kóta automaticky aktualizuje</li>
+                        <li>Hodnota kóty se přepočítá podle nové pozice objektu</li>
+                        <li>Pozice kótovací čáry se posouvá s objektem</li>
+                        <li>Při smazání zdrojového objektu zůstane kóta na místě</li>
+                      </ul>
+                    </div>
+                  </details>
+
+                  <details class="help-sub-detail">
+                    <summary>Export a zobrazení</summary>
+                    <div class="help-sub-content">
+                      <ul>
+                        <li><strong>DXF export</strong> – kóty se exportují jako DIMENSION entity</li>
+                        <li><strong>PNG/SVG</strong> – kóty jsou součástí exportovaného obrázku</li>
+                        <li><strong><kbd>D</kbd></strong> – přepíná zobrazení: všechny / jen manuální / skryté</li>
+                        <li>Kóty lze smazat jednotlivě výběrem + <kbd>Delete</kbd></li>
+                      </ul>
+                    </div>
+                  </details>
                 </div>
               </details>
               <details class="help-tool-item">
-                <summary><span class="tool-icon">📏</span> Měření <kbd>M</kbd></summary>
+                <summary>
+                  <span class="tool-icon">📏</span> Měření <kbd>M</kbd>
+                </summary>
                 <div class="tool-detail">
-                  <p>Změří vzdálenost a úhel mezi dvěma body (dočasné, neukládá se do kresby).</p>
+                  <p>
+                    Univerzální měřicí nástroj – měří vzdálenosti, úhly,
+                    poloměry a další vlastnosti objektů. Výsledky jsou dočasné
+                    (neukládají se do kresby). Na mobilu: tlačítko 📏 ve
+                    spodní liště.
+                  </p>
+                  <p><strong>Měření jednoho objektu:</strong></p>
+
+                  <details class="help-sub-detail">
+                    <summary>📍 Dva body (kliknutím na canvas)</summary>
+                    <div class="help-sub-content">
+                      <p>Aktivujte měření (<kbd>M</kbd>) a klikněte postupně na dva body.</p>
+                      <ul>
+                        <li><strong>Vzdálenost</strong> – přímá vzdálenost mezi body (mm)</li>
+                        <li><strong>Úhel</strong> – úhel spojnice bodů (°)</li>
+                        <li><strong>ΔX, ΔZ</strong> – rozdíly souřadnic v osách</li>
+                        <li><strong>Souřadnice</strong> – oba body s přesnými hodnotami</li>
+                        <li>Možnost přidat kótu přímo z dialogu měření</li>
+                      </ul>
+                    </div>
+                  </details>
+
+                  <details class="help-sub-detail">
+                    <summary>/ Úsečka (výběr jedné úsečky)</summary>
+                    <div class="help-sub-content">
+                      <p>Vyberte úsečku a stiskněte <kbd>M</kbd> nebo 📏.</p>
+                      <ul>
+                        <li><strong>Souřadnice bodů</strong> – bod 1 (x1, y1) a bod 2 (x2, y2)</li>
+                        <li><strong>Délka</strong> – celková délka úsečky</li>
+                        <li><strong>Úhel</strong> – úhel úsečky ve stupních</li>
+                        <li><strong>ΔX, ΔZ</strong> – rozdíly souřadnic</li>
+                      </ul>
+                    </div>
+                  </details>
+
+                  <details class="help-sub-detail">
+                    <summary>○ Kružnice (výběr kružnice)</summary>
+                    <div class="help-sub-content">
+                      <p>Vyberte kružnici a stiskněte <kbd>M</kbd>.</p>
+                      <ul>
+                        <li><strong>Střed</strong> – souřadnice středu (cx, cy)</li>
+                        <li><strong>Poloměr</strong> – poloměr kružnice</li>
+                        <li><strong>Průměr</strong> – průměr (2 × poloměr)</li>
+                        <li><strong>Obvod</strong> – obvod kružnice (2πr)</li>
+                      </ul>
+                    </div>
+                  </details>
+
+                  <details class="help-sub-detail">
+                    <summary>⌒ Oblouk (výběr oblouku)</summary>
+                    <div class="help-sub-content">
+                      <p>Vyberte oblouk a stiskněte <kbd>M</kbd>.</p>
+                      <ul>
+                        <li><strong>Střed</strong> – souřadnice středu oblouku</li>
+                        <li><strong>Poloměr</strong> – poloměr oblouku</li>
+                        <li><strong>Počáteční úhel</strong> – úhel začátku oblouku (°)</li>
+                        <li><strong>Koncový úhel</strong> – úhel konce oblouku (°)</li>
+                      </ul>
+                    </div>
+                  </details>
+
+                  <details class="help-sub-detail">
+                    <summary>⛓ Kontura / Polyline (výběr kontury)</summary>
+                    <div class="help-sub-content">
+                      <p>Vyberte konturu (polyline) a stiskněte <kbd>M</kbd>.</p>
+                      <ul>
+                        <li><strong>Počet vrcholů</strong> – kolik bodů kontura obsahuje</li>
+                        <li><strong>Počet segmentů</strong> – přímé + obloukové (s počtem oblouků)</li>
+                        <li><strong>Uzavřená</strong> – Ano / Ne</li>
+                        <li><strong>Celková délka</strong> – součet délek všech segmentů</li>
+                        <li><strong>Souřadnice vrcholů</strong> – všechny body kontury</li>
+                      </ul>
+                    </div>
+                  </details>
+
+                  <details class="help-sub-detail">
+                    <summary>□ Obdélník (výběr obdélníku)</summary>
+                    <div class="help-sub-content">
+                      <p>Vyberte obdélník a stiskněte <kbd>M</kbd>.</p>
+                      <ul>
+                        <li><strong>Rohy</strong> – souřadnice dvou protilehlých rohů</li>
+                        <li><strong>Šířka</strong> – rozměr v jedné ose</li>
+                        <li><strong>Výška</strong> – rozměr v druhé ose</li>
+                        <li><strong>Obvod</strong> – 2 × (šířka + výška)</li>
+                        <li><strong>Plocha</strong> – šířka × výška</li>
+                      </ul>
+                    </div>
+                  </details>
+
+                  <details class="help-sub-detail">
+                    <summary>· Bod (výběr bodu)</summary>
+                    <div class="help-sub-content">
+                      <p>Vyberte bod a stiskněte <kbd>M</kbd>.</p>
+                      <ul>
+                        <li><strong>Souřadnice X</strong> – pozice v ose X</li>
+                        <li><strong>Souřadnice Z</strong> – pozice v ose Z</li>
+                      </ul>
+                    </div>
+                  </details>
+
+                  <p style="margin-top:8px"><strong>Měření mezi dvěma objekty:</strong></p>
+
+                  <details class="help-sub-detail">
+                    <summary>📐 Dva snap body</summary>
+                    <div class="help-sub-content">
+                      <p>Klikněte na dva snap body na objektech (koncové body, průsečíky).</p>
+                      <ul>
+                        <li><strong>Vzdálenost</strong> – přímá vzdálenost mezi body</li>
+                        <li><strong>Úhel</strong> – úhel spojnice</li>
+                        <li><strong>ΔX, ΔZ</strong> – rozdíly souřadnic</li>
+                      </ul>
+                    </div>
+                  </details>
+
+                  <details class="help-sub-detail">
+                    <summary>📐 Tři a více snap bodů</summary>
+                    <div class="help-sub-content">
+                      <p>Vyberte 3 nebo více snap bodů postupným klikáním.</p>
+                      <ul>
+                        <li><strong>Dílčí vzdálenosti</strong> – vzdálenost mezi každým párem po sobě jdoucích bodů</li>
+                        <li><strong>Celková délka trasy</strong> – součet všech dílčích vzdáleností</li>
+                        <li><strong>Přímá vzdálenost</strong> – vzdálenost od prvního k poslednímu bodu</li>
+                        <li><strong>Souřadnice</strong> – všechny body s přesnými hodnotami</li>
+                      </ul>
+                    </div>
+                  </details>
+
+                  <details class="help-sub-detail">
+                    <summary>/ + / Dvě úsečky – úhel a vzdálenost</summary>
+                    <div class="help-sub-content">
+                      <p>Vyberte dvě úsečky (Ctrl+klik) a stiskněte <kbd>M</kbd>.</p>
+                      <p><strong>Rovnoběžné úsečky:</strong></p>
+                      <ul>
+                        <li><strong>Kolmá vzdálenost</strong> – nejkratší vzdálenost mezi přímkami</li>
+                        <li><strong>Délky</strong> – délka obou úseček</li>
+                        <li>Možnost upravit kolmou vzdálenost (posunem jedné úsečky)</li>
+                      </ul>
+                      <p><strong>Různoběžné úsečky:</strong></p>
+                      <ul>
+                        <li><strong>Úhel</strong> – úhel sevřený úsečkami (°)</li>
+                        <li><strong>Doplněk</strong> – doplňkový úhel do 180°</li>
+                        <li><strong>Průsečík</strong> – souřadnice průsečíku přímek</li>
+                        <li><strong>Délky</strong> – délka obou úseček</li>
+                        <li>Možnost vytvořit bod v průsečíku</li>
+                        <li>Možnost upravit úhel (otočením jedné úsečky)</li>
+                      </ul>
+                    </div>
+                  </details>
+
+                  <details class="help-sub-detail">
+                    <summary>○ + ○ Dvě kružnice / oblouky</summary>
+                    <div class="help-sub-content">
+                      <p>Vyberte dvě kružnice nebo oblouky (Ctrl+klik) a stiskněte <kbd>M</kbd>.</p>
+                      <ul>
+                        <li><strong>Vzdálenost středů</strong> – vzdálenost mezi středy kružnic</li>
+                        <li><strong>Mezera mezi okraji</strong> – vzdálenost středů − r₁ − r₂ (záporná = překryv)</li>
+                        <li><strong>Poloměry</strong> – poloměr obou kružnic</li>
+                        <li><strong>Souřadnice středů</strong> – středy obou kružnic</li>
+                        <li>Možnost upravit vzdálenost středů (posunem jedné kružnice)</li>
+                      </ul>
+                    </div>
+                  </details>
+
+                  <details class="help-sub-detail">
+                    <summary>· + / Bod a úsečka</summary>
+                    <div class="help-sub-content">
+                      <p>Vyberte snap bod a úsečku a stiskněte <kbd>M</kbd>.</p>
+                      <ul>
+                        <li><strong>Kolmá vzdálenost</strong> – nejkratší vzdálenost od bodu k přímce</li>
+                        <li><strong>Úhel</strong> – úhel od paty kolmice k bodu</li>
+                        <li><strong>Pata kolmice</strong> – souřadnice nejbližšího bodu na přímce</li>
+                        <li><strong>Souřadnice bodu</strong> – vybraný bod</li>
+                        <li>Možnost upravit kolmou vzdálenost</li>
+                      </ul>
+                    </div>
+                  </details>
+
+                  <details class="help-sub-detail">
+                    <summary>· + ○ Bod a kružnice</summary>
+                    <div class="help-sub-content">
+                      <p>Vyberte snap bod a kružnici a stiskněte <kbd>M</kbd>.</p>
+                      <ul>
+                        <li><strong>Vzdálenost od středu</strong> – vzdálenost bodu od středu kružnice</li>
+                        <li><strong>Vzdálenost od okraje</strong> – vzdálenost bodu od obvodu kružnice</li>
+                        <li><strong>Souřadnice bodu</strong> – vybraný bod</li>
+                        <li><strong>Střed a poloměr</strong> – parametry kružnice</li>
+                      </ul>
+                    </div>
+                  </details>
+
+                  <p style="margin-top:8px"><strong>Společné funkce dialogu:</strong></p>
                   <ul>
-                    <li><strong>2 kliky</strong> – zobrazí vzdálenost, úhel, ΔX a ΔZ</li>
-                    <li><strong>Klik na kružnici</strong> – zobrazí poloměr a průměr</li>
-                    <li>Na mobilu: tlačítko 📏 ve spodní liště</li>
-                    <li>Výsledek se zobrazí v toastu a stavovém řádku</li>
+                    <li><strong>📋 Kopírovat</strong> – zkopíruje naměřené hodnoty do schránky</li>
+                    <li><strong>📐 Přidat kótu</strong> – vytvoří trvalou kótu z naměřených bodů</li>
+                    <li><strong>✏️ Upravit</strong> – u některých typů lze změnit vzdálenost/úhel a objekt se přesune</li>
                   </ul>
                 </div>
               </details>
@@ -1795,9 +2382,16 @@
                 <div class="tool-detail">
                   <p>Zakotvit nebo uvolnit manuálně přidané snap body.</p>
                   <ul>
-                    <li>Klikněte na libovolné místo ve výkresu – přidá trvalý snap bod</li>
-                    <li>Opětovným kliknutím na existující kotvu ji odstraníte</li>
-                    <li>Kotvené body fungují jako snap cíle pro všechny nástroje</li>
+                    <li>
+                      Klikněte na libovolné místo ve výkresu – přidá trvalý snap
+                      bod
+                    </li>
+                    <li>
+                      Opětovným kliknutím na existující kotvu ji odstraníte
+                    </li>
+                    <li>
+                      Kotvené body fungují jako snap cíle pro všechny nástroje
+                    </li>
                   </ul>
                 </div>
               </details>
@@ -1807,20 +2401,29 @@
                   <p>Nastavte vlastní nulový bod pro souřadnicový systém.</p>
                   <ul>
                     <li>Klikněte na místo, kde chcete mít nulový bod [0, 0]</li>
-                    <li>Všechny souřadnice se přepočítají relativně k novému bodu</li>
-                    <li>V inkrementálním režimu (<kbd>ABS/INC</kbd>) se výpočty provádějí od tohoto bodu</li>
+                    <li>
+                      Všechny souřadnice se přepočítají relativně k novému bodu
+                    </li>
+                    <li>
+                      V inkrementálním režimu (<kbd>ABS/INC</kbd>) se výpočty
+                      provádějí od tohoto bodu
+                    </li>
                     <li>Dostupný i z kontextového menu (pravý klik)</li>
                   </ul>
                 </div>
               </details>
               <details class="help-tool-item">
-                <summary><span class="tool-icon">🗑</span> Smazat <kbd>Delete</kbd></summary>
+                <summary>
+                  <span class="tool-icon">🗑</span> Smazat <kbd>Delete</kbd>
+                </summary>
                 <div class="tool-detail">
                   <p>Smaže vybraný objekt nebo objekty z výkresu.</p>
                   <ul>
                     <li>Vyberte objekt(y) a stiskněte <kbd>Delete</kbd></li>
                     <li>Smazání lze vrátit pomocí <kbd>Ctrl+Z</kbd></li>
-                    <li>Při smazání se aktualizují průsečíky a asociativní kóty</li>
+                    <li>
+                      Při smazání se aktualizují průsečíky a asociativní kóty
+                    </li>
                   </ul>
                 </div>
               </details>
@@ -1953,84 +2556,187 @@
             <summary>📱 Dotykové ovládání</summary>
             <div class="help-tools-list">
               <details class="help-tool-item">
-                <summary><span class="tool-icon">👆</span> Základní gesta</summary>
+                <summary>
+                  <span class="tool-icon">👆</span> Základní gesta
+                </summary>
                 <div class="tool-detail">
                   <ul>
-                    <li><strong>Jeden tap</strong> – kliknutí (výběr objektu, umístění bodu, …)</li>
-                    <li><strong>Jeden prst táhnout</strong> – posun zobrazení (pan), pokud právě nekreslíte</li>
-                    <li><strong>Dva prsty táhnout</strong> – posun zobrazení (pan) vždy, i při kreslení</li>
-                    <li><strong>Pinch (dva prsty k sobě / od sebe)</strong> – přiblížit / oddálit výkres</li>
-                    <li><strong>Dvojtap na prázdno</strong> – zahájí obdélníkový výběr (táhněte prstem pro výběr oblasti)</li>
+                    <li>
+                      <strong>Jeden tap</strong> – kliknutí (výběr objektu,
+                      umístění bodu, …)
+                    </li>
+                    <li>
+                      <strong>Jeden prst táhnout</strong> – posun zobrazení
+                      (pan), pokud právě nekreslíte
+                    </li>
+                    <li>
+                      <strong>Dva prsty táhnout</strong> – posun zobrazení (pan)
+                      vždy, i při kreslení
+                    </li>
+                    <li>
+                      <strong>Pinch (dva prsty k sobě / od sebe)</strong> –
+                      přiblížit / oddálit výkres
+                    </li>
+                    <li>
+                      <strong>Dvojtap na prázdno</strong> – zahájí obdélníkový
+                      výběr (táhněte prstem pro výběr oblasti)
+                    </li>
                   </ul>
                 </div>
               </details>
               <details class="help-tool-item">
-                <summary><span class="tool-icon">🎯</span> Přesný režim (precision crosshair)</summary>
+                <summary>
+                  <span class="tool-icon">🎯</span> Přesný režim (precision
+                  crosshair)
+                </summary>
                 <div class="tool-detail">
-                  <p>Dlouhý stisk (cca 0,5 s) na canvasu aktivuje přesný zaměřovač.</p>
+                  <p>
+                    Dlouhý stisk (cca 0,5 s) na canvasu aktivuje přesný
+                    zaměřovač.
+                  </p>
                   <ul>
-                    <li>Zaměřovač se zobrazí <strong>80 px nad prstem</strong>, abyste viděli kam mířite</li>
+                    <li>
+                      Zaměřovač se zobrazí <strong>80 px nad prstem</strong>,
+                      abyste viděli kam mířite
+                    </li>
                     <li>Zobrazuje aktuální souřadnice X, Z v reálném čase</li>
-                    <li>Při kreslení zobrazuje i vzdálenost a úhel od posledního bodu</li>
+                    <li>
+                      Při kreslení zobrazuje i vzdálenost a úhel od posledního
+                      bodu
+                    </li>
                     <li>Podržte prst a táhněte pro přesné umístění bodu</li>
                     <li>Snap k bodům funguje i v tomto režimu</li>
-                    <li>Zařízení zavibruje při aktivaci (pokud podporuje vibrace)</li>
-                    <li>Uvolnění prstu provede kliknutí na pozici zaměřovače</li>
+                    <li>
+                      Zařízení zavibruje při aktivaci (pokud podporuje vibrace)
+                    </li>
+                    <li>
+                      Uvolnění prstu provede kliknutí na pozici zaměřovače
+                    </li>
                   </ul>
                 </div>
               </details>
               <details class="help-tool-item">
-                <summary><span class="tool-icon">📱</span> Spodní lišta (mobilní)</summary>
+                <summary>
+                  <span class="tool-icon">📱</span> Spodní lišta (mobilní)
+                </summary>
                 <div class="tool-detail">
-                  <p>Na mobilním zařízení se zobrazuje spodní ovládací lišta s tlačítky:</p>
+                  <p>
+                    Na mobilním zařízení se zobrazuje spodní ovládací lišta s
+                    tlačítky:
+                  </p>
                   <ul>
-                    <li><strong>🔧 Nástroje</strong> – otevře horní panel s kreslicími a editačními nástroji</li>
-                    <li><strong>🔢 Zadat</strong> – otevře dialog pro číselný vstup souřadnic</li>
-                    <li><strong>📏 Měření</strong> – rychlé měření vybraného objektu nebo přepnutí na měřicí nástroj</li>
-                    <li><strong>🧲 Snap</strong> – zapne/vypne přichycení k bodům</li>
-                    <li><strong>⟲ Zpět</strong> – vrátí poslední akci (Undo)</li>
-                    <li><strong>⟳ Vpřed</strong> – zobrazí se pouze když je k dispozici Redo</li>
-                    <li><strong>✕ Zrušit</strong> – zobrazí se při kreslení/přetahování, zruší aktuální akci</li>
-                    <li><strong>☰ Panel</strong> – otevře boční panel s nastavením, kalkulačkami a vlastnostmi</li>
+                    <li>
+                      <strong>🔧 Nástroje</strong> – otevře horní panel s
+                      kreslicími a editačními nástroji
+                    </li>
+                    <li>
+                      <strong>🔢 Zadat</strong> – otevře dialog pro číselný
+                      vstup souřadnic
+                    </li>
+                    <li>
+                      <strong>📏 Měření</strong> – rychlé měření vybraného
+                      objektu nebo přepnutí na měřicí nástroj
+                    </li>
+                    <li>
+                      <strong>🧲 Snap</strong> – zapne/vypne přichycení k bodům
+                    </li>
+                    <li>
+                      <strong>⟲ Zpět</strong> – vrátí poslední akci (Undo)
+                    </li>
+                    <li>
+                      <strong>⟳ Vpřed</strong> – zobrazí se pouze když je k
+                      dispozici Redo
+                    </li>
+                    <li>
+                      <strong>✕ Zrušit</strong> – zobrazí se při
+                      kreslení/přetahování, zruší aktuální akci
+                    </li>
+                    <li>
+                      <strong>☰ Panel</strong> – otevře boční panel s
+                      nastavením, kalkulačkami a vlastnostmi
+                    </li>
                   </ul>
                 </div>
               </details>
               <details class="help-tool-item">
-                <summary><span class="tool-icon">📊</span> Stavový řádek (mobilní)</summary>
+                <summary>
+                  <span class="tool-icon">📊</span> Stavový řádek (mobilní)
+                </summary>
                 <div class="tool-detail">
                   <p>Horní stavový řádek na mobilu zobrazuje:</p>
                   <ul>
-                    <li><strong>Typ stroje</strong> – SOU (soustruh) / KAR (karusel)</li>
-                    <li><strong>Režim</strong> – ABS (absolutní) / INC (inkrementální)</li>
+                    <li>
+                      <strong>Typ stroje</strong> – SOU (soustruh) / KAR
+                      (karusel)
+                    </li>
+                    <li>
+                      <strong>Režim</strong> – ABS (absolutní) / INC
+                      (inkrementální)
+                    </li>
                     <li><strong>Osa X</strong> – R (poloměr) / ⌀ (průměr)</li>
-                    <li><strong>Souřadnice</strong> – aktuální pozice kurzoru X, Z</li>
-                    <li><strong>Zoom</strong> – aktuální přiblížení v procentech</li>
-                    <li><strong>Indikátory</strong> – # mřížka, ∠ úhel, 📐 kóty (zelené = aktivní)</li>
+                    <li>
+                      <strong>Souřadnice</strong> – aktuální pozice kurzoru X, Z
+                    </li>
+                    <li>
+                      <strong>Zoom</strong> – aktuální přiblížení v procentech
+                    </li>
+                    <li>
+                      <strong>Indikátory</strong> – # mřížka, ∠ úhel, 📐 kóty
+                      (zelené = aktivní)
+                    </li>
                   </ul>
                 </div>
               </details>
               <details class="help-tool-item">
-                <summary><span class="tool-icon">⛓</span> Kontura na mobilu</summary>
+                <summary>
+                  <span class="tool-icon">⛓</span> Kontura na mobilu
+                </summary>
                 <div class="tool-detail">
-                  <p>Při kreslení kontury (polyline) se na mobilu zobrazí speciální tlačítka:</p>
+                  <p>
+                    Při kreslení kontury (polyline) se na mobilu zobrazí
+                    speciální tlačítka:
+                  </p>
                   <ul>
-                    <li><strong>✓ Dokončit</strong> – dokončí konturu jako otevřenou (Enter na desktopu)</li>
-                    <li><strong>⬡ Uzavřít</strong> – uzavře konturu (poslední→první bod, Shift+Enter)</li>
+                    <li>
+                      <strong>✓ Dokončit</strong> – dokončí konturu jako
+                      otevřenou (Enter na desktopu)
+                    </li>
+                    <li>
+                      <strong>⬡ Uzavřít</strong> – uzavře konturu
+                      (poslední→první bod, Shift+Enter)
+                    </li>
                     <li>Tlačítka se zobrazí po zadání alespoň 2 bodů</li>
                   </ul>
                 </div>
               </details>
               <details class="help-tool-item">
-                <summary><span class="tool-icon">🎨</span> Tipy pro mobilní použití</summary>
+                <summary>
+                  <span class="tool-icon">🎨</span> Tipy pro mobilní použití
+                </summary>
                 <div class="tool-detail">
                   <ul>
-                    <li>Uložte aplikaci na plochu (PWA) pro fullscreen režim bez adresního řádku</li>
-                    <li>Používejte přesný režim (dlouhý stisk) pro přesné umístění bodů</li>
-                    <li>Zapněte snap k bodům (🧲) pro automatické přichycení</li>
+                    <li>
+                      Uložte aplikaci na plochu (PWA) pro fullscreen režim bez
+                      adresního řádku
+                    </li>
+                    <li>
+                      Používejte přesný režim (dlouhý stisk) pro přesné umístění
+                      bodů
+                    </li>
+                    <li>
+                      Zapněte snap k bodům (🧲) pro automatické přichycení
+                    </li>
                     <li>Používejte číselný vstup (🔢) pro přesné souřadnice</li>
-                    <li>Boční panel se automaticky zavře při kliknutí na výkres</li>
-                    <li>Dvojtap na prázdné místo pro obdélníkový výběr více objektů</li>
-                    <li>Aplikace funguje plně offline – data se ukládají lokálně</li>
+                    <li>
+                      Boční panel se automaticky zavře při kliknutí na výkres
+                    </li>
+                    <li>
+                      Dvojtap na prázdné místo pro obdélníkový výběr více
+                      objektů
+                    </li>
+                    <li>
+                      Aplikace funguje plně offline – data se ukládají lokálně
+                    </li>
                   </ul>
                 </div>
               </details>
