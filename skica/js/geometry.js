@@ -738,7 +738,7 @@ export function calculateAllIntersections() {
   }
   const unique = [];
   for (const pt of pts) {
-    if (!unique.some((u) => Math.hypot(u.x - pt.x, u.y - pt.y) < 1e-6))
+    if (!unique.some((u) => Math.hypot(u.x - pt.x, u.y - pt.y) < 1e-4))
       unique.push(pt);
   }
   state.intersections = unique;
@@ -906,10 +906,17 @@ export function circlePositionsTangentToLineAndPoint(r, x1, y1, x2, y2, px, py) 
     }
   }
   // Filtrovat: tečný bod musí ležet na konečné úsečce
-  return results.filter(p => {
+  const filtered = results.filter(p => {
     const tp = projectionParam(p.cx, p.cy, x1, y1, x2, y2);
     return tp >= -1e-9 && tp <= 1 + 1e-9;
   });
+  // Deduplikace tečných řešení (disc ≈ 0 → dva téměř totožné výsledky)
+  const deduped = [];
+  for (const p of filtered) {
+    if (!deduped.some(d => Math.hypot(d.cx - p.cx, d.cy - p.cy) < 1e-4))
+      deduped.push(p);
+  }
+  return deduped;
 }
 
 // ── Kružnice procházející třemi body ──
@@ -971,10 +978,17 @@ export function circleTangentToLineAndTwoPoints(lx1, ly1, lx2, ly2, p1x, p1y, p2
     }
   }
   // Filtrovat: tečný bod musí ležet na konečné úsečce
-  return results.filter(p => {
+  const filtered = results.filter(p => {
     const tp = projectionParam(p.cx, p.cy, lx1, ly1, lx2, ly2);
     return tp >= -1e-9 && tp <= 1 + 1e-9;
   });
+  // Deduplikace tečných řešení
+  const deduped = [];
+  for (const p of filtered) {
+    if (!deduped.some(d => Math.hypot(d.cx - p.cx, d.cy - p.cy) < 1e-4))
+      deduped.push(p);
+  }
+  return deduped;
 }
 
 // ── Kružnice tečná ke dvěma úsečkám a procházející bodem ──
@@ -1034,11 +1048,18 @@ export function circleTangentToTwoLinesAndPoint(l1, l2, px, py) {
     }
   }
   // Filtrovat: tečný bod musí ležet na konečné úsečce u obou přímek
-  return results.filter(p => {
+  const filtered = results.filter(p => {
     const t1 = projectionParam(p.cx, p.cy, l1.x1, l1.y1, l1.x2, l1.y2);
     const t2 = projectionParam(p.cx, p.cy, l2.x1, l2.y1, l2.x2, l2.y2);
     return t1 >= -1e-9 && t1 <= 1 + 1e-9 && t2 >= -1e-9 && t2 <= 1 + 1e-9;
   });
+  // Deduplikace tečných řešení
+  const deduped = [];
+  for (const p of filtered) {
+    if (!deduped.some(d => Math.hypot(d.cx - p.cx, d.cy - p.cy) < 1e-4))
+      deduped.push(p);
+  }
+  return deduped;
 }
 
 // ── Kružnice tečná ke třem úsečkám ──
@@ -1070,7 +1091,7 @@ export function circleTangentToThreeLines(l1, l2, l3) {
       const cy = (-eA1 * eC2 + eA2 * eC1) / det;
       const r = Math.abs(n1.a * cx + n1.b * cy + n1.c);
       if (r > 1e-10) {
-        const isDup = results.some(p => Math.hypot(p.cx - cx, p.cy - cy) < 1e-6);
+        const isDup = results.some(p => Math.hypot(p.cx - cx, p.cy - cy) < 1e-4);
         if (!isDup) results.push({ cx, cy, r });
       }
     }
@@ -1124,7 +1145,13 @@ export function circleTangentToCircleAndTwoPoints(ccx, ccy, cR, p1x, p1y, p2x, p
       tryT((-qb - sqrtDisc) / (2 * qa));
     }
   }
-  return results;
+  // Deduplikace tečných řešení
+  const deduped = [];
+  for (const p of results) {
+    if (!deduped.some(d => Math.hypot(d.cx - p.cx, d.cy - p.cy) < 1e-4))
+      deduped.push(p);
+  }
+  return deduped;
 }
 
 // ── Extrakce úsečkových dat z polyline segmentu ──
