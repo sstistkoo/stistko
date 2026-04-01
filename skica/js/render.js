@@ -1617,20 +1617,23 @@ export function drawPolyline(obj, isSel, normalColor, objIdx) {
   ctx.strokeStyle = baseStroke;
   ctx.lineWidth = baseWidth;
 
-  // Vertex dots
-  for (let vi = 0; vi < n; vi++) {
-    const v = obj.vertices[vi];
-    const [sx, sy] = worldToScreen(v.x, v.y);
-    // Highlight vertices of selected segments in white, others in normal color
-    const isVtxSel = isSegMode && (isSegSelected(vi) || isSegSelected(((vi - 1) % n + n) % n));
-    if (isSegMode) {
-      ctx.fillStyle = isVtxSel ? COLORS.selected : (normalColor || COLORS.primary);
-    } else {
-      ctx.fillStyle = baseStroke;
+  // Vertex dots — skrýt u polylines s mnoha vertexy (boolean výsledky, kruhové aproximace)
+  const showVertexDots = n <= 20 || isSel || isSegMode;
+  if (showVertexDots) {
+    for (let vi = 0; vi < n; vi++) {
+      const v = obj.vertices[vi];
+      const [sx, sy] = worldToScreen(v.x, v.y);
+      // Highlight vertices of selected segments in white, others in normal color
+      const isVtxSel = isSegMode && (isSegSelected(vi) || isSegSelected(((vi - 1) % n + n) % n));
+      if (isSegMode) {
+        ctx.fillStyle = isVtxSel ? COLORS.selected : (normalColor || COLORS.primary);
+      } else {
+        ctx.fillStyle = baseStroke;
+      }
+      ctx.beginPath();
+      ctx.arc(sx, sy, isVtxSel ? 4.5 : 2.5, 0, Math.PI * 2);
+      ctx.fill();
     }
-    ctx.beginPath();
-    ctx.arc(sx, sy, isVtxSel ? 4.5 : 2.5, 0, Math.PI * 2);
-    ctx.fill();
   }
   // Restore fillStyle
   ctx.fillStyle = baseStroke;

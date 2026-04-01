@@ -2,12 +2,11 @@
 // ║  SKICA – Boolean operace (sjednocení, odečtení, průnik)   ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-import { state, showToast } from '../state.js';
-import { addObject } from '../objects.js';
+import { state, pushUndo, showToast } from '../state.js';
 import { findObjectAt, calculateAllIntersections } from '../geometry.js';
-import { setHint } from '../ui.js';
+import { setHint, updateObjectList, updateProperties } from '../ui.js';
 import { renderAll } from '../render.js';
-import { deepClone, getRectCorners } from '../utils.js';
+import { getRectCorners } from '../utils.js';
 import { showBooleanDialog } from '../dialogs/booleanDialog.js';
 
 // ── Stav nástroje ──
@@ -85,23 +84,31 @@ export function handleBooleanClick(wx, wy) {
       return;
     }
 
+    // Jeden pushUndo PŘED všemi změnami
+    pushUndo();
+
     // Smazat zdrojové objekty (vyšší index nejdřív)
     const toRemove = [idxA, idxB].sort((a, b) => b - a);
     for (const ri of toRemove) {
       state.objects.splice(ri, 1);
     }
 
-    // Přidat výsledek
+    // Přidat výsledek ručně (addObject volá pushUndo znovu)
     const opLabels = { union: 'Sjednocení', subtract: 'Odečtení', intersect: 'Průnik' };
-    addObject({
+    const resultObj = {
       type: 'polyline',
       vertices: result,
       bulges: new Array(result.length).fill(0),
       closed: true,
       name: `${opLabels[operation]} ${state.nextId}`,
-    });
+      id: state.nextId++,
+      layer: state.activeLayer,
+    };
+    state.objects.push(resultObj);
 
     calculateAllIntersections();
+    updateObjectList();
+    updateProperties();
     renderAll();
     showToast(`${opLabels[operation]} provedeno ✓`);
     setHint('Klikněte na první uzavřenou konturu');
@@ -321,80 +328,170 @@ function _ensureCCW(poly) {
   return poly;
 }
 
-// ── Union: obrysový přístup přes řazení průsečíků ──
+// ── Union & Subtract: edge-traversal přes průsečíky ──
 
+/**
+ * Vloží průsečíky na hrany polygonu a vrátí augmentovaný polygon.
+ * Každý bod má {x, y, intersect?, t?, partner?}.
+ */
+function _augmentPolygon(poly, otherPoly) {
+  const result = [];
+  for (let i = 0; i < poly.length; i++) {
+    const p1 = poly[i];
+    const p2 = poly[(i + 1) % poly.length];
+    const edgePts = [{ x: p1.x, y: p1.y, t: 0, intersect: false }];
+
+    for (let j = 0; j < otherPoly.length; j++) {
+      const q1 = otherPoly[j];
+      const q2 = otherPoly[(j + 1) % otherPoly.length];
+      const inter = _segmentIntersect(p1, p2, q1, q2);
+      if (inter) {
+        const dx = p2.x - p1.x, dy = p2.y - p1.y;
+        const len = Math.hypot(dx, dy);
+        const t = len > 1e-10 ? Math.hypot(inter.x - p1.x, inter.y - p1.y) / len : 0;
+        edgePts.push({ x: inter.x, y: inter.y, t, intersect: true, edgeJ: j });
+      }
+    }
+
+    // Seřadit body na hraně podle parametru t
+    edgePts.sort((a, b) => a.t - b.t);
+    // Nepřidávat koncový bod (ten bude začátek další hrany)
+    for (const pt of edgePts) {
+      result.push(pt);
+    }
+  }
+  return result;
+}
+
+/**
+ * Sjednocení — procházení po vnějším obrysu.
+ * Sleduje hrany A, na průsečíku přepne na B (vnější), na dalším průsečíku zpět.
+ */
 function _computeUnion(polyA, polyB) {
   _ensureCCW(polyA);
   _ensureCCW(polyB);
 
-  // Najít body A mimo B a body B mimo A, plus průsečíky
-  const result = [];
+  const augA = _augmentPolygon(polyA, polyB);
+  const augB = _augmentPolygon(polyB, polyA);
 
-  // Sbírat body A, které leží mimo B
-  for (const p of polyA) {
-    if (!_pointInPolygon(p, polyB)) {
-      result.push({ x: p.x, y: p.y });
-    }
-  }
-  // Sbírat body B, které leží mimo A
-  for (const p of polyB) {
-    if (!_pointInPolygon(p, polyA)) {
-      result.push({ x: p.x, y: p.y });
-    }
-  }
-  // Přidat průsečíky hran
-  const inters = _findAllEdgeIntersections(polyA, polyB);
-  for (const p of inters) {
-    result.push(p);
+  // Najít průsečíky
+  const intersections = augA.filter(p => p.intersect);
+  if (intersections.length < 2) {
+    // Jeden polygon obsahuje druhý nebo se netýkají
+    const aContainsB = polyB.every(p => _pointInPolygon(p, polyA));
+    const bContainsA = polyA.every(p => _pointInPolygon(p, polyB));
+    if (aContainsB) return polyA.map(p => ({ x: p.x, y: p.y }));
+    if (bContainsA) return polyB.map(p => ({ x: p.x, y: p.y }));
+    return _mergeDisjoint(polyA, polyB);
   }
 
-  if (result.length < 3) {
-    // Jeden polygon zcela obsahuje druhý
-    const aArea = Math.abs(_signedArea(polyA));
-    const bArea = Math.abs(_signedArea(polyB));
-    return aArea >= bArea
-      ? polyA.map(p => ({ x: p.x, y: p.y }))
-      : polyB.map(p => ({ x: p.x, y: p.y }));
-  }
-
-  return _convexHullSort(result);
+  // Pro union: na průsečíku přepnout na polygon, jehož další bod je MIMO druhý polygon
+  return _traceContour(augA, augB, polyA, polyB, 'union');
 }
 
+/**
+ * Odečtení — A mínus B.
+ * Sleduje vnější hrany A a vnitřní hrany B (opačný směr).
+ */
 function _computeSubtract(polyA, polyB) {
   _ensureCCW(polyA);
   _ensureCCW(polyB);
 
-  const result = [];
+  const augA = _augmentPolygon(polyA, polyB);
+  // Pro subtract: B procházíme v opačném směru (CW)
+  const reversedB = [...polyB].reverse();
+  const augB = _augmentPolygon(reversedB, polyA);
 
-  // Body A mimo B
-  for (const p of polyA) {
-    if (!_pointInPolygon(p, polyB)) {
-      result.push({ x: p.x, y: p.y });
-    }
-  }
-  // Průsečíky hran
-  const inters = _findAllEdgeIntersections(polyA, polyB);
-  for (const p of inters) {
-    result.push(p);
-  }
-  // Body B uvnitř A (obrácený obrys výřezu)
-  const bInside = [];
-  for (const p of polyB) {
-    if (_pointInPolygon(p, polyA)) {
-      bInside.push({ x: p.x, y: p.y });
-    }
-  }
-  // Přidat body B uvnitř A v obráceném pořadí (díra)
-  bInside.reverse();
-  for (const p of bInside) {
-    result.push(p);
-  }
-
-  if (result.length < 3) {
+  const intersections = augA.filter(p => p.intersect);
+  if (intersections.length < 2) {
+    const bContainsA = polyA.every(p => _pointInPolygon(p, polyB));
+    if (bContainsA) return []; // A je celý uvnitř B → nic nezbyde
     return polyA.map(p => ({ x: p.x, y: p.y }));
   }
 
-  return _sortPolygonPoints(result);
+  return _traceContour(augA, augB, polyA, reversedB, 'subtract');
+}
+
+/**
+ * Trasování obrysu přes průsečíky.
+ * @param {'union'|'subtract'} mode
+ */
+function _traceContour(augA, augB, polyA, polyB, mode) {
+  const DIST_TOL = 1e-4;
+  const MAX_PTS = 500;
+
+  // Najít startovní bod na A, který je MIMO B
+  // Pro subtract: polyB je reversed, ale _pointInPolygon (ray cast) je winding-agnostický
+  let startIdx = -1;
+  for (let i = 0; i < augA.length; i++) {
+    if (!augA[i].intersect && !_pointInPolygon(augA[i], polyB)) {
+      startIdx = i;
+      break;
+    }
+  }
+
+  if (startIdx === -1) {
+    // Fallback: začít od prvního průsečíku
+    startIdx = augA.findIndex(p => p.intersect);
+    if (startIdx === -1) {
+      return polyA.map(p => ({ x: p.x, y: p.y }));
+    }
+  }
+
+  const result = [];
+  let onA = true;
+  let aug = augA;
+  let otherAug = augB;
+  let otherPoly = polyB;
+  let currentPoly = polyA;
+  let idx = startIdx;
+  const visited = new Set();
+
+  for (let safety = 0; safety < MAX_PTS; safety++) {
+    const pt = aug[idx];
+    result.push({ x: pt.x, y: pt.y });
+
+    if (pt.intersect && safety > 0) {
+      const key = `${pt.x.toFixed(6)},${pt.y.toFixed(6)}`;
+      if (visited.has(key)) break; // Uzavřená smyčka
+      visited.add(key);
+
+      // Přepnout na druhý polygon
+      onA = !onA;
+      const tmpAug = aug;
+      aug = otherAug;
+      otherAug = tmpAug;
+      const tmpPoly = currentPoly;
+      currentPoly = otherPoly;
+      otherPoly = tmpPoly;
+
+      // Najít odpovídající průsečík v druhém polygonu
+      let bestJ = -1;
+      let bestDist = Infinity;
+      for (let j = 0; j < aug.length; j++) {
+        if (aug[j].intersect) {
+          const d = Math.hypot(aug[j].x - pt.x, aug[j].y - pt.y);
+          if (d < bestDist) { bestDist = d; bestJ = j; }
+        }
+      }
+      if (bestJ === -1 || bestDist > DIST_TOL * 100) break;
+      idx = (bestJ + 1) % aug.length;
+    } else {
+      idx = (idx + 1) % aug.length;
+    }
+
+    // Kontrola uzavření — vrátili jsme se na start?
+    if (result.length > 2) {
+      const first = result[0];
+      const last = result[result.length - 1];
+      if (Math.hypot(last.x - first.x, last.y - first.y) < DIST_TOL) {
+        result.pop(); // Odebrat duplicitní uzavírací bod
+        break;
+      }
+    }
+  }
+
+  return result.length >= 3 ? _removeDuplicates(result) : polyA.map(p => ({ x: p.x, y: p.y }));
 }
 
 /** Najde všechny průsečíky hran dvou polygonů. */
