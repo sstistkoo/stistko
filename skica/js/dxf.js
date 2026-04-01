@@ -471,6 +471,7 @@ function entityLines(obj, nextHandle) {
       const rc = getRectCorners(obj);
       entityHeader('LWPOLYLINE', 'AcDbPolyline');
       out.push(gc(90, 4), gc(70, 1), gc(43, '0.0'));
+      out.push(gc(210, '0.0'), gc(220, '0.0'), gc(230, '1.0'));
       for (const c of rc) {
         out.push(gc(10, c.x.toFixed(6)), gc(20, c.y.toFixed(6)));
       }
@@ -482,6 +483,7 @@ function entityLines(obj, nextHandle) {
       out.push(gc(90, obj.vertices.length));
       out.push(gc(70, obj.closed ? 1 : 0));
       out.push(gc(43, '0.0'));
+      out.push(gc(210, '0.0'), gc(220, '0.0'), gc(230, '1.0'));
       for (let i = 0; i < obj.vertices.length; i++) {
         out.push(gc(10, obj.vertices[i].x.toFixed(6)));
         out.push(gc(20, obj.vertices[i].y.toFixed(6)));
