@@ -1009,19 +1009,18 @@ bridge.updatePolylineButtons = updatePolylineButtons;
   });
 
   function showTopbarPointer(clientX, clientY) {
-    // Vizuální ukazatel nad prstem
-    tpEl.style.left = clientX + "px";
-    tpEl.style.top = (clientY + TOPBAR_OFFSET_Y) + "px";
+    const px = clientX, py = clientY + TOPBAR_OFFSET_Y;
+    tpEl.style.left = px + "px";
+    tpEl.style.top = py + "px";
     tpEl.style.display = "block";
-    // Detekce prvků na pozici PRSTU (ne offsetu)
-    highlightTopbarAt(clientX, clientY);
+    highlightTopbarAt(px, py);
   }
 
   function updateTopbarPointer(clientX, clientY) {
-    tpEl.style.left = clientX + "px";
-    tpEl.style.top = (clientY + TOPBAR_OFFSET_Y) + "px";
-    // Detekce na pozici prstu
-    highlightTopbarAt(clientX, clientY);
+    const px = clientX, py = clientY + TOPBAR_OFFSET_Y;
+    tpEl.style.left = px + "px";
+    tpEl.style.top = py + "px";
+    highlightTopbarAt(px, py);
   }
 
   function highlightTopbarAt(x, y) {
@@ -1112,9 +1111,9 @@ bridge.updatePolylineButtons = updatePolylineButtons;
     if (tpTimer) { clearTimeout(tpTimer); tpTimer = null; }
     if (tpActive) {
       e.preventDefault();
-      // Klik na pozici prstu (ne offsetu)
+      // Klik na pozici kolečka (s offsetem)
       const px = (e.changedTouches[0]?.clientX || tpStartX);
-      const py = (e.changedTouches[0]?.clientY || tpStartY);
+      const py = (e.changedTouches[0]?.clientY || tpStartY) + TOPBAR_OFFSET_Y;
       clickTopbarAt(px, py);
       hideTopbarPointer();
     }
