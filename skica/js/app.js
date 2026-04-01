@@ -66,6 +66,10 @@ async function tryAutoLoad() {
       if (data.showIntersectionNumbers !== undefined) state.showIntersectionNumbers = data.showIntersectionNumbers;
       if (data.displayDecimals !== undefined) state.displayDecimals = data.displayDecimals;
       if (data.theme) state.theme = data.theme;
+      if (data.snapToGrid !== undefined) state.snapToGrid = data.snapToGrid;
+      if (data.angleSnap !== undefined) state.angleSnap = data.angleSnap;
+      if (data.angleSnapStep !== undefined) state.angleSnapStep = data.angleSnapStep;
+      if (data.showDimensions) state.showDimensions = data.showDimensions;
       updateObjectList();
       updateProperties();
       updateLayerList();
@@ -79,7 +83,7 @@ async function tryAutoLoad() {
 setInterval(() => {
   if (state.objects.length > 0) {
     const data = {
-      version: 1.5,
+      version: 1.6,
       objects: state.objects,
       intersections: state.intersections,
       nextId: state.nextId,
@@ -98,6 +102,10 @@ setInterval(() => {
       showIntersectionNumbers: state.showIntersectionNumbers,
       displayDecimals: state.displayDecimals,
       theme: state.theme,
+      snapToGrid: state.snapToGrid,
+      angleSnap: state.angleSnap,
+      angleSnapStep: state.angleSnapStep,
+      showDimensions: state.showDimensions,
     };
     setMeta('currentProjectData', data);
   }
@@ -202,7 +210,7 @@ document.addEventListener('click', (e) => {
 });
 
 console.log(
-  "%c SKICA – CAD pro CNC soustružník v1.5 (X,Z) ",
+  "%c SKICA – CAD pro CNC soustružník v1.6 (X,Z) ",
   "background:#89b4fa;color:#1e1e2e;font-size:18px;font-weight:bold;padding:4px 12px;border-radius:4px;",
 );
 console.log(
