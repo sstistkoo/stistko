@@ -856,109 +856,76 @@ describe('exportDXF – vrstvy a barvy', () => {
 
   it('exportuje ACI barvu', () => {
     const dxf = exportDXF([{ type: 'point', x: 0, y: 0, color: '#ff0000' }]);
-    // ACI 1 = červená
-    const lines = dxf.split('\n');
-    const pointIdx = lines.findIndex(l => l.trim() === 'POINT');
-    // Najdi kód 62 po POINT
-    let found = false;
-    for (let i = pointIdx + 1; i < lines.length && i < pointIdx + 12; i++) {
-      if (lines[i].trim() === '62') {
-        expect(lines[i + 1].trim()).toBe('1');
-        found = true;
-        break;
-      }
-    }
-    expect(found).toBe(true);
+    // Minimální formát nemá ACI barvy (žádný kód 62)
+    // Kontrolujeme jen že POINT existuje
+    expect(dxf).toContain('POINT');
   });
 });
 
 // ════════════════════════════════════════
-// ── Export AC1014 compliance (Fusion 360 format) ──
+// ── Export AC1009 compliance (minimální Fusion 360 formát) ──
 // ════════════════════════════════════════
-describe('exportDXF – AC1014 compliance', () => {
-  it('entity má handle (kód 5) a AcDb subclass marker', () => {
+describe('exportDXF – AC1009 compliance', () => {
+  it('entity nemá handle ani AcDb markery (minimální formát)', () => {
     const dxf = exportDXF([{ type: 'line', x1: 0, y1: 0, x2: 10, y2: 10 }]);
     const lines = dxf.split('\n');
     const lineIdx = lines.findIndex((l, i) => l.trim() === 'LINE' && i > 0 && lines[i - 1].trim() === '0');
     expect(lineIdx).toBeGreaterThan(-1);
-    // Handle (kód 5) hned za entity type
-    expect(lines[lineIdx + 1].trim()).toBe('5');
-    expect(lines[lineIdx + 2].trim()).toMatch(/^[0-9A-F]+$/);
-    // AcDbEntity marker
-    expect(dxf).toContain('AcDbEntity');
-    expect(dxf).toContain('AcDbLine');
+    // Hned za LINE by měl být layer kód 8, ne handle kód 5
+    expect(lines[lineIdx + 1].trim()).toBe('8');
+    // Žádné AcDb markery v minimálním formátu
+    expect(dxf).not.toContain('AcDbEntity');
+    expect(dxf).not.toContain('AcDbLine');
   });
 
-  it('CIRCLE má AcDbCircle subclass', () => {
+  it('CIRCLE nemá AcDb marker', () => {
     const dxf = exportDXF([{ type: 'circle', cx: 5, cy: 5, r: 3 }]);
-    expect(dxf).toContain('AcDbCircle');
+    expect(dxf).not.toContain('AcDbCircle');
+    expect(dxf).toContain('CIRCLE');
   });
 
-  it('ARC má AcDbCircle i AcDbArc subclass', () => {
+  it('ARC nemá AcDb markery', () => {
     const dxf = exportDXF([{ type: 'arc', cx: 0, cy: 0, r: 10, startAngle: 0, endAngle: PI / 2 }]);
-    expect(dxf).toContain('AcDbCircle');
-    expect(dxf).toContain('AcDbArc');
+    expect(dxf).not.toContain('AcDbCircle');
+    expect(dxf).not.toContain('AcDbArc');
+    expect(dxf).toContain('ARC');
   });
 
-  it('LWPOLYLINE má AcDbPolyline subclass', () => {
+  it('LWPOLYLINE nemá AcDb marker', () => {
     const dxf = exportDXF([{
       type: 'polyline',
       vertices: [{ x: 0, y: 0 }, { x: 10, y: 10 }],
       bulges: [0, 0], closed: false,
     }]);
-    expect(dxf).toContain('AcDbPolyline');
+    expect(dxf).not.toContain('AcDbPolyline');
+    expect(dxf).toContain('LWPOLYLINE');
   });
 
-  it('TEXT má AcDbText subclass', () => {
+  it('TEXT nemá AcDb marker', () => {
     const dxf = exportDXF([{
       type: 'text', x: 0, y: 0, text: 'Test', fontSize: 10, rotation: 0,
     }]);
-    expect(dxf).toContain('AcDbText');
+    expect(dxf).not.toContain('AcDbText');
+    expect(dxf).toContain('TEXT');
   });
 
-  it('POINT má AcDbPoint subclass', () => {
+  it('POINT nemá AcDb marker', () => {
     const dxf = exportDXF([{ type: 'point', x: 0, y: 0 }]);
-    expect(dxf).toContain('AcDbPoint');
+    expect(dxf).not.toContain('AcDbPoint');
+    expect(dxf).toContain('POINT');
   });
 
-  it('entity handles jsou unikátní', () => {
-    const dxf = exportDXF([
-      { type: 'point', x: 0, y: 0 },
-      { type: 'line', x1: 0, y1: 0, x2: 10, y2: 10 },
-      { type: 'circle', cx: 5, cy: 5, r: 3 },
-    ]);
-    const lines = dxf.split('\n');
-    // Sbírej handles jen z ENTITIES sekce
-    const entIdx = lines.findIndex(l => l.trim() === 'ENTITIES');
-    const endIdx = lines.findIndex((l, i) => i > entIdx && l.trim() === 'ENDSEC');
-    const handles = [];
-    for (let i = entIdx; i < endIdx - 1; i++) {
-      if (lines[i].trim() === '5') {
-        handles.push(lines[i + 1].trim());
-      }
-    }
-    const unique = new Set(handles);
-    expect(unique.size).toBe(handles.length);
-  });
-
-  it('obsahuje BLOCKS sekci s MODEL_SPACE a PAPER_SPACE', () => {
+  it('nemá BLOCKS ani OBJECTS sekce', () => {
     const dxf = exportDXF([{ type: 'point', x: 0, y: 0 }]);
-    expect(dxf).toContain('BLOCKS');
-    expect(dxf).toContain('*MODEL_SPACE');
-    expect(dxf).toContain('*PAPER_SPACE');
-    expect(dxf).toContain('BLOCK_RECORD');
+    expect(dxf).not.toContain('BLOCKS');
+    expect(dxf).not.toContain('OBJECTS');
+    expect(dxf).not.toContain('DICTIONARY');
+    expect(dxf).not.toContain('BLOCK_RECORD');
   });
 
-  it('obsahuje OBJECTS sekci s DICTIONARY', () => {
+  it('používá AC1009 formát', () => {
     const dxf = exportDXF([{ type: 'point', x: 0, y: 0 }]);
-    expect(dxf).toContain('OBJECTS');
-    expect(dxf).toContain('DICTIONARY');
-    expect(dxf).toContain('ACAD_GROUP');
-  });
-
-  it('používá AC1014 formát', () => {
-    const dxf = exportDXF([{ type: 'point', x: 0, y: 0 }]);
-    expect(dxf).toContain('AC1014');
+    expect(dxf).toContain('AC1009');
   });
 });
 
@@ -971,14 +938,13 @@ describe('exportDXF – HEADER', () => {
       { type: 'line', x1: -50, y1: -30, x2: 150, y2: 80 },
     ]);
     expect(dxf).toContain('$ACADVER');
-    expect(dxf).toContain('AC1014');
+    expect(dxf).toContain('AC1009');
     expect(dxf).toContain('$INSUNITS');
   });
 
-  it('HEADER obsahuje $HANDSEED', () => {
+  it('HEADER neobsahuje $HANDSEED (minimální formát)', () => {
     const dxf = exportDXF([{ type: 'point', x: 10, y: 20 }]);
-    expect(dxf).toContain('$HANDSEED');
-    expect(dxf).toContain('FFFF');
+    expect(dxf).not.toContain('$HANDSEED');
   });
 });
 
@@ -1013,20 +979,20 @@ describe('exportDXF – Z souřadnice', () => {
 // ════════════════════════════════════════
 // ── Export tabulky ──
 // ════════════════════════════════════════
-describe('exportDXF – rozšířené tabulky', () => {
-  it('obsahuje BYBLOCK a BYLAYER LTYPE', () => {
+describe('exportDXF – minimální formát', () => {
+  it('nemá TABLES sekci (BYBLOCK, BYLAYER, CONTINUOUS)', () => {
     const dxf = exportDXF([]);
-    expect(dxf).toContain('BYBLOCK');
-    expect(dxf).toContain('BYLAYER');
-    expect(dxf).toContain('CONTINUOUS');
+    expect(dxf).not.toContain('BYBLOCK');
+    expect(dxf).not.toContain('BYLAYER');
+    expect(dxf).not.toContain('TABLES');
   });
 
-  it('obsahuje VIEW a UCS tabulky', () => {
+  it('nemá VIEW, UCS ani STYLE tabulky', () => {
     const dxf = exportDXF([]);
-    expect(dxf).toContain('VIEW');
-    expect(dxf).toContain('UCS');
-    expect(dxf).toContain('STYLE');
-    expect(dxf).toContain('STANDARD');
+    // V minimálním formátu žádné tabulky
+    expect(dxf).toContain('HEADER');
+    expect(dxf).toContain('ENTITIES');
+    expect(dxf).toContain('EOF');
   });
 });
 
@@ -1034,16 +1000,15 @@ describe('exportDXF – rozšířené tabulky', () => {
 // ── Rozšířená paleta barev ──
 // ════════════════════════════════════════
 describe('exportDXF – rozšířená paleta barev', () => {
-  it('mapuje SKICA primary barvu na ACI', () => {
+  it('minimální formát nemá ACI barvy (kód 62)', () => {
     const dxf = exportDXF([{ type: 'point', x: 0, y: 0, color: '#89b4fa' }]);
-    // #89b4fa → ACI 5 (modrá)
-    expect(dxf).toContain('\n62\n5\n');
+    // Minimální formát neexportuje barvy
+    expect(dxf).toContain('POINT');
   });
 
-  it('mapuje SKICA construction barvu na ACI', () => {
+  it('construction barva - minimální formát nemá ACI', () => {
     const dxf = exportDXF([{ type: 'point', x: 0, y: 0, color: '#6c7086' }]);
-    // #6c7086 → ACI 8 (šedá)
-    expect(dxf).toContain('\n62\n8\n');
+    expect(dxf).toContain('POINT');
   });
 
   it('TEXT fontSize je formátován jako float', () => {

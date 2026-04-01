@@ -23,7 +23,7 @@ import { exportDXF, parseDXF } from '../js/dxf.js';
 import { generateFullGearProfile } from '../js/tools/gearGenerator.js';
 
 describe('DXF gear export for Fusion 360', () => {
-  it('gear polyline exports with AC1014 format for Fusion 360', () => {
+  it('gear polyline exports with AC1009 minimal format for Fusion 360', () => {
     const profile = generateFullGearProfile(2, 20, 20, 0, 20, 0, 0);
     const gearObj = {
       type: 'polyline',
@@ -33,21 +33,16 @@ describe('DXF gear export for Fusion 360', () => {
     };
     const dxf = exportDXF([gearObj]);
 
-    // Required sections (Fusion 360 format)
+    // Minimal AC1009 format (same as DXF-JSON converter)
     expect(dxf).toContain('$ACADVER');
-    expect(dxf).toContain('AC1014');
-    expect(dxf).toContain('BLOCKS');
-    expect(dxf).toContain('*MODEL_SPACE');
-    expect(dxf).toContain('*PAPER_SPACE');
-    expect(dxf).toContain('OBJECTS');
-    expect(dxf).toContain('DICTIONARY');
-    expect(dxf).toContain('BLOCK_RECORD');
-    expect(dxf).toContain('AcDbEntity');
+    expect(dxf).toContain('AC1009');
     expect(dxf).toContain('LWPOLYLINE');
-    expect(dxf).toContain('LTYPE');
-    expect(dxf).toContain('LAYER');
-    expect(dxf).toContain('STYLE');
-    expect(dxf).toContain('APPID');
+    expect(dxf).toContain('ENTITIES');
+    expect(dxf).toContain('EOF');
+    // Should NOT have complex sections
+    expect(dxf).not.toContain('BLOCKS');
+    expect(dxf).not.toContain('OBJECTS');
+    expect(dxf).not.toContain('AcDbEntity');
   });
 
   it('gear DXF round-trips correctly', () => {
@@ -92,12 +87,11 @@ describe('DXF gear export for Fusion 360', () => {
     expect(bulgeLines.length).toBe(40);
   });
 
-  it('DXF export includes extrusion direction (210/220/230) for circles', () => {
-    // Test s circle entity, která má extrusion direction
+  it('DXF export circle is minimal (no extrusion direction)', () => {
     const dxf = exportDXF([{ type: 'circle', cx: 0, cy: 0, r: 10 }]);
-    expect(dxf).toContain('210');
-    expect(dxf).toContain('220');
-    expect(dxf).toContain('230');
+    // Minimální formát nemá extrusion direction
+    expect(dxf).toContain('CIRCLE');
+    expect(dxf).not.toContain('210');
   });
 
   it('round-trip preserves all bulge values', () => {
