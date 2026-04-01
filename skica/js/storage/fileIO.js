@@ -10,6 +10,7 @@ import { bulgeToArc } from '../utils.js';
 import { parseDXF, exportDXF } from '../dxf.js';
 import { autoCenterView } from '../canvas.js';
 import { bridge } from '../bridge.js';
+import { openCncEditor } from '../calculators/cncEditor.js';
 import { loadProject } from './projectManager.js';
 import { showExportImageDialog } from './exportImage.js';
 
@@ -541,4 +542,9 @@ document.getElementById("btnExport")?.addEventListener("click", () => {
   copyCncToClipboard();
 });
 document.getElementById("btnCncCopy").addEventListener("click", copyCncToClipboard);
+document.getElementById("btnCncEdit").addEventListener("click", () => {
+  let code = document.getElementById("cncOutput").textContent;
+  if (!code) { runCncExport(); code = document.getElementById("cncOutput").textContent; }
+  openCncEditor(code);
+});
 bridge.runCncExport = runCncExport;

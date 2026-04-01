@@ -401,7 +401,7 @@ function buildEditorHTML() {
 // ══════════════════════════════════════════════════════════════
 // ██  MAIN EXPORT  ████████████████████████████████████████████
 // ══════════════════════════════════════════════════════════════
-export function openCncEditor() {
+export function openCncEditor(initialCode) {
   // ── State ──────────────────────────────────────────────────
   let programs   = {};
   let currentFile = '';
@@ -1134,5 +1134,13 @@ export function openCncEditor() {
     editor.readOnly = true;
   }
   ensureFile();
+
+  // Pokud byl předán initialCode, vloží se do nového souboru
+  if (initialCode && typeof initialCode === 'string' && initialCode.trim()) {
+    const name = 'CNC_IMPORT.MPF';
+    programs[name] = initialCode;
+    currentFile = name;
+  }
+
   displayFile(currentFile);
 }
