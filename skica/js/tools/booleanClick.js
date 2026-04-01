@@ -1,13 +1,19 @@
 // ╔══════════════════════════════════════════════════════════════╗
-// ║  SKICA – Boolean operace (sjednocení, odečtení, průnik)   ║
+// ║  SKICA – Boolean operace (multi-trim přístup)              ║
+// ║  Zachovává přesnou geometrii (oblouky, čáry)               ║
 // ╚══════════════════════════════════════════════════════════════╝
 
 import { state, pushUndo, showToast } from '../state.js';
-import { findObjectAt, calculateAllIntersections } from '../geometry.js';
+import {
+  findObjectAt, calculateAllIntersections,
+  getLines, getCircles,
+  intersectLineLine, intersectLineCircle, intersectCircleCircle
+} from '../geometry.js';
 import { setHint, updateObjectList, updateProperties } from '../ui.js';
 import { renderAll } from '../render.js';
 import { getRectCorners } from '../utils.js';
 import { showBooleanDialog } from '../dialogs/booleanDialog.js';
+import { updateAssociativeDimensions } from '../dialogs/dimension.js';
 
 // ── Stav nástroje ──
 let boolFirstIdx = null;
@@ -58,61 +64,70 @@ export function handleBooleanClick(wx, wy) {
   boolFirstIdx = null;
 
   showBooleanDialog((operation) => {
-    const polyA = _objectToPolygon(objA);
-    const polyB = _objectToPolygon(objB);
-
-    if (!polyA || !polyB || polyA.length < 3 || polyB.length < 3) {
-      showToast('Nepodařilo se převést kontury na polygony');
-      return;
-    }
-
-    let result;
-    switch (operation) {
-      case 'union':
-        result = polygonUnion(polyA, polyB);
-        break;
-      case 'subtract':
-        result = polygonSubtract(polyA, polyB);
-        break;
-      case 'intersect':
-        result = polygonIntersect(polyA, polyB);
-        break;
-    }
-
-    if (!result || result.length < 3) {
-      showToast('Výsledek booleovské operace je prázdný');
-      return;
-    }
-
-    // Jeden pushUndo PŘED všemi změnami
-    pushUndo();
-
-    // Smazat zdrojové objekty (vyšší index nejdřív)
-    const toRemove = [idxA, idxB].sort((a, b) => b - a);
-    for (const ri of toRemove) {
-      state.objects.splice(ri, 1);
-    }
-
-    // Přidat výsledek ručně (addObject volá pushUndo znovu)
-    const opLabels = { union: 'Sjednocení', subtract: 'Odečtení', intersect: 'Průnik' };
-    const resultObj = {
-      type: 'polyline',
-      vertices: result,
-      bulges: new Array(result.length).fill(0),
-      closed: true,
-      name: `${opLabels[operation]} ${state.nextId}`,
-      id: state.nextId++,
-      layer: state.activeLayer,
-    };
-    state.objects.push(resultObj);
-
-    calculateAllIntersections();
-    updateObjectList();
-    updateProperties();
-    renderAll();
-    showToast(`${opLabels[operation]} provedeno ✓`);
-    setHint('Klikněte na první uzavřenou konturu');
+    _executeBooleanOp(idxA, idxB, objA, objB, operation);
   });
+}
+
+// ══════════════════════════════════════════════════════════════
+// Hlavní logika – multi-trim boolean
+// ══════════════════════════════════════════════════════════════
+
+function _executeBooleanOp(idxA, idxB, objA, objB, operation) {
+  // 1. Najít průsečíky mezi objekty
+  const inters = _findPairIntersections(objA, objB);
+
+  if (inters.length < 2) {
+    showToast('Objekty se neprotínají (potřeba alespoň 2 průsečíky)');
+    return;
+  }
+
+  // 2. Rozdělit oba objekty na segmenty v průsečících
+  const partsA = _splitObject(objA, inters);
+  const partsB = _splitObject(objB, inters);
+
+  if (partsA.length === 0 || partsB.length === 0) {
+    showToast('Nepodařilo se rozdělit objekty v průsečících');
+    return;
+  }
+
+  // 3. Klasifikovat segmenty (inside/outside) a filtrovat
+  const keptParts = [];
+  for (const part of partsA) {
+    const mid = _getPartMidpoint(part);
+    const inside = _isPointInsideObject(mid, objB);
+    if (_shouldKeep(inside, 'A', operation)) keptParts.push(part);
+  }
+  for (const part of partsB) {
+    const mid = _getPartMidpoint(part);
+    const inside = _isPointInsideObject(mid, objA);
+    if (_shouldKeep(inside, 'B', operation)) keptParts.push(part);
+  }
+
+  if (keptParts.length === 0) {
+    showToast('Výsledek operace je prázdný');
+    return;
+  }
+
+  // 4. Nahradit originály výsledkem
+  pushUndo();
+  const toRemove = [idxA, idxB].sort((a, b) => b - a);
+  for (const ri of toRemove) state.objects.splice(ri, 1);
+
+  const opLabels = { union: 'Sjednocení', subtract: 'Odečtení', intersect: 'Průnik' };
+  for (const part of keptParts) {
+    part.id = state.nextId++;
+    const label = part.type === 'arc' ? 'Oblouk' : 'Úsečka';
+    part.name = `${label} ${part.id}`;
+    state.objects.push(part);
+  }
+
+  calculateAllIntersections();
+  updateAssociativeDimensions();
+  updateObjectList();
+  updateProperties();
+  renderAll();
+  showToast(`${opLabels[operation]} ✓ (${keptParts.length} segment${keptParts.length === 1 ? '' : 'ů'})`);
+  setHint('Klikněte na první uzavřenou konturu');
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -128,58 +143,223 @@ function _isClosedShape(obj) {
   return false;
 }
 
-/** Převede objekt na polygon (pole {x,y} bodů). */
-function _objectToPolygon(obj) {
-  switch (obj.type) {
-    case 'circle':
-      return _circleToPolygon(obj.cx, obj.cy, obj.r, 64);
-    case 'rect':
-      return getRectCorners(obj);
-    case 'polyline':
-      return _polylineToPolygon(obj);
-    default:
-      return null;
+/**
+ * Rozhodne, zda segment ponechat.
+ * @param {boolean} isInside - je segment uvnitř druhého tvaru?
+ * @param {'A'|'B'} source - ze kterého objektu pochází
+ * @param {'union'|'subtract'|'intersect'} operation
+ */
+function _shouldKeep(isInside, source, operation) {
+  switch (operation) {
+    case 'union':     return !isInside;                        // vnější části obou
+    case 'subtract':  return source === 'A' ? !isInside : isInside; // A venku + B uvnitř A
+    case 'intersect': return isInside;                         // vnitřní části obou
   }
 }
 
-/** Aproximuje kružnici jako polygon s N body. */
-function _circleToPolygon(cx, cy, r, n) {
+// ══════════════════════════════════════════════════════════════
+// Hledání průsečíků mezi dvěma objekty
+// ══════════════════════════════════════════════════════════════
+
+function _findPairIntersections(objA, objB) {
   const pts = [];
-  for (let i = 0; i < n; i++) {
-    const a = (2 * Math.PI * i) / n;
-    pts.push({ x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) });
+  const linesA = getLines(objA), circlesA = getCircles(objA);
+  const linesB = getLines(objB), circlesB = getCircles(objB);
+
+  for (const la of linesA)
+    for (const lb of linesB) pts.push(...intersectLineLine(la, lb));
+  for (const la of linesA)
+    for (const cb of circlesB) pts.push(...intersectLineCircle(la, cb));
+  for (const ca of circlesA)
+    for (const lb of linesB) pts.push(...intersectLineCircle(lb, ca));
+  for (const ca of circlesA)
+    for (const cb of circlesB) pts.push(...intersectCircleCircle(ca, cb));
+
+  // Deduplikace
+  const unique = [];
+  for (const pt of pts) {
+    if (!unique.some(u => Math.hypot(u.x - pt.x, u.y - pt.y) < 1e-6)) {
+      unique.push(pt);
+    }
   }
-  return pts;
+  return unique;
 }
 
-/** Převede polyline (s bulges) na polygon flat body. */
-function _polylineToPolygon(obj) {
-  if (!obj.vertices || obj.vertices.length < 3) return null;
-  const result = [];
-  const n = obj.vertices.length;
-  for (let i = 0; i < n; i++) {
-    const p1 = obj.vertices[i];
-    const p2 = obj.vertices[(i + 1) % n];
-    const bulge = (obj.bulges && obj.bulges[i]) || 0;
-    if (Math.abs(bulge) > 1e-6) {
-      // Obloukový segment → aproximace body
-      const arcPts = _bulgeToPoints(p1, p2, bulge, 16);
-      // Přidat vše kromě posledního bodu (ten = p2, přidá se dalším segmentem)
-      for (let j = 0; j < arcPts.length - 1; j++) {
-        result.push(arcPts[j]);
-      }
-    } else {
-      result.push({ x: p1.x, y: p1.y });
+// ══════════════════════════════════════════════════════════════
+// Rozdělení objektu na segmenty v průsečících
+// ══════════════════════════════════════════════════════════════
+
+function _splitObject(obj, intersections) {
+  switch (obj.type) {
+    case 'circle':   return _splitCircle(obj, intersections);
+    case 'rect':     return _splitRect(obj, intersections);
+    case 'polyline': return _splitPolyline(obj, intersections);
+    default:         return [];
+  }
+}
+
+/** Normalizuje úhel do [0, 2π). */
+function _normalizeAngle(a) {
+  return ((a % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+}
+
+/** Rozdělí kružnici na oblouky v průsečících. */
+function _splitCircle(circle, intersections) {
+  const angles = [];
+  for (const pt of intersections) {
+    const d = Math.hypot(pt.x - circle.cx, pt.y - circle.cy);
+    if (Math.abs(d - circle.r) < 1e-3) {
+      angles.push(Math.atan2(pt.y - circle.cy, pt.x - circle.cx));
     }
+  }
+  if (angles.length < 2) return [];
+
+  angles.sort((a, b) => _normalizeAngle(a) - _normalizeAngle(b));
+  const base = { layer: circle.layer, ...(circle.color ? { color: circle.color } : {}) };
+  const arcs = [];
+  for (let i = 0; i < angles.length; i++) {
+    arcs.push({
+      type: 'arc',
+      cx: circle.cx, cy: circle.cy, r: circle.r,
+      startAngle: angles[i],
+      endAngle: angles[(i + 1) % angles.length],
+      ...base
+    });
+  }
+  return arcs;
+}
+
+/** Rozdělí obdélník — rozloží na 4 hrany a každou rozdělí. */
+function _splitRect(rect, intersections) {
+  const rc = getRectCorners(rect);
+  const base = { layer: rect.layer, ...(rect.color ? { color: rect.color } : {}) };
+  const allParts = [];
+  for (let i = 0; i < 4; i++) {
+    const p1 = rc[i], p2 = rc[(i + 1) % 4];
+    const edge = { type: 'line', x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y, ...base };
+    allParts.push(..._splitLine(edge, intersections));
+  }
+  return allParts;
+}
+
+/** Rozdělí úsečku na segmenty v průsečících. */
+function _splitLine(line, intersections) {
+  const dx = line.x2 - line.x1, dy = line.y2 - line.y1;
+  const len = Math.hypot(dx, dy);
+  if (len < 1e-10) return [];
+
+  const onLine = [];
+  for (const pt of intersections) {
+    const t = ((pt.x - line.x1) * dx + (pt.y - line.y1) * dy) / (len * len);
+    if (t > 1e-6 && t < 1 - 1e-6) {
+      const projX = line.x1 + t * dx, projY = line.y1 + t * dy;
+      if (Math.hypot(pt.x - projX, pt.y - projY) < 1e-3) {
+        onLine.push({ x: pt.x, y: pt.y, t });
+      }
+    }
+  }
+
+  const base = { layer: line.layer, ...(line.color ? { color: line.color } : {}) };
+  if (onLine.length === 0) {
+    return [{ type: 'line', x1: line.x1, y1: line.y1, x2: line.x2, y2: line.y2, ...base }];
+  }
+
+  onLine.sort((a, b) => a.t - b.t);
+  const points = [
+    { x: line.x1, y: line.y1 },
+    ...onLine,
+    { x: line.x2, y: line.y2 }
+  ];
+  const result = [];
+  for (let i = 0; i < points.length - 1; i++) {
+    result.push({
+      type: 'line',
+      x1: points[i].x, y1: points[i].y,
+      x2: points[i + 1].x, y2: points[i + 1].y,
+      ...base
+    });
   }
   return result;
 }
 
-/** Převede bulge segment na pole bodů. */
-function _bulgeToPoints(p1, p2, bulge, segments) {
+/** Rozdělí uzavřenou polyline na segmenty. */
+function _splitPolyline(poly, intersections) {
+  const verts = poly.vertices;
+  const n = verts.length;
+  const segCount = poly.closed ? n : n - 1;
+  const base = { layer: poly.layer, ...(poly.color ? { color: poly.color } : {}) };
+  const allParts = [];
+
+  for (let i = 0; i < segCount; i++) {
+    const p1 = verts[i], p2 = verts[(i + 1) % n];
+    const bulge = (poly.bulges && poly.bulges[i]) || 0;
+
+    if (Math.abs(bulge) > 1e-6) {
+      const arc = _bulgeToArcObj(p1, p2, bulge, base);
+      if (arc) allParts.push(..._splitArc(arc, intersections));
+    } else {
+      const line = { type: 'line', x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y, ...base };
+      allParts.push(..._splitLine(line, intersections));
+    }
+  }
+  return allParts;
+}
+
+/** Rozdělí oblouk na menší oblouky v průsečících. */
+function _splitArc(arc, intersections) {
+  const ccw = arc.ccw !== false;
+  function arcPos(angle) {
+    return ccw
+      ? _normalizeAngle(angle - arc.startAngle)
+      : _normalizeAngle(arc.startAngle - angle);
+  }
+  const sweep = arcPos(arc.endAngle);
+
+  const onArc = [];
+  for (const pt of intersections) {
+    const d = Math.hypot(pt.x - arc.cx, pt.y - arc.cy);
+    if (Math.abs(d - arc.r) > 1e-3) continue;
+    const a = Math.atan2(pt.y - arc.cy, pt.x - arc.cx);
+    const pos = arcPos(a);
+    if (pos > 1e-6 && pos < sweep - 1e-6) {
+      onArc.push({ angle: a, pos });
+    }
+  }
+
+  const base = {
+    layer: arc.layer, ...(arc.color ? { color: arc.color } : {}),
+    ...(arc.ccw === false ? { ccw: false } : {})
+  };
+
+  if (onArc.length === 0) {
+    return [{
+      type: 'arc', cx: arc.cx, cy: arc.cy, r: arc.r,
+      startAngle: arc.startAngle, endAngle: arc.endAngle, ...base
+    }];
+  }
+
+  onArc.sort((a, b) => a.pos - b.pos);
+  const boundaries = [
+    { angle: arc.startAngle },
+    ...onArc,
+    { angle: arc.endAngle }
+  ];
+  const result = [];
+  for (let i = 0; i < boundaries.length - 1; i++) {
+    result.push({
+      type: 'arc', cx: arc.cx, cy: arc.cy, r: arc.r,
+      startAngle: boundaries[i].angle,
+      endAngle: boundaries[i + 1].angle, ...base
+    });
+  }
+  return result;
+}
+
+/** Převede bulge segment na arc objekt. */
+function _bulgeToArcObj(p1, p2, bulge, base) {
   const dx = p2.x - p1.x, dy = p2.y - p1.y;
   const d = Math.hypot(dx, dy);
-  if (d < 1e-10) return [{ x: p1.x, y: p1.y }];
+  if (d < 1e-10) return null;
 
   const sagitta = Math.abs(bulge) * d / 2;
   const r = ((d / 2) * (d / 2) + sagitta * sagitta) / (2 * sagitta);
@@ -190,388 +370,75 @@ function _bulgeToPoints(p1, p2, bulge, segments) {
   const cx = mx + sign * nx * offset;
   const cy = my + sign * ny * offset;
 
-  let a1 = Math.atan2(p1.y - cy, p1.x - cx);
-  let a2 = Math.atan2(p2.y - cy, p2.x - cx);
-
-  if (bulge > 0) {
-    if (a2 < a1) a2 += 2 * Math.PI;
-  } else {
-    if (a1 < a2) a1 += 2 * Math.PI;
-  }
-
-  const pts = [];
-  for (let i = 0; i <= segments; i++) {
-    const t = i / segments;
-    const a = a1 + (a2 - a1) * t;
-    pts.push({ x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) });
-  }
-  return pts;
+  return {
+    type: 'arc', cx, cy, r,
+    startAngle: Math.atan2(p1.y - cy, p1.x - cx),
+    endAngle: Math.atan2(p2.y - cy, p2.x - cx),
+    ...(bulge < 0 ? { ccw: false } : {}),
+    ...base
+  };
 }
 
 // ══════════════════════════════════════════════════════════════
-// Polygon Boolean Operations (Sutherland-Hodgman based)
+// Střed segmentu & test uvnitř tvaru
 // ══════════════════════════════════════════════════════════════
 
-/**
- * Průnik dvou konvexních/konkávních polygonů.
- * Používá Sutherland-Hodgman clipping.
- */
-export function polygonIntersect(subjectPoly, clipPoly) {
-  return sutherlandHodgman(subjectPoly, clipPoly);
-}
-
-/**
- * Sjednocení dvou polygonů.
- * Union = A + B - (A ∩ B) — implementováno přes obrys.
- */
-export function polygonUnion(polyA, polyB) {
-  // Pokud se nepřekrývají, vrátit obě jako jeden polygon (přibližně)
-  const inter = sutherlandHodgman(polyA, polyB);
-  if (!inter || inter.length < 3) {
-    // Nepřekrývají se — sloučit jako jeden polygon
-    // Najít nejbližší body a spojit
-    return _mergeDisjoint(polyA, polyB);
-  }
-  // Překrývající se — výpočet union obrysu
-  return _computeUnion(polyA, polyB);
-}
-
-/**
- * Odečtení polygonu B od A.
- * A - B: body A, které jsou mimo B.
- */
-export function polygonSubtract(polyA, polyB) {
-  const inter = sutherlandHodgman(polyA, polyB);
-  if (!inter || inter.length < 3) {
-    // B neovlivňuje A — vrátit A
-    return polyA.map(p => ({ x: p.x, y: p.y }));
-  }
-  return _computeSubtract(polyA, polyB);
-}
-
-// ── Sutherland-Hodgman polygon clipping ──
-
-function sutherlandHodgman(subject, clip) {
-  let output = subject.map(p => ({ x: p.x, y: p.y }));
-
-  for (let i = 0; i < clip.length; i++) {
-    if (output.length === 0) return [];
-    const input = output;
-    output = [];
-    const edgeStart = clip[i];
-    const edgeEnd = clip[(i + 1) % clip.length];
-
-    for (let j = 0; j < input.length; j++) {
-      const current = input[j];
-      const prev = input[(j + input.length - 1) % input.length];
-      const currInside = _isLeft(edgeStart, edgeEnd, current);
-      const prevInside = _isLeft(edgeStart, edgeEnd, prev);
-
-      if (currInside) {
-        if (!prevInside) {
-          const inter = _lineIntersect(prev, current, edgeStart, edgeEnd);
-          if (inter) output.push(inter);
-        }
-        output.push({ x: current.x, y: current.y });
-      } else if (prevInside) {
-        const inter = _lineIntersect(prev, current, edgeStart, edgeEnd);
-        if (inter) output.push(inter);
-      }
+/** Vrátí střed segmentu pro klasifikaci inside/outside. */
+function _getPartMidpoint(part) {
+  if (part.type === 'arc') {
+    const ccw = part.ccw !== false;
+    let sweep;
+    if (ccw) {
+      sweep = _normalizeAngle(part.endAngle - part.startAngle);
+    } else {
+      sweep = _normalizeAngle(part.startAngle - part.endAngle);
     }
+    if (sweep < 1e-10) sweep = 2 * Math.PI;
+    const mid = ccw
+      ? part.startAngle + sweep / 2
+      : part.startAngle - sweep / 2;
+    return {
+      x: part.cx + part.r * Math.cos(mid),
+      y: part.cy + part.r * Math.sin(mid)
+    };
   }
-  return output;
+  if (part.type === 'line') {
+    return {
+      x: (part.x1 + part.x2) / 2,
+      y: (part.y1 + part.y2) / 2
+    };
+  }
+  return { x: 0, y: 0 };
 }
 
-/** Bod je "vlevo" od orientované hrany (inside). */
-function _isLeft(a, b, p) {
-  return (b.x - a.x) * (p.y - a.y) - (b.y - a.y) * (p.x - a.x) >= 0;
+/** Test, zda bod leží uvnitř uzavřeného tvaru. */
+function _isPointInsideObject(pt, obj) {
+  switch (obj.type) {
+    case 'circle':
+      return Math.hypot(pt.x - obj.cx, pt.y - obj.cy) < obj.r - 1e-6;
+    case 'rect': {
+      const minX = Math.min(obj.x1, obj.x2), maxX = Math.max(obj.x1, obj.x2);
+      const minY = Math.min(obj.y1, obj.y2), maxY = Math.max(obj.y1, obj.y2);
+      return pt.x > minX + 1e-6 && pt.x < maxX - 1e-6 &&
+             pt.y > minY + 1e-6 && pt.y < maxY - 1e-6;
+    }
+    case 'polyline':
+      return _pointInPolygon(pt, obj.vertices);
+    default:
+      return false;
+  }
 }
 
-/** Průsečík dvou úseček (p1→p2 a p3→p4). */
-function _lineIntersect(p1, p2, p3, p4) {
-  const d1x = p2.x - p1.x, d1y = p2.y - p1.y;
-  const d2x = p4.x - p3.x, d2y = p4.y - p3.y;
-  const denom = d1x * d2y - d1y * d2x;
-  if (Math.abs(denom) < 1e-12) return null;
-  const t = ((p3.x - p1.x) * d2y - (p3.y - p1.y) * d2x) / denom;
-  return { x: p1.x + t * d1x, y: p1.y + t * d1y };
-}
-
-/** Test bod uvnitř polygonu (ray casting). */
-function _pointInPolygon(pt, poly) {
+/** Ray casting point-in-polygon test. */
+function _pointInPolygon(pt, vertices) {
   let inside = false;
-  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
-    const xi = poly[i].x, yi = poly[i].y;
-    const xj = poly[j].x, yj = poly[j].y;
+  for (let i = 0, j = vertices.length - 1; i < vertices.length; j = i++) {
+    const xi = vertices[i].x, yi = vertices[i].y;
+    const xj = vertices[j].x, yj = vertices[j].y;
     if (((yi > pt.y) !== (yj > pt.y)) &&
         (pt.x < (xj - xi) * (pt.y - yi) / (yj - yi) + xi)) {
       inside = !inside;
     }
   }
   return inside;
-}
-
-/** Plocha polygonu (signed). */
-function _signedArea(poly) {
-  let area = 0;
-  for (let i = 0; i < poly.length; i++) {
-    const j = (i + 1) % poly.length;
-    area += poly[i].x * poly[j].y;
-    area -= poly[j].x * poly[i].y;
-  }
-  return area / 2;
-}
-
-/** Zajistí CCW orientaci polygonu. */
-function _ensureCCW(poly) {
-  if (_signedArea(poly) < 0) poly.reverse();
-  return poly;
-}
-
-// ── Union & Subtract: edge-traversal přes průsečíky ──
-
-/**
- * Vloží průsečíky na hrany polygonu a vrátí augmentovaný polygon.
- * Každý bod má {x, y, intersect?, t?, partner?}.
- */
-function _augmentPolygon(poly, otherPoly) {
-  const result = [];
-  for (let i = 0; i < poly.length; i++) {
-    const p1 = poly[i];
-    const p2 = poly[(i + 1) % poly.length];
-    const edgePts = [{ x: p1.x, y: p1.y, t: 0, intersect: false }];
-
-    for (let j = 0; j < otherPoly.length; j++) {
-      const q1 = otherPoly[j];
-      const q2 = otherPoly[(j + 1) % otherPoly.length];
-      const inter = _segmentIntersect(p1, p2, q1, q2);
-      if (inter) {
-        const dx = p2.x - p1.x, dy = p2.y - p1.y;
-        const len = Math.hypot(dx, dy);
-        const t = len > 1e-10 ? Math.hypot(inter.x - p1.x, inter.y - p1.y) / len : 0;
-        edgePts.push({ x: inter.x, y: inter.y, t, intersect: true, edgeJ: j });
-      }
-    }
-
-    // Seřadit body na hraně podle parametru t
-    edgePts.sort((a, b) => a.t - b.t);
-    // Nepřidávat koncový bod (ten bude začátek další hrany)
-    for (const pt of edgePts) {
-      result.push(pt);
-    }
-  }
-  return result;
-}
-
-/**
- * Sjednocení — procházení po vnějším obrysu.
- * Sleduje hrany A, na průsečíku přepne na B (vnější), na dalším průsečíku zpět.
- */
-function _computeUnion(polyA, polyB) {
-  _ensureCCW(polyA);
-  _ensureCCW(polyB);
-
-  const augA = _augmentPolygon(polyA, polyB);
-  const augB = _augmentPolygon(polyB, polyA);
-
-  // Najít průsečíky
-  const intersections = augA.filter(p => p.intersect);
-  if (intersections.length < 2) {
-    // Jeden polygon obsahuje druhý nebo se netýkají
-    const aContainsB = polyB.every(p => _pointInPolygon(p, polyA));
-    const bContainsA = polyA.every(p => _pointInPolygon(p, polyB));
-    if (aContainsB) return polyA.map(p => ({ x: p.x, y: p.y }));
-    if (bContainsA) return polyB.map(p => ({ x: p.x, y: p.y }));
-    return _mergeDisjoint(polyA, polyB);
-  }
-
-  // Pro union: na průsečíku přepnout na polygon, jehož další bod je MIMO druhý polygon
-  return _traceContour(augA, augB, polyA, polyB, 'union');
-}
-
-/**
- * Odečtení — A mínus B.
- * Sleduje vnější hrany A a vnitřní hrany B (opačný směr).
- */
-function _computeSubtract(polyA, polyB) {
-  _ensureCCW(polyA);
-  _ensureCCW(polyB);
-
-  const augA = _augmentPolygon(polyA, polyB);
-  // Pro subtract: B procházíme v opačném směru (CW)
-  const reversedB = [...polyB].reverse();
-  const augB = _augmentPolygon(reversedB, polyA);
-
-  const intersections = augA.filter(p => p.intersect);
-  if (intersections.length < 2) {
-    const bContainsA = polyA.every(p => _pointInPolygon(p, polyB));
-    if (bContainsA) return []; // A je celý uvnitř B → nic nezbyde
-    return polyA.map(p => ({ x: p.x, y: p.y }));
-  }
-
-  return _traceContour(augA, augB, polyA, reversedB, 'subtract');
-}
-
-/**
- * Trasování obrysu přes průsečíky.
- * @param {'union'|'subtract'} mode
- */
-function _traceContour(augA, augB, polyA, polyB, mode) {
-  const DIST_TOL = 1e-4;
-  const MAX_PTS = 500;
-
-  // Najít startovní bod na A, který je MIMO B
-  // Pro subtract: polyB je reversed, ale _pointInPolygon (ray cast) je winding-agnostický
-  let startIdx = -1;
-  for (let i = 0; i < augA.length; i++) {
-    if (!augA[i].intersect && !_pointInPolygon(augA[i], polyB)) {
-      startIdx = i;
-      break;
-    }
-  }
-
-  if (startIdx === -1) {
-    // Fallback: začít od prvního průsečíku
-    startIdx = augA.findIndex(p => p.intersect);
-    if (startIdx === -1) {
-      return polyA.map(p => ({ x: p.x, y: p.y }));
-    }
-  }
-
-  const result = [];
-  let onA = true;
-  let aug = augA;
-  let otherAug = augB;
-  let otherPoly = polyB;
-  let currentPoly = polyA;
-  let idx = startIdx;
-  const visited = new Set();
-
-  for (let safety = 0; safety < MAX_PTS; safety++) {
-    const pt = aug[idx];
-    result.push({ x: pt.x, y: pt.y });
-
-    if (pt.intersect && safety > 0) {
-      const key = `${pt.x.toFixed(6)},${pt.y.toFixed(6)}`;
-      if (visited.has(key)) break; // Uzavřená smyčka
-      visited.add(key);
-
-      // Přepnout na druhý polygon
-      onA = !onA;
-      const tmpAug = aug;
-      aug = otherAug;
-      otherAug = tmpAug;
-      const tmpPoly = currentPoly;
-      currentPoly = otherPoly;
-      otherPoly = tmpPoly;
-
-      // Najít odpovídající průsečík v druhém polygonu
-      let bestJ = -1;
-      let bestDist = Infinity;
-      for (let j = 0; j < aug.length; j++) {
-        if (aug[j].intersect) {
-          const d = Math.hypot(aug[j].x - pt.x, aug[j].y - pt.y);
-          if (d < bestDist) { bestDist = d; bestJ = j; }
-        }
-      }
-      if (bestJ === -1 || bestDist > DIST_TOL * 100) break;
-      idx = (bestJ + 1) % aug.length;
-    } else {
-      idx = (idx + 1) % aug.length;
-    }
-
-    // Kontrola uzavření — vrátili jsme se na start?
-    if (result.length > 2) {
-      const first = result[0];
-      const last = result[result.length - 1];
-      if (Math.hypot(last.x - first.x, last.y - first.y) < DIST_TOL) {
-        result.pop(); // Odebrat duplicitní uzavírací bod
-        break;
-      }
-    }
-  }
-
-  return result.length >= 3 ? _removeDuplicates(result) : polyA.map(p => ({ x: p.x, y: p.y }));
-}
-
-/** Najde všechny průsečíky hran dvou polygonů. */
-function _findAllEdgeIntersections(polyA, polyB) {
-  const result = [];
-  for (let i = 0; i < polyA.length; i++) {
-    const a1 = polyA[i], a2 = polyA[(i + 1) % polyA.length];
-    for (let j = 0; j < polyB.length; j++) {
-      const b1 = polyB[j], b2 = polyB[(j + 1) % polyB.length];
-      const inter = _segmentIntersect(a1, a2, b1, b2);
-      if (inter) result.push(inter);
-    }
-  }
-  return result;
-}
-
-/** Průsečík dvou úseček (s kontrolou rozsahu t,u ∈ [0,1]). */
-function _segmentIntersect(p1, p2, p3, p4) {
-  const d1x = p2.x - p1.x, d1y = p2.y - p1.y;
-  const d2x = p4.x - p3.x, d2y = p4.y - p3.y;
-  const denom = d1x * d2y - d1y * d2x;
-  if (Math.abs(denom) < 1e-12) return null;
-  const t = ((p3.x - p1.x) * d2y - (p3.y - p1.y) * d2x) / denom;
-  const u = ((p3.x - p1.x) * d1y - (p3.y - p1.y) * d1x) / denom;
-  if (t >= 0 && t <= 1 && u >= 0 && u <= 1) {
-    return { x: p1.x + t * d1x, y: p1.y + t * d1y };
-  }
-  return null;
-}
-
-/** Seřadí body polygonu úhlově kolem těžiště. */
-function _sortPolygonPoints(pts) {
-  const cx = pts.reduce((s, p) => s + p.x, 0) / pts.length;
-  const cy = pts.reduce((s, p) => s + p.y, 0) / pts.length;
-  pts.sort((a, b) => {
-    const aa = Math.atan2(a.y - cy, a.x - cx);
-    const ba = Math.atan2(b.y - cy, b.x - cx);
-    return aa - ba;
-  });
-  // Odstranit duplicity
-  return _removeDuplicates(pts);
-}
-
-/** Konvexní obal + řazení (pro union disjunktních polygonů). */
-function _convexHullSort(pts) {
-  return _sortPolygonPoints(pts);
-}
-
-/** Spojení dvou nepřekrývajících se polygonů. */
-function _mergeDisjoint(polyA, polyB) {
-  // Najít nejbližší páry bodů
-  let minDist = Infinity, bestA = 0, bestB = 0;
-  for (let i = 0; i < polyA.length; i++) {
-    for (let j = 0; j < polyB.length; j++) {
-      const d = Math.hypot(polyA[i].x - polyB[j].x, polyA[i].y - polyB[j].y);
-      if (d < minDist) { minDist = d; bestA = i; bestB = j; }
-    }
-  }
-  // Sestavit cestu: A od bestA → zpět do bestA, přejít do B bestB → zpět
-  const result = [];
-  for (let i = 0; i <= polyA.length; i++) {
-    const p = polyA[(bestA + i) % polyA.length];
-    result.push({ x: p.x, y: p.y });
-  }
-  for (let i = 0; i <= polyB.length; i++) {
-    const p = polyB[(bestB + i) % polyB.length];
-    result.push({ x: p.x, y: p.y });
-  }
-  return result;
-}
-
-/** Odstraní téměř-duplicitní body. */
-function _removeDuplicates(pts) {
-  if (pts.length < 2) return pts;
-  const result = [pts[0]];
-  for (let i = 1; i < pts.length; i++) {
-    const prev = result[result.length - 1];
-    if (Math.hypot(pts[i].x - prev.x, pts[i].y - prev.y) > 1e-6) {
-      result.push(pts[i]);
-    }
-  }
-  return result;
 }
