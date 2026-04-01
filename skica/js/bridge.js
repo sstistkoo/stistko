@@ -28,4 +28,8 @@ export const bridge = {
   scaleFromSelection: null,
   filletChamferFromSelection: null,
   mirrorFromSelection: null,
+  rotateFromSelection: null,
+  linearArrayFromSelection: null,
+  circularArrayFromSelection: null,
+  copyPlaceFromSelection: null,
 };

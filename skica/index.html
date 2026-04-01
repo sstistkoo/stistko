@@ -843,6 +843,7 @@
         <button
           class="tool-btn"
           id="btnRotate"
+          data-tool="rotate"
           title="Otočit vybraný objekt"
           aria-label="Otočit vybraný objekt"
         >
@@ -892,6 +893,7 @@
         <button
           class="tool-btn"
           id="btnLinearArray"
+          data-tool="linearArray"
           title="Lineární pole – kopie v řadě nebo mřížce"
         >
           <svg viewBox="0 0 24 24">
@@ -1563,6 +1565,18 @@
               <tr>
                 <td>Shift+N</td>
                 <td>Polární kreslení z bodu</td>
+              </tr>
+              <tr>
+                <td>Shift+A</td>
+                <td>Kruhové pole</td>
+              </tr>
+              <tr>
+                <td>Shift+C</td>
+                <td>Kopírovat &amp; umístit</td>
+              </tr>
+              <tr>
+                <td>Y</td>
+                <td>Zaoblení / Zkosení (alternativa F)</td>
               </tr>
             </table>
           </details>
@@ -2440,7 +2454,153 @@
               </details>
               <details class="help-tool-item">
                 <summary>
-                  <span class="tool-icon">📐</span> Kóta <kbd>U</kbd>
+                  <span class="tool-icon">�</span> Kopírovat &amp; umístit
+                  <kbd>Shift+C</kbd>
+                </summary>
+                <div class="tool-detail">
+                  <p>
+                    Vytvoří kopie vybraných objektů posunuté o zadaný vektor.
+                    Tříkrokový nástroj: výběr → referenční bod → cílový bod.
+                  </p>
+                  <ul>
+                    <li>
+                      <strong>1. krok</strong> – vyberte objekty ke kopírování
+                      (Ctrl+klik pro vícenásobný výběr)
+                    </li>
+                    <li>
+                      <strong>2. krok</strong> – klikněte na referenční bod
+                      (odkud)
+                    </li>
+                    <li>
+                      <strong>3. krok</strong> – klikněte na cílový bod (kam) →
+                      kopie se vytvoří
+                    </li>
+                    <li>
+                      Po umístění zůstává nástroj aktivní pro další kopie (nový
+                      cílový bod)
+                    </li>
+                    <li><kbd>Escape</kbd> ukončí nástroj</li>
+                    <li>
+                      Dostupné i z kontextového menu (pravý klik → 📋 Kopírovat
+                      sem)
+                    </li>
+                  </ul>
+                </div>
+              </details>
+              <details class="help-tool-item">
+                <summary>
+                  <span class="tool-icon">🔄</span> Kruhové pole
+                  <kbd>Shift+A</kbd>
+                </summary>
+                <div class="tool-detail">
+                  <p>
+                    Vytvoří kopie objektu rozmístěné po kruhu kolem zadaného
+                    středu.
+                  </p>
+                  <ul>
+                    <li>Klikněte na objekt – otevře se dialog s parametry</li>
+                    <li>
+                      <strong>Střed</strong> – souřadnice středu pole (X, Z)
+                    </li>
+                    <li><strong>Počet kopií</strong> – kolik kopií vytvořit</li>
+                    <li>
+                      <strong>Celkový úhel</strong> – úhel rozložení (360° =
+                      plný kruh)
+                    </li>
+                    <li>
+                      <strong>Včetně originálu</strong> – zda ponechat původní
+                      objekt
+                    </li>
+                    <li>
+                      Dostupné i z kontextového menu (pravý klik → 🔄 Kruhové
+                      pole)
+                    </li>
+                  </ul>
+                </div>
+              </details>
+              <details class="help-tool-item">
+                <summary>
+                  <span class="tool-icon">📏</span> Lineární pole
+                </summary>
+                <div class="tool-detail">
+                  <p>Vytvoří kopie objektu uspořádané v řadě nebo mřížce.</p>
+                  <ul>
+                    <li>Vyberte objekt a aktivujte lineární pole</li>
+                    <li>
+                      <strong>Směr a vzdálenost</strong> – posun mezi kopiemi v
+                      ose X a Z
+                    </li>
+                    <li>
+                      <strong>Počet kopií</strong> – kolik kopií v řadě vytvořit
+                    </li>
+                    <li>
+                      <strong>Druhý směr</strong> – volitelně i druhý směr pro
+                      mřížku (2D pole)
+                    </li>
+                    <li>
+                      Dostupné i z kontextového menu (pravý klik → 📏 Lineární
+                      pole)
+                    </li>
+                  </ul>
+                </div>
+              </details>
+              <details class="help-tool-item">
+                <summary>
+                  <span class="tool-icon">⊕</span> Booleovské operace
+                </summary>
+                <div class="tool-detail">
+                  <p>
+                    Provádí sjednocení, odečtení nebo průnik dvou uzavřených
+                    kontur (kružnice, obdélník, uzavřená polyline).
+                  </p>
+                  <ul>
+                    <li>
+                      <strong>1. klik</strong> – vyberte první uzavřenou konturu
+                    </li>
+                    <li>
+                      <strong>2. klik</strong> – vyberte druhou uzavřenou
+                      konturu
+                    </li>
+                    <li>V dialogu zvolte operaci:</li>
+                    <li>
+                      <strong>Sjednocení</strong> – sloučí oba tvary do jednoho
+                    </li>
+                    <li>
+                      <strong>Odečtení</strong> – odebere druhý tvar z prvního
+                    </li>
+                    <li>
+                      <strong>Průnik</strong> – zachová pouze překrývající se
+                      oblast
+                    </li>
+                    <li>Objekty musí mít alespoň 2 průsečíky</li>
+                  </ul>
+                </div>
+              </details>
+              <details class="help-tool-item">
+                <summary>
+                  <span class="tool-icon">💥</span> Rozložit konturu
+                </summary>
+                <div class="tool-detail">
+                  <p>
+                    Rozloží polyline (konturu) na jednotlivé úsečky a oblouky.
+                  </p>
+                  <ul>
+                    <li>
+                      Dostupné pouze z kontextového menu (pravý klik na polyline
+                      → 💥 Rozložit konturu)
+                    </li>
+                    <li>Každý segment kontury se stane samostatným objektem</li>
+                    <li>Původní polyline se odstraní</li>
+                    <li>
+                      Vhodné pro další editaci jednotlivých segmentů (ořez,
+                      prodloužení, …)
+                    </li>
+                  </ul>
+                </div>
+              </details>
+              <details class="help-tool-item">
+                <summary>
+                  <span class="tool-icon">�📐</span> Kóta <kbd>U</kbd>
                 </summary>
                 <div class="tool-detail">
                   <p>
@@ -3218,7 +3378,8 @@
             <summary>💡 Tipy &amp; triky</summary>
             <ul class="help-tips">
               <li>
-                Pravým klikem na canvasu – nulový bod, zrcadlení, offset, pole
+                Pravým klikem na canvasu – nulový bod, zrcadlení, offset, pole,
+                kopírovat sem, rozložit konturu
               </li>
               <li>
                 Snap k bodům (S) automaticky přichytává kurzor k vrcholům a

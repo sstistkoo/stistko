@@ -24,6 +24,7 @@ export function copyPlaceFromSelection() {
   state._copyPlaceObjects = indices;
   state._copyPlaceRef = null;
   setHint('Klikněte referenční bod (odkud)');
+  showToast('Klikněte referenční bod (odkud)', 3000);
   return true;
 }
 
