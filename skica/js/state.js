@@ -254,6 +254,7 @@ export function undo() {
   if (bridge.updateProperties) bridge.updateProperties();
   if (bridge.calculateAllIntersections) bridge.calculateAllIntersections();
   updateUndoButtons();
+  if (_pushUndoHook) _pushUndoHook();
   showToast("Zpět");
 }
 
@@ -279,6 +280,7 @@ export function redo() {
   if (bridge.updateProperties) bridge.updateProperties();
   if (bridge.calculateAllIntersections) bridge.calculateAllIntersections();
   updateUndoButtons();
+  if (_pushUndoHook) _pushUndoHook();
   showToast("Vpřed");
 }
 

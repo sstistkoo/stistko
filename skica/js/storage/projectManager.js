@@ -46,6 +46,7 @@ function _buildProjectData() {
     showDimensions: state.showDimensions,
     snapQuadrants: state.snapQuadrants,
     snapMidpoints: state.snapMidpoints,
+    undoStack: state.undoStack,
   };
 }
 
