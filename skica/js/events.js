@@ -8,13 +8,13 @@ import { state, pushUndo, undo, redo, showToast, resetDrawingState, fmtStatusCoo
 import { renderAll, getObjectBounds, boundsOverlap } from './render.js';
 import { moveObject, addObject, addPolylineAsSegments } from './objects.js';
 import { setTool, resetHint, setHint, updateProperties, updateObjectList, updateSnapPtsBtn, updateDimsBtn, toggleCoordMode, updateCoordModeBtn, updateSnapGridBtn, updateAngleSnapBtn, showGridSizeDialog, showAngleSnapDialog, toggleHelp, updateNullPointUI } from './ui.js';
-import { findObjectAt, selectObjectAt, calculateAllIntersections, mirrorObject, linearArray, rotateObject, findSegmentAt, findConstraintAt } from './geometry.js';
-import { showNumericalInputDialog, showPolarDrawingDialog, showCircleRadiusDialog, showBulgeDialog, showMirrorDialog, showLinearArrayDialog, showRotateDialog } from './dialogs.js';
+import { findObjectAt, selectObjectAt, calculateAllIntersections, mirrorObject, linearArray, circularArray, rotateObject, findSegmentAt, findConstraintAt } from './geometry.js';
+import { showNumericalInputDialog, showPolarDrawingDialog, showCircleRadiusDialog, showBulgeDialog, showMirrorDialog, showLinearArrayDialog, showCircularArrayDialog, showRotateDialog } from './dialogs.js';
 import { saveProject, showExportImageDialog, showProjectsDialog, showSaveAsDialog } from './storage.js';
 import { bulgeToArc, deepClone } from './utils.js';
 import { bridge } from './bridge.js';
 import { updateAssociativeDimensions } from './dialogs/dimension.js';
-import { handleTangentClick, tangentFromSelection, handleOffsetClick, offsetFromSelection, handleTrimClick, trimFromSelection, handleExtendClick, extendFromSelection, handleFilletClick, filletFromSelection, handleChamferClick, chamferFromSelection, handlePerpClick, perpFromSelection, handleHorizontalClick, horizontalFromSelection, handleParallelClick, parallelFromSelection, handleDimensionClick, handleSnapPointClick, handleMoveClick, handleLineClick, handleMeasureClick, handleCircleClick, handleArcClick, handleRectClick, handlePolylineClick, measureSelection, handleTextClick, handleGearClick, resetGearState, handleAnchorClick, removeAnchorsForObject, removeAnchorAt, hasAnchoredPoint, cleanupOrphanAnchors, handleBreakClick, handleCenterMarkClick, centerMarkFromSelection, handleScaleClick, scaleFromSelection, handleFilletChamferClick, filletChamferFromSelection, handleBooleanClick, resetBooleanState } from './tools/index.js';
+import { handleTangentClick, tangentFromSelection, handleOffsetClick, offsetFromSelection, handleTrimClick, trimFromSelection, handleExtendClick, extendFromSelection, handleFilletClick, filletFromSelection, handleChamferClick, chamferFromSelection, handlePerpClick, perpFromSelection, handleHorizontalClick, horizontalFromSelection, handleParallelClick, parallelFromSelection, handleDimensionClick, handleSnapPointClick, handleMoveClick, handleLineClick, handleMeasureClick, handleCircleClick, handleArcClick, handleRectClick, handlePolylineClick, measureSelection, handleTextClick, handleGearClick, resetGearState, handleAnchorClick, removeAnchorsForObject, removeAnchorAt, hasAnchoredPoint, cleanupOrphanAnchors, handleBreakClick, handleCenterMarkClick, centerMarkFromSelection, handleScaleClick, scaleFromSelection, handleFilletChamferClick, filletChamferFromSelection, handleBooleanClick, resetBooleanState, handleCircularArrayClick } from './tools/index.js';
 import { getLineSegment } from './tools/helpers.js';
 import { showPostDrawPointDialog } from './dialogs/postDrawDialog.js';
 
@@ -412,7 +412,7 @@ document.addEventListener("keydown", (e) => {
   // B is only snapPoint when not drawing polyline
   if (e.key.toLowerCase() === 'b' && state.drawing && state.tool === 'polyline') {
     // handled separately below for bulge
-  } else if (!(e.shiftKey && ['m','n','g'].includes(e.key.toLowerCase())) && shortcuts[e.key.toLowerCase()]) {
+  } else if (!(e.shiftKey && ['m','n','g','a'].includes(e.key.toLowerCase())) && shortcuts[e.key.toLowerCase()]) {
     // M (measure): pokud je výběr → okamžitě změřit
     if (e.key.toLowerCase() === 'm' && !e.shiftKey && measureSelection()) {
       // měření provedeno přes výběr
@@ -473,6 +473,11 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "M" && e.shiftKey && (state.selected !== null || state.multiSelected.size > 0)) {
     e.preventDefault();
     startMirrorAction();
+  }
+  // Shift+A: Kruhové pole
+  if (e.key === "A" && e.shiftKey && (state.selected !== null || state.multiSelected.size > 0)) {
+    e.preventDefault();
+    startCircularArrayAction();
   }
   if (e.key === "Enter" && state.drawing && state.tool === "circle") {
     e.preventDefault();
@@ -577,6 +582,7 @@ drawCanvas.addEventListener("contextmenu", (e) => {
     menuDef.push({ label: '🪞 Zrcadlit (Shift+M)', action: 'mirror' });
     menuDef.push({ label: '🔄 Otočit', action: 'rotate' });
     menuDef.push({ label: '📏 Lineární pole', action: 'array' });
+    menuDef.push({ label: '🔄 Kruhové pole', action: 'circArray' });
     menuDef.push({ label: '⇔ Offset', action: 'offset' });
     if (state.objects[ctxIdx] && state.objects[ctxIdx].type === 'polyline') {
       menuDef.push({ label: '💥 Rozložit konturu', action: 'explode' });
@@ -617,6 +623,8 @@ drawCanvas.addEventListener("contextmenu", (e) => {
         startRotateAction();
       } else if (action === 'array') {
         startLinearArrayAction();
+      } else if (action === 'circArray') {
+        startCircularArrayAction();
       } else if (action === 'offset') {
         if (ctxIdx !== null && state.objects[ctxIdx]) {
           handleOffsetClick(wx, wy);
@@ -803,6 +811,10 @@ export function handleCanvasClick(wx, wy) {
 
     case "boolean":
       handleBooleanClick(wx, wy);
+      break;
+
+    case "circularArray":
+      handleCircularArrayClick(wx, wy);
       break;
 
     case "deleteObj": {
@@ -1431,8 +1443,31 @@ function startLinearArrayAction() {
   });
 }
 
+// ── Kruhové pole akce ──
+/** Spustí dialog pro vytvoření kruhového pole (podporuje multi-select). */
+function startCircularArrayAction() {
+  const indices = state.multiSelected.size > 0
+    ? [...state.multiSelected]
+    : state.selected !== null ? [state.selected] : [];
+  if (indices.length === 0) { showToast("Nejdříve vyberte objekt"); return; }
+  const objs = indices.map(i => state.objects[i]);
+
+  showCircularArrayDialog(objs[0], (cx, cz, count, totalAngle, includeOriginal) => {
+    pushUndo();
+    let totalCopies = 0;
+    for (const obj of objs) {
+      const copies = circularArray(obj, cx, cz, count, totalAngle, includeOriginal);
+      for (const copy of copies) {
+        addObject(copy);
+      }
+      totalCopies += copies.length;
+    }
+    showToast(`Vytvořeno ${totalCopies} kopií${objs.length > 1 ? ` z ${objs.length} objektů` : ''}`);
+  });
+}
+
 // Export pro ui.js context menu
-export { startMirrorAction, startLinearArrayAction, startRotateAction, deleteSelected };
+export { startMirrorAction, startLinearArrayAction, startCircularArrayAction, startRotateAction, deleteSelected };
 
 // ── Tlačítka Smazat a Otočit ──
 document.getElementById("btnDelete").addEventListener("click", () => {
@@ -1450,6 +1485,7 @@ document.getElementById("btnDelete").addEventListener("click", () => {
 });
 document.getElementById("btnRotate").addEventListener("click", startRotateAction);
 document.getElementById("btnLinearArray").addEventListener("click", startLinearArrayAction);
+document.getElementById("btnCircularArray").addEventListener("click", startCircularArrayAction);
 
 // ── Double-click: dokončit konturu / vybrat segment ──
 drawCanvas.addEventListener("dblclick", (e) => {

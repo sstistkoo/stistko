@@ -562,3 +562,54 @@ export function showEndpointChoiceDialog(title, seg, label1, label2, callback) {
   overlay.setAttribute("tabindex", "-1");
   overlay.focus();
 }
+
+// ── Dialog pro kruhové pole ──
+/**
+ * @param {import('../types.js').DrawObject} obj
+ * @param {function(number, number, number, number, boolean): void} callback  (cx, cz, count, totalAngle, includeOriginal)
+ */
+export function showCircularArrayDialog(obj, callback) {
+  const labels = axisLabels();
+  const overlay = makeInputOverlay(`
+    <div class="input-dialog">
+      <h3>🔄 Kruhové pole</h3>
+      <label>Objekt: ${obj.name || typeLabel(obj.type)}</label>
+      <label>Počet kopií:</label>
+      <input type="text" id="dlgCircArrCount" value="6" inputmode="numeric">
+      <label>Celkový úhel (°):</label>
+      <input type="text" id="dlgCircArrAngle" value="360" inputmode="decimal">
+      <label>Střed ${labels[0]}:</label>
+      <input type="text" id="dlgCircArrCX" value="0" inputmode="decimal">
+      <label>Střed ${labels[1]}:</label>
+      <input type="text" id="dlgCircArrCZ" value="0" inputmode="decimal">
+      <label style="display:flex;align-items:center;gap:6px;margin-top:4px">
+        <input type="checkbox" id="dlgCircArrIncOrig"> Včetně originálu
+      </label>
+      <div class="btn-row">
+        <button class="btn-cancel btn-cancel-overlay">Zrušit</button>
+        <button class="btn-ok" id="dlgCircArrOk">Vytvořit</button>
+      </div>
+    </div>`);
+  overlay.querySelector("#dlgCircArrCount").focus();
+
+  function accept() {
+    const count = parseInt(overlay.querySelector("#dlgCircArrCount").value);
+    const totalAngle = safeEvalMath(overlay.querySelector("#dlgCircArrAngle").value);
+    const cx = safeEvalMath(overlay.querySelector("#dlgCircArrCX").value);
+    const cz = safeEvalMath(overlay.querySelector("#dlgCircArrCZ").value);
+    const includeOriginal = overlay.querySelector("#dlgCircArrIncOrig").checked;
+    if (isNaN(count) || count < 1) { showToast("Zadejte kladný počet"); return; }
+    if (isNaN(totalAngle) || totalAngle === 0) { showToast("Zadejte nenulový úhel"); return; }
+    if (isNaN(cx) || isNaN(cz)) { showToast("Zadejte souřadnice středu"); return; }
+    overlay.remove();
+    callback(cx, cz, count, totalAngle, includeOriginal);
+  }
+  overlay.querySelector("#dlgCircArrOk").addEventListener("click", accept);
+  overlay.querySelectorAll("input").forEach(inp => {
+    inp.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") accept();
+      if (e.key === "Escape") overlay.remove();
+      e.stopPropagation();
+    });
+  });
+}

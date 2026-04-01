@@ -492,6 +492,7 @@ export function toolLabel(t) {
       chamfer: "Zkosení",
       filletChamfer: "Zaob./Zkos.",
       mirror: "Zrcadlení",
+      circularArray: "Kruhové pole",
     }[t] || t
   );
 }
