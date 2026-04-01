@@ -855,7 +855,7 @@ function drawSnapIndicator() {
     ctx.font = `${fontSize}px Consolas`;
     ctx.fillStyle = COLORS.snapEdge;
     const tw = ctx.measureText(coordLabel).width;
-    ctx.fillText(coordLabel, sx - tw / 2, sy - 12);
+    ctx.fillText(coordLabel, sx - tw / 2, sy - 40);
   }
 
   // Vodící čára od raw pozice k snap pozici
