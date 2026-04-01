@@ -1687,6 +1687,8 @@ document.getElementById("btnDelLayer").addEventListener("click", () => {
 // ── Toolbar ──
 document.querySelectorAll("[data-tool]").forEach((btn) => {
   btn.addEventListener("click", () => {
+    // Deaktivovat všechna tool-tlačítka – setTool() nebo bridge funkce je znovu aktivují
+    document.querySelectorAll("[data-tool]").forEach(b => b.classList.remove("active"));
     // Měření: pokud je výběr → okamžitě změřit
     if (btn.dataset.tool === 'measure' && bridge.measureSelection && bridge.measureSelection()) return;
     // Tečna: pokud je výběr → okamžitě provést
