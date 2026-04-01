@@ -992,3 +992,137 @@ bridge.updatePolylineButtons = updatePolylineButtons;
     hideSidebarPointer();
   });
 }
+
+// ── Topbar Precision Pointer (long-press pro přesné klikání v toolbaru) ──
+{
+  const topbar = document.getElementById("topbar");
+  const tpEl = document.getElementById("topbarPrecisionPointer");
+  const TOPBAR_OFFSET_Y = -60; // vizuální indikátor NAD prstem
+  let tpTimer = null;
+  let tpActive = false;
+  let tpStartX = 0, tpStartY = 0;
+  let tpHighlighted = null;
+  const tpLabel = tpEl.querySelector(".sp-label");
+
+  // Potlačit kontextové menu při long-press na toolbaru
+  topbar.addEventListener("contextmenu", (e) => {
+    if (tpActive) e.preventDefault();
+  });
+
+  function showTopbarPointer(clientX, clientY) {
+    // Vizuální ukazatel nad prstem
+    tpEl.style.left = clientX + "px";
+    tpEl.style.top = (clientY + TOPBAR_OFFSET_Y) + "px";
+    tpEl.style.display = "block";
+    // Detekce prvků na pozici PRSTU (ne offsetu)
+    highlightTopbarAt(clientX, clientY);
+  }
+
+  function updateTopbarPointer(clientX, clientY) {
+    tpEl.style.left = clientX + "px";
+    tpEl.style.top = (clientY + TOPBAR_OFFSET_Y) + "px";
+    // Detekce na pozici prstu
+    highlightTopbarAt(clientX, clientY);
+  }
+
+  function highlightTopbarAt(x, y) {
+    if (tpHighlighted) {
+      tpHighlighted.style.outline = "";
+      tpHighlighted.style.outlineOffset = "";
+      tpHighlighted = null;
+    }
+    tpLabel.style.display = "none";
+    tpEl.style.display = "none";
+    const el = document.elementFromPoint(x, y);
+    tpEl.style.display = "block";
+    if (el && topbar.contains(el)) {
+      const clickable = el.closest("button, a, label");
+      if (clickable) {
+        clickable.style.outline = "2px solid #f9e2af";
+        clickable.style.outlineOffset = "1px";
+        tpHighlighted = clickable;
+        const tip = clickable.getAttribute("title") || clickable.getAttribute("aria-label");
+        if (tip) {
+          tpLabel.textContent = tip;
+          tpLabel.style.left = "14px";
+          tpLabel.style.right = "auto";
+          tpLabel.style.display = "block";
+          const rect = tpLabel.getBoundingClientRect();
+          if (rect.right > window.innerWidth - 4) {
+            tpLabel.style.left = "auto";
+            tpLabel.style.right = "14px";
+          }
+        }
+      }
+    }
+  }
+
+  function hideTopbarPointer() {
+    tpEl.style.display = "none";
+    tpActive = false;
+    if (tpHighlighted) {
+      tpHighlighted.style.outline = "";
+      tpHighlighted.style.outlineOffset = "";
+      tpHighlighted = null;
+    }
+    if (tpTimer) { clearTimeout(tpTimer); tpTimer = null; }
+  }
+
+  function clickTopbarAt(x, y) {
+    tpEl.style.display = "none";
+    const el = document.elementFromPoint(x, y);
+    tpEl.style.display = "block";
+    if (el && topbar.contains(el)) {
+      const clickable = el.closest("button, a, label");
+      if (clickable) clickable.click();
+    }
+  }
+
+  topbar.addEventListener("touchstart", (e) => {
+    if (!isMobile()) return;
+    if (e.touches.length !== 1) return;
+    const t = e.touches[0];
+    if (e.target.tagName === "INPUT" || e.target.tagName === "SELECT") return;
+    tpStartX = t.clientX;
+    tpStartY = t.clientY;
+    tpActive = false;
+    if (tpTimer) clearTimeout(tpTimer);
+    tpTimer = setTimeout(() => {
+      tpActive = true;
+      try { safeVibrate(VIBRATE_LONG_PRESS); } catch (_) {}
+      showTopbarPointer(t.clientX, t.clientY);
+    }, LONG_PRESS_MS);
+  }, { passive: false });
+
+  topbar.addEventListener("touchmove", (e) => {
+    if (!isMobile()) return;
+    if (e.touches.length !== 1) return;
+    const t = e.touches[0];
+    const dist = Math.hypot(t.clientX - tpStartX, t.clientY - tpStartY);
+    if (!tpActive && dist > TOUCH_MOVE_THRESHOLD) {
+      if (tpTimer) { clearTimeout(tpTimer); tpTimer = null; }
+      return;
+    }
+    if (tpActive) {
+      e.preventDefault();
+      updateTopbarPointer(t.clientX, t.clientY);
+    }
+  }, { passive: false });
+
+  topbar.addEventListener("touchend", (e) => {
+    if (tpTimer) { clearTimeout(tpTimer); tpTimer = null; }
+    if (tpActive) {
+      e.preventDefault();
+      // Klik na pozici prstu (ne offsetu)
+      const px = (e.changedTouches[0]?.clientX || tpStartX);
+      const py = (e.changedTouches[0]?.clientY || tpStartY);
+      clickTopbarAt(px, py);
+      hideTopbarPointer();
+    }
+    tpActive = false;
+  }, { passive: false });
+
+  topbar.addEventListener("touchcancel", () => {
+    hideTopbarPointer();
+  });
+}
