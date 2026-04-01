@@ -86,6 +86,8 @@ export const state = {
   xDisplayMode: 'radius',
   // Přesnost zobrazení souřadnic a kót (počet desetinných míst)
   displayDecimals: 3,
+  // Motiv: 'dark' nebo 'light'
+  theme: 'dark',
   // Vrstvy
   layers: [
     { id: 0, name: 'Kontura', color: COLORS.primary, visible: true, locked: false },

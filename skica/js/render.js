@@ -959,7 +959,7 @@ function drawObjectNumbers() {
 
     // Background pill
     const isSel = idx === state.selected || state.multiSelected.has(idx);
-    ctx.fillStyle = isSel ? COLORS.selected : '#f9e2af';
+    ctx.fillStyle = isSel ? COLORS.selected : COLORS.yellow;
     ctx.globalAlpha = 0.9;
     ctx.beginPath();
     const rx = scx - bw / 2, ry = scy - bh / 2;
@@ -977,7 +977,7 @@ function drawObjectNumbers() {
     ctx.globalAlpha = 1;
 
     // Number text
-    ctx.fillStyle = '#1e1e2e';
+    ctx.fillStyle = COLORS.bgDark;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(label, scx, scy);
@@ -1022,7 +1022,7 @@ function drawIntersectionNumbers() {
     ctx.globalAlpha = 1;
 
     // Number text
-    ctx.fillStyle = '#1e1e2e';
+    ctx.fillStyle = COLORS.bgDark;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(label, scx, ry + bh / 2);
@@ -1142,7 +1142,7 @@ export function drawPoint(obj) {
     ctx.arc(sx, sy, 3, 0, Math.PI * 2);
     ctx.stroke();
     // Text souřadnic
-    ctx.fillStyle = '#cdd6f4';
+    ctx.fillStyle = COLORS.text;
     ctx.textAlign = 'left';
     ctx.textBaseline = 'bottom';
     ctx.fillText(labelText, ex + 2, ey - 3);
@@ -1171,7 +1171,7 @@ export function drawLine(obj) {
     const dimType = obj.dimType || 'linear';
     const dimSize = Math.round(Math.min(24, Math.max(11, 8 + state.zoom * 4.5)));
     ctx.font = dimSize + 'px Consolas';
-    ctx.fillStyle = '#cdd6f4';
+    ctx.fillStyle = COLORS.text;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'bottom';
 
@@ -1548,7 +1548,7 @@ export function drawText(obj) {
   const fontSize = obj.fontSize || 14;
   const screenSize = Math.round(Math.min(48, Math.max(8, fontSize * state.zoom * 0.5)));
   ctx.font = screenSize + 'px Consolas';
-  ctx.fillStyle = obj.color || '#cdd6f4';
+  ctx.fillStyle = obj.color || COLORS.text;
   ctx.textAlign = 'left';
   ctx.textBaseline = 'bottom';
   if (obj.rotation) {
@@ -1626,16 +1626,16 @@ function _drawConstraintIcon(wx, wy, type, size, isSelected) {
   const rx = sx - bw / 2, ry = sy - bh / 2;
 
   // Pozadí značky
-  ctx.fillStyle = isSelected ? '#f38ba8' : 'rgba(30, 30, 46, 0.85)';
+  ctx.fillStyle = isSelected ? COLORS.delete : 'rgba(30, 30, 46, 0.85)';
   ctx.fillRect(rx, ry, bw, bh);
 
   // Obrys
-  ctx.strokeStyle = isSelected ? '#f38ba8' : '#cdd6f4';
+  ctx.strokeStyle = isSelected ? COLORS.delete : COLORS.text;
   ctx.lineWidth = 1;
   ctx.strokeRect(rx, ry, bw, bh);
 
   // Symbol
-  ctx.fillStyle = isSelected ? '#1e1e2e' : '#f9e2af';
+  ctx.fillStyle = isSelected ? COLORS.bgDark : COLORS.yellow;
   ctx.font = `bold ${size}px Consolas`;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';

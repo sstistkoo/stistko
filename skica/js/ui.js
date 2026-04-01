@@ -2,7 +2,7 @@
 // ║  SKICA – UI panely, toolbar, hinty                          ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-import { COLORS, MOBILE_BREAKPOINT } from './constants.js';
+import { COLORS, MOBILE_BREAKPOINT, applyThemeColors } from './constants.js';
 import { state, showToast, pushUndo, undo, redo, axisLabels, resetDrawingState, displayX, xPrefix, fmtStatusCoords, coordHelpers } from './state.js';
 import { typeLabel, toolLabel, bulgeToArc, safeEvalMath, _parseMathExpr, getRectCorners, getObjectSnapPoints } from './utils.js';
 import { renderAll, renderAllDebounced } from './render.js';
@@ -23,6 +23,7 @@ bridge.updateIntersectionList = () => updateIntersectionList();
 bridge.updateLayerList = () => updateLayerList();
 bridge.renderAll = () => renderAll();
 bridge.resetHint = () => resetHint();
+bridge.applyTheme = () => applyTheme();
 
 // ── Scroll input do viditelné oblasti na mobilu (nad klávesnici) ──
 document.getElementById("sidebar").addEventListener("focus", (e) => {
@@ -1855,7 +1856,7 @@ export function updateDimsBtn() {
     btn.classList.add("active");
   } else if (state.showDimensions === 'intersections') {
     btn.style.background = COLORS.dimension;
-    btn.style.color = '#1e1e2e';
+    btn.style.color = COLORS.bgDark;
     btn.style.borderColor = COLORS.dimension;
   }
   // 'none' → výchozí neaktivní vzhled
@@ -2825,9 +2826,31 @@ export async function checkFirstRunHelp() {
 // ║  Nastavení – dialog s konfigurací aplikace                ║
 // ══════════════════════════════════════════════════════════════
 
+/** Aplikuje aktuální motiv na CSS i canvas barvy. */
+export function applyTheme() {
+  const isLight = state.theme === 'light';
+  document.body.classList.toggle('light-theme', isLight);
+  applyThemeColors(state.theme);
+  renderAll();
+  showToast(isLight ? 'Světlý motiv' : 'Tmavý motiv');
+}
+
 function showSettingsDialog() {
   const bodyHTML = `
     <div style="display:flex;flex-direction:column;gap:16px;min-width:300px;max-width:420px">
+
+      <!-- Motiv -->
+      <fieldset style="border:1px solid var(--ctp-surface1);border-radius:8px;padding:10px 12px;margin:0">
+        <legend style="color:var(--ctp-blue);font-size:13px;padding:0 6px">🎨 Motiv</legend>
+        <div style="display:flex;gap:8px;margin-top:4px">
+          <button class="calc-btn" id="settThemeDark" style="flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid ${state.theme === 'dark' ? 'var(--ctp-green)' : 'var(--ctp-surface1)'};background:${state.theme === 'dark' ? 'var(--ctp-green)' : 'var(--ctp-surface0)'};color:${state.theme === 'dark' ? 'var(--ctp-base)' : 'var(--ctp-text)'}">
+            🌙 Tmavý
+          </button>
+          <button class="calc-btn" id="settThemeLight" style="flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid ${state.theme === 'light' ? 'var(--ctp-green)' : 'var(--ctp-surface1)'};background:${state.theme === 'light' ? 'var(--ctp-green)' : 'var(--ctp-surface0)'};color:${state.theme === 'light' ? 'var(--ctp-base)' : 'var(--ctp-text)'}">
+            ☀️ Světlý
+          </button>
+        </div>
+      </fieldset>
 
       <!-- Přesnost zobrazení -->
       <fieldset style="border:1px solid var(--ctp-surface1);border-radius:8px;padding:10px 12px;margin:0">
@@ -2896,12 +2919,37 @@ function showSettingsDialog() {
             📋 CNC Export
           </button>
         </div>
+        <div style="margin-top:8px">
+          <button class="calc-btn" id="settDxfJson" style="width:100%;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;background:#a6e3a1;color:#1e1e2e;border:1px solid #a6e3a1">
+            🔄 DXF - JSON konvertor
+          </button>
+        </div>
       </fieldset>
 
     </div>`;
 
   const overlay = makeOverlay('settings', '⚙️ Nastavení', bodyHTML, 'cnc-window');
   if (!overlay) return;
+
+  // ── Motiv ──
+  function updateThemeBtns() {
+    const dBtn = overlay.querySelector('#settThemeDark');
+    const lBtn = overlay.querySelector('#settThemeLight');
+    const activeStyle = 'border-color:var(--ctp-green);background:var(--ctp-green);color:var(--ctp-base)';
+    const inactiveStyle = 'border-color:var(--ctp-surface1);background:var(--ctp-surface0);color:var(--ctp-text)';
+    dBtn.style.cssText = `flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid transparent;${state.theme === 'dark' ? activeStyle : inactiveStyle}`;
+    lBtn.style.cssText = `flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid transparent;${state.theme === 'light' ? activeStyle : inactiveStyle}`;
+  }
+  overlay.querySelector('#settThemeDark').addEventListener('click', () => {
+    state.theme = 'dark';
+    applyTheme();
+    updateThemeBtns();
+  });
+  overlay.querySelector('#settThemeLight').addEventListener('click', () => {
+    state.theme = 'light';
+    applyTheme();
+    updateThemeBtns();
+  });
 
   // ── Přesnost zobrazení ──
   overlay.querySelector('#settDecimals').addEventListener('change', (e) => {
@@ -2981,6 +3029,12 @@ function showSettingsDialog() {
   overlay.querySelector('#settCNC').addEventListener('click', () => {
     overlay.remove();
     if (bridge.runCncExport) bridge.runCncExport();
+  });
+
+  // ── DXF - JSON ──
+  overlay.querySelector('#settDxfJson').addEventListener('click', () => {
+    overlay.remove();
+    window.open('dxf-json.html', '_blank');
   });
 }
 

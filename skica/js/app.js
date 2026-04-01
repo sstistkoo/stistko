@@ -5,7 +5,7 @@
 import { state, showToast } from './state.js';
 import { resizeCanvases, autoCenterView } from './canvas.js';
 import { calculateAllIntersections } from './geometry.js';
-import { updateObjectList, updateProperties, resetHint, updateDimsBtn, updateSnapPtsBtn, updateCoordModeBtn, updateMachineTypeBtn, updateXDisplayBtn, togglePanel, updateLayerList, updateStatusProject, checkFirstRunHelp, updateAngleSnapBtn, updateNullPointUI } from './ui.js';
+import { updateObjectList, updateProperties, resetHint, updateDimsBtn, updateSnapPtsBtn, updateCoordModeBtn, updateMachineTypeBtn, updateXDisplayBtn, togglePanel, updateLayerList, updateStatusProject, checkFirstRunHelp, updateAngleSnapBtn, updateNullPointUI, applyTheme } from './ui.js';
 import { initAutoSave } from './storage.js';
 import { getMeta, setMeta, migrateFromLocalStorage } from './idb.js';
 import { bridge } from './bridge.js';
@@ -65,6 +65,7 @@ async function tryAutoLoad() {
       if (data.showObjectNumbers !== undefined) state.showObjectNumbers = data.showObjectNumbers;
       if (data.showIntersectionNumbers !== undefined) state.showIntersectionNumbers = data.showIntersectionNumbers;
       if (data.displayDecimals !== undefined) state.displayDecimals = data.displayDecimals;
+      if (data.theme) state.theme = data.theme;
       updateObjectList();
       updateProperties();
       updateLayerList();
@@ -78,7 +79,7 @@ async function tryAutoLoad() {
 setInterval(() => {
   if (state.objects.length > 0) {
     const data = {
-      version: 1.4,
+      version: 1.5,
       objects: state.objects,
       intersections: state.intersections,
       nextId: state.nextId,
@@ -96,6 +97,7 @@ setInterval(() => {
       showObjectNumbers: state.showObjectNumbers,
       showIntersectionNumbers: state.showIntersectionNumbers,
       displayDecimals: state.displayDecimals,
+      theme: state.theme,
     };
     setMeta('currentProjectData', data);
   }
@@ -105,6 +107,12 @@ setInterval(() => {
 (async () => {
   await migrateFromLocalStorage();
   await tryAutoLoad();
+  // Aplikovat uložený motiv (bez toastu při startu)
+  if (state.theme === 'light') {
+    document.body.classList.add('light-theme');
+    const { applyThemeColors } = await import('./constants.js');
+    applyThemeColors('light');
+  }
   resizeCanvases();
   if (state.objects.length > 0) {
     calculateAllIntersections();
@@ -194,7 +202,7 @@ document.addEventListener('click', (e) => {
 });
 
 console.log(
-  "%c SKICA – CAD pro CNC soustružník v1.4 (X,Z) ",
+  "%c SKICA – CAD pro CNC soustružník v1.5 (X,Z) ",
   "background:#89b4fa;color:#1e1e2e;font-size:18px;font-weight:bold;padding:4px 12px;border-radius:4px;",
 );
 console.log(

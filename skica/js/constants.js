@@ -3,34 +3,60 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 // ── Catppuccin Mocha – barvy tématu ─────────────────────────
-export const COLORS = {
-  // Objekt / vrstvy
-  primary:       '#89b4fa',   // Modrá – výchozí barva vrstvy, obrysy
-  construction:  '#6c7086',   // Šedá – konstrukční čáry
-  dimension:     '#a6e3a1',   // Zelená – kótovací čáry, průsečíky
-  selected:      '#ffffff',   // Bílá – zvýrazněný výběr
-  preview:       '#f5c2e7',   // Růžová – dočasné čáry při kreslení
-  snapPoint:     '#fab387',   // Oranžová – indikátor kurzorového přichycení
-  snapEdge:      '#cba6f7',   // Fialová – snap k hraně objektu
-  delete:        '#f38ba8',   // Červená – smazání, vertikální osa
-
-  // Osy
-  axisH:         '#a6e3a1',   // Vodorovná osa (Z / karusel-X)
-  axisV:         '#f38ba8',   // Svislá osa (X / karusel-Z)
-
-  // Texty
-  text:          '#cdd6f4',   // Hlavní text
-  textSecondary: '#9399b2',   // Sekundární / kóty / info
-  label:         '#a6adc8',   // Popisky v dialozích
-  textMuted:     '#6c7086',   // Neaktivní / disabled
-
-  // Pozadí & povrchy
-  bgDark:        '#1e1e2e',   // Tmavé pozadí (Base)
-  bgDarker:      '#11111b',   // Nejtmavší pozadí (Crust)
-  surface:       '#313244',   // Pozadí kontextového menu (Surface0)
-  surfaceHover:  '#45475a',   // Hover efekt, oddělovače (Surface1)
-  border:        '#585b70',   // Okraje, rámečky (Surface2)
+const DARK_COLORS = {
+  primary:       '#89b4fa',
+  construction:  '#6c7086',
+  dimension:     '#a6e3a1',
+  selected:      '#ffffff',
+  preview:       '#f5c2e7',
+  snapPoint:     '#fab387',
+  snapEdge:      '#cba6f7',
+  delete:        '#f38ba8',
+  axisH:         '#a6e3a1',
+  axisV:         '#f38ba8',
+  text:          '#cdd6f4',
+  textSecondary: '#9399b2',
+  label:         '#a6adc8',
+  textMuted:     '#6c7086',
+  bgDark:        '#1e1e2e',
+  bgDarker:      '#11111b',
+  surface:       '#313244',
+  surfaceHover:  '#45475a',
+  border:        '#585b70',
+  yellow:        '#f9e2af',
 };
+
+// ── Catppuccin Latte – světlé barvy ─────────────────────────
+const LIGHT_COLORS = {
+  primary:       '#1e66f5',
+  construction:  '#9ca0b0',
+  dimension:     '#40a02b',
+  selected:      '#000000',
+  preview:       '#ea76cb',
+  snapPoint:     '#fe640b',
+  snapEdge:      '#8839ef',
+  delete:        '#d20f39',
+  axisH:         '#40a02b',
+  axisV:         '#d20f39',
+  text:          '#4c4f69',
+  textSecondary: '#7c7f93',
+  label:         '#6c6f85',
+  textMuted:     '#9ca0b0',
+  bgDark:        '#eff1f5',
+  bgDarker:      '#dce0e8',
+  surface:       '#ccd0da',
+  surfaceHover:  '#bcc0cc',
+  border:        '#acb0be',
+  yellow:        '#df8e1d',
+};
+
+export const COLORS = { ...DARK_COLORS };
+
+/** Přepne barevné konstanty podle tématu ('dark' | 'light'). */
+export function applyThemeColors(theme) {
+  const src = theme === 'light' ? LIGHT_COLORS : DARK_COLORS;
+  Object.assign(COLORS, src);
+}
 
 // ── Přichycení (snap) ───────────────────────────────────────
 export const SNAP_POINT_THRESHOLD = 20;   // px (děleno zoom) – přichycení k bodu
