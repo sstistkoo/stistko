@@ -1059,7 +1059,6 @@ export function openCncEditor(initialCode) {
         case 'hdrClose':  readHeaderInputs(); persistHdr(); hdrModal.style.display = 'none'; break;
         case 'hdrApply':  applyHeader(); break;
         case 'backspace': doBackspace(); break;
-        case 'copy':      copyToClipboard(); break;
         case 'addBlock':  insertBlockNumber(); break;
         case 'keyboard':  editor.readOnly = false; editor.focus(); break;
         case 'menu':      $('menuModal').style.display = 'flex'; break;
