@@ -1332,6 +1332,11 @@ body {
   gap: 4px;
   flex-shrink: 0;
 }
+#coordBarIndicators2 {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
 .coord-ind {
   display: none;
   font-size: 11px;

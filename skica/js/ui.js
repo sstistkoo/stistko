@@ -1895,18 +1895,21 @@ document.getElementById("btnDeleteDims").addEventListener("click", () => {
 /** Aktualizuje zobrazení módu souřadnic (ABS/INC). */
 export function updateCoordModeBtn() {
   const btn = document.getElementById("btnCoordMode");
-  if (!btn) return;
-  const isInc = state.coordMode === 'inc';
-  const label = isInc ? 'INC' : 'ABS';
-  btn.textContent = label;
-  btn.classList.toggle('active', isInc);
-  if (isInc) {
-    btn.style.background = COLORS.selected;
-    btn.style.color = COLORS.bgDark;
-  } else {
-    btn.style.background = '';
-    btn.style.color = '';
+  if (btn) {
+    const isInc = state.coordMode === 'inc';
+    const label = isInc ? 'INC' : 'ABS';
+    btn.textContent = label;
+    btn.classList.toggle('active', isInc);
+    if (isInc) {
+      btn.style.background = COLORS.selected;
+      btn.style.color = COLORS.bgDark;
+    } else {
+      btn.style.background = '';
+      btn.style.color = '';
+    }
   }
+  const ind = document.getElementById("indCoordMode");
+  if (ind) ind.textContent = state.coordMode === 'inc' ? 'INC' : 'ABS';
 }
 
 /** Přepne mód souřadnic ABS ↔ INC. */
@@ -1924,17 +1927,20 @@ document.getElementById("btnCoordMode")?.addEventListener("click", toggleCoordMo
 /** Aktualizuje zobrazení režimu osy X (R/⌀). */
 export function updateXDisplayBtn() {
   const btn = document.getElementById("btnXDisplay");
-  if (!btn) return;
-  const isDiam = state.xDisplayMode === 'diameter';
-  btn.textContent = isDiam ? '⌀' : 'R';
-  btn.classList.toggle('active', isDiam);
-  if (isDiam) {
-    btn.style.background = COLORS.delete;
-    btn.style.color = COLORS.bgDark;
-  } else {
-    btn.style.background = '';
-    btn.style.color = '';
+  if (btn) {
+    const isDiam = state.xDisplayMode === 'diameter';
+    btn.textContent = isDiam ? '⌀' : 'R';
+    btn.classList.toggle('active', isDiam);
+    if (isDiam) {
+      btn.style.background = COLORS.delete;
+      btn.style.color = COLORS.bgDark;
+    } else {
+      btn.style.background = '';
+      btn.style.color = '';
+    }
   }
+  const ind = document.getElementById("indXDisplay");
+  if (ind) ind.textContent = state.xDisplayMode === 'diameter' ? '⌀' : 'R';
 }
 
 /** Přepne režim osy X: Poloměr ↔ Průměr. */
@@ -1952,17 +1958,20 @@ document.getElementById("btnXDisplay")?.addEventListener("click", toggleXDisplay
 /** Aktualizuje zobrazení typu stroje. */
 export function updateMachineTypeBtn() {
   const btn = document.getElementById("btnMachineType");
-  if (!btn) return;
-  const isKarusel = state.machineType === 'karusel';
-  btn.textContent = isKarusel ? '⚙ Karusel' : '⚙ Soustruh';
-  btn.classList.toggle('active', isKarusel);
-  if (isKarusel) {
-    btn.style.background = COLORS.dimension;
-    btn.style.color = COLORS.bgDark;
-  } else {
-    btn.style.background = '';
-    btn.style.color = '';
+  if (btn) {
+    const isKarusel = state.machineType === 'karusel';
+    btn.textContent = isKarusel ? '⚙ Karusel' : '⚙ Soustruh';
+    btn.classList.toggle('active', isKarusel);
+    if (isKarusel) {
+      btn.style.background = COLORS.dimension;
+      btn.style.color = COLORS.bgDark;
+    } else {
+      btn.style.background = '';
+      btn.style.color = '';
+    }
   }
+  const ind = document.getElementById("indMachine");
+  if (ind) ind.textContent = state.machineType === 'karusel' ? 'KAR' : 'SOU';
 }
 
 /** Přepne typ stroje Soustruh ↔ Karusel (prohodí osy). */
