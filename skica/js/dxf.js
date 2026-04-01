@@ -419,46 +419,42 @@ function gc(code, value) {
   return code + '\n' + value;
 }
 
-function entityLines(obj, nextHandle) {
+function entityLines(obj) {
   const out = [];
   const layerName = obj.layerName || '0';
   const aci = colorToAci(obj.color);
 
-  // Společné hlavičkové group codes pro AC1015 entity
-  function entityHeader(entityType, acDbType) {
+  // Společné hlavičkové group codes pro R12 entity
+  function entityHeader(entityType) {
     out.push(gc(0, entityType));
-    out.push(gc(5, nextHandle()));
-    out.push(gc(100, 'AcDbEntity'));
     out.push(gc(8, layerName));
     if (aci !== 7) out.push(gc(62, aci));
-    if (acDbType) out.push(gc(100, acDbType));
   }
 
   switch (obj.type) {
     case 'point':
-      entityHeader('POINT', 'AcDbPoint');
+      entityHeader('POINT');
       out.push(gc(10, obj.x.toFixed(6)), gc(20, obj.y.toFixed(6)), gc(30, '0.0'));
       break;
 
     case 'line':
     case 'constr':
       if (obj.isDimension) break;
-      entityHeader('LINE', 'AcDbLine');
+      entityHeader('LINE');
       out.push(gc(10, obj.x1.toFixed(6)), gc(20, obj.y1.toFixed(6)), gc(30, '0.0'));
       out.push(gc(11, obj.x2.toFixed(6)), gc(21, obj.y2.toFixed(6)), gc(31, '0.0'));
       break;
 
     case 'circle':
-      entityHeader('CIRCLE', 'AcDbCircle');
+      entityHeader('CIRCLE');
       out.push(gc(10, obj.cx.toFixed(6)), gc(20, obj.cy.toFixed(6)), gc(30, '0.0'));
       out.push(gc(40, obj.r.toFixed(6)));
       break;
 
     case 'arc': {
-      entityHeader('ARC', 'AcDbCircle');
+      entityHeader('ARC');
       out.push(gc(10, obj.cx.toFixed(6)), gc(20, obj.cy.toFixed(6)), gc(30, '0.0'));
       out.push(gc(40, obj.r.toFixed(6)));
-      out.push(gc(100, 'AcDbArc'));
       // DXF ARC is always CCW; for CW arcs (ccw===false) swap start/end
       const dxfStart = obj.ccw === false ? obj.endAngle : obj.startAngle;
       const dxfEnd = obj.ccw === false ? obj.startAngle : obj.endAngle;
@@ -468,33 +464,43 @@ function entityLines(obj, nextHandle) {
     }
 
     case 'rect': {
+      // R12: heavy POLYLINE + VERTEX + SEQEND
       const rc = getRectCorners(obj);
-      entityHeader('LWPOLYLINE', 'AcDbPolyline');
-      out.push(gc(90, 4), gc(70, 1), gc(43, '0.0'));
-      out.push(gc(210, '0.0'), gc(220, '0.0'), gc(230, '1.0'));
+      entityHeader('POLYLINE');
+      out.push(gc(66, 1), gc(70, 1));  // vertices-follow=1, closed=1
+      out.push(gc(10, '0.0'), gc(20, '0.0'), gc(30, '0.0'));
       for (const c of rc) {
-        out.push(gc(10, c.x.toFixed(6)), gc(20, c.y.toFixed(6)));
+        out.push(gc(0, 'VERTEX'));
+        out.push(gc(8, layerName));
+        out.push(gc(10, c.x.toFixed(6)), gc(20, c.y.toFixed(6)), gc(30, '0.0'));
       }
+      out.push(gc(0, 'SEQEND'));
+      out.push(gc(8, layerName));
       break;
     }
 
-    case 'polyline':
-      entityHeader('LWPOLYLINE', 'AcDbPolyline');
-      out.push(gc(90, obj.vertices.length));
-      out.push(gc(70, obj.closed ? 1 : 0));
-      out.push(gc(43, '0.0'));
-      out.push(gc(210, '0.0'), gc(220, '0.0'), gc(230, '1.0'));
+    case 'polyline': {
+      // R12: heavy POLYLINE + VERTEX + SEQEND
+      entityHeader('POLYLINE');
+      out.push(gc(66, 1), gc(70, obj.closed ? 1 : 0));
+      out.push(gc(10, '0.0'), gc(20, '0.0'), gc(30, '0.0'));
       for (let i = 0; i < obj.vertices.length; i++) {
+        out.push(gc(0, 'VERTEX'));
+        out.push(gc(8, layerName));
         out.push(gc(10, obj.vertices[i].x.toFixed(6)));
         out.push(gc(20, obj.vertices[i].y.toFixed(6)));
+        out.push(gc(30, '0.0'));
         if (obj.bulges && obj.bulges[i] && obj.bulges[i] !== 0) {
           out.push(gc(42, obj.bulges[i].toFixed(6)));
         }
       }
+      out.push(gc(0, 'SEQEND'));
+      out.push(gc(8, layerName));
       break;
+    }
 
     case 'text':
-      entityHeader('TEXT', 'AcDbText');
+      entityHeader('TEXT');
       out.push(gc(10, obj.x.toFixed(6)), gc(20, obj.y.toFixed(6)), gc(30, '0.0'));
       out.push(gc(40, (obj.fontSize || 14).toFixed(6)));
       out.push(gc(1, obj.text || ''));
@@ -509,8 +515,8 @@ function entityLines(obj, nextHandle) {
 
 /**
  * Exportuje SKICA objekty do DXF textu (ASCII formát).
- * Formát kompatibilní s Fusion 360, FreeCAD, LibreCAD, AutoCAD atd.
- * Obsahuje $ACADVER AC1015 (AutoCAD 2000) a minimální TABLES sekci.
+ * Formát R12 (AC1009) – maximální kompatibilita s Fusion 360, FreeCAD,
+ * LibreCAD, AutoCAD a dalšími CAD programy.
  * @param {object[]} objects - pole SKICA objektů
  * @param {object[]} [layers] - volitelné pole vrstev [{id, name}]
  * @returns {string} DXF text
@@ -535,11 +541,6 @@ export function exportDXF(objects, layers) {
   // Sesbírej unikátní jména vrstev
   const layerNames = [...new Set(enriched.map(o => o.layerName))];
   if (!layerNames.includes('0')) layerNames.unshift('0');
-
-  let handleCounter = 1;
-  function nextHandle() {
-    return (handleCounter++).toString(16).toUpperCase();
-  }
 
   // ── Výpočet bounding boxu pro $EXTMIN/$EXTMAX ──
   let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
@@ -581,145 +582,49 @@ export function exportDXF(objects, layers) {
   // Záchrana pro prázdný/minimální výkres
   if (!isFinite(minX)) { minX = 0; minY = 0; maxX = 100; maxY = 100; }
 
-  // ── HEADER – verze AC1015 (AutoCAD 2000) pro podporu LWPOLYLINE ──
+  // ── HEADER – R12 (AC1009) ──
   out.push(gc(0, 'SECTION'), gc(2, 'HEADER'));
-  out.push(gc(9, '$ACADVER'), gc(1, 'AC1015'));
-  out.push(gc(9, '$HANDSEED'), gc(5, 'FFFF'));
+  out.push(gc(9, '$ACADVER'), gc(1, 'AC1009'));
   out.push(gc(9, '$INSUNITS'), gc(70, 4));  // 4 = milimetry
-  out.push(gc(9, '$EXTMIN'), gc(10, minX.toFixed(6)), gc(20, minY.toFixed(6)), gc(30, '0.0'));
-  out.push(gc(9, '$EXTMAX'), gc(10, maxX.toFixed(6)), gc(20, maxY.toFixed(6)), gc(30, '0.0'));
+  out.push(gc(9, '$EXTMIN'), gc(10, minX.toFixed(6)), gc(20, minY.toFixed(6)));
+  out.push(gc(9, '$EXTMAX'), gc(10, maxX.toFixed(6)), gc(20, maxY.toFixed(6)));
   out.push(gc(9, '$LIMMIN'), gc(10, minX.toFixed(6)), gc(20, minY.toFixed(6)));
   out.push(gc(9, '$LIMMAX'), gc(10, maxX.toFixed(6)), gc(20, maxY.toFixed(6)));
   out.push(gc(0, 'ENDSEC'));
 
-  // ── CLASSES (povinná sekce pro AC1015, prázdná) ──
-  out.push(gc(0, 'SECTION'), gc(2, 'CLASSES'));
-  out.push(gc(0, 'ENDSEC'));
-
-  // ── TABLES – definice typů čar a vrstev ──
+  // ── TABLES ──
   out.push(gc(0, 'SECTION'), gc(2, 'TABLES'));
 
-  // Tabulka VPORT
-  const vportH = nextHandle();
-  out.push(gc(0, 'TABLE'), gc(2, 'VPORT'), gc(5, vportH), gc(100, 'AcDbSymbolTable'), gc(70, 1));
-  const vportEntH = nextHandle();
-  out.push(gc(0, 'VPORT'), gc(5, vportEntH), gc(100, 'AcDbSymbolTableRecord'), gc(100, 'AcDbViewportTableRecord'));
-  out.push(gc(2, '*ACTIVE'), gc(70, 0));
-  // Vycentruj pohled na bounding box
-  const cx = ((minX + maxX) / 2).toFixed(6);
-  const cy = ((minY + maxY) / 2).toFixed(6);
-  const viewH = Math.max(maxY - minY, maxX - minX, 1).toFixed(6);
-  out.push(gc(10, cx), gc(20, cy));   // view center
-  out.push(gc(11, '1.0'), gc(21, '1.0'));   // snap spacing
-  out.push(gc(40, viewH));                   // view height
-  out.push(gc(41, '1.0'));                   // aspect ratio
-  out.push(gc(0, 'ENDTAB'));
-
-  // Tabulka LTYPE (ByBlock, ByLayer, CONTINUOUS)
-  const ltypeH = nextHandle();
-  out.push(gc(0, 'TABLE'), gc(2, 'LTYPE'), gc(5, ltypeH), gc(100, 'AcDbSymbolTable'), gc(70, 3));
-  // ByBlock
-  const ltBbH = nextHandle();
-  out.push(gc(0, 'LTYPE'), gc(5, ltBbH), gc(100, 'AcDbSymbolTableRecord'), gc(100, 'AcDbLinetypeTableRecord'));
-  out.push(gc(2, 'ByBlock'), gc(70, 0), gc(3, ''), gc(72, 65), gc(73, 0), gc(40, '0.0'));
-  // ByLayer
-  const ltBlH = nextHandle();
-  out.push(gc(0, 'LTYPE'), gc(5, ltBlH), gc(100, 'AcDbSymbolTableRecord'), gc(100, 'AcDbLinetypeTableRecord'));
-  out.push(gc(2, 'ByLayer'), gc(70, 0), gc(3, ''), gc(72, 65), gc(73, 0), gc(40, '0.0'));
-  // CONTINUOUS
-  const ltypeEntH = nextHandle();
-  out.push(gc(0, 'LTYPE'), gc(5, ltypeEntH), gc(100, 'AcDbSymbolTableRecord'), gc(100, 'AcDbLinetypeTableRecord'));
+  // Tabulka LTYPE
+  out.push(gc(0, 'TABLE'), gc(2, 'LTYPE'), gc(70, 1));
+  out.push(gc(0, 'LTYPE'));
   out.push(gc(2, 'CONTINUOUS'), gc(70, 0));
   out.push(gc(3, 'Solid line'), gc(72, 65), gc(73, 0), gc(40, '0.0'));
   out.push(gc(0, 'ENDTAB'));
 
   // Tabulka LAYER
-  const layerH = nextHandle();
-  out.push(gc(0, 'TABLE'), gc(2, 'LAYER'), gc(5, layerH), gc(100, 'AcDbSymbolTable'), gc(70, layerNames.length));
+  out.push(gc(0, 'TABLE'), gc(2, 'LAYER'), gc(70, layerNames.length));
   for (const name of layerNames) {
-    const lH = nextHandle();
-    out.push(gc(0, 'LAYER'), gc(5, lH), gc(100, 'AcDbSymbolTableRecord'), gc(100, 'AcDbLayerTableRecord'));
+    out.push(gc(0, 'LAYER'));
     out.push(gc(2, name), gc(70, 0));
     out.push(gc(62, 7), gc(6, 'CONTINUOUS'));
   }
   out.push(gc(0, 'ENDTAB'));
 
   // Tabulka STYLE
-  const styleH = nextHandle();
-  out.push(gc(0, 'TABLE'), gc(2, 'STYLE'), gc(5, styleH), gc(100, 'AcDbSymbolTable'), gc(70, 1));
-  const styleEntH = nextHandle();
-  out.push(gc(0, 'STYLE'), gc(5, styleEntH), gc(100, 'AcDbSymbolTableRecord'), gc(100, 'AcDbTextStyleTableRecord'));
+  out.push(gc(0, 'TABLE'), gc(2, 'STYLE'), gc(70, 1));
+  out.push(gc(0, 'STYLE'));
   out.push(gc(2, 'STANDARD'), gc(70, 0), gc(40, '0.0'), gc(41, '1.0'), gc(3, 'txt'));
   out.push(gc(0, 'ENDTAB'));
-
-  // Tabulka VIEW
-  const viewTabH = nextHandle();
-  out.push(gc(0, 'TABLE'), gc(2, 'VIEW'), gc(5, viewTabH), gc(100, 'AcDbSymbolTable'), gc(70, 0));
-  out.push(gc(0, 'ENDTAB'));
-
-  // Tabulka UCS
-  const ucsH = nextHandle();
-  out.push(gc(0, 'TABLE'), gc(2, 'UCS'), gc(5, ucsH), gc(100, 'AcDbSymbolTable'), gc(70, 0));
-  out.push(gc(0, 'ENDTAB'));
-
-  // Tabulka APPID
-  const appidH = nextHandle();
-  out.push(gc(0, 'TABLE'), gc(2, 'APPID'), gc(5, appidH), gc(100, 'AcDbSymbolTable'), gc(70, 1));
-  const appidEntH = nextHandle();
-  out.push(gc(0, 'APPID'), gc(5, appidEntH), gc(100, 'AcDbSymbolTableRecord'), gc(100, 'AcDbRegAppTableRecord'));
-  out.push(gc(2, 'ACAD'), gc(70, 0));
-  out.push(gc(0, 'ENDTAB'));
-
-  // Tabulka DIMSTYLE
-  const dimstyleH = nextHandle();
-  out.push(gc(0, 'TABLE'), gc(2, 'DIMSTYLE'), gc(5, dimstyleH), gc(100, 'AcDbSymbolTable'), gc(70, 1));
-  const dimEntH = nextHandle();
-  out.push(gc(0, 'DIMSTYLE'), gc(105, dimEntH), gc(100, 'AcDbSymbolTableRecord'), gc(100, 'AcDbDimStyleTableRecord'));
-  out.push(gc(2, 'STANDARD'), gc(70, 0));
-  out.push(gc(0, 'ENDTAB'));
-
-  // Tabulka BLOCK_RECORD
-  const brH = nextHandle();
-  out.push(gc(0, 'TABLE'), gc(2, 'BLOCK_RECORD'), gc(5, brH), gc(100, 'AcDbSymbolTable'), gc(70, 2));
-  const msRecH = nextHandle();
-  out.push(gc(0, 'BLOCK_RECORD'), gc(5, msRecH), gc(100, 'AcDbSymbolTableRecord'), gc(100, 'AcDbBlockTableRecord'));
-  out.push(gc(2, '*MODEL_SPACE'));
-  const psRecH = nextHandle();
-  out.push(gc(0, 'BLOCK_RECORD'), gc(5, psRecH), gc(100, 'AcDbSymbolTableRecord'), gc(100, 'AcDbBlockTableRecord'));
-  out.push(gc(2, '*PAPER_SPACE'));
-  out.push(gc(0, 'ENDTAB'));
-
-  out.push(gc(0, 'ENDSEC'));
-
-  // ── BLOCKS (povinná sekce pro AC1015) ──
-  out.push(gc(0, 'SECTION'), gc(2, 'BLOCKS'));
-
-  const msBlkH = nextHandle();
-  out.push(gc(0, 'BLOCK'), gc(5, msBlkH), gc(100, 'AcDbEntity'), gc(8, '0'), gc(100, 'AcDbBlockBegin'));
-  out.push(gc(2, '*MODEL_SPACE'), gc(70, 0), gc(10, '0.0'), gc(20, '0.0'), gc(30, '0.0'));
-  const msEndH = nextHandle();
-  out.push(gc(0, 'ENDBLK'), gc(5, msEndH), gc(100, 'AcDbEntity'), gc(8, '0'), gc(100, 'AcDbBlockEnd'));
-
-  const psBlkH = nextHandle();
-  out.push(gc(0, 'BLOCK'), gc(5, psBlkH), gc(100, 'AcDbEntity'), gc(8, '0'), gc(100, 'AcDbBlockBegin'));
-  out.push(gc(2, '*PAPER_SPACE'), gc(70, 0), gc(10, '0.0'), gc(20, '0.0'), gc(30, '0.0'));
-  const psEndH = nextHandle();
-  out.push(gc(0, 'ENDBLK'), gc(5, psEndH), gc(100, 'AcDbEntity'), gc(8, '0'), gc(100, 'AcDbBlockEnd'));
 
   out.push(gc(0, 'ENDSEC'));
 
   // ── ENTITIES ──
   out.push(gc(0, 'SECTION'), gc(2, 'ENTITIES'));
   for (const obj of enriched) {
-    const str = entityLines(obj, nextHandle);
+    const str = entityLines(obj);
     if (str.length > 0) out.push(str);
   }
-  out.push(gc(0, 'ENDSEC'));
-
-  // ── OBJECTS (povinná sekce pro AC1015) ──
-  out.push(gc(0, 'SECTION'), gc(2, 'OBJECTS'));
-  const dictH = nextHandle();
-  out.push(gc(0, 'DICTIONARY'), gc(5, dictH), gc(100, 'AcDbDictionary'));
   out.push(gc(0, 'ENDSEC'));
 
   out.push(gc(0, 'EOF'));
