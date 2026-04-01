@@ -616,9 +616,10 @@ drawCanvas.addEventListener("contextmenu", (e) => {
   });
 
   const closeMenu = (ev) => {
-    if (!menu.contains(ev.target)) { menu.remove(); document.removeEventListener('click', closeMenu); }
+    if (!menu.contains(ev.target)) { menu.remove(); document.removeEventListener('click', closeMenu, true); }
   };
-  setTimeout(() => document.addEventListener('click', closeMenu), 0);
+  // Capture phase + timeout zajistí, že aktuální klik neuzavře menu okamžitě
+  setTimeout(() => document.addEventListener('click', closeMenu, true), 0);
 });
 
 // ── Obdélníkový výběr – dokončení ──

@@ -2,7 +2,7 @@
 // ║  SKICA – Service Worker (PWA offline cache)                 ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-const CACHE_NAME = 'skica-v126';
+const CACHE_NAME = 'skica-v127';
 const ASSETS = [
   './',
   './index.html',
@@ -119,7 +119,7 @@ self.addEventListener('activate', (e) => {
   self.clients.claim();
 });
 
-// ── Fetch: network-first pro localhost, cache-first pro produkci ──
+// ── Fetch: network-first pro localhost, stale-while-revalidate pro produkci ──
 self.addEventListener('fetch', (e) => {
   const url = new URL(e.request.url);
 
@@ -141,16 +141,19 @@ self.addEventListener('fetch', (e) => {
     return;
   }
 
+  // Produkce: stale-while-revalidate
+  // Vrátit cache ihned (rychlé načtení), na pozadí stáhnout aktuální verzi
   e.respondWith(
-    caches.match(e.request).then((cached) => {
-      if (cached) return cached;
-      return fetch(e.request).then((resp) => {
-        if (resp && resp.status === 200) {
-          const clone = resp.clone();
-          caches.open(CACHE_NAME).then((c) => c.put(e.request, clone));
-        }
-        return resp;
-      });
-    })
+    caches.open(CACHE_NAME).then((cache) =>
+      cache.match(e.request).then((cached) => {
+        const fetchPromise = fetch(e.request).then((resp) => {
+          if (resp && resp.status === 200) {
+            cache.put(e.request, resp.clone());
+          }
+          return resp;
+        }).catch(() => cached);
+        return cached || fetchPromise;
+      })
+    )
   );
 });

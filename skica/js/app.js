@@ -176,14 +176,21 @@ if ("serviceWorker" in navigator) {
           const newWorker = reg.installing;
           if (!newWorker) return;
           newWorker.addEventListener('statechange', () => {
-            if (newWorker.state === 'activated' && navigator.serviceWorker.controller) {
-              showToast('Aktualizace... stránka se obnoví', 2000);
-              setTimeout(() => location.reload(), 2000);
+            // Nový SW se nainstaloval a čeká na aktivaci nebo už je aktivní
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              // Nová verze čeká — skipWaiting ji aktivuje, ale pro jistotu info
+              console.log('SW: Nová verze nainstalována');
             }
           });
         });
       })
       .catch((e) => console.warn("SW: Chyba", e));
+
+    // Spolehlivá detekce: nový SW převzal kontrolu → reload
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      showToast('Aktualizace... stránka se obnoví', 1500);
+      setTimeout(() => location.reload(), 1500);
+    });
   }
 }
 
