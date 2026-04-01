@@ -493,6 +493,10 @@ export function toolLabel(t) {
       filletChamfer: "Zaob./Zkos.",
       mirror: "Zrcadlení",
       circularArray: "Kruhové pole",
+      linearArray: "Lineární pole",
+      copyPlace: "Kopírovat",
+      boolean: "Boolean",
+      rotate: "Otočit",
     }[t] || t
   );
 }

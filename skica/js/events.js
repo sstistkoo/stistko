@@ -75,6 +75,42 @@ bridge.mirrorFromSelection = () => {
   return true;
 };
 
+bridge.rotateFromSelection = () => {
+  if (state.selected === null && state.multiSelected.size === 0) {
+    showToast("Nejdříve vyberte objekt");
+    return true;
+  }
+  startRotateAction();
+  return true;
+};
+
+bridge.linearArrayFromSelection = () => {
+  if (state.selected === null && state.multiSelected.size === 0) {
+    showToast("Nejdříve vyberte objekt");
+    return true;
+  }
+  startLinearArrayAction();
+  return true;
+};
+
+bridge.circularArrayFromSelection = () => {
+  if (state.selected === null && state.multiSelected.size === 0) {
+    showToast("Nejdříve vyberte objekt");
+    return true;
+  }
+  startCircularArrayAction();
+  return true;
+};
+
+bridge.copyPlaceFromSelection = () => {
+  if (state.selected === null && state.multiSelected.size === 0) {
+    showToast("Vyberte objekty ke kopírování");
+    return true;
+  }
+  copyPlaceFromSelection();
+  return true;
+};
+
 let isPanning = false;
 let panStartX, panStartY, panStartPX, panStartPY;
 
@@ -830,6 +866,10 @@ export function handleCanvasClick(wx, wy) {
       handleCopyPlaceClick(wx, wy);
       break;
 
+    case "rotate":
+      handleRotateClick(wx, wy);
+      break;
+
     case "deleteObj": {
       // Nejprve zkusit vazbu (constraint marker)
       const constr = findConstraintAt(wx, wy);
@@ -1088,50 +1128,45 @@ function removeConstraint(obj, segIdx) {
 }
 
 // ── Rotace akce ──
-/** Spustí rotaci – nejprve vyzve k výběru referenčního bodu, pak zobrazí dialog pro úhel. */
+/** Spustí rotaci – přepne na nástroj rotate, kde uživatel klikne na referenční bod. */
 function startRotateAction() {
   const indices = state.multiSelected.size > 0
     ? [...state.multiSelected]
     : state.selected !== null ? [state.selected] : [];
   if (indices.length === 0) { showToast("Nejdříve vyberte objekt"); return; }
-  const objs = indices.map(i => state.objects[i]).filter(o => o);
+
+  setTool('rotate');
+  state._rotateObjects = indices;
+  setHint("Klikněte na referenční bod otáčení");
+  showToast("Klikněte na referenční bod otáčení", 3000);
+}
+
+/** Handler kliknutí pro nástroj rotate – klik = referenční bod → dialog pro úhel. */
+function handleRotateClick(wx, wy) {
+  if (!state._rotateObjects || state._rotateObjects.length === 0) {
+    showToast("Nejdříve vyberte objekt");
+    return;
+  }
+
+  const objs = state._rotateObjects.map(i => state.objects[i]).filter(o => o);
   if (objs.length === 0) { showToast("Žádný platný objekt k otočení"); return; }
   const refObj = objs[0];
 
-  setHint("Klikněte na referenční bod otáčení");
-
-  function handleClick(e) {
-    const [wx, wy] = _worldFromEvent(e);
-    cleanup();
-    resetHint();
-
-    showRotateDialog(refObj, (deg) => {
-      pushUndo();
-      for (const obj of objs) {
-        if (hasAnchoredPoint(obj)) {
-          showToast("Zakotvené objekty nelze otáčet");
-          continue;
-        }
-        rotateObject(obj, wx, wy, deg * Math.PI / 180);
+  showRotateDialog(refObj, (deg) => {
+    pushUndo();
+    for (const obj of objs) {
+      if (hasAnchoredPoint(obj)) {
+        showToast("Zakotvené objekty nelze otáčet");
+        continue;
       }
-      calculateAllIntersections();
-      updateAssociativeDimensions();
-      renderAll();
-      showToast(`Otočeno o ${deg}° ✓`);
-    });
-  }
-
-  function handleTouch(e) {
-    if (e.changedTouches.length === 1) { e.preventDefault(); handleClick(e); }
-  }
-  function cleanup() {
-    drawCanvas.removeEventListener("click", handleClick);
-    drawCanvas.removeEventListener("touchend", handleTouch);
-    state._toolCleanup = null;
-  }
-  drawCanvas.addEventListener("click", handleClick);
-  drawCanvas.addEventListener("touchend", handleTouch);
-  state._toolCleanup = cleanup;
+      rotateObject(obj, wx, wy, deg * Math.PI / 180);
+    }
+    calculateAllIntersections();
+    updateAssociativeDimensions();
+    renderAll();
+    showToast(`Otočeno o ${deg}° ✓`);
+    setTool('select');
+  });
 }
 
 // ── Odstranění osiřelých kót (zdrojový objekt byl smazán) ──
@@ -1494,17 +1529,6 @@ document.getElementById("btnDelete").addEventListener("click", () => {
     setTool('select');
   } else {
     setTool('deleteObj');
-  }
-});
-document.getElementById("btnRotate").addEventListener("click", startRotateAction);
-document.getElementById("btnLinearArray").addEventListener("click", startLinearArrayAction);
-document.getElementById("btnCircularArray").addEventListener("click", startCircularArrayAction);
-document.getElementById("btnCopyPlace").addEventListener("click", () => {
-  if (state.selected !== null || state.multiSelected.size > 0) {
-    copyPlaceFromSelection();
-  } else {
-    setTool('copyPlace');
-    setHint('Vyberte objekty ke kopírování, pak klikněte referenční bod');
   }
 });
 

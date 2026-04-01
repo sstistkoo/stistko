@@ -138,6 +138,8 @@ export function resetDrawingState() {
   // CopyPlace cleanup
   state._copyPlaceObjects = null;
   state._copyPlaceRef = null;
+  // Rotate cleanup
+  state._rotateObjects = null;
   // multiSelected se čistí při resetu (setTool si jej uloží pro move)
   state.multiSelected.clear();
   state.selectedPoint = null;

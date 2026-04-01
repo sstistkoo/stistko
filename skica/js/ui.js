@@ -1715,6 +1715,14 @@ document.querySelectorAll("[data-tool]").forEach((btn) => {
     if (btn.dataset.tool === 'filletChamfer' && bridge.filletChamferFromSelection && bridge.filletChamferFromSelection()) return;
     // Zrcadlení: pokud je výběr → okamžitě provést
     if (btn.dataset.tool === 'mirror' && bridge.mirrorFromSelection && bridge.mirrorFromSelection()) return;
+    // Otočení: pokud je výběr → okamžitě přepnout na rotate s výběrem
+    if (btn.dataset.tool === 'rotate' && bridge.rotateFromSelection && bridge.rotateFromSelection()) return;
+    // Lineární pole: pokud je výběr → okamžitě otevřít dialog
+    if (btn.dataset.tool === 'linearArray' && bridge.linearArrayFromSelection && bridge.linearArrayFromSelection()) return;
+    // Kruhové pole: pokud je výběr → okamžitě otevřít dialog
+    if (btn.dataset.tool === 'circularArray' && bridge.circularArrayFromSelection && bridge.circularArrayFromSelection()) return;
+    // Kopírovat & umístit: pokud je výběr → přepnout do copyPlace módu
+    if (btn.dataset.tool === 'copyPlace' && bridge.copyPlaceFromSelection && bridge.copyPlaceFromSelection()) return;
     setTool(btn.dataset.tool);
   });
 });
@@ -1745,9 +1753,9 @@ export function setTool(tool) {
     state.selectedPoint = null;
     if (bridge.updateProperties) bridge.updateProperties();
   }
-  // Uložit multiSelected před resetem – move zachovává výběr
-  const savedMulti = (tool === 'move') ? new Set(state.multiSelected) : null;
-  const savedSelected = (tool === 'move') ? state.selected : null;
+  // Uložit multiSelected před resetem – move a rotate zachovává výběr
+  const savedMulti = (tool === 'move' || tool === 'rotate') ? new Set(state.multiSelected) : null;
+  const savedSelected = (tool === 'move' || tool === 'rotate') ? state.selected : null;
   state.tool = tool;
   resetDrawingState();
   if (savedMulti && savedMulti.size > 0) {
@@ -2690,39 +2698,369 @@ document.getElementById("btnOpenRoughness").addEventListener("click", openRoughn
 document.getElementById("btnOpenInserts").addEventListener("click", openInsertCalc);
 document.getElementById("btnOpenSinumerik").addEventListener("click", openSinumerikHub);
 
-// ── Poznámkový blok ──
+// ── Poznámkový blok (profesionální verze) ──
 document.getElementById("btnOpenNotes").addEventListener("click", async () => {
-  const saved = await getMeta('userNotes') || '';
-  const overlay = makeOverlay('notes', '📝 Poznámky', `
-    <textarea id="notesArea" style="
-      width:100%; min-height:300px; max-height:60vh; resize:vertical;
-      background:var(--ctp-surface0); color:var(--ctp-text); border:1px solid var(--ctp-surface1);
-      border-radius:4px; padding:10px; font-family:'Consolas',monospace; font-size:13px;
-      outline:none; line-height:1.5;
-    " placeholder="Sem si můžete psát poznámky...">${saved.replace(/</g,'&lt;')}</textarea>
-    <div style="display:flex;gap:8px;margin-top:10px;justify-content:flex-end">
-      <button class="sn-tile" id="notesClear" style="padding:6px 14px;font-size:12px">🗑 Vymazat</button>
-      <button class="sn-tile" id="notesSave" style="padding:6px 14px;font-size:12px;background:var(--ctp-blue);color:var(--ctp-crust)">💾 Uložit</button>
+  // ── Data layer: multiple note tabs stored in IDB ──
+  let allNotes = await getMeta('userNotesAll');
+  if (!allNotes) {
+    // Migrate old single-note format
+    const legacy = await getMeta('userNotes') || '';
+    allNotes = [{ id: 1, title: 'Poznámky', text: legacy }];
+  }
+  let activeId = allNotes[0].id;
+  let nextId = Math.max(...allNotes.map(n => n.id)) + 1;
+  let dirty = false;
+  let fontSize = 'normal'; // 'sm' | 'normal' | 'lg'
+
+  const getActive = () => allNotes.find(n => n.id === activeId);
+
+  // ── Build overlay ──
+  const overlay = makeOverlay('notes', '📝 Poznámkový blok', `
+    <!-- Tabs -->
+    <div class="notes-tabs" id="notesTabs"></div>
+    <!-- Toolbar -->
+    <div class="notes-toolbar">
+      <button class="notes-tb-btn" data-act="bold" title="Tučné **text**"><b>B</b></button>
+      <button class="notes-tb-btn" data-act="italic" title="Kurzíva *text*"><i>I</i></button>
+      <button class="notes-tb-btn" data-act="strike" title="Přeškrtnuté ~~text~~"><s>S</s></button>
+      <span class="notes-sep"></span>
+      <button class="notes-tb-btn" data-act="bullet" title="Odrážka">•</button>
+      <button class="notes-tb-btn" data-act="number" title="Číslo">1.</button>
+      <button class="notes-tb-btn" data-act="check" title="Checkbox [ ]">☑</button>
+      <button class="notes-tb-btn" data-act="heading" title="Nadpis">#</button>
+      <span class="notes-sep"></span>
+      <button class="notes-tb-btn" data-act="timestamp" title="Vložit datum/čas">🕐</button>
+      <button class="notes-tb-btn" data-act="line" title="Oddělovač">―</button>
+      <span class="notes-sep"></span>
+      <button class="notes-tb-btn" data-act="fontDown" title="Menší písmo">A↓</button>
+      <button class="notes-tb-btn" data-act="fontUp" title="Větší písmo">A↑</button>
+      <span class="notes-sep"></span>
+      <button class="notes-tb-btn" data-act="search" title="Hledat (Ctrl+F)">🔍</button>
+      <button class="notes-tb-btn" data-act="undo" title="Zpět (Ctrl+Z)">↩</button>
+      <button class="notes-tb-btn" data-act="redo" title="Vpřed (Ctrl+Y)">↪</button>
     </div>
-  `);
+    <!-- Search bar -->
+    <div class="notes-search-bar" id="notesSearchBar">
+      <input type="text" id="notesSearchInput" placeholder="Hledat…">
+      <span class="notes-search-count" id="notesSearchCount"></span>
+      <button class="notes-tb-btn" data-act="searchPrev" title="Předchozí">▲</button>
+      <button class="notes-tb-btn" data-act="searchNext" title="Další">▼</button>
+      <button class="notes-tb-btn" data-act="searchClose" title="Zavřít">✕</button>
+    </div>
+    <!-- Editor -->
+    <textarea class="notes-editor" id="notesArea" placeholder="Pište své poznámky…\n\nTipy:\n  **tučné**  *kurzíva*  ~~přeškrtnuté~~\n  - odrážky\n  [ ] checkbox\n  # nadpis"></textarea>
+    <!-- Status bar -->
+    <div class="notes-statusbar">
+      <div class="notes-status-left">
+        <span class="notes-save-indicator"><span class="dot"></span> <span id="notesSaveText">Uloženo</span></span>
+        <span id="notesLastSaved"></span>
+      </div>
+      <div class="notes-status-right">
+        <span id="notesWordCount">0 slov</span>
+        <span id="notesCharCount">0 znaků</span>
+        <span id="notesLineCount">Ř 1</span>
+      </div>
+    </div>
+    <!-- Actions -->
+    <div class="notes-actions">
+      <button class="notes-btn danger" data-act="clear">🗑 Vymazat</button>
+      <button class="notes-btn" data-act="copy">📋 Kopírovat</button>
+      <button class="notes-btn" data-act="download">⬇ Stáhnout .txt</button>
+      <button class="notes-btn primary" data-act="save">💾 Uložit</button>
+    </div>
+  `, 'notes-window');
   if (!overlay) return;
+
   const ta = overlay.querySelector('#notesArea');
-  ta.focus();
-  overlay.querySelector('#notesSave').addEventListener('click', async () => {
-    await setMeta('userNotes', ta.value);
-    showToast('Poznámky uloženy');
+  const tabsEl = overlay.querySelector('#notesTabs');
+  const dotEl = overlay.querySelector('.notes-save-indicator .dot');
+  const saveTextEl = overlay.querySelector('#notesSaveText');
+  const lastSavedEl = overlay.querySelector('#notesLastSaved');
+  const wordEl = overlay.querySelector('#notesWordCount');
+  const charEl = overlay.querySelector('#notesCharCount');
+  const lineEl = overlay.querySelector('#notesLineCount');
+  const searchBar = overlay.querySelector('#notesSearchBar');
+  const searchInput = overlay.querySelector('#notesSearchInput');
+  const searchCountEl = overlay.querySelector('#notesSearchCount');
+
+  // ── Helpers ──
+  const persist = async () => {
+    await setMeta('userNotesAll', allNotes);
+    // keep legacy key in sync
+    const first = allNotes.find(n => n.id === 1);
+    if (first) await setMeta('userNotes', first.text);
+    dirty = false;
+    dotEl.classList.remove('dirty');
+    saveTextEl.textContent = 'Uloženo';
+    const now = new Date();
+    lastSavedEl.textContent = now.toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit' });
+  };
+
+  const markDirty = () => {
+    dirty = true;
+    dotEl.classList.add('dirty');
+    saveTextEl.textContent = 'Neuloženo';
+  };
+
+  const updateStats = () => {
+    const text = ta.value;
+    const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+    const chars = text.length;
+    const curLine = ta.value.substring(0, ta.selectionStart).split('\n').length;
+    wordEl.textContent = words + ' slov';
+    charEl.textContent = chars + ' znaků';
+    lineEl.textContent = 'Ř ' + curLine;
+  };
+
+  // ── Tab rendering ──
+  const renderTabs = () => {
+    tabsEl.innerHTML = '';
+    allNotes.forEach(n => {
+      const btn = document.createElement('button');
+      btn.className = 'notes-tab' + (n.id === activeId ? ' active' : '');
+      btn.textContent = n.title;
+      btn.addEventListener('click', () => switchTab(n.id));
+      btn.addEventListener('dblclick', () => renameTab(n.id));
+      btn.addEventListener('contextmenu', e => { e.preventDefault(); showTabCtx(e, n.id); });
+      tabsEl.appendChild(btn);
+    });
+    const addBtn = document.createElement('button');
+    addBtn.className = 'notes-tab-add';
+    addBtn.textContent = '+';
+    addBtn.title = 'Nová záložka';
+    addBtn.addEventListener('click', addTab);
+    tabsEl.appendChild(addBtn);
+  };
+
+  const switchTab = (id) => {
+    // Save current text before switching
+    const cur = getActive();
+    if (cur) cur.text = ta.value;
+    activeId = id;
+    const note = getActive();
+    ta.value = note ? note.text : '';
+    renderTabs();
+    updateStats();
+    markDirty();
+    ta.focus();
+  };
+
+  const addTab = () => {
+    const title = prompt('Název nové záložky:', 'Poznámka ' + nextId);
+    if (!title) return;
+    allNotes.push({ id: nextId++, title, text: '' });
+    switchTab(allNotes[allNotes.length - 1].id);
+  };
+
+  const renameTab = (id) => {
+    const note = allNotes.find(n => n.id === id);
+    if (!note) return;
+    const title = prompt('Nový název:', note.title);
+    if (title) { note.title = title; renderTabs(); markDirty(); }
+  };
+
+  const showTabCtx = (e, id) => {
+    // Remove old context menu if any
+    overlay.querySelectorAll('.notes-ctx').forEach(m => m.remove());
+    const menu = document.createElement('div');
+    menu.className = 'notes-ctx';
+    menu.style.left = e.clientX + 'px';
+    menu.style.top = e.clientY + 'px';
+    menu.innerHTML = `
+      <button data-ctx="rename">✏️ Přejmenovat</button>
+      <button data-ctx="duplicate">📄 Duplikovat</button>
+      ${allNotes.length > 1 ? '<button data-ctx="delete">🗑 Smazat</button>' : ''}
+    `;
+    overlay.appendChild(menu);
+    menu.addEventListener('click', ev => {
+      const act = ev.target.dataset.ctx;
+      if (act === 'rename') renameTab(id);
+      if (act === 'duplicate') {
+        const src = allNotes.find(n => n.id === id);
+        if (src) {
+          allNotes.push({ id: nextId++, title: src.title + ' (kopie)', text: src.text });
+          switchTab(allNotes[allNotes.length - 1].id);
+        }
+      }
+      if (act === 'delete' && allNotes.length > 1) {
+        if (confirm('Smazat záložku „' + (allNotes.find(n => n.id === id)?.title) + '"?')) {
+          allNotes = allNotes.filter(n => n.id !== id);
+          if (activeId === id) switchTab(allNotes[0].id);
+          renderTabs();
+          markDirty();
+        }
+      }
+      menu.remove();
+    });
+    const dismiss = (ev) => { if (!menu.contains(ev.target)) { menu.remove(); document.removeEventListener('click', dismiss); } };
+    setTimeout(() => document.addEventListener('click', dismiss), 0);
+  };
+
+  // ── Toolbar: insert helpers ──
+  const wrapSelection = (before, after) => {
+    const start = ta.selectionStart, end = ta.selectionEnd;
+    const sel = ta.value.substring(start, end) || 'text';
+    ta.setRangeText(before + sel + after, start, end, 'select');
+    ta.focus();
+    markDirty();
+    updateStats();
+  };
+
+  const insertAtCursor = (text) => {
+    const start = ta.selectionStart;
+    ta.setRangeText(text, start, ta.selectionEnd, 'end');
+    ta.focus();
+    markDirty();
+    updateStats();
+  };
+
+  const insertLinePrefix = (prefix) => {
+    const start = ta.selectionStart;
+    const lineStart = ta.value.lastIndexOf('\n', start - 1) + 1;
+    ta.setRangeText(prefix, lineStart, lineStart, 'end');
+    ta.focus();
+    markDirty();
+    updateStats();
+  };
+
+  // ── Toolbar actions ──
+  const toolbarActions = {
+    bold: () => wrapSelection('**', '**'),
+    italic: () => wrapSelection('*', '*'),
+    strike: () => wrapSelection('~~', '~~'),
+    bullet: () => insertLinePrefix('- '),
+    number: () => insertLinePrefix('1. '),
+    check: () => insertLinePrefix('[ ] '),
+    heading: () => insertLinePrefix('# '),
+    timestamp: () => {
+      const now = new Date();
+      insertAtCursor('[' + now.toLocaleDateString('cs-CZ') + ' ' + now.toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit' }) + '] ');
+    },
+    line: () => insertAtCursor('\n────────────────────────────────\n'),
+    fontDown: () => {
+      if (fontSize === 'lg') fontSize = 'normal';
+      else fontSize = 'sm';
+      ta.classList.remove('font-sm', 'font-lg');
+      if (fontSize !== 'normal') ta.classList.add('font-' + fontSize);
+    },
+    fontUp: () => {
+      if (fontSize === 'sm') fontSize = 'normal';
+      else fontSize = 'lg';
+      ta.classList.remove('font-sm', 'font-lg');
+      if (fontSize !== 'normal') ta.classList.add('font-' + fontSize);
+    },
+    search: () => searchBar.classList.toggle('open'),
+    undo: () => { document.execCommand('undo'); updateStats(); },
+    redo: () => { document.execCommand('redo'); updateStats(); },
+    // Search navigation
+    searchClose: () => searchBar.classList.remove('open'),
+    searchPrev: () => doSearch(-1),
+    searchNext: () => doSearch(1),
+    // Bottom actions
+    save: () => { getActive().text = ta.value; persist(); showToast('Poznámky uloženy ✓'); },
+    clear: () => {
+      if (confirm('Opravdu vymazat obsah této záložky?')) {
+        ta.value = '';
+        getActive().text = '';
+        markDirty();
+        updateStats();
+        showToast('Záložka vymazána');
+      }
+    },
+    copy: () => {
+      navigator.clipboard.writeText(ta.value).then(() => showToast('Zkopírováno do schránky ✓'));
+    },
+    download: () => {
+      const note = getActive();
+      const blob = new Blob([ta.value], { type: 'text/plain;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = (note.title || 'poznamky') + '.txt';
+      a.click();
+      URL.revokeObjectURL(a.href);
+      showToast('Soubor stažen ✓');
+    },
+  };
+
+  // ── Search in text ──
+  let searchMatches = [];
+  let searchIdx = -1;
+  const doSearch = (dir) => {
+    const q = searchInput.value;
+    if (!q) { searchCountEl.textContent = ''; return; }
+    searchMatches = [];
+    let i = -1;
+    const lower = ta.value.toLowerCase();
+    const ql = q.toLowerCase();
+    while ((i = lower.indexOf(ql, i + 1)) !== -1) searchMatches.push(i);
+    if (!searchMatches.length) { searchCountEl.textContent = '0 / 0'; return; }
+    searchIdx = (searchIdx + dir + searchMatches.length) % searchMatches.length;
+    searchCountEl.textContent = (searchIdx + 1) + ' / ' + searchMatches.length;
+    ta.focus();
+    ta.setSelectionRange(searchMatches[searchIdx], searchMatches[searchIdx] + q.length);
+  };
+  searchInput.addEventListener('input', () => { searchIdx = -1; doSearch(1); });
+  searchInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); doSearch(e.shiftKey ? -1 : 1); }
+    if (e.key === 'Escape') searchBar.classList.remove('open');
   });
-  overlay.querySelector('#notesClear').addEventListener('click', () => {
-    if (confirm('Opravdu vymazat všechny poznámky?')) {
-      ta.value = '';
-      setMeta('userNotes', '');
-      showToast('Poznámky vymazány');
+
+  // ── Event delegation for toolbar + action buttons ──
+  overlay.addEventListener('click', e => {
+    const act = e.target.closest('[data-act]')?.dataset.act;
+    if (act && toolbarActions[act]) toolbarActions[act]();
+  });
+
+  // ── Text area events ──
+  let autoSaveTimer = null;
+  ta.addEventListener('input', () => {
+    markDirty();
+    updateStats();
+    // Debounced autosave
+    clearTimeout(autoSaveTimer);
+    autoSaveTimer = setTimeout(() => {
+      getActive().text = ta.value;
+      persist();
+    }, 2000);
+  });
+  ta.addEventListener('click', updateStats);
+  ta.addEventListener('keyup', e => {
+    if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Home','End'].includes(e.key)) updateStats();
+  });
+
+  // Ctrl+F interceptor inside notes
+  ta.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+      e.preventDefault();
+      searchBar.classList.add('open');
+      searchInput.focus();
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+      e.preventDefault();
+      getActive().text = ta.value;
+      persist();
+      showToast('Poznámky uloženy ✓');
+    }
+    // Tab key inserts \t
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      insertAtCursor('\t');
     }
   });
-  // Automatické uložení při zavření
+
+  // ── Init ──
+  const note = getActive();
+  ta.value = note ? note.text : '';
+  renderTabs();
+  updateStats();
+  ta.focus();
+
+  // ── Autosave on overlay close ──
   const _obs = new MutationObserver((_, obs) => {
     if (!document.body.contains(overlay)) {
-      setMeta('userNotes', ta.value);
+      clearTimeout(autoSaveTimer);
+      getActive().text = ta.value;
+      persist();
       obs.disconnect();
     }
   });
