@@ -5,7 +5,7 @@
 import { state, showToast } from './state.js';
 import { resizeCanvases, autoCenterView } from './canvas.js';
 import { calculateAllIntersections } from './geometry.js';
-import { updateObjectList, updateProperties, resetHint, updateDimsBtn, updateSnapPtsBtn, updateCoordModeBtn, updateMachineTypeBtn, updateXDisplayBtn, togglePanel, updateLayerList, updateStatusProject, checkFirstRunHelp, updateAngleSnapBtn, updateNullPointUI, applyTheme } from './ui.js';
+import { updateObjectList, updateProperties, resetHint, updateDimsBtn, updateSnapPtsBtn, updateCoordModeBtn, updateMachineTypeBtn, updateXDisplayBtn, updateSnapGridBtn, togglePanel, updateLayerList, updateStatusProject, checkFirstRunHelp, updateAngleSnapBtn, updateNullPointUI, applyTheme } from './ui.js';
 import { initAutoSave } from './storage.js';
 import { getMeta, setMeta, migrateFromLocalStorage } from './idb.js';
 import { bridge } from './bridge.js';
@@ -69,7 +69,7 @@ async function tryAutoLoad() {
       if (data.snapToGrid !== undefined) state.snapToGrid = data.snapToGrid;
       if (data.angleSnap !== undefined) state.angleSnap = data.angleSnap;
       if (data.angleSnapStep !== undefined) state.angleSnapStep = data.angleSnapStep;
-      if (data.showDimensions) state.showDimensions = data.showDimensions;
+      if (data.showDimensions !== undefined) state.showDimensions = data.showDimensions;
       updateObjectList();
       updateProperties();
       updateLayerList();
@@ -137,6 +137,7 @@ setInterval(() => {
   updateMachineTypeBtn();
   updateXDisplayBtn();
   updateAngleSnapBtn();
+  updateSnapGridBtn();
   updateNullPointUI();
   updateLayerList();
   initAutoSave();

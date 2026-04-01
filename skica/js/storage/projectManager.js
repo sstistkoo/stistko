@@ -71,7 +71,7 @@ function _loadProjectData(data) {
   if (data.snapToGrid !== undefined) state.snapToGrid = data.snapToGrid;
   if (data.angleSnap !== undefined) state.angleSnap = data.angleSnap;
   if (data.angleSnapStep !== undefined) state.angleSnapStep = data.angleSnapStep;
-  if (data.showDimensions) state.showDimensions = data.showDimensions;
+  if (data.showDimensions !== undefined) state.showDimensions = data.showDimensions;
   state.selected = null;
   state.multiSelected.clear();
   state.selectedPoint = null;
