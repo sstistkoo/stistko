@@ -7,6 +7,7 @@ import { COLORS } from '../constants.js';
 import { makeInputOverlay } from '../dialogFactory.js';
 import { state, showToast, axisLabels } from '../state.js';
 import { typeLabel, safeEvalMath } from '../utils.js';
+import { drawCanvas, screenToWorld, snapPt } from '../canvas.js';
 
 // ── Dialog pro offset ──
 /**
@@ -578,10 +579,13 @@ export function showCircularArrayDialog(obj, callback) {
       <input type="text" id="dlgCircArrCount" value="6" inputmode="numeric">
       <label>Celkový úhel (°):</label>
       <input type="text" id="dlgCircArrAngle" value="360" inputmode="decimal">
-      <label>Střed ${labels[0]}:</label>
-      <input type="text" id="dlgCircArrCX" value="0" inputmode="decimal">
-      <label>Střed ${labels[1]}:</label>
-      <input type="text" id="dlgCircArrCZ" value="0" inputmode="decimal">
+      <div class="input-row" style="align-items:end">
+        <div><label>Střed ${labels[0]}:</label>
+        <input type="text" id="dlgCircArrCX" value="0" inputmode="decimal"></div>
+        <div><label>Střed ${labels[1]}:</label>
+        <input type="text" id="dlgCircArrCZ" value="0" inputmode="decimal"></div>
+        <div class="pick-col"><button type="button" class="pick-btn" id="dlgCircArrPick" title="Vybrat střed z výkresu">🎯</button></div>
+      </div>
       <label style="display:flex;align-items:center;gap:6px;margin-top:4px">
         <input type="checkbox" id="dlgCircArrIncOrig"> Včetně originálu
       </label>
@@ -611,5 +615,53 @@ export function showCircularArrayDialog(obj, callback) {
       if (e.key === "Escape") overlay.remove();
       e.stopPropagation();
     });
+  });
+
+  // ── Pick středu z plátna ──
+  let _pickCleanup = null;
+  overlay.querySelector("#dlgCircArrPick").addEventListener("click", (e) => {
+    e.preventDefault();
+    overlay.style.display = "none";
+    showToast("Klikněte na výkres pro výběr středu...");
+
+    function cleanup() {
+      drawCanvas.removeEventListener("click", onPick);
+      drawCanvas.removeEventListener("touchend", onTouch);
+      _pickCleanup = null;
+    }
+
+    function onPick(ev) {
+      const rect = drawCanvas.getBoundingClientRect();
+      const sx = ev.clientX - rect.left;
+      const sy = ev.clientY - rect.top;
+      let [wx, wy] = screenToWorld(sx, sy);
+      if (state.snapToPoints) [wx, wy] = snapPt(wx, wy);
+      cleanup();
+      overlay.style.display = "flex";
+      overlay.querySelector("#dlgCircArrCX").value = wx.toFixed(3);
+      overlay.querySelector("#dlgCircArrCZ").value = wy.toFixed(3);
+      showToast(`Střed: ${labels[0]}${wx.toFixed(2)} ${labels[1]}${wy.toFixed(2)}`);
+    }
+
+    function onTouch(ev) {
+      if (ev.changedTouches.length === 1) {
+        const t = ev.changedTouches[0];
+        const rect = drawCanvas.getBoundingClientRect();
+        const sx = t.clientX - rect.left;
+        const sy = t.clientY - rect.top;
+        let [wx, wy] = screenToWorld(sx, sy);
+        if (state.snapToPoints) [wx, wy] = snapPt(wx, wy);
+        cleanup();
+        overlay.style.display = "flex";
+        overlay.querySelector("#dlgCircArrCX").value = wx.toFixed(3);
+        overlay.querySelector("#dlgCircArrCZ").value = wy.toFixed(3);
+        showToast(`Střed: ${labels[0]}${wx.toFixed(2)} ${labels[1]}${wy.toFixed(2)}`);
+        ev.preventDefault();
+      }
+    }
+
+    drawCanvas.addEventListener("click", onPick);
+    drawCanvas.addEventListener("touchend", onTouch);
+    _pickCleanup = cleanup;
   });
 }
