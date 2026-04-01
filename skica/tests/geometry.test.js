@@ -31,7 +31,9 @@ import {
   circleTangentToLineAndTwoPoints,
   getLines,
   getCircles,
+  calculateAllIntersections,
 } from '../js/geometry.js';
+import { state } from '../js/state.js';
 
 const PI = Math.PI;
 
@@ -1203,5 +1205,57 @@ describe('getCircles', () => {
       closed: false,
     });
     expect(circs).toHaveLength(0);
+  });
+});
+
+// ════════════════════════════════════════
+// ── calculateAllIntersections – bod na objektu ──
+// ════════════════════════════════════════
+describe('calculateAllIntersections – bod na objektu', () => {
+  beforeEach(() => {
+    state.objects = [];
+    state.intersections = [];
+    state.layers = [{ id: 0, name: 'L0', visible: true, locked: false, color: '#fff' }];
+  });
+
+  it('bod ležící na kružnici → průsečík', () => {
+    state.objects = [
+      { type: 'point', x: 10, y: 0, id: 1, layer: 0 },
+      { type: 'circle', cx: 0, cy: 0, r: 10, id: 2, layer: 0 },
+    ];
+    calculateAllIntersections();
+    expect(state.intersections).toHaveLength(1);
+    expect(state.intersections[0].x).toBeCloseTo(10, 4);
+    expect(state.intersections[0].y).toBeCloseTo(0, 4);
+  });
+
+  it('bod ležící na úsečce → průsečík', () => {
+    state.objects = [
+      { type: 'point', x: 5, y: 0, id: 1, layer: 0 },
+      { type: 'line', x1: 0, y1: 0, x2: 10, y2: 0, id: 2, layer: 0 },
+    ];
+    calculateAllIntersections();
+    expect(state.intersections).toHaveLength(1);
+    expect(state.intersections[0].x).toBeCloseTo(5, 4);
+    expect(state.intersections[0].y).toBeCloseTo(0, 4);
+  });
+
+  it('bod mimo kružnici → žádný průsečík', () => {
+    state.objects = [
+      { type: 'point', x: 20, y: 0, id: 1, layer: 0 },
+      { type: 'circle', cx: 0, cy: 0, r: 10, id: 2, layer: 0 },
+    ];
+    calculateAllIntersections();
+    expect(state.intersections).toHaveLength(0);
+  });
+
+  it('dva body na kružnici → 2 průsečíky', () => {
+    state.objects = [
+      { type: 'point', x: 10, y: 0, id: 1, layer: 0 },
+      { type: 'point', x: 0, y: 10, id: 2, layer: 0 },
+      { type: 'circle', cx: 0, cy: 0, r: 10, id: 3, layer: 0 },
+    ];
+    calculateAllIntersections();
+    expect(state.intersections).toHaveLength(2);
   });
 });

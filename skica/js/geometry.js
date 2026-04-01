@@ -4,7 +4,7 @@
 
 import { state } from './state.js';
 import { SNAP_POINT_THRESHOLD, SELECT_THRESHOLD, CONSTRAINT_OFFSET_PX, ARC_OUTSIDE_PENALTY } from './constants.js';
-import { distPointToSegment, isAngleBetween, bulgeToArc, deepClone, getObjectSnapPoints, getRectCorners } from './utils.js';
+import { distPointToSegment, isAngleBetween, bulgeToArc, deepClone, getObjectSnapPoints, getRectCorners, getNearestPointOnObject } from './utils.js';
 import { renderAll } from './render.js';
 import { bridge } from './bridge.js';
 
@@ -717,6 +717,19 @@ export function calculateAllIntersections() {
         lines2 = getLines(objs[j]);
       const circs1 = getCircles(objs[i]),
         circs2 = getCircles(objs[j]);
+
+      // Bod ležící na jiném objektu = průsečík
+      const PT_TOL = 1e-4;
+      if (objs[i].type === 'point' && objs[j].type !== 'point') {
+        const near = getNearestPointOnObject(objs[j], objs[i].x, objs[i].y);
+        if (near && near.dist < PT_TOL) pts.push({ x: objs[i].x, y: objs[i].y });
+        continue;
+      }
+      if (objs[j].type === 'point' && objs[i].type !== 'point') {
+        const near = getNearestPointOnObject(objs[i], objs[j].x, objs[j].y);
+        if (near && near.dist < PT_TOL) pts.push({ x: objs[j].x, y: objs[j].y });
+        continue;
+      }
 
       // Filtrování: bod na koncovém bodě obou objektů = napojení, ne průsečík
       const eps1 = getObjectEndpoints(objs[i]);
