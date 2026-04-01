@@ -91,6 +91,24 @@ export function generateFullGearProfile(m, z, alpha = 20, x = 0, steps = 20, cx 
     const rightBase = tc - halfThickAngle - invAlpha;
     const leftBase = tc + halfThickAngle + invAlpha;
 
+    // ── Parametry tip oblouku ──
+    const tipInv = involuteAngleAt(rb, ra);
+    const rightTipA = rightBase + tipInv;
+    const leftTipA = leftBase - tipInv;
+    let tipSweep = leftTipA - rightTipA;
+    while (tipSweep < 0) tipSweep += 2 * Math.PI;
+    const tipBulge = (tipSweep > 0.001 && tipSweep < angularPitch)
+      ? Math.tan(tipSweep / 4) : 0;
+
+    // ── Parametry root oblouku ──
+    const nextRightBase = ((tooth + 1) * angularPitch) - halfThickAngle - invAlpha;
+    const rootStartA = effRf < rb ? leftBase : leftBase - involuteAngleAt(rb, effRf);
+    const rootEndA = effRf < rb ? nextRightBase : nextRightBase + involuteAngleAt(rb, effRf);
+    let rootSweep = rootEndA - rootStartA;
+    while (rootSweep < 0) rootSweep += 2 * Math.PI;
+    const rootBulge = (rootSweep > 0.001 && rootSweep < angularPitch)
+      ? Math.tan(rootSweep / 4) : 0;
+
     // ── Patní bod (pravá strana) ──
     if (effRf < rb) {
       addVert(cx + effRf * Math.cos(rightBase), cy + effRf * Math.sin(rightBase), 0);
@@ -101,20 +119,9 @@ export function generateFullGearProfile(m, z, alpha = 20, x = 0, steps = 20, cx 
       const r = rb + (ra - rb) * (i / steps);
       const ia = involuteAngleAt(rb, r);
       const a = rightBase + ia;
-      addVert(cx + r * Math.cos(a), cy + r * Math.sin(a), 0);
-    }
-
-    // ── Tip arc (oblouk na hlavové kružnici) ──
-    const tipInv = involuteAngleAt(rb, ra);
-    const rightTipA = rightBase + tipInv;
-    const leftTipA = leftBase - tipInv;
-    let tipSweep = leftTipA - rightTipA;
-    while (tipSweep < 0) tipSweep += 2 * Math.PI;
-
-    if (tipSweep > 0.001 && tipSweep < angularPitch) {
-      // Jeden bod uprostřed tip arcu
-      const aMid = rightTipA + tipSweep / 2;
-      addVert(cx + ra * Math.cos(aMid), cy + ra * Math.sin(aMid), 0);
+      // Poslední bod dostane tip bulge (oblouk k levé involutě)
+      const b = (i === steps) ? tipBulge : 0;
+      addVert(cx + r * Math.cos(a), cy + r * Math.sin(a), b);
     }
 
     // ── Levá involuta (od hlavové kružnice zpět k základní) ──
@@ -125,23 +132,14 @@ export function generateFullGearProfile(m, z, alpha = 20, x = 0, steps = 20, cx 
       addVert(cx + r * Math.cos(a), cy + r * Math.sin(a), 0);
     }
 
-    // ── Patní bod (levá strana) ──
+    // ── Patní přechod s root bulge ──
     if (effRf < rb) {
-      addVert(cx + effRf * Math.cos(leftBase), cy + effRf * Math.sin(leftBase), 0);
-    }
-
-    // ── Root arc (patní oblouk k dalšímu zubu) ──
-    const nextRightBase = ((tooth + 1) * angularPitch) - halfThickAngle - invAlpha;
-    let rootStartA = effRf < rb ? leftBase : leftBase - involuteAngleAt(rb, effRf);
-    let rootEndA = effRf < rb ? nextRightBase : nextRightBase + involuteAngleAt(rb, effRf);
-
-    let rootSweep = rootEndA - rootStartA;
-    while (rootSweep < 0) rootSweep += 2 * Math.PI;
-
-    if (rootSweep > 0.001 && rootSweep < angularPitch) {
-      // Jeden bod uprostřed root arcu
-      const aMid = rootStartA + rootSweep / 2;
-      addVert(cx + effRf * Math.cos(aMid), cy + effRf * Math.sin(aMid), 0);
+      // Patní bod levá strana – oblouk k dalšímu zubu
+      addVert(cx + effRf * Math.cos(leftBase), cy + effRf * Math.sin(leftBase), rootBulge);
+    } else {
+      // effRf >= rb: explicitní body na patní kružnici
+      addVert(cx + effRf * Math.cos(rootStartA), cy + effRf * Math.sin(rootStartA), rootBulge);
+      addVert(cx + effRf * Math.cos(rootEndA), cy + effRf * Math.sin(rootEndA), 0);
     }
   }
 
@@ -317,7 +315,7 @@ export function generateInternalGearProfile(m, z, alpha = 20, x = 0, steps = 10,
       addVert(cx + r * Math.cos(leftBase + ia), cy + r * Math.sin(leftBase + ia));
     }
 
-    // ── Tělo zubu na rf – hladký oblouk k další drážce ──
+    // ── Tělo zubu na rf – oblouk s bulge k další drážce ──
     const aEnd = leftBase + involuteAngleAt(rb, rf);
     const nextTc = ((tooth + 1) % z) * angularPitch;
     const nextRight = nextTc - halfThickAngle + invAlpha;
@@ -326,10 +324,10 @@ export function generateInternalGearProfile(m, z, alpha = 20, x = 0, steps = 10,
     let span = aStart - aEnd;
     if (span < 0) span += 2 * Math.PI;
 
-    const arcPts = Math.max(3, Math.round(span / (Math.PI / 18)));
-    for (let i = 1; i < arcPts; i++) {
-      const a = aEnd + span * (i / arcPts);
-      addVert(cx + rf * Math.cos(a), cy + rf * Math.sin(a));
+    if (span > 0.001 && span < angularPitch) {
+      // Bulge na posledním bodu levého boku → oblouk na rf ke další drážce
+      const lastIdx = vertices.length - 1;
+      if (lastIdx >= 0) bulges[lastIdx] = Math.tan(span / 4);
     }
   }
 
@@ -423,14 +421,24 @@ export function generateSprocketProfile(pChain, z, d1, steps = 8, cx = 0, cy = 0
     const rcx = rp * Math.cos(tc);
     const rcy = rp * Math.sin(tc);
 
-    // ── Sedlový oblouk (spodek zubu, otevřený ke středu kola) ──
+    // ── Sedlový oblouk (spodek zubu) ──
     const seatStartA = tc + Math.PI - seatHalf;
     const seatEndA   = tc + Math.PI + seatHalf;
+    const seatSweep = seatEndA - seatStartA; // = 2 * seatHalf
 
-    for (let i = 0; i <= steps; i++) {
-      const a = seatStartA + (seatEndA - seatStartA) * (i / steps);
-      addVert(cx + rcx + rSeat * Math.cos(a), cy + rcy + rSeat * Math.sin(a), 0);
-    }
+    // Počáteční bod sedla s bulge pro oblouk
+    const seatBulge = Math.tan(seatSweep / 4);
+    addVert(
+      cx + rcx + rSeat * Math.cos(seatStartA),
+      cy + rcy + rSeat * Math.sin(seatStartA),
+      seatBulge
+    );
+    // Koncový bod sedla
+    addVert(
+      cx + rcx + rSeat * Math.cos(seatEndA),
+      cy + rcy + rSeat * Math.sin(seatEndA),
+      0
+    );
 
     // ── Hrot zubu (tip) uprostřed k dalšímu sedlu ──
     const tipAngle = tc + angularPitch / 2;
