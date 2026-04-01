@@ -2,7 +2,7 @@
 // ║  SKICA – Inicializace aplikace (ES Module entry point)      ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-import { state, showToast } from './state.js';
+import { state, showToast, updateUndoButtons } from './state.js';
 import { resizeCanvases, autoCenterView } from './canvas.js';
 import { calculateAllIntersections } from './geometry.js';
 import { updateObjectList, updateProperties, resetHint, updateDimsBtn, updateSnapPtsBtn, updateCoordModeBtn, updateMachineTypeBtn, updateXDisplayBtn, updateSnapGridBtn, togglePanel, updateLayerList, updateStatusProject, checkFirstRunHelp, updateAngleSnapBtn, updateNullPointUI, applyTheme } from './ui.js';
@@ -72,9 +72,11 @@ async function tryAutoLoad() {
       if (data.showDimensions !== undefined) state.showDimensions = data.showDimensions;
       if (data.snapQuadrants !== undefined) state.snapQuadrants = data.snapQuadrants;
       if (data.snapMidpoints !== undefined) state.snapMidpoints = data.snapMidpoints;
+      if (Array.isArray(data.undoStack)) state.undoStack = data.undoStack;
       updateObjectList();
       updateProperties();
       updateLayerList();
+      updateUndoButtons();
     }
   } catch (e) {
     console.warn('Auto-load selhal:', e);
@@ -110,6 +112,7 @@ setInterval(() => {
       showDimensions: state.showDimensions,
       snapQuadrants: state.snapQuadrants,
       snapMidpoints: state.snapMidpoints,
+      undoStack: state.undoStack,
     };
     setMeta('currentProjectData', data);
   }
