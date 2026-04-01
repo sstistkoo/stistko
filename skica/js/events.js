@@ -1065,6 +1065,7 @@ function startRotateAction() {
     : state.selected !== null ? [state.selected] : [];
   if (indices.length === 0) { showToast("Nejdříve vyberte objekt"); return; }
   const objs = indices.map(i => state.objects[i]).filter(o => o);
+  if (objs.length === 0) { showToast("Žádný platný objekt k otočení"); return; }
   const refObj = objs[0];
 
   setHint("Klikněte na referenční bod otáčení");
