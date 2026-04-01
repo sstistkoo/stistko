@@ -8,6 +8,7 @@ import { makeOverlay } from '../dialogFactory.js';
 // ── Konstanty ──────────────────────────────────────────────────
 const STORAGE_DATA = 'skica-cnc-editor-data';
 const STORAGE_CFG  = 'skica-cnc-editor-settings';
+const STORAGE_HDR  = 'skica-cnc-editor-header';
 
 const G_CODES = {
   '0':'Rychloposuv','1':'Lineární interpolace','2':'Kruhová int. (CW)',
@@ -60,6 +61,17 @@ function defaultParserConfig() {
     calls:     { name: 'Podprogramy',          active: true },
     params:    { name: 'Parametry (R)',         active: true },
     syntax:    { name: 'Syntaxe',              active: true }
+  };
+}
+
+function defaultHeaderConfig() {
+  return {
+    gear:    { name: 'Převod (M4x)',       active: true, val: '41' },
+    door:    { name: 'Odjezd do výměny',   active: true, val: '80' },
+    tool:    { name: 'Nástroj a korekce',  active: true, t: '1', d: '1' },
+    coords:  { name: 'Souřadný systém',   active: true, val: 'G54' },
+    feed:    { name: 'Posuv',              active: true, mode: 'G95' },
+    spindle: { name: 'Vřeteno',            active: true, mode: 'G97', s: '500', m: '4', lims: '2000' }
   };
 }
 
@@ -234,6 +246,7 @@ function buildEditorHTML() {
       <button class="cne-tb-btn cne-hide-m" data-act="renum" title="Přečíslovat N-bloky">🔢</button>
       <button class="cne-tb-btn cne-conv cne-hide-m" data-act="convAbs" data-el="convAbsBtn" title="Převést na absolutní (G90)">ABS</button>
       <button class="cne-tb-btn cne-conv cne-hide-m" data-act="convInc" data-el="convIncBtn" title="Převést na přírůstkové (G91)">INC</button>
+      <button class="cne-tb-btn cne-hide-m" data-act="header" title="Generovat hlavičku">📝</button>
       <button class="cne-tb-btn cne-status" data-act="validate" data-el="statusBtn" title="Validace">●</button>
       <button class="cne-tb-btn cne-hide-m" data-act="settings" title="Nastavení parseru">⚙</button>
       <button class="cne-tb-btn cne-menu-btn" data-act="menu" title="Menu">⋮</button>
@@ -263,34 +276,30 @@ function buildEditorHTML() {
   </div>
 
   <div class="cne-quickbar">
-    <button class="cne-qb green" data-ins="\\n">↵</button>
-    <button class="cne-qb del" data-act="backspace">⌫</button>
-    <button class="cne-qb gray" data-ins=" ">␣</button>
-
     <button class="cne-qb blue" data-inp="G">G</button>
     <button class="cne-qb blue" data-inp="M">M</button>
     <button class="cne-qb" data-inp="X">X</button>
-
     <button class="cne-qb" data-inp="Z">Z</button>
+    <button class="cne-qb gray" data-ins=" ">␣</button>
+    <button class="cne-qb del" data-act="backspace">⌫</button>
+
     <button class="cne-qb" data-inp="F">F</button>
     <button class="cne-qb" data-inp="S">S</button>
-
     <button class="cne-qb" data-inp="T">T</button>
-    <button class="cne-qb" data-inp="R">R</button>
     <button class="cne-qb" data-inp="D">D</button>
-
+    <button class="cne-qb" data-inp="R">R</button>
     <button class="cne-qb gray" data-inp="">123</button>
+
     <button class="cne-qb gray" data-ins=";">;</button>
     <button class="cne-qb gray" data-ins="=">=</button>
-
     <button class="cne-qb accent" data-ins="G0 ">G0</button>
     <button class="cne-qb accent" data-ins="G1 ">G1</button>
     <button class="cne-qb accent" data-ins="M30">M30</button>
-
     <button class="cne-qb accent" data-ins="M17">M17</button>
+
+    <button class="cne-qb green" data-ins="\\n">↵</button>
     <button class="cne-qb red" data-inp="LIMS=">LIMS</button>
     <button class="cne-qb accent" data-ins="STOPRE">STOP</button>
-
     <button class="cne-qb cne-kb-btn" data-act="keyboard" title="Zobrazit klávesnici">⌨</button>
   </div>
 
@@ -308,6 +317,8 @@ function buildEditorHTML() {
         <button class="cne-menu-item" data-act="renum"><span class="cne-mi-icon">🔢</span><span class="cne-mi-text"><b>Přečíslovat N-bloky</b><small>Přečíslování bloků N10, N20…</small></span></button>
         <button class="cne-menu-item" data-act="convAbs"><span class="cne-mi-icon sn">ABS</span><span class="cne-mi-text"><b>Převést na absolutní</b><small>G91 → G90 souřadnice</small></span></button>
         <button class="cne-menu-item" data-act="convInc"><span class="cne-mi-icon sn">INC</span><span class="cne-mi-text"><b>Převést na přírůstkové</b><small>G90 → G91 souřadnice</small></span></button>
+        <div class="cne-menu-sep"></div>
+        <button class="cne-menu-item" data-act="header"><span class="cne-mi-icon">📝</span><span class="cne-mi-text"><b>Generovat hlavičku</b><small>Vložit hlavičku programu (M4x, T, G54…)</small></span></button>
         <div class="cne-menu-sep"></div>
         <button class="cne-menu-item" data-act="settings"><span class="cne-mi-icon">⚙</span><span class="cne-mi-text"><b>Nastavení validace</b><small>Pravidla kontroly programu</small></span></button>
       </div>
@@ -368,6 +379,18 @@ function buildEditorHTML() {
     </div>
   </div>
 
+  <!-- Header generator modal -->
+  <div class="cne-inner-modal" data-el="hdrModal" style="display:none">
+    <div class="cne-im-card" style="min-width:300px;max-width:380px">
+      <div class="cne-im-title">Generovat hlavičku programu</div>
+      <div class="cne-hdr-list" data-el="hdrList"></div>
+      <div class="cne-im-actions" style="margin-top:10px">
+        <button class="cne-im-btn cancel" data-act="hdrClose">Zavřít</button>
+        <button class="cne-im-btn ok" data-act="hdrApply">Vložit hlavičku</button>
+      </div>
+    </div>
+  </div>
+
   <input type="file" data-el="fileInput" style="display:none" accept=".txt,.mpf,.spf">
 </div>`;
 }
@@ -380,6 +403,7 @@ export function openCncEditor() {
   let programs   = {};
   let currentFile = '';
   let parserCfg  = defaultParserConfig();
+  let headerCfg  = defaultHeaderConfig();
   let tValidate  = null;
   let tSave      = null;
   let rafHL      = null;
@@ -397,6 +421,8 @@ export function openCncEditor() {
   }
   const sc = storageLoad(STORAGE_CFG);
   if (sc) parserCfg = { ...defaultParserConfig(), ...sc };
+  const sh = storageLoad(STORAGE_HDR);
+  if (sh) headerCfg = { ...defaultHeaderConfig(), ...sh };
 
   // ── Create overlay ─────────────────────────────────────────
   const overlay = makeOverlay('cnc-editor', '💻 CNC Editor', buildEditorHTML(), 'cnc-editor-window');
@@ -423,6 +449,8 @@ export function openCncEditor() {
   const cfgModal    = $('cfgModal');
   const cfgList     = $('cfgList');
   const fileInput   = $('fileInput');
+  const hdrModal    = $('hdrModal');
+  const hdrList     = $('hdrList');
 
   // ── Persistence ────────────────────────────────────────────
   function persist() { storageSave(STORAGE_DATA, { programs, currentFile }); }
@@ -660,6 +688,105 @@ export function openCncEditor() {
       </div>`
     ).join('');
     cfgModal.style.display = 'flex';
+  }
+
+  // ── Header generator ──────────────────────────────────────
+  function persistHdr() { storageSave(STORAGE_HDR, headerCfg); }
+
+  function showHeaderSettings() {
+    const h = headerCfg;
+    const coordOpts = ['G54','G55','G56','G57','G505','G53'].map(v =>
+      `<option value="${v}" ${h.coords.val === v ? 'selected' : ''}>${v}</option>`).join('');
+    const feedOpts = ['G95','G94'].map(v =>
+      `<option value="${v}" ${h.feed.mode === v ? 'selected' : ''}>${v} ${v === 'G95' ? '(mm/ot)' : '(mm/min)'}</option>`).join('');
+    const spModeOpts = ['G97','G96'].map(v =>
+      `<option value="${v}" ${h.spindle.mode === v ? 'selected' : ''}>${v} ${v === 'G97' ? '(konst. ot.)' : '(konst. řez.)'}</option>`).join('');
+    const spDirOpts = ['4','3'].map(v =>
+      `<option value="${v}" ${h.spindle.m === v ? 'selected' : ''}>M${v} ${v === '4' ? '(CCW)' : '(CW)'}</option>`).join('');
+
+    hdrList.innerHTML = `
+      <div class="cne-hdr-row">
+        <label><input type="checkbox" data-hdr="gear" ${h.gear.active ? 'checked' : ''}> Převod</label>
+        <span>M<input type="number" class="cne-hdr-inp" data-hdr-v="gear.val" value="${h.gear.val}" min="40" max="45" style="width:40px"></span>
+      </div>
+      <div class="cne-hdr-row">
+        <label><input type="checkbox" data-hdr="door" ${h.door.active ? 'checked' : ''}> Odjezd do výměny</label>
+        <span>M<input type="number" class="cne-hdr-inp" data-hdr-v="door.val" value="${h.door.val}" min="0" max="99" style="width:40px"></span>
+      </div>
+      <div class="cne-hdr-row">
+        <label><input type="checkbox" data-hdr="tool" ${h.tool.active ? 'checked' : ''}> Nástroj</label>
+        <span>T<input type="number" class="cne-hdr-inp" data-hdr-v="tool.t" value="${h.tool.t}" min="1" max="99" style="width:36px">
+        D<input type="number" class="cne-hdr-inp" data-hdr-v="tool.d" value="${h.tool.d}" min="1" max="9" style="width:36px"></span>
+      </div>
+      <div class="cne-hdr-row">
+        <label><input type="checkbox" data-hdr="coords" ${h.coords.active ? 'checked' : ''}> Souřadnice</label>
+        <select class="cne-hdr-inp" data-hdr-v="coords.val">${coordOpts}</select>
+      </div>
+      <div class="cne-hdr-row">
+        <label><input type="checkbox" data-hdr="feed" ${h.feed.active ? 'checked' : ''}> Posuv</label>
+        <select class="cne-hdr-inp" data-hdr-v="feed.mode">${feedOpts}</select>
+      </div>
+      <div class="cne-hdr-row">
+        <label><input type="checkbox" data-hdr="spindle" ${h.spindle.active ? 'checked' : ''}> Vřeteno</label>
+        <div class="cne-hdr-sp-wrap">
+          <select class="cne-hdr-inp" data-hdr-v="spindle.mode">${spModeOpts}</select>
+          <span>S<input type="number" class="cne-hdr-inp" data-hdr-v="spindle.s" value="${h.spindle.s}" min="1" max="9999" style="width:52px"></span>
+          <select class="cne-hdr-inp" data-hdr-v="spindle.m">${spDirOpts}</select>
+          <span>LIMS<input type="number" class="cne-hdr-inp" data-hdr-v="spindle.lims" value="${h.spindle.lims}" min="1" max="9999" style="width:52px"></span>
+        </div>
+      </div>`;
+    hdrModal.style.display = 'flex';
+  }
+
+  function readHeaderInputs() {
+    hdrModal.querySelectorAll('[data-hdr]').forEach(el => {
+      const key = el.dataset.hdr;
+      if (headerCfg[key]) headerCfg[key].active = el.checked;
+    });
+    hdrModal.querySelectorAll('[data-hdr-v]').forEach(el => {
+      const path = el.dataset.hdrV.split('.');
+      if (path.length === 2 && headerCfg[path[0]]) {
+        headerCfg[path[0]][path[1]] = el.value;
+      }
+    });
+  }
+
+  function applyHeader() {
+    readHeaderInputs();
+    persistHdr();
+    const h = headerCfg;
+    const lines = [];
+    let n = 10;
+
+    if (h.gear.active)  { lines.push(`N${n} M${h.gear.val}`); n += 10; }
+    lines.push(`N${n} STOPRE`); n += 10;
+    if (h.door.active)  { lines.push(`N${n} M${h.door.val}`); n += 10; }
+    if (h.tool.active)  { lines.push(`N${n} T${h.tool.t}`); lines.push(`      D${h.tool.d}`); n += 10; }
+
+    let coordLine = `N${n}`;
+    if (h.coords.active) coordLine += ` ${h.coords.val}`;
+    if (h.feed.active)   coordLine += ` ${h.feed.mode}`;
+    coordLine += ' G90';
+    lines.push(coordLine); n += 10;
+
+    if (h.spindle.active) {
+      let sp = `N${n} ${h.spindle.mode}`;
+      if (h.spindle.mode === 'G96' && h.spindle.lims) sp += ` LIMS=${h.spindle.lims}`;
+      sp += ` S${h.spindle.s} M${h.spindle.m}`;
+      lines.push(sp); n += 10;
+    }
+    lines.push(`N${n} STOPRE`);
+
+    const existing = editor.value.split('\n');
+    let result;
+    if (existing.length > 0 && existing[0].trim().toUpperCase().startsWith('MSG')) {
+      result = existing[0] + '\n' + lines.join('\n') + '\n' + existing.slice(1).join('\n');
+    } else {
+      result = lines.join('\n') + '\n' + editor.value;
+    }
+    editor.value = result;
+    onInput();
+    hdrModal.style.display = 'none';
   }
 
   // ── Import / Export ────────────────────────────────────────
@@ -906,6 +1033,9 @@ export function openCncEditor() {
           break;
         case 'convAbs':   convertToAbsolute(); closeMenu(); break;
         case 'convInc':   convertToIncremental(); closeMenu(); break;
+        case 'header':    showHeaderSettings(); closeMenu(); break;
+        case 'hdrClose':  readHeaderInputs(); persistHdr(); hdrModal.style.display = 'none'; break;
+        case 'hdrApply':  applyHeader(); break;
         case 'backspace': doBackspace(); break;
         case 'keyboard':  editor.focus(); break;
         case 'menu':      $('menuModal').style.display = 'flex'; break;

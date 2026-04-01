@@ -3901,8 +3901,7 @@ body {
 .cne-quickbar {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  grid-auto-flow: column;
+  grid-auto-flow: row;
   gap: 3px; padding: 6px 8px;
   background: var(--ctp-mantle);
   border-top: 1px solid var(--ctp-surface0);
@@ -4066,19 +4065,43 @@ body {
   margin: 4px 8px;
 }
 
+/* ── Header generator rows ───────────────────────────────────── */
+.cne-hdr-list { display: flex; flex-direction: column; gap: 6px; }
+.cne-hdr-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px; padding: 6px 8px; border-radius: 6px;
+  background: var(--ctp-surface0); font-size: 13px; color: var(--ctp-text);
+  flex-wrap: wrap;
+}
+.cne-hdr-row label { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+.cne-hdr-row label input[type="checkbox"] { accent-color: var(--ctp-green); width: 16px; height: 16px; }
+.cne-hdr-inp {
+  padding: 3px 6px; border-radius: 4px;
+  background: var(--ctp-mantle); border: 1px solid var(--ctp-surface1);
+  color: var(--ctp-text); font: 700 12px "Consolas",monospace;
+  text-align: center; outline: none;
+}
+.cne-hdr-inp:focus { border-color: var(--ctp-blue); }
+select.cne-hdr-inp { padding: 3px 4px; text-align: left; }
+.cne-hdr-sp-wrap {
+  display: flex; align-items: center; gap: 4px; flex-wrap: wrap; font-size: 11px;
+}
+
 /* ── Responsive ─────────────────────────────────────────────── */
 @media (max-width: 600px) {
-  .cnc-editor-window { width: 100vw; height: 100vh; max-width: 100vw; max-height: 100vh; border-radius: 0; }
+  .cnc-editor-window { width: 100vw; height: 100vh; max-width: 100vw; max-height: 100vh; border-radius: 0; border: none; box-shadow: none; }
   .cnc-editor-window .calc-titlebar { display: none; }
-  .cne-sn-bar { font-size: 9px; padding: 4px 8px; }
+
+  /* Sinumerik bar — visible & prominent on mobile */
+  .cne-sn-bar { font-size: 10px; padding: 6px 12px; letter-spacing: 1px; }
 
   /* Toolbar: hide overflow buttons, show menu */
   .cne-hide-m { display: none !important; }
   .cne-menu-btn { display: flex !important; }
-  .cne-toolbar { padding: 4px 6px; gap: 4px; }
+  .cne-toolbar { padding: 6px 8px; gap: 6px; }
   .cne-toolbar-left { min-width: 0; flex: 1; overflow: hidden; }
-  .cne-filename { font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 140px; display: inline-block; }
-  .cne-tb-btn { padding: 6px; font-size: 15px; }
+  .cne-filename { font-size: 15px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 55vw; display: inline-block; padding: 4px 8px; }
+  .cne-tb-btn { padding: 8px; font-size: 17px; }
 
   /* Sidebar overlay style on mobile */
   .cne-sidebar {
@@ -4090,13 +4113,14 @@ body {
   /* Quickbar: row flow, 6 columns, larger touch targets */
   .cne-quickbar {
     grid-template-columns: repeat(6, 1fr);
-    grid-auto-flow: row;
-    gap: 3px; padding: 4px;
+    gap: 3px; padding: 4px 4px calc(4px + env(safe-area-inset-bottom, 6px));
   }
   .cne-qb { padding: 8px 2px; font-size: 13px; min-height: 36px; }
 
-  /* Line numbers narrower */
-  .cne-line-nums { width: 30px; font-size: 11px; padding: 8px 3px 8px 0; }
+  /* Line numbers — match textarea exactly to stay in sync */
+  .cne-line-nums { width: 30px; font-size: 12px; line-height: 20px; padding: 10px 3px 10px 0; }
+  .cne-backdrop, .cne-textarea { font-size: 12px; line-height: 20px; }
+  .cne-textarea { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 
   /* Editor text slightly smaller */
   .cne-backdrop, .cne-textarea { font-size: 13px; line-height: 19px; padding: 8px 8px; }
