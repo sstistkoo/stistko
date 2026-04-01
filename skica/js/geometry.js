@@ -602,8 +602,9 @@ export function intersectLineCircle(line, circle) {
   const c = fx * fx + fy * fy - r * r;
   let disc = b * b - 4 * a * c;
   // Tolerance pro tečné případy – diskriminant může být mírně záporný
-  // kvůli floating-point nepřesnosti
-  if (disc < -1e-6) return [];
+  // kvůli floating-point nepřesnosti; škálujeme s velikostí dat
+  const discTol = 1e-6 * Math.max(1, a);
+  if (disc < -discTol) return [];
   if (disc < 0) disc = 0;
   disc = Math.sqrt(disc);
   const results = [];
