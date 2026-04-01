@@ -80,7 +80,13 @@ export function importProjectFile() {
     const reader = new FileReader();
     reader.onload = (ev) => {
       try {
-        const data = JSON.parse(ev.target.result);
+        let data = JSON.parse(ev.target.result);
+
+        // Auto-detekce SimDxf formátu (points pole místo objects)
+        if (Array.isArray(data.points) && !Array.isArray(data.objects)) {
+          data = convertSimDxfToSkica(data);
+        }
+
         validateImportData(data);
         pushUndo();
         state.objects = data.objects || [];
@@ -191,6 +197,73 @@ export function exportDXFFile() {
   showToast(`Exportováno ${state.objects.length} objektů do DXF`);
 }
 
+/** Exportuje projekt jako JSON soubor kompatibilní se SimDxf konvertorem. */
+function exportJsonCompatible() {
+  exportProjectFile();
+}
+
+/**
+ * Převádí SimDxf "points" formát na SKICA v3 objekty.
+ * SimDxf formát: { version: "1.0", points: [{x, z, break, type, id, r?, cw?, cx?, cz?}], dimensions: [] }
+ */
+function convertSimDxfToSkica(data) {
+  const points = data.points || [];
+  const objects = [];
+  let idCounter = 1;
+
+  for (let i = 0; i < points.length - 1; i++) {
+    const curr = points[i];
+    const next = points[i + 1];
+    if (next.break) continue;
+
+    if (next.type === 'line') {
+      objects.push({
+        type: 'line',
+        id: idCounter,
+        name: `Úsečka ${idCounter}`,
+        x1: curr.x, y1: curr.z,
+        x2: next.x, y2: next.z,
+        color: '#89b4fa',
+        layer: 0,
+      });
+      idCounter++;
+    } else if (next.type === 'arc') {
+      const cx = next.cx, cy = next.cz, r = next.r;
+      const startAngle = Math.atan2(curr.z - cy, curr.x - cx);
+      const endAngle = Math.atan2(next.z - cy, next.x - cx);
+      objects.push({
+        type: 'arc',
+        id: idCounter,
+        name: `Oblouk ${idCounter}`,
+        cx: cx, cy: cy, r: r,
+        startAngle: next.cw ? endAngle : startAngle,
+        endAngle: next.cw ? startAngle : endAngle,
+        ccw: !next.cw,
+        color: '#89b4fa',
+        layer: 0,
+      });
+      idCounter++;
+    }
+  }
+
+  return {
+    version: 3,
+    objects: objects,
+    intersections: [],
+    nextId: idCounter,
+    gridSize: 10,
+    coordMode: 'abs',
+    machineType: (data.machineType || 'soustruh').toLowerCase(),
+    xDisplayMode: 'radius',
+    layers: [{ id: 0, name: 'Vrstva 0', color: '#89b4fa', visible: true }],
+    activeLayer: 0,
+    nextLayerId: 1,
+    showObjectNumbers: false,
+    showIntersectionNumbers: false,
+    anchors: [],
+  };
+}
+
 // ── Tlačítko Soubor (overlay) ──
 document.getElementById("btnLoad").addEventListener("click", () => {
   const overlay = document.createElement("div");
@@ -203,6 +276,7 @@ document.getElementById("btnLoad").addEventListener("click", () => {
         <button class="btn-ok" id="loadFile" style="width:100%">Importovat ze souboru (.json)</button>
         <button class="btn-ok" id="loadDXF" style="width:100%">📐 Importovat DXF soubor (.dxf)</button>
         <button class="btn-ok" id="exportFile" style="width:100%;background:${COLORS.selected};border-color:${COLORS.selected}">Exportovat do souboru</button>
+        <button class="btn-ok" id="exportJsonFile" style="width:100%;background:${COLORS.selected};border-color:${COLORS.selected}">📄 Exportovat JSON soubor</button>
         <button class="btn-ok" id="exportDXF" style="width:100%;background:${COLORS.selected};border-color:${COLORS.selected}">📐 Exportovat DXF</button>
         <button class="btn-ok" id="exportImage" style="width:100%;background:${COLORS.selected};border-color:${COLORS.selected}">🖼 Export obrazu (SVG/PNG)</button>
         <button class="btn-cancel btn-cancel-overlay" style="width:100%">Zrušit</button>
@@ -224,6 +298,10 @@ document.getElementById("btnLoad").addEventListener("click", () => {
   overlay.querySelector("#exportFile").addEventListener("click", () => {
     overlay.remove();
     exportProjectFile();
+  });
+  overlay.querySelector("#exportJsonFile").addEventListener("click", () => {
+    overlay.remove();
+    exportJsonCompatible();
   });
   overlay.querySelector("#exportDXF").addEventListener("click", () => {
     overlay.remove();
