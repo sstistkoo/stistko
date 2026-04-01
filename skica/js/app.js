@@ -70,6 +70,8 @@ async function tryAutoLoad() {
       if (data.angleSnap !== undefined) state.angleSnap = data.angleSnap;
       if (data.angleSnapStep !== undefined) state.angleSnapStep = data.angleSnapStep;
       if (data.showDimensions !== undefined) state.showDimensions = data.showDimensions;
+      if (data.snapQuadrants !== undefined) state.snapQuadrants = data.snapQuadrants;
+      if (data.snapMidpoints !== undefined) state.snapMidpoints = data.snapMidpoints;
       updateObjectList();
       updateProperties();
       updateLayerList();
@@ -106,6 +108,8 @@ setInterval(() => {
       angleSnap: state.angleSnap,
       angleSnapStep: state.angleSnapStep,
       showDimensions: state.showDimensions,
+      snapQuadrants: state.snapQuadrants,
+      snapMidpoints: state.snapMidpoints,
     };
     setMeta('currentProjectData', data);
   }

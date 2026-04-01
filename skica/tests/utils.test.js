@@ -12,6 +12,7 @@ import {
   getNearestPointOnObject,
   safeEvalMath,
 } from '../js/utils.js';
+import { state } from '../js/state.js';
 
 const PI = Math.PI;
 const EPSILON = 1e-9;
@@ -228,20 +229,31 @@ describe('getObjectSnapPoints', () => {
   });
 
   it('úsečka → 3 snap points (start, end, mid)', () => {
+    state.snapMidpoints = true;
     const pts = getObjectSnapPoints({ type: 'line', x1: 0, y1: 0, x2: 10, y2: 0 });
     expect(pts).toHaveLength(3);
     expect(pts[0]).toEqual({ x: 0, y: 0 });
     expect(pts[1]).toEqual({ x: 10, y: 0 });
     expect(pts[2]).toEqual({ x: 5, y: 0, mid: true });
+    state.snapMidpoints = false;
+  });
+
+  it('úsečka bez snapMidpoints → 2 snap points', () => {
+    state.snapMidpoints = false;
+    const pts = getObjectSnapPoints({ type: 'line', x1: 0, y1: 0, x2: 10, y2: 0 });
+    expect(pts).toHaveLength(2);
   });
 
   it('konstrukční čára → 3 snap points', () => {
+    state.snapMidpoints = true;
     const pts = getObjectSnapPoints({ type: 'constr', x1: 0, y1: 0, x2: 6, y2: 8 });
     expect(pts).toHaveLength(3);
     expect(pts[2]).toEqual({ x: 3, y: 4, mid: true }); // midpoint
+    state.snapMidpoints = false;
   });
 
   it('kružnice → 5 snap points (střed + 4 kardinální)', () => {
+    state.snapQuadrants = true;
     const pts = getObjectSnapPoints({ type: 'circle', cx: 0, cy: 0, r: 5 });
     expect(pts).toHaveLength(5);
     expect(pts[0]).toEqual({ x: 0, y: 0 });   // center
@@ -249,6 +261,14 @@ describe('getObjectSnapPoints', () => {
     expect(pts[2]).toEqual({ x: -5, y: 0, quarter: true });  // left
     expect(pts[3]).toEqual({ x: 0, y: 5, quarter: true });   // top
     expect(pts[4]).toEqual({ x: 0, y: -5, quarter: true });  // bottom
+    state.snapQuadrants = false;
+  });
+
+  it('kružnice bez snapQuadrants → 1 snap point (jen střed)', () => {
+    state.snapQuadrants = false;
+    const pts = getObjectSnapPoints({ type: 'circle', cx: 0, cy: 0, r: 5 });
+    expect(pts).toHaveLength(1);
+    expect(pts[0]).toEqual({ x: 0, y: 0 });
   });
 
   it('oblouk → 3 snap points (střed, start, end)', () => {
@@ -265,12 +285,15 @@ describe('getObjectSnapPoints', () => {
   });
 
   it('obdélník → 5 snap points (4 rohy + střed)', () => {
+    state.snapMidpoints = true;
     const pts = getObjectSnapPoints({ type: 'rect', x1: 0, y1: 0, x2: 10, y2: 6 });
     expect(pts).toHaveLength(5);
     expect(pts[4]).toEqual({ x: 5, y: 3, mid: true }); // center
+    state.snapMidpoints = false;
   });
 
   it('polyline (otevřená, 3 body) → vrcholy + midpoints', () => {
+    state.snapMidpoints = true;
     const pts = getObjectSnapPoints({
       type: 'polyline',
       vertices: [{ x: 0, y: 0 }, { x: 10, y: 0 }, { x: 10, y: 10 }],
@@ -281,6 +304,7 @@ describe('getObjectSnapPoints', () => {
     expect(pts).toHaveLength(5);
     expect(pts[3]).toEqual({ x: 5, y: 0, mid: true });   // mid seg 0
     expect(pts[4]).toEqual({ x: 10, y: 5, mid: true });  // mid seg 1
+    state.snapMidpoints = false;
   });
 
   it('neznámý typ → prázdné pole', () => {

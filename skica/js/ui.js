@@ -46,6 +46,8 @@ function persistSettings() {
       base.showDimensions = state.showDimensions;
       base.showObjectNumbers = state.showObjectNumbers;
       base.showIntersectionNumbers = state.showIntersectionNumbers;
+      base.snapQuadrants = state.snapQuadrants;
+      base.snapMidpoints = state.snapMidpoints;
       await setMeta('currentProjectData', base);
     } catch(e) { console.warn('persistSettings:', e); }
   }, 500);
@@ -2971,6 +2973,14 @@ function showSettingsDialog() {
           <input id="settAngleStep" type="number" min="1" max="90" step="1" value="${state.angleSnapStep}"
             style="width:70px;padding:6px 8px;border-radius:6px;border:1px solid var(--ctp-surface1);background:var(--ctp-surface0);color:var(--ctp-text);font-size:14px;text-align:center">
         </div>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="calc-btn" id="settSnapQuadrants" style="flex:1;padding:8px;font-size:12px;border-radius:6px;cursor:pointer;border:2px solid ${state.snapQuadrants ? 'var(--ctp-green)' : 'var(--ctp-surface1)'};background:${state.snapQuadrants ? 'var(--ctp-green)' : 'var(--ctp-surface0)'};color:${state.snapQuadrants ? 'var(--ctp-base)' : 'var(--ctp-text)'}">
+            ◎ Quadranty: ${state.snapQuadrants ? 'ON' : 'OFF'}
+          </button>
+          <button class="calc-btn" id="settSnapMidpoints" style="flex:1;padding:8px;font-size:12px;border-radius:6px;cursor:pointer;border:2px solid ${state.snapMidpoints ? 'var(--ctp-green)' : 'var(--ctp-surface1)'};background:${state.snapMidpoints ? 'var(--ctp-green)' : 'var(--ctp-surface0)'};color:${state.snapMidpoints ? 'var(--ctp-base)' : 'var(--ctp-text)'}">
+            ½ Středy: ${state.snapMidpoints ? 'ON' : 'OFF'}
+          </button>
+        </div>
       </fieldset>
 
       <!-- Souřadnice -->
@@ -3156,6 +3166,38 @@ function showSettingsDialog() {
       state.angleSnapStep = val;
       persistSettings();
     }
+  });
+
+  // ── Quadranty kružnice ON/OFF ──
+  function updateSnapQuadrantsBtn() {
+    const btn = overlay.querySelector('#settSnapQuadrants');
+    const activeStyle = 'border-color:var(--ctp-green);background:var(--ctp-green);color:var(--ctp-base)';
+    const inactiveStyle = 'border-color:var(--ctp-surface1);background:var(--ctp-surface0);color:var(--ctp-text)';
+    btn.style.cssText = `flex:1;padding:8px;font-size:12px;border-radius:6px;cursor:pointer;border:2px solid transparent;${state.snapQuadrants ? activeStyle : inactiveStyle}`;
+    btn.textContent = `◎ Quadranty: ${state.snapQuadrants ? 'ON' : 'OFF'}`;
+  }
+  overlay.querySelector('#settSnapQuadrants').addEventListener('click', () => {
+    state.snapQuadrants = !state.snapQuadrants;
+    updateSnapQuadrantsBtn();
+    renderAll();
+    persistSettings();
+    showToast(state.snapQuadrants ? 'Snap quadranty kružnice: ON' : 'Snap quadranty kružnice: OFF');
+  });
+
+  // ── Středy úseček ON/OFF ──
+  function updateSnapMidpointsBtn() {
+    const btn = overlay.querySelector('#settSnapMidpoints');
+    const activeStyle = 'border-color:var(--ctp-green);background:var(--ctp-green);color:var(--ctp-base)';
+    const inactiveStyle = 'border-color:var(--ctp-surface1);background:var(--ctp-surface0);color:var(--ctp-text)';
+    btn.style.cssText = `flex:1;padding:8px;font-size:12px;border-radius:6px;cursor:pointer;border:2px solid transparent;${state.snapMidpoints ? activeStyle : inactiveStyle}`;
+    btn.textContent = `½ Středy: ${state.snapMidpoints ? 'ON' : 'OFF'}`;
+  }
+  overlay.querySelector('#settSnapMidpoints').addEventListener('click', () => {
+    state.snapMidpoints = !state.snapMidpoints;
+    updateSnapMidpointsBtn();
+    renderAll();
+    persistSettings();
+    showToast(state.snapMidpoints ? 'Snap středy úseček: ON' : 'Snap středy úseček: OFF');
   });
 
   // ── Souřadnice ABS/INC ──

@@ -2,6 +2,8 @@
 // ║  SKICA – Pomocné funkce (snap body, geometrie, labely)      ║
 // ╚══════════════════════════════════════════════════════════════╝
 
+import { state } from './state.js';
+
 // ── Bezpečný parser matematických výrazů (bez eval / new Function) ──
 
 /**
@@ -186,20 +188,28 @@ export function getObjectSnapPoints(obj) {
     case "point":
       return [{ x: obj.x, y: obj.y }];
     case "line":
-    case "constr":
-      return [
+    case "constr": {
+      const pts = [
         { x: obj.x1, y: obj.y1 },
         { x: obj.x2, y: obj.y2 },
-        { x: (obj.x1 + obj.x2) / 2, y: (obj.y1 + obj.y2) / 2, mid: true },
       ];
-    case "circle":
-      return [
-        { x: obj.cx, y: obj.cy },
-        { x: obj.cx + obj.r, y: obj.cy, quarter: true },
-        { x: obj.cx - obj.r, y: obj.cy, quarter: true },
-        { x: obj.cx, y: obj.cy + obj.r, quarter: true },
-        { x: obj.cx, y: obj.cy - obj.r, quarter: true },
-      ];
+      if (state.snapMidpoints) {
+        pts.push({ x: (obj.x1 + obj.x2) / 2, y: (obj.y1 + obj.y2) / 2, mid: true });
+      }
+      return pts;
+    }
+    case "circle": {
+      const pts = [{ x: obj.cx, y: obj.cy }];
+      if (state.snapQuadrants) {
+        pts.push(
+          { x: obj.cx + obj.r, y: obj.cy, quarter: true },
+          { x: obj.cx - obj.r, y: obj.cy, quarter: true },
+          { x: obj.cx, y: obj.cy + obj.r, quarter: true },
+          { x: obj.cx, y: obj.cy - obj.r, quarter: true },
+        );
+      }
+      return pts;
+    }
     case "arc":
       return [
         { x: obj.cx, y: obj.cy },
@@ -214,10 +224,11 @@ export function getObjectSnapPoints(obj) {
       ];
     case "rect": {
       const c = getRectCorners(obj);
-      return [
-        ...c,
-        { x: (c[0].x + c[2].x) / 2, y: (c[0].y + c[2].y) / 2, mid: true },
-      ];
+      const rPts = [...c];
+      if (state.snapMidpoints) {
+        rPts.push({ x: (c[0].x + c[2].x) / 2, y: (c[0].y + c[2].y) / 2, mid: true });
+      }
+      return rPts;
     }
     case "polyline": {
       const pts = obj.vertices.map(v => ({ x: v.x, y: v.y }));
@@ -228,22 +239,24 @@ export function getObjectSnapPoints(obj) {
         const p1 = obj.vertices[i];
         const p2 = obj.vertices[(i + 1) % n];
         const b = obj.bulges[i] || 0;
-        if (b === 0) {
-          pts.push({ x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2, mid: true });
-        } else {
-          const arc = bulgeToArc(p1, p2, b);
-          if (arc) {
-            const midAngle = (arc.startAngle + arc.endAngle) / 2;
-            // Adjust midAngle for arc direction
-            let ma;
-            if (b > 0) {
-              ma = arc.startAngle + normalizeAngleDiff(arc.endAngle - arc.startAngle, true) / 2;
-            } else {
-              ma = arc.startAngle + normalizeAngleDiff(arc.endAngle - arc.startAngle, false) / 2;
-            }
-            pts.push({ x: arc.cx + arc.r * Math.cos(ma), y: arc.cy + arc.r * Math.sin(ma), mid: true });
-          } else {
+        if (state.snapMidpoints) {
+          if (b === 0) {
             pts.push({ x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2, mid: true });
+          } else {
+            const arc = bulgeToArc(p1, p2, b);
+            if (arc) {
+              const midAngle = (arc.startAngle + arc.endAngle) / 2;
+              // Adjust midAngle for arc direction
+              let ma;
+              if (b > 0) {
+                ma = arc.startAngle + normalizeAngleDiff(arc.endAngle - arc.startAngle, true) / 2;
+              } else {
+                ma = arc.startAngle + normalizeAngleDiff(arc.endAngle - arc.startAngle, false) / 2;
+              }
+              pts.push({ x: arc.cx + arc.r * Math.cos(ma), y: arc.cy + arc.r * Math.sin(ma), mid: true });
+            } else {
+              pts.push({ x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2, mid: true });
+            }
           }
         }
       }
