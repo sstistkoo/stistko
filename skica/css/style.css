@@ -3862,6 +3862,11 @@ body {
 .cne-conv { font-size: 11px; font-weight: 700; letter-spacing: .5px; }
 .cne-conv-active { color: var(--ctp-base); background: var(--ctp-yellow); }
 .cne-conv:disabled { opacity: .35; pointer-events: none; }
+.cne-close-btn {
+  margin-left: 16px;
+  color: var(--ctp-subtext0); font-size: 18px; font-weight: 700;
+}
+.cne-close-btn:hover { color: var(--ctp-red); background: rgba(243,139,168,.15); }
 
 /* ── Sinumerik 840D bar ─────────────────────────────────────── */
 .cne-sn-bar {
