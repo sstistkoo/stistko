@@ -844,16 +844,18 @@ function drawSnapIndicator() {
     ctx.fillStyle = COLORS.label;
     ctx.fillText("GRID", sx + 7, sy - 3);
   } else if (state.mouse.snapType === 'edge') {
-    // Snap k hraně objektu – kolečko + souřadnice
+    // Snap k hraně objektu – kolečko + souřadnice nad ním
     ctx.strokeStyle = COLORS.snapEdge;
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.arc(sx, sy, 5, 0, Math.PI * 2);
     ctx.stroke();
     const coordLabel = fmtCoordLabel(state.mouse.x, state.mouse.y);
-    ctx.font = `${Math.max(9, snapLabelSize - 4)}px Consolas`;
+    const fontSize = Math.max(9, snapLabelSize - 4);
+    ctx.font = `${fontSize}px Consolas`;
     ctx.fillStyle = COLORS.snapEdge;
-    ctx.fillText(coordLabel, sx + 9, sy - 3);
+    const tw = ctx.measureText(coordLabel).width;
+    ctx.fillText(coordLabel, sx - tw / 2, sy - 12);
   }
 
   // Vodící čára od raw pozice k snap pozici
