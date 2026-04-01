@@ -5,6 +5,7 @@ import { openSysvarReference }   from './sysvar.js';
 import { openShortcutsReference } from './shortcuts.js';
 import { openCommandsReference } from './commands.js';
 import { openCncExamples }       from './cncExamples.js';
+import { openCncEditor }         from './cncEditor.js';
 
 // ── Dlaždice rozcestníku ────────────────────────────────────
 const tiles = [
@@ -13,7 +14,8 @@ const tiles = [
   { icon: '💻', title: 'Příkazy',     desc: 'Příkazy & syntax programování',       action: openCommandsReference },
   { icon: '📊', title: 'Proměnné',    desc: 'Systémové proměnné ($P_, $AA_…)',     action: openSysvarReference },
   { icon: '⌨️', title: 'Zkratky',     desc: 'Klávesové zkratky displeje',          action: openShortcutsReference },
-  { icon: '📝', title: 'Ukázky',      desc: 'Ukázky CNC kódů s komentáři',        action: openCncExamples }
+  { icon: '📝', title: 'Ukázky',      desc: 'Ukázky CNC kódů s komentáři',        action: openCncExamples },
+  { icon: '✏️', title: 'Editor',      desc: 'CNC editor se zvýrazňováním syntaxe', action: openCncEditor }
 ];
 
 // ── Hlavní funkce ───────────────────────────────────────────

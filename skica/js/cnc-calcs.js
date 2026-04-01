@@ -13,3 +13,4 @@ export { openInsertCalc } from './calculators/insert.js';
 export { openGcodeReference } from './calculators/gcode.js';
 export { openMcodeReference } from './calculators/mcode.js';
 export { openSinumerikHub } from './calculators/sinumerikHub.js';
+export { openCncEditor } from './calculators/cncEditor.js';
