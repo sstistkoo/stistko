@@ -245,10 +245,10 @@ describe('getObjectSnapPoints', () => {
     const pts = getObjectSnapPoints({ type: 'circle', cx: 0, cy: 0, r: 5 });
     expect(pts).toHaveLength(5);
     expect(pts[0]).toEqual({ x: 0, y: 0 });   // center
-    expect(pts[1]).toEqual({ x: 5, y: 0 });   // right
-    expect(pts[2]).toEqual({ x: -5, y: 0 });  // left
-    expect(pts[3]).toEqual({ x: 0, y: 5 });   // top
-    expect(pts[4]).toEqual({ x: 0, y: -5 });  // bottom
+    expect(pts[1]).toEqual({ x: 5, y: 0, quarter: true });   // right
+    expect(pts[2]).toEqual({ x: -5, y: 0, quarter: true });  // left
+    expect(pts[3]).toEqual({ x: 0, y: 5, quarter: true });   // top
+    expect(pts[4]).toEqual({ x: 0, y: -5, quarter: true });  // bottom
   });
 
   it('oblouk → 3 snap points (střed, start, end)', () => {
