@@ -15,6 +15,7 @@ import { bulgeToArc, deepClone } from './utils.js';
 import { bridge } from './bridge.js';
 import { updateAssociativeDimensions } from './dialogs/dimension.js';
 import { handleTangentClick, tangentFromSelection, handleOffsetClick, offsetFromSelection, handleTrimClick, trimFromSelection, handleExtendClick, extendFromSelection, handleFilletClick, filletFromSelection, handleChamferClick, chamferFromSelection, handlePerpClick, perpFromSelection, handleHorizontalClick, horizontalFromSelection, handleParallelClick, parallelFromSelection, handleDimensionClick, handleSnapPointClick, handleMoveClick, handleLineClick, handleMeasureClick, handleCircleClick, handleArcClick, handleRectClick, handlePolylineClick, measureSelection, handleTextClick, handleGearClick, resetGearState, handleAnchorClick, removeAnchorsForObject, removeAnchorAt, hasAnchoredPoint, cleanupOrphanAnchors, handleBreakClick, handleCenterMarkClick, centerMarkFromSelection, handleScaleClick, scaleFromSelection, handleFilletChamferClick, filletChamferFromSelection } from './tools/index.js';
+import { getLineSegment } from './tools/helpers.js';
 import { showPostDrawPointDialog } from './dialogs/postDrawDialog.js';
 
 // Registrace measureSelection na bridge (aby ui.js nemusel importovat přímo – kruhová závislost)
@@ -25,9 +26,21 @@ bridge.trimFromSelection = trimFromSelection;
 bridge.extendFromSelection = extendFromSelection;
 bridge.filletFromSelection = filletFromSelection;
 bridge.chamferFromSelection = chamferFromSelection;
-bridge.perpFromSelection = perpFromSelection;
-bridge.horizontalFromSelection = horizontalFromSelection;
-bridge.parallelFromSelection = parallelFromSelection;
+bridge.perpFromSelection = () => {
+  const indices = _getMultiIndices();
+  if (indices.length > 1) { perpMultiAlign(indices); return true; }
+  return perpFromSelection();
+};
+bridge.horizontalFromSelection = () => {
+  const indices = _getMultiIndices();
+  if (indices.length > 1) { horizontalMultiAlign(indices); return true; }
+  return horizontalFromSelection();
+};
+bridge.parallelFromSelection = () => {
+  const indices = _getMultiIndices();
+  if (indices.length > 1) { parallelMultiAlign(indices); return true; }
+  return parallelFromSelection();
+};
 bridge.centerMarkFromSelection = centerMarkFromSelection;
 bridge.scaleFromSelection = scaleFromSelection;
 bridge.filletChamferFromSelection = filletChamferFromSelection;
@@ -825,6 +838,212 @@ export function handleCanvasClick(wx, wy) {
   }
 }
 
+// ── Multi-select: pomocné funkce pro skupinové natáčení ──
+
+/** Vrátí indexy všech vybraných ne-kótových objektů. */
+function _getMultiIndices() {
+  const allIndices = new Set();
+  if (state.selected !== null) allIndices.add(state.selected);
+  for (const idx of state.multiSelected) allIndices.add(idx);
+  return [...allIndices].filter(i => {
+    const o = state.objects[i];
+    return o && !o.isDimension && !o.isCoordLabel;
+  });
+}
+
+/** Spočítá střed (centroid) jednoho objektu. */
+function _objCenter(obj) {
+  switch (obj.type) {
+    case 'point': return { x: obj.x, y: obj.y };
+    case 'line': case 'constr':
+      return { x: (obj.x1 + obj.x2) / 2, y: (obj.y1 + obj.y2) / 2 };
+    case 'circle': case 'arc':
+      return { x: obj.cx, y: obj.cy };
+    case 'rect':
+      return { x: (obj.x1 + obj.x2) / 2, y: (obj.y1 + obj.y2) / 2 };
+    case 'polyline': {
+      const v = obj.vertices;
+      return { x: v.reduce((s, p) => s + p.x, 0) / v.length, y: v.reduce((s, p) => s + p.y, 0) / v.length };
+    }
+    case 'text': return { x: obj.x, y: obj.y };
+    default: return { x: 0, y: 0 };
+  }
+}
+
+/** Spočítá těžiště skupiny objektů. */
+function _groupCenter(indices) {
+  let cx = 0, cy = 0, count = 0;
+  for (const i of indices) {
+    const o = state.objects[i];
+    if (!o) continue;
+    const c = _objCenter(o);
+    cx += c.x; cy += c.y; count++;
+  }
+  if (count === 0) return { x: 0, y: 0 };
+  return { x: cx / count, y: cy / count };
+}
+
+/** Získá world souřadnice z mouse/touch eventu. */
+function _worldFromEvent(e) {
+  const rect = drawCanvas.getBoundingClientRect();
+  const sx = (e.clientX ?? e.changedTouches?.[0]?.clientX) - rect.left;
+  const sy = (e.clientY ?? e.changedTouches?.[0]?.clientY) - rect.top;
+  let [wx, wy] = screenToWorld(sx, sy);
+  if (state.snapToPoints) [wx, wy] = snapPt(wx, wy);
+  return [wx, wy];
+}
+
+/** Multi-select: vodorovnost – vyzve ke kliknutí na referenční úsečku, pak otočí celou skupinu. */
+function horizontalMultiAlign(indices) {
+  setHint("Klikněte na úsečku, která se má vyrovnat vodorovně");
+
+  function handleClick(e) {
+    const [wx, wy] = _worldFromEvent(e);
+    const idx = findObjectAt(wx, wy);
+    if (idx === null) return;
+    const obj = state.objects[idx];
+    const ls = getLineSegment(obj, wx, wy);
+    if (!ls) { showToast("Klikněte na úsečku"); return; }
+
+    cleanup();
+
+    const currentAngle = Math.atan2(ls.seg.y2 - ls.seg.y1, ls.seg.x2 - ls.seg.x1);
+    const hAngle = (state.nullPointActive && state.nullPointAngle)
+      ? (state.nullPointAngle * Math.PI / 180) : 0;
+
+    // Vybrat nejmenší rotaci (0° i 180° jsou obě vodorovné)
+    let rotAngle = hAngle - currentAngle;
+    const alt = hAngle + Math.PI - currentAngle;
+    if (Math.abs(alt) < Math.abs(rotAngle)) rotAngle = alt;
+
+    const center = _groupCenter(indices);
+    pushUndo();
+    for (const i of indices) {
+      const o = state.objects[i];
+      if (o) rotateObject(o, center.x, center.y, rotAngle);
+    }
+    calculateAllIntersections();
+    updateAssociativeDimensions();
+    renderAll();
+    resetHint();
+    showToast("Skupina vyrovnána vodorovně ✓");
+  }
+
+  function handleTouch(e) {
+    if (e.changedTouches.length === 1) { e.preventDefault(); handleClick(e); }
+  }
+  function cleanup() {
+    drawCanvas.removeEventListener("click", handleClick);
+    drawCanvas.removeEventListener("touchend", handleTouch);
+    state._toolCleanup = null;
+  }
+  drawCanvas.addEventListener("click", handleClick);
+  drawCanvas.addEventListener("touchend", handleTouch);
+  state._toolCleanup = cleanup;
+}
+
+/** Multi-select: kolmost – vyzve ke kliknutí na referenční úsečku, pak otočí celou skupinu do svislé polohy. */
+function perpMultiAlign(indices) {
+  setHint("Klikněte na úsečku, která se má vyrovnat svisle");
+
+  function handleClick(e) {
+    const [wx, wy] = _worldFromEvent(e);
+    const idx = findObjectAt(wx, wy);
+    if (idx === null) return;
+    const obj = state.objects[idx];
+    const ls = getLineSegment(obj, wx, wy);
+    if (!ls) { showToast("Klikněte na úsečku"); return; }
+
+    cleanup();
+
+    const currentAngle = Math.atan2(ls.seg.y2 - ls.seg.y1, ls.seg.x2 - ls.seg.x1);
+    const vAngle = (state.nullPointActive && state.nullPointAngle)
+      ? (state.nullPointAngle * Math.PI / 180 + Math.PI / 2) : (Math.PI / 2);
+
+    let rotAngle = vAngle - currentAngle;
+    const alt = vAngle + Math.PI - currentAngle;
+    if (Math.abs(alt) < Math.abs(rotAngle)) rotAngle = alt;
+
+    const center = _groupCenter(indices);
+    pushUndo();
+    for (const i of indices) {
+      const o = state.objects[i];
+      if (o) rotateObject(o, center.x, center.y, rotAngle);
+    }
+    calculateAllIntersections();
+    updateAssociativeDimensions();
+    renderAll();
+    resetHint();
+    showToast("Skupina vyrovnána svisle ✓");
+  }
+
+  function handleTouch(e) {
+    if (e.changedTouches.length === 1) { e.preventDefault(); handleClick(e); }
+  }
+  function cleanup() {
+    drawCanvas.removeEventListener("click", handleClick);
+    drawCanvas.removeEventListener("touchend", handleTouch);
+    state._toolCleanup = null;
+  }
+  drawCanvas.addEventListener("click", handleClick);
+  drawCanvas.addEventListener("touchend", handleTouch);
+  state._toolCleanup = cleanup;
+}
+
+/** Multi-select: rovnoběžnost – vyzve ke kliknutí na referenční úsečku a pak na cílovou, otočí celou skupinu. */
+function parallelMultiAlign(indices) {
+  let refAngle = null;
+  setHint("Klikněte na úsečku v označených objektech (referenční směr)");
+
+  function handleClick(e) {
+    const [wx, wy] = _worldFromEvent(e);
+    const idx = findObjectAt(wx, wy);
+    if (idx === null) return;
+    const obj = state.objects[idx];
+    const ls = getLineSegment(obj, wx, wy);
+    if (!ls) { showToast("Klikněte na úsečku"); return; }
+
+    if (refAngle === null) {
+      // První klik: reference segment
+      refAngle = Math.atan2(ls.seg.y2 - ls.seg.y1, ls.seg.x2 - ls.seg.x1);
+      setHint("Klikněte na cílovou úsečku pro rovnoběžnost");
+    } else {
+      // Druhý klik: cílový segment
+      cleanup();
+
+      const targetAngle = Math.atan2(ls.seg.y2 - ls.seg.y1, ls.seg.x2 - ls.seg.x1);
+      // Vybrat nejmenší rotaci
+      let rotAngle = targetAngle - refAngle;
+      const alt = targetAngle + Math.PI - refAngle;
+      if (Math.abs(alt) < Math.abs(rotAngle)) rotAngle = alt;
+
+      const center = _groupCenter(indices);
+      pushUndo();
+      for (const i of indices) {
+        const o = state.objects[i];
+        if (o) rotateObject(o, center.x, center.y, rotAngle);
+      }
+      calculateAllIntersections();
+      updateAssociativeDimensions();
+      renderAll();
+      resetHint();
+      showToast("Skupina otočena do rovnoběžnosti ✓");
+    }
+  }
+
+  function handleTouch(e) {
+    if (e.changedTouches.length === 1) { e.preventDefault(); handleClick(e); }
+  }
+  function cleanup() {
+    drawCanvas.removeEventListener("click", handleClick);
+    drawCanvas.removeEventListener("touchend", handleTouch);
+    state._toolCleanup = null;
+  }
+  drawCanvas.addEventListener("click", handleClick);
+  drawCanvas.addEventListener("touchend", handleTouch);
+  state._toolCleanup = cleanup;
+}
+
 // ── Vazby (constraints) – helper ──
 /** Odstraní vazbu z objektu/segmentu. */
 function removeConstraint(obj, segIdx) {
@@ -839,46 +1058,49 @@ function removeConstraint(obj, segIdx) {
 }
 
 // ── Rotace akce ──
-/** Spustí dialog pro rotaci vybraného objektu (podporuje multi-select). */
+/** Spustí rotaci – nejprve vyzve k výběru referenčního bodu, pak zobrazí dialog pro úhel. */
 function startRotateAction() {
   const indices = state.multiSelected.size > 0
     ? [...state.multiSelected]
     : state.selected !== null ? [state.selected] : [];
   if (indices.length === 0) { showToast("Nejdříve vyberte objekt"); return; }
-  const objs = indices.map(i => state.objects[i]);
+  const objs = indices.map(i => state.objects[i]).filter(o => o);
   const refObj = objs[0];
 
-  showRotateDialog(refObj, (deg) => {
-    pushUndo();
-    for (const obj of objs) {
-      if (hasAnchoredPoint(obj)) {
-        showToast("Zakotvené objekty nelze otáčet");
-        continue;
-      }
-      // Rotate around object center
-      let cx, cy;
-      switch (obj.type) {
-        case 'point': cx = obj.x; cy = obj.y; break;
-        case 'line': case 'constr':
-          cx = (obj.x1 + obj.x2) / 2; cy = (obj.y1 + obj.y2) / 2; break;
-        case 'circle': case 'arc':
-          cx = obj.cx; cy = obj.cy; break;
-        case 'rect':
-          cx = (obj.x1 + obj.x2) / 2; cy = (obj.y1 + obj.y2) / 2; break;
-        case 'polyline': {
-          const vs = obj.vertices;
-          cx = vs.reduce((s, v) => s + v.x, 0) / vs.length;
-          cy = vs.reduce((s, v) => s + v.y, 0) / vs.length;
-          break;
+  setHint("Klikněte na referenční bod otáčení");
+
+  function handleClick(e) {
+    const [wx, wy] = _worldFromEvent(e);
+    cleanup();
+    resetHint();
+
+    showRotateDialog(refObj, (deg) => {
+      pushUndo();
+      for (const obj of objs) {
+        if (hasAnchoredPoint(obj)) {
+          showToast("Zakotvené objekty nelze otáčet");
+          continue;
         }
-        default: cx = 0; cy = 0;
+        rotateObject(obj, wx, wy, deg * Math.PI / 180);
       }
-      rotateObject(obj, cx, cy, deg * Math.PI / 180);
-    }
-    calculateAllIntersections();
-    renderAll();
-    showToast(`Otočeno o ${deg}° ✓`);
-  });
+      calculateAllIntersections();
+      updateAssociativeDimensions();
+      renderAll();
+      showToast(`Otočeno o ${deg}° ✓`);
+    });
+  }
+
+  function handleTouch(e) {
+    if (e.changedTouches.length === 1) { e.preventDefault(); handleClick(e); }
+  }
+  function cleanup() {
+    drawCanvas.removeEventListener("click", handleClick);
+    drawCanvas.removeEventListener("touchend", handleTouch);
+    state._toolCleanup = null;
+  }
+  drawCanvas.addEventListener("click", handleClick);
+  drawCanvas.addEventListener("touchend", handleTouch);
+  state._toolCleanup = cleanup;
 }
 
 // ── Odstranění osiřelých kót (zdrojový objekt byl smazán) ──
