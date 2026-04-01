@@ -1503,7 +1503,7 @@ body {
 #topbarPrecisionPointer .sp-label {
   display: none;
   position: absolute;
-  left: 14px; top: -30px;
+  left: 14px; top: -12px;
   white-space: nowrap;
   font: 600 11px/1.3 system-ui, sans-serif;
   color: var(--ctp-crust, #11111b);
