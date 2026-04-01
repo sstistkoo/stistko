@@ -1911,6 +1911,7 @@ export function toggleCoordMode() {
   state.coordMode = state.coordMode === 'abs' ? 'inc' : 'abs';
   updateCoordModeBtn();
   renderAll();
+  if (bridge.updateMobileCoords) bridge.updateMobileCoords(state.mouse.x, state.mouse.y);
   showToast(state.coordMode === 'inc' ? 'Inkrementální souřadnice (INC)' : 'Absolutní souřadnice (ABS)');
 }
 
@@ -1937,6 +1938,7 @@ export function toggleXDisplay() {
   state.xDisplayMode = state.xDisplayMode === 'radius' ? 'diameter' : 'radius';
   updateXDisplayBtn();
   renderAll();
+  if (bridge.updateMobileCoords) bridge.updateMobileCoords(state.mouse.x, state.mouse.y);
   showToast(state.xDisplayMode === 'diameter' ? 'Osa X: Průměr (⌀)' : 'Osa X: Poloměr (R)');
 }
 
@@ -1963,6 +1965,7 @@ export function toggleMachineType() {
   state.machineType = state.machineType === 'soustruh' ? 'karusel' : 'soustruh';
   updateMachineTypeBtn();
   renderAll();
+  if (bridge.updateMobileCoords) bridge.updateMobileCoords(state.mouse.x, state.mouse.y);
   showToast(state.machineType === 'karusel'
     ? 'Karusel – X vodorovně, Z svisle'
     : 'Soustruh – Z vodorovně, X svisle');

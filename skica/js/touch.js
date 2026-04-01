@@ -120,10 +120,13 @@ export function updateMobileCoords(wx, wy, extra) {
   const coordBarText = document.getElementById("coordBarText");
   if (isMobile()) {
     const zoomPct = (state.zoom * 100).toFixed(0);
-    const machine = state.machineType === 'karusel' ? 'KAR' : 'SOU';
-    const cMode = state.coordMode === 'inc' ? 'INC' : 'ABS';
-    const xMode = state.xDisplayMode === 'diameter' ? '⌀' : 'R';
-    coordBarText.textContent = `${machine} ${cMode} ${xMode}  |  ${coords}  |  ${zoomPct}%`;
+    const isKar = state.machineType === 'karusel';
+    const isInc = state.coordMode === 'inc';
+    const isDiam = state.xDisplayMode === 'diameter';
+    const machineTag = isKar ? '<span class="cb-hi cb-hi-warn">KAR</span>' : 'SOU';
+    const cModeTag = isInc ? '<span class="cb-hi cb-hi-warn">INC</span>' : 'ABS';
+    const xModeTag = isDiam ? '<span class="cb-hi cb-hi-warn">⌀</span>' : 'R';
+    coordBarText.innerHTML = `${machineTag} ${cModeTag} ${xModeTag}  |  ${coords}  |  ${zoomPct}%`;
   } else {
     coordBarText.textContent = coords;
   }
