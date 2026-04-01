@@ -552,13 +552,9 @@ export function openCncEditor() {
   }
 
   function updateLineNumbers() {
-    const lines = editor.value.split('\n');
+    const c = editor.value.split('\n').length;
     const a = [];
-    let n = 10;
-    for (let i = 0; i < lines.length; i++) {
-      if (lines[i].trim() === '') { a.push(''); }
-      else { a.push('N' + n); n += 10; }
-    }
+    for (let i = 1; i <= c; i++) a.push(i);
     lineNums.textContent = a.join('\n');
   }
 
@@ -650,19 +646,14 @@ export function openCncEditor() {
     if (!errs.length) {
       valList.innerHTML = '<div class="cne-val-ok">✓ Program je v pořádku</div>';
     } else {
-      const lines = editor.value.split('\n');
-      valList.innerHTML = errs.map(e => {
-        let n = 10, blk = '';
-        for (let i = 0; i <= e.lineIndex && i < lines.length; i++) {
-          if (lines[i].trim() !== '') { blk = 'N' + n; n += 10; }
-        }
-        return `<div class="cne-val-row" data-ln="${e.lineIndex}">
+      valList.innerHTML = errs.map(e =>
+        `<div class="cne-val-row" data-ln="${e.lineIndex}">
           <span class="cne-val-ic">⚠</span>
           <span class="cne-val-file">${esc(e.file)}</span>
-          <span class="cne-val-line">${blk}</span>
+          <span class="cne-val-line">L${e.lineIndex + 1}</span>
           <span class="cne-val-msg">${esc(e.msg)}</span>
-        </div>`;
-      }).join('');
+        </div>`
+      ).join('');
     }
     valModal.style.display = 'flex';
   }
@@ -1095,6 +1086,11 @@ export function openCncEditor() {
   filenameLbl.addEventListener('click', renameFile);
   numInput.addEventListener('keydown', e => { if (e.key === 'Enter') confirmNumpad(); });
   fileInput.addEventListener('change', handleImport);
+
+  // Close menu modal on click outside card
+  $('menuModal').addEventListener('click', e => {
+    if (e.target === $('menuModal')) $('menuModal').style.display = 'none';
+  });
 
   // ── Cleanup ────────────────────────────────────────────────
   new MutationObserver((_, obs) => {
