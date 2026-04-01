@@ -191,6 +191,27 @@ function renderAxes() {
   g.lineTo(state.panX, h);
   g.stroke();
 
+  // Mřížka – zobrazit pokud je zapnutý snap na mřížku
+  if (state.snapToGrid) {
+    const gs = state.gridSize * state.zoom;         // velikost buňky v px
+    if (gs >= 4) {                                    // kreslit jen pokud má smysl
+      g.strokeStyle = COLORS.textMuted + '18';
+      g.lineWidth = 0.5;
+      const gStartX = state.panX % gs;
+      const gStartY = state.panY % gs;
+      g.beginPath();
+      for (let x = gStartX; x < w; x += gs) {
+        g.moveTo(x, 0);
+        g.lineTo(x, h);
+      }
+      for (let y = gStartY; y < h; y += gs) {
+        g.moveTo(0, y);
+        g.lineTo(w, y);
+      }
+      g.stroke();
+    }
+  }
+
   // Popisky os
   const startX = state.panX % drawStep,
     startY = state.panY % drawStep;
