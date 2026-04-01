@@ -1347,6 +1347,10 @@ body {
 }
 .coord-ind.active {
   display: inline-block;
+  background: #11111b;
+  color: #cdd6f4;
+}
+.coord-ind.active.alt {
   background: var(--ctp-blue);
   color: var(--ctp-base);
 }
@@ -1476,6 +1480,16 @@ body {
   /* Safe area pro telefony s vÃ½Å™ezem */
   #mobileCoordBar {
     padding-top: max(4px, env(safe-area-inset-top));
+  }
+
+  /* Settings dialog: titlebar vždy viditelný na mobilu */
+  .calc-overlay {
+    align-items: flex-start;
+    padding-top: max(36px, calc(env(safe-area-inset-top) + 32px));
+  }
+  .calc-window {
+    max-height: calc(100vh - max(44px, calc(env(safe-area-inset-top) + 40px)));
+    max-height: calc(100dvh - max(44px, calc(env(safe-area-inset-top) + 40px)));
   }
 
   #mobileBottomBar {
