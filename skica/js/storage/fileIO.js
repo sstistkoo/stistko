@@ -205,6 +205,7 @@ document.getElementById("btnLoad").addEventListener("click", () => {
         <button class="btn-ok" id="exportFile" style="width:100%;background:${COLORS.selected};border-color:${COLORS.selected}">Exportovat do souboru</button>
         <button class="btn-ok" id="exportDXF" style="width:100%;background:${COLORS.selected};border-color:${COLORS.selected}">📐 Exportovat DXF</button>
         <button class="btn-ok" id="exportImage" style="width:100%;background:${COLORS.selected};border-color:${COLORS.selected}">🖼 Export obrazu (SVG/PNG)</button>
+        <button class="btn-ok" id="openDxfJson" style="width:100%;background:#a6e3a1;border-color:#a6e3a1;color:#1e1e2e">🔄 DXF - JSON</button>
         <button class="btn-cancel btn-cancel-overlay" style="width:100%">Zrušit</button>
       </div>
     </div>`;
@@ -232,6 +233,10 @@ document.getElementById("btnLoad").addEventListener("click", () => {
   overlay.querySelector("#exportImage").addEventListener("click", () => {
     overlay.remove();
     showExportImageDialog();
+  });
+  overlay.querySelector("#openDxfJson").addEventListener("click", () => {
+    overlay.remove();
+    window.open('dxf-json.html', '_blank');
   });
 });
 
