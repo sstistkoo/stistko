@@ -262,6 +262,48 @@ export function tangentFromSelection() {
     return true;
   }
 
+  // ── Kružnice + 2 body → přesun kružnice přes oba body (zachovat poloměr) ──
+  if (circles.length === 1 && lines.length === 0 && points.length >= 2) {
+    const circ = circles[0];
+    const p1 = points[0], p2 = points[1];
+    const r = circ.r;
+    // Střed kružnice procházející dvěma body leží na kolmici k úsečce p1-p2 ve středu
+    const mx = (p1.x + p2.x) / 2, my = (p1.y + p2.y) / 2;
+    const dx = p2.x - p1.x, dy = p2.y - p1.y;
+    const halfDist = Math.hypot(dx, dy) / 2;
+    if (halfDist > r + 1e-9) {
+      showToast("Body jsou příliš daleko – kružnice jimi nemůže procházet");
+      return true;
+    }
+    const h = Math.sqrt(Math.max(0, r * r - halfDist * halfDist));
+    const nx = -dy / (halfDist * 2), ny = dx / (halfDist * 2);
+    const positions = [
+      { cx: mx + nx * h, cy: my + ny * h },
+      { cx: mx - nx * h, cy: my - ny * h }
+    ];
+    // Seřadit: bližší k aktuální pozici kružnice první
+    positions.sort((a, b) => {
+      const da = Math.hypot(a.cx - circ.cx, a.cy - circ.cy);
+      const db = Math.hypot(b.cx - circ.cx, b.cy - circ.cy);
+      return da - db;
+    });
+    // Deduplikace (body na průměru → jedna pozice)
+    if (positions.length === 2 &&
+        Math.hypot(positions[0].cx - positions[1].cx, positions[0].cy - positions[1].cy) < 1e-4) {
+      positions.pop();
+    }
+    showTangentPositionDialog(positions, state.objects[circ.idx], (chosenIdx) => {
+      pushUndo();
+      const obj = state.objects[circ.idx];
+      obj.cx = positions[chosenIdx].cx;
+      obj.cy = positions[chosenIdx].cy;
+      calculateAllIntersections();
+      renderAll();
+      showToast("Kružnice přesunuta přes 2 body ✓");
+    });
+    return true;
+  }
+
   // ── Bod + Kružnice → tečné úsečky z bodu ──
   if (circles.length === 1 && lines.length === 0 && points.length >= 1) {
     const circ = circles[0];
