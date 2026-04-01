@@ -39,6 +39,7 @@ function _buildProjectData() {
     showObjectNumbers: state.showObjectNumbers,
     showIntersectionNumbers: state.showIntersectionNumbers,
     displayDecimals: state.displayDecimals,
+    theme: state.theme,
     snapToGrid: state.snapToGrid,
     angleSnap: state.angleSnap,
     angleSnapStep: state.angleSnapStep,

@@ -881,6 +881,17 @@ function startRotateAction() {
   });
 }
 
+// ── Odstranění osiřelých kót (zdrojový objekt byl smazán) ──
+function removeOrphanDimensions() {
+  const existingIds = new Set(state.objects.map(o => o.id));
+  for (let i = state.objects.length - 1; i >= 0; i--) {
+    const obj = state.objects[i];
+    if (obj.isDimension && obj.sourceObjId && !existingIds.has(obj.sourceObjId)) {
+      state.objects.splice(i, 1);
+    }
+  }
+}
+
 // ── Smazání vybraného objektu nebo vazby ──
 function deleteSelected() {
   // Pokud je vybrána vazební značka, smazat jen vazbu
@@ -905,6 +916,8 @@ function deleteSelected() {
       removeAnchorsForObject(state.objects[idx]);
       state.objects.splice(idx, 1);
     }
+    // Smazat osiřelé kóty (jejich zdrojový objekt byl právě smazán)
+    removeOrphanDimensions();
     state.selected = null;
     state.selectedSegment = null;
     state._selectedSegmentObjIdx = null;
@@ -930,6 +943,8 @@ function deleteSelected() {
   pushUndo();
   removeAnchorsForObject(state.objects[state.selected]);
   state.objects.splice(state.selected, 1);
+  // Smazat osiřelé kóty (jejich zdrojový objekt byl právě smazán)
+  removeOrphanDimensions();
   state.selected = null;
   state.selectedSegment = null;
   state._selectedSegmentObjIdx = null;

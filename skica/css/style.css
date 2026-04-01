@@ -1541,8 +1541,11 @@ body {
     padding-top: max(36px, calc(env(safe-area-inset-top) + 32px));
   }
   .calc-window {
-    max-height: calc(100vh - max(44px, calc(env(safe-area-inset-top) + 40px)));
-    max-height: calc(100dvh - max(44px, calc(env(safe-area-inset-top) + 40px)));
+    max-height: calc(100vh - max(44px, calc(env(safe-area-inset-top) + 40px)) - max(8px, env(safe-area-inset-bottom)));
+    max-height: calc(100dvh - max(44px, calc(env(safe-area-inset-top) + 40px)) - max(8px, env(safe-area-inset-bottom)));
+  }
+  .calc-body {
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
   }
 
   #mobileBottomBar {

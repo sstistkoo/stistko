@@ -25,6 +25,32 @@ bridge.renderAll = () => renderAll();
 bridge.resetHint = () => resetHint();
 bridge.applyTheme = () => applyTheme();
 
+// ── Okamžité uložení nastavení do IDB ──
+let _persistTimer = null;
+function persistSettings() {
+  if (_persistTimer) clearTimeout(_persistTimer);
+  _persistTimer = setTimeout(async () => {
+    try {
+      const data = await getMeta('currentProjectData');
+      const base = data || {};
+      base.gridSize = state.gridSize;
+      base.coordMode = state.coordMode;
+      base.incReference = state.incReference;
+      base.machineType = state.machineType;
+      base.xDisplayMode = state.xDisplayMode;
+      base.displayDecimals = state.displayDecimals;
+      base.theme = state.theme;
+      base.snapToGrid = state.snapToGrid;
+      base.angleSnap = state.angleSnap;
+      base.angleSnapStep = state.angleSnapStep;
+      base.showDimensions = state.showDimensions;
+      base.showObjectNumbers = state.showObjectNumbers;
+      base.showIntersectionNumbers = state.showIntersectionNumbers;
+      await setMeta('currentProjectData', base);
+    } catch(e) { console.warn('persistSettings:', e); }
+  }, 500);
+}
+
 // ── Scroll input do viditelné oblasti na mobilu (nad klávesnici) ──
 document.getElementById("sidebar").addEventListener("focus", (e) => {
   if (e.target.tagName === "INPUT" || e.target.tagName === "SELECT") {
@@ -234,6 +260,15 @@ export function updateObjectList() {
       }
       removeAnchorsForObject(state.objects[idx]);
       state.objects.splice(idx, 1);
+      // Smazat osiřelé kóty (zdrojový objekt byl právě smazán)
+      const existingIds = new Set(state.objects.map(o => o.id));
+      for (let di = state.objects.length - 1; di >= 0; di--) {
+        const d = state.objects[di];
+        if (d.isDimension && d.sourceObjId && !existingIds.has(d.sourceObjId)) {
+          state.objects.splice(di, 1);
+          if (idx > di) idx--;
+        }
+      }
       if (state.selected === idx) state.selected = null;
       else if (state.selected > idx) state.selected--;
       const newMulti = new Set();
@@ -3003,17 +3038,20 @@ function showSettingsDialog() {
     state.theme = 'dark';
     applyTheme();
     updateThemeBtns();
+    persistSettings();
   });
   overlay.querySelector('#settThemeLight').addEventListener('click', () => {
     state.theme = 'light';
     applyTheme();
     updateThemeBtns();
+    persistSettings();
   });
 
   // ── Přesnost zobrazení ──
   overlay.querySelector('#settDecimals').addEventListener('change', (e) => {
     state.displayDecimals = parseInt(e.target.value);
     renderAll();
+    persistSettings();
     showToast(`Přesnost: ${state.displayDecimals} des. míst`);
   });
 
@@ -3031,12 +3069,14 @@ function showSettingsDialog() {
     updateMachineTypeBtn();
     updateMachBtns();
     renderAll();
+    persistSettings();
   });
   overlay.querySelector('#settMachKarusel').addEventListener('click', () => {
     state.machineType = 'karusel';
     updateMachineTypeBtn();
     updateMachBtns();
     renderAll();
+    persistSettings();
   });
 
   // ── Osa X ──
@@ -3053,12 +3093,14 @@ function showSettingsDialog() {
     updateXDisplayBtn();
     updateXBtns();
     renderAll();
+    persistSettings();
   });
   overlay.querySelector('#settXDiam').addEventListener('click', () => {
     state.xDisplayMode = 'diameter';
     updateXDisplayBtn();
     updateXBtns();
     renderAll();
+    persistSettings();
   });
 
   // ── Snap mřížka ON/OFF ──
@@ -3075,6 +3117,7 @@ function showSettingsDialog() {
     document.getElementById("indGrid")?.classList.toggle("active", state.snapToGrid);
     updateSnapGridSettBtn();
     renderAll();
+    persistSettings();
     showToast(state.snapToGrid ? `Snap na mřížku: ON (${state.gridSize})` : "Snap na mřížku: OFF");
   });
 
@@ -3092,6 +3135,7 @@ function showSettingsDialog() {
     document.getElementById("indAngle")?.classList.toggle("active", state.angleSnap);
     updateAngleSnapSettBtn();
     renderAll();
+    persistSettings();
     showToast(state.angleSnap ? `Úhlový snap: ON (${state.angleSnapStep}°)` : "Úhlový snap: OFF");
   });
 
@@ -3101,6 +3145,7 @@ function showSettingsDialog() {
     if (val > 0 && val <= 100) {
       state.gridSize = val;
       renderAll();
+      persistSettings();
     }
   });
 
@@ -3109,6 +3154,7 @@ function showSettingsDialog() {
     const val = parseInt(e.target.value);
     if (val >= 1 && val <= 90) {
       state.angleSnapStep = val;
+      persistSettings();
     }
   });
 
@@ -3127,6 +3173,7 @@ function showSettingsDialog() {
     updateCoordBtns();
     renderAll();
     if (bridge.updateMobileCoords) bridge.updateMobileCoords(state.mouse.x, state.mouse.y);
+    persistSettings();
     showToast('Absolutní souřadnice (ABS)');
   });
   overlay.querySelector('#settCoordInc').addEventListener('click', () => {
@@ -3135,6 +3182,7 @@ function showSettingsDialog() {
     updateCoordBtns();
     renderAll();
     if (bridge.updateMobileCoords) bridge.updateMobileCoords(state.mouse.x, state.mouse.y);
+    persistSettings();
     showToast('Inkrementální souřadnice (INC)');
   });
 
@@ -3157,6 +3205,7 @@ function showSettingsDialog() {
       document.getElementById("indDims")?.classList.toggle("active", state.showDimensions !== 'none');
       updateDimsBtns();
       renderAll();
+      persistSettings();
       const labels = { all: 'Kóty: vše', intersections: 'Kóty: pouze průsečíky', none: 'Kóty: skryté' };
       showToast(labels[mode]);
     });
