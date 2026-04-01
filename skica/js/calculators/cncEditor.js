@@ -300,6 +300,8 @@ function buildEditorHTML() {
     <button class="cne-qb green" data-ins="\\n">↵</button>
     <button class="cne-qb red" data-inp="LIMS=">LIMS</button>
     <button class="cne-qb accent" data-ins="STOPRE">STOP</button>
+    <button class="cne-qb gray" data-act="copy" title="Kopírovat kód">📋</button>
+    <button class="cne-qb blue" data-act="addBlock" title="Přidat číslo bloku">N+</button>
     <button class="cne-qb cne-kb-btn" data-act="keyboard" title="Zobrazit klávesnici">⌨</button>
   </div>
 
@@ -571,15 +573,16 @@ export function openCncEditor() {
 
   // ── Insert / Backspace ─────────────────────────────────────
   function insertText(text) {
+    editor.readOnly = false;
     const s = editor.selectionStart, e = editor.selectionEnd, v = editor.value;
     const actual = text === '\\n' ? '\n' : text;
     editor.value = v.substring(0, s) + actual + v.substring(e);
     editor.selectionStart = editor.selectionEnd = s + actual.length;
-    editor.focus();
     onInput();
   }
 
   function doBackspace() {
+    editor.readOnly = false;
     const s = editor.selectionStart, e = editor.selectionEnd, v = editor.value;
     if (s !== e) {
       editor.value = v.substring(0, s) + v.substring(e);
@@ -588,7 +591,25 @@ export function openCncEditor() {
       editor.value = v.substring(0, s - 1) + v.substring(s);
       editor.selectionStart = editor.selectionEnd = s - 1;
     }
-    editor.focus();
+    onInput();
+  }
+
+  function insertBlockNumber() {
+    editor.readOnly = false;
+    const v = editor.value, pos = editor.selectionStart;
+    const lineStart = v.lastIndexOf('\n', pos - 1) + 1;
+    const lineEnd = v.indexOf('\n', pos); const le = lineEnd === -1 ? v.length : lineEnd;
+    const line = v.substring(lineStart, le);
+    if (/^\s*N\d+/i.test(line)) return; // already has block number
+    const step = parseInt($('renumStep')?.value) || 10;
+    // find highest existing N-block in code
+    let maxN = 0;
+    const matches = v.matchAll(/\bN(\d+)/gi);
+    for (const m of matches) { const nn = parseInt(m[1]); if (nn > maxN) maxN = nn; }
+    const nextN = maxN > 0 ? maxN + step : step;
+    const prefix = 'N' + nextN + ' ';
+    editor.value = v.substring(0, lineStart) + prefix + v.substring(lineStart);
+    editor.selectionStart = editor.selectionEnd = lineStart + prefix.length;
     onInput();
   }
 
@@ -1037,7 +1058,9 @@ export function openCncEditor() {
         case 'hdrClose':  readHeaderInputs(); persistHdr(); hdrModal.style.display = 'none'; break;
         case 'hdrApply':  applyHeader(); break;
         case 'backspace': doBackspace(); break;
-        case 'keyboard':  editor.focus(); break;
+        case 'copy':      copyToClipboard(); break;
+        case 'addBlock':  insertBlockNumber(); break;
+        case 'keyboard':  editor.readOnly = false; editor.focus(); break;
         case 'menu':      $('menuModal').style.display = 'flex'; break;
         case 'menuClose': $('menuModal').style.display = 'none'; break;
         case 'numCancel': numModal.style.display = 'none'; break;
@@ -1104,6 +1127,10 @@ export function openCncEditor() {
   }).observe(document.body, { childList: true });
 
   // ── Init ───────────────────────────────────────────────────
+  // On mobile, prevent keyboard from auto-showing on tap
+  if (window.matchMedia('(max-width: 600px)').matches) {
+    editor.readOnly = true;
+  }
   ensureFile();
   displayFile(currentFile);
 }
