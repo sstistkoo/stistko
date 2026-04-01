@@ -154,12 +154,10 @@ describe('intersectLineCircle', () => {
       { x1: -20, y1: 10, x2: 20, y2: 10 },
       { cx: 0, cy: 0, r: 10 }
     );
-    // Tečna vrací 2 body (duplicitní — disc≈0 dává oba kořeny stejné)
-    expect(r).toHaveLength(2);
+    // Tečna vrací 1 bod (deduplikováno — disc≈0 dává oba kořeny stejné)
+    expect(r).toHaveLength(1);
     expect(r[0].x).toBeCloseTo(0, 6);
     expect(r[0].y).toBeCloseTo(10, 6);
-    expect(r[1].x).toBeCloseTo(0, 6);
-    expect(r[1].y).toBeCloseTo(10, 6);
   });
 
   it('míjení — žádný průsečík', () => {
