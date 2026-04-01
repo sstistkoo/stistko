@@ -2,12 +2,13 @@
 // ║  SKICA – Service Worker (PWA offline cache)                 ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-const CACHE_NAME = 'skica-v102';
+const CACHE_NAME = 'skica-v103';
 const ASSETS = [
   './',
   './index.html',
   './dxf-json.html',
   './manifest.json',
+  './js/lib/dxf-parser.min.js',
   './css/style.css',
   './js/app.js',
   './js/bridge.js',

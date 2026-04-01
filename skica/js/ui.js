@@ -2625,6 +2625,45 @@ document.getElementById("btnOpenRoughness").addEventListener("click", openRoughn
 document.getElementById("btnOpenInserts").addEventListener("click", openInsertCalc);
 document.getElementById("btnOpenSinumerik").addEventListener("click", openSinumerikHub);
 
+// ── Poznámkový blok ──
+document.getElementById("btnOpenNotes").addEventListener("click", async () => {
+  const saved = await getMeta('userNotes') || '';
+  const overlay = makeOverlay('notes', '📝 Poznámky', `
+    <textarea id="notesArea" style="
+      width:100%; min-height:300px; max-height:60vh; resize:vertical;
+      background:var(--ctp-surface0); color:var(--ctp-text); border:1px solid var(--ctp-surface1);
+      border-radius:4px; padding:10px; font-family:'Consolas',monospace; font-size:13px;
+      outline:none; line-height:1.5;
+    " placeholder="Sem si můžete psát poznámky...">${saved.replace(/</g,'&lt;')}</textarea>
+    <div style="display:flex;gap:8px;margin-top:10px;justify-content:flex-end">
+      <button class="sn-tile" id="notesClear" style="padding:6px 14px;font-size:12px">🗑 Vymazat</button>
+      <button class="sn-tile" id="notesSave" style="padding:6px 14px;font-size:12px;background:var(--ctp-blue);color:var(--ctp-crust)">💾 Uložit</button>
+    </div>
+  `);
+  if (!overlay) return;
+  const ta = overlay.querySelector('#notesArea');
+  ta.focus();
+  overlay.querySelector('#notesSave').addEventListener('click', async () => {
+    await setMeta('userNotes', ta.value);
+    showToast('Poznámky uloženy');
+  });
+  overlay.querySelector('#notesClear').addEventListener('click', () => {
+    if (confirm('Opravdu vymazat všechny poznámky?')) {
+      ta.value = '';
+      setMeta('userNotes', '');
+      showToast('Poznámky vymazány');
+    }
+  });
+  // Automatické uložení při zavření
+  const _obs = new MutationObserver((_, obs) => {
+    if (!document.body.contains(overlay)) {
+      setMeta('userNotes', ta.value);
+      obs.disconnect();
+    }
+  });
+  _obs.observe(document.body, { childList: true });
+});
+
 // ── Dialog: Grid Size ──
 /** Otevře dialog pro nastavení velikosti mřížky. */
 export function showGridSizeDialog() {
