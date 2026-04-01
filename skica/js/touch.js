@@ -995,7 +995,6 @@ bridge.updatePolylineButtons = updatePolylineButtons;
 
 // ── Topbar Precision Pointer (long-press pro přesné klikání v toolbaru) ──
 {
-  const topbar = document.getElementById("topbar");
   const tpEl = document.getElementById("topbarPrecisionPointer");
   const TOPBAR_OFFSET_Y = -60; // vizuální indikátor NAD prstem
   let tpTimer = null;
