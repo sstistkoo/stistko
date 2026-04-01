@@ -182,7 +182,7 @@ export function showSaveAsDialog() {
     <div class="input-dialog">
       <h3>💾 Uložit jako</h3>
       <label>Název projektu:</label>
-      <input type="text" id="saveAsName" value="${state.projectName}" autofocus>
+      <input type="text" id="saveAsName" autofocus>
       <div class="btn-row">
         <button class="btn-cancel" id="saveAsCancel">Zrušit</button>
         <button class="btn-ok" id="saveAsOk">Uložit</button>
@@ -191,6 +191,7 @@ export function showSaveAsDialog() {
   document.body.appendChild(overlay);
 
   const inp = overlay.querySelector('#saveAsName');
+  inp.value = state.projectName;
   inp.select();
   inp.addEventListener('keydown', e => {
     e.stopPropagation();
