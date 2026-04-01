@@ -1484,32 +1484,42 @@ export function mirrorObject(obj, axis, p1, p2) {
  * @param {number} dx
  * @param {number} dy
  * @param {number} count
+ * @param {number} [dx2=0]
+ * @param {number} [dy2=0]
+ * @param {number} [count2=0]
  * @returns {import('./types.js').DrawObject[]}
  */
-export function linearArray(obj, dx, dy, count) {
+export function linearArray(obj, dx, dy, count, dx2 = 0, dy2 = 0, count2 = 0) {
   const copies = [];
-  for (let i = 1; i <= count; i++) {
-    const copy = deepClone(obj);
-    delete copy.id;
-    switch (copy.type) {
-      case 'point':
-        copy.x += dx * i; copy.y += dy * i; break;
-      case 'line': case 'constr':
-        copy.x1 += dx * i; copy.y1 += dy * i;
-        copy.x2 += dx * i; copy.y2 += dy * i; break;
-      case 'circle':
-        copy.cx += dx * i; copy.cy += dy * i; break;
-      case 'arc':
-        copy.cx += dx * i; copy.cy += dy * i; break;
-      case 'rect':
-        copy.x1 += dx * i; copy.y1 += dy * i;
-        copy.x2 += dx * i; copy.y2 += dy * i; break;
-      case 'polyline':
-        copy.vertices = copy.vertices.map(v => ({ x: v.x + dx * i, y: v.y + dy * i }));
-        break;
+  const rows = count2 > 0 ? count2 : 1;
+  for (let j = 0; j < rows; j++) {
+    for (let i = 0; i <= count; i++) {
+      if (i === 0 && j === 0) continue; // skip original
+      const copy = deepClone(obj);
+      delete copy.id;
+      const ox = dx * i + dx2 * j;
+      const oy = dy * i + dy2 * j;
+      switch (copy.type) {
+        case 'point':
+          copy.x += ox; copy.y += oy; break;
+        case 'line': case 'constr':
+          copy.x1 += ox; copy.y1 += oy;
+          copy.x2 += ox; copy.y2 += oy; break;
+        case 'circle':
+          copy.cx += ox; copy.cy += oy; break;
+        case 'arc':
+          copy.cx += ox; copy.cy += oy; break;
+        case 'rect':
+          copy.x1 += ox; copy.y1 += oy;
+          copy.x2 += ox; copy.y2 += oy; break;
+        case 'polyline':
+          copy.vertices = copy.vertices.map(v => ({ x: v.x + ox, y: v.y + oy }));
+          break;
+      }
+      const label = count2 > 0 ? `${j + 1},${i + 1}` : `${i + 1}`;
+      copy.name = `${obj.name || obj.type} (pole ${label})`;
+      copies.push(copy);
     }
-    copy.name = `${obj.name || obj.type} (pole ${i + 1})`;
-    copies.push(copy);
   }
   return copies;
 }

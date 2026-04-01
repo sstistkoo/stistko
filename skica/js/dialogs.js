@@ -21,6 +21,7 @@ export { addDimensionForObject } from './dialogs/dimension.js';
 export { applyMobileInputMode, wireExprInputs, showMobileEditDialog, showEditObjectDialog } from './dialogs/mobileEdit.js';
 export { showOffsetDialog, showOffsetAngleDialog, showMirrorDialog, showLinearArrayDialog, showRotateDialog, showFilletDialog, showChamferDialog, showFilletChamferDialog, showScaleDialog, showEndpointChoiceDialog } from './dialogs/objectDialogs.js';
 export { showTangentChoiceDialog, showTangentPositionDialog } from './dialogs/tangentDialogs.js';
+export { showBooleanDialog } from './dialogs/booleanDialog.js';
 
 // ── Focus trap pro dialogy ──
 // Zachytí Tab v otevřeném overlay dialogu, aby focus neutekl za dialog

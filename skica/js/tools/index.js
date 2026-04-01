@@ -27,3 +27,4 @@ export { handleBreakClick } from './breakClick.js';
 export { handleCenterMarkClick, centerMarkFromSelection } from './centerMarkClick.js';
 export { handleScaleClick, scaleFromSelection } from './scaleClick.js';
 export { handleFilletChamferClick, filletChamferFromSelection } from './filletChamferClick.js';
+export { handleBooleanClick, resetBooleanState } from './booleanClick.js';
