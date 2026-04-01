@@ -2828,27 +2828,71 @@ body {
 }
 
 .help-content {
-  padding: 20px;
+  padding: 16px;
   overflow-y: auto;
   flex: 1;
 }
 
-.help-content h3 {
-  color: var(--ctp-yellow);
-  font-size: 14px;
-  margin: 16px 0 8px;
-  padding-bottom: 4px;
-  border-bottom: 1px solid var(--ctp-surface0);
+/* ── Rozbalovací sekce (details/summary) ── */
+.help-section {
+  margin-bottom: 6px;
+  border: 1px solid var(--ctp-surface0);
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-.help-content h3:first-child {
-  margin-top: 0;
+.help-section summary {
+  cursor: pointer;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ctp-yellow);
+  background: var(--ctp-mantle);
+  list-style: none;
+  -webkit-user-select: none;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.15s;
+}
+
+.help-section summary:hover {
+  background: var(--ctp-surface0);
+}
+
+.help-section summary::before {
+  content: "▸";
+  display: inline-block;
+  width: 14px;
+  transition: transform 0.2s;
+  color: var(--ctp-overlay0);
+}
+
+.help-section[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+.help-section summary::-webkit-details-marker {
+  display: none;
+}
+
+.help-section > .help-table,
+.help-section > .help-tips {
+  margin: 0;
+}
+
+.help-section > .help-table {
+  border-top: 1px solid var(--ctp-surface0);
+}
+
+.help-section > .help-tips {
+  padding: 10px 14px;
 }
 
 .help-table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 12px;
 }
 
 .help-table td {
@@ -2873,10 +2917,14 @@ body {
   background: #31324444;
 }
 
+.help-table tr:last-child td {
+  border-bottom: none;
+}
+
 .help-tips {
   list-style: none;
   padding: 0;
-  margin: 0 0 12px;
+  margin: 0;
 }
 
 .help-tips li {
@@ -2886,7 +2934,7 @@ body {
 }
 
 .help-tips li::before {
-  content: "â€¢ ";
+  content: "• ";
   color: var(--ctp-green);
 }
 
