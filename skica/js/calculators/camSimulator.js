@@ -15,7 +15,7 @@ function injectCSS() {
   style.textContent = `
 .cam-sim-window {
   width: 100vw !important; max-width: 100vw !important;
-  height: 100vh !important; max-height: 100vh !important;
+  height: calc(100vh - 20px) !important; max-height: calc(100vh - 20px) !important;
   display: flex; flex-direction: column;
   border-radius: 0 !important;
 }
@@ -53,6 +53,37 @@ function injectCSS() {
 }
 .cam-sim-toolbar button:hover { background: #45475a; }
 .cam-sim-toolbar button.cam-sim-active { background: #89b4fa; color: #1e1e2e; }
+.cam-sim-speed-group {
+  display: flex; align-items: center; gap: 4px;
+  background: #313244; border: 1px solid #45475a; border-radius: 6px;
+  padding: 2px 6px; font-size: 11px; color: #6c7086;
+}
+.cam-sim-speed-group button {
+  background: none; border: none; color: #6c7086; cursor: pointer;
+  font-size: 13px; padding: 0 2px; line-height: 1;
+}
+.cam-sim-speed-group button:hover { color: #cdd6f4; }
+.cam-sim-speed-label {
+  min-width: 28px; text-align: center; font-family: monospace;
+  font-weight: bold; color: #a6e3a1; font-size: 11px;
+}
+.cam-sim-progress-bar {
+  height: 20px; display: flex; align-items: center; gap: 6px;
+  padding: 0 8px; background: #181825; border-top: 1px solid #45475a;
+  cursor: pointer; user-select: none;
+}
+.cam-sim-progress-track {
+  flex: 1; height: 6px; background: #313244; border-radius: 3px;
+  position: relative; overflow: hidden;
+}
+.cam-sim-progress-fill {
+  height: 100%; background: #89b4fa; border-radius: 3px;
+  width: 0%; transition: width 0.05s linear;
+}
+.cam-sim-progress-bar span {
+  font-size: 10px; font-family: monospace; color: #6c7086; min-width: 32px;
+  text-align: right;
+}
 .cam-sim-code-area {
   height: 180px; border-top: 1px solid #45475a; display: flex; flex-direction: column;
   background: #11111b;
@@ -88,12 +119,12 @@ function injectCSS() {
   background: #11111b; color: #a6e3a1;
 }
 .cam-sim-sidebar {
-  width: 320px; overflow-y: auto; border-left: 1px solid #45475a;
+  width: 320px; overflow: hidden; border-left: 1px solid #45475a;
   background: #181825; display: flex; flex-direction: column;
 }
 .cam-sim-sidebar.cam-sim-sidebar-overlay {
   position: absolute; top: 0; right: 0; bottom: 0; z-index: 10;
-  box-shadow: -4px 0 16px rgba(0,0,0,0.5);
+  box-shadow: -4px 0 16px rgba(0,0,0,0.5); width: 100%; max-width: 360px;
 }
 .cam-sim-sidebar::-webkit-scrollbar { width: 6px; }
 .cam-sim-sidebar::-webkit-scrollbar-thumb { background: #45475a; border-radius: 3px; }
@@ -120,7 +151,7 @@ function injectCSS() {
 .cam-sim-tabs button.cam-sim-active {
   color: #89b4fa; border-bottom-color: #89b4fa;
 }
-.cam-sim-tab-body { flex: 1; overflow-y: auto; padding: 10px; }
+.cam-sim-tab-body { flex: 1; overflow-y: auto; padding: 10px; min-height: 0; -webkit-overflow-scrolling: touch; }
 .cam-sim-tab-body::-webkit-scrollbar { width: 6px; }
 .cam-sim-tab-body::-webkit-scrollbar-thumb { background: #45475a; border-radius: 3px; }
 .cam-sim-section-title {
@@ -523,8 +554,14 @@ function parseManualGCodeToPath(code, prms) {
   let lastMoveType = 'G0';
   path.push({ x: currentX, z: currentZ, type: 'G0' });
   lines.forEach((line, idx) => {
-    const clean = line.toUpperCase().trim();
+    let clean = line.toUpperCase().trim();
     if (!clean || clean.startsWith(';') || clean.startsWith('(') || clean.startsWith('%')) return;
+    // Strip inline comments
+    const semiIdx = clean.indexOf(';');
+    if (semiIdx >= 0) clean = clean.substring(0, semiIdx).trim();
+    const parenIdx = clean.indexOf('(');
+    if (parenIdx >= 0) clean = clean.substring(0, parenIdx).trim();
+    if (!clean) return;
     const gMatch = clean.match(/\bG0?([0-3])\b/);
     const type = gMatch ? 'G' + gMatch[1] : lastMoveType;
     const xMatch = clean.match(/[XU]([-]?\d*\.?\d+)/);
@@ -620,10 +657,19 @@ export function openCamSimulator(initialContour) {
     <div class="cam-sim-toolbar">
       <button data-act="play" title="Spustit/Pauza">▶</button>
       <button data-act="stop" title="Zastavit">⏹</button>
+      <div class="cam-sim-speed-group">
+        <button data-act="speed-down" title="Zpomalit">◀</button>
+        <span class="cam-sim-speed-label">1×</span>
+        <button data-act="speed-up" title="Zrychlit">▶</button>
+      </div>
       <button data-act="addpt" title="Vložit za bod">➕</button>
       <button data-act="fit" title="Centrovat">🎯</button>
     </div>
     <div class="cam-sim-canvas-wrap"><canvas></canvas><div class="cam-sim-time-overlay"></div></div>
+    <div class="cam-sim-progress-bar">
+      <div class="cam-sim-progress-track"><div class="cam-sim-progress-fill"></div></div>
+      <span class="cam-sim-progress-pct">0%</span>
+    </div>
     <div class="cam-sim-code-area">
       <div class="cam-sim-code-bar">
         <span style="font-weight:bold">G-CODE</span>
@@ -720,7 +766,7 @@ export function openCamSimulator(initialContour) {
     past: [], future: [],
     draggedPointId: null, hoverPointId: null,
     isDragging: false, addPointMode: false,
-    activeTab: 'editor',
+    activeTab: 'editor', simSpeed: 1,
     _animId: null, _lastMouse: { x: 0, y: 0 }, _lastPinch: null,
     _cachedCalc: null
   };
@@ -754,6 +800,10 @@ export function openCamSimulator(initialContour) {
   const codeScroll = root.querySelector('.cam-sim-code-scroll');
   const manualTa = root.querySelector('.cam-sim-manual-ta');
   const timeOverlay = root.querySelector('.cam-sim-time-overlay');
+  const progressBar = root.querySelector('.cam-sim-progress-bar');
+  const progressFill = root.querySelector('.cam-sim-progress-fill');
+  const progressPct = root.querySelector('.cam-sim-progress-pct');
+  const speedLabel = root.querySelector('.cam-sim-speed-label');
   const errorsDiv = root.querySelector('.cam-sim-errors');
   const tabBody = root.querySelector('.cam-sim-tab-body');
   const toolbar = root.querySelector('.cam-sim-toolbar');
@@ -1308,11 +1358,19 @@ export function openCamSimulator(initialContour) {
       const sLen = parseFloat(prms.stockLength) || 0;
       const sFace = parseFloat(prms.stockFace) || 0;
       const s1 = toScreen(sRad, sFace), s2 = toScreen(sRad, -sLen), s3 = toScreen(0, -sLen), sStart = toScreen(0, sFace);
-      ctx.fillStyle = 'rgba(100,100,100,0.1)';
-      ctx.beginPath(); ctx.moveTo(sStart.x, sStart.y); ctx.lineTo(s1.x, s1.y); ctx.lineTo(s2.x, s2.y); ctx.lineTo(s3.x, s3.y); ctx.fill();
-      ctx.strokeStyle = C.stock; ctx.setLineDash([5, 5]); ctx.beginPath();
-      ctx.moveTo(sStart.x, sStart.y); ctx.lineTo(s1.x, s1.y); ctx.lineTo(s2.x, s2.y); ctx.lineTo(s3.x, s3.y);
+      // filled area
+      ctx.fillStyle = 'rgba(108,112,134,0.12)';
+      ctx.beginPath(); ctx.moveTo(sStart.x, sStart.y); ctx.lineTo(s1.x, s1.y); ctx.lineTo(s2.x, s2.y); ctx.lineTo(s3.x, s3.y); ctx.closePath(); ctx.fill();
+      // outline — all 4 sides visible
+      ctx.strokeStyle = '#fab387'; ctx.lineWidth = 2; ctx.setLineDash([6, 4]); ctx.beginPath();
+      ctx.moveTo(sStart.x, sStart.y); ctx.lineTo(s1.x, s1.y); ctx.lineTo(s2.x, s2.y); ctx.lineTo(s3.x, s3.y); ctx.closePath();
       ctx.stroke(); ctx.setLineDash([]);
+      // label with stock dimensions
+      const labelPt = toScreen(sRad, sFace);
+      const stockDiaLabel = `∅${parseFloat(prms.stockDiameter)} × ${sLen}`;
+      ctx.fillStyle = '#fab387'; ctx.font = 'bold 11px sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
+      if (prms.machineStructure === 'carousel') ctx.fillText(stockDiaLabel, labelPt.x + 4, labelPt.y - 4);
+      else ctx.fillText(stockDiaLabel, labelPt.x + 4, labelPt.y - 4);
     } else if (calc.stockPathSegments.length > 0) {
       ctx.beginPath();
       calc.stockPathSegments.forEach((seg, i) => {
@@ -1455,12 +1513,12 @@ export function openCamSimulator(initialContour) {
         const curZ = pCurrent.z + (pNext.z - pCurrent.z) * t;
         const pt = toScreen(curX, curZ);
         const tRad = parseFloat(prms.toolRadius) || 0.8;
-        const rPix = tRad * S.view.scale;
-        ctx.fillStyle = C.tool; ctx.strokeStyle = '#000'; ctx.lineWidth = 1;
+        const rPix = Math.max(tRad * S.view.scale, 6);
+        ctx.fillStyle = C.tool; ctx.strokeStyle = '#000'; ctx.lineWidth = 2;
         if (prms.toolShape === 'round') {
           ctx.beginPath(); ctx.arc(pt.x, pt.y, rPix, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
         } else if (prms.toolShape === 'polygon') {
-          const lenPix = (parseFloat(prms.toolLength) || 10) * S.view.scale;
+          const lenPix = Math.max((parseFloat(prms.toolLength) || 10) * S.view.scale, 20);
           const rotRad = -(parseFloat(prms.toolAngle) || 0) * (Math.PI / 180);
           const tipAng = (parseFloat(prms.toolTipAngle) || 90) * (Math.PI / 180);
           const a1 = rotRad, a2 = rotRad - tipAng;
@@ -1475,7 +1533,11 @@ export function openCamSimulator(initialContour) {
           ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore();
           ctx.beginPath(); ctx.arc(pt.x, pt.y, rPix, 0, Math.PI * 2); ctx.stroke();
         }
-        ctx.fillStyle = '#000'; ctx.beginPath(); ctx.arc(pt.x, pt.y, 1, 0, Math.PI * 2); ctx.fill();
+        // crosshair at tool center
+        ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(pt.x - rPix - 4, pt.y); ctx.lineTo(pt.x + rPix + 4, pt.y); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(pt.x, pt.y - rPix - 4); ctx.lineTo(pt.x, pt.y + rPix + 4); ctx.stroke();
+        ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(pt.x, pt.y, 2.5, 0, Math.PI * 2); ctx.fill();
       }
     }
 
@@ -1512,6 +1574,22 @@ export function openCamSimulator(initialContour) {
       if (x < minX) minX = x; if (x > maxX) maxX = x;
       if (p.zAbs < minZ) minZ = p.zAbs; if (p.zAbs > maxZ) maxZ = p.zAbs;
     });
+    // Include stock bounds
+    if (prms.stockMode === 'cylinder') {
+      const sRad = (parseFloat(prms.stockDiameter) || 0) / 2;
+      const sLen = parseFloat(prms.stockLength) || 0;
+      const sFace = parseFloat(prms.stockFace) || 0;
+      if (sRad > maxX) maxX = sRad;
+      if (-sLen < minZ) minZ = -sLen;
+      if (sFace > maxZ) maxZ = sFace;
+    } else {
+      const stockPts = resolvePointsToAbsolute(S.stockPoints);
+      stockPts.forEach(p => {
+        const x = prms.mode === 'DIAMON' ? p.xAbs / 2 : p.xAbs;
+        if (x < minX) minX = x; if (x > maxX) maxX = x;
+        if (p.zAbs < minZ) minZ = p.zAbs; if (p.zAbs > maxZ) maxZ = p.zAbs;
+      });
+    }
     const pad = 20;
     const isCar = prms.machineStructure === 'carousel';
     const visW = isCar ? (maxX - minX) : (maxZ - minZ);
@@ -1551,14 +1629,32 @@ export function openCamSimulator(initialContour) {
   }
 
   // ── SIMULATION ──
+  const SIM_SPEEDS = [0.25, 0.5, 1, 2, 4, 8];
+
+  function updateProgressBar() {
+    const pct = Math.round(S.simProgress * 100);
+    progressFill.style.width = pct + '%';
+    progressPct.textContent = pct + '%';
+  }
+
+  function updateSpeedLabel() {
+    const txt = S.simSpeed < 1 ? S.simSpeed.toFixed(2).replace(/0$/, '') : S.simSpeed;
+    speedLabel.textContent = txt + '×';
+  }
+
   function startSimLoop() {
     if (S._animId) return;
     const animate = () => {
       if (!S.simRunning) { S._animId = null; return; }
-      S.simProgress += 0.0015;
-      if (S.simProgress >= 1) { S.simProgress = 1; S.simRunning = false; }
+      S.simProgress += 0.0015 * S.simSpeed;
+      if (S.simProgress >= 1) {
+        S.simProgress = 1; S.simRunning = false;
+        const playBtn = toolbar.querySelector('[data-act="play"]');
+        if (playBtn) playBtn.textContent = '▶';
+      }
       draw();
       updateCodeHighlight();
+      updateProgressBar();
       if (S.simRunning) S._animId = requestAnimationFrame(animate);
       else S._animId = null;
     };
@@ -1756,6 +1852,15 @@ export function openCamSimulator(initialContour) {
       <button data-ctrl="fanuc" class="${prms.controlSystem === 'fanuc' ? 'cam-sim-active' : ''}">Fanuc</button>
       <button data-ctrl="heidenhain" class="${prms.controlSystem === 'heidenhain' ? 'cam-sim-active' : ''}">Heidenhain</button>
     </div>`;
+    html += `<div class="cam-sim-section-title">Programování</div>
+    <div class="cam-sim-toggle-row">
+      <button data-pmode="DIAMON" class="${prms.mode === 'DIAMON' ? 'cam-sim-active' : ''}">⌀ Průměr</button>
+      <button data-pmode="RADIUS" class="${prms.mode === 'RADIUS' ? 'cam-sim-active' : ''}">R Poloměr</button>
+    </div>
+    <div class="cam-sim-row">
+      <div class="cam-sim-field"><label>Max. otáčky (LIMS)</label><input type="number" data-p="lims" value="${parseInt((prms.machineType || '').match(/LIMS=(\d+)/)?.[1]) || 2000}"></div>
+      <div class="cam-sim-field"><label>Název nástroje</label><input type="text" data-p="toolName" value="${prms.toolName}"></div>
+    </div>`;
     html += `<div class="cam-sim-section-title">Polotovar</div>
     <div class="cam-sim-toggle-row">
       <button data-smode="cylinder" class="${prms.stockMode === 'cylinder' ? 'cam-sim-active' : ''}">Válec</button>
@@ -1833,6 +1938,9 @@ export function openCamSimulator(initialContour) {
     tabBody.querySelectorAll('[data-ctrl]').forEach(btn => {
       btn.addEventListener('click', () => { S.params.controlSystem = btn.dataset.ctrl; fullUpdate(); });
     });
+    tabBody.querySelectorAll('[data-pmode]').forEach(btn => {
+      btn.addEventListener('click', () => { S.params.mode = btn.dataset.pmode; fullUpdate(); });
+    });
     tabBody.querySelectorAll('[data-smode]').forEach(btn => {
       btn.addEventListener('click', () => {
         S.params.stockMode = btn.dataset.smode;
@@ -1843,7 +1951,11 @@ export function openCamSimulator(initialContour) {
     tabBody.querySelectorAll('[data-p]').forEach(inp => {
       inp.addEventListener('change', () => {
         const v = inp.value;
-        S.params[inp.dataset.p] = inp.type === 'number' ? (parseFloat(v) || 0) : v;
+        if (inp.dataset.p === 'lims') {
+          S.params.machineType = `LIMS=${parseInt(v) || 2000}`;
+        } else {
+          S.params[inp.dataset.p] = inp.type === 'number' ? (parseFloat(v) || 0) : v;
+        }
         fullUpdate();
       });
     });
@@ -1909,17 +2021,37 @@ export function openCamSimulator(initialContour) {
   function handleAutoStock() {
     const absPts = resolvePointsToAbsolute(S.contourPoints);
     if (absPts.length === 0) return;
-    let minZ = Infinity, maxZ = -Infinity, maxD = 0;
+    const prms = S.params;
+    let minZ = Infinity, maxZ = -Infinity, maxR = 0;
+    // Convert to radius for consistent comparison
     absPts.forEach(p => {
-      const x = S.params.mode === 'DIAMON' ? p.xAbs : p.xAbs * 2;
-      if (Math.abs(x) > maxD) maxD = Math.abs(x);
+      const r = prms.mode === 'DIAMON' ? Math.abs(p.xAbs) / 2 : Math.abs(p.xAbs);
+      if (r > maxR) maxR = r;
       if (p.zAbs < minZ) minZ = p.zAbs; if (p.zAbs > maxZ) maxZ = p.zAbs;
     });
-    const margin = parseFloat(S.params.stockMargin) || 5;
-    S.params.stockDiameter = Math.ceil(maxD + margin * 2);
+    // Also check arc extremes (the arc peak can exceed endpoint X values)
+    for (let i = 0; i < absPts.length - 1; i++) {
+      const p2 = absPts[i + 1];
+      if (p2.type === 'G2' || p2.type === 'G3') {
+        const x1 = prms.mode === 'DIAMON' ? absPts[i].xAbs / 2 : absPts[i].xAbs;
+        const z1 = absPts[i].zAbs;
+        const x2 = prms.mode === 'DIAMON' ? p2.xAbs / 2 : p2.xAbs;
+        const z2 = p2.zAbs;
+        const arc = getArcParams({ x: x1, z: z1 }, { x: x2, z: z2 }, p2.rVal, p2.type);
+        if (!arc.error) {
+          const arcMaxR = Math.abs(arc.cx) + arc.r;
+          if (arcMaxR > maxR) maxR = arcMaxR;
+          if (arc.cz - arc.r < minZ) minZ = arc.cz - arc.r;
+        }
+      }
+    }
+    const margin = parseFloat(prms.stockMargin) || 5;
+    // stockDiameter is always diameter
+    S.params.stockDiameter = Math.ceil((maxR + margin) * 2);
     S.params.stockLength = Math.ceil(Math.abs(minZ) + margin);
-    S.params.stockFace = 2.0;
+    S.params.stockFace = Math.ceil(maxZ) + 2;
     fullUpdate();
+    fitView();
   }
 
   function generateDefaultStock() {
@@ -1943,7 +2075,10 @@ export function openCamSimulator(initialContour) {
   // ── copy / download / PDF ──
   function handleCopyGCode() {
     const text = S.useManualCode ? S.manualGCode : S.generatedCode.map(l => l.text).join('\n');
-    navigator.clipboard.writeText(text).catch(() => alert('Nepodařilo se zkopírovat kód do schránky.'));
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = tabBody.querySelector('[data-act="copy-code"]');
+      if (btn) { const orig = btn.textContent; btn.textContent = '✅ Zkopírováno'; setTimeout(() => { btn.textContent = orig; }, 1500); }
+    }).catch(() => alert('Nepodařilo se zkopírovat kód do schránky.'));
   }
   function handleDownload() {
     const text = S.useManualCode ? S.manualGCode : S.generatedCode.map(l => l.text).join('\n');
@@ -2036,11 +2171,21 @@ export function openCamSimulator(initialContour) {
     } else if (act === 'stop') {
       S.simRunning = false; S.simProgress = 0;
       toolbar.querySelector('[data-act="play"]').textContent = '▶';
-      draw(); updateCodeHighlight();
+      draw(); updateCodeHighlight(); updateProgressBar();
     } else if (act === 'addpt') {
       S.addPointMode = !S.addPointMode;
       btn.classList.toggle('cam-sim-active', S.addPointMode);
       canvas.style.cursor = S.addPointMode ? 'copy' : 'crosshair';
+    } else if (act === 'speed-down') {
+      const idx = SIM_SPEEDS.indexOf(S.simSpeed);
+      if (idx > 0) S.simSpeed = SIM_SPEEDS[idx - 1];
+      else if (idx === -1) S.simSpeed = SIM_SPEEDS[0];
+      updateSpeedLabel();
+    } else if (act === 'speed-up') {
+      const idx = SIM_SPEEDS.indexOf(S.simSpeed);
+      if (idx < SIM_SPEEDS.length - 1) S.simSpeed = SIM_SPEEDS[idx + 1];
+      else if (idx === -1) S.simSpeed = SIM_SPEEDS[SIM_SPEEDS.length - 1];
+      updateSpeedLabel();
     } else if (act === 'fit') {
       fitView();
     }
@@ -2049,6 +2194,30 @@ export function openCamSimulator(initialContour) {
   // undo / redo
   root.querySelector('[data-act="undo"]').addEventListener('click', undo);
   root.querySelector('[data-act="redo"]').addEventListener('click', redo);
+
+  // progress bar scrubbing
+  function scrubProgress(e) {
+    const track = progressBar.querySelector('.cam-sim-progress-track');
+    const rect = track.getBoundingClientRect();
+    const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    S.simProgress = ratio;
+    draw(); updateCodeHighlight(); updateProgressBar();
+  }
+  let _scrubbing = false;
+  progressBar.addEventListener('mousedown', e => {
+    _scrubbing = true; scrubProgress(e);
+  });
+  document.addEventListener('mousemove', e => {
+    if (_scrubbing) scrubProgress(e);
+  });
+  document.addEventListener('mouseup', () => { _scrubbing = false; });
+  progressBar.addEventListener('touchstart', e => {
+    if (e.touches.length === 1) { _scrubbing = true; scrubProgress(e.touches[0]); }
+  }, { passive: true });
+  progressBar.addEventListener('touchmove', e => {
+    if (_scrubbing && e.touches.length === 1) scrubProgress(e.touches[0]);
+  }, { passive: true });
+  progressBar.addEventListener('touchend', () => { _scrubbing = false; });
 
   // keyboard shortcuts
   const handleKeyDown = (e) => {
@@ -2066,7 +2235,7 @@ export function openCamSimulator(initialContour) {
   // code area buttons
   root.querySelector('[data-code="toggle-mode"]').addEventListener('click', () => {
     S.useManualCode = !S.useManualCode;
-    if (S.useManualCode && !S.manualGCode) S.manualGCode = S.generatedCode.map(l => l.text).join('\n');
+    if (S.useManualCode) S.manualGCode = S.generatedCode.map(l => l.text).join('\n');
     fullUpdate();
   });
   root.querySelector('[data-code="editor"]').addEventListener('click', handleSendToEditor);
@@ -2092,7 +2261,7 @@ export function openCamSimulator(initialContour) {
     const simIdx = lineEl.dataset.simidx;
     if (simIdx !== '' && S._cachedCalc && S._cachedCalc.simPath.length > 1) {
       S.simProgress = parseInt(simIdx) / (S._cachedCalc.simPath.length - 1);
-      draw(); updateCodeHighlight();
+      draw(); updateCodeHighlight(); updateProgressBar();
     }
   });
 
