@@ -14,3 +14,4 @@ export { openGcodeReference } from './calculators/gcode.js';
 export { openMcodeReference } from './calculators/mcode.js';
 export { openSinumerikHub } from './calculators/sinumerikHub.js';
 export { openCncEditor } from './calculators/cncEditor.js';
+export { openCamSimulator } from './calculators/camSimulator.js';
