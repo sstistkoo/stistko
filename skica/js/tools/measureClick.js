@@ -1,5 +1,5 @@
 import { COLORS, SNAP_POINT_THRESHOLD } from '../constants.js';
-import { state, showToast } from '../state.js';
+import { state, showToast, toDisplayAngle } from '../state.js';
 import { addObject } from '../objects.js';
 import { renderAll } from '../render.js';
 import { resetHint, setHint } from '../ui.js';
@@ -65,7 +65,7 @@ export function handleMeasureClick(wx, wy) {
     if (tempIdx !== -1) state.objects.splice(tempIdx, 1);
 
     const d = Math.hypot(wx - tp.x, wy - tp.y);
-    const angle = (Math.atan2(wy - tp.y, wx - tp.x) * 180) / Math.PI;
+    const angle = toDisplayAngle((Math.atan2(wy - tp.y, wx - tp.x) * 180) / Math.PI);
     const p1 = tp;
     const p2 = { x: wx, y: wy };
     showMeasureResult(p1, p2, d, angle);

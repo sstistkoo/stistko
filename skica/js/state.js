@@ -311,9 +311,29 @@ export function updateUndoButtons() {
  */
 export function toDisplayCoords(wx, wy) {
   if (state.coordMode === 'inc') {
-    return { x: wx - state.incReference.x, y: wy - state.incReference.y };
+    const dx = wx - state.incReference.x;
+    const dy = wy - state.incReference.y;
+    if (state.nullPointActive && state.nullPointAngle !== 0) {
+      // Rotace souřadnic do lokálního systému natočeného nulového bodu
+      const rad = -state.nullPointAngle * Math.PI / 180;
+      const c = Math.cos(rad), s = Math.sin(rad);
+      return { x: dx * c - dy * s, y: dx * s + dy * c };
+    }
+    return { x: dx, y: dy };
   }
   return { x: wx, y: wy };
+}
+
+/**
+ * Převede absolutní úhel (stupně) na zobrazovaný relativní k natočení nulového bodu.
+ * @param {number} angleDeg – úhel ve stupních (absolutní)
+ * @returns {number} – úhel relativní k null point rotaci
+ */
+export function toDisplayAngle(angleDeg) {
+  if (state.nullPointActive && state.nullPointAngle !== 0) {
+    return angleDeg - state.nullPointAngle;
+  }
+  return angleDeg;
 }
 
 /**
@@ -323,6 +343,15 @@ export function toDisplayCoords(wx, wy) {
  * @returns {{x: number, y: number}}
  */
 export function fromIncToAbs(dx, dy) {
+  if (state.nullPointActive && state.nullPointAngle !== 0) {
+    // Inverzní rotace z lokálního systému do absolutního
+    const rad = state.nullPointAngle * Math.PI / 180;
+    const c = Math.cos(rad), s = Math.sin(rad);
+    return {
+      x: state.incReference.x + dx * c - dy * s,
+      y: state.incReference.y + dx * s + dy * c
+    };
+  }
   return { x: state.incReference.x + dx, y: state.incReference.y + dy };
 }
 

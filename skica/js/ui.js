@@ -3,7 +3,7 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 import { COLORS, MOBILE_BREAKPOINT, applyThemeColors } from './constants.js';
-import { state, showToast, pushUndo, undo, redo, axisLabels, resetDrawingState, displayX, xPrefix, fmtStatusCoords, coordHelpers } from './state.js';
+import { state, showToast, pushUndo, undo, redo, axisLabels, resetDrawingState, displayX, xPrefix, fmtStatusCoords, coordHelpers, toDisplayAngle } from './state.js';
 import { typeLabel, toolLabel, bulgeToArc, safeEvalMath, _parseMathExpr, getRectCorners, getObjectSnapPoints } from './utils.js';
 import { renderAll, renderAllDebounced } from './render.js';
 import { drawCanvas, screenToWorld, snapPt, autoCenterView } from './canvas.js';
@@ -667,7 +667,7 @@ export function updateProperties() {
       case "constr":
         return [
           Math.hypot(o.x2 - o.x1, o.y2 - o.y1).toFixed(3),
-          ((Math.atan2(o.y2 - o.y1, o.x2 - o.x1) * 180) / Math.PI).toFixed(2) + "°"
+          toDisplayAngle((Math.atan2(o.y2 - o.y1, o.x2 - o.x1) * 180) / Math.PI).toFixed(2) + "°"
         ];
       case "circle":
         return [
@@ -847,10 +847,11 @@ export function updateProperties() {
       grid.appendChild(lblAng);
 
       function computeAngle() {
+        const offset = (state.nullPointActive && state.nullPointAngle !== 0) ? state.nullPointAngle : 0;
         if (getPropAnchor() === '1') {
-          return (((Math.atan2(obj.y2 - obj.y1, obj.x2 - obj.x1) * 180) / Math.PI) + 360) % 360;
+          return (((Math.atan2(obj.y2 - obj.y1, obj.x2 - obj.x1) * 180) / Math.PI - offset) + 360) % 360;
         } else {
-          return (((Math.atan2(obj.y1 - obj.y2, obj.x1 - obj.x2) * 180) / Math.PI) + 360) % 360;
+          return (((Math.atan2(obj.y1 - obj.y2, obj.x1 - obj.x2) * 180) / Math.PI - offset) + 360) % 360;
         }
       }
       const inpAng = makeGridInput(computeAngle(), 2); grid.appendChild(inpAng);
@@ -865,7 +866,8 @@ export function updateProperties() {
         const l = safeEvalMath(inpLen.value);
         const a = safeEvalMath(inpAng.value);
         if (!isFinite(l) || !isFinite(a)) return;
-        const rad = a * Math.PI / 180;
+        const offset = (state.nullPointActive && state.nullPointAngle !== 0) ? state.nullPointAngle : 0;
+        const rad = (a + offset) * Math.PI / 180;
         if (getPropAnchor() === '1') {
           obj.x2 = obj.x1 + l * Math.cos(rad);
           obj.y2 = obj.y1 + l * Math.sin(rad);
@@ -1293,7 +1295,7 @@ export function updateProperties() {
         if (b === 0) {
           // Straight segment info
           const segLen = Math.hypot(p2.x - p1.x, p2.y - p1.y);
-          const segAngle = (Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180) / Math.PI;
+          const segAngle = toDisplayAngle((Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180) / Math.PI);
           addInfoRow("Délka", segLen.toFixed(3));
           addInfoRow("Úhel", segAngle.toFixed(2) + "°");
         } else {

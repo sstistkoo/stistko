@@ -36,7 +36,7 @@ vi.mock('../js/render.js', () => ({
   renderAllDebounced: vi.fn(),
 }));
 
-import { state, pushUndo, undo, redo, showToast } from '../js/state.js';
+import { state, pushUndo, undo, redo, showToast, toDisplayCoords, fromIncToAbs, toDisplayAngle } from '../js/state.js';
 
 // ════════════════════════════════════════
 // ── pushUndo ──
@@ -254,5 +254,115 @@ describe('showToast', () => {
 
   it('nevyhodí chybu s prázdným řetězcem', () => {
     expect(() => showToast('')).not.toThrow();
+  });
+});
+
+// ════════════════════════════════════════
+// ── toDisplayCoords s rotací ──
+// ════════════════════════════════════════
+describe('toDisplayCoords s rotací nulového bodu', () => {
+  beforeEach(() => {
+    state.coordMode = 'inc';
+    state.incReference = { x: 0, y: 0 };
+    state.nullPointActive = false;
+    state.nullPointAngle = 0;
+  });
+
+  it('inc bez rotace – prostý offset', () => {
+    state.incReference = { x: 10, y: 5 };
+    const d = toDisplayCoords(15, 8);
+    expect(d.x).toBeCloseTo(5);
+    expect(d.y).toBeCloseTo(3);
+  });
+
+  it('inc s rotací 90° – souřadnice se otočí', () => {
+    state.nullPointActive = true;
+    state.nullPointAngle = 90;
+    // Bod (10, 0) → offset (10, 0) → rotace -90°: lx = 0, ly = -10
+    const d = toDisplayCoords(10, 0);
+    expect(d.x).toBeCloseTo(0, 5);
+    expect(d.y).toBeCloseTo(-10, 5);
+  });
+
+  it('inc s rotací 45° – diagonální transformace', () => {
+    state.nullPointActive = true;
+    state.nullPointAngle = 45;
+    const sq = Math.SQRT2 / 2;
+    // Bod (1, 0) → rotace -45°: lx = cos(-45)*1 = sq, ly = sin(-45)*1 = -sq
+    const d = toDisplayCoords(1, 0);
+    expect(d.x).toBeCloseTo(sq, 5);
+    expect(d.y).toBeCloseTo(-sq, 5);
+  });
+
+  it('abs režim – ignoruje rotaci', () => {
+    state.coordMode = 'abs';
+    state.nullPointActive = true;
+    state.nullPointAngle = 45;
+    const d = toDisplayCoords(10, 5);
+    expect(d.x).toBe(10);
+    expect(d.y).toBe(5);
+  });
+});
+
+// ════════════════════════════════════════
+// ── fromIncToAbs s rotací ──
+// ════════════════════════════════════════
+describe('fromIncToAbs s rotací nulového bodu', () => {
+  beforeEach(() => {
+    state.incReference = { x: 0, y: 0 };
+    state.nullPointActive = false;
+    state.nullPointAngle = 0;
+  });
+
+  it('bez rotace – prostý offset', () => {
+    state.incReference = { x: 10, y: 5 };
+    const abs = fromIncToAbs(3, 2);
+    expect(abs.x).toBeCloseTo(13);
+    expect(abs.y).toBeCloseTo(7);
+  });
+
+  it('s rotací 90° – inverzní rotace', () => {
+    state.nullPointActive = true;
+    state.nullPointAngle = 90;
+    state.incReference = { x: 0, y: 0 };
+    // Lokální (10, 0) → rotace +90°: abs.x = 0, abs.y = 10
+    const abs = fromIncToAbs(10, 0);
+    expect(abs.x).toBeCloseTo(0, 5);
+    expect(abs.y).toBeCloseTo(10, 5);
+  });
+
+  it('roundtrip: toDisplayCoords → fromIncToAbs', () => {
+    state.coordMode = 'inc';
+    state.nullPointActive = true;
+    state.nullPointAngle = 37;
+    state.incReference = { x: 15, y: 20 };
+    const wx = 42, wy = 13;
+    const d = toDisplayCoords(wx, wy);
+    const back = fromIncToAbs(d.x, d.y);
+    expect(back.x).toBeCloseTo(wx, 8);
+    expect(back.y).toBeCloseTo(wy, 8);
+  });
+});
+
+// ════════════════════════════════════════
+// ── toDisplayAngle ──
+// ════════════════════════════════════════
+describe('toDisplayAngle', () => {
+  beforeEach(() => {
+    state.nullPointActive = false;
+    state.nullPointAngle = 0;
+  });
+
+  it('bez rotace – úhel beze změny', () => {
+    expect(toDisplayAngle(45)).toBe(45);
+    expect(toDisplayAngle(90)).toBe(90);
+  });
+
+  it('s rotací 30° – odečte offset', () => {
+    state.nullPointActive = true;
+    state.nullPointAngle = 30;
+    expect(toDisplayAngle(30)).toBe(0);
+    expect(toDisplayAngle(90)).toBe(60);
+    expect(toDisplayAngle(0)).toBe(-30);
   });
 });

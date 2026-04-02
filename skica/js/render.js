@@ -228,18 +228,57 @@ function renderAxes() {
     if (gs >= 4) {                                    // kreslit jen pokud má smysl
       g.strokeStyle = COLORS.textMuted + '18';
       g.lineWidth = 0.5;
-      const gStartX = state.panX % gs;
-      const gStartY = state.panY % gs;
-      g.beginPath();
-      for (let x = gStartX; x < w; x += gs) {
-        g.moveTo(x, 0);
-        g.lineTo(x, h);
+
+      if (state.nullPointActive && state.nullPointAngle !== 0) {
+        // ── Rotovaná mřížka ──
+        const [npSx, npSy] = worldToScreen(state.incReference.x, state.incReference.y);
+        const angleRad = state.nullPointAngle * Math.PI / 180;
+        g.save();
+        g.translate(npSx, npSy);
+        g.rotate(-angleRad);
+        // Maximální potřebný rozsah mřížky = diagonála canvasu
+        const maxR = Math.hypot(w, h);
+        const count = Math.ceil(maxR / gs);
+        g.beginPath();
+        for (let i = -count; i <= count; i++) {
+          const pos = i * gs;
+          g.moveTo(pos, -maxR);
+          g.lineTo(pos, maxR);
+          g.moveTo(-maxR, pos);
+          g.lineTo(maxR, pos);
+        }
+        g.stroke();
+        g.restore();
+      } else if (state.nullPointActive) {
+        // ── Mřížka zarovnaná k nulovému bodu (bez rotace) ──
+        const [npSx, npSy] = worldToScreen(state.incReference.x, state.incReference.y);
+        const gStartX = npSx % gs;
+        const gStartY = npSy % gs;
+        g.beginPath();
+        for (let x = gStartX; x < w; x += gs) {
+          g.moveTo(x, 0);
+          g.lineTo(x, h);
+        }
+        for (let y = gStartY; y < h; y += gs) {
+          g.moveTo(0, y);
+          g.lineTo(w, y);
+        }
+        g.stroke();
+      } else {
+        // ── Standardní mřížka ──
+        const gStartX = state.panX % gs;
+        const gStartY = state.panY % gs;
+        g.beginPath();
+        for (let x = gStartX; x < w; x += gs) {
+          g.moveTo(x, 0);
+          g.lineTo(x, h);
+        }
+        for (let y = gStartY; y < h; y += gs) {
+          g.moveTo(0, y);
+          g.lineTo(w, y);
+        }
+        g.stroke();
       }
-      for (let y = gStartY; y < h; y += gs) {
-        g.moveTo(0, y);
-        g.lineTo(w, y);
-      }
-      g.stroke();
     }
   }
 

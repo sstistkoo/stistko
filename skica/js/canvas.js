@@ -88,6 +88,16 @@ export function snapPt(wx, wy) {
       objY = 0;
     }
 
+    // Snap k nulovému bodu (incReference) – pokud je aktivní a jinde než v počátku
+    if (state.nullPointActive) {
+      const dNP = Math.hypot(wx - state.incReference.x, wy - state.incReference.y);
+      if (dNP < threshold && dNP < objD) {
+        objD = dNP;
+        objX = state.incReference.x;
+        objY = state.incReference.y;
+      }
+    }
+
     const midThreshold = threshold * 0.3;  // Midpoints: ~30% of normal threshold
     for (const obj of state.objects) {
       if (obj.isDimension || obj.isCoordLabel) continue;
@@ -174,8 +184,30 @@ export function snapPt(wx, wy) {
   // Grid snap (nižší priorita než object snap)
   if (state.snapToGrid) {
     const g = state.gridSize;
-    const gx = Math.round(wx / g) * g;
-    const gy = Math.round(wy / g) * g;
+    let gx, gy;
+    if (state.nullPointActive && state.nullPointAngle !== 0) {
+      // Snap k rotované mřížce: transformovat do lokálního systému, snap, zpět
+      const dx = wx - state.incReference.x;
+      const dy = wy - state.incReference.y;
+      const rad = -state.nullPointAngle * Math.PI / 180;
+      const c = Math.cos(rad), s = Math.sin(rad);
+      const lx = dx * c - dy * s;
+      const ly = dx * s + dy * c;
+      const slx = Math.round(lx / g) * g;
+      const sly = Math.round(ly / g) * g;
+      // Inverzní rotace zpět do světového systému (cos(-rad)=c, sin(-rad)=-s)
+      gx = slx * c + sly * s + state.incReference.x;
+      gy = -slx * s + sly * c + state.incReference.y;
+    } else if (state.nullPointActive) {
+      // Mřížka zarovnaná k nulovému bodu (bez rotace)
+      const dx = wx - state.incReference.x;
+      const dy = wy - state.incReference.y;
+      gx = Math.round(dx / g) * g + state.incReference.x;
+      gy = Math.round(dy / g) * g + state.incReference.y;
+    } else {
+      gx = Math.round(wx / g) * g;
+      gy = Math.round(wy / g) * g;
+    }
     state.mouse.snapped = true;
     state.mouse.snapType = 'grid';
     return [gx, gy];
