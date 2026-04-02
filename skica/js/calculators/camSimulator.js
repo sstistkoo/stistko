@@ -274,10 +274,14 @@ function injectCSS() {
   background: #89b4fa; color: #1e1e2e; border-color: #89b4fa;
 }
 @media (max-width: 768px) {
+  .calc-overlay:has(.cam-sim-window) {
+    padding-top: 0 !important;
+    align-items: flex-start !important;
+  }
   .cam-sim-window {
-    height: calc(100dvh - max(60px, calc(env(safe-area-inset-top) + env(safe-area-inset-bottom) + 40px))) !important;
-    max-height: calc(100dvh - max(60px, calc(env(safe-area-inset-top) + env(safe-area-inset-bottom) + 40px))) !important;
-    margin-top: max(0px, env(safe-area-inset-top));
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    margin-top: 0;
   }
   .cam-sim-tab-body { padding-bottom: 80px; }
   .cam-sim-code-area { min-height: 100px; max-height: 140px; }
