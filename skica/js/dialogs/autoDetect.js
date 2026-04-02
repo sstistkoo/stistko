@@ -88,6 +88,19 @@ function extractSegments(objects) {
       lines.push({ obj, idx, segIdx: null });
     } else if (obj.type === 'arc') {
       arcs.push({ obj, idx, segIdx: null });
+    } else if (obj.type === 'rect') {
+      // Obdélník → 4 úsečky
+      const x1 = Math.min(obj.x1, obj.x2), x2 = Math.max(obj.x1, obj.x2);
+      const y1 = Math.min(obj.y1, obj.y2), y2 = Math.max(obj.y1, obj.y2);
+      const rectSegs = [
+        { x1: x1, y1: y1, x2: x2, y2: y1 }, // spodní
+        { x1: x2, y1: y1, x2: x2, y2: y2 }, // pravá
+        { x1: x2, y1: y2, x2: x1, y2: y2 }, // horní
+        { x1: x1, y1: y2, x2: x1, y2: y1 }, // levá
+      ];
+      rectSegs.forEach((seg, si) => {
+        lines.push({ obj: { type: 'line', ...seg }, idx, segIdx: si });
+      });
     } else if (obj.type === 'polyline' && obj.vertices && obj.vertices.length >= 2) {
       const n = obj.vertices.length;
       const segCnt = obj.closed ? n : n - 1;
@@ -191,9 +204,11 @@ function detectFillets(segments) {
 function detectChamfers(segments) {
   const chamfers = [];
   const lines = segments.lines;
+  const usedChamferSegs = new Set();
 
   // Pro každou úsečku zkontroluj, zda je "krátká" a spojuje dva delší segmenty
   for (let ci = 0; ci < lines.length; ci++) {
+    if (usedChamferSegs.has(segKey(lines[ci]))) continue;
     const cand = lines[ci];
     const cLen = Math.hypot(cand.obj.x2 - cand.obj.x1, cand.obj.y2 - cand.obj.y1);
     const cEps = lineEndpoints(cand.obj);
@@ -242,6 +257,7 @@ function detectChamfers(segments) {
           const dist1 = Math.hypot(cEps[0].x - intPt.x, cEps[0].y - intPt.y);
           const dist2 = Math.hypot(cEps[1].x - intPt.x, cEps[1].y - intPt.y);
 
+          usedChamferSegs.add(segKey(cand));
           chamfers.push({
             type: 'chamfer',
             chamferLine: cand,
@@ -556,7 +572,7 @@ function showAutoDetectDialog(fillets, chamfers, grooves, corners) {
 
   // ── Rohy / spoje ──
   if (corners.length > 0) {
-    rows += `<tr><td colspan="3" style="color:${COLORS.green || COLORS.primary};font-weight:bold;padding-top:12px;font-size:13px">
+    rows += `<tr><td colspan="3" style="color:${COLORS.dimension};font-weight:bold;padding-top:12px;font-size:13px">
       ∠ Rohy / spoje — ${corners.length}×</td></tr>`;
     rows += `<tr style="color:${COLORS.textMuted};font-size:11px">
       <td>#</td><td>Úhel</td><td>Pozice</td></tr>`;
@@ -709,7 +725,9 @@ function showAutoDetectDialog(fillets, chamfers, grooves, corners) {
           text += `  ${i + 1}. ${angle}  pozice: [${co.point.x.toFixed(3)}, ${co.point.y.toFixed(3)}]\n`;
         });
       }
-      navigator.clipboard.writeText(text).then(() => showToast('Výsledky zkopírovány'));
+      navigator.clipboard.writeText(text)
+        .then(() => showToast('Výsledky zkopírovány'))
+        .catch(() => showToast('Kopírování se nezdařilo'));
     });
   }
 
