@@ -4,6 +4,7 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 import { makeOverlay } from '../dialogFactory.js';
+import { openCamSimulator } from './camSimulator.js';
 
 // ── Konstanty ──────────────────────────────────────────────────
 const STORAGE_DATA = 'skica-cnc-editor-data';
@@ -247,6 +248,7 @@ function buildEditorHTML() {
       <button class="cne-tb-btn cne-conv cne-hide-m" data-act="convAbs" data-el="convAbsBtn" title="Převést na absolutní (G90)">ABS</button>
       <button class="cne-tb-btn cne-conv cne-hide-m" data-act="convInc" data-el="convIncBtn" title="Převést na přírůstkové (G91)">INC</button>
       <button class="cne-tb-btn cne-hide-m" data-act="header" title="Generovat hlavičku">📝</button>
+      <button class="cne-tb-btn cne-hide-m" data-act="cam" title="Otevřít v CAM Simulátoru">🔄</button>
       <button class="cne-tb-btn cne-status" data-act="validate" data-el="statusBtn" title="Validace">●</button>
       <button class="cne-tb-btn cne-hide-m" data-act="settings" title="Nastavení parseru">⚙</button>
       <button class="cne-tb-btn cne-menu-btn" data-act="menu" title="Menu">⋮</button>
@@ -322,6 +324,8 @@ function buildEditorHTML() {
         <button class="cne-menu-item" data-act="convInc"><span class="cne-mi-icon sn">INC</span><span class="cne-mi-text"><b>Převést na přírůstkové</b><small>G90 → G91 souřadnice</small></span></button>
         <div class="cne-menu-sep"></div>
         <button class="cne-menu-item" data-act="header"><span class="cne-mi-icon">📝</span><span class="cne-mi-text"><b>Generovat hlavičku</b><small>Vložit hlavičku programu (M4x, T, G54…)</small></span></button>
+        <div class="cne-menu-sep"></div>
+        <button class="cne-menu-item" data-act="cam"><span class="cne-mi-icon">🔄</span><span class="cne-mi-text"><b>CAM Simulátor</b><small>Načíst konturu do CAM simulátoru</small></span></button>
         <div class="cne-menu-sep"></div>
         <button class="cne-menu-item" data-act="settings"><span class="cne-mi-icon">⚙</span><span class="cne-mi-text"><b>Nastavení validace</b><small>Pravidla kontroly programu</small></span></button>
       </div>
@@ -1063,6 +1067,7 @@ export function openCncEditor(initialCode) {
         case 'keyboard':  editor.readOnly = false; editor.focus(); break;
         case 'menu':      $('menuModal').style.display = 'flex'; break;
         case 'menuClose': $('menuModal').style.display = 'none'; break;
+        case 'cam':       persist(); overlay.remove(); openCamSimulator(editor.value); break;
         case 'close':     persist(); overlay.remove(); break;
         case 'numCancel': numModal.style.display = 'none'; break;
         case 'numOk':     confirmNumpad(); break;

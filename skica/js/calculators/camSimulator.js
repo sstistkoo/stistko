@@ -5,6 +5,11 @@
 
 import { makeOverlay } from '../dialogFactory.js';
 import { openCncEditor } from './cncEditor.js';
+import { state, pushUndo, showToast } from '../state.js';
+import { renderAll } from '../render.js';
+import { autoCenterView } from '../canvas.js';
+import { calculateAllIntersections } from '../geometry.js';
+import { updateObjectList } from '../ui.js';
 
 // ── CSS injection ──────────────────────────────────────────────
 let cssInjected = false;
@@ -691,6 +696,7 @@ export function openCamSimulator(initialContour) {
         <div class="cam-sim-code-btns">
           <button data-code="toggle-mode" class="cam-sim-active">Auto</button>
           <button data-code="editor" title="Otevřít v CNC Editoru pro úpravu">🔧 Editor</button>
+          <button data-code="to-canvas" title="Vrátit konturu na plátno pro úpravu">📐 Kreslit</button>
           <button data-code="show-sidebar" title="Zobrazit editor kontury">✏ Edit</button>
         </div>
       </div>
@@ -2161,6 +2167,69 @@ export function openCamSimulator(initialContour) {
     openCncEditor(text);
   }
 
+  // ── Vrátit konturu zpět na plátno ──
+  function handleSendToCanvas() {
+    const pts = resolvePointsToAbsolute(S.contourPoints);
+    if (pts.length < 2) { alert('Kontura nemá dostatek bodů.'); return; }
+    if (!confirm('Smazat aktuální výkres a vložit konturu z CAM simulátoru?')) return;
+
+    // Uložit undo, smazat stávající objekty
+    pushUndo();
+    state.objects.length = 0;
+    state.selected = null;
+
+    const isKarusel = S.params.machineStructure === 'carousel';
+    // Mapování: CNC X,Z → canvas x,y
+    // soustruh: canvas.x = Z, canvas.y = X
+    // karusel:  canvas.x = X, canvas.y = Z
+    const toCanvas = (cncX, cncZ) => isKarusel
+      ? { x: cncX, y: cncZ }
+      : { x: cncZ, y: cncX };
+
+    for (let i = 0; i < pts.length - 1; i++) {
+      const p1 = pts[i], p2 = pts[i + 1];
+      const c1 = toCanvas(p1.xAbs, p1.zAbs);
+      const c2 = toCanvas(p2.xAbs, p2.zAbs);
+
+      if (p2.type === 'G0' || p2.type === 'G1') {
+        // Úsečka
+        const id = state.nextId++;
+        state.objects.push({
+          type: 'line', x1: c1.x, y1: c1.y, x2: c2.x, y2: c2.y,
+          name: `Úsečka ${id}`, id, layer: state.activeLayer,
+        });
+      } else if (p2.type === 'G2' || p2.type === 'G3') {
+        // Oblouk – vypočítat střed a úhly
+        const arc = getArcParams(
+          { x: p1.xAbs, z: p1.zAbs },
+          { x: p2.xAbs, z: p2.zAbs },
+          p2.rVal, p2.type
+        );
+        if (arc.error) continue;
+        const cc = toCanvas(arc.cx, arc.cz);
+        // Přepočítat úhly v souřadnicích canvasu
+        const startAngle = Math.atan2(c1.y - cc.y, c1.x - cc.x);
+        const endAngle = Math.atan2(c2.y - cc.y, c2.x - cc.x);
+        const id = state.nextId++;
+        state.objects.push({
+          type: 'arc', cx: cc.x, cy: cc.y, r: arc.r,
+          startAngle: p2.type === 'G2' ? endAngle : startAngle,
+          endAngle: p2.type === 'G2' ? startAngle : endAngle,
+          name: `Oblouk ${id}`, id, layer: state.activeLayer,
+        });
+      }
+    }
+
+    calculateAllIntersections();
+    updateObjectList();
+    autoCenterView();
+    renderAll();
+
+    // Zavřít CAM simulátor
+    overlay.remove();
+    showToast(`Kontura vložena (${state.objects.length} objektů)`);
+  }
+
   // ── FULL UPDATE (recalc + redraw + re-render UI) ──
   function fullUpdate() {
     S._cachedCalc = calculate();
@@ -2258,6 +2327,7 @@ export function openCamSimulator(initialContour) {
     fullUpdate();
   });
   root.querySelector('[data-code="editor"]').addEventListener('click', handleSendToEditor);
+  root.querySelector('[data-code="to-canvas"]').addEventListener('click', handleSendToCanvas);
   root.querySelector('[data-code="show-sidebar"]').addEventListener('click', () => {
     const narrow = root.clientWidth < 900;
     sidebar.classList.toggle('cam-sim-sidebar-overlay', narrow);

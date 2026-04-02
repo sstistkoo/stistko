@@ -339,9 +339,9 @@ function getTouchPos(touch) {
   };
 }
 
-// Detekce, zda je jednoprstý posun povolený (ne při kreslení/přetahování)
+// Detekce, zda je jednoprstý posun povolený (ne při kreslení/přetahování/precision)
 function canSingleFingerPan() {
-  return !state.drawing && !state.dragging;
+  return !state.drawing && !state.dragging && !touchState.precisionMode;
 }
 
 // ── Precision crosshair helpers ──
@@ -486,23 +486,25 @@ drawCanvas.addEventListener(
       // Pinch zoom / dvouprstý posun
       touchState.wasMultiTouch = true;
       touchState.singlePanning = false;
-      hidePrecisionCrosshair();
-      const t1 = getTouchPos(touches[0]);
-      const t2 = getTouchPos(touches[1]);
-      touchState.pinchStartDist = Math.hypot(
-        t1.sx - t2.sx,
-        t1.sy - t2.sy,
-      );
-      touchState.pinchStartZoom = state.zoom;
-      touchState.pinchMidX = (t1.sx + t2.sx) / 2;
-      touchState.pinchMidY = (t1.sy + t2.sy) / 2;
-      touchState.panStartX =
-        (touches[0].clientX + touches[1].clientX) / 2;
-      touchState.panStartY =
-        (touches[0].clientY + touches[1].clientY) / 2;
-      touchState.panStartPX = state.panX;
-      touchState.panStartPY = state.panY;
-      touchState.panActive = true;
+      if (!touchState.precisionMode) {
+        hidePrecisionCrosshair();
+        const t1 = getTouchPos(touches[0]);
+        const t2 = getTouchPos(touches[1]);
+        touchState.pinchStartDist = Math.hypot(
+          t1.sx - t2.sx,
+          t1.sy - t2.sy,
+        );
+        touchState.pinchStartZoom = state.zoom;
+        touchState.pinchMidX = (t1.sx + t2.sx) / 2;
+        touchState.pinchMidY = (t1.sy + t2.sy) / 2;
+        touchState.panStartX =
+          (touches[0].clientX + touches[1].clientX) / 2;
+        touchState.panStartY =
+          (touches[0].clientY + touches[1].clientY) / 2;
+        touchState.panStartPX = state.panX;
+        touchState.panStartPY = state.panY;
+        touchState.panActive = true;
+      }
       return;
     }
 
@@ -588,6 +590,15 @@ drawCanvas.addEventListener(
     e.preventDefault();
     const touches = e.touches;
 
+    // Blokovat zoom/pan pokud je precision crosshair aktivní
+    if (touchState.precisionMode) {
+      if (touches.length === 1) {
+        touchState.touchMoved = true;
+        updatePrecisionCrosshair(touches[0]);
+      }
+      return;
+    }
+
     if (touches.length === 2 && touchState.panActive) {
       // Pinch zoom
       const t1 = getTouchPos(touches[0]);
@@ -635,19 +646,11 @@ drawCanvas.addEventListener(
 
       // Cancel long-press timer if moved before activation
       if (
-        !touchState.precisionMode &&
         touchState.longPressTimer &&
         moveDistPx > TOUCH_MOVE_THRESHOLD
       ) {
         clearTimeout(touchState.longPressTimer);
         touchState.longPressTimer = null;
-      }
-
-      // Precision crosshair mode – finger moves the offset crosshair
-      if (touchState.precisionMode) {
-        touchState.touchMoved = true;
-        updatePrecisionCrosshair(touches[0]);
-        return;
       }
 
       // Obdélníkový výběr – aktualizovat pozici myši pro kreslení obdélníku
