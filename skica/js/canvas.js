@@ -102,6 +102,17 @@ export function snapPt(wx, wy) {
         }
       }
     }
+    // Snap k průsečíkům úhlových kót (prodloužené úsečky)
+    for (const obj of state.objects) {
+      if (obj.isDimension && obj.dimType === 'angular' && obj.dimCenterX != null && obj.dimCenterY != null) {
+        const d = Math.hypot(obj.dimCenterX - wx, obj.dimCenterY - wy);
+        if (d < threshold && d < objD) {
+          objD = d;
+          objX = obj.dimCenterX;
+          objY = obj.dimCenterY;
+        }
+      }
+    }
     // Snap k bodům právě kreslené kontury (tempPoints)
     if (state.drawing && state.tempPoints && state.tempPoints.length > 0) {
       for (const p of state.tempPoints) {
