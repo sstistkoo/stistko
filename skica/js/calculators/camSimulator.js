@@ -673,6 +673,7 @@ export function openCamSimulator(initialContour) {
         <button data-act="speed-up" title="Zrychlit">▶</button>
       </div>
       <button data-act="addpt" title="Vložit za bod">➕</button>
+      <button data-act="lock" title="Zamknout/odemknout body">🔓</button>
       <button data-act="fit" title="Centrovat">🎯</button>
     </div>
     <div class="cam-sim-canvas-wrap"><canvas></canvas><div class="cam-sim-time-overlay"></div></div>
@@ -775,7 +776,7 @@ export function openCamSimulator(initialContour) {
     generatedCode: [], errors: [],
     past: [], future: [],
     draggedPointId: null, hoverPointId: null,
-    isDragging: false, addPointMode: false,
+    isDragging: false, addPointMode: false, pointDragEnabled: true,
     activeTab: 'editor', simSpeed: 1,
     _animId: null, _lastMouse: { x: 0, y: 0 }, _lastPinch: null,
     _cachedCalc: null
@@ -2196,6 +2197,10 @@ export function openCamSimulator(initialContour) {
       if (idx < SIM_SPEEDS.length - 1) S.simSpeed = SIM_SPEEDS[idx + 1];
       else if (idx === -1) S.simSpeed = SIM_SPEEDS[SIM_SPEEDS.length - 1];
       updateSpeedLabel();
+    } else if (act === 'lock') {
+      S.pointDragEnabled = !S.pointDragEnabled;
+      btn.textContent = S.pointDragEnabled ? '🔓' : '🔒';
+      btn.classList.toggle('cam-sim-active', !S.pointDragEnabled);
     } else if (act === 'fit') {
       fitView();
     }
@@ -2306,7 +2311,7 @@ export function openCamSimulator(initialContour) {
       if (pointIdx !== null) { handleInsertAfter(pointIdx); S.addPointMode = false; toolbar.querySelector('[data-act="addpt"]').classList.remove('cam-sim-active'); canvas.style.cursor = 'crosshair'; }
       return;
     }
-    if (pointIdx !== null) { pushHistory(); S.draggedPointId = pointIdx; S.isDragging = true; }
+    if (S.pointDragEnabled && pointIdx !== null) { pushHistory(); S.draggedPointId = pointIdx; S.isDragging = true; }
     else { S.isDragging = true; }
     lastMousePos = { x: e.clientX, y: e.clientY };
   });
@@ -2319,8 +2324,8 @@ export function openCamSimulator(initialContour) {
       return;
     }
     if (!S.isDragging) {
-      if (S.hoverPointId !== pointIdx) { S.hoverPointId = pointIdx; draw(); }
-      canvas.style.cursor = pointIdx !== null ? 'move' : 'crosshair';
+      if (S.pointDragEnabled && S.hoverPointId !== pointIdx) { S.hoverPointId = pointIdx; draw(); }
+      canvas.style.cursor = (S.pointDragEnabled && pointIdx !== null) ? 'move' : 'crosshair';
       return;
     }
     const dx = e.clientX - lastMousePos.x;
@@ -2365,7 +2370,7 @@ export function openCamSimulator(initialContour) {
         if (pointIdx !== null) { handleInsertAfter(pointIdx); S.addPointMode = false; toolbar.querySelector('[data-act="addpt"]').classList.remove('cam-sim-active'); canvas.style.cursor = 'crosshair'; }
         return;
       }
-      if (pointIdx !== null) { pushHistory(); S.draggedPointId = pointIdx; S.isDragging = true; }
+      if (S.pointDragEnabled && pointIdx !== null) { pushHistory(); S.draggedPointId = pointIdx; S.isDragging = true; }
       else { S.isDragging = true; }
       lastMousePos = { x: t.clientX, y: t.clientY };
     } else if (e.touches.length === 2) {
