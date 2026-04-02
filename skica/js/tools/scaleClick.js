@@ -8,6 +8,7 @@ import { findObjectAt, calculateAllIntersections, scaleObject } from '../geometr
 import { resetHint, setHint } from '../ui.js';
 import { updateAssociativeDimensions } from '../dialogs/dimension.js';
 import { showScaleDialog } from '../dialogs.js';
+import { hasAnchoredPoint } from './anchorClick.js';
 
 /** Spočítá těžiště (centroid) jednoho objektu. */
 function objCenter(obj) {
@@ -35,6 +36,11 @@ export function handleScaleClick(wx, wy) {
   const idx = findObjectAt(wx, wy);
   if (idx === null) { showToast("Klepněte na objekt k škálování"); return; }
 
+  if (hasAnchoredPoint(state.objects[idx])) {
+    showToast("Objekt je zakotven – nelze škálovat");
+    return;
+  }
+
   state.selected = idx;
   renderAll();
   applyScale([idx]);
@@ -60,6 +66,13 @@ function applyScale(indices) {
   setHint("Zadejte měřítkový faktor");
 
   showScaleDialog((factor) => {
+    // Kontrola kotvení
+    const anchored = indices.filter(i => hasAnchoredPoint(state.objects[i]));
+    if (anchored.length > 0) {
+      showToast(`${anchored.length} zakotven${anchored.length === 1 ? 'ý objekt' : 'é objekty'} nelze škálovat`);
+      return;
+    }
+
     // Referenční bod = centroid všech vybraných
     let cx = 0, cy = 0;
     for (const i of indices) {

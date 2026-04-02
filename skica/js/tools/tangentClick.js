@@ -16,6 +16,7 @@ import {
   circleTangentToCircleAndTwoPoints
 } from '../geometry.js';
 import { showTangentChoiceDialog, showTangentPositionDialog } from '../dialogs.js';
+import { hasAnchoredPoint } from './anchorClick.js';
 
 // ── Pomocné funkce pro extrakci dat z výběru ──
 
@@ -91,6 +92,15 @@ export function tangentFromSelection() {
 
   const { circles, lines, points } = analyzeSelection();
   const totalConstraints = lines.length + points.length + Math.max(0, circles.length - 1);
+
+  // Kontrola kotvení – pokud se má měnit kružnice, která je zakotvená, zabránit
+  if (circles.length >= 1 && totalConstraints >= 1) {
+    const circObj = state.objects[circles[0].idx];
+    if (circObj && hasAnchoredPoint(circObj)) {
+      showToast("Kružnice je zakotvena – nelze přesunout tečně");
+      return true;
+    }
+  }
 
   // ════════════════════════════════════════════════════════════════
   // 3 vazby → změní se poloměr i pozice kružnice

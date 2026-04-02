@@ -8,6 +8,7 @@ import { addObject } from '../objects.js';
 import { findObjectAt, calculateAllIntersections } from '../geometry.js';
 import { resetHint } from '../ui.js';
 import { updateAssociativeDimensions } from '../dialogs/dimension.js';
+import { hasAnchoredPoint } from './anchorClick.js';
 
 /** Normalizuje úhel do [0, 2π). */
 function normalizeAngle(a) {
@@ -29,6 +30,11 @@ export function handleBreakClick(wx, wy) {
   const idx = findObjectAt(wx, wy);
   if (idx === null) { showToast("Klepněte na objekt k rozdělení"); return; }
   const obj = state.objects[idx];
+
+  if (hasAnchoredPoint(obj)) {
+    showToast("Objekt je zakotven – nelze rozdělit");
+    return;
+  }
 
   if (obj.type === 'line' || obj.type === 'constr') {
     return breakLine(idx, obj, wx, wy);
