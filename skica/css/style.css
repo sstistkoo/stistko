@@ -1227,32 +1227,6 @@ body {
   opacity: 1;
 }
 
-/* â”€â”€ Offline banner â”€â”€ */
-.offline-banner {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  background: var(--ctp-red);
-  color: var(--ctp-base);
-  text-align: center;
-  padding: 4px 12px;
-  font-size: 13px;
-  font-weight: 600;
-  z-index: 10000;
-  transition: transform 0.3s ease;
-}
-
-.offline-banner[hidden] {
-  display: block;
-  transform: translateY(-100%);
-  pointer-events: none;
-}
-
-.offline-banner:not([hidden]) {
-  transform: translateY(0);
-}
-
 /* â”€â”€ Dimension labels â”€â”€ */
 .dim-label {
   font: 10px Consolas;
