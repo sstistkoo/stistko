@@ -12,7 +12,7 @@ export { showMeasureResult, showIntersectionInfo, showMeasureObjectInfo,
   showMeasureTwoPointsResult, showMeasureMultiPointResult,
   showMeasureTwoLinesResult, showMeasureTwoCirclesResult,
   showMeasurePointToLineResult, showMeasurePointToCircleResult,
-  showMeasureTwoObjectsResult } from './dialogs/measure.js';
+  showMeasureTwoObjectsResult, showMeasureMultiObjectResult } from './dialogs/measure.js';
 export { showCircleRadiusDialog } from './dialogs/circleRadius.js';
 export { showNumericalInputDialog } from './dialogs/numericalInput.js';
 export { showPolarDrawingDialog } from './dialogs/polarDrawing.js';

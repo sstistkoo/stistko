@@ -9,7 +9,7 @@ import {
   showMeasureTwoPointsResult, showMeasureMultiPointResult,
   showMeasureTwoLinesResult, showMeasureTwoCirclesResult,
   showMeasurePointToLineResult, showMeasurePointToCircleResult,
-  showMeasureTwoObjectsResult,
+  showMeasureTwoObjectsResult, showMeasureMultiObjectResult,
 } from '../dialogs.js';
 
 /**
@@ -183,8 +183,15 @@ export function measureSelection() {
     return true;
   }
 
-  // ── 3+ objekty nebo nepodporovaný mix ──
-  showToast("Vyberte max 2 objekty nebo body pro měření");
+  // ── 3+ objekty ──
+  if (objs.length >= 3) {
+    showMeasureMultiObjectResult(objs, objIndices);
+    _clearSelection();
+    return true;
+  }
+
+  // ── Nepodporovaný mix ──
+  showToast("Vyberte objekty nebo body pro měření");
   return false;
 }
 
