@@ -119,6 +119,7 @@ bridge.autoDetectFeatures = autoDetectFeatures;
 
 let isPanning = false;
 let panStartX, panStartY, panStartPX, panStartPY;
+const _cursorCoordsEl = document.getElementById("cursorCoords");
 
 // ── Pohyb myší ──
 drawCanvas.addEventListener("mousemove", (e) => {
@@ -172,6 +173,14 @@ drawCanvas.addEventListener("mousemove", (e) => {
     bridge.updateMobileCoords(wx, wy, extra);
   } else {
     document.getElementById("coordDisplay").textContent = fmtStatusCoords(wx, wy, extra);
+  }
+
+  // Floating souřadnice u kurzoru (desktop)
+  if (_cursorCoordsEl && window.innerWidth > 900) {
+    _cursorCoordsEl.style.display = "block";
+    _cursorCoordsEl.style.left = e.clientX + "px";
+    _cursorCoordsEl.style.top = e.clientY + "px";
+    _cursorCoordsEl.textContent = fmtStatusCoords(wx, wy, extra);
   }
 
   if (isPanning) {
@@ -232,6 +241,11 @@ drawCanvas.addEventListener("mousemove", (e) => {
   }
 
   renderAll();
+});
+
+// ── Skrýt floating souřadnice při opuštění canvasu ──
+drawCanvas.addEventListener("mouseleave", () => {
+  if (_cursorCoordsEl) _cursorCoordsEl.style.display = "none";
 });
 
 // ── Klik myší ──
