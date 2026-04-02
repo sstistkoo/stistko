@@ -279,6 +279,8 @@ function injectCSS() {
     max-height: calc(100dvh - max(60px, calc(env(safe-area-inset-top) + env(safe-area-inset-bottom) + 40px))) !important;
     margin-top: max(0px, env(safe-area-inset-top));
   }
+  .cam-sim-tab-body { padding-bottom: 80px; }
+  .cam-sim-code-area { min-height: 100px; max-height: 140px; }
 }
 `;
   document.head.appendChild(style);
