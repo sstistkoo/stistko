@@ -49,13 +49,45 @@
   <body>
     <!-- ── Mobile Controls ── -->
     <div id="mobileBottomBar" aria-label="Mobilní ovládání" role="toolbar">
-      <button id="mobileToolbarToggle" aria-label="Nástroje" title="Otevřít panel nástrojů">🔧</button>
-      <button id="mobileNumInput" aria-label="Zadat" title="Zadat souřadnice číselně">🔢</button>
-      <button id="mobileMeasure" aria-label="Měření" title="Měření vzdálenosti a úhlu">📏</button>
-      <button id="mobileSidebarToggle" aria-label="Panel" title="Otevřít boční panel">☰</button>
+      <button
+        id="mobileToolbarToggle"
+        aria-label="Nástroje"
+        title="Otevřít panel nástrojů"
+      >
+        🔧
+      </button>
+      <button
+        id="mobileNumInput"
+        aria-label="Zadat"
+        title="Zadat souřadnice číselně"
+      >
+        🔢
+      </button>
+      <button
+        id="mobileMeasure"
+        aria-label="Měření"
+        title="Měření vzdálenosti a úhlu"
+      >
+        📏
+      </button>
+      <button
+        id="mobileSidebarToggle"
+        aria-label="Panel"
+        title="Otevřít boční panel"
+      >
+        ☰
+      </button>
     </div>
-    <button id="mobileAutoCenter" aria-label="Vycentrovat" title="Vycentrovat výkres">⊙</button>
-    <button id="mobileCancel" aria-label="Zrušit" title="Zrušit aktuální akci">✕</button>
+    <button
+      id="mobileAutoCenter"
+      aria-label="Vycentrovat"
+      title="Vycentrovat výkres"
+    >
+      ⊙
+    </button>
+    <button id="mobileCancel" aria-label="Zrušit" title="Zrušit aktuální akci">
+      ✕
+    </button>
     <button
       id="polylineConfirm"
       aria-label="Dokončit konturu"
@@ -84,12 +116,37 @@
     >
       ⌒ Radius
     </button>
-    <button id="mobileUndo" aria-label="Zpět" title="Zpět – vrátí poslední akci">↩</button>
-    <button id="mobileRedo" aria-label="Vpřed" title="Vpřed – znovu provede vrácenou akci">↪</button>
+    <button
+      id="mobileUndo"
+      aria-label="Zpět"
+      title="Zpět – vrátí poslední akci"
+    >
+      ↩
+    </button>
+    <button
+      id="mobileRedo"
+      aria-label="Vpřed"
+      title="Vpřed – znovu provede vrácenou akci"
+    >
+      ↪
+    </button>
     <button id="canvasCalcBtn" aria-label="Kalkulačka" title="Kalkulačka">
       🔢
     </button>
-    <button id="mobileSnap" aria-label="Přichycení" title="Přepnout přichycení k mřížce">🧲</button>
+    <button
+      id="canvasClipBtn"
+      aria-label="Schránka kalkulačky"
+      title="Schránka kalkulačky (prázdná)"
+    >
+      —
+    </button>
+    <button
+      id="mobileSnap"
+      aria-label="Přichycení"
+      title="Přepnout přichycení k mřížce"
+    >
+      🧲
+    </button>
     <div id="mobileCoordBar">
       <span id="coordBarIndicators"
         ><span id="indMachine" class="coord-ind active" title="Typ stroje"
@@ -775,7 +832,11 @@
         </svg>
         Rovnob.
       </button>
-      <button class="tool-btn" data-tool="scale" title="Škálovat">
+      <button
+        class="tool-btn"
+        data-tool="scale"
+        title="Měřítko – změna velikosti objektu"
+      >
         <svg viewBox="0 0 24 24">
           <rect
             x="8"
@@ -802,7 +863,7 @@
             stroke-width="2"
           />
         </svg>
-        Škála
+        Měřítko
       </button>
       <button
         class="tool-btn toolbar-more-toggle"
@@ -2629,7 +2690,7 @@
                 </div>
               </details>
               <details class="help-tool-item">
-                <summary><span class="tool-icon">⇲</span> Škálovat</summary>
+                <summary><span class="tool-icon">⇲</span> Měřítko</summary>
                 <div class="tool-detail">
                   <p>Zvětší nebo zmenší vybraný objekt podle měřítka.</p>
                   <ul>
@@ -3276,10 +3337,389 @@
                   </ul>
                 </div>
               </details>
+              <details class="help-tool-item">
+                <summary>
+                  <span class="tool-icon">🔍</span> Detekce prvků
+                </summary>
+                <div class="tool-detail">
+                  <p>
+                    Automatická analýza výkresu – rozpozná zaoblení, zkosení,
+                    zápichy a rohy/spoje v celé kresbě.
+                  </p>
+                  <ul>
+                    <li>
+                      <strong>Zaoblení (R)</strong> – nalezne oblouky tečně
+                      navazující na úsečky (fillety)
+                    </li>
+                    <li>
+                      <strong>Zkosení</strong> – rozpozná krátké úsečky mezi
+                      dvěma delšími segmenty (chamfery)
+                    </li>
+                    <li>
+                      <strong>Zápichy</strong> – detekuje U-tvary ze 3 spojených
+                      úseček (2 stěny + dno)
+                    </li>
+                    <li>
+                      <strong>Rohy/Spoje</strong> – místa kde se 2 segmenty
+                      potkávají pod úhlem
+                    </li>
+                    <li>
+                      Automaticky rozloží kontury a obdélníky na jednotlivé
+                      segmenty
+                    </li>
+                    <li>
+                      Možnost přidat kóty R k nalezeným zaoblením, zvýraznit
+                      prvky na canvasu
+                    </li>
+                    <li>
+                      Kliknutím na nalezený prvek vycentrujete pohled na něj
+                    </li>
+                  </ul>
+                </div>
+              </details>
+              <details class="help-tool-item">
+                <summary>
+                  <span class="tool-icon">📈</span> Trasování profilu
+                </summary>
+                <div class="tool-detail">
+                  <p>
+                    Interaktivní sběr souřadnic po kontuře výkresu pro CNC
+                    programování. Klikáním na body postupně budujete profil
+                    soustružnického dílu.
+                  </p>
+                  <ul>
+                    <li>
+                      <strong>Klikání na body</strong> – postupně přidávejte
+                      body na kontuře výkresu
+                    </li>
+                    <li>
+                      <strong>Auto-detekce oblouků</strong> – pokud oba body
+                      leží na kružnici/oblouku, automaticky rozpozná G02/G03
+                    </li>
+                    <li>
+                      <strong><kbd>R</kbd></strong> – manuální nastavení
+                      poloměru (bulge) pro obloukové segmenty
+                    </li>
+                    <li>
+                      V bočním panelu se zobrazí panel „Profil" s výsledky – viz
+                      sekce <strong>📋 Boční panel</strong> níže
+                    </li>
+                  </ul>
+                </div>
+              </details>
             </div>
           </details>
 
-          <!-- ── 5. Nastavení ── -->
+          <!-- ── 5. Boční panel (levé menu) ── -->
+          <details class="help-section">
+            <summary>📋 Boční panel (levé menu)</summary>
+            <p style="margin: 6px 0 10px; color: #bbb">
+              Boční panel obsahuje přehled kresby, vlastnosti objektů, vrstvy,
+              CNC výstup a kalkulačky. Na desktopu je vpravo, na mobilu se
+              otevírá tlačítkem ☰ Panel.
+            </p>
+            <div class="help-tools-list">
+              <details class="help-tool-item">
+                <summary><span class="tool-icon">📦</span> Objekty</summary>
+                <div class="tool-detail">
+                  <p>
+                    Seznam všech objektů na výkrese s možností výběru, editace a
+                    mazání.
+                  </p>
+                  <ul>
+                    <li>
+                      <strong>Select-all checkbox</strong> – vybere/zruší výběr
+                      všech objektů (kromě kót)
+                    </li>
+                    <li>
+                      <strong>Checkbox u objektu</strong> – vybere/odznačí
+                      objekt (Shift+klik pro rozsah)
+                    </li>
+                    <li>
+                      <strong>Číslovat</strong> – zobrazí pořadová čísla objektů
+                      (1, 2, 3…) přímo na canvasu
+                    </li>
+                    <li>
+                      <strong>✏️ Upravit</strong> – otevře editační dialog pro
+                      vybraný objekt
+                    </li>
+                    <li>
+                      <strong>✕ Smazat</strong> – smaže objekt (včetně
+                      asociovaných kót)
+                    </li>
+                    <li>
+                      <strong>Segmenty</strong> – u kontury/obdélníku se po
+                      výběru rozbalí jednotlivé segmenty s možností mazání
+                    </li>
+                    <li>
+                      <strong>📍 Nulový bod</strong> – pokud je nastaven,
+                      zobrazí se na vrchu panelu se souřadnicemi a tlačítkem ✕
+                      pro zrušení
+                    </li>
+                  </ul>
+                  <p>
+                    <strong>Ikony typů:</strong> · bod &nbsp;/&nbsp; úsečka
+                    &nbsp;⁄&nbsp; konstrukce &nbsp;○&nbsp; kružnice
+                    &nbsp;⌒&nbsp; oblouk &nbsp;□&nbsp; obdélník &nbsp;⛓&nbsp;
+                    kontura &nbsp;T&nbsp; text
+                  </p>
+                </div>
+              </details>
+
+              <details class="help-tool-item">
+                <summary><span class="tool-icon">✦</span> Průsečíky</summary>
+                <div class="tool-detail">
+                  <p>
+                    Automaticky vypočítá a zobrazí všechny průsečíky objektů na
+                    výkrese. Průsečíky slouží jako snap body pro přesné
+                    kreslení.
+                  </p>
+                  <ul>
+                    <li>
+                      <strong>Automatický výpočet</strong> – spustí se při
+                      otevření panelu
+                    </li>
+                    <li>
+                      <strong>Checkbox</strong> – přidá průsečík jako snap bod
+                      pro ostatní nástroje
+                    </li>
+                    <li>
+                      <strong>Číslování</strong> – zobrazí pořadová čísla (P1,
+                      P2…) na canvasu
+                    </li>
+                    <li>
+                      <strong>Klik na souřadnice</strong> – zkopíruje souřadnice
+                      do schránky
+                    </li>
+                    <li>
+                      Souřadnice respektují aktuální režim (soustruh/karusel,
+                      R/D, ABS/INC)
+                    </li>
+                  </ul>
+                </div>
+              </details>
+
+              <details class="help-tool-item">
+                <summary><span class="tool-icon">📝</span> Vlastnosti</summary>
+                <div class="tool-detail">
+                  <p>
+                    Zobrazí editovatelné vlastnosti aktuálně vybraného objektu.
+                    Hodnoty lze přímo editovat – změna se okamžitě projeví na
+                    canvasu.
+                  </p>
+
+                  <details class="help-sub-detail">
+                    <summary>Společné vlastnosti (všechny typy)</summary>
+                    <div class="help-sub-content">
+                      <ul>
+                        <li>
+                          <strong>Typ</strong> – typ objektu (nelze měnit)
+                        </li>
+                        <li>
+                          <strong>Název</strong> – volitelný popisek objektu
+                        </li>
+                        <li>
+                          <strong>Barva</strong> – color picker + 5 rychlých
+                          preset barev
+                        </li>
+                        <li>
+                          <strong>Vrstva</strong> – výběr vrstvy, na které
+                          objekt leží
+                        </li>
+                      </ul>
+                    </div>
+                  </details>
+
+                  <details class="help-sub-detail">
+                    <summary>Vlastnosti dle typu objektu</summary>
+                    <div class="help-sub-content">
+                      <ul>
+                        <li><strong>Bod</strong> – souřadnice X, Y</li>
+                        <li>
+                          <strong>Úsečka / Konstrukce</strong> – dva koncové
+                          body (X1, Y1, X2, Y2), délka, úhel, volba kotvy 📌
+                          (který bod je fixní při editaci)
+                        </li>
+                        <li>
+                          <strong>Kružnice</strong> – střed (X, Y), poloměr r,
+                          průměr ⌀, obvod
+                        </li>
+                        <li>
+                          <strong>Oblouk</strong> – střed, poloměr, počáteční a
+                          koncový úhel°
+                        </li>
+                        <li>
+                          <strong>Obdélník</strong> – dva protilehlé rohy,
+                          šířka, výška, úhel rotace°, souřadnice všech 4 rohů
+                        </li>
+                        <li>
+                          <strong>Kontura</strong> – počet vrcholů,
+                          uzavřená/otevřená, celková délka, editovatelné
+                          souřadnice bodů a segmentů (úsečka/oblouk + bulge)
+                        </li>
+                        <li>
+                          <strong>Text</strong> – pozice X, Y, velikost, rotace,
+                          font, zarovnání (vlevo/střed/vpravo), bold/italic
+                        </li>
+                      </ul>
+                    </div>
+                  </details>
+                </div>
+              </details>
+
+              <details class="help-tool-item">
+                <summary><span class="tool-icon">📂</span> Vrstvy</summary>
+                <div class="tool-detail">
+                  <p>
+                    Správa vrstev výkresu (podobně jako v CAD systémech).
+                    Výchozí vrstvy: 0 Kontura, 1 Konstrukce, 2 Kóty.
+                  </p>
+                  <ul>
+                    <li>
+                      <strong>Radio button</strong> – volba aktivní vrstvy (nově
+                      kreslené objekty se přidají na ni)
+                    </li>
+                    <li>
+                      <strong>🎨 Barevná tečka</strong> – klikněte pro změnu
+                      barvy celé vrstvy
+                    </li>
+                    <li>
+                      <strong>Dvojklik na název</strong> – přejmenování vrstvy
+                      inline
+                    </li>
+                    <li>
+                      <strong>👁 Viditelnost</strong> – přepíná zobrazení/skrytí
+                      objektů vrstvy na canvasu
+                    </li>
+                    <li>
+                      <strong>🔒 Zámek</strong> – zamkne vrstvu (objekty nelze
+                      vybírat ani editovat)
+                    </li>
+                    <li>
+                      <strong>+ Nová vrstva</strong> – přidá novou vrstvu s
+                      náhodnou barvou
+                    </li>
+                    <li>
+                      <strong>🗑 Smazat</strong> – smaže aktuální vrstvu
+                      (objekty se přesunou na vrstvu 0; vrstvu 0 nelze smazat)
+                    </li>
+                  </ul>
+                </div>
+              </details>
+
+              <details class="help-tool-item">
+                <summary>
+                  <span class="tool-icon">⚙️</span> CNC Souřadnice
+                </summary>
+                <div class="tool-detail">
+                  <p>
+                    Automaticky generuje G-kód ze všech objektů na výkrese pro
+                    soustružnický provoz.
+                  </p>
+                  <ul>
+                    <li>
+                      <strong>Automatický export</strong> – G-kód se přepočítá
+                      při otevření panelu
+                    </li>
+                    <li>
+                      <strong>📋 Kopírovat</strong> – zkopíruje celý G-kód do
+                      schránky
+                    </li>
+                    <li>
+                      <strong>✏️ Editor</strong> – otevře CNC Editor pro ruční
+                      úpravy a rozšířenou editaci
+                    </li>
+                    <li>
+                      <strong>G00</strong> – rapid pohyb (přejezd mezi
+                      nespojitými segmenty)
+                    </li>
+                    <li>
+                      <strong>G01</strong> – lineární interpolace (úsečky)
+                    </li>
+                    <li>
+                      <strong>G02/G03</strong> – kruhová interpolace (oblouky,
+                      kružnice) s I/K parametry
+                    </li>
+                    <li>
+                      Respektuje režim stroje (soustruh/karusel), ABS/INC, R/D
+                    </li>
+                    <li>Přeskakuje konstrukční čáry, texty a kóty</li>
+                    <li>
+                      Automaticky vkládá G00 rapid mezi nespojité segmenty
+                    </li>
+                  </ul>
+                </div>
+              </details>
+
+              <details class="help-tool-item">
+                <summary>
+                  <span class="tool-icon">📈</span> Profil (trasování)
+                </summary>
+                <div class="tool-detail">
+                  <p>
+                    Panel se zobrazí po aktivaci nástroje „Profil" v toolbaru.
+                    Interaktivní sběr souřadnic po kontuře výkresu pro CNC
+                    programování.
+                  </p>
+                  <ul>
+                    <li>
+                      Zobrazuje počet bodů a celkovou délku trasovaného profilu
+                    </li>
+                    <li>
+                      Seznam bodů s G-kódem, souřadnicemi a parametry (R, I, K)
+                    </li>
+                    <li>Klik na řádek zvýrazní příslušný segment na canvasu</li>
+                    <li>
+                      Tlačítko ⌒ u segmentu otevře dialog pro nastavení radiusu
+                    </li>
+                  </ul>
+
+                  <details class="help-sub-detail">
+                    <summary>Akční tlačítka panelu</summary>
+                    <div class="help-sub-content">
+                      <ul>
+                        <li>
+                          <strong>⚙ Do CNC</strong> – odešle trasované body do
+                          CNC editoru
+                        </li>
+                        <li>
+                          <strong>📋 G-kód</strong> – zkopíruje vygenerovaný
+                          G-kód do schránky
+                        </li>
+                        <li>
+                          <strong>✏ Vykreslit</strong> – vytvoří reálné objekty
+                          (úsečky, oblouky) z trasovaného profilu
+                        </li>
+                        <li>
+                          <strong>📥 G→Profil</strong> – import existujícího
+                          G-kódu (G00/G01/G02/G03 s X, Z, R, I, K) do trasování
+                        </li>
+                        <li>
+                          <strong>📊 CSV</strong> – export dat ve formátu CSV
+                        </li>
+                        <li>
+                          <strong>📋 Tabulka</strong> – export jako
+                          strukturovaná tabulka
+                        </li>
+                      </ul>
+                    </div>
+                  </details>
+                </div>
+              </details>
+
+              <details class="help-tool-item">
+                <summary><span class="tool-icon">🧮</span> Kalkulačky</summary>
+                <div class="tool-detail">
+                  <p>
+                    12 specializovaných kalkulaček a nástrojů pro CNC
+                    programování. Podrobný popis viz sekce 🧮 Kalkulačky níže.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </details>
+
+          <!-- ── 6. Nastavení ── -->
           <details class="help-section">
             <summary>⚙️ Nastavení</summary>
             <table class="help-table">
@@ -3314,7 +3754,7 @@
             </table>
           </details>
 
-          <!-- ── 6. Soubory & Export ── -->
+          <!-- ── 7. Soubory & Export ── -->
           <details class="help-section">
             <summary>📂 Soubory &amp; Export</summary>
             <table class="help-table">
@@ -3336,71 +3776,172 @@
               </tr>
               <tr>
                 <td>📁 Projekty</td>
-                <td>Správa více projektů (Ctrl+P)</td>
+                <td>
+                  Správa více projektů – uložit, otevřít, přejmenovat,
+                  duplikovat, smazat (Ctrl+P)
+                </td>
+              </tr>
+              <tr>
+                <td>📚 Knihovna</td>
+                <td>Knihovna předpřipravených výkresů k načtení</td>
               </tr>
               <tr>
                 <td>🕓 Historie</td>
-                <td>Obnovení smazaných výkresů</td>
+                <td>
+                  Obnovení smazaných výkresů (uchovává se max. 10 posledních)
+                </td>
+              </tr>
+              <tr>
+                <td>🗑 Smazat vše</td>
+                <td>Smaže všechny objekty z aktuálního výkresu</td>
+              </tr>
+              <tr>
+                <td>🗑️ Smazat kóty</td>
+                <td>Odstraní všechny kóty z výkresu najednou</td>
               </tr>
             </table>
           </details>
 
-          <!-- ── 7. Kalkulačky ── -->
+          <!-- ── 8. Kalkulačky ── -->
           <details class="help-section">
             <summary>🧮 Kalkulačky</summary>
-            <table class="help-table">
-              <tr>
-                <td>🔢 Kalkulačka</td>
-                <td>Základní matematické operace</td>
-              </tr>
-              <tr>
-                <td>📐 Trigonometrie</td>
-                <td>Sin, cos, tan + pravoúhlý trojúhelník</td>
-              </tr>
-              <tr>
-                <td>⚙️ Řezné podm.</td>
-                <td>Řezná rychlost, otáčky, posuv</td>
-              </tr>
-              <tr>
-                <td>🔺 Kužel</td>
-                <td>Výpočet kuželů (úhel, průměry, délka)</td>
-              </tr>
-              <tr>
-                <td>🔩 Závity</td>
-                <td>Metrické, Whitworth, trubkové závity</td>
-              </tr>
-              <tr>
-                <td>🔄 Převodník</td>
-                <td>Převody jednotek (mm↔palce, °C↔°F, …)</td>
-              </tr>
-              <tr>
-                <td>⚖️ Hmotnost</td>
-                <td>Výpočet hmotnosti materiálu</td>
-              </tr>
-              <tr>
-                <td>📏 Tolerance</td>
-                <td>ISO tolerance uložení (H7/g6, …)</td>
-              </tr>
-              <tr>
-                <td>🔬 Drsnost</td>
-                <td>Drsnost povrchu Ra, Rz</td>
-              </tr>
-              <tr>
-                <td>🔩 VBD & Držáky</td>
-                <td>Databáze vyměnitelných břitových destiček</td>
-              </tr>
-              <tr>
-                <td>🏭 Sinumerik</td>
-                <td>G/M kódy, příkazy, systémové proměnné, zkratky</td>
-              </tr>
-              <tr>
-                <td>📝 Poznámky</td>
-                <td>Poznámkový blok – automaticky se ukládá</td>
-              </tr>
-            </table>
+            <p style="margin: 6px 0 10px; color: #bbb">
+              12 specializovaných nástrojů v bočním panelu (sekce Kalkulačky).
+              Všechny kalkulačky otevírají vlastní overlay dialog.
+            </p>
+            <div class="help-tools-list">
+              <details class="help-tool-item">
+                <summary><span class="tool-icon">🔢</span> Kalkulačka</summary>
+                <div class="tool-detail">
+                  <p>
+                    Vědecká kalkulačka s historií výpočtů. Podporuje závorky,
+                    sin/cos/tan, asin/acos/atan, √, π, x², %. Historie se ukládá
+                    do IndexedDB a přežije restart.
+                  </p>
+                </div>
+              </details>
+              <details class="help-tool-item">
+                <summary>
+                  <span class="tool-icon">📐</span> Trigonometrie
+                </summary>
+                <div class="tool-detail">
+                  <p>
+                    Výpočty pravoúhlého trojúhelníku – zadejte libovolné 2
+                    hodnoty (strany nebo úhly) a dopočítá zbývající.
+                    Goniometrické funkce sin, cos, tan a jejich inverze.
+                  </p>
+                </div>
+              </details>
+              <details class="help-tool-item">
+                <summary>
+                  <span class="tool-icon">⚙️</span> Řezné podmínky
+                </summary>
+                <div class="tool-detail">
+                  <p>
+                    Výpočty pro obrábění: řezná rychlost vc (m/min), otáčky n
+                    (ot/min), posuv na otáčku f (mm/ot), minutový posuv vf
+                    (mm/min). Vzorce pro soustružení a frézování.
+                  </p>
+                </div>
+              </details>
+              <details class="help-tool-item">
+                <summary><span class="tool-icon">🔺</span> Kužel</summary>
+                <div class="tool-detail">
+                  <p>
+                    Výpočet parametrů kuželů: úhel kužele, velký/malý průměr,
+                    délka kužele, kuželovitost (poměr). Zadejte libovolné 3
+                    hodnoty a zbytek se dopočítá.
+                  </p>
+                </div>
+              </details>
+              <details class="help-tool-item">
+                <summary><span class="tool-icon">🔩</span> Závity</summary>
+                <div class="tool-detail">
+                  <p>
+                    Tabulky a výpočty závitů: metrické (M), Whitworth (BSW/BSF),
+                    trubkové (G/R). Zobrazuje stoupání, malý/velký průměr,
+                    průměr jádra, hloubku závitu.
+                  </p>
+                </div>
+              </details>
+              <details class="help-tool-item">
+                <summary><span class="tool-icon">🔄</span> Převodník</summary>
+                <div class="tool-detail">
+                  <p>
+                    Převody jednotek: mm ↔ palce, °C ↔ °F, bar ↔ psi, kg ↔ lb,
+                    m/s ↔ ft/min a další. Obousměrný převod s okamžitým
+                    výsledkem.
+                  </p>
+                </div>
+              </details>
+              <details class="help-tool-item">
+                <summary><span class="tool-icon">⚖️</span> Hmotnost</summary>
+                <div class="tool-detail">
+                  <p>
+                    Výpočet hmotnosti materiálu podle tvaru (tyč, trubka,
+                    plech), rozměrů a hustoty materiálu. Databáze běžných
+                    materiálů (ocel, hliník, měď, mosaz…).
+                  </p>
+                </div>
+              </details>
+              <details class="help-tool-item">
+                <summary><span class="tool-icon">📏</span> Tolerance</summary>
+                <div class="tool-detail">
+                  <p>
+                    ISO tolerance uložení podle ČSN EN ISO 286. Zadejte
+                    jmenovitý rozměr a toleranční značku (např. H7, g6) –
+                    zobrazí horní/dolní úchylku a rozsah tolerance v μm.
+                  </p>
+                </div>
+              </details>
+              <details class="help-tool-item">
+                <summary><span class="tool-icon">🔬</span> Drsnost</summary>
+                <div class="tool-detail">
+                  <p>
+                    Převody a tabulky drsnosti povrchu: Ra (střední
+                    aritmetická), Rz (výška nerovností), Rmax, N-třída (N1–N12).
+                    Převod mezi hodnotami a značkami dle ISO 1302.
+                  </p>
+                </div>
+              </details>
+              <details class="help-tool-item">
+                <summary>
+                  <span class="tool-icon">🔩</span> VBD &amp; Držáky
+                </summary>
+                <div class="tool-detail">
+                  <p>
+                    Databáze vyměnitelných břitových destiček (VBD) a nožových
+                    držáků. Dekódování ISO označení destiček (tvar, úhel hřbetu,
+                    tolerance, upínání, délka, tloušťka, rádius špičky).
+                  </p>
+                </div>
+              </details>
+              <details class="help-tool-item">
+                <summary><span class="tool-icon">🏭</span> Sinumerik</summary>
+                <div class="tool-detail">
+                  <p>
+                    Referenční příručka Sinumerik 840D sl: G kódy, M kódy,
+                    příkazy jazyka, systémové proměnné ($MN, $MA, $SA…),
+                    klávesové zkratky HMI, ukázkové programy a CNC editor s
+                    barevným zvýrazněním syntaxe.
+                  </p>
+                </div>
+              </details>
+              <details class="help-tool-item">
+                <summary><span class="tool-icon">📝</span> Poznámky</summary>
+                <div class="tool-detail">
+                  <p>
+                    Poznámkový blok pro rychlé poznámky. Text se automaticky
+                    ukládá do IndexedDB – přežije restart i offline režim.
+                    Vhodné pro dočasné poznámky k výkresu, CNC kódy, rozměry
+                    apod.
+                  </p>
+                </div>
+              </details>
+            </div>
           </details>
 
-          <!-- ── 8. Dotykové ovládání ── -->
+          <!-- ── 9. Dotykové ovládání ── -->
           <details class="help-section">
             <summary>📱 Dotykové ovládání</summary>
             <div class="help-tools-list">
@@ -3592,7 +4133,7 @@
             </div>
           </details>
 
-          <!-- ── 9. Tipy ── -->
+          <!-- ── 10. Tipy ── -->
           <details class="help-section">
             <summary>💡 Tipy &amp; triky</summary>
             <ul class="help-tips">

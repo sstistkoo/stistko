@@ -34,7 +34,7 @@ function objCenter(obj) {
 /** Škáluje vybraný objekt kliknutím. */
 export function handleScaleClick(wx, wy) {
   const idx = findObjectAt(wx, wy);
-  if (idx === null) { showToast("Klepněte na objekt k škálování"); return; }
+  if (idx === null) { showToast("Klepněte na objekt ke změně měřítka"); return; }
 
   if (hasAnchoredPoint(state.objects[idx])) {
     showToast("Objekt je zakotven – nelze škálovat");
@@ -91,6 +91,6 @@ function applyScale(indices) {
     updateAssociativeDimensions();
     renderAll();
     resetHint();
-    showToast(`Škálováno ×${factor} ✓`);
+    showToast(`Měřítko ×${factor} ✓`);
   });
 }
