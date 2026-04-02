@@ -1140,3 +1140,142 @@ bridge.updatePolylineButtons = updatePolylineButtons;
     hideTopbarPointer();
   });
 }
+
+// ── Overlay Precision Pointer (long-press v dialozích .calc-overlay / .input-overlay) ──
+{
+  const opEl = document.getElementById("overlayPrecisionPointer");
+  const OVERLAY_OFFSET_Y = -60;
+  let opTimer = null;
+  let opActive = false;
+  let opStartX = 0, opStartY = 0;
+  let opHighlighted = null;
+  let opContainer = null; // aktuální overlay kontejner
+  const opLabel = opEl.querySelector(".sp-label");
+
+  function getOverlayContainer(el) {
+    return el && el.closest(".calc-overlay, .input-overlay");
+  }
+
+  function showOverlayPointer(clientX, clientY) {
+    const px = clientX, py = clientY + OVERLAY_OFFSET_Y;
+    opEl.style.left = px + "px";
+    opEl.style.top = py + "px";
+    opEl.style.display = "block";
+    highlightOverlayAt(px, py);
+  }
+
+  function updateOverlayPointer(clientX, clientY) {
+    const px = clientX, py = clientY + OVERLAY_OFFSET_Y;
+    opEl.style.left = px + "px";
+    opEl.style.top = py + "px";
+    highlightOverlayAt(px, py);
+  }
+
+  function highlightOverlayAt(x, y) {
+    if (opHighlighted) {
+      opHighlighted.style.outline = "";
+      opHighlighted.style.outlineOffset = "";
+      opHighlighted = null;
+    }
+    opLabel.style.display = "none";
+    opEl.style.display = "none";
+    const el = document.elementFromPoint(x, y);
+    opEl.style.display = "block";
+    if (el && opContainer && opContainer.contains(el)) {
+      const clickable = el.closest("button, input[type=checkbox], input[type=radio], a, label, li, select, .mc-row, .mc-card");
+      if (clickable) {
+        clickable.style.outline = "2px solid #f9e2af";
+        clickable.style.outlineOffset = "1px";
+        opHighlighted = clickable;
+        const tip = clickable.getAttribute("title") || clickable.getAttribute("aria-label");
+        if (tip) {
+          opLabel.textContent = tip;
+          opLabel.style.left = "14px";
+          opLabel.style.right = "auto";
+          opLabel.style.display = "block";
+          const rect = opLabel.getBoundingClientRect();
+          if (rect.right > window.innerWidth - 4) {
+            opLabel.style.left = "auto";
+            opLabel.style.right = "14px";
+          }
+        }
+      }
+    }
+  }
+
+  function hideOverlayPointer() {
+    opEl.style.display = "none";
+    opActive = false;
+    opContainer = null;
+    if (opHighlighted) {
+      opHighlighted.style.outline = "";
+      opHighlighted.style.outlineOffset = "";
+      opHighlighted = null;
+    }
+    if (opTimer) { clearTimeout(opTimer); opTimer = null; }
+  }
+
+  function clickOverlayAt(x, y) {
+    opEl.style.display = "none";
+    const el = document.elementFromPoint(x, y);
+    opEl.style.display = "block";
+    if (el && opContainer && opContainer.contains(el)) {
+      const clickable = el.closest("button, input[type=checkbox], input[type=radio], a, label, li");
+      if (clickable) clickable.click();
+    }
+  }
+
+  // Delegovaný listener na document – zachytí touch na jakémkoli overlay
+  document.addEventListener("touchstart", (e) => {
+    if (!isMobile()) return;
+    if (e.touches.length !== 1) return;
+    const container = getOverlayContainer(e.target);
+    if (!container) return;
+    const t = e.touches[0];
+    if (e.target.tagName === "INPUT" && e.target.type !== "checkbox" && e.target.type !== "radio") return;
+    if (e.target.tagName === "SELECT" || e.target.tagName === "TEXTAREA") return;
+    opStartX = t.clientX;
+    opStartY = t.clientY;
+    opActive = false;
+    opContainer = container;
+    if (opTimer) clearTimeout(opTimer);
+    opTimer = setTimeout(() => {
+      opActive = true;
+      try { safeVibrate(VIBRATE_LONG_PRESS); } catch (_) {}
+      showOverlayPointer(t.clientX, t.clientY);
+    }, LONG_PRESS_MS);
+  }, { passive: false });
+
+  document.addEventListener("touchmove", (e) => {
+    if (!opActive && !opTimer) return;
+    if (!isMobile()) return;
+    if (e.touches.length !== 1) return;
+    const t = e.touches[0];
+    const dist = Math.hypot(t.clientX - opStartX, t.clientY - opStartY);
+    if (!opActive && dist > TOUCH_MOVE_THRESHOLD) {
+      if (opTimer) { clearTimeout(opTimer); opTimer = null; }
+      return;
+    }
+    if (opActive) {
+      e.preventDefault();
+      updateOverlayPointer(t.clientX, t.clientY);
+    }
+  }, { passive: false });
+
+  document.addEventListener("touchend", (e) => {
+    if (!opActive && !opTimer) return;
+    if (opTimer) { clearTimeout(opTimer); opTimer = null; }
+    if (opActive) {
+      e.preventDefault();
+      const px = (e.changedTouches[0]?.clientX || opStartX);
+      const py = (e.changedTouches[0]?.clientY || opStartY) + OVERLAY_OFFSET_Y;
+      clickOverlayAt(px, py);
+      hideOverlayPointer();
+    }
+    opActive = false;
+  }, { passive: false });
+
+  document.addEventListener("touchcancel", () => {
+    if (opActive || opTimer) hideOverlayPointer();
+  });
+}

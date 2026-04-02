@@ -1268,6 +1268,11 @@ function deleteSelectedSegment() {
   const segCount = obj.closed ? n : n - 1;
   if (segIdx < 0 || segIdx >= segCount) return;
 
+  if (hasAnchoredPoint(obj)) {
+    showToast("Kontura je zakotvena – nelze smazat segment");
+    return;
+  }
+
   pushUndo();
 
   if (n <= 2) {

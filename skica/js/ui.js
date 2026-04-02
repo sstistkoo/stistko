@@ -3442,6 +3442,18 @@ function showSettingsDialog() {
 
       <!-- Projekty a CNC -->
       <fieldset style="border:1px solid var(--ctp-surface1);border-radius:8px;padding:10px 12px;margin:0">
+        <legend style="color:var(--ctp-blue);font-size:13px;padding:0 6px">⚓ Kotvy</legend>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <p style="margin:0;flex:1;font-size:12px;color:var(--ctp-subtext0)">Aktivních kotev: <strong id="settAnchorCount">${state.anchors.length}</strong></p>
+          <button class="calc-btn" id="settListAnchors" title="Seznam kotev" style="padding:4px 8px;font-size:16px;border-radius:6px;cursor:pointer;background:var(--ctp-surface0);color:var(--ctp-text);border:1px solid var(--ctp-surface1);opacity:${state.anchors.length === 0 ? '0.5' : '1'}"${state.anchors.length === 0 ? ' disabled' : ''}>📋</button>
+        </div>
+        <div id="settAnchorList" style="display:none;max-height:180px;overflow-y:auto;margin-bottom:8px;border:1px solid var(--ctp-surface1);border-radius:6px;background:var(--ctp-mantle)"></div>
+        <button class="calc-btn" id="settDeleteAnchors" style="width:100%;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;background:var(--ctp-red);color:var(--ctp-base);border:1px solid var(--ctp-red);opacity:${state.anchors.length === 0 ? '0.5' : '1'}"${state.anchors.length === 0 ? ' disabled' : ''}>
+          🗑️ Smazat všechny kotvy
+        </button>
+      </fieldset>
+
+      <fieldset style="border:1px solid var(--ctp-surface1);border-radius:8px;padding:10px 12px;margin:0">
         <legend style="color:var(--ctp-blue);font-size:13px;padding:0 6px">📂 Projekty a export</legend>
         <div style="display:flex;gap:8px;margin-top:4px">
           <button class="calc-btn" id="settProjects" style="flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;background:var(--ctp-surface0);color:var(--ctp-text);border:1px solid var(--ctp-surface1)">
@@ -3697,6 +3709,76 @@ function showSettingsDialog() {
   overlay.querySelector('#settDxfJson').addEventListener('click', () => {
     overlay.remove();
     window.open('dxf-json.html', '_blank');
+  });
+
+  // ── Smazat všechny kotvy ──
+  function refreshAnchorUI() {
+    const countEl = overlay.querySelector('#settAnchorCount');
+    const delBtn = overlay.querySelector('#settDeleteAnchors');
+    const listBtn = overlay.querySelector('#settListAnchors');
+    const listEl = overlay.querySelector('#settAnchorList');
+    if (countEl) countEl.textContent = String(state.anchors.length);
+    const empty = state.anchors.length === 0;
+    if (delBtn) { delBtn.disabled = empty; delBtn.style.opacity = empty ? '0.5' : '1'; }
+    if (listBtn) { listBtn.disabled = empty; listBtn.style.opacity = empty ? '0.5' : '1'; }
+    if (listEl && listEl.style.display !== 'none') renderAnchorList();
+  }
+
+  function renderAnchorList() {
+    const listEl = overlay.querySelector('#settAnchorList');
+    if (!listEl) return;
+    const [H, V] = axisLabels();
+    const dec = state.displayDecimals;
+    if (state.anchors.length === 0) {
+      listEl.innerHTML = '<p style="margin:0;padding:8px;font-size:12px;color:var(--ctp-subtext0);text-align:center">Žádné kotvy</p>';
+      return;
+    }
+    listEl.innerHTML = state.anchors.map((a, i) => {
+      const hVal = displayX(a.x).toFixed(dec);
+      const vVal = a.y.toFixed(dec);
+      return `<div style="display:flex;align-items:center;gap:6px;padding:5px 8px;border-bottom:1px solid var(--ctp-surface0);font-size:12px" data-anchor-idx="${i}">
+        <span style="color:var(--ctp-red);font-size:14px">⚓</span>
+        <span style="flex:1;color:var(--ctp-text);font-family:monospace">${H}${xPrefix()}${hVal} &nbsp; ${V}${vVal}</span>
+        <button class="anchor-del-btn" data-idx="${i}" title="Smazat kotvu" style="padding:2px 6px;font-size:12px;border-radius:4px;cursor:pointer;background:transparent;color:var(--ctp-red);border:1px solid var(--ctp-red);line-height:1">✕</button>
+      </div>`;
+    }).join('');
+
+    listEl.querySelectorAll('.anchor-del-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const idx = parseInt(e.currentTarget.dataset.idx, 10);
+        if (idx >= 0 && idx < state.anchors.length) {
+          pushUndo();
+          state.anchors.splice(idx, 1);
+          renderAll();
+          refreshAnchorUI();
+          showToast('Kotva odstraněna ✓');
+        }
+      });
+    });
+  }
+
+  // ── Zobrazit/skrýt seznam kotev ──
+  overlay.querySelector('#settListAnchors').addEventListener('click', () => {
+    const listEl = overlay.querySelector('#settAnchorList');
+    if (!listEl) return;
+    if (listEl.style.display === 'none') {
+      listEl.style.display = 'block';
+      renderAnchorList();
+    } else {
+      listEl.style.display = 'none';
+    }
+  });
+
+  overlay.querySelector('#settDeleteAnchors').addEventListener('click', () => {
+    if (state.anchors.length === 0) return;
+    pushUndo();
+    const count = state.anchors.length;
+    state.anchors.length = 0;
+    renderAll();
+    refreshAnchorUI();
+    const listEl = overlay.querySelector('#settAnchorList');
+    if (listEl) listEl.style.display = 'none';
+    showToast(`Smazáno ${count} kotev ✓`);
   });
 }
 
