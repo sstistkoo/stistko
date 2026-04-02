@@ -9,6 +9,7 @@ export const bridge = {
   updatePolylineButtons: null,
   updateTraceButtons: null,
   finishProfileTrace: null,
+  finishChainDimension: null,
   updateProperties: null,
   updateObjectList: null,
   updateIntersectionList: null,

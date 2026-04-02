@@ -1760,6 +1760,10 @@ export function setTool(tool) {
   if (state.tool === 'profileTrace' && state.drawing && state.tempPoints.length >= 2) {
     if (bridge.finishProfileTrace) bridge.finishProfileTrace();
   }
+  // Auto-dokončit řetězcové kótování při přepnutí nástroje
+  if (state.tool === 'chainDimension' && state.drawing) {
+    if (bridge.finishChainDimension) bridge.finishChainDimension();
+  }
   // Pokud už jsme v select módu a klikne se znovu na Výběr → zrušit výběr
   if (tool === 'select' && state.tool === 'select') {
     state.selected = null;

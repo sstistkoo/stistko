@@ -15,7 +15,7 @@ import { autoDetectFeatures } from './dialogs/autoDetect.js';
 import { bulgeToArc, deepClone } from './utils.js';
 import { bridge } from './bridge.js';
 import { updateAssociativeDimensions } from './dialogs/dimension.js';
-import { handleTangentClick, tangentFromSelection, handleOffsetClick, offsetFromSelection, handleTrimClick, trimFromSelection, handleExtendClick, extendFromSelection, handleFilletClick, filletFromSelection, handleChamferClick, chamferFromSelection, handlePerpClick, perpFromSelection, handleHorizontalClick, horizontalFromSelection, handleParallelClick, parallelFromSelection, handleDimensionClick, handleSnapPointClick, handleMoveClick, handleLineClick, handleMeasureClick, handleCircleClick, handleArcClick, handleRectClick, handlePolylineClick, measureSelection, handleTextClick, handleGearClick, resetGearState, handleAnchorClick, removeAnchorsForObject, removeAnchorAt, hasAnchoredPoint, cleanupOrphanAnchors, handleBreakClick, handleCenterMarkClick, centerMarkFromSelection, handleScaleClick, scaleFromSelection, handleFilletChamferClick, filletChamferFromSelection, handleBooleanClick, resetBooleanState, handleCircularArrayClick, handleCopyPlaceClick, copyPlaceFromSelection, resetCopyPlaceState, handleProfileTraceClick, finishProfileTrace, cancelProfileTrace, resetProfileTraceState, setTraceBulge, getTraceData } from './tools/index.js';
+import { handleTangentClick, tangentFromSelection, handleOffsetClick, offsetFromSelection, handleTrimClick, trimFromSelection, handleExtendClick, extendFromSelection, handleFilletClick, filletFromSelection, handleChamferClick, chamferFromSelection, handlePerpClick, perpFromSelection, handleHorizontalClick, horizontalFromSelection, handleParallelClick, parallelFromSelection, handleDimensionClick, handleSnapPointClick, handleMoveClick, handleLineClick, handleMeasureClick, handleCircleClick, handleArcClick, handleRectClick, handlePolylineClick, measureSelection, handleTextClick, handleGearClick, resetGearState, handleAnchorClick, removeAnchorsForObject, removeAnchorAt, hasAnchoredPoint, cleanupOrphanAnchors, handleBreakClick, handleCenterMarkClick, centerMarkFromSelection, handleScaleClick, scaleFromSelection, handleFilletChamferClick, filletChamferFromSelection, handleBooleanClick, resetBooleanState, handleCircularArrayClick, handleCopyPlaceClick, copyPlaceFromSelection, resetCopyPlaceState, handleProfileTraceClick, finishProfileTrace, cancelProfileTrace, resetProfileTraceState, setTraceBulge, getTraceData, handleChainDimensionClick, finishChainDimension, resetChainDimensionState } from './tools/index.js';
 import { getLineSegment } from './tools/helpers.js';
 import { showPostDrawPointDialog } from './dialogs/postDrawDialog.js';
 
@@ -113,6 +113,7 @@ bridge.copyPlaceFromSelection = () => {
 };
 
 bridge.finishProfileTrace = finishProfileTrace;
+bridge.finishChainDimension = finishChainDimension;
 bridge.autoDetectFeatures = autoDetectFeatures;
 
 let isPanning = false;
@@ -131,7 +132,7 @@ drawCanvas.addEventListener("mousemove", (e) => {
 
   // Angle snap – jen při kreslení, a jen pokud object snap nezachytil bod
   if (state.angleSnap && state.drawing && state.tempPoints.length > 0
-      && ['line', 'constr', 'polyline', 'measure', 'dimension'].includes(state.tool)) {
+      && ['line', 'constr', 'polyline', 'measure', 'dimension', 'chainDimension'].includes(state.tool)) {
     if (state.mouse.snapType !== 'point') {
       const ref = state.tempPoints[state.tempPoints.length - 1];
       [wx, wy] = applyAngleSnap(wx, wy, ref);
@@ -342,6 +343,7 @@ document.addEventListener("keydown", (e) => {
     resetBooleanState();
     resetCopyPlaceState();
     resetProfileTraceState();
+    resetChainDimensionState();
     // Odstranit dočasný měřicí bod
     const mTempIdx = state.objects.findIndex(o => o.isMeasureTemp);
     if (mTempIdx !== -1) state.objects.splice(mTempIdx, 1);
@@ -548,6 +550,11 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Enter" && state.drawing && state.tool === "profileTrace") {
     e.preventDefault();
     finishProfileTrace();
+  }
+  // Chain dimension: Enter = dokončit řetězcové kótování
+  if (e.key === "Enter" && state.drawing && state.tool === "chainDimension") {
+    e.preventDefault();
+    finishChainDimension();
   }
   // Profile trace: R = radius dialog pro poslední segment
   if (e.key.toLowerCase() === "r" && state.drawing && state.tool === "profileTrace") {
@@ -887,6 +894,10 @@ export function handleCanvasClick(wx, wy) {
 
     case "dimension":
       handleDimensionClick(wx, wy);
+      break;
+
+    case "chainDimension":
+      handleChainDimensionClick(wx, wy);
       break;
 
     case "snapPoint":
