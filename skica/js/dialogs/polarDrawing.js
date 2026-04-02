@@ -190,7 +190,10 @@ export function showPolarDrawingDialog() {
       return;
     }
 
-    const rad = (angDeg * Math.PI) / 180;
+    // Úhel s offsetem od natočeného nulového bodu
+    const angleOffset = (state.nullPointActive && state.nullPointAngle !== 0)
+      ? (state.nullPointAngle * Math.PI / 180) : 0;
+    const rad = (angDeg * Math.PI) / 180 + angleOffset;
     const endX = rx + len * Math.cos(rad);
     const endZ = rz + len * Math.sin(rad);
     const typ = polType.value;

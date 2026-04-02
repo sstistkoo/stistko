@@ -162,7 +162,9 @@ drawCanvas.addEventListener("mousemove", (e) => {
     const ddx = wx - ref.x,
       ddy = wy - ref.y;
     const dist = Math.hypot(ddx, ddy);
-    const ang = (Math.atan2(ddy, ddx) * 180) / Math.PI;
+    const rawAng = (Math.atan2(ddy, ddx) * 180) / Math.PI;
+    const ang = (state.nullPointActive && state.nullPointAngle !== 0)
+      ? rawAng - state.nullPointAngle : rawAng;
     extra = `   |   d=${dist.toFixed(2)}  ∠=${ang.toFixed(1)}°`;
   }
 

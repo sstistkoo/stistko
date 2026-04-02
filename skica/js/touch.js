@@ -420,8 +420,10 @@ function updatePrecisionCrosshair(touch) {
     const ddx = wx - ref.x,
       ddy = wy - ref.y;
     const dist = Math.hypot(ddx, ddy);
-    const ang = (Math.atan2(ddy, ddx) * 180) / Math.PI;
-    extra = `  d=${dist.toFixed(1)} ∠=${ang.toFixed(1)}°`;
+    const rawAng = (Math.atan2(ddy, ddx) * 180) / Math.PI;
+    const ang = (state.nullPointActive && state.nullPointAngle !== 0)
+      ? rawAng - state.nullPointAngle : rawAng;
+    extra = `  d=${dist.toFixed(1)} \u2220=${ang.toFixed(1)}\u00b0`;
   }
   updateMobileCoords(wx, wy, extra);
 
@@ -699,7 +701,9 @@ drawCanvas.addEventListener(
         const ddx = wx - ref.x,
           ddy = wy - ref.y;
         const dist = Math.hypot(ddx, ddy);
-        const ang = (Math.atan2(ddy, ddx) * 180) / Math.PI;
+        const rawAng = (Math.atan2(ddy, ddx) * 180) / Math.PI;
+        const ang = (state.nullPointActive && state.nullPointAngle !== 0)
+          ? rawAng - state.nullPointAngle : rawAng;
         extra = `  d=${dist.toFixed(1)} ∠${ang.toFixed(1)}°`;
       }
       updateMobileCoords(wx, wy, extra);

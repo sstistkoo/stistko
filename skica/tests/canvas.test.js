@@ -59,7 +59,7 @@ vi.mock('../js/render.js', () => ({
 }));
 
 import { state } from '../js/state.js';
-import { worldToScreen, screenToWorld, snapPt, autoCenterView } from '../js/canvas.js';
+import { worldToScreen, screenToWorld, snapPt, autoCenterView, applyAngleSnap } from '../js/canvas.js';
 
 // ════════════════════════════════════════
 // ── worldToScreen ──
@@ -392,5 +392,113 @@ describe('autoCenterView', () => {
     expect(sx1).toBeLessThan(800);
     expect(sx2).toBeGreaterThan(0);
     expect(sx2).toBeLessThan(800);
+  });
+});
+
+// ════════════════════════════════════════
+// ── Rotovaný nulový bod ──
+// ════════════════════════════════════════
+
+describe('applyAngleSnap s rotací nulového bodu', () => {
+  beforeEach(() => {
+    state.angleSnap = true;
+    state.angleSnapStep = 15;
+    state.angleSnapTolerance = 2;
+    state.nullPointActive = false;
+    state.nullPointAngle = 0;
+  });
+
+  it('bez rotace – snap na 0° (vodorovná)', () => {
+    const [x, y] = applyAngleSnap(10, 0.1, { x: 0, y: 0 });
+    expect(y).toBeCloseTo(0, 5);
+    expect(x).toBeCloseTo(10, 0);
+  });
+
+  it('s rotací 45° – snap na 45° absolutní (= 0° lokální)', () => {
+    state.nullPointActive = true;
+    state.nullPointAngle = 45;
+    // Bod přibližně 45° → snap na 45° (=0° lokální)
+    const d = 10;
+    const a = 45.5 * Math.PI / 180;
+    const [x, y] = applyAngleSnap(d * Math.cos(a), d * Math.sin(a), { x: 0, y: 0 });
+    const snappedAngle = Math.atan2(y, x) * 180 / Math.PI;
+    expect(snappedAngle).toBeCloseTo(45, 0);
+  });
+
+  it('s rotací 30° – snap na 30° absolutní', () => {
+    state.nullPointActive = true;
+    state.nullPointAngle = 30;
+    const d = 10;
+    const a = 30.8 * Math.PI / 180;
+    const [x, y] = applyAngleSnap(d * Math.cos(a), d * Math.sin(a), { x: 0, y: 0 });
+    const snappedAngle = Math.atan2(y, x) * 180 / Math.PI;
+    expect(snappedAngle).toBeCloseTo(30, 0);
+  });
+});
+
+describe('snapPt – snap k nulovému bodu', () => {
+  beforeEach(() => {
+    state.snapToPoints = true;
+    state.snapToGrid = false;
+    state.objects = [];
+    state.intersections = [];
+    state.drawing = false;
+    state.tempPoints = [];
+    state.zoom = 1;
+    state.nullPointActive = false;
+    state.incReference = { x: 0, y: 0 };
+    state.mouse = { x: 0, y: 0, rawX: 0, rawY: 0, sx: 0, sy: 0, snapped: false, snapType: '' };
+    state.layers = [{ id: 0, name: 'L', color: '#fff', visible: true, locked: false }];
+  });
+
+  it('snapne k nulovému bodu když je aktivní', () => {
+    state.nullPointActive = true;
+    state.incReference = { x: 50, y: 30 };
+    const [x, y] = snapPt(50.5, 30.3);
+    expect(x).toBe(50);
+    expect(y).toBe(30);
+  });
+});
+
+describe('snapPt – rotovaný grid snap', () => {
+  beforeEach(() => {
+    state.snapToPoints = false;
+    state.snapToGrid = true;
+    state.gridSize = 10;
+    state.objects = [];
+    state.intersections = [];
+    state.zoom = 1;
+    state.nullPointActive = false;
+    state.nullPointAngle = 0;
+    state.incReference = { x: 0, y: 0 };
+    state.mouse = { x: 0, y: 0, rawX: 0, rawY: 0, sx: 0, sy: 0, snapped: false, snapType: '' };
+    state.layers = [{ id: 0, name: 'L', color: '#fff', visible: true, locked: false }];
+  });
+
+  it('bez rotace – klasický grid snap', () => {
+    const [x, y] = snapPt(13, 17);
+    expect(x).toBe(10);
+    expect(y).toBe(20);
+  });
+
+  it('s nulovým bodem (bez rotace) – grid zarovnaný k nulovému bodu', () => {
+    state.nullPointActive = true;
+    state.incReference = { x: 5, y: 5 };
+    const [x, y] = snapPt(18, 18);
+    expect(x).toBe(15);  // 5 + 10
+    expect(y).toBe(15);  // 5 + 10
+  });
+
+  it('s rotací 90° – grid rotovaný o 90°', () => {
+    state.nullPointActive = true;
+    state.nullPointAngle = 90;
+    state.incReference = { x: 0, y: 0 };
+    // Bod (13, 0) v rotovaném systému (90°) → lokální (0, -13) → snap (0, -10) → zpět (10, 0)
+    // Ověříme, že snapnutý bod leží na mřížce
+    const [x, y] = snapPt(1, 13);
+    // V lokálním systému (rotace -90°): lx = 0*cos(-90) - 13*sin(-90) = 13, ly = 0*sin(-90) + 13*cos(-90) = 0...
+    // Přesněji: lx = 1*0 - 13*(-1) = 13, ly = 1*(-1) + 13*0 = -1 → snap (10, 0) → zpět
+    expect(x).toBeCloseTo(0, 5);
+    expect(y).toBeCloseTo(10, 5);
   });
 });

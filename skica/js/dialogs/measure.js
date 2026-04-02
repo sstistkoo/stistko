@@ -5,7 +5,7 @@
 
 import { COLORS } from '../constants.js';
 import { makeInputOverlay } from '../dialogFactory.js';
-import { state, showToast, toDisplayCoords, axisLabels, displayX, xPrefix, coordHelpers, pushUndo } from '../state.js';
+import { state, showToast, toDisplayCoords, toDisplayAngle, axisLabels, displayX, xPrefix, coordHelpers, pushUndo } from '../state.js';
 import { addObject } from '../objects.js';
 import { renderAll } from '../render.js';
 import { typeLabel, bulgeToArc, safeEvalMath } from '../utils.js';
@@ -148,8 +148,8 @@ function buildObjectInfoDialog(obj, objIdx) {
         break;
       }
       const len = Math.hypot(obj.x2 - obj.x1, obj.y2 - obj.y1);
-      const angle =
-        (Math.atan2(obj.y2 - obj.y1, obj.x2 - obj.x1) * 180) / Math.PI;
+      const angle = toDisplayAngle(
+        (Math.atan2(obj.y2 - obj.y1, obj.x2 - obj.x1) * 180) / Math.PI);
       rows += `<tr><td style="color:${COLORS.label}">Bod 1:</td><td style="color:${COLORS.primary}">${Hp}${H}${fH(obj.x1).toFixed(3)} ${Vp}${V}${fV(obj.y1).toFixed(3)}</td></tr>`;
       rows += `<tr><td style="color:${COLORS.label}">Bod 2:</td><td style="color:${COLORS.primary}">${Hp}${H}${fH(obj.x2).toFixed(3)} ${Vp}${V}${fV(obj.y2).toFixed(3)}</td></tr>`;
       rows += `<tr><td style="color:${COLORS.label}">Délka:</td><td style="color:${COLORS.selected}">${len.toFixed(3)} mm</td></tr>`;
@@ -346,7 +346,7 @@ function _addCopyAndDimListeners(overlay, dimCallback) {
  */
 export function showMeasureTwoPointsResult(p1, p2) {
   const d = Math.hypot(p2.x - p1.x, p2.y - p1.y);
-  const angle = Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI;
+  const angle = toDisplayAngle(Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI);
   const { H, V, Hp, Vp, fH, fV } = coordHelpers();
   const overlay = makeInputOverlay(`
     <div class="input-dialog">
@@ -693,7 +693,7 @@ export function showMeasurePointToLineResult(pt, lineObj, ptIdx, lineIdx) {
   const { H, V, Hp, Vp, fH, fV } = coordHelpers();
   const foot = projectPointToLine(pt.x, pt.y, lineObj.x1, lineObj.y1, lineObj.x2, lineObj.y2);
   const perpDist = Math.hypot(pt.x - foot.x, pt.y - foot.y);
-  const angle = Math.atan2(pt.y - foot.y, pt.x - foot.x) * 180 / Math.PI;
+  const angle = toDisplayAngle(Math.atan2(pt.y - foot.y, pt.x - foot.x) * 180 / Math.PI);
   const canEdit = lineIdx !== undefined;
   let rows = '';
   rows += `<tr><td style="color:${COLORS.label}">Kolmá vzd.:</td><td style="color:${COLORS.selected}">${perpDist.toFixed(3)} mm</td></tr>`;
@@ -827,7 +827,7 @@ export function showMeasureTwoObjectsResult(obj1, obj2) {
   }
   const c1 = _getCenter(obj1), c2 = _getCenter(obj2);
   const d = Math.hypot(c2.x - c1.x, c2.y - c1.y);
-  const angle = Math.atan2(c2.y - c1.y, c2.x - c1.x) * 180 / Math.PI;
+  const angle = toDisplayAngle(Math.atan2(c2.y - c1.y, c2.x - c1.x) * 180 / Math.PI);
   let rows = '';
   rows += `<tr><td style="color:${COLORS.label}">Typ 1:</td><td style="color:${COLORS.text}">${typeLabel(obj1.type)}</td></tr>`;
   rows += `<tr><td style="color:${COLORS.label}">Typ 2:</td><td style="color:${COLORS.text}">${typeLabel(obj2.type)}</td></tr>`;
@@ -884,7 +884,7 @@ export function showMeasureMultiObjectResult(objs, indices) {
         break;
       case 'line': case 'constr': {
         const len = Math.hypot(o.x2 - o.x1, o.y2 - o.y1);
-        const ang = Math.atan2(o.y2 - o.y1, o.x2 - o.x1) * 180 / Math.PI;
+        const ang = toDisplayAngle(Math.atan2(o.y2 - o.y1, o.x2 - o.x1) * 180 / Math.PI);
         rows += `<tr><td style="color:${COLORS.label};padding-left:12px">Délka:</td><td style="color:${COLORS.selected}">${len.toFixed(3)} mm</td></tr>`;
         rows += `<tr><td style="color:${COLORS.label};padding-left:12px">Úhel:</td><td style="color:${COLORS.selected}">${ang.toFixed(2)}°</td></tr>`;
         break;
