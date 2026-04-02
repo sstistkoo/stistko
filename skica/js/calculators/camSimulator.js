@@ -15,7 +15,7 @@ function injectCSS() {
   style.textContent = `
 .cam-sim-window {
   width: 100vw !important; max-width: 100vw !important;
-  height: calc(100vh - 20px) !important; max-height: calc(100vh - 20px) !important;
+  height: calc(100vh - 60px) !important; max-height: calc(100vh - 60px) !important;
   display: flex; flex-direction: column;
   border-radius: 0 !important;
 }
@@ -290,6 +290,7 @@ const MATERIALS = {
 // ── MATH HELPERS ───────────────────────────────────────────────
 const EPSILON = 1e-9;
 const TRIM_TOL = 0.5;
+function arcSteps(r, scale) { return Math.max(8, Math.min(64, Math.ceil(r * scale * 0.5))); }
 
 function dist(p1, p2) {
   if (!p1 || !p2) return 0;
@@ -1379,7 +1380,7 @@ export function openCamSimulator(initialContour) {
           if (i === 0) ctx.moveTo(p1.x, p1.y); else ctx.lineTo(p1.x, p1.y);
           ctx.lineTo(p2.x, p2.y);
         } else if (seg.type === 'arc') {
-          const steps = 15;
+          const steps = arcSteps(seg.r, S.view.scale);
           let sA = seg.startAngle, eA = seg.endAngle;
           if (seg.dir === 'G2' && eA > sA) eA -= 2 * Math.PI;
           if (seg.dir === 'G3' && eA < sA) eA += 2 * Math.PI;
@@ -1408,7 +1409,7 @@ export function openCamSimulator(initialContour) {
         } else if (p2.type === 'G2' || p2.type === 'G3') {
           const arc = getArcParams({ x: p1.xReal, z: p1.zReal }, { x: p2.xReal, z: p2.zReal }, p2.rVal, p2.type);
           if (!arc.error) {
-            const steps = 20;
+            const steps = arcSteps(arc.r, S.view.scale);
             let sA = Math.atan2(p1.xReal - arc.cx, p1.zReal - arc.cz);
             let eA = Math.atan2(p2.xReal - arc.cx, p2.zReal - arc.cz);
             if (p2.type === 'G2' && eA > sA) eA -= 2 * Math.PI;
@@ -1434,7 +1435,7 @@ export function openCamSimulator(initialContour) {
           if (i === 0) ctx.moveTo(p1.x, p1.y); else ctx.lineTo(p1.x, p1.y);
           ctx.lineTo(p2.x, p2.y);
         } else if (seg.type === 'arc') {
-          const steps = 10;
+          const steps = arcSteps(seg.r, S.view.scale);
           let sA = seg.startAngle, eA = seg.endAngle;
           if (seg.dir === 'G2' && eA > sA) eA -= 2 * Math.PI;
           if (seg.dir === 'G3' && eA < sA) eA += 2 * Math.PI;
@@ -1459,7 +1460,7 @@ export function openCamSimulator(initialContour) {
           if (i === 0) ctx.moveTo(p1.x, p1.y); else ctx.lineTo(p1.x, p1.y);
           ctx.lineTo(p2.x, p2.y);
         } else if (seg.type === 'arc') {
-          const steps = 15;
+          const steps = arcSteps(seg.r, S.view.scale);
           let sA = seg.startAngle, eA = seg.endAngle;
           if (seg.dir === 'G2' && eA > sA) eA -= 2 * Math.PI;
           if (seg.dir === 'G3' && eA < sA) eA += 2 * Math.PI;
