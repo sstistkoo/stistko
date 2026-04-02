@@ -115,7 +115,7 @@ vi.mock('../js/tools/index.js', () => ({
   handleCenterMarkClick: vi.fn(), centerMarkFromSelection: vi.fn(() => false),
   handleScaleClick: vi.fn(), scaleFromSelection: vi.fn(() => false),
   handleFilletChamferClick: vi.fn(), filletChamferFromSelection: vi.fn(() => false),
-  handleDimensionClick: vi.fn(), handleSnapPointClick: vi.fn(),
+  handleDimensionClick: vi.fn(), dimensionFromSelection: vi.fn(() => false), handleSnapPointClick: vi.fn(),
   handleMoveClick: vi.fn(), handleLineClick: vi.fn(),
   handleMeasureClick: vi.fn(), handleCircleClick: vi.fn(),
   handleArcClick: vi.fn(), handleRectClick: vi.fn(),
