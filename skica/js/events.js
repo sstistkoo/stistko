@@ -11,6 +11,7 @@ import { setTool, resetHint, setHint, updateProperties, updateObjectList, update
 import { findObjectAt, selectObjectAt, calculateAllIntersections, mirrorObject, linearArray, circularArray, rotateObject, findSegmentAt, findConstraintAt } from './geometry.js';
 import { showNumericalInputDialog, showPolarDrawingDialog, showCircleRadiusDialog, showBulgeDialog, showMirrorDialog, showLinearArrayDialog, showCircularArrayDialog, showRotateDialog } from './dialogs.js';
 import { saveProject, showExportImageDialog, showProjectsDialog, showSaveAsDialog } from './storage.js';
+import { autoDetectFeatures } from './dialogs/autoDetect.js';
 import { bulgeToArc, deepClone } from './utils.js';
 import { bridge } from './bridge.js';
 import { updateAssociativeDimensions } from './dialogs/dimension.js';
@@ -112,6 +113,7 @@ bridge.copyPlaceFromSelection = () => {
 };
 
 bridge.finishProfileTrace = finishProfileTrace;
+bridge.autoDetectFeatures = autoDetectFeatures;
 
 let isPanning = false;
 let panStartX, panStartY, panStartPX, panStartPY;

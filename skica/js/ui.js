@@ -1956,6 +1956,18 @@ document.getElementById("btnDeleteDims").addEventListener("click", () => {
   renderAll();
 });
 
+// ── Auto-detekce R, zkosení, zápichů ──
+document.getElementById("btnAutoDetect")?.addEventListener("click", () => {
+  // Zavřít toolbarové panely jako ostatní tool-btn
+  const toolbarMid = document.getElementById("toolbarMid");
+  const toolbarMore = document.getElementById("toolbarMore");
+  const btnMid = document.getElementById("btnToolbarMid");
+  const btnMore = document.getElementById("btnToolbarMore");
+  if (toolbarMid) { toolbarMid.classList.remove("open"); if (btnMid) btnMid.textContent = "▾"; }
+  if (toolbarMore) { toolbarMore.classList.remove("open"); if (btnMore) btnMore.textContent = "▾"; }
+  if (bridge.autoDetectFeatures) bridge.autoDetectFeatures();
+});
+
 // ── Coord Mode tlačítko (ABS/INC) ──
 /** Aktualizuje zobrazení módu souřadnic (ABS/INC). */
 export function updateCoordModeBtn() {

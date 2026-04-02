@@ -22,6 +22,7 @@ export { applyMobileInputMode, wireExprInputs, showMobileEditDialog, showEditObj
 export { showOffsetDialog, showOffsetAngleDialog, showMirrorDialog, showLinearArrayDialog, showCircularArrayDialog, showRotateDialog, showFilletDialog, showChamferDialog, showFilletChamferDialog, showScaleDialog, showEndpointChoiceDialog } from './dialogs/objectDialogs.js';
 export { showTangentChoiceDialog, showTangentPositionDialog } from './dialogs/tangentDialogs.js';
 export { showBooleanDialog } from './dialogs/booleanDialog.js';
+export { autoDetectFeatures } from './dialogs/autoDetect.js';
 
 // ── Focus trap pro dialogy ──
 // Zachytí Tab v otevřeném overlay dialogu, aby focus neutekl za dialog
