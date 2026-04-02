@@ -1708,6 +1708,8 @@ document.querySelectorAll("[data-tool]").forEach((btn) => {
     document.querySelectorAll("[data-tool]").forEach(b => b.classList.remove("active"));
     // Měření: pokud je výběr → okamžitě změřit
     if (btn.dataset.tool === 'measure' && bridge.measureSelection && bridge.measureSelection()) return;
+    // Kóta: pokud je výběr → okamžitě přidat kóty
+    if (btn.dataset.tool === 'dimension' && bridge.dimensionFromSelection && bridge.dimensionFromSelection()) return;
     // Tečna: pokud je výběr → okamžitě provést
     if (btn.dataset.tool === 'tangent' && bridge.tangentFromSelection && bridge.tangentFromSelection()) return;
     // Offset: pokud je výběr → okamžitě provést

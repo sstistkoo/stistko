@@ -11,6 +11,8 @@ import { findObjectAt, calculateAllIntersections } from '../geometry.js';
 import { addDimensionForObject, addAngleDimensionForLines } from '../dialogs.js';
 
 export function handleDimensionClick(wx, wy) {
+  // Pokud je výběr → okamžitě přidat kóty
+  if (!state.drawing && !state._dimFirstLine && dimensionFromSelection()) return;
   // Režim: čekáme na druhou úsečku pro úhlovou kótu
   if (state._dimFirstLine) {
     const idx = findObjectAt(wx, wy);
@@ -87,4 +89,58 @@ export function handleDimensionClick(wx, wy) {
     renderAll();
     resetHint();
   }
+}
+
+/**
+ * Přidá kóty k aktuálně vybraným objektům / snap bodům.
+ * @returns {boolean} true pokud byla akce provedena
+ */
+export function dimensionFromSelection() {
+  const pts = state.selectedPoint ? state.selectedPoint.slice() : [];
+  const objIndices = state.multiSelected.size > 0
+    ? [...state.multiSelected]
+    : (state.selected !== null ? [state.selected] : []);
+  const objs = objIndices.map(i => state.objects[i]).filter(Boolean);
+
+  if (pts.length === 0 && objs.length === 0) return false;
+
+  pushUndo();
+  let count = 0;
+
+  // Snap body → kóty souřadnic
+  for (const pt of pts) {
+    addDimensionForObject({ type: 'point', x: pt.x, y: pt.y });
+    count++;
+  }
+
+  // Úhlové kóty mezi páry úseček
+  const lines = objs.filter(o => (o.type === 'line' || o.type === 'constr') && !o.isDimension);
+  if (lines.length >= 2) {
+    for (let i = 0; i < lines.length; i++) {
+      for (let j = i + 1; j < lines.length; j++) {
+        addAngleDimensionForLines(lines[i], lines[j]);
+        count++;
+      }
+    }
+  }
+
+  // Kóty pro jednotlivé objekty (ne-kóty)
+  for (const o of objs) {
+    if (o.isDimension || o.isCoordLabel) continue;
+    addDimensionForObject(o);
+    count++;
+  }
+
+  if (count > 0) {
+    calculateAllIntersections();
+    renderAll();
+    showToast(`Přidáno ${count} kót ✓`);
+  }
+
+  // Vyčistit výběr
+  state.multiSelected.clear();
+  state.selected = null;
+  state.selectedPoint = null;
+  renderAll();
+  return true;
 }

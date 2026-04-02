@@ -151,6 +151,7 @@ vi.mock('../js/tools/index.js', () => ({
   handleFilletChamferClick: vi.fn(),
   filletChamferFromSelection: vi.fn(() => false),
   handleDimensionClick: vi.fn(),
+  dimensionFromSelection: vi.fn(() => false),
   handleSnapPointClick: vi.fn(),
   handleMoveClick: vi.fn(),
   handleLineClick: vi.fn(),
