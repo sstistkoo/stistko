@@ -21,6 +21,7 @@
   --ctp-green:    #a6e3a1;
   --ctp-yellow:   #f9e2af;
   --ctp-red:      #f38ba8;
+  --ctp-peach:    #fab387;
   --ctp-pink:     #f5c2e7;
   --ctp-maroon:   #eba0ac;
 }
@@ -43,6 +44,7 @@ body.light-theme {
   --ctp-green:    #40a02b;
   --ctp-yellow:   #df8e1d;
   --ctp-red:      #d20f39;
+  --ctp-peach:    #fe640b;
   --ctp-pink:     #ea76cb;
   --ctp-maroon:   #e64553;
 }
@@ -156,6 +158,15 @@ body {
 }
 .tool-btn-danger:hover {
   background: #d94060;
+}
+
+.tool-btn-warning {
+  background: var(--ctp-peach);
+  color: var(--ctp-base);
+  border-color: var(--ctp-peach);
+}
+.tool-btn-warning:hover {
+  filter: brightness(0.85);
 }
 
 .tool-btn svg {
@@ -1861,8 +1872,10 @@ body {
   .toolbar-more-toggle {
     width: auto;
     text-align: center;
-    padding: 5px 10px;
+    padding: 5px 6px;
     font-size: 12px;
+    flex: 0 0 auto;
+    max-width: 30px;
   }
 
   .toolbar-mid {
@@ -1884,6 +1897,8 @@ body {
     font-size: 12px;
     cursor: pointer;
     padding: 5px 10px;
+    flex: 1 1 0;
+    min-width: 60px;
   }
   .toolbar-mid-toggle:hover {
     background: var(--ctp-surface2);
