@@ -2,27 +2,34 @@
 // ║  SKICA – Nástroj: Textová anotace                         ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-import { state, showToast } from '../state.js';
+import { showToast } from '../state.js';
 import { addObject } from '../objects.js';
 import { COLORS } from '../constants.js';
+import { showTextDialog } from '../dialogs/textDialog.js';
 
 /**
  * Kliknutí při aktivním nástroji "text".
- * Zobrazí prompt pro zadání textu a umístí anotaci na pozici kliknutí.
+ * Zobrazí dialog pro zadání textu a umístí anotaci na pozici kliknutí.
  */
 export function handleTextClick(wx, wy) {
-  const text = prompt('Zadejte text anotace:');
-  if (!text || text.trim() === '') return;
-
-  addObject({
-    type: 'text',
-    x: wx,
-    y: wy,
-    text: text.trim(),
-    fontSize: 14,
-    rotation: 0,
-    name: `Text "${text.trim().substring(0, 20)}"`,
-    color: COLORS.textSecondary,
+  showTextDialog({}, (result) => {
+    addObject({
+      type: 'text',
+      x: wx,
+      y: wy,
+      text: result.text,
+      fontSize: result.fontSize,
+      fontFamily: result.fontFamily,
+      rotation: result.rotation,
+      textAlign: result.textAlign,
+      bold: result.bold,
+      italic: result.italic,
+      letterSpacing: result.letterSpacing,
+      pathMode: result.pathMode,
+      pathObjectId: result.pathObjectId,
+      name: `Text "${result.text.substring(0, 20)}"`,
+      color: COLORS.textSecondary,
+    });
+    showToast('Text přidán');
   });
-  showToast('Text přidán');
 }

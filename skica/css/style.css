@@ -4750,3 +4750,52 @@ select.cne-hdr-inp { padding: 3px 4px; text-align: left; }
   .cne-val-card { min-width: auto; max-width: calc(100vw - 32px); width: 100%; }
   .cne-menu-card { min-width: auto; max-width: calc(100vw - 32px); width: 100%; }
 }
+
+/* ── Text dialog ── */
+.text-dialog textarea {
+  width: 100%;
+  background: var(--ctp-mantle);
+  border: 1px solid var(--ctp-surface0);
+  color: var(--ctp-text);
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+}
+.text-dialog textarea:focus {
+  border-color: var(--ctp-blue);
+}
+.text-align-btns {
+  display: flex;
+  gap: 2px;
+}
+.text-align-btn {
+  flex: 1;
+  padding: 6px;
+  border: 1px solid var(--ctp-surface1);
+  border-radius: 4px;
+  cursor: pointer;
+  background: var(--ctp-surface0);
+  color: var(--ctp-text);
+  font-size: 16px;
+  transition: background 0.15s;
+}
+.text-align-btn.active {
+  background: var(--ctp-blue);
+  color: var(--ctp-base);
+  border-color: var(--ctp-blue);
+}
+.text-align-btn:hover:not(.active) {
+  background: var(--ctp-surface1);
+}
+.text-preview {
+  background: var(--ctp-mantle);
+  border: 1px solid var(--ctp-surface0);
+  border-radius: 6px;
+  padding: 10px 12px;
+  min-height: 24px;
+  color: var(--ctp-text);
+  overflow: hidden;
+  word-wrap: break-word;
+}
