@@ -737,6 +737,50 @@ function renderObjects() {
       ctx.fillStyle = COLORS.selected;
       ctx.fillText('∠?', (fsx1 + fsx2) / 2 + 8, (fsy1 + fsy2) / 2 - 8);
     }
+    // Preview: Řetězcové kótování – zobrazit čárkovanou kótu od posledního bodu k myši
+    if (state.tool === "chainDimension" && tp.length >= 1) {
+      const last = tp[tp.length - 1];
+      const [sx1, sy1] = worldToScreen(last.x, last.y);
+      const [sx2, sy2] = worldToScreen(mx, my);
+      const d = Math.hypot(mx - last.x, my - last.y);
+      // Odsazená kóta (preview)
+      const angle = Math.atan2(sy2 - sy1, sx2 - sx1);
+      const dimOff = 20 * state.zoom;
+      const nx = -Math.sin(angle) * dimOff, ny = Math.cos(angle) * dimOff;
+      ctx.strokeStyle = COLORS.textSecondary;
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([6, 4]);
+      // Odsazená kótovací čára
+      ctx.beginPath();
+      ctx.moveTo(sx1 + nx, sy1 + ny);
+      ctx.lineTo(sx2 + nx, sy2 + ny);
+      ctx.stroke();
+      // Odkazové čáry
+      ctx.lineWidth = 0.7;
+      ctx.beginPath();
+      ctx.moveTo(sx1, sy1);
+      ctx.lineTo(sx1 + nx, sy1 + ny);
+      ctx.moveTo(sx2, sy2);
+      ctx.lineTo(sx2 + nx, sy2 + ny);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      // Šipky
+      drawDimArrow(sx1 + nx, sy1 + ny, sx2 + nx, sy2 + ny);
+      drawDimArrow(sx2 + nx, sy2 + ny, sx1 + nx, sy1 + ny);
+      // Text
+      ctx.font = `${labelSize}px Consolas`;
+      ctx.fillStyle = COLORS.textSecondary;
+      const tmx = (sx1 + sx2) / 2 + nx, tmy = (sy1 + sy2) / 2 + ny;
+      ctx.fillText(`${d.toFixed(state.displayDecimals)}mm`, tmx, tmy - 4);
+      // Zelený bod na předchozích bodech řetězce
+      ctx.fillStyle = COLORS.dimension || COLORS.textSecondary;
+      for (const pt of tp) {
+        const [px, py] = worldToScreen(pt.x, pt.y);
+        ctx.beginPath();
+        ctx.arc(px, py, 3, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
     // Preview: Trasování profilu
     if (state.tool === "profileTrace" && tp.length >= 1) {
       const traceBulges = state._profileTraceBulges || [];
@@ -1858,7 +1902,7 @@ function renderAngleSnapGuide() {
   } else if (state.tool === 'move' && state.dragging && state.dragStartWorld) {
     ref = state.dragStartWorld;
   } else if (state.drawing && state.tempPoints.length > 0
-      && ['line', 'constr', 'polyline', 'measure', 'dimension'].includes(state.tool)) {
+      && ['line', 'constr', 'polyline', 'measure', 'dimension', 'chainDimension'].includes(state.tool)) {
     ref = state.tempPoints[state.tempPoints.length - 1];
   } else {
     return;

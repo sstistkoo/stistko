@@ -211,6 +211,26 @@
         </button>
         <button
           class="tool-btn"
+          data-tool="chainDimension"
+          title="Řetězcová kóta – klik na body v řadě, Enter = konec"
+        >
+          <svg viewBox="0 0 24 24">
+            <line x1="2" y1="18" x2="2" y2="10" stroke="currentColor" stroke-width="1" />
+            <line x1="10" y1="18" x2="10" y2="10" stroke="currentColor" stroke-width="1" />
+            <line x1="18" y1="18" x2="18" y2="10" stroke="currentColor" stroke-width="1" />
+            <line x1="2" y1="13" x2="10" y2="13" stroke="currentColor" stroke-width="1.5" />
+            <line x1="10" y1="13" x2="18" y2="13" stroke="currentColor" stroke-width="1.5" />
+            <path d="M2 13l3-2v4z" fill="currentColor" />
+            <path d="M10 13l-3-2v4z" fill="currentColor" />
+            <path d="M10 13l3-2v4z" fill="currentColor" />
+            <path d="M18 13l-3-2v4z" fill="currentColor" />
+            <text x="6" y="9" text-anchor="middle" font-size="6" fill="currentColor">A</text>
+            <text x="14" y="9" text-anchor="middle" font-size="6" fill="currentColor">B</text>
+          </svg>
+          Řetěz. kóta
+        </button>
+        <button
+          class="tool-btn"
           data-tool="anchor"
           title="Kotva – zakotvit/uvolnit snap body"
         >
@@ -2805,7 +2825,26 @@
               </details>
               <details class="help-tool-item">
                 <summary>
-                  <span class="tool-icon">📏</span> Měření <kbd>M</kbd>
+                  <span class="tool-icon">�📐</span> Řetězcová kóta
+                </summary>
+                <div class="tool-detail">
+                  <p>
+                    Řetězcové (chain) kótování – kóty se řadí end-to-end.
+                    Ideální pro CNC práci, kde potřebujete sérii na sebe
+                    navazujících rozměrů.
+                  </p>
+                  <ul>
+                    <li>Klikněte na počáteční bod řetězce</li>
+                    <li>Klikejte na další body – každý přidá kótu od předchozího bodu</li>
+                    <li><kbd>Enter</kbd> nebo <kbd>Escape</kbd> ukončí řetězec</li>
+                    <li>Podporuje snap body a úhlový snap</li>
+                    <li>Celý řetězec se vrátí jedním Undo</li>
+                  </ul>
+                </div>
+              </details>
+              <details class="help-tool-item">
+                <summary>
+                  <span class="tool-icon">�📏</span> Měření <kbd>M</kbd>
                 </summary>
                 <div class="tool-detail">
                   <p>

@@ -356,7 +356,7 @@ function showPrecisionCrosshair(touch) {
   let [wx, wy] = screenToWorld(chSx, chSy);
   if (state.snapToPoints) [wx, wy] = snapPt(wx, wy);
   if (state.angleSnap && state.drawing && state.tempPoints.length > 0
-      && ['line', 'constr', 'polyline', 'measure', 'dimension'].includes(state.tool)
+      && ['line', 'constr', 'polyline', 'measure', 'dimension', 'chainDimension'].includes(state.tool)
       && state.mouse.snapType !== 'point') {
     [wx, wy] = applyAngleSnap(wx, wy, state.tempPoints[state.tempPoints.length - 1]);
   }
@@ -391,7 +391,7 @@ function updatePrecisionCrosshair(touch) {
   let [wx, wy] = screenToWorld(chSx, chSy);
   if (state.snapToPoints) [wx, wy] = snapPt(wx, wy);
   if (state.angleSnap && state.drawing && state.tempPoints.length > 0
-      && ['line', 'constr', 'polyline', 'measure', 'dimension'].includes(state.tool)
+      && ['line', 'constr', 'polyline', 'measure', 'dimension', 'chainDimension'].includes(state.tool)
       && state.mouse.snapType !== 'point') {
     [wx, wy] = applyAngleSnap(wx, wy, state.tempPoints[state.tempPoints.length - 1]);
   }

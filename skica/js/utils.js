@@ -481,6 +481,7 @@ export function toolLabel(t) {
       horizontal: "Vodorovnost",
       parallel: "Rovnoběžka",
       dimension: "Kóta",
+      chainDimension: "Řetězcová kóta",
       snapPoint: "Přichytit bod",
       text: "Text",
       gear: "Ozubené kolo",

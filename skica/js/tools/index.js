@@ -12,6 +12,7 @@ export { handlePerpClick, perpFromSelection } from './perpClick.js';
 export { handleHorizontalClick, horizontalFromSelection } from './horizontalClick.js';
 export { handleParallelClick, parallelFromSelection } from './parallelClick.js';
 export { handleDimensionClick } from './dimensionClick.js';
+export { handleChainDimensionClick, finishChainDimension, resetChainDimensionState } from './chainDimensionClick.js';
 export { handleSnapPointClick } from './snapPointClick.js';
 export { handleMoveClick } from './moveClick.js';
 export { handleLineClick } from './lineClick.js';
