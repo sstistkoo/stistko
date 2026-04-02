@@ -214,6 +214,10 @@ drawCanvas.addEventListener("mousemove", (e) => {
         const obj = state.objects[state.dragObjIdx];
         if (state.dragObjSnapshot) {
           const snapShot = JSON.parse(state.dragObjSnapshot);
+          // Smazat vlastnosti, které nejsou ve snapshotu (např. pathStart přidaný moveObject)
+          for (const k of Object.keys(obj)) {
+            if (!(k in snapShot)) delete obj[k];
+          }
           Object.assign(obj, snapShot);
         }
         moveObject(obj, dx, dy);

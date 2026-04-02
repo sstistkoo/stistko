@@ -526,9 +526,42 @@ export function distToObject(obj, wx, wy) {
       }
       return minD;
     }
-    case "text":
-      // Vzdálenost k kotevnímu bodu textu
-      return Math.hypot(wx - obj.x, wy - obj.y);
+    case "text": {
+      // Pokud text leží na cestě (pathMode), testuj vzdálenost k cestě
+      // s mírnou prioritou (× 0.4) aby text vyhrál nad podkladovou linií/obloukem
+      if (obj.pathMode && obj.pathMode !== 'none' && obj.pathObjectId != null) {
+        const pathObj = state.objects[obj.pathObjectId];
+        if (pathObj) {
+          if (obj.pathMode === 'line' && (pathObj.type === 'line' || pathObj.type === 'constr')) {
+            return distPointToSegment(wx, wy, pathObj.x1, pathObj.y1, pathObj.x2, pathObj.y2) * 0.4;
+          }
+          if (obj.pathMode === 'arc' && pathObj.type === 'arc') {
+            const dx2 = wx - pathObj.cx, dy2 = wy - pathObj.cy;
+            const distToCenter = Math.hypot(dx2, dy2);
+            return Math.abs(distToCenter - pathObj.r) * 0.4;
+          }
+          if (obj.pathMode === 'circle' && pathObj.type === 'circle') {
+            const dx2 = wx - pathObj.cx, dy2 = wy - pathObj.cy;
+            const distToCenter = Math.hypot(dx2, dy2);
+            return Math.abs(distToCenter - pathObj.r) * 0.4;
+          }
+        }
+      }
+      // Vzdálenost k bounding boxu textu
+      const fSize = obj.fontSize || 14;
+      const spacingFactor = 1 + (obj.letterSpacing || 0) / fSize * 0.5;
+      const boldFactor = obj.bold ? 1.1 : 1;
+      const tw = (obj.text || '').length * fSize * 0.6 * spacingFactor * boldFactor;
+      const th = fSize * 1.2;
+      const pad = fSize * 0.3;
+      // World Y-up: textBaseline='bottom' → text jde nahoru od obj.y
+      const bx1 = obj.x - pad, by1 = obj.y - pad, bx2 = obj.x + tw + pad, by2 = obj.y + th + pad;
+      if (wx >= bx1 && wx <= bx2 && wy >= by1 && wy <= by2) return 0;
+      // Vzdálenost k nejbližšímu bodu boxu
+      const cx = Math.max(bx1, Math.min(wx, bx2));
+      const cy = Math.max(by1, Math.min(wy, by2));
+      return Math.hypot(wx - cx, wy - cy);
+    }
     default:
       return Infinity;
   }

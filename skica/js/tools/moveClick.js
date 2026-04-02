@@ -56,7 +56,12 @@ export function handleMoveClick(wx, wy) {
       setHint("Klepněte pro umístění");
       return;
     }
-    const idx = findObjectAt(wx, wy);
+    // Zjistit objekt pod kurzorem nebo použít existující výběr
+    let idx = findObjectAt(wx, wy);
+    if (idx === null && state.selected !== null) {
+      // Objekt pod kurzorem nenalezen, ale máme výběr → použij ho
+      idx = state.selected;
+    }
     if (idx !== null) {
       if (hasAnchoredPoint(state.objects[idx])) {
         showToast("Objekt je zakotven – nelze přesunout");

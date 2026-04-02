@@ -23,7 +23,14 @@ export function handleMeasureClick(wx, wy) {
   if (!state.drawing) {
     const snapThreshold = SNAP_POINT_THRESHOLD / state.zoom;
 
-    // 1) Průsečíky mají nejvyšší prioritu – měření od průsečíku
+    // 1) Textové objekty mají nejvyšší prioritu – otevři info dialog
+    const bodyIdx = findObjectAt(wx, wy);
+    if (bodyIdx !== null && state.objects[bodyIdx]?.type === 'text') {
+      showMeasureObjectInfo(state.objects[bodyIdx], wx, wy, bodyIdx);
+      return;
+    }
+
+    // 2) Průsečíky – měření od průsečíku
     let isOnIntersection = false;
     for (const pt of state.intersections) {
       if (Math.hypot(pt.x - wx, pt.y - wy) < snapThreshold) {
@@ -32,13 +39,10 @@ export function handleMeasureClick(wx, wy) {
       }
     }
 
-    // 2) Klik na tělo objektu → info dialog (pokud to není průsečík)
-    if (!isOnIntersection) {
-      const bodyIdx = findObjectAt(wx, wy);
-      if (bodyIdx !== null) {
-        showMeasureObjectInfo(state.objects[bodyIdx], wx, wy, bodyIdx);
-        return;
-      }
+    // 3) Klik na tělo objektu → info dialog (pokud to není průsečík)
+    if (!isOnIntersection && bodyIdx !== null) {
+      showMeasureObjectInfo(state.objects[bodyIdx], wx, wy, bodyIdx);
+      return;
     }
     // Přidá dočasný coord label na 1. bod měření
     addObject({

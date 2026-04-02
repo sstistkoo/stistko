@@ -13,6 +13,7 @@ import { typeLabel, safeEvalMath } from '../utils.js';
 import { updateObjectList, updateProperties } from '../ui.js';
 import { calculateAllIntersections } from '../geometry.js';
 import { updateAssociativeDimensions } from './dimension.js';
+import { showTextDialog } from './textDialog.js';
 
 // ── Helper: auto-select + vyhodnocení mat. výrazů při blur ──
 /** @param {HTMLElement} container */
@@ -88,6 +89,43 @@ export function showMobileEditDialog() {
 export function showEditObjectDialog(idx) {
   const obj = state.objects[idx];
   if (!obj) { showToast("Objekt nenalezen"); return; }
+
+  // Textový objekt → přesměrovat na plný textový dialog
+  if (obj.type === 'text') {
+    showTextDialog({
+      text: obj.text || '',
+      fontSize: obj.fontSize || 14,
+      fontFamily: obj.fontFamily || 'Consolas, monospace',
+      rotation: obj.rotation || 0,
+      textAlign: obj.textAlign || 'left',
+      bold: obj.bold || false,
+      italic: obj.italic || false,
+      letterSpacing: obj.letterSpacing || 0,
+      pathMode: obj.pathMode || 'none',
+      pathObjectId: obj.pathObjectId,
+      pathOffset: obj.pathOffset != null ? obj.pathOffset : 2,
+      editMode: true,
+    }, (result) => {
+      pushUndo();
+      obj.text = result.text;
+      obj.fontSize = result.fontSize;
+      obj.fontFamily = result.fontFamily;
+      obj.rotation = result.rotation;
+      obj.textAlign = result.textAlign;
+      obj.bold = result.bold;
+      obj.italic = result.italic;
+      obj.letterSpacing = result.letterSpacing;
+      obj.pathMode = result.pathMode;
+      obj.pathObjectId = result.pathObjectId;
+      obj.pathOffset = result.pathOffset;
+      obj.name = `Text "${result.text.substring(0, 20)}"`;
+      updateObjectList();
+      updateProperties();
+      renderAll();
+      showToast("Text upraven ✓");
+    });
+    return;
+  }
 
   function buildFields() {
     const [H, V] = axisLabels();

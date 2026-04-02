@@ -1536,6 +1536,7 @@ export function updateProperties() {
               letterSpacing: obj.letterSpacing || 0,
               pathMode: obj.pathMode || 'none',
               pathObjectId: obj.pathObjectId != null ? obj.pathObjectId : null,
+              pathOffset: obj.pathOffset || 2,
               editMode: true,
             }, (result) => {
               pushUndo();
@@ -1549,6 +1550,7 @@ export function updateProperties() {
               obj.letterSpacing = result.letterSpacing;
               obj.pathMode = result.pathMode;
               obj.pathObjectId = result.pathObjectId;
+              obj.pathOffset = result.pathOffset;
               obj.name = `Text "${result.text.substring(0, 20)}"`;
               renderAll();
               updateProperties();

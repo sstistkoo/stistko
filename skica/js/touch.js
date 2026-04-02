@@ -515,6 +515,18 @@ drawCanvas.addEventListener(
       state.mouse.y = wy;
       updateMobileCoords(wx, wy);
 
+      // Move tool: okamžitě uchopí objekt při touchstart,
+      // aby touchmove mohl přetahovat (ne panovat)
+      if (state.tool === 'move' && !state.dragging) {
+        handleCanvasClick(wx, wy);
+        // Pokud se nastavilo dragging, nepokračovat s long-press/panning
+        if (state.dragging) {
+          touchState.touchMoved = false;
+          renderAll();
+          return;
+        }
+      }
+
       // Zapamatovat start pro detekci tah vs. tap
       touchState.singleTouchStartX = touches[0].clientX;
       touchState.singleTouchStartY = touches[0].clientY;
@@ -722,6 +734,10 @@ drawCanvas.addEventListener(
           const obj = state.objects[state.dragObjIdx];
           if (state.dragObjSnapshot) {
             const snapShot = JSON.parse(state.dragObjSnapshot);
+            // Smazat vlastnosti, které nejsou ve snapshotu (např. pathStart přidaný moveObject)
+            for (const k of Object.keys(obj)) {
+              if (!(k in snapShot)) delete obj[k];
+            }
             Object.assign(obj, snapShot);
           }
           moveObject(obj, dx, dy);
@@ -810,6 +826,19 @@ drawCanvas.addEventListener(
       if (e.touches.length === 0) {
         touchState.wasMultiTouch = false;
       }
+      return;
+    }
+
+    // Move tool: dokončit drag po tažení prstem (place object)
+    if (state.tool === 'move' && state.dragging && touchState.touchMoved) {
+      const tp = getTouchPos(e.changedTouches[0]);
+      let [wx, wy] = screenToWorld(tp.sx, tp.sy);
+      if (state.snapToPoints) [wx, wy] = snapPt(wx, wy);
+      handleCanvasClick(wx, wy);
+      touchState.touchMoved = false;
+      touchState.singlePanning = false;
+      if (e.touches.length === 0) touchState.wasMultiTouch = false;
+      renderAll();
       return;
     }
 
