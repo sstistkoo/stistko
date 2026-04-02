@@ -696,6 +696,26 @@ export function openThreadCalc() {
         '<input type="number" data-id="tIdentTol" step="any" value="0.3" placeholder="\u00B1"></label>' +
     '</div>' +
     '<div class="thr-ident-results" id="thrIdentResults"></div>' +
+    '<div class="cnc-table-label" style="margin-top:10px">\uD83D\uDD04 Reverzn\u00ED lookup z\u00E1vitu</div>' +
+    '<div class="cnc-fields">' +
+      '<label class="cnc-field"><span>Stoup\u00E1n\u00ED P <small>mm</small></span>' +
+        '<input type="number" data-id="tRevP" step="any" placeholder="P v mm"></label>' +
+      '<label class="cnc-field"><span>nebo TPI</span>' +
+        '<input type="number" data-id="tRevTPI" step="any" placeholder="z\u00E1vit\u016F/palec"></label>' +
+    '</div>' +
+    '<div class="cnc-fields">' +
+      '<label class="cnc-field"><span>Vn\u011Bj\u0161\u00ED \u00D8 <small>mm</small></span>' +
+        '<input type="number" data-id="tRevD" step="any" placeholder="vn\u011Bj\u0161\u00ED pr\u016Fm\u011Br"></label>' +
+      '<label class="cnc-field"><span>Vnit\u0159n\u00ED \u00D8 <small>mm</small></span>' +
+        '<input type="number" data-id="tRevD1" step="any" placeholder="d\u00EDra / matice"></label>' +
+      '<label class="cnc-field"><span>St\u0159edn\u00ED \u00D8 <small>mm</small></span>' +
+        '<input type="number" data-id="tRevD2" step="any" placeholder="z\u00E1vitov\u00FD mikrometr"></label>' +
+    '</div>' +
+    '<div class="cnc-fields">' +
+      '<label class="cnc-field"><span>Tolerance <small>mm</small></span>' +
+        '<input type="number" data-id="tRevTol" step="any" value="0.2" placeholder="\u00B1"></label>' +
+    '</div>' +
+    '<div class="thr-ident-results" id="thrRevResults"></div>' +
     '<div class="cnc-fields" style="margin-top:6px">' +
       '<label class="cnc-field"><span>Materi\u00E1l</span>' +
         '<select data-id="tMaterial">' +
@@ -1008,6 +1028,285 @@ export function openThreadCalc() {
   }
   identD.addEventListener("input", identifyThread);
   identTol.addEventListener("input", identifyThread);
+
+  // ── Reverzní lookup závitu ──────────────────────────────
+  var revP    = overlay.querySelector('[data-id="tRevP"]');
+  var revTPI  = overlay.querySelector('[data-id="tRevTPI"]');
+  var revD    = overlay.querySelector('[data-id="tRevD"]');
+  var revD1   = overlay.querySelector('[data-id="tRevD1"]');
+  var revD2   = overlay.querySelector('[data-id="tRevD2"]');
+  var revTol  = overlay.querySelector('[data-id="tRevTol"]');
+  var revRes  = overlay.querySelector('#thrRevResults');
+  var revHits = [];
+
+  // Výpočet d2 a D1 z D a P pro různé typy
+  function calcDiameters(D, P, angle) {
+    if (angle === 55) {
+      return { d2: D - 0.6403 * P, d1: D - 1.2806 * P };
+    } else if (angle === 30 || angle === 29) {
+      return { d2: D - 0.5 * P, d1: D - P };
+    } else {
+      // 60° (metric, UNC, UNF, NPT)
+      return { d2: D - 0.6495 * P, d1: D - 1.0825 * P };
+    }
+  }
+
+  function reverseMatch(entry, angle) {
+    var tol = revTol.value !== '' ? parseFloat(revTol.value) : 0.2;
+    if (isNaN(tol) || tol < 0) tol = 0;
+    var pVal  = revP.value !== '' ? parseFloat(revP.value) : null;
+    var tpiVal = revTPI.value !== '' ? parseFloat(revTPI.value) : null;
+    var dVal  = revD.value !== '' ? parseFloat(revD.value) : null;
+    var d1Val = revD1.value !== '' ? parseFloat(revD1.value) : null;
+    var d2Val = revD2.value !== '' ? parseFloat(revD2.value) : null;
+
+    var entryP = entry.P;
+    var entryD = entry.D;
+    var dims = calcDiameters(entryD, entryP, angle);
+    var score = 0;
+    var checks = 0;
+
+    // Kontrola stoupání (P a TPI jsou synced – počítáme jen jednou)
+    if (pVal !== null && !isNaN(pVal) && pVal > 0) {
+      checks++;
+      if (Math.abs(entryP - pVal) <= tol) score++;
+      else return null;
+    } else if (tpiVal !== null && !isNaN(tpiVal) && tpiVal > 0) {
+      checks++;
+      var entryTPI = 25.4 / entryP;
+      // Přepočítat toleranci z mm na TPI: dTPI/dP = -25.4/P², přibližně
+      var tpiTol = (25.4 / (entryP * entryP)) * tol;
+      if (tpiTol < 0.5) tpiTol = 0.5;
+      if (Math.abs(entryTPI - tpiVal) <= tpiTol) score++;
+      else return null;
+    }
+    // Kontrola vnějšího průměru
+    if (dVal !== null && !isNaN(dVal)) {
+      checks++;
+      if (Math.abs(entryD - dVal) <= tol) score++;
+      else return null;
+    }
+    // Kontrola vnitřního průměru
+    if (d1Val !== null && !isNaN(d1Val)) {
+      checks++;
+      if (Math.abs(dims.d1 - d1Val) <= tol) score++;
+      else return null;
+    }
+    // Kontrola středního průměru
+    if (d2Val !== null && !isNaN(d2Val)) {
+      checks++;
+      if (Math.abs(dims.d2 - d2Val) <= tol) score++;
+      else return null;
+    }
+    if (checks === 0) return null;
+    return score;
+  }
+
+  function reverseLookup() {
+    var pVal  = revP.value !== '' ? parseFloat(revP.value) : null;
+    var tpiVal = revTPI.value !== '' ? parseFloat(revTPI.value) : null;
+    var dVal  = revD.value !== '' ? parseFloat(revD.value) : null;
+    var d1Val = revD1.value !== '' ? parseFloat(revD1.value) : null;
+    var d2Val = revD2.value !== '' ? parseFloat(revD2.value) : null;
+    var hasInput = (pVal !== null && !isNaN(pVal)) || (tpiVal !== null && !isNaN(tpiVal)) ||
+                   (dVal !== null && !isNaN(dVal)) || (d1Val !== null && !isNaN(d1Val)) || (d2Val !== null && !isNaN(d2Val));
+    if (!hasInput) { revRes.innerHTML = ''; revHits = []; return; }
+
+    var hits = [];
+    // M hrubé (60°)
+    for (var i = 0; i < mCoarse.length; i++) {
+      var t = mCoarse[i];
+      var s = reverseMatch({ D: t.D, P: t.P }, 60);
+      if (s !== null) {
+        var dims = calcDiameters(t.D, t.P, 60);
+        hits.push({ label: 'M' + t.D + ' hrub\u00E9', info: 'D=' + t.D.toFixed(3) + ' d\u2082=' + dims.d2.toFixed(3) + ' D\u2081=' + dims.d1.toFixed(3) + ' P=' + t.P,
+          tab: 'mc', D: t.D, P: t.P, type: 'M', score: s });
+      }
+    }
+    // M jemné (60°)
+    for (var i = 0; i < mFine.length; i++) {
+      var t = mFine[i];
+      var s = reverseMatch({ D: t.D, P: t.P }, 60);
+      if (s !== null) {
+        var dims = calcDiameters(t.D, t.P, 60);
+        hits.push({ label: 'M' + t.D + '\u00D7' + t.P + ' jemn\u00E9', info: 'D=' + t.D.toFixed(3) + ' d\u2082=' + dims.d2.toFixed(3) + ' D\u2081=' + dims.d1.toFixed(3) + ' P=' + t.P,
+          tab: 'mf', D: t.D, P: t.P, type: 'M', score: s });
+      }
+    }
+    // G (55°)
+    for (var i = 0; i < gThreads.length; i++) {
+      var g = gThreads[i]; var gP = 25.4 / g.tpi;
+      var s = reverseMatch({ D: g.D, P: gP }, 55);
+      if (s !== null) {
+        var dims = calcDiameters(g.D, gP, 55);
+        hits.push({ label: g.n, info: 'D=' + g.D.toFixed(3) + ' d\u2082=' + dims.d2.toFixed(3) + ' d\u2081=' + dims.d1.toFixed(3) + ' TPI=' + g.tpi,
+          tab: 'g', D: g.D, P: gP, tpi: g.tpi, n: g.n, type: 'G', score: s });
+      }
+    }
+    // Tr (30°)
+    for (var i = 0; i < trThreads.length; i++) {
+      var t = trThreads[i];
+      var s = reverseMatch({ D: t.D, P: t.P }, 30);
+      if (s !== null) {
+        var dims = calcDiameters(t.D, t.P, 30);
+        hits.push({ label: 'Tr' + t.D + '\u00D7' + t.P, info: 'D=' + t.D.toFixed(3) + ' d\u2082=' + dims.d2.toFixed(3) + ' D\u2081=' + dims.d1.toFixed(3) + ' P=' + t.P,
+          tab: 'tr', D: t.D, P: t.P, type: 'Tr', score: s });
+      }
+    }
+    // UNC (60°)
+    for (var i = 0; i < uncThreads.length; i++) {
+      var t = uncThreads[i]; var uP = 25.4 / t.tpi;
+      var s = reverseMatch({ D: t.D, P: uP }, 60);
+      if (s !== null) {
+        var dims = calcDiameters(t.D, uP, 60);
+        hits.push({ label: 'UNC ' + t.n, info: 'D=' + t.D.toFixed(3) + ' d\u2082=' + dims.d2.toFixed(3) + ' D\u2081=' + dims.d1.toFixed(3) + ' TPI=' + t.tpi,
+          tab: 'unc', D: t.D, P: uP, tpi: t.tpi, n: t.n, type: 'UNC', score: s });
+      }
+    }
+    // UNF (60°)
+    for (var i = 0; i < unfThreads.length; i++) {
+      var t = unfThreads[i]; var uP = 25.4 / t.tpi;
+      var s = reverseMatch({ D: t.D, P: uP }, 60);
+      if (s !== null) {
+        var dims = calcDiameters(t.D, uP, 60);
+        hits.push({ label: 'UNF ' + t.n, info: 'D=' + t.D.toFixed(3) + ' d\u2082=' + dims.d2.toFixed(3) + ' D\u2081=' + dims.d1.toFixed(3) + ' TPI=' + t.tpi,
+          tab: 'unf', D: t.D, P: uP, tpi: t.tpi, n: t.n, type: 'UNF', score: s });
+      }
+    }
+    // BSW (55°)
+    for (var i = 0; i < bswThreads.length; i++) {
+      var t = bswThreads[i]; var bP = 25.4 / t.tpi;
+      var s = reverseMatch({ D: t.D, P: bP }, 55);
+      if (s !== null) {
+        var dims = calcDiameters(t.D, bP, 55);
+        hits.push({ label: 'BSW ' + t.n, info: 'D=' + t.D.toFixed(3) + ' d\u2082=' + dims.d2.toFixed(3) + ' d\u2081=' + dims.d1.toFixed(3) + ' TPI=' + t.tpi,
+          tab: 'bsw', D: t.D, P: bP, tpi: t.tpi, n: t.n, type: 'BSW', score: s });
+      }
+    }
+    // BSPT (55°)
+    for (var i = 0; i < bsptThreads.length; i++) {
+      var t = bsptThreads[i]; var bP = 25.4 / t.tpi;
+      var s = reverseMatch({ D: t.D, P: bP }, 55);
+      if (s !== null) {
+        var dims = calcDiameters(t.D, bP, 55);
+        hits.push({ label: 'BSPT ' + t.n, info: 'D=' + t.D.toFixed(3) + ' d\u2082=' + dims.d2.toFixed(3) + ' d\u2081=' + dims.d1.toFixed(3) + ' TPI=' + t.tpi,
+          tab: 'bspt', D: t.D, P: bP, tpi: t.tpi, n: t.n, type: 'BSPT', score: s });
+      }
+    }
+    // NPT (60°)
+    for (var i = 0; i < nptThreads.length; i++) {
+      var t = nptThreads[i]; var nP = 25.4 / t.tpi;
+      var s = reverseMatch({ D: t.D, P: nP }, 60);
+      if (s !== null) {
+        var dims = calcDiameters(t.D, nP, 60);
+        hits.push({ label: 'NPT ' + t.n, info: 'D=' + t.D.toFixed(3) + ' d\u2082=' + dims.d2.toFixed(3) + ' D\u2081=' + dims.d1.toFixed(3) + ' TPI=' + t.tpi,
+          tab: 'npt', D: t.D, P: nP, tpi: t.tpi, n: t.n, type: 'NPT', score: s });
+      }
+    }
+    // Acme (29°)
+    for (var i = 0; i < acmeThreads.length; i++) {
+      var t = acmeThreads[i]; var aP = 25.4 / t.tpi;
+      var s = reverseMatch({ D: t.D, P: aP }, 29);
+      if (s !== null) {
+        var dims = calcDiameters(t.D, aP, 29);
+        hits.push({ label: 'Acme ' + t.n, info: 'D=' + t.D.toFixed(3) + ' d\u2082=' + dims.d2.toFixed(3) + ' D\u2081=' + dims.d1.toFixed(3) + ' TPI=' + t.tpi,
+          tab: 'acme', D: t.D, P: aP, tpi: t.tpi, n: t.n, type: 'Acme', score: s });
+      }
+    }
+
+    // Seřadit: více shod = lepší, pak podle D
+    hits.sort(function(a, b) { return b.score - a.score || a.D - b.D; });
+    revHits = hits;
+    if (hits.length === 0) {
+      revRes.innerHTML = '<div class="thr-ident-empty">\u017D\u00E1dn\u00FD z\u00E1vit nenalezen</div>';
+      return;
+    }
+    var html = '';
+    var maxShow = Math.min(hits.length, 30);
+    for (var i = 0; i < maxShow; i++) {
+      var h = hits[i];
+      var stars = '';
+      for (var s = 0; s < h.score; s++) stars += '\u2605';
+      html += '<div class="thr-ident-item" data-revidx="' + i + '">' +
+        '<strong>' + h.label + '</strong> ' +
+        '<span class="thr-rev-score">' + stars + '</span> ' +
+        '<span class="thr-ident-info">(' + h.info + ')</span></div>';
+    }
+    if (hits.length > maxShow) {
+      html += '<div class="thr-ident-empty">\u2026 a dal\u0161\u00EDch ' + (hits.length - maxShow) + ' v\u00FDsledk\u016F</div>';
+    }
+    revRes.innerHTML = html;
+  }
+
+  revP.addEventListener("input", function() {
+    if (revP.value !== '') {
+      var pv = parseFloat(revP.value);
+      if (!isNaN(pv) && pv > 0) { revTPI.value = (25.4 / pv).toFixed(2); }
+      else { revTPI.value = ''; }
+    } else {
+      revTPI.value = '';
+    }
+    reverseLookup();
+  });
+  revTPI.addEventListener("input", function() {
+    if (revTPI.value !== '') {
+      var tv = parseFloat(revTPI.value);
+      if (!isNaN(tv) && tv > 0) { revP.value = (25.4 / tv).toFixed(4); }
+      else { revP.value = ''; }
+    } else {
+      revP.value = '';
+    }
+    reverseLookup();
+  });
+  revD.addEventListener("input", reverseLookup);
+  revD1.addEventListener("input", reverseLookup);
+  revD2.addEventListener("input", reverseLookup);
+  revTol.addEventListener("input", reverseLookup);
+
+  // Klik na výsledek reverzního lookup → zobraz detail
+  revRes.addEventListener("click", function(e) {
+    var item = e.target.closest('[data-revidx]');
+    if (!item) return;
+    var idx = parseInt(item.dataset.revidx);
+    var h = revHits[idx];
+    if (!h) return;
+    switchType(h.tab);
+    if (h.type === 'M') {
+      var isFine = (h.tab === 'mf');
+      var lbl = 'M' + h.D + (isFine ? '\u00D7' + h.P + ' jemn\u00E9' : ' hrub\u00E9');
+      lastMetricD = h.D; lastMetricP = h.P; lastMetricLabel = lbl;
+      setDetail(detailMetric(h.D, h.P, lbl, selExtClass.value, selIntClass.value));
+    } else if (h.type === 'G') {
+      setDetail(detailG(h.D, h.P, h.tpi, h.n));
+    } else if (h.type === 'Tr') {
+      setDetail(detailTr(h.D, h.P, 'Tr' + h.D + '\u00D7' + h.P));
+    } else if (h.type === 'UNC') {
+      setDetail(detailUN(h.D, h.P, h.tpi, h.n, 'UNC \u2013 ASME B1.1'));
+    } else if (h.type === 'UNF') {
+      setDetail(detailUN(h.D, h.P, h.tpi, h.n, 'UNF \u2013 ASME B1.1'));
+    } else if (h.type === 'BSW') {
+      setDetail(detailBSW(h.D, h.P, h.tpi, h.n));
+    } else if (h.type === 'BSPT') {
+      setDetail(detailBSPT(h.D, h.P, h.tpi, h.n));
+    } else if (h.type === 'NPT') {
+      setDetail(detailNPT(h.D, h.P, h.tpi, h.n));
+    } else if (h.type === 'Acme') {
+      setDetail(detailAcme(h.D, h.P, h.tpi, h.n));
+    }
+    // Zvýrazni odpovídající řádek v tabulce
+    if (lastActiveRow) lastActiveRow.classList.remove("thr-row-active");
+    var rows = tbody.querySelectorAll('tr');
+    for (var r = 0; r < rows.length; r++) {
+      var rd = parseFloat(rows[r].dataset.d);
+      var rp = parseFloat(rows[r].dataset.p);
+      if (Math.abs(rd - h.D) < 0.001 && Math.abs(rp - h.P) < 0.001) {
+        rows[r].classList.add("thr-row-active");
+        lastActiveRow = rows[r];
+        rows[r].scrollIntoView({ block: 'center', behavior: 'smooth' });
+        break;
+      }
+    }
+  });
 
   // Klik na výsledek identifikace → přepni záložku + zobraz detail
   identRes.addEventListener("click", function(e) {

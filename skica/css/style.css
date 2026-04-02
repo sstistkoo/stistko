@@ -2626,6 +2626,11 @@ body {
   font-size: .85rem;
   font-style: italic;
 }
+.thr-rev-score {
+  color: var(--ctp-yellow);
+  font-size: .8rem;
+  letter-spacing: 1px;
+}
 .rough-mode-row {
   display: flex;
   gap: 2px;
