@@ -207,14 +207,6 @@ window.addEventListener('load', () => {
 });
 
 // ── PWA Service Worker ──
-// >>> DEV: SW dočasně vypnut – odregistrovat a smazat cache <<<
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.getRegistrations().then(regs => {
-    regs.forEach(r => r.unregister());
-  });
-  caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
-}
-/*  // Původní produkční kód – obnovit až bude vývoj hotový:
 if ("serviceWorker" in navigator) {
   const isDev = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
   if (isDev) {
@@ -246,7 +238,6 @@ if ("serviceWorker" in navigator) {
     });
   }
 }
-*/
 
 // ── Offline indikátor ──
 const offlineBanner = document.getElementById('offlineBanner');
