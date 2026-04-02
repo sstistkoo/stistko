@@ -502,7 +502,7 @@ export function toolLabel(t) {
       anchor: "Kotva",
       break: "Rozdělit",
       centerMark: "Střed. značka",
-      scale: "Škálovat",
+      scale: "Měřítko",
       chamfer: "Zkosení",
       filletChamfer: "Zaob./Zkos.",
       mirror: "Zrcadlení",

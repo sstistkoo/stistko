@@ -1996,7 +1996,7 @@ export function resetHint() {
     anchor: "Klepněte na snap bod pro zakotvení/uvolnění",
     break: "Klepněte na objekt – rozdělí se v daném místě",
     centerMark: "Klepněte na kružnici/oblouk – přepne středovou značku",
-    scale: "Klepněte na objekt – otevře dialog škálování",
+    scale: "Klepněte na objekt – otevře dialog změny měřítka",
     filletChamfer: "Klepněte na první úsečku – zaoblení nebo zkosení",
     mirror: "Vyberte objekty pro zrcadlení (Shift+M)",
     boolean: "Klikněte na první uzavřenou konturu",
@@ -2568,49 +2568,128 @@ document.getElementById("btnHistory").addEventListener("click", async () => {
   attachHistoryListeners();
 });
 
+// ── Kalkulačka – clipboard schránka ──
+let _calcClipboardValue = null;
+export function getCalcClipboardValue() { return _calcClipboardValue; }
+export function setCalcClipboardValue(v) {
+  _calcClipboardValue = v;
+  const btn = document.getElementById("canvasClipBtn");
+  if (btn) {
+    btn.textContent = v != null ? v : "—";
+    btn.title = v != null ? `Schránka: ${v} (klik = vložit)` : "Schránka kalkulačky (prázdná)";
+  }
+}
+
 // ── Kalkulačka – popup ──
 /** Otevře vestavnou kalkulačku. */
 export function openCalculator() {
   const bodyHTML = `
+        <div class="calc-hist-header">
+          <button class="calc-hist-clear-btn" title="Vymazat historii">🗑</button>
+          <span class="calc-hist-title">Historie</span>
+          <button class="calc-close-inner-btn" title="Zavřít">✕</button>
+        </div>
         <div class="calc-history" id="calcHistory"></div>
         <div class="calc-expr" id="calcExpr">&nbsp;</div>
         <input type="text" id="calcDisplay" placeholder="0">
         <div class="calc-buttons">
-          <button class="calc-btn" data-val="7">7</button>
-          <button class="calc-btn" data-val="8">8</button>
-          <button class="calc-btn" data-val="9">9</button>
-          <button class="calc-btn calc-op" data-val="/">÷</button>
-          <button class="calc-btn" data-val="4">4</button>
-          <button class="calc-btn" data-val="5">5</button>
-          <button class="calc-btn" data-val="6">6</button>
-          <button class="calc-btn calc-op" data-val="*">×</button>
-          <button class="calc-btn" data-val="1">1</button>
-          <button class="calc-btn" data-val="2">2</button>
-          <button class="calc-btn" data-val="3">3</button>
-          <button class="calc-btn calc-op" data-val="-">−</button>
-          <button class="calc-btn" data-val="0">0</button>
-          <button class="calc-btn" data-val=".">.</button>
-          <button class="calc-btn calc-eq" data-val="=">=</button>
-          <button class="calc-btn calc-op" data-val="+">+</button>
-          <button class="calc-btn calc-fn" data-val="sqrt">√</button>
-          <button class="calc-btn calc-fn" data-val="sin">sin</button>
-          <button class="calc-btn calc-fn" data-val="cos">cos</button>
-          <button class="calc-btn calc-fn" data-val="tan">tan</button>
-          <button class="calc-btn calc-fn" data-val="pi">π</button>
-          <button class="calc-btn calc-fn" data-val="pow">x²</button>
-          <button class="calc-btn calc-fn" data-val="ans">ANS</button>
-          <button class="calc-btn calc-fn" data-val="%">%</button>
-          <button class="calc-btn calc-clear" data-val="C">C</button>
-          <button class="calc-btn calc-clear" data-val="CE">←</button>
-          <button class="calc-btn calc-copy" data-val="copy">📋</button>
-          <button class="calc-btn calc-fn" data-val="atan">atan</button>
-          <button class="calc-btn calc-fn" data-val="(">(</button>
-          <button class="calc-btn calc-fn" data-val=")">)</button>
-          <button class="calc-btn calc-fn" data-val="asin">asin</button>
-          <button class="calc-btn calc-fn" data-val="acos">acos</button>
+          <div class="calc-fn-row">
+            <button class="calc-btn calc-fn" data-val="sqrt">√</button>
+            <button class="calc-btn calc-fn" data-val="pi">π</button>
+            <button class="calc-btn calc-fn" data-val="pow">x²</button>
+            <button class="calc-btn calc-fn" data-val="%">%</button>
+          </div>
+          <div class="calc-fn-row">
+            <button class="calc-btn calc-fn" data-val="(">(</button>
+            <button class="calc-btn calc-fn" data-val=")">)</button>
+            <button class="calc-btn calc-fn" data-val="ans">ANS</button>
+            <div class="calc-trig-wrap">
+              <button class="calc-btn calc-fn calc-trig-toggle" data-val="_trig">f(x) ▾</button>
+              <div class="calc-trig-dropdown" id="calcTrigDropdown">
+                <button class="calc-btn calc-fn" data-val="sin">sin</button>
+                <button class="calc-btn calc-fn" data-val="cos">cos</button>
+                <button class="calc-btn calc-fn" data-val="tan">tan</button>
+                <button class="calc-btn calc-fn" data-val="asin">asin</button>
+                <button class="calc-btn calc-fn" data-val="acos">acos</button>
+                <button class="calc-btn calc-fn" data-val="atan">atan</button>
+              </div>
+            </div>
+          </div>
+          <div class="calc-fn-row calc-fn-row-3">
+            <button class="calc-btn calc-clear" data-val="C">C</button>
+            <button class="calc-btn calc-clear" data-val="CE">←</button>
+            <button class="calc-btn calc-copy" data-val="copy">📋</button>
+            <button class="calc-btn calc-paste" data-val="paste" title="Vložit výsledek na pozici kurzoru">⤓</button>
+          </div>
+          <div class="calc-num-grid">
+            <button class="calc-btn" data-val="7">7</button>
+            <button class="calc-btn" data-val="8">8</button>
+            <button class="calc-btn" data-val="9">9</button>
+            <button class="calc-btn calc-op" data-val="/">÷</button>
+            <button class="calc-btn" data-val="4">4</button>
+            <button class="calc-btn" data-val="5">5</button>
+            <button class="calc-btn" data-val="6">6</button>
+            <button class="calc-btn calc-op" data-val="*">×</button>
+            <button class="calc-btn" data-val="1">1</button>
+            <button class="calc-btn" data-val="2">2</button>
+            <button class="calc-btn" data-val="3">3</button>
+            <button class="calc-btn calc-op" data-val="-">−</button>
+            <button class="calc-btn" data-val=".">.</button>
+            <button class="calc-btn" data-val="0">0</button>
+            <button class="calc-btn calc-eq" data-val="=">=</button>
+            <button class="calc-btn calc-op" data-val="+">+</button>
+          </div>
         </div>`;
   const overlay = makeOverlay("calc", "🔢 Kalkulačka", bodyHTML, "calc-window");
   if (!overlay) return;
+
+  // Make calculator non-blocking: no fullscreen backdrop, draggable, stays above other dialogs
+  overlay.classList.add("calc-overlay-float");
+
+  // Hide default titlebar – we use compact history header instead
+  const defaultTitlebar = overlay.querySelector(".calc-titlebar");
+  defaultTitlebar.style.display = "none";
+
+  // Wire close & clear history buttons in the compact header
+  const calcWin = overlay.querySelector(".calc-window");
+  overlay.querySelector(".calc-close-inner-btn").addEventListener("click", () => overlay.remove());
+  overlay.querySelector(".calc-hist-clear-btn").addEventListener("click", () => {
+    history = [];
+    saveHistory();
+    renderHistory();
+    showToast("Historie vymazána");
+  });
+
+  // ── Drag via history header ──
+  const dragHandle = overlay.querySelector(".calc-hist-header");
+  let _dragOfs = null;
+  dragHandle.style.cursor = "move";
+  dragHandle.addEventListener("mousedown", (e) => {
+    if (e.target.closest("button")) return;
+    const rect = calcWin.getBoundingClientRect();
+    _dragOfs = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    e.preventDefault();
+  });
+  document.addEventListener("mousemove", (e) => {
+    if (!_dragOfs) return;
+    calcWin.style.left = (e.clientX - _dragOfs.x) + "px";
+    calcWin.style.top = (e.clientY - _dragOfs.y) + "px";
+  });
+  document.addEventListener("mouseup", () => { _dragOfs = null; });
+  // Touch drag
+  dragHandle.addEventListener("touchstart", (e) => {
+    if (e.target.closest("button")) return;
+    const t = e.touches[0];
+    const rect = calcWin.getBoundingClientRect();
+    _dragOfs = { x: t.clientX - rect.left, y: t.clientY - rect.top };
+  }, { passive: true });
+  document.addEventListener("touchmove", (e) => {
+    if (!_dragOfs) return;
+    const t = e.touches[0];
+    calcWin.style.left = (t.clientX - _dragOfs.x) + "px";
+    calcWin.style.top = (t.clientY - _dragOfs.y) + "px";
+  }, { passive: true });
+  document.addEventListener("touchend", () => { _dragOfs = null; });
 
   const display = overlay.querySelector("#calcDisplay");
   const exprDisplay = overlay.querySelector("#calcExpr");
@@ -2651,6 +2730,17 @@ export function openCalculator() {
       fullExpr.className = "calc-hist-full";
       fullExpr.textContent = item.expr + " = " + item.result;
       row.appendChild(fullExpr);
+      const copyBtn = document.createElement("button");
+      copyBtn.className = "calc-hist-copy";
+      copyBtn.textContent = "📋";
+      copyBtn.title = "Kopírovat výsledek";
+      copyBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const v = String(item.result);
+        navigator.clipboard.writeText(v).then(() => showToast("Zkopírováno: " + v));
+        setCalcClipboardValue(v);
+      });
+      row.appendChild(copyBtn);
       const delBtn = document.createElement("button");
       delBtn.className = "calc-hist-del";
       delBtn.textContent = "✕";
@@ -2734,12 +2824,47 @@ export function openCalculator() {
         case "C":    expr = ""; updateDisplay("0"); updateExprDisplay(""); break;
         case "CE":   expr = expr.slice(0, -1); updateDisplay(expr); break;
         case "=":    doEval(); break;
-        case "copy":  navigator.clipboard.writeText(display.value).then(() => showToast("Zkopírováno: " + display.value)); break;
+        case "copy": {
+          const v = display.value;
+          navigator.clipboard.writeText(v).then(() => showToast("Zkopírováno: " + v));
+          setCalcClipboardValue(v);
+          break;
+        }
+        case "paste": {
+          const v = display.value;
+          if (!v || v === "0") { showToast("Není co vložit"); break; }
+          const target = _lastFocusedInput;
+          if (target && document.body.contains(target) && !target.disabled && !target.readOnly
+              && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA')
+              && !overlay.contains(target)) {
+            const start = target.selectionStart || 0;
+            const end = target.selectionEnd || 0;
+            const before = target.value.substring(0, start);
+            const after = target.value.substring(end);
+            target.value = before + v + after;
+            target.selectionStart = target.selectionEnd = start + String(v).length;
+            target.dispatchEvent(new Event("input", { bubbles: true }));
+            target.focus();
+            showToast("Vloženo: " + v);
+          } else {
+            setCalcClipboardValue(v);
+            navigator.clipboard.writeText(v).then(() => showToast("Zkopírováno do schránky: " + v));
+          }
+          break;
+        }
+        case "_trig": {
+          const dd = overlay.querySelector("#calcTrigDropdown");
+          dd.classList.toggle("open");
+          break;
+        }
         case "pi":    expr += String(Math.PI); updateDisplay(expr); break;
         case "ans":   expr += String(lastAnswer); updateDisplay(expr); break;
         case "%":     expr += "%"; updateDisplay(expr); break;
         case "sqrt": case "sin": case "cos": case "tan": case "atan": case "asin": case "acos": case "pow":
-          handleFn(val); break;
+          handleFn(val);
+          // Close trig dropdown after selecting function
+          { const dd = overlay.querySelector("#calcTrigDropdown"); if (dd) dd.classList.remove("open"); }
+          break;
         default: expr += val; updateDisplay(expr);
       }
     });
@@ -2962,7 +3087,53 @@ function openTrigCalc() {
 }
 
 document.getElementById("btnOpenCalc").addEventListener("click", openCalculator);
-document.getElementById("canvasCalcBtn").addEventListener("click", openCalculator);
+const calcBtn = document.getElementById("canvasCalcBtn");
+calcBtn.addEventListener("mousedown", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+});
+calcBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  openCalculator();
+});
+// Track last focused input so clipboard/calc paste can target it
+let _lastFocusedInput = null;
+document.addEventListener('focusin', (e) => {
+  if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') && !e.target.disabled && !e.target.readOnly) {
+    // Don't track calculator's own display as a paste target
+    if (!e.target.closest('.calc-overlay[data-type="calc"]')) {
+      _lastFocusedInput = e.target;
+    }
+  }
+});
+
+const clipBtn = document.getElementById("canvasClipBtn");
+clipBtn.addEventListener("mousedown", (e) => {
+  // Prevent focus steal and overlay close
+  e.preventDefault();
+  e.stopPropagation();
+});
+clipBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  const v = getCalcClipboardValue();
+  if (v == null) { showToast("Schránka kalkulačky je prázdná"); return; }
+  // Use tracked input – activeElement may have shifted
+  const target = _lastFocusedInput;
+  if (target && document.body.contains(target) && !target.disabled && !target.readOnly
+      && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA')) {
+    const start = target.selectionStart || 0;
+    const end = target.selectionEnd || 0;
+    const before = target.value.substring(0, start);
+    const after = target.value.substring(end);
+    target.value = before + v + after;
+    target.selectionStart = target.selectionEnd = start + String(v).length;
+    target.dispatchEvent(new Event("input", { bubbles: true }));
+    target.focus();
+    showToast("Vloženo: " + v);
+  } else {
+    navigator.clipboard.writeText(String(v)).then(() => showToast("Zkopírováno do schránky: " + v));
+  }
+});
 document.getElementById("btnOpenTrig").addEventListener("click", openTrigCalc);
 document.getElementById("btnOpenCutting").addEventListener("click", openCuttingCalc);
 document.getElementById("btnOpenTaper").addEventListener("click", openTaperCalc);

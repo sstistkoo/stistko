@@ -301,9 +301,15 @@ drawCanvas.addEventListener(
 // ── Klávesnice ──
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
-    // Close topmost dialog overlay if open
-    const topOverlay = document.querySelector('.input-overlay, .calc-overlay');
-    if (topOverlay) {
+    // Close topmost dialog overlay if open (highest z-index first)
+    const allOverlays = document.querySelectorAll('.input-overlay, .calc-overlay');
+    if (allOverlays.length) {
+      let topOverlay = allOverlays[0];
+      let topZ = parseInt(getComputedStyle(topOverlay).zIndex) || 0;
+      allOverlays.forEach(o => {
+        const z = parseInt(getComputedStyle(o).zIndex) || 0;
+        if (z > topZ) { topOverlay = o; topZ = z; }
+      });
       topOverlay.remove();
       return;
     }

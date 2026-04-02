@@ -499,7 +499,7 @@ export function showChamferDialog(callback) {
 export function showScaleDialog(callback) {
   const overlay = makeInputOverlay(`
     <div class="input-dialog">
-      <h3>Škálování (Scale)</h3>
+      <h3>Měřítko (Scale)</h3>
       <label>Měřítkový faktor:</label>
       <input type="text" id="dlgScaleFactor" value="2" inputmode="decimal" autofocus>
       <div style="font-size:0.85em;color:#888;margin:4px 0">Např. 2 = dvojnásobek, 0.5 = polovina</div>

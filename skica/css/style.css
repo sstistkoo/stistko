@@ -1399,8 +1399,8 @@ body {
   display: none;
   position: fixed;
   top: 28px;
-  right: 104px;
-  z-index: 60;
+  right: 152px;
+  z-index: 250;
   background: var(--ctp-surface2);
   color: var(--ctp-text);
   border: none;
@@ -1419,6 +1419,39 @@ body {
 }
 #canvasCalcBtn:active {
   background: var(--ctp-blue);
+  color: var(--ctp-base);
+}
+
+#canvasClipBtn {
+  display: none;
+  position: fixed;
+  top: 28px;
+  right: 104px;
+  z-index: 250;
+  background: var(--ctp-surface2);
+  color: var(--ctp-yellow);
+  border: none;
+  border-radius: 20px;
+  min-width: 40px;
+  height: 40px;
+  font-size: 13px;
+  font-family: "Consolas", monospace;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  line-height: 40px;
+  text-align: center;
+  transition: background 0.2s;
+  padding: 0 10px;
+  white-space: nowrap;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#canvasClipBtn:hover {
+  background: var(--ctp-surface1);
+}
+#canvasClipBtn:active {
+  background: var(--ctp-yellow);
   color: var(--ctp-base);
 }
 
@@ -1915,6 +1948,12 @@ body {
     justify-content: center;
   }
 
+  #canvasClipBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   /* mobileRedo: hidden by default, shown by JS when redo is available */
 
   /* Hide duplicated toolbar items on mobile â€“ handled by mobile-specific overrides */
@@ -2047,12 +2086,27 @@ body {
   align-items: center;
   justify-content: center;
 }
+/* Floating calculator – no backdrop, doesn't block other dialogs */
+.calc-overlay-float {
+  background: none;
+  pointer-events: none;
+  z-index: 300;
+}
+.calc-overlay-float .calc-window {
+  pointer-events: auto;
+  position: fixed;
+  top: 72px;
+  right: 8px;
+  left: auto;
+  width: 320px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05);
+}
 .calc-window {
   background: var(--ctp-base);
   border: 1px solid var(--ctp-surface1);
   border-radius: 10px;
   box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-  min-width: 320px;
+  min-width: 260px;
   max-width: 95vw;
   max-height: 95vh;
   display: flex;
@@ -2096,6 +2150,9 @@ body {
   flex: 1;
   min-height: 0;
 }
+.calc-overlay-float .calc-body {
+  padding: 6px 8px;
+}
 
 /* â”€â”€ Basic calculator â”€â”€ */
 #calcDisplay {
@@ -2111,10 +2168,74 @@ body {
   margin-bottom: 8px;
   box-sizing: border-box;
 }
+.calc-overlay-float #calcDisplay {
+  padding: 6px 10px;
+  font-size: 17px;
+  margin-bottom: 4px;
+}
 .calc-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.calc-overlay-float .calc-buttons {
+  gap: 2px;
+}
+.calc-fn-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 4px;
+}
+.calc-fn-row.calc-fn-row-3 {
+  grid-template-columns: repeat(4, 1fr);
+}
+.calc-num-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  border-top: 1px solid var(--ctp-surface1);
+  padding-top: 4px;
+  margin-top: 2px;
+}
+.calc-overlay-float .calc-num-grid {
+  gap: 2px;
+  padding-top: 3px;
+}
+.calc-overlay-float .calc-fn-row {
+  gap: 2px;
+}
+/* Trig dropdown wrapper */
+.calc-trig-wrap {
+  position: relative;
+}
+.calc-trig-toggle {
+  width: 100%;
+  font-size: 11px !important;
+}
+.calc-trig-dropdown {
+  display: none;
+  position: absolute;
+  bottom: 100%;
+  left: auto;
+  right: 0;
+  width: 160px;
+  z-index: 200;
+  background: var(--ctp-mantle);
+  border: 1px solid var(--ctp-surface1);
+  border-radius: 6px;
+  padding: 4px;
+  gap: 3px;
+  box-shadow: 0 -4px 16px rgba(0,0,0,0.4);
+  display: none;
+  grid-template-columns: 1fr 1fr;
+}
+.calc-trig-dropdown.open {
+  display: grid;
+}
+.calc-trig-dropdown .calc-btn {
+  min-width: 0;
+  padding: 6px 4px;
+  font-size: 12px;
 }
 .calc-btn {
   padding: 12px 4px;
@@ -2128,6 +2249,25 @@ body {
   transition: background 0.12s;
   text-align: center;
 }
+.calc-overlay-float .calc-btn {
+  padding: 0;
+  font-size: 16px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.calc-overlay-float .calc-num-grid .calc-btn {
+  aspect-ratio: 1 / 0.8;
+}
+.calc-overlay-float .calc-fn {
+  font-size: 11px;
+  aspect-ratio: auto;
+  padding: 9px 3px;
+}
+.calc-overlay-float .calc-fn-row-3 .calc-btn {
+  padding: 11px 3px;
+}
 .calc-btn:hover { background: var(--ctp-surface1); }
 .calc-btn:active { background: var(--ctp-surface2); }
 .calc-op { background: var(--ctp-surface1); color: var(--ctp-blue); font-weight: bold; }
@@ -2136,6 +2276,7 @@ body {
 .calc-fn { background: #2a2a3e; color: var(--ctp-green); font-size: 12px; }
 .calc-clear { background: var(--ctp-surface1); color: var(--ctp-red); }
 .calc-copy { background: var(--ctp-surface1); color: var(--ctp-yellow); }
+.calc-paste { background: var(--ctp-surface1); color: var(--ctp-green); font-size: 14px; }
 
 /* â”€â”€ Calculator expression display â”€â”€ */
 .calc-expr {
@@ -2149,6 +2290,11 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.calc-overlay-float .calc-expr {
+  font-size: 11px;
+  min-height: 14px;
+  padding: 1px 10px 0;
+}
 
 /* â”€â”€ Calculator / Trig history â”€â”€ */
 .calc-history,
@@ -2161,6 +2307,54 @@ body {
   border: 1px solid var(--ctp-surface0);
   border-radius: 6px;
   background: var(--ctp-crust);
+}
+.calc-overlay-float .calc-history {
+  height: 54px;
+  min-height: 32px;
+  max-height: 80px;
+  margin-bottom: 3px;
+  border-radius: 0 0 6px 6px;
+}
+/* History header with close + clear buttons */
+.calc-hist-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3px 6px;
+  background: var(--ctp-mantle);
+  border: 1px solid var(--ctp-surface0);
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  gap: 4px;
+  user-select: none;
+}
+.calc-hist-title {
+  font-size: 10px;
+  color: var(--ctp-overlay0);
+  font-family: "Consolas", monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  flex: 1;
+  text-align: center;
+}
+.calc-hist-clear-btn,
+.calc-close-inner-btn {
+  background: var(--ctp-surface0);
+  border: 1px solid var(--ctp-surface1);
+  color: var(--ctp-subtext0);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 3px 8px;
+  border-radius: 4px;
+  line-height: 1;
+}
+.calc-hist-clear-btn:hover {
+  background: var(--ctp-surface1);
+  color: var(--ctp-red);
+}
+.calc-close-inner-btn:hover {
+  background: var(--ctp-red);
+  color: var(--ctp-base);
 }
 .calc-history:empty,
 .trig-history:empty {
@@ -2186,6 +2380,10 @@ body {
   border-bottom: 1px solid var(--ctp-base);
   transition: background 0.1s;
 }
+.calc-overlay-float .calc-history-item {
+  padding: 5px 8px;
+  font-size: 11px;
+}
 .calc-history-item:last-child {
   border-bottom: none;
 }
@@ -2203,22 +2401,46 @@ body {
   min-width: 0;
 }
 .calc-hist-del {
-  background: none;
-  border: none;
-  color: var(--ctp-surface2);
+  background: var(--ctp-surface0);
+  border: 1px solid var(--ctp-surface1);
+  border-radius: 4px;
+  color: var(--ctp-subtext0);
   cursor: pointer;
   font-size: 11px;
-  padding: 0 0 0 8px;
+  padding: 2px 5px;
+  margin-left: 8px;
   line-height: 1;
   flex-shrink: 0;
-  opacity: 0;
-  transition: opacity 0.15s, color 0.15s;
+  opacity: 0.7;
+  transition: opacity 0.15s, color 0.15s, background 0.15s;
 }
 .calc-history-item:hover .calc-hist-del {
   opacity: 1;
 }
 .calc-hist-del:hover {
   color: var(--ctp-red);
+  background: var(--ctp-surface1);
+}
+.calc-hist-copy {
+  background: var(--ctp-surface0);
+  border: 1px solid var(--ctp-surface1);
+  border-radius: 4px;
+  color: var(--ctp-subtext0);
+  cursor: pointer;
+  font-size: 10px;
+  padding: 2px 5px;
+  margin-left: 6px;
+  line-height: 1;
+  flex-shrink: 0;
+  opacity: 0.7;
+  transition: opacity 0.15s, color 0.15s, background 0.15s;
+}
+.calc-history-item:hover .calc-hist-copy {
+  opacity: 1;
+}
+.calc-hist-copy:hover {
+  color: var(--ctp-yellow);
+  background: var(--ctp-surface1);
 }
 
 /* â”€â”€ CNC calculators (shared) â”€â”€ */
