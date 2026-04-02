@@ -239,19 +239,6 @@ if ("serviceWorker" in navigator) {
   }
 }
 
-// ── Offline indikátor ──
-const offlineBanner = document.getElementById('offlineBanner');
-function updateOnlineStatus() {
-  if (navigator.onLine) {
-    offlineBanner.hidden = true;
-  } else {
-    offlineBanner.hidden = false;
-  }
-}
-window.addEventListener('online', updateOnlineStatus);
-window.addEventListener('offline', updateOnlineStatus);
-updateOnlineStatus();
-
 // ── Delegovaný close handler pro overlay dialogy ──
 // Nahrazuje inline onclick="this.closest('.input-overlay').remove()"
 document.addEventListener('click', (e) => {
