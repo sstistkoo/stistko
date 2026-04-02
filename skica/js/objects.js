@@ -177,6 +177,55 @@ export function moveObject(obj, dx, dy) {
       }
       break;
     case "text":
+      // Pohyb textu na cestě → změna pathStart (podél) + pathOffset (kolmo)
+      if (obj.pathMode && obj.pathMode !== 'none' && obj.pathObjectId != null) {
+        const pathObj = state.objects[obj.pathObjectId];
+        if (pathObj) {
+          if (obj.pathMode === 'line' && (pathObj.type === 'line' || pathObj.type === 'constr')) {
+            const ldx = pathObj.x2 - pathObj.x1;
+            const ldy = pathObj.y2 - pathObj.y1;
+            const len = Math.hypot(ldx, ldy);
+            if (len > 1e-10) {
+              const ux = ldx / len, uy = ldy / len;
+              // Kolmý vektor (normála úsečky)
+              const nx = -uy, ny = ux;
+              // Rovnoběžná složka → pathStart (posun podél úsečky)
+              const paraProj = dx * ux + dy * uy;
+              obj.pathStart = (obj.pathStart || 0) + paraProj;
+              // Kolmá složka → pathOffset
+              const perpProj = dx * nx + dy * ny;
+              obj.pathOffset = (obj.pathOffset || 0) + perpProj;
+            }
+            break;
+          } else if (obj.pathMode === 'arc' && pathObj.type === 'arc') {
+            // Úhlová složka → pathStart, radiální → pathOffset
+            const acx = pathObj.cx, acy = pathObj.cy;
+            const midAngle = (pathObj.startAngle + pathObj.endAngle) / 2;
+            const rx = Math.cos(midAngle), ry = Math.sin(midAngle);
+            const tx = -Math.sin(midAngle), ty = Math.cos(midAngle);
+            const radialProj = dx * rx + dy * ry;
+            const tangentProj = dx * tx + dy * ty;
+            obj.pathOffset = (obj.pathOffset || 0) + radialProj;
+            obj.pathStart = (obj.pathStart || 0) + tangentProj / pathObj.r;
+            break;
+          } else if (obj.pathMode === 'circle' && pathObj.type === 'circle') {
+            // Tangenciální složka → pathStart (úhel), radiální → pathOffset
+            const curAngle = Math.atan2(dy, dx);
+            // Obecný tangent/radial rozklad kolem středu
+            const fromCenter = Math.atan2(
+              (obj.y || pathObj.cy) - pathObj.cy,
+              (obj.x || pathObj.cx) - pathObj.cx
+            );
+            const rx = Math.cos(fromCenter), ry = Math.sin(fromCenter);
+            const tx = -Math.sin(fromCenter), ty = Math.cos(fromCenter);
+            const radialProj = dx * rx + dy * ry;
+            const tangentProj = dx * tx + dy * ty;
+            obj.pathOffset = (obj.pathOffset || 0) + radialProj;
+            obj.pathStart = (obj.pathStart || 0) + tangentProj / pathObj.r;
+            break;
+          }
+        }
+      }
       obj.x += dx;
       obj.y += dy;
       break;

@@ -29,6 +29,7 @@ const PATH_MODES = [
   { value: 'none', label: '— Bez cesty' },
   { value: 'line', label: '📏 Podél úsečky' },
   { value: 'arc', label: '⌒ Podél oblouku' },
+  { value: 'circle', label: '⭕ Podél kružnice' },
 ];
 
 /**
@@ -58,6 +59,7 @@ export function showTextDialog(opts, onConfirm) {
     italic: false,
     pathMode: 'none',
     pathObjectId: null,
+    pathOffset: 2,
     letterSpacing: 0,
     ...opts,
   };
@@ -69,6 +71,9 @@ export function showTextDialog(opts, onConfirm) {
   const availableArcs = state.objects
     .map((o, i) => ({ obj: o, idx: i }))
     .filter(({ obj }) => obj && obj.type === 'arc');
+  const availableCircles = state.objects
+    .map((o, i) => ({ obj: o, idx: i }))
+    .filter(({ obj }) => obj && obj.type === 'circle');
 
   const lineOptions = availableLines.map(({ obj, idx }) =>
     `<option value="${idx}" ${defaults.pathObjectId === idx ? 'selected' : ''}>${escHTML(obj.name || 'Úsečka #' + (idx + 1))}</option>`
@@ -76,6 +81,10 @@ export function showTextDialog(opts, onConfirm) {
 
   const arcOptions = availableArcs.map(({ obj, idx }) =>
     `<option value="${idx}" ${defaults.pathObjectId === idx ? 'selected' : ''}>${escHTML(obj.name || 'Oblouk #' + (idx + 1))}</option>`
+  ).join('');
+
+  const circleOptions = availableCircles.map(({ obj, idx }) =>
+    `<option value="${idx}" ${defaults.pathObjectId === idx ? 'selected' : ''}>${escHTML(obj.name || 'Kružnice #' + (idx + 1))}</option>`
   ).join('');
 
   const fontOptions = FONT_FAMILIES.map(f =>
@@ -141,8 +150,13 @@ export function showTextDialog(opts, onConfirm) {
       <div data-id="txt-pathobj-wrap" class="cnc-field cnc-field-full" style="display:${defaults.pathMode !== 'none' ? 'flex' : 'none'};flex-direction:column;gap:3px;margin-top:4px">
         <span>Cílový objekt</span>
         <select data-id="txt-pathobj">
-          ${defaults.pathMode === 'arc' ? arcOptions : lineOptions}
+          ${defaults.pathMode === 'arc' ? arcOptions : defaults.pathMode === 'circle' ? circleOptions : lineOptions}
         </select>
+      </div>
+
+      <div data-id="txt-pathoffset-wrap" class="cnc-field cnc-field-full" style="display:${defaults.pathMode !== 'none' ? 'flex' : 'none'};flex-direction:column;gap:3px;margin-top:4px">
+        <span>Odsazení od objektu [mm]</span>
+        <input data-id="txt-pathoffset" type="number" value="${defaults.pathOffset}" step="0.5" title="Vzdálenost textu od cesty (kladná = nad, záporná = pod)">
       </div>
 
       <div class="text-preview-box" data-id="txt-preview-box" style="margin-top:10px">
@@ -175,6 +189,8 @@ export function showTextDialog(opts, onConfirm) {
   const elPathMode = overlay.querySelector('[data-id="txt-pathmode"]');
   const elPathObjWrap = overlay.querySelector('[data-id="txt-pathobj-wrap"]');
   const elPathObj = overlay.querySelector('[data-id="txt-pathobj"]');
+  const elPathOffset = overlay.querySelector('[data-id="txt-pathoffset"]');
+  const elPathOffsetWrap = overlay.querySelector('[data-id="txt-pathoffset-wrap"]');
   const elPreview = overlay.querySelector('[data-id="txt-preview"]');
 
   let currentAlign = defaults.textAlign;
@@ -197,10 +213,12 @@ export function showTextDialog(opts, onConfirm) {
     const mode = elPathMode.value;
     if (mode === 'none') {
       elPathObjWrap.style.display = 'none';
+      elPathOffsetWrap.style.display = 'none';
     } else {
       elPathObjWrap.style.display = 'flex';
+      elPathOffsetWrap.style.display = 'flex';
       // Přepni seznam objektů
-      elPathObj.innerHTML = mode === 'arc' ? arcOptions : lineOptions;
+      elPathObj.innerHTML = mode === 'arc' ? arcOptions : mode === 'circle' ? circleOptions : lineOptions;
     }
     updatePreview();
   });
@@ -251,6 +269,7 @@ export function showTextDialog(opts, onConfirm) {
       letterSpacing: parseFloat(elSpacing.value) || 0,
       pathMode: elPathMode.value,
       pathObjectId: elPathMode.value !== 'none' && elPathObj.value ? parseInt(elPathObj.value, 10) : null,
+      pathOffset: parseFloat(elPathOffset.value) || 0,
     };
     overlay.remove();
     onConfirm(result);

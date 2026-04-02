@@ -126,6 +126,22 @@ export function getObjectBounds(obj) {
       return { minX, minY, maxX, maxY };
     }
     case 'text': {
+      // Text podél cesty – bounds z path objektu
+      if (obj.pathMode && obj.pathMode !== 'none' && obj.pathObjectId != null) {
+        const pathObj = state.objects[obj.pathObjectId];
+        if (pathObj && pathObj.type !== 'text') {
+          const pathBounds = getObjectBounds(pathObj);
+          if (pathBounds) {
+            const offset = Math.abs(obj.pathOffset || 0) + (obj.fontSize || 14);
+            return {
+              minX: pathBounds.minX - offset,
+              minY: pathBounds.minY - offset,
+              maxX: pathBounds.maxX + offset,
+              maxY: pathBounds.maxY + offset,
+            };
+          }
+        }
+      }
       // Přibližné bounds textu (šířka závisí na délce textu a fontu)
       const fSize = obj.fontSize || 14;
       const spacingFactor = 1 + (obj.letterSpacing || 0) / fSize * 0.5;
@@ -424,7 +440,7 @@ function renderObjects() {
         drawPolyline(obj, isSel, obj.color || layerColor, idx);
         break;
       case "text":
-        drawText(obj);
+        drawText(obj, isSel);
         break;
     }
     ctx.setLineDash([]);
@@ -960,7 +976,7 @@ function renderObjects() {
         case 'arc': drawArc(ghost); break;
         case 'rect': drawRect(ghost, false, COLORS.preview); break;
         case 'polyline': drawPolyline(ghost, false, COLORS.preview); break;
-        case 'text': drawText(ghost); break;
+        case 'text': drawText(ghost, false); break;
       }
     }
     ctx.globalAlpha = 1;
@@ -1800,33 +1816,56 @@ export function drawPolyline(obj, isSel, normalColor, objIdx) {
 }
 
 /** @param {import('./types.js').TextObject} obj */
-export function drawText(obj) {
+export function drawText(obj, isSel) {
   const [sx, sy] = worldToScreen(obj.x, obj.y);
   const fontSize = obj.fontSize || 14;
-  const screenSize = Math.round(Math.min(200, Math.max(8, fontSize * state.zoom * 0.5)));
+  const screenSize = Math.round(Math.max(1, fontSize * state.zoom));
   const fontFamily = obj.fontFamily || 'Consolas, monospace';
   const bold = obj.bold ? 'bold ' : '';
   const italic = obj.italic ? 'italic ' : '';
-  ctx.font = `${italic}${bold}${screenSize}px ${fontFamily}`;
-  ctx.fillStyle = obj.color || COLORS.text;
+
+  // Omezení velikosti fontu – prohlížeče mohou přestat kreslit velký text
+  const MAX_FONT = 500;
+  const fontScale = screenSize > MAX_FONT ? screenSize / MAX_FONT : 1;
+  const clampedSize = Math.min(screenSize, MAX_FONT);
+
+  ctx.font = `${italic}${bold}${clampedSize}px ${fontFamily}`;
+  ctx.fillStyle = isSel ? COLORS.selected : (obj.color || COLORS.text);
   const align = obj.textAlign || 'left';
   ctx.textAlign = align;
   ctx.textBaseline = 'bottom';
-  const spacing = (obj.letterSpacing || 0) * state.zoom * 0.5;
+  const spacing = (obj.letterSpacing || 0) * state.zoom;
   const textStr = obj.text || '';
 
   // Text podél cesty (úsečka nebo oblouk)
   if (obj.pathMode && obj.pathMode !== 'none' && obj.pathObjectId != null) {
     const pathObj = state.objects[obj.pathObjectId];
     if (pathObj) {
+      const pathOffset = (obj.pathOffset || 0) * state.zoom;
+      const pathStart = (obj.pathStart || 0) * state.zoom;
+      const fontStr = ctx.font;
       if (obj.pathMode === 'line' && (pathObj.type === 'line' || pathObj.type === 'constr')) {
-        _drawTextAlongLine(textStr, pathObj, screenSize, spacing);
+        _drawTextAlongLine(textStr, pathObj, screenSize, spacing, pathOffset, pathStart, align, fontStr);
       } else if (obj.pathMode === 'arc' && pathObj.type === 'arc') {
-        _drawTextAlongArc(textStr, pathObj, screenSize, spacing);
+        _drawTextAlongArc(textStr, pathObj, screenSize, spacing, pathOffset, obj.pathStart || 0, align, fontStr);
+      } else if (obj.pathMode === 'circle' && pathObj.type === 'circle') {
+        _drawTextAlongCircle(textStr, pathObj, screenSize, spacing, pathOffset, obj.pathStart || 0, align, fontStr);
       }
-      // Malý marker na kotevním bodě
+      // Viditelný marker (čtvereček) na začátku cesty, aby šel text snadno vybrat
+      let msx, msy;
+      if (obj.pathMode === 'line' && (pathObj.type === 'line' || pathObj.type === 'constr')) {
+        [msx, msy] = worldToScreen(pathObj.x1, pathObj.y1);
+      } else if (obj.pathMode === 'arc' && pathObj.type === 'arc') {
+        [msx, msy] = worldToScreen(pathObj.cx + pathObj.r * Math.cos(pathObj.startAngle), pathObj.cy + pathObj.r * Math.sin(pathObj.startAngle));
+      } else if (obj.pathMode === 'circle' && pathObj.type === 'circle') {
+        [msx, msy] = worldToScreen(pathObj.cx, pathObj.cy - pathObj.r);
+      } else {
+        [msx, msy] = [sx, sy];
+      }
       ctx.beginPath();
-      ctx.arc(sx, sy, 2, 0, Math.PI * 2);
+      const mSize = 4;
+      ctx.rect(msx - mSize, msy - mSize, mSize * 2, mSize * 2);
+      ctx.fillStyle = isSel ? COLORS.selected : (obj.color || COLORS.text);
       ctx.fill();
       ctx.textAlign = 'start';
       ctx.textBaseline = 'alphabetic';
@@ -1835,33 +1874,40 @@ export function drawText(obj) {
   }
 
   // Standardní text (s/bez rotace)
-  if (spacing && textStr.length > 1) {
+  const sSx = sx / fontScale, sSy = sy / fontScale;
+  const sSpacing = spacing / fontScale;
+  if (sSpacing && textStr.length > 1) {
     // Vykreslení po znacích s mezerou
     ctx.save();
-    ctx.translate(sx, sy);
+    if (fontScale > 1) ctx.scale(fontScale, fontScale);
+    ctx.translate(sSx, sSy);
     if (obj.rotation) ctx.rotate(-obj.rotation);
     ctx.textAlign = 'left';
     let offsetX = 0;
     if (align === 'center') {
-      const totalW = _measureTextSpaced(textStr, spacing);
+      const totalW = _measureTextSpaced(textStr, sSpacing);
       offsetX = -totalW / 2;
     } else if (align === 'right') {
-      const totalW = _measureTextSpaced(textStr, spacing);
+      const totalW = _measureTextSpaced(textStr, sSpacing);
       offsetX = -totalW;
     }
     for (let i = 0; i < textStr.length; i++) {
       ctx.fillText(textStr[i], offsetX, 0);
-      offsetX += ctx.measureText(textStr[i]).width + spacing;
+      offsetX += ctx.measureText(textStr[i]).width + sSpacing;
     }
     ctx.restore();
   } else if (obj.rotation) {
     ctx.save();
-    ctx.translate(sx, sy);
+    if (fontScale > 1) ctx.scale(fontScale, fontScale);
+    ctx.translate(sSx, sSy);
     ctx.rotate(-obj.rotation);
     ctx.fillText(textStr, 0, 0);
     ctx.restore();
   } else {
-    ctx.fillText(textStr, sx, sy);
+    ctx.save();
+    if (fontScale > 1) ctx.scale(fontScale, fontScale);
+    ctx.fillText(textStr, sSx, sSy);
+    ctx.restore();
   }
   // Malý marker na kotevním bodě
   ctx.beginPath();
@@ -1882,75 +1928,203 @@ function _measureTextSpaced(text, spacing) {
 }
 
 /** Vykreslí text podél úsečky */
-function _drawTextAlongLine(text, lineObj, screenSize, spacing) {
+function _drawTextAlongLine(text, lineObj, screenSize, spacing, pathOffset, pathStart, align, fontStr) {
   const [sx1, sy1] = worldToScreen(lineObj.x1, lineObj.y1);
   const [sx2, sy2] = worldToScreen(lineObj.x2, lineObj.y2);
   const dx = sx2 - sx1, dy = sy2 - sy1;
   const lineLen = Math.hypot(dx, dy);
   if (lineLen < 1) return;
   const angle = Math.atan2(dy, dx);
+  const nx = dy / lineLen;
+  const ny = -dx / lineLen;
+  const off = pathOffset || 0;
+  const startOff = pathStart || 0;
+
+  // Omezení velikosti fontu – při velkém zoomu použij scale
+  const MAX_FONT = 500;
+  const fontScale = screenSize > MAX_FONT ? screenSize / MAX_FONT : 1;
+  const clampedSize = Math.min(screenSize, MAX_FONT);
 
   ctx.save();
+  if (fontStr && fontScale > 1) {
+    ctx.font = fontStr.replace(/(\d+)px/, clampedSize + 'px');
+  } else if (fontStr) {
+    ctx.font = fontStr;
+  }
   ctx.textAlign = 'left';
   ctx.textBaseline = 'bottom';
 
-  let offsetX = 0;
+  if (fontScale > 1) ctx.scale(fontScale, fontScale);
+  const sLineLen = lineLen / fontScale;
+  const sOff = off / fontScale;
+  const sSpacing = spacing / fontScale;
+  const sSx1 = sx1 / fontScale, sSy1 = sy1 / fontScale;
+  const sDx = dx / fontScale, sDy = dy / fontScale;
+  const sStartOff = startOff / fontScale;
+
+  // Vypočti celkovou šířku textu pro zarovnání
+  let totalW = 0;
+  for (let i = 0; i < text.length; i++) {
+    totalW += ctx.measureText(text[i]).width;
+    if (i < text.length - 1) totalW += sSpacing;
+  }
+
+  let offsetX = sStartOff;
+  if (align === 'center') {
+    offsetX += (sLineLen - totalW) / 2;
+  } else if (align === 'right') {
+    offsetX += sLineLen - totalW;
+  }
+
   for (let i = 0; i < text.length; i++) {
     const charW = ctx.measureText(text[i]).width;
-    const t = (offsetX + charW / 2) / lineLen;
-    if (t > 1) break;
-    const px = sx1 + dx * (offsetX / lineLen);
-    const py = sy1 + dy * (offsetX / lineLen);
+    if (offsetX + charW > sLineLen) break;
+    if (offsetX < 0) { offsetX += charW + sSpacing; continue; }
+    const px = sSx1 + sDx * (offsetX / sLineLen) + nx * sOff;
+    const py = sSy1 + sDy * (offsetX / sLineLen) + ny * sOff;
     ctx.save();
     ctx.translate(px, py);
     ctx.rotate(angle);
     ctx.fillText(text[i], 0, -2);
     ctx.restore();
-    offsetX += charW + spacing;
+    offsetX += charW + sSpacing;
   }
   ctx.restore();
 }
 
 /** Vykreslí text podél oblouku */
-function _drawTextAlongArc(text, arcObj, screenSize, spacing) {
+function _drawTextAlongArc(text, arcObj, screenSize, spacing, pathOffset, pathStartAngle, align, fontStr) {
   const [scx, scy] = worldToScreen(arcObj.cx, arcObj.cy);
   const sr = arcObj.r * state.zoom;
-  if (sr < 5 || sr <= 0) return;
+  if (sr < 1) return;
 
   let startAngle = -arcObj.startAngle;
   let endAngle = -arcObj.endAngle;
-  // Normalizace – zajistit správný směr
   if (endAngle > startAngle) {
     const tmp = startAngle;
     startAngle = endAngle;
     endAngle = tmp;
   }
 
+  // Omezení velikosti fontu – při velkém zoomu použij scale
+  const MAX_FONT = 500;
+  const fontScale = screenSize > MAX_FONT ? screenSize / MAX_FONT : 1;
+  const clampedSize = Math.min(screenSize, MAX_FONT);
+
   ctx.save();
+  if (fontStr && fontScale > 1) {
+    ctx.font = fontStr.replace(/(\d+)px/, clampedSize + 'px');
+  } else if (fontStr) {
+    ctx.font = fontStr;
+  }
   ctx.textAlign = 'center';
   ctx.textBaseline = 'bottom';
 
-  let currentAngle = startAngle;
-  const textRadius = sr + 4; // o trochu nad obloukem
+  const scaledRadius = (sr + (pathOffset != null ? pathOffset : 4)) / fontScale;
+  const scaledSpacing = spacing / fontScale;
+  const scaledSCX = scx / fontScale;
+  const scaledSCY = scy / fontScale;
+  if (scaledRadius < 1) { ctx.restore(); return; }
+
+  // Celkový úhel textu pro zarovnání
+  let totalAngle = 0;
+  for (let i = 0; i < text.length; i++) {
+    totalAngle += ctx.measureText(text[i]).width / scaledRadius;
+    if (i < text.length - 1) totalAngle += scaledSpacing / scaledRadius;
+  }
+  const arcSpan = startAngle - endAngle;
+
+  let currentAngle = startAngle - (pathStartAngle || 0);
+  if (align === 'center') {
+    currentAngle -= (arcSpan - totalAngle) / 2;
+  } else if (align === 'right') {
+    currentAngle -= (arcSpan - totalAngle);
+  }
+
+  if (fontScale > 1) ctx.scale(fontScale, fontScale);
 
   for (let i = 0; i < text.length; i++) {
     const charW = ctx.measureText(text[i]).width;
-    const charAngle = charW / textRadius;
+    const charAngle = charW / scaledRadius;
     const halfChar = charAngle / 2;
     const drawAngle = currentAngle - halfChar;
 
-    // Nekresli znaky mimo oblouk
     if (drawAngle < endAngle) break;
 
-    const px = scx + textRadius * Math.cos(drawAngle);
-    const py = scy + textRadius * Math.sin(drawAngle);
+    const px = scaledSCX + scaledRadius * Math.cos(drawAngle);
+    const py = scaledSCY + scaledRadius * Math.sin(drawAngle);
     ctx.save();
     ctx.translate(px, py);
     ctx.rotate(drawAngle - Math.PI / 2);
     ctx.fillText(text[i], 0, 0);
     ctx.restore();
 
-    currentAngle -= charAngle + (spacing / textRadius);
+    currentAngle -= charAngle + (scaledSpacing / scaledRadius);
+  }
+  ctx.restore();
+}
+
+/** Vykreslí text podél kružnice */
+function _drawTextAlongCircle(text, circleObj, screenSize, spacing, pathOffset, pathStartAngle, align, fontStr) {
+  const [scx, scy] = worldToScreen(circleObj.cx, circleObj.cy);
+  const sr = circleObj.r * state.zoom;
+  if (sr < 1) return;
+
+  // Omezení velikosti fontu – při velkém zoomu použij scale
+  const MAX_FONT = 500;
+  const fontScale = screenSize > MAX_FONT ? screenSize / MAX_FONT : 1;
+  const clampedSize = Math.min(screenSize, MAX_FONT);
+
+  ctx.save();
+  // Přepočti font s omezenou velikostí
+  if (fontStr && fontScale > 1) {
+    ctx.font = fontStr.replace(/(\d+)px/, clampedSize + 'px');
+  } else if (fontStr) {
+    ctx.font = fontStr;
+  }
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'bottom';
+
+  // Poloměr a odsazení – přepočítáno na scaled souřadnice
+  const scaledRadius = (sr + (pathOffset != null ? pathOffset : 4)) / fontScale;
+  const scaledSpacing = spacing / fontScale;
+  const scaledSCX = scx / fontScale;
+  const scaledSCY = scy / fontScale;
+  if (scaledRadius < 1) { ctx.restore(); return; }
+
+  // Celkový úhel textu pro zarovnání kolem kružnice
+  let totalAngle = 0;
+  for (let i = 0; i < text.length; i++) {
+    totalAngle += ctx.measureText(text[i]).width / scaledRadius;
+    if (i < text.length - 1) totalAngle += scaledSpacing / scaledRadius;
+  }
+
+  // Začátek nahoře (screen -π/2) + úhlový posun
+  let currentAngle = -Math.PI / 2 - (pathStartAngle || 0);
+  if (align === 'center') {
+    currentAngle += totalAngle / 2;
+  } else if (align === 'right') {
+    currentAngle += totalAngle;
+  }
+
+  // Aplikuj scale pro velké fonty
+  if (fontScale > 1) ctx.scale(fontScale, fontScale);
+
+  for (let i = 0; i < text.length; i++) {
+    const charW = ctx.measureText(text[i]).width;
+    const charAngle = charW / scaledRadius;
+    const halfChar = charAngle / 2;
+    const drawAngle = currentAngle - halfChar;
+
+    const px = scaledSCX + scaledRadius * Math.cos(drawAngle);
+    const py = scaledSCY + scaledRadius * Math.sin(drawAngle);
+    ctx.save();
+    ctx.translate(px, py);
+    ctx.rotate(drawAngle + Math.PI / 2);
+    ctx.fillText(text[i], 0, 0);
+    ctx.restore();
+
+    currentAngle -= charAngle + (scaledSpacing / scaledRadius);
   }
   ctx.restore();
 }

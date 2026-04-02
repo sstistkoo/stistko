@@ -262,8 +262,21 @@ export function getObjectSnapPoints(obj) {
       }
       return pts;
     }
-    case "text":
-      return [{ x: obj.x, y: obj.y }];
+    case "text": {
+      const pts = [{ x: obj.x, y: obj.y }];
+      // Snap body na cestě – začátek a střed textu
+      if (obj.pathMode && obj.pathMode !== 'none' && obj.pathObjectId != null) {
+        const pathObj = state.objects[obj.pathObjectId];
+        if (pathObj && obj.pathMode === 'line' && (pathObj.type === 'line' || pathObj.type === 'constr')) {
+          pts.push({ x: pathObj.x1, y: pathObj.y1 });
+          pts.push({ x: (pathObj.x1 + pathObj.x2) / 2, y: (pathObj.y1 + pathObj.y2) / 2, mid: true });
+        } else if (pathObj && obj.pathMode === 'arc' && pathObj.type === 'arc') {
+          const sa = pathObj.startAngle;
+          pts.push({ x: pathObj.cx + pathObj.r * Math.cos(sa), y: pathObj.cy + pathObj.r * Math.sin(sa) });
+        }
+      }
+      return pts;
+    }
     default:
       return [];
   }
