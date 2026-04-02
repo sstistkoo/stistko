@@ -10,9 +10,10 @@ import { addObject } from '../objects.js';
 import { renderAll } from '../render.js';
 import { typeLabel, bulgeToArc, safeEvalMath } from '../utils.js';
 import { updateObjectList } from '../ui.js';
-import { addDimensionForObject, updateAssociativeDimensions } from './dimension.js';
+import { addDimensionForObject, addAngleDimensionForLines, updateAssociativeDimensions } from './dimension.js';
 import { showEditObjectDialog, wireExprInputs } from './mobileEdit.js';
 import { projectPointToLine, distPointToInfiniteLine, angleBetweenLines, intersectInfiniteLines, calculateAllIntersections } from '../geometry.js';
+import { removeAnchorsForObject, cleanupOrphanAnchors } from '../tools/index.js';
 
 // ── Měření – dialog výsledku ──
 /**
@@ -87,6 +88,7 @@ export function showIntersectionInfo(pt) {
       <div class="btn-row">
         <button class="btn-cancel" id="intCopy">📋 Kopírovat</button>
         <button class="btn-cancel" id="intAddPoint">📍 Vytvořit bod</button>
+        <button class="btn-cancel" id="intAddDim">📐 Přidat kótu</button>
         <button class="btn-ok btn-cancel-overlay">OK</button>
       </div>
     </div>`);
@@ -98,6 +100,12 @@ export function showIntersectionInfo(pt) {
   overlay.querySelector("#intAddPoint").addEventListener("click", () => {
     addObject({ type: "point", x: pt.x, y: pt.y, name: `Bod ${state.nextId}` });
     showToast(`Bod ${Hp}${H}${hv.toFixed(2)} ${Vp}${V}${vv.toFixed(2)} vytvořen`);
+    overlay.remove();
+  });
+  overlay.querySelector("#intAddDim").addEventListener("click", () => {
+    addDimensionForObject({ type: 'point', x: pt.x, y: pt.y });
+    calculateAllIntersections();
+    renderAll();
     overlay.remove();
   });
   overlay.querySelector(".btn-ok").focus();
@@ -197,24 +205,32 @@ function buildObjectInfoDialog(obj, objIdx) {
   }
 
   let addDimBtn = "";
-  if (obj.type === "line" || obj.type === "constr") {
+  let deleteDimBtn = "";
+  if (obj.isDimension || obj.isCoordLabel) {
+    deleteDimBtn = objIdx !== undefined ? `<button class="btn-cancel" id="objDeleteDim" style="color:#e64553;border-color:#e6455355">🗑 Smazat kótu</button>` : '';
+  } else if (obj.type === "line" || obj.type === "constr") {
     addDimBtn = `<button class="btn-cancel" id="objAddDim">📐 Přidat kótu</button>`;
   } else if (obj.type === "circle" || obj.type === "arc") {
     addDimBtn = `<button class="btn-cancel" id="objAddDim">📐 Přidat kótu R</button>`;
   } else if (obj.type === "rect") {
     addDimBtn = `<button class="btn-cancel" id="objAddDim">📐 Přidat kóty</button>`;
+  } else if (obj.type === "point") {
+    addDimBtn = `<button class="btn-cancel" id="objAddDim">📐 Přidat kótu souřadnic</button>`;
+  } else if (obj.type === "polyline") {
+    addDimBtn = `<button class="btn-cancel" id="objAddDim">📐 Přidat kóty</button>`;
   }
 
   let html = `
     <div class="input-dialog">
-      <h3>📏 Info o objektu</h3>
+      <h3>${obj.isDimension || obj.isCoordLabel ? '⌗ Info o kótě' : '📏 Info o objektu'}</h3>
       <table style="width:100%;font-family:Consolas;font-size:13px;">
         ${rows}
       </table>
       <div class="btn-row">
         ${addDimBtn}
+        ${deleteDimBtn}
         <button class="btn-cancel" id="objCopy">📋 Kopírovat</button>
-        ${objIdx !== undefined ? `<button class="btn-cancel" id="objEdit" style="color:${COLORS.dimension};border-color:${COLORS.dimension}55">✏️ Upravit</button>` : ''}
+        ${objIdx !== undefined && !obj.isDimension && !obj.isCoordLabel ? `<button class="btn-cancel" id="objEdit" style="color:${COLORS.dimension};border-color:${COLORS.dimension}55">✏️ Upravit</button>` : ''}
         <button class="btn-ok btn-cancel-overlay">OK</button>
       </div>
     </div>`;
@@ -251,6 +267,29 @@ function buildObjectInfoDialog(obj, objIdx) {
         renderAll();
         overlay.remove();
         showEditObjectDialog(objIdx);
+      });
+    }
+
+    const delDimBtn = overlay.querySelector("#objDeleteDim");
+    if (delDimBtn && objIdx !== undefined) {
+      delDimBtn.addEventListener("click", () => {
+        pushUndo();
+        removeAnchorsForObject(state.objects[objIdx]);
+        state.objects.splice(objIdx, 1);
+        if (state.selected === objIdx) state.selected = null;
+        else if (state.selected > objIdx) state.selected--;
+        const newMulti = new Set();
+        for (const mi of state.multiSelected) {
+          if (mi < objIdx) newMulti.add(mi);
+          else if (mi > objIdx) newMulti.add(mi - 1);
+        }
+        state.multiSelected = newMulti;
+        updateObjectList();
+        calculateAllIntersections();
+        cleanupOrphanAnchors();
+        renderAll();
+        overlay.remove();
+        showToast("Kóta smazána ✓");
       });
     }
   }, 0);
@@ -468,6 +507,7 @@ export function showMeasureTwoLinesResult(obj1, obj2, idx1, idx2) {
         </div>` : ''}
         <div class="btn-row">
           ${intPt ? `<button class="btn-cancel" id="msAddPt">📍 Vytvořit průsečík</button>` : ''}
+          <button class="btn-cancel" id="msAddAngleDim">📐 Přidat kótu ∠</button>
           <button class="btn-cancel" id="msCopy">📋 Kopírovat</button>
           <button class="btn-ok btn-cancel-overlay">OK</button>
         </div>
@@ -522,6 +562,16 @@ export function showMeasureTwoLinesResult(obj1, obj2, idx1, idx2) {
       if (ptBtn) ptBtn.addEventListener("click", () => {
         addObject({ type: "point", x: intPt.x, y: intPt.y, name: `Průsečík ${state.nextId}` });
         showToast("Průsečík vytvořen");
+        overlay.remove();
+      });
+    }
+    const angleDimBtn = overlay.querySelector("#msAddAngleDim");
+    if (angleDimBtn) {
+      angleDimBtn.addEventListener("click", () => {
+        pushUndo();
+        addAngleDimensionForLines(obj1, obj2);
+        calculateAllIntersections();
+        renderAll();
         overlay.remove();
       });
     }

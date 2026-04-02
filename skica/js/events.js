@@ -251,7 +251,13 @@ drawCanvas.addEventListener("mousedown", (e) => {
     }
   }
 
-  handleCanvasClick(state.mouse.x, state.mouse.y);
+  // V deleteObj režimu použít raw (nesnapnuté) souřadnice,
+  // aby snap nepřesouval bod k jinému objektu
+  if (state.tool === 'deleteObj') {
+    handleCanvasClick(state.mouse.rawX, state.mouse.rawY);
+  } else {
+    handleCanvasClick(state.mouse.x, state.mouse.y);
+  }
 });
 
 drawCanvas.addEventListener("mouseup", (e) => {
@@ -953,6 +959,7 @@ export function handleCanvasClick(wx, wy) {
         pushUndo();
         removeAnchorsForObject(state.objects[idx]);
         state.objects.splice(idx, 1);
+        removeOrphanDimensions();
         updateObjectList();
         updateProperties();
         calculateAllIntersections();

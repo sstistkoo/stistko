@@ -266,7 +266,12 @@ export function updateObjectList() {
       const existingIds = new Set(state.objects.map(o => o.id));
       for (let di = state.objects.length - 1; di >= 0; di--) {
         const d = state.objects[di];
-        if (d.isDimension && d.sourceObjId && !existingIds.has(d.sourceObjId)) {
+        if (!d.isDimension) continue;
+        if (d.sourceObjId && !existingIds.has(d.sourceObjId)) {
+          state.objects.splice(di, 1);
+          if (idx > di) idx--;
+        } else if (d.dimLine1Id && d.dimLine2Id &&
+                   (!existingIds.has(d.dimLine1Id) || !existingIds.has(d.dimLine2Id))) {
           state.objects.splice(di, 1);
           if (idx > di) idx--;
         }
@@ -283,6 +288,7 @@ export function updateObjectList() {
       updateProperties();
       if (bridge.calculateAllIntersections) bridge.calculateAllIntersections();
       cleanupOrphanAnchors();
+      renderAll();
     });
     ul.appendChild(li);
 
