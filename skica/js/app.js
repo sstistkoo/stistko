@@ -114,9 +114,52 @@ setInterval(() => {
       snapMidpoints: state.snapMidpoints,
       undoStack: state.undoStack,
     };
-    setMeta('currentProjectData', data);
+    setMeta('currentProjectData', data).catch(err => {
+      if (err && err.name === 'QuotaExceededError') {
+        showToast('Úložiště je plné – auto-save selhal');
+      } else {
+        console.warn('Auto-save selhal:', err);
+      }
+    });
   }
 }, 30000);
+
+// ── Uložení při zavření okna ──
+window.addEventListener('beforeunload', () => {
+  if (state.objects.length > 0) {
+    const data = {
+      version: 1.6,
+      objects: state.objects,
+      intersections: state.intersections,
+      nextId: state.nextId,
+      gridSize: state.gridSize,
+      coordMode: state.coordMode,
+      incReference: state.incReference,
+      nullPointActive: state.nullPointActive,
+      nullPointAngle: state.nullPointAngle,
+      machineType: state.machineType,
+      xDisplayMode: state.xDisplayMode,
+      layers: state.layers,
+      activeLayer: state.activeLayer,
+      nextLayerId: state.nextLayerId,
+      anchors: state.anchors,
+      showObjectNumbers: state.showObjectNumbers,
+      showIntersectionNumbers: state.showIntersectionNumbers,
+      displayDecimals: state.displayDecimals,
+      theme: state.theme,
+      snapToGrid: state.snapToGrid,
+      angleSnap: state.angleSnap,
+      angleSnapStep: state.angleSnapStep,
+      showDimensions: state.showDimensions,
+      snapQuadrants: state.snapQuadrants,
+      snapMidpoints: state.snapMidpoints,
+      undoStack: state.undoStack,
+    };
+    // Synchronní pokus o uložení – navigator.sendBeacon není vhodný pro IDB,
+    // ale setMeta spustí IDB transakci, která doběhne i po unload
+    setMeta('currentProjectData', data).catch(() => {});
+  }
+});
 
 // ── Inicializace ──
 (async () => {

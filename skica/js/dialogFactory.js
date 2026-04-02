@@ -6,6 +6,10 @@
  * Vytvoří calc-overlay se standardním layoutem (titlebar + close + body).
  * Pokud overlay daného typu již existuje, vrátí null.
  */
+function escHTML(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
 export function makeOverlay(type, title, bodyHTML, windowClass) {
   if (document.querySelector(`.calc-overlay[data-type="${CSS.escape(type)}"]`)) return null;
   const overlay = document.createElement("div");
@@ -13,7 +17,7 @@ export function makeOverlay(type, title, bodyHTML, windowClass) {
   overlay.dataset.type = type;
   overlay.innerHTML =
     '<div class="calc-window ' + (windowClass || "cnc-window") + '">' +
-      '<div class="calc-titlebar"><h3>' + title + '</h3><button class="calc-close-btn">\u2715</button></div>' +
+      '<div class="calc-titlebar"><h3>' + escHTML(title) + '</h3><button class="calc-close-btn">\u2715</button></div>' +
       '<div class="calc-body">' + bodyHTML + '</div>' +
     '</div>';
   document.body.appendChild(overlay);

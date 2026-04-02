@@ -66,6 +66,7 @@ async function _get(storeName, key) {
     const req = tx.objectStore(storeName).get(key);
     req.onsuccess = () => resolve(req.result);
     req.onerror = (e) => reject(e.target.error);
+    tx.onerror = (e) => reject(e.target.error);
   });
 }
 

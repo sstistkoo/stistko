@@ -79,6 +79,9 @@ export function importProjectFile() {
       return;
     }
     const reader = new FileReader();
+    reader.onerror = () => {
+      showToast('Chyba při čtení souboru');
+    };
     reader.onload = (ev) => {
       try {
         let data = JSON.parse(ev.target.result);
@@ -136,6 +139,9 @@ export function importDXFFile() {
     const file = e.target.files[0];
     if (!file) return;
     const reader = new FileReader();
+    reader.onerror = () => {
+      showToast('Chyba při čtení DXF souboru');
+    };
     reader.onload = (ev) => {
       try {
         const { entities, errors } = parseDXF(ev.target.result);
