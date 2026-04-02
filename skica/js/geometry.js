@@ -418,19 +418,64 @@ export function findSegmentAt(obj, wx, wy) {
 export function distToObject(obj, wx, wy) {
   switch (obj.type) {
     case "point":
+      // Coord label (kóta souřadnic) – hit-test zahrnuje leader čáru, shelf a text
+      if (obj.isCoordLabel && obj.x != null && obj.y != null) {
+        const leaderWorld = 30 / state.zoom;
+        // Text "Z77.526 X139.359" je cca 120–170px → pokrýt dostatečně
+        const textWorld = 130 / state.zoom;
+        // Leader jde doprava a nahoru v world coords (screen: +X, -Y → world: +X, +Y)
+        const ex = obj.x + leaderWorld;
+        const ey = obj.y + leaderWorld;
+        const dPoint = Math.hypot(wx - obj.x, wy - obj.y);
+        const dLeader = distPointToSegment(wx, wy, obj.x, obj.y, ex, ey);
+        // Shelf + text oblast jako jeden segment pokrývající celý text
+        const dText = distPointToSegment(wx, wy, ex, ey, ex + textWorld, ey);
+        // Text je těsně nad shelf čárou → tolerance výšky textu
+        const textH = 20 / state.zoom;
+        const dTextArea = (wx >= ex - 2 / state.zoom && wx <= ex + textWorld && Math.abs(wy - ey) < textH)
+          ? 0 : Infinity;
+        return Math.min(dPoint, dLeader, dText, dTextArea);
+      }
       return Math.hypot(wx - obj.x, wy - obj.y);
     case "line":
     case "constr":
-      // Úhlová kóta – hit-test na oblouk a referenční čáry
-      if (obj.isDimension && obj.dimType === 'angular' && obj.dimCenterX != null) {
+      // Úhlová kóta – hit-test na oblouk, referenční čáry a text
+      if (obj.isDimension && obj.dimType === 'angular' && obj.dimCenterX != null && obj.dimCenterY != null) {
         const cx = obj.dimCenterX, cy = obj.dimCenterY;
         const r = (obj.dimRadius || 20) * 0.8;
-        // Vzdálenost ke středu (referenční čáry)
         const dCenter = distPointToSegment(wx, wy, cx, cy, obj.x1, obj.y1);
         const dCenter2 = distPointToSegment(wx, wy, cx, cy, obj.x2, obj.y2);
-        // Vzdálenost k oblouku
         const dArc = Math.abs(Math.hypot(wx - cx, wy - cy) - r);
-        return Math.min(dCenter, dCenter2, dArc);
+        // Text je na středu oblouku – přidat hit area kolem textu
+        const ang1 = Math.atan2(obj.y1 - cy, obj.x1 - cx);
+        const ang2 = Math.atan2(obj.y2 - cy, obj.x2 - cx);
+        const midAng = (ang1 + ang2) / 2;
+        const textX = cx + r * Math.cos(midAng);
+        const textY = cy + r * Math.sin(midAng);
+        const textR = 15 / state.zoom;
+        const dText = Math.max(0, Math.hypot(wx - textX, wy - textY) - textR);
+        return Math.min(dCenter, dCenter2, dArc, dText);
+      }
+      // Lineární kóta – hit-test na kótovací čáru, referenční čáry a text
+      if (obj.isDimension && obj.dimSrcX1 != null && obj.dimSrcY1 != null && obj.dimSrcX2 != null && obj.dimSrcY2 != null) {
+        const dMain = distPointToSegment(wx, wy, obj.x1, obj.y1, obj.x2, obj.y2);
+        const dRef1 = distPointToSegment(wx, wy, obj.dimSrcX1, obj.dimSrcY1, obj.x1, obj.y1);
+        const dRef2 = distPointToSegment(wx, wy, obj.dimSrcX2, obj.dimSrcY2, obj.x2, obj.y2);
+        // Text je na středu kótovací čáry – rozšířit hit oblast o text
+        const tmx = (obj.x1 + obj.x2) / 2;
+        const tmy = (obj.y1 + obj.y2) / 2;
+        const textR = 20 / state.zoom;
+        const dText = Math.max(0, Math.hypot(wx - tmx, wy - tmy) - textR);
+        return Math.min(dMain, dRef1, dRef2, dText);
+      }
+      // Průměrová/radiální kóta – hit-test na kótovací čáru a text
+      if (obj.isDimension && (obj.dimType === 'diameter' || obj.dimType === 'radius')) {
+        const dLine = distPointToSegment(wx, wy, obj.x1, obj.y1, obj.x2, obj.y2);
+        const tmx = (obj.x1 + obj.x2) / 2;
+        const tmy = (obj.y1 + obj.y2) / 2;
+        const textR = 20 / state.zoom;
+        const dText = Math.max(0, Math.hypot(wx - tmx, wy - tmy) - textR);
+        return Math.min(dLine, dText);
       }
       return distPointToSegment(wx, wy, obj.x1, obj.y1, obj.x2, obj.y2);
     case "circle":
