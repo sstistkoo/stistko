@@ -1395,6 +1395,33 @@ body {
   color: var(--ctp-base);
 }
 
+#canvasCalcBtn {
+  display: none;
+  position: fixed;
+  top: 28px;
+  right: 104px;
+  z-index: 60;
+  background: var(--ctp-surface2);
+  color: var(--ctp-text);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  line-height: 40px;
+  text-align: center;
+  transition: background 0.2s;
+}
+#canvasCalcBtn:hover {
+  background: var(--ctp-surface1);
+}
+#canvasCalcBtn:active {
+  background: var(--ctp-blue);
+  color: var(--ctp-base);
+}
+
 #mobileSnap {
   display: none;
   position: fixed;
@@ -1877,6 +1904,12 @@ body {
   }
 
   #mobileSnap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #canvasCalcBtn {
     display: flex;
     align-items: center;
     justify-content: center;
