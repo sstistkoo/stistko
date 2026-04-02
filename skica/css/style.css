@@ -2266,7 +2266,7 @@ body {
   padding: 9px 3px;
 }
 .calc-overlay-float .calc-fn-row-3 .calc-btn {
-  padding: 11px 3px;
+  padding: 9px 3px;
 }
 .calc-btn:hover { background: var(--ctp-surface1); }
 .calc-btn:active { background: var(--ctp-surface2); }

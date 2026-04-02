@@ -2670,12 +2670,14 @@ export function openCalculator() {
     _dragOfs = { x: e.clientX - rect.left, y: e.clientY - rect.top };
     e.preventDefault();
   });
-  document.addEventListener("mousemove", (e) => {
+  const onMouseMove = (e) => {
     if (!_dragOfs) return;
     calcWin.style.left = (e.clientX - _dragOfs.x) + "px";
     calcWin.style.top = (e.clientY - _dragOfs.y) + "px";
-  });
-  document.addEventListener("mouseup", () => { _dragOfs = null; });
+  };
+  const onMouseUp = () => { _dragOfs = null; };
+  document.addEventListener("mousemove", onMouseMove);
+  document.addEventListener("mouseup", onMouseUp);
   // Touch drag
   dragHandle.addEventListener("touchstart", (e) => {
     if (e.target.closest("button")) return;
@@ -2683,13 +2685,24 @@ export function openCalculator() {
     const rect = calcWin.getBoundingClientRect();
     _dragOfs = { x: t.clientX - rect.left, y: t.clientY - rect.top };
   }, { passive: true });
-  document.addEventListener("touchmove", (e) => {
+  const onTouchMove = (e) => {
     if (!_dragOfs) return;
     const t = e.touches[0];
     calcWin.style.left = (t.clientX - _dragOfs.x) + "px";
     calcWin.style.top = (t.clientY - _dragOfs.y) + "px";
-  }, { passive: true });
-  document.addEventListener("touchend", () => { _dragOfs = null; });
+  };
+  const onTouchEnd = () => { _dragOfs = null; };
+  document.addEventListener("touchmove", onTouchMove, { passive: true });
+  document.addEventListener("touchend", onTouchEnd);
+  // Cleanup drag listeners when calculator is removed
+  const dragCleanup = () => {
+    document.removeEventListener("mousemove", onMouseMove);
+    document.removeEventListener("mouseup", onMouseUp);
+    document.removeEventListener("touchmove", onTouchMove);
+    document.removeEventListener("touchend", onTouchEnd);
+  };
+  const origRemove = overlay.remove.bind(overlay);
+  overlay.remove = () => { dragCleanup(); origRemove(); };
 
   const display = overlay.querySelector("#calcDisplay");
   const exprDisplay = overlay.querySelector("#calcExpr");
@@ -2832,7 +2845,7 @@ export function openCalculator() {
         }
         case "paste": {
           const v = display.value;
-          if (!v || v === "0") { showToast("Není co vložit"); break; }
+          if (v === null || v === undefined || v === "") { showToast("Není co vložit"); break; }
           const target = _lastFocusedInput;
           if (target && document.body.contains(target) && !target.disabled && !target.readOnly
               && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA')
