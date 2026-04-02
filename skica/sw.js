@@ -2,7 +2,7 @@
 // ║  SKICA – Service Worker (PWA offline cache)                 ║
 // ╚══════════════════════════════════════════════════════════════╝
 
-const CACHE_NAME = 'skica-v152';
+const CACHE_NAME = 'skica-v153';
 const ASSETS = [
   './',
   './index.html',
@@ -10,8 +10,9 @@ const ASSETS = [
   './css/style.css',
   './js/app.js',
   './js/bridge.js',
-  './js/calculators/cncExamples.js',
+  './js/calculators/camSimulator.js',
   './js/calculators/cncEditor.js',
+  './js/calculators/cncExamples.js',
   './js/calculators/commands.js',
   './js/calculators/convert.js',
   './js/calculators/cutting.js',
@@ -33,8 +34,9 @@ const ASSETS = [
   './js/constants.js',
   './js/dialogFactory.js',
   './js/dialogs.js',
-  './js/dialogs/bulge.js',
+  './js/dialogs/autoDetect.js',
   './js/dialogs/booleanDialog.js',
+  './js/dialogs/bulge.js',
   './js/dialogs/circleRadius.js',
   './js/dialogs/dimension.js',
   './js/dialogs/gearDialog.js',
@@ -45,6 +47,7 @@ const ASSETS = [
   './js/dialogs/polarDrawing.js',
   './js/dialogs/postDrawDialog.js',
   './js/dialogs/tangentDialogs.js',
+  './js/dialogs/textDialog.js',
   './js/dxf.js',
   './js/events.js',
   './js/geometry.js',
@@ -75,6 +78,7 @@ const ASSETS = [
   './js/tools/gearGenerator.js',
   './js/tools/helpers.js',
   './js/tools/horizontalClick.js',
+  './js/tools/chainDimensionClick.js',
   './js/tools/chamferClick.js',
   './js/tools/index.js',
   './js/tools/lineClick.js',
@@ -84,6 +88,7 @@ const ASSETS = [
   './js/tools/parallelClick.js',
   './js/tools/perpClick.js',
   './js/tools/polylineClick.js',
+  './js/tools/profileTraceClick.js',
   './js/tools/rectClick.js',
   './js/tools/scaleClick.js',
   './js/tools/snapPointClick.js',
@@ -94,6 +99,7 @@ const ASSETS = [
   './js/types.js',
   './js/ui.js',
   './js/utils.js',
+  './.vscode/tasks.json',
   './dxf-json.html',
   './gear_debug.html',
   './gear_profiles.html',
