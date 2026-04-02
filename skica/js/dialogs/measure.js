@@ -832,3 +832,116 @@ export function showMeasureTwoObjectsResult(obj1, obj2) {
     showToast(`Kóta ${d.toFixed(2)}mm přidána`);
   });
 }
+
+/**
+ * Souhrnné měření N vybraných objektů (3+).
+ * Zobrazí info o každém objektu + vzájemné vztahy.
+ * @param {Array<object>} objs - vybrané objekty
+ * @param {Array<number>} indices - indexy v state.objects
+ */
+export function showMeasureMultiObjectResult(objs, indices) {
+  const { H, V, Hp, Vp, fH, fV } = coordHelpers();
+
+  function _isLine(o) { return o.type === 'line' || o.type === 'constr'; }
+  function _isCircle(o) { return o.type === 'circle' || o.type === 'arc'; }
+
+  let rows = '';
+  // --- Souhrn každého objektu ---
+  for (let i = 0; i < objs.length; i++) {
+    const o = objs[i];
+    const label = o.name || typeLabel(o.type);
+    const safeLabel = label.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    rows += `<tr><td colspan="2" style="border-top:1px solid ${COLORS.border};padding-top:4px;color:${COLORS.dimension};font-weight:bold">${i + 1}. ${safeLabel}</td></tr>`;
+    switch (o.type) {
+      case 'point':
+        rows += `<tr><td style="color:${COLORS.label};padding-left:12px">${Hp}${H}:</td><td style="color:${COLORS.selected}">${fH(o.x).toFixed(3)}</td></tr>`;
+        rows += `<tr><td style="color:${COLORS.label};padding-left:12px">${Vp}${V}:</td><td style="color:${COLORS.selected}">${fV(o.y).toFixed(3)}</td></tr>`;
+        break;
+      case 'line': case 'constr': {
+        const len = Math.hypot(o.x2 - o.x1, o.y2 - o.y1);
+        const ang = Math.atan2(o.y2 - o.y1, o.x2 - o.x1) * 180 / Math.PI;
+        rows += `<tr><td style="color:${COLORS.label};padding-left:12px">Délka:</td><td style="color:${COLORS.selected}">${len.toFixed(3)} mm</td></tr>`;
+        rows += `<tr><td style="color:${COLORS.label};padding-left:12px">Úhel:</td><td style="color:${COLORS.selected}">${ang.toFixed(2)}°</td></tr>`;
+        break;
+      }
+      case 'circle':
+        rows += `<tr><td style="color:${COLORS.label};padding-left:12px">Poloměr:</td><td style="color:${COLORS.selected}">${o.r.toFixed(3)} mm</td></tr>`;
+        rows += `<tr><td style="color:${COLORS.label};padding-left:12px">Průměr:</td><td style="color:${COLORS.selected}">${(o.r * 2).toFixed(3)} mm</td></tr>`;
+        break;
+      case 'arc':
+        rows += `<tr><td style="color:${COLORS.label};padding-left:12px">Poloměr:</td><td style="color:${COLORS.selected}">${o.r.toFixed(3)} mm</td></tr>`;
+        break;
+      case 'rect': {
+        const w = Math.abs(o.x2 - o.x1), h = Math.abs(o.y2 - o.y1);
+        rows += `<tr><td style="color:${COLORS.label};padding-left:12px">Šířka×Výška:</td><td style="color:${COLORS.selected}">${w.toFixed(3)} × ${h.toFixed(3)} mm</td></tr>`;
+        break;
+      }
+      case 'polyline': {
+        let pLen = 0;
+        const pn = o.vertices.length;
+        const pSeg = o.closed ? pn : pn - 1;
+        for (let si = 0; si < pSeg; si++) {
+          const a = o.vertices[si], b = o.vertices[(si + 1) % pn];
+          const bg = o.bulges[si] || 0;
+          if (bg === 0) pLen += Math.hypot(b.x - a.x, b.y - a.y);
+          else { const arc = bulgeToArc(a, b, bg); if (arc) pLen += arc.r * 4 * Math.atan(Math.abs(bg)); }
+        }
+        rows += `<tr><td style="color:${COLORS.label};padding-left:12px">Délka:</td><td style="color:${COLORS.selected}">${pLen.toFixed(3)} mm</td></tr>`;
+        break;
+      }
+    }
+  }
+
+  // --- Vzájemné vztahy (úhly mezi úsečkami, vzdálenosti) ---
+  const lines = objs.filter(_isLine);
+  const circles = objs.filter(_isCircle);
+  if (lines.length >= 2) {
+    rows += `<tr><td colspan="2" style="border-top:1px solid ${COLORS.border};padding-top:6px;color:${COLORS.dimension};font-weight:bold">Úhly mezi úsečkami</td></tr>`;
+    for (let i = 0; i < lines.length; i++) {
+      for (let j = i + 1; j < lines.length; j++) {
+        const a = angleBetweenLines(lines[i], lines[j]);
+        const n1 = lines[i].name || `Ú${i + 1}`;
+        const n2 = lines[j].name || `Ú${j + 1}`;
+        rows += `<tr><td style="color:${COLORS.label};padding-left:12px">${n1} ↔ ${n2}:</td><td style="color:${COLORS.selected}">${a.toFixed(2)}°</td></tr>`;
+      }
+    }
+  }
+
+  const overlay = makeInputOverlay(`
+    <div class="input-dialog" style="max-height:80vh;overflow-y:auto">
+      <h3>📏 Měření – ${objs.length} objektů</h3>
+      <table style="width:100%;font-family:Consolas;font-size:13px;">${rows}</table>
+      <div class="btn-row">
+        <button class="btn-cancel" id="msAddAllDims">📐 Přidat kóty ke všem</button>
+        <button class="btn-cancel" id="msCopy">📋 Kopírovat</button>
+        <button class="btn-ok btn-cancel-overlay">OK</button>
+      </div>
+    </div>`);
+  _addCopyAndDimListeners(overlay);
+  const addAllBtn = overlay.querySelector("#msAddAllDims");
+  if (addAllBtn) {
+    addAllBtn.addEventListener("click", () => {
+      pushUndo();
+      let count = 0;
+      for (const o of objs) {
+        if (o.isDimension || o.isCoordLabel) continue;
+        addDimensionForObject(o);
+        count++;
+      }
+      // Úhlové kóty mezi páry úseček
+      if (lines.length >= 2) {
+        for (let i = 0; i < lines.length; i++) {
+          for (let j = i + 1; j < lines.length; j++) {
+            if (lines[i].isDimension || lines[j].isDimension) continue;
+            addAngleDimensionForLines(lines[i], lines[j]);
+            count++;
+          }
+        }
+      }
+      calculateAllIntersections();
+      renderAll();
+      overlay.remove();
+      showToast(`Přidáno ${count} kót ✓`);
+    });
+  }
+}
