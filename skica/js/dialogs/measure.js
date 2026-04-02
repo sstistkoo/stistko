@@ -139,6 +139,14 @@ function buildObjectInfoDialog(obj, objIdx) {
       break;
     case "line":
     case "constr": {
+      // Úhlová kóta – speciální info
+      if (obj.isDimension && obj.dimType === 'angular' && obj.dimCenterX != null) {
+        const sweepDeg = (obj.dimAngle || 0) * 180 / Math.PI;
+        rows += `<tr><td style="color:${COLORS.label}">Úhel:</td><td style="color:${COLORS.selected};font-size:16px">${sweepDeg.toFixed(1)}°</td></tr>`;
+        rows += `<tr><td style="color:${COLORS.label}">Doplněk:</td><td style="color:${COLORS.selected}">${(180 - sweepDeg).toFixed(1)}°</td></tr>`;
+        rows += `<tr><td style="color:${COLORS.label}">Průsečík:</td><td style="color:${COLORS.primary}">${Hp}${H}${fH(obj.dimCenterX).toFixed(3)} ${Vp}${V}${fV(obj.dimCenterY).toFixed(3)}</td></tr>`;
+        break;
+      }
       const len = Math.hypot(obj.x2 - obj.x1, obj.y2 - obj.y1);
       const angle =
         (Math.atan2(obj.y2 - obj.y1, obj.x2 - obj.x1) * 180) / Math.PI;
@@ -206,8 +214,13 @@ function buildObjectInfoDialog(obj, objIdx) {
 
   let addDimBtn = "";
   let deleteDimBtn = "";
+  let angularIntersectBtn = "";
   if (obj.isDimension || obj.isCoordLabel) {
     deleteDimBtn = objIdx !== undefined ? `<button class="btn-cancel" id="objDeleteDim" style="color:#e64553;border-color:#e6455355">🗑 Smazat kótu</button>` : '';
+    // Úhlová kóta → tlačítko pro vytvoření průsečíku
+    if (obj.dimType === 'angular' && obj.dimCenterX != null) {
+      angularIntersectBtn = `<button class="btn-cancel" id="objAddIntersect">📍 Vytvořit průsečík</button>`;
+    }
   } else if (obj.type === "line" || obj.type === "constr") {
     addDimBtn = `<button class="btn-cancel" id="objAddDim">📐 Přidat kótu</button>`;
   } else if (obj.type === "circle" || obj.type === "arc") {
@@ -228,6 +241,7 @@ function buildObjectInfoDialog(obj, objIdx) {
       </table>
       <div class="btn-row">
         ${addDimBtn}
+        ${angularIntersectBtn}
         ${deleteDimBtn}
         <button class="btn-cancel" id="objCopy">📋 Kopírovat</button>
         ${objIdx !== undefined && !obj.isDimension && !obj.isCoordLabel ? `<button class="btn-cancel" id="objEdit" style="color:${COLORS.dimension};border-color:${COLORS.dimension}55">✏️ Upravit</button>` : ''}
@@ -290,6 +304,17 @@ function buildObjectInfoDialog(obj, objIdx) {
         renderAll();
         overlay.remove();
         showToast("Kóta smazána ✓");
+      });
+    }
+
+    const intersectBtn = overlay.querySelector("#objAddIntersect");
+    if (intersectBtn && obj.dimCenterX != null && obj.dimCenterY != null) {
+      intersectBtn.addEventListener("click", () => {
+        addObject({ type: "point", x: obj.dimCenterX, y: obj.dimCenterY, name: `Průsečík ${state.nextId}` });
+        calculateAllIntersections();
+        renderAll();
+        overlay.remove();
+        showToast("Průsečík vytvořen ✓");
       });
     }
   }, 0);
