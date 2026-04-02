@@ -2962,6 +2962,7 @@ function openTrigCalc() {
 }
 
 document.getElementById("btnOpenCalc").addEventListener("click", openCalculator);
+document.getElementById("canvasCalcBtn").addEventListener("click", openCalculator);
 document.getElementById("btnOpenTrig").addEventListener("click", openTrigCalc);
 document.getElementById("btnOpenCutting").addEventListener("click", openCuttingCalc);
 document.getElementById("btnOpenTaper").addEventListener("click", openTaperCalc);
