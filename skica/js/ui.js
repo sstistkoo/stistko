@@ -10,7 +10,7 @@ import { drawCanvas, screenToWorld, snapPt, autoCenterView } from './canvas.js';
 import { bridge } from './bridge.js';
 import { addObject } from './objects.js';
 import { updateAssociativeDimensions } from './dialogs/dimension.js';
-import { openCuttingCalc, openTaperCalc, openThreadCalc, openConvertCalc, openWeightCalc, openToleranceCalc, openRoughnessCalc, openInsertCalc, openSinumerikHub } from './cnc-calcs.js';
+import { openCuttingCalc, openTaperCalc, openThreadCalc, openConvertCalc, openWeightCalc, openToleranceCalc, openRoughnessCalc, openInsertCalc, openSinumerikHub, openCamSimulator } from './cnc-calcs.js';
 import { makeOverlay, makeInputOverlay } from './dialogFactory.js';
 import { getMeta, setMeta } from './idb.js';
 import { showEditObjectDialog } from './dialogs/mobileEdit.js';
@@ -3160,6 +3160,7 @@ document.getElementById("btnOpenTolerance").addEventListener("click", openTolera
 document.getElementById("btnOpenRoughness").addEventListener("click", openRoughnessCalc);
 document.getElementById("btnOpenInserts").addEventListener("click", openInsertCalc);
 document.getElementById("btnOpenSinumerik").addEventListener("click", openSinumerikHub);
+document.getElementById("btnOpenCam").addEventListener("click", openCamSimulator);
 
 // ── Poznámkový blok (profesionální verze) ──
 document.getElementById("btnOpenNotes").addEventListener("click", async () => {

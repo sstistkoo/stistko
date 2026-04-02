@@ -580,6 +580,7 @@ export function updateTracePanel() {
   html += '</ul>';
   html += `<div class="trace-panel-actions">
     <button id="tracePanelToCnc" class="calc-btn trace-panel-btn" title="Odeslat do CNC editoru">⚙ Do CNC</button>
+    <button id="tracePanelToCam" class="calc-btn trace-panel-btn" title="Otevřít v CAM simulátoru">🔄 CAM</button>
     <button id="tracePanelCopy" class="calc-btn trace-panel-btn" title="Kopírovat G-kód">📋 G-kód</button>
     <button id="tracePanelDraw" class="calc-btn trace-panel-btn" title="Vykreslit profil na výkrese">✏ Vykreslit</button>
     <button id="tracePanelImport" class="calc-btn trace-panel-btn" title="Import profilu z G-kódu">📥 G→Profil</button>
@@ -633,6 +634,18 @@ export function updateTracePanel() {
       if (!gcode) { showToast('Žádná data k exportu'); return; }
       import('../calculators/cncEditor.js').then(m => {
         m.openCncEditor(gcode);
+      });
+    });
+  }
+
+  // CAM simulator button
+  const camBtn = content.querySelector('#tracePanelToCam');
+  if (camBtn) {
+    camBtn.addEventListener('click', () => {
+      const gcode = getTraceGcode();
+      if (!gcode) { showToast('Žádná data k exportu'); return; }
+      import('../calculators/camSimulator.js').then(m => {
+        m.openCamSimulator(gcode);
       });
     });
   }
