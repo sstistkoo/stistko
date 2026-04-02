@@ -134,6 +134,18 @@ drawCanvas.addEventListener("mousemove", (e) => {
     }
   }
 
+  // Angle snap – copyPlace (referenční bod jako pivot)
+  if (state.angleSnap && state.tool === 'copyPlace' && state._copyPlaceRef
+      && state.mouse.snapType !== 'point') {
+    [wx, wy] = applyAngleSnap(wx, wy, state._copyPlaceRef);
+  }
+
+  // Angle snap – move (dragStartWorld jako pivot)
+  if (state.angleSnap && state.tool === 'move' && state.dragging && state.dragStartWorld
+      && state.mouse.snapType !== 'point') {
+    [wx, wy] = applyAngleSnap(wx, wy, state.dragStartWorld);
+  }
+
   state.mouse.x = wx;
   state.mouse.y = wy;
 
