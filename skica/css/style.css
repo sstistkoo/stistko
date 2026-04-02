@@ -113,6 +113,92 @@ body {
   background: var(--ctp-surface2);
   color: var(--ctp-text);
 }
+
+/* ── Desktop: všechna tlačítka rozbalená, sidebar na celou výšku ── */
+@media (min-width: 901px) {
+  /* Sidebar fixně na celou výšku vpravo */
+  #sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 300px;
+    height: 100vh;
+    z-index: 20;
+    border-left: 1px solid var(--ctp-surface0);
+  }
+
+  /* Topbar přes celou šířku vlevo od sidebaru */
+  #topbar {
+    gap: 4px;
+    padding: 3px 8px;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 300px;
+    z-index: 15;
+    background: var(--ctp-mantle);
+    border-bottom: 1px solid var(--ctp-surface0);
+  }
+  #main {
+    margin-right: 300px;
+    margin-top: 0;
+    flex: 1;
+    height: 100vh;
+  }
+
+  /* Souřadnice skryty z topbaru – budou u kurzoru */
+  #coordDisplay {
+    display: none !important;
+  }
+
+  /* Floating souřadnice u kurzoru */
+  #cursorCoords {
+    display: block;
+    position: fixed;
+    z-index: 50;
+    pointer-events: none;
+    font-family: "Consolas", monospace;
+    font-size: 12px;
+    color: var(--ctp-text);
+    background: var(--ctp-crust);
+    border: 1px solid var(--ctp-surface1);
+    border-radius: 4px;
+    padding: 2px 8px;
+    white-space: nowrap;
+    opacity: 0.9;
+    transform: translate(16px, 16px);
+  }
+
+  /* Toolbar-more rozbalené */
+  .toolbar-more {
+    display: contents;
+  }
+  .toolbar-more-toggle {
+    display: none;
+  }
+  .toolbar-more-settings:empty {
+    display: none;
+  }
+  .toolbar-more-settings {
+    display: none;
+  }
+
+  /* Kompaktní tlačítka */
+  .tool-btn {
+    padding: 3px 7px;
+    font-size: 12px;
+  }
+  .tool-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+  #topbar .sep {
+    height: 20px;
+    margin: 0 2px;
+  }
+}
 .toolbar-more-settings {
   display: flex;
   flex-wrap: wrap;
