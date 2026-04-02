@@ -1746,11 +1746,20 @@ function _drawConstraintIcon(wx, wy, type, size, isSelected) {
 
 // ── Vodící čára pro angle snap ──
 function renderAngleSnapGuide() {
-  if (!state.angleSnap || !state.drawing || state.tempPoints.length === 0) return;
-  const tools = ['line', 'constr', 'polyline', 'measure', 'dimension'];
-  if (!tools.includes(state.tool)) return;
+  if (!state.angleSnap) return;
 
-  const ref = state.tempPoints[state.tempPoints.length - 1];
+  // Určit referenční bod – tempPoints (kreslení), _copyPlaceRef (kopírování), dragStartWorld (přesun)
+  let ref;
+  if (state.tool === 'copyPlace' && state._copyPlaceRef) {
+    ref = state._copyPlaceRef;
+  } else if (state.tool === 'move' && state.dragging && state.dragStartWorld) {
+    ref = state.dragStartWorld;
+  } else if (state.drawing && state.tempPoints.length > 0
+      && ['line', 'constr', 'polyline', 'measure', 'dimension'].includes(state.tool)) {
+    ref = state.tempPoints[state.tempPoints.length - 1];
+  } else {
+    return;
+  }
   const mx = state.mouse.x, my = state.mouse.y;
   const dx = mx - ref.x, dy = my - ref.y;
   const dist = Math.hypot(dx, dy);

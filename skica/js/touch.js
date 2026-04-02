@@ -359,6 +359,14 @@ function showPrecisionCrosshair(touch) {
       && state.mouse.snapType !== 'point') {
     [wx, wy] = applyAngleSnap(wx, wy, state.tempPoints[state.tempPoints.length - 1]);
   }
+  if (state.angleSnap && state.tool === 'copyPlace' && state._copyPlaceRef
+      && state.mouse.snapType !== 'point') {
+    [wx, wy] = applyAngleSnap(wx, wy, state._copyPlaceRef);
+  }
+  if (state.angleSnap && state.tool === 'move' && state.dragging && state.dragStartWorld
+      && state.mouse.snapType !== 'point') {
+    [wx, wy] = applyAngleSnap(wx, wy, state.dragStartWorld);
+  }
   state.mouse.x = wx;
   state.mouse.y = wy;
   state.mouse.sx = chSx;
@@ -385,6 +393,14 @@ function updatePrecisionCrosshair(touch) {
       && ['line', 'constr', 'polyline', 'measure', 'dimension'].includes(state.tool)
       && state.mouse.snapType !== 'point') {
     [wx, wy] = applyAngleSnap(wx, wy, state.tempPoints[state.tempPoints.length - 1]);
+  }
+  if (state.angleSnap && state.tool === 'copyPlace' && state._copyPlaceRef
+      && state.mouse.snapType !== 'point') {
+    [wx, wy] = applyAngleSnap(wx, wy, state._copyPlaceRef);
+  }
+  if (state.angleSnap && state.tool === 'move' && state.dragging && state.dragStartWorld
+      && state.mouse.snapType !== 'point') {
+    [wx, wy] = applyAngleSnap(wx, wy, state.dragStartWorld);
   }
   state.mouse.x = wx;
   state.mouse.y = wy;
