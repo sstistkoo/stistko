@@ -123,6 +123,7 @@ export function resetDrawingState() {
   state._trimLine = null;
   state._extendLine = null;
   state._filletFirstLine = null;
+  state._dimFirstLine = null;
   // Generic tool cleanup (fillet/offset listeners etc.)
   if (state._toolCleanup) {
     state._toolCleanup();

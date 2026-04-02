@@ -8,9 +8,34 @@ import { renderAll } from '../render.js';
 import { addObject } from '../objects.js';
 import { setHint, resetHint } from '../ui.js';
 import { findObjectAt, calculateAllIntersections } from '../geometry.js';
-import { addDimensionForObject } from '../dialogs.js';
+import { addDimensionForObject, addAngleDimensionForLines } from '../dialogs.js';
 
 export function handleDimensionClick(wx, wy) {
+  // Režim: čekáme na druhou úsečku pro úhlovou kótu
+  if (state._dimFirstLine) {
+    const idx = findObjectAt(wx, wy);
+    if (idx !== null) {
+      const obj = state.objects[idx];
+      if ((obj.type === 'line' || obj.type === 'constr') && !obj.isDimension && obj.id !== state._dimFirstLine.id) {
+        pushUndo();
+        addAngleDimensionForLines(state._dimFirstLine, obj);
+        state._dimFirstLine = null;
+        calculateAllIntersections();
+        renderAll();
+        resetHint();
+        return;
+      }
+    }
+    // Klik jinam – zrušit režim úhlové kóty, přidat lineární kótu první úsečky
+    pushUndo();
+    addDimensionForObject(state._dimFirstLine);
+    state._dimFirstLine = null;
+    calculateAllIntersections();
+    renderAll();
+    resetHint();
+    return;
+  }
+
   if (!state.drawing) {
     // Snap k bodu (endpoint/midpoint) → kóta souřadnic bodu
     if (state.mouse.snapType === 'point') {
@@ -24,6 +49,12 @@ export function handleDimensionClick(wx, wy) {
     const idx = findObjectAt(wx, wy);
     if (idx !== null) {
       const obj = state.objects[idx];
+      // Úsečka/konstr. → nabídnout úhlovou kótu (kliknout na druhou)
+      if ((obj.type === 'line' || obj.type === 'constr') && !obj.isDimension) {
+        state._dimFirstLine = obj;
+        setHint("Klepněte na druhou úsečku pro kótu úhlu, nebo jinam pro kótu délky");
+        return;
+      }
       pushUndo();
       addDimensionForObject(obj);
       calculateAllIntersections();

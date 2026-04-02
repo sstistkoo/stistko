@@ -13,7 +13,7 @@ vi.mock('../js/bridge.js', () => ({
   bridge: {},
 }));
 
-import { addDimensionForObject } from '../js/dialogs/dimension.js';
+import { addDimensionForObject, addAngleDimensionForLines } from '../js/dialogs/dimension.js';
 import { addObject } from '../js/objects.js';
 import { showToast } from '../js/state.js';
 
@@ -211,5 +211,82 @@ describe('addDimensionForObject', () => {
     });
     // Pouze 1 kóta – segment s nulovou délkou je přeskočen
     expect(addObject).toHaveBeenCalledOnce();
+  });
+});
+
+// ════════════════════════════════════════
+// ── addAngleDimensionForLines ──
+// ════════════════════════════════════════
+describe('addAngleDimensionForLines', () => {
+  beforeEach(() => { vi.clearAllMocks(); });
+
+  it('vytvoří úhlovou kótu 90° mezi kolmými úsečkami', () => {
+    const line1 = { id: 1, type: 'line', x1: 0, y1: 0, x2: 10, y2: 0 };
+    const line2 = { id: 2, type: 'line', x1: 0, y1: 0, x2: 0, y2: 10 };
+    addAngleDimensionForLines(line1, line2);
+    expect(addObject).toHaveBeenCalledOnce();
+    const arg = addObject.mock.calls[0][0];
+    expect(arg.isDimension).toBe(true);
+    expect(arg.dimType).toBe('angular');
+    expect(arg.dimAngle).toBeCloseTo(Math.PI / 2, 5);
+    expect(arg.name).toContain('∠90.0°');
+    expect(arg.dimLine1Id).toBe(1);
+    expect(arg.dimLine2Id).toBe(2);
+  });
+
+  it('vytvoří úhlovou kótu 45° mezi šikmými úsečkami', () => {
+    const line1 = { id: 1, type: 'line', x1: 0, y1: 0, x2: 10, y2: 0 };
+    const line2 = { id: 2, type: 'line', x1: 0, y1: 0, x2: 10, y2: 10 };
+    addAngleDimensionForLines(line1, line2);
+    expect(addObject).toHaveBeenCalledOnce();
+    const arg = addObject.mock.calls[0][0];
+    expect(arg.dimAngle).toBeCloseTo(Math.PI / 4, 5);
+    expect(arg.name).toContain('∠45.0°');
+  });
+
+  it('vypočítá průsečík jako centrum oblouku', () => {
+    const line1 = { id: 1, type: 'line', x1: 0, y1: 0, x2: 10, y2: 0 };
+    const line2 = { id: 2, type: 'line', x1: 5, y1: -5, x2: 5, y2: 5 };
+    addAngleDimensionForLines(line1, line2);
+    const arg = addObject.mock.calls[0][0];
+    expect(arg.dimCenterX).toBeCloseTo(5, 5);
+    expect(arg.dimCenterY).toBeCloseTo(0, 5);
+  });
+
+  it('odmítne rovnoběžné úsečky', () => {
+    const line1 = { id: 1, type: 'line', x1: 0, y1: 0, x2: 10, y2: 0 };
+    const line2 = { id: 2, type: 'line', x1: 0, y1: 5, x2: 10, y2: 5 };
+    addAngleDimensionForLines(line1, line2);
+    expect(addObject).not.toHaveBeenCalled();
+    expect(showToast).toHaveBeenCalledWith(expect.stringContaining('rovnoběžné'));
+  });
+
+  it('odmítne příliš krátkou úsečku', () => {
+    const line1 = { id: 1, type: 'line', x1: 0, y1: 0, x2: 0, y2: 0 };
+    const line2 = { id: 2, type: 'line', x1: 0, y1: 0, x2: 10, y2: 10 };
+    addAngleDimensionForLines(line1, line2);
+    expect(addObject).not.toHaveBeenCalled();
+    expect(showToast).toHaveBeenCalledWith(expect.stringContaining('krátké'));
+  });
+
+  it('kóta 180° pro protisměrné úsečky', () => {
+    const line1 = { id: 1, type: 'line', x1: 0, y1: 0, x2: 10, y2: 0 };
+    const line2 = { id: 2, type: 'line', x1: 5, y1: 5, x2: 5, y2: -5 };
+    addAngleDimensionForLines(line1, line2);
+    expect(addObject).toHaveBeenCalledOnce();
+    const arg = addObject.mock.calls[0][0];
+    expect(arg.dimAngle).toBeCloseTo(Math.PI / 2, 5);
+  });
+
+  it('zobrazí skutečný úhel mezi úsečkami (i tupý)', () => {
+    // Svislá úsečka dolů + šikmá úsečka nahoru-vlevo → úhel ~135°
+    const line1 = { id: 1, type: 'line', x1: 0, y1: 0, x2: 0, y2: -50 };
+    const line2 = { id: 2, type: 'line', x1: 0, y1: 0, x2: -30, y2: 30 };
+    addAngleDimensionForLines(line1, line2);
+    expect(addObject).toHaveBeenCalledOnce();
+    const arg = addObject.mock.calls[0][0];
+    // Skutečný úhel ≈ 135° (3π/4)
+    expect(arg.dimAngle).toBeCloseTo(3 * Math.PI / 4, 1);
+    expect(arg.name).toContain('∠135');
   });
 });

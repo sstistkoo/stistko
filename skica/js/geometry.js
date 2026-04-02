@@ -421,6 +421,17 @@ export function distToObject(obj, wx, wy) {
       return Math.hypot(wx - obj.x, wy - obj.y);
     case "line":
     case "constr":
+      // Úhlová kóta – hit-test na oblouk a referenční čáry
+      if (obj.isDimension && obj.dimType === 'angular' && obj.dimCenterX != null) {
+        const cx = obj.dimCenterX, cy = obj.dimCenterY;
+        const r = (obj.dimRadius || 20) * 0.8;
+        // Vzdálenost ke středu (referenční čáry)
+        const dCenter = distPointToSegment(wx, wy, cx, cy, obj.x1, obj.y1);
+        const dCenter2 = distPointToSegment(wx, wy, cx, cy, obj.x2, obj.y2);
+        // Vzdálenost k oblouku
+        const dArc = Math.abs(Math.hypot(wx - cx, wy - cy) - r);
+        return Math.min(dCenter, dCenter2, dArc);
+      }
       return distPointToSegment(wx, wy, obj.x1, obj.y1, obj.x2, obj.y2);
     case "circle":
       return Math.abs(Math.hypot(wx - obj.cx, wy - obj.cy) - obj.r);
