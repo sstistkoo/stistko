@@ -128,6 +128,21 @@ export async function openProject(name) {
 
 /** @param {string} name */
 export async function deleteProject(name) {
+  // Uložit do historie smazaných výkresů před smazáním
+  try {
+    const data = await loadProjectFromDB(name);
+    if (data) {
+      const history = (await getMeta('deletedHistory')) || [];
+      history.unshift({
+        id: 'del_' + Date.now(),
+        name: name,
+        date: new Date().toLocaleString('cs-CZ'),
+        data: deepClone(data),
+      });
+      if (history.length > 10) history.length = 10;
+      await setMeta('deletedHistory', history);
+    }
+  } catch (e) { /* ignore history errors */ }
   await deleteProjectFromDB(name);
   showToast(`Projekt "${name}" smazán`);
 }
@@ -329,9 +344,156 @@ export async function showProjectsDialog() {
   overlay.querySelector('#projClose').addEventListener('click', () => overlay.remove());
 }
 
+// ── Knihovna výkresů ──
+
+/** Uloží aktuální výkres do knihovny. */
+export async function saveToLibrary(customName) {
+  const library = (await getMeta('library')) || [];
+  const name = (customName || state.projectName || 'Bez názvu').trim();
+  const data = _buildProjectData();
+  library.unshift({
+    id: 'lib_' + Date.now(),
+    name: name,
+    date: new Date().toLocaleString('cs-CZ'),
+    objectCount: (data.objects || []).length,
+    data: data,
+  });
+  await setMeta('library', library);
+  showToast(`Uloženo do knihovny: "${name}"`);
+}
+
+/** Otevře dialog knihovny výkresů. */
+export async function showLibraryDialog() {
+  let library = (await getMeta('library')) || [];
+
+  function _esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+  function buildList(lib) {
+    if (lib.length === 0) {
+      return `<li style="color:var(--ctp-overlay0);padding:20px;text-align:center">
+        Knihovna je prázdná.<br><span style="font-size:12px">Uložte výkres tlačítkem ➕ níže.</span>
+      </li>`;
+    }
+    return lib.map((item, i) => `
+      <li class="project-item" data-lidx="${i}">
+        <div class="project-info">
+          <div class="project-name">${_esc(item.name)}</div>
+          <div class="project-meta">${_esc(item.date)} · ${item.objectCount || (item.data?.objects || []).length} objektů</div>
+        </div>
+        <div class="project-actions">
+          <button class="project-action-btn" data-act="open" title="Načíst do výkresu">📂</button>
+          <button class="project-action-btn" data-act="rename" title="Přejmenovat">✏️</button>
+          <button class="project-action-btn" data-act="duplicate" title="Duplikovat">📋</button>
+          <button class="project-action-btn del" data-act="delete" title="Smazat">🗑</button>
+        </div>
+      </li>`
+    ).join('');
+  }
+
+  const overlay = document.createElement('div');
+  overlay.className = 'input-overlay';
+  overlay.innerHTML = `
+    <div class="input-dialog" style="min-width:400px;max-width:520px">
+      <h3>📚 Knihovna výkresů</h3>
+      <ul class="project-list" id="libraryList">${buildList(library)}</ul>
+      <div class="btn-row" style="flex-direction:column;gap:8px;align-items:stretch">
+        <button class="btn-ok" id="libSaveCurrent" style="width:100%">➕ Uložit aktuální výkres do knihovny</button>
+        <button class="btn-cancel" id="libClose" style="width:100%">Zavřít</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+
+  function refreshList() {
+    overlay.querySelector('#libraryList').innerHTML = buildList(library);
+    attachListeners();
+  }
+
+  function attachListeners() {
+    overlay.querySelectorAll('#libraryList .project-item').forEach(item => {
+      const idx = parseInt(item.dataset.lidx);
+      item.querySelectorAll('.project-action-btn').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          const act = btn.dataset.act;
+          const entry = library[idx];
+          if (!entry) return;
+
+          if (act === 'open') {
+            if (state.objects.length > 0 && !confirm("Nahradit aktuální výkres výkresem z knihovny?")) return;
+            _loadProjectData(entry.data);
+            if (entry.name) {
+              state.projectName = entry.name;
+              updateStatusProject();
+            }
+            overlay.remove();
+            showToast(`Načteno z knihovny: "${entry.name}"`);
+          } else if (act === 'rename') {
+            const newName = prompt('Nový název:', entry.name);
+            if (newName && newName.trim()) {
+              library[idx].name = newName.trim();
+              await setMeta('library', library);
+              refreshList();
+            }
+          } else if (act === 'duplicate') {
+            const copy = deepClone(entry);
+            copy.id = 'lib_' + Date.now();
+            copy.name = entry.name + ' (kopie)';
+            copy.date = new Date().toLocaleString('cs-CZ');
+            library.splice(idx + 1, 0, copy);
+            await setMeta('library', library);
+            refreshList();
+            showToast(`Duplikováno: "${copy.name}"`);
+          } else if (act === 'delete') {
+            if (confirm(`Smazat "${entry.name}" z knihovny?`)) {
+              library.splice(idx, 1);
+              await setMeta('library', library);
+              refreshList();
+            }
+          }
+        });
+      });
+      // Double-click to open
+      item.addEventListener('dblclick', async () => {
+        const entry = library[idx];
+        if (!entry) return;
+        if (state.objects.length > 0 && !confirm("Nahradit aktuální výkres výkresem z knihovny?")) return;
+        _loadProjectData(entry.data);
+        if (entry.name) {
+          state.projectName = entry.name;
+          updateStatusProject();
+        }
+        overlay.remove();
+        showToast(`Načteno z knihovny: "${entry.name}"`);
+      });
+    });
+  }
+
+  attachListeners();
+
+  overlay.querySelector('#libSaveCurrent').addEventListener('click', async () => {
+    const name = prompt('Název v knihovně:', state.projectName || 'Bez názvu');
+    if (name && name.trim()) {
+      const data = _buildProjectData();
+      library.unshift({
+        id: 'lib_' + Date.now(),
+        name: name.trim(),
+        date: new Date().toLocaleString('cs-CZ'),
+        objectCount: (data.objects || []).length,
+        data: data,
+      });
+      await setMeta('library', library);
+      refreshList();
+      showToast(`Uloženo do knihovny: "${name.trim()}"`);
+    }
+  });
+
+  overlay.querySelector('#libClose').addEventListener('click', () => overlay.remove());
+}
+
 // ── Tlačítka ──
 document.getElementById("btnSave").addEventListener("click", saveProject);
 document.getElementById("btnProjects")?.addEventListener("click", () => showProjectsDialog());
+document.getElementById("btnLibrary")?.addEventListener("click", () => showLibraryDialog());
 
 import { bridge } from '../bridge.js';
 bridge.showProjectsDialog = showProjectsDialog;

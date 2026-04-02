@@ -97,6 +97,81 @@ export function showNumericalInputDialog() {
     return `<button type="button" class="pick-btn" title="Vybrat z mapy">${label}</button>`;
   }
 
+  function angleCompassBtn() {
+    return `<button type="button" class="compass-trigger-btn" title="Rychlá volba úhlu" style="font-size:16px;padding:2px 6px">✛</button>`;
+  }
+
+  function wireAngleCompass(container, angleInputId) {
+    const btn = container.querySelector('.compass-trigger-btn');
+    if (!btn) return;
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const existing = document.querySelector('.angle-compass-popup');
+      if (existing) existing.remove();
+
+      const popup = document.createElement('div');
+      popup.className = 'angle-compass-popup';
+      popup.innerHTML = `
+        <div class="compass-grid">
+          <button data-ang="135" class="compass-arrow" style="grid-area:tl" title="135°">↖</button>
+          <button data-ang="90" class="compass-arrow" style="grid-area:tc" title="90°">↑</button>
+          <button data-ang="45" class="compass-arrow" style="grid-area:tr" title="45°">↗</button>
+          <button data-ang="180" class="compass-arrow" style="grid-area:ml" title="180°">←</button>
+          <button class="compass-close" style="grid-area:mc" title="Zavřít">✕</button>
+          <button data-ang="0" class="compass-arrow" style="grid-area:mr" title="0°">→</button>
+          <button data-ang="225" class="compass-arrow" style="grid-area:bl" title="225°">↙</button>
+          <button data-ang="270" class="compass-arrow" style="grid-area:bc" title="270°">↓</button>
+          <button data-ang="315" class="compass-arrow" style="grid-area:br" title="315°">↘</button>
+        </div>`;
+
+      popup.style.position = 'fixed';
+      popup.style.zIndex = '100000';
+
+      // Blokovat probublání do overlay
+      popup.addEventListener('click', (ev) => ev.stopPropagation());
+      popup.addEventListener('mousedown', (ev) => ev.stopPropagation());
+      popup.addEventListener('touchstart', (ev) => ev.stopPropagation());
+
+      overlay.appendChild(popup);
+
+      // Pozicovat dole na střed obrazovky, nad spodní lištu
+      const pw = popup.offsetWidth;
+      const ph = popup.offsetHeight;
+      const left = Math.max(4, Math.min((window.innerWidth - pw) / 2, window.innerWidth - pw - 4));
+      const top = Math.max(4, window.innerHeight - ph - 80);
+      popup.style.left = left + 'px';
+      popup.style.top = top + 'px';
+
+      popup.querySelectorAll('.compass-arrow').forEach(ab => {
+        ab.onclick = function() {
+          const ang = this.dataset.ang;
+          const inp = document.getElementById(angleInputId);
+          if (inp) {
+            inp.value = ang;
+            inp.dispatchEvent(new Event('input', { bubbles: true }));
+          }
+          popup.remove();
+        };
+      });
+
+      // Zavřít křížkem uprostřed
+      const closeBtn = popup.querySelector('.compass-close');
+      if (closeBtn) {
+        closeBtn.onclick = function() { popup.remove(); };
+      }
+
+      // Zavřít popup kliknutím mimo
+      function onOutsideClick(ev) {
+        if (!popup.contains(ev.target) && ev.target !== btn) {
+          popup.remove();
+          document.removeEventListener('click', onOutsideClick);
+        }
+      }
+      setTimeout(() => document.addEventListener('click', onOutsideClick), 100);
+    });
+  }
+
   // Chain values
   const chainX = state.numDialogChain.x !== null ? state.numDialogChain.x.toFixed(3) : "0";
   const chainY = state.numDialogChain.y !== null ? state.numDialogChain.y.toFixed(3) : "0";
@@ -129,7 +204,8 @@ export function showNumericalInputDialog() {
                 <div id="numLineInfo" style="font-size:11px;color:${COLORS.textSecondary};margin-top:4px"></div>
                 <label style="font-size:11px;color:${COLORS.textMuted};margin-top:4px">Nebo: Délka a polární úhel</label>
                 <div class="input-row"><div><label>Délka:</label><input type="text" id="nlen" value=""></div>
-                <div><label>Úhel (°):</label><input type="text" id="nang" value=""></div></div>`;
+                <div><label>Úhel (°):</label><input type="text" id="nang" value=""></div>
+                <div class="pick-col">${angleCompassBtn()}</div></div>`;
         break;
       case "circle":
         html = `<div class="input-row"><div><label>${lbl('Střed '+H)}:</label><input type="text" id="ncx" value="${hasChain ? chainDispX : '0'}"></div>
@@ -169,6 +245,14 @@ export function showNumericalInputDialog() {
                 <div class="input-row"><div><label>${lbl(H)}:</label><input type="text" id="nx" value="${hasChain ? chainDispX : '0'}"></div>
                 <div><label>${lbl(V)}:</label><input type="text" id="ny" value="${hasChain ? chainDispY : '0'}"></div>
                 <div class="pick-col">${pickBtn("🎯")}</div></div>
+                <div id="polyLineInfo" style="font-size:11px;color:${COLORS.textSecondary};margin-top:4px"></div>
+                <label style="font-size:11px;color:${COLORS.textMuted};margin-top:4px">Nebo: Délka a polární úhel od posledního bodu</label>
+                <div class="input-row"><div><label>Délka:</label><input type="text" id="polyLen" value=""></div>
+                <div><label>Úhel (°):</label><input type="text" id="polyAng" value=""></div>
+                <div class="pick-col">${angleCompassBtn()}</div></div>
+                <label id="polyRelAngleLabel" style="font-size:11px;display:none;align-items:center;gap:4px;cursor:pointer;margin-top:2px;color:${COLORS.textMuted}">
+                  <input type="checkbox" id="polyRelAngle"> Relativní úhel (od předchozího segmentu)
+                </label>
                 <div id="polyVertexList" style="max-height:150px;overflow-y:auto;font-size:11px;font-family:Consolas;color:${COLORS.label};margin:8px 0;padding:4px;background:${COLORS.bgDarker};border-radius:4px;display:none"></div>
                 <div style="display:flex;gap:6px;margin-bottom:8px">
                   <button class="btn-ok" id="polyAddVtx" style="font-size:11px;padding:3px 8px;flex:1">➕ Přidat bod</button>
@@ -189,12 +273,16 @@ export function showNumericalInputDialog() {
           const t2 = typeSelect.value;
           // V INC režimu převést absolutní souřadnice na delta pro pole
           const dp = isInc ? toDisplayCoords(wx, wy) : { x: wx, y: wy };
-          if (t2 === "point") {
+          if (t2 === "point" || t2 === "polyline") {
             const nx = overlay.querySelector("#nx");
             const ny = overlay.querySelector("#ny");
             if (nx) nx.value = dp.x.toFixed(3);
             if (ny) ny.value = dp.y.toFixed(3);
-            updateChainInfo();
+            if (t2 === "point") updateChainInfo();
+            if (t2 === "polyline") {
+              // Trigger input event to update polyline info (délka/úhel)
+              if (nx) nx.dispatchEvent(new Event("input"));
+            }
           } else if (t2 === "line" || t2 === "constr" || t2 === "rect") {
             if (i === 0) {
               const f1 = overlay.querySelector("#nx1");
@@ -270,6 +358,13 @@ export function showNumericalInputDialog() {
         const d = Math.hypot(x2-x1, y2-y1);
         const a = Math.atan2(y2-y1, x2-x1) * 180 / Math.PI;
         info.textContent = `Délka: ${d.toFixed(3)} mm  |  Úhel: ${a.toFixed(2)}°`;
+        // Auto-fill délka/úhel polí pokud oba body jsou nenulové
+        const nlen = fieldsDiv.querySelector("#nlen");
+        const nang = fieldsDiv.querySelector("#nang");
+        if (nlen && nang && d > 0.0001) {
+          nlen.value = d.toFixed(3);
+          nang.value = a.toFixed(2);
+        }
       }
     }
     ["#nx1","#ny1","#nx2","#ny2"].forEach(sel => {
@@ -277,6 +372,39 @@ export function showNumericalInputDialog() {
       if (inp) inp.addEventListener("input", updateLineInfo);
     });
     updateLineInfo();
+
+    // Sync délka/úhel → souřadnice bodu 2
+    function syncLenAngToCoords() {
+      const nlen = fieldsDiv.querySelector("#nlen");
+      const nang = fieldsDiv.querySelector("#nang");
+      if (!nlen || !nang) return;
+      function onLenAngInput() {
+        const len = safeEvalMath(nlen.value);
+        const ang = safeEvalMath(nang.value);
+        if (!isFinite(len) || !isFinite(ang) || len <= 0) return;
+        const x1 = safeEvalMath(fieldsDiv.querySelector("#nx1")?.value) || 0;
+        const y1 = safeEvalMath(fieldsDiv.querySelector("#ny1")?.value) || 0;
+        const rad = (ang * Math.PI) / 180;
+        const nx2 = fieldsDiv.querySelector("#nx2");
+        const ny2 = fieldsDiv.querySelector("#ny2");
+        if (nx2) nx2.value = (x1 + len * Math.cos(rad)).toFixed(3);
+        if (ny2) ny2.value = (y1 + len * Math.sin(rad)).toFixed(3);
+        // Update info text
+        const info = fieldsDiv.querySelector("#numLineInfo");
+        if (info) info.textContent = `Délka: ${len.toFixed(3)} mm  |  Úhel: ${ang.toFixed(2)}°`;
+      }
+      nlen.addEventListener("input", onLenAngInput);
+      nang.addEventListener("input", onLenAngInput);
+    }
+    syncLenAngToCoords();
+
+    // Wire angle compass – jen pro aktuální typ
+    const currentType = typeSelect.value;
+    if (currentType === 'line' || currentType === 'constr') {
+      wireAngleCompass(fieldsDiv, 'nang');
+    } else if (currentType === 'polyline') {
+      wireAngleCompass(fieldsDiv, 'polyAng');
+    }
 
     // Auto-update info pro bod (chain distance)
     function updateChainInfo() {
@@ -335,6 +463,97 @@ export function showNumericalInputDialog() {
       if (!overlay._polyBulges) overlay._polyBulges = [];
       const vtxList = fieldsDiv.querySelector("#polyVertexList");
 
+      // Délka/úhel sync pro konturu
+      function getPolyLastVert() {
+        if (overlay._polyVerts && overlay._polyVerts.length > 0) {
+          return overlay._polyVerts[overlay._polyVerts.length - 1];
+        }
+        if (hasChain) return { x: state.numDialogChain.x, y: state.numDialogChain.y };
+        return null;
+      }
+
+      function getPrevSegmentAngle() {
+        const verts = overlay._polyVerts;
+        if (!verts || verts.length < 2) return null;
+        const p1 = verts[verts.length - 2];
+        const p2 = verts[verts.length - 1];
+        return Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI;
+      }
+
+      function isRelativeAngle() {
+        const cb = fieldsDiv.querySelector("#polyRelAngle");
+        return cb && cb.checked;
+      }
+
+      function updateRelAngleVisibility() {
+        const label = fieldsDiv.querySelector("#polyRelAngleLabel");
+        if (label) {
+          label.style.display = (overlay._polyVerts && overlay._polyVerts.length >= 2) ? 'flex' : 'none';
+        }
+      }
+      updateRelAngleVisibility();
+
+      function updatePolyInfo() {
+        const info = fieldsDiv.querySelector("#polyLineInfo");
+        if (!info) return;
+        const nx = safeEvalMath(fieldsDiv.querySelector("#nx")?.value);
+        const ny = safeEvalMath(fieldsDiv.querySelector("#ny")?.value);
+        const last = getPolyLastVert();
+        if (!last || !isFinite(nx) || !isFinite(ny)) { info.textContent = ''; return; }
+        const abs = isInc ? fromIncToAbs(nx, ny) : { x: nx, y: ny };
+        const d = Math.hypot(abs.x - last.x, abs.y - last.y);
+        const a = Math.atan2(abs.y - last.y, abs.x - last.x) * 180 / Math.PI;
+        info.textContent = `Délka: ${d.toFixed(3)} mm  |  Úhel: ${a.toFixed(2)}°`;
+      }
+
+      ["#nx","#ny"].forEach(sel => {
+        const inp = fieldsDiv.querySelector(sel);
+        if (inp) inp.addEventListener("input", updatePolyInfo);
+      });
+
+      // Délka/úhel → info text (nepřepisuje Z/X pole)
+      function syncPolyLenAng() {
+        const polyLen = fieldsDiv.querySelector("#polyLen");
+        const polyAng = fieldsDiv.querySelector("#polyAng");
+        if (!polyLen || !polyAng) return;
+        function onInput() {
+          const len = safeEvalMath(polyLen.value);
+          let ang = safeEvalMath(polyAng.value);
+          if (!isFinite(len) || !isFinite(ang) || len <= 0) return;
+          // Relativní úhel: přičíst úhel předchozího segmentu
+          if (isRelativeAngle()) {
+            const prevAng = getPrevSegmentAngle();
+            if (prevAng !== null) ang = prevAng + ang;
+          }
+          // Zjistit referenční bod – buď ručně zadané Z/X, nebo poslední vertex
+          const nxInp = fieldsDiv.querySelector("#nx");
+          const nyInp = fieldsDiv.querySelector("#ny");
+          const manualX = safeEvalMath(nxInp?.value);
+          const manualY = safeEvalMath(nyInp?.value);
+          let base;
+          if (isFinite(manualX) && isFinite(manualY)) {
+            base = isInc ? fromIncToAbs(manualX, manualY) : { x: manualX, y: manualY };
+          } else {
+            base = getPolyLastVert();
+          }
+          if (!base) return;
+          const rad = (ang * Math.PI) / 180;
+          const absX = base.x + len * Math.cos(rad);
+          const absY = base.y + len * Math.sin(rad);
+          const info = fieldsDiv.querySelector("#polyLineInfo");
+          if (info) {
+            const dp2 = isInc ? toDisplayCoords(absX, absY) : { x: absX, y: absY };
+            info.textContent = `Délka: ${len.toFixed(3)} mm  |  Úhel: ${ang.toFixed(2)}° → ${H}${dp2.x.toFixed(3)} ${V}${dp2.y.toFixed(3)}`;
+          }
+        }
+        polyLen.addEventListener("input", onInput);
+        polyAng.addEventListener("input", onInput);
+        // Při změně checkboxu přepočítat
+        const relCb = fieldsDiv.querySelector("#polyRelAngle");
+        if (relCb) relCb.addEventListener("change", onInput);
+      }
+      syncPolyLenAng();
+
       function updateVtxList() {
         if (overlay._polyVerts.length > 0) {
           vtxList.style.display = "";
@@ -346,16 +565,68 @@ export function showNumericalInputDialog() {
       }
 
       polyAddBtn.addEventListener("click", () => {
-        const vx = safeEvalMath(fieldsDiv.querySelector("#nx")?.value);
-        const vy = safeEvalMath(fieldsDiv.querySelector("#ny")?.value);
-        if (!isFinite(vx) || !isFinite(vy)) return;
-        const abs = isInc ? fromIncToAbs(vx, vy) : { x: vx, y: vy };
-        overlay._polyVerts.push(abs);
-        if (overlay._polyVerts.length > 1) {
+        const nxInp = fieldsDiv.querySelector("#nx");
+        const nyInp = fieldsDiv.querySelector("#ny");
+        const polyLenInp = fieldsDiv.querySelector("#polyLen");
+        const polyAngInp = fieldsDiv.querySelector("#polyAng");
+        const vx = safeEvalMath(nxInp?.value);
+        const vy = safeEvalMath(nyInp?.value);
+        const lenVal = safeEvalMath(polyLenInp?.value);
+        let angVal = safeEvalMath(polyAngInp?.value);
+        const hasCoords = isFinite(vx) && isFinite(vy);
+        const hasLenAng = isFinite(lenVal) && isFinite(angVal) && lenVal > 0;
+
+        if (!hasCoords && !hasLenAng) return;
+
+        if (hasCoords && hasLenAng) {
+          // Obojí vyplněno → souřadnice jsou začátek, délka+úhel dá koncový bod
+          // Relativní úhel spočítat PŘED přidáním startAbs (od předchozího segmentu)
+          if (isRelativeAngle()) {
+            const prevAng = getPrevSegmentAngle();
+            if (prevAng !== null) angVal = prevAng + angVal;
+          }
+          const startAbs = isInc ? fromIncToAbs(vx, vy) : { x: vx, y: vy };
+          overlay._polyVerts.push(startAbs);
+          if (overlay._polyVerts.length > 1) overlay._polyBulges.push(0);
+          showToast(`Bod ${overlay._polyVerts.length}: ${H}${startAbs.x.toFixed(2)} ${V}${startAbs.y.toFixed(2)}`);
+          const rad = (angVal * Math.PI) / 180;
+          const endAbs = { x: startAbs.x + lenVal * Math.cos(rad), y: startAbs.y + lenVal * Math.sin(rad) };
+          overlay._polyVerts.push(endAbs);
           overlay._polyBulges.push(0);
+          showToast(`Bod ${overlay._polyVerts.length}: ${H}${endAbs.x.toFixed(2)} ${V}${endAbs.y.toFixed(2)}`);
+        } else if (hasCoords) {
+          // Jen souřadnice → přidat jeden bod
+          const abs = isInc ? fromIncToAbs(vx, vy) : { x: vx, y: vy };
+          overlay._polyVerts.push(abs);
+          if (overlay._polyVerts.length > 1) overlay._polyBulges.push(0);
+          showToast(`Bod ${overlay._polyVerts.length}: ${H}${abs.x.toFixed(2)} ${V}${abs.y.toFixed(2)}`);
+        } else if (hasLenAng) {
+          // Jen délka+úhel → vypočítat od posledního vertexu
+          const last = getPolyLastVert();
+          if (!last) { showToast('Zadejte nejprve souřadnice bodu'); return; }
+          if (isRelativeAngle()) {
+            const prevAng = getPrevSegmentAngle();
+            if (prevAng !== null) angVal = prevAng + angVal;
+          }
+          const rad = (angVal * Math.PI) / 180;
+          const endAbs = { x: last.x + lenVal * Math.cos(rad), y: last.y + lenVal * Math.sin(rad) };
+          overlay._polyVerts.push(endAbs);
+          if (overlay._polyVerts.length > 1) overlay._polyBulges.push(0);
+          showToast(`Bod ${overlay._polyVerts.length}: ${H}${endAbs.x.toFixed(2)} ${V}${endAbs.y.toFixed(2)}`);
         }
+
         updateVtxList();
-        showToast(`Bod ${overlay._polyVerts.length}: ${H}${abs.x.toFixed(2)} ${V}${abs.y.toFixed(2)}`);
+        // Zobrazit checkbox pro relativní úhel po 2+ bodech
+        updateRelAngleVisibility();
+        // Vyčistit všechna pole po přidání bodu pro další zadávání
+        if (nxInp) nxInp.value = '';
+        if (nyInp) nyInp.value = '';
+        if (polyLenInp) polyLenInp.value = '';
+        if (polyAngInp) polyAngInp.value = '';
+        const info = fieldsDiv.querySelector("#polyLineInfo");
+        if (info) info.textContent = '';
+        // Fokus na první pole pro rychlé zadání dalšího bodu
+        if (nxInp) nxInp.focus();
       });
       updateVtxList();
     }

@@ -164,10 +164,17 @@ window.addEventListener('load', () => {
 });
 
 // ── PWA Service Worker ──
+// >>> DEV: SW dočasně vypnut – odregistrovat a smazat cache <<<
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.getRegistrations().then(regs => {
+    regs.forEach(r => r.unregister());
+  });
+  caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+}
+/*  // Původní produkční kód – obnovit až bude vývoj hotový:
 if ("serviceWorker" in navigator) {
   const isDev = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
   if (isDev) {
-    // Na localhostu odregistrovat SW a smazat cache (vývoj)
     navigator.serviceWorker.getRegistrations().then(regs => {
       regs.forEach(r => r.unregister());
     });
@@ -177,15 +184,12 @@ if ("serviceWorker" in navigator) {
       .register("./sw.js", { updateViaCache: 'none' })
       .then((reg) => {
         console.log("SW: Registrován");
-        // Pravidelně kontrolovat aktualizace SW (každých 60s)
         setInterval(() => reg.update(), 60000);
         reg.addEventListener('updatefound', () => {
           const newWorker = reg.installing;
           if (!newWorker) return;
           newWorker.addEventListener('statechange', () => {
-            // Nový SW se nainstaloval a čeká na aktivaci nebo už je aktivní
             if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-              // Nová verze čeká — skipWaiting ji aktivuje, ale pro jistotu info
               console.log('SW: Nová verze nainstalována');
             }
           });
@@ -193,13 +197,13 @@ if ("serviceWorker" in navigator) {
       })
       .catch((e) => console.warn("SW: Chyba", e));
 
-    // Spolehlivá detekce: nový SW převzal kontrolu → reload
     navigator.serviceWorker.addEventListener('controllerchange', () => {
       showToast('Aktualizace... stránka se obnoví', 1500);
       setTimeout(() => location.reload(), 1500);
     });
   }
 }
+*/
 
 // ── Offline indikátor ──
 const offlineBanner = document.getElementById('offlineBanner');

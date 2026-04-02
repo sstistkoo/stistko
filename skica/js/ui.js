@@ -2226,16 +2226,23 @@ if (_btnCalcInt) _btnCalcInt.addEventListener("click", () => { if (bridge.calcul
 document.getElementById("btnClearAll").addEventListener("click", async () => {
   if (state.objects.length === 0) return;
   if (confirm("Opravdu smazat všechny objekty?")) {
-    // Uložit do historie smazaných výkresů (max 5)
+    // Uložit do historie smazaných výkresů (max 10)
     try {
       const history = (await getMeta('deletedHistory')) || [];
       const snapshot = {
+        id: 'del_' + Date.now(),
+        name: state.projectName || 'Bez názvu',
         date: new Date().toLocaleString('cs-CZ'),
-        objects: JSON.parse(JSON.stringify(state.objects)),
-        nextId: state.nextId,
+        data: {
+          objects: JSON.parse(JSON.stringify(state.objects)),
+          nextId: state.nextId,
+          layers: JSON.parse(JSON.stringify(state.layers)),
+          activeLayer: state.activeLayer,
+          nextLayerId: state.nextLayerId,
+        },
       };
       history.unshift(snapshot);
-      if (history.length > 5) history.length = 5;
+      if (history.length > 10) history.length = 10;
       await setMeta('deletedHistory', history);
     } catch (e) { /* ignore storage errors */ }
 
@@ -2256,43 +2263,122 @@ document.getElementById("btnClearAll").addEventListener("click", async () => {
 
 // ── Historie smazaných výkresů ──
 document.getElementById("btnHistory").addEventListener("click", async () => {
-  const history = (await getMeta('deletedHistory')) || [];
+  let history = (await getMeta('deletedHistory')) || [];
   if (history.length === 0) {
     showToast("Žádné smazané výkresy v historii");
     return;
   }
-  const items = history.map((h, i) =>
-    `<button class="calc-btn" style="width:100%;padding:10px 12px;margin:4px 0;font-size:14px;text-align:left;cursor:pointer" data-hidx="${i}">
-      ${h.date} — ${h.objects.length} objektů
-    </button>`
-  ).join('');
+
+  function _esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+  function buildHistoryHTML(hist) {
+    return hist.map((h, i) => {
+      const objs = h.data ? (h.data.objects || []) : (h.objects || []);
+      const name = h.name || '(bez názvu)';
+      return `<li class="project-item" data-hidx="${i}">
+        <div class="project-info">
+          <div class="project-name">${_esc(name)}</div>
+          <div class="project-meta">${_esc(h.date)} · ${objs.length} objektů</div>
+        </div>
+        <div class="project-actions">
+          <button class="project-action-btn" data-act="restore" title="Obnovit">♻️</button>
+          <button class="project-action-btn" data-act="rename" title="Přejmenovat">✏️</button>
+          <button class="project-action-btn" data-act="tolib" title="Uložit do knihovny">📚</button>
+          <button class="project-action-btn del" data-act="delete" title="Smazat z historie">🗑</button>
+        </div>
+      </li>`;
+    }).join('');
+  }
+
   const bodyHTML = `
     <div style="max-height:60vh;overflow-y:auto">
-      <p style="margin:0 0 8px;font-size:13px;color:var(--ctp-subtext0)">Posledních ${history.length} smazaných výkresů. Klikněte pro obnovení:</p>
-      ${items}
+      <p style="margin:0 0 8px;font-size:13px;color:var(--ctp-subtext0)">Posledních ${history.length} smazaných výkresů:</p>
+      <ul class="project-list" id="historyList">${buildHistoryHTML(history)}</ul>
     </div>`;
   const overlay = makeOverlay("history", "🕓 Historie smazaných výkresů", bodyHTML);
-  overlay.querySelectorAll('[data-hidx]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const idx = parseInt(btn.dataset.hidx);
-      const entry = history[idx];
-      if (!entry) return;
-      if (state.objects.length > 0 && !confirm("Nahradit aktuální výkres obnoveným?")) return;
-      pushUndo();
-      state.objects = entry.objects;
-      state.nextId = entry.nextId || (Math.max(0, ...entry.objects.map(o => o.id || 0)) + 1);
-      state.selected = null;
-      state.selectedPoint = null;
-      state.intersections = [];
-      updateObjectList();
-      updateProperties();
-      updateIntersectionList();
-      if (bridge.calculateAllIntersections) bridge.calculateAllIntersections();
-      renderAll();
-      overlay.remove();
-      showToast(`Výkres z ${entry.date} obnoven ✓`);
+
+  function attachHistoryListeners() {
+    overlay.querySelectorAll('#historyList .project-item').forEach(item => {
+      const idx = parseInt(item.dataset.hidx);
+      item.querySelectorAll('.project-action-btn').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          const act = btn.dataset.act;
+          const entry = history[idx];
+          if (!entry) return;
+
+          if (act === 'restore') {
+            if (state.objects.length > 0 && !confirm("Nahradit aktuální výkres obnoveným?")) return;
+            pushUndo();
+            if (entry.data) {
+              // Nový formát – plná data projektu
+              state.objects = entry.data.objects || [];
+              state.nextId = entry.data.nextId || 1;
+              if (entry.data.layers) {
+                state.layers = entry.data.layers;
+                state.activeLayer = entry.data.activeLayer || 0;
+                state.nextLayerId = entry.data.nextLayerId || (state.layers.length > 0 ? Math.max(...state.layers.map(l => l.id)) + 1 : 1);
+              }
+            } else {
+              // Starý formát – jen objects + nextId
+              state.objects = entry.objects || [];
+              state.nextId = entry.nextId || (Math.max(0, ...state.objects.map(o => o.id || 0)) + 1);
+            }
+            if (entry.name && entry.name !== '(bez názvu)') {
+              state.projectName = entry.name;
+              updateStatusProject();
+            }
+            state.selected = null;
+            state.selectedPoint = null;
+            state.intersections = [];
+            updateObjectList();
+            updateProperties();
+            updateIntersectionList();
+            if (bridge.calculateAllIntersections) bridge.calculateAllIntersections();
+            renderAll();
+            overlay.remove();
+            showToast(`Výkres "${entry.name || entry.date}" obnoven ✓`);
+          } else if (act === 'rename') {
+            const newName = prompt('Nový název:', entry.name || '');
+            if (newName && newName.trim()) {
+              history[idx].name = newName.trim();
+              await setMeta('deletedHistory', history);
+              overlay.querySelector('#historyList').innerHTML = buildHistoryHTML(history);
+              attachHistoryListeners();
+            }
+          } else if (act === 'tolib') {
+            const libName = prompt('Název v knihovně:', entry.name || `Výkres z ${entry.date}`);
+            if (libName && libName.trim()) {
+              const library = (await getMeta('library')) || [];
+              const objs = entry.data ? (entry.data.objects || []) : (entry.objects || []);
+              library.unshift({
+                id: 'lib_' + Date.now(),
+                name: libName.trim(),
+                date: new Date().toLocaleString('cs-CZ'),
+                objectCount: objs.length,
+                data: entry.data || { objects: entry.objects, nextId: entry.nextId },
+              });
+              await setMeta('library', library);
+              showToast(`Uloženo do knihovny: "${libName.trim()}"`);
+            }
+          } else if (act === 'delete') {
+            if (confirm('Smazat tento záznam z historie?')) {
+              history.splice(idx, 1);
+              await setMeta('deletedHistory', history);
+              if (history.length === 0) {
+                overlay.remove();
+                showToast('Historie je prázdná');
+              } else {
+                overlay.querySelector('#historyList').innerHTML = buildHistoryHTML(history);
+                attachHistoryListeners();
+              }
+            }
+          }
+        });
+      });
     });
-  });
+  }
+  attachHistoryListeners();
 });
 
 // ── Kalkulačka – popup ──

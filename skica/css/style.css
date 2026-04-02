@@ -987,6 +987,96 @@ body {
   color: var(--ctp-base);
 }
 
+.compass-trigger-btn {
+  background: var(--ctp-surface1);
+  border: 1px solid var(--ctp-surface2);
+  color: var(--ctp-text);
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.compass-trigger-btn:hover {
+  background: var(--ctp-blue);
+  color: var(--ctp-base);
+}
+
+/* Angle compass popup */
+.angle-compass-popup {
+  background: var(--ctp-surface0);
+  border: 1px solid var(--ctp-surface1);
+  border-radius: 8px;
+  padding: 6px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+}
+
+.compass-grid {
+  display: grid;
+  grid-template-columns: 40px 40px 40px;
+  grid-template-rows: 40px 40px 40px;
+  grid-template-areas:
+    "tl tc tr"
+    "ml mc mr"
+    "bl bc br";
+  gap: 3px;
+}
+
+.compass-arrow {
+  background: var(--ctp-surface1);
+  border: 1px solid var(--ctp-surface2);
+  color: var(--ctp-text);
+  border-radius: 6px;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s, transform 0.1s;
+  padding: 0;
+  line-height: 1;
+}
+
+.compass-arrow:hover {
+  background: var(--ctp-blue);
+  color: var(--ctp-base);
+  transform: scale(1.1);
+}
+
+.compass-arrow:active {
+  background: var(--ctp-yellow);
+  color: var(--ctp-base);
+  transform: scale(0.95);
+}
+
+.compass-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: var(--ctp-overlay0);
+  font-weight: 700;
+}
+
+.compass-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ctp-surface1);
+  border: 1px solid var(--ctp-surface2);
+  color: var(--ctp-overlay0);
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.12s;
+}
+
+.compass-close:hover {
+  background: var(--ctp-red);
+  color: var(--ctp-base);
+}
+
 #statusbar {
   background: var(--ctp-mantle);
   border-top: 1px solid var(--ctp-surface0);
