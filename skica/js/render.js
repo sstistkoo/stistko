@@ -720,6 +720,23 @@ function renderObjects() {
       const nx = -Math.sin(angle) * 14, ny = Math.cos(angle) * 14;
       ctx.fillText(`${d.toFixed(state.displayDecimals)}mm`, (sx1 + sx2) / 2 + nx, (sy1 + sy2) / 2 + ny);
     }
+    // Preview: Úhlová kóta – první úsečka vybrána, čeká se na druhou
+    if (state.tool === "dimension" && state._dimFirstLine) {
+      const fl = state._dimFirstLine;
+      const [fsx1, fsy1] = worldToScreen(fl.x1, fl.y1);
+      const [fsx2, fsy2] = worldToScreen(fl.x2, fl.y2);
+      ctx.strokeStyle = COLORS.selected;
+      ctx.lineWidth = 2;
+      ctx.setLineDash([6, 3]);
+      ctx.beginPath();
+      ctx.moveTo(fsx1, fsy1);
+      ctx.lineTo(fsx2, fsy2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.font = `${labelSize}px Consolas`;
+      ctx.fillStyle = COLORS.selected;
+      ctx.fillText('∠?', (fsx1 + fsx2) / 2 + 8, (fsy1 + fsy2) / 2 - 8);
+    }
     // Preview: Trasování profilu
     if (state.tool === "profileTrace" && tp.length >= 1) {
       const traceBulges = state._profileTraceBulges || [];
@@ -1363,25 +1380,33 @@ export function drawLine(obj) {
       ctx.moveTo(scx, scy);
       ctx.lineTo(sx2, sy2);
       ctx.stroke();
-      // Oblouk kóty
+      // Oblouk kóty – vždy kratší oblouk
+      const aR = sr * 0.8;
+      const screenStart = -startA;
+      const screenEnd = -endA;
+      let ccwSweep = screenStart - screenEnd;
+      while (ccwSweep < 0) ccwSweep += 2 * Math.PI;
+      while (ccwSweep >= 2 * Math.PI) ccwSweep -= 2 * Math.PI;
+      const useCCW = ccwSweep <= Math.PI;
       ctx.lineWidth = 1.2;
       ctx.beginPath();
-      ctx.arc(scx, scy, sr * 0.8, -startA, -endA, true);
+      ctx.arc(scx, scy, aR, screenStart, screenEnd, useCCW);
       ctx.stroke();
       // Šipky na koncích oblouku
-      const aR = sr * 0.8;
-      const arrA1x = scx + aR * Math.cos(-startA);
-      const arrA1y = scy + aR * Math.sin(-startA);
-      const arrA2x = scx + aR * Math.cos(-endA);
-      const arrA2y = scy + aR * Math.sin(-endA);
+      const arrA1x = scx + aR * Math.cos(screenStart);
+      const arrA1y = scy + aR * Math.sin(screenStart);
+      const arrA2x = scx + aR * Math.cos(screenEnd);
+      const arrA2y = scy + aR * Math.sin(screenEnd);
       drawDimArrow(arrA1x, arrA1y, scx, scy);
       drawDimArrow(arrA2x, arrA2y, scx, scy);
-      // Text úhlu
-      let sweep = obj.dimAngle || (endA - startA);
+      // Text úhlu – uprostřed oblouku
+      const actualSweep = useCCW ? ccwSweep : (2 * Math.PI - ccwSweep);
+      const halfSweep = actualSweep / 2;
+      const midScreen = useCCW ? screenStart - halfSweep : screenStart + halfSweep;
+      const labelX = scx + aR * Math.cos(midScreen);
+      const labelY = scy + aR * Math.sin(midScreen);
+      let sweep = obj.dimAngle || actualSweep;
       if (sweep < 0) sweep += 2 * Math.PI;
-      const midA = startA + sweep / 2;
-      const labelX = scx + aR * Math.cos(-midA);
-      const labelY = scy + aR * Math.sin(-midA);
       const labelText = `${(sweep * 180 / Math.PI).toFixed(1)}°`;
       ctx.fillText(labelText, labelX, labelY - 4);
       ctx.textAlign = 'start';

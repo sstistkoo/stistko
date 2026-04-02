@@ -1229,7 +1229,11 @@ function removeOrphanDimensions() {
   const existingIds = new Set(state.objects.map(o => o.id));
   for (let i = state.objects.length - 1; i >= 0; i--) {
     const obj = state.objects[i];
-    if (obj.isDimension && obj.sourceObjId && !existingIds.has(obj.sourceObjId)) {
+    if (!obj.isDimension) continue;
+    if (obj.sourceObjId && !existingIds.has(obj.sourceObjId)) {
+      state.objects.splice(i, 1);
+    } else if (obj.dimLine1Id && obj.dimLine2Id &&
+               (!existingIds.has(obj.dimLine1Id) || !existingIds.has(obj.dimLine2Id))) {
       state.objects.splice(i, 1);
     }
   }

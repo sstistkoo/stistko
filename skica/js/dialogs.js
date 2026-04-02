@@ -17,7 +17,7 @@ export { showCircleRadiusDialog } from './dialogs/circleRadius.js';
 export { showNumericalInputDialog } from './dialogs/numericalInput.js';
 export { showPolarDrawingDialog } from './dialogs/polarDrawing.js';
 export { showBulgeDialog } from './dialogs/bulge.js';
-export { addDimensionForObject } from './dialogs/dimension.js';
+export { addDimensionForObject, addAngleDimensionForLines } from './dialogs/dimension.js';
 export { applyMobileInputMode, wireExprInputs, showMobileEditDialog, showEditObjectDialog } from './dialogs/mobileEdit.js';
 export { showOffsetDialog, showOffsetAngleDialog, showMirrorDialog, showLinearArrayDialog, showCircularArrayDialog, showRotateDialog, showFilletDialog, showChamferDialog, showFilletChamferDialog, showScaleDialog, showEndpointChoiceDialog } from './dialogs/objectDialogs.js';
 export { showTangentChoiceDialog, showTangentPositionDialog } from './dialogs/tangentDialogs.js';

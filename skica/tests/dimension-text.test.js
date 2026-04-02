@@ -57,7 +57,7 @@ vi.mock('../js/canvas.js', () => ({
 
 import { state } from '../js/state.js';
 import { addObject, moveObject } from '../js/objects.js';
-import { addDimensionForObject, updateAssociativeDimensions } from '../js/dialogs/dimension.js';
+import { addDimensionForObject, updateAssociativeDimensions, addAngleDimensionForLines } from '../js/dialogs/dimension.js';
 
 function resetState() {
   state.objects = [];
@@ -196,6 +196,61 @@ describe('updateAssociativeDimensions', () => {
 
     expect(rDim.x1).toBe(5);
     expect(rDim.y1).toBe(5);
+  });
+
+  it('aktualizuje úhlovou kótu mezi úsečkami po přesunu', () => {
+    const line1 = addObject({ type: 'line', x1: 0, y1: 0, x2: 20, y2: 0 });
+    const line2 = addObject({ type: 'line', x1: 0, y1: 0, x2: 0, y2: 20 });
+    addAngleDimensionForLines(line1, line2);
+    const dim = state.objects.find(o => o.isDimension && o.dimType === 'angular');
+    expect(dim).toBeDefined();
+    expect(dim.dimAngle).toBeCloseTo(Math.PI / 2, 5);
+    expect(dim.dimLine1Id).toBe(line1.id);
+    expect(dim.dimLine2Id).toBe(line2.id);
+
+    // Přesun úsečky 2 → změní úhel na 45°
+    line2.x2 = 20;
+    line2.y2 = 20;
+    updateAssociativeDimensions();
+
+    expect(dim.dimAngle).toBeCloseTo(Math.PI / 4, 5);
+    expect(dim.name).toContain('∠45.0°');
+  });
+});
+
+// ════════════════════════════════════════
+// ── addAngleDimensionForLines ──
+// ════════════════════════════════════════
+describe('addAngleDimensionForLines', () => {
+  beforeEach(resetState);
+
+  it('vytvoří úhlovou kótu 90° mezi kolmými úsečkami', () => {
+    const line1 = addObject({ type: 'line', x1: 0, y1: 0, x2: 10, y2: 0 });
+    const line2 = addObject({ type: 'line', x1: 0, y1: 0, x2: 0, y2: 10 });
+    addAngleDimensionForLines(line1, line2);
+    const dim = state.objects.find(o => o.isDimension && o.dimType === 'angular');
+    expect(dim).toBeDefined();
+    expect(dim.dimAngle).toBeCloseTo(Math.PI / 2, 5);
+    expect(dim.name).toContain('∠90.0°');
+    expect(dim.dimCenterX).toBeCloseTo(0, 5);
+    expect(dim.dimCenterY).toBeCloseTo(0, 5);
+  });
+
+  it('průsečík je správný pro mimoběžné úsečky', () => {
+    const line1 = addObject({ type: 'line', x1: -10, y1: 0, x2: 10, y2: 0 });
+    const line2 = addObject({ type: 'line', x1: 5, y1: -5, x2: 5, y2: 5 });
+    addAngleDimensionForLines(line1, line2);
+    const dim = state.objects.find(o => o.isDimension && o.dimType === 'angular');
+    expect(dim.dimCenterX).toBeCloseTo(5, 5);
+    expect(dim.dimCenterY).toBeCloseTo(0, 5);
+  });
+
+  it('nepovolí rovnoběžné úsečky', () => {
+    const line1 = addObject({ type: 'line', x1: 0, y1: 0, x2: 10, y2: 0 });
+    const line2 = addObject({ type: 'line', x1: 0, y1: 5, x2: 10, y2: 5 });
+    addAngleDimensionForLines(line1, line2);
+    const dim = state.objects.find(o => o.isDimension && o.dimType === 'angular');
+    expect(dim).toBeUndefined();
   });
 });
 
