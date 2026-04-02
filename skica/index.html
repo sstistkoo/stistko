@@ -70,6 +70,20 @@
     >
       ⬡ Uzavřít
     </button>
+    <button
+      id="traceConfirm"
+      aria-label="Dokončit trasování"
+      title="Dokončit trasování (Enter)"
+    >
+      ✓ Dokončit
+    </button>
+    <button
+      id="traceRadius"
+      aria-label="Nastavit radius"
+      title="Nastavit radius segmentu (R)"
+    >
+      ⌒ Radius
+    </button>
     <button id="mobileUndo" aria-label="Zpět">↩</button>
     <button id="mobileRedo" aria-label="Vpřed">↪</button>
     <button id="mobileSnap" aria-label="Přichycení">🧲</button>
@@ -1074,6 +1088,27 @@
           Měření
         </button>
         <button
+          class="tool-btn"
+          data-tool="profileTrace"
+          title="Trasování profilu – klikej po kontuře, Enter = tabulka souřadnic"
+        >
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M3 19L7 15L11 17L15 11L21 5"
+              stroke="currentColor"
+              stroke-width="2"
+              fill="none"
+              stroke-linejoin="round"
+            />
+            <circle cx="3" cy="19" r="2" fill="currentColor" />
+            <circle cx="7" cy="15" r="2" fill="currentColor" />
+            <circle cx="11" cy="17" r="2" fill="currentColor" />
+            <circle cx="15" cy="11" r="2" fill="currentColor" />
+            <circle cx="21" cy="5" r="2" fill="currentColor" />
+          </svg>
+          Profil
+        </button>
+        <button
           class="tool-btn mobile-hide"
           id="btnNumInput"
           title="Číselný vstup – zadej souřadnice ručně"
@@ -1269,6 +1304,26 @@
             </button>
           </div>
           <ul id="objectList"></ul>
+        </div>
+        <!-- ── Panel trasování profilu ── -->
+        <div
+          class="panel-header"
+          data-panel="tracePanel"
+          role="button"
+          tabindex="0"
+          style="display: none"
+          id="tracePanelHeader"
+        >
+          ▾ Profil
+        </div>
+        <div
+          class="panel-body"
+          id="tracePanel"
+          role="region"
+          aria-label="Trasování profilu"
+          style="display: none"
+        >
+          <div id="tracePanelContent"></div>
         </div>
         <div
           class="panel-header"

@@ -110,6 +110,7 @@ export function resetDrawingState() {
   state.drawing = false;
   state.tempPoints = [];
   state._polylineBulges = [];
+  state._profileTraceBulges = [];
   state._parallelRefIdx = null;
   state._parallelRefSeg = null;
   state._parallelClickX = undefined;

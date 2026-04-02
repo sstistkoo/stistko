@@ -7,6 +7,7 @@ describe('bridge – callback registry', () => {
   it('má všechny sloty nastavené na null', () => {
     const keys = [
       'updateMobileCancelBtn', 'updateMobileCoords', 'updatePolylineButtons',
+      'updateTraceButtons', 'finishProfileTrace',
       'updateProperties', 'updateObjectList', 'updateIntersectionList',
       'calculateAllIntersections', 'runCncExport', 'renderAll', 'resetHint',
     ];

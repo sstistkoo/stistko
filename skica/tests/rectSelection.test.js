@@ -179,6 +179,16 @@ vi.mock('../js/tools/index.js', () => ({
   removeAnchorsForObject: vi.fn(),
   removeAnchorAt: vi.fn(),
   hasAnchoredPoint: vi.fn(),
+  handleProfileTraceClick: vi.fn(),
+  finishProfileTrace: vi.fn(),
+  cancelProfileTrace: vi.fn(),
+  resetProfileTraceState: vi.fn(),
+  setTraceBulge: vi.fn(),
+  getTraceData: vi.fn(() => ({ points: [], segments: [], bulges: [] })),
+  getTraceGcode: vi.fn(() => ''),
+  drawTraceToCanvas: vi.fn(),
+  importTraceFromGcode: vi.fn(),
+  updateTracePanel: vi.fn(),
 }));
 
 import { state, resetDrawingState } from '../js/state.js';

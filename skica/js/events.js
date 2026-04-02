@@ -14,7 +14,7 @@ import { saveProject, showExportImageDialog, showProjectsDialog, showSaveAsDialo
 import { bulgeToArc, deepClone } from './utils.js';
 import { bridge } from './bridge.js';
 import { updateAssociativeDimensions } from './dialogs/dimension.js';
-import { handleTangentClick, tangentFromSelection, handleOffsetClick, offsetFromSelection, handleTrimClick, trimFromSelection, handleExtendClick, extendFromSelection, handleFilletClick, filletFromSelection, handleChamferClick, chamferFromSelection, handlePerpClick, perpFromSelection, handleHorizontalClick, horizontalFromSelection, handleParallelClick, parallelFromSelection, handleDimensionClick, handleSnapPointClick, handleMoveClick, handleLineClick, handleMeasureClick, handleCircleClick, handleArcClick, handleRectClick, handlePolylineClick, measureSelection, handleTextClick, handleGearClick, resetGearState, handleAnchorClick, removeAnchorsForObject, removeAnchorAt, hasAnchoredPoint, cleanupOrphanAnchors, handleBreakClick, handleCenterMarkClick, centerMarkFromSelection, handleScaleClick, scaleFromSelection, handleFilletChamferClick, filletChamferFromSelection, handleBooleanClick, resetBooleanState, handleCircularArrayClick, handleCopyPlaceClick, copyPlaceFromSelection, resetCopyPlaceState } from './tools/index.js';
+import { handleTangentClick, tangentFromSelection, handleOffsetClick, offsetFromSelection, handleTrimClick, trimFromSelection, handleExtendClick, extendFromSelection, handleFilletClick, filletFromSelection, handleChamferClick, chamferFromSelection, handlePerpClick, perpFromSelection, handleHorizontalClick, horizontalFromSelection, handleParallelClick, parallelFromSelection, handleDimensionClick, handleSnapPointClick, handleMoveClick, handleLineClick, handleMeasureClick, handleCircleClick, handleArcClick, handleRectClick, handlePolylineClick, measureSelection, handleTextClick, handleGearClick, resetGearState, handleAnchorClick, removeAnchorsForObject, removeAnchorAt, hasAnchoredPoint, cleanupOrphanAnchors, handleBreakClick, handleCenterMarkClick, centerMarkFromSelection, handleScaleClick, scaleFromSelection, handleFilletChamferClick, filletChamferFromSelection, handleBooleanClick, resetBooleanState, handleCircularArrayClick, handleCopyPlaceClick, copyPlaceFromSelection, resetCopyPlaceState, handleProfileTraceClick, finishProfileTrace, cancelProfileTrace, resetProfileTraceState, setTraceBulge, getTraceData } from './tools/index.js';
 import { getLineSegment } from './tools/helpers.js';
 import { showPostDrawPointDialog } from './dialogs/postDrawDialog.js';
 
@@ -110,6 +110,8 @@ bridge.copyPlaceFromSelection = () => {
   copyPlaceFromSelection();
   return true;
 };
+
+bridge.finishProfileTrace = finishProfileTrace;
 
 let isPanning = false;
 let panStartX, panStartY, panStartPX, panStartPY;
@@ -337,6 +339,7 @@ document.addEventListener("keydown", (e) => {
     resetGearState();
     resetBooleanState();
     resetCopyPlaceState();
+    resetProfileTraceState();
     // Odstranit dočasný měřicí bod
     const mTempIdx = state.objects.findIndex(o => o.isMeasureTemp);
     if (mTempIdx !== -1) state.objects.splice(mTempIdx, 1);
@@ -539,6 +542,24 @@ document.addEventListener("keydown", (e) => {
     e.preventDefault();
     showCircleRadiusDialog();
   }
+  // Profile trace: Enter = dokončit trasování
+  if (e.key === "Enter" && state.drawing && state.tool === "profileTrace") {
+    e.preventDefault();
+    finishProfileTrace();
+  }
+  // Profile trace: R = radius dialog pro poslední segment
+  if (e.key.toLowerCase() === "r" && state.drawing && state.tool === "profileTrace") {
+    const data = getTraceData();
+    if (data.points.length >= 2) {
+      e.preventDefault();
+      const idx = data.points.length - 2;
+      const p1 = data.points[idx];
+      const p2 = data.points[idx + 1];
+      showBulgeDialog(p1, p2, data.bulges[idx] || 0, (newBulge) => {
+        setTraceBulge(idx, newBulge);
+      });
+    }
+  }
   // Polyline: Enter = ukončit (otevřená), Shift+Enter = uzavřít
   if (e.key === "Enter" && state.drawing && state.tool === "polyline") {
     e.preventDefault();
@@ -609,6 +630,20 @@ drawCanvas.addEventListener("contextmenu", (e) => {
       renderAll();
     });
     return;
+  }
+
+  // Profile trace: pravý klik = bulge dialog pro poslední segment
+  if (state.drawing && state.tool === "profileTrace") {
+    const data = getTraceData();
+    if (data.points.length >= 2) {
+      const idx = data.points.length - 2;
+      const p1 = data.points[idx];
+      const p2 = data.points[idx + 1];
+      showBulgeDialog(p1, p2, data.bulges[idx] || 0, (newBulge) => {
+        setTraceBulge(idx, newBulge);
+      });
+      return;
+    }
   }
 
   // Zobrazit kontextové menu pro nastavení reference
@@ -878,6 +913,10 @@ export function handleCanvasClick(wx, wy) {
 
     case "copyPlace":
       handleCopyPlaceClick(wx, wy);
+      break;
+
+    case "profileTrace":
+      handleProfileTraceClick(wx, wy);
       break;
 
     case "rotate":
