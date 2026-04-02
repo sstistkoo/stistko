@@ -49,13 +49,13 @@
   <body>
     <!-- ── Mobile Controls ── -->
     <div id="mobileBottomBar" aria-label="Mobilní ovládání" role="toolbar">
-      <button id="mobileToolbarToggle" aria-label="Nástroje">🔧</button>
-      <button id="mobileNumInput" aria-label="Zadat">🔢</button>
-      <button id="mobileMeasure" aria-label="Měření">📏</button>
-      <button id="mobileSidebarToggle" aria-label="Panel">☰</button>
+      <button id="mobileToolbarToggle" aria-label="Nástroje" title="Otevřít panel nástrojů">🔧</button>
+      <button id="mobileNumInput" aria-label="Zadat" title="Zadat souřadnice číselně">🔢</button>
+      <button id="mobileMeasure" aria-label="Měření" title="Měření vzdálenosti a úhlu">📏</button>
+      <button id="mobileSidebarToggle" aria-label="Panel" title="Otevřít boční panel">☰</button>
     </div>
-    <button id="mobileAutoCenter" aria-label="Vycentrovat">⊙</button>
-    <button id="mobileCancel" aria-label="Zrušit">✕</button>
+    <button id="mobileAutoCenter" aria-label="Vycentrovat" title="Vycentrovat výkres">⊙</button>
+    <button id="mobileCancel" aria-label="Zrušit" title="Zrušit aktuální akci">✕</button>
     <button
       id="polylineConfirm"
       aria-label="Dokončit konturu"
@@ -84,12 +84,12 @@
     >
       ⌒ Radius
     </button>
-    <button id="mobileUndo" aria-label="Zpět">↩</button>
-    <button id="mobileRedo" aria-label="Vpřed">↪</button>
+    <button id="mobileUndo" aria-label="Zpět" title="Zpět – vrátí poslední akci">↩</button>
+    <button id="mobileRedo" aria-label="Vpřed" title="Vpřed – znovu provede vrácenou akci">↪</button>
     <button id="canvasCalcBtn" aria-label="Kalkulačka" title="Kalkulačka">
       🔢
     </button>
-    <button id="mobileSnap" aria-label="Přichycení">🧲</button>
+    <button id="mobileSnap" aria-label="Přichycení" title="Přepnout přichycení k mřížce">🧲</button>
     <div id="mobileCoordBar">
       <span id="coordBarIndicators"
         ><span id="indMachine" class="coord-ind active" title="Typ stroje"
@@ -1391,6 +1391,7 @@
             id="sidebarCloseBtn"
             class="sidebar-close-btn"
             aria-label="Zavřít panel"
+            title="Zavřít boční panel"
           >
             ✕
           </button>
