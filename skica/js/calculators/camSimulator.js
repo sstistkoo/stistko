@@ -789,7 +789,7 @@ export function openCamSimulator(initialContour) {
     isDragging: false, addPointMode: false, pointDragEnabled: false,
     activeTab: 'editor', simSpeed: 1,
     _animId: null, _lastMouse: { x: 0, y: 0 }, _lastPinch: null,
-    _cachedCalc: null
+    _cachedCalc: null, _hoverIsStock: false
   };
 
   // Load from localStorage
@@ -1564,8 +1564,8 @@ export function openCamSimulator(initialContour) {
 
     // draw points
     if (!S.simRunning) {
-      if (S.editMode === 'stock' && prms.stockMode === 'cylinder') {
-        // Cylinder drag handles
+      // Always show cylinder stock handles
+      if (prms.stockMode === 'cylinder') {
         const sRad = (parseFloat(prms.stockDiameter) || 0) / 2;
         const sLen = parseFloat(prms.stockLength) || 0;
         const sFace = parseFloat(prms.stockFace) || 0;
@@ -1573,8 +1573,8 @@ export function openCamSimulator(initialContour) {
         const labels = ['⌀/Čelo', '⌀/Délka'];
         ctx.font = 'bold 11px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
         handles.forEach((pt, i) => {
-          const isHovered = (i === S.hoverPointId);
-          const isDragged = (i === S.draggedPointId);
+          const isHovered = (S._hoverIsStock && i === S.hoverPointId);
+          const isDragged = (_draggingStock && i === S.draggedPointId);
           const radius = (isHovered || isDragged) ? 9 : 6;
           ctx.fillStyle = (isHovered || isDragged) ? '#f9e2af' : '#fab387';
           ctx.strokeStyle = '#1e1e2e'; ctx.lineWidth = 2;
@@ -1584,24 +1584,24 @@ export function openCamSimulator(initialContour) {
             ctx.fillText(labels[i], pt.x + 12, pt.y - 10);
           }
         });
-      } else {
-        const activePoints = S.editMode === 'contour' ? calc.worldPoints : calc.stockWorldPoints;
-        ctx.font = 'bold 11px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-        if (activePoints) {
-          activePoints.forEach((p, i) => {
-            if (!p) return;
-            const pt = toScreen(p.xReal, p.zReal);
-            const isHovered = (i === S.hoverPointId);
-            const isDragged = (i === S.draggedPointId);
-            const radius = (isHovered || isDragged) ? 8 : 4;
-            ctx.fillStyle = (isHovered || isDragged) ? '#f9e2af' : (S.editMode === 'contour' ? C.contour : C.pass);
-            ctx.beginPath(); ctx.arc(pt.x, pt.y, radius, 0, Math.PI * 2); ctx.fill();
-            if (!isHovered && !isDragged) {
-              ctx.fillStyle = '#f9e2af';
-              ctx.fillText(`${i + 1}`, pt.x + 8, pt.y - 8);
-            }
-          });
-        }
+      }
+      // Contour/stock points
+      const activePoints = S.editMode === 'contour' ? calc.worldPoints : calc.stockWorldPoints;
+      ctx.font = 'bold 11px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      if (activePoints && !(S.editMode === 'stock' && prms.stockMode === 'cylinder')) {
+        activePoints.forEach((p, i) => {
+          if (!p) return;
+          const pt = toScreen(p.xReal, p.zReal);
+          const isHovered = (!S._hoverIsStock && i === S.hoverPointId);
+          const isDragged = (!_draggingStock && i === S.draggedPointId);
+          const radius = (isHovered || isDragged) ? 8 : 4;
+          ctx.fillStyle = (isHovered || isDragged) ? '#f9e2af' : (S.editMode === 'contour' ? C.contour : C.pass);
+          ctx.beginPath(); ctx.arc(pt.x, pt.y, radius, 0, Math.PI * 2); ctx.fill();
+          if (!isHovered && !isDragged) {
+            ctx.fillStyle = '#f9e2af';
+            ctx.fillText(`${i + 1}`, pt.x + 8, pt.y - 8);
+          }
+        });
       }
     }
   }
@@ -1650,6 +1650,32 @@ export function openCamSimulator(initialContour) {
   }
 
   // ── getPointAt (hit testing) ──
+  function getStockHandleAt(clientX, clientY) {
+    if (S.simRunning || S.params.stockMode !== 'cylinder') return null;
+    const calc = S._cachedCalc; if (!calc) return null;
+    const rect = canvas.getBoundingClientRect();
+    const mx = clientX - rect.left, my = clientY - rect.top;
+    const prms = S.params;
+    const toScreen = (x, z) => {
+      if (prms.machineStructure === 'carousel') return { x: S.view.panX + x * S.view.scale, y: S.view.panY - z * S.view.scale };
+      return { x: S.view.panX + z * S.view.scale, y: S.view.panY - x * S.view.scale };
+    };
+    const sRad = (parseFloat(prms.stockDiameter) || 0) / 2;
+    const sLen = parseFloat(prms.stockLength) || 0;
+    const sFace = parseFloat(prms.stockFace) || 0;
+    const handles = [
+      { x: sRad, z: sFace },
+      { x: sRad, z: -sLen },
+    ];
+    let closest = null, minD = Infinity;
+    for (let i = 0; i < handles.length; i++) {
+      const pt = toScreen(handles[i].x, handles[i].z);
+      const d = Math.hypot(pt.x - mx, pt.y - my);
+      if (d < 18 && d < minD) { minD = d; closest = i; }
+    }
+    return closest;
+  }
+
   function getPointAt(clientX, clientY) {
     if (S.simRunning) return null;
     const calc = S._cachedCalc; if (!calc) return null;
@@ -1660,23 +1686,6 @@ export function openCamSimulator(initialContour) {
       if (prms.machineStructure === 'carousel') return { x: S.view.panX + x * S.view.scale, y: S.view.panY - z * S.view.scale };
       return { x: S.view.panX + z * S.view.scale, y: S.view.panY - x * S.view.scale };
     };
-    // Cylinder stock handles
-    if (S.editMode === 'stock' && prms.stockMode === 'cylinder') {
-      const sRad = (parseFloat(prms.stockDiameter) || 0) / 2;
-      const sLen = parseFloat(prms.stockLength) || 0;
-      const sFace = parseFloat(prms.stockFace) || 0;
-      const handles = [
-        { x: sRad, z: sFace },    // 0: top-right (diameter + face)
-        { x: sRad, z: -sLen },    // 1: top-left (diameter + length)
-      ];
-      let closest = null, minD = Infinity;
-      for (let i = 0; i < handles.length; i++) {
-        const pt = toScreen(handles[i].x, handles[i].z);
-        const d = Math.hypot(pt.x - mx, pt.y - my);
-        if (d < 18 && d < minD) { minD = d; closest = i; }
-      }
-      return closest;
-    }
     const pts = S.editMode === 'contour' ? calc.worldPoints : calc.stockWorldPoints;
     if (!pts) return null;
     let closest = null, minD = Infinity;
@@ -2437,8 +2446,15 @@ export function openCamSimulator(initialContour) {
 
   let lastMousePos = { x: 0, y: 0 };
   let lastPinchDist = null;
+  let _draggingStock = false;
 
   canvasWrap.addEventListener('mousedown', e => {
+    const stockIdx = getStockHandleAt(e.clientX, e.clientY);
+    if (S.pointDragEnabled && stockIdx !== null) {
+      pushHistory(); S.draggedPointId = stockIdx; S.isDragging = true; _draggingStock = true;
+      lastMousePos = { x: e.clientX, y: e.clientY };
+      return;
+    }
     const pointIdx = getPointAt(e.clientX, e.clientY);
     if (S.addPointMode) {
       if (pointIdx !== null) { handleInsertAfter(pointIdx); S.addPointMode = false; toolbar.querySelector('[data-act="addpt"]').classList.remove('cam-sim-active'); canvas.style.cursor = 'crosshair'; }
@@ -2450,6 +2466,7 @@ export function openCamSimulator(initialContour) {
   });
 
   canvasWrap.addEventListener('mousemove', e => {
+    const stockHover = S.pointDragEnabled ? getStockHandleAt(e.clientX, e.clientY) : null;
     const pointIdx = getPointAt(e.clientX, e.clientY);
     if (S.addPointMode) {
       canvas.style.cursor = pointIdx !== null ? 'pointer' : 'copy';
@@ -2457,14 +2474,20 @@ export function openCamSimulator(initialContour) {
       return;
     }
     if (!S.isDragging) {
-      if (S.pointDragEnabled && S.hoverPointId !== pointIdx) { S.hoverPointId = pointIdx; draw(); }
-      canvas.style.cursor = (S.pointDragEnabled && pointIdx !== null) ? 'move' : 'crosshair';
+      if (stockHover !== null) {
+        canvas.style.cursor = 'move';
+        if (S.hoverPointId !== stockHover || !S._hoverIsStock) { S.hoverPointId = stockHover; S._hoverIsStock = true; draw(); }
+      } else {
+        if (S._hoverIsStock) { S._hoverIsStock = false; S.hoverPointId = null; draw(); }
+        if (S.pointDragEnabled && S.hoverPointId !== pointIdx) { S.hoverPointId = pointIdx; draw(); }
+        canvas.style.cursor = (S.pointDragEnabled && pointIdx !== null) ? 'move' : 'crosshair';
+      }
       return;
     }
     const dx = e.clientX - lastMousePos.x;
     const dy = e.clientY - lastMousePos.y;
     lastMousePos = { x: e.clientX, y: e.clientY };
-    if (S.draggedPointId !== null && S.editMode === 'stock' && S.params.stockMode === 'cylinder') {
+    if (_draggingStock && S.draggedPointId !== null) {
       let rawDX, rawDZ;
       if (S.params.machineStructure === 'carousel') { rawDX = dx / S.view.scale; rawDZ = -dy / S.view.scale; }
       else { rawDZ = dx / S.view.scale; rawDX = -dy / S.view.scale; }
@@ -2501,10 +2524,10 @@ export function openCamSimulator(initialContour) {
   });
 
   const handleMouseUp = () => {
-    if (S.isDragging && S.draggedPointId !== null) {
+    if (S.isDragging && (S.draggedPointId !== null || _draggingStock)) {
       saveState(); renderCodeArea(); renderTab();
     }
-    S.isDragging = false; S.draggedPointId = null;
+    S.isDragging = false; S.draggedPointId = null; _draggingStock = false;
   };
   canvasWrap.addEventListener('mouseup', handleMouseUp);
   canvasWrap.addEventListener('mouseleave', handleMouseUp);
@@ -2513,6 +2536,12 @@ export function openCamSimulator(initialContour) {
   canvasWrap.addEventListener('touchstart', e => {
     if (e.touches.length === 1) {
       const t = e.touches[0];
+      const stockIdx = getStockHandleAt(t.clientX, t.clientY);
+      if (S.pointDragEnabled && stockIdx !== null) {
+        pushHistory(); S.draggedPointId = stockIdx; S.isDragging = true; _draggingStock = true;
+        lastMousePos = { x: t.clientX, y: t.clientY };
+        return;
+      }
       const pointIdx = getPointAt(t.clientX, t.clientY);
       if (S.addPointMode) {
         if (pointIdx !== null) { handleInsertAfter(pointIdx); S.addPointMode = false; toolbar.querySelector('[data-act="addpt"]').classList.remove('cam-sim-active'); canvas.style.cursor = 'crosshair'; }
@@ -2533,7 +2562,7 @@ export function openCamSimulator(initialContour) {
       const dx = t.clientX - lastMousePos.x;
       const dy = t.clientY - lastMousePos.y;
       lastMousePos = { x: t.clientX, y: t.clientY };
-      if (S.draggedPointId !== null && S.editMode === 'stock' && S.params.stockMode === 'cylinder') {
+      if (_draggingStock && S.draggedPointId !== null) {
         let rawDX, rawDZ;
         if (S.params.machineStructure === 'carousel') { rawDX = dx / S.view.scale; rawDZ = -dy / S.view.scale; }
         else { rawDZ = dx / S.view.scale; rawDX = -dy / S.view.scale; }
@@ -2585,10 +2614,10 @@ export function openCamSimulator(initialContour) {
   }, { passive: true });
 
   canvasWrap.addEventListener('touchend', () => {
-    if (S.isDragging && S.draggedPointId !== null) {
+    if (S.isDragging && (S.draggedPointId !== null || _draggingStock)) {
       saveState(); renderCodeArea(); renderTab();
     }
-    S.isDragging = false; S.draggedPointId = null; lastPinchDist = null;
+    S.isDragging = false; S.draggedPointId = null; _draggingStock = false; lastPinchDist = null;
   });
 
   // ── RESIZE OBSERVER ──
