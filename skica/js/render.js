@@ -126,9 +126,22 @@ export function getObjectBounds(obj) {
       return { minX, minY, maxX, maxY };
     }
     case 'text': {
-      // Přibližné bounds textu (šířka závisí na délce textu)
-      const approxW = (obj.text || '').length * (obj.fontSize || 14) * 0.6;
-      const approxH = (obj.fontSize || 14);
+      // Přibližné bounds textu (šířka závisí na délce textu a fontu)
+      const fSize = obj.fontSize || 14;
+      const spacingFactor = 1 + (obj.letterSpacing || 0) / fSize * 0.5;
+      const boldFactor = obj.bold ? 1.1 : 1;
+      const approxW = (obj.text || '').length * fSize * 0.6 * spacingFactor * boldFactor;
+      const approxH = fSize;
+      if (obj.rotation) {
+        const cos = Math.abs(Math.cos(obj.rotation));
+        const sin = Math.abs(Math.sin(obj.rotation));
+        const rw = approxW * cos + approxH * sin;
+        const rh = approxW * sin + approxH * cos;
+        return {
+          minX: obj.x - rw * 0.1, minY: obj.y - rh,
+          maxX: obj.x + rw, maxY: obj.y + rh * 0.1,
+        };
+      }
       return {
         minX: obj.x, minY: obj.y - approxH,
         maxX: obj.x + approxW, maxY: obj.y,
@@ -1790,19 +1803,65 @@ export function drawPolyline(obj, isSel, normalColor, objIdx) {
 export function drawText(obj) {
   const [sx, sy] = worldToScreen(obj.x, obj.y);
   const fontSize = obj.fontSize || 14;
-  const screenSize = Math.round(Math.min(48, Math.max(8, fontSize * state.zoom * 0.5)));
-  ctx.font = screenSize + 'px Consolas';
+  const screenSize = Math.round(Math.min(200, Math.max(8, fontSize * state.zoom * 0.5)));
+  const fontFamily = obj.fontFamily || 'Consolas, monospace';
+  const bold = obj.bold ? 'bold ' : '';
+  const italic = obj.italic ? 'italic ' : '';
+  ctx.font = `${italic}${bold}${screenSize}px ${fontFamily}`;
   ctx.fillStyle = obj.color || COLORS.text;
-  ctx.textAlign = 'left';
+  const align = obj.textAlign || 'left';
+  ctx.textAlign = align;
   ctx.textBaseline = 'bottom';
-  if (obj.rotation) {
+  const spacing = (obj.letterSpacing || 0) * state.zoom * 0.5;
+  const textStr = obj.text || '';
+
+  // Text podél cesty (úsečka nebo oblouk)
+  if (obj.pathMode && obj.pathMode !== 'none' && obj.pathObjectId != null) {
+    const pathObj = state.objects[obj.pathObjectId];
+    if (pathObj) {
+      if (obj.pathMode === 'line' && (pathObj.type === 'line' || pathObj.type === 'constr')) {
+        _drawTextAlongLine(textStr, pathObj, screenSize, spacing);
+      } else if (obj.pathMode === 'arc' && pathObj.type === 'arc') {
+        _drawTextAlongArc(textStr, pathObj, screenSize, spacing);
+      }
+      // Malý marker na kotevním bodě
+      ctx.beginPath();
+      ctx.arc(sx, sy, 2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.textAlign = 'start';
+      ctx.textBaseline = 'alphabetic';
+      return;
+    }
+  }
+
+  // Standardní text (s/bez rotace)
+  if (spacing && textStr.length > 1) {
+    // Vykreslení po znacích s mezerou
+    ctx.save();
+    ctx.translate(sx, sy);
+    if (obj.rotation) ctx.rotate(-obj.rotation);
+    ctx.textAlign = 'left';
+    let offsetX = 0;
+    if (align === 'center') {
+      const totalW = _measureTextSpaced(textStr, spacing);
+      offsetX = -totalW / 2;
+    } else if (align === 'right') {
+      const totalW = _measureTextSpaced(textStr, spacing);
+      offsetX = -totalW;
+    }
+    for (let i = 0; i < textStr.length; i++) {
+      ctx.fillText(textStr[i], offsetX, 0);
+      offsetX += ctx.measureText(textStr[i]).width + spacing;
+    }
+    ctx.restore();
+  } else if (obj.rotation) {
     ctx.save();
     ctx.translate(sx, sy);
     ctx.rotate(-obj.rotation);
-    ctx.fillText(obj.text || '', 0, 0);
+    ctx.fillText(textStr, 0, 0);
     ctx.restore();
   } else {
-    ctx.fillText(obj.text || '', sx, sy);
+    ctx.fillText(textStr, sx, sy);
   }
   // Malý marker na kotevním bodě
   ctx.beginPath();
@@ -1810,6 +1869,90 @@ export function drawText(obj) {
   ctx.fill();
   ctx.textAlign = 'start';
   ctx.textBaseline = 'alphabetic';
+}
+
+/** Měří šířku textu s mezerou mezi znaky */
+function _measureTextSpaced(text, spacing) {
+  let w = 0;
+  for (let i = 0; i < text.length; i++) {
+    w += ctx.measureText(text[i]).width;
+    if (i < text.length - 1) w += spacing;
+  }
+  return w;
+}
+
+/** Vykreslí text podél úsečky */
+function _drawTextAlongLine(text, lineObj, screenSize, spacing) {
+  const [sx1, sy1] = worldToScreen(lineObj.x1, lineObj.y1);
+  const [sx2, sy2] = worldToScreen(lineObj.x2, lineObj.y2);
+  const dx = sx2 - sx1, dy = sy2 - sy1;
+  const lineLen = Math.hypot(dx, dy);
+  if (lineLen < 1) return;
+  const angle = Math.atan2(dy, dx);
+
+  ctx.save();
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'bottom';
+
+  let offsetX = 0;
+  for (let i = 0; i < text.length; i++) {
+    const charW = ctx.measureText(text[i]).width;
+    const t = (offsetX + charW / 2) / lineLen;
+    if (t > 1) break;
+    const px = sx1 + dx * (offsetX / lineLen);
+    const py = sy1 + dy * (offsetX / lineLen);
+    ctx.save();
+    ctx.translate(px, py);
+    ctx.rotate(angle);
+    ctx.fillText(text[i], 0, -2);
+    ctx.restore();
+    offsetX += charW + spacing;
+  }
+  ctx.restore();
+}
+
+/** Vykreslí text podél oblouku */
+function _drawTextAlongArc(text, arcObj, screenSize, spacing) {
+  const [scx, scy] = worldToScreen(arcObj.cx, arcObj.cy);
+  const sr = arcObj.r * state.zoom;
+  if (sr < 5 || sr <= 0) return;
+
+  let startAngle = -arcObj.startAngle;
+  let endAngle = -arcObj.endAngle;
+  // Normalizace – zajistit správný směr
+  if (endAngle > startAngle) {
+    const tmp = startAngle;
+    startAngle = endAngle;
+    endAngle = tmp;
+  }
+
+  ctx.save();
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'bottom';
+
+  let currentAngle = startAngle;
+  const textRadius = sr + 4; // o trochu nad obloukem
+
+  for (let i = 0; i < text.length; i++) {
+    const charW = ctx.measureText(text[i]).width;
+    const charAngle = charW / textRadius;
+    const halfChar = charAngle / 2;
+    const drawAngle = currentAngle - halfChar;
+
+    // Nekresli znaky mimo oblouk
+    if (drawAngle < endAngle) break;
+
+    const px = scx + textRadius * Math.cos(drawAngle);
+    const py = scy + textRadius * Math.sin(drawAngle);
+    ctx.save();
+    ctx.translate(px, py);
+    ctx.rotate(drawAngle - Math.PI / 2);
+    ctx.fillText(text[i], 0, 0);
+    ctx.restore();
+
+    currentAngle -= charAngle + (spacing / textRadius);
+  }
+  ctx.restore();
 }
 
 // ── Vazební značky (constraints) ──

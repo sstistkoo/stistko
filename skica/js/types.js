@@ -142,7 +142,14 @@
  * @property {number} y
  * @property {string} text
  * @property {number} [fontSize]
+ * @property {string} [fontFamily]
  * @property {number} [rotation]
+ * @property {string} [textAlign]
+ * @property {boolean} [bold]
+ * @property {boolean} [italic]
+ * @property {number} [letterSpacing]
+ * @property {string} [pathMode] - 'none'|'line'|'arc'
+ * @property {number|null} [pathObjectId] - ID objektu cesty
  */
 
 /**
