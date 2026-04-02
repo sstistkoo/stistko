@@ -3511,166 +3511,129 @@ export function applyTheme() {
 }
 
 function showSettingsDialog() {
+  const act = (cond) => cond ? 'border-color:var(--ctp-green);background:var(--ctp-green);color:var(--ctp-base)' : 'border-color:var(--ctp-surface1);background:var(--ctp-surface0);color:var(--ctp-text)';
+  const btnS = 'flex:1;padding:5px 6px;font-size:12px;border-radius:5px;cursor:pointer;border:2px solid transparent;';
   const bodyHTML = `
-    <div style="display:flex;flex-direction:column;gap:16px;min-width:300px;max-width:420px">
+    <div style="display:flex;flex-direction:column;gap:10px;min-width:300px;max-width:420px">
 
-      <!-- Motiv -->
-      <fieldset style="border:1px solid var(--ctp-surface1);border-radius:8px;padding:10px 12px;margin:0">
-        <legend style="color:var(--ctp-blue);font-size:13px;padding:0 6px">🎨 Motiv</legend>
-        <div style="display:flex;gap:8px;margin-top:4px">
-          <button class="calc-btn" id="settThemeDark" style="flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid ${state.theme === 'dark' ? 'var(--ctp-green)' : 'var(--ctp-surface1)'};background:${state.theme === 'dark' ? 'var(--ctp-green)' : 'var(--ctp-surface0)'};color:${state.theme === 'dark' ? 'var(--ctp-base)' : 'var(--ctp-text)'}">
-            🌙 Tmavý
-          </button>
-          <button class="calc-btn" id="settThemeLight" style="flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid ${state.theme === 'light' ? 'var(--ctp-green)' : 'var(--ctp-surface1)'};background:${state.theme === 'light' ? 'var(--ctp-green)' : 'var(--ctp-surface0)'};color:${state.theme === 'light' ? 'var(--ctp-base)' : 'var(--ctp-text)'}">
-            ☀️ Světlý
-          </button>
+      <!-- Projekty a export – zabalovací -->
+      <details style="border:1px solid var(--ctp-surface1);border-radius:6px;margin:0;background:var(--ctp-mantle)">
+        <summary style="padding:6px 10px;cursor:pointer;font-size:12px;color:var(--ctp-blue);font-weight:600;user-select:none;list-style:none;display:flex;align-items:center;gap:4px">
+          <span id="settProjArrow" style="transition:transform .2s;display:inline-block">▸</span> 📂 Projekty a export
+        </summary>
+        <div style="padding:4px 10px 8px;display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;gap:6px">
+            <button class="calc-btn" id="settProjects" style="${btnS}background:var(--ctp-surface0);color:var(--ctp-text);border-color:var(--ctp-surface1)">📁 Projekty</button>
+            <button class="calc-btn" id="settCNC" style="${btnS}background:var(--ctp-surface0);color:var(--ctp-text);border-color:var(--ctp-surface1)">📋 CNC Export</button>
+          </div>
+          <button class="calc-btn" id="settDxfJson" style="width:100%;padding:5px 6px;font-size:12px;border-radius:5px;cursor:pointer;background:#a6e3a1;color:#1e1e2e;border:1px solid #a6e3a1">🔄 DXF - JSON konvertor</button>
+        </div>
+      </details>
+
+      <!-- Kóty -->
+      <fieldset style="border:1px solid var(--ctp-surface1);border-radius:6px;padding:6px 10px;margin:0">
+        <legend style="color:var(--ctp-blue);font-size:12px;padding:0 4px">📐 Kóty</legend>
+        <div style="display:flex;gap:6px;margin-top:2px;flex-wrap:wrap">
+          <button class="calc-btn" id="settDimsAll" style="${btnS}min-width:60px;${act(state.showDimensions === 'all')}">Vše</button>
+          <button class="calc-btn" id="settDimsIntersect" style="${btnS}min-width:60px;${act(state.showDimensions === 'intersections')}">Průsečíky</button>
+          <button class="calc-btn" id="settDimsNone" style="${btnS}min-width:60px;${act(state.showDimensions === 'none')}">Skryté</button>
         </div>
       </fieldset>
 
       <!-- Přesnost zobrazení -->
-      <fieldset style="border:1px solid var(--ctp-surface1);border-radius:8px;padding:10px 12px;margin:0">
-        <legend style="color:var(--ctp-blue);font-size:13px;padding:0 6px">📐 Přesnost zobrazení</legend>
-        <div style="display:flex;align-items:center;gap:10px;margin-top:4px">
-          <label style="flex:1;font-size:13px;color:var(--ctp-text)">Desetinná místa:</label>
-          <select id="settDecimals" style="padding:6px 10px;border-radius:6px;border:1px solid var(--ctp-surface1);background:var(--ctp-surface0);color:var(--ctp-text);font-size:14px">
-            <option value="0"${state.displayDecimals === 0 ? ' selected' : ''}>0 &nbsp;(1 mm)</option>
-            <option value="1"${state.displayDecimals === 1 ? ' selected' : ''}>1 &nbsp;(0.1 mm)</option>
-            <option value="2"${state.displayDecimals === 2 ? ' selected' : ''}>2 &nbsp;(0.01 mm)</option>
-            <option value="3"${state.displayDecimals === 3 ? ' selected' : ''}>3 &nbsp;(0.001 mm)</option>
+      <fieldset style="border:1px solid var(--ctp-surface1);border-radius:6px;padding:6px 10px;margin:0">
+        <legend style="color:var(--ctp-blue);font-size:12px;padding:0 4px">🔢 Přesnost zobrazení</legend>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:2px">
+          <label style="flex:1;font-size:12px;color:var(--ctp-text)">Desetinná místa:</label>
+          <select id="settDecimals" style="padding:4px 8px;border-radius:5px;border:1px solid var(--ctp-surface1);background:var(--ctp-surface0);color:var(--ctp-text);font-size:13px">
+            <option value="0"${state.displayDecimals === 0 ? ' selected' : ''}>0 (1 mm)</option>
+            <option value="1"${state.displayDecimals === 1 ? ' selected' : ''}>1 (0.1)</option>
+            <option value="2"${state.displayDecimals === 2 ? ' selected' : ''}>2 (0.01)</option>
+            <option value="3"${state.displayDecimals === 3 ? ' selected' : ''}>3 (0.001)</option>
           </select>
         </div>
-        <p style="margin:6px 0 0;font-size:11px;color:var(--ctp-subtext0)">Ovlivňuje kóty, průsečíky, souřadnice a status bar.</p>
       </fieldset>
 
-      <!-- Typ stroje -->
-      <fieldset style="border:1px solid var(--ctp-surface1);border-radius:8px;padding:10px 12px;margin:0">
-        <legend style="color:var(--ctp-blue);font-size:13px;padding:0 6px">🔧 Typ stroje</legend>
-        <div style="display:flex;gap:8px;margin-top:4px">
-          <button class="calc-btn" id="settMachSoustruh" style="flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid ${state.machineType === 'soustruh' ? 'var(--ctp-green)' : 'var(--ctp-surface1)'};background:${state.machineType === 'soustruh' ? 'var(--ctp-green)' : 'var(--ctp-surface0)'};color:${state.machineType === 'soustruh' ? 'var(--ctp-base)' : 'var(--ctp-text)'}">
-            Soustruh<br><span style="font-size:11px;opacity:0.8">Z↔ X↕</span>
-          </button>
-          <button class="calc-btn" id="settMachKarusel" style="flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid ${state.machineType === 'karusel' ? 'var(--ctp-green)' : 'var(--ctp-surface1)'};background:${state.machineType === 'karusel' ? 'var(--ctp-green)' : 'var(--ctp-surface0)'};color:${state.machineType === 'karusel' ? 'var(--ctp-base)' : 'var(--ctp-text)'}">
-            Karusel<br><span style="font-size:11px;opacity:0.8">X↔ Z↕</span>
-          </button>
+      <!-- Zobrazení os a stroje -->
+      <fieldset style="border:1px solid var(--ctp-surface1);border-radius:6px;padding:6px 10px;margin:0">
+        <legend style="color:var(--ctp-blue);font-size:12px;padding:0 4px">📏 Zobrazení</legend>
+        <div style="display:flex;gap:6px;margin-top:2px">
+          <button class="calc-btn" id="settXRadius" style="${btnS}${act(state.xDisplayMode === 'radius')}">R Poloměr</button>
+          <button class="calc-btn" id="settXDiam" style="${btnS}${act(state.xDisplayMode === 'diameter')}">⌀ Průměr</button>
         </div>
-      </fieldset>
-
-      <!-- Osa X -->
-      <fieldset style="border:1px solid var(--ctp-surface1);border-radius:8px;padding:10px 12px;margin:0">
-        <legend style="color:var(--ctp-blue);font-size:13px;padding:0 6px">📏 Zobrazení osy X</legend>
-        <div style="display:flex;gap:8px;margin-top:4px">
-          <button class="calc-btn" id="settXRadius" style="flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid ${state.xDisplayMode === 'radius' ? 'var(--ctp-green)' : 'var(--ctp-surface1)'};background:${state.xDisplayMode === 'radius' ? 'var(--ctp-green)' : 'var(--ctp-surface0)'};color:${state.xDisplayMode === 'radius' ? 'var(--ctp-base)' : 'var(--ctp-text)'}">
-            R – Poloměr
-          </button>
-          <button class="calc-btn" id="settXDiam" style="flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid ${state.xDisplayMode === 'diameter' ? 'var(--ctp-green)' : 'var(--ctp-surface1)'};background:${state.xDisplayMode === 'diameter' ? 'var(--ctp-green)' : 'var(--ctp-surface0)'};color:${state.xDisplayMode === 'diameter' ? 'var(--ctp-base)' : 'var(--ctp-text)'}">
-            ⌀ – Průměr
-          </button>
+        <div style="display:flex;gap:6px;margin-top:6px">
+          <button class="calc-btn" id="settCoordAbs" style="${btnS}${act(state.coordMode === 'abs')}">ABS</button>
+          <button class="calc-btn" id="settCoordInc" style="${btnS}${act(state.coordMode === 'inc')}">INC</button>
+          <button class="calc-btn" id="settMachSoustruh" style="${btnS}${act(state.machineType === 'soustruh')}">Soustruh</button>
+          <button class="calc-btn" id="settMachKarusel" style="${btnS}${act(state.machineType === 'karusel')}">Karusel</button>
         </div>
       </fieldset>
 
       <!-- Mřížka a snap -->
-      <fieldset style="border:1px solid var(--ctp-surface1);border-radius:8px;padding:10px 12px;margin:0">
-        <legend style="color:var(--ctp-blue);font-size:13px;padding:0 6px"># Mřížka a snap</legend>
-        <div style="display:flex;gap:8px;margin-top:4px">
-          <button class="calc-btn" id="settSnapGrid" style="flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid ${state.snapToGrid ? 'var(--ctp-green)' : 'var(--ctp-surface1)'};background:${state.snapToGrid ? 'var(--ctp-green)' : 'var(--ctp-surface0)'};color:${state.snapToGrid ? 'var(--ctp-base)' : 'var(--ctp-text)'}">
-            # Snap mřížka: ${state.snapToGrid ? 'ON' : 'OFF'}
-          </button>
-          <button class="calc-btn" id="settAngleSnap" style="flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid ${state.angleSnap ? 'var(--ctp-green)' : 'var(--ctp-surface1)'};background:${state.angleSnap ? 'var(--ctp-green)' : 'var(--ctp-surface0)'};color:${state.angleSnap ? 'var(--ctp-base)' : 'var(--ctp-text)'}">
-            ∠ Úhlový snap: ${state.angleSnap ? 'ON' : 'OFF'}
-          </button>
+      <fieldset style="border:1px solid var(--ctp-surface1);border-radius:6px;padding:6px 10px;margin:0">
+        <legend style="color:var(--ctp-blue);font-size:12px;padding:0 4px"># Mřížka a snap</legend>
+        <div style="display:flex;gap:6px;margin-top:2px">
+          <button class="calc-btn" id="settSnapGrid" style="${btnS}${act(state.snapToGrid)}"># Mřížka: ${state.snapToGrid ? 'ON' : 'OFF'}</button>
+          <button class="calc-btn" id="settAngleSnap" style="${btnS}${act(state.angleSnap)}">∠ Úhel: ${state.angleSnap ? 'ON' : 'OFF'}</button>
         </div>
-        <div style="display:flex;align-items:center;gap:10px;margin-top:8px">
-          <label style="flex:1;font-size:13px;color:var(--ctp-text)">Velikost mřížky (mm):</label>
+        <div style="display:flex;gap:8px;margin-top:5px;align-items:center">
+          <label style="font-size:11px;color:var(--ctp-subtext0)">Mřížka:</label>
           <input id="settGrid" type="number" min="0.1" max="100" step="0.1" value="${state.gridSize}"
-            style="width:70px;padding:6px 8px;border-radius:6px;border:1px solid var(--ctp-surface1);background:var(--ctp-surface0);color:var(--ctp-text);font-size:14px;text-align:center">
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;margin-top:8px">
-          <label style="flex:1;font-size:13px;color:var(--ctp-text)">Úhlový snap krok (°):</label>
+            style="width:56px;padding:3px 6px;border-radius:5px;border:1px solid var(--ctp-surface1);background:var(--ctp-surface0);color:var(--ctp-text);font-size:12px;text-align:center">
+          <label style="font-size:11px;color:var(--ctp-subtext0)">Úhel (°):</label>
           <input id="settAngleStep" type="number" min="1" max="90" step="1" value="${state.angleSnapStep}"
-            style="width:70px;padding:6px 8px;border-radius:6px;border:1px solid var(--ctp-surface1);background:var(--ctp-surface0);color:var(--ctp-text);font-size:14px;text-align:center">
+            style="width:56px;padding:3px 6px;border-radius:5px;border:1px solid var(--ctp-surface1);background:var(--ctp-surface0);color:var(--ctp-text);font-size:12px;text-align:center">
         </div>
-        <div style="display:flex;gap:8px;margin-top:8px">
-          <button class="calc-btn" id="settSnapQuadrants" style="flex:1;padding:8px;font-size:12px;border-radius:6px;cursor:pointer;border:2px solid ${state.snapQuadrants ? 'var(--ctp-green)' : 'var(--ctp-surface1)'};background:${state.snapQuadrants ? 'var(--ctp-green)' : 'var(--ctp-surface0)'};color:${state.snapQuadrants ? 'var(--ctp-base)' : 'var(--ctp-text)'}">
-            ◎ Quadranty: ${state.snapQuadrants ? 'ON' : 'OFF'}
-          </button>
-          <button class="calc-btn" id="settSnapMidpoints" style="flex:1;padding:8px;font-size:12px;border-radius:6px;cursor:pointer;border:2px solid ${state.snapMidpoints ? 'var(--ctp-green)' : 'var(--ctp-surface1)'};background:${state.snapMidpoints ? 'var(--ctp-green)' : 'var(--ctp-surface0)'};color:${state.snapMidpoints ? 'var(--ctp-base)' : 'var(--ctp-text)'}">
-            ½ Středy: ${state.snapMidpoints ? 'ON' : 'OFF'}
-          </button>
+        <div style="display:flex;gap:6px;margin-top:5px">
+          <button class="calc-btn" id="settSnapQuadrants" style="${btnS}font-size:11px;${act(state.snapQuadrants)}">◎ Quadranty: ${state.snapQuadrants ? 'ON' : 'OFF'}</button>
+          <button class="calc-btn" id="settSnapMidpoints" style="${btnS}font-size:11px;${act(state.snapMidpoints)}">½ Středy: ${state.snapMidpoints ? 'ON' : 'OFF'}</button>
         </div>
       </fieldset>
 
-      <!-- Souřadnice -->
-      <fieldset style="border:1px solid var(--ctp-surface1);border-radius:8px;padding:10px 12px;margin:0">
-        <legend style="color:var(--ctp-blue);font-size:13px;padding:0 6px">🔢 Souřadnice</legend>
-        <div style="display:flex;gap:8px;margin-top:4px">
-          <button class="calc-btn" id="settCoordAbs" style="flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid ${state.coordMode === 'abs' ? 'var(--ctp-green)' : 'var(--ctp-surface1)'};background:${state.coordMode === 'abs' ? 'var(--ctp-green)' : 'var(--ctp-surface0)'};color:${state.coordMode === 'abs' ? 'var(--ctp-base)' : 'var(--ctp-text)'}">
-            ABS – Absolutní
-          </button>
-          <button class="calc-btn" id="settCoordInc" style="flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid ${state.coordMode === 'inc' ? 'var(--ctp-green)' : 'var(--ctp-surface1)'};background:${state.coordMode === 'inc' ? 'var(--ctp-green)' : 'var(--ctp-surface0)'};color:${state.coordMode === 'inc' ? 'var(--ctp-base)' : 'var(--ctp-text)'}">
-            INC – Inkrementální
-          </button>
+      <!-- Kotvy -->
+      <fieldset style="border:1px solid var(--ctp-surface1);border-radius:6px;padding:6px 10px;margin:0">
+        <legend style="color:var(--ctp-blue);font-size:12px;padding:0 4px">⚓ Kotvy</legend>
+        <div style="display:flex;align-items:center;gap:6px">
+          <span style="font-size:11px;color:var(--ctp-subtext0)">Aktivních: <strong id="settAnchorCount">${state.anchors.length}</strong></span>
+          <button class="calc-btn" id="settListAnchors" title="Seznam kotev" style="padding:2px 6px;font-size:14px;border-radius:5px;cursor:pointer;background:var(--ctp-surface0);color:var(--ctp-text);border:1px solid var(--ctp-surface1);opacity:${state.anchors.length === 0 ? '0.5' : '1'}"${state.anchors.length === 0 ? ' disabled' : ''}>📋</button>
+          <button class="calc-btn" id="settDeleteAnchors" title="Smazat všechny kotvy" style="margin-left:auto;padding:4px 10px;font-size:11px;border-radius:5px;cursor:pointer;background:var(--ctp-red);color:var(--ctp-base);border:1px solid var(--ctp-red);opacity:${state.anchors.length === 0 ? '0.5' : '1'}"${state.anchors.length === 0 ? ' disabled' : ''}>🗑️ Smazat vše</button>
         </div>
+        <div id="settAnchorList" style="display:none;max-height:140px;overflow-y:auto;margin-top:4px;border:1px solid var(--ctp-surface1);border-radius:5px;background:var(--ctp-mantle)"></div>
       </fieldset>
 
-      <!-- Kóty -->
-      <fieldset style="border:1px solid var(--ctp-surface1);border-radius:8px;padding:10px 12px;margin:0">
-        <legend style="color:var(--ctp-blue);font-size:13px;padding:0 6px">📐 Zobrazení kót</legend>
-        <div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap">
-          <button class="calc-btn" id="settDimsAll" style="flex:1;min-width:80px;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid ${state.showDimensions === 'all' ? 'var(--ctp-green)' : 'var(--ctp-surface1)'};background:${state.showDimensions === 'all' ? 'var(--ctp-green)' : 'var(--ctp-surface0)'};color:${state.showDimensions === 'all' ? 'var(--ctp-base)' : 'var(--ctp-text)'}">
-            Vše
-          </button>
-          <button class="calc-btn" id="settDimsIntersect" style="flex:1;min-width:80px;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid ${state.showDimensions === 'intersections' ? 'var(--ctp-green)' : 'var(--ctp-surface1)'};background:${state.showDimensions === 'intersections' ? 'var(--ctp-green)' : 'var(--ctp-surface0)'};color:${state.showDimensions === 'intersections' ? 'var(--ctp-base)' : 'var(--ctp-text)'}">
-            Průsečíky
-          </button>
-          <button class="calc-btn" id="settDimsNone" style="flex:1;min-width:80px;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid ${state.showDimensions === 'none' ? 'var(--ctp-green)' : 'var(--ctp-surface1)'};background:${state.showDimensions === 'none' ? 'var(--ctp-green)' : 'var(--ctp-surface0)'};color:${state.showDimensions === 'none' ? 'var(--ctp-base)' : 'var(--ctp-text)'}">
-            Skryté
-          </button>
-        </div>
-      </fieldset>
-
-      <!-- Projekty a CNC -->
-      <fieldset style="border:1px solid var(--ctp-surface1);border-radius:8px;padding:10px 12px;margin:0">
-        <legend style="color:var(--ctp-blue);font-size:13px;padding:0 6px">⚓ Kotvy</legend>
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-          <p style="margin:0;flex:1;font-size:12px;color:var(--ctp-subtext0)">Aktivních kotev: <strong id="settAnchorCount">${state.anchors.length}</strong></p>
-          <button class="calc-btn" id="settListAnchors" title="Seznam kotev" style="padding:4px 8px;font-size:16px;border-radius:6px;cursor:pointer;background:var(--ctp-surface0);color:var(--ctp-text);border:1px solid var(--ctp-surface1);opacity:${state.anchors.length === 0 ? '0.5' : '1'}"${state.anchors.length === 0 ? ' disabled' : ''}>📋</button>
-        </div>
-        <div id="settAnchorList" style="display:none;max-height:180px;overflow-y:auto;margin-bottom:8px;border:1px solid var(--ctp-surface1);border-radius:6px;background:var(--ctp-mantle)"></div>
-        <button class="calc-btn" id="settDeleteAnchors" style="width:100%;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;background:var(--ctp-red);color:var(--ctp-base);border:1px solid var(--ctp-red);opacity:${state.anchors.length === 0 ? '0.5' : '1'}"${state.anchors.length === 0 ? ' disabled' : ''}>
-          🗑️ Smazat všechny kotvy
-        </button>
-      </fieldset>
-
-      <fieldset style="border:1px solid var(--ctp-surface1);border-radius:8px;padding:10px 12px;margin:0">
-        <legend style="color:var(--ctp-blue);font-size:13px;padding:0 6px">📂 Projekty a export</legend>
-        <div style="display:flex;gap:8px;margin-top:4px">
-          <button class="calc-btn" id="settProjects" style="flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;background:var(--ctp-surface0);color:var(--ctp-text);border:1px solid var(--ctp-surface1)">
-            📁 Projekty
-          </button>
-          <button class="calc-btn" id="settCNC" style="flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;background:var(--ctp-surface0);color:var(--ctp-text);border:1px solid var(--ctp-surface1)">
-            📋 CNC Export
-          </button>
-        </div>
-        <div style="margin-top:8px">
-          <button class="calc-btn" id="settDxfJson" style="width:100%;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;background:#a6e3a1;color:#1e1e2e;border:1px solid #a6e3a1">
-            🔄 DXF - JSON konvertor
-          </button>
-        </div>
-      </fieldset>
+      <!-- Motiv – malý přepínač dole -->
+      <div style="display:flex;align-items:center;justify-content:center;gap:8px;padding:4px 0;border-top:1px solid var(--ctp-surface0);margin-top:2px">
+        <span style="font-size:11px;color:var(--ctp-subtext0)">Motiv:</span>
+        <button class="calc-btn" id="settThemeDark" title="Tmavý motiv" style="padding:3px 10px;font-size:11px;border-radius:4px;cursor:pointer;border:2px solid transparent;${act(state.theme === 'dark')}">🌙 Tmavý</button>
+        <button class="calc-btn" id="settThemeLight" title="Světlý motiv" style="padding:3px 10px;font-size:11px;border-radius:4px;cursor:pointer;border:2px solid transparent;${act(state.theme === 'light')}">☀️ Světlý</button>
+      </div>
 
     </div>`;
 
   const overlay = makeOverlay('settings', '⚙️ Nastavení', bodyHTML, 'cnc-window');
   if (!overlay) return;
 
+  // ── Helpers ──
+  const activeStyle = 'border-color:var(--ctp-green);background:var(--ctp-green);color:var(--ctp-base)';
+  const inactiveStyle = 'border-color:var(--ctp-surface1);background:var(--ctp-surface0);color:var(--ctp-text)';
+  const btnBase = 'flex:1;padding:5px 6px;font-size:12px;border-radius:5px;cursor:pointer;border:2px solid transparent;';
+  const btnBaseSmall = 'flex:1;padding:5px 6px;font-size:11px;border-radius:5px;cursor:pointer;border:2px solid transparent;';
+
+  // ── Rozbalovací šipka ──
+  const detailsEl = overlay.querySelector('details');
+  if (detailsEl) {
+    detailsEl.addEventListener('toggle', () => {
+      const arrow = overlay.querySelector('#settProjArrow');
+      if (arrow) arrow.style.transform = detailsEl.open ? 'rotate(90deg)' : '';
+    });
+  }
+
   // ── Motiv ──
   function updateThemeBtns() {
     const dBtn = overlay.querySelector('#settThemeDark');
     const lBtn = overlay.querySelector('#settThemeLight');
-    const activeStyle = 'border-color:var(--ctp-green);background:var(--ctp-green);color:var(--ctp-base)';
-    const inactiveStyle = 'border-color:var(--ctp-surface1);background:var(--ctp-surface0);color:var(--ctp-text)';
-    dBtn.style.cssText = `flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid transparent;${state.theme === 'dark' ? activeStyle : inactiveStyle}`;
-    lBtn.style.cssText = `flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid transparent;${state.theme === 'light' ? activeStyle : inactiveStyle}`;
+    dBtn.style.cssText = `padding:3px 10px;font-size:11px;border-radius:4px;cursor:pointer;border:2px solid transparent;${state.theme === 'dark' ? activeStyle : inactiveStyle}`;
+    lBtn.style.cssText = `padding:3px 10px;font-size:11px;border-radius:4px;cursor:pointer;border:2px solid transparent;${state.theme === 'light' ? activeStyle : inactiveStyle}`;
   }
   overlay.querySelector('#settThemeDark').addEventListener('click', () => {
     state.theme = 'dark';
@@ -3697,10 +3660,8 @@ function showSettingsDialog() {
   function updateMachBtns() {
     const sBtn = overlay.querySelector('#settMachSoustruh');
     const kBtn = overlay.querySelector('#settMachKarusel');
-    const activeStyle = 'border-color:var(--ctp-green);background:var(--ctp-green);color:var(--ctp-base)';
-    const inactiveStyle = 'border-color:var(--ctp-surface1);background:var(--ctp-surface0);color:var(--ctp-text)';
-    sBtn.style.cssText = `flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid transparent;${state.machineType === 'soustruh' ? activeStyle : inactiveStyle}`;
-    kBtn.style.cssText = `flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid transparent;${state.machineType === 'karusel' ? activeStyle : inactiveStyle}`;
+    sBtn.style.cssText = `${btnBase}${state.machineType === 'soustruh' ? activeStyle : inactiveStyle}`;
+    kBtn.style.cssText = `${btnBase}${state.machineType === 'karusel' ? activeStyle : inactiveStyle}`;
   }
   overlay.querySelector('#settMachSoustruh').addEventListener('click', () => {
     state.machineType = 'soustruh';
@@ -3721,10 +3682,8 @@ function showSettingsDialog() {
   function updateXBtns() {
     const rBtn = overlay.querySelector('#settXRadius');
     const dBtn = overlay.querySelector('#settXDiam');
-    const activeStyle = 'border-color:var(--ctp-green);background:var(--ctp-green);color:var(--ctp-base)';
-    const inactiveStyle = 'border-color:var(--ctp-surface1);background:var(--ctp-surface0);color:var(--ctp-text)';
-    rBtn.style.cssText = `flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid transparent;${state.xDisplayMode === 'radius' ? activeStyle : inactiveStyle}`;
-    dBtn.style.cssText = `flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid transparent;${state.xDisplayMode === 'diameter' ? activeStyle : inactiveStyle}`;
+    rBtn.style.cssText = `${btnBase}${state.xDisplayMode === 'radius' ? activeStyle : inactiveStyle}`;
+    dBtn.style.cssText = `${btnBase}${state.xDisplayMode === 'diameter' ? activeStyle : inactiveStyle}`;
   }
   overlay.querySelector('#settXRadius').addEventListener('click', () => {
     state.xDisplayMode = 'radius';
@@ -3744,10 +3703,8 @@ function showSettingsDialog() {
   // ── Snap mřížka ON/OFF ──
   function updateSnapGridSettBtn() {
     const btn = overlay.querySelector('#settSnapGrid');
-    const activeStyle = 'border-color:var(--ctp-green);background:var(--ctp-green);color:var(--ctp-base)';
-    const inactiveStyle = 'border-color:var(--ctp-surface1);background:var(--ctp-surface0);color:var(--ctp-text)';
-    btn.style.cssText = `flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid transparent;${state.snapToGrid ? activeStyle : inactiveStyle}`;
-    btn.textContent = `# Snap mřížka: ${state.snapToGrid ? 'ON' : 'OFF'}`;
+    btn.style.cssText = `${btnBase}${state.snapToGrid ? activeStyle : inactiveStyle}`;
+    btn.textContent = `# Mřížka: ${state.snapToGrid ? 'ON' : 'OFF'}`;
   }
   overlay.querySelector('#settSnapGrid').addEventListener('click', () => {
     state.snapToGrid = !state.snapToGrid;
@@ -3762,10 +3719,8 @@ function showSettingsDialog() {
   // ── Úhlový snap ON/OFF ──
   function updateAngleSnapSettBtn() {
     const btn = overlay.querySelector('#settAngleSnap');
-    const activeStyle = 'border-color:var(--ctp-green);background:var(--ctp-green);color:var(--ctp-base)';
-    const inactiveStyle = 'border-color:var(--ctp-surface1);background:var(--ctp-surface0);color:var(--ctp-text)';
-    btn.style.cssText = `flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid transparent;${state.angleSnap ? activeStyle : inactiveStyle}`;
-    btn.textContent = `∠ Úhlový snap: ${state.angleSnap ? 'ON' : 'OFF'}`;
+    btn.style.cssText = `${btnBase}${state.angleSnap ? activeStyle : inactiveStyle}`;
+    btn.textContent = `∠ Úhel: ${state.angleSnap ? 'ON' : 'OFF'}`;
   }
   overlay.querySelector('#settAngleSnap').addEventListener('click', () => {
     state.angleSnap = !state.angleSnap;
@@ -3799,9 +3754,7 @@ function showSettingsDialog() {
   // ── Quadranty kružnice ON/OFF ──
   function updateSnapQuadrantsBtn() {
     const btn = overlay.querySelector('#settSnapQuadrants');
-    const activeStyle = 'border-color:var(--ctp-green);background:var(--ctp-green);color:var(--ctp-base)';
-    const inactiveStyle = 'border-color:var(--ctp-surface1);background:var(--ctp-surface0);color:var(--ctp-text)';
-    btn.style.cssText = `flex:1;padding:8px;font-size:12px;border-radius:6px;cursor:pointer;border:2px solid transparent;${state.snapQuadrants ? activeStyle : inactiveStyle}`;
+    btn.style.cssText = `${btnBaseSmall}${state.snapQuadrants ? activeStyle : inactiveStyle}`;
     btn.textContent = `◎ Quadranty: ${state.snapQuadrants ? 'ON' : 'OFF'}`;
   }
   overlay.querySelector('#settSnapQuadrants').addEventListener('click', () => {
@@ -3815,9 +3768,7 @@ function showSettingsDialog() {
   // ── Středy úseček ON/OFF ──
   function updateSnapMidpointsBtn() {
     const btn = overlay.querySelector('#settSnapMidpoints');
-    const activeStyle = 'border-color:var(--ctp-green);background:var(--ctp-green);color:var(--ctp-base)';
-    const inactiveStyle = 'border-color:var(--ctp-surface1);background:var(--ctp-surface0);color:var(--ctp-text)';
-    btn.style.cssText = `flex:1;padding:8px;font-size:12px;border-radius:6px;cursor:pointer;border:2px solid transparent;${state.snapMidpoints ? activeStyle : inactiveStyle}`;
+    btn.style.cssText = `${btnBaseSmall}${state.snapMidpoints ? activeStyle : inactiveStyle}`;
     btn.textContent = `½ Středy: ${state.snapMidpoints ? 'ON' : 'OFF'}`;
   }
   overlay.querySelector('#settSnapMidpoints').addEventListener('click', () => {
@@ -3832,10 +3783,8 @@ function showSettingsDialog() {
   function updateCoordBtns() {
     const aBtn = overlay.querySelector('#settCoordAbs');
     const iBtn = overlay.querySelector('#settCoordInc');
-    const activeStyle = 'border-color:var(--ctp-green);background:var(--ctp-green);color:var(--ctp-base)';
-    const inactiveStyle = 'border-color:var(--ctp-surface1);background:var(--ctp-surface0);color:var(--ctp-text)';
-    aBtn.style.cssText = `flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid transparent;${state.coordMode === 'abs' ? activeStyle : inactiveStyle}`;
-    iBtn.style.cssText = `flex:1;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid transparent;${state.coordMode === 'inc' ? activeStyle : inactiveStyle}`;
+    aBtn.style.cssText = `${btnBase}${state.coordMode === 'abs' ? activeStyle : inactiveStyle}`;
+    iBtn.style.cssText = `${btnBase}${state.coordMode === 'inc' ? activeStyle : inactiveStyle}`;
   }
   overlay.querySelector('#settCoordAbs').addEventListener('click', () => {
     state.coordMode = 'abs';
@@ -3860,11 +3809,9 @@ function showSettingsDialog() {
   function updateDimsBtns() {
     const modes = ['all', 'intersections', 'none'];
     const ids = ['#settDimsAll', '#settDimsIntersect', '#settDimsNone'];
-    const activeStyle = 'border-color:var(--ctp-green);background:var(--ctp-green);color:var(--ctp-base)';
-    const inactiveStyle = 'border-color:var(--ctp-surface1);background:var(--ctp-surface0);color:var(--ctp-text)';
     modes.forEach((m, i) => {
       const btn = overlay.querySelector(ids[i]);
-      btn.style.cssText = `flex:1;min-width:80px;padding:8px;font-size:13px;border-radius:6px;cursor:pointer;border:2px solid transparent;${state.showDimensions === m ? activeStyle : inactiveStyle}`;
+      btn.style.cssText = `${btnBase}min-width:60px;${state.showDimensions === m ? activeStyle : inactiveStyle}`;
     });
   }
   ['all', 'intersections', 'none'].forEach((mode, i) => {
