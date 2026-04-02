@@ -2859,6 +2859,7 @@ export function openCalculator() {
             target.dispatchEvent(new Event("input", { bubbles: true }));
             target.focus();
             showToast("Vloženo: " + v);
+            overlay.remove();
           } else {
             setCalcClipboardValue(v);
             navigator.clipboard.writeText(v).then(() => showToast("Zkopírováno do schránky: " + v));

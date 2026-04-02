@@ -341,7 +341,7 @@ export function showNumericalInputDialog() {
     });
 
     const first = fieldsDiv.querySelector("input");
-    if (first) setTimeout(() => first.focus(), 50);
+    if (first && !("ontouchstart" in window)) setTimeout(() => first.focus(), 50);
 
     // Auto-select obsahu při kliknutí + vyhodnocení výrazu při opuštění pole
     wireExprInputs(fieldsDiv);
