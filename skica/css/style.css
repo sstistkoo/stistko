@@ -499,6 +499,7 @@ body {
 .prop-readonly {
   color: var(--ctp-overlay0);
   font-style: italic;
+  -webkit-user-select: text;
   user-select: text;
   cursor: text;
 }
@@ -569,6 +570,7 @@ body {
   opacity: 0.8;
   color: #fab387;
   cursor: default;
+  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -2428,6 +2430,7 @@ body {
   border-bottom: none;
   border-radius: 6px 6px 0 0;
   gap: 4px;
+  -webkit-user-select: none;
   user-select: none;
 }
 .calc-hist-title {
@@ -3992,7 +3995,6 @@ body {
   flex-shrink: 0;
   max-height: 30vh;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
 }
 .gc-chip {
   flex-shrink: 0;
@@ -4027,7 +4029,6 @@ body {
   flex: 1;
   overflow-y: auto;
   padding: 0 12px 12px;
-  -webkit-overflow-scrolling: touch;
 }
 
 .gc-group-title {
@@ -4158,7 +4159,6 @@ body {
   overflow-x: auto;
   margin: 0;
   white-space: pre;
-  -webkit-overflow-scrolling: touch;
 }
 .gc-ex-desc {
   font-size: 11px;
@@ -4566,7 +4566,6 @@ body {
   max-height: 400px;
   overflow: auto;
   margin-bottom: 10px;
-  -webkit-overflow-scrolling: touch;
 }
 .profile-trace-table {
   width: 100%;
@@ -4761,6 +4760,7 @@ body {
   color: #1a1a1a; font: 700 10px/1 "Consolas","Courier New",monospace;
   text-transform: uppercase; letter-spacing: 1.5px;
   padding: 3px 12px; text-align: center; flex-shrink: 0;
+  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -4835,6 +4835,7 @@ body {
   background: var(--ctp-mantle);
   border-right: 1px solid var(--ctp-surface0);
   overflow: hidden; white-space: pre;
+  -webkit-user-select: none;
   user-select: none;
 }
 .cne-editor-container {
