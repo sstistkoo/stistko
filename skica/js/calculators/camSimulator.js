@@ -4,6 +4,7 @@
 // ╚══════════════════════════════════════════════════════════════╝
 
 import { makeOverlay } from '../dialogFactory.js';
+import { openCncEditor } from './cncEditor.js';
 
 // ── CSS injection ──────────────────────────────────────────────
 let cssInjected = false;
@@ -13,15 +14,18 @@ function injectCSS() {
   const style = document.createElement('style');
   style.textContent = `
 .cam-sim-window {
-  width: 95vw !important; max-width: 1600px !important;
-  height: 90vh !important; max-height: 900px !important;
+  width: 100vw !important; max-width: 100vw !important;
+  height: 100vh !important; max-height: 100vh !important;
   display: flex; flex-direction: column;
+  border-radius: 0 !important;
 }
+.cam-sim-window .calc-titlebar { border-radius: 0 !important; }
 .cam-sim-window .calc-body {
   flex: 1; overflow: hidden; padding: 0 !important;
 }
 .cam-sim-root {
   display: flex; height: 100%; color: #cdd6f4; font-family: system-ui, sans-serif; font-size: 13px;
+  position: relative; overflow: hidden;
 }
 .cam-sim-canvas-area {
   flex: 1; display: flex; flex-direction: column; position: relative; background: #1e1e2e;
@@ -30,6 +34,14 @@ function injectCSS() {
   flex: 1; overflow: hidden; cursor: crosshair; touch-action: none; position: relative;
 }
 .cam-sim-canvas-wrap canvas { display: block; }
+.cam-sim-time-overlay {
+  position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+  background: rgba(17,17,27,0.75); color: #6c7086; font-size: 11px; font-family: monospace;
+  padding: 2px 10px; border-radius: 4px; pointer-events: none; white-space: nowrap; z-index: 2;
+}
+.cam-sim-code-bar button[data-code="show-sidebar"] {
+  background: #cba6f7; color: #1e1e2e; border-color: #cba6f7;
+}
 .cam-sim-toolbar {
   position: absolute; top: 8px; right: 8px; z-index: 5;
   display: flex; gap: 6px; flex-wrap: wrap;
@@ -58,6 +70,7 @@ function injectCSS() {
 }
 .cam-sim-code-bar button:hover { background: #45475a; }
 .cam-sim-code-bar button.cam-sim-active { background: #89b4fa; color: #1e1e2e; }
+.cam-sim-code-bar button[data-code="editor"] { background: #a6e3a1; color: #1e1e2e; border-color: #a6e3a1; }
 .cam-sim-code-scroll {
   flex: 1; overflow-y: auto; font-family: monospace; font-size: 11px; padding: 4px;
 }
@@ -77,6 +90,10 @@ function injectCSS() {
 .cam-sim-sidebar {
   width: 320px; overflow-y: auto; border-left: 1px solid #45475a;
   background: #181825; display: flex; flex-direction: column;
+}
+.cam-sim-sidebar.cam-sim-sidebar-overlay {
+  position: absolute; top: 0; right: 0; bottom: 0; z-index: 10;
+  box-shadow: -4px 0 16px rgba(0,0,0,0.5);
 }
 .cam-sim-sidebar::-webkit-scrollbar { width: 6px; }
 .cam-sim-sidebar::-webkit-scrollbar-thumb { background: #45475a; border-radius: 3px; }
@@ -240,6 +257,9 @@ const MATERIALS = {
 };
 
 // ── MATH HELPERS ───────────────────────────────────────────────
+const EPSILON = 1e-9;
+const TRIM_TOL = 0.5;
+
 function dist(p1, p2) {
   if (!p1 || !p2) return 0;
   return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.z - p1.z, 2));
@@ -287,6 +307,29 @@ function intersectLineCircle(p1, p2, center, r) {
     { x: p1.x + t1 * dx, z: p1.z + t1 * dz },
     { x: p1.x + t2 * dx, z: p1.z + t2 * dz }
   ];
+}
+function intersectCircleCircle(c1x, c1z, r1, c2x, c2z, r2) {
+  const dx = c2x - c1x, dz = c2z - c1z;
+  const d = Math.sqrt(dx * dx + dz * dz);
+  if (d < EPSILON || d > r1 + r2 + EPSILON || d < Math.abs(r1 - r2) - EPSILON) return null;
+  const a = (r1 * r1 - r2 * r2 + d * d) / (2 * d);
+  const h2 = r1 * r1 - a * a;
+  if (h2 < 0) return null;
+  const h = Math.sqrt(Math.max(0, h2));
+  const mx = c1x + a * dx / d, mz = c1z + a * dz / d;
+  const ox = -dz / d, oz = dx / d;
+  return [
+    { x: mx + h * ox, z: mz + h * oz },
+    { x: mx - h * ox, z: mz - h * oz }
+  ];
+}
+function getSegEnd(seg) {
+  if (seg.type === 'line') return seg.p2;
+  return { x: seg.cx + Math.sin(seg.endAngle) * seg.r, z: seg.cz + Math.cos(seg.endAngle) * seg.r };
+}
+function getSegStart(seg) {
+  if (seg.type === 'line') return seg.p1;
+  return { x: seg.cx + Math.sin(seg.startAngle) * seg.r, z: seg.cz + Math.cos(seg.startAngle) * seg.r };
 }
 function getArcParams(p1, p2, r, type) {
   if (!p1 || !p2) return { error: true, cx: 0, cz: 0, r: 0 };
@@ -346,33 +389,114 @@ function intersectVerticalLineArc(zLine, center, radius) {
   return [center.x - sqrtTerm, center.x + sqrtTerm];
 }
 
-// ── SmartInput helper ──────────────────────────────────────────
-function createSmartInput(opts) {
-  const inp = document.createElement('input');
-  inp.type = opts.type || 'text';
-  if (opts.step) inp.step = opts.step;
-  if (opts.placeholder) inp.placeholder = opts.placeholder;
-  if (opts.className) inp.className = opts.className;
-  inp.value = opts.value ?? '';
-  let dirty = false;
-  let timer = null;
-  const commit = () => {
-    if (!dirty) return;
-    dirty = false;
-    if (timer) { clearTimeout(timer); timer = null; }
-    if (opts.onChange) opts.onChange(inp.value);
-  };
-  inp.addEventListener('input', () => {
-    dirty = true;
-    if (timer) clearTimeout(timer);
-    timer = setTimeout(commit, 600);
-  });
-  inp.addEventListener('blur', commit);
-  inp.addEventListener('keydown', e => {
-    if (e.key === 'Enter') { commit(); inp.blur(); }
-  });
-  inp.setValue = (v) => { inp.value = v; };
-  return inp;
+// ── Shared offset trimming + loop removal ──────────────────────
+function findSegIntersection(s1, s2) {
+  if (s1.type === 'line' && s2.type === 'line') {
+    return intersectLines(s1.p1, s1.p2, s2.p1, s2.p2);
+  }
+  if (s1.type === 'line' && s2.type === 'arc') {
+    const ints = intersectLineCircle(s1.p1, s1.p2, { x: s2.cx, z: s2.cz }, s2.r);
+    if (ints && ints.length > 0) {
+      const ref = getSegEnd(s1);
+      const d0 = Math.hypot(ints[0].x - ref.x, ints[0].z - ref.z);
+      const d1 = Math.hypot(ints[1].x - ref.x, ints[1].z - ref.z);
+      return d0 < d1 ? ints[0] : ints[1];
+    }
+    return null;
+  }
+  if (s1.type === 'arc' && s2.type === 'line') {
+    const ints = intersectLineCircle(s2.p1, s2.p2, { x: s1.cx, z: s1.cz }, s1.r);
+    if (ints && ints.length > 0) {
+      const ref = getSegStart(s2);
+      const d0 = Math.hypot(ints[0].x - ref.x, ints[0].z - ref.z);
+      const d1 = Math.hypot(ints[1].x - ref.x, ints[1].z - ref.z);
+      return d0 < d1 ? ints[0] : ints[1];
+    }
+    return null;
+  }
+  if (s1.type === 'arc' && s2.type === 'arc') {
+    const ints = intersectCircleCircle(s1.cx, s1.cz, s1.r, s2.cx, s2.cz, s2.r);
+    if (ints && ints.length > 0) {
+      const ref1 = getSegEnd(s1);
+      const ref2 = getSegStart(s2);
+      let best = null, bestD = Infinity;
+      for (const pt of ints) {
+        const d = Math.hypot(pt.x - ref1.x, pt.z - ref1.z) + Math.hypot(pt.x - ref2.x, pt.z - ref2.z);
+        if (d < bestD) { bestD = d; best = pt; }
+      }
+      return best;
+    }
+    return null;
+  }
+  return null;
+}
+function setSegEnd(seg, pt) {
+  if (seg.type === 'line') seg.p2 = pt;
+  else seg.endAngle = Math.atan2(pt.x - seg.cx, pt.z - seg.cz);
+}
+function setSegStart(seg, pt) {
+  if (seg.type === 'line') seg.p1 = pt;
+  else seg.startAngle = Math.atan2(pt.x - seg.cx, pt.z - seg.cz);
+}
+function isOnSegBounds(pt, seg) {
+  if (seg.type !== 'line') return true;
+  return pt.x >= Math.min(seg.p1.x, seg.p2.x) - TRIM_TOL &&
+    pt.x <= Math.max(seg.p1.x, seg.p2.x) + TRIM_TOL &&
+    pt.z >= Math.min(seg.p1.z, seg.p2.z) - TRIM_TOL &&
+    pt.z <= Math.max(seg.p1.z, seg.p2.z) + TRIM_TOL;
+}
+function trimAndRemoveLoops(rawSegs) {
+  if (rawSegs.length === 0) return [];
+  const result = [structuredClone(rawSegs[0])];
+  // 1. local trimming
+  for (let i = 0; i < rawSegs.length - 1; i++) {
+    const prevOff = result[result.length - 1];
+    const nextOff = structuredClone(rawSegs[i + 1]);
+    const intersection = findSegIntersection(prevOff, nextOff);
+    if (intersection) {
+      setSegEnd(prevOff, intersection);
+      setSegStart(nextOff, intersection);
+      result.push(nextOff);
+    } else {
+      let corner = null;
+      if (prevOff.type === 'line' && nextOff.type === 'line') {
+        corner = intersectLinesInfinite(prevOff.p1, prevOff.p2, nextOff.p1, nextOff.p2);
+      }
+      if (corner) {
+        prevOff.p2 = corner; nextOff.p1 = corner;
+      } else {
+        const pStart = getSegEnd(prevOff);
+        const pEnd = getSegStart(nextOff);
+        result.push({ type: 'line', p1: pStart, p2: { x: pEnd.x, z: pStart.z } });
+        if (Math.abs(pEnd.z - pStart.z) > 0.001)
+          result.push({ type: 'line', p1: { x: pEnd.x, z: pStart.z }, p2: pEnd });
+      }
+      result.push(nextOff);
+    }
+  }
+  // 2. global loop removal (handles all segment type combos)
+  if (result.length > 2) {
+    let loopFound = true, iterations = 0;
+    while (loopFound && iterations < 5) {
+      loopFound = false; iterations++;
+      outerLoop:
+      for (let i = 0; i < result.length - 2; i++) {
+        for (let j = i + 2; j < result.length; j++) {
+          const s1 = result[i], s2 = result[j];
+          if (s1.isDegenerate || s2.isDegenerate) continue;
+          const pt = findSegIntersection(s1, s2);
+          if (pt && isOnSegBounds(pt, s1) && isOnSegBounds(pt, s2)) {
+            setSegEnd(s1, pt);
+            setSegStart(s2, pt);
+            result.splice(i + 1, j - (i + 1));
+            loopFound = true;
+            break outerLoop;
+          }
+        }
+      }
+    }
+  }
+  return result;
 }
 
 // ── resolvePointsToAbsolute ────────────────────────────────────
@@ -401,11 +525,13 @@ function parseManualGCodeToPath(code, prms) {
   lines.forEach((line, idx) => {
     const clean = line.toUpperCase().trim();
     if (!clean || clean.startsWith(';') || clean.startsWith('(') || clean.startsWith('%')) return;
-    const gMatch = clean.match(/G([0-3])/);
+    const gMatch = clean.match(/\bG0?([0-3])\b/);
     const type = gMatch ? 'G' + gMatch[1] : lastMoveType;
     const xMatch = clean.match(/[XU]([-]?\d*\.?\d+)/);
     const zMatch = clean.match(/[ZW]([-]?\d*\.?\d+)/);
     const rMatch = clean.match(/(?:R|CR=)([-]?\d*\.?\d+)/);
+    const iMatch = clean.match(/I([-]?\d*\.?\d+)/);
+    const kMatch = clean.match(/K([-]?\d*\.?\d+)/);
     let targetX = currentX, targetZ = currentZ, hasMove = false;
     if (xMatch) { targetX = prms.mode === 'DIAMON' ? parseFloat(xMatch[1]) / 2 : parseFloat(xMatch[1]); hasMove = true; }
     if (zMatch) { targetZ = parseFloat(zMatch[1]); hasMove = true; }
@@ -414,11 +540,16 @@ function parseManualGCodeToPath(code, prms) {
       if (type === 'G0' || type === 'G1') {
         path.push({ x: targetX, z: targetZ, type, originalLineIdx: idx });
       } else if (type === 'G2' || type === 'G3') {
-        if (rMatch) {
-          const r = parseFloat(rMatch[1]);
+        let arcR = rMatch ? parseFloat(rMatch[1]) : 0;
+        if (!arcR && (iMatch || kMatch)) {
+          const ci = iMatch ? parseFloat(iMatch[1]) : 0;
+          const ck = kMatch ? parseFloat(kMatch[1]) : 0;
+          arcR = Math.hypot(ci, ck);
+        }
+        if (arcR) {
           const p1 = { x: currentX, z: currentZ };
           const p2 = { x: targetX, z: targetZ };
-          const arc = getArcParams(p1, p2, r, type);
+          const arc = getArcParams(p1, p2, arcR, type);
           if (!arc.error) {
             const steps = 10;
             let sA = Math.atan2(p1.x - arc.cx, p1.z - arc.cz);
@@ -451,16 +582,25 @@ function parseContourGCode(text) {
   let currentType = 'G1', idCounter = Date.now(), lastX = 100, lastZ = 0;
   lines.forEach(line => {
     const clean = line.toUpperCase().trim();
-    if (!clean || clean.startsWith(';')) return;
-    const gMatch = clean.match(/G([0-3])/);
+    if (!clean || clean.startsWith(';') || clean.startsWith('(') || clean.startsWith('%')) return;
+    const gMatch = clean.match(/\bG0?([0-3])\b/);
     if (gMatch) currentType = 'G' + gMatch[1];
     const xMatch = clean.match(/X([-]?\d+\.?\d*)/);
     const zMatch = clean.match(/Z([-]?\d+\.?\d*)/);
     const rMatch = clean.match(/(?:R|CR=)([-]?\d+\.?\d*)/);
+    const iMatch = clean.match(/I([-]?\d+\.?\d*)/);
+    const kMatch = clean.match(/K([-]?\d+\.?\d*)/);
     if (xMatch || zMatch) {
       const newX = xMatch ? parseFloat(xMatch[1]) : lastX;
       const newZ = zMatch ? parseFloat(zMatch[1]) : lastZ;
-      pts.push({ id: idCounter++, type: currentType, x: newX, z: newZ, r: rMatch ? parseFloat(rMatch[1]) : 0, mode: 'ABS' });
+      let rVal = rMatch ? parseFloat(rMatch[1]) : 0;
+      if (!rVal && (iMatch || kMatch) && (currentType === 'G2' || currentType === 'G3')) {
+        const ci = iMatch ? parseFloat(iMatch[1]) : 0;
+        const ck = kMatch ? parseFloat(kMatch[1]) : 0;
+        const cx = lastX + ci, cz = lastZ + ck;
+        rVal = Math.hypot(lastX - cx, lastZ - cz);
+      }
+      pts.push({ id: idCounter++, type: currentType, x: newX, z: newZ, r: rVal, mode: 'ABS' });
       lastX = newX; lastZ = newZ;
     }
   });
@@ -483,14 +623,14 @@ export function openCamSimulator(initialContour) {
       <button data-act="addpt" title="Vložit za bod">➕</button>
       <button data-act="fit" title="Centrovat">🎯</button>
     </div>
-    <div class="cam-sim-canvas-wrap"><canvas></canvas></div>
+    <div class="cam-sim-canvas-wrap"><canvas></canvas><div class="cam-sim-time-overlay"></div></div>
     <div class="cam-sim-code-area">
       <div class="cam-sim-code-bar">
         <span style="font-weight:bold">G-CODE</span>
-        <span class="cam-sim-time-info"></span>
         <div class="cam-sim-code-btns">
-          <button data-code="auto" class="cam-sim-active">Auto (Generátor)</button>
-          <button data-code="manual">✏ Manuál</button>
+          <button data-code="toggle-mode" class="cam-sim-active">Auto</button>
+          <button data-code="editor" title="Otevřít v CNC Editoru pro úpravu">🔧 Editor</button>
+          <button data-code="show-sidebar" title="Zobrazit editor kontury">✏ Edit</button>
         </div>
       </div>
       <div class="cam-sim-code-scroll"></div>
@@ -498,12 +638,13 @@ export function openCamSimulator(initialContour) {
         placeholder="Zde můžete psát vlastní G-kód..."></textarea>
     </div>
   </div>
-  <div class="cam-sim-sidebar">
+  <div class="cam-sim-sidebar" style="display:none">
     <div class="cam-sim-header">
       <h2>🔄 CAM Simulátor</h2>
       <div class="cam-sim-undo-btns">
         <button data-act="undo" title="Zpět">↩</button>
         <button data-act="redo" title="Vpřed">↪</button>
+        <button data-act="hide-sidebar" title="Zpět na G-kód">◀</button>
       </div>
     </div>
     <div class="cam-sim-errors" style="display:none"></div>
@@ -518,6 +659,25 @@ export function openCamSimulator(initialContour) {
 
   const overlay = makeOverlay('cam-simulator', '🔄 CAM Simulátor', bodyHTML, 'cam-sim-window');
   if (!overlay) return;
+
+  // Hide floating calculators, canvas buttons and sidebar when CAM is open
+  document.querySelectorAll('.calc-overlay-float').forEach(el => { el.style.display = 'none'; });
+  const sidebarEl = document.getElementById('sidebar');
+  if (sidebarEl) sidebarEl.style.display = 'none';
+  const calcBtn = document.getElementById('canvasCalcBtn');
+  const clipBtn = document.getElementById('canvasClipBtn');
+  if (calcBtn) calcBtn.style.display = 'none';
+  if (clipBtn) clipBtn.style.display = 'none';
+  const restoreOnClose = () => {
+    document.querySelectorAll('.calc-overlay-float').forEach(el => { el.style.display = ''; });
+    if (sidebarEl) sidebarEl.style.display = '';
+    if (calcBtn) calcBtn.style.display = '';
+    if (clipBtn) clipBtn.style.display = '';
+  };
+  const camCleanupObs = new MutationObserver(() => {
+    if (!document.body.contains(overlay)) { restoreOnClose(); camCleanupObs.disconnect(); }
+  });
+  camCleanupObs.observe(document.body, { childList: true });
 
   // ── STATE ──
   const S = {
@@ -580,9 +740,10 @@ export function openCamSimulator(initialContour) {
   } catch (_) { /* ignore */ }
 
   // Parse initial contour if provided
+  let _importedContour = false;
   if (initialContour && typeof initialContour === 'string' && initialContour.trim()) {
     const parsed = parseContourGCode(initialContour);
-    if (parsed.length > 0) S.contourPoints = parsed;
+    if (parsed.length > 0) { S.contourPoints = parsed; _importedContour = true; }
   }
 
   // ── DOM refs ──
@@ -592,10 +753,11 @@ export function openCamSimulator(initialContour) {
   const ctx = canvas.getContext('2d');
   const codeScroll = root.querySelector('.cam-sim-code-scroll');
   const manualTa = root.querySelector('.cam-sim-manual-ta');
-  const timeInfo = root.querySelector('.cam-sim-time-info');
+  const timeOverlay = root.querySelector('.cam-sim-time-overlay');
   const errorsDiv = root.querySelector('.cam-sim-errors');
   const tabBody = root.querySelector('.cam-sim-tab-body');
   const toolbar = root.querySelector('.cam-sim-toolbar');
+  const sidebar = root.querySelector('.cam-sim-sidebar');
 
   // ── HISTORY ──
   function pushHistory() {
@@ -711,93 +873,8 @@ export function openCamSimulator(initialContour) {
       if (offSeg) rawOffsets.push(offSeg);
     }
 
-    // 2. trimming
-    let trimmedOffsetPath = [];
-    if (rawOffsets.length > 0) {
-      trimmedOffsetPath.push(JSON.parse(JSON.stringify(rawOffsets[0])));
-      for (let i = 0; i < rawOffsets.length - 1; i++) {
-        let prevOff = trimmedOffsetPath[trimmedOffsetPath.length - 1];
-        let nextOff = JSON.parse(JSON.stringify(rawOffsets[i + 1]));
-        let intersection = null;
-        if (prevOff.type === 'line' && nextOff.type === 'line') {
-          intersection = intersectLines(prevOff.p1, prevOff.p2, nextOff.p1, nextOff.p2);
-        } else if (prevOff.type === 'line' && nextOff.type === 'arc') {
-          const ints = intersectLineCircle(prevOff.p1, prevOff.p2, { x: nextOff.cx, z: nextOff.cz }, nextOff.r);
-          if (ints && ints.length > 0) {
-            const d1 = Math.hypot(ints[0].x - prevOff.p2.x, ints[0].z - prevOff.p2.z);
-            const d2 = Math.hypot(ints[1].x - prevOff.p2.x, ints[1].z - prevOff.p2.z);
-            intersection = d1 < d2 ? ints[0] : ints[1];
-          }
-        } else if (prevOff.type === 'arc' && nextOff.type === 'line') {
-          const ints = intersectLineCircle(nextOff.p1, nextOff.p2, { x: prevOff.cx, z: prevOff.cz }, prevOff.r);
-          if (ints && ints.length > 0) {
-            const d1 = Math.hypot(ints[0].x - nextOff.p1.x, ints[0].z - nextOff.p1.z);
-            const d2 = Math.hypot(ints[1].x - nextOff.p1.x, ints[1].z - nextOff.p1.z);
-            intersection = d1 < d2 ? ints[0] : ints[1];
-          }
-        }
-        if (intersection) {
-          if (prevOff.type === 'line') prevOff.p2 = intersection;
-          else prevOff.endAngle = Math.atan2(intersection.x - prevOff.cx, intersection.z - prevOff.cz);
-          if (nextOff.type === 'line') nextOff.p1 = intersection;
-          else nextOff.startAngle = Math.atan2(intersection.x - nextOff.cx, intersection.z - nextOff.cz);
-          trimmedOffsetPath.push(nextOff);
-        } else {
-          let corner = null;
-          if (prevOff.type === 'line' && nextOff.type === 'line') {
-            corner = intersectLinesInfinite(prevOff.p1, prevOff.p2, nextOff.p1, nextOff.p2);
-          }
-          if (corner) {
-            prevOff.p2 = corner; nextOff.p1 = corner;
-          } else {
-            const pStart = (prevOff.type === 'line') ? prevOff.p2 : { x: prevOff.cx + Math.sin(prevOff.endAngle) * prevOff.r, z: prevOff.cz + Math.cos(prevOff.endAngle) * prevOff.r };
-            const pEnd = (nextOff.type === 'line') ? nextOff.p1 : { x: nextOff.cx + Math.sin(nextOff.startAngle) * nextOff.r, z: nextOff.cz + Math.cos(nextOff.startAngle) * nextOff.r };
-            trimmedOffsetPath.push({ type: 'line', p1: pStart, p2: { x: pEnd.x, z: pStart.z } });
-            if (Math.abs(pEnd.z - pStart.z) > 0.001)
-              trimmedOffsetPath.push({ type: 'line', p1: { x: pEnd.x, z: pStart.z }, p2: pEnd });
-          }
-          trimmedOffsetPath.push(nextOff);
-        }
-      }
-    }
-
-    // 3. global loop removal
-    if (trimmedOffsetPath.length > 2) {
-      let loopFound = true, iterations = 0;
-      while (loopFound && iterations < 5) {
-        loopFound = false; iterations++;
-        outerLoop:
-        for (let i = 0; i < trimmedOffsetPath.length - 2; i++) {
-          for (let j = i + 2; j < trimmedOffsetPath.length; j++) {
-            const s1 = trimmedOffsetPath[i], s2 = trimmedOffsetPath[j];
-            if (s1.isDegenerate || s2.isDegenerate) continue;
-            let intersection = null;
-            if (s1.type === 'line' && s2.type === 'line') {
-              intersection = intersectLines(s1.p1, s1.p2, s2.p1, s2.p2);
-              if (intersection) {
-                const tol = 0.5;
-                const ok = intersection.x >= Math.min(s1.p1.x, s1.p2.x) - tol && intersection.x <= Math.max(s1.p1.x, s1.p2.x) + tol &&
-                  intersection.z >= Math.min(s1.p1.z, s1.p2.z) - tol && intersection.z <= Math.max(s1.p1.z, s1.p2.z) + tol &&
-                  intersection.x >= Math.min(s2.p1.x, s2.p2.x) - tol && intersection.x <= Math.max(s2.p1.x, s2.p2.x) + tol &&
-                  intersection.z >= Math.min(s2.p1.z, s2.p2.z) - tol && intersection.z <= Math.max(s2.p1.z, s2.p2.z) + tol;
-                if (!ok) intersection = null;
-              }
-            }
-            if (intersection) {
-              if (s1.type === 'line') s1.p2 = intersection;
-              else s1.endAngle = Math.atan2(intersection.x - s1.cx, intersection.z - s1.cz);
-              if (s2.type === 'line') s2.p1 = intersection;
-              else s2.startAngle = Math.atan2(intersection.x - s2.cx, intersection.z - s2.cz);
-              trimmedOffsetPath.splice(i + 1, j - (i + 1));
-              loopFound = true;
-              break outerLoop;
-            }
-          }
-        }
-      }
-    }
-
-    const offsetPath = trimmedOffsetPath;
+    // 2. trimming + loop removal (shared helper handles all segment combos)
+    const offsetPath = trimAndRemoveLoops(rawOffsets);
 
     // finishing offset
     if (prms.doFinishing) {
@@ -816,86 +893,7 @@ export function openCamSimulator(initialContour) {
           }
         }
       }
-      if (finRaw.length > 0) {
-        finishOffsetPath.push(JSON.parse(JSON.stringify(finRaw[0])));
-        for (let i = 0; i < finRaw.length - 1; i++) {
-          let prevOff = finishOffsetPath[finishOffsetPath.length - 1];
-          let nextOff = JSON.parse(JSON.stringify(finRaw[i + 1]));
-          let intersection = null;
-          if (prevOff.type === 'line' && nextOff.type === 'line') {
-            intersection = intersectLines(prevOff.p1, prevOff.p2, nextOff.p1, nextOff.p2);
-          } else if (prevOff.type === 'line' && nextOff.type === 'arc') {
-            const ints = intersectLineCircle(prevOff.p1, prevOff.p2, { x: nextOff.cx, z: nextOff.cz }, nextOff.r);
-            if (ints && ints.length > 0) {
-              const d1 = Math.hypot(ints[0].x - prevOff.p2.x, ints[0].z - prevOff.p2.z);
-              const d2 = Math.hypot(ints[1].x - prevOff.p2.x, ints[1].z - prevOff.p2.z);
-              intersection = d1 < d2 ? ints[0] : ints[1];
-            }
-          } else if (prevOff.type === 'arc' && nextOff.type === 'line') {
-            const ints = intersectLineCircle(nextOff.p1, nextOff.p2, { x: prevOff.cx, z: prevOff.cz }, prevOff.r);
-            if (ints && ints.length > 0) {
-              const d1 = Math.hypot(ints[0].x - nextOff.p1.x, ints[0].z - nextOff.p1.z);
-              const d2 = Math.hypot(ints[1].x - nextOff.p1.x, ints[1].z - nextOff.p1.z);
-              intersection = d1 < d2 ? ints[0] : ints[1];
-            }
-          }
-          if (intersection) {
-            if (prevOff.type === 'line') prevOff.p2 = intersection;
-            else prevOff.endAngle = Math.atan2(intersection.x - prevOff.cx, intersection.z - prevOff.cz);
-            if (nextOff.type === 'line') nextOff.p1 = intersection;
-            else nextOff.startAngle = Math.atan2(intersection.x - nextOff.cx, intersection.z - nextOff.cz);
-            finishOffsetPath.push(nextOff);
-          } else {
-            let corner = null;
-            if (prevOff.type === 'line' && nextOff.type === 'line')
-              corner = intersectLinesInfinite(prevOff.p1, prevOff.p2, nextOff.p1, nextOff.p2);
-            if (corner) { prevOff.p2 = corner; nextOff.p1 = corner; }
-            else {
-              const pStart = (prevOff.type === 'line') ? prevOff.p2 : { x: prevOff.cx + Math.sin(prevOff.endAngle) * prevOff.r, z: prevOff.cz + Math.cos(prevOff.endAngle) * prevOff.r };
-              const pEnd = (nextOff.type === 'line') ? nextOff.p1 : { x: nextOff.cx + Math.sin(nextOff.startAngle) * nextOff.r, z: nextOff.cz + Math.cos(nextOff.startAngle) * nextOff.r };
-              finishOffsetPath.push({ type: 'line', p1: pStart, p2: { x: pEnd.x, z: pStart.z } });
-              if (Math.abs(pEnd.z - pStart.z) > 0.001)
-                finishOffsetPath.push({ type: 'line', p1: { x: pEnd.x, z: pStart.z }, p2: pEnd });
-            }
-            finishOffsetPath.push(nextOff);
-          }
-        }
-      }
-      // loop removal on finish
-      if (finishOffsetPath.length > 2) {
-        let loopFound = true, iterations = 0;
-        while (loopFound && iterations < 5) {
-          loopFound = false; iterations++;
-          outerLoopFin:
-          for (let i = 0; i < finishOffsetPath.length - 2; i++) {
-            for (let j = i + 2; j < finishOffsetPath.length; j++) {
-              const s1 = finishOffsetPath[i], s2 = finishOffsetPath[j];
-              if (s1.isDegenerate || s2.isDegenerate) continue;
-              let intersection = null;
-              if (s1.type === 'line' && s2.type === 'line') {
-                intersection = intersectLines(s1.p1, s1.p2, s2.p1, s2.p2);
-                if (intersection) {
-                  const tol = 0.5;
-                  const ok = intersection.x >= Math.min(s1.p1.x, s1.p2.x) - tol && intersection.x <= Math.max(s1.p1.x, s1.p2.x) + tol &&
-                    intersection.z >= Math.min(s1.p1.z, s1.p2.z) - tol && intersection.z <= Math.max(s1.p1.z, s1.p2.z) + tol &&
-                    intersection.x >= Math.min(s2.p1.x, s2.p2.x) - tol && intersection.x <= Math.max(s2.p1.x, s2.p2.x) + tol &&
-                    intersection.z >= Math.min(s2.p1.z, s2.p2.z) - tol && intersection.z <= Math.max(s2.p1.z, s2.p2.z) + tol;
-                  if (!ok) intersection = null;
-                }
-              }
-              if (intersection) {
-                if (s1.type === 'line') s1.p2 = intersection;
-                else s1.endAngle = Math.atan2(intersection.x - s1.cx, intersection.z - s1.cz);
-                if (s2.type === 'line') s2.p1 = intersection;
-                else s2.startAngle = Math.atan2(intersection.x - s2.cx, intersection.z - s2.cz);
-                finishOffsetPath.splice(i + 1, j - (i + 1));
-                loopFound = true;
-                break outerLoopFin;
-              }
-            }
-          }
-        }
-      }
+      finishOffsetPath = trimAndRemoveLoops(finRaw);
     }
 
     if (incompleteMachiningCount > 0)
@@ -909,7 +907,7 @@ export function openCamSimulator(initialContour) {
 
     if (prms.roughingStrategy === 'face') {
       let currentZ = stockFace;
-      const minZPart = -1000;
+      const minZPart = worldPoints.length > 0 ? Math.min(...worldPoints.map(p => p.z)) : -1000;
       let safe = 0;
       while (currentZ > minZPart && safe < 500) {
         currentZ -= step; safe++;
@@ -1028,7 +1026,9 @@ export function openCamSimulator(initialContour) {
         let avgX = Math.abs((x1 + x2) / 2);
         if (avgX < 1) avgX = 1;
         let rpm = (speed * 1000) / (Math.PI * avgX * 2);
-        if (rpm > 2000) rpm = 2000;
+        const limsMatch = (prms.machineType || '').match(/LIMS=(\d+)/);
+        const maxRpm = limsMatch ? parseInt(limsMatch[1], 10) : 2000;
+        if (rpm > maxRpm) rpm = maxRpm;
         const mmPerMin = feed * rpm;
         if (mmPerMin > 0) estimatedTimeSeconds += (d / mmPerMin) * 60;
       }
@@ -1084,8 +1084,7 @@ export function openCamSimulator(initialContour) {
             for (let j = 1; j <= steps; j++) {
               const a = sA + (eA - sA) * (j / steps);
               const nx = seg.cx + Math.sin(a) * seg.r, nz = seg.cz + Math.cos(a) * seg.r;
-              addToPath(lastArcX, lastArcZ, nx, nz, seg.dir);
-              simPath.push({ x: nx, z: nz, type: seg.dir });
+              simPath.push(addToPath(lastArcX, lastArcZ, nx, nz, seg.dir));
               lastArcX = nx; lastArcZ = nz;
             }
           }
@@ -1241,26 +1240,51 @@ export function openCamSimulator(initialContour) {
       return { x: S.view.panX + z * S.view.scale, y: S.view.panY - x * S.view.scale };
     };
 
-    // grid
+    // grid — dynamically cover entire visible canvas
     ctx.strokeStyle = C.grid; ctx.lineWidth = 1; ctx.beginPath();
-    for (let i = -500; i <= 500; i += 20) {
-      const p1 = toScreen(-500, i), p2 = toScreen(500, i);
+    // Convert canvas corners to world coords to find visible range
+    const toWorld = (sx, sy) => {
+      if (prms.machineStructure === 'carousel')
+        return { x: (sx - S.view.panX) / S.view.scale, z: -(sy - S.view.panY) / S.view.scale };
+      return { x: -(sy - S.view.panY) / S.view.scale, z: (sx - S.view.panX) / S.view.scale };
+    };
+    const wTL = toWorld(0, 0), wBR = toWorld(w, h);
+    const wMinX = Math.min(wTL.x, wBR.x), wMaxX = Math.max(wTL.x, wBR.x);
+    const wMinZ = Math.min(wTL.z, wBR.z), wMaxZ = Math.max(wTL.z, wBR.z);
+    // Choose grid step based on zoom
+    const rawStep = Math.max(wMaxX - wMinX, wMaxZ - wMinZ) / 15;
+    const mag = Math.pow(10, Math.floor(Math.log10(rawStep)));
+    const gridStep = [1, 2, 5, 10].map(m => m * mag).find(s => s >= rawStep) || (10 * mag);
+    const gx0 = Math.floor(wMinX / gridStep) * gridStep, gx1 = Math.ceil(wMaxX / gridStep) * gridStep;
+    const gz0 = Math.floor(wMinZ / gridStep) * gridStep, gz1 = Math.ceil(wMaxZ / gridStep) * gridStep;
+    for (let v = gx0; v <= gx1; v += gridStep) {
+      const p1 = toScreen(v, gz0), p2 = toScreen(v, gz1);
       ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y);
-      const p3 = toScreen(i, -500), p4 = toScreen(i, 500);
-      ctx.moveTo(p3.x, p3.y); ctx.lineTo(p4.x, p4.y);
+    }
+    for (let v = gz0; v <= gz1; v += gridStep) {
+      const p1 = toScreen(gx0, v), p2 = toScreen(gx1, v);
+      ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y);
     }
     ctx.stroke();
 
     // grid labels
     ctx.fillStyle = '#585b70'; ctx.font = '10px sans-serif';
-    for (let i = -500; i <= 500; i += 20) {
-      if (i === 0) continue;
+    for (let v = gx0; v <= gx1; v += gridStep) {
+      if (Math.abs(v) < gridStep * 0.01) continue;
+      const label = Number.isInteger(v) ? v.toString() : v.toFixed(1);
       if (prms.machineStructure === 'carousel') {
-        const ptX = toScreen(i, 0); ctx.textAlign = 'center'; ctx.textBaseline = 'top'; ctx.fillText(i.toString(), ptX.x, ptX.y + 2);
-        const ptZ = toScreen(0, i); ctx.textAlign = 'right'; ctx.textBaseline = 'middle'; ctx.fillText(i.toString(), ptZ.x - 4, ptZ.y);
+        const pt = toScreen(v, 0); ctx.textAlign = 'center'; ctx.textBaseline = 'top'; ctx.fillText(label, pt.x, pt.y + 2);
       } else {
-        const ptZ = toScreen(0, i); ctx.textAlign = 'center'; ctx.textBaseline = 'top'; ctx.fillText(i.toString(), ptZ.x, ptZ.y + 2);
-        const ptX = toScreen(i, 0); ctx.textAlign = 'right'; ctx.textBaseline = 'middle'; ctx.fillText(i.toString(), ptX.x - 4, ptX.y);
+        const pt = toScreen(v, 0); ctx.textAlign = 'right'; ctx.textBaseline = 'middle'; ctx.fillText(label, pt.x - 4, pt.y);
+      }
+    }
+    for (let v = gz0; v <= gz1; v += gridStep) {
+      if (Math.abs(v) < gridStep * 0.01) continue;
+      const label = Number.isInteger(v) ? v.toString() : v.toFixed(1);
+      if (prms.machineStructure === 'carousel') {
+        const pt = toScreen(0, v); ctx.textAlign = 'right'; ctx.textBaseline = 'middle'; ctx.fillText(label, pt.x - 4, pt.y);
+      } else {
+        const pt = toScreen(0, v); ctx.textAlign = 'center'; ctx.textBaseline = 'top'; ctx.fillText(label, pt.x, pt.y + 2);
       }
     }
 
@@ -1552,10 +1576,10 @@ export function openCamSimulator(initialContour) {
   // ── UI: code area ──
   function renderCodeArea() {
     const calc = S._cachedCalc; if (!calc) return;
-    // time info
+    // time info on canvas
     if (calc.estimatedTimeSeconds > 0)
-      timeInfo.textContent = `⏱ ${Math.floor(calc.estimatedTimeSeconds / 60)}m ${Math.round(calc.estimatedTimeSeconds % 60)}s | ${(calc.totalPathLength / 1000).toFixed(2)}m`;
-    else timeInfo.textContent = '';
+      timeOverlay.textContent = `⏱ ${Math.floor(calc.estimatedTimeSeconds / 60)}m ${Math.round(calc.estimatedTimeSeconds % 60)}s | ${(calc.totalPathLength / 1000).toFixed(2)}m`;
+    else timeOverlay.textContent = '';
 
     if (S.useManualCode) {
       codeScroll.style.display = 'none';
@@ -1583,8 +1607,9 @@ export function openCamSimulator(initialContour) {
     if (activeEl) activeEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
   function updateCodeBtns() {
-    root.querySelector('[data-code="auto"]').classList.toggle('cam-sim-active', !S.useManualCode);
-    root.querySelector('[data-code="manual"]').classList.toggle('cam-sim-active', S.useManualCode);
+    const toggleBtn = root.querySelector('[data-code="toggle-mode"]');
+    toggleBtn.textContent = S.useManualCode ? '✏ Manuál' : 'Auto';
+    toggleBtn.classList.toggle('cam-sim-active', !S.useManualCode);
   }
   function findLastIdx(arr, fn) {
     for (let i = arr.length - 1; i >= 0; i--) if (fn(arr[i])) return i;
@@ -1635,8 +1660,9 @@ export function openCamSimulator(initialContour) {
       <button class="cam-sim-btn cam-sim-btn-half cam-sim-btn-gray" data-act="copy-code">📋 Kopírovat</button>
       <button class="cam-sim-btn cam-sim-btn-half cam-sim-btn-purple" data-act="download">📥 Uložit</button>
     </div>
-    <div style="margin-top:4px">
-      <button class="cam-sim-btn cam-sim-btn-indigo" data-act="export-pdf">📄 Export PDF</button>
+    <div style="display:flex;gap:4px;margin-top:4px">
+      <button class="cam-sim-btn cam-sim-btn-half cam-sim-btn-indigo" data-act="export-pdf">📄 Export PDF</button>
+      <button class="cam-sim-btn cam-sim-btn-half cam-sim-btn-green" data-act="send-editor">🔧 Otevřít v Editoru</button>
     </div>`;
     tabBody.innerHTML = html;
     attachEditorEvents();
@@ -1711,6 +1737,8 @@ export function openCamSimulator(initialContour) {
     if (dlBtn) dlBtn.addEventListener('click', handleDownload);
     const pdfBtn = tabBody.querySelector('[data-act="export-pdf"]');
     if (pdfBtn) pdfBtn.addEventListener('click', handleExportPDF);
+    const editorBtn = tabBody.querySelector('[data-act="send-editor"]');
+    if (editorBtn) editorBtn.addEventListener('click', handleSendToEditor);
   }
 
   // ── params tab ──
@@ -1932,7 +1960,17 @@ export function openCamSimulator(initialContour) {
   }
   async function handleExportPDF() {
     try {
-      const { jsPDF } = await import('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.esm.min.js');
+      // Načíst jsPDF lokálně (UMD) pokud ještě není
+      if (!window.jspdf) {
+        await new Promise((resolve, reject) => {
+          const s = document.createElement('script');
+          s.src = 'js/lib/jspdf.umd.min.js';
+          s.onload = resolve;
+          s.onerror = () => reject(new Error('jsPDF load failed'));
+          document.head.appendChild(s);
+        });
+      }
+      const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
       const noAccents = (str) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
       doc.setFontSize(20); doc.text(noAccents('Technologicky list - CAM'), 15, 20);
@@ -1964,6 +2002,13 @@ export function openCamSimulator(initialContour) {
       alert('Knihovna pro PDF se nepodařila načíst. Zkuste to znovu.');
       console.error(err);
     }
+  }
+
+  // ── Send to CNC Editor ──
+  function handleSendToEditor() {
+    const text = S.useManualCode ? S.manualGCode : S.generatedCode.map(l => l.text).join('\n');
+    if (!text.trim()) { alert('Není žádný G-kód k odeslání.'); return; }
+    openCncEditor(text);
   }
 
   // ── FULL UPDATE (recalc + redraw + re-render UI) ──
@@ -2005,17 +2050,36 @@ export function openCamSimulator(initialContour) {
   root.querySelector('[data-act="undo"]').addEventListener('click', undo);
   root.querySelector('[data-act="redo"]').addEventListener('click', redo);
 
+  // keyboard shortcuts
+  const handleKeyDown = (e) => {
+    if (!document.body.contains(overlay)) return;
+    if (e.ctrlKey && e.key === 'z') { e.preventDefault(); undo(); }
+    if (e.ctrlKey && e.key === 'y') { e.preventDefault(); redo(); }
+  };
+  document.addEventListener('keydown', handleKeyDown);
+
   // tabs
   root.querySelectorAll('.cam-sim-tabs button').forEach(btn => {
     btn.addEventListener('click', () => { S.activeTab = btn.dataset.tab; renderTab(); });
   });
 
   // code area buttons
-  root.querySelector('[data-code="auto"]').addEventListener('click', () => { S.useManualCode = false; fullUpdate(); });
-  root.querySelector('[data-code="manual"]').addEventListener('click', () => {
-    S.useManualCode = true;
-    if (!S.manualGCode) S.manualGCode = S.generatedCode.map(l => l.text).join('\n');
+  root.querySelector('[data-code="toggle-mode"]').addEventListener('click', () => {
+    S.useManualCode = !S.useManualCode;
+    if (S.useManualCode && !S.manualGCode) S.manualGCode = S.generatedCode.map(l => l.text).join('\n');
     fullUpdate();
+  });
+  root.querySelector('[data-code="editor"]').addEventListener('click', handleSendToEditor);
+  root.querySelector('[data-code="show-sidebar"]').addEventListener('click', () => {
+    const narrow = root.clientWidth < 900;
+    sidebar.classList.toggle('cam-sim-sidebar-overlay', narrow);
+    sidebar.style.display = 'flex';
+    renderTab(); draw();
+  });
+  root.querySelector('[data-act="hide-sidebar"]').addEventListener('click', () => {
+    sidebar.style.display = 'none';
+    sidebar.classList.remove('cam-sim-sidebar-overlay');
+    draw();
   });
 
   // manual textarea
@@ -2043,7 +2107,14 @@ export function openCamSimulator(initialContour) {
 
   canvasWrap.addEventListener('wheel', e => {
     e.preventDefault();
-    S.view.scale = Math.max(0.2, Math.min(S.view.scale * (1 - Math.sign(e.deltaY) * 0.15), 50));
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+    const oldScale = S.view.scale;
+    const newScale = Math.max(0.2, Math.min(oldScale * (1 - Math.sign(e.deltaY) * 0.15), 50));
+    S.view.panX = mx - (mx - S.view.panX) * (newScale / oldScale);
+    S.view.panY = my - (my - S.view.panY) * (newScale / oldScale);
+    S.view.scale = newScale;
     draw();
   }, { passive: false });
 
@@ -2083,6 +2154,7 @@ export function openCamSimulator(initialContour) {
       } else {
         dZ_unit = dx / S.view.scale; dX_unit = -dy / S.view.scale;
       }
+      if (S.params.mode === 'DIAMON') dX_unit *= 2;
       const list = S.editMode === 'contour' ? S.contourPoints : S.stockPoints;
       const pt = list[S.draggedPointId];
       pt.x = parseFloat(pt.x) + dX_unit;
@@ -2136,6 +2208,7 @@ export function openCamSimulator(initialContour) {
         } else {
           dZ_unit = dx / S.view.scale; dX_unit = -dy / S.view.scale;
         }
+        if (S.params.mode === 'DIAMON') dX_unit *= 2;
         const list = S.editMode === 'contour' ? S.contourPoints : S.stockPoints;
         const pt = list[S.draggedPointId];
         pt.x = parseFloat(pt.x) + dX_unit;
@@ -2151,7 +2224,14 @@ export function openCamSimulator(initialContour) {
     if (e.touches.length === 2 && lastPinchDist) {
       const dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
       const zoomFactor = dist / lastPinchDist;
-      S.view.scale = Math.max(0.2, Math.min(S.view.scale * zoomFactor, 50));
+      const rect = canvas.getBoundingClientRect();
+      const mx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - rect.left;
+      const my = (e.touches[0].clientY + e.touches[1].clientY) / 2 - rect.top;
+      const oldScale = S.view.scale;
+      const newScale = Math.max(0.2, Math.min(oldScale * zoomFactor, 50));
+      S.view.panX = mx - (mx - S.view.panX) * (newScale / oldScale);
+      S.view.panY = my - (my - S.view.panY) * (newScale / oldScale);
+      S.view.scale = newScale;
       lastPinchDist = dist;
       draw();
     }
@@ -2178,6 +2258,7 @@ export function openCamSimulator(initialContour) {
   const cleanupObs = new MutationObserver((_, obs) => {
     if (!document.body.contains(overlay)) {
       resizeObs.disconnect(); obs.disconnect();
+      document.removeEventListener('keydown', handleKeyDown);
       if (S._animId) cancelAnimationFrame(S._animId);
       S.simRunning = false;
     }
@@ -2187,6 +2268,23 @@ export function openCamSimulator(initialContour) {
   // ── INITIAL SETUP ──
   canvas.width = canvasWrap.clientWidth;
   canvas.height = canvasWrap.clientHeight;
+  if (_importedContour) {
+    // Auto-fit stock to imported contour
+    const absPts = resolvePointsToAbsolute(S.contourPoints);
+    if (absPts.length > 0) {
+      let minZ = Infinity, maxD = 0;
+      absPts.forEach(p => {
+        const x = S.params.mode === 'DIAMON' ? p.xAbs : p.xAbs * 2;
+        if (Math.abs(x) > maxD) maxD = Math.abs(x);
+        if (p.zAbs < minZ) minZ = p.zAbs;
+      });
+      const margin = parseFloat(S.params.stockMargin) || 5;
+      S.params.stockDiameter = Math.ceil(maxD + margin * 2);
+      S.params.stockLength = Math.ceil(Math.abs(minZ) + margin);
+      S.params.stockFace = 2.0;
+    }
+    generateDefaultStock();
+  }
   fullUpdate();
   requestAnimationFrame(() => fitView());
 }

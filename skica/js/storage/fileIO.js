@@ -11,6 +11,7 @@ import { parseDXF, exportDXF } from '../dxf.js';
 import { autoCenterView } from '../canvas.js';
 import { bridge } from '../bridge.js';
 import { openCncEditor } from '../calculators/cncEditor.js';
+import { openCamSimulator } from '../calculators/camSimulator.js';
 import { loadProject } from './projectManager.js';
 import { showExportImageDialog } from './exportImage.js';
 
@@ -552,5 +553,10 @@ document.getElementById("btnCncEdit").addEventListener("click", () => {
   let code = document.getElementById("cncOutput").textContent;
   if (!code) { runCncExport(); code = document.getElementById("cncOutput").textContent; }
   openCncEditor(code);
+});
+document.getElementById("btnCncToCam").addEventListener("click", () => {
+  let code = document.getElementById("cncOutput").textContent;
+  if (!code) { runCncExport(); code = document.getElementById("cncOutput").textContent; }
+  openCamSimulator(code);
 });
 bridge.runCncExport = runCncExport;

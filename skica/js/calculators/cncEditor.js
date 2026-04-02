@@ -277,30 +277,30 @@ function buildEditorHTML() {
   </div>
 
   <div class="cne-quickbar">
-    <button class="cne-qb blue" data-inp="G">G</button>
-    <button class="cne-qb blue" data-inp="M">M</button>
-    <button class="cne-qb" data-inp="X">X</button>
-    <button class="cne-qb" data-inp="Z">Z</button>
-    <button class="cne-qb gray" data-ins=" ">␣</button>
-    <button class="cne-qb del" data-act="backspace">⌫</button>
+    <button class="cne-qb blue" data-inp="G" title="G-kód (cykly, interpolace)">G</button>
+    <button class="cne-qb blue" data-inp="M" title="M-kód (vřeteno, chlazení)">M</button>
+    <button class="cne-qb" data-inp="X" title="Osa X (průměr)">X</button>
+    <button class="cne-qb" data-inp="Z" title="Osa Z (délka)">Z</button>
+    <button class="cne-qb gray" data-ins=" " title="Mezera">␣</button>
+    <button class="cne-qb del" data-act="backspace" title="Smazat znak">⌫</button>
 
-    <button class="cne-qb" data-inp="F">F</button>
-    <button class="cne-qb" data-inp="S">S</button>
-    <button class="cne-qb" data-inp="T">T</button>
-    <button class="cne-qb" data-inp="D">D</button>
-    <button class="cne-qb" data-inp="R">R</button>
-    <button class="cne-qb gray" data-inp="">123</button>
+    <button class="cne-qb" data-inp="F" title="F – Posuv (mm/ot)">F</button>
+    <button class="cne-qb" data-inp="S" title="S – Otáčky / řezná rychlost">S</button>
+    <button class="cne-qb" data-inp="T" title="T – Číslo nástroje">T</button>
+    <button class="cne-qb" data-inp="D" title="D – Korekce nástroje">D</button>
+    <button class="cne-qb" data-inp="R" title="R – Parametr">R</button>
+    <button class="cne-qb gray" data-inp="" title="Zadat číslo">123</button>
 
-    <button class="cne-qb gray" data-ins=";">;</button>
-    <button class="cne-qb gray" data-ins="=">=</button>
-    <button class="cne-qb accent" data-ins="G0 ">G0</button>
-    <button class="cne-qb accent" data-ins="G1 ">G1</button>
-    <button class="cne-qb accent" data-ins="M30">M30</button>
-    <button class="cne-qb accent" data-ins="M17">M17</button>
+    <button class="cne-qb gray" data-ins=";" title="Středník (komentář)">;</button>
+    <button class="cne-qb gray" data-ins="=" title="Přiřazení hodnoty">=</button>
+    <button class="cne-qb accent" data-ins="G0 " title="G0 – Rychloposuv">G0</button>
+    <button class="cne-qb accent" data-ins="G1 " title="G1 – Lineární interpolace">G1</button>
+    <button class="cne-qb accent" data-ins="M30" title="M30 – Konec programu">M30</button>
+    <button class="cne-qb accent" data-ins="M17" title="M17 – Konec podprogramu">M17</button>
 
-    <button class="cne-qb green" data-ins="\\n">↵</button>
-    <button class="cne-qb red" data-inp="LIMS=">LIMS</button>
-    <button class="cne-qb accent" data-ins="STOPRE">STOP</button>
+    <button class="cne-qb green" data-ins="\\n" title="Nový řádek">↵</button>
+    <button class="cne-qb red" data-inp="LIMS=" title="LIMS – Omezení otáček">LIMS</button>
+    <button class="cne-qb accent" data-ins="STOPRE" title="STOPRE – Zastavit předzpracování">STOP</button>
     <button class="cne-qb gray" data-act="copy" title="Kopírovat kód">📋</button>
     <button class="cne-qb blue" data-act="addBlock" title="Přidat číslo bloku">N+</button>
     <button class="cne-qb cne-kb-btn" data-act="keyboard" title="Zobrazit klávesnici">⌨</button>
@@ -309,7 +309,7 @@ function buildEditorHTML() {
   <!-- Menu modal (mobile full actions) -->
   <div class="cne-inner-modal" data-el="menuModal" style="display:none">
     <div class="cne-im-card cne-menu-card">
-      <div class="cne-im-title">Nástroje editoru</div>
+      <div class="cne-im-title">Nástroje editoru<button class="cne-im-close" data-act="menuClose" title="Zavřít">✕</button></div>
       <div class="cne-menu-list">
         <button class="cne-menu-item" data-act="new"><span class="cne-mi-icon green">＋</span><span class="cne-mi-text"><b>Nový program</b><small>Vytvořit nový CNC soubor</small></span></button>
         <button class="cne-menu-item" data-act="copy"><span class="cne-mi-icon">📋</span><span class="cne-mi-text"><b>Kopírovat</b><small>Zkopírovat kód do schránky</small></span></button>
@@ -332,7 +332,7 @@ function buildEditorHTML() {
   <!-- Numpad modal -->
   <div class="cne-inner-modal" data-el="numModal" style="display:none">
     <div class="cne-im-card">
-      <div class="cne-im-title" data-el="numTitle">Vstup</div>
+      <div class="cne-im-title" data-el="numTitle">Vstup<button class="cne-im-close" data-act="numCancel" title="Zavřít">✕</button></div>
       <input class="cne-im-input" data-el="numInput" type="text" readonly>
       <div class="cne-im-helpers" data-el="numHelpers"></div>
       <div class="cne-numpad">
@@ -351,7 +351,7 @@ function buildEditorHTML() {
   <!-- Validation modal -->
   <div class="cne-inner-modal" data-el="valModal" style="display:none">
     <div class="cne-im-card cne-val-card">
-      <div class="cne-im-title">Validace programu</div>
+      <div class="cne-im-title">Validace programu<button class="cne-im-close" data-act="valClose" title="Zavřít">✕</button></div>
       <div class="cne-val-list" data-el="valList"></div>
       <button class="cne-im-btn cancel" data-act="valClose" style="margin-top:8px;width:100%">Zavřít</button>
     </div>
@@ -360,7 +360,7 @@ function buildEditorHTML() {
   <!-- Settings modal -->
   <div class="cne-inner-modal" data-el="cfgModal" style="display:none">
     <div class="cne-im-card">
-      <div class="cne-im-title">Nastavení validace</div>
+      <div class="cne-im-title">Nastavení validace<button class="cne-im-close" data-act="cfgClose" title="Zavřít">✕</button></div>
       <div class="cne-cfg-list" data-el="cfgList"></div>
       <button class="cne-im-btn cancel" data-act="cfgClose" style="margin-top:8px;width:100%">Zavřít</button>
     </div>
@@ -369,7 +369,7 @@ function buildEditorHTML() {
   <!-- Renumber modal -->
   <div class="cne-inner-modal" data-el="renumModal" style="display:none">
     <div class="cne-im-card">
-      <div class="cne-im-title">Přečíslování N-bloků</div>
+      <div class="cne-im-title">Přečíslování N-bloků<button class="cne-im-close" data-act="renumCancel" title="Zavřít">✕</button></div>
       <div style="display:flex;gap:8px;margin:8px 0">
         <label style="flex:1;color:var(--ctp-subtext0);font-size:.85rem">Start:<input data-el="renumStart" type="number" value="10" min="1" class="cne-im-input" style="width:100%;margin-top:4px"></label>
         <label style="flex:1;color:var(--ctp-subtext0);font-size:.85rem">Krok:<input data-el="renumStep" type="number" value="10" min="1" class="cne-im-input" style="width:100%;margin-top:4px"></label>
@@ -385,7 +385,7 @@ function buildEditorHTML() {
   <!-- Header generator modal -->
   <div class="cne-inner-modal" data-el="hdrModal" style="display:none">
     <div class="cne-im-card" style="min-width:300px;max-width:380px">
-      <div class="cne-im-title">Generovat hlavičku programu</div>
+      <div class="cne-im-title">Generovat hlavičku programu<button class="cne-im-close" data-act="hdrClose" title="Zavřít">✕</button></div>
       <div class="cne-hdr-list" data-el="hdrList"></div>
       <div class="cne-im-actions" style="margin-top:10px">
         <button class="cne-im-btn cancel" data-act="hdrClose">Zavřít</button>
@@ -1114,6 +1114,10 @@ export function openCncEditor(initialCode) {
   // Close menu modal on click outside card
   $('menuModal').addEventListener('click', e => {
     if (e.target === $('menuModal')) $('menuModal').style.display = 'none';
+  });
+  // Close numpad modal on click outside card
+  numModal.addEventListener('click', e => {
+    if (e.target === numModal) numModal.style.display = 'none';
   });
 
   // ── Cleanup ────────────────────────────────────────────────
