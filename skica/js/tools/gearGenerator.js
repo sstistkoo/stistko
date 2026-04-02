@@ -57,6 +57,7 @@ function involuteAngleAt(rb, r) {
  * @returns {{vertices: {x:number,y:number}[], bulges: number[]}}
  */
 export function generateFullGearProfile(m, z, alpha = 20, x = 0, steps = 20, cx = 0, cy = 0) {
+  if (z < 1) return { vertices: [], bulges: [] };
   const dim = calculateGearDimensions(m, z, alpha, x);
   const { rp, rb, ra, rf, aRad } = dim;
 
@@ -363,6 +364,7 @@ export const CHAIN_STANDARDS = [
  * @param {number} d1  průměr válečku [mm]
  */
 export function calculateSprocketDimensions(p, z, d1) {
+  if (z < 1) z = 1;
   const dp = p / Math.sin(Math.PI / z);        // roztečný průměr
   const rp = dp / 2;
   const ri = (dp - d1) / 2;                     // poloměr sedla (dno zubu)
@@ -387,6 +389,7 @@ export function calculateSprocketDimensions(p, z, d1) {
  * @param {number} cy      Y středu
  */
 export function generateSprocketProfile(pChain, z, d1, steps = 8, cx = 0, cy = 0) {
+  if (z < 1) return { vertices: [], bulges: [] };
   const dim = calculateSprocketDimensions(pChain, z, d1);
   const { rp, ra } = dim;
   const rRoller = d1 / 2;

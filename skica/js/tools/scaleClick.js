@@ -75,11 +75,11 @@ function applyScale(indices) {
 
     // Referenční bod = centroid všech vybraných
     let cx = 0, cy = 0;
+    if (indices.length === 0) return;
     for (const i of indices) {
       const c = objCenter(state.objects[i]);
       cx += c.x; cy += c.y;
     }
-    if (indices.length === 0) return;
     cx /= indices.length;
     cy /= indices.length;
 

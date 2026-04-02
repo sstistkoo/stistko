@@ -47,6 +47,7 @@ function addRefCircles3(cx, cy, dim) {
  */
 export function handleGearClick(wx, wy) {
   showGearDialog((params) => {
+    if (!params) return;
     switch (params.gearType) {
 
       // ── Čelní kolo (spur) ──

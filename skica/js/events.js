@@ -316,15 +316,17 @@ document.addEventListener("keydown", (e) => {
     if (state.dragging) {
       if (state.dragObjIdx === -1 && state._multiDragSnapshots) {
         // Revert multi-drag
-        for (const { idx, snapshot } of state._multiDragSnapshots) {
-          const obj = state.objects[idx];
-          if (obj) Object.assign(obj, JSON.parse(snapshot));
-        }
+        try {
+          for (const { idx, snapshot } of state._multiDragSnapshots) {
+            const obj = state.objects[idx];
+            if (obj) Object.assign(obj, JSON.parse(snapshot));
+          }
+        } catch (e) { console.warn('Revert multi-drag selhal:', e); }
         state._multiDragSnapshots = null;
       } else {
         const obj = state.objects[state.dragObjIdx];
         if (obj && state.dragObjSnapshot) {
-          Object.assign(obj, JSON.parse(state.dragObjSnapshot));
+          try { Object.assign(obj, JSON.parse(state.dragObjSnapshot)); } catch (e) { console.warn('Revert drag selhal:', e); }
         }
       }
       state.dragging = false;

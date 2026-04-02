@@ -1581,6 +1581,7 @@ export function rotateObject(obj, cx, cy, angle) {
  * @returns {import('./types.js').DrawObject[]}
  */
 export function circularArray(obj, cx, cy, count, totalAngleDeg, includeOriginal) {
+  if (count < 1) return [];
   const copies = [];
   const stepDeg = totalAngleDeg / count;
   const numCopies = includeOriginal ? count - 1 : count;
