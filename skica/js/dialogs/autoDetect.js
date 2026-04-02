@@ -10,6 +10,7 @@ import { renderAll } from '../render.js';
 import { addDimensionForObject } from './dimension.js';
 import { intersectInfiniteLines } from '../geometry.js';
 import { bulgeToArc } from '../utils.js';
+import { drawCanvas } from '../canvas.js';
 
 const EPS = 1e-4;      // tolerance pro shodu bodů
 const TANGENT_TOL = 0.05; // tolerance tečnosti (rad, ~3°)
@@ -567,7 +568,7 @@ function showAutoDetectDialog(fillets, chamfers, grooves, corners) {
         ? (Math.abs(c.angleDeg - 90) < 2 ? ' ⊾'
           : c.angleDeg < 90 ? ' ◁' : ' △')
         : '';
-      rows += `<tr>
+      rows += `<tr class="ad-corner-row" data-corner-idx="${i}" style="cursor:pointer">
         <td style="color:${COLORS.label}">${i + 1}</td>
         <td style="color:${COLORS.selected};font-weight:bold;white-space:nowrap">${angleLabel}${typeLabel}</td>
         <td style="color:${COLORS.primary};font-size:11px">${fH(c.point.x).toFixed(1)}, ${fV(c.point.y).toFixed(1)}</td>
@@ -711,6 +712,32 @@ function showAutoDetectDialog(fillets, chamfers, grooves, corners) {
       navigator.clipboard.writeText(text).then(() => showToast('Výsledky zkopírovány'));
     });
   }
+
+  // ── Klik na řádek rohu → vybrat a vycentrovat na bod ──
+  overlay.querySelectorAll('.ad-corner-row').forEach(row => {
+    row.addEventListener('click', () => {
+      const idx = parseInt(row.dataset.cornerIdx, 10);
+      const corner = corners[idx];
+      if (!corner) return;
+
+      // Vybrat připojené objekty
+      state.multiSelected.clear();
+      state.multiSelected.add(corner.line1.idx);
+      if (corner.line2) state.multiSelected.add(corner.line2.idx);
+      if (corner.arc) state.multiSelected.add(corner.arc.idx);
+
+      // Vycentrovat pohled na roh
+      const pt = corner.point;
+      const canvasW = drawCanvas.width;
+      const canvasH = drawCanvas.height;
+      state.panX = canvasW / 2 - pt.x * state.zoom;
+      state.panY = canvasH / 2 + pt.y * state.zoom;
+
+      overlay.remove();
+      renderAll();
+      showToast(`Roh ${idx + 1}: ${isNaN(corner.angleDeg) ? '' : corner.angleDeg.toFixed(1) + '°'}`);
+    });
+  });
 
   overlay.querySelector('.btn-ok').focus();
 }
