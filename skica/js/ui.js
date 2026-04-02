@@ -1687,6 +1687,17 @@ document.getElementById("btnDelLayer").addEventListener("click", () => {
 // ── Toolbar ──
 document.querySelectorAll("[data-tool]").forEach((btn) => {
   btn.addEventListener("click", () => {
+    // Zavřít rozbalené sekce toolbaru, pokud je tlačítko uvnitř nich
+    const inMid = btn.closest("#toolbarMid");
+    const inMore = btn.closest("#toolbarMore");
+    if (inMid || inMore) {
+      const toolbarMid = document.getElementById("toolbarMid");
+      const toolbarMore = document.getElementById("toolbarMore");
+      const btnMid = document.getElementById("btnToolbarMid");
+      const btnMore = document.getElementById("btnToolbarMore");
+      if (toolbarMid) { toolbarMid.classList.remove("open"); if (btnMid) btnMid.textContent = "▾"; }
+      if (toolbarMore) { toolbarMore.classList.remove("open"); if (btnMore) btnMore.textContent = "▾"; }
+    }
     // Deaktivovat všechna tool-tlačítka – setTool() nebo bridge funkce je znovu aktivují
     document.querySelectorAll("[data-tool]").forEach(b => b.classList.remove("active"));
     // Měření: pokud je výběr → okamžitě změřit
@@ -1744,6 +1755,10 @@ export function setTool(tool) {
       name: `Kontura ${state.nextId}`,
     });
     showToast(`Kontura uložena (${state.tempPoints.length} bodů)`);
+  }
+  // Auto-dokončit rozpracované trasování profilu
+  if (state.tool === 'profileTrace' && state.drawing && state.tempPoints.length >= 2) {
+    if (bridge.finishProfileTrace) bridge.finishProfileTrace();
   }
   // Pokud už jsme v select módu a klikne se znovu na Výběr → zrušit výběr
   if (tool === 'select' && state.tool === 'select') {
@@ -1827,6 +1842,7 @@ export function resetHint() {
     mirror: "Vyberte objekty pro zrcadlení (Shift+M)",
     boolean: "Klikněte na první uzavřenou konturu",
     circularArray: "Klepněte na objekt pro kruhové pole",
+    profileTrace: "Klepněte na první bod kontury (R = radius, Enter = dokončit)",
   };
   setHint(hints[state.tool] || "");
 }

@@ -41,6 +41,8 @@ export function renderAll() {
     if (bridge.updateMobileCancelBtn) bridge.updateMobileCancelBtn();
     // Aktualizovat tlačítka Dokončit/Uzavřít konturu
     if (bridge.updatePolylineButtons) bridge.updatePolylineButtons();
+    // Aktualizovat tlačítka trasování profilu
+    if (bridge.updateTraceButtons) bridge.updateTraceButtons();
   });
 }
 
@@ -717,6 +719,82 @@ function renderObjects() {
       const angle = Math.atan2(sy2 - sy1, sx2 - sx1);
       const nx = -Math.sin(angle) * 14, ny = Math.cos(angle) * 14;
       ctx.fillText(`${d.toFixed(state.displayDecimals)}mm`, (sx1 + sx2) / 2 + nx, (sy1 + sy2) / 2 + ny);
+    }
+    // Preview: Trasování profilu
+    if (state.tool === "profileTrace" && tp.length >= 1) {
+      const traceBulges = state._profileTraceBulges || [];
+      // Spojnice mezi body (rovné nebo oblouky)
+      ctx.strokeStyle = COLORS.selected;
+      ctx.lineWidth = 2;
+      ctx.setLineDash([]);
+      for (let i = 0; i < tp.length - 1; i++) {
+        const b = traceBulges[i] || 0;
+        const [sx1, sy1] = worldToScreen(tp[i].x, tp[i].y);
+        const [sx2, sy2] = worldToScreen(tp[i + 1].x, tp[i + 1].y);
+        if (b === 0) {
+          ctx.beginPath();
+          ctx.moveTo(sx1, sy1);
+          ctx.lineTo(sx2, sy2);
+          ctx.stroke();
+        } else {
+          // Oblouk
+          const arc = bulgeToArc(tp[i], tp[i + 1], b);
+          if (arc) {
+            const [scx, scy] = worldToScreen(arc.cx, arc.cy);
+            const sr = arc.r * state.zoom;
+            ctx.strokeStyle = COLORS.primary;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(scx, scy, sr, -arc.endAngle, -arc.startAngle, b < 0);
+            ctx.stroke();
+            ctx.strokeStyle = COLORS.selected;
+            // Popisek R
+            const midAngle = (-arc.startAngle + -arc.endAngle) / 2;
+            const rx = scx + sr * Math.cos(midAngle);
+            const ry = scy + sr * Math.sin(midAngle);
+            ctx.setLineDash([]);
+            ctx.font = `${labelSize}px Consolas`;
+            ctx.fillStyle = COLORS.primary;
+            ctx.fillText(`R${arc.r.toFixed(1)}`, rx + 6, ry - 6);
+          }
+        }
+      }
+      // Body s čísly
+      for (let i = 0; i < tp.length; i++) {
+        const [sx, sy] = worldToScreen(tp[i].x, tp[i].y);
+        // Velký bod
+        ctx.fillStyle = i === 0 ? COLORS.snapPoint : COLORS.selected;
+        ctx.beginPath();
+        ctx.arc(sx, sy, 5, 0, Math.PI * 2);
+        ctx.fill();
+        // Číslo bodu
+        ctx.setLineDash([]);
+        ctx.font = `bold ${labelSize}px Consolas`;
+        ctx.fillStyle = COLORS.snapPoint;
+        ctx.fillText(`${i + 1}`, sx + 8, sy - 8);
+      }
+      // Preview čára ke kurzoru
+      const last = tp[tp.length - 1];
+      const [slx, sly] = worldToScreen(last.x, last.y);
+      const [smx, smy] = worldToScreen(mx, my);
+      ctx.strokeStyle = COLORS.preview;
+      ctx.lineWidth = 1;
+      ctx.setLineDash(PREVIEW_DASH);
+      ctx.beginPath();
+      ctx.moveTo(slx, sly);
+      ctx.lineTo(smx, smy);
+      ctx.stroke();
+      // Info text
+      const dd = Math.hypot(mx - last.x, my - last.y);
+      const ang = (Math.atan2(my - last.y, mx - last.x) * 180) / Math.PI;
+      ctx.setLineDash([]);
+      ctx.font = `${labelSize}px Consolas`;
+      ctx.fillStyle = COLORS.preview;
+      ctx.fillText(
+        `${dd.toFixed(3)} mm  ${ang.toFixed(1)}°  [${tp.length} bodů]`,
+        (slx + smx) / 2 + 8,
+        (sly + smy) / 2 - 8,
+      );
     }
     ctx.setLineDash([]);
   }

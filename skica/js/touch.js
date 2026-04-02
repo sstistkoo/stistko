@@ -12,7 +12,8 @@ import { setTool, resetHint, updateSnapPtsBtn } from './ui.js';
 import { updateAssociativeDimensions } from './dialogs/dimension.js';
 import { toolLabel } from './utils.js';
 import { showNumericalInputDialog, showMobileEditDialog } from './dialogs.js';
-import { measureSelection } from './tools/index.js';
+import { measureSelection, finishProfileTrace, getTraceData, setTraceBulge } from './tools/index.js';
+import { showBulgeDialog } from './dialogs/bulge.js';
 import { findObjectAt } from './geometry.js';
 
 import { bridge } from './bridge.js';
@@ -862,10 +863,41 @@ document.body.addEventListener(
   { passive: false },
 );
 
+// ── Profile Trace: Dokončit / Radius tlačítka ──
+const traceConfirmBtn = document.getElementById("traceConfirm");
+const traceRadiusBtn = document.getElementById("traceRadius");
+
+/** Aktualizuje viditelnost tlačítek Dokončit/Radius pro trasování. */
+export function updateTraceButtons() {
+  const show = state.drawing && state.tool === 'profileTrace' && state.tempPoints.length >= 2;
+  traceConfirmBtn.style.display = show ? 'flex' : 'none';
+  traceRadiusBtn.style.display = show ? 'flex' : 'none';
+}
+
+traceConfirmBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  if (!state.drawing || state.tool !== 'profileTrace') return;
+  finishProfileTrace();
+  updateTraceButtons();
+});
+
+traceRadiusBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  const data = getTraceData();
+  if (data.points.length < 2) return;
+  const idx = data.points.length - 2;
+  const p1 = data.points[idx];
+  const p2 = data.points[idx + 1];
+  showBulgeDialog(p1, p2, data.bulges[idx] || 0, (newBulge) => {
+    setTraceBulge(idx, newBulge);
+  });
+});
+
 // ── Bridge registrace pro cyklické závislosti ──
 bridge.updateMobileCancelBtn = updateMobileCancelBtn;
 bridge.updateMobileCoords = updateMobileCoords;
 bridge.updatePolylineButtons = updatePolylineButtons;
+bridge.updateTraceButtons = updateTraceButtons;
 
 // ── Sidebar Precision Pointer (long-press pro přesné klikání v panelu) ──
 {

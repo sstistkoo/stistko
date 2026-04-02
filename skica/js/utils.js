@@ -497,6 +497,7 @@ export function toolLabel(t) {
       copyPlace: "Kopírovat",
       boolean: "Boolean",
       rotate: "Otočit",
+      profileTrace: "Trasování profilu",
     }[t] || t
   );
 }

@@ -160,6 +160,16 @@ vi.mock('../js/tools/index.js', () => ({
   handleRectClick: vi.fn(),
   handlePolylineClick: vi.fn(),
   measureSelection: vi.fn(() => false),
+  handleProfileTraceClick: vi.fn(),
+  finishProfileTrace: vi.fn(),
+  cancelProfileTrace: vi.fn(),
+  resetProfileTraceState: vi.fn(),
+  setTraceBulge: vi.fn(),
+  getTraceData: vi.fn(() => ({ points: [], segments: [], bulges: [] })),
+  getTraceGcode: vi.fn(() => ''),
+  drawTraceToCanvas: vi.fn(),
+  importTraceFromGcode: vi.fn(),
+  updateTracePanel: vi.fn(),
 }));
 
 import { state } from '../js/state.js';
