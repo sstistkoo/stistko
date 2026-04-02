@@ -15,7 +15,7 @@ function injectCSS() {
   style.textContent = `
 .cam-sim-window {
   width: 100vw !important; max-width: 100vw !important;
-  height: calc(100vh - 60px) !important; max-height: calc(100vh - 60px) !important;
+  height: calc(100dvh - 60px) !important; max-height: calc(100dvh - 60px) !important;
   display: flex; flex-direction: column;
   border-radius: 0 !important;
 }
@@ -272,6 +272,13 @@ function injectCSS() {
 }
 .cam-sim-tool-shape-row button.cam-sim-active {
   background: #89b4fa; color: #1e1e2e; border-color: #89b4fa;
+}
+@media (max-width: 768px) {
+  .cam-sim-window {
+    height: calc(100dvh - max(60px, calc(env(safe-area-inset-top) + env(safe-area-inset-bottom) + 40px))) !important;
+    max-height: calc(100dvh - max(60px, calc(env(safe-area-inset-top) + env(safe-area-inset-bottom) + 40px))) !important;
+    margin-top: max(0px, env(safe-area-inset-top));
+  }
 }
 `;
   document.head.appendChild(style);
