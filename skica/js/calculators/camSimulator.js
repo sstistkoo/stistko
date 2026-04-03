@@ -65,7 +65,13 @@ function injectCSS() {
   display: flex; flex-direction: column;
   border-radius: 0 !important;
 }
-.cam-sim-window .calc-titlebar { border-radius: 0 !important; }
+.cam-sim-window .calc-titlebar { border-radius: 0 !important; position: relative; }
+.cam-sim-calc-btn {
+  background: none; border: none; color: #cdd6f4; font-size: 18px;
+  cursor: pointer; padding: 2px 8px; margin-right: 4px; line-height: 1;
+  border-radius: 4px;
+}
+.cam-sim-calc-btn:hover { background: rgba(255,255,255,0.15); }
 .cam-sim-window .calc-body {
   flex: 1; overflow: hidden; padding: 0 !important;
 }
@@ -767,6 +773,20 @@ export function openCamSimulator(initialContour) {
 
   const overlay = makeOverlay('cam-simulator', '🔄 CAM Simulátor', bodyHTML, 'cam-sim-window');
   if (!overlay) return;
+
+  // Přidat tlačítko kalkulačky do titlebaru
+  const titlebar = overlay.querySelector('.calc-titlebar');
+  if (titlebar) {
+    const calcBtn = document.createElement('button');
+    calcBtn.className = 'cam-sim-calc-btn';
+    calcBtn.title = 'Kalkulačka';
+    calcBtn.textContent = '🔢';
+    calcBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      import('../ui.js').then(m => m.openCalculator());
+    });
+    titlebar.insertBefore(calcBtn, titlebar.querySelector('.calc-close-btn'));
+  }
 
   // Hide floating calculators, canvas buttons and sidebar when CAM is open
   document.querySelectorAll('.calc-overlay-float').forEach(el => { el.style.display = 'none'; });
@@ -2342,6 +2362,13 @@ export function openCamSimulator(initialContour) {
 
     // Zavřít CAM simulátor
     overlay.remove();
+    // Na mobilu zavřít sidebar
+    if (window.innerWidth <= 900) {
+      const mainSidebar = document.getElementById('sidebar');
+      if (mainSidebar) mainSidebar.classList.remove('mobile-open');
+      const sideOverlay = document.getElementById('sidebarOverlay');
+      if (sideOverlay) sideOverlay.style.display = 'none';
+    }
     showToast(`Kontura vložena (${state.objects.length} objektů)`);
   }
 
