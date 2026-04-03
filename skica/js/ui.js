@@ -522,6 +522,20 @@ export function updateProperties() {
       `<tr><td colspan="2" style="color:${COLORS.textMuted}">Není vybrán objekt</td></tr>`;
     return;
   }
+
+  // Multi-selection info
+  if (state.multiSelected.size > 1) {
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+    td.colSpan = 2;
+    td.style.color = COLORS.selected;
+    td.style.fontWeight = "bold";
+    td.style.padding = "4px 6px";
+    td.textContent = `Vybráno ${state.multiSelected.size} objektů`;
+    tr.appendChild(td);
+    tbody.appendChild(tr);
+  }
+
   const obj = state.objects[state.selected];
 
   // Helper: přidá řádek s editovatelným inputem

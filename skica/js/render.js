@@ -1081,7 +1081,8 @@ function drawSelectionCounter() {
   const w = ctx.measureText(label).width + 16;
   const h = fontSize + 12;
   const x = (drawCanvas.width - w) / 2;
-  const y = 50;
+  const isMobile = window.innerWidth <= 900;
+  const y = isMobile ? 90 : 50;
   ctx.fillStyle = 'rgba(30,30,46,0.85)';
   ctx.beginPath();
   ctx.roundRect(x, y, w, h, 6);
