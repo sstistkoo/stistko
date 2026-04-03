@@ -250,6 +250,7 @@ function buildEditorHTML() {
       <button class="cne-tb-btn cne-hide-m" data-act="header" title="Generovat hlavičku">📝</button>
       <button class="cne-tb-btn cne-hide-m" data-act="cam" title="Otevřít v CAM Simulátoru">🔄</button>
       <button class="cne-tb-btn cne-status" data-act="validate" data-el="statusBtn" title="Validace">●</button>
+      <button class="cne-tb-btn" data-act="calc" title="Kalkulačka">🔢</button>
       <button class="cne-tb-btn cne-hide-m" data-act="settings" title="Nastavení parseru">⚙</button>
       <button class="cne-tb-btn cne-menu-btn" data-act="menu" title="Menu">⋮</button>
       <button class="cne-tb-btn cne-close-btn" data-act="close" title="Zavřít editor">✕</button>
@@ -326,6 +327,7 @@ function buildEditorHTML() {
         <button class="cne-menu-item" data-act="header"><span class="cne-mi-icon">📝</span><span class="cne-mi-text"><b>Generovat hlavičku</b><small>Vložit hlavičku programu (M4x, T, G54…)</small></span></button>
         <div class="cne-menu-sep"></div>
         <button class="cne-menu-item" data-act="cam"><span class="cne-mi-icon">🔄</span><span class="cne-mi-text"><b>CAM Simulátor</b><small>Načíst konturu do CAM simulátoru</small></span></button>
+        <button class="cne-menu-item" data-act="calc"><span class="cne-mi-icon">🔢</span><span class="cne-mi-text"><b>Kalkulačka</b><small>Otevřít kalkulačku</small></span></button>
         <div class="cne-menu-sep"></div>
         <button class="cne-menu-item" data-act="settings"><span class="cne-mi-icon">⚙</span><span class="cne-mi-text"><b>Nastavení validace</b><small>Pravidla kontroly programu</small></span></button>
       </div>
@@ -1040,6 +1042,7 @@ export function openCncEditor(initialCode) {
         case 'import':    fileInput.click(); closeMenu(); break;
         case 'export':    handleExport(); closeMenu(); break;
         case 'validate':  showValidation(); break;
+        case 'calc':      closeMenu(); import('../ui.js').then(m => m.openCalculator()); break;
         case 'settings':  showSettings(); closeMenu(); break;
         case 'copy':      copyToClipboard(); closeMenu(); break;
         case 'renum':     closeMenu(); $('renumModal').style.display = 'flex'; break;
