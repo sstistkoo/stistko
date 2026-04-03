@@ -2444,8 +2444,7 @@ export function openCamSimulator(initialContour) {
   root.querySelector('[data-code="editor"]').addEventListener('click', handleSendToEditor);
   root.querySelector('[data-code="to-canvas"]').addEventListener('click', handleSendToCanvas);
   root.querySelector('[data-code="show-sidebar"]').addEventListener('click', () => {
-    const narrow = root.clientWidth < 900;
-    sidebar.classList.toggle('cam-sim-sidebar-overlay', narrow);
+    sidebar.classList.add('cam-sim-sidebar-overlay');
     sidebar.style.display = 'flex';
     renderTab(); draw();
   });
