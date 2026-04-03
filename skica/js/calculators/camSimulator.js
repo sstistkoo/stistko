@@ -2546,6 +2546,19 @@ export function openCamSimulator(initialContour) {
     if (!document.body.contains(overlay)) return;
     if (e.ctrlKey && e.key === 'z') { e.preventDefault(); undo(); }
     if (e.ctrlKey && e.key === 'y') { e.preventDefault(); redo(); }
+    if (e.key === 'Escape') {
+      if (S.rectSelecting) {
+        S.rectSelecting = false;
+        S.rectStart = null;
+        S.rectEnd = null;
+        S.selectedPoints.clear();
+        canvas.style.cursor = 'crosshair';
+        draw();
+      } else if (S.selectedPoints.size > 0) {
+        S.selectedPoints.clear();
+        draw();
+      }
+    }
   };
   document.addEventListener('keydown', handleKeyDown);
 
@@ -2753,55 +2766,66 @@ export function openCamSimulator(initialContour) {
 
   const handleMouseUp = () => {
     // Rect selection completion
-    if (S.rectSelecting && S.rectStart && S.rectEnd) {
-      S.rectSelecting = false;
-      const calc = S._cachedCalc;
-      if (calc) {
-        const pts = S.editMode === 'contour' ? calc.worldPoints : calc.stockWorldPoints;
-        const prms = S.params;
-        const _toScreen = (x, z) => {
-          if (prms.machineStructure === 'carousel') return { x: S.view.panX + x * S.view.scale, y: S.view.panY - z * S.view.scale };
-          return { x: S.view.panX + z * S.view.scale, y: S.view.panY - x * S.view.scale };
-        };
-        const minX = Math.min(S.rectStart.x, S.rectEnd.x);
-        const maxX = Math.max(S.rectStart.x, S.rectEnd.x);
-        const minY = Math.min(S.rectStart.y, S.rectEnd.y);
-        const maxY = Math.max(S.rectStart.y, S.rectEnd.y);
-        S.selectedPoints.clear();
-        if (pts) {
-          pts.forEach((p, i) => {
-            const sp = _toScreen(p.xReal, p.zReal);
-            if (sp.x >= minX && sp.x <= maxX && sp.y >= minY && sp.y <= maxY) {
-              S.selectedPoints.add(i);
+    if (S.rectSelecting) {
+      if (S.rectStart && S.rectEnd) {
+        S.rectSelecting = false;
+        const calc = S._cachedCalc;
+        if (calc) {
+          const pts = S.editMode === 'contour' ? calc.worldPoints : calc.stockWorldPoints;
+          const prms = S.params;
+          const _toScreen = (x, z) => {
+            if (prms.machineStructure === 'carousel') return { x: S.view.panX + x * S.view.scale, y: S.view.panY - z * S.view.scale };
+            return { x: S.view.panX + z * S.view.scale, y: S.view.panY - x * S.view.scale };
+          };
+          const minX = Math.min(S.rectStart.x, S.rectEnd.x);
+          const maxX = Math.max(S.rectStart.x, S.rectEnd.x);
+          const minY = Math.min(S.rectStart.y, S.rectEnd.y);
+          const maxY = Math.max(S.rectStart.y, S.rectEnd.y);
+          S.selectedPoints.clear();
+          if (pts) {
+            pts.forEach((p, i) => {
+              const sp = _toScreen(p.xReal, p.zReal);
+              if (sp.x >= minX && sp.x <= maxX && sp.y >= minY && sp.y <= maxY) {
+                S.selectedPoints.add(i);
+              }
+            });
+          }
+        }
+        S.rectStart = null;
+        S.rectEnd = null;
+        canvas.style.cursor = 'crosshair';
+        S.isDragging = false;
+        draw();
+        // Open offset dialog if points selected
+        if (S.selectedPoints.size > 0) {
+          camOffsetDialog(S.selectedPoints.size).then(result => {
+            if (result && (result.dx !== 0 || result.dz !== 0)) {
+              pushHistory();
+              const list = S.editMode === 'contour' ? S.contourPoints : S.stockPoints;
+              S.selectedPoints.forEach(idx => {
+                const pt = list[idx];
+                if (pt) {
+                  pt.x = parseFloat(pt.x) + result.dx;
+                  pt.z = parseFloat(pt.z) + result.dz;
+                }
+              });
+              S.selectedPoints.clear();
+              fullUpdate();
+            } else {
+              S.selectedPoints.clear();
+              draw();
             }
           });
         }
-      }
-      S.rectStart = null;
-      S.rectEnd = null;
-      canvas.style.cursor = 'crosshair';
-      S.isDragging = false;
-      draw();
-      // Open offset dialog if points selected
-      if (S.selectedPoints.size > 0) {
-        camOffsetDialog(S.selectedPoints.size).then(result => {
-          if (result && (result.dx !== 0 || result.dz !== 0)) {
-            pushHistory();
-            const list = S.editMode === 'contour' ? S.contourPoints : S.stockPoints;
-            S.selectedPoints.forEach(idx => {
-              const pt = list[idx];
-              if (pt) {
-                pt.x = parseFloat(pt.x) + result.dx;
-                pt.z = parseFloat(pt.z) + result.dz;
-              }
-            });
-            S.selectedPoints.clear();
-            fullUpdate();
-          } else {
-            S.selectedPoints.clear();
-            draw();
-          }
-        });
+      } else {
+        // Incomplete rect selection (mouseleave/cancel) — reset
+        S.rectSelecting = false;
+        S.rectStart = null;
+        S.rectEnd = null;
+        S.selectedPoints.clear();
+        S.isDragging = false;
+        canvas.style.cursor = 'crosshair';
+        draw();
       }
       return;
     }
