@@ -33,6 +33,47 @@ function camConfirm(message) {
   });
 }
 
+// ── Offset dialog ──────────────────────────────────────────────
+function camOffsetDialog(count) {
+  return new Promise(resolve => {
+    const ov = document.createElement('div');
+    ov.className = 'cam-confirm-overlay';
+    ov.innerHTML = `
+      <div class="cam-confirm-box">
+        <div class="cam-confirm-msg" style="font-weight:bold;margin-bottom:12px">Posunout ${count} vybraných bodů</div>
+        <div style="display:flex;gap:10px;margin-bottom:14px">
+          <label style="flex:1;display:flex;flex-direction:column;gap:4px;font-size:12px;color:#a6adc8">
+            ΔX<input id="cam-off-x" type="number" value="0" step="0.1"
+              style="background:#1e1e2e;border:1px solid #45475a;color:#cdd6f4;border-radius:4px;padding:6px;font-size:14px;width:100%;box-sizing:border-box">
+          </label>
+          <label style="flex:1;display:flex;flex-direction:column;gap:4px;font-size:12px;color:#a6adc8">
+            ΔZ<input id="cam-off-z" type="number" value="0" step="0.1"
+              style="background:#1e1e2e;border:1px solid #45475a;color:#cdd6f4;border-radius:4px;padding:6px;font-size:14px;width:100%;box-sizing:border-box">
+          </label>
+        </div>
+        <div class="cam-confirm-btns">
+          <button class="cam-confirm-ok">Posunout</button>
+          <button class="cam-confirm-cancel">Zrušit</button>
+        </div>
+      </div>`;
+    document.body.appendChild(ov);
+    const cleanup = (val) => { ov.remove(); resolve(val); };
+    const doConfirm = () => {
+      const dx = parseFloat(ov.querySelector('#cam-off-x').value) || 0;
+      const dz = parseFloat(ov.querySelector('#cam-off-z').value) || 0;
+      cleanup({ dx, dz });
+    };
+    ov.querySelector('.cam-confirm-ok').addEventListener('click', doConfirm);
+    ov.querySelector('.cam-confirm-cancel').addEventListener('click', () => cleanup(null));
+    ov.addEventListener('click', e => { if (e.target === ov) cleanup(null); });
+    ov.addEventListener('keydown', e => {
+      if (e.key === 'Enter') doConfirm();
+      else if (e.key === 'Escape') cleanup(null);
+    });
+    ov.querySelector('#cam-off-x').focus();
+  });
+}
+
 // ── CSS injection ──────────────────────────────────────────────
 let cssInjected = false;
 function injectCSS() {
@@ -850,7 +891,13 @@ export function openCamSimulator(initialContour) {
     isDragging: false, addPointMode: false, pointDragEnabled: false,
     activeTab: 'editor', simSpeed: 1,
     _animId: null, _lastMouse: { x: 0, y: 0 }, _lastPinch: null,
-    _cachedCalc: null, _hoverIsStock: false
+    _cachedCalc: null, _hoverIsStock: false,
+    selectedPoints: new Set(),
+    rectSelecting: false,
+    rectStart: null,
+    rectEnd: null,
+    snapLines: [],
+    _lastTapTime: 0
   };
 
   // Load from localStorage
@@ -1655,15 +1702,60 @@ export function openCamSimulator(initialContour) {
           const pt = toScreen(p.xReal, p.zReal);
           const isHovered = (!S._hoverIsStock && i === S.hoverPointId);
           const isDragged = (!_draggingStock && i === S.draggedPointId);
-          const radius = (isHovered || isDragged) ? 8 : 4;
-          ctx.fillStyle = (isHovered || isDragged) ? '#f9e2af' : (S.editMode === 'contour' ? C.contour : C.pass);
+          const isSelected = S.selectedPoints.has(i);
+          const radius = (isHovered || isDragged) ? 8 : (isSelected ? 6 : 4);
+          ctx.fillStyle = (isHovered || isDragged) ? '#f9e2af' : (isSelected ? '#f9e2af' : (S.editMode === 'contour' ? C.contour : C.pass));
           ctx.beginPath(); ctx.arc(pt.x, pt.y, radius, 0, Math.PI * 2); ctx.fill();
+          if (isSelected) {
+            ctx.strokeStyle = '#f9e2af'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.arc(pt.x, pt.y, radius + 3, 0, Math.PI * 2); ctx.stroke();
+          }
           if (!isHovered && !isDragged) {
             ctx.fillStyle = '#f9e2af';
             ctx.fillText(`${i + 1}`, pt.x + 8, pt.y - 8);
           }
         });
       }
+    }
+
+    // Selection rectangle
+    if (S.rectSelecting && S.rectStart && S.rectEnd) {
+      const rx = Math.min(S.rectStart.x, S.rectEnd.x);
+      const ry = Math.min(S.rectStart.y, S.rectEnd.y);
+      const rw = Math.abs(S.rectEnd.x - S.rectStart.x);
+      const rh = Math.abs(S.rectEnd.y - S.rectStart.y);
+      ctx.fillStyle = 'rgba(137,180,250,0.15)';
+      ctx.fillRect(rx, ry, rw, rh);
+      ctx.strokeStyle = '#89b4fa'; ctx.lineWidth = 1; ctx.setLineDash([4, 4]);
+      ctx.strokeRect(rx, ry, rw, rh);
+      ctx.setLineDash([]);
+    }
+
+    // Snap guide lines
+    if (S.snapLines.length > 0) {
+      ctx.save();
+      ctx.strokeStyle = '#f9e2af'; ctx.lineWidth = 1; ctx.setLineDash([4, 4]);
+      S.snapLines.forEach(snap => {
+        ctx.beginPath();
+        if (snap.type === 'x') {
+          const p1 = toScreen(snap.val, snap.from - 5);
+          const p2 = toScreen(snap.val, snap.to + 5);
+          ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y);
+        } else {
+          const p1 = toScreen(snap.from - 5, snap.val);
+          const p2 = toScreen(snap.to + 5, snap.val);
+          ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y);
+        }
+        ctx.stroke();
+      });
+      ctx.restore();
+    }
+
+    // Rect select mode indicator
+    if (S.rectSelecting && !S.rectStart) {
+      ctx.fillStyle = 'rgba(137,180,250,0.8)'; ctx.font = 'bold 13px sans-serif';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText('⬚ Tažením vyberte body', w / 2, 20);
     }
   }
 
@@ -2521,7 +2613,27 @@ export function openCamSimulator(initialContour) {
   let lastPinchDist = null;
   let _draggingStock = false;
 
+  // ── Double-click to enter rect selection mode ──
+  canvasWrap.addEventListener('dblclick', e => {
+    if (!S.pointDragEnabled || S.simRunning) return;
+    e.preventDefault();
+    S.rectSelecting = true;
+    S.selectedPoints.clear();
+    S.snapLines = [];
+    canvas.style.cursor = 'crosshair';
+    draw();
+  });
+
   canvasWrap.addEventListener('mousedown', e => {
+    // Rect selection start
+    if (S.rectSelecting) {
+      const rect = canvas.getBoundingClientRect();
+      S.rectStart = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+      S.rectEnd = null;
+      S.isDragging = true;
+      lastMousePos = { x: e.clientX, y: e.clientY };
+      return;
+    }
     const stockIdx = getStockHandleAt(e.clientX, e.clientY);
     if (S.pointDragEnabled && stockIdx !== null) {
       pushHistory(); S.draggedPointId = stockIdx; S.isDragging = true; _draggingStock = true;
@@ -2539,6 +2651,14 @@ export function openCamSimulator(initialContour) {
   });
 
   canvasWrap.addEventListener('mousemove', e => {
+    // Rect selection drag
+    if (S.rectSelecting && S.isDragging && S.rectStart) {
+      const rect = canvas.getBoundingClientRect();
+      S.rectEnd = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+      draw();
+      return;
+    }
+
     const stockHover = S.pointDragEnabled ? getStockHandleAt(e.clientX, e.clientY) : null;
     const pointIdx = getPointAt(e.clientX, e.clientY);
     if (S.addPointMode) {
@@ -2584,9 +2704,44 @@ export function openCamSimulator(initialContour) {
       }
       if (S.params.mode === 'DIAMON') dX_unit *= 2;
       const list = S.editMode === 'contour' ? S.contourPoints : S.stockPoints;
-      const pt = list[S.draggedPointId];
-      pt.x = parseFloat(pt.x) + dX_unit;
-      pt.z = parseFloat(pt.z) + dZ_unit;
+
+      // Multi-drag: if dragging a selected point, move all selected
+      if (S.selectedPoints.size > 1 && S.selectedPoints.has(S.draggedPointId)) {
+        S.snapLines = [];
+        S.selectedPoints.forEach(idx => {
+          const p = list[idx];
+          if (p) { p.x = parseFloat(p.x) + dX_unit; p.z = parseFloat(p.z) + dZ_unit; }
+        });
+      } else {
+        const pt = list[S.draggedPointId];
+        pt.x = parseFloat(pt.x) + dX_unit;
+        pt.z = parseFloat(pt.z) + dZ_unit;
+
+        // Snap guides
+        S.snapLines = [];
+        const allAbs = resolvePointsToAbsolute(list);
+        const dragAbs = allAbs[S.draggedPointId];
+        if (dragAbs) {
+          const isDia = S.params.mode === 'DIAMON';
+          const dragWX = isDia ? dragAbs.xAbs / 2 : dragAbs.xAbs;
+          const dragWZ = dragAbs.zAbs;
+          const snapTol = 3 / S.view.scale;
+          for (let i = 0; i < allAbs.length; i++) {
+            if (i === S.draggedPointId) continue;
+            const otherWX = isDia ? allAbs[i].xAbs / 2 : allAbs[i].xAbs;
+            const otherWZ = allAbs[i].zAbs;
+            if (Math.abs(dragWX - otherWX) < snapTol) {
+              S.snapLines.push({ type: 'x', val: otherWX, from: Math.min(dragWZ, otherWZ), to: Math.max(dragWZ, otherWZ) });
+              if (pt.mode === 'ABS') pt.x = isDia ? otherWX * 2 : otherWX;
+            }
+            if (Math.abs(dragWZ - otherWZ) < snapTol) {
+              S.snapLines.push({ type: 'z', val: otherWZ, from: Math.min(dragWX, otherWX), to: Math.max(dragWX, otherWX) });
+              if (pt.mode === 'ABS') pt.z = otherWZ;
+            }
+          }
+        }
+      }
+
       S._cachedCalc = calculate();
       S.generatedCode = generateGCode(S._cachedCalc);
       draw();
@@ -2597,10 +2752,66 @@ export function openCamSimulator(initialContour) {
   });
 
   const handleMouseUp = () => {
+    // Rect selection completion
+    if (S.rectSelecting && S.rectStart && S.rectEnd) {
+      S.rectSelecting = false;
+      const calc = S._cachedCalc;
+      if (calc) {
+        const pts = S.editMode === 'contour' ? calc.worldPoints : calc.stockWorldPoints;
+        const prms = S.params;
+        const _toScreen = (x, z) => {
+          if (prms.machineStructure === 'carousel') return { x: S.view.panX + x * S.view.scale, y: S.view.panY - z * S.view.scale };
+          return { x: S.view.panX + z * S.view.scale, y: S.view.panY - x * S.view.scale };
+        };
+        const minX = Math.min(S.rectStart.x, S.rectEnd.x);
+        const maxX = Math.max(S.rectStart.x, S.rectEnd.x);
+        const minY = Math.min(S.rectStart.y, S.rectEnd.y);
+        const maxY = Math.max(S.rectStart.y, S.rectEnd.y);
+        S.selectedPoints.clear();
+        if (pts) {
+          pts.forEach((p, i) => {
+            const sp = _toScreen(p.xReal, p.zReal);
+            if (sp.x >= minX && sp.x <= maxX && sp.y >= minY && sp.y <= maxY) {
+              S.selectedPoints.add(i);
+            }
+          });
+        }
+      }
+      S.rectStart = null;
+      S.rectEnd = null;
+      canvas.style.cursor = 'crosshair';
+      S.isDragging = false;
+      draw();
+      // Open offset dialog if points selected
+      if (S.selectedPoints.size > 0) {
+        camOffsetDialog(S.selectedPoints.size).then(result => {
+          if (result && (result.dx !== 0 || result.dz !== 0)) {
+            pushHistory();
+            const list = S.editMode === 'contour' ? S.contourPoints : S.stockPoints;
+            S.selectedPoints.forEach(idx => {
+              const pt = list[idx];
+              if (pt) {
+                pt.x = parseFloat(pt.x) + result.dx;
+                pt.z = parseFloat(pt.z) + result.dz;
+              }
+            });
+            S.selectedPoints.clear();
+            fullUpdate();
+          } else {
+            S.selectedPoints.clear();
+            draw();
+          }
+        });
+      }
+      return;
+    }
+    // Clear snap lines on release
+    S.snapLines = [];
     if (S.isDragging && (S.draggedPointId !== null || _draggingStock)) {
       saveState(); renderCodeArea(); renderTab();
     }
     S.isDragging = false; S.draggedPointId = null; _draggingStock = false;
+    draw();
   };
   canvasWrap.addEventListener('mouseup', handleMouseUp);
   canvasWrap.addEventListener('mouseleave', handleMouseUp);
@@ -2608,6 +2819,28 @@ export function openCamSimulator(initialContour) {
   // ── TOUCH ──
   canvasWrap.addEventListener('touchstart', e => {
     if (e.touches.length === 1) {
+      // Double-tap detection for rect selection
+      const now = Date.now();
+      if (now - S._lastTapTime < 350 && S.pointDragEnabled && !S.simRunning) {
+        S.rectSelecting = true;
+        S.selectedPoints.clear();
+        S.snapLines = [];
+        draw();
+        S._lastTapTime = 0;
+        return;
+      }
+      S._lastTapTime = now;
+
+      // Rect selection on touch
+      if (S.rectSelecting) {
+        const rect = canvas.getBoundingClientRect();
+        S.rectStart = { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
+        S.rectEnd = null;
+        S.isDragging = true;
+        lastMousePos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        return;
+      }
+
       const t = e.touches[0];
       const stockIdx = getStockHandleAt(t.clientX, t.clientY);
       if (S.pointDragEnabled && stockIdx !== null) {
@@ -2630,6 +2863,15 @@ export function openCamSimulator(initialContour) {
 
   canvasWrap.addEventListener('touchmove', e => {
     if (S.addPointMode) return;
+
+    // Rect selection drag on touch
+    if (S.rectSelecting && S.isDragging && S.rectStart && e.touches.length === 1) {
+      const rect = canvas.getBoundingClientRect();
+      S.rectEnd = { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
+      draw();
+      return;
+    }
+
     if (S.isDragging && e.touches.length === 1) {
       const t = e.touches[0];
       const dx = t.clientX - lastMousePos.x;
@@ -2659,9 +2901,44 @@ export function openCamSimulator(initialContour) {
         }
         if (S.params.mode === 'DIAMON') dX_unit *= 2;
         const list = S.editMode === 'contour' ? S.contourPoints : S.stockPoints;
-        const pt = list[S.draggedPointId];
-        pt.x = parseFloat(pt.x) + dX_unit;
-        pt.z = parseFloat(pt.z) + dZ_unit;
+
+        // Multi-drag on touch
+        if (S.selectedPoints.size > 1 && S.selectedPoints.has(S.draggedPointId)) {
+          S.snapLines = [];
+          S.selectedPoints.forEach(idx => {
+            const p = list[idx];
+            if (p) { p.x = parseFloat(p.x) + dX_unit; p.z = parseFloat(p.z) + dZ_unit; }
+          });
+        } else {
+          const pt = list[S.draggedPointId];
+          pt.x = parseFloat(pt.x) + dX_unit;
+          pt.z = parseFloat(pt.z) + dZ_unit;
+
+          // Snap guides on touch
+          S.snapLines = [];
+          const allAbs = resolvePointsToAbsolute(list);
+          const dragAbs = allAbs[S.draggedPointId];
+          if (dragAbs) {
+            const isDia = S.params.mode === 'DIAMON';
+            const dragWX = isDia ? dragAbs.xAbs / 2 : dragAbs.xAbs;
+            const dragWZ = dragAbs.zAbs;
+            const snapTol = 3 / S.view.scale;
+            for (let i = 0; i < allAbs.length; i++) {
+              if (i === S.draggedPointId) continue;
+              const otherWX = isDia ? allAbs[i].xAbs / 2 : allAbs[i].xAbs;
+              const otherWZ = allAbs[i].zAbs;
+              if (Math.abs(dragWX - otherWX) < snapTol) {
+                S.snapLines.push({ type: 'x', val: otherWX, from: Math.min(dragWZ, otherWZ), to: Math.max(dragWZ, otherWZ) });
+                if (pt.mode === 'ABS') pt.x = isDia ? otherWX * 2 : otherWX;
+              }
+              if (Math.abs(dragWZ - otherWZ) < snapTol) {
+                S.snapLines.push({ type: 'z', val: otherWZ, from: Math.min(dragWX, otherWX), to: Math.max(dragWX, otherWX) });
+                if (pt.mode === 'ABS') pt.z = otherWZ;
+              }
+            }
+          }
+        }
+
         S._cachedCalc = calculate();
         S.generatedCode = generateGCode(S._cachedCalc);
         draw();
@@ -2687,10 +2964,18 @@ export function openCamSimulator(initialContour) {
   }, { passive: true });
 
   canvasWrap.addEventListener('touchend', () => {
+    // Rect selection completion on touch
+    if (S.rectSelecting && S.rectStart && S.rectEnd) {
+      handleMouseUp();
+      lastPinchDist = null;
+      return;
+    }
+    S.snapLines = [];
     if (S.isDragging && (S.draggedPointId !== null || _draggingStock)) {
       saveState(); renderCodeArea(); renderTab();
     }
     S.isDragging = false; S.draggedPointId = null; _draggingStock = false; lastPinchDist = null;
+    draw();
   });
 
   // ── RESIZE OBSERVER ──
