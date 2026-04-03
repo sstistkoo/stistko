@@ -2092,9 +2092,8 @@ body {
     display: none;
   }
 
-  /* Skrýt kalkulačky v sidebaru na mobilu – jsou přístupné přes canvasCalcBtn */
-  #calcPanel,
-  [data-panel="calcPanel"] {
+  /* Skrýt duplikátní kalkulačku v sidebaru na mobilu – je přístupná přes canvasCalcBtn */
+  #btnOpenCalc {
     display: none !important;
   }
 
