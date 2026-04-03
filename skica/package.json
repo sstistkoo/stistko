@@ -1,6 +1,6 @@
 {
   "name": "skica",
-  "version": "1.6.3",
+  "version": "1.6.4",
   "description": "SKICA – CAD pro CNC soustružník",
   "main": "sw.js",
   "scripts": {
