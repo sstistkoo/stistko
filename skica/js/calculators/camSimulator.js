@@ -11,6 +11,28 @@ import { autoCenterView } from '../canvas.js';
 import { calculateAllIntersections } from '../geometry.js';
 import { updateObjectList } from '../ui.js';
 
+// ── Custom confirm dialog ──────────────────────────────────────
+function camConfirm(message) {
+  return new Promise(resolve => {
+    const ov = document.createElement('div');
+    ov.className = 'cam-confirm-overlay';
+    ov.innerHTML = `
+      <div class="cam-confirm-box">
+        <div class="cam-confirm-msg">${message}</div>
+        <div class="cam-confirm-btns">
+          <button class="cam-confirm-ok">OK</button>
+          <button class="cam-confirm-cancel">Zrušit</button>
+        </div>
+      </div>`;
+    document.body.appendChild(ov);
+    const cleanup = (val) => { ov.remove(); resolve(val); };
+    ov.querySelector('.cam-confirm-ok').addEventListener('click', () => cleanup(true));
+    ov.querySelector('.cam-confirm-cancel').addEventListener('click', () => cleanup(false));
+    ov.addEventListener('click', e => { if (e.target === ov) cleanup(false); });
+    ov.querySelector('.cam-confirm-ok').focus();
+  });
+}
+
 // ── CSS injection ──────────────────────────────────────────────
 let cssInjected = false;
 function injectCSS() {
@@ -18,6 +40,25 @@ function injectCSS() {
   cssInjected = true;
   const style = document.createElement('style');
   style.textContent = `
+.cam-confirm-overlay {
+  position: fixed; inset: 0; z-index: 100000;
+  background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center;
+}
+.cam-confirm-box {
+  background: #1e1e2e; border: 1px solid #45475a; border-radius: 10px;
+  padding: 24px 28px 18px; min-width: 320px; max-width: 90vw;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5); color: #cdd6f4; font-family: system-ui, sans-serif;
+}
+.cam-confirm-msg { font-size: 14px; margin-bottom: 18px; line-height: 1.5; }
+.cam-confirm-btns { display: flex; gap: 10px; justify-content: flex-end; }
+.cam-confirm-btns button {
+  padding: 7px 22px; border-radius: 6px; font-size: 13px; font-weight: 600;
+  cursor: pointer; border: none;
+}
+.cam-confirm-ok { background: #89b4fa; color: #1e1e2e; }
+.cam-confirm-ok:hover { background: #74a8f7; }
+.cam-confirm-cancel { background: #45475a; color: #cdd6f4; }
+.cam-confirm-cancel:hover { background: #585b70; }
 .cam-sim-window {
   width: 100vw !important; max-width: 100vw !important;
   height: calc(100dvh - 60px) !important; max-height: calc(100dvh - 60px) !important;
@@ -2073,8 +2114,9 @@ export function openCamSimulator(initialContour) {
     const autoBtn = tabBody.querySelector('[data-act="auto-stock"]');
     if (autoBtn) autoBtn.addEventListener('click', handleAutoStock);
     const resetBtn = tabBody.querySelector('[data-act="reset"]');
-    if (resetBtn) resetBtn.addEventListener('click', () => {
-      if (confirm('Opravdu chcete vymazat veškerou uloženou práci a resetovat?')) {
+    if (resetBtn) resetBtn.addEventListener('click', async () => {
+      const ok = await camConfirm('Opravdu chcete vymazat veškerou uloženou práci a resetovat?');
+      if (ok) {
         localStorage.removeItem(STORAGE_KEY);
         overlay.remove();
         openCamSimulator();
@@ -2236,16 +2278,18 @@ export function openCamSimulator(initialContour) {
   }
 
   // ── Vrátit konturu zpět na plátno ──
-  function handleSendToCanvas() {
+  async function handleSendToCanvas() {
     const pts = resolvePointsToAbsolute(S.contourPoints);
     if (pts.length < 2) { alert('Kontura nemá dostatek bodů.'); return; }
-    if (!confirm('Smazat aktuální výkres a vložit konturu z CAM simulátoru?')) return;
+    const ok = await camConfirm('Smazat aktuální výkres a vložit konturu z CAM simulátoru?');
+    if (!ok) return;
 
     // Uložit undo, smazat stávající objekty
     pushUndo();
     state.objects.length = 0;
     state.selected = null;
 
+    const isDia = S.params.mode === 'DIAMON';
     const isKarusel = S.params.machineStructure === 'carousel';
     // Mapování: CNC X,Z → canvas x,y
     // soustruh: canvas.x = Z, canvas.y = X
@@ -2256,8 +2300,11 @@ export function openCamSimulator(initialContour) {
 
     for (let i = 0; i < pts.length - 1; i++) {
       const p1 = pts[i], p2 = pts[i + 1];
-      const c1 = toCanvas(p1.xAbs, p1.zAbs);
-      const c2 = toCanvas(p2.xAbs, p2.zAbs);
+      // Přepočet z průměru na poloměr pokud je DIAMON mód
+      const x1 = isDia ? p1.xAbs / 2 : p1.xAbs;
+      const x2 = isDia ? p2.xAbs / 2 : p2.xAbs;
+      const c1 = toCanvas(x1, p1.zAbs);
+      const c2 = toCanvas(x2, p2.zAbs);
 
       if (p2.type === 'G0' || p2.type === 'G1') {
         // Úsečka
@@ -2269,8 +2316,8 @@ export function openCamSimulator(initialContour) {
       } else if (p2.type === 'G2' || p2.type === 'G3') {
         // Oblouk – vypočítat střed a úhly
         const arc = getArcParams(
-          { x: p1.xAbs, z: p1.zAbs },
-          { x: p2.xAbs, z: p2.zAbs },
+          { x: x1, z: p1.zAbs },
+          { x: x2, z: p2.zAbs },
           p2.rVal, p2.type
         );
         if (arc.error) continue;
