@@ -236,7 +236,7 @@ header h1 span {
 
 /* ── DIAGRAM SECTION ── */
 .diagram-wrap {
-  background: white;
+  background: var(--parch);
   border: 1px solid var(--violet4);
   border-radius: var(--radius);
   padding: 1rem;
@@ -652,7 +652,7 @@ main > *:nth-child(5) { animation-delay: 0.33s; }
 [data-theme="dark"] .accordion-header { background: #1e1830; }
 [data-theme="dark"] .accordion-header:hover { background: #26203c; }
 [data-theme="dark"] .accordion-header.open { background: var(--violet); }
-[data-theme="dark"] .accordion-body { background: #1a1628; min-height: 0; clip-path: inset(0 0 100% 0); }
+[data-theme="dark"] .accordion-body { min-height: 0; clip-path: inset(0 0 100% 0); }
 [data-theme="dark"] .accordion-inner { border-top-color: rgba(212,200,240,0.15); }
 [data-theme="dark"] .diagram-wrap { background: #1e1830; border-color: rgba(212,200,240,0.15); }
 [data-theme="dark"] .body-text { color: #d0c8e8; }
@@ -758,7 +758,7 @@ main > *:nth-child(5) { animation-delay: 0.33s; }
   display: grid;
   grid-template-rows: 0fr;
   transition: grid-template-rows 0.32s cubic-bezier(0.4,0,0.2,1);
-  background: white;
+  background: var(--parch);
   min-height: 0;
   overflow: hidden;
   clip-path: inset(0 0 100% 0);
