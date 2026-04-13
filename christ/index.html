@@ -2192,33 +2192,15 @@ function scrollToSection(id) {
   const target = document.getElementById(id);
   if (!target) return;
   
-  let accordionId = null;
-  if (id.startsWith('body-c') || id.startsWith('body-gen') || id === 'body-trun' || id === 'body-peceti' || id === 'body-trubky' || id === 'body-vize' || id === 'body-cise' || id === 'body-tisic' || id === 'body-jeruzalem' || id === 'body-plan-uvod' || id === 'body-plan-proces' || id === 'body-plan-cakry' || id === 'body-sol-uvod' || id === 'body-sol-mesic' || id === 'body-cteni') {
-    const match = id.match(/(?:body-(?:c|gen|trun|peceti|trubky|vize|cise|tisic|jeruzalem|plan|sol|cteni))/);
-    if (match) {
-      const base = match[0].replace('body-', '');
-      if (base.startsWith('c')) {
-        accordionId = base;
-      } else if (base === 'gen-uvod' || base === 'gen1' || base === 'gen2' || base === 'gen3' || base === 'gen4' || base === 'gen5' || base === 'gen6' || base === 'gen7' || base === 'gen-srov') {
-        accordionId = base.replace('gen-', 'gen');
-        if (accordionId === 'gen-srov') accordionId = 'gen';
-      } else if (base === 'trun') accordionId = 'trun';
-      else if (base === 'peceti') accordionId = 'peceti';
-      else if (base === 'trubky') accordionId = 'trubky';
-      else if (base === 'vize') accordionId = 'vize';
-      else if (base === 'cise') accordionId = 'cise';
-      else if (base === 'tisic') accordionId = 'tisic';
-      else if (base === 'jeruzalem') accordionId = 'jeruzalem';
+  const accordionBody = target.closest('.accordion-body');
+  if (accordionBody && !accordionBody.classList.contains('open')) {
+    const header = accordionBody.previousElementSibling;
+    if (header && header.classList.contains('accordion-header')) {
+      toggle(header.id.replace('acc-', ''));
     }
   }
   
-  if (accordionId) {
-    toggle(accordionId);
-  }
-  
-  setTimeout(() => {
-    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, accordionId ? 50 : 0);
+  target.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function toggle(id) {
