@@ -634,6 +634,11 @@ main > *:nth-child(5) { animation-delay: 0.33s; }
 .plan-btn:hover {
   background: #d8d0ec !important;
 }
+.plan-btn--active {
+  background: var(--violet) !important;
+  color: var(--parch) !important;
+  border-color: var(--violet) !important;
+}
 
 /* ── DARK MODE (data-theme attribute) ── */
 [data-theme="dark"] {
@@ -2100,23 +2105,17 @@ function showPlanet(key, evt) {
   document.getElementById('planet-detail').style.display = 'block';
   // Highlight active button
   document.querySelectorAll('.plan-btn').forEach(b => {
-    b.style.background = '';
-    b.style.color = '';
-    b.style.borderColor = '';
+    b.classList.remove('plan-btn--active');
   });
   if (evt && evt.target) {
-    evt.target.style.background = '#3C3489';
-    evt.target.style.color = 'white';
-    evt.target.style.borderColor = '#3C3489';
+    evt.target.classList.add('plan-btn--active');
   }
 }
 
 function closePlanet() {
   document.getElementById('planet-detail').style.display = 'none';
   document.querySelectorAll('.plan-btn').forEach(b => {
-    b.style.background = '';
-    b.style.color = '';
-    b.style.borderColor = '';
+    b.classList.remove('plan-btn--active');
   });
 }
 </script>
