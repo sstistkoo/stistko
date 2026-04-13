@@ -2191,12 +2191,11 @@ function scrollToSection(id) {
 }
 
 function toggle(id) {
-  let header = document.getElementById('acc-' + id);
-  let body = document.getElementById('body-' + id);
+  const body = document.getElementById('body-' + id);
+  if (!body) return;
   
-  if (!body) body = document.getElementById('body-' + id);
-  if (!header && body) header = body.previousElementSibling;
-  if (!body || !header) return;
+  const header = body.previousElementSibling;
+  if (!header || !header.classList.contains('accordion-header')) return;
   
   const isOpen = body.classList.contains('open');
   header.classList.toggle('open');
@@ -2205,12 +2204,11 @@ function toggle(id) {
 }
 
 function openAccordion(id) {
-  let header = document.getElementById('acc-' + id);
-  let body = document.getElementById('body-' + id);
+  const body = document.getElementById('body-' + id);
+  if (!body) return;
   
-  if (!body) body = document.getElementById('body-' + id);
-  if (!header && body) header = body.previousElementSibling;
-  if (!body || !header) return;
+  const header = body.previousElementSibling;
+  if (!header || !header.classList.contains('accordion-header')) return;
   
   header.classList.add('open');
   body.classList.add('open');
