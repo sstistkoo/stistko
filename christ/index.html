@@ -367,9 +367,6 @@ header h1 span {
   transform: rotate(180deg);
   color: var(--violet4);
 }
-.accordion-body-old-removed {
-  /* replaced by grid trick above */
-}
 .accordion-inner {
   padding: 0.7rem 0.9rem 0.9rem;
   border-top: 1px solid var(--violet4);
@@ -2176,11 +2173,6 @@ function closeSidebar() {
   btn.classList.remove('active');
   overlay.classList.remove('active');
   overlay.style.display = 'none';
-}
-
-function toggleGroup(id) {
-  const group = document.getElementById('group-' + id);
-  group.classList.toggle('open');
 }
 
 function scrollToSection(id) {
