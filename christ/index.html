@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cayceho výklad Zjevení Janova</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
-<script>try{if(localStorage.getItem('cayce-theme')==='dark')document.documentElement.classList.add('dark-init')}catch(e){}</script>
+<script>try{if(localStorage.getItem('cayce-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}</script>
 <style>
 :root {
   --ink:     #1a1628;
@@ -638,13 +638,8 @@ main > *:nth-child(5) { animation-delay: 0.33s; }
   background: #d8d0ec !important;
 }
 
-/* ── ANTI-FOUC: okamžité tmavé téma před JS ── */
-html.dark-init body {
-  background: #120f1e !important;
-}
-
-/* ── DARK MODE (přepínač třídou body.dark) ── */
-body.dark {
+/* ── DARK MODE (data-theme attribute) ── */
+[data-theme="dark"] {
   --ink:     #e8e4f5;
   --parch:   #1a1628;
   --parch2:  #211c35;
@@ -657,37 +652,37 @@ body.dark {
   background: #120f1e;
   color: #e8e4f5;
 }
-body.dark .accordion-header { background: #1e1830; }
-body.dark .accordion-header:hover { background: #26203c; }
-body.dark .accordion-header.open { background: var(--violet); }
-body.dark .accordion-body { background: #1a1628; min-height: 0; clip-path: inset(0 0 100% 0); }
-body.dark .accordion-inner { border-top-color: rgba(212,200,240,0.15); }
-body.dark .diagram-wrap { background: #1e1830; border-color: rgba(212,200,240,0.15); }
-body.dark .body-text { color: #d0c8e8; }
-body.dark .symbol-desc { color: #d0c8e8; }
-body.dark .symbol-term { color: var(--violet3); }
-body.dark .quote-block { background: rgba(139,105,20,0.15); color: var(--violet4); border-left-color: var(--gold2); }
-body.dark .promise-block { background: rgba(61,46,107,0.35); color: #d0c8e8; }
-body.dark .overview-table td { color: #d0c8e8; }
-body.dark .overview-table tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
-body.dark .overview-table tr:hover td { background: rgba(255,255,255,0.06); }
-body.dark .sidebar { background: #110e1e; }
-body.dark .sidebar-group-header { color: #d4c8f0; }
-body.dark .note { color: #9988bb; }
-body.dark #planet-detail { background: #1e1830 !important; }
-body.dark .plan-btn { background: #2a2040 !important; color: #c8b8f0 !important; border-color: #4a3a8a !important; }
-body.dark .chakra-name { color: var(--violet3); }
-body.dark .chakra-church { color: #9988bb; }
-body.dark .acc-title { color: var(--violet4); }
-body.dark .acc-subtitle { color: var(--gold); }
-body.dark .section-label { color: var(--gold2); border-left-color: var(--gold2); }
-body.dark .key-card { background: rgba(255,255,255,0.05); border-color: rgba(212,200,240,0.15); }
-body.dark .key-desc { color: var(--violet4); }
-body.dark .sidebar-group-content a { color: var(--violet3); }
-body.dark .chakra-gland { color: var(--gold); }
-body.dark .chakra-row:hover { background: rgba(255,255,255,0.05); }
-body.dark td, body.dark th { border-color: rgba(212,200,240,0.12) !important; }
-body.dark .final-card { background: #1e1420; }
+[data-theme="dark"] .accordion-header { background: #1e1830; }
+[data-theme="dark"] .accordion-header:hover { background: #26203c; }
+[data-theme="dark"] .accordion-header.open { background: var(--violet); }
+[data-theme="dark"] .accordion-body { background: #1a1628; min-height: 0; clip-path: inset(0 0 100% 0); }
+[data-theme="dark"] .accordion-inner { border-top-color: rgba(212,200,240,0.15); }
+[data-theme="dark"] .diagram-wrap { background: #1e1830; border-color: rgba(212,200,240,0.15); }
+[data-theme="dark"] .body-text { color: #d0c8e8; }
+[data-theme="dark"] .symbol-desc { color: #d0c8e8; }
+[data-theme="dark"] .symbol-term { color: var(--violet3); }
+[data-theme="dark"] .quote-block { background: rgba(139,105,20,0.15); color: var(--violet4); border-left-color: var(--gold2); }
+[data-theme="dark"] .promise-block { background: rgba(61,46,107,0.35); color: #d0c8e8; }
+[data-theme="dark"] .overview-table td { color: #d0c8e8; }
+[data-theme="dark"] .overview-table tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+[data-theme="dark"] .overview-table tr:hover td { background: rgba(255,255,255,0.06); }
+[data-theme="dark"] .sidebar { background: #110e1e; }
+[data-theme="dark"] .sidebar-group-header { color: #d4c8f0; }
+[data-theme="dark"] .note { color: #9988bb; }
+[data-theme="dark"] #planet-detail { background: #1e1830 !important; }
+[data-theme="dark"] .plan-btn { background: #2a2040 !important; color: #c8b8f0 !important; border-color: #4a3a8a !important; }
+[data-theme="dark"] .chakra-name { color: var(--violet3); }
+[data-theme="dark"] .chakra-church { color: #9988bb; }
+[data-theme="dark"] .acc-title { color: var(--violet4); }
+[data-theme="dark"] .acc-subtitle { color: var(--gold); }
+[data-theme="dark"] .section-label { color: var(--gold2); border-left-color: var(--gold2); }
+[data-theme="dark"] .key-card { background: rgba(255,255,255,0.05); border-color: rgba(212,200,240,0.15); }
+[data-theme="dark"] .key-desc { color: var(--violet4); }
+[data-theme="dark"] .sidebar-group-content a { color: var(--violet3); }
+[data-theme="dark"] .chakra-gland { color: var(--gold); }
+[data-theme="dark"] .chakra-row:hover { background: rgba(255,255,255,0.05); }
+[data-theme="dark"] td, [data-theme="dark"] th { border-color: rgba(212,200,240,0.12) !important; }
+[data-theme="dark"] .final-card { background: #1e1420; }
 
 
 #back-to-top {
@@ -2029,7 +2024,7 @@ document.addEventListener('DOMContentLoaded', function() {
   try {
     const saved = localStorage.getItem('cayce-theme');
     if (saved === 'dark') {
-      document.body.classList.add('dark');
+      document.documentElement.setAttribute('data-theme', 'dark');
       updateThemeButton(true);
     }
   } catch(e) {}
@@ -2242,9 +2237,11 @@ document.addEventListener('keydown', function(e) {
 
 // ── THEME TOGGLE ──
 function toggleTheme() {
-  const isDark = document.body.classList.toggle('dark');
-  try { localStorage.setItem('cayce-theme', isDark ? 'dark' : 'light'); } catch(e) {}
-  updateThemeButton(isDark);
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  try { localStorage.setItem('cayce-theme', isDark ? 'light' : 'dark'); } catch(e) {}
+  updateThemeButton(!isDark);
 }
 
 function updateThemeButton(isDark) {
