@@ -1,0 +1,2279 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cayceho výklad Zjevení Janova</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<script>try{if(localStorage.getItem('cayce-theme')==='dark')document.documentElement.classList.add('dark-init')}catch(e){}</script>
+<style>
+:root {
+  --ink:     #1a1628;
+  --parch:   #f5f0e8;
+  --parch2:  #ede6d4;
+  --gold:    #8b6914;
+  --gold2:   #c49a2a;
+  --violet:  #3d2e6b;
+  --violet2: #6b4fa8;
+  --violet3: #9b7fd4;
+  --violet4: #d4c8f0;
+  --crimson: #7a1f2e;
+  --teal:    #1a5c52;
+  --amber:   #8b5200;
+  --radius:  6px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:focus-visible {
+  outline: 2px solid var(--gold2);
+  outline-offset: 2px;
+}
+button:focus-visible,
+a:focus-visible {
+  outline-offset: 2px;
+}
+
+body {
+  font-family: 'Crimson Pro', Georgia, serif;
+  background: var(--parch);
+  color: var(--ink);
+  min-height: 100vh;
+  background-image:
+    radial-gradient(ellipse at 20% 0%, rgba(61,46,107,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 100%, rgba(139,105,20,0.06) 0%, transparent 60%);
+}
+
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 200px;
+  height: 100vh;
+  background: var(--violet);
+  padding: 1rem;
+  z-index: 100;
+  overflow-y: auto;
+}
+.sidebar-logo {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  color: var(--gold2);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(212,200,240,0.2);
+  text-align: center;
+}
+
+/* ── THEME TOGGLE BUTTON ── */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(212,200,240,0.15);
+  border-radius: 6px;
+  padding: 0.45rem 0.7rem;
+  cursor: pointer;
+  color: var(--violet4);
+  font-size: 0.82rem;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.8rem;
+  transition: background 0.15s, color 0.15s;
+}
+.theme-toggle:hover {
+  background: rgba(255,255,255,0.13);
+  color: var(--parch);
+}
+.theme-icon { font-size: 0.9rem; line-height: 1; }
+.theme-label { flex: 1; text-align: left; }
+.sidebar-group {
+  margin-bottom: 0.3rem;
+}
+.sidebar-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.6rem;
+  background: rgba(255,255,255,0.05);
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--parch);
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: background 0.15s;
+}
+.sidebar-group-header:hover {
+  background: rgba(255,255,255,0.1);
+}
+.sidebar-group-header .arrow {
+  font-size: 0.7rem;
+  transition: transform 0.2s;
+}
+.sidebar-group.open .sidebar-group-header .arrow {
+  transform: rotate(180deg);
+}
+.sidebar-group-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.25s ease;
+}
+.sidebar-group.open .sidebar-group-content {
+  max-height: 400px;
+}
+.sidebar-group-content a {
+  display: block;
+  color: var(--violet4);
+  text-decoration: none;
+  font-size: 0.92rem;
+  padding: 0.4rem 0.6rem 0.4rem 1.2rem;
+  border-radius: 4px;
+  transition: background 0.15s, color 0.15s;
+  border-left: 2px solid transparent;
+}
+.sidebar-group-content a:hover {
+  background: rgba(255,255,255,0.08);
+  color: var(--parch);
+  border-left-color: var(--gold2);
+}
+
+main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 3rem;
+  margin-left: 200px;
+}
+
+/* ── HEADER ── */
+
+header {
+  background: var(--violet);
+  color: var(--parch);
+  padding: 2.2rem 1.2rem 1.8rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% -20%, rgba(196,154,42,0.25) 0%, transparent 65%),
+    radial-gradient(ellipse at 20% 120%, rgba(107,79,168,0.4) 0%, transparent 50%);
+  pointer-events: none;
+}
+header::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold2), var(--gold), var(--gold2), transparent);
+}
+.header-symbol {
+  font-size: 1.6rem;
+  margin-bottom: 0.6rem;
+  opacity: 0.85;
+  letter-spacing: 0.25em;
+}
+header h1 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.6rem, 4vw, 2.8rem);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+  color: var(--parch);
+}
+header h1 span {
+  display: block;
+  font-size: 0.6em;
+  font-weight: 400;
+  color: var(--gold2);
+  letter-spacing: 0.2em;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+.header-sub {
+  margin-top: 0.7rem;
+  font-size: 0.95rem;
+  color: var(--violet4);
+  font-style: italic;
+  letter-spacing: 0.02em;
+}
+.header-quote {
+  margin-top: 1rem;
+  font-size: 0.88rem;
+  color: rgba(212,200,240,0.8);
+  max-width: 440px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+  font-style: italic;
+}
+
+/* ── SECTION GROUPS ── */
+.section-group {
+  margin-bottom: 1rem;
+}
+.section-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.6rem;
+  padding-left: 0.8rem;
+  border-left: 2px solid var(--gold2);
+  padding-bottom: 0.1rem;
+}
+
+/* ── DIAGRAM SECTION ── */
+.diagram-wrap {
+  background: white;
+  border: 1px solid var(--violet4);
+  border-radius: var(--radius);
+  padding: 1rem;
+  margin-bottom: 1.8rem;
+  box-shadow: 0 2px 12px rgba(61,46,107,0.08);
+}
+.diagram-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  color: var(--violet);
+  text-align: center;
+  margin-bottom: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+.body-diagram {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+.diagram-svg-wrap {
+  flex: 0 0 auto;
+}
+.chakra-list {
+  flex: 1;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.3rem;
+}
+.chakra-row {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.chakra-row:hover { background: rgba(61,46,107,0.05); }
+.chakra-dot {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+.chakra-info { line-height: 1.3; }
+.chakra-name { font-size: 0.85rem; font-weight: 600; color: var(--violet); }
+.chakra-gland { font-size: 0.75rem; color: var(--gold); font-style: italic; }
+.chakra-church { font-size: 0.72rem; color: #666; margin-top: 0.1rem; }
+
+/* ── ACCORDION ── */
+.accordion {
+  border: 1px solid var(--violet4);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(61,46,107,0.06);
+  margin-bottom: 0.35rem;
+}
+.accordion-header {
+  width: 100%;
+  background: white;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  transition: background 0.15s;
+  position: relative;
+}
+.accordion-header:hover { background: #faf8ff; }
+.accordion-header.open { background: var(--violet); }
+.acc-num {
+  width: 44px;
+  min-height: 52px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+.accordion-header:not(.open) .acc-num {
+  color: var(--violet2);
+}
+.acc-title-wrap {
+  flex: 1;
+  padding: 0.5rem 0.7rem;
+}
+.acc-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--violet);
+  line-height: 1.25;
+  transition: color 0.15s;
+}
+.accordion-header.open .acc-title { color: var(--parch); }
+.acc-subtitle {
+  font-size: 0.76rem;
+  color: var(--gold);
+  font-style: italic;
+  margin-top: 0.15rem;
+  transition: color 0.15s;
+}
+.accordion-header.open .acc-subtitle { color: var(--violet4); }
+.acc-arrow {
+  width: 44px;
+  min-height: 52px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  color: var(--violet3);
+  transition: transform 0.25s, color 0.15s;
+  flex-shrink: 0;
+}
+.accordion-header.open .acc-arrow {
+  transform: rotate(180deg);
+  color: var(--violet4);
+}
+.accordion-body-old-removed {
+  /* replaced by grid trick above */
+}
+.accordion-inner {
+  padding: 0.7rem 0.9rem 0.9rem;
+  border-top: 1px solid var(--violet4);
+}
+
+/* ── CONTENT STYLES ── */
+.quote-block {
+  border-left: 3px solid var(--gold2);
+  padding: 0.6rem 0.9rem;
+  margin: 0.6rem 0 0.8rem;
+  background: rgba(139,105,20,0.07);
+  border-radius: 0 4px 4px 0;
+  font-style: italic;
+  font-size: 0.97rem;
+  color: #1a1020;
+  line-height: 1.65;
+}
+.body-text {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: #111118;
+  margin-bottom: 0.7rem;
+}
+.promise-block {
+  background: linear-gradient(135deg, rgba(61,46,107,0.07), rgba(61,46,107,0.03));
+  border: 1px solid var(--violet4);
+  border-radius: 4px;
+  padding: 0.6rem 0.9rem;
+  margin-top: 0.8rem;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: #111118;
+}
+.promise-block strong {
+  color: var(--violet);
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.symbol-block {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+}
+.symbol-item {
+  display: flex;
+  gap: 0.7rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(61,46,107,0.08);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+.symbol-item:last-child { border-bottom: none; }
+.symbol-term {
+  font-weight: 600;
+  color: var(--violet2);
+  min-width: 140px;
+  flex-shrink: 0;
+  font-size: 0.88rem;
+  padding-top: 0.05rem;
+}
+.symbol-desc { color: #111118; font-size: 0.97rem; line-height: 1.7; }
+
+/* ── OVERVIEW TABLE ── */
+.overview-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  margin: 0.8rem 0;
+}
+.overview-table th {
+  background: var(--violet);
+  color: var(--parch);
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.6rem 0.8rem;
+  text-align: left;
+}
+.overview-table td {
+  padding: 0.55rem 0.8rem;
+  border-bottom: 1px solid var(--violet4);
+  vertical-align: top;
+  line-height: 1.5;
+}
+.overview-table tr:nth-child(even) td { background: rgba(61,46,107,0.03); }
+.overview-table tr:hover td { background: rgba(61,46,107,0.06); }
+.num-badge {
+  display: inline-flex;
+  align-items: center; justify-content: center;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: white;
+}
+
+/* ── FINAL SECTION ── */
+.final-card {
+  background: var(--violet);
+  color: var(--parch);
+  border-radius: var(--radius);
+  padding: 1.4rem 1.2rem;
+  margin-top: 1.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.final-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(196,154,42,0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+.final-card h3 {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--gold2);
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+.final-quote {
+  font-style: italic;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--violet4);
+  max-width: 520px;
+  margin: 0 auto 1.5rem;
+}
+.keys-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+  margin-top: 1.2rem;
+}
+.key-card {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(212,200,240,0.2);
+  border-radius: 4px;
+  padding: 0.9rem;
+}
+.key-card .key-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--gold2);
+  letter-spacing: 0.08em;
+  margin-bottom: 0.4rem;
+}
+.key-card .key-desc { font-size: 0.88rem; color: var(--violet4); line-height: 1.5; }
+
+/* ── CAPTIONS ── */
+.note { font-size: 0.82rem; color: #777; font-style: italic; margin-top: 0.5rem; }
+
+/* ── MOBILE THEME TOGGLE ── */
+#theme-toggle-mobile {
+  display: none;
+  position: fixed;
+  top: 0.8rem;
+  left: 4rem;
+  z-index: 200;
+  width: 44px;
+  height: 44px;
+  background: var(--violet);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  line-height: 1;
+}
+
+/* ── MOBILE MENU BUTTON ── */
+.menu-toggle {
+  display: none;
+  position: fixed;
+  top: 0.8rem;
+  left: 0.8rem;
+  z-index: 200;
+  width: 44px;
+  height: 44px;
+  background: var(--violet);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.menu-toggle span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--parch);
+  border-radius: 1px;
+  transition: transform 0.2s, opacity 0.2s;
+}
+.menu-toggle.active span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.menu-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+.menu-toggle.active span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 90;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.sidebar-overlay.active {
+  opacity: 1;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 800px) {
+  .menu-toggle { display: flex; }
+  #theme-toggle-mobile { display: flex; align-items: center; justify-content: center; }
+  .sidebar { 
+    display: block;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    width: 240px;
+  }
+  .sidebar.open { 
+    transform: translateX(0);
+  }
+  main { margin-left: 0; max-width: 100%; }
+  .body-diagram { flex-direction: column; align-items: center; }
+  .symbol-term { min-width: 110px; }
+  header { padding: 4rem 1.2rem 1.8rem; }
+}
+
+/* ── LOAD ANIMATION ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+main > * { animation: fadeUp 0.5s ease both; }
+main > *:nth-child(1) { animation-delay: 0.05s; }
+main > *:nth-child(2) { animation-delay: 0.12s; }
+main > *:nth-child(3) { animation-delay: 0.19s; }
+main > *:nth-child(4) { animation-delay: 0.26s; }
+main > *:nth-child(5) { animation-delay: 0.33s; }
+/* ── PLANET BUTTONS FOCUS ── */
+.plan-btn:focus-visible {
+  outline: 2px solid var(--gold2);
+  outline-offset: 2px;
+}
+.plan-btn:hover {
+  background: #d8d0ec !important;
+}
+
+/* ── ANTI-FOUC: okamžité tmavé téma před JS ── */
+html.dark-init body {
+  background: #120f1e !important;
+}
+
+/* ── DARK MODE (přepínač třídou body.dark) ── */
+body.dark {
+  --ink:     #e8e4f5;
+  --parch:   #1a1628;
+  --parch2:  #211c35;
+  --gold:    #c49a2a;
+  --gold2:   #e0b84a;
+  --violet:  #4a3a8a;
+  --violet2: #7a5fc8;
+  --violet3: #a890e0;
+  --violet4: #c8b8f0;
+  background: #120f1e;
+  color: #e8e4f5;
+}
+body.dark .accordion-header { background: #1e1830; }
+body.dark .accordion-header:hover { background: #26203c; }
+body.dark .accordion-header.open { background: var(--violet); }
+body.dark .accordion-body { background: #1a1628; min-height: 0; clip-path: inset(0 0 100% 0); }
+body.dark .accordion-inner { border-top-color: rgba(212,200,240,0.15); }
+body.dark .diagram-wrap { background: #1e1830; border-color: rgba(212,200,240,0.15); }
+body.dark .body-text { color: #d0c8e8; }
+body.dark .symbol-desc { color: #d0c8e8; }
+body.dark .symbol-term { color: var(--violet3); }
+body.dark .quote-block { background: rgba(139,105,20,0.15); color: var(--violet4); border-left-color: var(--gold2); }
+body.dark .promise-block { background: rgba(61,46,107,0.35); color: #d0c8e8; }
+body.dark .overview-table td { color: #d0c8e8; }
+body.dark .overview-table tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+body.dark .overview-table tr:hover td { background: rgba(255,255,255,0.06); }
+body.dark .sidebar { background: #110e1e; }
+body.dark .sidebar-group-header { color: #d4c8f0; }
+body.dark .note { color: #9988bb; }
+body.dark #planet-detail { background: #1e1830 !important; }
+body.dark .plan-btn { background: #2a2040 !important; color: #c8b8f0 !important; border-color: #4a3a8a !important; }
+body.dark .chakra-name { color: var(--violet3); }
+body.dark .chakra-church { color: #9988bb; }
+body.dark .acc-title { color: var(--violet4); }
+body.dark .acc-subtitle { color: var(--gold); }
+body.dark .section-label { color: var(--gold2); border-left-color: var(--gold2); }
+body.dark .key-card { background: rgba(255,255,255,0.05); border-color: rgba(212,200,240,0.15); }
+body.dark .key-desc { color: var(--violet4); }
+body.dark .sidebar-group-content a { color: var(--violet3); }
+body.dark .chakra-gland { color: var(--gold); }
+body.dark .chakra-row:hover { background: rgba(255,255,255,0.05); }
+body.dark td, body.dark th { border-color: rgba(212,200,240,0.12) !important; }
+body.dark .final-card { background: #1e1420; }
+
+
+#back-to-top {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--violet);
+  color: var(--parch);
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 12px rgba(61,46,107,0.35);
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.3s, transform 0.3s, background 0.15s;
+  z-index: 150;
+  pointer-events: none;
+}
+#back-to-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+#back-to-top:hover { background: var(--violet2); }
+
+/* ── READING PROGRESS BAR ── */
+#progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  width: 0%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold2), var(--violet2));
+  z-index: 999;
+  transition: width 0.1s linear;
+}
+
+/* ── TABLE OVERFLOW FIX ── */
+.overview-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 0.8rem 0;
+}
+.overview-table { margin: 0; }
+
+/* ── PLANET DETAIL CLOSE ── */
+.planet-close {
+  position: absolute;
+  top: 0.5rem; right: 0.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--violet3);
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  transition: color 0.15s, background 0.15s;
+}
+.planet-close:hover { color: var(--violet); background: rgba(61,46,107,0.1); }
+
+/* ── SIDEBAR ACTIVE LINK ── */
+.sidebar-group-content a.active {
+  background: rgba(255,255,255,0.12);
+  color: var(--parch);
+  border-left-color: var(--gold2);
+}
+
+/* ── SMOOTH ACCORDION (grid trick + clip fallback) ── */
+.accordion-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.32s cubic-bezier(0.4,0,0.2,1);
+  background: white;
+  min-height: 0;
+  overflow: hidden;
+  clip-path: inset(0 0 100% 0);
+}
+.accordion-body.open {
+  grid-template-rows: 1fr;
+  clip-path: inset(0 0 0 0);
+}
+.accordion-body > .accordion-inner {
+  overflow: hidden;
+  min-height: 0;
+  height: 100%;
+}
+
+/* ── PRINT STYLES ── */
+@media print {
+  .sidebar, .menu-toggle, .sidebar-overlay, #progress-bar { display: none !important; }
+  main { margin-left: 0 !important; max-width: 100% !important; padding: 0 !important; }
+  .accordion-body { display: block !important; max-height: none !important; grid-template-rows: 1fr !important; }
+  .accordion-body > .accordion-inner { overflow: visible !important; }
+  header { break-after: avoid; }
+  .accordion { break-inside: avoid; }
+  .final-card { background: white !important; color: black !important; border: 1px solid #ccc; }
+  .final-card h3, .final-quote { color: #333 !important; }
+}
+
+  #section1, #section2, #section3, #section4 { scroll-margin-top: 1rem; }
+  .accordion-body[id] { scroll-margin-top: 0.5rem; }
+  #diagram { scroll-margin-top: 1rem; }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<button class="menu-toggle" onclick="toggleSidebar()" aria-label="Otevřít menu" aria-expanded="false">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+<button id="theme-toggle-mobile" onclick="toggleTheme()" aria-label="Přepnout téma" title="Světlý/Tmavý mód">🌙</button>
+<div class="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">☩ Cayce</div>
+  
+  <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Přepnout světlý/tmavý mód">
+    <span class="theme-icon">🌙</span>
+    <span class="theme-label">Tmavý mód</span>
+  </button>
+
+  <div class="sidebar-group" id="group-genesis">
+    <div class="sidebar-group-header" onclick="toggleGroup('genesis')">
+      Genesis a stvoření
+      <span class="arrow">▾</span>
+    </div>
+    <div class="sidebar-group-content">
+      <a href="#section4" onclick="scrollToSection('section4')">Genesis — přehled</a>
+      <a href="#body-gen-uvod" onclick="scrollToSection('body-gen-uvod')">Jak Cayce četl Genesis</a>
+      <a href="#body-gen1" onclick="scrollToSection('body-gen1')">Den první — Světlo</a>
+      <a href="#body-gen2" onclick="scrollToSection('body-gen2')">Den druhý — Klenba</a>
+      <a href="#body-gen3" onclick="scrollToSection('body-gen3')">Den třetí — Pevnina</a>
+      <a href="#body-gen4" onclick="scrollToSection('body-gen4')">Den čtvrtý — Hvězdy</a>
+      <a href="#body-gen5" onclick="scrollToSection('body-gen5')">Den pátý — Živočichové</a>
+      <a href="#body-gen6" onclick="scrollToSection('body-gen6')">Den šestý — Člověk</a>
+      <a href="#body-gen7" onclick="scrollToSection('body-gen7')">Den sedmý — Odpočinek</a>
+      <a href="#body-gen-srov" onclick="scrollToSection('body-gen-srov')">Srovnávací tabulka</a>
+    </div>
+  </div>
+
+  <div class="sidebar-group" id="group-chakras">
+    <div class="sidebar-group-header" onclick="toggleGroup('chakras')">
+      Čákry a žlázy
+      <span class="arrow">▾</span>
+    </div>
+    <div class="sidebar-group-content">
+      <a href="#diagram" onclick="scrollToSection('diagram')">Diagram těla</a>
+      <a href="#body-c1" onclick="scrollToSection('body-c1')">1. Muladhara — Základ</a>
+      <a href="#body-c2" onclick="scrollToSection('body-c2')">2. Svadhišthána — Tvoření</a>
+      <a href="#body-c3" onclick="scrollToSection('body-c3')">3. Manipura — Moc</a>
+      <a href="#body-c4" onclick="scrollToSection('body-c4')">4. Anáhata — Srdce</a>
+      <a href="#body-c5" onclick="scrollToSection('body-c5')">5. Višuddha — Hrdlo</a>
+      <a href="#body-c6" onclick="scrollToSection('body-c6')">6. Adžna — Třetí oko</a>
+      <a href="#body-c7" onclick="scrollToSection('body-c7')">7. Sahasrara — Koruna</a>
+    </div>
+  </div>
+
+  <div class="sidebar-group" id="group-revelation">
+    <div class="sidebar-group-header" onclick="toggleGroup('revelation')">
+      Janovo zjevení
+      <span class="arrow">▾</span>
+    </div>
+    <div class="sidebar-group-content">
+      <a href="#section1" onclick="scrollToSection('section1')">Sedm cirkví (1–3)</a>
+      <a href="#body-trun" onclick="scrollToSection('body-trun')">Trůn a Beránek (4–5)</a>
+      <a href="#body-peceti" onclick="scrollToSection('body-peceti')">Sedm pečetí (6–7)</a>
+      <a href="#body-trubky" onclick="scrollToSection('body-trubky')">Sedm trubek (8–9)</a>
+      <a href="#body-vize" onclick="scrollToSection('body-vize')">Střední vize (10–14)</a>
+      <a href="#body-cise" onclick="scrollToSection('body-cise')">Číše hněvu (15–19)</a>
+      <a href="#body-tisic" onclick="scrollToSection('body-tisic')">Tisícileté království</a>
+      <a href="#body-jeruzalem" onclick="scrollToSection('body-jeruzalem')">Nový Jeruzalém (21–22)</a>
+    </div>
+  </div>
+
+  <div class="sidebar-group" id="group-kosmologie">
+    <div class="sidebar-group-header" onclick="toggleGroup('kosmologie')">
+      Kosmologie
+      <span class="arrow">▾</span>
+    </div>
+    <div class="sidebar-group-content">
+      <a href="#body-plan-uvod" onclick="scrollToSection('body-plan-uvod')">Planety jako školy</a>
+      <a href="#body-plan-proces" onclick="scrollToSection('body-plan-proces')">Meziinkarnační stav</a>
+      <a href="#body-plan-cakry" onclick="scrollToSection('body-plan-cakry')">Planety a čákry</a>
+      <a href="#body-sol-uvod" onclick="scrollToSection('body-sol-uvod')">Slunce</a>
+      <a href="#body-sol-mesic" onclick="scrollToSection('body-sol-mesic')">Měsíc</a>
+      <a href="#body-cteni" onclick="scrollToSection('body-cteni')">Čísla čtení</a>
+    </div>
+  </div>
+</aside>
+
+<header>
+  <div class="header-symbol">☩ ✦ ☩</div>
+  <h1><span>Edgar Cayce</span>Výklad Zjevení Janova</h1>
+  <p class="header-sub">Sedm čáker · Sedm žláz · Sedm center vědomí</p>
+  <p class="header-quote">„Zjevení Janovo není proroctví o budoucnosti světa. Je to mapa vnitřního duchovního probuzení jednoho člověka." — E. Cayce, čtení č. 281</p>
+</header>
+
+<main>
+
+<!-- SEKCE 1: SEDM CÍRKVÍ -->
+<div class="section-group" id="section1">
+  <div class="section-label">Část I — Sedm církví · Kapitoly 1–3</div>
+
+  <!-- C1 Efez -->
+  <div class="accordion" id="acc-c1">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('c1')">
+      <div class="acc-num" style="background:#E24B4A">1</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Efez — Muladhara — Gonády</div>
+        <div class="acc-subtitle">Základ · Kořenové centrum · Reprodukční žlázy</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-c1">
+      <div class="accordion-inner">
+        <div class="quote-block">„Vím o tvých skutcích, o tvé námaze a trpělivosti... Znam, že nemůžeš snést zlých, a zkoušel jsi ty, kteří se praví apoštolové, ale nejsou, a shledal jsi, že jsou lháři. Ale máš trpělivost... Opustil jsi svou první lásku." — Zjevení 2:2–4</div>
+        <p class="body-text">První centrum je základ existence — místo, kde duše vstoupila do těla. „První láska" není sentimentální pojem — je to původní impulz duše k inkarnaci, vůle existovat, primární spojení s božským zdrojem.</p>
+        <p class="body-text">Efez je chválen za vytrvalost a rozlišování — centrum je stabilní, přežívá. Ale výtka: ztratil živost, spontánnost, původní oheň. Energie je přítomna, ale spí. Centrum blokované strachem z přežití, úzkostí o základní bezpečí, odpojením od těla.</p>
+        <div class="promise-block"><strong>Příslib:</strong> Kdo překoná, dostane jíst ze stromu života — plně probuzená Muladhara dává přístup k základní životní síle, která je nevyčerpatelná.</div>
+        <p class="note" style="margin-top:0.6rem">Cayceho čtení: 281-16 (základní výklad), 281-29 (mapování na žlázy), 281-31 (kundalini), 281-33 (drak a šelmy)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- C2 Smyrna -->
+  <div class="accordion" id="acc-c2">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('c2')">
+      <div class="acc-num" style="background:#D85A30">2</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Smyrna — Svadhišthána — Leydigovy buňky</div>
+        <div class="acc-subtitle">Tvůrčí centrum · Podbřišek · Slezina</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-c2">
+      <div class="accordion-inner">
+        <div class="quote-block">„Buď věrný až do smrti, a dám ti věnec života... Kdo překoná, nebude zraněn od druhé smrti." — Zjevení 2:10–11</div>
+        <p class="body-text">Druhé centrum je tvůrčí síla, která má dvě tváře. Sexuální energie a duchovní tvůrčí energie jsou tatáž síla — záleží jen na směru. Smyrna dostává nejméně výtek ze všech sedmi církví. Cayce to vykládal: toto centrum je přirozeně čisté.</p>
+        <p class="body-text">Problém přichází jen zvenku — vnější tlaky a pokušení, které chtějí tvůrčí sílu odklonit od duchovního využití. „Deset dní utrpení" = proces očisty, deset je číslo dokončení cyklu.</p>
+        <div class="promise-block"><strong>Příslib:</strong> Věnec života, druhá smrt jim neublíží — kdo transformuje tvůrčí energii z čistě fyzické na duchovní, překročí cyklus nucené reinkarnace.</div>
+        <p class="note" style="margin-top:0.6rem">Cayceho čtení: 281-16, 281-29 (gonády → Neptun), 281-33 (144 000)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- C3 Pergamon -->
+  <div class="accordion" id="acc-c3">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('c3')">
+      <div class="acc-num" style="background:#BA7517">3</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Pergamon — Manipura — Nadledvinky</div>
+        <div class="acc-subtitle">Centrum moci · Solar plexus</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-c3">
+      <div class="accordion-inner">
+        <div class="quote-block">„Máš tam některé, kteří drží učení Balaámovo, který učil Balaka uvést syny Izraele v blaho, aby jedli modlamé oběti a smilnili. Tak i ty máš některé, kteří drží učení Nikolaitů. Čiň pokání!" — Zjevení 2:14–16</div>
+        <p class="body-text">Třetí centrum je centrem vůle a moci. Nadledvinky — adrenalin — boj nebo útěk — rozhodnutí. Tady se rozhoduje, co děláme se silou, kterou máme. Pergamon je chválen za věrnost a sílu.</p>
+        <p class="body-text">Ale výtka je vážná: „Balaámovo učení" = zneužití síly a vůle pro ego. Centrum moci, když není v rovnováze, produkuje tyranství, manipulaci, touhu po kontrole. „Pokrm obětovaný modlám" = síla věnovaná falešným cílům — pracuješ tvrdě, ale pro špatné věci.</p>
+        <div class="promise-block"><strong>Příslib:</strong> Bílý kamének s novým jménem — kdo transformuje vůli k moci na vůli ke službě, dostane novou identitu. Přestane být tím, kdo bojuje o přežití.</div>
+        <p class="note" style="margin-top:0.6rem">Cayceho čtení: 281-16, 281-29 (nadledviny → Mars), 281-31 (vůle a kundalini)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- C4 Thyatira -->
+  <div class="accordion" id="acc-c4">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('c4')">
+      <div class="acc-num" style="background:#3B6D11">4</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Thyatira — Anáhata — Brzlík (thymus)</div>
+        <div class="acc-subtitle">Srdce · Most mezi světy · Střed systému</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-c4">
+      <div class="accordion-inner">
+        <div class="quote-block">„A dám jí (Jezábel) místo, aby trpěla, a také její milenci s ní, jestliže se neobrátí od svých skutků. A uvedu na ni soužení veliké... A všem cirkvím budu psáti: Kdo zvítězí, tomu dám moc nad národy." — Zjevení 2:21–23, 26</div>
+        <p class="body-text">Čtvrté centrum — srdce — je středem celého systému. Tady se mění směr: první tři centra jsou více fyzická, poslední tři více duchovní. Srdce je most. Thyatira dostává největší chválu — láska, víra, služba, vytrvalost.</p>
+        <p class="body-text">Ale Jezábel = sentimentalita a falešná láska. Záměna pravé lásky za emocionální závislost, vlastnění, potřeba být potřebný. Láska, která je ve skutečnosti strach ze ztráty.</p>
+        <div class="promise-block"><strong>Příslib:</strong> Moc nad národy, jitřní hvězda — otevřené srdeční centrum dává schopnost skutečně sloužit druhým bez vlastního záměru. Jitřní hvězda = láska jako první pohyb před vším ostatním.</div>
+        <p class="note" style="margin-top:0.6rem">Cayceho čtení: 281-16, 281-29 (brzlík → Venuše), 281-33, 281-37 (Nový Jeruzalém)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- C5 Sardy -->
+  <div class="accordion" id="acc-c5">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('c5')">
+      <div class="acc-num" style="background:#1D9E75">5</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Sardy — Višuddha — Štítná žláza</div>
+        <div class="acc-subtitle">Hrdlo · Pravda a vyjádření</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-c5">
+      <div class="accordion-inner">
+        <div class="quote-block">„Máš jméno, že jsi živý, ale jsi mrtvý. Probuď se a posilni, co zbylo a na čemž se chystá zemříti. Neboť nenacházím, že by tvé skutky byly dokonalé před Bohem mým." — Zjevení 3:1–2</div>
+        <p class="body-text">Páté centrum je centrem pravdy a vyjádření. Štítná žláza řídí metabolismus — tempo života. Cayce to spojoval s tím, jak duše „metabolizuje" duchovní pravdu — zda ji přijímá a vyjadřuje nebo zadržuje.</p>
+        <p class="body-text">Výtka je velmi ostrá: Sardy vypadají zbožně, mají správnou formu, správná slova, správné rituály — ale uvnitř není život. Centrum hrdla blokované = říkáš, co se říká, ale nevěříš tomu. Nebo věříš, ale neřekneš.</p>
+        <div class="promise-block"><strong>Příslib:</strong> Bílé roucho, jméno v knize života — kdo mluví pravdu, stává se průhledným. Centrum se otevírá každodenní autenticitou v malých věcech.</div>
+        <p class="note" style="margin-top:0.6rem">Cayceho čtení: 281-16, 281-29 (štítná žláza → Uran), 281-31 (vyjádření a pravda)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- C6 Filadelfie -->
+  <div class="accordion" id="acc-c6">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('c6')">
+      <div class="acc-num" style="background:#185FA5">6</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Filadelfie — Adžna — Hypofýza</div>
+        <div class="acc-subtitle">Třetí oko · Duchovní vidění · Intuice</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-c6">
+      <div class="accordion-inner">
+        <div class="quote-block">„Hle, dal jsem před tebou dvéře otevřené, a žádný je nemůže zavříti. Poněvadž máš malou moc a zachoval jsi mé slovo, i nezapřel jsi mého jména." — Zjevení 3:8</div>
+        <p class="body-text">Šesté centrum — třetí oko — je centrem intuice a duchovního vidění. Hypofýza jako „ředitel těla" koordinuje všechny ostatní žlázy. Adžna koordinuje všechna nižší centra.</p>
+        <p class="body-text">Filadelfie dostává prakticky žádné výtky — duchovní vidění samo o sobě nevede k pýše. „Otevřené dveře" = přímý popis otevřeného třetího oka. Cayce říkal: toto je centrum, skrze které přijímal informace ve svých čteních.</p>
+        <div class="promise-block"><strong>Příslib:</strong> Sloup v chrámu Boha, tři nová jména — kdo otevře šesté centrum, stává se stabilním kanálem duchovní pravdy na třech úrovních: kosmické, kolektivní, osobní.</div>
+        <p class="note" style="margin-top:0.6rem">Cayceho čtení: 281-16, 281-29 (hypofýza → Merkur), 281-31 (intuice), 281-33 (duchovní vidění)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- C7 Laodicea -->
+  <div class="accordion" id="acc-c7">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('c7')">
+      <div class="acc-num" style="background:#534AB7">7</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Laodicea — Sahasrara — Epifýza</div>
+        <div class="acc-subtitle">Koruna · Sjednocení s božským · Šišinka mozková</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-c7">
+      <div class="accordion-inner">
+        <div class="quote-block">„Protože jsi vlažný, ani studený ani horký, vyvrhnu tě z úst svých. Ale pravíš: jsem bohatý a zbohatl jsem a ničehož nepotřebuji. A nevíš, že jsi bidný a ubohý a slepý a nahý. Hle, stojím u dveří a tluču: kdo slyší můj hlas a otevře dvéře, k tomu vejdu a budu s ním večeřeti, a on se mnou." — Zjevení 3:15–20</div>
+        <p class="body-text">Sedmé centrum — koruna — je centrem sjednocení s božským. Epifýza jako přijímač božského impulsu. Největší paradox celého Zjevení: <em>nejostřejší výtka dostává nejvyšší centrum</em>.</p>
+        <p class="body-text">„Vlažnost" není morální selhání — je to duchovní sebeuspokojení. Laodicea říká: „jsem bohatý, nic nepotřebuji" — nejnebezpečnější past na duchovní cestě. Duchovní pýcha = znáš všechny pojmy, čteš všechny knihy, mluvíš správně — ale skutečná transformace neprobíhá.</p>
+        <p class="body-text">„Stojím u dveří a tluču" — Cayce: nejkrásnější verš celého Zjevení. Bůh nečeká pasivně — aktivně klepe. Ale dveře se otevírají <em>zevnitř</em>. Nikdo nemůže být donucen — ani Bohem.</p>
+        <div class="promise-block"><strong>Příslib:</strong> Sednout s Kristem na jeho trůn — stav vědomí, které spoluexistuje s božským. Plně otevřená Sahasrara.</div>
+        <p class="note" style="margin-top:0.6rem">Cayceho čtení: 281-16, 281-29 (epifýza → Jupiter), 281-37 (Nový Jeruzalém), 281-33 (sjednocení)</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SEKCE 2: PEČETI, TRUBKY, ČÍŠE -->
+<div class="section-group" id="section2">
+  <div class="section-label">Část II — Dramatický boj · Kapitoly 4–19</div>
+
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('trun')">
+      <div class="acc-num" style="background:#3d2e6b">✦</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Kapitoly 4–5 — Trůn a Beránek</div>
+        <div class="acc-subtitle">Střed vědomí · Kosmický Kristus · Kniha sedmi pečetí</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-trun">
+      <div class="accordion-inner">
+        <p class="body-text">Jan vstupuje do nebeského trůnního sálu. Cayce to vykládal jako vstup do centra vlastního vědomí.</p>
+        <div class="symbol-block">
+          <div class="symbol-item"><div class="symbol-term">Trůn</div><div class="symbol-desc">Střed vědomí, božský základ duše. Ne vnější Bůh — vnitřní centrum ticha, ze kterého vše vychází.</div></div>
+          <div class="symbol-item"><div class="symbol-term">Čtyři bytosti</div><div class="symbol-desc">Lev, býk, člověk, orel = čtyři nižší těla člověka — fyzické, emoční, mentální, intuitivní. „Plné očí" = plně vědomé na všech úrovních.</div></div>
+          <div class="symbol-item"><div class="symbol-term">24 starců</div><div class="symbol-desc">Dvanáct kraniosákrálních nervových center na každé straně páteře = celý nervový systém jako svědek duchovního probuzení.</div></div>
+          <div class="symbol-item"><div class="symbol-term">Beránek</div><div class="symbol-desc">Kristus jako kosmický princip. Sedm rohů = plná moc, sedm očí = plné vidění na všech úrovních.</div></div>
+          <div class="symbol-item"><div class="symbol-term">Kniha se 7 pečetěmi</div><div class="symbol-desc">Lidská duše sama — jen Beránek ji může otevřít. Jen skrze kristovský princip lásky a oběti se vědomí plně probouzí.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('peceti')">
+      <div class="acc-num" style="background:#3d2e6b">𝍖</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Kapitoly 6–7 — Sedm pečetí</div>
+        <div class="acc-subtitle">První průchod kundalini · Probouzení center zdola nahoru</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-peceti">
+      <div class="accordion-inner">
+        <p class="body-text">Otevírání pečetí = probouzení sedmi center zdola nahoru. Popisuje, co se uvolňuje, když se centrum otevírá — ne vždy krásný proces.</p>
+        <div class="symbol-block">
+          <div class="symbol-item"><div class="symbol-term" style="color:#E24B4A">1. · Bílý kůň</div><div class="symbol-desc">Muladhara. Čistá životní energie ze základu. Jezdec = záměr duše, vůle k duchovnímu dobytí.</div></div>
+          <div class="symbol-item"><div class="symbol-term" style="color:#D85A30">2. · Červený kůň</div><div class="symbol-desc">Svadhišthána. Tvůrčí energie uvolněná. „Vzal mír ze země" = napětí, touha, neklid — energie hledá směr.</div></div>
+          <div class="symbol-item"><div class="symbol-term" style="color:#BA7517">3. · Černý kůň</div><div class="symbol-desc">Manipura. „Váhy v ruce" = nutnost rozlišovat mezi silou ega a silou ducha. „Nepoškozuj olej a víno."</div></div>
+          <div class="symbol-item"><div class="symbol-term" style="color:#3B6D11">4. · Bledý kůň</div><div class="symbol-desc">Anáhata. Jezdec = Smrt. Probuzení srdce přináší smrt starého já — ego musí zemřít, aby láska mohla být skutečná.</div></div>
+          <div class="symbol-item"><div class="symbol-term" style="color:#1D9E75">5. · Duše pod oltářem</div><div class="symbol-desc">Višuddha. Potlačené pravdy volají po uznání. Centrum hrdla se otevírá — bílé roucho = pravdivost.</div></div>
+          <div class="symbol-item"><div class="symbol-term" style="color:#185FA5">6. · Kosmické otřesy</div><div class="symbol-desc">Adžna. Epistemická revoluce — starý způsob vidění reality se hroutí. Není to katastrofa — je to probuzení.</div></div>
+          <div class="symbol-item"><div class="symbol-term" style="color:#534AB7">7. · Půlhodina ticha</div><div class="symbol-desc">Sahasrara. Nejhlubší verš: prázdnota, šúnjatá. Vědomí překračuje všechny formy. Není kdo by říkal. Je jen ticho.</div></div>
+        </div>
+        <p class="body-text" style="margin-top:0.8rem">144 000 označených = symbolická matematika: 12 × 12 000 = stav vědomí, kde jsou všechny aspekty duše harmonizovány. Není to počet lidí.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('trubky')">
+      <div class="acc-num" style="background:#3d2e6b">♩</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Kapitoly 8–9 — Sedm trubek</div>
+        <div class="acc-subtitle">Druhý průchod kundalini · Intenzivnější očista</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-trubky">
+      <div class="accordion-inner">
+        <p class="body-text">Po sedmi pečetích přichází druhá vlna — intenzivnější. Trubky jsou hlasitější. Probouzení je dramatičtější, méně kontrolovatelné.</p>
+        <div class="symbol-block">
+          <div class="symbol-item"><div class="symbol-term">Krupobití a oheň</div><div class="symbol-desc">Fyzická úroveň — tělo prochází transformací.</div></div>
+          <div class="symbol-item"><div class="symbol-term">Hora v moři</div><div class="symbol-desc">Emocionální úroveň — velké emoce vycházejí na povrch, třetina emočního těla v krizi.</div></div>
+          <div class="symbol-item"><div class="symbol-term">Pelyněk</div><div class="symbol-desc">Mentální úroveň — stará přesvědčení, která otravují vědomí, vycházejí na povrch aby mohla být rozpuštěna.</div></div>
+          <div class="symbol-item"><div class="symbol-term">Kobylky z propasti</div><div class="symbol-desc">Myšlenky a impulsy z nevědomí. Jejich král Apollyon = ego v agónii destrukce starých vzorců. Nejtěžší fáze.</div></div>
+          <div class="symbol-item"><div class="symbol-term">7. trubka</div><div class="symbol-desc">„Království světa se stala královstvím Pána." Vědomí dosahuje bodu, kde ego přestává být dominantní silou.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('vize')">
+      <div class="acc-num" style="background:#3d2e6b">◈</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Kapitoly 10–14 — Střední vize</div>
+        <div class="acc-subtitle">Žena a drak · Šelmy · Číslo 666</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-vize">
+      <div class="accordion-inner">
+        <div class="symbol-block">
+          <div class="symbol-item"><div class="symbol-term">Malá kniha</div><div class="symbol-desc">Sladká v ústech, hořká v břiše = duchovní pravda přijatelná jako idea, bolestná když ji skutečně žiješ. Mění vše.</div></div>
+          <div class="symbol-item"><div class="symbol-term">Dva svědkové</div><div class="symbol-desc">Modlitba a meditace — nebo víra a skutky. Zabiti = potlačeny. Vzkříšeni = obnoveny po krizi.</div></div>
+          <div class="symbol-item"><div class="symbol-term">Žena a drak</div><div class="symbol-desc">Duše (žena) a neočištěná kundalini (drak). Sedm hlav draka = stínová strana každého centra, které musí být transformována.</div></div>
+          <div class="symbol-item"><div class="symbol-term">Šelma z moře</div><div class="symbol-desc">Kolektivní ego — davová mentalita, tlak společnosti vzdát se individuálního duchovního hledání.</div></div>
+          <div class="symbol-item"><div class="symbol-term">Šelma ze země</div><div class="symbol-desc">Falešné duchovní ego — náboženský formalismus, duchovní pýcha. Vypadá jako Beránek, mluví jako drak.</div></div>
+          <div class="symbol-item"><div class="symbol-term">Číslo 666</div><div class="symbol-desc">Šestka = číslo hmoty. Tři šestky = vědomí zcela uvězněné v hmotě a egu. Není to číslo konkrétního člověka — je to stav vědomí.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('cise')">
+      <div class="acc-num" style="background:#3d2e6b">⚗</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Kapitoly 15–19 — Číše hněvu a Vítězství</div>
+        <div class="acc-subtitle">Třetí vlna · Armageddon · Svatba Beránkova</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-cise">
+      <div class="accordion-inner">
+        <div class="quote-block">„I naplnil anděl číši svou a uvrhl ji na zem, a učiněna jsou bolestná a ukrutná, a rouhali se Bohu z nebe, pro bolest jejich." — Zjevení 16:1, 21</div>
+        <p class="body-text">Po sedmi trubkách přichází sedm číší — třetí a nejintenzivnější vlna očisty. Cayce tento proces vykládal jako finální průchod všemi úrovněmi těla a emocí před úplným osvícením. Každá číše odpovídá jedné úrovni vědomí, která musí projít poslední krizí.</p>
+        <p class="body-text">Klíčový princip: čím blíže je duše ke světlu, tím ostřeji vidí vlastní stín. Toto není vina — je to nutnost. Dokud nevidíme svou tmu, nemůžeme ji transformovat. Číše hněvu je ve skutečnosti číší poznání.</p>
+        <div class="symbol-block">
+          <div class="symbol-item"><div class="symbol-term">1. číše — Tělo</div><div class="symbol-desc">Fyzická úroveň. Nemoc, bolest, únava — tělo protestuje proti starým vzorcům. Všechny fyzické závislosti (jídlo, návyky, rutiny) procházejí rozpadem.</div></div>
+          <div class="symbol-item"><div class="symbol-term">2. číše — Emoce</div><div class="symbol-desc">Hluboké emoce stoupají na povrch. Staré rány, nenávist, strach, smutek. Všechno, co bylo potlačeno, chce být prožito. Emocionální tělo prochází totální rekonstrukcí.</div></div>
+          <div class="symbol-item"><div class="symbol-term">3. číše — Mysl</div><div class="symbol-desc">Mentální vzorce — přesvědčení o sobě a světě — se hroutí. „Věděl jsem, že..." přechází v „nev  m". Starý intelektální komfort končí.</div></div>
+          <div class="symbol-item"><div class="symbol-term">4. číše — Vztahy</div><div class="symbol-desc">Všechny závislosti na druhých vycházejí najevo. Příloha, kontrola, potřeba uznání. Jste-li prázdní uvnitř, vztahy se mění.</div></div>
+          <div class="symbol-item"><div class="symbol-term">5. číše — Ego</div><div class="symbol-desc">Nejtěžší číše. Touha být někým, identita založená na výkonech. Ego v agónii prosí o přežití. Ale ego musí zemřít.</div></div>
+          <div class="symbol-item"><div class="symbol-term">6. číše — Duše</div><div class="symbol-desc">Poslední hrdinství duše. Zůstat v největší temnotě a věřit ve světlo, které nevidíš. Zoufalejší než kdy dřív — a přesto pokračovat.</div></div>
+          <div class="symbol-item"><div class="symbol-term">7. číše — „Stalo se"</div><div class="symbol-desc">Totožné s Ježíšovým „dokonáno jest" na kříži. Proces očisty je dokonán. Duše ví: „Už nejsem tím, kým jsem byl."</div></div>
+        </div>
+        <p class="body-text" style="margin-top:0.8rem"><strong>Armageddon</strong> — Cayce kategoricky odmítl vnější válečnou interpretaci. Armageddon = vnitřní bitva, finální střet mezi egem a vyšším Já. Každý prochází svým Armagedonem — bodem, kdy už nemůžeš jít zpět a ještě nevidíš cestu vpřed. Jen v tomto bodě se ego skutečně vzdává.</p>
+        <div class="quote-block">„I poznal jsem, že se válka přioděla, a viděl jsem šelmu i krále země s jejich vojsky, aby učinili válku s tím, který sedí na koni a s jeho jezdci." — Zjevení 19:19</div>
+        <p class="body-text"><strong>Babylón padá</strong> — Systém víry a identity postavený na vnějších věcech (úspěch, uznání, rituál) se hroutí. Každý nese svůj Babylón. A každý ho musí nechat padnout. Kdo se drží staré struktury, i když už nefunguje, zůstává v zajetí.</p>
+        <div class="promise-block"><strong>Svatba Beránkova:</strong> Duše jako nevěsta se sjednocuje s kristovským principem — láskou, která se obětuje. Není to romantická svatba — je to vnitřní sjednocení vyššího a nižšího Já. Zrození nového člověka.</div>
+        <div class="quote-block">„I viděl jsem nebesa otevřená, a aj kůň bělah, a ten, kterýž na něm sedí, sloul Víra a Jméno jeho." — Zjevení 19:11</div>
+        <p class="body-text"><strong>Bílý kůň</strong> — Tatáž energie jako první pečeť (čistá vůle duše), nyní plně transformovaná. Kundalini, která se dříve zmítala jako drak, teď slouží jako nástroj světla. Vůle k přežití se stala vůlí ke službě.</p>
+        <p class="note" style="margin-top:0.6rem">Cayceho čtení: 281-16 (hlavní výklad), 281-31 (kundalini a očista), 281-33 (symbolika číší), 281-37 ( Nový Jeruzalém)</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SEKCE 3: NOVÝ JERUZALÉM -->
+<div class="section-group" id="section3">
+  <div class="section-label">Část III — Nový Jeruzalém · Kapitoly 20–22</div>
+
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('tisic')">
+      <div class="acc-num" style="background:#534AB7">∞</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Tisícileté království a Druhá smrt</div>
+        <div class="acc-subtitle">Zánik karmy · Svobodná reinkarnace</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-tisic">
+      <div class="accordion-inner">
+        <p class="body-text">Cayce odmítl doslova historické čtení tisíciletého království. Tisíc let = symbol dokonalého cyklu. Je to stav vědomí mimo běžné časové cykly karmy a znovuzrození.</p>
+        <div class="symbol-block">
+          <div class="symbol-item"><div class="symbol-term">Tisícileté království</div><div class="symbol-desc">Vědomí, které vstoupilo do tohoto stavu, žije v „tisícileté" harmonii — mimo běžné cykly karmy. Není to historická epocha.</div></div>
+          <div class="symbol-item"><div class="symbol-term">Druhá smrt</div><div class="symbol-desc">První smrt = fyzická smrt těla. Druhá smrt = zánik karmy, konec nucené reinkarnace. Kdo prošel plným probuzením se může znovu vtělit ze svobodné volby jako služba — ne z nutnosti.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('jeruzalem')">
+      <div class="acc-num" style="background:#534AB7">✡</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Nový Jeruzalém — Kapitoly 21–22</div>
+        <div class="acc-subtitle">Plně probuzené vědomí · Strom života · Kruh se uzavírá</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-jeruzalem">
+      <div class="accordion-inner">
+        <p class="body-text">Cayce to vykládal jako nejpřesnější popis plně probuzeného vědomí v celé Bibli.</p>
+        <div class="symbol-block">
+          <div class="symbol-item"><div class="symbol-term">Dvanáct bran</div><div class="symbol-desc">Dvanáct aspektů vědomí plně otevřených. 12 × 12 = 144 — dokonale integrované vědomí.</div></div>
+          <div class="symbol-item"><div class="symbol-term">„Chrám v něm není"</div><div class="symbol-desc">Cayceho klíčový verš: v plně probuzeném vědomí není chrám — protože celé vědomí je chrámem. Instituce jsou nutné na cestě — ale v cíli jsou zbytečné.</div></div>
+          <div class="symbol-item"><div class="symbol-term">„Noc tam nebude"</div><div class="symbol-desc">Není tma nevědomí, není spánek nevědomosti. Vědomí je trvale probuzené.</div></div>
+          <div class="symbol-item"><div class="symbol-term">Řeka života</div><div class="symbol-desc">Proud božské energie volně tekoucí skrze všechna centra. Bez překážek, bez blokád.</div></div>
+          <div class="symbol-item"><div class="symbol-term">Strom života</div><div class="symbol-desc">Návrat ke stromu v Edenu — ale jako plně probuzené bytosti, ne jako nevědomé děti. Kruh je uzavřen. Od Efeze (Muladhara) k Novému Jeruzalému.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SEKCE 4: SEDM DNÍ STVOŘENÍ -->
+
+<!-- DIAGRAM -->
+<div class="diagram-wrap" id="diagram">
+  <div class="diagram-title">Tělo, čákry a endokrinní žlázy</div>
+  <div class="body-diagram">
+
+    <!-- SVG tělo -->
+    <div class="diagram-svg-wrap">
+      <svg width="120" height="360" viewBox="0 0 160 420" xmlns="http://www.w3.org/2000/svg" style="transform: scale(0.75); transform-origin: center top;">
+        <defs>
+          <radialGradient id="bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#e8e4f5"/><stop offset="100%" stop-color="#d4cce8"/></radialGradient>
+        </defs>
+        <!-- tělo silueta -->
+        <ellipse cx="80" cy="52" rx="30" ry="34" fill="url(#bg)" stroke="#9c8fba" stroke-width="1"/>
+        <rect x="68" y="84" width="24" height="20" rx="4" fill="url(#bg)" stroke="#9c8fba" stroke-width="1"/>
+        <ellipse cx="80" cy="170" rx="48" ry="75" fill="url(#bg)" stroke="#9c8fba" stroke-width="1"/>
+        <ellipse cx="80" cy="265" rx="38" ry="28" fill="url(#bg)" stroke="#9c8fba" stroke-width="1"/>
+        <ellipse cx="36" cy="175" rx="14" ry="48" fill="url(#bg)" stroke="#9c8fba" stroke-width="1"/>
+        <ellipse cx="124" cy="175" rx="14" ry="48" fill="url(#bg)" stroke="#9c8fba" stroke-width="1"/>
+        <ellipse cx="63" cy="345" rx="15" ry="62" fill="url(#bg)" stroke="#9c8fba" stroke-width="1"/>
+        <ellipse cx="97" cy="345" rx="15" ry="62" fill="url(#bg)" stroke="#9c8fba" stroke-width="1"/>
+        <!-- osa -->
+        <line x1="80" y1="22" x2="80" y2="400" stroke="#b4a8d4" stroke-width="0.8" stroke-dasharray="4 3"/>
+        <!-- čákry -->
+        <!-- 7 Sahasrara -->
+        <circle cx="80" cy="22" r="13" fill="#534AB7" stroke="white" stroke-width="1.5" opacity="0.95"/>
+        <text x="80" y="27" text-anchor="middle" fill="white" font-family="Georgia,serif" font-size="11" font-weight="bold">7</text>
+        <!-- 6 Adžna -->
+        <circle cx="80" cy="52" r="12" fill="#185FA5" stroke="white" stroke-width="1.5" opacity="0.95"/>
+        <text x="80" y="57" text-anchor="middle" fill="white" font-family="Georgia,serif" font-size="11" font-weight="bold">6</text>
+        <!-- 5 Višuddha -->
+        <circle cx="80" cy="94" r="12" fill="#1D9E75" stroke="white" stroke-width="1.5" opacity="0.95"/>
+        <text x="80" y="99" text-anchor="middle" fill="white" font-family="Georgia,serif" font-size="11" font-weight="bold">5</text>
+        <!-- 4 Anáhata -->
+        <circle cx="80" cy="150" r="14" fill="#3B6D11" stroke="white" stroke-width="1.5" opacity="0.95"/>
+        <text x="80" y="155" text-anchor="middle" fill="white" font-family="Georgia,serif" font-size="12" font-weight="bold">4</text>
+        <!-- 3 Manipura -->
+        <circle cx="80" cy="205" r="12" fill="#BA7517" stroke="white" stroke-width="1.5" opacity="0.95"/>
+        <text x="80" y="210" text-anchor="middle" fill="white" font-family="Georgia,serif" font-size="11" font-weight="bold">3</text>
+        <!-- 2 Svadhišthána -->
+        <circle cx="80" cy="258" r="12" fill="#D85A30" stroke="white" stroke-width="1.5" opacity="0.95"/>
+        <text x="80" y="263" text-anchor="middle" fill="white" font-family="Georgia,serif" font-size="11" font-weight="bold">2</text>
+        <!-- 1 Muladhara -->
+        <circle cx="80" cy="310" r="12" fill="#E24B4A" stroke="white" stroke-width="1.5" opacity="0.95"/>
+        <text x="80" y="315" text-anchor="middle" fill="white" font-family="Georgia,serif" font-size="11" font-weight="bold">1</text>
+        <!-- kundalini šipka -->
+        <line x1="140" y1="310" x2="140" y2="28" stroke="#BA7517" stroke-width="1" stroke-dasharray="4 3"/>
+        <polygon points="136,30 144,30 140,20" fill="#BA7517"/>
+        <text x="150" y="170" text-anchor="middle" fill="#BA7517" font-family="Georgia,serif" font-size="7" transform="rotate(90,150,170)">KUNDALINI</text>
+      </svg>
+    </div>
+
+    <!-- Seznam čáker -->
+    <div class="chakra-list">
+      <div class="chakra-row" onclick="openAccordion('c7')">
+        <div class="chakra-dot" style="background:#534AB7">7</div>
+        <div class="chakra-info">
+          <div class="chakra-name">Sahasrara</div>
+          <div class="chakra-gland">Epifýza (šišinka)</div>
+          <div class="chakra-church">Laodicea · Koruna</div>
+        </div>
+      </div>
+      <div class="chakra-row" onclick="openAccordion('c6')">
+        <div class="chakra-dot" style="background:#185FA5">6</div>
+        <div class="chakra-info">
+          <div class="chakra-name">Adžna</div>
+          <div class="chakra-gland">Hypofýza</div>
+          <div class="chakra-church">Filadelfie · Třetí oko</div>
+        </div>
+      </div>
+      <div class="chakra-row" onclick="openAccordion('c5')">
+        <div class="chakra-dot" style="background:#1D9E75">5</div>
+        <div class="chakra-info">
+          <div class="chakra-name">Višuddha</div>
+          <div class="chakra-gland">Štítná žláza</div>
+          <div class="chakra-church">Sardy · Hrdlo</div>
+        </div>
+      </div>
+      <div class="chakra-row" onclick="openAccordion('c4')">
+        <div class="chakra-dot" style="background:#3B6D11">4</div>
+        <div class="chakra-info">
+          <div class="chakra-name">Anáhata</div>
+          <div class="chakra-gland">Brzlík (thymus)</div>
+          <div class="chakra-church">Thyatira · Srdce</div>
+        </div>
+      </div>
+      <div class="chakra-row" onclick="openAccordion('c3')">
+        <div class="chakra-dot" style="background:#BA7517">3</div>
+        <div class="chakra-info">
+          <div class="chakra-name">Manipura</div>
+          <div class="chakra-gland">Nadledvinky</div>
+          <div class="chakra-church">Pergamon · Solar plexus</div>
+        </div>
+      </div>
+      <div class="chakra-row" onclick="openAccordion('c2')">
+        <div class="chakra-dot" style="background:#D85A30">2</div>
+        <div class="chakra-info">
+          <div class="chakra-name">Svadhišthána</div>
+          <div class="chakra-gland">Gonády</div>
+          <div class="chakra-church">Smyrna · Podbřišek</div>
+        </div>
+      </div>
+      <div class="chakra-row" onclick="openAccordion('c1')">
+        <div class="chakra-dot" style="background:#E24B4A">1</div>
+        <div class="chakra-info">
+          <div class="chakra-name">Muladhara</div>
+          <div class="chakra-gland">Leydigovy buňky</div>
+          <div class="chakra-church">Efez · Základ</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section-group" id="section4">
+  <div class="section-label">Bonus — Sedm dní stvoření · Genesis 1 podle Cayceho</div>
+
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('gen-uvod')">
+      <div class="acc-num" style="background:#5F5E5A">✦</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Úvod — Jak Cayce četl Genesis</div>
+        <div class="acc-subtitle">Ne doslovně · Mapa sestupu vědomí do hmoty</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-gen-uvod">
+      <div class="accordion-inner">
+        <p class="body-text">Cayce říkal totéž o Genesis jako o Zjevení: <em>není to doslovný popis fyzických událostí</em>. Je to symbolický záznam o tom, jak vědomí sestoupilo z božské jednoty do hmoty — a jak se má vrátit zpět. Sedm dní není sedm kalendářních dnů. Jsou to <strong>sedm fází nebo úrovní vědomí</strong> při procesu stvoření.</p>
+        <p class="body-text">Klíčový Cayceho výrok: stvoření začalo <em>"v Božím Mysli"</em> jako duchovní energie — vědomá a inteligentní síla složená z lásky, harmonie a krásy. Fyzický svět přišel až na konec, jako nejhustší vrstva tohoto sestupu. Duše existovaly dlouho před fyzickými těly.</p>
+        <div class="symbol-block">
+          <div class="symbol-item"><div class="symbol-term">Elohim vs. Jahve</div><div class="symbol-desc">Cayce rozlišoval dvě stvoření v Genesis. Elohim (1. kapitola) = kolektivní, sjednocený aspekt božství — stvoření duchovních bytostí. Jahve (2. kapitola) = sestup do individualizované, fyzické formy. Dvě etapy, ne rozpor.</div></div>
+          <div class="symbol-item"><div class="symbol-term">Adam</div><div class="symbol-desc">Není jednotlivec — je to kolektivní entita, skupina duší. A zároveň první individualizovaný projev "Syna člověka" v zemské rovině. Cayce identifikoval prvního Adama s posledním Adamem — Kristem. Kruh se uzavírá.</div></div>
+          <div class="symbol-item"><div class="symbol-term">Den stvoření</div><div class="symbol-desc">Hebrejské slovo "jom" neznamená nutně 24 hodin — může znamenat epochu, fázi, úroveň. Cayce to bral jako miliony let nebo jako mimočasové roviny vědomí.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEN 1 -->
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('gen1')">
+      <div class="acc-num" style="background:#534AB7">1</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Den první — Světlo a tma</div>
+        <div class="acc-subtitle">„Budiž světlo" · Prvotní rozlišení · Vědomí a nevědomí</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-gen1">
+      <div class="accordion-inner">
+        <div class="quote-block">„Na počátku stvořil Bůh nebe a zemi... a Bůh řekl: Budiž světlo. A bylo světlo."</div>
+        <p class="body-text">Cayce vykládal první den jako <strong>prvotní akt vědomí</strong> — okamžik, kdy božský duch řekl „já jsem" a tím rozlišil sebe od nicoty. Světlo není fyzické světlo — je to <em>vědomí samo</em>. Tma není zlo — je to latentní potenciál, nevědomí, neprojevené.</p>
+        <p class="body-text">Oddělení světla od tmy = první dualita. Cayce říkal: veškeré stvoření probíhá skrze rozlišení a oddělení — to je princip jak Bůh tvoří. Jednota se stává dvěma, aby se mohla poznat sama sebe.</p>
+        <div class="promise-block"><strong>Paralela se čákrami:</strong> Odpovídá Sahasrara — koruna, první záblesk božského vědomí. Světlo které vstupuje do systému shora.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEN 2 -->
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('gen2')">
+      <div class="acc-num" style="background:#185FA5">2</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Den druhý — Klenba nebeská</div>
+        <div class="acc-subtitle">Oddělení vod · Duchovní a materiální rovina</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-gen2">
+      <div class="accordion-inner">
+        <div class="quote-block">„Budiž klenba uprostřed vod a odděluj vody od vod."</div>
+        <p class="body-text">Druhý den — oddělení vod nahoře od vod dole. Cayce to vykládal jako <strong>oddělení duchovních rovin od materiálních</strong>. „Vody nahoře" = duchovní substance, primární energie. „Vody dole" = hmotná substance, hustší vibrace.</p>
+        <p class="body-text">Klenba mezi nimi (hebrejsky <em>rakia</em>) = hranice, membrána mezi světy. Cayce říkal: duše procházejí touto klenubou při inkarnaci — sestupují z duchovních vod do materiálních. A při smrti stoupají zpět.</p>
+        <div class="promise-block"><strong>Paralela se čákrami:</strong> Odpovídá Adžna — třetí oko, místo kde se duchovní vnímání a fyzická realita setkávají. Rozhraní světů.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEN 3 -->
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('gen3')">
+      <div class="acc-num" style="background:#1D9E75">3</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Den třetí — Pevnina a vegetace</div>
+        <div class="acc-subtitle">Forma se zhušťuje · Zákon příčiny a následku</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-gen3">
+      <div class="accordion-inner">
+        <div class="quote-block">„Budiž shromážděny vody... a ukaž se souš. Vydej země zeleň..."</div>
+        <p class="body-text">Třetí den — hmota se formuje a organizuje. Pevnina vychází z moře — <strong>forma se vynořuje z chaosu</strong>. Cayce to vykládal jako první projevení principu karmy: zákon příčiny a následku se zakódovává do struktury reality. Každé semeno nese svůj druh — to je kauzální zákon vepsaný do přírody.</p>
+        <p class="body-text">Vegetace — první živé formy — symbolizují pro Cayceho <em>první úroveň vědomí v hmotě</em>. Rostliny mají vědomí, ale bez individuality. Je to vědomí kolektivní, druhu.</p>
+        <div class="promise-block"><strong>Paralela se čákrami:</strong> Odpovídá Višuddha — hrdlo, vyjádření, forma dostává podobu. Slovo se stává tělem.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEN 4 -->
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('gen4')">
+      <div class="acc-num" style="background:#3B6D11">4</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Den čtvrtý — Slunce, měsíc a hvězdy</div>
+        <div class="acc-subtitle">Kosmické hodiny · Planetární vlivy · Astrologie</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-gen4">
+      <div class="accordion-inner">
+        <div class="quote-block">„Buďte světla na nebeské klenbě... pro znamení a pro určení období, dnů a let."</div>
+        <p class="body-text">Čtvrtý den je pro Cayceho mimořádně důležitý — tady vznikají <strong>kosmické hodiny a planetární vlivy</strong>. Cayce věřil v astrologii jako reálný systém — planety nejsou jen fyzická tělesa, jsou to <em>úrovně vědomí</em> kterými duše procházejí mezi inkarnacemi.</p>
+        <p class="body-text">Slunce, měsíc a hvězdy jako „znamení a období" — Cayce říkal: duše se rodí do konkrétního astrologického vzorce protože si vybraly specifické lekce. Planety jsou učitelé, ne vládci. Vůle člověka je silnější než jakýkoli planetární vliv — ale planety nastavují podmínky.</p>
+        <p class="body-text">Čtvrtý den odpovídá středu stromu — srdci systému. Cayce říkal: kosmický řád a osobní svobodná vůle jsou v rovnováze právě tady.</p>
+        <div class="promise-block"><strong>Paralela se čákrami:</strong> Odpovídá Anáhata — srdce, střed, rovnováha mezi kosmickým a osobním. Místo kde se střetává osud a svoboda.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEN 5 -->
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('gen5')">
+      <div class="acc-num" style="background:#BA7517">5</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Den pátý — Živočichové ve vodě a vzduchu</div>
+        <div class="acc-subtitle">Emoce a touha · Skupinové vědomí · Instinkt</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-gen5">
+      <div class="accordion-inner">
+        <div class="quote-block">„Hemžete se vody živočichy... a létejte ptáci nad zemí."</div>
+        <p class="body-text">Pátý den — živočichové ve vodě a vzduchu. Cayce to vykládal jako vznik <strong>emočního a instinktivního vědomí</strong>. Ryby (voda = emoce, nevědomí) a ptáci (vzduch = myšlení, pohyb, svoboda) — dva aspekty předlidského vědomí.</p>
+        <p class="body-text">Živočichové mají skupinové vědomí — druhy, smečky, hejna. Ještě ne individuální já. Cayce říkal: lidské duše procházely těmito formami jako zkušenostmi — ne doslova jako reinkarnace do zvířat (to odmítal), ale jako úrovně vědomí které jsou v člověku stále přítomny jako vrstvy.</p>
+        <div class="promise-block"><strong>Paralela se čákrami:</strong> Odpovídá Manipura — solar plexus, pudová síla, instinkty, skupinová energie. Voda jako symbol emočního těla.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEN 6 -->
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('gen6')">
+      <div class="acc-num" style="background:#D85A30">6</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Den šestý — Zvířata a člověk</div>
+        <div class="acc-subtitle">„Učiňme člověka..." · Pád duší do hmoty · Androgynní Adam</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-gen6">
+      <div class="accordion-inner">
+        <div class="quote-block">„Učiňme člověka k obrazu svému, k podobě naší..."</div>
+        <p class="body-text">Šestý den je pro Cayceho nejdramatičtější. Vznik člověka není biologická evoluce — je to <strong>záměrný sestup duchovních bytostí do hmoty</strong>. „Učiňme" — Elohim mluví v množném čísle — Cayce vykládal jako pluralitu duší které kolektivně vstupují do fyzické formy.</p>
+        <p class="body-text">Klíčový Cayceho detail: prvotní Adam byl <em>androgynní</em> — obsahoval v sobě mužský i ženský princip. Oddělení na muže a ženu (Eva z Adamova žebra) = moment kdy se duše rozdělily na polaritu, aby mohly prožívat vztah a naučit se lásce skrze jinakost druhého.</p>
+        <p class="body-text">„K obrazu Božímu" — Cayce říkal: naše přirozené stav je duch. Nejsme fyzická těla která mají duši — jsme duchovní bytosti, které mají dočasnou fyzickou zkušenost. Tělo je jako auto — odložíme ho, když ho nepotřebujeme.</p>
+        <p class="body-text">Číslo 6 = číslo hmoty. Šestý den = vstup ducha plně do hmotné formy. Proto 666 v Zjevení symbolizuje vědomí uvězněné v hmotě — šestý den bez soboty, bez návratu k božskému.</p>
+        <div class="promise-block"><strong>Paralela se čákrami:</strong> Odpovídá Svadhišthána a Muladhara — tvůrčí síla a základní zakotvení. Duše plně inkarnovaná, pohlavně diferencovaná, v těle.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEN 7 -->
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('gen7')">
+      <div class="acc-num" style="background:#E24B4A">7</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Den sedmý — Sobota · Odpočinek</div>
+        <div class="acc-subtitle">Nový Jeruzalém Genesis · Vědomí které se vrací · Šabat jako duchovní stav</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-gen7">
+      <div class="accordion-inner">
+        <div class="quote-block">„A Bůh dokončil sedmého dne své dílo... a odpočinul sedmého dne od veškerého díla."</div>
+        <p class="body-text">Sedmý den je pro Cayceho <strong>cíl celého stvoření</strong> — a zároveň jeho klíč. Bůh „odpočinul" — ne proto že byl unavený, ale proto že stvoření bylo dokončeno a dokonalé. Je to stav <em>sjednocení</em>, ne nečinnosti.</p>
+        <p class="body-text">Cayce říkal: sedmý den není historicky uzavřený. Stále trvá. Jsme stále uvnitř sedmého dne — duše se vrací z hmoty zpět do božského odpočinku. Každá inkarnace je krokem v tomto návratu. Sobota (Šabat) pro Cayceho není jen den v týdnu — je to <em>stav vědomí</em> které se vzdalo boje ega a spočinulo v Bohu.</p>
+        <p class="body-text">Tady je přímé propojení se Zjevením: Nový Jeruzalém je sedmý den Genesis. Strom života na konci Zjevení je tentýž strom v Edenu. <strong>Kruh Genesis → Zjevení je jedním příběhem</strong> — sestup do hmoty a návrat do božského odpočinku. Bible jako celek je touto mapou.</p>
+        <div class="symbol-block">
+          <div class="symbol-item"><div class="symbol-term">Šabat jako stav</div><div class="symbol-desc">Ne kalendářní den — ale vědomí, které přestalo bojovat s existencí a spočinulo v přítomnosti Boha. To je Cayceho výklad Šabatu.</div></div>
+          <div class="symbol-item"><div class="symbol-term">„Velmi dobré"</div><div class="symbol-desc">Bůh na konci šestého dne řekl „bylo to velmi dobré" — Cayce říkal: hmota není zlo. Tělo není vězení. Fyzická existence je dar, ne trest. Gnostické odmítání hmoty Cayce nepřijímal.</div></div>
+          <div class="symbol-item"><div class="symbol-term">Genesis = Zjevení</div><div class="symbol-desc">Had v Edenu a drak v Zjevení jsou totožný symbol — kundalini. Strom života v Edenu a strom života v Novém Jeruzalémě jsou totéž. Bible je jeden uzavřený kruh.</div></div>
+        </div>
+        <div class="promise-block"><strong>Paralela se čákrami:</strong> Sedmý den odpovídá Sahasrara — korunní centrum, návrat k božskému zdroji. Genesis začíná světlem (den 1 = Sahasrara) a končí odpočinkem (den 7 = Sahasrara). Stvoření je kruhem vědomí, které vychází ze sebe a vrací se k sobě.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABULKA SROVNANI -->
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('gen-srov')">
+      <div class="acc-num" style="background:#3d2e6b">≡</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Srovnávací tabulka — Genesis, čákry a Zjevení</div>
+        <div class="acc-subtitle">Jak Cayce propojil tři texty do jednoho systému</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-gen-srov">
+      <div class="accordion-inner">
+        <p class="body-text" style="margin-bottom:0.8rem">Cayce říkal, že celá Bible je jeden příběh — sestup vědomí z Boha do hmoty a jeho návrat. Genesis popisuje sestup, Zjevení popisuje výstup. Sedm čáker je mapa těla skrze které tento pohyb probíhá.</p>
+        <div class="overview-table-wrap">
+        <table style="width:100%;border-collapse:collapse;font-size:0.88rem">
+              <th style="padding:0.5rem 0.7rem;text-align:left;font-family:'Cinzel',serif;font-size:0.72rem;letter-spacing:0.08em">Čákra</th>
+              <th style="padding:0.5rem 0.7rem;text-align:left;font-family:'Cinzel',serif;font-size:0.72rem;letter-spacing:0.08em">Církev / Zjevení</th>
+              <th style="padding:0.5rem 0.7rem;text-align:left;font-family:'Cinzel',serif;font-size:0.72rem;letter-spacing:0.08em">Téma</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background:#faf8ff">
+              <td style="padding:0.5rem 0.7rem;border-bottom:1px solid #d4c8f0"><span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#534AB7;color:white;font-size:0.7rem;font-weight:bold;margin-right:0.4rem">1</span>Světlo</td>
+              <td style="padding:0.5rem 0.7rem;border-bottom:1px solid #d4c8f0">7 · Sahasrara</td>
+              <td style="padding:0.5rem 0.7rem;border-bottom:1px solid #d4c8f0">Laodicea</td>
+              <td style="padding:0.5rem 0.7rem;border-bottom:1px solid #d4c8f0">Prvotní vědomí, božský záblesk</td>
+            </tr>
+            <tr>
+              <td style="padding:0.5rem 0.7rem;border-bottom:1px solid #d4c8f0"><span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#185FA5;color:white;font-size:0.7rem;font-weight:bold;margin-right:0.4rem">2</span>Klenba</td>
+              <td style="padding:0.5rem 0.7rem;border-bottom:1px solid #d4c8f0">6 · Adžna</td>
+              <td style="padding:0.5rem 0.7rem;border-bottom:1px solid #d4c8f0">Filadelfie</td>
+              <td style="padding:0.5rem 0.7rem;border-bottom:1px solid #d4c8f0">Rozhraní světů, duchovní vidění</td>
+            </tr>
+            <tr style="background:#faf8ff">
+              <td style="padding:0.5rem 0.7rem;border-bottom:1px solid #d4c8f0"><span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#1D9E75;color:white;font-size:0.7rem;font-weight:bold;margin-right:0.4rem">3</span>Pevnina</td>
+              <td style="padding:0.5rem 0.7rem;border-bottom:1px solid #d4c8f0">5 · Višuddha</td>
+              <td style="padding:0.5rem 0.7rem;border-bottom:1px solid #d4c8f0">Sardy</td>
+              <td style="padding:0.5rem 0.7rem;border-bottom:1px solid #d4c8f0">Forma, vyjádření, kauzální zákon</td>
+            </tr>
+            <tr>
+              <td style="padding:0.5rem 0.7rem;border-bottom:1px solid #d4c8f0"><span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#3B6D11;color:white;font-size:0.7rem;font-weight:bold;margin-right:0.4rem">4</span>Hvězdy</td>
+              <td style="padding:0.5rem 0.7rem;border-bottom:1px solid #d4c8f0">4 · Anáhata</td>
+              <td style="padding:0.5rem 0.7rem;border-bottom:1px solid #d4c8f0">Thyatira</td>
+              <td style="padding:0.5rem 0.7rem;border-bottom:1px solid #d4c8f0">Kosmický řád, rovnováha, srdce</td>
+            </tr>
+            <tr style="background:#faf8ff">
+              <td style="padding:0.5rem 0.7rem;border-bottom:1px solid #d4c8f0"><span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#BA7517;color:white;font-size:0.7rem;font-weight:bold;margin-right:0.4rem">5</span>Živočichové</td>
+              <td style="padding:0.5rem 0.7rem;border-bottom:1px solid #d4c8f0">3 · Manipura</td>
+              <td style="padding:0.5rem 0.7rem;border-bottom:1px solid #d4c8f0">Pergamon</td>
+              <td style="padding:0.5rem 0.7rem;border-bottom:1px solid #d4c8f0">Instinkt, emoce, skupinová energie</td>
+            </tr>
+            <tr>
+              <td style="padding:0.5rem 0.7rem;border-bottom:1px solid #d4c8f0"><span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#D85A30;color:white;font-size:0.7rem;font-weight:bold;margin-right:0.4rem">6</span>Člověk</td>
+              <td style="padding:0.5rem 0.7rem;border-bottom:1px solid #d4c8f0">1–2 · Muladhara / Svadhišthána</td>
+              <td style="padding:0.5rem 0.7rem;border-bottom:1px solid #d4c8f0">Efez / Smyrna</td>
+              <td style="padding:0.5rem 0.7rem;border-bottom:1px solid #d4c8f0">Plný sestup do hmoty, polarita</td>
+            </tr>
+            <tr style="background:#faf8ff">
+              <td style="padding:0.5rem 0.7rem"><span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#E24B4A;color:white;font-size:0.7rem;font-weight:bold;margin-right:0.4rem">7</span>Odpočinek</td>
+              <td style="padding:0.5rem 0.7rem">7 → 1 · Kruh</td>
+              <td style="padding:0.5rem 0.7rem">Nový Jeruzalém</td>
+              <td style="padding:0.5rem 0.7rem">Návrat vědomí k božskému zdroji</td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+        <p class="note" style="margin-top:0.7rem">Poznámka: Tato paralela je rekonstrukcí z Cayceho obecných principů. Cayce propojil čákry se Zjevením explicitně — propojení s Genesis je odvozeno z jeho kosmologie.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SEKCE 5: ČÍSLA ČTENÍ -->
+<div class="section-group">
+  <div class="section-label">Zdroje — Klíčová čtení z archivu A.R.E.</div>
+
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('cteni')">
+      <div class="acc-num" style="background:#3d2e6b">№</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Konkrétní čísla Cayceho čtení</div>
+        <div class="acc-subtitle">Archiv A.R.E. · Virginia Beach · 14 306 dokumentovaných čtení</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-cteni">
+      <div class="accordion-inner">
+        <p class="body-text">Cayce dal celkem 14 306 dokumentovaných čtení — každé má přidělené číslo ve formátu <strong>číslo-pořadí</strong> (např. 281-16 = 281. série, 16. čtení). Série 281 je celá věnována Zjevení Janovu a čákrám. Série 3744 je filosofická — zde začal Cayce mluvit o astrologii a meziinkarnačních soujournech.</p>
+        <div class="symbol-block">
+          <div class="symbol-item">
+            <div class="symbol-term" style="color:#534AB7">281-16</div>
+            <div class="symbol-desc">Základní čtení o Zjevení jako mapě vnitřního probuzení. <em>„Vize, zkušenosti, jména, církve, místa, draci, města — vše jsou emblémy sil, které mohou válčit uvnitř jedince na jeho cestě skrze hmotu."</em></div>
+          </div>
+          <div class="symbol-item">
+            <div class="symbol-term" style="color:#534AB7">281-29</div>
+            <div class="symbol-desc">Podrobné mapování sedmi církví na endokrinní žlázy. Efez = gonády, Smyrna = Leydigovy buňky, Pergamon = nadledvinky, Thyatira = thymus, Sardy = štítná žláza, Filadelfie = epifýza, Laodicea = hypofýza.</div>
+          </div>
+          <div class="symbol-item">
+            <div class="symbol-term" style="color:#534AB7">281-31</div>
+            <div class="symbol-desc">Kundalini a sedm pečetí. Cayce vysvětluje jak hadí síla stoupá páteří a aktivuje centra. Varování před probouzením bez duchovní přípravy.</div>
+          </div>
+          <div class="symbol-item">
+            <div class="symbol-term" style="color:#534AB7">281-33</div>
+            <div class="symbol-desc">Drak, šelmy a 144 000. Výklad čísla 666 jako trojnásobné hmoty, ne jako konkrétní osoby. 144 000 jako stav plné integrace vědomí.</div>
+          </div>
+          <div class="symbol-item">
+            <div class="symbol-term" style="color:#534AB7">281-37</div>
+            <div class="symbol-desc">Nový Jeruzalém. <em>„Chrám v něm není"</em> — vysvětlení proč plně probuzené vědomí nepotřebuje instituce. Strom života a řeka jako symboly plně harmonizovaného energetického systému těla.</div>
+          </div>
+          <div class="symbol-item">
+            <div class="symbol-term" style="color:#534AB7">3744-4</div>
+            <div class="symbol-desc">Filozofická série — první zmínka o astrologii a planetárních soujournech. <em>„Žádná akce žádné planety nepřevyšuje sílu lidské vůle."</em> Zároveň: planety jsou školy vědomí, ne vládci osudu.</div>
+          </div>
+          <div class="symbol-item">
+            <div class="symbol-term" style="color:#534AB7">136-33</div>
+            <div class="symbol-desc"><em>„Neexistuje smrt — pouze přechod z fyzického do duchovního."</em> Jedno z nejcitovanějších Cayceho čtení o kontinuitě života.</div>
+          </div>
+          <div class="symbol-item">
+            <div class="symbol-term" style="color:#534AB7">1554-2</div>
+            <div class="symbol-desc"><em>„Život je kontinuální a nekonečný."</em> Krátké čtení o podstatě duše a jejím vztahu k fyzické existenci.</div>
+          </div>
+          <div class="symbol-item">
+            <div class="symbol-term" style="color:#534AB7">2402-2</div>
+            <div class="symbol-desc">Adam a Kristus jako jedna duše. <em>„On, který byl vyvýšen na Kříži na Kalvárii, byl také ten, kdo jako první kráčel mezi lidmi na počátku příchodu člověka do těla. Byl a je prvním Adamem, posledním Adamem."</em></div>
+          </div>
+          <div class="symbol-item">
+            <div class="symbol-term" style="color:#534AB7">5755-2</div>
+            <div class="symbol-desc">Pád duší do hmoty. <em>„Pak přišlo to, co hledalo sebeuspokojení, sebeoslavení; a byl to začátek válek mezi sebou navzájem — stále ještě v Duchu."</em> Cayceho výklad Genesis 3.</div>
+          </div>
+          <div class="symbol-item">
+            <div class="symbol-term" style="color:#534AB7">815-6</div>
+            <div class="symbol-desc">Na otázku zda je vhodné studovat astrologii Cayce odpověděl: <em>„Když správně studována, velmi, velmi, velmi ano."</em></div>
+          </div>
+        </div>
+        <p class="note" style="margin-top:0.8rem">Celý archiv čtení je přístupný online na <strong>edgarcayce.org</strong> (A.R.E. — Association for Research and Enlightenment). Série 281 obsahuje přes 60 čtení věnovaných výhradně Zjevení a meditaci.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SEKCE 6: PLANETY A MEZIINKARNAČNÍ STAV -->
+<div class="section-group">
+  <div class="section-label">Kosmologie — Planety a meziinkarnační soujourne</div>
+
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('plan-uvod')">
+      <div class="acc-num" style="background:#0F6E56">✦</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Solární systém jako univerzita duší</div>
+        <div class="acc-subtitle">Co se děje mezi inkarnacemi · Planety jako školy vědomí</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-plan-uvod">
+      <div class="accordion-inner">
+        <div class="quote-block">„Běžná teorie, že inkarnace do zemské roviny je jediným zdrojem inkarnace, je chybná." — čtení č. 3744</div>
+        <p class="body-text">Cayce popsal náš solární systém jako <strong>„univerzitu pro vyšší duchovní učení"</strong>. Mezi zemskými inkarnacemi duše nespí ani nečekají — aktivně se pohybují skrze různé planetární sféry a v každé se učí specifickým lekcím vědomí.</p>
+        <p class="body-text">Klíčový rozdíl od tradiční astrologie: pozice planet při narození nám <em>nepředpovídají budoucnost</em> — říkají nám kde jsme byli. Horoskop je záznam planetárních soujourneů které duše prošla před touto inkarnací. Planety jsou <strong>indikátory minulosti</strong>, ne diktátoři budoucnosti.</p>
+        <p class="body-text">Cayce sám popsal své vlastní soujourne: naposledy pobýval ve sféře Uranu (sféra psychiky a mimořádných schopností), těsně před inkarnací pak krátce ve sféře Venuše (sféra lásky a pomoci). Výsledek — psychik s velkým srdcem pro pomoc druhým.</p>
+        <div class="promise-block"><strong>Čtení 3744-4:</strong> „Žádná akce žádné planety ani fáze Slunce, Měsíce nebo jakéhokoli nebeského tělesa nepřevyšuje sílu lidské vůle."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interaktivní diagram planet -->
+  <div style="background:white;border:1px solid var(--violet4);border-radius:6px;padding:1.2rem;margin-bottom:0.6rem;box-shadow:0 2px 8px rgba(61,46,107,0.06)">
+    <div style="font-family:'Cinzel',serif;font-size:0.9rem;color:var(--violet);text-align:center;margin-bottom:1rem;font-weight:600;letter-spacing:0.05em">Planetární sféry vědomí — klikni pro detail</div>
+    <div style="display:flex;flex-wrap:wrap;gap:0.5rem;justify-content:center;margin-bottom:0.8rem" id="planet-btns">
+      <button onclick="showPlanet('merkur', event)" class="plan-btn" style="background:#E8E4F0;border:1px solid #9C8FBA;border-radius:20px;padding:0.35rem 0.8rem;font-family:'Cinzel',serif;font-size:0.75rem;cursor:pointer;color:#3C3489;transition:all 0.15s">☿ Merkur</button>
+      <button onclick="showPlanet('venus', event)" class="plan-btn" style="background:#E8E4F0;border:1px solid #9C8FBA;border-radius:20px;padding:0.35rem 0.8rem;font-family:'Cinzel',serif;font-size:0.75rem;cursor:pointer;color:#3C3489;transition:all 0.15s">♀ Venuše</button>
+      <button onclick="showPlanet('mars', event)" class="plan-btn" style="background:#E8E4F0;border:1px solid #9C8FBA;border-radius:20px;padding:0.35rem 0.8rem;font-family:'Cinzel',serif;font-size:0.75rem;cursor:pointer;color:#3C3489;transition:all 0.15s">♂ Mars</button>
+      <button onclick="showPlanet('jupiter', event)" class="plan-btn" style="background:#E8E4F0;border:1px solid #9C8FBA;border-radius:20px;padding:0.35rem 0.8rem;font-family:'Cinzel',serif;font-size:0.75rem;cursor:pointer;color:#3C3489;transition:all 0.15s">♃ Jupiter</button>
+      <button onclick="showPlanet('saturn', event)" class="plan-btn" style="background:#E8E4F0;border:1px solid #9C8FBA;border-radius:20px;padding:0.35rem 0.8rem;font-family:'Cinzel',serif;font-size:0.75rem;cursor:pointer;color:#3C3489;transition:all 0.15s">♄ Saturn</button>
+      <button onclick="showPlanet('uran', event)" class="plan-btn" style="background:#E8E4F0;border:1px solid #9C8FBA;border-radius:20px;padding:0.35rem 0.8rem;font-family:'Cinzel',serif;font-size:0.75rem;cursor:pointer;color:#3C3489;transition:all 0.15s">⛢ Uran</button>
+      <button onclick="showPlanet('neptun', event)" class="plan-btn" style="background:#E8E4F0;border:1px solid #9C8FBA;border-radius:20px;padding:0.35rem 0.8rem;font-family:'Cinzel',serif;font-size:0.75rem;cursor:pointer;color:#3C3489;transition:all 0.15s">♆ Neptun</button>
+      <button onclick="showPlanet('slunce', event)" class="plan-btn" style="background:#E8E4F0;border:1px solid #9C8FBA;border-radius:20px;padding:0.35rem 0.8rem;font-family:'Cinzel',serif;font-size:0.75rem;cursor:pointer;color:#3C3489;transition:all 0.15s">☉ Slunce</button>
+      <button onclick="showPlanet('zeme', event)" class="plan-btn" style="background:#E8E4F0;border:1px solid #9C8FBA;border-radius:20px;padding:0.35rem 0.8rem;font-family:'Cinzel',serif;font-size:0.75rem;cursor:pointer;color:#3C3489;transition:all 0.15s">⊕ Země</button>
+      <button onclick="showPlanet('mesic', event)" class="plan-btn" style="background:#E8E4F0;border:1px solid #9C8FBA;border-radius:20px;padding:0.35rem 0.8rem;font-family:'Cinzel',serif;font-size:0.75rem;cursor:pointer;color:#3C3489;transition:all 0.15s">☽ Měsíc</button>
+    </div>
+    <div id="planet-detail" style="display:none;padding:1rem;background:var(--parch);border-radius:4px;border-left:3px solid var(--violet2);position:relative">
+      <button class="planet-close" onclick="closePlanet()" title="Zavřít">✕</button>
+      <div id="planet-title" style="font-family:'Cinzel',serif;font-size:1rem;font-weight:600;color:var(--violet);margin-bottom:0.5rem;padding-right:1.5rem"></div>
+      <div id="planet-lekce" style="font-size:0.85rem;color:#2a2035;line-height:1.7;margin-bottom:0.5rem"></div>
+      <div id="planet-vlastnosti" style="font-size:0.82rem;color:var(--gold);font-style:italic"></div>
+      <div id="planet-cteni" style="font-size:0.78rem;color:var(--color-gray,#888);margin-top:0.4rem"></div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('plan-proces')">
+      <div class="acc-num" style="background:#0F6E56">⟳</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Jak meziinkarnační soujourne fungují</div>
+        <div class="acc-subtitle">Smrt · Planetární školy · Výběr příští inkarnace</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-plan-proces">
+      <div class="accordion-inner">
+        <div class="quote-block">„Neexistuje smrt — pouze přechod z fyzického do duchovního." — čtení 136-33</div>
+        <p class="body-text">Cayce popsal přechod po smrti jako <strong>postupný</strong>, ne okamžitý. Vědomí se nevypne — pozvolna se stahuje z fyzického těla, procházejíc různými vrstvami (éterická, astrální, mentální). Tento proces může trvat hodiny i dny subjektivního času.</p>
+        <div class="symbol-block">
+          <div class="symbol-item"><div class="symbol-term">Bezprostředně po smrti</div><div class="symbol-desc">Duše prochází panoramatickým přehledem uplynulého života — vidí každou volbu, každý vztah, každý dopad svých činů na ostatní. Ne jako soud — jako pochopení. Bez trestu, s plným porozuměním příčin a následků.</div></div>
+          <div class="symbol-item"><div class="symbol-term">Výběr planetární sféry</div><div class="symbol-desc">Na základě toho co duše potřebuje se rozvíjet, přitáhne ji konkrétní planetární sféra. Není to vnější rozhodnutí — je to přirozená rezonance. Duše jde tam, kde vibrace odpovídá jejímu stavu vědomí.</div></div>
+          <div class="symbol-item"><div class="symbol-term">Pobyt ve sféře</div><div class="symbol-desc">Ve sféře duše intenzivně prožívá a integruje lekce dané planety. Není to fyzická realita — je to dimenze vědomí. Cayce říkal: ve spánku se naše vědomí dotýká těchto sfér každou noc.</div></div>
+          <div class="symbol-item"><div class="symbol-term">Výběr příští inkarnace</div><div class="symbol-desc">Duše si vybírá rodiče, kulturu, tělo, dobu — to vše vědomě. Horoskop při narození je záznamem tohoto výběru. Duše si vybírá astrologické podmínky, které jí umožní splnit karmické závazky a rozvinout potřebné vlastnosti.</div></div>
+          <div class="symbol-item"><div class="symbol-term">Pluto (čtení z roku 1923)</div><div class="symbol-desc">Cayce popsal Pluto jako sféru vědomí již v roce 1923 — sedm let před jeho astronomickým objevem v roce 1930. Nazýval ho „Vulkánem" a spojoval ho s vývojem vědomí samotného — nejhlubší transformací duše.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('plan-spani')">
+      <div class="acc-num" style="background:#0F6E56">☽</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Spánek jako mini-smrt — noční soujourne</div>
+        <div class="acc-subtitle">Sny · Akášické záznamy · Regenerace čáker ve spánku</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-plan-spani">
+      <div class="accordion-inner">
+        <p class="body-text">Cayce říkal že <strong>spánek je mini-smrtí</strong> — vědomí se každou noc částečně odpojuje od fyzického těla a vstupuje do těch samých dimenzí které plně navštěvuje po fyzické smrti. Proto je spánek tak důležitý a proto jsou sny oknem do duchovní reality.</p>
+        <div class="symbol-block">
+          <div class="symbol-item"><div class="symbol-term">Epifýza ve spánku</div><div class="symbol-desc">Cayce věnoval zvláštní pozornost epifýze (šišince mozkové) — je aktivní ve tmě a reguluje melatonin. Pro Cayceho je přijímačem duchovních impulzů právě proto, že ve spánku, když vědomí překročí hranici těla, epifýza tuto komunikaci zprostředkovává.</div></div>
+          <div class="symbol-item"><div class="symbol-term">Sny jako zprávy</div><div class="symbol-desc">Cayce dal přes 1 600 výkladů snů. Říkal: sny jsou nejdůvěryhodnějším kanálem komunikace mezi vědomou a nadvědomou myslí. Planetární sféry navštívené ve spánku se projevují jako symbolický obsah snů.</div></div>
+          <div class="symbol-item"><div class="symbol-term">Regenerace center</div><div class="symbol-desc">Cayce říkal: tělesné centrum (čákra) se regeneruje a přijímá „nabití" ze své příslušné planetární sféry každou noc ve spánku. Proto spánek není jen fyzická regenerace — je to duchovní dotankovávání energie do každého ze sedmi center.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('plan-cakry')">
+      <div class="acc-num" style="background:#0F6E56">⊕</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Planety a čákry — přímé propojení</div>
+        <div class="acc-subtitle">Každá žláza rezonuje s konkrétní planetou</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-plan-cakry">
+      <div class="accordion-inner">
+        <p class="body-text">Cayce propojil sedm endokrinních žláz nejen se sedmi církvemi v Zjevení, ale také se sedmi planetami. Každá žláza je fyzickým rezonátorem odpovídající planetární sféry. Vliv planety na člověka nepůsobí magicky zvenku — působí <em>skrze žlázu</em> která na danou frekvenci rezonuje.</p>
+        <div class="overview-table-wrap">
+        <table style="width:100%;border-collapse:collapse;font-size:0.85rem;margin-top:0.6rem">
+          <thead>
+            <tr style="background:#0F6E56;color:#f5f0e8">
+              <th style="padding:0.5rem 0.7rem;text-align:left;font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:0.08em">Čákra / Žláza</th>
+              <th style="padding:0.5rem 0.7rem;text-align:left;font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:0.08em">Planeta</th>
+              <th style="padding:0.5rem 0.7rem;text-align:left;font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:0.08em">Lekce sféry</th>
+              <th style="padding:0.5rem 0.7rem;text-align:left;font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:0.08em">Církev / Zjevení</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background:#faf8ff">
+              <td style="padding:0.45rem 0.7rem;border-bottom:1px solid #d4c8f0"><span style="color:#534AB7;font-weight:bold">7 · Sahasrara</span><br><small style="color:#888">Hypofýza</small></td>
+              <td style="padding:0.45rem 0.7rem;border-bottom:1px solid #d4c8f0">♃ <strong>Jupiter</strong></td>
+              <td style="padding:0.45rem 0.7rem;border-bottom:1px solid #d4c8f0">Vznešenost, velké ideály, expanze, filantropie</td>
+              <td style="padding:0.45rem 0.7rem;border-bottom:1px solid #d4c8f0">Laodicea</td>
+            </tr>
+            <tr>
+              <td style="padding:0.45rem 0.7rem;border-bottom:1px solid #d4c8f0"><span style="color:#185FA5;font-weight:bold">6 · Adžna</span><br><small style="color:#888">Epifýza</small></td>
+              <td style="padding:0.45rem 0.7rem;border-bottom:1px solid #d4c8f0">☿ <strong>Merkur</strong></td>
+              <td style="padding:0.45rem 0.7rem;border-bottom:1px solid #d4c8f0">Mentální síla, komunikace, intelekt, rychlost myšlení</td>
+              <td style="padding:0.45rem 0.7rem;border-bottom:1px solid #d4c8f0">Filadelfie</td>
+            </tr>
+            <tr style="background:#faf8ff">
+              <td style="padding:0.45rem 0.7rem;border-bottom:1px solid #d4c8f0"><span style="color:#1D9E75;font-weight:bold">5 · Višuddha</span><br><small style="color:#888">Štítná žláza</small></td>
+              <td style="padding:0.45rem 0.7rem;border-bottom:1px solid #d4c8f0">⛢ <strong>Uran</strong></td>
+              <td style="padding:0.45rem 0.7rem;border-bottom:1px solid #d4c8f0">Psychické schopnosti, originalita, náhlé průlomy, extrém</td>
+              <td style="padding:0.45rem 0.7rem;border-bottom:1px solid #d4c8f0">Sardy</td>
+            </tr>
+            <tr>
+              <td style="padding:0.45rem 0.7rem;border-bottom:1px solid #d4c8f0"><span style="color:#3B6D11;font-weight:bold">4 · Anáhata</span><br><small style="color:#888">Brzlík</small></td>
+              <td style="padding:0.45rem 0.7rem;border-bottom:1px solid #d4c8f0">♀ <strong>Venuše</strong></td>
+              <td style="padding:0.45rem 0.7rem;border-bottom:1px solid #d4c8f0">Láska, harmonie, krása, vztahy, umění</td>
+              <td style="padding:0.45rem 0.7rem;border-bottom:1px solid #d4c8f0">Thyatira</td>
+            </tr>
+            <tr style="background:#faf8ff">
+              <td style="padding:0.45rem 0.7rem;border-bottom:1px solid #d4c8f0"><span style="color:#BA7517;font-weight:bold">3 · Manipura</span><br><small style="color:#888">Nadledvinky</small></td>
+              <td style="padding:0.45rem 0.7rem;border-bottom:1px solid #d4c8f0">♂ <strong>Mars</strong></td>
+              <td style="padding:0.45rem 0.7rem;border-bottom:1px solid #d4c8f0">Energie, odvaha, vůle k činu, boj, vytrvalost</td>
+              <td style="padding:0.45rem 0.7rem;border-bottom:1px solid #d4c8f0">Pergamon</td>
+            </tr>
+            <tr>
+              <td style="padding:0.45rem 0.7rem;border-bottom:1px solid #d4c8f0"><span style="color:#D85A30;font-weight:bold">2 · Svadhišthána</span><br><small style="color:#888">Leydigovy buňky</small></td>
+              <td style="padding:0.45rem 0.7rem;border-bottom:1px solid #d4c8f0">♆ <strong>Neptun</strong></td>
+              <td style="padding:0.45rem 0.7rem;border-bottom:1px solid #d4c8f0">Mystika, soucit, rozpuštění hranic, nevědomí</td>
+              <td style="padding:0.45rem 0.7rem;border-bottom:1px solid #d4c8f0">Smyrna</td>
+            </tr>
+            <tr style="background:#faf8ff">
+              <td style="padding:0.45rem 0.7rem"><span style="color:#E24B4A;font-weight:bold">1 · Muladhara</span><br><small style="color:#888">Gonády</small></td>
+              <td style="padding:0.45rem 0.7rem">♄ <strong>Saturn</strong></td>
+              <td style="padding:0.45rem 0.7rem">Nový začátek, karma, transformace, překonání sebe sama</td>
+              <td style="padding:0.45rem 0.7rem">Efez</td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+        <p class="note" style="margin-top:0.6rem">Zdroj: near-death.com kompilace Cayceho čtení série 281. Cayce používal 7 klasických planet — Saturn, Neptun, Mars, Venuše, Uran, Merkur, Jupiter. Slunce, Měsíc a Země mají v jeho systému zvláštní roli mimo toto sedmičlenné schéma.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('plan-arcturus')">
+      <div class="acc-num" style="background:#0F6E56">★</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Za hranicí solárního systému — Arcturus a hvězdy</div>
+        <div class="acc-subtitle">Přechod na vyšší úroveň existence · Konec cyklu reinkarnací</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-plan-arcturus">
+      <div class="accordion-inner">
+        <div class="quote-block">„...jako světlo, paprsek který nekončí, žije dál a dál, dokud se nestane jedním v esenci se zdrojem světla." — Cayce čtení</div>
+        <p class="body-text">Cayce popsal i sféry za naším solárním systémem — hvězdy jako <strong>Arcturus, Polaris, Plejády</strong>. Jsou to vyšší školy vědomí pro duše, které absolvovaly všechny lekce v rámci solárního systému.</p>
+        <div class="symbol-block">
+          <div class="symbol-item"><div class="symbol-term">Arcturus</div><div class="symbol-desc">Cayce ho zmiňoval opakovaně jako „bránu" — přechod mezi solárním systémem a vyššími dimenzemi. Duše které prošly všemi planetárními lekcemi mohou projít Arcturem do dalšího „vesmíru" zkušeností.</div></div>
+          <div class="symbol-item"><div class="symbol-term">Konec cyklu</div><div class="symbol-desc">Jakmile duše naučí všechny lekce v zemské rovině a splní všechnu karmu, nemusí se více vracet na Zemi. Pak absolvuje ještě vyšší planetární sféry. Cílem je návrat k Bohu jako vědomý, plně individualizovaný spoluvytvářitel — ne jako ztráta identity, ale jako její naplnění.</div></div>
+          <div class="symbol-item"><div class="symbol-term">Propojení se Zjevením</div><div class="symbol-desc">„Druhá smrt" v Zjevení = zánik nutnosti reinkarnace. Tisícileté království = stav vědomí které již nepodléhá karmickému cyklu. Nový Jeruzalém = vědomí které se vrátilo k Bohu jako plně vědomý partner — to co Cayce nazýval „companionable to the Creator".</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SEKCE 7: SLUNCE A MĚSÍC -->
+<div class="section-group">
+  <div class="section-label">Zvláštní vlivy — Slunce a Měsíc podle Cayceho</div>
+
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('sol-uvod')">
+      <div class="acc-num" style="background:#BA7517">☉</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Slunce — Střed systému, ne sféra sojournu</div>
+        <div class="acc-subtitle">Srdce solárního systému · Životní síla · Vůle k existenci</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-sol-uvod">
+      <div class="accordion-inner">
+        <div class="quote-block">„Slunce je nejsilnější mocí v osudu člověka — ale vůle člověka je silnější." — čtení 3744-4</div>
+        <p class="body-text">Slunce zaujímá v Cayceho systému zvláštní místo — <strong>není to meziinkarnační sféra</strong> jako ostatní planety, kam by duše cestovaly mezi životy. Je to střed celého solárního systému a odpovídá středu fyzického těla — srdci.</p>
+        <p class="body-text">Cayce říkal: tělo člověka je jako miniaturní solární systém. Srdce je Slunce — pumpa životní energie do celého systému. Sedm endokrinních žláz jsou planety obíhající kolem tohoto středu. Proto je srdce v tolika tradicích centrem — ne mozek.</p>
+        <div class="symbol-block">
+          <div class="symbol-item">
+            <div class="symbol-term">Srdce jako Slunce</div>
+            <div class="symbol-desc">Cayce přirovnal srdce k Slunci v miniaturním solárním systému těla. Stejně jako Slunce udržuje planety svou gravitací, srdce udržuje celý organismus svým rytmem a krví. Srdeční centrum (Anáhata) je proto pro Cayceho absolutním středem — fyzickým i duchovním.</div>
+          </div>
+          <div class="symbol-item">
+            <div class="symbol-term">Sluneční vliv na duši</div>
+            <div class="symbol-desc">Ačkoli Slunce není sférou sojournu, jeho astrologický vliv při narození je nejsilnější ze všech těles. Cayce říkal: pozice Slunce ukazuje základní vůli a životní zaměření duše v dané inkarnaci. Je to základ na který ostatní planetární vlivy navazují.</div>
+          </div>
+          <div class="symbol-item">
+            <div class="symbol-term">Světlo jako vědomí</div>
+            <div class="symbol-desc">Cayce propojoval fyzické světlo Slunce s duchovním světlem vědomí. V Zjevení — „Slunce se stalo černým jako žíněný pytel" (6. pečeť) = zánik starého způsobu vnímání reality. Slunce v symbolickém jazyce = vědomí samo.</div>
+          </div>
+          <div class="symbol-item">
+            <div class="symbol-term">Propojení s Genesis</div>
+            <div class="symbol-desc">„Budiž světlo" — první den stvoření. Cayce: světlo prvního dne není fyzické světlo Slunce (to přichází až 4. den) — je to prvotní vědomí Boha. Slunce je fyzickým symbolem tohoto prvotního světla v hmotném světě.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('sol-mesic')">
+      <div class="acc-num" style="background:#534AB7">☽</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Měsíc — Rytmus těla a nevědomé mysli</div>
+        <div class="acc-subtitle">Tělesné tekutiny · Emoční cykly · Léčení a měsíční fáze</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-sol-mesic">
+      <div class="accordion-inner">
+        <div class="quote-block">„Měsíc ovlivňuje tělesné tekutiny stejně jako příliv a odliv." — čtení 3744-4</div>
+        <p class="body-text">Měsíc v Cayceho systému <strong>není meziinkarnační sférou</strong> ale má přímý a velmi konkrétní vliv na fyzické a emoční tělo. Cayce o Měsíci mluvil mnohem praktičtěji než o ostatních planetách — jeho vliv je každodenní a bezprostřední.</p>
+        <div class="symbol-block">
+          <div class="symbol-item">
+            <div class="symbol-term">Tělesné tekutiny</div>
+            <div class="symbol-desc">Cayce říkal: Měsíc ovlivňuje všechny tekutiny v těle — krev, lymfu, mozkomíšní mok. Stejně jako způsobuje příliv a odliv oceánů, způsobuje rytmické výkyvy v tělesných tekutinách. Proto jsou v úplněk rány krvavější, operace riskantnější a emoce intenzivnější.</div>
+          </div>
+          <div class="symbol-item">
+            <div class="symbol-term">Léčení a měsíční fáze</div>
+            <div class="symbol-desc">Cayce v mnoha léčebných čteních zmiňoval měsíční fáze jako důležitý faktor. Doporučoval začínat určité léčebné kúry na novoluní (počátek, nová energie), operace odkládal z úplňku (zvýšené krvácení), a bylinné přípravky sbírané v úplněk považoval za silnější.</div>
+          </div>
+          <div class="symbol-item">
+            <div class="symbol-term">Nevědomá mysl</div>
+            <div class="symbol-desc">Cayce propojoval Měsíc s nevědomou vrstvou mysli — tou která pracuje ve snech, v intuici, v emočních reakcích. Měsíc neovlivňuje vědomé rozhodování ale nevědomé vzorce chování. Proto lidé s silným měsíčním vlivem při narození jsou emocionálně citliví a intuitivní.</div>
+          </div>
+          <div class="symbol-item">
+            <div class="symbol-term">Měsíc a spánek</div>
+            <div class="symbol-desc">Cayce spojoval Měsíc se spánkem a sny. Říkal: v úplněk jsou sny živější a vědomí při spánku více aktivní — duše cestuje snáze do jiných dimenzí. Proto mnoho mystických tradic pracuje s lunárním kalendářem pro meditace a rituály.</div>
+          </div>
+          <div class="symbol-item">
+            <div class="symbol-term">Propojení se Zjevením</div>
+            <div class="symbol-desc">„Měsíc se stal jako krev" — 6. pečeť. Cayce: narušení emocionálního těla při probouzení šestého centra (Adžna). Emocionální rovina se „zbarví krví" — vše potlačené vystoupí na povrch. Měsíc v Zjevení symbolizuje emoční a nevědomou vrstvu reality.</div>
+          </div>
+        </div>
+        <div class="promise-block"><strong>Praktické doporučení Cayceho:</strong> Sleduj měsíční fáze při léčení, operacích a duchovní práci. Novoluní — začínání nových věcí. Úplněk — vrchol energie i emocí, intenzivní sny, zvýšená intuice. Měsíc ubývající — uvolňování, čištění, odpouštění.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('sol-trojice')">
+      <div class="acc-num" style="background:#3d2e6b">✦</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Trojice: Slunce, Měsíc, Země — zvláštní vztah</div>
+        <div class="acc-subtitle">Cayce o trojici center fyzické existence</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-sol-trojice">
+      <div class="accordion-inner">
+        <p class="body-text">Cayce vnímal Slunce, Měsíc a Zemi jako <strong>trojici která tvoří bezprostřední rámec fyzické existence</strong> — odlišnou od sedmi planetárních sfér sojournu. Jsou to tři základní souřadnice hmotného světa.</p>
+        <div class="symbol-block">
+          <div class="symbol-item">
+            <div class="symbol-term">Slunce = Duch</div>
+            <div class="symbol-desc">Vědomí, životní vůle, záměr. Odpovídá Cayceho pojmu superconscious mind — nejvyšší vrstvě vědomí. Ve fyzickém těle = srdce jako pumpa života.</div>
+          </div>
+          <div class="symbol-item">
+            <div class="symbol-term">Měsíc = Duše</div>
+            <div class="symbol-desc">Paměť, emoce, vzorce z minulosti, nevědomí. Odpovídá subconscious mind — vrstvě která nese karmické záznamy. Ve fyzickém těle = mozek a nervový systém reagující na vnější podněty.</div>
+          </div>
+          <div class="symbol-item">
+            <div class="symbol-term">Země = Tělo</div>
+            <div class="symbol-desc">Hmota, čin, přímá zkušenost, zákon příčiny a následku. Odpovídá conscious mind — vědomé mysli která rozhoduje a jedná. Ve fyzickém těle = celý fyzický organismus jako nástroj duše.</div>
+          </div>
+          <div class="symbol-item">
+            <div class="symbol-term">Trojice v člověku</div>
+            <div class="symbol-desc">Cayce opakovaně zdůrazňoval: člověk je trojjediná bytost — duch, duše, tělo. Slunce–Měsíc–Země je kosmickým obrazem této trojice. Duchovní probuzení = harmonizace všech tří složek, ne útěk z těla k duchu.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ZÁVĚR -->
+<div class="final-card">
+  <h3>Cayceho závěrečné poselství</h3>
+  <p class="final-quote">„Od hada, který spí v základu — k Novému Jeruzalému, kde chrám není potřeba, protože vše je chrámem."</p>
+  <p style="font-size:0.9rem; color:var(--violet4); line-height:1.7; max-width:520px; margin:0 auto 1.5rem;">
+    Jan napsal nejodvážnější duchovní dokument v dějinách křesťanství. Ukryl kompletní mapu duchovního probuzení do apokalyptického jazyka. A přežila — dva tisíce let — čekala, až lidé budou připraveni ji číst jinak.
+  </p>
+  <div class="keys-grid">
+    <div class="key-card">
+      <div class="key-title">Modlitba</div>
+      <div class="key-desc">Záměr — vědomé obrácení vůle k vyššímu</div>
+    </div>
+    <div class="key-card">
+      <div class="key-title">Meditace</div>
+      <div class="key-desc">Ticho a přijetí — prostor pro božské</div>
+    </div>
+    <div class="key-card">
+      <div class="key-title">Služba druhým</div>
+      <div class="key-desc">Praktická láska — energie se pohybuje skrze čin</div>
+    </div>
+  </div>
+  <p style="margin-top:1.5rem; font-size:0.8rem; color:rgba(212,200,240,0.5);">Edgar Cayce (1877–1945) · A.R.E. Virginia Beach</p>
+</div>
+
+</main>
+
+<button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Zpět nahoru" aria-label="Zpět nahoru">↑</button>
+
+<script>
+function toggleGroup(id) {
+  const el = document.getElementById('group-' + id);
+  if (el) {
+    el.classList.toggle('open');
+    saveMenuState();
+  }
+}
+
+function saveMenuState() {
+  const openGroups = [];
+  document.querySelectorAll('.sidebar-group.open').forEach(g => {
+    openGroups.push(g.id.replace('group-', ''));
+  });
+  try {
+    localStorage.setItem('cayce-menu', JSON.stringify(openGroups));
+  } catch (e) {}
+}
+
+function loadMenuState() {
+  try {
+    const saved = localStorage.getItem('cayce-menu');
+    if (saved) {
+      JSON.parse(saved).forEach(id => {
+        const el = document.getElementById('group-' + id);
+        if (el) el.classList.add('open');
+      });
+    }
+  } catch (e) {}
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  loadMenuState();
+  try {
+    const saved = localStorage.getItem('cayce-theme');
+    if (saved === 'dark') {
+      document.body.classList.add('dark');
+      updateThemeButton(true);
+    }
+  } catch(e) {}
+});
+
+const planets = {
+  merkur: {
+    title: '☿ Merkur — Sféra mysli',
+    lekce: 'Merkurova sféra rozvíjí intelekt, rychlost myšlení a komunikaci. Cayce ji spojoval s epifýzou — přijímačem jemných duchovních informací. Duše které navštíví Merkur přinášejí mentální bystrost a dar zprostředkovávat poznání druhým.',
+    vlastnosti: 'Bystrý intelekt · rychlé chápání · dar komunikace · schopnost vidět mnoho stran · sklony k rozptýlenosti',
+    cteni: 'Série 3744: Cayce — Merkur představuje mentální život v jeho nejširším aspektu. Žláza: Epifýza · Čákra: Adžna (6) · Církev: Filadelfie'
+  },
+  venus: {
+    title: '♀ Venuše — Sféra lásky',
+    lekce: 'Venušina sféra rozvíjí lásku, krásu a harmonii ve vztazích. Cayce ji spojoval s brzlíkem. Popsal svůj vlastní pobyt ve Venušině sféře těsně před inkarnací — odtud jeho hluboký soucit s trpícími.',
+    vlastnosti: 'Přirozená laskavost · smysl pro krásu · dar léčení vztahů · touha po harmonii · sklony vyhýbat se konfliktu',
+    cteni: 'Cayce o sobě: kombinace Uran + Venuše — psychik se srdcem pro pomoc druhým. Žláza: Brzlík · Čákra: Anáhata (4) · Církev: Thyatira'
+  },
+  mars: {
+    title: '♂ Mars — Sféra vůle',
+    lekce: 'Marsova sféra je školou vůle, energie a odvahy. Cayce ji spojoval s nadledvinkami — centrem boje nebo útěku. Nevyvinutý Martian sklouzne k hněvu; vyvinutý se stane ochráncem spravedlnosti.',
+    vlastnosti: 'Silná vůle · odvaha · energie · schopnost vést · výbušný temperament · síla překonávat překážky',
+    cteni: 'Žláza: Nadledvinky · Čákra: Manipura (3) · Církev: Pergamon. Balaámovo učení v Zjevení = Mars v nerovnováze — síla bez moudrosti.'
+  },
+  jupiter: {
+    title: '♃ Jupiter — Sféra vznešenosti',
+    lekce: 'Jupiterova sféra rozvíjí velkorysost a vysoké ideály. Cayce ji spojoval s hypofýzou — ředitelem těla. Cayceho sestra Lila přišla z Jupiteru a stala se vedoucí Mezinárodního Červeného kříže.',
+    vlastnosti: 'Velkorysost · schopnost inspirovat · zájem o velké projekty · přirozená autorita · optimismus · sklony k přehánění',
+    cteni: 'Žláza: Hypofýza · Čákra: Sahasrara (7) · Církev: Laodicea. Cayce o Lile: Jupiterův vliv vysokomyslnosti je důvodem, proč vedla Červený kříž.'
+  },
+  saturn: {
+    title: '♄ Saturn — Sféra nového začátku',
+    lekce: 'Saturnova sféra je místem kde vše nedostatečné jde být přepracováno. Cayce ji spojoval s gonádami — základem fyzické existence. Bůh miluje ty, kteří jsou ochotni začít znovu.',
+    vlastnosti: 'Schopnost radikální proměny · vytrvalost · sklon k depresím i k síle · karmatické výzvy · hluboká moudrost ze zkoušek',
+    cteni: 'Žláza: Gonády · Čákra: Muladhara (1) · Církev: Efez. Cayce: Saturn — Velký měnič. Bůh miluje ty, kteří jsou ochotni začít znovu.'
+  },
+  uran: {
+    title: '⛢ Uran — Sféra psychiky',
+    lekce: 'Uranova sféra rozvíjí psychické schopnosti a originalitu. Cayce ji spojoval se štítnou žlázou. Sám soujournoval v Uranu — a přinesil si odtud dar mimořádného vnímání.',
+    vlastnosti: 'Psychické schopnosti · originalita · extrémní povaha · sklon k revoluci · zájem o okultní · nekonformnost',
+    cteni: 'Žláza: Štítná žláza · Čákra: Višuddha (5) · Církev: Sardy. Cayce o sobě: moje soujourne bylo v Uranu — sféře psychiky. Proto schopnost která skrze mě pracuje.'
+  },
+  neptun: {
+    title: '♆ Neptun — Sféra mystiky',
+    lekce: 'Neptunova sféra rozvíjí mystické vědomí a hluboký soucit. Cayce ji spojoval s Leydigovými buňkami — místem kde se kundalini zakotvuje do těla. Nejprimitivnější a zároveň nejduchovnější vrstva.',
+    vlastnosti: 'Mystická intuice · hluboký soucit · citlivost na jemné energie · sklony k iluzím · vidění za závojem hmoty',
+    cteni: 'Žláza: Leydigovy buňky · Čákra: Svadhišthána (2) · Církev: Smyrna. Neptun = sféra nejhlubšího nevědomí a mystické vnímavosti.'
+  },
+  slunce: {
+    title: '☉ Slunce — Střed systému',
+    lekce: 'Slunce pro Cayceho není planetární sféra v meziinkarnačním smyslu — je to střed celého solárního systému a zdroj primární životní síly. V těle odpovídá srdci — centru oběhového systému. Cayce říkal: Slunce je nejsilnějším kosmickým vlivem, ale přesto nepřevyšuje lidskou vůli.',
+    vlastnosti: 'Sluneční vliv: životní energie · vůdčí schopnosti · přímočarost · potřeba uznání · přirozená autorita · vůle k životu',
+    cteni: 'Čtení 3744-4: Slunce je nejsilnější mocí v osudu člověka — ale vůle člověka je silnější než Slunce. Cayce: tělo je jako miniaturní solární systém a srdce plní funkci Slunce.'
+  },
+  mesic: {
+    title: '☽ Měsíc — Vliv na emoce a cykly',
+    lekce: 'Měsíc pro Cayceho není samostatnou meziinkarnační sférou, ale má silný vliv na emoční a fyzické tělo. Cayce ho spojoval s cykly, přílivem a odlivem vitality, a se stavem nevědomé mysli. Říkal že Měsíc ovlivňuje tělesné tekutiny a emoční rytmy — a tím nepřímo i duchovní vnímavost.',
+    vlastnosti: 'Měsíční vliv: emoční citlivost · cyklické výkyvy nálad · intuice · vazba na minulost a rodinu · nevědomé vzorce chování',
+    cteni: 'Čtení 3744-4: Měsíc ovlivňuje tělesné tekutiny a emoční stavy. Cayce doporučoval sledovat měsíční fáze při léčení — v úplněk jsou tělesné procesy intenzivnější. Měsíc není sféra sojournu ale silný rytmický vliv.'
+  },
+  zeme: {
+    title: '⊕ Země — Škola svobodné vůle',
+    lekce: 'Země je jedinečná — jediné místo kde duše prožívá plnou trojdimenzionální fyzickou existenci s úplnou svobodnou vůlí. Ostatní sféry jsou dimenze vědomí; Země je dimenze činu a přímého karmického následku. Žádná jiná sféra nenabízí tak rychlý duchovní pokrok — ani tak hluboké utrpení.',
+    vlastnosti: 'Co Země učí: svobodná vůle · zákon příčiny a následku v přímém prožitku · láska skrze ztrátu · překonání strachu ze smrti · sjednocení ducha a hmoty',
+    cteni: 'Čtení 2650-1: Vždy existuje volba duše ohledně prostředí a cesty. Čtení 3744-4: Nikde jinde není vůle tak přímou silou tvorby jako na Zemi.'
+  }
+};
+
+function showPlanet(key, evt) {
+  const p = planets[key];
+  if (!p) return;
+  document.getElementById('planet-title').textContent = p.title;
+  document.getElementById('planet-lekce').textContent = p.lekce;
+  document.getElementById('planet-vlastnosti').textContent = p.vlastnosti;
+  document.getElementById('planet-cteni').textContent = p.cteni;
+  document.getElementById('planet-detail').style.display = 'block';
+  // Highlight active button
+  document.querySelectorAll('.plan-btn').forEach(b => {
+    b.style.background = '';
+    b.style.color = '';
+    b.style.borderColor = '';
+  });
+  if (evt && evt.target) {
+    evt.target.style.background = '#3C3489';
+    evt.target.style.color = 'white';
+    evt.target.style.borderColor = '#3C3489';
+  }
+}
+
+function closePlanet() {
+  document.getElementById('planet-detail').style.display = 'none';
+  document.querySelectorAll('.plan-btn').forEach(b => {
+    b.style.background = '';
+    b.style.color = '';
+    b.style.borderColor = '';
+  });
+}
+</script>
+<script>
+// ── READING PROGRESS BAR + BACK TO TOP ──
+(function() {
+  const bar = document.getElementById('progress-bar');
+  const btn = document.getElementById('back-to-top');
+  function updateProgress() {
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    if (bar) bar.style.width = (docHeight > 0 ? (scrollTop / docHeight * 100) : 0) + '%';
+    if (btn) btn.classList.toggle('visible', scrollTop > 400);
+  }
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  updateProgress();
+})();
+
+// ── SIDEBAR ACTIVE SECTION HIGHLIGHT ──
+(function() {
+  const sections = document.querySelectorAll('[id]');
+  const links = document.querySelectorAll('.sidebar-group-content a');
+  if (!links.length) return;
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        links.forEach(a => {
+          const href = a.getAttribute('href');
+          a.classList.toggle('active', href === '#' + id);
+        });
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => observer.observe(s));
+})();
+
+function toggleSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  const btn = document.querySelector('.menu-toggle');
+  const overlay = document.querySelector('.sidebar-overlay');
+  const isOpen = sidebar.classList.toggle('open');
+  btn.classList.toggle('active');
+  btn.setAttribute('aria-expanded', isOpen);
+  overlay.classList.toggle('active');
+  overlay.style.display = isOpen ? 'block' : 'none';
+}
+
+function closeSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  const btn = document.querySelector('.menu-toggle');
+  const overlay = document.querySelector('.sidebar-overlay');
+  sidebar.classList.remove('open');
+  btn.classList.remove('active');
+  overlay.classList.remove('active');
+  overlay.style.display = 'none';
+}
+
+function toggleGroup(id) {
+  const group = document.getElementById('group-' + id);
+  group.classList.toggle('open');
+}
+
+function scrollToSection(id) {
+  const target = document.getElementById(id);
+  if (!target) return;
+  
+  let accordionId = null;
+  if (id.startsWith('body-c') || id.startsWith('body-gen') || id === 'body-trun' || id === 'body-peceti' || id === 'body-trubky' || id === 'body-vize' || id === 'body-cise' || id === 'body-tisic' || id === 'body-jeruzalem' || id === 'body-plan-uvod' || id === 'body-plan-proces' || id === 'body-plan-cakry' || id === 'body-sol-uvod' || id === 'body-sol-mesic' || id === 'body-cteni') {
+    const match = id.match(/(?:body-(?:c|gen|trun|peceti|trubky|vize|cise|tisic|jeruzalem|plan|sol|cteni))/);
+    if (match) {
+      const base = match[0].replace('body-', '');
+      if (base.startsWith('c')) {
+        accordionId = base;
+      } else if (base === 'gen-uvod' || base === 'gen1' || base === 'gen2' || base === 'gen3' || base === 'gen4' || base === 'gen5' || base === 'gen6' || base === 'gen7' || base === 'gen-srov') {
+        accordionId = base.replace('gen-', 'gen');
+        if (accordionId === 'gen-srov') accordionId = 'gen';
+      } else if (base === 'trun') accordionId = 'trun';
+      else if (base === 'peceti') accordionId = 'peceti';
+      else if (base === 'trubky') accordionId = 'trubky';
+      else if (base === 'vize') accordionId = 'vize';
+      else if (base === 'cise') accordionId = 'cise';
+      else if (base === 'tisic') accordionId = 'tisic';
+      else if (base === 'jeruzalem') accordionId = 'jeruzalem';
+    }
+  }
+  
+  if (accordionId) {
+    toggle(accordionId);
+  }
+  
+  setTimeout(() => {
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, accordionId ? 50 : 0);
+}
+
+function toggle(id) {
+  let header = document.getElementById('acc-' + id);
+  let body = document.getElementById('body-' + id);
+  
+  if (!body) body = document.getElementById('body-' + id);
+  if (!header && body) header = body.previousElementSibling;
+  if (!body || !header) return;
+  
+  const isOpen = body.classList.contains('open');
+  header.classList.toggle('open');
+  body.classList.toggle('open', !isOpen);
+  header.setAttribute('aria-expanded', String(!isOpen));
+}
+
+function openAccordion(id) {
+  let header = document.getElementById('acc-' + id);
+  let body = document.getElementById('body-' + id);
+  
+  if (!body) body = document.getElementById('body-' + id);
+  if (!header && body) header = body.previousElementSibling;
+  if (!body || !header) return;
+  
+  header.classList.add('open');
+  body.classList.add('open');
+  setTimeout(() => {
+    header.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 100);
+}
+
+// ── KEYBOARD ACCESSIBILITY ──
+document.addEventListener('keydown', function(e) {
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('accordion-header')) {
+    e.preventDefault();
+    e.target.click();
+  }
+});
+
+// ── THEME TOGGLE ──
+function toggleTheme() {
+  const isDark = document.body.classList.toggle('dark');
+  try { localStorage.setItem('cayce-theme', isDark ? 'dark' : 'light'); } catch(e) {}
+  updateThemeButton(isDark);
+}
+
+function updateThemeButton(isDark) {
+  const btn = document.getElementById('theme-toggle');
+  if (btn) {
+    btn.querySelector('.theme-icon').textContent = isDark ? '☀️' : '🌙';
+    btn.querySelector('.theme-label').textContent = isDark ? 'Světlý mód' : 'Tmavý mód';
+  }
+  const mob = document.getElementById('theme-toggle-mobile');
+  if (mob) mob.textContent = isDark ? '☀️' : '🌙';
+}
+</script>
+</body>
+</html>
