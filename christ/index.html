@@ -2122,9 +2122,14 @@ function closeSidebar() {
 
 function scrollToSection(id) {
   const target = document.getElementById(id);
-  if (!target) return;
+  if (!target) {
+    console.log('Target not found:', id);
+    return;
+  }
+  console.log('Found target:', id, target);
 
   if (target.classList && target.classList.contains('accordion-body') && !target.classList.contains('open')) {
+    console.log('Opening:', id);
     target.classList.add('open');
     const hdr = target.previousElementSibling;
     if (hdr && hdr.classList.contains('accordion-header')) {
