@@ -60,12 +60,35 @@ function toggleMainSection(sgClass) {
 function scrollToSection(id) {
   const target = document.getElementById(id);
   if (!target) return;
+  
+  target.classList.add('open');
+  const hdr = target.previousElementSibling;
+  if (hdr && hdr.classList.contains('accordion-header')) {
+    hdr.classList.add('open');
+    hdr.setAttribute('aria-expanded', 'true');
+  }
+
+  document.querySelectorAll('.sidebar-group').forEach(g => g.classList.remove('open'));
+
+  target.querySelectorAll('.accordion-body').forEach(body => {
+    if (!body.classList.contains('open')) {
+      body.classList.add('open');
+      const h = body.previousElementSibling;
+      if (h && h.classList.contains('accordion-header')) {
+        h.classList.add('open');
+        h.setAttribute('aria-expanded', 'true');
+      }
+    }
+  });
+
   const links = document.querySelectorAll('.sidebar-group-content a');
   links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
+
   setTimeout(() => {
     const rect = target.getBoundingClientRect();
     const absoluteTop = window.scrollY + rect.top - 80;
     window.scrollTo({ top: Math.max(0, absoluteTop), behavior: 'smooth' });
+    closeSidebar();
   }, 150);
 }
 
