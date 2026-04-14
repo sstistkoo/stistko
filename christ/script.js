@@ -2,12 +2,21 @@ function toggle(id) {
   const body = document.getElementById('body-' + id);
   if (!body) return;
   const isOpen = body.classList.contains('open');
-  body.classList.toggle('open', !isOpen);
+  if (isOpen) {
+    body.classList.remove('open');
+  } else {
+    body.classList.add('open');
+  }
   
   const header = body.previousElementSibling;
   if (header && header.classList.contains('accordion-header')) {
-    header.classList.toggle('open', !isOpen);
-    header.setAttribute('aria-expanded', String(!isOpen));
+    if (isOpen) {
+      header.classList.remove('open');
+      header.setAttribute('aria-expanded', 'false');
+    } else {
+      header.classList.add('open');
+      header.setAttribute('aria-expanded', 'true');
+    }
   }
 }
 
@@ -57,10 +66,22 @@ function toggleMainSection(sgClass) {
   });
 }
 
+function toggleSidebar() {
+  document.querySelector('.sidebar').classList.toggle('open');
+  document.querySelector('.sidebar-overlay').classList.toggle('active');
+  document.querySelector('.menu-toggle').classList.toggle('active');
+}
+
+function closeSidebar() {
+  document.querySelector('.sidebar').classList.remove('open');
+  document.querySelector('.sidebar-overlay').classList.remove('active');
+  document.querySelector('.menu-toggle').classList.remove('active');
+}
+
 function scrollToSection(id) {
   const target = document.getElementById(id);
   if (!target) return;
-  
+
   target.classList.add('open');
   const hdr = target.previousElementSibling;
   if (hdr && hdr.classList.contains('accordion-header')) {
@@ -68,58 +89,13 @@ function scrollToSection(id) {
     hdr.setAttribute('aria-expanded', 'true');
   }
 
-  document.querySelectorAll('.sidebar-group').forEach(g => g.classList.remove('open'));
-
-  target.querySelectorAll('.accordion-body').forEach(body => {
-    if (!body.classList.contains('open')) {
-      body.classList.add('open');
-      const h = body.previousElementSibling;
-      if (h && h.classList.contains('accordion-header')) {
-        h.classList.add('open');
-        h.setAttribute('aria-expanded', 'true');
-      }
-    }
-  });
-
   const links = document.querySelectorAll('.sidebar-group-content a');
   links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
 
   setTimeout(() => {
-    const rect = target.getBoundingClientRect();
-    const absoluteTop = window.scrollY + rect.top - 80;
-    window.scrollTo({ top: Math.max(0, absoluteTop), behavior: 'smooth' });
+    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
     closeSidebar();
-  }, 150);
-}
-
-function toggleSidebar() {
-  const sidebar = document.querySelector('.sidebar');
-  const overlay = document.querySelector('.sidebar-overlay');
-  const menuToggle = document.querySelector('.menu-toggle');
-  if (sidebar) sidebar.classList.toggle('open');
-  if (overlay) overlay.classList.toggle('active');
-  if (menuToggle) menuToggle.classList.toggle('active');
-  document.body.classList.toggle('sidebar-open');
-}
-
-function closeSidebar() {
-  const sidebar = document.querySelector('.sidebar');
-  const overlay = document.querySelector('.sidebar-overlay');
-  const menuToggle = document.querySelector('.menu-toggle');
-  if (sidebar) sidebar.classList.remove('open');
-  if (overlay) overlay.classList.remove('active');
-  if (menuToggle) menuToggle.classList.remove('active');
-  document.body.classList.remove('sidebar-open');
-}
-
-function openAccordion(id) {
-  const body = document.getElementById('body-' + id);
-  if (!body) return;
-  const header = body.previousElementSibling;
-  if (!header || !header.classList.contains('accordion-header')) return;
-  header.classList.add('open');
-  body.classList.add('open');
-  setTimeout(() => header.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+  }, 200);
 }
 
 function toggleTheme() {
@@ -129,12 +105,6 @@ function toggleTheme() {
     localStorage.setItem('cayce-theme', isDark ? 'light' : 'dark');
   } catch (e) {}
   updateThemeButton(!isDark);
-}
-
-function closePlanet() {
-  const detail = document.getElementById('planet-detail');
-  if (detail) detail.style.display = 'none';
-  document.querySelectorAll('.plan-btn').forEach(b => b.classList.remove('plan-btn--active'));
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -153,8 +123,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const saved = localStorage.getItem('cayce-theme');
     if (saved) {
       document.documentElement.setAttribute('data-theme', saved);
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      document.documentElement.setAttribute('data-theme', 'dark');
     }
   } catch(e) {}
   const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
@@ -182,59 +150,6 @@ if (backToTopBtn) {
   });
 }
 
-document.querySelectorAll('.sidebar-group-header').forEach(header => {
-  header.addEventListener('click', function() {
-    const group = this.parentElement;
-    if (group) group.classList.toggle('open');
-  });
-});
-
-document.querySelectorAll('.section-label').forEach(label => {
-  label.addEventListener('click', function() {
-    const section = this.parentElement;
-    if (section) section.classList.toggle('collapsed');
-  });
-});
-
-document.querySelectorAll('.chakra-row').forEach(row => {
-  row.addEventListener('click', function() {
-    const detail = document.getElementById('planet-detail');
-    if (detail) detail.style.display = 'block';
-  });
-});
-
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeSidebar();
-  if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('accordion-header')) {
-    e.preventDefault();
-    e.target.click();
-  }
 });
-
-
-
-(function initSectionHighlight() {
-  const links = document.querySelectorAll('.sidebar-group-content a');
-  if (!links.length) return;
-  
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const id = entry.target.id;
-        links.forEach(a => {
-          const isMatch = a.getAttribute('href') === '#' + id;
-          a.classList.toggle('active', isMatch);
-          if (isMatch) {
-            const group = a.closest('.sidebar-group');
-            if (group && !group.classList.contains('open')) {
-              group.classList.add('open');
-              saveMenuState();
-            }
-          }
-        });
-      }
-    });
-  }, { threshold: 0.3 });
-  
-  document.querySelectorAll('[id]').forEach(section => observer.observe(section));
-})();
