@@ -2131,6 +2131,8 @@ function scrollToSection(id) {
     hdr.setAttribute('aria-expanded', 'true');
   }
 
+  document.querySelectorAll('.sidebar-group').forEach(g => g.classList.remove('open'));
+
   target.querySelectorAll('.accordion-body').forEach(body => {
     if (!body.classList.contains('open')) {
       body.classList.add('open');
@@ -2151,6 +2153,7 @@ function scrollToSection(id) {
     const rect = target.getBoundingClientRect();
     const absoluteTop = window.scrollY + rect.top - 80;
     window.scrollTo({ top: Math.max(0, absoluteTop), behavior: 'smooth' });
+    closeSidebar();
   }, 150);
 }
 
