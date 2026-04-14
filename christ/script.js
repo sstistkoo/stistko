@@ -188,13 +188,7 @@ document.addEventListener('keydown', function(e) {
   }
 });
 
-document.querySelectorAll('.accordion-header').forEach(header => {
-  header.addEventListener('click', function() {
-    const body = this.nextElementSibling;
-    this.classList.toggle('open');
-    body.classList.toggle('open');
-  });
-});
+
 
 (function initSectionHighlight() {
   const links = document.querySelectorAll('.sidebar-group-content a');
