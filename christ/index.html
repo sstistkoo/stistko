@@ -2124,18 +2124,25 @@ function scrollToSection(id) {
   const target = document.getElementById(id);
   if (!target) return;
 
-  let el = target;
-  while (el && el !== document.body) {
-    if (el.classList && el.classList.contains('accordion-body') && !el.classList.contains('open')) {
-      el.classList.add('open');
-      const hdr = el.previousElementSibling;
+  if (target.classList && target.classList.contains('accordion-body') && !target.classList.contains('open')) {
+    target.classList.add('open');
+    const hdr = target.previousElementSibling;
+    if (hdr && hdr.classList.contains('accordion-header')) {
+      hdr.classList.add('open');
+      hdr.setAttribute('aria-expanded', 'true');
+    }
+  }
+
+  target.querySelectorAll('.accordion-body').forEach(body => {
+    if (!body.classList.contains('open')) {
+      body.classList.add('open');
+      const hdr = body.previousElementSibling;
       if (hdr && hdr.classList.contains('accordion-header')) {
         hdr.classList.add('open');
         hdr.setAttribute('aria-expanded', 'true');
       }
     }
-    el = el.parentElement;
-  }
+  });
 
   const links = document.querySelectorAll('.sidebar-group-content a');
   links.forEach(a => {
