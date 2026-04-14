@@ -1123,12 +1123,14 @@ main > *:nth-child(10) { animation-delay: 0.68s; }
       <div class="accordion-inner">
         <p class="body-text" style="margin-bottom:0.8rem">Cayce říkal, že celá Bible je jeden příběh — sestup vědomí z Boha do hmoty a jeho návrat. Genesis popisuje sestup, Zjevení popisuje výstup. Sedm čáker je mapa těla skrze které tento pohyb probíhá.</p>
         <div class="overview-table-wrap">
-        <table style="width:100%;border-collapse:collapse;font-size:0.88rem">
-              <th style="padding:0.5rem 0.7rem;text-align:left;font-family:'Cinzel',serif;font-size:0.72rem;letter-spacing:0.08em">Čákra</th>
-              <th style="padding:0.5rem 0.7rem;text-align:left;font-family:'Cinzel',serif;font-size:0.72rem;letter-spacing:0.08em">Církev / Zjevení</th>
-              <th style="padding:0.5rem 0.7rem;text-align:left;font-family:'Cinzel',serif;font-size:0.72rem;letter-spacing:0.08em">Téma</th>
-            </tr>
-          </thead>
+          <table style="width:100%;border-collapse:collapse;font-size:0.88rem">
+            <thead>
+              <tr>
+                <th style="padding:0.5rem 0.7rem;text-align:left;font-family:'Cinzel',serif;font-size:0.72rem;letter-spacing:0.08em">Čákra</th>
+                <th style="padding:0.5rem 0.7rem;text-align:left;font-family:'Cinzel',serif;font-size:0.72rem;letter-spacing:0.08em">Církev / Zjevení</th>
+                <th style="padding:0.5rem 0.7rem;text-align:left;font-family:'Cinzel',serif;font-size:0.72rem;letter-spacing:0.08em">Téma</th>
+              </tr>
+            </thead>
           <tbody>
             <tr style="background:#faf8ff">
               <td style="padding:0.5rem 0.7rem"><span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#534AB7;color:white;font-size:0.7rem;font-weight:bold;margin-right:0.4rem">1</span>Světlo</td>
@@ -1918,57 +1920,6 @@ main > *:nth-child(10) { animation-delay: 0.68s; }
 <button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Zpět nahoru" aria-label="Zpět nahoru">↑</button>
 
 <script>
-function toggleGroup(id) {
-  const el = document.getElementById('group-' + id);
-  if (el) {
-    el.classList.toggle('open');
-    saveMenuState();
-  }
-}
-
-function saveMenuState() {
-  const openGroups = [];
-  document.querySelectorAll('.sidebar-group.open').forEach(g => {
-    openGroups.push(g.id.replace('group-', ''));
-  });
-  try {
-    localStorage.setItem('cayce-menu', JSON.stringify(openGroups));
-  } catch (e) {}
-}
-
-function loadMenuState() {
-  try {
-    const saved = localStorage.getItem('cayce-menu');
-    if (saved) {
-      JSON.parse(saved).forEach(id => {
-        const el = document.getElementById('group-' + id);
-        if (el) el.classList.add('open');
-      });
-    }
-  } catch (e) {}
-}
-
-function updateThemeButton(isDark) {
-  const btn = document.getElementById('theme-toggle');
-  if (btn) {
-    btn.querySelector('.theme-icon').textContent = isDark ? '☀️' : '🌙';
-    btn.querySelector('.theme-label').textContent = isDark ? 'Světlý mód' : 'Tmavý mód';
-  }
-  const mob = document.getElementById('theme-toggle-mobile');
-  if (mob) mob.textContent = isDark ? '☀️' : '🌙';
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-  loadMenuState();
-  try {
-    const saved = localStorage.getItem('cayce-theme');
-    if (saved === 'dark') {
-      document.documentElement.setAttribute('data-theme', 'dark');
-      updateThemeButton(true);
-    }
-  } catch(e) {}
-});
-
 const planets = {
   merkur: {
     title: '☿ Merkur — Sféra mysli',
@@ -2053,159 +2004,6 @@ function closePlanet() {
   document.getElementById('planet-detail').style.display = 'none';
   document.querySelectorAll('.plan-btn').forEach(b => {
     b.classList.remove('plan-btn--active');
-  });
-}
-</script>
-<script>
-// ── READING PROGRESS BAR + BACK TO TOP ──
-(function() {
-  const bar = document.getElementById('progress-bar');
-  const btn = document.getElementById('back-to-top');
-  function updateProgress() {
-    const scrollTop = window.scrollY || document.documentElement.scrollTop;
-    const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    if (bar) bar.style.width = (docHeight > 0 ? (scrollTop / docHeight * 100) : 0) + '%';
-    if (btn) btn.classList.toggle('visible', scrollTop > 400);
-  }
-  window.addEventListener('scroll', updateProgress, { passive: true });
-  updateProgress();
-})();
-
-// ── SIDEBAR ACTIVE SECTION HIGHLIGHT ──
-(function() {
-  const sections = document.querySelectorAll('[id]');
-  const links = document.querySelectorAll('.sidebar-group-content a');
-  if (!links.length) return;
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const id = entry.target.id;
-        links.forEach(a => {
-          const isMatch = a.getAttribute('href') === '#' + id;
-          a.classList.toggle('active', isMatch);
-          if (isMatch) {
-            const group = a.closest('.sidebar-group');
-            if (group && !group.classList.contains('open')) {
-              group.classList.add('open');
-              saveMenuState();
-            }
-            a.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-          }
-        });
-      }
-    });
-  }, { rootMargin: '-10% 0px -80% 0px', threshold: 0 });
-
-  sections.forEach(s => observer.observe(s));
-})();
-
-function toggleSidebar() {
-  const sidebar = document.querySelector('.sidebar');
-  const btn = document.querySelector('.menu-toggle');
-  const overlay = document.querySelector('.sidebar-overlay');
-  const isOpen = sidebar.classList.toggle('open');
-  btn.classList.toggle('active');
-  btn.setAttribute('aria-expanded', isOpen);
-  overlay.classList.toggle('active');
-  overlay.style.display = isOpen ? 'block' : 'none';
-}
-
-function closeSidebar() {
-  const sidebar = document.querySelector('.sidebar');
-  const btn = document.querySelector('.menu-toggle');
-  const overlay = document.querySelector('.sidebar-overlay');
-  sidebar.classList.remove('open');
-  btn.classList.remove('active');
-  overlay.classList.remove('active');
-  overlay.style.display = 'none';
-}
-
-function scrollToSection(id) {
-  const target = document.getElementById(id);
-  if (!target) return;
-
-  target.classList.add('open');
-  const hdr = target.previousElementSibling;
-  if (hdr && hdr.classList.contains('accordion-header')) {
-    hdr.classList.add('open');
-    hdr.setAttribute('aria-expanded', 'true');
-  }
-
-  document.querySelectorAll('.sidebar-group').forEach(g => g.classList.remove('open'));
-
-  target.querySelectorAll('.accordion-body').forEach(body => {
-    if (!body.classList.contains('open')) {
-      body.classList.add('open');
-      const hdr = body.previousElementSibling;
-      if (hdr && hdr.classList.contains('accordion-header')) {
-        hdr.classList.add('open');
-        hdr.setAttribute('aria-expanded', 'true');
-      }
-    }
-  });
-
-  const links = document.querySelectorAll('.sidebar-group-content a');
-  links.forEach(a => {
-    a.classList.toggle('active', a.getAttribute('href') === '#' + id);
-  });
-
-  setTimeout(() => {
-    const rect = target.getBoundingClientRect();
-    const absoluteTop = window.scrollY + rect.top - 80;
-    window.scrollTo({ top: Math.max(0, absoluteTop), behavior: 'smooth' });
-    closeSidebar();
-  }, 150);
-}
-
-function toggle(id) {
-  const body = document.getElementById('body-' + id);
-  if (!body) return;
-  
-  const header = body.previousElementSibling;
-  if (!header || !header.classList.contains('accordion-header')) return;
-  
-  const isOpen = body.classList.contains('open');
-  header.classList.toggle('open');
-  body.classList.toggle('open', !isOpen);
-  header.setAttribute('aria-expanded', String(!isOpen));
-}
-
-function openAccordion(id) {
-  const body = document.getElementById('body-' + id);
-  if (!body) return;
-  
-  const header = body.previousElementSibling;
-  if (!header || !header.classList.contains('accordion-header')) return;
-  
-  header.classList.add('open');
-  body.classList.add('open');
-  setTimeout(() => {
-    header.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }, 100);
-}
-
-// ── KEYBOARD ACCESSIBILITY ──
-document.addEventListener('keydown', function(e) {
-  if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('accordion-header')) {
-    e.preventDefault();
-    e.target.click();
-  }
-});
-
-// ── THEME TOGGLE ──
-function toggleTheme() {
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
-  try {
-    localStorage.setItem('cayce-theme', isDark ? 'light' : 'dark');
-  } catch (e) {}
-  updateThemeButton(!isDark);
-}
-
-function toggleMainSection(sgClass) {
-  document.querySelectorAll('.' + sgClass).forEach(sg => {
-    sg.classList.toggle('collapsed');
   });
 }
 </script>

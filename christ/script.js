@@ -2,12 +2,12 @@ function toggle(id) {
   const body = document.getElementById('body-' + id);
   if (!body) return;
   const isOpen = body.classList.contains('open');
-  body.classList.toggle('open');
+  body.classList.toggle('open', !isOpen);
   
   const header = body.previousElementSibling;
   if (header && header.classList.contains('accordion-header')) {
-    header.classList.toggle('open');
-    header.setAttribute('aria-expanded', !isOpen);
+    header.classList.toggle('open', !isOpen);
+    header.setAttribute('aria-expanded', String(!isOpen));
   }
 }
 
