@@ -1,11 +1,14 @@
 function toggle(id) {
   const body = document.getElementById('body-' + id);
-  const header = document.querySelector(`button[onclick="toggle('${id}')"]`);
-  if (!body || !header) return;
+  if (!body) return;
   const isOpen = body.classList.contains('open');
-  header.classList.toggle('open');
   body.classList.toggle('open');
-  header.setAttribute('aria-expanded', !isOpen);
+  
+  const header = body.previousElementSibling;
+  if (header && header.classList.contains('accordion-header')) {
+    header.classList.toggle('open');
+    header.setAttribute('aria-expanded', !isOpen);
+  }
 }
 
 function toggleGroup(id) {
