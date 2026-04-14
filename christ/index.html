@@ -2122,20 +2122,13 @@ function closeSidebar() {
 
 function scrollToSection(id) {
   const target = document.getElementById(id);
-  if (!target) {
-    console.log('Target not found:', id);
-    return;
-  }
-  console.log('Found target:', id, target);
+  if (!target) return;
 
-  if (target.classList && target.classList.contains('accordion-body') && !target.classList.contains('open')) {
-    console.log('Opening:', id);
-    target.classList.add('open');
-    const hdr = target.previousElementSibling;
-    if (hdr && hdr.classList.contains('accordion-header')) {
-      hdr.classList.add('open');
-      hdr.setAttribute('aria-expanded', 'true');
-    }
+  target.classList.add('open');
+  const hdr = target.previousElementSibling;
+  if (hdr && hdr.classList.contains('accordion-header')) {
+    hdr.classList.add('open');
+    hdr.setAttribute('aria-expanded', 'true');
   }
 
   target.querySelectorAll('.accordion-body').forEach(body => {
