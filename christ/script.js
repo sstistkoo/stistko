@@ -200,7 +200,11 @@ function closeSidebar() {
 }
 
 function scrollToSection(id) {
-  const target = document.getElementById(id);
+  // Try both: direct id and with 'body-' prefix
+  let target = document.getElementById(id);
+  if (!target) {
+    target = document.getElementById('body-' + id);
+  }
   if (!target) return;
 
   // First open the parent section-group if it's collapsed
