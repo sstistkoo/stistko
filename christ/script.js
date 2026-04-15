@@ -104,12 +104,6 @@ function updateThemeButton(isDark) {
   if (mob) mob.textContent = isDark ? '☀️' : '🌙';
 }
 
-function toggleMainSection(sgClass) {
-  document.querySelectorAll('.' + sgClass).forEach(sg => {
-    sg.classList.toggle('collapsed');
-  });
-}
-
 function toggleThemeSection(themeClass) {
   const groups = Array.from(document.querySelectorAll('.' + themeClass));
   if (!groups.length) return;
