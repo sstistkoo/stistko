@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cayceho výklad Genesis — Sedm dní stvoření</title>
+<meta name="description" content="Edgar Cayce (1877-1945) interpretoval Genesis jako symbolickou mapu sestupu vědomí do hmoty — sedm dní stvoření odpovídá sedmi čakrám.">
+<link rel="icon" href="data:,">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styl.css">
+<script>try{if(localStorage.getItem('cayce-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}</script>
+<style>
+:root {
+  --ink:     #1a1628;
+  --parch:   #f5f0e8;
+  --parch2:  #ede6d4;
+  --gold:    #8b6914;
+  --gold2:   #c49a2a;
+  --violet:  #3d2e6b;
+  --violet2: #6b4fa8;
+  --violet3: #9b7fd4;
+  --violet4: #d4c8f0;
+  --crimson: #7a1f2e;
+  --teal:    #1a5c52;
+  --amber:   #8b5200;
+  --radius:  6px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:focus-visible {
+  outline: 2px solid var(--gold2);
+  outline-offset: 2px;
+}
+button:focus-visible,
+a:focus-visible {
+  outline-offset: 2px;
+}
+
+body {
+  font-family: 'Crimson Pro', Georgia, serif;
+  background: var(--parch);
+  color: var(--ink);
+  min-height: 100vh;
+  background-image:
+    radial-gradient(ellipse at 20% 0%, rgba(61,46,107,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 100%, rgba(139,105,20,0.06) 0%, transparent 60%);
+}
+
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 260px;
+  height: 100vh;
+  background: var(--violet);
+  padding: 1rem;
+  z-index: 100;
+  overflow-y: auto;
+  transition: transform 0.28s ease;
+}
+.sidebar-tab {
+  position: fixed;
+  left: 0;
+  top: 0.8rem;
+  transform: none;
+  z-index: 120;
+  border: none;
+  background: var(--violet);
+  color: var(--gold2);
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 0.9rem 0.55rem;
+  border-radius: 0 8px 8px 0;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.25);
+  transition: background 0.2s, color 0.2s, left 0.28s ease;
+}
+.sidebar-tab:hover {
+  background: var(--violet2);
+  color: var(--parch);
+}
+.sidebar-logo {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  color: var(--gold2);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(212,200,240,0.2);
+  text-align: center;
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(212,200,240,0.15);
+  border-radius: 6px;
+  padding: 0.45rem 0.7rem;
+  cursor: pointer;
+  color: var(--violet4);
+  font-size: 0.82rem;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.8rem;
+  transition: background 0.15s, color 0.15s;
+}
+.theme-toggle:hover {
+  background: rgba(255,255,255,0.13);
+  color: var(--parch);
+}
+.theme-icon { font-size: 0.9rem; line-height: 1; }
+.theme-label { flex: 1; text-align: left; }
+.sidebar-actions-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.4rem;
+  margin-bottom: 0.85rem;
+}
+.sidebar-actions-row .theme-toggle,
+.sidebar-actions-row .sidebar-action {
+  margin-bottom: 0;
+  justify-content: center;
+  padding: 0.45rem 0.45rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+}
+.sidebar-actions-row .theme-toggle .theme-label {
+  text-align: center;
+}
+.sidebar-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px dashed rgba(212,200,240,0.22);
+  border-radius: 6px;
+  padding: 0.42rem 0.6rem;
+  color: var(--violet4);
+  font-size: 0.76rem;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-bottom: 0.85rem;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.sidebar-action:hover {
+  background: rgba(255,255,255,0.11);
+  color: var(--parch);
+  border-color: rgba(212,200,240,0.38);
+}
+.sidebar-group {
+  margin-bottom: 0.3rem;
+}
+.sidebar-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.6rem;
+  background: rgba(255,255,255,0.05);
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--parch);
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: background 0.15s;
+}
+.sidebar-group-header:hover {
+  background: rgba(255,255,255,0.1);
+}
+.sidebar-group-header .arrow {
+  font-size: 0.7rem;
+  transition: transform 0.2s;
+}
+.sidebar-group.open .sidebar-group-header .arrow {
+  transform: rotate(180deg);
+}
+.sidebar-group-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.25s ease;
+}
+.sidebar-group.open .sidebar-group-content {
+  max-height: 400px;
+}
+.sidebar-group-content a {
+  display: block;
+  color: var(--violet4);
+  text-decoration: none;
+  font-size: 0.92rem;
+  padding: 0.4rem 0.6rem 0.4rem 1.2rem;
+  border-radius: 4px;
+  transition: background 0.15s, color 0.15s;
+  border-left: 2px solid transparent;
+}
+.sidebar-group-content a:hover {
+  background: rgba(255,255,255,0.08);
+  color: var(--parch);
+  border-left-color: var(--gold2);
+}
+.sidebar-nav-links {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(212,200,240,0.2);
+}
+.sidebar-nav-link {
+  flex: 1;
+  text-align: center;
+  padding: 0.4rem 0.5rem;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(212,200,240,0.15);
+  border-radius: 4px;
+  color: var(--violet4);
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+}
+.sidebar-nav-link:hover {
+  background: rgba(255,255,255,0.13);
+  color: var(--parch);
+}
+.sidebar-nav-link.active {
+  background: var(--gold2);
+  color: var(--violet);
+  border-color: var(--gold2);
+}
+
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 2rem 3rem;
+  margin-left: 260px;
+  transition: margin-left 0.28s ease;
+}
+body.sidebar-collapsed .sidebar {
+  transform: translateX(-100%);
+}
+body.sidebar-collapsed .sidebar-tab {
+  left: 0;
+}
+body:not(.sidebar-collapsed) .sidebar-tab {
+  left: 260px;
+}
+body.sidebar-collapsed main {
+  margin-left: 1.6rem;
+}
+
+header {
+  background: var(--violet);
+  color: var(--parch);
+  padding: 2.2rem 1.2rem 1.8rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% -20%, rgba(196,154,42,0.25) 0%, transparent 65%),
+    radial-gradient(ellipse at 20% 120%, rgba(107,79,168,0.4) 0%, transparent 50%);
+  pointer-events: none;
+}
+header::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold2), var(--gold), var(--gold2), transparent);
+}
+.header-symbol {
+  font-size: 1.6rem;
+  margin-bottom: 0.6rem;
+  opacity: 0.85;
+  letter-spacing: 0.25em;
+}
+header h1 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.6rem, 4vw, 2.8rem);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+  color: var(--parch);
+}
+header h1 span {
+  display: block;
+  font-size: 0.6em;
+  font-weight: 400;
+  color: var(--gold2);
+  letter-spacing: 0.2em;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+.header-sub {
+  margin-top: 0.7rem;
+  font-size: 0.95rem;
+  color: var(--violet4);
+  font-style: italic;
+  letter-spacing: 0.02em;
+}
+.header-quote {
+  margin-top: 1rem;
+  font-size: 0.88rem;
+  color: rgba(212,200,240,0.8);
+  max-width: 440px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+  font-style: italic;
+}
+
+.section-group {
+  margin-bottom: 1rem;
+}
+.section-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.6rem;
+  padding-left: 0.8rem;
+  border-left: 2px solid var(--gold2);
+  padding-bottom: 0.1rem;
+}
+
+.diagram-wrap {
+  background: var(--parch);
+  border: 1px solid var(--violet4);
+  border-radius: var(--radius);
+  padding: 1rem;
+  margin-bottom: 1.8rem;
+  box-shadow: 0 2px 12px rgba(61,46,107,0.08);
+}
+.diagram-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  color: var(--violet);
+  text-align: center;
+  margin-bottom: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+.body-diagram {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+.diagram-svg-wrap {
+  flex: 0 0 auto;
+}
+.chakra-list {
+  flex: 1;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.3rem;
+}
+.chakra-row {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.chakra-row:hover { background: rgba(61,46,107,0.05); }
+.chakra-node {
+  cursor: pointer;
+}
+.chakra-node circle {
+  transition: transform 0.15s, filter 0.15s;
+}
+.chakra-node:hover circle,
+.chakra-node:focus-visible circle {
+  transform: scale(1.08);
+  filter: brightness(1.12);
+}
+.chakra-dot {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+.chakra-info { line-height: 1.3; }
+.chakra-name { font-size: 0.85rem; font-weight: 600; color: var(--violet); }
+.chakra-gland { font-size: 0.75rem; color: var(--gold); font-style: italic; }
+.chakra-church { font-size: 0.72rem; color: #666; margin-top: 0.1rem; }
+
+.accordion {
+  border: 1px solid var(--violet4);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(61,46,107,0.06);
+  margin-bottom: 0.35rem;
+}
+.accordion-header {
+  width: 100%;
+  background: white;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  transition: background 0.15s;
+  position: relative;
+}
+.accordion-header:hover { background: #faf8ff; }
+.accordion-header.open { background: var(--violet); }
+.acc-num {
+  width: 44px;
+  min-height: 52px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+.accordion-header:not(.open) .acc-num {
+  color: var(--violet2);
+}
+.acc-title-wrap {
+  flex: 1;
+  padding: 0.5rem 0.7rem;
+}
+.acc-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--violet);
+  line-height: 1.25;
+  transition: color 0.15s;
+}
+.accordion-header.open .acc-title { color: var(--parch); }
+.acc-subtitle {
+  font-size: 0.76rem;
+  color: var(--gold);
+  font-style: italic;
+  margin-top: 0.15rem;
+  transition: color 0.15s;
+}
+.accordion-header.open .acc-subtitle { color: var(--violet4); }
+.acc-arrow {
+  width: 44px;
+  min-height: 52px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  color: var(--violet3);
+  transition: transform 0.25s, color 0.15s;
+  flex-shrink: 0;
+}
+.accordion-header.open .acc-arrow {
+  transform: rotate(180deg);
+  color: var(--violet4);
+}
+.accordion-inner {
+  padding: 0.7rem 0.9rem 0.9rem;
+  border-top: 1px solid var(--violet4);
+}
+
+.quote-block {
+  border-left: 3px solid var(--gold2);
+  padding: 0.6rem 0.9rem;
+  margin: 0.6rem 0 0.8rem;
+  background: rgba(139,105,20,0.07);
+  border-radius: 0 4px 4px 0;
+  font-style: italic;
+  font-size: 0.97rem;
+  color: #1a1020;
+  line-height: 1.65;
+}
+.body-text {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: #111118;
+  margin-bottom: 0.7rem;
+}
+.promise-block {
+  background: linear-gradient(135deg, rgba(61,46,107,0.07), rgba(61,46,107,0.03));
+  border: 1px solid var(--violet4);
+  border-radius: 4px;
+  padding: 0.6rem 0.9rem;
+  margin-top: 0.8rem;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: #111118;
+}
+.promise-block strong {
+  color: var(--violet);
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.symbol-block {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+}
+.symbol-item {
+  display: flex;
+  gap: 0.7rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(61,46,107,0.08);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+.symbol-item:last-child { border-bottom: none; }
+.symbol-term {
+  font-weight: 600;
+  color: var(--violet2);
+  min-width: 140px;
+  flex-shrink: 0;
+  font-size: 0.88rem;
+  padding-top: 0.05rem;
+}
+.symbol-desc { color: #111118; font-size: 0.97rem; line-height: 1.7; }
+
+.overview-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  margin: 0.8rem 0;
+}
+.overview-table th {
+  background: var(--violet);
+  color: var(--parch);
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.6rem 0.8rem;
+  text-align: left;
+}
+.overview-table td {
+  padding: 0.55rem 0.8rem;
+  border-bottom: 1px solid var(--violet4);
+  vertical-align: top;
+  line-height: 1.5;
+}
+.overview-table tr:nth-child(even) td { background: rgba(61,46,107,0.03); }
+.overview-table tr:hover td { background: rgba(61,46,107,0.06); }
+
+.note { font-size: 0.82rem; color: #777; font-style: italic; margin-top: 0.5rem; }
+
+#theme-toggle-mobile {
+  display: none;
+  position: fixed;
+  top: 0.8rem;
+  left: 4rem;
+  z-index: 200;
+  width: 44px;
+  height: 44px;
+  background: var(--violet);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  line-height: 1;
+}
+
+.menu-toggle {
+  display: none;
+  position: fixed;
+  top: 0.8rem;
+  left: 0.8rem;
+  z-index: 200;
+  width: 44px;
+  height: 44px;
+  background: var(--violet);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.menu-toggle span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--parch);
+  border-radius: 1px;
+  transition: transform 0.2s, opacity 0.2s;
+}
+.menu-toggle.active span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.menu-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+.menu-toggle.active span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 90;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.sidebar-overlay.active {
+  opacity: 1;
+}
+
+@media (max-width: 800px) {
+  .sidebar-tab { display: none; }
+  .menu-toggle { display: flex; }
+  #theme-toggle-mobile { display: flex; align-items: center; justify-content: center; }
+  .sidebar { 
+    display: block;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    width: 240px;
+  }
+  .sidebar.open { 
+    transform: translateX(0);
+  }
+  main { margin-left: 0; max-width: 100%; }
+  header { padding: 4rem 1.2rem 1.8rem; }
+  .body-diagram { flex-direction: column; align-items: center; }
+  .symbol-term { min-width: 110px; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+main > * { animation: fadeUp 0.5s ease both; }
+main > *:nth-child(1) { animation-delay: 0.05s; }
+main > *:nth-child(2) { animation-delay: 0.12s; }
+main > *:nth-child(3) { animation-delay: 0.19s; }
+main > *:nth-child(4) { animation-delay: 0.26s; }
+main > *:nth-child(5) { animation-delay: 0.33s; }
+main > *:nth-child(6) { animation-delay: 0.40s; }
+main > *:nth-child(7) { animation-delay: 0.47s; }
+main > *:nth-child(8) { animation-delay: 0.54s; }
+main > *:nth-child(9) { animation-delay: 0.61s; }
+main > *:nth-child(10) { animation-delay: 0.68s; }
+
+[data-theme="dark"] {
+  --ink:     #e8e4f5;
+  --parch:   #1a1628;
+  --parch2:  #211c35;
+  --gold:    #c49a2a;
+  --gold2:   #e0b84a;
+  --violet:  #4a3a8a;
+  --violet2: #7a5fc8;
+  --violet3: #a890e0;
+  --violet4: #c8b8f0;
+  background: #120f1e;
+  color: #e8e4f5;
+}
+[data-theme="dark"] .accordion-header { background: #1e1830; }
+[data-theme="dark"] .accordion-header:hover { background: #26203c; }
+[data-theme="dark"] .accordion-header.open { background: var(--violet); }
+[data-theme="dark"] .accordion-inner { border-top-color: rgba(212,200,240,0.15); }
+[data-theme="dark"] .diagram-wrap { background: #1e1830; border-color: rgba(212,200,240,0.15); }
+[data-theme="dark"] .body-text { color: #d0c8e8; }
+[data-theme="dark"] .symbol-desc { color: #d0c8e8; }
+[data-theme="dark"] .symbol-term { color: var(--violet3); }
+[data-theme="dark"] .quote-block { background: rgba(139,105,20,0.15); color: var(--violet4); border-left-color: var(--gold2); }
+[data-theme="dark"] .promise-block { background: rgba(61,46,107,0.35); color: #d0c8e8; }
+[data-theme="dark"] .overview-table td { color: #d0c8e8; }
+[data-theme="dark"] .overview-table tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+[data-theme="dark"] .overview-table tr:hover td { background: rgba(255,255,255,0.06); }
+[data-theme="dark"] .sidebar { background: #110e1e; }
+[data-theme="dark"] .sidebar-group-header { color: #d4c8f0; }
+[data-theme="dark"] .note { color: #9988bb; }
+[data-theme="dark"] .chakra-name { color: var(--violet3); }
+[data-theme="dark"] .chakra-church { color: #9988bb; }
+[data-theme="dark"] .acc-title { color: var(--violet4); }
+[data-theme="dark"] .acc-subtitle { color: var(--gold); }
+[data-theme="dark"] .section-label { color: var(--gold2); border-left-color: var(--gold2); }
+[data-theme="dark"] .sidebar-group-content a { color: var(--violet3); }
+[data-theme="dark"] .chakra-gland { color: var(--gold); }
+[data-theme="dark"] .chakra-row:hover { background: rgba(255,255,255,0.05); }
+[data-theme="dark"] td, [data-theme="dark"] th { border-color: rgba(212,200,240,0.12) !important; }
+
+#back-to-top {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--violet);
+  color: var(--parch);
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 12px rgba(61,46,107,0.35);
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.3s, transform 0.3s, background 0.15s;
+  z-index: 150;
+  pointer-events: none;
+}
+#back-to-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+#back-to-top:hover { background: var(--violet2); }
+
+#progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  width: 0%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold2), var(--violet2));
+  z-index: 999;
+  transition: width 0.1s linear;
+}
+
+.overview-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 0.8rem 0;
+}
+.overview-table { margin: 0; }
+
+.sidebar-group-content a.active {
+  background: rgba(255,255,255,0.12);
+  color: var(--parch);
+  border-left-color: var(--gold2);
+}
+.sidebar-nav-link.active {
+  background: var(--gold2);
+  color: var(--violet);
+  border-color: var(--gold2);
+}
+
+.accordion-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.32s cubic-bezier(0.4,0,0.2,1);
+  background: var(--parch);
+  min-height: 0;
+  overflow: hidden;
+  clip-path: inset(0 0 100% 0);
+}
+.accordion-body.open {
+  grid-template-rows: 1fr;
+  clip-path: inset(0 0 0 0);
+}
+.accordion-body > .accordion-inner {
+  overflow: hidden;
+  min-height: 0;
+  height: 100%;
+}
+
+@media print {
+  .sidebar, .menu-toggle, .sidebar-overlay, #progress-bar { display: none !important; }
+  main { margin-left: 0 !important; max-width: 100% !important; padding: 0 !important; }
+  header { margin-left: 0 !important; }
+  .accordion-body { display: block !important; max-height: none !important; grid-template-rows: 1fr !important; }
+  .accordion-body > .accordion-inner { overflow: visible !important; }
+  header { break-after: avoid; }
+  .accordion { break-inside: avoid; }
+}
+
+#section1, #section2 { scroll-margin-top: 1rem; }
+.accordion-body[id] { scroll-margin-top: 0.5rem; }
+
+.overview-table td, .overview-table th {
+  border-bottom: 1px solid var(--violet4);
+}
+[data-theme="dark"] .overview-table td,
+[data-theme="dark"] .overview-table th {
+  border-bottom: 1px solid rgba(212,200,240,0.15);
+}
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<button class="menu-toggle" onclick="toggleSidebar()" aria-label="Otevřít menu" aria-expanded="false">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+<button id="theme-toggle-mobile" onclick="toggleTheme()" aria-label="Přepnout téma" title="Světlý/Tmavý mód">🌙</button>
+<div class="sidebar-overlay" onclick="closeSidebar()"></div>
+<button class="sidebar-tab" onclick="toggleSidebar()" aria-label="Rozbalit levý panel Cayce" aria-expanded="false">cayce</button>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">☩ Cayce</div>
+  
+  <div class="sidebar-nav-links">
+    <a href="index.html" class="sidebar-nav-link">Domů</a>
+    <a href="genesis.html" class="sidebar-nav-link active">Genesis</a>
+    <a href="zjeveni.html" class="sidebar-nav-link">Zjevení</a>
+  </div>
+  
+  <div class="sidebar-actions-row">
+    <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Přepnout světlý/tmavý mód">
+      <span class="theme-icon">🌙</span>
+      <span class="theme-label">Mód</span>
+    </button>
+    <button class="sidebar-action" onclick="expandAll()" title="Rozbalit vše">
+      ▾ Rozbalit
+    </button>
+    <button class="sidebar-action" onclick="collapseAll()" title="Sbalit vše">
+      ▸ Sbalit
+    </button>
+  </div>
+
+  <div class="sidebar-group open" id="group-genesis">
+    <div class="sidebar-group-header" onclick="toggleGroup('genesis')">
+      Genesis — Sedm dní
+      <span class="arrow">▾</span>
+    </div>
+    <div class="sidebar-group-content">
+      <a href="#body-gen-uvod" onclick="scrollToSection('gen-uvod')">Úvod — Jak Cayce četl Genesis</a>
+      <a href="#body-gen1" onclick="scrollToSection('gen1')">Den první — Světlo</a>
+      <a href="#body-gen2" onclick="scrollToSection('gen2')">Den druhý — Klenba</a>
+      <a href="#body-gen3" onclick="scrollToSection('gen3')">Den třetí — Pevnina</a>
+      <a href="#body-gen4" onclick="scrollToSection('gen4')">Den čtvrtý — Hvězdy</a>
+      <a href="#body-gen5" onclick="scrollToSection('gen5')">Den pátý — Živočichové</a>
+      <a href="#body-gen6" onclick="scrollToSection('gen6')">Den šestý — Člověk</a>
+      <a href="#body-gen7" onclick="scrollToSection('gen7')">Den sedmý — Odpočinek</a>
+    </div>
+  </div>
+
+  <div class="sidebar-group" id="group-srovnani">
+    <div class="sidebar-group-header" onclick="toggleGroup('srovnani')">
+      Srovnávací tabulka
+      <span class="arrow">▾</span>
+    </div>
+    <div class="sidebar-group-content">
+      <a href="#body-gen-srov" onclick="scrollToSection('gen-srov')">Genesis · Čákry · Zjevení</a>
+    </div>
+  </div>
+</aside>
+
+<main>
+<header>
+  <div class="header-symbol">☩ ✦ ☩</div>
+  <h1><span>Edgar Cayce</span>Genesis</h1>
+  <p class="header-sub">Sedm dní stvoření · Sestup vědomí do hmoty</p>
+  <p class="header-quote">„Písmo svaté není jen historií — je mapou vnitřního duchovního probuzení člověka." — E. Cayce</p>
+</header>
+
+<div class="section-group" id="section1">
+  <div class="section-label">Sedm dní stvoření — Genesis 1 podle Cayceho</div>
+
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('gen-uvod')">
+      <div class="acc-num" style="background:#5F5E5A">✦</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Úvod — Jak Cayce četl Genesis</div>
+        <div class="acc-subtitle">Ne doslovně · Mapa sestupu vědomí do hmoty</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-gen-uvod">
+      <div class="accordion-inner">
+        <p class="body-text">Cayce říkal totéž o Genesis jako o Zjevení: <em>není to doslovný popis fyzických událostí</em>. Je to symbolický záznam o tom, jak vědomí sestoupilo z božské jednoty do hmoty — a jak se má vrátit zpět. Sedm dní není sedm kalendářních dnů. Jsou to <strong>sedm fází nebo úrovní vědomí</strong> při procesu stvoření.</p>
+        <p class="body-text">Klíčový Cayceho výrok: stvoření začalo <em>"v Božím Mysli"</em> jako duchovní energie — vědomá a inteligentní síla složená z lásky, harmonie a krásy. Fyzický svět přišel až na konec, jako nejhustší vrstva tohoto sestupu. Duše existovaly dlouho před fyzickými těly.</p>
+        <div class="symbol-block">
+          <div class="symbol-item"><div class="symbol-term">Elohim vs. Jahve</div><div class="symbol-desc">Cayce rozlišoval dvě stvoření v Genesis. Elohim (1. kapitola) = kolektivní, sjednocený aspekt božství — stvoření duchovních bytostí. Jahve (2. kapitola) = sestup do individualizované, fyzické formy. Dvě etapy, ne rozpor.</div></div>
+          <div class="symbol-item"><div class="symbol-term">Adam</div><div class="symbol-desc">Není jednotlivec — je to kolektivní entita, skupina duší. A zároveň první individualizovaný projev "Syna člověka" v zemské rovině. Cayce identifikoval prvního Adama s posledním Adamem — Kristem. Kruh se uzavírá.</div></div>
+          <div class="symbol-item"><div class="symbol-term">Den stvoření</div><div class="symbol-desc">Hebrejské slovo "jom" neznamená nutně 24 hodin — může znamenat epochu, fázi, úroveň. Cayce to bral jako miliony let nebo jako mimočasové roviny vědomí.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('gen1')">
+      <div class="acc-num" style="background:#534AB7">1</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Den první — Světlo a tma</div>
+        <div class="acc-subtitle">„Budiž světlo" · Prvotní rozlišení · Vědomí a nevědomí</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-gen1">
+      <div class="accordion-inner">
+        <div class="quote-block">„Na počátku stvořil Bůh nebe a zemi... a Bůh řekl: Budiž světlo. A bylo světlo."</div>
+        <p class="body-text">Cayce vykládal první den jako <strong>prvotní akt vědomí</strong> — okamžik, kdy božský duch řekl „já jsem" a tím rozlišil sebe od nicoty. Světlo není fyzické světlo — je to <em>vědomí samo</em>. Tma není zlo — je to latentní potenciál, nevědomí, neprojevené.</p>
+        <p class="body-text">Oddělení světla od tmy = první dualita. Cayce říkal: veškeré stvoření probíhá skrze rozlišení a oddělení — to je princip jak Bůh tvoří. Jednota se stává dvěma, aby se mohla poznat sama sebe.</p>
+        <div class="promise-block"><strong>Paralela se čákrami:</strong> Odpovídá Sahasrara — koruna, první záblesk božského vědomí. Světlo které vstupuje do systému shora.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('gen2')">
+      <div class="acc-num" style="background:#185FA5">2</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Den druhý — Klenba nebeská</div>
+        <div class="acc-subtitle">Oddělení vod · Duchovní a materiální rovina</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-gen2">
+      <div class="accordion-inner">
+        <div class="quote-block">„Budiž klenba uprostřed vod a odděluj vody od vod."</div>
+        <p class="body-text">Druhý den — oddělení vod nahoře od vod dole. Cayce to vykládal jako <strong>oddělení duchovních rovin od materiálních</strong>. „Vody nahoře" = duchovní substance, primární energie. „Vody dole" = hmotná substance, hustší vibrace.</p>
+        <p class="body-text">Klenba mezi nimi (hebrejsky <em>rakia</em>) = hranice, membrána mezi světy. Cayce říkal: duše procházejí touto klenubou při inkarnaci — sestupují z duchovních vod do materiálních. A při smrti stoupají zpět.</p>
+        <div class="promise-block"><strong>Paralela se čákrami:</strong> Odpovídá Adžna — třetí oko, místo kde se duchovní vnímání a fyzická realita setkávají. Rozhraní světů.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('gen3')">
+      <div class="acc-num" style="background:#1D9E75">3</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Den třetí — Pevnina a vegetace</div>
+        <div class="acc-subtitle">Forma se zhušťuje · Zákon příčiny a následku</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-gen3">
+      <div class="accordion-inner">
+        <div class="quote-block">„Budiž shromážděny vody... a ukaž se souš. Vydej země zeleň..."</div>
+        <p class="body-text">Třetí den — hmota se formuje a organizuje. Pevnina vychází z moře — <strong>forma se vynořuje z chaosu</strong>. Cayce to vykládal jako první projevení principu karmy: zákon příčiny a následku se zakódovává do struktury reality. Každé semeno nese svůj druh — to je kauzální zákon vepsaný do přírody.</p>
+        <p class="body-text">Vegetace — první živé formy — symbolizují pro Cayceho <em>první úroveň vědomí v hmotě</em>. Rostliny mají vědomí, ale bez individuality. Je to vědomí kolektivní, druhu.</p>
+        <div class="promise-block"><strong>Paralela se čákrami:</strong> Odpovídá Višuddha — hrdlo, vyjádření, forma dostává podobu. Slovo se stává tělem.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('gen4')">
+      <div class="acc-num" style="background:#3B6D11">4</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Den čtvrtý — Slunce, měsíc a hvězdy</div>
+        <div class="acc-subtitle">Kosmické hodiny · Planetární vlivy · Astrologie</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-gen4">
+      <div class="accordion-inner">
+        <div class="quote-block">„Buďte světla na nebeské klenbě... pro znamení a pro určení období, dnů a let."</div>
+        <p class="body-text">Čtvrtý den je pro Cayceho mimořádně důležitý — tady vznikají <strong>kosmické hodiny a planetární vlivy</strong>. Cayce věřil v astrologii jako reálný systém — planety nejsou jen fyzická tělesa, jsou to <em>úrovně vědomí</em> kterými duše procházejí mezi inkarnacemi.</p>
+        <p class="body-text">Slunce, měsíc a hvězdy jako „znamení a období" — Cayce říkal: duše se rodí do konkrétního astrologického vzorce protože si vybraly specifické lekce. Planety jsou učitelé, ne vládci. Vůle člověka je silnější než jakýkoli planetární vliv — ale planety nastavují podmínky.</p>
+        <p class="body-text">Čtvrtý den odpovídá středu stromu — srdci systému. Cayce říkal: kosmický řád a osobní svobodná vůle jsou v rovnováze právě tady.</p>
+        <div class="promise-block"><strong>Paralela se čákrami:</strong> Odpovídá Anáhata — srdce, střed, rovnováha mezi kosmickým a osobním. Místo kde se střetává osud a svoboda.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('gen5')">
+      <div class="acc-num" style="background:#BA7517">5</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Den pátý — Živočichové ve vodě a vzduchu</div>
+        <div class="acc-subtitle">Emoce a touha · Skupinové vědomí · Instinkt</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-gen5">
+      <div class="accordion-inner">
+        <div class="quote-block">„Hemžete se vody živočichy... a létejte ptáci nad zemí."</div>
+        <p class="body-text">Pátý den — živočichové ve vodě a vzduchu. Cayce to vykládal jako vznik <strong>emočního a instinktivního vědomí</strong>. Ryby (voda = emoce, nevědomí) a ptáci (vzduch = myšlení, pohyb, svoboda) — dva aspekty předlidského vědomí.</p>
+        <p class="body-text">Živočichové mají skupinové vědomí — druhy, smečky, hejna. Ještě ne individuální já. Cayce říkal: lidské duše procházely těmito formami jako zkušenostmi — ne doslova jako reinkarnace do zvířat (to odmítal), ale jako úrovně vědomí které jsou v člověku stále přítomny jako vrstvy.</p>
+        <div class="promise-block"><strong>Paralela se čákrami:</strong> Odpovídá Manipura — solar plexus, pudová síla, instinkty, skupinová energie. Voda jako symbol emočního těla.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('gen6')">
+      <div class="acc-num" style="background:#D85A30">6</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Den šestý — Zvířata a člověk</div>
+        <div class="acc-subtitle">„Učiňme člověka..." · Pád duší do hmoty · Androgynní Adam</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-gen6">
+      <div class="accordion-inner">
+        <div class="quote-block">„Učiňme člověka k obrazu svému, k podobě naší..."</div>
+        <p class="body-text">Šestý den je pro Cayceho nejdramatičtější. Vznik člověka není biologická evoluce — je to <strong>záměrný sestup duchovních bytostí do hmoty</strong>. „Učiňme" — Elohim mluví v množném čísle — Cayce vykládal jako pluralitu duší které kolektivně vstupují do fyzické formy.</p>
+        <p class="body-text">Klíčový Cayceho detail: prvotní Adam byl <em>androgynní</em> — obsahoval v sobě mužský i ženský princip. Oddělení na muže a ženu (Eva z Adamova žebra) = moment kdy se duše rozdělily na polaritu, aby mohly prožívat vztah a naučit se lásce skrze jinakost druhého.</p>
+        <p class="body-text">„K obrazu Božímu" — Cayce říkal: naše přirozené stav je duch. Nejsme fyzická těla která mají duši — jsme duchovní bytosti, které mají dočasnou fyzickou zkušenost. Tělo je jako auto — odložíme ho, když ho nepotřebujeme.</p>
+        <p class="body-text">Číslo 6 = číslo hmoty. Šestý den = vstup ducha plně do hmotné formy. Proto 666 v Zjevení symbolizuje vědomí uvězněné v hmotě — šestý den bez soboty, bez návratu k božskému.</p>
+        <div class="promise-block"><strong>Paralela se čákrami:</strong> Odpovídá Svadhišthána a Muladhara — tvůrčí síla a základní zakotvení. Duše plně inkarnovaná, pohlavně diferencovaná, v těle.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('gen7')">
+      <div class="acc-num" style="background:#E24B4A">7</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Den sedmý — Sobota · Odpočinek</div>
+        <div class="acc-subtitle">Nový Jeruzalém Genesis · Vědomí které se vrací · Šabat jako duchovní stav</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-gen7">
+      <div class="accordion-inner">
+        <div class="quote-block">„A Bůh dokončil sedmého dne své dílo... a odpočinul sedmého dne od veškerého díla."</div>
+        <p class="body-text">Sedmý den je pro Cayceho <strong>cíl celého stvoření</strong> — a zároveň jeho klíč. Bůh „odpočinul" — ne proto že byl unavený, ale proto že stvoření bylo dokončeno a dokonalé. Je to stav <em>sjednocení</em>, ne nečinnosti.</p>
+        <p class="body-text">Cayce říkal: sedmý den není historicky uzavřený. Stále trvá. Jsme stále uvnitř sedmého dne — duše se vrací z hmoty zpět do božského odpočinku. Každá inkarnace je krokem v tomto návratu. Sobota (Šabat) pro Cayceho není jen den v týdnu — je to <em>stav vědomí</em> které se vzdalo boje ega a spočinulo v Bohu.</p>
+        <p class="body-text">Tady je přímé propojení se Zjevením: Nový Jeruzalém je sedmý den Genesis. Strom života na konci Zjevení je tentýž strom v Edenu. <strong>Kruh Genesis → Zjevení je jedním příběhem</strong> — sestup do hmoty a návrat do božského odpočinku. Bible jako celek je touto mapou.</p>
+        <div class="symbol-block">
+          <div class="symbol-item"><div class="symbol-term">Šabat jako stav</div><div class="symbol-desc">Ne kalendářní den — ale vědomí, které přestalo bojovat s existencí a spočinulo v přítomnosti Boha. To je Cayceho výklad Šabatu.</div></div>
+          <div class="symbol-item"><div class="symbol-term">„Velmi dobré"</div><div class="symbol-desc">Bůh na konci šestého dne řekl „bylo to velmi dobré" — Cayce říkal: hmota není zlo. Tělo není vězení. Fyzická existence je dar, ne trest. Gnostické odmítání hmoty Cayce nepřijímal.</div></div>
+          <div class="symbol-item"><div class="symbol-term">Genesis = Zjevení</div><div class="symbol-desc">Had v Edenu a drak v Zjevení jsou totožný symbol — kundalini. Strom života v Edenu a strom života v Novém Jeruzalémě jsou totéž. Bible je jeden uzavřený kruh.</div></div>
+        </div>
+        <div class="promise-block"><strong>Paralela se čákrami:</strong> Sedmý den odpovídá Sahasrara — korunní centrum, návrat k božskému zdroji. Genesis začíná světlem (den 1 = Sahasrara) a končí odpočinkem (den 7 = Sahasrara). Stvoření je kruhem vědomí, které vychází ze sebe a vrací se k sobě.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section-group" id="section2">
+  <div class="section-label">Srovnávací tabulka — Genesis, čákry a Zjevení</div>
+
+  <div class="accordion">
+    <button class="accordion-header" aria-expanded="false" onclick="toggle('gen-srov')">
+      <div class="acc-num" style="background:#3d2e6b">≡</div>
+      <div class="acc-title-wrap">
+        <div class="acc-title">Srovnávací tabulka — Genesis, čákry a Zjevení</div>
+        <div class="acc-subtitle">Jak Cayce propojil tři texty do jednoho systému</div>
+      </div>
+      <div class="acc-arrow">▾</div>
+    </button>
+    <div class="accordion-body" id="body-gen-srov">
+      <div class="accordion-inner">
+        <p class="body-text" style="margin-bottom:0.8rem">Cayce říkal, že celá Bible je jeden příběh — sestup vědomí z Boha do hmoty a jeho návrat. Genesis popisuje sestup, Zjevení popisuje výstup. Sedm čáker je mapa těla skrze které tento pohyb probíhá.</p>
+        <div class="overview-table-wrap">
+          <table style="width:100%;border-collapse:collapse;font-size:0.88rem">
+            <thead>
+              <tr>
+                <th style="padding:0.5rem 0.7rem;text-align:left;font-family:'Cinzel',serif;font-size:0.72rem;letter-spacing:0.08em">Genesis</th>
+                <th style="padding:0.5rem 0.7rem;text-align:left;font-family:'Cinzel',serif;font-size:0.72rem;letter-spacing:0.08em">Čákra</th>
+                <th style="padding:0.5rem 0.7rem;text-align:left;font-family:'Cinzel',serif;font-size:0.72rem;letter-spacing:0.08em">Žláza</th>
+                <th style="padding:0.5rem 0.7rem;text-align:left;font-family:'Cinzel',serif;font-size:0.72rem;letter-spacing:0.08em">Církev</th>
+                <th style="padding:0.5rem 0.7rem;text-align:left;font-family:'Cinzel',serif;font-size:0.72rem;letter-spacing:0.08em">Téma</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="background:#faf8ff">
+                <td style="padding:0.5rem 0.7rem">1. Světlo</td>
+                <td style="padding:0.5rem 0.7rem">7. Sahasrara</td>
+                <td style="padding:0.5rem 0.7rem">Epifýza</td>
+                <td style="padding:0.5rem 0.7rem">Laodicea</td>
+                <td style="padding:0.5rem 0.7rem">Prvotní vědomí, božský záblesk</td>
+              </tr>
+              <tr>
+                <td style="padding:0.5rem 0.7rem">2. Klenba</td>
+                <td style="padding:0.5rem 0.7rem">6. Adžna</td>
+                <td style="padding:0.5rem 0.7rem">Hypofýza</td>
+                <td style="padding:0.5rem 0.7rem">Filadelfie</td>
+                <td style="padding:0.5rem 0.7rem">Rozhraní světů, duchovní vidění</td>
+              </tr>
+              <tr style="background:#faf8ff">
+                <td style="padding:0.5rem 0.7rem">3. Pevnina</td>
+                <td style="padding:0.5rem 0.7rem">5. Višuddha</td>
+                <td style="padding:0.5rem 0.7rem">Štítná žláza</td>
+                <td style="padding:0.5rem 0.7rem">Sardy</td>
+                <td style="padding:0.5rem 0.7rem">Forma, vyjádření, vůle</td>
+              </tr>
+              <tr>
+                <td style="padding:0.5rem 0.7rem">4. Hvězdy</td>
+                <td style="padding:0.5rem 0.7rem">4. Anáhata</td>
+                <td style="padding:0.5rem 0.7rem">Brzlík</td>
+                <td style="padding:0.5rem 0.7rem">Thyatira</td>
+                <td style="padding:0.5rem 0.7rem">Kosmický řád, rovnováha, láska</td>
+              </tr>
+              <tr style="background:#faf8ff">
+                <td style="padding:0.5rem 0.7rem">5. Živočichové</td>
+                <td style="padding:0.5rem 0.7rem">3. Manipura</td>
+                <td style="padding:0.5rem 0.7rem">Nadledvinky</td>
+                <td style="padding:0.5rem 0.7rem">Pergamon</td>
+                <td style="padding:0.5rem 0.7rem">Instinkty, emoce, hněv/strach</td>
+              </tr>
+              <tr>
+                <td style="padding:0.5rem 0.7rem">6. Člověk</td>
+                <td style="padding:0.5rem 0.7rem">2. Svadhišthána</td>
+                <td style="padding:0.5rem 0.7rem">Pohlavní žlázy</td>
+                <td style="padding:0.5rem 0.7rem">Smyrna</td>
+                <td style="padding:0.5rem 0.7rem">Polarita, tvořivá síla, život</td>
+              </tr>
+              <tr style="background:#faf8ff">
+                <td style="padding:0.5rem 0.7rem">6. Člověk</td>
+                <td style="padding:0.5rem 0.7rem">1. Muladhara</td>
+                <td style="padding:0.5rem 0.7rem">Leydigovy buňky</td>
+                <td style="padding:0.5rem 0.7rem">Efez</td>
+                <td style="padding:0.5rem 0.7rem">Plný sestup do hmoty, uzemnění</td>
+              </tr>
+              <tr>
+                <td style="padding:0.5rem 0.7rem">7. Odpočinek</td>
+                <td style="padding:0.5rem 0.7rem">Návrat / Kruh</td>
+                <td style="padding:0.5rem 0.7rem">Celistvost</td>
+                <td style="padding:0.5rem 0.7rem">Nový Jeruzalém</td>
+                <td style="padding:0.5rem 0.7rem">Návrat vědomí k božskému zdroji</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="note" style="margin-top:0.7rem">Poznámka: Tabulka vychází z Cayceho systému esoterické anatomie a korespondencí mezi endokrinními žlázami, čákrami a sedmi círvemi ze Zjevení. 6. den Genesis je rozdělen do dvou řádků podle dvou spodních žláz (nadledvinky a pohlavní žlázy/gonády).</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Zpět nahoru" aria-label="Zpět nahoru">↑</button>
+
+<script src="script.js"></script>
+</body>
+</html>

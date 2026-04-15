@@ -121,18 +121,34 @@ function setThemeCollapsed(themeClass, isCollapsed) {
   applyThemeSync(themeClass, isCollapsed);
 }
 
-function collapseAllThemes() {
-  Object.keys(THEME_TO_SIDEBAR_MAP).forEach(themeClass => {
-    setThemeCollapsed(themeClass, true);
+function collapseAll() {
+  document.querySelectorAll('.sidebar-group').forEach(g => g.classList.remove('open'));
+  document.querySelectorAll('.accordion-header').forEach(h => {
+    h.classList.remove('open');
+    h.setAttribute('aria-expanded', 'false');
   });
-  saveMenuState();
+  document.querySelectorAll('.accordion-body').forEach(b => b.classList.remove('open'));
 }
 
-function expandAllThemes() {
-  Object.keys(THEME_TO_SIDEBAR_MAP).forEach(themeClass => {
-    setThemeCollapsed(themeClass, false);
+function expandAllThemes() { expandAll(); }
+function collapseAllThemes() { collapseAll(); }
+
+function expandAll() {
+  document.querySelectorAll('.sidebar-group').forEach(g => g.classList.add('open'));
+  document.querySelectorAll('.accordion-header').forEach(h => {
+    h.classList.add('open');
+    h.setAttribute('aria-expanded', 'true');
   });
-  saveMenuState();
+  document.querySelectorAll('.accordion-body').forEach(b => b.classList.add('open'));
+}
+
+function collapseAll() {
+  document.querySelectorAll('.sidebar-group').forEach(g => g.classList.remove('open'));
+  document.querySelectorAll('.accordion-header').forEach(h => {
+    h.classList.remove('open');
+    h.setAttribute('aria-expanded', 'false');
+  });
+  document.querySelectorAll('.accordion-body').forEach(b => b.classList.remove('open'));
 }
 
 function applyThemeSync(themeClass, isCollapsed) {
