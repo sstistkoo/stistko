@@ -45,6 +45,31 @@ body {
   padding: 1rem;
   z-index: 100;
   overflow-y: auto;
+  transition: transform 0.28s ease;
+}
+.sidebar-tab {
+  position: fixed;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 120;
+  border: none;
+  background: var(--violet);
+  color: var(--gold2);
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 0.9rem 0.55rem;
+  border-radius: 0 8px 8px 0;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.25);
+  transition: background 0.2s, color 0.2s, left 0.28s ease;
+}
+.sidebar-tab:hover {
+  background: var(--violet2);
+  color: var(--parch);
 }
 .sidebar-logo {
   font-family: 'Cinzel', serif;
@@ -138,6 +163,19 @@ main {
   margin: 0 auto;
   padding: 2rem 2rem 3rem;
   margin-left: 260px;
+  transition: margin-left 0.28s ease;
+}
+body.sidebar-collapsed .sidebar {
+  transform: translateX(-100%);
+}
+body.sidebar-collapsed .sidebar-tab {
+  left: 0;
+}
+body:not(.sidebar-collapsed) .sidebar-tab {
+  left: 260px;
+}
+body.sidebar-collapsed main {
+  margin-left: 1.6rem;
 }
 
 header {
@@ -576,6 +614,7 @@ header h1 span {
 }
 
 @media (max-width: 800px) {
+  .sidebar-tab { display: none; }
   .menu-toggle { display: flex; }
   #theme-toggle-mobile { display: flex; align-items: center; justify-content: center; }
   .sidebar { 
