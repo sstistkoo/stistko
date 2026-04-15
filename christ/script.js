@@ -203,6 +203,12 @@ function scrollToSection(id) {
   const target = document.getElementById(id);
   if (!target) return;
 
+  // First open the parent section-group if it's collapsed
+  let parentSection = target.closest('.section-group');
+  if (parentSection && parentSection.classList.contains('collapsed')) {
+    parentSection.classList.remove('collapsed');
+  }
+
   target.classList.add('open');
   const hdr = target.previousElementSibling;
   if (hdr && hdr.classList.contains('accordion-header')) {
