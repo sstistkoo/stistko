@@ -5039,6 +5039,726 @@
     "H1260": {
       "definitions_cz": "Bered = \"krupobití\" | n pr m | 1) syn nebo potomek Efraima | n pr loc | 2) místo na jihu Palestiny, poblíž Kadeše, poblíž studny Lahairoi",
       "translated": true
+    },
+    "H1261": {
+      "definitions_cz": "1) skvrnité, označené",
+      "translated": true
+    },
+    "H1262": {
+      "definitions_cz": "1) jíst, konzumovat | 1a) (Qal) jíst | 1b) (Piel) k jídlu, požírání | 1c) (Hiphil) přimět k jídlu",
+      "translated": true
+    },
+    "H1263": {
+      "definitions_cz": "Baruch = \"blahoslavený\" | 1) přítel, amanuensis a věrný pomocník Jeremiáše | 2) kněz, syn Zabbai, který pomáhal Nehemjášovi při přestavbě jeruzalémských hradeb | 3) kněz nebo rodina kněží, kteří podepsali smlouvu s Nehemiášem | 4) syn Col-hozeha, potomka Peresa nebo Pharese, syna Judova",
+      "translated": true
+    },
+    "H1264": {
+      "definitions_cz": "1) pestré plátno, damašek",
+      "translated": true
+    },
+    "H1265": {
+      "definitions_cz": "1) cypřiš, jedle, jalovec, borovice | 1a) ušlechtilý strom (lit.) | 1b) vznešenosti (obr.) | 1c) materiál pro chrám",
+      "translated": true
+    },
+    "H1266": {
+      "definitions_cz": "1) cypřiš, jedle, jalovec, borovice",
+      "translated": true
+    },
+    "H1267": {
+      "definitions_cz": "1) jídlo",
+      "translated": true
+    },
+    "H1268": {
+      "definitions_cz": "Berothah nebo Berothai = \"cypřišový háj\" | 1) místo poblíž Hamátu | 2) město patřící Hadadezerovi",
+      "translated": true
+    },
+    "H1269": {
+      "definitions_cz": "Birzavith nebo Birzath ​​= \"ve štíhlosti: výběr oliv\" | 1) potomek Ashera",
+      "translated": true
+    },
+    "H1270": {
+      "definitions_cz": "1) železo | 1a) železo | 1a1) železná ruda | 1a2) jako materiál nábytku, nádobí, nářadí | 2) nástroj ze železa | 3) tvrdost, síla, útlak (obr.)",
+      "translated": true
+    },
+    "H1271": {
+      "definitions_cz": "Barzillai = \"moje železo\" | 1) Gileadský vůdce, který pomohl Davidovi porazit Absolonovo povstání | 2) kněz, zeť Barzillaie Gileadského | 3) Izraelita z Mahalath, jehož syn Adriel se oženil s Michalem, Saulovou dcerou",
+      "translated": true
+    },
+    "H1272": {
+      "definitions_cz": "1) projít, utéct, utéct, pronásledovat, zahnat, dát na útěk, dosáhnout, vystřelit (prodloužit), pospíšit | 1a) (Qal) | 1a1) jít, projít | 1a2) uprchnout | 1a3) pospěš si, rychle přijď | 1b) (hifil) | 1b1) projít | 1b2) přimět uprchnout, dát na útěk | 1b3) odjet",
+      "translated": true
+    },
+    "H1273": {
+      "definitions_cz": "Barhumite = \"syn zčernalých: v lítostivých\" | 1) osoba z Bahurim, vesnice zjevně na nebo blízko silnice vedoucí z údolí Jordánu do Jeruzaléma a poblíž jižní hranice Benjamina",
+      "translated": true
+    },
+    "H1274": {
+      "definitions_cz": "1) tuk | 2) (TWOT) tlustý, tlustší, krmený, pevný, hojný, hodnost",
+      "translated": true
+    },
+    "H1275": {
+      "definitions_cz": "Beri = \"studna\" | 1) syn Cófa, z pokolení Asser",
+      "translated": true
+    },
+    "H1276": {
+      "definitions_cz": "Berites = \"moje studna: studny\" | 1) kmen, který se jmenuje Ábel a Bét-maacha, a který se proto bezpochyby nacházel na severu Palestiny",
+      "translated": true
+    },
+    "H1277": {
+      "definitions_cz": "1) tuk | 2) (TWOT) tlustý, tlustší, krmený, pevný, hojný, hodnost",
+      "translated": true
+    },
+    "H1278": {
+      "definitions_cz": "1) výtvor, stvořená věc, nová věc, zázrak",
+      "translated": true
+    },
+    "H1279": {
+      "definitions_cz": "1) jídlo",
+      "translated": true
+    },
+    "H1280": {
+      "definitions_cz": "1) bar | 1a) ze dřeva | 1b) městských bran | 2) soužení, pevnost, země jako vězení (obr.)",
+      "translated": true
+    },
+    "H1281": {
+      "definitions_cz": "adj | 1) utíkat | subst | 2) uprchlík",
+      "translated": true
+    },
+    "H1282": {
+      "definitions_cz": "Bariah = \"prchající\" nebo \"uprchlík\" | 1) syn Šemajášův a potomek judského královského rodu",
+      "translated": true
+    },
+    "H1283": {
+      "definitions_cz": "Beriah = \"s přítelem\" | 1) syn Ashera | 2) syn Efraimův | 3) benjamín | 4) Levita",
+      "translated": true
+    },
+    "H1284": {
+      "definitions_cz": "Beriité = \"ve zlém\" | 1) jeden z rodu Beriah",
+      "translated": true
+    },
+    "H1285": {
+      "definitions_cz": "1) smlouva, spojenectví, slib | 1a) mezi muži | 1a1) smlouva, aliance, liga (muž k muži) | 1a2) ústava, nařízení (monarcha poddaným) | 1a3) dohoda, zástava (muž člověku) | 1a4) spojenectví (přátelství) | 1a5) spojenectví (manželství) | 1b) mezi Bohem a člověkem | 1b1) spojenectví (přátelství) | 1b2) smlouva (boží obřad se znameními nebo zástavami) | 2) (fráze) | 2a) uzavírání smluv | 2b) dodržování smlouvy | 2c) porušení smlouvy",
+      "translated": true
+    },
+    "H1286": {
+      "definitions_cz": "Berith = \"smlouva\" | 1) ve jménu Baal-beritha, cizího božstva uctívaného v Sichemu",
+      "translated": true
+    },
+    "H1287": {
+      "definitions_cz": "1) louh, potaš, mýdlo, alkálie (používané při praní)",
+      "translated": true
+    },
+    "H1288": {
+      "definitions_cz": "1) žehnat, klečet | 1a) (Qal) | 1a1) klečet | 1a2) požehnat | 1b) (Niphal) být požehnán, požehnat se | 1c) (Piel) požehnat | 1d) (Pual) být požehnán, být uctíván | 1e) (Hiphil) způsobit pokleknutí | 1f) (Hithpael) požehnat se | 2) (TWOT) chválit, zdravit, proklínat",
+      "translated": true
+    },
+    "H1289": {
+      "definitions_cz": "1) žehnat, klečet | 1a) (P'al) | 1a1) klečící (příčestí) | 1a2) být požehnán | 1b) (Pael) žehnat, chválit",
+      "translated": true
+    },
+    "H1290": {
+      "definitions_cz": "1) koleno | 2) slabý strachem (obr.)",
+      "translated": true
+    },
+    "H1291": {
+      "definitions_cz": "1) koleno",
+      "translated": true
+    },
+    "H1292": {
+      "definitions_cz": "Barachel = \"Bůh žehná\" | 1) otec Elihu",
+      "translated": true
+    },
+    "H1293": {
+      "definitions_cz": "1) požehnání | 2) (zdroj) požehnání | 3) požehnání, prosperita | 4) požehnání, chvála Boží | 5) dárek, dárek | 6) mírová smlouva",
+      "translated": true
+    },
+    "H1294": {
+      "definitions_cz": "Berachah = \"požehnání\" | n pr m | 1) Benjamínec, jeden z Davidových válečníků | n pr loc | 2) údolí v poušti poblíž Tekoa, kde se po svržení moábských zástupů shromáždili Jozafat a jeho lid, aby žehnali Jehovovi",
+      "translated": true
+    },
+    "H1295": {
+      "definitions_cz": "1) bazén, jezírko",
+      "translated": true
+    },
+    "H1296": {
+      "definitions_cz": "Berachiáš nebo Berechiáš = \"Jehova žehná\" | 1) syn Zerubbábelův | 2) Levita, který se vrátil do vyhnanství | 3) otec Mešullama, jednoho z Nehemjášových náčelníků, který pomáhal při obnově jeruzalémských hradeb | 4) otec Zachariášův | 5) geršonský levita, otec Asafa, zpěváka, vrátného archy | 6) Efraimský náčelník v době Achaza",
+      "translated": true
+    },
+    "H1297": {
+      "definitions_cz": "1) pouze, nicméně, ale",
+      "translated": true
+    },
+    "H1298": {
+      "definitions_cz": "Bera = \"syn zla\" | 1) král Sodomy",
+      "translated": true
+    },
+    "H1299": {
+      "definitions_cz": "1) (Qal) k záblesku, vrhnout (blesk)",
+      "translated": true
+    },
+    "H1300": {
+      "definitions_cz": "1) blesk | 1a) blesky, blesky | 1b) blikajícího hrotu šipky (obr.)",
+      "translated": true
+    },
+    "H1301": {
+      "definitions_cz": "Barak = \"blesk\" nebo \"blesk\" | 1) syn Abinoama z Kedeše, který na popud Debory, prorokyně z Efraima, vysvobodil Izraelity z jha Jabin tím, že porazil Kananejce na rovině Jizreel",
+      "translated": true
+    },
+    "H1302": {
+      "definitions_cz": "Barkos = \"syn odříznutý\" | 1) hlava rodiny chrámových otroků, kteří se vrátili z exilu se Zerubábelem",
+      "translated": true
+    },
+    "H1303": {
+      "definitions_cz": "1) briers, briars",
+      "translated": true
+    },
+    "H1304": {
+      "definitions_cz": "1) drahokam, drahý kámen, smaragd (Josephus)",
+      "translated": true
+    },
+    "H1305": {
+      "definitions_cz": "1) čistit, vybírat, leštit, vybírat, čistit, čistit nebo rozjasňovat, testovat nebo ověřovat | 1a) (Qal) | 1a1) vyčistit, vyčistit, vyčistit | 1a2) pro výběr vyberte | 1a3) čistit, dělat lesk, leštit | 1a4) otestovat, dokázat | 1b) (Niphal) očistit se | 1c) (Piel) k čištění | 1d) (Hiphil) | 1d1) k čištění | 1d2) k leštění šípů | 1e) (Hithpael) | 1e1) očistit se | 1e2) ukázat se čistý, spravedlivý, laskavý",
+      "translated": true
+    },
+    "H1306": {
+      "definitions_cz": "Birsha = \"s nepravostí\" | 1) král Gomory",
+      "translated": true
+    },
+    "H1307": {
+      "definitions_cz": "Berothit = \"moje studny\" | 1) obyvatel Berothy",
+      "translated": true
+    },
+    "H1308": {
+      "definitions_cz": "Besor = \"veselý\" | 1) potok, koryto bystřin nebo vádí na extrémním jihu Judy ve Filistii; ústí do Středozemního moře",
+      "translated": true
+    },
+    "H1309": {
+      "definitions_cz": "1) zprávy, dobré zprávy, zprávy, odměna za dobré zprávy | 1a) dobrá zpráva | 1b) zprávy, zprávy | 1c) odměna za dobré zprávy",
+      "translated": true
+    },
+    "H1310": {
+      "definitions_cz": "1) vařit, vařit, péct, opékat, zrát, dozrát | 1a) (Qal) | 1a1) vařit, vařit | 1a2) dozrát, dozrát | 1b) (Piel) | 1b1) k varu | 1b2) vařit | 1c) (Pual) | 1c1) k vaření | 1c2) být namočený | 1d) (Hiphil) | 1d1) dozrát | 1d2) dozrát, dozrát",
+      "translated": true
+    },
+    "H1311": {
+      "definitions_cz": "1) vařený, vařený",
+      "translated": true
+    },
+    "H1312": {
+      "definitions_cz": "Bishlam = \"v míru\" | 1) perský důstojník v Palestině v době Ezry",
+      "translated": true
+    },
+    "H1313": {
+      "definitions_cz": "1) koření, balzám | 2) (TWOT) sladká, sladká vůně, sladká vůně",
+      "translated": true
+    },
+    "H1314": {
+      "definitions_cz": "1) koření, balzám, balzámovník, parfém | 2) (TWOT) sladká, sladká vůně, sladká vůně",
+      "translated": true
+    },
+    "H1315": {
+      "definitions_cz": "Bashemath nebo Basmath = \"koření\" | 1) Chetejská manželka Ezaua, dcera Izmaela, sestra Nebajótova | 2) dcera Šalamouna, manželky Ahimaaze, jednoho ze Šalomounových komisařů",
+      "translated": true
+    },
+    "H1316": {
+      "definitions_cz": "Bashan = \"plodný\" | 1) oblast na východ od Jordánu známá svou úrodností, která byla dána polovině kmene Manasses",
+      "translated": true
+    },
+    "H1317": {
+      "definitions_cz": "1) hanba | 1a) hanba | 1b) ostudná věc",
+      "translated": true
+    },
+    "H1318": {
+      "definitions_cz": "1) šlapat, šlapat | 1a) (Poel) přešlapování",
+      "translated": true
+    },
+    "H1319": {
+      "definitions_cz": "1) přinášet zprávy, nést zprávy, publikovat, kázat, ukazovat | 1a) (Piel) | 1a1) potěšit dobrou zprávou | 1a2) přinášet zprávy | 1a3) hlásat (spásu) jako dobrou zprávu, kázat | 1b) (Hithpael) přijímat dobré zprávy",
+      "translated": true
+    },
+    "H1320": {
+      "definitions_cz": "1) maso | 1a) těla | 1a1) lidí | 1a2) zvířat | 1b) samotné tělo | 1c) mužský orgán generace (eufemismus) | 1d) příbuzenstvo, pokrevní vztahy | 1e) tělo jako křehké nebo chybující (člověk proti Bohu) | 1f) vše živé | 1g) zvířata | 1h) lidstvo",
+      "translated": true
+    },
+    "H1321": {
+      "definitions_cz": "1) maso",
+      "translated": true
+    },
+    "H1322": {
+      "definitions_cz": "1) hanba | 1a) hanba | 1b) ostudná věc",
+      "translated": true
+    },
+    "H1323": {
+      "definitions_cz": "n f | 1) dcera | 1a) dcera, dívka, adoptovaná dcera, snacha, sestra, vnučky, dítě, sestřenice | 1a1) jako zdvořilou adresu | n pr f | 1a2) jako označení žen určitého místa | 2) mladé ženy, ženy | 1a3) jako personifikace | 1a4) dceřiné vesnice | 1a5) popis charakteru",
+      "translated": true
+    },
+    "H1324": {
+      "definitions_cz": "1) lázeň, měrná jednotka kapaliny, rovná suché míře ephah (asi 9 imperiálních galonů nebo 40 litrů, rabínské spisy uvádějí velikosti poloviny tohoto množství)",
+      "translated": true
+    },
+    "H1325": {
+      "definitions_cz": "1) lázeň, měrná jednotka kapaliny, asi 40 litrů, rovná se suché odměrce ephah | 2) (TWOT) odměrka tekutiny, asi 22 litrů",
+      "translated": true
+    },
+    "H1326": {
+      "definitions_cz": "1) konec, zničení",
+      "translated": true
+    },
+    "H1327": {
+      "definitions_cz": "1) útes, sráz, strmý",
+      "translated": true
+    },
+    "H1328": {
+      "definitions_cz": "Bethuel = \"Bůh ničí\" nebo \"Boží muž\" nebo \"obyvatel v Bohu\" | n pr m | 1) synovec Abrahama, syna Nachora od Milky, otce Rebeky | n pr loc | 2) město Simeon na jihu",
+      "translated": true
+    },
+    "H1329": {
+      "definitions_cz": "Bethul = \"Bůh ničí\" nebo \"Boží muž\" nebo \"obyvatel v Bohu\" | 1) město Simeon na jihu (také psáno 'Bethuel')",
+      "translated": true
+    },
+    "H1330": {
+      "definitions_cz": "1) panna",
+      "translated": true
+    },
+    "H1331": {
+      "definitions_cz": "1) panenství",
+      "translated": true
+    },
+    "H1332": {
+      "definitions_cz": "Bithiah = \"dcera Jehovova\" | 1) dcera faraona a manželka Mereda z Judska",
+      "translated": true
+    },
+    "H1333": {
+      "definitions_cz": "1) (Piel) řezat, řezat, řezat, řezat",
+      "translated": true
+    },
+    "H1334": {
+      "definitions_cz": "1) rozdělit na dvě části | 1a) (Qal) rozdělit na dvě části | 1b) (Piel) rozdělit na dvě části",
+      "translated": true
+    },
+    "H1335": {
+      "definitions_cz": "1) díl, kus | 1a) části zvířete rozpůlené k oběti",
+      "translated": true
+    },
+    "H1336": {
+      "definitions_cz": "Bether = \"rozštěp\" | 1) hornatý region v Palestině, místo neznámé",
+      "translated": true
+    },
+    "H1337": {
+      "definitions_cz": "Bath-rabbim = \"dcera zástupů\" | 1) město Chešbon nebo jednu z jeho bran",
+      "translated": true
+    },
+    "H1338": {
+      "definitions_cz": "Bithron = \"divize\" nebo \"rozštěp\" nebo \"rokle\" | 1) území nebo okres v údolí Jordánu východně od Jordánu",
+      "translated": true
+    },
+    "H1339": {
+      "definitions_cz": "Bat-šeba = \"dcera přísahy\" | 1) manželka Uriáše, kterého David zavraždil, protože s ní měl cizoložný styk; následně manželka Davida a matka Šalomouna, Šimey, Šóbaba a Nátana",
+      "translated": true
+    },
+    "H1340": {
+      "definitions_cz": "Bath-shua = \"dcera bohatství\" | 1) manželka Uriáše, kterého David zavraždil, protože s ní měl cizoložný styk; následně manželka Davida a matka Šalomouna, Šimei, Šóbaba a Nátana (alternativní hláskování k „Bathsheba“) | 2) manželka Judova",
+      "translated": true
+    },
+    "H1341": {
+      "definitions_cz": "1) hrdý",
+      "translated": true
+    },
+    "H1342": {
+      "definitions_cz": "1) vstát, vyrůst, být povýšen v triumfu | 1a) (Qal) | 1a1) vstát | 1a2) vyrůst | 1a3) být povýšen, být povýšen, být povýšen",
+      "translated": true
+    },
+    "H1343": {
+      "definitions_cz": "1) hrdý",
+      "translated": true
+    },
+    "H1344": {
+      "definitions_cz": "1) hrdost",
+      "translated": true
+    },
+    "H1345": {
+      "definitions_cz": "Geuel = \"veličenstvo Boží\" | 1) Gadit se rozhodl prozkoumat zemi, synu Machiho",
+      "translated": true
+    },
+    "H1346": {
+      "definitions_cz": "1) pýcha, majestát, povstání | 1a) stoupání, vzdouvání (moře) | 1b) Veličenstvo (Izraele) | 1c) pýcha, povýšenost",
+      "translated": true
+    },
+    "H1347": {
+      "definitions_cz": "1) povznesení, majestát, hrdost | 1a) majestát, vznešenost, dokonalost | 1a1) národů | 1a2) Boží | 1a3) Jordánu | 1b) pýcha, arogance (špatný smysl)",
+      "translated": true
+    },
+    "H1348": {
+      "definitions_cz": "1) veličenstvo | 1a) stoupání (sloupce kouře) | 1b) otok (moře) | 1c) majestát (Boží) | 1d) hrdost",
+      "translated": true
+    },
+    "H1349": {
+      "definitions_cz": "1) hrdý",
+      "translated": true
+    },
+    "H1350": {
+      "definitions_cz": "1) vykoupit, jednat jako příbuzný-vykupitel, pomstít se, pomstít se, vykoupit, udělat roli příbuzného | 1a) (Qal) | 1a1) jednat jako příbuzný, vykonávat roli nejbližšího příbuzného, ​​jednat jako příbuzný-vykupitel | 1a1a) sňatkem s vdovou po bratrovi, abych mu zplodil dítě, vykoupil z otroctví, vykoupil zemi, vykonal pomstu | 1a2) vyplatit (platbou) | 1a3) vykoupit (s Bohem jako subjektem) | 1a3a) jednotlivci před smrtí | 1a3b) Izrael z egyptského otroctví | 1a3c) Izrael z exilu | 1b) (Niphal) | 1b1) vykoupit se | 1b2), které mají být vyplaceny",
+      "translated": true
+    },
+    "H1351": {
+      "definitions_cz": "1) poskvrnit, znečišťovat, znesvětit | 1a) (Niphal) být poskvrněn, být znečištěn | 1b) (Piel) znečišťovat, znesvětit | 1c)(Pual) být znesvěcen (o odstranění z kněžství) | 1d) (Hiphil) znečišťovat, skvrnit | 1e) (Hithpael) poskvrnit se",
+      "translated": true
+    },
+    "H1352": {
+      "definitions_cz": "1) pošpinění, poskvrnění",
+      "translated": true
+    },
+    "H1353": {
+      "definitions_cz": "1) rod, odkup, právo na odkup, cena za odkup | 1a) příbuzní, příbuzní | 1b) vykoupení | 1c) právo na odkoupení | 1d) výkupní cena, výkupní cena",
+      "translated": true
+    },
+    "H1354": {
+      "definitions_cz": "1) konvexní plocha, zadní strana | 1a) záda (člověka) | 1b) mohyla (pro nedovolené uctívání) | 1c) výstupek (konvexní projekce štítu) | 1d) zábradlí, prsa (argumentů-obr.) | 1e) obočí, obočí | 1f) ráfek (kola)",
+      "translated": true
+    },
+    "H1355": {
+      "definitions_cz": "1) zadní nebo boční",
+      "translated": true
+    },
+    "H1356": {
+      "definitions_cz": "1) jáma, příkop, příkop, trám, krokve | 1a) jáma, příkop | 1b) trám, krokev",
+      "translated": true
+    },
+    "H1357": {
+      "definitions_cz": "1) saranče",
+      "translated": true
+    },
+    "H1358": {
+      "definitions_cz": "1) jáma, doupě (lvů)",
+      "translated": true
+    },
+    "H1359": {
+      "definitions_cz": "Gob = \"cisterna\" | 1) místo, které bylo dějištěm dvou střetnutí mezi Davidovými válečníky a Pelištejci (také „Gezer“)",
+      "translated": true
+    },
+    "H1360": {
+      "definitions_cz": "1) cisterna, bazén | 1a) cisterna | 1b) tůň, bažina",
+      "translated": true
+    },
+    "H1361": {
+      "definitions_cz": "1) být vysoký, být povýšen | 1a) (Qal) | 1a1) být vysoký, vznešený, vysoký | 1a2) být povýšen | 1a3) být vznešený | 1a3a) být vznešený (podle Jehovových cest – dobrý smysl) | 1a3b) být povýšený, být arogantní (špatný smysl) | 1b) (Hifil) činit vysoko, povznášet",
+      "translated": true
+    },
+    "H1362": {
+      "definitions_cz": "1) vysoký, hrdý | 1a) vysoký, vznešený, vysoký | 1b) povýšen ve stanici | 1c) povýšený, hrdý",
+      "translated": true
+    },
+    "H1363": {
+      "definitions_cz": "1) výška, exaltace | 1a) výška | 1b) povznesení, vznešenost | 1c) povýšenost",
+      "translated": true
+    },
+    "H1364": {
+      "definitions_cz": "adj | 1) vysoký, vznešený | 1a) vysoký, vysoký | 1b) vysoká (v poloze) | 1c) hrdý, povýšený | n m | 2) vznešenost",
+      "translated": true
+    },
+    "H1365": {
+      "definitions_cz": "1) povýšenost",
+      "translated": true
+    },
+    "H1366": {
+      "definitions_cz": "1) hranice, území | 1a) hranice | 1b) území (uzavřené hranicemi) | 1c) region, území (tmy) (obr.)",
+      "translated": true
+    },
+    "H1367": {
+      "definitions_cz": "1) hranice, hranice",
+      "translated": true
+    },
+    "H1368": {
+      "definitions_cz": "adj | 1) silný, mocný | n m | 2) silný muž, statečný muž, mocný muž",
+      "translated": true
+    },
+    "H1369": {
+      "definitions_cz": "1) síla, síla | 1a) pevnost | 1b) moc, statečnost, statečnost | 1c) moc, mocné činy (Boží)",
+      "translated": true
+    },
+    "H1370": {
+      "definitions_cz": "1) možná",
+      "translated": true
+    },
+    "H1371": {
+      "definitions_cz": "1) býti vysoký, lysý (v čele), mající lysé čelo",
+      "translated": true
+    },
+    "H1372": {
+      "definitions_cz": "1) lysé čelo, lysina, holé místo",
+      "translated": true
+    },
+    "H1373": {
+      "definitions_cz": "Gabbai = \"moje záda\" | 1) hlava významného benjamitského rodu žijícího v Jeruzalémě v době Nehemjáše",
+      "translated": true
+    },
+    "H1374": {
+      "definitions_cz": "Gebim = \"cisterny\" | 1) vesnice severně od Jeruzaléma zřejmě mezi Anathothem (dnešní Anata) a hřebenem, na kterém se nacházel Nob",
+      "translated": true
+    },
+    "H1375": {
+      "definitions_cz": "1) hrnek, miska",
+      "translated": true
+    },
+    "H1376": {
+      "definitions_cz": "1) pán, vládce",
+      "translated": true
+    },
+    "H1377": {
+      "definitions_cz": "1) královna, paní | 2) královna-matka",
+      "translated": true
+    },
+    "H1378": {
+      "definitions_cz": "1) krystal",
+      "translated": true
+    },
+    "H1379": {
+      "definitions_cz": "1) svázat, ohraničit | 1a) (Qal) vázat, hraničit | 1b) (Hiphil) stanovit hranice, stanovit hranice",
+      "translated": true
+    },
+    "H1380": {
+      "definitions_cz": "Gebal = \"hora\" | 1) přímořské město Fénicie poblíž Tyru (moderní 'Jebeil'), známé Řekům jako 'Byblus'",
+      "translated": true
+    },
+    "H1381": {
+      "definitions_cz": "Gebal = \"hranice\" | 1) horská oblast jižně od Mrtvého moře",
+      "translated": true
+    },
+    "H1382": {
+      "definitions_cz": "Giblites = \"hranice\" | 1) obyvatelé Gebal",
+      "translated": true
+    },
+    "H1383": {
+      "definitions_cz": "1) kroucení",
+      "translated": true
+    },
+    "H1384": {
+      "definitions_cz": "1) hrbatý, křivohřbetý",
+      "translated": true
+    },
+    "H1385": {
+      "definitions_cz": "1) sýr, tvaroh",
+      "translated": true
+    },
+    "H1386": {
+      "definitions_cz": "1) vrchol, zaoblený vrchol, vrchol hory",
+      "translated": true
+    },
+    "H1387": {
+      "definitions_cz": "Gaba nebo Geba nebo Gibeah = \"kopec\" | 1) město v Benjaminu, moderní „Jeba“, které stojí na vrcholu strmého terasovitého kopce, šest mil nebo deset kilometrů severovýchodně od Jeruzaléma a tři míle nebo pět kilometrů od Gibey, na okraji Wadi Suweinit s výhledem na sever k protější vesnici starověkého Michmaše, moderní „Mukhmas“",
+      "translated": true
+    },
+    "H1388": {
+      "definitions_cz": "Gibea = \"kopec\" | 1) syn Shevy a vnuk Caleba (syna Caleba)",
+      "translated": true
+    },
+    "H1389": {
+      "definitions_cz": "1) kopec | 1a) kopec (nižší než hora) | 1b) jako místo nezákonného uctívání | 1c) poetické pro horu | 1d) používané v místních názvech",
+      "translated": true
+    },
+    "H1390": {
+      "definitions_cz": "Gibeah = \"kopec\" | 1) město v judské horské oblasti | 2) Benjamínovo město, rodiště krále Saula | 3) město v Kirjath-jearim z Efraima",
+      "translated": true
+    },
+    "H1391": {
+      "definitions_cz": "Gibeon = \"město na kopci\" | 1) Levitské město Benjamin, moderní 'el-Jib', které leží 5 mil nebo 8 km od Jeruzaléma",
+      "translated": true
+    },
+    "H1392": {
+      "definitions_cz": "1) bud",
+      "translated": true
+    },
+    "H1393": {
+      "definitions_cz": "Gibeonit = \"kopeček: kopcovitý\" | 1) obyvatel Gibeonu",
+      "translated": true
+    },
+    "H1394": {
+      "definitions_cz": "Gibeath = \"kopec\" | 1) Benjamínovo město",
+      "translated": true
+    },
+    "H1395": {
+      "definitions_cz": "Gibeathite = \"kopcovitost\" | 1) obyvatel Gibey",
+      "translated": true
+    },
+    "H1396": {
+      "definitions_cz": "1) zvítězit, mít sílu, být silný, být mocný, být mocný, být velký | 1a) (Qal) | 1a1) být silný, mocný | 1a2) převážit | 1b) (Piel) učinit silný, posílit | 1c) (Hiphil) | 1c1) potvrdit, dát sílu | 1c2) potvrdit (smlouvu) | 1d) (Hithpael) | 1d1) ukázat se mocně | 1d2) jednat hrdě (vůči Bohu)",
+      "translated": true
+    },
+    "H1397": {
+      "definitions_cz": "1) muž, silný muž, válečník (s důrazem na sílu nebo schopnost bojovat)",
+      "translated": true
+    },
+    "H1398": {
+      "definitions_cz": "Geber = \"bojovník\" | 1) syn Uriho, důstojníka Šalomounova, dozorce nad Gileádem",
+      "translated": true
+    },
+    "H1399": {
+      "definitions_cz": "1) muž, muž (upřímnosti)",
+      "translated": true
+    },
+    "H1400": {
+      "definitions_cz": "1) muž, jistý (jeden)",
+      "translated": true
+    },
+    "H1401": {
+      "definitions_cz": "1) mocný, mocný",
+      "translated": true
+    },
+    "H1402": {
+      "definitions_cz": "Gibbar = \"udatný\" | 1) hlava rodiny vracejících se vyhnanců za Zerubbábela",
+      "translated": true
+    },
+    "H1403": {
+      "definitions_cz": "Gabriel = \"Boží válečník\" nebo \"Boží muž\" | 1) archanděl; anděl, kterým Bůh posílal poselství pro člověka velkého významu; poslal Danielovi, Zachariášovi a Marii",
+      "translated": true
+    },
+    "H1404": {
+      "definitions_cz": "1) dáma, královna | 2) paní (sluhů)",
+      "translated": true
+    },
+    "H1405": {
+      "definitions_cz": "Gibbethon = \"mohyla\" | 1) filištínské město v Dan přidělené kehatským levitům",
+      "translated": true
+    },
+    "H1406": {
+      "definitions_cz": "1) střecha, střecha, střecha | 1a) střecha (domu) | 1b) vršek (kadidelného oltáře)",
+      "translated": true
+    },
+    "H1407": {
+      "definitions_cz": "1) koriandr – rostlina, jejíž semeno připomíná mannu",
+      "translated": true
+    },
+    "H1408": {
+      "definitions_cz": "Gad = \"bůh štěstí\" | 1) babylonské božstvo",
+      "translated": true
+    },
+    "H1409": {
+      "definitions_cz": "1) štěstí, štěstí",
+      "translated": true
+    },
+    "H1410": {
+      "definitions_cz": "Gad = \"vojsko\" | 1) sedmý syn Jákobův od Zilpy, služebnice Leiny a úplného bratra Ašera. | 2) kmen pocházející z Gad | 3) prorok za časů Davidových; zdá se, že se připojil k Davidovi, když byl v nákladovém prostoru; znovu se objeví v souvislosti s trestem za provedení sčítání lidu; také asistoval při aranžmá pro hudební službu „domu Božího“",
+      "translated": true
+    },
+    "H1411": {
+      "definitions_cz": "1) pokladník",
+      "translated": true
+    },
+    "H1412": {
+      "definitions_cz": "Gudgodah = \"místo sekání\" | 1) stanice nebo zastávka Izraele na toulkách pouští",
+      "translated": true
+    },
+    "H1413": {
+      "definitions_cz": "1) proniknout, řezat, napadnout, napadnout | 1a) (Qal) proniknout, nakrájet na | 1b)(Hithpoel) | 1b1) pořezat se | 1b2) shromažďovat se v jednotkách nebo davech",
+      "translated": true
+    },
+    "H1414": {
+      "definitions_cz": "1) kácet, kácet",
+      "translated": true
+    },
+    "H1415": {
+      "definitions_cz": "1) břeh řeky",
+      "translated": true
+    },
+    "H1416": {
+      "definitions_cz": "1) kapela, oddíl, záškodnická kapela | 1a) záškodnická kapela, přepadová kapela | 1b) vojsko, skupina (divizí armády) | 1c) nájezd, nájezd",
+      "translated": true
+    },
+    "H1417": {
+      "definitions_cz": "1) něco řezat, brázdit, řezat | 1a) brázda | 1b) řízky (na znamení smutku)",
+      "translated": true
+    },
+    "H1418": {
+      "definitions_cz": "1) brázda, řezání | 1a) brázda | 1b) řízky (na znamení smutku)",
+      "translated": true
+    },
+    "H1419": {
+      "definitions_cz": "adj | 1) skvělé | 1a) velký (ve velikosti a rozsahu) | 1b) v počtu | 1c) v intenzitě | 1d) hlasitě (ve zvuku) | 1e) starší (ve věku) | 1f) podle důležitosti | 1f1) důležité věci | 1f2) velký, význačný (mužů) | 1f3) Bůh sám (Boží) | subst | 1g) skvělé věci | 1h) povýšené věci | 1i) velikost | n pr m | 1j) (CLBL) Haggedolim, velký muž?, otec Zabdiela",
+      "translated": true
+    },
+    "H1420": {
+      "definitions_cz": "1) velikost | 1a) člověka | 1b) Boží velikosti (jako atribut)",
+      "translated": true
+    },
+    "H1421": {
+      "definitions_cz": "1) hanobení, hanobení slov",
+      "translated": true
+    },
+    "H1422": {
+      "definitions_cz": "1) výsměch",
+      "translated": true
+    },
+    "H1423": {
+      "definitions_cz": "1) kůzle, mladý kozel",
+      "translated": true
+    },
+    "H1424": {
+      "definitions_cz": "Gadi = \"moje štěstí\" | 1) gaditský otec Menahema, izraelského krále",
+      "translated": true
+    },
+    "H1425": {
+      "definitions_cz": "Gadite = \"vetřelec: jednotka: štěstí\" | 1) jeden z kmene pocházející z Gad",
+      "translated": true
+    },
+    "H1426": {
+      "definitions_cz": "Gaddi = \"moje štěstí\" | 1) syn Susi, vyzvědač z kmene Manasse, kterého poslal Mojžíš, aby prozkoumal zemi Kanaán",
+      "translated": true
+    },
+    "H1427": {
+      "definitions_cz": "Gaddiel = \"Bůh je mé štěstí\" | 1) vyzvědač z kmene Zabulon vyslaný Mojžíšem, aby prozkoumal zemi Kanaán",
+      "translated": true
+    },
+    "H1428": {
+      "definitions_cz": "1) břeh řeky, břeh",
+      "translated": true
+    },
+    "H1429": {
+      "definitions_cz": "1) kůzlata, mladé kozy",
+      "translated": true
+    },
+    "H1430": {
+      "definitions_cz": "1) hromada, hromada, hromada | 2) hrobka",
+      "translated": true
+    },
+    "H1431": {
+      "definitions_cz": "1) růst, stát se velkým nebo důležitým, podporovat, dělat mocné, chválit, zvětšovat, dělat velké věci | 1a) (Qal) | 1a1) vyrůst | 1a2) stát se velkým | 1a3) ke zvětšení | 1b) (Piel) | 1b1) způsobit růst | 1b2) udělat velký, silný | 1b3) pro zvětšení | 1c) (Pual) bude vychován | 1d) (Hiphil) | 1d1) udělat skvělé | 1d2) pro zvětšení | 1d3) dělat velké věci | 1e) (Hithpael) zvětšit se",
+      "translated": true
+    },
+    "H1432": {
+      "definitions_cz": "1) stát se skvělým, vyrůst",
+      "translated": true
+    },
+    "H1433": {
+      "definitions_cz": "1) velikost | 1a) velikost, velikost | 1b) velkolepost | 1c) pýcha, drzost (špatný smysl)",
+      "translated": true
+    },
+    "H1434": {
+      "definitions_cz": "1) kroucené nitě, střapce, věnce | 1a) střapce (na oblečení) | 1b) festony (na hlavicích sloupů)",
+      "translated": true
+    },
+    "H1435": {
+      "definitions_cz": "Giddel = \"velmi skvělé\" | 1) hlava rodiny chrámových otroků vracejících se z exilu se Zerubábelem | 2) hlava potomků Šalomounových služebníků vracejících se z vyhnanství se Zerubábelem",
+      "translated": true
+    },
+    "H1436": {
+      "definitions_cz": "Gedaliáš = \"Jehova je velký\" | 1) syn Jeduthunův v době Davidově | 2) syn Ahikama, místodržitele Judeje jmenovaný Nabuchodonozorem | 3) syn Pashura, jednoho z náčelníků Jeruzaléma za časů Jeremiášových | 4) syn Amariášův a vnuk Ezechiášův | 5) kněz synů Jeshua v době Ezdráše",
+      "translated": true
+    },
+    "H1437": {
+      "definitions_cz": "Giddalti = \"Vydělávám skvěle\" | 1) jeden ze synů Hémana, králova vidoucího",
+      "translated": true
+    },
+    "H1438": {
+      "definitions_cz": "1) stříhat, ořezávat, sekat, kácet, ořezávat, odřezávat, odřezávat, rozpůlit, oholit | 1a) (Qal) osekat, rozsekat na dvě | 1b) (Niphal) k odříznutí, odříznutí | 1c) (Piel) odříznout nebo srazit na dvě části, odštípnout nebo srazit na dvě části | 1d) (Pual) sekat, sekat",
+      "translated": true
+    },
+    "H1439": {
+      "definitions_cz": "Gideon = \"sekáč\" | 1) nejmladší syn Joaše z Abiezritů, pátý soudce Izraele, který vedl Izraelity proti Midjáncům",
+      "translated": true
+    },
+    "H1440": {
+      "definitions_cz": "Gidom = \"kácení\" | 1) místo, kde Izraelité přestali pronásledovat Benjamina, ležící zřejmě mezi Gibeou a útesy Rimmon",
+      "translated": true
     }
   }
 }
