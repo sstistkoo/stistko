@@ -2879,6 +2879,726 @@
     "H720": {
       "definitions_cz": "Arod = \"podmaním si: budu se toulat\" | 1) syn Gádův",
       "translated": true
+    },
+    "H721": {
+      "definitions_cz": "Arvadites = \"Utrhnu se\" | 1) potomci Arvada, syna Kanaana",
+      "translated": true
+    },
+    "H722": {
+      "definitions_cz": "Arodi nebo Arodites = \"podmaním si: budu se toulat\" | 1) potomci Arod",
+      "translated": true
+    },
+    "H723": {
+      "definitions_cz": "1) jesličky, jesličky, stání (pro zvířata)",
+      "translated": true
+    },
+    "H724": {
+      "definitions_cz": "1) léčení, obnova",
+      "translated": true
+    },
+    "H725": {
+      "definitions_cz": "Arumah = \"Budu povýšen\" | 1) místo poblíž Sichemu, domova Abimelecha",
+      "translated": true
+    },
+    "H726": {
+      "definitions_cz": "1) Aramit, syrský (Kethib), Edomit",
+      "translated": true
+    },
+    "H727": {
+      "definitions_cz": "1) truhla, archa | 1a) truhla na peníze | 1b) Archa úmluvy | 2) (TWOT) rakev",
+      "translated": true
+    },
+    "H728": {
+      "definitions_cz": "Araunah = \"budu křičet radostí\" = \"přičiň, abyste se rozzářili\" (2 Sa 24:16) nebo \"radostné volání Jah\" (2Sa 24:18) | 1) Jebusite, který prodal Davidovi místo za oltář",
+      "translated": true
+    },
+    "H729": {
+      "definitions_cz": "(CLBL) v | 1) (CLBL) být pevný | 2) (CLBL) zpevněno (minulá část.) | adj | 3) (BDB/TWOT) pevný, silný",
+      "translated": true
+    },
+    "H730": {
+      "definitions_cz": "1) cedr | 1a) cedr | 1b) cedrové dřevo, cedrové dřevo (ve stavebnictví) | 1c) cedrové dřevo (při čištění)",
+      "translated": true
+    },
+    "H731": {
+      "definitions_cz": "1) cedrové panely, cedrové práce",
+      "translated": true
+    },
+    "H732": {
+      "definitions_cz": "1) putovat, cestovat, jít, dělat společnost | 1a) (Qal) | 1a1) cestovat, jít | 1a2) (část.) | 1a2a) putování, poutník, putování | 1a3) (subst.) | 1a3a) tulák, pocestný, cestovatel",
+      "translated": true
+    },
+    "H733": {
+      "definitions_cz": "Arah = \"cestovatel\" | 1) muž z Asher | 2) prominentní hlava rodiny vracejících se vyhnanců | 3) další navrácený exulant",
+      "translated": true
+    },
+    "H734": {
+      "definitions_cz": "1) cesta, cesta | 1a) cesta, silnice | 1b) cesta, cesta, plynutí života (obr.) | 1c) způsob bydlení (obr.) | 1d) cestovatel, pocestný (meton)",
+      "translated": true
+    },
+    "H735": {
+      "definitions_cz": "1) cesta, cesta, běh života",
+      "translated": true
+    },
+    "H736": {
+      "definitions_cz": "1) karavan, cestovní společnost",
+      "translated": true
+    },
+    "H737": {
+      "definitions_cz": "1) jídlo, příspěvek, příděl | 1a) jídlo | 1b) dieta",
+      "translated": true
+    },
+    "H738": {
+      "definitions_cz": "1) lev | 1a) obrázky nebo obrázky lvů",
+      "translated": true
+    },
+    "H739": {
+      "definitions_cz": "1) znamená nejistý | 1a) (CLBL) možná jako lev | 1b) (BDB) možná dva synové Ariela Moábského",
+      "translated": true
+    },
+    "H740": {
+      "definitions_cz": "Ariel = \"lev Boží\" nebo \"lvice Boží\" | 1) jméno používané pro Jeruzalém | 2) jméno náčelníka vracejících se exulantů",
+      "translated": true
+    },
+    "H741": {
+      "definitions_cz": "1) ohniště, oltářní ohniště, oltář",
+      "translated": true
+    },
+    "H742": {
+      "definitions_cz": "Aridai = \"lev stačí\" | 1) syn Hamanův",
+      "translated": true
+    },
+    "H743": {
+      "definitions_cz": "Aridatha = \"lev vyhlášky\" | 1) syn Hamanův",
+      "translated": true
+    },
+    "H744": {
+      "definitions_cz": "1) lev",
+      "translated": true
+    },
+    "H745": {
+      "definitions_cz": "Arieh = \"lev\" | 1) důstojník krále Pekachiáše",
+      "translated": true
+    },
+    "H746": {
+      "definitions_cz": "Arioch = \"lvovitý\" | 1) starověký král Ellasaru, spojenec Chedorlaomer | 2) šéf katů pro Nabuchodonozora",
+      "translated": true
+    },
+    "H747": {
+      "definitions_cz": "Arisai = \"lev mých praporů (?)\" | 1) syn Hamanův",
+      "translated": true
+    },
+    "H748": {
+      "definitions_cz": "1) být dlouhý, prodlužovat | 1a) (Qal) být dlouhý | 1b) (hifil) | 1b1) prodloužit (dny) | 1b2) na výrobu dlouhých (šňůry od stanu) | 1b3) růst dlouho, pokračovat dlouho",
+      "translated": true
+    },
+    "H749": {
+      "definitions_cz": "v | 1) (CLBL) (P'al) být dlouhý, dosah, setkat se | adj v | 2) (BDB/TWOT) montáž, správná",
+      "translated": true
+    },
+    "H750": {
+      "definitions_cz": "1) dlouhé (pastorky) | 2) trpělivý, pomalý k hněvu",
+      "translated": true
+    },
+    "H751": {
+      "definitions_cz": "Erech = \"dlouhý\" | 1) město 40 mil (64 km) severozápadně od Ur směrem k Babylonu na levém břehu řeky Eufrat",
+      "translated": true
+    },
+    "H752": {
+      "definitions_cz": "1) dlouhý | 1a) času | 1b) Boží moudrosti (obr.)",
+      "translated": true
+    },
+    "H753": {
+      "definitions_cz": "1) délka | 1a) fyzická délka | 1b) času | 2) shovívavost, zdrženlivost (trpělivost)",
+      "translated": true
+    },
+    "H754": {
+      "definitions_cz": "1) prodloužení, prodloužení, prodloužení",
+      "translated": true
+    },
+    "H755": {
+      "definitions_cz": "1) koleno",
+      "translated": true
+    },
+    "H756": {
+      "definitions_cz": "Archevites = \"dlouhé\" | 1) rodák z města Erech",
+      "translated": true
+    },
+    "H757": {
+      "definitions_cz": "Archite nebo Archi = \"dlouhý\" | 1) odkazující na domovské město Hushai",
+      "translated": true
+    },
+    "H758": {
+      "definitions_cz": "Aram nebo Aramejci = \"vznešený\" | n pr m | 1) Aram nebo Syrský národ | 2) syrský nebo aramejský lid | Aram = \"vznešený\" | n m | 3) pátý syn Šemův | 4) vnuk Nahor | 5) potomek Ashera",
+      "translated": true
+    },
+    "H759": {
+      "definitions_cz": "1) citadela, palác, pevnost",
+      "translated": true
+    },
+    "H760": {
+      "definitions_cz": "Aram-zobah = \"vznešená stanice: vznešený konflikt\" | 1) pravděpodobně země severovýchodně od Damašku",
+      "translated": true
+    },
+    "H761": {
+      "definitions_cz": "syrský nebo aramejský = \"vznešený\" | 1) věc nebo osoba ze Sýrie nebo Aram",
+      "translated": true
+    },
+    "H762": {
+      "definitions_cz": "Aramaic = \"jazyk\" | 1) jazyk aramejština, aramejština",
+      "translated": true
+    },
+    "H763": {
+      "definitions_cz": "Aram-naharaim = \"Aram dvou řek\" | 1) Mezopotámie",
+      "translated": true
+    },
+    "H764": {
+      "definitions_cz": "Armoni = \"jeden z paláce\" | 1) syn Saulova",
+      "translated": true
+    },
+    "H765": {
+      "definitions_cz": "Aran = \"radostný\" | 1) potomek Ezaua",
+      "translated": true
+    },
+    "H766": {
+      "definitions_cz": "1) jedle, cedr",
+      "translated": true
+    },
+    "H767": {
+      "definitions_cz": "Oren = \"cedr\" | 1) potomek Judy",
+      "translated": true
+    },
+    "H768": {
+      "definitions_cz": "1) zajíc | 1a) pravděpodobně vyhynulé zvíře, protože žádný známý zajíc nepřežvykuje, přesný význam není znám a je lepší ho nepřeložit jako „arnebeth“",
+      "translated": true
+    },
+    "H769": {
+      "definitions_cz": "Arnon = \"hučící proud\" | 1) řeka a okolní údolí v jižní Palestině tvoří hranici mezi Moábem a Amorejci",
+      "translated": true
+    },
+    "H770": {
+      "definitions_cz": "Arnan = \"lev věčnosti: nebo divoká koza: budu křičet radostí\" | 1) potomek Davidův",
+      "translated": true
+    },
+    "H771": {
+      "definitions_cz": "Ornan = \"světlo bylo zvěčněno: jejich jedle\" | 1) Jebuzejec, který prodal Davidovi mlat na oltář",
+      "translated": true
+    },
+    "H772": {
+      "definitions_cz": "1) země, svět, země",
+      "translated": true
+    },
+    "H773": {
+      "definitions_cz": "1) dole",
+      "translated": true
+    },
+    "H774": {
+      "definitions_cz": "Arpad nebo Arphad = \"Budu rozprostřen (nebo podporován)\" | 1) město v severní Sýrii uváděné jako příklad asyrského dobytí",
+      "translated": true
+    },
+    "H775": {
+      "definitions_cz": "Arphaxad = \"Zklamu jako prso: proklel prsní láhev\" | 1) třetí syn Šémův",
+      "translated": true
+    },
+    "H776": {
+      "definitions_cz": "1) země, země | 1a) Země | 1a1) celá země (na rozdíl od části) | 1a2) země (oproti nebi) | 1a3) země (obyvatelé) | 1b) pozemek | 1b1) země, území | 1b2) okres, kraj | 1b3) kmenové území | 1b4) kus země | 1b5) země Kanaán, Izrael | 1b6) obyvatelé země | 1b7) Šeol, země bez návratu, (pod)svět | 1b8) město (-stát) | 1c) zem, povrch země | 1c1) zem | 1c2) půda | 1d) (ve frázích) | 1d1) lidé země | 1d2) prostor nebo vzdálenost země (v měření vzdálenosti) | 1d3) rovina nebo rovina | 1d4) země živých | 1d5) konec(y) země | 1e) (téměř zcela pozdě v použití) | 1e1) země, země | 1e1a) často na rozdíl od Kanaánu",
+      "translated": true
+    },
+    "H777": {
+      "definitions_cz": "Arza = \"zemitá\" | 1) hospodyně Ela, krále izraelského",
+      "translated": true
+    },
+    "H778": {
+      "definitions_cz": "1) Země, země",
+      "translated": true
+    },
+    "H779": {
+      "definitions_cz": "1) proklínat | 1a) (Qal) | 1a1) proklínat | 1a2) prokletý budiž (příčestí používané jako v kletbách) | 1b) (Niphal) být proklet, proklet | 1c)(Piel) proklít, ležet pod kletbou, dát kletbu na | 1d) (Hophal) být proklet, buď proklet",
+      "translated": true
+    },
+    "H780": {
+      "definitions_cz": "Ararat = \"kletba obrácena: srážení kletby\" | 1) hornatý region východní Arménie, mezi řekou Araxes a jezery Van a Oroomiah, místo, kde spočinula Noemova archa | 2) (TWOT) hora, kde spočinula Noemova archa",
+      "translated": true
+    },
+    "H781": {
+      "definitions_cz": "1) zasnoubit se, zasnoubit | 1a) (Piel) se zasnoubit (muž nebo žena) | 1b) (Pual) k zasnoubení",
+      "translated": true
+    },
+    "H782": {
+      "definitions_cz": "1) touha, žádost",
+      "translated": true
+    },
+    "H783": {
+      "definitions_cz": "Artaxerxes = \"Rozmazlené přivedu k varu: zamíchám (v) zimě\" | 1) syn a nástupce Xerxa ​​jako císaře Persie, 465-424 př.n.l.",
+      "translated": true
+    },
+    "H784": {
+      "definitions_cz": "1) oheň | 1a) oheň, plameny | 1b) nadpřirozený oheň (doprovázející theofanii) | 1c) oheň (na vaření, opékání, smažení) | 1d) oltářní oheň | 1e) Boží hněv (obr.)",
+      "translated": true
+    },
+    "H785": {
+      "definitions_cz": "1) oheň",
+      "translated": true
+    },
+    "H786": {
+      "definitions_cz": "1) existuje, existuje",
+      "translated": true
+    },
+    "H787": {
+      "definitions_cz": "1) základ",
+      "translated": true
+    },
+    "H788": {
+      "definitions_cz": "Ashbel = \"muž v Bohu: muž Baalův: oheň Bel: udělám cestu\" | 1) druhý syn Benjamina",
+      "translated": true
+    },
+    "H789": {
+      "definitions_cz": "Ashbelites = \"muž v Bohu: muž Baalův: oheň Bel: udělám cestu\" | 1) potomci Ashbela",
+      "translated": true
+    },
+    "H790": {
+      "definitions_cz": "Eshban = \"oheň rozlišování\" | 1) náčelník Edomu",
+      "translated": true
+    },
+    "H791": {
+      "definitions_cz": "Ashbea = \"Budu přísahat\" | 1) patriarcha judské rodiny",
+      "translated": true
+    },
+    "H792": {
+      "definitions_cz": "Eshbaal = \"muž Baal\" | 1) čtvrtý syn Saulova, zvaný také Išbošet",
+      "translated": true
+    },
+    "H793": {
+      "definitions_cz": "1) dno, sklon, základ, spodní část",
+      "translated": true
+    },
+    "H794": {
+      "definitions_cz": "1) základ, sklon",
+      "translated": true
+    },
+    "H795": {
+      "definitions_cz": "Ashdod = \"mocný\" | 1) hlavní filištínské město ve Středozemním moři západně od Jeruzaléma, moderní Esdud",
+      "translated": true
+    },
+    "H796": {
+      "definitions_cz": "Ashdodites = \"Budu kazit\" | 1) obyvatel Ašdodu",
+      "translated": true
+    },
+    "H797": {
+      "definitions_cz": "Ashdodites = \"Budu kazit\" | 1) Ašdodský jazyk",
+      "translated": true
+    },
+    "H798": {
+      "definitions_cz": "Ashdoth-pisgah = \"svahy Pisgah\" | 1) pohoří Pisgah, které zahrnuje horu Nebo",
+      "translated": true
+    },
+    "H799": {
+      "definitions_cz": "1) ohnivý zákon, oheň zákona, oheň byl zákon (což znamená nejistý)",
+      "translated": true
+    },
+    "H800": {
+      "definitions_cz": "1) oheň",
+      "translated": true
+    },
+    "H801": {
+      "definitions_cz": "1) zápalná oběť, ohnivá oběť, ohnivá oběť",
+      "translated": true
+    },
+    "H802": {
+      "definitions_cz": "1) žena, manželka, žena | 1a) žena (opak muže) | 1b) manželka (žena provdaná za muže) | 1c) samice (ze zvířat) | 1d) každý, každý (zájmeno)",
+      "translated": true
+    },
+    "H803": {
+      "definitions_cz": "1) opěra, podpora",
+      "translated": true
+    },
+    "H804": {
+      "definitions_cz": "Asshur nebo Assyria = \"krok\" | n pr m | 1) druhý syn Semův, stejnojmenný předek Asyřanů | 2) lid Asýrie | n pr loc | 3) národ, Asýrie | 4) země, Asýrie nebo Asshur",
+      "translated": true
+    },
+    "H805": {
+      "definitions_cz": "Ašurici = \"vedení: požehnaní\" | adj | 1) kmen obývající rovinu Esdraelon | Asshuri = \"kroky\" | n pr m | 2) kmen pocházející z Abrahama a Ketury",
+      "translated": true
+    },
+    "H806": {
+      "definitions_cz": "Ashur = \"černý\" | 1) syn Pharezův",
+      "translated": true
+    },
+    "H807": {
+      "definitions_cz": "Ashima = \"vina: učiním pustinou\" | 1) bůh Chamatu",
+      "translated": true
+    },
+    "H808": {
+      "definitions_cz": "1) se smyslem pro stlačení, založení",
+      "translated": true
+    },
+    "H809": {
+      "definitions_cz": "1) rozinkový koláč, používaný při obětních hostinách | 1a) důsledně překládáno v AV jako „flagon vína“",
+      "translated": true
+    },
+    "H810": {
+      "definitions_cz": "1) varle | 2) (CLBL) kámen",
+      "translated": true
+    },
+    "H811": {
+      "definitions_cz": "1) cluster | 1a) hroznů | 1b) květin (metafora milence)",
+      "translated": true
+    },
+    "H812": {
+      "definitions_cz": "Eshcol = \"shluk\" | 1) oblast Hebronu, údolí Eshcol | 2) Amorejec, bratr Mamre, bydlící v Hebronu",
+      "translated": true
+    },
+    "H813": {
+      "definitions_cz": "Ashchenaz nebo Ashkenaz = \"člověk jako pokropený: oheň jako rozptýlený\" | 1) potomek Jafeta | 2) severní lidé, možná z Bithynie",
+      "translated": true
+    },
+    "H814": {
+      "definitions_cz": "1) dárek",
+      "translated": true
+    },
+    "H815": {
+      "definitions_cz": "1) tamaryšek strom",
+      "translated": true
+    },
+    "H816": {
+      "definitions_cz": "1) urazit, být vinen, přestupek | 1a) (Qal) | 1a1) dopustit se špatného, ​​urazit, přestoupit, spáchat přestupek, ublížit | 1a2) být nebo se stát vinným | 1a3) být uznán vinným | 1a4) být obviněn | 1b) (Niphal) podstoupit trest | 1c) (Hiphil) prohlásit vinu | 2) (TWOT) být pustý, uznat přestupek",
+      "translated": true
+    },
+    "H817": {
+      "definitions_cz": "1) vina, urážka, vina | 1a) přestupek, přestupek, zavinění | 1b) vina, vina | 1c) odškodnění (za přestupek) | 1d) oběť za vinu, oběť za vinu",
+      "translated": true
+    },
+    "H818": {
+      "definitions_cz": "1) vinný, chybující (a povinen nabídnout oběť viny)",
+      "translated": true
+    },
+    "H819": {
+      "definitions_cz": "1) vina, vina, urážka, hřích, provinění | 1a) konání špatného, ​​spáchání přestupku nebo přestupku | 1b) stát se vinným, vina | 1c) předložení oběti za vinu",
+      "translated": true
+    },
+    "H820": {
+      "definitions_cz": "1) tlustý, mezi tlustý | 2) (CLBL) pustý, jako mrtvý",
+      "translated": true
+    },
+    "H821": {
+      "definitions_cz": "1) hlídka (časové období), noční hlídka",
+      "translated": true
+    },
+    "H822": {
+      "definitions_cz": "1) okenní mříž",
+      "translated": true
+    },
+    "H823": {
+      "definitions_cz": "Ashnah = \"způsobím změnu\" | 1) město poblíž Dan | 2) město v Judsku",
+      "translated": true
+    },
+    "H824": {
+      "definitions_cz": "Eshean = \"podpora\" | 1) město v Judsku",
+      "translated": true
+    },
+    "H825": {
+      "definitions_cz": "1) nekromant, kouzelník, | 2) (TWOT) astrolog, kouzelník, exorcista",
+      "translated": true
+    },
+    "H826": {
+      "definitions_cz": "1) kouzelník, kouzelník, (CLBL) nekromancer",
+      "translated": true
+    },
+    "H827": {
+      "definitions_cz": "1) toulec (na šípy) | 1a) domova, Božích nástrojů (obr.)",
+      "translated": true
+    },
+    "H828": {
+      "definitions_cz": "Ashpenaz = \"učiním prominentní posypané\" | 1) hlavní eunuch Nabuchodonozora",
+      "translated": true
+    },
+    "H829": {
+      "definitions_cz": "1) kus masa, odměřená porce, datlový dort (význam a význam nejasný)",
+      "translated": true
+    },
+    "H830": {
+      "definitions_cz": "1) hromada popela, hromada odpadků, hnůj",
+      "translated": true
+    },
+    "H831": {
+      "definitions_cz": "Askelon nebo Ashkelon = \"oheň hanby: budu zvážen\" | 1) námořní město Pelištejců, jihozápadně od Jeruzaléma",
+      "translated": true
+    },
+    "H832": {
+      "definitions_cz": "Eshkalonites = \"oheň hanby: budu zvážen\" | 1) obyvatel Aškelonu",
+      "translated": true
+    },
+    "H833": {
+      "definitions_cz": "1) jít rovně, chodit, jít dál, postupovat, dělat pokroky | 1a)(Qal) jít rovně, udělat pokrok | 1b) (Piel) | 1b1) jít rovně, postupovat | 1b2) vést na (kauzativní) | 1b3) pro nastavení doprava, doprava | 1b4) vyslovit šťastný, volat blahoslavený | 1c) (Pual) | 1c1) být pokročilý, být veden na | 1c2) být šťastný, být požehnán",
+      "translated": true
+    },
+    "H834": {
+      "definitions_cz": "1) (relativní část.) | 1a) který, kdo | 1b) to, co | 2) (conj) | 2a) že (v doložce obj) | 2b) když | 2c) od | 2d) jako | 2e) podmíněné jestliže",
+      "translated": true
+    },
+    "H835": {
+      "definitions_cz": "1) štěstí, požehnání | 1a) často se používá jako citoslovce | 1b) blahoslavení jsou",
+      "translated": true
+    },
+    "H836": {
+      "definitions_cz": "Asher = \"šťastný\" | 1) syn Jákoba a Zilpy | 2) kmen pocházející z Asher | 3) město východně od Sichemu v Manasse",
+      "translated": true
+    },
+    "H837": {
+      "definitions_cz": "1) štěstí",
+      "translated": true
+    },
+    "H838": {
+      "definitions_cz": "1) krok, jít",
+      "translated": true
+    },
+    "H839": {
+      "definitions_cz": "1) jeden z kmene Asher",
+      "translated": true
+    },
+    "H840": {
+      "definitions_cz": "Asareel = \"Bůh drží\" | 1) potomek Judy skrze Káleba",
+      "translated": true
+    },
+    "H841": {
+      "definitions_cz": "Asarelah = \"Bůh drží\" | 1) syn Asafa, kterého David jmenoval hudebníkem svatyně",
+      "translated": true
+    },
+    "H842": {
+      "definitions_cz": "Ashera(h) = \"háje (pro uctívání modly)\" | 1) babylonská (Astarte)-kanaánská bohyně (štěstí a štěstí), údajná choť Baala, její obrazy | 1a) bohyně, bohyně | 1b) její obrázky | 1c) posvátné stromy nebo kůly postavené poblíž oltáře",
+      "translated": true
+    },
+    "H843": {
+      "definitions_cz": "Asherites = \"šťastný\" | 1) pocházející z Ashera",
+      "translated": true
+    },
+    "H844": {
+      "definitions_cz": "Ashriel nebo Asriel = \"Budu knížetem Božím\" | 1) pravnuk Manassesův a syn Gileadův | 2) syn Manassesův",
+      "translated": true
+    },
+    "H845": {
+      "definitions_cz": "Asrielites = \"Budu knížetem Božím\" | 1) klan pocházel z Ashrielu",
+      "translated": true
+    },
+    "H846": {
+      "definitions_cz": "1) stěna, obložení, trámy, konstrukce (přesný význam a odvození nejisté)",
+      "translated": true
+    },
+    "H847": {
+      "definitions_cz": "Eshtaol = \"prosba\" | 1) Danitské město nacházející se v Judsku",
+      "translated": true
+    },
+    "H848": {
+      "definitions_cz": "Eshtaulites = \"Budu prosit\" | 1) obyvatelé Eshtaolu",
+      "translated": true
+    },
+    "H849": {
+      "definitions_cz": "1) vzpoura, pobuřování",
+      "translated": true
+    },
+    "H850": {
+      "definitions_cz": "Eshton = \"zženštilý\" | 1) potomek Káleba z kmene Juda",
+      "translated": true
+    },
+    "H851": {
+      "definitions_cz": "Eshtemoa = \"Dám se slyšet\" Eshtemoh = \"Svou vlastní zkázu způsobím: oheň úžasu: vzlétnu do výše\" | 1) levitské město v Judsku | 2) muž z Judy",
+      "translated": true
+    },
+    "H852": {
+      "definitions_cz": "1) znamení, zázračná znamení, zázraky",
+      "translated": true
+    },
+    "H853": {
+      "definitions_cz": "1) znak určitého přímého předmětu, nepřeložený do angličtiny, ale obecně předcházející a označující akuzativ",
+      "translated": true
+    },
+    "H854": {
+      "definitions_cz": "1) s, blízko, spolu s | 1a) spolu s | 1b) s (vztahu) | 1c) blízko (místa) | 1d) s (příp.) | 1e) od...s, od (s jinou přípravou)",
+      "translated": true
+    },
+    "H855": {
+      "definitions_cz": "1) radlice",
+      "translated": true
+    },
+    "H856": {
+      "definitions_cz": "Ethbaal = \"s Baalem\" | 1) sidonský král, otec Jezábel",
+      "translated": true
+    },
+    "H857": {
+      "definitions_cz": "1) přijít, přijít | 1a) (Qal) přijít (lidí, času, zvířat, neštěstí) | 1b) (Hifil) přinést",
+      "translated": true
+    },
+    "H858": {
+      "definitions_cz": "1) přijít, přijít | 1a) (P'al) přijít | 1b) (Aphel) přinést | 1c) (Hophal) přivést | 2) použitý v NZ ve frázi „maranatha“ - „Pane přijď“",
+      "translated": true
+    },
+    "H859": {
+      "definitions_cz": "1) vy (druhá os. zpěv. maska)",
+      "translated": true
+    },
+    "H860": {
+      "definitions_cz": "1) ona-prdel, ona-oslík",
+      "translated": true
+    },
+    "H861": {
+      "definitions_cz": "1) pec",
+      "translated": true
+    },
+    "H862": {
+      "definitions_cz": "1) galerie, veranda",
+      "translated": true
+    },
+    "H863": {
+      "definitions_cz": "Ittai nebo Ithai = \"se mnou\" | 1) gittský velitel z Gatu v Davidově vojsku | 2) jeden z 30 Davidových mocných válečníků, benjamínec",
+      "translated": true
+    },
+    "H864": {
+      "definitions_cz": "Etham = \"s nimi: jejich radlice\" | 1) zastávka pro Izrael během exodu",
+      "translated": true
+    },
+    "H865": {
+      "definitions_cz": "1) včera, nedávno, dříve | 1a) včera | 1b) dříve (obr.) | 1c) ze včerejška, již (ve frázi) | 2) (TWOT +) před, před tím časem, před časem, před tím, pozdě, starým, tyto dny, časy minulé",
+      "translated": true
+    },
+    "H866": {
+      "definitions_cz": "1) nájem, cena (nevěstky) | 2) (TWOT) odměna",
+      "translated": true
+    },
+    "H867": {
+      "definitions_cz": "Ethni = \"můj nájem\" | 1) předek Asafa",
+      "translated": true
+    },
+    "H868": {
+      "definitions_cz": "1) pronájem prostitutky, cena | 1a) pronájem (nevěstky) | 1b) modlářského Izraele, Jeruzaléma, Týru (obr.)",
+      "translated": true
+    },
+    "H869": {
+      "definitions_cz": "Ethnan = \"nájem necudnosti\" | 1) vnuk Ashur",
+      "translated": true
+    },
+    "H870": {
+      "definitions_cz": "1) trať, místo",
+      "translated": true
+    },
+    "H871": {
+      "definitions_cz": "1) znamená nejistý - možná horský průsmyk nebo karavanní cesta",
+      "translated": true
+    },
+    "H872": {
+      "definitions_cz": "1) vchod, příchod, vstup, vstup (do chrámu) | 1a) vchod | 1b) vstup (akt vstupu)",
+      "translated": true
+    },
+    "H873": {
+      "definitions_cz": "1) zlý, zlý, buď zlý",
+      "translated": true
+    },
+    "H874": {
+      "definitions_cz": "1) (Piel) | 1a) učinit prostým, zřetelným | 1b) aby bylo jasné | 1c) prohlásit | 1d) písmena na tabletu",
+      "translated": true
+    },
+    "H875": {
+      "definitions_cz": "1) studna, jáma, jaro",
+      "translated": true
+    },
+    "H876": {
+      "definitions_cz": "Pivo = \"dobře\" | 1) odpočinek v oáze v poušti během exodu | 2) město západně od Hebronu",
+      "translated": true
+    },
+    "H877": {
+      "definitions_cz": "1) cisterna, jáma, studna",
+      "translated": true
+    },
+    "H878": {
+      "definitions_cz": "Beera = \"studna\" | 1) muž z Asheru",
+      "translated": true
+    },
+    "H879": {
+      "definitions_cz": "Beer-elim = \"Boží studna\" | 1) studna na jihu Moabu",
+      "translated": true
+    },
+    "H880": {
+      "definitions_cz": "Beerah = \"dobře\" | 1) náčelník Rubenitů vyhoštěný do Asýrie",
+      "translated": true
+    },
+    "H881": {
+      "definitions_cz": "Beeroth = \"studny\" | 1) gibeonské město přidělené Benjaminovi",
+      "translated": true
+    },
+    "H882": {
+      "definitions_cz": "Beeri = \"moje studna\" | 1) Ezauův chetitský tchán | 2) otec Ozeáše",
+      "translated": true
+    },
+    "H883": {
+      "definitions_cz": "Beer-lahai-roi = \"studna Živého, který mě vidí\" | 1) studna západně od Kadeše, jižně od Izraele",
+      "translated": true
+    },
+    "H884": {
+      "definitions_cz": "Beer-šeba = \"studna sedminásobné přísahy\" | 1) město na jižním okraji Izraele",
+      "translated": true
+    },
+    "H885": {
+      "definitions_cz": "Beeroth Bene-Jaakan nebo Beeroth = \"studny\" nebo \"studny synů Jaakanových\" | 1) tábor pro Izrael na poušti pravděpodobně v zemi Horitů",
+      "translated": true
+    },
+    "H886": {
+      "definitions_cz": "Beerothit = \"studny\" | 1) obyvatel Beeroth (v Benjaminu)",
+      "translated": true
+    },
+    "H887": {
+      "definitions_cz": "1) mít nepříjemný zápach, smrad, zápach | 1a) (Qal) páchnout, páchnout | 1b) (Niphal) | 1b1) stát se odporným | 1b2) udělat ze sebe odporný | 1c) (Hiphil) | 1c1) páchnout, vydávat páchnoucí zápach | 1c2) způsobit zápach | 1c3) špatnosti (obr.) | 1d) (Hithpael) udělat ze sebe odporný | 2) (TWOT) ošklivit se",
+      "translated": true
+    },
+    "H888": {
+      "definitions_cz": "1) (P'al) být zlý, být špatný, být nepříjemný",
+      "translated": true
+    },
+    "H889": {
+      "definitions_cz": "1) smrad, nepříjemný zápach",
+      "translated": true
+    },
+    "H890": {
+      "definitions_cz": "1) páchnoucí věci, páchnoucí nebo škodlivý plevel, páchník",
+      "translated": true
+    },
+    "H891": {
+      "definitions_cz": "1) páchnoucí nebo bezcenné věci, divoké hrozny, smradlavé",
+      "translated": true
+    },
+    "H892": {
+      "definitions_cz": "1) jablko (zornice) oka",
+      "translated": true
+    },
+    "H893": {
+      "definitions_cz": "Bebai = \"moje dutiny\" | 1) vůdce vracejících se exulantů",
+      "translated": true
+    },
+    "H894": {
+      "definitions_cz": "Babel nebo Babylon = \"zmatek (smícháním)\" | 1) Babel nebo Babylon, starověké místo a/nebo hlavní město Babylonie (moderní Hillah) ležící na Eufratu",
+      "translated": true
+    },
+    "H895": {
+      "definitions_cz": "Babel nebo Babylon = \"zmatek (smícháním)\" | 1) Babel nebo Babylon, starověké místo a/nebo hlavní město Babylonie (moderní Hillah) ležící na Eufratu",
+      "translated": true
+    },
+    "H896": {
+      "definitions_cz": "Babylonian = \"zmatek (smícháním)\" | 1) Babylonský",
+      "translated": true
+    },
+    "H897": {
+      "definitions_cz": "1) zkazit, kořist",
+      "translated": true
+    },
+    "H898": {
+      "definitions_cz": "1) jednat zrádně, lstivě, jednat zrádně | 1a) (Qal) jednat nebo jednat zrádně, nevěrně, podvodně, urážet",
+      "translated": true
+    },
+    "H899": {
+      "definitions_cz": "1) zrada, podvod | 2) (CLBL) oděv, oděv (používaný bez rozdílu)",
+      "translated": true
+    },
+    "H900": {
+      "definitions_cz": "1) zrádný, proradnost, muži zrádného chování",
+      "translated": true
     }
   }
 }
