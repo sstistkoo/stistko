@@ -29803,6 +29803,906 @@
       "translit": "neanías",
       "pronunciation": "neh-an-ee'-as",
       "translated": true
+    },
+    "G3495": {
+      "definitions_cz": "mladík (do čtyřiceti let)",
+      "translit": "neanískos",
+      "pronunciation": "neh-an-is'-kos",
+      "translated": true
+    },
+    "G3496": {
+      "definitions_cz": "nové město; Neapolis, místo v\n Makedonie",
+      "translit": "Neápolis",
+      "pronunciation": "neh-ap'-ol-is",
+      "translated": true
+    },
+    "G3497": {
+      "definitions_cz": "Neeman (t. j. Naaman), Syřan",
+      "translit": "Neemán",
+      "pronunciation": "neh-eh-man'",
+      "translated": true
+    },
+    "G3498": {
+      "definitions_cz": "mrtvý (doslova nebo\n přeneseně; také jako podstatné jméno)",
+      "translit": "nekrós",
+      "pronunciation": "nek-ros'",
+      "translated": true
+    },
+    "G3499": {
+      "definitions_cz": "umrtvit, t. j. (obrazně) podmanit",
+      "translit": "nekróō",
+      "pronunciation": "nek-ro'-o",
+      "translated": true
+    },
+    "G3500": {
+      "definitions_cz": "zesnout; přeneseně impotence",
+      "translit": "nékrōsis",
+      "pronunciation": "nek'-ro-sis",
+      "translated": true
+    },
+    "G3501": {
+      "definitions_cz": "\"nový\", tj. (osob) mladistvý, nebo (věcí) svěží; přeneseně,\n regenerovat",
+      "translit": "néos",
+      "pronunciation": "neh'-os",
+      "translated": true
+    },
+    "G3502": {
+      "definitions_cz": "mládě (mládě)",
+      "translit": "neossós",
+      "pronunciation": "neh-os-sos'",
+      "translated": true
+    },
+    "G3503": {
+      "definitions_cz": "novost, tedy mladost",
+      "translit": "neótēs",
+      "pronunciation": "neh-ot'-ace",
+      "translated": true
+    },
+    "G3504": {
+      "definitions_cz": "nově vysazené, tj. (obrazně)\n mladý konvertita (\"neophyte\")",
+      "translit": "neóphytos",
+      "pronunciation": "neh-of'-oo-tos",
+      "translated": true
+    },
+    "G3505": {
+      "definitions_cz": "Neron (tj. Nero), římský císař",
+      "translit": "Nérōn",
+      "pronunciation": "ner'-ohn",
+      "translated": true
+    },
+    "G3506": {
+      "definitions_cz": "\"přikývnout\", tj. (analogicky),\n signál",
+      "translit": "neúō",
+      "pronunciation": "nyoo'-o",
+      "translated": true
+    },
+    "G3507": {
+      "definitions_cz": "správně, oblačnost, tedy (konkrétně) oblak",
+      "translit": "nephélē",
+      "pronunciation": "nef-el'-ay",
+      "translated": true
+    },
+    "G3508": {
+      "definitions_cz": "Nephthaleim (t. j. Naftali), kmen v\n Palestina",
+      "translit": "Nephthaleím",
+      "pronunciation": "nef-thal-ime'",
+      "translated": true
+    },
+    "G3509": {
+      "definitions_cz": "mrak",
+      "translit": "néphos",
+      "pronunciation": "nef'-os",
+      "translated": true
+    },
+    "G3510": {
+      "definitions_cz": "ledvina (množné číslo), tj. (obrazně) the\n nejvnitřnější mysli",
+      "translit": "nephrós",
+      "pronunciation": "nef-ros'",
+      "translated": true
+    },
+    "G3511": {
+      "definitions_cz": "chrámový služebník, tj\n implikace) volič",
+      "translit": "neōkóros",
+      "pronunciation": "neh-o-kor'-os",
+      "translated": true
+    },
+    "G3512": {
+      "definitions_cz": "týkající se mladších osob, tj.\n mladistvý",
+      "translit": "neōterikós",
+      "pronunciation": "neh-o-ter'-ik-os",
+      "translated": true
+    },
+    "G3513": {
+      "definitions_cz": "částice atestace\n (doprovázené předmětem, na který se v potvrzení dovoláváte nebo na který se odvolal); jako\n jistě jako",
+      "translit": "nḗ",
+      "pronunciation": "nay",
+      "translated": true
+    },
+    "G3514": {
+      "definitions_cz": "točit",
+      "translit": "nḗthō",
+      "pronunciation": "nay'-tho",
+      "translated": true
+    },
+    "G3515": {
+      "definitions_cz": "působit jako naivka, tedy (obrazně) nevinně",
+      "translit": "nēpiázō",
+      "pronunciation": "nay-pee-ad'-zo",
+      "translated": true
+    },
+    "G3516": {
+      "definitions_cz": "ne\n mluvení, t. j. nemluvně (nezletilé); obrazně řečeno, prostoduchý\n člověk, nezralý křesťan",
+      "translit": "nḗpios",
+      "pronunciation": "nay'-pee-os",
+      "translated": true
+    },
+    "G3517": {
+      "definitions_cz": "Nereus, křesťan",
+      "translit": "Nēreús",
+      "pronunciation": "nare-yoos'",
+      "translated": true
+    },
+    "G3518": {
+      "definitions_cz": "Neri (tj. Nerijah), Izraelita",
+      "translit": "Nērí",
+      "pronunciation": "nay-ree'",
+      "translated": true
+    },
+    "G3519": {
+      "definitions_cz": "ostrůvek",
+      "translit": "nēsíon",
+      "pronunciation": "nay-see'-on",
+      "translated": true
+    },
+    "G3520": {
+      "definitions_cz": "ostrov",
+      "translit": "nēsos",
+      "pronunciation": "nay'-sos",
+      "translated": true
+    },
+    "G3521": {
+      "definitions_cz": "abstinence (od nedostatku jídla nebo dobrovolná a náboženská);\n zvláště půst Dne smíření",
+      "translit": "nēsteía",
+      "pronunciation": "nace-ti'-ah",
+      "translated": true
+    },
+    "G3522": {
+      "definitions_cz": "zdržet se jídla (nábožensky)",
+      "translit": "nēsteúō",
+      "pronunciation": "nace-tyoo'-o",
+      "translated": true
+    },
+    "G3523": {
+      "definitions_cz": "nejíst,\n tj. abstinent od jídla (nábožensky)",
+      "translit": "nēstis",
+      "pronunciation": "nace'-tis",
+      "translated": true
+    },
+    "G3524": {
+      "definitions_cz": "střízlivý, tedy (obrazně) obezřetný",
+      "translit": "nēpháleos",
+      "pronunciation": "nay-fal'-eh-os",
+      "translated": true
+    },
+    "G3525": {
+      "definitions_cz": "zdržet se vína (zůstat střízlivý), t.j.\n (obrazně) být diskrétní",
+      "translit": "nḗphō",
+      "pronunciation": "nay'-fo",
+      "translated": true
+    },
+    "G3526": {
+      "definitions_cz": "černý; Niger, křesťan",
+      "translit": "Níger",
+      "pronunciation": "neeg'-er",
+      "translated": true
+    },
+    "G3527": {
+      "definitions_cz": "vítězný; Nicanor, křesťan",
+      "translit": "Nikánōr",
+      "pronunciation": "nik-an'-ore",
+      "translated": true
+    },
+    "G3528": {
+      "definitions_cz": "podmanit si (doslova nebo obrazně)",
+      "translit": "nikáō",
+      "pronunciation": "nik-ah'-o",
+      "translated": true
+    },
+    "G3529": {
+      "definitions_cz": "dobytí (abstraktně), tj. (obrazně)\n prostředek úspěchu",
+      "translit": "níkē",
+      "pronunciation": "nee'-kay",
+      "translated": true
+    },
+    "G3530": {
+      "definitions_cz": "vítězný mezi svým lidem; Nikodém, an\n Izraelita",
+      "translit": "Nikódēmos",
+      "pronunciation": "nik-od'-ay-mos",
+      "translated": true
+    },
+    "G3531": {
+      "definitions_cz": "Nicolaite, tj. přívrženec Nicolaus",
+      "translit": "Nikolaḯtēs",
+      "pronunciation": "nik-ol-ah-ee'-tace",
+      "translated": true
+    },
+    "G3532": {
+      "definitions_cz": "vítězný nad lidmi; Společnost Nicolaus, a\n kacíř",
+      "translit": "Nikólaos",
+      "pronunciation": "nik-ol'-ah-os",
+      "translated": true
+    },
+    "G3533": {
+      "definitions_cz": "vítězné město; Nicopolis, místo v\n Makedonie",
+      "translit": "Nikópolis",
+      "pronunciation": "nik-op'-ol-is",
+      "translated": true
+    },
+    "G3534": {
+      "definitions_cz": "dobytí (konkrétně), tj. (implicitně)\n triumf",
+      "translit": "nîkos",
+      "pronunciation": "nee'-kos",
+      "translated": true
+    },
+    "G3535": {
+      "definitions_cz": "Ninevi (t. j. Ninive), hlavní město\n Asýrie",
+      "translit": "Nineuḯ",
+      "pronunciation": "nin-yoo-ee'",
+      "translated": true
+    },
+    "G3536": {
+      "definitions_cz": "Ninivce, tedy obyvatele Ninive",
+      "translit": "Nineuḯtēs",
+      "pronunciation": "nin-yoo-ee'-tace",
+      "translated": true
+    },
+    "G3537": {
+      "definitions_cz": "džbán",
+      "translit": "niptḗr",
+      "pronunciation": "nip-tare'",
+      "translated": true
+    },
+    "G3538": {
+      "definitions_cz": "očistit (zejména ruce nebo nohy nebo obličej);\n ceremoniálně, provést omývání",
+      "translit": "níptō",
+      "pronunciation": "nip'-to",
+      "translated": true
+    },
+    "G3539": {
+      "definitions_cz": "cvičit mysl (pozorovat), t. j. (obrazně) k\n chápat, dbát",
+      "translit": "noiéō",
+      "pronunciation": "noy-eh'-o",
+      "translated": true
+    },
+    "G3540": {
+      "definitions_cz": "vjem, tj. účel, nebo (implicitně)\n intelekt, dispozice, sám sebe",
+      "translit": "nóēma",
+      "pronunciation": "no'-ay-mah",
+      "translated": true
+    },
+    "G3541": {
+      "definitions_cz": "podvržený nebo nemanželský syn",
+      "translit": "nóthos",
+      "pronunciation": "noth'-os",
+      "translated": true
+    },
+    "G3542": {
+      "definitions_cz": "pastva, tedy (akt) krmení\n (obrazně, šíření gangrény), nebo (jídlo) pastva",
+      "translit": "nomḗ",
+      "pronunciation": "nom-ay'",
+      "translated": true
+    },
+    "G3543": {
+      "definitions_cz": "řádně, ze zákona dělat (užití), t. j. obyč\n (pasivně, být obvyklý); rozšířením, považovat nebo brát v úvahu",
+      "translit": "nomízō",
+      "pronunciation": "nom-id'-zo",
+      "translated": true
+    },
+    "G3544": {
+      "definitions_cz": "podle práva (nebo příslušejícího), tedy zákonného\n (slavnostně); jako podstatné jméno, odborník na (mozaikové) právo",
+      "translit": "nomikós",
+      "pronunciation": "nom-ik-os'",
+      "translated": true
+    },
+    "G3545": {
+      "definitions_cz": "legitimně (zvláště, souhlasně\n k pravidlům seznamů)",
+      "translit": "nomímōs",
+      "pronunciation": "nom-im'-oce",
+      "translated": true
+    },
+    "G3546": {
+      "definitions_cz": "co se považuje za hodnotu (po latinsky numisma",
+      "translit": "nómisma",
+      "pronunciation": "nom'-is-mah",
+      "translated": true
+    },
+    "G3547": {
+      "definitions_cz": "vykladač (židovského) práva, tj\n rabín",
+      "translit": "nomodidáskalos",
+      "pronunciation": "nom-od-id-as'-kal-os",
+      "translated": true
+    },
+    "G3548": {
+      "definitions_cz": "legislativa (zejména instituce Mosaic\n kód)",
+      "translit": "nomothesía",
+      "pronunciation": "nom-oth-es-ee'-ah",
+      "translated": true
+    },
+    "G3549": {
+      "definitions_cz": "vydávat zákony, tj. (pasivně) mít (mozaiku)\n právní předpisy připojeny, být sankcionovány (jimi)",
+      "translit": "nomothetéō",
+      "pronunciation": "nom-oth-et-eh'-o",
+      "translated": true
+    },
+    "G3550": {
+      "definitions_cz": "zákonodárce",
+      "translit": "nomothétēs",
+      "pronunciation": "nom-oth-et'-ace",
+      "translated": true
+    },
+    "G3551": {
+      "definitions_cz": "právo (přes představu předpisového užití), genitivní pád\n (nařízení), zvláště, (Mojžíše (včetně svazku); také o\n evangelium), nebo přeneseně (zásada)",
+      "translit": "nómos",
+      "pronunciation": "nom'-os",
+      "translated": true
+    },
+    "G3552": {
+      "definitions_cz": "být nemocný, tj. (implicitně chorobný apetit)\n toužit po (obrazně harfovat)",
+      "translit": "noséō",
+      "pronunciation": "nos-eh'-o",
+      "translated": true
+    },
+    "G3553": {
+      "definitions_cz": "nemoc",
+      "translit": "nósēma",
+      "pronunciation": "nos'-ay-ma",
+      "translated": true
+    },
+    "G3554": {
+      "definitions_cz": "nemoc (zřídka obrazně, morální\n postižení)",
+      "translit": "nósos",
+      "pronunciation": "nos'-os",
+      "translated": true
+    },
+    "G3555": {
+      "definitions_cz": "potomstvo (kuřat)",
+      "translit": "nossiá",
+      "pronunciation": "nos-see-ah'",
+      "translated": true
+    },
+    "G3556": {
+      "definitions_cz": "pták",
+      "translit": "nossíon",
+      "pronunciation": "nos-see'-on",
+      "translated": true
+    },
+    "G3557": {
+      "definitions_cz": "sekvestrovat pro\n sebe, t. j. zpronevěřit",
+      "translit": "nosphízomai",
+      "pronunciation": "nos-fid'-zom-ahee",
+      "translated": true
+    },
+    "G3558": {
+      "definitions_cz": "jižní (-západní) vítr; rozšířením,\n samotná jižní čtvrť",
+      "translit": "nótos",
+      "pronunciation": "not'-os",
+      "translated": true
+    },
+    "G3559": {
+      "definitions_cz": "upozorňovat na, tj\n implikace) mírné pokárání nebo varování",
+      "translit": "nouthesía",
+      "pronunciation": "noo-thes-ee'-ah",
+      "translated": true
+    },
+    "G3560": {
+      "definitions_cz": "mít na mysli, tj. (implicitně) k\n opatrně nebo jemně napomínat",
+      "translit": "nouthetéō",
+      "pronunciation": "noo-thet-eh'-o",
+      "translated": true
+    },
+    "G3561": {
+      "definitions_cz": "svátek novoluní",
+      "translit": "noumēnía",
+      "pronunciation": "noo-may-nee'-ah",
+      "translated": true
+    },
+    "G3562": {
+      "definitions_cz": "v\n rozumným způsobem, tedy rozvážně",
+      "translit": "nounechōs",
+      "pronunciation": "noon-ekh-oce'",
+      "translated": true
+    },
+    "G3563": {
+      "definitions_cz": "the intellect, i.e. mind (divine or\n člověk; in thought, feeling, or will); implikací, významem",
+      "translit": "noûs",
+      "pronunciation": "nooce",
+      "translated": true
+    },
+    "G3564": {
+      "definitions_cz": "daná nymfou (tj.\n -narozen); Nymphas, křesťan",
+      "translit": "Nymphâs",
+      "pronunciation": "noom-fas'",
+      "translated": true
+    },
+    "G3565": {
+      "definitions_cz": "porovnat\n latinsky „nupto",
+      "translit": "nýmphē",
+      "pronunciation": "noom-fay'",
+      "translated": true
+    },
+    "G3566": {
+      "definitions_cz": "ženich (doslova nebo přeneseně)",
+      "translit": "nymphíos",
+      "pronunciation": "noom-fee'-os",
+      "translated": true
+    },
+    "G3567": {
+      "definitions_cz": "svatební místnost",
+      "translit": "nymphṓn",
+      "pronunciation": "noom-fohn'",
+      "translated": true
+    },
+    "G3568": {
+      "definitions_cz": "„nyní“ (jako příslovce data, a\n přechod nebo důraz); také jako podstatné jméno nebo přídavné jméno přítomný nebo\n bezprostřední",
+      "translit": "nŷn",
+      "pronunciation": "noon",
+      "translated": true
+    },
+    "G3569": {
+      "definitions_cz": "věci teď, tzn.\n (adverbiálně) v současnosti",
+      "translit": "tanŷn",
+      "pronunciation": "tan-oon'",
+      "translated": true
+    },
+    "G3570": {
+      "definitions_cz": "právě teď",
+      "translit": "nyní",
+      "pronunciation": "noo-nee'",
+      "translated": true
+    },
+    "G3571": {
+      "definitions_cz": "\"noc\" (doslova nebo přeneseně)",
+      "translit": "nýx",
+      "pronunciation": "noox",
+      "translated": true
+    },
+    "G3572": {
+      "definitions_cz": "píchnout (\"šťouchat\")",
+      "translit": "nýssō",
+      "pronunciation": "noos'-so",
+      "translated": true
+    },
+    "G3573": {
+      "definitions_cz": "kývat, tedy (implicitně) k\n usnout; obrazně řečeno zdržovat",
+      "translit": "nystázō",
+      "pronunciation": "noos-tad'-zo",
+      "translated": true
+    },
+    "G3574": {
+      "definitions_cz": "den a noc, tedy celý den čtyřiadvaceti\n hodin",
+      "translit": "nychthḗmeron",
+      "pronunciation": "nookh-thay'-mer-on",
+      "translated": true
+    },
+    "G3575": {
+      "definitions_cz": "Noë, (t. j. Noäch), patriarcha",
+      "translit": "Nōe",
+      "pronunciation": "no'-eh",
+      "translated": true
+    },
+    "G3576": {
+      "definitions_cz": "lenivý, tedy (doslova) líný, popř\n (obrazně) hloupý",
+      "translit": "nōthrós",
+      "pronunciation": "no-thros'",
+      "translated": true
+    },
+    "G3577": {
+      "definitions_cz": "záda",
+      "translit": "nōtos",
+      "pronunciation": "no'-tos",
+      "translated": true
+    },
+    "G3578": {
+      "definitions_cz": "pohostinství, tj. (implicitně) místo\n zábava",
+      "translit": "xenía",
+      "pronunciation": "xen-ee'-ah",
+      "translated": true
+    },
+    "G3579": {
+      "definitions_cz": "být hostitelem (pasivně, hostem); implicitně být\n (udělat, objevit se) podivný",
+      "translit": "xenízō",
+      "pronunciation": "xen-id'-zo",
+      "translated": true
+    },
+    "G3580": {
+      "definitions_cz": "být pohostinní",
+      "translit": "xenodochéō",
+      "pronunciation": "xen-od-okh-eh'-o",
+      "translated": true
+    },
+    "G3581": {
+      "definitions_cz": "cizí (doslova, cizí nebo přeneseně,\n román); implicitně host nebo (naopak) bavič",
+      "translit": "xénos",
+      "pronunciation": "xen'-os",
+      "translated": true
+    },
+    "G3582": {
+      "definitions_cz": "implikací, (o tření) k\n vařit nebo zahřívat); nádoba (jak vyrobená nebo na vaření) (nebo možná\n korupce z latinského sextarius",
+      "translit": "xéstēs",
+      "pronunciation": "xes'-tace",
+      "translated": true
+    },
+    "G3583": {
+      "definitions_cz": "vysušit; implikovaně scvrknout se, dozrát",
+      "translit": "xēraínō",
+      "pronunciation": "xay-rah'-ee-no",
+      "translated": true
+    },
+    "G3584": {
+      "definitions_cz": "vyprahlý; podle\n implikace, scvrklý, země (na rozdíl od vody)",
+      "translit": "xērós",
+      "pronunciation": "xay-ros'",
+      "translated": true
+    },
+    "G3585": {
+      "definitions_cz": "dřevěný",
+      "translit": "xýlinos",
+      "pronunciation": "xoo'-lin-os",
+      "translated": true
+    },
+    "G3586": {
+      "definitions_cz": "dřevo (jako palivo nebo materiál);\n implicitně hůl, kyj nebo strom nebo jiný dřevěný předmět nebo\n látka",
+      "translit": "xýlon",
+      "pronunciation": "xoo'-lon",
+      "translated": true
+    },
+    "G3587": {
+      "definitions_cz": "oholit popř\n \"ostříhat\" vlasy",
+      "translit": "xyráō",
+      "pronunciation": "xoo-rah'-o",
+      "translated": true
+    },
+    "G3588": {
+      "definitions_cz": "(někdy být\n dodáno, jinde vynecháno, v anglickém idiomu)",
+      "translit": "ho",
+      "pronunciation": "ho",
+      "translated": true
+    },
+    "G3589": {
+      "definitions_cz": "deset krát osm",
+      "translit": "ogdoḗkonta",
+      "pronunciation": "og-do-ay'-kon-tah",
+      "translated": true
+    },
+    "G3590": {
+      "definitions_cz": "osmý",
+      "translit": "ógdoos",
+      "pronunciation": "og'-do-os",
+      "translated": true
+    },
+    "G3591": {
+      "definitions_cz": "hmota (jako její ohýbání nebo vyboulení\n zátěž), tj. zátěž (překážka)",
+      "translit": "ónkos",
+      "pronunciation": "ong'-kos",
+      "translated": true
+    },
+    "G3592": {
+      "definitions_cz": "stejný, tj. ten či onen (množné číslo tyto nebo\n ty); často se používá jako osobní zájmeno",
+      "translit": "hóde",
+      "pronunciation": "hod'-eh",
+      "translated": true
+    },
+    "G3593": {
+      "definitions_cz": "cestovat",
+      "translit": "hodeúō",
+      "pronunciation": "hod-yoo'-o",
+      "translated": true
+    },
+    "G3594": {
+      "definitions_cz": "ukázat cestu (doslova nebo obrazně\n (učit))",
+      "translit": "hodēgéō",
+      "pronunciation": "hod-ayg-eh'-o",
+      "translated": true
+    },
+    "G3595": {
+      "definitions_cz": "dirigent (doslova nebo obrazně\n (učitel))",
+      "translit": "hodēgós",
+      "pronunciation": "hod-ayg-os'",
+      "translated": true
+    },
+    "G3596": {
+      "definitions_cz": "býti pocestným, t. j. cestovati",
+      "translit": "hodoiporéō",
+      "pronunciation": "hod-oy-por-eh'-o",
+      "translated": true
+    },
+    "G3597": {
+      "definitions_cz": "cestovat",
+      "translit": "hodoiporía",
+      "pronunciation": "hod-oy-por-ee'-ah",
+      "translated": true
+    },
+    "G3598": {
+      "definitions_cz": "silnice; implicitně pokrok (\n trasa, akt nebo vzdálenost); přeneseně způsob nebo prostředek",
+      "translit": "hodós",
+      "pronunciation": "hod-os'",
+      "translated": true
+    },
+    "G3599": {
+      "definitions_cz": "\"zub\"",
+      "translit": "odoús",
+      "pronunciation": "od-ooce",
+      "translated": true
+    },
+    "G3600": {
+      "definitions_cz": "truchlit",
+      "translit": "odynáō",
+      "pronunciation": "od-oo-nah'-o",
+      "translated": true
+    },
+    "G3601": {
+      "definitions_cz": "smutek (jako sklíčený)",
+      "translit": "odýnē",
+      "pronunciation": "od-oo'-nay",
+      "translated": true
+    },
+    "G3602": {
+      "definitions_cz": "sténání, tzn.\n nářek",
+      "translit": "odyrmós",
+      "pronunciation": "od-oor-mos'",
+      "translated": true
+    },
+    "G3603": {
+      "definitions_cz": "což je",
+      "translit": "hó esti",
+      "pronunciation": "ho es-tee'",
+      "translated": true
+    },
+    "G3604": {
+      "definitions_cz": "Ozias (t. j. Uzzijah), Izraelita",
+      "translit": "Ozías",
+      "pronunciation": "od-zee'-as",
+      "translated": true
+    },
+    "G3605": {
+      "definitions_cz": "cítit (obvykle nemocný\n \"zápach\")",
+      "translit": "ózō",
+      "pronunciation": "od'-zo",
+      "translated": true
+    },
+    "G3606": {
+      "definitions_cz": "z jakého místa popř\n zdroj nebo příčina (příslovce nebo spojka)",
+      "translit": "hóthen",
+      "pronunciation": "hoth'-en",
+      "translated": true
+    },
+    "G3607": {
+      "definitions_cz": "lněné plátno, tj. (zejména) a\n plachtit",
+      "translit": "othónē",
+      "pronunciation": "oth-on'-ay",
+      "translated": true
+    },
+    "G3608": {
+      "definitions_cz": "plátěný obvaz",
+      "translit": "othónion",
+      "pronunciation": "oth-on'-ee-on",
+      "translated": true
+    },
+    "G3609": {
+      "definitions_cz": "domácí, t. j. (jako podstatné jméno), příbuzný, přívrženec",
+      "translit": "oikeîos",
+      "pronunciation": "oy-ki'-os",
+      "translated": true
+    },
+    "G3610": {
+      "definitions_cz": "spolubydlící, tedy podřadný domácí",
+      "translit": "oikétēs",
+      "pronunciation": "oy-ket'-ace",
+      "translated": true
+    },
+    "G3611": {
+      "definitions_cz": "obývat dům, tedy bydlet (obrazně bydlet,\n zůstat, zde); implicitně spolužít",
+      "translit": "oikéō",
+      "pronunciation": "oy-keh'-o",
+      "translated": true
+    },
+    "G3612": {
+      "definitions_cz": "činžák, tj. (zvláště), vězení",
+      "translit": "oíkēma",
+      "pronunciation": "oy'-kay-mah",
+      "translated": true
+    },
+    "G3613": {
+      "definitions_cz": "a\n bydliště (doslova nebo přeneseně)",
+      "translit": "oikētḗrion",
+      "pronunciation": "oy-kay-tay'-ree-on",
+      "translated": true
+    },
+    "G3614": {
+      "definitions_cz": "správně, bydliště (abstraktně), ale obvykle (konkrétně)\n příbytek (doslova nebo přeneseně); implicitně rodina\n (hlavně domácí)",
+      "translit": "oikía",
+      "pronunciation": "oy-kee'-ah",
+      "translated": true
+    },
+    "G3615": {
+      "definitions_cz": "známý, tj. (jako podstatné jméno) příbuzný",
+      "translit": "oikiakós",
+      "pronunciation": "oy-kee-ak-os'",
+      "translated": true
+    },
+    "G3616": {
+      "definitions_cz": "být hlavou (tj. vládnout) rodině",
+      "translit": "oikodespotéō",
+      "pronunciation": "oy-kod-es-pot-eh'-o",
+      "translated": true
+    },
+    "G3617": {
+      "definitions_cz": "hlava rodiny",
+      "translit": "oikodespótēs",
+      "pronunciation": "oy-kod-es-pot'-ace",
+      "translated": true
+    },
+    "G3618": {
+      "definitions_cz": "být stavitelem domu, t. j. postavit popř\n (obrazně) potvrdit",
+      "translit": "oikodoméō",
+      "pronunciation": "oy-kod-om-eh'-o",
+      "translated": true
+    },
+    "G3619": {
+      "definitions_cz": "architektura, tj. (konkrétně) stavba; přeneseně,\n potvrzení",
+      "translit": "oikodomḗ",
+      "pronunciation": "oy-kod-om-ay'",
+      "translated": true
+    },
+    "G3620": {
+      "definitions_cz": "potvrzení",
+      "translit": "oikodomía",
+      "pronunciation": "oy-kod-om-ee'-ah",
+      "translated": true
+    },
+    "G3621": {
+      "definitions_cz": "spravovat (dům, tj. majetek)",
+      "translit": "oikonoméō",
+      "pronunciation": "oy-kon-om-eh'-o",
+      "translated": true
+    },
+    "G3622": {
+      "definitions_cz": "správa (domácnosti nebo majetku); speciálně, a\n (náboženská) \"ekonomika\"",
+      "translit": "oikonomía",
+      "pronunciation": "oy-kon-om-ee'-ah",
+      "translated": true
+    },
+    "G3623": {
+      "definitions_cz": "dům-distributor (t.j. správce), popř\n dozorce, tj. zaměstnanec v této funkci; potažmo fiskální\n agent (pokladník); přeneseně, kazatel (o\n evangelium)",
+      "translit": "oikonómos",
+      "pronunciation": "oy-kon-om'-os",
+      "translated": true
+    },
+    "G3624": {
+      "definitions_cz": "obydlí (více či méně rozsáhlé, doslovné popř\n obrazné); implicitně rodina (více či méně příbuzná, doslova\n nebo obrazně)",
+      "translit": "oîkos",
+      "pronunciation": "oy'-kos",
+      "translated": true
+    },
+    "G3625": {
+      "definitions_cz": "země, tj. (terénní část) zeměkoule; speciálně,\n římská říše",
+      "translit": "oikouménē",
+      "pronunciation": "oy-kou-men'-ay",
+      "translated": true
+    },
+    "G3626": {
+      "definitions_cz": "být \"ware\"); pobyt doma, tzn.\n domácky nakloněný („dobrý hospodyně“)",
+      "translit": "oikourós",
+      "pronunciation": "oy-koo-ros'",
+      "translated": true
+    },
+    "G3627": {
+      "definitions_cz": "projevovat lítost",
+      "translit": "oikteírō",
+      "pronunciation": "oyk-ti'-ro",
+      "translated": true
+    },
+    "G3628": {
+      "definitions_cz": "soucit",
+      "translit": "oiktirmós",
+      "pronunciation": "oyk-tir-mos'",
+      "translated": true
+    },
+    "G3629": {
+      "definitions_cz": "soucitný",
+      "translit": "oiktírmōn",
+      "pronunciation": "oyk-tir'-mone",
+      "translated": true
+    },
+    "G3630": {
+      "definitions_cz": "a\n tippler",
+      "translit": "oinopótēs",
+      "pronunciation": "oy-nop-ot'-ace",
+      "translated": true
+    },
+    "G3631": {
+      "definitions_cz": "\"víno\" (doslova\n nebo obrazně)",
+      "translit": "oînos",
+      "pronunciation": "oy'-nos",
+      "translated": true
+    },
+    "G3632": {
+      "definitions_cz": "přebytek (nebo přebytek).\n víno, tj. vinolency (opilost)",
+      "translit": "oinophlygía",
+      "pronunciation": "oy-nof-loog-ee'-ah",
+      "translated": true
+    },
+    "G3633": {
+      "definitions_cz": "dělat jako (sebe), tzn.\n představit si (být toho názoru)",
+      "translit": "oíomai",
+      "pronunciation": "oy'-om-ahee",
+      "translated": true
+    },
+    "G3634": {
+      "definitions_cz": "takový nebo jaký druh (jako a\n korelace nebo vykřičník); zejména středního rodu (příslovečně) s\n negativní, ne tak",
+      "translit": "hoîos",
+      "pronunciation": "hoy'-os",
+      "translated": true
+    },
+    "G3635": {
+      "definitions_cz": "být pomalý (obrazně, odpor)",
+      "translit": "oknéō",
+      "pronunciation": "ok-neh'-o",
+      "translated": true
+    },
+    "G3636": {
+      "definitions_cz": "zdrženlivý, tj. indolentní; (obrazně) otravný",
+      "translit": "oknērós",
+      "pronunciation": "ok-nay-ros'",
+      "translated": true
+    },
+    "G3637": {
+      "definitions_cz": "osmidenní člověk nebo čin",
+      "translit": "oktaḗmeros",
+      "pronunciation": "ok-tah-ay'-mer-os",
+      "translated": true
+    },
+    "G3638": {
+      "definitions_cz": "\"osm\"",
+      "translit": "oktṓ",
+      "pronunciation": "ok-to'",
+      "translated": true
+    },
+    "G3639": {
+      "definitions_cz": "prodloužená forma); zmar, tzn.\n smrt, trest",
+      "translit": "ólethros",
+      "pronunciation": "ol'-eth-ros",
+      "translated": true
+    },
+    "G3640": {
+      "definitions_cz": "nedůvěřivý, tj. nedostatek důvěry (v\n Kristus)",
+      "translit": "oligópistos",
+      "pronunciation": "ol-ig-op'-is-tos",
+      "translated": true
+    },
+    "G3641": {
+      "definitions_cz": "nepatrný (v rozsahu, stupni, počtu, trvání popř\n hodnota); zvláště středního rodu (adverbiálně) poněkud",
+      "translit": "olígos",
+      "pronunciation": "ol-ee'-gos",
+      "translated": true
+    },
+    "G3642": {
+      "definitions_cz": "málo temperamentní, tzn.\n slaboduchý",
+      "translit": "oligópsychos",
+      "pronunciation": "ol-ig-op'-soo-khos",
+      "translated": true
+    },
+    "G3643": {
+      "definitions_cz": "mít malý ohled na to,\n tj. znevažovat",
+      "translit": "oligōréō",
+      "pronunciation": "ol-ig-o-reh'-o",
+      "translated": true
+    },
+    "G3644": {
+      "definitions_cz": "ničitel, tj. (zvláště), jedovatý had",
+      "translit": "olothreutḗs",
+      "pronunciation": "ol-oth-ryoo-tace'",
+      "translated": true
     }
   }
 }
