@@ -17151,6 +17151,904 @@
       "translit": "dikastḗs",
       "pronunciation": "dik-as-tace'",
       "translated": true
+    },
+    "G1349": {
+      "definitions_cz": "právo (jako samozřejmé), tj. spravedlnost (\n princip, rozhodnutí nebo jeho výkon)",
+      "translit": "díkē",
+      "pronunciation": "dee'-kay",
+      "translated": true
+    },
+    "G1350": {
+      "definitions_cz": "nevod (pro\n rybaření)",
+      "translit": "díktyon",
+      "pronunciation": "dik'-too-on",
+      "translated": true
+    },
+    "G1351": {
+      "definitions_cz": "nejednoznačný, t. j. vypovídající něco jiného\n příběh",
+      "translit": "dílogos",
+      "pronunciation": "dil'-og-os",
+      "translated": true
+    },
+    "G1352": {
+      "definitions_cz": "skrze kterou věc, tj. následně",
+      "translit": "dió",
+      "pronunciation": "dee-o'",
+      "translated": true
+    },
+    "G1353": {
+      "definitions_cz": "cestovat skrz",
+      "translit": "diodeúō",
+      "pronunciation": "dee-od-yoo'-o",
+      "translated": true
+    },
+    "G1354": {
+      "definitions_cz": "reveller; Dionysius, Athéňan",
+      "translit": "Dionýsios",
+      "pronunciation": "dee-on-oo'-see-os",
+      "translated": true
+    },
+    "G1355": {
+      "definitions_cz": "na což právě účet",
+      "translit": "dióper",
+      "pronunciation": "dee-op'-er",
+      "translated": true
+    },
+    "G1356": {
+      "definitions_cz": "padající do nebe (tj.\n aerolit)",
+      "translit": "diopetḗs",
+      "pronunciation": "dee-op-et'-ace",
+      "translated": true
+    },
+    "G1357": {
+      "definitions_cz": "náprava, tedy (zvláště) mesiášská\n restaurování",
+      "translit": "diórthōsis",
+      "pronunciation": "dee-or'-tho-sis",
+      "translated": true
+    },
+    "G1358": {
+      "definitions_cz": "proniknout zlodějně",
+      "translit": "diorýssō",
+      "pronunciation": "dee-or-oos'-so",
+      "translated": true
+    },
+    "G1359": {
+      "definitions_cz": "synové\n Jupiter, tedy dvojčata Dioscuri",
+      "translit": "Dióskouroi",
+      "pronunciation": "dee-os'-koo-roy",
+      "translated": true
+    },
+    "G1360": {
+      "definitions_cz": "právě proto, nebo pokud ano",
+      "translit": "dióti",
+      "pronunciation": "dee-ot'-ee",
+      "translated": true
+    },
+    "G1361": {
+      "definitions_cz": "Jove-živil; Diotrephes, an\n odpůrce křesťanství",
+      "translit": "Diotrephḗs",
+      "pronunciation": "dee-ot-ref-ace'",
+      "translated": true
+    },
+    "G1362": {
+      "definitions_cz": "dvojí",
+      "translit": "diploûs",
+      "pronunciation": "dip-looce'",
+      "translated": true
+    },
+    "G1363": {
+      "definitions_cz": "vykreslit dvojnásobně",
+      "translit": "diplóō",
+      "pronunciation": "dip-lo'-o",
+      "translated": true
+    },
+    "G1364": {
+      "definitions_cz": "dvakrát",
+      "translit": "dís",
+      "pronunciation": "dece",
+      "translated": true
+    },
+    "G1365": {
+      "definitions_cz": "správně, duplikovat, tj. (mentálně) kolísat (v\n názor)",
+      "translit": "distázō",
+      "pronunciation": "dis-tad'-zo",
+      "translated": true
+    },
+    "G1366": {
+      "definitions_cz": "dvoubřitý",
+      "translit": "dístomos",
+      "pronunciation": "dis'-tom-os",
+      "translated": true
+    },
+    "G1367": {
+      "definitions_cz": "dva tisíce",
+      "translit": "dischílioi",
+      "pronunciation": "dis-khil'-ee-oy",
+      "translated": true
+    },
+    "G1368": {
+      "definitions_cz": "namáhat se",
+      "translit": "diÿlízō",
+      "pronunciation": "dee-oo-lid'-zo",
+      "translated": true
+    },
+    "G1369": {
+      "definitions_cz": "rozdělit, tj. rozdělit (obrazně,\n odcizit)",
+      "translit": "dicházō",
+      "pronunciation": "dee-khad'-zo",
+      "translated": true
+    },
+    "G1370": {
+      "definitions_cz": "disunion, tj. (obrazně)\n rozbroje",
+      "translit": "dichostasía",
+      "pronunciation": "dee-khos-tas-ee'-ah",
+      "translated": true
+    },
+    "G1371": {
+      "definitions_cz": "půlit, t. j. (podle rozšíření) bičovat\n vážně",
+      "translit": "dichotoméō",
+      "pronunciation": "dee-khot-om-eh'-o",
+      "translated": true
+    },
+    "G1372": {
+      "definitions_cz": "žíznit po (doslova nebo\n přeneseně)",
+      "translit": "dipsáō",
+      "pronunciation": "dip-sah'-o",
+      "translated": true
+    },
+    "G1373": {
+      "definitions_cz": "žízeň",
+      "translit": "dípsos",
+      "pronunciation": "dip'-sos",
+      "translated": true
+    },
+    "G1374": {
+      "definitions_cz": "dvouduchý, tj. kolísavý (v názoru nebo\n účel)",
+      "translit": "dípsychos",
+      "pronunciation": "dip'-soo-khos",
+      "translated": true
+    },
+    "G1375": {
+      "definitions_cz": "pronásledování",
+      "translit": "diōgmós",
+      "pronunciation": "dee-ogue-mos'",
+      "translated": true
+    },
+    "G1376": {
+      "definitions_cz": "pronásledovatel",
+      "translit": "diṓktēs",
+      "pronunciation": "dee-oke'-tace",
+      "translated": true
+    },
+    "G1377": {
+      "definitions_cz": "porovnejte základ [ŘECKO:1169][ŘECKO:1249]",
+      "translit": "diṓkō",
+      "pronunciation": "dee-o'-ko",
+      "translated": true
+    },
+    "G1378": {
+      "definitions_cz": "zákon (občanský, obřadní popř\n církevní)",
+      "translit": "dógma",
+      "pronunciation": "dog'-mah",
+      "translated": true
+    },
+    "G1379": {
+      "definitions_cz": "předepsat zákonem, tj. (reflexivně) podřídit se,\n slavnostně vládnout",
+      "translit": "dogmatízō",
+      "pronunciation": "dog-mat-id'-zo",
+      "translated": true
+    },
+    "G1380": {
+      "definitions_cz": "porovnat základ [ŘECKO:1166]",
+      "translit": "dokéō",
+      "pronunciation": "dok-eh'-o",
+      "translated": true
+    },
+    "G1381": {
+      "definitions_cz": "testovat (doslova nebo obrazně); implicitně, k\n schválit",
+      "translit": "dokimázō",
+      "pronunciation": "dok-im-ad'-zo",
+      "translated": true
+    },
+    "G1382": {
+      "definitions_cz": "test (abstraktně nebo konkrétně); podle\n implikace, důvěryhodnost",
+      "translit": "dokimḗ",
+      "pronunciation": "dok-ee-may'",
+      "translated": true
+    },
+    "G1383": {
+      "definitions_cz": "testování; implicitně,\n důvěryhodnost",
+      "translit": "dokímion",
+      "pronunciation": "dok-im'-ee-on",
+      "translated": true
+    },
+    "G1384": {
+      "definitions_cz": "správně, přijatelné (aktuální po testu), tzn.\n schváleno",
+      "translit": "dókimos",
+      "pronunciation": "dok'-ee-mos",
+      "translated": true
+    },
+    "G1385": {
+      "definitions_cz": "hůl dřeva",
+      "translit": "dokós",
+      "pronunciation": "dok-os'",
+      "translated": true
+    },
+    "G1386": {
+      "definitions_cz": "zrádný",
+      "translit": "dólios",
+      "pronunciation": "dol'-ee-os",
+      "translated": true
+    },
+    "G1387": {
+      "definitions_cz": "být lstivý",
+      "translit": "dolióō",
+      "pronunciation": "dol-ee-o'-o",
+      "translated": true
+    },
+    "G1388": {
+      "definitions_cz": "porovnat [ŘECKO:1185]",
+      "translit": "dólos",
+      "pronunciation": "dol'-os",
+      "translated": true
+    },
+    "G1389": {
+      "definitions_cz": "lapit, t. j. (obrazně) falšovat",
+      "translit": "dolóō",
+      "pronunciation": "dol-o'-o",
+      "translated": true
+    },
+    "G1390": {
+      "definitions_cz": "dárek",
+      "translit": "dóma",
+      "pronunciation": "dom'-ah",
+      "translated": true
+    },
+    "G1391": {
+      "definitions_cz": "sláva (jak je velmi zřejmé), v širokém uplatnění\n (doslovné nebo obrazné, objektivní nebo subjektivní)",
+      "translit": "dóxa",
+      "pronunciation": "dox'-ah",
+      "translated": true
+    },
+    "G1392": {
+      "definitions_cz": "činit (nebo vážit si) slávy (v širokém\n aplikace)",
+      "translit": "doxázō",
+      "pronunciation": "dox-ad'-zo",
+      "translated": true
+    },
+    "G1393": {
+      "definitions_cz": "gazela; Dorcas, křesťanka",
+      "translit": "Dorkás",
+      "pronunciation": "dor-kas'",
+      "translated": true
+    },
+    "G1394": {
+      "definitions_cz": "dávání; implicitně, (konkrétně) a\n dárek",
+      "translit": "dósis",
+      "pronunciation": "dos'-is",
+      "translated": true
+    },
+    "G1395": {
+      "definitions_cz": "dárce",
+      "translit": "dótēs",
+      "pronunciation": "dot'-ace",
+      "translated": true
+    },
+    "G1396": {
+      "definitions_cz": "být otrokář, t.j\n zotročit (obrazně, podmanit si)",
+      "translit": "doulagōgéō",
+      "pronunciation": "doo-lag-ogue-eh'-o",
+      "translated": true
+    },
+    "G1397": {
+      "definitions_cz": "otroctví (obřadně nebo obrazně)",
+      "translit": "douleía",
+      "pronunciation": "doo-li'-ah",
+      "translated": true
+    },
+    "G1398": {
+      "definitions_cz": "být otrokem (doslovně nebo obrazně, nedobrovolně nebo\n dobrovolné)",
+      "translit": "douleúō",
+      "pronunciation": "dool-yoo'-o",
+      "translated": true
+    },
+    "G1399": {
+      "definitions_cz": "otrokyně (nedobrovolně popř\n dobrovolně)",
+      "translit": "doúlē",
+      "pronunciation": "doo'-lay",
+      "translated": true
+    },
+    "G1400": {
+      "definitions_cz": "servilní",
+      "translit": "doûlon",
+      "pronunciation": "doo'-lon",
+      "translated": true
+    },
+    "G1401": {
+      "definitions_cz": "otrok (doslovný nebo obrazný, nedobrovolný nebo dobrovolný;\n často, tedy v kvalifikovaném smyslu podřízenosti resp\n podřízenost)",
+      "translit": "doûlos",
+      "pronunciation": "doo'-los",
+      "translated": true
+    },
+    "G1402": {
+      "definitions_cz": "zotročit (doslova nebo přeneseně)",
+      "translit": "doulóō",
+      "pronunciation": "doo-lo'-o",
+      "translated": true
+    },
+    "G1403": {
+      "definitions_cz": "recepce, tedy družná zábava",
+      "translit": "dochḗ",
+      "pronunciation": "dokh-ay'",
+      "translated": true
+    },
+    "G1404": {
+      "definitions_cz": "báječný druh\n z hada (možná jako by měl fascinovat)",
+      "translit": "drákōn",
+      "pronunciation": "drak'-own",
+      "translated": true
+    },
+    "G1405": {
+      "definitions_cz": "do\n uchopit, tj. (obrazně) chytit",
+      "translit": "drássomai",
+      "pronunciation": "dras'-som-ahee",
+      "translated": true
+    },
+    "G1406": {
+      "definitions_cz": "drachma nebo (stříbrná) mince (podle zacházení)",
+      "translit": "drachmḗ",
+      "pronunciation": "drakh-may'",
+      "translated": true
+    },
+    "G1407": {
+      "definitions_cz": "sběrací hák (zejména pro\n sklizeň)",
+      "translit": "drépanon",
+      "pronunciation": "drep'-an-on",
+      "translated": true
+    },
+    "G1408": {
+      "definitions_cz": "rasa, tj. (obrazně)\n kariéra",
+      "translit": "drómos",
+      "pronunciation": "drom'-os",
+      "translated": true
+    },
+    "G1409": {
+      "definitions_cz": "Drusilla, člen\n herodiánská rodina",
+      "translit": "Droúsilla",
+      "pronunciation": "droo'-sil-lah",
+      "translated": true
+    },
+    "G1410": {
+      "definitions_cz": "být schopen nebo možný",
+      "translit": "dýnamai",
+      "pronunciation": "doo'-nam-ahee",
+      "translated": true
+    },
+    "G1411": {
+      "definitions_cz": "síla (doslova nebo přeneseně); speciálně, zázračné\n moc (obvykle implicitně, zázrak sám o sobě)",
+      "translit": "dýnamis",
+      "pronunciation": "doo'-nam-is",
+      "translated": true
+    },
+    "G1412": {
+      "definitions_cz": "povolit",
+      "translit": "dynamóō",
+      "pronunciation": "doo-nam-o'-o",
+      "translated": true
+    },
+    "G1413": {
+      "definitions_cz": "vládce nebo důstojník",
+      "translit": "dynástēs",
+      "pronunciation": "doo-nas'-tace",
+      "translated": true
+    },
+    "G1414": {
+      "definitions_cz": "být efektivní (obrazně)",
+      "translit": "dynatéō",
+      "pronunciation": "doo-nat-eh'-o",
+      "translated": true
+    },
+    "G1415": {
+      "definitions_cz": "mocný nebo schopný (doslova nebo přeneseně); kastrovat\n možné",
+      "translit": "dynatós",
+      "pronunciation": "doo-nat-os'",
+      "translated": true
+    },
+    "G1416": {
+      "definitions_cz": "jít \"dolů\"",
+      "translit": "dýnō",
+      "pronunciation": "doo'-no",
+      "translated": true
+    },
+    "G1417": {
+      "definitions_cz": "\"dva\"",
+      "translit": "dýo",
+      "pronunciation": "doo'-o",
+      "translated": true
+    },
+    "G1418": {
+      "definitions_cz": "používán pouze v\n složení jako předpona; těžce, tedy s obtížemi",
+      "translit": "dys-",
+      "pronunciation": "doos",
+      "translated": true
+    },
+    "G1419": {
+      "definitions_cz": "tísnivý",
+      "translit": "dysbástaktos",
+      "pronunciation": "doos-bas'-tak-tos",
+      "translated": true
+    },
+    "G1420": {
+      "definitions_cz": "a\n \"úplavice\"",
+      "translit": "dysentería",
+      "pronunciation": "doos-en-ter-ee'-ah",
+      "translated": true
+    },
+    "G1421": {
+      "definitions_cz": "obtížné\n vysvětlení",
+      "translit": "dysermḗneutos",
+      "pronunciation": "doos-er-mane'-yoo-tos",
+      "translated": true
+    },
+    "G1422": {
+      "definitions_cz": "správně, pečlivý v jídle\n (otravný), t. j. (genitivní pád) neproveditelný",
+      "translit": "dýskolos",
+      "pronunciation": "doo'-kol-os",
+      "translated": true
+    },
+    "G1423": {
+      "definitions_cz": "neproveditelně",
+      "translit": "dyskólōs",
+      "pronunciation": "doos-kol'-oce",
+      "translated": true
+    },
+    "G1424": {
+      "definitions_cz": "západ slunce, tedy (implicitně) západní\n regionu",
+      "translit": "dysmḗ",
+      "pronunciation": "doos-may'",
+      "translated": true
+    },
+    "G1425": {
+      "definitions_cz": "obtížné vnímání",
+      "translit": "dysnóētos",
+      "pronunciation": "doos-no'-ay-tos",
+      "translated": true
+    },
+    "G1426": {
+      "definitions_cz": "hanobení",
+      "translit": "dysphēmía",
+      "pronunciation": "doos-fay-mee'-ah",
+      "translated": true
+    },
+    "G1427": {
+      "definitions_cz": "dvě a deset, tedy tucet",
+      "translit": "dṓdeka",
+      "pronunciation": "do'-dek-ah",
+      "translated": true
+    },
+    "G1428": {
+      "definitions_cz": "dvanáctý",
+      "translit": "dōdékatos",
+      "pronunciation": "do-dek'-at-os",
+      "translated": true
+    },
+    "G1429": {
+      "definitions_cz": "společenství Izraele",
+      "translit": "dōdekáphylon",
+      "pronunciation": "do-dek-af'-oo-lon",
+      "translated": true
+    },
+    "G1430": {
+      "definitions_cz": "správně, stavba, tj. (zvláště) a\n střecha",
+      "translit": "dōma",
+      "pronunciation": "do'-mah",
+      "translated": true
+    },
+    "G1431": {
+      "definitions_cz": "spropitné",
+      "translit": "dōreá",
+      "pronunciation": "do-reh-ah'",
+      "translated": true
+    },
+    "G1432": {
+      "definitions_cz": "bezplatně (doslova popř\n přeneseně)",
+      "translit": "dōreán",
+      "pronunciation": "do-reh-an'",
+      "translated": true
+    },
+    "G1433": {
+      "definitions_cz": "darovat bezplatně",
+      "translit": "dōréomai",
+      "pronunciation": "do-reh'-om-ahee",
+      "translated": true
+    },
+    "G1434": {
+      "definitions_cz": "obdarování",
+      "translit": "dṓrēma",
+      "pronunciation": "do'-ray-mah",
+      "translated": true
+    },
+    "G1435": {
+      "definitions_cz": "dárek; zvláště oběť",
+      "translit": "dōron",
+      "pronunciation": "do'-ron",
+      "translated": true
+    },
+    "G1436": {
+      "definitions_cz": "správně, nech to být, tj. (jako\n citoslovce) aha!",
+      "translit": "éa",
+      "pronunciation": "eh'-ah",
+      "translated": true
+    },
+    "G1437": {
+      "definitions_cz": "podmíněná částice; v případě, že za předpokladu,\n atd.; často se používá ve spojení s jinými částicemi k označení\n neurčitost nebo nejistota",
+      "translit": "eán",
+      "pronunciation": "eh-an'",
+      "translated": true
+    },
+    "G1438": {
+      "definitions_cz": "on- (její-, to-, oni-, také\n (ve spojení s osobním zájmenem ostatních osob) my-,\n vaše-, naše-, vaše-) já (já) atd.",
+      "translit": "heautoû",
+      "pronunciation": "heh-ow-too'",
+      "translated": true
+    },
+    "G1439": {
+      "definitions_cz": "nechat být, t. j. povolit nebo nechat na pokoji",
+      "translit": "eáō",
+      "pronunciation": "eh-ah'-o",
+      "translated": true
+    },
+    "G1440": {
+      "definitions_cz": "sedmdesát",
+      "translit": "hebdomḗkonta",
+      "pronunciation": "heb-dom-ay'-kon-tah",
+      "translated": true
+    },
+    "G1441": {
+      "definitions_cz": "sedmdesátkrát",
+      "translit": "hebdomēkontákis",
+      "pronunciation": "heb-dom-ay-kon-tak-is",
+      "translated": true
+    },
+    "G1442": {
+      "definitions_cz": "sedmý",
+      "translit": "hébdomos",
+      "pronunciation": "heb'-dom-os",
+      "translated": true
+    },
+    "G1443": {
+      "definitions_cz": "Eber, patriarcha",
+      "translit": "Ebér",
+      "pronunciation": "eb-er'",
+      "translated": true
+    },
+    "G1444": {
+      "definitions_cz": "hebrejština nebo židovský jazyk",
+      "translit": "Hebraïkós",
+      "pronunciation": "heb-rah-ee-kos'",
+      "translated": true
+    },
+    "G1445": {
+      "definitions_cz": "Hebrejec (tj. hebrejština) nebo Žid",
+      "translit": "Hebraîos",
+      "pronunciation": "heb-rah'-yos",
+      "translated": true
+    },
+    "G1446": {
+      "definitions_cz": "hebrejský (hebrejský) nebo židovský (chaldejský)\n jazyk",
+      "translit": "Hebraḯs",
+      "pronunciation": "heb-rah-is'",
+      "translated": true
+    },
+    "G1447": {
+      "definitions_cz": "hebraisticky nebo v židovském (chaldejském)\n jazyk",
+      "translit": "Hebraïstí",
+      "pronunciation": "heb-rah-is-tee'",
+      "translated": true
+    },
+    "G1448": {
+      "definitions_cz": "přiblížit, tj. (reflexivně) přiblížit",
+      "translit": "engízō",
+      "pronunciation": "eng-id'-zo",
+      "translated": true
+    },
+    "G1449": {
+      "definitions_cz": "\"ryt\", t. j. vepsat",
+      "translit": "engráphō",
+      "pronunciation": "eng-graf'-o",
+      "translated": true
+    },
+    "G1450": {
+      "definitions_cz": "zavázané (jako by je vyslovil člen),\n tj. nevolník",
+      "translit": "éngyos",
+      "pronunciation": "eng'-goo-os",
+      "translated": true
+    },
+    "G1451": {
+      "definitions_cz": "podobný základu\n [ŘECtina:43]",
+      "translit": "engýs",
+      "pronunciation": "eng-goos'",
+      "translated": true
+    },
+    "G1452": {
+      "definitions_cz": "blíž",
+      "translit": "engýteron",
+      "pronunciation": "eng-goo'-ter-on",
+      "translated": true
+    },
+    "G1453": {
+      "definitions_cz": "probudit se (přechodně nebo nepřechodně), t. j. vzbudit\n (doslova ze spánku, ze sezení nebo ležení, z nemoci, z\n smrt; nebo přeneseně z neznáma, nečinnosti, ruin,\n neexistence)",
+      "translit": "egeírō",
+      "pronunciation": "eg-i'-ro",
+      "translated": true
+    },
+    "G1454": {
+      "definitions_cz": "vzkříšení (ze smrti)",
+      "translit": "égersis",
+      "pronunciation": "eg'-er-sis",
+      "translated": true
+    },
+    "G1455": {
+      "definitions_cz": "subindukované, tj. tajně\n podřízena jako lhář",
+      "translit": "enkáthetos",
+      "pronunciation": "eng-kath'-et-os",
+      "translated": true
+    },
+    "G1456": {
+      "definitions_cz": "inovace,\n tj. (zvláště) obnovení (náboženských bohoslužeb po Antiochii\n přerušení)",
+      "translit": "enkaínia",
+      "pronunciation": "eng-kah'-ee-nee-ah",
+      "translated": true
+    },
+    "G1457": {
+      "definitions_cz": "obnovit, t. j. inaugurovat",
+      "translit": "enkainízō",
+      "pronunciation": "eng-kahee-nid'-zo",
+      "translated": true
+    },
+    "G1458": {
+      "definitions_cz": "vyzvat (jako dluh nebo poptávku), t. j. přinést do\n účet (obvinit, kriminalizovat atd.)",
+      "translit": "enkaléō",
+      "pronunciation": "eng-kal-eh'-o",
+      "translated": true
+    },
+    "G1459": {
+      "definitions_cz": "zanechat na nějakém místě, tj. (v dobrém\n smysl) nechat zůstat, nebo (ve špatném smyslu) opustit",
+      "translit": "enkataleípō",
+      "pronunciation": "eng-kat-al-i'-po",
+      "translated": true
+    },
+    "G1460": {
+      "definitions_cz": "usadit se na místě, tedy bydlet",
+      "translit": "enkatoikéō",
+      "pronunciation": "eng-kat-oy-keh'-o",
+      "translated": true
+    },
+    "G1461": {
+      "definitions_cz": "píchnout, t. j. vštěpovat",
+      "translit": "enkentrízō",
+      "pronunciation": "eng-ken-trid'-zo",
+      "translated": true
+    },
+    "G1462": {
+      "definitions_cz": "obvinění, tedy údajný trestný čin",
+      "translit": "énklēma",
+      "pronunciation": "eng'-klay-mah",
+      "translated": true
+    },
+    "G1463": {
+      "definitions_cz": "opásat se (pro\n práce), tj. přeneseně (zástěra jako odznak služebnosti) k\n opotřebení (na znamení vzájemné úcty)",
+      "translit": "enkombóomai",
+      "pronunciation": "eng-kom-bo'-om-ahee",
+      "translated": true
+    },
+    "G1464": {
+      "definitions_cz": "překážkou",
+      "translit": "enkopḗ",
+      "pronunciation": "eng-kop-ay'",
+      "translated": true
+    },
+    "G1465": {
+      "definitions_cz": "řezat do, tj. (obrazně) bránit,\n zadržet",
+      "translit": "enkóptō",
+      "pronunciation": "eng-kop'-to",
+      "translated": true
+    },
+    "G1466": {
+      "definitions_cz": "sebekontrola (zejména kontinence)",
+      "translit": "enkráteia",
+      "pronunciation": "eng-krat'-i-ah",
+      "translated": true
+    },
+    "G1467": {
+      "definitions_cz": "uplatňovat sebekontrolu (ve stravě a\n cudnost)",
+      "translit": "enkrateúomai",
+      "pronunciation": "eng-krat-yoo'-om-ahee",
+      "translated": true
+    },
+    "G1468": {
+      "definitions_cz": "silný ve věci (mistrovský), tj. (obrazně\n a reflexně) sebekontrola (v chuti k jídlu atd.)",
+      "translit": "enkratḗs",
+      "pronunciation": "eng-krat-ace'",
+      "translated": true
+    },
+    "G1469": {
+      "definitions_cz": "soudit v, t. j. počítat mezi",
+      "translit": "enkrínō",
+      "pronunciation": "eng-kree'-no",
+      "translated": true
+    },
+    "G1470": {
+      "definitions_cz": "skrýt, tj. začlenit s",
+      "translit": "enkrýptō",
+      "pronunciation": "eng-kroop'-to",
+      "translated": true
+    },
+    "G1471": {
+      "definitions_cz": "otok uvnitř, tedy těhotná",
+      "translit": "énkyos",
+      "pronunciation": "eng'-koo-os",
+      "translated": true
+    },
+    "G1472": {
+      "definitions_cz": "vetřít (olej), t. j. potřít",
+      "translit": "enchríō",
+      "pronunciation": "eng-khree'-o",
+      "translated": true
+    },
+    "G1473": {
+      "definitions_cz": "",
+      "translated": false
+    },
+    "G1474": {
+      "definitions_cz": "srovnat se zemí",
+      "translit": "edaphízō",
+      "pronunciation": "ed-af-id'-zo",
+      "translated": true
+    },
+    "G1475": {
+      "definitions_cz": "základ (dole), tj. půda",
+      "translit": "édaphos",
+      "pronunciation": "ed'-af-os",
+      "translated": true
+    },
+    "G1476": {
+      "definitions_cz": "sedavý, tj\n implikace) nehybný",
+      "translit": "hedraîos",
+      "pronunciation": "hed-rah'-yos",
+      "translated": true
+    },
+    "G1477": {
+      "definitions_cz": "podpora, tj. (obrazně)\n základ",
+      "translit": "hedraíōma",
+      "pronunciation": "hed-rah'-yo-mah",
+      "translated": true
+    },
+    "G1478": {
+      "definitions_cz": "Ezechiáš (tj. Ezekeiáš), an\n Izraelita",
+      "translit": "Ezekías",
+      "pronunciation": "ed-zek-ee'-as",
+      "translated": true
+    },
+    "G1479": {
+      "definitions_cz": "dobrovolná (svévolná a neoprávněná) zbožnost, tzn.\n posvěcení",
+      "translit": "ethelothrēskeía",
+      "pronunciation": "eth-el-oth-race-ki'-ah",
+      "translated": true
+    },
+    "G1480": {
+      "definitions_cz": "zvyknout si, tj. (neutrální trpné příčestí)\n obvyklé",
+      "translit": "ethízō",
+      "pronunciation": "eth-id'-zo",
+      "translated": true
+    },
+    "G1481": {
+      "definitions_cz": "guvernér (ne král) okresu",
+      "translit": "ethnárchēs",
+      "pronunciation": "eth-nar'-khace",
+      "translated": true
+    },
+    "G1482": {
+      "definitions_cz": "národní (\"etnický\"), tj. (zvláště) nežid",
+      "translit": "ethnikós",
+      "pronunciation": "eth-nee-kos'",
+      "translated": true
+    },
+    "G1483": {
+      "definitions_cz": "jako pohan",
+      "translit": "ethnikōs",
+      "pronunciation": "eth-nee-koce'",
+      "translated": true
+    },
+    "G1484": {
+      "definitions_cz": "rasa (jako stejného zvyku), t. j. kmen;\n konkrétně cizí (nežidovský) (obvykle implicitně,\n pohan)",
+      "translit": "éthnos",
+      "pronunciation": "eth'-nos",
+      "translated": true
+    },
+    "G1485": {
+      "definitions_cz": "použití (předepsané zvykem nebo zákonem)",
+      "translit": "éthos",
+      "pronunciation": "eth'-os",
+      "translated": true
+    },
+    "G1486": {
+      "definitions_cz": "k použití (na základě zvyku nebo konvenčnosti); kastrovat\n dokonalé užití příčestí",
+      "translit": "éthō",
+      "pronunciation": "eth'-o",
+      "translated": true
+    },
+    "G1487": {
+      "definitions_cz": "jestli, zda, to,\n atd.",
+      "translit": "ei",
+      "pronunciation": "i",
+      "translated": true
+    },
+    "G1488": {
+      "definitions_cz": "ty jsi",
+      "translit": "eî",
+      "pronunciation": "i",
+      "translated": true
+    },
+    "G1489": {
+      "definitions_cz": "jestli opravdu, vidět to, ledaže, (s negativním)\n jinak",
+      "translit": "eíge",
+      "pronunciation": "i'-gheh",
+      "translated": true
+    },
+    "G1490": {
+      "definitions_cz": "ale kdyby\n ne",
+      "translit": "ei dè mḗ(ge)",
+      "pronunciation": "i deh may'-(gheh)",
+      "translated": true
+    },
+    "G1491": {
+      "definitions_cz": "pohled, tedy forma (doslova nebo obrazně)",
+      "translit": "eîdos",
+      "pronunciation": "i'-dos",
+      "translated": true
+    },
+    "G1492": {
+      "definitions_cz": "používá se pouze v určitých minulých časech, ostatní jsou\n vypůjčeno z ekvivalentu [ŘECKO:3700][ŘECKO:3708]",
+      "translit": "eídō",
+      "pronunciation": "i'-do",
+      "translated": true
+    },
+    "G1493": {
+      "definitions_cz": "obrazový vějíř",
+      "translit": "eidōleîon",
+      "pronunciation": "i-do-li'-on",
+      "translated": true
+    },
+    "G1494": {
+      "definitions_cz": "an\n obrazová oběť, tedy součást modlářské oběti",
+      "translit": "eidōlóthyton",
+      "pronunciation": "i-do-loth'-oo-ton",
+      "translated": true
+    },
+    "G1495": {
+      "definitions_cz": "uctívání obrazu (doslova nebo\n přeneseně)",
+      "translit": "eidōlolatreía",
+      "pronunciation": "i-do-lol-at-ri'-ah",
+      "translated": true
+    },
+    "G1496": {
+      "definitions_cz": "obraz- (služebník nebo) ctitel\n (doslova nebo obrazně)",
+      "translit": "eidōlolátrēs",
+      "pronunciation": "i-do-lol-at'-race",
+      "translated": true
+    },
+    "G1497": {
+      "definitions_cz": "obraz (t. j. pro uctívání); implicitně pohanský bůh,\n nebo (množné číslo) uctívání takových",
+      "translit": "eídōlon",
+      "pronunciation": "i'-do-lon",
+      "translated": true
+    },
+    "G1498": {
+      "definitions_cz": "mohlo (mohlo, by nebo mělo) být",
+      "translit": "eíēn",
+      "pronunciation": "i'-ane",
+      "translated": true
     }
   }
 }
