@@ -21631,6 +21631,906 @@
       "translit": "euangelízō",
       "pronunciation": "yoo-ang-ghel-id'-zo",
       "translated": true
+    },
+    "G2098": {
+      "definitions_cz": "dobré poselství, t. j. evangelium",
+      "translit": "euangélion",
+      "pronunciation": "yoo-ang-ghel'-ee-on",
+      "translated": true
+    },
+    "G2099": {
+      "definitions_cz": "kazatel evangelia",
+      "translit": "euangelistḗs",
+      "pronunciation": "yoo-ang-ghel-is-tace'",
+      "translated": true
+    },
+    "G2100": {
+      "definitions_cz": "úplně uspokojit",
+      "translit": "euarestéō",
+      "pronunciation": "yoo-ar-es-teh'-o",
+      "translated": true
+    },
+    "G2101": {
+      "definitions_cz": "plně vyhovující",
+      "translit": "euárestos",
+      "pronunciation": "yoo-ar'-es-tos",
+      "translated": true
+    },
+    "G2102": {
+      "definitions_cz": "docela souhlasně",
+      "translit": "euaréstōs",
+      "pronunciation": "yoo-ar-es'-toce",
+      "translated": true
+    },
+    "G2103": {
+      "definitions_cz": "dobrá vůle; Eubulus, křesťan",
+      "translit": "Eúboulos",
+      "pronunciation": "yoo'-boo-los",
+      "translated": true
+    },
+    "G2104": {
+      "definitions_cz": "dobře narozený, tj. (doslova) vysoce postavený, popř\n (obrazně) štědrý",
+      "translit": "eugenḗs",
+      "pronunciation": "yoog-en'-ace",
+      "translated": true
+    },
+    "G2105": {
+      "definitions_cz": "jasná obloha, tedy pěkné počasí",
+      "translit": "eudía",
+      "pronunciation": "yoo-dee'-ah",
+      "translated": true
+    },
+    "G2106": {
+      "definitions_cz": "dobře myslet, t. j. schvalovat (akt);\n zvláště, schválit (osobu nebo věc)",
+      "translit": "eudokéō",
+      "pronunciation": "yoo-dok-eh'-o",
+      "translated": true
+    },
+    "G2107": {
+      "definitions_cz": "spokojenost,\n tj. (subjektivně) potěšení, nebo (objektivně) laskavost, přání,\n účel",
+      "translit": "eudokía",
+      "pronunciation": "yoo-dok-ee'-ah",
+      "translated": true
+    },
+    "G2108": {
+      "definitions_cz": "beneficience (genitivní případ nebo speciálně)",
+      "translit": "euergesía",
+      "pronunciation": "yoo-erg-es-ee'-ah",
+      "translated": true
+    },
+    "G2109": {
+      "definitions_cz": "být filantropický",
+      "translit": "euergetéō",
+      "pronunciation": "yoo-erg-et-eh'-o",
+      "translated": true
+    },
+    "G2110": {
+      "definitions_cz": "dělník dobra, tj. (zvláště) a\n filantrop",
+      "translit": "euergétēs",
+      "pronunciation": "yoo-erg-et'-ace",
+      "translated": true
+    },
+    "G2111": {
+      "definitions_cz": "dobře umístěné, tj. (obrazně)\n vhodné",
+      "translit": "eúthetos",
+      "pronunciation": "yoo'-thet-os",
+      "translated": true
+    },
+    "G2112": {
+      "definitions_cz": "přímo, tedy najednou nebo brzy",
+      "translit": "euthéōs",
+      "pronunciation": "yoo-theh'-oce",
+      "translated": true
+    },
+    "G2113": {
+      "definitions_cz": "položit přímý kurz, t. j. plachtit\n přímý",
+      "translit": "euthydroméō",
+      "pronunciation": "yoo-thoo-drom-eh'-o",
+      "translated": true
+    },
+    "G2114": {
+      "definitions_cz": "rozveselit, t. j. (nepřechodně) být veselý; kastrovat\n srovnávací (příslovečně) veseleji",
+      "translit": "euthyméō",
+      "pronunciation": "yoo-thoo-meh'-o",
+      "translated": true
+    },
+    "G2115": {
+      "definitions_cz": "v dobré náladě, t. j. veselý",
+      "translit": "eúthymos",
+      "pronunciation": "yoo'-thoo-mos",
+      "translated": true
+    },
+    "G2116": {
+      "definitions_cz": "narovnat (vyrovnat); technicky, řídit",
+      "translit": "euthýnō",
+      "pronunciation": "yoo-thoo'-no",
+      "translated": true
+    },
+    "G2117": {
+      "definitions_cz": "rovné, tedy (doslova) rovné, popř\n (obrazně) pravda; adverbiálně (času) najednou",
+      "translit": "euthýs",
+      "pronunciation": "yoo-thoos'",
+      "translated": true
+    },
+    "G2118": {
+      "definitions_cz": "přímost",
+      "translit": "euthýtēs",
+      "pronunciation": "yoo-thoo'-tace",
+      "translated": true
+    },
+    "G2119": {
+      "definitions_cz": "mít dobrý čas, tj. příležitost nebo volný čas",
+      "translit": "eukairéō",
+      "pronunciation": "yoo-kahee-reh'-o",
+      "translated": true
+    },
+    "G2120": {
+      "definitions_cz": "příznivá příležitost",
+      "translit": "eukairía",
+      "pronunciation": "yoo-kahee-ree'-ah",
+      "translated": true
+    },
+    "G2121": {
+      "definitions_cz": "dobře načasované, tedy příhodné",
+      "translit": "eúkairos",
+      "pronunciation": "yoo'-kahee-ros",
+      "translated": true
+    },
+    "G2122": {
+      "definitions_cz": "vhodně",
+      "translit": "eukaírōs",
+      "pronunciation": "yoo-kah'-ee-roce",
+      "translated": true
+    },
+    "G2123": {
+      "definitions_cz": "lepší na dřinu, t. j. více\n snadné",
+      "translit": "eukopṓteros",
+      "pronunciation": "yoo-kop-o'-ter-os",
+      "translated": true
+    },
+    "G2124": {
+      "definitions_cz": "správně, opatrnost, t. j. (nábožensky) úcta (zbožnost); podle\n implikace, strach (konkrétně)",
+      "translit": "eulábeia",
+      "pronunciation": "yoo-lab'-i-ah",
+      "translated": true
+    },
+    "G2125": {
+      "definitions_cz": "být obezřetný, tj. (implicitně) být\n úzkostný; nábožensky, k úctě",
+      "translit": "eulabéomai",
+      "pronunciation": "yoo-lab-eh'-om-ahee",
+      "translated": true
+    },
+    "G2126": {
+      "definitions_cz": "brát dobře (opatrně), t. j. obezřetný\n (nábožensky, zbožně)",
+      "translit": "eulabḗs",
+      "pronunciation": "yoo-lab-ace'",
+      "translated": true
+    },
+    "G2127": {
+      "definitions_cz": "dobře mluvit, tj. (nábožensky)\n požehnat (děkovat nebo vzývat požehnání, prosperovat)",
+      "translit": "eulogéō",
+      "pronunciation": "yoo-log-eh'-o",
+      "translated": true
+    },
+    "G2128": {
+      "definitions_cz": "rozkošný",
+      "translit": "eulogētós",
+      "pronunciation": "yoo-log-ay-tos'",
+      "translated": true
+    },
+    "G2129": {
+      "definitions_cz": "jemné mluvení, t. j. elegance jazyka;\n pochvala (\"chvalozpěv\"), tj. (uctivě) adorace; nábožensky,\n požehnání; implikací, zasvěcení; rozšířením, prospěchem popř\n velký",
+      "translit": "eulogía",
+      "pronunciation": "yoo-log-ee'-ah",
+      "translated": true
+    },
+    "G2130": {
+      "definitions_cz": "dobrý v předávání, tzn.\n liberální",
+      "translit": "eumetádotos",
+      "pronunciation": "yoo-met-ad'-ot-os",
+      "translated": true
+    },
+    "G2131": {
+      "definitions_cz": "vítězný; Eunice, Židovka",
+      "translit": "Euníkē",
+      "pronunciation": "yoo-nee'-kay",
+      "translated": true
+    },
+    "G2132": {
+      "definitions_cz": "být dobře smýšlející, tzn.\n smířit",
+      "translit": "eunoéō",
+      "pronunciation": "yoo-no-eh'-o",
+      "translated": true
+    },
+    "G2133": {
+      "definitions_cz": "laskavost; eufemisticky, manželský\n povinnost",
+      "translit": "eúnoia",
+      "pronunciation": "yoo'-noy-ah",
+      "translated": true
+    },
+    "G2134": {
+      "definitions_cz": "vykastrovat (obrazně žít svobodně)",
+      "translit": "eunouchízō",
+      "pronunciation": "yoo-noo-khid'-zo",
+      "translated": true
+    },
+    "G2135": {
+      "definitions_cz": "kastrovaná osoba (taková zaměstnaná v\n orientální ložnice); potažmo impotentní nebo svobodný muž; podle\n implikace, komorník (státní důstojník)",
+      "translit": "eunoûchos",
+      "pronunciation": "yoo-noo'-khos",
+      "translated": true
+    },
+    "G2136": {
+      "definitions_cz": "dobré cestování; Euodia, křesťanka\n žena",
+      "translit": "Euodía",
+      "pronunciation": "yoo-od-ee'-ah",
+      "translated": true
+    },
+    "G2137": {
+      "definitions_cz": "pomáhat na cestách, tzn.\n (pasivně) uspět v dosažení; obrazně řečeno uspět v podnikání\n záležitosti",
+      "translit": "euodóō",
+      "pronunciation": "yoo-od-o'-o",
+      "translated": true
+    },
+    "G2138": {
+      "definitions_cz": "dobré pro přesvědčování, tj. (nepřechodně)\n stížnost",
+      "translit": "eupeithḗs",
+      "pronunciation": "yoo-pi-thace'",
+      "translated": true
+    },
+    "G2139": {
+      "definitions_cz": "dobře stojící kolem, t. j. (závodník) mařící (závodník) v každé\n směr (obrazně hříchu v genitivu)",
+      "translit": "euperístatos",
+      "pronunciation": "yoo-per-is'-tat-os",
+      "translated": true
+    },
+    "G2140": {
+      "definitions_cz": "dobročinnost, t. j. dobročinnost",
+      "translit": "eupoiḯa",
+      "pronunciation": "yoo-poy-ee'-ah",
+      "translated": true
+    },
+    "G2141": {
+      "definitions_cz": "(nepřechodně) být\n dobré pro průchod, t. j. (obrazně) mít peněžitý\n znamená",
+      "translit": "euporéō",
+      "pronunciation": "yoo-por-eh'-o",
+      "translated": true
+    },
+    "G2142": {
+      "definitions_cz": "peněžní prostředky",
+      "translit": "euporía",
+      "pronunciation": "yoo-por-ee'-ah",
+      "translated": true
+    },
+    "G2143": {
+      "definitions_cz": "dobrá vhodnost, tzn.\n půvabnost",
+      "translit": "euprépeia",
+      "pronunciation": "yoo-prep'-i-ah",
+      "translated": true
+    },
+    "G2144": {
+      "definitions_cz": "dobře přijato, tj. schváleno,\n příznivé",
+      "translit": "euprósdektos",
+      "pronunciation": "yoo-pros'-dek-tos",
+      "translated": true
+    },
+    "G2145": {
+      "definitions_cz": "dobře sedět směrem, tzn.\n (obrazně) vytrvalý (kastrovaný, pečlivý servis)",
+      "translit": "euprósedros",
+      "pronunciation": "yoo-pros'-ed-ros",
+      "translated": true
+    },
+    "G2146": {
+      "definitions_cz": "mít dobrou tvář, tzn.\n (obrazně) udělat displej",
+      "translit": "euprosōpéō",
+      "pronunciation": "yoo-pros-o-peh'-o",
+      "translated": true
+    },
+    "G2147": {
+      "definitions_cz": "najít (doslova nebo obrazně)",
+      "translit": "heurískō",
+      "pronunciation": "hyoo-ris'-ko",
+      "translated": true
+    },
+    "G2148": {
+      "definitions_cz": "bouře z východu (resp\n jihovýchod), tedy (moderně řečeno) Levanter",
+      "translit": "Euroklýdōn",
+      "pronunciation": "yoo-rok-loo'-dohn",
+      "translated": true
+    },
+    "G2149": {
+      "definitions_cz": "prostorný",
+      "translit": "eurýchōros",
+      "pronunciation": "yoo-roo'-kho-ros",
+      "translated": true
+    },
+    "G2150": {
+      "definitions_cz": "zbožnost; zvláště schéma evangelia",
+      "translit": "eusébeia",
+      "pronunciation": "yoo-seb'-i-ah",
+      "translated": true
+    },
+    "G2151": {
+      "definitions_cz": "být zbožný, t. j. (k Bohu) uctívat, nebo (k\n rodiče) respektovat (podporovat)",
+      "translit": "eusebéō",
+      "pronunciation": "yoo-seb-eh'-o",
+      "translated": true
+    },
+    "G2152": {
+      "definitions_cz": "dobře uctivý, t. j. zbožný",
+      "translit": "eusebḗs",
+      "pronunciation": "yoo-seb-ace'",
+      "translated": true
+    },
+    "G2153": {
+      "definitions_cz": "zbožně",
+      "translit": "eusebōs",
+      "pronunciation": "yoo-seb-oce'",
+      "translated": true
+    },
+    "G2154": {
+      "definitions_cz": "dobře naznačeno, tj. (obrazně)\n významný",
+      "translit": "eúsēmos",
+      "pronunciation": "yoo'-say-mos",
+      "translated": true
+    },
+    "G2155": {
+      "definitions_cz": "dobře soucitný, tedy soucitný",
+      "translit": "eúsplanchnos",
+      "pronunciation": "yoo'-splangkh-nos",
+      "translated": true
+    },
+    "G2156": {
+      "definitions_cz": "slušně",
+      "translit": "euschēmónōs",
+      "pronunciation": "yoo-skhay-mon'-ose",
+      "translated": true
+    },
+    "G2157": {
+      "definitions_cz": "slušnost",
+      "translit": "euschēmosýnē",
+      "pronunciation": "yoo-skhay-mos-oo'-nay",
+      "translated": true
+    },
+    "G2158": {
+      "definitions_cz": "dobře utvářený, t. j. (obrazně) zdobný, ušlechtilý\n (v hodnosti)",
+      "translit": "euschḗmōn",
+      "pronunciation": "yoo-skhay'-mone",
+      "translated": true
+    },
+    "G2159": {
+      "definitions_cz": "dobře navlečeným způsobem, tj. (obrazně) intenzivně (v dobrém\n smysl, přesvědčivě; ve špatném, zuřivě)",
+      "translit": "eutónōs",
+      "pronunciation": "yoo-ton'-oce",
+      "translated": true
+    },
+    "G2160": {
+      "definitions_cz": "vtipkování, tj. (v a\n vulgární smysl) zhýralost",
+      "translit": "eutrapelía",
+      "pronunciation": "yoo-trap-el-ee'-ah",
+      "translated": true
+    },
+    "G2161": {
+      "definitions_cz": "dobře osudový, t. j. šťastný;\n Eutychus, mladý muž",
+      "translit": "Eútychos",
+      "pronunciation": "yoo'-too-khos",
+      "translated": true
+    },
+    "G2162": {
+      "definitions_cz": "dobrý jazyk (\"eufemie\"), tj. chvála (pověst)",
+      "translit": "euphēmía",
+      "pronunciation": "yoo-fay-mee'-ah",
+      "translated": true
+    },
+    "G2163": {
+      "definitions_cz": "dobře řečeno, tj. renomovaný",
+      "translit": "eúphēmos",
+      "pronunciation": "yoo'-fay-mos",
+      "translated": true
+    },
+    "G2164": {
+      "definitions_cz": "dobře nést, t. j. být plodný",
+      "translit": "euphoréō",
+      "pronunciation": "yoo-for-eh'-o",
+      "translated": true
+    },
+    "G2165": {
+      "definitions_cz": "dát (střední hlas nebo pasivně, být) v dobré\n rozpoložení mysli, t. j. radovat se",
+      "translit": "euphraínō",
+      "pronunciation": "yoo-frah'-ee-no",
+      "translated": true
+    },
+    "G2166": {
+      "definitions_cz": "Eufrat, řeka\n Asie",
+      "translit": "Euphrátēs",
+      "pronunciation": "yoo-frat'-ace",
+      "translated": true
+    },
+    "G2167": {
+      "definitions_cz": "radostnost",
+      "translit": "euphrosýnē",
+      "pronunciation": "yoo-fros-oo'-nay",
+      "translated": true
+    },
+    "G2168": {
+      "definitions_cz": "být vděčný, t. j. (aktivně) vyjadřovat vděčnost\n (směrem); zvláště říci milost při jídle",
+      "translit": "eucharistéō",
+      "pronunciation": "yoo-khar-is-teh'-o",
+      "translated": true
+    },
+    "G2169": {
+      "definitions_cz": "vděčnost; aktivně, vděčný jazyk (Bohu jako akt\n uctívání)",
+      "translit": "eucharistía",
+      "pronunciation": "yoo-khar-is-tee'-ah",
+      "translated": true
+    },
+    "G2170": {
+      "definitions_cz": "dobře oblíbený, tj\n implikace) vděčný",
+      "translit": "eucháristos",
+      "pronunciation": "yoo-khar'-is-tos",
+      "translated": true
+    },
+    "G2171": {
+      "definitions_cz": "správně, přání, vyjádřené jako prosba k Bohu, nebo v\n votivní povinnost",
+      "translit": "euchḗ",
+      "pronunciation": "yoo-khay'",
+      "translated": true
+    },
+    "G2172": {
+      "definitions_cz": "přát si; implikovaně se modlit\n Bože",
+      "translit": "eúchomai",
+      "pronunciation": "yoo'-khom-ahee",
+      "translated": true
+    },
+    "G2173": {
+      "definitions_cz": "snadno použitelné, tedy užitečné",
+      "translit": "eúchrēstos",
+      "pronunciation": "yoo'-khrays-tos",
+      "translated": true
+    },
+    "G2174": {
+      "definitions_cz": "mít dobrou náladu, t.j. cítit\n povzbuzen",
+      "translit": "eupsychéō",
+      "pronunciation": "yoo-psoo-kheh'-o",
+      "translated": true
+    },
+    "G2175": {
+      "definitions_cz": "dobrá vůně,\n tj. vůně",
+      "translit": "euōdía",
+      "pronunciation": "yoo-o-dee'-ah",
+      "translated": true
+    },
+    "G2176": {
+      "definitions_cz": "správně, dobře pojmenované (dobré znamení), t. j. levice\n (což byla šťastná strana mezi pohanskými Řeky); kastrovat jako\n adverbiální, na levé ruce",
+      "translit": "euṓnymos",
+      "pronunciation": "yoo-o'-noo-mos",
+      "translated": true
+    },
+    "G2177": {
+      "definitions_cz": "naskočit na",
+      "translit": "ephállomai",
+      "pronunciation": "ef-al'-lom-ahee",
+      "translated": true
+    },
+    "G2178": {
+      "definitions_cz": "při jedné příležitosti (pouze)",
+      "translit": "ephápax",
+      "pronunciation": "ef-ap'-ax",
+      "translated": true
+    },
+    "G2179": {
+      "definitions_cz": "Ephesine, nebo se nachází v Efezu",
+      "translit": "Ephesînos",
+      "pronunciation": "ef-es-ee'-nos",
+      "translated": true
+    },
+    "G2180": {
+      "definitions_cz": "Efezský nebo obyvatel Efezu",
+      "translit": "Ephésios",
+      "pronunciation": "ef-es'-ee-os",
+      "translated": true
+    },
+    "G2181": {
+      "definitions_cz": "Efez, město v Malé Asii",
+      "translit": "Éphesos",
+      "pronunciation": "ef'-es-os",
+      "translated": true
+    },
+    "G2182": {
+      "definitions_cz": "objevitel, tzn.\n kontruktor",
+      "translit": "epheuretḗs",
+      "pronunciation": "ef-yoo-ret'-ace",
+      "translated": true
+    },
+    "G2183": {
+      "definitions_cz": "diurnality, tedy (zejména) všední rotace resp\n třída bohoslužby židovských kněží v chrámu, jak ji distribuoval\n rodiny",
+      "translit": "ephēmería",
+      "pronunciation": "ef-ay-mer-ee'-ah",
+      "translated": true
+    },
+    "G2184": {
+      "definitions_cz": "na den („efemérní“), tedy denní",
+      "translit": "ephḗmeros",
+      "pronunciation": "ef-ay'-mer-os",
+      "translated": true
+    },
+    "G2185": {
+      "definitions_cz": "dorazit, t. j. rozšířit\n do",
+      "translit": "ephiknéomai",
+      "pronunciation": "ef-ik-neh'-om-ahee",
+      "translated": true
+    },
+    "G2186": {
+      "definitions_cz": "stát na, t. j. být přítomen (v různých\n aplikace, přátelské nebo jiné, obvykle doslovné);",
+      "translit": "ephístēmi",
+      "pronunciation": "ef-is'-tay-mee",
+      "translated": true
+    },
+    "G2187": {
+      "definitions_cz": "Ephraim, místo v\n Palestina",
+      "translit": "Ephraím",
+      "pronunciation": "ef-rah-im'",
+      "translated": true
+    },
+    "G2188": {
+      "definitions_cz": "být otevřen!",
+      "translit": "ephphathá",
+      "pronunciation": "ef-fath-ah'",
+      "translated": true
+    },
+    "G2189": {
+      "definitions_cz": "nepřátelství; implicitně důvod pro\n opozice",
+      "translit": "échthra",
+      "pronunciation": "ekh'-thrah",
+      "translated": true
+    },
+    "G2190": {
+      "definitions_cz": "nenávistný (pasivně, odporný, popř\n aktivně, nepřátelsky); obvykle jako podstatné jméno, protivník (zejména\n Satan)",
+      "translit": "echthrós",
+      "pronunciation": "ech-thros'",
+      "translated": true
+    },
+    "G2191": {
+      "definitions_cz": "zmije nebo jiný jedovatý had (doslova nebo\n přeneseně)",
+      "translit": "échidna",
+      "pronunciation": "ekh'-id-nah",
+      "translated": true
+    },
+    "G2192": {
+      "definitions_cz": "držet (používá se ve velmi různých aplikacích, doslova\n nebo přeneseně, přímé nebo vzdálené; jako je držení; schopnost,\n kontinuita, vztah nebo podmínka)",
+      "translit": "échō",
+      "pronunciation": "ekh'-o",
+      "translated": true
+    },
+    "G2193": {
+      "definitions_cz": "spojka, předložka a příslovce z\n pokračování, do (času a místa)",
+      "translit": "héōs",
+      "pronunciation": "heh'-oce",
+      "translated": true
+    },
+    "G2194": {
+      "definitions_cz": "Zabulon (t. j. Zebulon), kraj\n Palestina",
+      "translit": "Zaboulṓn",
+      "pronunciation": "dzab-oo-lone'",
+      "translated": true
+    },
+    "G2195": {
+      "definitions_cz": "Zacheus, Izraelita",
+      "translit": "Zakchaîos",
+      "pronunciation": "dzak-chah'-ee-yos",
+      "translated": true
+    },
+    "G2196": {
+      "definitions_cz": "Zara, (t. j. Zerach), Izraelita",
+      "translit": "Zará",
+      "pronunciation": "dzar-ah'",
+      "translated": true
+    },
+    "G2197": {
+      "definitions_cz": "Zachariáš (t. j. Zachariáš), jméno dvou\n Izraelité",
+      "translit": "Zacharías",
+      "pronunciation": "dzakh-ar-ee'-as",
+      "translated": true
+    },
+    "G2198": {
+      "definitions_cz": "žít (doslova nebo obrazně)",
+      "translit": "záō",
+      "pronunciation": "dzah'-o",
+      "translated": true
+    },
+    "G2199": {
+      "definitions_cz": "Zebedæus, Izraelita",
+      "translit": "Zebedaîos",
+      "pronunciation": "dzeb-ed-ah'-yos",
+      "translated": true
+    },
+    "G2200": {
+      "definitions_cz": "vařený, tj. (implicitně) kalid (obrazně,\n vroucí)",
+      "translit": "zestós",
+      "pronunciation": "dzes-tos'",
+      "translated": true
+    },
+    "G2201": {
+      "definitions_cz": "pár, tj. spřežení (volů spřažených dohromady)\n nebo ortéza (ptáků svázaných dohromady)",
+      "translit": "zeûgos",
+      "pronunciation": "dzyoo'-gos",
+      "translated": true
+    },
+    "G2202": {
+      "definitions_cz": "upevnění (ojové lano)",
+      "translit": "zeuktēría",
+      "pronunciation": "dzook-tay-ree'-ah",
+      "translated": true
+    },
+    "G2203": {
+      "definitions_cz": "v šikmých případech se používá místo\n je to (pravděpodobně příbuzné) jméno\n\n      Δίς (deece)",
+      "translit": "Zeús",
+      "pronunciation": "dzyooce",
+      "translated": true
+    },
+    "G2204": {
+      "definitions_cz": "být horký (var, z kapalin; nebo záře, z pevných látek), tzn.\n (obrazně) být vášnivý (upřímný)",
+      "translit": "zéō",
+      "pronunciation": "dzeh'-o",
+      "translated": true
+    },
+    "G2205": {
+      "definitions_cz": "správně, teplo, tj. (obrazně) „horlivost“ (v příznivém\n smysl, zápal; v nepříznivém, žárlivost, jako manžel\n (obrazně Boha), nebo nepřítel, zloba)",
+      "translit": "zēlos",
+      "pronunciation": "dzay'-los",
+      "translated": true
+    },
+    "G2206": {
+      "definitions_cz": "mít vřelý cit pro nebo proti",
+      "translit": "zēlóō",
+      "pronunciation": "dzay-lo'-o",
+      "translated": true
+    },
+    "G2207": {
+      "definitions_cz": "\"horlivec\"",
+      "translit": "zēlōtḗs",
+      "pronunciation": "dzay-lo-tace'",
+      "translated": true
+    },
+    "G2208": {
+      "definitions_cz": "zélót, tedy (zvláště) partyzán pro židy\n politická nezávislost",
+      "translit": "Zēlōtḗs",
+      "pronunciation": "dzay-lo-tace'",
+      "translated": true
+    },
+    "G2209": {
+      "definitions_cz": "újma",
+      "translit": "zēmía",
+      "pronunciation": "dzay-mee'-ah",
+      "translated": true
+    },
+    "G2210": {
+      "definitions_cz": "zranit, tj. (reflexivně nebo pasivně) prožít\n újma",
+      "translit": "zēmióō",
+      "pronunciation": "dzay-mee-o'-o",
+      "translated": true
+    },
+    "G2211": {
+      "definitions_cz": "Jove-daný;\n Zenas, křesťan",
+      "translit": "Zēnâs",
+      "pronunciation": "dzay-nas'",
+      "translated": true
+    },
+    "G2212": {
+      "definitions_cz": "hledat (doslova nebo obrazně); speciálně,\n (hebraismem) uctívat (Boha) nebo (ve špatném smyslu) spiknout (proti\n život)",
+      "translit": "zētéō",
+      "pronunciation": "dzay-teh'-o",
+      "translated": true
+    },
+    "G2213": {
+      "definitions_cz": "hledání (správně konkrétně), tj. (slovy) a\n debata",
+      "translit": "zḗtēma",
+      "pronunciation": "dzay'-tay-mah",
+      "translated": true
+    },
+    "G2214": {
+      "definitions_cz": "hledání (správně, akt), tedy spor nebo jeho\n téma",
+      "translit": "zḗtēsis",
+      "pronunciation": "dzay'-tay-sis",
+      "translated": true
+    },
+    "G2215": {
+      "definitions_cz": "šípky nebo nepravé obilí",
+      "translit": "zizánion",
+      "pronunciation": "dziz-an'-ee-on",
+      "translated": true
+    },
+    "G2216": {
+      "definitions_cz": "Zorobabel (t. j. Zerubbabel), an\n Izraelita",
+      "translit": "Zorobábel",
+      "pronunciation": "dzor-ob-ab'-el",
+      "translated": true
+    },
+    "G2217": {
+      "definitions_cz": "šero (zahalující jako a\n cloud)",
+      "translit": "zóphos",
+      "pronunciation": "dzof'-os",
+      "translated": true
+    },
+    "G2218": {
+      "definitions_cz": "a\n spojka, tj. (obrazně) služebnost (zákon nebo závazek); také\n (doslova) paprsek váhy (jako spojující váhy)",
+      "translit": "zygós",
+      "pronunciation": "dzoo-gos'",
+      "translated": true
+    },
+    "G2219": {
+      "definitions_cz": "fermentovat (jako by se vařil)",
+      "translit": "zýmē",
+      "pronunciation": "dzoo'-may",
+      "translated": true
+    },
+    "G2220": {
+      "definitions_cz": "způsobit fermentaci",
+      "translit": "zymóō",
+      "pronunciation": "dzoo-mo'-o",
+      "translated": true
+    },
+    "G2221": {
+      "definitions_cz": "vzít živého (udělat válečného zajatce),\n tj. (obrazně) zachytit nebo lapit",
+      "translit": "zōgréō",
+      "pronunciation": "dzogue-reh'-o",
+      "translated": true
+    },
+    "G2222": {
+      "definitions_cz": "život (doslova nebo obrazně)",
+      "translit": "zōḗ",
+      "pronunciation": "dzo-ay'",
+      "translated": true
+    },
+    "G2223": {
+      "definitions_cz": "pás; implicitně, a\n kapsa",
+      "translit": "zṓnē",
+      "pronunciation": "dzo'-nay",
+      "translated": true
+    },
+    "G2224": {
+      "definitions_cz": "vázat se (zejména pásem)",
+      "translit": "zṓnnymi",
+      "pronunciation": "dzone'-noo-mi",
+      "translated": true
+    },
+    "G2225": {
+      "definitions_cz": "zplodit naživu,\n tj. (analogicky) zachránit (pasivně, být zachráněn) před smrtí",
+      "translit": "zōogonéō",
+      "pronunciation": "dzo-og-on-eh'-o",
+      "translated": true
+    },
+    "G2226": {
+      "definitions_cz": "živá věc, tedy zvíře",
+      "translit": "zōon",
+      "pronunciation": "dzo'-on",
+      "translated": true
+    },
+    "G2227": {
+      "definitions_cz": "(znovu) oživit (doslova popř\n přeneseně)",
+      "translit": "zōopoiéō",
+      "pronunciation": "dzo-op-oy-eh'-o",
+      "translated": true
+    },
+    "G2228": {
+      "definitions_cz": "disjunktivní, nebo; srovnávací, než",
+      "translit": "ḗ",
+      "pronunciation": "ay",
+      "translated": true
+    },
+    "G2229": {
+      "definitions_cz": "jistě",
+      "translit": "ē",
+      "pronunciation": "ay",
+      "translated": true
+    },
+    "G2230": {
+      "definitions_cz": "působit jako vládce",
+      "translit": "hēgemoneúō",
+      "pronunciation": "hayg-em-on-yoo'-o",
+      "translated": true
+    },
+    "G2231": {
+      "definitions_cz": "vláda, tedy (časově) úřední termín",
+      "translit": "hēgemonía",
+      "pronunciation": "hayg-em-on-ee'-ah",
+      "translated": true
+    },
+    "G2232": {
+      "definitions_cz": "vůdce, tj. hlavní osoba (nebo přeneseně místo) a\n provincie",
+      "translit": "hēgemṓn",
+      "pronunciation": "hayg-em-ohn'",
+      "translated": true
+    },
+    "G2233": {
+      "definitions_cz": "vést, tzn.\n velení (s úřední pravomocí); obrazně, domnívat se, tzn.\n zvážit",
+      "translit": "hēgéomai",
+      "pronunciation": "hayg-eh'-om-ahee",
+      "translated": true
+    },
+    "G2234": {
+      "definitions_cz": "sladce, tzn.\n (obrazně) s radostí",
+      "translit": "hēdéōs",
+      "pronunciation": "hay-deh'-oce",
+      "translated": true
+    },
+    "G2235": {
+      "definitions_cz": "i teď",
+      "translit": "ḗdē",
+      "pronunciation": "ay'-day",
+      "translated": true
+    },
+    "G2236": {
+      "definitions_cz": "s velkým\n potěšení",
+      "translit": "hḗdista",
+      "pronunciation": "hay'-dis-tah",
+      "translated": true
+    },
+    "G2237": {
+      "definitions_cz": "smyslná rozkoš; implicitně,\n touha",
+      "translit": "hēdonḗ",
+      "pronunciation": "hay-don-ay'",
+      "translated": true
+    },
+    "G2238": {
+      "definitions_cz": "sladce vonící\n rostlina, tedy máta",
+      "translit": "hēdýosmon",
+      "pronunciation": "hay-doo'-os-mon",
+      "translated": true
+    },
+    "G2239": {
+      "definitions_cz": "užití, t. j. (množné číslo) mravní\n zvyky",
+      "translit": "ēthos",
+      "pronunciation": "ay'-thos",
+      "translated": true
+    },
+    "G2240": {
+      "definitions_cz": "dorazit, tj. být přítomen (doslova nebo\n přeneseně)",
+      "translit": "hḗkō",
+      "pronunciation": "hay'-ko",
+      "translated": true
+    },
+    "G2241": {
+      "definitions_cz": "můj bože",
+      "translit": "ēlí",
+      "pronunciation": "ay-lee'",
+      "translated": true
+    },
+    "G2242": {
+      "definitions_cz": "Heli (tj. Eli), Izraelita",
+      "translit": "Hēlí",
+      "pronunciation": "hay-lee'",
+      "translated": true
+    },
+    "G2243": {
+      "definitions_cz": "Helias (tj. Eliáš), Izraelita",
+      "translit": "Hēlías",
+      "pronunciation": "hay-lee'-as",
+      "translated": true
+    },
+    "G2244": {
+      "definitions_cz": "splatnost (v letech nebo velikosti)",
+      "translit": "hēlikía",
+      "pronunciation": "hay-lik-ee'-ah",
+      "translated": true
+    },
+    "G2245": {
+      "definitions_cz": "velký jako, tzn.\n (interjektivně) kolik",
+      "translit": "hēlíkos",
+      "pronunciation": "hay-lee'-kos",
+      "translated": true
+    },
+    "G2246": {
+      "definitions_cz": "možná podobný alternativě [ŘECKO:138]",
+      "translit": "hḗlios",
+      "pronunciation": "hay'-lee-os",
+      "translated": true
+    },
+    "G2247": {
+      "definitions_cz": "cvoček, tedy bodec",
+      "translit": "hēlos",
+      "pronunciation": "hay'-los",
+      "translated": true
     }
   }
 }
