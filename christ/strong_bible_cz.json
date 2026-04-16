@@ -22531,6 +22531,902 @@
       "translit": "hēlos",
       "pronunciation": "hay'-los",
       "translated": true
+    },
+    "G2248": {
+      "definitions_cz": "nás",
+      "translit": "hēmâs",
+      "pronunciation": "hay-mas'",
+      "translated": true
+    },
+    "G2249": {
+      "definitions_cz": "my (používáme pouze při důrazu)",
+      "translit": "hēmeîs",
+      "pronunciation": "hay-mice'",
+      "translated": true
+    },
+    "G2250": {
+      "definitions_cz": "den, tj. (doslova)\n časový prostor mezi úsvitem a setměním nebo celých 24 hodin (ale několik\n dny byly Židy obvykle počítány jako včetně částí\n oba extrémy); přeneseně období (vždy definované více či méně\n jasně podle kontextu)",
+      "translit": "hēméra",
+      "pronunciation": "hay-mer'-ah",
+      "translated": true
+    },
+    "G2251": {
+      "definitions_cz": "náš",
+      "translit": "hēméteros",
+      "pronunciation": "hay-met'-er-os",
+      "translated": true
+    },
+    "G2252": {
+      "definitions_cz": "Byl jsem",
+      "translit": "ḗmēn",
+      "pronunciation": "ay'-mane",
+      "translated": true
+    },
+    "G2253": {
+      "definitions_cz": "polomrtvý, tzn.\n zcela vyčerpaný",
+      "translit": "hēmithanḗs",
+      "pronunciation": "hay-mee-than-ace'",
+      "translated": true
+    },
+    "G2254": {
+      "definitions_cz": "nám (nebo pro nás, s námi).",
+      "translit": "hēmîn",
+      "pronunciation": "hay-meen'",
+      "translated": true
+    },
+    "G2255": {
+      "definitions_cz": "(jako\n podstatné jméno) polovina",
+      "translit": "hḗmisy",
+      "pronunciation": "hay'-mee-soo",
+      "translated": true
+    },
+    "G2256": {
+      "definitions_cz": "půl hodiny",
+      "translit": "hēmiṓrion",
+      "pronunciation": "hay-mee-o'-ree-on",
+      "translated": true
+    },
+    "G2257": {
+      "definitions_cz": "od nás (nebo od nás).",
+      "translit": "hēmōn",
+      "pronunciation": "hay-mone'",
+      "translated": true
+    },
+    "G2258": {
+      "definitions_cz": "Já (ty atd.) jsem byl (byl nebo jsem byl)",
+      "translit": "ēn",
+      "pronunciation": "ane",
+      "translated": true
+    },
+    "G2259": {
+      "definitions_cz": "v kterou dobu",
+      "translit": "hēníka",
+      "pronunciation": "hay-nee'-kah",
+      "translated": true
+    },
+    "G2260": {
+      "definitions_cz": "než vůbec (nebo než možná, než skutečně)",
+      "translit": "ḗper",
+      "pronunciation": "ay'-per",
+      "translated": true
+    },
+    "G2261": {
+      "definitions_cz": "řádně, vlídně, t. j. mírný nebo laskavý",
+      "translit": "ḗpios",
+      "pronunciation": "ay'-pee-os",
+      "translated": true
+    },
+    "G2262": {
+      "definitions_cz": "Ehm, Izraelita",
+      "translit": "Ḗr",
+      "pronunciation": "ayr",
+      "translated": true
+    },
+    "G2263": {
+      "definitions_cz": "klidný",
+      "translit": "ḗremos",
+      "pronunciation": "ay'-rem-os",
+      "translated": true
+    },
+    "G2264": {
+      "definitions_cz": "hrdinný; Herodes, jméno čtyř\n židovských králů",
+      "translit": "Hērṓdēs",
+      "pronunciation": "hay-ro'-dace",
+      "translated": true
+    },
+    "G2265": {
+      "definitions_cz": "Herodiáni, tedy přívrženci\n Herodes",
+      "translit": "Hērōdianoí",
+      "pronunciation": "hay-ro-dee-an-oy'",
+      "translated": true
+    },
+    "G2266": {
+      "definitions_cz": "Herodias, žena z rodu Heodianů",
+      "translit": "Hērōdiás",
+      "pronunciation": "hay-ro-dee-as'",
+      "translated": true
+    },
+    "G2267": {
+      "definitions_cz": "Herodion, křesťan",
+      "translit": "Hērōdíōn",
+      "pronunciation": "hay-ro-dee'-ohn",
+      "translated": true
+    },
+    "G2268": {
+      "definitions_cz": "Hesaias (tj. Jeshajah), an\n Izraelita",
+      "translit": "Hēsaḯas",
+      "pronunciation": "hay-sah-ee'-as",
+      "translated": true
+    },
+    "G2269": {
+      "definitions_cz": "Ezau, Edomita",
+      "translit": "Ēsaû",
+      "pronunciation": "ay-sow'",
+      "translated": true
+    },
+    "G2270": {
+      "definitions_cz": "zůstat v klidu (nepřechodně), t. j. zdržet se\n od porodu, vměšování nebo řeči",
+      "translit": "hēsycházō",
+      "pronunciation": "hay-soo-khad'-zo",
+      "translated": true
+    },
+    "G2271": {
+      "definitions_cz": "(jako podstatné jméno) nehybnost, t. j. odklon od shonu popř\n jazyk",
+      "translit": "hēsychía",
+      "pronunciation": "hay-soo-khee'-ah",
+      "translated": true
+    },
+    "G2272": {
+      "definitions_cz": "správně, držení sedu (sedavého), tzn.\n (implicitně) stále (nerušený, nerušivý)",
+      "translit": "hēsýchios",
+      "pronunciation": "hay-soo'-khee-os",
+      "translated": true
+    },
+    "G2273": {
+      "definitions_cz": "buď opravdu",
+      "translit": "ḗtoi",
+      "pronunciation": "ay'-toy",
+      "translated": true
+    },
+    "G2274": {
+      "definitions_cz": "zhoršit, tj. porazit (doslova nebo\n přeneseně); implicitně hodnotit nižší",
+      "translit": "hēttáō",
+      "pronunciation": "hayt-tah'-o",
+      "translated": true
+    },
+    "G2275": {
+      "definitions_cz": "zhoršení, tedy (objektivně) selhání resp\n (subjektivně) ztráta",
+      "translit": "hḗttēma",
+      "pronunciation": "hayt'-tay-mah",
+      "translated": true
+    },
+    "G2276": {
+      "definitions_cz": "horší\n (jako podstatné jméno); implicitně méně (jako příslovce)",
+      "translit": "hḗtton",
+      "pronunciation": "hate'-ton",
+      "translated": true
+    },
+    "G2277": {
+      "definitions_cz": "nech ho (nebo to) být",
+      "translit": "ḗtō",
+      "pronunciation": "ay'-to",
+      "translated": true
+    },
+    "G2278": {
+      "definitions_cz": "vydávat hlasitý hluk, t.j. odrážet se",
+      "translit": "ēchéō",
+      "pronunciation": "ay-kheh'-o",
+      "translated": true
+    },
+    "G2279": {
+      "definitions_cz": "hlasitý nebo zmatený hluk (\"echo\"), tj. řev;\n obrazně řečeno fáma",
+      "translit": "ēchos",
+      "pronunciation": "ay'-khos",
+      "translated": true
+    },
+    "G2280": {
+      "definitions_cz": "Thaddæus, jeden z apoštolů",
+      "translit": "Thaddaîos",
+      "pronunciation": "thad-dah'-yos",
+      "translated": true
+    },
+    "G2281": {
+      "definitions_cz": "moře (genitivní pád nebo\n speciálně)",
+      "translit": "thálassa",
+      "pronunciation": "thal'-as-sah",
+      "translated": true
+    },
+    "G2282": {
+      "definitions_cz": "plodit, t. j. (obrazně) k\n pěstovat",
+      "translit": "thálpō",
+      "pronunciation": "thal'-po",
+      "translated": true
+    },
+    "G2283": {
+      "definitions_cz": "Thamar (tj. Tamar), Izraelka",
+      "translit": "Thámar",
+      "pronunciation": "tham'-ar",
+      "translated": true
+    },
+    "G2284": {
+      "definitions_cz": "omráčit (překvapením), t. j. ohromit",
+      "translit": "thambéō",
+      "pronunciation": "tham-beh'-o",
+      "translated": true
+    },
+    "G2285": {
+      "definitions_cz": "omráčení (překvapením),\n tedy údiv",
+      "translit": "thámbos",
+      "pronunciation": "tham'-bos",
+      "translated": true
+    },
+    "G2286": {
+      "definitions_cz": "smrtelné, tedy jedovaté",
+      "translit": "thanásimos",
+      "pronunciation": "than-as'-ee-mos",
+      "translated": true
+    },
+    "G2287": {
+      "definitions_cz": "smrtící, tzn.\n fatální",
+      "translit": "thanatḗphoros",
+      "pronunciation": "than-at-ay'-for-os",
+      "translated": true
+    },
+    "G2288": {
+      "definitions_cz": "(správně, přídavné jméno používané jako podstatné jméno) smrt (doslova nebo\n přeneseně)",
+      "translit": "thánatos",
+      "pronunciation": "than'-at-os",
+      "translated": true
+    },
+    "G2289": {
+      "definitions_cz": "",
+      "translated": false
+    },
+    "G2290": {
+      "definitions_cz": "slavit pohřební obřady, t. j. inter",
+      "translit": "tháptō",
+      "pronunciation": "thap'-to",
+      "translated": true
+    },
+    "G2291": {
+      "definitions_cz": "Thara (t. j. Terach), otec o\n Abraham",
+      "translit": "Thára",
+      "pronunciation": "thar'-ah",
+      "translated": true
+    },
+    "G2292": {
+      "definitions_cz": "uplatnit odvahu",
+      "translit": "tharrhéō",
+      "pronunciation": "thar-hreh'-o",
+      "translated": true
+    },
+    "G2293": {
+      "definitions_cz": "mít odvahu",
+      "translit": "tharséō",
+      "pronunciation": "thar-seh'-o",
+      "translated": true
+    },
+    "G2294": {
+      "definitions_cz": "smělost\n (subjektivně)",
+      "translit": "thársos",
+      "pronunciation": "thar'-sos",
+      "translated": true
+    },
+    "G2295": {
+      "definitions_cz": "divit se (správně konkrétní; ale tím\n implikace, abstraktní)",
+      "translit": "thaûma",
+      "pronunciation": "thos'-mah",
+      "translated": true
+    },
+    "G2296": {
+      "definitions_cz": "divit se; implicitně obdivovat",
+      "translit": "thaumázō",
+      "pronunciation": "thou-mad'-zo",
+      "translated": true
+    },
+    "G2297": {
+      "definitions_cz": "podivuhodný, t. j. (neutr jako podstatné jméno) zázrak",
+      "translit": "thaumásios",
+      "pronunciation": "thow-mas'-ee-os",
+      "translated": true
+    },
+    "G2298": {
+      "definitions_cz": "divil se, tj. (implicitně)\n úžasné",
+      "translit": "thaumastós",
+      "pronunciation": "thow-mas-tos'",
+      "translated": true
+    },
+    "G2299": {
+      "definitions_cz": "ženské božstvo",
+      "translit": "theá",
+      "pronunciation": "theh-ah'",
+      "translated": true
+    },
+    "G2300": {
+      "definitions_cz": "podívat se zblízka, tj\n implikace) vnímat (doslova nebo obrazně); rozšířením na\n navštívit",
+      "translit": "theáomai",
+      "pronunciation": "theh-ah'-om-ahee",
+      "translated": true
+    },
+    "G2301": {
+      "definitions_cz": "vystavit jako podívanou",
+      "translit": "theatrízō",
+      "pronunciation": "theh-at-rid'-zo",
+      "translated": true
+    },
+    "G2302": {
+      "definitions_cz": "místo pro veřejné představení („divadlo“), tedy obecné\n audienční místnost; implicitně samotná show\n (obrazně)",
+      "translit": "théatron",
+      "pronunciation": "theh'-at-ron",
+      "translated": true
+    },
+    "G2303": {
+      "definitions_cz": "síra",
+      "translit": "theîon",
+      "pronunciation": "thi'-on",
+      "translated": true
+    },
+    "G2304": {
+      "definitions_cz": "božský (střední jako podstatné jméno, božství)",
+      "translit": "theîos",
+      "pronunciation": "thi'-os",
+      "translated": true
+    },
+    "G2305": {
+      "definitions_cz": "božství (abstraktně)",
+      "translit": "theiótēs",
+      "pronunciation": "thi-ot'-ace",
+      "translated": true
+    },
+    "G2306": {
+      "definitions_cz": "sírové, tedy sirné",
+      "translit": "theiṓdēs",
+      "pronunciation": "thi-o'-dace",
+      "translated": true
+    },
+    "G2307": {
+      "definitions_cz": "odhodlání (správně,\n věc), t. j. (aktivně) volba (zvláště, účel, vyhláška;\n abstraktně, vůle) nebo (pasivně) sklon",
+      "translit": "thélēma",
+      "pronunciation": "thel'-ay-mah",
+      "translated": true
+    },
+    "G2308": {
+      "definitions_cz": "určení (správně, úkon), tedy opce",
+      "translit": "thélēsis",
+      "pronunciation": "thel'-ay-sis",
+      "translated": true
+    },
+    "G2309": {
+      "definitions_cz": "určit\n (jako aktivní možnost ze subjektivního impulsu; vzhledem k tomu, že [ŘECKO:1014]",
+      "translit": "thélō",
+      "pronunciation": "thel'-o",
+      "translated": true
+    },
+    "G2310": {
+      "definitions_cz": "něco odloženého, tj. substrukce (z\n budova atd.), (doslova nebo přeneseně)",
+      "translit": "themélios",
+      "pronunciation": "them-el'-ee-os",
+      "translated": true
+    },
+    "G2311": {
+      "definitions_cz": "položit základ pro, tedy (doslova) vztyčený, popř\n (obrazně) konsolidovat",
+      "translit": "themelióō",
+      "pronunciation": "them-el-ee-o'-o",
+      "translated": true
+    },
+    "G2312": {
+      "definitions_cz": "božsky poučen",
+      "translit": "theodídaktos",
+      "pronunciation": "theh-od-id'-ak-tos",
+      "translated": true
+    },
+    "G2313": {
+      "definitions_cz": "vzdorovat božstvu",
+      "translit": "theomachéō",
+      "pronunciation": "theh-o-makh-eh'-o",
+      "translated": true
+    },
+    "G2314": {
+      "definitions_cz": "odpůrce božství",
+      "translit": "theomáchos",
+      "pronunciation": "theh-om'-akh-os",
+      "translated": true
+    },
+    "G2315": {
+      "definitions_cz": "božsky dýchal\n v",
+      "translit": "theópneustos",
+      "pronunciation": "theh-op'-nyoo-stos",
+      "translated": true
+    },
+    "G2316": {
+      "definitions_cz": "přeneseně soudce; hebraismem, velmi",
+      "translit": "theós",
+      "pronunciation": "theh'-os",
+      "translated": true
+    },
+    "G2317": {
+      "definitions_cz": "zbožnost, t. j. zbožnost",
+      "translit": "theosébeia",
+      "pronunciation": "theh-os-eb'-i-ah",
+      "translated": true
+    },
+    "G2318": {
+      "definitions_cz": "ctihodný Boží, t. j. zbožný",
+      "translit": "theosebḗs",
+      "pronunciation": "theh-os-eb-ace'",
+      "translated": true
+    },
+    "G2319": {
+      "definitions_cz": "Bohu nenávistný, t. j. bezbožný",
+      "translit": "theostygḗs",
+      "pronunciation": "theh-os-too-gace'",
+      "translated": true
+    },
+    "G2320": {
+      "definitions_cz": "božství (abstraktně)",
+      "translit": "theótēs",
+      "pronunciation": "theh-ot'-ace",
+      "translated": true
+    },
+    "G2321": {
+      "definitions_cz": "přítel Boží; Theophilus, a\n Christian",
+      "translit": "Theóphilos",
+      "pronunciation": "theh-of'-il-os",
+      "translated": true
+    },
+    "G2322": {
+      "definitions_cz": "docházka (zejména lékařská, tj. léčba); přeneseně\n a společně domácí",
+      "translit": "therapeía",
+      "pronunciation": "ther-ap-i'-ah",
+      "translated": true
+    },
+    "G2323": {
+      "definitions_cz": "čekat na podřadně, tj. (obrazně) na\n uctívat (Boha) nebo (zvláště) zbavit (nemoci)",
+      "translit": "therapeúō",
+      "pronunciation": "ther-ap-yoo'-o",
+      "translated": true
+    },
+    "G2324": {
+      "definitions_cz": "podřadný pomocník (jako by si vážil)",
+      "translit": "therápōn",
+      "pronunciation": "ther-ap'-ohn",
+      "translated": true
+    },
+    "G2325": {
+      "definitions_cz": "sklízet",
+      "translit": "therízō",
+      "pronunciation": "ther-id'-zo",
+      "translated": true
+    },
+    "G2326": {
+      "definitions_cz": "žně, tedy úrodu",
+      "translit": "therismós",
+      "pronunciation": "ther-is-mos'",
+      "translated": true
+    },
+    "G2327": {
+      "definitions_cz": "kombajn",
+      "translit": "theristḗs",
+      "pronunciation": "ther-is-tace'",
+      "translated": true
+    },
+    "G2328": {
+      "definitions_cz": "zahřívat (se)",
+      "translit": "thermaínō",
+      "pronunciation": "ther-mah'-ee-no",
+      "translated": true
+    },
+    "G2329": {
+      "definitions_cz": "teplo",
+      "translit": "thérmē",
+      "pronunciation": "ther'-may",
+      "translated": true
+    },
+    "G2330": {
+      "definitions_cz": "správně, teplo, tedy léto",
+      "translit": "théros",
+      "pronunciation": "ther'-os",
+      "translated": true
+    },
+    "G2331": {
+      "definitions_cz": "soluňský, t. j. obyvatel\n Thessalonice",
+      "translit": "Thessalonikeús",
+      "pronunciation": "thes-sal-on-ik-yoos'",
+      "translated": true
+    },
+    "G2332": {
+      "definitions_cz": "Thessalonice, místo v Asii\n Menší",
+      "translit": "Thessaloníkē",
+      "pronunciation": "thes-sal-on-ee'-kay",
+      "translated": true
+    },
+    "G2333": {
+      "definitions_cz": "Theudas, Izraelita",
+      "translit": "Theudâs",
+      "pronunciation": "thyoo-das'",
+      "translated": true
+    },
+    "G2334": {
+      "definitions_cz": "být a\n divák, tj. rozeznat, (doslova, přeneseně (prožitek) popř.\n intenzivně (přijmout))",
+      "translit": "theōréō",
+      "pronunciation": "theh-o-reh'-o",
+      "translated": true
+    },
+    "G2335": {
+      "definitions_cz": "sledovanost, tj. (konkrétně) a\n podívaná",
+      "translit": "theōría",
+      "pronunciation": "theh-o-ree'-ah",
+      "translated": true
+    },
+    "G2336": {
+      "definitions_cz": "nádoba, tj. pochva",
+      "translit": "thḗkē",
+      "pronunciation": "thay'-kay",
+      "translated": true
+    },
+    "G2337": {
+      "definitions_cz": "sát, (implicitně) sát",
+      "translit": "thēlázō",
+      "pronunciation": "thay-lad'-zo",
+      "translated": true
+    },
+    "G2338": {
+      "definitions_cz": "žena",
+      "translit": "thēlys",
+      "pronunciation": "thay'-loos",
+      "translated": true
+    },
+    "G2339": {
+      "definitions_cz": "lov, tj. (obrazně)\n zničení",
+      "translit": "thḗra",
+      "pronunciation": "thay'-rah",
+      "translated": true
+    },
+    "G2340": {
+      "definitions_cz": "lovit (zvíře), t. j. (obrazně) kapra\n v",
+      "translit": "thēreúō",
+      "pronunciation": "thay-ryoo'-o",
+      "translated": true
+    },
+    "G2341": {
+      "definitions_cz": "být bojovníkem se zvířaty (v\n gladiátorská show), tj. (obrazně) setkat se (zuřivý\n muži)",
+      "translit": "thēriomachéō",
+      "pronunciation": "thay-ree-om-akh-eh'-o",
+      "translated": true
+    },
+    "G2342": {
+      "definitions_cz": "nebezpečné zvíře",
+      "translit": "thēríon",
+      "pronunciation": "thay-ree'-on",
+      "translated": true
+    },
+    "G2343": {
+      "definitions_cz": "hromadit nebo rezervovat (doslova nebo přeneseně)",
+      "translit": "thēsaurízō",
+      "pronunciation": "thay-sow-rid'-zo",
+      "translated": true
+    },
+    "G2344": {
+      "definitions_cz": "vklad, tj. bohatství (doslova resp\n přeneseně)",
+      "translit": "thēsaurós",
+      "pronunciation": "thay-sow-ros'",
+      "translated": true
+    },
+    "G2345": {
+      "definitions_cz": "do\n manipulovat, t. j. mít co do činění s; implicitně zranit",
+      "translit": "thingánō",
+      "pronunciation": "thing-gan'-o",
+      "translated": true
+    },
+    "G2346": {
+      "definitions_cz": "dav (doslova nebo\n přeneseně)",
+      "translit": "thlíbō",
+      "pronunciation": "thlee'-bo",
+      "translated": true
+    },
+    "G2347": {
+      "definitions_cz": "tlak (doslova nebo obrazně)",
+      "translit": "thlîpsis",
+      "pronunciation": "thlip'-sis",
+      "translated": true
+    },
+    "G2348": {
+      "definitions_cz": "zemřít (doslova nebo\n přeneseně)",
+      "translit": "thnḗskō",
+      "pronunciation": "thnay'-sko",
+      "translated": true
+    },
+    "G2349": {
+      "definitions_cz": "náchylný zemřít",
+      "translit": "thnētós",
+      "pronunciation": "thnay-tos'",
+      "translated": true
+    },
+    "G2350": {
+      "definitions_cz": "být ve vřavě, t. j. rušit, řvát",
+      "translit": "thorybéō",
+      "pronunciation": "thor-oo-beh'-o",
+      "translated": true
+    },
+    "G2351": {
+      "definitions_cz": "porucha",
+      "translit": "thórybos",
+      "pronunciation": "thor'-oo-bos",
+      "translated": true
+    },
+    "G2352": {
+      "definitions_cz": "rozdrtit",
+      "translit": "thraúō",
+      "pronunciation": "throw'-o",
+      "translated": true
+    },
+    "G2353": {
+      "definitions_cz": "zásoby (chované na farmě)",
+      "translit": "thrémma",
+      "pronunciation": "threm'-mah",
+      "translated": true
+    },
+    "G2354": {
+      "definitions_cz": "naříkat",
+      "translit": "thrēnéō",
+      "pronunciation": "thray-neh'-o",
+      "translated": true
+    },
+    "G2355": {
+      "definitions_cz": "kvílení",
+      "translit": "thrēnos",
+      "pronunciation": "thray'-nos",
+      "translated": true
+    },
+    "G2356": {
+      "definitions_cz": "slavnostní obřad",
+      "translit": "thrēskeía",
+      "pronunciation": "thrace-ki'-ah",
+      "translated": true
+    },
+    "G2357": {
+      "definitions_cz": "ceremoniální v uctívání (jako\n demonstrativní), t. j. zbožný",
+      "translit": "thrēskós",
+      "pronunciation": "thrace'-kos",
+      "translated": true
+    },
+    "G2358": {
+      "definitions_cz": "a odvozenina [ŘECKO:680]",
+      "translit": "thriambeúō",
+      "pronunciation": "three-am-byoo'-o",
+      "translated": true
+    },
+    "G2359": {
+      "definitions_cz": "nejisté odvození; vlasy",
+      "translit": "thríx",
+      "pronunciation": "threeks",
+      "translated": true
+    },
+    "G2360": {
+      "definitions_cz": "řvát, t. j. (implicitně) k\n vyděsit",
+      "translit": "throéō",
+      "pronunciation": "thro-eh'-o",
+      "translated": true
+    },
+    "G2361": {
+      "definitions_cz": "sraženina",
+      "translit": "thrómbos",
+      "pronunciation": "throm'-bos",
+      "translated": true
+    },
+    "G2362": {
+      "definitions_cz": "honosné sídlo („trůn“); implikací, moc\n nebo (konkrétně) potentát",
+      "translit": "thrónos",
+      "pronunciation": "thron'-os",
+      "translated": true
+    },
+    "G2363": {
+      "definitions_cz": "Thyatira, místo v Malé Asii",
+      "translit": "Thyáteira",
+      "pronunciation": "thoo-at'-i-rah",
+      "translated": true
+    },
+    "G2364": {
+      "definitions_cz": "dítě ženského pohlaví, nebo (podle\n hebraismus) potomek (nebo obyvatel)",
+      "translit": "thygátēr",
+      "pronunciation": "thoo-gat'-air",
+      "translated": true
+    },
+    "G2365": {
+      "definitions_cz": "dcera",
+      "translit": "thygátrion",
+      "pronunciation": "thoo-gat'-ree-on",
+      "translated": true
+    },
+    "G2366": {
+      "definitions_cz": "",
+      "translated": false
+    },
+    "G2367": {
+      "definitions_cz": "označující jistý\n vonný strom); vyrobeno z citronového dřeva",
+      "translit": "thýïnos",
+      "pronunciation": "thoo'-ee-nos",
+      "translated": true
+    },
+    "G2368": {
+      "definitions_cz": "aroma, t. j. vonný prášek pálený při bohoslužbě;\n implicitně samotné pálení",
+      "translit": "thymíama",
+      "pronunciation": "thoo-mee'-am-ah",
+      "translated": true
+    },
+    "G2369": {
+      "definitions_cz": "místo fumigace, tedy alter of\n kadidlo (v chrámu)",
+      "translit": "thymiastḗrion",
+      "pronunciation": "thoo-mee-as-tay'-ree-on",
+      "translated": true
+    },
+    "G2370": {
+      "definitions_cz": "fumigovat, tzn.\n nabízet aromatické výpary",
+      "translit": "thymiáō",
+      "pronunciation": "thoo-mee-ah'-o",
+      "translated": true
+    },
+    "G2371": {
+      "definitions_cz": "být v zuřivém boji,\n tj. (obrazně) být rozhořčen",
+      "translit": "thymomachéō",
+      "pronunciation": "thoo-mom-akh-eh'-o",
+      "translated": true
+    },
+    "G2372": {
+      "definitions_cz": "vášeň (jako by těžce dýchal)",
+      "translit": "thymós",
+      "pronunciation": "thoo-mos'",
+      "translated": true
+    },
+    "G2373": {
+      "definitions_cz": "dát do vášně, t. j. rozhořčení",
+      "translit": "thymóō",
+      "pronunciation": "tho-mo'-o",
+      "translated": true
+    },
+    "G2374": {
+      "definitions_cz": "portál nebo vchod (\n otevírání nebo zavírání, doslova nebo přeneseně)",
+      "translit": "thýra",
+      "pronunciation": "thoo'-rah",
+      "translated": true
+    },
+    "G2375": {
+      "definitions_cz": "velký štít (ve tvaru dveří)",
+      "translit": "thyreós",
+      "pronunciation": "thoo-reh-os'",
+      "translated": true
+    },
+    "G2376": {
+      "definitions_cz": "otvor, tedy okno",
+      "translit": "thyrís",
+      "pronunciation": "thoo-rece'",
+      "translated": true
+    },
+    "G2377": {
+      "definitions_cz": "strážce brány",
+      "translit": "thyrōrós",
+      "pronunciation": "thoo-ro-ros'",
+      "translated": true
+    },
+    "G2378": {
+      "definitions_cz": "oběť (akt nebo oběť, doslova nebo\n přeneseně)",
+      "translit": "thysía",
+      "pronunciation": "thoo-see'-ah",
+      "translated": true
+    },
+    "G2379": {
+      "definitions_cz": "obětní místo, t. j. oltář\n (zvláštní nebo genitivní pád, doslovný nebo obrazový)",
+      "translit": "thysiastḗrion",
+      "pronunciation": "thoo-see-as-tay'-ree-on",
+      "translated": true
+    },
+    "G2380": {
+      "definitions_cz": "správně, spěchat (těžce dýchat, foukat, kouřit), tzn.\n (implicitně) obětovat (správně, ohněm, ale genitivní pád);\n rozšířením na immolate (porážka pro jakýkoli účel)",
+      "translit": "thýō",
+      "pronunciation": "thoo'-o",
+      "translated": true
+    },
+    "G2381": {
+      "definitions_cz": "dvojče; Thomas, a\n Christian",
+      "translit": "Thōmâs",
+      "pronunciation": "tho-mas'",
+      "translated": true
+    },
+    "G2382": {
+      "definitions_cz": "hrudník (\"hrudník\"), tj. (implicitně) a\n korzet",
+      "translit": "thṓrax",
+      "pronunciation": "tho'-rax",
+      "translated": true
+    },
+    "G2383": {
+      "definitions_cz": "Jairus (t. j. Jair), Izraelita",
+      "translit": "Iáeiros",
+      "pronunciation": "ee-ah'-i-ros",
+      "translated": true
+    },
+    "G2384": {
+      "definitions_cz": "Jacob (tj. Ja`akob), předek\n Izraelité",
+      "translit": "Iakṓb",
+      "pronunciation": "ee-ak-obe'",
+      "translated": true
+    },
+    "G2385": {
+      "definitions_cz": "Jacobus, jméno tří\n Izraelité",
+      "translit": "Iákōbos",
+      "pronunciation": "ee-ak'-o-bos",
+      "translated": true
+    },
+    "G2386": {
+      "definitions_cz": "lék (účinek)",
+      "translit": "íama",
+      "pronunciation": "ee'-am-ah",
+      "translated": true
+    },
+    "G2387": {
+      "definitions_cz": "Jambres, Egypťan",
+      "translit": "Iambrēs",
+      "pronunciation": "ee-am-brace'",
+      "translated": true
+    },
+    "G2388": {
+      "definitions_cz": "Janna, Izraelita",
+      "translit": "Ianná",
+      "pronunciation": "ee-an-nah'",
+      "translated": true
+    },
+    "G2389": {
+      "definitions_cz": "Jannes, Egypťan",
+      "translit": "Iannēs",
+      "pronunciation": "ee-an-nace'",
+      "translated": true
+    },
+    "G2390": {
+      "definitions_cz": "léčit (doslova popř\n přeneseně)",
+      "translit": "iáomai",
+      "pronunciation": "ee-ah'-om-ahee",
+      "translated": true
+    },
+    "G2391": {
+      "definitions_cz": "Jared (t. j. Jered), předpotopní",
+      "translit": "Iáred",
+      "pronunciation": "ee-ar'-ed",
+      "translated": true
+    },
+    "G2392": {
+      "definitions_cz": "léčení (akt)",
+      "translit": "íasis",
+      "pronunciation": "ee'-as-is",
+      "translated": true
+    },
+    "G2393": {
+      "definitions_cz": "\"jaspis\", drahokam",
+      "translit": "íaspis",
+      "pronunciation": "ee'-as-pis",
+      "translated": true
+    },
+    "G2394": {
+      "definitions_cz": "chystá se vyléčit; Společnost Jason, a\n Christian",
+      "translit": "Iásōn",
+      "pronunciation": "ee-as'-oan",
+      "translated": true
+    },
+    "G2395": {
+      "definitions_cz": "lékař",
+      "translit": "iatrós",
+      "pronunciation": "ee-at-ros'",
+      "translated": true
+    },
+    "G2396": {
+      "definitions_cz": "používá se jako an\n citoslovce k označení překvapení; hle!",
+      "translit": "íde",
+      "pronunciation": "id'-eh",
+      "translated": true
+    },
+    "G2397": {
+      "definitions_cz": "pohled (komparativní přeneseně \"idea\"), tzn.\n aspekt",
+      "translit": "idéa",
+      "pronunciation": "id-eh'-ah",
+      "translated": true
     }
   }
 }
