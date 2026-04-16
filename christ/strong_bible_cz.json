@@ -9975,6 +9975,894 @@
       "translit": "aischrós",
       "pronunciation": "ahee-skhros'",
       "translated": true
+    },
+    "G151": {
+      "definitions_cz": "hanebnost, tj. oplzlost",
+      "translit": "aischrótēs",
+      "pronunciation": "ahee-skhrot'-ace",
+      "translated": true
+    },
+    "G152": {
+      "definitions_cz": "hanba nebo hanba (abstraktně nebo konkrétně)",
+      "translit": "aischýnē",
+      "pronunciation": "ahee-skhoo'-nay",
+      "translated": true
+    },
+    "G153": {
+      "definitions_cz": "pociťovat hanbu (za\n sebe)",
+      "translit": "aischýnomai",
+      "pronunciation": "ahee-skhoo'-nom-ahee",
+      "translated": true
+    },
+    "G154": {
+      "definitions_cz": "zeptat se (v případě genitivu)",
+      "translit": "aitéō",
+      "pronunciation": "ahee-teh'-o",
+      "translated": true
+    },
+    "G155": {
+      "definitions_cz": "věc se zeptala nebo (abstraktně) dotaz",
+      "translit": "aítēma",
+      "pronunciation": "ah'-ee-tay-mah",
+      "translated": true
+    },
+    "G156": {
+      "definitions_cz": "příčina (jakoby žádána), t. j. (logický) důvod\n (motiv, věc), (právní) trestný čin (údajný nebo prokázaný)",
+      "translit": "aitía",
+      "pronunciation": "ahee-tee'-a",
+      "translated": true
+    },
+    "G157": {
+      "definitions_cz": "věc nabitá",
+      "translit": "aitíama",
+      "pronunciation": "ahee-tee'-am-ah",
+      "translated": true
+    },
+    "G158": {
+      "definitions_cz": "důvod nebo zločin (jako [ŘECKO:156]",
+      "translit": "aítion",
+      "pronunciation": "ah'-ee-tee-on",
+      "translated": true
+    },
+    "G159": {
+      "definitions_cz": "kauzativní, tedy (konkrétně) původce",
+      "translit": "aítios",
+      "pronunciation": "ah'-ee-tee-os",
+      "translated": true
+    },
+    "G160": {
+      "definitions_cz": "neočekávaný, tj. (příslovečně)\n náhle",
+      "translit": "aiphnídios",
+      "pronunciation": "aheef-nid'-ee-os",
+      "translated": true
+    },
+    "G161": {
+      "definitions_cz": "zajetí",
+      "translit": "aichmalōsía",
+      "pronunciation": "aheekh-mal-o-see'-ah",
+      "translated": true
+    },
+    "G162": {
+      "definitions_cz": "zachytit (jako [ŘECKO:163]",
+      "translit": "aichmalōteúō",
+      "pronunciation": "aheekh-mal-o-tew'-o",
+      "translated": true
+    },
+    "G163": {
+      "definitions_cz": "dostat do zajetí",
+      "translit": "aichmalōtízō",
+      "pronunciation": "aheekh-mal-o-tid'-zo",
+      "translated": true
+    },
+    "G164": {
+      "definitions_cz": "správně, a\n válečný zajatec, t. j. (genitivní případ) zajatec",
+      "translit": "aichmálōtos",
+      "pronunciation": "aheekh-mal-o-tos'",
+      "translated": true
+    },
+    "G165": {
+      "definitions_cz": "správně, věk; rozšířením, věčností (také\n minulost); implicitně svět; speciálně (židovský) mesiášský\n období (současné nebo budoucí)",
+      "translit": "aiṓn",
+      "pronunciation": "ahee-ohn'",
+      "translated": true
+    },
+    "G166": {
+      "definitions_cz": "věčný (také používaný pro minulý čas nebo minulost a budoucnost jako\n dobře)",
+      "translit": "aiṓnios",
+      "pronunciation": "ahee-o'-nee-os",
+      "translated": true
+    },
+    "G167": {
+      "definitions_cz": "nečistota (kvalita), fyzicky nebo morálně",
+      "translit": "akatharsía",
+      "pronunciation": "ak-ath-ar-see'-ah",
+      "translated": true
+    },
+    "G168": {
+      "definitions_cz": "nečistota (stát), mravně",
+      "translit": "akathártēs",
+      "pronunciation": "ak-ath-ar'-tace",
+      "translated": true
+    },
+    "G169": {
+      "definitions_cz": "nečistý (obřadně, morálně (oplzlý) nebo speciálně,\n (démonický))",
+      "translit": "akáthartos",
+      "pronunciation": "ak-ath'-ar-tos",
+      "translated": true
+    },
+    "G170": {
+      "definitions_cz": "být nevhodný (pro sebe), t. j. selhat z a\n vhodná příležitost",
+      "translit": "akairéomai",
+      "pronunciation": "ak-ahee-reh'-om-ahee",
+      "translated": true
+    },
+    "G171": {
+      "definitions_cz": "nevhodně",
+      "translit": "akaírōs",
+      "pronunciation": "ak-ah'-ee-roce",
+      "translated": true
+    },
+    "G172": {
+      "definitions_cz": "není špatné, tj. (objektivně)\n nevinný nebo (subjektivně) nic netušící",
+      "translit": "ákakos",
+      "pronunciation": "ak'-ak-os",
+      "translated": true
+    },
+    "G173": {
+      "definitions_cz": "trn",
+      "translit": "ákantha",
+      "pronunciation": "ak'-an-thah",
+      "translated": true
+    },
+    "G174": {
+      "definitions_cz": "trnitý",
+      "translit": "akánthinos",
+      "pronunciation": "ak-an'-thee-nos",
+      "translated": true
+    },
+    "G175": {
+      "definitions_cz": "neplodný (doslova nebo\n přeneseně)",
+      "translit": "ákarpos",
+      "pronunciation": "ak'-ar-pos",
+      "translated": true
+    },
+    "G176": {
+      "definitions_cz": "bezúhonný",
+      "translit": "akatágnōstos",
+      "pronunciation": "ak-at-ag'-noce-tos",
+      "translated": true
+    },
+    "G177": {
+      "definitions_cz": "odhaleno",
+      "translit": "akatakályptos",
+      "pronunciation": "ak-at-ak-al'-oop-tos",
+      "translated": true
+    },
+    "G178": {
+      "definitions_cz": "bez\n (právní) soud",
+      "translit": "akatákritos",
+      "pronunciation": "ak-at-ak'-ree-tos",
+      "translated": true
+    },
+    "G179": {
+      "definitions_cz": "nerozpustný, tedy (obrazně) trvalý",
+      "translit": "akatálytos",
+      "pronunciation": "ak-at-al'-oo-tos",
+      "translated": true
+    },
+    "G180": {
+      "definitions_cz": "nezdrženlivý",
+      "translit": "akatápaustos",
+      "pronunciation": "ak-at-ap'-ow-stos",
+      "translated": true
+    },
+    "G181": {
+      "definitions_cz": "nestabilita, tedy porucha",
+      "translit": "akatastasía",
+      "pronunciation": "ak-at-as-tah-see'-ah",
+      "translated": true
+    },
+    "G182": {
+      "definitions_cz": "nestálý",
+      "translit": "akatástatos",
+      "pronunciation": "ak-at-as'-tat-os",
+      "translated": true
+    },
+    "G183": {
+      "definitions_cz": "nespoutaný",
+      "translit": "akatáschetos",
+      "pronunciation": "ak-at-as'-khet-os",
+      "translated": true
+    },
+    "G184": {
+      "definitions_cz": "odpovídající [HEBREW:02506][HEBREW:01818]",
+      "translit": "Akeldamá",
+      "pronunciation": "ak-el-dam-ah'",
+      "translated": true
+    },
+    "G185": {
+      "definitions_cz": "nemíchaný, tedy (obrazně) nevinný",
+      "translit": "akéraios",
+      "pronunciation": "ak-er'-ah-yos",
+      "translated": true
+    },
+    "G186": {
+      "definitions_cz": "nenaklánění, tzn.\n (obrazně) pevný",
+      "translit": "aklinḗs",
+      "pronunciation": "ak-lee-nace'",
+      "translated": true
+    },
+    "G187": {
+      "definitions_cz": "udělat pointu, tedy (obrazně) zralý",
+      "translit": "akmázō",
+      "pronunciation": "ak-mad'-zo",
+      "translated": true
+    },
+    "G188": {
+      "definitions_cz": "adverbiálně, právě teď, t. j. stále",
+      "translit": "akmḗn",
+      "pronunciation": "ak-mane'",
+      "translated": true
+    },
+    "G189": {
+      "definitions_cz": "sluch (akt, smysl nebo slyšená věc)",
+      "translit": "akoḗ",
+      "pronunciation": "ak-o-ay'",
+      "translated": true
+    },
+    "G190": {
+      "definitions_cz": "správně, do\n být stejným způsobem s, tj. doprovázet (zvláště jako a\n žák)",
+      "translit": "akolouthéō",
+      "pronunciation": "ak-ol-oo-theh'-o",
+      "translated": true
+    },
+    "G191": {
+      "definitions_cz": "slyšet (v různých smyslech)",
+      "translit": "akoúō",
+      "pronunciation": "ak-oo'-o",
+      "translated": true
+    },
+    "G192": {
+      "definitions_cz": "touha po sebekontrole",
+      "translit": "akrasía",
+      "pronunciation": "ak-ras-ee'-a",
+      "translated": true
+    },
+    "G194": {
+      "definitions_cz": "neředěný",
+      "translit": "ákratos",
+      "pronunciation": "ak'-rat-os",
+      "translated": true
+    },
+    "G195": {
+      "definitions_cz": "přesnost",
+      "translit": "akríbeia",
+      "pronunciation": "ak-ree'-bi-ah",
+      "translated": true
+    },
+    "G196": {
+      "definitions_cz": "většina\n přesné",
+      "translit": "akribéstatos",
+      "pronunciation": "ak-ree-bes'-ta-tos",
+      "translated": true
+    },
+    "G197": {
+      "definitions_cz": "(adverbiálně) více\n přesně",
+      "translit": "akribésteron",
+      "pronunciation": "ak-ree-bes'-ter-on",
+      "translated": true
+    },
+    "G198": {
+      "definitions_cz": "abych byl přesný, tedy zjistit",
+      "translit": "akribóō",
+      "pronunciation": "ak-ree-bo'-o",
+      "translated": true
+    },
+    "G199": {
+      "definitions_cz": "přesně",
+      "translit": "akribōs",
+      "pronunciation": "ak-ree-boce'",
+      "translated": true
+    },
+    "G200": {
+      "definitions_cz": "saranče (jako špičaté nebo jako osvětlení\n na vrcholu vegetace)",
+      "translit": "akrís",
+      "pronunciation": "ak-rece'",
+      "translated": true
+    },
+    "G201": {
+      "definitions_cz": "audienční místnost",
+      "translit": "akroatḗrion",
+      "pronunciation": "ak-ro-at-ay'-ree-on",
+      "translated": true
+    },
+    "G202": {
+      "definitions_cz": "zjevně intenzivní [ŘECKO:191]",
+      "translit": "akroatḗs",
+      "pronunciation": "ak-ro-at-ace'",
+      "translated": true
+    },
+    "G203": {
+      "definitions_cz": "předkožka; implicitně neobřezaný (tj.\n nežidovský, přeneseně, nezregenerovaný) stav nebo osoba",
+      "translit": "akrobystía",
+      "pronunciation": "ak-rob-oos-tee'-ah",
+      "translated": true
+    },
+    "G204": {
+      "definitions_cz": "patřící k extrémnímu koutu",
+      "translit": "akrogōniaîos",
+      "pronunciation": "ak-rog-o-nee-ah'-yos",
+      "translated": true
+    },
+    "G205": {
+      "definitions_cz": "správně (v množném čísle) horní část\n hromada, tedy (implicitně) nejlepší z kořisti",
+      "translit": "akrothínion",
+      "pronunciation": "ak-roth-in'-ee-on",
+      "translated": true
+    },
+    "G206": {
+      "definitions_cz": "a\n končetina",
+      "translit": "ákron",
+      "pronunciation": "ak'-ron",
+      "translated": true
+    },
+    "G207": {
+      "definitions_cz": "Akulas, Izraelita",
+      "translit": "Akýlas",
+      "pronunciation": "ak-oo'-las",
+      "translated": true
+    },
+    "G208": {
+      "definitions_cz": "zneplatnit",
+      "translit": "akyróō",
+      "pronunciation": "ak-oo-ro'-o",
+      "translated": true
+    },
+    "G209": {
+      "definitions_cz": "nerušeně, tedy volně",
+      "translit": "akōlýtōs",
+      "pronunciation": "ak-o-loo'-toce",
+      "translated": true
+    },
+    "G210": {
+      "definitions_cz": "nepřející",
+      "translit": "ákōn",
+      "pronunciation": "ak'-ohn",
+      "translated": true
+    },
+    "G211": {
+      "definitions_cz": "správně „alabastrová“ krabička, tj. (v rozšíření) váza s parfémem (z\n jakýkoli materiál)",
+      "translit": "alábastron",
+      "pronunciation": "al-ab'-as-tron",
+      "translated": true
+    },
+    "G212": {
+      "definitions_cz": "braggadocio, tj. (implicitně)\n sebevědomí",
+      "translit": "alazoneía",
+      "pronunciation": "al-ad-zon-i'-a",
+      "translated": true
+    },
+    "G213": {
+      "definitions_cz": "chvastoun",
+      "translit": "alazṓn",
+      "pronunciation": "al-ad-zone'",
+      "translated": true
+    },
+    "G214": {
+      "definitions_cz": "vociferovat, tj. (implicitně)\n kvílet; přeneseně cinkat",
+      "translit": "alalázō",
+      "pronunciation": "al-al-ad'-zo",
+      "translated": true
+    },
+    "G215": {
+      "definitions_cz": "nevyslovitelné",
+      "translit": "alálētos",
+      "pronunciation": "al-al'-ay-tos",
+      "translated": true
+    },
+    "G216": {
+      "definitions_cz": "ztlumit",
+      "translit": "álalos",
+      "pronunciation": "al'-al-os",
+      "translated": true
+    },
+    "G217": {
+      "definitions_cz": "sůl; obrazně řečeno opatrnost",
+      "translit": "hálas",
+      "pronunciation": "hal'-as",
+      "translated": true
+    },
+    "G218": {
+      "definitions_cz": "naolejovat (s\n parfém)",
+      "translit": "aleíphō",
+      "pronunciation": "al-i'-fo",
+      "translated": true
+    },
+    "G219": {
+      "definitions_cz": "kohout-kokrhání, tedy třetí\n noční hlídka",
+      "translit": "alektorophōnía",
+      "pronunciation": "al-ek-tor-of-o-nee'-ah",
+      "translated": true
+    },
+    "G220": {
+      "definitions_cz": "kohouta nebo samce drůbeže",
+      "translit": "aléktōr",
+      "pronunciation": "al-ek'-tore",
+      "translated": true
+    },
+    "G221": {
+      "definitions_cz": "Alexandrejec nebo obyvatel\n z Alexandrie",
+      "translit": "Alexandreús",
+      "pronunciation": "al-ex-and-reuce'",
+      "translated": true
+    },
+    "G222": {
+      "definitions_cz": "Alexandrine, nebo patřící k Alexandrii",
+      "translit": "Alexandrînos",
+      "pronunciation": "al-ex-an-dree'-nos",
+      "translated": true
+    },
+    "G223": {
+      "definitions_cz": "muž-obránce;\n Alexandr, jméno tří Izraelitů a jednoho dalšího muže",
+      "translit": "Aléxandros",
+      "pronunciation": "al-ex'-an-dros",
+      "translated": true
+    },
+    "G224": {
+      "definitions_cz": "mouka",
+      "translit": "áleuron",
+      "pronunciation": "al'-yoo-ron",
+      "translated": true
+    },
+    "G225": {
+      "definitions_cz": "pravda",
+      "translit": "alḗtheia",
+      "pronunciation": "al-ay'-thi-a",
+      "translated": true
+    },
+    "G226": {
+      "definitions_cz": "být pravdivý (v doktríně a povolání)",
+      "translit": "alētheúō",
+      "pronunciation": "al-ayth-yoo'-o",
+      "translated": true
+    },
+    "G227": {
+      "definitions_cz": "pravda (jako ne\n skrývání)",
+      "translit": "alēthḗs",
+      "pronunciation": "al-ay-thace'",
+      "translated": true
+    },
+    "G228": {
+      "definitions_cz": "pravdivý",
+      "translit": "alēthinós",
+      "pronunciation": "al-ay-thee-nos'",
+      "translated": true
+    },
+    "G229": {
+      "definitions_cz": "brousit",
+      "translit": "alḗthō",
+      "pronunciation": "al-ay'-tho",
+      "translated": true
+    },
+    "G230": {
+      "definitions_cz": "skutečně",
+      "translit": "alēthōs",
+      "pronunciation": "al-ay-thoce'",
+      "translated": true
+    },
+    "G231": {
+      "definitions_cz": "námořník (jak se zabývá slanou vodou), tj\n implikace) rybář",
+      "translit": "halieús",
+      "pronunciation": "hal-ee-yoos'",
+      "translated": true
+    },
+    "G232": {
+      "definitions_cz": "být rybářem, tedy (implicitně) rybařit",
+      "translit": "halieúō",
+      "pronunciation": "hal-ee-yoo'-o",
+      "translated": true
+    },
+    "G233": {
+      "definitions_cz": "dosolit",
+      "translit": "halízō",
+      "pronunciation": "hal-id'-zo",
+      "translated": true
+    },
+    "G234": {
+      "definitions_cz": "(obřadně) poskvrnění",
+      "translit": "alísgema",
+      "pronunciation": "al-is'-ghem-ah",
+      "translated": true
+    },
+    "G235": {
+      "definitions_cz": "správně, jiné věci, tj. (adverbiálně)\n naopak (v mnoha vztazích)",
+      "translit": "allá",
+      "pronunciation": "al-lah'",
+      "translated": true
+    },
+    "G236": {
+      "definitions_cz": "dělat jiné",
+      "translit": "allássō",
+      "pronunciation": "al-las'-so",
+      "translated": true
+    },
+    "G237": {
+      "definitions_cz": "odjinud",
+      "translit": "allachóthen",
+      "pronunciation": "al-lakh-oth'-en",
+      "translated": true
+    },
+    "G238": {
+      "definitions_cz": "alegorizovat",
+      "translit": "allēgoréō",
+      "pronunciation": "al-lay-gor-eh'-o",
+      "translated": true
+    },
+    "G239": {
+      "definitions_cz": "chval vás Jah!, an\n zbožňující výkřik",
+      "translit": "allēlouïa",
+      "pronunciation": "al-lay-loo'-ee-ah",
+      "translated": true
+    },
+    "G240": {
+      "definitions_cz": "navzájem",
+      "translit": "allḗlōn",
+      "pronunciation": "al-lay'-lone",
+      "translated": true
+    },
+    "G241": {
+      "definitions_cz": "cizí, t. j. ne Žid",
+      "translit": "allogenḗs",
+      "pronunciation": "al-log-en-ace'",
+      "translated": true
+    },
+    "G242": {
+      "definitions_cz": "skočit; přeneseně do\n tryskat",
+      "translit": "hállomai",
+      "pronunciation": "hal'-lom-ahee",
+      "translated": true
+    },
+    "G243": {
+      "definitions_cz": "\"jinak\", tj. jiný (v mnoha aplikacích)",
+      "translit": "állos",
+      "pronunciation": "al'-los",
+      "translated": true
+    },
+    "G244": {
+      "definitions_cz": "dozor nad cizími záležitostmi, t. j. vměšovač\n (zejména v pohanských zvycích)",
+      "translit": "allotriepískopos",
+      "pronunciation": "al-lot-ree-ep-is'-kop-os",
+      "translated": true
+    },
+    "G245": {
+      "definitions_cz": "cizí, t. j. ne vlastní; rozšířením cizí, ne\n podobný, nepřátelský",
+      "translit": "allótrios",
+      "pronunciation": "al-lot'-ree-os",
+      "translated": true
+    },
+    "G246": {
+      "definitions_cz": "cizí, t. j. (zvláště) pohan",
+      "translit": "allóphylos",
+      "pronunciation": "al-lof'-oo-los",
+      "translated": true
+    },
+    "G247": {
+      "definitions_cz": "jinak",
+      "translit": "állōs",
+      "pronunciation": "al'-loce",
+      "translated": true
+    },
+    "G248": {
+      "definitions_cz": "šlapat obilí",
+      "translit": "aloáō",
+      "pronunciation": "al-o-ah'-o",
+      "translated": true
+    },
+    "G249": {
+      "definitions_cz": "iracionální",
+      "translit": "álogos",
+      "pronunciation": "al'-og-os",
+      "translated": true
+    },
+    "G250": {
+      "definitions_cz": "aloe (žvýkačka)",
+      "translit": "alóē",
+      "pronunciation": "al-o-ay'",
+      "translated": true
+    },
+    "G251": {
+      "definitions_cz": "\"sůl\"",
+      "translit": "háls",
+      "pronunciation": "halce",
+      "translated": true
+    },
+    "G252": {
+      "definitions_cz": "slaný",
+      "translit": "halykós",
+      "pronunciation": "hal-oo-kos'",
+      "translated": true
+    },
+    "G253": {
+      "definitions_cz": "více\n bez smutku",
+      "translit": "alypóteros",
+      "pronunciation": "al-oo-pot'-er-os",
+      "translated": true
+    },
+    "G254": {
+      "definitions_cz": "pouto nebo pouto",
+      "translit": "hálysis",
+      "pronunciation": "hal'-oo-sis",
+      "translated": true
+    },
+    "G255": {
+      "definitions_cz": "bez zisku, tzn.\n (implicitně) zhoubný",
+      "translit": "alysitelḗs",
+      "pronunciation": "al-oo-sit-el-ace'",
+      "translated": true
+    },
+    "G256": {
+      "definitions_cz": "Alfæus, Izraelita",
+      "translit": "Alphaîos",
+      "pronunciation": "al-fah'-yos",
+      "translated": true
+    },
+    "G257": {
+      "definitions_cz": "mlat (jako natvrdo válcovaný),\n tj. (obrazně) obilí (a plevy, právě vymlácené)",
+      "translit": "hálōn",
+      "pronunciation": "hal'-ohn",
+      "translated": true
+    },
+    "G258": {
+      "definitions_cz": "liška, tedy (obrazně) mazaný\n osoba",
+      "translit": "alṓpēx",
+      "pronunciation": "al-o'-pakes",
+      "translated": true
+    },
+    "G259": {
+      "definitions_cz": "zachytit, být vzat.",
+      "translit": "hálōsis",
+      "pronunciation": "hal'-o-sis",
+      "translated": true
+    },
+    "G260": {
+      "definitions_cz": "správně, ve „stejném“ čase, ale volně užívaný jako a\n předložka nebo příslovce označující úzkou asociaci",
+      "translit": "háma",
+      "pronunciation": "ham'-ah",
+      "translated": true
+    },
+    "G261": {
+      "definitions_cz": "neznalý",
+      "translit": "amathḗs",
+      "pronunciation": "am-ath-ace'",
+      "translated": true
+    },
+    "G262": {
+      "definitions_cz": "\"amaranthine\", tedy (implicitně) neblednoucí",
+      "translit": "amarántinos",
+      "pronunciation": "am-ar-an'-tee-nos",
+      "translated": true
+    },
+    "G263": {
+      "definitions_cz": "neblednoucí, tedy (implicitně) věčný",
+      "translit": "amárantos",
+      "pronunciation": "am-ar'-an-tos",
+      "translated": true
+    },
+    "G264": {
+      "definitions_cz": "řádně, minout se (a tím se nepodílet na výhře), tzn.\n (obrazně) chybovat, zvláště (mravně) hřešit",
+      "translit": "hamartánō",
+      "pronunciation": "ham-ar-tan'-o",
+      "translated": true
+    },
+    "G265": {
+      "definitions_cz": "hřích (správně konkrétní)",
+      "translit": "hamártēma",
+      "pronunciation": "ham-ar'-tay-mah",
+      "translated": true
+    },
+    "G266": {
+      "definitions_cz": "hřích (správně abstraktní)",
+      "translit": "hamartía",
+      "pronunciation": "ham-ar-tee'-ah",
+      "translated": true
+    },
+    "G267": {
+      "definitions_cz": "neověřené",
+      "translit": "amártyros",
+      "pronunciation": "am-ar'-too-ros",
+      "translated": true
+    },
+    "G268": {
+      "definitions_cz": "hříšný, t. j. hříšník",
+      "translit": "hamartōlós",
+      "pronunciation": "ham-ar-to-los'",
+      "translated": true
+    },
+    "G269": {
+      "definitions_cz": "mírumilovný",
+      "translit": "ámachos",
+      "pronunciation": "am'-akh-os",
+      "translated": true
+    },
+    "G270": {
+      "definitions_cz": "správně, sbírat, tj. (implicitně) sklízet",
+      "translit": "amáō",
+      "pronunciation": "am-ah'-o",
+      "translated": true
+    },
+    "G271": {
+      "definitions_cz": "a\n \"ametyst\" (má zabránit intoxikaci)",
+      "translit": "améthystos",
+      "pronunciation": "am-eth'-oos-tos",
+      "translated": true
+    },
+    "G273": {
+      "definitions_cz": "bezúhonný",
+      "translit": "ámemptos",
+      "pronunciation": "am'-emp-tos",
+      "translated": true
+    },
+    "G274": {
+      "definitions_cz": "bezchybně",
+      "translit": "amémptōs",
+      "pronunciation": "am-emp'-toce",
+      "translated": true
+    },
+    "G275": {
+      "definitions_cz": "ne úzkostný",
+      "translit": "amérimnos",
+      "pronunciation": "am-er'-im-nos",
+      "translated": true
+    },
+    "G276": {
+      "definitions_cz": "neměnný, nebo (neutrální jako abstraktní)\n neměnnost",
+      "translit": "ametáthetos",
+      "pronunciation": "am-et-ath'-et-os",
+      "translated": true
+    },
+    "G277": {
+      "definitions_cz": "nepojízdný",
+      "translit": "ametakínētos",
+      "pronunciation": "am-et-ak-in'-ay-tos",
+      "translated": true
+    },
+    "G278": {
+      "definitions_cz": "neodvolatelný",
+      "translit": "ametamélētos",
+      "pronunciation": "am-et-am-el'-ay-tos",
+      "translated": true
+    },
+    "G279": {
+      "definitions_cz": "nekajícný",
+      "translit": "ametanóētos",
+      "pronunciation": "am-et-an-o'-ay-tos",
+      "translated": true
+    },
+    "G280": {
+      "definitions_cz": "nemírný",
+      "translit": "ámetros",
+      "pronunciation": "am'-et-ros",
+      "translated": true
+    },
+    "G281": {
+      "definitions_cz": "správně, pevně, tj. (obrazně)\n důvěryhodný; adverbiálně, jistě (často jako citoslovce, tak be\n to)",
+      "translit": "amḗn",
+      "pronunciation": "am-ane'",
+      "translated": true
+    },
+    "G282": {
+      "definitions_cz": "bez matky, t. j. neznámého\n mateřství",
+      "translit": "amḗtōr",
+      "pronunciation": "am-ay'-tore",
+      "translated": true
+    },
+    "G283": {
+      "definitions_cz": "neznečištěný,\n tedy (obrazně) čistý",
+      "translit": "amíantos",
+      "pronunciation": "am-ee'-an-tos",
+      "translated": true
+    },
+    "G284": {
+      "definitions_cz": "Aminadab, Izraelita",
+      "translit": "Aminadáb",
+      "pronunciation": "am-ee-nad-ab'",
+      "translated": true
+    },
+    "G285": {
+      "definitions_cz": "písek (jako nahromaděný na pláži)",
+      "translit": "ámmos",
+      "pronunciation": "am'-mos",
+      "translated": true
+    },
+    "G286": {
+      "definitions_cz": "jehně",
+      "translit": "amnós",
+      "pronunciation": "am-nos'",
+      "translated": true
+    },
+    "G287": {
+      "definitions_cz": "odplata",
+      "translit": "amoibḗ",
+      "pronunciation": "am-oy-bay'",
+      "translated": true
+    },
+    "G288": {
+      "definitions_cz": "vinná réva (jako svinutí\n o podpoře)",
+      "translit": "ámpelos",
+      "pronunciation": "am'-pel-os",
+      "translated": true
+    },
+    "G289": {
+      "definitions_cz": "vinař, t. j. prořezávač",
+      "translit": "ampelourgós",
+      "pronunciation": "am-pel-oor-gos'",
+      "translated": true
+    },
+    "G290": {
+      "definitions_cz": "vinici",
+      "translit": "ampelṓn",
+      "pronunciation": "am-pel-ohn'",
+      "translated": true
+    },
+    "G291": {
+      "definitions_cz": "Amplias, Říman\n Christian",
+      "translit": "Amplías",
+      "pronunciation": "am-plee'-as",
+      "translated": true
+    },
+    "G292": {
+      "definitions_cz": "odhánět (pro sebe), tzn.\n chránit",
+      "translit": "amýnomai",
+      "pronunciation": "am-oo'-nom-ahee",
+      "translated": true
+    },
+    "G293": {
+      "definitions_cz": "(rybářská) síť (jako vržená\n o rybách)",
+      "translit": "amphíblēstron",
+      "pronunciation": "am-fib'-lace-tron",
+      "translated": true
+    },
+    "G294": {
+      "definitions_cz": "oblékat se",
+      "translit": "amphiénnymi",
+      "pronunciation": "am-fee-en'-noo-mee",
+      "translated": true
+    },
+    "G295": {
+      "definitions_cz": "město obklopené řekou;\n Amphipolis, místo v Makedonii",
+      "translit": "Amphípolis",
+      "pronunciation": "am-fip'-ol-is",
+      "translated": true
+    },
+    "G296": {
+      "definitions_cz": "rozcestí na cestě",
+      "translit": "ámphodon",
+      "pronunciation": "am'-fod-on",
+      "translated": true
+    },
+    "G297": {
+      "definitions_cz": "(v množném čísle) oba",
+      "translit": "amphóteros",
+      "pronunciation": "am-fot'-er-os",
+      "translated": true
+    },
+    "G298": {
+      "definitions_cz": "bezúhonný",
+      "translit": "amṓmētos",
+      "pronunciation": "am-o'-may-tos",
+      "translated": true
+    },
+    "G299": {
+      "definitions_cz": "neposkvrněný (doslova popř\n přeneseně)",
+      "translit": "ámōmos",
+      "pronunciation": "am'-o-mos",
+      "translated": true
+    },
+    "G300": {
+      "definitions_cz": "Amon, Izraelita",
+      "translit": "Amṓn",
+      "pronunciation": "am-one'",
+      "translated": true
     }
   }
 }
