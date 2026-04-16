@@ -23427,6 +23427,898 @@
       "translit": "idéa",
       "pronunciation": "id-eh'-ah",
       "translated": true
+    },
+    "G2398": {
+      "definitions_cz": "náležející k sobě, t. j. vlastnímu; podle\n implikace, soukromá nebo samostatná",
+      "translit": "ídios",
+      "pronunciation": "id'-ee-os",
+      "translated": true
+    },
+    "G2399": {
+      "definitions_cz": "soukromá osoba, tedy (implicitně) ignorant\n (srovnej \"idiot\")",
+      "translit": "idiṓtēs",
+      "pronunciation": "id-ee-o'-tace",
+      "translated": true
+    },
+    "G2400": {
+      "definitions_cz": "použit jako\n imperativ lo!;",
+      "translit": "idoú",
+      "pronunciation": "id-oo'",
+      "translated": true
+    },
+    "G2401": {
+      "definitions_cz": "Idumæa (tj Edom), region na východ (a jih)\n z Palestiny",
+      "translit": "Idoumaía",
+      "pronunciation": "id-oo-mah'-yah",
+      "translated": true
+    },
+    "G2402": {
+      "definitions_cz": "pocení",
+      "translit": "hidrṓs",
+      "pronunciation": "hid-roce'",
+      "translated": true
+    },
+    "G2403": {
+      "definitions_cz": "Jezabel (t. j. Jezábel), tyrská žena (už\n jako synonymum termaganta nebo falešného učitele)",
+      "translit": "Iezabḗl",
+      "pronunciation": "ee-ed-zab-ale'",
+      "translated": true
+    },
+    "G2404": {
+      "definitions_cz": "svaté město; Hierapolis, místo v Asii\n Menší",
+      "translit": "Hierápolis",
+      "pronunciation": "hee-er-ap'-ol-is",
+      "translated": true
+    },
+    "G2405": {
+      "definitions_cz": "kněžství, tedy sacerdotální funkce",
+      "translit": "hierateía",
+      "pronunciation": "hee-er-at-i'-ah",
+      "translated": true
+    },
+    "G2406": {
+      "definitions_cz": "kněžské bratrstvo, tedy sacerdotal řád\n (obrazně)",
+      "translit": "hieráteuma",
+      "pronunciation": "hee-er-at'-yoo-mah",
+      "translated": true
+    },
+    "G2407": {
+      "definitions_cz": "být knězem, t. j. vykonávat jeho\n funkcí",
+      "translit": "hierateúō",
+      "pronunciation": "hee-er-at-yoo'-o",
+      "translated": true
+    },
+    "G2408": {
+      "definitions_cz": "Hieremias (t. j. Jermijah), an\n Izraelita",
+      "translit": "Hieremías",
+      "pronunciation": "hee-er-em-ee'-as",
+      "translated": true
+    },
+    "G2409": {
+      "definitions_cz": "kněz (doslova nebo přeneseně)",
+      "translit": "hiereús",
+      "pronunciation": "hee-er-yooce'",
+      "translated": true
+    },
+    "G2410": {
+      "definitions_cz": "Jericho, místo v Palestině",
+      "translit": "Hierichṓ",
+      "pronunciation": "hee-er-ee-kho'",
+      "translated": true
+    },
+    "G2411": {
+      "definitions_cz": "posvátné místo, tedy celý areál (zatímco\n [ŘECKA:3485]",
+      "translit": "hierón",
+      "pronunciation": "hee-er-on'",
+      "translated": true
+    },
+    "G2412": {
+      "definitions_cz": "uctivý",
+      "translit": "hieroprepḗs",
+      "pronunciation": "hee-er-op-rep-ace'",
+      "translated": true
+    },
+    "G2413": {
+      "definitions_cz": "posvátný",
+      "translit": "hierós",
+      "pronunciation": "hee-er-os'",
+      "translated": true
+    },
+    "G2414": {
+      "definitions_cz": "Hierosolyma (tj Jerushalaim), hlavní město\n z Palestiny",
+      "translit": "Hierosólyma",
+      "pronunciation": "hee-er-os-ol'-oo-mah",
+      "translated": true
+    },
+    "G2415": {
+      "definitions_cz": "Hierosolymit, tedy obyvatel Hierosolymy",
+      "translit": "Hierosolymítēs",
+      "pronunciation": "hee-er-os-ol-oo-mee'-tace",
+      "translated": true
+    },
+    "G2416": {
+      "definitions_cz": "být chrámovým lupičem (obrazně)",
+      "translit": "hierosyléō",
+      "pronunciation": "hee-er-os-ool-eh'-o",
+      "translated": true
+    },
+    "G2417": {
+      "definitions_cz": "ničitel chrámů",
+      "translit": "hierósylos",
+      "pronunciation": "hee-er-os'-oo-los",
+      "translated": true
+    },
+    "G2418": {
+      "definitions_cz": "být chrámovým pracovníkem,\n tj. sloužit jako kněz (obrazně)",
+      "translit": "hierourgéō",
+      "pronunciation": "hee-er-oorg-eh'-o",
+      "translated": true
+    },
+    "G2419": {
+      "definitions_cz": "Hierusalem (t. j. Jerushalem), hlavní město\n Palestina",
+      "translit": "Hierousalḗm",
+      "pronunciation": "hee-er-oo-sal-ame'",
+      "translated": true
+    },
+    "G2420": {
+      "definitions_cz": "posvátnost, tedy (implicitně) kněžská\n kancelář",
+      "translit": "hierōsýnē",
+      "pronunciation": "hee-er-o-soo'-nay",
+      "translated": true
+    },
+    "G2421": {
+      "definitions_cz": "Jessæ (tj. Jishai), Izraelita",
+      "translit": "Iessaí",
+      "pronunciation": "es-es-sah'-ee",
+      "translated": true
+    },
+    "G2422": {
+      "definitions_cz": "Jephthaë (t. j. Jiphtach), an\n Izraelita",
+      "translit": "Iephtháe",
+      "pronunciation": "ee-ef-thah'-eh",
+      "translated": true
+    },
+    "G2423": {
+      "definitions_cz": "Jechonias (t. j. Jekonjah), an\n Izraelita",
+      "translit": "Iechonías",
+      "pronunciation": "ee-ekh-on-ee'-as",
+      "translated": true
+    },
+    "G2424": {
+      "definitions_cz": "Ježíš (tj. Jehošua), jméno našeho Pána\n a další dva (tři) Izraelité",
+      "translit": "Iēsoûs",
+      "pronunciation": "ee-ay-sooce'",
+      "translated": true
+    },
+    "G2425": {
+      "definitions_cz": "kompetentní\n (jako by přicházel v sezóně), tj. dostatek (v množství) nebo fit (v\n postava)",
+      "translit": "hikanós",
+      "pronunciation": "hik-an-os'",
+      "translated": true
+    },
+    "G2426": {
+      "definitions_cz": "schopnost",
+      "translit": "hikanótēs",
+      "pronunciation": "hik-an-ot'-ace",
+      "translated": true
+    },
+    "G2427": {
+      "definitions_cz": "umožnit, tj. kvalifikovat",
+      "translit": "hikanóō",
+      "pronunciation": "hik-an-o'-o",
+      "translated": true
+    },
+    "G2428": {
+      "definitions_cz": "smlouva",
+      "translit": "hiketēría",
+      "pronunciation": "hik-et-ay-ree'-ah",
+      "translated": true
+    },
+    "G2429": {
+      "definitions_cz": "vlhkost",
+      "translit": "hikmás",
+      "pronunciation": "hik-mas'",
+      "translated": true
+    },
+    "G2430": {
+      "definitions_cz": "obrazový; Iconium, místo v Asii\n Menší",
+      "translit": "Ikónion",
+      "pronunciation": "ee-kon'-ee-on",
+      "translated": true
+    },
+    "G2431": {
+      "definitions_cz": "příznivé nebo veselé (\"veselé\"), tedy pohotové\n nebo ochotný",
+      "translit": "hilarós",
+      "pronunciation": "hil-ar-os'",
+      "translated": true
+    },
+    "G2432": {
+      "definitions_cz": "ochota",
+      "translit": "hilarótēs",
+      "pronunciation": "hil-ar-ot'-ace",
+      "translated": true
+    },
+    "G2433": {
+      "definitions_cz": "domluvit se, tj. (přechodně)\n odčinit (hřích) nebo (nepřechodně) být příznivý",
+      "translit": "hiláskomai",
+      "pronunciation": "hil-as'-kom-ahee",
+      "translated": true
+    },
+    "G2434": {
+      "definitions_cz": "smíření, tj. (konkrétně) expiator",
+      "translit": "hilasmós",
+      "pronunciation": "hil-as-mos'",
+      "translated": true
+    },
+    "G2435": {
+      "definitions_cz": "expiator (místo nebo věc), tzn.\n (konkrétně) oběť smíření, nebo (zvláště) víko archy (v\n chrám)",
+      "translit": "hilastḗrion",
+      "pronunciation": "hil-as-tay'-ree-on",
+      "translated": true
+    },
+    "G2436": {
+      "definitions_cz": "veselý (jako přitažlivý), tzn.\n příznivý; adverbiálně (hebraismem) Bůh buď milostivý!, tj. (v\n odvrácení nějaké pohromy) dalece to bude",
+      "translit": "híleōs",
+      "pronunciation": "hil'-eh-oce",
+      "translated": true
+    },
+    "G2437": {
+      "definitions_cz": "(ten)\n Illyrican (břeh), t. j. (jako název sám) Illyricum, kraj\n Evropě",
+      "translit": "Illyrikón",
+      "pronunciation": "il-loo-ree-kon'",
+      "translated": true
+    },
+    "G2438": {
+      "definitions_cz": "pásek, tj. (zvláště) kravata (a\n sandál) nebo řasa (metla)",
+      "translit": "himás",
+      "pronunciation": "hee-mas'",
+      "translated": true
+    },
+    "G2439": {
+      "definitions_cz": "oblékat se",
+      "translit": "himatízō",
+      "pronunciation": "him-at-id'-zo",
+      "translated": true
+    },
+    "G2440": {
+      "definitions_cz": "šaty (vnitřní\n nebo vnější)",
+      "translit": "himátion",
+      "pronunciation": "him-at'-ee-on",
+      "translated": true
+    },
+    "G2441": {
+      "definitions_cz": "oblečení",
+      "translit": "himatismós",
+      "pronunciation": "him-at-is-mos'",
+      "translated": true
+    },
+    "G2442": {
+      "definitions_cz": "nejisté afinity); dlouho\n pro",
+      "translit": "himeíromai",
+      "pronunciation": "him-i'-rom-ahee",
+      "translated": true
+    },
+    "G2443": {
+      "definitions_cz": "porovnat [ŘECKO:3588]",
+      "translit": "hína",
+      "pronunciation": "hin'-ah",
+      "translated": true
+    },
+    "G2444": {
+      "definitions_cz": "z jakého důvodu?, tedy proč?",
+      "translit": "hinatí",
+      "pronunciation": "hin-at-ee'",
+      "translated": true
+    },
+    "G2445": {
+      "definitions_cz": "Joppe (t. j. Japho), místo v\n Palestina",
+      "translit": "Ióppē",
+      "pronunciation": "ee-op'-pay",
+      "translated": true
+    },
+    "G2446": {
+      "definitions_cz": "Jordanes (t. j. Jarden), řeka o\n Palestina",
+      "translit": "Iordánēs",
+      "pronunciation": "ee-or-dan'-ace",
+      "translated": true
+    },
+    "G2447": {
+      "definitions_cz": "rez (jako by emitoval\n kovy); také jed (vyzařovaný hady)",
+      "translit": "iós",
+      "pronunciation": "ee-os'",
+      "translated": true
+    },
+    "G2448": {
+      "definitions_cz": "Juda (tj. Jehuda nebo\n Juttah), část (nebo místo v) Palestině",
+      "translit": "Ioudá",
+      "pronunciation": "ee-oo-dah'",
+      "translated": true
+    },
+    "G2449": {
+      "definitions_cz": "judská země (tj. Judea),\n oblast Palestiny",
+      "translit": "Ioudaía",
+      "pronunciation": "ee-oo-dah'-yah",
+      "translated": true
+    },
+    "G2450": {
+      "definitions_cz": "stát se Judaeanem, tedy „judaizovat“",
+      "translit": "Ioudaḯzō",
+      "pronunciation": "ee-oo-dah-id'-zo",
+      "translated": true
+    },
+    "G2451": {
+      "definitions_cz": "Judaic, tedy podobající se Judaeanovi",
+      "translit": "Ioudaïkós",
+      "pronunciation": "ee-oo-dah-ee-kos'",
+      "translated": true
+    },
+    "G2452": {
+      "definitions_cz": "Židovsky nebo způsobem připomínajícím juďan",
+      "translit": "Ioudaïkōs",
+      "pronunciation": "ee-oo-dah-ee-koce'",
+      "translated": true
+    },
+    "G2453": {
+      "definitions_cz": "Judæan, t. j. sounáležitost\n do Jehudy",
+      "translit": "Ioudaîos",
+      "pronunciation": "ee-oo-dah'-yos",
+      "translated": true
+    },
+    "G2454": {
+      "definitions_cz": "„judaismus“, tedy židovská víra a zvyklosti",
+      "translit": "Ioudaïsmós",
+      "pronunciation": "ee-oo-dah-is-mos'",
+      "translated": true
+    },
+    "G2455": {
+      "definitions_cz": "Jidáš (t. j. Jehuda), jméno deseti\n Izraelité; také o potomstvu jednoho z nich a jeho\n regionu",
+      "translit": "Ioúdas",
+      "pronunciation": "ee-oo-das'",
+      "translated": true
+    },
+    "G2456": {
+      "definitions_cz": "Julia, křesťanka",
+      "translit": "Ioulía",
+      "pronunciation": "ee-oo-lee'-ah",
+      "translated": true
+    },
+    "G2457": {
+      "definitions_cz": "Julius, setník",
+      "translit": "Ioúlios",
+      "pronunciation": "ee-oo'-lee-os",
+      "translated": true
+    },
+    "G2458": {
+      "definitions_cz": "Junias, křesťan",
+      "translit": "Iouniâs",
+      "pronunciation": "ee-oo-nee'-as",
+      "translated": true
+    },
+    "G2459": {
+      "definitions_cz": "Justus, jméno tří\n Christian",
+      "translit": "Ioûstos",
+      "pronunciation": "ee-ooce'-tos",
+      "translated": true
+    },
+    "G2460": {
+      "definitions_cz": "jezdec, t. j. příslušník jezdeckého sboru",
+      "translit": "hippeús",
+      "pronunciation": "hip-yooce'",
+      "translated": true
+    },
+    "G2461": {
+      "definitions_cz": "jízdní síly",
+      "translit": "hippikón",
+      "pronunciation": "hip-pee-kon'",
+      "translated": true
+    },
+    "G2462": {
+      "definitions_cz": "koně",
+      "translit": "híppos",
+      "pronunciation": "hip'-pos",
+      "translated": true
+    },
+    "G2463": {
+      "definitions_cz": "duha (\"duhovka\")",
+      "translit": "îris",
+      "pronunciation": "ee'-ris",
+      "translated": true
+    },
+    "G2464": {
+      "definitions_cz": "Isaac (tj. Jitschak), syn\n Abraham",
+      "translit": "Isaák",
+      "pronunciation": "ee-sah-ak'",
+      "translated": true
+    },
+    "G2465": {
+      "definitions_cz": "jako anděl, t. j. andělský",
+      "translit": "isángelos",
+      "pronunciation": "ee-sang'-el-los",
+      "translated": true
+    },
+    "G2466": {
+      "definitions_cz": "Isachar (tj. Jissaskar), syn Jákobův\n (obrazně jeho potomek)",
+      "translit": "Isachár",
+      "pronunciation": "ee-sakh-ar'",
+      "translated": true
+    },
+    "G2467": {
+      "definitions_cz": "do\n vědět",
+      "translit": "ísēmi",
+      "pronunciation": "is'-ay-mee",
+      "translated": true
+    },
+    "G2468": {
+      "definitions_cz": "buď ty",
+      "translit": "ísthi",
+      "pronunciation": "is'-thee",
+      "translated": true
+    },
+    "G2469": {
+      "definitions_cz": "obyvatel Keriothu;\n Iškariotský (tj. keriotský), epiteton Jidáše\n zrádce",
+      "translit": "Iskariṓtēs",
+      "pronunciation": "is-kar-ee-o'-tace",
+      "translated": true
+    },
+    "G2470": {
+      "definitions_cz": "podobný (v množství\n a laskavý)",
+      "translit": "ísos",
+      "pronunciation": "ee'-sos",
+      "translated": true
+    },
+    "G2471": {
+      "definitions_cz": "podobnost (ve stavu nebo poměru); implicitně,\n vlastní kapitál",
+      "translit": "isótēs",
+      "pronunciation": "ee-sot'-ace",
+      "translated": true
+    },
+    "G2472": {
+      "definitions_cz": "stejné hodnoty nebo cti",
+      "translit": "isótimos",
+      "pronunciation": "ee-sot'-ee-mos",
+      "translated": true
+    },
+    "G2473": {
+      "definitions_cz": "podobného ducha",
+      "translit": "isópsychos",
+      "pronunciation": "ee-sop'-soo-khos",
+      "translated": true
+    },
+    "G2474": {
+      "definitions_cz": "Izrael (tj Jisrael), přijaté jméno\n Jacob, včetně jeho potomků (doslova nebo obrazně)",
+      "translit": "Israḗl",
+      "pronunciation": "is-rah-ale'",
+      "translated": true
+    },
+    "G2475": {
+      "definitions_cz": "„Izraelita“, tedy potomek Izraele (doslova nebo\n přeneseně)",
+      "translit": "Israēlítēs",
+      "pronunciation": "is-rah-ale-ee'-tace",
+      "translated": true
+    },
+    "G2476": {
+      "definitions_cz": "stát (přechodně popř\n netranzitivně), používané v různých aplikacích (doslova popř\n přeneseně)",
+      "translit": "hístēmi",
+      "pronunciation": "his'-tay-mee",
+      "translated": true
+    },
+    "G2477": {
+      "definitions_cz": "být vědoucí (naučený), tj. (tím\n implikace) navštívit pro informace (rozhovor)",
+      "translit": "historéō",
+      "pronunciation": "his-tor-eh'-o",
+      "translated": true
+    },
+    "G2478": {
+      "definitions_cz": "násilný (doslova nebo obrazně)",
+      "translit": "ischyrós",
+      "pronunciation": "is-khoo-ros'",
+      "translated": true
+    },
+    "G2479": {
+      "definitions_cz": "porovnat ἔσχον[ŘECKO:2192]",
+      "translit": "ischýs",
+      "pronunciation": "is-khoos'",
+      "translated": true
+    },
+    "G2480": {
+      "definitions_cz": "mít (nebo vykonávat) sílu (doslova popř\n přeneseně)",
+      "translit": "ischýō",
+      "pronunciation": "is-khoo'-o",
+      "translated": true
+    },
+    "G2481": {
+      "definitions_cz": "pravděpodobně, tj",
+      "translit": "ísōs",
+      "pronunciation": "ee'-soce",
+      "translated": true
+    },
+    "G2482": {
+      "definitions_cz": "Itálie, region Evropy",
+      "translit": "Italía",
+      "pronunciation": "ee-tal-ee'-ah",
+      "translated": true
+    },
+    "G2483": {
+      "definitions_cz": "Italic, tedy patřící Italii",
+      "translit": "Italikós",
+      "pronunciation": "ee-tal-ee-kos'",
+      "translated": true
+    },
+    "G2484": {
+      "definitions_cz": "Ituræa (t. j. Jetur), kraj\n Palestina",
+      "translit": "Itouraḯa",
+      "pronunciation": "ee-too-rah'-yah",
+      "translated": true
+    },
+    "G2485": {
+      "definitions_cz": "drobná ryba",
+      "translit": "ichthýdion",
+      "pronunciation": "ikh-thoo'-dee-on",
+      "translated": true
+    },
+    "G2486": {
+      "definitions_cz": "ryba",
+      "translit": "ichthýs",
+      "pronunciation": "ikh-thoos'",
+      "translated": true
+    },
+    "G2487": {
+      "definitions_cz": "porovnat [ŘECKO:2240]",
+      "translit": "íchnos",
+      "pronunciation": "ikh'-nos",
+      "translated": true
+    },
+    "G2488": {
+      "definitions_cz": "Joatham (tj. Jotham), an\n Izraelita",
+      "translit": "Iōátham",
+      "pronunciation": "ee-o-ath'-am",
+      "translated": true
+    },
+    "G2489": {
+      "definitions_cz": "Joanna, křesťanka",
+      "translit": "Iōánna",
+      "pronunciation": "ee-o-an'-nah",
+      "translated": true
+    },
+    "G2490": {
+      "definitions_cz": "Joannas, Izraelita",
+      "translit": "Iōannâs",
+      "pronunciation": "ee-o-an-nas'",
+      "translated": true
+    },
+    "G2491": {
+      "definitions_cz": "Joannes (t. j. Jochanan), jméno čtyř\n Izraelité",
+      "translit": "Iōánnēs",
+      "pronunciation": "ee-o-an'-nace",
+      "translated": true
+    },
+    "G2492": {
+      "definitions_cz": "Job (t. j. Ijob), patriarcha",
+      "translit": "Iṓb",
+      "pronunciation": "ee-obe'",
+      "translated": true
+    },
+    "G2493": {
+      "definitions_cz": "Joel, Izraelita",
+      "translit": "Iōḗl",
+      "pronunciation": "ee-o-ale'",
+      "translated": true
+    },
+    "G2494": {
+      "definitions_cz": "Jonan, Izraelita",
+      "translit": "Iōnán",
+      "pronunciation": "ee-o-nan'",
+      "translated": true
+    },
+    "G2495": {
+      "definitions_cz": "Jonas (t. j. Jonáš), jméno dvou\n Izraelité",
+      "translit": "Iōnâs",
+      "pronunciation": "ee-o-nas'",
+      "translated": true
+    },
+    "G2496": {
+      "definitions_cz": "Joram, Izraelita",
+      "translit": "Iōrám",
+      "pronunciation": "ee-o-ram'",
+      "translated": true
+    },
+    "G2497": {
+      "definitions_cz": "Jorim, Izraelita",
+      "translit": "Iōreím",
+      "pronunciation": "ee-o-rime'",
+      "translated": true
+    },
+    "G2498": {
+      "definitions_cz": "Josafat (t. j. Jozafat), an\n Izraelita",
+      "translit": "Iōsaphát",
+      "pronunciation": "ee-o-saf-at'",
+      "translated": true
+    },
+    "G2499": {
+      "definitions_cz": "Jose, Izraelita",
+      "translit": "Iōsḗ",
+      "pronunciation": "ee-o-say'",
+      "translated": true
+    },
+    "G2500": {
+      "definitions_cz": "Joses, jméno dvou Izraelitů",
+      "translit": "Iōsēs",
+      "pronunciation": "ee-o-sace'",
+      "translated": true
+    },
+    "G2501": {
+      "definitions_cz": "Josef, jméno sedmi\n Izraelité",
+      "translit": "Iōsḗph",
+      "pronunciation": "ee-o-safe'",
+      "translated": true
+    },
+    "G2502": {
+      "definitions_cz": "Josias (tj. Joshiah), Izraelita",
+      "translit": "Iōsías",
+      "pronunciation": "ee-o-see'-as",
+      "translated": true
+    },
+    "G2503": {
+      "definitions_cz": "\"iota\",\n název osmého písmene řecké abecedy, put\n (obrazně) za velmi malou část čehokoli",
+      "translit": "iōta",
+      "pronunciation": "ee-o'-tah",
+      "translated": true
+    },
+    "G2504": {
+      "definitions_cz": "tak i dativní případ\n  \n      κἀμοί(kam-oy')κἀμέ(kam-eh')",
+      "translit": "kagṓ",
+      "pronunciation": "kag-o'",
+      "translated": true
+    },
+    "G2505": {
+      "definitions_cz": "podle jakých věcí,\n tedy stejně",
+      "translit": "kathá",
+      "pronunciation": "kath-ah'",
+      "translated": true
+    },
+    "G2506": {
+      "definitions_cz": "demolice; přeneseně vymírání",
+      "translit": "kathaíresis",
+      "pronunciation": "kath-ah'-ee-res-is",
+      "translated": true
+    },
+    "G2507": {
+      "definitions_cz": "snížit (nebo s\n násilí) demolovat (doslova nebo obrazně)",
+      "translit": "kathairéō",
+      "pronunciation": "kath-ahee-reh'-o",
+      "translated": true
+    },
+    "G2508": {
+      "definitions_cz": "čistit, t. j. (zvláště) prořezávat; přeneseně do\n odpykat",
+      "translit": "kathaírō",
+      "pronunciation": "kath-ah'-ee-ro",
+      "translated": true
+    },
+    "G2509": {
+      "definitions_cz": "přesně jako",
+      "translit": "katháper",
+      "pronunciation": "kath-ap'-er",
+      "translated": true
+    },
+    "G2510": {
+      "definitions_cz": "chopit se",
+      "translit": "katháptō",
+      "pronunciation": "kath-ap'-to",
+      "translated": true
+    },
+    "G2511": {
+      "definitions_cz": "očistit (doslova nebo přeneseně)",
+      "translit": "katharízō",
+      "pronunciation": "kath-ar-id'-zo",
+      "translated": true
+    },
+    "G2512": {
+      "definitions_cz": "smytí, tj. (obřadně) omytí, (morálně)\n odčinění",
+      "translit": "katharismós",
+      "pronunciation": "kath-ar-is-mos'",
+      "translated": true
+    },
+    "G2513": {
+      "definitions_cz": "čistý (doslova nebo obrazně)",
+      "translit": "katharós",
+      "pronunciation": "kath-ar-os'",
+      "translated": true
+    },
+    "G2514": {
+      "definitions_cz": "čistota (obřadně)",
+      "translit": "katharótēs",
+      "pronunciation": "kath-ar-ot'-ace",
+      "translated": true
+    },
+    "G2515": {
+      "definitions_cz": "lavička (doslova popř\n přeneseně)",
+      "translit": "kathédra",
+      "pronunciation": "kath-ed'-rah",
+      "translated": true
+    },
+    "G2516": {
+      "definitions_cz": "posadit se",
+      "translit": "kathézomai",
+      "pronunciation": "kath-ed'-zom-ahee",
+      "translated": true
+    },
+    "G2517": {
+      "definitions_cz": "poté, tj. postupně; jako podstatné jméno (podle\n elipsa podstatného jména) následující osoba nebo čas",
+      "translit": "kathexēs",
+      "pronunciation": "kath-ex-ace'",
+      "translated": true
+    },
+    "G2518": {
+      "definitions_cz": "lehnout si k odpočinku, tj\n implikace) usnout (doslova nebo obrazně)",
+      "translit": "katheúdō",
+      "pronunciation": "kath-yoo'-do",
+      "translated": true
+    },
+    "G2519": {
+      "definitions_cz": "průvodce, tedy (obrazně) a\n učitel",
+      "translit": "kathēgētḗs",
+      "pronunciation": "kath-ayg-ay-tace'",
+      "translated": true
+    },
+    "G2520": {
+      "definitions_cz": "dosáhnout do, tj. (neutr přítomného aktivního\n příčestí, přeneseně jako adjektivum) stávat se",
+      "translit": "kathḗkō",
+      "pronunciation": "kath-ay'-ko",
+      "translated": true
+    },
+    "G2521": {
+      "definitions_cz": "a ἧμαι[ŘECKO:1476]",
+      "translit": "káthēmai",
+      "pronunciation": "kath'-ay-mahee",
+      "translated": true
+    },
+    "G2522": {
+      "definitions_cz": "každodenní",
+      "translit": "kathēmerinós",
+      "pronunciation": "kath-ay-mer-ee-nos'",
+      "translated": true
+    },
+    "G2523": {
+      "definitions_cz": "posadit se, tj. nastavit (obrazně\n jmenovat); netranzitivně, posadit se (sednout); obrazně řečeno usadit se\n (vznášet se, přebývat)",
+      "translit": "kathízō",
+      "pronunciation": "kath-id'-zo",
+      "translated": true
+    },
+    "G2524": {
+      "definitions_cz": "a ἵημι",
+      "translit": "kathíēmi",
+      "pronunciation": "kath-ee'-ay-mee",
+      "translated": true
+    },
+    "G2525": {
+      "definitions_cz": "umístit dolů (trvale), tj. (obrazně)\n určit, ustanovit, konvoj",
+      "translit": "kathístēmi",
+      "pronunciation": "kath-is'-tay-mee",
+      "translated": true
+    },
+    "G2526": {
+      "definitions_cz": "podle které věci, t. j. právě jako, v\n podíl jako",
+      "translit": "kathó",
+      "pronunciation": "kath-o'",
+      "translated": true
+    },
+    "G2527": {
+      "definitions_cz": "celkově, tj. úplně",
+      "translit": "kathólou",
+      "pronunciation": "kath-ol'-oo",
+      "translated": true
+    },
+    "G2529": {
+      "definitions_cz": "hledět plně, tedy (obrazně) zřetelně\n apprehend",
+      "translit": "kathoráō",
+      "pronunciation": "kath-or-ah'-o",
+      "translated": true
+    },
+    "G2530": {
+      "definitions_cz": "a [ŘEK:3739][ŘEK:5100]",
+      "translit": "kathóti",
+      "pronunciation": "kath-ot'-ee",
+      "translated": true
+    },
+    "G2531": {
+      "definitions_cz": "jen (nebo tolik), že",
+      "translit": "kathṓs",
+      "pronunciation": "kath-oce'",
+      "translated": true
+    },
+    "G2532": {
+      "definitions_cz": "a také, dokonce, tak potom, taky atd.; často používané v\n spojení (nebo složení) s jinými částicemi nebo malými slovy",
+      "translit": "kaí",
+      "pronunciation": "kahee",
+      "translated": true
+    },
+    "G2533": {
+      "definitions_cz": "dell; Kaifáš (tj. Cajepha), an\n Izraelita",
+      "translit": "Kaïáphas",
+      "pronunciation": "kah-ee-af'-as",
+      "translated": true
+    },
+    "G2534": {
+      "definitions_cz": "a přinejmenším (nebo dokonce, opravdu)",
+      "translit": "kaíge",
+      "pronunciation": "kah'-ee-gheh",
+      "translated": true
+    },
+    "G2535": {
+      "definitions_cz": "Kain, (t. j. Cajin), syn Adamův",
+      "translit": "Káïn",
+      "pronunciation": "kah'-in",
+      "translated": true
+    },
+    "G2536": {
+      "definitions_cz": "Cainan (t. j. Kenan), jméno dvou\n patriarchové",
+      "translit": "Kaïnán",
+      "pronunciation": "kah-ee-nan'",
+      "translated": true
+    },
+    "G2537": {
+      "definitions_cz": "",
+      "translated": false
+    },
+    "G2538": {
+      "definitions_cz": "obnovení (obrazně)",
+      "translit": "kainótēs",
+      "pronunciation": "kahee-not'-ace",
+      "translated": true
+    },
+    "G2539": {
+      "definitions_cz": "a skutečně, tj. přesto nebo\n nehledě na to",
+      "translit": "kaíper",
+      "pronunciation": "kah'-ee-per",
+      "translated": true
+    },
+    "G2540": {
+      "definitions_cz": "příležitost, tj. stanovený nebo správný čas",
+      "translit": "kairós",
+      "pronunciation": "kahee-ros'",
+      "translated": true
+    },
+    "G2541": {
+      "definitions_cz": "Cæsar, titul římského císaře",
+      "translit": "Kaîsar",
+      "pronunciation": "kah'-ee-sar",
+      "translated": true
+    },
+    "G2542": {
+      "definitions_cz": "Cæsaria, název dvou míst v Palestině",
+      "translit": "Kaisáreia",
+      "pronunciation": "kahee-sar'-i-a",
+      "translated": true
+    },
+    "G2543": {
+      "definitions_cz": "a přesto, tj. přesto",
+      "translit": "kaítoi",
+      "pronunciation": "kah'-ee-toy",
+      "translated": true
+    },
+    "G2544": {
+      "definitions_cz": "a přece skutečně, tj. ačkoli\n opravdu",
+      "translit": "kaítoige",
+      "pronunciation": "kah'-ee-toyg-eh",
+      "translated": true
+    },
+    "G2545": {
+      "definitions_cz": "zapálit, t. j. zapálit nebo (tím\n implikace) konzumovat",
+      "translit": "kaíō",
+      "pronunciation": "kah'-yo",
+      "translated": true
+    },
+    "G2546": {
+      "definitions_cz": "stejně tak na tom místě",
+      "translit": "kakeî",
+      "pronunciation": "kak-i'",
+      "translated": true
+    },
+    "G2547": {
+      "definitions_cz": "také z toho místa (nebo času)",
+      "translit": "kakeîthen",
+      "pronunciation": "kak-i'-then",
+      "translated": true
     }
   }
 }
