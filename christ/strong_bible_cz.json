@@ -2159,6 +2159,726 @@
     "H540": {
       "definitions_cz": "1) potvrdit, podpořit | 1a) (Aphel) | 1a1) věřit | 1a2) důvěřovat | 1a3) důvěryhodný (přijaté příčestí)",
       "translated": true
+    },
+    "H541": {
+      "definitions_cz": "1) (Hiphil) vzít pravou ruku, zahnout doprava, vybrat doprava, jít doprava, použít pravou ruku",
+      "translated": true
+    },
+    "H542": {
+      "definitions_cz": "1) mistr-dělník, umělec, člověk s pevnou rukou, řemeslník",
+      "translated": true
+    },
+    "H543": {
+      "definitions_cz": "1) opravdu, opravdu, amen, budiž",
+      "translated": true
+    },
+    "H544": {
+      "definitions_cz": "1) věrnost",
+      "translated": true
+    },
+    "H545": {
+      "definitions_cz": "1) výchova, výživa, výchova, výcvik, zaopatření (jako rodič)",
+      "translated": true
+    },
+    "H546": {
+      "definitions_cz": "1) opravdu, opravdu, opravdu",
+      "translated": true
+    },
+    "H547": {
+      "definitions_cz": "1) sloupek, podpěry dveří | 2) potvrdit, podpořit, potvrdit",
+      "translated": true
+    },
+    "H548": {
+      "definitions_cz": "1) víra, podpora, jistota, jistota | 1a) smlouvy | 1b) finanční podpory",
+      "translated": true
+    },
+    "H549": {
+      "definitions_cz": "Amana = \"podpora\" | 1) řeka tekoucí do Damašské pláně z Antilibanonu | 2) horská oblast původu řeky",
+      "translated": true
+    },
+    "H550": {
+      "definitions_cz": "Amnon = \"věrný\" | 1) nejstarší syn Davidův, násilník Tamar, zabitý Absolonem | 2) syn Šimona (z Kálebova klanu)",
+      "translated": true
+    },
+    "H551": {
+      "definitions_cz": "1) opravdu, opravdu, jistě",
+      "translated": true
+    },
+    "H552": {
+      "definitions_cz": "1) opravdu, opravdu, opravdu",
+      "translated": true
+    },
+    "H553": {
+      "definitions_cz": "1) být silný, ostražitý, odvážný, statečný, statný, smělý, pevný, tvrdý | 1a) (Qal) být silný, statečný, smělý | 1b) (Piel) posílit, zajistit (pro sebe), zatvrdit (srdce), zpevnit, zatvrdit, zajistit | 1c) (Hithpael) být odhodlaný, dát se do pozoru, posílit se, utvrdit se, vytrvat, dokázat nadřazenost | 1d) (Hiphil) projevit sílu, být silný, cítit se silný",
+      "translated": true
+    },
+    "H554": {
+      "definitions_cz": "1) silný | 2) hnědák, kropenatý, strakatý (barevný)",
+      "translated": true
+    },
+    "H555": {
+      "definitions_cz": "1) síla",
+      "translated": true
+    },
+    "H556": {
+      "definitions_cz": "1) síla",
+      "translated": true
+    },
+    "H557": {
+      "definitions_cz": "Amzi = \"moje síla\" | 1) Levita | 2) předek navráceného vyhnanství v kněžské linii",
+      "translated": true
+    },
+    "H558": {
+      "definitions_cz": "Amaziah = \"Jehova je mocný\" | 1) judský král, syn Joaš, otec Azariášův | 2) kněz z Bételu za Jeroboáma II. | 3) otec Jošaha z kmene Simeon | 4) zpěvák levitského svatostánku za Davidových dnů",
+      "translated": true
+    },
+    "H559": {
+      "definitions_cz": "1) říkat, mluvit, vyslovovat | 1a) (Qal) říci, odpovědět, říci v srdci, myslet, přikázat, slíbit, zamýšlet | 1b) (Niphal) býti řečeno, být řečeno, být volán | 1c) (Hithpael) chlubit se, hrdě jednat | 1d) (Hiphil) přiznat se, zavázat se",
+      "translated": true
+    },
+    "H560": {
+      "definitions_cz": "1) (P'al) říkat, mluvit, přikazovat, vyprávět, vztahovat se",
+      "translated": true
+    },
+    "H561": {
+      "definitions_cz": "1) promluva, řeč, slovo, rčení, slib, příkaz",
+      "translated": true
+    },
+    "H562": {
+      "definitions_cz": "1) promluva, řeč, slovo, rčení, slib, příkaz",
+      "translated": true
+    },
+    "H563": {
+      "definitions_cz": "1) jehněčí",
+      "translated": true
+    },
+    "H564": {
+      "definitions_cz": "Immer = \"řekl\" | 1) kněz za Davidovy doby | 2) kněz za Jeremiášových časů | 3) otec kněze Sádoka | 4) předek kněze",
+      "translated": true
+    },
+    "H565": {
+      "definitions_cz": "1) promluva, řeč, slovo | 1a) Slovo Boží, Tóra",
+      "translated": true
+    },
+    "H566": {
+      "definitions_cz": "Imri = \"výmluvný\" | 1) muž z Judy | 2) předek jednoho z Nehemiášových pomocníků",
+      "translated": true
+    },
+    "H567": {
+      "definitions_cz": "Amorite = \"říkač\" | 1) jeden z národů východního Kanaánu a za Jordánskem, vyvlastněný izraelskou invazí z Egypta",
+      "translated": true
+    },
+    "H568": {
+      "definitions_cz": "Amariah = \"Jehova mluví\" nebo \"Jah(u) slíbil\" | 1) Zadokův děda | 2) syn vrchního kněze v Šalomounově době | 3) velekněz za Jozafata | 4) Chizkijášův syn, pradědeček Sofonjášův | 5) Levita za Ezrovy doby | 6) Levita za Ezechiáše | 7) kněz v době Nehemiáše",
+      "translated": true
+    },
+    "H569": {
+      "definitions_cz": "Amraphel = \"říkající temnoty: pád toho, kdo říká\" | 1) král Shinar (Babylon) (snad Hammurabi c 2100 př.nl)",
+      "translated": true
+    },
+    "H570": {
+      "definitions_cz": "1) včera, včera v noci | 2) nedávno (obr.)",
+      "translated": true
+    },
+    "H571": {
+      "definitions_cz": "n f | 1) pevnost, věrnost, pravda | 1a) jistota, spolehlivost | 1b) stabilita, kontinuita | 1c) věrnost, spolehlivost | 1d) pravda | 1d1) jak bylo řečeno | 1d2) svědectví a rozsudku | 1d3) božského poučení | 1d4) pravda jako soubor etických nebo náboženských znalostí | 1d5) pravá nauka | adv | 2) po pravdě, opravdu",
+      "translated": true
+    },
+    "H572": {
+      "definitions_cz": "1) pytel, flexibilní nádoba (na obilí) | 2) (TWOT) rozprostřeno",
+      "translated": true
+    },
+    "H573": {
+      "definitions_cz": "Amittai = \"moje pravda\" | 1) otec proroka Jonáše",
+      "translated": true
+    },
+    "H574": {
+      "definitions_cz": "1) hrozné",
+      "translated": true
+    },
+    "H575": {
+      "definitions_cz": "1) kde?, kde? (místa) | 2) kdy?, do kdy?, jak dlouho? (času)",
+      "translated": true
+    },
+    "H576": {
+      "definitions_cz": "1) I (první os. zp. - obvykle se používá pro zdůraznění)",
+      "translated": true
+    },
+    "H577": {
+      "definitions_cz": "1) a teď! Prosíme vás, oh nyní!, modlete se nyní! (příčestí prosby, za kterým obvykle následuje rozkazovací způsob slovesa)",
+      "translated": true
+    },
+    "H578": {
+      "definitions_cz": "1) (Qal) truchlit",
+      "translated": true
+    },
+    "H579": {
+      "definitions_cz": "1) setkat se, setkat se, přiblížit se, být příhodný | 1a) (Piel) umožnit setkání, způsobit setkání | 1b) (Pual) k odeslání, mít možnost se setkat | 1c) (Hithpael) hledat příležitost (hádku), přimět se k setkání",
+      "translated": true
+    },
+    "H580": {
+      "definitions_cz": "1) my (první os. pl. -obvykle se používá pro zdůraznění)",
+      "translated": true
+    },
+    "H581": {
+      "definitions_cz": "1) tito, ti, oni",
+      "translated": true
+    },
+    "H582": {
+      "definitions_cz": "1) člověk, smrtelník, člověk, lidstvo | 1a) jednotlivce | 1b) muži (kolektiv) | 1c) člověk, lidstvo",
+      "translated": true
+    },
+    "H583": {
+      "definitions_cz": "Enos = \"člověk\" | 1) syn Setha",
+      "translated": true
+    },
+    "H584": {
+      "definitions_cz": "1) (Niphal) povzdech, sténání (v bolesti nebo žalu), lapání po dechu | 1a) sténání (skotu)",
+      "translated": true
+    },
+    "H585": {
+      "definitions_cz": "1) vzdychání, sténání (vyjádření smutku nebo fyzického utrpení)",
+      "translated": true
+    },
+    "H586": {
+      "definitions_cz": "1) my (první os. pl.)",
+      "translated": true
+    },
+    "H587": {
+      "definitions_cz": "1) my (první os. pl. -obvykle se používá pro zdůraznění)",
+      "translated": true
+    },
+    "H588": {
+      "definitions_cz": "Anaharath = \"sténání strachu\" | 1) (BDB) město v Naftali | 2) (CLBL) město v Issacharu",
+      "translated": true
+    },
+    "H589": {
+      "definitions_cz": "1) I (první os. zp. - obvykle se používá pro zdůraznění)",
+      "translated": true
+    },
+    "H590": {
+      "definitions_cz": "1) flotila, lodě",
+      "translated": true
+    },
+    "H591": {
+      "definitions_cz": "1) loď | 1a) lodníci, námořníci",
+      "translated": true
+    },
+    "H592": {
+      "definitions_cz": "1) smutek, nářek",
+      "translated": true
+    },
+    "H593": {
+      "definitions_cz": "Aniam = \"Já jsem lid\" nebo \"nářek lidí\" | 1) muž z Manasse",
+      "translated": true
+    },
+    "H594": {
+      "definitions_cz": "1) olovnice, olovnice, závaží olova",
+      "translated": true
+    },
+    "H595": {
+      "definitions_cz": "1) Já (zpívám první os.)",
+      "translated": true
+    },
+    "H596": {
+      "definitions_cz": "1) (Hithpael) stěžovat si, reptat",
+      "translated": true
+    },
+    "H597": {
+      "definitions_cz": "1) (Qal) nutit, omezovat",
+      "translated": true
+    },
+    "H598": {
+      "definitions_cz": "1) (P'al) utlačovat, nutit, omezovat",
+      "translated": true
+    },
+    "H599": {
+      "definitions_cz": "1) zlobit se, být nespokojený, těžce dýchat | 1a) (Qal) hněvat se (na Boha) | 1b) (Hithpael) být naštvaný (vždy Boží)",
+      "translated": true
+    },
+    "H600": {
+      "definitions_cz": "1) obličej, nos",
+      "translated": true
+    },
+    "H601": {
+      "definitions_cz": "1) nečistý pták | 1a) snad volavka",
+      "translated": true
+    },
+    "H602": {
+      "definitions_cz": "1) plakat, sténat | 1a) (Qal) plakat, naříkat | 1b) (Niphal), aby naříkal",
+      "translated": true
+    },
+    "H603": {
+      "definitions_cz": "1) pláč, sténání, nářek",
+      "translated": true
+    },
+    "H604": {
+      "definitions_cz": "1) nečisté zvíře, fretka, rejsek, gekon | 1a) snad vyhynulý živočich, přesný význam neznámý",
+      "translated": true
+    },
+    "H605": {
+      "definitions_cz": "1) být slabý, nemocný, křehký | 1a) (Qal) | 1a1) být nevyléčitelný | 1a2) být nemocný | 1a3) zoufalý, nevyléčitelný, zoufale zlý, žalostný, velmi nemocný (milé příčestí) (metaf.) | 1b) (Niphal) být nemocný",
+      "translated": true
+    },
+    "H606": {
+      "definitions_cz": "1) člověk, lidská bytost | 2) lidstvo (kolektivní)",
+      "translated": true
+    },
+    "H607": {
+      "definitions_cz": "1) ty, ty (druhá os. zpívat.)",
+      "translated": true
+    },
+    "H608": {
+      "definitions_cz": "1) ty, ty (druhá os. pl.)",
+      "translated": true
+    },
+    "H609": {
+      "definitions_cz": "Asa = \"léčitel: zranitelný (?)\" | 1) judský král, syn Abijamův, otec Jozafatův | 2) Levita",
+      "translated": true
+    },
+    "H610": {
+      "definitions_cz": "1) baňka, malá nádoba na olej",
+      "translated": true
+    },
+    "H611": {
+      "definitions_cz": "1) zlo, neplecha, škoda, ublížení",
+      "translated": true
+    },
+    "H612": {
+      "definitions_cz": "1) pásmo, vazba | 2) dům pout, vězení (obrazně)",
+      "translated": true
+    },
+    "H613": {
+      "definitions_cz": "1) kapela, vazba, vězení",
+      "translated": true
+    },
+    "H614": {
+      "definitions_cz": "1) sběr, sklizeň",
+      "translated": true
+    },
+    "H615": {
+      "definitions_cz": "1) vězeň, zajatec, nevolník",
+      "translated": true
+    },
+    "H616": {
+      "definitions_cz": "1) vězni (kolektivní) | 2) (CLBL) vězeň, zajatec",
+      "translated": true
+    },
+    "H617": {
+      "definitions_cz": "Assir = \"vězeň\" | 1) syn Koracha | 2) syn Ebiasafův | 3) syn Jekonjášův",
+      "translated": true
+    },
+    "H618": {
+      "definitions_cz": "1) sklad, stodola",
+      "translated": true
+    },
+    "H619": {
+      "definitions_cz": "Asnah = \"Budu nenáviděn: ona si uložila\" | 1) chrámový otrok, který se vrátil z exilu",
+      "translated": true
+    },
+    "H620": {
+      "definitions_cz": "Asnappar nebo Osnappar = \"rohatý býk: trn zrušen\" | 1) asyrský král, který přepravil další národy do Samaří - pravděpodobně král Aššurbanipal",
+      "translated": true
+    },
+    "H621": {
+      "definitions_cz": "Asenath = \"patřící bohyni Neith\" | 1) manželka Josefa",
+      "translated": true
+    },
+    "H622": {
+      "definitions_cz": "1) shromáždit, přijmout, odstranit, shromáždit v | 1a) (Qal) | 1a1) sbírat, sbírat | 1a2) shromáždit (jednotlivce do společnosti ostatních) | 1a3) pro zvednutí zadní části | 1a4) shromáždit a odnést, odstranit, stáhnout | 1b) (Niphal) | 1b1) sestavit, shromáždit | 1b2) (průchod Qal 1a2) | 1b2a) být shromážděn ke svým otcům | 1b2b) které mají být přivezeny nebo do nich (přidružení k ostatním) | 1b3) (průchod Qal 1a4) | 1b3a) být odebrán, odstraněn, zahyne | 1c) (Piel) | 1c1) sbírat (sklízet) | 1c2) přijmout, přijmout do | 1c3) zadní kryt, zadní (subst) | 1d) (Pual) k odběru | 1e) (Hithpael) shromáždit sebe nebo sebe",
+      "translated": true
+    },
+    "H623": {
+      "definitions_cz": "Asaph = \"sběrač\" | 1) otec Ezechiášova tajemníka | 2) syn Berechiáše, hlavního levitského hudebníka za Davida | 3) perský důstojník nad královským lesem",
+      "translated": true
+    },
+    "H624": {
+      "definitions_cz": "1) co se sbírá, sklad, sklad, sklad | 2) (CLBL) práh (metonomie)",
+      "translated": true
+    },
+    "H625": {
+      "definitions_cz": "1) sběr, sběr, sklizeň",
+      "translated": true
+    },
+    "H626": {
+      "definitions_cz": "1) sběr, shromažďování",
+      "translated": true
+    },
+    "H627": {
+      "definitions_cz": "1) kolekce",
+      "translated": true
+    },
+    "H628": {
+      "definitions_cz": "1) sbírka, chátra, shromážděné množství",
+      "translated": true
+    },
+    "H629": {
+      "definitions_cz": "1) důkladně | 2) (CLBL) horlivě, pilně",
+      "translated": true
+    },
+    "H630": {
+      "definitions_cz": "Aspatha = \"shromáždění sváděni\" | 1) třetí syn Hamanův",
+      "translated": true
+    },
+    "H631": {
+      "definitions_cz": "1) svázat, svázat, uvěznit | 1a) (Qal) | 1a1) svázat, svázat | 1a2) vázat, vázat | 1a3) vázat (šňůrami) | 1a4) k obrubě (vzácné a pozdní) | 1a5) pro zahájení bitvy zaútočte | 1a6) povinnost složit přísahu (obrazně) | 1b) (Niphal) být uvězněn, vázán | 1c) (Pual) být zajat",
+      "translated": true
+    },
+    "H632": {
+      "definitions_cz": "1) dluhopis, závazek, závazek",
+      "translated": true
+    },
+    "H633": {
+      "definitions_cz": "1) interdikt, dekret, dekret o omezení",
+      "translated": true
+    },
+    "H634": {
+      "definitions_cz": "Esarhaddon = \"Ašur dal bratra\" | 1) asyrský král v sedmém století před naším letopočtem",
+      "translated": true
+    },
+    "H635": {
+      "definitions_cz": "Esther = \"hvězda\" | 1) královna Persie, hrdinka knihy Ester-dcera Abihail, sestřenice a adoptivní dcera Mordechaje z kmene Benjamin, kterou učinil královnou král Ahasver, aby nahradil rozvedenou královnu Vasti.",
+      "translated": true
+    },
+    "H636": {
+      "definitions_cz": "1) dřevo, trám, dřevo",
+      "translated": true
+    },
+    "H637": {
+      "definitions_cz": "conj (označující sčítání, esp něčeho většího) | 1) také, ano, i když, tím více | adv | 2) Navíc, opravdu",
+      "translated": true
+    },
+    "H638": {
+      "definitions_cz": "1) taky ano",
+      "translated": true
+    },
+    "H639": {
+      "definitions_cz": "1) nosní dírka, nos, obličej | 2) vztek",
+      "translated": true
+    },
+    "H640": {
+      "definitions_cz": "1) (Qal) vázat, opásat | 1a) opásat (efod) | 1b) (TWOT) efod",
+      "translated": true
+    },
+    "H641": {
+      "definitions_cz": "Ephod = \"(zvláštní) pás\" | 1) otec náčelníka Manassese",
+      "translated": true
+    },
+    "H642": {
+      "definitions_cz": "1) efod | 1a) kněžský oděv, náramenice nebo plášť, svrchní oděv | 1a1) nošený obyčejným knězem a vyrobený z bílé látky | 1a2) nošený veleknězem-dražší, tkaný ze zlatých, modrých, purpurových, šarlatových a lněných nití opatřených nárameníky a náprsním kusem z podobného materiálu, zdobený drahokamy a zlatem | 1b) kovový kryt pro modly, pokovení",
+      "translated": true
+    },
+    "H643": {
+      "definitions_cz": "1) palác",
+      "translated": true
+    },
+    "H644": {
+      "definitions_cz": "1) upéct | 1a) (Qal) | 1a1) upéct | 1a2) (subst) pekař | 1b) (Niphal) být upečen, upečen",
+      "translated": true
+    },
+    "H645": {
+      "definitions_cz": "1) tehdy, teď, takže | 1a) (kdo) pak, (co) pak (s výslechem) | 1b) pak (s imperativem-t. j. vědět tehdy) | 1c) pokud...pak (s adv)",
+      "translated": true
+    },
+    "H646": {
+      "definitions_cz": "1) efod | 1a) kněžský oděv, náramenice nebo plášť, svrchní oděv | 1a1) nošený obyčejným knězem a vyrobený z bílé látky | 1a2) nošené veleknězem – dražší, tkané ze zlata, modré, purpurové, šarlatové a lněné nitě opatřené nárameníky a náprsní částí z podobného materiálu, zdobené drahokamy a zlatem",
+      "translated": true
+    },
+    "H647": {
+      "definitions_cz": "Aphiah = \"Dám se nadechnout\" | 1) předek Saula",
+      "translated": true
+    },
+    "H648": {
+      "definitions_cz": "1) pozdní, zralé",
+      "translated": true
+    },
+    "H649": {
+      "definitions_cz": "Appaim = \"nozdry\" | 1) syn Nadabův",
+      "translated": true
+    },
+    "H650": {
+      "definitions_cz": "1) kanál | 2) rokle | 3) z dutých kostí (obr.)",
+      "translated": true
+    },
+    "H651": {
+      "definitions_cz": "1) ponurý, tmavý",
+      "translated": true
+    },
+    "H652": {
+      "definitions_cz": "1) tma, šero | 2) duchovní nevnímavost, pohroma (obr.)",
+      "translated": true
+    },
+    "H653": {
+      "definitions_cz": "1) tma, ponurost, neštěstí | 2) špatnost (obr.)",
+      "translated": true
+    },
+    "H654": {
+      "definitions_cz": "Ephlal = \"přímluvce\" | 1) potomek Phareze",
+      "translated": true
+    },
+    "H655": {
+      "definitions_cz": "1) okolnost, stav, včasnost",
+      "translated": true
+    },
+    "H656": {
+      "definitions_cz": "1) (Qal) přestat, zlomit, skončit",
+      "translated": true
+    },
+    "H657": {
+      "definitions_cz": "1) zastavení, konec, konečnost",
+      "translated": true
+    },
+    "H658": {
+      "definitions_cz": "Ephes Dammim = \"okraj krve\" | 1) místo asi 16 mil (25 km) jihozápadně od Jeruzaléma",
+      "translated": true
+    },
+    "H659": {
+      "definitions_cz": "1) bezcenný, k ničemu",
+      "translated": true
+    },
+    "H660": {
+      "definitions_cz": "1) zmije, had",
+      "translated": true
+    },
+    "H661": {
+      "definitions_cz": "1) obklopit, obsáhnout | 1a) (Qal) zahrnout",
+      "translated": true
+    },
+    "H662": {
+      "definitions_cz": "1) držet, být silný, zdržovat se, držet zpátky | 1a) (Hithpael) | 1a1) omezit se, zdržet se | 1a2) nutit, nutit se",
+      "translated": true
+    },
+    "H663": {
+      "definitions_cz": "Aphek nebo Aphik = \"ohrada\" | 1) kananejské město poblíž Jizreel | 2) město na území Asher | 3) město severovýchodně od Bejrútu v Transjordánsku",
+      "translated": true
+    },
+    "H664": {
+      "definitions_cz": "Aphekah = \"ohrazení\" | 1) město poblíž Hebronu v Judsku | 2) (BDB) možná skupina měst včetně Hebronu",
+      "translated": true
+    },
+    "H665": {
+      "definitions_cz": "1) popel | 2) (CLBL) bezcennost (obr.)",
+      "translated": true
+    },
+    "H666": {
+      "definitions_cz": "1) krytí, obvaz",
+      "translated": true
+    },
+    "H667": {
+      "definitions_cz": "1) mládě, mládě (ptáků) | 2) mladí ptáci",
+      "translated": true
+    },
+    "H668": {
+      "definitions_cz": "1) sedan, nosítka, nosítka | 2) (CLBL) vůz",
+      "translated": true
+    },
+    "H669": {
+      "definitions_cz": "Efraim = \"dvojitá hromada popela: Budu dvojnásobně plodný\" | 1) druhý syn Josefův, jím požehnán a upřednostněn před prvním synem Manassem | 2) kmen, Efraim | 3) horská země Efraim | 4) někdy používaný název pro severní království (Ozeáš nebo Izajáš) | 5) město poblíž Baal-hazor | 6) hlavní brána Jeruzaléma",
+      "translated": true
+    },
+    "H670": {
+      "definitions_cz": "Afarsit = \"původci dělení (?)\" | 1) (CLBL) neznámá kancelář | 2) (BDB) tajemníci | 3) (TWOT) snad titul úředníka",
+      "translated": true
+    },
+    "H671": {
+      "definitions_cz": "Apharsachites = \"jako původci rozdělení (?)\" Apharsathchites = \"Rozdělím podvodníky (?)\" | 1) (CLBL) neznámá kancelář | 2) (BDB) snad kancelář nebo úředník | 3) (TWOT) | 3a) lid | 3b) snad titul úředníka",
+      "translated": true
+    },
+    "H672": {
+      "definitions_cz": "Efrata nebo Efrata = \"hromada popela: místo plodnosti\" | n pr loc | 1) místo poblíž Bételu, kde zemřela a byla pohřbena Ráchel | 2) jiný název pro Betlém | n pr f | 3) manželka Caleba",
+      "translated": true
+    },
+    "H673": {
+      "definitions_cz": "Efratský = \"popelavost: plodnost\" | 1) obyvatel nebo potomek Efraima | 2) obyvatel Betléma",
+      "translated": true
+    },
+    "H674": {
+      "definitions_cz": "1) pokladna, pokladny | 2) (CLBL) příjmy",
+      "translated": true
+    },
+    "H675": {
+      "definitions_cz": "Ezbon = \"spěchám rozeznat: budu rozšíření\" | 1) syn Gad | 2) vnuk Benjamina",
+      "translated": true
+    },
+    "H676": {
+      "definitions_cz": "1) na prstu, na noze",
+      "translated": true
+    },
+    "H677": {
+      "definitions_cz": "1) na prstu, na noze",
+      "translated": true
+    },
+    "H678": {
+      "definitions_cz": "1) boční, rohové, hlavní | 2) (CLBL) šlechtici (obr.)",
+      "translated": true
+    },
+    "H679": {
+      "definitions_cz": "1) spojování, spojování (jako loket atd.)",
+      "translated": true
+    },
+    "H680": {
+      "definitions_cz": "1) odložit, zarezervovat, stáhnout, zadržet | 1a) (Qal) rezervovat, oddělit, zadržet | 1b) (Niphal) ke stažení | 1c) (Hiphil) ke stažení",
+      "translated": true
+    },
+    "H681": {
+      "definitions_cz": "n m | 1) vedle, vedle, blízko, blízkost, spojení, blízkost | subst | 2) (BDB) | 2a) konjunkce, blízkost | 2b) vedle, v blízkosti, sousedící s, ​​ze strany",
+      "translated": true
+    },
+    "H682": {
+      "definitions_cz": "Azal = \"blízkost: má vyhrazeno\" | n pr loc | 1) místo poblíž Jeruzaléma, místo v současnosti neznámé | Azel = \"rezervováno\" | n pr m (CLBL) | 2) benjamitský potomek Saula a Jonatana",
+      "translated": true
+    },
+    "H683": {
+      "definitions_cz": "Azaliah = \"Jehova (Jahve) vyhradil (oddělil)\" | 1) otec písaře Šafana",
+      "translated": true
+    },
+    "H684": {
+      "definitions_cz": "Ozem = \"Urychlím je\" | 1) starší bratr Davida | 2) potomek Judy",
+      "translated": true
+    },
+    "H685": {
+      "definitions_cz": "1) náramek, náramek, řetízek na kotník",
+      "translated": true
+    },
+    "H686": {
+      "definitions_cz": "1) uložit, uložit, položit | 1a) (Qal) skladovat, dělat pokladníka | 1b) (Niphal) ceněný",
+      "translated": true
+    },
+    "H687": {
+      "definitions_cz": "Ezer = \"poklad\" | 1) náčelník Horitů",
+      "translated": true
+    },
+    "H688": {
+      "definitions_cz": "1) ohnivá záře, jiskra | 2) (CLBL) název drahokamu-karbuncle",
+      "translated": true
+    },
+    "H689": {
+      "definitions_cz": "1) divoká koza",
+      "translated": true
+    },
+    "H690": {
+      "definitions_cz": "Ara = \"lev\" | 1) potomek Ashera",
+      "translated": true
+    },
+    "H691": {
+      "definitions_cz": "1) (CLBL) hrdina, udatný | 2) (BDB) tvar a význam pochybný | 3) (TWOT) Ariel nebo ohniště",
+      "translated": true
+    },
+    "H692": {
+      "definitions_cz": "Areli = \"lev Boží\" | 1) syn Gad | 2) z rodiny Areli (pater adj-Arelites)",
+      "translated": true
+    },
+    "H693": {
+      "definitions_cz": "1) číhat, přepadat, číhat | 1a) (Qal) | 1a1) číhat | 1a2) přepadení (příčestí jako subst) | 1b) (Piel) ambushers, liers-in-wait (pl. participium) | 1c) (Hiphil) položit zálohu",
+      "translated": true
+    },
+    "H694": {
+      "definitions_cz": "Arab = \"přepadení\" | 1) město poblíž Hebronu",
+      "translated": true
+    },
+    "H695": {
+      "definitions_cz": "1) čekatel | 2) úkryt, doupě, doupě",
+      "translated": true
+    },
+    "H696": {
+      "definitions_cz": "1) ambuscade, úkryt | 2) zrada, podvod (obr.)",
+      "translated": true
+    },
+    "H697": {
+      "definitions_cz": "1) druh saranče, sarančí roj (coll) | 2) (CLBL) | 2a) náhlé zmizení (obr.) | 2b) bezvýznamnost (obr.) | 2c) činnost (obr.)",
+      "translated": true
+    },
+    "H698": {
+      "definitions_cz": "1) lstivost, podvod, trik",
+      "translated": true
+    },
+    "H699": {
+      "definitions_cz": "1) mříž, okno, stavidlo | 2) (CLBL) komín (otvor mřížky, kudy uniká kouř)",
+      "translated": true
+    },
+    "H700": {
+      "definitions_cz": "Aruboth = \"okna\" | 1) okres označený Šalomounem pro daňové účely",
+      "translated": true
+    },
+    "H701": {
+      "definitions_cz": "Arbite = \"přepadení\" | 1) rodák z Arábie",
+      "translated": true
+    },
+    "H702": {
+      "definitions_cz": "1) čtyři",
+      "translated": true
+    },
+    "H703": {
+      "definitions_cz": "1) čtyři",
+      "translated": true
+    },
+    "H704": {
+      "definitions_cz": "Arba = \"čtvrtý\" | 1) otec Anak a největší z obrů (Anakim) | 2) viz H07153 v překladu „město Arba“",
+      "translated": true
+    },
+    "H705": {
+      "definitions_cz": "1) čtyřicet",
+      "translated": true
+    },
+    "H706": {
+      "definitions_cz": "1) čtyřnásobný",
+      "translated": true
+    },
+    "H707": {
+      "definitions_cz": "1) tkát | 1a) (Qal) | 1a1) tkát (látka) | 1a2) do copu (Samsonovy vlasy) | 1a3) tkadlec (subst.) | 1a4) intrika (obr.)",
+      "translated": true
+    },
+    "H708": {
+      "definitions_cz": "1) tkalcovský stav, člun",
+      "translated": true
+    },
+    "H709": {
+      "definitions_cz": "Argob = \"hromada hrud\" | n pr loc | 1) okres nebo oblast v Bashan | n pr m | 2) jeden z důstojníků krále Pekacha",
+      "translated": true
+    },
+    "H710": {
+      "definitions_cz": "1) fialová",
+      "translated": true
+    },
+    "H711": {
+      "definitions_cz": "1) fialová, červenofialová",
+      "translated": true
+    },
+    "H712": {
+      "definitions_cz": "1) krabice, truhla, truhla",
+      "translated": true
+    },
+    "H713": {
+      "definitions_cz": "1) fialová, červenofialová",
+      "translated": true
+    },
+    "H714": {
+      "definitions_cz": "Ard = \"podrobím\" | 1) syn Benjamina | 2) vnuk Benjamina",
+      "translated": true
+    },
+    "H715": {
+      "definitions_cz": "Ardon = \"přemožitel: uprchlík\" | 1) syn Kálebův",
+      "translated": true
+    },
+    "H716": {
+      "definitions_cz": "Ardites = \"Podrobím si\" | 1) potomci Ard",
+      "translated": true
+    },
+    "H717": {
+      "definitions_cz": "1) trhat, sbírat | 1a) (Qal) trhat (hrozny)",
+      "translated": true
+    },
+    "H718": {
+      "definitions_cz": "1) hle, hle",
+      "translated": true
+    },
+    "H719": {
+      "definitions_cz": "Arvad = \"I shall break loose\" | 1) město-ostrov poblíž Sidonu",
+      "translated": true
+    },
+    "H720": {
+      "definitions_cz": "Arod = \"podmaním si: budu se toulat\" | 1) syn Gádův",
+      "translated": true
     }
   }
 }
