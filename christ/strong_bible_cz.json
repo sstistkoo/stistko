@@ -18049,6 +18049,906 @@
       "translit": "eíēn",
       "pronunciation": "i'-ane",
       "translated": true
+    },
+    "G1499": {
+      "definitions_cz": "jestli také (nebo dokonce)",
+      "translit": "ei kaí",
+      "pronunciation": "i kahee",
+      "translated": true
+    },
+    "G1500": {
+      "definitions_cz": "nečinně, tj. bez\n důvod (nebo následek)",
+      "translit": "eikē",
+      "pronunciation": "i-kay'",
+      "translated": true
+    },
+    "G1501": {
+      "definitions_cz": "skóre",
+      "translit": "eíkosi",
+      "pronunciation": "i'-kos-ee",
+      "translated": true
+    },
+    "G1502": {
+      "definitions_cz": "správně, být slabý, t. j. vydat",
+      "translit": "eíkō",
+      "pronunciation": "i'-ko",
+      "translated": true
+    },
+    "G1503": {
+      "definitions_cz": "podobat se",
+      "translit": "eíkō",
+      "pronunciation": "i'-ko",
+      "translated": true
+    },
+    "G1504": {
+      "definitions_cz": "podobizna, tedy (doslova) socha, profil, popř\n (obrazně) reprezentace, podobnost",
+      "translit": "eikṓn",
+      "pronunciation": "i-kone'",
+      "translated": true
+    },
+    "G1505": {
+      "definitions_cz": "čirost, tj. (implicitně) čistota\n (obrazně)",
+      "translit": "eilikríneia",
+      "pronunciation": "i-lik-ree'-ni-ah",
+      "translated": true
+    },
+    "G1506": {
+      "definitions_cz": "posuzováno podle slunečního záření, tedy testováno\n jako pravý (obrazně)",
+      "translit": "eilikrinḗs",
+      "pronunciation": "i-lik-ree-nace'",
+      "translated": true
+    },
+    "G1507": {
+      "definitions_cz": "svinout nebo zabalit",
+      "translit": "heilíssō",
+      "pronunciation": "hi-lis'-so",
+      "translated": true
+    },
+    "G1508": {
+      "definitions_cz": "pokud ne",
+      "translit": "ei mḗ",
+      "pronunciation": "i may",
+      "translated": true
+    },
+    "G1509": {
+      "definitions_cz": "ne-li poněkud",
+      "translit": "ei mḗ ti",
+      "pronunciation": "i may tee",
+      "translated": true
+    },
+    "G1510": {
+      "definitions_cz": "Existuji (používá se pouze při důrazu)",
+      "translit": "eimí",
+      "pronunciation": "i-mee'",
+      "translated": true
+    },
+    "G1511": {
+      "definitions_cz": "existovat",
+      "translit": "eînai",
+      "pronunciation": "i'-nahee",
+      "translated": true
+    },
+    "G1512": {
+      "definitions_cz": "pokud možná",
+      "translit": "eí per",
+      "pronunciation": "i per",
+      "translated": true
+    },
+    "G1513": {
+      "definitions_cz": "jestli nějak",
+      "translit": "eí pōs",
+      "pronunciation": "i poce",
+      "translated": true
+    },
+    "G1514": {
+      "definitions_cz": "být (jednat) mírumilovně",
+      "translit": "eirēneúō",
+      "pronunciation": "i-rane-yoo'-o",
+      "translated": true
+    },
+    "G1515": {
+      "definitions_cz": "mír (doslova popř\n přeneseně); implicitně prosperita",
+      "translit": "eirḗnē",
+      "pronunciation": "i-ray'-nay",
+      "translated": true
+    },
+    "G1516": {
+      "definitions_cz": "Pacifik; implicitně spásný",
+      "translit": "eirēnikós",
+      "pronunciation": "i-ray-nee-kos'",
+      "translated": true
+    },
+    "G1517": {
+      "definitions_cz": "být mírotvorcem, tedy (obrazně) k\n harmonizovat",
+      "translit": "eirēnopoiéō",
+      "pronunciation": "i-ray-nop-oy-eh'-o",
+      "translated": true
+    },
+    "G1518": {
+      "definitions_cz": "uklidňující, tj. (subjektivně)\n mírumilovný",
+      "translit": "eirēnopoiós",
+      "pronunciation": "i-ray-nop-oy-os'",
+      "translated": true
+    },
+    "G1519": {
+      "definitions_cz": "do nebo do (s uvedením dosaženého bodu nebo\n zadáno), místa, času nebo (obrazně) účelu (výsledku atd.);\n i v příslovečných spojeních",
+      "translit": "eis",
+      "pronunciation": "ice",
+      "translated": true
+    },
+    "G1520": {
+      "definitions_cz": "jeden",
+      "translit": "heîs",
+      "pronunciation": "hice",
+      "translated": true
+    },
+    "G1521": {
+      "definitions_cz": "představit (doslovně nebo obrazně)",
+      "translit": "eiságō",
+      "pronunciation": "ice-ag'-o",
+      "translated": true
+    },
+    "G1522": {
+      "definitions_cz": "poslouchat",
+      "translit": "eisakoúō",
+      "pronunciation": "ice-ak-oo'-o",
+      "translated": true
+    },
+    "G1523": {
+      "definitions_cz": "vzít do své přízně",
+      "translit": "eisdéchomai",
+      "pronunciation": "ice-dekh'-om-ahee",
+      "translated": true
+    },
+    "G1524": {
+      "definitions_cz": "vstoupit",
+      "translit": "eíseimi",
+      "pronunciation": "ice'-i-mee",
+      "translated": true
+    },
+    "G1525": {
+      "definitions_cz": "vstoupit (doslova nebo obrazně)",
+      "translit": "eisérchomai",
+      "pronunciation": "ice-er'-khom-ahee",
+      "translated": true
+    },
+    "G1526": {
+      "definitions_cz": "jsou",
+      "translit": "eisí",
+      "pronunciation": "i-see'",
+      "translated": true
+    },
+    "G1527": {
+      "definitions_cz": "několikrát",
+      "translit": "heîs kath’ heîs",
+      "pronunciation": "hice kath hice",
+      "translated": true
+    },
+    "G1528": {
+      "definitions_cz": "pozvat dovnitř",
+      "translit": "eiskaléō",
+      "pronunciation": "ice-kal-eh'-o",
+      "translated": true
+    },
+    "G1529": {
+      "definitions_cz": "vchod (doslova nebo přeneseně)",
+      "translit": "eísodos",
+      "pronunciation": "ice'-od-os",
+      "translated": true
+    },
+    "G1530": {
+      "definitions_cz": "spěchat dovnitř",
+      "translit": "eispēdáō",
+      "pronunciation": "ice-pay-dah'-o",
+      "translated": true
+    },
+    "G1531": {
+      "definitions_cz": "vstoupit (doslova nebo obrazně)",
+      "translit": "eisporeúomai",
+      "pronunciation": "ice-por-yoo'-om-ahee",
+      "translated": true
+    },
+    "G1532": {
+      "definitions_cz": "spěchat dovnitř",
+      "translit": "eistréchō",
+      "pronunciation": "ice-trekh'-o",
+      "translated": true
+    },
+    "G1533": {
+      "definitions_cz": "nést dovnitř (doslova nebo\n přeneseně)",
+      "translit": "eisphérō",
+      "pronunciation": "ice-fer'-o",
+      "translated": true
+    },
+    "G1534": {
+      "definitions_cz": "částice posloupnosti (v čase nebo logické\n výčet), pak navíc",
+      "translit": "eîta",
+      "pronunciation": "i'-tah",
+      "translated": true
+    },
+    "G1535": {
+      "definitions_cz": "jestli taky",
+      "translit": "eíte",
+      "pronunciation": "i'-teh",
+      "translated": true
+    },
+    "G1536": {
+      "definitions_cz": "pokud nějaké",
+      "translit": "eí tis",
+      "pronunciation": "i tis",
+      "translated": true
+    },
+    "G1537": {
+      "definitions_cz": "doslovný nebo\n obrazný; přímý nebo vzdálený)",
+      "translit": "ek",
+      "pronunciation": "ek",
+      "translated": true
+    },
+    "G1538": {
+      "definitions_cz": "každý nebo každý",
+      "translit": "hékastos",
+      "pronunciation": "hek'-as-tos",
+      "translated": true
+    },
+    "G1539": {
+      "definitions_cz": "v každé době",
+      "translit": "hekástote",
+      "pronunciation": "hek-as'-tot-eh",
+      "translated": true
+    },
+    "G1540": {
+      "definitions_cz": "sto",
+      "translit": "hekatón",
+      "pronunciation": "hek-at-on'",
+      "translated": true
+    },
+    "G1541": {
+      "definitions_cz": "stoletý",
+      "translit": "hekatontaétēs",
+      "pronunciation": "hek-at-on-tah-et'-ace",
+      "translated": true
+    },
+    "G1542": {
+      "definitions_cz": "sto\n časy",
+      "translit": "hekatontaplasíōn",
+      "pronunciation": "hek-at-on-ta-plah-sec'-own",
+      "translated": true
+    },
+    "G1543": {
+      "definitions_cz": "kapitán sta mužů",
+      "translit": "hekatontárchēs",
+      "pronunciation": "hek-at-on-tar'-khace",
+      "translated": true
+    },
+    "G1544": {
+      "definitions_cz": "vyhodit (doslova nebo obrazně)",
+      "translit": "ekbállō",
+      "pronunciation": "ek-bal'-lo",
+      "translated": true
+    },
+    "G1545": {
+      "definitions_cz": "an\n odchod (doslova nebo obrazně)",
+      "translit": "ékbasis",
+      "pronunciation": "ek'-bas-is",
+      "translated": true
+    },
+    "G1546": {
+      "definitions_cz": "vyhození, tj. (zejména) přehození přes palubu\n nákladu",
+      "translit": "ekbolḗ",
+      "pronunciation": "ek-bol-ay'",
+      "translated": true
+    },
+    "G1547": {
+      "definitions_cz": "oženit se a\n dcera",
+      "translit": "ekgamízō",
+      "pronunciation": "ek-gam-id'-zo",
+      "translated": true
+    },
+    "G1548": {
+      "definitions_cz": "stejně jako 1547",
+      "translit": "ekgamískō",
+      "pronunciation": "ek-gam-is'-ko",
+      "translated": true
+    },
+    "G1549": {
+      "definitions_cz": "potomek,\n tedy (speciálně) vnouče",
+      "translit": "ékgonon",
+      "pronunciation": "ek'-gon-on",
+      "translated": true
+    },
+    "G1550": {
+      "definitions_cz": "utratit (zcela), tj. (obrazně)\n výfuk",
+      "translit": "ekdapanáō",
+      "pronunciation": "ek-dap-an-ah'-o",
+      "translated": true
+    },
+    "G1551": {
+      "definitions_cz": "přijmout z nějakého zdroje, tj. (implicitně)\n čekat",
+      "translit": "ekdéchomai",
+      "pronunciation": "ek-dekh'-om-ahee",
+      "translated": true
+    },
+    "G1552": {
+      "definitions_cz": "zcela evidentní",
+      "translit": "ékdēlos",
+      "pronunciation": "ek'-day-los",
+      "translated": true
+    },
+    "G1553": {
+      "definitions_cz": "emigrovat, tj. (obrazně)\n opustit nebo odejít",
+      "translit": "ekdēméō",
+      "pronunciation": "ek-day-meh'-o",
+      "translated": true
+    },
+    "G1554": {
+      "definitions_cz": "vydávat, tj. (zvláště) pronajímat",
+      "translit": "ekdídōmi",
+      "pronunciation": "ek-did-o'-mee",
+      "translated": true
+    },
+    "G1555": {
+      "definitions_cz": "vyprávět skrz\n zcela",
+      "translit": "ekdiēgéomai",
+      "pronunciation": "ek-dee-ayg-eh'-om-ahee",
+      "translated": true
+    },
+    "G1556": {
+      "definitions_cz": "ospravedlnit, odplatit, potrestat",
+      "translit": "ekdikéō",
+      "pronunciation": "ek-dik-eh'-o",
+      "translated": true
+    },
+    "G1557": {
+      "definitions_cz": "ospravedlnění, odplata",
+      "translit": "ekdíkēsis",
+      "pronunciation": "ek-dik'-ay-sis",
+      "translated": true
+    },
+    "G1558": {
+      "definitions_cz": "vykonávající spravedlnost, t. j. trestající",
+      "translit": "ékdikos",
+      "pronunciation": "ek'-dik-os",
+      "translated": true
+    },
+    "G1559": {
+      "definitions_cz": "pronásledovat, t. j. vyhnat nebo pronásledovat\n nesmiřitelně",
+      "translit": "ekdiṓkō",
+      "pronunciation": "ek-dee-o'-ko",
+      "translated": true
+    },
+    "G1560": {
+      "definitions_cz": "vydáno nebo přes, tzn.\n se vzdal",
+      "translit": "ékdotos",
+      "pronunciation": "ek'-dot-os",
+      "translated": true
+    },
+    "G1561": {
+      "definitions_cz": "očekávání",
+      "translit": "ekdochḗ",
+      "pronunciation": "ek-dokh-ay'",
+      "translated": true
+    },
+    "G1562": {
+      "definitions_cz": "způsobit propadnutí, tzn.\n (zejména oděvů) zbavit se",
+      "translit": "ekdýō",
+      "pronunciation": "ek-doo'-o",
+      "translated": true
+    },
+    "G1563": {
+      "definitions_cz": "tam; rozšířením, tam",
+      "translit": "ekeî",
+      "pronunciation": "ek-i'",
+      "translated": true
+    },
+    "G1564": {
+      "definitions_cz": "odtud",
+      "translit": "ekeîthen",
+      "pronunciation": "ek-i'-then",
+      "translated": true
+    },
+    "G1565": {
+      "definitions_cz": "ta jedna (nebo (kastrovaná) věc); často zesílený tím\n článek s předponou",
+      "translit": "ekeînos",
+      "pronunciation": "ek-i'-nos",
+      "translated": true
+    },
+    "G1566": {
+      "definitions_cz": "tam",
+      "translit": "ekeîse",
+      "pronunciation": "ek-i'-seh",
+      "translated": true
+    },
+    "G1567": {
+      "definitions_cz": "pátrat, tj. (obrazně) zkoumat,\n toužit, požadovat, (hebraismem) uctívání",
+      "translit": "ekzētéō",
+      "pronunciation": "ek-zay-teh'-o",
+      "translated": true
+    },
+    "G1568": {
+      "definitions_cz": "úplně ohromit",
+      "translit": "ekthambéō",
+      "pronunciation": "ek-tham-beh'-o",
+      "translated": true
+    },
+    "G1569": {
+      "definitions_cz": "naprosto ohromen",
+      "translit": "ékthambos",
+      "pronunciation": "ek'-tham-bos",
+      "translated": true
+    },
+    "G1570": {
+      "definitions_cz": "uhasit, t. j. vystaven\n zahynout",
+      "translit": "ékthetos",
+      "pronunciation": "ek'-thet-os",
+      "translated": true
+    },
+    "G1571": {
+      "definitions_cz": "důkladně očistit",
+      "translit": "ekkathaírō",
+      "pronunciation": "ek-kath-ah'-ee-ro",
+      "translated": true
+    },
+    "G1572": {
+      "definitions_cz": "hluboce zapálit",
+      "translit": "ekkaíō",
+      "pronunciation": "ek-kah'-yo",
+      "translated": true
+    },
+    "G1573": {
+      "definitions_cz": "být (špatný nebo) slabý, tj. (implicitně) selhat\n (v srdci)",
+      "translit": "ekkakéō",
+      "pronunciation": "ek-kak-eh'-o",
+      "translated": true
+    },
+    "G1574": {
+      "definitions_cz": "transfixovat",
+      "translit": "ekkentéō",
+      "pronunciation": "ek-ken-teh'-o",
+      "translated": true
+    },
+    "G1575": {
+      "definitions_cz": "excintovat",
+      "translit": "ekkláō",
+      "pronunciation": "ek-klah'-o",
+      "translated": true
+    },
+    "G1576": {
+      "definitions_cz": "vypnout (doslova nebo obrazně)",
+      "translit": "ekkleíō",
+      "pronunciation": "ek-kli'-o",
+      "translated": true
+    },
+    "G1577": {
+      "definitions_cz": "volání, tzn.\n (konkrétně) lidové setkání, zejména řeholní kongregace\n (Židovská synagoga neboli křesťanské společenství členů na zemi resp\n svatí v nebi nebo obojí)",
+      "translit": "ekklēsía",
+      "pronunciation": "ek-klay-see'-ah",
+      "translated": true
+    },
+    "G1578": {
+      "definitions_cz": "odchýlit se, tj. (absolutně) vyhýbat se (doslova\n nebo obrazně), nebo (relativně) klesnout (od zbožnosti)",
+      "translit": "ekklínō",
+      "pronunciation": "ek-klee'-no",
+      "translated": true
+    },
+    "G1579": {
+      "definitions_cz": "uniknout plaváním",
+      "translit": "ekkolymbáō",
+      "pronunciation": "ek-kol-oom-bah'-o",
+      "translated": true
+    },
+    "G1580": {
+      "definitions_cz": "rodit (pochovat)",
+      "translit": "ekkomízō",
+      "pronunciation": "ek-kom-id'-zo",
+      "translated": true
+    },
+    "G1581": {
+      "definitions_cz": "excintovat; přeneseně frustrovat",
+      "translit": "ekkóptō",
+      "pronunciation": "ek-kop'-to",
+      "translated": true
+    },
+    "G1582": {
+      "definitions_cz": "viset na rtech řečníka,\n tedy pozorně poslouchat",
+      "translit": "ekkrémamai",
+      "pronunciation": "ek-krem'-am-ahee",
+      "translated": true
+    },
+    "G1583": {
+      "definitions_cz": "prozradit",
+      "translit": "eklaléō",
+      "pronunciation": "ek-lal-eh'-o",
+      "translated": true
+    },
+    "G1584": {
+      "definitions_cz": "být zářivý",
+      "translit": "eklámpō",
+      "pronunciation": "ek-lam'-po",
+      "translated": true
+    },
+    "G1585": {
+      "definitions_cz": "být úplně zapomenut",
+      "translit": "eklanthánomai",
+      "pronunciation": "ek-lan-than'-om-ahee",
+      "translated": true
+    },
+    "G1586": {
+      "definitions_cz": "do\n vybrat",
+      "translit": "eklégomai",
+      "pronunciation": "ek-leg'-om-ahee",
+      "translated": true
+    },
+    "G1587": {
+      "definitions_cz": "vynechat, tj. (implicitně) přestat (zemřít)",
+      "translit": "ekleípō",
+      "pronunciation": "ek-li'-po",
+      "translated": true
+    },
+    "G1588": {
+      "definitions_cz": "vybrat; implicitně oblíbený",
+      "translit": "eklektós",
+      "pronunciation": "ek-lek-tos'",
+      "translated": true
+    },
+    "G1589": {
+      "definitions_cz": "(božský) výběr (abstraktně nebo konkrétně)",
+      "translit": "eklogḗ",
+      "pronunciation": "ek-log-ay'",
+      "translated": true
+    },
+    "G1590": {
+      "definitions_cz": "relaxovat (doslova nebo obrazně)",
+      "translit": "eklýō",
+      "pronunciation": "ek-loo'-o",
+      "translated": true
+    },
+    "G1591": {
+      "definitions_cz": "hníst, tj. (analogicky) k\n otřete do sucha",
+      "translit": "ekmássō",
+      "pronunciation": "ek-mas'-so",
+      "translated": true
+    },
+    "G1592": {
+      "definitions_cz": "vyloženě se vysmívat",
+      "translit": "ekmyktērízō",
+      "pronunciation": "ek-mook-ter-id'-zo",
+      "translated": true
+    },
+    "G1593": {
+      "definitions_cz": "(analogicky) sklouznout, tj. tiše\n stáhnout",
+      "translit": "ekneúō",
+      "pronunciation": "ek-nyoo'-o",
+      "translated": true
+    },
+    "G1594": {
+      "definitions_cz": "(obrazně) vyburcovat (se) z\n strnulost",
+      "translit": "eknḗphō",
+      "pronunciation": "ek-nay'-fo",
+      "translated": true
+    },
+    "G1595": {
+      "definitions_cz": "dobrovolnosti",
+      "translit": "hekoúsion",
+      "pronunciation": "hek-oo'-see-on",
+      "translated": true
+    },
+    "G1596": {
+      "definitions_cz": "dobrovolně",
+      "translit": "hekousíōs",
+      "pronunciation": "hek-oo-see'-ose",
+      "translated": true
+    },
+    "G1597": {
+      "definitions_cz": "dávno, na dlouhou dobu",
+      "translit": "ékpalai",
+      "pronunciation": "eh'-pal-ahee",
+      "translated": true
+    },
+    "G1598": {
+      "definitions_cz": "důkladně otestovat",
+      "translit": "ekpeirázō",
+      "pronunciation": "ek-pi-rad'-zo",
+      "translated": true
+    },
+    "G1599": {
+      "definitions_cz": "odeslat",
+      "translit": "ekpémpō",
+      "pronunciation": "ek-pem'-po",
+      "translated": true
+    },
+    "G1600": {
+      "definitions_cz": "vyletět, tj. (analogicky) k\n prodloužit",
+      "translit": "ekpetánnymi",
+      "pronunciation": "ek-pet-an'-noo-mee",
+      "translated": true
+    },
+    "G1601": {
+      "definitions_cz": "odpadnout; zvláště být vyhnán ze svého\n kurz; přeneseně ztratit, stát se neefektivní",
+      "translit": "ekpíptō",
+      "pronunciation": "ek-pip'-to",
+      "translated": true
+    },
+    "G1602": {
+      "definitions_cz": "odjet lodí",
+      "translit": "ekpléō",
+      "pronunciation": "ek-pleh'-o",
+      "translated": true
+    },
+    "G1603": {
+      "definitions_cz": "úplně splnit",
+      "translit": "ekplēróō",
+      "pronunciation": "ek-play-ro'-o",
+      "translated": true
+    },
+    "G1604": {
+      "definitions_cz": "dokončení",
+      "translit": "ekplḗrōsis",
+      "pronunciation": "ek-play'-ro-sis",
+      "translated": true
+    },
+    "G1605": {
+      "definitions_cz": "udeřit úžasem",
+      "translit": "ekplḗssō",
+      "pronunciation": "ek-place'-so",
+      "translated": true
+    },
+    "G1606": {
+      "definitions_cz": "vypršet",
+      "translit": "ekpnéō",
+      "pronunciation": "ek-pneh'-o",
+      "translated": true
+    },
+    "G1607": {
+      "definitions_cz": "odejít, být propuštěn, pokračovat, projekt",
+      "translit": "ekporeúomai",
+      "pronunciation": "ek-por-yoo'-om-ahee",
+      "translated": true
+    },
+    "G1608": {
+      "definitions_cz": "být úplně necudný",
+      "translit": "ekporneúō",
+      "pronunciation": "ek-porn-yoo'-o",
+      "translated": true
+    },
+    "G1609": {
+      "definitions_cz": "vyplivnout, t. j. (obrazně) pohrdat",
+      "translit": "ekptýō",
+      "pronunciation": "ek-ptoo'-o",
+      "translated": true
+    },
+    "G1610": {
+      "definitions_cz": "vykořenit",
+      "translit": "ekrizóō",
+      "pronunciation": "ek-rid-zo'-o",
+      "translated": true
+    },
+    "G1611": {
+      "definitions_cz": "vytěsnění mysli, tj. zmatenost,\n \"extáze\"",
+      "translit": "ékstasis",
+      "pronunciation": "ek'-stas-is",
+      "translated": true
+    },
+    "G1612": {
+      "definitions_cz": "zvrhnout (obrazně)",
+      "translit": "ekstréphō",
+      "pronunciation": "ek-stref'-o",
+      "translated": true
+    },
+    "G1613": {
+      "definitions_cz": "úplně rušit",
+      "translit": "ektarássō",
+      "pronunciation": "ek-tar-as'-so",
+      "translated": true
+    },
+    "G1614": {
+      "definitions_cz": "prodloužit",
+      "translit": "ekteínō",
+      "pronunciation": "ek-ti'-no",
+      "translated": true
+    },
+    "G1615": {
+      "definitions_cz": "úplně dokončit",
+      "translit": "ekteléō",
+      "pronunciation": "ek-tel-eh'-o",
+      "translated": true
+    },
+    "G1616": {
+      "definitions_cz": "záměrnost",
+      "translit": "ekténeia",
+      "pronunciation": "ek-ten'-i-ah",
+      "translated": true
+    },
+    "G1617": {
+      "definitions_cz": "soustředěněji",
+      "translit": "ektenésteron",
+      "pronunciation": "ek-ten-es'-ter-on",
+      "translated": true
+    },
+    "G1618": {
+      "definitions_cz": "úmysl",
+      "translit": "ektenḗs",
+      "pronunciation": "ek-ten-ace'",
+      "translated": true
+    },
+    "G1619": {
+      "definitions_cz": "soustředěně",
+      "translit": "ektenōs",
+      "pronunciation": "ek-ten-oce'",
+      "translated": true
+    },
+    "G1620": {
+      "definitions_cz": "vystavit; obrazně řečeno prohlásit",
+      "translit": "ektíthēmi",
+      "pronunciation": "ek-tith'-ay-mee",
+      "translated": true
+    },
+    "G1621": {
+      "definitions_cz": "prudce se třást",
+      "translit": "ektinássō",
+      "pronunciation": "ek-tin-as'-so",
+      "translated": true
+    },
+    "G1622": {
+      "definitions_cz": "exteriér; přeneseně (jako předložka) kromě,\n kromě toho",
+      "translit": "ektós",
+      "pronunciation": "ek-tos'",
+      "translated": true
+    },
+    "G1623": {
+      "definitions_cz": "šestý",
+      "translit": "héktos",
+      "pronunciation": "hek'-tos",
+      "translated": true
+    },
+    "G1624": {
+      "definitions_cz": "odklonit se, tj. odvrátit se (doslova\n nebo obrazně)",
+      "translit": "ektrépō",
+      "pronunciation": "ek-trep'-o",
+      "translated": true
+    },
+    "G1625": {
+      "definitions_cz": "vychovávat k dospělosti, tj. (genitivní pád) k\n milovat nebo trénovat",
+      "translit": "ektréphō",
+      "pronunciation": "ek-tref'-o",
+      "translated": true
+    },
+    "G1626": {
+      "definitions_cz": "potrat\n (potrat), tedy (analogicky) předčasný porod",
+      "translit": "éktrōma",
+      "pronunciation": "ek'-tro-mah",
+      "translated": true
+    },
+    "G1627": {
+      "definitions_cz": "vyjadřovat (doslova nebo obrazně)",
+      "translit": "ekphérō",
+      "pronunciation": "ek-fer'-o",
+      "translated": true
+    },
+    "G1628": {
+      "definitions_cz": "utéct ven",
+      "translit": "ekpheúgō",
+      "pronunciation": "ek-fyoo'-go",
+      "translated": true
+    },
+    "G1629": {
+      "definitions_cz": "úplně vyděsit",
+      "translit": "ekphobéō",
+      "pronunciation": "ek-fob-eh'-o",
+      "translated": true
+    },
+    "G1630": {
+      "definitions_cz": "vyděšený z rozumu",
+      "translit": "ékphobos",
+      "pronunciation": "ek'-fob-os",
+      "translated": true
+    },
+    "G1631": {
+      "definitions_cz": "vyklíčit",
+      "translit": "ekphýō",
+      "pronunciation": "ek-foo'-o",
+      "translated": true
+    },
+    "G1632": {
+      "definitions_cz": "vylévat; přeneseně do\n udělit",
+      "translit": "ekchéō",
+      "pronunciation": "ek-kheh'-o",
+      "translated": true
+    },
+    "G1633": {
+      "definitions_cz": "odejít",
+      "translit": "ekchōréō",
+      "pronunciation": "ek-kho-reh'-o",
+      "translated": true
+    },
+    "G1634": {
+      "definitions_cz": "vypršet",
+      "translit": "ekpsýchō",
+      "pronunciation": "ek-psoo'-kho",
+      "translated": true
+    },
+    "G1635": {
+      "definitions_cz": "dobrovolný",
+      "translit": "hekṓn",
+      "pronunciation": "hek-own'",
+      "translated": true
+    },
+    "G1636": {
+      "definitions_cz": "oliva\n (strom nebo ovoce)",
+      "translit": "elaía",
+      "pronunciation": "el-ah'-yah",
+      "translated": true
+    },
+    "G1637": {
+      "definitions_cz": "olivový olej",
+      "translit": "élaion",
+      "pronunciation": "el'-ah-yon",
+      "translated": true
+    },
+    "G1638": {
+      "definitions_cz": "olivový sad, tj. (zvláště) hora\n Olivy",
+      "translit": "elaiṓn",
+      "pronunciation": "el-ah-yone'",
+      "translated": true
+    },
+    "G1639": {
+      "definitions_cz": "Elamit nebo Peršan",
+      "translit": "Elamítēs",
+      "pronunciation": "el-am-ee'-tace",
+      "translated": true
+    },
+    "G1640": {
+      "definitions_cz": "menší (velikost, množství, stáří popř\n kvalita)",
+      "translit": "elássōn",
+      "pronunciation": "el-as'-sone",
+      "translated": true
+    },
+    "G1641": {
+      "definitions_cz": "zmenšit, t. j. nedostat",
+      "translit": "elattonéō",
+      "pronunciation": "el-at-ton-eh-o",
+      "translated": true
+    },
+    "G1642": {
+      "definitions_cz": "snížit (v hodnosti nebo vlivu)",
+      "translit": "elattóō",
+      "pronunciation": "el-at-to'-o",
+      "translated": true
+    },
+    "G1643": {
+      "definitions_cz": "tlačit (jako vítr,\n vesla nebo démonická síla)",
+      "translit": "elaúnō",
+      "pronunciation": "el-ow'-no",
+      "translated": true
+    },
+    "G1644": {
+      "definitions_cz": "lehkovážnost (obrazně), t. j. vrtkavost",
+      "translit": "elaphría",
+      "pronunciation": "el-af-ree'-ah",
+      "translated": true
+    },
+    "G1645": {
+      "definitions_cz": "lehký, tedy snadný",
+      "translit": "elaphrós",
+      "pronunciation": "el-af-ros'",
+      "translated": true
+    },
+    "G1646": {
+      "definitions_cz": "používá se jako ekvivalent [ŘECKO:3398]",
+      "translit": "eláchistos",
+      "pronunciation": "el-akh'-is-tos",
+      "translated": true
+    },
+    "G1647": {
+      "definitions_cz": "mnohem méně",
+      "translit": "elachistóteros",
+      "pronunciation": "el-akh-is-tot'-er-os",
+      "translated": true
+    },
+    "G1648": {
+      "definitions_cz": "Eleazar, Izraelita",
+      "translit": "Eleázar",
+      "pronunciation": "el-eh-ad'-zar",
+      "translated": true
     }
   }
 }
