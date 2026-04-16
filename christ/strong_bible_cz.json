@@ -24319,6 +24319,898 @@
       "translit": "kakeîthen",
       "pronunciation": "kak-i'-then",
       "translated": true
+    },
+    "G2528": {
+      "definitions_cz": "a [ŘECtina:3695]",
+      "translit": "kathoplízō",
+      "pronunciation": "kath-op-lid'-zo",
+      "translated": true
+    },
+    "G2548": {
+      "definitions_cz": "stejně tak (nebo ty)",
+      "translit": "kakeînos",
+      "pronunciation": "kak-i'-nos",
+      "translated": true
+    },
+    "G2549": {
+      "definitions_cz": "špatnost, tj. (subjektivně) zkaženost, nebo (aktivně)\n malignita nebo (pasivně) potíže",
+      "translit": "kakía",
+      "pronunciation": "kak-ee'-ah",
+      "translated": true
+    },
+    "G2550": {
+      "definitions_cz": "špatná postava, tj. (zvláště)\n škodolibost",
+      "translit": "kakoḗtheia",
+      "pronunciation": "kak-o-ay'-thi-ah",
+      "translated": true
+    },
+    "G2551": {
+      "definitions_cz": "nadávat",
+      "translit": "kakologéō",
+      "pronunciation": "kak-ol-og-eh'-o",
+      "translated": true
+    },
+    "G2552": {
+      "definitions_cz": "strádání",
+      "translit": "kakopátheia",
+      "pronunciation": "kak-op-ath'-i-ah",
+      "translated": true
+    },
+    "G2553": {
+      "definitions_cz": "podstoupit těžkosti",
+      "translit": "kakopathéō",
+      "pronunciation": "kak-op-ath-eh'-o",
+      "translated": true
+    },
+    "G2554": {
+      "definitions_cz": "být bad-deer, tedy (objektivně) zranit, popř\n (genitiv) hřešit",
+      "translit": "kakopoiéō",
+      "pronunciation": "kak-op-oy-eh'-o",
+      "translated": true
+    },
+    "G2555": {
+      "definitions_cz": "provinilec; (zvláště), zločinec",
+      "translit": "kakopoiós",
+      "pronunciation": "kak-op-oy-os'",
+      "translated": true
+    },
+    "G2556": {
+      "definitions_cz": "bezcenný (vlastně takový; vzhledem k tomu, že\n [ŘECKA:4190]",
+      "translit": "kakós",
+      "pronunciation": "kak-os'",
+      "translated": true
+    },
+    "G2557": {
+      "definitions_cz": "provinilec, tj.\n kriminální",
+      "translit": "kakoûrgos",
+      "pronunciation": "kak-oor'-gos",
+      "translated": true
+    },
+    "G2558": {
+      "definitions_cz": "týrat",
+      "translit": "kakouchéō",
+      "pronunciation": "kak-oo-kheh'-o",
+      "translated": true
+    },
+    "G2559": {
+      "definitions_cz": "zranit; obrazně řečeno rozčilovat",
+      "translit": "kakóō",
+      "pronunciation": "kak-o'-o",
+      "translated": true
+    },
+    "G2560": {
+      "definitions_cz": "špatně (fyzicky nebo morálně)",
+      "translit": "kakōs",
+      "pronunciation": "kak-oce'",
+      "translated": true
+    },
+    "G2561": {
+      "definitions_cz": "týrání",
+      "translit": "kákōsis",
+      "pronunciation": "kak'-o-sis",
+      "translated": true
+    },
+    "G2562": {
+      "definitions_cz": "stéblo obilí, tj. (souhrnně)\n strniště",
+      "translit": "kalámē",
+      "pronunciation": "kal-am'-ay",
+      "translated": true
+    },
+    "G2563": {
+      "definitions_cz": "rákos (rostlina nebo její stonek nebo kmen a\n podobná rostlina); implicitně pero",
+      "translit": "kálamos",
+      "pronunciation": "kal'-am-os",
+      "translated": true
+    },
+    "G2564": {
+      "definitions_cz": "„zavolat“ (správně, nahlas, ale používá se v a\n různé aplikace, přímo nebo jinak)",
+      "translit": "kaléō",
+      "pronunciation": "kal-eh'-o",
+      "translated": true
+    },
+    "G2565": {
+      "definitions_cz": "pěstovaný olivovník, tj\n domestikovaný nebo vylepšený",
+      "translit": "kalliélaios",
+      "pronunciation": "kal-le-el'-ah-yos",
+      "translated": true
+    },
+    "G2566": {
+      "definitions_cz": "(adverbiálně) lepší\n než mnozí",
+      "translit": "kallíon",
+      "pronunciation": "kal-lee'-on",
+      "translated": true
+    },
+    "G2567": {
+      "definitions_cz": "učitel pravice",
+      "translit": "kalodidáskalos",
+      "pronunciation": "kal-od-id-as'-kal-os",
+      "translated": true
+    },
+    "G2568": {
+      "definitions_cz": "Good Harbours, tedy Fairhaven, zátoka\n Kréta",
+      "translit": "Kaloì Liménes",
+      "pronunciation": "kal-oy' lee-men'-es",
+      "translated": true
+    },
+    "G2569": {
+      "definitions_cz": "dobře činit, t. j. žít ctnostně",
+      "translit": "kalopoiéō",
+      "pronunciation": "kal-op-oy-eh'-o",
+      "translated": true
+    },
+    "G2570": {
+      "definitions_cz": "",
+      "translated": false
+    },
+    "G2571": {
+      "definitions_cz": "kryt, tedy závoj",
+      "translit": "kályma",
+      "pronunciation": "kal'-oo-mah",
+      "translated": true
+    },
+    "G2572": {
+      "definitions_cz": "zakrýt (doslova popř\n přeneseně)",
+      "translit": "kalýptō",
+      "pronunciation": "kal-oop'-to",
+      "translated": true
+    },
+    "G2573": {
+      "definitions_cz": "dobře (obvykle morálně)",
+      "translit": "kalōs",
+      "pronunciation": "kal-oce'",
+      "translated": true
+    },
+    "G2574": {
+      "definitions_cz": "\"velbloud\"",
+      "translit": "kámēlos",
+      "pronunciation": "kam'-ay-los",
+      "translated": true
+    },
+    "G2575": {
+      "definitions_cz": "pec",
+      "translit": "káminos",
+      "pronunciation": "kam'-ee-nos",
+      "translated": true
+    },
+    "G2576": {
+      "definitions_cz": "vypnout, t. j. zavřít\n oči",
+      "translit": "kammýō",
+      "pronunciation": "kam-moo'-o",
+      "translated": true
+    },
+    "G2577": {
+      "definitions_cz": "správně, dřít, t. j. (implicitně) k\n pneumatika (obrazně mdlý, nemocný)",
+      "translit": "kámnō",
+      "pronunciation": "kam'-no",
+      "translated": true
+    },
+    "G2578": {
+      "definitions_cz": "ohýbat se",
+      "translit": "kámptō",
+      "pronunciation": "kamp'-to",
+      "translated": true
+    },
+    "G2579": {
+      "definitions_cz": "a (nebo dokonce) jestliže",
+      "translit": "kán",
+      "pronunciation": "kan",
+      "translated": true
+    },
+    "G2580": {
+      "definitions_cz": "Cana, místo v Palestině",
+      "translit": "Kanâ",
+      "pronunciation": "kan-ah'",
+      "translated": true
+    },
+    "G2581": {
+      "definitions_cz": "horlivý; Kananejci, an\n epiteton",
+      "translit": "Kananítēs",
+      "pronunciation": "kan-an-ee'-tace",
+      "translated": true
+    },
+    "G2582": {
+      "definitions_cz": "Candacè, egyptská královna",
+      "translit": "Kandákē",
+      "pronunciation": "kan-dak'-ay",
+      "translated": true
+    },
+    "G2583": {
+      "definitions_cz": "pravidlo (\"kánon\"), tzn.\n (obrazně) standard (víry a praxe); implicitně, a\n hranice, tj. (obrazně) sféra (činnosti)",
+      "translit": "kanṓn",
+      "pronunciation": "kan-ohn'",
+      "translated": true
+    },
+    "G2584": {
+      "definitions_cz": "Kafarnaum (tj.\n Caphanachum), místo v Palestině",
+      "translit": "Kapernaoúm",
+      "pronunciation": "cap-er-nah-oom'",
+      "translated": true
+    },
+    "G2585": {
+      "definitions_cz": "do maloobchodu, tedy (implicitně) do\n falšovat (obrazně)",
+      "translit": "kapēleúō",
+      "pronunciation": "kap-ale-yoo'-o",
+      "translated": true
+    },
+    "G2586": {
+      "definitions_cz": "kouř",
+      "translit": "kapnós",
+      "pronunciation": "kap-nos'",
+      "translated": true
+    },
+    "G2587": {
+      "definitions_cz": "Kappadokie, oblast Malé Asie",
+      "translit": "Kappadokía",
+      "pronunciation": "kap-pad-ok-ee'-ah",
+      "translated": true
+    },
+    "G2588": {
+      "definitions_cz": "srdce, tj.\n (obrazně) myšlenky nebo pocity (mysl); také (analogicky)\n střední",
+      "translit": "kardía",
+      "pronunciation": "kar-dee'-ah",
+      "translated": true
+    },
+    "G2589": {
+      "definitions_cz": "srdce znalý",
+      "translit": "kardiognṓstēs",
+      "pronunciation": "kar-dee-og-noce'-tace",
+      "translated": true
+    },
+    "G2590": {
+      "definitions_cz": "ovoce (jako utržené), doslova nebo\n přeneseně",
+      "translit": "karpós",
+      "pronunciation": "kar-pos'",
+      "translated": true
+    },
+    "G2591": {
+      "definitions_cz": "Carpus, pravděpodobně křesťan",
+      "translit": "Kárpos",
+      "pronunciation": "kar'-pos",
+      "translated": true
+    },
+    "G2592": {
+      "definitions_cz": "být plodný (doslova nebo obrazně)",
+      "translit": "karpophoréō",
+      "pronunciation": "kar-pof-or-eh'-o",
+      "translated": true
+    },
+    "G2593": {
+      "definitions_cz": "plodící (obrazně)",
+      "translit": "karpophóros",
+      "pronunciation": "kar-pof-or'-os",
+      "translated": true
+    },
+    "G2594": {
+      "definitions_cz": "být silný, tzn.\n (obrazně) stálý (trpělivý)",
+      "translit": "karteréō",
+      "pronunciation": "kar-ter-eh'-o",
+      "translated": true
+    },
+    "G2595": {
+      "definitions_cz": "suchou větvičkou nebo slámou",
+      "translit": "kárphos",
+      "pronunciation": "kar'-fos",
+      "translated": true
+    },
+    "G2596": {
+      "definitions_cz": "(předložkově) dolů (v místě nebo čase), v\n různé vztahy (podle případu (genitiv, dativ nebo\n akuzativ), se kterým je spojen)",
+      "translit": "katá",
+      "pronunciation": "kat-ah'",
+      "translated": true
+    },
+    "G2597": {
+      "definitions_cz": "sestoupit (doslova popř\n přeneseně)",
+      "translit": "katabaínō",
+      "pronunciation": "kat-ab-ah'-ee-no",
+      "translated": true
+    },
+    "G2598": {
+      "definitions_cz": "shodit dolů",
+      "translit": "katabállō",
+      "pronunciation": "kat-ab-al'-lo",
+      "translated": true
+    },
+    "G2599": {
+      "definitions_cz": "uložit na",
+      "translit": "katabaréō",
+      "pronunciation": "kat-ab-ar-eh'-o",
+      "translated": true
+    },
+    "G2600": {
+      "definitions_cz": "pokleslost",
+      "translit": "katábasis",
+      "pronunciation": "kat-ab'-as-is",
+      "translated": true
+    },
+    "G2601": {
+      "definitions_cz": "způsobit pád,\n tj. sraženina",
+      "translit": "katabibázō",
+      "pronunciation": "kat-ab-ib-ad'-zo",
+      "translated": true
+    },
+    "G2602": {
+      "definitions_cz": "uložení, tj. založení; přeneseně,\n početí",
+      "translit": "katabolḗ",
+      "pronunciation": "kat-ab-ol-ay'",
+      "translated": true
+    },
+    "G2603": {
+      "definitions_cz": "udělit cenu\n proti, tj. (obrazně) ošidit (spásu)",
+      "translit": "katabrabeúō",
+      "pronunciation": "kat-ab-rab-yoo'-o",
+      "translated": true
+    },
+    "G2605": {
+      "definitions_cz": "hlásat, vyhlašovat",
+      "translit": "katangéllō",
+      "pronunciation": "kat-ang-gel'-lo",
+      "translated": true
+    },
+    "G2606": {
+      "definitions_cz": "vysmívat se, t. j. vysmívat se",
+      "translit": "katageláō",
+      "pronunciation": "kat-ag-el-ah'-o",
+      "translated": true
+    },
+    "G2607": {
+      "definitions_cz": "poznamenat proti, tj. najít chybu",
+      "translit": "kataginṓskō",
+      "pronunciation": "kat-ag-in-o'-sko",
+      "translated": true
+    },
+    "G2608": {
+      "definitions_cz": "roztrhat na kusy, t. j. prasknout\n od sebe",
+      "translit": "katágnymi",
+      "pronunciation": "kat-ag'-noo-mee",
+      "translated": true
+    },
+    "G2609": {
+      "definitions_cz": "vést dolů; speciálně pro kotvení plavidla",
+      "translit": "katágō",
+      "pronunciation": "kat-ag'-o",
+      "translated": true
+    },
+    "G2610": {
+      "definitions_cz": "bojovat proti, tj. (implicitně) k\n překonat",
+      "translit": "katagōnízomai",
+      "pronunciation": "kat-ag-o-nid'-zom-ahee",
+      "translated": true
+    },
+    "G2611": {
+      "definitions_cz": "svázat, t.j. obvazovat (ránu)",
+      "translit": "katadéō",
+      "pronunciation": "kat-ad-eh'-o",
+      "translated": true
+    },
+    "G2612": {
+      "definitions_cz": "manifest",
+      "translit": "katádēlos",
+      "pronunciation": "kat-ad'-ay-los",
+      "translated": true
+    },
+    "G2613": {
+      "definitions_cz": "soudit proti, t. j. vyslovit\n vinen",
+      "translit": "katadikázō",
+      "pronunciation": "kat-ad-ik-ad'-zo",
+      "translated": true
+    },
+    "G2614": {
+      "definitions_cz": "lovit, t. j. hledat",
+      "translit": "katadiṓkō",
+      "pronunciation": "kat-ad-ee-o'-ko",
+      "translated": true
+    },
+    "G2615": {
+      "definitions_cz": "úplně zotročit",
+      "translit": "katadoulóō",
+      "pronunciation": "kat-ad-oo-lo'-o",
+      "translated": true
+    },
+    "G2616": {
+      "definitions_cz": "vykonávat nadvládu proti, tzn.\n utlačovat",
+      "translit": "katadynasteúō",
+      "pronunciation": "kat-ad-oo-nas-tyoo'-o",
+      "translated": true
+    },
+    "G2617": {
+      "definitions_cz": "zahanbit, tj. zostudit nebo (implicitně)\n dát do ruměnec",
+      "translit": "kataischýnō",
+      "pronunciation": "kat-ahee-skhoo'-no",
+      "translated": true
+    },
+    "G2618": {
+      "definitions_cz": "shořet (na zem), t. j. spotřebovat\n zcela",
+      "translit": "katakaíō",
+      "pronunciation": "kat-ak-ah'-ee-o",
+      "translated": true
+    },
+    "G2619": {
+      "definitions_cz": "zakrýt celé, t. j. závoj",
+      "translit": "katakalýptō",
+      "pronunciation": "kat-ak-al-oop'-to",
+      "translated": true
+    },
+    "G2620": {
+      "definitions_cz": "jásat proti (tj. přes)",
+      "translit": "katakaucháomai",
+      "pronunciation": "kat-ak-ow-khah'-om-ahee",
+      "translated": true
+    },
+    "G2621": {
+      "definitions_cz": "ležet, t. j. (implicitně) být nemocný;\n zvláště ležet u jídla",
+      "translit": "katákeimai",
+      "pronunciation": "kat-ak'-i-mahee",
+      "translated": true
+    },
+    "G2622": {
+      "definitions_cz": "rozbít, t. j. dělit",
+      "translit": "katakláō",
+      "pronunciation": "kat-ak-lah'-o",
+      "translated": true
+    },
+    "G2623": {
+      "definitions_cz": "zavřít (v žaláři), t.j.\n uvěznit",
+      "translit": "katakleíō",
+      "pronunciation": "kat-ak-li'-o",
+      "translated": true
+    },
+    "G2624": {
+      "definitions_cz": "být a\n dárce lotů každému, tj. (implicitně) přidělit an\n panství",
+      "translit": "kataklērodotéō",
+      "pronunciation": "kat-ak-lay-rod-ot-eh'-o",
+      "translated": true
+    },
+    "G2625": {
+      "definitions_cz": "sklopit se, tj. (zvláště) zaujmout místo\n u stolu",
+      "translit": "kataklínō",
+      "pronunciation": "kat-ak-lee'-no",
+      "translated": true
+    },
+    "G2626": {
+      "definitions_cz": "čárkovat (smývat) dolů, tj\n implikace) potopit",
+      "translit": "kataklýzō",
+      "pronunciation": "kat-ak-lood'-zo",
+      "translated": true
+    },
+    "G2627": {
+      "definitions_cz": "záplava",
+      "translit": "kataklysmós",
+      "pronunciation": "kat-ak-looce-mos'",
+      "translated": true
+    },
+    "G2628": {
+      "definitions_cz": "úzce doprovázet",
+      "translit": "katakolouthéō",
+      "pronunciation": "kat-ak-ol-oo-theh'-o",
+      "translated": true
+    },
+    "G2629": {
+      "definitions_cz": "sekat, t. j. mandlovat",
+      "translit": "katakóptō",
+      "pronunciation": "kat-ak-op'-to",
+      "translated": true
+    },
+    "G2630": {
+      "definitions_cz": "vysrážet se dolů",
+      "translit": "katakrēmnízō",
+      "pronunciation": "kat-ak-rame-nid'-zo",
+      "translated": true
+    },
+    "G2631": {
+      "definitions_cz": "nepříznivý trest (rozsudek)",
+      "translit": "katákrima",
+      "pronunciation": "kat-ak'-ree-mah",
+      "translated": true
+    },
+    "G2632": {
+      "definitions_cz": "soudit proti, t. j. trest",
+      "translit": "katakrínō",
+      "pronunciation": "kat-ak-ree'-no",
+      "translated": true
+    },
+    "G2633": {
+      "definitions_cz": "nepříznivý trest (čin)",
+      "translit": "katákrisis",
+      "pronunciation": "kat-ak'-ree-sis",
+      "translated": true
+    },
+    "G2634": {
+      "definitions_cz": "panovat proti, tj. ovládat,\n podmanit si",
+      "translit": "katakyrieúō",
+      "pronunciation": "kat-ak-oo-ree-yoo'-o",
+      "translated": true
+    },
+    "G2635": {
+      "definitions_cz": "být překupníkem, t. j. pomlouvat",
+      "translit": "katalaléō",
+      "pronunciation": "kat-al-al-eh'-o",
+      "translated": true
+    },
+    "G2636": {
+      "definitions_cz": "hanobení",
+      "translit": "katalalía",
+      "pronunciation": "kat-al-al-ee'-ah",
+      "translated": true
+    },
+    "G2637": {
+      "definitions_cz": "hovorný proti, tj\n pomlouvač",
+      "translit": "katálalos",
+      "pronunciation": "kat-al'-al-os",
+      "translated": true
+    },
+    "G2638": {
+      "definitions_cz": "horlivě brát, t. j. zmocnit se, vlastnit atd.\n (doslova nebo obrazně)",
+      "translit": "katalambánō",
+      "pronunciation": "kat-al-am-ban'-o",
+      "translated": true
+    },
+    "G2639": {
+      "definitions_cz": "položit, tzn.\n (obrazně) zapsat se",
+      "translit": "katalégō",
+      "pronunciation": "kat-al-eg'-o",
+      "translated": true
+    },
+    "G2640": {
+      "definitions_cz": "zbytek, tj. (implicitně) několik",
+      "translit": "katáleimma",
+      "pronunciation": "kat-al'-ime-mah",
+      "translated": true
+    },
+    "G2641": {
+      "definitions_cz": "nechat dole, t. j. pozadu; implicitně, k\n opustit, zůstat",
+      "translit": "kataleípō",
+      "pronunciation": "kat-al-i'-po",
+      "translated": true
+    },
+    "G2642": {
+      "definitions_cz": "ukamenovat, t. j. umřít",
+      "translit": "katalitházō",
+      "pronunciation": "kat-al-ith-ad'-zo",
+      "translated": true
+    },
+    "G2643": {
+      "definitions_cz": "výměna (obrazně úprava), t. j. obnova k\n (božská) přízeň",
+      "translit": "katallagḗ",
+      "pronunciation": "kat-al-lag-ay'",
+      "translated": true
+    },
+    "G2644": {
+      "definitions_cz": "vzájemně se měnit, tj. (obrazně) skládat\n rozdíl",
+      "translit": "katallássō",
+      "pronunciation": "kat-al-las'-so",
+      "translated": true
+    },
+    "G2645": {
+      "definitions_cz": "vlevo dole (za), tj. zbývající (množné číslo\n odpočinek)",
+      "translit": "katáloipos",
+      "pronunciation": "kat-al'-oy-pos",
+      "translated": true
+    },
+    "G2646": {
+      "definitions_cz": "správně rozpuštění (rozbití cesty), tzn.\n (implicitně) ubytování",
+      "translit": "katályma",
+      "pronunciation": "kat-al'-oo-mah",
+      "translated": true
+    },
+    "G2647": {
+      "definitions_cz": "uvolnit se (rozpadnout se), tj\n implikace) zbourat (doslova nebo přeneseně); speciálně\n (srovnej [ŘECKO:2646]",
+      "translit": "katalýō",
+      "pronunciation": "kat-al-oo'-o",
+      "translated": true
+    },
+    "G2648": {
+      "definitions_cz": "důkladně se učit, t. j. (implicitně) poznamenat\n opatrně",
+      "translit": "katamanthánō",
+      "pronunciation": "kat-am-an-than'-o",
+      "translated": true
+    },
+    "G2649": {
+      "definitions_cz": "svědčit proti",
+      "translit": "katamartyréō",
+      "pronunciation": "kat-am-ar-too-reh'-o",
+      "translated": true
+    },
+    "G2650": {
+      "definitions_cz": "zůstat plně, t. j. bydlet",
+      "translit": "kataménō",
+      "pronunciation": "kat-am-en'-o",
+      "translated": true
+    },
+    "G2651": {
+      "definitions_cz": "podle výhradních míst, tj. (adverbiálně)\n samostatně",
+      "translit": "katamónas",
+      "pronunciation": "kat-am-on'-as",
+      "translated": true
+    },
+    "G2652": {
+      "definitions_cz": "nadávka",
+      "translit": "katanáthema",
+      "pronunciation": "kat-an-ath'-em-ah",
+      "translated": true
+    },
+    "G2653": {
+      "definitions_cz": "zpronevěřit se",
+      "translit": "katanathematízō",
+      "pronunciation": "kat-an-ath-em-at-id'-zo",
+      "translated": true
+    },
+    "G2654": {
+      "definitions_cz": "úplně spotřebovat",
+      "translit": "katanalískō",
+      "pronunciation": "kat-an-al-is'-ko",
+      "translated": true
+    },
+    "G2655": {
+      "definitions_cz": "stát se úplně torpidním, tj\n implikace) lenivý (obrazně, drahý)",
+      "translit": "katanarkáō",
+      "pronunciation": "kat-an-ar-kah'-o",
+      "translated": true
+    },
+    "G2656": {
+      "definitions_cz": "kývnout dolů (směrem), tj. (analogicky) učinit\n znamení k",
+      "translit": "kataneúō",
+      "pronunciation": "kat-an-yoo'-o",
+      "translated": true
+    },
+    "G2657": {
+      "definitions_cz": "plně pozorovat",
+      "translit": "katanoéō",
+      "pronunciation": "kat-an-o-eh'-o",
+      "translated": true
+    },
+    "G2658": {
+      "definitions_cz": "setkat se proti, t. j. dospět k\n (doslova nebo obrazně)",
+      "translit": "katantáō",
+      "pronunciation": "kat-an-tah'-o",
+      "translated": true
+    },
+    "G2659": {
+      "definitions_cz": "píchání (pocit, jako když končetiny spí), tj\n implikace, (možná z nějakého zmatku s [ŘECKO:3506][ŘECKO:3571]",
+      "translit": "katányxis",
+      "pronunciation": "kat-an'-oox-is",
+      "translated": true
+    },
+    "G2660": {
+      "definitions_cz": "důkladně propíchnout, t. j. (obrazně) do\n násilně agitovat (\"bodnout do rychlého\")",
+      "translit": "katanýssō",
+      "pronunciation": "kat-an-oos'-so",
+      "translated": true
+    },
+    "G2661": {
+      "definitions_cz": "považovat za zcela záslužné",
+      "translit": "kataxióō",
+      "pronunciation": "kat-ax-ee-o'-o",
+      "translated": true
+    },
+    "G2662": {
+      "definitions_cz": "pošlapat; přeneseně odmítnout s\n pohrdat",
+      "translit": "katapatéō",
+      "pronunciation": "kat-ap-at-eh'-o",
+      "translated": true
+    },
+    "G2663": {
+      "definitions_cz": "spočívající dolů, tj. (hebraismem) příbytek",
+      "translit": "katápausis",
+      "pronunciation": "kat-ap'-ow-sis",
+      "translated": true
+    },
+    "G2664": {
+      "definitions_cz": "usadit se, tedy (doslova) kolonizovat, popř\n (obrazně) upustit od (způsobit).",
+      "translit": "katapaúō",
+      "pronunciation": "kat-ap-ow'-o",
+      "translated": true
+    },
+    "G2665": {
+      "definitions_cz": "něco se rozšířilo\n důkladně, tj. (zvláště) zástěna dveří (do Nejsvětějšího místa)\n v židovském chrámu",
+      "translit": "katapétasma",
+      "pronunciation": "kat-ap-et'-as-mah",
+      "translated": true
+    },
+    "G2666": {
+      "definitions_cz": "vypít, tj. spolknout celý (doslova popř\n přeneseně)",
+      "translit": "katapínō",
+      "pronunciation": "kat-ap-ee'-no",
+      "translated": true
+    },
+    "G2667": {
+      "definitions_cz": "spadnout dolů",
+      "translit": "katapíptō",
+      "pronunciation": "kat-ap-ip'-to",
+      "translated": true
+    },
+    "G2668": {
+      "definitions_cz": "doplout na místo, t. j. přistát\n v",
+      "translit": "katapléō",
+      "pronunciation": "kat-ap-leh'-o",
+      "translated": true
+    },
+    "G2669": {
+      "definitions_cz": "namáhat se, t. j. opotřebovávat se dřinou\n (obrazně obtěžovat)",
+      "translit": "kataponéō",
+      "pronunciation": "kat-ap-on-eh'-o",
+      "translated": true
+    },
+    "G2670": {
+      "definitions_cz": "vrhnout se dolů, tzn.\n ponořit",
+      "translit": "katapontízō",
+      "pronunciation": "kat-ap-on-tid'-zo",
+      "translated": true
+    },
+    "G2671": {
+      "definitions_cz": "ukřižování, exekuce",
+      "translit": "katára",
+      "pronunciation": "kat-ar'-ah",
+      "translated": true
+    },
+    "G2672": {
+      "definitions_cz": "vykonat; analogicky k záhubě",
+      "translit": "kataráomai",
+      "pronunciation": "kat-ar-ah'-om-ahee",
+      "translated": true
+    },
+    "G2673": {
+      "definitions_cz": "být (render) zcela nečinný (neužitečný), doslova\n nebo přeneseně",
+      "translit": "katargéō",
+      "pronunciation": "kat-arg-eh'-o",
+      "translated": true
+    },
+    "G2674": {
+      "definitions_cz": "počítat mezi",
+      "translit": "katarithméō",
+      "pronunciation": "kat-ar-ith-meh'-o",
+      "translated": true
+    },
+    "G2675": {
+      "definitions_cz": "důkladně dokončit, tj. opravit\n (doslova nebo přeneseně) nebo upravit",
+      "translit": "katartízō",
+      "pronunciation": "kat-ar-tid'-zo",
+      "translated": true
+    },
+    "G2676": {
+      "definitions_cz": "důkladné vybavení (subjektivně)",
+      "translit": "katártisis",
+      "pronunciation": "kat-ar'-tis-is",
+      "translated": true
+    },
+    "G2677": {
+      "definitions_cz": "kompletní vybavení (objektivně)",
+      "translit": "katartismós",
+      "pronunciation": "kat-ar-tis-mos'",
+      "translated": true
+    },
+    "G2678": {
+      "definitions_cz": "kývat se dolů, tedy vydávat signál",
+      "translit": "kataseíō",
+      "pronunciation": "kat-as-i'-o",
+      "translated": true
+    },
+    "G2679": {
+      "definitions_cz": "podkopat, tj. (implicitně) zničit",
+      "translit": "kataskáptō",
+      "pronunciation": "kat-as-kap'-to",
+      "translated": true
+    },
+    "G2680": {
+      "definitions_cz": "důkladně se připravit (správně,\n externím zařízením; zatímco [ŘECKO:2090]",
+      "translit": "kataskeuázō",
+      "pronunciation": "kat-ask-yoo-ad'-zo",
+      "translated": true
+    },
+    "G2681": {
+      "definitions_cz": "tábořit, t. j. strašit; přeneseně do\n zůstat",
+      "translit": "kataskēnóō",
+      "pronunciation": "kat-as-kay-no'-o",
+      "translated": true
+    },
+    "G2682": {
+      "definitions_cz": "tábořiště, tedy (obrazně) okouna",
+      "translit": "kataskḗnōsis",
+      "pronunciation": "kat-as-kay'-no-sis",
+      "translated": true
+    },
+    "G2683": {
+      "definitions_cz": "zastínit, t. j. zakrýt",
+      "translit": "kataskiázō",
+      "pronunciation": "kat-as-kee-ad'-zo",
+      "translated": true
+    },
+    "G2684": {
+      "definitions_cz": "být hlídačem, t. j. zákeřně kontrolovat",
+      "translit": "kataskopéō",
+      "pronunciation": "kat-as-kop-eh'-o",
+      "translated": true
+    },
+    "G2685": {
+      "definitions_cz": "a\n průzkumník",
+      "translit": "katáskopos",
+      "pronunciation": "kat-as'-kop-os",
+      "translated": true
+    },
+    "G2686": {
+      "definitions_cz": "být lstivý proti, tzn.\n obcházet",
+      "translit": "katasophízomai",
+      "pronunciation": "kat-as-of-id'-zom-ahee",
+      "translated": true
+    },
+    "G2687": {
+      "definitions_cz": "položit, t. j. utišit",
+      "translit": "katastéllō",
+      "pronunciation": "kat-as-tel'-lo",
+      "translated": true
+    },
+    "G2688": {
+      "definitions_cz": "správně, pozice nebo podmínka, tj. (subjektivně)\n chování",
+      "translit": "katástēma",
+      "pronunciation": "kat-as'-tay-mah",
+      "translated": true
+    },
+    "G2689": {
+      "definitions_cz": "záloha, tedy (speciálně) kostým",
+      "translit": "katastolḗ",
+      "pronunciation": "kat-as-tol-ay'",
+      "translated": true
+    },
+    "G2690": {
+      "definitions_cz": "převrátit, t. j. rozčílit",
+      "translit": "katastréphō",
+      "pronunciation": "kat-as-tref'-o",
+      "translated": true
+    },
+    "G2691": {
+      "definitions_cz": "stát se smyslným proti",
+      "translit": "katastrēniáō",
+      "pronunciation": "kat-as-tray-nee-ah'-o",
+      "translated": true
+    },
+    "G2692": {
+      "definitions_cz": "převrácení („katastrofa“), tj. demolice; přeneseně,\n odpadlictví",
+      "translit": "katastrophḗ",
+      "pronunciation": "kat-as-trof-ay'",
+      "translated": true
+    },
+    "G2693": {
+      "definitions_cz": "sypat, t. j. (implicitně) padat na zem\n (zabít)",
+      "translit": "katastrṓnnymi",
+      "pronunciation": "kat-as-trone'-noo-mee",
+      "translated": true
+    },
+    "G2694": {
+      "definitions_cz": "strhnout, t. j. soudně zatknout",
+      "translit": "katasýrō",
+      "pronunciation": "kat-as-oo'-ro",
+      "translated": true
+    },
+    "G2695": {
+      "definitions_cz": "zabít, t. j. porazit",
+      "translit": "kataspháttō",
+      "pronunciation": "kat-as-fat'-to",
+      "translated": true
+    },
+    "G2696": {
+      "definitions_cz": "těsně utěsnit",
+      "translit": "katasphragízō",
+      "pronunciation": "kat-as-frag-id'-zo",
+      "translated": true
     }
   }
 }
