@@ -9075,6 +9075,906 @@
     "H2269": {
       "definitions_cz": "1) společník, společník, přítel, kamarád, kolega",
       "translated": true
+    },
+    "G1": {
+      "definitions_cz": "první písmeno abecedy; pouze obrazně\n (od jeho použití jako číslovky) první:",
+      "translit": "A",
+      "pronunciation": "al'-fah",
+      "translated": true
+    },
+    "G2": {
+      "definitions_cz": "Áron, bratr Mojžíšův",
+      "translit": "Aarṓn",
+      "pronunciation": "ah-ar-ohn'",
+      "translated": true
+    },
+    "G3": {
+      "definitions_cz": "ničícího anděla",
+      "translit": "Abaddṓn",
+      "pronunciation": "ab-ad-dohn'",
+      "translated": true
+    },
+    "G4": {
+      "definitions_cz": "beztížný, tzn.\n (obrazně) nezatěžující",
+      "translit": "abarḗs",
+      "pronunciation": "ab-ar-ace'",
+      "translated": true
+    },
+    "G5": {
+      "definitions_cz": "otec jako vokativ",
+      "translit": "Abbâ",
+      "pronunciation": "ab-bah'",
+      "translated": true
+    },
+    "G6": {
+      "definitions_cz": "Ábel, syn Adamův",
+      "translit": "Ábel",
+      "pronunciation": "ab'-el",
+      "translated": true
+    },
+    "G7": {
+      "definitions_cz": "Abijah, jméno dvou Izraelitů",
+      "translit": "Abiá",
+      "pronunciation": "ab-ee-ah'",
+      "translated": true
+    },
+    "G8": {
+      "definitions_cz": "Abiatar, Izraelita",
+      "translit": "Abiathár",
+      "pronunciation": "ab-ee-ath'-ar",
+      "translated": true
+    },
+    "G9": {
+      "definitions_cz": "Abilene, oblast Sýrie",
+      "translit": "Abilēnḗ",
+      "pronunciation": "ab-ee-lay-nay'",
+      "translated": true
+    },
+    "G10": {
+      "definitions_cz": "Abihud, Izraelita",
+      "translit": "Abioúd",
+      "pronunciation": "ab-ee-ood'",
+      "translated": true
+    },
+    "G11": {
+      "definitions_cz": "Abraham, hebrejský patriarcha",
+      "translit": "Abraám",
+      "pronunciation": "ab-rah-am'",
+      "translated": true
+    },
+    "G12": {
+      "definitions_cz": "bez hloubky,\n tj. (speciálně) (pekelný) \"propast\"",
+      "translit": "ábyssos",
+      "pronunciation": "ab'-us-sos",
+      "translated": true
+    },
+    "G13": {
+      "definitions_cz": "Agabus, Izraelita",
+      "translit": "Ágabos",
+      "pronunciation": "ag'-ab-os",
+      "translated": true
+    },
+    "G14": {
+      "definitions_cz": "pracovat dobře",
+      "translit": "agathoergéō",
+      "pronunciation": "ag-ath-er-gheh'-o",
+      "translated": true
+    },
+    "G15": {
+      "definitions_cz": "být dobročinným (jako laskavost nebo povinnost)",
+      "translit": "agathopoiéō",
+      "pronunciation": "ag-ath-op-oy-eh'-o",
+      "translated": true
+    },
+    "G16": {
+      "definitions_cz": "dobročinnost, t. j. ctnost",
+      "translit": "agathopoiḯa",
+      "pronunciation": "ag-ath-op-oy-ee'-ah",
+      "translated": true
+    },
+    "G17": {
+      "definitions_cz": "dobrák, t. j. ctnostný",
+      "translit": "agathopoiós",
+      "pronunciation": "ag-ath-op-oy-os'",
+      "translated": true
+    },
+    "G18": {
+      "definitions_cz": "\"dobrý\" (v jakémkoli smyslu, často jako podstatné jméno)",
+      "translit": "agathós",
+      "pronunciation": "ag-ath-os'",
+      "translated": true
+    },
+    "G19": {
+      "definitions_cz": "dobrotu, t. j. ctnost nebo dobrodiní",
+      "translit": "agathōsýnē",
+      "pronunciation": "ag-ath-o-soo'-nay",
+      "translated": true
+    },
+    "G20": {
+      "definitions_cz": "jásání; zvláště, vítejte",
+      "translit": "agallíasis",
+      "pronunciation": "ag-al-lee'-as-is",
+      "translated": true
+    },
+    "G21": {
+      "definitions_cz": "správně, radostí skákat, t. j. jásat",
+      "translit": "agalliáō",
+      "pronunciation": "ag-al-lee-ah'-o",
+      "translated": true
+    },
+    "G22": {
+      "definitions_cz": "svobodný",
+      "translit": "ágamos",
+      "pronunciation": "ag'-am-os",
+      "translated": true
+    },
+    "G23": {
+      "definitions_cz": "podobný základu [ŘECKO:43]",
+      "translit": "aganaktéō",
+      "pronunciation": "ag-an-ak-teh'-o",
+      "translated": true
+    },
+    "G24": {
+      "definitions_cz": "rozhořčení",
+      "translit": "aganáktēsis",
+      "pronunciation": "ag-an-ak'-tay-sis",
+      "translated": true
+    },
+    "G25": {
+      "definitions_cz": "milovat (ve společenském popř\n morální smysl)",
+      "translit": "agapáō",
+      "pronunciation": "ag-ap-ah'-o",
+      "translated": true
+    },
+    "G26": {
+      "definitions_cz": "láska, t. j. náklonnost nebo dobrotivost; speciálně (množné číslo) a\n milostná hostina",
+      "translit": "agápē",
+      "pronunciation": "ag-ah'-pay",
+      "translated": true
+    },
+    "G27": {
+      "definitions_cz": "milovaný",
+      "translit": "agapētós",
+      "pronunciation": "ag-ap-ay-tos'",
+      "translated": true
+    },
+    "G28": {
+      "definitions_cz": "Hagar, konkubína Abrahamova",
+      "translit": "Ágar",
+      "pronunciation": "ag'-ar",
+      "translated": true
+    },
+    "G29": {
+      "definitions_cz": "správně, být kurýrem, tj\n implikace) tlačit do veřejné služby",
+      "translit": "angareúō",
+      "pronunciation": "ang-ar-yew'-o",
+      "translated": true
+    },
+    "G30": {
+      "definitions_cz": "porovnat základ [ŘECKO:43]",
+      "translit": "angeîon",
+      "pronunciation": "ang-eye'-on",
+      "translated": true
+    },
+    "G31": {
+      "definitions_cz": "oznámení, tj. (implicitně) předpis",
+      "translit": "angelía",
+      "pronunciation": "ang-el-ee'-ah",
+      "translated": true
+    },
+    "G32": {
+      "definitions_cz": "porovnat [ŘECKO:34]",
+      "translit": "ángelos",
+      "pronunciation": "ang'-el-os",
+      "translated": true
+    },
+    "G33": {
+      "definitions_cz": "správně, vést, t. j. pojď",
+      "translit": "áge",
+      "pronunciation": "ag'-eh",
+      "translated": true
+    },
+    "G34": {
+      "definitions_cz": "jel",
+      "translit": "agélē",
+      "pronunciation": "ag-el'-ay",
+      "translated": true
+    },
+    "G35": {
+      "definitions_cz": "neregistrovaný jako do\n narození",
+      "translit": "agenealógētos",
+      "pronunciation": "ag-en-eh-al-og'-ay-tos",
+      "translated": true
+    },
+    "G36": {
+      "definitions_cz": "řádně, bez příbuzenstva, tzn.\n (neznámého původu a implicitně) neslušný",
+      "translit": "agenḗs",
+      "pronunciation": "ag-en-ace'",
+      "translated": true
+    },
+    "G37": {
+      "definitions_cz": "učinit svatým, t. j. (obřadně) očistit nebo posvětit;\n (duševně) uctívat",
+      "translit": "hagiázō",
+      "pronunciation": "hag-ee-ad'-zo",
+      "translated": true
+    },
+    "G38": {
+      "definitions_cz": "správně, očista, t. j. (státní) čistota; konkrétně\n (hebraismem) čistička",
+      "translit": "hagiasmós",
+      "pronunciation": "hag-ee-as-mos'",
+      "translated": true
+    },
+    "G39": {
+      "definitions_cz": "posvátná věc (tj. místo)",
+      "translit": "hágion",
+      "pronunciation": "hag'-ee-on",
+      "translated": true
+    },
+    "G40": {
+      "definitions_cz": "posvátný (fyzicky,\n čistý, morálně bezúhonný nebo náboženský, ceremoniálně,\n zasvěcený)",
+      "translit": "hágios",
+      "pronunciation": "hag'-ee-os",
+      "translated": true
+    },
+    "G41": {
+      "definitions_cz": "posvátnost (tj. správně stát)",
+      "translit": "hagiótēs",
+      "pronunciation": "hag-ee-ot'-ace",
+      "translated": true
+    },
+    "G42": {
+      "definitions_cz": "posvátnost (tj. správně kvalita)",
+      "translit": "hagiōsýnē",
+      "pronunciation": "hag-ee-o-soo'-nay",
+      "translated": true
+    },
+    "G43": {
+      "definitions_cz": "paže (jako zakřivená)",
+      "translit": "ankálē",
+      "pronunciation": "ang-kal'-ay",
+      "translated": true
+    },
+    "G44": {
+      "definitions_cz": "háček (jako ohnutý)",
+      "translit": "ánkistron",
+      "pronunciation": "ang'-kis-tron",
+      "translated": true
+    },
+    "G45": {
+      "definitions_cz": "\"kotva\" (jako křivá)",
+      "translit": "ánkyra",
+      "pronunciation": "ang'-koo-rah",
+      "translated": true
+    },
+    "G46": {
+      "definitions_cz": "správně,\n nenaplněný, tj. (implicitně) nový (tkanina)",
+      "translit": "ágnaphos",
+      "pronunciation": "ag'-naf-os",
+      "translated": true
+    },
+    "G47": {
+      "definitions_cz": "čistota (kvalita), tj. (zvláště)\n cudnost",
+      "translit": "hagneía",
+      "pronunciation": "hag-ni'-ah",
+      "translated": true
+    },
+    "G48": {
+      "definitions_cz": "čistit, t. j. (obrazně) posvětit (obřadně popř\n morálně)",
+      "translit": "hagnízō",
+      "pronunciation": "hag-nid'-zo",
+      "translated": true
+    },
+    "G49": {
+      "definitions_cz": "očista (akt), tj. (obřadně)\n lustraci",
+      "translit": "hagnismós",
+      "pronunciation": "hag-nis-mos'",
+      "translated": true
+    },
+    "G50": {
+      "definitions_cz": "nevědět (pro nedostatek\n informace nebo zpravodajství); implicitně ignorovat (přes\n disinclination)",
+      "translit": "agnoéō",
+      "pronunciation": "ag-no-eh'-o",
+      "translated": true
+    },
+    "G51": {
+      "definitions_cz": "ignorovaná věc, tedy nedostatek",
+      "translit": "agnóēma",
+      "pronunciation": "ag-no'-ay-mah",
+      "translated": true
+    },
+    "G52": {
+      "definitions_cz": "neznalost (správně, kvalita)",
+      "translit": "ágnoia",
+      "pronunciation": "ag'-noy-ah",
+      "translated": true
+    },
+    "G53": {
+      "definitions_cz": "řádně, čistě, tedy (obrazně) nevinně,\n skromný, dokonalý",
+      "translit": "hagnós",
+      "pronunciation": "hag-nos'",
+      "translated": true
+    },
+    "G54": {
+      "definitions_cz": "čistota (stát), tj. (obrazně)\n bezúhonnost",
+      "translit": "hagnótēs",
+      "pronunciation": "hag-not'-ace",
+      "translated": true
+    },
+    "G55": {
+      "definitions_cz": "čistě, tj. upřímně",
+      "translit": "hagnōs",
+      "pronunciation": "hag-noce'",
+      "translated": true
+    },
+    "G56": {
+      "definitions_cz": "neznalost (správně,\n stát)",
+      "translit": "agnōsía",
+      "pronunciation": "ag-no-see'-ah",
+      "translated": true
+    },
+    "G57": {
+      "definitions_cz": "neznámý",
+      "translit": "ágnōstos",
+      "pronunciation": "ag'-noce-tos'",
+      "translated": true
+    },
+    "G58": {
+      "definitions_cz": "pravděpodobně podobný [ŘECKO:1453]",
+      "translit": "agorá",
+      "pronunciation": "ag-or-ah'",
+      "translated": true
+    },
+    "G59": {
+      "definitions_cz": "správně, jít na trh, tj. (implicitně) koupit;\n zvláště vykoupit",
+      "translit": "agorázō",
+      "pronunciation": "ag-or-ad'-zo",
+      "translated": true
+    },
+    "G60": {
+      "definitions_cz": "vztahující se k tržišti, tj. forenzní (časy); podle\n implikace, vulgární",
+      "translit": "agoraîos",
+      "pronunciation": "ag-or-ah'-yos",
+      "translated": true
+    },
+    "G61": {
+      "definitions_cz": "(abstraktně) chytání (ryb); také (konkrétně) zátah\n (z ryb)",
+      "translit": "ágra",
+      "pronunciation": "ag'-rah",
+      "translated": true
+    },
+    "G62": {
+      "definitions_cz": "nepsaný, tzn.\n negramotný",
+      "translit": "agrámmatos",
+      "pronunciation": "ag-ram-mat-os",
+      "translated": true
+    },
+    "G63": {
+      "definitions_cz": "tábořit ven",
+      "translit": "agrauléō",
+      "pronunciation": "ag-row-leh'-o",
+      "translated": true
+    },
+    "G64": {
+      "definitions_cz": "lovit, t. j. (obrazně) lapit",
+      "translit": "agreúō",
+      "pronunciation": "ag-rew'-o",
+      "translated": true
+    },
+    "G65": {
+      "definitions_cz": "oleaster",
+      "translit": "agriélaios",
+      "pronunciation": "ag-ree-el'-ah-yos",
+      "translated": true
+    },
+    "G66": {
+      "definitions_cz": "divoký (podle dané země), doslova (přírodní) popř\n přeneseně (divoký)",
+      "translit": "ágrios",
+      "pronunciation": "ag'-ree-os",
+      "translated": true
+    },
+    "G67": {
+      "definitions_cz": "krotitel divokých koní; Agrippas, jeden z\n Herodesové",
+      "translit": "Agríppas",
+      "pronunciation": "ag-rip'-pas",
+      "translated": true
+    },
+    "G68": {
+      "definitions_cz": "pole (jako pohon pro dobytek); genitiv, země;\n zvláště statek, t. j. vesnička",
+      "translit": "agrós",
+      "pronunciation": "ag-ros'",
+      "translated": true
+    },
+    "G69": {
+      "definitions_cz": "být bez spánku,\n tedy zůstat vzhůru",
+      "translit": "agrypnéō",
+      "pronunciation": "ag-roop-neh'-o",
+      "translated": true
+    },
+    "G70": {
+      "definitions_cz": "nespavost, tedy udržení bdělosti",
+      "translit": "agrypnía",
+      "pronunciation": "ag-roop-nee'-ah",
+      "translated": true
+    },
+    "G71": {
+      "definitions_cz": "správně, vést; implicitně přinést, řídit,\n (reflexivně) jít, (zvláště) projít (čas) nebo (obrazně)\n vyvolat",
+      "translit": "ágō",
+      "pronunciation": "ag'-o",
+      "translated": true
+    },
+    "G72": {
+      "definitions_cz": "výchova, tedy způsob života",
+      "translit": "agōgḗ",
+      "pronunciation": "ag-o-gay'",
+      "translated": true
+    },
+    "G73": {
+      "definitions_cz": "správně, místo shromáždění (jakoby vedené), tj\n implikace) soutěž (tam se koná); obrazně řečeno úsilí resp\n úzkost",
+      "translit": "agṓn",
+      "pronunciation": "ag-one'",
+      "translated": true
+    },
+    "G74": {
+      "definitions_cz": "boj (správně stát), tj. (obrazně)\n trápení",
+      "translit": "agōnía",
+      "pronunciation": "ag-o-nee'-ah",
+      "translated": true
+    },
+    "G75": {
+      "definitions_cz": "bojovat, doslova (soutěžit o cenu), přeneseně\n (zápasit s protivníkem) nebo genitivní pád (snažit se\n něco dokázat)",
+      "translit": "agōnízomai",
+      "pronunciation": "ag-o-nid'-zom-ahee",
+      "translated": true
+    },
+    "G76": {
+      "definitions_cz": "Adam, první člověk; typicky (Ježíše) člověk\n (jako jeho zástupce)",
+      "translit": "Adám",
+      "pronunciation": "ad-am'",
+      "translated": true
+    },
+    "G77": {
+      "definitions_cz": "a [ŘECtina:1160]",
+      "translit": "adápanos",
+      "pronunciation": "ad-ap'-an-os",
+      "translated": true
+    },
+    "G78": {
+      "definitions_cz": "Addi, Izraelita",
+      "translit": "Addí",
+      "pronunciation": "ad-dee'",
+      "translated": true
+    },
+    "G79": {
+      "definitions_cz": "sestra (přirozeně nebo církevně)",
+      "translit": "adelphḗ",
+      "pronunciation": "ad-el-fay'",
+      "translated": true
+    },
+    "G80": {
+      "definitions_cz": "bratr\n (doslova nebo přeneseně) blízko nebo na dálku (podobně jako [ŘECKO:1]",
+      "translit": "adelphós",
+      "pronunciation": "ad-el-fos'",
+      "translated": true
+    },
+    "G81": {
+      "definitions_cz": "bratrství (správně, pocit bratrství), tzn.\n (křesťanské) bratrstvo",
+      "translit": "adelphótēs",
+      "pronunciation": "ad-el-fot'-ace",
+      "translated": true
+    },
+    "G82": {
+      "definitions_cz": "skrytý, obrazně,\n nezřetelný",
+      "translit": "ádēlos",
+      "pronunciation": "ad'-ay-los",
+      "translated": true
+    },
+    "G83": {
+      "definitions_cz": "nejistota",
+      "translit": "adēlótēs",
+      "pronunciation": "ad-ay-lot'-ace",
+      "translated": true
+    },
+    "G84": {
+      "definitions_cz": "nejistě",
+      "translit": "adḗlōs",
+      "pronunciation": "ad-ay'-loce",
+      "translated": true
+    },
+    "G85": {
+      "definitions_cz": "být v nouzi\n (mysli)",
+      "translit": "adēmonéō",
+      "pronunciation": "ad-ay-mon-eh'-o",
+      "translated": true
+    },
+    "G86": {
+      "definitions_cz": "správně, neviditelně, tj. \"Hades\"\n nebo místo (stav) zesnulých duší",
+      "translit": "háidēs",
+      "pronunciation": "hah'-dace",
+      "translated": true
+    },
+    "G87": {
+      "definitions_cz": "správně,\n nevýrazný, tedy (aktivně) nestranný",
+      "translit": "adiákritos",
+      "pronunciation": "ad-ee-ak'-ree-tos",
+      "translated": true
+    },
+    "G88": {
+      "definitions_cz": "nepřerušovaný, tedy trvalý",
+      "translit": "adiáleiptos",
+      "pronunciation": "ad-ee-al'-ipe-tos",
+      "translated": true
+    },
+    "G89": {
+      "definitions_cz": "nepřerušovaně, tj. bez vynechání (na an\n vhodná příležitost)",
+      "translit": "adialeíptōs",
+      "pronunciation": "ad-ee-al-ipe'-toce",
+      "translated": true
+    },
+    "G90": {
+      "definitions_cz": "neúplatnost, tj. (obrazně) čistota (z\n doktrína)",
+      "translit": "adiaphthoría",
+      "pronunciation": "ad-ee-af-thor-ee'-ah",
+      "translated": true
+    },
+    "G91": {
+      "definitions_cz": "být nespravedlivý, tj. (aktivně) konat špatně (morálně, společensky nebo\n fyzicky)",
+      "translit": "adikéō",
+      "pronunciation": "ad-ee-keh'-o",
+      "translated": true
+    },
+    "G92": {
+      "definitions_cz": "udělaná chyba",
+      "translit": "adíkēma",
+      "pronunciation": "ad-eek'-ay-mah",
+      "translated": true
+    },
+    "G93": {
+      "definitions_cz": "(právní) nespravedlnost (správně kvalita, implicitně,\n jednat); morálně, bezpráví (charakteru, života nebo činu)",
+      "translit": "adikía",
+      "pronunciation": "ad-ee-kee'-ah",
+      "translated": true
+    },
+    "G94": {
+      "definitions_cz": "nespravedlivý; rozšířením zlý;\n implicitně zrádný; zvláště pohané",
+      "translit": "ádikos",
+      "pronunciation": "ad'-ee-kos",
+      "translated": true
+    },
+    "G95": {
+      "definitions_cz": "nespravedlivě",
+      "translit": "adíkōs",
+      "pronunciation": "ad-ee'-koce",
+      "translated": true
+    },
+    "G96": {
+      "definitions_cz": "neschválený, tj. zamítnutý;\n implicitně bezcenný (doslova nebo morálně)",
+      "translit": "adókimos",
+      "pronunciation": "ad-ok'-ee-mos",
+      "translated": true
+    },
+    "G97": {
+      "definitions_cz": "a [ŘECKO:1388]",
+      "translit": "ádolos",
+      "pronunciation": "ad'-ol-os",
+      "translated": true
+    },
+    "G98": {
+      "definitions_cz": "Adramyttene nebo patřící k\n adramytium",
+      "translit": "Adramyttēnós",
+      "pronunciation": "ad-ram-oot-tay-nos'",
+      "translated": true
+    },
+    "G99": {
+      "definitions_cz": "Jaderské moře (včetně\n Jónské moře)",
+      "translit": "Adrías",
+      "pronunciation": "ad-ree'-as",
+      "translated": true
+    },
+    "G100": {
+      "definitions_cz": "baculatost, tj. (obrazně)\n liberálnost",
+      "translit": "hadrótēs",
+      "pronunciation": "had-rot'-ace",
+      "translated": true
+    },
+    "G101": {
+      "definitions_cz": "být neschopný, t. j. (pasivně) nemožný",
+      "translit": "adynatéō",
+      "pronunciation": "ad-oo-nat-eh'-o",
+      "translated": true
+    },
+    "G102": {
+      "definitions_cz": "neschopný, tj. slabý (doslova\n nebo obrazně); pasivně, nemožné",
+      "translit": "adýnatos",
+      "pronunciation": "ad-oo'-nat-os",
+      "translated": true
+    },
+    "G103": {
+      "definitions_cz": "zpívat",
+      "translit": "áidō",
+      "pronunciation": "ad'-o",
+      "translated": true
+    },
+    "G104": {
+      "definitions_cz": "\"kdykoli\", kvalifikací pravidelně; implicitně, vážně",
+      "translit": "aeí",
+      "pronunciation": "ah-eye'",
+      "translated": true
+    },
+    "G105": {
+      "definitions_cz": "orel (z jeho letu podobného větru)",
+      "translit": "aetós",
+      "pronunciation": "ah-et-os'",
+      "translated": true
+    },
+    "G106": {
+      "definitions_cz": "nekvašené, tzn.\n (obrazně) nezkažené; (v neutrálním množném čísle) speciálně (tím\n implikace) Pesachový týden",
+      "translit": "ázymos",
+      "pronunciation": "ad'-zoo-mos",
+      "translated": true
+    },
+    "G107": {
+      "definitions_cz": "Azor, Izraelita",
+      "translit": "Azṓr",
+      "pronunciation": "ad-zore'",
+      "translated": true
+    },
+    "G108": {
+      "definitions_cz": "Azotus (t. j. Ašdod), místo v\n Palestina",
+      "translit": "Ázōtos",
+      "pronunciation": "ad'-zo-tos",
+      "translated": true
+    },
+    "G109": {
+      "definitions_cz": "analogicky k\n rána); \"vzduch\" (jako přirozeně obklopující)",
+      "translit": "aḗr",
+      "pronunciation": "ah-ayr'",
+      "translated": true
+    },
+    "G110": {
+      "definitions_cz": "nesmrtelnost",
+      "translit": "athanasía",
+      "pronunciation": "ath-an-as-ee'-ah",
+      "translated": true
+    },
+    "G111": {
+      "definitions_cz": "ze základny [ŘECKO:5087]",
+      "translit": "athémitos",
+      "pronunciation": "ath-em'-ee-tos",
+      "translated": true
+    },
+    "G112": {
+      "definitions_cz": "bezbožný",
+      "translit": "átheos",
+      "pronunciation": "ath'-eh-os",
+      "translated": true
+    },
+    "G113": {
+      "definitions_cz": "nezákonný, tedy (implicitně) zločinný",
+      "translit": "áthesmos",
+      "pronunciation": "ath'-es-mos",
+      "translated": true
+    },
+    "G114": {
+      "definitions_cz": "odložit, tj. (implicitně) znevážit, neutralizovat popř\n porušovat",
+      "translit": "athetéō",
+      "pronunciation": "ath-et-eh'-o",
+      "translated": true
+    },
+    "G115": {
+      "definitions_cz": "zrušení (doslova nebo obrazně)",
+      "translit": "athétēsis",
+      "pronunciation": "ath-et'-ay-sis",
+      "translated": true
+    },
+    "G116": {
+      "definitions_cz": "Atény, hlavní město Řecka",
+      "translit": "Athēnai",
+      "pronunciation": "ath-ay-nahee",
+      "translated": true
+    },
+    "G117": {
+      "definitions_cz": "Athenæan nebo obyvatel Athenæ",
+      "translit": "Athēnaîos",
+      "pronunciation": "ath-ay-nah'-yos",
+      "translated": true
+    },
+    "G118": {
+      "definitions_cz": "bojovat v\n soutěžní hry",
+      "translit": "athléō",
+      "pronunciation": "ath-leh'-o",
+      "translated": true
+    },
+    "G119": {
+      "definitions_cz": "boj (obrazně)",
+      "translit": "áthlēsis",
+      "pronunciation": "ath'-lay-sis",
+      "translated": true
+    },
+    "G120": {
+      "definitions_cz": "být\n bezduchý, t. j. sklíčený",
+      "translit": "athyméō",
+      "pronunciation": "ath-oo-meh'-o",
+      "translated": true
+    },
+    "G121": {
+      "definitions_cz": "nevinen",
+      "translit": "áthōos",
+      "pronunciation": "ath'-o-os",
+      "translated": true
+    },
+    "G122": {
+      "definitions_cz": "patřící koze",
+      "translit": "aígeios",
+      "pronunciation": "ah'-ee-ghi-os",
+      "translated": true
+    },
+    "G123": {
+      "definitions_cz": "pláž (na\n kterým se řítí vlny)",
+      "translit": "aigialós",
+      "pronunciation": "ahee-ghee-al-os'",
+      "translated": true
+    },
+    "G124": {
+      "definitions_cz": "Ægypt nebo obyvatel Ægyptu",
+      "translit": "Aigýptios",
+      "pronunciation": "ahee-goop'-tee-os",
+      "translated": true
+    },
+    "G125": {
+      "definitions_cz": "Ægyptus, země Nilu",
+      "translit": "Aígyptos",
+      "pronunciation": "ah'-ee-goop-tos",
+      "translated": true
+    },
+    "G126": {
+      "definitions_cz": "everduring (vpřed a vzad nebo vpřed\n pouze)",
+      "translit": "aḯdios",
+      "pronunciation": "ah-id'-ee-os",
+      "translated": true
+    },
+    "G127": {
+      "definitions_cz": "stydlivost, tj. (k mužům), skromnost nebo (k\n Bůh) bázeň",
+      "translit": "aidṓs",
+      "pronunciation": "ahee-doce'",
+      "translated": true
+    },
+    "G128": {
+      "definitions_cz": "Æthiop (jako\n blackamoor)",
+      "translit": "Aithíops",
+      "pronunciation": "ahee-thee'-ops",
+      "translated": true
+    },
+    "G129": {
+      "definitions_cz": "krev, doslova (lidí nebo zvířat),\n přeneseně (šťáva z hroznů) nebo speciálně (smírná krev\n Kristus); implicitně krveprolití, také příbuzní",
+      "translit": "haîma",
+      "pronunciation": "hah'-ee-mah",
+      "translated": true
+    },
+    "G130": {
+      "definitions_cz": "výron krve",
+      "translit": "haimatekchysía",
+      "pronunciation": "hahee-mat-ek-khoo-see'-ah",
+      "translated": true
+    },
+    "G131": {
+      "definitions_cz": "proudit krev, tj. mít krvácení",
+      "translit": "haimorrhéō",
+      "pronunciation": "hahee-mor-hreh'-o",
+      "translated": true
+    },
+    "G132": {
+      "definitions_cz": "Ænĕas, Izraelita",
+      "translit": "Ainéas",
+      "pronunciation": "ahee-neh'-as",
+      "translated": true
+    },
+    "G133": {
+      "definitions_cz": "chvála (akt), tj. (zvláště) a\n děkuji (-nabídka)",
+      "translit": "aínesis",
+      "pronunciation": "ah'-ee-nes-is",
+      "translated": true
+    },
+    "G134": {
+      "definitions_cz": "chválit (Boha)",
+      "translit": "ainéō",
+      "pronunciation": "ahee-neh'-o",
+      "translated": true
+    },
+    "G135": {
+      "definitions_cz": "nejasné rčení\n (\"enigma\"), tedy (abstraktně) nejasnost",
+      "translit": "aínigma",
+      "pronunciation": "ah'-ee-nig-ma",
+      "translated": true
+    },
+    "G136": {
+      "definitions_cz": "správně, příběh, ale použitý ve smyslu\n [ŘECKA:1868]",
+      "translit": "aînos",
+      "pronunciation": "ah'-ee-nos",
+      "translated": true
+    },
+    "G137": {
+      "definitions_cz": "Společnost Ænon, a\n místo v Palestině",
+      "translit": "Ainṓn",
+      "pronunciation": "ahee-nohn'",
+      "translated": true
+    },
+    "G138": {
+      "definitions_cz": "brát pro sebe, t. j. preferovat",
+      "translit": "hairéomai",
+      "pronunciation": "hahee-reh'-om-ahee",
+      "translated": true
+    },
+    "G139": {
+      "definitions_cz": "správně, volba, tj. (zvláště) strana nebo (abstraktně)\n nesjednocení",
+      "translit": "haíresis",
+      "pronunciation": "hah'-ee-res-is",
+      "translated": true
+    },
+    "G140": {
+      "definitions_cz": "udělat volbu",
+      "translit": "hairetízō",
+      "pronunciation": "hahee-ret-id'-zo",
+      "translated": true
+    },
+    "G141": {
+      "definitions_cz": "schizmatik",
+      "translit": "hairetikós",
+      "pronunciation": "hahee-ret-ee-kos'",
+      "translated": true
+    },
+    "G142": {
+      "definitions_cz": "pozvednout; implicitně přijmout nebo odebrat;\n přeneseně zvýšit (hlas), udržet v napětí (mysl),\n speciálně odplout (tj. vážit kotvu); podle hebraismu (srov\n [HEBREJSKO:05375]",
+      "translit": "aírō",
+      "pronunciation": "ah'-ee-ro",
+      "translated": true
+    },
+    "G143": {
+      "definitions_cz": "zachytit (správně, tím\n smysly)",
+      "translit": "aisthánomai",
+      "pronunciation": "ahee-sthan'-om-ahee",
+      "translated": true
+    },
+    "G144": {
+      "definitions_cz": "vnímání, tedy (obrazně) rozlišování",
+      "translit": "aísthēsis",
+      "pronunciation": "ah'-ee-sthay-sis",
+      "translated": true
+    },
+    "G145": {
+      "definitions_cz": "správně, orgán vnímání, tzn.\n (obrazně) soud",
+      "translit": "aisthētḗrion",
+      "pronunciation": "ahee-sthay-tay'-ree-on",
+      "translated": true
+    },
+    "G146": {
+      "definitions_cz": "špinavý",
+      "translit": "aischrokerdḗs",
+      "pronunciation": "ahee-skhrok-er-dace'",
+      "translated": true
+    },
+    "G147": {
+      "definitions_cz": "špinavě",
+      "translit": "aischrokerdōs",
+      "pronunciation": "ahee-skhrok-er-doce'",
+      "translated": true
+    },
+    "G148": {
+      "definitions_cz": "odporný rozhovor",
+      "translit": "aischrología",
+      "pronunciation": "ahee-skhrol-og-ee'-ah",
+      "translated": true
+    },
+    "G149": {
+      "definitions_cz": "hanebná věc, t. j. indecorum",
+      "translit": "aischrón",
+      "pronunciation": "ahee-skhron'",
+      "translated": true
+    },
+    "G150": {
+      "definitions_cz": "hanebný, t. j. základ (zejména žravý)",
+      "translit": "aischrós",
+      "pronunciation": "ahee-skhros'",
+      "translated": true
     }
   }
 }
