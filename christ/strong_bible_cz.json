@@ -25211,6 +25211,898 @@
       "translit": "katasphragízō",
       "pronunciation": "kat-as-frag-id'-zo",
       "translated": true
+    },
+    "G2604": {
+      "definitions_cz": "hlasatel",
+      "translit": "katangeleús",
+      "pronunciation": "kat-ang-gel-yooce'",
+      "translated": true
+    },
+    "G2697": {
+      "definitions_cz": "držení, tj. obsazenost",
+      "translit": "katáschesis",
+      "pronunciation": "kat-as'-khes-is",
+      "translated": true
+    },
+    "G2698": {
+      "definitions_cz": "položit dolů, tj. uložit (doslova popř\n přeneseně)",
+      "translit": "katatíthēmi",
+      "pronunciation": "kat-at-ith'-ay-mee",
+      "translated": true
+    },
+    "G2699": {
+      "definitions_cz": "kácení (odříznutí), tzn.\n mrzačení (ironicky)",
+      "translit": "katatomḗ",
+      "pronunciation": "kat-at-om-ay'",
+      "translated": true
+    },
+    "G2700": {
+      "definitions_cz": "sestřelit šípem nebo\n jiná střela",
+      "translit": "katatoxeúō",
+      "pronunciation": "kat-at-ox-yoo'-o",
+      "translated": true
+    },
+    "G2701": {
+      "definitions_cz": "běžet dolů, t. j. spěchat z věže",
+      "translit": "katatréchō",
+      "pronunciation": "kat-at-rekh'-o",
+      "translated": true
+    },
+    "G2702": {
+      "definitions_cz": "snést dolů, tzn.\n (obrazně) překonat (s ospalostí); speciálně odlévat a\n hlasovat",
+      "translit": "kataphérō",
+      "pronunciation": "kat-af-er'-o",
+      "translated": true
+    },
+    "G2703": {
+      "definitions_cz": "utéct dolů (pryč)",
+      "translit": "katapheúgō",
+      "pronunciation": "kat-af-yoo'-go",
+      "translated": true
+    },
+    "G2704": {
+      "definitions_cz": "úplně zkazit, t. j. (doslova) zničit; nebo\n (obrazně) zkazit;",
+      "translit": "kataphtheírō",
+      "pronunciation": "kat-af-thi'-ro",
+      "translated": true
+    },
+    "G2705": {
+      "definitions_cz": "líbat vážně",
+      "translit": "kataphiléō",
+      "pronunciation": "kat-af-ee-leh'-o",
+      "translated": true
+    },
+    "G2706": {
+      "definitions_cz": "myslet proti, t. j. neúcta",
+      "translit": "kataphronéō",
+      "pronunciation": "kat-af-ron-eh'-o",
+      "translated": true
+    },
+    "G2707": {
+      "definitions_cz": "pohrdavec",
+      "translit": "kataphrontḗs",
+      "pronunciation": "kat-af-ron-tace'",
+      "translated": true
+    },
+    "G2708": {
+      "definitions_cz": "vylévat (vylévat)",
+      "translit": "katachéō",
+      "pronunciation": "kat-akh-eh'-o",
+      "translated": true
+    },
+    "G2709": {
+      "definitions_cz": "podzemní, t. j. pekelný\n (patřící do světa zesnulých duchů)",
+      "translit": "katachthónios",
+      "pronunciation": "kat-akh-thon'-ee-os",
+      "translated": true
+    },
+    "G2710": {
+      "definitions_cz": "k nadužívání, tedy nesprávnému užívání",
+      "translit": "katachráomai",
+      "pronunciation": "kat-akh-rah'-om-ahee",
+      "translated": true
+    },
+    "G2711": {
+      "definitions_cz": "vychladnout (vypnout), t. j. osvěžit",
+      "translit": "katapsýchō",
+      "pronunciation": "kat-ap-soo'-kho",
+      "translated": true
+    },
+    "G2712": {
+      "definitions_cz": "naprosto modlářský",
+      "translit": "kateídōlos",
+      "pronunciation": "kat-i'-do-los",
+      "translated": true
+    },
+    "G2713": {
+      "definitions_cz": "přímo naproti",
+      "translit": "katénanti",
+      "pronunciation": "kat-en'-an-tee",
+      "translated": true
+    },
+    "G2714": {
+      "definitions_cz": "přímo před",
+      "translit": "katenṓpion",
+      "pronunciation": "kat-en-o'-pee-on",
+      "translated": true
+    },
+    "G2715": {
+      "definitions_cz": "mít (mít) plné privilegium nad",
+      "translit": "katexousiázō",
+      "pronunciation": "kat-ex-oo-see-ad'-zo",
+      "translated": true
+    },
+    "G2716": {
+      "definitions_cz": "plně pracovat, t. j. plnit; implicitně, k\n úprava, móda",
+      "translit": "katergázomai",
+      "pronunciation": "kat-er-gad'-zom-ahee",
+      "translated": true
+    },
+    "G2717": {
+      "definitions_cz": "",
+      "translated": false
+    },
+    "G2718": {
+      "definitions_cz": "přijít (nebo jít) dolů\n (doslova nebo obrazně)",
+      "translit": "katérchomai",
+      "pronunciation": "kat-er'-khom-ahee",
+      "translated": true
+    },
+    "G2719": {
+      "definitions_cz": "sníst, t. j. pozřít\n (doslova nebo obrazně)",
+      "translit": "katesthíō",
+      "pronunciation": "kat-es-thee'-o",
+      "translated": true
+    },
+    "G2720": {
+      "definitions_cz": "úplně se narovnat, tj. (obrazně)\n přímý",
+      "translit": "kateuthýnō",
+      "pronunciation": "kat-yoo-thoo'-no",
+      "translated": true
+    },
+    "G2721": {
+      "definitions_cz": "postavit se proti, t. j. spěchat na\n (útok)",
+      "translit": "katephístēmi",
+      "pronunciation": "kat-ef-is'-tay-mee",
+      "translated": true
+    },
+    "G2722": {
+      "definitions_cz": "držet stisknuté (rychle), v různých aplikacích\n (doslova nebo obrazně)",
+      "translit": "katéchō",
+      "pronunciation": "kat-ekh'-o",
+      "translated": true
+    },
+    "G2723": {
+      "definitions_cz": "být žalobcem, t. j. obvinit se s některými\n přestupek",
+      "translit": "katēgoréō",
+      "pronunciation": "kat-ay-gor-eh'-o",
+      "translated": true
+    },
+    "G2724": {
+      "definitions_cz": "stížnost (\"kategorie\"), tedy trestní oznámení",
+      "translit": "katēgoría",
+      "pronunciation": "kat-ay-gor-ee'-ah",
+      "translated": true
+    },
+    "G2725": {
+      "definitions_cz": "proti jednomu v zastupitelstvu, t. j. stěžovateli u\n právo; zvláště Satan",
+      "translit": "katḗgoros",
+      "pronunciation": "kat-ay'-gor-os",
+      "translated": true
+    },
+    "G2726": {
+      "definitions_cz": "ostýchavost, tj. (implicitně)\n smutek",
+      "translit": "katḗpheia",
+      "pronunciation": "kat-ay'-fi-ah",
+      "translated": true
+    },
+    "G2727": {
+      "definitions_cz": "znít dolů do uší, tj. (implicitně)\n indoktrinovat (\"katechizovat\") nebo (genitivní pád) informovat\n z",
+      "translit": "katēchéō",
+      "pronunciation": "kat-ay-kheh'-o",
+      "translated": true
+    },
+    "G2728": {
+      "definitions_cz": "zrezivět, tzn.\n korodovat",
+      "translit": "katióō",
+      "pronunciation": "kat-ee-o'-o",
+      "translated": true
+    },
+    "G2729": {
+      "definitions_cz": "přemoci",
+      "translit": "katischýō",
+      "pronunciation": "kat-is-khoo'-o",
+      "translated": true
+    },
+    "G2730": {
+      "definitions_cz": "trvale bydlet, tedy bydlet (doslova resp\n přeneseně)",
+      "translit": "katoikéō",
+      "pronunciation": "kat-oy-keh'-o",
+      "translated": true
+    },
+    "G2731": {
+      "definitions_cz": "bydliště (správně akt; ale implicitně,\n konkrétně zámek)",
+      "translit": "katoíkēsis",
+      "pronunciation": "kat-oy'-kay-sis",
+      "translated": true
+    },
+    "G2732": {
+      "definitions_cz": "obydlí",
+      "translit": "katoikētḗrion",
+      "pronunciation": "kat-oy-kay-tay'-ree-on",
+      "translated": true
+    },
+    "G2733": {
+      "definitions_cz": "bydliště (správně podmínka; ale implicitně,\n samotný příbytek)",
+      "translit": "katoikía",
+      "pronunciation": "kat-oy-kee'-ah",
+      "translated": true
+    },
+    "G2734": {
+      "definitions_cz": "zrcadlit se, t. j. vidět odražený\n (obrazně)",
+      "translit": "katoptrízomai",
+      "pronunciation": "kat-op-trid'-zom-ahee",
+      "translated": true
+    },
+    "G2735": {
+      "definitions_cz": "něco zcela vzpřímeného, tedy (obrazně) náprava\n (zejména dobrá veřejná správa)",
+      "translit": "katórthōma",
+      "pronunciation": "kat-or'-tho-mah",
+      "translated": true
+    },
+    "G2736": {
+      "definitions_cz": "dolů",
+      "translit": "kátō",
+      "pronunciation": "kat'-o",
+      "translated": true
+    },
+    "G2737": {
+      "definitions_cz": "nižší (místně, Hádes)",
+      "translit": "katṓteros",
+      "pronunciation": "kat-o'-ter-os",
+      "translated": true
+    },
+    "G2738": {
+      "definitions_cz": "správně, popálenina (konkrétně), ale použitá (abstraktně) a\n zářit",
+      "translit": "kaûma",
+      "pronunciation": "kow'-mah",
+      "translated": true
+    },
+    "G2739": {
+      "definitions_cz": "spálit",
+      "translit": "kaumatízō",
+      "pronunciation": "kow-mat-id'-zo",
+      "translated": true
+    },
+    "G2740": {
+      "definitions_cz": "pálení (akt)",
+      "translit": "kaûsis",
+      "pronunciation": "kow'-sis",
+      "translated": true
+    },
+    "G2741": {
+      "definitions_cz": "zapálit",
+      "translit": "kausóō",
+      "pronunciation": "kow-so'-o",
+      "translated": true
+    },
+    "G2742": {
+      "definitions_cz": "pohled",
+      "translit": "kaúsōn",
+      "pronunciation": "kow'-sone",
+      "translated": true
+    },
+    "G2743": {
+      "definitions_cz": "označit (\"kauterizovat\"), tj\n implikace) učinit necitlivým (obrazně)",
+      "translit": "kautēriázō",
+      "pronunciation": "kow-tay-ree-ad'-zo",
+      "translated": true
+    },
+    "G2744": {
+      "definitions_cz": "chlubit se (v dobrém nebo špatném smyslu)",
+      "translit": "kaucháomai",
+      "pronunciation": "kow-khah'-om-ahee",
+      "translated": true
+    },
+    "G2745": {
+      "definitions_cz": "chlubit se (správně předmět; implicitně čin) v\n dobrý nebo špatný smysl",
+      "translit": "kaúchēma",
+      "pronunciation": "kow'-khay-mah",
+      "translated": true
+    },
+    "G2746": {
+      "definitions_cz": "chlubit se (správně čin; implicitně předmět),\n v dobrém nebo špatném smyslu",
+      "translit": "kaúchēsis",
+      "pronunciation": "kow'-khay-sis",
+      "translated": true
+    },
+    "G2747": {
+      "definitions_cz": "Cenchreæ, přístav\n Korint",
+      "translit": "Kenchreaí",
+      "pronunciation": "keng-khreh-a'-hee",
+      "translated": true
+    },
+    "G2748": {
+      "definitions_cz": "Cedron (t. j. Kidron), potok blízko\n Jeruzalém",
+      "translit": "Kedrṓn",
+      "pronunciation": "ked-rone'",
+      "translated": true
+    },
+    "G2749": {
+      "definitions_cz": "ležet natažený (doslova popř\n přeneseně)",
+      "translit": "keîmai",
+      "pronunciation": "ki'-mahee",
+      "translated": true
+    },
+    "G2750": {
+      "definitions_cz": "pokos, tj. navíjecí list",
+      "translit": "keiría",
+      "pronunciation": "ki-ree'-ah",
+      "translated": true
+    },
+    "G2751": {
+      "definitions_cz": "stříhat",
+      "translit": "keírō",
+      "pronunciation": "ki'-ro",
+      "translated": true
+    },
+    "G2752": {
+      "definitions_cz": "výkřik podněcování",
+      "translit": "kéleuma",
+      "pronunciation": "kel'-yoo-mah",
+      "translated": true
+    },
+    "G2753": {
+      "definitions_cz": "\"kroupy\"; podněcovat slovem, tzn.\n řádu",
+      "translit": "keleúō",
+      "pronunciation": "kel-yoo'-o",
+      "translated": true
+    },
+    "G2754": {
+      "definitions_cz": "prázdná sláva, t. j. namyšlenost",
+      "translit": "kenodoxía",
+      "pronunciation": "ken-od-ox-ee'-ah",
+      "translated": true
+    },
+    "G2755": {
+      "definitions_cz": "marně oslavující, t. j. namyšlený",
+      "translit": "kenódoxos",
+      "pronunciation": "ken-od'-ox-os",
+      "translated": true
+    },
+    "G2756": {
+      "definitions_cz": "prázdný (doslova nebo obrazně)",
+      "translit": "kenós",
+      "pronunciation": "ken-os'",
+      "translated": true
+    },
+    "G2757": {
+      "definitions_cz": "prázdné znějící, tzn.\n neplodná diskuse",
+      "translit": "kenophōnía",
+      "pronunciation": "ken-of-o-nee'-ah",
+      "translated": true
+    },
+    "G2758": {
+      "definitions_cz": "vyprázdnit, tj. (obrazně) ponížit, neutralizovat,\n zfalšovat",
+      "translit": "kenóō",
+      "pronunciation": "ken-o'-o",
+      "translated": true
+    },
+    "G2759": {
+      "definitions_cz": "bod (\"střed\"), tedy žihadlo\n (obrazně jed) nebo bodec (obrazně božský impuls)",
+      "translit": "kéntron",
+      "pronunciation": "ken'-tron",
+      "translated": true
+    },
+    "G2760": {
+      "definitions_cz": "setník, t. j. kapitán sta\n vojáků",
+      "translit": "kentyríōn",
+      "pronunciation": "ken-too-ree'-ohn",
+      "translated": true
+    },
+    "G2761": {
+      "definitions_cz": "marně, t. j. bezúčelně",
+      "translit": "kenōs",
+      "pronunciation": "ken-oce'",
+      "translated": true
+    },
+    "G2762": {
+      "definitions_cz": "něco\n jako roh, tedy (zvláště) vrchol hebrejského písmene (obrazně,\n nejmenší částice)",
+      "translit": "keraía",
+      "pronunciation": "ker-ah'-yah",
+      "translated": true
+    },
+    "G2763": {
+      "definitions_cz": "hrnčíř",
+      "translit": "kerameús",
+      "pronunciation": "ker-am-yooce'",
+      "translated": true
+    },
+    "G2764": {
+      "definitions_cz": "z hlíny, t. j. hliněné",
+      "translit": "keramikós",
+      "pronunciation": "ker-am-ik-os'",
+      "translated": true
+    },
+    "G2765": {
+      "definitions_cz": "hliněná nádoba, tzn.\n sklenice",
+      "translit": "kerámion",
+      "pronunciation": "ker-am'-ee-on",
+      "translated": true
+    },
+    "G2766": {
+      "definitions_cz": "kamenina, tedy taška (analogicky tenká střecha popř\n markýza)",
+      "translit": "kéramos",
+      "pronunciation": "ker'-am-os",
+      "translated": true
+    },
+    "G2767": {
+      "definitions_cz": "mísit se, tj. (implicitně) vylévat (pro\n pití)",
+      "translit": "keránnymi",
+      "pronunciation": "ker-an'-noo-mee",
+      "translated": true
+    },
+    "G2768": {
+      "definitions_cz": "roh (doslova nebo\n přeneseně)",
+      "translit": "kéras",
+      "pronunciation": "ker'-as",
+      "translated": true
+    },
+    "G2769": {
+      "definitions_cz": "něco rohatého, tzn.\n (zvláště) lusk rohovníku",
+      "translit": "kerátion",
+      "pronunciation": "ker-at'-ee-on",
+      "translated": true
+    },
+    "G2770": {
+      "definitions_cz": "získat (doslova nebo obrazně)",
+      "translit": "kerdaínō",
+      "pronunciation": "ker-dah'-ee-no",
+      "translated": true
+    },
+    "G2771": {
+      "definitions_cz": "zisk (peněžní nebo genitivní případ)",
+      "translit": "kérdos",
+      "pronunciation": "ker'-dos",
+      "translated": true
+    },
+    "G2772": {
+      "definitions_cz": "výstřižek (bit), tedy (zvláště) mince",
+      "translit": "kérma",
+      "pronunciation": "ker'-mah",
+      "translated": true
+    },
+    "G2773": {
+      "definitions_cz": "manipulátor s mincemi, tzn.\n peněžní makléř",
+      "translit": "kermatistḗs",
+      "pronunciation": "ker-mat-is-tace'",
+      "translated": true
+    },
+    "G2774": {
+      "definitions_cz": "hlavní věc, tj. hlavní bod;\n konkrétně množství (peněz)",
+      "translit": "kephálaion",
+      "pronunciation": "kef-al'-ah-yon",
+      "translated": true
+    },
+    "G2775": {
+      "definitions_cz": "(zvláště) udeřit na hlavu",
+      "translit": "kephalaióō",
+      "pronunciation": "kef-al-ahee-o'-o",
+      "translated": true
+    },
+    "G2776": {
+      "definitions_cz": "hlava (jako\n část nejsnáze uchopit), doslova nebo obrazně",
+      "translit": "kephalḗ",
+      "pronunciation": "kef-al-ay'",
+      "translated": true
+    },
+    "G2777": {
+      "definitions_cz": "správně, knoflík, tj. (implicitně) váleček (tím\n nástavec z konce tyčinky, na které byl rukopis\n válcované)",
+      "translit": "kephalís",
+      "pronunciation": "kef-al-is'",
+      "translated": true
+    },
+    "G2778": {
+      "definitions_cz": "správně, zápis („sčítání lidu“), tj\n implikace) daň",
+      "translit": "kēnsos",
+      "pronunciation": "kane'-sos",
+      "translated": true
+    },
+    "G2779": {
+      "definitions_cz": "zahrada",
+      "translit": "kēpos",
+      "pronunciation": "kay'-pos",
+      "translated": true
+    },
+    "G2780": {
+      "definitions_cz": "zahradník, tj.\n zahradník",
+      "translit": "kēpourós",
+      "pronunciation": "kay-poo-ros'",
+      "translated": true
+    },
+    "G2781": {
+      "definitions_cz": "buňka pro med, tj. (souhrnně) the\n hřeben",
+      "translit": "kēríon",
+      "pronunciation": "kay-ree'-on",
+      "translated": true
+    },
+    "G2782": {
+      "definitions_cz": "hlásání (zejména evangelia; implicitně,\n samotné evangelium)",
+      "translit": "kḗrygma",
+      "pronunciation": "kay'-roog-mah",
+      "translated": true
+    },
+    "G2783": {
+      "definitions_cz": "hlasatel, tj. božské pravdy (zejména o\n evangelium)",
+      "translit": "kēryx",
+      "pronunciation": "kay'-roox",
+      "translated": true
+    },
+    "G2785": {
+      "definitions_cz": "obrovská ryba (jako zející na\n kořist)",
+      "translit": "kētos",
+      "pronunciation": "kay'-tos",
+      "translated": true
+    },
+    "G2786": {
+      "definitions_cz": "skála; Cephas (tj. Kepha), a\n příjmení Petra",
+      "translit": "Kēphâs",
+      "pronunciation": "kay-fas'",
+      "translated": true
+    },
+    "G2787": {
+      "definitions_cz": "schránka, t. j. posvátná archa a ta z\n Noah",
+      "translit": "kibōtós",
+      "pronunciation": "kib-o-tos'",
+      "translated": true
+    },
+    "G2788": {
+      "definitions_cz": "lyru",
+      "translit": "kithára",
+      "pronunciation": "kith-ar'-ah",
+      "translated": true
+    },
+    "G2789": {
+      "definitions_cz": "hrát na lyru",
+      "translit": "kitharízō",
+      "pronunciation": "kith-ar-id'-zo",
+      "translated": true
+    },
+    "G2790": {
+      "definitions_cz": "a\n lyra-zpěvák(-hráč), t. j. harfista",
+      "translit": "kitharōidós",
+      "pronunciation": "kith-ar-o'-dos",
+      "translated": true
+    },
+    "G2791": {
+      "definitions_cz": "Cilicia, oblast Malé Asie",
+      "translit": "Kilikía",
+      "pronunciation": "kil-ik-ee'-ah",
+      "translated": true
+    },
+    "G2792": {
+      "definitions_cz": "skořice",
+      "translit": "kinámōmon",
+      "pronunciation": "kin-am'-o-mon",
+      "translated": true
+    },
+    "G2793": {
+      "definitions_cz": "podstoupit nebezpečí",
+      "translit": "kindyneúō",
+      "pronunciation": "kin-doon-yoo'-o",
+      "translated": true
+    },
+    "G2794": {
+      "definitions_cz": "nebezpečí",
+      "translit": "kíndynos",
+      "pronunciation": "kin'-doo-nos",
+      "translated": true
+    },
+    "G2795": {
+      "definitions_cz": "míchat (přechodně), doslova\n nebo přeneseně",
+      "translit": "kinéō",
+      "pronunciation": "kin-eh'-o",
+      "translated": true
+    },
+    "G2796": {
+      "definitions_cz": "míchání",
+      "translit": "kínēsis",
+      "pronunciation": "kin'-ay-sis",
+      "translated": true
+    },
+    "G2797": {
+      "definitions_cz": "Cis (t. j. Kiš), Israelita",
+      "translit": "Kís",
+      "pronunciation": "kis",
+      "translated": true
+    },
+    "G2798": {
+      "definitions_cz": "větvička nebo větvička (jako by se ulomila)",
+      "translit": "kládos",
+      "pronunciation": "klad'-os",
+      "translated": true
+    },
+    "G2799": {
+      "definitions_cz": "vzlykat, tj. nahlas naříkat (zatímco 1145 je spíše\n tiše plakat)",
+      "translit": "klaíō",
+      "pronunciation": "klah'-yo",
+      "translated": true
+    },
+    "G2800": {
+      "definitions_cz": "zlomenina (akt)",
+      "translit": "klásis",
+      "pronunciation": "klas'-is",
+      "translated": true
+    },
+    "G2801": {
+      "definitions_cz": "kousek (kousek)",
+      "translit": "klásma",
+      "pronunciation": "klas'-mah",
+      "translated": true
+    },
+    "G2802": {
+      "definitions_cz": "Claude, ostrov poblíž Kréty",
+      "translit": "Klaúdē",
+      "pronunciation": "klow'-day",
+      "translated": true
+    },
+    "G2803": {
+      "definitions_cz": "Claudia, křesťanka",
+      "translit": "Klaudía",
+      "pronunciation": "klow-dee'-ah",
+      "translated": true
+    },
+    "G2804": {
+      "definitions_cz": "Claudius, jméno dvou Římanů",
+      "translit": "Klaúdios",
+      "pronunciation": "klow'-dee-os",
+      "translated": true
+    },
+    "G2805": {
+      "definitions_cz": "bědování",
+      "translit": "klauthmós",
+      "pronunciation": "klowth-mos'",
+      "translated": true
+    },
+    "G2806": {
+      "definitions_cz": "lámat (zejména chleba)",
+      "translit": "kláō",
+      "pronunciation": "klah'-o",
+      "translated": true
+    },
+    "G2807": {
+      "definitions_cz": "klíč (jako zavření zámku), doslova nebo\n přeneseně",
+      "translit": "kleís",
+      "pronunciation": "klice",
+      "translated": true
+    },
+    "G2808": {
+      "definitions_cz": "uzavřít (doslova nebo obrazně)",
+      "translit": "kleíō",
+      "pronunciation": "kli'-o",
+      "translated": true
+    },
+    "G2809": {
+      "definitions_cz": "krádež (správně, věc ukradená, ale použitá\n jednat)",
+      "translit": "klémma",
+      "pronunciation": "klem'-mah",
+      "translated": true
+    },
+    "G2810": {
+      "definitions_cz": "Kleofáš, křesťan",
+      "translit": "Kleópas",
+      "pronunciation": "kleh-op'-as",
+      "translated": true
+    },
+    "G2811": {
+      "definitions_cz": "věhlas (jako by se tomu říkalo)",
+      "translit": "kléos",
+      "pronunciation": "kleh'-os",
+      "translated": true
+    },
+    "G2812": {
+      "definitions_cz": "zloděj (doslova nebo obrazně)",
+      "translit": "kléptēs",
+      "pronunciation": "klep'-tace",
+      "translated": true
+    },
+    "G2813": {
+      "definitions_cz": "šukat",
+      "translit": "kléptō",
+      "pronunciation": "klep'-to",
+      "translated": true
+    },
+    "G2814": {
+      "definitions_cz": "končetina nebo výhonek (jako by se ulomil)",
+      "translit": "klēma",
+      "pronunciation": "kaly'-mah",
+      "translated": true
+    },
+    "G2815": {
+      "definitions_cz": "milosrdný; Clemes (tj. Clemens), a\n Christian",
+      "translit": "Klḗmēs",
+      "pronunciation": "klay'-mace",
+      "translated": true
+    },
+    "G2816": {
+      "definitions_cz": "být dědicem (doslova nebo přeneseně)",
+      "translit": "klēronoméō",
+      "pronunciation": "klay-ron-om-eh'-o",
+      "translated": true
+    },
+    "G2817": {
+      "definitions_cz": "dědictví, tj. (konkrétně) dědictví nebo (genitivní případ)\n majetek",
+      "translit": "klēronomía",
+      "pronunciation": "klay-ron-om-ee'-ah",
+      "translated": true
+    },
+    "G2818": {
+      "definitions_cz": "sdílející losem, tzn.\n dědic (doslova nebo přeneseně); implicitně, a\n vlastník",
+      "translit": "klēronómos",
+      "pronunciation": "klay-ron-om'-os",
+      "translated": true
+    },
+    "G2819": {
+      "definitions_cz": "kostka (pro losování); implicitně část\n (jakoby takto zajištěno); rozšířením akvizice (zejména a\n dědictví, obrazně)",
+      "translit": "klēros",
+      "pronunciation": "klay'-ros",
+      "translated": true
+    },
+    "G2820": {
+      "definitions_cz": "přidělit, tj. (obrazně) přiřadit (a\n výsada)",
+      "translit": "klēróō",
+      "pronunciation": "klay-ro'-o",
+      "translated": true
+    },
+    "G2821": {
+      "definitions_cz": "pozvánka (obrazně)",
+      "translit": "klēsis",
+      "pronunciation": "klay'-sis",
+      "translated": true
+    },
+    "G2822": {
+      "definitions_cz": "pozván, tj. jmenovaný, nebo (zvláště), a\n svatý",
+      "translit": "klētós",
+      "pronunciation": "klay-tos'",
+      "translated": true
+    },
+    "G2823": {
+      "definitions_cz": "hliněný hrnec používaný k pečení",
+      "translit": "klíbanos",
+      "pronunciation": "klib'-an-os",
+      "translated": true
+    },
+    "G2824": {
+      "definitions_cz": "svah, tj. (zvláště) \"klima\" nebo trakt\n země",
+      "translit": "klíma",
+      "pronunciation": "klee'-mah",
+      "translated": true
+    },
+    "G2825": {
+      "definitions_cz": "pohovka (na spánek, nemoc, sezení nebo jídlo)",
+      "translit": "klínē",
+      "pronunciation": "klee'-nay",
+      "translated": true
+    },
+    "G2826": {
+      "definitions_cz": "paleta nebo málo\n gauč",
+      "translit": "klinídion",
+      "pronunciation": "klin-id'-ee-on",
+      "translated": true
+    },
+    "G2827": {
+      "definitions_cz": "naklonit se nebo sklonit, tj. naklonit se nebo naklonit (doslova\n nebo obrazně)",
+      "translit": "klínō",
+      "pronunciation": "klee'-no",
+      "translated": true
+    },
+    "G2828": {
+      "definitions_cz": "správně, ležení, tj. (konkrétně a\n speciálně), večírek u jídla",
+      "translit": "klisía",
+      "pronunciation": "klee-see'-ah",
+      "translated": true
+    },
+    "G2829": {
+      "definitions_cz": "kradení",
+      "translit": "klopḗ",
+      "pronunciation": "klop-ay'",
+      "translated": true
+    },
+    "G2830": {
+      "definitions_cz": "vlnobití moře (doslova nebo\n přeneseně)",
+      "translit": "klýdōn",
+      "pronunciation": "kloo'-dohn",
+      "translated": true
+    },
+    "G2831": {
+      "definitions_cz": "k přepětí, tedy (obrazně) k\n kolísat",
+      "translit": "klydōnízomai",
+      "pronunciation": "kloo-do-nid'-zom-ahee",
+      "translated": true
+    },
+    "G2832": {
+      "definitions_cz": "Společnost Clopas, an\n Izraelita",
+      "translit": "Klōpâs",
+      "pronunciation": "klo-pas'",
+      "translated": true
+    },
+    "G2833": {
+      "definitions_cz": "škrábat, tj. (implicitně) k\n lechtat",
+      "translit": "knḗthō",
+      "pronunciation": "knay'-tho",
+      "translated": true
+    },
+    "G2834": {
+      "definitions_cz": "Cnidus, místo v Malé Asii",
+      "translit": "Knídos",
+      "pronunciation": "knee'-dos",
+      "translated": true
+    },
+    "G2835": {
+      "definitions_cz": "a quadrans, tedy čtvrtá část as",
+      "translit": "kodrántēs",
+      "pronunciation": "kod-ran'-tace",
+      "translated": true
+    },
+    "G2836": {
+      "definitions_cz": "dutinu, tj. (zejména) břicho; podle\n implikace, matice; přeneseně srdce",
+      "translit": "koilía",
+      "pronunciation": "koy-lee'-ah",
+      "translated": true
+    },
+    "G2837": {
+      "definitions_cz": "to put to sleep, i.e. (passively or reflexively) to\n spánek; přeneseně zemřít",
+      "translit": "koimáō",
+      "pronunciation": "koy-mah'-o",
+      "translated": true
+    },
+    "G2838": {
+      "definitions_cz": "spící, tedy (implicitně) odpočinek",
+      "translit": "koímēsis",
+      "pronunciation": "koy'-may-sis",
+      "translated": true
+    },
+    "G2839": {
+      "definitions_cz": "společné, tj. (doslova) sdílené všemi nebo několika,\n nebo (slavnostně) profánní",
+      "translit": "koinós",
+      "pronunciation": "koy-nos'",
+      "translated": true
+    },
+    "G2840": {
+      "definitions_cz": "učinit (nebo považovat) za profánní (obřadně)",
+      "translit": "koinóō",
+      "pronunciation": "koy-no'-o",
+      "translated": true
+    },
+    "G2841": {
+      "definitions_cz": "sdílet s ostatními (objektivně popř\n subjektivně)",
+      "translit": "koinōnéō",
+      "pronunciation": "koy-no-neh'-o",
+      "translated": true
+    },
+    "G2842": {
+      "definitions_cz": "partnerství, tj. (doslova) participace nebo (sociální)\n styk nebo (peněžní) dobročinnost",
+      "translit": "koinōnía",
+      "pronunciation": "koy-nohn-ee'-ah",
+      "translated": true
+    },
+    "G2843": {
+      "definitions_cz": "komunikativní, tedy (pekuniárně) liberální",
+      "translit": "koinōnikós",
+      "pronunciation": "koy-no-nee-kos'",
+      "translated": true
+    },
+    "G2844": {
+      "definitions_cz": "podílník, tedy společník",
+      "translit": "koinōnós",
+      "pronunciation": "koy-no-nos'",
+      "translated": true
+    },
+    "G2845": {
+      "definitions_cz": "pohovka; rozšířením soužití; implicitně,\n mužské spermie",
+      "translit": "koítē",
+      "pronunciation": "koy'-tay",
+      "translated": true
     }
   }
 }
