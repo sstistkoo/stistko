@@ -33,10 +33,10 @@ HEBREW_SOURCE = SOURCE_DIR / "stronghebrew.json"
 GREEK_SOURCE = SOURCE_DIR / "strongsgreek.json"
 TARGET_FILE = SOURCE_DIR / "strong_bible_cz.json"
 
-MAX_RUNTIME_SECONDS = 600  # 10 minut
+MAX_RUNTIME_SECONDS = 300  # 5 minut
 BATCH_SIZE_BEFORE_COMMIT = 100
-PAUSE_MIN = 1
-PAUSE_MAX = 3
+PAUSE_MIN = 0.5
+PAUSE_MAX = 1.5
 
 translator = GoogleTranslator(source="en", target="cs")
 
