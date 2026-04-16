@@ -13559,6 +13559,904 @@
       "translit": "archieratikós",
       "pronunciation": "ar-khee-er-at-ee-kos'",
       "translated": true
+    },
+    "G749": {
+      "definitions_cz": "velekněz (doslova Židů, typicky,\n Kristus); potažmo hlavní kněz",
+      "translit": "archiereús",
+      "pronunciation": "ar-khee-er-yuce'",
+      "translated": true
+    },
+    "G750": {
+      "definitions_cz": "hlavní pastýř",
+      "translit": "archipoímēn",
+      "pronunciation": "ar-khee-poy'-mane",
+      "translated": true
+    },
+    "G751": {
+      "definitions_cz": "koňský vládce; Archippus, křesťan",
+      "translit": "Árchippos",
+      "pronunciation": "ar'-khip-pos",
+      "translated": true
+    },
+    "G752": {
+      "definitions_cz": "ředitel služeb synagogy",
+      "translit": "archisynágōgos",
+      "pronunciation": "ar-khee-soon-ag'-o-gos",
+      "translated": true
+    },
+    "G753": {
+      "definitions_cz": "hlavní konstruktér, tj.\n \"architekt\"",
+      "translit": "architéktōn",
+      "pronunciation": "ar-khee-tek'-tone",
+      "translated": true
+    },
+    "G754": {
+      "definitions_cz": "hlavní výběrčí daní",
+      "translit": "architelṓnēs",
+      "pronunciation": "ar-khee-tel-o'-nace",
+      "translated": true
+    },
+    "G755": {
+      "definitions_cz": "ředitel zábavy",
+      "translit": "architríklinos",
+      "pronunciation": "ar-khee-tree'-klee-nos",
+      "translated": true
+    },
+    "G756": {
+      "definitions_cz": "do\n začít (v časovém pořadí)",
+      "translit": "árchomai",
+      "pronunciation": "ar'-khom-ahee",
+      "translated": true
+    },
+    "G757": {
+      "definitions_cz": "být první (v politické hodnosti nebo moci)",
+      "translit": "árchō",
+      "pronunciation": "ar'-kho",
+      "translated": true
+    },
+    "G758": {
+      "definitions_cz": "první (v hodnosti nebo moci)",
+      "translit": "árchōn",
+      "pronunciation": "ar'-khone",
+      "translated": true
+    },
+    "G759": {
+      "definitions_cz": "aromatický",
+      "translit": "árōma",
+      "pronunciation": "ar'-o-mah",
+      "translated": true
+    },
+    "G760": {
+      "definitions_cz": "Asa, Izraelita",
+      "translit": "Asá",
+      "pronunciation": "as-ah'",
+      "translated": true
+    },
+    "G761": {
+      "definitions_cz": "neotřesený,\n tj. (implicitně) nehybný (obrazně)",
+      "translit": "asáleutos",
+      "pronunciation": "as-al'-yoo-tos",
+      "translated": true
+    },
+    "G762": {
+      "definitions_cz": "ne\n vyhaslé, tedy (implicitně) trvalé",
+      "translit": "ásbestos",
+      "pronunciation": "as'-bes-tos",
+      "translated": true
+    },
+    "G763": {
+      "definitions_cz": "bezbožnost, tj. (implicitně)\n špatnost",
+      "translit": "asébeia",
+      "pronunciation": "as-eb'-i-ah",
+      "translated": true
+    },
+    "G764": {
+      "definitions_cz": "být (implicitním aktem) bezbožný nebo zlý",
+      "translit": "asebéō",
+      "pronunciation": "as-eb-eh'-o",
+      "translated": true
+    },
+    "G765": {
+      "definitions_cz": "neuctivý, tj. (rozšířeně) bezbožný nebo zlý",
+      "translit": "asebḗs",
+      "pronunciation": "as-eb-ace'",
+      "translated": true
+    },
+    "G766": {
+      "definitions_cz": "prostopášnost (někdy včetně dalších\n neřesti)",
+      "translit": "asélgeia",
+      "pronunciation": "as-elg'-i-a",
+      "translated": true
+    },
+    "G767": {
+      "definitions_cz": "neoznačené, tzn.\n (obrazně) neslušný",
+      "translit": "ásēmos",
+      "pronunciation": "as'-ay-mos",
+      "translated": true
+    },
+    "G768": {
+      "definitions_cz": "Aser (tj. Asher), izraelský kmen",
+      "translit": "Asḗr",
+      "pronunciation": "as-ayr'",
+      "translated": true
+    },
+    "G769": {
+      "definitions_cz": "slabost (mysli nebo těla); implicitně nemoc;\n morálně, křehký",
+      "translit": "asthéneia",
+      "pronunciation": "as-then'-i-ah",
+      "translated": true
+    },
+    "G770": {
+      "definitions_cz": "být slabý (v jakémkoli smyslu)",
+      "translit": "asthenéō",
+      "pronunciation": "as-then-eh'-o",
+      "translated": true
+    },
+    "G771": {
+      "definitions_cz": "skrupule svědomí",
+      "translit": "asthénēma",
+      "pronunciation": "as-then'-ay-mah",
+      "translated": true
+    },
+    "G772": {
+      "definitions_cz": "bezmocný (v\n různé aplikace, doslovné, obrazné a morální)",
+      "translit": "asthenḗs",
+      "pronunciation": "as-then-ace'",
+      "translated": true
+    },
+    "G773": {
+      "definitions_cz": "Asie, tedy Malá Asie, nebo (většinou) jen její\n západní břeh",
+      "translit": "Asía",
+      "pronunciation": "as-ee'-ah",
+      "translated": true
+    },
+    "G774": {
+      "definitions_cz": "Asiat (tedy Asiat) nebo obyvatel Asie",
+      "translit": "Asianós",
+      "pronunciation": "as-ee-an-os'",
+      "translated": true
+    },
+    "G775": {
+      "definitions_cz": "Asiarcha nebo prezident veřejných slavností v\n město Malé Asie",
+      "translit": "Asiárchēs",
+      "pronunciation": "as-ee-ar'-khace",
+      "translated": true
+    },
+    "G776": {
+      "definitions_cz": "půst (stát)",
+      "translit": "asitía",
+      "pronunciation": "as-ee-tee'-ah",
+      "translated": true
+    },
+    "G777": {
+      "definitions_cz": "bez (vzít)\n jídlo",
+      "translit": "ásitos",
+      "pronunciation": "as'-ee-tos",
+      "translated": true
+    },
+    "G778": {
+      "definitions_cz": "upřesnit, tj. (obrazně)\n trénovat (implicitně usilovat)",
+      "translit": "askéō",
+      "pronunciation": "as-keh'-o",
+      "translated": true
+    },
+    "G779": {
+      "definitions_cz": "kožená (nebo kožená) taška používaná jako a\n láhev",
+      "translit": "askós",
+      "pronunciation": "as-kos'",
+      "translated": true
+    },
+    "G780": {
+      "definitions_cz": "s radostí",
+      "translit": "asménōs",
+      "pronunciation": "as-men'-oce",
+      "translated": true
+    },
+    "G781": {
+      "definitions_cz": "nemoudrý",
+      "translit": "ásophos",
+      "pronunciation": "as'-of-os",
+      "translated": true
+    },
+    "G782": {
+      "definitions_cz": "zabalit se\n v náručí, tedy (implicitně) zdravit, (obrazně) k\n vítejte",
+      "translit": "aspázomai",
+      "pronunciation": "as-pad'-zom-ahee",
+      "translated": true
+    },
+    "G783": {
+      "definitions_cz": "pozdrav (osobně nebo dopisem)",
+      "translit": "aspasmós",
+      "pronunciation": "as-pas-mos'",
+      "translated": true
+    },
+    "G784": {
+      "definitions_cz": "bez poskvrny (fyzicky popř\n morálně)",
+      "translit": "áspilos",
+      "pronunciation": "as'-pee-los",
+      "translated": true
+    },
+    "G785": {
+      "definitions_cz": "štít (nebo kulatý štít); použitý z a\n had (jako svinutí sám), pravděpodobně \"asp\"",
+      "translit": "aspís",
+      "pronunciation": "as-pece'",
+      "translated": true
+    },
+    "G786": {
+      "definitions_cz": "doslova,\n bez úlitby (která obvykle doprovázela smlouvu), tj\n implikace) nemilosrdný",
+      "translit": "áspondos",
+      "pronunciation": "as'-pon-dos",
+      "translated": true
+    },
+    "G787": {
+      "definitions_cz": "assarius nebo as, římská mince",
+      "translit": "assárion",
+      "pronunciation": "as-sar'-ee-on",
+      "translated": true
+    },
+    "G788": {
+      "definitions_cz": "více skoro, tj. velmi\n blízko",
+      "translit": "âsson",
+      "pronunciation": "as'-son",
+      "translated": true
+    },
+    "G789": {
+      "definitions_cz": "Assus, město v Malé Asii",
+      "translit": "Ássos",
+      "pronunciation": "as'-sos",
+      "translated": true
+    },
+    "G790": {
+      "definitions_cz": "být\n nestacionární, tedy (obrazně) bezdomovci",
+      "translit": "astatéō",
+      "pronunciation": "as-tat-eh'-o",
+      "translated": true
+    },
+    "G791": {
+      "definitions_cz": "urbane, tedy (implicitně) hezký",
+      "translit": "asteîos",
+      "pronunciation": "as-ti'-os",
+      "translated": true
+    },
+    "G792": {
+      "definitions_cz": "hvězda (rozházená po obloze),\n doslova nebo obrazně",
+      "translit": "astḗr",
+      "pronunciation": "as-tare'",
+      "translated": true
+    },
+    "G793": {
+      "definitions_cz": "nefixovaný, tedy (obrazně) kolísavý",
+      "translit": "astḗriktos",
+      "pronunciation": "as-tay'-rik-tos",
+      "translated": true
+    },
+    "G794": {
+      "definitions_cz": "tvrdohlavý vůči\n příbuzný",
+      "translit": "ástorgos",
+      "pronunciation": "as'-tor-gos",
+      "translated": true
+    },
+    "G795": {
+      "definitions_cz": "minout značku, tedy (obrazně) odchýlit se od pravdy",
+      "translit": "astochéō",
+      "pronunciation": "as-tokh-eh'-o",
+      "translated": true
+    },
+    "G796": {
+      "definitions_cz": "blesk; analogicky, oslnění",
+      "translit": "astrapḗ",
+      "pronunciation": "as-trap-ay'",
+      "translated": true
+    },
+    "G797": {
+      "definitions_cz": "blikat jako blesk",
+      "translit": "astráptō",
+      "pronunciation": "as-trap'-to",
+      "translated": true
+    },
+    "G798": {
+      "definitions_cz": "správně, konstelace; dát za jednu hvězdu\n (přírodní nebo umělé)",
+      "translit": "ástron",
+      "pronunciation": "as'-tron",
+      "translated": true
+    },
+    "G799": {
+      "definitions_cz": "nesrovnatelný; Asyncritus, křesťan",
+      "translit": "Asýnkritos",
+      "pronunciation": "as-oong'-kree-tos",
+      "translated": true
+    },
+    "G800": {
+      "definitions_cz": "neharmonický\n (obrazně)",
+      "translit": "asýmphōnos",
+      "pronunciation": "as-oom'-fo-nos",
+      "translated": true
+    },
+    "G801": {
+      "definitions_cz": "neinteligentní; podle\n implikace, zlý",
+      "translit": "asýnetos",
+      "pronunciation": "as-oon'-ay-tos",
+      "translated": true
+    },
+    "G802": {
+      "definitions_cz": "správně,\n nesjednané, t. j. zrádné kompaktům",
+      "translit": "asýnthetos",
+      "pronunciation": "as-oon'-thet-os",
+      "translated": true
+    },
+    "G803": {
+      "definitions_cz": "bezpečnost (doslova nebo obrazně)",
+      "translit": "aspháleia",
+      "pronunciation": "as-fal'-i-ah",
+      "translated": true
+    },
+    "G804": {
+      "definitions_cz": "zabezpečit\n (doslova nebo obrazně)",
+      "translit": "asphalḗs",
+      "pronunciation": "as-fal-ace'",
+      "translated": true
+    },
+    "G805": {
+      "definitions_cz": "zabezpečit",
+      "translit": "asphalízō",
+      "pronunciation": "as-fal-id'-zo",
+      "translated": true
+    },
+    "G806": {
+      "definitions_cz": "bezpečně (doslova nebo obrazně)",
+      "translit": "asphalōs",
+      "pronunciation": "as-fal-oce'",
+      "translated": true
+    },
+    "G807": {
+      "definitions_cz": "být (t. j. jednat) neslušný",
+      "translit": "aschēmonéō",
+      "pronunciation": "as-kay-mon-eh'-o",
+      "translated": true
+    },
+    "G808": {
+      "definitions_cz": "neslušnost; implicitně pudenda",
+      "translit": "aschēmosýnē",
+      "pronunciation": "as-kay-mos-oo'-nay",
+      "translated": true
+    },
+    "G809": {
+      "definitions_cz": "správně, beztvaré, tzn.\n (obrazně) nevkusné",
+      "translit": "aschḗmōn",
+      "pronunciation": "as-kay'-mone",
+      "translated": true
+    },
+    "G810": {
+      "definitions_cz": "správně, neuloženo, tj. (implicitně)\n prostopášnost",
+      "translit": "asōtía",
+      "pronunciation": "as-o-tee'-ah",
+      "translated": true
+    },
+    "G811": {
+      "definitions_cz": "rozpustile",
+      "translit": "asṓtōs",
+      "pronunciation": "as-o'-toce",
+      "translated": true
+    },
+    "G812": {
+      "definitions_cz": "být (t. j. jednat) neregulérní",
+      "translit": "ataktéō",
+      "pronunciation": "at-ak-teh'-o",
+      "translated": true
+    },
+    "G813": {
+      "definitions_cz": "neuspořádaný,\n tj. (implicitně) neposlušný (nábožensky)",
+      "translit": "átaktos",
+      "pronunciation": "at'-ak-tos",
+      "translated": true
+    },
+    "G814": {
+      "definitions_cz": "",
+      "translated": false
+    },
+    "G815": {
+      "definitions_cz": "bezdětný",
+      "translit": "áteknos",
+      "pronunciation": "at'-ek-nos",
+      "translated": true
+    },
+    "G816": {
+      "definitions_cz": "upřeně se dívat",
+      "translit": "atenízō",
+      "pronunciation": "at-en-id'-zo",
+      "translated": true
+    },
+    "G817": {
+      "definitions_cz": "rezervovaný, tj. kromě (doslova nebo\n přeneseně)",
+      "translit": "áter",
+      "pronunciation": "at'-er",
+      "translated": true
+    },
+    "G818": {
+      "definitions_cz": "učinit nechvalně známým, tj. (implicitně) pohrdat nebo\n maltreat",
+      "translit": "atimázō",
+      "pronunciation": "at-im-ad'-zo",
+      "translated": true
+    },
+    "G819": {
+      "definitions_cz": "infamy, tedy (subjektivně) komparativní nedůstojnost,\n (objektivně) ostuda",
+      "translit": "atimía",
+      "pronunciation": "at-ee-mee'-ah",
+      "translated": true
+    },
+    "G820": {
+      "definitions_cz": "(negativně) nepoctěn popř\n (pozitivně) zneuctěn",
+      "translit": "átimos",
+      "pronunciation": "at'-ee-mos",
+      "translated": true
+    },
+    "G821": {
+      "definitions_cz": "používá se jako [ŘECKO:818]",
+      "translit": "atimóō",
+      "pronunciation": "at-ee-mo'-o",
+      "translated": true
+    },
+    "G822": {
+      "definitions_cz": "mlha",
+      "translit": "atmís",
+      "pronunciation": "at-mece'",
+      "translated": true
+    },
+    "G823": {
+      "definitions_cz": "nesestříhaný, tj. (podle\n implikace) nedělitelný (\"atom\" času)",
+      "translit": "átomos",
+      "pronunciation": "at'-om-os",
+      "translated": true
+    },
+    "G824": {
+      "definitions_cz": "mimo místo, tzn.\n (obrazně) nevhodný, ubližující, zlý",
+      "translit": "átopos",
+      "pronunciation": "at'-op-os",
+      "translated": true
+    },
+    "G825": {
+      "definitions_cz": "Attaleia, místo v\n Pamphylia",
+      "translit": "Attáleia",
+      "pronunciation": "at-tal'-i-ah",
+      "translated": true
+    },
+    "G826": {
+      "definitions_cz": "vysílat (obrazně)",
+      "translit": "augázō",
+      "pronunciation": "ow-gad'-zo",
+      "translated": true
+    },
+    "G827": {
+      "definitions_cz": "paprsek světla, tj. (implicitně)\n záře, svítání",
+      "translit": "augḗ",
+      "pronunciation": "owg'-ay",
+      "translated": true
+    },
+    "G828": {
+      "definitions_cz": "Augustus, římský titul\n císař",
+      "translit": "Augoûstos",
+      "pronunciation": "ow'-goos-tos",
+      "translated": true
+    },
+    "G829": {
+      "definitions_cz": "sebepotěšující, tzn.\n arogantní",
+      "translit": "authádēs",
+      "pronunciation": "ow-thad'-ace",
+      "translated": true
+    },
+    "G830": {
+      "definitions_cz": "samostatně zvolený, tj. (implicitně)\n dobrovolné",
+      "translit": "authaíretos",
+      "pronunciation": "ow-thah'-ee-ret-os",
+      "translated": true
+    },
+    "G831": {
+      "definitions_cz": "jednat z\n sebe, tedy (obrazně) dominovat",
+      "translit": "authentéō",
+      "pronunciation": "ow-then-teh'-o",
+      "translated": true
+    },
+    "G832": {
+      "definitions_cz": "hrát na flétnu",
+      "translit": "auléō",
+      "pronunciation": "ow-leh'-o",
+      "translated": true
+    },
+    "G833": {
+      "definitions_cz": "dvůr (jak otevřený větru); implicitně, a\n sídlo",
+      "translit": "aulḗ",
+      "pronunciation": "ow-lay'",
+      "translated": true
+    },
+    "G834": {
+      "definitions_cz": "hráč na flétnu",
+      "translit": "aulētḗs",
+      "pronunciation": "ow-lay-tace'",
+      "translated": true
+    },
+    "G835": {
+      "definitions_cz": "přenocovat (správně, pod širým nebem\n vzduch)",
+      "translit": "aulízomai",
+      "pronunciation": "ow-lid'-zom-ahee",
+      "translated": true
+    },
+    "G836": {
+      "definitions_cz": "flétna (jako foukaná)",
+      "translit": "aulós",
+      "pronunciation": "ow-los'",
+      "translated": true
+    },
+    "G837": {
+      "definitions_cz": "růst (\"vosk\"), t. j. zvětšovat\n (doslovné nebo obrazné, aktivní nebo pasivní)",
+      "translit": "auxánō",
+      "pronunciation": "owx-an'-o",
+      "translated": true
+    },
+    "G838": {
+      "definitions_cz": "růst",
+      "translit": "aúxēsis",
+      "pronunciation": "owx'-ay-sis",
+      "translated": true
+    },
+    "G839": {
+      "definitions_cz": "správně, svěží, tj. (příslovce s třemi tečkami [ŘECKA:2250]",
+      "translit": "aúrion",
+      "pronunciation": "ow'-ree-on",
+      "translated": true
+    },
+    "G840": {
+      "definitions_cz": "drsný\n (správně jako vichřice), tedy (obrazně) krutá",
+      "translit": "austērós",
+      "pronunciation": "ow-stay-ros'",
+      "translated": true
+    },
+    "G841": {
+      "definitions_cz": "sebeuspokojení, tedy (abstraktně) spokojenost, popř\n (konkrétně) kompetence",
+      "translit": "autárkeia",
+      "pronunciation": "ow-tar'-ki-ah",
+      "translated": true
+    },
+    "G842": {
+      "definitions_cz": "samolibý, tedy spokojený",
+      "translit": "autárkēs",
+      "pronunciation": "ow-tar'-kace",
+      "translated": true
+    },
+    "G843": {
+      "definitions_cz": "sebeodsouzený",
+      "translit": "autokatákritos",
+      "pronunciation": "ow-tok-at-ak'-ree-tos",
+      "translated": true
+    },
+    "G844": {
+      "definitions_cz": "samohybný („automatický“), tzn.\n spontánní",
+      "translit": "autómatos",
+      "pronunciation": "ow-tom'-at-os",
+      "translated": true
+    },
+    "G845": {
+      "definitions_cz": "sebevidoucí, tedy očitý svědek",
+      "translit": "autóptēs",
+      "pronunciation": "ow-top'-tace",
+      "translated": true
+    },
+    "G846": {
+      "definitions_cz": "zvratné zájmeno self, užité\n (samotně nebo ve srovnávací [ŘECKO:1438]",
+      "translit": "autós",
+      "pronunciation": "ow-tos'",
+      "translated": true
+    },
+    "G847": {
+      "definitions_cz": "správně, patřící na stejné místo, tj. v tomto (nebo onom)\n místo",
+      "translit": "autoû",
+      "pronunciation": "ow-too'",
+      "translated": true
+    },
+    "G848": {
+      "definitions_cz": "sebe (v nějakém šikmém případě nebo reflexně,\n vztah)",
+      "translit": "hautoû",
+      "pronunciation": "how-too'",
+      "translated": true
+    },
+    "G849": {
+      "definitions_cz": "vlastnoručně, t. j. dělat osobně",
+      "translit": "autócheir",
+      "pronunciation": "ow-tokh'-ire",
+      "translated": true
+    },
+    "G850": {
+      "definitions_cz": "správně, špinavý, tedy (implicitně) nejasný",
+      "translit": "auchmērós",
+      "pronunciation": "owkh-may-ros'",
+      "translated": true
+    },
+    "G851": {
+      "definitions_cz": "odstranit (doslova nebo obrazně)",
+      "translit": "aphairéō",
+      "pronunciation": "af-ahee-reh'-o",
+      "translated": true
+    },
+    "G852": {
+      "definitions_cz": "nezjevný)",
+      "translit": "aphanḗs",
+      "pronunciation": "af-an-ace'",
+      "translated": true
+    },
+    "G853": {
+      "definitions_cz": "učinit neviditelným, tj. (aktivně) konzumovat (becloud), popř\n (pasivně) zmizet (být zničen)",
+      "translit": "aphanízō",
+      "pronunciation": "af-an-id'-zo",
+      "translated": true
+    },
+    "G854": {
+      "definitions_cz": "zmizení, tedy (obrazně) abrogace",
+      "translit": "aphanismós",
+      "pronunciation": "af-an-is-mos'",
+      "translated": true
+    },
+    "G855": {
+      "definitions_cz": "neprojevený, tedy neviditelný",
+      "translit": "áphantos",
+      "pronunciation": "af'-an-tos",
+      "translated": true
+    },
+    "G856": {
+      "definitions_cz": "místo k sezení odděleně,\n tj. záchod",
+      "translit": "aphedrṓn",
+      "pronunciation": "af-ed-rone'",
+      "translated": true
+    },
+    "G857": {
+      "definitions_cz": "nešetrnost,\n tedy askeze (askeze)",
+      "translit": "apheidía",
+      "pronunciation": "af-i-dee'-ah",
+      "translated": true
+    },
+    "G858": {
+      "definitions_cz": "hladkost, tzn.\n (obrazně) jednoduchost",
+      "translit": "aphelótēs",
+      "pronunciation": "af-el-ot'-ace",
+      "translated": true
+    },
+    "G859": {
+      "definitions_cz": "svoboda; (obrazně) pardon",
+      "translit": "áphesis",
+      "pronunciation": "af'-es-is",
+      "translated": true
+    },
+    "G860": {
+      "definitions_cz": "pravděpodobně vaz (jako upevnění)",
+      "translit": "haphḗ",
+      "pronunciation": "haf-ay'",
+      "translated": true
+    },
+    "G861": {
+      "definitions_cz": "neúplatnost; genitiv, nekonečná existence;\n (obrazně) opravdovost",
+      "translit": "aphtharsía",
+      "pronunciation": "af-thar-see'-ah",
+      "translated": true
+    },
+    "G862": {
+      "definitions_cz": "nerozpadající se\n (v podstatě nebo pokračování)",
+      "translit": "áphthartos",
+      "pronunciation": "af'-thar-tos",
+      "translated": true
+    },
+    "G863": {
+      "definitions_cz": "intenzivní forma εἶμι",
+      "translit": "aphíēmi",
+      "pronunciation": "af-ee'-ay-mee",
+      "translated": true
+    },
+    "G864": {
+      "definitions_cz": "to go (i.e. spread) forth (by\n fáma)",
+      "translit": "aphiknéomai",
+      "pronunciation": "af-ik-neh'-om-ahee",
+      "translated": true
+    },
+    "G865": {
+      "definitions_cz": "nepřátelský ke ctnosti",
+      "translit": "aphilágathos",
+      "pronunciation": "af-il-ag'-ath-os",
+      "translated": true
+    },
+    "G866": {
+      "definitions_cz": "nevolný",
+      "translit": "aphilárgyros",
+      "pronunciation": "af-il-ar'-goo-ros",
+      "translated": true
+    },
+    "G867": {
+      "definitions_cz": "správně, příchod, tj. (implicitně)\n odjezd",
+      "translit": "áphixis",
+      "pronunciation": "af'-ix-is",
+      "translated": true
+    },
+    "G868": {
+      "definitions_cz": "odstranit, tj. (aktivně) podněcovat ke vzpouře;\n obvykle (reflexivně) upustit, opustit atp.",
+      "translit": "aphístēmi",
+      "pronunciation": "af-is'-tay-mee",
+      "translated": true
+    },
+    "G869": {
+      "definitions_cz": "nevědomky, tedy nečekaně",
+      "translit": "áphnō",
+      "pronunciation": "af'-no",
+      "translated": true
+    },
+    "G870": {
+      "definitions_cz": "neohroženě",
+      "translit": "aphóbōs",
+      "pronunciation": "af-ob'-oce",
+      "translated": true
+    },
+    "G871": {
+      "definitions_cz": "úzce se asimilovat",
+      "translit": "aphomoióō",
+      "pronunciation": "af-om-oy-o'-o",
+      "translated": true
+    },
+    "G872": {
+      "definitions_cz": "pozorně zvážit",
+      "translit": "aphoráō",
+      "pronunciation": "af-or-ah'-o",
+      "translated": true
+    },
+    "G873": {
+      "definitions_cz": "vyrazit hranicí, tj. (obrazně) limitem,\n vyloučit, jmenovat atd.",
+      "translit": "aphorízō",
+      "pronunciation": "af-or-id'-zo",
+      "translated": true
+    },
+    "G874": {
+      "definitions_cz": "výchozí bod, tj. (obrazně)\n příležitost",
+      "translit": "aphormḗ",
+      "pronunciation": "af-or-may'",
+      "translated": true
+    },
+    "G875": {
+      "definitions_cz": "pěna v ústech (při epilepsii)",
+      "translit": "aphrízō",
+      "pronunciation": "af-rid'-zo",
+      "translated": true
+    },
+    "G876": {
+      "definitions_cz": "pěna, t. j. otrokář",
+      "translit": "aphrós",
+      "pronunciation": "af-ros'",
+      "translated": true
+    },
+    "G877": {
+      "definitions_cz": "nesmyslnost, tj. (eufemisticky) egoismus; (morálně)\n nerozvážnost",
+      "translit": "aphrosýnē",
+      "pronunciation": "af-ros-oo'-nay",
+      "translated": true
+    },
+    "G878": {
+      "definitions_cz": "řádně, bezmyšlenkovitě, tzn.\n hloupý, (implicitně) ignorant, (zvláště) egoistický,\n (prakticky) ukvapený, nebo (morálně) nevěřící",
+      "translit": "áphrōn",
+      "pronunciation": "af'-rone",
+      "translated": true
+    },
+    "G879": {
+      "definitions_cz": "správně, probudit se, tj\n implikace) odpadnout (odpadnout) ve spánku",
+      "translit": "aphypnóō",
+      "pronunciation": "af-oop-no'-o",
+      "translated": true
+    },
+    "G880": {
+      "definitions_cz": "neznělý, tj. němý (podle\n povaha nebo volba); přeneseně, bezvýznamný",
+      "translit": "áphōnos",
+      "pronunciation": "af'-o-nos",
+      "translated": true
+    },
+    "G881": {
+      "definitions_cz": "Achaz, Izraelita",
+      "translit": "Acház",
+      "pronunciation": "akh-adz'",
+      "translated": true
+    },
+    "G882": {
+      "definitions_cz": "Achaia (t. j. Řecko), země\n Evropě",
+      "translit": "Achaḯa",
+      "pronunciation": "ach-ah-ee'-ah",
+      "translated": true
+    },
+    "G883": {
+      "definitions_cz": "Achaian; Achaicus, křesťan",
+      "translit": "Achaïkós",
+      "pronunciation": "ach-ah-ee-kos'",
+      "translated": true
+    },
+    "G884": {
+      "definitions_cz": "nevděčný, t. j. nevděčný",
+      "translit": "acháristos",
+      "pronunciation": "ach-ar'-is-tos",
+      "translated": true
+    },
+    "G885": {
+      "definitions_cz": "Achim, Izraelita",
+      "translit": "Acheím",
+      "pronunciation": "akh-ime'",
+      "translated": true
+    },
+    "G886": {
+      "definitions_cz": "nevyrobený, tzn.\n umělý",
+      "translit": "acheiropoíētos",
+      "pronunciation": "akh-i-rop-oy'-ay-tos",
+      "translated": true
+    },
+    "G887": {
+      "definitions_cz": "zatemnění zraku, tj. (pravděpodobně) a\n šedý zákal",
+      "translit": "achlýs",
+      "pronunciation": "akh-looce'",
+      "translated": true
+    },
+    "G888": {
+      "definitions_cz": "zbytečný, t. j. (eufemisticky) nezáslužný",
+      "translit": "achreîos",
+      "pronunciation": "akh-ri'-os",
+      "translated": true
+    },
+    "G889": {
+      "definitions_cz": "učinit neužitečným, t. j. zkazit",
+      "translit": "achreióō",
+      "pronunciation": "akh-ri-o'-o",
+      "translated": true
+    },
+    "G890": {
+      "definitions_cz": "neefektivní, tj\n implikace) škodlivý",
+      "translit": "áchrēstos",
+      "pronunciation": "akh'-race-tos",
+      "translated": true
+    },
+    "G891": {
+      "definitions_cz": "(z\n čas) do nebo (místa) do",
+      "translit": "áchri",
+      "pronunciation": "akh'-ree",
+      "translated": true
+    },
+    "G892": {
+      "definitions_cz": "plevy (jako\n difúzní)",
+      "translit": "áchyron",
+      "pronunciation": "akh'-oo-ron",
+      "translated": true
+    },
+    "G893": {
+      "definitions_cz": "věrohodný",
+      "translit": "apseudḗs",
+      "pronunciation": "aps-yoo-dace'",
+      "translated": true
+    },
+    "G894": {
+      "definitions_cz": "pelyněk (jako druh hořkosti, tzn.\n (obrazně) neštěstí)",
+      "translit": "ápsinthos",
+      "pronunciation": "ap'-sin-thos",
+      "translated": true
+    },
+    "G895": {
+      "definitions_cz": "neživý, tedy neživý\n (mechanický)",
+      "translit": "ápsychos",
+      "pronunciation": "ap'-soo-khos",
+      "translated": true
+    },
+    "G896": {
+      "definitions_cz": "Baal, fénické božstvo (používané jako symbol\n modloslužba)",
+      "translit": "Báal",
+      "pronunciation": "bah'-al",
+      "translated": true
+    },
+    "G897": {
+      "definitions_cz": "Babylon, hlavní město Chaldæa (doslova nebo\n přeneseně (jako typ tyranie))",
+      "translit": "Babylṓn",
+      "pronunciation": "bab-oo-lone'",
+      "translated": true
+    },
+    "G898": {
+      "definitions_cz": "stupeň, tj. (obrazně) stupeň (z\n důstojnost)",
+      "translit": "bathmós",
+      "pronunciation": "bath-mos'",
+      "translated": true
     }
   }
 }
