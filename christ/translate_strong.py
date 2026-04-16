@@ -77,7 +77,9 @@ def normalize_hebrew_id(key: str, entry: dict) -> str | None:
 
 def normalize_greek_id(key: str, entry: dict) -> str | None:
     """Normalizuje řecké ID na G1, G2, ..."""
-    strongs = entry.get("strongs", key.lstrip("0"))
+    strongs = entry.get("strongs", key)
+    if not strongs:
+        strongs = key.lstrip("0")
     try:
         num = int(strongs)
         return f"G{num}"
