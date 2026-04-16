@@ -18949,6 +18949,898 @@
       "translit": "Eleázar",
       "pronunciation": "el-eh-ad'-zar",
       "translated": true
+    },
+    "G1649": {
+      "definitions_cz": "vyvrácení, t. j. napomenutí",
+      "translit": "élenxis",
+      "pronunciation": "el'-eng-xis",
+      "translated": true
+    },
+    "G1650": {
+      "definitions_cz": "důkaz, přesvědčení",
+      "translit": "élenchos",
+      "pronunciation": "el'-eng-khos",
+      "translated": true
+    },
+    "G1651": {
+      "definitions_cz": "vyvracet, napomínat",
+      "translit": "elénchō",
+      "pronunciation": "el-eng'-kho",
+      "translated": true
+    },
+    "G1652": {
+      "definitions_cz": "politováníhodný",
+      "translit": "eleeinós",
+      "pronunciation": "el-eh-i-nos'",
+      "translated": true
+    },
+    "G1653": {
+      "definitions_cz": "soucitit (slovem nebo skutkem, zvláště božským\n milost)",
+      "translit": "eleéō",
+      "pronunciation": "el-eh-eh'-o",
+      "translated": true
+    },
+    "G1654": {
+      "definitions_cz": "soucitnost, tj. (jak se uplatňuje vůči chudým)\n dobročinnost nebo (konkrétně) dobrodiní",
+      "translit": "eleēmosýnē",
+      "pronunciation": "el-eh-ay-mos-oo'-nay",
+      "translated": true
+    },
+    "G1655": {
+      "definitions_cz": "soucitný (aktivně)",
+      "translit": "eleḗmōn",
+      "pronunciation": "el-eh-ay'-mone",
+      "translated": true
+    },
+    "G1656": {
+      "definitions_cz": "soucit (lidský nebo božský, zvláště\n aktivní)",
+      "translit": "éleos",
+      "pronunciation": "el'-eh-os",
+      "translated": true
+    },
+    "G1657": {
+      "definitions_cz": "svoboda (legitimní nebo nezákonná, především morální nebo\n ceremoniální)",
+      "translit": "eleuthería",
+      "pronunciation": "el-yoo-ther-ee'-ah",
+      "translated": true
+    },
+    "G1658": {
+      "definitions_cz": "nespoutaný (jít s potěšením),\n tj. (jako občan) ne otrok (ať už svobodný nebo manumitovaný), popř\n (genitivní pád) osvobozený (z povinnosti nebo odpovědnosti)",
+      "translit": "eleútheros",
+      "pronunciation": "el-yoo'-ther-os",
+      "translated": true
+    },
+    "G1659": {
+      "definitions_cz": "osvobodit, tj. (obrazně) osvobodit (od mravního,\n ceremoniální nebo smrtelná odpovědnost)",
+      "translit": "eleutheróō",
+      "pronunciation": "el-yoo-ther-o'-o",
+      "translated": true
+    },
+    "G1660": {
+      "definitions_cz": "advent",
+      "translit": "éleusis",
+      "pronunciation": "el'-yoo-sis",
+      "translated": true
+    },
+    "G1661": {
+      "definitions_cz": "elephantine, tj. (implicitně)\n složené ze slonoviny",
+      "translit": "elephántinos",
+      "pronunciation": "el-ef-an'-tee-nos",
+      "translated": true
+    },
+    "G1662": {
+      "definitions_cz": "Eliakim, Izraelita",
+      "translit": "Eliakeím",
+      "pronunciation": "el-ee-ak-ime'",
+      "translated": true
+    },
+    "G1663": {
+      "definitions_cz": "Eliezer, Izraelita",
+      "translit": "Eliézer",
+      "pronunciation": "el-ee-ed'-zer",
+      "translated": true
+    },
+    "G1664": {
+      "definitions_cz": "Bůh velebnosti; Eliud, an\n Izraelita",
+      "translit": "Elioúd",
+      "pronunciation": "el-ee-ood'",
+      "translated": true
+    },
+    "G1665": {
+      "definitions_cz": "Elisabet, Izraelka",
+      "translit": "Elisábet",
+      "pronunciation": "el-ee-sab'-et",
+      "translated": true
+    },
+    "G1666": {
+      "definitions_cz": "Elissæus, Izraelita",
+      "translit": "Elissaîos",
+      "pronunciation": "el-is-sah'-yos",
+      "translated": true
+    },
+    "G1667": {
+      "definitions_cz": "svinout nebo zabalit",
+      "translit": "helíssō",
+      "pronunciation": "hel-is'-so",
+      "translated": true
+    },
+    "G1668": {
+      "definitions_cz": "vřed (jakoby přitažený k sobě)",
+      "translit": "hélkos",
+      "pronunciation": "hel'-kos",
+      "translated": true
+    },
+    "G1669": {
+      "definitions_cz": "způsobit ulcerovat, tj. (pasivně) být vředovitý",
+      "translit": "helkóō",
+      "pronunciation": "hel-ko'-o",
+      "translated": true
+    },
+    "G1670": {
+      "definitions_cz": "táhnout (doslova popř\n přeneseně)",
+      "translit": "helkýō",
+      "pronunciation": "hel-koo'-o",
+      "translated": true
+    },
+    "G1671": {
+      "definitions_cz": "Hellas (neboli Řecko), země\n Evropě",
+      "translit": "Hellás",
+      "pronunciation": "hel-las'",
+      "translated": true
+    },
+    "G1672": {
+      "definitions_cz": "Hellen (Řek) nebo obyvatel Hellas; rozšířením a\n Řecky mluvící osoba, zejména nežid",
+      "translit": "Héllēn",
+      "pronunciation": "hel'-lane",
+      "translated": true
+    },
+    "G1673": {
+      "definitions_cz": "helénština, tj. řečtina (v jazyce)",
+      "translit": "Hellēnikós",
+      "pronunciation": "hel-lay-nee-kos'",
+      "translated": true
+    },
+    "G1674": {
+      "definitions_cz": "řecká (tedy nežidovská) žena",
+      "translit": "Hellēnís",
+      "pronunciation": "hel-lay-nis'",
+      "translated": true
+    },
+    "G1675": {
+      "definitions_cz": "helénista nebo řecky mluvící\n Žid",
+      "translit": "Hellēnistḗs",
+      "pronunciation": "hel-lay-nis-tace'",
+      "translated": true
+    },
+    "G1676": {
+      "definitions_cz": "helénisticky, t. j. v řec\n jazyk",
+      "translit": "Hellēnistí",
+      "pronunciation": "hel-lay-nis-tee'",
+      "translated": true
+    },
+    "G1677": {
+      "definitions_cz": "počítat, tzn.\n atribut",
+      "translit": "ellogéō",
+      "pronunciation": "el-log-eh'-o",
+      "translated": true
+    },
+    "G1678": {
+      "definitions_cz": "Elmodam, Izraelita",
+      "translit": "Elmōdám",
+      "pronunciation": "el-mo-dam'",
+      "translated": true
+    },
+    "G1679": {
+      "definitions_cz": "očekávat nebo se svěřit",
+      "translit": "elpízō",
+      "pronunciation": "el-pid'-zo",
+      "translated": true
+    },
+    "G1680": {
+      "definitions_cz": "očekávání (abstraktně nebo konkrétně) nebo důvěra",
+      "translit": "elpís",
+      "pronunciation": "el-pece'",
+      "translated": true
+    },
+    "G1681": {
+      "definitions_cz": "Elymas, čaroděj",
+      "translit": "Elýmas",
+      "pronunciation": "el-oo'-mas",
+      "translated": true
+    },
+    "G1682": {
+      "definitions_cz": "",
+      "translated": false
+    },
+    "G1683": {
+      "definitions_cz": "ze sebe\n\n tak podobně i případ dativu\n      ἐμαυτῷ(em-ow-to')ἐμαυτόν(em-ow-ton')",
+      "translit": "emautoû",
+      "pronunciation": "em-ow-too'",
+      "translated": true
+    },
+    "G1684": {
+      "definitions_cz": "jít dál, tj. nastoupit (na palubu a\n plavidlo), dosah (bazén)",
+      "translit": "embaínō",
+      "pronunciation": "em-ba'-hee-no",
+      "translated": true
+    },
+    "G1685": {
+      "definitions_cz": "nahodit, t. j. (obrazně) podléhat\n (věčný trest)",
+      "translit": "embállō",
+      "pronunciation": "em-bal'-lo",
+      "translated": true
+    },
+    "G1686": {
+      "definitions_cz": "navlhčit, tj. mokrý (část osoby atd.)\n kontaktem s tekutinou",
+      "translit": "embáptō",
+      "pronunciation": "em-bap'-to",
+      "translated": true
+    },
+    "G1687": {
+      "definitions_cz": "ekvivalentní k\n [ŘECKA:1684]",
+      "translit": "embateúō",
+      "pronunciation": "em-bat-yoo'-o",
+      "translated": true
+    },
+    "G1688": {
+      "definitions_cz": "příčina [ŘECKO:1684]",
+      "translit": "embibázō",
+      "pronunciation": "em-bib-ad'-zo",
+      "translated": true
+    },
+    "G1689": {
+      "definitions_cz": "dívat se, tj. (relativně) pozorovat pevně,\n nebo (absolutně) jasně rozeznat",
+      "translit": "emblépō",
+      "pronunciation": "em-blep'-o",
+      "translated": true
+    },
+    "G1690": {
+      "definitions_cz": "mít rozhořčení,\n tj. (přechodně) obviňovat, (nepřechodně) vzdychat žalem,\n (zvláště) přísně nařizovat",
+      "translit": "embrimáomai",
+      "pronunciation": "em-brim-ah'-om-ahee",
+      "translated": true
+    },
+    "G1691": {
+      "definitions_cz": "mě",
+      "translit": "emé",
+      "pronunciation": "em-eh'",
+      "translated": true
+    },
+    "G1692": {
+      "definitions_cz": "zvracet",
+      "translit": "eméō",
+      "pronunciation": "em-eh'-o",
+      "translated": true
+    },
+    "G1693": {
+      "definitions_cz": "řádit dál, t. j. vztekat se",
+      "translit": "emmaínomai",
+      "pronunciation": "em-mah'-ee-nom-ahee",
+      "translated": true
+    },
+    "G1694": {
+      "definitions_cz": "Bůh s námi; Emmanuel, jméno\n Kriste",
+      "translit": "Emmanouḗl",
+      "pronunciation": "em-man-oo-ale'",
+      "translated": true
+    },
+    "G1695": {
+      "definitions_cz": "Emauzy, místo v\n Palestina",
+      "translit": "Emmaoús",
+      "pronunciation": "em-mah-ooce'",
+      "translated": true
+    },
+    "G1696": {
+      "definitions_cz": "zůstat na stejném místě, tj. (obrazně)\n vytrvat",
+      "translit": "emménō",
+      "pronunciation": "em-men'-o",
+      "translated": true
+    },
+    "G1697": {
+      "definitions_cz": "Emmor (t. j. Chamor), Kananejec",
+      "translit": "Emmór",
+      "pronunciation": "em-mor'",
+      "translated": true
+    },
+    "G1698": {
+      "definitions_cz": "ke mně",
+      "translit": "emoí",
+      "pronunciation": "em-oy'",
+      "translated": true
+    },
+    "G1699": {
+      "definitions_cz": "můj",
+      "translit": "emós",
+      "pronunciation": "em-os'",
+      "translated": true
+    },
+    "G1700": {
+      "definitions_cz": "ze mě",
+      "translit": "emoû",
+      "pronunciation": "em-oo'",
+      "translated": true
+    },
+    "G1701": {
+      "definitions_cz": "výsměch",
+      "translit": "empaigmós",
+      "pronunciation": "emp-aheeg-mos'",
+      "translated": true
+    },
+    "G1702": {
+      "definitions_cz": "posmívat se, t. j. vysmívat se",
+      "translit": "empaízō",
+      "pronunciation": "emp-aheed'-zo",
+      "translated": true
+    },
+    "G1703": {
+      "definitions_cz": "posměvač, tedy (implicitně) falešný učitel",
+      "translit": "empaíktēs",
+      "pronunciation": "emp-aheek-tace'",
+      "translated": true
+    },
+    "G1704": {
+      "definitions_cz": "chodit na místo, tj. (obrazně) k\n být obsazen mezi lidmi",
+      "translit": "emperipatéō",
+      "pronunciation": "em-per-ee-pat-eh'-o",
+      "translated": true
+    },
+    "G1705": {
+      "definitions_cz": "vyplnit (nahoru), tj. (implicitně)\n uspokojit (doslova nebo obrazně)",
+      "translit": "empíplēmi",
+      "pronunciation": "em-pip'-lay-mee",
+      "translated": true
+    },
+    "G1706": {
+      "definitions_cz": "padnout na, tj. (doslova) být chycen,\n nebo (obrazně) být přemožen",
+      "translit": "empíptō",
+      "pronunciation": "em-pip'-to",
+      "translated": true
+    },
+    "G1707": {
+      "definitions_cz": "proplést, tj. (obrazně) zapojit\n s",
+      "translit": "emplékō",
+      "pronunciation": "em-plek'-o",
+      "translated": true
+    },
+    "G1708": {
+      "definitions_cz": "propracované zapletení vlasů",
+      "translit": "emplokḗ",
+      "pronunciation": "em-plok-ay'",
+      "translated": true
+    },
+    "G1709": {
+      "definitions_cz": "nadechnout se, tedy (obrazně) být animován tím\n (nakloněný)",
+      "translit": "empnéō",
+      "pronunciation": "emp-neh'-o",
+      "translated": true
+    },
+    "G1710": {
+      "definitions_cz": "cestovat v (země jako podomní obchodník), tj\n implikace) obchodovat",
+      "translit": "emporeúomai",
+      "pronunciation": "em-por-yoo'-om-ahee",
+      "translated": true
+    },
+    "G1711": {
+      "definitions_cz": "provoz",
+      "translit": "emporía",
+      "pronunciation": "em-por-ee'-ah",
+      "translated": true
+    },
+    "G1712": {
+      "definitions_cz": "tržiště (\"obchodní centrum\")",
+      "translit": "empórion",
+      "pronunciation": "em-por'-ee-on",
+      "translated": true
+    },
+    "G1713": {
+      "definitions_cz": "(velkoobchod) živnostník",
+      "translit": "émporos",
+      "pronunciation": "em'-por-os",
+      "translated": true
+    },
+    "G1714": {
+      "definitions_cz": "zapálit, t. j. nasadit\n oheň",
+      "translit": "emprḗthō",
+      "pronunciation": "em-pray'-tho",
+      "translated": true
+    },
+    "G1715": {
+      "definitions_cz": "před (na místě (doslova nebo obrazně)\n nebo čas)",
+      "translit": "émprosthen",
+      "pronunciation": "em'-pros-then",
+      "translated": true
+    },
+    "G1716": {
+      "definitions_cz": "plivat na nebo na",
+      "translit": "emptýō",
+      "pronunciation": "emp-too'-o",
+      "translated": true
+    },
+    "G1717": {
+      "definitions_cz": "zjevný v sobě",
+      "translit": "emphanḗs",
+      "pronunciation": "em-fan-ace'",
+      "translated": true
+    },
+    "G1718": {
+      "definitions_cz": "vystavit (osobně) nebo zveřejnit (slovy)",
+      "translit": "emphanízō",
+      "pronunciation": "em-fan-id'-zo",
+      "translated": true
+    },
+    "G1719": {
+      "definitions_cz": "ve strachu, t. j. vystrašený",
+      "translit": "émphobos",
+      "pronunciation": "em'-fob-os",
+      "translated": true
+    },
+    "G1720": {
+      "definitions_cz": "foukat na nebo\n na",
+      "translit": "emphysáō",
+      "pronunciation": "em-foo-sah'-o",
+      "translated": true
+    },
+    "G1721": {
+      "definitions_cz": "implantován\n (obrazně)",
+      "translit": "émphytos",
+      "pronunciation": "em'-foo-tos",
+      "translated": true
+    },
+    "G1722": {
+      "definitions_cz": "\"v\", v, (nahoru-)na, od atd.",
+      "translit": "en",
+      "pronunciation": "en",
+      "translated": true
+    },
+    "G1723": {
+      "definitions_cz": "vzít do náruče, tzn.\n obejmout",
+      "translit": "enankalízomai",
+      "pronunciation": "en-ang-kal-id'-zom-ahee",
+      "translated": true
+    },
+    "G1724": {
+      "definitions_cz": "v moři, t. j. mořské",
+      "translit": "enálios",
+      "pronunciation": "en-al'-ee-os",
+      "translated": true
+    },
+    "G1725": {
+      "definitions_cz": "před (tj. přeneseně přítomností).",
+      "translit": "énanti",
+      "pronunciation": "en'-an-tee",
+      "translated": true
+    },
+    "G1726": {
+      "definitions_cz": "(adverbiálně) v přítomnosti (pohledu).",
+      "translit": "enantíon",
+      "pronunciation": "en-an-tee'-on",
+      "translated": true
+    },
+    "G1727": {
+      "definitions_cz": "naproti; v přeneseném smyslu antagonistické",
+      "translit": "enantíos",
+      "pronunciation": "en-an-tee'-os",
+      "translated": true
+    },
+    "G1729": {
+      "definitions_cz": "nedostatečný\n v",
+      "translit": "endeḗs",
+      "pronunciation": "en-deh-ace'",
+      "translated": true
+    },
+    "G1730": {
+      "definitions_cz": "indikace (konkrétně)",
+      "translit": "éndeigma",
+      "pronunciation": "en'-dighe-mah",
+      "translated": true
+    },
+    "G1731": {
+      "definitions_cz": "naznačit (slovem nebo činem)",
+      "translit": "endeíknymi",
+      "pronunciation": "en-dike'-noo-mee",
+      "translated": true
+    },
+    "G1732": {
+      "definitions_cz": "indikace (abstraktně)",
+      "translit": "éndeixis",
+      "pronunciation": "en'-dike-sis",
+      "translated": true
+    },
+    "G1733": {
+      "definitions_cz": "jedna a deset, tedy jedenáct",
+      "translit": "héndeka",
+      "pronunciation": "hen'-dek-ah",
+      "translated": true
+    },
+    "G1734": {
+      "definitions_cz": "jedenáctý",
+      "translit": "hendékatos",
+      "pronunciation": "hen-dek'-at-os",
+      "translated": true
+    },
+    "G1735": {
+      "definitions_cz": "(neosobně) je to přijato, tj. přijato (možné)",
+      "translit": "endéchetai",
+      "pronunciation": "en-dekh'-et-ahee",
+      "translated": true
+    },
+    "G1736": {
+      "definitions_cz": "být ve vlastní zemi, tzn.\n doma (obrazně)",
+      "translit": "endēméō",
+      "pronunciation": "en-day-meh'-o",
+      "translated": true
+    },
+    "G1737": {
+      "definitions_cz": "investovat (s oděvem)",
+      "translit": "endidýskō",
+      "pronunciation": "en-did-oos'-ko",
+      "translated": true
+    },
+    "G1738": {
+      "definitions_cz": "v právu, tedy spravedlivé",
+      "translit": "éndikos",
+      "pronunciation": "en'-dee-kos",
+      "translated": true
+    },
+    "G1739": {
+      "definitions_cz": "a\n bydlení v (bydlišti), t. j. struktura",
+      "translit": "endómēsis",
+      "pronunciation": "en-dom'-ay-sis",
+      "translated": true
+    },
+    "G1740": {
+      "definitions_cz": "oslavovat",
+      "translit": "endoxázō",
+      "pronunciation": "en-dox-ad'-zo",
+      "translated": true
+    },
+    "G1741": {
+      "definitions_cz": "ve slávě, tj. nádhera, (obrazně)\n ušlechtilý",
+      "translit": "éndoxos",
+      "pronunciation": "en'-dox-os",
+      "translated": true
+    },
+    "G1742": {
+      "definitions_cz": "oděv (zejména svrchní plášť)",
+      "translit": "éndyma",
+      "pronunciation": "en'-doo-mah",
+      "translated": true
+    },
+    "G1743": {
+      "definitions_cz": "zmocnit",
+      "translit": "endynamóō",
+      "pronunciation": "en-doo-nam-o'-o",
+      "translated": true
+    },
+    "G1744": {
+      "definitions_cz": "potopit (implicitně zabalit (srovnej [ŘECKO:1746]",
+      "translit": "endýnō",
+      "pronunciation": "en-doo'-no",
+      "translated": true
+    },
+    "G1745": {
+      "definitions_cz": "investice s oblečením",
+      "translit": "éndysis",
+      "pronunciation": "en'-doo-sis",
+      "translated": true
+    },
+    "G1746": {
+      "definitions_cz": "investovat\n s oblečením (doslova nebo obrazně)",
+      "translit": "endýō",
+      "pronunciation": "en-doo'-o",
+      "translated": true
+    },
+    "G1747": {
+      "definitions_cz": "ambuscade, tzn.\n (obrazně) vražedný účel",
+      "translit": "enédra",
+      "pronunciation": "en-ed'-rah",
+      "translated": true
+    },
+    "G1748": {
+      "definitions_cz": "číhat, tedy (obrazně) zosnovat atentát",
+      "translit": "enedreúō",
+      "pronunciation": "en-ed-ryoo'-o",
+      "translated": true
+    },
+    "G1749": {
+      "definitions_cz": "přepadení, tedy (obrazně) vražedné\n design",
+      "translit": "énedron",
+      "pronunciation": "en'-ed-ron",
+      "translated": true
+    },
+    "G1750": {
+      "definitions_cz": "zabalit",
+      "translit": "eneiléō",
+      "pronunciation": "en-i-leh'-o",
+      "translated": true
+    },
+    "G1751": {
+      "definitions_cz": "být uvnitř (střední příčestí množné číslo)",
+      "translit": "éneimi",
+      "pronunciation": "en'-i-mee",
+      "translated": true
+    },
+    "G1752": {
+      "definitions_cz": "kvůli",
+      "translit": "héneka",
+      "pronunciation": "hen'-ek-ah",
+      "translated": true
+    },
+    "G1753": {
+      "definitions_cz": "účinnost (\"energie\")",
+      "translit": "enérgeia",
+      "pronunciation": "en-erg'-i-ah",
+      "translated": true
+    },
+    "G1754": {
+      "definitions_cz": "být aktivní, efektivní",
+      "translit": "energéō",
+      "pronunciation": "en-erg-eh'-o",
+      "translated": true
+    },
+    "G1755": {
+      "definitions_cz": "efekt",
+      "translit": "enérgēma",
+      "pronunciation": "en-erg'-ay-mah",
+      "translated": true
+    },
+    "G1756": {
+      "definitions_cz": "aktivní, operativní",
+      "translit": "energḗs",
+      "pronunciation": "en-er-gace'",
+      "translated": true
+    },
+    "G1757": {
+      "definitions_cz": "poskytnout výhodu",
+      "translit": "eneulogéō",
+      "pronunciation": "en-yoo-log-eh'-o",
+      "translated": true
+    },
+    "G1758": {
+      "definitions_cz": "držet v nebo na, t. j. lapit; implicitně,\n udržet si zášť",
+      "translit": "enéchō",
+      "pronunciation": "en-ekh'-o",
+      "translated": true
+    },
+    "G1759": {
+      "definitions_cz": "správně, uvnitř, tj. (místa) zde,\n sem",
+      "translit": "entháde",
+      "pronunciation": "en-thad'-eh",
+      "translated": true
+    },
+    "G1760": {
+      "definitions_cz": "nechat se inspirovat, tzn.\n přemýšlet",
+      "translit": "enthyméomai",
+      "pronunciation": "en-thoo-meh'-om-ahee",
+      "translated": true
+    },
+    "G1761": {
+      "definitions_cz": "uvažování",
+      "translit": "enthýmēsis",
+      "pronunciation": "en-thoo'-may-sis",
+      "translated": true
+    },
+    "G1762": {
+      "definitions_cz": "neosobně, je v nebo mezi",
+      "translit": "éni",
+      "pronunciation": "en'-ee",
+      "translated": true
+    },
+    "G1763": {
+      "definitions_cz": "rok",
+      "translit": "eniautós",
+      "pronunciation": "en-ee-ow-tos'",
+      "translated": true
+    },
+    "G1764": {
+      "definitions_cz": "položit na ruku, tj. (reflexivně) hrozit,\n (příčestí) být okamžitý",
+      "translit": "enístēmi",
+      "pronunciation": "en-is'-tay-mee",
+      "translated": true
+    },
+    "G1765": {
+      "definitions_cz": "povzbudit (přechodně popř\n reflexně)",
+      "translit": "enischýō",
+      "pronunciation": "en-is-khoo'-o",
+      "translated": true
+    },
+    "G1766": {
+      "definitions_cz": "devátý",
+      "translit": "énnatos",
+      "pronunciation": "en'-nat-os",
+      "translated": true
+    },
+    "G1767": {
+      "definitions_cz": "devět",
+      "translit": "ennéa",
+      "pronunciation": "en-neh'-ah",
+      "translated": true
+    },
+    "G1768": {
+      "definitions_cz": "devadesát devět",
+      "translit": "ennenēkontaennéa",
+      "pronunciation": "en-nen-ay-kon-tah-en-neh'-ah",
+      "translated": true
+    },
+    "G1769": {
+      "definitions_cz": "němý (jako dělající znamení), t. j. tichý od\n údiv",
+      "translit": "enneós",
+      "pronunciation": "en-neh-os'",
+      "translated": true
+    },
+    "G1770": {
+      "definitions_cz": "přikyvovat, t. j. kývat nebo komunikovat pomocí\n gesto",
+      "translit": "enneúō",
+      "pronunciation": "en-nyoo'-o",
+      "translated": true
+    },
+    "G1771": {
+      "definitions_cz": "ohleduplnost, t. j. mravní\n porozumění",
+      "translit": "énnoia",
+      "pronunciation": "en'-noy-ah",
+      "translated": true
+    },
+    "G1772": {
+      "definitions_cz": "(subjektivně) právní, nebo (objektivně) subjekt\n do",
+      "translit": "énnomos",
+      "pronunciation": "en'-nom-os",
+      "translated": true
+    },
+    "G1773": {
+      "definitions_cz": "(adverbiálně) v noci",
+      "translit": "énnychon",
+      "pronunciation": "en'-noo-khon",
+      "translated": true
+    },
+    "G1774": {
+      "definitions_cz": "obývat (obrazně)",
+      "translit": "enoikéō",
+      "pronunciation": "en-oy-keh'-o",
+      "translated": true
+    },
+    "G1775": {
+      "definitions_cz": "jednota, tedy (obrazně) jednomyslnost",
+      "translit": "henótēs",
+      "pronunciation": "hen-ot-ace'",
+      "translated": true
+    },
+    "G1776": {
+      "definitions_cz": "nacpat se, tj. (obrazně) do\n otravovat",
+      "translit": "enochléō",
+      "pronunciation": "en-okh-leh'-o",
+      "translated": true
+    },
+    "G1777": {
+      "definitions_cz": "podléhající (podmínce, pokutě nebo přičtení)",
+      "translit": "énochos",
+      "pronunciation": "en'-okh-os",
+      "translated": true
+    },
+    "G1778": {
+      "definitions_cz": "příkaz, t. j. náboženský předpis",
+      "translit": "éntalma",
+      "pronunciation": "en'-tal-mah",
+      "translated": true
+    },
+    "G1779": {
+      "definitions_cz": "zasypat obilím pro\n pohřbít",
+      "translit": "entaphiázō",
+      "pronunciation": "en-taf-ee-ad'-zo",
+      "translated": true
+    },
+    "G1780": {
+      "definitions_cz": "příprava na pohřeb",
+      "translit": "entaphiasmós",
+      "pronunciation": "en-taf-ee-as-mos'",
+      "translated": true
+    },
+    "G1781": {
+      "definitions_cz": "nařizovat",
+      "translit": "entéllomai",
+      "pronunciation": "en-tel'-lom-ahee",
+      "translated": true
+    },
+    "G1782": {
+      "definitions_cz": "odtud (doslova nebo obrazně); (opakovaně)\n na obou stranách",
+      "translit": "enteûthen",
+      "pronunciation": "ent-yoo'-then",
+      "translated": true
+    },
+    "G1783": {
+      "definitions_cz": "rozhovor, tedy (zvláště) prosba",
+      "translit": "énteuxis",
+      "pronunciation": "ent'-yook-sis",
+      "translated": true
+    },
+    "G1784": {
+      "definitions_cz": "ceněný (obrazně)",
+      "translit": "éntimos",
+      "pronunciation": "en'-tee-mos",
+      "translated": true
+    },
+    "G1785": {
+      "definitions_cz": "soudní příkaz, tedy autoritativní\n předpis",
+      "translit": "entolḗ",
+      "pronunciation": "en-tol-ay'",
+      "translated": true
+    },
+    "G1786": {
+      "definitions_cz": "rezidentem",
+      "translit": "entópios",
+      "pronunciation": "en-top'-ee-os",
+      "translated": true
+    },
+    "G1787": {
+      "definitions_cz": "uvnitř (příslovce nebo podstatné jméno)",
+      "translit": "entós",
+      "pronunciation": "en-tos'",
+      "translated": true
+    },
+    "G1788": {
+      "definitions_cz": "převrátit, tj. (obrazně a\n reflexivně) v dobrém smyslu respektovat; nebo ve špatném, k\n zmást",
+      "translit": "entrépō",
+      "pronunciation": "en-trep'-o",
+      "translated": true
+    },
+    "G1789": {
+      "definitions_cz": "(obrazně) vzdělávat",
+      "translit": "entréphō",
+      "pronunciation": "en-tref'-o",
+      "translated": true
+    },
+    "G1790": {
+      "definitions_cz": "vyděšený",
+      "translit": "éntromos",
+      "pronunciation": "en'-trom-os",
+      "translated": true
+    },
+    "G1791": {
+      "definitions_cz": "zmatek",
+      "translit": "entropḗ",
+      "pronunciation": "en-trop-ay'",
+      "translated": true
+    },
+    "G1792": {
+      "definitions_cz": "kochat se",
+      "translit": "entrypháō",
+      "pronunciation": "en-troo-fah'-o",
+      "translated": true
+    },
+    "G1793": {
+      "definitions_cz": "nahodit, t. j. (implicitně) sdělit;\n rozšířením prosit (pro nebo proti)",
+      "translit": "entynchánō",
+      "pronunciation": "en-toong-khan'-o",
+      "translated": true
+    },
+    "G1794": {
+      "definitions_cz": "pravděpodobně podobný [ŘECKO:1507]",
+      "translit": "entylíssō",
+      "pronunciation": "en-too-lis'-so",
+      "translated": true
+    },
+    "G1795": {
+      "definitions_cz": "orazítkovat, tzn.\n vyrýt",
+      "translit": "entypóō",
+      "pronunciation": "en-too-po'-o",
+      "translated": true
+    },
+    "G1796": {
+      "definitions_cz": "urážet",
+      "translit": "enybrízō",
+      "pronunciation": "en-oo-brid'-zo",
+      "translated": true
+    },
+    "G1797": {
+      "definitions_cz": "snít",
+      "translit": "enypniázomai",
+      "pronunciation": "en-oop-nee-ad'-zom-ahee",
+      "translated": true
+    },
+    "G1798": {
+      "definitions_cz": "něco viděného ve spánku, tj. sen (vize v a\n sen)",
+      "translit": "enýpnion",
+      "pronunciation": "en-oop'-nee-on",
+      "translated": true
     }
   }
 }
