@@ -14457,6 +14457,904 @@
       "translit": "bathmós",
       "pronunciation": "bath-mos'",
       "translated": true
+    },
+    "G899": {
+      "definitions_cz": "hloubka, tj. (implicitně) rozsah;\n (obrazně) záhada",
+      "translit": "báthos",
+      "pronunciation": "bath'-os",
+      "translated": true
+    },
+    "G900": {
+      "definitions_cz": "prohloubit",
+      "translit": "bathýnō",
+      "pronunciation": "bath-oo'-no",
+      "translated": true
+    },
+    "G901": {
+      "definitions_cz": "hluboký (jako klesající), doslova nebo\n přeneseně",
+      "translit": "bathýs",
+      "pronunciation": "bath-oos'",
+      "translated": true
+    },
+    "G902": {
+      "definitions_cz": "palmová větvička\n (jako daleko)",
+      "translit": "baḯon",
+      "pronunciation": "bah-ee'-on",
+      "translated": true
+    },
+    "G903": {
+      "definitions_cz": "Balám, Mezopotámec (symbol falešného\n učitel)",
+      "translit": "Balaám",
+      "pronunciation": "bal-ah-am'",
+      "translated": true
+    },
+    "G904": {
+      "definitions_cz": "Balák, Moábec",
+      "translit": "Balák",
+      "pronunciation": "bal-ak'",
+      "translated": true
+    },
+    "G905": {
+      "definitions_cz": "sáček (pro\n peníze)",
+      "translit": "balántion",
+      "pronunciation": "bal-an'-tee-on",
+      "translated": true
+    },
+    "G906": {
+      "definitions_cz": "házet (v různých aplikacích, více či méně\n násilné nebo intenzivní)",
+      "translit": "bállō",
+      "pronunciation": "bal'-lo",
+      "translated": true
+    },
+    "G907": {
+      "definitions_cz": "ponořit, ponořit; udělat whelmed (tj.\n úplně mokré); používá se pouze (v Novém zákoně) obřadního omývání,\n zvláště (technicky) křesťanského řádu\n křest",
+      "translit": "baptízō",
+      "pronunciation": "bap-tid'-zo",
+      "translated": true
+    },
+    "G908": {
+      "definitions_cz": "křest (technicky nebo obrazně)",
+      "translit": "báptisma",
+      "pronunciation": "bap'-tis-mah",
+      "translated": true
+    },
+    "G909": {
+      "definitions_cz": "mytí (obřadní nebo křesťanské)",
+      "translit": "baptismós",
+      "pronunciation": "bap-tis-mos'",
+      "translated": true
+    },
+    "G910": {
+      "definitions_cz": "křtitel, jako epiteton Kristova předchůdce",
+      "translit": "Baptistḗs",
+      "pronunciation": "bap-tis-tace'",
+      "translated": true
+    },
+    "G911": {
+      "definitions_cz": "pohltit, tj. zcela zakrýt tekutinou; v Novém\n Testament pouze v kvalifikovaném nebo zvláštním smyslu, tj. (doslova) k\n navlhčit (část své osoby) nebo (implicitně) obarvit (jako\n s barvivem)",
+      "translit": "báptō",
+      "pronunciation": "bap'-to",
+      "translated": true
+    },
+    "G912": {
+      "definitions_cz": "syn Abba; Bar-abbas, an\n Izraelita",
+      "translit": "Barabbâs",
+      "pronunciation": "bar-ab-bas'",
+      "translated": true
+    },
+    "G913": {
+      "definitions_cz": "Barak, Izraelita",
+      "translit": "Barák",
+      "pronunciation": "bar-ak'",
+      "translated": true
+    },
+    "G914": {
+      "definitions_cz": "Barachias (t. j. Berechijah), an\n Izraelita",
+      "translit": "Barachías",
+      "pronunciation": "bar-akh-ee'-as",
+      "translated": true
+    },
+    "G915": {
+      "definitions_cz": "cizinec (tj.\n neřecký)",
+      "translit": "bárbaros",
+      "pronunciation": "bar'-bar-os",
+      "translated": true
+    },
+    "G916": {
+      "definitions_cz": "vážit (obrazně)",
+      "translit": "baréō",
+      "pronunciation": "bar-eh'-o",
+      "translated": true
+    },
+    "G917": {
+      "definitions_cz": "silně (obrazně)",
+      "translit": "baréōs",
+      "pronunciation": "bar-eh'-oce",
+      "translated": true
+    },
+    "G918": {
+      "definitions_cz": "syn Tolmai; Společnost Bar-tholomæus, a\n křesťanský apoštol",
+      "translit": "Bartholomaîos",
+      "pronunciation": "bar-thol-om-ah'-yos",
+      "translated": true
+    },
+    "G919": {
+      "definitions_cz": "syn Ježíše (nebo Jozue);\n Bar-ježiš, Izraelita",
+      "translit": "Bariēsoûs",
+      "pronunciation": "bar-ee-ay-sooce'",
+      "translated": true
+    },
+    "G920": {
+      "definitions_cz": "syn Jonáše (nebo Jonáše); Bar-Jonas,\n Izraelita",
+      "translit": "Bariōnâs",
+      "pronunciation": "bar-ee-oo-nas'",
+      "translated": true
+    },
+    "G921": {
+      "definitions_cz": "syn Nabasův (t. j. proroctví);\n Barnabáš, Izraelita",
+      "translit": "Barnábas",
+      "pronunciation": "bar-nab'-as",
+      "translated": true
+    },
+    "G922": {
+      "definitions_cz": "porovnat [ŘECKO:899]",
+      "translit": "báros",
+      "pronunciation": "bar'-os",
+      "translated": true
+    },
+    "G923": {
+      "definitions_cz": "syn Sabase (nebo Tsaba);\n Bar-sabas, jméno dvou Izraelitů",
+      "translit": "Barsabâs",
+      "pronunciation": "bar-sab-as'",
+      "translated": true
+    },
+    "G924": {
+      "definitions_cz": "syn Timæus (nebo nečistý);\n Bar-timæus, Izraelita",
+      "translit": "Bartimaîos",
+      "pronunciation": "bar-tim-ah'-yos",
+      "translated": true
+    },
+    "G925": {
+      "definitions_cz": "zatěžovat (obrazně)",
+      "translit": "barýnō",
+      "pronunciation": "bar-oo'-no",
+      "translated": true
+    },
+    "G926": {
+      "definitions_cz": "těžký, tj. (fík) zatěžující,\n hrob",
+      "translit": "barýs",
+      "pronunciation": "bar-ooce'",
+      "translated": true
+    },
+    "G927": {
+      "definitions_cz": "vysoce cenné",
+      "translit": "barýtimos",
+      "pronunciation": "bar-oo'-tim-os",
+      "translated": true
+    },
+    "G928": {
+      "definitions_cz": "k mučení",
+      "translit": "basanízō",
+      "pronunciation": "bas-an-id'-zo",
+      "translated": true
+    },
+    "G929": {
+      "definitions_cz": "mučení",
+      "translit": "basanismós",
+      "pronunciation": "bas-an-is-mos'",
+      "translated": true
+    },
+    "G930": {
+      "definitions_cz": "mučitel",
+      "translit": "basanistḗs",
+      "pronunciation": "bas-an-is-tace'",
+      "translated": true
+    },
+    "G931": {
+      "definitions_cz": "prubířský kámen, tedy (analogicky) mučení",
+      "translit": "básanos",
+      "pronunciation": "bas'-an-os",
+      "translated": true
+    },
+    "G932": {
+      "definitions_cz": "správně, honorář, tj. (abstraktně) pravidlo, nebo (konkrétně) a\n říše (doslova nebo přeneseně)",
+      "translit": "basileía",
+      "pronunciation": "bas-il-i'-ah",
+      "translated": true
+    },
+    "G933": {
+      "definitions_cz": "palác",
+      "translit": "basíleion",
+      "pronunciation": "bas-il'-i-on",
+      "translated": true
+    },
+    "G934": {
+      "definitions_cz": "královský (v přírodě)",
+      "translit": "basíleios",
+      "pronunciation": "bas-il'-i-os",
+      "translated": true
+    },
+    "G935": {
+      "definitions_cz": "a\n suverénní (abstraktně, relativně nebo přeneseně)",
+      "translit": "basileús",
+      "pronunciation": "bas-il-yooce'",
+      "translated": true
+    },
+    "G936": {
+      "definitions_cz": "vládnout (doslova nebo obrazně)",
+      "translit": "basileúō",
+      "pronunciation": "bas-il-yoo'-o",
+      "translated": true
+    },
+    "G937": {
+      "definitions_cz": "královský (ve vztahu), t. j. (doslova) patřící k (příp\n slušící) panovníkovi (jako zemi, šat nebo dvořanovi), popř\n (obrazně) přední",
+      "translit": "basilikós",
+      "pronunciation": "bas-il-ee-kos'",
+      "translated": true
+    },
+    "G938": {
+      "definitions_cz": "královna",
+      "translit": "basílissa",
+      "pronunciation": "bas-il'-is-sah",
+      "translated": true
+    },
+    "G939": {
+      "definitions_cz": "tempo (\"základ\"), tj. (implicitně) the\n noha",
+      "translit": "básis",
+      "pronunciation": "bas'-ece",
+      "translated": true
+    },
+    "G940": {
+      "definitions_cz": "pomlouvat, tj. (podle rozšíření) fascinovat (nepravdivým\n reprezentace)",
+      "translit": "baskaínō",
+      "pronunciation": "bas-kah'-ee-no",
+      "translated": true
+    },
+    "G941": {
+      "definitions_cz": "zvednout, doslova nebo přeneseně (vydržet, prohlásit,\n udržovat, přijímat atd.)",
+      "translit": "bastázō",
+      "pronunciation": "bas-tad'-zo",
+      "translated": true
+    },
+    "G942": {
+      "definitions_cz": "jemnější keř",
+      "translit": "bátos",
+      "pronunciation": "bat'-os",
+      "translated": true
+    },
+    "G943": {
+      "definitions_cz": "koupel nebo odměrku na tekutiny",
+      "translit": "bátos",
+      "pronunciation": "bat'-os",
+      "translated": true
+    },
+    "G944": {
+      "definitions_cz": "žába",
+      "translit": "bátrachos",
+      "pronunciation": "bat'-rakh-os",
+      "translated": true
+    },
+    "G945": {
+      "definitions_cz": "koktat, tj. (tím\n implikace) nudně žvanit",
+      "translit": "battologéō",
+      "pronunciation": "bat-tol-og-eh'-o",
+      "translated": true
+    },
+    "G946": {
+      "definitions_cz": "odpor, tedy (zvláště) modloslužba",
+      "translit": "bdélygma",
+      "pronunciation": "bdel'-oog-mah",
+      "translated": true
+    },
+    "G947": {
+      "definitions_cz": "odporný, tj. (zvláště) modlářský",
+      "translit": "bdelyktós",
+      "pronunciation": "bdel-ook-tos'",
+      "translated": true
+    },
+    "G948": {
+      "definitions_cz": "být znechucen, tzn.\n (implicitně) odpor (zejména k modlářství)",
+      "translit": "bdelýssō",
+      "pronunciation": "bdel-oos'-so",
+      "translated": true
+    },
+    "G949": {
+      "definitions_cz": "stabilní (doslova\n nebo obrazně)",
+      "translit": "bébaios",
+      "pronunciation": "beb'-ah-yos",
+      "translated": true
+    },
+    "G950": {
+      "definitions_cz": "stabilizovat (obrazně)",
+      "translit": "bebaióō",
+      "pronunciation": "beb-ah-yo'-o",
+      "translated": true
+    },
+    "G951": {
+      "definitions_cz": "stabilizace",
+      "translit": "bebaíōsis",
+      "pronunciation": "beb-ah'-yo-sis",
+      "translated": true
+    },
+    "G952": {
+      "definitions_cz": "přístupný (jako by\n překročení vchodu), tj. (implicitně židovské představy)\n pohanský, zlý",
+      "translit": "bébēlos",
+      "pronunciation": "beb'-ay-los",
+      "translated": true
+    },
+    "G953": {
+      "definitions_cz": "znesvětit",
+      "translit": "bebēlóō",
+      "pronunciation": "beb-ay-lo'-o",
+      "translated": true
+    },
+    "G954": {
+      "definitions_cz": "bůh hnoje; Belzebul, jméno\n Satan",
+      "translit": "Beelzeboúl",
+      "pronunciation": "beh-el-zeb-ool'",
+      "translated": true
+    },
+    "G955": {
+      "definitions_cz": "bezcennost; Belial, jako epiteton\n Satan",
+      "translit": "Belíal",
+      "pronunciation": "bel-ee'-al",
+      "translated": true
+    },
+    "G956": {
+      "definitions_cz": "střela, t. j. kopí nebo šíp",
+      "translit": "bélos",
+      "pronunciation": "bel'-os",
+      "translated": true
+    },
+    "G957": {
+      "definitions_cz": "lepší",
+      "translit": "beltíon",
+      "pronunciation": "bel-tee'-on",
+      "translated": true
+    },
+    "G958": {
+      "definitions_cz": "Benjamin, Izraelita",
+      "translit": "Beniamín",
+      "pronunciation": "ben-ee-am-een'",
+      "translated": true
+    },
+    "G959": {
+      "definitions_cz": "vítězný; Bernice, člen\n z rodu Herodiánů",
+      "translit": "Berníkē",
+      "pronunciation": "ber-nee'-kay",
+      "translated": true
+    },
+    "G960": {
+      "definitions_cz": "Berœa, místo v Makedonii",
+      "translit": "Béroia",
+      "pronunciation": "ber'-oy-ah",
+      "translated": true
+    },
+    "G961": {
+      "definitions_cz": "Beroan nebo rodák z Beroe",
+      "translit": "Beroiaîos",
+      "pronunciation": "ber-oy-ah'-yos",
+      "translated": true
+    },
+    "G962": {
+      "definitions_cz": "převozník; Bethabara (tj.\n Bethabarah), místo na Jordánu",
+      "translit": "Bēthabará",
+      "pronunciation": "bay-thab-ar-ah'",
+      "translated": true
+    },
+    "G963": {
+      "definitions_cz": "datle; Beth-any, místo v\n Palestina",
+      "translit": "Bēthanía",
+      "pronunciation": "bay-than-ee'-ah",
+      "translated": true
+    },
+    "G964": {
+      "definitions_cz": "dům laskavosti;\n Beth-esda, bazén v Jeruzalémě",
+      "translit": "Bēthesdá",
+      "pronunciation": "bay-thes-dah'",
+      "translated": true
+    },
+    "G965": {
+      "definitions_cz": "Bethleem (t. j. Bet-lechem), místo v\n Palestina",
+      "translit": "Bēthleém",
+      "pronunciation": "bayth-leh-em'",
+      "translated": true
+    },
+    "G966": {
+      "definitions_cz": "rybářský dům; Společnost Bethsaida, a\n místo v Palestině",
+      "translit": "Bēthsaïdá",
+      "pronunciation": "bayth-sahee-dah'",
+      "translated": true
+    },
+    "G967": {
+      "definitions_cz": "fíkovna; Společnost Beth-phage, a\n místo v Palestině",
+      "translit": "Bēthphagḗ",
+      "pronunciation": "bayth-fag-ay'",
+      "translated": true
+    },
+    "G968": {
+      "definitions_cz": "krok, t. j. nádech nohou; implicitně, a\n tribuna, tedy tribunál",
+      "translit": "bēma",
+      "pronunciation": "bay'-ma",
+      "translated": true
+    },
+    "G969": {
+      "definitions_cz": "\"beryl\"",
+      "translit": "bḗryllos",
+      "pronunciation": "bay'-rool-los",
+      "translated": true
+    },
+    "G970": {
+      "definitions_cz": "platnost",
+      "translit": "bía",
+      "pronunciation": "bee'-ah",
+      "translated": true
+    },
+    "G971": {
+      "definitions_cz": "nutit, t. j. (reflexivně) nacpat se (do), popř\n (pasivně) být zabaven",
+      "translit": "biázō",
+      "pronunciation": "bee-ad'-zo",
+      "translated": true
+    },
+    "G972": {
+      "definitions_cz": "násilný",
+      "translit": "bíaios",
+      "pronunciation": "bee'-ah-yos",
+      "translated": true
+    },
+    "G973": {
+      "definitions_cz": "silák, tedy (obrazně) energetický",
+      "translit": "biastḗs",
+      "pronunciation": "bee-as-tace'",
+      "translated": true
+    },
+    "G974": {
+      "definitions_cz": "brožuru",
+      "translit": "bibliarídion",
+      "pronunciation": "bib-lee-ar-id'-ee-on",
+      "translated": true
+    },
+    "G975": {
+      "definitions_cz": "role",
+      "translit": "biblíon",
+      "pronunciation": "bib-lee'-on",
+      "translated": true
+    },
+    "G976": {
+      "definitions_cz": "",
+      "translated": false
+    },
+    "G977": {
+      "definitions_cz": "jíst",
+      "translit": "bibrṓskō",
+      "pronunciation": "bib-ro'-sko",
+      "translated": true
+    },
+    "G978": {
+      "definitions_cz": "Bithynia, oblast Asie",
+      "translit": "Bithynía",
+      "pronunciation": "bee-thoo-nee'-ah",
+      "translated": true
+    },
+    "G979": {
+      "definitions_cz": "život, tj. (doslova) současný stav existence;\n implicitně prostředek obživy",
+      "translit": "bíos",
+      "pronunciation": "bee'-os",
+      "translated": true
+    },
+    "G980": {
+      "definitions_cz": "strávit existenci",
+      "translit": "bióō",
+      "pronunciation": "bee-o'-o",
+      "translated": true
+    },
+    "G981": {
+      "definitions_cz": "žít (správně čin, implicitně, ten\n režim)",
+      "translit": "bíōsis",
+      "pronunciation": "bee'-o-sis",
+      "translated": true
+    },
+    "G982": {
+      "definitions_cz": "vztahující se k současné existenci",
+      "translit": "biōtikós",
+      "pronunciation": "bee-o-tee-kos'",
+      "translated": true
+    },
+    "G983": {
+      "definitions_cz": "zraňující",
+      "translit": "blaberós",
+      "pronunciation": "blab-er-os'",
+      "translated": true
+    },
+    "G984": {
+      "definitions_cz": "správně, bránit, t. j. (implicitně) tomu\n zranit",
+      "translit": "bláptō",
+      "pronunciation": "blap'-to",
+      "translated": true
+    },
+    "G985": {
+      "definitions_cz": "klíčit; implicitně ustoupit\n ovoce",
+      "translit": "blastánō",
+      "pronunciation": "blas-tan'-o",
+      "translated": true
+    },
+    "G986": {
+      "definitions_cz": "Blastus, Herodův důstojník\n Agrippa",
+      "translit": "Blástos",
+      "pronunciation": "blas'-tos",
+      "translated": true
+    },
+    "G987": {
+      "definitions_cz": "hanit; zvláště mluvit bezbožně",
+      "translit": "blasphēméō",
+      "pronunciation": "blas-fay-meh'-o",
+      "translated": true
+    },
+    "G988": {
+      "definitions_cz": "hanobení (zejména proti Bohu)",
+      "translit": "blasphēmía",
+      "pronunciation": "blas-fay-me'-ah",
+      "translated": true
+    },
+    "G989": {
+      "definitions_cz": "sprostý, t. j. pomlouvačný\n (proti mužům), nebo (zvláště) bezbožný (proti\n Bůh)",
+      "translit": "blásphēmos",
+      "pronunciation": "blas'-fay-mos",
+      "translated": true
+    },
+    "G990": {
+      "definitions_cz": "vize (správně konkrétní; implicitně,\n abstrakt)",
+      "translit": "blémma",
+      "pronunciation": "blem'-mah",
+      "translated": true
+    },
+    "G991": {
+      "definitions_cz": "podívat se (doslova nebo obrazně)",
+      "translit": "blépō",
+      "pronunciation": "blep'-o",
+      "translated": true
+    },
+    "G992": {
+      "definitions_cz": "vhodné k obsazení (tj. aplikováno)",
+      "translit": "blētéos",
+      "pronunciation": "blay-teh'-os",
+      "translated": true
+    },
+    "G993": {
+      "definitions_cz": "synové nepokoje; Boanerges, an\n epiteton dvou apoštolů",
+      "translit": "Boanergés",
+      "pronunciation": "bo-an-erg-es'",
+      "translated": true
+    },
+    "G994": {
+      "definitions_cz": "haloo, tedy křičet\n (za pomoc nebo bouřlivým způsobem)",
+      "translit": "boáō",
+      "pronunciation": "bo-ah'-o",
+      "translated": true
+    },
+    "G995": {
+      "definitions_cz": "ahaloo, tedy volání (o pomoc atd.)",
+      "translit": "boḗ",
+      "pronunciation": "bo-ay'",
+      "translated": true
+    },
+    "G996": {
+      "definitions_cz": "pomoc; speciálně lano nebo řetěz pro frapping a\n plavidlo",
+      "translit": "boḗtheia",
+      "pronunciation": "bo-ay'-thi-ah",
+      "translated": true
+    },
+    "G997": {
+      "definitions_cz": "pomoci nebo ulevit",
+      "translit": "boēthéō",
+      "pronunciation": "bo-ay-theh'-o",
+      "translated": true
+    },
+    "G998": {
+      "definitions_cz": "nástupce",
+      "translit": "boēthós",
+      "pronunciation": "bo-ay-thos'",
+      "translated": true
+    },
+    "G999": {
+      "definitions_cz": "díra (v zemi); speciálně cisterna",
+      "translit": "bóthynos",
+      "pronunciation": "both'-oo-nos",
+      "translated": true
+    },
+    "G1000": {
+      "definitions_cz": "hod (jako měřítko vzdálenosti)",
+      "translit": "bolḗ",
+      "pronunciation": "bol-ay'",
+      "translated": true
+    },
+    "G1001": {
+      "definitions_cz": "zvednout vedení",
+      "translit": "bolízō",
+      "pronunciation": "bol-id'-zo",
+      "translated": true
+    },
+    "G1002": {
+      "definitions_cz": "střela, tedy oštěp",
+      "translit": "bolís",
+      "pronunciation": "bol-ece'",
+      "translated": true
+    },
+    "G1003": {
+      "definitions_cz": "Booz, (t. j. Boaz), Izraelita",
+      "translit": "Boóz",
+      "pronunciation": "bo-oz'",
+      "translated": true
+    },
+    "G1004": {
+      "definitions_cz": "bláto",
+      "translit": "bórboros",
+      "pronunciation": "bor'-bor-os",
+      "translated": true
+    },
+    "G1005": {
+      "definitions_cz": "sever (správně, vítr)",
+      "translit": "borrhâs",
+      "pronunciation": "bor-hras'",
+      "translated": true
+    },
+    "G1006": {
+      "definitions_cz": "na pastvu; podle\n rozšíření do, píce; reflexně, pást se",
+      "translit": "bóskō",
+      "pronunciation": "bos'-ko",
+      "translated": true
+    },
+    "G1007": {
+      "definitions_cz": "Bosor (t. j. Beor), Moábec",
+      "translit": "Bosór",
+      "pronunciation": "bos-or'",
+      "translated": true
+    },
+    "G1008": {
+      "definitions_cz": "bylinky (jako na pastvu)",
+      "translit": "botánē",
+      "pronunciation": "bot-an'-ay",
+      "translated": true
+    },
+    "G1009": {
+      "definitions_cz": "hrozen (hroznů)",
+      "translit": "bótrys",
+      "pronunciation": "bot'-rooce",
+      "translated": true
+    },
+    "G1010": {
+      "definitions_cz": "poradce, tj. (zejména) radní nebo člen\n židovský Sanhedrin",
+      "translit": "bouleutḗs",
+      "pronunciation": "bool-yoo-tace'",
+      "translated": true
+    },
+    "G1011": {
+      "definitions_cz": "radit, tj. (reflexivně) úmyslně, nebo (tím\n implikace) vyřešit",
+      "translit": "bouleúō",
+      "pronunciation": "bool-yoo'-o",
+      "translated": true
+    },
+    "G1012": {
+      "definitions_cz": "vůle, tedy (objektivně) rada, nebo (implicitně)\n účel",
+      "translit": "boulḗ",
+      "pronunciation": "boo-lay'",
+      "translated": true
+    },
+    "G1013": {
+      "definitions_cz": "odhodlání",
+      "translit": "boúlēma",
+      "pronunciation": "boo'-lay-mah",
+      "translated": true
+    },
+    "G1014": {
+      "definitions_cz": "„bude“, tj. (reflexivně) být\n ochotný",
+      "translit": "boúlomai",
+      "pronunciation": "boo'-lom-ahee",
+      "translated": true
+    },
+    "G1015": {
+      "definitions_cz": "pahorek",
+      "translit": "bounós",
+      "pronunciation": "boo-nos'",
+      "translated": true
+    },
+    "G1016": {
+      "definitions_cz": "vůl (jako pastva), t. j. zvíře z\n tento druh (\"hovězí maso\")",
+      "translit": "boûs",
+      "pronunciation": "booce",
+      "translated": true
+    },
+    "G1017": {
+      "definitions_cz": "ocenění (z\n arbitráž), tedy (zejména) cenu ve veřejných hrách",
+      "translit": "brabeîon",
+      "pronunciation": "brab-i'-on",
+      "translated": true
+    },
+    "G1018": {
+      "definitions_cz": "rozhodovat, t. j. (genitivní pád) vládnout\n (obrazně, převažovat)",
+      "translit": "brabeúō",
+      "pronunciation": "brab-yoo'-o",
+      "translated": true
+    },
+    "G1019": {
+      "definitions_cz": "zdržovat",
+      "translit": "bradýnō",
+      "pronunciation": "brad-oo'-no",
+      "translated": true
+    },
+    "G1020": {
+      "definitions_cz": "pomalu plout",
+      "translit": "bradyploéō",
+      "pronunciation": "brad-oo-plo-eh'-o",
+      "translated": true
+    },
+    "G1021": {
+      "definitions_cz": "pomalý; přeneseně, nudný",
+      "translit": "bradýs",
+      "pronunciation": "brad-ooce'",
+      "translated": true
+    },
+    "G1022": {
+      "definitions_cz": "nedochvilnost",
+      "translit": "bradýtēs",
+      "pronunciation": "brad-oo'-tace",
+      "translated": true
+    },
+    "G1023": {
+      "definitions_cz": "paže, tj. (obrazně)\n sílu",
+      "translit": "brachíōn",
+      "pronunciation": "brakh-ee'-own",
+      "translated": true
+    },
+    "G1024": {
+      "definitions_cz": "krátké (času, místa, množství, popř\n číslo)",
+      "translit": "brachýs",
+      "pronunciation": "brakh-ooce'",
+      "translated": true
+    },
+    "G1025": {
+      "definitions_cz": "kojenec (správně, nenarozený) doslova nebo\n přeneseně",
+      "translit": "bréphos",
+      "pronunciation": "bref'-os",
+      "translated": true
+    },
+    "G1026": {
+      "definitions_cz": "zvlhčit (zejména sprchou)",
+      "translit": "bréchō",
+      "pronunciation": "brekh'-o",
+      "translated": true
+    },
+    "G1027": {
+      "definitions_cz": "hrom",
+      "translit": "brontḗ",
+      "pronunciation": "bron-tay'",
+      "translated": true
+    },
+    "G1028": {
+      "definitions_cz": "déšť",
+      "translit": "brochḗ",
+      "pronunciation": "brokh-ay'",
+      "translated": true
+    },
+    "G1029": {
+      "definitions_cz": "smyčka",
+      "translit": "bróchos",
+      "pronunciation": "brokh'-os",
+      "translated": true
+    },
+    "G1030": {
+      "definitions_cz": "mřížka (ze zubů)",
+      "translit": "brygmós",
+      "pronunciation": "broog-mos'",
+      "translated": true
+    },
+    "G1031": {
+      "definitions_cz": "strouhat zuby (bolesti nebo vzteku)",
+      "translit": "brýchō",
+      "pronunciation": "broo'-kho",
+      "translated": true
+    },
+    "G1032": {
+      "definitions_cz": "bobtnat, t. j. (implicitně) tryskat",
+      "translit": "brýō",
+      "pronunciation": "broo'-o",
+      "translated": true
+    },
+    "G1033": {
+      "definitions_cz": "jídlo (doslova nebo přeneseně), zvláště\n (slavnostně) články povolené nebo zakázané židovským zákonem",
+      "translit": "brōma",
+      "pronunciation": "bro'-mah",
+      "translated": true
+    },
+    "G1034": {
+      "definitions_cz": "jedlý",
+      "translit": "brṓsimos",
+      "pronunciation": "bro'-sim-os",
+      "translated": true
+    },
+    "G1035": {
+      "definitions_cz": "(abstraktně) jíst (doslova nebo přeneseně);\n rozšířením (konkrétně) jídlo (doslova nebo přeneseně)",
+      "translit": "brōsis",
+      "pronunciation": "bro'-sis",
+      "translated": true
+    },
+    "G1036": {
+      "definitions_cz": "potopit se; implicitně se utopit",
+      "translit": "bythízō",
+      "pronunciation": "boo-thid'-zo",
+      "translated": true
+    },
+    "G1037": {
+      "definitions_cz": "hloubka, tedy (implicitně) moře",
+      "translit": "bythós",
+      "pronunciation": "boo-thos'",
+      "translated": true
+    },
+    "G1038": {
+      "definitions_cz": "koželuhem",
+      "translit": "byrseús",
+      "pronunciation": "boorce-yooce'",
+      "translated": true
+    },
+    "G1039": {
+      "definitions_cz": "vyrobeno ze lnu (kastrovat lněné plátno)",
+      "translit": "býssinos",
+      "pronunciation": "boos'-see-nos",
+      "translated": true
+    },
+    "G1040": {
+      "definitions_cz": "bílé prádlo",
+      "translit": "býssos",
+      "pronunciation": "boos'-sos",
+      "translated": true
+    },
+    "G1041": {
+      "definitions_cz": "správně, stojan, tj. (zvláště) an\n oltář",
+      "translit": "bōmós",
+      "pronunciation": "bo'-mos",
+      "translated": true
+    },
+    "G1042": {
+      "definitions_cz": "pahorek; gabatha, lidový jazyk\n termín pro římský tribunál v Jeruzalémě",
+      "translit": "gabbathá",
+      "pronunciation": "gab-bath-ah'",
+      "translated": true
+    },
+    "G1043": {
+      "definitions_cz": "Gabriel, archanděl",
+      "translit": "Gabriḗl",
+      "pronunciation": "gab-ree-ale'",
+      "translated": true
+    },
+    "G1044": {
+      "definitions_cz": "vřed (\"gangréna\")",
+      "translit": "gángraina",
+      "pronunciation": "gang'-grahee-nah",
+      "translated": true
+    },
+    "G1045": {
+      "definitions_cz": "Gad, kmen Izraelitů",
+      "translit": "Gád",
+      "pronunciation": "gad",
+      "translated": true
+    },
+    "G1046": {
+      "definitions_cz": "Gadarene nebo obyvatel\n Gadara",
+      "translit": "Gadarēnós",
+      "pronunciation": "gad-ar-ay-nos'",
+      "translated": true
+    },
+    "G1047": {
+      "definitions_cz": "poklad",
+      "translit": "gáza",
+      "pronunciation": "gad'-zah",
+      "translated": true
+    },
+    "G1048": {
+      "definitions_cz": "Gazah (t. j. Azzah), místo v\n Palestina",
+      "translit": "Gáza",
+      "pronunciation": "gad'-zah",
+      "translated": true
     }
   }
 }
