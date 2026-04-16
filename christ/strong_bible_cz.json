@@ -10863,6 +10863,904 @@
       "translit": "Amṓn",
       "pronunciation": "am-one'",
       "translated": true
+    },
+    "G193": {
+      "definitions_cz": "bezmocný, tj. bez\n sebeovládání",
+      "translit": "akratḗs",
+      "pronunciation": "ak-rat'-ace",
+      "translated": true
+    },
+    "G272": {
+      "definitions_cz": "být nedbalý",
+      "translit": "ameléō",
+      "pronunciation": "am-el-eh'-o",
+      "translated": true
+    },
+    "G301": {
+      "definitions_cz": "Amos, Izraelita",
+      "translit": "Amṓs",
+      "pronunciation": "am-oce'",
+      "translated": true
+    },
+    "G302": {
+      "definitions_cz": "",
+      "translated": false
+    },
+    "G303": {
+      "definitions_cz": "správně, nahoru; ale (popřípadě)\n používané (distribučně) jednotlivě nebo (lokálně) na (atd.)",
+      "translit": "aná",
+      "pronunciation": "an-ah'",
+      "translated": true
+    },
+    "G304": {
+      "definitions_cz": "schodiště",
+      "translit": "anabathmós",
+      "pronunciation": "an-ab-ath-mos'",
+      "translated": true
+    },
+    "G305": {
+      "definitions_cz": "jít nahoru (doslova nebo\n přeneseně)",
+      "translit": "anabaínō",
+      "pronunciation": "an-ab-ah'-ee-no",
+      "translated": true
+    },
+    "G306": {
+      "definitions_cz": "odložit (pro sebe)",
+      "translit": "anabállomai",
+      "pronunciation": "an-ab-al'-lom-ahee",
+      "translated": true
+    },
+    "G307": {
+      "definitions_cz": "přimět jít nahoru, tzn.\n tahat (síť)",
+      "translit": "anabibázō",
+      "pronunciation": "an-ab-ee-bad'-zo",
+      "translated": true
+    },
+    "G308": {
+      "definitions_cz": "vzhlédnout; implicitně obnovit zrak",
+      "translit": "anablépō",
+      "pronunciation": "an-ab-lep'-o",
+      "translated": true
+    },
+    "G309": {
+      "definitions_cz": "obnovení zraku",
+      "translit": "anáblepsis",
+      "pronunciation": "an-ab'-lep-sis",
+      "translated": true
+    },
+    "G310": {
+      "definitions_cz": "na haloo",
+      "translit": "anaboáō",
+      "pronunciation": "an-ab-o-ah'-o",
+      "translated": true
+    },
+    "G311": {
+      "definitions_cz": "odkládání",
+      "translit": "anabolḗ",
+      "pronunciation": "an-ab-ol-ay'",
+      "translated": true
+    },
+    "G312": {
+      "definitions_cz": "oznámit (podrobně)",
+      "translit": "anangéllō",
+      "pronunciation": "an-ang-el'-lo",
+      "translated": true
+    },
+    "G313": {
+      "definitions_cz": "zplodit nebo (rozšířeně) nést (znovu)",
+      "translit": "anagennáō",
+      "pronunciation": "an-ag-en-nah'-o",
+      "translated": true
+    },
+    "G314": {
+      "definitions_cz": "znovu vědět, t. j. (podle rozšíření) číst",
+      "translit": "anaginṓskō",
+      "pronunciation": "an-ag-in-oce'-ko",
+      "translated": true
+    },
+    "G315": {
+      "definitions_cz": "vyžadovat",
+      "translit": "anankázō",
+      "pronunciation": "an-ang-kad'-zo",
+      "translated": true
+    },
+    "G316": {
+      "definitions_cz": "nutné; implicitně blízký (příbuzný)",
+      "translit": "anankaîos",
+      "pronunciation": "an-ang-kah'-yos",
+      "translated": true
+    },
+    "G317": {
+      "definitions_cz": "povinně",
+      "translit": "anankastōs",
+      "pronunciation": "an-ang-kas-toce'",
+      "translated": true
+    },
+    "G318": {
+      "definitions_cz": "omezení (doslova nebo obrazně);\n implikovaně, tíseň",
+      "translit": "anánkē",
+      "pronunciation": "an-ang-kay'",
+      "translated": true
+    },
+    "G319": {
+      "definitions_cz": "dát (o sobě) vědět",
+      "translit": "anagnōrízomai",
+      "pronunciation": "an-ag-no-rid'-zom-ahee",
+      "translated": true
+    },
+    "G320": {
+      "definitions_cz": "(akt) čtení",
+      "translit": "anágnōsis",
+      "pronunciation": "an-ag'-no-sis",
+      "translated": true
+    },
+    "G321": {
+      "definitions_cz": "vést nahoru; prodloužením vyvést; speciálně, aby\n odplout pryč",
+      "translit": "anágō",
+      "pronunciation": "an-ag'-o",
+      "translated": true
+    },
+    "G322": {
+      "definitions_cz": "vystavovat, tj. (implicitně) naznačovat,\n jmenovat",
+      "translit": "anadeíknymi",
+      "pronunciation": "an-ad-ike'-noo-mee",
+      "translated": true
+    },
+    "G323": {
+      "definitions_cz": "(akt) výstava",
+      "translit": "anádeixis",
+      "pronunciation": "an-ad'-ike-sis",
+      "translated": true
+    },
+    "G324": {
+      "definitions_cz": "pobavit (jako host)",
+      "translit": "anadéchomai",
+      "pronunciation": "an-ad-ekh'-om-ahee",
+      "translated": true
+    },
+    "G325": {
+      "definitions_cz": "předat",
+      "translit": "anadídōmi",
+      "pronunciation": "an-ad-eed'-om-ee",
+      "translated": true
+    },
+    "G326": {
+      "definitions_cz": "obnovit život (doslova nebo obrazně)",
+      "translit": "anazáō",
+      "pronunciation": "an-ad-zah'-o",
+      "translated": true
+    },
+    "G327": {
+      "definitions_cz": "hledat",
+      "translit": "anazētéō",
+      "pronunciation": "an-ad-zay-teh'-o",
+      "translated": true
+    },
+    "G328": {
+      "definitions_cz": "znovu opásat",
+      "translit": "anazṓnnymi",
+      "pronunciation": "an-ad-zone'-noo-mee",
+      "translated": true
+    },
+    "G329": {
+      "definitions_cz": "do\n znovu zapálit",
+      "translit": "anazōpyréō",
+      "pronunciation": "an-ad-zo-poor-eh'-o",
+      "translated": true
+    },
+    "G330": {
+      "definitions_cz": "oživit",
+      "translit": "anathállō",
+      "pronunciation": "an-ath-al'-lo",
+      "translated": true
+    },
+    "G331": {
+      "definitions_cz": "(náboženský) zákaz nebo (konkrétně) exkomunikovaný (věc nebo\n osoba)",
+      "translit": "anáthema",
+      "pronunciation": "an-ath'-em-ah",
+      "translated": true
+    },
+    "G332": {
+      "definitions_cz": "prohlásit nebo slíbit pod trestem exekuce",
+      "translit": "anathematízō",
+      "pronunciation": "an-ath-em-at-id'-zo",
+      "translated": true
+    },
+    "G333": {
+      "definitions_cz": "znovu se (t. j. pozorně) podívat na (doslova popř\n přeneseně)",
+      "translit": "anatheōréō",
+      "pronunciation": "an-ath-eh-o-reh'-o",
+      "translated": true
+    },
+    "G334": {
+      "definitions_cz": "votivní nabídka",
+      "translit": "anáthēma",
+      "pronunciation": "an-ath'-ay-mah",
+      "translated": true
+    },
+    "G335": {
+      "definitions_cz": "drzost, tedy (implicitně) bezvýznamnost",
+      "translit": "anaídeia",
+      "pronunciation": "an-ah'-ee-die-ah'",
+      "translated": true
+    },
+    "G336": {
+      "definitions_cz": "(akt) zabití",
+      "translit": "anaíresis",
+      "pronunciation": "an-ah'-ee-res-is",
+      "translated": true
+    },
+    "G337": {
+      "definitions_cz": "přijmout, t. j. adoptovat; podle\n implikace, odejmout (násilně), t. j. zrušit, vraždit",
+      "translit": "anairéō",
+      "pronunciation": "an-ahee-reh'-o",
+      "translated": true
+    },
+    "G338": {
+      "definitions_cz": "nevinný",
+      "translit": "anaítios",
+      "pronunciation": "an-ah'-ee-tee-os",
+      "translated": true
+    },
+    "G339": {
+      "definitions_cz": "správně, postavit, t. j. (reflexivně) sedět\n nahoru",
+      "translit": "anakathízō",
+      "pronunciation": "an-ak-ath-id'-zo",
+      "translated": true
+    },
+    "G340": {
+      "definitions_cz": "obnovit",
+      "translit": "anakainízō",
+      "pronunciation": "an-ak-ahee-nid'-zo",
+      "translated": true
+    },
+    "G341": {
+      "definitions_cz": "renovovat",
+      "translit": "anakainóō",
+      "pronunciation": "an-ak-ahee-no'-o",
+      "translated": true
+    },
+    "G342": {
+      "definitions_cz": "renovace",
+      "translit": "anakaínōsis",
+      "pronunciation": "an-ak-ah'-ee-no-sis",
+      "translated": true
+    },
+    "G343": {
+      "definitions_cz": "odhalit",
+      "translit": "anakalýptō",
+      "pronunciation": "an-ak-al-oop'-to",
+      "translated": true
+    },
+    "G344": {
+      "definitions_cz": "obrátit se zpět",
+      "translit": "anakámptō",
+      "pronunciation": "an-ak-amp'-to",
+      "translated": true
+    },
+    "G345": {
+      "definitions_cz": "lehnout si (jako mrtvola nebo u jídla)",
+      "translit": "anakeîmai",
+      "pronunciation": "an-ak-i'-mahee",
+      "translated": true
+    },
+    "G346": {
+      "definitions_cz": "abych to shrnul",
+      "translit": "anakephalaíomai",
+      "pronunciation": "an-ak-ef-al-ah'-ee-om-ahee",
+      "translated": true
+    },
+    "G347": {
+      "definitions_cz": "opřít se",
+      "translit": "anaklínō",
+      "pronunciation": "an-ak-lee'-no",
+      "translated": true
+    },
+    "G348": {
+      "definitions_cz": "odrážet, t. j. kontrolovat",
+      "translit": "anakóptō",
+      "pronunciation": "an-ak-op'-to",
+      "translated": true
+    },
+    "G349": {
+      "definitions_cz": "křičet (nahlas)",
+      "translit": "anakrázō",
+      "pronunciation": "an-ak-rad'-zo",
+      "translated": true
+    },
+    "G350": {
+      "definitions_cz": "řádně, prozkoumat, tj. (implicitně)\n vyšetřovat, vyslýchat, určovat",
+      "translit": "anakrínō",
+      "pronunciation": "an-ak-ree'-no",
+      "translated": true
+    },
+    "G351": {
+      "definitions_cz": "(soudní) vyšetřování",
+      "translit": "anákrisis",
+      "pronunciation": "an-ak'-ree-sis",
+      "translated": true
+    },
+    "G352": {
+      "definitions_cz": "uvolnit se, t. j. vstát;\n obrazně řečeno, být nadšený",
+      "translit": "anakýptō",
+      "pronunciation": "an-ak-oop'-to",
+      "translated": true
+    },
+    "G353": {
+      "definitions_cz": "převzít",
+      "translit": "analambánō",
+      "pronunciation": "an-al-am-ban'-o",
+      "translated": true
+    },
+    "G354": {
+      "definitions_cz": "nanebevstoupení",
+      "translit": "análēpsis",
+      "pronunciation": "an-al'-ape-sis",
+      "translated": true
+    },
+    "G355": {
+      "definitions_cz": "řádně, spotřebovat, tzn.\n zničit",
+      "translit": "analískō",
+      "pronunciation": "an-al-is'-ko",
+      "translated": true
+    },
+    "G356": {
+      "definitions_cz": "poměr",
+      "translit": "analogía",
+      "pronunciation": "an-al-og-ee'-ah",
+      "translated": true
+    },
+    "G357": {
+      "definitions_cz": "odhadnout, tj. (obrazně)\n kontemplovat",
+      "translit": "analogízomai",
+      "pronunciation": "an-al-og-id'-zom-ahee",
+      "translated": true
+    },
+    "G358": {
+      "definitions_cz": "bezsolný, tj. mdlý",
+      "translit": "ánalos",
+      "pronunciation": "an'-al-os",
+      "translated": true
+    },
+    "G359": {
+      "definitions_cz": "odchod",
+      "translit": "análysis",
+      "pronunciation": "an-al'-oo-sis",
+      "translated": true
+    },
+    "G360": {
+      "definitions_cz": "rozejít se, tj. odejít (doslova popř\n přeneseně)",
+      "translit": "analýō",
+      "pronunciation": "an-al-oo'-o",
+      "translated": true
+    },
+    "G361": {
+      "definitions_cz": "bez hříchu",
+      "translit": "anamártētos",
+      "pronunciation": "an-am-ar'-tay-tos",
+      "translated": true
+    },
+    "G362": {
+      "definitions_cz": "čekat",
+      "translit": "anaménō",
+      "pronunciation": "an-am-en'-o",
+      "translated": true
+    },
+    "G363": {
+      "definitions_cz": "připomenout; (reflexivně) vzpomenout si",
+      "translit": "anamimnḗskō",
+      "pronunciation": "an-am-im-nace'-ko",
+      "translated": true
+    },
+    "G364": {
+      "definitions_cz": "vzpomínka",
+      "translit": "anámnēsis",
+      "pronunciation": "an-am'-nay-sis",
+      "translated": true
+    },
+    "G365": {
+      "definitions_cz": "renovovat, t. j. reformovat",
+      "translit": "ananeóō",
+      "pronunciation": "an-an-neh-o'-o",
+      "translated": true
+    },
+    "G366": {
+      "definitions_cz": "znovu vystřízlivět, tedy (obrazně) znovu získat\n (své) smysly",
+      "translit": "ananḗphō",
+      "pronunciation": "an-an-ay'-fo",
+      "translated": true
+    },
+    "G367": {
+      "definitions_cz": "Ananiáš, jméno tří\n Izraelité",
+      "translit": "Ananías",
+      "pronunciation": "an-an-ee'-as",
+      "translated": true
+    },
+    "G368": {
+      "definitions_cz": "nesporný",
+      "translit": "anantírrhētos",
+      "pronunciation": "an-an-tir'-hray-tos",
+      "translated": true
+    },
+    "G369": {
+      "definitions_cz": "okamžitě",
+      "translit": "anantirrhḗtōs",
+      "pronunciation": "an-an-tir-hray'-toce",
+      "translated": true
+    },
+    "G370": {
+      "definitions_cz": "nevhodný",
+      "translit": "anáxios",
+      "pronunciation": "an-ax'-ee-os",
+      "translated": true
+    },
+    "G371": {
+      "definitions_cz": "neuctivě",
+      "translit": "anaxíōs",
+      "pronunciation": "an-ax-ee'-oce",
+      "translated": true
+    },
+    "G372": {
+      "definitions_cz": "přestávka; implicitně, rekreace",
+      "translit": "anápausis",
+      "pronunciation": "an-ap'-ow-sis",
+      "translated": true
+    },
+    "G373": {
+      "definitions_cz": "(reflexivně) spočinout (doslova nebo obrazně).\n (být osvobozen), zůstat); implicitně osvěžit",
+      "translit": "anapaúō",
+      "pronunciation": "an-ap-ow'-o",
+      "translated": true
+    },
+    "G374": {
+      "definitions_cz": "podněcovat",
+      "translit": "anapeíthō",
+      "pronunciation": "an-ap-i'-tho",
+      "translated": true
+    },
+    "G375": {
+      "definitions_cz": "poslat nahoru nebo zpět",
+      "translit": "anapémpō",
+      "pronunciation": "an-ap-em'-po",
+      "translated": true
+    },
+    "G376": {
+      "definitions_cz": "zmrzačený",
+      "translit": "anápēros",
+      "pronunciation": "an-ap'-ay-ros",
+      "translated": true
+    },
+    "G377": {
+      "definitions_cz": "upadnout, t. j. lehnout si, opřít se",
+      "translit": "anapíptō",
+      "pronunciation": "an-ap-ip'-to",
+      "translated": true
+    },
+    "G378": {
+      "definitions_cz": "dokončit; implicitně obsadit, zásobit;\n obrazně řečeno splnit (shodou okolností nebo poslušností)",
+      "translit": "anaplēróō",
+      "pronunciation": "an-ap-lay-ro'-o",
+      "translated": true
+    },
+    "G379": {
+      "definitions_cz": "neobhajitelný",
+      "translit": "anapológētos",
+      "pronunciation": "an-ap-ol-og'-ay-tos",
+      "translated": true
+    },
+    "G380": {
+      "definitions_cz": "pro rozbalení (rolování nebo\n objem)",
+      "translit": "anaptýssō",
+      "pronunciation": "an-ap-toos'-o",
+      "translated": true
+    },
+    "G381": {
+      "definitions_cz": "zapálit",
+      "translit": "anáptō",
+      "pronunciation": "an-ap'-to",
+      "translated": true
+    },
+    "G382": {
+      "definitions_cz": "nečíslované,\n tedy bez čísla",
+      "translit": "anaríthmētos",
+      "pronunciation": "an-ar-ith'-may-tos",
+      "translated": true
+    },
+    "G383": {
+      "definitions_cz": "přeneseně vzrušovat",
+      "translit": "anaseíō",
+      "pronunciation": "an-as-i'-o",
+      "translated": true
+    },
+    "G384": {
+      "definitions_cz": "řádně zabalit (zavazadla), tj. (implicitně, a\n přeneseně) rozrušit",
+      "translit": "anaskeuázō",
+      "pronunciation": "an-ask-yoo-ad'-zo",
+      "translated": true
+    },
+    "G385": {
+      "definitions_cz": "vzít nebo vyprostit",
+      "translit": "anaspáō",
+      "pronunciation": "an-as-pah'-o",
+      "translated": true
+    },
+    "G386": {
+      "definitions_cz": "znovu vstát, tedy (doslova) vzkříšení z\n smrt (jednotlivec, genitivní pád nebo implicitně, (jeho autor)), popř\n (obrazně) (morální) zotavení (duchovní pravdy)",
+      "translit": "anástasis",
+      "pronunciation": "an-as'-tas-is",
+      "translated": true
+    },
+    "G387": {
+      "definitions_cz": "správně, řídit\n mimo domov, tj. (implicitně) rušit (doslova popř\n přeneseně)",
+      "translit": "anastatóō",
+      "pronunciation": "an-as-tat-o'-o",
+      "translated": true
+    },
+    "G388": {
+      "definitions_cz": "znovu ukřižovat (obrazně)",
+      "translit": "anastauróō",
+      "pronunciation": "an-as-tow-ro'-o",
+      "translated": true
+    },
+    "G389": {
+      "definitions_cz": "zhluboka si povzdechnout",
+      "translit": "anastenázō",
+      "pronunciation": "an-as-ten-ad'-zo",
+      "translated": true
+    },
+    "G390": {
+      "definitions_cz": "převrátit se; také vrátit se; implicitně, k\n zaneprázdnit se, t. j. zůstat, žít",
+      "translit": "anastréphō",
+      "pronunciation": "an-as-tref'-o",
+      "translated": true
+    },
+    "G391": {
+      "definitions_cz": "chování",
+      "translit": "anastrophḗ",
+      "pronunciation": "an-as-trof-ay'",
+      "translated": true
+    },
+    "G392": {
+      "definitions_cz": "zařídit",
+      "translit": "anatássomai",
+      "pronunciation": "an-at-as'-som-ahee",
+      "translated": true
+    },
+    "G393": {
+      "definitions_cz": "vzniknout (způsobit).",
+      "translit": "anatéllō",
+      "pronunciation": "an-at-el'-lo",
+      "translated": true
+    },
+    "G394": {
+      "definitions_cz": "vydat se (pro sebe), tzn\n navrhnout",
+      "translit": "anatíthemai",
+      "pronunciation": "an-at-ith'-em-ahee",
+      "translated": true
+    },
+    "G395": {
+      "definitions_cz": "vzestup světla, tj. svítání (obrazně); implicitně,\n východ (také v množném čísle)",
+      "translit": "anatolḗ",
+      "pronunciation": "an-at-ol-ay'",
+      "translated": true
+    },
+    "G396": {
+      "definitions_cz": "převrátit (obrazně)",
+      "translit": "anatrépō",
+      "pronunciation": "an-at-rep'-o",
+      "translated": true
+    },
+    "G397": {
+      "definitions_cz": "vzpamatovat se (fyzicky nebo duševně)",
+      "translit": "anatréphō",
+      "pronunciation": "an-at-ref'-o",
+      "translated": true
+    },
+    "G398": {
+      "definitions_cz": "ukázat, tj. (reflexivně) se objevit, nebo (pasivně)\n abych poukázal",
+      "translit": "anaphaínō",
+      "pronunciation": "an-af-ah'-ee-no",
+      "translated": true
+    },
+    "G399": {
+      "definitions_cz": "přijmout (doslova nebo obrazně)",
+      "translit": "anaphérō",
+      "pronunciation": "an-af-er'-o",
+      "translated": true
+    },
+    "G400": {
+      "definitions_cz": "vykřiknout",
+      "translit": "anaphōnéō",
+      "pronunciation": "an-af-o-neh'-o",
+      "translated": true
+    },
+    "G401": {
+      "definitions_cz": "správně, výpotek, tzn.\n (obrazně) licence",
+      "translit": "anáchysis",
+      "pronunciation": "an-akh'-oo-sis",
+      "translated": true
+    },
+    "G402": {
+      "definitions_cz": "odejít do důchodu",
+      "translit": "anachōréō",
+      "pronunciation": "an-akh-o-reh'-o",
+      "translated": true
+    },
+    "G403": {
+      "definitions_cz": "správně, obnovení dechu, tj. (obrazně)\n oživení",
+      "translit": "anápsyxis",
+      "pronunciation": "an-aps'-ook-sis",
+      "translated": true
+    },
+    "G404": {
+      "definitions_cz": "pořádně, vychladnout, tj. (obrazně)\n ulevit",
+      "translit": "anapsýchō",
+      "pronunciation": "an-aps-oo'-kho",
+      "translated": true
+    },
+    "G405": {
+      "definitions_cz": "zotročovatel (jako\n zvedat muže na nohy)",
+      "translit": "andrapodistḗs",
+      "pronunciation": "an-drap-od-is-tace'",
+      "translated": true
+    },
+    "G406": {
+      "definitions_cz": "mužný; Andreas, Izraelita",
+      "translit": "Andréas",
+      "pronunciation": "an-dreh'-as",
+      "translated": true
+    },
+    "G407": {
+      "definitions_cz": "působit mužně",
+      "translit": "andrízomai",
+      "pronunciation": "an-drid'-zom-ahee",
+      "translated": true
+    },
+    "G408": {
+      "definitions_cz": "vítězný muž; Andronicos, an\n Izraelita",
+      "translit": "Andrónikos",
+      "pronunciation": "an-dron'-ee-kos",
+      "translated": true
+    },
+    "G409": {
+      "definitions_cz": "vrah",
+      "translit": "androphónos",
+      "pronunciation": "an-drof-on'-os",
+      "translated": true
+    },
+    "G410": {
+      "definitions_cz": "neobviněný,\n tj. (implicitně) bezúhonné",
+      "translit": "anénklētos",
+      "pronunciation": "an-eng'-klay-tos",
+      "translated": true
+    },
+    "G411": {
+      "definitions_cz": "ne\n vyloženo v plném rozsahu, t. j. nepopsatelné",
+      "translit": "anekdiḗgētos",
+      "pronunciation": "an-ek-dee-ay'-gay-tos",
+      "translated": true
+    },
+    "G412": {
+      "definitions_cz": "ne\n vyslovený, tedy (implicitně) nevyslovitelný",
+      "translit": "aneklálētos",
+      "pronunciation": "an-ek-lal'-ay-tos",
+      "translated": true
+    },
+    "G413": {
+      "definitions_cz": "ne\n vynechaný, tedy (implicitně) nevyčerpatelný",
+      "translit": "anékleiptos",
+      "pronunciation": "an-ek'-lipe-tos",
+      "translated": true
+    },
+    "G414": {
+      "definitions_cz": "snesitelnější",
+      "translit": "anektóteros",
+      "pronunciation": "an-ek-tot'-er-os",
+      "translated": true
+    },
+    "G415": {
+      "definitions_cz": "nemilosrdný",
+      "translit": "aneleḗmōn",
+      "pronunciation": "an-eleh-ay'-mone",
+      "translated": true
+    },
+    "G416": {
+      "definitions_cz": "házet s větrem",
+      "translit": "anemízō",
+      "pronunciation": "an-em-id'-zo",
+      "translated": true
+    },
+    "G417": {
+      "definitions_cz": "vítr; (množné číslo) implicitně, (čtyři)\n čtvrti (země)",
+      "translit": "ánemos",
+      "pronunciation": "an'-em-os",
+      "translated": true
+    },
+    "G418": {
+      "definitions_cz": "nepřiznané, tedy (implicitně) nepředpokládatelné",
+      "translit": "anéndektos",
+      "pronunciation": "an-en'-dek-tos",
+      "translated": true
+    },
+    "G419": {
+      "definitions_cz": "ne\n vyhledávaný, t. j. (implicitně) nevyzpytatelný",
+      "translit": "anexereúnētos",
+      "pronunciation": "an-ex-er-yoo'-nay-tos",
+      "translated": true
+    },
+    "G420": {
+      "definitions_cz": "snášení nemocného, ​​t. j. shovívavý",
+      "translit": "anexíkakos",
+      "pronunciation": "an-ex-ik'-ak-os",
+      "translated": true
+    },
+    "G421": {
+      "definitions_cz": "nevysledováno, tj\n implikace) nevysledovatelný",
+      "translit": "anexichníastos",
+      "pronunciation": "an-ex-ikh-nee'-as-tos",
+      "translated": true
+    },
+    "G422": {
+      "definitions_cz": "nestydí se, t.j.",
+      "translit": "anepaíschyntos",
+      "pronunciation": "an-ep-ah'-ee-skhoon-tos",
+      "translated": true
+    },
+    "G423": {
+      "definitions_cz": "ne\n zatčen, tedy (implicitně) nezaviněný",
+      "translit": "anepílēptos",
+      "pronunciation": "an-ep-eel'-ape-tos",
+      "translated": true
+    },
+    "G424": {
+      "definitions_cz": "povznést se",
+      "translit": "anérchomai",
+      "pronunciation": "an-erkh'-om-ahee",
+      "translated": true
+    },
+    "G425": {
+      "definitions_cz": "relaxace nebo (obrazně) úleva",
+      "translit": "ánesis",
+      "pronunciation": "an'-es-is",
+      "translated": true
+    },
+    "G426": {
+      "definitions_cz": "vyšetřovat (soudně)",
+      "translit": "anetázō",
+      "pronunciation": "an-et-ad'-zo",
+      "translated": true
+    },
+    "G427": {
+      "definitions_cz": "bez",
+      "translit": "áneu",
+      "pronunciation": "an'-yoo",
+      "translated": true
+    },
+    "G428": {
+      "definitions_cz": "špatně nastavený, tzn.\n nepohodlné",
+      "translit": "aneúthetos",
+      "pronunciation": "an-yoo'-the-tos",
+      "translated": true
+    },
+    "G429": {
+      "definitions_cz": "zjistit",
+      "translit": "aneurískō",
+      "pronunciation": "an-yoo-ris'-ko",
+      "translated": true
+    },
+    "G430": {
+      "definitions_cz": "držet se proti, tzn.\n (obrazně) snášet",
+      "translit": "anéchomai",
+      "pronunciation": "an-ekh'-om-ahee",
+      "translated": true
+    },
+    "G431": {
+      "definitions_cz": "správně, příbuzný, tj. (zvláště) bratranec",
+      "translit": "anepsiós",
+      "pronunciation": "an-eps'-ee-os",
+      "translated": true
+    },
+    "G432": {
+      "definitions_cz": "kopr",
+      "translit": "ánēthon",
+      "pronunciation": "an'-ay-thon",
+      "translated": true
+    },
+    "G433": {
+      "definitions_cz": "dosáhnout, tj. (obrazně) být\n správné",
+      "translit": "anḗkō",
+      "pronunciation": "an-ay'-ko",
+      "translated": true
+    },
+    "G434": {
+      "definitions_cz": "divoch",
+      "translit": "anḗmeros",
+      "pronunciation": "an-ay'-mer-os",
+      "translated": true
+    },
+    "G435": {
+      "definitions_cz": "muž (správně jako jednotlivec\n muž)",
+      "translit": "anḗr",
+      "pronunciation": "an'-ayr",
+      "translated": true
+    },
+    "G436": {
+      "definitions_cz": "postavit se proti, t. j. oponovat",
+      "translit": "anthístēmi",
+      "pronunciation": "anth-is'-tay-mee",
+      "translated": true
+    },
+    "G437": {
+      "definitions_cz": "obratem se přiznat, tzn.\n reagovat pochvalně",
+      "translit": "anthomologéomai",
+      "pronunciation": "anth-om-ol-og-eh'-om-ahee",
+      "translated": true
+    },
+    "G438": {
+      "definitions_cz": "květ",
+      "translit": "ánthos",
+      "pronunciation": "anth'-os",
+      "translated": true
+    },
+    "G439": {
+      "definitions_cz": "lože hořícího uhlí",
+      "translit": "anthrakiá",
+      "pronunciation": "anth-rak-ee-ah'",
+      "translated": true
+    },
+    "G440": {
+      "definitions_cz": "živé uhlí",
+      "translit": "ánthrax",
+      "pronunciation": "anth'-rax",
+      "translated": true
+    },
+    "G441": {
+      "definitions_cz": "muž-dvoření, t. j. podlézání",
+      "translit": "anthrōpáreskos",
+      "pronunciation": "anth-ro-par'-es-kos",
+      "translated": true
+    },
+    "G442": {
+      "definitions_cz": "člověk",
+      "translit": "anthrṓpinos",
+      "pronunciation": "anth-ro'-pee-nos",
+      "translated": true
+    },
+    "G443": {
+      "definitions_cz": "vrah",
+      "translit": "anthrōpoktónos",
+      "pronunciation": "anth-ro-pok-ton'-os",
+      "translated": true
+    },
+    "G444": {
+      "definitions_cz": "od [ŘECKO:3700]",
+      "translit": "ánthrōpos",
+      "pronunciation": "anth'-ro-pos",
+      "translated": true
+    },
+    "G445": {
+      "definitions_cz": "působit jako prokonzul",
+      "translit": "anthypateúō",
+      "pronunciation": "anth-oo-pat-yoo'-o",
+      "translated": true
+    },
+    "G446": {
+      "definitions_cz": "místo nejvyššího důstojníka,\n tj. (zvláště) římský prokonzul",
+      "translit": "anthýpatos",
+      "pronunciation": "anth-oo'-pat-os",
+      "translated": true
+    },
+    "G447": {
+      "definitions_cz": "povolit, t. j. (doslova) zvolnit popř\n (přeneseně) poušť, upustit od",
+      "translit": "aníēmi",
+      "pronunciation": "an-ee'-ay-mee",
+      "translated": true
+    },
+    "G448": {
+      "definitions_cz": "neúprosný",
+      "translit": "aníleōs",
+      "pronunciation": "an-ee'-leh-oce",
+      "translated": true
     }
   }
 }
