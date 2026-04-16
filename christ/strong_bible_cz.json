@@ -20739,6 +20739,898 @@
       "translit": "epikouría",
       "pronunciation": "ep-ee-koo-ree'-ah",
       "translated": true
+    },
+    "G1948": {
+      "definitions_cz": "soudit",
+      "translit": "epikrínō",
+      "pronunciation": "ep-ee-kree'-no",
+      "translated": true
+    },
+    "G1949": {
+      "definitions_cz": "zabavit (o pomoc, zranění,\n dosažení nebo jakýkoli jiný účel; doslova nebo obrazně)",
+      "translit": "epilambánomai",
+      "pronunciation": "ep-ee-lam-ban'-om-ahee",
+      "translated": true
+    },
+    "G1950": {
+      "definitions_cz": "ztratit se z mysli; implicitně,\n zanedbávat",
+      "translit": "epilanthánomai",
+      "pronunciation": "ep-ee-lan-than'-om-ahee",
+      "translated": true
+    },
+    "G1951": {
+      "definitions_cz": "k příjmení, vyberte",
+      "translit": "epilégomai",
+      "pronunciation": "ep-ee-leg'-om-ahee",
+      "translated": true
+    },
+    "G1952": {
+      "definitions_cz": "nechat na, t. j. (obrazně) být\n nedostatečné pro",
+      "translit": "epileípō",
+      "pronunciation": "ep-ee-li'-po",
+      "translated": true
+    },
+    "G1953": {
+      "definitions_cz": "nedbalost",
+      "translit": "epilēsmonḗ",
+      "pronunciation": "ep-ee-lace-mon-ay'",
+      "translated": true
+    },
+    "G1954": {
+      "definitions_cz": "zbyly, tj. zbyly",
+      "translit": "epíloipos",
+      "pronunciation": "ep-il'-oy-pos",
+      "translated": true
+    },
+    "G1955": {
+      "definitions_cz": "vysvětlení, tedy aplikace",
+      "translit": "epílysis",
+      "pronunciation": "ep-il'-oo-sis",
+      "translated": true
+    },
+    "G1956": {
+      "definitions_cz": "dále řešit, tj. (obrazně) vysvětlit,\n rozhodnout",
+      "translit": "epilýō",
+      "pronunciation": "ep-ee-loo'-o",
+      "translated": true
+    },
+    "G1957": {
+      "definitions_cz": "dále dosvědčovat, t. j. potvrzovat",
+      "translit": "epimartyréō",
+      "pronunciation": "ep-ee-mar-too-reh'-o",
+      "translated": true
+    },
+    "G1958": {
+      "definitions_cz": "opatrnost, tj. laskavá pozornost (pohostinnost)",
+      "translit": "epiméleia",
+      "pronunciation": "ep-ee-mel'-i-ah",
+      "translated": true
+    },
+    "G1959": {
+      "definitions_cz": "starat se (fyzicky\n nebo jinak)",
+      "translit": "epimeléomai",
+      "pronunciation": "ep-ee-mel-eh'-om-ahee",
+      "translated": true
+    },
+    "G1960": {
+      "definitions_cz": "opatrně",
+      "translit": "epimelōs",
+      "pronunciation": "ep-ee-mel-oce'",
+      "translated": true
+    },
+    "G1961": {
+      "definitions_cz": "zůstat na místě, tj. zůstat (obrazně,\n vytrvat)",
+      "translit": "epiménō",
+      "pronunciation": "ep-ee-men'-o",
+      "translated": true
+    },
+    "G1962": {
+      "definitions_cz": "kývnout na, tedy (implicitně) na\n souhlas",
+      "translit": "epineúō",
+      "pronunciation": "ep-een-yoo'-o",
+      "translated": true
+    },
+    "G1963": {
+      "definitions_cz": "pozornost mysli, tj. (implicitně)\n účel",
+      "translit": "epínoia",
+      "pronunciation": "ep-in'-oy-ah",
+      "translated": true
+    },
+    "G1964": {
+      "definitions_cz": "spáchat křivou přísahu",
+      "translit": "epiorkéō",
+      "pronunciation": "ep-ee-or-keh'-o",
+      "translated": true
+    },
+    "G1965": {
+      "definitions_cz": "na přísahu, t. j. (nepravdivě) proklínač",
+      "translit": "epíorkos",
+      "pronunciation": "ep-ee'-or-kos",
+      "translated": true
+    },
+    "G1966": {
+      "definitions_cz": "supervening, tj. ([ŘECKO:2250][ŘECKO:3571]",
+      "translit": "epioûsa",
+      "pronunciation": "ep-ee-oo'-sah",
+      "translated": true
+    },
+    "G1967": {
+      "definitions_cz": "zítřejší; ale pravděpodobněji z [ŘECKO:1909][ŘECKO:1510]",
+      "translit": "epioúsios",
+      "pronunciation": "ep-ee-oo'-see-os",
+      "translated": true
+    },
+    "G1968": {
+      "definitions_cz": "obejmout (s láskou) nebo uchopit (s více nebo\n méně násilí; doslova nebo obrazně)",
+      "translit": "epipíptō",
+      "pronunciation": "ep-ee-pip'-to",
+      "translated": true
+    },
+    "G1969": {
+      "definitions_cz": "kárat, t. j. (slovy) k\n výprask",
+      "translit": "epiplḗssō",
+      "pronunciation": "ep-ee-place'-so",
+      "translated": true
+    },
+    "G1970": {
+      "definitions_cz": "přiškrtit, tj. (obrazně)\n zarůstat",
+      "translit": "epipnígō",
+      "pronunciation": "ep-ee-pnee'-go",
+      "translated": true
+    },
+    "G1971": {
+      "definitions_cz": "milovat, t. j. intenzivně toužit\n držení (oprávněně nebo neoprávněně)",
+      "translit": "epipothéō",
+      "pronunciation": "ep-ee-poth-eh'-o",
+      "translated": true
+    },
+    "G1972": {
+      "definitions_cz": "touha po",
+      "translit": "epipóthēsis",
+      "pronunciation": "ep-ee-poth'-ay-sis",
+      "translated": true
+    },
+    "G1973": {
+      "definitions_cz": "toužil po,\n tedy velmi milován",
+      "translit": "epipóthētos",
+      "pronunciation": "ep-ee-poth'-ay-tos",
+      "translated": true
+    },
+    "G1974": {
+      "definitions_cz": "intenzivní touha",
+      "translit": "epipothía",
+      "pronunciation": "ep-ee-poth-ee'-ah",
+      "translated": true
+    },
+    "G1975": {
+      "definitions_cz": "cestovat dále, tj. cestovat dál (dosáhnout)",
+      "translit": "epiporeúomai",
+      "pronunciation": "ep-ee-por-yoo'-om-ahee",
+      "translated": true
+    },
+    "G1976": {
+      "definitions_cz": "přišít, tj. připevnit pomocí\n jehla",
+      "translit": "epirrháptō",
+      "pronunciation": "ep-ir-hrap'-to",
+      "translated": true
+    },
+    "G1977": {
+      "definitions_cz": "hodit na (doslova nebo obrazně)",
+      "translit": "epirrhíptō",
+      "pronunciation": "ep-ir-hrip'-to",
+      "translated": true
+    },
+    "G1978": {
+      "definitions_cz": "pozoruhodné, tzn.\n (obrazně) význačný",
+      "translit": "epísēmos",
+      "pronunciation": "ep-is'-ay-mos",
+      "translated": true
+    },
+    "G1979": {
+      "definitions_cz": "dotace, tzn.\n (konkrétně) jídlo",
+      "translit": "episitismós",
+      "pronunciation": "ep-ee-sit-is-mos'",
+      "translated": true
+    },
+    "G1980": {
+      "definitions_cz": "kontrolovat, tj\n implikace) vybrat; rozšířením jít se podívat, ulevit",
+      "translit": "episképtomai",
+      "pronunciation": "ep-ee-skep'-tom-ahee",
+      "translated": true
+    },
+    "G1981": {
+      "definitions_cz": "stanovat, t. j. (obrazně) vydržet",
+      "translit": "episkēnóō",
+      "pronunciation": "ep-ee-skay-no'-o",
+      "translated": true
+    },
+    "G1982": {
+      "definitions_cz": "vrhnout stín, tj. (tím\n analogie) zahalit se do oparu lesku; obrazně řečeno investovat\n s nadpřirozeným vlivem",
+      "translit": "episkiázō",
+      "pronunciation": "ep-ee-skee-ad'-zo",
+      "translated": true
+    },
+    "G1983": {
+      "definitions_cz": "dohlížet; implicitně se mít na pozoru",
+      "translit": "episkopéō",
+      "pronunciation": "ep-ee-skop-eh'-o",
+      "translated": true
+    },
+    "G1984": {
+      "definitions_cz": "kontrola (pro úlevu); implicitně superintendence;\n zvláště křesťanský \"episkopát\"",
+      "translit": "episkopḗ",
+      "pronunciation": "ep-is-kop-ay'",
+      "translated": true
+    },
+    "G1985": {
+      "definitions_cz": "superintendent, tj.\n Křesťanský důstojník v genitivu obviněný z církve (nebo církve).\n (doslova nebo obrazně)",
+      "translit": "epískopos",
+      "pronunciation": "ep-is'-kop-os",
+      "translated": true
+    },
+    "G1986": {
+      "definitions_cz": "překreslit, tj. (s [ŘECKO:203]",
+      "translit": "epispáomai",
+      "pronunciation": "ep-ee-spah'-om-ahee",
+      "translated": true
+    },
+    "G1987": {
+      "definitions_cz": "dát mysl\n na, tj. porozumět nebo se s nimi seznámit",
+      "translit": "epístamai",
+      "pronunciation": "ep-is'-tam-ahee",
+      "translated": true
+    },
+    "G1988": {
+      "definitions_cz": "jmenovaný nad, tzn.\n velitel (učitel)",
+      "translit": "epistátēs",
+      "pronunciation": "ep-is-tat'-ace",
+      "translated": true
+    },
+    "G1989": {
+      "definitions_cz": "přikazovat (psáním), t. j. (genitivní pád) k\n komunikovat dopisem (pro jakýkoli účel)",
+      "translit": "epistéllō",
+      "pronunciation": "ep-ee-stel'-lo",
+      "translated": true
+    },
+    "G1990": {
+      "definitions_cz": "inteligentní",
+      "translit": "epistḗmōn",
+      "pronunciation": "ep-ee-stay'-mone",
+      "translated": true
+    },
+    "G1991": {
+      "definitions_cz": "dále podporovat, tj. obnovit",
+      "translit": "epistērízō",
+      "pronunciation": "ep-ee-stay-rid'-zo",
+      "translated": true
+    },
+    "G1992": {
+      "definitions_cz": "písemná zpráva",
+      "translit": "epistolḗ",
+      "pronunciation": "ep-is-tol-ay'",
+      "translated": true
+    },
+    "G1993": {
+      "definitions_cz": "dát něco přes ústa, tzn.\n (obrazně) mlčet",
+      "translit": "epistomízō",
+      "pronunciation": "ep-ee-stom-id'-zo",
+      "translated": true
+    },
+    "G1994": {
+      "definitions_cz": "vrátit (doslova, přeneseně nebo\n morálně)",
+      "translit": "epistréphō",
+      "pronunciation": "ep-ee-stref'-o",
+      "translated": true
+    },
+    "G1995": {
+      "definitions_cz": "reverze, tedy morálně revoluce",
+      "translit": "epistrophḗ",
+      "pronunciation": "ep-is-trof-ay'",
+      "translated": true
+    },
+    "G1996": {
+      "definitions_cz": "sbírat na stejném místě",
+      "translit": "episynágō",
+      "pronunciation": "ep-ee-soon-ag'-o",
+      "translated": true
+    },
+    "G1997": {
+      "definitions_cz": "kompletní sbírka; zvláště křesťanské setkání (pro\n uctívání)",
+      "translit": "episynagōgḗ",
+      "pronunciation": "ep-ee-soon-ag-o-gay'",
+      "translated": true
+    },
+    "G1998": {
+      "definitions_cz": "spěchat společně na jednom místě (nebo konkrétním\n příležitost)",
+      "translit": "episyntréchō",
+      "pronunciation": "ep-ee-soon-trekh'-o",
+      "translated": true
+    },
+    "G1999": {
+      "definitions_cz": "spiknutí,\n tj. konkurs (buřičský nebo přátelský)",
+      "translit": "episýstasis",
+      "pronunciation": "ep-ee-soo'-stas-is",
+      "translated": true
+    },
+    "G2000": {
+      "definitions_cz": "přeneseně,\n nejistý",
+      "translit": "episphalḗs",
+      "pronunciation": "ep-ee-sfal-ace'",
+      "translated": true
+    },
+    "G2001": {
+      "definitions_cz": "dále využívat, tedy (obrazně) trvat\n statný",
+      "translit": "epischýō",
+      "pronunciation": "ep-is-khoo'-o",
+      "translated": true
+    },
+    "G2002": {
+      "definitions_cz": "dále hromadit, t. j. (obrazně) hledat\n dodatečně",
+      "translit": "episōreúō",
+      "pronunciation": "ep-ee-so-ryoo'-o",
+      "translated": true
+    },
+    "G2003": {
+      "definitions_cz": "soudní příkaz nebo výnos; implicitně,\n autoritativnost",
+      "translit": "epitagḗ",
+      "pronunciation": "ep-ee-tag-ay'",
+      "translated": true
+    },
+    "G2004": {
+      "definitions_cz": "zařídit, tj. objednat",
+      "translit": "epitássō",
+      "pronunciation": "ep-ee-tas'-so",
+      "translated": true
+    },
+    "G2005": {
+      "definitions_cz": "plnit dále (nebo úplně), t. j. provést;\n implikovaně ukončit, podstoupit",
+      "translit": "epiteléō",
+      "pronunciation": "ep-ee-tel-eh'-o",
+      "translated": true
+    },
+    "G2006": {
+      "definitions_cz": "provozuschopný, tj. (implicitně)\n nutné",
+      "translit": "epitḗdeios",
+      "pronunciation": "ep-ee-tay'-di-os",
+      "translated": true
+    },
+    "G2007": {
+      "definitions_cz": "vnutit (v přátelském nebo nepřátelském smyslu)",
+      "translit": "epitíthēmi",
+      "pronunciation": "ep-ee-tith'-ay-mee",
+      "translated": true
+    },
+    "G2008": {
+      "definitions_cz": "zdanit, t. j. odsuzovat nebo napomínat; podle\n implikace, zakázat",
+      "translit": "epitimáō",
+      "pronunciation": "ep-ee-tee-mah'-o",
+      "translated": true
+    },
+    "G2009": {
+      "definitions_cz": "řádně, vážnost, t. j. občanství;\n použité (ve smyslu [ŘECKO:2008]",
+      "translit": "epitimía",
+      "pronunciation": "ep-ee-tee-mee'-ah",
+      "translated": true
+    },
+    "G2010": {
+      "definitions_cz": "převrátit (přenést), tzn.\n dovolit",
+      "translit": "epitrépō",
+      "pronunciation": "ep-ee-trep'-o",
+      "translated": true
+    },
+    "G2011": {
+      "definitions_cz": "povolení, tedy (implicitně) plná moc",
+      "translit": "epitropḗ",
+      "pronunciation": "ep-ee-trop-ay'",
+      "translated": true
+    },
+    "G2012": {
+      "definitions_cz": "komisař, tj.\n domácí správce, opatrovník",
+      "translit": "epítropos",
+      "pronunciation": "ep-it'-rop-os",
+      "translated": true
+    },
+    "G2013": {
+      "definitions_cz": "na náhodu, tj. (implicitně) k\n dosáhnout",
+      "translit": "epitynchánō",
+      "pronunciation": "ep-ee-toong-khan'-o",
+      "translated": true
+    },
+    "G2014": {
+      "definitions_cz": "svítit na, t. j. stát se (doslova) viditelným nebo\n (obrazně) známý",
+      "translit": "epiphaínō",
+      "pronunciation": "ep-ee-fah'-ee-no",
+      "translated": true
+    },
+    "G2015": {
+      "definitions_cz": "projev, tj. (zvláště) příchod Krista\n (minulost nebo budoucnost)",
+      "translit": "epipháneia",
+      "pronunciation": "ep-if-an'-i-ah",
+      "translated": true
+    },
+    "G2016": {
+      "definitions_cz": "nápadný, t. j. (obrazně) zapamatovatelný",
+      "translit": "epiphanḗs",
+      "pronunciation": "ep-if-an-ace'",
+      "translated": true
+    },
+    "G2017": {
+      "definitions_cz": "osvětlit (obrazně)",
+      "translit": "epiphaúō",
+      "pronunciation": "ep-ee-fow'-o",
+      "translated": true
+    },
+    "G2018": {
+      "definitions_cz": "nést (nebo dále), t. j. přivodit (osobně\n nebo soudně (obvinit, přisoudit)), superindukovat",
+      "translit": "epiphérō",
+      "pronunciation": "ep-ee-fer'-o",
+      "translated": true
+    },
+    "G2019": {
+      "definitions_cz": "volat na něco, t. j. zvolat",
+      "translit": "epiphōnéō",
+      "pronunciation": "ep-ee-fo-neh'-o",
+      "translated": true
+    },
+    "G2020": {
+      "definitions_cz": "aby začalo růst světlo",
+      "translit": "epiphṓskō",
+      "pronunciation": "ep-ee-foce'-ko",
+      "translated": true
+    },
+    "G2021": {
+      "definitions_cz": "položit ruku, t. j. zavázat se",
+      "translit": "epicheiréō",
+      "pronunciation": "ep-ee-khi-reh'-o",
+      "translated": true
+    },
+    "G2022": {
+      "definitions_cz": "",
+      "translated": false
+    },
+    "G2023": {
+      "definitions_cz": "dodat, tj. plně dodat,\n (obrazně) pomáhat nebo přispívat",
+      "translit": "epichorēgéō",
+      "pronunciation": "ep-ee-khor-ayg-eh'-o",
+      "translated": true
+    },
+    "G2024": {
+      "definitions_cz": "příspěvek",
+      "translit": "epichorēgía",
+      "pronunciation": "ep-ee-khor-ayg-ee'-ah",
+      "translated": true
+    },
+    "G2025": {
+      "definitions_cz": "přemazat",
+      "translit": "epichríō",
+      "pronunciation": "ep-ee-khree'-o",
+      "translated": true
+    },
+    "G2026": {
+      "definitions_cz": "stavět na, t. j. (obrazně) vzdělávat\n nahoru",
+      "translit": "epoikodoméō",
+      "pronunciation": "ep-oy-kod-om-eh'-o",
+      "translated": true
+    },
+    "G2027": {
+      "definitions_cz": "jezdit na břeh, tedy na pláž\n plavidlo",
+      "translit": "epokéllō",
+      "pronunciation": "ep-ok-el'-lo",
+      "translated": true
+    },
+    "G2028": {
+      "definitions_cz": "dále jmenovat, t. j. denominovat",
+      "translit": "eponomázō",
+      "pronunciation": "ep-on-om-ad'-zo",
+      "translated": true
+    },
+    "G2029": {
+      "definitions_cz": "kontrolovat, t. j. sledovat",
+      "translit": "epopteúō",
+      "pronunciation": "ep-opt-yoo'-o",
+      "translated": true
+    },
+    "G2030": {
+      "definitions_cz": "a\n přihlížející",
+      "translit": "epóptēs",
+      "pronunciation": "ep-op'-tace",
+      "translated": true
+    },
+    "G2031": {
+      "definitions_cz": "slovo",
+      "translit": "épos",
+      "pronunciation": "ep'-os",
+      "translated": true
+    },
+    "G2032": {
+      "definitions_cz": "nad nebem",
+      "translit": "epouránios",
+      "pronunciation": "ep-oo-ran'-ee-os",
+      "translated": true
+    },
+    "G2033": {
+      "definitions_cz": "sedm",
+      "translit": "heptá",
+      "pronunciation": "hep-tah'",
+      "translated": true
+    },
+    "G2034": {
+      "definitions_cz": "sedmkrát",
+      "translit": "heptákis",
+      "pronunciation": "hep-tak-is'",
+      "translated": true
+    },
+    "G2035": {
+      "definitions_cz": "sedmkrát tisíc",
+      "translit": "heptakischílioi",
+      "pronunciation": "hep-tak-is-khil'-ee-oy",
+      "translated": true
+    },
+    "G2036": {
+      "definitions_cz": "mluvit nebo říkat (slovem nebo\n psaní)",
+      "translit": "épō",
+      "pronunciation": "ep'-o",
+      "translated": true
+    },
+    "G2037": {
+      "definitions_cz": "milovaný; Erastus, křesťan",
+      "translit": "Érastos",
+      "pronunciation": "er'-as-tos",
+      "translated": true
+    },
+    "G2038": {
+      "definitions_cz": "dřít (jako úkol, povolání atd.), (tím\n implikace) působit, být zapojen nebo s ním atd.",
+      "translit": "ergázomai",
+      "pronunciation": "er-gad'-zom-ahee",
+      "translated": true
+    },
+    "G2039": {
+      "definitions_cz": "povolání; implikací, ziskem, bolestí",
+      "translit": "ergasía",
+      "pronunciation": "er-gas-ee'-ah",
+      "translated": true
+    },
+    "G2040": {
+      "definitions_cz": "pracant; přeneseně učitel",
+      "translit": "ergátēs",
+      "pronunciation": "er-gat'-ace",
+      "translated": true
+    },
+    "G2041": {
+      "definitions_cz": "dřina (jako námaha resp\n povolání); implicitně akt",
+      "translit": "érgon",
+      "pronunciation": "er'-gon",
+      "translated": true
+    },
+    "G2042": {
+      "definitions_cz": "stimulovat (zejména k\n hněv)",
+      "translit": "erethízō",
+      "pronunciation": "er-eth-id'-zo",
+      "translated": true
+    },
+    "G2043": {
+      "definitions_cz": "podpírat, tj. (reflexivně) rychle",
+      "translit": "ereídō",
+      "pronunciation": "er-i'-do",
+      "translated": true
+    },
+    "G2044": {
+      "definitions_cz": "říhat, t. j. (obrazně) mluvit\n ven",
+      "translit": "ereúgomai",
+      "pronunciation": "er-yoog'-om-ahee",
+      "translated": true
+    },
+    "G2045": {
+      "definitions_cz": "hledat, tzn.\n (obrazně) vyšetřovat",
+      "translit": "ereunáō",
+      "pronunciation": "er-yoo-nah'-o",
+      "translated": true
+    },
+    "G2046": {
+      "definitions_cz": "náhradník za [ŘECKO:2036]",
+      "translit": "eréō",
+      "pronunciation": "er-eh'-o",
+      "translated": true
+    },
+    "G2047": {
+      "definitions_cz": "samota (konkrétně)",
+      "translit": "erēmía",
+      "pronunciation": "er-ay-mee'-ah",
+      "translated": true
+    },
+    "G2048": {
+      "definitions_cz": "",
+      "translated": false
+    },
+    "G2049": {
+      "definitions_cz": "odkládat odpad (doslova nebo obrazně)",
+      "translit": "erēmóō",
+      "pronunciation": "er-ay-mo'-o",
+      "translated": true
+    },
+    "G2050": {
+      "definitions_cz": "pustošení",
+      "translit": "erḗmōsis",
+      "pronunciation": "er-ay'-mo-sis",
+      "translated": true
+    },
+    "G2051": {
+      "definitions_cz": "hádat se",
+      "translit": "erízō",
+      "pronunciation": "er-id'-zo",
+      "translated": true
+    },
+    "G2052": {
+      "definitions_cz": "správně, intrika, tj. (implicitně)\n frakce",
+      "translit": "eritheía",
+      "pronunciation": "er-ith-i'-ah",
+      "translated": true
+    },
+    "G2053": {
+      "definitions_cz": "vlna",
+      "translit": "érion",
+      "pronunciation": "er'-ee-on",
+      "translated": true
+    },
+    "G2054": {
+      "definitions_cz": "hádka, tj. (implicitně)\n tahanice",
+      "translit": "éris",
+      "pronunciation": "er'-is",
+      "translated": true
+    },
+    "G2055": {
+      "definitions_cz": "kidle, tj. (genitivní případ) koza (symbolicky, zlý\n osoba)",
+      "translit": "eríphion",
+      "pronunciation": "er-if'-ee-on",
+      "translated": true
+    },
+    "G2056": {
+      "definitions_cz": "dítě\n nebo (genitivní pád) koza",
+      "translit": "ériphos",
+      "pronunciation": "er'-if-os",
+      "translated": true
+    },
+    "G2057": {
+      "definitions_cz": "Hermas, křesťan",
+      "translit": "Hermâs",
+      "pronunciation": "her-mas'",
+      "translated": true
+    },
+    "G2058": {
+      "definitions_cz": "překlad",
+      "translit": "hermēneía",
+      "pronunciation": "her-may-ni'-ah",
+      "translated": true
+    },
+    "G2059": {
+      "definitions_cz": "do\n překládat",
+      "translit": "hermēneúō",
+      "pronunciation": "her-mayn-yoo'-o",
+      "translated": true
+    },
+    "G2060": {
+      "definitions_cz": "Hermes, jméno řeckého posla\n božstva; také křesťana",
+      "translit": "Hermēs",
+      "pronunciation": "her-mace'",
+      "translated": true
+    },
+    "G2061": {
+      "definitions_cz": "narozený Hermes; Hermogenes, odpadlík\n Christian",
+      "translit": "Hermogénēs",
+      "pronunciation": "her-mog-en'-ace",
+      "translated": true
+    },
+    "G2062": {
+      "definitions_cz": "plaz, tj\n Hebraismus (srovnej [HEBREW:07431]",
+      "translit": "herpetón",
+      "pronunciation": "her-pet-on'",
+      "translated": true
+    },
+    "G2063": {
+      "definitions_cz": "",
+      "translated": false
+    },
+    "G2064": {
+      "definitions_cz": "přijít nebo odejít (ve velkém množství aplikací, doslova a \n přeneseně)",
+      "translit": "érchomai",
+      "pronunciation": "er'-khom-ahee",
+      "translated": true
+    },
+    "G2065": {
+      "definitions_cz": "vyslýchat; implicitně,\n požádat",
+      "translit": "erōtáō",
+      "pronunciation": "er-o-tah'-o",
+      "translated": true
+    },
+    "G2066": {
+      "definitions_cz": "šaty",
+      "translit": "esthḗs",
+      "pronunciation": "es-thace'",
+      "translated": true
+    },
+    "G2067": {
+      "definitions_cz": "oblečení (konkrétně)",
+      "translit": "ésthēsis",
+      "pronunciation": "es'-thay-sis",
+      "translated": true
+    },
+    "G2068": {
+      "definitions_cz": "používá se pouze v určitých časech,\n zbytek dodává [GREEK:5315]",
+      "translit": "esthíō",
+      "pronunciation": "es-thee'-o",
+      "translated": true
+    },
+    "G2069": {
+      "definitions_cz": "Esli, Izraelita",
+      "translit": "Eslí",
+      "pronunciation": "es-lee'",
+      "translated": true
+    },
+    "G2070": {
+      "definitions_cz": "jsme",
+      "translit": "esmén",
+      "pronunciation": "es-men'",
+      "translated": true
+    },
+    "G2071": {
+      "definitions_cz": "bude",
+      "translit": "ésomai",
+      "pronunciation": "es'-om-ahee",
+      "translated": true
+    },
+    "G2072": {
+      "definitions_cz": "zrcadlo (pro pohled\n do)",
+      "translit": "ésoptron",
+      "pronunciation": "es'-op-tron",
+      "translated": true
+    },
+    "G2073": {
+      "definitions_cz": "",
+      "translated": false
+    },
+    "G2074": {
+      "definitions_cz": "Esrom (tj. Chetsron), Izraelita",
+      "translit": "Esrṓm",
+      "pronunciation": "es-rome",
+      "translated": true
+    },
+    "G2075": {
+      "definitions_cz": "ty jsi",
+      "translit": "esté",
+      "pronunciation": "es-teh'",
+      "translated": true
+    },
+    "G2076": {
+      "definitions_cz": "on (ona nebo to) je;\n také (s středním množným číslem) jsou",
+      "translit": "estí",
+      "pronunciation": "es-tee'",
+      "translated": true
+    },
+    "G2077": {
+      "definitions_cz": "buď ty; \n\n také ἔστωσαν(es'-to-san)",
+      "translit": "éstō",
+      "pronunciation": "es'-to",
+      "translated": true
+    },
+    "G2078": {
+      "definitions_cz": "nejvzdálenější, konečný (místa nebo času)",
+      "translit": "éschatos",
+      "pronunciation": "es'-khat-os",
+      "translated": true
+    },
+    "G2079": {
+      "definitions_cz": "konečně, tj. (s [ŘECKO:2192]",
+      "translit": "eschátōs",
+      "pronunciation": "es-khat'-oce",
+      "translated": true
+    },
+    "G2080": {
+      "definitions_cz": "uvnitř (jako předložka nebo přídavné jméno)",
+      "translit": "ésō",
+      "pronunciation": "es'-o",
+      "translated": true
+    },
+    "G2081": {
+      "definitions_cz": "zevnitř; používá se také jako ekvivalent [ŘECKO:2080]",
+      "translit": "ésōthen",
+      "pronunciation": "es'-o-then",
+      "translated": true
+    },
+    "G2082": {
+      "definitions_cz": "interiér",
+      "translit": "esṓteros",
+      "pronunciation": "es-o'-ter-os",
+      "translated": true
+    },
+    "G2083": {
+      "definitions_cz": "soudruh",
+      "translit": "hetaîros",
+      "pronunciation": "het-ah'-ee-ros",
+      "translated": true
+    },
+    "G2084": {
+      "definitions_cz": "jinojazyčný, tedy cizinec",
+      "translit": "heteróglōssos",
+      "pronunciation": "het-er-og'-loce-sos",
+      "translated": true
+    },
+    "G2085": {
+      "definitions_cz": "instruovat jinak",
+      "translit": "heterodidaskaléō",
+      "pronunciation": "het-er-od-id-as-kal-eh'-o",
+      "translated": true
+    },
+    "G2086": {
+      "definitions_cz": "jho jinak, tzn.\n (obrazně) sdružovat se nesouhlasně",
+      "translit": "heterozygéō",
+      "pronunciation": "het-er-od-zoog-eh'-o",
+      "translated": true
+    },
+    "G2087": {
+      "definitions_cz": "(an-, the) other or different",
+      "translit": "héteros",
+      "pronunciation": "het'-er-os",
+      "translated": true
+    },
+    "G2088": {
+      "definitions_cz": "jinak",
+      "translit": "hetérōs",
+      "pronunciation": "het-er'-oce",
+      "translated": true
+    },
+    "G2089": {
+      "definitions_cz": "\"zatím\", stále (času nebo stupně)",
+      "translit": "éti",
+      "pronunciation": "et'-ee",
+      "translated": true
+    },
+    "G2090": {
+      "definitions_cz": "připravit",
+      "translit": "hetoimázō",
+      "pronunciation": "het-oy-mad'-zo",
+      "translated": true
+    },
+    "G2091": {
+      "definitions_cz": "příprava",
+      "translit": "hetoimasía",
+      "pronunciation": "het-oy-mas-ee'-ah",
+      "translated": true
+    },
+    "G2092": {
+      "definitions_cz": "upravená, tedy připravená",
+      "translit": "hétoimos",
+      "pronunciation": "het-oy'-mos",
+      "translated": true
+    },
+    "G2093": {
+      "definitions_cz": "v pohotovosti",
+      "translit": "hetoímōs",
+      "pronunciation": "het'-oy-moce",
+      "translated": true
+    },
+    "G2094": {
+      "definitions_cz": "rok",
+      "translit": "étos",
+      "pronunciation": "et'-os",
+      "translated": true
+    },
+    "G2095": {
+      "definitions_cz": "(příslovečně) dobře",
+      "translit": "eû",
+      "pronunciation": "yoo",
+      "translated": true
+    },
+    "G2096": {
+      "definitions_cz": "Eua (nebo Eva, tj. Chavvah), první\n žena",
+      "translit": "Eûa",
+      "pronunciation": "yoo'-ah",
+      "translated": true
+    },
+    "G2097": {
+      "definitions_cz": "oznamovat dobré zprávy (\"evangelizovat\"), zejména\n evangelium",
+      "translit": "euangelízō",
+      "pronunciation": "yoo-ang-ghel-id'-zo",
+      "translated": true
     }
   }
 }
