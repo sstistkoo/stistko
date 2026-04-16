@@ -30703,6 +30703,904 @@
       "translit": "olothreutḗs",
       "pronunciation": "ol-oth-ryoo-tace'",
       "translated": true
+    },
+    "G3645": {
+      "definitions_cz": "zkazit, t. j. zabít",
+      "translit": "olothreúō",
+      "pronunciation": "ol-oth-ryoo'-o",
+      "translated": true
+    },
+    "G3646": {
+      "definitions_cz": "a\n zcela spotřebovaná oběť („holocaust“)",
+      "translit": "holokaútōma",
+      "pronunciation": "hol-ok-ow'-to-mah",
+      "translated": true
+    },
+    "G3647": {
+      "definitions_cz": "integrita, tedy fyzická celistvost",
+      "translit": "holoklēría",
+      "pronunciation": "hol-ok-lay-ree'-ah",
+      "translated": true
+    },
+    "G3648": {
+      "definitions_cz": "kompletní v každé části, tj. dokonale zvuk (v\n tělo)",
+      "translit": "holóklēros",
+      "pronunciation": "hol'-ok'-lay-ros",
+      "translated": true
+    },
+    "G3649": {
+      "definitions_cz": "„vytí“ nebo „halloo“, tzn.\n křičet",
+      "translit": "ololýzō",
+      "pronunciation": "ol-ol-odd'-zo",
+      "translated": true
+    },
+    "G3650": {
+      "definitions_cz": "„celé“ nebo „vše“, tj. úplné (v rozsahu, množství,\n čas nebo stupeň), zejména (střední rod) jako podstatné jméno nebo příslovce",
+      "translit": "hólos",
+      "pronunciation": "hol'-os",
+      "translated": true
+    },
+    "G3651": {
+      "definitions_cz": "kompletní až do konce, tedy absolutně\n perfektní",
+      "translit": "holotelḗs",
+      "pronunciation": "hol-ot-el-ace'",
+      "translated": true
+    },
+    "G3652": {
+      "definitions_cz": "Olympas, křesťan",
+      "translit": "Olympâs",
+      "pronunciation": "ol-oom-pas'",
+      "translated": true
+    },
+    "G3653": {
+      "definitions_cz": "nezralý (protože mimo sezónu)\n Obr",
+      "translit": "ólynthos",
+      "pronunciation": "ol'-oon-thos",
+      "translated": true
+    },
+    "G3654": {
+      "definitions_cz": "úplně, tj. celkem; (analogicky),\n všude; (negativně) v žádném případě",
+      "translit": "hólōs",
+      "pronunciation": "hol'-oce",
+      "translated": true
+    },
+    "G3655": {
+      "definitions_cz": "bouřka",
+      "translit": "ómbros",
+      "pronunciation": "om'-bros",
+      "translated": true
+    },
+    "G3656": {
+      "definitions_cz": "být ve společnosti, tj. (implicitně) k\n konverzovat",
+      "translit": "homiléō",
+      "pronunciation": "hom-il-eh'-o",
+      "translated": true
+    },
+    "G3657": {
+      "definitions_cz": "společnost (\"homilie\"), tj. (implicitně)\n styk",
+      "translit": "homilía",
+      "pronunciation": "hom-il-ee'-ah",
+      "translated": true
+    },
+    "G3658": {
+      "definitions_cz": "sdružení dohromady, tj. množství",
+      "translit": "hómilos",
+      "pronunciation": "hom'-il-os",
+      "translated": true
+    },
+    "G3659": {
+      "definitions_cz": "zrak, tj. (implicitně) oko",
+      "translit": "ómma",
+      "pronunciation": "om'-mah",
+      "translated": true
+    },
+    "G3660": {
+      "definitions_cz": "přísahat, t. j. složit (nebo prohlásit) přísahu",
+      "translit": "omnýō",
+      "pronunciation": "om-noo'-o",
+      "translated": true
+    },
+    "G3661": {
+      "definitions_cz": "jednomyslně",
+      "translit": "homothymadón",
+      "pronunciation": "hom-oth-oo-mad-on'",
+      "translated": true
+    },
+    "G3662": {
+      "definitions_cz": "podobat se",
+      "translit": "homoiázō",
+      "pronunciation": "hom-oy-ad'-zo",
+      "translated": true
+    },
+    "G3663": {
+      "definitions_cz": "podobně postižený",
+      "translit": "homoiopathḗs",
+      "pronunciation": "hom-oy-op-ath-ace'",
+      "translated": true
+    },
+    "G3664": {
+      "definitions_cz": "podobný (vzhledem nebo charakterem)",
+      "translit": "hómoios",
+      "pronunciation": "hom'-oy-os",
+      "translated": true
+    },
+    "G3665": {
+      "definitions_cz": "podobnost",
+      "translit": "homoiótēs",
+      "pronunciation": "hom-oy-ot'-ace",
+      "translated": true
+    },
+    "G3666": {
+      "definitions_cz": "asimilovat, t. j. srovnávat; pasivně, stát se\n podobný",
+      "translit": "homoióō",
+      "pronunciation": "hom-oy-o'-o",
+      "translated": true
+    },
+    "G3667": {
+      "definitions_cz": "formulář; abstraktně, podobnost",
+      "translit": "homoíōma",
+      "pronunciation": "hom-oy'-o-mah",
+      "translated": true
+    },
+    "G3668": {
+      "definitions_cz": "podobně",
+      "translit": "homoíōs",
+      "pronunciation": "hom-oy'-oce",
+      "translated": true
+    },
+    "G3669": {
+      "definitions_cz": "asimilace, tedy podobnost",
+      "translit": "homoíōsis",
+      "pronunciation": "hom-oy'-o-sis",
+      "translated": true
+    },
+    "G3670": {
+      "definitions_cz": "souhlasit, tzn.\n smlouva, uznat",
+      "translit": "homologéō",
+      "pronunciation": "hom-ol-og-eh'-o",
+      "translated": true
+    },
+    "G3671": {
+      "definitions_cz": "potvrzení",
+      "translit": "homología",
+      "pronunciation": "hom-ol-og-ee'-ah",
+      "translated": true
+    },
+    "G3672": {
+      "definitions_cz": "přiznal",
+      "translit": "homologouménōs",
+      "pronunciation": "hom-ol-og-ow-men'-oce",
+      "translated": true
+    },
+    "G3673": {
+      "definitions_cz": "kolega-umělec",
+      "translit": "homótechnos",
+      "pronunciation": "hom-ot'-ekh-nos",
+      "translated": true
+    },
+    "G3674": {
+      "definitions_cz": "podobný [ŘECKO:260]",
+      "translit": "homoû",
+      "pronunciation": "hom-oo'",
+      "translated": true
+    },
+    "G3675": {
+      "definitions_cz": "stejně smýšlející, tedy harmonický",
+      "translit": "homóphrōn",
+      "pronunciation": "hom-of'-rone",
+      "translated": true
+    },
+    "G3676": {
+      "definitions_cz": "současně, tj. (konjunktivně)\n přesto, přesto stále",
+      "translit": "hómōs",
+      "pronunciation": "hom'-oce",
+      "translated": true
+    },
+    "G3677": {
+      "definitions_cz": "sen",
+      "translit": "ónar",
+      "pronunciation": "on'-ar",
+      "translated": true
+    },
+    "G3678": {
+      "definitions_cz": "malý zadek",
+      "translit": "onárion",
+      "pronunciation": "on-ar'-ee-on",
+      "translated": true
+    },
+    "G3679": {
+      "definitions_cz": "pomlouvat, t. j. nadávat, pomlouvat, posmívat se",
+      "translit": "oneidízō",
+      "pronunciation": "on-i-did'-zo",
+      "translated": true
+    },
+    "G3680": {
+      "definitions_cz": "urážka",
+      "translit": "oneidismós",
+      "pronunciation": "on-i-dis-mos'",
+      "translated": true
+    },
+    "G3681": {
+      "definitions_cz": "proslulost, tedy posměšek\n (ostuda)",
+      "translit": "óneidos",
+      "pronunciation": "on'-i-dos",
+      "translated": true
+    },
+    "G3682": {
+      "definitions_cz": "ziskový; Onesimus, křesťan",
+      "translit": "Onḗsimos",
+      "pronunciation": "on-ay'-sim-os",
+      "translated": true
+    },
+    "G3683": {
+      "definitions_cz": "nositel zisku; Onesiphorus, a\n Christian",
+      "translit": "Onēsíphoros",
+      "pronunciation": "on-ay-sif'-or-os",
+      "translated": true
+    },
+    "G3684": {
+      "definitions_cz": "patřící osla, tj. velký (tak, aby se s ním mohl otáčet\n zadek)",
+      "translit": "onikós",
+      "pronunciation": "on-ik-os'",
+      "translated": true
+    },
+    "G3685": {
+      "definitions_cz": "pro kterou jiná prodloužená forma (ὀνάω[ŘECKO:3686]",
+      "translit": "onínēmi",
+      "pronunciation": "on-in'-ay-mee",
+      "translated": true
+    },
+    "G3686": {
+      "definitions_cz": "a\n \"jméno\" (doslova nebo přeneseně) (autorita, postava)",
+      "translit": "ónoma",
+      "pronunciation": "on'-om-ah",
+      "translated": true
+    },
+    "G3687": {
+      "definitions_cz": "jmenovat, t. j. přiřadit apelativum; rozšířením na\n vyslovit, zmínit, vyznat",
+      "translit": "onomázō",
+      "pronunciation": "on-om-ad'-zo",
+      "translated": true
+    },
+    "G3688": {
+      "definitions_cz": "osel",
+      "translit": "ónos",
+      "pronunciation": "on'-os",
+      "translated": true
+    },
+    "G3689": {
+      "definitions_cz": "opravdu",
+      "translit": "óntōs",
+      "pronunciation": "on'-toce",
+      "translated": true
+    },
+    "G3690": {
+      "definitions_cz": "ocet, t. j. kyselé víno",
+      "translit": "óxos",
+      "pronunciation": "oz-os",
+      "translated": true
+    },
+    "G3691": {
+      "definitions_cz": "horlivý; analogicky,\n rychlý",
+      "translit": "oxýs",
+      "pronunciation": "oz-oos'",
+      "translated": true
+    },
+    "G3692": {
+      "definitions_cz": "díra (jakoby pro světlo), t. j. jeskyně; analogicky,\n pramen (vody)",
+      "translit": "opḗ",
+      "pronunciation": "op-ay'",
+      "translated": true
+    },
+    "G3693": {
+      "definitions_cz": "od [ŘECKO:3700]",
+      "translit": "ópisthen",
+      "pronunciation": "op'-is-then",
+      "translated": true
+    },
+    "G3694": {
+      "definitions_cz": "do zad, tzn.\n vzadu (jako příslovce nebo předložka času nebo místa; nebo jako podstatné jméno)",
+      "translit": "opísō",
+      "pronunciation": "op-is'-o",
+      "translated": true
+    },
+    "G3695": {
+      "definitions_cz": "vybavit (zbraněmi (střední hlas a\n obrazně))",
+      "translit": "hoplízō",
+      "pronunciation": "hop-lid'-zo",
+      "translated": true
+    },
+    "G3696": {
+      "definitions_cz": "nářadí nebo\n nádoba nebo nástroj (doslova nebo přeneseně, zvláště urážlivý pro\n válka)",
+      "translit": "hóplon",
+      "pronunciation": "hop'-lon",
+      "translated": true
+    },
+    "G3697": {
+      "definitions_cz": "jakého druhu, tj. jak (jako) skvělý (výborný)\n (zejména jako neurčitý korelativ k určitému předchůdci\n [ŘECKA:5108]",
+      "translit": "hopoîos",
+      "pronunciation": "hop-oy'-os",
+      "translated": true
+    },
+    "G3698": {
+      "definitions_cz": "co(-kdy) potom, t. j. (času) jakmile\n jako",
+      "translit": "hopóte",
+      "pronunciation": "hop-ot'-eh",
+      "translated": true
+    },
+    "G3699": {
+      "definitions_cz": "what(-ever) where, tj. na kterémkoli místě",
+      "translit": "hópou",
+      "pronunciation": "hop'-oo",
+      "translated": true
+    },
+    "G3700": {
+      "definitions_cz": "dívat se (tj. s široce otevřenýma očima, jako na něco pozoruhodného; a\n tím se liší od [ŘECKO:991][ŘECKO:1492][ŘECKO:2300][ŘECKO:2334][ŘECKO:4648]",
+      "translit": "optánomai",
+      "pronunciation": "op-tan'-om-ahee",
+      "translated": true
+    },
+    "G3701": {
+      "definitions_cz": "vizualita, tj. (konkrétně) an\n zjevení",
+      "translit": "optasía",
+      "pronunciation": "op-tas-ee'-ah",
+      "translated": true
+    },
+    "G3702": {
+      "definitions_cz": "vařené, tzn.\n pražené",
+      "translit": "optós",
+      "pronunciation": "op-tos'",
+      "translated": true
+    },
+    "G3703": {
+      "definitions_cz": "správně, rovnoměrný příliv\n (letní) sezóna (psí dny), tedy (implicitně) zralé ovoce",
+      "translit": "opṓra",
+      "pronunciation": "op-o'-rah",
+      "translated": true
+    },
+    "G3704": {
+      "definitions_cz": "co (-ever) jak, tj. způsobem, že (jako\n příslovce nebo spojka nahodilá, záměrná nebo\n skutečný)",
+      "translit": "hópōs",
+      "pronunciation": "hop'-oce",
+      "translated": true
+    },
+    "G3705": {
+      "definitions_cz": "něco, na co se díval, tedy podívaná (zejména\n nadpřirozeno)",
+      "translit": "hórama",
+      "pronunciation": "hor'-am-ah",
+      "translated": true
+    },
+    "G3706": {
+      "definitions_cz": "akt zírání, tj. (externě) aspekt resp\n (vnitřně) inspirovaný vzhled",
+      "translit": "hórasis",
+      "pronunciation": "hor'-as-is",
+      "translated": true
+    },
+    "G3707": {
+      "definitions_cz": "nahlížený, tj. (implicitně) schopný být\n viděl",
+      "translit": "horatós",
+      "pronunciation": "hor-at-os'",
+      "translated": true
+    },
+    "G3708": {
+      "definitions_cz": "rozšířením věnovat se; podle\n Hebraismus, zažít; pasivně, objevit se",
+      "translit": "horáō",
+      "pronunciation": "hor-ah'-o",
+      "translated": true
+    },
+    "G3709": {
+      "definitions_cz": "správně, touha (jako natažení nebo vzrušení z\n mysl), tj. (analogicky), násilná vášeň (hněv, nebo (ospravedlnitelné)\n odpor); implikovaným trestem",
+      "translit": "orgḗ",
+      "pronunciation": "or-gay'",
+      "translated": true
+    },
+    "G3710": {
+      "definitions_cz": "provokovat nebo rozzuřit, tedy (pasivně) stát se\n podrážděný",
+      "translit": "orgízō",
+      "pronunciation": "or-gid'-zo",
+      "translated": true
+    },
+    "G3711": {
+      "definitions_cz": "prchlivý",
+      "translit": "orgílos",
+      "pronunciation": "org-ee'-los",
+      "translated": true
+    },
+    "G3712": {
+      "definitions_cz": "protažení paží, t. j. sáh",
+      "translit": "orguiá",
+      "pronunciation": "org-wee-ah'",
+      "translated": true
+    },
+    "G3713": {
+      "definitions_cz": "natáhnout se, t. j. natáhnout se po (dlouhém\n pro)",
+      "translit": "orégomai",
+      "pronunciation": "or-eg'-om-ahee",
+      "translated": true
+    },
+    "G3714": {
+      "definitions_cz": "hornatý, tj. (implicitně ženský, z [ŘECKO:5561]",
+      "translit": "oreinós",
+      "pronunciation": "or-i-nos",
+      "translated": true
+    },
+    "G3715": {
+      "definitions_cz": "vzrušení mysli, t. j. stesk po",
+      "translit": "órexis",
+      "pronunciation": "or'-ex-is",
+      "translated": true
+    },
+    "G3716": {
+      "definitions_cz": "být rovná noha, tzn.\n (obrazně) jít přímo vpřed",
+      "translit": "orthopodéō",
+      "pronunciation": "or-thop-od-eh'-o",
+      "translated": true
+    },
+    "G3717": {
+      "definitions_cz": "vpravo (jako stoupající), tzn.\n (kolmo) vzpřímený (obrazně, poctivě) nebo (horizontálně)\n úrovni nebo přímo",
+      "translit": "orthós",
+      "pronunciation": "or-thos'",
+      "translated": true
+    },
+    "G3718": {
+      "definitions_cz": "",
+      "translated": false
+    },
+    "G3719": {
+      "definitions_cz": "využít svítání, tedy (implicitně) k opravě\n nejlépe",
+      "translit": "orthrízō",
+      "pronunciation": "or-thrid'-zo",
+      "translated": true
+    },
+    "G3720": {
+      "definitions_cz": "vztahující se k úsvitu, tj. matutinální (jako epiteton\n Venuše, obzvláště brilantní na začátku dne)",
+      "translit": "orthrinós",
+      "pronunciation": "or-thrin-os'",
+      "translated": true
+    },
+    "G3721": {
+      "definitions_cz": "za svítání, t. j. v den přestávky",
+      "translit": "órthrios",
+      "pronunciation": "or'-three-os",
+      "translated": true
+    },
+    "G3722": {
+      "definitions_cz": "svítání (jako východ slunce, východ světla); podle\n prodloužení, ráno",
+      "translit": "órthros",
+      "pronunciation": "or'-thros",
+      "translated": true
+    },
+    "G3723": {
+      "definitions_cz": "rovným způsobem, tedy (obrazně) správně\n (také morálně)",
+      "translit": "orthōs",
+      "pronunciation": "or-thoce'",
+      "translated": true
+    },
+    "G3724": {
+      "definitions_cz": "vytyčit nebo svázat (\"horizont\"), tedy (obrazně) k\n jmenovat, nařizovat, upřesňovat",
+      "translit": "horízō",
+      "pronunciation": "hor-id'-zo",
+      "translated": true
+    },
+    "G3725": {
+      "definitions_cz": "hraniční čára, tj. (implicitně) hranice\n (region)",
+      "translit": "hórion",
+      "pronunciation": "hor'-ee-on",
+      "translated": true
+    },
+    "G3726": {
+      "definitions_cz": "přísahat, t. j. přísahat; analogicky slavnostně\n nařídit",
+      "translit": "horkízō",
+      "pronunciation": "hor-kid'-zo",
+      "translated": true
+    },
+    "G3727": {
+      "definitions_cz": "možná podobný [ŘECKO:3725]",
+      "translit": "hórkos",
+      "pronunciation": "hor'-kos",
+      "translated": true
+    },
+    "G3728": {
+      "definitions_cz": "aseverace na\n přísaha",
+      "translit": "horkōmosía",
+      "pronunciation": "hor-ko-mos-ee'ah",
+      "translated": true
+    },
+    "G3729": {
+      "definitions_cz": "nastartovat, popohnat nebo popohnat, tj. (reflexivně) pomlčet popř\n ponořit se",
+      "translit": "hormáō",
+      "pronunciation": "hor-mah'-o",
+      "translated": true
+    },
+    "G3730": {
+      "definitions_cz": "násilný impuls, tedy nástup",
+      "translit": "hormḗ",
+      "pronunciation": "hor-may'",
+      "translated": true
+    },
+    "G3731": {
+      "definitions_cz": "útok, tj. (abstraktně) sraženina",
+      "translit": "hórmēma",
+      "pronunciation": "hor'-may-mah",
+      "translated": true
+    },
+    "G3732": {
+      "definitions_cz": "pták",
+      "translit": "órneon",
+      "pronunciation": "or'-neh-on",
+      "translated": true
+    },
+    "G3733": {
+      "definitions_cz": "pták (jako vstávání\n in the air), i.e. (specially), a hen (or female domestic fowl)",
+      "translit": "órnis",
+      "pronunciation": "or'-nis",
+      "translated": true
+    },
+    "G3734": {
+      "definitions_cz": "a\n limit-placing, tj. (konkrétně) hraniční čára",
+      "translit": "horothesía",
+      "pronunciation": "hor-oth-es-ee'-ah",
+      "translated": true
+    },
+    "G3735": {
+      "definitions_cz": "možná podobný [ŘECKO:142][ŘECKO:3733]",
+      "translit": "óros",
+      "pronunciation": "or'-os",
+      "translated": true
+    },
+    "G3736": {
+      "definitions_cz": "\"zavrtat\" se do země, tedy kopat",
+      "translit": "orýssō",
+      "pronunciation": "or-oos'-so",
+      "translated": true
+    },
+    "G3737": {
+      "definitions_cz": "pozůstalí (\"sirotek\"), tzn.\n bez rodičů",
+      "translit": "orphanós",
+      "pronunciation": "or-fan-os'",
+      "translated": true
+    },
+    "G3738": {
+      "definitions_cz": "tančit (od hodnosti\n nebo pravidelný pohyb)",
+      "translit": "orchéomai",
+      "pronunciation": "or-kheh'-om-ahee",
+      "translated": true
+    },
+    "G3739": {
+      "definitions_cz": "a\n relativně (někdy ukazovací) zájmeno, kdo, který, jaký,\n že",
+      "translit": "hós",
+      "pronunciation": "hos",
+      "translated": true
+    },
+    "G3740": {
+      "definitions_cz": "jak (tj. s [ŘECKO:302]",
+      "translit": "hosákis",
+      "pronunciation": "hos-ak'-is",
+      "translated": true
+    },
+    "G3741": {
+      "definitions_cz": "a z [ŘECKO:40]",
+      "translit": "hósios",
+      "pronunciation": "hos'-ee-os",
+      "translated": true
+    },
+    "G3742": {
+      "definitions_cz": "zbožnost",
+      "translit": "hosiótēs",
+      "pronunciation": "hos-ee-ot'-ace",
+      "translated": true
+    },
+    "G3743": {
+      "definitions_cz": "zbožně",
+      "translit": "hosíōs",
+      "pronunciation": "hos-ee-oce'",
+      "translated": true
+    },
+    "G3744": {
+      "definitions_cz": "vůně (doslova nebo obrazně)",
+      "translit": "osmḗ",
+      "pronunciation": "os-may'",
+      "translated": true
+    },
+    "G3745": {
+      "definitions_cz": "as (mnoho, skvělý, dlouhý atd.) as",
+      "translit": "hósos",
+      "pronunciation": "hos'-os",
+      "translated": true
+    },
+    "G3746": {
+      "definitions_cz": "kdo zvláště",
+      "translit": "hósper",
+      "pronunciation": "hos'-per",
+      "translated": true
+    },
+    "G3747": {
+      "definitions_cz": "kost",
+      "translit": "ostéon",
+      "pronunciation": "os-teh'-on",
+      "translated": true
+    },
+    "G3748": {
+      "definitions_cz": "které některé, t. j. jakékoli to; také (určitý) který\n stejné",
+      "translit": "hóstis",
+      "pronunciation": "hos'-tis",
+      "translated": true
+    },
+    "G3749": {
+      "definitions_cz": "hliněné zboží,\n tj. jílovitý; implicitně křehký",
+      "translit": "ostrákinos",
+      "pronunciation": "os-tra'-kin-os",
+      "translated": true
+    },
+    "G3750": {
+      "definitions_cz": "čich (smysl)",
+      "translit": "ósphrēsis",
+      "pronunciation": "os'-fray-sis",
+      "translated": true
+    },
+    "G3751": {
+      "definitions_cz": "bedra (zevně), tj. kyčle; vnitřně\n (rozšířením) rozmnožovací síla",
+      "translit": "osphŷs",
+      "pronunciation": "os-foos'",
+      "translated": true
+    },
+    "G3752": {
+      "definitions_cz": "kdykoli (implikující hypotézu nebo více či méně\n nejistota); také kauzálně (konjunkčně), pokud",
+      "translit": "hótan",
+      "pronunciation": "hot'-an",
+      "translated": true
+    },
+    "G3753": {
+      "definitions_cz": "při které (věci) také, t. j. kdy",
+      "translit": "hóte",
+      "pronunciation": "hot'-eh",
+      "translated": true
+    },
+    "G3754": {
+      "definitions_cz": "demonstrativní, že (někdy\n nadbytečné); kauzální, protože",
+      "translit": "hóti",
+      "pronunciation": "hot'-ee",
+      "translated": true
+    },
+    "G3755": {
+      "definitions_cz": "během té samé doby,\n tj. zatímco",
+      "translit": "hótou",
+      "pronunciation": "hot'-oo",
+      "translated": true
+    },
+    "G3756": {
+      "definitions_cz": "absolutní zápor (srovnej [ŘECKO:3361]",
+      "translit": "ou",
+      "pronunciation": "oo",
+      "translated": true
+    },
+    "G3757": {
+      "definitions_cz": "na jakém místě, tzn.\n kde",
+      "translit": "hoû",
+      "pronunciation": "hoo",
+      "translated": true
+    },
+    "G3758": {
+      "definitions_cz": "\"ach\"",
+      "translit": "ouá",
+      "pronunciation": "oo-ah'",
+      "translated": true
+    },
+    "G3759": {
+      "definitions_cz": "\"běda\"",
+      "translit": "ouaí",
+      "pronunciation": "oo-ah'-ee",
+      "translated": true
+    },
+    "G3760": {
+      "definitions_cz": "v žádném případě",
+      "translit": "oudamōs",
+      "pronunciation": "oo-dam-oce'",
+      "translated": true
+    },
+    "G3761": {
+      "definitions_cz": "ne však, t. j. ani, ani, dokonce ani",
+      "translit": "oudé",
+      "pronunciation": "oo-deh'",
+      "translated": true
+    },
+    "G3762": {
+      "definitions_cz": "ani jeden (muž, žena nebo věc), tedy žádný,\n nikdo, nic",
+      "translit": "oudeís",
+      "pronunciation": "oo-dice'",
+      "translated": true
+    },
+    "G3763": {
+      "definitions_cz": "ani kdykoliv, t. j. vůbec nikdy",
+      "translit": "oudépote",
+      "pronunciation": "oo-dep'-ot-eh",
+      "translated": true
+    },
+    "G3764": {
+      "definitions_cz": "ještě ani ne",
+      "translit": "oudépō",
+      "pronunciation": "oo-dep'-o",
+      "translated": true
+    },
+    "G3765": {
+      "definitions_cz": "ještě ne, už ne",
+      "translit": "oukéti",
+      "pronunciation": "ook-et'-ee",
+      "translated": true
+    },
+    "G3766": {
+      "definitions_cz": "není to tedy tak, že, tj. (kladně)\n odtud nebo tak",
+      "translit": "oukoûn",
+      "pronunciation": "ook-oon'",
+      "translated": true
+    },
+    "G3767": {
+      "definitions_cz": "(adverbiálně) jistě, popř\n (konjunkčně) podle toho",
+      "translit": "oûn",
+      "pronunciation": "oon",
+      "translated": true
+    },
+    "G3768": {
+      "definitions_cz": "ještě ne",
+      "translit": "oúpō",
+      "pronunciation": "oo'-po",
+      "translated": true
+    },
+    "G3769": {
+      "definitions_cz": "ocas",
+      "translit": "ourá",
+      "pronunciation": "oo-rah'",
+      "translated": true
+    },
+    "G3770": {
+      "definitions_cz": "nebeské, t. j. patřící nebo pocházející z\n nebe",
+      "translit": "ouránios",
+      "pronunciation": "oo-ran'-ee-os",
+      "translated": true
+    },
+    "G3771": {
+      "definitions_cz": "z nebe",
+      "translit": "ouranóthen",
+      "pronunciation": "oo-ran-oth'-en",
+      "translated": true
+    },
+    "G3772": {
+      "definitions_cz": "a\n nebe; rozšířením nebe (jako příbytek Boží); implicitně,\n štěstí, moc, věčnost; zvláště evangelium\n (křesťanství)",
+      "translit": "ouranós",
+      "pronunciation": "oo-ran-os'",
+      "translated": true
+    },
+    "G3773": {
+      "definitions_cz": "Urbanus (města, \"urbane\"), a\n Christian",
+      "translit": "Ourbanós",
+      "pronunciation": "oor-ban-os'",
+      "translated": true
+    },
+    "G3774": {
+      "definitions_cz": "Urias (t. j. Urijah), Chetit",
+      "translit": "Ourías",
+      "pronunciation": "oo-ree'-as",
+      "translated": true
+    },
+    "G3775": {
+      "definitions_cz": "ucho (fyzicky nebo duševně)",
+      "translit": "oûs",
+      "pronunciation": "ooce",
+      "translated": true
+    },
+    "G3776": {
+      "definitions_cz": "substance, tedy majetek\n (majetek)",
+      "translit": "ousía",
+      "pronunciation": "oo-see'-ah",
+      "translated": true
+    },
+    "G3777": {
+      "definitions_cz": "ne příliš, t. j. ani nebo ani; analogicky ne\n dokonce",
+      "translit": "oúte",
+      "pronunciation": "oo'-teh",
+      "translated": true
+    },
+    "G3778": {
+      "definitions_cz": "ten on (ona nebo ono), tj. ten či onen\n (často s opakovaným článkem)",
+      "translit": "hoûtos",
+      "pronunciation": "hoo'-tos",
+      "translated": true
+    },
+    "G3779": {
+      "definitions_cz": "tímto způsobem (s odkazem na to, co předchází resp\n následuje)",
+      "translit": "hoútō",
+      "pronunciation": "hoo'-to",
+      "translated": true
+    },
+    "G3780": {
+      "definitions_cz": "vlastně ne",
+      "translit": "ouchí",
+      "pronunciation": "oo-khee'",
+      "translated": true
+    },
+    "G3781": {
+      "definitions_cz": "dluh, t. j. osoba zadlužená; přeneseně delikvent;\n morálně, přestupník (proti Bohu)",
+      "translit": "opheilétēs",
+      "pronunciation": "of-i-let'-ace",
+      "translated": true
+    },
+    "G3782": {
+      "definitions_cz": "zadluženost, tj. (konkrétně) dlužná částka; přeneseně,\n povinnost, t. j. (manželská) povinnost",
+      "translit": "opheilḗ",
+      "pronunciation": "of-i-lay'",
+      "translated": true
+    },
+    "G3783": {
+      "definitions_cz": "něco dlužného, tj. (obrazně) a\n splatný; morálně chyba",
+      "translit": "opheílēma",
+      "pronunciation": "of-i'-lay-mah",
+      "translated": true
+    },
+    "G3784": {
+      "definitions_cz": "dlužit\n (peněžně); přeneseně být zavázán (měl, musí,\n měl); morálně selhat v povinnosti",
+      "translit": "opheílō",
+      "pronunciation": "of-i'-lo",
+      "translated": true
+    },
+    "G3785": {
+      "definitions_cz": "Měl bych (přát si), tzn.\n (citoslovce) ach to!",
+      "translit": "óphelon",
+      "pronunciation": "of'-el-on",
+      "translated": true
+    },
+    "G3786": {
+      "definitions_cz": "získat",
+      "translit": "óphelos",
+      "pronunciation": "of'-el-os",
+      "translated": true
+    },
+    "G3787": {
+      "definitions_cz": "zrak-práce, tj. které je třeba sledovat\n (nedbalost)",
+      "translit": "ophthalmodouleía",
+      "pronunciation": "of-thal-mod-oo-li'-ah",
+      "translated": true
+    },
+    "G3788": {
+      "definitions_cz": "oko (doslova nebo obrazně); implicitně,\n vidění; přeneseně závist (ze žárlivého bočního pohledu)",
+      "translit": "ophthalmós",
+      "pronunciation": "of-thal-mos'",
+      "translated": true
+    },
+    "G3789": {
+      "definitions_cz": "had,\n přeneseně (jako druh lstivého vychytralosti) rafinovaný zákeřný člověk,\n zejména Satan",
+      "translit": "óphis",
+      "pronunciation": "of'-is",
+      "translated": true
+    },
+    "G3790": {
+      "definitions_cz": "oko - \"obočí\" nebo čelo, tj. (obrazně)\n okraj propasti",
+      "translit": "ophrŷs",
+      "pronunciation": "of-roos'",
+      "translated": true
+    },
+    "G3791": {
+      "definitions_cz": "mobovat, tedy (implicitně) obtěžovat",
+      "translit": "ochléō",
+      "pronunciation": "okh-leh'-o",
+      "translated": true
+    },
+    "G3792": {
+      "definitions_cz": "udělat dav, t. j. pozvednout veřejnost\n rušení",
+      "translit": "ochlopoiéō",
+      "pronunciation": "okh-lop-oy-eh'-o",
+      "translated": true
+    },
+    "G3793": {
+      "definitions_cz": "zástup (jak nese\n podél); implicitně chátra; v rozšíření třída lidí;\n přeneseně vzpoura",
+      "translit": "óchlos",
+      "pronunciation": "okh'los",
+      "translated": true
+    },
+    "G3794": {
+      "definitions_cz": "hrad (obrazně, argument)",
+      "translit": "ochýrōma",
+      "pronunciation": "okh-oo'-ro-mah",
+      "translated": true
     }
   }
 }
