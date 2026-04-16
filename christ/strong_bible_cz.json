@@ -26103,6 +26103,906 @@
       "translit": "koítē",
       "pronunciation": "koy'-tay",
       "translated": true
+    },
+    "G2784": {
+      "definitions_cz": "hlásat (jako veřejný křikloun), zvláště\n božská pravda (evangelium)",
+      "translit": "kērýssō",
+      "pronunciation": "kay-roos'-so",
+      "translated": true
+    },
+    "G2846": {
+      "definitions_cz": "ložnice",
+      "translit": "koitṓn",
+      "pronunciation": "koy-tone'",
+      "translated": true
+    },
+    "G2847": {
+      "definitions_cz": "karmínové barvy",
+      "translit": "kókkinos",
+      "pronunciation": "kok'-kee-nos",
+      "translated": true
+    },
+    "G2848": {
+      "definitions_cz": "jádro semene",
+      "translit": "kókkos",
+      "pronunciation": "kok'-kos",
+      "translated": true
+    },
+    "G2849": {
+      "definitions_cz": "správně, omezit, t. j. (obrazně) k\n trestat (nebo vyhrazovat za způsobení)",
+      "translit": "kolázō",
+      "pronunciation": "kol-ad'-zo",
+      "translated": true
+    },
+    "G2850": {
+      "definitions_cz": "lichocení",
+      "translit": "kolakeía",
+      "pronunciation": "kol-ak-i'-ah",
+      "translated": true
+    },
+    "G2851": {
+      "definitions_cz": "trestním způsobení",
+      "translit": "kólasis",
+      "pronunciation": "kol'-as-is",
+      "translated": true
+    },
+    "G2852": {
+      "definitions_cz": "rapovat pěstí",
+      "translit": "kolaphízō",
+      "pronunciation": "kol-af-id'-zo",
+      "translated": true
+    },
+    "G2853": {
+      "definitions_cz": "lepit, tedy (pasivně nebo reflexivně) lepit\n (obrazně)",
+      "translit": "kolláō",
+      "pronunciation": "kol-lah'-o",
+      "translated": true
+    },
+    "G2854": {
+      "definitions_cz": "prob podobný\n základ [ŘECKO:2853]",
+      "translit": "kolloúrion",
+      "pronunciation": "kol-loo'-ree-on",
+      "translated": true
+    },
+    "G2855": {
+      "definitions_cz": "pravděpodobně podobný\n [ŘECKA:2854]",
+      "translit": "kollybistḗs",
+      "pronunciation": "kol-loo-bis-tace'",
+      "translated": true
+    },
+    "G2856": {
+      "definitions_cz": "dokovat, tj. (obrazně)\n zkrátit",
+      "translit": "kolobóō",
+      "pronunciation": "kol-ob-o'-o",
+      "translated": true
+    },
+    "G2857": {
+      "definitions_cz": "Colossæ, místo\n v Malé Asii",
+      "translit": "Kolossaí",
+      "pronunciation": "kol-os-sah'-ee",
+      "translated": true
+    },
+    "G2858": {
+      "definitions_cz": "Colossæan, (tj. obyvatel Colossæ",
+      "translit": "Kolossaeús",
+      "pronunciation": "kol-os-sayoos'",
+      "translated": true
+    },
+    "G2859": {
+      "definitions_cz": "prsa; analogicky zátoka",
+      "translit": "kólpos",
+      "pronunciation": "kol'-pos",
+      "translated": true
+    },
+    "G2860": {
+      "definitions_cz": "ponořit se do vody",
+      "translit": "kolymbáō",
+      "pronunciation": "kol-oom-bah'-o",
+      "translated": true
+    },
+    "G2861": {
+      "definitions_cz": "potápěčské místo, tj. rybník ke koupání (nebo plavání)",
+      "translit": "kolymbḗthra",
+      "pronunciation": "kol-oom-bay'-thrah",
+      "translated": true
+    },
+    "G2862": {
+      "definitions_cz": "římská „kolonie“ pro veterány",
+      "translit": "kolōnía",
+      "pronunciation": "kol-o-nee'-ah",
+      "translated": true
+    },
+    "G2863": {
+      "definitions_cz": "nosit kadeře vlasů",
+      "translit": "komáō",
+      "pronunciation": "kom-ah'-o",
+      "translated": true
+    },
+    "G2864": {
+      "definitions_cz": "vlasy na hlavě (zámky, jako\n okrasné, a tím se liší od [ŘECKO:2359]",
+      "translit": "kómē",
+      "pronunciation": "kom'-ay",
+      "translated": true
+    },
+    "G2865": {
+      "definitions_cz": "správně, do\n zajistit, t. j. (implicitně) odnést (jakoby z újmy;\n získání genitivu)",
+      "translit": "komízō",
+      "pronunciation": "kom-id'-zo",
+      "translated": true
+    },
+    "G2866": {
+      "definitions_cz": "přeneseně rekonvalescenční",
+      "translit": "kompsóteron",
+      "pronunciation": "komp-sot'-er-on",
+      "translated": true
+    },
+    "G2867": {
+      "definitions_cz": "analogicky vápno); vybílit",
+      "translit": "koniáō",
+      "pronunciation": "kon-ee-ah'-o",
+      "translated": true
+    },
+    "G2868": {
+      "definitions_cz": "práškovitost (jako foukaná\n o)",
+      "translit": "koniortós",
+      "pronunciation": "kon-ee-or-tos'",
+      "translated": true
+    },
+    "G2869": {
+      "definitions_cz": "unavit, tedy (obrazně) relaxovat",
+      "translit": "kopázō",
+      "pronunciation": "kop-ad'-zo",
+      "translated": true
+    },
+    "G2870": {
+      "definitions_cz": "truchlení (správně, bitím do prsou)",
+      "translit": "kopetós",
+      "pronunciation": "kop-et-os'",
+      "translated": true
+    },
+    "G2871": {
+      "definitions_cz": "řezání, tedy masakr",
+      "translit": "kopḗ",
+      "pronunciation": "kop-ay'",
+      "translated": true
+    },
+    "G2872": {
+      "definitions_cz": "cítit únavu; implicitně pracovat\n těžké",
+      "translit": "kopiáō",
+      "pronunciation": "kop-ee-ah'-o",
+      "translated": true
+    },
+    "G2873": {
+      "definitions_cz": "řez, tj. (analogicky) dřina (jako snížení síly),\n doslova nebo obrazně; implicitně, bolesti",
+      "translit": "kópos",
+      "pronunciation": "kop'-os",
+      "translated": true
+    },
+    "G2874": {
+      "definitions_cz": "možná podobný [ŘECKO:2875]",
+      "translit": "kopría",
+      "pronunciation": "kop-ree'-ah",
+      "translated": true
+    },
+    "G2875": {
+      "definitions_cz": "\"sekat\"; speciálně tlouci do prsou\n smutek",
+      "translit": "kóptō",
+      "pronunciation": "kop'-to",
+      "translated": true
+    },
+    "G2876": {
+      "definitions_cz": "vrána (ze své žravosti)",
+      "translit": "kórax",
+      "pronunciation": "kor'-ax",
+      "translated": true
+    },
+    "G2877": {
+      "definitions_cz": "a (trochu)\n dívka",
+      "translit": "korásion",
+      "pronunciation": "kor-as'-ee-on",
+      "translated": true
+    },
+    "G2878": {
+      "definitions_cz": "votivní nabídka\n a nabídka; zasvěcený dar (do chrámového fondu); podle\n prodloužení (poslední termín) samotná státní pokladna, tj. místnost, kde\n schránky na příspěvky stály",
+      "translit": "korbân",
+      "pronunciation": "kor-ban'",
+      "translated": true
+    },
+    "G2879": {
+      "definitions_cz": "Core (t. j. Korach), Israelita",
+      "translit": "Koré",
+      "pronunciation": "kor-eh'",
+      "translated": true
+    },
+    "G2880": {
+      "definitions_cz": "nacpat, tj. nasytit nebo nasytit",
+      "translit": "korénnymi",
+      "pronunciation": "kor-en'-noo-mee",
+      "translated": true
+    },
+    "G2881": {
+      "definitions_cz": "Korinťan, t. j. obyvatel Korintu",
+      "translit": "Korínthios",
+      "pronunciation": "kor-in'-thee-os",
+      "translated": true
+    },
+    "G2882": {
+      "definitions_cz": "Korint, město v Řecku",
+      "translit": "Kórinthos",
+      "pronunciation": "kor'-in-thos",
+      "translated": true
+    },
+    "G2883": {
+      "definitions_cz": "Cornelius, Říman",
+      "translit": "Kornḗlios",
+      "pronunciation": "kor-nay'-lee-os",
+      "translated": true
+    },
+    "G2884": {
+      "definitions_cz": "a cor, tedy konkrétní opatření",
+      "translit": "kóros",
+      "pronunciation": "kor'-os",
+      "translated": true
+    },
+    "G2885": {
+      "definitions_cz": "dát do správného pořádku, tj. ozdobit (doslova popř\n přeneseně); speciálně šňupat (knot)",
+      "translit": "kosméō",
+      "pronunciation": "kos-meh'-o",
+      "translated": true
+    },
+    "G2886": {
+      "definitions_cz": "terrene („kosmický“), doslova\n (všední) nebo přeneseně (zkažený)",
+      "translit": "kosmikós",
+      "pronunciation": "kos-mee-kos'",
+      "translated": true
+    },
+    "G2887": {
+      "definitions_cz": "spořádaný, t. j. slušivý",
+      "translit": "kósmios",
+      "pronunciation": "kos'-mee-os",
+      "translated": true
+    },
+    "G2888": {
+      "definitions_cz": "světovládce, přídomek Satana",
+      "translit": "kosmokrátōr",
+      "pronunciation": "kos-mok-fat'-ore",
+      "translated": true
+    },
+    "G2889": {
+      "definitions_cz": "řádné uspořádání, t. j. dekorace;\n implicitně svět (v širokém nebo úzkém smyslu, včetně jeho\n obyvatelé, doslova nebo přeneseně (morálně))",
+      "translit": "kósmos",
+      "pronunciation": "kos'-mos",
+      "translated": true
+    },
+    "G2890": {
+      "definitions_cz": "Quartus, křesťan",
+      "translit": "Koúartos",
+      "pronunciation": "koo'-ar-tos",
+      "translated": true
+    },
+    "G2891": {
+      "definitions_cz": "cumi (tj. stoupat!)",
+      "translit": "koûmi",
+      "pronunciation": "koo'-mee",
+      "translated": true
+    },
+    "G2892": {
+      "definitions_cz": "„custody“, tedy římská hlídka",
+      "translit": "koustōdía",
+      "pronunciation": "koos-to-dee'-ah",
+      "translated": true
+    },
+    "G2893": {
+      "definitions_cz": "vyložit",
+      "translit": "kouphízō",
+      "pronunciation": "koo-fid'-zo",
+      "translated": true
+    },
+    "G2894": {
+      "definitions_cz": "(malý) košík",
+      "translit": "kóphinos",
+      "pronunciation": "kof'-ee-nos",
+      "translated": true
+    },
+    "G2895": {
+      "definitions_cz": "matrace",
+      "translit": "krábbatos",
+      "pronunciation": "krab'-bat-os",
+      "translated": true
+    },
+    "G2896": {
+      "definitions_cz": "správně, „krákat“ (jako havran) nebo křičet, tzn.\n (genitivní pád) volat nahlas (ječet, zvolat, naříkat)",
+      "translit": "krázō",
+      "pronunciation": "krad'-zo",
+      "translated": true
+    },
+    "G2897": {
+      "definitions_cz": "správně, bolest hlavy (jako záchvat\n bolest) z opilosti, tj. (implicitně) zhýralost (analogicky a\n nadbytek)",
+      "translit": "kraipálē",
+      "pronunciation": "krahee-pal'-ay",
+      "translated": true
+    },
+    "G2898": {
+      "definitions_cz": "lebka\n (\"lebka\")",
+      "translit": "kraníon",
+      "pronunciation": "kran-ee'-on",
+      "translated": true
+    },
+    "G2899": {
+      "definitions_cz": "okraj, tj. (speciálně), třásně nebo\n střapec",
+      "translit": "kráspedon",
+      "pronunciation": "kras'-ped-on",
+      "translated": true
+    },
+    "G2900": {
+      "definitions_cz": "silný",
+      "translit": "krataiós",
+      "pronunciation": "krat-ah-yos'",
+      "translated": true
+    },
+    "G2901": {
+      "definitions_cz": "zmocnit, tj. (pasivně) zvýšit elán",
+      "translit": "krataióō",
+      "pronunciation": "krat-ah-yo'-o",
+      "translated": true
+    },
+    "G2902": {
+      "definitions_cz": "využít sílu, tj. uchopit nebo udržet (doslova popř\n přeneseně)",
+      "translit": "kratéō",
+      "pronunciation": "krat-eh'-o",
+      "translated": true
+    },
+    "G2903": {
+      "definitions_cz": "nejsilnější, t. j. (v důstojnosti) velmi\n čestný",
+      "translit": "krátistos",
+      "pronunciation": "krat'-is-tos",
+      "translated": true
+    },
+    "G2904": {
+      "definitions_cz": "ráznost (\"velká\") (doslova nebo\n přeneseně)",
+      "translit": "krátos",
+      "pronunciation": "krat'-os",
+      "translated": true
+    },
+    "G2905": {
+      "definitions_cz": "křičet",
+      "translit": "kraugázō",
+      "pronunciation": "krow-gad'-zo",
+      "translated": true
+    },
+    "G2906": {
+      "definitions_cz": "výkřik (v oznámení, vřava nebo smutek)",
+      "translit": "kraugḗ",
+      "pronunciation": "krow-gay'",
+      "translated": true
+    },
+    "G2907": {
+      "definitions_cz": "(řeznické) maso",
+      "translit": "kréas",
+      "pronunciation": "kreh'-as",
+      "translated": true
+    },
+    "G2908": {
+      "definitions_cz": "(jako podstatné jméno) lepší, t. j. větší\n výhoda",
+      "translit": "kreîsson",
+      "pronunciation": "krice'-son",
+      "translated": true
+    },
+    "G2909": {
+      "definitions_cz": "silnější, tj. (obrazně)\n lepší, t. j. ušlechtilejší",
+      "translit": "kreíttōn",
+      "pronunciation": "krite'-tohn",
+      "translated": true
+    },
+    "G2910": {
+      "definitions_cz": "pověsit",
+      "translit": "kremánnymi",
+      "pronunciation": "krem-an'-noo-mee",
+      "translated": true
+    },
+    "G2911": {
+      "definitions_cz": "převislý, t. j. sráz",
+      "translit": "krēmnós",
+      "pronunciation": "krame-nos'",
+      "translated": true
+    },
+    "G2912": {
+      "definitions_cz": "Kréťan, t. j. obyvatel Kréty",
+      "translit": "Krḗs",
+      "pronunciation": "krace",
+      "translated": true
+    },
+    "G2913": {
+      "definitions_cz": "rostoucí; Cresces (tj. Crescens), a\n Christian",
+      "translit": "Krḗskēs",
+      "pronunciation": "krace'-kace",
+      "translated": true
+    },
+    "G2914": {
+      "definitions_cz": "Kréta, ostrov v\n Středomoří",
+      "translit": "Krḗtē",
+      "pronunciation": "kray'-tay",
+      "translated": true
+    },
+    "G2915": {
+      "definitions_cz": "ječmen",
+      "translit": "krithḗ",
+      "pronunciation": "kree-thay'",
+      "translated": true
+    },
+    "G2916": {
+      "definitions_cz": "sestávající z ječmene",
+      "translit": "kríthinos",
+      "pronunciation": "kree'-thee-nos",
+      "translated": true
+    },
+    "G2917": {
+      "definitions_cz": "rozhodnutí (funkce nebo účinek, pro nebo proti\n (\"zločin\"))",
+      "translit": "kríma",
+      "pronunciation": "kree'-mah",
+      "translated": true
+    },
+    "G2918": {
+      "definitions_cz": "lilie",
+      "translit": "krínon",
+      "pronunciation": "kree'-non",
+      "translated": true
+    },
+    "G2919": {
+      "definitions_cz": "podle\n implikace, zkoušet, odsuzovat, trestat",
+      "translit": "krínō",
+      "pronunciation": "kree'-no",
+      "translated": true
+    },
+    "G2920": {
+      "definitions_cz": "rozhodnutí (subjektivně nebo objektivně, pro nebo proti); podle\n prodloužení, tribunál; implicitně spravedlnost (zejména božská\n zákon)",
+      "translit": "krísis",
+      "pronunciation": "kree'-sis",
+      "translated": true
+    },
+    "G2921": {
+      "definitions_cz": "\"křupavý\"; Crispus, Korinťan",
+      "translit": "Kríspos",
+      "pronunciation": "kris'-pos",
+      "translated": true
+    },
+    "G2922": {
+      "definitions_cz": "pravidlo posuzování\n (\"kritérium\"), tj. (implicitně) tribunál",
+      "translit": "kritḗrion",
+      "pronunciation": "kree-tay'-ree-on",
+      "translated": true
+    },
+    "G2923": {
+      "definitions_cz": "soudce (genitivní případ nebo speciálně)",
+      "translit": "kritḗs",
+      "pronunciation": "kree-tace'",
+      "translated": true
+    },
+    "G2924": {
+      "definitions_cz": "rozhodné („kritické“), tedy diskriminační",
+      "translit": "kritikós",
+      "pronunciation": "krit-ee-kos'",
+      "translated": true
+    },
+    "G2925": {
+      "definitions_cz": "rapovat",
+      "translit": "kroúō",
+      "pronunciation": "kroo'-o",
+      "translated": true
+    },
+    "G2926": {
+      "definitions_cz": "skryté místo, tj. sklep (\"krypta\")",
+      "translit": "krýptē",
+      "pronunciation": "kroop-tay'",
+      "translated": true
+    },
+    "G2927": {
+      "definitions_cz": "skrytý, t. j. soukromý",
+      "translit": "kryptós",
+      "pronunciation": "kroop-tos'",
+      "translated": true
+    },
+    "G2928": {
+      "definitions_cz": "skrýt (správně, zakrytím)",
+      "translit": "krýptō",
+      "pronunciation": "kroop'-to",
+      "translated": true
+    },
+    "G2929": {
+      "definitions_cz": "dělat (t. j. nepřechodně, podobat se) ledu\n (\"krystalizovat\")",
+      "translit": "krystallízō",
+      "pronunciation": "kroos-tal-lid'-zo",
+      "translated": true
+    },
+    "G2930": {
+      "definitions_cz": "led, tedy (analogicky) skála\n \"krystal\"",
+      "translit": "krýstallos",
+      "pronunciation": "kroos'-tal-los",
+      "translated": true
+    },
+    "G2931": {
+      "definitions_cz": "soukromě",
+      "translit": "kryphē",
+      "pronunciation": "kroo-fay'",
+      "translated": true
+    },
+    "G2932": {
+      "definitions_cz": "získat, tj. získat (jakýmikoli prostředky; vlastnit)",
+      "translit": "ktáomai",
+      "pronunciation": "ktah'-om-ahee",
+      "translated": true
+    },
+    "G2933": {
+      "definitions_cz": "nabytí, tedy pozůstalost",
+      "translit": "ktēma",
+      "pronunciation": "ktay'-mah",
+      "translated": true
+    },
+    "G2934": {
+      "definitions_cz": "majetek, tedy (zejména) domácí zvíře",
+      "translit": "ktēnos",
+      "pronunciation": "ktay'-nos",
+      "translated": true
+    },
+    "G2935": {
+      "definitions_cz": "vlastník",
+      "translit": "ktḗtōr",
+      "pronunciation": "ktay'-tore",
+      "translated": true
+    },
+    "G2936": {
+      "definitions_cz": "vyrobit, tj. nalézt (původně formu)",
+      "translit": "ktízō",
+      "pronunciation": "ktid'-zo",
+      "translated": true
+    },
+    "G2937": {
+      "definitions_cz": "původní formace (správně akt; implicitně to\n věc, doslova nebo obrazně)",
+      "translit": "ktísis",
+      "pronunciation": "ktis'-is",
+      "translated": true
+    },
+    "G2938": {
+      "definitions_cz": "původní útvar (konkrétně), tj. produkt (vytvořený\n věc)",
+      "translit": "ktísma",
+      "pronunciation": "ktis'-mah",
+      "translated": true
+    },
+    "G2939": {
+      "definitions_cz": "zakladatel, tj. Bůh (jako autor všech věcí)",
+      "translit": "ktístēs",
+      "pronunciation": "ktis-tace'",
+      "translated": true
+    },
+    "G2940": {
+      "definitions_cz": "hazardní hry, tzn.\n (obrazně) umělost nebo podvod",
+      "translit": "kybeía",
+      "pronunciation": "koo-bi'-ah",
+      "translated": true
+    },
+    "G2941": {
+      "definitions_cz": "lodivodství, tzn.\n (obrazně) ředitelství (v církvi)",
+      "translit": "kybérnēsis",
+      "pronunciation": "koo-ber'-nay-sis",
+      "translated": true
+    },
+    "G2942": {
+      "definitions_cz": "kormidelník, tj. (implicitně)\n kapitán",
+      "translit": "kybernḗtēs",
+      "pronunciation": "koo-ber-nay'-tace",
+      "translated": true
+    },
+    "G2943": {
+      "definitions_cz": "z kruhu, tedy všech\n kolem",
+      "translit": "kyklóthen",
+      "pronunciation": "koo-kloth'-en",
+      "translated": true
+    },
+    "G2944": {
+      "definitions_cz": "obklíčit, t. j. obklopit",
+      "translit": "kyklóō",
+      "pronunciation": "koo-klo'-o",
+      "translated": true
+    },
+    "G2945": {
+      "definitions_cz": "podobný [ŘECKO:2947][ŘECKO:1722]",
+      "translit": "kýklōi",
+      "pronunciation": "koo'-klo",
+      "translated": true
+    },
+    "G2946": {
+      "definitions_cz": "valování (efekt válení), t. j. špína",
+      "translit": "kýlisma",
+      "pronunciation": "koo'-lis-mah",
+      "translated": true
+    },
+    "G2947": {
+      "definitions_cz": "porovnejte [ŘECKO:2945][ŘECKO:1507]",
+      "translit": "kylióō",
+      "pronunciation": "koo-lee-o'-o",
+      "translated": true
+    },
+    "G2948": {
+      "definitions_cz": "kolébat se, t. j. zmrzačený (zmrzačený, v nohách\n nebo ruce)",
+      "translit": "kyllós",
+      "pronunciation": "kool-los'",
+      "translated": true
+    },
+    "G2949": {
+      "definitions_cz": "vlna (jako\n prasknutí nebo převrácení)",
+      "translit": "kŷma",
+      "pronunciation": "koo'-mah",
+      "translated": true
+    },
+    "G2950": {
+      "definitions_cz": "\"činel\" (jako\n dutý)",
+      "translit": "kýmbalon",
+      "pronunciation": "koom'-bal-on",
+      "translated": true
+    },
+    "G2951": {
+      "definitions_cz": "kopr nebo fenykl (\"kmín\")",
+      "translit": "kýminon",
+      "pronunciation": "koo'-min-on",
+      "translated": true
+    },
+    "G2952": {
+      "definitions_cz": "štěně",
+      "translit": "kynárion",
+      "pronunciation": "koo-nar'-ee-on",
+      "translated": true
+    },
+    "G2953": {
+      "definitions_cz": "Kypřan (Kyper), t. j. obyvatel Kypru",
+      "translit": "Kýprios",
+      "pronunciation": "koo'-pree-os",
+      "translated": true
+    },
+    "G2954": {
+      "definitions_cz": "Kypr, ostrov ve Středozemním moři",
+      "translit": "Kýpros",
+      "pronunciation": "koo'-pros",
+      "translated": true
+    },
+    "G2955": {
+      "definitions_cz": "předklonit se",
+      "translit": "kýptō",
+      "pronunciation": "koop'-to",
+      "translated": true
+    },
+    "G2956": {
+      "definitions_cz": "tj. Cyrenæan, tj. obyvatel Kyrény",
+      "translit": "Kyrēnaîos",
+      "pronunciation": "koo-ray-nah'-yos",
+      "translated": true
+    },
+    "G2957": {
+      "definitions_cz": "Kyréna, oblast Afriky",
+      "translit": "Kyrḗnē",
+      "pronunciation": "koo-ray'-nay",
+      "translated": true
+    },
+    "G2958": {
+      "definitions_cz": "Cyrenius (t. j. Quirinus), Říman",
+      "translit": "Kyrḗnios",
+      "pronunciation": "koo-ray'-nee-os",
+      "translated": true
+    },
+    "G2959": {
+      "definitions_cz": "Cyria, křesťanka",
+      "translit": "Kyría",
+      "pronunciation": "koo-ree'-ah",
+      "translated": true
+    },
+    "G2960": {
+      "definitions_cz": "patřit Pánu (Jehovovi nebo Ježíši)",
+      "translit": "kyriakós",
+      "pronunciation": "koo-ree-ak-os'",
+      "translated": true
+    },
+    "G2961": {
+      "definitions_cz": "vládnout",
+      "translit": "kyrieúō",
+      "pronunciation": "ko-ree-yoo'-o",
+      "translated": true
+    },
+    "G2962": {
+      "definitions_cz": "nejvyšší v autoritě, tj. (jako podstatné jméno)\n ovladač; implicitně, Mistr (jako uctivý titul)",
+      "translit": "kýrios",
+      "pronunciation": "koo'-ree-os",
+      "translated": true
+    },
+    "G2963": {
+      "definitions_cz": "mistrovství, tj. (konkrétně a společně)\n vládců",
+      "translit": "kyriótēs",
+      "pronunciation": "koo-ree-ot'-ace",
+      "translated": true
+    },
+    "G2964": {
+      "definitions_cz": "učinit směrodatným, tj. ratifikovat",
+      "translit": "kyróō",
+      "pronunciation": "koo-ro'-o",
+      "translated": true
+    },
+    "G2965": {
+      "definitions_cz": "pes (\"ohař\") (doslova nebo přeneseně)",
+      "translit": "kýōn",
+      "pronunciation": "koo'-ohn",
+      "translated": true
+    },
+    "G2966": {
+      "definitions_cz": "úd těla (jakoby uťatý)",
+      "translit": "kōlon",
+      "pronunciation": "ko'-lon",
+      "translated": true
+    },
+    "G2967": {
+      "definitions_cz": "zastavit, tj. zabránit (slovem nebo\n jednat)",
+      "translit": "kōlýō",
+      "pronunciation": "ko-loo'-o",
+      "translated": true
+    },
+    "G2968": {
+      "definitions_cz": "vesnička (jakoby položená)",
+      "translit": "kṓmē",
+      "pronunciation": "ko'-may",
+      "translated": true
+    },
+    "G2969": {
+      "definitions_cz": "neopevněné město",
+      "translit": "kōmópolis",
+      "pronunciation": "ko-mop'-ol-is",
+      "translated": true
+    },
+    "G2970": {
+      "definitions_cz": "kolotoč (jako by se uvolnil)",
+      "translit": "kōmos",
+      "pronunciation": "ko'-mos",
+      "translated": true
+    },
+    "G2971": {
+      "definitions_cz": "komár (od jeho bodavého proboscis)",
+      "translit": "kṓnōps",
+      "pronunciation": "ko'-nopes",
+      "translated": true
+    },
+    "G2972": {
+      "definitions_cz": "Cos, ostrov ve Středozemním moři",
+      "translit": "Kṓs",
+      "pronunciation": "koce",
+      "translated": true
+    },
+    "G2973": {
+      "definitions_cz": "Cosam (tj. Kosam) an\n Izraelita",
+      "translit": "Kōsám",
+      "pronunciation": "ko-sam'",
+      "translated": true
+    },
+    "G2974": {
+      "definitions_cz": "otupený, t. j. (obrazně) sluchu (hluchého) nebo řeči\n (hloupý)",
+      "translit": "kōphós",
+      "pronunciation": "ko-fos'",
+      "translated": true
+    },
+    "G2975": {
+      "definitions_cz": "losovat, tj. určit (implicitně přijímat)\n především losem",
+      "translit": "lanchánō",
+      "pronunciation": "lang-khan'-o",
+      "translated": true
+    },
+    "G2976": {
+      "definitions_cz": "Lazarus (t. j. Elazar), jméno\n dva Izraelité (jeden imaginární)",
+      "translit": "Lázaros",
+      "pronunciation": "lad'-zar-os",
+      "translated": true
+    },
+    "G2977": {
+      "definitions_cz": "soukromě",
+      "translit": "láthra",
+      "pronunciation": "lath'-rah",
+      "translated": true
+    },
+    "G2978": {
+      "definitions_cz": "vichřice (bouře)",
+      "translit": "laîlaps",
+      "pronunciation": "lah'-ee-laps",
+      "translated": true
+    },
+    "G2979": {
+      "definitions_cz": "rekalcitovat",
+      "translit": "laktízō",
+      "pronunciation": "lak-tid'-zo",
+      "translated": true
+    },
+    "G2980": {
+      "definitions_cz": "mluvit, t. j. vyslovit\n slova",
+      "translit": "laléō",
+      "pronunciation": "lal-eh'-o",
+      "translated": true
+    },
+    "G2981": {
+      "definitions_cz": "mluvit",
+      "translit": "laliá",
+      "pronunciation": "lal-ee-ah'",
+      "translated": true
+    },
+    "G2982": {
+      "definitions_cz": "lama (tedy proč)",
+      "translit": "lamá",
+      "pronunciation": "lam-ah'",
+      "translated": true
+    },
+    "G2983": {
+      "definitions_cz": "zatímco\n [ŘECtina:138]",
+      "translit": "lambánō",
+      "pronunciation": "lam-ban'-o",
+      "translated": true
+    },
+    "G2984": {
+      "definitions_cz": "Lámech (t. j. Lemek), patriarcha",
+      "translit": "Lámech",
+      "pronunciation": "lam'-ekh",
+      "translated": true
+    },
+    "G2985": {
+      "definitions_cz": "\"lampa\" nebo flambeau",
+      "translit": "lampás",
+      "pronunciation": "lam-pas'",
+      "translated": true
+    },
+    "G2986": {
+      "definitions_cz": "zářivý; analogicky průzračný; přeneseně,\n velkolepý nebo přepychový (na vzhled)",
+      "translit": "lamprós",
+      "pronunciation": "lam-pros'",
+      "translated": true
+    },
+    "G2987": {
+      "definitions_cz": "brilance",
+      "translit": "lamprótēs",
+      "pronunciation": "lam-prot'-ace",
+      "translated": true
+    },
+    "G2988": {
+      "definitions_cz": "brilantně, tj. obrazně,\n luxusně",
+      "translit": "lamprōs",
+      "pronunciation": "lam-proce'",
+      "translated": true
+    },
+    "G2989": {
+      "definitions_cz": "vyzařovat, tj. vyzařovat brilantnost (doslova nebo\n přeneseně)",
+      "translit": "lámpō",
+      "pronunciation": "lam'-po",
+      "translated": true
+    },
+    "G2990": {
+      "definitions_cz": "ležet skrytě (doslova nebo přeneseně); často používané\n adverbiálně, nevědomky",
+      "translit": "lanthánō",
+      "pronunciation": "lan-than'-o",
+      "translated": true
+    },
+    "G2991": {
+      "definitions_cz": "skála těžená",
+      "translit": "laxeutós",
+      "pronunciation": "lax-yoo-tos'",
+      "translated": true
+    },
+    "G2992": {
+      "definitions_cz": "lid (obecně; tím se liší od\n [ŘECKA:1218]",
+      "translit": "laós",
+      "pronunciation": "lah-os'",
+      "translated": true
+    },
+    "G2993": {
+      "definitions_cz": "Laodicia, místo v Asii\n Menší",
+      "translit": "Laodíkeia",
+      "pronunciation": "lah-od-ik'-i-ah",
+      "translated": true
+    },
+    "G2994": {
+      "definitions_cz": "Laodicejec, tedy obyvatel Laodicie",
+      "translit": "Laodikeús",
+      "pronunciation": "lah-od-ik-yooce'",
+      "translated": true
     }
   }
 }
