@@ -16251,6 +16251,906 @@
       "translit": "désmios",
       "pronunciation": "des'-mee-os",
       "translated": true
+    },
+    "G1199": {
+      "definitions_cz": "pásek, tj. vaz (z\n tělo) nebo okov (vězně); přeneseně, překážka resp\n postižení",
+      "translit": "desmón",
+      "pronunciation": "des-mon'",
+      "translated": true
+    },
+    "G1200": {
+      "definitions_cz": "žalářník (jako strážce vězňů)",
+      "translit": "desmophýlax",
+      "pronunciation": "des-mof-oo'-lax",
+      "translated": true
+    },
+    "G1201": {
+      "definitions_cz": "místo otroctví,\n tj. sklepení",
+      "translit": "desmōtḗrion",
+      "pronunciation": "des-mo-tay'-ree-on",
+      "translated": true
+    },
+    "G1202": {
+      "definitions_cz": "(pasivně) zajatcem",
+      "translit": "desmṓtēs",
+      "pronunciation": "des-mo'-tace",
+      "translated": true
+    },
+    "G1203": {
+      "definitions_cz": "absolutní vládce\n (\"despota\")",
+      "translit": "despótēs",
+      "pronunciation": "des-pot'-ace",
+      "translated": true
+    },
+    "G1204": {
+      "definitions_cz": "zde; zde používán také rozkazovací způsob!; a z\n čas, dosud",
+      "translit": "deûro",
+      "pronunciation": "dyoo'-ro",
+      "translated": true
+    },
+    "G1205": {
+      "definitions_cz": "pojď sem!",
+      "translit": "deûte",
+      "pronunciation": "dyoo'-teh",
+      "translated": true
+    },
+    "G1206": {
+      "definitions_cz": "sekundární, tedy (speciálně) druhý den",
+      "translit": "deuteraîos",
+      "pronunciation": "dyoo-ter-ah'-yos",
+      "translated": true
+    },
+    "G1207": {
+      "definitions_cz": "druhý-první, tedy (zvláště) označení\n sabat bezprostředně po velikonočním týdnu (je to druhý po\n Velikonoční den a první ze sedmi sobot, které zasahovaly předtím\n letnice)",
+      "translit": "deuteróprōtos",
+      "pronunciation": "dyoo-ter-op'-ro-tos",
+      "translated": true
+    },
+    "G1208": {
+      "definitions_cz": "(ordinální) druhý (v čase, místě nebo pořadí;\n také příslovce)",
+      "translit": "deúteros",
+      "pronunciation": "dyoo'-ter-os",
+      "translated": true
+    },
+    "G1209": {
+      "definitions_cz": "přijímat (v různých aplikacích,\n doslova nebo obrazně)",
+      "translit": "déchomai",
+      "pronunciation": "dekh'-om-ahee",
+      "translated": true
+    },
+    "G1210": {
+      "definitions_cz": "vázat (v různých aplikacích doslova nebo\n přeneseně)",
+      "translit": "déō",
+      "pronunciation": "deh'-o",
+      "translated": true
+    },
+    "G1211": {
+      "definitions_cz": "částice důrazu nebo explicitnosti; teď\n pak atd.",
+      "translit": "dḗ",
+      "pronunciation": "day",
+      "translated": true
+    },
+    "G1212": {
+      "definitions_cz": "jasný",
+      "translit": "dēlos",
+      "pronunciation": "day'-los",
+      "translated": true
+    },
+    "G1213": {
+      "definitions_cz": "objasnit (slovy)",
+      "translit": "dēlóō",
+      "pronunciation": "day-lo'-o",
+      "translated": true
+    },
+    "G1214": {
+      "definitions_cz": "Demas, křesťan",
+      "translit": "Dēmâs",
+      "pronunciation": "day-mas'",
+      "translated": true
+    },
+    "G1215": {
+      "definitions_cz": "být sběračem lidí, tj\n vystoupit na veřejném shromáždění",
+      "translit": "dēmēgoréō",
+      "pronunciation": "day-may-gor-eh'-o",
+      "translated": true
+    },
+    "G1216": {
+      "definitions_cz": "Demetrius, jméno efezského a a\n Christian",
+      "translit": "Dēmḗtrios",
+      "pronunciation": "day-may'-tree-os",
+      "translated": true
+    },
+    "G1217": {
+      "definitions_cz": "dělník pro lid, tj. mechanik (mluveno\n Stvořitel)",
+      "translit": "dēmiourgós",
+      "pronunciation": "day-me-oor-gos'",
+      "translated": true
+    },
+    "G1218": {
+      "definitions_cz": "veřejnost (spojená společensky)",
+      "translit": "dēmos",
+      "pronunciation": "day'-mos",
+      "translated": true
+    },
+    "G1219": {
+      "definitions_cz": "veřejnost; (ženský pád jednotného čísla jako příslovce) v\n veřejné",
+      "translit": "dēmósios",
+      "pronunciation": "day-mos'ee-os",
+      "translated": true
+    },
+    "G1220": {
+      "definitions_cz": "denár (nebo deset oslů)",
+      "translit": "dēnárion",
+      "pronunciation": "day-nar'-ee-on",
+      "translated": true
+    },
+    "G1221": {
+      "definitions_cz": "částice zobecnění; skutečně, v jakékoli\n čas",
+      "translit": "dḗpote",
+      "pronunciation": "day'-pot-eh",
+      "translated": true
+    },
+    "G1222": {
+      "definitions_cz": "částice aseverace; skutečně\n bezpochyby",
+      "translit": "dḗpou",
+      "pronunciation": "day'-poo",
+      "translated": true
+    },
+    "G1223": {
+      "definitions_cz": "skrz (ve velmi\n široké aplikace, místní, kauzální nebo příležitostné)",
+      "translit": "diá",
+      "pronunciation": "dee-ah'",
+      "translated": true
+    },
+    "G1224": {
+      "definitions_cz": "přejít",
+      "translit": "diabaínō",
+      "pronunciation": "dee-ab-ah'-ee-no",
+      "translated": true
+    },
+    "G1225": {
+      "definitions_cz": "(obrazně) tradovat",
+      "translit": "diabállō",
+      "pronunciation": "dee-ab-al'-lo",
+      "translated": true
+    },
+    "G1226": {
+      "definitions_cz": "důkladně potvrdit (tím\n slova), tj. důrazně",
+      "translit": "diabebaióomai",
+      "pronunciation": "dee-ab-eb-ahee-o'-om-ahee",
+      "translated": true
+    },
+    "G1227": {
+      "definitions_cz": "prohlédnout, tj. obnovit plné vidění",
+      "translit": "diablépō",
+      "pronunciation": "dee-ab-lep'-o",
+      "translated": true
+    },
+    "G1228": {
+      "definitions_cz": "obchodník; speciálně Satan (srovnej [HEBREJSKO:07854]",
+      "translit": "diábolos",
+      "pronunciation": "dee-ab'-ol-os",
+      "translated": true
+    },
+    "G1229": {
+      "definitions_cz": "důkladně ohlašovat",
+      "translit": "diangéllō",
+      "pronunciation": "de-ang-gel'-lo",
+      "translated": true
+    },
+    "G1230": {
+      "definitions_cz": "mezitím uplynout",
+      "translit": "diagínomai",
+      "pronunciation": "dee-ag-in'-om-ahee",
+      "translated": true
+    },
+    "G1231": {
+      "definitions_cz": "důkladně poznat, t. j. zjistit\n přesně",
+      "translit": "diaginṓskō",
+      "pronunciation": "dee-ag-in-o'-sko",
+      "translated": true
+    },
+    "G1232": {
+      "definitions_cz": "říct do zahraničí",
+      "translit": "diagnōrízō",
+      "pronunciation": "dee-ag-no-rid'-zo",
+      "translated": true
+    },
+    "G1233": {
+      "definitions_cz": "(magisterské) vyšetření (\"diagnóza\")",
+      "translit": "diágnōsis",
+      "pronunciation": "dee-ag'-no-sis",
+      "translated": true
+    },
+    "G1234": {
+      "definitions_cz": "stěžovat si v celém davu",
+      "translit": "diagongýzō",
+      "pronunciation": "dee-ag-ong-good'-zo",
+      "translated": true
+    },
+    "G1235": {
+      "definitions_cz": "důkladně se probudit",
+      "translit": "diagrēgoréō",
+      "pronunciation": "dee-ag-ray-gor-eh'-o",
+      "translated": true
+    },
+    "G1236": {
+      "definitions_cz": "trávit čas nebo život",
+      "translit": "diágō",
+      "pronunciation": "dee-ag'-o",
+      "translated": true
+    },
+    "G1237": {
+      "definitions_cz": "obdržet obratem, tedy (obrazně) uspět\n do",
+      "translit": "diadéchomai",
+      "pronunciation": "dee-ad-ekh'-om-ahee",
+      "translated": true
+    },
+    "G1238": {
+      "definitions_cz": "„diadém“ (jak se váže k\n hlava)",
+      "translit": "diádēma",
+      "pronunciation": "dee-ad'-ay-mah",
+      "translated": true
+    },
+    "G1239": {
+      "definitions_cz": "dávat skrz zástup, t. j. rozdávat; také k\n doručit (jako nástupci)",
+      "translit": "diadídōmi",
+      "pronunciation": "dee-ad-id'-o-mee",
+      "translated": true
+    },
+    "G1240": {
+      "definitions_cz": "nástupce ve funkci",
+      "translit": "diádochos",
+      "pronunciation": "dee-ad'-okh-os",
+      "translated": true
+    },
+    "G1241": {
+      "definitions_cz": "pevně opásat",
+      "translit": "diazṓnnymi",
+      "pronunciation": "dee-az-own'-noo-mee",
+      "translated": true
+    },
+    "G1242": {
+      "definitions_cz": "správně, dispozice, tedy (zvláště) smlouva\n (zejména falešná vůle)",
+      "translit": "diathḗkē",
+      "pronunciation": "dee-ath-ay'-kay",
+      "translated": true
+    },
+    "G1243": {
+      "definitions_cz": "rozdíl nebo (konkrétně) odrůda",
+      "translit": "diaíresis",
+      "pronunciation": "dee-ah'-ee-res-is",
+      "translated": true
+    },
+    "G1244": {
+      "definitions_cz": "oddělovat, t. j. distribuovat",
+      "translit": "diairéō",
+      "pronunciation": "dee-ahee-reh'-o",
+      "translated": true
+    },
+    "G1245": {
+      "definitions_cz": "dokonale vyčistit, tj. (speciálně)\n winnow",
+      "translit": "diakatharízō",
+      "pronunciation": "dee-ak-ath-ar-id'-zo",
+      "translated": true
+    },
+    "G1246": {
+      "definitions_cz": "dokázat\n přímo, t. j. vyvrátit",
+      "translit": "diakatelénchomai",
+      "pronunciation": "dee-ak-at-el-eng'-khom-ahee",
+      "translated": true
+    },
+    "G1247": {
+      "definitions_cz": "být doprovodem, tj. čekat na (podřadně nebo jako hostitel,\n přítel, nebo (obrazně) učitel); technicky jednat jako křesťan\n jáhen",
+      "translit": "diakonéō",
+      "pronunciation": "dee-ak-on-eh'-o",
+      "translated": true
+    },
+    "G1248": {
+      "definitions_cz": "docházka (jako sluha atd.); přeneseně\n (eleemosynární) pomoc, (oficiální) služba (zejména křesťanské\n učitel nebo technicky diakonát)",
+      "translit": "diakonía",
+      "pronunciation": "dee-ak-on-ee'-ah",
+      "translated": true
+    },
+    "G1249": {
+      "definitions_cz": "an\n obsluha, tj. (genitivní případ) číšník (u stolu nebo v jiném podřadném\n povinnosti); speciálně křesťanský učitel a pastor (technicky, a\n jáhen nebo diakonka)",
+      "translit": "diákonos",
+      "pronunciation": "dee-ak'-on-os",
+      "translated": true
+    },
+    "G1250": {
+      "definitions_cz": "dvě stě",
+      "translit": "diakósioi",
+      "pronunciation": "dee-ak-os'-ee-oy",
+      "translated": true
+    },
+    "G1251": {
+      "definitions_cz": "slyšet po celou dobu, t. j. trpělivě\n poslouchat (prosbu vězně)",
+      "translit": "diakoúomai",
+      "pronunciation": "dee-ak-oo'-om-ahee",
+      "translated": true
+    },
+    "G1252": {
+      "definitions_cz": "důkladně oddělit, tj. (doslova a\n reflexivně) odstoupit nebo (implicitně) odporovat;\n přeneseně rozlišovat (implicitně, rozhodovat), popř\n (reflexivně) váhat",
+      "translit": "diakrínō",
+      "pronunciation": "dee-ak-ree'-no",
+      "translated": true
+    },
+    "G1253": {
+      "definitions_cz": "soudního odhadu",
+      "translit": "diákrisis",
+      "pronunciation": "dee-ak'-ree-sis",
+      "translated": true
+    },
+    "G1254": {
+      "definitions_cz": "překážet úplně, t. j. úplně\n zakázat",
+      "translit": "diakōlýō",
+      "pronunciation": "dee-ak-o-loo'-o",
+      "translated": true
+    },
+    "G1255": {
+      "definitions_cz": "mluvit v celé společnosti, tj. konverzovat nebo\n (genitivní pád) zveřejnit",
+      "translit": "dialaléō",
+      "pronunciation": "dee-al-al-eh'-o",
+      "translated": true
+    },
+    "G1256": {
+      "definitions_cz": "důkladně říci, tj. diskutovat (v\n argument nebo nabádání)",
+      "translit": "dialégomai",
+      "pronunciation": "dee-al-eg'-om-ahee",
+      "translated": true
+    },
+    "G1257": {
+      "definitions_cz": "uprostřed přerušit, t. j. přerušit",
+      "translit": "dialeípō",
+      "pronunciation": "dee-al-i'-po",
+      "translated": true
+    },
+    "G1258": {
+      "definitions_cz": "(způsob) diskursu, tj. „dialekt“",
+      "translit": "diálektos",
+      "pronunciation": "dee-al'-ek-tos",
+      "translated": true
+    },
+    "G1259": {
+      "definitions_cz": "důkladně se změnit, t. j. (duševně) na\n smířit",
+      "translit": "diallássō",
+      "pronunciation": "dee-al-las'-so",
+      "translated": true
+    },
+    "G1260": {
+      "definitions_cz": "důkladně počítat, t. j. (genitivní pád) do\n úmyslně (reflexí nebo diskuzí)",
+      "translit": "dialogízomai",
+      "pronunciation": "dee-al-og-id'-zom-ahee",
+      "translated": true
+    },
+    "G1261": {
+      "definitions_cz": "diskuse, tj. (vnitřní) úvaha (implicitně,\n účel), nebo (externí) debata",
+      "translit": "dialogismós",
+      "pronunciation": "dee-al-og-is-mos'",
+      "translated": true
+    },
+    "G1262": {
+      "definitions_cz": "úplně rozpustit",
+      "translit": "dialýō",
+      "pronunciation": "dee-al-oo'-o",
+      "translated": true
+    },
+    "G1263": {
+      "definitions_cz": "potvrdit nebo vážně protestovat, nebo (tím\n implikace) hortativně",
+      "translit": "diamartýromai",
+      "pronunciation": "dee-am-ar-too'-rom-ahee",
+      "translated": true
+    },
+    "G1264": {
+      "definitions_cz": "zuřivě bojovat (v hádce)",
+      "translit": "diamáchomai",
+      "pronunciation": "dee-am-akh'-om-ahee",
+      "translated": true
+    },
+    "G1265": {
+      "definitions_cz": "zůstat neustále (v bytí nebo\n vztah)",
+      "translit": "diaménō",
+      "pronunciation": "dee-am-en'-o",
+      "translated": true
+    },
+    "G1266": {
+      "definitions_cz": "důkladně rozdělit (doslova dovnitř\n distribuce, obrazně řečeno v rozbroji)",
+      "translit": "diamerízō",
+      "pronunciation": "dee-am-er-id'-zo",
+      "translated": true
+    },
+    "G1267": {
+      "definitions_cz": "nesoulad (názoru a chování)",
+      "translit": "diamerismós",
+      "pronunciation": "dee-am-er-is-mos'",
+      "translated": true
+    },
+    "G1268": {
+      "definitions_cz": "distribuovat, tj. (informací)\n šířit",
+      "translit": "dianémō",
+      "pronunciation": "dee-an-em'-o",
+      "translated": true
+    },
+    "G1269": {
+      "definitions_cz": "přikývnout (nebo vyjádřit znaky) přes zasahujícího\n prostor",
+      "translit": "dianeúō",
+      "pronunciation": "dee-an-yoo'-o",
+      "translated": true
+    },
+    "G1270": {
+      "definitions_cz": "něco promyšleného, např\n sentiment",
+      "translit": "dianóēma",
+      "pronunciation": "dee-an-o'-ay-mah",
+      "translated": true
+    },
+    "G1271": {
+      "definitions_cz": "hluboká myšlenka, správně, schopnost (mysl nebo její\n dispozice), implicitně její výkon",
+      "translit": "diánoia",
+      "pronunciation": "dee-an'-oy-ah",
+      "translated": true
+    },
+    "G1272": {
+      "definitions_cz": "důkladně otevřít, doslova (jako prvorodička) popř\n obrazně (vyložit)",
+      "translit": "dianoígō",
+      "pronunciation": "dee-an-oy'-go",
+      "translated": true
+    },
+    "G1273": {
+      "definitions_cz": "sedět celý\n noc",
+      "translit": "dianyktereúō",
+      "pronunciation": "dee-an-ook-ter-yoo'-o",
+      "translated": true
+    },
+    "G1274": {
+      "definitions_cz": "provést důkladně",
+      "translit": "dianýō",
+      "pronunciation": "dee-an-oo'-o",
+      "translated": true
+    },
+    "G1275": {
+      "definitions_cz": "po celou dobu, tj.\n (adverbiálně) neustále",
+      "translit": "diapantós",
+      "pronunciation": "dee-ap-an-tos'",
+      "translated": true
+    },
+    "G1276": {
+      "definitions_cz": "úplně přejít",
+      "translit": "diaperáō",
+      "pronunciation": "dee-ap-er-ah'-o",
+      "translated": true
+    },
+    "G1277": {
+      "definitions_cz": "proplout",
+      "translit": "diapléō",
+      "pronunciation": "dee-ap-leh'-o",
+      "translated": true
+    },
+    "G1278": {
+      "definitions_cz": "dřít se, tj. (pasivně)\n dělat si starosti",
+      "translit": "diaponéō",
+      "pronunciation": "dee-ap-on-eh'-o",
+      "translated": true
+    },
+    "G1279": {
+      "definitions_cz": "cestovat skrz",
+      "translit": "diaporeúomai",
+      "pronunciation": "dee-ap-or-yoo'-om-ahee",
+      "translated": true
+    },
+    "G1280": {
+      "definitions_cz": "být úplně bez rozpaků",
+      "translit": "diaporéō",
+      "pronunciation": "dee-ap-or-eh'-o",
+      "translated": true
+    },
+    "G1281": {
+      "definitions_cz": "důkladně se zaměstnat, tj. (přechodně\n a implicitně) vydělávat v podnikání",
+      "translit": "diapragmateúomai",
+      "pronunciation": "dee-ap-rag-mat-yoo'-om-ahee",
+      "translated": true
+    },
+    "G1282": {
+      "definitions_cz": "rozřezat, t. j. (obrazně) do\n podrážděný",
+      "translit": "diapríō",
+      "pronunciation": "dee-ap-ree'-o",
+      "translated": true
+    },
+    "G1283": {
+      "definitions_cz": "zmocnit se, t. j. plenit",
+      "translit": "diarpázō",
+      "pronunciation": "dee-ar-pad'-zo",
+      "translated": true
+    },
+    "G1284": {
+      "definitions_cz": "roztrhat na kusy",
+      "translit": "diarrhḗssō",
+      "pronunciation": "dee-ar-hrayce'-so",
+      "translated": true
+    },
+    "G1285": {
+      "definitions_cz": "důkladně vyčistit, tj. (obrazně)\n prohlásit",
+      "translit": "diasaphéō",
+      "pronunciation": "dee-as-af-eh'-o",
+      "translated": true
+    },
+    "G1286": {
+      "definitions_cz": "důkladně protřepat, tedy (obrazně) do\n zastrašit",
+      "translit": "diaseíō",
+      "pronunciation": "dee-as-i'-o",
+      "translated": true
+    },
+    "G1287": {
+      "definitions_cz": "rozptýlit, t. j. (genitivní pád) routovat nebo\n oddělit; zvláště, vyvětrat; přeneseně plýtvat",
+      "translit": "diaskorpízō",
+      "pronunciation": "dee-as-kor-pid'-zo",
+      "translated": true
+    },
+    "G1288": {
+      "definitions_cz": "oddělit, t. j. oddělit nebo rozkouskovat",
+      "translit": "diaspáō",
+      "pronunciation": "dee-as-pah'-o",
+      "translated": true
+    },
+    "G1289": {
+      "definitions_cz": "rozsévat v celém, t. j. (obrazně) rozdávat\n v cizích zemích",
+      "translit": "diaspeírō",
+      "pronunciation": "dee-as-pi'-ro",
+      "translated": true
+    },
+    "G1290": {
+      "definitions_cz": "disperze, tj. (speciálně a konkrétně) (převedeno)\n Izraelita žijící v pohanských zemích",
+      "translit": "diasporá",
+      "pronunciation": "dee-as-por-ah'",
+      "translated": true
+    },
+    "G1291": {
+      "definitions_cz": "odlišit se (obrazně)\n rozlišovat), tedy (implicitně) nařizovat",
+      "translit": "diastéllomai",
+      "pronunciation": "dee-as-tel'-lom-ahee",
+      "translated": true
+    },
+    "G1292": {
+      "definitions_cz": "interval",
+      "translit": "diástēma",
+      "pronunciation": "dee-as'-tay-mah",
+      "translated": true
+    },
+    "G1293": {
+      "definitions_cz": "variace",
+      "translit": "diastolḗ",
+      "pronunciation": "dee-as-tol-ay'",
+      "translated": true
+    },
+    "G1294": {
+      "definitions_cz": "zkreslovat, tedy (obrazně) dezinterpretovat, popř\n (morálně) zkorumpovaný",
+      "translit": "diastréphō",
+      "pronunciation": "dee-as-tref'-o",
+      "translated": true
+    },
+    "G1295": {
+      "definitions_cz": "důkladně šetřit, tj. (implicitně popř\n analogie) léčit, uchovávat, zachraňovat atd.",
+      "translit": "diasṓzō",
+      "pronunciation": "dee-as-odze'-o",
+      "translated": true
+    },
+    "G1296": {
+      "definitions_cz": "uspořádání, tedy instituce",
+      "translit": "diatagḗ",
+      "pronunciation": "dee-at-ag-ay'",
+      "translated": true
+    },
+    "G1297": {
+      "definitions_cz": "ujednání, tj. (směrodárný) edikt",
+      "translit": "diátagma",
+      "pronunciation": "dee-at'-ag-mah",
+      "translated": true
+    },
+    "G1298": {
+      "definitions_cz": "úplně rušit, t.j. agitovat (s\n alarm)",
+      "translit": "diatarássō",
+      "pronunciation": "dee-at-ar-as'-so",
+      "translated": true
+    },
+    "G1299": {
+      "definitions_cz": "důkladně zařídit, tj. (speciálně) ústav,\n předepsat atd.",
+      "translit": "diatássō",
+      "pronunciation": "dee-at-as'-so",
+      "translated": true
+    },
+    "G1300": {
+      "definitions_cz": "provést důkladně, tj. (subjektivně) do\n vytrvat",
+      "translit": "diateléō",
+      "pronunciation": "dee-at-el-eh'-o",
+      "translated": true
+    },
+    "G1301": {
+      "definitions_cz": "důkladně sledovat, tj. (pozitivně a\n tranzitivně) přísně dodržovat, nebo (negativně a reflexivně) k\n zcela vyhnout",
+      "translit": "diatēréō",
+      "pronunciation": "dee-at-ay-reh'-o",
+      "translated": true
+    },
+    "G1302": {
+      "definitions_cz": "z jaké příčiny?, tedy proč?",
+      "translit": "diatí",
+      "pronunciation": "dee-at-ee'",
+      "translated": true
+    },
+    "G1303": {
+      "definitions_cz": "oddělit, tj. (obrazně)\n zlikvidovat (postoupením, kompaktem nebo odkazem)",
+      "translit": "diatíthemai",
+      "pronunciation": "dee-at-ith'-em-ahee",
+      "translated": true
+    },
+    "G1304": {
+      "definitions_cz": "opotřebovat se (čas), tzn.\n zůstat",
+      "translit": "diatríbō",
+      "pronunciation": "dee-at-ree'-bo",
+      "translated": true
+    },
+    "G1305": {
+      "definitions_cz": "výživa",
+      "translit": "diatrophḗ",
+      "pronunciation": "dee-at-rof-ay'",
+      "translated": true
+    },
+    "G1306": {
+      "definitions_cz": "prosvítit, tj. prolomit (jako den)",
+      "translit": "diaugázō",
+      "pronunciation": "dee-ow-gad'-zo",
+      "translated": true
+    },
+    "G1307": {
+      "definitions_cz": "objevující se přes, tzn.\n \"průsvitný\"",
+      "translit": "diaphanḗs",
+      "pronunciation": "dee-af-an-ace'",
+      "translated": true
+    },
+    "G1308": {
+      "definitions_cz": "snést, t. j. (doslova) transport;\n obvykle oddělit, tj. (objektivně) pohazovat (obrazně,\n zpráva); subjektivně se „lišit“ nebo (implicitně) překonat",
+      "translit": "diaphérō",
+      "pronunciation": "dee-af-er'-o",
+      "translated": true
+    },
+    "G1309": {
+      "definitions_cz": "prchnout, t. j. uniknout",
+      "translit": "diapheúgō",
+      "pronunciation": "dee-af-yoo'-go",
+      "translated": true
+    },
+    "G1310": {
+      "definitions_cz": "důkladně hlásit, tzn.\n prozradit",
+      "translit": "diaphēmízō",
+      "pronunciation": "dee-af-ay-mid'-zo",
+      "translated": true
+    },
+    "G1311": {
+      "definitions_cz": "důkladně hnít, t. j. (implicitně) zkazit\n (pasivně, úplně chátrat, přeneseně, zvrhnout)",
+      "translit": "diaphtheírō",
+      "pronunciation": "dee-af-thi'-ro",
+      "translated": true
+    },
+    "G1312": {
+      "definitions_cz": "rozklad",
+      "translit": "diaphthorá",
+      "pronunciation": "dee-af-thor-ah'",
+      "translated": true
+    },
+    "G1313": {
+      "definitions_cz": "měnící se; také překonávající",
+      "translit": "diáphoros",
+      "pronunciation": "dee-af'-or-os",
+      "translated": true
+    },
+    "G1314": {
+      "definitions_cz": "důkladně střežit, t. j. chránit",
+      "translit": "diaphylássō",
+      "pronunciation": "dee-af-oo-las'-so",
+      "translated": true
+    },
+    "G1315": {
+      "definitions_cz": "důkladně manipulovat, tedy pokládat\n násilné ruce",
+      "translit": "diacheirízomai",
+      "pronunciation": "dee-akh-i-rid'-zom-ahee",
+      "translated": true
+    },
+    "G1316": {
+      "definitions_cz": "odstranit (se) úplně,\n tedy odejít do důchodu",
+      "translit": "diachōrízomai",
+      "pronunciation": "dee-akh-o-rid'-zom-ahee",
+      "translated": true
+    },
+    "G1317": {
+      "definitions_cz": "poučný (\"didaktický\")",
+      "translit": "didaktikós",
+      "pronunciation": "did-ak-tik-os'",
+      "translated": true
+    },
+    "G1318": {
+      "definitions_cz": "(subjektivně) poučen, nebo (objektivně) sdělen\n vyučování",
+      "translit": "didaktós",
+      "pronunciation": "did-ak-tos'",
+      "translated": true
+    },
+    "G1319": {
+      "definitions_cz": "instrukce (funkce nebo informace)",
+      "translit": "didaskalía",
+      "pronunciation": "did-as-kal-ee'-ah",
+      "translated": true
+    },
+    "G1320": {
+      "definitions_cz": "instruktor (genitivní případ nebo speciálně)",
+      "translit": "didáskalos",
+      "pronunciation": "did-as'-kal-os",
+      "translated": true
+    },
+    "G1321": {
+      "definitions_cz": "do\n učit (ve stejné široké aplikaci)",
+      "translit": "didáskō",
+      "pronunciation": "did-as'-ko",
+      "translated": true
+    },
+    "G1322": {
+      "definitions_cz": "pokyn (akt nebo věc)",
+      "translit": "didachḗ",
+      "pronunciation": "did-akh-ay'",
+      "translated": true
+    },
+    "G1323": {
+      "definitions_cz": "dvojitá drachma (didrachma)",
+      "translit": "dídrachmon",
+      "pronunciation": "did'-rakh-mon",
+      "translated": true
+    },
+    "G1324": {
+      "definitions_cz": "double, tj. dvojče; Společnost Didymus, a\n Christian",
+      "translit": "Dídymos",
+      "pronunciation": "did'-oo-mos",
+      "translated": true
+    },
+    "G1325": {
+      "definitions_cz": "dát (používá se ve velmi široké aplikaci,\n správně nebo implicitně, doslovně nebo obrazně; velmi\n změněno připojením)",
+      "translit": "dídōmi",
+      "pronunciation": "did'-o-mee",
+      "translated": true
+    },
+    "G1326": {
+      "definitions_cz": "plně se probudit; tj. vzbudit (doslova nebo\n přeneseně)",
+      "translit": "diegeírō",
+      "pronunciation": "dee-eg-i'-ro",
+      "translated": true
+    },
+    "G1327": {
+      "definitions_cz": "vývod skrz, tedy pravděpodobně otevřený čtverec\n (od kterých se cesty rozcházejí)",
+      "translit": "diéxodos",
+      "pronunciation": "dee-ex'-od-os",
+      "translated": true
+    },
+    "G1328": {
+      "definitions_cz": "vysvětlovač",
+      "translit": "diermēneutḗs",
+      "pronunciation": "dee-er-main-yoo-tace'",
+      "translated": true
+    },
+    "G1329": {
+      "definitions_cz": "důkladně vysvětlit, implikací, k\n překládat",
+      "translit": "diermēneúō",
+      "pronunciation": "dee-er-main-yoo'-o",
+      "translated": true
+    },
+    "G1330": {
+      "definitions_cz": "procházet (doslova)",
+      "translit": "diérchomai",
+      "pronunciation": "dee-er'-khom-ahee",
+      "translated": true
+    },
+    "G1331": {
+      "definitions_cz": "po celou dobu se ptát, t. j. zjišťovat podle\n výslech",
+      "translit": "dierōtáō",
+      "pronunciation": "dee-er-o-tah'-o",
+      "translated": true
+    },
+    "G1332": {
+      "definitions_cz": "dva roky (ve věku)",
+      "translit": "dietḗs",
+      "pronunciation": "dee-et-ace'",
+      "translated": true
+    },
+    "G1333": {
+      "definitions_cz": "období dvou let (dvouletá)",
+      "translit": "dietía",
+      "pronunciation": "dee-et-ee'-a",
+      "translated": true
+    },
+    "G1334": {
+      "definitions_cz": "plně souviset",
+      "translit": "diēgéomai",
+      "pronunciation": "dee-ayg-eh'-om-ahee",
+      "translated": true
+    },
+    "G1335": {
+      "definitions_cz": "recitál",
+      "translit": "diḗgesis",
+      "pronunciation": "dee-ayg'-es-is",
+      "translated": true
+    },
+    "G1336": {
+      "definitions_cz": "přeneseno, tj. (příslovečně s [ŘECKO:1519][ŘECKO:3588]",
+      "translit": "diēnekḗs",
+      "pronunciation": "dee-ay-nek-es'",
+      "translated": true
+    },
+    "G1337": {
+      "definitions_cz": "mající dvě moře, t. j. zvuk s dvojím\n vývod",
+      "translit": "dithálassos",
+      "pronunciation": "dee-thal'-as-sos",
+      "translated": true
+    },
+    "G1338": {
+      "definitions_cz": "dosáhnout skrz, tzn.\n proniknout",
+      "translit": "diïknéomai",
+      "pronunciation": "dee-ik-neh'-om-ahee",
+      "translated": true
+    },
+    "G1339": {
+      "definitions_cz": "odstát, tj. (reflexivně) odstranit,\n zasáhnout",
+      "translit": "diḯstēmi",
+      "pronunciation": "dee-is'-tay-mee",
+      "translated": true
+    },
+    "G1340": {
+      "definitions_cz": "stout to skrz, tzn.\n asservate",
+      "translit": "diïschyrízomai",
+      "pronunciation": "dee-is-khoo-rid'-zom-ahee",
+      "translated": true
+    },
+    "G1341": {
+      "definitions_cz": "spravedlivá věta",
+      "translit": "dikaiokrisía",
+      "pronunciation": "dik-ah-yok-ris-ee'-ah",
+      "translated": true
+    },
+    "G1342": {
+      "definitions_cz": "spravedlivý (povahově nebo činem); implicitně nevinný,\n svatý (absolutně nebo relativně)",
+      "translit": "díkaios",
+      "pronunciation": "dik'-ah-yos",
+      "translated": true
+    },
+    "G1343": {
+      "definitions_cz": "spravedlnost (charakteru nebo činu); speciálně (křesťan)\n zdůvodnění",
+      "translit": "dikaiosýnē",
+      "pronunciation": "dik-ah-yos-oo'-nay",
+      "translated": true
+    },
+    "G1344": {
+      "definitions_cz": "učinit (tj. ukazovat nebo považovat za) spravedlivým nebo nevinným",
+      "translit": "dikaióō",
+      "pronunciation": "dik-ah-yo'-o",
+      "translated": true
+    },
+    "G1345": {
+      "definitions_cz": "spravedlivý skutek; implicitně, statut nebo\n rozhodnutí",
+      "translit": "dikaíōma",
+      "pronunciation": "dik-ah'-yo-mah",
+      "translated": true
+    },
+    "G1346": {
+      "definitions_cz": "spravedlivě",
+      "translit": "dikaíōs",
+      "pronunciation": "dik-ah'-yoce",
+      "translated": true
+    },
+    "G1347": {
+      "definitions_cz": "osvobodit (pro Krista)",
+      "translit": "dikaíōsis",
+      "pronunciation": "dik-ah'-yo-sis",
+      "translated": true
+    },
+    "G1348": {
+      "definitions_cz": "soudce",
+      "translit": "dikastḗs",
+      "pronunciation": "dik-as-tace'",
+      "translated": true
     }
   }
 }
