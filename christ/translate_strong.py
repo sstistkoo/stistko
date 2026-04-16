@@ -192,10 +192,10 @@ def main():
             break
 
     # Zpracuj řecké
-print("--- NAČÍTÁM strongsgreek.json ---")
+    print("--- NAČÍTÁM strongsgreek.json ---")
     greek_data = load_json_safe(GREEK_SOURCE)
     print(f"Greek entries: {len(greek_data.get('entries', {}))}")
-    
+
     for key, entry in greek_data.get("entries", {}).items():
         elapsed = (datetime.now() - start_time).total_seconds()
         if elapsed > MAX_RUNTIME_SECONDS:
