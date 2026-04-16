@@ -12661,6 +12661,904 @@
       "translit": "apothlíbō",
       "pronunciation": "ap-oth-lee'-bo",
       "translated": true
+    },
+    "G599": {
+      "definitions_cz": "zemřít (doslova nebo obrazně)",
+      "translit": "apothnḗskō",
+      "pronunciation": "ap-oth-nace'-ko",
+      "translated": true
+    },
+    "G600": {
+      "definitions_cz": "rekonstituovat (ve zdraví, doma popř\n organizace)",
+      "translit": "apokathístēmi",
+      "pronunciation": "ap-ok-ath-is'-tay-mee",
+      "translated": true
+    },
+    "G601": {
+      "definitions_cz": "sundat kryt, t. j. prozradit",
+      "translit": "apokalýptō",
+      "pronunciation": "ap-ok-al-oop'-to",
+      "translated": true
+    },
+    "G602": {
+      "definitions_cz": "zveřejnění",
+      "translit": "apokálypsis",
+      "pronunciation": "ap-ok-al'-oop-sis",
+      "translated": true
+    },
+    "G603": {
+      "definitions_cz": "intenzivní očekávání",
+      "translit": "apokaradokía",
+      "pronunciation": "ap-ok-ar-ad-ok-ee'-ah",
+      "translated": true
+    },
+    "G604": {
+      "definitions_cz": "se plně smířit",
+      "translit": "apokatallássō",
+      "pronunciation": "ap-ok-at-al-las'-so",
+      "translated": true
+    },
+    "G605": {
+      "definitions_cz": "rekonstituce",
+      "translit": "apokatástasis",
+      "pronunciation": "ap-ok-at-as'-tas-is",
+      "translated": true
+    },
+    "G606": {
+      "definitions_cz": "být rezervován; obrazně řečeno čekat",
+      "translit": "apókeimai",
+      "pronunciation": "ap-ok'-i-mahee",
+      "translated": true
+    },
+    "G607": {
+      "definitions_cz": "dekapitovat",
+      "translit": "apokephalízō",
+      "pronunciation": "ap-ok-ef-al-id'-zo",
+      "translated": true
+    },
+    "G608": {
+      "definitions_cz": "úplně uzavřít",
+      "translit": "apokleíō",
+      "pronunciation": "ap-ok-li'-o",
+      "translated": true
+    },
+    "G609": {
+      "definitions_cz": "amputovat; reflexivně (ironií) zmrzačit\n (soukromé části)",
+      "translit": "apokóptō",
+      "pronunciation": "ap-ok-op'-to",
+      "translated": true
+    },
+    "G610": {
+      "definitions_cz": "soudce\n rozhodnutí",
+      "translit": "apókrima",
+      "pronunciation": "ap-ok'-ree-mah",
+      "translated": true
+    },
+    "G611": {
+      "definitions_cz": "uzavřít pro sebe, t. j. (implicitně) k\n reagovat; podle hebrejštiny (srovnej [HEBREW:06030]",
+      "translit": "apokrínomai",
+      "pronunciation": "ap-ok-ree'-nom-ahee",
+      "translated": true
+    },
+    "G612": {
+      "definitions_cz": "odpověď",
+      "translit": "apókrisis",
+      "pronunciation": "ap-ok'-ree-sis",
+      "translated": true
+    },
+    "G613": {
+      "definitions_cz": "skrýt se (t. j. plně); obrazně řečeno zachovat\n tajné",
+      "translit": "apokrýptō",
+      "pronunciation": "ap-ok-roop'-to",
+      "translated": true
+    },
+    "G614": {
+      "definitions_cz": "tajný; implicitně ceněný",
+      "translit": "apókryphos",
+      "pronunciation": "ap-ok'-roo-fos",
+      "translated": true
+    },
+    "G615": {
+      "definitions_cz": "přímo zabít; přeneseně do\n zničit",
+      "translit": "apokteínō",
+      "pronunciation": "ap-ok-ti'-no",
+      "translated": true
+    },
+    "G616": {
+      "definitions_cz": "rozmnožovat se, tj. (přenosem)\n generovat (obrazně)",
+      "translit": "apokyéō",
+      "pronunciation": "ap-ok-oo-eh'-o",
+      "translated": true
+    },
+    "G617": {
+      "definitions_cz": "odvalit se",
+      "translit": "apokylíō",
+      "pronunciation": "ap-ok-oo-lee'-o",
+      "translated": true
+    },
+    "G618": {
+      "definitions_cz": "přijímat (zvláště, v plném rozsahu nebo jako hostitel); také\n vzít stranou",
+      "translit": "apolambánō",
+      "pronunciation": "ap-ol-am-ban'-o",
+      "translated": true
+    },
+    "G619": {
+      "definitions_cz": "plný\n požitek",
+      "translit": "apólausis",
+      "pronunciation": "ap-ol'-ow-sis",
+      "translated": true
+    },
+    "G620": {
+      "definitions_cz": "opustit (pasivně, zůstat); podle\n implikace, opustit",
+      "translit": "apoleípō",
+      "pronunciation": "ap-ol-ipe'-o",
+      "translated": true
+    },
+    "G621": {
+      "definitions_cz": "lízat čistit",
+      "translit": "apoleíchō",
+      "pronunciation": "ap-ol-i'-kho",
+      "translated": true
+    },
+    "G622": {
+      "definitions_cz": "úplně zničit (reflexně, do\n zahynout nebo ztratit), doslova nebo obrazně",
+      "translit": "apóllymi",
+      "pronunciation": "ap-ol'-loo-mee",
+      "translated": true
+    },
+    "G623": {
+      "definitions_cz": "ničitel (tj. Satan)",
+      "translit": "Apollýōn",
+      "pronunciation": "ap-ol-loo'-ohn",
+      "translated": true
+    },
+    "G624": {
+      "definitions_cz": "od [ŘECKO:622]",
+      "translit": "Apollōnía",
+      "pronunciation": "ap-ol-lo-nee'-ah",
+      "translated": true
+    },
+    "G625": {
+      "definitions_cz": "Apollos, Izraelita",
+      "translit": "Apollōs",
+      "pronunciation": "ap-ol-loce'",
+      "translated": true
+    },
+    "G626": {
+      "definitions_cz": "dát účet\n (právní důvod) sebe sama, tj. exkulpovat (sebe)",
+      "translit": "apologéomai",
+      "pronunciation": "ap-ol-og-eh'-om-ahee",
+      "translated": true
+    },
+    "G627": {
+      "definitions_cz": "prosba (\"omluva\")",
+      "translit": "apología",
+      "pronunciation": "ap-ol-og-ee'-ah",
+      "translated": true
+    },
+    "G628": {
+      "definitions_cz": "plně umýt, tedy (obrazně) odpustit\n (reflexivně)",
+      "translit": "apoloúō",
+      "pronunciation": "ap-ol-oo'-o",
+      "translated": true
+    },
+    "G629": {
+      "definitions_cz": "(skutek) výkupné v plné výši, tzn.\n (obrazně) riddance, nebo (zvláště) křesťan\n spasení",
+      "translit": "apolýtrōsis",
+      "pronunciation": "ap-ol-oo'-tro-sis",
+      "translated": true
+    },
+    "G630": {
+      "definitions_cz": "plně se osvobodit, tj. (doslova) uvolnit, uvolnit,\n propustit (reflexivně, odejít), nebo (obrazně) nechat zemřít, prominout nebo\n (zejména) rozvod",
+      "translit": "apolýō",
+      "pronunciation": "ap-ol-oo'-o",
+      "translated": true
+    },
+    "G631": {
+      "definitions_cz": "škrábat\n pryč",
+      "translit": "apomássomai",
+      "pronunciation": "ap-om-as'-som-ahee",
+      "translated": true
+    },
+    "G632": {
+      "definitions_cz": "rozdělit, t. j. obdarovat",
+      "translit": "aponémō",
+      "pronunciation": "ap-on-em'-o",
+      "translated": true
+    },
+    "G633": {
+      "definitions_cz": "smýt se (reflexně vlastní ruce\n symbolicky)",
+      "translit": "aponíptō",
+      "pronunciation": "ap-on-ip'-to",
+      "translated": true
+    },
+    "G634": {
+      "definitions_cz": "spadnout",
+      "translit": "apopíptō",
+      "pronunciation": "ap-op-ip'-to",
+      "translated": true
+    },
+    "G635": {
+      "definitions_cz": "svést na scestí (obrazně); pasivně, bloudit\n (z pravdy)",
+      "translit": "apoplanáō",
+      "pronunciation": "ap-op-lan-ah'-o",
+      "translated": true
+    },
+    "G636": {
+      "definitions_cz": "vyplout",
+      "translit": "apopléō",
+      "pronunciation": "ap-op-leh'-o",
+      "translated": true
+    },
+    "G637": {
+      "definitions_cz": "opláchnout",
+      "translit": "apoplýnō",
+      "pronunciation": "ap-op-loo'-no",
+      "translated": true
+    },
+    "G638": {
+      "definitions_cz": "potlačit (utopením nebo přemnožením)",
+      "translit": "apopnígō",
+      "pronunciation": "ap-op-nee'-go",
+      "translated": true
+    },
+    "G639": {
+      "definitions_cz": "do\n mít žádnou cestu ven, tj. být v rozpacích (duševně)",
+      "translit": "aporéō",
+      "pronunciation": "ap-or-eh'-o",
+      "translated": true
+    },
+    "G640": {
+      "definitions_cz": "(stav) bezradný",
+      "translit": "aporía",
+      "pronunciation": "ap-or-ee'-a",
+      "translated": true
+    },
+    "G641": {
+      "definitions_cz": "odhodit, t.j. vysrážet se",
+      "translit": "aporrhíptō",
+      "pronunciation": "ap-or-hrip'-to",
+      "translated": true
+    },
+    "G642": {
+      "definitions_cz": "úplně truchlit, tzn.\n (obrazně) oddělit (od pohlavního styku)",
+      "translit": "aporphanízō",
+      "pronunciation": "ap-or-fan-id'-zo",
+      "translated": true
+    },
+    "G643": {
+      "definitions_cz": "sbalit (něčí) zavazadla",
+      "translit": "aposkeuázō",
+      "pronunciation": "ap-osk-yoo-ad'-zo",
+      "translated": true
+    },
+    "G644": {
+      "definitions_cz": "zastínění, tzn.\n zatemnění",
+      "translit": "aposkíasma",
+      "pronunciation": "ap-os-kee'-as-mah",
+      "translated": true
+    },
+    "G645": {
+      "definitions_cz": "vytáhnout, tj. (doslova) sundat z pochvy (a\n meč), nebo relativně (s předpokládanou mírou síly) odejít\n (osobně nebo fakticky)",
+      "translit": "apospáō",
+      "pronunciation": "ap-os-pah'-o",
+      "translated": true
+    },
+    "G646": {
+      "definitions_cz": "odklon od pravdy (správně,\n stát) (\"odpadlictví\")",
+      "translit": "apostasía",
+      "pronunciation": "ap-os-tas-ee'-ah",
+      "translated": true
+    },
+    "G647": {
+      "definitions_cz": "správně,\n něco separačního, tedy (zvláště) rozvod",
+      "translit": "apostásion",
+      "pronunciation": "ap-os-tas'-ee-on",
+      "translated": true
+    },
+    "G648": {
+      "definitions_cz": "odkrýt střechu",
+      "translit": "apostegázō",
+      "pronunciation": "ap-os-teg-ad'-zo",
+      "translated": true
+    },
+    "G649": {
+      "definitions_cz": "oddělit, t. j. (implicitně) vyslat\n (správně, na misi) doslova nebo přeneseně",
+      "translit": "apostéllō",
+      "pronunciation": "ap-os-tel'-lo",
+      "translated": true
+    },
+    "G650": {
+      "definitions_cz": "vydrancovat",
+      "translit": "aposteréō",
+      "pronunciation": "ap-os-ter-eh'-o",
+      "translated": true
+    },
+    "G651": {
+      "definitions_cz": "komise, tedy (zvláště) apoštolát",
+      "translit": "apostolḗ",
+      "pronunciation": "ap-os-tol-ay'",
+      "translated": true
+    },
+    "G652": {
+      "definitions_cz": "delegát; zvláště vyslanec evangelia;\n oficiálně pověřenec Krista („apoštol“) (se zázračným\n pravomoci)",
+      "translit": "apóstolos",
+      "pronunciation": "ap-os'-tol-os",
+      "translated": true
+    },
+    "G653": {
+      "definitions_cz": "mluvit mimoděk\n (správně, diktovat), t. j. katechizovat (v záludném\n způsobem)",
+      "translit": "apostomatízō",
+      "pronunciation": "ap-os-tom-at-id'-zo",
+      "translated": true
+    },
+    "G654": {
+      "definitions_cz": "odvrátit se nebo vrátit se (doslova nebo\n přeneseně)",
+      "translit": "apostréphō",
+      "pronunciation": "ap-os-tref'-o",
+      "translated": true
+    },
+    "G655": {
+      "definitions_cz": "úplně nenávidět",
+      "translit": "apostygéō",
+      "pronunciation": "ap-os-toog-eh'-o",
+      "translated": true
+    },
+    "G656": {
+      "definitions_cz": "exkomunikován",
+      "translit": "aposynágōgos",
+      "pronunciation": "ap-os-oon-ag'-o-gos",
+      "translated": true
+    },
+    "G657": {
+      "definitions_cz": "doslova říct adieu (odjezdem\n nebo propuštění); obrazně řečeno, zříci se",
+      "translit": "apotássomai",
+      "pronunciation": "ap-ot-as'-som-ahee",
+      "translated": true
+    },
+    "G658": {
+      "definitions_cz": "dokončit úplně, tj. dovršit",
+      "translit": "apoteléō",
+      "pronunciation": "ap-ot-el-eh'-o",
+      "translated": true
+    },
+    "G659": {
+      "definitions_cz": "odložit (doslova nebo přeneseně)",
+      "translit": "apotíthēmi",
+      "pronunciation": "ap-ot-eeth'-ay-mee",
+      "translated": true
+    },
+    "G660": {
+      "definitions_cz": "oprášit",
+      "translit": "apotinássō",
+      "pronunciation": "ap-ot-in-as'-so",
+      "translated": true
+    },
+    "G661": {
+      "definitions_cz": "zaplatit v plné výši",
+      "translit": "apotínō",
+      "pronunciation": "ap-ot-ee'-no",
+      "translated": true
+    },
+    "G662": {
+      "definitions_cz": "odvážit se jasně",
+      "translit": "apotolmáō",
+      "pronunciation": "ap-ot-ol-mah'-o",
+      "translated": true
+    },
+    "G663": {
+      "definitions_cz": "(obrazně) rozhodnost, tzn.\n přísnost",
+      "translit": "apotomía",
+      "pronunciation": "ap-ot-om-ee'-ah",
+      "translated": true
+    },
+    "G664": {
+      "definitions_cz": "náhle, tedy rázně",
+      "translit": "apotómōs",
+      "pronunciation": "ap-ot-om'-oce",
+      "translated": true
+    },
+    "G665": {
+      "definitions_cz": "vychýlit, tj. (reflexivně)\n vyhnout se",
+      "translit": "apotrépō",
+      "pronunciation": "ap-ot-rep'-o",
+      "translated": true
+    },
+    "G666": {
+      "definitions_cz": "bytost pryč",
+      "translit": "apousía",
+      "pronunciation": "ap-oo-see'-ah",
+      "translated": true
+    },
+    "G667": {
+      "definitions_cz": "ustoupit (doslova nebo relativně)",
+      "translit": "apophérō",
+      "pronunciation": "ap-of-er'-o",
+      "translated": true
+    },
+    "G668": {
+      "definitions_cz": "(obrazně) uniknout",
+      "translit": "apopheúgō",
+      "pronunciation": "ap-of-yoo'-go",
+      "translated": true
+    },
+    "G669": {
+      "definitions_cz": "jasně vyslovit, t. j. prohlásit",
+      "translit": "apophthéngomai",
+      "pronunciation": "ap-of-theng'-om-ahee",
+      "translated": true
+    },
+    "G670": {
+      "definitions_cz": "vyložit",
+      "translit": "apophortízomai",
+      "pronunciation": "ap-of-or-tid'-zom-ahee",
+      "translated": true
+    },
+    "G671": {
+      "definitions_cz": "akt spotřebování, tzn.\n spotřeba",
+      "translit": "apóchrēsis",
+      "pronunciation": "ap-okh'-ray-sis",
+      "translated": true
+    },
+    "G672": {
+      "definitions_cz": "jít pryč",
+      "translit": "apochōréō",
+      "pronunciation": "ap-okh-o-reh'-o",
+      "translated": true
+    },
+    "G673": {
+      "definitions_cz": "roztrhat se; reflexně, oddělit",
+      "translit": "apochōrízō",
+      "pronunciation": "ap-okh-o-rid'-zo",
+      "translated": true
+    },
+    "G674": {
+      "definitions_cz": "vydechnout, t. j. omdlévat",
+      "translit": "apopsýchō",
+      "pronunciation": "ap-ops-oo'-kho",
+      "translated": true
+    },
+    "G675": {
+      "definitions_cz": "(v genitivu, tj. přivlastňovacím případě) Appia,\n jméno Římana",
+      "translit": "Áppios",
+      "pronunciation": "ap'-pee-os",
+      "translated": true
+    },
+    "G676": {
+      "definitions_cz": "nepřístupný",
+      "translit": "aprósitos",
+      "pronunciation": "ap-ros'-ee-tos",
+      "translated": true
+    },
+    "G677": {
+      "definitions_cz": "aktivně, neútočně, t. j. nesvádějící do hříchu; pasivně,\n bezchybný, t. j. nesvedený do hříchu",
+      "translit": "apróskopos",
+      "pronunciation": "ap-ros'-kop-os",
+      "translated": true
+    },
+    "G678": {
+      "definitions_cz": "v\n způsob nepřijetí osoby, tedy nestranně",
+      "translit": "aprosōpolḗptōs",
+      "pronunciation": "ap-ros-o-pol-ape'-tos",
+      "translated": true
+    },
+    "G679": {
+      "definitions_cz": "ne\n klopýtnutí, tedy (obrazně) bez hříchu",
+      "translit": "áptaistos",
+      "pronunciation": "ap-tah'-ee-stos",
+      "translated": true
+    },
+    "G680": {
+      "definitions_cz": "správně, připoutat se, tj. dotýkat se (in\n mnoho implikovaných vztahů)",
+      "translit": "háptomai",
+      "pronunciation": "hap'-tom-ahee",
+      "translated": true
+    },
+    "G681": {
+      "definitions_cz": "správně, upevnit, tj. (speciálně) nasadit\n oheň",
+      "translit": "háptō",
+      "pronunciation": "hap'-to",
+      "translated": true
+    },
+    "G682": {
+      "definitions_cz": "Apphia, žena z Collosæ",
+      "translit": "Apphía",
+      "pronunciation": "ap-fee'-a",
+      "translated": true
+    },
+    "G683": {
+      "definitions_cz": "tlačit\n vypnout, obrazně řečeno, odmítnout",
+      "translit": "apōthéomai",
+      "pronunciation": "ap-o-theh'-om-ahee",
+      "translated": true
+    },
+    "G684": {
+      "definitions_cz": "zmar nebo ztráta (fyzická, duchovní\n nebo věčný)",
+      "translit": "apṓleia",
+      "pronunciation": "ap-o'-li-a",
+      "translated": true
+    },
+    "G685": {
+      "definitions_cz": "správně, modlitba (jak je vyzdvižena do nebe), tj\n implikace) impresace",
+      "translit": "ará",
+      "pronunciation": "ar-ah'",
+      "translated": true
+    },
+    "G686": {
+      "definitions_cz": "a\n částice označující závěr více či méně rozhodující (jako\n následuje)",
+      "translit": "ára",
+      "pronunciation": "ar'-ah",
+      "translated": true
+    },
+    "G687": {
+      "definitions_cz": "",
+      "translated": false
+    },
+    "G688": {
+      "definitions_cz": "Arábie, oblast Asie",
+      "translit": "Arabía",
+      "pronunciation": "ar-ab-ee'-ah",
+      "translated": true
+    },
+    "G689": {
+      "definitions_cz": "Aram (tj. Ram), Izraelita",
+      "translit": "Arám",
+      "pronunciation": "ar-am'",
+      "translated": true
+    },
+    "G690": {
+      "definitions_cz": "Arab nebo rodák z Arábie",
+      "translit": "Áraps",
+      "pronunciation": "ar'-aps",
+      "translated": true
+    },
+    "G691": {
+      "definitions_cz": "zahálet, t. j. (obrazně) zdržovat",
+      "translit": "argéō",
+      "pronunciation": "arg-eh'-o",
+      "translated": true
+    },
+    "G692": {
+      "definitions_cz": "neaktivní, t. j. nezaměstnaný;\n (implicitně) líný, k ničemu",
+      "translit": "argós",
+      "pronunciation": "ar-gos'",
+      "translated": true
+    },
+    "G693": {
+      "definitions_cz": "ze stříbra",
+      "translit": "argýreos",
+      "pronunciation": "ar-goo'-reh-os",
+      "translated": true
+    },
+    "G694": {
+      "definitions_cz": "stříbřitý, tj. (implicitně)\n hotovost; speciálně, stříbro (tj. drachma nebo šekel)",
+      "translit": "argýrion",
+      "pronunciation": "ar-goo'-ree-on",
+      "translated": true
+    },
+    "G695": {
+      "definitions_cz": "šlehač (t. j. dělník) stříbra",
+      "translit": "argyrokópos",
+      "pronunciation": "ar-goo-rok-op'-os",
+      "translated": true
+    },
+    "G696": {
+      "definitions_cz": "stříbro (kov, ve výrobcích popř\n mince)",
+      "translit": "árgyros",
+      "pronunciation": "ar'-goo-ros",
+      "translated": true
+    },
+    "G697": {
+      "definitions_cz": "skála Ares, místo v Athénách",
+      "translit": "Áreios Págos",
+      "pronunciation": "ar'-i-os pag'-os",
+      "translated": true
+    },
+    "G698": {
+      "definitions_cz": "Areopagita nebo člen soudu konaného na Marsu\n Hill",
+      "translit": "Areopagítēs",
+      "pronunciation": "ar-eh-op-ag-ee'-tace",
+      "translated": true
+    },
+    "G699": {
+      "definitions_cz": "úslužnost",
+      "translit": "areskeía",
+      "pronunciation": "ar-es'-ki-ah",
+      "translated": true
+    },
+    "G700": {
+      "definitions_cz": "být\n příjemné (nebo implicitně usilovat o to, aby to tak bylo)",
+      "translit": "aréskō",
+      "pronunciation": "ar-es'-ko",
+      "translated": true
+    },
+    "G701": {
+      "definitions_cz": "příjemný; implikovaně se hodí",
+      "translit": "arestós",
+      "pronunciation": "ar-es-tos'",
+      "translated": true
+    },
+    "G702": {
+      "definitions_cz": "Aretas, Arab",
+      "translit": "Arétas",
+      "pronunciation": "ar-et'-as",
+      "translated": true
+    },
+    "G703": {
+      "definitions_cz": "správně, mužnost (chvalnost), t. j. znamenitost\n (vnitřní nebo přiřazené)",
+      "translit": "arétē",
+      "pronunciation": "ar-et'-ay",
+      "translated": true
+    },
+    "G704": {
+      "definitions_cz": "jehně (jako samec)",
+      "translit": "arḗn",
+      "pronunciation": "ar-ane'",
+      "translated": true
+    },
+    "G705": {
+      "definitions_cz": "vyčíslit nebo spočítat",
+      "translit": "arithméō",
+      "pronunciation": "ar-ith-meh'-o",
+      "translated": true
+    },
+    "G706": {
+      "definitions_cz": "číslo (podle výpočtu)",
+      "translit": "arithmós",
+      "pronunciation": "ar-ith-mos'",
+      "translated": true
+    },
+    "G707": {
+      "definitions_cz": "Arimatha (nebo Ramah), místo v\n Palestina",
+      "translit": "Arimathaía",
+      "pronunciation": "ar-ee-math-ah'-ee-ah",
+      "translated": true
+    },
+    "G708": {
+      "definitions_cz": "nejlepší rozhodnutí; Aristarchus, a\n makedonský",
+      "translit": "Arístarchos",
+      "pronunciation": "ar-is'-tar-khos",
+      "translated": true
+    },
+    "G709": {
+      "definitions_cz": "vzít hlavní jídlo",
+      "translit": "aristáō",
+      "pronunciation": "ar-is-tah'-o",
+      "translated": true
+    },
+    "G710": {
+      "definitions_cz": "levá ruka (jako\n druhý nejlepší)",
+      "translit": "aristerós",
+      "pronunciation": "ar-is-ter-os'",
+      "translated": true
+    },
+    "G711": {
+      "definitions_cz": "nejlepší poradenství; Aristoboulus, a\n Christian",
+      "translit": "Aristóboulos",
+      "pronunciation": "ar-is-tob'-oo-los",
+      "translated": true
+    },
+    "G712": {
+      "definitions_cz": "nejlepší jídlo\n (nebo snídaně; možná z ἦρι",
+      "translit": "áriston",
+      "pronunciation": "ar'-is-ton",
+      "translated": true
+    },
+    "G713": {
+      "definitions_cz": "vyhovující",
+      "translit": "arketós",
+      "pronunciation": "ar-ket-os'",
+      "translated": true
+    },
+    "G714": {
+      "definitions_cz": "správně, odvrátit, tedy (implicitně) k\n využít (obrazně, být uspokojivý)",
+      "translit": "arkéō",
+      "pronunciation": "ar-keh'-o",
+      "translated": true
+    },
+    "G715": {
+      "definitions_cz": "medvěd (jako překážející zuřivostí)",
+      "translit": "árktos",
+      "pronunciation": "ark'-tos",
+      "translated": true
+    },
+    "G716": {
+      "definitions_cz": "vůz (zvednutý nebo spojený dohromady (srovnej [ŘECKO:719])",
+      "translit": "hárma",
+      "pronunciation": "har'-mah",
+      "translated": true
+    },
+    "G717": {
+      "definitions_cz": "Armageddon (nebo Har-Meggiddon), a\n symbolické jméno",
+      "translit": "Armageddṓn",
+      "pronunciation": "ar-mag-ed-dohn'",
+      "translated": true
+    },
+    "G718": {
+      "definitions_cz": "spojovat, tj. (obrazně) namlouvat (reflexivně, k\n zasnoubení)",
+      "translit": "harmózō",
+      "pronunciation": "har-mod'-zo",
+      "translated": true
+    },
+    "G719": {
+      "definitions_cz": "artikulace (těla)",
+      "translit": "harmós",
+      "pronunciation": "har-mos'",
+      "translated": true
+    },
+    "G720": {
+      "definitions_cz": "odporovat, t. j. distancovat se, odmítat, zříkat se",
+      "translit": "arnéomai",
+      "pronunciation": "ar-neh'-om-ahee",
+      "translated": true
+    },
+    "G721": {
+      "definitions_cz": "jehněčí",
+      "translit": "arníon",
+      "pronunciation": "ar-nee'-on",
+      "translated": true
+    },
+    "G722": {
+      "definitions_cz": "orat",
+      "translit": "arotrióō",
+      "pronunciation": "ar-ot-ree-o'-o",
+      "translated": true
+    },
+    "G723": {
+      "definitions_cz": "pluh",
+      "translit": "árotron",
+      "pronunciation": "ar'-ot-ron",
+      "translated": true
+    },
+    "G724": {
+      "definitions_cz": "plenění (správně abstraktní)",
+      "translit": "harpagḗ",
+      "pronunciation": "har-pag-ay'",
+      "translated": true
+    },
+    "G725": {
+      "definitions_cz": "plenit (správně beton)",
+      "translit": "harpagmós",
+      "pronunciation": "har-pag-mos'",
+      "translated": true
+    },
+    "G726": {
+      "definitions_cz": "zachytit (v různých aplikacích)",
+      "translit": "harpázō",
+      "pronunciation": "har-pad'-zo",
+      "translated": true
+    },
+    "G727": {
+      "definitions_cz": "nenasytný",
+      "translit": "hárpax",
+      "pronunciation": "har'-pax",
+      "translated": true
+    },
+    "G728": {
+      "definitions_cz": "zástava, tedy část kupní-peníze popř\n majetek daný předem jako záruka za zbytek",
+      "translit": "arrhabṓn",
+      "pronunciation": "ar-hrab-ohn'",
+      "translated": true
+    },
+    "G729": {
+      "definitions_cz": "nešité, tedy z jednoho kusu",
+      "translit": "árrhaphos",
+      "pronunciation": "ar'-hhraf-os",
+      "translated": true
+    },
+    "G730": {
+      "definitions_cz": "samec (jako silnější pro zvedání)",
+      "translit": "árrhēn",
+      "pronunciation": "ar'-hrane",
+      "translated": true
+    },
+    "G731": {
+      "definitions_cz": "nevyřčený, tj. (tím\n implikace) nevyslovitelný",
+      "translit": "árrhētos",
+      "pronunciation": "ar'-hray-tos",
+      "translated": true
+    },
+    "G732": {
+      "definitions_cz": "nemohoucí",
+      "translit": "árrhōstos",
+      "pronunciation": "ar'-hroce-tos",
+      "translated": true
+    },
+    "G733": {
+      "definitions_cz": "sodomit",
+      "translit": "arsenokoítēs",
+      "pronunciation": "ar-sen-ok-oy'-tace",
+      "translated": true
+    },
+    "G734": {
+      "definitions_cz": "dar Artemis; Artemas\n (nebo Artemidorus), křesťan",
+      "translit": "Artemás",
+      "pronunciation": "ar-tem-as'",
+      "translated": true
+    },
+    "G735": {
+      "definitions_cz": "promptní; Artemis, jméno Řeka\n bohyně, kterou si Asiaté vypůjčili pro jedno ze svých božstev",
+      "translit": "Ártemis",
+      "pronunciation": "ar'-tem-is",
+      "translated": true
+    },
+    "G736": {
+      "definitions_cz": "správně, něco připraveného (nebo jinak více\n vzdáleně z [ŘECKO:142][ŘECKO:740]",
+      "translit": "artémōn",
+      "pronunciation": "ar-tem'-ohn",
+      "translated": true
+    },
+    "G737": {
+      "definitions_cz": "právě teď",
+      "translit": "árti",
+      "pronunciation": "ar'-tee",
+      "translated": true
+    },
+    "G738": {
+      "definitions_cz": "právě narozený, tedy (obrazně) mládě\n převést",
+      "translit": "artigénnētos",
+      "pronunciation": "ar-teeg-en'-nay-tos",
+      "translated": true
+    },
+    "G739": {
+      "definitions_cz": "čerstvé, tedy (implicitně) úplné",
+      "translit": "ártios",
+      "pronunciation": "ar'-tee-os",
+      "translated": true
+    },
+    "G740": {
+      "definitions_cz": "chléb (jako vychovaný) nebo bochník",
+      "translit": "ártos",
+      "pronunciation": "ar'-tos",
+      "translated": true
+    },
+    "G741": {
+      "definitions_cz": "připravit, tj. kořenit (s\n povzbuzující koření)",
+      "translit": "artýō",
+      "pronunciation": "ar-too'-o",
+      "translated": true
+    },
+    "G742": {
+      "definitions_cz": "Arphaxad, postdiluvian\n patriarcha",
+      "translit": "Arphaxád",
+      "pronunciation": "ar-fax-ad'",
+      "translated": true
+    },
+    "G743": {
+      "definitions_cz": "hlavní anděl",
+      "translit": "archángelos",
+      "pronunciation": "ar-khang'-el-os",
+      "translated": true
+    },
+    "G744": {
+      "definitions_cz": "původní nebo prapůvodní",
+      "translit": "archaîos",
+      "pronunciation": "ar-khah'-yos",
+      "translated": true
+    },
+    "G745": {
+      "definitions_cz": "vládnoucí lid; Archelaos, Žid\n král",
+      "translit": "Archélaos",
+      "pronunciation": "ar-khel'-ah-os",
+      "translated": true
+    },
+    "G746": {
+      "definitions_cz": "(správně abstraktní) zahájení, nebo (konkrétně) šéf\n (v různých aplikacích pořadí, času, místa nebo pořadí)",
+      "translit": "archḗ",
+      "pronunciation": "ar-khay'",
+      "translated": true
+    },
+    "G747": {
+      "definitions_cz": "hlavní vůdce",
+      "translit": "archēgós",
+      "pronunciation": "ar-khay-gos'",
+      "translated": true
+    },
+    "G748": {
+      "definitions_cz": "velekněz",
+      "translit": "archieratikós",
+      "pronunciation": "ar-khee-er-at-ee-kos'",
+      "translated": true
     }
   }
 }
