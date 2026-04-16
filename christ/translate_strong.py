@@ -210,6 +210,8 @@ def main():
             existing = target["entries"][norm_id]
             if existing.get("translated"):
                 continue
+        else:
+            print(f"Processing Greek: {norm_id}")
 
         text = extract_definitions(entry, is_hebrew=False)
         if not text:
@@ -219,6 +221,8 @@ def main():
         if cz is None:
             break
 
+        if norm_id not in target["entries"]:
+            target["entries"][norm_id] = {}
         target["entries"][norm_id]["definitions_cz"] = cz
         target["entries"][norm_id]["translated"] = True
         new_translations += 1
