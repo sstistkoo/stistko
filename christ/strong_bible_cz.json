@@ -11761,6 +11761,906 @@
       "translit": "aníleōs",
       "pronunciation": "an-ee'-leh-oce",
       "translated": true
+    },
+    "G449": {
+      "definitions_cz": "bez mytí",
+      "translit": "ániptos",
+      "pronunciation": "an'-ip-tos",
+      "translated": true
+    },
+    "G450": {
+      "definitions_cz": "vstát (doslovné nebo obrazné, tranzitivní nebo\n netranzitivní)",
+      "translit": "anístēmi",
+      "pronunciation": "an-is'-tay-mee",
+      "translated": true
+    },
+    "G451": {
+      "definitions_cz": "Anna, Izraelka",
+      "translit": "Ánna",
+      "pronunciation": "an'-nah",
+      "translated": true
+    },
+    "G452": {
+      "definitions_cz": "Annas (tj. [ŘECKO:367]",
+      "translit": "Ánnas",
+      "pronunciation": "an'-nas",
+      "translated": true
+    },
+    "G453": {
+      "definitions_cz": "neinteligentní; implikovaně, smyslný",
+      "translit": "anóētos",
+      "pronunciation": "an-o'-ay-tos",
+      "translated": true
+    },
+    "G454": {
+      "definitions_cz": "hloupost; podle\n implikace, vztek",
+      "translit": "ánoia",
+      "pronunciation": "an'-oy-ah",
+      "translated": true
+    },
+    "G455": {
+      "definitions_cz": "otevřít se (doslova nebo přeneseně, v\n různé aplikace)",
+      "translit": "anoígō",
+      "pronunciation": "an-oy'-go",
+      "translated": true
+    },
+    "G456": {
+      "definitions_cz": "přestavět",
+      "translit": "anoikodoméō",
+      "pronunciation": "an-oy-kod-om-eh'-o",
+      "translated": true
+    },
+    "G457": {
+      "definitions_cz": "otevření (hrdlo)",
+      "translit": "ánoixis",
+      "pronunciation": "an'-oix-is",
+      "translated": true
+    },
+    "G458": {
+      "definitions_cz": "nezákonnost, tj. porušení zákona nebo (genitivní případ)\n špatnost",
+      "translit": "anomía",
+      "pronunciation": "an-om-ee'-ah",
+      "translated": true
+    },
+    "G459": {
+      "definitions_cz": "nezákonný, tj. (negativně)\n nepodléhající (židovskému) právu; (implicitně pohan), nebo\n (pozitivně) zlý",
+      "translit": "ánomos",
+      "pronunciation": "an'-om-os",
+      "translated": true
+    },
+    "G460": {
+      "definitions_cz": "nezákonně, tj. (zvláště) nepřístupný (\n židovské) právo",
+      "translit": "anómōs",
+      "pronunciation": "an-om'-oce",
+      "translated": true
+    },
+    "G461": {
+      "definitions_cz": "narovnat se",
+      "translit": "anorthóō",
+      "pronunciation": "an-orth-o'-o",
+      "translated": true
+    },
+    "G462": {
+      "definitions_cz": "zlý",
+      "translit": "anósios",
+      "pronunciation": "an-os'-ee-os",
+      "translated": true
+    },
+    "G463": {
+      "definitions_cz": "sebeomezení, tedy tolerance",
+      "translit": "anochḗ",
+      "pronunciation": "an-okh-ay'",
+      "translated": true
+    },
+    "G464": {
+      "definitions_cz": "bojovat proti (obrazně)\n (\"znepřátelit si\")",
+      "translit": "antagōnízomai",
+      "pronunciation": "an-tag-o-nid'-zom-ahee",
+      "translated": true
+    },
+    "G465": {
+      "definitions_cz": "ekvivalent nebo výkupné",
+      "translit": "antállagma",
+      "pronunciation": "an-tal'-ag-mah",
+      "translated": true
+    },
+    "G466": {
+      "definitions_cz": "doplnit",
+      "translit": "antanaplēróō",
+      "pronunciation": "an-tan-ap-lay-ro'-o",
+      "translated": true
+    },
+    "G467": {
+      "definitions_cz": "odvděčit se (dobré nebo zlé)",
+      "translit": "antapodídōmi",
+      "pronunciation": "an-tap-od-ee'-do-mee",
+      "translated": true
+    },
+    "G468": {
+      "definitions_cz": "odplata (správně věc)",
+      "translit": "antapódoma",
+      "pronunciation": "an-tap-od'-om-ah",
+      "translated": true
+    },
+    "G469": {
+      "definitions_cz": "odplata (správně, čin)",
+      "translit": "antapódosis",
+      "pronunciation": "an-tap-od'-os-is",
+      "translated": true
+    },
+    "G470": {
+      "definitions_cz": "odporovat nebo polemizovat",
+      "translit": "antapokrínomai",
+      "pronunciation": "an-tap-ok-ree'-nom-ahee",
+      "translated": true
+    },
+    "G471": {
+      "definitions_cz": "vyvrátit nebo popřít",
+      "translit": "antépō",
+      "pronunciation": "an-tep'-o",
+      "translated": true
+    },
+    "G472": {
+      "definitions_cz": "držet se naproti,\n tj. (implicitně) dodržovat; rozšířením pečovat",
+      "translit": "antéchomai",
+      "pronunciation": "an-tekh'-om-ahee",
+      "translated": true
+    },
+    "G473": {
+      "definitions_cz": "naopak, tj. místo nebo kvůli (zřídka v\n dodatek k)",
+      "translit": "antí",
+      "pronunciation": "an-tee'",
+      "translated": true
+    },
+    "G474": {
+      "definitions_cz": "do bandy",
+      "translit": "antibállō",
+      "pronunciation": "an-tee-bal'-lo",
+      "translated": true
+    },
+    "G475": {
+      "definitions_cz": "postavit se naproti, t. j. být \n diskutabilní",
+      "translit": "antidiatíthemai",
+      "pronunciation": "an-tee-dee-at-eeth'-em-ahee",
+      "translated": true
+    },
+    "G476": {
+      "definitions_cz": "odpůrce (v soudním sporu); zvláště Satan (jako\n úhlavní nepřítel)",
+      "translit": "antídikos",
+      "pronunciation": "an-tid'-ee-kos",
+      "translated": true
+    },
+    "G477": {
+      "definitions_cz": "opozice, tj. konflikt (o\n teorie)",
+      "translit": "antíthesis",
+      "pronunciation": "an-tith'-es-is",
+      "translated": true
+    },
+    "G478": {
+      "definitions_cz": "postavit (vojska) proti, tzn.\n vydržet",
+      "translit": "antikathístēmi",
+      "pronunciation": "an-tee-kath-is'-tay-mee",
+      "translated": true
+    },
+    "G479": {
+      "definitions_cz": "na oplátku pozvat",
+      "translit": "antikaléō",
+      "pronunciation": "an-tee-kal-eh'-o",
+      "translated": true
+    },
+    "G480": {
+      "definitions_cz": "ležet naproti, tj. být nepříznivý (obrazně,\n odporný) k",
+      "translit": "antíkeimai",
+      "pronunciation": "an-tik'-i-mahee",
+      "translated": true
+    },
+    "G481": {
+      "definitions_cz": "naproti",
+      "translit": "antikrý",
+      "pronunciation": "an-tee-kroo'",
+      "translated": true
+    },
+    "G482": {
+      "definitions_cz": "chopit se střídavě, tzn.\n pomoc; také zúčastnit",
+      "translit": "antilambánomai",
+      "pronunciation": "an-tee-lam-ban'-om-ahee",
+      "translated": true
+    },
+    "G483": {
+      "definitions_cz": "zpochybnit, odmítnout",
+      "translit": "antilégō",
+      "pronunciation": "an-til'-eg-o",
+      "translated": true
+    },
+    "G484": {
+      "definitions_cz": "úleva",
+      "translit": "antílēpsis",
+      "pronunciation": "an-til'-ape-sis",
+      "translated": true
+    },
+    "G485": {
+      "definitions_cz": "spor, neposlušnost",
+      "translit": "antilogía",
+      "pronunciation": "an-tee-log-ee'-ah",
+      "translated": true
+    },
+    "G486": {
+      "definitions_cz": "na železnici v odpovědi",
+      "translit": "antiloidoréō",
+      "pronunciation": "an-tee-loy-dor-eh'-o",
+      "translated": true
+    },
+    "G487": {
+      "definitions_cz": "výkupní cena",
+      "translit": "antílytron",
+      "pronunciation": "an-til'-oo-tron",
+      "translated": true
+    },
+    "G488": {
+      "definitions_cz": "potkat na oplátku",
+      "translit": "antimetréō",
+      "pronunciation": "an-tee-met-reh'-o",
+      "translated": true
+    },
+    "G489": {
+      "definitions_cz": "odplata,\n korespondence",
+      "translit": "antimisthía",
+      "pronunciation": "an-tee-mis-thee'-ah",
+      "translated": true
+    },
+    "G490": {
+      "definitions_cz": "Antiochia, místo v Sýrii",
+      "translit": "Antiócheia",
+      "pronunciation": "an-tee-okh'-i-ah",
+      "translated": true
+    },
+    "G491": {
+      "definitions_cz": "Antiochian nebo obyvatel Antiochie",
+      "translit": "Antiocheús",
+      "pronunciation": "an-tee-okh-yoos'",
+      "translated": true
+    },
+    "G492": {
+      "definitions_cz": "jít naproti",
+      "translit": "antiparérchomai",
+      "pronunciation": "an-tee-par-er'-khom-ahee",
+      "translated": true
+    },
+    "G493": {
+      "definitions_cz": "Společnost Antipas, a\n Christian",
+      "translit": "Antípas",
+      "pronunciation": "an-tee'-pas",
+      "translated": true
+    },
+    "G494": {
+      "definitions_cz": "Antipatris, místo v Palestině",
+      "translit": "Antipatrís",
+      "pronunciation": "an-tip-at-rece'",
+      "translated": true
+    },
+    "G495": {
+      "definitions_cz": "na opačné straně",
+      "translit": "antipéran",
+      "pronunciation": "an-tee-per'-an",
+      "translated": true
+    },
+    "G496": {
+      "definitions_cz": "oponovat",
+      "translit": "antipíptō",
+      "pronunciation": "an-tee-pip'-to",
+      "translated": true
+    },
+    "G497": {
+      "definitions_cz": "(obrazně) zaútočit, tj. (implicitně)\n zničit",
+      "translit": "antistrateúomai",
+      "pronunciation": "an-tee-strat-yoo'-om-ahee",
+      "translated": true
+    },
+    "G498": {
+      "definitions_cz": "postavit se proti, tzn.\n oponovat",
+      "translit": "antitássomai",
+      "pronunciation": "an-tee-tas'-som-ahee",
+      "translated": true
+    },
+    "G499": {
+      "definitions_cz": "odpovídající (\"antityp\"), tzn.\n zástupce, protějšek",
+      "translit": "antítypon",
+      "pronunciation": "an-teet'-oo-pon",
+      "translated": true
+    },
+    "G500": {
+      "definitions_cz": "odpůrce Mesiáše",
+      "translit": "antíchristos",
+      "pronunciation": "an-tee'-khris-tos",
+      "translated": true
+    },
+    "G501": {
+      "definitions_cz": "sbalit (správně, stočit vodu),\n namočit vodu (kbelíkem, džbánem atd.)",
+      "translit": "antléō",
+      "pronunciation": "ant-leh-o",
+      "translated": true
+    },
+    "G502": {
+      "definitions_cz": "balicí nádobu",
+      "translit": "ántlēma",
+      "pronunciation": "ant'-lay-mah",
+      "translated": true
+    },
+    "G503": {
+      "definitions_cz": "čelit",
+      "translit": "antophthalméō",
+      "pronunciation": "ant-of-thal-meh'-o",
+      "translated": true
+    },
+    "G504": {
+      "definitions_cz": "bezvodé, tedy suché",
+      "translit": "ánydros",
+      "pronunciation": "an'-oo-dros",
+      "translated": true
+    },
+    "G505": {
+      "definitions_cz": "nerozložený, t. j. upřímný",
+      "translit": "anypókritos",
+      "pronunciation": "an-oo-pok'-ree-tos",
+      "translated": true
+    },
+    "G506": {
+      "definitions_cz": "nepodřízený, tj. nepodřízený (ve skutečnosti nebo temperament)",
+      "translit": "anypótaktos",
+      "pronunciation": "an-oo-pot'-ak-tos",
+      "translated": true
+    },
+    "G507": {
+      "definitions_cz": "nahoru nebo nahoře",
+      "translit": "ánō",
+      "pronunciation": "an'-o",
+      "translated": true
+    },
+    "G508": {
+      "definitions_cz": "nad zemí, tedy (správně) druhé patro\n budovy; používá se pro kopuli nebo balkon v horním patře",
+      "translit": "anṓgeon",
+      "pronunciation": "an-ogue'-eh-on",
+      "translated": true
+    },
+    "G509": {
+      "definitions_cz": "shora; analogicky od prvního; implicitně,\n nově",
+      "translit": "ánōthen",
+      "pronunciation": "an'-o-then",
+      "translated": true
+    },
+    "G510": {
+      "definitions_cz": "nadřazený, tedy (místně) vzdálenější",
+      "translit": "anōterikós",
+      "pronunciation": "an-o-ter-ee-kos'",
+      "translated": true
+    },
+    "G511": {
+      "definitions_cz": "horní, tj. (střední jako příslovce) k více\n nápadné místo v bývalé části knihy",
+      "translit": "anṓteros",
+      "pronunciation": "an-o'-ter-os",
+      "translated": true
+    },
+    "G512": {
+      "definitions_cz": "zbytečné popř\n (neutrální) neužitečnost",
+      "translit": "anōphelḗs",
+      "pronunciation": "an-o-fel'-ace",
+      "translated": true
+    },
+    "G513": {
+      "definitions_cz": "porovnat [ŘECKO:4486]",
+      "translit": "axínē",
+      "pronunciation": "ax-ee'-nay",
+      "translated": true
+    },
+    "G514": {
+      "definitions_cz": "zasluhující, srovnatelné nebo vhodné (jako by kresba\n pochvala)",
+      "translit": "áxios",
+      "pronunciation": "ax'-ee-os",
+      "translated": true
+    },
+    "G515": {
+      "definitions_cz": "uznat oprávněné nebo vhodné",
+      "translit": "axióō",
+      "pronunciation": "ax-ee-o'-o",
+      "translated": true
+    },
+    "G516": {
+      "definitions_cz": "vhodně",
+      "translit": "axíōs",
+      "pronunciation": "ax-ee'-oce",
+      "translated": true
+    },
+    "G517": {
+      "definitions_cz": "neviditelný",
+      "translit": "aóratos",
+      "pronunciation": "ah-or'-at-os",
+      "translated": true
+    },
+    "G518": {
+      "definitions_cz": "oznámit",
+      "translit": "apangéllō",
+      "pronunciation": "ap-ang-el'-lo",
+      "translated": true
+    },
+    "G519": {
+      "definitions_cz": "podobný základu [ŘECKO:43]",
+      "translit": "apánchomai",
+      "pronunciation": "ap-ang'-khom-ahee",
+      "translated": true
+    },
+    "G520": {
+      "definitions_cz": "vzlétnout (v různých smyslech)",
+      "translit": "apágō",
+      "pronunciation": "ap-ag'-o",
+      "translated": true
+    },
+    "G521": {
+      "definitions_cz": "nepoučený, tedy (obrazně) hloupý",
+      "translit": "apaídeutos",
+      "pronunciation": "ap-ah'-ee-dyoo-tos",
+      "translated": true
+    },
+    "G522": {
+      "definitions_cz": "zvednout, tj. odstranit",
+      "translit": "apaírō",
+      "pronunciation": "ap-ah'-ee-ro",
+      "translated": true
+    },
+    "G523": {
+      "definitions_cz": "požadovat zpět",
+      "translit": "apaitéō",
+      "pronunciation": "ap-ah'-ee-teh-o",
+      "translated": true
+    },
+    "G524": {
+      "definitions_cz": "truchlit, t. j. stát se\n apatický",
+      "translit": "apalgéō",
+      "pronunciation": "ap-alg-eh'-o",
+      "translated": true
+    },
+    "G525": {
+      "definitions_cz": "změnit se, tj. uvolnit, (reflexivně)\n odstranit",
+      "translit": "apallássō",
+      "pronunciation": "ap-al-las'-so",
+      "translated": true
+    },
+    "G526": {
+      "definitions_cz": "odcizit se, tj. (pasivně\n a přeneseně) být nezúčastněný",
+      "translit": "apallotrióō",
+      "pronunciation": "ap-al-lot-ree-o'-o",
+      "translated": true
+    },
+    "G527": {
+      "definitions_cz": "měkký",
+      "translit": "apalós",
+      "pronunciation": "ap-al-os'",
+      "translated": true
+    },
+    "G528": {
+      "definitions_cz": "setkat se, t. j. setkat se",
+      "translit": "apantáō",
+      "pronunciation": "ap-an-tah'-o",
+      "translated": true
+    },
+    "G529": {
+      "definitions_cz": "(přátelské) setkání",
+      "translit": "apántēsis",
+      "pronunciation": "ap-an'-tay-sis",
+      "translated": true
+    },
+    "G530": {
+      "definitions_cz": "jednou (nebo jednou) (číselně nebo\n přesvědčivě)",
+      "translit": "hápax",
+      "pronunciation": "hap'-ax",
+      "translated": true
+    },
+    "G531": {
+      "definitions_cz": "neprochází\n pryč, tj. nepřenosný (trvalý)",
+      "translit": "aparábatos",
+      "pronunciation": "ap-ar-ab'-at-os",
+      "translated": true
+    },
+    "G532": {
+      "definitions_cz": "nepřipravený",
+      "translit": "aparaskeúastos",
+      "pronunciation": "ap-ar-ask-yoo'-as-tos",
+      "translated": true
+    },
+    "G533": {
+      "definitions_cz": "úplně zapřít, t. j. zapřít, zdržet se",
+      "translit": "aparnéomai",
+      "pronunciation": "ap-ar-neh'-om-ahee",
+      "translated": true
+    },
+    "G534": {
+      "definitions_cz": "od nynějška, tj. od nynějška (již)",
+      "translit": "apárti",
+      "pronunciation": "ap-ar'-tee",
+      "translated": true
+    },
+    "G535": {
+      "definitions_cz": "dokončení",
+      "translit": "apartismós",
+      "pronunciation": "ap-ar-tis-mos'",
+      "translated": true
+    },
+    "G536": {
+      "definitions_cz": "začátek oběti, tj\n (židovská) prvotina (obrazně)",
+      "translit": "aparchḗ",
+      "pronunciation": "ap-ar-khay'",
+      "translated": true
+    },
+    "G537": {
+      "definitions_cz": "úplně všechny nebo (jednotné číslo)\n každý",
+      "translit": "hápas",
+      "pronunciation": "hap'-as",
+      "translated": true
+    },
+    "G538": {
+      "definitions_cz": "podvádět, t. j. klamat",
+      "translit": "apatáō",
+      "pronunciation": "ap-at-ah'-o",
+      "translated": true
+    },
+    "G539": {
+      "definitions_cz": "klam",
+      "translit": "apátē",
+      "pronunciation": "ap-at'-ay",
+      "translated": true
+    },
+    "G540": {
+      "definitions_cz": "bez otce, tj\n nezapsané otcovství",
+      "translit": "apátōr",
+      "pronunciation": "ap-at'-ore",
+      "translated": true
+    },
+    "G541": {
+      "definitions_cz": "vypnutý blesk, tzn.\n záře",
+      "translit": "apaúgasma",
+      "pronunciation": "ap-ow'-gas-mah",
+      "translated": true
+    },
+    "G542": {
+      "definitions_cz": "vidět naplno",
+      "translit": "apeídō",
+      "pronunciation": "ap-i'-do",
+      "translated": true
+    },
+    "G543": {
+      "definitions_cz": "nedůvěra (tvrdohlavý a vzpurný)",
+      "translit": "apeítheia",
+      "pronunciation": "ap-i'-thi-ah",
+      "translated": true
+    },
+    "G544": {
+      "definitions_cz": "nevěřit (schválně a zvráceně)",
+      "translit": "apeithéō",
+      "pronunciation": "ap-i-theh'-o",
+      "translated": true
+    },
+    "G545": {
+      "definitions_cz": "nepřesvědčivé, tzn.\n kontumační",
+      "translit": "apeithḗs",
+      "pronunciation": "ap-i-thace'",
+      "translated": true
+    },
+    "G546": {
+      "definitions_cz": "hrozit; implicitně, k\n zakázat",
+      "translit": "apeiléō",
+      "pronunciation": "ap-i-leh'-o",
+      "translated": true
+    },
+    "G547": {
+      "definitions_cz": "hrozba",
+      "translit": "apeilḗ",
+      "pronunciation": "ap-i-lay'",
+      "translated": true
+    },
+    "G548": {
+      "definitions_cz": "být pryč",
+      "translit": "ápeimi",
+      "pronunciation": "ap'-i-mee",
+      "translated": true
+    },
+    "G549": {
+      "definitions_cz": "jít pryč",
+      "translit": "ápeimi",
+      "pronunciation": "ap'-i-mee",
+      "translated": true
+    },
+    "G550": {
+      "definitions_cz": "říct si pro sebe,\n tj. popřít",
+      "translit": "apeipómēn",
+      "pronunciation": "ap-i-pom'-ane",
+      "translated": true
+    },
+    "G551": {
+      "definitions_cz": "nevyzkoušený, t. j. nepokušitelný",
+      "translit": "apeírastos",
+      "pronunciation": "ap-i'-ras-tos",
+      "translated": true
+    },
+    "G552": {
+      "definitions_cz": "nezkušený, tzn.\n neznalý",
+      "translit": "ápeiros",
+      "pronunciation": "ap'-i-ros",
+      "translated": true
+    },
+    "G553": {
+      "definitions_cz": "plně očekávat",
+      "translit": "apekdéchomai",
+      "pronunciation": "ap-ek-dekh'-om-ahee",
+      "translated": true
+    },
+    "G554": {
+      "definitions_cz": "zcela se zbavit, nebo (pro\n sebe) plenit",
+      "translit": "apekdýomai",
+      "pronunciation": "ap-ek-doo'-om-ahee",
+      "translated": true
+    },
+    "G555": {
+      "definitions_cz": "odprodej",
+      "translit": "apékdysis",
+      "pronunciation": "ap-ek'-doo-sis",
+      "translated": true
+    },
+    "G556": {
+      "definitions_cz": "propustit",
+      "translit": "apelaúnō",
+      "pronunciation": "ap-el-ow'-no",
+      "translated": true
+    },
+    "G557": {
+      "definitions_cz": "vyvrácení, tj. (implicitně)\n pohrdání",
+      "translit": "apelegmós",
+      "pronunciation": "ap-el-eg-mos'",
+      "translated": true
+    },
+    "G558": {
+      "definitions_cz": "jeden osvobozený, t. j. svobodník",
+      "translit": "apeleútheros",
+      "pronunciation": "ap-el-yoo'-ther-os",
+      "translated": true
+    },
+    "G559": {
+      "definitions_cz": "Apelles, křesťan",
+      "translit": "Apellēs",
+      "pronunciation": "ap-el-lace'",
+      "translated": true
+    },
+    "G560": {
+      "definitions_cz": "doufat, t. j. plně očekávat",
+      "translit": "apelpízō",
+      "pronunciation": "ap-el-pid'-zo",
+      "translated": true
+    },
+    "G561": {
+      "definitions_cz": "zepředu, t. j. naproti, před nebo\n proti",
+      "translit": "apénanti",
+      "pronunciation": "ap-en'-an-tee",
+      "translated": true
+    },
+    "G562": {
+      "definitions_cz": "nedokončený, tedy (implicitně) nekonečný",
+      "translit": "apérantos",
+      "pronunciation": "ap-er'-an-tos",
+      "translated": true
+    },
+    "G563": {
+      "definitions_cz": "nerušeně, tj. bez (domácího)\n pečlivost",
+      "translit": "aperispástōs",
+      "pronunciation": "ap-er-is-pas-toce'",
+      "translated": true
+    },
+    "G564": {
+      "definitions_cz": "neobřezaný (obrazně)",
+      "translit": "aperítmētos",
+      "pronunciation": "ap-er-eet'-may-tos",
+      "translated": true
+    },
+    "G565": {
+      "definitions_cz": "odejít (tj. odejít), stranou (t. j. od sebe) popř\n za (tj. následovat), doslova nebo obrazně",
+      "translit": "apérchomai",
+      "pronunciation": "ap-erkh'-om-ahee",
+      "translated": true
+    },
+    "G566": {
+      "definitions_cz": "je to dostačující",
+      "translit": "apéchei",
+      "pronunciation": "ap-ekh'-i",
+      "translated": true
+    },
+    "G567": {
+      "definitions_cz": "zdržovat se, tzn.\n zdržet se",
+      "translit": "apéchomai",
+      "pronunciation": "ap-ekh'-om-ahee",
+      "translated": true
+    },
+    "G568": {
+      "definitions_cz": "(aktivně) mít ven, t. j. přijímat v plné výši;\n (nepřechodně) držet se stranou, tj. být vzdálený (doslova nebo\n přeneseně)",
+      "translit": "apéchō",
+      "pronunciation": "ap-ekh'-o",
+      "translated": true
+    },
+    "G569": {
+      "definitions_cz": "být nevěřící, tj. (přechodně) nevěřit, nebo (tím\n implikace) neuposlechnout",
+      "translit": "apistéō",
+      "pronunciation": "ap-is-teh'-o",
+      "translated": true
+    },
+    "G570": {
+      "definitions_cz": "nevěra, tj. (negativně) nevěra (nedostatek\n křesťanská víra), nebo (pozitivně) nevěra\n (neposlušnost)",
+      "translit": "apistía",
+      "pronunciation": "ap-is-tee'-ah",
+      "translated": true
+    },
+    "G571": {
+      "definitions_cz": "(aktivně) nevěřící,\n tj. bez křesťanské víry (zvláště pohan); (pasivně)\n nedůvěryhodný (člověk) nebo neuvěřitelný (věc)",
+      "translit": "ápistos",
+      "pronunciation": "ap'-is-tos",
+      "translated": true
+    },
+    "G572": {
+      "definitions_cz": "osamělost, tj. (subjektivně) upřímnost (bez\n přetvářka nebo sebehledání), nebo (objektivně) velkorysost (velká\n udělení)",
+      "translit": "haplótēs",
+      "pronunciation": "hap-lot'-ace",
+      "translated": true
+    },
+    "G573": {
+      "definitions_cz": "správně, složené dohromady, tj. jednoduché (obrazně, jasné)",
+      "translit": "haploûs",
+      "pronunciation": "hap-looce'",
+      "translated": true
+    },
+    "G574": {
+      "definitions_cz": "štědře;",
+      "translit": "haplōs",
+      "pronunciation": "hap-loce'",
+      "translated": true
+    },
+    "G575": {
+      "definitions_cz": "\"vypnuto\", tj. pryč (od něčeho blízkého), v různých\n smysly (místa, času nebo vztahu; doslovné nebo obrazné)",
+      "translit": "apó",
+      "pronunciation": "apo'",
+      "translated": true
+    },
+    "G576": {
+      "definitions_cz": "doslova, vystoupit; přeneseně,\n vyvolat",
+      "translit": "apobaínō",
+      "pronunciation": "ap-ob-ah'-ee-no",
+      "translated": true
+    },
+    "G577": {
+      "definitions_cz": "odhodit; obrazně řečeno prohrát",
+      "translit": "apobállō",
+      "pronunciation": "ap-ob-al'-lo",
+      "translated": true
+    },
+    "G578": {
+      "definitions_cz": "odhlédnout od všeho ostatního, tzn.\n (obrazně) soustředěně pozorovat",
+      "translit": "apoblépō",
+      "pronunciation": "ap-ob-lep'-o",
+      "translated": true
+    },
+    "G579": {
+      "definitions_cz": "odhodit, tedy (obrazně) takový, aby byl odmítnut",
+      "translit": "apóblētos",
+      "pronunciation": "ap-ob'-lay-tos",
+      "translated": true
+    },
+    "G580": {
+      "definitions_cz": "odmítnutí; přeneseně ztráta",
+      "translit": "apobolḗ",
+      "pronunciation": "ap-ob-ol-ay'",
+      "translated": true
+    },
+    "G581": {
+      "definitions_cz": "nepřítomný, tedy zemřelý\n (obrazně řečeno, zřekl se)",
+      "translit": "apogenómenos",
+      "pronunciation": "ap-og-en-om'-en-os",
+      "translated": true
+    },
+    "G582": {
+      "definitions_cz": "zápis; implicitně, hodnocení",
+      "translit": "apographḗ",
+      "pronunciation": "ap-og-raf-ay'",
+      "translated": true
+    },
+    "G583": {
+      "definitions_cz": "odepsat (kopii nebo seznam), tj. zapsat",
+      "translit": "apográphō",
+      "pronunciation": "ap-og-raf'-o",
+      "translated": true
+    },
+    "G584": {
+      "definitions_cz": "předvádět se, t. j. vystavovat; přeneseně do\n prokázat, tedy akreditovat",
+      "translit": "apodeíknymi",
+      "pronunciation": "ap-od-ike'-noo-mee",
+      "translated": true
+    },
+    "G585": {
+      "definitions_cz": "manifestace",
+      "translit": "apódeixis",
+      "pronunciation": "ap-od'-ike-sis",
+      "translated": true
+    },
+    "G586": {
+      "definitions_cz": "dávat desátek (jako dlužník nebo věřitel)",
+      "translit": "apodekatóō",
+      "pronunciation": "ap-od-ek-at-o'-o",
+      "translated": true
+    },
+    "G587": {
+      "definitions_cz": "přijaté, tedy přijatelné",
+      "translit": "apódektos",
+      "pronunciation": "ap-od'-ek-tos",
+      "translated": true
+    },
+    "G588": {
+      "definitions_cz": "plně brát, t. j. vítat (osoby), schvalovat\n (věci)",
+      "translit": "apodéchomai",
+      "pronunciation": "ap-od-ekh'-om-ahee",
+      "translated": true
+    },
+    "G589": {
+      "definitions_cz": "odejít do zahraničí, tj. navštívit cizí zemi",
+      "translit": "apodēméō",
+      "pronunciation": "ap-od-ay-meh'-o",
+      "translated": true
+    },
+    "G590": {
+      "definitions_cz": "nepřítomen u vlastních lidí, tedy cizích\n cestovatel",
+      "translit": "apódēmos",
+      "pronunciation": "ap-od'-ay-mos",
+      "translated": true
+    },
+    "G591": {
+      "definitions_cz": "dát pryč, tj. nahoru, přes, zpět atd. (v různých\n aplikace)",
+      "translit": "apodídōmi",
+      "pronunciation": "ap-od-eed'-o-mee",
+      "translated": true
+    },
+    "G592": {
+      "definitions_cz": "oddělit (o hranici,\n obrazně řečeno večírek)",
+      "translit": "apodiorízō",
+      "pronunciation": "ap-od-ee-or-id'-zo",
+      "translated": true
+    },
+    "G593": {
+      "definitions_cz": "neschválit, tj. (implicitně) k\n zavrhnout",
+      "translit": "apodokimázō",
+      "pronunciation": "ap-od-ok-ee-mad'-zo",
+      "translated": true
+    },
+    "G594": {
+      "definitions_cz": "přijetí",
+      "translit": "apodochḗ",
+      "pronunciation": "ap-od-okh-ay'",
+      "translated": true
+    },
+    "G595": {
+      "definitions_cz": "odložení (doslova nebo přeneseně)",
+      "translit": "apóthesis",
+      "pronunciation": "ap-oth'-es-is",
+      "translated": true
+    },
+    "G596": {
+      "definitions_cz": "úložiště, tedy sýpka",
+      "translit": "apothḗkē",
+      "pronunciation": "ap-oth-ay'-kay",
+      "translated": true
+    },
+    "G597": {
+      "definitions_cz": "poklad pryč",
+      "translit": "apothēsaurízō",
+      "pronunciation": "ap-oth-ay-sow-rid'-zo",
+      "translated": true
+    },
+    "G598": {
+      "definitions_cz": "dav (z každé strany)",
+      "translit": "apothlíbō",
+      "pronunciation": "ap-oth-lee'-bo",
+      "translated": true
     }
   }
 }
