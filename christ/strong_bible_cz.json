@@ -27003,6 +27003,906 @@
       "translit": "Laodikeús",
       "pronunciation": "lah-od-ik-yooce'",
       "translated": true
+    },
+    "G2995": {
+      "definitions_cz": "hrdlo (\"hrtan\")",
+      "translit": "lárynx",
+      "pronunciation": "lar'-oongks",
+      "translated": true
+    },
+    "G2996": {
+      "definitions_cz": "Lasæa, místo na Krétě",
+      "translit": "Lasaía",
+      "pronunciation": "las-ah'-yah",
+      "translated": true
+    },
+    "G2997": {
+      "definitions_cz": "rozlousknout se\n (z pádu)",
+      "translit": "láschō",
+      "pronunciation": "las'-kho",
+      "translated": true
+    },
+    "G2998": {
+      "definitions_cz": "do\n lom",
+      "translit": "latoméō",
+      "pronunciation": "lat-om-eh'-o",
+      "translated": true
+    },
+    "G2999": {
+      "definitions_cz": "služba Boží, t. j. bohoslužba",
+      "translit": "latreía",
+      "pronunciation": "lat-ri'-ah",
+      "translated": true
+    },
+    "G3000": {
+      "definitions_cz": "sloužit (Bohu), t. j. obdarovávat\n náboženská pocta",
+      "translit": "latreúō",
+      "pronunciation": "lat-ryoo'-o",
+      "translated": true
+    },
+    "G3001": {
+      "definitions_cz": "zelenina",
+      "translit": "láchanon",
+      "pronunciation": "lakh'-an-on",
+      "translated": true
+    },
+    "G3002": {
+      "definitions_cz": "Lebbæus, křesťan",
+      "translit": "Lebbaîos",
+      "pronunciation": "leb-bah'-yos",
+      "translated": true
+    },
+    "G3003": {
+      "definitions_cz": "„legie“, tedy římský pluk\n (obrazně)",
+      "translit": "legeṓn",
+      "pronunciation": "leg-eh-ohn'",
+      "translated": true
+    },
+    "G3004": {
+      "definitions_cz": "správně „vyložit“, tj. (obrazně) vztáhnout\n (slovy (obvykle systematického nebo stanoveného diskursu; vzhledem k tomu, že [ŘECKO:2036][ŘECKO:5346][ŘECKO:4483][ŘECKO:2980])",
+      "translit": "légō",
+      "pronunciation": "leg'-o",
+      "translated": true
+    },
+    "G3005": {
+      "definitions_cz": "zbytek",
+      "translit": "leîmma",
+      "pronunciation": "lime'-mah",
+      "translated": true
+    },
+    "G3006": {
+      "definitions_cz": "hladký, tj. \"úroveň\"",
+      "translit": "leîos",
+      "pronunciation": "li'-os",
+      "translated": true
+    },
+    "G3007": {
+      "definitions_cz": "odejít, tj. (nepřechodně nebo pasivně) selhat\n nebo být nepřítomen",
+      "translit": "leípō",
+      "pronunciation": "li'-po",
+      "translated": true
+    },
+    "G3008": {
+      "definitions_cz": "být veřejným zaměstnancem, tj. (analogicky) vykonávat\n náboženské nebo charitativní funkce (uctívání, poslušnost, úleva)",
+      "translit": "leitourgéō",
+      "pronunciation": "li-toorg-eh'-o",
+      "translated": true
+    },
+    "G3009": {
+      "definitions_cz": "veřejná funkce (jako kněz („liturgie“) popř\n almužna)",
+      "translit": "leitourgía",
+      "pronunciation": "li-toorg-ee'-ah",
+      "translated": true
+    },
+    "G3010": {
+      "definitions_cz": "funkční veřejně („liturgický“); tj.\n prospěšný",
+      "translit": "leitourgikós",
+      "pronunciation": "li-toorg-ik-os'",
+      "translated": true
+    },
+    "G3011": {
+      "definitions_cz": "státní úředník, tj\n funkcionář v chrámu nebo evangeliu nebo (případ genitivu) ctitel\n (Boha) nebo dobrodince (člověka)",
+      "translit": "leitourgós",
+      "pronunciation": "li-toorg-os'",
+      "translated": true
+    },
+    "G3012": {
+      "definitions_cz": "\"lněnou\" látkou, tedy zástěrou",
+      "translit": "léntion",
+      "pronunciation": "len'-tee-on",
+      "translated": true
+    },
+    "G3013": {
+      "definitions_cz": "vločka",
+      "translit": "lepís",
+      "pronunciation": "lep-is'",
+      "translated": true
+    },
+    "G3014": {
+      "definitions_cz": "šupinatost, tedy \"lepra\"",
+      "translit": "lépra",
+      "pronunciation": "lep'-rah",
+      "translated": true
+    },
+    "G3015": {
+      "definitions_cz": "šupinatý, t. j. malomocný (malomocný)",
+      "translit": "leprós",
+      "pronunciation": "lep-ros'",
+      "translated": true
+    },
+    "G3016": {
+      "definitions_cz": "něco šupinatého (světlo),\n tedy malá mince",
+      "translit": "leptón",
+      "pronunciation": "lep-ton'",
+      "translated": true
+    },
+    "G3017": {
+      "definitions_cz": "Lévi, jméno tří Izraelitů",
+      "translit": "Leuḯ",
+      "pronunciation": "lyoo'-ee",
+      "translated": true
+    },
+    "G3018": {
+      "definitions_cz": "Lewis (t. j. Levi), křesťan",
+      "translit": "Leuḯs",
+      "pronunciation": "lyoo-is'",
+      "translated": true
+    },
+    "G3019": {
+      "definitions_cz": "Levita, tedy potomek Léviho",
+      "translit": "Leuḯtēs",
+      "pronunciation": "lyoo-ee'-tace",
+      "translated": true
+    },
+    "G3020": {
+      "definitions_cz": "Levitský, t. j. vztahující se k Levitům",
+      "translit": "Leuïtikós",
+      "pronunciation": "lyoo-it'-ee-kos",
+      "translated": true
+    },
+    "G3021": {
+      "definitions_cz": "vybělit",
+      "translit": "leukaínō",
+      "pronunciation": "lyoo-kah'-ee-no",
+      "translated": true
+    },
+    "G3022": {
+      "definitions_cz": "bílý",
+      "translit": "leukós",
+      "pronunciation": "lyoo-kos'",
+      "translated": true
+    },
+    "G3023": {
+      "definitions_cz": "\"lev\"",
+      "translit": "léōn",
+      "pronunciation": "leh-ohn'",
+      "translated": true
+    },
+    "G3024": {
+      "definitions_cz": "zapomnětlivost",
+      "translit": "lḗthē",
+      "pronunciation": "lay'-thay",
+      "translated": true
+    },
+    "G3025": {
+      "definitions_cz": "koryto, t. j. káď na víno",
+      "translit": "lēnós",
+      "pronunciation": "lay-nos'",
+      "translated": true
+    },
+    "G3026": {
+      "definitions_cz": "twaddle, tedy neuvěřitelný příběh",
+      "translit": "lēros",
+      "pronunciation": "lay'-ros",
+      "translated": true
+    },
+    "G3027": {
+      "definitions_cz": "lupič",
+      "translit": "lēistḗs",
+      "pronunciation": "lace-tace'",
+      "translated": true
+    },
+    "G3028": {
+      "definitions_cz": "potvrzení (akt)",
+      "translit": "lēmpsis",
+      "pronunciation": "lape'-sis",
+      "translated": true
+    },
+    "G3029": {
+      "definitions_cz": "hodně (příslovečně)",
+      "translit": "lían",
+      "pronunciation": "lee'-an",
+      "translated": true
+    },
+    "G3030": {
+      "definitions_cz": "kadidlový strom, tj. (implicitně)\n samotné kadidlo",
+      "translit": "líbanos",
+      "pronunciation": "lib'-an-os",
+      "translated": true
+    },
+    "G3031": {
+      "definitions_cz": "kadidlo, t. j. (podle rozšíření) kadidelnice na pálení\n to",
+      "translit": "libanōtós",
+      "pronunciation": "lib-an-o-tos'",
+      "translated": true
+    },
+    "G3032": {
+      "definitions_cz": "římský propuštěnec",
+      "translit": "Libertînos",
+      "pronunciation": "lib-er-tee'-nos",
+      "translated": true
+    },
+    "G3033": {
+      "definitions_cz": "Libye, oblast Afriky",
+      "translit": "Libýē",
+      "pronunciation": "lib-oo'-ay",
+      "translated": true
+    },
+    "G3034": {
+      "definitions_cz": "lapovat",
+      "translit": "litházō",
+      "pronunciation": "lith-ad'-zo",
+      "translated": true
+    },
+    "G3035": {
+      "definitions_cz": "kamenný, t. j. z kamene",
+      "translit": "líthinos",
+      "pronunciation": "lith-ee'-nos",
+      "translated": true
+    },
+    "G3036": {
+      "definitions_cz": "házet kameny, tzn.\n lapidát",
+      "translit": "lithoboléō",
+      "pronunciation": "lith-ob-ol-eh'-o",
+      "translated": true
+    },
+    "G3037": {
+      "definitions_cz": "kámen (doslova nebo\n přeneseně)",
+      "translit": "líthos",
+      "pronunciation": "lee'-thos",
+      "translated": true
+    },
+    "G3038": {
+      "definitions_cz": "kamenný, t. j. mozaikový\n mozaika, na které byl umístěn římský tribunál",
+      "translit": "lithóstrōtos",
+      "pronunciation": "lith-os'-tro-tos",
+      "translated": true
+    },
+    "G3039": {
+      "definitions_cz": "do\n winnow, tj. (analogicky), triturovat",
+      "translit": "likmáō",
+      "pronunciation": "lik-mah'-o",
+      "translated": true
+    },
+    "G3040": {
+      "definitions_cz": "přístav",
+      "translit": "limḗn",
+      "pronunciation": "lee-mane'",
+      "translated": true
+    },
+    "G3041": {
+      "definitions_cz": "rybník\n (velký nebo malý)",
+      "translit": "límnē",
+      "pronunciation": "lim'-nay",
+      "translated": true
+    },
+    "G3042": {
+      "definitions_cz": "nedostatek\n jídlo",
+      "translit": "limós",
+      "pronunciation": "lee-mos'",
+      "translated": true
+    },
+    "G3043": {
+      "definitions_cz": "len, tedy (implicitně) \"len\"",
+      "translit": "línon",
+      "pronunciation": "lee'-non",
+      "translated": true
+    },
+    "G3044": {
+      "definitions_cz": "Linus, křesťan",
+      "translit": "Línos",
+      "pronunciation": "lee'-nos",
+      "translated": true
+    },
+    "G3045": {
+      "definitions_cz": "tlustý, tedy (obrazně) přepychový",
+      "translit": "liparós",
+      "pronunciation": "lip-ar-os'",
+      "translated": true
+    },
+    "G3046": {
+      "definitions_cz": "kila na váze",
+      "translit": "lítra",
+      "pronunciation": "lee'-trah",
+      "translated": true
+    },
+    "G3047": {
+      "definitions_cz": "jižní (- západní) vítr (as\n přinášející déšť, tedy (rozšířeně) jižní čtvrť)",
+      "translit": "líps",
+      "pronunciation": "leeps",
+      "translated": true
+    },
+    "G3048": {
+      "definitions_cz": "příspěvek",
+      "translit": "logía",
+      "pronunciation": "log-ee'-ah",
+      "translated": true
+    },
+    "G3049": {
+      "definitions_cz": "provést inventuru, tj. odhadnout (doslova\n nebo obrazně)",
+      "translit": "logízomai",
+      "pronunciation": "log-id'-zom-ahee",
+      "translated": true
+    },
+    "G3050": {
+      "definitions_cz": "racionální (\"logický\")",
+      "translit": "logikós",
+      "pronunciation": "log-ik-os'",
+      "translated": true
+    },
+    "G3051": {
+      "definitions_cz": "promluva (boží)",
+      "translit": "lógion",
+      "pronunciation": "log'-ee-on",
+      "translated": true
+    },
+    "G3052": {
+      "definitions_cz": "plynně, t. j. řečník",
+      "translit": "lógios",
+      "pronunciation": "log'-ee-os",
+      "translated": true
+    },
+    "G3053": {
+      "definitions_cz": "počítání, tj. (obrazně) uvažování (svědomí,\n domýšlivost)",
+      "translit": "logismós",
+      "pronunciation": "log-is-mos'",
+      "translated": true
+    },
+    "G3054": {
+      "definitions_cz": "být sporný (na\n maličkosti)",
+      "translit": "logomachéō",
+      "pronunciation": "log-om-akh-eh'-o",
+      "translated": true
+    },
+    "G3055": {
+      "definitions_cz": "disputace o maličkostech\n (\"logomachie\")",
+      "translit": "logomachía",
+      "pronunciation": "log-om-akh-ee'-ah",
+      "translated": true
+    },
+    "G3056": {
+      "definitions_cz": "něco řekl (včetně myšlenky); implicitně, a\n téma (předmět diskursu), též uvažování (mentální fakulta) popř\n motiv; rozšířením, výpočet; speciálně (s článkem v\n John) Boží výraz (tj. Kristus)",
+      "translit": "lógos",
+      "pronunciation": "log'-os",
+      "translated": true
+    },
+    "G3057": {
+      "definitions_cz": "\"kopí\"",
+      "translit": "lónchē",
+      "pronunciation": "long'-khay",
+      "translated": true
+    },
+    "G3058": {
+      "definitions_cz": "vytýkat, t. j. hanit",
+      "translit": "loidoréō",
+      "pronunciation": "loy-dor-eh'-o",
+      "translated": true
+    },
+    "G3059": {
+      "definitions_cz": "pomluvy nebo hanobení",
+      "translit": "loidoría",
+      "pronunciation": "loy-dor-ee'-ah",
+      "translated": true
+    },
+    "G3060": {
+      "definitions_cz": "zneužívající, t. j. černoch",
+      "translit": "loídoros",
+      "pronunciation": "loy'-dor-os",
+      "translated": true
+    },
+    "G3061": {
+      "definitions_cz": "mor (doslova nemoc, popř\n přeneseně škůdce)",
+      "translit": "loimós",
+      "pronunciation": "loy'-mos",
+      "translated": true
+    },
+    "G3062": {
+      "definitions_cz": "zbývající",
+      "translit": "loipoí",
+      "pronunciation": "loy-poy'",
+      "translated": true
+    },
+    "G3063": {
+      "definitions_cz": "něco zbylo\n (adverbiálně)",
+      "translit": "loipón",
+      "pronunciation": "loy-pon'",
+      "translated": true
+    },
+    "G3064": {
+      "definitions_cz": "zbývající čas",
+      "translit": "loipoû",
+      "pronunciation": "loy-poo'",
+      "translated": true
+    },
+    "G3065": {
+      "definitions_cz": "Lucas, křesťan",
+      "translit": "Loukâs",
+      "pronunciation": "loo-kas'",
+      "translated": true
+    },
+    "G3066": {
+      "definitions_cz": "osvětlovací; Lucius, křesťan",
+      "translit": "Loúkios",
+      "pronunciation": "loo'-kee-os",
+      "translated": true
+    },
+    "G3067": {
+      "definitions_cz": "koupel, t. j. (obrazně), křest",
+      "translit": "loutrón",
+      "pronunciation": "loo-tron'",
+      "translated": true
+    },
+    "G3068": {
+      "definitions_cz": "vykoupat (celého člověka; vzhledem k tomu, že [ŘECKO:3538][ŘECKO:4150]",
+      "translit": "loúō",
+      "pronunciation": "loo'-o",
+      "translated": true
+    },
+    "G3069": {
+      "definitions_cz": "Lydda (t. j. Lod), místo v\n Palestina",
+      "translit": "Lýdda",
+      "pronunciation": "lud'-dah",
+      "translated": true
+    },
+    "G3070": {
+      "definitions_cz": "Lydia, křesťanka",
+      "translit": "Lydía",
+      "pronunciation": "loo-dee'-ah",
+      "translated": true
+    },
+    "G3071": {
+      "definitions_cz": "Lycaonia, oblast Asie\n Menší",
+      "translit": "Lykaonía",
+      "pronunciation": "loo-kah-on-ee'-ah",
+      "translated": true
+    },
+    "G3072": {
+      "definitions_cz": "Lykaonisticky, tedy v\n jazyk Lycaonians",
+      "translit": "Lykaonistí",
+      "pronunciation": "loo-kah-on-is-tee'",
+      "translated": true
+    },
+    "G3073": {
+      "definitions_cz": "Lycia, provincie Malé Asie",
+      "translit": "Lykía",
+      "pronunciation": "loo-kee'-ah",
+      "translated": true
+    },
+    "G3074": {
+      "definitions_cz": "a\n vlk",
+      "translit": "lýkos",
+      "pronunciation": "loo'-kos",
+      "translated": true
+    },
+    "G3075": {
+      "definitions_cz": "správně špinit, tj. (obrazně) urážet (týrat)",
+      "translit": "lymaínomai",
+      "pronunciation": "loo-mah'-ee-nom-ahee",
+      "translated": true
+    },
+    "G3076": {
+      "definitions_cz": "strádat; reflexivně nebo pasivně, být smutný",
+      "translit": "lypéō",
+      "pronunciation": "loo-peh'-o",
+      "translated": true
+    },
+    "G3077": {
+      "definitions_cz": "smutek",
+      "translit": "lýpē",
+      "pronunciation": "loo'-pay",
+      "translated": true
+    },
+    "G3078": {
+      "definitions_cz": "rozhánění smutku; Lysanias, guvernér\n z Abilene",
+      "translit": "Lysanías",
+      "pronunciation": "loo-san-ee'-as",
+      "translated": true
+    },
+    "G3079": {
+      "definitions_cz": "Lysias, Říman",
+      "translit": "Lysías",
+      "pronunciation": "loo-see'-as",
+      "translated": true
+    },
+    "G3080": {
+      "definitions_cz": "uvolnění, tj. (zvláště), rozvod",
+      "translit": "lýsis",
+      "pronunciation": "loo'-sis",
+      "translated": true
+    },
+    "G3081": {
+      "definitions_cz": "neosobně odpovídá účelu, tzn.\n je výhodné",
+      "translit": "lysiteleî",
+      "pronunciation": "loo-sit-el-i'",
+      "translated": true
+    },
+    "G3082": {
+      "definitions_cz": "Lystra, místo v Malé Asii",
+      "translit": "Lýstra",
+      "pronunciation": "loos'-trah",
+      "translated": true
+    },
+    "G3083": {
+      "definitions_cz": "něco na uvolnění, tedy výkupní cenu\n (obrazně, odčinění)",
+      "translit": "lýtron",
+      "pronunciation": "loo'-tron",
+      "translated": true
+    },
+    "G3084": {
+      "definitions_cz": "vykoupit (doslova nebo obrazně)",
+      "translit": "lytróō",
+      "pronunciation": "loo-tro'-o",
+      "translated": true
+    },
+    "G3085": {
+      "definitions_cz": "výkupné (obrazně)",
+      "translit": "lýtrōsis",
+      "pronunciation": "loo'-tro-sis",
+      "translated": true
+    },
+    "G3086": {
+      "definitions_cz": "vykupitel (obrazně)",
+      "translit": "lytrōtḗs",
+      "pronunciation": "loo-tro-tace'",
+      "translated": true
+    },
+    "G3087": {
+      "definitions_cz": "stojánek (doslova nebo přeneseně)",
+      "translit": "lychnía",
+      "pronunciation": "lookh-nee'-ah",
+      "translated": true
+    },
+    "G3088": {
+      "definitions_cz": "přenosná lampa nebo jiný osvětlovač (doslova\n nebo obrazně)",
+      "translit": "lýchnos",
+      "pronunciation": "lookh'-nos",
+      "translated": true
+    },
+    "G3089": {
+      "definitions_cz": "\"uvolnit\" (doslova nebo obrazně)",
+      "translit": "lýō",
+      "pronunciation": "loo'-o",
+      "translated": true
+    },
+    "G3090": {
+      "definitions_cz": "Lois, křesťanka",
+      "translit": "Lōḯs",
+      "pronunciation": "lo-ece'",
+      "translated": true
+    },
+    "G3091": {
+      "definitions_cz": "Lot, patriarcha",
+      "translit": "Lṓt",
+      "pronunciation": "lote",
+      "translated": true
+    },
+    "G3092": {
+      "definitions_cz": "Maath, Izraelita",
+      "translit": "Maáth",
+      "pronunciation": "mah-ath'",
+      "translated": true
+    },
+    "G3093": {
+      "definitions_cz": "věž; Magdala (tedy Migdala), a\n místo v Palestině",
+      "translit": "Magdalá",
+      "pronunciation": "mag-dal-ah'",
+      "translated": true
+    },
+    "G3094": {
+      "definitions_cz": "žena Magdaléna, tedy obyvatelka\n z Magdaly",
+      "translit": "Magdalēnḗ",
+      "pronunciation": "mag-dal-ay-nay'",
+      "translated": true
+    },
+    "G3095": {
+      "definitions_cz": "\"kouzlo\"",
+      "translit": "mageía",
+      "pronunciation": "mag-i'-ah",
+      "translated": true
+    },
+    "G3096": {
+      "definitions_cz": "praktikovat magii",
+      "translit": "mageúō",
+      "pronunciation": "mag-yoo'-o",
+      "translated": true
+    },
+    "G3097": {
+      "definitions_cz": "mág, t. j. orientální vědec; podle\n implikace, kouzelník",
+      "translit": "mágos",
+      "pronunciation": "mag'-os",
+      "translated": true
+    },
+    "G3098": {
+      "definitions_cz": "Magog, cizí národ, tj. (obrazně)\n antikřesťanská strana",
+      "translit": "Magṓg",
+      "pronunciation": "mag-ogue'",
+      "translated": true
+    },
+    "G3099": {
+      "definitions_cz": "Madian (t. j. Midian), kraj\n Arábie",
+      "translit": "Madián",
+      "pronunciation": "mad-ee-on'",
+      "translated": true
+    },
+    "G3100": {
+      "definitions_cz": "netranzitivně, stát se žákem; tranzitivně, do\n žák, t. j. zapsat se jako učenec",
+      "translit": "mathēteúō",
+      "pronunciation": "math-ayt-yoo'-o",
+      "translated": true
+    },
+    "G3101": {
+      "definitions_cz": "žák, tedy žák",
+      "translit": "mathētḗs",
+      "pronunciation": "math-ay-tes'",
+      "translated": true
+    },
+    "G3102": {
+      "definitions_cz": "žákyně",
+      "translit": "mathḗtria",
+      "pronunciation": "math-ay'-tree-ah",
+      "translated": true
+    },
+    "G3103": {
+      "definitions_cz": "Mathusala (tj. Methušelach), an\n předpotopní",
+      "translit": "Mathousála",
+      "pronunciation": "math-oo-sal'-ah",
+      "translated": true
+    },
+    "G3104": {
+      "definitions_cz": "Mainan, Izraelita",
+      "translit": "Maïnán",
+      "pronunciation": "mahee-nan'",
+      "translated": true
+    },
+    "G3105": {
+      "definitions_cz": "prostřednictvím myšlenky\n bezcitná touha); blouznit jako \"maniak\"",
+      "translit": "maínomai",
+      "pronunciation": "mah'-ee-nom-ahee",
+      "translated": true
+    },
+    "G3106": {
+      "definitions_cz": "blahořečit, t. j. vyslovit (nebo vážit) štěstí",
+      "translit": "makarízō",
+      "pronunciation": "mak-ar-id'-zo",
+      "translated": true
+    },
+    "G3107": {
+      "definitions_cz": "svrchovaně\n požehnat; podle rozšíření, štěstí, dobře",
+      "translit": "makários",
+      "pronunciation": "mak-ar'-ee-os",
+      "translated": true
+    },
+    "G3108": {
+      "definitions_cz": "beatifikace, t. j. připisování dobra\n štěstí",
+      "translit": "makarismós",
+      "pronunciation": "mak-ar-is-mos'",
+      "translated": true
+    },
+    "G3109": {
+      "definitions_cz": "Makedonie, region Řecka",
+      "translit": "Makedonía",
+      "pronunciation": "mak-ed-on-ee'-ah",
+      "translated": true
+    },
+    "G3110": {
+      "definitions_cz": "makedonský (makedonský), t. j. obyvatel\n Makedonie",
+      "translit": "Makedṓn",
+      "pronunciation": "mak-ed'-ohn",
+      "translated": true
+    },
+    "G3111": {
+      "definitions_cz": "řeznický stánek, masný trh popř\n provizorní obchod",
+      "translit": "mákellon",
+      "pronunciation": "mak'-el-lon",
+      "translated": true
+    },
+    "G3112": {
+      "definitions_cz": "v a\n vzdálenost (doslova nebo přeneseně)",
+      "translit": "makrán",
+      "pronunciation": "mak-ran'",
+      "translated": true
+    },
+    "G3113": {
+      "definitions_cz": "z dálky nebo z dálky",
+      "translit": "makróthen",
+      "pronunciation": "mak-roth'-en",
+      "translated": true
+    },
+    "G3114": {
+      "definitions_cz": "být dlouhotrvající, tj. (objektivně)\n shovívavý nebo (subjektivně) trpělivý",
+      "translit": "makrothyméō",
+      "pronunciation": "mak-roth-oo-meh'-o",
+      "translated": true
+    },
+    "G3115": {
+      "definitions_cz": "longanimity, tedy (objektivně) shovívavost popř\n (subjektivně) statečnost",
+      "translit": "makrothymía",
+      "pronunciation": "mak-roth-oo-mee'-ah",
+      "translated": true
+    },
+    "G3116": {
+      "definitions_cz": "s dlouhou (trvalou) povahou,\n tedy shovívavě",
+      "translit": "makrothymṓs",
+      "pronunciation": "mak-roth-oo-moce'",
+      "translated": true
+    },
+    "G3117": {
+      "definitions_cz": "dlouhý (na místě (vzdálený) nebo čas (střední množné číslo))",
+      "translit": "makrós",
+      "pronunciation": "mak-ros'",
+      "translated": true
+    },
+    "G3118": {
+      "definitions_cz": "dlouhodobá, t. j. dlouhověká",
+      "translit": "makrochrónios",
+      "pronunciation": "mak-rokh-ron'-ee-os",
+      "translated": true
+    },
+    "G3119": {
+      "definitions_cz": "měkkost, tj. nervace (slabost)",
+      "translit": "malakía",
+      "pronunciation": "mal-ak-ee'-ah",
+      "translated": true
+    },
+    "G3120": {
+      "definitions_cz": "měkký, t. j. jemný (oděv); přeneseně, a\n katamit",
+      "translit": "malakós",
+      "pronunciation": "mal-ak-os'",
+      "translated": true
+    },
+    "G3121": {
+      "definitions_cz": "Maleleel (tj. Mahalalel), an\n předpotopní",
+      "translit": "Maleleḗl",
+      "pronunciation": "mal-el-eh-ale'",
+      "translated": true
+    },
+    "G3122": {
+      "definitions_cz": "(adverbiálně) nejvíce (v největší míře) popř\n zvláště",
+      "translit": "málista",
+      "pronunciation": "mal'-is-tah",
+      "translated": true
+    },
+    "G3123": {
+      "definitions_cz": "(příslovečně) více (v\n větší stupeň)) nebo spíše",
+      "translit": "mâllon",
+      "pronunciation": "mal'-lon",
+      "translated": true
+    },
+    "G3124": {
+      "definitions_cz": "Malchus, Izraelita",
+      "translit": "Málchos",
+      "pronunciation": "mal'-khos",
+      "translated": true
+    },
+    "G3125": {
+      "definitions_cz": "babička",
+      "translit": "mámmē",
+      "pronunciation": "mam'-may",
+      "translated": true
+    },
+    "G3126": {
+      "definitions_cz": "mammonas,\n tj. hrabivost (zbožštěná)",
+      "translit": "mammōnâs",
+      "pronunciation": "mam-mo-nas'",
+      "translated": true
+    },
+    "G3127": {
+      "definitions_cz": "Manaën, křesťan",
+      "translit": "Manaḗn",
+      "pronunciation": "man-ah-ane'",
+      "translated": true
+    },
+    "G3128": {
+      "definitions_cz": "Mannasses (tj. Menashsheh), an\n Izraelita",
+      "translit": "Manassēs",
+      "pronunciation": "man-as-sace'",
+      "translated": true
+    },
+    "G3129": {
+      "definitions_cz": "učit se\n (jakýmkoli způsobem)",
+      "translit": "manthánō",
+      "pronunciation": "man-than'-o",
+      "translated": true
+    },
+    "G3130": {
+      "definitions_cz": "šílenství",
+      "translit": "manía",
+      "pronunciation": "man-ee'-ah",
+      "translated": true
+    },
+    "G3131": {
+      "definitions_cz": "manna (t. j. muž), jedlá guma",
+      "translit": "mánna",
+      "pronunciation": "man'-nah",
+      "translated": true
+    },
+    "G3132": {
+      "definitions_cz": "božsky, tj. vyslovovat kouzla (pod záminkou\n předpovídání",
+      "translit": "manteúomai",
+      "pronunciation": "mant-yoo'-om-ahee",
+      "translated": true
+    },
+    "G3133": {
+      "definitions_cz": "uhasit (jako oheň), tj. (obrazně a\n pasivně) zemřít",
+      "translit": "maraínō",
+      "pronunciation": "mar-ah'-ee-no",
+      "translated": true
+    },
+    "G3134": {
+      "definitions_cz": "maranatha, tj\n zvolání blížícího se božího soudu",
+      "translit": "maràn athá",
+      "pronunciation": "mar'-an ath'-ah",
+      "translated": true
+    },
+    "G3135": {
+      "definitions_cz": "perla",
+      "translit": "margarítēs",
+      "pronunciation": "mar-gar-ee'-tace",
+      "translated": true
+    },
+    "G3136": {
+      "definitions_cz": "Marta, křesťanka\n žena",
+      "translit": "Mártha",
+      "pronunciation": "mar'-thah",
+      "translated": true
+    },
+    "G3137": {
+      "definitions_cz": "Maria nebo Mariam (tj. Mirjam), jméno\n šest křesťanských žen",
+      "translit": "María",
+      "pronunciation": "mar-ee'-ah",
+      "translated": true
+    },
+    "G3138": {
+      "definitions_cz": "Marcus, křesťan",
+      "translit": "Márkos",
+      "pronunciation": "mar'-kos",
+      "translated": true
+    },
+    "G3139": {
+      "definitions_cz": "mramor (jako jiskřivá bílá)",
+      "translit": "mármaros",
+      "pronunciation": "mar'-mar-os",
+      "translated": true
+    },
+    "G3140": {
+      "definitions_cz": "být svědkem, tedy svědčit (doslova popř\n přeneseně)",
+      "translit": "martyréō",
+      "pronunciation": "mar-too-reh'-o",
+      "translated": true
+    },
+    "G3141": {
+      "definitions_cz": "poskytnutý důkaz (soudně nebo genitivní případ)",
+      "translit": "martyría",
+      "pronunciation": "mar-too-ree'-ah",
+      "translated": true
+    },
+    "G3142": {
+      "definitions_cz": "něco průkazného, tzn.\n (genitivní pád) daný důkaz nebo (zvláště) Desatero (v\n posvátný svatostánek)",
+      "translit": "martýrion",
+      "pronunciation": "mar-too'-ree-on",
+      "translated": true
+    },
+    "G3143": {
+      "definitions_cz": "být předveden jako svědek, tzn.\n (obrazně) domáhat se (afirmace nebo nabádání)",
+      "translit": "martýromai",
+      "pronunciation": "mar-too'-rom-ahee",
+      "translated": true
+    },
+    "G3144": {
+      "definitions_cz": "svědek (doslova (soudně) popř\n přeneseně (genitivní pád)); analogicky \"mučedník\"",
+      "translit": "mártys",
+      "pronunciation": "mar'-toos",
+      "translated": true
     }
   }
 }
