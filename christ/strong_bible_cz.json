@@ -15355,6 +15355,902 @@
       "translit": "Gáza",
       "pronunciation": "gad'-zah",
       "translated": true
+    },
+    "G1049": {
+      "definitions_cz": "pokladnice, t. j. soud v chrámu pro\n sběrné boxy",
+      "translit": "gazophylákion",
+      "pronunciation": "gad-zof-oo-lak'-ee-on",
+      "translated": true
+    },
+    "G1050": {
+      "definitions_cz": "Gaius (t. j. Caius), křesťan",
+      "translit": "Gáïos",
+      "pronunciation": "gah'-ee-os",
+      "translated": true
+    },
+    "G1051": {
+      "definitions_cz": "mléko (obrazně)",
+      "translit": "gála",
+      "pronunciation": "gal'-ah",
+      "translated": true
+    },
+    "G1052": {
+      "definitions_cz": "Galaťan nebo obyvatel Galacie",
+      "translit": "Galátēs",
+      "pronunciation": "gal-at'-ace",
+      "translated": true
+    },
+    "G1053": {
+      "definitions_cz": "Galatia, oblast Asie",
+      "translit": "Galatía",
+      "pronunciation": "gal-at-ee'-ah",
+      "translated": true
+    },
+    "G1054": {
+      "definitions_cz": "Galatské nebo týkající se Galacie",
+      "translit": "Galatikós",
+      "pronunciation": "gal-at-ee-kos'",
+      "translated": true
+    },
+    "G1055": {
+      "definitions_cz": "klid",
+      "translit": "galḗnē",
+      "pronunciation": "gal-ay'-nay",
+      "translated": true
+    },
+    "G1056": {
+      "definitions_cz": "Galilæa (t. j. pohanský kruh), kraj\n z Palestiny",
+      "translit": "Galilaía",
+      "pronunciation": "gal-il-ah'-yah",
+      "translated": true
+    },
+    "G1057": {
+      "definitions_cz": "Galilejský nebo patřící ke Galileji",
+      "translit": "Galilaîos",
+      "pronunciation": "gal-ee-lah'-yos",
+      "translated": true
+    },
+    "G1058": {
+      "definitions_cz": "Gallion (t. j. Gallio), římský důstojník",
+      "translit": "Gallíōn",
+      "pronunciation": "gal-lee'-own",
+      "translated": true
+    },
+    "G1059": {
+      "definitions_cz": "Gamaliel (tj. Gamliel), an\n Izraelita",
+      "translit": "Gamaliḗl",
+      "pronunciation": "gam-al-ee-ale'",
+      "translated": true
+    },
+    "G1060": {
+      "definitions_cz": "oženit se (obého pohlaví)",
+      "translit": "gaméō",
+      "pronunciation": "gam-eh'-o",
+      "translated": true
+    },
+    "G1061": {
+      "definitions_cz": "zasnoubit se (dcera manželovi)",
+      "translit": "gamískō",
+      "pronunciation": "gam-is'-ko",
+      "translated": true
+    },
+    "G1062": {
+      "definitions_cz": "svatební obřad",
+      "translit": "gámos",
+      "pronunciation": "gam'-os",
+      "translated": true
+    },
+    "G1063": {
+      "definitions_cz": "správně, přiřazení důvodu (použito v argumentu,\n vysvětlení nebo zesílení; často s jinými částicemi)",
+      "translit": "gár",
+      "pronunciation": "gar",
+      "translated": true
+    },
+    "G1064": {
+      "definitions_cz": "žaludek; analogicky matice;\n přeneseně gurmán",
+      "translit": "gastḗr",
+      "pronunciation": "gas-tare'",
+      "translated": true
+    },
+    "G1065": {
+      "definitions_cz": "",
+      "translated": false
+    },
+    "G1066": {
+      "definitions_cz": "Gedeon (tj. Gid(e)on), Izraelita",
+      "translit": "Gedeṓn",
+      "pronunciation": "ghed-eh-own'",
+      "translated": true
+    },
+    "G1067": {
+      "definitions_cz": "údolí (syna) Hinnoma;\n ge-henna (nebo Ge-Hinnom), údolí Jeruzaléma, používané (obrazně) jako\n jméno pro místo (nebo stát) věčného trestu",
+      "translit": "géenna",
+      "pronunciation": "gheh'-en-nah",
+      "translated": true
+    },
+    "G1068": {
+      "definitions_cz": "lis na olej; Společnost Getsemane, a\n zahrada poblíž Jeruzaléma",
+      "translit": "Gethsēmanē",
+      "pronunciation": "gheth-say-man-ay'",
+      "translated": true
+    },
+    "G1069": {
+      "definitions_cz": "soused (jako sousedící s vlastním pozemek); implicitně, a\n přítel",
+      "translit": "geítōn",
+      "pronunciation": "ghi'-tone",
+      "translated": true
+    },
+    "G1070": {
+      "definitions_cz": "smát se (na znamení radosti popř\n spokojenost)",
+      "translit": "geláō",
+      "pronunciation": "ghel-ah'-o",
+      "translated": true
+    },
+    "G1071": {
+      "definitions_cz": "smích (jako známka uspokojení)",
+      "translit": "gélōs",
+      "pronunciation": "ghel'-os",
+      "translated": true
+    },
+    "G1072": {
+      "definitions_cz": "úplně naplnit",
+      "translit": "gemízō",
+      "pronunciation": "ghem-id'-zo",
+      "translated": true
+    },
+    "G1073": {
+      "definitions_cz": "bobtnat, t. j. být plný",
+      "translit": "gémō",
+      "pronunciation": "ghem'-o",
+      "translated": true
+    },
+    "G1074": {
+      "definitions_cz": "generace; implicitně, an\n věk (období nebo osoby)",
+      "translit": "geneá",
+      "pronunciation": "ghen-eh-ah'",
+      "translated": true
+    },
+    "G1075": {
+      "definitions_cz": "počítat po generace, t. j. vysledovat v\n genealogie",
+      "translit": "genealogéō",
+      "pronunciation": "ghen-eh-al-og-eh'-o",
+      "translated": true
+    },
+    "G1076": {
+      "definitions_cz": "trasování po generacích, tzn.\n \"genealogie\"",
+      "translit": "genealogía",
+      "pronunciation": "ghen-eh-al-og-ee'-ah",
+      "translated": true
+    },
+    "G1077": {
+      "definitions_cz": "narozeninové obřady",
+      "translit": "genésia",
+      "pronunciation": "ghen-es'-ee-ah",
+      "translated": true
+    },
+    "G1078": {
+      "definitions_cz": "narození; obrazně řečeno příroda",
+      "translit": "génesis",
+      "pronunciation": "ghen'-es-is",
+      "translated": true
+    },
+    "G1079": {
+      "definitions_cz": "narození",
+      "translit": "genetḗ",
+      "pronunciation": "ghen-et-ay",
+      "translated": true
+    },
+    "G1080": {
+      "definitions_cz": "plodit (správně, otce, ale\n prodloužením matky); obrazně řečeno regenerovat",
+      "translit": "gennáō",
+      "pronunciation": "ghen-nah'-o",
+      "translated": true
+    },
+    "G1081": {
+      "definitions_cz": "potomstvo; analogicky vyrobit (doslova nebo\n přeneseně)",
+      "translit": "génnēma",
+      "pronunciation": "ghen'-nay-mah",
+      "translated": true
+    },
+    "G1082": {
+      "definitions_cz": "Gennesaret (t. j. Kinnereth), jezero\n a prostý v Palestině",
+      "translit": "Gennēsarét",
+      "pronunciation": "ghen-nay-sar-et'",
+      "translated": true
+    },
+    "G1083": {
+      "definitions_cz": "narození",
+      "translit": "génnēsis",
+      "pronunciation": "ghen'-nay-sis",
+      "translated": true
+    },
+    "G1084": {
+      "definitions_cz": "narozený",
+      "translit": "gennētós",
+      "pronunciation": "ghen-nay-tos'",
+      "translated": true
+    },
+    "G1085": {
+      "definitions_cz": "„příbuzný“ (abstraktní nebo konkrétní, doslovný nebo obrazný,\n individuální nebo kolektivní)",
+      "translit": "génos",
+      "pronunciation": "ghen'-os",
+      "translated": true
+    },
+    "G1086": {
+      "definitions_cz": "Gergesene (tj. Girgashite) nebo jeden z\n domorodci z Palestiny",
+      "translit": "Gergesēnós",
+      "pronunciation": "gher-ghes-ay-nos'",
+      "translated": true
+    },
+    "G1087": {
+      "definitions_cz": "staršovstvo, tedy (souhrnně) židovské\n Sanhedrin",
+      "translit": "gerousía",
+      "pronunciation": "gher-oo-see'-ah",
+      "translated": true
+    },
+    "G1088": {
+      "definitions_cz": "ve věku",
+      "translit": "gérōn",
+      "pronunciation": "gher'-own",
+      "translated": true
+    },
+    "G1089": {
+      "definitions_cz": "ochutnat; implicitně jíst; přeneseně do\n zkušenost (dobrá nebo špatná)",
+      "translit": "geúomai",
+      "pronunciation": "ghyoo'-om-ahee",
+      "translated": true
+    },
+    "G1090": {
+      "definitions_cz": "obdělávat (půdu)",
+      "translit": "geōrgéō",
+      "pronunciation": "gheh-or-gheh'-o",
+      "translated": true
+    },
+    "G1091": {
+      "definitions_cz": "kultivovatelné, tj\n farma",
+      "translit": "geṓrgion",
+      "pronunciation": "gheh-ore'-ghee-on",
+      "translated": true
+    },
+    "G1092": {
+      "definitions_cz": "zemědělec, tzn.\n farmář",
+      "translit": "geōrgós",
+      "pronunciation": "gheh-ore-gos'",
+      "translated": true
+    },
+    "G1093": {
+      "definitions_cz": "půda; rozšířením region, nebo\n pevná část nebo celá zeměkoule (včetně obyvatel\n v každé aplikaci)",
+      "translit": "gē",
+      "pronunciation": "ghay",
+      "translated": true
+    },
+    "G1094": {
+      "definitions_cz": "senilita",
+      "translit": "gēras",
+      "pronunciation": "ghay'-ras",
+      "translated": true
+    },
+    "G1095": {
+      "definitions_cz": "být senescentní",
+      "translit": "gēráskō",
+      "pronunciation": "ghay-ras'-ko",
+      "translated": true
+    },
+    "G1096": {
+      "definitions_cz": "způsobit být\n (\"gen\"-erate), t. j. (reflexivně) stát se (vzniknout), použit\n s velkou volností (doslovné, obrazné, intenzivní atd.)",
+      "translit": "gínomai",
+      "pronunciation": "ghin'-om-ahee",
+      "translated": true
+    },
+    "G1097": {
+      "definitions_cz": "\"vědět\" (naprosto) ve velkém\n různé aplikace a s mnoha důsledky (jak je uvedeno níže, s\n ostatní nejsou takto jasně vyjádřeny)",
+      "translit": "ginṓskō",
+      "pronunciation": "ghin-oce'-ko",
+      "translated": true
+    },
+    "G1098": {
+      "definitions_cz": "sladké víno, t. j. (správně) mošt (čerstvá šťáva), ale použitý\n více sacharinu (a proto vysoce opilého) fermentovaného\n víno",
+      "translit": "gleûkos",
+      "pronunciation": "glyoo'-kos",
+      "translated": true
+    },
+    "G1099": {
+      "definitions_cz": "sladké (tj. ne hořké ani slané)",
+      "translit": "glykýs",
+      "pronunciation": "gloo-koos'",
+      "translated": true
+    },
+    "G1100": {
+      "definitions_cz": "jazyk; implicitně jazyk\n (zejména jeden přirozeně nezískaný)",
+      "translit": "glōssa",
+      "pronunciation": "gloce-sah'",
+      "translated": true
+    },
+    "G1101": {
+      "definitions_cz": "správně, pouzdro (pro uchování náustků\n dechových nástrojů v), tj. (rozšířeně) v rakvi nebo (zvláště)\n peněženka",
+      "translit": "glōssókomon",
+      "pronunciation": "gloce-sok'-om-on",
+      "translated": true
+    },
+    "G1102": {
+      "definitions_cz": "a\n oděvník",
+      "translit": "gnapheús",
+      "pronunciation": "gnaf-yuce'",
+      "translated": true
+    },
+    "G1103": {
+      "definitions_cz": "legitimní (zrození), t. j. pravé",
+      "translit": "gnḗsios",
+      "pronunciation": "gnay'-see-os",
+      "translated": true
+    },
+    "G1104": {
+      "definitions_cz": "skutečně, tj. skutečně",
+      "translit": "gnēsíōs",
+      "pronunciation": "gnay-see'-ose",
+      "translated": true
+    },
+    "G1105": {
+      "definitions_cz": "šero (jako bouře)",
+      "translit": "gnóphos",
+      "pronunciation": "gnof'-os",
+      "translated": true
+    },
+    "G1106": {
+      "definitions_cz": "poznání, tedy (subjektivně) názor, nebo (objektivně)\n řešení (porada, souhlas atd.)",
+      "translit": "gnṓmē",
+      "pronunciation": "gno'-may",
+      "translated": true
+    },
+    "G1107": {
+      "definitions_cz": "dát vědět; subjektivně, k\n vědět",
+      "translit": "gnōrízō",
+      "pronunciation": "gno-rid'-zo",
+      "translated": true
+    },
+    "G1108": {
+      "definitions_cz": "vědět (akt), tj. (implicitně)\n znalosti",
+      "translit": "gnōsis",
+      "pronunciation": "gno'-sis",
+      "translated": true
+    },
+    "G1109": {
+      "definitions_cz": "znalec",
+      "translit": "gnṓstēs",
+      "pronunciation": "gnoce'-tace",
+      "translated": true
+    },
+    "G1110": {
+      "definitions_cz": "dobře známý",
+      "translit": "gnōstós",
+      "pronunciation": "gnoce-tos'",
+      "translated": true
+    },
+    "G1111": {
+      "definitions_cz": "reptat",
+      "translit": "gongýzō",
+      "pronunciation": "gong-good'-zo",
+      "translated": true
+    },
+    "G1112": {
+      "definitions_cz": "reptání",
+      "translit": "gongysmós",
+      "pronunciation": "gong-goos-mos'",
+      "translated": true
+    },
+    "G1113": {
+      "definitions_cz": "bručoun",
+      "translit": "gongystḗs",
+      "pronunciation": "gong-goos-tace'",
+      "translated": true
+    },
+    "G1114": {
+      "definitions_cz": "správně, čaroděj (jako mumlající kouzla), tzn.\n (implicitně) podvodník",
+      "translit": "góēs",
+      "pronunciation": "go'-ace",
+      "translated": true
+    },
+    "G1115": {
+      "definitions_cz": "lebka; Golgota, návrší poblíž\n Jeruzalém",
+      "translit": "Golgothâ",
+      "pronunciation": "gol-goth-ah'",
+      "translated": true
+    },
+    "G1116": {
+      "definitions_cz": "Gomorha (t. j. Amorah), místo poblíž Mrtvých\n moře",
+      "translit": "Gómorrha",
+      "pronunciation": "gom'-or-hrhah",
+      "translated": true
+    },
+    "G1117": {
+      "definitions_cz": "náklad (jako náplň), tj. (zejména) náklad, nebo (podle\n rozšíření) zboží",
+      "translit": "gómos",
+      "pronunciation": "gom'-os",
+      "translated": true
+    },
+    "G1118": {
+      "definitions_cz": "rodič",
+      "translit": "goneús",
+      "pronunciation": "gon-yooce'",
+      "translated": true
+    },
+    "G1119": {
+      "definitions_cz": "\"koleno\"",
+      "translit": "góny",
+      "pronunciation": "gon-oo'",
+      "translated": true
+    },
+    "G1120": {
+      "definitions_cz": "padnout na\n koleno",
+      "translit": "gonypetéō",
+      "pronunciation": "gon-oo-pet-eh'-o",
+      "translated": true
+    },
+    "G1121": {
+      "definitions_cz": "spis, t. j. dopis, poznámka, epištola, kniha atd.; množné číslo\n učení",
+      "translit": "grámma",
+      "pronunciation": "gram'-mah",
+      "translated": true
+    },
+    "G1122": {
+      "definitions_cz": "",
+      "translated": false
+    },
+    "G1123": {
+      "definitions_cz": "vepsaný (obrazně)",
+      "translit": "graptós",
+      "pronunciation": "grap-tos'",
+      "translated": true
+    },
+    "G1124": {
+      "definitions_cz": "dokument, tedy Svatý spis (nebo jeho obsah nebo prohlášení v\n to)",
+      "translit": "graphḗ",
+      "pronunciation": "graf-ay'",
+      "translated": true
+    },
+    "G1125": {
+      "definitions_cz": "„hrobovat“, zejména psát; přeneseně do\n popsat",
+      "translit": "gráphō",
+      "pronunciation": "graf'-o",
+      "translated": true
+    },
+    "G1126": {
+      "definitions_cz": "babizna, tedy hloupá",
+      "translit": "graṓdēs",
+      "pronunciation": "grah-o'-dace",
+      "translated": true
+    },
+    "G1127": {
+      "definitions_cz": "zůstat vzhůru, tj. dívat se (doslova nebo obrazně)",
+      "translit": "grēgoreúō",
+      "pronunciation": "gray-gor-yoo'-o",
+      "translated": true
+    },
+    "G1128": {
+      "definitions_cz": "cvičit nazí (ve hrách), t. j. trénovat\n (obrazně)",
+      "translit": "gymnázō",
+      "pronunciation": "goom-nad'-zo",
+      "translated": true
+    },
+    "G1129": {
+      "definitions_cz": "školení, tedy (obrazně) askeze",
+      "translit": "gymnasía",
+      "pronunciation": "goom-nas-ee'-ah",
+      "translated": true
+    },
+    "G1130": {
+      "definitions_cz": "svléknout, tj. (reflexivně) jít špatně\n oděný",
+      "translit": "gymnēteúō",
+      "pronunciation": "goom-nayt-yoo'-o",
+      "translated": true
+    },
+    "G1131": {
+      "definitions_cz": "nahý (absolutní nebo relativní, doslovný nebo\n obrazný)",
+      "translit": "gymnós",
+      "pronunciation": "goom-nos'",
+      "translated": true
+    },
+    "G1132": {
+      "definitions_cz": "nahota (absolutní nebo srovnávací)",
+      "translit": "gymnótēs",
+      "pronunciation": "goom-not'-ace",
+      "translated": true
+    },
+    "G1133": {
+      "definitions_cz": "malá (t. j. pošetilá) žena",
+      "translit": "gynaikárion",
+      "pronunciation": "goo-nahee-kar'-ee-on",
+      "translated": true
+    },
+    "G1134": {
+      "definitions_cz": "ženský",
+      "translit": "gynaikeîos",
+      "pronunciation": "goo-nahee-ki'-os",
+      "translated": true
+    },
+    "G1135": {
+      "definitions_cz": "žena; konkrétně manželka",
+      "translit": "gynḗ",
+      "pronunciation": "goo-nay'",
+      "translated": true
+    },
+    "G1136": {
+      "definitions_cz": "Gog, symbolické jméno pro nějakou budoucnost\n Antikrist",
+      "translit": "Gṓg",
+      "pronunciation": "gogue",
+      "translated": true
+    },
+    "G1137": {
+      "definitions_cz": "úhel",
+      "translit": "gōnía",
+      "pronunciation": "go-nee'-ah",
+      "translated": true
+    },
+    "G1138": {
+      "definitions_cz": "Dabid (tj. David), Izraelita\n král",
+      "translit": "Dabíd",
+      "pronunciation": "dab-eed'",
+      "translated": true
+    },
+    "G1139": {
+      "definitions_cz": "být vykonáván démonem",
+      "translit": "daimonízomai",
+      "pronunciation": "dahee-mon-id'-zom-ahee",
+      "translated": true
+    },
+    "G1140": {
+      "definitions_cz": "démonická bytost; rozšířením a\n božstvo",
+      "translit": "daimónion",
+      "pronunciation": "dahee-mon'-ee-on",
+      "translated": true
+    },
+    "G1141": {
+      "definitions_cz": "podobný démonovi",
+      "translit": "daimoniṓdēs",
+      "pronunciation": "dahee-mon-ee-o'-dace",
+      "translated": true
+    },
+    "G1142": {
+      "definitions_cz": "démon nebo nadpřirozený duch (z\n špatná povaha)",
+      "translit": "daímōn",
+      "pronunciation": "dah'-ee-mown",
+      "translated": true
+    },
+    "G1143": {
+      "definitions_cz": "kousat, tj. (obrazně)\n mařit",
+      "translit": "dáknō",
+      "pronunciation": "dak'-no",
+      "translated": true
+    },
+    "G1144": {
+      "definitions_cz": "slza",
+      "translit": "dákry",
+      "pronunciation": "dak'-roo",
+      "translated": true
+    },
+    "G1145": {
+      "definitions_cz": "ronit slzy",
+      "translit": "dakrýō",
+      "pronunciation": "dak-roo'-o",
+      "translated": true
+    },
+    "G1146": {
+      "definitions_cz": "prstýnek",
+      "translit": "daktýlios",
+      "pronunciation": "dak-too'-lee-os",
+      "translated": true
+    },
+    "G1147": {
+      "definitions_cz": "prstem",
+      "translit": "dáktylos",
+      "pronunciation": "dak'-too-los",
+      "translated": true
+    },
+    "G1148": {
+      "definitions_cz": "Dalmanutha, místo v\n Palestina",
+      "translit": "Dalmanouthá",
+      "pronunciation": "dal-man-oo-thah'",
+      "translated": true
+    },
+    "G1149": {
+      "definitions_cz": "Dalmácie, oblast\n Evropě",
+      "translit": "Dalmatía",
+      "pronunciation": "dal-mat-ee'-ah",
+      "translated": true
+    },
+    "G1150": {
+      "definitions_cz": "do\n krotký",
+      "translit": "damázō",
+      "pronunciation": "dam-ad'-zo",
+      "translated": true
+    },
+    "G1151": {
+      "definitions_cz": "jalovice (jako krotká)",
+      "translit": "dámalis",
+      "pronunciation": "dam'-al-is",
+      "translated": true
+    },
+    "G1152": {
+      "definitions_cz": "možná jemný; Damaris, Athéňanka\n žena",
+      "translit": "Dámaris",
+      "pronunciation": "dam'-ar-is",
+      "translated": true
+    },
+    "G1153": {
+      "definitions_cz": "Damašek nebo obyvatel Damašku",
+      "translit": "Damaskēnós",
+      "pronunciation": "dam-as-kay-nos'",
+      "translated": true
+    },
+    "G1154": {
+      "definitions_cz": "Damašek, město Sýrie",
+      "translit": "Damaskós",
+      "pronunciation": "dam-as-kos'",
+      "translated": true
+    },
+    "G1155": {
+      "definitions_cz": "půjčovat na úrok; reflexivně, půjčovat si",
+      "translit": "daneízō",
+      "pronunciation": "dan-ide'-zo",
+      "translated": true
+    },
+    "G1156": {
+      "definitions_cz": "pravděpodobně podobný základu [ŘECKO:1325]",
+      "translit": "dáneion",
+      "pronunciation": "dan'-i-on",
+      "translated": true
+    },
+    "G1157": {
+      "definitions_cz": "věřitel",
+      "translit": "daneistḗs",
+      "pronunciation": "dan-ice-tace'",
+      "translated": true
+    },
+    "G1158": {
+      "definitions_cz": "Daniel, Izraelita",
+      "translit": "Daniḗl",
+      "pronunciation": "dan-ee-ale'",
+      "translated": true
+    },
+    "G1159": {
+      "definitions_cz": "utratit, tj. (v dobrém slova smyslu) vynaložit náklady, nebo (v a\n špatný) promarnit",
+      "translit": "dapanáō",
+      "pronunciation": "dap-an-ah'-o",
+      "translated": true
+    },
+    "G1160": {
+      "definitions_cz": "výdaj (jako spotřeba)",
+      "translit": "dapánē",
+      "pronunciation": "dap-an'-ay",
+      "translated": true
+    },
+    "G1161": {
+      "definitions_cz": "ale, a,\n atd.",
+      "translit": "dé",
+      "pronunciation": "deh",
+      "translated": true
+    },
+    "G1162": {
+      "definitions_cz": "petici",
+      "translit": "déēsis",
+      "pronunciation": "deh'-ay-sis",
+      "translated": true
+    },
+    "G1163": {
+      "definitions_cz": "také deon deh-on'; kastrovat\n činné příčestí téhož; oba užívali neosobně; je to (bylo,\n atd.) nutné (jako závazné)",
+      "translit": "deî",
+      "pronunciation": "die",
+      "translated": true
+    },
+    "G1164": {
+      "definitions_cz": "vzorek (jak je znázorněno)",
+      "translit": "deîgma",
+      "pronunciation": "digh'-mah",
+      "translated": true
+    },
+    "G1165": {
+      "definitions_cz": "vystavovat",
+      "translit": "deigmatízō",
+      "pronunciation": "digh-mat-id'-zo",
+      "translated": true
+    },
+    "G1166": {
+      "definitions_cz": "ukázat\n (doslova nebo obrazně)",
+      "translit": "deiknýō",
+      "pronunciation": "dike-noo'-o",
+      "translated": true
+    },
+    "G1167": {
+      "definitions_cz": "plachost",
+      "translit": "deilía",
+      "pronunciation": "di-lee'-ah",
+      "translated": true
+    },
+    "G1168": {
+      "definitions_cz": "být nesmělý",
+      "translit": "deiliáō",
+      "pronunciation": "di-lee-ah'-o",
+      "translated": true
+    },
+    "G1169": {
+      "definitions_cz": "bázlivý, tedy (implicitně) nevěrný",
+      "translit": "deilós",
+      "pronunciation": "di-los'",
+      "translated": true
+    },
+    "G1170": {
+      "definitions_cz": "tak a tak (když osoba není\n specifikováno)",
+      "translit": "deîna",
+      "pronunciation": "di'-nah",
+      "translated": true
+    },
+    "G1171": {
+      "definitions_cz": "strašně, tzn.\n nadměrně",
+      "translit": "deinōs",
+      "pronunciation": "di-noce'",
+      "translated": true
+    },
+    "G1172": {
+      "definitions_cz": "večeřet, tj. brát základní (neboli večerní) jídlo",
+      "translit": "deipnéō",
+      "pronunciation": "dipe-neh'-o",
+      "translated": true
+    },
+    "G1173": {
+      "definitions_cz": "večeře, tedy hlavní jídlo (obvykle v\n večer)",
+      "translit": "deîpnon",
+      "pronunciation": "dipe'-non",
+      "translated": true
+    },
+    "G1174": {
+      "definitions_cz": "více\n náboženské než ostatní",
+      "translit": "deisidaimonésteros",
+      "pronunciation": "dice-ee-dahee-mon-es'-ter-os",
+      "translated": true
+    },
+    "G1175": {
+      "definitions_cz": "náboženství",
+      "translit": "deisidaimonía",
+      "pronunciation": "dice-ee-dahee-mon-ee'-ah",
+      "translated": true
+    },
+    "G1176": {
+      "definitions_cz": "deset",
+      "translit": "déka",
+      "pronunciation": "dek'-ah",
+      "translated": true
+    },
+    "G1177": {
+      "definitions_cz": "dva a deset, tedy dvanáct",
+      "translit": "dekadýo",
+      "pronunciation": "dek-ad-oo'-o",
+      "translated": true
+    },
+    "G1178": {
+      "definitions_cz": "deset a pět, tedy patnáct",
+      "translit": "dekapénte",
+      "pronunciation": "dek-ap-en'-teh",
+      "translated": true
+    },
+    "G1179": {
+      "definitions_cz": "region deseti měst; Decapolis, okres v\n Sýrie",
+      "translit": "Dekápolis",
+      "pronunciation": "dek-ap'-ol-is",
+      "translated": true
+    },
+    "G1180": {
+      "definitions_cz": "deset a čtyři, tedy čtrnáct",
+      "translit": "dekatéssares",
+      "pronunciation": "dek-at-es'-sar-es",
+      "translated": true
+    },
+    "G1181": {
+      "definitions_cz": "desetina, tj. v procentech nebo (technicky)\n desátek",
+      "translit": "dekátē",
+      "pronunciation": "dek-at'-ay",
+      "translated": true
+    },
+    "G1182": {
+      "definitions_cz": "desátý",
+      "translit": "dékatos",
+      "pronunciation": "dek'-at-os",
+      "translated": true
+    },
+    "G1183": {
+      "definitions_cz": "desátek, t. j. dávat nebo brát desátek",
+      "translit": "dekatóō",
+      "pronunciation": "dek-at-o'-o",
+      "translated": true
+    },
+    "G1184": {
+      "definitions_cz": "schválený; (obrazně) příznivý",
+      "translit": "dektós",
+      "pronunciation": "dek-tos'",
+      "translated": true
+    },
+    "G1185": {
+      "definitions_cz": "lapit, t. j. (obrazně) oklamat",
+      "translit": "deleázō",
+      "pronunciation": "del-eh-ad'-zo",
+      "translated": true
+    },
+    "G1186": {
+      "definitions_cz": "strom",
+      "translit": "déndron",
+      "pronunciation": "den'-dron",
+      "translated": true
+    },
+    "G1187": {
+      "definitions_cz": "gardista (jakoby bral zprava) popř\n lehce ozbrojený voják",
+      "translit": "dexiolábos",
+      "pronunciation": "dex-ee-ol-ab'-os",
+      "translated": true
+    },
+    "G1188": {
+      "definitions_cz": "pravá strana nebo (ženská) ruka (jako obvykle\n bere)",
+      "translit": "dexiós",
+      "pronunciation": "dex-ee-os'",
+      "translated": true
+    },
+    "G1189": {
+      "definitions_cz": "prosit (jako závazný), tzn.\n petice",
+      "translit": "déomai",
+      "pronunciation": "deh'-om-ahee",
+      "translated": true
+    },
+    "G1190": {
+      "definitions_cz": "Derbaean nebo obyvatel Derbe",
+      "translit": "Derbaîos",
+      "pronunciation": "der-bah'-ee-os",
+      "translated": true
+    },
+    "G1191": {
+      "definitions_cz": "Derbe, místo v Malé Asii",
+      "translit": "Dérbē",
+      "pronunciation": "der-bay'",
+      "translated": true
+    },
+    "G1192": {
+      "definitions_cz": "skrýš",
+      "translit": "dérma",
+      "pronunciation": "der'-mah",
+      "translated": true
+    },
+    "G1193": {
+      "definitions_cz": "vyrobený z kůže",
+      "translit": "dermátinos",
+      "pronunciation": "der-mat'-ee-nos",
+      "translated": true
+    },
+    "G1194": {
+      "definitions_cz": "správně, shodit, tj. (implicitně) bičovat,\n nebo (analogicky) mlátit",
+      "translit": "dérō",
+      "pronunciation": "der'-o",
+      "translated": true
+    },
+    "G1195": {
+      "definitions_cz": "být vazačem (captorem), t. j. aby\n přivázat (vězně), přivázat (náklad)",
+      "translit": "desmeúō",
+      "pronunciation": "des-myoo'-o",
+      "translated": true
+    },
+    "G1196": {
+      "definitions_cz": "vázat, t. j. spoutat",
+      "translit": "desméō",
+      "pronunciation": "des-meh'-o",
+      "translated": true
+    },
+    "G1197": {
+      "definitions_cz": "svazek",
+      "translit": "désmē",
+      "pronunciation": "des-may'",
+      "translated": true
+    },
+    "G1198": {
+      "definitions_cz": "zajatec (jako svázaný)",
+      "translit": "désmios",
+      "pronunciation": "des'-mee-os",
+      "translated": true
     }
   }
 }
