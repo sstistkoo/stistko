@@ -28903,6 +28903,906 @@
       "translit": "metastréphō",
       "pronunciation": "met-as-tref'-o",
       "translated": true
+    },
+    "G3345": {
+      "definitions_cz": "přetvářet nebo maskovat;\n přeneseně žádat (ubytováním)",
+      "translit": "metaschēmatízō",
+      "pronunciation": "met-askh-ay-mat-id'-zo",
+      "translated": true
+    },
+    "G3346": {
+      "definitions_cz": "přenést, tj. (doslova) přepravit, (tím\n implikace) výměna, (reflexně) změna strany nebo (obrazně)\n perverzní",
+      "translit": "metatíthēmi",
+      "pronunciation": "met-at-ith'-ay-mee",
+      "translated": true
+    },
+    "G3347": {
+      "definitions_cz": "poté",
+      "translit": "metépeita",
+      "pronunciation": "met-ep'-i-tah",
+      "translated": true
+    },
+    "G3348": {
+      "definitions_cz": "sdílet nebo se účastnit; implicitně patří\n jíst, pít (nebo pít)",
+      "translit": "metéchō",
+      "pronunciation": "met-ekh'-o",
+      "translated": true
+    },
+    "G3349": {
+      "definitions_cz": "zvednout ve vzduchu, tj. (obrazně)\n pozastavit (pasivně, kolísat nebo být úzkostný)",
+      "translit": "meteōrízō",
+      "pronunciation": "met-eh-o-rid'-zo",
+      "translated": true
+    },
+    "G3350": {
+      "definitions_cz": "změna bydliště,\n tj. (zvláště), expatriace",
+      "translit": "metoikesía",
+      "pronunciation": "met-oy-kes-ee'-ah",
+      "translated": true
+    },
+    "G3351": {
+      "definitions_cz": "převést jako osadník nebo zajatec, tzn\n kolonizovat nebo vyhnat",
+      "translit": "metoikízō",
+      "pronunciation": "met-oy-kid'-zo",
+      "translated": true
+    },
+    "G3352": {
+      "definitions_cz": "účastenství, tedy styk",
+      "translit": "metochḗ",
+      "pronunciation": "met-okh-ay'",
+      "translated": true
+    },
+    "G3353": {
+      "definitions_cz": "účastník, tj. (jako podstatné jméno) podílník; implicitně, an\n společník",
+      "translit": "métochos",
+      "pronunciation": "met'-okh-os",
+      "translated": true
+    },
+    "G3354": {
+      "definitions_cz": "měřit (tj. zjišťovat velikost pevným standardem); podle\n implikace, měřit (tj. přidělovat podle pravidla)",
+      "translit": "metréō",
+      "pronunciation": "met-reh'-o",
+      "translated": true
+    },
+    "G3355": {
+      "definitions_cz": "měřidlo, tj. (zvláště), určitá standardní míra\n kapacita pro kapaliny",
+      "translit": "metrētḗs",
+      "pronunciation": "met-ray-tace'",
+      "translated": true
+    },
+    "G3356": {
+      "definitions_cz": "být umírněný v\n vášeň, tj. jemný (chovat se shovívavě)",
+      "translit": "metriopathéō",
+      "pronunciation": "met-ree-op-ath-eh'-o",
+      "translated": true
+    },
+    "G3357": {
+      "definitions_cz": "středně, tedy mírně",
+      "translit": "metríōs",
+      "pronunciation": "met-ree'-oce",
+      "translated": true
+    },
+    "G3358": {
+      "definitions_cz": "míra (\"metr\"), doslova nebo\n přeneseně; implicitně omezená část (stupeň)",
+      "translit": "métron",
+      "pronunciation": "met'-ron",
+      "translated": true
+    },
+    "G3359": {
+      "definitions_cz": "čelo (naproti tomu\n obličej)",
+      "translit": "métōpon",
+      "pronunciation": "met'-o-pon",
+      "translated": true
+    },
+    "G3360": {
+      "definitions_cz": "až do určitého bodu (jako předložka, of\n rozsah (označující konec, zatímco [ŘECKO:891]",
+      "translit": "méchri",
+      "pronunciation": "mekh'-ree",
+      "translated": true
+    },
+    "G3361": {
+      "definitions_cz": "(příslovce) ne, (spojka) lest; také (jako an\n tázací, což znamená zápornou odpověď (zatímco [ŘECKO:3756]",
+      "translit": "mḗ",
+      "pronunciation": "may",
+      "translated": true
+    },
+    "G3362": {
+      "definitions_cz": "pokud ne, tj. pokud",
+      "translit": "eàn mḗ",
+      "pronunciation": "eh-an' may",
+      "translated": true
+    },
+    "G3363": {
+      "definitions_cz": "v pořadí (nebo tak), že ne",
+      "translit": "hína mḗ",
+      "pronunciation": "hin'-ah may",
+      "translated": true
+    },
+    "G3364": {
+      "definitions_cz": "dvojitý zápor posilující popření; ne při\n všechny",
+      "translit": "ou mḗ",
+      "pronunciation": "oo may",
+      "translated": true
+    },
+    "G3365": {
+      "definitions_cz": "v žádném případě",
+      "translit": "mēdamōs",
+      "pronunciation": "may-dam-oce'",
+      "translated": true
+    },
+    "G3366": {
+      "definitions_cz": "ale ne, dokonce ani ne; v pokračující negaci,\n ani",
+      "translit": "mēdé",
+      "pronunciation": "may-deh'",
+      "translated": true
+    },
+    "G3367": {
+      "definitions_cz": "ani jeden (muž, žena, věc)",
+      "translit": "mēdeís",
+      "pronunciation": "may-dice'",
+      "translated": true
+    },
+    "G3368": {
+      "definitions_cz": "ani nikdy",
+      "translit": "mēdépote",
+      "pronunciation": "may-dep'-ot-eh",
+      "translated": true
+    },
+    "G3369": {
+      "definitions_cz": "ještě ani ne",
+      "translit": "mēdépō",
+      "pronunciation": "may-dep'-o",
+      "translated": true
+    },
+    "G3370": {
+      "definitions_cz": "medián nebo obyvatel\n Média",
+      "translit": "Mēdos",
+      "pronunciation": "may'-dos",
+      "translated": true
+    },
+    "G3371": {
+      "definitions_cz": "dále ne",
+      "translit": "mēkéti",
+      "pronunciation": "may-ket'-ee",
+      "translated": true
+    },
+    "G3372": {
+      "definitions_cz": "délka (doslova nebo přeneseně) délka.",
+      "translit": "mēkos",
+      "pronunciation": "may'-kos",
+      "translated": true
+    },
+    "G3373": {
+      "definitions_cz": "prodloužit, t. j. (střední hlas) zvětšit",
+      "translit": "mēkýnō",
+      "pronunciation": "may-koo'-no",
+      "translated": true
+    },
+    "G3374": {
+      "definitions_cz": "ovčí kůže",
+      "translit": "mēlōtḗ",
+      "pronunciation": "may-lo-tay'",
+      "translated": true
+    },
+    "G3375": {
+      "definitions_cz": "částice potvrzení (pouze s [ŘECKO:2229]",
+      "translit": "mḗn",
+      "pronunciation": "mane",
+      "translated": true
+    },
+    "G3376": {
+      "definitions_cz": "měsíc",
+      "translit": "mḗn",
+      "pronunciation": "mane",
+      "translated": true
+    },
+    "G3377": {
+      "definitions_cz": "do\n odhalit (prostřednictvím myšlenky duševního úsilí a tím přivolání mysli),\n t. j. nahlásit, prohlásit, intimní",
+      "translit": "mēnýō",
+      "pronunciation": "may-noo'-o",
+      "translated": true
+    },
+    "G3378": {
+      "definitions_cz": "jako tázací a negativní, je to tak?\n že?",
+      "translit": "mḕ ouk",
+      "pronunciation": "ouk",
+      "translated": true
+    },
+    "G3379": {
+      "definitions_cz": "nikdy ne; také pokud (nebo možná) někdy (nebo možná)",
+      "translit": "mḗpote",
+      "pronunciation": "may'-pot-eh",
+      "translated": true
+    },
+    "G3380": {
+      "definitions_cz": "ještě ne",
+      "translit": "mḗpō",
+      "pronunciation": "may'-po",
+      "translated": true
+    },
+    "G3381": {
+      "definitions_cz": "aby nějak",
+      "translit": "mḗpōs",
+      "pronunciation": "may'-pos",
+      "translated": true
+    },
+    "G3382": {
+      "definitions_cz": "stehno",
+      "translit": "mērós",
+      "pronunciation": "may-ros'",
+      "translated": true
+    },
+    "G3383": {
+      "definitions_cz": "ne příliš, tj. (v pokračující negaci) ani nebo\n ani; také, ani ne",
+      "translit": "mḗte",
+      "pronunciation": "may'-teh",
+      "translated": true
+    },
+    "G3384": {
+      "definitions_cz": "\"matka\" (doslova nebo přeneseně,\n okamžité nebo vzdálené)",
+      "translit": "mḗtēr",
+      "pronunciation": "may'-tare",
+      "translated": true
+    },
+    "G3385": {
+      "definitions_cz": "zda vůbec",
+      "translit": "mḗti",
+      "pronunciation": "may'-tee",
+      "translated": true
+    },
+    "G3386": {
+      "definitions_cz": "tedy vůbec ne, tedy neříkat (spíše\n stále)",
+      "translit": "mḗtige",
+      "pronunciation": "may'-tig-eh",
+      "translated": true
+    },
+    "G3387": {
+      "definitions_cz": "zda nějaké",
+      "translit": "mḗtis",
+      "pronunciation": "may'-tis",
+      "translated": true
+    },
+    "G3388": {
+      "definitions_cz": "matice",
+      "translit": "mḗtra",
+      "pronunciation": "may'-trah",
+      "translated": true
+    },
+    "G3389": {
+      "definitions_cz": "matka-mlátička, tzn.\n matricide",
+      "translit": "mētralṓias",
+      "pronunciation": "may-tral-o'-as",
+      "translated": true
+    },
+    "G3390": {
+      "definitions_cz": "mateřské město, tedy \"metropole\"",
+      "translit": "mētrópolis",
+      "pronunciation": "may-trop'-ol-is",
+      "translated": true
+    },
+    "G3391": {
+      "definitions_cz": "jeden nebo první",
+      "translit": "mía",
+      "pronunciation": "mee'-ah",
+      "translated": true
+    },
+    "G3392": {
+      "definitions_cz": "pošpinit nebo pošpinit, tj. znečistit\n (slavnostně nebo morálně)",
+      "translit": "miaínō",
+      "pronunciation": "me-ah'-ee-no",
+      "translated": true
+    },
+    "G3393": {
+      "definitions_cz": "(morálně) špatnost (správně,\n efekt)",
+      "translit": "míasma",
+      "pronunciation": "mee'-as-mah",
+      "translated": true
+    },
+    "G3394": {
+      "definitions_cz": "(morálně) znečištění (správně, čin)",
+      "translit": "miasmós",
+      "pronunciation": "mee-as-mos'",
+      "translated": true
+    },
+    "G3395": {
+      "definitions_cz": "sloučenina",
+      "translit": "mígma",
+      "pronunciation": "mig'-mah",
+      "translated": true
+    },
+    "G3396": {
+      "definitions_cz": "míchat",
+      "translit": "mígnymi",
+      "pronunciation": "mig'-noo-mee",
+      "translated": true
+    },
+    "G3397": {
+      "definitions_cz": "malý časový prostor\n nebo stupeň",
+      "translit": "mikrón",
+      "pronunciation": "mik-ron'",
+      "translated": true
+    },
+    "G3398": {
+      "definitions_cz": "malý (velikost, množství, počet popř\n (obrazně) důstojnost)",
+      "translit": "mikrós",
+      "pronunciation": "mik-ros'",
+      "translated": true
+    },
+    "G3399": {
+      "definitions_cz": "Milétus, město Malé Asie",
+      "translit": "Mílētos",
+      "pronunciation": "mil'-ay-tos",
+      "translated": true
+    },
+    "G3400": {
+      "definitions_cz": "tisíc kroků, tedy \"míle\"",
+      "translit": "mílion",
+      "pronunciation": "mil'-ee-on",
+      "translated": true
+    },
+    "G3401": {
+      "definitions_cz": "napodobovat",
+      "translit": "miméomai",
+      "pronunciation": "mim-eh'-om-ahee",
+      "translated": true
+    },
+    "G3402": {
+      "definitions_cz": "imitátor",
+      "translit": "mimētḗs",
+      "pronunciation": "mim-ay-tace'",
+      "translated": true
+    },
+    "G3403": {
+      "definitions_cz": "připomínat, t. j. (střední hlas) připomínat si",
+      "translit": "mimnḗskō",
+      "pronunciation": "mim-nace'-ko",
+      "translated": true
+    },
+    "G3404": {
+      "definitions_cz": "nenávidět (zejména pronásledovat); podle\n prodloužení, milovat méně",
+      "translit": "miséō",
+      "pronunciation": "mis-eh'-o",
+      "translated": true
+    },
+    "G3405": {
+      "definitions_cz": "odplata (dobrá nebo špatná)",
+      "translit": "misthapodosía",
+      "pronunciation": "mis-thap-od-os-ee'-ah",
+      "translated": true
+    },
+    "G3406": {
+      "definitions_cz": "odměňovatel",
+      "translit": "misthapodótēs",
+      "pronunciation": "mis-thap-od-ot'-ace",
+      "translated": true
+    },
+    "G3407": {
+      "definitions_cz": "námezdně pracující",
+      "translit": "místhios",
+      "pronunciation": "mis'-thee-os",
+      "translated": true
+    },
+    "G3408": {
+      "definitions_cz": "platit za službu (doslova popř\n přeneseně), dobrý nebo špatný",
+      "translit": "misthós",
+      "pronunciation": "mis-thos'",
+      "translated": true
+    },
+    "G3409": {
+      "definitions_cz": "propouštět za mzdu, t. j. (střední hlas) najímat",
+      "translit": "misthóō",
+      "pronunciation": "mis-tho'-o",
+      "translated": true
+    },
+    "G3410": {
+      "definitions_cz": "pronajatou budovu",
+      "translit": "místhōma",
+      "pronunciation": "mis'-tho-mah",
+      "translated": true
+    },
+    "G3411": {
+      "definitions_cz": "námezdní dělník (dobrý nebo špatný)",
+      "translit": "misthōtós",
+      "pronunciation": "mis-tho-tos'",
+      "translated": true
+    },
+    "G3412": {
+      "definitions_cz": "Mitylene (nebo Mytilene), město\n na ostrově Lesbos",
+      "translit": "Mitylḗnē",
+      "pronunciation": "mit-oo-lay'-nay",
+      "translated": true
+    },
+    "G3413": {
+      "definitions_cz": "Michael, archanděl",
+      "translit": "Michaḗl",
+      "pronunciation": "mikh-ah-ale'",
+      "translated": true
+    },
+    "G3414": {
+      "definitions_cz": "a mna (t. j. mina), určitá váha",
+      "translit": "mnâ",
+      "pronunciation": "mnah",
+      "translated": true
+    },
+    "G3415": {
+      "definitions_cz": "nést\n v mysli, t. j. vzpomínat; implicitně odměňovat nebo trestat",
+      "translit": "mnáomai",
+      "pronunciation": "mnah'-om-ahee",
+      "translated": true
+    },
+    "G3416": {
+      "definitions_cz": "Mnason, křesťan",
+      "translit": "Mnásōn",
+      "pronunciation": "mnah'-sohn",
+      "translated": true
+    },
+    "G3417": {
+      "definitions_cz": "vzpomínka; implicitně, bod odůvodnění",
+      "translit": "mneía",
+      "pronunciation": "mni'-ah",
+      "translated": true
+    },
+    "G3418": {
+      "definitions_cz": "památník, t. j. sepulkrální pomník\n (pohřebiště)",
+      "translit": "mnēma",
+      "pronunciation": "mnay'-mah",
+      "translated": true
+    },
+    "G3419": {
+      "definitions_cz": "vzpomínka, tedy kenotaf (místo pohřbu)",
+      "translit": "mnēmeîon",
+      "pronunciation": "mnay-mi'-on",
+      "translated": true
+    },
+    "G3420": {
+      "definitions_cz": "paměť",
+      "translit": "mnḗmē",
+      "pronunciation": "mnay'-may",
+      "translated": true
+    },
+    "G3421": {
+      "definitions_cz": "cvičit paměť, tj. vzpomínat; podle\n implikace, trestat; také zkoušet",
+      "translit": "mnēmoneúō",
+      "pronunciation": "mnay-mon-yoo'-o",
+      "translated": true
+    },
+    "G3422": {
+      "definitions_cz": "upomínku (memorandum), t. j. záznam",
+      "translit": "mnēmósynon",
+      "pronunciation": "mnay-mos'-oo-non",
+      "translated": true
+    },
+    "G3423": {
+      "definitions_cz": "dát suvenýr (dárek k zásnubám),\n tedy zasnoubení",
+      "translit": "mnēsteúō",
+      "pronunciation": "mnace-tyoo'-o",
+      "translated": true
+    },
+    "G3424": {
+      "definitions_cz": "sotva mluví, tj. němý (svázaný jazykem)",
+      "translit": "mogilálos",
+      "pronunciation": "mog-il-al'-os",
+      "translated": true
+    },
+    "G3425": {
+      "definitions_cz": "obtížně",
+      "translit": "mógis",
+      "pronunciation": "mog'-is",
+      "translated": true
+    },
+    "G3426": {
+      "definitions_cz": "modius, tj. určitá míra pro věci suché (\n množství nebo nádobí)",
+      "translit": "módios",
+      "pronunciation": "mod'-ee-os",
+      "translated": true
+    },
+    "G3427": {
+      "definitions_cz": "ke mně",
+      "translit": "moí",
+      "pronunciation": "moy",
+      "translated": true
+    },
+    "G3428": {
+      "definitions_cz": "cizoložnice (doslova nebo\n přeneseně)",
+      "translit": "moichalís",
+      "pronunciation": "moy-khal-is'",
+      "translated": true
+    },
+    "G3429": {
+      "definitions_cz": "(střední hlas) spáchat cizoložství",
+      "translit": "moicháō",
+      "pronunciation": "moy-khah'-o",
+      "translated": true
+    },
+    "G3430": {
+      "definitions_cz": "cizoložství",
+      "translit": "moicheía",
+      "pronunciation": "moy-khi'-ah",
+      "translated": true
+    },
+    "G3431": {
+      "definitions_cz": "spáchat cizoložství",
+      "translit": "moicheúō",
+      "pronunciation": "moy-khyoo'-o",
+      "translated": true
+    },
+    "G3432": {
+      "definitions_cz": "(mužský) milenec; přeneseně,\n odpadlík",
+      "translit": "moichós",
+      "pronunciation": "moy-khos'",
+      "translated": true
+    },
+    "G3433": {
+      "definitions_cz": "obtížně",
+      "translit": "mólis",
+      "pronunciation": "mol'-is",
+      "translated": true
+    },
+    "G3434": {
+      "definitions_cz": "Moloch (t. j. Molek), idol",
+      "translit": "Molóch",
+      "pronunciation": "mol-okh'",
+      "translated": true
+    },
+    "G3435": {
+      "definitions_cz": "zašpinit (obrazně)",
+      "translit": "molýnō",
+      "pronunciation": "mol-oo'-no",
+      "translated": true
+    },
+    "G3436": {
+      "definitions_cz": "skvrna; tedy (obrazně) nemravnost",
+      "translit": "molysmós",
+      "pronunciation": "mol-oos-mos'",
+      "translated": true
+    },
+    "G3437": {
+      "definitions_cz": "vina, tedy (implicitně), chyba",
+      "translit": "momphḗ",
+      "pronunciation": "mom-fay'",
+      "translated": true
+    },
+    "G3438": {
+      "definitions_cz": "pobyt, tedy bydliště (akt nebo místo)",
+      "translit": "monḗ",
+      "pronunciation": "mon-ay'",
+      "translated": true
+    },
+    "G3439": {
+      "definitions_cz": "jedináček, tedy jediný",
+      "translit": "monogenḗs",
+      "pronunciation": "mon-og-en-ace'",
+      "translated": true
+    },
+    "G3440": {
+      "definitions_cz": "pouze",
+      "translit": "mónon",
+      "pronunciation": "mon'-on",
+      "translated": true
+    },
+    "G3441": {
+      "definitions_cz": "zbývající, tj. jediný nebo jediný; implicitně,\n pouhá",
+      "translit": "mónos",
+      "pronunciation": "mon'-os",
+      "translated": true
+    },
+    "G3442": {
+      "definitions_cz": "jednooký",
+      "translit": "monóphthalmos",
+      "pronunciation": "mon-of'-thal-mos",
+      "translated": true
+    },
+    "G3443": {
+      "definitions_cz": "izolovat, t. j. truchlit",
+      "translit": "monóō",
+      "pronunciation": "mon-o'-o",
+      "translated": true
+    },
+    "G3444": {
+      "definitions_cz": "tvar; obrazně řečeno příroda",
+      "translit": "morphḗ",
+      "pronunciation": "mor-fay'",
+      "translated": true
+    },
+    "G3445": {
+      "definitions_cz": "do módy (obrazně)",
+      "translit": "morphóō",
+      "pronunciation": "mor-fo'-o",
+      "translated": true
+    },
+    "G3446": {
+      "definitions_cz": "formace, tj. (implicitně), vzhled (zdání nebo\n (konkrétně) vzorec)",
+      "translit": "mórphōsis",
+      "pronunciation": "mor'-fo-sis",
+      "translated": true
+    },
+    "G3447": {
+      "definitions_cz": "vyrobit obraz býka",
+      "translit": "moschopoiéō",
+      "pronunciation": "mos-khop-oy-eh'-o",
+      "translated": true
+    },
+    "G3448": {
+      "definitions_cz": "mladý býček",
+      "translit": "móschos",
+      "pronunciation": "mos'-khos",
+      "translated": true
+    },
+    "G3449": {
+      "definitions_cz": "dřina, tj. (implicitně)\n smutek",
+      "translit": "móchthos",
+      "pronunciation": "mokh'-thos",
+      "translated": true
+    },
+    "G3450": {
+      "definitions_cz": "ze mě",
+      "translit": "moû",
+      "pronunciation": "moo",
+      "translated": true
+    },
+    "G3451": {
+      "definitions_cz": "\"hudební\", tj. (jako podstatné jméno) pěvec",
+      "translit": "mousikós",
+      "pronunciation": "moo-sik-os'",
+      "translated": true
+    },
+    "G3452": {
+      "definitions_cz": "dřeň",
+      "translit": "myelós",
+      "pronunciation": "moo-el-os'",
+      "translated": true
+    },
+    "G3453": {
+      "definitions_cz": "iniciovat, tj. (implicitně) k\n učit",
+      "translit": "myéō",
+      "pronunciation": "moo-eh'-o",
+      "translated": true
+    },
+    "G3454": {
+      "definitions_cz": "pohádka,\n tj. fikce (\"mýtus\")",
+      "translit": "mŷthos",
+      "pronunciation": "moo'-thos",
+      "translated": true
+    },
+    "G3455": {
+      "definitions_cz": "řvát\n (řev)",
+      "translit": "mykáomai",
+      "pronunciation": "moo-kah'-om-ahee",
+      "translated": true
+    },
+    "G3456": {
+      "definitions_cz": "dělat ústa, t. j. posměch",
+      "translit": "myktērízō",
+      "pronunciation": "mook-tay-rid'-zo",
+      "translated": true
+    },
+    "G3457": {
+      "definitions_cz": "patřící k mlýnu",
+      "translit": "mylikós",
+      "pronunciation": "moo-lee-kos'",
+      "translated": true
+    },
+    "G3458": {
+      "definitions_cz": "\"mlýn\", tedy (implicitně), mlýnek\n (mlýnský kámen)",
+      "translit": "mýlos",
+      "pronunciation": "moo'-los",
+      "translated": true
+    },
+    "G3459": {
+      "definitions_cz": "mlýnský dům",
+      "translit": "mýlōn",
+      "pronunciation": "moo'-lone",
+      "translated": true
+    },
+    "G3460": {
+      "definitions_cz": "Myra, místo v Malé Asii",
+      "translit": "Mýra",
+      "pronunciation": "moo'-rah",
+      "translated": true
+    },
+    "G3461": {
+      "definitions_cz": "deset tisíc; rozšířením, \"myriad\" nebo neurčitý\n číslo",
+      "translit": "myriás",
+      "pronunciation": "moo-ree'-as",
+      "translated": true
+    },
+    "G3462": {
+      "definitions_cz": "aplikovat (parfémovaný) nemastný na",
+      "translit": "myrízō",
+      "pronunciation": "moo-rid'-zo",
+      "translated": true
+    },
+    "G3463": {
+      "definitions_cz": "deset tisíc; rozšířením nesčetně mnoho",
+      "translit": "mýrioi",
+      "pronunciation": "moo'-ree-oi",
+      "translated": true
+    },
+    "G3464": {
+      "definitions_cz": "\"myrha\", tj\n důsledek) parfémovaný olej",
+      "translit": "mýron",
+      "pronunciation": "moo'-ron",
+      "translated": true
+    },
+    "G3465": {
+      "definitions_cz": "Mysia, oblast Malé Asie",
+      "translit": "Mysía",
+      "pronunciation": "moo-see'-ah",
+      "translated": true
+    },
+    "G3466": {
+      "definitions_cz": "a secret or \"mystery\"\n (skrze myšlenku ticha vnuceného zasvěcením do řehole\n rites)",
+      "translit": "mystḗrion",
+      "pronunciation": "moos-tay'-ree-on",
+      "translated": true
+    },
+    "G3467": {
+      "definitions_cz": "od [ŘECKO:3700]",
+      "translit": "myōpázō",
+      "pronunciation": "moo-ope-ad'-zo",
+      "translated": true
+    },
+    "G3468": {
+      "definitions_cz": "pravděpodobně podobný základu [ŘECKO:3433]ὤψ[ŘECKO:3700]",
+      "translit": "mṓlōps",
+      "pronunciation": "mo'-lopes",
+      "translated": true
+    },
+    "G3469": {
+      "definitions_cz": "na kapra, t. j. cenzura (diskreditace)",
+      "translit": "mōmáomai",
+      "pronunciation": "mo-mah'-om-ahee",
+      "translated": true
+    },
+    "G3470": {
+      "definitions_cz": "vada nebo skvrna, tedy (obrazně) hanebné\n osoba",
+      "translit": "mōmos",
+      "pronunciation": "mo'-mos",
+      "translated": true
+    },
+    "G3471": {
+      "definitions_cz": "stát se bezcitným; přeneseně, dělat (pasivně, jednat)\n jako prosťáček",
+      "translit": "mōraínō",
+      "pronunciation": "mo-rah'-ee-no",
+      "translated": true
+    },
+    "G3472": {
+      "definitions_cz": "hloupost, tedy absurdita",
+      "translit": "mōría",
+      "pronunciation": "mo-ree'-ah",
+      "translated": true
+    },
+    "G3473": {
+      "definitions_cz": "hloupé řeči, tzn.\n biflování",
+      "translit": "mōrología",
+      "pronunciation": "mo-rol-og-ee'-ah",
+      "translated": true
+    },
+    "G3474": {
+      "definitions_cz": "tupý nebo hloupý (jakoby drž hubu), tzn.\n nedbalý, (morálně) hlupák, (zdánlivě) absurdní",
+      "translit": "mōrós",
+      "pronunciation": "mo-ros'",
+      "translated": true
+    },
+    "G3475": {
+      "definitions_cz": "Moseus, Moses nebo Mouses (tj. Mosheh), the\n Hebrejský zákonodárce",
+      "translit": "Mōseús",
+      "pronunciation": "moce-yoos'",
+      "translated": true
+    },
+    "G3476": {
+      "definitions_cz": "Naasson (tj. Nachshon), an\n Izraelita",
+      "translit": "Naassṓn",
+      "pronunciation": "nah-as-sone'",
+      "translated": true
+    },
+    "G3477": {
+      "definitions_cz": "Nangæ (tj. možná\n Nogach), Izraelita",
+      "translit": "Nangaí",
+      "pronunciation": "nang-gah'-ee",
+      "translated": true
+    },
+    "G3478": {
+      "definitions_cz": "Nazaret nebo Nazaret,\n místo v Palestině",
+      "translit": "Nazaréth",
+      "pronunciation": "nad-zar-eth'",
+      "translated": true
+    },
+    "G3479": {
+      "definitions_cz": "Nazaretský, tedy obyvatel Nazaretu",
+      "translit": "Nazarēnós",
+      "pronunciation": "nad-zar-ay-nos'",
+      "translated": true
+    },
+    "G3480": {
+      "definitions_cz": "Nazoraean, tj. obyvatel Nazaretu; rozšířením, a\n Christian",
+      "translit": "Nazōraîos",
+      "pronunciation": "nad-zo-rah'-yos",
+      "translated": true
+    },
+    "G3481": {
+      "definitions_cz": "Nathan, Izraelita",
+      "translit": "Nathán",
+      "pronunciation": "nath-an'",
+      "translated": true
+    },
+    "G3482": {
+      "definitions_cz": "Nathanaël (tj. Nathanel), Izraelita a\n Christian",
+      "translit": "Nathanaḗl",
+      "pronunciation": "nath-an-ah-ale'",
+      "translated": true
+    },
+    "G3483": {
+      "definitions_cz": "Ano",
+      "translit": "naí",
+      "pronunciation": "nahee",
+      "translated": true
+    },
+    "G3484": {
+      "definitions_cz": "Nain, místo v\n Palestina",
+      "translit": "Naḯn",
+      "pronunciation": "nah-in'",
+      "translated": true
+    },
+    "G3485": {
+      "definitions_cz": "vějíř, svatyně, chrám",
+      "translit": "naós",
+      "pronunciation": "nah-os'",
+      "translated": true
+    },
+    "G3486": {
+      "definitions_cz": "Naum (t. j. Nachum), Izraelita",
+      "translit": "Naoúm",
+      "pronunciation": "nah-oom'",
+      "translated": true
+    },
+    "G3487": {
+      "definitions_cz": "\"nard\"",
+      "translit": "nárdos",
+      "pronunciation": "nar'dos",
+      "translated": true
+    },
+    "G3488": {
+      "definitions_cz": "Narcis, Říman",
+      "translit": "Nárkissos",
+      "pronunciation": "nar'-kis-sos",
+      "translated": true
+    },
+    "G3489": {
+      "definitions_cz": "ztroskotat (uvíznout,\n \"navigovat\"), doslova nebo obrazně",
+      "translit": "nauagéō",
+      "pronunciation": "now-ag-eh'-o",
+      "translated": true
+    },
+    "G3490": {
+      "definitions_cz": "kapitán",
+      "translit": "naúklēros",
+      "pronunciation": "now'-klay-ros",
+      "translated": true
+    },
+    "G3491": {
+      "definitions_cz": "loď (jakékoli velikosti)",
+      "translit": "naûs",
+      "pronunciation": "nowce",
+      "translated": true
+    },
+    "G3492": {
+      "definitions_cz": "lodník, t. j. námořník",
+      "translit": "naútēs",
+      "pronunciation": "now'-tace",
+      "translated": true
+    },
+    "G3493": {
+      "definitions_cz": "Nachor, dědeček Abrahamův",
+      "translit": "Nachṓr",
+      "pronunciation": "nakh-ore'",
+      "translated": true
+    },
+    "G3494": {
+      "definitions_cz": "mládí (cca do čtyřiceti let)",
+      "translit": "neanías",
+      "pronunciation": "neh-an-ee'-as",
+      "translated": true
     }
   }
 }
