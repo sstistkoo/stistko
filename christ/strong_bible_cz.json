@@ -61624,6 +61624,706 @@
       "hebrew": "מתרדת",
       "xlit": "Mithrᵉdâth",
       "translated": true
+    },
+    "H4991": {
+      "definitions_cz": "1) dárek, odměna",
+      "lemma": "מַתָּת",
+      "hebrew": "מתת",
+      "xlit": "mattâth",
+      "translated": true
+    },
+    "H4992": {
+      "definitions_cz": "Mattatah = \"dar Jehovův\" | 1) syn Hašumův, který za časů Ezdrášů vzal a propustil svou cizí manželku",
+      "lemma": "מַתַּתָּה",
+      "hebrew": "מתתה",
+      "xlit": "Mattattâh",
+      "translated": true
+    },
+    "H4993": {
+      "definitions_cz": "Mattitjáš = \"dar Jehovův\" | 1) Levita, který předsedal obětem | 2) Levita jmenovaný Davidem, aby sloužil v hudební službě před archou | 3) jeden z rodiny Nebo, který měl v době Ezry cizí manželku | 4) jeden z mužů, kteří stáli po pravici Ezdráše, když četl lidem zákon",
+      "lemma": "מַתִּתְיָה",
+      "hebrew": "מתתיה",
+      "xlit": "Mattithyâh",
+      "translated": true
+    },
+    "H4994": {
+      "definitions_cz": "1) Modlím se (my) nyní, prosím | 1a) používané v prosbě nebo nabádání",
+      "lemma": "נָא",
+      "hebrew": "נא",
+      "xlit": "nâʼ",
+      "translated": true
+    },
+    "H4995": {
+      "definitions_cz": "1) syrové",
+      "lemma": "נָא",
+      "hebrew": "נא",
+      "xlit": "nâʼ",
+      "translated": true
+    },
+    "H4996": {
+      "definitions_cz": "Ne = \"rušící\" | 1) starověké hlavní město Egypta; také \"théby\"",
+      "lemma": "נֹא",
+      "hebrew": "נא",
+      "xlit": "Nôʼ",
+      "translated": true
+    },
+    "H4997": {
+      "definitions_cz": "1) kůže, láhev, kůže-láhev",
+      "lemma": "נֹאד",
+      "hebrew": "נאד",
+      "xlit": "nôʼd",
+      "translated": true
+    },
+    "H4998": {
+      "definitions_cz": "1) být půvabný, krásný, slušivý | 1a) (Pilpel) | 1a1) být hezký | 1a2), aby to bylo vhodné",
+      "lemma": "נָאָה",
+      "hebrew": "נאה",
+      "xlit": "nâʼâh",
+      "translated": true
+    },
+    "H4999": {
+      "definitions_cz": "1) pastvina, příbytek, příbytek pastýře, příbytek, louka | 1a) pastvina, louka | 1b) příbytek",
+      "lemma": "נָאָה",
+      "hebrew": "נאה",
+      "xlit": "nâʼâh",
+      "translated": true
+    },
+    "H5000": {
+      "definitions_cz": "1) půvabný, krásný, pohledný | 1a) půvabná, krásná | 1b) zdánlivě",
+      "lemma": "נָאוֶה",
+      "hebrew": "נאוה",
+      "xlit": "nâʼveh",
+      "translated": true
+    },
+    "H5001": {
+      "definitions_cz": "1) prorokovat, vyslovovat proroctví, mluvit jako prorok, říkat | 1a) (Qal) vyslovit proroctví, mluvit jako prorok",
+      "lemma": "נָאַם",
+      "hebrew": "נאם",
+      "xlit": "nâʼam",
+      "translated": true
+    },
+    "H5002": {
+      "definitions_cz": "1) (Qal) výrok, prohlášení (proroka) | 1a) vyslovení, prohlášení, zjevení (proroka v extatickém stavu) | 1b) vyslovení, prohlášení (jinde vždy před Božím jménem)",
+      "lemma": "נְאֻם",
+      "hebrew": "נאם",
+      "xlit": "nᵉʼum",
+      "translated": true
+    },
+    "H5003": {
+      "definitions_cz": "1) cizoložství | 1a) (Qal) | 1a1) cizoložství | 1a1a) obvykle člověka | 1a1a1) vždy s manželkou jiného | 1a1b) cizoložství (ženy) (příčestí) | 1a2) modlářské uctívání (obr.) | 1b) (Piel) | 1b1) cizoložství | 1b1a) člověka | 1b1b) cizoložství (ženy) (příčestí) | 1b2) modlářské uctívání (obr.)",
+      "lemma": "נָאַף",
+      "hebrew": "נאף",
+      "xlit": "nâʼaph",
+      "translated": true
+    },
+    "H5004": {
+      "definitions_cz": "1) cizoložství | 1a) modlářské uctívání (obr.)",
+      "lemma": "נִאֻף",
+      "hebrew": "נאף",
+      "xlit": "niʼuph",
+      "translated": true
+    },
+    "H5005": {
+      "definitions_cz": "1) cizoložství",
+      "lemma": "נַאֲפוּף",
+      "hebrew": "נאפוף",
+      "xlit": "naʼăphûwph",
+      "translated": true
+    },
+    "H5006": {
+      "definitions_cz": "1) pohrdat, opovrhovat, pohrdat, ošklivě si ošklivit | 1a) (Qal) zavrhnout, odsuzovat | 1b) (Piel) | 1b1) odhodit | 1b2) způsobit opovržení | 1c) (Hiphil) odmítnout | 1d) (Hithpolel) k zavržení",
+      "lemma": "נָאַץ",
+      "hebrew": "נאץ",
+      "xlit": "nâʼats",
+      "translated": true
+    },
+    "H5007": {
+      "definitions_cz": "1) pohrdání, pohrdání | 2) pohrdání, rouhání",
+      "lemma": "נְאָצָה",
+      "hebrew": "נאצה",
+      "xlit": "nᵉʼâtsâh",
+      "translated": true
+    },
+    "H5008": {
+      "definitions_cz": "1) (Qal) sténat",
+      "lemma": "נָאַק",
+      "hebrew": "נאק",
+      "xlit": "nâʼaq",
+      "translated": true
+    },
+    "H5009": {
+      "definitions_cz": "1) sténat, sténat",
+      "lemma": "נְאָקָה",
+      "hebrew": "נאקה",
+      "xlit": "nᵉʼâqâh",
+      "translated": true
+    },
+    "H5010": {
+      "definitions_cz": "1) (Piel) nenávidět, zavrhovat",
+      "lemma": "נָאַר",
+      "hebrew": "נאר",
+      "xlit": "nâʼar",
+      "translated": true
+    },
+    "H5011": {
+      "definitions_cz": "Nob = \"vysoké místo\" | 1) kněžské město v Benjamínu ležící na nějaké význačnosti na severu, ale poblíž Jeruzaléma",
+      "lemma": "נֹב",
+      "hebrew": "נב",
+      "xlit": "Nôb",
+      "translated": true
+    },
+    "H5012": {
+      "definitions_cz": "1) prorokovat | 1a) (Niphal) | 1a1) prorokovat | 1a1a) pod vlivem božského ducha | 1a1b) falešných proroků | 1b)(Hithpael) | 1b1) prorokovat | 1b1a) pod vlivem božského ducha | 1b1b) falešných proroků",
+      "lemma": "נָבָא",
+      "hebrew": "נבא",
+      "xlit": "nâbâʼ",
+      "translated": true
+    },
+    "H5013": {
+      "definitions_cz": "v | 1) (CLBL) (Ithpael) prorokovat",
+      "lemma": "נְבָא",
+      "hebrew": "נבא",
+      "xlit": "nᵉbâʼ",
+      "translated": true
+    },
+    "H5014": {
+      "definitions_cz": "1) (Qal) k vyhloubení | 1a) dutý (příčestí)",
+      "lemma": "נָבַב",
+      "hebrew": "נבב",
+      "xlit": "nâbab",
+      "translated": true
+    },
+    "H5015": {
+      "definitions_cz": "Nebo = \"prorok\" | n pr m | 1) babylonské božstvo, které předsedalo učení a dopisům; odpovídá řeckému Hermesovi, latinskému Merkurovi a egyptskému Thothovi | n pr loc | 2) město v Moabu a kdysi přidělené Rubenovi; pravděpodobně se nachází na hoře Nebo nebo v její blízkosti | 3) město v Judsku (možná Benjamin), ze kterého původně pocházely rodiny některých vyhnanců, kteří se vrátili z Babylonu se Zerubábelem | 4) hora, kde zemřel Mojžíš; nachází se východně od Jordánu naproti Jerichu; místo nejisté",
+      "lemma": "נְבוֹ",
+      "hebrew": "נבו",
+      "xlit": "Nᵉbôw",
+      "translated": true
+    },
+    "H5016": {
+      "definitions_cz": "1) proroctví | 1a) proroctví | 1a1) specifické a pravé | 1a2) nepravda | 1b) prorocké psaní",
+      "lemma": "נְבוּאָה",
+      "hebrew": "נבואה",
+      "xlit": "nᵉbûwʼâh",
+      "translated": true
+    },
+    "H5017": {
+      "definitions_cz": "1) prorokovat",
+      "lemma": "נְבוּאָה",
+      "hebrew": "נבואה",
+      "xlit": "nᵉbûwʼâh",
+      "translated": true
+    },
+    "H5018": {
+      "definitions_cz": "Nebuzaradan = \"Nebo dal semeno\" | 1) generál Nabuchodonozorovy armády při dobytí Jeruzaléma",
+      "lemma": "נְבוּזַרְאֲדָן",
+      "hebrew": "נבוזראדן",
+      "xlit": "Nᵉbûwzarʼădân",
+      "translated": true
+    },
+    "H5019": {
+      "definitions_cz": "Nabuchodonozor nebo Nabuchodonozor = \"ať Nebo chrání korunu\" | 1) velký babylonský král, který dobyl Jeruzalém a odvedl Judu do zajetí",
+      "lemma": "נְבוּכַדְנֶאצַּר",
+      "hebrew": "נבוכדנאצר",
+      "xlit": "Nᵉbûwkadneʼtstsar",
+      "translated": true
+    },
+    "H5020": {
+      "definitions_cz": "Nabuchodonozor = \"ať Nebo chrání korunu\" | 1) velký babylonský král, který dobyl Jeruzalém a odvedl Judu do zajetí",
+      "lemma": "נְבוּכַדְנֶצַּר",
+      "hebrew": "נבוכדנצר",
+      "xlit": "Nᵉbûwkadnetstsar",
+      "translated": true
+    },
+    "H5021": {
+      "definitions_cz": "Nebushasban = \"Nebo mě vysvobodí\" | 1) jeden z Nabuchodonozorových důstojníků při dobytí Jeruzaléma",
+      "lemma": "נְבוּשַׁזְבָּן",
+      "hebrew": "נבושזבן",
+      "xlit": "Nᵉbûwshazbân",
+      "translated": true
+    },
+    "H5022": {
+      "definitions_cz": "Naboth = \"ovoce\" | 1) majitel vinice Jizreel, kterého Achab a Jezábel zabili, aby měli jeho vinici",
+      "lemma": "נָבוֹת",
+      "hebrew": "נבות",
+      "xlit": "Nâbôwth",
+      "translated": true
+    },
+    "H5023": {
+      "definitions_cz": "1) odměna",
+      "lemma": "נְבִזְבָּה",
+      "hebrew": "נבזבה",
+      "xlit": "nᵉbizbâh",
+      "translated": true
+    },
+    "H5024": {
+      "definitions_cz": "1) (Qal) štěkat",
+      "lemma": "נָבַח",
+      "hebrew": "נבח",
+      "xlit": "nâbach",
+      "translated": true
+    },
+    "H5025": {
+      "definitions_cz": "Nobah = \"štěkání\" | n pr m | 1) válečník z Manasse, který se při dobývání území na východě Jordánu zmocnil města Kenath a okolních vesnic | n pr loc | 2) místo v Gileadu, které zahrnovalo města Kenath a okolní vesnice zajaté 1 výše a přejmenované po něm; oblast nakonec získala svou původní identitu",
+      "lemma": "נֹבַח",
+      "hebrew": "נבח",
+      "xlit": "Nôbach",
+      "translated": true
+    },
+    "H5026": {
+      "definitions_cz": "Nibhaz = \"štěkač\" | 1) božstvo Avitů jimi zavedené do Samaří v době Šalmanasera; idol měl postavu psa",
+      "lemma": "נִבְחַז",
+      "hebrew": "נבחז",
+      "xlit": "Nibchaz",
+      "translated": true
+    },
+    "H5027": {
+      "definitions_cz": "1) dívat se, hledět | 1a) (Piel) podívat se | 1b) (hifil) | 1b1) podívat se | 1b2) brát ohled, dávat pozor, věnovat pozornost, uvažovat | 1b3) dívat se, hledět, dávat pozor",
+      "lemma": "נָבַט",
+      "hebrew": "נבט",
+      "xlit": "nâbaṭ",
+      "translated": true
+    },
+    "H5028": {
+      "definitions_cz": "Nebat = \"aspekt\" | 1) Efraimec ze Zeredy, otec krále Jeroboama I. ze severního království Izraele",
+      "lemma": "נְבָט",
+      "hebrew": "נבט",
+      "xlit": "Nᵉbâṭ",
+      "translated": true
+    },
+    "H5029": {
+      "definitions_cz": "1) prorok",
+      "lemma": "נְבִיא",
+      "hebrew": "נביא",
+      "xlit": "nᵉbîyʼ",
+      "translated": true
+    },
+    "H5030": {
+      "definitions_cz": "1) mluvčí, řečník, prorok | 1a) prorok | 1b) falešný prorok | 1c) pohanský prorok",
+      "lemma": "נָבִיא",
+      "hebrew": "נביא",
+      "xlit": "nâbîyʼ",
+      "translated": true
+    },
+    "H5031": {
+      "definitions_cz": "1) prorokyně | 1a) starověký typ obdařený darem písně (Miriam) | 1b) pozdější typ vyhledávané slovo (Huldah) | 1c) falešná prorokyně (Noadiah) | 1d) manželka proroka Izajáše",
+      "lemma": "נְבִיאָה",
+      "hebrew": "נביאה",
+      "xlit": "nᵉbîyʼâh",
+      "translated": true
+    },
+    "H5032": {
+      "definitions_cz": "Nebaioth nebo Nebajoth = \"výšky\" | 1) syn Izmaelův | 2) lidé pocházející z1 nazývaných Nabatejci s hlavním městem v Petře",
+      "lemma": "נְבָיוֹת",
+      "hebrew": "נביות",
+      "xlit": "Nᵉbâyôwth",
+      "translated": true
+    },
+    "H5033": {
+      "definitions_cz": "1) pružina, pružiny",
+      "lemma": "נֵבֶךְ",
+      "hebrew": "נבך",
+      "xlit": "nêbek",
+      "translated": true
+    },
+    "H5034": {
+      "definitions_cz": "1) být nesmyslný, být hloupý | 1a) (Qal) být pošetilý | 1b) (Piel) | 1b1) považovat za blázna nebo s ním zacházet | 1b2) zacházet s pohrdáním | 2) potopit se nebo spadnout, chřadnout, vadnout a spadnout, vyblednout | 2a) (Qal) | 2a1) potopit nebo spadnout dolů | 2a2) padat, chřadnout a padat, blednout | 2a3) klesnout",
+      "lemma": "נָבֵל",
+      "hebrew": "נבל",
+      "xlit": "nâbêl",
+      "translated": true
+    },
+    "H5035": {
+      "definitions_cz": "1) kožený sáček, sklenice, džbán | 1a) kožená láhev, kůže | 1b) sklenice, džbán (hliněný) | 2) harfa, loutna, kytara, hudební nástroj",
+      "lemma": "נֶבֶל",
+      "hebrew": "נבל",
+      "xlit": "nebel",
+      "translated": true
+    },
+    "H5036": {
+      "definitions_cz": "1) hloupý, nesmyslný, hlupák",
+      "lemma": "נָבָל",
+      "hebrew": "נבל",
+      "xlit": "nâbâl",
+      "translated": true
+    },
+    "H5037": {
+      "definitions_cz": "Nabhal nebo Nabal = \"blázen\" | 1) muž z Karmelu, který zavrhl Davidovy posly, pak zemřel šokem, když si uvědomil, že by to mohlo způsobit jeho smrt; jeho případ obhajovala jeho žena Abigail, která se po jeho smrti stala manželkou Davida",
+      "lemma": "נָבָל",
+      "hebrew": "נבל",
+      "xlit": "Nâbâl",
+      "translated": true
+    },
+    "H5038": {
+      "definitions_cz": "1) zdechlina, mrtvola | 1a) lidí, idolů, zvířat",
+      "lemma": "נְבֵלָה",
+      "hebrew": "נבלה",
+      "xlit": "nᵉbêlâh",
+      "translated": true
+    },
+    "H5039": {
+      "definitions_cz": "1) nesmyslnost, pošetilost | 1a) hanebná hloupost | 1a1) nemravnosti, profánní jednání | 1b) ostuda, potupná ostuda",
+      "lemma": "נְבָלָה",
+      "hebrew": "נבלה",
+      "xlit": "nᵉbâlâh",
+      "translated": true
+    },
+    "H5040": {
+      "definitions_cz": "1) neskromnost, nestoudnost, oplzlost, pudenda (ženy)",
+      "lemma": "נַבְלוּת",
+      "hebrew": "נבלות",
+      "xlit": "nablûwth",
+      "translated": true
+    },
+    "H5041": {
+      "definitions_cz": "Neballat = \"skrytá hloupost\" | 1) město Benjamin znovu obsazené po zajetí",
+      "lemma": "נְבַלָּט",
+      "hebrew": "נבלט",
+      "xlit": "Nᵉballâṭ",
+      "translated": true
+    },
+    "H5042": {
+      "definitions_cz": "1) téct, vylévat, vylévat, tryskat, pramenit, bublat, kvasit | 1a) (Qal) k toku | 1b)(Hiphil) vylévat, vydávat, způsobovat bublání, říhat | 1b1) vylít | 1b2) způsobit bublání, kvasit | 1b3) vylévat, vydávat, říhat",
+      "lemma": "נָבַע",
+      "hebrew": "נבע",
+      "xlit": "nâbaʻ",
+      "translated": true
+    },
+    "H5043": {
+      "definitions_cz": "1) stojan na lampu, svícen | 1a) ne 7 ramenný svícen chrámu",
+      "lemma": "נֶבְרְשָׁא",
+      "hebrew": "נברשא",
+      "xlit": "nebrᵉshâʼ",
+      "translated": true
+    },
+    "H5044": {
+      "definitions_cz": "Nibshan = \"měkká půda\" | 1) jedno ze 6 judských měst, která byla v poušti",
+      "lemma": "נִבְשָׁן",
+      "hebrew": "נבשן",
+      "xlit": "Nibshân",
+      "translated": true
+    },
+    "H5045": {
+      "definitions_cz": "1) jižní země, Nekeb, jih | 1a) jižní země | 1a1) oblast jižního Judska, hranice nejsou konkrétní | 1b) na jih",
+      "lemma": "נֶגֶב",
+      "hebrew": "נגב",
+      "xlit": "negeb",
+      "translated": true
+    },
+    "H5046": {
+      "definitions_cz": "1) být nápadný, říct, dát vědět | 1a) (Hiphil) říci, prohlásit | 1a1) říkat, oznamovat, hlásit | 1a2) prohlásit, oznámit, vyložit | 1a3) informovat o | 1a4) zveřejnit, prohlásit, prohlásit | 1a5) přiznat, uznat, přiznat | 1a5a) posel (příčestí) | 1b) (Hophal) být sdělen, být oznámen, být hlášen",
+      "lemma": "נָגַד",
+      "hebrew": "נגד",
+      "xlit": "nâgad",
+      "translated": true
+    },
+    "H5047": {
+      "definitions_cz": "1) (Pael) proudit, proudit",
+      "lemma": "נְגַד",
+      "hebrew": "נגד",
+      "xlit": "nᵉgad",
+      "translated": true
+    },
+    "H5048": {
+      "definitions_cz": "subst | 1) co je nápadné, co je před | adv | 2) před, přímo vpřed, před, na dohled | 3) sám před sebou, přímočarý | 4) před vaší tváří, podle vašeho pohledu nebo účelu | s přípravou | 5) co je před, odpovídající | 6) před, před | 7) v dohledu nebo přítomnosti | 8) rovnoběžně s | 9) přes, pro | 10) vpředu, naproti | 11) na dálku | příprava | 12) zepředu, od | 13) z před očima, naproti, na dis",
+      "lemma": "נֶגֶד",
+      "hebrew": "נגד",
+      "xlit": "neged",
+      "translated": true
+    },
+    "H5049": {
+      "definitions_cz": "1) před, čelem",
+      "lemma": "נֶגֶד",
+      "hebrew": "נגד",
+      "xlit": "neged",
+      "translated": true
+    },
+    "H5050": {
+      "definitions_cz": "1) zářit | 1a) (Qal) svítit | 1b) (hifil) | 1b1) osvětlit | 1b2) způsobit lesk",
+      "lemma": "נָגַהּ",
+      "hebrew": "נגה",
+      "xlit": "nâgahh",
+      "translated": true
+    },
+    "H5051": {
+      "definitions_cz": "1) jas",
+      "lemma": "נֹגַהּ",
+      "hebrew": "נגה",
+      "xlit": "nôgahh",
+      "translated": true
+    },
+    "H5052": {
+      "definitions_cz": "Nogah = \"jas\" | 1) jeden ze 13 synů Davidových, kteří se mu narodili v Jeruzalémě",
+      "lemma": "נֹגַהּ",
+      "hebrew": "נגה",
+      "xlit": "Nôgahh",
+      "translated": true
+    },
+    "H5053": {
+      "definitions_cz": "1) jas, denní světlo",
+      "lemma": "נֹגַהּ",
+      "hebrew": "נגה",
+      "xlit": "nôgahh",
+      "translated": true
+    },
+    "H5054": {
+      "definitions_cz": "1) jas",
+      "lemma": "נְגֹהָה",
+      "hebrew": "נגהה",
+      "xlit": "nᵉgôhâh",
+      "translated": true
+    },
+    "H5055": {
+      "definitions_cz": "1) tlačit, tlačit, škrtit | 1a) (Qal) do gore | 1b) (Piel) k tlačení nebo tlačení na | 1c) (Hithpael) zapojit se do strkání, vést válku",
+      "lemma": "נָגַח",
+      "hebrew": "נגח",
+      "xlit": "nâgach",
+      "translated": true
+    },
+    "H5056": {
+      "definitions_cz": "1) závislý na goringu, náchylný k goringu",
+      "lemma": "נַגָּח",
+      "hebrew": "נגח",
+      "xlit": "naggâch",
+      "translated": true
+    },
+    "H5057": {
+      "definitions_cz": "1) vůdce, vládce, kapitán, princ | 1a) vládce, kníže | 1b) vrchní dozorce | 1c) pravítko (v jiných funkcích) | 1d) knížecí věci",
+      "lemma": "נָגִיד",
+      "hebrew": "נגיד",
+      "xlit": "nâgîyd",
+      "translated": true
+    },
+    "H5058": {
+      "definitions_cz": "1) hudba, píseň, posměšná píseň | 1a) hudba (strunného nástroje) | 1b) píseň | 1b1) posměšná nebo zesměšňující píseň",
+      "lemma": "נְגִינָה",
+      "hebrew": "נגינה",
+      "xlit": "nᵉgîynâh",
+      "translated": true
+    },
+    "H5059": {
+      "definitions_cz": "1) hrát nebo udeřit na struny, hrát na strunný nástroj | 1a) (Qal) | 1a1) hráč (příčestí) | 1b) (Piel) | 1b1) hrát | 1b1a) hráč, pěvec (příčestí)",
+      "lemma": "נָגַן",
+      "hebrew": "נגן",
+      "xlit": "nâgan",
+      "translated": true
+    },
+    "H5060": {
+      "definitions_cz": "1) dotknout se, dosáhnout, udeřit | 1a) (Qal) | 1a1) dotýkat se | 1a2) udeřit | 1a3) dosáhnout, rozšířit na | 1a4) k vyražení | 1a4a) sražen (příčestí) | 1b) (Niphal) být zasažen, být poražen | 1c) (Piel) udeřit | 1d) (Pual) být zasažen (nemocí) | 1e) (Hiphil) způsobit dotek, dosáhnout, přiblížit se, přijít | 1e1) k doteku použijte | 1e2) dosáhnout, rozšířit, dosáhnout, dorazit, přijít | 1e3) přiblížit se (času) | 1e4) potkat (osudu)",
+      "lemma": "נָגַע",
+      "hebrew": "נגע",
+      "xlit": "nâgaʻ",
+      "translated": true
+    },
+    "H5061": {
+      "definitions_cz": "1) mrtvice, mor, nemoc, znaménko, morová skvrna | 1a) mrtvice, rána | 1b) mrtvice (metaforické pro nemoc) | 1c) známka (malomocenství)",
+      "lemma": "נֶגַע",
+      "hebrew": "נגע",
+      "xlit": "negaʻ",
+      "translated": true
+    },
+    "H5062": {
+      "definitions_cz": "1) udeřit, udeřit | 1a) (Qal) udeřit, udeřit | 1b) (Niphal) být zasažen, být zasažen | 1c) (Hithpael) klopýtnout",
+      "lemma": "נָגַף",
+      "hebrew": "נגף",
+      "xlit": "nâgaph",
+      "translated": true
+    },
+    "H5063": {
+      "definitions_cz": "1) rána, úder, mor | 1a) rána, mor (smrtelná) | 1b) stávkující",
+      "lemma": "נֶגֶף",
+      "hebrew": "נגף",
+      "xlit": "negeph",
+      "translated": true
+    },
+    "H5064": {
+      "definitions_cz": "1) nalít, běžet, téci, slévat | 1a) (Niphal) | 1a1) nalít, rozlít | 1a2) nalít se, téci, stékat | 1a3) zmizet (obr.) | 1a4) k roztažení | 1b) (Hiphil) nalít dolů | 1c) (Hophal) roztavit",
+      "lemma": "נָגַר",
+      "hebrew": "נגר",
+      "xlit": "nâgar",
+      "translated": true
+    },
+    "H5065": {
+      "definitions_cz": "1) lisovat, pohánět, utlačovat, přesně, vyvíjet náročný tlak | 1a) (Qal) | 1a1) stisknout, pohánět | 1a2) přesně | 1a3) řidič, úkolář, vládce, utlačovatel, tyran, pán, vymahač tributu (příčestí) | 1b) (Niphal) být silně stlačen",
+      "lemma": "נָגַשׂ",
+      "hebrew": "נגש",
+      "xlit": "nâgas",
+      "translated": true
+    },
+    "H5066": {
+      "definitions_cz": "1) přiblížit se, přiblížit se | 1a) (Qal) přitáhnout se nebo se přiblížit | 1a1) lidí | 1a1a) pohlavního styku | 1a2) neživého předmětu | 1a2a) přiblížit se k sobě | 1b) (Niphal) přiblížit se | 1c) (Hiphil) způsobit přiblížení, přiblížení, přivedení | 1d) (Hophal) přiblížit | 1e) (Hithpael), aby se přiblížil",
+      "lemma": "נָגַשׁ",
+      "hebrew": "נגש",
+      "xlit": "nâgash",
+      "translated": true
+    },
+    "H5067": {
+      "definitions_cz": "1) hromada",
+      "lemma": "נֵד",
+      "hebrew": "נד",
+      "xlit": "nêd",
+      "translated": true
+    },
+    "H5068": {
+      "definitions_cz": "1) podněcovat, pobízet, přimět k ochotě | 1a) (Qal) podněcovat, pohánět | 1b) (Hithpael) | 1b1) dobrovolně | 1b2) nabízet dobrovolné nabídky",
+      "lemma": "נָדַב",
+      "hebrew": "נדב",
+      "xlit": "nâdab",
+      "translated": true
+    },
+    "H5069": {
+      "definitions_cz": "1) dobrovolně, nabízet svobodně | 1a) (Ithpael) | 1a1) dobrovolně | 1a2) volně dávat, volně nabízet",
+      "lemma": "נְדַב",
+      "hebrew": "נדב",
+      "xlit": "nᵉdab",
+      "translated": true
+    },
+    "H5070": {
+      "definitions_cz": "Nadab = \"velkorysý\" | 1) nejstarší syn Áronův od Elíšeby; zabit před svatyní v poušti za zapálení kadidelnic podivným ohněm | 2) syn krále Jeroboama I. ze severního království Izraele a izraelského krále po dobu 2 let, než byl zabit Baashou | 3) Jerahmeelita, syn Šammajův, z kmene Juda | 4) syn Gibeona z kmene Benjamín",
+      "lemma": "נָדָב",
+      "hebrew": "נדב",
+      "xlit": "Nâdâb",
+      "translated": true
+    },
+    "H5071": {
+      "definitions_cz": "1) dobrovolnost, dobrovolná nabídka | 1a) dobrovolnost | 1b) svobodná vůle, dobrovolná, nabídka",
+      "lemma": "נְדָבָה",
+      "hebrew": "נדבה",
+      "xlit": "nᵉdâbâh",
+      "translated": true
+    },
+    "H5072": {
+      "definitions_cz": "Nedabiah = \"koho Jehova pohání\" | 1) jeden ze synů judského krále Jehojakina (Jekonjáše).",
+      "lemma": "נְדַבְיָה",
+      "hebrew": "נדביה",
+      "xlit": "Nᵉdabyâh",
+      "translated": true
+    },
+    "H5073": {
+      "definitions_cz": "1) řada, vrstva, řada (kamenů)",
+      "lemma": "נִדְבָּךְ",
+      "hebrew": "נדבך",
+      "xlit": "nidbâk",
+      "translated": true
+    },
+    "H5074": {
+      "definitions_cz": "1) ustoupit, uprchnout, odejít, přesunout se, toulat se do ciziny, bloudit, třepetat se | 1a)(Qal) | 1a1) ustoupit, uprchnout | 1a2) uprchnout, odejít | 1a3) bloudit, bloudit | 1a4) třepetat (ptáků) | 1b) (Poal) utéct, být pronásledován | 1c) (Hiphil) zahnat | 1d) (Hophal) k zahnání | 1e) (Hithpolel) utéct",
+      "lemma": "נָדַד",
+      "hebrew": "נדד",
+      "xlit": "nâdad",
+      "translated": true
+    },
+    "H5075": {
+      "definitions_cz": "1) (P'al) uprchnout",
+      "lemma": "נְדַד",
+      "hebrew": "נדד",
+      "xlit": "nᵉdad",
+      "translated": true
+    },
+    "H5076": {
+      "definitions_cz": "1) zmítání (nespavosti)",
+      "lemma": "נָדֻד",
+      "hebrew": "נדד",
+      "xlit": "nâdud",
+      "translated": true
+    },
+    "H5077": {
+      "definitions_cz": "1) (Hiphil) vyloučit, zahnat, odsunout stranou | 2) (Piel) vyhodit, odložit",
+      "lemma": "נָדָה",
+      "hebrew": "נדה",
+      "xlit": "nâdâh",
+      "translated": true
+    },
+    "H5078": {
+      "definitions_cz": "1) dárek",
+      "lemma": "נֵדֶה",
+      "hebrew": "נדה",
+      "xlit": "nêdeh",
+      "translated": true
+    },
+    "H5079": {
+      "definitions_cz": "1) nečistota, špinavost, menstruační, oddělená | 1a) nečistota | 1a1) obřadní nečistoty | 1a2) menstruace | 1b) nečistá věc (obr.) | 1b1) modloslužby, nemravnosti",
+      "lemma": "נִדָּה",
+      "hebrew": "נדה",
+      "xlit": "niddâh",
+      "translated": true
+    },
+    "H5080": {
+      "definitions_cz": "1) pohánět, strkat, odhánět, vyhnat | 1a) (Qal) | 1a1) pohánět | 1a2) odstrčit, vyhnat | 1b) (Niphal) | 1b1) být poháněn | 1b2) být vyhozen, být vykázán | 1b2a) vyhnán, vyvrženec (příčestí) | 1b3) k zahnání | 1b4) být odsunut, odsunut stranou | 1c) (Pual) být vražen do | 1c1) tah (příčestí) | 1d) (Hiphil) | 1d1) strčit, pohybovat, pohánět | 1d2) vystrčit, vyhnat | 1d3) odstrčit, odsunout stranou | 1e) (Hophal) být pronásledován, být loven | 1e1)",
+      "lemma": "נָדַח",
+      "hebrew": "נדח",
+      "xlit": "nâdach",
+      "translated": true
+    },
+    "H5081": {
+      "definitions_cz": "adj | 1) nakloněný, ochotný, ušlechtilý, velkorysý | 1a) podněcován, nakloněn, ochotný | 1b) urozený, knížecí (v hodnosti) | 1c) ušlechtilý (myslem a charakterem) | n m | 2) ušlechtilý",
+      "lemma": "נָדִיב",
+      "hebrew": "נדיב",
+      "xlit": "nâdîyb",
+      "translated": true
+    },
+    "H5082": {
+      "definitions_cz": "1) urozenost, ušlechtilost, ušlechtilé činy | 1a) šlechta (hodnosti), čest | 1b) ušlechtilé věci",
+      "lemma": "נְדִיבָה",
+      "hebrew": "נדיבה",
+      "xlit": "nᵉdîybâh",
+      "translated": true
+    },
+    "H5083": {
+      "definitions_cz": "1) dárek | 1a) o úplatku nevěstky",
+      "lemma": "נָדָן",
+      "hebrew": "נדן",
+      "xlit": "nâdân",
+      "translated": true
+    },
+    "H5084": {
+      "definitions_cz": "1) plášť",
+      "lemma": "נָדָן",
+      "hebrew": "נדן",
+      "xlit": "nâdân",
+      "translated": true
+    },
+    "H5085": {
+      "definitions_cz": "1) pochva | 1a) znamená nejistý",
+      "lemma": "נִדְנֶה",
+      "hebrew": "נדנה",
+      "xlit": "nidneh",
+      "translated": true
+    },
+    "H5086": {
+      "definitions_cz": "1) odjet, odjet, rozjet | 1a) (Qal) projet asi | 1b)(Niphal) být řízen, být obízen",
+      "lemma": "נָדַף",
+      "hebrew": "נדף",
+      "xlit": "nâdaph",
+      "translated": true
+    },
+    "H5087": {
+      "definitions_cz": "1) slibovat, skládat slib | 1a) (Qal) složit slib",
+      "lemma": "נָדַר",
+      "hebrew": "נדר",
+      "xlit": "nâdar",
+      "translated": true
+    },
+    "H5088": {
+      "definitions_cz": "1) slib, votivní dar",
+      "lemma": "נֶדֶר",
+      "hebrew": "נדר",
+      "xlit": "neder",
+      "translated": true
+    },
+    "H5089": {
+      "definitions_cz": "1) Eminence, vyznamenání",
+      "lemma": "נֹהַּ",
+      "hebrew": "נה",
+      "xlit": "nôahh",
+      "translated": true
+    },
+    "H5090": {
+      "definitions_cz": "1) řídit, vést, vést, vést | 1a) (Qal) | 1a1) jet, vést, odjet, odjet | 1a2) chovat se (obr.) (srdce) | 1b) (Piel) | 1b1) odjet, odvést | 1b2) vést dál, vést, vést na | 1b3) způsobit jízdu | 2) (Piel) naříkat, naříkat",
+      "lemma": "נָהַג",
+      "hebrew": "נהג",
+      "xlit": "nâhag",
+      "translated": true
     }
   }
 }
