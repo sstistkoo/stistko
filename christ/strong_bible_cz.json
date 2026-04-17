@@ -52377,6 +52377,356 @@
       "hebrew": "כנעני",
       "xlit": "Kᵉnaʻanîy",
       "translated": true
+    },
+    "H3670": {
+      "definitions_cz": "1) (Niphal) být umístěn nebo zatlačen do rohu nebo do rohu, být skryt před zraky, být zahnán do kouta, být odsunut stranou",
+      "lemma": "כָּנַף",
+      "hebrew": "כנף",
+      "xlit": "kânaph",
+      "translated": true
+    },
+    "H3671": {
+      "definitions_cz": "1) křídlo, konec, okraj, okřídlený, okraj, roh, košile | 1a) křídlo | 1b) končetina | 1b1) sukně, roh (oděvu)",
+      "lemma": "כָּנָף",
+      "hebrew": "כנף",
+      "xlit": "kânâph",
+      "translated": true
+    },
+    "H3672": {
+      "definitions_cz": "Chinneroth nebo Cinneroth nebo Chinnereth = \"harfy\" | 1) raný název Galilejského jezera | 2) město a okres v Neftali poblíž Galilejského jezera",
+      "lemma": "כִּנְּרוֹת",
+      "hebrew": "כנרות",
+      "xlit": "Kinnᵉrôwth",
+      "translated": true
+    },
+    "H3673": {
+      "definitions_cz": "1) sbírat | 1a) (P'al) shromáždit | 1b) (Ithpael) shromážděno (příčestí)",
+      "lemma": "כָּנַשׁ",
+      "hebrew": "כנש",
+      "xlit": "kânash",
+      "translated": true
+    },
+    "H3674": {
+      "definitions_cz": "1) spolupracovník, kolega, společník",
+      "lemma": "כְּנָת",
+      "hebrew": "כנת",
+      "xlit": "kᵉnâth",
+      "translated": true
+    },
+    "H3675": {
+      "definitions_cz": "1) společník, společník",
+      "lemma": "כְּנָת",
+      "hebrew": "כנת",
+      "xlit": "kᵉnâth",
+      "translated": true
+    },
+    "H3676": {
+      "definitions_cz": "1) sídlo (čestné), trůn, sídlo, stolice",
+      "lemma": "כֵּס",
+      "hebrew": "כס",
+      "xlit": "kêç",
+      "translated": true
+    },
+    "H3677": {
+      "definitions_cz": "1) úplněk",
+      "lemma": "כֶּסֶא",
+      "hebrew": "כסא",
+      "xlit": "keçeʼ",
+      "translated": true
+    },
+    "H3678": {
+      "definitions_cz": "1) sedadlo (čestné), trůn, sedadlo, stolička | 1a) sídlo (čestné), trůn | 1b) královská důstojnost, autorita, moc (obr.)",
+      "lemma": "כִּסֵּא",
+      "hebrew": "כסא",
+      "xlit": "kiççêʼ",
+      "translated": true
+    },
+    "H3679": {
+      "definitions_cz": "chaldejské = viz chaldejské \"hrodoborce\" | 1) skupina lidí obvykle spojená s oblastí kolem Babylonie | 2) učená třída kněží, kouzelníků nebo astronomů",
+      "lemma": "כַּסְדַּי",
+      "hebrew": "כסדי",
+      "xlit": "Kaçday",
+      "translated": true
+    },
+    "H3680": {
+      "definitions_cz": "1) zakrýt, skrýt, skrýt | 1a) (Qal) skrýt, zakryto (příčestí) | 1b) (Niphal) na pokrytí | 1c) (Piel) | 1c1) zakrýt, obléknout | 1c2) zakrýt, zakrýt | 1c3) zakrýt (pro ochranu) | 1c4) překrýt, rozprostřít | 1c5) pokrýt, přemoci | 1d) (Pual) | 1d1), který má být pokryt | 1d2) být oblečen | 1e) (Hithpael) zahalovat se, oblékat se",
+      "lemma": "כָּסָה",
+      "hebrew": "כסה",
+      "xlit": "kâçâh",
+      "translated": true
+    },
+    "H3681": {
+      "definitions_cz": "1) krytina, vnější krytina",
+      "lemma": "כָּסוּי",
+      "hebrew": "כסוי",
+      "xlit": "kâçûwy",
+      "translated": true
+    },
+    "H3682": {
+      "definitions_cz": "1) potahy, oděvy | 1a) pokrývky, oděvy | 1b) zakrytí (pro skrytí)",
+      "lemma": "כְּסוּת",
+      "hebrew": "כסות",
+      "xlit": "kᵉçûwth",
+      "translated": true
+    },
+    "H3683": {
+      "definitions_cz": "1) pokácet, odříznout, odříznout (rostlin) | 1a) (Qal) odříznout (přejít příčestí) | 1a1) rozsudku (obr.)",
+      "lemma": "כָּסַח",
+      "hebrew": "כסח",
+      "xlit": "kâçach",
+      "translated": true
+    },
+    "H3684": {
+      "definitions_cz": "1) hlupák, hloupý chlap, tupý, prosťáček, arogantní",
+      "lemma": "כְּסִיל",
+      "hebrew": "כסיל",
+      "xlit": "kᵉçîyl",
+      "translated": true
+    },
+    "H3685": {
+      "definitions_cz": "1) souhvězdí Orion | 1a) Orion, souhvězdí | 1b) souhvězdí (obecné)",
+      "lemma": "כְּסִיל",
+      "hebrew": "כסיל",
+      "xlit": "Kᵉçîyl",
+      "translated": true
+    },
+    "H3686": {
+      "definitions_cz": "Chesil = \"hloupý\" | 1) město na extrémním jihu Judy a 15 mil jihozápadně od Beersheby; možná stejné jako H01329",
+      "lemma": "כְּסִיל",
+      "hebrew": "כסיל",
+      "xlit": "Kᵉçîyl",
+      "translated": true
+    },
+    "H3687": {
+      "definitions_cz": "1) hloupost, hloupost",
+      "lemma": "כְּסִילוּת",
+      "hebrew": "כסילות",
+      "xlit": "kᵉçîylûwth",
+      "translated": true
+    },
+    "H3688": {
+      "definitions_cz": "1) (Qal) být hloupý, být hloupý",
+      "lemma": "כָּסַל",
+      "hebrew": "כסל",
+      "xlit": "kâçal",
+      "translated": true
+    },
+    "H3689": {
+      "definitions_cz": "1) bedra, bok | 2) hloupost, hloupost | 3) důvěra, naděje",
+      "lemma": "כֶּסֶל",
+      "hebrew": "כסל",
+      "xlit": "keçel",
+      "translated": true
+    },
+    "H3690": {
+      "definitions_cz": "1) důvěra | 2) hloupost, hloupost",
+      "lemma": "כִּסְלָה",
+      "hebrew": "כסלה",
+      "xlit": "kiçlâh",
+      "translated": true
+    },
+    "H3691": {
+      "definitions_cz": "Chisleu = \"jeho sebevědomí\" | 1) 9. měsíc kalendáře odpovídající listopad-prosinec",
+      "lemma": "כִּסְלֵו",
+      "hebrew": "כסלו",
+      "xlit": "Kiçlêv",
+      "translated": true
+    },
+    "H3692": {
+      "definitions_cz": "Chislon = \"důvěra\" | 1) otec Elidada, prince vybraného, ​​aby pomohl při rozdělení země Kanaán mezi kmeny",
+      "lemma": "כִּסְלוֹן",
+      "hebrew": "כסלון",
+      "xlit": "Kiçlôwn",
+      "translated": true
+    },
+    "H3693": {
+      "definitions_cz": "Chesalon = \"naděje\" | 1) město na severní hranici Judska asi 10 mil západně od Jeruzaléma",
+      "lemma": "כְּסָלוֹן",
+      "hebrew": "כסלון",
+      "xlit": "Kᵉçâlôwn",
+      "translated": true
+    },
+    "H3694": {
+      "definitions_cz": "Chesulloth = \"boky\" | 1) město v Issachar u Jizreelu; také 'Chisloth-tabor' H03696",
+      "lemma": "כְּסֻלּוֹת",
+      "hebrew": "כסלות",
+      "xlit": "Kᵉçullôwth",
+      "translated": true
+    },
+    "H3695": {
+      "definitions_cz": "Casluhim = \"opevněný\" | 1) lid nebo kmen pocházející z Mizraimu (Egypt), předků Pelištejců a Kaftorimu",
+      "lemma": "כַּסְלֻחִים",
+      "hebrew": "כסלחים",
+      "xlit": "Kaçluchîym",
+      "translated": true
+    },
+    "H3696": {
+      "definitions_cz": "Chisloth-tabor = \"boky Tábora\" | 1) město Issachar na svazích hory Tábor; také 'Chesulloth' H03694",
+      "lemma": "כִּסְלֹת תָּבֹר",
+      "hebrew": "כסלת תבר",
+      "xlit": "Kiçlôth Tâbôr",
+      "translated": true
+    },
+    "H3697": {
+      "definitions_cz": "1) (Qal) stříhat, stříhat, stříhat, stříhat",
+      "lemma": "כָּסַם",
+      "hebrew": "כסם",
+      "xlit": "kâçam",
+      "translated": true
+    },
+    "H3698": {
+      "definitions_cz": "1) špalda – plodina podobná pšenici zasazená a sklizená na podzim nebo na jaře",
+      "lemma": "כֻּסֶּמֶת",
+      "hebrew": "כסמת",
+      "xlit": "kuççemeth",
+      "translated": true
+    },
+    "H3699": {
+      "definitions_cz": "1) (Qal) odhadovat, počítat, počítat",
+      "lemma": "כָּסַס",
+      "hebrew": "כסס",
+      "xlit": "kâçaç",
+      "translated": true
+    },
+    "H3700": {
+      "definitions_cz": "1) toužit po, toužit, dlouho po | 1a) (Qal) toužit po | 1b) (Niphal) | 1b1) toužit po (hluboce) | 1b2) být vytoužený (příčestí)",
+      "lemma": "כָּסַף",
+      "hebrew": "כסף",
+      "xlit": "kâçaph",
+      "translated": true
+    },
+    "H3701": {
+      "definitions_cz": "1) stříbro, peníze | 1a) stříbro | 1a1) jako kov | 1a2) jako ozdoba | 1a3) jako barva | 1b) peníze, šekely, talenty",
+      "lemma": "כֶּסֶף",
+      "hebrew": "כסף",
+      "xlit": "keçeph",
+      "translated": true
+    },
+    "H3702": {
+      "definitions_cz": "1) stříbro | 1a) jako kov | 1b) jako peníze",
+      "lemma": "כְּסַף",
+      "hebrew": "כסף",
+      "xlit": "kᵉçaph",
+      "translated": true
+    },
+    "H3703": {
+      "definitions_cz": "Casiphia = \"stříbrná\" | 1) místo v Babylónii na cestě mezi Babylonem a Jeruzalémem; místo nejisté",
+      "lemma": "כָּסִפְיָא",
+      "hebrew": "כספיא",
+      "xlit": "Kâçiphyâʼ",
+      "translated": true
+    },
+    "H3704": {
+      "definitions_cz": "1) páska, filé, kryté amulety, falešné fylakterie | 1a) používané falešnými prorokyněmi v Izraeli k podpoře jejich démonických plánů věštění",
+      "lemma": "כֶּסֶת",
+      "hebrew": "כסת",
+      "xlit": "keçeth",
+      "translated": true
+    },
+    "H3705": {
+      "definitions_cz": "1) nyní, v této době, až dosud",
+      "lemma": "כְּעַן",
+      "hebrew": "כען",
+      "xlit": "kᵉʻan",
+      "translated": true
+    },
+    "H3706": {
+      "definitions_cz": "1) teď a teď",
+      "lemma": "כְּעֶנֶת",
+      "hebrew": "כענת",
+      "xlit": "kᵉʻeneth",
+      "translated": true
+    },
+    "H3707": {
+      "definitions_cz": "1) hněvat se, rozčilovat se, rozhořčovat se, hněvat se, rmoutit se, provokovat k hněvu a hněvu | 1a) (Qal) | 1a1) být naštvaný, být rozhořčený | 1a2) zlobit se | 1b) (Piel) vyprovokovat k hněvu | 1c) (Hiphil) | 1c1) obtěžovat | 1c2) obtěžovat, provokovat k hněvu",
+      "lemma": "כַּעַס",
+      "hebrew": "כעס",
+      "xlit": "kaʻaç",
+      "translated": true
+    },
+    "H3708": {
+      "definitions_cz": "1) hněv, rozhořčení, provokace, smutek | 1a) rozčilení | 1a1) mužů | 1a2) Boží | 1b) rozhořčení, smutek, frustrace",
+      "lemma": "כַּעַס",
+      "hebrew": "כעס",
+      "xlit": "kaʻaç",
+      "translated": true
+    },
+    "H3709": {
+      "definitions_cz": "1) dlaň, ruka, chodidlo, dlaň, prohlubeň nebo ploška | 1a) dlaň, prohlubeň nebo plocha ruky | 1b) výkon | 1c) ploska (nohy) | 1d) duté předměty, ohýbané předměty, ohnuté předměty | 1d1) stehenního kloubu | 1d2) pánev, nádoba (jako dutá) | 1d3) dutý (z praku) | 1d4) ručně tvarované větve nebo listy (palm) | 1d5) rukojeti (jako ohnuté)",
+      "lemma": "כַּף",
+      "hebrew": "כף",
+      "xlit": "kaph",
+      "translated": true
+    },
+    "H3710": {
+      "definitions_cz": "1) skála, dutina skály",
+      "lemma": "כֵּף",
+      "hebrew": "כף",
+      "xlit": "kêph",
+      "translated": true
+    },
+    "H3711": {
+      "definitions_cz": "1) (Qal) uklidnit, podmanit si, uklidnit",
+      "lemma": "כָּפָה",
+      "hebrew": "כפה",
+      "xlit": "kâphâh",
+      "translated": true
+    },
+    "H3712": {
+      "definitions_cz": "1) větev, list, list, palmový list, palmová ratolest",
+      "lemma": "כִּפָּה",
+      "hebrew": "כפה",
+      "xlit": "kippâh",
+      "translated": true
+    },
+    "H3713": {
+      "definitions_cz": "1) miska, umyvadlo | 2) jinovatka, mráz",
+      "lemma": "כְּפוֹר",
+      "hebrew": "כפור",
+      "xlit": "kᵉphôwr",
+      "translated": true
+    },
+    "H3714": {
+      "definitions_cz": "1) krokev, nosník (což znamená pochybný)",
+      "lemma": "כָּפִיס",
+      "hebrew": "כפיס",
+      "xlit": "kâphîyç",
+      "translated": true
+    },
+    "H3715": {
+      "definitions_cz": "1) mladý lev | 2) vesnice",
+      "lemma": "כְּפִיר",
+      "hebrew": "כפיר",
+      "xlit": "kᵉphîyr",
+      "translated": true
+    },
+    "H3716": {
+      "definitions_cz": "Chefira = \"lvice\" | 1) město Gibeonitů, které bylo následně přiděleno kmeni Benjamín",
+      "lemma": "כְּפִירָה",
+      "hebrew": "כפירה",
+      "xlit": "Kᵉphîyrâh",
+      "translated": true
+    },
+    "H3717": {
+      "definitions_cz": "1) zdvojit, zdvojnásobit, zdvojnásobit | 1a) (Qal) zdvojnásobit | 1b) (Niphal) zdvojnásobit",
+      "lemma": "כָּפַל",
+      "hebrew": "כפל",
+      "xlit": "kâphal",
+      "translated": true
+    },
+    "H3718": {
+      "definitions_cz": "1) double, zdvojnásobení",
+      "lemma": "כֶּפֶל",
+      "hebrew": "כפל",
+      "xlit": "kephel",
+      "translated": true
+    },
+    "H3719": {
+      "definitions_cz": "1) (Qal) hladovět, mít hlad, lačně toužit | 2) (CLBL) kroutit, ohýbat",
+      "lemma": "כָּפַן",
+      "hebrew": "כפן",
+      "xlit": "kâphan",
+      "translated": true
     }
   }
 }
