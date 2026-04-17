@@ -36101,6 +36101,906 @@
       "translit": "Sámos",
       "pronunciation": "sam'-os",
       "translated": true
+    },
+    "G4545": {
+      "definitions_cz": "Samuel (tj. Shemuel), Izraelita",
+      "translit": "Samouḗl",
+      "pronunciation": "sam-oo-ale'",
+      "translated": true
+    },
+    "G4546": {
+      "definitions_cz": "Sampson (tj. Shimshon), an\n Izraelita",
+      "translit": "Sampsṓn",
+      "pronunciation": "samp-sone'",
+      "translated": true
+    },
+    "G4547": {
+      "definitions_cz": "nejistého původu);\n pantofle nebo podrážka",
+      "translit": "sandálion",
+      "pronunciation": "san-dal'-ee-on",
+      "translated": true
+    },
+    "G4548": {
+      "definitions_cz": "prkno",
+      "translit": "sanís",
+      "pronunciation": "san-ece'",
+      "translated": true
+    },
+    "G4549": {
+      "definitions_cz": "Saul (t. j. Šaul), židovské jméno\n Paul",
+      "translit": "Saoúl",
+      "pronunciation": "sah-ool'",
+      "translated": true
+    },
+    "G4550": {
+      "definitions_cz": "shnilý, tj. bezcenný (doslova nebo morálně)",
+      "translit": "saprós",
+      "pronunciation": "sap-ros'",
+      "translated": true
+    },
+    "G4551": {
+      "definitions_cz": "Sapphire, Izraelka",
+      "translit": "Sappheírē",
+      "pronunciation": "sap-fi'-ray",
+      "translated": true
+    },
+    "G4552": {
+      "definitions_cz": "„safír“ nebo drahokam lapis-lazuli",
+      "translit": "sáppheiros",
+      "pronunciation": "sap'-fi-ros",
+      "translated": true
+    },
+    "G4553": {
+      "definitions_cz": "košík (jako propletený popř\n proutěné práce",
+      "translit": "sargánē",
+      "pronunciation": "sar-gan'-ay",
+      "translated": true
+    },
+    "G4554": {
+      "definitions_cz": "Sardy, místo v Asii\n Menší",
+      "translit": "Sárdeis",
+      "pronunciation": "sar'-dice",
+      "translated": true
+    },
+    "G4555": {
+      "definitions_cz": "sardinka ([ŘECKO:3037]",
+      "translit": "sárdinos",
+      "pronunciation": "sar'-dee-nos",
+      "translated": true
+    },
+    "G4556": {
+      "definitions_cz": "sardian (3037 bytostí\n implikovaný), tj. (jako podstatné jméno) drahokam tak zvaný",
+      "translit": "sárdios",
+      "pronunciation": "sar'-dee-os",
+      "translated": true
+    },
+    "G4557": {
+      "definitions_cz": "proto ten \"onyx\"\n kámen); \"sardonyx\", tj. drahokam tzv",
+      "translit": "sardónyx",
+      "pronunciation": "sar-don'-oox",
+      "translated": true
+    },
+    "G4558": {
+      "definitions_cz": "Sarepta (t. j. Tsarephath), místo v\n Palestina",
+      "translit": "Sárepta",
+      "pronunciation": "sar'-ep-tah",
+      "translated": true
+    },
+    "G4559": {
+      "definitions_cz": "vztahující se k tělu, tj. (v rozšíření) tělesné, časové,\n nebo (implicitně) zvíře, neregenerované",
+      "translit": "sarkikós",
+      "pronunciation": "sar-kee-kos'",
+      "translated": true
+    },
+    "G4560": {
+      "definitions_cz": "podobný masu, tedy (analogicky) měkký",
+      "translit": "sárkinos",
+      "pronunciation": "sar'-kee-nos",
+      "translated": true
+    },
+    "G4561": {
+      "definitions_cz": "maso (jako zbavené slupky), tzn.\n (přísně) maso zvířete (jako potrava), nebo (rozšířeně) tělo\n (na rozdíl od duše (nebo ducha) nebo jako symbol toho, co je\n vnější, nebo jako prostředek příbuzenstva, nebo (implicitně) člověk\n příroda (s jejími slabostmi (fyzickými či morálními) a vášněmi), popř\n (zvláště), lidská bytost (jako taková)",
+      "translit": "sárx",
+      "pronunciation": "sarx",
+      "translated": true
+    },
+    "G4562": {
+      "definitions_cz": "Saruch (t. j. Serug), patriarcha",
+      "translit": "Saroúch",
+      "pronunciation": "sar-ooch'",
+      "translated": true
+    },
+    "G4563": {
+      "definitions_cz": "podobný [ŘECKO:4951]",
+      "translit": "saróō",
+      "pronunciation": "sar-o'-o",
+      "translated": true
+    },
+    "G4564": {
+      "definitions_cz": "Sarra (tj. Sarah), manželka\n Abraham",
+      "translit": "Sárrha",
+      "pronunciation": "sar'-hrah",
+      "translated": true
+    },
+    "G4565": {
+      "definitions_cz": "Saron (t. j. Sharon), okres\n Palestina",
+      "translit": "Sárōn",
+      "pronunciation": "sar'-one",
+      "translated": true
+    },
+    "G4566": {
+      "definitions_cz": "Satan, tedy ďábel",
+      "translit": "Satân",
+      "pronunciation": "sat-an'",
+      "translated": true
+    },
+    "G4567": {
+      "definitions_cz": "a\n žalobce, tedy ďábel",
+      "translit": "Satanâs",
+      "pronunciation": "sat-an-as'",
+      "translated": true
+    },
+    "G4568": {
+      "definitions_cz": "určitá míra pro věci suché",
+      "translit": "sáton",
+      "pronunciation": "sat'-on",
+      "translated": true
+    },
+    "G4569": {
+      "definitions_cz": "Saulus (t. j. Šaul), Žid\n jméno Paul",
+      "translit": "Saûlos",
+      "pronunciation": "sow'-los",
+      "translated": true
+    },
+    "G4570": {
+      "definitions_cz": "uhasit\n (doslova nebo obrazně)",
+      "translit": "sbénnymi",
+      "pronunciation": "sben'-noo-mee",
+      "translated": true
+    },
+    "G4571": {
+      "definitions_cz": "tě",
+      "translit": "sé",
+      "pronunciation": "seh",
+      "translated": true
+    },
+    "G4572": {
+      "definitions_cz": "sebe (se sebou).",
+      "translit": "seautoû",
+      "pronunciation": "seh-ow-too'",
+      "translated": true
+    },
+    "G4573": {
+      "definitions_cz": "uctívat, tzn.\n zbožňovat",
+      "translit": "sebázomai",
+      "pronunciation": "seb-ad'-zom-ahee",
+      "translated": true
+    },
+    "G4574": {
+      "definitions_cz": "něco zbožňovaného, tj. předmět uctívání (bůh, oltář,\n atd.)",
+      "translit": "sébasma",
+      "pronunciation": "seb'-as-mah",
+      "translated": true
+    },
+    "G4575": {
+      "definitions_cz": "ctihodný (srpen), tj. (jako podstatné jméno) titul římský\n Císař, nebo (jako přídavné jméno) císařský",
+      "translit": "sebastós",
+      "pronunciation": "seb-as-tos'",
+      "translated": true
+    },
+    "G4576": {
+      "definitions_cz": "ctít, tzn.\n zbožňovat",
+      "translit": "sébomai",
+      "pronunciation": "seb'-om-ahee",
+      "translated": true
+    },
+    "G4577": {
+      "definitions_cz": "podobný [ŘECKO:138]",
+      "translit": "seirá",
+      "pronunciation": "si-rah'",
+      "translated": true
+    },
+    "G4578": {
+      "definitions_cz": "vřava, t. j. (vzduchu) vichřice, (země) an\n zemětřesení",
+      "translit": "seismós",
+      "pronunciation": "sice-mos'",
+      "translated": true
+    },
+    "G4579": {
+      "definitions_cz": "houpat (vibrovat, správně, do stran nebo do\n a zpět), tj. (obecně) agitovat (v libovolném směru; způsobit\n třást se); přeneseně uvrhnout do chvění (ze strachu nebo\n obavy)",
+      "translit": "seíō",
+      "pronunciation": "si'-o",
+      "translated": true
+    },
+    "G4580": {
+      "definitions_cz": "\"druhý\"; Secundus, křesťan",
+      "translit": "Sekoûndos",
+      "pronunciation": "sek-oon'-dos",
+      "translated": true
+    },
+    "G4581": {
+      "definitions_cz": "Seleuceia, místo v\n Sýrie",
+      "translit": "Seleúkeia",
+      "pronunciation": "sel-yook'-i-ah",
+      "translated": true
+    },
+    "G4582": {
+      "definitions_cz": "pravděpodobně podobný alternativě [ŘECKO:138]",
+      "translit": "selḗnē",
+      "pronunciation": "sel-ay'-nay",
+      "translated": true
+    },
+    "G4583": {
+      "definitions_cz": "být\n měsícem, t. j. šílený",
+      "translit": "selēniázomai",
+      "pronunciation": "sel-ay-nee-ad'-zom-ahee",
+      "translated": true
+    },
+    "G4584": {
+      "definitions_cz": "Semei (tj. Shimi), Izraelita",
+      "translit": "Semeḯ",
+      "pronunciation": "sem-eh-ee'",
+      "translated": true
+    },
+    "G4585": {
+      "definitions_cz": "jemná pšeničná mouka",
+      "translit": "semídalis",
+      "pronunciation": "sem-id'-al-is",
+      "translated": true
+    },
+    "G4586": {
+      "definitions_cz": "ctihodný, t. j. čestný",
+      "translit": "semnós",
+      "pronunciation": "sem-nos'",
+      "translated": true
+    },
+    "G4587": {
+      "definitions_cz": "ctihodnosti, tj. poctivosti",
+      "translit": "semnótēs",
+      "pronunciation": "sem-not'-ace",
+      "translated": true
+    },
+    "G4588": {
+      "definitions_cz": "Sergius, Říman",
+      "translit": "Sérgios",
+      "pronunciation": "serg'-ee-os",
+      "translated": true
+    },
+    "G4589": {
+      "definitions_cz": "Seth (tj. Sheth), patriarcha",
+      "translit": "Sḗth",
+      "pronunciation": "sayth",
+      "translated": true
+    },
+    "G4590": {
+      "definitions_cz": "Sem (t. j. Šém), patriarcha",
+      "translit": "Sḗm",
+      "pronunciation": "same",
+      "translated": true
+    },
+    "G4591": {
+      "definitions_cz": "nejisté odvození); naznačit",
+      "translit": "sēmaínō",
+      "pronunciation": "say-mah'-ee-no",
+      "translated": true
+    },
+    "G4592": {
+      "definitions_cz": "indikace,\n zvláště ceremoniálně nebo nadpřirozeně",
+      "translit": "sēmeîon",
+      "pronunciation": "say-mi'-on",
+      "translated": true
+    },
+    "G4593": {
+      "definitions_cz": "rozlišovat, tj. označit (pro zamezení)",
+      "translit": "sēmeióō",
+      "pronunciation": "say-mi-o'-o",
+      "translated": true
+    },
+    "G4594": {
+      "definitions_cz": "na (tedy tento) denní (nebo noční proud popř\n právě prošel); obecně, nyní (tj. v současnosti, dosud)",
+      "translit": "sḗmeron",
+      "pronunciation": "say'-mer-on",
+      "translated": true
+    },
+    "G4595": {
+      "definitions_cz": "hnít, t. j. (obrazně) zahynout",
+      "translit": "sḗpō",
+      "pronunciation": "say'-po",
+      "translated": true
+    },
+    "G4596": {
+      "definitions_cz": "odtud název\n bource morušového); Seric, tj. hedvábný (neutr jako podstatné jméno, hedvábný\n tkanina)",
+      "translit": "sērikós",
+      "pronunciation": "say-ree-kos'",
+      "translated": true
+    },
+    "G4597": {
+      "definitions_cz": "můra",
+      "translit": "sḗs",
+      "pronunciation": "sace",
+      "translated": true
+    },
+    "G4598": {
+      "definitions_cz": "můry prožrané",
+      "translit": "sētóbrōtos",
+      "pronunciation": "say-tob'-ro-tos",
+      "translated": true
+    },
+    "G4599": {
+      "definitions_cz": "pravděpodobně podobný základu [ŘECKO:2476]",
+      "translit": "sthenóō",
+      "pronunciation": "sthen-o'-o",
+      "translated": true
+    },
+    "G4600": {
+      "definitions_cz": "čelist-kost, tj. (implicitně) tvář\n nebo straně obličeje",
+      "translit": "siagṓn",
+      "pronunciation": "see-ag-one'",
+      "translated": true
+    },
+    "G4601": {
+      "definitions_cz": "mlčet (přechodně nebo nepřechodně)",
+      "translit": "sigáō",
+      "pronunciation": "see-gah'-o",
+      "translated": true
+    },
+    "G4602": {
+      "definitions_cz": "umlčet",
+      "translit": "sigḗ",
+      "pronunciation": "see-gay'",
+      "translated": true
+    },
+    "G4603": {
+      "definitions_cz": "ze železa",
+      "translit": "sidḗreos",
+      "pronunciation": "sid-ay'-reh-os",
+      "translated": true
+    },
+    "G4604": {
+      "definitions_cz": "železo",
+      "translit": "sídēros",
+      "pronunciation": "sid'-ay-ros",
+      "translated": true
+    },
+    "G4605": {
+      "definitions_cz": "Sidon (t. j. Tsidon), místo v\n Palestina",
+      "translit": "Sidṓn",
+      "pronunciation": "sid-one'",
+      "translated": true
+    },
+    "G4606": {
+      "definitions_cz": "sidonský, t. j. obyvatel Sidonu",
+      "translit": "Sidṓnios",
+      "pronunciation": "sid-o'-nee-os",
+      "translated": true
+    },
+    "G4607": {
+      "definitions_cz": "dýka-man nebo vrah; freebooter (žid\n fanatik postavený mimo zákon Římany)",
+      "translit": "sikários",
+      "pronunciation": "sik-ar'-ee-os",
+      "translated": true
+    },
+    "G4608": {
+      "definitions_cz": "omamná látka, tedy intenzivně fermentovaná\n likér",
+      "translit": "síkera",
+      "pronunciation": "sik'-er-ah",
+      "translated": true
+    },
+    "G4609": {
+      "definitions_cz": "Silas, křesťan",
+      "translit": "Sílas",
+      "pronunciation": "see'-las",
+      "translated": true
+    },
+    "G4610": {
+      "definitions_cz": "\"silvan\"; Silvanus, křesťan",
+      "translit": "Silouanós",
+      "pronunciation": "sil-oo-an-os'",
+      "translated": true
+    },
+    "G4611": {
+      "definitions_cz": "Siloam (t. j. Shiloach), tůň\n Jeruzalém",
+      "translit": "Silōám",
+      "pronunciation": "sil-o-am'",
+      "translated": true
+    },
+    "G4612": {
+      "definitions_cz": "semicinctium nebo poloviční obruba, tj. úzká krytina\n (zástěra)",
+      "translit": "simikínthion",
+      "pronunciation": "sim-ee-kin'-thee-on",
+      "translated": true
+    },
+    "G4613": {
+      "definitions_cz": "Simon (t. j. Šimon), jméno devíti\n Izraelité",
+      "translit": "Símōn",
+      "pronunciation": "see'-mone",
+      "translated": true
+    },
+    "G4614": {
+      "definitions_cz": "Sina (t. j. Sinaj), hora v\n Arábie",
+      "translit": "Sinâ",
+      "pronunciation": "see-nah'",
+      "translated": true
+    },
+    "G4615": {
+      "definitions_cz": "hořčice (\n rostlina)",
+      "translit": "sínapi",
+      "pronunciation": "sin'-ap-ee",
+      "translated": true
+    },
+    "G4616": {
+      "definitions_cz": "byssos, t. j. bělené prádlo\n (látka nebo její oděv)",
+      "translit": "sindṓn",
+      "pronunciation": "sin-done'",
+      "translated": true
+    },
+    "G4617": {
+      "definitions_cz": "hádat (obrazně)",
+      "translit": "siniázō",
+      "pronunciation": "sin-ee-ad'-zo",
+      "translated": true
+    },
+    "G4618": {
+      "definitions_cz": "krmený obilím, t. j. vykrmený",
+      "translit": "siteutós",
+      "pronunciation": "sit-yoo-ros'",
+      "translated": true
+    },
+    "G4619": {
+      "definitions_cz": "zrnitý, t. j. tučný",
+      "translit": "sitistós",
+      "pronunciation": "sit-is-tos'",
+      "translated": true
+    },
+    "G4620": {
+      "definitions_cz": "obilná odměrka, tedy (implicitně) dávka\n (příspěvek na jídlo)",
+      "translit": "sitómetron",
+      "pronunciation": "sit-om'-et-ron",
+      "translated": true
+    },
+    "G4621": {
+      "definitions_cz": "obilí, zejména pšenice",
+      "translit": "sîtos",
+      "pronunciation": "see'-tos",
+      "translated": true
+    },
+    "G4622": {
+      "definitions_cz": "Sion (t. j. Tsijon), kopec jeruzalémský;\n přeneseně církev (bojovná nebo vítězná)",
+      "translit": "Siṓn",
+      "pronunciation": "see-own'",
+      "translated": true
+    },
+    "G4623": {
+      "definitions_cz": "správně, němost, t. j. nedobrovolná\n ticho nebo neschopnost mluvit; a tím se liší od [ŘECKO:4602]",
+      "translit": "siōpáō",
+      "pronunciation": "see-o-pah'-o",
+      "translated": true
+    },
+    "G4624": {
+      "definitions_cz": "chytit, t. j. zakopnout (obrazně klopýtnout\n (přechodně) nebo svádí ke hříchu, odpadlictví nebo nelibosti)",
+      "translit": "skandalízō",
+      "pronunciation": "skan-dal-id'-zo",
+      "translated": true
+    },
+    "G4625": {
+      "definitions_cz": "pastička (ohnutá\n stromek), t. j. léčka (obrazně příčina nelibosti resp\n hřích)",
+      "translit": "skándalon",
+      "pronunciation": "skan'-dal-on",
+      "translated": true
+    },
+    "G4626": {
+      "definitions_cz": "kopat",
+      "translit": "skáptō",
+      "pronunciation": "skap'-to",
+      "translated": true
+    },
+    "G4627": {
+      "definitions_cz": "„skif“ (jakoby vykopaný) nebo yawl (nesený na palubě velkého plavidla pro\n přistání)",
+      "translit": "skáphē",
+      "pronunciation": "skaf'-ay",
+      "translated": true
+    },
+    "G4628": {
+      "definitions_cz": "prostřednictvím myšlenky štíhlosti); a\n noha (jako hladká)",
+      "translit": "skélos",
+      "pronunciation": "skel'-os",
+      "translated": true
+    },
+    "G4629": {
+      "definitions_cz": "možná podobný základu\n [ŘECKA:4649]",
+      "translit": "sképasma",
+      "pronunciation": "skep'-as-mah",
+      "translated": true
+    },
+    "G4630": {
+      "definitions_cz": "levák; Scevas (tj. Scævus), an\n Izraelita",
+      "translit": "Skeuâs",
+      "pronunciation": "skyoo-as'",
+      "translated": true
+    },
+    "G4631": {
+      "definitions_cz": "nábytek, tedy náhradní náčiní",
+      "translit": "skeuḗ",
+      "pronunciation": "skyoo-ay'",
+      "translated": true
+    },
+    "G4632": {
+      "definitions_cz": "plavidlo, nářadí, vybavení nebo zařízení\n (doslova nebo přeneseně [zvláště manželka jako přispívající k\n užitečnost manžela])",
+      "translit": "skeûos",
+      "pronunciation": "skyoo'-os",
+      "translated": true
+    },
+    "G4633": {
+      "definitions_cz": "stan nebo látková bouda (doslova popř\n přeneseně)",
+      "translit": "skēnḗ",
+      "pronunciation": "skay-nay'",
+      "translated": true
+    },
+    "G4634": {
+      "definitions_cz": "svátek stánků (tak zvaný z\n zvyk stavět budky pro dočasné domovy)",
+      "translit": "skēnopēgía",
+      "pronunciation": "skay-nop-ayg-ee'-ah",
+      "translated": true
+    },
+    "G4635": {
+      "definitions_cz": "výrobce stanů",
+      "translit": "skēnopoiós",
+      "pronunciation": "skay-nop-oy-os'",
+      "translated": true
+    },
+    "G4636": {
+      "definitions_cz": "chatrč nebo dočasné bydliště, tedy (obrazně) člověk\n tělo (jako sídlo ducha)",
+      "translit": "skēnos",
+      "pronunciation": "skay'-nos",
+      "translated": true
+    },
+    "G4637": {
+      "definitions_cz": "stanovat nebo utábořit, tj. (obrazně) obsadit (jako a\n sídlo) nebo (zvláště), přebývat (jako Bůh ve svatostánku\n starý, symbol ochrany a společenství)",
+      "translit": "skēnóō",
+      "pronunciation": "skay-no'-o",
+      "translated": true
+    },
+    "G4638": {
+      "definitions_cz": "tábor, tj. (obrazně) chrám (jako Boží\n bydliště), tělo (jako činžák pro duši)",
+      "translit": "skḗnōma",
+      "pronunciation": "skay'-no-mah",
+      "translated": true
+    },
+    "G4639": {
+      "definitions_cz": "„stín“ nebo stín (doslova nebo\n přeneseně (tma omylu nebo adumbace))",
+      "translit": "skiá",
+      "pronunciation": "skee'-ah",
+      "translated": true
+    },
+    "G4640": {
+      "definitions_cz": "skákat, tj. soucitně se pohybovat (jako\n zrychlení plodu)",
+      "translit": "skirtáō",
+      "pronunciation": "skeer-tah'-o",
+      "translated": true
+    },
+    "G4641": {
+      "definitions_cz": "tvrdohlavost, tzn.\n (zvláště), bída (duchovního) vnímání",
+      "translit": "sklērokardía",
+      "pronunciation": "sklay-rok-ar-dee'-ah",
+      "translated": true
+    },
+    "G4642": {
+      "definitions_cz": "suché, tj. tvrdé nebo tuhé (obrazně drsné,\n těžký)",
+      "translit": "sklērós",
+      "pronunciation": "sklay-ros'",
+      "translated": true
+    },
+    "G4643": {
+      "definitions_cz": "bezcitnost, tedy (obrazně) tvrdohlavost",
+      "translit": "sklērótēs",
+      "pronunciation": "sklay-rot'-ace",
+      "translated": true
+    },
+    "G4644": {
+      "definitions_cz": "hardnaped, tj. (obrazně)\n tvrdohlavý",
+      "translit": "sklērotráchēlos",
+      "pronunciation": "sklay-rot-rakh'-ay-los",
+      "translated": true
+    },
+    "G4645": {
+      "definitions_cz": "ztvrdnout, tj. (obrazně) učinit tvrdohlavý",
+      "translit": "sklērýnō",
+      "pronunciation": "sklay-roo'-no",
+      "translated": true
+    },
+    "G4646": {
+      "definitions_cz": "pokroucený, t. j. vinutí; přeneseně,\n perverzní",
+      "translit": "skoliós",
+      "pronunciation": "skol-ee-os'",
+      "translated": true
+    },
+    "G4647": {
+      "definitions_cz": "vpředu uschlé, tj\n bod nebo bodnutí (obrazně tělesná mrzutost nebo\n postižení)",
+      "translit": "skólops",
+      "pronunciation": "skol'-ops",
+      "translated": true
+    },
+    "G4648": {
+      "definitions_cz": "zamířit na (špion), tj. (obrazně)\n ohledu",
+      "translit": "skopéō",
+      "pronunciation": "skop-eh'-o",
+      "translated": true
+    },
+    "G4649": {
+      "definitions_cz": "možná podobný [ŘECKO:4626][ŘECKO:4629]",
+      "translit": "skopós",
+      "pronunciation": "skop-os'",
+      "translated": true
+    },
+    "G4650": {
+      "definitions_cz": "do\n rozptýlit, t. j. (obrazně) dát na útěk, plýtvat, být\n liberální",
+      "translit": "skorpízō",
+      "pronunciation": "skor-pid'-zo",
+      "translated": true
+    },
+    "G4651": {
+      "definitions_cz": "„škorpión“ (z jeho\n bodnutí)",
+      "translit": "skorpíos",
+      "pronunciation": "skor-pee'-os",
+      "translated": true
+    },
+    "G4652": {
+      "definitions_cz": "neprůhledný, tedy (obrazně) zaostalý",
+      "translit": "skoteinós",
+      "pronunciation": "skot-i-nos'",
+      "translated": true
+    },
+    "G4653": {
+      "definitions_cz": "šero, nejasnost (doslova nebo\n přeneseně)",
+      "translit": "skotía",
+      "pronunciation": "skot-ee'-ah",
+      "translated": true
+    },
+    "G4654": {
+      "definitions_cz": "zatemnit (doslova nebo obrazně)",
+      "translit": "skotízō",
+      "pronunciation": "skot-id-zo",
+      "translated": true
+    },
+    "G4655": {
+      "definitions_cz": "stínovost, tj. nejasnost (doslova popř\n přeneseně)",
+      "translit": "skótos",
+      "pronunciation": "skot'-os",
+      "translated": true
+    },
+    "G4656": {
+      "definitions_cz": "zatemnit nebo zaslepit (doslova nebo obrazně)",
+      "translit": "skotóō",
+      "pronunciation": "skot-o'-o",
+      "translated": true
+    },
+    "G4657": {
+      "definitions_cz": "co je\n hozen psům, tj. odmítnout (řád)",
+      "translit": "skýbalon",
+      "pronunciation": "skoo'-bal-on",
+      "translated": true
+    },
+    "G4658": {
+      "definitions_cz": "Skythene nebo Skythian, tj\n implikace) divoch",
+      "translit": "Skýthēs",
+      "pronunciation": "skoo'-thace",
+      "translated": true
+    },
+    "G4659": {
+      "definitions_cz": "naštvaný-visaged, tzn.\n ponurý nebo ovlivňující truchlivý vzhled",
+      "translit": "skythrōpós",
+      "pronunciation": "skoo-thro-pos'",
+      "translated": true
+    },
+    "G4660": {
+      "definitions_cz": "stahovat, t. j. (obrazně) k\n obtěžovat",
+      "translit": "skýllō",
+      "pronunciation": "skool'-lo",
+      "translated": true
+    },
+    "G4661": {
+      "definitions_cz": "něco svlečeného (jako skrýš), t. j. kořist",
+      "translit": "skŷlon",
+      "pronunciation": "skoo'-lon",
+      "translated": true
+    },
+    "G4662": {
+      "definitions_cz": "červivý, t. j. nemocný s\n červi",
+      "translit": "skōlēkóbrōtos",
+      "pronunciation": "sko-lay-kob'-ro-tos",
+      "translated": true
+    },
+    "G4663": {
+      "definitions_cz": "červ, červ nebo žížala",
+      "translit": "skṓlēx",
+      "pronunciation": "sko'-lakes",
+      "translated": true
+    },
+    "G4664": {
+      "definitions_cz": "skládající se ze smaragdu",
+      "translit": "smarágdinos",
+      "pronunciation": "smar-ag'-dee-nos",
+      "translated": true
+    },
+    "G4665": {
+      "definitions_cz": "tzv. smaragdový nebo zelený drahokam",
+      "translit": "smáragdos",
+      "pronunciation": "smar'-ag-dos",
+      "translated": true
+    },
+    "G4666": {
+      "definitions_cz": "myrha",
+      "translit": "smýrna",
+      "pronunciation": "smoor'-nah",
+      "translated": true
+    },
+    "G4667": {
+      "definitions_cz": "Smyrna, místo v Malé Asii",
+      "translit": "Smýrna",
+      "pronunciation": "smoor'-nah",
+      "translated": true
+    },
+    "G4668": {
+      "definitions_cz": "Smyrnæan",
+      "translit": "Smyrnaîos",
+      "pronunciation": "smoor-nah'-yos",
+      "translated": true
+    },
+    "G4669": {
+      "definitions_cz": "tinkturu s myrhou, tj. hořčinou (jako a\n narkotikum)",
+      "translit": "smyrnízō",
+      "pronunciation": "smoor-nid'-zo",
+      "translated": true
+    },
+    "G4670": {
+      "definitions_cz": "Sodoma (t. j. Sedom), místo v\n Palestina",
+      "translit": "Sódoma",
+      "pronunciation": "sod'-om-ah",
+      "translated": true
+    },
+    "G4671": {
+      "definitions_cz": "k tobě",
+      "translit": "soí",
+      "pronunciation": "soy",
+      "translated": true
+    },
+    "G4672": {
+      "definitions_cz": "Šalamoun (t. j. Šelomoh), syn\n Davide",
+      "translit": "Solomṓn",
+      "pronunciation": "sol-om-one'",
+      "translated": true
+    },
+    "G4673": {
+      "definitions_cz": "pohřební nádoba (urna,\n rakev), tj. (analogicky) már",
+      "translit": "sorós",
+      "pronunciation": "sor-os'",
+      "translated": true
+    },
+    "G4674": {
+      "definitions_cz": "tvůj",
+      "translit": "sós",
+      "pronunciation": "sos",
+      "translated": true
+    },
+    "G4675": {
+      "definitions_cz": "tebe, tvého",
+      "translit": "soû",
+      "pronunciation": "soo",
+      "translated": true
+    },
+    "G4676": {
+      "definitions_cz": "sudarium (tkanina), tj. ručník (na utírání\n pot z obličeje nebo vázání obličeje a\n mrtvola)",
+      "translit": "soudárion",
+      "pronunciation": "soo-dar'-ee-on",
+      "translated": true
+    },
+    "G4677": {
+      "definitions_cz": "lilie; Susannah (tj. Shoshannah), an\n Izraelitka",
+      "translit": "Sousánna",
+      "pronunciation": "soo-san'-nah",
+      "translated": true
+    },
+    "G4678": {
+      "definitions_cz": "moudrost (vyšší nebo nižší, světská nebo duchovní)",
+      "translit": "sophía",
+      "pronunciation": "sof-ee'-ah",
+      "translated": true
+    },
+    "G4679": {
+      "definitions_cz": "učinit moudrým; ve zlověstném přijetí, tvořit\n \"sofismy\", tj. pokračování věrohodné chyby",
+      "translit": "sophízō",
+      "pronunciation": "sof-id'-zo",
+      "translated": true
+    },
+    "G4680": {
+      "definitions_cz": "moudrý (v nejobecnější aplikaci)",
+      "translit": "sophós",
+      "pronunciation": "sof-os'",
+      "translated": true
+    },
+    "G4681": {
+      "definitions_cz": "Španělsko, region Evropy",
+      "translit": "Spanía",
+      "pronunciation": "span-ee'-ah",
+      "translated": true
+    },
+    "G4682": {
+      "definitions_cz": "zjevně posíleno z [ŘECKO:4685]",
+      "translit": "sparássō",
+      "pronunciation": "spar-as'-so",
+      "translated": true
+    },
+    "G4683": {
+      "definitions_cz": "z derivátu báze [ŘECKO:4682]",
+      "translit": "sparganóō",
+      "pronunciation": "spar-gan-o'-o",
+      "translated": true
+    },
+    "G4684": {
+      "definitions_cz": "být smyslný",
+      "translit": "spataláō",
+      "pronunciation": "spat-al-ah'-o",
+      "translated": true
+    },
+    "G4685": {
+      "definitions_cz": "kreslit",
+      "translit": "spáō",
+      "pronunciation": "spah'-o",
+      "translated": true
+    },
+    "G4686": {
+      "definitions_cz": "cívka (spira, \"spire\"), tzn.\n (obrazně) masa mužů (římská vojenská kohorta; také (podle\n analogie) četa levitských domovníků)",
+      "translit": "speîra",
+      "pronunciation": "spi'-rah",
+      "translated": true
+    },
+    "G4687": {
+      "definitions_cz": "do\n rozházet, tj. zasít (doslova nebo přeneseně)",
+      "translit": "speírō",
+      "pronunciation": "spi'-ro",
+      "translated": true
+    },
+    "G4688": {
+      "definitions_cz": "spekulant, tj. vojenský zvěd (špion nebo (podle\n prodloužení) plavčík)",
+      "translit": "spekoulátōr",
+      "pronunciation": "spek-oo-lat'-ore",
+      "translated": true
+    },
+    "G4689": {
+      "definitions_cz": "vylévat jako úlitbu, tzn.\n (obrazně) věnovat (svůj život nebo krev, jako oběť)\n (\"utratit\")",
+      "translit": "spéndō",
+      "pronunciation": "spen'-do",
+      "translated": true
+    },
+    "G4690": {
+      "definitions_cz": "něco zaseto, tj. semeno (včetně mužského „spermie“); podle\n implikace, potomstvo; speciálně pozůstatek (obrazně, jako by byl zachován\n na výsadbu)",
+      "translit": "spérma",
+      "pronunciation": "sper'-mah",
+      "translated": true
+    },
+    "G4691": {
+      "definitions_cz": "sběrač semen (jako vrána), tj. (obrazně) a\n houbař, povaleč (zejména drb nebo maličkost v hovoru)",
+      "translit": "spermológos",
+      "pronunciation": "sper-mol-og'-os",
+      "translated": true
+    },
+    "G4692": {
+      "definitions_cz": "na „rychlost“ („studium“), tedy naléhání na\n (pilně nebo vážně); implicitně netrpělivě čekat",
+      "translit": "speúdō",
+      "pronunciation": "spyoo'-do",
+      "translated": true
+    },
+    "G4693": {
+      "definitions_cz": "jeskyně; podle\n implikace, úkryt nebo letovisko",
+      "translit": "spḗlaion",
+      "pronunciation": "spay'-lah-yon",
+      "translated": true
+    },
+    "G4694": {
+      "definitions_cz": "římsa nebo útes skály v moři",
+      "translit": "spilás",
+      "pronunciation": "spee-las'",
+      "translated": true
     }
   }
 }
