@@ -68274,6 +68274,356 @@
       "hebrew": "עלי",
       "xlit": "ʻĕlîy",
       "translated": true
+    },
+    "H5941": {
+      "definitions_cz": "Eli = \"nanebevstoupení\" | 1) potomek Árona prostřednictvím Ithamara a velekněze a soudce Izraele, když Samuel vstoupil do služby jako dítě",
+      "lemma": "עֵלִי",
+      "hebrew": "עלי",
+      "xlit": "ʻÊlîy",
+      "translated": true
+    },
+    "H5942": {
+      "definitions_cz": "1) horní",
+      "lemma": "עִלִּי",
+      "hebrew": "עלי",
+      "xlit": "ʻillîy",
+      "translated": true
+    },
+    "H5943": {
+      "definitions_cz": "1) nejvyšší, Nejvyšší",
+      "lemma": "עִלַּי",
+      "hebrew": "עלי",
+      "xlit": "ʻillay",
+      "translated": true
+    },
+    "H5944": {
+      "definitions_cz": "1) střešní místnost, střešní komora",
+      "lemma": "עֲלִיָּה",
+      "hebrew": "עליה",
+      "xlit": "ʻălîyâh",
+      "translated": true
+    },
+    "H5945": {
+      "definitions_cz": "adj | 1) vysoký, horní | 1a) davidovský král povýšený nad panovníky | n m | 2) Nejvyšší, nejvyšší | 2a) jméno Boží | 2b) panovníků, buď panovníků nebo andělských knížat",
+      "lemma": "עֶלְיוֹן",
+      "hebrew": "עליון",
+      "xlit": "ʻelyôwn",
+      "translated": true
+    },
+    "H5946": {
+      "definitions_cz": "1) Nejvyšší | 1a) Boha",
+      "lemma": "עֶלְיוֹן",
+      "hebrew": "עליון",
+      "xlit": "ʻelyôwn",
+      "translated": true
+    },
+    "H5947": {
+      "definitions_cz": "1) jásající, jásající",
+      "lemma": "עַלִּיז",
+      "hebrew": "עליז",
+      "xlit": "ʻallîyz",
+      "translated": true
+    },
+    "H5948": {
+      "definitions_cz": "1) pec, kelímek",
+      "lemma": "עֲלִיל",
+      "hebrew": "עליל",
+      "xlit": "ʻălîyl",
+      "translated": true
+    },
+    "H5949": {
+      "definitions_cz": "1) svévolnost, skutek, konání | 1a) svévolnost | 1b) listina | 1c) praktiky, zlé skutky",
+      "lemma": "עֲלִילָה",
+      "hebrew": "עלילה",
+      "xlit": "ʻălîylâh",
+      "translated": true
+    },
+    "H5950": {
+      "definitions_cz": "1) skutek",
+      "lemma": "עֲלִילִיָּה",
+      "hebrew": "עליליה",
+      "xlit": "ʻălîylîyâh",
+      "translated": true
+    },
+    "H5951": {
+      "definitions_cz": "1) jásání",
+      "lemma": "עֲלִיצוּת",
+      "hebrew": "עליצות",
+      "xlit": "ʻălîytsûwth",
+      "translated": true
+    },
+    "H5952": {
+      "definitions_cz": "1) střešní místnost, střešní komora",
+      "lemma": "עַלִּית",
+      "hebrew": "עלית",
+      "xlit": "ʻallîyth",
+      "translated": true
+    },
+    "H5953": {
+      "definitions_cz": "1) jednat přísně, jednat přísně, dělat z někoho hlupáka | 1a) (Poel) jednat přísně | 1b) (Poal) je třeba přísně řešit | 1c) (Hithpael) zaneprázdnit se, odklonit se, jednat bezohledně, jednat bezohledně, zneužít (proražením) | 1d) (Hithpoel) praktikovat praktiky, vystrkovat (ve špatnosti) | 2) (Poel) sbírat | 3) (Poel) hrát nebo hrát dítě | 4) (Poel) vložit, vrazit, vrazit, vrazit",
+      "lemma": "עָלַל",
+      "hebrew": "עלל",
+      "xlit": "ʻâlal",
+      "translated": true
+    },
+    "H5954": {
+      "definitions_cz": "1) vrazit, vstoupit, vstoupit | 1a) (P'al) jít dovnitř, vstoupit | 1b) (Aphel) přivést | 1c) (Hophal) být přiveden",
+      "lemma": "עֲלַל",
+      "hebrew": "עלל",
+      "xlit": "ʻălal",
+      "translated": true
+    },
+    "H5955": {
+      "definitions_cz": "1) paběrkování",
+      "lemma": "עֹלֵלָה",
+      "hebrew": "עללה",
+      "xlit": "ʻôlêlâh",
+      "translated": true
+    },
+    "H5956": {
+      "definitions_cz": "1) skrývat se, skrývat se, být skrytý, být skrytý, být tajný | 1a) (Qal) tajenka (příčestí) | 1b) (Niphal) | 1b1) ke skrytí | 1b2) skrytý, dissembler (příčestí) | 1c) (Hiphil) skrývat, skrývat | 1d) (Hithpael) schovat se",
+      "lemma": "עָלַם",
+      "hebrew": "עלם",
+      "xlit": "ʻâlam",
+      "translated": true
+    },
+    "H5957": {
+      "definitions_cz": "1) věčnost, starověk, navždy",
+      "lemma": "עָלַם",
+      "hebrew": "עלם",
+      "xlit": "ʻâlam",
+      "translated": true
+    },
+    "H5958": {
+      "definitions_cz": "1) mladý muž",
+      "lemma": "עֶלֶם",
+      "hebrew": "עלם",
+      "xlit": "ʻelem",
+      "translated": true
+    },
+    "H5959": {
+      "definitions_cz": "1) panna, mladá žena | 1a) ve věku pro uzavření manželství | 1b) pokojská nebo čerstvě vdaná | ++++ | Neexistuje žádný případ, kdy by bylo možné dokázat, že toto slovo označuje mladou ženu, která není panna. (TWOT)",
+      "lemma": "עַלְמָה",
+      "hebrew": "עלמה",
+      "xlit": "ʻalmâh",
+      "translated": true
+    },
+    "H5960": {
+      "definitions_cz": "Almon = \"skrytý\" | 1) město v Benjamínu přidělené kněžím",
+      "lemma": "עַלְמוֹן",
+      "hebrew": "עלמון",
+      "xlit": "ʻAlmôwn",
+      "translated": true
+    },
+    "H5961": {
+      "definitions_cz": "1) mladé ženy, soprán? | 1b) termín v záhlaví žalmu – Alamot",
+      "lemma": "עֲלָמוֹת",
+      "hebrew": "עלמות",
+      "xlit": "ʻĂlâmôwth",
+      "translated": true
+    },
+    "H5962": {
+      "definitions_cz": "Elamiti = viz Elam \"jejich hromady\" | 1) rodák z Elamu",
+      "lemma": "עַלְמִי",
+      "hebrew": "עלמי",
+      "xlit": "ʻAlmîy",
+      "translated": true
+    },
+    "H5963": {
+      "definitions_cz": "Almon-diblathaim = \"skrytí dvou koláčů\" | 1) stanice Izraelitů v Moábské poušti",
+      "lemma": "עַלְמֹן דִּבְלָתָיְמָה",
+      "hebrew": "עלמן דבלתימה",
+      "xlit": "ʻAlmôn Diblâthâyᵉmâh",
+      "translated": true
+    },
+    "H5964": {
+      "definitions_cz": "Alameth nebo Alemeth = \"krytí\" | n pr m | 1) benjamínec, syn Joadaha nebo Jeraha a pocházející od Saula přes Jonatana | 2) město v Benjaminu",
+      "lemma": "עָלֶמֶת",
+      "hebrew": "עלמת",
+      "xlit": "ʻÂlemeth",
+      "translated": true
+    },
+    "H5965": {
+      "definitions_cz": "1) radovat se | 1a) (Qal) radovat se | 1b) (Niphal) jásat | 1b1) mávat radostně (o pštrosi) | 1c) (Hithpael) potěšit se",
+      "lemma": "עָלַס",
+      "hebrew": "עלס",
+      "xlit": "ʻâlaç",
+      "translated": true
+    },
+    "H5966": {
+      "definitions_cz": "1) vysát (rozuměj nejistý) | 1a) (Piel) pít",
+      "lemma": "עָלַע",
+      "hebrew": "עלע",
+      "xlit": "ʻâlaʻ",
+      "translated": true
+    },
+    "H5967": {
+      "definitions_cz": "1) žebro",
+      "lemma": "עֲלַע",
+      "hebrew": "עלע",
+      "xlit": "ʻălaʻ",
+      "translated": true
+    },
+    "H5968": {
+      "definitions_cz": "1) pokrýt | 1a) (Pual) pokrytý, inkrustovaný (příčestí) | 1b) (Hithpael) zabalit se, přestrojit se, omdlévat",
+      "lemma": "עָלַף",
+      "hebrew": "עלף",
+      "xlit": "ʻâlaph",
+      "translated": true
+    },
+    "H5969": {
+      "definitions_cz": "1) zvadlý, omdlelý",
+      "lemma": "עֻלְפֶּה",
+      "hebrew": "עלפה",
+      "xlit": "ʻulpeh",
+      "translated": true
+    },
+    "H5970": {
+      "definitions_cz": "1) radovat se, jásat | 1a) (Qal) jásat",
+      "lemma": "עָלַץ",
+      "hebrew": "עלץ",
+      "xlit": "ʻâlats",
+      "translated": true
+    },
+    "H5971": {
+      "definitions_cz": "1) národ, lidé | 1a) lidé, národ | 1b) osoby, příslušníci svého lidu, krajané, krajané | 2) příbuzný, příbuzný",
+      "lemma": "עַם",
+      "hebrew": "עם",
+      "xlit": "ʻam",
+      "translated": true
+    },
+    "H5972": {
+      "definitions_cz": "1) lidé",
+      "lemma": "עַם",
+      "hebrew": "עם",
+      "xlit": "ʻam",
+      "translated": true
+    },
+    "H5973": {
+      "definitions_cz": "1) s | 1a) s | 1b) proti | 1c) směrem k | 1d) pokud | 1e) vedle, kromě | 1f) navzdory",
+      "lemma": "עִם",
+      "hebrew": "עם",
+      "xlit": "ʻim",
+      "translated": true
+    },
+    "H5974": {
+      "definitions_cz": "1) s | 1a) spolu s | 1b) s, během",
+      "lemma": "עִם",
+      "hebrew": "עם",
+      "xlit": "ʻim",
+      "translated": true
+    },
+    "H5975": {
+      "definitions_cz": "1) stát, zůstat, vydržet, zaujmout svůj postoj | 1a) (Qal) | 1a1) stát, zaujmout svůj postoj, stát ve stoje, vystoupit, zaujmout stanovisko, prezentovat se, věnovat se, být nebo se stát služebníkem | 1a2) stát na místě, zastavit se (pohybovat se nebo dělat), přestat | 1a3) zdržovat se, zdržovat se, zůstat, pokračovat, vydržet, vydržet, vytrvat, být neochvějný | 1a4) postavit se, držet se země | 1a5) stát vzpřímeně, zůstat stát, vstát, vstát, vzpřímit se, být vzpřímený | 1a6) vzniknout, objevit se",
+      "lemma": "עָמַד",
+      "hebrew": "עמד",
+      "xlit": "ʻâmad",
+      "translated": true
+    },
+    "H5976": {
+      "definitions_cz": "1) stát na místě, stát, zůstat, vydržet",
+      "lemma": "עָמַד",
+      "hebrew": "עמד",
+      "xlit": "ʻâmad",
+      "translated": true
+    },
+    "H5977": {
+      "definitions_cz": "1) místo na stání",
+      "lemma": "עֹמֶד",
+      "hebrew": "עמד",
+      "xlit": "ʻômed",
+      "translated": true
+    },
+    "H5978": {
+      "definitions_cz": "1) s",
+      "lemma": "עִמָּד",
+      "hebrew": "עמד",
+      "xlit": "ʻimmâd",
+      "translated": true
+    },
+    "H5979": {
+      "definitions_cz": "1) na zemi",
+      "lemma": "עֶמְדָּה",
+      "hebrew": "עמדה",
+      "xlit": "ʻemdâh",
+      "translated": true
+    },
+    "H5980": {
+      "definitions_cz": "1) vedle sebe | 1a) používá se pouze jako přípravek | 1a1) blízko, vedle sebe s, vedle, rovnoběžně s | 1a2) souhlasí s, odpovídá, přesně jako, zavřít vedle | 1a3) odpovídajícím způsobem",
+      "lemma": "עֻמָּה",
+      "hebrew": "עמה",
+      "xlit": "ʻummâh",
+      "translated": true
+    },
+    "H5981": {
+      "definitions_cz": "Ummah = \"unie\" | 1) jedno z měst Asher; také pravděpodobně 'Acco'",
+      "lemma": "עֻמָּה",
+      "hebrew": "עמה",
+      "xlit": "ʻUmmâh",
+      "translated": true
+    },
+    "H5982": {
+      "definitions_cz": "1) pilíř, sloup | 1a) pilíř | 1b) sloupek, svislý | 1c) sloupec (kouře)",
+      "lemma": "עַמּוּד",
+      "hebrew": "עמוד",
+      "xlit": "ʻammûwd",
+      "translated": true
+    },
+    "H5983": {
+      "definitions_cz": "Ammon = \"kmenový\" | 1) lid žijící v Zajordánsku sestoupil z Lota přes Ben-ammi",
+      "lemma": "עַמּוֹן",
+      "hebrew": "עמון",
+      "xlit": "ʻAmmôwn",
+      "translated": true
+    },
+    "H5984": {
+      "definitions_cz": "Ammonit = viz Ammon \"kmenový\" | 1) potomci Ammon a obyvatelé Ammon",
+      "lemma": "עַמּוֹנִי",
+      "hebrew": "עמוני",
+      "xlit": "ʻAmmôwnîy",
+      "translated": true
+    },
+    "H5985": {
+      "definitions_cz": "Ammonita = viz Ammon \"kmenový\" | 1) žena z Ammonu",
+      "lemma": "עַמּוֹנִית",
+      "hebrew": "עמונית",
+      "xlit": "ʻAmmôwnîyth",
+      "translated": true
+    },
+    "H5986": {
+      "definitions_cz": "Amos = \"břemeno\" | 1) prorok Páně, který prorokoval v severním království; rodák z Tekoa v Judsku u Betléma a řemeslný pastýř; autor prorocké knihy svým jménem",
+      "lemma": "עָמוֹס",
+      "hebrew": "עמוס",
+      "xlit": "ʻÂmôwç",
+      "translated": true
+    },
+    "H5987": {
+      "definitions_cz": "Amok = \"být hluboký\" | 1) kněz, který se vrátil se Zerubábelem",
+      "lemma": "עָמוֹק",
+      "hebrew": "עמוק",
+      "xlit": "ʻÂmôwq",
+      "translated": true
+    },
+    "H5988": {
+      "definitions_cz": "Ammiel = \"můj příbuzný je Bůh\" | 1) vyzvědač z kmene Dan, který za svou špatnou zprávu zahynul v moru | 2) otec Machira z Lo-debaru | 3) otec Batšeby; také 'Eliam' | 4) 6. syn Obed-edoma a strážce chrámu",
+      "lemma": "עַמִּיאֵל",
+      "hebrew": "עמיאל",
+      "xlit": "ʻAmmîyʼêl",
+      "translated": true
+    },
+    "H5989": {
+      "definitions_cz": "Ammihud = \"můj příbuzný je veličenstvo\" | 1) Efraimec, otec Elishama, náčelníka kmene v době exodu | 2) Simeonite, otce Shemuela | 3) otec Pedahela, knížete kmene Neftali | 4) otec krále Talmai z Geshur | 5) potomek Judy prostřednictvím svého syna Pharese",
+      "lemma": "עַמִּיהוּד",
+      "hebrew": "עמיהוד",
+      "xlit": "ʻAmmîyhûwd",
+      "translated": true
+    },
+    "H5990": {
+      "definitions_cz": "Ammizabad = \"můj lid dal\" | 1) syn Benaiášův, který velel 3. oddílu Davidova vojska",
+      "lemma": "עַמִּיזָבָד",
+      "hebrew": "עמיזבד",
+      "xlit": "ʻAmmîyzâbâd",
+      "translated": true
     }
   }
 }
