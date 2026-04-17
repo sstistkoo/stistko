@@ -42577,6 +42577,1406 @@
       "translit": "ōphélimos",
       "pronunciation": "o-fel'-ee-mos",
       "translated": true
+    },
+    "H2270": {
+      "definitions_cz": "adj | 1) sjednoceni | n m | 2) spolupracovník, kolega, věřící | 3) společník",
+      "lemma": "חָבֵר",
+      "hebrew": "חבר",
+      "xlit": "châbêr",
+      "translated": true
+    },
+    "H2271": {
+      "definitions_cz": "1) společník, partner (v obchodě)",
+      "lemma": "חַבָּר",
+      "hebrew": "חבר",
+      "xlit": "chabbâr",
+      "translated": true
+    },
+    "H2272": {
+      "definitions_cz": "1) skvrny, pruh, značka",
+      "lemma": "חֲבַרְבֻּרָה",
+      "hebrew": "חברברה",
+      "xlit": "chăbarburâh",
+      "translated": true
+    },
+    "H2273": {
+      "definitions_cz": "1) společník, kolega, společník",
+      "lemma": "חַבְרָה",
+      "hebrew": "חברה",
+      "xlit": "chabrâh",
+      "translated": true
+    },
+    "H2274": {
+      "definitions_cz": "1) společnost, spolek",
+      "lemma": "חֶבְרָה",
+      "hebrew": "חברה",
+      "xlit": "chebrâh",
+      "translated": true
+    },
+    "H2275": {
+      "definitions_cz": "Hebron = \"sdružení\" | n pr loc | 1) město v jižním Judsku asi 20 jižně od Jeruzaléma a asi 20 mil (30 km) severně od Beersheby a poblíž místa, kde Abraham postavil oltář | n pr m | 2) 3. syn Kohatův a vnuk Léviho | 3) potomek Caleba",
+      "lemma": "חֶבְרוֹן",
+      "hebrew": "חברון",
+      "xlit": "Chebrôwn",
+      "translated": true
+    },
+    "H2276": {
+      "definitions_cz": "Hebronité = viz Hebron | 1) obyvatelé města Hebronu | 2) potomci Hebrona, vnuka Léviho",
+      "lemma": "חֶבְרוֹנִי",
+      "hebrew": "חברוני",
+      "xlit": "Chebrôwnîy",
+      "translated": true
+    },
+    "H2277": {
+      "definitions_cz": "Heberité = viz Heber | 1) potomci Hebera",
+      "lemma": "חֶבְרִי",
+      "hebrew": "חברי",
+      "xlit": "Chebrîy",
+      "translated": true
+    },
+    "H2278": {
+      "definitions_cz": "1) společnice, manželka, družka",
+      "lemma": "חֲבֶרֶת",
+      "hebrew": "חברת",
+      "xlit": "chăbereth",
+      "translated": true
+    },
+    "H2279": {
+      "definitions_cz": "1) křižovatka, věc spojená | 2) záclonové kusy svatostánku",
+      "lemma": "חֹבֶרֶת",
+      "hebrew": "חברת",
+      "xlit": "chôbereth",
+      "translated": true
+    },
+    "H2280": {
+      "definitions_cz": "1) svázat, svázat, svázat, svázat, osedlat, omezovat, obvazovat, řídit | 1a) (Qal) | 1a1) vázat, vázat na | 1a2) svázat | 1b) (Piel) svázat, zadržet | 1c) (Pual) bude svázán",
+      "lemma": "חָבַשׁ",
+      "hebrew": "חבש",
+      "xlit": "châbash",
+      "translated": true
+    },
+    "H2281": {
+      "definitions_cz": "1) ploché koláče, chlebové oplatky",
+      "lemma": "חָבֵת",
+      "hebrew": "חבת",
+      "xlit": "châbêth",
+      "translated": true
+    },
+    "H2282": {
+      "definitions_cz": "1) festival, svátek, festival-shromáždění, poutnické hody | 1a) hody | 1b) festivalová oběť",
+      "lemma": "חַג",
+      "hebrew": "חג",
+      "xlit": "chag",
+      "translated": true
+    },
+    "H2283": {
+      "definitions_cz": "1) hrůza, zmítání (v hrůze)",
+      "lemma": "חָגָא",
+      "hebrew": "חגא",
+      "xlit": "châgâʼ",
+      "translated": true
+    },
+    "H2284": {
+      "definitions_cz": "1) kobylka, kobylka",
+      "lemma": "חָגָב",
+      "hebrew": "חגב",
+      "xlit": "châgâb",
+      "translated": true
+    },
+    "H2285": {
+      "definitions_cz": "Hagab = \"kobylka\" | 1) hlava rodiny vyhnanců, kteří se vrátili se Zerubábelem",
+      "lemma": "חָגָב",
+      "hebrew": "חגב",
+      "xlit": "Châgâb",
+      "translated": true
+    },
+    "H2286": {
+      "definitions_cz": "Hagaba nebo Hagaba = \"kobylka\" | 1) hlava rodiny vyhnanců, kteří se vrátili se Zerubábelem",
+      "lemma": "חֲגָבָא",
+      "hebrew": "חגבא",
+      "xlit": "Chăgâbâʼ",
+      "translated": true
+    },
+    "H2287": {
+      "definitions_cz": "1) pořádat hostinu, pořádat festival, dělat pouť, pořádat poutní hostinu, slavit, tančit, potácet se | 1a) (Qal) | 1a1) uspořádat poutní hostinu | 1a2) navinout",
+      "lemma": "חָגַג",
+      "hebrew": "חגג",
+      "xlit": "châgag",
+      "translated": true
+    },
+    "H2288": {
+      "definitions_cz": "1) rozštěpy, místa úkrytu, ústupy",
+      "lemma": "חֲגָו",
+      "hebrew": "חגו",
+      "xlit": "chăgâv",
+      "translated": true
+    },
+    "H2289": {
+      "definitions_cz": "1) oblečený, přepásaný, přepásaný",
+      "lemma": "חָגוֹר",
+      "hebrew": "חגור",
+      "xlit": "châgôwr",
+      "translated": true
+    },
+    "H2290": {
+      "definitions_cz": "1) opasek, pás | 2) opasek, bederní pokrývka, opasek, bederní plátno, brnění",
+      "lemma": "חֲגוֹר",
+      "hebrew": "חגור",
+      "xlit": "chăgôwr",
+      "translated": true
+    },
+    "H2291": {
+      "definitions_cz": "Haggi = \"slavnostní\" | n pr m | 1) druhý syn Gad | adj | 2) potomci Haggiho, Gadita",
+      "lemma": "חַגִּי",
+      "hebrew": "חגי",
+      "xlit": "Chaggîy",
+      "translated": true
+    },
+    "H2292": {
+      "definitions_cz": "Haggai = \"slavnostní\" | 1) 10. v pořadí menších proroků; první prorok k proroctví po zajetí",
+      "lemma": "חַגַּי",
+      "hebrew": "חגי",
+      "xlit": "Chaggay",
+      "translated": true
+    },
+    "H2293": {
+      "definitions_cz": "Haggiah = \"Jehovův svátek\" | 1) syn Šimeův a merarijský levita",
+      "lemma": "חַגִּיָּה",
+      "hebrew": "חגיה",
+      "xlit": "Chaggîyâh",
+      "translated": true
+    },
+    "H2294": {
+      "definitions_cz": "Haggith = \"slavnostní\" | 1) manželka Davida a matka Adoniášova",
+      "lemma": "חַגִּית",
+      "hebrew": "חגית",
+      "xlit": "Chaggîyth",
+      "translated": true
+    },
+    "H2295": {
+      "definitions_cz": "Hoglah = \"koroptev\" | 1) 3. z 5 dcer Celofchada, potomka Manassesova",
+      "lemma": "חׇגְלָה",
+      "hebrew": "חגלה",
+      "xlit": "Choglâh",
+      "translated": true
+    },
+    "H2296": {
+      "definitions_cz": "1) opásat se, opásat se, opásat se, nasadit opasek | 1a)(Qal) | 1a1) k opásání | 1a2) opásat, přivázat | 1a3) opásat se",
+      "lemma": "חָגַר",
+      "hebrew": "חגר",
+      "xlit": "châgar",
+      "translated": true
+    },
+    "H2297": {
+      "definitions_cz": "1) jeden (číslo), stejný, jeden, první, každý, jednou",
+      "lemma": "חַד",
+      "hebrew": "חד",
+      "xlit": "chad",
+      "translated": true
+    },
+    "H2298": {
+      "definitions_cz": "1) jedna (číslo) | 1a) jeden | 1b) a (neurčitý člen)",
+      "lemma": "חַד",
+      "hebrew": "חד",
+      "xlit": "chad",
+      "translated": true
+    },
+    "H2299": {
+      "definitions_cz": "1) ostrý",
+      "lemma": "חַד",
+      "hebrew": "חד",
+      "xlit": "chad",
+      "translated": true
+    },
+    "H2300": {
+      "definitions_cz": "1) být bystrý, bdělý, bystrý | 1a) (Qal) být ostrý, být horlivý | 1b) (Hiphil) k ostření | 1c) (Hophal) k naostření",
+      "lemma": "חָדַד",
+      "hebrew": "חדד",
+      "xlit": "châdad",
+      "translated": true
+    },
+    "H2301": {
+      "definitions_cz": "Hadad = \"mocný\" | 1) syn Izmaelův",
+      "lemma": "חֲדַד",
+      "hebrew": "חדד",
+      "xlit": "Chădad",
+      "translated": true
+    },
+    "H2302": {
+      "definitions_cz": "1) radovat se | 1a) (Qal) radovat se | 1b) (Piel) potěšit, potěšit",
+      "lemma": "חָדָה",
+      "hebrew": "חדה",
+      "xlit": "châdâh",
+      "translated": true
+    },
+    "H2303": {
+      "definitions_cz": "1) ostrý, špičatý, nabroušený",
+      "lemma": "חַדּוּד",
+      "hebrew": "חדוד",
+      "xlit": "chaddûwd",
+      "translated": true
+    },
+    "H2304": {
+      "definitions_cz": "1) radost, radost",
+      "lemma": "חֶדְוָה",
+      "hebrew": "חדוה",
+      "xlit": "chedvâh",
+      "translated": true
+    },
+    "H2305": {
+      "definitions_cz": "1) radost",
+      "lemma": "חֶדְוָה",
+      "hebrew": "חדוה",
+      "xlit": "chedvâh",
+      "translated": true
+    },
+    "H2306": {
+      "definitions_cz": "1) prsa, hruď",
+      "lemma": "חֲדִי",
+      "hebrew": "חדי",
+      "xlit": "chădîy",
+      "translated": true
+    },
+    "H2307": {
+      "definitions_cz": "Hadid = \"ostrý\" | 1) město v Benjaminu",
+      "lemma": "חָדִיד",
+      "hebrew": "חדיד",
+      "xlit": "Châdîyd",
+      "translated": true
+    },
+    "H2308": {
+      "definitions_cz": "1) přestat, přestat, přestat, vzdát se, přestat být, nechat nedokončené, snášet | 1a) (Qal) | 1a1) přestat, skončit | 1a2) přestat, odejít",
+      "lemma": "חָדַל",
+      "hebrew": "חדל",
+      "xlit": "châdal",
+      "translated": true
+    },
+    "H2309": {
+      "definitions_cz": "1) odpočinek, zastavení",
+      "lemma": "חֶדֶל",
+      "hebrew": "חדל",
+      "xlit": "chedel",
+      "translated": true
+    },
+    "H2310": {
+      "definitions_cz": "1) odmítnutý, shovívavý, pomíjivý, pomíjivý, chybějící",
+      "lemma": "חָדֵל",
+      "hebrew": "חדל",
+      "xlit": "châdêl",
+      "translated": true
+    },
+    "H2311": {
+      "definitions_cz": "Hadlai = \"zbytek boha\" | 1) Efraimský",
+      "lemma": "חַדְלַי",
+      "hebrew": "חדלי",
+      "xlit": "Chadlay",
+      "translated": true
+    },
+    "H2312": {
+      "definitions_cz": "1) trn, trn, píchání",
+      "lemma": "חֵדֶק",
+      "hebrew": "חדק",
+      "xlit": "chêdeq",
+      "translated": true
+    },
+    "H2313": {
+      "definitions_cz": "Hiddekel = \"rychlý\" | 1) jedna z řek Eden, která směřovala na východ k Asýrii; lépe známý jako Tigris (ekvivalent LXX)",
+      "lemma": "חִדֶּקֶל",
+      "hebrew": "חדקל",
+      "xlit": "Chiddeqel",
+      "translated": true
+    },
+    "H2314": {
+      "definitions_cz": "1) (Qal) obsáhnout, obklopit, uzavřít",
+      "lemma": "חָדַר",
+      "hebrew": "חדר",
+      "xlit": "châdar",
+      "translated": true
+    },
+    "H2315": {
+      "definitions_cz": "1) komora, místnost, salón, nejvnitřnější nebo vnitřní část, uvnitř",
+      "lemma": "חֶדֶר",
+      "hebrew": "חדר",
+      "xlit": "cheder",
+      "translated": true
+    },
+    "H2316": {
+      "definitions_cz": "Hadar = \"čest\" | 1) Edomitský král",
+      "lemma": "חֲדַר",
+      "hebrew": "חדר",
+      "xlit": "Chădar",
+      "translated": true
+    },
+    "H2317": {
+      "definitions_cz": "Hadrach = \"obydlí\" | 1) město Sýrie (mod Libanon)",
+      "lemma": "חַדְרָךְ",
+      "hebrew": "חדרך",
+      "xlit": "Chadrâk",
+      "translated": true
+    },
+    "H2318": {
+      "definitions_cz": "1) být nový, obnovit, opravit | 1a) (Piel) | 1a1) obnovit, vytvořit znovu | 1a2) opravit | 1b) (Hithpael) obnovit se",
+      "lemma": "חָדַשׁ",
+      "hebrew": "חדש",
+      "xlit": "châdash",
+      "translated": true
+    },
+    "H2319": {
+      "definitions_cz": "1) nová, nová věc, svěží",
+      "lemma": "חָדָשׁ",
+      "hebrew": "חדש",
+      "xlit": "châdâsh",
+      "translated": true
+    },
+    "H2320": {
+      "definitions_cz": "1) novoluní, měsíc, měsíc | 1a) první den v měsíci | 1b) lunární měsíc",
+      "lemma": "חֹדֶשׁ",
+      "hebrew": "חדש",
+      "xlit": "chôdesh",
+      "translated": true
+    },
+    "H2321": {
+      "definitions_cz": "Hodesh = \"novoměsíc\" | 1) manželka Šaharaima, benjamínce",
+      "lemma": "חֹדֶשׁ",
+      "hebrew": "חדש",
+      "xlit": "Chôdesh",
+      "translated": true
+    },
+    "H2322": {
+      "definitions_cz": "Hadaša = \"nový\" | 1) jedno z měst v judské nížině",
+      "lemma": "חֲדָשָׁה",
+      "hebrew": "חדשה",
+      "xlit": "Chădâshâh",
+      "translated": true
+    },
+    "H2323": {
+      "definitions_cz": "1) nový",
+      "lemma": "חֲדָת",
+      "hebrew": "חדת",
+      "xlit": "chădâth",
+      "translated": true
+    },
+    "H2324": {
+      "definitions_cz": "1) ukázat, interpretovat, vysvětlit, informovat, sdělit, prohlásit | 1a) (Pael) ukázat, vyložit | 1b) (Aphel) ukázat",
+      "lemma": "חֲוָא",
+      "hebrew": "חוא",
+      "xlit": "chăvâʼ",
+      "translated": true
+    },
+    "H2325": {
+      "definitions_cz": "1) být vinen, učinit vinným | 1a) (Piel) ohrozit",
+      "lemma": "חוּב",
+      "hebrew": "חוב",
+      "xlit": "chûwb",
+      "translated": true
+    },
+    "H2326": {
+      "definitions_cz": "1) dluh, dlužník",
+      "lemma": "חוֹב",
+      "hebrew": "חוב",
+      "xlit": "chôwb",
+      "translated": true
+    },
+    "H2327": {
+      "definitions_cz": "Hobah = \"úkryt\" | 1) město severně od Damašku, do kterého Abraham pronásledoval krále, kteří vyplenili Sodomu",
+      "lemma": "חוֹבָה",
+      "hebrew": "חובה",
+      "xlit": "chôwbâh",
+      "translated": true
+    },
+    "H2328": {
+      "definitions_cz": "1) obkroužit, obsáhnout, popsat kruh, obkreslit, vytvořit kruh | 1a) (Qal) obklíčit, obsáhnout",
+      "lemma": "חוּג",
+      "hebrew": "חוג",
+      "xlit": "chûwg",
+      "translated": true
+    },
+    "H2329": {
+      "definitions_cz": "1) kruh, obvod, kompas | 2) (BDB) trezor (nebes)",
+      "lemma": "חוּג",
+      "hebrew": "חוג",
+      "xlit": "chûwg",
+      "translated": true
+    },
+    "H2330": {
+      "definitions_cz": "1) (Qal) navrhnout hádanku, navrhnout hádanku",
+      "lemma": "חוּד",
+      "hebrew": "חוד",
+      "xlit": "chûwd",
+      "translated": true
+    },
+    "H2331": {
+      "definitions_cz": "1) (Piel) říci, prohlásit, ukázat, dát vědět | 2) (CLBL) dýchat",
+      "lemma": "חָוָה",
+      "hebrew": "חוה",
+      "xlit": "châvâh",
+      "translated": true
+    },
+    "H2332": {
+      "definitions_cz": "Eva = \"život\" nebo \"život\" | 1) první žena, manželka Adamova",
+      "lemma": "חַוָּה",
+      "hebrew": "חוה",
+      "xlit": "Chavvâh",
+      "translated": true
+    },
+    "H2333": {
+      "definitions_cz": "1) vesnice, město, stanová vesnička",
+      "lemma": "חַוָּה",
+      "hebrew": "חוה",
+      "xlit": "chavvâh",
+      "translated": true
+    },
+    "H2334": {
+      "definitions_cz": "Havoth-jair = \"vesnice Jair\" | 1) některé vesnice na východě Jordánu, v Gileádu nebo Bášanu, které obsadil Jair, syn Manassesův, a nazval je jeho jménem; 60 nebo 23 nebo 30 měst celkem",
+      "lemma": "חַוּוֹת יָעִיר",
+      "hebrew": "חוות יעיר",
+      "xlit": "Chavvôwth Yâʻîyr",
+      "translated": true
+    },
+    "H2335": {
+      "definitions_cz": "1) vidět | 1a) vidoucí | 1b) vidění",
+      "lemma": "חוֹזַי",
+      "hebrew": "חוזי",
+      "xlit": "Chôwzay",
+      "translated": true
+    },
+    "H2336": {
+      "definitions_cz": "1) trn, trn, ostružiník, trnovník, houština | 2) háček, kroužek, pouto",
+      "lemma": "חוֹחַ",
+      "hebrew": "חוח",
+      "xlit": "chôwach",
+      "translated": true
+    },
+    "H2337": {
+      "definitions_cz": "1) skála, štěrbina (úkryt)",
+      "lemma": "חָוָח",
+      "hebrew": "חוח",
+      "xlit": "châvâch",
+      "translated": true
+    },
+    "H2338": {
+      "definitions_cz": "1) (Aphel) opravit, připojit se",
+      "lemma": "חוּט",
+      "hebrew": "חוט",
+      "xlit": "chûwṭ",
+      "translated": true
+    },
+    "H2339": {
+      "definitions_cz": "1) nit, šňůra, vlasec, provázek",
+      "lemma": "חוּט",
+      "hebrew": "חוט",
+      "xlit": "chûwṭ",
+      "translated": true
+    },
+    "H2340": {
+      "definitions_cz": "Hivite = \"vesničané\" | 1) 6. generace potomků Kanaána, syna Hamova, kteří v době dobytí žili v severním Kanaánu poblíž hory Hermon",
+      "lemma": "חִוִּי",
+      "hebrew": "חוי",
+      "xlit": "Chivvîy",
+      "translated": true
+    },
+    "H2341": {
+      "definitions_cz": "Havilah = \"kruh\" | n pr loc | 1) část Edenu, kterou protékala řeka Pison (Araxes); byla pravděpodobně řecká Kolchida, v severovýchodním rohu Malé Asie, poblíž Kaspického moře | 2) oblast Izmaelitů v Arábii pojmenovaná podle 2. syna Kúše; pravděpodobně okres Kualan, v severozápadní části Jemenu | n pr m | 3) syn Cush | 4) syn Joktanův",
+      "lemma": "חֲוִילָה",
+      "hebrew": "חוילה",
+      "xlit": "Chăvîylâh",
+      "translated": true
+    },
+    "H2342": {
+      "definitions_cz": "1) kroutit se, vířit, tančit, svíjet se, bát se, třást se, lopotit se, být v úzkosti, bolet | 1a) (Qal) | 1a1) tančit | 1a2) kroutit se, kroutit | 1a3) vířit, otáčet se | 1b) (Pole) | 1b1) tančit | 1b2) svíjet se (v práci), nést, rodit | 1b3) úzkostlivě čekat | 1c) (pulal) | 1c1) být přinucen svíjet se, být přinucen nést | 1c2) bude vydáno | 1d) (Hophal) se narodí | 1e) (Hithpolel) | 1e1) víření (příčestí) | 1e2) svíjení se, mučení (příčestí) | 1e3",
+      "lemma": "חוּל",
+      "hebrew": "חול",
+      "xlit": "chûwl",
+      "translated": true
+    },
+    "H2343": {
+      "definitions_cz": "Hul = \"kruh\" | 1) druhý syn Aramův a vnuk Semův",
+      "lemma": "חוּל",
+      "hebrew": "חול",
+      "xlit": "Chûwl",
+      "translated": true
+    },
+    "H2344": {
+      "definitions_cz": "1) písek",
+      "lemma": "חוֹל",
+      "hebrew": "חול",
+      "xlit": "chôwl",
+      "translated": true
+    },
+    "H2345": {
+      "definitions_cz": "1) tmavá barva, ztmavená, tmavě hnědá nebo černá",
+      "lemma": "חוּם",
+      "hebrew": "חום",
+      "xlit": "chûwm",
+      "translated": true
+    },
+    "H2346": {
+      "definitions_cz": "1) zeď",
+      "lemma": "חוֹמָה",
+      "hebrew": "חומה",
+      "xlit": "chôwmâh",
+      "translated": true
+    },
+    "H2347": {
+      "definitions_cz": "1) (Qal) litovat, mít soucit, šetřit, dívat se na ně se soucitem",
+      "lemma": "חוּס",
+      "hebrew": "חוס",
+      "xlit": "chûwç",
+      "translated": true
+    },
+    "H2348": {
+      "definitions_cz": "1) mořské pobřeží, pobřeží, pobřeží",
+      "lemma": "חוֹף",
+      "hebrew": "חוף",
+      "xlit": "chôwph",
+      "translated": true
+    },
+    "H2349": {
+      "definitions_cz": "Hupham = \"pobřežní muž\" | 1) syn Benjamina, zakladatele rodu Hufamitů",
+      "lemma": "חוּפָם",
+      "hebrew": "חופם",
+      "xlit": "Chûwphâm",
+      "translated": true
+    },
+    "H2350": {
+      "definitions_cz": "Hufamité = viz Hupham | 1) potomci Huphama z kmene Benjamin",
+      "lemma": "חוּפָמִי",
+      "hebrew": "חופמי",
+      "xlit": "Chûwphâmîy",
+      "translated": true
+    },
+    "H2351": {
+      "definitions_cz": "1) venku, ven, ulice, venku",
+      "lemma": "חוּץ",
+      "hebrew": "חוץ",
+      "xlit": "chûwts",
+      "translated": true
+    },
+    "H2352": {
+      "definitions_cz": "1) díra",
+      "lemma": "חוּר",
+      "hebrew": "חור",
+      "xlit": "chûwr",
+      "translated": true
+    },
+    "H2353": {
+      "definitions_cz": "1) bílá látka, bílé věci",
+      "lemma": "חוּר",
+      "hebrew": "חור",
+      "xlit": "chûwr",
+      "translated": true
+    },
+    "H2354": {
+      "definitions_cz": "Hur = \"díra\" | 1) hlavní asistent Mojžíše a Árona | 2) děda Bezaleela, hlavního stavitele svatostánku; možná stejné jako 1 výše | 3) 4. z 5 králů Midian, kteří byli zabiti s Balámem po Peorovi | 4) otec Refaiášův v době Nehemjáše | 5) otec Ben-Hura, který byl důstojníkem komisariátu pro Šalomouna v hoře Efraim",
+      "lemma": "חוּר",
+      "hebrew": "חור",
+      "xlit": "Chûwr",
+      "translated": true
+    },
+    "H2355": {
+      "definitions_cz": "1) bílá látka, bílé věci",
+      "lemma": "חוֹר",
+      "hebrew": "חור",
+      "xlit": "chôwr",
+      "translated": true
+    },
+    "H2356": {
+      "definitions_cz": "1) díra, jeskyně",
+      "lemma": "חוֹר",
+      "hebrew": "חור",
+      "xlit": "chôwr",
+      "translated": true
+    },
+    "H2357": {
+      "definitions_cz": "1) (Qal) být bílý, zbělat, zblednout",
+      "lemma": "חָוַר",
+      "hebrew": "חור",
+      "xlit": "châvar",
+      "translated": true
+    },
+    "H2358": {
+      "definitions_cz": "1) bílá",
+      "lemma": "חִוָּר",
+      "hebrew": "חור",
+      "xlit": "chivvâr",
+      "translated": true
+    },
+    "H2359": {
+      "definitions_cz": "Huri = \"tkadlec plátna\" | 1) Gadit, otec Abihail",
+      "lemma": "חוּרִי",
+      "hebrew": "חורי",
+      "xlit": "Chûwrîy",
+      "translated": true
+    },
+    "H2360": {
+      "definitions_cz": "Hurai = \"tkadlec plátna\" | 1) jeden z Davidových mocných válečníků",
+      "lemma": "חוּרַי",
+      "hebrew": "חורי",
+      "xlit": "Chûwray",
+      "translated": true
+    },
+    "H2361": {
+      "definitions_cz": "Huram = \"vznešený zrozený\" | 1) syn Bela a vnuk Benjamina | 2) tyrský král se spojil s Davidem a Šalomounem; alternativní pravopis pro 'Hiram' | 3) hlavní architekt Šalomounova chrámu; alternativní pravopis pro 'Hiram'",
+      "lemma": "חוּרָם",
+      "hebrew": "חורם",
+      "xlit": "Chûwrâm",
+      "translated": true
+    },
+    "H2362": {
+      "definitions_cz": "Hauran = \"jeskyně\" | 1) provincie Palestiny východně od Galilejského jezera; přesná oblast nejistá, ale pravděpodobně na hranicích pouště ve Filipově tetrarchii",
+      "lemma": "חַוְרָן",
+      "hebrew": "חורן",
+      "xlit": "Chavrân",
+      "translated": true
+    },
+    "H2363": {
+      "definitions_cz": "1) spěchat, spěchat, spěchat | 1a) (Qal) spěchat | 1b) (hifil) | 1b1) ukázat spěch, jednat rychle, spěchat, přijít rychle | 1b2) užívat si, být nadšený",
+      "lemma": "חוּשׁ",
+      "hebrew": "חוש",
+      "xlit": "chûwsh",
+      "translated": true
+    },
+    "H2364": {
+      "definitions_cz": "Hushah = \"spěch\" | 1) potomek Judy",
+      "lemma": "חוּשָׁה",
+      "hebrew": "חושה",
+      "xlit": "Chûwshâh",
+      "translated": true
+    },
+    "H2365": {
+      "definitions_cz": "Hushai = \"spěchat\" | 1) architekt, Davidův přítel | 2) otec Baana, důstojník Šalomounova; asi stejně jako 1",
+      "lemma": "חוּשַׁי",
+      "hebrew": "חישי",
+      "xlit": "Chûwshay",
+      "translated": true
+    },
+    "H2366": {
+      "definitions_cz": "Hushim = \"kdo spěchá\" | n pr f | 1) jedna ze dvou manželek Shaharaim | n pr m | 2) synové Ahera, Benjamínce | 3) potomci Dan",
+      "lemma": "חוּשִׁים",
+      "hebrew": "חושים",
+      "xlit": "Chûwshîym",
+      "translated": true
+    },
+    "H2367": {
+      "definitions_cz": "Husham = \"spěch\" | 1) jeden z prvních králů Edomu",
+      "lemma": "חוּשָׁם",
+      "hebrew": "חושם",
+      "xlit": "Chûwshâm",
+      "translated": true
+    },
+    "H2368": {
+      "definitions_cz": "1) pečeť, pečeť, pečetní prsten",
+      "lemma": "חוֹתָם",
+      "hebrew": "חותם",
+      "xlit": "chôwthâm",
+      "translated": true
+    },
+    "H2369": {
+      "definitions_cz": "Hotham = \"pečeť\" | 1) muž Ašera, syna Heberova, z rodu Beria | 2) otec dvou Davidových mocných válečníků",
+      "lemma": "חוֹתָם",
+      "hebrew": "חותם",
+      "xlit": "Chôwthâm",
+      "translated": true
+    },
+    "H2370": {
+      "definitions_cz": "1) vidět, hle | 1a)(P'al) | 1a1) vidět | 1a2) vidět, hle, svědčit | 1a3) spatřit (ve snu nebo vidění) | 1a4) obvyklý, zdánlivě (pasivní)",
+      "lemma": "חֲזָא",
+      "hebrew": "חזא",
+      "xlit": "chăzâʼ",
+      "translated": true
+    },
+    "H2371": {
+      "definitions_cz": "Hazael = \"ten, kdo vidí Boha\" | 1) syrský král; poslal jeho pán Ben-hadad k proroku Elizeovi, aby hledal lék na Ben-hadadovu malomocenství; zřejmě později zabil Ben-hadada, ujal se trůnu a brzy se zapojil do války s judskými a izraelskými králi o vlastnictví města Rámot-gileád.",
+      "lemma": "חֲזָאֵל",
+      "hebrew": "חזאל",
+      "xlit": "Chăzâʼêl",
+      "translated": true
+    },
+    "H2372": {
+      "definitions_cz": "1) vidět, vnímat, dívat se, hledět, prorokovat, poskytovat | 1a) (Qal) | 1a1) viděti, hle | 1a2) vidět jako věštec v extatickém stavu | 1a3) vidět, vnímat | 1a3a) s inteligencí | 1a3b) vidět (na základě zkušenosti) | 1a3c) poskytnout",
+      "lemma": "חָזָה",
+      "hebrew": "חזה",
+      "xlit": "châzâh",
+      "translated": true
+    },
+    "H2373": {
+      "definitions_cz": "1) prsa (zvířat), prsa zvířecí oběti",
+      "lemma": "חָזֶה",
+      "hebrew": "חזה",
+      "xlit": "châzeh",
+      "translated": true
+    },
+    "H2374": {
+      "definitions_cz": "1) vidět | 1a) vidoucí | 1b) vidění",
+      "lemma": "חֹזֶה",
+      "hebrew": "חזה",
+      "xlit": "chôzeh",
+      "translated": true
+    },
+    "H2375": {
+      "definitions_cz": "Hazo = \"vize\" | 1) syn Nachor od jeho manželky Milky",
+      "lemma": "חֲזוֹ",
+      "hebrew": "חזו",
+      "xlit": "Chăzôw",
+      "translated": true
+    },
+    "H2376": {
+      "definitions_cz": "1) vize, vzhled | 1a) vize | 1b) vzhled",
+      "lemma": "חֵזֵו",
+      "hebrew": "חזו",
+      "xlit": "chêzêv",
+      "translated": true
+    },
+    "H2377": {
+      "definitions_cz": "1) vize | 1a) vidění (v extatickém stavu) | 1b) vidění (v noci) | 1c) vize, orákulum, proroctví (božská komunikace) | 1d) vidění (jako název knihy proroctví)",
+      "lemma": "חָזוֹן",
+      "hebrew": "חזון",
+      "xlit": "châzôwn",
+      "translated": true
+    },
+    "H2378": {
+      "definitions_cz": "1) vize",
+      "lemma": "חָזוֹת",
+      "hebrew": "חזות",
+      "xlit": "châzôwth",
+      "translated": true
+    },
+    "H2379": {
+      "definitions_cz": "1) výhled, zrak, viditelnost",
+      "lemma": "חֲזוֹת",
+      "hebrew": "חזות",
+      "xlit": "chăzôwth",
+      "translated": true
+    },
+    "H2380": {
+      "definitions_cz": "1) vidění, nápadnost | 1a) vize, orákulum proroka | 1a1) dohoda | 1b) nápadnost vzhledu",
+      "lemma": "חָזוּת",
+      "hebrew": "חזות",
+      "xlit": "châzûwth",
+      "translated": true
+    },
+    "H2381": {
+      "definitions_cz": "Haziel = \"vidění Boha\" | 1) Levita z rodu Šimei z Geršonů v době Davida nebo Šalomouna",
+      "lemma": "חֲזִיאֵל",
+      "hebrew": "חזיאל",
+      "xlit": "Chăzîyʼêl",
+      "translated": true
+    },
+    "H2382": {
+      "definitions_cz": "Hazaiah = \"Bůh viděl\" | 1) vyhnance a potomek Shelaha z kmene Juda, který se vrátil v době Nehemiáše",
+      "lemma": "חֲזָיָה",
+      "hebrew": "חזיה",
+      "xlit": "Chăzâyâh",
+      "translated": true
+    },
+    "H2383": {
+      "definitions_cz": "Hezion = \"vize\" | 1) syrský král, otec Tabrimona a děd Ben-hadada; pravděpodobně totožný s ‚Rezonem‘ současníkem Šalomouna",
+      "lemma": "חֶזְיוֹן",
+      "hebrew": "חזיון",
+      "xlit": "Chezyôwn",
+      "translated": true
+    },
+    "H2384": {
+      "definitions_cz": "1) vize | 1a) vidění (v extatickém stavu) | 1a1) údolí vidění (snad obr. Jeruzaléma nebo Hinnom) | 1b) vidění (v noci) | 1c) vize, orákulum, proroctví (v božské komunikaci)",
+      "lemma": "חִזָּיוֹן",
+      "hebrew": "חזיון",
+      "xlit": "chizzâyôwn",
+      "translated": true
+    },
+    "H2385": {
+      "definitions_cz": "1) blesk, blesk, blesk, bouře, mrak",
+      "lemma": "חֲזִיז",
+      "hebrew": "חזיז",
+      "xlit": "chăzîyz",
+      "translated": true
+    },
+    "H2386": {
+      "definitions_cz": "1) prase, prase, kanec | 1a) prasata (jako zakázané jídlo) | 1b) divočák",
+      "lemma": "חֲזִיר",
+      "hebrew": "חזיר",
+      "xlit": "chăzîyr",
+      "translated": true
+    },
+    "H2387": {
+      "definitions_cz": "Hezir = \"svině\" | 1) kněz v době Davidově, vedoucí 17. měsíčního kurzu | 2) jedna z hlav lidu, který zpečetil smlouvu s Nehemjášem",
+      "lemma": "חֵזִיר",
+      "hebrew": "חזיר",
+      "xlit": "Chêzîyr",
+      "translated": true
+    },
+    "H2388": {
+      "definitions_cz": "1) zesílit, zvítězit, ztvrdnout, být silný, stát se silným, být odvážný, pevný, zpevnit, být rozhodný, bolet | 1a) (Qal) | 1a1) být silný, sílit | 1a1a) zvítězit, zvítězit nad | 1a1b) být pevný, být rychle chycen, být v bezpečí | 1a1c) stisknout, být naléhavý | 1a1d) ztuhnout, ztuhnout, ztvrdnout (špatný smysl) | 1a1e) být přísný, být smutný | 1a2) posílit | 1b) (Piel) | 1b1) aby byl silný | 1b2) obnovit sílu, dát sílu | 1b3) posílit,",
+      "lemma": "חָזַק",
+      "hebrew": "חזק",
+      "xlit": "châzaq",
+      "translated": true
+    },
+    "H2389": {
+      "definitions_cz": "1) silný, statný, mocný | 1a) silný | 1a1) ostrý, ostrý, horký | 1a2) pevný, tvrdý | 1b) silný (subst)",
+      "lemma": "חָזָק",
+      "hebrew": "חזק",
+      "xlit": "châzâq",
+      "translated": true
+    },
+    "H2390": {
+      "definitions_cz": "1) silnější, hlasitější",
+      "lemma": "חָזֵק",
+      "hebrew": "חזק",
+      "xlit": "châzêq",
+      "translated": true
+    },
+    "H2391": {
+      "definitions_cz": "1) síla",
+      "lemma": "חֵזֶק",
+      "hebrew": "חזק",
+      "xlit": "chêzeq",
+      "translated": true
+    },
+    "H2392": {
+      "definitions_cz": "1) síla",
+      "lemma": "חֹזֶק",
+      "hebrew": "חזק",
+      "xlit": "chôzeq",
+      "translated": true
+    },
+    "H2393": {
+      "definitions_cz": "1) síla, silný, být silný, síla",
+      "lemma": "חֶזְקָה",
+      "hebrew": "חזקה",
+      "xlit": "chezqâh",
+      "translated": true
+    },
+    "H2394": {
+      "definitions_cz": "1) síla, síla, síla, násilí",
+      "lemma": "חׇזְקָה",
+      "hebrew": "חזקה",
+      "xlit": "chozqâh",
+      "translated": true
+    },
+    "H2395": {
+      "definitions_cz": "Hezeki = \"silný\" | 1) Benjamínec, potomek Šaaraima",
+      "lemma": "חִזְקִי",
+      "hebrew": "חזקי",
+      "xlit": "Chizqîy",
+      "translated": true
+    },
+    "H2396": {
+      "definitions_cz": "Ezechiáš nebo Chizkijáš nebo Hizkijáš = \"Jehova je má síla\" | 1) 12. judský král, syn Achaza a Abiáše; dobrý král v tom, že sloužil Jehovovi a skoncoval s modlářskými praktikami | 2) prapradědeček proroka Sofonjáše | 3) syn Neariášův, potomek Davidův | 4) hlava rodiny vracejících se vyhnanců v době Nehemjáše",
+      "lemma": "חִזְקִיָּה",
+      "hebrew": "חזקיה",
+      "xlit": "Chizqîyâh",
+      "translated": true
+    },
+    "H2397": {
+      "definitions_cz": "1) háček, prsten, pouto, brož | 1a) háček, kroužek (v nose zajatého) | 1b) háček, prsten (jako šperk) | 1b1) nosní kroužek | 1b2) náramek",
+      "lemma": "חָח",
+      "hebrew": "חח",
+      "xlit": "châch",
+      "translated": true
+    },
+    "H2398": {
+      "definitions_cz": "1) hřešit, minout, minout cestu, jít špatně, přivodit si vinu, propadnout, očistit se od nečistoty | 1a) (Qal) | 1a1) minout | 1a2) hřešit, minout cíl nebo cestu práva a povinnosti | 1a3) přivodit si vinu, vynést trest za hřích, propadnout | 1b) (Piel) | 1b1) nést ztrátu | 1b2) učinit oběť za hřích | 1b3) očistit od hříchu | 1b4) očistit od nečistoty | 1c) (Hiphil) | 1c1) minout značku | 1c2) přimět k hříchu, způsobit hřích | 1c3) přivést k vině nebo odsouzení nebo trestu | 1d) (Hithp",
+      "lemma": "חָטָא",
+      "hebrew": "חטא",
+      "xlit": "châṭâʼ",
+      "translated": true
+    },
+    "H2399": {
+      "definitions_cz": "1) hřích | 1a) hřích | 1b) vina za hřích | 1c) trest za hřích",
+      "lemma": "חֵטְא",
+      "hebrew": "חטא",
+      "xlit": "chêṭᵉʼ",
+      "translated": true
+    },
+    "H2400": {
+      "definitions_cz": "n m | 1) hříšníci | adj | 2) hříšný | 3) vystaveni odsouzení, považováni za pachatele",
+      "lemma": "חַטָּא",
+      "hebrew": "חטא",
+      "xlit": "chaṭṭâʼ",
+      "translated": true
+    },
+    "H2401": {
+      "definitions_cz": "1) hřích, oběť za hřích | 1a) hřích | 1b) oběť za hřích",
+      "lemma": "חֲטָאָה",
+      "hebrew": "חטאה",
+      "xlit": "chăṭâʼâh",
+      "translated": true
+    },
+    "H2402": {
+      "definitions_cz": "1) oběť za hřích",
+      "lemma": "חַטָּאָה",
+      "hebrew": "חטאה",
+      "xlit": "chaṭṭâʼâh",
+      "translated": true
+    },
+    "H2403": {
+      "definitions_cz": "1) hřích, hříšný | 2) hřích, oběť za hřích | 2a) hřích | 2b) stav hříchu, vina hříchu | 2c) trest za hřích | 2d) oběť za hřích | 2e) očištění od hříchů obřadní nečistoty",
+      "lemma": "חַטָּאָה",
+      "hebrew": "חטאה",
+      "xlit": "chaṭṭâʼâh",
+      "translated": true
+    },
+    "H2404": {
+      "definitions_cz": "1) řezat, sbírat | 1a) (Qal) řezat, sbírat (dřevo) | 1b) (Pual) řezat, vyřezávat",
+      "lemma": "חָטַב",
+      "hebrew": "חטב",
+      "xlit": "châṭab",
+      "translated": true
+    },
+    "H2405": {
+      "definitions_cz": "1) barevná látka, tmavé látky",
+      "lemma": "חֲטֻבָה",
+      "hebrew": "חטבה",
+      "xlit": "chăṭubâh",
+      "translated": true
+    },
+    "H2406": {
+      "definitions_cz": "1) pšenice | 1a) pšenice (rostlina) | 1b) pšeničná mouka",
+      "lemma": "חִטָּה",
+      "hebrew": "חטה",
+      "xlit": "chiṭṭâh",
+      "translated": true
+    },
+    "H2407": {
+      "definitions_cz": "Hattush = \"sestaveno\" | 1) potomek Davidův, zřejmě jeden ze synů Šechanjášových, ve 4. nebo 5. generaci od Zerubábela | 1a) muž, který se vrátil s Ezrou; možná stejně jako 1 výše | 1b) muž, který se vrátil se Zerubábelem; možná stejně jako 1 výše | 2) syn Chašabnijova, který pomáhal s Nehemjášem opravovat hradby Jeruzaléma",
+      "lemma": "חַטּוּשׁ",
+      "hebrew": "חטוש",
+      "xlit": "Chaṭṭûwsh",
+      "translated": true
+    },
+    "H2408": {
+      "definitions_cz": "1) hřích",
+      "lemma": "חֲטִי",
+      "hebrew": "חטי",
+      "xlit": "chăṭîy",
+      "translated": true
+    },
+    "H2409": {
+      "definitions_cz": "1) oběť za hřích",
+      "lemma": "חֲטָּיָא",
+      "hebrew": "חטיא",
+      "xlit": "chăṭṭâyâʼ",
+      "translated": true
+    },
+    "H2410": {
+      "definitions_cz": "Hatita = \"zkoumání\" | 1) hlava rodiny levitských nosičů nebo vrátných, kteří se vrátili z exilu se Zerubábelem",
+      "lemma": "חֲטִיטָא",
+      "hebrew": "חטיטא",
+      "xlit": "Chăṭîyṭâʼ",
+      "translated": true
+    },
+    "H2411": {
+      "definitions_cz": "Hattil = \"pochybný\" | 1) hlava rodiny dětí Šalamounových otroků, kteří se vrátili z vyhnanství se Zerubábelem",
+      "lemma": "חַטִּיל",
+      "hebrew": "חטיל",
+      "xlit": "Chaṭṭîyl",
+      "translated": true
+    },
+    "H2412": {
+      "definitions_cz": "Hatipha = \"zabavena\" | 1) hlava rodiny chrámových otroků, kteří se vrátili z exilu se Zerubábelem",
+      "lemma": "חֲטִיפָא",
+      "hebrew": "חטיפא",
+      "xlit": "Chăṭîyphâʼ",
+      "translated": true
+    },
+    "H2413": {
+      "definitions_cz": "1) držet, zadržovat | 1a) (Qal) omezit (se)",
+      "lemma": "חָטַם",
+      "hebrew": "חטם",
+      "xlit": "châṭam",
+      "translated": true
+    },
+    "H2414": {
+      "definitions_cz": "1) (Qal) chytit, uchopit",
+      "lemma": "חָטַף",
+      "hebrew": "חטף",
+      "xlit": "châṭaph",
+      "translated": true
+    },
+    "H2415": {
+      "definitions_cz": "1) větev, větvička, prut",
+      "lemma": "חֹטֵר",
+      "hebrew": "חטר",
+      "xlit": "chôṭêr",
+      "translated": true
+    },
+    "H2416": {
+      "definitions_cz": "adj | 1) živý, živý | 1a) zelená (vegetace) | 1b) tekoucí, čerstvá (voda) | 1c) čilý, aktivní (člověka) | 1d) oživení (jara) | n m | 2) příbuzní | 3) život (abstraktně důrazný) | 3a) život | 3b) údržba, údržba | n f | 4) živá věc, zvíře | 4a) zvíře | 4b) život | 4c) chuť k jídlu | 4d) oživení, obnova | 5) komunita",
+      "lemma": "חַי",
+      "hebrew": "חי",
+      "xlit": "chay",
+      "translated": true
+    },
+    "H2417": {
+      "definitions_cz": "1) žít, žít, žít",
+      "lemma": "חַי",
+      "hebrew": "חי",
+      "xlit": "chay",
+      "translated": true
+    },
+    "H2418": {
+      "definitions_cz": "1) žít | 1a) (P'al) žít | 1b) (Aphel) nechat žít, udržet naživu",
+      "lemma": "חֲיָא",
+      "hebrew": "חיא",
+      "xlit": "chăyâʼ",
+      "translated": true
+    },
+    "H2419": {
+      "definitions_cz": "Hiel = \"Bůh žije\" | 1) rodák z Bételu, který za vlády Achaba přestavěl Jericho a v němž se naplnila kletba vyslovená Jozuem",
+      "lemma": "חִיאֵל",
+      "hebrew": "חיאל",
+      "xlit": "Chîyʼêl",
+      "translated": true
+    },
+    "H2420": {
+      "definitions_cz": "1) hádanka, obtížná otázka, podobenství, záhadný výrok nebo otázka, matoucí výrok nebo otázka | 1a) hádanka (temná nejasná výpověď) | 1b) hádanka, záhada (k uhodnutí) | 1c) matoucí otázky (obtížné) | 1d) dvojité jednání (s 'havin')",
+      "lemma": "חִידָה",
+      "hebrew": "חידה",
+      "xlit": "chîydâh",
+      "translated": true
+    },
+    "H2421": {
+      "definitions_cz": "1) žít, mít život, zůstat naživu, udržet si život, žít prosperující, žít věčně, být oživen, být naživu, být navrácen životu nebo zdraví | 1a) (Qal) | 1a1) žít | 1a1a) mít život | 1a1b) pokračovat v životě, zůstat naživu | 1a1c) udržovat život, žít na nebo na | 1a1d) žít (prosperujícím způsobem) | 1a2) oživit, být oživen | 1a2a) z nemoci | 1a2b) od odrazování | 1a2c) z mdloby | 1a2d) od smrti | 1b) (Piel) | 1b1) zachovat naživu, nechat žít | 1b2) dát",
+      "lemma": "חָיָה",
+      "hebrew": "חיה",
+      "xlit": "châyâh",
+      "translated": true
+    },
+    "H2422": {
+      "definitions_cz": "1) rázný, čilý, mající elán života",
+      "lemma": "חָיֶה",
+      "hebrew": "חיה",
+      "xlit": "châyeh",
+      "translated": true
+    },
+    "H2423": {
+      "definitions_cz": "1) šelma, zvíře",
+      "lemma": "חֵיוָא",
+      "hebrew": "חיוא",
+      "xlit": "chêyvâʼ",
+      "translated": true
+    },
+    "H2424": {
+      "definitions_cz": "1) bydlení",
+      "lemma": "חַיּוּת",
+      "hebrew": "חיות",
+      "xlit": "chayûwth",
+      "translated": true
+    },
+    "H2425": {
+      "definitions_cz": "1) žít, mít život, zůstat naživu, udržet si život, žít prosperující, žít věčně, být oživen, být naživu, být navrácen životu nebo zdraví | 1a) (Qal) | 1a1) žít | 1a1a) mít život | 1a1b) pokračovat v životě, zůstat naživu | 1a1c) udržovat život, žít na nebo na | 1a1d) žít (prosperujícím způsobem) | 1a2) oživit, být oživen | 1a2a) z nemoci | 1a2b) od odrazování | 1a2c) z mdloby | 1a2d) od smrti | 1b) (Piel) | 1b1) zachovat naživu, nechat žít | 1b2) dát",
+      "lemma": "חָיַי",
+      "hebrew": "חיי",
+      "xlit": "châyay",
+      "translated": true
+    },
+    "H2426": {
+      "definitions_cz": "1) val, tvrz, zeď | 1a) val | 1b) tvrz",
+      "lemma": "חֵיל",
+      "hebrew": "חיל",
+      "xlit": "chêyl",
+      "translated": true
+    },
+    "H2427": {
+      "definitions_cz": "1) bolest, agónie, smutek, svíjení se, úzkost | 1a) svíjení (ze strachu) | 1b) úzkost",
+      "lemma": "חִיל",
+      "hebrew": "חיל",
+      "xlit": "chîyl",
+      "translated": true
+    },
+    "H2428": {
+      "definitions_cz": "1) síla, moc, výkonnost, bohatství, armáda | 1a) pevnost | 1b) schopnost, účinnost | 1c) bohatství | 1d) síla, armáda",
+      "lemma": "חַיִל",
+      "hebrew": "חיל",
+      "xlit": "chayil",
+      "translated": true
+    },
+    "H2429": {
+      "definitions_cz": "1) síla, armáda, síla | 1a) výkon | 1b) síla, armáda",
+      "lemma": "חַיִל",
+      "hebrew": "חיל",
+      "xlit": "chayil",
+      "translated": true
+    },
+    "H2430": {
+      "definitions_cz": "1) hradba, opevnění, val, pevnost",
+      "lemma": "חֵילָה",
+      "hebrew": "חילה",
+      "xlit": "chêylâh",
+      "translated": true
+    },
+    "H2431": {
+      "definitions_cz": "Helam = \"pevnost\" | 1) místo východně od Jordánu, západně od Eufratu, v Gileadu, kde byli Syřané pod Hadarezerem poraženi Davidem",
+      "lemma": "חֵילָם",
+      "hebrew": "חילם",
+      "xlit": "Chêylâm",
+      "translated": true
+    },
+    "H2432": {
+      "definitions_cz": "Hilen = \"místo jeskyní\" | 1) judské město přidělené kněžím",
+      "lemma": "חִילֵן",
+      "hebrew": "חילן",
+      "xlit": "Chîylên",
+      "translated": true
+    },
+    "H2433": {
+      "definitions_cz": "1) krása, milost",
+      "lemma": "חִין",
+      "hebrew": "חין",
+      "xlit": "chîyn",
+      "translated": true
+    },
+    "H2434": {
+      "definitions_cz": "1) stěna, party-wall, tenká stěna",
+      "lemma": "חַיִץ",
+      "hebrew": "חיץ",
+      "xlit": "chayits",
+      "translated": true
+    },
+    "H2435": {
+      "definitions_cz": "1) vnější, vnější, vnější",
+      "lemma": "חִיצוֹן",
+      "hebrew": "חיצון",
+      "xlit": "chîytsôwn",
+      "translated": true
+    },
+    "H2436": {
+      "definitions_cz": "1) ňadra, dutina, dno, střed",
+      "lemma": "חֵיק",
+      "hebrew": "חיק",
+      "xlit": "chêyq",
+      "translated": true
+    },
+    "H2437": {
+      "definitions_cz": "Hirah = \"šlechtický rod\" | 1) Adulamita, přítel Judy",
+      "lemma": "חִירָה",
+      "hebrew": "חירה",
+      "xlit": "Chîyrâh",
+      "translated": true
+    },
+    "H2438": {
+      "definitions_cz": "Hiram, Huram = \"vznešený\" | 1) tyrský král, který poslal dělníky a materiál do Jeruzaléma, aby postavili jak palác pro Davida, tak i chrám pro Šalomouna | 2) hlavní architekt a inženýr Šalomounova chrámu poslaný králem Hiramem k Šalomounovi",
+      "lemma": "חִירָם",
+      "hebrew": "חירם",
+      "xlit": "Chîyrâm",
+      "translated": true
+    },
+    "H2439": {
+      "definitions_cz": "1) spěchat, spěchat, spěchat | 1a) (Qal) spěchat | 1b) (Hiph) | 1b1) ukázat spěch, jednat rychle, spěchat, přijít rychle | 1b2) užívat si, být nadšený",
+      "lemma": "חִישׁ",
+      "hebrew": "חיש",
+      "xlit": "chîysh",
+      "translated": true
+    },
+    "H2440": {
+      "definitions_cz": "1) rychle",
+      "lemma": "חִישׁ",
+      "hebrew": "חיש",
+      "xlit": "chîysh",
+      "translated": true
+    },
+    "H2441": {
+      "definitions_cz": "1) ústa, patro, chuť, dásně",
+      "lemma": "חֵךְ",
+      "hebrew": "חך",
+      "xlit": "chêk",
+      "translated": true
+    },
+    "H2442": {
+      "definitions_cz": "1) čekat, čekat, čekat | 1a) (Qal) čekat na | 1b) (Piel) | 1b1) čekat, zdržovat | 1b2) čekat (v záloze) | 1b3) čekat, toužit",
+      "lemma": "חָכָה",
+      "hebrew": "חכה",
+      "xlit": "châkâh",
+      "translated": true
+    },
+    "H2443": {
+      "definitions_cz": "1) háček, úhelník, háček upevněný v čelisti, háček na ryby",
+      "lemma": "חַכָּה",
+      "hebrew": "חכה",
+      "xlit": "chakkâh",
+      "translated": true
+    },
+    "H2444": {
+      "definitions_cz": "Hachilah = \"temný\" | 1) kopec je jižní Juda, na okraji pouště Ziph",
+      "lemma": "חֲכִילָה",
+      "hebrew": "חכילה",
+      "xlit": "Chăkîylâh",
+      "translated": true
+    },
+    "H2445": {
+      "definitions_cz": "1) moudrý muž, moudrý",
+      "lemma": "חַכִּים",
+      "hebrew": "חכים",
+      "xlit": "chakkîym",
+      "translated": true
+    },
+    "H2446": {
+      "definitions_cz": "Hachaliah = \"koho Jehova osvěcuje\" | 1) otec Nehemjáše",
+      "lemma": "חֲכַלְיָה",
+      "hebrew": "חכליה",
+      "xlit": "Chăkalyâh",
+      "translated": true
+    },
+    "H2447": {
+      "definitions_cz": "1) nudný | 2) (CLBL) tmavě blikající, brilantní",
+      "lemma": "חַכְלִיל",
+      "hebrew": "חכליל",
+      "xlit": "chaklîyl",
+      "translated": true
+    },
+    "H2448": {
+      "definitions_cz": "1) zarudnutí, otupělost",
+      "lemma": "חַכְלִלוּת",
+      "hebrew": "חכללות",
+      "xlit": "chaklilûwth",
+      "translated": true
+    },
+    "H2449": {
+      "definitions_cz": "1) být moudrý | 1a) (Qal) být nebo se stát moudrým, jednat moudře | 1b) (Piel) dělat moudrého, učit moudrosti, poučovat | 1c) (Pual) být moudrý | 1d) (Hiphil) učinit moudrým | 1e) (Hithpael) ukázat se moudrým, oklamat, ukázat svou moudrost",
+      "lemma": "חָכַם",
+      "hebrew": "חכם",
+      "xlit": "châkam",
+      "translated": true
+    },
+    "H2450": {
+      "definitions_cz": "1) moudrý, moudrý (člověk) | 1a) zručný (v technické práci) | 1b) moudrý (v podání) | 1c) bystrý, lstivý, mazaný, lstivý, rafinovaný | 1d) učený, chytrý (třída mužů) | 1e) obezřetný | 1f) moudrý (eticky a nábožensky)",
+      "lemma": "חָכָם",
+      "hebrew": "חכם",
+      "xlit": "châkâm",
+      "translated": true
+    },
+    "H2451": {
+      "definitions_cz": "1) moudrost | 1a) dovednost (ve válce) | 1b) moudrost (v administrativě) | 1c) bystrost, moudrost | 1d) moudrost, opatrnost (v náboženských záležitostech) | 1e) moudrost (etická a náboženská)",
+      "lemma": "חׇכְמָה",
+      "hebrew": "חכמה",
+      "xlit": "chokmâh",
+      "translated": true
+    },
+    "H2452": {
+      "definitions_cz": "1) moudrost",
+      "lemma": "חׇכְמָה",
+      "hebrew": "חכמה",
+      "xlit": "chokmâh",
+      "translated": true
+    },
+    "H2453": {
+      "definitions_cz": "Hachmoni nebo Hachmonite = \"moudrý\" | n pr m | 1) otec jednoho z Davidových mocných válečníků | 2) otec vychovatele Davidových synů | n patr m | 3) rodina jednoho z Davidových služebníků",
+      "lemma": "חַכְמוֹנִי",
+      "hebrew": "חכמוני",
+      "xlit": "Chakmôwnîy",
+      "translated": true
+    },
+    "H2454": {
+      "definitions_cz": "1) moudrost",
+      "lemma": "חׇכְמוֹת",
+      "hebrew": "חכמות",
+      "xlit": "chokmôwth",
+      "translated": true
+    },
+    "H2455": {
+      "definitions_cz": "1) profánnost, obyčejnost, bezbožný, profánní, obyčejný, písek",
+      "lemma": "חֹל",
+      "hebrew": "חל",
+      "xlit": "chôl",
+      "translated": true
+    },
+    "H2456": {
+      "definitions_cz": "1) (Qal) trpět, být nemocný, být nemocný",
+      "lemma": "חָלָא",
+      "hebrew": "חלא",
+      "xlit": "châlâʼ",
+      "translated": true
+    },
+    "H2457": {
+      "definitions_cz": "1) rez, špína",
+      "lemma": "חֶלְאָה",
+      "hebrew": "חלאה",
+      "xlit": "chelʼâh",
+      "translated": true
+    },
+    "H2458": {
+      "definitions_cz": "Helah = \"rez\" | 1) jedna ze dvou manželek Ashura, otce Tekoacha",
+      "lemma": "חֶלְאָה",
+      "hebrew": "חלאה",
+      "xlit": "Chelʼâh",
+      "translated": true
+    },
+    "H2459": {
+      "definitions_cz": "1) tuk | 1a) tuk (lidský) | 1b) tuk (zvířat) | 1c) nejvybranější, nejlepší část, hojnost (produktů země)",
+      "lemma": "חֶלֶב",
+      "hebrew": "חלב",
+      "xlit": "cheleb",
+      "translated": true
+    },
+    "H2460": {
+      "definitions_cz": "Heleb = \"mléko\" | 1) syn Baany, Netofat a jeden z Davidových mocných válečníků; také hláskováno 'Heled' (H02466)",
+      "lemma": "חֵלֶב",
+      "hebrew": "חלב",
+      "xlit": "Chêleb",
+      "translated": true
+    },
+    "H2461": {
+      "definitions_cz": "1) mléko, kyselé mléko, sýr | 1a) mléko | 1b) hojnost půdy (metaf.) | 1c) bílá (jako mléko)",
+      "lemma": "חָלָב",
+      "hebrew": "חלב",
+      "xlit": "châlâb",
+      "translated": true
+    },
+    "H2462": {
+      "definitions_cz": "Helbah = \"úrodný\" | 1) město Asher, pravděpodobně na planině Fénicia nedaleko Sidonu",
+      "lemma": "חֶלְבָּה",
+      "hebrew": "חלבה",
+      "xlit": "Chelbâh",
+      "translated": true
+    },
+    "H2463": {
+      "definitions_cz": "Helbon = \"úrodný\" | 1) město několik mil severozápadně od Damašku, moderní 'Helbon', stále známé svými skvělými hrozny",
+      "lemma": "חֶלְבּוֹן",
+      "hebrew": "חלבון",
+      "xlit": "Chelbôwn",
+      "translated": true
+    },
+    "H2464": {
+      "definitions_cz": "1) galbanum | 1a) druh pryskyřice nebo gumy, přísada posvátného kadidla",
+      "lemma": "חֶלְבְּנָה",
+      "hebrew": "חלבנה",
+      "xlit": "chelbᵉnâh",
+      "translated": true
+    },
+    "H2465": {
+      "definitions_cz": "1) věk, délka života, svět",
+      "lemma": "חֶלֶד",
+      "hebrew": "חלד",
+      "xlit": "cheled",
+      "translated": true
+    },
+    "H2466": {
+      "definitions_cz": "Heled = \"přechodný\" | 1) syn Baany, Netofat a jeden z Davidových mocných válečníků; také hláskováno 'Heleb' (H02460)",
+      "lemma": "חֵלֶד",
+      "hebrew": "חלד",
+      "xlit": "chêled",
+      "translated": true
+    },
+    "H2467": {
+      "definitions_cz": "1) lasička, krtek | 1a) snad vyhynulý živočich, přesný význam neznámý",
+      "lemma": "חֹלֶד",
+      "hebrew": "חלד",
+      "xlit": "chôled",
+      "translated": true
+    },
+    "H2468": {
+      "definitions_cz": "Huldah = \"lasička\" | 1) prorokyně v době Josiáše, kterou Josiáš požádal o autoritativní názor na knihu zákona, kterou našel Hilkiáš",
+      "lemma": "חֻלְדָּה",
+      "hebrew": "חלדה",
+      "xlit": "Chuldâh",
+      "translated": true
+    },
+    "H2469": {
+      "definitions_cz": "Heldai = \"světský\" | 1) jeden z Davidových mocných válečníků a 12. kapitán měsíčních kurzů pro chrámovou službu | 2) vracející se vyhnanství v době Zachariáše",
+      "lemma": "חֶלְדַּי",
+      "hebrew": "חלדי",
+      "xlit": "Chelday",
+      "translated": true
     }
   }
 }
