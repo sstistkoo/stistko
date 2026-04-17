@@ -47127,6 +47127,356 @@
       "hebrew": "טל",
       "xlit": "ṭal",
       "translated": true
+    },
+    "H2920": {
+      "definitions_cz": "1) rosa",
+      "lemma": "טַל",
+      "hebrew": "טל",
+      "xlit": "ṭal",
+      "translated": true
+    },
+    "H2921": {
+      "definitions_cz": "1) skvrnit, skvrnit, být skvrnitý, vybarvit | 1a) (Qal) | 1a1) na místě | 1a2) tečkovaný (příčestí) | 1b) (Pual) k záplatě",
+      "lemma": "טָלָא",
+      "hebrew": "טלא",
+      "xlit": "ṭâlâʼ",
+      "translated": true
+    },
+    "H2922": {
+      "definitions_cz": "1) jehněčí",
+      "lemma": "טְלָא",
+      "hebrew": "טלא",
+      "xlit": "ṭᵉlâʼ",
+      "translated": true
+    },
+    "H2923": {
+      "definitions_cz": "Telaim = \"jehňata\" | 1) místo v Judsku, kde Saul shromáždil své síly před útokem na Amálek; místo neznámé",
+      "lemma": "טְלָאִים",
+      "hebrew": "טלאים",
+      "xlit": "Ṭᵉlâʼîym",
+      "translated": true
+    },
+    "H2924": {
+      "definitions_cz": "1) jehněčí",
+      "lemma": "טָלֶה",
+      "hebrew": "טלה",
+      "xlit": "ṭâleh",
+      "translated": true
+    },
+    "H2925": {
+      "definitions_cz": "1) vrhání, zajetí",
+      "lemma": "טַלְטֵלָה",
+      "hebrew": "טלטלה",
+      "xlit": "ṭalṭêlâh",
+      "translated": true
+    },
+    "H2926": {
+      "definitions_cz": "1) (Piel) zakrýt střechou, zakrýt, střechou",
+      "lemma": "טָלַל",
+      "hebrew": "טלל",
+      "xlit": "ṭâlal",
+      "translated": true
+    },
+    "H2927": {
+      "definitions_cz": "1) (Aphel) hledat stín, mít stín",
+      "lemma": "טְלַל",
+      "hebrew": "טלל",
+      "xlit": "ṭᵉlal",
+      "translated": true
+    },
+    "H2928": {
+      "definitions_cz": "Telem = \"útlak\" | n pr m | 1) strážce brány mezi vracejícími se vyhnanci v době Ezry | n pr loc | 2) jedno z měst na extrémním jihu Judska v Negebu",
+      "lemma": "טֶלֶם",
+      "hebrew": "טלם",
+      "xlit": "Ṭelem",
+      "translated": true
+    },
+    "H2929": {
+      "definitions_cz": "Talmon = \"utlačovatel\" | 1) hlava rodiny vrátných v chrámu; někteří z jeho potomků se vrátili z vyhnanství se Zerubábelem a byli zaměstnáni v jejich dědičném úřadu za dnů Nehemjáše a Ezry | 1a) možná dva další vrátní v době Nehemiáše",
+      "lemma": "טַלְמוֹן",
+      "hebrew": "טלמון",
+      "xlit": "Ṭalmôwn",
+      "translated": true
+    },
+    "H2930": {
+      "definitions_cz": "1) být nečistý, nečistý, nečistý | 1a) (Qal) být nebo se stát nečistým | 1a1) sexuálně | 1a2) nábožensky | 1a3) slavnostně | 1b) (Niphal) | 1b1) poskvrnit se, poskvrnit se | 1b1a) sexuálně | 1b1b) modloslužbou | 1b1c) slavnostně | 1b2) považovat za nečisté | 1c) (Piel) | 1c1) pošpinit | 1c1a) sexuálně | 1c1b) nábožensky | 1c1c) slavnostně | 1c2) prohlásit za nečistý, prohlásit za nečistého (obřadně) | 1c3) profánní (Boží jméno) | 1d) (Pual) ke znečištění | 1e) (H",
+      "lemma": "טָמֵא",
+      "hebrew": "טמא",
+      "xlit": "ṭâmêʼ",
+      "translated": true
+    },
+    "H2931": {
+      "definitions_cz": "1) nečistý, nečistý | 1a) eticky a nábožensky | 1b) rituálně | 1c) míst",
+      "lemma": "טָמֵא",
+      "hebrew": "טמא",
+      "xlit": "ṭâmêʼ",
+      "translated": true
+    },
+    "H2932": {
+      "definitions_cz": "1) nečistota | 1a) sexuální | 1b) špinavé hmoty | 1c) etické a náboženské | 1d) rituál | 1e) místní (národů)",
+      "lemma": "טֻמְאָה",
+      "hebrew": "טמאה",
+      "xlit": "ṭumʼâh",
+      "translated": true
+    },
+    "H2933": {
+      "definitions_cz": "1) (Niphal) k zastavení | 1a) být považován za nečistý (metaplastický)",
+      "lemma": "טָמָה",
+      "hebrew": "טמה",
+      "xlit": "ṭâmâh",
+      "translated": true
+    },
+    "H2934": {
+      "definitions_cz": "1) skrývat, skrývat, pohřbívat | 1a) (Qal) | 1a1) skrýt | 1a2) skrývání, zatajování, tajné kladení (příčestí) | 1a3) temnota (příčestí) | 1b) (Niphal) schovat se | 1c) (Hiphil) schovat se",
+      "lemma": "טָמַן",
+      "hebrew": "טמן",
+      "xlit": "ṭâman",
+      "translated": true
+    },
+    "H2935": {
+      "definitions_cz": "1) košík",
+      "lemma": "טֶנֶא",
+      "hebrew": "טנא",
+      "xlit": "ṭeneʼ",
+      "translated": true
+    },
+    "H2936": {
+      "definitions_cz": "1) (Piel) pošpinit, zašpinit",
+      "lemma": "טָנַף",
+      "hebrew": "טנף",
+      "xlit": "ṭânaph",
+      "translated": true
+    },
+    "H2937": {
+      "definitions_cz": "1) bloudit, bloudit, bloudit bloudit, chybovat | 1a) (Hiphil) | 1a1) svést | 1a2) přimět sejít z cesty",
+      "lemma": "טָעָה",
+      "hebrew": "טעה",
+      "xlit": "ṭâʻâh",
+      "translated": true
+    },
+    "H2938": {
+      "definitions_cz": "1) ochutnat, vnímat, jíst | 1a) (Qal) podle chuti",
+      "lemma": "טָעַם",
+      "hebrew": "טעם",
+      "xlit": "ṭâʻam",
+      "translated": true
+    },
+    "H2939": {
+      "definitions_cz": "1) (P'al) krmit, přimět k jídlu",
+      "lemma": "טְעַם",
+      "hebrew": "טעם",
+      "xlit": "ṭᵉʻam",
+      "translated": true
+    },
+    "H2940": {
+      "definitions_cz": "1) chuť, úsudek | 1a) chuť | 1b) rozsudek (obr.) | 1c) rozhodnutí, vyhláška",
+      "lemma": "טַעַם",
+      "hebrew": "טעם",
+      "xlit": "ṭaʻam",
+      "translated": true
+    },
+    "H2941": {
+      "definitions_cz": "1) chuť, soudnost, příkaz | 1a) chuť | 1b) rozhodnutí, uvážení | 1c) zpráva | 1d) příkaz",
+      "lemma": "טַעַם",
+      "hebrew": "טעם",
+      "xlit": "ṭaʻam",
+      "translated": true
+    },
+    "H2942": {
+      "definitions_cz": "1) vyhláška, chuť, soud, příkaz | 1a) chuť | 1b) rozhodnutí, uvážení | 1c) zpráva | 1d) příkaz",
+      "lemma": "טְעֵם",
+      "hebrew": "טעם",
+      "xlit": "ṭᵉʻêm",
+      "translated": true
+    },
+    "H2943": {
+      "definitions_cz": "1) (Qal) načíst",
+      "lemma": "טָעַן",
+      "hebrew": "טען",
+      "xlit": "ṭâʻan",
+      "translated": true
+    },
+    "H2944": {
+      "definitions_cz": "1) (Pual) propíchnout",
+      "lemma": "טָעַן",
+      "hebrew": "טען",
+      "xlit": "ṭâʻan",
+      "translated": true
+    },
+    "H2945": {
+      "definitions_cz": "1) děti, malé děti, malé",
+      "lemma": "טַף",
+      "hebrew": "טף",
+      "xlit": "ṭaph",
+      "translated": true
+    },
+    "H2946": {
+      "definitions_cz": "1) prodloužit, roztáhnout, zakopnout, udělat rychlé malé kroky | 1a) (Piel) | 1a1) rozložit | 1a2) nosit na dlaních, kývat | 1a3) k výchově dětí",
+      "lemma": "טָפַח",
+      "hebrew": "טפח",
+      "xlit": "ṭâphach",
+      "translated": true
+    },
+    "H2947": {
+      "definitions_cz": "1) rozpětí, šířka ruky, šířka ruky | 1a) jednotka měření, měření délky | 2) coping (architektonický termín)",
+      "lemma": "טֵפַח",
+      "hebrew": "טפח",
+      "xlit": "ṭêphach",
+      "translated": true
+    },
+    "H2948": {
+      "definitions_cz": "1) rozpětí, šířka ruky",
+      "lemma": "טֹפַח",
+      "hebrew": "טפח",
+      "xlit": "ṭôphach",
+      "translated": true
+    },
+    "H2949": {
+      "definitions_cz": "1) něžná péče, houpání",
+      "lemma": "טִפֻּח",
+      "hebrew": "טפח",
+      "xlit": "ṭippuch",
+      "translated": true
+    },
+    "H2950": {
+      "definitions_cz": "1) (Qal) namazat, přelepit, nalepit, slepit",
+      "lemma": "טָפַל",
+      "hebrew": "טפל",
+      "xlit": "ṭâphal",
+      "translated": true
+    },
+    "H2951": {
+      "definitions_cz": "1) písař, úředník, maršál",
+      "lemma": "טִפְסַר",
+      "hebrew": "טפסר",
+      "xlit": "ṭiphçar",
+      "translated": true
+    },
+    "H2952": {
+      "definitions_cz": "1) (Qal) přeskočit, zakopnout, udělat rychlé malé kroky",
+      "lemma": "טָפַף",
+      "hebrew": "טפף",
+      "xlit": "ṭâphaph",
+      "translated": true
+    },
+    "H2953": {
+      "definitions_cz": "1) nehet, nehet, dráp",
+      "lemma": "טְפַר",
+      "hebrew": "טפר",
+      "xlit": "ṭᵉphar",
+      "translated": true
+    },
+    "H2954": {
+      "definitions_cz": "1) (Qal) být hrubý, být necitlivý, být tlustý",
+      "lemma": "טָפַשׁ",
+      "hebrew": "טפש",
+      "xlit": "ṭâphash",
+      "translated": true
+    },
+    "H2955": {
+      "definitions_cz": "Taphath = \"ornament\" | 1) dcera Šalomouna, který byl provdán za Ben-Abinadaba",
+      "lemma": "טָפַת",
+      "hebrew": "טפת",
+      "xlit": "Ṭâphath",
+      "translated": true
+    },
+    "H2956": {
+      "definitions_cz": "1) pronásledovat, pronásledovat, být nepřetržitý | 1a) (Qal) kapání (příčestí)",
+      "lemma": "טָרַד",
+      "hebrew": "טרד",
+      "xlit": "ṭârad",
+      "translated": true
+    },
+    "H2957": {
+      "definitions_cz": "1) (P'al) odhánět, odhánět, odhánět",
+      "lemma": "טְרַד",
+      "hebrew": "טרד",
+      "xlit": "ṭᵉrad",
+      "translated": true
+    },
+    "H2958": {
+      "definitions_cz": "1) předtím, ještě ne, před tím, ere (času)",
+      "lemma": "טְרוֹם",
+      "hebrew": "טרום",
+      "xlit": "ṭᵉrôwm",
+      "translated": true
+    },
+    "H2959": {
+      "definitions_cz": "1) (Hifil) tížit, dřít, být obtěžkán",
+      "lemma": "טָרַח",
+      "hebrew": "טרח",
+      "xlit": "ṭârach",
+      "translated": true
+    },
+    "H2960": {
+      "definitions_cz": "1) zátěž",
+      "lemma": "טֹרַח",
+      "hebrew": "טרח",
+      "xlit": "ṭôrach",
+      "translated": true
+    },
+    "H2961": {
+      "definitions_cz": "1) čerstvé, nové",
+      "lemma": "טָרִי",
+      "hebrew": "טרי",
+      "xlit": "ṭârîy",
+      "translated": true
+    },
+    "H2962": {
+      "definitions_cz": "1) předtím, ještě ne, předtím",
+      "lemma": "טֶרֶם",
+      "hebrew": "טרם",
+      "xlit": "ṭerem",
+      "translated": true
+    },
+    "H2963": {
+      "definitions_cz": "1) trhat, trhat, trhat | 1a) (Qal) trhat, trhat | 1b) (Niphal) k roztrhání na kusy | 1c) (Poal) k roztrhání na kusy | 1d) (Hiphil) poskytovat jídlo",
+      "lemma": "טָרַף",
+      "hebrew": "טרף",
+      "xlit": "ṭâraph",
+      "translated": true
+    },
+    "H2964": {
+      "definitions_cz": "1) kořist, jídlo, list | 1a) kořist | 1b) jídlo | 1c) list",
+      "lemma": "טֶרֶף",
+      "hebrew": "טרף",
+      "xlit": "ṭereph",
+      "translated": true
+    },
+    "H2965": {
+      "definitions_cz": "1) čerstvě utržený, čerstvě utržený, čerstvě utržený",
+      "lemma": "טָרָף",
+      "hebrew": "טרף",
+      "xlit": "ṭârâph",
+      "translated": true
+    },
+    "H2966": {
+      "definitions_cz": "1) to, co je roztrháno, zvíře roztrhané (zvěřami)",
+      "lemma": "טְרֵפָה",
+      "hebrew": "טרפה",
+      "xlit": "ṭᵉrêphâh",
+      "translated": true
+    },
+    "H2967": {
+      "definitions_cz": "Tarpelites = \"oni z padlé (nebo podivuhodné) hory\" | 1) skupina asyrských kolonistů, kteří byli vysazeni ve městech Samaří po zajetí severního království Izraele; identita nejistá",
+      "lemma": "טַרְפְּלַי",
+      "hebrew": "טרפלי",
+      "xlit": "Ṭarpᵉlay",
+      "translated": true
+    },
+    "H2968": {
+      "definitions_cz": "1) (Qal) toužit, toužit, toužit",
+      "lemma": "יָאַב",
+      "hebrew": "יאב",
+      "xlit": "yâʼab",
+      "translated": true
+    },
+    "H2969": {
+      "definitions_cz": "1) (Qal) týkat se, slušet, slušet",
+      "lemma": "יָאָה",
+      "hebrew": "יאה",
+      "xlit": "yâʼâh",
+      "translated": true
     }
   }
 }
