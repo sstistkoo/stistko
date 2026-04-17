@@ -48527,6 +48527,706 @@
       "hebrew": "יומם",
       "xlit": "yôwmâm",
       "translated": true
+    },
+    "H3120": {
+      "definitions_cz": "Javan = \"Ionia\" nebo \"Řecko\" | n pr m | 1) syn Jafeta a vnuk Noeho | n pr loc | 2) Řecko, Ionie, Iónové | 2a) umístění potomků Javana",
+      "lemma": "יָוָן",
+      "hebrew": "יון",
+      "xlit": "Yâvân",
+      "translated": true
+    },
+    "H3121": {
+      "definitions_cz": "1) bahno, rašeliniště",
+      "lemma": "יָוֵן",
+      "hebrew": "יון",
+      "xlit": "yâvên",
+      "translated": true
+    },
+    "H3122": {
+      "definitions_cz": "Jonadab nebo Jehonadab = \"Jehova je ochoten\" | 1) syn Rechaba, náčelníka Rechabitů, za časů Jehua a Achaba | 2) Davidův synovec",
+      "lemma": "יוֹנָדָב",
+      "hebrew": "יונדב",
+      "xlit": "Yôwnâdâb",
+      "translated": true
+    },
+    "H3123": {
+      "definitions_cz": "1) holubice, holub",
+      "lemma": "יוֹנָה",
+      "hebrew": "יונה",
+      "xlit": "yôwnâh",
+      "translated": true
+    },
+    "H3124": {
+      "definitions_cz": "Jonáš = \"holubice\" | 1) syn Amittai a rodák z Gat-heferu; 5. z menších proroků, kteří prorokovali za vlády Jeroboáma II. a které Bůh také poslal prorokovat do Ninive",
+      "lemma": "יוֹנָה",
+      "hebrew": "יונה",
+      "xlit": "Yôwnâh",
+      "translated": true
+    },
+    "H3125": {
+      "definitions_cz": "1) řecký, iónský",
+      "lemma": "יְוָנִי",
+      "hebrew": "יוני",
+      "xlit": "Yᵉvânîy",
+      "translated": true
+    },
+    "H3126": {
+      "definitions_cz": "1) přísavník, kojenec, stromek, mladá rostlina",
+      "lemma": "יוֹנֵק",
+      "hebrew": "יונק",
+      "xlit": "yôwnêq",
+      "translated": true
+    },
+    "H3127": {
+      "definitions_cz": "1) mladá rostlina, větvička, mladý výhonek",
+      "lemma": "יוֹנֶקֶת",
+      "hebrew": "יונקת",
+      "xlit": "yôwneqeth",
+      "translated": true
+    },
+    "H3128": {
+      "definitions_cz": "Jonath-elem-recho-kim = \"tichá holubice vzdálených míst\" | 1) znamená nejistý | 1a) pravděpodobně název melodie | 1b) použito pouze v názvu Ž 56:1",
+      "lemma": "יוֹנַת אֵלֶם רְחֹקִים",
+      "hebrew": "יונת אלם רחקים",
+      "xlit": "yôwnath ʼêlem rᵉchôqîym",
+      "translated": true
+    },
+    "H3129": {
+      "definitions_cz": "Jonathan nebo Jehonathan = \"Jehova dal\" | 1) syn krále Saula a přítel Davidův | 2) syn velekněze Abiatara a posledního potomka Eliho, o kterém slyšíme | 3) jeden z Davidových mocných válečníků | 4) Levita a otec Zachariáše, kněze, který zatroubil na trubku při posvěcení zdi | 5) syn Kareachův a bratr Jochananův; judaitský kapitán po pádu Jeruzaléma | 6) další judaita | 7) otec Ebedův v době Ezry | 8) syn Asahelův v době",
+      "lemma": "יוֹנָתָן",
+      "hebrew": "יונתן",
+      "xlit": "Yôwnâthân",
+      "translated": true
+    },
+    "H3130": {
+      "definitions_cz": "Josef = \"Jehova přidal\" | 1) nejstarší syn Jákobův od Ráchel | 2) otec Igal, který zastupoval kmen Issachar mezi vyzvědači | 3) syn Asafův | 4) muž, který si v době Ezry vzal cizí manželku | 5) kněz z rodu Šebanjáše v době Nehemjáše",
+      "lemma": "יוֹסֵף",
+      "hebrew": "יוסף",
+      "xlit": "Yôwçêph",
+      "translated": true
+    },
+    "H3131": {
+      "definitions_cz": "Josiphiah = \"Jehova dodává\" | 1) otec nebo předek Šelomita, který se vrátil s Ezrou",
+      "lemma": "יוֹסִפְיָה",
+      "hebrew": "יוספיה",
+      "xlit": "Yôwçiphyâh",
+      "translated": true
+    },
+    "H3132": {
+      "definitions_cz": "Joelah = \"ať využije\" | 1) syn Jerohama z Gedoru a jeden z Davidových mocných válečníků",
+      "lemma": "יוֹעֵאלָה",
+      "hebrew": "יועאלה",
+      "xlit": "Yôwʻêʼlâh",
+      "translated": true
+    },
+    "H3133": {
+      "definitions_cz": "Joed = \"Jehova je svědkem\" | 1) Benjamínec, syn Pedaiášův",
+      "lemma": "יוֹעֵד",
+      "hebrew": "יועד",
+      "xlit": "Yôwʻêd",
+      "translated": true
+    },
+    "H3134": {
+      "definitions_cz": "Joezer = \"Jehova je pomoc\" | 1) Korhite, jeden z Davidových mocných válečníků, kteří se k němu připojili v Ziklagu",
+      "lemma": "יוֹעֶזֶר",
+      "hebrew": "יועזר",
+      "xlit": "Yôwʻezer",
+      "translated": true
+    },
+    "H3135": {
+      "definitions_cz": "Joaš = \"Jehova spěchá\" | 1) Benjamínec, syn Becherův | 2) jeden z důstojníků na Davidově dvoře",
+      "lemma": "יוֹעָשׁ",
+      "hebrew": "יועש",
+      "xlit": "Yôwʻâsh",
+      "translated": true
+    },
+    "H3136": {
+      "definitions_cz": "Jozadak = \"Jehova je spravedlivý\" | 1) vnuk velekněze Hilkiáše; syn velekněze Seraiáše; a otec velekněze Jozue; sám nikdy nedosáhl úřadu velekněze, protože ho Nabuchodonozor odnesl do zajetí do Babylóna",
+      "lemma": "יוֹצָדָק",
+      "hebrew": "יוצדק",
+      "xlit": "Yôwtsâdâq",
+      "translated": true
+    },
+    "H3137": {
+      "definitions_cz": "Jokim = \"Jehova zvedá\" | 1) potomek Judy",
+      "lemma": "יוֹקִים",
+      "hebrew": "יוקים",
+      "xlit": "Yôwqîym",
+      "translated": true
+    },
+    "H3138": {
+      "definitions_cz": "1) brzký déšť, podzimní přeháňky | 1a) déšť, který padá v Palestině od konce října do začátku prosince",
+      "lemma": "יוֹרֶה",
+      "hebrew": "יורה",
+      "xlit": "yôwreh",
+      "translated": true
+    },
+    "H3139": {
+      "definitions_cz": "Jorah = \"on instruuje\" | 1) hlava nebo předek rodiny, která se vrátila z Babylonu s Ezrou",
+      "lemma": "יוֹרָה",
+      "hebrew": "יורה",
+      "xlit": "Yôwrâh",
+      "translated": true
+    },
+    "H3140": {
+      "definitions_cz": "Jorai = \"Jehova mě naučil\" | 1) jeden z Gádovců bydlících v Gileádu v Bášanu za vlády judského krále Jótama",
+      "lemma": "יוֹרַי",
+      "hebrew": "יורי",
+      "xlit": "Yôwray",
+      "translated": true
+    },
+    "H3141": {
+      "definitions_cz": "Joram = \"Jehova je vyvýšen\" | 1) syn judského krále Jozafata a sám král judský na 8 let; jeho manželkou byla zlá Ataliah, která pravděpodobně podněcovala jeho návrat judského národa k uctívání Baala | 2) syn krále Achaba ze severního království Izraele a samotného krále Izraele po dobu 12 let; byl zavražděn Jehu na pozemku, pro který jeho otec zavraždil Nábota, čímž se do písmene naplnilo Eliášovo proroctví | 3) Levita v době",
+      "lemma": "יוֹרָם",
+      "hebrew": "יורם",
+      "xlit": "Yôwrâm",
+      "translated": true
+    },
+    "H3142": {
+      "definitions_cz": "Jushab-hesed = \"jehož láska je opětována\" | 1) syn Zerubábelův",
+      "lemma": "יוּשַׁב חֶסֶד",
+      "hebrew": "יושב חסד",
+      "xlit": "Yûwshab Cheçed",
+      "translated": true
+    },
+    "H3143": {
+      "definitions_cz": "Josibiah = \"Jehova dává přebývat\" | 1) Simeonite, otce Jehua",
+      "lemma": "יוֹשִׁבְיָה",
+      "hebrew": "יושביה",
+      "xlit": "Yôwshibyâh",
+      "translated": true
+    },
+    "H3144": {
+      "definitions_cz": "Joshah = \"Jehova činí rovného\" | 1) kníže z rodu Simeonových",
+      "lemma": "יוֹשָׁה",
+      "hebrew": "יושה",
+      "xlit": "Yôwshâh",
+      "translated": true
+    },
+    "H3145": {
+      "definitions_cz": "Joshaviah = \"Jehova činí rovného\" | 1) syn Elnaamův a jeden z Davidových mocných válečníků",
+      "lemma": "יוֹשַׁוְיָה",
+      "hebrew": "יושויה",
+      "xlit": "Yôwshavyâh",
+      "translated": true
+    },
+    "H3146": {
+      "definitions_cz": "Jozafat nebo Jozafat = \"Jehova soudí\" | n pr m | 1) jeden z Davidových mocných válečníků | 2) kněz a trubač v době Davidově",
+      "lemma": "יוֹשָׁפָט",
+      "hebrew": "יושפט",
+      "xlit": "Yôwshâphâṭ",
+      "translated": true
+    },
+    "H3147": {
+      "definitions_cz": "Jotham = \"Jehova je dokonalý\" | 1) syn judského krále Uziáše od Jeruše; judským králem 16 let a současně s Izajášem a izraelským králem Pekachem | 2) syn Jahdai a potomek Káleba a Judy | 3) nejmladší syn Gideona, který utekl z masakru svých bratrů",
+      "lemma": "יוֹתָם",
+      "hebrew": "יותם",
+      "xlit": "Yôwthâm",
+      "translated": true
+    },
+    "H3148": {
+      "definitions_cz": "n m | 1) nadřazenost, výhoda, přebytek | adv | 2) přebytek, lépe | conj | 3) kromě toho ještě víc",
+      "lemma": "יוֹתֵר",
+      "hebrew": "יותר",
+      "xlit": "yôwthêr",
+      "translated": true
+    },
+    "H3149": {
+      "definitions_cz": "Jeziel = \"shromáždění Boží\" | 1) Benjamínec a jeden z Davidových mocných válečníků, kteří se k němu připojili v Ziklagu",
+      "lemma": "יְזַוְאֵל",
+      "hebrew": "יזואל",
+      "xlit": "Yᵉzavʼêl",
+      "translated": true
+    },
+    "H3150": {
+      "definitions_cz": "Jeziah = \"Jehova kropí\" | 1) potomek Paroshe, který si v době Ezdráše vzal cizí manželku",
+      "lemma": "יִזִּיָּה",
+      "hebrew": "יזיה",
+      "xlit": "Yizzîyâh",
+      "translated": true
+    },
+    "H3151": {
+      "definitions_cz": "Jaziz = \"Zvýrazňuje se\" | 1) Hagarita, Davidův důstojník, který měl na starosti stáda",
+      "lemma": "יָזִיז",
+      "hebrew": "יזיז",
+      "xlit": "Yâzîyz",
+      "translated": true
+    },
+    "H3152": {
+      "definitions_cz": "Jezliah = \"kterého Bůh zachová\" | 1) Benjamínec ze synů Elpaalových",
+      "lemma": "יִזְלִיאָה",
+      "hebrew": "יזליאה",
+      "xlit": "Yizlîyʼâh",
+      "translated": true
+    },
+    "H3153": {
+      "definitions_cz": "Jezaniáš = \"Jehova vyslyšel\" | 1) syn Hošaiáše Maachatského a jeden z kapitánů, kteří uprchli z Jeruzaléma během posledního obléhání Babylóňany; jeden z prvních, kdo se vrátil ke Gedaliášovi do Micpy, kde se po zavraždění Gedaliáše významně podílel",
+      "lemma": "יְזַנְיָה",
+      "hebrew": "יזניה",
+      "xlit": "Yᵉzanyâh",
+      "translated": true
+    },
+    "H3154": {
+      "definitions_cz": "1) pot, pot",
+      "lemma": "יֶזַע",
+      "hebrew": "יזע",
+      "xlit": "yezaʻ",
+      "translated": true
+    },
+    "H3155": {
+      "definitions_cz": "Izrahite = \"potomek Zerach\" | 1) potomek Zeracha z Judska",
+      "lemma": "יִזְרָח",
+      "hebrew": "יזרח",
+      "xlit": "Yizrâch",
+      "translated": true
+    },
+    "H3156": {
+      "definitions_cz": "Izrahiah nebo Jezrahiah = „Jehova bude zářit“ | 1) náčelník Issachar | 2) Levita a vůdce sboru při zasvěcení jeruzalémské zdi za Nehemjáše",
+      "lemma": "יִזְרַחְיָה",
+      "hebrew": "יזרחיה",
+      "xlit": "Yizrachyâh",
+      "translated": true
+    },
+    "H3157": {
+      "definitions_cz": "Jezreel = \"Bůh seje\" | n pr m | 1) potomek otce nebo zakladatele Etamu z Judy | 2) první syn proroka Ozeáše | n pr loc | 3) město v judském Nekebu | 4) město v Issachar na severozápadním výběžku hory Gilboa",
+      "lemma": "יִזְרְעֵאל",
+      "hebrew": "יזרעאל",
+      "xlit": "Yizrᵉʻêʼl",
+      "translated": true
+    },
+    "H3158": {
+      "definitions_cz": "Jizreelite = viz Jizreel \"zasetý Bohem\" | 1) obyvatel Jezreelu",
+      "lemma": "יִזְרְעֵאלִי",
+      "hebrew": "יזרעאלי",
+      "xlit": "Yizrᵉʻêʼlîy",
+      "translated": true
+    },
+    "H3159": {
+      "definitions_cz": "Jizreelitka = viz Jizreel \"zasetý Bohem\" | 1) obyvatelka Jizreelu | 1a) použito pouze u Ahinoam, manželky Davidovy",
+      "lemma": "יִזְרְעֵאלִית",
+      "hebrew": "יזרעאלית",
+      "xlit": "Yizrᵉʻêʼlîyth",
+      "translated": true
+    },
+    "H3160": {
+      "definitions_cz": "Jehubbah = \"skrytý\" | 1) muž Ashera, syna Shomera nebo Shamera z domu Beriah",
+      "lemma": "יְחֻבָּה",
+      "hebrew": "יחבה",
+      "xlit": "Yᵉchubbâh",
+      "translated": true
+    },
+    "H3161": {
+      "definitions_cz": "1) spojit se, sjednotit se, spojit se, sjednotit se | 1a) (Qal) ke sjednocení | 1b) (Piel) sjednotit",
+      "lemma": "יָחַד",
+      "hebrew": "יחד",
+      "xlit": "yâchad",
+      "translated": true
+    },
+    "H3162": {
+      "definitions_cz": "n m | 1) unie, jednota | adv | 2) spolu, dohromady, všichni dohromady, stejně",
+      "lemma": "יַחַד",
+      "hebrew": "יחד",
+      "xlit": "yachad",
+      "translated": true
+    },
+    "H3163": {
+      "definitions_cz": "Jahdo = \"Jeho jednota\" | 1) Gileádský syn Búzův a otec Ješišaje",
+      "lemma": "יַחְדוֹ",
+      "hebrew": "יחדו",
+      "xlit": "Yachdôw",
+      "translated": true
+    },
+    "H3164": {
+      "definitions_cz": "Jahdiel = \"moje jednota je Bůh\" | 1) náčelník Manasse na východě Jordánu",
+      "lemma": "יַחְדִּיאֵל",
+      "hebrew": "יחדיאל",
+      "xlit": "Yachdîyʼêl",
+      "translated": true
+    },
+    "H3165": {
+      "definitions_cz": "Jehdeiah = \"Jehova je jednota\" | 1) levita v době Davidově | 2) Meronotita, Davidův důstojník, který má na starosti osly",
+      "lemma": "יֶחְדִּיָּהוּ",
+      "hebrew": "יחדיהו",
+      "xlit": "Yechdîyâhûw",
+      "translated": true
+    },
+    "H3166": {
+      "definitions_cz": "Jahaziel = \"Boží pohled\" | 1) benjamitský válečník, který se připojil k Davidovi v Ziklagu | 2) kněz za vlády Davida, který pomáhal stěhovat archu | 3) kehatský levita, 3. syn Hebrona | 4) Levita, syn Zachariášův, ze synů Asafových, za vlády Jozafata | 5) předek jednoho z rodů, který se vrátil z vyhnanství s Ezrou",
+      "lemma": "יַחֲזִיאֵל",
+      "hebrew": "יחזיאל",
+      "xlit": "Yachăzîyʼêl",
+      "translated": true
+    },
+    "H3167": {
+      "definitions_cz": "Jahaziah = \"Názory Jehovy\" | 1) syn Tikvy, zřejmě kněz a vůdce v době Ezdráše",
+      "lemma": "יַחְזְיָה",
+      "hebrew": "יחזיה",
+      "xlit": "Yachzᵉyâh",
+      "translated": true
+    },
+    "H3168": {
+      "definitions_cz": "Ezechiel nebo Jehezekel = \"Bůh posiluje\" | 1) syn Buziho a kněze a proroka; autor knihy svým jménem; zajat s Joiachinem a vyhoštěn v Babylóně, kde prorokoval na dalších 22 let | 2) kněz, který měl na starosti 20. kurz v době Davidově",
+      "lemma": "יְחֶזְקֵאל",
+      "hebrew": "יחזקאל",
+      "xlit": "Yᵉchezqêʼl",
+      "translated": true
+    },
+    "H3169": {
+      "definitions_cz": "Ezechiáš nebo Jehizkiah = \"Jehova zesílil\" | 1) syn krále Achazbyho Abiho nebo Abijaha a 12. krále judského; jeho vláda se vyznačovala jeho zbožným chováním; vládl 29 let | 2) hlava rodiny vracejících se vyhnanců v době Nehemjáše | 3) Efraimský v době Achaza",
+      "lemma": "יְחִזְקִיָּה",
+      "hebrew": "יחזקיה",
+      "xlit": "Yᵉchizqîyâh",
+      "translated": true
+    },
+    "H3170": {
+      "definitions_cz": "Jahzerah = \"koho Bůh vede zpět\" | 1) kněz z domu Immer",
+      "lemma": "יַחְזֵרָה",
+      "hebrew": "יחזרה",
+      "xlit": "Yachzêrâh",
+      "translated": true
+    },
+    "H3171": {
+      "definitions_cz": "Jehiel = \"Bůh žije\" | 1) Levita a jeden z hlavních hudebníků v době Davidově | 2) Geršonský levita, který měl na starosti poklady v době Davida | 3) syn Hachmoniho a úředník Davidův a vychovatel Davidových synů | 4) syn judského krále Jozafata usmrcený svým bratrem Jehoramem | 5) Hemanita, který se podílel na obnově krále Ezechiáše | 6) Levita a dozorce v době Ezechiáše | 7) vládce chrámu během reforem Josiáše | 8) otec Ob",
+      "lemma": "יְחִיאֵל",
+      "hebrew": "יחיאל",
+      "xlit": "Yᵉchîyʼêl",
+      "translated": true
+    },
+    "H3172": {
+      "definitions_cz": "Jehieli = \"Bůh zachrání zaživa\" nebo \"smeten Bohem\" | 1) Geršonský levita z rodu Laadanů",
+      "lemma": "יְחִיאֵלִי",
+      "hebrew": "יחיאלי",
+      "xlit": "Yᵉchîyʼêlîy",
+      "translated": true
+    },
+    "H3173": {
+      "definitions_cz": "adj | 1) jen, jen jeden, osamělý, jeden | 1a) pouze, jedinečný, jeden | 1b) osamělý | 1c)(TWOT) jednorozený syn | subst | 2) jeden",
+      "lemma": "יָחִיד",
+      "hebrew": "יחיד",
+      "xlit": "yâchîyd",
+      "translated": true
+    },
+    "H3174": {
+      "definitions_cz": "Jehiah = \"Jehova žije\" | 1) vrátný archy v době jejího zřízení v Jeruzalémě",
+      "lemma": "יְחִיָּה",
+      "hebrew": "יחיה",
+      "xlit": "Yᵉchîyâh",
+      "translated": true
+    },
+    "H3175": {
+      "definitions_cz": "1) čekání, doufání",
+      "lemma": "יָחִיל",
+      "hebrew": "יחיל",
+      "xlit": "yâchîyl",
+      "translated": true
+    },
+    "H3176": {
+      "definitions_cz": "1) čekat, doufat, očekávat | 1a) (Niphal) čekat | 1b) (Piel) | 1b1) čekat, čekat, zdržovat | 1b2) čekat, doufat | 1c) (Hiphil) čekat, zdržovat se, čekat, doufat",
+      "lemma": "יָחַל",
+      "hebrew": "יחל",
+      "xlit": "yâchal",
+      "translated": true
+    },
+    "H3177": {
+      "definitions_cz": "Jahleel = \"Bůh čeká\" | 1) 3. ze 3 synů Zabulonových; zakladatel rodu Jahleelitů",
+      "lemma": "יַחְלְאֵל",
+      "hebrew": "יחלאל",
+      "xlit": "Yachlᵉʼêl",
+      "translated": true
+    },
+    "H3178": {
+      "definitions_cz": "Jahleelites = \"naděje Boha\" | 1) potomci Jahleel z kmene Zabulon",
+      "lemma": "יַחְלְאֵלִי",
+      "hebrew": "יחלאלי",
+      "xlit": "Yachlᵉʼêlîy",
+      "translated": true
+    },
+    "H3179": {
+      "definitions_cz": "1) být horký, otěhotnět | 1a) (Qal) | 1a1) být horký, stát se horkým | 1a2) pářit se (zvířat) | 1a3) být nebo se stát horkým (obr. hněvu) | 1b) (Piel) | 1b1) otěhotnět (sexuálně) | 1b2) být v říji (zvířat)",
+      "lemma": "יָחַם",
+      "hebrew": "יחם",
+      "xlit": "yâcham",
+      "translated": true
+    },
+    "H3180": {
+      "definitions_cz": "1) srnčí | 1a) druh jelena, načervenalé barvy | 1b) snad vyhynulý živočich, přesný význam neznámý",
+      "lemma": "יַחְמוּר",
+      "hebrew": "יחמור",
+      "xlit": "yachmûwr",
+      "translated": true
+    },
+    "H3181": {
+      "definitions_cz": "Jahmai = \"koho Jehova střeží\" | 1) muž z Issacharu a jedna z hlav rodiny Tola",
+      "lemma": "יַחְמַי",
+      "hebrew": "יחמי",
+      "xlit": "Yachmay",
+      "translated": true
+    },
+    "H3182": {
+      "definitions_cz": "1) naboso | 1a) holost, být neobutý (subst)",
+      "lemma": "יָחֵף",
+      "hebrew": "יחף",
+      "xlit": "yâchêph",
+      "translated": true
+    },
+    "H3183": {
+      "definitions_cz": "Jahzeel = \"Bůh rozděluje\" | 1) 1. ze 4 synů Neftaliho a zakladatel rodu Jahzeelitů",
+      "lemma": "יַחְצְאֵל",
+      "hebrew": "יחצאל",
+      "xlit": "Yachtsᵉʼêl",
+      "translated": true
+    },
+    "H3184": {
+      "definitions_cz": "Jahzeelites = viz Jahzeel \"Bůh rozděluje\" | 1) potomci Jahzeela, prvního syna Neftaliho",
+      "lemma": "יַחְצְאֵלִי",
+      "hebrew": "יחצאלי",
+      "xlit": "Yachtsᵉʼêlîy",
+      "translated": true
+    },
+    "H3185": {
+      "definitions_cz": "Jahziel = \"Bůh rozděluje\" | 1) 1. ze 4 synů Neftaliho a zakladatel rodu Jahzeelitů",
+      "lemma": "יַחְצִיאֵל",
+      "hebrew": "יחציאל",
+      "xlit": "Yachtsîyʼêl",
+      "translated": true
+    },
+    "H3186": {
+      "definitions_cz": "1) (Qal) zdržovat, zdržovat, odkládat",
+      "lemma": "יָחַר",
+      "hebrew": "יחר",
+      "xlit": "yâchar",
+      "translated": true
+    },
+    "H3187": {
+      "definitions_cz": "1) (Hithpael) počítat genealogicky, zapsat se do genealogie, zapsat se, být zapsán",
+      "lemma": "יָחַשׂ",
+      "hebrew": "יחש",
+      "xlit": "yâchas",
+      "translated": true
+    },
+    "H3188": {
+      "definitions_cz": "1) genealogie",
+      "lemma": "יַחַשׂ",
+      "hebrew": "יחש",
+      "xlit": "yachas",
+      "translated": true
+    },
+    "H3189": {
+      "definitions_cz": "Jahath = \"Vytrhne\" | 1) syn Reajášův a vnuk Šóbala z kmene Juda | 2) syn Libni a vnuk Gershom a pravnuk Levi | 3) geršonský levita; nejstarší syn Šimei a vnuk Laadanův; zakladatel domu Jahath | 4) Levita a syn Šelomotův | 5) merarijský levita za vlády Josiáše",
+      "lemma": "יַחַת",
+      "hebrew": "יחת",
+      "xlit": "Yachath",
+      "translated": true
+    },
+    "H3190": {
+      "definitions_cz": "1) být dobrý, být příjemný, být dobrý, být rád | 1a) (Qal) | 1a1) radovat se, radovat se | 1a2) být dobře umístěn | 1a3) mít se dobře, mít se dobře, jít dobře s | 1a4) být příjemný, být příjemný | 1b) (hifil) | 1b1) radovat se, radovat se | 1b2) konat dobro, jednat dobře | 1b3) dělat dobře, dělat důkladně | 1b4) učinit věc dobrou nebo správnou nebo krásnou | 1b5) dělat dobře, dělat dobře",
+      "lemma": "יָטַב",
+      "hebrew": "יטב",
+      "xlit": "yâṭab",
+      "translated": true
+    },
+    "H3191": {
+      "definitions_cz": "1) (P'al) být dobrý, konat dobro, být příjemný",
+      "lemma": "יְטַב",
+      "hebrew": "יטב",
+      "xlit": "yᵉṭab",
+      "translated": true
+    },
+    "H3192": {
+      "definitions_cz": "Jotbah = \"potěšující\" | 1) město v Judsku, rodné město Meshullemeth, manželky krále Manasse | 1a) místo neznámé",
+      "lemma": "יׇטְבָה",
+      "hebrew": "יטבה",
+      "xlit": "Yoṭbâh",
+      "translated": true
+    },
+    "H3193": {
+      "definitions_cz": "Jotbath nebo Jotbathah = \"příjemnost\" | 1) zastávka v divočině; místo neznámé",
+      "lemma": "יׇטְבָתָה",
+      "hebrew": "יטבתה",
+      "xlit": "Yoṭbâthâh",
+      "translated": true
+    },
+    "H3194": {
+      "definitions_cz": "Juttah = \"natažený\" | 1) město v judských horách, v sousedství Maonu a Karmelu; moderní 'Yutta'",
+      "lemma": "יֻטָּה",
+      "hebrew": "יטה",
+      "xlit": "Yuṭṭâh",
+      "translated": true
+    },
+    "H3195": {
+      "definitions_cz": "Jetur = \"uzavřený\" | 1) syn Izmaelův, jehož potomci válčili s Izraelem na východ od Jordánu | 1a) také nazývaný „Ituraea“",
+      "lemma": "יְטוּר",
+      "hebrew": "יטור",
+      "xlit": "Yᵉṭûwr",
+      "translated": true
+    },
+    "H3196": {
+      "definitions_cz": "1) víno",
+      "lemma": "יַיִן",
+      "hebrew": "יין",
+      "xlit": "yayin",
+      "translated": true
+    },
+    "H3197": {
+      "definitions_cz": "1) ruka, (cesta) strana",
+      "lemma": "יַךְ",
+      "hebrew": "יך",
+      "xlit": "yak",
+      "translated": true
+    },
+    "H3198": {
+      "definitions_cz": "1) dokazovat, rozhodovat, soudit, kárat, kárat, opravovat, mít pravdu | 1a) (Hiphil) | 1a1) rozhodovat, soudit | 1a2) soudit, jmenovat | 1a3) ukázat, že má pravdu, dokázat | 1a4) přesvědčit, odsoudit | 1a5) kárat, kárat | 1a6) opravit, pokárat | 1b) (Hophal) být potrestán | 1c) (Niphal) rozumět, uvažovat společně | 1d) (Hithp) argumentovat",
+      "lemma": "יָכַח",
+      "hebrew": "יכח",
+      "xlit": "yâkach",
+      "translated": true
+    },
+    "H3199": {
+      "definitions_cz": "Jachin = \"Založí\" | n pr m | 1) 4. syn Simeonův a zakladatel rodu Jachinitů | 2) kněz a vedoucí 21. kurzu v době Davidově | 3) postexilní kněz v době Nehemjáše | n pr | 4) název pravého sloupu před chrámem",
+      "lemma": "יָכִין",
+      "hebrew": "יכין",
+      "xlit": "Yâkîyn",
+      "translated": true
+    },
+    "H3200": {
+      "definitions_cz": "Jachinité = viz Jachin \"založí\" | 1) potomci Jachina",
+      "lemma": "יָכִינִי",
+      "hebrew": "יכיני",
+      "xlit": "Yâkîynîy",
+      "translated": true
+    },
+    "H3201": {
+      "definitions_cz": "1) zvítězit, překonat, vydržet, mít moc, umět | 1a) (Qal) | 1a1) být schopen, být schopen získat nebo dosáhnout, být schopen vydržet, být schopen dosáhnout | 1a2) zvítězit, zvítězit nad nebo proti, překonat, být vítězem | 1a3) mít schopnost, mít sílu",
+      "lemma": "יָכֹל",
+      "hebrew": "יכל",
+      "xlit": "yâkôl",
+      "translated": true
+    },
+    "H3202": {
+      "definitions_cz": "1) být schopen | 1a) (P'al) | 1a1) být schopen | 1a2), aby zvítězil",
+      "lemma": "יְכֵל",
+      "hebrew": "יכל",
+      "xlit": "yᵉkêl",
+      "translated": true
+    },
+    "H3203": {
+      "definitions_cz": "Jecoliah nebo Jecholiah = \"Jehova je schopen\" | 1) manželka judského krále Amaziáše a matka krále Uziáše (Azariáše)",
+      "lemma": "יְכׇלְיָה",
+      "hebrew": "יכליה",
+      "xlit": "Yᵉkolyâh",
+      "translated": true
+    },
+    "H3204": {
+      "definitions_cz": "Jeconiáš = \"Jehova ustanoví\" | 1) syn judského krále Jojakima a judského krále 3 měsíce a 10 dní, než se vzdal Nabuchodonozorovi a byl zajat do Babylóna, kde byl dalších 36 let uvězněn; propuštěn po smrti Nabuchodonozora a žil v Babylóně až do své smrti | 1a) primární hláskování 'Jehoiachin'",
+      "lemma": "יְכׇנְיָה",
+      "hebrew": "יכניה",
+      "xlit": "Yᵉkonyâh",
+      "translated": true
+    },
+    "H3205": {
+      "definitions_cz": "1) rodit, rodit, plodit, rodit, lozit | 1a) (Qal) | 1a1) nést, rodit | 1a1a) narození dítěte | 1a1b) nouze (přirovnání) | 1a1c) zlých (chování) | 1a2) zplodit | 1b) (Niphal) se narodí | 1c) (Piel) | 1c1) způsobit nebo pomoci zrodit | 1c2) pomáhat nebo pečovat jako porodní asistentka | 1c3) porodní asistentka (příčestí) | 1d) (Pual) se narodí | 1e) (hifil) | 1e1) zplodit (dítě) | 1e2) nést (obr. -bezbožných plodících nepravost) | 1f) (Hophal) den narození, narozeniny (infi",
+      "lemma": "יָלַד",
+      "hebrew": "ילד",
+      "xlit": "yâlad",
+      "translated": true
+    },
+    "H3206": {
+      "definitions_cz": "1) dítě, syn, chlapec, potomek, mládí | 1a) dítě, syn, chlapec | 1b) dítě, děti | 1c) potomci | 1d) mládež | 1e) odpadlí Izraelité (obr.)",
+      "lemma": "יֶלֶד",
+      "hebrew": "ילד",
+      "xlit": "yeled",
+      "translated": true
+    },
+    "H3207": {
+      "definitions_cz": "1) dívka, dívka, dívka vhodná k vdávání",
+      "lemma": "יַלְדָּה",
+      "hebrew": "ילדה",
+      "xlit": "yaldâh",
+      "translated": true
+    },
+    "H3208": {
+      "definitions_cz": "1) dětství, mládí",
+      "lemma": "יַלְדוּת",
+      "hebrew": "ילדות",
+      "xlit": "yaldûwth",
+      "translated": true
+    },
+    "H3209": {
+      "definitions_cz": "1) narozen",
+      "lemma": "יִלּוֹד",
+      "hebrew": "ילוד",
+      "xlit": "yillôwd",
+      "translated": true
+    },
+    "H3210": {
+      "definitions_cz": "Jalon = \"Jehova lóže\" | 1) syn Ezdráš a potomek Kálebův",
+      "lemma": "יָלוֹן",
+      "hebrew": "ילון",
+      "xlit": "Yâlôwn",
+      "translated": true
+    },
+    "H3211": {
+      "definitions_cz": "1) narozen",
+      "lemma": "יָלִיד",
+      "hebrew": "יליד",
+      "xlit": "yâlîyd",
+      "translated": true
+    },
+    "H3212": {
+      "definitions_cz": "1) jít, chodit, přijít | 1a) (Qal) | 1a1) jít, chodit, přijít, odejít, pokračovat, pohybovat se, odejít | 1a2) zemřít, žít, způsob života (obr.) | 1b) (Hifil) vést, přinášet, odvádět, nést, přimět chodit",
+      "lemma": "יָלַךְ",
+      "hebrew": "ילך",
+      "xlit": "yâlak",
+      "translated": true
+    },
+    "H3213": {
+      "definitions_cz": "1) (Hiphil) kvílet, kvílet, kvílet",
+      "lemma": "יָלַל",
+      "hebrew": "ילל",
+      "xlit": "yâlal",
+      "translated": true
+    },
+    "H3214": {
+      "definitions_cz": "1) vytí (zvířat)",
+      "lemma": "יְלֵל",
+      "hebrew": "ילל",
+      "xlit": "yᵉlêl",
+      "translated": true
+    },
+    "H3215": {
+      "definitions_cz": "1) vytí (z tísně), nářek",
+      "lemma": "יְלָלָה",
+      "hebrew": "יללה",
+      "xlit": "yᵉlâlâh",
+      "translated": true
+    },
+    "H3216": {
+      "definitions_cz": "1) (Qal) mluvit unáhleně, mluvit divoce | 1a) (TWOT) polknout, spolknout",
+      "lemma": "יָלַע",
+      "hebrew": "ילע",
+      "xlit": "yâlaʻ",
+      "translated": true
+    },
+    "H3217": {
+      "definitions_cz": "1) strupovitost, kožní vředy, šupiny, šupinky, eruptivní onemocnění",
+      "lemma": "יַלֶּפֶת",
+      "hebrew": "ילפת",
+      "xlit": "yallepheth",
+      "translated": true
+    },
+    "H3218": {
+      "definitions_cz": "1) mládě kobylky (raná fáze vývoje) | 1a) housenka (jako požírající)",
+      "lemma": "יֶלֶק",
+      "hebrew": "ילק",
+      "xlit": "yeleq",
+      "translated": true
+    },
+    "H3219": {
+      "definitions_cz": "1) peněženka, peněženka, taška, taška, schránka",
+      "lemma": "יַלְקוּט",
+      "hebrew": "ילקיט",
+      "xlit": "yalqûwṭ",
+      "translated": true
     }
   }
 }
