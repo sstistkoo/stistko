@@ -61141,6 +61141,356 @@
       "hebrew": "משלמית",
       "xlit": "Mᵉshillêmîyth",
       "translated": true
+    },
+    "H4922": {
+      "definitions_cz": "Meshullemeth = \"přítel\" | 1) dcera Haruze z Jotby, manželka judského krále Manasse a matka judského krále Amona",
+      "lemma": "מְשֻׁלֶּמֶת",
+      "hebrew": "משלמת",
+      "xlit": "Mᵉshullemeth",
+      "translated": true
+    },
+    "H4923": {
+      "definitions_cz": "1) devastace, hrůza | 1a) devastace, plýtvání | 1b) hrůza",
+      "lemma": "מְשַׁמָּה",
+      "hebrew": "משמה",
+      "xlit": "mᵉshammâh",
+      "translated": true
+    },
+    "H4924": {
+      "definitions_cz": "1) tučnost, tučný kus, úrodné místo, bohatě připravené jídlo | 1a) tuk, tučnost, tučné kusy | 1b) olej, olivový olej | 2) tloušťka | 2a) statný, rázný | 2b) úrodná místa nebo místa",
+      "lemma": "מַשְׁמָן",
+      "hebrew": "משמן",
+      "xlit": "mashmân",
+      "translated": true
+    },
+    "H4925": {
+      "definitions_cz": "Mishmannah = \"tloušťka\" | 1) Gadit, jeden z Davidových mocných válečníků, který se k němu připojil v Ziklagu",
+      "lemma": "מִשְׁמַנָּה",
+      "hebrew": "משמנה",
+      "xlit": "Mishmannâh",
+      "translated": true
+    },
+    "H4926": {
+      "definitions_cz": "1) slyšená věc, fáma",
+      "lemma": "מִשְׁמָע",
+      "hebrew": "משמע",
+      "xlit": "mishmâʻ",
+      "translated": true
+    },
+    "H4927": {
+      "definitions_cz": "Mišma = \"slyšení\" | 1) jeden z 12 synů Izmaelových | 2) syn Mibsamův z rodu Simeonových",
+      "lemma": "מִשְׁמָע",
+      "hebrew": "משמע",
+      "xlit": "Mishmâʻ",
+      "translated": true
+    },
+    "H4928": {
+      "definitions_cz": "1) poddaní, tělo poddaných, bodyguard, posluchači, poslušní | 1a) bodyguard | 1b) předměty",
+      "lemma": "מִשְׁמַעַת",
+      "hebrew": "משמעת",
+      "xlit": "mishmaʻath",
+      "translated": true
+    },
+    "H4929": {
+      "definitions_cz": "1) místo uvěznění, vězení, stráž, vězení, strážní stanoviště, hlídka, zachovávání | 1a) vězení, vězení, strážnice | 1b) stráž, strážní stanoviště, akt ostrahy | 1c) dodržování",
+      "lemma": "מִשְׁמָר",
+      "hebrew": "משמר",
+      "xlit": "mishmâr",
+      "translated": true
+    },
+    "H4930": {
+      "definitions_cz": "1) hřebík",
+      "lemma": "מַשְׂמְרָה",
+      "hebrew": "משמרה",
+      "xlit": "masmᵉrâh",
+      "translated": true
+    },
+    "H4931": {
+      "definitions_cz": "1) stráž, poplatek, funkce, povinnost, služba, hodinky | 1a) stráž, hlídka, zadržovací nebo vazební dům | 1b) uchovávání, konzervace | 1c) obvinění, soudní příkaz | 1d) úřad, funkce (slavnostní)",
+      "lemma": "מִשְׁמֶרֶת",
+      "hebrew": "משמרת",
+      "xlit": "mishmereth",
+      "translated": true
+    },
+    "H4932": {
+      "definitions_cz": "1) double, copy, second, repeat | 1a) dvojitý | 1b) kopie (zákona) | 1c) druhý (v pořadí) | 1c1) druhé místo | 1c2) druhý ve věku | 1d) druhé čtvrtletí nebo okres",
+      "lemma": "מִשְׁנֶה",
+      "hebrew": "משנה",
+      "xlit": "mishneh",
+      "translated": true
+    },
+    "H4933": {
+      "definitions_cz": "1) kořist, kořist, plenění",
+      "lemma": "מְשִׁסָּה",
+      "hebrew": "משסה",
+      "xlit": "mᵉshiççâh",
+      "translated": true
+    },
+    "H4934": {
+      "definitions_cz": "1) dutá cesta, úzká cesta | 1a) silnice uzavřené mezi vinicemi",
+      "lemma": "מִשְׁעוֹל",
+      "hebrew": "משעול",
+      "xlit": "mishʻôwl",
+      "translated": true
+    },
+    "H4935": {
+      "definitions_cz": "1) očista",
+      "lemma": "מִשְׁעִי",
+      "hebrew": "משעי",
+      "xlit": "mishʻîy",
+      "translated": true
+    },
+    "H4936": {
+      "definitions_cz": "Misham = \"očista\" | 1) Benjamínec, syn Elpaalův a potomek Šaharaima",
+      "lemma": "מִשְׁעָם",
+      "hebrew": "משעם",
+      "xlit": "Mishʻâm",
+      "translated": true
+    },
+    "H4937": {
+      "definitions_cz": "1) podpora, personál",
+      "lemma": "מִשְׁעֵן",
+      "hebrew": "משען",
+      "xlit": "mishʻên",
+      "translated": true
+    },
+    "H4938": {
+      "definitions_cz": "1) podpora (všeho druhu), personál",
+      "lemma": "מִשְׁעֵנָה",
+      "hebrew": "משענה",
+      "xlit": "mishʻênâh",
+      "translated": true
+    },
+    "H4939": {
+      "definitions_cz": "1) krveprolití, vylití (krve)",
+      "lemma": "מִשְׂפָּח",
+      "hebrew": "משפח",
+      "xlit": "mispâch",
+      "translated": true
+    },
+    "H4940": {
+      "definitions_cz": "1) klan, rodina | 1a) klan | 1a1) rodina | 1a2) kmen | 1a3) lidé, národ | 1b) cech | 1c) druh, druh | 1d) aristokraty",
+      "lemma": "מִשְׁפָּחָה",
+      "hebrew": "משפחה",
+      "xlit": "mishpâchâh",
+      "translated": true
+    },
+    "H4941": {
+      "definitions_cz": "1) rozsudek, spravedlnost, nařízení | 1a) rozsudek | 1a1) akt rozhodnutí případu | 1a2) místo, soud, sídlo rozsudku | 1a3) proces, postup, soudní spor (před soudci) | 1a4) případ, příčina (předložená k soudu) | 1a5) věta, rozhodnutí (rozsudek) | 1a6) výkon (rozsudku) | 1a7) čas (rozsudek) | 1b) spravedlnost, právo, poctivost (vlastnosti Boha nebo člověka) | 1c) vyhláška | 1d) rozhodnutí (v právu) | 1e) právo, výsada, splatnost (právní) | 1f) správný, vhodný, míra, způsobilost,",
+      "lemma": "מִשְׁפָּט",
+      "hebrew": "משפט",
+      "xlit": "mishpâṭ",
+      "translated": true
+    },
+    "H4942": {
+      "definitions_cz": "1) krby, haldy popela | 1a) význam nejistý | 2) (CLBL) ovčíny, sedlové brašny | 2a) znamená nejistý",
+      "lemma": "מִשְׁפָּת",
+      "hebrew": "משפת",
+      "xlit": "mishpâth",
+      "translated": true
+    },
+    "H4943": {
+      "definitions_cz": "1) nabytí, držba, syn držby, dědic",
+      "lemma": "מֶשֶׁק",
+      "hebrew": "משק",
+      "xlit": "mesheq",
+      "translated": true
+    },
+    "H4944": {
+      "definitions_cz": "1) běh, spěch",
+      "lemma": "מַשָּׁק",
+      "hebrew": "משק",
+      "xlit": "mashshâq",
+      "translated": true
+    },
+    "H4945": {
+      "definitions_cz": "1) zavlažování, pití | 1a) zavlažování | 1b) nápoje, nádoby na pití | 1c) komornictví (kancelář komorníka) | 2) komorník, číšník",
+      "lemma": "מַשְׁקֶה",
+      "hebrew": "משקה",
+      "xlit": "mashqeh",
+      "translated": true
+    },
+    "H4946": {
+      "definitions_cz": "1) váha, váha",
+      "lemma": "מִשְׁקוֹל",
+      "hebrew": "משקול",
+      "xlit": "mishqôwl",
+      "translated": true
+    },
+    "H4947": {
+      "definitions_cz": "1) překlad (dveře)",
+      "lemma": "מַשְׁקוֹף",
+      "hebrew": "משקוף",
+      "xlit": "mashqôwph",
+      "translated": true
+    },
+    "H4948": {
+      "definitions_cz": "1) váha, váha",
+      "lemma": "מִשְׁקָל",
+      "hebrew": "משקל",
+      "xlit": "mishqâl",
+      "translated": true
+    },
+    "H4949": {
+      "definitions_cz": "1) vodováha, nivelační nástroj nebo nástroj, olovnice",
+      "lemma": "מִשְׁקֶלֶת",
+      "hebrew": "משקלת",
+      "xlit": "mishqeleth",
+      "translated": true
+    },
+    "H4950": {
+      "definitions_cz": "1) co je vyřízeno nebo vyjasněno, jasné",
+      "lemma": "מִשְׁקָע",
+      "hebrew": "משקע",
+      "xlit": "mishqâʻ",
+      "translated": true
+    },
+    "H4951": {
+      "definitions_cz": "1) vláda, panství, vláda",
+      "lemma": "מִשְׂרָה",
+      "hebrew": "משרה",
+      "xlit": "misrâh",
+      "translated": true
+    },
+    "H4952": {
+      "definitions_cz": "1) šťáva",
+      "lemma": "מִשְׁרָה",
+      "hebrew": "משרה",
+      "xlit": "mishrâh",
+      "translated": true
+    },
+    "H4953": {
+      "definitions_cz": "1) potrubí",
+      "lemma": "מַשְׁרוֹקִי",
+      "hebrew": "משרוקי",
+      "xlit": "mashrôwqîy",
+      "translated": true
+    },
+    "H4954": {
+      "definitions_cz": "Mishraites = \"dotýkat se zla\" | 1) 4. ze 4 rodin Kirjath-jearim",
+      "lemma": "מִשְׁרָעִי",
+      "hebrew": "משרעי",
+      "xlit": "Mishrâʻîy",
+      "translated": true
+    },
+    "H4955": {
+      "definitions_cz": "1) pálení",
+      "lemma": "מִשְׂרָפָה",
+      "hebrew": "משרפה",
+      "xlit": "misrâphâh",
+      "translated": true
+    },
+    "H4956": {
+      "definitions_cz": "Misrephoth-maim = \"spáleniny vody\" | 1) místo v severní Palestině poblíž Sidonu",
+      "lemma": "מִשְׂרְפוֹת מַיִם",
+      "hebrew": "משרפות מים",
+      "xlit": "Misrᵉphôwth mayim",
+      "translated": true
+    },
+    "H4957": {
+      "definitions_cz": "Masrekah = \"vinice ušlechtilé vinné révy\" | 1) starověké místo, rodné místo Samlaha, jednoho ze starých králů Edomitů",
+      "lemma": "מַשְׂרֵקָה",
+      "hebrew": "משרקה",
+      "xlit": "Masrêqâh",
+      "translated": true
+    },
+    "H4958": {
+      "definitions_cz": "1) pánev, miska",
+      "lemma": "מַשְׂרֵת",
+      "hebrew": "משרת",
+      "xlit": "masrêth",
+      "translated": true
+    },
+    "H4959": {
+      "definitions_cz": "1) cítit, tápat | 1a) (Qal) cítit, tápat | 1b) (Piel) cítit se nad nebo skrz, tápat | 1b1) procítit | 1b2) tápat | 1c)(Hiphil) cítit",
+      "lemma": "מָשַׁשׁ",
+      "hebrew": "משש",
+      "xlit": "mâshash",
+      "translated": true
+    },
+    "H4960": {
+      "definitions_cz": "1) hostina, pití, hostina | 1a) hostina, hostina | 1b) pít",
+      "lemma": "מִשְׁתֶּה",
+      "hebrew": "משתה",
+      "xlit": "mishteh",
+      "translated": true
+    },
+    "H4961": {
+      "definitions_cz": "1) hostina, hostina",
+      "lemma": "מִשְׁתֶּה",
+      "hebrew": "משתה",
+      "xlit": "mishteh",
+      "translated": true
+    },
+    "H4962": {
+      "definitions_cz": "1) muž, muž | 1a) muži, muži | 1b) málo mužů (v próze) | 1b1) menší důraz na sex | 1c) muži (poetické) | 1c1) menší důraz na sex",
+      "lemma": "מַת",
+      "hebrew": "מת",
+      "xlit": "math",
+      "translated": true
+    },
+    "H4963": {
+      "definitions_cz": "1) hromada slámy",
+      "lemma": "מַתְבֵּן",
+      "hebrew": "מתבן",
+      "xlit": "mathbên",
+      "translated": true
+    },
+    "H4964": {
+      "definitions_cz": "1) uzdečka | 1a) uzda (pro zvířata) | 1b) kontrola, pravomoc (obr.)",
+      "lemma": "מֶתֶג",
+      "hebrew": "מתג",
+      "xlit": "metheg",
+      "translated": true
+    },
+    "H4965": {
+      "definitions_cz": "1) mateřské město | 1a) uzdu mateřského města (tj. kontrola nebo autorita)",
+      "lemma": "מֶתֶג הָאַמָּה",
+      "hebrew": "מתג האמה",
+      "xlit": "Metheg hâ-ʼAmmâh",
+      "translated": true
+    },
+    "H4966": {
+      "definitions_cz": "adj | 1) sladké | n m | 2) sladkost, příjemná (věc)",
+      "lemma": "מָתוֹק",
+      "hebrew": "מתוק",
+      "xlit": "mâthôwq",
+      "translated": true
+    },
+    "H4967": {
+      "definitions_cz": "Methusael = \"kdo je z Boha\" | 1) syn Mehujaelův, 4. původem od Kaina, a otec Lámechův",
+      "lemma": "מְתוּשָׁאֵל",
+      "hebrew": "מתושאל",
+      "xlit": "Mᵉthûwshâʼêl",
+      "translated": true
+    },
+    "H4968": {
+      "definitions_cz": "Metuzalém = \"muž šipky\" | 1) syn Enochův, 6. původem ze Seta, a otec Lámechův",
+      "lemma": "מְתוּשֶׁלַח",
+      "hebrew": "מתושלח",
+      "xlit": "Mᵉthûwshelach",
+      "translated": true
+    },
+    "H4969": {
+      "definitions_cz": "1) (Qal) rozprostřít",
+      "lemma": "מָתַח",
+      "hebrew": "מתח",
+      "xlit": "mâthach",
+      "translated": true
+    },
+    "H4970": {
+      "definitions_cz": "1) kdy? | 1a) s přípravou | 1a1) proti kdy?, do kdy?, jak dlouho?, po jak dlouho?",
+      "lemma": "מָתַי",
+      "hebrew": "מתי",
+      "xlit": "mâthay",
+      "translated": true
+    },
+    "H4971": {
+      "definitions_cz": "1) měření, proporce, příběh | 1a) příběh, sčítání (cihel) | 1b) měření, podíl",
+      "lemma": "מַתְכֹנֶת",
+      "hebrew": "מתכנת",
+      "xlit": "mathkôneth",
+      "translated": true
     }
   }
 }
