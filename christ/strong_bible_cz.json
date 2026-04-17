@@ -60091,6 +60091,356 @@
       "hebrew": "מרגוע",
       "xlit": "margôwaʻ",
       "translated": true
+    },
+    "H4772": {
+      "definitions_cz": "1) místo chodidel, chodidla",
+      "lemma": "מַרְגְלָה",
+      "hebrew": "מרגלה",
+      "xlit": "margᵉlâh",
+      "translated": true
+    },
+    "H4773": {
+      "definitions_cz": "1) závěs | 2) (CLBL) hromada kamení",
+      "lemma": "מַרְגֵּמָה",
+      "hebrew": "מרגמה",
+      "xlit": "margêmâh",
+      "translated": true
+    },
+    "H4774": {
+      "definitions_cz": "1) odpočinek, odpočinek, místo k odpočinku",
+      "lemma": "מַרְגֵּעָה",
+      "hebrew": "מרגעה",
+      "xlit": "margêʻâh",
+      "translated": true
+    },
+    "H4775": {
+      "definitions_cz": "1) bouřit se, bouřit se, být vzpurný | 1a) (Qal) vzbouřit se, bouřit | 1a1) proti lidskému králi | 1a2) proti Bohu | 1a3) proti světlu (poetické)",
+      "lemma": "מָרַד",
+      "hebrew": "מרד",
+      "xlit": "mârad",
+      "translated": true
+    },
+    "H4776": {
+      "definitions_cz": "1) povstání",
+      "lemma": "מְרַד",
+      "hebrew": "מרד",
+      "xlit": "mᵉrad",
+      "translated": true
+    },
+    "H4777": {
+      "definitions_cz": "1) vzpoura, vzpoura | 1a) proti Jehovovi",
+      "lemma": "מֶרֶד",
+      "hebrew": "מרד",
+      "xlit": "mered",
+      "translated": true
+    },
+    "H4778": {
+      "definitions_cz": "Mered = \"vzpoura\" | 1) syn Ezdráš a potomek Juda",
+      "lemma": "מֶרֶד",
+      "hebrew": "מרד",
+      "xlit": "Mered",
+      "translated": true
+    },
+    "H4779": {
+      "definitions_cz": "1) vzpurný",
+      "lemma": "מָרָד",
+      "hebrew": "מרד",
+      "xlit": "mârâd",
+      "translated": true
+    },
+    "H4780": {
+      "definitions_cz": "1) vzpoura, vzpurnost",
+      "lemma": "מַרְדּוּת",
+      "hebrew": "מרדות",
+      "xlit": "mardûwth",
+      "translated": true
+    },
+    "H4781": {
+      "definitions_cz": "Merodach = \"tvá vzpoura\" | 1) hlavní božstvo Babyloňanů v době Nabuchodonozora",
+      "lemma": "מְרֹדָךְ",
+      "hebrew": "מרדך",
+      "xlit": "Mᵉrôdâk",
+      "translated": true
+    },
+    "H4782": {
+      "definitions_cz": "Mordecai = \"malý muž\" nebo \"ctitel Marsu\" | 1) bratranec a adoptivní otec královny Esther; syn Jaira z kmene Benjamína; vysvoboditel pod Boží prozřetelností synů Izraele ze zničení, které naplánoval Haman, hlavní ministr Ahasvera; zakladatel svátku Purim | 2) Žid, který se vrátil z exilu se Zerubábelem",
+      "lemma": "מׇרְדְּכַי",
+      "hebrew": "מרדכי",
+      "xlit": "Mordᵉkay",
+      "translated": true
+    },
+    "H4783": {
+      "definitions_cz": "1) pronásledování",
+      "lemma": "מֻרְדָּף",
+      "hebrew": "מרדף",
+      "xlit": "murdâph",
+      "translated": true
+    },
+    "H4784": {
+      "definitions_cz": "1) být svárlivý, být vzpurný, být vzdorovitý, být neposlušný vůči, být vzpurný vůči | 1a) (Qal) být neposlušný, být vzpurný | 1a1) vůči otci | 1a2) k Bohu | 1b) (Hifil) projevit vzpurnost, projevit neposlušnost, neuposlechnout",
+      "lemma": "מָרָה",
+      "hebrew": "מרה",
+      "xlit": "mârâh",
+      "translated": true
+    },
+    "H4785": {
+      "definitions_cz": "Marah = \"hořký\" | 1) pramen s hořkou vodou, který byl 3 dny cesty od místa přechodu Rudého moře na poloostrově Sinaj",
+      "lemma": "מָרָה",
+      "hebrew": "מרה",
+      "xlit": "Mârâh",
+      "translated": true
+    },
+    "H4786": {
+      "definitions_cz": "1) hořkost, smutek",
+      "lemma": "מֹרָה",
+      "hebrew": "מרה",
+      "xlit": "môrâh",
+      "translated": true
+    },
+    "H4787": {
+      "definitions_cz": "1) hořkost",
+      "lemma": "מׇרָּה",
+      "hebrew": "מרה",
+      "xlit": "morrâh",
+      "translated": true
+    },
+    "H4788": {
+      "definitions_cz": "1) neklid, bloudění, tulák, uprchlík",
+      "lemma": "מָרוּד",
+      "hebrew": "מרוד",
+      "xlit": "mârûwd",
+      "translated": true
+    },
+    "H4789": {
+      "definitions_cz": "Meroz = \"útočiště\" | 1) místo v severní Palestině; místo neznámé",
+      "lemma": "מֵרוֹז",
+      "hebrew": "מרוז",
+      "xlit": "Mêrôwz",
+      "translated": true
+    },
+    "H4790": {
+      "definitions_cz": "1) pohmožděný, rozdrcený, odřený | 1a) znamená pochybný",
+      "lemma": "מְרוֹחַ",
+      "hebrew": "מרוח",
+      "xlit": "mᵉrôwach",
+      "translated": true
+    },
+    "H4791": {
+      "definitions_cz": "1) výška | 1a) výška, nadmořská výška, vyvýšené místo | 1a1) na vysokém místě (adv) | 1b) výška | 1c) hrdě (adv) | 1d) šlechticů (obr.)",
+      "lemma": "מָרוֹם",
+      "hebrew": "מרום",
+      "xlit": "mârôwm",
+      "translated": true
+    },
+    "H4792": {
+      "definitions_cz": "Merom = \"vysoké místo\" | 1) jezero v severním Kanaánu, u kterého Joshua porazil severní konfederaci v čele s Jabinem | 1a) místo nejisté; pravděpodobně jezero vytvořené řekou Jordán asi 10 mil (16 km) severně od Galilejského jezera",
+      "lemma": "מֵרוֹם",
+      "hebrew": "מרום",
+      "xlit": "Mêrôwm",
+      "translated": true
+    },
+    "H4793": {
+      "definitions_cz": "1) běh, závod, kurz",
+      "lemma": "מֵרוֹץ",
+      "hebrew": "מרוץ",
+      "xlit": "mêrôwts",
+      "translated": true
+    },
+    "H4794": {
+      "definitions_cz": "1) běh, běh (života) | 1a) běh, režim nebo styl běhu | 1b) běh (života)",
+      "lemma": "מְרוּצָה",
+      "hebrew": "מרוצה",
+      "xlit": "mᵉrûwtsâh",
+      "translated": true
+    },
+    "H4795": {
+      "definitions_cz": "1) škrábání, tření | 1a) roku přípravy dívek do harému; tělesné oděrky",
+      "lemma": "מָרוּק",
+      "hebrew": "מרוק",
+      "xlit": "mârûwq",
+      "translated": true
+    },
+    "H4796": {
+      "definitions_cz": "Maroth = \"hořkost\" | 1) jedno z měst v judské nížině",
+      "lemma": "מָרוֹת",
+      "hebrew": "מרות",
+      "xlit": "Mârôwth",
+      "translated": true
+    },
+    "H4797": {
+      "definitions_cz": "1) pláč, pláč radosti, radovánky | 1a) smuteční pláč | 1a1) snad, hodový pláč | 1b) výkřik hýření",
+      "lemma": "מִרְזַח",
+      "hebrew": "מרזח",
+      "xlit": "mirzach",
+      "translated": true
+    },
+    "H4798": {
+      "definitions_cz": "1) pláč, pláč radosti, radovánky | 1a) smuteční pláč | 1a1) snad, hodový pláč | 1b) výkřik hýření",
+      "lemma": "מַרְזֵחַ",
+      "hebrew": "מרזח",
+      "xlit": "marzêach",
+      "translated": true
+    },
+    "H4799": {
+      "definitions_cz": "1) (Qal) třít",
+      "lemma": "מָרַח",
+      "hebrew": "מרח",
+      "xlit": "mârach",
+      "translated": true
+    },
+    "H4800": {
+      "definitions_cz": "1) široké nebo prostorné místo, široké, rozlohy",
+      "lemma": "מֶרְחָב",
+      "hebrew": "מרחב",
+      "xlit": "merchâb",
+      "translated": true
+    },
+    "H4801": {
+      "definitions_cz": "1) vzdálené místo, vzdálenost, vzdálená země",
+      "lemma": "מֶרְחָק",
+      "hebrew": "מרחק",
+      "xlit": "merchâq",
+      "translated": true
+    },
+    "H4802": {
+      "definitions_cz": "1) rendlík, dušená pánev",
+      "lemma": "מַרְחֶשֶׁת",
+      "hebrew": "מרחשת",
+      "xlit": "marchesheth",
+      "translated": true
+    },
+    "H4803": {
+      "definitions_cz": "1) holé, leštěné, hladké nebo plešaté nebo holé | 1a) (Qal) | 1a1) učinit holé | 1a2) drhnout, leštit | 1b) (Niphal) být plešatý",
+      "lemma": "מָרַט",
+      "hebrew": "מרט",
+      "xlit": "mâraṭ",
+      "translated": true
+    },
+    "H4804": {
+      "definitions_cz": "1) vytrhnout, strhnout | 1a) (P'il) k utržení",
+      "lemma": "מְרַט",
+      "hebrew": "מרט",
+      "xlit": "mᵉraṭ",
+      "translated": true
+    },
+    "H4805": {
+      "definitions_cz": "1) povstání | 1a) vzpoura | 1b) vzpurný (v konstrukci)",
+      "lemma": "מְרִי",
+      "hebrew": "מרי",
+      "xlit": "mᵉrîy",
+      "translated": true
+    },
+    "H4806": {
+      "definitions_cz": "1) dobře živený, vykrmený",
+      "lemma": "מְרִיא",
+      "hebrew": "מריא",
+      "xlit": "mᵉrîyʼ",
+      "translated": true
+    },
+    "H4807": {
+      "definitions_cz": "Merib-baal = \"Baal je můj obhájce\" | 1) jiné jméno pro Mefibošeta | 1a) syn Jonathanův a vnuk Saulova",
+      "lemma": "מְרִיב בַּעַל",
+      "hebrew": "מריב בעל",
+      "xlit": "Mᵉrîyb Baʻal",
+      "translated": true
+    },
+    "H4808": {
+      "definitions_cz": "1) sváry, sváry",
+      "lemma": "מְרִיבָה",
+      "hebrew": "מריבה",
+      "xlit": "mᵉrîybâh",
+      "translated": true
+    },
+    "H4809": {
+      "definitions_cz": "Meribah = \"svár\" nebo \"spor\" | 1) fontána v Rephidim, v poušti Sin; nazývá se tak, protože Izraelci reptali proti Bohu | 2) název vodovodu v Kadeši na jižní hranici země zaslíbené; lid zde také reptal proti Bohu",
+      "lemma": "מְרִיבָה",
+      "hebrew": "מריבה",
+      "xlit": "Mᵉrîybâh",
+      "translated": true
+    },
+    "H4810": {
+      "definitions_cz": "Merib-baal = \"Baal je můj obhájce\" | 1) jiné jméno pro Mefibošeta | 1a) syn Jonathanův a vnuk Saulova",
+      "lemma": "מְרִי בַעַל",
+      "hebrew": "מרי בעל",
+      "xlit": "Mᵉrîy Baʻal",
+      "translated": true
+    },
+    "H4811": {
+      "definitions_cz": "Meraiah = \"vzpoura\" | 1) kněz po vyhnanství ve dnech Joakima",
+      "lemma": "מְרָיָה",
+      "hebrew": "מריה",
+      "xlit": "Mᵉrâyâh",
+      "translated": true
+    },
+    "H4812": {
+      "definitions_cz": "Meraioth = \"vzpurný\" | 1) děd Ahituba, potomka Eleazara, syna Áronova, a hlava kněžského domu | 2) syn Ahituba, otce Sádoka, potomka Eleazara, syna Áronova, a hlava kněžského domu | 3) hlava rodiny kněží, kterou zastupoval Helkai v době Joakima, syna Jeshua",
+      "lemma": "מְרָיוֹת",
+      "hebrew": "מריות",
+      "xlit": "Mᵉrâyôwth",
+      "translated": true
+    },
+    "H4813": {
+      "definitions_cz": "Miriam = \"vzpoura\" | 1) starší sestra Mojžíše a Árona | 2) žena z Judska",
+      "lemma": "מִרְיָם",
+      "hebrew": "מרים",
+      "xlit": "Miryâm",
+      "translated": true
+    },
+    "H4814": {
+      "definitions_cz": "1) hořkost",
+      "lemma": "מְרִירוּת",
+      "hebrew": "מרירות",
+      "xlit": "mᵉrîyrûwth",
+      "translated": true
+    },
+    "H4815": {
+      "definitions_cz": "1) hořký",
+      "lemma": "מְרִירִי",
+      "hebrew": "מרירי",
+      "xlit": "mᵉrîyrîy",
+      "translated": true
+    },
+    "H4816": {
+      "definitions_cz": "1) slabost",
+      "lemma": "מֹרֶךְ",
+      "hebrew": "מרך",
+      "xlit": "môrek",
+      "translated": true
+    },
+    "H4817": {
+      "definitions_cz": "1) vůz, místo k jízdě, jezdecká sedačka | 1a) kočár | 1b) sedlo (z vrhu), sedlo",
+      "lemma": "מֶרְכָּב",
+      "hebrew": "מרכב",
+      "xlit": "merkâb",
+      "translated": true
+    },
+    "H4818": {
+      "definitions_cz": "1) kočár",
+      "lemma": "מֶרְכָּבָה",
+      "hebrew": "מרכבה",
+      "xlit": "merkâbâh",
+      "translated": true
+    },
+    "H4819": {
+      "definitions_cz": "1) tržiště, místo obchodu",
+      "lemma": "מַרְכֹּלֶת",
+      "hebrew": "מרכלת",
+      "xlit": "markôleth",
+      "translated": true
+    },
+    "H4820": {
+      "definitions_cz": "1) podvod, zrada",
+      "lemma": "מִרְמָה",
+      "hebrew": "מרמה",
+      "xlit": "mirmâh",
+      "translated": true
+    },
+    "H4821": {
+      "definitions_cz": "Mirma = \"podvod\" | 1) Benjamínec narozený v zemi Moab",
+      "lemma": "מִרְמָה",
+      "hebrew": "מרמה",
+      "xlit": "Mirmâh",
+      "translated": true
     }
   }
 }
