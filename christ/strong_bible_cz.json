@@ -74812,6 +74812,706 @@
       "hebrew": "צרי",
       "xlit": "Tsᵉrîy",
       "translated": true
+    },
+    "H6875": {
+      "definitions_cz": "1) druh balzámu, balzámu, masti | 1a) jako zboží | 1b) jako lék",
+      "lemma": "צְרִי",
+      "hebrew": "צרי",
+      "xlit": "tsᵉrîy",
+      "translated": true
+    },
+    "H6876": {
+      "definitions_cz": "Tyrian = viz Pneumatika \"do tísně\" | 1) obyvatel Tyru",
+      "lemma": "צֹרִי",
+      "hebrew": "צרי",
+      "xlit": "Tsôrîy",
+      "translated": true
+    },
+    "H6877": {
+      "definitions_cz": "1) výkop, podzemní komora, sklep, podzemní místnost | 1a) znamená nejistý",
+      "lemma": "צְרִיחַ",
+      "hebrew": "צריח",
+      "xlit": "tsᵉrîyach",
+      "translated": true
+    },
+    "H6878": {
+      "definitions_cz": "1) potřeba",
+      "lemma": "צֹרֶךְ",
+      "hebrew": "צרך",
+      "xlit": "tsôrek",
+      "translated": true
+    },
+    "H6879": {
+      "definitions_cz": "1) mít nemocnou kůži, být malomocný | 1a) (Qal) být malomocným | 1b) (Pual) mít malomocenství",
+      "lemma": "צָרַע",
+      "hebrew": "צרע",
+      "xlit": "tsâraʻ",
+      "translated": true
+    },
+    "H6880": {
+      "definitions_cz": "1) sršni",
+      "lemma": "צִרְעָה",
+      "hebrew": "צרעה",
+      "xlit": "tsirʻâh",
+      "translated": true
+    },
+    "H6881": {
+      "definitions_cz": "Zareah nebo Zoreah nebo Zorah = \"sršeň\" | 1) město v Danu, sídlo Manoah a domovské město Samsona",
+      "lemma": "צׇרְעָה",
+      "hebrew": "צרעה",
+      "xlit": "Tsorʻâh",
+      "translated": true
+    },
+    "H6882": {
+      "definitions_cz": "Zorité nebo Zoratité = viz Zorah \"sršeň\" | 1) obyvatelé Zorah",
+      "lemma": "צׇרְעִי",
+      "hebrew": "צרעי",
+      "xlit": "Tsorʻîy",
+      "translated": true
+    },
+    "H6883": {
+      "definitions_cz": "1) malomocenství | 1a) u lidí, maligní kožní onemocnění (Le 13:1-14:57) | 1b) v oděvu, plíseň nebo plíseň (3Mo 13:47–52) | 1c) v budovách plíseň nebo plíseň (3Mo 14:34–53)",
+      "lemma": "צָרַעַת",
+      "hebrew": "צרעת",
+      "xlit": "tsâraʻath",
+      "translated": true
+    },
+    "H6884": {
+      "definitions_cz": "1) tavit, rafinovat, testovat | 1a) (Qal) | 1a1) tavit, rafinovat | 1a2) vyzkoušet | 1a3) otestovat (a prokázat pravdivost) | 1a4) tavič, rafinér, zlatník (příčestí) | 1b) (Niphal) k rafinaci | 1c) (Piel) být rafinérem | 1c1) rafinér (příčestí)",
+      "lemma": "צָרַף",
+      "hebrew": "צרף",
+      "xlit": "tsâraph",
+      "translated": true
+    },
+    "H6885": {
+      "definitions_cz": "1) zlatníci",
+      "lemma": "צֹרְפִי",
+      "hebrew": "צרפי",
+      "xlit": "Tsôrᵉphîy",
+      "translated": true
+    },
+    "H6886": {
+      "definitions_cz": "Zarephath = \"rafinérie\" | 1) město na pobřeží jižně od Sidonu a sídlo Eliáše během poslední části sucha; moderní 'Sura-fend'",
+      "lemma": "צָרְפַת",
+      "hebrew": "צרפת",
+      "xlit": "Tsârᵉphath",
+      "translated": true
+    },
+    "H6887": {
+      "definitions_cz": "1) svázat, být úzký, být v tísni, zužovat, působit tíseň, obléhat, být sužován, být svázán | 1a) (Qal) | 1a1) svázat, svázat, zavřít | 1a2) být skrovný, stísněný, být v úžině | 1b) (Pual) být svázán, být svázán | 1c) (Hiphil) | 1c1) zužovat pro, způsobit úzkost, silně tlačit na | 1c2) trpět nouzi | 2) ukázat nepřátelství vůči, vex | 1a) (Qal) | 1a1) projevovat nepřátelství vůči, zacházet s nepřátelstvím, obtěžovat, obtěžovat | 1a2) vexer, obtěžovatel (příčestí)",
+      "lemma": "צָרַר",
+      "hebrew": "צרר",
+      "xlit": "tsârar",
+      "translated": true
+    },
+    "H6888": {
+      "definitions_cz": "Zererath = \"útlak\" | 1) město nebo území v Manasse a domov Jeroboáma | 1a) stejně jako H06868",
+      "lemma": "צְרֵרָה",
+      "hebrew": "צררה",
+      "xlit": "Tsᵉrêrâh",
+      "translated": true
+    },
+    "H6889": {
+      "definitions_cz": "Zereth = \"nádhera\" | 1) syn Ashura, zakladatele Tekoy, od jeho ženy Hely",
+      "lemma": "צֶרֶת",
+      "hebrew": "צרת",
+      "xlit": "Tsereth",
+      "translated": true
+    },
+    "H6890": {
+      "definitions_cz": "Zareth-shahar = \"nádhera úsvitu\" | 1) město v Rubenu",
+      "lemma": "צֶרֶת הַשַּׁחַר",
+      "hebrew": "צרת השחר",
+      "xlit": "Tsereth hash-Shachar",
+      "translated": true
+    },
+    "H6891": {
+      "definitions_cz": "Zarthan nebo Zaretan = \"jejich tíseň\" | 1) místo v údolí Jordánu, kde se řeka rozdělila, aby Izrael přešel k dobytí Kanaánu | 1a) místo neznámé",
+      "lemma": "צָרְתָן",
+      "hebrew": "צרתן",
+      "xlit": "Tsârᵉthân",
+      "translated": true
+    },
+    "H6892": {
+      "definitions_cz": "1) zvracet, co je vyzvraceno",
+      "lemma": "קֵא",
+      "hebrew": "קא",
+      "xlit": "qêʼ",
+      "translated": true
+    },
+    "H6893": {
+      "definitions_cz": "1) obřadně nečistý pták | 1a) snad pelikán nebo kormorán | 1b) možná vyhynulý pták, přesný význam neznámý",
+      "lemma": "קָאַת",
+      "hebrew": "קאת",
+      "xlit": "qâʼath",
+      "translated": true
+    },
+    "H6894": {
+      "definitions_cz": "1) suchá měřící kabina, kabina | 1a) asi 1,5 litru, 1/6 moře nebo 1/18 efa",
+      "lemma": "קַב",
+      "hebrew": "קב",
+      "xlit": "qab",
+      "translated": true
+    },
+    "H6895": {
+      "definitions_cz": "1) proklít, pronést kletbu proti | 1a) (Qal) proklínat",
+      "lemma": "קָבַב",
+      "hebrew": "קבב",
+      "xlit": "qâbab",
+      "translated": true
+    },
+    "H6896": {
+      "definitions_cz": "1) žaludek, břicho, chřtán | 1a) žaludek (obětované oběti) | 1b) břicho (ženy)",
+      "lemma": "קֵבָה",
+      "hebrew": "קבה",
+      "xlit": "qêbâh",
+      "translated": true
+    },
+    "H6897": {
+      "definitions_cz": "1) žaludek, břicho, chřtán | 1a) žaludek (obětované oběti) | 1b) břicho (ženy)",
+      "lemma": "קֹבָה",
+      "hebrew": "קבה",
+      "xlit": "qôbâh",
+      "translated": true
+    },
+    "H6898": {
+      "definitions_cz": "1) velký klenutý stan, stan",
+      "lemma": "קֻבָּה",
+      "hebrew": "קבה",
+      "xlit": "qubbâh",
+      "translated": true
+    },
+    "H6899": {
+      "definitions_cz": "1) shromáždění, shromáždění, shromáždění | 2) (BDB) halda",
+      "lemma": "קִבּוּץ",
+      "hebrew": "קבוץ",
+      "xlit": "qibbûwts",
+      "translated": true
+    },
+    "H6900": {
+      "definitions_cz": "1) hrob, pohřebiště, pohřebiště | 1a) hrob | 1b) pohřeb",
+      "lemma": "קְבוּרָה",
+      "hebrew": "קבורה",
+      "xlit": "qᵉbûwrâh",
+      "translated": true
+    },
+    "H6901": {
+      "definitions_cz": "1) brát, přijímat, být před | 1a) (Piel) | 1a1) brát, vybírat, přijímat | 1a2) přijmout | 1a3) přijmout, předpokládat | 1b) (hifil) | 1b1) ukázat protiklad | 1b2) odpovídat, přijímat jeden druhému",
+      "lemma": "קָבַל",
+      "hebrew": "קבל",
+      "xlit": "qâbal",
+      "translated": true
+    },
+    "H6902": {
+      "definitions_cz": "1) (Pael) přijímat",
+      "lemma": "קְבַל",
+      "hebrew": "קבל",
+      "xlit": "qᵉbal",
+      "translated": true
+    },
+    "H6903": {
+      "definitions_cz": "subst | 1) přední | příprava | 2) před, před, kvůli, s ohledem na, z důvodu, kvůli tomu, proto | conj | 3) protože to, pokud, ačkoli, podle jako, před | adv | 4) tedy podle toho",
+      "lemma": "קְבֵל",
+      "hebrew": "קבל",
+      "xlit": "qᵉbêl",
+      "translated": true
+    },
+    "H6904": {
+      "definitions_cz": "1) něco vepředu, útočící motor, něco před | 1a) před | 1b) obléhací stroj, beranidlo",
+      "lemma": "קֹבֶל",
+      "hebrew": "קבל",
+      "xlit": "qôbel",
+      "translated": true
+    },
+    "H6905": {
+      "definitions_cz": "n m | 1) něco vepředu, útočící motor, něco před | 1a) před | 1b) obléhací stroj, beranidlo | adv | 1) (CLBL) dříve",
+      "lemma": "קָבָל",
+      "hebrew": "קבל",
+      "xlit": "qâbâl",
+      "translated": true
+    },
+    "H6906": {
+      "definitions_cz": "1) (Qal) okrást | 1a) znamená pochybný",
+      "lemma": "קָבַע",
+      "hebrew": "קבע",
+      "xlit": "qâbaʻ",
+      "translated": true
+    },
+    "H6907": {
+      "definitions_cz": "1) pohár",
+      "lemma": "קֻבַּעַת",
+      "hebrew": "קבעת",
+      "xlit": "qubbaʻath",
+      "translated": true
+    },
+    "H6908": {
+      "definitions_cz": "1) shromáždit, shromáždit | 1a) (Qal) sbírat, sbírat, shromažďovat | 1b) (Niphal) | 1b1) sestavit, shromáždit | 1b2) ke sběru | 1c) (Piel) shromáždit, shromáždit, odnést | 1d) (Pual) ke shromáždění | 1e) (Hithpael) shromáždit se, shromáždit se",
+      "lemma": "קָבַץ",
+      "hebrew": "קבץ",
+      "xlit": "qâbats",
+      "translated": true
+    },
+    "H6909": {
+      "definitions_cz": "Kabzeel = \"Bůh se shromažďuje\" | 1) nejvzdálenější město Judska; nachází se v jižním Judsku na hranici Edomu",
+      "lemma": "קַבְצְאֵל",
+      "hebrew": "קבצאל",
+      "xlit": "Qabtsᵉʼêl",
+      "translated": true
+    },
+    "H6910": {
+      "definitions_cz": "1) shromáždění, shromáždění",
+      "lemma": "קְבֻצָה",
+      "hebrew": "קבצה",
+      "xlit": "qᵉbutsâh",
+      "translated": true
+    },
+    "H6911": {
+      "definitions_cz": "Kibzaim = \"dvě shromáždění\" | 1) kehatitské levitské město v Efraim na hoře Efraim",
+      "lemma": "קִבְצַיִם",
+      "hebrew": "קבצים",
+      "xlit": "Qibtsayim",
+      "translated": true
+    },
+    "H6912": {
+      "definitions_cz": "1) pohřbít | 1a) (Qal) pohřbít | 1b) (Niphal) k pohřbu | 1c) (Piel) pohřbít, pohřbít (ve hromadách) | 1d) (Pual) být pohřben",
+      "lemma": "קָבַר",
+      "hebrew": "קבר",
+      "xlit": "qâbar",
+      "translated": true
+    },
+    "H6913": {
+      "definitions_cz": "1) hrob, hrob, hrob",
+      "lemma": "קֶבֶר",
+      "hebrew": "קבר",
+      "xlit": "qeber",
+      "translated": true
+    },
+    "H6914": {
+      "definitions_cz": "Kibroth-hattaavah = „hroby chtíče“ | 1) stanice Izraele v poušti 3 kempy od Sinaje poblíž zálivu Akabah",
+      "lemma": "קִבְרוֹת הַתַּאֲוָה",
+      "hebrew": "קברות התאוה",
+      "xlit": "Qibrôwth hat-Taʼă-vâh",
+      "translated": true
+    },
+    "H6915": {
+      "definitions_cz": "1) (Qal) poklonit se",
+      "lemma": "קָדַד",
+      "hebrew": "קדד",
+      "xlit": "qâdad",
+      "translated": true
+    },
+    "H6916": {
+      "definitions_cz": "1) koření-cassia",
+      "lemma": "קִדָּה",
+      "hebrew": "קדה",
+      "xlit": "qiddâh",
+      "translated": true
+    },
+    "H6917": {
+      "definitions_cz": "1) starověk, starověký, nápor | 1a) znamená pochybný",
+      "lemma": "קָדוּם",
+      "hebrew": "קדום",
+      "xlit": "qâdûwm",
+      "translated": true
+    },
+    "H6918": {
+      "definitions_cz": "1) posvátný, svatý, Svatý, svatý, oddělený",
+      "lemma": "קָדוֹשׁ",
+      "hebrew": "קדוש",
+      "xlit": "qâdôwsh",
+      "translated": true
+    },
+    "H6919": {
+      "definitions_cz": "1) zapálit, zapálit | 1a) (Qal) | 1a1) zapálit | 1a2) zapálit",
+      "lemma": "קָדַח",
+      "hebrew": "קדח",
+      "xlit": "qâdach",
+      "translated": true
+    },
+    "H6920": {
+      "definitions_cz": "1) horečka",
+      "lemma": "קַדַּחַת",
+      "hebrew": "קדחת",
+      "xlit": "qaddachath",
+      "translated": true
+    },
+    "H6921": {
+      "definitions_cz": "1) východní, východní vítr | 1a) východně (od směru) | 1b) východní vítr",
+      "lemma": "קָדִים",
+      "hebrew": "קדים",
+      "xlit": "qâdîym",
+      "translated": true
+    },
+    "H6922": {
+      "definitions_cz": "1) svatý, oddělený | 2) (TWOT) andělé, svatí",
+      "lemma": "קַדִּישׁ",
+      "hebrew": "קדיש",
+      "xlit": "qaddîysh",
+      "translated": true
+    },
+    "H6923": {
+      "definitions_cz": "1) setkat se, přijít nebo být vepředu, konfrontovat se, jít před | 1a) (Piel) | 1a1) setkat se, konfrontovat se, přijít se setkat, přijmout | 1a2) jít před, jít vpředu, být vpředu | 1a3) vést, být předem, předvídat, předcházet | 1b) (hifil) | 1b1) dostat se dopředu | 1b2) čelit, předvídat",
+      "lemma": "קָדַם",
+      "hebrew": "קדם",
+      "xlit": "qâdam",
+      "translated": true
+    },
+    "H6924": {
+      "definitions_cz": "n m | 1) východ, starověk, přední, to, co bylo dříve, dříve | 1a) vpředu, zepředu nebo z východu, vpředu, hora z východu | 1b) dávný čas, pradávný, dávný, od pradávna, nejstarší čas | 1c) starodávně, starého (příslovce) | 1d) začátek | 1e) východ | adv | 2) na východ, na nebo směrem na východ",
+      "lemma": "קֶדֶם",
+      "hebrew": "קדם",
+      "xlit": "qedem",
+      "translated": true
+    },
+    "H6925": {
+      "definitions_cz": "1) před, před | 1a) před | 1b) z dřívějška",
+      "lemma": "קֳדָם",
+      "hebrew": "קדם",
+      "xlit": "qŏdâm",
+      "translated": true
+    },
+    "H6926": {
+      "definitions_cz": "1) vpřed, vpředu, na východě, starověku, na východě | 1a) před, přes proti, zepředu | 1b) na východ od, na východ",
+      "lemma": "קִדְמָה",
+      "hebrew": "קדמה",
+      "xlit": "qidmâh",
+      "translated": true
+    },
+    "H6927": {
+      "definitions_cz": "1) starověk, bývalý stav nebo panství nebo situace, před, původ | 1a) starověk, počátek, vznik | 1b) bývalý stav nebo situace conj | 1c) dříve",
+      "lemma": "קַדְמָה",
+      "hebrew": "קדמה",
+      "xlit": "qadmâh",
+      "translated": true
+    },
+    "H6928": {
+      "definitions_cz": "1) dřívější čas nebo situace, jako dříve",
+      "lemma": "קַדְמָה",
+      "hebrew": "קדמה",
+      "xlit": "qadmâh",
+      "translated": true
+    },
+    "H6929": {
+      "definitions_cz": "Kedemah = \"originál\" | 1) nejmladší syn Izmaelův",
+      "lemma": "קֵדְמָה",
+      "hebrew": "קדמה",
+      "xlit": "Qêdᵉmâh",
+      "translated": true
+    },
+    "H6930": {
+      "definitions_cz": "1) východní",
+      "lemma": "קַדְמוֹן",
+      "hebrew": "קדמון",
+      "xlit": "qadmôwn",
+      "translated": true
+    },
+    "H6931": {
+      "definitions_cz": "1) bývalý, starověký, východní | 1a) bývalý, starověký | 1b) východní",
+      "lemma": "קַדְמוֹנִי",
+      "hebrew": "קדמוני",
+      "xlit": "qadmôwnîy",
+      "translated": true
+    },
+    "H6932": {
+      "definitions_cz": "Kedemoth = \"východní\" | 1) jedno z měst v oblasti na východ od Mrtvého moře přidělené kmeni Ruben a dané merarijským Levitům",
+      "lemma": "קְדֵמוֹת",
+      "hebrew": "קדמות",
+      "xlit": "Qᵉdêmôwth",
+      "translated": true
+    },
+    "H6933": {
+      "definitions_cz": "1) bývalý, první | 1a) první | 1b) bývalý",
+      "lemma": "קַדְמַי",
+      "hebrew": "קדמי",
+      "xlit": "qadmay",
+      "translated": true
+    },
+    "H6934": {
+      "definitions_cz": "Kadmiel = \"Bůh je ten starověký\" | 1) Levita, potomek Hodaviáše a hlava rodiny vracejících se vyhnanců; také dohlížel na práce na chrámu a byl také jedním z vůdců lidu, který vedl lid ve veřejné zpovědi",
+      "lemma": "קַדְמִיאֵל",
+      "hebrew": "קדמיאל",
+      "xlit": "Qadmîyʼêl",
+      "translated": true
+    },
+    "H6935": {
+      "definitions_cz": "Kadmonité = \"východní\" | 1) lid, který obsadil zemi Kanaán, když to Bůh slíbil Abramovi",
+      "lemma": "קַדְמֹנִי",
+      "hebrew": "קדמני",
+      "xlit": "Qadmônîy",
+      "translated": true
+    },
+    "H6936": {
+      "definitions_cz": "1) hlava, temeno hlavy, temeno hlavy, chlupatá temeno, temeno",
+      "lemma": "קׇדְקֹד",
+      "hebrew": "קדקד",
+      "xlit": "qodqôd",
+      "translated": true
+    },
+    "H6937": {
+      "definitions_cz": "1) truchlit, být temný | 1a) (Qal) být tmavý | 1b) (hifil) | 1b1) ztmavit | 1b2) způsobit smutek | 1c) (Hithpael) ztmavnout",
+      "lemma": "קָדַר",
+      "hebrew": "קדר",
+      "xlit": "qâdar",
+      "translated": true
+    },
+    "H6938": {
+      "definitions_cz": "Kedar = \"tmavý\" | n pr m | 1) syn Izmaelův | n pr lidi | 2) potomci Kedara",
+      "lemma": "קֵדָר",
+      "hebrew": "קדר",
+      "xlit": "Qêdâr",
+      "translated": true
+    },
+    "H6939": {
+      "definitions_cz": "Kidron = \"tmavý\" | 1) potok východně od Jeruzaléma",
+      "lemma": "קִדְרוֹן",
+      "hebrew": "קדרון",
+      "xlit": "Qidrôwn",
+      "translated": true
+    },
+    "H6940": {
+      "definitions_cz": "1) tma, šero",
+      "lemma": "קַדְרוּת",
+      "hebrew": "קדרות",
+      "xlit": "qadrûwth",
+      "translated": true
+    },
+    "H6941": {
+      "definitions_cz": "1) smutně",
+      "lemma": "קְדֹרַנִּית",
+      "hebrew": "קדרנית",
+      "xlit": "qᵉdôrannîyth",
+      "translated": true
+    },
+    "H6942": {
+      "definitions_cz": "1) zasvětit, posvětit, připravit, zasvětit, být posvěcen, být svatý, být posvěcen, být oddělen | 1a) (Qal) | 1a1) být oddělen, být posvěcen | 1a2) být posvěcen | 1a3) zasvěcený, tabuizovaný | 1b) (Niphal) | 1b1) ukázat se posvátně nebo majestátně | 1b2) být ctěn, být považován za posvátný | 1b3) být svatý | 1c) (Piel) | 1c1) vyčlenit jako posvátné, zasvětit, zasvětit | 1c2) zachovávat jako svatý, udržovat posvátný | 1c3) ctít jako posvátné, posvátné | 1c4) zasvětit | 1d) (Pual)",
+      "lemma": "קָדַשׁ",
+      "hebrew": "קדש",
+      "xlit": "qâdash",
+      "translated": true
+    },
+    "H6943": {
+      "definitions_cz": "Kedesh = \"svaté místo\" | 1) město na úplném jihu Judska | 1a) stejné jako „Kadesh“ a „Kadesh-barnea“ | 2) město Issachar přidělené geršonským levitům | 3) opevněné kananejské město přidělené Neftalimu | 4) útočiště v Naftali",
+      "lemma": "קֶדֶשׁ",
+      "hebrew": "קדש",
+      "xlit": "Qedesh",
+      "translated": true
+    },
+    "H6944": {
+      "definitions_cz": "1) oddělenost, svatost, posvátnost, oddělenost | 1a) oddělenost, posvátnost, svatost | 1a1) Boží | 1a2) míst | 1a3) věcí | 1b) oddělenost, oddělenost",
+      "lemma": "קֹדֶשׁ",
+      "hebrew": "קדש",
+      "xlit": "qôdesh",
+      "translated": true
+    },
+    "H6945": {
+      "definitions_cz": "1) mužská chrámová prostitutka",
+      "lemma": "קָדֵשׁ",
+      "hebrew": "קדש",
+      "xlit": "qâdêsh",
+      "translated": true
+    },
+    "H6946": {
+      "definitions_cz": "Kadesh = \"svatý\" | 1) město na úplném jihu Judska | 1a) stejné jako „Kedesh“ a „Kadesh-barnea“",
+      "lemma": "קָדֵשׁ",
+      "hebrew": "קדש",
+      "xlit": "Qâdêsh",
+      "translated": true
+    },
+    "H6947": {
+      "definitions_cz": "Kadesh-barnea = \"svatý\" | 1) město na úplném jihu Judska | 1a) stejné jako „Kedesh“ a „Kadesh“",
+      "lemma": "קָדֵשׁ בַּרְנֵעַ",
+      "hebrew": "קדש ברנע",
+      "xlit": "Qâdêsh Barnêaʻ",
+      "translated": true
+    },
+    "H6948": {
+      "definitions_cz": "1) chrámová prostitutka, nevěstka",
+      "lemma": "קְדֵשָׁה",
+      "hebrew": "קדשה",
+      "xlit": "qᵉdêshâh",
+      "translated": true
+    },
+    "H6949": {
+      "definitions_cz": "1) být tupý, být tupý | 1a) (Qal) být tupý, být tupý | 1b) (Piel) být tupý",
+      "lemma": "קָהָה",
+      "hebrew": "קהה",
+      "xlit": "qâhâh",
+      "translated": true
+    },
+    "H6950": {
+      "definitions_cz": "1) sestavit, shromáždit | 1a) (Niphal) sestavit | 1a1) z náboženských důvodů | 1a2) z politických důvodů | 1b) (Hiphil) svolat shromáždění | 1b1) za válku, rozsudek | 1b2) pro náboženské účely",
+      "lemma": "קָהַל",
+      "hebrew": "קהל",
+      "xlit": "qâhal",
+      "translated": true
+    },
+    "H6951": {
+      "definitions_cz": "1) shromáždění, společnost, shromáždění, svolání | 1a) montáž | 1a1) pro zlé rady, válku nebo invazi, náboženské účely | 1b) společnost (vracejících se exulantů) | 1c) sbor | 1c1) jako organizovaný orgán",
+      "lemma": "קָהָל",
+      "hebrew": "קהל",
+      "xlit": "qâhâl",
+      "translated": true
+    },
+    "H6952": {
+      "definitions_cz": "1) shromáždění, shromáždění",
+      "lemma": "קְהִלָּה",
+      "hebrew": "קהלה",
+      "xlit": "qᵉhillâh",
+      "translated": true
+    },
+    "H6953": {
+      "definitions_cz": "1) sběratel (vět), kazatel, řečník, řečník ve shromáždění, Qoheleth",
+      "lemma": "קֹהֶלֶת",
+      "hebrew": "קהלת",
+      "xlit": "qôheleth",
+      "translated": true
+    },
+    "H6954": {
+      "definitions_cz": "Kehelathah = \"montáž\" | 1) stanice Izraelitů během jejich putování pouští",
+      "lemma": "קְהֵלָתָה",
+      "hebrew": "קהלתה",
+      "xlit": "Qᵉhêlâthâh",
+      "translated": true
+    },
+    "H6955": {
+      "definitions_cz": "Kohath = \"shromáždění\" | 1) 2. ze 3 synů Leviho a předek rodiny v kmeni Levi",
+      "lemma": "קְהָת",
+      "hebrew": "קהת",
+      "xlit": "Qᵉhâth",
+      "translated": true
+    },
+    "H6956": {
+      "definitions_cz": "Kohatovci = viz Kohath \"shromáždění\" | 1) potomci Kehata, druhého syna Léviho",
+      "lemma": "קֳהָתִי",
+      "hebrew": "קהתי",
+      "xlit": "Qŏhâthîy",
+      "translated": true
+    },
+    "H6957": {
+      "definitions_cz": "1) šňůra, šňůra, měřící šňůra | 1a) šňůra | 1b) měřicí linka | 2) (BDB) onomatapoetická mimika Izajášových slov, možná nesmyslná",
+      "lemma": "קַו",
+      "hebrew": "קו",
+      "xlit": "qav",
+      "translated": true
+    },
+    "H6958": {
+      "definitions_cz": "1) zvracet, vyplivnout, vyvrhnout | 1a) (Qal) zvracet | 1b) (Hiphil) zvracet | 1b1) země chrlí své obyvatele (obr.) | 1b2) zvracení, degoržování",
+      "lemma": "קוֹא",
+      "hebrew": "קוא",
+      "xlit": "qôwʼ",
+      "translated": true
+    },
+    "H6959": {
+      "definitions_cz": "1) přilba",
+      "lemma": "קוֹבַע",
+      "hebrew": "קובע",
+      "xlit": "qôwbaʻ",
+      "translated": true
+    },
+    "H6960": {
+      "definitions_cz": "1) čekat, hledat, doufat, očekávat | 1a) (Qal) čekání (příčestí) | 1b) (Piel) | 1b1) čekat nebo dychtivě hledat | 1b2) číhat na | 1b3) čekat, zdržovat se | 2) sbírat, vázat dohromady | 2a) (Niphal) k odběru",
+      "lemma": "קָוָה",
+      "hebrew": "קוה",
+      "xlit": "qâvâh",
+      "translated": true
+    },
+    "H6961": {
+      "definitions_cz": "1) řádek",
+      "lemma": "קָוֶה",
+      "hebrew": "קוה",
+      "xlit": "qâveh",
+      "translated": true
+    },
+    "H6962": {
+      "definitions_cz": "1) nenávidět se, být zarmoucen, cítit odpor | 1a) (Qal) cítit odpor | 1b) (Niphal) | 1b1) cítit odpor k sobě | 1b2) nenávidět | 1c) (Hithpolel) nenávidět se",
+      "lemma": "קוּט",
+      "hebrew": "קוט",
+      "xlit": "qûwṭ",
+      "translated": true
+    },
+    "H6963": {
+      "definitions_cz": "1) hlas, zvuk, hluk | 1a) hlas | 1b) zvuk (nástroje) | 2) lehkost, lehkovážnost",
+      "lemma": "קוֹל",
+      "hebrew": "קול",
+      "xlit": "qôwl",
+      "translated": true
+    },
+    "H6964": {
+      "definitions_cz": "Kolaiah = \"hlas Jehovův\" | 1) otec falešného proroka Achaba | 2) Benjamínec, jehož potomci se po návratu ze zajetí usadili v Jeruzalémě | 3) Levita v době Ezdráše",
+      "lemma": "קוֹלָיָה",
+      "hebrew": "קוליה",
+      "xlit": "Qôwlâyâh",
+      "translated": true
+    },
+    "H6965": {
+      "definitions_cz": "1) vstát, vstát, vstát, vstát, vstát | 1a) (Qal) | 1a1) vzniknout | 1a2) vzniknout (nepřátelský smysl) | 1a3) povstat, stát se mocným | 1a4) povstat, přijít na scénu | 1a5) stát | 1a5a) udržovat se | 1a5b) bude stanoveno, bude potvrzeno | 1a5c) stát, vydržet | 1a5d) bude opraveno | 1a5e) platí | 1a5f) k prokázání | 1a5g) musí být splněno | 1a5h) přetrvávat | 1a5i) nastavit, opravit | 1b) (Piel) | 1b1) splnit | 1b2) potvrdit, ratifikovat, zřídit, uložit",
+      "lemma": "קוּם",
+      "hebrew": "קום",
+      "xlit": "qûwm",
+      "translated": true
+    },
+    "H6966": {
+      "definitions_cz": "1) povstat, stát | 1a) (P'al) | 1a1) vzniknout z | 1a2) přijít na scénu (obr.) | 1a3) vzniknout (z nečinnosti) | 1a4) stát | 1a5) vydržet | 1b) (Pael) založit, založit | 1c) (Aphel) | 1c1) pro nastavení | 1c2) zvednout | 1c3) založit | 1c4) jmenovat | 1d) (Hophal) k postavení",
+      "lemma": "קוּם",
+      "hebrew": "קום",
+      "xlit": "qûwm",
+      "translated": true
+    },
+    "H6967": {
+      "definitions_cz": "1) výška | 1a) výška, postava | 1b) výška",
+      "lemma": "קוֹמָה",
+      "hebrew": "קומה",
+      "xlit": "qôwmâh",
+      "translated": true
+    },
+    "H6968": {
+      "definitions_cz": "1) vzpřímenost (jako adv)",
+      "lemma": "קוֹמְמִיּוּת",
+      "hebrew": "קוממיות",
+      "xlit": "qôwmᵉmîyûwth",
+      "translated": true
+    },
+    "H6969": {
+      "definitions_cz": "1) zpívat žalozpěv, zpívat, naříkat, naříkat | 1a) (Polel) naříkat",
+      "lemma": "קוּן",
+      "hebrew": "קון",
+      "xlit": "qûwn",
+      "translated": true
+    },
+    "H6970": {
+      "definitions_cz": "Koa = \"on-velbloud\" | 1) území v Mezopotámii, východně od Tigridu, na hranici Elamu a Médie",
+      "lemma": "קוֹעַ",
+      "hebrew": "קוע",
+      "xlit": "Qôwaʻ",
+      "translated": true
+    },
+    "H6971": {
+      "definitions_cz": "1) opice",
+      "lemma": "קוֹף",
+      "hebrew": "קוף",
+      "xlit": "qôwph",
+      "translated": true
+    },
+    "H6972": {
+      "definitions_cz": "1) (Qal) strávit léto",
+      "lemma": "קוּץ",
+      "hebrew": "קוץ",
+      "xlit": "qûwts",
+      "translated": true
+    },
+    "H6973": {
+      "definitions_cz": "1) být zarmoucený, ošklivit se, ošklivit se, pociťovat hnus nebo odpor nebo odporný strach | 1a) (Qal) | 1a1) cítit odpor, hnusit se | 1a2) cítit odpornou hrůzu | 1b) (hifil) | 1b1) způsobit děsivou hrůzu | 1b2) způsobit odpor",
+      "lemma": "קוּץ",
+      "hebrew": "קוץ",
+      "xlit": "qûwts",
+      "translated": true
+    },
+    "H6974": {
+      "definitions_cz": "1) probudit se, probudit | 1a) (Hiphil) probudit, vzbudit, projevit známky probuzení, probudit",
+      "lemma": "קוּץ",
+      "hebrew": "קוץ",
+      "xlit": "qûwts",
+      "translated": true
     }
   }
 }
