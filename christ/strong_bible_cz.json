@@ -51327,6 +51327,356 @@
       "hebrew": "כבוד",
       "xlit": "kâbôwd",
       "translated": true
+    },
+    "H3520": {
+      "definitions_cz": "1) hojnost, bohatství, bohatství | 2) sláva, sláva",
+      "lemma": "כְּבוּדָּה",
+      "hebrew": "כבודה",
+      "xlit": "kᵉbûwddâh",
+      "translated": true
+    },
+    "H3521": {
+      "definitions_cz": "Cabul = \"vázání\" | 1) město na hranici Asher a ležící přibližně 10 mil (16 km) východně od Akko; moderní 'Kábul' | 2) čtvrť v Galileji, kterou dal Šalomoun Hiramovi a kterou Hiram pohrdavě nazval „Kábul“",
+      "lemma": "כָּבוּל",
+      "hebrew": "כבול",
+      "xlit": "Kâbûwl",
+      "translated": true
+    },
+    "H3522": {
+      "definitions_cz": "Cabbon = \"stavitel\" | 1) město v judské nížině",
+      "lemma": "כַּבּוֹן",
+      "hebrew": "כבון",
+      "xlit": "Kabbôwn",
+      "translated": true
+    },
+    "H3523": {
+      "definitions_cz": "1) (něco) síťovina, přikrývka, síť na mouchy, polštář",
+      "lemma": "כְּבִיר",
+      "hebrew": "כביר",
+      "xlit": "kᵉbîyr",
+      "translated": true
+    },
+    "H3524": {
+      "definitions_cz": "1) mocný, velký, mocný, mnoho, mnoho",
+      "lemma": "כַּבִּיר",
+      "hebrew": "כביר",
+      "xlit": "kabbîyr",
+      "translated": true
+    },
+    "H3525": {
+      "definitions_cz": "1) pouto(a), pouto(a)",
+      "lemma": "כֶּבֶל",
+      "hebrew": "כבל",
+      "xlit": "kebel",
+      "translated": true
+    },
+    "H3526": {
+      "definitions_cz": "1) umýt (šlapáním), být umytý, vykonávat práci plnič | 1a) (Qal) podložka, plnička, nášlapná část (participium) | 1b) (Piel) k praní (oděvy, osoba) | 1c) (Pual) k praní | 1d) (Hothpael) k vymytí",
+      "lemma": "כָּבַס",
+      "hebrew": "כבס",
+      "xlit": "kâbaç",
+      "translated": true
+    },
+    "H3527": {
+      "definitions_cz": "1) být mnoho, být mnoho, být v hojnosti, proplétat se, množit se | 1a) (Hiphil) učinit mnoho, učinit velkými",
+      "lemma": "כָּבַר",
+      "hebrew": "כבר",
+      "xlit": "kâbar",
+      "translated": true
+    },
+    "H3528": {
+      "definitions_cz": "1) už dávno, hodně dlouho",
+      "lemma": "כְּבָר",
+      "hebrew": "כבר",
+      "xlit": "kᵉbâr",
+      "translated": true
+    },
+    "H3529": {
+      "definitions_cz": "Chebar = \"daleko\" | 1) babylonská řeka, u které se usadilo mnoho izraelských vyhnanců; možná 'Habor' nebo 'Královský kanál' Nebukadnezar",
+      "lemma": "כְּבָר",
+      "hebrew": "כבר",
+      "xlit": "Kᵉbâr",
+      "translated": true
+    },
+    "H3530": {
+      "definitions_cz": "1) vzdálenost (neurčená délka)",
+      "lemma": "כִּבְרָה",
+      "hebrew": "כברה",
+      "xlit": "kibrâh",
+      "translated": true
+    },
+    "H3531": {
+      "definitions_cz": "1) síto, síto",
+      "lemma": "כְּבָרָה",
+      "hebrew": "כברה",
+      "xlit": "kᵉbârâh",
+      "translated": true
+    },
+    "H3532": {
+      "definitions_cz": "1) jehně, ovce, mladý beran",
+      "lemma": "כֶּבֶשׂ",
+      "hebrew": "כבש",
+      "xlit": "kebes",
+      "translated": true
+    },
+    "H3533": {
+      "definitions_cz": "1) podřídit, podmanit si, přinutit, udržet pod, přivést do otroctví | 1a) (Qal) | 1a1) uvést do otroctví, podřídit se | 1a2) podmanit, vynutit, porušit | 1a3) podmanit si, ovládnout, sešlápnout | 1b) (Niphal) bude pokořen | 1c) (Piel) podrobit | 1d) (Hiphil) uvést do otroctví",
+      "lemma": "כָּבַשׁ",
+      "hebrew": "כבש",
+      "xlit": "kâbash",
+      "translated": true
+    },
+    "H3534": {
+      "definitions_cz": "1) podnožka",
+      "lemma": "כֶּבֶשׁ",
+      "hebrew": "כבש",
+      "xlit": "kebesh",
+      "translated": true
+    },
+    "H3535": {
+      "definitions_cz": "1) ovečka-beránek, beránek",
+      "lemma": "כִּבְשָׂה",
+      "hebrew": "כבשה",
+      "xlit": "kibsâh",
+      "translated": true
+    },
+    "H3536": {
+      "definitions_cz": "1) pec (hrnčířská nebo vápenná), tavící kovárna, pec",
+      "lemma": "כִּבְשָׁן",
+      "hebrew": "כבשן",
+      "xlit": "kibshân",
+      "translated": true
+    },
+    "H3537": {
+      "definitions_cz": "1) sklenice, velká sklenice (přenosná)",
+      "lemma": "כַּד",
+      "hebrew": "כד",
+      "xlit": "kad",
+      "translated": true
+    },
+    "H3538": {
+      "definitions_cz": "1) falešné, lživé",
+      "lemma": "כְּדַב",
+      "hebrew": "כדב",
+      "xlit": "kᵉdab",
+      "translated": true
+    },
+    "H3539": {
+      "definitions_cz": "1) drahý kámen (možná rubín, achát)",
+      "lemma": "כַּדְכֹּד",
+      "hebrew": "כדכד",
+      "xlit": "kadkôd",
+      "translated": true
+    },
+    "H3540": {
+      "definitions_cz": "Chedorlaomer = \"hrst snopů\" | 1) král Elam poražený Abrahamem",
+      "lemma": "כְּדׇרְלָעֹמֶר",
+      "hebrew": "כדרלעמר",
+      "xlit": "Kᵉdorlâʻômer",
+      "translated": true
+    },
+    "H3541": {
+      "definitions_cz": "1) tedy, zde, tímto způsobem | 1a) tedy, takže | 1b) sem, sem a tam | 1c) doteď, doteď...do té doby, mezitím",
+      "lemma": "כֹּה",
+      "hebrew": "כה",
+      "xlit": "kôh",
+      "translated": true
+    },
+    "H3542": {
+      "definitions_cz": "1) zde zatím takto",
+      "lemma": "כָּה",
+      "hebrew": "כה",
+      "xlit": "kâh",
+      "translated": true
+    },
+    "H3543": {
+      "definitions_cz": "1) zeslábnout, zeslábnout, zeslábnout, zakolísat, zeslábnout, zeslábnout, zatemnit se, být zdrženlivé, omdlévat, selhat | 1a) (Qal) stmívat se, ochabovat | 1b) (Piel) omdlévat, slábnout, omdlévat",
+      "lemma": "כָּהָה",
+      "hebrew": "כהה",
+      "xlit": "kâhâh",
+      "translated": true
+    },
+    "H3544": {
+      "definitions_cz": "1) matný, matný, bezbarvý, být tmavý, slabý",
+      "lemma": "כֵּהֶה",
+      "hebrew": "כהה",
+      "xlit": "kêheh",
+      "translated": true
+    },
+    "H3545": {
+      "definitions_cz": "1) utlumení, otupení, zmenšení, uzdravení, zmírnění",
+      "lemma": "כֵּהָה",
+      "hebrew": "כהה",
+      "xlit": "kêhâh",
+      "translated": true
+    },
+    "H3546": {
+      "definitions_cz": "1) být schopen | 1a) (P'al) moci",
+      "lemma": "כְּהַל",
+      "hebrew": "כהל",
+      "xlit": "kᵉhal",
+      "translated": true
+    },
+    "H3547": {
+      "definitions_cz": "1) působit jako kněz, sloužit v kněžské kanceláři | 1a) (Piel) | 1a1) sloužit jako kněz, sloužit jako kněz | 1a2) být nebo se stát knězem | 1a3) hrát na kněze",
+      "lemma": "כָּהַן",
+      "hebrew": "כהן",
+      "xlit": "kâhan",
+      "translated": true
+    },
+    "H3548": {
+      "definitions_cz": "1) kněz, hlavní důstojník nebo hlavní vládce | 1a) kněz-král (Melchisedech, Mesiáš) | 1b) pohanští kněží | 1c) kněží Jehovovi | 1d) Levitští kněží | 1e) Zadokiští kněží | 1f) Aronští kněží | 1g) velekněz",
+      "lemma": "כֹּהֵן",
+      "hebrew": "כהן",
+      "xlit": "kôhên",
+      "translated": true
+    },
+    "H3549": {
+      "definitions_cz": "1) kněz",
+      "lemma": "כָּהֵן",
+      "hebrew": "כהן",
+      "xlit": "kâhên",
+      "translated": true
+    },
+    "H3550": {
+      "definitions_cz": "1) kněžství",
+      "lemma": "כְּהֻנָּה",
+      "hebrew": "כהנה",
+      "xlit": "kᵉhunnâh",
+      "translated": true
+    },
+    "H3551": {
+      "definitions_cz": "1) okno",
+      "lemma": "כַּו",
+      "hebrew": "כו",
+      "xlit": "kav",
+      "translated": true
+    },
+    "H3552": {
+      "definitions_cz": "1) jméno národa ve spojenectví s Nabuchodonozorem a pravděpodobně ležícího v severní Africe; možná stejné jako 'Lybia' nebo 'Lub'",
+      "lemma": "כּוּב",
+      "hebrew": "כוב",
+      "xlit": "Kûwb",
+      "translated": true
+    },
+    "H3553": {
+      "definitions_cz": "1) přilba",
+      "lemma": "כּוֹבַע",
+      "hebrew": "כובע",
+      "xlit": "kôwbaʻ",
+      "translated": true
+    },
+    "H3554": {
+      "definitions_cz": "1) pálit, pálit, značku | 1a) (Niphal) být spálen, být spálen",
+      "lemma": "כָּוָה",
+      "hebrew": "כוה",
+      "xlit": "kâvâh",
+      "translated": true
+    },
+    "H3555": {
+      "definitions_cz": "1) pálení, branding, branding jizva, popálenina",
+      "lemma": "כְּוִיָּה",
+      "hebrew": "כויה",
+      "xlit": "kᵉvîyâh",
+      "translated": true
+    },
+    "H3556": {
+      "definitions_cz": "1) hvězda | 1a) Mesiáše, bratři, mládí, početné potomstvo, personifikace, Boží vševědoucnost (obr.)",
+      "lemma": "כּוֹכָב",
+      "hebrew": "כוכב",
+      "xlit": "kôwkâb",
+      "translated": true
+    },
+    "H3557": {
+      "definitions_cz": "1) zabavit, zadržet, změřit | 1a)(Qal) měřit, vypočítat | 1b) (Pilpel) udržovat, udržovat, obsahovat | 1b1) udržovat, podporovat, vyživovat | 1b2) zadržovat, zadržovat, omezovat | 1b3) podporovat, vydržet | 1c) (Polpal) bude dodáno | 1d) (Hilpil) obsahovat, držet, držet, vydržet | 1d1) obsahovat | 1d2) vydržet, vydržet",
+      "lemma": "כּוּל",
+      "hebrew": "כול",
+      "xlit": "kûwl",
+      "translated": true
+    },
+    "H3558": {
+      "definitions_cz": "1) ozdoby, zlatý ornament | 1a) možná-náramky ze zlata, přesný význam není znám | 2) (TWOT) tablety",
+      "lemma": "כּוּמָז",
+      "hebrew": "כומז",
+      "xlit": "kûwmâz",
+      "translated": true
+    },
+    "H3559": {
+      "definitions_cz": "1) být pevný, stabilní, usazený | 1a) (Niphal) | 1a1) bude zřízeno, zřízeno, stanoveno | 1a1a) bude pevně stanovena | 1a1b) být usazený, stabilní, bezpečný, trvalý | 1a1c) bude stanoveno, bude bezpečně určeno | 1a2) být směřován správně, být pevně stanoven, být stálý (morální smysl) | 1a3) připravit se, být připraven | 1a4) být připraven, být uspořádán, být vypořádán | 1b) (hifil) | 1b1) založit, zřídit, splnit, udělat, založit firmu | 1b2) opravit, udělat rea",
+      "lemma": "כּוּן",
+      "hebrew": "כון",
+      "xlit": "kûwn",
+      "translated": true
+    },
+    "H3560": {
+      "definitions_cz": "Chun = \"usazeno\" | 1) město patřící Hadarezerovi, vypleněné Davidovými silami",
+      "lemma": "כּוּן",
+      "hebrew": "כון",
+      "xlit": "Kûwn",
+      "translated": true
+    },
+    "H3561": {
+      "definitions_cz": "1) dort, obětní dort",
+      "lemma": "כַּוָּן",
+      "hebrew": "כון",
+      "xlit": "kavvân",
+      "translated": true
+    },
+    "H3562": {
+      "definitions_cz": "Cononiah nebo Conaniah = \"Jehova ustanovil\" | 1) levitský vládce v době Ezechiáše | 2) levitský náčelník v době Josiáše",
+      "lemma": "כּוֹנַנְיָהוּ",
+      "hebrew": "כונניהו",
+      "xlit": "Kôwnanyâhûw",
+      "translated": true
+    },
+    "H3563": {
+      "definitions_cz": "n f | 1) pohár | n m | 2) druh sovy (nečistý pták)",
+      "lemma": "כּוֹס",
+      "hebrew": "כוס",
+      "xlit": "kôwç",
+      "translated": true
+    },
+    "H3564": {
+      "definitions_cz": "n m | 1) pec, kovárna, tavicí pec nebo hrnec | v | 2) (Qal) vrtat, prorážet, kopat, tesat",
+      "lemma": "כּוּר",
+      "hebrew": "כור",
+      "xlit": "kûwr",
+      "translated": true
+    },
+    "H3565": {
+      "definitions_cz": "Chor-ashan = \"pec kouře\" | 1) město v Judsku",
+      "lemma": "כּוֹר עָשָׁן",
+      "hebrew": "כור עשן",
+      "xlit": "Kôwr ʻÂshân",
+      "translated": true
+    },
+    "H3566": {
+      "definitions_cz": "Cyrus = \"máš pec\" | 1) král Persie a dobyvatel Babylonu; prvním vládcem Persie, který vydal dekret umožňující izraelským vyhnancům návrat do Jeruzaléma",
+      "lemma": "כּוֹרֶשׁ",
+      "hebrew": "כורש",
+      "xlit": "Kôwresh",
+      "translated": true
+    },
+    "H3567": {
+      "definitions_cz": "Cyrus = \"máš pec\" | 1) král Persie a dobyvatel Babylonu; prvním vládcem Persie, který vydal dekret umožňující izraelským vyhnancům návrat do Jeruzaléma",
+      "lemma": "כּוֹרֶשׁ",
+      "hebrew": "כורש",
+      "xlit": "Kôwresh",
+      "translated": true
+    },
+    "H3568": {
+      "definitions_cz": "Cush = \"černý\" | n pr m | 1) Benjamínec zmíněný pouze v názvu Ž 7:1 | 2) syn Hama a vnuk Noema a předek nejjižnějších národů v Africe | 3) národy pocházející z Cush | n pr loc | 4) země obsazená potomky Cush nacházející se kolem jižních částí Nilu (Etiopie)",
+      "lemma": "כּוּשׁ",
+      "hebrew": "כוש",
+      "xlit": "Kûwsh",
+      "translated": true
+    },
+    "H3569": {
+      "definitions_cz": "Cushi nebo Etiopan = viz Cushan \"jejich černotu\" | 1) jeden z potomků Cushe, vnuka Noeho přes Hama, a příslušník tohoto národa nebo lidu | 2) jeden z Joabových kurýrů | 3) (TWOT) Etiopský",
+      "lemma": "כּוּשִׁי",
+      "hebrew": "כושי",
+      "xlit": "Kûwshîy",
+      "translated": true
     }
   }
 }
