@@ -80412,6 +80412,706 @@
       "hebrew": "שבת",
       "xlit": "shebeth",
       "translated": true
+    },
+    "H7675": {
+      "definitions_cz": "1) (Qal) sídlo, obydlí, místo",
+      "lemma": "שֶׁבֶת",
+      "hebrew": "שבת",
+      "xlit": "shebeth",
+      "translated": true
+    },
+    "H7676": {
+      "definitions_cz": "1) Sabat | 1a) sabat | 1b) den smíření | 1c) sabatní rok | 1d) týden | 1e) vyrábět (v sabatním roce)",
+      "lemma": "שַׁבָּת",
+      "hebrew": "שבת",
+      "xlit": "shabbâth",
+      "translated": true
+    },
+    "H7677": {
+      "definitions_cz": "1) Zachovávání sabatu, sabat | 1a) týdenního sabatu | 1b) den smíření | 1c) sabatický rok | 1d) Svátek trubek | 1e) 1. a posledního dne svátku stánků",
+      "lemma": "שַׁבָּתוֹן",
+      "hebrew": "שבתון",
+      "xlit": "shabbâthôwn",
+      "translated": true
+    },
+    "H7678": {
+      "definitions_cz": "Shabbethai = \"sabbatical\" | 1) Levita v době Ezdráše a Nehemjáše",
+      "lemma": "שַׁבְּתַי",
+      "hebrew": "שבתי",
+      "xlit": "Shabbᵉthay",
+      "translated": true
+    },
+    "H7679": {
+      "definitions_cz": "1) zvětšit, růst, zvětšovat, růst skvěle | 1a) (Hiphil) | 1a1) dělat skvělé | 1a2) zvětšit, chválit",
+      "lemma": "שָׂגָא",
+      "hebrew": "שגא",
+      "xlit": "sâgâʼ",
+      "translated": true
+    },
+    "H7680": {
+      "definitions_cz": "1) (P'al) růst skvěle",
+      "lemma": "שְׂגָא",
+      "hebrew": "שגא",
+      "xlit": "sᵉgâʼ",
+      "translated": true
+    },
+    "H7681": {
+      "definitions_cz": "Šage = \"chybující\" | 1) otec Hannathona Hararského, jednoho z Davidových mocných válečníků",
+      "lemma": "שָׁגֶא",
+      "hebrew": "שגא",
+      "xlit": "Shâgeʼ",
+      "translated": true
+    },
+    "H7682": {
+      "definitions_cz": "1) být vysoký, být nepřístupně vysoký | 1a) (Qal) | 1a1) být (příliš) vysoký (pro zachycení) | 1a2) být vysoký (blahobytu) | 1b) (Niphal) | 1b1) být vysoký | 1b2) být nastaven na vysokou, být (bezpečně) nastaven na vysokou | 1b3) být vyvýšen (Boží) | 1c) (Piel) | 1c1) nastavte na vysokou, nastavte (bezpečně) na vysokou | 1c2) vyvyšovat, vyvyšovat (v účinném nepřátelství) | 1d) (Pual) pro nastavení (bezpečně) na vysokou | 1e) (Hifil) jednat vznešeně",
+      "lemma": "שָׂגַב",
+      "hebrew": "שגב",
+      "xlit": "sâgab",
+      "translated": true
+    },
+    "H7683": {
+      "definitions_cz": "1) sejít z cesty, mýlit se, spáchat hřích nebo chybu | 1a) (Qal) | 1a1) chybovat (duševně) | 1a2) hřešit (nevědomky nebo neúmyslně)",
+      "lemma": "שָׁגַג",
+      "hebrew": "שגג",
+      "xlit": "shâgag",
+      "translated": true
+    },
+    "H7684": {
+      "definitions_cz": "1) hřích, hřích omylu nebo nepozornosti, neúmyslný hřích | 1a) chyba",
+      "lemma": "שְׁגָגָה",
+      "hebrew": "שגגה",
+      "xlit": "shᵉgâgâh",
+      "translated": true
+    },
+    "H7685": {
+      "definitions_cz": "1) růst, zvyšovat | 1a) (Qal) růst (skvělý) | 1b) (Hiphil) zvýšit",
+      "lemma": "שָׂגָה",
+      "hebrew": "שגה",
+      "xlit": "sâgâh",
+      "translated": true
+    },
+    "H7686": {
+      "definitions_cz": "1) zabloudit, bloudit, mýlka | 1a)(Qal) | 1a1) mýlit se, bloudit | 1a2) uhýbat, meandrovat, motat se, válet se, být opilý, chybovat (v opilosti) | 1a3) sejít z cesty (morálně) | 1a4) spáchat hřích z nevědomosti nebo nepozornosti, emr (nevědomě) | 1b) (hifil) | 1b1) svést z omylu | 1b2) svést na scestí, svést (duševně) | 1b3) svést na scestí (morálně)",
+      "lemma": "שָׁגָה",
+      "hebrew": "שגה",
+      "xlit": "shâgâh",
+      "translated": true
+    },
+    "H7687": {
+      "definitions_cz": "Segub = \"vznešený\" | 1) nejmladší syn Hiel Bethelite, který přestavěl Jericho | 2) Judaita, syn Hezronův",
+      "lemma": "שְׂגוּב",
+      "hebrew": "שגוב",
+      "xlit": "Sᵉgûwb",
+      "translated": true
+    },
+    "H7688": {
+      "definitions_cz": "1) (Hiphil) dívat se, zírat",
+      "lemma": "שָׁגַח",
+      "hebrew": "שגח",
+      "xlit": "shâgach",
+      "translated": true
+    },
+    "H7689": {
+      "definitions_cz": "1) velký (boží)",
+      "lemma": "שַׂגִּיא",
+      "hebrew": "שגיא",
+      "xlit": "saggîyʼ",
+      "translated": true
+    },
+    "H7690": {
+      "definitions_cz": "adj | 1) skvělé, moc | 1a) skvělé | 1b) mnoho, mnoho | adv | 2) nadmíru",
+      "lemma": "שַׂגִּיא",
+      "hebrew": "שגיא",
+      "xlit": "saggîyʼ",
+      "translated": true
+    },
+    "H7691": {
+      "definitions_cz": "1) chyba",
+      "lemma": "שְׁגִיאָה",
+      "hebrew": "שגיאה",
+      "xlit": "shᵉgîyʼâh",
+      "translated": true
+    },
+    "H7692": {
+      "definitions_cz": "1) písnička? | 1a) použitý v názvu Ž 7:1 | 1b) znamená pochybný",
+      "lemma": "שִׁגָּיוֹן",
+      "hebrew": "שגיון",
+      "xlit": "shiggâyôwn",
+      "translated": true
+    },
+    "H7693": {
+      "definitions_cz": "1) porušit, znásilnit | 1a) (Qal) porušit, znásilnit | 1b) (Niphal) k uchvácení | 1c) (Pual) k uchvácení",
+      "lemma": "שָׁגַל",
+      "hebrew": "שגל",
+      "xlit": "shâgal",
+      "translated": true
+    },
+    "H7694": {
+      "definitions_cz": "1) choť, královna, (královna-) choť",
+      "lemma": "שֵׁגָל",
+      "hebrew": "שגל",
+      "xlit": "shêgâl",
+      "translated": true
+    },
+    "H7695": {
+      "definitions_cz": "1) králova manželka, králova konkubína, (královská) choť",
+      "lemma": "שֵׁגָל",
+      "hebrew": "שגל",
+      "xlit": "shêgâl",
+      "translated": true
+    },
+    "H7696": {
+      "definitions_cz": "1) být naštvaný | 1a) (Pual) | 1a1) být šílený | 1a2) k šílenství (příčestí) | 1b) (Hithpael) ukázat šílenství",
+      "lemma": "שָׁגַע",
+      "hebrew": "שגע",
+      "xlit": "shâgaʻ",
+      "translated": true
+    },
+    "H7697": {
+      "definitions_cz": "1) šílenství",
+      "lemma": "שִׁגָּעוֹן",
+      "hebrew": "שגעון",
+      "xlit": "shiggâʻôwn",
+      "translated": true
+    },
+    "H7698": {
+      "definitions_cz": "1) potomstvo, mládě nebo potomstvo šelem",
+      "lemma": "שֶׁגֶר",
+      "hebrew": "שגר",
+      "xlit": "sheger",
+      "translated": true
+    },
+    "H7699": {
+      "definitions_cz": "1) prsa, ňadra, (ženská) prsa | 1a) prsa (ženy) | 1b) prsa (zvířecí) | 1c) prsa (lidská i zvířecí)",
+      "lemma": "שַׁד",
+      "hebrew": "שד",
+      "xlit": "shad",
+      "translated": true
+    },
+    "H7700": {
+      "definitions_cz": "1) démon",
+      "lemma": "שֵׁד",
+      "hebrew": "שד",
+      "xlit": "shêd",
+      "translated": true
+    },
+    "H7701": {
+      "definitions_cz": "1) zmatek, násilí, destrukce, devastace, zmar | 1a) násilí, zmatek (jako společenský hřích) | 1b) devastace, zmar",
+      "lemma": "שֹׁד",
+      "hebrew": "שד",
+      "xlit": "shôd",
+      "translated": true
+    },
+    "H7702": {
+      "definitions_cz": "1) (Piel) k branám",
+      "lemma": "שָׂדַד",
+      "hebrew": "שדד",
+      "xlit": "sâdad",
+      "translated": true
+    },
+    "H7703": {
+      "definitions_cz": "1) násilně se s nimi vypořádat, vykořisťovat, devastovat, ničit, ničit, kazit | 1a) (Qal) | 1a1) násilně ničit, devastovat, drancovat, napadat | 1a2) devastátor, despoiler (příčestí) (subst) | 1b) (Niphal) být zcela zničen | 1c) (Piel) | 1c1) k napadení | 1c2) devastovat | 1d) (Pual) bude zpustošen | 1e) (Poel) násilně zničit | 1f) (Hophal) být zpustošen",
+      "lemma": "שָׁדַד",
+      "hebrew": "שדד",
+      "xlit": "shâdad",
+      "translated": true
+    },
+    "H7704": {
+      "definitions_cz": "1) pole, pozemek | 1a) obdělávané pole | 1b) domova divokých šelem | 1c) rovina (na rozdíl od hory) | 1d) pevnina (na rozdíl od moře)",
+      "lemma": "שָׂדֶה",
+      "hebrew": "שדה",
+      "xlit": "sâdeh",
+      "translated": true
+    },
+    "H7705": {
+      "definitions_cz": "1) konkubína, manželka, harém | 1a) význam neznámý",
+      "lemma": "שִׁדָּה",
+      "hebrew": "שדה",
+      "xlit": "shiddâh",
+      "translated": true
+    },
+    "H7706": {
+      "definitions_cz": "1) všemohoucí, nejmocnější | 1a) Shaddai, Všemohoucí (Boží)",
+      "lemma": "שַׁדַּי",
+      "hebrew": "שדי",
+      "xlit": "Shadday",
+      "translated": true
+    },
+    "H7707": {
+      "definitions_cz": "Shedeur = \"darter světla\" | 1) otec Elizura, náčelníka kmene Ruben v době exodu",
+      "lemma": "שְׁדֵיאוּר",
+      "hebrew": "שדיאור",
+      "xlit": "Shᵉdêyʼûwr",
+      "translated": true
+    },
+    "H7708": {
+      "definitions_cz": "Siddim = \"pole\" nebo \"prostý\" | 1) údolí, kde se nachází Mrtvé moře",
+      "lemma": "שִׂדִּים",
+      "hebrew": "שדים",
+      "xlit": "Siddîym",
+      "translated": true
+    },
+    "H7709": {
+      "definitions_cz": "1) pole",
+      "lemma": "שְׁדֵמָה",
+      "hebrew": "שדמה",
+      "xlit": "shᵉdêmâh",
+      "translated": true
+    },
+    "H7710": {
+      "definitions_cz": "1) spálit, spálit | 1a) (Qal) spálený (klasů) (příčestí)",
+      "lemma": "שָׁדַף",
+      "hebrew": "שדף",
+      "xlit": "shâdaph",
+      "translated": true
+    },
+    "H7711": {
+      "definitions_cz": "n f | 1) ošlehaná nebo ošlehaná věc, ošlehaná, ošlehaná | n m | 2) plíseň (plodin)",
+      "lemma": "שְׁדֵפָה",
+      "hebrew": "שדפה",
+      "xlit": "shᵉdêphâh",
+      "translated": true
+    },
+    "H7712": {
+      "definitions_cz": "1) (Ithpael) bojovat, snažit se",
+      "lemma": "שְׁדַר",
+      "hebrew": "שדר",
+      "xlit": "shᵉdar",
+      "translated": true
+    },
+    "H7713": {
+      "definitions_cz": "1) řada, hodnost (vojáků) | 1a) řady, řady | 1b) technický termín stavby | 1b1) význam neznámý",
+      "lemma": "שְׂדֵרָה",
+      "hebrew": "שדרה",
+      "xlit": "sᵉdêrâh",
+      "translated": true
+    },
+    "H7714": {
+      "definitions_cz": "Shadrach = \"královský\" nebo \"velký písař\" | 1) zbožný přítel Daniela, kterého Nabuchodonozor přejmenoval na Šadracha; jeden ze tří přátel, kteří se s Danielem odmítli znečišťovat tím, že jedli jídlo z králova stolu, což bylo v rozporu se stravovacími zákony, které Bůh dal Židům; také jeden ze tří, kteří byli vhozeni do ohnivé pece za to, že se odmítli poklonit rytému obrazu Nabuchodonozora a kteří byli zachráněni andělem Páně | 1a) také „Hananiah“ (H02608)",
+      "lemma": "שַׁדְרַךְ",
+      "hebrew": "שדרך",
+      "xlit": "Shadrak",
+      "translated": true
+    },
+    "H7715": {
+      "definitions_cz": "Shadrach = \"královský\" nebo \"velký písař\" | 1) zbožný přítel Daniela, kterého Nabuchodonozor přejmenoval na Šadracha; jeden ze tří přátel, kteří se s Danielem odmítli znečišťovat tím, že jedli jídlo z králova stolu, což bylo v rozporu se stravovacími zákony, které Bůh dal Židům; také jeden ze tří, kteří byli vhozeni do ohnivé pece za to, že se odmítli poklonit rytému obrazu Nabuchodonozora a kteří byli zachráněni andělem Páně | 1a) také „Hananiah“ (H02608)",
+      "lemma": "שַׁדְרַךְ",
+      "hebrew": "שדרך",
+      "xlit": "Shadrak",
+      "translated": true
+    },
+    "H7716": {
+      "definitions_cz": "1) jeden ze stáda, jehně, ovce, koza, mladá ovce, mladá koza | 1a) ovce, kozy | 1b) hejno (kolektivní)",
+      "lemma": "שֶׂה",
+      "hebrew": "שה",
+      "xlit": "seh",
+      "translated": true
+    },
+    "H7717": {
+      "definitions_cz": "1) svědek",
+      "lemma": "שָׂהֵד",
+      "hebrew": "שהד",
+      "xlit": "sâhêd",
+      "translated": true
+    },
+    "H7718": {
+      "definitions_cz": "1) drahý kámen nebo drahokam | 1a) pravděpodobně onyx, chrysopras, beryl, malachit",
+      "lemma": "שֹׁהַם",
+      "hebrew": "שהם",
+      "xlit": "shôham",
+      "translated": true
+    },
+    "H7719": {
+      "definitions_cz": "Shoham = \"onyx\" | 1) merarijský levita, syn Jaaziášův",
+      "lemma": "שֹׁהַם",
+      "hebrew": "שהם",
+      "xlit": "Shôham",
+      "translated": true
+    },
+    "H7720": {
+      "definitions_cz": "1) měsíc, srpek | 1a) jako ozdoba",
+      "lemma": "שַׂהֲרֹן",
+      "hebrew": "שהרן",
+      "xlit": "sahărôn",
+      "translated": true
+    },
+    "H7721": {
+      "definitions_cz": "1) (Qal) rostoucí (infinitiv)",
+      "lemma": "שׂוֹא",
+      "hebrew": "שוא",
+      "xlit": "sôwʼ",
+      "translated": true
+    },
+    "H7722": {
+      "definitions_cz": "n m | 1) pustošit | n f | 2) devastace, zmar, plýtvání | 2a) devastace, zmar | 2b) ruina, plýtvání (země)",
+      "lemma": "שׁוֹא",
+      "hebrew": "שוא",
+      "xlit": "shôwʼ",
+      "translated": true
+    },
+    "H7723": {
+      "definitions_cz": "1) prázdnota, marnost, faleš | 1a) prázdnota, nicota, marnost | 1b) prázdnota řeči, lež | 1c) bezcennost (chování)",
+      "lemma": "שָׁוְא",
+      "hebrew": "שוא",
+      "xlit": "shâvᵉʼ",
+      "translated": true
+    },
+    "H7724": {
+      "definitions_cz": "Sheva = \"Jehova tvrdí\" | 1) Judaita, syn Kálebův od své konkubíny Maachy a vnuka Chezróna",
+      "lemma": "שְׁוָא",
+      "hebrew": "שוא",
+      "xlit": "Shᵉvâʼ",
+      "translated": true
+    },
+    "H7725": {
+      "definitions_cz": "1) pro návrat otočte zpět | 1a) (Qal) | 1a1) vrátit se zpět, vrátit se | 1a1a) vrátit se zpět | 1a1b) vrátit se, vrátit se nebo se vrátit | 1a1c) vrátit se, vrátit se, vrátit se | 1a1d) umírání | 1a1e) lidských vztahů (obr.) | 1a1f) duchovních vztahů (obr.) | 1a1f1) obrátit se zpět (od Boha), odpadnout | 1a1f2) odvrátit se (Boha) | 1a1f3) obrátit se zpět (k Bohu), činit pokání | 1a1f4) obrátit se zpět (od zlého) | 1a1g) neživých věcí | 1a1h) v opakování | 1b) (Pole) | 1b1) vrátit zpět | 1b2) znovu",
+      "lemma": "שׁוּב",
+      "hebrew": "שוב",
+      "xlit": "shûwb",
+      "translated": true
+    },
+    "H7726": {
+      "definitions_cz": "1) couvání, zpětný chod, odpadlík, odmítavý",
+      "lemma": "שׁוֹבָב",
+      "hebrew": "שובב",
+      "xlit": "shôwbâb",
+      "translated": true
+    },
+    "H7727": {
+      "definitions_cz": "Shobab = \"vzpurný\" | 1) syn Davidův od Batšeby | 2) Judaita, syn Kálebův od manželky Azuby a vnuk Hezrónův",
+      "lemma": "שׁוֹבָב",
+      "hebrew": "שובב",
+      "xlit": "Shôwbâb",
+      "translated": true
+    },
+    "H7728": {
+      "definitions_cz": "1) couvání, odpadlík, couvání",
+      "lemma": "שׁוֹבֵב",
+      "hebrew": "שובב",
+      "xlit": "shôwbêb",
+      "translated": true
+    },
+    "H7729": {
+      "definitions_cz": "1) odchod do důchodu, odstoupení",
+      "lemma": "שׁוּבָה",
+      "hebrew": "שובה",
+      "xlit": "shûwbâh",
+      "translated": true
+    },
+    "H7730": {
+      "definitions_cz": "1) síť (poboček)",
+      "lemma": "שׂוֹבֶךְ",
+      "hebrew": "שובך",
+      "xlit": "sôwbek",
+      "translated": true
+    },
+    "H7731": {
+      "definitions_cz": "Shobach = \"expanze\" | 1) generál krále Hadarezera ze Sýrie ze Zóby v době Davidově",
+      "lemma": "שׁוֹבָךְ",
+      "hebrew": "שובך",
+      "xlit": "Shôwbâk",
+      "translated": true
+    },
+    "H7732": {
+      "definitions_cz": "Shobal = \"tekoucí\" | 1) 2. syn Seira Horejce (Edom) a jednoho z vévodů Horitů | 2) syn Káleba, vnuka Hura a zakladatel Kirjath-jearimu | 3) Judaita, syn Hurův a potomek Kálebův | 3a) možná stejně jako 2",
+      "lemma": "שׁוֹבָל",
+      "hebrew": "שובל",
+      "xlit": "Shôwbâl",
+      "translated": true
+    },
+    "H7733": {
+      "definitions_cz": "Shobek = \"zdarma\" | 1) jedna z hlav lidu, který zpečetil smlouvu s Nehemjášem",
+      "lemma": "שׁוֹבֵק",
+      "hebrew": "שובק",
+      "xlit": "Shôwbêq",
+      "translated": true
+    },
+    "H7734": {
+      "definitions_cz": "1) pohybovat se, jít, otočit se, odvrátit se | 1a) (Niphal) odvrátit se",
+      "lemma": "שׂוּג",
+      "hebrew": "שוג",
+      "xlit": "sûwg",
+      "translated": true
+    },
+    "H7735": {
+      "definitions_cz": "1) ohradit se | 1a) (Pilpel) pečlivě oplotit",
+      "lemma": "שׂוּג",
+      "hebrew": "שוג",
+      "xlit": "sûwg",
+      "translated": true
+    },
+    "H7736": {
+      "definitions_cz": "1) (Qal) zničit, zničit, zkazit, devastovat",
+      "lemma": "שׁוּד",
+      "hebrew": "שוד",
+      "xlit": "shûwd",
+      "translated": true
+    },
+    "H7737": {
+      "definitions_cz": "1) souhlasit s, být nebo být podobný, na úrovni, podobat se | 1a) (Qal) | 1a1) být jako | 1a2) ekvivalent (příčestí) | 1a3) nastavit, umístit | 1a4) nastavení (příčestí) | 1b) (Piel) do roviny, hladké, stále | 1c) (Hiphil) udělat jako | 1d) (Nithpael) být podobný | 2) (Piel) nastavit, umístit",
+      "lemma": "שָׁוָה",
+      "hebrew": "שוה",
+      "xlit": "shâvâh",
+      "translated": true
+    },
+    "H7738": {
+      "definitions_cz": "1) (CLBL/BDB) bouře | 2) (TWOT) nastavit, umístit",
+      "lemma": "שָׁוָה",
+      "hebrew": "שוה",
+      "xlit": "shâvâh",
+      "translated": true
+    },
+    "H7739": {
+      "definitions_cz": "1) (Pael) stát se jako | 2) (Ithpael) být nastaven, být proveden",
+      "lemma": "שְׁוָה",
+      "hebrew": "שוה",
+      "xlit": "shᵉvâh",
+      "translated": true
+    },
+    "H7740": {
+      "definitions_cz": "Shaveh = \"prostý\" nebo \"rovinný\" | 1) údolí, kde se po bitvě setkal sodomský král s Abramem",
+      "lemma": "שָׁוֵה",
+      "hebrew": "שוה",
+      "xlit": "Shâvêh",
+      "translated": true
+    },
+    "H7741": {
+      "definitions_cz": "Shaveh Kiriathaim = \"rovina dvojitého nebo dvouměsta\" | 1) místo napadené Chedorlaomerem",
+      "lemma": "שָׁוֵה קִרְיָתַיִם",
+      "hebrew": "שוה קריתים",
+      "xlit": "Shâvêh Qiryâthayim",
+      "translated": true
+    },
+    "H7742": {
+      "definitions_cz": "1) (Qal) meditovat, přemítat, komunikovat, mluvit, stěžovat si | 1a) znamená nejistý",
+      "lemma": "שׂוּחַ",
+      "hebrew": "שוח",
+      "xlit": "sûwach",
+      "translated": true
+    },
+    "H7743": {
+      "definitions_cz": "1) potopit se, být pokloněn, být pokorný | 1a) (Qal) klesnout | 1b) (Hiphil) deprese mysli",
+      "lemma": "שׁוּחַ",
+      "hebrew": "שוח",
+      "xlit": "shûwach",
+      "translated": true
+    },
+    "H7744": {
+      "definitions_cz": "Shuah = \"bohatství\" | 1) syn Abrahamův od jeho manželky Ketury",
+      "lemma": "שׁוּחַ",
+      "hebrew": "שוח",
+      "xlit": "Shûwach",
+      "translated": true
+    },
+    "H7745": {
+      "definitions_cz": "1) jáma",
+      "lemma": "שׁוּחָה",
+      "hebrew": "שוחה",
+      "xlit": "shûwchâh",
+      "translated": true
+    },
+    "H7746": {
+      "definitions_cz": "Shuah = \"bohatství\" | 1) Judaita, bratr Chelubův | 1a) také 'Shuhah'",
+      "lemma": "שׁוּחָה",
+      "hebrew": "שוחה",
+      "xlit": "Shûwchâh",
+      "translated": true
+    },
+    "H7747": {
+      "definitions_cz": "Shuhite = viz Shua \"bohatství\" | 1) etnické apelativum se vztahovalo pouze na Bildada, Jobova přítele",
+      "lemma": "שׁוּחִי",
+      "hebrew": "שוחי",
+      "xlit": "Shûwchîy",
+      "translated": true
+    },
+    "H7748": {
+      "definitions_cz": "Shuham = \"kopař\" | 1) syn Danův a předek rodu Šuhamitů",
+      "lemma": "שׁוּחָם",
+      "hebrew": "שוחם",
+      "xlit": "Shûwchâm",
+      "translated": true
+    },
+    "H7749": {
+      "definitions_cz": "Šuhamité = viz Šuam \"kopař\" | 1) potomci Šuhama, syna Danova",
+      "lemma": "שׁוּחָמִי",
+      "hebrew": "שוחמי",
+      "xlit": "Shûwchâmîy",
+      "translated": true
+    },
+    "H7750": {
+      "definitions_cz": "1) uhnout, odpadnout | 1a) (Qal) | 1a1) uhnout, odpadnout | 1a2) ti odpadající (příčestí)",
+      "lemma": "שׂוּט",
+      "hebrew": "שוט",
+      "xlit": "sûwṭ",
+      "translated": true
+    },
+    "H7751": {
+      "definitions_cz": "1) jít, jít nebo toulat se, jít sem a tam | 1a) (Qal) jít nebo potulovat se kolem | 1b) (Polel) chodit tam a zpět, chodit dychtivě nebo rychle tam a zpět | 1c) (Hithpolel) pro běh tam a zpět | 2) do řádku",
+      "lemma": "שׁוּט",
+      "hebrew": "שוט",
+      "xlit": "shûwṭ",
+      "translated": true
+    },
+    "H7752": {
+      "definitions_cz": "1) metla, bič | 1a) metla (za trest) | 1a1) vnitrostátního rozsudku (obr.) | 1b) bič (na koně)",
+      "lemma": "שׁוֹט",
+      "hebrew": "שוט",
+      "xlit": "shôwṭ",
+      "translated": true
+    },
+    "H7753": {
+      "definitions_cz": "1) k živému plotu nebo plotu nebo kolem | 1a) (Qal) ohradit se, ohradit se",
+      "lemma": "שׂוּךְ",
+      "hebrew": "שוך",
+      "xlit": "sûwk",
+      "translated": true
+    },
+    "H7754": {
+      "definitions_cz": "1) větev, klestí, větev",
+      "lemma": "שׂוֹךְ",
+      "hebrew": "שוך",
+      "xlit": "sôwk",
+      "translated": true
+    },
+    "H7755": {
+      "definitions_cz": "Shocho nebo Shochoh nebo Sochoh nebo Shoco nebo Socoh = \"huňatý\" | 1) město v nížinách Judska | 2) město v horském okrese Judah",
+      "lemma": "שׂוֹכֹה",
+      "hebrew": "שוכה",
+      "xlit": "Sôwkôh",
+      "translated": true
+    },
+    "H7756": {
+      "definitions_cz": "Suchathité = \"křováci\" | 1) rodina písařů v Jabez a potomci Juda přes Káleba",
+      "lemma": "שׂוּכָתִי",
+      "hebrew": "שוכתי",
+      "xlit": "Sûwkâthîy",
+      "translated": true
+    },
+    "H7757": {
+      "definitions_cz": "1) sukně (z hábitu) | 1a) velekněžského roucha | 1b) Božího vlaku, město jako žena, potupa, poskvrnění (obr.)",
+      "lemma": "שׁוּל",
+      "hebrew": "שול",
+      "xlit": "shûwl",
+      "translated": true
+    },
+    "H7758": {
+      "definitions_cz": "1) naboso",
+      "lemma": "שׁוֹלָל",
+      "hebrew": "שולל",
+      "xlit": "shôwlâl",
+      "translated": true
+    },
+    "H7759": {
+      "definitions_cz": "Shulamite = \"dokonalý\" nebo \"mírumilovný\" | 1) milovnice hrdinek Písně písní (Šalamounova)",
+      "lemma": "שׁוּלַמִּית",
+      "hebrew": "שולמית",
+      "xlit": "Shûwlammîyth",
+      "translated": true
+    },
+    "H7760": {
+      "definitions_cz": "1) umístit, umístit, nastavit, jmenovat, vyrobit | 1a) (Qal) | 1a1) položit, nastavit, položit, položit nebo položit, položit (násilně) ruce na | 1a2) nastavit, nasměrovat, nasměrovat k | 1a2a) rozšířit (soucit) (obr.) | 1a3) stanovit, nařídit, zřídit, založit, jmenovat, ustanovit, učinit, určit, opravit | 1a4) nastavit, postavit, umístit, postavit na místo, zasadit, opravit | 1a5) učinit, učinit, přeměnit, ustavit, utvořit, pracovat, uskutečnit, jmenovat, dát | 1b) (Hiphil) nastavit nebo vytvořit pro znamení | 1c) (",
+      "lemma": "שׂוּם",
+      "hebrew": "שום",
+      "xlit": "sûwm",
+      "translated": true
+    },
+    "H7761": {
+      "definitions_cz": "1) nastavit, provést, jmenovat | 1a) (P'al) | 1a1) učinit, učinit dekret, stanovit (dekret) | 1a2) učinit, jmenovat | 1a3) nastavit, opravit | 1b) (Ithp'al) být vyroben, být nastaven, být položen",
+      "lemma": "שׂוּם",
+      "hebrew": "שום",
+      "xlit": "sûwm",
+      "translated": true
+    },
+    "H7762": {
+      "definitions_cz": "1) česnek",
+      "lemma": "שׁוּם",
+      "hebrew": "שום",
+      "xlit": "shûwm",
+      "translated": true
+    },
+    "H7763": {
+      "definitions_cz": "Shomer = \"chovatel\" | 1) syn Jehozabada nebo Šimrity Moábské a jeden ze spiklenců, kteří zabili judského krále Joaše | 2) Asherita, syn Heberův | 2a) také „Shemer“",
+      "lemma": "שׁוֹמֵר",
+      "hebrew": "שומר",
+      "xlit": "Shôwmêr",
+      "translated": true
+    },
+    "H7764": {
+      "definitions_cz": "Shuni = \"šťastný\" | 1) syn Gádův a předek rodu Šúnitů",
+      "lemma": "שׁוּנִי",
+      "hebrew": "שוני",
+      "xlit": "Shûwnîy",
+      "translated": true
+    },
+    "H7765": {
+      "definitions_cz": "Šunité = viz Šuna \"štěstí\" | 1) potomci Shuni",
+      "lemma": "שׁוּנִי",
+      "hebrew": "שוני",
+      "xlit": "Shûwnîy",
+      "translated": true
+    },
+    "H7766": {
+      "definitions_cz": "Shunem = \"dvojité místo odpočinku\" | 1) město v Issachar, které se nachází 5 mil (8 km) jižně od hory Tábor",
+      "lemma": "שׁוּנֵם",
+      "hebrew": "שונם",
+      "xlit": "Shûwnêm",
+      "translated": true
+    },
+    "H7767": {
+      "definitions_cz": "Shunammite = viz Shunen \"dvojité místo odpočinku\" | 1) obyvatel Shunem",
+      "lemma": "שׁוּנַמִּית",
+      "hebrew": "שונמית",
+      "xlit": "Shûwnammîyth",
+      "translated": true
+    },
+    "H7768": {
+      "definitions_cz": "1) (Piel) křičet (o pomoc), křičet",
+      "lemma": "שָׁוַע",
+      "hebrew": "שוע",
+      "xlit": "shâvaʻ",
+      "translated": true
+    },
+    "H7769": {
+      "definitions_cz": "1) plakat, volat o pomoc, křičet | 2) přepych | 2a) znamená pochybný",
+      "lemma": "שׁוּעַ",
+      "hebrew": "שוע",
+      "xlit": "shûwaʻ",
+      "translated": true
+    },
+    "H7770": {
+      "definitions_cz": "Shuah = \"bohatství\" | 1) otec Judovy ženy",
+      "lemma": "שׁוּעַ",
+      "hebrew": "שוע",
+      "xlit": "Shûwaʻ",
+      "translated": true
+    },
+    "H7771": {
+      "definitions_cz": "adj | 1) nezávislý, vznešený, svobodný, bohatý, štědrý | n m | 2) plakat | 2a) možná válečný pokřik, volání o pomoc",
+      "lemma": "שׁוֹעַ",
+      "hebrew": "שוע",
+      "xlit": "shôwaʻ",
+      "translated": true
+    },
+    "H7772": {
+      "definitions_cz": "Shoa = \"bohatý\" | 1) kmen nomádů z Mezopotámie",
+      "lemma": "שׁוֹעַ",
+      "hebrew": "שוע",
+      "xlit": "Shôwaʻ",
+      "translated": true
+    },
+    "H7773": {
+      "definitions_cz": "1) plakat",
+      "lemma": "שֶׁוַע",
+      "hebrew": "שוע",
+      "xlit": "shevaʻ",
+      "translated": true
+    },
+    "H7774": {
+      "definitions_cz": "Shua = \"wealth\" | 1) Asherites, dcera Hebera a sestra Jafleta, Shomera a Hothama",
+      "lemma": "שׁוּעָא",
+      "hebrew": "שועא",
+      "xlit": "Shûwʻâʼ",
+      "translated": true
     }
   }
 }
