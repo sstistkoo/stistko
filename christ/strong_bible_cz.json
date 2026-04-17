@@ -49577,6 +49577,706 @@
       "hebrew": "יעזיהו",
       "xlit": "Yaʻăzîyâhûw",
       "translated": true
+    },
+    "H3270": {
+      "definitions_cz": "Jazer nebo Jaazer = \"pomohl\" | 1) levitské město východně od Jordánu, v Gileadu na území Gádu, dříve emorejské město; místo nejisté",
+      "lemma": "יַעֲזֵיר",
+      "hebrew": "יעזיר",
+      "xlit": "Yaʻăzêyr",
+      "translated": true
+    },
+    "H3271": {
+      "definitions_cz": "1) (Qal) na pokrytí",
+      "lemma": "יָעַט",
+      "hebrew": "יעט",
+      "xlit": "yâʻaṭ",
+      "translated": true
+    },
+    "H3272": {
+      "definitions_cz": "1) (Ithpael) radit, radit, radit se | 2) (P'al) poradce (příčestí)",
+      "lemma": "יְעַט",
+      "hebrew": "יעט",
+      "xlit": "yᵉʻaṭ",
+      "translated": true
+    },
+    "H3273": {
+      "definitions_cz": "Jeiel nebo Jehiel = \"Bůh zametá\" | 1) jeden ze synů Adonikama, který se vrátil z vyhnanství s Ezrou | 2) náčelník Rubenity z domu Joelova | 3) merarijský levita a vrátný do svatostánku, který také hrál na harfu a žaltář při bohoslužbě před archou | 4) jeden z náčelníků Levitů v době krále Josiáše | 5) jeden ze synů Neba, který si za Ezdráše vzal cizí manželku | 6) muž z Gibeonu a praotec krále Saula | 7) jeden ze synů Hothama Aroerita",
+      "lemma": "יְעִיאֵל",
+      "hebrew": "יעיאל",
+      "xlit": "Yᵉʻîyʼêl",
+      "translated": true
+    },
+    "H3274": {
+      "definitions_cz": "Jeush = \"montér\" | 1) syn Ezau od Aholibama, dcery Any, syna Sibeona Hivejského | 2) Benjamin, syn Bilhanův",
+      "lemma": "יְעִישׁ",
+      "hebrew": "יעיש",
+      "xlit": "Yᵉʻîysh",
+      "translated": true
+    },
+    "H3275": {
+      "definitions_cz": "Jachan = \"problémový\" | 1) jeden ze sedmi předních mužů kmene Gád",
+      "lemma": "יַעְכָּן",
+      "hebrew": "יעכן",
+      "xlit": "Yaʻkân",
+      "translated": true
+    },
+    "H3276": {
+      "definitions_cz": "1) (Hiphil) získat, zisk, prospěch, prospěch",
+      "lemma": "יַעַל",
+      "hebrew": "יעל",
+      "xlit": "yaʻal",
+      "translated": true
+    },
+    "H3277": {
+      "definitions_cz": "1) horská koza",
+      "lemma": "יָעֵל",
+      "hebrew": "יעל",
+      "xlit": "yâʻêl",
+      "translated": true
+    },
+    "H3278": {
+      "definitions_cz": "Jael = \"horská koza\" | 1) manželka Hebera Kenita, který zabil generála Siseru, když spal, zaražením kolíku přes spánky do země",
+      "lemma": "יָעֵל",
+      "hebrew": "יעל",
+      "xlit": "Yâʻêl",
+      "translated": true
+    },
+    "H3279": {
+      "definitions_cz": "Jaala nebo Jaalah = \"vzestupně\" | 1) hlava rodiny potomků Šalamounových otroků, kteří se vrátili z vyhnanství se Zerubábelem",
+      "lemma": "יַעֲלָא",
+      "hebrew": "יעלא",
+      "xlit": "Yaʻălâʼ",
+      "translated": true
+    },
+    "H3280": {
+      "definitions_cz": "1) samice horské kozy",
+      "lemma": "יַעֲלָה",
+      "hebrew": "יעלה",
+      "xlit": "yaʻălâh",
+      "translated": true
+    },
+    "H3281": {
+      "definitions_cz": "Jaalam = \"skrytý\" | 1) Edomita, potomek Ezaua",
+      "lemma": "יַעְלָם",
+      "hebrew": "יעלם",
+      "xlit": "Yaʻlâm",
+      "translated": true
+    },
+    "H3282": {
+      "definitions_cz": "conj | 1) protože, tedy protože to, kvůli | příprava | 2) z důvodu | 3) proč (s tázacím zájmem)",
+      "lemma": "יַעַן",
+      "hebrew": "יען",
+      "xlit": "yaʻan",
+      "translated": true
+    },
+    "H3283": {
+      "definitions_cz": "1) pštros | 1a) obřadně nečisté zvíře",
+      "lemma": "יָעֵן",
+      "hebrew": "יען",
+      "xlit": "yâʻên",
+      "translated": true
+    },
+    "H3284": {
+      "definitions_cz": "1) nečistý pták | 1a) sova, pštros, doslova přeloženo jako \"dcery sovy\" | 1b) možná vyhynulý pták, přesný význam neznámý",
+      "lemma": "יַעֲנָה",
+      "hebrew": "יענה",
+      "xlit": "yaʻănâh",
+      "translated": true
+    },
+    "H3285": {
+      "definitions_cz": "Jaanai = \"komu Jehova odpovídá\" | 1) hlavní muž v pokolení Gád",
+      "lemma": "יַעֲנַי",
+      "hebrew": "יעני",
+      "xlit": "Yaʻănay",
+      "translated": true
+    },
+    "H3286": {
+      "definitions_cz": "1) být nebo být unavený, být unavený, být mdlý | 1a) (Qal) být nebo být unavený, být unavený, být slabý | 1b) (Hophal) unavený (příčestí)",
+      "lemma": "יָעַף",
+      "hebrew": "יעף",
+      "xlit": "yâʻaph",
+      "translated": true
+    },
+    "H3287": {
+      "definitions_cz": "1) mdlý, unavený, unavený",
+      "lemma": "יָעֵף",
+      "hebrew": "יעף",
+      "xlit": "yâʻêph",
+      "translated": true
+    },
+    "H3288": {
+      "definitions_cz": "1) únava, únava, mdloba",
+      "lemma": "יְעָף",
+      "hebrew": "יעף",
+      "xlit": "yᵉʻâph",
+      "translated": true
+    },
+    "H3289": {
+      "definitions_cz": "1) radit, konzultovat, radit, radit, účel, vymýšlet, plánovat | 1a) (Qal) | 1a1) radit, radit, radit, radit se | 1a2) rádce (příčestí) | 1b) (Niphal) společně se radit, vyměňovat si rady, uvažovat, radit se společně | 1c) (Hithpael) konspirovat",
+      "lemma": "יָעַץ",
+      "hebrew": "יעץ",
+      "xlit": "yâʻats",
+      "translated": true
+    },
+    "H3290": {
+      "definitions_cz": "Jacob = \"držák paty\" nebo \"náhradník\" | 1) syn Izáka, vnuka Abrahamova a otec 12 patriarchů izraelských kmenů",
+      "lemma": "יַעֲקֹב",
+      "hebrew": "יעקב",
+      "xlit": "Yaʻăqôb",
+      "translated": true
+    },
+    "H3291": {
+      "definitions_cz": "Jaakobah = \"směrem k Jákobovi\" | 1) syn Simeonův a vnuk Jákobův",
+      "lemma": "יַעֲקֹבָה",
+      "hebrew": "יעקבה",
+      "xlit": "Yaʻăqôbâh",
+      "translated": true
+    },
+    "H3292": {
+      "definitions_cz": "Jakan = \"ať je utlačuje\" | 1) Edomit",
+      "lemma": "יַעֲקָן",
+      "hebrew": "יעקן",
+      "xlit": "Yaʻăqân",
+      "translated": true
+    },
+    "H3293": {
+      "definitions_cz": "1) les, dřevo, houština, zalesněná výška",
+      "lemma": "יַעַר",
+      "hebrew": "יער",
+      "xlit": "yaʻar",
+      "translated": true
+    },
+    "H3294": {
+      "definitions_cz": "Jarah = \"zalesněný\" | 1) potomek Saula, syna Micheášova, pravnuka Mefibošetova",
+      "lemma": "יַעְרָה",
+      "hebrew": "יערה",
+      "xlit": "Yaʻrâh",
+      "translated": true
+    },
+    "H3295": {
+      "definitions_cz": "1) les | 1a) plástev (meton)",
+      "lemma": "יַעֲרָה",
+      "hebrew": "יערה",
+      "xlit": "yaʻărâh",
+      "translated": true
+    },
+    "H3296": {
+      "definitions_cz": "Jaare-oregim = \"lesy tkalce\" | 1) muž z Betléma, otec Elchanana, zabijáka obrů a jednoho z Davidových mocných bojovníků; také nazývaný 'Jair'",
+      "lemma": "יַעֲרֵי אֹרְגִים",
+      "hebrew": "יערי ארגים",
+      "xlit": "Yaʻărêy ʼÔrᵉgîym",
+      "translated": true
+    },
+    "H3297": {
+      "definitions_cz": "Jearim = \"lesy\" | 1) kopec na severní hranici Judska",
+      "lemma": "יְעָרִים",
+      "hebrew": "יערים",
+      "xlit": "Yᵉʻârîym",
+      "translated": true
+    },
+    "H3298": {
+      "definitions_cz": "Jaresiáš = \"koho Jehova živí\" | 1) Benjamin, jeden z potomků Jehorama",
+      "lemma": "יַעֲרֶשְׁיָה",
+      "hebrew": "יערשיה",
+      "xlit": "Yaʻăreshyâh",
+      "translated": true
+    },
+    "H3299": {
+      "definitions_cz": "Jaasau = \"budou dělat\" | 1) jeden z potomků Bani, který si vzal cizí manželku v době Ezry",
+      "lemma": "יַעֲשׂוּ",
+      "hebrew": "יעשו",
+      "xlit": "Yaʻăsûw",
+      "translated": true
+    },
+    "H3300": {
+      "definitions_cz": "Jasiel nebo Jaasiel = \"Bůh je tvůrce\" | 1) jeden z Davidových mocných válečníků | 2) syn Abnerův a náčelník Benjaminův",
+      "lemma": "יַעֲשִׂיאֵל",
+      "hebrew": "יעשיאל",
+      "xlit": "Yaʻăsîyʼêl",
+      "translated": true
+    },
+    "H3301": {
+      "definitions_cz": "Iphedeiah = \"Jehova vykoupí\" | 1) potomek Benjamina a rodu Shashaka",
+      "lemma": "יִפְדְּיָה",
+      "hebrew": "יפדיה",
+      "xlit": "Yiphdᵉyâh",
+      "translated": true
+    },
+    "H3302": {
+      "definitions_cz": "1) být jasný, být krásný, být hezký, být spravedlivý | 1a) (Qal) být krásný | 1b) (Piel) ke zkrášlení | 1c) (Pual) být krásný | 1d) (Hithpael) zkrášlit se",
+      "lemma": "יָפָה",
+      "hebrew": "יפה",
+      "xlit": "yâphâh",
+      "translated": true
+    },
+    "H3303": {
+      "definitions_cz": "1) spravedlivý, krásný, hezký",
+      "lemma": "יָפֶה",
+      "hebrew": "יפה",
+      "xlit": "yâpheh",
+      "translated": true
+    },
+    "H3304": {
+      "definitions_cz": "1) hezká (reduplikace silou zdrobněliny) | 1a) čestná slova (lit.) | 2) (CLBL) velmi krásné",
+      "lemma": "יְפֵה־פִיָּה",
+      "hebrew": "יפהפיה",
+      "xlit": "yᵉphêh-phîyâh",
+      "translated": true
+    },
+    "H3305": {
+      "definitions_cz": "Joppa nebo Japho = \"krásný\" | 1) město na jihozápadním pobřeží Palestiny na území Dan; se stal hlavním přístavem Jeruzaléma za vlády Šalomouna",
+      "lemma": "יָפוֹ",
+      "hebrew": "יפו",
+      "xlit": "Yâphôw",
+      "translated": true
+    },
+    "H3306": {
+      "definitions_cz": "1) dýchat, těžce dýchat, bafnout | 1a) (Hithpael) lapat po dechu",
+      "lemma": "יָפַח",
+      "hebrew": "יפח",
+      "xlit": "yâphach",
+      "translated": true
+    },
+    "H3307": {
+      "definitions_cz": "1) výdech, výdech, nafouknutí (subst)",
+      "lemma": "יָפֵחַ",
+      "hebrew": "יפח",
+      "xlit": "yâphêach",
+      "translated": true
+    },
+    "H3308": {
+      "definitions_cz": "1) krása",
+      "lemma": "יֳפִי",
+      "hebrew": "יפי",
+      "xlit": "yŏphîy",
+      "translated": true
+    },
+    "H3309": {
+      "definitions_cz": "Japhia = \"zářící\" | n pr loc | 1) město na hranici Zebulunu a Issacharu | 1a) možná moderní 'Yafa' | n pr m | 2) král Lachiše v době dobytí Kanaánu Jozuem | 3) syn Davidův od konkubíny",
+      "lemma": "יָפִיעַ",
+      "hebrew": "יפיע",
+      "xlit": "Yâphîyaʻ",
+      "translated": true
+    },
+    "H3310": {
+      "definitions_cz": "Jaflet = \"dodá\" | 1) potomek Ashera prostřednictvím Beriah",
+      "lemma": "יַפְלֵט",
+      "hebrew": "יפלט",
+      "xlit": "Yaphlêṭ",
+      "translated": true
+    },
+    "H3311": {
+      "definitions_cz": "Jafleti viz Jaflet = \"nech ho utéct\" | 1) potomci Ashera z rodu Jaflet, který žil na jihozápadní hranici Efraima. Používá se jako umístění",
+      "lemma": "יַפְלֵטִי",
+      "hebrew": "יפלטי",
+      "xlit": "Yaphlêṭîy",
+      "translated": true
+    },
+    "H3312": {
+      "definitions_cz": "Jephunneh = \"Bude čelit\" | 1) Kenezita a otec zvěda Káleba z kmene Juda | 2) syn Jeterův a potomek Ašerův",
+      "lemma": "יְפֻנֶּה",
+      "hebrew": "יפנה",
+      "xlit": "Yᵉphunneh",
+      "translated": true
+    },
+    "H3313": {
+      "definitions_cz": "1) zářit, zářit nebo ven, přimět zářit, vysílat paprsky | 1a) (Hiphil) | 1a1) svítit, svítit, vysílat paprsky | 1a2) způsobit lesk",
+      "lemma": "יָפַע",
+      "hebrew": "יפע",
+      "xlit": "yâphaʻ",
+      "translated": true
+    },
+    "H3314": {
+      "definitions_cz": "1) nádhera, jas, lesk",
+      "lemma": "יִפְעָה",
+      "hebrew": "יפעה",
+      "xlit": "yiphʻâh",
+      "translated": true
+    },
+    "H3315": {
+      "definitions_cz": "Japheth = \"otevřeno\" | 1) 3. syn Noema, jehož potomci se po potopě usadili na pobřežních oblastech Středozemního moře, které se šíří na sever do Evropy a částí Asie",
+      "lemma": "יֶפֶת",
+      "hebrew": "יפת",
+      "xlit": "Yepheth",
+      "translated": true
+    },
+    "H3316": {
+      "definitions_cz": "Jefta nebo Jiftah = \"otevírá\" | n pr m | 1) syn Gileadův a konkubína a soudce, který porazil Ammonity; po vítězství kvůli slibu složenému před bitvou obětoval svou dceru jako zápalnou oběť | n pr loc | 2) město v Judsku",
+      "lemma": "יִפְתָּח",
+      "hebrew": "יפתח",
+      "xlit": "Yiphtâch",
+      "translated": true
+    },
+    "H3317": {
+      "definitions_cz": "Jiphthah-el = \"Bůh otevírá\" | 1) údolí mezi Zabulonem a Ašerem; umístění nejisté",
+      "lemma": "יִפְתַּח־אֵל",
+      "hebrew": "יפתחאל",
+      "xlit": "Yiphtach-ʼêl",
+      "translated": true
+    },
+    "H3318": {
+      "definitions_cz": "1) vyjít, vyjít, vyjít, vyjít | 1a) (Qal) | 1a1) jít nebo vyjít nebo odejít, odejít | 1a2) jít vpřed (na místo) | 1a3) jít vpřed, pokračovat k (k něčemu nebo k něčemu) | 1a4) přicházet nebo vycházet (s účelem nebo za výsledkem) | 1a5) vyjít z | 1b) (hifil) | 1b1) přimět jít nebo vyjít, vyvést, vyvést | 1b2) vyvést z | 1b3) vyvést | 1b4) dodat | 1c) (Hophal) být vyveden nebo vyveden",
+      "lemma": "יָצָא",
+      "hebrew": "יצא",
+      "xlit": "yâtsâʼ",
+      "translated": true
+    },
+    "H3319": {
+      "definitions_cz": "1) (Shaphel) dovést do konce, dokončit, dovést do konce",
+      "lemma": "יְצָא",
+      "hebrew": "יצא",
+      "xlit": "yᵉtsâʼ",
+      "translated": true
+    },
+    "H3320": {
+      "definitions_cz": "1) umístit, postavit, postavit, postavit nebo postavit se, prezentovat se | 1a) (Hithpael) postavit se, postavit se, stát, prezentovat se, stát s někým",
+      "lemma": "יָצַב",
+      "hebrew": "יצב",
+      "xlit": "yâtsab",
+      "translated": true
+    },
+    "H3321": {
+      "definitions_cz": "1) (Pael) postavit se, ujistit se, získat jistotu, znát pravdu, být si jistý",
+      "lemma": "יְצַב",
+      "hebrew": "יצב",
+      "xlit": "yᵉtsab",
+      "translated": true
+    },
+    "H3322": {
+      "definitions_cz": "1) umístit, nastavit, založit | 1a) (Hiphil) | 1a1) nastavit, umístit | 1a2) do současnosti | 1a3) vystavit | 1b) (Hophal) být zastaven, zůstat, být zadržen",
+      "lemma": "יָצַג",
+      "hebrew": "יצג",
+      "xlit": "yâtsag",
+      "translated": true
+    },
+    "H3323": {
+      "definitions_cz": "1) čerstvý olej, lesklý (čistý) olej",
+      "lemma": "יִצְהָר",
+      "hebrew": "יצהר",
+      "xlit": "yitshâr",
+      "translated": true
+    },
+    "H3324": {
+      "definitions_cz": "Izhar = \"zářící olej\" | 1) syn Kehata, vnuka Léviho, strýce Mojžíše a Árona a otce Kóracha; předchůdce Izharitů",
+      "lemma": "יִצְהָר",
+      "hebrew": "יצהר",
+      "xlit": "Yitshâr",
+      "translated": true
+    },
+    "H3325": {
+      "definitions_cz": "Izharites nebo Izeharites = \"olej\" | 1) potomci Izara, syna Kehatova a vnuka Léviho",
+      "lemma": "יִצְהָרִי",
+      "hebrew": "יצהרי",
+      "xlit": "Yitshârîy",
+      "translated": true
+    },
+    "H3326": {
+      "definitions_cz": "1) gauč, postel",
+      "lemma": "יָצוּעַ",
+      "hebrew": "יצוע",
+      "xlit": "yâtsûwaʻ",
+      "translated": true
+    },
+    "H3327": {
+      "definitions_cz": "Izák = \"směje se\" | 1) syn Abrahamův od Sáry, jeho manželky a otce Jákoba a Ezaua",
+      "lemma": "יִצְחָק",
+      "hebrew": "יצחק",
+      "xlit": "Yitschâq",
+      "translated": true
+    },
+    "H3328": {
+      "definitions_cz": "Zohar = \"hnědý\"",
+      "lemma": "יִצְחַר",
+      "hebrew": "יצחר",
+      "xlit": "Yitschar",
+      "translated": true
+    },
+    "H3329": {
+      "definitions_cz": "1) vychází | 1a) potomek (subst)",
+      "lemma": "יָצִיא",
+      "hebrew": "יציא",
+      "xlit": "yâtsîyʼ",
+      "translated": true
+    },
+    "H3330": {
+      "definitions_cz": "n | 1) pravda | adv | 2) jistě, spolehlivě, skutečně | adj | 3) spolehlivý, pravdivý, jistý, jistý",
+      "lemma": "יַצִּיב",
+      "hebrew": "יציב",
+      "xlit": "yatstsîyb",
+      "translated": true
+    },
+    "H3331": {
+      "definitions_cz": "1) rozložit, ustlat postel | 1a) (Hiphil) položit, rozložit | 1b) (Hophal) položit, rozložit",
+      "lemma": "יַצַע",
+      "hebrew": "יצע",
+      "xlit": "yatsaʻ",
+      "translated": true
+    },
+    "H3332": {
+      "definitions_cz": "1) nalít, téci, odlévat, vylévat | 1a) (Qal) | 1a1) nalít, vylít | 1a2) odlévat | 1a3) proudit | 1b) (Hifil) nalít, vylít | 1c) (Hophal) | 1c1) k nalití | 1c2) litý, roztavený (příčestí) | 1c3) je pevně stanoven (příčestí)",
+      "lemma": "יָצַק",
+      "hebrew": "יצק",
+      "xlit": "yâtsaq",
+      "translated": true
+    },
+    "H3333": {
+      "definitions_cz": "1) odlitek (kovu)",
+      "lemma": "יְצֻקָה",
+      "hebrew": "יצקה",
+      "xlit": "yᵉtsuqâh",
+      "translated": true
+    },
+    "H3334": {
+      "definitions_cz": "1) svázat, být v tísni, být v tísni, být stísněný, být úzký, být skrovný, být v úžinách, dělat úzký, působit tíseň, obléhat | 1a) (Qal) trpět nouzi",
+      "lemma": "יָצַר",
+      "hebrew": "יצר",
+      "xlit": "yâtsar",
+      "translated": true
+    },
+    "H3335": {
+      "definitions_cz": "1) tvořit, móda, rám | 1a) (Qal) tvořit, móda | 1a1) lidské činnosti | 1a2) božské činnosti | 1a2a) stvoření | 1a2a1) původní tvorby | 1a2a2) jedinců při početí | 1a2a3) Izraele jako lid | 1a2b) zarámovat, předurčit, naplánovat (obr. božského) účel situace) | 1b) (Niphal) být vytvořen, být vytvořen | 1c) (Pual) být předem určen, být předem nařízen | 1d) (Hophal), který má být vytvořen",
+      "lemma": "יָצַר",
+      "hebrew": "יצר",
+      "xlit": "yâtsar",
+      "translated": true
+    },
+    "H3336": {
+      "definitions_cz": "1) forma, rámování, účel, rámec | 1a) formulář | 1a1) keramika | 1a2) rytý obrázek | 1a3) člověk (jako stvořený z prachu) | 1b) účel, představivost, zařízení (intelektuální rámec)",
+      "lemma": "יֵצֶר",
+      "hebrew": "יצר",
+      "xlit": "yêtser",
+      "translated": true
+    },
+    "H3337": {
+      "definitions_cz": "Jezer = \"formování\" | 1) 3. syn Neftaliho a zakladatel rodu Jezerovců",
+      "lemma": "יֵצֶר",
+      "hebrew": "יצר",
+      "xlit": "Yêtser",
+      "translated": true
+    },
+    "H3338": {
+      "definitions_cz": "1) formy, členové (těla)",
+      "lemma": "יָצֻר",
+      "hebrew": "יצר",
+      "xlit": "yâtsur",
+      "translated": true
+    },
+    "H3339": {
+      "definitions_cz": "Izri = \"můj módní návrhář\" | 1) vedoucí jednoho z levitských svatostánkových sborů",
+      "lemma": "יִצְרִי",
+      "hebrew": "יצרי",
+      "xlit": "Yitsrîy",
+      "translated": true
+    },
+    "H3340": {
+      "definitions_cz": "Jezerites = \"představivost: forma: účel\" | 1) potomci Jezera, syna Neftaliho",
+      "lemma": "יִצְרִי",
+      "hebrew": "יצרי",
+      "xlit": "Yitsrîy",
+      "translated": true
+    },
+    "H3341": {
+      "definitions_cz": "1) zapálit, spálit, zapálit | 1a) (Qal) zapálit | 1b) (Niphal) | 1b1) k zapálení | 1b2) zůstane pustý | 1c) (Hiphil) zapálit, zapálit",
+      "lemma": "יָצַת",
+      "hebrew": "יצת",
+      "xlit": "yâtsath",
+      "translated": true
+    },
+    "H3342": {
+      "definitions_cz": "1) káď na víno, lis na víno",
+      "lemma": "יֶקֶב",
+      "hebrew": "יקב",
+      "xlit": "yeqeb",
+      "translated": true
+    },
+    "H3343": {
+      "definitions_cz": "Jekabzeel = \"Bůh se shromažďuje\" | 1) nejvzdálenější město Judska; nachází se v jižním Judsku na hranici Edomu",
+      "lemma": "יְקַבְצְאֵל",
+      "hebrew": "יקבצאל",
+      "xlit": "Yᵉqabtsᵉʼêl",
+      "translated": true
+    },
+    "H3344": {
+      "definitions_cz": "1) zapálit, zapálit, zapálit | 1a) (Qal) k zapálení | 1b) (Hophal) hořet, hořet,",
+      "lemma": "יָקַד",
+      "hebrew": "יקד",
+      "xlit": "yâqad",
+      "translated": true
+    },
+    "H3345": {
+      "definitions_cz": "1) (P'al) spálit",
+      "lemma": "יְקַד",
+      "hebrew": "יקד",
+      "xlit": "yᵉqad",
+      "translated": true
+    },
+    "H3346": {
+      "definitions_cz": "1) pálení",
+      "lemma": "יְקֵדָא",
+      "hebrew": "יקדא",
+      "xlit": "yᵉqêdâʼ",
+      "translated": true
+    },
+    "H3347": {
+      "definitions_cz": "Jokdeam = \"upálení lidu\" | 1) město v horách jižního Judska; zřejmě jižně od Hebronu",
+      "lemma": "יׇקְדְעָם",
+      "hebrew": "יקדעם",
+      "xlit": "Yoqdᵉʻâm",
+      "translated": true
+    },
+    "H3348": {
+      "definitions_cz": "Jakeh = \"bezúhonný\" | 1) otec mudrce Agura",
+      "lemma": "יָקֶה",
+      "hebrew": "יקה",
+      "xlit": "Yâqeh",
+      "translated": true
+    },
+    "H3349": {
+      "definitions_cz": "1) poslušnost, očista, očista",
+      "lemma": "יִקָּהָה",
+      "hebrew": "יקהה",
+      "xlit": "yiqqâhâh",
+      "translated": true
+    },
+    "H3350": {
+      "definitions_cz": "1) pálení",
+      "lemma": "יְקוֹד",
+      "hebrew": "יקוד",
+      "xlit": "yᵉqôwd",
+      "translated": true
+    },
+    "H3351": {
+      "definitions_cz": "1) živá substance, to, co stojí nebo existuje, existence, substance",
+      "lemma": "יְקוּם",
+      "hebrew": "יקום",
+      "xlit": "yᵉqûwm",
+      "translated": true
+    },
+    "H3352": {
+      "definitions_cz": "1) fowler, návnada",
+      "lemma": "יָקוֹשׁ",
+      "hebrew": "יקוש",
+      "xlit": "yâqôwsh",
+      "translated": true
+    },
+    "H3353": {
+      "definitions_cz": "1) lovec ptáků, lapač, kladeč návnad",
+      "lemma": "יָקוּשׁ",
+      "hebrew": "יקוש",
+      "xlit": "yâqûwsh",
+      "translated": true
+    },
+    "H3354": {
+      "definitions_cz": "Jekuthiel = \"očista boží\" | 1) potomek Káleba z kmene Juda",
+      "lemma": "יְקוּתִיאֵל",
+      "hebrew": "יקותיאל",
+      "xlit": "Yᵉqûwthîyʼêl",
+      "translated": true
+    },
+    "H3355": {
+      "definitions_cz": "Joktan = \"malost\" | 1) syn Eberův a potomek Šema a patriarcha různých arabských kmenů",
+      "lemma": "יׇקְטָן",
+      "hebrew": "יקטן",
+      "xlit": "Yoqṭân",
+      "translated": true
+    },
+    "H3356": {
+      "definitions_cz": "Jakim = \"Zvedne\" | 1) benjamínec a potomek Shimhiho | 2) levitský kněz, který měl na starosti 12. kurz v době Davidově",
+      "lemma": "יָקִים",
+      "hebrew": "יקים",
+      "xlit": "Yâqîym",
+      "translated": true
+    },
+    "H3357": {
+      "definitions_cz": "1) vzácný, velmi drahý, čest, drahý",
+      "lemma": "יַקִּיר",
+      "hebrew": "יקיר",
+      "xlit": "yaqqîyr",
+      "translated": true
+    },
+    "H3358": {
+      "definitions_cz": "1) vzácný, vznešený, slavný, těžký | 1a) čestný | 1b) obtížné (meton)",
+      "lemma": "יַקִּיר",
+      "hebrew": "יקיר",
+      "xlit": "yaqqîyr",
+      "translated": true
+    },
+    "H3359": {
+      "definitions_cz": "Jecamiah nebo Jekamiah = \"Jehova zvedá\" | 1) potomek Judy, syna Shalluma z rodu Ahlai | 2) potomek Davida a jeden ze sedmi zavedených do královské linie po jejím selhání v osobě Jehojakina",
+      "lemma": "יְקַמְיָה",
+      "hebrew": "יקמיה",
+      "xlit": "Yᵉqamyâh",
+      "translated": true
+    },
+    "H3360": {
+      "definitions_cz": "Jekameam = \"nech lid povstat\" | 1) Levita, čtvrtý syn Hebrona a vnuk Kehata v době Davida",
+      "lemma": "יְקַמְעָם",
+      "hebrew": "יקמעם",
+      "xlit": "Yᵉqamʻâm",
+      "translated": true
+    },
+    "H3361": {
+      "definitions_cz": "Jokmeam = \"shromážděný lidmi\" | 1) útočiště v Efrajimu dané kehatským levitům",
+      "lemma": "יׇקְמְעָם",
+      "hebrew": "יקמעם",
+      "xlit": "Yoqmᵉʻâm",
+      "translated": true
+    },
+    "H3362": {
+      "definitions_cz": "Jokneam = \"lid naříká\" | 1) město Kanaán dobyté Jozuem a na území Zabulon, ale přidělené merarijským Levitům a nacházející se na hoře Karmel",
+      "lemma": "יׇקְנְעָם",
+      "hebrew": "יקנעם",
+      "xlit": "Yoqnᵉʻâm",
+      "translated": true
+    },
+    "H3363": {
+      "definitions_cz": "1) být dislokován, být odcizen | 1a) (Qal) být dislokován, být odtržen, být odcizen | 1b) (hifil) | 1b1) provádět pomalu (expozicí nebo nabodnutím) | 1b2) k zavěšení | 1c) (Hophal) k provedení",
+      "lemma": "יָקַע",
+      "hebrew": "יקע",
+      "xlit": "yâqaʻ",
+      "translated": true
+    },
+    "H3364": {
+      "definitions_cz": "1) (Qal) probudit, probudit, stát se aktivním",
+      "lemma": "יָקַץ",
+      "hebrew": "יקץ",
+      "xlit": "yâqats",
+      "translated": true
+    },
+    "H3365": {
+      "definitions_cz": "1) vážit si, být ceněný, být cenný, být drahý, být drahý, být oceněn | 1a) (Qal) | 1a1) být drahý, být vysoce ceněn, být vážený, být drahý | 1a2) k posouzení | 1b) (Hifil) vyrobit něco vzácného",
+      "lemma": "יָקַר",
+      "hebrew": "יקר",
+      "xlit": "yâqar",
+      "translated": true
+    },
+    "H3366": {
+      "definitions_cz": "1) cena, hodnota, vzácnost, čest, nádhera, okázalost | 1a) vzácnost | 1b) cena | 1c) čest, úcta",
+      "lemma": "יְקָר",
+      "hebrew": "יקר",
+      "xlit": "yᵉqâr",
+      "translated": true
+    },
+    "H3367": {
+      "definitions_cz": "1) čest, úcta",
+      "lemma": "יְקָר",
+      "hebrew": "יקר",
+      "xlit": "yᵉqâr",
+      "translated": true
+    },
+    "H3368": {
+      "definitions_cz": "1) cenný, ceněný, vážený, vzácný, vzácný, nádherný | 1a) drahý | 1a1) nákladné | 1a2) vzácný, vysoce ceněný | 1a3) drahé kameny nebo šperky | 1b) vzácné | 1c) nádherné, nádherné | 1d) závažná, vlivná",
+      "lemma": "יָקָר",
+      "hebrew": "יקר",
+      "xlit": "yâqâr",
+      "translated": true
+    },
+    "H3369": {
+      "definitions_cz": "1) nalákat, nalákat, nachytat, položit past nebo nalákat, nastražit past | 1a) (Qal) | 1a1) klást léčky (obr. zařízení bezbožných) | 1a2) fowlers (příčestí) | 1b) (Niphal), který má být chycen, být chycen návnadou | 1c) (Pual) být chycen",
+      "lemma": "יָקֹשׁ",
+      "hebrew": "יקש",
+      "xlit": "yâqôsh",
+      "translated": true
     }
   }
 }
