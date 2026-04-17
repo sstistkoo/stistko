@@ -65124,6 +65124,356 @@
       "hebrew": "סוף",
       "xlit": "çôwph",
       "translated": true
+    },
+    "H5491": {
+      "definitions_cz": "1) konec, závěr",
+      "lemma": "סוֹף",
+      "hebrew": "סוף",
+      "xlit": "çôwph",
+      "translated": true
+    },
+    "H5492": {
+      "definitions_cz": "n f | 1) bouřkový vítr | Suphah = \"voština: přetečení\" | n pr loc | 2) místo na východ od Jordánu",
+      "lemma": "סוּפָה",
+      "hebrew": "סופה",
+      "xlit": "çûwphâh",
+      "translated": true
+    },
+    "H5493": {
+      "definitions_cz": "1) odvrátit se, odejít | 1a) (Qal) | 1a1) pro otočení stranou otočte do | 1a2) odcházet, odcházet z cesty, vyhýbat se | 1a3) k odstranění | 1a4) skončit | 1b) (Polel) pro otočení stranou | 1c) (Hiphil) | 1c1) přimět k odvrácení, přimět odejít, odstranit, odnést, odložit, sesadit | 1c2) odložit, ponechat nedokončené, stáhnout zpět, odmítnout, zrušit | 1d) (Hophal) být odvezen, být odstraněn",
+      "lemma": "סוּר",
+      "hebrew": "סור",
+      "xlit": "çûwr",
+      "translated": true
+    },
+    "H5494": {
+      "definitions_cz": "1) degenerovat",
+      "lemma": "סוּר",
+      "hebrew": "סור",
+      "xlit": "çûwr",
+      "translated": true
+    },
+    "H5495": {
+      "definitions_cz": "Sur = \"odbočit\" | 1) chrámová brána",
+      "lemma": "סוּר",
+      "hebrew": "סור",
+      "xlit": "Çûwr",
+      "translated": true
+    },
+    "H5496": {
+      "definitions_cz": "1) podněcovat, lákat, podněcovat, lákat | 1a) (Hiphil) | 1a1) podněcovat (k žádosti) | 1a2) lákat, lákat | 1a3) podněcovat (špatný smysl)",
+      "lemma": "סוּת",
+      "hebrew": "סות",
+      "xlit": "çûwth",
+      "translated": true
+    },
+    "H5497": {
+      "definitions_cz": "1) oděv, roucho",
+      "lemma": "סוּת",
+      "hebrew": "סות",
+      "xlit": "çûwth",
+      "translated": true
+    },
+    "H5498": {
+      "definitions_cz": "1) (Qal) přetáhnout",
+      "lemma": "סָחַב",
+      "hebrew": "סחב",
+      "xlit": "çâchab",
+      "translated": true
+    },
+    "H5499": {
+      "definitions_cz": "1) hadr, hadr (věci tahané nebo vláčené)",
+      "lemma": "סְחָבָה",
+      "hebrew": "סחבה",
+      "xlit": "çᵉchâbâh",
+      "translated": true
+    },
+    "H5500": {
+      "definitions_cz": "1) škrábat | 1a) (Piel) oškrábat, vydrhnout",
+      "lemma": "סָחָה",
+      "hebrew": "סחה",
+      "xlit": "çâchâh",
+      "translated": true
+    },
+    "H5501": {
+      "definitions_cz": "1) offscours",
+      "lemma": "סְחִי",
+      "hebrew": "סחי",
+      "xlit": "çᵉchîy",
+      "translated": true
+    },
+    "H5502": {
+      "definitions_cz": "1) padnout na zem, porazit | 1a) (Qal) klanějící se (příčestí) | 1b) (Niphal), aby se poklonil",
+      "lemma": "סָחַף",
+      "hebrew": "סחף",
+      "xlit": "çâchaph",
+      "translated": true
+    },
+    "H5503": {
+      "definitions_cz": "1) obcházet, obcházet, cestovat, obchodovat | 1a) (Qal) | 1a1) chodit sem a tam (v podnikání) | 1a2) obchodník, překupník (příčestí) | 1b) (Pilpel) bušit",
+      "lemma": "סָחַר",
+      "hebrew": "סחר",
+      "xlit": "çâchar",
+      "translated": true
+    },
+    "H5504": {
+      "definitions_cz": "1) návštěvnost, zisk, zisk, zisk ze zboží | 1a) provoz, zisk z provozu",
+      "lemma": "סַחַר",
+      "hebrew": "סחר",
+      "xlit": "çachar",
+      "translated": true
+    },
+    "H5505": {
+      "definitions_cz": "1) návštěvnost, zisk, zisk, zisk ze zboží | 1a) provoz, zisk z provozu",
+      "lemma": "סָחַר",
+      "hebrew": "סחר",
+      "xlit": "çâchar",
+      "translated": true
+    },
+    "H5506": {
+      "definitions_cz": "1) zboží",
+      "lemma": "סְחֹרָה",
+      "hebrew": "סחרה",
+      "xlit": "çᵉchôrâh",
+      "translated": true
+    },
+    "H5507": {
+      "definitions_cz": "1) štít, štít",
+      "lemma": "סֹחֵרָה",
+      "hebrew": "סחרה",
+      "xlit": "çôchêrâh",
+      "translated": true
+    },
+    "H5508": {
+      "definitions_cz": "1) kámen používaný na dlažbu (s mramorem)",
+      "lemma": "סֹחֵרֶת",
+      "hebrew": "סחרת",
+      "xlit": "çôchêreth",
+      "translated": true
+    },
+    "H5509": {
+      "definitions_cz": "1) pohyb zpět nebo pryč | 2) struska (obvykle stříbrná)",
+      "lemma": "סִיג",
+      "hebrew": "סיג",
+      "xlit": "çîyg",
+      "translated": true
+    },
+    "H5510": {
+      "definitions_cz": "Sivan = \"jejich přikrytí\" | 1) 3. měsíc v židovském kalendáři odpovídající květen-červen",
+      "lemma": "סִיוָן",
+      "hebrew": "סיון",
+      "xlit": "Çîyvân",
+      "translated": true
+    },
+    "H5511": {
+      "definitions_cz": "Sihon = \"bojovník\" | 1) král Amorejců v době dobytí a poražený Mojžíšem v Transjordánsku",
+      "lemma": "סִיחוֹן",
+      "hebrew": "סיחון",
+      "xlit": "Çîychôwn",
+      "translated": true
+    },
+    "H5512": {
+      "definitions_cz": "Sin = \"trn\" nebo \"hlína\" | 1) město ve východním Egyptě | 2) úsek divočiny mezi Elim a Sinaj",
+      "lemma": "סִין",
+      "hebrew": "סין",
+      "xlit": "Çîyn",
+      "translated": true
+    },
+    "H5513": {
+      "definitions_cz": "Sinite = viz Sin \"trn\" nebo \"hlína\" | 1) kmen Kananejců pocházející z Kanaánu obývající severní část libanonského okresu",
+      "lemma": "סִינִי",
+      "hebrew": "סיני",
+      "xlit": "Çîynîy",
+      "translated": true
+    },
+    "H5514": {
+      "definitions_cz": "Sinaj = \"trnitý\" | 1) hora, kde Mojžíš přijal Zákon od Jehovy; nachází se na jižním konci Sinajského poloostrova mezi rohy Rudého moře; přesné místo neznámé",
+      "lemma": "סִינַי",
+      "hebrew": "סיני",
+      "xlit": "Çîynay",
+      "translated": true
+    },
+    "H5515": {
+      "definitions_cz": "Sinim = \"trny\" | 1) lidé žijící na konci známého světa; lze identifikovat s obyvateli jižní Číny",
+      "lemma": "סִינִים",
+      "hebrew": "סינים",
+      "xlit": "Çîynîym",
+      "translated": true
+    },
+    "H5516": {
+      "definitions_cz": "Sisera = \"bitevní pole\" | 1) dobyvatelský generál pod králem Jabinem z Hazoru a zabitý Jael | 2) předek rodiny chrámových otroků, kteří se vrátili z exilu se Zerubábelem",
+      "lemma": "סִיסְרָא",
+      "hebrew": "סיסרא",
+      "xlit": "Çîyçᵉrâʼ",
+      "translated": true
+    },
+    "H5517": {
+      "definitions_cz": "Sia nebo Siaha = \"odcházející\" | 1) předek rodiny chrámových otroků, kteří se vrátili z exilu se Zerubábelem",
+      "lemma": "סִיעָא",
+      "hebrew": "סיעא",
+      "xlit": "Çîyʻâʼ",
+      "translated": true
+    },
+    "H5518": {
+      "definitions_cz": "1) hrnec | 1a) hrnec (nádobí pro domácnost) | 1b) hrnec (chrámu) | 2) trn, háček, trn | 2a) trny | 2b) háčky",
+      "lemma": "סִיר",
+      "hebrew": "סיר",
+      "xlit": "çîyr",
+      "translated": true
+    },
+    "H5519": {
+      "definitions_cz": "1) zástup, množství",
+      "lemma": "סָךְ",
+      "hebrew": "סך",
+      "xlit": "çâk",
+      "translated": true
+    },
+    "H5520": {
+      "definitions_cz": "1) houština, doupě, úkryt, budka",
+      "lemma": "סֹךְ",
+      "hebrew": "סך",
+      "xlit": "çôk",
+      "translated": true
+    },
+    "H5521": {
+      "definitions_cz": "1) houština, úkryt, budka | 1a) houští | 1b) budka (neslušný nebo dočasný úkryt)",
+      "lemma": "סֻכָּה",
+      "hebrew": "סכה",
+      "xlit": "çukkâh",
+      "translated": true
+    },
+    "H5522": {
+      "definitions_cz": "Sikkuth = \"stan\" | 1) babylonské božstvo | 2) (TWOT) Tabernacle",
+      "lemma": "סִכּוּת",
+      "hebrew": "סכות",
+      "xlit": "çikkûwth",
+      "translated": true
+    },
+    "H5523": {
+      "definitions_cz": "Succoth = \"budky\" | 1) místo, kde Jákob postavil budky pro svůj dobytek a postavil si dům; zjevně východně od Jordánu poblíž brodu bystřiny Jabbok a později přiděleného kmeni Gad | 2) první zastávka Izraelitů, když opouštěli Egypt",
+      "lemma": "סֻכּוֹת",
+      "hebrew": "סכות",
+      "xlit": "Çukkôwth",
+      "translated": true
+    },
+    "H5524": {
+      "definitions_cz": "Succoth-benoth = \"stánek dcery\" | 1) Asyrské nebo babylonské božstvo uctívané Babyloňany v Samaří",
+      "lemma": "סֻכּוֹת בְּנוֹת",
+      "hebrew": "סכות בנות",
+      "xlit": "Çukkôwth bᵉnôwth",
+      "translated": true
+    },
+    "H5525": {
+      "definitions_cz": "Sukkiims = \"obyvatelé stánků\" | 1) lid, který dodával válečníky pro egyptskou armádu pod Šišakem",
+      "lemma": "סֻכִּי",
+      "hebrew": "סכי",
+      "xlit": "Çukkîy",
+      "translated": true
+    },
+    "H5526": {
+      "definitions_cz": "1) (Qal) ohradit, ohradit, zavřít | 2) blokovat, zastínit, clonit, zastavit přiblížení, vypnout, zakrýt | 2a) (Qal) | 2a1) na stínítko, kryt | 2a2) zahalit se | 2a3) chránič (příčestí) | 2b) (hifil) | 2b1) na stínítko, kryt | 2b2) krýt, defekovat (eufemismus) | 3) (Qal) zakrýt, položit | 4) splést dohromady | 4a) (Qal) proplést dohromady | 4b) (Pilpel) plést, plést dohromady",
+      "lemma": "סָכַךְ",
+      "hebrew": "סכך",
+      "xlit": "çâkak",
+      "translated": true
+    },
+    "H5527": {
+      "definitions_cz": "Secacah = \"houšť\" | 1) jedno ze 6 judských měst ležících v poušti hraničící s Mrtvým mořem",
+      "lemma": "סְכָכָה",
+      "hebrew": "סככה",
+      "xlit": "Çᵉkâkâh",
+      "translated": true
+    },
+    "H5528": {
+      "definitions_cz": "1) být hloupý, být hloupý | 1a) (Piel) učiniti bláznovstvím, proměniti v bláznovství | 1b) (Niphal) jednat nebo jednat pošetile | 1c) (Hiphil) dělat hloupě, hrát si na blázna",
+      "lemma": "סָכַל",
+      "hebrew": "סכל",
+      "xlit": "çâkal",
+      "translated": true
+    },
+    "H5529": {
+      "definitions_cz": "1) blbost",
+      "lemma": "סֶכֶל",
+      "hebrew": "סכל",
+      "xlit": "çekel",
+      "translated": true
+    },
+    "H5530": {
+      "definitions_cz": "1) blázen",
+      "lemma": "סָכָל",
+      "hebrew": "סכל",
+      "xlit": "çâkâl",
+      "translated": true
+    },
+    "H5531": {
+      "definitions_cz": "1) hloupost, hloupost",
+      "lemma": "סִכְלוּת",
+      "hebrew": "סכלות",
+      "xlit": "çiklûwth",
+      "translated": true
+    },
+    "H5532": {
+      "definitions_cz": "1) k užitku nebo službě nebo zisku nebo prospěchu | 1a) (Qal) | 1a1) k použití nebo službě | 1a2) služebník, správce (příčestí) | 1a3) prospěch, zisk | 1b) (Hiphil) být používán, být zvyklý, projevovat užívání nebo zvyk, projevovat harmonii s, být obeznámen, důvěrně znát",
+      "lemma": "סָכַן",
+      "hebrew": "סכן",
+      "xlit": "çâkan",
+      "translated": true
+    },
+    "H5533": {
+      "definitions_cz": "1) vystavit se nebezpečí | 1a) (Niphal) ohrozit se | 2) být chudý | 2a) (Pual) být ochuzen",
+      "lemma": "סָכַן",
+      "hebrew": "סכן",
+      "xlit": "çâkan",
+      "translated": true
+    },
+    "H5534": {
+      "definitions_cz": "1) ztišit, zastavit | 1a) (Niphal) být zastaven, být zticha | 1b) (Piel) držet hubu, vzdát se",
+      "lemma": "סָכַר",
+      "hebrew": "סכר",
+      "xlit": "çâkar",
+      "translated": true
+    },
+    "H5535": {
+      "definitions_cz": "1) mlčet | 1a) (Hiphil) mlčet, ukazovat ticho",
+      "lemma": "סָכַת",
+      "hebrew": "סכת",
+      "xlit": "çâkath",
+      "translated": true
+    },
+    "H5536": {
+      "definitions_cz": "1) košík",
+      "lemma": "סַל",
+      "hebrew": "סל",
+      "xlit": "çal",
+      "translated": true
+    },
+    "H5537": {
+      "definitions_cz": "1) vážit, porovnávat | 1a) (Pual) | 1a1) ke vážení | 1a2) zváženo (příčestí)",
+      "lemma": "סָלָא",
+      "hebrew": "סלא",
+      "xlit": "çâlâʼ",
+      "translated": true
+    },
+    "H5538": {
+      "definitions_cz": "Silla = \"dálnice\" | 1) scéna vraždy judského krále Joaše; místo neznámé",
+      "lemma": "סִלָּא",
+      "hebrew": "סלא",
+      "xlit": "Çillâʼ",
+      "translated": true
+    },
+    "H5539": {
+      "definitions_cz": "1) (Piel) skákat, skákat, skákat, skákat radostí",
+      "lemma": "סָלַד",
+      "hebrew": "סלד",
+      "xlit": "çâlad",
+      "translated": true
+    },
+    "H5540": {
+      "definitions_cz": "Seled = \"jásání\" | 1) jeden ze synů Nádaba, potomka Jerahmeela",
+      "lemma": "סֶלֶד",
+      "hebrew": "סלד",
+      "xlit": "Çeled",
+      "translated": true
     }
   }
 }
