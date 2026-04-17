@@ -68624,6 +68624,706 @@
       "hebrew": "עמיזבד",
       "xlit": "ʻAmmîyzâbâd",
       "translated": true
+    },
+    "H5991": {
+      "definitions_cz": "Ammihud = \"lid veličenstva\" | 1) vládce Sýrie",
+      "lemma": "עַמִּיחוּר",
+      "hebrew": "עמיחור",
+      "xlit": "ʻAmmîychûwr",
+      "translated": true
+    },
+    "H5992": {
+      "definitions_cz": "Amminadab = \"můj příbuzný je vznešený\" | 1) syn Ráma nebo Arama a otec Nachšona nebo Naassona a předek Ježíše; Áronův tchán | 2) kehatský levita a vůdce synů Uzielových | 3) Levita, syn Kehatův; také \"Izhar\"",
+      "lemma": "עַמִּינָדָב",
+      "hebrew": "עמינדב",
+      "xlit": "ʻAmmîynâdâb",
+      "translated": true
+    },
+    "H5993": {
+      "definitions_cz": "Amminadib = \"moji lidé jsou ochotni\" | 1) neznámá osoba známá rychlostí svých vozů | 1a) možná to není osoba, ale mělo by být přeloženo jako „moji ochotní lidé“",
+      "lemma": "עַמִּי נָדִיב",
+      "hebrew": "עמי נדיב",
+      "xlit": "ʻAmmîy Nâdîyb",
+      "translated": true
+    },
+    "H5994": {
+      "definitions_cz": "adj | 1) hluboký | subst | 2) hluboké věci, hluboké záhady",
+      "lemma": "עֲמִיק",
+      "hebrew": "עמיק",
+      "xlit": "ʻămîyq",
+      "translated": true
+    },
+    "H5995": {
+      "definitions_cz": "1) řádka, řada padlého obilí",
+      "lemma": "עָמִיר",
+      "hebrew": "עמיר",
+      "xlit": "ʻâmîyr",
+      "translated": true
+    },
+    "H5996": {
+      "definitions_cz": "Ammishaddai = \"můj příbuzný je Všemohoucí\" | 1) otec Achiezera, knížete kmene Dan v době exodu",
+      "lemma": "עַמִּישַׁדַּי",
+      "hebrew": "עמישדי",
+      "xlit": "ʻAmmîyshadday",
+      "translated": true
+    },
+    "H5997": {
+      "definitions_cz": "1) vztah, soused, společník, kolega",
+      "lemma": "עָמִית",
+      "hebrew": "עמית",
+      "xlit": "ʻâmîyth",
+      "translated": true
+    },
+    "H5998": {
+      "definitions_cz": "1) pracovat, dřít | 1a) (Qal) k práci",
+      "lemma": "עָמַל",
+      "hebrew": "עמל",
+      "xlit": "ʻâmal",
+      "translated": true
+    },
+    "H5999": {
+      "definitions_cz": "1) dřina, potíže, práce | 1a) potíže | 1b) potíže, neplechu | 1c) dřina, práce",
+      "lemma": "עָמָל",
+      "hebrew": "עמל",
+      "xlit": "ʻâmâl",
+      "translated": true
+    },
+    "H6000": {
+      "definitions_cz": "Amal = \"práce\" | 1) Ašerita, syn Helemův",
+      "lemma": "עָמָל",
+      "hebrew": "עמל",
+      "xlit": "ʻÂmâl",
+      "translated": true
+    },
+    "H6001": {
+      "definitions_cz": "n m | 1) dělník, trpící, ubohý | 1a) dělník, dělník | 1b) postižený | adj v | 2) dřina",
+      "lemma": "עָמֵל",
+      "hebrew": "עמל",
+      "xlit": "ʻâmêl",
+      "translated": true
+    },
+    "H6002": {
+      "definitions_cz": "Amalek = \"obyvatel v údolí\" | 1) syn Elifaz jeho konkubína Timnah, vnuk Ezaua a předek kmene lidí v jižním Kanaánu | 2) potomci Amáleka",
+      "lemma": "עֲמָלֵק",
+      "hebrew": "עמלק",
+      "xlit": "ʻĂmâlêq",
+      "translated": true
+    },
+    "H6003": {
+      "definitions_cz": "Amalekit = viz Amalek \"lidé lapování\" | 1) potomci Amáleka, vnuka Ezaua",
+      "lemma": "עֲמָלֵקִי",
+      "hebrew": "עמלקי",
+      "xlit": "ʻĂmâlêqîy",
+      "translated": true
+    },
+    "H6004": {
+      "definitions_cz": "1) stmívat, tmavnout, tmavnout | 1a) (Qal) stmívat, zatmění, být drženo ve tmě | 1b) (Hophal) být ztlumen, ztmavnout",
+      "lemma": "עָמַם",
+      "hebrew": "עמם",
+      "xlit": "ʻâmam",
+      "translated": true
+    },
+    "H6005": {
+      "definitions_cz": "Immanuel = \"Bůh s námi\" nebo \"s námi je Bůh\" | 1) symbolické a prorocké jméno Mesiáše, Krista, prorokujícího, že se narodí z panny a bude „Bůh s námi“",
+      "lemma": "עִמָּנוּאֵל",
+      "hebrew": "עמנואל",
+      "xlit": "ʻImmânûwʼêl",
+      "translated": true
+    },
+    "H6006": {
+      "definitions_cz": "1) nakládat, nést, nést náklad | 1a) (Qal) | 1a1) načíst | 1a2) k přepravě nákladu | 1b)(Hiphil) položit náklad",
+      "lemma": "עָמַס",
+      "hebrew": "עמס",
+      "xlit": "ʻâmaç",
+      "translated": true
+    },
+    "H6007": {
+      "definitions_cz": "Amasiáš = \"Jehova je síla\" | 1) syn Zichriho a kapitán 200 000 judských válečníků za vlády judského krále Jozafata",
+      "lemma": "עֲמַסְיָה",
+      "hebrew": "עמסיה",
+      "xlit": "ʻĂmaçyâh",
+      "translated": true
+    },
+    "H6008": {
+      "definitions_cz": "Amad = \"vytrvalý\" | 1) město v Ašeru na hranici mezi Alammelechem a Mishealem",
+      "lemma": "עַמְעָד",
+      "hebrew": "עמעד",
+      "xlit": "ʻAmʻâd",
+      "translated": true
+    },
+    "H6009": {
+      "definitions_cz": "1) být hluboký, být hluboký, být hluboký | 1a) (Qal) být hluboký | 1b) (Hiphil) učinit hlubokým, učinit hlubokým",
+      "lemma": "עָמַק",
+      "hebrew": "עמק",
+      "xlit": "ʻâmaq",
+      "translated": true
+    },
+    "H6010": {
+      "definitions_cz": "1) údolí, údolí, nížina, otevřená krajina",
+      "lemma": "עֵמֶק",
+      "hebrew": "עמק",
+      "xlit": "ʻêmeq",
+      "translated": true
+    },
+    "H6011": {
+      "definitions_cz": "1) hloubka",
+      "lemma": "עֹמֶק",
+      "hebrew": "עמק",
+      "xlit": "ʻômeq",
+      "translated": true
+    },
+    "H6012": {
+      "definitions_cz": "1) hluboký, nevyzpytatelný | 1a) nesrozumitelný (řeči)",
+      "lemma": "עָמֵק",
+      "hebrew": "עמק",
+      "xlit": "ʻâmêq",
+      "translated": true
+    },
+    "H6013": {
+      "definitions_cz": "1) hluboké, tajemné, hlubiny | 1a) hluboký | 1b) nevyhledatelné",
+      "lemma": "עָמֹק",
+      "hebrew": "עמק",
+      "xlit": "ʻâmôq",
+      "translated": true
+    },
+    "H6014": {
+      "definitions_cz": "1) vázat snopy | 1a) (Piel) shromáždit | 2) manipulovat, tyransky jednat s | 2a) (Hithpael) zacházet jako s otrokem",
+      "lemma": "עָמַר",
+      "hebrew": "עמר",
+      "xlit": "ʻâmar",
+      "translated": true
+    },
+    "H6015": {
+      "definitions_cz": "1) vlna",
+      "lemma": "עֲמַר",
+      "hebrew": "עמר",
+      "xlit": "ʻămar",
+      "translated": true
+    },
+    "H6016": {
+      "definitions_cz": "1) omer | 1a) suchá odměrka 1/10 ephah (asi 2 litry) | 2) svazek",
+      "lemma": "עֹמֶר",
+      "hebrew": "עמר",
+      "xlit": "ʻômer",
+      "translated": true
+    },
+    "H6017": {
+      "definitions_cz": "Gomora = \"ponoření\" | 1) dvojměstí ve zlém se Sodomou, obě zničená při soudu Bohem ohněm z nebe | 1a) nepravosti (obr.)",
+      "lemma": "עֲמֹרָה",
+      "hebrew": "עמרה",
+      "xlit": "ʻĂmôrâh",
+      "translated": true
+    },
+    "H6018": {
+      "definitions_cz": "Omri = „Jehovův žák“ | 1) král severního království Izraele, nástupce krále Elaha, pro kterého byl kapitánem armády; vládl 12 let a jeho nástupcem se stal jeho nechvalně známý syn Achab | 2) jeden ze synů Bechera, syna Benjaminova | 3) potomek Fáreze, syna Judova | 4) syn Michaela a náčelník kmene Issachar v době Davida",
+      "lemma": "עׇמְרִי",
+      "hebrew": "עמרי",
+      "xlit": "ʻOmrîy",
+      "translated": true
+    },
+    "H6019": {
+      "definitions_cz": "Amram = \"vznešení lidé\" | 1) potomek Kehata a Léviho a otec Mojžíše | 2) jeden ze synů Baniho, který měl v době Ezdráše cizí manželku",
+      "lemma": "עַמְרָם",
+      "hebrew": "עמרם",
+      "xlit": "ʻAmrâm",
+      "translated": true
+    },
+    "H6020": {
+      "definitions_cz": "Amramité = viz Aram \"vznešený\" | 1) větev kehatovského rodu z kmene Lévi a potomků Amrama, otce Mojžíše",
+      "lemma": "עַמְרָמִי",
+      "hebrew": "עמרמי",
+      "xlit": "ʻAmrâmîy",
+      "translated": true
+    },
+    "H6021": {
+      "definitions_cz": "Amasa = \"břemeno\" | 1) syn Ithry nebo Jethera od Abigail, sestry Davidovy a generála Absalomova vojska | 2) syn Hadlai a kníže Efraim za vlády krále Achaza",
+      "lemma": "עֲמָשָׂא",
+      "hebrew": "עמשא",
+      "xlit": "ʻĂmâsâʼ",
+      "translated": true
+    },
+    "H6022": {
+      "definitions_cz": "Amasai = \"zatěžující\" | 1) válečník a náčelník velitelů Judy a Benjamína, který se připojil k Davidovi v Ciklagu | 2) kehatský levita, otec Mahatha a předek Samuela | 3) kněz, který troubil na trubku před archou | 4) další kehatský levita za vlády judského krále Ezechiáše",
+      "lemma": "עֲמָשַׂי",
+      "hebrew": "עמשי",
+      "xlit": "ʻĂmâsay",
+      "translated": true
+    },
+    "H6023": {
+      "definitions_cz": "Amashai = \"zatěžující\" | 1) kněz, syn Azareelův v době Nehemjáše",
+      "lemma": "עֲמַשְׁסַי",
+      "hebrew": "עמשסי",
+      "xlit": "ʻĂmashçay",
+      "translated": true
+    },
+    "H6024": {
+      "definitions_cz": "Anab = \"ovoce\" | 1) město v horách jižního Judska, 18 mil jihozápadně od Hebronu",
+      "lemma": "עֲנָב",
+      "hebrew": "ענב",
+      "xlit": "ʻĂnâb",
+      "translated": true
+    },
+    "H6025": {
+      "definitions_cz": "1) hrozny",
+      "lemma": "עֵנָב",
+      "hebrew": "ענב",
+      "xlit": "ʻênâb",
+      "translated": true
+    },
+    "H6026": {
+      "definitions_cz": "1) být měkký, jemný, jemný | 1a) (Pual) být jemný | 1b) (Hithpael) | 1b1) mít vkusný zvyk, nechat se hýčkat | 1b2) být šťastný, mít skvělé potěšení | 1b3) rozveselit, zasportovat si",
+      "lemma": "עָנַג",
+      "hebrew": "ענג",
+      "xlit": "ʻânag",
+      "translated": true
+    },
+    "H6027": {
+      "definitions_cz": "1) vynikající rozkoš, lahůdka, rozkoš, příjemnost",
+      "lemma": "עֹנֶג",
+      "hebrew": "ענג",
+      "xlit": "ʻôneg",
+      "translated": true
+    },
+    "H6028": {
+      "definitions_cz": "1) jemný, jemný",
+      "lemma": "עָנֹג",
+      "hebrew": "ענג",
+      "xlit": "ʻânôg",
+      "translated": true
+    },
+    "H6029": {
+      "definitions_cz": "1) svázat, svázat, svázat kolem nebo na | 1a) (Qal) svázat",
+      "lemma": "עָנַד",
+      "hebrew": "ענד",
+      "xlit": "ʻânad",
+      "translated": true
+    },
+    "H6030": {
+      "definitions_cz": "1) odpovídat, odpovídat, svědčit, mluvit, křičet | 1a) (Qal) | 1a1) odpovědět, odpovědět na | 1a2) svědčit, odpovídat jako svědek | 1b) (Niphal) | 1b1) učinit odpověď | 1b2) k zodpovězení, obdržení odpovědi | 2) (Qal) zpívat, vyslovovat melodii | 3) (Qal) přebývat",
+      "lemma": "עָנָה",
+      "hebrew": "ענה",
+      "xlit": "ʻânâh",
+      "translated": true
+    },
+    "H6031": {
+      "definitions_cz": "1) (Qal) být obsazen, být zaneprázdněn | 2) sužovat, utlačovat, pokorovat, být sužován, klanět se | 2a) (Qal) | 2a1), který má být položen, stát se nízkým | 2a2) být v depresi, být sklíčený | 2a3) být postižen | 2a4) sklonit se | 2b) (Niphal) | 2b1) pokořit se, poklonit se | 2b2) být sužován, být pokořen | 2c) (Piel) | 2c1) ponížit, špatně zacházet, sužovat | 2c2) ponížit se, být ponížen | 2c3) sužovat | 2d4) pokořit se, oslabit se | 2d) (Pual) | 2d1) být postižen | 2d2) až",
+      "lemma": "עָנָה",
+      "hebrew": "ענה",
+      "xlit": "ʻânâh",
+      "translated": true
+    },
+    "H6032": {
+      "definitions_cz": "1) odpovědět, odpovědět | 1a) (P'al) | 1a1) odpovědět, odpovědět | 1a2) reagovat",
+      "lemma": "עֲנָה",
+      "hebrew": "ענה",
+      "xlit": "ʻănâh",
+      "translated": true
+    },
+    "H6033": {
+      "definitions_cz": "v | 1) (P'al) být pokorný, být nízký | adj | 2) chudý, potřebný",
+      "lemma": "עֲנָה",
+      "hebrew": "ענה",
+      "xlit": "ʻănâh",
+      "translated": true
+    },
+    "H6034": {
+      "definitions_cz": "Anah = \"odpověď\" | n pr m | 1) syn Sibeonův a otec Aholibama, manželky Ezauovy | 2) náčelník Horite | n pr f | 3) dcera Zibeonova",
+      "lemma": "עֲנָה",
+      "hebrew": "ענה",
+      "xlit": "ʻĂnâh",
+      "translated": true
+    },
+    "H6035": {
+      "definitions_cz": "1) chudý, pokorný, utrápený, pokorný | 1a) chudý, nuzný | 1b) chudý a slabý | 1c) chudý, slabý a postižený | 1d) pokorný, pokorný, pokorný",
+      "lemma": "עָנָו",
+      "hebrew": "ענו",
+      "xlit": "ʻânâv",
+      "translated": true
+    },
+    "H6036": {
+      "definitions_cz": "Anub = \"konfederace\" | 1) syn Kósův, potomek Judy a Káleba přes Ašura, otce Tekoy",
+      "lemma": "עָנוּב",
+      "hebrew": "ענוב",
+      "xlit": "ʻÂnûwb",
+      "translated": true
+    },
+    "H6037": {
+      "definitions_cz": "1) pokora, mírnost | 1a) pokora, mírnost | 1b) blahosklonnost",
+      "lemma": "עַנְוָה",
+      "hebrew": "ענוה",
+      "xlit": "ʻanvâh",
+      "translated": true
+    },
+    "H6038": {
+      "definitions_cz": "1) pokora, mírnost",
+      "lemma": "עֲנָוָה",
+      "hebrew": "ענוה",
+      "xlit": "ʻănâvâh",
+      "translated": true
+    },
+    "H6039": {
+      "definitions_cz": "1) trápení",
+      "lemma": "עֱנוּת",
+      "hebrew": "ענות",
+      "xlit": "ʻĕnûwth",
+      "translated": true
+    },
+    "H6040": {
+      "definitions_cz": "1) trápení, chudoba, bída | 1a) trápení | 1b) chudoba",
+      "lemma": "עֳנִי",
+      "hebrew": "עני",
+      "xlit": "ʻŏnîy",
+      "translated": true
+    },
+    "H6041": {
+      "definitions_cz": "1) chudý, utrápený, pokorný, ubohý | 1a) chudý, nuzný | 1b) chudý a slabý | 1c) chudý, slabý, utrápený, ubohý | 1d) pokorný, pokorný",
+      "lemma": "עָנִי",
+      "hebrew": "עני",
+      "xlit": "ʻânîy",
+      "translated": true
+    },
+    "H6042": {
+      "definitions_cz": "Unni = \"postižený\" | 1) levitský vrátný v době Davidově | 2) Levita zaujatý posvátným úřadem po návratu z vyhnanství v Babylóně",
+      "lemma": "עֻנִּי",
+      "hebrew": "עני",
+      "xlit": "ʻUnnîy",
+      "translated": true
+    },
+    "H6043": {
+      "definitions_cz": "Anaiáš = \"Jehova odpověděl\" | 1) kněz, který pomohl Ezrovi a podepsal smlouvu s Nehemjášem",
+      "lemma": "עֲנָיָה",
+      "hebrew": "עניה",
+      "xlit": "ʻĂnâyâh",
+      "translated": true
+    },
+    "H6044": {
+      "definitions_cz": "Anim = \"fontány\" | 1) město v horách jižního Judska",
+      "lemma": "עָנִים",
+      "hebrew": "ענים",
+      "xlit": "ʻÂnîym",
+      "translated": true
+    },
+    "H6045": {
+      "definitions_cz": "1) povolání, úkol, zaměstnání",
+      "lemma": "עִנְיָן",
+      "hebrew": "ענין",
+      "xlit": "ʻinyân",
+      "translated": true
+    },
+    "H6046": {
+      "definitions_cz": "Anem = \"fontány\" | 1) levitské město v Issachar přidělené Geršonitům",
+      "lemma": "עָנֵם",
+      "hebrew": "ענם",
+      "xlit": "ʻÂnêm",
+      "translated": true
+    },
+    "H6047": {
+      "definitions_cz": "Anamim = \"trápení vod\" | 1) kmen Egypťanů",
+      "lemma": "עֲנָמִים",
+      "hebrew": "ענמים",
+      "xlit": "ʻĂnâmîym",
+      "translated": true
+    },
+    "H6048": {
+      "definitions_cz": "Anammelech = \"obraz krále\" | 1) asyrský falešný bůh představený Izraeli během monarchie; uctíván obřady podobnými těm Molochovým; doprovodný bůh 'Adrammelech'",
+      "lemma": "עֲנַמֶּלֶךְ",
+      "hebrew": "ענמלך",
+      "xlit": "ʻĂnammelek",
+      "translated": true
+    },
+    "H6049": {
+      "definitions_cz": "1) (Piel) přimět se objevit, vyrobit, přinést (mraky) | 2) (Poel) cvičit věštění, kouzlit | 2a) pozorovat časy, praktikovat věštectví nebo spiritismus nebo magii nebo věštbu nebo čarodějnictví | 2b) věštec, kouzelník, čarodějka, věštkyně, věštkyně, barbar, Meonenim (příčestí)",
+      "lemma": "עָנַן",
+      "hebrew": "ענן",
+      "xlit": "ʻânan",
+      "translated": true
+    },
+    "H6050": {
+      "definitions_cz": "1) mrak",
+      "lemma": "עֲנַן",
+      "hebrew": "ענן",
+      "xlit": "ʻănan",
+      "translated": true
+    },
+    "H6051": {
+      "definitions_cz": "1) oblačnost, zataženo, oblačnost | 1a) hmotnost oblaku (teofanického oblaku) | 1b) oblak",
+      "lemma": "עָנָן",
+      "hebrew": "ענן",
+      "xlit": "ʻânân",
+      "translated": true
+    },
+    "H6052": {
+      "definitions_cz": "Anan = \"oblak\" | 1) jedna z hlav lidí, kteří podepsali smlouvu s Nehemjášem",
+      "lemma": "עָנָן",
+      "hebrew": "ענן",
+      "xlit": "ʻÂnân",
+      "translated": true
+    },
+    "H6053": {
+      "definitions_cz": "1) oblačno, zataženo",
+      "lemma": "עֲנָנָה",
+      "hebrew": "עננה",
+      "xlit": "ʻănânâh",
+      "translated": true
+    },
+    "H6054": {
+      "definitions_cz": "Anani = \"můj oblak\" | 1) 7. syn Elioenai, potomek Davidův",
+      "lemma": "עֲנָנִי",
+      "hebrew": "ענני",
+      "xlit": "ʻĂnânîy",
+      "translated": true
+    },
+    "H6055": {
+      "definitions_cz": "Ananiáš = \"Jehova mraky\" | n pr m | 1) předek Azariáše, který pomáhal při přestavbě městských hradeb v době Nehemiáše | n pr loc | 2) město severozápadně od Jeruzaléma, do kterého se vrátili někteří benjamitští vyhnanci",
+      "lemma": "עֲנַנְיָה",
+      "hebrew": "ענניה",
+      "xlit": "ʻĂnanyâh",
+      "translated": true
+    },
+    "H6056": {
+      "definitions_cz": "1) větev, větev",
+      "lemma": "עֲנַף",
+      "hebrew": "ענף",
+      "xlit": "ʻănaph",
+      "translated": true
+    },
+    "H6057": {
+      "definitions_cz": "1) větev, větev",
+      "lemma": "עָנָף",
+      "hebrew": "ענף",
+      "xlit": "ʻânâph",
+      "translated": true
+    },
+    "H6058": {
+      "definitions_cz": "1) plné větví, husté",
+      "lemma": "עָנֵף",
+      "hebrew": "ענף",
+      "xlit": "ʻânêph",
+      "translated": true
+    },
+    "H6059": {
+      "definitions_cz": "1) sloužit jako náhrdelník, ozdobit ozdobou na krk | 1a) (Qal) sloužit jako náhrdelník | 1b) (Hiphil) vyrobit náhrdelník",
+      "lemma": "עָנַק",
+      "hebrew": "ענק",
+      "xlit": "ʻânaq",
+      "translated": true
+    },
+    "H6060": {
+      "definitions_cz": "1) náhrdelník, přívěsek na krk | 2) (TWOT) krk",
+      "lemma": "עָנָק",
+      "hebrew": "ענק",
+      "xlit": "ʻânâq",
+      "translated": true
+    },
+    "H6061": {
+      "definitions_cz": "Anak = \"krk\" | 1) předek rodiny nebo kmene obřích lidí v Kanaánu",
+      "lemma": "עָנָק",
+      "hebrew": "ענק",
+      "xlit": "ʻÂnâq",
+      "translated": true
+    },
+    "H6062": {
+      "definitions_cz": "Anakims = \"dlouhokrký\" | 1) kmen obrů, potomků Anaka, který sídlil v jižním Kanaánu",
+      "lemma": "עֲנָקִי",
+      "hebrew": "ענקי",
+      "xlit": "ʻĂnâqîy",
+      "translated": true
+    },
+    "H6063": {
+      "definitions_cz": "Aner = \"kluk\" | n pr m | 1) jeden z amorejských náčelníků, kteří pomáhali Abrahamovi v pronásledování 4 invazních králů | n pr loc | 2) levitské město západně od Jordánu v Manasse přidělené kehatským levitům",
+      "lemma": "עָנֵר",
+      "hebrew": "ענר",
+      "xlit": "ʻÂnêr",
+      "translated": true
+    },
+    "H6064": {
+      "definitions_cz": "1) pokutovat, milovat, trestat, odsuzovat, mulct | 1a) (Qal) pokutovat, trestat | 1b) (Niphal) být pokutován, potrestán, být mulctován",
+      "lemma": "עָנַשׁ",
+      "hebrew": "ענש",
+      "xlit": "ʻânash",
+      "translated": true
+    },
+    "H6065": {
+      "definitions_cz": "v | 1) (CLBL) do pokuty | 2) (BDB/TWOT) konfiskace, pokuta, amercing",
+      "lemma": "עֲנַשׁ",
+      "hebrew": "ענש",
+      "xlit": "ʻănash",
+      "translated": true
+    },
+    "H6066": {
+      "definitions_cz": "1) pokuta, pokuta, odškodnění",
+      "lemma": "עֹנֶשׁ",
+      "hebrew": "ענש",
+      "xlit": "ʻônesh",
+      "translated": true
+    },
+    "H6067": {
+      "definitions_cz": "Anath = \"odpověď\" | 1) otec Shamgara",
+      "lemma": "עֲנָת",
+      "hebrew": "ענת",
+      "xlit": "ʻĂnâth",
+      "translated": true
+    },
+    "H6068": {
+      "definitions_cz": "Anathoth = \"odpovědi na modlitbu\" | n pr m | 1) syn Becherův a vnuk Benjaminův | 2) jedna z hlav lidí, kteří podepsali smlouvu s Nehemjášem | n pr loc | 3) Benjamínovo město přidělené knězi; nachází se přibližně 3 míle (5 km) od Jeruzaléma; rodiště proroka Jeremiáše",
+      "lemma": "עֲנָתוֹת",
+      "hebrew": "ענתות",
+      "xlit": "ʻĂnâthôwth",
+      "translated": true
+    },
+    "H6069": {
+      "definitions_cz": "Anethothite = viz Anathoth \"trápení\" | 1) potomek nebo obyvatel Anathoth",
+      "lemma": "עַנְתֹתִי",
+      "hebrew": "ענתתי",
+      "xlit": "ʻAnthôthîy",
+      "translated": true
+    },
+    "H6070": {
+      "definitions_cz": "Antothijah = \"Jehovova odpověď\" | 1) Benjamínec, jeden ze synů Jerohamových",
+      "lemma": "עַנְתֹתִיָּה",
+      "hebrew": "ענתתיה",
+      "xlit": "ʻAnthôthîyâh",
+      "translated": true
+    },
+    "H6071": {
+      "definitions_cz": "1) sladké víno, víno, vylisovaná šťáva",
+      "lemma": "עָסִיס",
+      "hebrew": "עסיס",
+      "xlit": "ʻâçîyç",
+      "translated": true
+    },
+    "H6072": {
+      "definitions_cz": "1) lisovat, drtit, lisovat šlapáním, šlapat nebo ven, lisovat (hrozny) | 1a) (Qal) stisknout",
+      "lemma": "עָסַס",
+      "hebrew": "עסס",
+      "xlit": "ʻâçaç",
+      "translated": true
+    },
+    "H6073": {
+      "definitions_cz": "1) větev, zeleň",
+      "lemma": "עֳפֶא",
+      "hebrew": "עפא",
+      "xlit": "ʻŏpheʼ",
+      "translated": true
+    },
+    "H6074": {
+      "definitions_cz": "1) listí, zeleň",
+      "lemma": "עֳפִי",
+      "hebrew": "עפי",
+      "xlit": "ʻŏphîy",
+      "translated": true
+    },
+    "H6075": {
+      "definitions_cz": "1) zvedat se, bobtnat, být zvednut | 1a) (Pual) bobtnat | 1b) (Hiphil) být smělý, být nafouklý | 2) předpokládat, být nedbalý | 2a) (Hiphil) být nedbalý, projevovat nedbalost",
+      "lemma": "עָפַל",
+      "hebrew": "עפל",
+      "xlit": "ʻâphal",
+      "translated": true
+    },
+    "H6076": {
+      "definitions_cz": "1) kopec, mohyla, pevnost, pevnost, Ophel | 2) nádor, hemoroidy",
+      "lemma": "עֹפֶל",
+      "hebrew": "עפל",
+      "xlit": "ʻôphel",
+      "translated": true
+    },
+    "H6077": {
+      "definitions_cz": "Ophel = \"kopec\" | 1) hřeben kopců v Jeruzalémě, opevněný na obranu města",
+      "lemma": "עֹפֶל",
+      "hebrew": "עפל",
+      "xlit": "ʻÔphel",
+      "translated": true
+    },
+    "H6078": {
+      "definitions_cz": "Ophni = \"plesnivý\" | 1) město Benjamin ležící 2,5 (4,5 km) mil severozápadně od Bethelu; moderní 'Jifna'",
+      "lemma": "עׇפְנִי",
+      "hebrew": "עפני",
+      "xlit": "ʻOphnîy",
+      "translated": true
+    },
+    "H6079": {
+      "definitions_cz": "1) oční víčko | 1a) oční víčko | 1b) svítání, sluneční paprsky (obr.)",
+      "lemma": "עַפְעַף",
+      "hebrew": "עפעף",
+      "xlit": "ʻaphʻaph",
+      "translated": true
+    },
+    "H6080": {
+      "definitions_cz": "1) (Piel) na prach, prášek",
+      "lemma": "עָפַר",
+      "hebrew": "עפר",
+      "xlit": "ʻâphar",
+      "translated": true
+    },
+    "H6081": {
+      "definitions_cz": "Epher = \"tele\" | 1) 2. syn Midiana | 2) syn Ezdráš, mezi potomky Judy | 3) jedna z hlav rodů Manassesových na východ od Jordánu",
+      "lemma": "עֵפֶר",
+      "hebrew": "עפר",
+      "xlit": "ʻÊpher",
+      "translated": true
+    },
+    "H6082": {
+      "definitions_cz": "1) jelen, kolouch, jelen, mladý jelen",
+      "lemma": "עֹפֶר",
+      "hebrew": "עפר",
+      "xlit": "ʻôpher",
+      "translated": true
+    },
+    "H6083": {
+      "definitions_cz": "1) suchá zemina, prach, prášek, popel, zemina, zem, malta, odpadky | 1a) suchá nebo uvolněná zemina | 1b) trosky | 1c) malta | 1d) ruda",
+      "lemma": "עָפָר",
+      "hebrew": "עפר",
+      "xlit": "ʻâphâr",
+      "translated": true
+    },
+    "H6084": {
+      "definitions_cz": "Ophrah = \"plavá\" | n pr m | 1) Judaita, syn Meonothai | n pr loc | 2) město Benjamin přibližně 5 mil (8 km) východně od Bethel | 3) místo v Manasse, rodném místě Gedeona; pravděpodobně se nachází v blízkosti Shechem",
+      "lemma": "עׇפְרָה",
+      "hebrew": "עפרה",
+      "xlit": "ʻOphrâh",
+      "translated": true
+    },
+    "H6085": {
+      "definitions_cz": "Ephron = \"jako kolouch\" | n pr m | 1) Chetita, syn Zoharův a ten, od něhož Abraham koupil pole a jeskyni Machpela | n pr loc | 2) město na hranicích Benjamina | 3) hora na severní hranici Judska",
+      "lemma": "עֶפְרוֹן",
+      "hebrew": "עפרון",
+      "xlit": "ʻEphrôwn",
+      "translated": true
+    },
+    "H6086": {
+      "definitions_cz": "1) strom, dřevo, dřevo, pažba, prkno, stéblo, hůl, šibenice | 1a) strom, stromy | 1b) dřevo, kusy dřeva, šibenice, palivové dříví, cedrové dřevo, dřevitý len",
+      "lemma": "עֵץ",
+      "hebrew": "עץ",
+      "xlit": "ʻêts",
+      "translated": true
+    },
+    "H6087": {
+      "definitions_cz": "1) ubližovat, bolet, truchlit, nelibovat si, trápit se, vyrvat | 1a) (Qal) bolet, bolest | 1b)(Niphal) mít bolest, být bolestný, být zarmoucen | 1c) (Piel) obtěžovat, mučit | 1d) (Hiphil) způsobit bolest | 1e) (Hithpael) cítit se zarmoucený, být naštvaný | 2) utvářet, utvářet, dělat, formovat, natahovat se do tvaru, (TWOT) uctívání | 2a) (Piel) tvarovat, tvořit | 2b) (Hiphil) tvořit, kopírovat, módovat",
+      "lemma": "עָצַב",
+      "hebrew": "עצב",
+      "xlit": "ʻâtsab",
+      "translated": true
+    },
+    "H6088": {
+      "definitions_cz": "1) bolet, truchlit | 1a) (P'al) bolený (příčestí)",
+      "lemma": "עֲצַב",
+      "hebrew": "עצב",
+      "xlit": "ʻătsab",
+      "translated": true
+    },
+    "H6089": {
+      "definitions_cz": "1) bolest, bolest, dřina, smutek, práce, strádání | 1a) bolest | 1b) ublížení, urážka | 1c) dřina, strádání | 2) plavidlo, stvoření, předmět | 3) (TWOT) idol",
+      "lemma": "עֶצֶב",
+      "hebrew": "עצב",
+      "xlit": "ʻetseb",
+      "translated": true
+    },
+    "H6090": {
+      "definitions_cz": "1) bolest, smutek | 2) idol",
+      "lemma": "עֹצֶב",
+      "hebrew": "עצב",
+      "xlit": "ʻôtseb",
+      "translated": true
     }
   }
 }
