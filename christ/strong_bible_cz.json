@@ -75862,6 +75862,706 @@
       "hebrew": "קיר",
       "xlit": "Qîyr",
       "translated": true
+    },
+    "H7025": {
+      "definitions_cz": "Kir-hareseth nebo Kir-hares nebo Kir-haresh = \"stěna ze střepů\" | 1) jedna ze dvou hlavních moábských pevností",
+      "lemma": "קִיר חֶרֶשׂ",
+      "hebrew": "קיר חרש",
+      "xlit": "Qîyr Cheres",
+      "translated": true
+    },
+    "H7026": {
+      "definitions_cz": "Keros = \"kotník\" | 1) hlava rodiny chrámových otroků, kteří se vrátili z exilu se Zerubábelem",
+      "lemma": "קֵירֹס",
+      "hebrew": "קירס",
+      "xlit": "Qêyrôç",
+      "translated": true
+    },
+    "H7027": {
+      "definitions_cz": "Kish = \"ohnutý\" | 1) Benjamínec z rodu Matri, otec krále Saula | 2) předek Mordecai | 3) syn Gibeonův a bratr Abdonův, Zur, Baal, Ner, Nadab, Gedor, Ahio, Zachariáš a Miklot; strýc Kiše, otce krále Saula | 4) merarijský levita, syn Mahliho a vnuk Merariho, předka rodu | 5) merarijský levita, syn Abdiho v době judského krále Ezechiáše",
+      "lemma": "קִישׁ",
+      "hebrew": "קיש",
+      "xlit": "Qîysh",
+      "translated": true
+    },
+    "H7028": {
+      "definitions_cz": "Kishon = \"navíjení\" | 1) řeka ve střední Palestině; scéna porážky Sisery Izraelity v době soudců a zničení Baalových proroků Eliášem",
+      "lemma": "קִישׁוֹן",
+      "hebrew": "קישון",
+      "xlit": "Qîyshôwn",
+      "translated": true
+    },
+    "H7029": {
+      "definitions_cz": "Kishi = \"Jehovův luk\" | 1) merarijský levita, otec nebo předek pěvce Etana v době Davida",
+      "lemma": "קִישִׁי",
+      "hebrew": "קישי",
+      "xlit": "Qîyshîy",
+      "translated": true
+    },
+    "H7030": {
+      "definitions_cz": "1) hudební nástroj | 1a) pravděpodobně lyra nebo citera",
+      "lemma": "קִיתָרֹס",
+      "hebrew": "קיתרס",
+      "xlit": "qîythârôç",
+      "translated": true
+    },
+    "H7031": {
+      "definitions_cz": "1) rychlý, lehký, vozový park | 1a) rychlý | 1b) ten, kdo je rychlý",
+      "lemma": "קַל",
+      "hebrew": "קל",
+      "xlit": "qal",
+      "translated": true
+    },
+    "H7032": {
+      "definitions_cz": "1) hlas, zvuk",
+      "lemma": "קָל",
+      "hebrew": "קל",
+      "xlit": "qâl",
+      "translated": true
+    },
+    "H7033": {
+      "definitions_cz": "1) opéct, opražit | 1a) (Qal) k pražení | 1b) (Niphal) | 1b1) ke spálení | 1b2) pálení (příčestí)",
+      "lemma": "קָלָה",
+      "hebrew": "קלה",
+      "xlit": "qâlâh",
+      "translated": true
+    },
+    "H7034": {
+      "definitions_cz": "1) zneuctít, zneuctít, být lehce vážen, být zneuctěn, být opovrhován | 1a) (Niphal) být zneuctěn, být opovrhován, být lehce vážen | 1b) (Hifil) chovat se pohrdavě, dehonestovat, zacházet hanebně",
+      "lemma": "קָלָה",
+      "hebrew": "קלה",
+      "xlit": "qâlâh",
+      "translated": true
+    },
+    "H7035": {
+      "definitions_cz": "1) (Niphal) shromáždit se, shromáždit se",
+      "lemma": "קָלַהּ",
+      "hebrew": "קלה",
+      "xlit": "qâlahh",
+      "translated": true
+    },
+    "H7036": {
+      "definitions_cz": "1) hanba, ostuda, potupa, potupa | 1a) hanba (národa) | 1b) potupa, ostuda (osobní)",
+      "lemma": "קָלוֹן",
+      "hebrew": "קלון",
+      "xlit": "qâlôwn",
+      "translated": true
+    },
+    "H7037": {
+      "definitions_cz": "1) kotel, hrnec, kotlík",
+      "lemma": "קַלַּחַת",
+      "hebrew": "קלחת",
+      "xlit": "qallachath",
+      "translated": true
+    },
+    "H7038": {
+      "definitions_cz": "1) (Qal) být zakrnělý, handicapovaný, deformovaný (obětního zvířete bez částí těla)",
+      "lemma": "קָלַט",
+      "hebrew": "קלט",
+      "xlit": "qâlaṭ",
+      "translated": true
+    },
+    "H7039": {
+      "definitions_cz": "1) pražené zrno, pražené zrno | 1a) společné jídlo",
+      "lemma": "קָלִי",
+      "hebrew": "קלי",
+      "xlit": "qâlîy",
+      "translated": true
+    },
+    "H7040": {
+      "definitions_cz": "Kallai = \"rychlý\" | 1) kněz z rodu Sallai v době Nehemjáše",
+      "lemma": "קַלַּי",
+      "hebrew": "קלי",
+      "xlit": "Qallay",
+      "translated": true
+    },
+    "H7041": {
+      "definitions_cz": "Kelaiah = \"Jehova zneuctil\" | 1) Levita, který měl v době Ezdráše cizí manželku | 1a) také „Kelita“",
+      "lemma": "קֵלָיָה",
+      "hebrew": "קליה",
+      "xlit": "Qêlâyâh",
+      "translated": true
+    },
+    "H7042": {
+      "definitions_cz": "Kelita = \"zmrzačený\" | 1) Levita, který měl v době Ezdráše cizí manželku | 1a) také „Kelaiah“",
+      "lemma": "קְלִיטָא",
+      "hebrew": "קליטא",
+      "xlit": "Qᵉlîyṭâʼ",
+      "translated": true
+    },
+    "H7043": {
+      "definitions_cz": "1) být maličký, být rychlý, být malicherný, být bezvýznamný, být lehký | 1a) (Qal) | 1a1) být mírný, být snížen (vody) | 1a2) být rychlý | 1a3) být malicherný, být bezvýznamný | 1b) (Niphal) | 1b1) být rychlý, ukázat se rychlý | 1b2) vypadat malicherně, být příliš malicherný, být bezvýznamný | 1b3) být lehce vážený | 1c) (Piel) | 1c1) učinit opovrženíhodným | 1c2) proklínat | 1d) (Pual) být proklet | 1e) (hifil) | 1e1) zesvětlit, zesvětlit | 1e2) zacházet s opovržením,",
+      "lemma": "קָלַל",
+      "hebrew": "קלל",
+      "xlit": "qâlal",
+      "translated": true
+    },
+    "H7044": {
+      "definitions_cz": "1) leštěné, leštěné",
+      "lemma": "קָלָל",
+      "hebrew": "קלל",
+      "xlit": "qâlâl",
+      "translated": true
+    },
+    "H7045": {
+      "definitions_cz": "1) prokletí, hanobení, poskvrnění",
+      "lemma": "קְלָלָה",
+      "hebrew": "קללה",
+      "xlit": "qᵉlâlâh",
+      "translated": true
+    },
+    "H7046": {
+      "definitions_cz": "1) vysmívat se, vysmívat se | 1a) (Piel) vysmívat se | 1b) (Hithpael) vysmívat se, vysmívat se, vysmívat se",
+      "lemma": "קָלַס",
+      "hebrew": "קלס",
+      "xlit": "qâlaç",
+      "translated": true
+    },
+    "H7047": {
+      "definitions_cz": "1) výsměch, výsměch",
+      "lemma": "קֶלֶס",
+      "hebrew": "קלס",
+      "xlit": "qeleç",
+      "translated": true
+    },
+    "H7048": {
+      "definitions_cz": "1) výsměch, výsměch",
+      "lemma": "קַלָּסָה",
+      "hebrew": "קלסה",
+      "xlit": "qallâçâh",
+      "translated": true
+    },
+    "H7049": {
+      "definitions_cz": "1) zavěsit, vrhnout se | 1a) (Qal) | 1a1) do praku | 1a2) slinger (příčestí) | 1b) (Piel) do závěsu | 2) (Qal) vyřezat",
+      "lemma": "קָלַע",
+      "hebrew": "קלע",
+      "xlit": "qâlaʻ",
+      "translated": true
+    },
+    "H7050": {
+      "definitions_cz": "1) prak, prak | 2) záclona, ​​závěs, závěs",
+      "lemma": "קֶלַע",
+      "hebrew": "קלע",
+      "xlit": "qelaʻ",
+      "translated": true
+    },
+    "H7051": {
+      "definitions_cz": "1) slinger",
+      "lemma": "קַלָּע",
+      "hebrew": "קלע",
+      "xlit": "qallâʻ",
+      "translated": true
+    },
+    "H7052": {
+      "definitions_cz": "1) opovrženíhodný, bezcenný",
+      "lemma": "קְלֹקֵל",
+      "hebrew": "קלקל",
+      "xlit": "qᵉlôqêl",
+      "translated": true
+    },
+    "H7053": {
+      "definitions_cz": "1) vidle, vidle se třemi hroty, bodec | 1a) znamená pochybný",
+      "lemma": "קִלְּשׁוֹן",
+      "hebrew": "קלשון",
+      "xlit": "qillᵉshôwn",
+      "translated": true
+    },
+    "H7054": {
+      "definitions_cz": "1) stojící obilí",
+      "lemma": "קָמָה",
+      "hebrew": "קמה",
+      "xlit": "qâmâh",
+      "translated": true
+    },
+    "H7055": {
+      "definitions_cz": "Kemuel = \"vyrostl z Boha\" | 1) syn Nachorův od Milky a otce Arama | 2) syn Shiphtana, kníže kmene Efraim, a jeden z 12 mužů vybraných k rozdělení zaslíbené země mezi kmeny | 3) Levita, otec Chašabjáše, knížete kmene v době Davidově",
+      "lemma": "קְמוּאֵל",
+      "hebrew": "קמואל",
+      "xlit": "Qᵉmûwʼêl",
+      "translated": true
+    },
+    "H7056": {
+      "definitions_cz": "Camon = \"zvednutý\" | 1) místo v Gileadu, kde byl pohřben soudce Jair",
+      "lemma": "קָמוֹן",
+      "hebrew": "קמון",
+      "xlit": "Qâmôwn",
+      "translated": true
+    },
+    "H7057": {
+      "definitions_cz": "1) bodlák nebo kopřiva, trnitá nebo neužitečná rostlina",
+      "lemma": "קִמּוֹשׁ",
+      "hebrew": "קמוש",
+      "xlit": "qimmôwsh",
+      "translated": true
+    },
+    "H7058": {
+      "definitions_cz": "1) mouka, krupice, krupice",
+      "lemma": "קֶמַח",
+      "hebrew": "קמח",
+      "xlit": "qemach",
+      "translated": true
+    },
+    "H7059": {
+      "definitions_cz": "1) zabavit | 1a) (Qal) zabavit | 1b) (Pual) být předčasně utržen",
+      "lemma": "קָמַט",
+      "hebrew": "קמט",
+      "xlit": "qâmaṭ",
+      "translated": true
+    },
+    "H7060": {
+      "definitions_cz": "1) zchátrat, uschnout | 1a) (Qal) plesnivět, být uschlý",
+      "lemma": "קָמַל",
+      "hebrew": "קמל",
+      "xlit": "qâmal",
+      "translated": true
+    },
+    "H7061": {
+      "definitions_cz": "1) (Qal) uchopit, obložit rukou, vzít hrst",
+      "lemma": "קָמַץ",
+      "hebrew": "קמץ",
+      "xlit": "qâmats",
+      "translated": true
+    },
+    "H7062": {
+      "definitions_cz": "1) zavřená ruka, pěst, hrst",
+      "lemma": "קֹמֶץ",
+      "hebrew": "קמץ",
+      "xlit": "qômets",
+      "translated": true
+    },
+    "H7063": {
+      "definitions_cz": "1) bodlák nebo kopřiva, trnitá nebo neužitečná rostlina",
+      "lemma": "קִמָּשׁוֹן",
+      "hebrew": "קמשון",
+      "xlit": "qimmâshôwn",
+      "translated": true
+    },
+    "H7064": {
+      "definitions_cz": "1) hnízdo | 1a) hnízdo (ptaka) | 1b) buňky (jako hnízda v Noemově arše)",
+      "lemma": "קֵן",
+      "hebrew": "קן",
+      "xlit": "qên",
+      "translated": true
+    },
+    "H7065": {
+      "definitions_cz": "1) závidět, závidět, závidět, závidět | 1a) (Piel) | 1a1) žárlit na | 1a2) závidět | 1a3) horlit za | 1a4) vyburcovat k žárlivému hněvu | 1b) (Hifil) vyvolat k žárlivému hněvu, způsobit žárlivost",
+      "lemma": "קָנָא",
+      "hebrew": "קנא",
+      "xlit": "qânâʼ",
+      "translated": true
+    },
+    "H7066": {
+      "definitions_cz": "1) (P'al) získat, koupit, koupit",
+      "lemma": "קְנָא",
+      "hebrew": "קנא",
+      "xlit": "qᵉnâʼ",
+      "translated": true
+    },
+    "H7067": {
+      "definitions_cz": "1) žárlivý (pouze na Boha)",
+      "lemma": "קַנָּא",
+      "hebrew": "קנא",
+      "xlit": "qannâʼ",
+      "translated": true
+    },
+    "H7068": {
+      "definitions_cz": "1) horlivost, horlivost, žárlivost | 1a) žárlivost, žárlivost, žárlivá povaha (manžela) | 1a1) sexuální vášeň | 1b) zápal horlivosti (náboženské horlivosti) | 1b1) lidí pro Boha | 1b2) lidí pro dům Boží | 1b3) Boha pro svůj lid | 1c) žár hněvu | 1c1) mužů proti protivníkům | 1c2) Boha proti lidem | 1d) závist (člověka) | 1e) žárlivost (vedoucí k Božímu hněvu)",
+      "lemma": "קִנְאָה",
+      "hebrew": "קנאה",
+      "xlit": "qinʼâh",
+      "translated": true
+    },
+    "H7069": {
+      "definitions_cz": "1) získat, získat, vytvořit, koupit, vlastnit | 1a) (Qal) | 1a1) získat, získat, získat | 1a1a) Boha pocházejícího, tvořícího, vykupujícího svůj lid | 1a1a1) vlastník | 1a1b) Evy nabývající | 1a1c) získávání znalostí, moudrosti | 1a2) koupit | 1b) (Niphal) ke koupi | 1c) (Hiphil) přimět vlastnit",
+      "lemma": "קָנָה",
+      "hebrew": "קנה",
+      "xlit": "qânâh",
+      "translated": true
+    },
+    "H7070": {
+      "definitions_cz": "1) rákos, stéblo, kost, váhy | 1a) stonek | 1b) vodní rostlina, rákos | 1c) kalamus (aromatický rákos) | 1d) odvozené významy | 1d1) měřicí tyč | 1d2) rákos (jako měrná jednotka-6 loktů) | 1d3) paprsek (vah-pro váhy samotné) | 1d4) hřídel (stojánku) | 1d5) větve (stojany) | 1d6) ramenní kloub",
+      "lemma": "קָנֶה",
+      "hebrew": "קנה",
+      "xlit": "qâneh",
+      "translated": true
+    },
+    "H7071": {
+      "definitions_cz": "Kanah = \"rákos\" | 1) potok tekoucí do Středozemního moře, který vymezoval hranici mezi Efraimem na jihu a Manassem na severu | 2) město označující hranici Asher",
+      "lemma": "קָנָה",
+      "hebrew": "קנה",
+      "xlit": "Qânâh",
+      "translated": true
+    },
+    "H7072": {
+      "definitions_cz": "1) žárlivý",
+      "lemma": "קַנּוֹא",
+      "hebrew": "קנוא",
+      "xlit": "qannôwʼ",
+      "translated": true
+    },
+    "H7073": {
+      "definitions_cz": "Kenaz = \"lovec\" | 1) syn Elifazův a vnuk Ezauův; jeden z edomských vévodů | 2) bratr Caleba a otce Otniela",
+      "lemma": "קְנַז",
+      "hebrew": "קנז",
+      "xlit": "Qᵉnaz",
+      "translated": true
+    },
+    "H7074": {
+      "definitions_cz": "Kenezite nebo Kenizzites = \"potomek Kenaz\" | 1) potomci Kenaze",
+      "lemma": "קְנִזִּי",
+      "hebrew": "קנזי",
+      "xlit": "Qᵉnizzîy",
+      "translated": true
+    },
+    "H7075": {
+      "definitions_cz": "1) věc získaná, nabytí, držení, zakoupený majetek, bohatství | 1a) věc získaná (koupí) | 1b) stvoření (obecněji)",
+      "lemma": "קִנְיָן",
+      "hebrew": "קנין",
+      "xlit": "qinyân",
+      "translated": true
+    },
+    "H7076": {
+      "definitions_cz": "1) skořice | 1a) vonná kůra používaná jako koření",
+      "lemma": "קִנָּמוֹן",
+      "hebrew": "קנמון",
+      "xlit": "qinnâmôwn",
+      "translated": true
+    },
+    "H7077": {
+      "definitions_cz": "1) udělat hnízdo | 1a) (Piel) udělat hnízdo | 1b) (Pual) k vnoření",
+      "lemma": "קָנַן",
+      "hebrew": "קנן",
+      "xlit": "qânan",
+      "translated": true
+    },
+    "H7078": {
+      "definitions_cz": "1) nástraha, síť | 1a) znamená pochybný",
+      "lemma": "קֶנֶץ",
+      "hebrew": "קנץ",
+      "xlit": "qenets",
+      "translated": true
+    },
+    "H7079": {
+      "definitions_cz": "Kenath = \"držba\" | 1) město v Gileadu východně od Jordánu, které se zmocnil jistý Nobah a přejmenováno na svou počest",
+      "lemma": "קְנָת",
+      "hebrew": "קנת",
+      "xlit": "Qᵉnâth",
+      "translated": true
+    },
+    "H7080": {
+      "definitions_cz": "1) (Qal) praktikovat věštění, božské | 1a) věštců národů, Balám | 1b) falešných proroků Izraele | 1c) zakázáno",
+      "lemma": "קָסַם",
+      "hebrew": "קסם",
+      "xlit": "qâçam",
+      "translated": true
+    },
+    "H7081": {
+      "definitions_cz": "1) věštění, čarodějnictví | 1a) národů, Balám | 1b) falešných proroků | 1c) v dobrém slova smyslu (královy rty jako věštci)",
+      "lemma": "קֶסֶם",
+      "hebrew": "קסם",
+      "xlit": "qeçem",
+      "translated": true
+    },
+    "H7082": {
+      "definitions_cz": "1) (Poel) svléknout, odříznout",
+      "lemma": "קָסַס",
+      "hebrew": "קסס",
+      "xlit": "qâçaç",
+      "translated": true
+    },
+    "H7083": {
+      "definitions_cz": "1) hrnec (na inkoust), kalamář, kalamář",
+      "lemma": "קֶסֶת",
+      "hebrew": "קסת",
+      "xlit": "qeçeth",
+      "translated": true
+    },
+    "H7084": {
+      "definitions_cz": "Keilah = \"pevnost\" | 1) město v nížinách Judy severozápadně od Hebronu",
+      "lemma": "קְעִילָה",
+      "hebrew": "קעילה",
+      "xlit": "Qᵉʻîylâh",
+      "translated": true
+    },
+    "H7085": {
+      "definitions_cz": "1) řez, otisk, tetování, značka",
+      "lemma": "קַעֲקַע",
+      "hebrew": "קעקע",
+      "xlit": "qaʻăqaʻ",
+      "translated": true
+    },
+    "H7086": {
+      "definitions_cz": "1) miska, talíř",
+      "lemma": "קְעָרָה",
+      "hebrew": "קערה",
+      "xlit": "qᵉʻârâh",
+      "translated": true
+    },
+    "H7087": {
+      "definitions_cz": "v | 1) zhoustnout, zkondenzovat, ztuhnout, usadit se, zhustnout | 1a) (Qal) ke kondenzaci | 1a1) zahušťování (příčestí) | 1b) (Hiphil) způsobit sražení | n m | 2) ztuhnutí",
+      "lemma": "קָפָא",
+      "hebrew": "קפא",
+      "xlit": "qâphâʼ",
+      "translated": true
+    },
+    "H7088": {
+      "definitions_cz": "1) (Piel) shromáždit se, srolovat, sklidit",
+      "lemma": "קָפַד",
+      "hebrew": "קפד",
+      "xlit": "qâphad",
+      "translated": true
+    },
+    "H7089": {
+      "definitions_cz": "1) chvění, úzkost",
+      "lemma": "קְפָדָה",
+      "hebrew": "קפדה",
+      "xlit": "qᵉphâdâh",
+      "translated": true
+    },
+    "H7090": {
+      "definitions_cz": "1) dikobraz, ježek | 1a) zmenšující se zvíře",
+      "lemma": "קִפּוֹד",
+      "hebrew": "קפוד",
+      "xlit": "qippôwd",
+      "translated": true
+    },
+    "H7091": {
+      "definitions_cz": "1) šípový had, sova | 1a) znamená pochybný",
+      "lemma": "קִפּוֹז",
+      "hebrew": "קפוז",
+      "xlit": "qippôwz",
+      "translated": true
+    },
+    "H7092": {
+      "definitions_cz": "1) přitáhnout k sobě, zavřít, zavřít, zavřít, zastavit | 1a) (Qal) zavřít | 1b) (Niphal) | 1b1) přitáhnout se k sobě (smrti) | 1b2) umlčet k smrti | 1c) (Piel) pružení, přeskakování (příčestí)",
+      "lemma": "קָפַץ",
+      "hebrew": "קפץ",
+      "xlit": "qâphats",
+      "translated": true
+    },
+    "H7093": {
+      "definitions_cz": "1) konec | 1a) konec, na konci (času) | 1b) konec (prostoru)",
+      "lemma": "קֵץ",
+      "hebrew": "קץ",
+      "xlit": "qêts",
+      "translated": true
+    },
+    "H7094": {
+      "definitions_cz": "1) (Qal) odříznout, stříhat",
+      "lemma": "קָצַב",
+      "hebrew": "קצב",
+      "xlit": "qâtsab",
+      "translated": true
+    },
+    "H7095": {
+      "definitions_cz": "1) střih, tvar, konec, tvar, základ | 1a) řez, tvar | 1b) končetina",
+      "lemma": "קֶצֶב",
+      "hebrew": "קצב",
+      "xlit": "qetseb",
+      "translated": true
+    },
+    "H7096": {
+      "definitions_cz": "1) odříznout | 1a) (Qal) odříznout | 1b) (Piel) k odříznutí | 1c) (Hiphil) škrábat, škrábat",
+      "lemma": "קָצָה",
+      "hebrew": "קצה",
+      "xlit": "qâtsâh",
+      "translated": true
+    },
+    "H7097": {
+      "definitions_cz": "1) konec, konec | 1a) konec, ústa, konec | 1b) hranice, okraj | 1c) celek (zkrácený výraz pro to, co je zahrnuto mezi končetiny) | 1d) na konci (určitý čas)",
+      "lemma": "קָצֶה",
+      "hebrew": "קצה",
+      "xlit": "qâtseh",
+      "translated": true
+    },
+    "H7098": {
+      "definitions_cz": "1) konec, konec | 1a) konec | 1b) z celku, z mezi (z toho, co je zahrnuto mezi končetiny)",
+      "lemma": "קָצָה",
+      "hebrew": "קצה",
+      "xlit": "qâtsâh",
+      "translated": true
+    },
+    "H7099": {
+      "definitions_cz": "1) konec, hranice, hranice",
+      "lemma": "קֶצֶו",
+      "hebrew": "קצו",
+      "xlit": "qetsev",
+      "translated": true
+    },
+    "H7100": {
+      "definitions_cz": "1) černý kmín | 1a) rostlina s malými černými štiplavými semeny používaná jako koření",
+      "lemma": "קֶצַח",
+      "hebrew": "קצח",
+      "xlit": "qetsach",
+      "translated": true
+    },
+    "H7101": {
+      "definitions_cz": "1) náčelník, vládce, velitel | 1a) náčelník, velitel (ve válce) | 1b) diktátor | 1c) vládce (jednoho z úřadů)",
+      "lemma": "קָצִין",
+      "hebrew": "קצין",
+      "xlit": "qâtsîyn",
+      "translated": true
+    },
+    "H7102": {
+      "definitions_cz": "1) kasie | 1a) koření; prášková kůra jako skořice",
+      "lemma": "קְצִיעָה",
+      "hebrew": "קציעה",
+      "xlit": "qᵉtsîyʻâh",
+      "translated": true
+    },
+    "H7103": {
+      "definitions_cz": "Kezia = \"cassia\" | 1) 2. z dcer narozených Jobovi po jeho soudu",
+      "lemma": "קְצִיעָה",
+      "hebrew": "קציעה",
+      "xlit": "Qᵉtsîyʻâh",
+      "translated": true
+    },
+    "H7104": {
+      "definitions_cz": "Keziz = \"odříznout\" | 1) město na Benjamínu a východní hranici kmene",
+      "lemma": "קְצִיץ",
+      "hebrew": "קציץ",
+      "xlit": "Qᵉtsîyts",
+      "translated": true
+    },
+    "H7105": {
+      "definitions_cz": "1) sklizeň, sklizeň | 1a) proces sklizně | 1b) úroda, co se sklízí nebo sklízí | 1c) doba sklizně | 2) větve, větve",
+      "lemma": "קָצִיר",
+      "hebrew": "קציר",
+      "xlit": "qâtsîyr",
+      "translated": true
+    },
+    "H7106": {
+      "definitions_cz": "1) škrábat, škrábat, odřezávat | 1a) (Hiphil) škrábat | 2) k rohovému zasazení do rohů | 2a) (Hophal) odříznout místa, udělat rohy",
+      "lemma": "קָצַע",
+      "hebrew": "קצע",
+      "xlit": "qâtsaʻ",
+      "translated": true
+    },
+    "H7107": {
+      "definitions_cz": "1) být nespokojený, zlobit se, rozčilovat se, hněvat se | 1a) (Qal) hněvat se, být plný hněvu, být zuřivý | 1b) (Hiphil) vyprovokovat k hněvu nebo hněvu | 1c) (Hithpael) rozzlobit se, rozzlobit se",
+      "lemma": "קָצַף",
+      "hebrew": "קצף",
+      "xlit": "qâtsaph",
+      "translated": true
+    },
+    "H7108": {
+      "definitions_cz": "1) (P'al) býti nebo se hněvat, hněvat se",
+      "lemma": "קְצַף",
+      "hebrew": "קצף",
+      "xlit": "qᵉtsaph",
+      "translated": true
+    },
+    "H7109": {
+      "definitions_cz": "1) hněv (Boží), hněv",
+      "lemma": "קְצַף",
+      "hebrew": "קצף",
+      "xlit": "qᵉtsaph",
+      "translated": true
+    },
+    "H7110": {
+      "definitions_cz": "1) hněv, hněv | 1a) Boží | 1b) člověka | 2) tříska, větvička, zlomená větvička | 2a) znamená pochybný",
+      "lemma": "קֶצֶף",
+      "hebrew": "קצף",
+      "xlit": "qetseph",
+      "translated": true
+    },
+    "H7111": {
+      "definitions_cz": "1) prasknutí nebo roztříštění, něco roztříštěného nebo roztříštěného",
+      "lemma": "קְצָפָה",
+      "hebrew": "קצפה",
+      "xlit": "qᵉtsâphâh",
+      "translated": true
+    },
+    "H7112": {
+      "definitions_cz": "1) odříznout | 1a) (Qal) odříznout | 1b) (Piel) k odříznutí nebo odříznutí, rozříznutí na dvě části, rozřezání na kusy | 1c) (Pual) k odříznutí nebo odříznutí",
+      "lemma": "קָצַץ",
+      "hebrew": "קצץ",
+      "xlit": "qâtsats",
+      "translated": true
+    },
+    "H7113": {
+      "definitions_cz": "1) (Pael) odříznout",
+      "lemma": "קְצַץ",
+      "hebrew": "קצץ",
+      "xlit": "qᵉtsats",
+      "translated": true
+    },
+    "H7114": {
+      "definitions_cz": "1) být krátký, netrpělivý, naštvaný, zarmoucený | 1a) (Qal) být krátký | 1b) (Piel) ke zkrácení | 1c) (Hiphil) ke zkrácení | 2) sklízet, sklízet | 2a) (Qal) sklízet, sklízet | 2b) (Hifil) sklízet, sklízet",
+      "lemma": "קָצַר",
+      "hebrew": "קצר",
+      "xlit": "qâtsar",
+      "translated": true
+    },
+    "H7115": {
+      "definitions_cz": "1) krátkost, netrpělivost, úzkost",
+      "lemma": "קֹצֶר",
+      "hebrew": "קצר",
+      "xlit": "qôtser",
+      "translated": true
+    },
+    "H7116": {
+      "definitions_cz": "1) krátký, netrpělivý | 1a) ve velikosti, počtu, životnosti, síle atd",
+      "lemma": "קָצֵר",
+      "hebrew": "קצר",
+      "xlit": "qâtsêr",
+      "translated": true
+    },
+    "H7117": {
+      "definitions_cz": "1) konec, část | 1a) konec | 1a1) rohů, země | 1b) od konce | 1c) na konci",
+      "lemma": "קְצָת",
+      "hebrew": "קצת",
+      "xlit": "qᵉtsâth",
+      "translated": true
+    },
+    "H7118": {
+      "definitions_cz": "1) konec, část",
+      "lemma": "קְצָת",
+      "hebrew": "קצת",
+      "xlit": "qᵉtsâth",
+      "translated": true
+    },
+    "H7119": {
+      "definitions_cz": "1) v pohodě | 1a) chladný, klidný, sebevědomý (ducha)",
+      "lemma": "קַר",
+      "hebrew": "קר",
+      "xlit": "qar",
+      "translated": true
+    },
+    "H7120": {
+      "definitions_cz": "1) zima",
+      "lemma": "קֹר",
+      "hebrew": "קר",
+      "xlit": "qôr",
+      "translated": true
+    },
+    "H7121": {
+      "definitions_cz": "1) volat, volat, recitovat, číst, křičet, hlásat | 1a) (Qal) | 1a1) volat, plakat, vydávat hlasitý zvuk | 1a2) volat, volat (o pomoc), volat (jménem Božím) | 1a3) vyhlásit | 1a4) číst nahlas, číst (pro sebe), číst | 1a5) svolávat, zvát, volat, volat a pověřovat, jmenovat, volat a obdarovávat | 1a6) volat, jmenovat, jmenovat, volat | 1b) (Niphal) | 1b1) nazývat se | 1b2) být volán, být prohlášen, být přečten, být předvolán, být jmenován | 1c) (Pual",
+      "lemma": "קָרָא",
+      "hebrew": "קרא",
+      "xlit": "qârâʼ",
+      "translated": true
+    },
+    "H7122": {
+      "definitions_cz": "1) setkat se, setkat se, setkat se | 1a) (Qal) | 1a1) setkat se, setkat se | 1a2) narazit (obr.) | 1b) (Niphal) setkat se, setkat se nečekaně | 1c) (Hiphil) způsobit setkání",
+      "lemma": "קָרָא",
+      "hebrew": "קרא",
+      "xlit": "qârâʼ",
+      "translated": true
+    },
+    "H7123": {
+      "definitions_cz": "1) volat, číst nahlas, číst, křičet | 1a) (P'al) | 1a1) volat, hlásat | 1a2) číst nahlas, číst | 1b)(Ithp'el) být předvolán, být zavolán",
+      "lemma": "קְרָא",
+      "hebrew": "קרא",
+      "xlit": "qᵉrâʼ",
+      "translated": true
+    },
+    "H7124": {
+      "definitions_cz": "1) koroptev",
+      "lemma": "קֹרֵא",
+      "hebrew": "קרא",
+      "xlit": "qôrêʼ",
+      "translated": true
     }
   }
 }
