@@ -66524,6 +66524,706 @@
       "hebrew": "עגב",
       "xlit": "ʻegeb",
       "translated": true
+    },
+    "H5691": {
+      "definitions_cz": "1) žádostivost",
+      "lemma": "עֲגָבָה",
+      "hebrew": "עגבה",
+      "xlit": "ʻăgâbâh",
+      "translated": true
+    },
+    "H5692": {
+      "definitions_cz": "1) kotouč nebo koláč (chléb) | 1a) koláč z horkých kamenů (koláč pečený na horkých kamenech)",
+      "lemma": "עֻגָּה",
+      "hebrew": "עגה",
+      "xlit": "ʻuggâh",
+      "translated": true
+    },
+    "H5693": {
+      "definitions_cz": "1) jméno ptáka | 1a) snad drozd, vlaštovka, jeřáb",
+      "lemma": "עָגוּר",
+      "hebrew": "עגור",
+      "xlit": "ʻâgûwr",
+      "translated": true
+    },
+    "H5694": {
+      "definitions_cz": "1) obruč, prsten, náušnice | 1a) ozdoba pro muže nebo ženy",
+      "lemma": "עָגִיל",
+      "hebrew": "עגיל",
+      "xlit": "ʻâgîyl",
+      "translated": true
+    },
+    "H5695": {
+      "definitions_cz": "1) tele, býk-tele",
+      "lemma": "עֵגֶל",
+      "hebrew": "עגל",
+      "xlit": "ʻêgel",
+      "translated": true
+    },
+    "H5696": {
+      "definitions_cz": "1) kolo",
+      "lemma": "עָגֹל",
+      "hebrew": "עגל",
+      "xlit": "ʻâgôl",
+      "translated": true
+    },
+    "H5697": {
+      "definitions_cz": "1) jalovice",
+      "lemma": "עֶגְלָה",
+      "hebrew": "עגלה",
+      "xlit": "ʻeglâh",
+      "translated": true
+    },
+    "H5698": {
+      "definitions_cz": "Eglah = \"jalovice\" | 1) manželka Davida a matka Ithreamova",
+      "lemma": "עֶגְלָה",
+      "hebrew": "עגלה",
+      "xlit": "ʻEglâh",
+      "translated": true
+    },
+    "H5699": {
+      "definitions_cz": "1) vozík, vagón",
+      "lemma": "עֲגָלָה",
+      "hebrew": "עגלה",
+      "xlit": "ʻăgâlâh",
+      "translated": true
+    },
+    "H5700": {
+      "definitions_cz": "Eglon = \"telecí\" | n pr m | 1) moábský král, který 18 let utiskoval děti Izraele, než ho zabil soudce Ehud | n pr loc | 2) královské město v Kanaánu, které se postavilo proti dobytí; nachází se v nížinách Judska",
+      "lemma": "עֶגְלוֹן",
+      "hebrew": "עגלון",
+      "xlit": "ʻEglôwn",
+      "translated": true
+    },
+    "H5701": {
+      "definitions_cz": "1) (Qal) být zarmoucen",
+      "lemma": "עָגַם",
+      "hebrew": "עגם",
+      "xlit": "ʻâgam",
+      "translated": true
+    },
+    "H5702": {
+      "definitions_cz": "1) (Niphal) zavřít se, vypnout nebo zavřít",
+      "lemma": "עָגַן",
+      "hebrew": "עגן",
+      "xlit": "ʻâgan",
+      "translated": true
+    },
+    "H5703": {
+      "definitions_cz": "1) věčnost, navždy, pokračující budoucnost | 1a) starověký (minulý čas) | 1b) navždy (budoucího času) | 1b1) nepřetržité existence | 1c) navždy (boží existence)",
+      "lemma": "עַד",
+      "hebrew": "עד",
+      "xlit": "ʻad",
+      "translated": true
+    },
+    "H5704": {
+      "definitions_cz": "příprava | 1) až, dokonce až, až, až, zatímco, až | 1a) prostoru | 1a1) až, až, dokonce až | 1b) v kombinaci | 1b1) od...jak daleko, jak...a (s 'min' -od) | 1c) času | 1c1) i do, do, do, do, během, konce | 1d) stupně | 1d1) dokonce do, do stupně, dokonce jako | conj | 2) dokud, zatímco, do té míry, že, takže dokonce",
+      "lemma": "עַד",
+      "hebrew": "עד",
+      "xlit": "ʻad",
+      "translated": true
+    },
+    "H5705": {
+      "definitions_cz": "příprava | 1) dokonce do, do, do, během | conj | 2) až do doby, kdy, ere",
+      "lemma": "עַד",
+      "hebrew": "עד",
+      "xlit": "ʻad",
+      "translated": true
+    },
+    "H5706": {
+      "definitions_cz": "1) kořist, kořist",
+      "lemma": "עַד",
+      "hebrew": "עד",
+      "xlit": "ʻad",
+      "translated": true
+    },
+    "H5707": {
+      "definitions_cz": "1) svědek | 1a) svědek, svědectví, důkaz (o věcech) | 1b) svědek (lidí)",
+      "lemma": "עֵד",
+      "hebrew": "עד",
+      "xlit": "ʻêd",
+      "translated": true
+    },
+    "H5708": {
+      "definitions_cz": "1) menstruace | 1a) špinavý hadr, potřísněný oděv (obr. nejlepších činů provinilců)",
+      "lemma": "עֵד",
+      "hebrew": "עד",
+      "xlit": "ʻêd",
+      "translated": true
+    },
+    "H5709": {
+      "definitions_cz": "1) předat, pominout | 1a)(P'al) | 1a1) předat, předat | 1a2) zemřít | 1b) (Aphel) odnést, odstranit, sesadit",
+      "lemma": "עֲדָא",
+      "hebrew": "עדא",
+      "xlit": "ʻădâʼ",
+      "translated": true
+    },
+    "H5710": {
+      "definitions_cz": "1) předat, postoupit, jít dál, projít kolem, odstranit | 1a) (Qal) předat, nasadit | 1b) (Hiphil) k odstranění",
+      "lemma": "עָדָה",
+      "hebrew": "עדה",
+      "xlit": "ʻâdâh",
+      "translated": true
+    },
+    "H5711": {
+      "definitions_cz": "Adah = \"ornament\" | 1) 1. ze 2 manželek Lámechových a matky Jabala a Jubala | 2) Chetita, 1 ze 3 manželek Ezaua a matka Elifaza | 2a) také nazývaný „Bashemath“",
+      "lemma": "עָדָה",
+      "hebrew": "עדה",
+      "xlit": "ʻÂdâh",
+      "translated": true
+    },
+    "H5712": {
+      "definitions_cz": "1) shromáždění, shromáždění",
+      "lemma": "עֵדָה",
+      "hebrew": "עדה",
+      "xlit": "ʻêdâh",
+      "translated": true
+    },
+    "H5713": {
+      "definitions_cz": "1) svědectví, svědek | 1a) vždy množné a vždy zákonů jako božských svědectví",
+      "lemma": "עֵדָה",
+      "hebrew": "עדה",
+      "xlit": "ʻêdâh",
+      "translated": true
+    },
+    "H5714": {
+      "definitions_cz": "Iddo = \"Jeho svědek\" | 1) otec Abinadaba, důstojníka Šalomouna | 2) děd proroka Zachariáše | 3) Geršonský levita, syn Joachův | 4) kněz za časů Nehemiášových | 5) věštec v době krále Jeroboáma ze severního království Izraele | 6) syn Zacharjáše, vládce kmene Manasses v době Davidově | 7) náčelník chrámových otroků, kteří se shromáždili v Casiphii v době 2. karavany z Babylonu",
+      "lemma": "עִדּוֹ",
+      "hebrew": "עדו",
+      "xlit": "ʻIddôw",
+      "translated": true
+    },
+    "H5715": {
+      "definitions_cz": "1) svědectví",
+      "lemma": "עֵדוּת",
+      "hebrew": "עדות",
+      "xlit": "ʻêdûwth",
+      "translated": true
+    },
+    "H5716": {
+      "definitions_cz": "1) ozdoby | 1a) ozdoby | 1b) pasti (koní)",
+      "lemma": "עֲדִי",
+      "hebrew": "עדי",
+      "xlit": "ʻădîy",
+      "translated": true
+    },
+    "H5717": {
+      "definitions_cz": "Adiel = \"ozdoba boží\" | 1) kníže Simeon z rodu Šimei v době judského krále Ezechiáše | 2) kněz, praotec Maasiai | 3) předek Azmavetha, pokladníka Davidova",
+      "lemma": "עֲדִיאֵל",
+      "hebrew": "עדיאל",
+      "xlit": "ʻĂdîyʼêl",
+      "translated": true
+    },
+    "H5718": {
+      "definitions_cz": "Adaiah = \"Jehova se ozdobil\" | 1) dědeček judského krále Josiáše z matčiny strany a rodák z Boscathu v judských nížinách | 2) geršonský levita a předek Asafa | 3) Benjamínec, syn Šimhiho | 4) kněz, syn Jehoramův | 5) předek Maaseiáše, jeden z kapitánů, kteří podporovali Jehojadu | 6) potomek Bani, který měl v době Ezry cizí manželku | 7) potomek jiného Baniho, který měl v době Ezry cizí manželku | 8) potomek Phareze z t. zv",
+      "lemma": "עֲדָיָה",
+      "hebrew": "עדיה",
+      "xlit": "ʻĂdâyâh",
+      "translated": true
+    },
+    "H5719": {
+      "definitions_cz": "1) smyslný",
+      "lemma": "עָדִין",
+      "hebrew": "עדין",
+      "xlit": "ʻâdîyn",
+      "translated": true
+    },
+    "H5720": {
+      "definitions_cz": "Adin = \"jemný\" nebo \"jemný\" | 1) předek rodiny vyhnanců, kteří se vrátili se Zerubábelem | 2) náčelník mezi navrácenými exulanty, který podepsal smlouvu s Nehemjášem",
+      "lemma": "עָדִין",
+      "hebrew": "עדין",
+      "xlit": "ʻÂdîyn",
+      "translated": true
+    },
+    "H5721": {
+      "definitions_cz": "Adina = \"štíhlá\" | 1) vůdce Rúbenovců a velitel Davidův",
+      "lemma": "עֲדִינָא",
+      "hebrew": "עדינא",
+      "xlit": "ʻĂdîynâʼ",
+      "translated": true
+    },
+    "H5722": {
+      "definitions_cz": "Adino = \"jeho ozdoba\" | 1) jeden z Davidových mocných válečníků",
+      "lemma": "עֲדִינוֹ",
+      "hebrew": "עדינו",
+      "xlit": "ʻădîynôw",
+      "translated": true
+    },
+    "H5723": {
+      "definitions_cz": "Adithaim = \"dvojitá ozdoba\" | 1) město v judské nížině",
+      "lemma": "עֲדִיתַיִם",
+      "hebrew": "עדיתים",
+      "xlit": "ʻĂdîythayim",
+      "translated": true
+    },
+    "H5724": {
+      "definitions_cz": "Adlai = \"spravedlnost Jehovova\" | 1) předek Šafata, dozorce nad Davidovými stády",
+      "lemma": "עַדְלַי",
+      "hebrew": "עדלי",
+      "xlit": "ʻAdlay",
+      "translated": true
+    },
+    "H5725": {
+      "definitions_cz": "Adullam = \"spravedlnost lidu\" | 1) město Kananejců přidělené Judsku a ležící v nížinách; místo jeskyně, kde se David ukryl",
+      "lemma": "עֲדֻלָּם",
+      "hebrew": "עדלם",
+      "xlit": "ʻĂdullâm",
+      "translated": true
+    },
+    "H5726": {
+      "definitions_cz": "Adullamit = viz Adullam \"spravedlnost lidu\" | 1) obyvatel Adullamu",
+      "lemma": "עֲדֻלָּמִי",
+      "hebrew": "עדלמי",
+      "xlit": "ʻĂdullâmîy",
+      "translated": true
+    },
+    "H5727": {
+      "definitions_cz": "1) (Hithpael) luxovat, těšit se",
+      "lemma": "עָדַן",
+      "hebrew": "עדן",
+      "xlit": "ʻâdan",
+      "translated": true
+    },
+    "H5728": {
+      "definitions_cz": "1) dosud, stále, zatím",
+      "lemma": "עֲדֶן",
+      "hebrew": "עדן",
+      "xlit": "ʻăden",
+      "translated": true
+    },
+    "H5729": {
+      "definitions_cz": "Eden = \"potěšení\" | 1) místo dobyté Asýrií; pravděpodobně leží na severozápadě Mezopotámie",
+      "lemma": "עֶדֶן",
+      "hebrew": "עדן",
+      "xlit": "ʻEden",
+      "translated": true
+    },
+    "H5730": {
+      "definitions_cz": "1) luxus, jemnost, rozkoš, skvost | 2) radost",
+      "lemma": "עֵדֶן",
+      "hebrew": "עדן",
+      "xlit": "ʻêden",
+      "translated": true
+    },
+    "H5731": {
+      "definitions_cz": "Eden= \"potěšení\" | n pr m loc | 1) první stanoviště člověka po stvoření; místo neznámé | n pr m | 2) Geršonský levita, syn Joachův za dnů judského krále Ezechiáše",
+      "lemma": "עֵדֶן",
+      "hebrew": "עדן",
+      "xlit": "ʻÊden",
+      "translated": true
+    },
+    "H5732": {
+      "definitions_cz": "1) čas | 1a) doba (trvání) | 1b) rok",
+      "lemma": "עִדָּן",
+      "hebrew": "עדן",
+      "xlit": "ʻiddân",
+      "translated": true
+    },
+    "H5733": {
+      "definitions_cz": "Adna = \"odpočinek\" nebo \"rozkoš\" | 1) jeden z rodiny Pahat-moabů, který se vrátil s Ezrou a oženil se s cizí manželkou | 2) kněz, potomek Harima za dnů Joakima, syna Jeshua",
+      "lemma": "עַדְנָא",
+      "hebrew": "עדנא",
+      "xlit": "ʻAdnâʼ",
+      "translated": true
+    },
+    "H5734": {
+      "definitions_cz": "Adnah = \"potěšení\" | 1) Manassite, který dezertoval od Saula a připojil se k Davidovi v Ciklagu | 2) kapitán, který měl na starosti více než 300 000 mužů z Judy v době Jozafata",
+      "lemma": "עַדְנָה",
+      "hebrew": "עדנה",
+      "xlit": "ʻAdnâh",
+      "translated": true
+    },
+    "H5735": {
+      "definitions_cz": "Adadah = \"festival\" nebo \"hranice\" | 1) jedno z měst na extrémním jihu Judska",
+      "lemma": "עֲדְעָדָה",
+      "hebrew": "עדעדה",
+      "xlit": "ʻĂdʻâdâh",
+      "translated": true
+    },
+    "H5736": {
+      "definitions_cz": "1) zůstat nad, být v přebytku | 1a) (Qal) | 1a1) být překročen | 1a1a) přebytek (subst) | 1a1b) přebytek (příčestí) | 1b) (Hifil) mít přebytek",
+      "lemma": "עֲדַף",
+      "hebrew": "עדף",
+      "xlit": "ʻădaph",
+      "translated": true
+    },
+    "H5737": {
+      "definitions_cz": "1) pomoci | 1a) (Qal) pomoci | 2) okopávat | 2a) (Niphal) k okopávání | 3) chybět, selhat | 3a)(Niphal) | 3b1) chybí | 3b1) nechat chybějící | 3b) (Piel) nechat chybějící",
+      "lemma": "עֲדַר",
+      "hebrew": "עדר",
+      "xlit": "ʻădar",
+      "translated": true
+    },
+    "H5738": {
+      "definitions_cz": "Ader = \"hejno\" | 1) Benjamínec, syn Beriášův, náčelník obyvatel Ajalónu | 1a) také „Eder“",
+      "lemma": "עֶדֶר",
+      "hebrew": "עדר",
+      "xlit": "ʻEder",
+      "translated": true
+    },
+    "H5739": {
+      "definitions_cz": "1) hejno, stádo | 1a) hejno | 1b) stáda, hejna a stáda",
+      "lemma": "עֵדֶר",
+      "hebrew": "עדר",
+      "xlit": "ʻêder",
+      "translated": true
+    },
+    "H5740": {
+      "definitions_cz": "Eder = \"hejno\" | n pr m | 1) merarijský levita v době Davidově | n pr loc | 2) město na úplném jihu Judska na hranici Edomu; místo neznámé",
+      "lemma": "עֵדֶר",
+      "hebrew": "עדר",
+      "xlit": "ʻÊder",
+      "translated": true
+    },
+    "H5741": {
+      "definitions_cz": "Adriel = \"Boží stádo\" | 1) syn Barzillai a muž, kterému Saul dal za ženu svou dceru Merab, i když ta již byla zaslíbena Davidovi",
+      "lemma": "עַדְרִיאֵל",
+      "hebrew": "עדריאל",
+      "xlit": "ʻAdrîyʼêl",
+      "translated": true
+    },
+    "H5742": {
+      "definitions_cz": "1) čočka",
+      "lemma": "עָדָשׁ",
+      "hebrew": "עדש",
+      "xlit": "ʻâdâsh",
+      "translated": true
+    },
+    "H5743": {
+      "definitions_cz": "1) (Hiphil) zamračit se",
+      "lemma": "עוּב",
+      "hebrew": "עוב",
+      "xlit": "ʻûwb",
+      "translated": true
+    },
+    "H5744": {
+      "definitions_cz": "Obed = \"servírování\" | 1) syn Boaz od Rút a děda Davidova | 2) Judaita, potomek Jarhy, egyptského otroka ze Šešanu, v linii Jerahmeel | 3) Judaita, otec Azariáše, jednoho z kapitánů stovek, kteří se přidali k Jojadovi v revoluci, při níž padla Atalia | 4) jeden z Davidových mocných válečníků | 5) syn Šemajášův a strážce chrámové brány",
+      "lemma": "עוֹבֵד",
+      "hebrew": "עובד",
+      "xlit": "ʻÔwbêd",
+      "translated": true
+    },
+    "H5745": {
+      "definitions_cz": "Obal = \"svlečený\" | 1) syn Joktanův a zakladatel arabského kmene",
+      "lemma": "עוֹבָל",
+      "hebrew": "עובל",
+      "xlit": "ʻÔwbâl",
+      "translated": true
+    },
+    "H5746": {
+      "definitions_cz": "1) (Qal) upéct, upéct koláč",
+      "lemma": "עוּג",
+      "hebrew": "עוג",
+      "xlit": "ʻûwg",
+      "translated": true
+    },
+    "H5747": {
+      "definitions_cz": "Og = \"dlouhokrký\" | 1) amorejský král Bášanu a jeden z posledních zástupců obrů z Refaim",
+      "lemma": "עוֹג",
+      "hebrew": "עוג",
+      "xlit": "ʻÔwg",
+      "translated": true
+    },
+    "H5748": {
+      "definitions_cz": "1) hudební nástroj | 1a) možná flétna, rákosová píšťala nebo panpipes",
+      "lemma": "עוּגָב",
+      "hebrew": "עוגב",
+      "xlit": "ʻûwgâb",
+      "translated": true
+    },
+    "H5749": {
+      "definitions_cz": "1) vrátit se, opakovat, jít, opakovat | 1a) (Piel) obklopit, objíždět a dokola | 1b) (Pilel) obnovit, ulevit | 1c) (Hithpalel) k obnovení | 2) vydat svědectví | 2a) (Qal) svědčit, říkat znovu a znovu | 2b) (hifil) | 2b1) svědčit, vydat svědectví | 2b2) přimět svědčit, vzít nebo předvolat jako svědka, dovolat se | 2b3) protestovat, slavnostně potvrdit, varovat, nabádat nebo slavnostně nařizovat, napomínat, obviňovat | 2c) (Hophal) protestovat, varovat",
+      "lemma": "עוּד",
+      "hebrew": "עוד",
+      "xlit": "ʻûwd",
+      "translated": true
+    },
+    "H5750": {
+      "definitions_cz": "subst | 1) dokola, pokračování | adv | 2) stále, ještě, znovu, kromě | 2a) stále, přesto (přetrvávající nebo přetrvávající) | 2b) stále, ale ještě více (sčítání nebo opakování) | 2c) znovu | 2d) ještě kromě toho",
+      "lemma": "עוֹד",
+      "hebrew": "עוד",
+      "xlit": "ʻôwd",
+      "translated": true
+    },
+    "H5751": {
+      "definitions_cz": "1) stále, zatímco, ještě",
+      "lemma": "עוֹד",
+      "hebrew": "עוד",
+      "xlit": "ʻôwd",
+      "translated": true
+    },
+    "H5752": {
+      "definitions_cz": "Oded = \"obnovitel\" | 1) otec proroka Azariáše za vlády judského krále Asy | 2) Jehovův prorok v Samaří v době Pekachovy invaze do Judy",
+      "lemma": "עוֹדֵד",
+      "hebrew": "עודד",
+      "xlit": "ʻÔwdêd",
+      "translated": true
+    },
+    "H5753": {
+      "definitions_cz": "1) ohýbat, kroutit, deformovat | 1a) (Niphal) být ohnut, být ukloněn, být zkroucený, být zvrácený | 1b) (Piel) kroutit, deformovat | 1c) (Hiphil) dělat zvráceně | 2) páchat nepravost, konat špatnost, převracet | 2a) (Qal) páchat zlo, páchat nepravost | 2b) (Hifil) páchat nepravost",
+      "lemma": "עָוָה",
+      "hebrew": "עוה",
+      "xlit": "ʻâvâh",
+      "translated": true
+    },
+    "H5754": {
+      "definitions_cz": "1) zkreslení, zmar",
+      "lemma": "עַוָּה",
+      "hebrew": "עוה",
+      "xlit": "ʻavvâh",
+      "translated": true
+    },
+    "H5755": {
+      "definitions_cz": "Ava nebo Ivah = \"zřícenina\" | 1) město dobyté Asyřany",
+      "lemma": "עִוָּה",
+      "hebrew": "עוה",
+      "xlit": "ʻIvvâh",
+      "translated": true
+    },
+    "H5756": {
+      "definitions_cz": "1) (Hifil) uchýlit se, uchýlit se, hledat útočiště",
+      "lemma": "עוּז",
+      "hebrew": "עוז",
+      "xlit": "ʻûwz",
+      "translated": true
+    },
+    "H5757": {
+      "definitions_cz": "Avimi nebo Avites = \"zvrhlíky\" | 1) obyvatelé Avy nebo Ivah",
+      "lemma": "עַוִּי",
+      "hebrew": "עוי",
+      "xlit": "ʻAvvîy",
+      "translated": true
+    },
+    "H5758": {
+      "definitions_cz": "1) zvrácenost, nepravost",
+      "lemma": "עִוְיָא",
+      "hebrew": "עויא",
+      "xlit": "ʻivyâʼ",
+      "translated": true
+    },
+    "H5759": {
+      "definitions_cz": "1) mladý muž nebo muž nebo chlapec, chlapec",
+      "lemma": "עֲוִיל",
+      "hebrew": "עויל",
+      "xlit": "ʻăvîyl",
+      "translated": true
+    },
+    "H5760": {
+      "definitions_cz": "1) zvrácený, nespravedlivý",
+      "lemma": "עֲוִיל",
+      "hebrew": "עויל",
+      "xlit": "ʻăvîyl",
+      "translated": true
+    },
+    "H5761": {
+      "definitions_cz": "Avim = \"ruiny\" | n pr m | 1) národ mezi ranými obyvateli Palestiny nacházející se v jihozápadním rohu mořského pobřeží | n pr loc | 2) město v Benjaminu",
+      "lemma": "עַוִּים",
+      "hebrew": "עוים",
+      "xlit": "ʻAvvîym",
+      "translated": true
+    },
+    "H5762": {
+      "definitions_cz": "Avith = \"ruiny\" | 1) město Hadad Ben-Bedad, jednoho z králů Edomu",
+      "lemma": "עֲוִית",
+      "hebrew": "עוית",
+      "xlit": "ʻĂvîyth",
+      "translated": true
+    },
+    "H5763": {
+      "definitions_cz": "1) dát sát, sát, kojit | 1a) (Qal) sání (příčestí)",
+      "lemma": "עוּל",
+      "hebrew": "עול",
+      "xlit": "ʻûwl",
+      "translated": true
+    },
+    "H5764": {
+      "definitions_cz": "1) kojení, sání dítěte",
+      "lemma": "עוּל",
+      "hebrew": "עול",
+      "xlit": "ʻûwl",
+      "translated": true
+    },
+    "H5765": {
+      "definitions_cz": "1) jednat neoprávněně nebo nespravedlivě, odchýlit se od | 1a) (Piel) jednat neprávem",
+      "lemma": "עֲוַל",
+      "hebrew": "עול",
+      "xlit": "ʻăval",
+      "translated": true
+    },
+    "H5766": {
+      "definitions_cz": "1) nespravedlnost, nespravedlnost, křivda | 1a) násilné činy bezpráví | 1b) nespravedlnost (řeči) | 1c) nespravedlnost (obecně)",
+      "lemma": "עֶוֶל",
+      "hebrew": "עול",
+      "xlit": "ʻevel",
+      "translated": true
+    },
+    "H5767": {
+      "definitions_cz": "1) nespravedlivý, zvrácený, nespravedlivý",
+      "lemma": "עַוָּל",
+      "hebrew": "עול",
+      "xlit": "ʻavvâl",
+      "translated": true
+    },
+    "H5768": {
+      "definitions_cz": "1) dítě, chlapec",
+      "lemma": "עוֹלֵל",
+      "hebrew": "עולל",
+      "xlit": "ʻôwlêl",
+      "translated": true
+    },
+    "H5769": {
+      "definitions_cz": "1) dlouhé trvání, starověk, budoucnost, navždy, navždy, věčný, věčný, věčný, starý, starověký, svět | 1a) dávný čas, dávný čas (minulosti) | 1b) (budoucí) | 1b1) navždy, vždy | 1b2) nepřetržitá existence, věčná | 1b3) věčná, neurčitá nebo nekonečná budoucnost, věčnost",
+      "lemma": "עוֹלָם",
+      "hebrew": "עולם",
+      "xlit": "ʻôwlâm",
+      "translated": true
+    },
+    "H5770": {
+      "definitions_cz": "1) do očí, podívejte se na | 1a) (Qal) do očí, podívejte se",
+      "lemma": "עָוַן",
+      "hebrew": "עון",
+      "xlit": "ʻâvan",
+      "translated": true
+    },
+    "H5771": {
+      "definitions_cz": "1) zvrácenost, zkaženost, nepravost, vina nebo trest za nepravost | 1a) nepravost | 1b) vina za nepravost, vina (jako velká), vina (podmínka) | 1c) následek nebo trest za nepravost",
+      "lemma": "עָוֺן",
+      "hebrew": "עון",
+      "xlit": "ʻâvôn",
+      "translated": true
+    },
+    "H5772": {
+      "definitions_cz": "1) soužití, manželská práva",
+      "lemma": "עוֹנָה",
+      "hebrew": "עונה",
+      "xlit": "ʻôwnâh",
+      "translated": true
+    },
+    "H5773": {
+      "definitions_cz": "1) zkreslování, překrucování, deformování",
+      "lemma": "עַוְעֶה",
+      "hebrew": "עועה",
+      "xlit": "ʻavʻeh",
+      "translated": true
+    },
+    "H5774": {
+      "definitions_cz": "v | 1) létat, létat, odlétat | 1a)(Qal) | 1a1) létat, vznášet se | 1a2) odletět | 1b) (Hiphil) přimět létat, světlo na | 1c) (Pole) | 1c1) létat kolem nebo sem a tam | 1c2) způsobit létání sem a tam, mávat | 1d) (Hithpolel) odletět | 2) (Qal) zakrýt, být tmavý | n f | 3) šero",
+      "lemma": "עוּף",
+      "hebrew": "עוף",
+      "xlit": "ʻûwph",
+      "translated": true
+    },
+    "H5775": {
+      "definitions_cz": "1) létající tvorové, drůbež, hmyz, ptáci | 1a) drůbež, ptáci | 1b) okřídlený hmyz",
+      "lemma": "עוֹף",
+      "hebrew": "עוף",
+      "xlit": "ʻôwph",
+      "translated": true
+    },
+    "H5776": {
+      "definitions_cz": "1) drůbež",
+      "lemma": "עוֹף",
+      "hebrew": "עוף",
+      "xlit": "ʻôwph",
+      "translated": true
+    },
+    "H5777": {
+      "definitions_cz": "1) vést",
+      "lemma": "עוֹפֶרֶת",
+      "hebrew": "עופרת",
+      "xlit": "ʻôwphereth",
+      "translated": true
+    },
+    "H5778": {
+      "definitions_cz": "Ephai = \"pochmurný\" | 1) Netofat, jehož synové patřili mezi velitele sil, které v Judsku zůstaly po deportaci do Babylóna",
+      "lemma": "עוֹפַי",
+      "hebrew": "עופי",
+      "xlit": "ʻÔwphay",
+      "translated": true
+    },
+    "H5779": {
+      "definitions_cz": "1) (Qal) radit, plánovat",
+      "lemma": "עוּץ",
+      "hebrew": "עוץ",
+      "xlit": "ʻûwts",
+      "translated": true
+    },
+    "H5780": {
+      "definitions_cz": "Uz = \"zalesněný\" | n pr m | 1) syn Arama a vnuk Setha | 2) syn Nachorův od Milky | 3) Edomita, syn Dišanův a vnuk Seirův | n pr loc | 4) země Job; pravděpodobně východně a jihovýchodně od Palestiny někde v arabské poušti",
+      "lemma": "עוּץ",
+      "hebrew": "עוץ",
+      "xlit": "ʻÛwts",
+      "translated": true
+    },
+    "H5781": {
+      "definitions_cz": "1) (Hiphil) potácet se, přimět se potácet, drtit | 1a) znamená pochybný",
+      "lemma": "עוּק",
+      "hebrew": "עוק",
+      "xlit": "ʻûwq",
+      "translated": true
+    },
+    "H5782": {
+      "definitions_cz": "1) probudit se, probudit, probudit, podnítit | 1a) (Qal) probudit se, probudit se | 1b) (Niphal) k probuzení | 1c) (Polel) vzbudit, vyburcovat, podnítit | 1d) (Hithpolel) být vzrušený, být triumfální | 1e) (hifil) | 1e1) vzbudit, rozhýbat | 1e2) jednat vzrušeně, vzhůru",
+      "lemma": "עוּר",
+      "hebrew": "עור",
+      "xlit": "ʻûwr",
+      "translated": true
+    },
+    "H5783": {
+      "definitions_cz": "1) (Niphal) být odhalen, být odhalen, být odhalen",
+      "lemma": "עוּר",
+      "hebrew": "עור",
+      "xlit": "ʻûwr",
+      "translated": true
+    },
+    "H5784": {
+      "definitions_cz": "1) plevy",
+      "lemma": "עוּר",
+      "hebrew": "עור",
+      "xlit": "ʻûwr",
+      "translated": true
+    },
+    "H5785": {
+      "definitions_cz": "1) kůže, skrýt | 1a) kůže (mužů) | 1b) skrýt (zvířat)",
+      "lemma": "עוֹר",
+      "hebrew": "עור",
+      "xlit": "ʻôwr",
+      "translated": true
+    },
+    "H5786": {
+      "definitions_cz": "1) (Piel) oslepit, oslepit, vysadit oči",
+      "lemma": "עָוַר",
+      "hebrew": "עור",
+      "xlit": "ʻâvar",
+      "translated": true
+    },
+    "H5787": {
+      "definitions_cz": "1) slepý | 1a) slepý (fyzicky) | 1b) slepý (obr.)",
+      "lemma": "עִוֵּר",
+      "hebrew": "עור",
+      "xlit": "ʻivvêr",
+      "translated": true
+    },
+    "H5788": {
+      "definitions_cz": "1) slepota",
+      "lemma": "עִוָּרוֹן",
+      "hebrew": "עורון",
+      "xlit": "ʻivvârôwn",
+      "translated": true
+    },
+    "H5789": {
+      "definitions_cz": "1) (Qal) půjčit pomoc, přijít na pomoc, pospíšit",
+      "lemma": "עוּשׁ",
+      "hebrew": "עוש",
+      "xlit": "ʻûwsh",
+      "translated": true
+    },
+    "H5790": {
+      "definitions_cz": "1) (Qal) pospíšit, pomoci, pomoci | 1a) znamená pochybný",
+      "lemma": "עוּת",
+      "hebrew": "עות",
+      "xlit": "ʻûwth",
+      "translated": true
     }
   }
 }
