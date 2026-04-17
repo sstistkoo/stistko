@@ -86012,6 +86012,356 @@
       "hebrew": "תחרה",
       "xlit": "tachârâh",
       "translated": true
+    },
+    "H8475": {
+      "definitions_cz": "Tahrea = \"mazaný\" | 1) Benjamínec, syn Micheášův ze Saulovy linie",
+      "lemma": "תַּחְרֵעַ",
+      "hebrew": "תחרע",
+      "xlit": "Tachrêaʻ",
+      "translated": true
+    },
+    "H8476": {
+      "definitions_cz": "1) druh kůže, kůže nebo zvířecí kůže | 1a) snad zvíře, které dává kůži | 1a1) možná jezevec nebo dugong, delfín nebo ovce nebo nyní vyhynulé zvíře",
+      "lemma": "תַּחַשׁ",
+      "hebrew": "תחש",
+      "xlit": "tachash",
+      "translated": true
+    },
+    "H8477": {
+      "definitions_cz": "Thahash = \"dugong\" | 1) syn Náchora od jeho konkubíny Reumy a synovce Abrahamova",
+      "lemma": "תַּחַשׁ",
+      "hebrew": "תחש",
+      "xlit": "Tachash",
+      "translated": true
+    },
+    "H8478": {
+      "definitions_cz": "1) spodní část, pod, místo, jako, pro, kvůli, plochá, do, kde, kdežto n m | 1a) spodní část adv accus | 1b) pod přípravou | 1c) pod, pod | 1c1) na úpatí (idiom) | 1c2) sladkost, podřízenost, žena, být obtěžkána nebo utlačována (obr.) | 1c3) podrobení nebo dobytí | 1d) co je pod jedním, místo, na kterém člověk stojí | 1d1) na svém místě, na místě, kde stojíme (idiom se zvratným zájmenem) | 1d2) místo, místo (v přeneseném",
+      "lemma": "תַּחַת",
+      "hebrew": "תחת",
+      "xlit": "tachath",
+      "translated": true
+    },
+    "H8479": {
+      "definitions_cz": "1) pod",
+      "lemma": "תַּחַת",
+      "hebrew": "תחת",
+      "xlit": "tachath",
+      "translated": true
+    },
+    "H8480": {
+      "definitions_cz": "Tahath = \"stanice\" | n pr m | 1) kehatský levita, syn Assirův a otec Uriela | 2) kehatský levita, syn Assirův a otec Sofonjášův | 2a) možná stejné jako 1 | 3) syn Beredův, pravnuk Efraimův a otec Eladah | 4) syn Eladah, vnuk 3, a otec Zabad | n pr loc | 3) stanice Izraele v poušti",
+      "lemma": "תַּחַת",
+      "hebrew": "תחת",
+      "xlit": "Tachath",
+      "translated": true
+    },
+    "H8481": {
+      "definitions_cz": "1) nižší, nejnižší, nether",
+      "lemma": "תַּחְתּוֹן",
+      "hebrew": "תחתון",
+      "xlit": "tachtôwn",
+      "translated": true
+    },
+    "H8482": {
+      "definitions_cz": "1) nízký, nižší, nejnižší | 1a) nejnižší (jako adj) | 1b) spodní části (subst)",
+      "lemma": "תַּחְתִּי",
+      "hebrew": "תחתי",
+      "xlit": "tachtîy",
+      "translated": true
+    },
+    "H8483": {
+      "definitions_cz": "Tahtim-hodshi = \"nejnižší měsíc\" | 1) místo poblíž Gileadu na východě Jordánu",
+      "lemma": "תַּחְתִּים חׇדְשִׁי",
+      "hebrew": "תחתים חדשי",
+      "xlit": "Tachtîym Chodshîy",
+      "translated": true
+    },
+    "H8484": {
+      "definitions_cz": "1) uprostřed",
+      "lemma": "תִּיכוֹן",
+      "hebrew": "תיכון",
+      "xlit": "tîykôwn",
+      "translated": true
+    },
+    "H8485": {
+      "definitions_cz": "Tema = \"poušť\" | n pr m | 1) 9. syn Izmaelův | n pr loc | 2) země osídlená Temou, synem Izmaelovým",
+      "lemma": "תֵּימָא",
+      "hebrew": "תימא",
+      "xlit": "Têymâʼ",
+      "translated": true
+    },
+    "H8486": {
+      "definitions_cz": "1) jih, jih, cokoliv je vpravo (tedy jižní čtvrť), jižní vítr | 1a) jižně (od území) | 1b) jižní čtvrtina (nebe) | 1c) na jih, na jih (od směru) | 1d) jižní vítr",
+      "lemma": "תֵּימָן",
+      "hebrew": "תימן",
+      "xlit": "têymân",
+      "translated": true
+    },
+    "H8487": {
+      "definitions_cz": "Teman = \"jih\" | n pr m | 1) syn Elifaze, vnuka Ezaua a jednoho z edomských vévodů | 2) kmen pocházející z 1 známý moudrostí svého lidu | n pr loc | 3) oblast obsazená potomky 1, která se nachází východně od Idumea",
+      "lemma": "תֵּימָן",
+      "hebrew": "תימן",
+      "xlit": "Têymân",
+      "translated": true
+    },
+    "H8488": {
+      "definitions_cz": "Temeni = \"jižní\" | 1) Judaita, syn Ašura jednou z jeho dvou manželek Naaře",
+      "lemma": "תֵּימְנִי",
+      "hebrew": "תימני",
+      "xlit": "Têymᵉnîy",
+      "translated": true
+    },
+    "H8489": {
+      "definitions_cz": "Temanite nebo Temani = viz Teman \"na jih\" | 1) obyvatel Temanu ležícího východně od Idumea | 2) potomek Temana, vnuka Ezaua a vévody z Edomu",
+      "lemma": "תֵּימָנִי",
+      "hebrew": "תימני",
+      "xlit": "Têymânîy",
+      "translated": true
+    },
+    "H8490": {
+      "definitions_cz": "1) pilíř, sloup | 1a) nahoře dlaňovité rozprostření",
+      "lemma": "תִּימָרָה",
+      "hebrew": "תימרה",
+      "xlit": "tîymârâh",
+      "translated": true
+    },
+    "H8491": {
+      "definitions_cz": "Tizite = \"vyjdeš\" | 1) an inhabitant of Tiz",
+      "lemma": "תִּיצִי",
+      "hebrew": "תיצי",
+      "xlit": "Tîytsîy",
+      "translated": true
+    },
+    "H8492": {
+      "definitions_cz": "1) víno, čerstvé nebo nové víno, mošt, čerstvě vylisované víno",
+      "lemma": "תִּירוֹשׁ",
+      "hebrew": "תירוש",
+      "xlit": "tîyrôwsh",
+      "translated": true
+    },
+    "H8493": {
+      "definitions_cz": "Tiria = \"strach\" | 1) Judaita, syn Jehaleleelův",
+      "lemma": "תִּירְיָא",
+      "hebrew": "תיריא",
+      "xlit": "Tîyrᵉyâʼ",
+      "translated": true
+    },
+    "H8494": {
+      "definitions_cz": "Tiras = \"touha\" | 1) syn Jafeta a vnuk Noeho",
+      "lemma": "תִּירָס",
+      "hebrew": "תירס",
+      "xlit": "Tîyrâç",
+      "translated": true
+    },
+    "H8495": {
+      "definitions_cz": "1) koza",
+      "lemma": "תַּיִשׁ",
+      "hebrew": "תיש",
+      "xlit": "tayish",
+      "translated": true
+    },
+    "H8496": {
+      "definitions_cz": "1) zranění, útlak, utlačovatel | 2) (TWOT) podvod, podvod, klamný",
+      "lemma": "תֹּךְ",
+      "hebrew": "תך",
+      "xlit": "tôk",
+      "translated": true
+    },
+    "H8497": {
+      "definitions_cz": "1) (Pual) k vedení, k sestavení | 1a) znamená zcela pochybné | 2) (CLBL) (Pu) položit, naklonit se",
+      "lemma": "תָּכָה",
+      "hebrew": "תכה",
+      "xlit": "tâkâh",
+      "translated": true
+    },
+    "H8498": {
+      "definitions_cz": "1) uspořádání, příprava, pevné místo | 1a) uspořádání, dispozice | 1b) příprava | 1c) pevné místo",
+      "lemma": "תְּכוּנָה",
+      "hebrew": "תכונה",
+      "xlit": "tᵉkûwnâh",
+      "translated": true
+    },
+    "H8499": {
+      "definitions_cz": "1) uspořádání, příprava, pevné místo, sídlo, místo | 1a) uspořádání, dispozice | 1b) příprava | 1c) pevné místo, sídlo, místo",
+      "lemma": "תְּכוּנָה",
+      "hebrew": "תכונה",
+      "xlit": "tᵉkûwnâh",
+      "translated": true
+    },
+    "H8500": {
+      "definitions_cz": "1) páv, pavián, opice | 1a) páv | 1b) (TWOT) pavián, opice",
+      "lemma": "תֻּכִּי",
+      "hebrew": "תכי",
+      "xlit": "tukkîy",
+      "translated": true
+    },
+    "H8501": {
+      "definitions_cz": "1) zranění, útlak, utlačovatel",
+      "lemma": "תָּכָךְ",
+      "hebrew": "תכך",
+      "xlit": "tâkâk",
+      "translated": true
+    },
+    "H8502": {
+      "definitions_cz": "1) dokonalost, úplnost, úplnost",
+      "lemma": "תִּכְלָה",
+      "hebrew": "תכלה",
+      "xlit": "tiklâh",
+      "translated": true
+    },
+    "H8503": {
+      "definitions_cz": "1) konec, dokonalost, dovršení, dokončení, úplnost | 1a) konec | 1b) úplnost",
+      "lemma": "תַּכְלִית",
+      "hebrew": "תכלית",
+      "xlit": "taklîyth",
+      "translated": true
+    },
+    "H8504": {
+      "definitions_cz": "1) fialová, fialová látka | 1a) fialová nit | 1b) fialová látka nebo látka | 2) (TWOT) modrá (pokrývá spektrum od zářivě červené po tmavě fialovou)",
+      "lemma": "תְּכֵלֶת",
+      "hebrew": "תכלת",
+      "xlit": "tᵉkêleth",
+      "translated": true
+    },
+    "H8505": {
+      "definitions_cz": "1) regulovat, měřit, odhadovat, uvažovat, vyvažovat, vyrovnávat, vyrovnávat, vážit, rovnat se, být odvážen, testovat, dokazovat | 1a) (Qal) odhad (participium) | 1b) (Niphal) | 1b1) odhadnout | 1b2) být rovný nebo pravý, upravit podle normy | 1c) (Piel) odvážit, odměřit | 1d) (Pual) | 1d1) k odvážení, odměření | 1d2) odměřeno (příčestí)",
+      "lemma": "תָּכַן",
+      "hebrew": "תכן",
+      "xlit": "tâkan",
+      "translated": true
+    },
+    "H8506": {
+      "definitions_cz": "1) měření, naměřené množství",
+      "lemma": "תֹּכֶן",
+      "hebrew": "תכן",
+      "xlit": "tôken",
+      "translated": true
+    },
+    "H8507": {
+      "definitions_cz": "Tochen = \"měření\" | 1) město v Simeonu až do doby Davidovy",
+      "lemma": "תֹּכֶן",
+      "hebrew": "תכן",
+      "xlit": "Tôken",
+      "translated": true
+    },
+    "H8508": {
+      "definitions_cz": "1) měření, vzor, ​​proporce",
+      "lemma": "תׇּכְנִית",
+      "hebrew": "תכנית",
+      "xlit": "toknîyth",
+      "translated": true
+    },
+    "H8509": {
+      "definitions_cz": "1) župan",
+      "lemma": "תַּכְרִיךְ",
+      "hebrew": "תכריך",
+      "xlit": "takrîyk",
+      "translated": true
+    },
+    "H8510": {
+      "definitions_cz": "1) mohyla, halda, halda ruin | 1a) mohyla (zřícenina-hromada města) | 1b) mohyla, kopec (vyvýšení, na kterém stálo město)",
+      "lemma": "תֵּל",
+      "hebrew": "תל",
+      "xlit": "têl",
+      "translated": true
+    },
+    "H8511": {
+      "definitions_cz": "1) (Qal) viset, viset, držet se",
+      "lemma": "תָּלָא",
+      "hebrew": "תלא",
+      "xlit": "tâlâʼ",
+      "translated": true
+    },
+    "H8512": {
+      "definitions_cz": "Tel-abib = \"mohyla potopy\" | 1) město v Babylóně, domov proroka Ezechiela, ležící na řece Chebar, která byla pravděpodobně větví Eufratu",
+      "lemma": "תֵּל אָבִיב",
+      "hebrew": "תל אביב",
+      "xlit": "Têl ʼÂbîyb",
+      "translated": true
+    },
+    "H8513": {
+      "definitions_cz": "1) dřina, strádání, úzkost, únava",
+      "lemma": "תְּלָאָה",
+      "hebrew": "תלאה",
+      "xlit": "tᵉlâʼâh",
+      "translated": true
+    },
+    "H8514": {
+      "definitions_cz": "1) sucho",
+      "lemma": "תַּלְאוּבָה",
+      "hebrew": "תלאובה",
+      "xlit": "talʼûwbâh",
+      "translated": true
+    },
+    "H8515": {
+      "definitions_cz": "Telassar nebo Thelasar = \"asyrský kopec\" | 1) město dobyté a držené Asyřany nacházející se zřejmě v Mezopotámii",
+      "lemma": "תְּלַאשַּׂר",
+      "hebrew": "תלאשר",
+      "xlit": "Tᵉlaʼssar",
+      "translated": true
+    },
+    "H8516": {
+      "definitions_cz": "1) oděv, oděv, oděv",
+      "lemma": "תַּלְבֹּשֶׁת",
+      "hebrew": "תלבשת",
+      "xlit": "talbôsheth",
+      "translated": true
+    },
+    "H8517": {
+      "definitions_cz": "1) sníh",
+      "lemma": "תְּלַג",
+      "hebrew": "תלג",
+      "xlit": "tᵉlag",
+      "translated": true
+    },
+    "H8518": {
+      "definitions_cz": "1) k zavěšení | 1a) (Qal) | 1a1) k zavěšení | 1a1a) zavěsit (jakýkoli předmět) | 1a1b) usmrtit oběšením | 1b) (Niphal) k pověšení | 1c) (Piel) pověsit, zavěsit (pro zobrazení)",
+      "lemma": "תָּלָה",
+      "hebrew": "תלה",
+      "xlit": "tâlâh",
+      "translated": true
+    },
+    "H8519": {
+      "definitions_cz": "1) mumlat",
+      "lemma": "תְּלוּנָה",
+      "hebrew": "תלונה",
+      "xlit": "tᵉlûwnâh",
+      "translated": true
+    },
+    "H8520": {
+      "definitions_cz": "Telah = \"ráznost\" | 1) syn Efraimův",
+      "lemma": "תֶּלַח",
+      "hebrew": "תלח",
+      "xlit": "Telach",
+      "translated": true
+    },
+    "H8521": {
+      "definitions_cz": "Tel-harsa nebo Tel-haresha = \"mohyla hluchoněmých\" | 1) město Babylon | 1a) pravděpodobně se nachází v nížině poblíž moře",
+      "lemma": "תֵּל חַרְשָׁא",
+      "hebrew": "תל חרשא",
+      "xlit": "Têl Charshâʼ",
+      "translated": true
+    },
+    "H8522": {
+      "definitions_cz": "1) toulec | 1a) toulec (se šipkami) | 1b) toulec (jako visící na rameni)",
+      "lemma": "תְּלִי",
+      "hebrew": "תלי",
+      "xlit": "tᵉlîy",
+      "translated": true
+    },
+    "H8523": {
+      "definitions_cz": "1) třetí | 1a) třetí (řadové číslo)",
+      "lemma": "תְּלִיתַי",
+      "hebrew": "תליתי",
+      "xlit": "tᵉlîythay",
+      "translated": true
+    },
+    "H8524": {
+      "definitions_cz": "v | 1) (CLBL) vyvyšovat | 1a) (Qal) eminentní, vznešený (participium) | adj | 2) (BDB) vznešený, vznešený",
+      "lemma": "תָּלַל",
+      "hebrew": "תלל",
+      "xlit": "tâlal",
+      "translated": true
     }
   }
 }
