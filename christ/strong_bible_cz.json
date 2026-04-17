@@ -46077,6 +46077,356 @@
       "hebrew": "חרמונים",
       "xlit": "Chermôwnîym",
       "translated": true
+    },
+    "H2770": {
+      "definitions_cz": "1) srp",
+      "lemma": "חֶרְמֵשׁ",
+      "hebrew": "חרמש",
+      "xlit": "chermêsh",
+      "translated": true
+    },
+    "H2771": {
+      "definitions_cz": "Háran = \"horolezec\" | n pr m | 1) syn Kálebův od své konkubíny Efy | n pr loc | 2) město, do kterého Abraham emigroval, když opustil Ur Chaldejský a kde zůstal, dokud jeho otec nezemřel, než odešel do zaslíbené země; nachází se v Mezopotámii v Padan-aram na úpatí hory Masius mezi Chabour a Eufratem",
+      "lemma": "חָרָן",
+      "hebrew": "חרן",
+      "xlit": "Chârân",
+      "translated": true
+    },
+    "H2772": {
+      "definitions_cz": "Horonit = \"rodák z Horonaimu\" | 1) obyvatel Horonaimu v Moabu | 1a) označení Sanballata, odpůrce Nehemiáše",
+      "lemma": "חֹרֹנִי",
+      "hebrew": "חרני",
+      "xlit": "Chôrônîy",
+      "translated": true
+    },
+    "H2773": {
+      "definitions_cz": "Horonaim = \"dvě jeskyně\" | 1) město Moab",
+      "lemma": "חֹרֹנַיִם",
+      "hebrew": "חרנים",
+      "xlit": "Chôrônayim",
+      "translated": true
+    },
+    "H2774": {
+      "definitions_cz": "Harnepher = \"dýchající\" | 1) syn Cófa z kmene Ašer",
+      "lemma": "חַרְנֶפֶר",
+      "hebrew": "חרנפר",
+      "xlit": "Charnepher",
+      "translated": true
+    },
+    "H2775": {
+      "definitions_cz": "1) svědění, eruptivní onemocnění | 2) slunce",
+      "lemma": "חֶרֶס",
+      "hebrew": "חרס",
+      "xlit": "chereç",
+      "translated": true
+    },
+    "H2776": {
+      "definitions_cz": "Heres = \"slunce\" | 1) hora obývaná Amorejci v Moabu; místo, kde se Gedeon odvrátil od pronásledování Midjánců",
+      "lemma": "חֶרֶס",
+      "hebrew": "חרס",
+      "xlit": "Chereç",
+      "translated": true
+    },
+    "H2777": {
+      "definitions_cz": "1) střep",
+      "lemma": "חַרְסוּת",
+      "hebrew": "חרסות",
+      "xlit": "charçûwth",
+      "translated": true
+    },
+    "H2778": {
+      "definitions_cz": "1) vyčítat, posmívat se, rouhat se, vzdorovat, ohrožovat, nadávat, pomlouvat | 1a) (Qal) vytýkat | 1b) (Piel) vyčítat, vzdorovat, vysmívat se | 2) (Qal) přezimovat, strávit čas sklizně, zůstat v době sklizně | 3) (Niphal) získat, zasnoubit se",
+      "lemma": "חָרַף",
+      "hebrew": "חרף",
+      "xlit": "châraph",
+      "translated": true
+    },
+    "H2779": {
+      "definitions_cz": "1) čas sklizně, podzim | 2) (CLBL) zima",
+      "lemma": "חֹרֶף",
+      "hebrew": "חרף",
+      "xlit": "chôreph",
+      "translated": true
+    },
+    "H2780": {
+      "definitions_cz": "Hareph = \"oškubání\" | 1) syn Káleba a otec Betgadera",
+      "lemma": "חָרֵף",
+      "hebrew": "חרף",
+      "xlit": "Chârêph",
+      "translated": true
+    },
+    "H2781": {
+      "definitions_cz": "1) výčitka, opovržení | 1a) posmívat se, pohrdat (na nepřítele) | 1b) výtka (spočívající na podmínce hanby, hanby) | 1c) výčitka (předmět)",
+      "lemma": "חֶרְפָּה",
+      "hebrew": "חרפה",
+      "xlit": "cherpâh",
+      "translated": true
+    },
+    "H2782": {
+      "definitions_cz": "1) řezat, ostřit, rozhodovat, rozhodovat, určovat, mrzačit, hýbat, být rozhodný, být zmrzačený | 1a)(Qal) | 1a1) řezat, mrzačit | 1a2) doostřit | 1a3) rozhodnout | 1b) (Niphal) být rozhodující",
+      "lemma": "חָרַץ",
+      "hebrew": "חרץ",
+      "xlit": "chârats",
+      "translated": true
+    },
+    "H2783": {
+      "definitions_cz": "1) bedra, kyčel, kyčelní kloub",
+      "lemma": "חֲרַץ",
+      "hebrew": "חרץ",
+      "xlit": "chărats",
+      "translated": true
+    },
+    "H2784": {
+      "definitions_cz": "1) pouto, pouto, bodnutí, ruce | 1a) dluhopisy | 1b) bolesti",
+      "lemma": "חַרְצֻבָּה",
+      "hebrew": "חרצבה",
+      "xlit": "chartsubbâh",
+      "translated": true
+    },
+    "H2785": {
+      "definitions_cz": "1) jádra, semena, bezvýznamný produkt vinné révy, hroznová semena?",
+      "lemma": "חַרְצַן",
+      "hebrew": "חרצן",
+      "xlit": "chartsan",
+      "translated": true
+    },
+    "H2786": {
+      "definitions_cz": "1) (Qal) skřípat, skřípat (zuby)",
+      "lemma": "חָרַק",
+      "hebrew": "חרק",
+      "xlit": "châraq",
+      "translated": true
+    },
+    "H2787": {
+      "definitions_cz": "1) hořet, být horký, být spálen, být spálen | 1a) (Qal) | 1a1) být horký, být spálený | 1a2) hořet, být spálen | 1b) (Niphal) | 1b1) být spálen, být spálen | 1b2) spálit | 1b3) být suchý, zlobit se | 1c) (Pilpel) způsobit popálení",
+      "lemma": "חָרַר",
+      "hebrew": "חרר",
+      "xlit": "chârar",
+      "translated": true
+    },
+    "H2788": {
+      "definitions_cz": "1) suché oblasti, vyprahlé místo",
+      "lemma": "חָרֵר",
+      "hebrew": "חרר",
+      "xlit": "chârêr",
+      "translated": true
+    },
+    "H2789": {
+      "definitions_cz": "1) kamenina, hliněná keramika, střep, střep, hliněná nádoba",
+      "lemma": "חֶרֶשׂ",
+      "hebrew": "חרש",
+      "xlit": "cheres",
+      "translated": true
+    },
+    "H2790": {
+      "definitions_cz": "1) zařezávat, orat, rýt, vymýšlet | 1a) (Qal) | 1a1) vyříznout, vyryt | 1a2) orat | 1a3) vymyslet | 1b) (Niphal) k orání | 1c) (Hiphil) spiknout zlo | 2) mlčet, být němý, být němý, být hluchý | 2a) (Qal) | 2a1) mlčet | 2a2) být hluchý | 2b) (hifil) | 2b1) mlčet, mlčet | 2b2) mlčet | 2b3) být hluchý, ukázat hluchotu | 2c) (Hithpael) mlčet",
+      "lemma": "חָרַשׁ",
+      "hebrew": "חרש",
+      "xlit": "chârash",
+      "translated": true
+    },
+    "H2791": {
+      "definitions_cz": "adv | 1) tiše, tajně | n m | 2) kouzelnické umění, kouzelník",
+      "lemma": "חֶרֶשׁ",
+      "hebrew": "חרש",
+      "xlit": "cheresh",
+      "translated": true
+    },
+    "H2792": {
+      "definitions_cz": "Heresh = \"ztlumit\" | 1) Levita připojený ke svatostánku",
+      "lemma": "חֶרֶשׁ",
+      "hebrew": "חרש",
+      "xlit": "Cheresh",
+      "translated": true
+    },
+    "H2793": {
+      "definitions_cz": "1) dřevo, zalesněná výška, les, zalesněná plocha",
+      "lemma": "חֹרֶשׁ",
+      "hebrew": "חרש",
+      "xlit": "chôresh",
+      "translated": true
+    },
+    "H2794": {
+      "definitions_cz": "1) kovový řemeslník",
+      "lemma": "חֹרֵשׁ",
+      "hebrew": "חרש",
+      "xlit": "chôrêsh",
+      "translated": true
+    },
+    "H2795": {
+      "definitions_cz": "1) hluchý",
+      "lemma": "חֵרֵשׁ",
+      "hebrew": "חרש",
+      "xlit": "chêrêsh",
+      "translated": true
+    },
+    "H2796": {
+      "definitions_cz": "1) řemeslník, řemeslník, rytec, rytec, umělec | 1a) rytec, umělec | 1b) dovedné zničit (bojovníky) (obr.)",
+      "lemma": "חָרָשׁ",
+      "hebrew": "חרש",
+      "xlit": "chârâsh",
+      "translated": true
+    },
+    "H2797": {
+      "definitions_cz": "Harsha = \"ztlumit\" | 1) hlava rodiny vyhnanců vracejících se se Zerubábelem",
+      "lemma": "חַרְשָׁא",
+      "hebrew": "חרשא",
+      "xlit": "Charshâʼ",
+      "translated": true
+    },
+    "H2798": {
+      "definitions_cz": "Charashim nebo Harashim = \"údolí řemeslníků\" | 1) údolí poblíž Lyddy, několik mil východně od Joppy, založené Joabem z Othnielu",
+      "lemma": "חֲרָשִׁים",
+      "hebrew": "חרשים",
+      "xlit": "Chărâshîym",
+      "translated": true
+    },
+    "H2799": {
+      "definitions_cz": "1) řezbářství, zručná práce",
+      "lemma": "חֲרֹשֶׁת",
+      "hebrew": "חרשת",
+      "xlit": "chărôsheth",
+      "translated": true
+    },
+    "H2800": {
+      "definitions_cz": "Harosheth = \"lesy\" | 1) město na severu země Kanaán na západním pobřeží jezera Merom",
+      "lemma": "חֲרֹשֶׁת",
+      "hebrew": "חרשת",
+      "xlit": "Chărôsheth",
+      "translated": true
+    },
+    "H2801": {
+      "definitions_cz": "1) (Qal) ryt, ryt",
+      "lemma": "חָרַת",
+      "hebrew": "חרת",
+      "xlit": "chârath",
+      "translated": true
+    },
+    "H2802": {
+      "definitions_cz": "Hareth = \"les\" | 1) les, jehož místo je nyní neznámé",
+      "lemma": "חֶרֶת",
+      "hebrew": "חרת",
+      "xlit": "Chereth",
+      "translated": true
+    },
+    "H2803": {
+      "definitions_cz": "1) myslet, plánovat, vážit si, počítat, vymýšlet, soudit, představovat si, počítat | 1a) (Qal) | 1a1) myslet, účet | 1a2) plánovat, vymýšlet, mínit | 1a3) účtovat, přičítat, počítat | 1a4) vážit si, vážit si, vážit si | 1a5) vymyslet | 1b) (Niphal) | 1b1) být účtován, být myšlen, být vážen | 1b2) vypočítat, započítat | 1b3) bude imputováno | 1c) (Piel) | 1c1) přemýšlet, uvažovat, mít na paměti | 1c2) myslet dělat, vymýšlet, plánovat | 1c3) počítat, počítat | 1d) (Hithpael)",
+      "lemma": "חָשַׁב",
+      "hebrew": "חשב",
+      "xlit": "châshab",
+      "translated": true
+    },
+    "H2804": {
+      "definitions_cz": "1) (P'al) myslet, účet",
+      "lemma": "חֲשַׁב",
+      "hebrew": "חשב",
+      "xlit": "chăshab",
+      "translated": true
+    },
+    "H2805": {
+      "definitions_cz": "1) opasek, pás, důmyslná práce | 1a) důmyslné dílo – název opasku nebo pásku efodu",
+      "lemma": "חֵשֶׁב",
+      "hebrew": "חשב",
+      "xlit": "chêsheb",
+      "translated": true
+    },
+    "H2806": {
+      "definitions_cz": "Hashbadana = \"ohleduplný soudce\" | 1) jeden z mužů, kteří stáli nalevo od Ezdráše, když četl lidem zákon",
+      "lemma": "חַשְׁבַּדָּנָה",
+      "hebrew": "חשבדנה",
+      "xlit": "Chashbaddânâh",
+      "translated": true
+    },
+    "H2807": {
+      "definitions_cz": "Hašuba = \"ohleduplnost\" | 1) syn Zerubábelův",
+      "lemma": "חֲשֻׁבָה",
+      "hebrew": "חשבה",
+      "xlit": "Chăshubâh",
+      "translated": true
+    },
+    "H2808": {
+      "definitions_cz": "1) účet, zdůvodnění, účtování",
+      "lemma": "חֶשְׁבּוֹן",
+      "hebrew": "חשבון",
+      "xlit": "cheshbôwn",
+      "translated": true
+    },
+    "H2809": {
+      "definitions_cz": "Heshbon = \"pevnost\" | 1) hlavní město Sihona, krále amorejců, ležící na západní hranici náhorní planiny a na hranici mezi kmeny Ruben a Gád",
+      "lemma": "חֶשְׁבּוֹן",
+      "hebrew": "חשבון",
+      "xlit": "Cheshbôwn",
+      "translated": true
+    },
+    "H2810": {
+      "definitions_cz": "1) zařízení, vynález",
+      "lemma": "חִשָּׁבוֹן",
+      "hebrew": "חשבון",
+      "xlit": "chishshâbôwn",
+      "translated": true
+    },
+    "H2811": {
+      "definitions_cz": "Hashabiah = \"Jehova zvážil\" | 1) merarijský levita | 2) 4. ze 6 synů Jeduthunových, kteří měli na starosti 12. kurz | 3) jeden z potomků Hebrona, syna Kehatova | 4) syn Kemuela, který byl knížetem kmene Lévi za časů Davidových | 5) Levita, jeden z náčelníků svého kmene, který sloužil za Josiáše na jeho velkém velikonočním svátku | 6) merarijský levita, jeden z hlavních kněží, který doprovázel Ezdráše z Babylóna; vládce poloviny obvodu Keilah a jednoho",
+      "lemma": "חֲשַׁבְיָה",
+      "hebrew": "חשביה",
+      "xlit": "Chăshabyâh",
+      "translated": true
+    },
+    "H2812": {
+      "definitions_cz": "Hashabnah = \"Jehova zvážil\" | 1) jeden z náčelníků lidu, který zpečetil smlouvu s Nehemjášem",
+      "lemma": "חֲשַׁבְנָה",
+      "hebrew": "חשבנה",
+      "xlit": "Chăshabnâh",
+      "translated": true
+    },
+    "H2813": {
+      "definitions_cz": "Hashabniah = \"koho Jehova respektuje\" | 1) otec Hattush, opravář zdi | 2) Levita, který byl mezi těmi, kteří sloužili velký půst za Ezdráše a Nehemjáše, když byla smlouva zpečetěna",
+      "lemma": "חֲשַׁבְנְיָה",
+      "hebrew": "חשבניה",
+      "xlit": "Chăshabnᵉyâh",
+      "translated": true
+    },
+    "H2814": {
+      "definitions_cz": "1) být tichý, tichý, klidný, nečinný | 1a) (Qal) mlčet, mlčet | 1b) (hifil) | 1b1) mlčet, projevovat ticho | 1b2) ukázat nečinnost, být neaktivní | 1b3) ztišit, ztišit, způsobit ticho",
+      "lemma": "חָשָׁה",
+      "hebrew": "חשה",
+      "xlit": "châshâh",
+      "translated": true
+    },
+    "H2815": {
+      "definitions_cz": "Hashub = \"ohleduplný\" | 1) náčelník merarijských levitů, syn Azrikama | 2) syn Pahat-moab, který pomáhal při opravě jeruzalémských hradeb | 3) muž, který pomáhal při opravě jeruzalémské zdi; může být stejné jako 2 výše | 4) jedna z hlav lidu, který zpečetil smlouvu s Nehemjášem",
+      "lemma": "חַשּׁוּב",
+      "hebrew": "חשוב",
+      "xlit": "Chashshûwb",
+      "translated": true
+    },
+    "H2816": {
+      "definitions_cz": "1) tma",
+      "lemma": "חֲשׁוֹךְ",
+      "hebrew": "חשוך",
+      "xlit": "chăshôwk",
+      "translated": true
+    },
+    "H2817": {
+      "definitions_cz": "Hasupha nebo Hashupha = \"svlečený\" | 1) hlava rodiny chrámových otroků vracejících se z exilu v 1. karavaně",
+      "lemma": "חֲשׂוּפָא",
+      "hebrew": "חשופא",
+      "xlit": "Chăsûwphâʼ",
+      "translated": true
+    },
+    "H2818": {
+      "definitions_cz": "v | 1) (P'al) potřebovat, mít potřebu | n | 2) (P'al) potřebná věc",
+      "lemma": "חֲשַׁח",
+      "hebrew": "חשח",
+      "xlit": "chăshach",
+      "translated": true
+    },
+    "H2819": {
+      "definitions_cz": "1) potřebné věci, požadavky, to, co je požadováno",
+      "lemma": "חַשְׁחוּת",
+      "hebrew": "חשחות",
+      "xlit": "chashchûwth",
+      "translated": true
     }
   }
 }
