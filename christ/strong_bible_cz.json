@@ -50627,6 +50627,706 @@
       "hebrew": "ירק",
       "xlit": "yârâq",
       "translated": true
+    },
+    "H3420": {
+      "definitions_cz": "1) plíseň, bledost, bledost | 1a) plíseň, rez | 1b) bledost",
+      "lemma": "יֵרָקוֹן",
+      "hebrew": "ירקון",
+      "xlit": "yêrâqôwn",
+      "translated": true
+    },
+    "H3421": {
+      "definitions_cz": "Jorkoam = \"lidé prázdný\" | 1) Kalebitský potomek Judy",
+      "lemma": "יׇרְקְעָם",
+      "hebrew": "ירקעם",
+      "xlit": "Yorqᵉʻâm",
+      "translated": true
+    },
+    "H3422": {
+      "definitions_cz": "1) nazelenalá, světle zelená, zelenožlutá",
+      "lemma": "יְרַקְרַק",
+      "hebrew": "ירקרק",
+      "xlit": "yᵉraqraq",
+      "translated": true
+    },
+    "H3423": {
+      "definitions_cz": "1) zabavit, vyvlastnit, zmocnit se, zdědit, vydědit, obsadit, ochudit, být dědicem | 1a) (Qal) | 1a1) převzít | 1a2) zdědit | 1a3) ožebračit, přijít do chudoby, být chudý | 1b) (Niphal) být vyvlastněn, ožebračen, přijít do chudoby | 1c) (Piel) sežrat | 1d) (Hiphil) | 1d1) způsobit vlastnit nebo zdědit | 1d2) přimět ostatní, aby vlastnili nebo zdědili | 1d3) ochudit | 1d4) vyvlastnit | 1d5) zničit, zruinovat, vydědit",
+      "lemma": "יָרַשׁ",
+      "hebrew": "ירש",
+      "xlit": "yârash",
+      "translated": true
+    },
+    "H3424": {
+      "definitions_cz": "1) majetek, majetek",
+      "lemma": "יְרֵשָׁה",
+      "hebrew": "ירשה",
+      "xlit": "yᵉrêshâh",
+      "translated": true
+    },
+    "H3425": {
+      "definitions_cz": "1) držení, dědictví",
+      "lemma": "יְרֻשָּׁה",
+      "hebrew": "ירשה",
+      "xlit": "yᵉrushshâh",
+      "translated": true
+    },
+    "H3426": {
+      "definitions_cz": "1) bytí, existence, substance, existuje nebo jsou | 1a) látka | 1b) existence | 1c) existuje nebo existuje",
+      "lemma": "יֵשׁ",
+      "hebrew": "יש",
+      "xlit": "yêsh",
+      "translated": true
+    },
+    "H3427": {
+      "definitions_cz": "1) přebývat, zůstávat, sedět, přebývat | 1a) (Qal) | 1a1) sedět, sednout | 1a2) k nastavení | 1a3) zůstat, zůstat | 1a4) bydlet, mít svůj příbytek | 1b) (Niphal) k obydlení | 1c) (Piel) nastavit, umístit | 1d) (Hiphil) | 1d1) přimět sedět | 1d2) způsobit dodržení, nastavte | 1d3) způsobit přebývání | 1d4) způsobit, že (města) budou obydlena | 1d5) oženit se (dát obydlí) | 1e) (Hophal) | 1e1) být obýván | 1e2) nechat přebývat",
+      "lemma": "יָשַׁב",
+      "hebrew": "ישב",
+      "xlit": "yâshab",
+      "translated": true
+    },
+    "H3428": {
+      "definitions_cz": "Ješebeab = \"příbytek otce\" | 1) levita, hlava 14. kurzu kněží",
+      "lemma": "יֶשֶׁבְאָב",
+      "hebrew": "ישבאב",
+      "xlit": "Yeshebʼâb",
+      "translated": true
+    },
+    "H3429": {
+      "definitions_cz": "Josheb-basshebeth = \"obydlí v klidu\" | 1) jeden z Davidových mocných válečníků",
+      "lemma": "יֹשֵׁב בַּשֶּׁבֶת",
+      "hebrew": "ישב בשבת",
+      "xlit": "Yôshêb bash-Shebeth",
+      "translated": true
+    },
+    "H3430": {
+      "definitions_cz": "Ishbi-benob = \"jeho obydlí je v Nobu\" | 1) syn Rapha, jednoho z národa filištínských obrů, který napadl Davida v bitvě a byl zabit Abishai",
+      "lemma": "יִשְׁבּוֹ בְּנֹב",
+      "hebrew": "ישבו בנב",
+      "xlit": "Yishbôw bᵉ-Nôb",
+      "translated": true
+    },
+    "H3431": {
+      "definitions_cz": "Ishbah = \"bude chválit\" | 1) otec Eshtemoa a potomek Juda",
+      "lemma": "יִשְׁבַּח",
+      "hebrew": "ישבח",
+      "xlit": "Yishbach",
+      "translated": true
+    },
+    "H3432": {
+      "definitions_cz": "Jashubites = viz Jashub \"vrátí se\" | 1) potomci Jašubovi z kmene Issachar",
+      "lemma": "יָשֻׁבִי",
+      "hebrew": "ישבי",
+      "xlit": "Yâshubîy",
+      "translated": true
+    },
+    "H3433": {
+      "definitions_cz": "Jashubi-lehem = \"navraceč chleba\" | 1) potomek Šela, syna Judova, od Kananejky Bat-šuy",
+      "lemma": "יָשֻׁבִי לֶחֶם",
+      "hebrew": "ישבי לחם",
+      "xlit": "Yâshubîy Lechem",
+      "translated": true
+    },
+    "H3434": {
+      "definitions_cz": "Jashobeam = \"lidé se vrátí\" | 1) Hachmonita, vůdce 30 mocných Davidových válečníků; připojil se k Davidovi v Ziklagu a byl nejlépe známý jako muž, který zabil 800 nebo 300 mužů najednou; také nazývaný 'Adino the Eznite' | 2) Korachita, další z Davidových mocných bojovníků; stejně jako 1?",
+      "lemma": "יָשׇׁבְעָם",
+      "hebrew": "ישבעם",
+      "xlit": "Yâshobʻâm",
+      "translated": true
+    },
+    "H3435": {
+      "definitions_cz": "Ishbak = \"uvolňuje\" | 1) syn Abrahamův od Ketury a předek arabského kmene",
+      "lemma": "יִשְׁבָּק",
+      "hebrew": "ישבק",
+      "xlit": "Yishbâq",
+      "translated": true
+    },
+    "H3436": {
+      "definitions_cz": "Joshbekashah = \"sedící v tvrdosti\" | 1) syn Hemana a vedoucí 17. kurzu hudebníků",
+      "lemma": "יׇשְׁבְּקָשָׁה",
+      "hebrew": "ישבקשה",
+      "xlit": "Yoshbᵉqâshâh",
+      "translated": true
+    },
+    "H3437": {
+      "definitions_cz": "Jashub = \"vrátí se\" | 1) 3. syn Issacharův a zakladatel rodu Jašubovců | 2) jeden ze synů Baniho, který musel v době Ezdráše propustit cizí manželku",
+      "lemma": "יָשׁוּב",
+      "hebrew": "ישוב",
+      "xlit": "Yâshûwb",
+      "translated": true
+    },
+    "H3438": {
+      "definitions_cz": "Ishuai nebo Isuah = \"bude se podobat\" | 1) 2. syn Ašera",
+      "lemma": "יִשְׁוָה",
+      "hebrew": "ישוה",
+      "xlit": "Yishvâh",
+      "translated": true
+    },
+    "H3439": {
+      "definitions_cz": "Jeshohaiah = \"Jehova pokořuje\" | 1) potomek Šimei a náčelník Simeonitů",
+      "lemma": "יְשׁוֹחָיָה",
+      "hebrew": "ישוחיה",
+      "xlit": "Yᵉshôwchâyâh",
+      "translated": true
+    },
+    "H3440": {
+      "definitions_cz": "Ishui nebo Ishuai nebo Isui nebo Jesui = \"podobá se mi\" | 1) 2. syn Saulův od manželky Ahinoam | 2) 3. syn Ašera a zakladatel rodu Ishuaitů",
+      "lemma": "יִשְׁוִי",
+      "hebrew": "ישוי",
+      "xlit": "Yishvîy",
+      "translated": true
+    },
+    "H3441": {
+      "definitions_cz": "Jesuité = viz Jesui \"on mě ospravedlní\" | 1) potomci Jesui (H03440-2)",
+      "lemma": "יִשְׁוִי",
+      "hebrew": "ישוי",
+      "xlit": "Yishvîy",
+      "translated": true
+    },
+    "H3442": {
+      "definitions_cz": "Jeshua = \"je spasen\" | n pr m | 1) syn Nuna z kmene Efraim a nástupce Mojžíše jako vůdce synů Izraele; vedl dobytí Kanaánu | 2) syn Jehozadaka a velekněze po obnově | 3) kněz v době Davidově, který měl na starosti 9. chod | 4) Levita za vlády Chizkijáše | 5) hlava levitského domu, který se vrátil ze zajetí v Babylóně | 6) otec stavitele jeruzalémských hradeb v době Nehemjáše | n pr loc | 7) město I",
+      "lemma": "יֵשׁוּעַ",
+      "hebrew": "ישוע",
+      "xlit": "Yêshûwaʻ",
+      "translated": true
+    },
+    "H3443": {
+      "definitions_cz": "Jeshua = \"je spasen\" | 1) exilový kněz, který se vrátil se Zerubábelem",
+      "lemma": "יֵשׁוּעַ",
+      "hebrew": "ישוע",
+      "xlit": "Yêshûwaʻ",
+      "translated": true
+    },
+    "H3444": {
+      "definitions_cz": "1) spasení, vysvobození | 1a) blahobyt, prosperita | 1b) vysvobození | 1c) spasení (od Boha) | 1d) vítězství",
+      "lemma": "יְשׁוּעָה",
+      "hebrew": "ישועה",
+      "xlit": "yᵉshûwʻâh",
+      "translated": true
+    },
+    "H3445": {
+      "definitions_cz": "1) pocit potopení, prázdnoty",
+      "lemma": "יֶשַׁח",
+      "hebrew": "ישח",
+      "xlit": "yeshach",
+      "translated": true
+    },
+    "H3446": {
+      "definitions_cz": "Izák = \"směje se\" | 1) syn Abrahamův od Sáry, jeho manželky a otce Jákoba a Ezaua",
+      "lemma": "יִשְׂחָק",
+      "hebrew": "ישחק",
+      "xlit": "Yischâq",
+      "translated": true
+    },
+    "H3447": {
+      "definitions_cz": "1) (Hiphil) vydržet, prodloužit",
+      "lemma": "יָשַׁט",
+      "hebrew": "ישט",
+      "xlit": "yâshaṭ",
+      "translated": true
+    },
+    "H3448": {
+      "definitions_cz": "Jesse = \"vlastním\" | 1) syn Boazův a otec krále Davida",
+      "lemma": "יִשַׁי",
+      "hebrew": "ישי",
+      "xlit": "Yishay",
+      "translated": true
+    },
+    "H3449": {
+      "definitions_cz": "Ishiah nebo Ishijah nebo Jesiah = \"Jehova půjčí\" | 1) Korhite, jeden z Davidových mocných válečníků, kteří se k němu připojili v Ziklagu | 2) 5. z 5 synů Izrachiášových a jednoho z vůdců kmene Issachar v době Davidově | 3) Levita, 2. syn Uzziela a vnuk Kohatova | 4) jiný Levita, syn Rehabiášův | 5) potomek Harima, který měl cizí manželku",
+      "lemma": "יִשִּׁיָּה",
+      "hebrew": "ישיה",
+      "xlit": "Yishshîyâh",
+      "translated": true
+    },
+    "H3450": {
+      "definitions_cz": "Jesimiel = \"Bůh umístí\" | 1) simeonský náčelník z rodu Šimei",
+      "lemma": "יְשִׁימָאֵל",
+      "hebrew": "ישימאל",
+      "xlit": "Yᵉshîymâʼêl",
+      "translated": true
+    },
+    "H3451": {
+      "definitions_cz": "1) opuštěnost",
+      "lemma": "יְשִׁימַה",
+      "hebrew": "ישימה",
+      "xlit": "yᵉshîymah",
+      "translated": true
+    },
+    "H3452": {
+      "definitions_cz": "1) odpad, divočina, poušť, pusté místo",
+      "lemma": "יְשִׁימוֹן",
+      "hebrew": "ישימון",
+      "xlit": "yᵉshîymôwn",
+      "translated": true
+    },
+    "H3453": {
+      "definitions_cz": "1) starý, starý muž, starý jeden",
+      "lemma": "יָשִׁישׁ",
+      "hebrew": "ישיש",
+      "xlit": "yâshîysh",
+      "translated": true
+    },
+    "H3454": {
+      "definitions_cz": "Jeshishai = \"můj starý\" | 1) Gadit z Gileadu",
+      "lemma": "יְשִׁישָׁי",
+      "hebrew": "ישישי",
+      "xlit": "Yᵉshîyshây",
+      "translated": true
+    },
+    "H3455": {
+      "definitions_cz": "1) umístit, umístit, nastavit, jmenovat, vyrobit | 1a) (Qal) položit, umístit",
+      "lemma": "יָשַׂם",
+      "hebrew": "ישם",
+      "xlit": "yâsam",
+      "translated": true
+    },
+    "H3456": {
+      "definitions_cz": "1) (Qal) zkazit, být pustý",
+      "lemma": "יָשַׁם",
+      "hebrew": "ישם",
+      "xlit": "yâsham",
+      "translated": true
+    },
+    "H3457": {
+      "definitions_cz": "Ishma = \"pustotina\" | 1) Judaita pocházející z Hur",
+      "lemma": "יִשְׁמָא",
+      "hebrew": "ישמא",
+      "xlit": "Yishmâʼ",
+      "translated": true
+    },
+    "H3458": {
+      "definitions_cz": "Ismael = \"Bůh uslyší\" | 1) syn Abrahamovy a služebnice Sáry Hagar a předek arabských národů | 2) syn Netanjášův a vrah Gedaljáše | 3) Benjamínec, jeden ze synů Azela, potomka Saulova přes Meribbaal nebo Mefibošet | 4) Judaita, otec Zebadjáše | 5) Judaita, syn Jochananův a jeden z kapitánů, kteří pomáhali Jojadovi při znovunastolení Joaše na trůn | 6) kněz z rodiny Pashurů s cizí manželkou, kterou byl donucen propustit",
+      "lemma": "יִשְׁמָעֵאל",
+      "hebrew": "ישמעאל",
+      "xlit": "Yishmâʻêʼl",
+      "translated": true
+    },
+    "H3459": {
+      "definitions_cz": "Izmaelita = viz Izmael \"Bůh uslyší\" | 1) potomek Izmaela",
+      "lemma": "יִשְׁמָעֵאלִי",
+      "hebrew": "ישמעאלי",
+      "xlit": "Yishmâʻêʼlîy",
+      "translated": true
+    },
+    "H3460": {
+      "definitions_cz": "Ishmaiah = \"Jehova uslyší\" | 1) Gibeonite a jeden z Davidových mocných válečníků | 2) syn Abdiášův a vládce kmene Zabulon v době krále Davida",
+      "lemma": "יִשְׁמַעְיָה",
+      "hebrew": "ישמעיה",
+      "xlit": "Yishmaʻyâh",
+      "translated": true
+    },
+    "H3461": {
+      "definitions_cz": "Ishmerai = \"On mě drží\" | 1) Benjamínec z rodu Elpaalů",
+      "lemma": "יִשְׁמְרַי",
+      "hebrew": "ישמרי",
+      "xlit": "Yishmᵉray",
+      "translated": true
+    },
+    "H3462": {
+      "definitions_cz": "1) spát, spát | 1a) (Qal) spát, jít spát, spát | 1b) (Niphal) | 1b1) zůstat dlouho, uložit | 1b2) být hnisající (z malomocenství) | 1c) (Piel) přimět ke spánku, nalákat ke spánku",
+      "lemma": "יָשֵׁן",
+      "hebrew": "ישן",
+      "xlit": "yâshên",
+      "translated": true
+    },
+    "H3463": {
+      "definitions_cz": "1) spaní",
+      "lemma": "יָשֵׁן",
+      "hebrew": "ישן",
+      "xlit": "yâshên",
+      "translated": true
+    },
+    "H3464": {
+      "definitions_cz": "Jashen = \"spící\" | 1) otec jednoho nebo více Davidových mocných válečníků",
+      "lemma": "יָשֵׁן",
+      "hebrew": "ישן",
+      "xlit": "Yâshên",
+      "translated": true
+    },
+    "H3465": {
+      "definitions_cz": "1) starý, sklad, sklad",
+      "lemma": "יָשָׁן",
+      "hebrew": "ישן",
+      "xlit": "yâshân",
+      "translated": true
+    },
+    "H3466": {
+      "definitions_cz": "Jeshana = \"úložiště\" | 1) město na jižní hranici severního království poblíž Bethel",
+      "lemma": "יְשָׁנָה",
+      "hebrew": "ישנה",
+      "xlit": "Yᵉshânâh",
+      "translated": true
+    },
+    "H3467": {
+      "definitions_cz": "1) uložit, být zachráněn, být doručen | 1a) (Niphal) | 1a1) být osvobozen, být zachráněn, být vysvobozen | 1a2) být zachráněn (v bitvě), zvítězit | 1b) (hifil) | 1b1) uložit, dodat | 1b2) zachránit před morálními problémy | 1b3) dát vítězství",
+      "lemma": "יָשַׁע",
+      "hebrew": "ישע",
+      "xlit": "yâshaʻ",
+      "translated": true
+    },
+    "H3468": {
+      "definitions_cz": "1) vysvobození, spása, záchrana, bezpečnost, blaho | 1a) bezpečnost, blahobyt, prosperita | 1b) spasení | 1c) vítězství",
+      "lemma": "יֶשַׁע",
+      "hebrew": "ישע",
+      "xlit": "yeshaʻ",
+      "translated": true
+    },
+    "H3469": {
+      "definitions_cz": "Ishi = \"Zachrání mě\" | 1) syn Appaimův, jeden z rodu Jerahmeela z domu Chezrona | 2) náčelník Manasse a hlava rodiny na východě Jordánu | 3) náčelník Judy, otec Zohet | 4) náčelník Simeon a hlava rodiny",
+      "lemma": "יִשְׁעִי",
+      "hebrew": "ישעי",
+      "xlit": "Yishʻîy",
+      "translated": true
+    },
+    "H3470": {
+      "definitions_cz": "Isaiah nebo Jesaiah nebo Jeshaiah = \"Jehova zachránil\" | 1) hlavní prorok, syn Amosův, který prorokoval o Judsku a Jeruzalémě za dnů judských králů Uziáše, Jótama, Achaza a Ezechiáše; autor prorocké knihy svým jménem; Traduje se, že byl rozřezán v kmeni rohovníku králem Manassem a že toto je událost, o které se mluví v Židům 11:37 | 2) syn Chananiášův, bratr Pelatiášův a vnuk Zerubbábelův | 3) benjamín | 4) jeden z",
+      "lemma": "יְשַׁעְיָה",
+      "hebrew": "ישעיה",
+      "xlit": "Yᵉshaʻyâh",
+      "translated": true
+    },
+    "H3471": {
+      "definitions_cz": "1) jaspis (drahokam)",
+      "lemma": "יָשְׁפֵה",
+      "hebrew": "ישפה",
+      "xlit": "yâshᵉphêh",
+      "translated": true
+    },
+    "H3472": {
+      "definitions_cz": "Ispah = \"Je nahý\" | 1) Benjamínec z rodu Beriah a jeden z vůdců jeho kmene",
+      "lemma": "יִשְׁפָּה",
+      "hebrew": "ישפה",
+      "xlit": "Yishpâh",
+      "translated": true
+    },
+    "H3473": {
+      "definitions_cz": "Ishpan = \"skrývá\" | 1) benjamínec z rodu Šašaků",
+      "lemma": "יִשְׁפָּן",
+      "hebrew": "ישפן",
+      "xlit": "Yishpân",
+      "translated": true
+    },
+    "H3474": {
+      "definitions_cz": "1) mít pravdu, být rovný, být rovný, být vzpřímený, být spravedlivý, být zákonný, být hladký | 1a) (Qal) | 1a1) jít rovně | 1a2) být příjemný, být příjemný, mít pravdu (obr.) | 1a3) být přímý, být vzpřímený | 1b) (Piel) | 1b1) napravit, vyhladit, vyrovnat | 1b2) vést, nasměrovat, vést rovně podél | 1b3) vážit si správně, schvalovat | 1c) (Pual) vyrovnat, položit hladce | 1d) (Hiphil) dělat rovně, dívat se rovně",
+      "lemma": "יָשַׁר",
+      "hebrew": "ישר",
+      "xlit": "yâshar",
+      "translated": true
+    },
+    "H3475": {
+      "definitions_cz": "Jesher = \"vzpřímený\" | 1) jeden ze synů Káleba a vnuka Chezróna od manželky Azuby",
+      "lemma": "יֵשֶׁר",
+      "hebrew": "ישר",
+      "xlit": "Yêsher",
+      "translated": true
+    },
+    "H3476": {
+      "definitions_cz": "1) přímost, vzpřímenost | 1a) přímost, rovnost (morální důsledky) | 1b) správnost, přímost | 1c) co je správné, co je splatné",
+      "lemma": "יֹשֶׁר",
+      "hebrew": "ישר",
+      "xlit": "yôsher",
+      "translated": true
+    },
+    "H3477": {
+      "definitions_cz": "1) rovný, vzpřímený, správný, pravý | 1a) rovné, rovné | 1b) správný, potěšující, správný | 1c) přímočarý, spravedlivý, vzpřímený, vhodný, správný | 1d) upřímnost, spravedlivý, vzpřímený | 1e) to, co je vzpřímené (subst)",
+      "lemma": "יָשָׁר",
+      "hebrew": "ישר",
+      "xlit": "yâshâr",
+      "translated": true
+    },
+    "H3478": {
+      "definitions_cz": "Izrael = \"Bůh vítězí\" | 1) druhé jméno pro Jákoba, které mu dal Bůh po jeho zápase s andělem v Peniel | 2) jméno potomků a národa potomků Jákobových | 2a) jméno národa až do smrti Šalomouna a rozkolu | 2b) jméno používané a dané severnímu království sestávajícímu z 10 kmenů pod Jeroboamem; jižní království bylo známé jako Juda | 2c) jméno národa po návratu z exilu",
+      "lemma": "יִשְׂרָאֵל",
+      "hebrew": "ישראל",
+      "xlit": "Yisrâʼêl",
+      "translated": true
+    },
+    "H3479": {
+      "definitions_cz": "Izrael = \"Bůh vítězí\" | 1) druhé jméno pro Jákoba, které mu dal Bůh po jeho zápase s andělem v Peniel | 2) jméno potomků a národa potomků Jákobových | 2a) jméno národa až do smrti Šalomouna a rozkolu | 2b) jméno používané a dané severnímu království sestávajícímu z 10 kmenů pod Jeroboamem; jižní království bylo známé jako Juda | 2c) jméno národa po návratu z exilu",
+      "lemma": "יִשְׂרָאֵל",
+      "hebrew": "ישראל",
+      "xlit": "Yisrâʼêl",
+      "translated": true
+    },
+    "H3480": {
+      "definitions_cz": "Jesharelah = \"tyto jsou vzpřímené\" | 1) Levita a syn Asafův a vůdce 7. třídy hudebníků",
+      "lemma": "יְשַׂרְאֵלָה",
+      "hebrew": "ישראלה",
+      "xlit": "Yᵉsarʼêlâh",
+      "translated": true
+    },
+    "H3481": {
+      "definitions_cz": "Izraelita = viz Izrael \"Bůh vítězí\" | 1) potomek nebo obyvatel izraelského národa",
+      "lemma": "יִשְׂרְאֵלִי",
+      "hebrew": "ישראלי",
+      "xlit": "Yisrᵉʼêlîy",
+      "translated": true
+    },
+    "H3482": {
+      "definitions_cz": "Izraelitka = viz Izrael \"Bůh vítězí\" | 1) ženský potomek nebo obyvatelka izraelského národa",
+      "lemma": "יִשְׂרְאֵלִית",
+      "hebrew": "ישראלית",
+      "xlit": "Yisrᵉʼêlîyth",
+      "translated": true
+    },
+    "H3483": {
+      "definitions_cz": "1) vzpřímenost",
+      "lemma": "יִשְׁרָה",
+      "hebrew": "ישרה",
+      "xlit": "yishrâh",
+      "translated": true
+    },
+    "H3484": {
+      "definitions_cz": "Jeshurun ​​= \"vzpřímený\" | 1) symbolické jméno pro Izrael popisující její ideální charakter",
+      "lemma": "יְשֻׁרוּן",
+      "hebrew": "ישרון",
+      "xlit": "Yᵉshurûwn",
+      "translated": true
+    },
+    "H3485": {
+      "definitions_cz": "Issachar = \"existuje odplata\" | n pr m | 1) 9. syn Jákoba a 5. od Ley, jeho první manželky a předchůdce kmene podle jeho jména | 2) Korachitský levita a 7. syn Obed-edoma a vrátný do chrámu | n pr coll | 3) kmen pocházel z Issachara, syna Jákobova | n pr loc | 4) území přidělené potomkům Issachara, když vstoupili do země Kanaán",
+      "lemma": "יִשָּׂשכָר",
+      "hebrew": "יששכר",
+      "xlit": "Yissâˢkâr",
+      "translated": true
+    },
+    "H3486": {
+      "definitions_cz": "1) zestárlý, sešlý, slabý",
+      "lemma": "יָשֵׁשׁ",
+      "hebrew": "ישש",
+      "xlit": "yâshêsh",
+      "translated": true
+    },
+    "H3487": {
+      "definitions_cz": "1) (značka přímého předmětu nebo akuzativu a nepřeloženo)",
+      "lemma": "יַת",
+      "hebrew": "ית",
+      "xlit": "yath",
+      "translated": true
+    },
+    "H3488": {
+      "definitions_cz": "1) sedět, bydlet | 1a) (P'al) sedět, sedět | 1b) (Aphel) způsobit přebývání",
+      "lemma": "יְתִב",
+      "hebrew": "יתב",
+      "xlit": "yᵉthib",
+      "translated": true
+    },
+    "H3489": {
+      "definitions_cz": "1) špendlík, kolík, kolík, hřebík | 1a) kolík, kolík, stanový kolík, stanový kolík | 1b) hřebík, špendlík (obr.) | 1c) špendlík (používá se při tkaní)",
+      "lemma": "יָתֵד",
+      "hebrew": "יתד",
+      "xlit": "yâthêd",
+      "translated": true
+    },
+    "H3490": {
+      "definitions_cz": "1) sirotek bez otce",
+      "lemma": "יָתוֹם",
+      "hebrew": "יתום",
+      "xlit": "yâthôwm",
+      "translated": true
+    },
+    "H3491": {
+      "definitions_cz": "1) zůstat přes, odejít, překročit | 2) (BDB) a vyhledávání (n m)",
+      "lemma": "יָתוּר",
+      "hebrew": "יתור",
+      "xlit": "yâthûwr",
+      "translated": true
+    },
+    "H3492": {
+      "definitions_cz": "Jattir = \"hodně\" | 1) město v judských horách",
+      "lemma": "יַתִּיר",
+      "hebrew": "יתיר",
+      "xlit": "Yattîyr",
+      "translated": true
+    },
+    "H3493": {
+      "definitions_cz": "adj | 1) prvořadý, převyšující, extrémní, mimořádný | adv | 2) nesmírně, extrémně",
+      "lemma": "יַתִּיר",
+      "hebrew": "יתיר",
+      "xlit": "yattîyr",
+      "translated": true
+    },
+    "H3494": {
+      "definitions_cz": "Jethlah = \"visí\" | 1) jedno z měst v jižním Danu",
+      "lemma": "יִתְלָה",
+      "hebrew": "יתלה",
+      "xlit": "Yithlâh",
+      "translated": true
+    },
+    "H3495": {
+      "definitions_cz": "Ithmah = \"sirotek\" | 1) Moábec, jeden z Davidových mocných válečníků",
+      "lemma": "יִתְמָה",
+      "hebrew": "יתמה",
+      "xlit": "Yithmâh",
+      "translated": true
+    },
+    "H3496": {
+      "definitions_cz": "Jathniel = \"Bůh si mě najímá\" | 1) Korchitský levita a 4. z rodu Meshelemiášových",
+      "lemma": "יַתְנִיאֵל",
+      "hebrew": "יתניאל",
+      "xlit": "Yathnîyʼêl",
+      "translated": true
+    },
+    "H3497": {
+      "definitions_cz": "Ithnan = \"najmout\" | 1) jedno z měst na úplném jihu Judska; místo neznámé",
+      "lemma": "יִתְנָן",
+      "hebrew": "יתנן",
+      "xlit": "Yithnân",
+      "translated": true
+    },
+    "H3498": {
+      "definitions_cz": "1) zůstat, zůstat, zůstat, odejít | 1a) (Qal) zbytek (příčestí) | 1b) (Niphal) být ponechán, zůstat přes, být ponechán | 1c) (Hiphil) | 1c1) odejít, odejít | 1c2) zachránit, zachovat naživu | 1c3) vyniknout, ukázat přednost | 1c4) ukázat přebytek, mít víc než dost, mít přebytek",
+      "lemma": "יָתַר",
+      "hebrew": "יתר",
+      "xlit": "yâthar",
+      "translated": true
+    },
+    "H3499": {
+      "definitions_cz": "1) zbytek, přebytek, zbytek, zbytek, dokonalost | 1a) zbytek, zbytek | 1b) zbytek, zbytek, další část | 1c) přebytek | 1d) hojně (adv) | 1e) hojnost, blahobyt | 1f) nadřazenost, excelence",
+      "lemma": "יֶתֶר",
+      "hebrew": "יתר",
+      "xlit": "yether",
+      "translated": true
+    },
+    "H3500": {
+      "definitions_cz": "Jether = \"hojnost\" | 1) Mojžíšův tchán | 2) nejstarší syn Gideon | 3) otec Jefunneho a náčelník rodu válečníků z rodu Ašer | 4) otec Amasy, velitele Absalomovy armády | 5) syn Jady, potomka Hezróna, z kmene Juda | 6) syn Ezdráš, Judaita",
+      "lemma": "יֶתֶר",
+      "hebrew": "יתר",
+      "xlit": "Yether",
+      "translated": true
+    },
+    "H3501": {
+      "definitions_cz": "Ithra = \"hojnost\" | 1) otec Amasy, velitele Absolonovy armády; také 'Jether'",
+      "lemma": "יִתְרָא",
+      "hebrew": "יתרא",
+      "xlit": "Yithrâʼ",
+      "translated": true
+    },
+    "H3502": {
+      "definitions_cz": "1) hojnost, bohatství, bohatství",
+      "lemma": "יִתְרָה",
+      "hebrew": "יתרה",
+      "xlit": "yithrâh",
+      "translated": true
+    },
+    "H3503": {
+      "definitions_cz": "Jethro = \"jeho hojnost\" | 1) tchán Mojžíšův; také 'Jether'",
+      "lemma": "יִתְרוֹ",
+      "hebrew": "יתרו",
+      "xlit": "Yithrôw",
+      "translated": true
+    },
+    "H3504": {
+      "definitions_cz": "1) výhoda, zisk, znamenitost",
+      "lemma": "יִתְרוֹן",
+      "hebrew": "יתרון",
+      "xlit": "yithrôwn",
+      "translated": true
+    },
+    "H3505": {
+      "definitions_cz": "Ithrite = \"zbytek: dokonalost\" | 1) potomek Jethera",
+      "lemma": "יִתְרִי",
+      "hebrew": "יתרי",
+      "xlit": "Yithrîy",
+      "translated": true
+    },
+    "H3506": {
+      "definitions_cz": "Ithran = \"výhoda\" | 1) Edomita, syn Dišonův, Chorejec a pravděpodobně fyarcha z kmene Horimů | 2) potomek Ashera",
+      "lemma": "יִתְרָן",
+      "hebrew": "יתרן",
+      "xlit": "Yithrân",
+      "translated": true
+    },
+    "H3507": {
+      "definitions_cz": "Ithream = \"zisk lidu\" | 1) syn Davidův od manželky Egly; 6. syn a narozený v Hebronu",
+      "lemma": "יִתְרְעָם",
+      "hebrew": "יתרעם",
+      "xlit": "Yithrᵉʻâm",
+      "translated": true
+    },
+    "H3508": {
+      "definitions_cz": "1) úpon, převis, výběžek, ocasní lalok jater obětního zvířete",
+      "lemma": "יֹתֶרֶת",
+      "hebrew": "יתרת",
+      "xlit": "yôthereth",
+      "translated": true
+    },
+    "H3509": {
+      "definitions_cz": "Jetheth = \"hřebík\" | 1) jeden z edomských vévodů, který pocházel z Ezaua",
+      "lemma": "יְתֵת",
+      "hebrew": "יתת",
+      "xlit": "Yᵉthêth",
+      "translated": true
+    },
+    "H3510": {
+      "definitions_cz": "1) mít bolest, bolet, mít bolest, být smutný | 1a) (Qal) | 1a1) mít bolest (fyzickou) | 1a2) mít bolest (mentální) | 1b) (hifil) | 1b1) způsobit bolest, ublížit, mar | 1b2) bolest, mar (příčestí)",
+      "lemma": "כָּאַב",
+      "hebrew": "כאב",
+      "xlit": "kâʼab",
+      "translated": true
+    },
+    "H3511": {
+      "definitions_cz": "1) bolest (duševní i fyzická), smutek",
+      "lemma": "כְּאֵב",
+      "hebrew": "כאב",
+      "xlit": "kᵉʼêb",
+      "translated": true
+    },
+    "H3512": {
+      "definitions_cz": "1) být smutný, sklíčený, zastrašený | 1a) (Niphal) být sklíčený, být zastrašen | 1b) (Hifil) zarmoutit",
+      "lemma": "כָּאָה",
+      "hebrew": "כאה",
+      "xlit": "kâʼâh",
+      "translated": true
+    },
+    "H3513": {
+      "definitions_cz": "1) být těžký, být těžký, být smutný, být tvrdý, být bohatý, být čestný, být slavný, být tíživý, být poctěn | 1a) (Qal) | 1a1) být těžký | 1a2) být těžký, být necitlivý, být tupý | 1a3) být vyznamenán | 1b) (Niphal) | 1b1) stát se těžkým, být poctěn, požívat čest, být hojným | 1b2) získat si slávu nebo čest, získat slávu | 1c) (Piel) | 1c1) učinit těžkým, učinit tupým, učinit necitlivým | 1c2) učinit čestným, ctít, oslavovat | 1d) (Pual) být čestným",
+      "lemma": "כָּבַד",
+      "hebrew": "כבד",
+      "xlit": "kâbad",
+      "translated": true
+    },
+    "H3514": {
+      "definitions_cz": "1) hmotnost, váha, hmotnost, skvělé | 1a) váha, hmotnost | 1b) hmotnost, hojnost | 1c) vehemence, těžkost",
+      "lemma": "כֹּבֶד",
+      "hebrew": "כבד",
+      "xlit": "kôbed",
+      "translated": true
+    },
+    "H3515": {
+      "definitions_cz": "1) těžký, skvělý | 1a) těžký | 1b) masivní, hojný, početný | 1c) těžký, tupý | 1d) těžké, obtížné, tíživé | 1e) velmi tísnivý, početný, bohatý",
+      "lemma": "כָּבֵד",
+      "hebrew": "כבד",
+      "xlit": "kâbêd",
+      "translated": true
+    },
+    "H3516": {
+      "definitions_cz": "1) játra | 1a) játra (jako nejtěžší orgán)",
+      "lemma": "כָּבֵד",
+      "hebrew": "כבד",
+      "xlit": "kâbêd",
+      "translated": true
+    },
+    "H3517": {
+      "definitions_cz": "1) těžkost, obtížnost",
+      "lemma": "כְּבֵדֻת",
+      "hebrew": "כבדת",
+      "xlit": "kᵉbêduth",
+      "translated": true
+    },
+    "H3518": {
+      "definitions_cz": "1) uhasit, uhasit, uhasit, uhasit, uhasit | 1a) (Qal) uhasit, uhasit | 1b) (Piel) uhasit, uhasit",
+      "lemma": "כָּבָה",
+      "hebrew": "כבה",
+      "xlit": "kâbâh",
+      "translated": true
+    },
+    "H3519": {
+      "definitions_cz": "1) sláva, čest, sláva, hojnost | 1a) hojnost, bohatství | 1b) čest, nádhera, sláva | 1c) čest, důstojnost | 1d) čest, pověst | 1e) čest, úcta, sláva | 1f) sláva",
+      "lemma": "כָּבוֹד",
+      "hebrew": "כבוד",
+      "xlit": "kâbôwd",
+      "translated": true
     }
   }
 }
