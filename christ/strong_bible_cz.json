@@ -40599,6 +40599,898 @@
       "translit": "hypotíthēmi",
       "pronunciation": "hoop-ot-ith'-ay-mee",
       "translated": true
+    },
+    "G5295": {
+      "definitions_cz": "podběhnout, tzn.\n (zejména), proplout kolem",
+      "translit": "hypotréchō",
+      "pronunciation": "hoop-ot-rekh'-o",
+      "translated": true
+    },
+    "G5296": {
+      "definitions_cz": "typizace pod\n (po), t. j. (konkrétně) skica (obrazně) pro\n imitace",
+      "translit": "hypotýpōsis",
+      "pronunciation": "hoop-ot-oop'-o-sis",
+      "translated": true
+    },
+    "G5297": {
+      "definitions_cz": "nést zespodu, tedy (obrazně) do\n podstoupit těžkosti",
+      "translit": "hypophérō",
+      "pronunciation": "hoop-of-er'-o",
+      "translated": true
+    },
+    "G5298": {
+      "definitions_cz": "vyklidit se, t. j. tiše odejít do důchodu",
+      "translit": "hypochōréō",
+      "pronunciation": "hoop-okh-o-reh'-o",
+      "translated": true
+    },
+    "G5299": {
+      "definitions_cz": "zasáhnout pod oko\n (bufet nebo zakázat antagonistu jako pugilistu), tj. (obrazně)\n dráždit nebo obtěžovat (do souladu), podmanit si (své vášně)",
+      "translit": "hypōpiázō",
+      "pronunciation": "hoop-o-pee-ad'-zo",
+      "translated": true
+    },
+    "G5300": {
+      "definitions_cz": "prase (\"prase\")",
+      "translit": "hŷs",
+      "pronunciation": "hoos",
+      "translated": true
+    },
+    "G5301": {
+      "definitions_cz": "\"yzop\"",
+      "translit": "hýssōpos",
+      "pronunciation": "hoos'-so-pos",
+      "translated": true
+    },
+    "G5302": {
+      "definitions_cz": "být pozdější, tj. (implicitně) být méněcenný;\n obecně nedostatečný (být nedostatečný)",
+      "translit": "hysteréō",
+      "pronunciation": "hoos-ter-eh'-o",
+      "translated": true
+    },
+    "G5303": {
+      "definitions_cz": "deficit; zvláště chudoba",
+      "translit": "hystérēma",
+      "pronunciation": "hoos-ter'-ay-mah",
+      "translated": true
+    },
+    "G5304": {
+      "definitions_cz": "nedostatek, tj. (zvláště), nouze",
+      "translit": "hystérēsis",
+      "pronunciation": "hoos-ter'-ay-sis",
+      "translated": true
+    },
+    "G5305": {
+      "definitions_cz": "více v poslední době, tedy nakonec",
+      "translit": "hýsteron",
+      "pronunciation": "hoos'-ter-on",
+      "translated": true
+    },
+    "G5306": {
+      "definitions_cz": "později",
+      "translit": "hýsteros",
+      "pronunciation": "hoos'-ter-os",
+      "translated": true
+    },
+    "G5307": {
+      "definitions_cz": "tkané, tedy (snad) pletené",
+      "translit": "hyphantós",
+      "pronunciation": "hoo-fan-tos'",
+      "translated": true
+    },
+    "G5308": {
+      "definitions_cz": "vznešený (na místě nebo charakteru)",
+      "translit": "hypsēlós",
+      "pronunciation": "hoop-say-los'",
+      "translated": true
+    },
+    "G5309": {
+      "definitions_cz": "být vznešený na mysli, tzn.\n arogantní",
+      "translit": "hypsēlophronéō",
+      "pronunciation": "hoop-say-lo-fron-eh'-o",
+      "translated": true
+    },
+    "G5310": {
+      "definitions_cz": "nejvyšší, tj. (mužský rod jednotného čísla)\n Nejvyšší (Bůh), nebo (neutr množné číslo) nebesa",
+      "translit": "hýpsistos",
+      "pronunciation": "hoop'-sis-tos",
+      "translated": true
+    },
+    "G5311": {
+      "definitions_cz": "nadmořská výška, tj. (abstraktně) nadmořská výška,\n (zvláště), nebe nebo (obrazně) důstojnost",
+      "translit": "hýpsos",
+      "pronunciation": "hoop'-sos",
+      "translated": true
+    },
+    "G5312": {
+      "definitions_cz": "pozvednout (doslova nebo obrazně)",
+      "translit": "hypsóō",
+      "pronunciation": "hoop-so'-o",
+      "translated": true
+    },
+    "G5313": {
+      "definitions_cz": "vyvýšené místo nebo věc, tedy (abstraktně) nadmořská výška, popř\n (implicitně) bariéra (obrazně)",
+      "translit": "hýpsōma",
+      "pronunciation": "hoop'-so-mah",
+      "translated": true
+    },
+    "G5314": {
+      "definitions_cz": "žrout",
+      "translit": "phágos",
+      "pronunciation": "fag'-os",
+      "translated": true
+    },
+    "G5315": {
+      "definitions_cz": "do\n jíst (doslova nebo obrazně)",
+      "translit": "phágō",
+      "pronunciation": "fag'-o",
+      "translated": true
+    },
+    "G5316": {
+      "definitions_cz": "zesvětlit (svítit), t. j. ukázat\n (přechodné nebo nepřechodné, doslovné nebo obrazné)",
+      "translit": "phaínō",
+      "pronunciation": "fah'-ee-no",
+      "translated": true
+    },
+    "G5317": {
+      "definitions_cz": "Phalek (t. j. Peleg), patriarcha",
+      "translit": "Phálek",
+      "pronunciation": "fal'-ek",
+      "translated": true
+    },
+    "G5318": {
+      "definitions_cz": "svítící, t. j. zdánlivý (doslova nebo obrazně); kastrovat\n (jako příslovce) veřejně, navenek",
+      "translit": "phanerós",
+      "pronunciation": "fan-er-os'",
+      "translated": true
+    },
+    "G5319": {
+      "definitions_cz": "zviditelnit (doslova nebo obrazně)",
+      "translit": "phaneróō",
+      "pronunciation": "fan-er-o'-o",
+      "translated": true
+    },
+    "G5320": {
+      "definitions_cz": "zjevně, tedy jasně nebo veřejně",
+      "translit": "phanerōs",
+      "pronunciation": "fan-er-oce'",
+      "translated": true
+    },
+    "G5321": {
+      "definitions_cz": "výstava, tj. (obrazně) vyjádření, (rozšířením)\n obdarování",
+      "translit": "phanérōsis",
+      "pronunciation": "fan-er'-o-sis",
+      "translated": true
+    },
+    "G5322": {
+      "definitions_cz": "zesvětlovač, tj. světlo; lucerna",
+      "translit": "phanós",
+      "pronunciation": "fan-os'",
+      "translated": true
+    },
+    "G5323": {
+      "definitions_cz": "Phanuel (tj. Penuel), an\n Izraelita",
+      "translit": "Phanouḗl",
+      "pronunciation": "fan-oo-ale'",
+      "translated": true
+    },
+    "G5324": {
+      "definitions_cz": "učinit zjevným, t. j. (pasivně) k\n objevit se (střední příčestí jako podstatné jméno, podívaná)",
+      "translit": "phantázō",
+      "pronunciation": "fan-tad'-zo",
+      "translated": true
+    },
+    "G5325": {
+      "definitions_cz": "(správně abstraktní) (marná) show\n (\"fantazie\")",
+      "translit": "phantasía",
+      "pronunciation": "fan-tas-ee'-ah",
+      "translated": true
+    },
+    "G5326": {
+      "definitions_cz": "(správně konkrétní) (pouhé) představení (\"fantasmus\"), tzn.\n přízrak",
+      "translit": "phántasma",
+      "pronunciation": "fan'-tas-mah",
+      "translated": true
+    },
+    "G5327": {
+      "definitions_cz": "mezera\n nebo propast, tj. rokle (zimní bystřina)",
+      "translit": "pháranx",
+      "pronunciation": "far'-anx",
+      "translated": true
+    },
+    "G5328": {
+      "definitions_cz": "Pharao (t. j. Pharoh), Egypťan\n král",
+      "translit": "Pharaṓ",
+      "pronunciation": "far-ah-o'",
+      "translated": true
+    },
+    "G5329": {
+      "definitions_cz": "Phares (t. j. Perets), Israelita",
+      "translit": "Pháres",
+      "pronunciation": "far-es'",
+      "translated": true
+    },
+    "G5330": {
+      "definitions_cz": "separatista, tedy výhradně\n náboženský; farizean, tedy židovská sekta",
+      "translit": "Pharisaîos",
+      "pronunciation": "far-is-ah'-yos",
+      "translated": true
+    },
+    "G5331": {
+      "definitions_cz": "medikace (\"lékárna\"), tedy (rozšířeně) magie\n (doslova nebo obrazně)",
+      "translit": "pharmakeía",
+      "pronunciation": "far-mak-i'-ah",
+      "translated": true
+    },
+    "G5332": {
+      "definitions_cz": "drogista\n (\"lékárník\") nebo travič, tedy (v rozšíření) kouzelník",
+      "translit": "pharmakeús",
+      "pronunciation": "far-mak-yoos'",
+      "translated": true
+    },
+    "G5333": {
+      "definitions_cz": "",
+      "translated": false
+    },
+    "G5334": {
+      "definitions_cz": "rčení,\n tj. hlásit",
+      "translit": "phásis",
+      "pronunciation": "fas'-is",
+      "translated": true
+    },
+    "G5335": {
+      "definitions_cz": "tvrdit",
+      "translit": "pháskō",
+      "pronunciation": "fas'-ko",
+      "translated": true
+    },
+    "G5336": {
+      "definitions_cz": "jeslička (na krmení)",
+      "translit": "phátnē",
+      "pronunciation": "fat'-nay",
+      "translated": true
+    },
+    "G5337": {
+      "definitions_cz": "„faul“ nebo „chybný“, tj. (obrazně)\n zlý",
+      "translit": "phaûlos",
+      "pronunciation": "fow'-los",
+      "translated": true
+    },
+    "G5338": {
+      "definitions_cz": "brilance",
+      "translit": "phéngos",
+      "pronunciation": "feng'-gos",
+      "translated": true
+    },
+    "G5339": {
+      "definitions_cz": "být chary of, tj. (subjektivně) se zdržet\n nebo (objektivně) zacházet shovívavě",
+      "translit": "pheídomai",
+      "pronunciation": "fi'-dom-ahee",
+      "translated": true
+    },
+    "G5340": {
+      "definitions_cz": "zdrženlivě, tzn.\n lakomě",
+      "translit": "pheidoménōs",
+      "pronunciation": "fi-dom-en'-oce",
+      "translated": true
+    },
+    "G5341": {
+      "definitions_cz": "plášť (surtout)",
+      "translit": "phelónēs",
+      "pronunciation": "fel-on'-ace",
+      "translated": true
+    },
+    "G5342": {
+      "definitions_cz": "„nést“ nebo nosit (ve velmi širokém použití doslova a\n obrazně, takto)",
+      "translit": "phérō",
+      "pronunciation": "fer'-o",
+      "translated": true
+    },
+    "G5343": {
+      "definitions_cz": "utéct (doslova nebo přeneseně); podle\n implikace, vyhýbat se; analogicky zmizet",
+      "translit": "pheúgō",
+      "pronunciation": "fyoo'-go",
+      "translated": true
+    },
+    "G5344": {
+      "definitions_cz": "šťastný; Phelix (t. j. Felix), Říman",
+      "translit": "Phēlix",
+      "pronunciation": "fay'-lix",
+      "translated": true
+    },
+    "G5345": {
+      "definitions_cz": "rčení, tj. pověst (\"sláva\")",
+      "translit": "phḗmē",
+      "pronunciation": "fay'-may",
+      "translated": true
+    },
+    "G5346": {
+      "definitions_cz": "ukázat nebo dát vědět\n něčí myšlenky, tj. mluvit nebo říkat",
+      "translit": "phēmí",
+      "pronunciation": "fay-mee'",
+      "translated": true
+    },
+    "G5347": {
+      "definitions_cz": "slavnostní; Phestus (t. j. Festus), římský",
+      "translit": "Phēstos",
+      "pronunciation": "face'-tos",
+      "translated": true
+    },
+    "G5348": {
+      "definitions_cz": "být předem, t. j. předvídat popř\n předcházet; rozšířením, abychom dosáhli",
+      "translit": "phthánō",
+      "pronunciation": "fthan'-o",
+      "translated": true
+    },
+    "G5349": {
+      "definitions_cz": "zchátralý, tedy (implicitně) podléhající zkáze",
+      "translit": "phthartós",
+      "pronunciation": "fthar-tos'",
+      "translated": true
+    },
+    "G5350": {
+      "definitions_cz": "vydávat čistý zvuk, tzn.\n (obecně) hlásat",
+      "translit": "phthéngomai",
+      "pronunciation": "ftheng'-gom-ahee",
+      "translated": true
+    },
+    "G5351": {
+      "definitions_cz": "správně, do\n scvrknout se nebo uschnout, tj. zkazit (jakýmkoli procesem) nebo (obecně) zkazit\n zmar (zejména obrazně, morálními vlivy, k\n zkažený)",
+      "translit": "phtheírō",
+      "pronunciation": "fthi'-ro",
+      "translated": true
+    },
+    "G5352": {
+      "definitions_cz": "podobný základu [ŘEK:5351][ŘEK:3703]",
+      "translit": "phthinopōrinós",
+      "pronunciation": "fthin-op-o-ree-nos'",
+      "translated": true
+    },
+    "G5353": {
+      "definitions_cz": "promluva, tedy hudební nota (vokální nebo\n instrumentální)",
+      "translit": "phthóngos",
+      "pronunciation": "ftong'-gos",
+      "translated": true
+    },
+    "G5354": {
+      "definitions_cz": "žárlit na",
+      "translit": "phthonéō",
+      "pronunciation": "fthon-eh'-o",
+      "translated": true
+    },
+    "G5355": {
+      "definitions_cz": "zlovůle (jako detrakce), tzn.\n žárlivost (navzdory)",
+      "translit": "phthónos",
+      "pronunciation": "fthon'-os",
+      "translated": true
+    },
+    "G5356": {
+      "definitions_cz": "rozklad, tj. zmar (spontánní nebo způsobený, doslova nebo\n přeneseně)",
+      "translit": "phthorá",
+      "pronunciation": "fthor-ah'",
+      "translated": true
+    },
+    "G5357": {
+      "definitions_cz": "široký mělký pohár (\"lahvička\")",
+      "translit": "phiálē",
+      "pronunciation": "fee-al'-ay",
+      "translated": true
+    },
+    "G5358": {
+      "definitions_cz": "rád k dobru, t. j. propagátor ctnosti",
+      "translit": "philágathos",
+      "pronunciation": "fil-ag'-ath-os",
+      "translated": true
+    },
+    "G5359": {
+      "definitions_cz": "Philadelphia, místo v Malé Asii",
+      "translit": "Philadélpheia",
+      "pronunciation": "fil-ad-el'-fee-ah",
+      "translated": true
+    },
+    "G5360": {
+      "definitions_cz": "bratrská náklonnost",
+      "translit": "philadelphía",
+      "pronunciation": "fil-ad-el-fee'-ah",
+      "translated": true
+    },
+    "G5361": {
+      "definitions_cz": "rád bratrský, t. j. bratrský",
+      "translit": "philádelphos",
+      "pronunciation": "fil-ad'-el-fos",
+      "translated": true
+    },
+    "G5362": {
+      "definitions_cz": "milující muže, t. j. milující jako manželka",
+      "translit": "phílandros",
+      "pronunciation": "fil'-an-dros",
+      "translated": true
+    },
+    "G5363": {
+      "definitions_cz": "náklonnost lidstva, t. j. dobrotivost\n (\"filantropie\")",
+      "translit": "philanthrōpía",
+      "pronunciation": "fil-an-thro-pee'-ah",
+      "translated": true
+    },
+    "G5364": {
+      "definitions_cz": "s láskou k člověku\n (\"filantropicky\"), tedy lidsky",
+      "translit": "philanthrṓpōs",
+      "pronunciation": "fil-an-thro'-poce",
+      "translated": true
+    },
+    "G5365": {
+      "definitions_cz": "lakota",
+      "translit": "philargyría",
+      "pronunciation": "fil-ar-goo-ree'-ah",
+      "translated": true
+    },
+    "G5366": {
+      "definitions_cz": "rád stříbro (peníze), t. j. lakomý",
+      "translit": "philárgyros",
+      "pronunciation": "fil-ar'-goo-ros",
+      "translated": true
+    },
+    "G5367": {
+      "definitions_cz": "mít rád sebe, t. j. sobecký",
+      "translit": "phílautos",
+      "pronunciation": "fil'-ow-tos",
+      "translated": true
+    },
+    "G5368": {
+      "definitions_cz": "být přítelem (milovat (jednotlivce nebo objekt)),\n mít náklonnost k (označující osobní připoutanost jako věc\n sentiment nebo pocit; zatímco [ŘECKO:25][ŘECKO:2309][ŘECKO:1014][ŘECKO:2372][ŘECKO:3563]",
+      "translit": "philéō",
+      "pronunciation": "fil-eh'-o",
+      "translated": true
+    },
+    "G5369": {
+      "definitions_cz": "milující potěšení, t. j. smyslný",
+      "translit": "philḗdonos",
+      "pronunciation": "fil-ay'-don-os",
+      "translated": true
+    },
+    "G5370": {
+      "definitions_cz": "polibek",
+      "translit": "phílēma",
+      "pronunciation": "fil'-ay-mah",
+      "translated": true
+    },
+    "G5371": {
+      "definitions_cz": "přátelský; Filemon, křesťan",
+      "translit": "Philḗmōn",
+      "pronunciation": "fil-ay'-mone",
+      "translated": true
+    },
+    "G5372": {
+      "definitions_cz": "přívětivý; Philetus, odpůrce křesťanství",
+      "translit": "Phílētos",
+      "pronunciation": "fil-ay-tos'",
+      "translated": true
+    },
+    "G5373": {
+      "definitions_cz": "záliba",
+      "translit": "philía",
+      "pronunciation": "fil-ee'-ah",
+      "translated": true
+    },
+    "G5374": {
+      "definitions_cz": "filipský (filipský), t. j. původem z\n Philippi",
+      "translit": "Philippḗsios",
+      "pronunciation": "fil-ip-pay'-see-os",
+      "translated": true
+    },
+    "G5375": {
+      "definitions_cz": "Philippi, místo v Makedonii",
+      "translit": "Phílippoi",
+      "pronunciation": "fil'-ip-poy",
+      "translated": true
+    },
+    "G5376": {
+      "definitions_cz": "záliba v koních; Philippus, jméno čtyř\n Izraelité",
+      "translit": "Phílippos",
+      "pronunciation": "fil'-ip-pos",
+      "translated": true
+    },
+    "G5377": {
+      "definitions_cz": "milující Boha, t. j. zbožný",
+      "translit": "philótheos",
+      "pronunciation": "fil-oth'-eh-os",
+      "translated": true
+    },
+    "G5378": {
+      "definitions_cz": "záliba ve slovech, tj. hovorný (argumentativní,\n učený, \"filologický\"); Filolog, křesťan",
+      "translit": "Philólogos",
+      "pronunciation": "fil-ol'-og-os",
+      "translated": true
+    },
+    "G5379": {
+      "definitions_cz": "svárlivost, t. j. spor",
+      "translit": "philoneikía",
+      "pronunciation": "fil-on-i-kee'-ah",
+      "translated": true
+    },
+    "G5380": {
+      "definitions_cz": "pravděpodobně podobný [ŘECKO:3534]",
+      "translit": "philóneikos",
+      "pronunciation": "fil-on'-i-kos",
+      "translated": true
+    },
+    "G5381": {
+      "definitions_cz": "pohostinnost",
+      "translit": "philonexía",
+      "pronunciation": "fil-on-ex-ee'-ah",
+      "translated": true
+    },
+    "G5382": {
+      "definitions_cz": "milující hosty, t. j. pohostinní",
+      "translit": "philóxenos",
+      "pronunciation": "fil-ox'-en-os",
+      "translated": true
+    },
+    "G5383": {
+      "definitions_cz": "mít rád být první, tzn.\n ambiciózní v rozlišení",
+      "translit": "philoprōteúō",
+      "pronunciation": "fil-op-rote-yoo'-o",
+      "translated": true
+    },
+    "G5384": {
+      "definitions_cz": "aktivně, rád, tj. přátelský (stále jako\n podstatné jméno, společník, soused atd.)",
+      "translit": "phílos",
+      "pronunciation": "fee'-los",
+      "translated": true
+    },
+    "G5385": {
+      "definitions_cz": "\"filosofie\", tj. (zvláště), židovská\n sofistika",
+      "translit": "philosophía",
+      "pronunciation": "fil-os-of-ee'-ah",
+      "translated": true
+    },
+    "G5386": {
+      "definitions_cz": "rád moudré věci, tj\n \"filosof\"",
+      "translit": "philósophos",
+      "pronunciation": "fil-os'-of-os",
+      "translated": true
+    },
+    "G5387": {
+      "definitions_cz": "rád přirozené příbuzné, t. j. bratrský k bližnímu\n Christian",
+      "translit": "philóstorgos",
+      "pronunciation": "fil-os'-tor-gos",
+      "translated": true
+    },
+    "G5388": {
+      "definitions_cz": "milující své děti, t. j. mateřskou",
+      "translit": "philóteknos",
+      "pronunciation": "fil-ot'-ek-nos",
+      "translated": true
+    },
+    "G5389": {
+      "definitions_cz": "mít rád čest,\n tj. emulózní (chtivý nebo vážný něco udělat)",
+      "translit": "philotiméomai",
+      "pronunciation": "fil-ot-im-eh'-om-ahee",
+      "translated": true
+    },
+    "G5390": {
+      "definitions_cz": "s přátelskou myslí, tzn.\n laskavě",
+      "translit": "philophrónōs",
+      "pronunciation": "fil-of-ron'-oce",
+      "translated": true
+    },
+    "G5391": {
+      "definitions_cz": "přátelské mysli, t. j. laskavé",
+      "translit": "philóphrōn",
+      "pronunciation": "fil-of'-rone",
+      "translated": true
+    },
+    "G5392": {
+      "definitions_cz": "k náhubku",
+      "translit": "phimóō",
+      "pronunciation": "fee-mo'-o",
+      "translated": true
+    },
+    "G5393": {
+      "definitions_cz": "planoucí; Společnost Phlegon, a\n Christian",
+      "translit": "Phlégōn",
+      "pronunciation": "fleg'-one",
+      "translated": true
+    },
+    "G5394": {
+      "definitions_cz": "způsobit požár, tj. zapálit (obrazně, zapálit\n s vášní)",
+      "translit": "phlogízō",
+      "pronunciation": "flog-id'-zo",
+      "translated": true
+    },
+    "G5395": {
+      "definitions_cz": "požár",
+      "translit": "phlóx",
+      "pronunciation": "flox",
+      "translated": true
+    },
+    "G5396": {
+      "definitions_cz": "být blábolem nebo maličkým, tedy (implicitně) nadávat\n nečinně nebo škodolibě",
+      "translit": "phlyaréō",
+      "pronunciation": "floo-ar-eh'-o",
+      "translated": true
+    },
+    "G5397": {
+      "definitions_cz": "upovídaný člověk, t. j. prater",
+      "translit": "phlýaros",
+      "pronunciation": "floo'-ar-os",
+      "translated": true
+    },
+    "G5398": {
+      "definitions_cz": "děsivý, tj. (objektivně) hrozivý",
+      "translit": "phoberós",
+      "pronunciation": "fob-er-os'",
+      "translated": true
+    },
+    "G5399": {
+      "definitions_cz": "strašit, t. j. (pasivně) znepokojovat se; analogicky k\n být v úžasu, t. j. ctít",
+      "translit": "phobéō",
+      "pronunciation": "fob-eh'-o",
+      "translated": true
+    },
+    "G5400": {
+      "definitions_cz": "děsivá věc, tj. úžasná\n předzvěst",
+      "translit": "phóbētron",
+      "pronunciation": "fob'-ay-tron",
+      "translated": true
+    },
+    "G5401": {
+      "definitions_cz": "poplach nebo strach",
+      "translit": "phóbos",
+      "pronunciation": "fob'-os",
+      "translated": true
+    },
+    "G5402": {
+      "definitions_cz": "pravděpodobně podobný základu [ŘECKO:5457]",
+      "translit": "Phoíbē",
+      "pronunciation": "foy'-bay",
+      "translated": true
+    },
+    "G5403": {
+      "definitions_cz": "palmová země; Phœnice (nebo Pœnicia), kraj\n Palestina",
+      "translit": "Phoiníkē",
+      "pronunciation": "foy-nee'-kay",
+      "translated": true
+    },
+    "G5404": {
+      "definitions_cz": "palma",
+      "translit": "phoînix",
+      "pronunciation": "foy'-nix",
+      "translated": true
+    },
+    "G5405": {
+      "definitions_cz": "Phœnix, místo na Krétě",
+      "translit": "Phoînix",
+      "pronunciation": "foy'-nix",
+      "translated": true
+    },
+    "G5406": {
+      "definitions_cz": "vrah (vždy zločinný (nebo alespoň úmyslný)\n zabití; což [ŘECKO:443][ŘECKO:4607]",
+      "translit": "phoneús",
+      "pronunciation": "fon-yooce'",
+      "translated": true
+    },
+    "G5407": {
+      "definitions_cz": "být vrahem (čeho)",
+      "translit": "phoneúō",
+      "pronunciation": "fon-yoo'-o",
+      "translated": true
+    },
+    "G5408": {
+      "definitions_cz": "vražda",
+      "translit": "phónos",
+      "pronunciation": "fon'-os",
+      "translated": true
+    },
+    "G5409": {
+      "definitions_cz": "mít břemeno, tj. (analogicky) nosit jako oděv nebo\n stálý doprovod",
+      "translit": "phoréō",
+      "pronunciation": "for-eh'-o",
+      "translated": true
+    },
+    "G5410": {
+      "definitions_cz": "fórum nebo tržiště; pouze ve srovnání s\n [ŘECtina:675]",
+      "translit": "Phóron",
+      "pronunciation": "for'-on",
+      "translated": true
+    },
+    "G5411": {
+      "definitions_cz": "náklad (jak nese), tj. (obrazně) daň (správně, an\n individuální posouzení osob nebo majetku; vzhledem k tomu, [ŘECKO:5056]",
+      "translit": "phóros",
+      "pronunciation": "for'-os",
+      "translated": true
+    },
+    "G5412": {
+      "definitions_cz": "naložit (správně, jako nádobu nebo zvíře), tzn.\n (obrazně) přetížit ceremonií (nebo duchovní\n úzkost)",
+      "translit": "phortízō",
+      "pronunciation": "for-tid'-zo",
+      "translated": true
+    },
+    "G5413": {
+      "definitions_cz": "fakturu (v rámci přepravného), tzn.\n (obrazně) úkol nebo službu",
+      "translit": "phortíon",
+      "pronunciation": "for-tee'-on",
+      "translated": true
+    },
+    "G5414": {
+      "definitions_cz": "něco neslo, t. j. náklad lodi",
+      "translit": "phórtos",
+      "pronunciation": "for'-tos",
+      "translated": true
+    },
+    "G5415": {
+      "definitions_cz": "\"štěstí\"; Fortunatus, křesťan",
+      "translit": "Phortounâtos",
+      "pronunciation": "for-too-nat'-os",
+      "translated": true
+    },
+    "G5416": {
+      "definitions_cz": "bič, t. j. římský bič\n jako veřejný trest",
+      "translit": "phragéllion",
+      "pronunciation": "frag-el'-le-on",
+      "translated": true
+    },
+    "G5417": {
+      "definitions_cz": "bičovat, t. j. bičovat\n jako veřejný trest",
+      "translit": "phragellóō",
+      "pronunciation": "frag-el-lo'-o",
+      "translated": true
+    },
+    "G5418": {
+      "definitions_cz": "plot, nebo uzavírací bariéra (doslova popř\n přeneseně)",
+      "translit": "phragmós",
+      "pronunciation": "frag-mos'",
+      "translated": true
+    },
+    "G5419": {
+      "definitions_cz": "naznačit (tím\n slovo nebo čin), tj. (zvláště), vyložit",
+      "translit": "phrázō",
+      "pronunciation": "frad'-zo",
+      "translated": true
+    },
+    "G5420": {
+      "definitions_cz": "oplotit popř\n zavřít, tj. (zvláště), zablokovat (obrazně, do\n ticho)",
+      "translit": "phrássō",
+      "pronunciation": "fras'-so",
+      "translated": true
+    },
+    "G5421": {
+      "definitions_cz": "díra v zemi (vykopaná pro získání popř\n zadržování vody nebo jiné účely), tj. cisterna nebo studna;\n přeneseně, propast (jako vězení)",
+      "translit": "phréar",
+      "pronunciation": "freh'-ar",
+      "translated": true
+    },
+    "G5422": {
+      "definitions_cz": "být mysl-klamač, t. j. klamat",
+      "translit": "phrenapatáō",
+      "pronunciation": "fren-ap-at-ah'-o",
+      "translated": true
+    },
+    "G5423": {
+      "definitions_cz": "mysl-klamač, tj. svůdce",
+      "translit": "phrenapátēs",
+      "pronunciation": "fren-ap-at'-ace",
+      "translated": true
+    },
+    "G5424": {
+      "definitions_cz": "midrif (jako předěl těla), tj. (obrazně a tím\n implikace, sympatie) pocity (nebo citlivé povahy; tím\n rozšíření (také v množném čísle) mysl nebo kognitivní\n fakulty)",
+      "translit": "phrḗn",
+      "pronunciation": "frane",
+      "translated": true
+    },
+    "G5425": {
+      "definitions_cz": "„ještět“ nebo chladit, t. j. otřásat se\n (strach)",
+      "translit": "phríssō",
+      "pronunciation": "fris'-so",
+      "translated": true
+    },
+    "G5426": {
+      "definitions_cz": "cvičit mysl, tj. bavit nebo mít sentiment nebo\n názor; implicitně být (mentálně) disponován (více či méně\n vážně v určitém směru); intenzivně, zajímat se o sebe\n (se starostí nebo poslušností)",
+      "translit": "phronéō",
+      "pronunciation": "fron-eh'-o",
+      "translated": true
+    },
+    "G5427": {
+      "definitions_cz": "(duševní) sklon nebo účel",
+      "translit": "phrónēma",
+      "pronunciation": "fron'-ay-mah",
+      "translated": true
+    },
+    "G5428": {
+      "definitions_cz": "duševní jednání nebo činnost, t. j. intelektuální nebo mravní\n vhled",
+      "translit": "phrónēsis",
+      "pronunciation": "fron'-ay-sis",
+      "translated": true
+    },
+    "G5429": {
+      "definitions_cz": "přemýšlivý, tj. prozíravý nebo diskrétní (což znamená opatrný\n charakter; zatímco [ŘEK:4680][ŘEK:4908]",
+      "translit": "phrónimos",
+      "pronunciation": "fron'-ee-mos",
+      "translated": true
+    },
+    "G5430": {
+      "definitions_cz": "rozvážně",
+      "translit": "phronímōs",
+      "pronunciation": "fron-im'-oce",
+      "translated": true
+    },
+    "G5431": {
+      "definitions_cz": "cvičit myšlení, t. j. být úzkostný",
+      "translit": "phrontízō",
+      "pronunciation": "fron-tid'-zo",
+      "translated": true
+    },
+    "G5432": {
+      "definitions_cz": "býti předem pozorovatelem, t. j. aby\n horská stráž jako strážce (posílat špiony u bran); přeneseně k lemu\n v, chránit",
+      "translit": "phrouréō",
+      "pronunciation": "froo-reh'-o",
+      "translated": true
+    },
+    "G5433": {
+      "definitions_cz": "frkat (jako temperamentní kůň), tzn.\n (obrazně) udělat vřavu",
+      "translit": "phryássō",
+      "pronunciation": "froo-as'-so",
+      "translated": true
+    },
+    "G5434": {
+      "definitions_cz": "podobný\n základ [ŘECKO:5395]",
+      "translit": "phrýganon",
+      "pronunciation": "froo'-gan-on",
+      "translated": true
+    },
+    "G5435": {
+      "definitions_cz": "Frygia, oblast Malé Asie",
+      "translit": "Phrygía",
+      "pronunciation": "froog-ee'-ah",
+      "translated": true
+    },
+    "G5436": {
+      "definitions_cz": "uprchlík; Phygellus, odpadlík\n Christian",
+      "translit": "Phýgellos",
+      "pronunciation": "foog'-el-los",
+      "translated": true
+    },
+    "G5437": {
+      "definitions_cz": "útěk, tedy útěk",
+      "translit": "phygḗ",
+      "pronunciation": "foog-ay'",
+      "translated": true
+    },
+    "G5438": {
+      "definitions_cz": "střežení nebo (konkrétně stráž), čin, osoba;\n přeneseně, místo, stav nebo (zvláště) čas (jako a\n rozdělení dne nebo noci), doslova nebo přeneseně",
+      "translit": "phylakḗ",
+      "pronunciation": "foo-lak-ay'",
+      "translated": true
+    },
+    "G5439": {
+      "definitions_cz": "uvěznit",
+      "translit": "phylakízō",
+      "pronunciation": "foo-lak-id'-zo",
+      "translated": true
+    },
+    "G5440": {
+      "definitions_cz": "strážní pouzdro, tj. \"fylaktérie\" pro\n nosit útržky textů Písma",
+      "translit": "phylaktḗrion",
+      "pronunciation": "foo-lak-tay'-ree-on",
+      "translated": true
+    },
+    "G5442": {
+      "definitions_cz": "dívat se, tj. být zapnutý\n stráž (doslova přeneseně); implicitně zachovávat, poslouchat,\n vyhnout se",
+      "translit": "phylássō",
+      "pronunciation": "foo-las'-so",
+      "translated": true
+    },
+    "G5443": {
+      "definitions_cz": "odnož, tedy rasa nebo klan",
+      "translit": "phylḗ",
+      "pronunciation": "foo-lay'",
+      "translated": true
+    },
+    "G5444": {
+      "definitions_cz": "výhonek, tedy list",
+      "translit": "phýllon",
+      "pronunciation": "fool'-lon",
+      "translated": true
     }
   }
 }
