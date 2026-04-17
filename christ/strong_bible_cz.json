@@ -43977,6 +43977,356 @@
       "hebrew": "חלדי",
       "xlit": "Chelday",
       "translated": true
+    },
+    "H2470": {
+      "definitions_cz": "1) být nebo se stát slabým, být nebo onemocnět, být nebo onemocnět, být nebo být zarmoucen, být nebo se litovat | 1a) (Qal) být slabý, být nemocný | 1b) (Piel) | 1b1) být nebo se stát slabým, cítit se slabý | 1b2) onemocnět, onemocnět | 1b3) (CLBL) prosit, modlit se, prosit | 1c) (Niphal) | 1c1) onemocnět | 1c2) onemocnět | 1c3) být unavený | 1d) (Pual) zeslábni, zeslábni | 1e) (Hithpael) onemocnět | 1f) (hifil) | 1f1) udělat bolest | 1f2) onemocnět | 1f3) t",
+      "lemma": "חָלָה",
+      "hebrew": "חלה",
+      "xlit": "châlâh",
+      "translated": true
+    },
+    "H2471": {
+      "definitions_cz": "1) dort, dort (pokud je propíchnutý) (pravděpodobně perforovaný)",
+      "lemma": "חַלָּה",
+      "hebrew": "חלה",
+      "xlit": "challâh",
+      "translated": true
+    },
+    "H2472": {
+      "definitions_cz": "1) sen | 1a) sen (obyčejný) | 1b) sen (s prorockým významem)",
+      "lemma": "חֲלוֹם",
+      "hebrew": "חלום",
+      "xlit": "chălôwm",
+      "translated": true
+    },
+    "H2473": {
+      "definitions_cz": "Holon = \"písečná\" | 1) město v judských horách dané kněžím | 2) město Moab; místo neznámé",
+      "lemma": "חֹלוֹן",
+      "hebrew": "חלון",
+      "xlit": "Chôlôwn",
+      "translated": true
+    },
+    "H2474": {
+      "definitions_cz": "1) okno (proražení zdi)",
+      "lemma": "חַלּוֹן",
+      "hebrew": "חלון",
+      "xlit": "challôwn",
+      "translated": true
+    },
+    "H2475": {
+      "definitions_cz": "1) zničení, pomíjející, mizející, určený ke zničení",
+      "lemma": "חֲלוֹף",
+      "hebrew": "חלוף",
+      "xlit": "chălôwph",
+      "translated": true
+    },
+    "H2476": {
+      "definitions_cz": "1) slabost, porážka, poklona",
+      "lemma": "חֲלוּשָׁה",
+      "hebrew": "חלושה",
+      "xlit": "chălûwshâh",
+      "translated": true
+    },
+    "H2477": {
+      "definitions_cz": "Halah = \"bolestivý\" | 1) město nebo čtvrť v Mezopotámii pod asyrskou kontrolou, kam byli zajati izraelští zajatci",
+      "lemma": "חֲלַח",
+      "hebrew": "חלח",
+      "xlit": "Chălach",
+      "translated": true
+    },
+    "H2478": {
+      "definitions_cz": "Halhul = \"chvění\" | 1) město na kopci v judských horách nalevo od silnice z Jeruzaléma do Hebronu a asi 3-4 (5-7 km) mil od Hebronu",
+      "lemma": "חַלְחוּל",
+      "hebrew": "חלחול",
+      "xlit": "Chalchûwl",
+      "translated": true
+    },
+    "H2479": {
+      "definitions_cz": "1) bolest, chvění, hrůza, svíjení se, úzkost",
+      "lemma": "חַלְחָלָה",
+      "hebrew": "חלחלה",
+      "xlit": "chalchâlâh",
+      "translated": true
+    },
+    "H2480": {
+      "definitions_cz": "1) (Hiphil) zvednout, chytit, zvednout (slovo)",
+      "lemma": "חָלַט",
+      "hebrew": "חלט",
+      "xlit": "châlaṭ",
+      "translated": true
+    },
+    "H2481": {
+      "definitions_cz": "1) šperky, ozdoba",
+      "lemma": "חֲלִי",
+      "hebrew": "חלי",
+      "xlit": "chălîy",
+      "translated": true
+    },
+    "H2482": {
+      "definitions_cz": "Hali = \"náhrdelník\" | 1) město na hranici Asher mezi Helkath a Beten",
+      "lemma": "חֲלִי",
+      "hebrew": "חלי",
+      "xlit": "Chălîy",
+      "translated": true
+    },
+    "H2483": {
+      "definitions_cz": "1) nemoc",
+      "lemma": "חֳלִי",
+      "hebrew": "חלי",
+      "xlit": "chŏlîy",
+      "translated": true
+    },
+    "H2484": {
+      "definitions_cz": "1) šperky, šperky",
+      "lemma": "חֶלְיָה",
+      "hebrew": "חליה",
+      "xlit": "chelyâh",
+      "translated": true
+    },
+    "H2485": {
+      "definitions_cz": "1) trubka, flétna",
+      "lemma": "חָלִיל",
+      "hebrew": "חליל",
+      "xlit": "châlîyl",
+      "translated": true
+    },
+    "H2486": {
+      "definitions_cz": "1) daleko (ode mne), nedej bože, ať není",
+      "lemma": "חָלִילָה",
+      "hebrew": "חלילה",
+      "xlit": "châlîylâh",
+      "translated": true
+    },
+    "H2487": {
+      "definitions_cz": "1) změna, výměna (oděvů), výměna | 1a) změna (oděvu) | 1b) relé | 1c) osvobození (od smrti) | 1d) měnící se, měnící se (běh života)",
+      "lemma": "חֲלִיפָה",
+      "hebrew": "חליפה",
+      "xlit": "chălîyphâh",
+      "translated": true
+    },
+    "H2488": {
+      "definitions_cz": "1) co se svléká (člověk ve válce), brnění, kořist, opasek",
+      "lemma": "חֲלִיצָה",
+      "hebrew": "חליצה",
+      "xlit": "chălîytsâh",
+      "translated": true
+    },
+    "H2489": {
+      "definitions_cz": "1) nešťastný, chudý, nešťastný člověk",
+      "lemma": "חֵלְכָא",
+      "hebrew": "חלכא",
+      "xlit": "chêlᵉkâʼ",
+      "translated": true
+    },
+    "H2490": {
+      "definitions_cz": "1) znesvětit, poskvrnit, pošpinit, znesvětit, začít | 1a) (Niphal) | 1a1) znesvěcovat se, poskvrňovat se, znečišťovat se | 1a1a) rituálně | 1a1b) sexuálně | 1a2) být znečištěn, být poskvrněn | 1b) (Piel) | 1b1) znesvětit, učinit obecným, poskvrnit, znečišťovat | 1b2) porušit čest, zneuctít | 1b3) porušit (smlouvu) | 1b4) považovat za běžné | 1c) (Pual) na profánní (jméno Boží) | 1d) (Hiphil) | 1d1) nechat zprofanovat | 1d2) začít | 1e) (Hophal) bude zahájeno | 2) zranit (",
+      "lemma": "חָלַל",
+      "hebrew": "חלל",
+      "xlit": "châlal",
+      "translated": true
+    },
+    "H2491": {
+      "definitions_cz": "n m | 1) zabitý, smrtelně zraněný, probodnutý | 1a) probodnutý, smrtelně zraněný | 1b) zabitý | adj | 2) (CLBL) zprofanováno | 2a) poskvrněný, zprofanovaný (rozvodem)",
+      "lemma": "חָלָל",
+      "hebrew": "חלל",
+      "xlit": "châlâl",
+      "translated": true
+    },
+    "H2492": {
+      "definitions_cz": "1) snít | 1a) (Qal) | 1a1) snít (obyčejné) | 1a2) snít (prorocký) | 1a3) snít (o falešných prorocích) | 1b) (Hiphil) snít | 2) být zdravý, být silný | 2a) (Qal) být zdravý | 2b) (Hiphil) obnovit zdraví",
+      "lemma": "חָלַם",
+      "hebrew": "חלם",
+      "xlit": "châlam",
+      "translated": true
+    },
+    "H2493": {
+      "definitions_cz": "1) sen",
+      "lemma": "חֵלֶם",
+      "hebrew": "חלם",
+      "xlit": "chêlem",
+      "translated": true
+    },
+    "H2494": {
+      "definitions_cz": "Helem = \"síla\" nebo \"sen\" | 1) navrácené vyhnanství v době Zachariáše; také hláskováno 'Heldai'",
+      "lemma": "חֵלֶם",
+      "hebrew": "חלם",
+      "xlit": "Chêlem",
+      "translated": true
+    },
+    "H2495": {
+      "definitions_cz": "1) portulaka, rostlina bez chuti s hustou slizkou šťávou",
+      "lemma": "חַלָּמוּת",
+      "hebrew": "חלמות",
+      "xlit": "challâmûwth",
+      "translated": true
+    },
+    "H2496": {
+      "definitions_cz": "1) pazourek, kámen",
+      "lemma": "חַלָּמִישׁ",
+      "hebrew": "חלמיש",
+      "xlit": "challâmîysh",
+      "translated": true
+    },
+    "H2497": {
+      "definitions_cz": "Helon = \"síla\" | 1) otec Eliaba z kmene Zabulon",
+      "lemma": "חֵלֹן",
+      "hebrew": "חלן",
+      "xlit": "Chêlôn",
+      "translated": true
+    },
+    "H2498": {
+      "definitions_cz": "1) projít nebo odejít, projít, projít, projít, vyrůst, změnit se, jít dál od | 1a) (Qal) | 1a1) rychle předat | 1a2) pominout (zmizet) | 1a3) přijít nanovo, znovu vyrašit (trávy) | 1a4) projít | 1a5) překročit, přestoupit | 1b) (Piel) přimět projít, změnit | 1c) (Hiph) | 1c1) změnit, nahradit, pozměnit, změnit k lepšímu, obnovit | 1c2) ukázat novost (stromu)",
+      "lemma": "חָלַף",
+      "hebrew": "חלף",
+      "xlit": "châlaph",
+      "translated": true
+    },
+    "H2499": {
+      "definitions_cz": "1) projít, projít | 1a) (Pe) projít, projít",
+      "lemma": "חֲלַף",
+      "hebrew": "חלף",
+      "xlit": "chălaph",
+      "translated": true
+    },
+    "H2500": {
+      "definitions_cz": "n m | 1) výměnou za (pouze konstrukce) | příprava | 2) na oplátku",
+      "lemma": "חֵלֶף",
+      "hebrew": "חלף",
+      "xlit": "chêleph",
+      "translated": true
+    },
+    "H2501": {
+      "definitions_cz": "Heleph = \"výměna\" | 1) místo, odkud začala hranice Naftali, místo neznámé",
+      "lemma": "חֶלֶף",
+      "hebrew": "חלף",
+      "xlit": "Cheleph",
+      "translated": true
+    },
+    "H2502": {
+      "definitions_cz": "1) odstranit, vytáhnout, stáhnout, vzlétnout, stáhnout se, vybavit (na válku), vyzbrojit se do války, zachránit, být zachráněn | 1a) (Qal) vybavený (příčestí) | 1b) (Niphal) | 1b1) vybavit | 1b2) jít vybaven | 1b3) být vyzbrojen | 1c) (Hiphil) | 1c1) aby byla silná, vzpěru | 1c2) oživit | 2) odčerpat nebo vytáhnout, stáhnout | 2a) (Qal) | 2a1) kreslit, čerpat | 2a2) stáhnout | 2b) (Niphal) | 2b1) k dodání | 2b2) k uložení | 2c) (Piel) | 2c1) vytáhnout, vytrhnout | 2c2) zachránit,",
+      "lemma": "חָלַץ",
+      "hebrew": "חלץ",
+      "xlit": "châlats",
+      "translated": true
+    },
+    "H2503": {
+      "definitions_cz": "Helez = \"zachránil\" | 1) Efraimec, jeden z 30 Davidových mocných válečníků, vůdce 7. měsíčního kurzu | 2) muž z Judy, syn Azariášův",
+      "lemma": "חֶלֶץ",
+      "hebrew": "חלץ",
+      "xlit": "Chelets",
+      "translated": true
+    },
+    "H2504": {
+      "definitions_cz": "1) bedra | 1a) jako sídlo mužnosti | 1b) jako opásané | 1c) jako sídlo bolesti (ženská útrapa)",
+      "lemma": "חָלָץ",
+      "hebrew": "חלץ",
+      "xlit": "châlâts",
+      "translated": true
+    },
+    "H2505": {
+      "definitions_cz": "1) dělit, sdílet, drancovat, přidělovat, rozdělovat, přidělovat | 1a) (Qal) | 1a1) dělit, rozdělovat | 1a2) přidělovat, distribuovat | 1a3) přidělit, předat | 1a4) sdílet | 1a5) dělit se, drancovat | 1b) (Niphal) | 1b1) rozdělit se | 1b2) k rozdělení | 1b3) přidělovat, distribuovat | 1c) (Piel) | 1c1) dělit, rozdělovat | 1c2) přidělovat, distribuovat | 1c3) rozptýlit | 1d) (Pual) k rozdělení | 1e) (Hiphil) získat část nebo část | 1f) (Hithpael) rozdělit se mezi sebou |",
+      "lemma": "חָלַק",
+      "hebrew": "חלק",
+      "xlit": "châlaq",
+      "translated": true
+    },
+    "H2506": {
+      "definitions_cz": "1) část, podíl, část, území | 1a) portion,  share | 1b) část, trakt, parcela (pozemku) | 1c) něčí podíl, něčí majetek | 1d) (chosen) portion | 1e) část, ocenění (od Boha) | 2) uhlazenost, svůdnost, lichocení",
+      "lemma": "חֵלֶק",
+      "hebrew": "חלק",
+      "xlit": "chêleq",
+      "translated": true
+    },
+    "H2507": {
+      "definitions_cz": "Helek = \"porce\" | 1) potomek Manassesův a druhý syn Gileadův",
+      "lemma": "חֵלֶק",
+      "hebrew": "חלק",
+      "xlit": "Chêleq",
+      "translated": true
+    },
+    "H2508": {
+      "definitions_cz": "1) podíl, majetek, los",
+      "lemma": "חֲלָק",
+      "hebrew": "חלק",
+      "xlit": "chălâq",
+      "translated": true
+    },
+    "H2509": {
+      "definitions_cz": "1) lichotivý, hladký",
+      "lemma": "חָלָק",
+      "hebrew": "חלק",
+      "xlit": "châlâq",
+      "translated": true
+    },
+    "H2510": {
+      "definitions_cz": "Halák = \"hladký\" | 1) hora v jižním Judsku, která je jižní hranicí Jozuova dobytí; místo neznámé",
+      "lemma": "חָלָק",
+      "hebrew": "חלק",
+      "xlit": "Châlâq",
+      "translated": true
+    },
+    "H2511": {
+      "definitions_cz": "1) hladká",
+      "lemma": "חַלָּק",
+      "hebrew": "חלק",
+      "xlit": "challâq",
+      "translated": true
+    },
+    "H2512": {
+      "definitions_cz": "1) hladká",
+      "lemma": "חַלֻּק",
+      "hebrew": "חלק",
+      "xlit": "challuq",
+      "translated": true
+    },
+    "H2513": {
+      "definitions_cz": "1) část, parcela | 1a) země | 2) hladká část, hladkost, lichotka | 2a) hladkost, hladká část | 2b) kluzká místa | 2c) hladkost, lichocení",
+      "lemma": "חֶלְקָה",
+      "hebrew": "חלקה",
+      "xlit": "chelqâh",
+      "translated": true
+    },
+    "H2514": {
+      "definitions_cz": "1) lichotky, uhlazenost, jemné sliby",
+      "lemma": "חֲלַקָּה",
+      "hebrew": "חלקה",
+      "xlit": "chălaqqâh",
+      "translated": true
+    },
+    "H2515": {
+      "definitions_cz": "1) rozdělení, část, část",
+      "lemma": "חֲלֻקָּה",
+      "hebrew": "חלקה",
+      "xlit": "chăluqqâh",
+      "translated": true
+    },
+    "H2516": {
+      "definitions_cz": "Helekité = \"lichotivé\" | 1) potomci Helek",
+      "lemma": "חֶלְקִי",
+      "hebrew": "חלקי",
+      "xlit": "Chelqîy",
+      "translated": true
+    },
+    "H2517": {
+      "definitions_cz": "Helkai = \"my portion is Jehovah\" | 1) náčelník Meremothovy kněžské rodiny v době Joakima",
+      "lemma": "חֶלְקַי",
+      "hebrew": "חלקי",
+      "xlit": "Chelqay",
+      "translated": true
+    },
+    "H2518": {
+      "definitions_cz": "Hilkiáš = \"mým dílem je Jehova\" | 1) otec Eliakima, důstojník Ezechiášův | 2) velekněz za vlády Josiáše | 3) merarijský levita, syn Amzi | 4) další merarijský levita, 2. syn Hosa | 5) jeden z těch, kteří stáli po Ezrově pravici, když četl zákon, a pravděpodobně levita a kněz | 6) kněz Anatoth, otec proroka Jeremiáše | 7) otec Gemarjáše, který byl jedním ze Sedekiášových vyslanců v Babylóně",
+      "lemma": "חִלְקִיָּה",
+      "hebrew": "חלקיה",
+      "xlit": "Chilqîyâh",
+      "translated": true
+    },
+    "H2519": {
+      "definitions_cz": "1) lichotivost, kluzkost, jemné sliby, hladkost | 1a) kluzkost | 1b) dobré sliby",
+      "lemma": "חֲלַקְלַקָּה",
+      "hebrew": "חלקלקה",
+      "xlit": "chălaqlaqqâh",
+      "translated": true
     }
   }
 }
