@@ -72474,6 +72474,706 @@
       "hebrew": "פרס",
       "xlit": "Pâraç",
       "translated": true
+    },
+    "H6541": {
+      "definitions_cz": "1) kopyto | 1a) přežvýkavců | 1b) koní (nerozdělená kopyta)",
+      "lemma": "פַּרְסָה",
+      "hebrew": "פרסה",
+      "xlit": "parçâh",
+      "translated": true
+    },
+    "H6542": {
+      "definitions_cz": "Peršan = viz Persie \"čistá\" nebo \"skvělá\" | 1) obyvatel Persie",
+      "lemma": "פַּרְסִי",
+      "hebrew": "פרסי",
+      "xlit": "Parçîy",
+      "translated": true
+    },
+    "H6543": {
+      "definitions_cz": "Peršan = viz Persie \"čistá\" nebo \"skvělá\" | 1) obyvatel Persie",
+      "lemma": "פַּרְסִי",
+      "hebrew": "פרסי",
+      "xlit": "Parçîy",
+      "translated": true
+    },
+    "H6544": {
+      "definitions_cz": "1) vést, jednat jako vůdce | 2) pustit, pustit, ignorovat, natož | 2a) (Qal) | 2a1) pustit, pustit | 2a2) opustit, vyhnout se, zanedbávat | 2a3) uvolnit | 2b) (Niphal) uvolnit, uvolnit zádrž | 2c) (Hiphil) | 2c1) způsobit zdržení se | 2c2) ukázat nedostatek zdrženlivosti | 2c3) uvolnit zábrany",
+      "lemma": "פָּרַע",
+      "hebrew": "פרע",
+      "xlit": "pâraʻ",
+      "translated": true
+    },
+    "H6545": {
+      "definitions_cz": "1) vlasy, dlouhé vlasy (na hlavě), kadeře | 2) vedoucí",
+      "lemma": "פֶּרַע",
+      "hebrew": "פרע",
+      "xlit": "peraʻ",
+      "translated": true
+    },
+    "H6546": {
+      "definitions_cz": "1) vůdce, velitel",
+      "lemma": "פַּרְעָה",
+      "hebrew": "פרעה",
+      "xlit": "parʻâh",
+      "translated": true
+    },
+    "H6547": {
+      "definitions_cz": "Faraon = \"velký dům\" | 1) společný titul egyptského krále",
+      "lemma": "פַּרְעֹה",
+      "hebrew": "פרעה",
+      "xlit": "Parʻôh",
+      "translated": true
+    },
+    "H6548": {
+      "definitions_cz": "Pharaoh-hophra = \"velký dům zakrývající zlo\" ​​| 1) egyptský faraon v době dobytí Nabuchodonozorem",
+      "lemma": "פַּרְעֹה חׇפְרַע",
+      "hebrew": "פרעה חפרע",
+      "xlit": "Parʻôh Chophraʻ",
+      "translated": true
+    },
+    "H6549": {
+      "definitions_cz": "Faraon-necho = \"velký dům-je poražen\" | 1) egyptský faraon, který bojoval s judským králem Josiášem u Megida a zabil ho",
+      "lemma": "פַּרְעֹה נְכֹה",
+      "hebrew": "פרעה נכה",
+      "xlit": "Parʻôh Nᵉkôh",
+      "translated": true
+    },
+    "H6550": {
+      "definitions_cz": "1) blecha",
+      "lemma": "פַּרְעֹשׁ",
+      "hebrew": "פרעש",
+      "xlit": "parʻôsh",
+      "translated": true
+    },
+    "H6551": {
+      "definitions_cz": "Parosh nebo Pharosh = \"blecha\" | 1) předek rodiny, která se vrátila z exilu se Zerubábelem a 2. skupina, která se vrátila s Ezrou | 2) vůdce lidu, který podepsal smlouvu s Nehemjášem",
+      "lemma": "פַּרְעֹשׁ",
+      "hebrew": "פרעש",
+      "xlit": "Parʻôsh",
+      "translated": true
+    },
+    "H6552": {
+      "definitions_cz": "Pirathon = \"knížecí\" | 1) město v Efraim na hoře Amalekite | 1a) možná moderní 'Ferata' nacházející se 1,5 míle (2,5 km) jižně od Jaffy na silnici do Nábulusu",
+      "lemma": "פִּרְעָתוֹן",
+      "hebrew": "פרעתון",
+      "xlit": "Pirʻâthôwn",
+      "translated": true
+    },
+    "H6553": {
+      "definitions_cz": "Pirathonit = viz Pirathon \"knížecí\" | 1) obyvatel Pirathonu",
+      "lemma": "פִּרְעָתוֹנִי",
+      "hebrew": "פרעתוני",
+      "xlit": "Pirʻâthôwnîy",
+      "translated": true
+    },
+    "H6554": {
+      "definitions_cz": "Pharpar = \"rychlý\" | 1) potok v okrese Damašek ztotožněný s moderním „Awaj“; pramení na jihovýchodních svazích hory Hermon a vlévá se do nejjižnějšího jezera Damašku",
+      "lemma": "פַּרְפַּר",
+      "hebrew": "פרפר",
+      "xlit": "Parpar",
+      "translated": true
+    },
+    "H6555": {
+      "definitions_cz": "1) prorazit nebo dolů nebo přes, prasknout, prorazit | 1a) (Qal) | 1a1) vylomit nebo vybuchnout (z dělohy nebo uzavřeného prostoru) | 1a2) k proražení nebo prolomení proveďte průlom v | 1a3) proniknout do | 1a4) k otevření | 1a5) rozbít, rozbít na kusy | 1a6) vypuknout (násilně) na | 1a7) překročit (limity), zvýšit | 1a8) použít násilí | 1a9) k prasknutí 1a10) k šíření, distribuci | 1b) (Niphal) k proražení | 1c) (Pual) k členění | 1d) (Hithpael) se odtrhnout",
+      "lemma": "פָּרַץ",
+      "hebrew": "פרץ",
+      "xlit": "pârats",
+      "translated": true
+    },
+    "H6556": {
+      "definitions_cz": "1) porušení, mezera, propuknutí | 1a) propuknutí, výbuch | 1b) porušení | 1c) rozbitá stěna | 1d) výbuch (obr. Božího hněvu)",
+      "lemma": "פֶּרֶץ",
+      "hebrew": "פרץ",
+      "xlit": "perets",
+      "translated": true
+    },
+    "H6557": {
+      "definitions_cz": "Perez nebo Pharez = \"porušení\" | 1) syn dvojče se Zarah z Judska od Támar a předek dvou judských rodin, Hezronitů a Hamulitů; od Hezronitů vzešla královská linie Davida a Krista",
+      "lemma": "פֶּרֶץ",
+      "hebrew": "פרץ",
+      "xlit": "Perets",
+      "translated": true
+    },
+    "H6558": {
+      "definitions_cz": "Farzité = viz Pharez \"porušení\" | 1) potomci Fáreze, syna Judova, od Támar",
+      "lemma": "פַּרְצִי",
+      "hebrew": "פרצי",
+      "xlit": "Partsîy",
+      "translated": true
+    },
+    "H6559": {
+      "definitions_cz": "Perazim = \"porušuje\" | 1) hora v Palestině | 1a) možná stejný jako „Baal-perazim“, který byl dějištěm vítězství Davida nad Pelištejci v údolí Refaim, jižně od Jeruzaléma, na cestě do Betléma",
+      "lemma": "פְּרָצִים",
+      "hebrew": "פרצים",
+      "xlit": "pᵉrâtsîym",
+      "translated": true
+    },
+    "H6560": {
+      "definitions_cz": "Perez-uzza nebo Perezuzzah = \"porušení Uzzy\" | 1) místo, kde byl Uzza zabit Bohem za to, že se dotkl archy; nachází v blízkosti Jeruzaléma",
+      "lemma": "פֶּרֶץ עֻזָּא",
+      "hebrew": "פרץ עזא",
+      "xlit": "Perets ʻUzzâʼ",
+      "translated": true
+    },
+    "H6561": {
+      "definitions_cz": "1) odtrhnout nebo odtrhnout, odtrhnout, odtrhnout | 1a) (Qal) odtrhnout, vytrhnout, zachránit | 1b) (Piel) k odtržení | 1c) (Hithpael) odtrhnout se od sebe, být zlomen, být rozbit na kusy",
+      "lemma": "פָּרַק",
+      "hebrew": "פרק",
+      "xlit": "pâraq",
+      "translated": true
+    },
+    "H6562": {
+      "definitions_cz": "1) (P'al) odtrhnout, odlomit (hříchy)",
+      "lemma": "פְּרַק",
+      "hebrew": "פרק",
+      "xlit": "pᵉraq",
+      "translated": true
+    },
+    "H6563": {
+      "definitions_cz": "1) rozchod, vloupání, drancování, křižovatka",
+      "lemma": "פֶּרֶק",
+      "hebrew": "פרק",
+      "xlit": "pereq",
+      "translated": true
+    },
+    "H6564": {
+      "definitions_cz": "1) fragment, rozbitá drť, vývar",
+      "lemma": "פָּרָק",
+      "hebrew": "פרק",
+      "xlit": "pârâq",
+      "translated": true
+    },
+    "H6565": {
+      "definitions_cz": "1) zlomit, frustrovat | 1a) (Hiphil) | 1a1) porušit, porušit | 1a2) zmařit, učinit neúčinným | 1b) (Hophal) | 1b1) být frustrovaný | 1b2) k porušení | 1b3) rozbít | 1c) (Pilpel) rozbít na kousky, rozbít | 2) rozdělit, rozdělit | 2a) (Qal) rozdělit, prorazit | 2b) (Poel) rozdělit se | 2c) (Hithpoel) k rozštěpení, proražení",
+      "lemma": "פָּרַר",
+      "hebrew": "פרר",
+      "xlit": "pârar",
+      "translated": true
+    },
+    "H6566": {
+      "definitions_cz": "1) rozprostírat, roztahovat, natahovat, lámat na kousky | 1a) (Qal) | 1a1) pro roztažení, zobrazení | 1a2) rozložit | 1b) (Niphal) být rozptýlen, být rozložen | 1c) (Piel) | 1c1) rozložit | 1c1) rozptýlit",
+      "lemma": "פָּרַשׂ",
+      "hebrew": "פרש",
+      "xlit": "pâras",
+      "translated": true
+    },
+    "H6567": {
+      "definitions_cz": "1) rozlišovat, deklarovat, rozlišovat, oddělovat | 1a) (Qal) prohlásit, objasnit | 1b) (Pual) bude zřetelně deklarováno | 2) (Hiphil) propíchnout, bodnout | 3) (Niphal) rozptyl",
+      "lemma": "פָּרָשׁ",
+      "hebrew": "פרש",
+      "xlit": "pârâsh",
+      "translated": true
+    },
+    "H6568": {
+      "definitions_cz": "1) (Pael) specifikovat, rozlišovat, rozlišovat",
+      "lemma": "פְּרַשׁ",
+      "hebrew": "פרש",
+      "xlit": "pᵉrash",
+      "translated": true
+    },
+    "H6569": {
+      "definitions_cz": "1) trus, trus, vnitřnosti",
+      "lemma": "פֶּרֶשׁ",
+      "hebrew": "פרש",
+      "xlit": "peresh",
+      "translated": true
+    },
+    "H6570": {
+      "definitions_cz": "Peresh = \"hnůj\" | 1) syn Machira od jeho manželky Maachah",
+      "lemma": "פֶּרֶשׁ",
+      "hebrew": "פרש",
+      "xlit": "Peresh",
+      "translated": true
+    },
+    "H6571": {
+      "definitions_cz": "1) kůň, oř, válečný kůň | 2) jezdec",
+      "lemma": "פָּרָשׁ",
+      "hebrew": "פרש",
+      "xlit": "pârâsh",
+      "translated": true
+    },
+    "H6572": {
+      "definitions_cz": "1) kopírovat",
+      "lemma": "פַּרְשֶׁגֶן",
+      "hebrew": "פרשגן",
+      "xlit": "parshegen",
+      "translated": true
+    },
+    "H6573": {
+      "definitions_cz": "1) kopírovat",
+      "lemma": "פַּרְשֶׁגֶן",
+      "hebrew": "פרשגן",
+      "xlit": "parshegen",
+      "translated": true
+    },
+    "H6574": {
+      "definitions_cz": "1) exkrementy, výkaly | 1a) znamená pochybný",
+      "lemma": "פַּרְשְׁדֹן",
+      "hebrew": "פרשדן",
+      "xlit": "parshᵉdôn",
+      "translated": true
+    },
+    "H6575": {
+      "definitions_cz": "1) přesné vyjádření, prohlášení",
+      "lemma": "פָּרָשָׁה",
+      "hebrew": "פרשה",
+      "xlit": "pârâshâh",
+      "translated": true
+    },
+    "H6576": {
+      "definitions_cz": "1) (pilel) šíření (verbální)",
+      "lemma": "פַּרְשֵׁז",
+      "hebrew": "פרשז",
+      "xlit": "parshêz",
+      "translated": true
+    },
+    "H6577": {
+      "definitions_cz": "Paršandatha = \"dáno modlitbou\" | 1) jeden z 10 synů Hamana, nepřítele Mordechaje a královny Ester",
+      "lemma": "פַּרְשַׁנְדָּתָא",
+      "hebrew": "פרשנדתא",
+      "xlit": "Parshandâthâʼ",
+      "translated": true
+    },
+    "H6578": {
+      "definitions_cz": "Eufrat = \"plodnost\" | 1) největší a nejdelší řeka západní Asie; pramení ze dvou hlavních zdrojů v arménských horách a vlévá se do Perského zálivu",
+      "lemma": "פְּרָת",
+      "hebrew": "פרת",
+      "xlit": "Pᵉrâth",
+      "translated": true
+    },
+    "H6579": {
+      "definitions_cz": "1) šlechtic, šlechtic",
+      "lemma": "פַּרְתַּם",
+      "hebrew": "פרתם",
+      "xlit": "partam",
+      "translated": true
+    },
+    "H6580": {
+      "definitions_cz": "1) hloupost, slabost, hloupost",
+      "lemma": "פַּשׁ",
+      "hebrew": "פש",
+      "xlit": "pash",
+      "translated": true
+    },
+    "H6581": {
+      "definitions_cz": "1) (Qal) šířit",
+      "lemma": "פָּשָׂה",
+      "hebrew": "פשה",
+      "xlit": "pâsâh",
+      "translated": true
+    },
+    "H6582": {
+      "definitions_cz": "1) trhat, trhat, trhat na kusy | 1a) (Piel) roztrhat na kusy",
+      "lemma": "פָּשַׁח",
+      "hebrew": "פשח",
+      "xlit": "pâshach",
+      "translated": true
+    },
+    "H6583": {
+      "definitions_cz": "Pashur = \"svoboda\" | 1) kněz, syn Malchiášův a jeden z hlavních knížat za vlády judského krále Sedekjáše | 2) kněz, syn Immerův, vrchní správce chrámu, a ten, kdo za vlády judského krále Joakima udeřil a dal do skladu proroka Jeremiáše | 3) syn Malkiášova, otce Zachariáše a praotce Adaiáše, který dělal chrámovou práci v době Nehemjáše. Pravděpodobně stejné jako 1 | 4) otec Gedaliáše; pravděpodobně stejně jako 1 | 5) vedoucí a",
+      "lemma": "פַּשְׁחוּר",
+      "hebrew": "פשחור",
+      "xlit": "Pashchûwr",
+      "translated": true
+    },
+    "H6584": {
+      "definitions_cz": "1) svléknout se, napadnout, svléknout se, udělat úprk, nájezd, rozprostřít | 1a) (Qal) | 1a1) svléknout, odložit | 1a2) odložit (svůj úkryt), udělat čárku | 1b) (Piel) k odizolování | 1c) (Hiphil) | 1c1) na pás | 1c2) svléknout | 1c3) shodit | 1d) (Hithpael) svléknout se",
+      "lemma": "פָּשַׁט",
+      "hebrew": "פשט",
+      "xlit": "pâshaṭ",
+      "translated": true
+    },
+    "H6585": {
+      "definitions_cz": "1) (Qal) vykročit, pochodovat, vykročit",
+      "lemma": "פָּשַׂע",
+      "hebrew": "פשע",
+      "xlit": "pâsaʻ",
+      "translated": true
+    },
+    "H6586": {
+      "definitions_cz": "1) bouřit se, přestupovat, bouřit | 1a) (Qal) | 1a1) bouřit se, bouřit | 1a2) přestoupit | 1b) (Niphal), proti kterému se má vzbouřit",
+      "lemma": "פָּשַׁע",
+      "hebrew": "פשע",
+      "xlit": "pâshaʻ",
+      "translated": true
+    },
+    "H6587": {
+      "definitions_cz": "1) krok",
+      "lemma": "פֶּשַׂע",
+      "hebrew": "פשע",
+      "xlit": "pesaʻ",
+      "translated": true
+    },
+    "H6588": {
+      "definitions_cz": "1) přestupek, vzpoura | 1a1) prohřešky (proti jednotlivcům) | 1a2) přestoupení (národ proti národu) | 1a3) provinění (proti Bohu) | 1a3a) obecně | 1a3b), jak jej uznal hříšník | 1a3c) jak s tím Bůh nakládá | 1a3d) jak Bůh odpouští | 1a4) vina z přestupku | 1a5) trest za přestupek | 1a6) oběť za přestupek",
+      "lemma": "פֶּשַׁע",
+      "hebrew": "פשע",
+      "xlit": "peshaʻ",
+      "translated": true
+    },
+    "H6589": {
+      "definitions_cz": "1) rozdělit, otevřít dokořán | 1a) (Qal) | 1a1) otevřít dokořán | 1a2) být hovorný (úst) | 1b) (Piel) otevřít dokořán",
+      "lemma": "פָּשַׂק",
+      "hebrew": "פשק",
+      "xlit": "pâsaq",
+      "translated": true
+    },
+    "H6590": {
+      "definitions_cz": "1) vykládat | 1a) (P'al) vykládat | 1b) (Pael) vykládat",
+      "lemma": "פְּשַׁר",
+      "hebrew": "פשר",
+      "xlit": "pᵉshar",
+      "translated": true
+    },
+    "H6591": {
+      "definitions_cz": "1) výklad (snu)",
+      "lemma": "פְּשַׁר",
+      "hebrew": "פשר",
+      "xlit": "pᵉshar",
+      "translated": true
+    },
+    "H6592": {
+      "definitions_cz": "1) výklad, řešení",
+      "lemma": "פֵּשֶׁר",
+      "hebrew": "פשר",
+      "xlit": "pêsher",
+      "translated": true
+    },
+    "H6593": {
+      "definitions_cz": "1) len, len | 1a) vlákno používané jako materiál pro oděvy",
+      "lemma": "פִּשְׁתֶּה",
+      "hebrew": "פשתה",
+      "xlit": "pishteh",
+      "translated": true
+    },
+    "H6594": {
+      "definitions_cz": "1) len | 1a) len (rostliny) | 1b) jako knot pro lampu",
+      "lemma": "פִּשְׁתָּה",
+      "hebrew": "פשתה",
+      "xlit": "pishtâh",
+      "translated": true
+    },
+    "H6595": {
+      "definitions_cz": "1) zlomek, kousek, sousto (z chleba), kousek",
+      "lemma": "פַּת",
+      "hebrew": "פת",
+      "xlit": "path",
+      "translated": true
+    },
+    "H6596": {
+      "definitions_cz": "1) zásuvky, panty, tajné díly (myšleno pochybné) | 1a) zásuvky | 1b) tajné části",
+      "lemma": "פֹּת",
+      "hebrew": "פת",
+      "xlit": "pôth",
+      "translated": true
+    },
+    "H6597": {
+      "definitions_cz": "adv | 1) náhle, překvapivě | subst | 2) náhlost",
+      "lemma": "פִּתְאוֹם",
+      "hebrew": "פתאום",
+      "xlit": "pithʼôwm",
+      "translated": true
+    },
+    "H6598": {
+      "definitions_cz": "1) porce jídla pro krále, lahůdky",
+      "lemma": "פַּתְבַּג",
+      "hebrew": "פתבג",
+      "xlit": "pathbag",
+      "translated": true
+    },
+    "H6599": {
+      "definitions_cz": "1) edikt, dekret",
+      "lemma": "פִּתְגָּם",
+      "hebrew": "פתגם",
+      "xlit": "pithgâm",
+      "translated": true
+    },
+    "H6600": {
+      "definitions_cz": "1) příkaz, práce, záležitost, dekret | 1a) slovo, zpráva | 1b) vyhlášky",
+      "lemma": "פִּתְגָּם",
+      "hebrew": "פתגם",
+      "xlit": "pithgâm",
+      "translated": true
+    },
+    "H6601": {
+      "definitions_cz": "1) být prostorný, být otevřený, být široký | 1a) (Qal) být prostorný nebo otevřený nebo široký | 1b) (Hiphil) udělat prostorný, udělat otevřený | 2) být jednoduchý, lákat, klamat, přesvědčovat | 2a) (Qal) | 2a1) být otevřený, být jednoduchý, být naivní | 2a2) nechat se nalákat, nechat se oklamat | 2b) (Niphal) být oklamán, být důvěřivý | 2c) (Piel) | 2c) (Piel) | 2c1) přesvědčit, svést | 2c2) oklamat | 2d) (Pual) | 2d1) nechat se přesvědčit | 2d2) být oklamán",
+      "lemma": "פָּתָה",
+      "hebrew": "פתה",
+      "xlit": "pâthâh",
+      "translated": true
+    },
+    "H6602": {
+      "definitions_cz": "Pethuel = \"vidění Boha\" | 1) otec proroka Joela",
+      "lemma": "פְּתוּאֵל",
+      "hebrew": "פתואל",
+      "xlit": "Pᵉthûwʼêl",
+      "translated": true
+    },
+    "H6603": {
+      "definitions_cz": "1) rytí, řezbářství",
+      "lemma": "פִּתּוּחַ",
+      "hebrew": "פתוח",
+      "xlit": "pittûwach",
+      "translated": true
+    },
+    "H6604": {
+      "definitions_cz": "Pethor = \"věštec\" | 1) město Mezopotámie a domov Baláma; umístěný na řece; místo neznámé",
+      "lemma": "פְּתוֹר",
+      "hebrew": "פתור",
+      "xlit": "Pᵉthôwr",
+      "translated": true
+    },
+    "H6605": {
+      "definitions_cz": "1) otevřít | 1a) (Qal) otevřít | 1b) (Niphal) otevřít, uvolnit, otevřít | 1c) (Piel) | 1c1) zdarma | 1c2) uvolnit | 1c3) otevřít se, otevřít se | 1d) (Hithpael) ztratit se | 2) vyřezávat, ryt | 2a) (Piel) k rytí | 2b) (Pual) k vyrytí",
+      "lemma": "פָּתַח",
+      "hebrew": "פתח",
+      "xlit": "pâthach",
+      "translated": true
+    },
+    "H6606": {
+      "definitions_cz": "1) otevřít | 1a) (P'il) otevřít",
+      "lemma": "פְּתַח",
+      "hebrew": "פתח",
+      "xlit": "pᵉthach",
+      "translated": true
+    },
+    "H6607": {
+      "definitions_cz": "1) otvor, dveře, vchod",
+      "lemma": "פֶּתַח",
+      "hebrew": "פתח",
+      "xlit": "pethach",
+      "translated": true
+    },
+    "H6608": {
+      "definitions_cz": "1) otevírání, rozkládání, vchod, dveře",
+      "lemma": "פֵּתַח",
+      "hebrew": "פתח",
+      "xlit": "pêthach",
+      "translated": true
+    },
+    "H6609": {
+      "definitions_cz": "1) tasený meč, meč",
+      "lemma": "פְּתִחָה",
+      "hebrew": "פתחה",
+      "xlit": "pᵉthichâh",
+      "translated": true
+    },
+    "H6610": {
+      "definitions_cz": "1) otevírání",
+      "lemma": "פִּתְחוֹן",
+      "hebrew": "פתחון",
+      "xlit": "pithchôwn",
+      "translated": true
+    },
+    "H6611": {
+      "definitions_cz": "Pethahiah = \"osvobozen Jehovou\" | 1) kněz, vedoucí 19. kursu, v době Davidově | 2) Levita a vracející se exulant, který se oženil s cizí manželkou; pravděpodobně stejně jako 3 | 3) Levita, který pomáhal vést ve zpovědi lidu v době Ezdráše; pravděpodobně stejně jako 2 | 4) syn Mešezabeelův, potomek Zeracha, syna Judova; zástupcem krále ve všech záležitostech týkajících se lidu",
+      "lemma": "פְּתַחְיָה",
+      "hebrew": "פתחיה",
+      "xlit": "Pᵉthachyâh",
+      "translated": true
+    },
+    "H6612": {
+      "definitions_cz": "n f | 1) jednoduchost, naivita | adj | 2) jednoduchý, pošetilý, otevřený",
+      "lemma": "פְּתִי",
+      "hebrew": "פתי",
+      "xlit": "pᵉthîy",
+      "translated": true
+    },
+    "H6613": {
+      "definitions_cz": "1) šířka, šířka",
+      "lemma": "פְּתַי",
+      "hebrew": "פתי",
+      "xlit": "pᵉthay",
+      "translated": true
+    },
+    "H6614": {
+      "definitions_cz": "1) bohatý nebo drahý župan",
+      "lemma": "פְּתִיגִיל",
+      "hebrew": "פתיגיל",
+      "xlit": "pᵉthîygîyl",
+      "translated": true
+    },
+    "H6615": {
+      "definitions_cz": "1) jednoduchost, naivita",
+      "lemma": "פְּתַיּוּת",
+      "hebrew": "פתיות",
+      "xlit": "pᵉthayûwth",
+      "translated": true
+    },
+    "H6616": {
+      "definitions_cz": "1) šňůra, závit (kroucená)",
+      "lemma": "פָּתִיל",
+      "hebrew": "פתיל",
+      "xlit": "pâthîyl",
+      "translated": true
+    },
+    "H6617": {
+      "definitions_cz": "1) kroutit | 1a) (Niphal) | 1a1) ke zkroucení | 1a2) zápasit | 1b) (Hithpael) ke zkroucení",
+      "lemma": "פָּתַל",
+      "hebrew": "פתל",
+      "xlit": "pâthal",
+      "translated": true
+    },
+    "H6618": {
+      "definitions_cz": "1) zkroucený, klikatý",
+      "lemma": "פְּתַלְתֹּל",
+      "hebrew": "פתלתל",
+      "xlit": "pᵉthaltôl",
+      "translated": true
+    },
+    "H6619": {
+      "definitions_cz": "Pithom = \"město spravedlnosti\" | 1) jedno ze skladišť, které faraon nechal postavit Izraelity",
+      "lemma": "פִּתֹם",
+      "hebrew": "פתם",
+      "xlit": "Pithôm",
+      "translated": true
+    },
+    "H6620": {
+      "definitions_cz": "1) had, jedovatý had | 1a) možná kobra, zmije nebo zmije",
+      "lemma": "פֶּתֶן",
+      "hebrew": "פתן",
+      "xlit": "pethen",
+      "translated": true
+    },
+    "H6621": {
+      "definitions_cz": "1) náhlost, v okamžiku",
+      "lemma": "פֶּתַע",
+      "hebrew": "פתע",
+      "xlit": "pethaʻ",
+      "translated": true
+    },
+    "H6622": {
+      "definitions_cz": "1) (Qal) vykládat (sny)",
+      "lemma": "פָּתַר",
+      "hebrew": "פתר",
+      "xlit": "pâthar",
+      "translated": true
+    },
+    "H6623": {
+      "definitions_cz": "1) výklad",
+      "lemma": "פִּתְרוֹן",
+      "hebrew": "פתרון",
+      "xlit": "pithrôwn",
+      "translated": true
+    },
+    "H6624": {
+      "definitions_cz": "Pathros = \"region jihu\" | 1) část Egypta a domovská země národa Pathrusim; pravděpodobně leží v horním Egyptě",
+      "lemma": "פַּתְרוֹס",
+      "hebrew": "פתרוס",
+      "xlit": "Pathrôwç",
+      "translated": true
+    },
+    "H6625": {
+      "definitions_cz": "Pathrusim = viz Pathros \"kraj jihu\" | 1) obyvatelé Pathrosu",
+      "lemma": "פַּתְרֻסִי",
+      "hebrew": "פתרסי",
+      "xlit": "Pathruçîy",
+      "translated": true
+    },
+    "H6626": {
+      "definitions_cz": "1) rozpadnout se, rozpadnout se | 1a) (Qal) se rozpadat",
+      "lemma": "פָּתַת",
+      "hebrew": "פתת",
+      "xlit": "pâthath",
+      "translated": true
+    },
+    "H6627": {
+      "definitions_cz": "1) špína, lidské výkaly, výkaly, výkaly",
+      "lemma": "צָאָה",
+      "hebrew": "צאה",
+      "xlit": "tsâʼâh",
+      "translated": true
+    },
+    "H6628": {
+      "definitions_cz": "1) druh lotosu | 1a) trnitý lotosový keř",
+      "lemma": "צֶאֶל",
+      "hebrew": "צאל",
+      "xlit": "tseʼel",
+      "translated": true
+    },
+    "H6629": {
+      "definitions_cz": "1) malý skot, ovce, ovce a kozy, stádo, stáda | 1a) malý skot (obvykle ovce a kozy) | 1b) z množství (podobenství) | 1c) množství (metafora)",
+      "lemma": "צֹאן",
+      "hebrew": "צאן",
+      "xlit": "tsôʼn",
+      "translated": true
+    },
+    "H6630": {
+      "definitions_cz": "Zaanan = \"špičatý\" | 1) město v judské nížině",
+      "lemma": "צַאֲנָן",
+      "hebrew": "צאנן",
+      "xlit": "Tsaʼănân",
+      "translated": true
+    },
+    "H6631": {
+      "definitions_cz": "1) potomstvo, produkce, vydání | 1a) potomstvo (mužů) | 1b) produkce (ze země) | 1c) potomci (metaforicky)",
+      "lemma": "צֶאֱצָא",
+      "hebrew": "צאצא",
+      "xlit": "tseʼĕtsâʼ",
+      "translated": true
+    },
+    "H6632": {
+      "definitions_cz": "1) přepravní vozidlo, stelivo, krytý vůz | 2) nečistá ještěrka | 2a) snad želva | 2b) snad vyhynulý živočich, přesný význam neznámý",
+      "lemma": "צָב",
+      "hebrew": "צב",
+      "xlit": "tsâb",
+      "translated": true
+    },
+    "H6633": {
+      "definitions_cz": "1) jít vpřed, vést válku, bojovat, sloužit | 1a) (Qal) | 1a1) vést válku, bojovat, jít do války | 1a2) sloužit (u posvátného stanu) | 1b) (Hiphil) přimět vyjít, shromáždit se",
+      "lemma": "צָבָא",
+      "hebrew": "צבא",
+      "xlit": "tsâbâʼ",
+      "translated": true
+    },
+    "H6634": {
+      "definitions_cz": "1) toužit, být nakloněn, být ochotný, být potěšen | 1a) (P'al) | 1a1) toužit | 1a2) být potěšen | 1a3) chtít (bez překážek) (Boží)",
+      "lemma": "צְבָא",
+      "hebrew": "צבא",
+      "xlit": "tsᵉbâʼ",
+      "translated": true
+    },
+    "H6635": {
+      "definitions_cz": "1) to, co vychází, armáda, válka, válčení, hostitel | 1a) armáda, hostitel | 1a1) hostitel (organizované armády) | 1a2) hostitel (andělů) | 1a3) slunce, měsíce a hvězd | 1a4) celého stvoření | 1b) válka, válčení, služba, jít do války | 1c) služba",
+      "lemma": "צָבָא",
+      "hebrew": "צבא",
+      "xlit": "tsâbâʼ",
+      "translated": true
+    },
+    "H6636": {
+      "definitions_cz": "Zeboim nebo Zeboiim = \"gazely\" | 1) jedno z 5 měst v rovině, která zahrnovala Sodomu a Gomoru",
+      "lemma": "צְבֹאִים",
+      "hebrew": "צבאים",
+      "xlit": "Tsᵉbôʼîym",
+      "translated": true
+    },
+    "H6637": {
+      "definitions_cz": "Zobebah = \"pomalý\" | 1) syn Coz z kmene Juda",
+      "lemma": "צֹבֵבָה",
+      "hebrew": "צבבה",
+      "xlit": "Tsôbêbâh",
+      "translated": true
+    },
+    "H6638": {
+      "definitions_cz": "1) bobtnat, bobtnat | 1a) (Qal) bobtnat (břicha cizoložnice) | 1b) (Hiphil) způsobit nafouknutí (břicha cizoložnice)",
+      "lemma": "צָבָה",
+      "hebrew": "צבה",
+      "xlit": "tsâbâh",
+      "translated": true
+    },
+    "H6639": {
+      "definitions_cz": "1) otok, oteklý",
+      "lemma": "צָבֶה",
+      "hebrew": "צבה",
+      "xlit": "tsâbeh",
+      "translated": true
+    },
+    "H6640": {
+      "definitions_cz": "1) věc, cokoliv, hmota | 1a) zjevně požadovaná věc | 1b) jako věc určení",
+      "lemma": "צְבוּ",
+      "hebrew": "צבו",
+      "xlit": "tsᵉbûw",
+      "translated": true
     }
   }
 }
