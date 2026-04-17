@@ -74462,6 +74462,356 @@
       "hebrew": "צפה",
       "xlit": "tsâphâh",
       "translated": true
+    },
+    "H6825": {
+      "definitions_cz": "Zepho nebo Zephi = \"hlídková věž\" | 1) syn Elifazův a vnuk Ezau a jeden z náčelníků Edomitů",
+      "lemma": "צְפוֹ",
+      "hebrew": "צפו",
+      "xlit": "Tsᵉphôw",
+      "translated": true
+    },
+    "H6826": {
+      "definitions_cz": "1) pokovování (kovu), pokovování",
+      "lemma": "צִפּוּי",
+      "hebrew": "צפוי",
+      "xlit": "tsippûwy",
+      "translated": true
+    },
+    "H6827": {
+      "definitions_cz": "Zephon = \"poklad\" | 1) syn Gádův a předek rodu Zefonitů",
+      "lemma": "צְפוֹן",
+      "hebrew": "צפון",
+      "xlit": "Tsᵉphôwn",
+      "translated": true
+    },
+    "H6828": {
+      "definitions_cz": "1) na sever (od směru), na sever | 1a) sever | 1b) na sever",
+      "lemma": "צָפוֹן",
+      "hebrew": "צפון",
+      "xlit": "tsâphôwn",
+      "translated": true
+    },
+    "H6829": {
+      "definitions_cz": "Zaphon = \"sever\" | 1) město v Gadu východně od Galilejského jezera na východním břehu Jordánu",
+      "lemma": "צָפוֹן",
+      "hebrew": "צפון",
+      "xlit": "Tsâphôwn",
+      "translated": true
+    },
+    "H6830": {
+      "definitions_cz": "adj | 1) severní | n m | 2) severní, severní (subst)",
+      "lemma": "צְפוֹנִי",
+      "hebrew": "צפוני",
+      "xlit": "tsᵉphôwnîy",
+      "translated": true
+    },
+    "H6831": {
+      "definitions_cz": "Zefonité = viz Zefon \"poklad\" | 1) potomci Sefona, syna Gádova",
+      "lemma": "צְפוֹנִי",
+      "hebrew": "צפוני",
+      "xlit": "Tsᵉphôwnîy",
+      "translated": true
+    },
+    "H6832": {
+      "definitions_cz": "1) hnůj (z dobytka), hnůj, dobytčí hnůj",
+      "lemma": "צְפוּעַ",
+      "hebrew": "צפוע",
+      "xlit": "tsᵉphûwaʻ",
+      "translated": true
+    },
+    "H6833": {
+      "definitions_cz": "1) pták, drůbež | 1a) pták (jednotné číslo) | 1b) ptáci (sbírka)",
+      "lemma": "צִפּוֹר",
+      "hebrew": "צפור",
+      "xlit": "tsippôwr",
+      "translated": true
+    },
+    "H6834": {
+      "definitions_cz": "Zippor = \"vrabec\" | 1) otec Moábského krále Balaka v době exodu",
+      "lemma": "צִפּוֹר",
+      "hebrew": "צפור",
+      "xlit": "Tsippôwr",
+      "translated": true
+    },
+    "H6835": {
+      "definitions_cz": "1) sklenice, džbán (na tekutiny)",
+      "lemma": "צַפַּחַת",
+      "hebrew": "צפחת",
+      "xlit": "tsappachath",
+      "translated": true
+    },
+    "H6836": {
+      "definitions_cz": "1) rozhledna, rozhledna, strážní věž",
+      "lemma": "צְפִיָּה",
+      "hebrew": "צפיה",
+      "xlit": "tsᵉphîyâh",
+      "translated": true
+    },
+    "H6837": {
+      "definitions_cz": "Ziphion = \"rozhledna\" | 1) syn Gádův a předek rodu Zefonitů | 1a) také „zephon“",
+      "lemma": "צִפְיוֹן",
+      "hebrew": "צפיון",
+      "xlit": "Tsiphyôwn",
+      "translated": true
+    },
+    "H6838": {
+      "definitions_cz": "1) plochý dort, oplatka",
+      "lemma": "צַפִּיחִת",
+      "hebrew": "צפיחת",
+      "xlit": "tsappîychith",
+      "translated": true
+    },
+    "H6839": {
+      "definitions_cz": "Zophim = \"pozorovatelé\" | 1) místo na vrcholu Pisgah nebo blízko něj, místa Balámových věštců",
+      "lemma": "צֹפִים",
+      "hebrew": "צפים",
+      "xlit": "Tsôphîym",
+      "translated": true
+    },
+    "H6840": {
+      "definitions_cz": "1) poklad, skrytá věc",
+      "lemma": "צָפִין",
+      "hebrew": "צפין",
+      "xlit": "tsâphîyn",
+      "translated": true
+    },
+    "H6841": {
+      "definitions_cz": "1) koza",
+      "lemma": "צְפִיר",
+      "hebrew": "צפיר",
+      "xlit": "tsᵉphîyr",
+      "translated": true
+    },
+    "H6842": {
+      "definitions_cz": "1) koza",
+      "lemma": "צָפִיר",
+      "hebrew": "צפיר",
+      "xlit": "tsâphîyr",
+      "translated": true
+    },
+    "H6843": {
+      "definitions_cz": "1) cop, věnec, věnec, koruna | 1a) pletenec, korunka, diadém",
+      "lemma": "צְפִירָה",
+      "hebrew": "צפירה",
+      "xlit": "tsᵉphîyrâh",
+      "translated": true
+    },
+    "H6844": {
+      "definitions_cz": "1) koberec, koberec | 2) hodinky (CLBL).",
+      "lemma": "צָפִית",
+      "hebrew": "צפית",
+      "xlit": "tsâphîyth",
+      "translated": true
+    },
+    "H6845": {
+      "definitions_cz": "1) schovat, poklad, poklad nebo uložení | 1a)(Qal) | 1a1) schovat, poklad, poklad nahoru | 1a2) ležet skrytý, číhat | 1b) (Niphal) schovat, uložit | 1c) (Hiphil) schovat se, schovat se před objevením",
+      "lemma": "צָפַן",
+      "hebrew": "צפן",
+      "xlit": "tsâphan",
+      "translated": true
+    },
+    "H6846": {
+      "definitions_cz": "Sofoniáš = \"Jehova si cenil\" | 1) 9. v pořadí z 12 menších proroků; potomek judského krále Ezechiáše a proroka v době judského krále Josiáše | 2) syn Maaseiášův a druhý kněz za vlády judského krále Sidkijáše; následoval Jehojada a chrámový důstojník; zabit v Riblah při dobytí Jeruzaléma | 3) otec Josiáše a Hena za časů proroka Zachariáše | 4) Levita",
+      "lemma": "צְפַנְיָה",
+      "hebrew": "צפניה",
+      "xlit": "Tsᵉphanyâh",
+      "translated": true
+    },
+    "H6847": {
+      "definitions_cz": "Zaphnath-paaneah = \"poklad slavného odpočinku\" | 1) jméno, které dal faraon Josefovi",
+      "lemma": "צׇפְנַת פַּעְנֵחַ",
+      "hebrew": "צפנת פענח",
+      "xlit": "Tsophnath Paʻnêach",
+      "translated": true
+    },
+    "H6848": {
+      "definitions_cz": "1) jedovatý had | 1a) užovka zmije nebo zmije",
+      "lemma": "צֶפַע",
+      "hebrew": "צפע",
+      "xlit": "tsephaʻ",
+      "translated": true
+    },
+    "H6849": {
+      "definitions_cz": "1) odnož, list, výhonek | 1a) znamená pochybný",
+      "lemma": "צְפִעָה",
+      "hebrew": "צפעה",
+      "xlit": "tsᵉphiʻâh",
+      "translated": true
+    },
+    "H6850": {
+      "definitions_cz": "1) (Pilpel) cvrlikat, koukat | 1a) ptáků | 1b) duchů",
+      "lemma": "צָפַף",
+      "hebrew": "צפף",
+      "xlit": "tsâphaph",
+      "translated": true
+    },
+    "H6851": {
+      "definitions_cz": "1) druh vrby, vrba",
+      "lemma": "צַפְצָפָה",
+      "hebrew": "צפצפה",
+      "xlit": "tsaphtsâphâh",
+      "translated": true
+    },
+    "H6852": {
+      "definitions_cz": "1) (Qal) jít brzy, odjet brzy | 1a) znamená pochybný",
+      "lemma": "צָפַר",
+      "hebrew": "צפר",
+      "xlit": "tsâphar",
+      "translated": true
+    },
+    "H6853": {
+      "definitions_cz": "1) pták",
+      "lemma": "צְפַר",
+      "hebrew": "צפר",
+      "xlit": "tsᵉphar",
+      "translated": true
+    },
+    "H6854": {
+      "definitions_cz": "1) žáby",
+      "lemma": "צְפַרְדֵּעַ",
+      "hebrew": "צפרדע",
+      "xlit": "tsᵉphardêaʻ",
+      "translated": true
+    },
+    "H6855": {
+      "definitions_cz": "Zipporah = \"pták\" | 1) dcera Reuela nebo Jetra, manželka Mojžíše a matka Geršoma a Eliezera",
+      "lemma": "צִפֹּרָה",
+      "hebrew": "צפרה",
+      "xlit": "Tsippôrâh",
+      "translated": true
+    },
+    "H6856": {
+      "definitions_cz": "1) nehet, hrot pera | 1a) nehet | 1b) bod (kosoštvorce)",
+      "lemma": "צִפֹּרֶן",
+      "hebrew": "צפרן",
+      "xlit": "tsippôren",
+      "translated": true
+    },
+    "H6857": {
+      "definitions_cz": "Zephath = \"hlídková věž\" | 1) kananejské město v Simeonu, které Izraelci přejmenovali na Hormu",
+      "lemma": "צְפַת",
+      "hebrew": "צפת",
+      "xlit": "Tsᵉphath",
+      "translated": true
+    },
+    "H6858": {
+      "definitions_cz": "1) základní kapitál (pilíře)",
+      "lemma": "צֶפֶת",
+      "hebrew": "צפת",
+      "xlit": "tsepheth",
+      "translated": true
+    },
+    "H6859": {
+      "definitions_cz": "Zephatha = \"strážní věž\" | 1) údolí v západním Judsku",
+      "lemma": "צְפָתָה",
+      "hebrew": "צפתה",
+      "xlit": "Tsᵉphâthâh",
+      "translated": true
+    },
+    "H6860": {
+      "definitions_cz": "Ziklag = \"navíjení\" | 1) město na jihu Judska, později přidělené Simeonovi; známý tím, že to bylo město Davidovo, které mu dal král Achiš z Gatu, a jeho sídlo, když se k němu připojilo mnoho jeho mocných válečníků a když dostal zprávu o smrti Saula.",
+      "lemma": "צִקְלַג",
+      "hebrew": "צקלג",
+      "xlit": "Tsiqlag",
+      "translated": true
+    },
+    "H6861": {
+      "definitions_cz": "1) pytel, pytel | 1a) znamená pochybný",
+      "lemma": "צִקְלֹן",
+      "hebrew": "צקלן",
+      "xlit": "tsiqlôn",
+      "translated": true
+    },
+    "H6862": {
+      "definitions_cz": "1) úzké, těsné | 2) úžiny, tíseň | 3) protivník, nepřítel, nepřítel, utlačovatel | 4) tvrdý oblázek, pazourek",
+      "lemma": "צַר",
+      "hebrew": "צר",
+      "xlit": "tsar",
+      "translated": true
+    },
+    "H6863": {
+      "definitions_cz": "Zer = \"pazourek\" | 1) opevněné město v Neftali, pravděpodobně v oblasti Galilejského jezera",
+      "lemma": "צֵר",
+      "hebrew": "צר",
+      "xlit": "Tsêr",
+      "translated": true
+    },
+    "H6864": {
+      "definitions_cz": "1) pazourek, tvrdý oblázek | 1a) používá se jako nůž",
+      "lemma": "צֹר",
+      "hebrew": "צר",
+      "xlit": "tsôr",
+      "translated": true
+    },
+    "H6865": {
+      "definitions_cz": "Pneumatika nebo Tyrus = \"kámen\" | 1) fénické město na pobřeží Středozemního moře",
+      "lemma": "צֹר",
+      "hebrew": "צר",
+      "xlit": "Tsôr",
+      "translated": true
+    },
+    "H6866": {
+      "definitions_cz": "1) hořet, pálit | 1a) (Niphal) k popálení",
+      "lemma": "צָרַב",
+      "hebrew": "צרב",
+      "xlit": "tsârab",
+      "translated": true
+    },
+    "H6867": {
+      "definitions_cz": "n f | 1) strup, jizva po boláku | adj | 2) pálení, pálení",
+      "lemma": "צָרֶבֶת",
+      "hebrew": "צרבת",
+      "xlit": "tsârebeth",
+      "translated": true
+    },
+    "H6868": {
+      "definitions_cz": "Zereda nebo Zeredathah = \"pevnost\" | 1) město nebo území v Manasse a domov Jeroboáma",
+      "lemma": "צְרֵדָה",
+      "hebrew": "צרדה",
+      "xlit": "Tsᵉrêdâh",
+      "translated": true
+    },
+    "H6869": {
+      "definitions_cz": "1) úžiny, nouze, potíže | 2) vexer, soupeřící manželka",
+      "lemma": "צָרָה",
+      "hebrew": "צרה",
+      "xlit": "tsârâh",
+      "translated": true
+    },
+    "H6870": {
+      "definitions_cz": "Zeruja = \"balzám\" | 1) sestra Davida a matka 3 předních hrdinů Davidovy armády - Abishai, Joab a Asahel",
+      "lemma": "צְרוּיָה",
+      "hebrew": "צרויה",
+      "xlit": "Tsᵉrûwyâh",
+      "translated": true
+    },
+    "H6871": {
+      "definitions_cz": "Zeruah = \"plná prsa\" | 1) manželka Nebata a matka krále Jeroboama I. ze severního království Izraele",
+      "lemma": "צְרוּעָה",
+      "hebrew": "צרועה",
+      "xlit": "Tsᵉrûwʻâh",
+      "translated": true
+    },
+    "H6872": {
+      "definitions_cz": "1) svazek, balík, taška, taška (zabalené) | 2) oblázek",
+      "lemma": "צְרוֹר",
+      "hebrew": "צרור",
+      "xlit": "tsᵉrôwr",
+      "translated": true
+    },
+    "H6873": {
+      "definitions_cz": "1) plakat, řvát, vydávat ječivý nebo jasný zvuk | 1a) (Qal) řvát | 1b) (Hiphil) vydat řev, křičet (bojový pokřik)",
+      "lemma": "צָרַח",
+      "hebrew": "צרח",
+      "xlit": "tsârach",
+      "translated": true
+    },
+    "H6874": {
+      "definitions_cz": "Zeri = \"postaveno\" | 1) syn Jeduthunův a hudebník na dvoře Davidově",
+      "lemma": "צְרִי",
+      "hebrew": "צרי",
+      "xlit": "Tsᵉrîy",
+      "translated": true
     }
   }
 }
