@@ -57291,6 +57291,706 @@
       "hebrew": "מכס",
       "xlit": "mekeç",
       "translated": true
+    },
+    "H4372": {
+      "definitions_cz": "1) krytina | 1a) zakrytí (archy) | 1b) pokrývka (kůží svatostánku)",
+      "lemma": "מִכְסֶה",
+      "hebrew": "מכסה",
+      "xlit": "mikçeh",
+      "translated": true
+    },
+    "H4373": {
+      "definitions_cz": "1) výpočet | 1a) číslo | 1b) hodnota, ocenění",
+      "lemma": "מִכְסָה",
+      "hebrew": "מכסה",
+      "xlit": "mikçâh",
+      "translated": true
+    },
+    "H4374": {
+      "definitions_cz": "1) krycí, to, co kryje",
+      "lemma": "מְכַסֶּה",
+      "hebrew": "מכסה",
+      "xlit": "mᵉkaççeh",
+      "translated": true
+    },
+    "H4375": {
+      "definitions_cz": "Machpelah = \"dvojitá\" nebo \"porce\" | 1) the location of a burial cave for the patriarchs,  near Hebron",
+      "lemma": "מַכְפֵּלָה",
+      "hebrew": "מכפלה",
+      "xlit": "Makpêlâh",
+      "translated": true
+    },
+    "H4376": {
+      "definitions_cz": "1) prodat | 1a) (Qal) | 1a1) prodat | 1a2) prodávající (příčestí) | 1b) (Niphal) | 1b1) k prodeji | 1b2) prodat se | 1b3) bude vydán smrti | 1c) (Hithpael) prodat se",
+      "lemma": "מָכַר",
+      "hebrew": "מכר",
+      "xlit": "mâkar",
+      "translated": true
+    },
+    "H4377": {
+      "definitions_cz": "1) zboží, hodnota, cena",
+      "lemma": "מֶכֶר",
+      "hebrew": "מכר",
+      "xlit": "meker",
+      "translated": true
+    },
+    "H4378": {
+      "definitions_cz": "1) známý, kamarád",
+      "lemma": "מַכָּר",
+      "hebrew": "מכר",
+      "xlit": "makkâr",
+      "translated": true
+    },
+    "H4379": {
+      "definitions_cz": "1) jáma, solná jáma | 1a) znamená nejistý",
+      "lemma": "מִכְרֶה",
+      "hebrew": "מכרה",
+      "xlit": "mikreh",
+      "translated": true
+    },
+    "H4380": {
+      "definitions_cz": "1) meče, zbraně, zařízení | 1a) znamená pochybný",
+      "lemma": "מְכֵרָה",
+      "hebrew": "מכרה",
+      "xlit": "mᵉkêrâh",
+      "translated": true
+    },
+    "H4381": {
+      "definitions_cz": "Michri = \"hodný ceny\" | 1) praotec Ely, jedné z hlav Benjaminových",
+      "lemma": "מִכְרִי",
+      "hebrew": "מכרי",
+      "xlit": "Mikrîy",
+      "translated": true
+    },
+    "H4382": {
+      "definitions_cz": "Mecherathite = \"on z vykopaného\" nebo \"on z kopacího nástroje\" | 1) rodák nebo obyvatel Mecherahu",
+      "lemma": "מְכֵרָתִי",
+      "hebrew": "מכרתי",
+      "xlit": "Mᵉkêrâthîy",
+      "translated": true
+    },
+    "H4383": {
+      "definitions_cz": "1) úraz, prostředek nebo příležitost úrazu, kámen úrazu | 1a) klopýtnutí, pád | 1b) prostředek nebo příležitost úrazu, kámen úrazu",
+      "lemma": "מִכְשׁוֹל",
+      "hebrew": "מכשול",
+      "xlit": "mikshôwl",
+      "translated": true
+    },
+    "H4384": {
+      "definitions_cz": "1) svržená masa, kámen úrazu, něco svrženého, ​​úpadek, zmar | 1a) věc svržená (obraz království) | 1b) kámen úrazu (modly)",
+      "lemma": "מַכְשֵׁלָה",
+      "hebrew": "מכשלה",
+      "xlit": "makshêlâh",
+      "translated": true
+    },
+    "H4385": {
+      "definitions_cz": "1) psaní, věc psaná | 1a) rukopis | 1b) věc napsaná | 1c) psaní",
+      "lemma": "מִכְתָּב",
+      "hebrew": "מכתב",
+      "xlit": "miktâb",
+      "translated": true
+    },
+    "H4386": {
+      "definitions_cz": "1) drcené nebo rozdrcené úlomky",
+      "lemma": "מְכִתָּה",
+      "hebrew": "מכתה",
+      "xlit": "mᵉkittâh",
+      "translated": true
+    },
+    "H4387": {
+      "definitions_cz": "1) michtam | 1a) odborný termín vyskytující se v názvech žalmů | 1b) znamená nejistý",
+      "lemma": "מִכְתָּם",
+      "hebrew": "מכתם",
+      "xlit": "miktâm",
+      "translated": true
+    },
+    "H4388": {
+      "definitions_cz": "1) malta",
+      "lemma": "מַכְתֵּשׁ",
+      "hebrew": "מכתש",
+      "xlit": "maktêsh",
+      "translated": true
+    },
+    "H4389": {
+      "definitions_cz": "Maktesh = \"malta\" nebo \"hluboká prohlubeň\" | 1) prohlubeň nebo údolí zjevně v oblasti většího Jeruzaléma",
+      "lemma": "מַכְתֵּשׁ",
+      "hebrew": "מכתש",
+      "xlit": "Maktêsh",
+      "translated": true
+    },
+    "H4390": {
+      "definitions_cz": "1) vyplnit, být plný | 1a) (Qal) | 1a1) být plný | 1a1a) plnost, hojnost (příčestí) | 1a1b) být plný, být splněn, být ukončen | 1a2) zasvětit, naplnit ruku | 1b) (Niphal) | 1b1) být naplněn, být ozbrojen, být uspokojen | 1b2) být splněn, být ukončen | 1c) (Piel) | 1c1) vyplnit | 1c2) uspokojit | 1c3) splnit, splnit, dokončit | 1c4) pro potvrzení | 1d) (Pual) vyplní se | 1e) (Hithpael), aby se proti sobě postavili",
+      "lemma": "מָלֵא",
+      "hebrew": "מלא",
+      "xlit": "mâlêʼ",
+      "translated": true
+    },
+    "H4391": {
+      "definitions_cz": "1) vyplnit | 1a) (P'al) vyplnit | 1b) (Ithp'al) k vyplnění",
+      "lemma": "מְלָא",
+      "hebrew": "מלא",
+      "xlit": "mᵉlâʼ",
+      "translated": true
+    },
+    "H4392": {
+      "definitions_cz": "1) plný, plnost, to, co naplňuje | 1a) plně (adv)",
+      "lemma": "מָלֵא",
+      "hebrew": "מלא",
+      "xlit": "mâlêʼ",
+      "translated": true
+    },
+    "H4393": {
+      "definitions_cz": "1) plnost, to, co naplňuje | 1a) plnost, hrstka | 1b) hmotnost, množství | 1c) plnost, to, co naplňuje, celý obsah | 1d) plná délka, plná čára",
+      "lemma": "מְלֹא",
+      "hebrew": "מלא",
+      "xlit": "mᵉlôʼ",
+      "translated": true
+    },
+    "H4394": {
+      "definitions_cz": "1) nastavení, instalace | 1a) zasazení, kameny k zasazení | 1b) instalace (kněží)",
+      "lemma": "מִלֻּא",
+      "hebrew": "מלא",
+      "xlit": "milluʼ",
+      "translated": true
+    },
+    "H4395": {
+      "definitions_cz": "1) plnost, plná produkce",
+      "lemma": "מְלֵאָה",
+      "hebrew": "מלאה",
+      "xlit": "mᵉlêʼâh",
+      "translated": true
+    },
+    "H4396": {
+      "definitions_cz": "1) zasazení (klenotu)",
+      "lemma": "מִלֻּאָה",
+      "hebrew": "מלאה",
+      "xlit": "milluʼâh",
+      "translated": true
+    },
+    "H4397": {
+      "definitions_cz": "1) posel, zástupce | 1a) posel | 1b) anděl | 1c) theofanický anděl",
+      "lemma": "מֲלְאָךְ",
+      "hebrew": "מלאך",
+      "xlit": "mălʼâk",
+      "translated": true
+    },
+    "H4398": {
+      "definitions_cz": "1) anděl",
+      "lemma": "מַלְאַךְ",
+      "hebrew": "מלאך",
+      "xlit": "malʼak",
+      "translated": true
+    },
+    "H4399": {
+      "definitions_cz": "1) povolání, práce, podnikání | 1a) povolání, podnikání | 1b) majetek | 1c) práce (něco hotového nebo vyrobeného) | 1d) zpracování | 1e) služba, použití | 1f) veřejné podnikání | 1f1) politický | 1f2) náboženské",
+      "lemma": "מְלָאכָה",
+      "hebrew": "מלאכה",
+      "xlit": "mᵉlâʼkâh",
+      "translated": true
+    },
+    "H4400": {
+      "definitions_cz": "1) zpráva",
+      "lemma": "מַלְאֲכוּת",
+      "hebrew": "מלאכות",
+      "xlit": "malʼăkûwth",
+      "translated": true
+    },
+    "H4401": {
+      "definitions_cz": "Malachi = \"Můj posel\" | 1) prorok, který napsal poslední knihu Starého zákona; nic jiného není známo",
+      "lemma": "מַלְאָכִי",
+      "hebrew": "מלאכי",
+      "xlit": "Malʼâkîy",
+      "translated": true
+    },
+    "H4402": {
+      "definitions_cz": "1) plnost, nastavení, ohraničení, okraj | 1a) znamená pochybný",
+      "lemma": "מִלֵּאת",
+      "hebrew": "מלאת",
+      "xlit": "millêʼth",
+      "translated": true
+    },
+    "H4403": {
+      "definitions_cz": "1) oděv, oděv, roucha, oděv, oděv",
+      "lemma": "מַלְבּוּשׁ",
+      "hebrew": "מלבוש",
+      "xlit": "malbûwsh",
+      "translated": true
+    },
+    "H4404": {
+      "definitions_cz": "1) cihlová forma, cihlová pec, čtyřúhelník | 1a) cihlová forma, cihlářská pec | 1b) čtyřúhelník",
+      "lemma": "מַלְבֵּן",
+      "hebrew": "מלבן",
+      "xlit": "malbên",
+      "translated": true
+    },
+    "H4405": {
+      "definitions_cz": "1) slovo, řeč, výpověď",
+      "lemma": "מִלָּה",
+      "hebrew": "מלה",
+      "xlit": "millâh",
+      "translated": true
+    },
+    "H4406": {
+      "definitions_cz": "1) slovo, věc | 1a) slovo, výrok, příkaz | 1b) věc, záležitost, záležitost",
+      "lemma": "מִלָּה",
+      "hebrew": "מלה",
+      "xlit": "millâh",
+      "translated": true
+    },
+    "H4407": {
+      "definitions_cz": "Millo = \"hrad\" nebo \"mohyla\" | 1) místo poblíž Sichemu; místo neznámé | 2) část opevnění Jeruzaléma",
+      "lemma": "מִלּוֹא",
+      "hebrew": "מלוא",
+      "xlit": "millôwʼ",
+      "translated": true
+    },
+    "H4408": {
+      "definitions_cz": "1) mallow | 1a) rostlina, která roste v slaných bažinách",
+      "lemma": "מַלּוּחַ",
+      "hebrew": "מלוח",
+      "xlit": "mallûwach",
+      "translated": true
+    },
+    "H4409": {
+      "definitions_cz": "Malluch nebo Melicu = \"poradce\" | 1) merarijský levita, syn Chašabiášův | 2) potomek Bani, který měl v době Ezry cizí manželku | 3) potomek Harima, který měl v době Ezry cizí manželku | 4) kněz, který podepsal smlouvu s Nehemjášem | 5) jeden z vůdců lidu, který podepsal smlouvu s Nehemjášem | 6) kněz, který se vrátil z exilu se Zerubábelem",
+      "lemma": "מַלּוּךְ",
+      "hebrew": "מלוך",
+      "xlit": "Mallûwk",
+      "translated": true
+    },
+    "H4410": {
+      "definitions_cz": "1) královský úřad, královský úřad, královský úřad",
+      "lemma": "מְלוּכָה",
+      "hebrew": "מלוכה",
+      "xlit": "mᵉlûwkâh",
+      "translated": true
+    },
+    "H4411": {
+      "definitions_cz": "1) místo ubytování, hostinec, chán",
+      "lemma": "מָלוֹן",
+      "hebrew": "מלון",
+      "xlit": "mâlôwn",
+      "translated": true
+    },
+    "H4412": {
+      "definitions_cz": "1) lóže, chata",
+      "lemma": "מְלוּנָה",
+      "hebrew": "מלונה",
+      "xlit": "mᵉlûwnâh",
+      "translated": true
+    },
+    "H4413": {
+      "definitions_cz": "Mallothi = \"vyslovil jsem\" | 1) jeden ze 14 synů Hemana, zpěváka v době Davidově",
+      "lemma": "מַלּוֹתִי",
+      "hebrew": "מלותי",
+      "xlit": "Mallôwthîy",
+      "translated": true
+    },
+    "H4414": {
+      "definitions_cz": "1) odtrhnout, rozptýlit | 1a) (Niphal) k rozptýlení, k rozptýlení | 2) osolit, okořenit | 2a) (Qal) osolit, okořenit | 2b) (Pual) k solení | 2c) (Hophal) otírat nebo omýt solí",
+      "lemma": "מָלַח",
+      "hebrew": "מלח",
+      "xlit": "mâlach",
+      "translated": true
+    },
+    "H4415": {
+      "definitions_cz": "1) (P'al) jíst sůl",
+      "lemma": "מְלַח",
+      "hebrew": "מלח",
+      "xlit": "mᵉlach",
+      "translated": true
+    },
+    "H4416": {
+      "definitions_cz": "1) sůl",
+      "lemma": "מְלַח",
+      "hebrew": "מלח",
+      "xlit": "mᵉlach",
+      "translated": true
+    },
+    "H4417": {
+      "definitions_cz": "1) sůl",
+      "lemma": "מֶלַח",
+      "hebrew": "מלח",
+      "xlit": "melach",
+      "translated": true
+    },
+    "H4418": {
+      "definitions_cz": "1) hadr",
+      "lemma": "מָלָח",
+      "hebrew": "מלח",
+      "xlit": "mâlâch",
+      "translated": true
+    },
+    "H4419": {
+      "definitions_cz": "1) námořník, námořník, námořník",
+      "lemma": "מַלָּח",
+      "hebrew": "מלח",
+      "xlit": "mallâch",
+      "translated": true
+    },
+    "H4420": {
+      "definitions_cz": "1) slanost, neplodnost, slanost",
+      "lemma": "מְלֵחָה",
+      "hebrew": "מלחה",
+      "xlit": "mᵉlêchâh",
+      "translated": true
+    },
+    "H4421": {
+      "definitions_cz": "1) bitva, válka",
+      "lemma": "מִלְחָמָה",
+      "hebrew": "מלחמה",
+      "xlit": "milchâmâh",
+      "translated": true
+    },
+    "H4422": {
+      "definitions_cz": "1) vyklouznout, uniknout, doručit, zachránit, být doručen | 1a)(Niphal) | 1a1) vyklouznout | 1a2) uniknout | 1a3) k dodání | 1b) (Piel) | 1b1) snést, nechat vyklouznout (z vajec) | 1b2) nechat uniknout | 1b3) dodat, zachránit (život) | 1c) (Hiphil) | 1c1) porodit | 1c2) dodat | 1d) (Hithpael) | 1d1) vyklouznout, vyklouznout, uniknout | 1d2) uniknout",
+      "lemma": "מָלַט",
+      "hebrew": "מלט",
+      "xlit": "mâlaṭ",
+      "translated": true
+    },
+    "H4423": {
+      "definitions_cz": "1) malta, cement, hlína (podlahy)",
+      "lemma": "מֶלֶט",
+      "hebrew": "מלט",
+      "xlit": "meleṭ",
+      "translated": true
+    },
+    "H4424": {
+      "definitions_cz": "Melatiáš = „Jehova vysvobodil“ | 1) Gibeonite, který pomáhal při obnově jeruzalémské zdi",
+      "lemma": "מְלַטְיָה",
+      "hebrew": "מלטיה",
+      "xlit": "Mᵉlaṭyâh",
+      "translated": true
+    },
+    "H4425": {
+      "definitions_cz": "1) klas (pšenice), hlava (pšenice)",
+      "lemma": "מְלִילָה",
+      "hebrew": "מלילה",
+      "xlit": "mᵉlîylâh",
+      "translated": true
+    },
+    "H4426": {
+      "definitions_cz": "1) satira, posměšná báseň, posměšná píseň, posměšky, postava, záhada",
+      "lemma": "מְלִיצָה",
+      "hebrew": "מליצה",
+      "xlit": "mᵉlîytsâh",
+      "translated": true
+    },
+    "H4427": {
+      "definitions_cz": "1) být nebo se stát králem nebo královnou, vládnout | 1a) (Qal) být nebo se stát králem nebo královnou, vládnout | 1b) (Hiphil) učinit jednoho krále nebo královnu, způsobit vládu | 1c) (Hophal) se stane králem nebo královnou | 2) radit, radit | 2a) (Niphal) zvážit",
+      "lemma": "מָלַךְ",
+      "hebrew": "מלך",
+      "xlit": "mâlak",
+      "translated": true
+    },
+    "H4428": {
+      "definitions_cz": "1) král",
+      "lemma": "מֶלֶךְ",
+      "hebrew": "מלך",
+      "xlit": "melek",
+      "translated": true
+    },
+    "H4429": {
+      "definitions_cz": "Melech = \"král\" | 1) Benjamínec, druhý syn Micheášův a vnuk Mefibošeta",
+      "lemma": "מֶלֶךְ",
+      "hebrew": "מלך",
+      "xlit": "Melek",
+      "translated": true
+    },
+    "H4430": {
+      "definitions_cz": "1) král",
+      "lemma": "מֶלֶךְ",
+      "hebrew": "מלך",
+      "xlit": "melek",
+      "translated": true
+    },
+    "H4431": {
+      "definitions_cz": "1) rada, rada",
+      "lemma": "מְלַךְ",
+      "hebrew": "מלך",
+      "xlit": "mᵉlak",
+      "translated": true
+    },
+    "H4432": {
+      "definitions_cz": "Molech = \"král\" | 1) bůh Ammonitů a Féničanů, kterému někteří Izraelité obětovali svá nemluvňata v údolí Hinnom",
+      "lemma": "מֹלֶךְ",
+      "hebrew": "מלך",
+      "xlit": "Môlek",
+      "translated": true
+    },
+    "H4433": {
+      "definitions_cz": "1) královna",
+      "lemma": "מַלְכָּא",
+      "hebrew": "מלכא",
+      "xlit": "malkâʼ",
+      "translated": true
+    },
+    "H4434": {
+      "definitions_cz": "1) chytací nástroj, past, past",
+      "lemma": "מַלְכֹּדֶת",
+      "hebrew": "מלכדת",
+      "xlit": "malkôdeth",
+      "translated": true
+    },
+    "H4435": {
+      "definitions_cz": "Milcah = \"královna\" | 1) dcera Hárana a manželky Nachora, jejího strýce a bratra Abrahama, kterému porodila 8 dětí | 2) dcera Celofchada a vnučka Manassesova",
+      "lemma": "מִלְכָּה",
+      "hebrew": "מלכה",
+      "xlit": "Milkâh",
+      "translated": true
+    },
+    "H4436": {
+      "definitions_cz": "1) královna",
+      "lemma": "מַלְכָּה",
+      "hebrew": "מלכה",
+      "xlit": "malkâh",
+      "translated": true
+    },
+    "H4437": {
+      "definitions_cz": "1) královská hodnost, vláda, království | 1a) královské hodnosti, královské hodnost, královská autorita | 1b) království | 1c) říše (území) | 1d) vláda (času)",
+      "lemma": "מַלְכוּ",
+      "hebrew": "מלכו",
+      "xlit": "malkûw",
+      "translated": true
+    },
+    "H4438": {
+      "definitions_cz": "1) královská moc, královská moc, panování, království, suverénní moc | 1a) královská moc, panství | 1b) vládnout | 1c) království, říše",
+      "lemma": "מַלְכוּת",
+      "hebrew": "מלכות",
+      "xlit": "malkûwth",
+      "translated": true
+    },
+    "H4439": {
+      "definitions_cz": "Malchiel = \"mým králem je Bůh\" | 1) syn Beriášův a vnuk Ašerův",
+      "lemma": "מַלְכִּיאֵל",
+      "hebrew": "מלכיאל",
+      "xlit": "Malkîyʼêl",
+      "translated": true
+    },
+    "H4440": {
+      "definitions_cz": "Malchielité = Malchiel \"můj král je Bůh\" | 1) Ašerita a potomek Malchiela, vnuka Ašera",
+      "lemma": "מַלְכִּיאֵלִי",
+      "hebrew": "מלכיאלי",
+      "xlit": "Malkîyʼêlîy",
+      "translated": true
+    },
+    "H4441": {
+      "definitions_cz": "Malchijah nebo Malchiah nebo Melchiah = \"mým králem je Jehova\" | 1) otec Pashur za časů Jeremiášových | 2) syn Hammelechův, do jehož žaláře byl uvržen Jeremiáš | 3) hlava 5. kurzu kněží v době Davidově | 4) jeden z kněží, který byl u čtení zákona od Ezdráše, zpečetil smlouvu s Nehemjášem a byl u zasvěcení zdi s Nehemjášem | 5) levitský předek Asafův a potomek Léviho prostřednictvím Geršona | 6) syn Parosh, který zahnal cizince",
+      "lemma": "מַלְכִּיָּה",
+      "hebrew": "מלכיה",
+      "xlit": "Malkîyâh",
+      "translated": true
+    },
+    "H4442": {
+      "definitions_cz": "Melchizedek = \"mým králem je Sedek\" | 1) král Salemu a kněz Nejvyššího Boha, kterému Abram platil desátek po bitvě, kterou bojoval za osvobození Lota; „Řád Melchisedechův“ řád kněžství, ke kterému patří Kristus",
+      "lemma": "מַלְכִּי־צֶדֶק",
+      "hebrew": "מלכיצדק",
+      "xlit": "Malkîy-Tsedeq",
+      "translated": true
+    },
+    "H4443": {
+      "definitions_cz": "Malchiram = \"můj král je vysoko\" | 1) syn judského krále Jojakina",
+      "lemma": "מַלְכִּירָם",
+      "hebrew": "מלכירם",
+      "xlit": "Malkîyrâm",
+      "translated": true
+    },
+    "H4444": {
+      "definitions_cz": "Malchishua nebo Melchishua = \"mým králem je bohatství\" | 1) syn izraelského krále Saula",
+      "lemma": "מַלְכִּישׁוּעַ",
+      "hebrew": "מלכישוע",
+      "xlit": "Malkîyshûwaʻ",
+      "translated": true
+    },
+    "H4445": {
+      "definitions_cz": "Milcom = \"velký král\" | 1) bůh Ammonitů a Féničanů, kterému někteří Izraelité obětovali svá nemluvňata v údolí Hinnom | 1a) též 'Molech' | 2) benjamínec, syn Šaharaim od jeho manželky Hodeše",
+      "lemma": "מַלְכָּם",
+      "hebrew": "מלכם",
+      "xlit": "Malkâm",
+      "translated": true
+    },
+    "H4446": {
+      "definitions_cz": "1) královna",
+      "lemma": "מְלֶכֶת",
+      "hebrew": "מלכת",
+      "xlit": "mᵉleketh",
+      "translated": true
+    },
+    "H4447": {
+      "definitions_cz": "Hammoleketh = \"královna\" | 1) dcera Machirova a sestra Gileadova",
+      "lemma": "מֹלֶכֶת",
+      "hebrew": "מלכת",
+      "xlit": "Môleketh",
+      "translated": true
+    },
+    "H4448": {
+      "definitions_cz": "1) mluvit, vyslovovat, říkat | 1a) (Qal) mluvit | 1b) (Piel) říci, vyslovit",
+      "lemma": "מָלַל",
+      "hebrew": "מלל",
+      "xlit": "mâlal",
+      "translated": true
+    },
+    "H4449": {
+      "definitions_cz": "1) (Pael) mluvit, říkat",
+      "lemma": "מְלַל",
+      "hebrew": "מלל",
+      "xlit": "mᵉlal",
+      "translated": true
+    },
+    "H4450": {
+      "definitions_cz": "Milalai = \"výmluvný\" | 1) syn kněze Jonatana a potomek Asafův",
+      "lemma": "מִלֲלַי",
+      "hebrew": "מללי",
+      "xlit": "Milălay",
+      "translated": true
+    },
+    "H4451": {
+      "definitions_cz": "1) volský hůl",
+      "lemma": "מַלְמָד",
+      "hebrew": "מלמד",
+      "xlit": "malmâd",
+      "translated": true
+    },
+    "H4452": {
+      "definitions_cz": "1) být hladký, být kluzký | 1a) (Niphal) být hladký (příjemný, příjemný)",
+      "lemma": "מָלַץ",
+      "hebrew": "מלץ",
+      "xlit": "mâlats",
+      "translated": true
+    },
+    "H4453": {
+      "definitions_cz": "1) opatrovník, soudní úředník | 1a) znamená pochybný",
+      "lemma": "מֶלְצָר",
+      "hebrew": "מלצר",
+      "xlit": "meltsâr",
+      "translated": true
+    },
+    "H4454": {
+      "definitions_cz": "1) (Qal) uštípnout, uštípnout (hlavu ptáka)",
+      "lemma": "מָלַק",
+      "hebrew": "מלק",
+      "xlit": "mâlaq",
+      "translated": true
+    },
+    "H4455": {
+      "definitions_cz": "1) kořist, kořist | 2) čelist",
+      "lemma": "מַלְקוֹחַ",
+      "hebrew": "מלקוח",
+      "xlit": "malqôwach",
+      "translated": true
+    },
+    "H4456": {
+      "definitions_cz": "1) pozdní déšť, jarní déšť | 1a) březnové a dubnové deště, které dozrávají úrodu Palestiny",
+      "lemma": "מַלְקוֹשׁ",
+      "hebrew": "מלקוש",
+      "xlit": "malqôwsh",
+      "translated": true
+    },
+    "H4457": {
+      "definitions_cz": "1) šňupáky, kleště | 1a) kleště (pro použití oltáře) | 1b) zhasínadla (pro lampy v chrámu nebo svatostánku)",
+      "lemma": "מֶלְקָח",
+      "hebrew": "מלקח",
+      "xlit": "melqâch",
+      "translated": true
+    },
+    "H4458": {
+      "definitions_cz": "1) šatník, oblečení, roucho",
+      "lemma": "מֶלְתָּחָה",
+      "hebrew": "מלתחה",
+      "xlit": "meltâchâh",
+      "translated": true
+    },
+    "H4459": {
+      "definitions_cz": "1) zub, velký zub | 1a) zuby, řezáky",
+      "lemma": "מַלְתָּעָה",
+      "hebrew": "מלתעה",
+      "xlit": "maltâʻâh",
+      "translated": true
+    },
+    "H4460": {
+      "definitions_cz": "1) sýpka, sklad",
+      "lemma": "מַמְּגֻרָה",
+      "hebrew": "ממגרה",
+      "xlit": "mammᵉgurâh",
+      "translated": true
+    },
+    "H4461": {
+      "definitions_cz": "1) měření",
+      "lemma": "מֵמַד",
+      "hebrew": "ממד",
+      "xlit": "mêmad",
+      "translated": true
+    },
+    "H4462": {
+      "definitions_cz": "Memucan = \"důstojný\" | 1) jeden ze 7 knížat Persie za vlády Ahasvera",
+      "lemma": "מְמוּכָן",
+      "hebrew": "ממוכן",
+      "xlit": "Mᵉmûwkân",
+      "translated": true
+    },
+    "H4463": {
+      "definitions_cz": "1) smrt",
+      "lemma": "מָמוֹת",
+      "hebrew": "ממות",
+      "xlit": "mâmôwth",
+      "translated": true
+    },
+    "H4464": {
+      "definitions_cz": "1) bastard, dítě incestu, nemanželské dítě | 1a) bastard | 1b) smíšená populace (obr.) | 1c) narozené židovskému otci a pohanské matce nebo naopak",
+      "lemma": "מַמְזֵר",
+      "hebrew": "ממזר",
+      "xlit": "mamzêr",
+      "translated": true
+    },
+    "H4465": {
+      "definitions_cz": "1) prodej, zboží, prodaná věc",
+      "lemma": "מִמְכָּר",
+      "hebrew": "ממכר",
+      "xlit": "mimkâr",
+      "translated": true
+    },
+    "H4466": {
+      "definitions_cz": "1) prodej",
+      "lemma": "מִמְכֶּרֶת",
+      "hebrew": "ממכרת",
+      "xlit": "mimkereth",
+      "translated": true
+    },
+    "H4467": {
+      "definitions_cz": "1) království, panství, panování, suverenita | 1a) království, říše | 1b) suverenita, panství | 1c) vládnout",
+      "lemma": "מַמְלָכָה",
+      "hebrew": "ממלכה",
+      "xlit": "mamlâkâh",
+      "translated": true
+    },
+    "H4468": {
+      "definitions_cz": "1) království, panství, panování, suverenita | 1a) království | 1b) panství, královská moc | 1c) vládnout",
+      "lemma": "מַמְלָכוּת",
+      "hebrew": "ממלכות",
+      "xlit": "mamlâkûwth",
+      "translated": true
+    },
+    "H4469": {
+      "definitions_cz": "1) míchaný nápoj, míchané víno, nabídka nápojů",
+      "lemma": "מַמְסָךְ",
+      "hebrew": "ממסך",
+      "xlit": "mamçâk",
+      "translated": true
+    },
+    "H4470": {
+      "definitions_cz": "1) hořkost",
+      "lemma": "מֶמֶר",
+      "hebrew": "ממר",
+      "xlit": "memer",
+      "translated": true
+    },
+    "H4471": {
+      "definitions_cz": "Mamre = \"síla\" nebo \"tloušťka\" | n pr m | 1) Amorejec, který se spojil s Abramem | n pr loc | 2) dubový háj na Mamreho zemi v Palestině, kde bydlel Abraham | 3) místo poblíž Abrahamova pohřebiště, zřejmě ztotožněného s Hebronem",
+      "lemma": "מַמְרֵא",
+      "hebrew": "ממרא",
+      "xlit": "Mamrêʼ",
+      "translated": true
     }
   }
 }
