@@ -39701,6 +39701,904 @@
       "translit": "triákonta",
       "pronunciation": "tree-ak'-on-tah",
       "translated": true
+    },
+    "G5145": {
+      "definitions_cz": "tři sta",
+      "translit": "triakósioi",
+      "pronunciation": "tree-ak-os'-ee-oy",
+      "translated": true
+    },
+    "G5146": {
+      "definitions_cz": "správně, vraná noha (trojcípá překážka v\n válka), tj. (analogicky) trnitá rostlina (caltrop)",
+      "translit": "tríbolos",
+      "pronunciation": "trib'-ol-os",
+      "translated": true
+    },
+    "G5147": {
+      "definitions_cz": "podobný τείρωτρύω[ŘECKO:5131][ŘECKO:5134]",
+      "translit": "tríbos",
+      "pronunciation": "tree'-bos",
+      "translated": true
+    },
+    "G5148": {
+      "definitions_cz": "tříleté období\n (triénium)",
+      "translit": "trietía",
+      "pronunciation": "tree-et-ee'-ah",
+      "translated": true
+    },
+    "G5149": {
+      "definitions_cz": "skřípat (skřípat), tedy (analogicky) k\n strouhat zuby (zběsile)",
+      "translit": "trízō",
+      "pronunciation": "trid'-zo",
+      "translated": true
+    },
+    "G5150": {
+      "definitions_cz": "tři měsíce\n prostor",
+      "translit": "trímēnon",
+      "pronunciation": "trim'-ay-non",
+      "translated": true
+    },
+    "G5151": {
+      "definitions_cz": "třikrát",
+      "translit": "trís",
+      "pronunciation": "trece",
+      "translated": true
+    },
+    "G5152": {
+      "definitions_cz": "třetí střecha\n (příběh)",
+      "translit": "trístegon",
+      "pronunciation": "tris'-teg-on",
+      "translated": true
+    },
+    "G5153": {
+      "definitions_cz": "třikrát tisíc",
+      "translit": "trischílioi",
+      "pronunciation": "tris-khil'-ee-oy",
+      "translated": true
+    },
+    "G5154": {
+      "definitions_cz": "třetí; středního rodu (jako podstatné jméno) třetí část nebo (jako\n příslovce) a (nebo) potřetí, potřetí",
+      "translit": "trítos",
+      "pronunciation": "tree'-tos",
+      "translated": true
+    },
+    "G5155": {
+      "definitions_cz": "chlupatý, tj. vyrobený z vlasů (mohér)",
+      "translit": "tríchinos",
+      "pronunciation": "trikh'-ee-nos",
+      "translated": true
+    },
+    "G5156": {
+      "definitions_cz": "\"chvění\", tj. třesení se strachem",
+      "translit": "trómos",
+      "pronunciation": "trom'-os",
+      "translated": true
+    },
+    "G5157": {
+      "definitions_cz": "obrat (\"trop\"), tzn.\n revoluce (obrazně, variace)",
+      "translit": "tropḗ",
+      "pronunciation": "trop-ay'",
+      "translated": true
+    },
+    "G5158": {
+      "definitions_cz": "obrat, tj. (implicitně) režim nebo styl\n (zejména s předložkou nebo vztažnou předponou jako příslovce, jako);\n přeneseně, chování nebo charakter",
+      "translit": "trópos",
+      "pronunciation": "trop'-os",
+      "translated": true
+    },
+    "G5159": {
+      "definitions_cz": "vydržet své zvyky",
+      "translit": "tropophoréō",
+      "pronunciation": "trop-of-or-eh'-o",
+      "translated": true
+    },
+    "G5160": {
+      "definitions_cz": "výživa (doslova nebo přeneseně); implicitně,\n příděly (mzdy)",
+      "translit": "trophḗ",
+      "pronunciation": "trof-ay'",
+      "translated": true
+    },
+    "G5161": {
+      "definitions_cz": "výživný; Trophimus, křesťan",
+      "translit": "Tróphimos",
+      "pronunciation": "trof'-ee-mos",
+      "translated": true
+    },
+    "G5162": {
+      "definitions_cz": "vyživovačka, tedy ošetřovatelka",
+      "translit": "trophós",
+      "pronunciation": "trof-os'",
+      "translated": true
+    },
+    "G5163": {
+      "definitions_cz": "dráha (jako kolo-vyjetá kolej), tedy (obrazně) průběh\n chování",
+      "translit": "trochiá",
+      "pronunciation": "trokh-ee-ah'",
+      "translated": true
+    },
+    "G5164": {
+      "definitions_cz": "kolo (jako běžec), tedy (obrazně) okruh z\n fyzikální účinky",
+      "translit": "trochós",
+      "pronunciation": "trokh-os'",
+      "translated": true
+    },
+    "G5165": {
+      "definitions_cz": "miska",
+      "translit": "trýblion",
+      "pronunciation": "troob'-lee-on",
+      "translated": true
+    },
+    "G5166": {
+      "definitions_cz": "do\n sbírat vinobraní",
+      "translit": "trygáō",
+      "pronunciation": "troo-gah'-o",
+      "translated": true
+    },
+    "G5167": {
+      "definitions_cz": "podobný [ŘECKO:5149]",
+      "translit": "trygṓn",
+      "pronunciation": "troo-gone'",
+      "translated": true
+    },
+    "G5168": {
+      "definitions_cz": "podobný základu [ŘEK:5134][ŘEK:5147][ŘEK:5176]",
+      "translit": "trymaliá",
+      "pronunciation": "troo-mal-ee-ah'",
+      "translated": true
+    },
+    "G5169": {
+      "definitions_cz": "otvor, tj. jehla\n oko",
+      "translit": "trýpēma",
+      "pronunciation": "troo'-pay-mah",
+      "translated": true
+    },
+    "G5170": {
+      "definitions_cz": "luxusní; Tryphæna, křesťanka",
+      "translit": "Trýphaina",
+      "pronunciation": "troo'-fahee-nah",
+      "translated": true
+    },
+    "G5171": {
+      "definitions_cz": "dopřát si luxus",
+      "translit": "trypháō",
+      "pronunciation": "troo-fah'-o",
+      "translated": true
+    },
+    "G5172": {
+      "definitions_cz": "zženštilost, t. j. luxus popř\n zhýralost",
+      "translit": "tryphḗ",
+      "pronunciation": "troo-fay'",
+      "translated": true
+    },
+    "G5173": {
+      "definitions_cz": "luxování; Tryphosa, křesťanská žena",
+      "translit": "Tryphōsa",
+      "pronunciation": "troo-fo'-sah",
+      "translated": true
+    },
+    "G5174": {
+      "definitions_cz": "Troad (neboli pláň Trója), tj. Troas, a\n místo v Malé Asii",
+      "translit": "Trōás",
+      "pronunciation": "tro-as'",
+      "translated": true
+    },
+    "G5175": {
+      "definitions_cz": "Trogyllium, místo v Asii\n Menší",
+      "translit": "Trōgýllion",
+      "pronunciation": "tro-gool'-lee-on",
+      "translated": true
+    },
+    "G5176": {
+      "definitions_cz": "nebo možná spíše a\n základ [ŘEK:5167][ŘEK:5149]",
+      "translit": "trṓgō",
+      "pronunciation": "tro'-go",
+      "translated": true
+    },
+    "G5177": {
+      "definitions_cz": "podobný základu [ŘEK:5088][ŘEK:1487][ŘEK:3756]",
+      "translit": "tynchánō",
+      "pronunciation": "toong-khan'-o",
+      "translated": true
+    },
+    "G5178": {
+      "definitions_cz": "natáhnout se dál\n mučící nástroj připomínající buben, a tak do něj bít\n smrt",
+      "translit": "tympanízō",
+      "pronunciation": "toom-pan-id'-zo",
+      "translated": true
+    },
+    "G5179": {
+      "definitions_cz": "kostka (jak udeřena), tj. (implicitně) razítko nebo jizva;\n analogicky tvar, tj. socha, (obrazně) styl popř\n podobnost; speciálně vzorník (\"typ\"), tj. model (pro\n imitace) nebo instance (pro varování)",
+      "translit": "týpos",
+      "pronunciation": "too'-pos",
+      "translated": true
+    },
+    "G5180": {
+      "definitions_cz": "\"bouchnout\", tedy kyjovat popř\n mlátit (správně, holí nebo bastinado), ale v každém případě tím\n opakované údery; tím se liší od [ŘECKO:3817][ŘECKO:3960][ŘECKO:4141][ŘECKO:4474][ŘECKO:5177]",
+      "translit": "týptō",
+      "pronunciation": "toop'-to",
+      "translated": true
+    },
+    "G5181": {
+      "definitions_cz": "\"tyran\";\n Tyrannus, Efezský",
+      "translit": "Týrannos",
+      "pronunciation": "too'-ran-nos",
+      "translated": true
+    },
+    "G5182": {
+      "definitions_cz": "podobný [ŘECKO:2351]",
+      "translit": "tyrbázō",
+      "pronunciation": "toor-bad'-zo",
+      "translated": true
+    },
+    "G5183": {
+      "definitions_cz": "Tyrian, t. j. obyvatel Tyrusu",
+      "translit": "Týrios",
+      "pronunciation": "too'-ree-os",
+      "translated": true
+    },
+    "G5184": {
+      "definitions_cz": "",
+      "translated": false
+    },
+    "G5185": {
+      "definitions_cz": "neprůhledný (jakoby zakouřený), tedy (analogicky) slepý (fyz\n nebo mentálně)",
+      "translit": "typhlós",
+      "pronunciation": "toof-los'",
+      "translated": true
+    },
+    "G5186": {
+      "definitions_cz": "oslepit, t. j. (obrazně) zatemnit",
+      "translit": "typhlóō",
+      "pronunciation": "toof-lo'-o",
+      "translated": true
+    },
+    "G5187": {
+      "definitions_cz": "zahalit kouřem, tj. (obrazně)\n nafouknout se samolibostí",
+      "translit": "typhóō",
+      "pronunciation": "toof-o'-o",
+      "translated": true
+    },
+    "G5188": {
+      "definitions_cz": "udělat kouř, t. j. pomalu konzumovat\n bez plamene",
+      "translit": "týphō",
+      "pronunciation": "too'-fo",
+      "translated": true
+    },
+    "G5189": {
+      "definitions_cz": "bouřlivý (jakoby zakouřený)",
+      "translit": "typhōnikós",
+      "pronunciation": "too-fo-nee-kos'",
+      "translated": true
+    },
+    "G5190": {
+      "definitions_cz": "náhodný, t. j. šťastný; Společnost Tychicus, spol\n Christian",
+      "translit": "Tychikós",
+      "pronunciation": "too-khee-kos'",
+      "translated": true
+    },
+    "G5191": {
+      "definitions_cz": "\"hyacint\" nebo \"jacinthine\", tedy sytě modrá",
+      "translit": "hyakínthinos",
+      "pronunciation": "hoo-ak-in'-thee-nos",
+      "translated": true
+    },
+    "G5192": {
+      "definitions_cz": "\"hyacint\" nebo \"jacinth\", tj. nějaký drahokam\n tmavě modrá barva, pravděpodobně zirkon",
+      "translit": "hyákinthos",
+      "pronunciation": "hoo-ak'-in-thos",
+      "translated": true
+    },
+    "G5193": {
+      "definitions_cz": "skelný, t. j. průhledný",
+      "translit": "hyálinos",
+      "pronunciation": "hoo-al'-ee-nos",
+      "translated": true
+    },
+    "G5194": {
+      "definitions_cz": "sklo",
+      "translit": "hýalos",
+      "pronunciation": "hoo'-al-os",
+      "translated": true
+    },
+    "G5195": {
+      "definitions_cz": "páchat násilí, tedy zneužívání",
+      "translit": "hybrízō",
+      "pronunciation": "hoo-brid'-zo",
+      "translated": true
+    },
+    "G5196": {
+      "definitions_cz": "drzost (jako přehnaná), t. j. urážka, zranění",
+      "translit": "hýbris",
+      "pronunciation": "hoo'-bris",
+      "translated": true
+    },
+    "G5197": {
+      "definitions_cz": "urážející, t. j. násilník",
+      "translit": "hybristḗs",
+      "pronunciation": "hoo-bris-tace'",
+      "translated": true
+    },
+    "G5198": {
+      "definitions_cz": "mít pevné zdraví, t. j. mít se dobře (v těle); přeneseně,\n být nezkažený (pravda v doktríně)",
+      "translit": "hygiaínō",
+      "pronunciation": "hoog-ee-ah'-ee-no",
+      "translated": true
+    },
+    "G5199": {
+      "definitions_cz": "zdravý, t. j. dobře (v těle); obrazně řečeno, pravda\n (v doktríně)",
+      "translit": "hygiḗs",
+      "pronunciation": "hoog-ee-ace'",
+      "translated": true
+    },
+    "G5200": {
+      "definitions_cz": "mokrý (jakoby s deštěm), tj. (implicitně)\n šťavnatý (čerstvý)",
+      "translit": "hygrós",
+      "pronunciation": "hoo-gros'",
+      "translated": true
+    },
+    "G5201": {
+      "definitions_cz": "nádoba na vodu, tedy nádoba na rodinné zásoby",
+      "translit": "hydría",
+      "pronunciation": "hoo-dree-ah'",
+      "translated": true
+    },
+    "G5202": {
+      "definitions_cz": "být a\n piják vody, t. j. zdržet se vinných nápojů",
+      "translit": "hydropotéō",
+      "pronunciation": "hoo-drop-ot-eh'-o",
+      "translated": true
+    },
+    "G5203": {
+      "definitions_cz": "být \"dropsický\"",
+      "translit": "hydrōpikós",
+      "pronunciation": "hoo-dro-pik-os'",
+      "translated": true
+    },
+    "G5204": {
+      "definitions_cz": "voda (jakoby deštivá) doslova nebo\n přeneseně",
+      "translit": "hýdōr",
+      "pronunciation": "hoo'-dore",
+      "translated": true
+    },
+    "G5205": {
+      "definitions_cz": "déšť, zejména přeháňka",
+      "translit": "hyetós",
+      "pronunciation": "hoo-et-os'",
+      "translated": true
+    },
+    "G5206": {
+      "definitions_cz": "umístění\n jako syn, tedy adopce (obrazně křesťanské synovství vzhledem k\n Bůh)",
+      "translit": "huiothesía",
+      "pronunciation": "hwee-oth-es-ee'-ah",
+      "translated": true
+    },
+    "G5207": {
+      "definitions_cz": "\"syn\" (někdy zvířat), používaný velmi\n široce bezprostředního, vzdáleného nebo obrazně řečeno, příbuzenství",
+      "translit": "huiós",
+      "pronunciation": "hwee-os'",
+      "translated": true
+    },
+    "G5208": {
+      "definitions_cz": "les, tedy (implicitně) palivo",
+      "translit": "hýlē",
+      "pronunciation": "hoo-lay'",
+      "translated": true
+    },
+    "G5209": {
+      "definitions_cz": "vy (jako cíl slovesa nebo\n předložka)",
+      "translit": "hymâs",
+      "pronunciation": "hoo-mas'",
+      "translated": true
+    },
+    "G5210": {
+      "definitions_cz": "ty (jako subjekt slovesa)",
+      "translit": "hymeîs",
+      "pronunciation": "hoo-mice'",
+      "translated": true
+    },
+    "G5211": {
+      "definitions_cz": "\"hymenæal\"; Hymenæus, odpůrce\n křesťanství",
+      "translit": "Hymenaîos",
+      "pronunciation": "hoo-men-ah'-yos",
+      "translated": true
+    },
+    "G5212": {
+      "definitions_cz": "vaše, tedy týkající se vás",
+      "translit": "hyméteros",
+      "pronunciation": "hoo-met'-er-os",
+      "translated": true
+    },
+    "G5213": {
+      "definitions_cz": "vám (s vámi nebo s vámi).",
+      "translit": "hymîn",
+      "pronunciation": "hoo-min'",
+      "translated": true
+    },
+    "G5214": {
+      "definitions_cz": "hymnovat, t. j. zpívat náboženskou ódu; implicitně, k\n oslavovat (Boha) v písni",
+      "translit": "hymnéō",
+      "pronunciation": "hoom-neh'-o",
+      "translated": true
+    },
+    "G5215": {
+      "definitions_cz": "pravděpodobně podobný [ŘECKO:103][HEBREW:05667]",
+      "translit": "hýmnos",
+      "pronunciation": "hoom'-nos",
+      "translated": true
+    },
+    "G5216": {
+      "definitions_cz": "(od vás nebo se vás týkají).",
+      "translit": "hymōn",
+      "pronunciation": "hoo-mone'",
+      "translated": true
+    },
+    "G5217": {
+      "definitions_cz": "vést (se) pod, tj. stáhnout se nebo odejít do důchodu (jako\n pokud se potopí z dohledu), doslova nebo přeneseně",
+      "translit": "hypágō",
+      "pronunciation": "hoop-ag'-o",
+      "translated": true
+    },
+    "G5218": {
+      "definitions_cz": "pozorné naslouchání, tedy (implicitně) vyhovění popř\n podání",
+      "translit": "hypakoḗ",
+      "pronunciation": "hoop-ak-o-ay'",
+      "translated": true
+    },
+    "G5219": {
+      "definitions_cz": "slyšet pod (jako podřízený), t. j. poslouchat\n pozorně; implicitně dbát nebo se podřizovat příkazu nebo\n autorita",
+      "translit": "hypakoúō",
+      "pronunciation": "hoop-ak-oo'-o",
+      "translated": true
+    },
+    "G5220": {
+      "definitions_cz": "v poddanosti pod mužem, t. j. ženatým\n žena",
+      "translit": "hýpandros",
+      "pronunciation": "hoop'-an-dros",
+      "translated": true
+    },
+    "G5221": {
+      "definitions_cz": "jít naproti (setkat se) pod\n (tiše), t. j. setkat se, zapadnout",
+      "translit": "hypantáō",
+      "pronunciation": "hoop-an-tah'-o",
+      "translated": true
+    },
+    "G5222": {
+      "definitions_cz": "setkání nebo souběh (s [ŘECKO:1519]",
+      "translit": "hypántēsis",
+      "pronunciation": "hoop-an'-tay-sis",
+      "translated": true
+    },
+    "G5223": {
+      "definitions_cz": "existence nebo vlastnictví, tedy (konkrétně) majetek,\n bohatství",
+      "translit": "hýparxis",
+      "pronunciation": "hoop'-arx-is",
+      "translated": true
+    },
+    "G5224": {
+      "definitions_cz": "věci\n existující nebo v majetku, tj. majetek nebo majetek",
+      "translit": "hypárchonta",
+      "pronunciation": "hoop-ar'-khon-tah",
+      "translated": true
+    },
+    "G5225": {
+      "definitions_cz": "začít pod (tiše), t. j. vzniknout\n (být přítomen nebo po ruce); expleble, existovat (jako spona nebo\n podřazené přídavnému jménu, příčestí, příslovci nebo předložce nebo jako\n pomocný prvek k hlavnímu (slovesu)",
+      "translit": "hypárchō",
+      "pronunciation": "hoop-ar'-kho",
+      "translated": true
+    },
+    "G5226": {
+      "definitions_cz": "vzdát se",
+      "translit": "hypeíkō",
+      "pronunciation": "hoop-i'-ko",
+      "translated": true
+    },
+    "G5227": {
+      "definitions_cz": "pod (skrytě) v rozporu s, tj. proti nebo (jako\n podstatné jméno) oponent",
+      "translit": "hypenantíos",
+      "pronunciation": "hoop-en-an-tee'-os",
+      "translated": true
+    },
+    "G5228": {
+      "definitions_cz": "\"přes\", tj. (s pádem genitivu) místa,\n nad, za, napříč nebo kauzální, kvůli, místo toho, týkající se;\n s akuzativním pádem nadřazeným, více než",
+      "translit": "hypér",
+      "pronunciation": "hoop-er'",
+      "translated": true
+    },
+    "G5229": {
+      "definitions_cz": "pozvednout se, tzn.\n (obrazně) stát se povýšeným",
+      "translit": "hyperaíromai",
+      "pronunciation": "hoop-er-ah'-ee-rom-ahee",
+      "translated": true
+    },
+    "G5230": {
+      "definitions_cz": "za \"acme\", tedy obrazně\n (dcery) po rozkvětu (prime) mládí",
+      "translit": "hypérakmos",
+      "pronunciation": "hoop-er'-ak-mos",
+      "translated": true
+    },
+    "G5231": {
+      "definitions_cz": "výše nahoru, tj. výrazně výše (na místě nebo\n hodnost)",
+      "translit": "hyperánō",
+      "pronunciation": "hoop-er-an'-o",
+      "translated": true
+    },
+    "G5232": {
+      "definitions_cz": "zvýšit nad běžný stupeň",
+      "translit": "hyperauxánō",
+      "pronunciation": "hoop-er-owx-an'-o",
+      "translated": true
+    },
+    "G5233": {
+      "definitions_cz": "transcendovat, tedy (obrazně) k\n přesahovat",
+      "translit": "hyperbaínō",
+      "pronunciation": "hoop-er-bah'-ee-no",
+      "translated": true
+    },
+    "G5234": {
+      "definitions_cz": "nadměrně",
+      "translit": "hyperballóntōs",
+      "pronunciation": "hoop-er-bal-lon'-toce",
+      "translated": true
+    },
+    "G5235": {
+      "definitions_cz": "hodit za obvyklou značku, tj. (obrazně)\n překonat (pouze aktivní příčestí nadřazené)",
+      "translit": "hyperbállō",
+      "pronunciation": "hoop-er-bal'-lo",
+      "translated": true
+    },
+    "G5236": {
+      "definitions_cz": "házení za ostatní, tj. (obrazně)\n supereminence; adverbiálně (s [ŘECKO:1519][ŘECKO:2596]",
+      "translit": "hyperbolḗ",
+      "pronunciation": "hoop-er-bol-ay'",
+      "translated": true
+    },
+    "G5237": {
+      "definitions_cz": "přehlížet, t. j. netrestat",
+      "translit": "hypereídō",
+      "pronunciation": "hoop-er-i'-do",
+      "translated": true
+    },
+    "G5238": {
+      "definitions_cz": "nad těmi částmi, t. j. stále\n dále",
+      "translit": "hyperékeina",
+      "pronunciation": "hoop-er-ek'-i-nah",
+      "translated": true
+    },
+    "G5239": {
+      "definitions_cz": "neúměrně prodlužovat",
+      "translit": "hyperekteínō",
+      "pronunciation": "hoop-er-ek-ti'-no",
+      "translated": true
+    },
+    "G5240": {
+      "definitions_cz": "přelít, tzn.\n (pasivně) přetékat",
+      "translit": "hyperekchýnō",
+      "pronunciation": "hoop-er-ek-khoo'-no",
+      "translated": true
+    },
+    "G5241": {
+      "definitions_cz": "přimlouvat se jménem",
+      "translit": "hyperentynchánō",
+      "pronunciation": "hoop-er-en-toong-khan'-o",
+      "translated": true
+    },
+    "G5242": {
+      "definitions_cz": "držet se výše, t. j. (obrazně) k\n excel; příčestí (jako přídavné jméno nebo střední číslo jako podstatné jméno) nadřazené,\n nadřazenost",
+      "translit": "hyperéchō",
+      "pronunciation": "hoop-er-ekh'-o",
+      "translated": true
+    },
+    "G5243": {
+      "definitions_cz": "povýšenost",
+      "translit": "hyperēphanía",
+      "pronunciation": "hoop-er-ay-fan-ee'-ah",
+      "translated": true
+    },
+    "G5244": {
+      "definitions_cz": "objevující se nad ostatními (nápadné), tzn.\n (obrazně) povýšený",
+      "translit": "hyperḗphanos",
+      "pronunciation": "hoop-er-ay'-fan-os",
+      "translated": true
+    },
+    "G5245": {
+      "definitions_cz": "porazit dál, t. j. získat rozhodující\n vítězství",
+      "translit": "hypernikáō",
+      "pronunciation": "hoop-er-nik-ah'-o",
+      "translated": true
+    },
+    "G5246": {
+      "definitions_cz": "vyboulený, t. j. (obrazně) drzý",
+      "translit": "hypéronkos",
+      "pronunciation": "hoop-er'-ong-kos",
+      "translated": true
+    },
+    "G5247": {
+      "definitions_cz": "prominence, tedy (obrazně) převaha (v hodnosti resp\n postava)",
+      "translit": "hyperochḗ",
+      "pronunciation": "hoop-er-okh-ay'",
+      "translated": true
+    },
+    "G5248": {
+      "definitions_cz": "přetékat",
+      "translit": "hyperperisseúō",
+      "pronunciation": "hoop-er-per-is-syoo'-o",
+      "translated": true
+    },
+    "G5249": {
+      "definitions_cz": "nadmíru, tedy nadmíru",
+      "translit": "hyperperissōs",
+      "pronunciation": "hoop-er-per-is-soce'",
+      "translated": true
+    },
+    "G5250": {
+      "definitions_cz": "přetékat",
+      "translit": "hyperpleonázō",
+      "pronunciation": "hoop-er-pleh-on-ad'-zo",
+      "translated": true
+    },
+    "G5251": {
+      "definitions_cz": "povýšit nad ostatní, t. j. pozvednout na nejvyšší\n pozici",
+      "translit": "hyperypsóō",
+      "pronunciation": "hoop-er-oop-so'-o",
+      "translated": true
+    },
+    "G5252": {
+      "definitions_cz": "příliš si vážit, t. j. být marnivý nebo\n arogantní",
+      "translit": "hyperphronéō",
+      "pronunciation": "hoop-er-fron-eh'-o",
+      "translated": true
+    },
+    "G5253": {
+      "definitions_cz": "vyšší část domu, tzn.\n byt ve třetím patře",
+      "translit": "hyperōion",
+      "pronunciation": "hoop-er-o'-on",
+      "translated": true
+    },
+    "G5254": {
+      "definitions_cz": "držet se pod sebou, t. j. vydržet s\n trpělivost",
+      "translit": "hypéchō",
+      "pronunciation": "hoop-ekh'-o",
+      "translated": true
+    },
+    "G5255": {
+      "definitions_cz": "pozorně naslouchat, tj. (implicitně)\n submisivní",
+      "translit": "hypḗkoos",
+      "pronunciation": "hoop-ay'-ko-os",
+      "translated": true
+    },
+    "G5256": {
+      "definitions_cz": "být podřízeným, tj. (implicitně)\n podléhat",
+      "translit": "hypēretéō",
+      "pronunciation": "hoop-ay-ret-eh'-o",
+      "translated": true
+    },
+    "G5257": {
+      "definitions_cz": "podveslice, tzn.\n (obecně) podřízený (asistent, šestinedělí, strážník)",
+      "translit": "hypērétēs",
+      "pronunciation": "hoop-ay-ret'-ace",
+      "translated": true
+    },
+    "G5258": {
+      "definitions_cz": "spánek, tedy (obrazně) duchovní strnulost",
+      "translit": "hýpnos",
+      "pronunciation": "hoop'-nos",
+      "translated": true
+    },
+    "G5259": {
+      "definitions_cz": "pod, tj. (s genitivním pádem) místa\n (pod), nebo se slovesy (agentura nebo prostředky, skrz); (s\n akuzativ) místa (kam (pod) nebo kde (dole) popř\n čas (když (v))",
+      "translit": "hypó",
+      "pronunciation": "hoop-o'",
+      "translated": true
+    },
+    "G5260": {
+      "definitions_cz": "pokradmu vhodit, t. j. představit tím\n tajná dohoda",
+      "translit": "hypobállō",
+      "pronunciation": "hoop-ob-al'-lo",
+      "translated": true
+    },
+    "G5261": {
+      "definitions_cz": "upisování, tj. kopie pro\n imitace (obrazně)",
+      "translit": "hypogrammós",
+      "pronunciation": "hoop-og-ram-mos'",
+      "translated": true
+    },
+    "G5262": {
+      "definitions_cz": "exponát k napodobování nebo varování (obrazně,\n exemplář, adumbace)",
+      "translit": "hypódeigma",
+      "pronunciation": "hoop-od'-igue-mah",
+      "translated": true
+    },
+    "G5263": {
+      "definitions_cz": "vystavovat pod očima, tedy (obrazně) k\n příkladovat (napomínat, napomínat)",
+      "translit": "hypodeíknymi",
+      "pronunciation": "hoop-od-ike'-noo-mee",
+      "translated": true
+    },
+    "G5264": {
+      "definitions_cz": "připustit pod svou střechu, t. j. pobavit\n pohostinně",
+      "translit": "hypodéchomai",
+      "pronunciation": "hoop-od-ekh'-om-ahee",
+      "translated": true
+    },
+    "G5265": {
+      "definitions_cz": "vázat pod nohama, t. j. obouvat boty popř\n sandály",
+      "translit": "hypodéō",
+      "pronunciation": "hoop-od-eh'-o",
+      "translated": true
+    },
+    "G5266": {
+      "definitions_cz": "něco vázaného pod nohama, t. j. bota popř\n sandál",
+      "translit": "hypódēma",
+      "pronunciation": "hoop-od'-ay-mah",
+      "translated": true
+    },
+    "G5267": {
+      "definitions_cz": "pod větou, tj. (implicitně)\n odsouzen",
+      "translit": "hypódikos",
+      "pronunciation": "hoop-od'-ee-kos",
+      "translated": true
+    },
+    "G5268": {
+      "definitions_cz": "zvíře pod jhem\n (draught-beast), tj. (zvláště), osel",
+      "translit": "hypozýgion",
+      "pronunciation": "hoop-od-zoog'-ee-on",
+      "translated": true
+    },
+    "G5269": {
+      "definitions_cz": "podpásat, tj. frap (nádoba s kabely\n přes kýl, boky a palubu)",
+      "translit": "hypozṓnnymi",
+      "pronunciation": "hoop-od-zone'-noo-mee",
+      "translated": true
+    },
+    "G5270": {
+      "definitions_cz": "dole pod, tj. pod",
+      "translit": "hypokátō",
+      "pronunciation": "hoop-ok-at'-o",
+      "translated": true
+    },
+    "G5271": {
+      "definitions_cz": "rozhodnout (hovořit nebo jednat) podle a\n falešná část, tj. (obrazně) přetvářet (předstírat)",
+      "translit": "hypokrínomai",
+      "pronunciation": "hoop-ok-rin'-om-ahee",
+      "translated": true
+    },
+    "G5272": {
+      "definitions_cz": "jednání pod předstíranou částí, tedy (obrazně) podvod\n (\"pokrytectví\")",
+      "translit": "hypókrisis",
+      "pronunciation": "hoop-ok'-ree-sis",
+      "translated": true
+    },
+    "G5273": {
+      "definitions_cz": "herec pod předpokládanou postavou (jevištní hráč), tzn.\n (obrazně) dissembler (\"pokrytec\"",
+      "translit": "hypokritḗs",
+      "pronunciation": "hoop-ok-ree-tace'",
+      "translated": true
+    },
+    "G5274": {
+      "definitions_cz": "brát zdola, t. j. nést vzhůru;\n přeneseně nabrat, tj. pokračovat v diskurzu nebo tématu;\n mentálně, předpokládat (předpokládat)",
+      "translit": "hypolambánō",
+      "pronunciation": "hoop-ol-am-ban'-o",
+      "translated": true
+    },
+    "G5275": {
+      "definitions_cz": "nechat pod (za), t. j. (pasivně) do\n zůstat (přežít)",
+      "translit": "hypoleípō",
+      "pronunciation": "hoop-ol-i'-po",
+      "translated": true
+    },
+    "G5276": {
+      "definitions_cz": "nádoba nebo nádoba\n pod lisem, t. j. spodní vinnou kádí",
+      "translit": "hypolḗnion",
+      "pronunciation": "hoop-ol-ay'-nee-on",
+      "translated": true
+    },
+    "G5277": {
+      "definitions_cz": "zanechat, t. j. odkázat",
+      "translit": "hypolimpánō",
+      "pronunciation": "hoop-ol-im-pan'-o",
+      "translated": true
+    },
+    "G5278": {
+      "definitions_cz": "zůstat pod (za), t. j. zůstat; přeneseně,\n podstupovat, t. j. nést (zkoušky), mít statečnost, vytrvat",
+      "translit": "hypoménō",
+      "pronunciation": "hoop-om-en'-o",
+      "translated": true
+    },
+    "G5279": {
+      "definitions_cz": "tiše připomínat, tj. navrhovat (uprostřed\n hlas, vlastní) paměť",
+      "translit": "hypomimnḗskō",
+      "pronunciation": "hoop-om-im-nace'-ko",
+      "translated": true
+    },
+    "G5280": {
+      "definitions_cz": "připomenutí nebo (reflexivně) vzpomínka",
+      "translit": "hypómnēsis",
+      "pronunciation": "hoop-om'-nay-sis",
+      "translated": true
+    },
+    "G5281": {
+      "definitions_cz": "veselá (nebo nadějná) vytrvalost, stálost",
+      "translit": "hypomonḗ",
+      "pronunciation": "hoop-om-on-ay'",
+      "translated": true
+    },
+    "G5282": {
+      "definitions_cz": "domnívat se pod (soukromě), t. j. domnívat se či\n domněnka",
+      "translit": "hyponoéō",
+      "pronunciation": "hoop-on-o-eh'-o",
+      "translated": true
+    },
+    "G5283": {
+      "definitions_cz": "podezření",
+      "translit": "hypónoia",
+      "pronunciation": "hoop-on'-oy-ah",
+      "translated": true
+    },
+    "G5284": {
+      "definitions_cz": "plout pod závětřím",
+      "translit": "hypopléō",
+      "pronunciation": "hoop-op-leh'-o",
+      "translated": true
+    },
+    "G5285": {
+      "definitions_cz": "dýchat jemně, t. j. vánek",
+      "translit": "hypopnéō",
+      "pronunciation": "hoop-op-neh'-o",
+      "translated": true
+    },
+    "G5286": {
+      "definitions_cz": "něco pod nohama, tzn.\n opěrka nohou (obrazně)",
+      "translit": "hypopódion",
+      "pronunciation": "hoop-op-od'-ee-on",
+      "translated": true
+    },
+    "G5287": {
+      "definitions_cz": "nastavení pod (podpora), tzn.\n (obrazně) konkrétně, podstata, nebo abstraktně, jistota\n (objektivně nebo subjektivně)",
+      "translit": "hypóstasis",
+      "pronunciation": "hoop-os'-tas-is",
+      "translated": true
+    },
+    "G5288": {
+      "definitions_cz": "zadržet pod (z dohledu), t.j.\n (reflexivně) krčit se nebo zmenšovat, (obrazně) skrývat\n (rezerva)",
+      "translit": "hypostéllō",
+      "pronunciation": "hoop-os-tel'-lo",
+      "translated": true
+    },
+    "G5289": {
+      "definitions_cz": "smršťování (plachost), tj. (implicitně) odpadlictví",
+      "translit": "hypostolḗ",
+      "pronunciation": "hoop-os-tol-ay'",
+      "translated": true
+    },
+    "G5290": {
+      "definitions_cz": "otočit se pod (za), tj. vrátit se (doslova\n nebo obrazně)",
+      "translit": "hypostréphō",
+      "pronunciation": "hoop-os-tref'-o",
+      "translated": true
+    },
+    "G5291": {
+      "definitions_cz": "rozsypat pod sebe (nohy jako a\n koberec)",
+      "translit": "hypostrṓnnymi",
+      "pronunciation": "hoop-os-trone'-noo-mee",
+      "translated": true
+    },
+    "G5292": {
+      "definitions_cz": "podřízení",
+      "translit": "hypotagḗ",
+      "pronunciation": "hoop-ot-ag-ay'",
+      "translated": true
+    },
+    "G5293": {
+      "definitions_cz": "podřídit se; reflexivně, poslouchat",
+      "translit": "hypotássō",
+      "pronunciation": "hoop-ot-as'-so",
+      "translated": true
+    },
+    "G5294": {
+      "definitions_cz": "umístit pod, tj. (obrazně) k\n nebezpečí, (reflexivně) navrhnout",
+      "translit": "hypotíthēmi",
+      "pronunciation": "hoop-ot-ith'-ay-mee",
+      "translated": true
     }
   }
 }
