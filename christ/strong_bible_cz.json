@@ -65474,6 +65474,706 @@
       "hebrew": "סלד",
       "xlit": "Çeled",
       "translated": true
+    },
+    "H5541": {
+      "definitions_cz": "1) odlehčit, odhodit | 1a) (Qal) odlehčit | 1b) (Piel) opominout, odmítnout | 2) vážit, vyvažovat | 2a) (Pual) ke zvážení",
+      "lemma": "סָלָה",
+      "hebrew": "סלה",
+      "xlit": "çâlâh",
+      "translated": true
+    },
+    "H5542": {
+      "definitions_cz": "1) pozvednout, povznést | 1a) Selah | 1a1) technický hudební termín pravděpodobně zobrazující zvýraznění, pauzu, přerušení",
+      "lemma": "סֶלָה",
+      "hebrew": "סלה",
+      "xlit": "çelâh",
+      "translated": true
+    },
+    "H5543": {
+      "definitions_cz": "Sallu nebo Salu nebo Sallai = \"váženo\" | 1) kněz za časů Zerubbábelových | 2) otec Zimriho, knížete Simeonských, kterého zabil Pinchas | 3) postexilový benjamit",
+      "lemma": "סַלּוּ",
+      "hebrew": "סלו",
+      "xlit": "Çallûw",
+      "translated": true
+    },
+    "H5544": {
+      "definitions_cz": "1) trn, trn",
+      "lemma": "סִלּוֹן",
+      "hebrew": "סלון",
+      "xlit": "çillôwn",
+      "translated": true
+    },
+    "H5545": {
+      "definitions_cz": "1) odpustit, prominout | 1a) (Qal) odpustit, prominout | 1b) (Niphal), aby bylo odpuštěno",
+      "lemma": "סָלַח",
+      "hebrew": "סלח",
+      "xlit": "çâlach",
+      "translated": true
+    },
+    "H5546": {
+      "definitions_cz": "1) připraven odpustit, odpouštět",
+      "lemma": "סַלָּח",
+      "hebrew": "סלח",
+      "xlit": "çallâch",
+      "translated": true
+    },
+    "H5547": {
+      "definitions_cz": "1) odpuštění",
+      "lemma": "סְלִיחָה",
+      "hebrew": "סליחה",
+      "xlit": "çᵉlîychâh",
+      "translated": true
+    },
+    "H5548": {
+      "definitions_cz": "Salcah nebo Salchah = \"migrace\" | 1) město nebo okres na nejvýchodnějším okraji Bášanu a přidělené kmeni Gad; moderní 'Sulkhad', který je 56 mil (90 km) východně od Jordánu na jižním výběžku pohoří Hauran",
+      "lemma": "סַלְכָה",
+      "hebrew": "סלכה",
+      "xlit": "Çalkâh",
+      "translated": true
+    },
+    "H5549": {
+      "definitions_cz": "1) pozvednout, nahodit, povznést | 1a) (Qal) | 1a1) postavit dálnici | 1a2) nahodit cestu | 1a3) zvednout (z písně) | 1b) (Pilpel) vyvyšovat, vysoce vážit, oceňovat | 1c) (Hithpoel) vyvyšovat se",
+      "lemma": "סָלַל",
+      "hebrew": "סלל",
+      "xlit": "çâlal",
+      "translated": true
+    },
+    "H5550": {
+      "definitions_cz": "1) mohyla",
+      "lemma": "סֹלְלָה",
+      "hebrew": "סללה",
+      "xlit": "çôlᵉlâh",
+      "translated": true
+    },
+    "H5551": {
+      "definitions_cz": "1) žebřík",
+      "lemma": "סֻלָּם",
+      "hebrew": "סלם",
+      "xlit": "çullâm",
+      "translated": true
+    },
+    "H5552": {
+      "definitions_cz": "1) košík | 1a) snad nebo pravděpodobně výhonek, větev, úponek",
+      "lemma": "סַלְסִלָּה",
+      "hebrew": "סלסלה",
+      "xlit": "çalçillâh",
+      "translated": true
+    },
+    "H5553": {
+      "definitions_cz": "1) útes, útes, skála | 1a) útes, útes | 1b) jako Jehovova pevnost, bezpečí (obr.)",
+      "lemma": "סֶלַע",
+      "hebrew": "סלע",
+      "xlit": "çelaʻ",
+      "translated": true
+    },
+    "H5554": {
+      "definitions_cz": "Sela = \"skála\" | 1) místo v Edomu | 1a) možná rané jméno pro „Petra“",
+      "lemma": "סֶלַע",
+      "hebrew": "סלע",
+      "xlit": "Çelaʻ",
+      "translated": true
+    },
+    "H5555": {
+      "definitions_cz": "Sela-hammahlekoth = \"útes útěků\" nebo \"útes divizí\" | 1) skála nebo útes v pustině Maon, jihovýchodně od Hebronu, dějiště útěku Davida před Saulem",
+      "lemma": "סֶלַע הַמַּחְלְקוֹת",
+      "hebrew": "סלע המחלקות",
+      "xlit": "Çelaʻ ham-machlᵉqôwth",
+      "translated": true
+    },
+    "H5556": {
+      "definitions_cz": "1) saranče | 1a) jedlá okřídlená kobylka",
+      "lemma": "סׇלְעָם",
+      "hebrew": "סלעם",
+      "xlit": "çolʻâm",
+      "translated": true
+    },
+    "H5557": {
+      "definitions_cz": "1) překroutit, převrátit, překroutit, převrátit, zničit | 1a) (Piel) | 1a1) zvrhnout (úplatkářství) | 1a2) podvracet, převracet, ničit",
+      "lemma": "סָלַף",
+      "hebrew": "סלף",
+      "xlit": "çâlaph",
+      "translated": true
+    },
+    "H5558": {
+      "definitions_cz": "1) křivost, zvrácenost, křivé jednání",
+      "lemma": "סֶלֶף",
+      "hebrew": "סלף",
+      "xlit": "çeleph",
+      "translated": true
+    },
+    "H5559": {
+      "definitions_cz": "1) vystoupit, vystoupit | 1a) (P'al) přijít nahoru | 1b) (P'il) přijít nahoru",
+      "lemma": "סְלִק",
+      "hebrew": "סלק",
+      "xlit": "çᵉliq",
+      "translated": true
+    },
+    "H5560": {
+      "definitions_cz": "1) jemná mouka",
+      "lemma": "סֹלֶת",
+      "hebrew": "סלת",
+      "xlit": "çôleth",
+      "translated": true
+    },
+    "H5561": {
+      "definitions_cz": "1) koření | 1a) koření používané do kadidla",
+      "lemma": "סַם",
+      "hebrew": "סם",
+      "xlit": "çam",
+      "translated": true
+    },
+    "H5562": {
+      "definitions_cz": "Samgar-nebo = \"meč Nebo\" | 1) jeden z knížat nebo vojevůdců babylonského krále Nabuchodonozora",
+      "lemma": "סַמְגַּר נְבוֹ",
+      "hebrew": "נבו",
+      "xlit": "Çamgar Nᵉbôw",
+      "translated": true
+    },
+    "H5563": {
+      "definitions_cz": "1) hroznový květ, hroznový pupen",
+      "lemma": "סְמָדַר",
+      "hebrew": "סמדר",
+      "xlit": "çᵉmâdar",
+      "translated": true
+    },
+    "H5564": {
+      "definitions_cz": "1) opřít se, položit, opřít se, podepřít, položit, podepřít, opřít se o | 1a) (Qal) | 1a1) opřít se nebo položit, opřít se, opřít se | 1a2) podporovat, udržovat, udržovat | 1b) (Niphal) podepřít se nebo se podepřít | 1c) (Piel) k udržení, osvěžení, oživení",
+      "lemma": "סָמַךְ",
+      "hebrew": "סמך",
+      "xlit": "çâmak",
+      "translated": true
+    },
+    "H5565": {
+      "definitions_cz": "Semachiah = \"Jehova podpořil\" | 1) Korachitský levita, jeden ze synů Šemajášových",
+      "lemma": "סְמַכְיָהוּ",
+      "hebrew": "סמכיהו",
+      "xlit": "Çᵉmakyâhûw",
+      "translated": true
+    },
+    "H5566": {
+      "definitions_cz": "1) obraz, socha, idol",
+      "lemma": "סֶמֶל",
+      "hebrew": "סמל",
+      "xlit": "çemel",
+      "translated": true
+    },
+    "H5567": {
+      "definitions_cz": "1) pro označení | 1a) (Niphal) jmenovaný, určený (příčestí)",
+      "lemma": "סָמַן",
+      "hebrew": "סמן",
+      "xlit": "çâman",
+      "translated": true
+    },
+    "H5568": {
+      "definitions_cz": "1) naježit se, třást se, vstát | 1a) (Qal) k naježení, chvění | 1b) (Piel) naježit se, vstát",
+      "lemma": "סָמַר",
+      "hebrew": "סמר",
+      "xlit": "çâmar",
+      "translated": true
+    },
+    "H5569": {
+      "definitions_cz": "1) naježený, drsný",
+      "lemma": "סָמָר",
+      "hebrew": "סמר",
+      "xlit": "çâmâr",
+      "translated": true
+    },
+    "H5570": {
+      "definitions_cz": "Senaah nebo Hassenaah [s článkem] = \"trnitý\" | 1) předek rodu, který se vrátil z exilu se Zerubábelem",
+      "lemma": "סְנָאָה",
+      "hebrew": "סנאה",
+      "xlit": "Çᵉnâʼâh",
+      "translated": true
+    },
+    "H5571": {
+      "definitions_cz": "Sanballat = \"síla\" | 1) Moáb z Horonaima a odpůrce Nehemjáše a navrácených vyhnanců s cílem znovu postavit hradby Jeruzaléma",
+      "lemma": "סַנְבַלַּט",
+      "hebrew": "סנבלט",
+      "xlit": "Çanballaṭ",
+      "translated": true
+    },
+    "H5572": {
+      "definitions_cz": "1) keř, trnitý keř | 1a) hořící Mojžíšův keř | 1b) snad ostružinový keř",
+      "lemma": "סְנֶה",
+      "hebrew": "סנה",
+      "xlit": "çᵉneh",
+      "translated": true
+    },
+    "H5573": {
+      "definitions_cz": "Seneh = \"trnitý\" | 1) skalní výšina s útesy, která stála v průchodu Michmash 6,5 mil (10,4 km) severně od Jeruzaléma; Jonatan zaútočil na filištínskou základnu na této výšině",
+      "lemma": "סֶנֶה",
+      "hebrew": "סנה",
+      "xlit": "Çeneh",
+      "translated": true
+    },
+    "H5574": {
+      "definitions_cz": "Senuah nebo Hasenuah [s uměním] = \"ježící\" | 1) benjamit",
+      "lemma": "סְנוּאָה",
+      "hebrew": "סנואה",
+      "xlit": "Çᵉnûwʼâh",
+      "translated": true
+    },
+    "H5575": {
+      "definitions_cz": "1) náhlá slepota",
+      "lemma": "סַנְוֵר",
+      "hebrew": "סנור",
+      "xlit": "çanvêr",
+      "translated": true
+    },
+    "H5576": {
+      "definitions_cz": "Sennacherib = \"Hřích rozmnožil bratři\" (Sin = měsíc) | 1) syn Sargona, otce Esarhaddona a asyrského krále v letech 705-681 př. n. l.; zaútočil na Judu za vlády krále Ezechiáše a Juda byla vysvobozena, když v reakci na modlitbu Ezechiáše anděl zabil 185 000 asyrských vojáků",
+      "lemma": "סַנְחֵרִיב",
+      "hebrew": "סנחריב",
+      "xlit": "Çanchêrîyb",
+      "translated": true
+    },
+    "H5577": {
+      "definitions_cz": "1) větev, stonek (datlovníku)",
+      "lemma": "סַנְסִן",
+      "hebrew": "סנסן",
+      "xlit": "çançin",
+      "translated": true
+    },
+    "H5578": {
+      "definitions_cz": "Sansannah = \"palmová ratolest\" | 1) město v jižním Judsku",
+      "lemma": "סַנְסַנָּה",
+      "hebrew": "סנסנה",
+      "xlit": "Çançannâh",
+      "translated": true
+    },
+    "H5579": {
+      "definitions_cz": "1) fin",
+      "lemma": "סְנַפִּיר",
+      "hebrew": "סנפיר",
+      "xlit": "çᵉnappîyr",
+      "translated": true
+    },
+    "H5580": {
+      "definitions_cz": "1) můra",
+      "lemma": "סָס",
+      "hebrew": "סס",
+      "xlit": "çâç",
+      "translated": true
+    },
+    "H5581": {
+      "definitions_cz": "Sisamai = \"vodní jeřáb\" nebo \"vlaštovka\" | 1) potomek Šešana v linii Jerahmeel",
+      "lemma": "סִסְמַי",
+      "hebrew": "ססמי",
+      "xlit": "Çiçmay",
+      "translated": true
+    },
+    "H5582": {
+      "definitions_cz": "1) podporovat, udržovat, zůstat, zakládat, posilovat, utěšit | 1a) (Qal) podporovat, udržovat | 1a1) udržet, zůstat (srdce) | 1a2) podporovat, držet (trůnu)",
+      "lemma": "סָעַד",
+      "hebrew": "סעד",
+      "xlit": "çâʻad",
+      "translated": true
+    },
+    "H5583": {
+      "definitions_cz": "1) (Aphel) podporovat, udržovat",
+      "lemma": "סְעַד",
+      "hebrew": "סעד",
+      "xlit": "çᵉʻad",
+      "translated": true
+    },
+    "H5584": {
+      "definitions_cz": "1) (Qal) spěchat (bouřkového větru)",
+      "lemma": "סָעָה",
+      "hebrew": "סעה",
+      "xlit": "çâʻâh",
+      "translated": true
+    },
+    "H5585": {
+      "definitions_cz": "1) rozštěp, větev | 1a) štěrbina (srubu) | 1b) větve, větve",
+      "lemma": "סָעִיף",
+      "hebrew": "סעיף",
+      "xlit": "çâʻîyph",
+      "translated": true
+    },
+    "H5586": {
+      "definitions_cz": "1) (Piel) odříznout, odštípnout větve",
+      "lemma": "סָעַף",
+      "hebrew": "סעף",
+      "xlit": "çâʻaph",
+      "translated": true
+    },
+    "H5587": {
+      "definitions_cz": "1) ambivalence, rozdělení, rozdělený názor",
+      "lemma": "סָעִף",
+      "hebrew": "סעף",
+      "xlit": "çâʻiph",
+      "translated": true
+    },
+    "H5588": {
+      "definitions_cz": "1) ambivalentní, rozdělený, polopatický",
+      "lemma": "סֵעֵף",
+      "hebrew": "סעף",
+      "xlit": "çêʻêph",
+      "translated": true
+    },
+    "H5589": {
+      "definitions_cz": "1) větev, větev",
+      "lemma": "סְעַפָּה",
+      "hebrew": "סעפה",
+      "xlit": "çᵉʻappâh",
+      "translated": true
+    },
+    "H5590": {
+      "definitions_cz": "1) bouřit, zuřit | 1a) (Qal) | 1a1) do bouře | 1a2) bouřlivá, rostoucí bouře (příčestí) | 1b) (Niphal) k rozzuření | 1c) (Piel) k bouři pryč | 1d) (Pual) být poháněn bouří",
+      "lemma": "סָעַר",
+      "hebrew": "סער",
+      "xlit": "çâʻar",
+      "translated": true
+    },
+    "H5591": {
+      "definitions_cz": "1) bouře, bouře, vichřice | 1a) bouře",
+      "lemma": "סַעַר",
+      "hebrew": "סער",
+      "xlit": "çaʻar",
+      "translated": true
+    },
+    "H5592": {
+      "definitions_cz": "1) rozkládací, umyvadlo, pohár, miska | 1a) umyvadlo, pohár | 2) práh, parapet | 2a) práh, parapet, vrátný",
+      "lemma": "סַף",
+      "hebrew": "סף",
+      "xlit": "çaph",
+      "translated": true
+    },
+    "H5593": {
+      "definitions_cz": "Saph = \"vysoký\" | 1) jeden ze synů filištínského obra zabitého Sibbechaiem Chušatským",
+      "lemma": "סַף",
+      "hebrew": "סף",
+      "xlit": "Çaph",
+      "translated": true
+    },
+    "H5594": {
+      "definitions_cz": "1) naříkat, naříkat, truchlit | 1a) (Qal) | 1a1) naříkat, naříkat | 1a2) kvílení (příčestí) | 1b) (Niphal) být naříkán, být naříkán",
+      "lemma": "סָפַד",
+      "hebrew": "ספד",
+      "xlit": "çâphad",
+      "translated": true
+    },
+    "H5595": {
+      "definitions_cz": "1) zamést nebo vytrhnout, dohnat, zničit, spotřebovat | 1a) (Qal) | 1a1) k utržení | 1a2) zamést nebo vytrhnout | 1b) (Niphal) | 1b1) být smeten, zničen | 1b2) být dohozen, být zajat | 1c) (Hiphil) dohnat, shromáždit",
+      "lemma": "סָפָה",
+      "hebrew": "ספה",
+      "xlit": "çâphâh",
+      "translated": true
+    },
+    "H5596": {
+      "definitions_cz": "1) spojit, připojit, spojit | 1a) (Qal) pro připojení, připojte se k | 1b) (Niphal) připojit se | 1c) (Piel) spojování (příčestí) | 1d) (Pual) spojit se, držet se pohromadě | 1e) (Hithpael) připojit se | 2) (Piel) způsobit strup, udeřit strupem",
+      "lemma": "סָפַח",
+      "hebrew": "ספח",
+      "xlit": "çâphach",
+      "translated": true
+    },
+    "H5597": {
+      "definitions_cz": "1) erupce, strup, léze | 1a) buď maligní nebo benigní",
+      "lemma": "סַפַּחַת",
+      "hebrew": "ספחת",
+      "xlit": "çappachath",
+      "translated": true
+    },
+    "H5598": {
+      "definitions_cz": "Sippai = \"práh\" | 1) jeden ze synů filištínského obra zabitého Sibbechaiem Chušatským",
+      "lemma": "סִפַּי",
+      "hebrew": "ספי",
+      "xlit": "Çippay",
+      "translated": true
+    },
+    "H5599": {
+      "definitions_cz": "1) výlev | 2) růst z vysypaných jader, dorůstání, plodnice",
+      "lemma": "סָפִיחַ",
+      "hebrew": "ספיח",
+      "xlit": "çâphîyach",
+      "translated": true
+    },
+    "H5600": {
+      "definitions_cz": "1) loď, plavidlo",
+      "lemma": "סְפִינָה",
+      "hebrew": "ספינה",
+      "xlit": "çᵉphîynâh",
+      "translated": true
+    },
+    "H5601": {
+      "definitions_cz": "1) safír, lapis lazuli",
+      "lemma": "סַפִּיר",
+      "hebrew": "ספיר",
+      "xlit": "çappîyr",
+      "translated": true
+    },
+    "H5602": {
+      "definitions_cz": "1) miska, umyvadlo",
+      "lemma": "סֵפֶל",
+      "hebrew": "ספל",
+      "xlit": "çêphel",
+      "translated": true
+    },
+    "H5603": {
+      "definitions_cz": "1) k zakrytí, zakrytí, obložení, obložení deskami nebo obložením | 1a) (Qal) | 1a1) k zakrytí, panel | 1a2) krytý, obložený (příčestí)",
+      "lemma": "סָפַן",
+      "hebrew": "ספן",
+      "xlit": "çâphan",
+      "translated": true
+    },
+    "H5604": {
+      "definitions_cz": "1) kryt, kryt, panel, obložení",
+      "lemma": "סִפֻּן",
+      "hebrew": "ספן",
+      "xlit": "çippun",
+      "translated": true
+    },
+    "H5605": {
+      "definitions_cz": "1) (Hithpoel) stát na prahu nebo jej hlídat",
+      "lemma": "סָפַף",
+      "hebrew": "ספף",
+      "xlit": "çâphaph",
+      "translated": true
+    },
+    "H5606": {
+      "definitions_cz": "1) tleskat, plácat | 1a)(Qal) | 1a1) plácat, tleskat | 1a2) plácat, kárat | 1a3) cákat, zvracet | 1b) (Hiphil) způsobit tleskání",
+      "lemma": "סָפַק",
+      "hebrew": "ספק",
+      "xlit": "çâphaq",
+      "translated": true
+    },
+    "H5607": {
+      "definitions_cz": "1) tleskání, výsměch, výsměch, pohrdání | 1a) znamená pochybný",
+      "lemma": "סֵפֶק",
+      "hebrew": "ספק",
+      "xlit": "çêpheq",
+      "translated": true
+    },
+    "H5608": {
+      "definitions_cz": "v | 1) počítat, vyprávět, vztahovat | 1a) (Qal) | 1a1) počítat (věci) | 1a2) očíslovat, brát v úvahu, počítat | 1b) (Niphal) se počítá, čísluje se | 1c) (Piel) převyprávět, nacvičit, prohlásit | 1c1) převyprávět (něco), zkoušet | 1c2) mluvit | 1c3) počítat přesně nebo přesně | 1d) (Pual) k převyprávění, k nacvičení, k příbuznosti | n m | 2) sčítač, shromažďovací důstojník, sekretář, písař | 2a) sčítač, shromažďovatel, tajemník | 2b) učený člověk, písař",
+      "lemma": "סָפַר",
+      "hebrew": "ספר",
+      "xlit": "çâphar",
+      "translated": true
+    },
+    "H5609": {
+      "definitions_cz": "1) kniha",
+      "lemma": "סְפַר",
+      "hebrew": "ספר",
+      "xlit": "çᵉphar",
+      "translated": true
+    },
+    "H5610": {
+      "definitions_cz": "1) sčítání lidu, výčet",
+      "lemma": "סְפָר",
+      "hebrew": "ספר",
+      "xlit": "çᵉphâr",
+      "translated": true
+    },
+    "H5611": {
+      "definitions_cz": "Sephar = \"číslování\" | 1) místo v jižní Arábii",
+      "lemma": "סְפָר",
+      "hebrew": "ספר",
+      "xlit": "Çᵉphâr",
+      "translated": true
+    },
+    "H5612": {
+      "definitions_cz": "n f | 1) kniha | n m | 2) dopis, dokument, psaní, kniha | 2a) mise | 2a1) dopis (pokyn), písemná objednávka, pověření, žádost, písemná vyhláška | 2b) právní dokument, osvědčení o rozvodu, kupní smlouva, obžaloba, podpis | 2c) kniha, svitek | 2c1) kniha proroctví | 2c2) genealogický rejstřík | 2c3) zákonná kniha | 2c4) kniha (básní) | 2c5) kniha (královských) | 2c6) knihy kánonu, písmo | 2c7) kniha záznamů (Boží) | 2d) kniha-učení, psaní | 2d1) umět číst",
+      "lemma": "סֵפֶר",
+      "hebrew": "ספר",
+      "xlit": "çêpher",
+      "translated": true
+    },
+    "H5613": {
+      "definitions_cz": "1) písař, tajemník",
+      "lemma": "סָפֵר",
+      "hebrew": "ספר",
+      "xlit": "çâphêr",
+      "translated": true
+    },
+    "H5614": {
+      "definitions_cz": "Sepharad = \"oddělený\" | 1) místo, kam byli Izraelité vyhnáni; místo neznámé",
+      "lemma": "סְפָרָד",
+      "hebrew": "ספרד",
+      "xlit": "Çᵉphârâd",
+      "translated": true
+    },
+    "H5615": {
+      "definitions_cz": "1) číslo",
+      "lemma": "סְפֹרָה",
+      "hebrew": "ספרה",
+      "xlit": "çᵉphôrâh",
+      "translated": true
+    },
+    "H5616": {
+      "definitions_cz": "Sefarviti viz Sepharvaim = \"výčet\" | 1) obyvatel Sepharvaimu",
+      "lemma": "סְפַרְוִי",
+      "hebrew": "ספרוי",
+      "xlit": "Çᵉpharvîy",
+      "translated": true
+    },
+    "H5617": {
+      "definitions_cz": "Sepharvaim = \"dva Sipparové\" | 1) město v Sýrii dobyté asyrským králem | 1a) snad v blízkosti moderního „Mosaibu“ a na Eufratu nad Babylonem",
+      "lemma": "סְפַרְוַיִם",
+      "hebrew": "ספרוים",
+      "xlit": "Çᵉpharvayim",
+      "translated": true
+    },
+    "H5618": {
+      "definitions_cz": "Sophereth = \"psaní\" | 1) předek rodiny vyhnanců, kteří se vrátili se Zerubábelem",
+      "lemma": "סֹפֶרֶת",
+      "hebrew": "ספרת",
+      "xlit": "Çôphereth",
+      "translated": true
+    },
+    "H5619": {
+      "definitions_cz": "1) ukamenovat (k smrti), usmrtit ukamenováním | 1a) (Qal) házet kameny, kameny k smrti | 1b) (Niphal) být ukamenován | 1c) (Piel) | 1c1) kamenovat, házet kameny | 1c2) zbavit se kamenů (vinice, dálnice) | 1d) (Pual) být ukamenován k smrti",
+      "lemma": "סָקַל",
+      "hebrew": "סקל",
+      "xlit": "çâqal",
+      "translated": true
+    },
+    "H5620": {
+      "definitions_cz": "1) tvrdohlavý, nesmiřitelný, vzpurný, naštvaný, mrzutý",
+      "lemma": "סַר",
+      "hebrew": "סר",
+      "xlit": "çar",
+      "translated": true
+    },
+    "H5621": {
+      "definitions_cz": "1) brier, rebel | 1a) znamená pochybný",
+      "lemma": "סָרָב",
+      "hebrew": "סרב",
+      "xlit": "çârâb",
+      "translated": true
+    },
+    "H5622": {
+      "definitions_cz": "1) plášť, plášť | 1a) význam pochybný; možná také 'babouche' (orientální pantofle)",
+      "lemma": "סַרְבַּל",
+      "hebrew": "סרבל",
+      "xlit": "çarbal",
+      "translated": true
+    },
+    "H5623": {
+      "definitions_cz": "Sargon = \"princ slunce\" | 1) asyrský král, syn Salmaneserův a otec Senacheribův; vládl v letech 721-702 př. n. l.; dobyvatel Samaří",
+      "lemma": "סַרְגּוֹן",
+      "hebrew": "סרגון",
+      "xlit": "Çargôwn",
+      "translated": true
+    },
+    "H5624": {
+      "definitions_cz": "Sered = \"strach\" | 1) 1. syn Zabulonův",
+      "lemma": "סֶרֶד",
+      "hebrew": "סרד",
+      "xlit": "Çered",
+      "translated": true
+    },
+    "H5625": {
+      "definitions_cz": "Sardites = viz Sered \"zděšení\" | 1) potomci Sereda, prvorozeného syna Zabulona",
+      "lemma": "סַרְדִּי",
+      "hebrew": "סרדי",
+      "xlit": "Çardîy",
+      "translated": true
+    },
+    "H5626": {
+      "definitions_cz": "Sirah = \"otáčení\" | 1) studna nebo cisterna; zřejmě na silnici severně od Hebronu",
+      "lemma": "סִרָה",
+      "hebrew": "סרה",
+      "xlit": "Çirâh",
+      "translated": true
+    },
+    "H5627": {
+      "definitions_cz": "1) odpadlictví, zběhnutí, odbočení, stažení | 1a) zběhnutí (mravních nebo právních trestných činů) | 1b) odpadlictví | 1c) stažení (negováno)",
+      "lemma": "סָרָה",
+      "hebrew": "סרה",
+      "xlit": "çârâh",
+      "translated": true
+    },
+    "H5628": {
+      "definitions_cz": "1) jít na svobodu, být nespoutaný, být překročen, převyšovat, přečnívat, luxusně růst | 1a) (Qal) | 1a1) jít na svobodu, být nespoutaný, roztáhnout se | 1a1a) přejíždění, šíření (příčestí) | 1a2) k převisu | 1b) (Niphal) být propuštěn nebo propuštěn nebo pryč",
+      "lemma": "סָרַח",
+      "hebrew": "סרח",
+      "xlit": "çârach",
+      "translated": true
+    },
+    "H5629": {
+      "definitions_cz": "1) převislý, převislý",
+      "lemma": "סֶרַח",
+      "hebrew": "סרח",
+      "xlit": "çerach",
+      "translated": true
+    },
+    "H5630": {
+      "definitions_cz": "1) brnění",
+      "lemma": "סִרְיֹן",
+      "hebrew": "סרין",
+      "xlit": "çiryôn",
+      "translated": true
+    },
+    "H5631": {
+      "definitions_cz": "1) úředník, eunuch",
+      "lemma": "סָרִיס",
+      "hebrew": "סריס",
+      "xlit": "çârîyç",
+      "translated": true
+    },
+    "H5632": {
+      "definitions_cz": "1) náčelník, dozorce",
+      "lemma": "סָרֵךְ",
+      "hebrew": "סרך",
+      "xlit": "çârêk",
+      "translated": true
+    },
+    "H5633": {
+      "definitions_cz": "1) pán, vládce, tyran | 2) náprava",
+      "lemma": "סֶרֶן",
+      "hebrew": "סרן",
+      "xlit": "çeren",
+      "translated": true
+    },
+    "H5634": {
+      "definitions_cz": "1) větev",
+      "lemma": "סַרְעַפָּה",
+      "hebrew": "סרעפה",
+      "xlit": "çarʻappâh",
+      "translated": true
+    },
+    "H5635": {
+      "definitions_cz": "1) (Piel) spálit",
+      "lemma": "סָרַף",
+      "hebrew": "סרף",
+      "xlit": "çâraph",
+      "translated": true
+    },
+    "H5636": {
+      "definitions_cz": "1) neidentifikovaná pouštní rostlina | 1a) význam pochybný; možná brier, kopřiva",
+      "lemma": "סַרְפָּד",
+      "hebrew": "סרפד",
+      "xlit": "çarpâd",
+      "translated": true
+    },
+    "H5637": {
+      "definitions_cz": "1) bouřit se, být tvrdohlavý, být vzpurný, být odolný | 1a) (Qal) | 1a1) být tvrdohlavý | 1a2) tvrdohlavý, rebel (subst)",
+      "lemma": "סָרַר",
+      "hebrew": "סרר",
+      "xlit": "çârar",
+      "translated": true
+    },
+    "H5638": {
+      "definitions_cz": "1) zima, období dešťů",
+      "lemma": "סְתָו",
+      "hebrew": "סתו",
+      "xlit": "çᵉthâv",
+      "translated": true
+    },
+    "H5639": {
+      "definitions_cz": "Sethur = \"skrytý\" | 1) syn Michaela, vyzvědače z kmene Asher",
+      "lemma": "סְתוּר",
+      "hebrew": "סתור",
+      "xlit": "Çᵉthûwr",
+      "translated": true
+    },
+    "H5640": {
+      "definitions_cz": "1) zastavit, ztišit, držet blízko | 1a) (Qal) | 1a1) zastavit | 1a2) držet hubu, držet blízko | 1a3) tajenka (příčestí) | 1b) (Niphal) k zastavení | 1c) (Piel) pro zastavení",
+      "lemma": "סָתַם",
+      "hebrew": "סתם",
+      "xlit": "çâtham",
+      "translated": true
     }
   }
 }
