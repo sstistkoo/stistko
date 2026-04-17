@@ -60441,6 +60441,706 @@
       "hebrew": "מרמה",
       "xlit": "Mirmâh",
       "translated": true
+    },
+    "H4822": {
+      "definitions_cz": "Meremoth = \"výšky\" | 1) kněz, syn Uriáše z rodu Kozů činný při přestavbě jeruzalémských hradeb a v 7. běhu chrámové služby v době Ezdráše a Nehemjáše | 2) kněz za časů Zerubbábelových | 3) vracející se vyhnanství rodiny Bani, která měla v době Ezry cizí manželku",
+      "lemma": "מְרֵמוֹת",
+      "hebrew": "מרמות",
+      "xlit": "Mᵉrêmôwth",
+      "translated": true
+    },
+    "H4823": {
+      "definitions_cz": "1) přešlapující místo, přešlap | 1a) přešlapovací místo | 1b) přešlapování",
+      "lemma": "מִרְמָס",
+      "hebrew": "מרמס",
+      "xlit": "mirmâç",
+      "translated": true
+    },
+    "H4824": {
+      "definitions_cz": "Meronothite = \"radostný křikloun\" | 1) rodák z místa pravděpodobně zvaného 'Meronoth' | 1a) Jehdeiah | 1b) Jadon",
+      "lemma": "מֵרֹנֹתִי",
+      "hebrew": "מרנתי",
+      "xlit": "Mêrônôthîy",
+      "translated": true
+    },
+    "H4825": {
+      "definitions_cz": "Meres = \"vznešený\" | 1) jeden ze 7 rádců Ahasvera",
+      "lemma": "מֶרֶס",
+      "hebrew": "מרס",
+      "xlit": "Mereç",
+      "translated": true
+    },
+    "H4826": {
+      "definitions_cz": "Marsena = \"hodný\" | 1) jeden ze 7 rádců Ahasvera",
+      "lemma": "מַרְסְנָא",
+      "hebrew": "מרסנא",
+      "xlit": "Marçᵉnâʼ",
+      "translated": true
+    },
+    "H4827": {
+      "definitions_cz": "1) (Hiphil) neplechu | 2) (TWOT) důvěrný přítel",
+      "lemma": "מֵרַע",
+      "hebrew": "מרע",
+      "xlit": "mêraʻ",
+      "translated": true
+    },
+    "H4828": {
+      "definitions_cz": "1) společník, přítel, důvěrný přítel",
+      "lemma": "מֵרֵעַ",
+      "hebrew": "מרע",
+      "xlit": "mêrêaʻ",
+      "translated": true
+    },
+    "H4829": {
+      "definitions_cz": "1) pastva, pastvina",
+      "lemma": "מִרְעֶה",
+      "hebrew": "מרעה",
+      "xlit": "mirʻeh",
+      "translated": true
+    },
+    "H4830": {
+      "definitions_cz": "1) pastva, pastevectví, pastevectví | 1a) pastva, pastevectví | 1b) pastviny | 1c) hejno (meton)",
+      "lemma": "מִרְעִית",
+      "hebrew": "מרעית",
+      "xlit": "mirʻîyth",
+      "translated": true
+    },
+    "H4831": {
+      "definitions_cz": "Maralah = \"chvění\" | 1) město nebo orientační bod na hranici Zabulunu",
+      "lemma": "מַרְעֲלָה",
+      "hebrew": "מרעלה",
+      "xlit": "Marʻălâh",
+      "translated": true
+    },
+    "H4832": {
+      "definitions_cz": "1) zdraví, léčení, léčba | 1a) léčení, léčení | 1b) zdraví, zisk, zdraví (mysli) | 1c) léčení | 1c1) nevyléčitelné (s negativním)",
+      "lemma": "מַרְפֵּא",
+      "hebrew": "מרפא",
+      "xlit": "marpêʼ",
+      "translated": true
+    },
+    "H4833": {
+      "definitions_cz": "1) pokažená, věc pokažená",
+      "lemma": "מִרְפָּשׂ",
+      "hebrew": "מרפש",
+      "xlit": "mirpâs",
+      "translated": true
+    },
+    "H4834": {
+      "definitions_cz": "1) být nebo onemocnět | 1a) (Niphal) být žalostný nebo bolestivý | 1b) (Hifil) onemocnět",
+      "lemma": "מָרַץ",
+      "hebrew": "מרץ",
+      "xlit": "mârats",
+      "translated": true
+    },
+    "H4835": {
+      "definitions_cz": "1) drcení, útlak",
+      "lemma": "מְרֻצָה",
+      "hebrew": "מרצה",
+      "xlit": "mᵉrutsâh",
+      "translated": true
+    },
+    "H4836": {
+      "definitions_cz": "1) šídlo, nudný nástroj",
+      "lemma": "מַרְצֵעַ",
+      "hebrew": "מרצע",
+      "xlit": "martsêaʻ",
+      "translated": true
+    },
+    "H4837": {
+      "definitions_cz": "1) chodník",
+      "lemma": "מַרְצֶפֶת",
+      "hebrew": "מרצפת",
+      "xlit": "martsepheth",
+      "translated": true
+    },
+    "H4838": {
+      "definitions_cz": "1) drhnout, leštit | 1a) (Qal) drhnout, leštit | 1b) (Pual) k pročištění",
+      "lemma": "מָרַק",
+      "hebrew": "מרק",
+      "xlit": "mâraq",
+      "translated": true
+    },
+    "H4839": {
+      "definitions_cz": "1) vývar, šťáva vařená z masa",
+      "lemma": "מָרָק",
+      "hebrew": "מרק",
+      "xlit": "mârâq",
+      "translated": true
+    },
+    "H4840": {
+      "definitions_cz": "1) koření, parfém, aromatické koření",
+      "lemma": "מֶרְקָח",
+      "hebrew": "מרקח",
+      "xlit": "merqâch",
+      "translated": true
+    },
+    "H4841": {
+      "definitions_cz": "1) koření, směs, koření | 2) hrnec na mast",
+      "lemma": "מֶרְקָחָה",
+      "hebrew": "מרקחה",
+      "xlit": "merqâchâh",
+      "translated": true
+    },
+    "H4842": {
+      "definitions_cz": "1) mast, směs masti | 2) mast-pot",
+      "lemma": "מִרְקַחַת",
+      "hebrew": "מרקחת",
+      "xlit": "mirqachath",
+      "translated": true
+    },
+    "H4843": {
+      "definitions_cz": "1) být hořký | 1a) (Qal) být hořký | 1b) (Piel) | 1b1) ukázat hořkost | 1b2) zhořknout | 1c) (Hiphil) udělat hořký, hořký | 1d) (Hithpalpel) | 1d1) rozhořčit se | 1d2) být rozzuřený | 2) (TWOT) být silný, posilovat",
+      "lemma": "מָרַר",
+      "hebrew": "מרר",
+      "xlit": "mârar",
+      "translated": true
+    },
+    "H4844": {
+      "definitions_cz": "1) hořká věc, hořká bylina, hořkost",
+      "lemma": "מְרֹר",
+      "hebrew": "מרר",
+      "xlit": "mᵉrôr",
+      "translated": true
+    },
+    "H4845": {
+      "definitions_cz": "1) žluč",
+      "lemma": "מְרֵרָה",
+      "hebrew": "מררה",
+      "xlit": "mᵉrêrâh",
+      "translated": true
+    },
+    "H4846": {
+      "definitions_cz": "1) hořká věc, žluč, jed | 1a) žlučník, žlučník (sídlo žlučníku) | 1b) jed, jed | 1c) hořká věc | 1d) hořkost",
+      "lemma": "מְרֹרָה",
+      "hebrew": "מררה",
+      "xlit": "mᵉrôrâh",
+      "translated": true
+    },
+    "H4847": {
+      "definitions_cz": "Merari = \"hořký\" | 1) 3. syn Leviho a hlava levitské rodiny",
+      "lemma": "מְרָרִי",
+      "hebrew": "מררי",
+      "xlit": "Mᵉrârîy",
+      "translated": true
+    },
+    "H4848": {
+      "definitions_cz": "Merarites = viz Marari \"hořký\" | 1) potomci Merariho, syna Léviho, a členové levitské rodiny",
+      "lemma": "מְרָרִי",
+      "hebrew": "מררי",
+      "xlit": "Mᵉrârîy",
+      "translated": true
+    },
+    "H4849": {
+      "definitions_cz": "1) špatnost",
+      "lemma": "מִרְשַׁעַת",
+      "hebrew": "מרשעת",
+      "xlit": "mirshaʻath",
+      "translated": true
+    },
+    "H4850": {
+      "definitions_cz": "Merathaim = \"dvojí povstání\" | 1) jiný název pro 'Babylon'",
+      "lemma": "מְרָתַיִם",
+      "hebrew": "מרתים",
+      "xlit": "Mᵉrâthayim",
+      "translated": true
+    },
+    "H4851": {
+      "definitions_cz": "Mash = \"vytažený\" | 1) jeden ze synů Aramových; také \"Meshech\"",
+      "lemma": "מַשׁ",
+      "hebrew": "מש",
+      "xlit": "Mash",
+      "translated": true
+    },
+    "H4852": {
+      "definitions_cz": "Mesha = \"svoboda\" | 1) oblast označující jednu z hranic území Joktanitů, když se poprvé usadili v Arábii",
+      "lemma": "מֵשָׁא",
+      "hebrew": "משא",
+      "xlit": "Mêshâʼ",
+      "translated": true
+    },
+    "H4853": {
+      "definitions_cz": "n m | 1) zatížení, nesení, hold, břemeno, zvedání | 1a) zatížení, zatížení | 1b) povznášející, povznášející, k čemu se duše pozvedá | 1c) ložisko, nesoucí | 1d) hold, to, co je neseno nebo přineseno nebo neseno | 2) výrok, orákulum, břemeno | Massa = \"břemeno\" | n pr m | 3) (BDB) syn Izmaelův",
+      "lemma": "מַשָּׂא",
+      "hebrew": "משא",
+      "xlit": "massâʼ",
+      "translated": true
+    },
+    "H4854": {
+      "definitions_cz": "Massa = \"břemeno\" | n pr m | 1) syn Izmaelův",
+      "lemma": "מַשָּׂא",
+      "hebrew": "משא",
+      "xlit": "Massâʼ",
+      "translated": true
+    },
+    "H4855": {
+      "definitions_cz": "1) půjčování na úrok, lichva | 1a) v Ne 5:11 byla míra „lichvy“ pouze jedno procento",
+      "lemma": "מַשָּׁא",
+      "hebrew": "משא",
+      "xlit": "mashshâʼ",
+      "translated": true
+    },
+    "H4856": {
+      "definitions_cz": "1) zvedání | 1a) zaujatost (v konstrukci)",
+      "lemma": "מַשֹּׂא",
+      "hebrew": "משא",
+      "xlit": "massôʼ",
+      "translated": true
+    },
+    "H4857": {
+      "definitions_cz": "1) místo čerpání vody, místo čerpání vody",
+      "lemma": "מַשְׁאָב",
+      "hebrew": "משאב",
+      "xlit": "mashʼâb",
+      "translated": true
+    },
+    "H4858": {
+      "definitions_cz": "1) povznesený, povznášející",
+      "lemma": "מַשָּׂאָה",
+      "hebrew": "משאה",
+      "xlit": "massâʼâh",
+      "translated": true
+    },
+    "H4859": {
+      "definitions_cz": "1) půjčka",
+      "lemma": "מַשָּׁאָה",
+      "hebrew": "משאה",
+      "xlit": "mashshâʼâh",
+      "translated": true
+    },
+    "H4860": {
+      "definitions_cz": "1) lstivost, přetvářka, podvod",
+      "lemma": "מַשָּׁאוֹן",
+      "hebrew": "משאון",
+      "xlit": "mashshâʼôwn",
+      "translated": true
+    },
+    "H4861": {
+      "definitions_cz": "Misheal = \"prosba\" | 1) město na území Asher přidělené geršonským Levitům",
+      "lemma": "מִשְׁאָל",
+      "hebrew": "משאל",
+      "xlit": "Mishʼâl",
+      "translated": true
+    },
+    "H4862": {
+      "definitions_cz": "1) žádost, žádost, přání",
+      "lemma": "מִשְׁאָלָה",
+      "hebrew": "משאלה",
+      "xlit": "mishʼâlâh",
+      "translated": true
+    },
+    "H4863": {
+      "definitions_cz": "1) hnětací žlab nebo mísa",
+      "lemma": "מִשְׁאֶרֶת",
+      "hebrew": "משארת",
+      "xlit": "mishʼereth",
+      "translated": true
+    },
+    "H4864": {
+      "definitions_cz": "1) povstání, výpověď, břemeno, porce, povznesení | 1a) to, co stoupá, povstání, povznesení, signál, povstání | 1b) výrok, orákulum | 1c) zátěž | 1d) porce, dar, štědrost, dar, příspěvek, obětina, pocta",
+      "lemma": "מַשְׂאֵת",
+      "hebrew": "משאת",
+      "xlit": "masʼêth",
+      "translated": true
+    },
+    "H4865": {
+      "definitions_cz": "1) pletená nebo filigránská nebo kostkovaná práce (nastavení pro drahokamy)",
+      "lemma": "מִשְׁבְּצָה",
+      "hebrew": "משבצה",
+      "xlit": "mishbᵉtsâh",
+      "translated": true
+    },
+    "H4866": {
+      "definitions_cz": "1) místo prolomení, místo porušení, otevření | 1a) dělohy",
+      "lemma": "מִשְׁבֵּר",
+      "hebrew": "משבר",
+      "xlit": "mishbêr",
+      "translated": true
+    },
+    "H4867": {
+      "definitions_cz": "1) rozbíječ, rozbíjení (moře)",
+      "lemma": "מִשְׁבָּר",
+      "hebrew": "משבר",
+      "xlit": "mishbâr",
+      "translated": true
+    },
+    "H4868": {
+      "definitions_cz": "1) zastavení, zničení",
+      "lemma": "מִשְׁבָּת",
+      "hebrew": "משבת",
+      "xlit": "mishbâth",
+      "translated": true
+    },
+    "H4869": {
+      "definitions_cz": "n m | 1) vysoké místo, útočiště, bezpečná výška, ústup | 1a) tvrz | 1b) útočiště (Boží) | Misgab = \"výška\" | n pr loc | 2) místo v Moabu",
+      "lemma": "מִשְׂגָּב",
+      "hebrew": "משגב",
+      "xlit": "misgâb",
+      "translated": true
+    },
+    "H4870": {
+      "definitions_cz": "1) chyba",
+      "lemma": "מִשְׁגֶּה",
+      "hebrew": "משגה",
+      "xlit": "mishgeh",
+      "translated": true
+    },
+    "H4871": {
+      "definitions_cz": "1) kreslit | 1a) (Qal) kreslit | 1b) (Hiphil) kreslit",
+      "lemma": "מָשָׁה",
+      "hebrew": "משה",
+      "xlit": "mâshâh",
+      "translated": true
+    },
+    "H4872": {
+      "definitions_cz": "Mojžíš = \"nakreslený\" | 1) prorok a zákonodárce, vůdce exodu",
+      "lemma": "מֹשֶׁה",
+      "hebrew": "משה",
+      "xlit": "Môsheh",
+      "translated": true
+    },
+    "H4873": {
+      "definitions_cz": "Mojžíš = \"nakreslený\" | 1) prorok a zákonodárce, vůdce exodu",
+      "lemma": "מֹשֶׁה",
+      "hebrew": "משה",
+      "xlit": "Môsheh",
+      "translated": true
+    },
+    "H4874": {
+      "definitions_cz": "1) půjčka | 1a) půjčky uvolněné v 7. roce",
+      "lemma": "מַשֶּׁה",
+      "hebrew": "משה",
+      "xlit": "mashsheh",
+      "translated": true
+    },
+    "H4875": {
+      "definitions_cz": "1) opuštěnost, zmar",
+      "lemma": "מְשׁוֹאָה",
+      "hebrew": "משואה",
+      "xlit": "mᵉshôwʼâh",
+      "translated": true
+    },
+    "H4876": {
+      "definitions_cz": "1) opuštěnost, zmar",
+      "lemma": "מַשּׁוּאָה",
+      "hebrew": "משואה",
+      "xlit": "mashshûwʼâh",
+      "translated": true
+    },
+    "H4877": {
+      "definitions_cz": "Meshobab = \"obnovený\" nebo \"zpátečnický\" | 1) potomek Simeonův",
+      "lemma": "מְשׁוֹבָב",
+      "hebrew": "משובב",
+      "xlit": "Mᵉshôwbâb",
+      "translated": true
+    },
+    "H4878": {
+      "definitions_cz": "1) odvrácení, otočení zpět, odpadnutí, odpadnutí",
+      "lemma": "מְשׁוּבָה",
+      "hebrew": "משובה",
+      "xlit": "mᵉshûwbâh",
+      "translated": true
+    },
+    "H4879": {
+      "definitions_cz": "1) chyba",
+      "lemma": "מְשׁוּגָה",
+      "hebrew": "משוגה",
+      "xlit": "mᵉshûwgâh",
+      "translated": true
+    },
+    "H4880": {
+      "definitions_cz": "1) veslo",
+      "lemma": "מָשׁוֹט",
+      "hebrew": "משוט",
+      "xlit": "mâshôwṭ",
+      "translated": true
+    },
+    "H4881": {
+      "definitions_cz": "1) živý plot",
+      "lemma": "מְשׂוּכָה",
+      "hebrew": "משוכה",
+      "xlit": "mᵉsûwkâh",
+      "translated": true
+    },
+    "H4882": {
+      "definitions_cz": "1) kořist, kořist, plenění",
+      "lemma": "מְשׁוּסָה",
+      "hebrew": "משוסה",
+      "xlit": "mᵉshûwçâh",
+      "translated": true
+    },
+    "H4883": {
+      "definitions_cz": "1) pila",
+      "lemma": "מַשּׂוֹר",
+      "hebrew": "משור",
+      "xlit": "massôwr",
+      "translated": true
+    },
+    "H4884": {
+      "definitions_cz": "1) měřit",
+      "lemma": "מְשׂוּרָה",
+      "hebrew": "משורה",
+      "xlit": "mᵉsûwrâh",
+      "translated": true
+    },
+    "H4885": {
+      "definitions_cz": "1) jásání, radost, jásání",
+      "lemma": "מָשׂוֹשׂ",
+      "hebrew": "משוש",
+      "xlit": "mâsôws",
+      "translated": true
+    },
+    "H4886": {
+      "definitions_cz": "1) potřít, namazat, potřít tekutinou | 1a) (Qal) | 1a1) namazat | 1a2) pomazat (jako zasvěcení) | 1a3) pomazat, posvětit | 1b) (Niphal), aby byl pomazán",
+      "lemma": "מָשַׁח",
+      "hebrew": "משח",
+      "xlit": "mâshach",
+      "translated": true
+    },
+    "H4887": {
+      "definitions_cz": "1) olej",
+      "lemma": "מְשַׁח",
+      "hebrew": "משח",
+      "xlit": "mᵉshach",
+      "translated": true
+    },
+    "H4888": {
+      "definitions_cz": "1) posvěcený podíl, olej na pomazání, podíl, mast, podíl na pomazání | 1a) mast (používá se k posvěcení pomazáním) | 1b) část pomazání",
+      "lemma": "מִשְׁחָה",
+      "hebrew": "משחה",
+      "xlit": "mishchâh",
+      "translated": true
+    },
+    "H4889": {
+      "definitions_cz": "1) zmar, zničení",
+      "lemma": "מַשְׁחִית",
+      "hebrew": "משחית",
+      "xlit": "mashchîyth",
+      "translated": true
+    },
+    "H4890": {
+      "definitions_cz": "1) předmět posměchu",
+      "lemma": "מִשְׂחַק",
+      "hebrew": "משחק",
+      "xlit": "mischaq",
+      "translated": true
+    },
+    "H4891": {
+      "definitions_cz": "1) svítání",
+      "lemma": "מִשְׁחָר",
+      "hebrew": "משחר",
+      "xlit": "mishchâr",
+      "translated": true
+    },
+    "H4892": {
+      "definitions_cz": "1) zmar, zničení",
+      "lemma": "מַשְׁחֵת",
+      "hebrew": "משחת",
+      "xlit": "mashchêth",
+      "translated": true
+    },
+    "H4893": {
+      "definitions_cz": "1) znetvoření (obličeje), korupce",
+      "lemma": "מִשְׁחָת",
+      "hebrew": "משחת",
+      "xlit": "mishchâth",
+      "translated": true
+    },
+    "H4894": {
+      "definitions_cz": "1) místo šíření",
+      "lemma": "מִשְׁטוֹחַ",
+      "hebrew": "משטוח",
+      "xlit": "mishṭôwach",
+      "translated": true
+    },
+    "H4895": {
+      "definitions_cz": "1) nepřátelství, nepřátelství",
+      "lemma": "מַשְׂטֵמָה",
+      "hebrew": "משטמה",
+      "xlit": "masṭêmâh",
+      "translated": true
+    },
+    "H4896": {
+      "definitions_cz": "1) pravidlo, autorita",
+      "lemma": "מִשְׁטָר",
+      "hebrew": "משטר",
+      "xlit": "mishṭâr",
+      "translated": true
+    },
+    "H4897": {
+      "definitions_cz": "1) drahý materiál na oděv | 1a) snad hedvábí",
+      "lemma": "מֶשִׁי",
+      "hebrew": "משי",
+      "xlit": "meshîy",
+      "translated": true
+    },
+    "H4898": {
+      "definitions_cz": "Meshezabeel = \"Bůh vysvobodí\" | 1) Mešullamův předek, který pomáhal Nehemjášovi při přestavbě jeruzalémské zdi | 1a) možná stejně jako 2 a 3 | 2) hlava lidu, který zpečetil smlouvu s Nehemjášem | 2a) možná stejně jako 1 a 3 | 3) otec Petachjáše a potomek Zeracha, syna Judova | 3a) možná stejně jako 1 a 2",
+      "lemma": "מְשֵׁיזַבְאֵל",
+      "hebrew": "משיזבאל",
+      "xlit": "Mᵉshêyzabʼêl",
+      "translated": true
+    },
+    "H4899": {
+      "definitions_cz": "1) pomazaný, pomazaný | 1a) Mesiáše, mesiášského knížete | 1b) izraelského krále | 1c) velekněze Izraele | 1d) Cyrus | 1e) patriarchů jako pomazaných králů",
+      "lemma": "מָשִׁיחַ",
+      "hebrew": "משיח",
+      "xlit": "mâshîyach",
+      "translated": true
+    },
+    "H4900": {
+      "definitions_cz": "1) kreslit, táhnout, uchopit | 1a) (Qal) | 1a1) kreslit (a zvedat), táhnout, vést, táhnout nebo odtahovat, táhnout dolů | 1a2) kreslit (luk) | 1a3) pokračovat, pochod | 1a4) vytáhnout nebo vydat (zvuk) | 1a5) vytáhnout, prodloužit, pokračovat | 1a6) do stezky (semeno při setí) | 1a7) rozveselit, kreslit, přitahovat, potěšit | 1b) (Niphal) k vytažení | 1c) (Pual) | 1c1) být protažen, být odložen, být odložen | 1c2) být vysoký",
+      "lemma": "מָשַׁךְ",
+      "hebrew": "משך",
+      "xlit": "mâshak",
+      "translated": true
+    },
+    "H4901": {
+      "definitions_cz": "1) kreslení, kreslení, kreslení stopy | 1a) sestavení, vylovení, zajištění, nabytí | 1b) stopa (semena)",
+      "lemma": "מֶשֶׁךְ",
+      "hebrew": "משך",
+      "xlit": "meshek",
+      "translated": true
+    },
+    "H4902": {
+      "definitions_cz": "Mesech nebo Meshech = \"vytahování\" | 1) syn Jafeta, vnuka Noeho a praotce národů na severu Izraele | 1a) potomci Mesecha často zmiňovaní v souvislosti s Tubalem, Magogem a dalšími severními národy včetně Moschi, lidu na hranicích Kolchidy a Arménie",
+      "lemma": "מֶשֶׁךְ",
+      "hebrew": "משך",
+      "xlit": "Meshek",
+      "translated": true
+    },
+    "H4903": {
+      "definitions_cz": "1) gauč, postel",
+      "lemma": "מִשְׁכַּב",
+      "hebrew": "משכב",
+      "xlit": "mishkab",
+      "translated": true
+    },
+    "H4904": {
+      "definitions_cz": "1) ležení, pohovka, már, akt lhaní | 1a) gauč, postel | 1b) akt ležení, ležení nebo spaní pokoj, ložnice | 1c) vleže (pro sexuální kontakt)",
+      "lemma": "מִשְׁכָּב",
+      "hebrew": "משכב",
+      "xlit": "mishkâb",
+      "translated": true
+    },
+    "H4905": {
+      "definitions_cz": "1) (hifilská) báseň, píseň nebo báseň rozjímání",
+      "lemma": "מַשְׂכִּיל",
+      "hebrew": "משכיל",
+      "xlit": "maskîyl",
+      "translated": true
+    },
+    "H4906": {
+      "definitions_cz": "1) show-kus, postava, představivost, image, idol, fotografie | 1a) výstavní kus, vyřezávaná postava (modly) | 1b) představivost, domýšlivost",
+      "lemma": "מַשְׂכִּית",
+      "hebrew": "משכית",
+      "xlit": "maskîyth",
+      "translated": true
+    },
+    "H4907": {
+      "definitions_cz": "1) příbytek (Boží)",
+      "lemma": "מִשְׁכַּן",
+      "hebrew": "משכן",
+      "xlit": "mishkan",
+      "translated": true
+    },
+    "H4908": {
+      "definitions_cz": "1) obydlí, svatostánek | 1a) obydlí | 1b) obydlí",
+      "lemma": "מִשְׁכָּן",
+      "hebrew": "משכן",
+      "xlit": "mishkân",
+      "translated": true
+    },
+    "H4909": {
+      "definitions_cz": "1) mzdy",
+      "lemma": "מַשְׂכֹּרֶת",
+      "hebrew": "משכרת",
+      "xlit": "maskôreth",
+      "translated": true
+    },
+    "H4910": {
+      "definitions_cz": "1) vládnout, mít nadvládu, vládnout | 1a) (Qal) vládnout, mít nadvládu | 1b) (hifil) | 1b1) přimět vládnout | 1b2) vykonávat nadvládu",
+      "lemma": "מָשַׁל",
+      "hebrew": "משל",
+      "xlit": "mâshal",
+      "translated": true
+    },
+    "H4911": {
+      "definitions_cz": "1) představovat, připodobňovat, být jako | 1a) (Niphal) připodobnit, být podobný, být podobný | 1b) (Hiphil) pro srovnání | 1c) (Hithpael) stát se jako | 2) mluvit v přísloví, používat přísloví, mluvit v podobenstvích, mluvit ve větách poezie | 2a) (Qal) použít přísloví, mluvit podobenství nebo přísloví | 2b) (Piel) udělat podobenství | 2b1) tvůrce podobenství (příčestí)",
+      "lemma": "מָשַׁל",
+      "hebrew": "משל",
+      "xlit": "mâshal",
+      "translated": true
+    },
+    "H4912": {
+      "definitions_cz": "1) přísloví, podobenství | 1a) přísloví, přísloví, aforismus | 1b) přísloví | 1c) podobenství, podobenství | 1d) báseň | 1e) věty etické moudrosti, etické maximy",
+      "lemma": "מָשָׁל",
+      "hebrew": "משל",
+      "xlit": "mâshâl",
+      "translated": true
+    },
+    "H4913": {
+      "definitions_cz": "Mashal = \"prosba\" | 1) město na území Asher přidělené geršonským Levitům | 1a) také „Mishal“ a „Misheal“",
+      "lemma": "מָשָׁל",
+      "hebrew": "משל",
+      "xlit": "Mâshâl",
+      "translated": true
+    },
+    "H4914": {
+      "definitions_cz": "1) přísloví",
+      "lemma": "מְשֹׁל",
+      "hebrew": "משל",
+      "xlit": "mᵉshôl",
+      "translated": true
+    },
+    "H4915": {
+      "definitions_cz": "1) panství | z H04911; |RT1258c|Rt; | n m | 2) podobenství, jeden podobný, podobenství",
+      "lemma": "מֹשֶׁל",
+      "hebrew": "משל",
+      "xlit": "môshel",
+      "translated": true
+    },
+    "H4916": {
+      "definitions_cz": "1) natahování, odesílání, odesílání | 2) natažení, podnik (to, ke kterému se natahuje ruka), místo pouštění nebo otáčení, pastvina (místo, kde jsou puštěna zvířata)",
+      "lemma": "מִשְׁלוֹחַ",
+      "hebrew": "משלוח",
+      "xlit": "mishlôwach",
+      "translated": true
+    },
+    "H4917": {
+      "definitions_cz": "1) propuštění, odeslání, odeslání, deputace | 1a) vypouštění | 1b) deputace",
+      "lemma": "מִשְׁלַחַת",
+      "hebrew": "משלחת",
+      "xlit": "mishlachath",
+      "translated": true
+    },
+    "H4918": {
+      "definitions_cz": "Meshullam = \"přítel\" | 1) dědeček Šafanův, písař | 2) syn Zerubbábelův | 3) Benjamínec ze synů Elpaalových | 4) Benjamínec, otec Sallu | 5) Benjamínec, který po zajetí žil v Jeruzalémě | 6) benjamín | 6a) možná stejně jako 3 nebo 4 | 7) Gadit za vlády judského krále Jotama | 8) syn Berechiáše, který pomáhal při přestavbě jeruzalémské zdi | 9) syn Besodejáše, který pomáhal Jojadovi, synovi Paseahovi, při obnově staré brány Jeruzaléma | 10) a",
+      "lemma": "מְשֻׁלָּם",
+      "hebrew": "משלם",
+      "xlit": "Mᵉshullâm",
+      "translated": true
+    },
+    "H4919": {
+      "definitions_cz": "Meshillemoth = \"odplata\" | 1) Efraimský, jeden z náčelníků kmene za vlády izraelského krále Pekacha | 1a) také „Meshillemith“ | 2) kněz, syn Immer | 2a) také „Meshillemith“",
+      "lemma": "מְשִׁלֵּמוֹת",
+      "hebrew": "משלמות",
+      "xlit": "Mᵉshillêmôwth",
+      "translated": true
+    },
+    "H4920": {
+      "definitions_cz": "Meshelemiah = \"komu Jehova splácí\" | 1) Korhijský levitský vrátný nebo vrátný domu Božího v době Davida",
+      "lemma": "מְשֶׁלֶמְיָה",
+      "hebrew": "משלמיה",
+      "xlit": "Mᵉshelemyâh",
+      "translated": true
+    },
+    "H4921": {
+      "definitions_cz": "Meshillemith = \"odplata\" | 1) kněz, syn Immerův. Viz také 'Meshillemoth'",
+      "lemma": "מְשִׁלֵּמִית",
+      "hebrew": "משלמית",
+      "xlit": "Mᵉshillêmîyth",
+      "translated": true
     }
   }
 }
