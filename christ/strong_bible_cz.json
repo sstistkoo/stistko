@@ -62324,6 +62324,356 @@
       "hebrew": "נהג",
       "xlit": "nâhag",
       "translated": true
+    },
+    "H5091": {
+      "definitions_cz": "1) naříkat, naříkat | 1a) (Qal) naříkat, naříkat | 1b) (Niphal) jít truchlit po",
+      "lemma": "נָהָה",
+      "hebrew": "נהה",
+      "xlit": "nâhâh",
+      "translated": true
+    },
+    "H5092": {
+      "definitions_cz": "1) nářek, nářek, smuteční píseň | 1a) nářek | 1b) smuteční píseň",
+      "lemma": "נְהִי",
+      "hebrew": "נהי",
+      "xlit": "nᵉhîy",
+      "translated": true
+    },
+    "H5093": {
+      "definitions_cz": "1) nářek, nářek, nářek, žalozpěv",
+      "lemma": "נִהְיָה",
+      "hebrew": "נהיה",
+      "xlit": "nihyâh",
+      "translated": true
+    },
+    "H5094": {
+      "definitions_cz": "1) světlo",
+      "lemma": "נְהִיר",
+      "hebrew": "נהיר",
+      "xlit": "nᵉhîyr",
+      "translated": true
+    },
+    "H5095": {
+      "definitions_cz": "1) vést, dopřát odpočinek, vést opatrně, navést na napajedlo nebo stanoviště, přimět k odpočinku, přivést na stanici nebo místo odpočinku, vést, osvěžit | 1a) (Piel) | 1a1) vést k napajedlu nebo stanici a tam si odpočinout | 1a2) vést nebo přivést na stanici nebo cíl | 1a3) vést, vést | 1a4) dát odpočinek | 1a5) osvěžit (jídlem) | 1b) (Hithpael) | 1b1) vést na | 1b2) k jízdě po stanicích nebo etapách",
+      "lemma": "נָהַל",
+      "hebrew": "נהל",
+      "xlit": "nâhal",
+      "translated": true
+    },
+    "H5096": {
+      "definitions_cz": "Nahalal nebo Nahallal nebo Nahalol = \"pastva\" | 1) jedno z měst Zabulon daných merarijským Levitům | 1a) místo nejisté | 1b) možná moderní 'Malul', vesnice v rovině Esdraelon",
+      "lemma": "נַהֲלָל",
+      "hebrew": "נהלל",
+      "xlit": "Nahălâl",
+      "translated": true
+    },
+    "H5097": {
+      "definitions_cz": "1) pastvina, napajedlo",
+      "lemma": "נַהֲלֹל",
+      "hebrew": "נהלל",
+      "xlit": "nahălôl",
+      "translated": true
+    },
+    "H5098": {
+      "definitions_cz": "1) vrčet, sténat | 1a) (Qal) | 1a1) vrčet (o lvu) | 1a2) sténat (trpícího)",
+      "lemma": "נָהַם",
+      "hebrew": "נהם",
+      "xlit": "nâham",
+      "translated": true
+    },
+    "H5099": {
+      "definitions_cz": "1) vrčení, řev | 1a) lva | 1b) královského hněvu (obr.)",
+      "lemma": "נַהַם",
+      "hebrew": "נהם",
+      "xlit": "naham",
+      "translated": true
+    },
+    "H5100": {
+      "definitions_cz": "1) vrčení, sténání",
+      "lemma": "נְהָמָה",
+      "hebrew": "נהמה",
+      "xlit": "nᵉhâmâh",
+      "translated": true
+    },
+    "H5101": {
+      "definitions_cz": "1) (Qal) brečet, plakat, křičet",
+      "lemma": "נָהַק",
+      "hebrew": "נהק",
+      "xlit": "nâhaq",
+      "translated": true
+    },
+    "H5102": {
+      "definitions_cz": "1) svítit, svítit, svítit, hořet | 1a) (Qal) vyzařovat, být zářivý | 2) proudit, proudit | 2a) (Qal) proudit, proudit",
+      "lemma": "נָהַר",
+      "hebrew": "נהר",
+      "xlit": "nâhar",
+      "translated": true
+    },
+    "H5103": {
+      "definitions_cz": "1) řeka",
+      "lemma": "נְהַר",
+      "hebrew": "נהר",
+      "xlit": "nᵉhar",
+      "translated": true
+    },
+    "H5104": {
+      "definitions_cz": "1) potok, řeka | 1a) potok, řeka | 1b) (podzemní) toky",
+      "lemma": "נָהָר",
+      "hebrew": "נהר",
+      "xlit": "nâhâr",
+      "translated": true
+    },
+    "H5105": {
+      "definitions_cz": "1) světlo, denní světlo",
+      "lemma": "נְהָרָה",
+      "hebrew": "נהרה",
+      "xlit": "nᵉhârâh",
+      "translated": true
+    },
+    "H5106": {
+      "definitions_cz": "1) bránit, zadržovat, zakazovat, zakazovat, omezovat, frustrovat | 1a) (Qal) bránit, držet zpátky | 1b) (hifil) | 1b1) omezovat, zakazovat, mařit | 1b2) omezovat, dělat odpor, odrazovat",
+      "lemma": "נוּא",
+      "hebrew": "נוא",
+      "xlit": "nûwʼ",
+      "translated": true
+    },
+    "H5107": {
+      "definitions_cz": "1) nést ovoce | 1a) (Qal) nést ovoce | 1b) (Pilel), aby vzkvétal (obr.)",
+      "lemma": "נוּב",
+      "hebrew": "נוב",
+      "xlit": "nûwb",
+      "translated": true
+    },
+    "H5108": {
+      "definitions_cz": "1) ovoce",
+      "lemma": "נוֹב",
+      "hebrew": "נוב",
+      "xlit": "nôwb",
+      "translated": true
+    },
+    "H5109": {
+      "definitions_cz": "Nebai = \"plodný\" | 1) rodina hlav lidí, kteří podepsali smlouvu s Nehemjášem",
+      "lemma": "נוֹבַי",
+      "hebrew": "נובי",
+      "xlit": "Nôwbay",
+      "translated": true
+    },
+    "H5110": {
+      "definitions_cz": "1) třást se, kolísat, bloudit, pohybovat se sem a tam, třepetat se, projevovat smutek, mít soucit | 1a) (Qal) | 1a1) pohybovat se tam a zpět, bloudit (bezcílně), létat | 1a2) třepetat | 1a3) mávat, mávat, třást | 1a4) ukázat smutek | 1a4a) naříkat, kondolovat, projevovat soucit | 1b) (hifil) | 1b1) způsobit bloudění (bezcílně) | 1b2) dělat vrtění, vrtět (hlavou) | 1c) (Hithpolel) | 1c1) pohybovat se sem a tam, kolébat se, potácet se | 1c2) otřást se | 1c3) naříkat si",
+      "lemma": "נוּד",
+      "hebrew": "נוד",
+      "xlit": "nûwd",
+      "translated": true
+    },
+    "H5111": {
+      "definitions_cz": "1) (P'al) uprchnout",
+      "lemma": "נוּד",
+      "hebrew": "נוד",
+      "xlit": "nûwd",
+      "translated": true
+    },
+    "H5112": {
+      "definitions_cz": "1) putování (bezcílného uprchlíka)",
+      "lemma": "נוֹד",
+      "hebrew": "נוד",
+      "xlit": "nôwd",
+      "translated": true
+    },
+    "H5113": {
+      "definitions_cz": "Nod = \"\"putování\" | 1) země, do které Kain uprchl nebo se toulal po vraždě Ábela",
+      "lemma": "נוֹד",
+      "hebrew": "נוד",
+      "xlit": "Nôwd",
+      "translated": true
+    },
+    "H5114": {
+      "definitions_cz": "Nodab = \"šlechta\" | 1) Arabský kmen pravděpodobně pocházející z Nodaba, syna Izmaela a vnuka Abrahama",
+      "lemma": "נוֹדָב",
+      "hebrew": "נודב",
+      "xlit": "Nôwdâb",
+      "translated": true
+    },
+    "H5115": {
+      "definitions_cz": "1) ke zkrášlení | 1a) (Hiphil) zkrášlit, ozdobit | 2) bydlet | 2a) (Qal) přebývat, přebývat, držet doma | 3) (Hophal) odpočinek",
+      "lemma": "נָוָה",
+      "hebrew": "נוה",
+      "xlit": "nâvâh",
+      "translated": true
+    },
+    "H5116": {
+      "definitions_cz": "n m | 1) příbytek, příbytek, příbytek pastýřů nebo stád, pastviny | 1a) příbytek (ovcí) | 1b) příbytek (pastýřů) | 1c) louka | 1d) bydlení | adj | 2) obydlí, přebývání",
+      "lemma": "נָוֶה",
+      "hebrew": "נוה",
+      "xlit": "nâveh",
+      "translated": true
+    },
+    "H5117": {
+      "definitions_cz": "1) odpočívat | 1a) (Qal) | 1a1) odpočívat, usadit se a zůstat | 1a2) odpočívat, odpočívat, být zticha | 1b) (Hiph) | 1b1) přimět k odpočinku, dát odpočinek, ztišit | 1b2) přimět k odpočinku, přimět sestoupit, položit | 1b3) položit nebo položit, uložit, nechat ležet, položit | 1b4) nechat zůstat, odejít | 1b5) odejít, odjet z | 1b6) opustit | 1b7) povolit | 1c) (Hoph) | 1c1) získat odpočinek, získat odpočinek | 1c2) být ponechán, být umístěn | 1c3) otevřený prostor (subst)",
+      "lemma": "נוּחַ",
+      "hebrew": "נוח",
+      "xlit": "nûwach",
+      "translated": true
+    },
+    "H5118": {
+      "definitions_cz": "1) místo odpočinku",
+      "lemma": "נוּחַ",
+      "hebrew": "נוח",
+      "xlit": "nûwach",
+      "translated": true
+    },
+    "H5119": {
+      "definitions_cz": "Nohah = \"odpočinek\" | 1) 4. syn Benjamina",
+      "lemma": "נוֹחָה",
+      "hebrew": "נוחה",
+      "xlit": "Nôwchâh",
+      "translated": true
+    },
+    "H5120": {
+      "definitions_cz": "1) (Qal) se třást, třást, houpat se",
+      "lemma": "נוּט",
+      "hebrew": "נוט",
+      "xlit": "nûwṭ",
+      "translated": true
+    },
+    "H5121": {
+      "definitions_cz": "Naioth = \"obydlí\" | 1) příbytek proroků v době Samuelově",
+      "lemma": "נָוִית",
+      "hebrew": "נוית",
+      "xlit": "Nâvîyth",
+      "translated": true
+    },
+    "H5122": {
+      "definitions_cz": "1) halda odpadu, hnojiště, kůlna",
+      "lemma": "נְוָלוּ",
+      "hebrew": "נולו",
+      "xlit": "nᵉvâlûw",
+      "translated": true
+    },
+    "H5123": {
+      "definitions_cz": "1) být ospalý, spát, spát | 1a) (Qal) usnout, být ospalý",
+      "lemma": "נוּם",
+      "hebrew": "נום",
+      "xlit": "nûwm",
+      "translated": true
+    },
+    "H5124": {
+      "definitions_cz": "1) ospalost, somnolence, lenost (obr.)",
+      "lemma": "נוּמָה",
+      "hebrew": "נומה",
+      "xlit": "nûwmâh",
+      "translated": true
+    },
+    "H5125": {
+      "definitions_cz": "1) (Niphal) pokračovat, zvyšovat, množit | 2) (Hiphil) pokračovat, zvětšovat se, propagovat",
+      "lemma": "נוּן",
+      "hebrew": "נון",
+      "xlit": "nûwn",
+      "translated": true
+    },
+    "H5126": {
+      "definitions_cz": "Nun = \"ryba\" nebo \"potomstvo\" | 1) otec Jozue, nástupce Mojžíše",
+      "lemma": "נוּן",
+      "hebrew": "נון",
+      "xlit": "Nûwn",
+      "translated": true
+    },
+    "H5127": {
+      "definitions_cz": "1) uprchnout, uniknout | 1a) (Qal) | 1a1) uprchnout | 1a2) uniknout | 1a3) vzlétnout, odletět, zmizet | 1a4) létat (do útoku) na koni | 1b) (Polel) pro jízdu na | 1c) (Hithpolel) vzlétnout | 1d) (Hiphil) | 1d1) dát k letu | 1d2) jet rychle | 1d3) způsobit zmizení, skrýt se",
+      "lemma": "נוּס",
+      "hebrew": "נוס",
+      "xlit": "nûwç",
+      "translated": true
+    },
+    "H5128": {
+      "definitions_cz": "1) chvět, kývat, třást se, navíjet, vrávorat, bloudit, hýbat, prosévat, hýbat se, mávat, mávat, chvět | 1a) (Qal) | 1a1) mávat, chvět, vibrovat, houpat se, vrávorat, třást se, být nestabilní | 1a2) potácet se, potácet se | 1a2a) tulák (příčestí) | 1b) (Niphal) k házení kolem nebo kolem | 1c) (Hiphil) | 1c1) házet o | 1c2) třást se, způsobovat kolébání | 1c3) třást, rušit | 1c4) přimět bloudit",
+      "lemma": "נוּעַ",
+      "hebrew": "נוע",
+      "xlit": "nûwaʻ",
+      "translated": true
+    },
+    "H5129": {
+      "definitions_cz": "Noadiah = \"setkání s Jehovou\" | n pr m | 1) Levita, syn Binnui, který vážil zlaté a stříbrné nádoby patřící chrámu, které byly přivezeny z Babylonu | n pr f | 2) prorokyně, která se připojila k Sanballatovi a Tobiášovi v jejich pokusu zastrašit Nehemiáše",
+      "lemma": "נוֹעַדְיָה",
+      "hebrew": "נועדיה",
+      "xlit": "Nôwʻadyâh",
+      "translated": true
+    },
+    "H5130": {
+      "definitions_cz": "1) pohybovat se sem a tam, mávat, kropit | 1a) (Qal) posypat, posypat | 1b) (Polel) mávat, mávat (v ohrožení) | 1c) (Hiphil) houpat se, ohánět se, mávat | 1c1) ovládat | 1c2) mávat nebo potřást (rukou) | 1c2a) mávat (rukou) | 1c2b) třást se nebo mávat proti | 1c2c) kývat sem a tam | 1c3) mávat (nabídka), nabízet | 1c4) vyhodit do zahraničí | 1d) (Hophal) na mávání",
+      "lemma": "נוּף",
+      "hebrew": "נוף",
+      "xlit": "nûwph",
+      "translated": true
+    },
+    "H5131": {
+      "definitions_cz": "1) nadmořská výška, výška",
+      "lemma": "נוֹף",
+      "hebrew": "נוף",
+      "xlit": "nôwph",
+      "translated": true
+    },
+    "H5132": {
+      "definitions_cz": "1) (Qal) létat, prchat | 2) (Hiphil) kvést, kvést",
+      "lemma": "נוּץ",
+      "hebrew": "נוץ",
+      "xlit": "nûwts",
+      "translated": true
+    },
+    "H5133": {
+      "definitions_cz": "1) peří, peří",
+      "lemma": "נוֹצָה",
+      "hebrew": "נוצה",
+      "xlit": "nôwtsâh",
+      "translated": true
+    },
+    "H5134": {
+      "definitions_cz": "1) (Hiphil) sát, ošetřovatelko",
+      "lemma": "נוּק",
+      "hebrew": "נוק",
+      "xlit": "nûwq",
+      "translated": true
+    },
+    "H5135": {
+      "definitions_cz": "1) oheň",
+      "lemma": "נוּר",
+      "hebrew": "נור",
+      "xlit": "nûwr",
+      "translated": true
+    },
+    "H5136": {
+      "definitions_cz": "1) (Qal) být nemocný",
+      "lemma": "נוּשׁ",
+      "hebrew": "נוש",
+      "xlit": "nûwsh",
+      "translated": true
+    },
+    "H5137": {
+      "definitions_cz": "1) stříkat, stříkat, kropit | 1a) (Qal) vystříknout, rozstřikovat | 1b) (Hiphil) způsobit vystříknutí, pokropit | 2) na jaře, skok | 2a) (Hiphil) způsobit skok, polekat",
+      "lemma": "נָזָה",
+      "hebrew": "נזה",
+      "xlit": "nâzâh",
+      "translated": true
+    },
+    "H5138": {
+      "definitions_cz": "1) vařené jídlo, polévka, hrnce, věci namočené nebo vařené",
+      "lemma": "נָזִיד",
+      "hebrew": "נזיד",
+      "xlit": "nâzîyd",
+      "translated": true
+    },
+    "H5139": {
+      "definitions_cz": "1) zasvěcený nebo oddaný, nazarejský | 1a) zasvěcený | 1b) oddaný, Nazarite | 1c) neořezaný (vinná réva)",
+      "lemma": "נָזִיר",
+      "hebrew": "נזיר",
+      "xlit": "nâzîyr",
+      "translated": true
+    },
+    "H5140": {
+      "definitions_cz": "1) proudit, destilovat, vytékat nebo stékat, kapat, kapat | 1a) (Qal) | 1a1) proudit | 1a1a) toky, povodně (příčestí) | 1a2) destilovat | 1b) (Hiphil) způsobit tok",
+      "lemma": "נָזַל",
+      "hebrew": "נזל",
+      "xlit": "nâzal",
+      "translated": true
     }
   }
 }
