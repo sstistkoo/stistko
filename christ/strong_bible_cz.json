@@ -69324,6 +69324,706 @@
       "hebrew": "עצב",
       "xlit": "ʻôtseb",
       "translated": true
+    },
+    "H6091": {
+      "definitions_cz": "1) idol, obraz",
+      "lemma": "עָצָב",
+      "hebrew": "עצב",
+      "xlit": "ʻâtsâb",
+      "translated": true
+    },
+    "H6092": {
+      "definitions_cz": "1) dělník, dříč, dříč",
+      "lemma": "עָצֵב",
+      "hebrew": "עצב",
+      "xlit": "ʻâtsêb",
+      "translated": true
+    },
+    "H6093": {
+      "definitions_cz": "1) bolest, dřina, strádání, smutek, dřina",
+      "lemma": "עִצָּבוֹן",
+      "hebrew": "עצבון",
+      "xlit": "ʻitstsâbôwn",
+      "translated": true
+    },
+    "H6094": {
+      "definitions_cz": "1) bolest, zranění, zranění, smutek, rána",
+      "lemma": "עַצֶּבֶת",
+      "hebrew": "עצבת",
+      "xlit": "ʻatstsebeth",
+      "translated": true
+    },
+    "H6095": {
+      "definitions_cz": "1) (Qal) zavřít",
+      "lemma": "עָצָה",
+      "hebrew": "עצה",
+      "xlit": "ʻâtsâh",
+      "translated": true
+    },
+    "H6096": {
+      "definitions_cz": "1) páteř, páteř, kost křížová | 1a) buď páteř, nebo kost křížová | 1a1) kost blízko tlustého ocasu",
+      "lemma": "עָצֶה",
+      "hebrew": "עצה",
+      "xlit": "ʻâtseh",
+      "translated": true
+    },
+    "H6097": {
+      "definitions_cz": "1) stromy, dřevo",
+      "lemma": "עֵצָה",
+      "hebrew": "עצה",
+      "xlit": "ʻêtsâh",
+      "translated": true
+    },
+    "H6098": {
+      "definitions_cz": "1) rada, rada, účel",
+      "lemma": "עֵצָה",
+      "hebrew": "עצה",
+      "xlit": "ʻêtsâh",
+      "translated": true
+    },
+    "H6099": {
+      "definitions_cz": "1) mohutný, rozlehlý, početný | 1a) mocný, silný (v počtu) | 1b) četné, nesčetné",
+      "lemma": "עָצוּם",
+      "hebrew": "עצום",
+      "xlit": "ʻâtsûwm",
+      "translated": true
+    },
+    "H6100": {
+      "definitions_cz": "Ezion-geber = \"páteř člověka\" | 1) poslední stanice během exodu Izraelitů před jejich příchodem do pouště Cin; nachází se poblíž Elath v čele zálivu Akaba",
+      "lemma": "עֶצְיוֹן גֶּבֶר",
+      "hebrew": "עצין גבר",
+      "xlit": "ʻEtsyôwn Geber",
+      "translated": true
+    },
+    "H6101": {
+      "definitions_cz": "1) (Niphal) být pomalý",
+      "lemma": "עָצַל",
+      "hebrew": "עצל",
+      "xlit": "ʻâtsal",
+      "translated": true
+    },
+    "H6102": {
+      "definitions_cz": "1) lenivý, líný | 1a) lenoch (subst)",
+      "lemma": "עָצֵל",
+      "hebrew": "עצל",
+      "xlit": "ʻâtsêl",
+      "translated": true
+    },
+    "H6103": {
+      "definitions_cz": "1) lenost, lenost",
+      "lemma": "עַצְלָה",
+      "hebrew": "עצלה",
+      "xlit": "ʻatslâh",
+      "translated": true
+    },
+    "H6104": {
+      "definitions_cz": "1) lenost, lenost",
+      "lemma": "עַצְלוּת",
+      "hebrew": "עצלות",
+      "xlit": "ʻatslûwth",
+      "translated": true
+    },
+    "H6105": {
+      "definitions_cz": "1) být obrovský, být početný, být mocný | 1a)(Qal) | 1a1) být mocný | 1a2) být početný | 1b) (Hiphil) učinit silným, učinit mocným | 2) zavřít (oči), zavřít (oči) | 2a) (Qal) zavřít (oči) | 2b) (Piel) pevně zavřete (oči)",
+      "lemma": "עָצַם",
+      "hebrew": "עצם",
+      "xlit": "ʻâtsam",
+      "translated": true
+    },
+    "H6106": {
+      "definitions_cz": "1) kost, esence, substance | 1a) kost | 1a1) tělo, končetiny, údy, vnější tělo | 1b) kost (zvířecí) | 1c) substance, já",
+      "lemma": "עֶצֶם",
+      "hebrew": "עצם",
+      "xlit": "ʻetsem",
+      "translated": true
+    },
+    "H6107": {
+      "definitions_cz": "Azem nebo Ezem = \"kost\" | 1) město v judském Nekebu, které bylo poté přiděleno Simeonovi",
+      "lemma": "עֶצֶם",
+      "hebrew": "עצם",
+      "xlit": "ʻEtsem",
+      "translated": true
+    },
+    "H6108": {
+      "definitions_cz": "1) síla, kosti, síla | 1a) může | 1b) kosti",
+      "lemma": "עֹצֶם",
+      "hebrew": "עצם",
+      "xlit": "ʻôtsem",
+      "translated": true
+    },
+    "H6109": {
+      "definitions_cz": "1) moc, síla, moc",
+      "lemma": "עׇצְמָה",
+      "hebrew": "עצמה",
+      "xlit": "ʻotsmâh",
+      "translated": true
+    },
+    "H6110": {
+      "definitions_cz": "1) obrana, argument, silný",
+      "lemma": "עַצֻּמָה",
+      "hebrew": "עצמה",
+      "xlit": "ʻatstsumâh",
+      "translated": true
+    },
+    "H6111": {
+      "definitions_cz": "Azmon = \"silný\" | 1) místo na extrémní jižní hranici Kanaánu",
+      "lemma": "עַצְמוֹן",
+      "hebrew": "עצמון",
+      "xlit": "ʻAtsmôwn",
+      "translated": true
+    },
+    "H6112": {
+      "definitions_cz": "1) ostrý, silný, kopí | 1a) znamená nejistý",
+      "lemma": "עֵצֶן",
+      "hebrew": "עצן",
+      "xlit": "ʻêtsen",
+      "translated": true
+    },
+    "H6113": {
+      "definitions_cz": "1) omezit, zadržet, zavřít, zavřít, zadržet, zdržet se, zůstat, zadržet | 1a) (Qal) | 1a1) zadržet, zastavit, zastavit | 1a2) zachovat | 1b) (Niphal) být připoután, být zdržen, být omezován",
+      "lemma": "עָצָר",
+      "hebrew": "עצר",
+      "xlit": "ʻâtsâr",
+      "translated": true
+    },
+    "H6114": {
+      "definitions_cz": "1) omezení, útlak",
+      "lemma": "עֶצֶר",
+      "hebrew": "עצר",
+      "xlit": "ʻetser",
+      "translated": true
+    },
+    "H6115": {
+      "definitions_cz": "1) omezení, nátlak | 1a) omezení, nátlak | 1b) neplodnost (lůna)",
+      "lemma": "עֹצֶר",
+      "hebrew": "עצר",
+      "xlit": "ʻôtser",
+      "translated": true
+    },
+    "H6116": {
+      "definitions_cz": "1) shromáždění, slavnostní shromáždění | 1a) shromáždění (posvátné nebo slavnostní setkání) | 1b) shromáždění, společnost, skupina",
+      "lemma": "עֲצָרָה",
+      "hebrew": "עצרה",
+      "xlit": "ʻătsârâh",
+      "translated": true
+    },
+    "H6117": {
+      "definitions_cz": "1) vytlačit, obejít, vzít za patu, následovat za patu, zákeřně napadnout, přesáhnout | 1a) (Qal) nahradit, překročit, zaútočit na patu | 1b) (Piel) držet zpátky",
+      "lemma": "עָקַב",
+      "hebrew": "עקב",
+      "xlit": "ʻâqab",
+      "translated": true
+    },
+    "H6118": {
+      "definitions_cz": "n m | 1) následek | 1a) následek | 1b) následek, zisk, odměna | 1c) konec | adv | 2) v důsledku toho, protože v důsledku toho | conj | 3) v důsledku toho, protože",
+      "lemma": "עֵקֶב",
+      "hebrew": "עקב",
+      "xlit": "ʻêqeb",
+      "translated": true
+    },
+    "H6119": {
+      "definitions_cz": "1) pata, zadní část, stopa, zadní část, kopyto, zadní část oddílu, nášlap | 1a) pata | 1b) značka paty, stopa | 1c) zadní část, zadní část",
+      "lemma": "עָקֵב",
+      "hebrew": "עקב",
+      "xlit": "ʻâqêb",
+      "translated": true
+    },
+    "H6120": {
+      "definitions_cz": "1) přesahující, suplantér",
+      "lemma": "עָקֵב",
+      "hebrew": "עקב",
+      "xlit": "ʻâqêb",
+      "translated": true
+    },
+    "H6121": {
+      "definitions_cz": "1) lstivý, úskočný, zákeřný | 1a) lstivý, úskočný, zákeřný, kluzký | 1b) stopované | 2) strmé, kopcovité",
+      "lemma": "עָקֹב",
+      "hebrew": "עקב",
+      "xlit": "ʻâqôb",
+      "translated": true
+    },
+    "H6122": {
+      "definitions_cz": "1) jemnost, záludnost, rafinovanost",
+      "lemma": "עׇקְבָה",
+      "hebrew": "עקבה",
+      "xlit": "ʻoqbâh",
+      "translated": true
+    },
+    "H6123": {
+      "definitions_cz": "1) (Qal) vázat, vázat",
+      "lemma": "עָקַד",
+      "hebrew": "עקד",
+      "xlit": "ʻâqad",
+      "translated": true
+    },
+    "H6124": {
+      "definitions_cz": "1) pruhovaný, pruhovaný",
+      "lemma": "עָקֹד",
+      "hebrew": "עקד",
+      "xlit": "ʻâqôd",
+      "translated": true
+    },
+    "H6125": {
+      "definitions_cz": "1) útlak, tlak",
+      "lemma": "עָקָה",
+      "hebrew": "עקה",
+      "xlit": "ʻâqâh",
+      "translated": true
+    },
+    "H6126": {
+      "definitions_cz": "Akkub = \"zákeřný\" | 1) syn Elioenai a potomek Davidův přes Zerubábel | 2) hlava rodiny vracející se z exilu | 3) hlava rodiny chrámových otroků vracejících se z exilu | 4) levitský vrátný | 5) Levita, který pomohl Ezrovi vyložit zákon lidem | 6) levitský vrátný po návratu z exilu",
+      "lemma": "עַקּוּב",
+      "hebrew": "עקוב",
+      "xlit": "ʻAqqûwb",
+      "translated": true
+    },
+    "H6127": {
+      "definitions_cz": "1) ohýbat, kroutit | 1a) (Pual) být ohnut z tvaru, být zdeformován, být křivý",
+      "lemma": "עָקַל",
+      "hebrew": "עקל",
+      "xlit": "ʻâqal",
+      "translated": true
+    },
+    "H6128": {
+      "definitions_cz": "1) klikatý, úskočný, křivý",
+      "lemma": "עֲקַלְקַל",
+      "hebrew": "עקלקל",
+      "xlit": "ʻăqalqal",
+      "translated": true
+    },
+    "H6129": {
+      "definitions_cz": "1) křivý",
+      "lemma": "עֲקַלָּתוֹן",
+      "hebrew": "עקלתון",
+      "xlit": "ʻăqallâthôwn",
+      "translated": true
+    },
+    "H6130": {
+      "definitions_cz": "Akan = \"bystrozraký\" | 1) syn Ezerův, potomek Seirův a jeden z náčelníků edomských Chorejců",
+      "lemma": "עָקָן",
+      "hebrew": "עקן",
+      "xlit": "ʻÂqân",
+      "translated": true
+    },
+    "H6131": {
+      "definitions_cz": "1) vytrhnout, vykořenit | 1a) (Qal) vytrhnout, vykořenit | 1b) (Niphal) k utržení | 2) řezat, hamstring | 2a) (Piel) řezat, hamstring",
+      "lemma": "עָקַר",
+      "hebrew": "עקר",
+      "xlit": "ʻâqar",
+      "translated": true
+    },
+    "H6132": {
+      "definitions_cz": "1) škubat, být vykořeněn | 1a) (Ithp'al), který má být vykořeněn",
+      "lemma": "עֲקַר",
+      "hebrew": "עקר",
+      "xlit": "ʻăqar",
+      "translated": true
+    },
+    "H6133": {
+      "definitions_cz": "1) člen, potomek, odnož",
+      "lemma": "עֵקֶר",
+      "hebrew": "עקר",
+      "xlit": "ʻêqer",
+      "translated": true
+    },
+    "H6134": {
+      "definitions_cz": "Eker = \"potomek\" | 1) potomek Judy",
+      "lemma": "עֵקֶר",
+      "hebrew": "עקר",
+      "xlit": "ʻÊqer",
+      "translated": true
+    },
+    "H6135": {
+      "definitions_cz": "1) neplodná, sterilní",
+      "lemma": "עָקָר",
+      "hebrew": "עקר",
+      "xlit": "ʻâqâr",
+      "translated": true
+    },
+    "H6136": {
+      "definitions_cz": "1) kořen, zásoba",
+      "lemma": "עִקַּר",
+      "hebrew": "עקר",
+      "xlit": "ʻiqqar",
+      "translated": true
+    },
+    "H6137": {
+      "definitions_cz": "1) štír",
+      "lemma": "עַקְרָב",
+      "hebrew": "עקרב",
+      "xlit": "ʻaqrâb",
+      "translated": true
+    },
+    "H6138": {
+      "definitions_cz": "Ekron = \"emigrace\" nebo \"roztrhaný kořeny\" | 1) nejsevernější z 5 hlavních měst Pelištejců; nacházející se v nížinách Judy a později dán Danovi",
+      "lemma": "עֶקְרוֹן",
+      "hebrew": "עקרון",
+      "xlit": "ʻEqrôwn",
+      "translated": true
+    },
+    "H6139": {
+      "definitions_cz": "Ekronité = viz Ekron \"emigrace\" | 1) obyvatel Ekronu",
+      "lemma": "עֶקְרוֹנִי",
+      "hebrew": "עקרוני",
+      "xlit": "ʻEqrôwnîy",
+      "translated": true
+    },
+    "H6140": {
+      "definitions_cz": "1) být zvrácený, překroutit, zvrhnout, zkřivit, dokázat zvrácenost, prohlásit zvrácenost | 1a) (Niphal) být křivý | 1b) (Piel) zkroutit, pokřivit, převrátit, udělat nakřivo | 1c) (Hiphil) prohlásit za křivé | 1d) (Qal) perverzní",
+      "lemma": "עָקַשׁ",
+      "hebrew": "עקש",
+      "xlit": "ʻâqash",
+      "translated": true
+    },
+    "H6141": {
+      "definitions_cz": "1) pokroucený, pokřivený, pokřivený, zvrácený, zvrácený",
+      "lemma": "עִקֵּשׁ",
+      "hebrew": "עקש",
+      "xlit": "ʻiqqêsh",
+      "translated": true
+    },
+    "H6142": {
+      "definitions_cz": "Ikkesh = \"zkroucený\" | 1) otec Iry, Tekoita a jednoho z Davidových mocných válečníků",
+      "lemma": "עִקֵּשׁ",
+      "hebrew": "עקש",
+      "xlit": "ʻIqqêsh",
+      "translated": true
+    },
+    "H6143": {
+      "definitions_cz": "1) zkreslení, křivost",
+      "lemma": "עִקְּשׁוּת",
+      "hebrew": "עקשות",
+      "xlit": "ʻiqqᵉshûwth",
+      "translated": true
+    },
+    "H6144": {
+      "definitions_cz": "Ar = \"město\" | 1) město Moab ležící jižně od řeky Arnon; možná hlavní město",
+      "lemma": "עָר",
+      "hebrew": "ער",
+      "xlit": "ʻÂr",
+      "translated": true
+    },
+    "H6145": {
+      "definitions_cz": "1) nepřítel, protivník, nepřítel",
+      "lemma": "עָר",
+      "hebrew": "ער",
+      "xlit": "ʻâr",
+      "translated": true
+    },
+    "H6146": {
+      "definitions_cz": "1) nepřítel, protivník, nepřítel",
+      "lemma": "עָר",
+      "hebrew": "ער",
+      "xlit": "ʻâr",
+      "translated": true
+    },
+    "H6147": {
+      "definitions_cz": "Er = \"probuzený\" | 1) nejstarší syn Judy | 2) syn Šelaův a vnuk Judův",
+      "lemma": "עֵר",
+      "hebrew": "ער",
+      "xlit": "ʻÊr",
+      "translated": true
+    },
+    "H6148": {
+      "definitions_cz": "1) dát zástavu, vyměnit, zastavit, obsadit, obsadit, zavázat se, dát zástavy, být nebo se stát ručitelem, vzít na sebe, dát zástavu | 1a) (Qal) | 1a1) vzít na sebe zástavu, ručit za | 1a2) dát do zástavy | 1a3) vyměnit | 1a4) do zástavy | 1b) (Hithpael) | 1b1) k výměně zástav | 1b2) mít společenství s, sdílet",
+      "lemma": "עָרַב",
+      "hebrew": "ערב",
+      "xlit": "ʻârab",
+      "translated": true
+    },
+    "H6149": {
+      "definitions_cz": "1) (Qal) být příjemný, být sladký, být příjemný | 1a) (TWOT) sladký, příjemný",
+      "lemma": "עָרֵב",
+      "hebrew": "ערב",
+      "xlit": "ʻârêb",
+      "translated": true
+    },
+    "H6150": {
+      "definitions_cz": "1) stát se večerem, ztmavnout | 1a) (Qal) stát se večerem, ztmavnout | 1b) (Hiphil) strávit večer, dělat večer",
+      "lemma": "עָרַב",
+      "hebrew": "ערב",
+      "xlit": "ʻârab",
+      "translated": true
+    },
+    "H6151": {
+      "definitions_cz": "1) míchat, spojovat | 1a) (Pael) smíšený (příčestí) | 1b) (Ithpael) smíšený (příčestí)",
+      "lemma": "עֲרַב",
+      "hebrew": "ערב",
+      "xlit": "ʻărab",
+      "translated": true
+    },
+    "H6152": {
+      "definitions_cz": "1) obyvatelé stepí | 1a) lidé obývající zemi východně a jižně od Kanaánu, kočovní pouštní beduíni | 1b) Arabové, Arabové",
+      "lemma": "עֲרָב",
+      "hebrew": "ערב",
+      "xlit": "ʻĂrâb",
+      "translated": true
+    },
+    "H6153": {
+      "definitions_cz": "1) večer, noc, západ slunce | 1a) večer, západ slunce | 1b) noc",
+      "lemma": "עֶרֶב",
+      "hebrew": "ערב",
+      "xlit": "ʻereb",
+      "translated": true
+    },
+    "H6154": {
+      "definitions_cz": "1) fuj | 1a) jako smíšené, protkané | 1b) pletený materiál | 2) směs, smíšení lidé, smíšená společnost",
+      "lemma": "עֵרֶב",
+      "hebrew": "ערב",
+      "xlit": "ʻêreb",
+      "translated": true
+    },
+    "H6155": {
+      "definitions_cz": "1) topol, vrba | 1a) strom vyznačující se tmavým dřevem",
+      "lemma": "עָרָב",
+      "hebrew": "ערב",
+      "xlit": "ʻârâb",
+      "translated": true
+    },
+    "H6156": {
+      "definitions_cz": "1) sladké, příjemné",
+      "lemma": "עָרֵב",
+      "hebrew": "ערב",
+      "xlit": "ʻârêb",
+      "translated": true
+    },
+    "H6157": {
+      "definitions_cz": "1) roj | 1a) pravděpodobný význam od „směs“ a „nepřetržitý nebo zapojený pohyb“",
+      "lemma": "עָרֹב",
+      "hebrew": "ערב",
+      "xlit": "ʻârôb",
+      "translated": true
+    },
+    "H6158": {
+      "definitions_cz": "1) havran",
+      "lemma": "עֹרֵב",
+      "hebrew": "ערב",
+      "xlit": "ʻôrêb",
+      "translated": true
+    },
+    "H6159": {
+      "definitions_cz": "Oreb = \"havran\" | n pr m | 1) jeden z náčelníků midianské armády poražený Gedeonem | n pr loc | 2) skála východně od Jordánu, kde padl Oreb a část jeho armády Efraimcům",
+      "lemma": "עֹרֵב",
+      "hebrew": "ערב",
+      "xlit": "ʻÔrêb",
+      "translated": true
+    },
+    "H6160": {
+      "definitions_cz": "1) pouštní rovina, step, poušť, divočina",
+      "lemma": "עֲרָבָה",
+      "hebrew": "ערבה",
+      "xlit": "ʻărâbâh",
+      "translated": true
+    },
+    "H6161": {
+      "definitions_cz": "1) zástava, žeton, obligace, ručení, věc vyměněná",
+      "lemma": "עֲרֻבָּה",
+      "hebrew": "ערבה",
+      "xlit": "ʻărubbâh",
+      "translated": true
+    },
+    "H6162": {
+      "definitions_cz": "1) zástava, jistota",
+      "lemma": "עֲרָבוֹן",
+      "hebrew": "ערבון",
+      "xlit": "ʻărâbôwn",
+      "translated": true
+    },
+    "H6163": {
+      "definitions_cz": "Arabština = viz Arábie \"smíšená\" | 1) obyvatel Arábie | 1a) stepník",
+      "lemma": "עֲרָבִי",
+      "hebrew": "ערבי",
+      "xlit": "ʻĂrâbîy",
+      "translated": true
+    },
+    "H6164": {
+      "definitions_cz": "Arbathite = viz Betharabah \"pouštní dům\" | 1) obyvatel Bét-araby",
+      "lemma": "עַרְבָתִי",
+      "hebrew": "ערבתי",
+      "xlit": "ʻArbâthîy",
+      "translated": true
+    },
+    "H6165": {
+      "definitions_cz": "1) (Qal) toužit po, dýchat po",
+      "lemma": "עָרַג",
+      "hebrew": "ערג",
+      "xlit": "ʻârag",
+      "translated": true
+    },
+    "H6166": {
+      "definitions_cz": "Arad = \"divoký osel\" | n pr m | 1) Benjamínec, syn Beriášův, který vyhnal obyvatele Gatu | n pr loc | 2) královské město Kananejců severně od judské pouště",
+      "lemma": "עֲרָד",
+      "hebrew": "ערד",
+      "xlit": "ʻĂrâd",
+      "translated": true
+    },
+    "H6167": {
+      "definitions_cz": "1) divoký zadek",
+      "lemma": "עֲרָד",
+      "hebrew": "ערד",
+      "xlit": "ʻărâd",
+      "translated": true
+    },
+    "H6168": {
+      "definitions_cz": "1) být holý, být nahý, odhalit, nechat opuštěný, objevit, vyprázdnit, srovnat se zemí, vylít | 1a) (Piel) | 1a1) holý, ležet holý | 1a2) odhalit vyprázdněním, vyprázdnit | 1a3) vylít | 1b) (hifil) | 1b1) obnažit se, svléknout se (sexuálních deliktů) | 1b2) vylít | 1c) (Niphal) k vylití, vystavení | 1d) (Hithpael) | 1d1) obnažit se, obnažit se | 1d2) nalévat se, šířit se (příčestí)",
+      "lemma": "עָרָה",
+      "hebrew": "ערה",
+      "xlit": "ʻârâh",
+      "translated": true
+    },
+    "H6169": {
+      "definitions_cz": "1) holé místo",
+      "lemma": "עָרָה",
+      "hebrew": "ערה",
+      "xlit": "ʻârâh",
+      "translated": true
+    },
+    "H6170": {
+      "definitions_cz": "1) zahradní terasa nebo postel",
+      "lemma": "עֲרוּגָה",
+      "hebrew": "ערוגה",
+      "xlit": "ʻărûwgâh",
+      "translated": true
+    },
+    "H6171": {
+      "definitions_cz": "1) divoký zadek",
+      "lemma": "עָרוֹד",
+      "hebrew": "ערוד",
+      "xlit": "ʻârôwd",
+      "translated": true
+    },
+    "H6172": {
+      "definitions_cz": "1) nahota, nahota, stud, pudenda | 1a) pudenda (naznačující ostudné vystavení) | 1b) nahota věci, neslušnost, nevhodné chování | 1c) odkrytý, nechráněný (obr.)",
+      "lemma": "עֶרְוָה",
+      "hebrew": "ערוה",
+      "xlit": "ʻervâh",
+      "translated": true
+    },
+    "H6173": {
+      "definitions_cz": "1) nečest, nahota | 1a) dehonestace (metafora nahoty)",
+      "lemma": "עַרְוָה",
+      "hebrew": "ערוה",
+      "xlit": "ʻarvâh",
+      "translated": true
+    },
+    "H6174": {
+      "definitions_cz": "1) nahý, holý",
+      "lemma": "עָרוֹם",
+      "hebrew": "ערום",
+      "xlit": "ʻârôwm",
+      "translated": true
+    },
+    "H6175": {
+      "definitions_cz": "1) rafinovaný, bystrý, lstivý, mazaný, rozumný | 1a) lstivý | 1b) bystrý, rozumný, rozvážný",
+      "lemma": "עָרוּם",
+      "hebrew": "ערום",
+      "xlit": "ʻârûwm",
+      "translated": true
+    },
+    "H6176": {
+      "definitions_cz": "1) nahý, svlečený, strádající | 2) strom nebo keř | 2a) pravděpodobně jalovec nebo cypřiš",
+      "lemma": "עֲרוֹעֵר",
+      "hebrew": "ערוער",
+      "xlit": "ʻărôwʻêr",
+      "translated": true
+    },
+    "H6177": {
+      "definitions_cz": "Aroer = \"ruiny\" | 1) město na severním břehu řeky Arnon, jižní bod území Sihona, krále Amorejců a později Rubena; moderní 'Arair' | 2) město v Ammonu poblíž Jabboku patřící Gad | 3) město v jižním Judsku",
+      "lemma": "עֲרוֹעֵר",
+      "hebrew": "ערוער",
+      "xlit": "ʻĂrôwʻêr",
+      "translated": true
+    },
+    "H6178": {
+      "definitions_cz": "1) strašné | 2) (CLBL) propast, rokle, strmý svah",
+      "lemma": "עָרוּץ",
+      "hebrew": "ערוץ",
+      "xlit": "ʻârûwts",
+      "translated": true
+    },
+    "H6179": {
+      "definitions_cz": "Eri = \"bdělý\" | 1) syn Gádův a předek rodu Eritů",
+      "lemma": "עֵרִי",
+      "hebrew": "ערי",
+      "xlit": "ʻÊrîy",
+      "translated": true
+    },
+    "H6180": {
+      "definitions_cz": "Erites = viz Erites \"bdělý\" | 1) potomci Eriho, syna Gádova",
+      "lemma": "עֵרִי",
+      "hebrew": "ערי",
+      "xlit": "ʻÊrîy",
+      "translated": true
+    },
+    "H6181": {
+      "definitions_cz": "1) nahota, nahota",
+      "lemma": "עֶרְיָה",
+      "hebrew": "עריה",
+      "xlit": "ʻeryâh",
+      "translated": true
+    },
+    "H6182": {
+      "definitions_cz": "1) těsto, moučka, hrubá mouka, hnětací žlab | 1a) znamená pochybný",
+      "lemma": "עֲרִיסָה",
+      "hebrew": "עריסה",
+      "xlit": "ʻărîyçâh",
+      "translated": true
+    },
+    "H6183": {
+      "definitions_cz": "1) mrak, mlha",
+      "lemma": "עָרִיף",
+      "hebrew": "עריף",
+      "xlit": "ʻârîyph",
+      "translated": true
+    },
+    "H6184": {
+      "definitions_cz": "1) úctyhodný, děsivý, úžasný, děsivý, nemilosrdný, mocný",
+      "lemma": "עָרִיץ",
+      "hebrew": "עריץ",
+      "xlit": "ʻârîyts",
+      "translated": true
+    },
+    "H6185": {
+      "definitions_cz": "1) svlečený, bezdětný, bez dětí",
+      "lemma": "עֲרִירִי",
+      "hebrew": "ערירי",
+      "xlit": "ʻărîyrîy",
+      "translated": true
+    },
+    "H6186": {
+      "definitions_cz": "1) uspořádat, nastavit nebo dát či položit do pořádku, zasadit do pole, připravit, objednat, nařídit, manipulovat, poskytnout, vážit si, rovnat se, nasměrovat, porovnat | 1a) (Qal) | 1a1) uspořádat nebo uvést nebo dát do pořádku, zařídit, uvést do pořádku, uvést (právní případ), uvést na místo | 1a2) porovnávat, být srovnatelný | 2) (Hifil) hodnotit, daň",
+      "lemma": "עָרַךְ",
+      "hebrew": "ערך",
+      "xlit": "ʻârak",
+      "translated": true
+    },
+    "H6187": {
+      "definitions_cz": "1) pořadí, řada, odhad, věci, které jsou seřazeny, vrstva, hromada | 1a) pořadí, řádek | 1b) odhad, ocenění",
+      "lemma": "עֵרֶךְ",
+      "hebrew": "ערך",
+      "xlit": "ʻêrek",
+      "translated": true
+    },
+    "H6188": {
+      "definitions_cz": "1) zůstat neobřezaný, počítat jako neobřezaný, počítat jako předkožka | 1a) (Qal) | 1a1) považovat za neobřezaného | 1a2) zůstat nesklizený (obr.) | 1b) (Niphal) být počítán jako neobřezaný",
+      "lemma": "עָרֵל",
+      "hebrew": "ערל",
+      "xlit": "ʻârêl",
+      "translated": true
+    },
+    "H6189": {
+      "definitions_cz": "1) neobřezaný, mající předkožku",
+      "lemma": "עָרֵל",
+      "hebrew": "ערל",
+      "xlit": "ʻârêl",
+      "translated": true
+    },
+    "H6190": {
+      "definitions_cz": "1) předkožka, neobřezaná",
+      "lemma": "עׇרְלָה",
+      "hebrew": "ערלה",
+      "xlit": "ʻorlâh",
+      "translated": true
     }
   }
 }
