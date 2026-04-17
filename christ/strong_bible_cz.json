@@ -54477,6 +54477,356 @@
       "hebrew": "מאה",
       "xlit": "mᵉʼâh",
       "translated": true
+    },
+    "H3970": {
+      "definitions_cz": "1) touha",
+      "lemma": "מַאֲוַי",
+      "hebrew": "מאוי",
+      "xlit": "maʼăvay",
+      "translated": true
+    },
+    "H3971": {
+      "definitions_cz": "1) vada, skvrna, vada | 1a) fyzické vady | 1b) morální poskvrny",
+      "lemma": "מאוּם",
+      "hebrew": "מאום",
+      "xlit": "mʼûwm",
+      "translated": true
+    },
+    "H3972": {
+      "definitions_cz": "1) cokoliv",
+      "lemma": "מְאוּמָה",
+      "hebrew": "מאומה",
+      "xlit": "mᵉʼûwmâh",
+      "translated": true
+    },
+    "H3973": {
+      "definitions_cz": "1) odmítnout, odpad",
+      "lemma": "מָאוֹס",
+      "hebrew": "מאוס",
+      "xlit": "mâʼôwç",
+      "translated": true
+    },
+    "H3974": {
+      "definitions_cz": "1) světlo, svítidlo",
+      "lemma": "מָאוֹר",
+      "hebrew": "מאור",
+      "xlit": "mâʼôwr",
+      "translated": true
+    },
+    "H3975": {
+      "definitions_cz": "1) světlý otvor, doupě",
+      "lemma": "מְאוּרָה",
+      "hebrew": "מאורה",
+      "xlit": "mᵉʼûwrâh",
+      "translated": true
+    },
+    "H3976": {
+      "definitions_cz": "1) váhy, váhy",
+      "lemma": "מֹאזֵן",
+      "hebrew": "מאזן",
+      "xlit": "môʼzên",
+      "translated": true
+    },
+    "H3977": {
+      "definitions_cz": "1) měřítko, rovnováha",
+      "lemma": "מֹאזֵן",
+      "hebrew": "מאזן",
+      "xlit": "môʼzên",
+      "translated": true
+    },
+    "H3978": {
+      "definitions_cz": "1) jídlo, ovoce, maso",
+      "lemma": "מַאֲכָל",
+      "hebrew": "מאכל",
+      "xlit": "maʼăkâl",
+      "translated": true
+    },
+    "H3979": {
+      "definitions_cz": "1) nůž",
+      "lemma": "מַאֲכֶלֶת",
+      "hebrew": "מאכלת",
+      "xlit": "maʼăkeleth",
+      "translated": true
+    },
+    "H3980": {
+      "definitions_cz": "1) palivo",
+      "lemma": "מַאֲכֹלֶת",
+      "hebrew": "מאכלת",
+      "xlit": "maʼăkôleth",
+      "translated": true
+    },
+    "H3981": {
+      "definitions_cz": "1) síla, síla, síla",
+      "lemma": "מַאֲמָץ",
+      "hebrew": "מאמץ",
+      "xlit": "maʼămâts",
+      "translated": true
+    },
+    "H3982": {
+      "definitions_cz": "1) slovo, příkaz",
+      "lemma": "מַאֲמַר",
+      "hebrew": "מאמר",
+      "xlit": "maʼămar",
+      "translated": true
+    },
+    "H3983": {
+      "definitions_cz": "1) slovo, příkaz",
+      "lemma": "מֵאמַר",
+      "hebrew": "מאמר",
+      "xlit": "mêʼmar",
+      "translated": true
+    },
+    "H3984": {
+      "definitions_cz": "1) nádoba, nádoba",
+      "lemma": "מָאן",
+      "hebrew": "מאן",
+      "xlit": "mâʼn",
+      "translated": true
+    },
+    "H3985": {
+      "definitions_cz": "1) (Piel) odmítnout",
+      "lemma": "מָאֵן",
+      "hebrew": "מאן",
+      "xlit": "mâʼên",
+      "translated": true
+    },
+    "H3986": {
+      "definitions_cz": "1) odmítání, neochota poslouchat",
+      "lemma": "מָאֵן",
+      "hebrew": "מאן",
+      "xlit": "mâʼên",
+      "translated": true
+    },
+    "H3987": {
+      "definitions_cz": "1) odmítání",
+      "lemma": "מֵאֵן",
+      "hebrew": "מאן",
+      "xlit": "mêʼên",
+      "translated": true
+    },
+    "H3988": {
+      "definitions_cz": "1) odmítat, pohrdat, odmítat | 1a) (Qal) | 1a1) odmítnout, odmítnout | 1a2) pohrdat | 1b) (Niphal) k zamítnutí | 2) (Niphal) proudit, běžet",
+      "lemma": "מָאַס",
+      "hebrew": "מאס",
+      "xlit": "mâʼaç",
+      "translated": true
+    },
+    "H3989": {
+      "definitions_cz": "1) pečená, věc pečená",
+      "lemma": "מַאֲפֶה",
+      "hebrew": "מאפה",
+      "xlit": "maʼăpheh",
+      "translated": true
+    },
+    "H3990": {
+      "definitions_cz": "1) tma",
+      "lemma": "מַאֲפֵל",
+      "hebrew": "מאפל",
+      "xlit": "maʼăphêl",
+      "translated": true
+    },
+    "H3991": {
+      "definitions_cz": "1) hluboká tma, tma",
+      "lemma": "מַאְפֵלְיָה",
+      "hebrew": "מאפליה",
+      "xlit": "maʼphêlᵉyâh",
+      "translated": true
+    },
+    "H3992": {
+      "definitions_cz": "1) (Hiphil) bolet, píchat, dráždit, bolet",
+      "lemma": "מָאַר",
+      "hebrew": "מאר",
+      "xlit": "mâʼar",
+      "translated": true
+    },
+    "H3993": {
+      "definitions_cz": "1) přepadení, (lovec) slepý | 1a) přepadení, číhající místo | 1b) čekající lháři",
+      "lemma": "מַאֲרָב",
+      "hebrew": "מארב",
+      "xlit": "maʼărâb",
+      "translated": true
+    },
+    "H3994": {
+      "definitions_cz": "1) prokletí",
+      "lemma": "מְאֵרָה",
+      "hebrew": "מארה",
+      "xlit": "mᵉʼêrâh",
+      "translated": true
+    },
+    "H3995": {
+      "definitions_cz": "1) samostatné místo",
+      "lemma": "מִבְדָּלָה",
+      "hebrew": "מבדלה",
+      "xlit": "mibdâlâh",
+      "translated": true
+    },
+    "H3996": {
+      "definitions_cz": "1) vchod, příchod, vstup | 2) západ slunce | 2a) západ slunce | 2b) západ slunce, západ",
+      "lemma": "מָבוֹא",
+      "hebrew": "מבוא",
+      "xlit": "mâbôwʼ",
+      "translated": true
+    },
+    "H3997": {
+      "definitions_cz": "1) vstup, vstup, příchod, vstup",
+      "lemma": "מְבוֹאָה",
+      "hebrew": "מבואה",
+      "xlit": "mᵉbôwʼâh",
+      "translated": true
+    },
+    "H3998": {
+      "definitions_cz": "1) zmatek, zmatenost, zmatek",
+      "lemma": "מְבוּכָה",
+      "hebrew": "מבוכה",
+      "xlit": "mᵉbûwkâh",
+      "translated": true
+    },
+    "H3999": {
+      "definitions_cz": "1) povodeň, záplava. | 1a) Noemova potopa, která ponořila celou planetu Zemi pod vodu asi na rok | ++++ | Někteří si myslí, že Noemova potopa byla pouze místní. Nicméně popis nalezený v Gen. 6 až 8 to činí zjevně absurdním. Pokud to bylo místní, měl Noe 120 let na to, aby se z oblasti vystěhoval na bezpečnou půdu! Proč plýtvat veškerou námahou na stavbu lodi? Aby dosáhl nejvzdálenějšího bodu na zeměkouli, musel se denně posunout o méně než 1500 stop! Snad s výjimkou Ž 29,10 toto slovo",
+      "lemma": "מַבּוּל",
+      "hebrew": "מבול",
+      "xlit": "mabbûwl",
+      "translated": true
+    },
+    "H4000": {
+      "definitions_cz": "1) ti, kteří učili, ti, kteří dávali porozumění, učitel",
+      "lemma": "מָבוֹן",
+      "hebrew": "מבון",
+      "xlit": "mâbôwn",
+      "translated": true
+    },
+    "H4001": {
+      "definitions_cz": "1) sestup, podmanění",
+      "lemma": "מְבוּסָה",
+      "hebrew": "מבוסה",
+      "xlit": "mᵉbûwçâh",
+      "translated": true
+    },
+    "H4002": {
+      "definitions_cz": "1) pramen vody",
+      "lemma": "מַבּוּעַ",
+      "hebrew": "מבוע",
+      "xlit": "mabbûwaʻ",
+      "translated": true
+    },
+    "H4003": {
+      "definitions_cz": "1) prázdnota, prázdnota",
+      "lemma": "מְבוּקָה",
+      "hebrew": "מבוקה",
+      "xlit": "mᵉbûwqâh",
+      "translated": true
+    },
+    "H4004": {
+      "definitions_cz": "1) výběr",
+      "lemma": "מִבְחוֹר",
+      "hebrew": "מבחור",
+      "xlit": "mibchôwr",
+      "translated": true
+    },
+    "H4005": {
+      "definitions_cz": "1) nejvybranější, nejlepší",
+      "lemma": "מִבְחָר",
+      "hebrew": "מבחר",
+      "xlit": "mibchâr",
+      "translated": true
+    },
+    "H4006": {
+      "definitions_cz": "Mibhar = \"výběr\" | 1) jeden z Davidových mocných válečníků",
+      "lemma": "מִבְחָר",
+      "hebrew": "מבחר",
+      "xlit": "Mibchâr",
+      "translated": true
+    },
+    "H4007": {
+      "definitions_cz": "1) očekávání, předmět naděje nebo důvěry",
+      "lemma": "מַבָּט",
+      "hebrew": "מבט",
+      "xlit": "mabbâṭ",
+      "translated": true
+    },
+    "H4008": {
+      "definitions_cz": "1) unáhlený výrok, ukvapený slib",
+      "lemma": "מִבְטָא",
+      "hebrew": "מבטא",
+      "xlit": "mibṭâʼ",
+      "translated": true
+    },
+    "H4009": {
+      "definitions_cz": "1) důvěra, důvěra, útočiště | 1a) akt důvěry | 1b) předmět důvěry | 1c) stav důvěry, bezpečí",
+      "lemma": "מִבְטָח",
+      "hebrew": "מבטח",
+      "xlit": "mibṭâch",
+      "translated": true
+    },
+    "H4010": {
+      "definitions_cz": "1) úsměv, veselost, zdroj veselí nebo rozjasnění",
+      "lemma": "מַבְלִיגִית",
+      "hebrew": "מבליגית",
+      "xlit": "mablîygîyth",
+      "translated": true
+    },
+    "H4011": {
+      "definitions_cz": "1) stavba, budova",
+      "lemma": "מִבְנֶה",
+      "hebrew": "מבנה",
+      "xlit": "mibneh",
+      "translated": true
+    },
+    "H4012": {
+      "definitions_cz": "Mebunnai = \"budova Jehova\" | 1) jeden z Davidových mocných válečníků | 1a) také „Sibbechai“ nebo „Sibbecai“",
+      "lemma": "מְבֻנַּי",
+      "hebrew": "מבני",
+      "xlit": "Mᵉbunnay",
+      "translated": true
+    },
+    "H4013": {
+      "definitions_cz": "1) opevnění, pevnost, opevněné město, tvrz",
+      "lemma": "מִבְצָר",
+      "hebrew": "מבצר",
+      "xlit": "mibtsâr",
+      "translated": true
+    },
+    "H4014": {
+      "definitions_cz": "Mibzar = \"pevnost\" | 1) jeden z náčelníků Edomu",
+      "lemma": "מִבְצָר",
+      "hebrew": "מבצר",
+      "xlit": "Mibtsâr",
+      "translated": true
+    },
+    "H4015": {
+      "definitions_cz": "1) uprchlík, útěk",
+      "lemma": "מִבְרָח",
+      "hebrew": "מברח",
+      "xlit": "mibrâch",
+      "translated": true
+    },
+    "H4016": {
+      "definitions_cz": "1) intimní partie, jeho intimy, mužské pohlavní orgány | 1a) doslova – „to vzbuzuje stud“",
+      "lemma": "מָבֻשׁ",
+      "hebrew": "מבש",
+      "xlit": "mâbush",
+      "translated": true
+    },
+    "H4017": {
+      "definitions_cz": "Mibsam = \"sladká vůně\" | 1) syn Izmaelův | 2) potomek Simeonův",
+      "lemma": "מִבְשָׂם",
+      "hebrew": "מבשם",
+      "xlit": "Mibsâm",
+      "translated": true
+    },
+    "H4018": {
+      "definitions_cz": "1) místa pro vaření",
+      "lemma": "מְבַשְּׁלָה",
+      "hebrew": "מבשלה",
+      "xlit": "mᵉbashshᵉlâh",
+      "translated": true
+    },
+    "H4019": {
+      "definitions_cz": "Magbish = \"shromáždění\" | 1) hlava rodiny vracejících se vyhnanců",
+      "lemma": "מַגְבִּישׁ",
+      "hebrew": "מגביש",
+      "xlit": "Magbîysh",
+      "translated": true
     }
   }
 }
