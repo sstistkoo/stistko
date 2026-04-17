@@ -86362,6 +86362,706 @@
       "hebrew": "תלל",
       "xlit": "tâlal",
       "translated": true
+    },
+    "H8525": {
+      "definitions_cz": "1) brázda",
+      "lemma": "תֶּלֶם",
+      "hebrew": "תלם",
+      "xlit": "telem",
+      "translated": true
+    },
+    "H8526": {
+      "definitions_cz": "Talmai = \"brázdí\" | 1) jeden ze 3 synů obra Anaka, kteří byli zabiti judskými muži | 2) syn Ammihuda, krále Gešúru, později samotného krále Gešúru a otce Maaky, matky Abšalómovy a manželky Davidovy",
+      "lemma": "תַּלְמַי",
+      "hebrew": "תלמי",
+      "xlit": "Talmay",
+      "translated": true
+    },
+    "H8527": {
+      "definitions_cz": "1) učenec",
+      "lemma": "תַּלְמִיד",
+      "hebrew": "תלמיד",
+      "xlit": "talmîyd",
+      "translated": true
+    },
+    "H8528": {
+      "definitions_cz": "Tel-melah = \"hromada soli\" | 1) místo v Babylonu, odkud pocházeli někteří vyhnanci neznámého původu; se vrátil do Jeruzaléma se Zerubábelem",
+      "lemma": "תֵּל מֶלַח",
+      "hebrew": "תל מלח",
+      "xlit": "Têl Melach",
+      "translated": true
+    },
+    "H8529": {
+      "definitions_cz": "1) (Pual) obléci se do šarlatu, nosit šarlat",
+      "lemma": "תָּלַע",
+      "hebrew": "תלע",
+      "xlit": "tâlaʻ",
+      "translated": true
+    },
+    "H8530": {
+      "definitions_cz": "1) zbraně, zbrojnice, výzbroj | 1a) znamená pochybný",
+      "lemma": "תַּלְפִּיָּה",
+      "hebrew": "תלפיה",
+      "xlit": "talpîyâh",
+      "translated": true
+    },
+    "H8531": {
+      "definitions_cz": "1) třetí, jedna ze tří, třetí část",
+      "lemma": "תְּלַת",
+      "hebrew": "תלת",
+      "xlit": "tᵉlath",
+      "translated": true
+    },
+    "H8532": {
+      "definitions_cz": "1) tři | 1a) tři (hlavní číslo) | 1b) třetí (řadové číslo)",
+      "lemma": "תְּלָת",
+      "hebrew": "תלת",
+      "xlit": "tᵉlâth",
+      "translated": true
+    },
+    "H8533": {
+      "definitions_cz": "1) třicet",
+      "lemma": "תְּלָתִין",
+      "hebrew": "תלתין",
+      "xlit": "tᵉlâthîyn",
+      "translated": true
+    },
+    "H8534": {
+      "definitions_cz": "1) vlnité, rozvětvené (používané z ženských vlasů-fík) | 1a) znamená nejistý",
+      "lemma": "תַּלְתַּל",
+      "hebrew": "תלתל",
+      "xlit": "taltal",
+      "translated": true
+    },
+    "H8535": {
+      "definitions_cz": "1) perfektní, kompletní | 1a) úplný, dokonalý | 1a1) ten, komu nic nechybí na fyzické síle, kráse atd. | 1b) zdravý, zdravý | 1b1) obyčejný, tichý typ člověka | 1c) úplný, morálně nevinný, bezúhonný | 1c1) ten, kdo je morálně a eticky čistý",
+      "lemma": "תָּם",
+      "hebrew": "תם",
+      "xlit": "tâm",
+      "translated": true
+    },
+    "H8536": {
+      "definitions_cz": "1) tam",
+      "lemma": "תָּם",
+      "hebrew": "תם",
+      "xlit": "tâm",
+      "translated": true
+    },
+    "H8537": {
+      "definitions_cz": "1) celistvost, úplnost | 1a) úplnost, úplnost | 1b) nevinnost, jednoduchost | 1c) integrita",
+      "lemma": "תֹּם",
+      "hebrew": "תם",
+      "xlit": "tôm",
+      "translated": true
+    },
+    "H8538": {
+      "definitions_cz": "1) integrita",
+      "lemma": "תֻּמָּה",
+      "hebrew": "תמה",
+      "xlit": "tummâh",
+      "translated": true
+    },
+    "H8539": {
+      "definitions_cz": "1) být ohromen, být ohromen, být ohromen, být ohromen | 1a) (Qal) být ohromen | 1b) (Hithpael) žasnout, žasnout, žasnout jeden na druhého",
+      "lemma": "תָּמַהּ",
+      "hebrew": "תמה",
+      "xlit": "tâmahh",
+      "translated": true
+    },
+    "H8540": {
+      "definitions_cz": "1) zázrak, zázrak",
+      "lemma": "תְּמַהּ",
+      "hebrew": "תמה",
+      "xlit": "tᵉmahh",
+      "translated": true
+    },
+    "H8541": {
+      "definitions_cz": "1) údiv, zmatek, údiv",
+      "lemma": "תִּמָּהוֹן",
+      "hebrew": "תמהון",
+      "xlit": "timmâhôwn",
+      "translated": true
+    },
+    "H8542": {
+      "definitions_cz": "Tammuz = \"výhonek života\" | 1) sumerské božstvo jídla nebo vegetace",
+      "lemma": "תַּמּוּז",
+      "hebrew": "תמוז",
+      "xlit": "Tammûwz",
+      "translated": true
+    },
+    "H8543": {
+      "definitions_cz": "1) dříve, před tím časem, před tím, před tím, pozdě, starým, tyto dny, čas(y) minulý, včera, předevčírem, nedávno, dříve | 1a) včera | 1a1) nedávno, dříve (obvyklé použití) (obr.) | 1b) jako dříve, tak i nedávno | 1c) již od včerejška",
+      "lemma": "תְּמוֹל",
+      "hebrew": "תמול",
+      "xlit": "tᵉmôwl",
+      "translated": true
+    },
+    "H8544": {
+      "definitions_cz": "1) forma, obraz, podoba, znázornění, zdání",
+      "lemma": "תְּמוּנָה",
+      "hebrew": "תמונה",
+      "xlit": "tᵉmûwnâh",
+      "translated": true
+    },
+    "H8545": {
+      "definitions_cz": "1) to, co se vyměňuje, výměna, náhrada, náhrada",
+      "lemma": "תְּמוּרָה",
+      "hebrew": "תמורה",
+      "xlit": "tᵉmûwrâh",
+      "translated": true
+    },
+    "H8546": {
+      "definitions_cz": "1) smrt",
+      "lemma": "תְּמוּתָה",
+      "hebrew": "תמותה",
+      "xlit": "tᵉmûwthâh",
+      "translated": true
+    },
+    "H8547": {
+      "definitions_cz": "Tamah nebo Thamah = \"smích\" | 1) hlava rodiny chrámových otroků, kteří se vrátili z exilu se Zerubábelem",
+      "lemma": "תֶּמַח",
+      "hebrew": "תמח",
+      "xlit": "Temach",
+      "translated": true
+    },
+    "H8548": {
+      "definitions_cz": "1) kontinuita, věčnost, protáhnout | 1a) nepřetržitě, nepřetržitě (jako příslovce) | 1b) spojitost (subst)",
+      "lemma": "תָּמִיד",
+      "hebrew": "תמיד",
+      "xlit": "tâmîyd",
+      "translated": true
+    },
+    "H8549": {
+      "definitions_cz": "1) úplný, celý, celistvý, zdravý | 1a) úplný, celý, celý | 1b) celý, zdravý, zdravý | 1c) úplný, celý (času) | 1d) zdravý, zdravý, nepoškozený, nevinný, mající integritu | 1e) co je úplné nebo zcela v souladu s pravdou a skutečností (neuter adj/subst)",
+      "lemma": "תָּמִים",
+      "hebrew": "תמים",
+      "xlit": "tâmîym",
+      "translated": true
+    },
+    "H8550": {
+      "definitions_cz": "Thummim = \"dokonalost\" | 1) kameny určené k dosažení posvátného losu | 1a) použitý s Urim, vůle Boží byla zjevena",
+      "lemma": "תֻּמִּים",
+      "hebrew": "תמים",
+      "xlit": "Tummîym",
+      "translated": true
+    },
+    "H8551": {
+      "definitions_cz": "1) uchopit, držet, podporovat, dosáhnout, držet se, pevně se držet | 1a) (Qal) | 1a1) uchopit, uchopit, dosáhnout | 1a2) držet se, podporovat | 1a3) držet, držet | 1a4) uchopit jeden druhého | 1b) (Niphal), který má být zadržen, být zadržen",
+      "lemma": "תָּמַךְ",
+      "hebrew": "תמך",
+      "xlit": "tâmak",
+      "translated": true
+    },
+    "H8552": {
+      "definitions_cz": "1) být kompletní, být dokončen, být na konci | 1a) (Qal) | 1a1) dokončit, doplnit | 1a1a) úplně, úplně, úplně (jako pomocné se slovesem) | 1a2) dokončit, skončit, přestat | 1a3) doplňte (počet) | 1a4) být spotřebován, vyčerpán, utracen | 1a5) dokončit, spotřebovat, zničit | 1a6) být úplný, zdravý, nepoškozený, vzpřímený (eticky) | 1a7) dokončit, dokončit | 1a8) zcela překřížit | 1b) (Niphal) ke spotřebě",
+      "lemma": "תָּמַם",
+      "hebrew": "תמם",
+      "xlit": "tâmam",
+      "translated": true
+    },
+    "H8553": {
+      "definitions_cz": "Timnath nebo Timnah nebo Thimnathah = \"porce\" | 1) město na severní hranici Judska později přidělené Danovi | 2) město v judské pohoří",
+      "lemma": "תִּמְנָה",
+      "hebrew": "תמנה",
+      "xlit": "Timnâh",
+      "translated": true
+    },
+    "H8554": {
+      "definitions_cz": "Timnite = \"budeš počítat: část\" | 1) obyvatel Timnath nebo Timnah nebo Thimnathah",
+      "lemma": "תִּמְנִי",
+      "hebrew": "תמני",
+      "xlit": "Timnîy",
+      "translated": true
+    },
+    "H8555": {
+      "definitions_cz": "Timna nebo Timnah = \"zdrženlivý\" | n pr m | 1) náčelník nebo vévoda z Ezaua a Edomu | n pr f | 2) konkubína Elifaze, syna Ezauova | 3) dcera Seira Horejského a sestra Lotanova",
+      "lemma": "תִּמְנָע",
+      "hebrew": "תמנע",
+      "xlit": "Timnâʻ",
+      "translated": true
+    },
+    "H8556": {
+      "definitions_cz": "Timnath-heres nebo Timnath-serah = \"část slunce\" nebo \"hojná část\" | 1) město dané Jozuovi jako dědictví v horách Efraim na severu kopce Gaash, kde byl pohřben",
+      "lemma": "תִּמְנַת חֶרֶס",
+      "hebrew": "תמנת חרס",
+      "xlit": "Timnath Chereç",
+      "translated": true
+    },
+    "H8557": {
+      "definitions_cz": "1) rozpouštění, tání, tání (pryč)",
+      "lemma": "תֶּמֶס",
+      "hebrew": "תמס",
+      "xlit": "temeç",
+      "translated": true
+    },
+    "H8558": {
+      "definitions_cz": "1) palma, datlová palma",
+      "lemma": "תָּמָר",
+      "hebrew": "תמר",
+      "xlit": "tâmâr",
+      "translated": true
+    },
+    "H8559": {
+      "definitions_cz": "Tamar = \"palma\" | n pr f | 1) vdova po Erovi, synu Judově; snoubenka Šela, dalšího syna Judova; manželka Judova a matka Fárezova a Zeracha | 2) dcera Davidova od Maaky, sestra Absalomova, a oběť znásilnění Amnona, jejího nevlastního bratra, dalšího syna Davidova | 3) dcera Absolonova | n pr loc | 4) místo na jižní hranici Gadu",
+      "lemma": "תָּמָר",
+      "hebrew": "תמר",
+      "xlit": "Tâmâr",
+      "translated": true
+    },
+    "H8560": {
+      "definitions_cz": "1) palma, sloup, sloup",
+      "lemma": "תֹּמֶר",
+      "hebrew": "תמר",
+      "xlit": "tômer",
+      "translated": true
+    },
+    "H8561": {
+      "definitions_cz": "1) figurka palmy (jako ozdoba)",
+      "lemma": "תִּמֹּר",
+      "hebrew": "תמר",
+      "xlit": "timmôr",
+      "translated": true
+    },
+    "H8562": {
+      "definitions_cz": "1) škrábání, tření | 2) (CLBL) náprava (na zranění)",
+      "lemma": "תַּמְרוּק",
+      "hebrew": "תמרוק",
+      "xlit": "tamrûwq",
+      "translated": true
+    },
+    "H8563": {
+      "definitions_cz": "1) hořkost",
+      "lemma": "תַּמְרוּר",
+      "hebrew": "תמרור",
+      "xlit": "tamrûwr",
+      "translated": true
+    },
+    "H8564": {
+      "definitions_cz": "1) směrovky, značky, směrovky, vysoká halda | 1a) znamená pochybný",
+      "lemma": "תַּמְרוּר",
+      "hebrew": "תמרור",
+      "xlit": "tamrûwr",
+      "translated": true
+    },
+    "H8565": {
+      "definitions_cz": "1) drak, možná vyhynulý dinosaurus, plesiosaurus, velryba",
+      "lemma": "תַּן",
+      "hebrew": "תן",
+      "xlit": "tan",
+      "translated": true
+    },
+    "H8566": {
+      "definitions_cz": "1) najmout | 1a) (Qal) najmout | 1b) (Hiphil) najmout (prostitutku), dát milostné laskavosti",
+      "lemma": "תָּנָה",
+      "hebrew": "תנה",
+      "xlit": "tânâh",
+      "translated": true
+    },
+    "H8567": {
+      "definitions_cz": "1) (Piel) převyprávět, nacvičit, znovu vyprávět",
+      "lemma": "תָּנָה",
+      "hebrew": "תנה",
+      "xlit": "tânâh",
+      "translated": true
+    },
+    "H8568": {
+      "definitions_cz": "1) obydlí, šakali, (TWOT) drak, (TWOT) mořská příšera | 1a) znamená nejistý",
+      "lemma": "תַּנָּה",
+      "hebrew": "תנה",
+      "xlit": "tannâh",
+      "translated": true
+    },
+    "H8569": {
+      "definitions_cz": "1) opozice, odcizení, nepřátelství",
+      "lemma": "תְּנוּאָה",
+      "hebrew": "תנואה",
+      "xlit": "tᵉnûwʼâh",
+      "translated": true
+    },
+    "H8570": {
+      "definitions_cz": "1) ovoce, produkce",
+      "lemma": "תְּנוּבָה",
+      "hebrew": "תנובה",
+      "xlit": "tᵉnûwbâh",
+      "translated": true
+    },
+    "H8571": {
+      "definitions_cz": "1) špička, lalok (ucha)",
+      "lemma": "תְּנוּךְ",
+      "hebrew": "תנוך",
+      "xlit": "tᵉnûwk",
+      "translated": true
+    },
+    "H8572": {
+      "definitions_cz": "1) spánek, usínání, spánek",
+      "lemma": "תְּנוּמָה",
+      "hebrew": "תנומה",
+      "xlit": "tᵉnûwmâh",
+      "translated": true
+    },
+    "H8573": {
+      "definitions_cz": "1) houpání, mávání, mávání, nabízení | 1a) houpání, mávání | 1a1) Boží ruky, zbraně | 1b) mávání, mávání (technický termín obětování) | 1c) nabídka (ze zlata nebo mosazi)",
+      "lemma": "תְּנוּפָה",
+      "hebrew": "תנופה",
+      "xlit": "tᵉnûwphâh",
+      "translated": true
+    },
+    "H8574": {
+      "definitions_cz": "1) pec, trouba, ohniště, (přenosný) sporák | 1a) na vaření | 1b) Božího hněvu, Jeho pec (obr.) | 1c) hladu, touhy po zlu | 1d) ohniště",
+      "lemma": "תַּנּוּר",
+      "hebrew": "תנור",
+      "xlit": "tannûwr",
+      "translated": true
+    },
+    "H8575": {
+      "definitions_cz": "1) útěcha(y)",
+      "lemma": "תַּנְחוּם",
+      "hebrew": "תנחום",
+      "xlit": "tanchûwm",
+      "translated": true
+    },
+    "H8576": {
+      "definitions_cz": "Tanhumeth = \"útěcha\" | 1) otec Seraiáše, vůdce, který se připojil ke Godoliášovi po pádu Jeruzaléma",
+      "lemma": "תַּנְחֻמֶת",
+      "hebrew": "תנחמת",
+      "xlit": "Tanchumeth",
+      "translated": true
+    },
+    "H8577": {
+      "definitions_cz": "1) drak, had, mořská příšera | 1a) drak nebo dinosaurus | 1b) mořská nebo říční příšera | 1c) had, jedovatý had",
+      "lemma": "תַּנִּין",
+      "hebrew": "תנין",
+      "xlit": "tannîyn",
+      "translated": true
+    },
+    "H8578": {
+      "definitions_cz": "1) druhý",
+      "lemma": "תִּנְיָן",
+      "hebrew": "תנין",
+      "xlit": "tinyân",
+      "translated": true
+    },
+    "H8579": {
+      "definitions_cz": "1) podruhé, znovu",
+      "lemma": "תִּנְיָנוּת",
+      "hebrew": "תנינות",
+      "xlit": "tinyânûwth",
+      "translated": true
+    },
+    "H8580": {
+      "definitions_cz": "1) nějaké nečisté zvíře | 1a) nečistý pták | 1a1) snad ibis, vodní slepice, druh sovy, sova pálená | 1b) nečistá ještěrka | 1b1) snad chameleon | 1c) možná vyhynulý ještěr nebo pták, přesný význam neznámý",
+      "lemma": "תַּנְשֶׁמֶת",
+      "hebrew": "תנשמת",
+      "xlit": "tanshemeth",
+      "translated": true
+    },
+    "H8581": {
+      "definitions_cz": "1) ošklivit se, být ohavný, činit ohavně | 1a) (Niphal) být nenáviděn, být nenáviděn | 1a1) v rituálním smyslu | 1a2) v etickém smyslu | 1b) (Piel) | 1b1) nenávidět, ošklivit se, považovat za ohavnost | 1b1a) v rituálním smyslu | 1b1b) v etickém smyslu | 1b2) způsobit být ohavností | 1c) (Hiphil) učinit ohavným, činit ohavně | 1c1) v rituálním smyslu | 1c2) v etickém smyslu",
+      "lemma": "תַּעָב",
+      "hebrew": "תעב",
+      "xlit": "taʻâb",
+      "translated": true
+    },
+    "H8582": {
+      "definitions_cz": "1) chybovat, bloudit, bloudit, vrávorat | 1a) (Qal) se mýlit | 1a1) toulat se (fyzicky) | 1a2) intoxikace | 1a3) hříchu (eticky) | 1a4) putování (mysli) | 1b) (Niphal) | 1b1) být přinucen toulat se, být nucen vrávorat (opilec) | 1b2) nechat se svést (eticky) | 1c) (Hiphil) způsobit putování | 1c1) způsobit toulání se (fyzicky) | 1c2) způsobit putování (opojení) | 1c3) způsobit chybu, uvést v omyl (duševně a morálně)",
+      "lemma": "תָּעָה",
+      "hebrew": "תעה",
+      "xlit": "tâʻâh",
+      "translated": true
+    },
+    "H8583": {
+      "definitions_cz": "Toi nebo Tou = \"putovat\" | 1) král Chamatu v době Davidově",
+      "lemma": "תֹּעוּ",
+      "hebrew": "תעו",
+      "xlit": "Tôʻûw",
+      "translated": true
+    },
+    "H8584": {
+      "definitions_cz": "1) svědectví, atestace, potvrzení | 1a) svědectví, (prorocký) příkaz | 1b) atestace",
+      "lemma": "תְּעוּדָה",
+      "hebrew": "תעודה",
+      "xlit": "tᵉʻûwdâh",
+      "translated": true
+    },
+    "H8585": {
+      "definitions_cz": "1) potrubí, vodní tok, příkop | 2) hojení (vytvoření nového masa a kůže na ráně) | 2a) (CLBL) obvaz, náplast (k hojení rány)",
+      "lemma": "תְּעָלָה",
+      "hebrew": "תעלה",
+      "xlit": "tᵉʻâlâh",
+      "translated": true
+    },
+    "H8586": {
+      "definitions_cz": "1) svévolnost, rozmar, rozmrzelost",
+      "lemma": "תַּעֲלוּל",
+      "hebrew": "תעלול",
+      "xlit": "taʻălûwl",
+      "translated": true
+    },
+    "H8587": {
+      "definitions_cz": "1) skrytá věc, tajemství, to, co je skryté",
+      "lemma": "תַּעֲלֻמָּה",
+      "hebrew": "תעלמה",
+      "xlit": "taʻălummâh",
+      "translated": true
+    },
+    "H8588": {
+      "definitions_cz": "1) lahůdka, luxus, nádherná rozkoš, příjemnost, rozkoš, pohodlí | 1a) luxusní | 1b) lahůdka | 1c) radost",
+      "lemma": "תַּעֲנוּג",
+      "hebrew": "תענוג",
+      "xlit": "taʻănûwg",
+      "translated": true
+    },
+    "H8589": {
+      "definitions_cz": "1) ponížení (půstem), asketické praktikování půstu",
+      "lemma": "תַּעֲנִית",
+      "hebrew": "תענית",
+      "xlit": "taʻănîyth",
+      "translated": true
+    },
+    "H8590": {
+      "definitions_cz": "Taanach nebo Tanach = \"písečná\" | 1) starověké kananejské město dobyté Jozuem a přidělené polovině kmene Manasses, ačkoli na území Issachar; dán kehatským levitům; nachází se na západě Jordánu a poblíž vod Megiddo",
+      "lemma": "תַּעֲנָךְ",
+      "hebrew": "תענך",
+      "xlit": "Taʻănâk",
+      "translated": true
+    },
+    "H8591": {
+      "definitions_cz": "1) oklamat, zneužít | 1a) (Pilpel) | 1a1) být posměchem, posmívat se | 1a2) posměvač (subst) | 1b) (Hithpalpel) | 1b1) zesměšnit | 1b2) zesměšňování (příčestí)",
+      "lemma": "תָּעַע",
+      "hebrew": "תעע",
+      "xlit": "tâʻaʻ",
+      "translated": true
+    },
+    "H8592": {
+      "definitions_cz": "1) moc, síla",
+      "lemma": "תַּעֲצֻמָה",
+      "hebrew": "תעצמה",
+      "xlit": "taʻătsumâh",
+      "translated": true
+    },
+    "H8593": {
+      "definitions_cz": "1) břitva, pouzdro (nahá) | 1a) břitva | 1b) pochva (meče)",
+      "lemma": "תַּעַר",
+      "hebrew": "תער",
+      "xlit": "taʻar",
+      "translated": true
+    },
+    "H8594": {
+      "definitions_cz": "1) zástava, ručení, rukojmí",
+      "lemma": "תַּעֲרֻבָה",
+      "hebrew": "תערבה",
+      "xlit": "taʻărubâh",
+      "translated": true
+    },
+    "H8595": {
+      "definitions_cz": "1) chyby, bludy | 2) (BDB) výsměch",
+      "lemma": "תַּעְתֻּעַ",
+      "hebrew": "תעתע",
+      "xlit": "taʻtuaʻ",
+      "translated": true
+    },
+    "H8596": {
+      "definitions_cz": "1) bubínka, tamburína",
+      "lemma": "תֹּף",
+      "hebrew": "תף",
+      "xlit": "tôph",
+      "translated": true
+    },
+    "H8597": {
+      "definitions_cz": "1) krása, nádhera, sláva | 1a) krása, skvost (oděvů, šperků) | 1b) sláva | 1b1) hodnosti, věhlas | 1b2) jako atribut Boha | 1c) čest (nebo národ Izrael) | 1d) chlubit se, chlubit se (jednotlivcem)",
+      "lemma": "תִּפְאָרָה",
+      "hebrew": "תפארה",
+      "xlit": "tiphʼârâh",
+      "translated": true
+    },
+    "H8598": {
+      "definitions_cz": "1) jablko, jabloň | 1a) jabloň | 1b) jablka",
+      "lemma": "תַּפּוּחַ",
+      "hebrew": "תפוח",
+      "xlit": "tappûwach",
+      "translated": true
+    },
+    "H8599": {
+      "definitions_cz": "Tappuah = \"jablečné město\" | n pr m | 1) Judaita z rodu Káleba, syna Hebronova | n pr loc | 2) město v judské nížině | 3) město na hranici v Efraim | 4) území v hranicích Manasse",
+      "lemma": "תַּפּוּחַ",
+      "hebrew": "תפוח",
+      "xlit": "Tappûwach",
+      "translated": true
+    },
+    "H8600": {
+      "definitions_cz": "1) disperze",
+      "lemma": "תְּפוֹצָה",
+      "hebrew": "תפוצה",
+      "xlit": "tᵉphôwtsâh",
+      "translated": true
+    },
+    "H8601": {
+      "definitions_cz": "1) úlomky, pečené kousky, vařené kousky | 1a) znamená pochybný",
+      "lemma": "תֻּפִין",
+      "hebrew": "תפין",
+      "xlit": "tuphîyn",
+      "translated": true
+    },
+    "H8602": {
+      "definitions_cz": "adj | 1) hloupý, hloupý | 2) (BDB) bez chuti, nekořeněné | n m | 3) vápno | 2a) znamená nejistý",
+      "lemma": "תָּפֵל",
+      "hebrew": "תפל",
+      "xlit": "tâphêl",
+      "translated": true
+    },
+    "H8603": {
+      "definitions_cz": "Tophel = \"bílý\" | 1) místo jihovýchodně od Mrtvého moře a v nebo poblíž 'Arabah'",
+      "lemma": "תֹּפֶל",
+      "hebrew": "תפל",
+      "xlit": "Tôphel",
+      "translated": true
+    },
+    "H8604": {
+      "definitions_cz": "1) to, co je prázdné, pošetilé, hloupé, pošetilé | 2) (BDB) nevkusnost, neslušnost (morální)",
+      "lemma": "תִּפְלָה",
+      "hebrew": "תפלה",
+      "xlit": "tiphlâh",
+      "translated": true
+    },
+    "H8605": {
+      "definitions_cz": "1) modlitba | 1a) modlitba | 1b) modlete se modlitbu | 1c) modlitebna | 1d) vyslyš modlitbu | 1e) v názvech Ps (básnické nebo liturgické modlitby)",
+      "lemma": "תְּפִלָּה",
+      "hebrew": "תפלה",
+      "xlit": "tᵉphillâh",
+      "translated": true
+    },
+    "H8606": {
+      "definitions_cz": "1) chvění, hrůza",
+      "lemma": "תִּפְלֶצֶת",
+      "hebrew": "תפלצת",
+      "xlit": "tiphletseth",
+      "translated": true
+    },
+    "H8607": {
+      "definitions_cz": "Tiphsah = \"překročit\" | 1) místo na severovýchodní hranici Šalamounovy říše; leží na řece Eufrat | 2) místo v severním království Izraele, na které zaútočil král Menahem a kde roztrhal všechny těhotné ženy | 2a) může být stejné jako 1",
+      "lemma": "תִּפְסַח",
+      "hebrew": "תפסח",
+      "xlit": "Tiphçach",
+      "translated": true
+    },
+    "H8608": {
+      "definitions_cz": "1) hrát nebo rozeznívat bubínku, tlouct, hrát na buben (na bubínku nebo jiný předmět) | 1a) (Qal) hraní (příčestí) | 1b) (Poel) bití (příčestí)",
+      "lemma": "תָּפַף",
+      "hebrew": "תפף",
+      "xlit": "tâphaph",
+      "translated": true
+    },
+    "H8609": {
+      "definitions_cz": "1) sešít dohromady | 1a) (Qal) šít, šít dohromady | 1b) (Piel) | 1b1) šít | 1b2) šití (příčestí)",
+      "lemma": "תָּפַר",
+      "hebrew": "תפר",
+      "xlit": "tâphar",
+      "translated": true
+    },
+    "H8610": {
+      "definitions_cz": "1) chytit, uchopit, uchopit, uchopit, uchopit, ovládat | 1a) (Qal) | 1a1) zadržet, zmocnit se, zatknout, chytit | 1a2) uchopit (aby se) ohánět, ohánět se, dovedně používat | 1b) (Niphal) být zadržen, zatčen, chycen, zajat, zajat | 1c) (Piel) chytit, uchopit (rukama)",
+      "lemma": "תָּפַשׂ",
+      "hebrew": "תפש",
+      "xlit": "tâphas",
+      "translated": true
+    },
+    "H8611": {
+      "definitions_cz": "1) akt plivání, plivání",
+      "lemma": "תֹּפֶת",
+      "hebrew": "תפת",
+      "xlit": "tôpheth",
+      "translated": true
+    },
+    "H8612": {
+      "definitions_cz": "Tophet nebo Topheth = \"místo ohně\" | 1) místo v jihovýchodním konci údolí syna Hinnoma jižně od Jeruzaléma. Stejné jako H08613",
+      "lemma": "תֹּפֶת",
+      "hebrew": "תפת",
+      "xlit": "Tôpheth",
+      "translated": true
+    },
+    "H8613": {
+      "definitions_cz": "Tophet = \"místo ohně\" | 1) místo na jihovýchodním konci údolí syna Hinnoma jižně od Jeruzaléma | 1a) stejně jako H08612",
+      "lemma": "תׇּפְתֶּה",
+      "hebrew": "תפתה",
+      "xlit": "Tophteh",
+      "translated": true
+    },
+    "H8614": {
+      "definitions_cz": "1) soudce | 2) (BDB) jméno soudce",
+      "lemma": "תִּפְתַּי",
+      "hebrew": "תפתי",
+      "xlit": "tiphtay",
+      "translated": true
+    },
+    "H8615": {
+      "definitions_cz": "1) šňůra | 2) naděje, očekávání | 2a) naděje | 2b) důvod naděje | 2c) očekávané věci, výsledek",
+      "lemma": "תִּקְוָה",
+      "hebrew": "תקוה",
+      "xlit": "tiqvâh",
+      "translated": true
+    },
+    "H8616": {
+      "definitions_cz": "Tikvath nebo Tikvah = \"naděje\" | 1) otec Shalluma, manžela prorokyně Huldy v době judského krále Josiáše | 2) otec Jahaziáše (Tikvah) v době Ezdráše",
+      "lemma": "תִּקְוָה",
+      "hebrew": "תקוה",
+      "xlit": "Tiqvâh",
+      "translated": true
+    },
+    "H8617": {
+      "definitions_cz": "1) stání, schopnost nebo síla stát",
+      "lemma": "תְּקוּמָה",
+      "hebrew": "תקומה",
+      "xlit": "tᵉqûwmâh",
+      "translated": true
+    },
+    "H8618": {
+      "definitions_cz": "1) (Hithpol) a povstání proti (příčestí)",
+      "lemma": "תְּקוֹמֵם",
+      "hebrew": "תקומם",
+      "xlit": "tᵉqôwmêm",
+      "translated": true
+    },
+    "H8619": {
+      "definitions_cz": "1) foukací (dechový) nástroj, trubka",
+      "lemma": "תָּקוֹעַ",
+      "hebrew": "תקוע",
+      "xlit": "tâqôwaʻ",
+      "translated": true
+    },
+    "H8620": {
+      "definitions_cz": "Tekoa nebo Tekoah = \"palisáda\" | n pr m | 1) Judaita, syn Ašurův a vnuk Hezrónův | n pr loc | 2) město v judské pohoří poblíž Hebronu postavené judským králem Rechabeámem; rodiště Amose | 3) oblast pouště, kde judský král Jozafat porazil obyvatele Moaba, Ammona a hory Seir",
+      "lemma": "תְּקוֹעַ",
+      "hebrew": "תקוע",
+      "xlit": "Tᵉqôwaʻ",
+      "translated": true
+    },
+    "H8621": {
+      "definitions_cz": "Tekoite = viz Tekoa \"troubení trubky\" | 1) obyvatel Tekoa",
+      "lemma": "תְּקוֹעִי",
+      "hebrew": "תקועי",
+      "xlit": "Tᵉqôwʻîy",
+      "translated": true
+    },
+    "H8622": {
+      "definitions_cz": "1) obíhání, okruh času nebo prostoru, otáčení, okruh | 1a) na okruhu (jako příslovce)",
+      "lemma": "תְּקוּפָה",
+      "hebrew": "תקופה",
+      "xlit": "tᵉqûwphâh",
+      "translated": true
+    },
+    "H8623": {
+      "definitions_cz": "1) mocný",
+      "lemma": "תַּקִּיף",
+      "hebrew": "תקיף",
+      "xlit": "taqqîyph",
+      "translated": true
+    },
+    "H8624": {
+      "definitions_cz": "1) mocný, silný, mocný",
+      "lemma": "תַּקִּיף",
+      "hebrew": "תקיף",
+      "xlit": "taqqîyph",
+      "translated": true
     }
   }
 }
