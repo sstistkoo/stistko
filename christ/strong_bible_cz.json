@@ -34301,6 +34301,906 @@
       "translit": "presbytérion",
       "pronunciation": "pres-boo-ter'-ee-on",
       "translated": true
+    },
+    "G4245": {
+      "definitions_cz": "starší; jako podstatné jméno, senior; speciálně,\n izraelský sanhedrist (také přeneseně člen nebe\n koncil) nebo křesťanský „presbyter“",
+      "translit": "presbýteros",
+      "pronunciation": "pres-boo'-ter-os",
+      "translated": true
+    },
+    "G4246": {
+      "definitions_cz": "starý muž",
+      "translit": "presbýtēs",
+      "pronunciation": "pres-boo'-tace",
+      "translated": true
+    },
+    "G4247": {
+      "definitions_cz": "stará žena",
+      "translit": "presbŷtis",
+      "pronunciation": "pres-boo'-tis",
+      "translated": true
+    },
+    "G4248": {
+      "definitions_cz": "předklonění (padnutí) dopředu („naklonění“), tedy hlava\n především",
+      "translit": "prēnḗs",
+      "pronunciation": "pray-nace'",
+      "translated": true
+    },
+    "G4249": {
+      "definitions_cz": "pilovat ve dvou",
+      "translit": "prízō",
+      "pronunciation": "prid'-zo",
+      "translated": true
+    },
+    "G4250": {
+      "definitions_cz": "dříve, dříve",
+      "translit": "prín",
+      "pronunciation": "prin",
+      "translated": true
+    },
+    "G4251": {
+      "definitions_cz": "ženský rod Priscus, starověký; Priska, křesťanka\n žena",
+      "translit": "Príska",
+      "pronunciation": "pris'-kah",
+      "translated": true
+    },
+    "G4252": {
+      "definitions_cz": "Priscilla (t. j. malá Prisca), křesťanka\n žena",
+      "translit": "Prískilla",
+      "pronunciation": "pris'-cil-lah",
+      "translated": true
+    },
+    "G4253": {
+      "definitions_cz": "\"před\", tj. před, před (obrazně,\n nadřazený) k",
+      "translit": "pró",
+      "pronunciation": "pro",
+      "translated": true
+    },
+    "G4254": {
+      "definitions_cz": "vést vpřed (magistersky); netranzitivně, do\n předcházet (v místě nebo čase (příčestí, předchozí))",
+      "translit": "proágō",
+      "pronunciation": "pro-ag'-o",
+      "translated": true
+    },
+    "G4255": {
+      "definitions_cz": "vybrat si pro sebe před jinou věcí\n (upřednostňovat), tj. (implicitně) navrhovat (zamýšlet)",
+      "translit": "proairéomai",
+      "pronunciation": "pro-ahee-reh'-om-ahee",
+      "translated": true
+    },
+    "G4256": {
+      "definitions_cz": "obvinit již, t. j. dříve\n poplatek",
+      "translit": "proaitiáomai",
+      "pronunciation": "pro-ahee-tee-ah'-om-ahee",
+      "translated": true
+    },
+    "G4257": {
+      "definitions_cz": "už slyšet, tzn. předvídat",
+      "translit": "proakoúō",
+      "pronunciation": "pro-ak-oo'-o",
+      "translated": true
+    },
+    "G4258": {
+      "definitions_cz": "dříve hřešit (k obrácení)",
+      "translit": "proamartánō",
+      "pronunciation": "pro-am-ar-tan'-o",
+      "translated": true
+    },
+    "G4259": {
+      "definitions_cz": "nádvoří, tzn.\n vestibul (ulička)",
+      "translit": "proaúlion",
+      "pronunciation": "pro-ow'-lee-on",
+      "translated": true
+    },
+    "G4260": {
+      "definitions_cz": "jít vpřed, t. j. postupovat\n (doslova nebo v letech)",
+      "translit": "probaínō",
+      "pronunciation": "prob-ah'-ee-no",
+      "translated": true
+    },
+    "G4261": {
+      "definitions_cz": "házet dopředu, tj. tlačit dopředu,\n klíčit",
+      "translit": "probállō",
+      "pronunciation": "prob-al'-lo",
+      "translated": true
+    },
+    "G4262": {
+      "definitions_cz": "týkající se ovcí, t. j. (brána), kterou byly\n vedl do Jeruzaléma",
+      "translit": "probatikós",
+      "pronunciation": "prob-at-ik-os'",
+      "translated": true
+    },
+    "G4263": {
+      "definitions_cz": "něco, co chodí\n vpřed (čtyřnožec), tj. (zvláště), ovce (doslova nebo\n přeneseně)",
+      "translit": "próbaton",
+      "pronunciation": "prob'-at-on",
+      "translated": true
+    },
+    "G4264": {
+      "definitions_cz": "donutit vpřed, t. j. přinést\n do popředí, podněcovat",
+      "translit": "probibázō",
+      "pronunciation": "prob-ib-ad'-zo",
+      "translated": true
+    },
+    "G4265": {
+      "definitions_cz": "předem vyhlídnout, t.j. zařídit\n předem",
+      "translit": "problépō",
+      "pronunciation": "prob-lep'-o",
+      "translated": true
+    },
+    "G4266": {
+      "definitions_cz": "být již, t. j. již dříve proběhl",
+      "translit": "progínomai",
+      "pronunciation": "prog-in'-om-ahee",
+      "translated": true
+    },
+    "G4267": {
+      "definitions_cz": "vědět předem, t. j. předvídat",
+      "translit": "proginṓskō",
+      "pronunciation": "prog-in-oce'-ko",
+      "translated": true
+    },
+    "G4268": {
+      "definitions_cz": "prozíravost",
+      "translit": "prógnōsis",
+      "pronunciation": "prog'-no-sis",
+      "translated": true
+    },
+    "G4269": {
+      "definitions_cz": "předek, (pra-)rodič",
+      "translit": "prógonos",
+      "pronunciation": "prog'-on-os",
+      "translated": true
+    },
+    "G4270": {
+      "definitions_cz": "psát dříve; obrazně řečeno oznámit,\n předepsat",
+      "translit": "prográphō",
+      "pronunciation": "prog-raf'-o",
+      "translated": true
+    },
+    "G4271": {
+      "definitions_cz": "prosté před všemi lidmi, t. j. zřejmé",
+      "translit": "pródēlos",
+      "pronunciation": "prod'-ay-los",
+      "translated": true
+    },
+    "G4272": {
+      "definitions_cz": "dát dříve, než druhá strana dá",
+      "translit": "prodídōmi",
+      "pronunciation": "prod-id'-o-mee",
+      "translated": true
+    },
+    "G4273": {
+      "definitions_cz": "kapitulace",
+      "translit": "prodótēs",
+      "pronunciation": "prod-ot'-ace",
+      "translated": true
+    },
+    "G4274": {
+      "definitions_cz": "běžec vepředu, tj. skaut (obrazně,\n předchůdce)",
+      "translit": "pródromos",
+      "pronunciation": "prod'-rom-os",
+      "translated": true
+    },
+    "G4275": {
+      "definitions_cz": "předvídat",
+      "translit": "proeídō",
+      "pronunciation": "pro-i'-do",
+      "translated": true
+    },
+    "G4276": {
+      "definitions_cz": "předem doufat v další potvrzení",
+      "translit": "proelpízō",
+      "pronunciation": "pro-el-pid'-zo",
+      "translated": true
+    },
+    "G4277": {
+      "definitions_cz": "již říci, předvídat",
+      "translit": "proépō",
+      "pronunciation": "pro-ep'-o",
+      "translated": true
+    },
+    "G4278": {
+      "definitions_cz": "již začít",
+      "translit": "proenárchomai",
+      "pronunciation": "pro-en-ar'-khom-ahee",
+      "translated": true
+    },
+    "G4279": {
+      "definitions_cz": "staromódně slibovat",
+      "translit": "proepangéllomai",
+      "pronunciation": "pro-ep-ang-ghel'-lom-ahee",
+      "translated": true
+    },
+    "G4280": {
+      "definitions_cz": "používá se jako alternativa k [ŘECKO:4277]",
+      "translit": "proeréō",
+      "pronunciation": "pro-er-eh'-o",
+      "translated": true
+    },
+    "G4281": {
+      "definitions_cz": "jít dál, předcházet\n (v místě nebo čase)",
+      "translit": "proérchomai",
+      "pronunciation": "pro-er'-khom-ahee",
+      "translated": true
+    },
+    "G4282": {
+      "definitions_cz": "předem se vejít (doslova popř\n přeneseně)",
+      "translit": "proetoimázō",
+      "pronunciation": "pro-et-oy-mad'-zo",
+      "translated": true
+    },
+    "G4283": {
+      "definitions_cz": "oznámit radostnou zprávu v\n předem",
+      "translit": "proeuangelízomai",
+      "pronunciation": "pro-yoo-ang-ghel-id'-zom-ahee",
+      "translated": true
+    },
+    "G4284": {
+      "definitions_cz": "držet se před ostatními, tzn.\n (obrazně) vyniknout",
+      "translit": "proéchomai",
+      "pronunciation": "pro-ekh-om-ahee",
+      "translated": true
+    },
+    "G4285": {
+      "definitions_cz": "vést cestu pro ostatní, t. j. ukázat\n úcta",
+      "translit": "proēgéomai",
+      "pronunciation": "pro-ay-geh'-om-ahee",
+      "translated": true
+    },
+    "G4286": {
+      "definitions_cz": "uvedení, tj. (obrazně) návrh (záměr);\n speciálně výstavní chléb (v chrámu), jak byl vystaven dříve\n Bože",
+      "translit": "próthesis",
+      "pronunciation": "proth'-es-is",
+      "translated": true
+    },
+    "G4287": {
+      "definitions_cz": "předem fixované, tj. (ženský\n s [ŘECKO:2250]",
+      "translit": "prothésmios",
+      "pronunciation": "proth-es'-mee-os",
+      "translated": true
+    },
+    "G4288": {
+      "definitions_cz": "predispozice, tedy čilost",
+      "translit": "prothymía",
+      "pronunciation": "proth-oo-mee'-ah",
+      "translated": true
+    },
+    "G4289": {
+      "definitions_cz": "vpřed v duchu, t. j. predisponovaný; kastrovat (jako\n podstatné jméno) čilost",
+      "translit": "próthymos",
+      "pronunciation": "proth'-oo-mos",
+      "translated": true
+    },
+    "G4290": {
+      "definitions_cz": "s horlivostí",
+      "translit": "prothýmōs",
+      "pronunciation": "proth-oo'-moce",
+      "translated": true
+    },
+    "G4291": {
+      "definitions_cz": "stát před, tj. (v hodnosti) předsedat nebo (tím\n implikace) do praxe",
+      "translit": "proḯstēmi",
+      "pronunciation": "pro-is'-tay-mee",
+      "translated": true
+    },
+    "G4292": {
+      "definitions_cz": "volat k sobě (výzva),\n tj. (implicitně) dráždit",
+      "translit": "prokaléomai",
+      "pronunciation": "prok-al-eh'-om-ahee",
+      "translated": true
+    },
+    "G4293": {
+      "definitions_cz": "předem oznámit, tj. předvídat,\n slib",
+      "translit": "prokatangéllō",
+      "pronunciation": "prok-at-ang-ghel'-lo",
+      "translated": true
+    },
+    "G4294": {
+      "definitions_cz": "předem připravit",
+      "translit": "prokatartízō",
+      "pronunciation": "prok-at-ar-tid'-zo",
+      "translated": true
+    },
+    "G4295": {
+      "definitions_cz": "ležet před pohledem, t. j. (obrazně) být\n prezentovat (v mysli), vystupovat (jako příklad nebo odměna)",
+      "translit": "prókeimai",
+      "pronunciation": "prok'-i-mahee",
+      "translated": true
+    },
+    "G4296": {
+      "definitions_cz": "předem zvěstovat (t. j. hlásat).",
+      "translit": "prokērýssō",
+      "pronunciation": "prok-ay-rooce'-so",
+      "translated": true
+    },
+    "G4297": {
+      "definitions_cz": "pokrok, tj. pokrok (subjektivně popř\n objektivně)",
+      "translit": "prokopḗ",
+      "pronunciation": "prok-op-ay'",
+      "translated": true
+    },
+    "G4298": {
+      "definitions_cz": "jezdit vpřed (jakoby bitím), tzn.\n (obrazně a nepřechodně) postupovat (v množství, růst; v\n čas, abychom se měli dobře)",
+      "translit": "prokóptō",
+      "pronunciation": "prok-op'-to",
+      "translated": true
+    },
+    "G4299": {
+      "definitions_cz": "předsudek (předsudek), tzn.\n posedlost",
+      "translit": "prókrima",
+      "pronunciation": "prok'-ree-mah",
+      "translated": true
+    },
+    "G4300": {
+      "definitions_cz": "ratifikovat dříve",
+      "translit": "prokyróō",
+      "pronunciation": "prok-oo-ro'-o",
+      "translated": true
+    },
+    "G4301": {
+      "definitions_cz": "vzít předem, tj. (doslova) jíst předtím\n ostatní mají příležitost; (obrazně) předvídat,\n překvapení",
+      "translit": "prolambánō",
+      "pronunciation": "prol-am-ban'-o",
+      "translated": true
+    },
+    "G4302": {
+      "definitions_cz": "říci předem, tj. předvídat,\n varovat",
+      "translit": "prolégō",
+      "pronunciation": "prol-eg'-o",
+      "translated": true
+    },
+    "G4303": {
+      "definitions_cz": "býti svědkem předem t. j. předvídat",
+      "translit": "promartýromai",
+      "pronunciation": "prom-ar-too'-rom-ahee",
+      "translated": true
+    },
+    "G4304": {
+      "definitions_cz": "předem promyslet",
+      "translit": "promeletáō",
+      "pronunciation": "prom-el-et-ah'-o",
+      "translated": true
+    },
+    "G4305": {
+      "definitions_cz": "starat se (úzkostlivě) předem",
+      "translit": "promerimnáō",
+      "pronunciation": "prom-er-im-nah'-o",
+      "translated": true
+    },
+    "G4306": {
+      "definitions_cz": "předem zvážit, t. j. hlídat\n předem (aktivně, formou údržby pro ostatní; střední hlas\n kvůli obezřetnosti k sobě samému)",
+      "translit": "pronoéō",
+      "pronunciation": "pron-o-eh'-o",
+      "translated": true
+    },
+    "G4307": {
+      "definitions_cz": "prozíravost, t. j. zaopatřovací péče nebo zásobování",
+      "translit": "prónoia",
+      "pronunciation": "pron'-oy-ah",
+      "translated": true
+    },
+    "G4308": {
+      "definitions_cz": "předem spatřit, t. j. (aktivně) postřehnout\n (jiný) dříve, nebo (střední hlas) ponechat si (vlastního)\n pohled",
+      "translit": "prooráō",
+      "pronunciation": "pro-or-ah'-o",
+      "translated": true
+    },
+    "G4309": {
+      "definitions_cz": "předem omezit, tj. (obrazně)\n předem určit",
+      "translit": "proorízō",
+      "pronunciation": "pro-or-id'-zo",
+      "translated": true
+    },
+    "G4310": {
+      "definitions_cz": "dříve podstoupit těžkosti",
+      "translit": "propáschō",
+      "pronunciation": "prop-as'-kho",
+      "translated": true
+    },
+    "G4311": {
+      "definitions_cz": "poslat dál, tj. doprovod nebo pomoc\n cestování",
+      "translit": "propémpō",
+      "pronunciation": "prop-em'-po",
+      "translated": true
+    },
+    "G4312": {
+      "definitions_cz": "padající dopředu, t. j. střemhlav\n (obrazně, sraženina)",
+      "translit": "propetḗs",
+      "pronunciation": "prop-et-ace'",
+      "translated": true
+    },
+    "G4313": {
+      "definitions_cz": "předcházet (jako průvodce nebo zvěstovatel)",
+      "translit": "proporeúomai",
+      "pronunciation": "prop-or-yoo'-om-ahee",
+      "translated": true
+    },
+    "G4314": {
+      "definitions_cz": "předložka směru; vpřed,\n tj. směrem (s pádem genitivu, strana, tj. týkající se;\n s pádem dativu, vedle, t. j. blízko; obvykle s\n akuzativ, místo, čas, příležitost nebo respekt, který je\n určení vztahu, tj. kde nebo pro které je\n predikovaný)",
+      "translit": "prós",
+      "pronunciation": "pros",
+      "translated": true
+    },
+    "G4315": {
+      "definitions_cz": "předsabat, tedy sobotní předvečer",
+      "translit": "prosábbaton",
+      "pronunciation": "pros-ab'-bat-on",
+      "translated": true
+    },
+    "G4316": {
+      "definitions_cz": "oslovit, tzn.\n pozdrav jménem",
+      "translit": "prosagoreúō",
+      "pronunciation": "pros-ag-or-yoo'-o",
+      "translated": true
+    },
+    "G4317": {
+      "definitions_cz": "vést k, t. j. (přechodně) vést blízko\n (přivolat, předložit) nebo (nepřechodně) přiblížit se",
+      "translit": "proságō",
+      "pronunciation": "pros-ag'-o",
+      "translated": true
+    },
+    "G4318": {
+      "definitions_cz": "přijetí",
+      "translit": "prosagōgḗ",
+      "pronunciation": "pros-ag-ogue-ay'",
+      "translated": true
+    },
+    "G4319": {
+      "definitions_cz": "žádat opakovaně (důležité), t. j. žádat",
+      "translit": "prosaitéō",
+      "pronunciation": "pros-ahee-teh'-o",
+      "translated": true
+    },
+    "G4320": {
+      "definitions_cz": "vystoupat dále, tj. být povýšen (vezměte si svršek\n (čestnější) místo)",
+      "translit": "prosanabaínō",
+      "pronunciation": "pros-an-ab-ah'-ee-no",
+      "translated": true
+    },
+    "G4321": {
+      "definitions_cz": "dále utrácet",
+      "translit": "prosanalískō",
+      "pronunciation": "pros-an-al-is'-ko",
+      "translated": true
+    },
+    "G4322": {
+      "definitions_cz": "dále plnit, t.j. plně zařídit",
+      "translit": "prosanaplēróō",
+      "pronunciation": "pros-an-ap-lay-ro'-o",
+      "translated": true
+    },
+    "G4323": {
+      "definitions_cz": "položit navíc, tj. (střední hlas a\n přeneseně) předat nebo (implicitně) konzultovat",
+      "translit": "prosanatíthēmi",
+      "pronunciation": "pros-an-at-ith'-ay-mee",
+      "translated": true
+    },
+    "G4324": {
+      "definitions_cz": "dodatečně hrozit",
+      "translit": "prosapeiléō",
+      "pronunciation": "pros-ap-i-leh'-o",
+      "translated": true
+    },
+    "G4325": {
+      "definitions_cz": "utratit dodatečně",
+      "translit": "prosdapanáō",
+      "pronunciation": "pros-dap-an-ah'-o",
+      "translated": true
+    },
+    "G4326": {
+      "definitions_cz": "vyžadovat dodatečně, tj. chtít dále",
+      "translit": "prosdéomai",
+      "pronunciation": "pros-deh'-om-ahee",
+      "translated": true
+    },
+    "G4327": {
+      "definitions_cz": "přiznat (k pohlavnímu styku, pohostinnosti, důvěře,\n nebo (obrazně) vytrvalost); implicitně čekat (s\n důvěra nebo trpělivost)",
+      "translit": "prosdéchomai",
+      "pronunciation": "pros-dekh'-om-ahee",
+      "translated": true
+    },
+    "G4328": {
+      "definitions_cz": "předvídat (v myšlenkách, naději nebo\n strach); implicitně čekat",
+      "translit": "prosdokáō",
+      "pronunciation": "pros-dok-ah'-o",
+      "translated": true
+    },
+    "G4329": {
+      "definitions_cz": "obava (ze zla); implikací, přičiněním\n předpokládaný",
+      "translit": "prosdokía",
+      "pronunciation": "pros-dok-ee'-ah",
+      "translated": true
+    },
+    "G4330": {
+      "definitions_cz": "aby umožnil další pokrok",
+      "translit": "proseáō",
+      "pronunciation": "pros-eh-ah'-o",
+      "translated": true
+    },
+    "G4331": {
+      "definitions_cz": "přiblížit se",
+      "translit": "prosengízō",
+      "pronunciation": "pros-eng-ghid'-zo",
+      "translated": true
+    },
+    "G4332": {
+      "definitions_cz": "sedět blízko, t. j. účastnit se\n jako služebník",
+      "translit": "prosedreúō",
+      "pronunciation": "pros-ed-ryoo'-o",
+      "translated": true
+    },
+    "G4333": {
+      "definitions_cz": "pracovat dodatečně, tj. (implicitně)\n získat kromě toho",
+      "translit": "prosergázomai",
+      "pronunciation": "pros-er-gad'-zom-ahee",
+      "translated": true
+    },
+    "G4334": {
+      "definitions_cz": "přiblížit, tzn.\n (doslova) přiblížit se, navštívit nebo (obrazně) uctívat, souhlasit\n do",
+      "translit": "prosérchomai",
+      "pronunciation": "pros-er'-khom-ahee",
+      "translated": true
+    },
+    "G4335": {
+      "definitions_cz": "modlitba (uctívání); implicitně oratoř (kaple)",
+      "translit": "proseuchḗ",
+      "pronunciation": "pros-yoo-khay'",
+      "translated": true
+    },
+    "G4336": {
+      "definitions_cz": "modlit se k Bohu, t. j. prosit, uctívat",
+      "translit": "proseúchomai",
+      "pronunciation": "pros-yoo'-khom-ahee",
+      "translated": true
+    },
+    "G4337": {
+      "definitions_cz": "(obrazně) udržet mysl (implicitně 3563)\n vůči, tj. věnovat pozornost, být obezřetný, uplatňovat se,\n dodržovat",
+      "translit": "proséchō",
+      "pronunciation": "pros-ekh'-o",
+      "translated": true
+    },
+    "G4338": {
+      "definitions_cz": "zavěsit na, t. j. rychle bodnout",
+      "translit": "prosēlóō",
+      "pronunciation": "pros-ay-lo'-o",
+      "translated": true
+    },
+    "G4339": {
+      "definitions_cz": "příchozí z cizího kraje, tzn.\n (zejména), přistupující (konvertita) k judaismu\n (\"proselyt\")",
+      "translit": "prosḗlytos",
+      "pronunciation": "pros-ay'-loo-tos",
+      "translated": true
+    },
+    "G4340": {
+      "definitions_cz": "pouze pro příležitost, tedy dočasně",
+      "translit": "próskairos",
+      "pronunciation": "pros'-kahee-ros",
+      "translated": true
+    },
+    "G4341": {
+      "definitions_cz": "volat k sobě, t.j. přivolávat,\n pozvat",
+      "translit": "proskaléomai",
+      "pronunciation": "pros-kal-eh'-om-ahee",
+      "translated": true
+    },
+    "G4342": {
+      "definitions_cz": "být vážný vůči, tj. (k věci) k\n vytrvat, být neustále pilný nebo (na místě) se zúčastnit\n vytrvale všechna cvičení, nebo se (osobě) těsně držet\n (jako služebník)",
+      "translit": "proskarteréō",
+      "pronunciation": "pros-kar-ter-eh'-o",
+      "translated": true
+    },
+    "G4343": {
+      "definitions_cz": "vytrvalost",
+      "translit": "proskartérēsis",
+      "pronunciation": "pros-kar-ter'-ay-sis",
+      "translated": true
+    },
+    "G4344": {
+      "definitions_cz": "něco pro\n hlavu, tedy polštář",
+      "translit": "proskephálaion",
+      "pronunciation": "pros-kef-al'-ahee-on",
+      "translated": true
+    },
+    "G4345": {
+      "definitions_cz": "dát společný los, t. j. (obrazně) tomu\n stýkat se s",
+      "translit": "prosklēróō",
+      "pronunciation": "pros-klay-ro'-o",
+      "translated": true
+    },
+    "G4346": {
+      "definitions_cz": "sklon k, tzn.\n (obrazně) náchylnost (protežování)",
+      "translit": "prósklisis",
+      "pronunciation": "pros'-klis-is",
+      "translated": true
+    },
+    "G4347": {
+      "definitions_cz": "lepit na, tedy (obrazně) na\n dodržovat",
+      "translit": "proskolláō",
+      "pronunciation": "pros-kol-lah'-o",
+      "translated": true
+    },
+    "G4348": {
+      "definitions_cz": "útržek, tedy (obrazně) příležitost apostaze",
+      "translit": "próskomma",
+      "pronunciation": "pros'-kom-mah",
+      "translated": true
+    },
+    "G4349": {
+      "definitions_cz": "klopýtnutí, tj. (obrazně i konkrétně) příležitost\n hřích",
+      "translit": "proskopḗ",
+      "pronunciation": "pros-kop-ay'",
+      "translated": true
+    },
+    "G4350": {
+      "definitions_cz": "udeřit na, t. j. nápor proti (jako voda);\n speciálně, zakopnout, tj. zakopnout (doslova nebo přeneseně)",
+      "translit": "proskóptō",
+      "pronunciation": "pros-kop'-to",
+      "translated": true
+    },
+    "G4351": {
+      "definitions_cz": "valit se směrem, t. j. blokovat proti",
+      "translit": "proskylíō",
+      "pronunciation": "pros-koo-lee'-o",
+      "translated": true
+    },
+    "G4352": {
+      "definitions_cz": "plavat nebo přikrčit se, tj. (doslova\n nebo obrazně) klanět se v poctě (uctívat,\n zbožňuji)",
+      "translit": "proskynéō",
+      "pronunciation": "pros-koo-neh'-o",
+      "translated": true
+    },
+    "G4353": {
+      "definitions_cz": "ctitel",
+      "translit": "proskynētḗs",
+      "pronunciation": "pros-koo-nay-tace'",
+      "translated": true
+    },
+    "G4354": {
+      "definitions_cz": "mluvit, tj. mluvit s",
+      "translit": "proslaléō",
+      "pronunciation": "pros-lal-eh'-o",
+      "translated": true
+    },
+    "G4355": {
+      "definitions_cz": "vzít k sobě, t. j. užívat (jídlo), vést (stranit),\n přiznat (k přátelství nebo pohostinnosti)",
+      "translit": "proslambánō",
+      "pronunciation": "pros-lam-ban'-o",
+      "translated": true
+    },
+    "G4356": {
+      "definitions_cz": "přijetí",
+      "translit": "próslēpsis",
+      "pronunciation": "pros'-lape-sis",
+      "translated": true
+    },
+    "G4357": {
+      "definitions_cz": "zůstat dále, tj. zůstat na místě, s a\n osoba; přeneseně dodržet, vytrvat v",
+      "translit": "prosménō",
+      "pronunciation": "pros-men'-o",
+      "translated": true
+    },
+    "G4358": {
+      "definitions_cz": "vyvázat se, tj. (implicitně) přistát na",
+      "translit": "prosormízō",
+      "pronunciation": "pros-or-mid'-zo",
+      "translated": true
+    },
+    "G4359": {
+      "definitions_cz": "zadlužit se dodatečně",
+      "translit": "prosopheílō",
+      "pronunciation": "pros-of-i'-lo",
+      "translated": true
+    },
+    "G4360": {
+      "definitions_cz": "cítit se rozhořčen",
+      "translit": "prosochthízō",
+      "pronunciation": "pros-okh-thid'-zo",
+      "translated": true
+    },
+    "G4361": {
+      "definitions_cz": "hladovět dále, tedy intenzivně\n hladový",
+      "translit": "próspeinos",
+      "pronunciation": "pros'-pi-nos",
+      "translated": true
+    },
+    "G4362": {
+      "definitions_cz": "připevnit k, tj. (zvláště), napíchnout (na a\n kříž)",
+      "translit": "prospḗgnymi",
+      "pronunciation": "pros-payg'-noo-mee",
+      "translated": true
+    },
+    "G4363": {
+      "definitions_cz": "padat k, t. j. (jemně) se klanět\n (v prosbě nebo pokloně) nebo (násilně) spěchat na (v\n bouře)",
+      "translit": "prospíptō",
+      "pronunciation": "pros-pip'-to",
+      "translated": true
+    },
+    "G4364": {
+      "definitions_cz": "dělat dopředu pro sebe, tzn.\n předstírat (jako by se chystal něco udělat)",
+      "translit": "prospoiéomai",
+      "pronunciation": "pros-poy-eh'-om-ahee",
+      "translated": true
+    },
+    "G4365": {
+      "definitions_cz": "k cestě směrem, tj. přiblížení (není totéž jako\n [ŘECKA:4313]",
+      "translit": "prosporeúomai",
+      "pronunciation": "pros-por-yoo'-om-ahee",
+      "translated": true
+    },
+    "G4366": {
+      "definitions_cz": "trhat se směrem, t. j. propuknout (jako bouře nebo\n povodeň)",
+      "translit": "prosrḗgnymi",
+      "pronunciation": "pros-rayg'-noo-mee",
+      "translated": true
+    },
+    "G4367": {
+      "definitions_cz": "uspořádat směrem, tj. (obrazně)\n nařídit",
+      "translit": "prostássō",
+      "pronunciation": "pros-tas'-so",
+      "translated": true
+    },
+    "G4368": {
+      "definitions_cz": "patronka, tj.\n asistent",
+      "translit": "prostátis",
+      "pronunciation": "pros-tat'-is",
+      "translated": true
+    },
+    "G4369": {
+      "definitions_cz": "umístit dodatečně, tj. položit vedle, přílohu,\n opakovat",
+      "translit": "prostíthēmi",
+      "pronunciation": "pros-tith'-ay-mee",
+      "translated": true
+    },
+    "G4370": {
+      "definitions_cz": "běžet směrem, tzn.\n urychleně se setkat nebo se připojit",
+      "translit": "prostréchō",
+      "pronunciation": "pros-trekh'-o",
+      "translated": true
+    },
+    "G4371": {
+      "definitions_cz": "něco, co se jí kromě chleba, tj. pochutina (zvláště ryba;\n porovnat [ŘECKO:3795]",
+      "translit": "prosphágion",
+      "pronunciation": "pros-fag'-ee-on",
+      "translated": true
+    },
+    "G4372": {
+      "definitions_cz": "dříve (nedávno) zabitý\n (čerstvé), tedy (obrazně) v poslední době vyrobené",
+      "translit": "prósphatos",
+      "pronunciation": "pros'-fat-os",
+      "translated": true
+    },
+    "G4373": {
+      "definitions_cz": "nedávno",
+      "translit": "prosphátōs",
+      "pronunciation": "pros-fat'-oce",
+      "translated": true
+    },
+    "G4374": {
+      "definitions_cz": "nést směrem, tzn.\n vést k, něžný (zejména k Bohu), léčit",
+      "translit": "prosphérō",
+      "pronunciation": "pros-fer'-o",
+      "translated": true
+    },
+    "G4375": {
+      "definitions_cz": "přátelský vůči, tzn.\n přijatelné",
+      "translit": "prosphilḗs",
+      "pronunciation": "pros-fee-lace'",
+      "translated": true
+    },
+    "G4376": {
+      "definitions_cz": "prezentace; konkrétně obětina (bezkrevní) popř\n obětovat",
+      "translit": "prosphorá",
+      "pronunciation": "pros-for-ah'",
+      "translated": true
+    },
+    "G4377": {
+      "definitions_cz": "znít směrem, tj. oslovovat, vykřikovat,\n přivolat",
+      "translit": "prosphōnéō",
+      "pronunciation": "pros-fo-neh'-o",
+      "translated": true
+    },
+    "G4378": {
+      "definitions_cz": "prolévání, tzn.\n afúze",
+      "translit": "próschysis",
+      "pronunciation": "pros'-khoo-sis",
+      "translated": true
+    },
+    "G4379": {
+      "definitions_cz": "narážet, tj. položit prst na (v\n rozkaz ulevit)",
+      "translit": "prospsaúō",
+      "pronunciation": "pros-psow'-o",
+      "translated": true
+    },
+    "G4380": {
+      "definitions_cz": "zvýhodňovat jednotlivce, t. j. projevovat zaujatost",
+      "translit": "prosōpolēptéō",
+      "pronunciation": "pros-o-pol-ape-teh'-o",
+      "translated": true
+    },
+    "G4381": {
+      "definitions_cz": "akceptant obličeje (jedince), tzn.\n (zvláště), jeden vykazující zaujatost",
+      "translit": "prosōpolḗptēs",
+      "pronunciation": "pros-o-pol-ape'-tace",
+      "translated": true
+    },
+    "G4382": {
+      "definitions_cz": "podjatost, tedy zvýhodňování",
+      "translit": "prosōpolēpsía",
+      "pronunciation": "pros-o-pol-ape-see'-ah",
+      "translated": true
+    },
+    "G4383": {
+      "definitions_cz": "vpředu (jako směrem k\n pohled), tj. vzhled, vzhled, vzhled, povrch; podle\n implikace, přítomnost, osoba",
+      "translit": "prósōpon",
+      "pronunciation": "pros'-o-pon",
+      "translated": true
+    },
+    "G4384": {
+      "definitions_cz": "předem domluvit, tedy předepsat",
+      "translit": "protássō",
+      "pronunciation": "prot-as'-so",
+      "translated": true
+    },
+    "G4385": {
+      "definitions_cz": "chovat se, t. j. uvázat na zem (pro\n bičování)",
+      "translit": "proteínō",
+      "pronunciation": "prot-i'-no",
+      "translated": true
+    },
+    "G4386": {
+      "definitions_cz": "dříve",
+      "translit": "próteron",
+      "pronunciation": "prot'-er-on",
+      "translated": true
+    },
+    "G4387": {
+      "definitions_cz": "předchozí nebo předchozí",
+      "translit": "próteros",
+      "pronunciation": "prot'-er-os",
+      "translated": true
+    },
+    "G4388": {
+      "definitions_cz": "umístit před, tj. (pro sebe)\n vystavovat; (sám sobě) navrhnout (určit)",
+      "translit": "protíthemai",
+      "pronunciation": "prot-ith'-em-ahee",
+      "translated": true
+    },
+    "G4389": {
+      "definitions_cz": "obrátit se dopředu\n sebe, t. j. povzbudit",
+      "translit": "protrépomai",
+      "pronunciation": "prot-rep'-om-ahee",
+      "translated": true
+    },
+    "G4390": {
+      "definitions_cz": "běžet vpřed, tzn.\n předběhnout, předcházet",
+      "translit": "protréchō",
+      "pronunciation": "prot-rekh'-o",
+      "translated": true
+    },
+    "G4391": {
+      "definitions_cz": "existovat dříve, tj. (příslovečně) být nebo dělat\n něco dříve",
+      "translit": "proÿpárchō",
+      "pronunciation": "pro-oop-ar'-kho",
+      "translated": true
+    },
+    "G4392": {
+      "definitions_cz": "vnější projev, tzn.\n záminka",
+      "translit": "próphasis",
+      "pronunciation": "prof'-as-is",
+      "translated": true
+    },
+    "G4393": {
+      "definitions_cz": "nést dopředu, t. j. vyrábět",
+      "translit": "prophérō",
+      "pronunciation": "prof-er'-o",
+      "translated": true
+    },
+    "G4394": {
+      "definitions_cz": "předpověď (písemná nebo jiná)",
+      "translit": "prophēteía",
+      "pronunciation": "prof-ay-ti'-ah",
+      "translated": true
     }
   }
 }
