@@ -1,0 +1,15 @@
+﻿python : Traceback (most recent call last):
+At line:1 char:1
++ python detailed_check.py 2>&1 | Out-File -FilePath check_results.txt  ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last)::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "C:\Users\stistko\CascadeProjects\stistko\christ\detailed_check.py", line 7, in <module>
+    print("H2148 (longest, 1834 chars):", e["H2148"].get("definitions_cz", "")[:300])
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u0159' in position 43: character maps to <undefined>
+H2148 (longest, 1834 chars): 
