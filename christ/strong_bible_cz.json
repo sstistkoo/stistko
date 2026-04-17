@@ -82512,6 +82512,706 @@
       "hebrew": "שלח",
       "xlit": "Shelach",
       "translated": true
+    },
+    "H7975": {
+      "definitions_cz": "Shiloah nebo Siloah = \"poslaná\" | 1) fontána jihovýchodně od Jeruzaléma",
+      "lemma": "שִׁלֹחַ",
+      "hebrew": "שלחה",
+      "xlit": "Shilôach",
+      "translated": true
+    },
+    "H7976": {
+      "definitions_cz": "1) střílet, větev",
+      "lemma": "שִׁלֻּחָה",
+      "hebrew": "שלחה",
+      "xlit": "shilluchâh",
+      "translated": true
+    },
+    "H7977": {
+      "definitions_cz": "Shilhi = \"ozbrojený\" | 1) otec Azuby, matky Jozafatovy",
+      "lemma": "שִׁלְחִי",
+      "hebrew": "שלחי",
+      "xlit": "Shilchîy",
+      "translated": true
+    },
+    "H7978": {
+      "definitions_cz": "Shilhim = \"fontány\" | 1) město v jižní části Judy",
+      "lemma": "שִׁלְחִים",
+      "hebrew": "שלחים",
+      "xlit": "Shilchîym",
+      "translated": true
+    },
+    "H7979": {
+      "definitions_cz": "1) tabulka | 1a) tabulka | 1a1) královského stolu, soukromé použití, posvátné použití",
+      "lemma": "שֻׁלְחָן",
+      "hebrew": "שלחן",
+      "xlit": "shulchân",
+      "translated": true
+    },
+    "H7980": {
+      "definitions_cz": "1) panovat, uplatňovat moc, dominovat, ovládat, být pánem, panovat | 1a) (Qal) panovat, panovat, stát se pánem | 1b) (hifil) | 1b1) dát mocninu | 1b2), abyste si osvojili",
+      "lemma": "שָׁלַט",
+      "hebrew": "שלט",
+      "xlit": "shâlaṭ",
+      "translated": true
+    },
+    "H7981": {
+      "definitions_cz": "1) mít moc, vládnout, panovat, vládnout | 1a) (P'al) mít moc nad nebo nad, vládnout, padat na, útok, být vládcem | 1b) (Aphel) udělej vládcem",
+      "lemma": "שְׁלֵט",
+      "hebrew": "שלט",
+      "xlit": "shᵉlêṭ",
+      "translated": true
+    },
+    "H7982": {
+      "definitions_cz": "1) štít",
+      "lemma": "שֶׁלֶט",
+      "hebrew": "שלט",
+      "xlit": "sheleṭ",
+      "translated": true
+    },
+    "H7983": {
+      "definitions_cz": "1) mistrovství",
+      "lemma": "שִׁלְטוֹן",
+      "hebrew": "שלטון",
+      "xlit": "shilṭôwn",
+      "translated": true
+    },
+    "H7984": {
+      "definitions_cz": "1) guvernér, vládce, úředník",
+      "lemma": "שִׁלְטוֹן",
+      "hebrew": "שלטון",
+      "xlit": "shilṭôwn",
+      "translated": true
+    },
+    "H7985": {
+      "definitions_cz": "1) panství, suverenita | 1a) panství, suverenita | 1b) říše",
+      "lemma": "שׇׁלְטָן",
+      "hebrew": "שלטן",
+      "xlit": "sholṭân",
+      "translated": true
+    },
+    "H7986": {
+      "definitions_cz": "1) panovačný, panovačný",
+      "lemma": "שַׁלֶּטֶת",
+      "hebrew": "שלטת",
+      "xlit": "shalleṭeth",
+      "translated": true
+    },
+    "H7987": {
+      "definitions_cz": "1) klid, soukromí, ticho",
+      "lemma": "שְׁלִי",
+      "hebrew": "שלי",
+      "xlit": "shᵉlîy",
+      "translated": true
+    },
+    "H7988": {
+      "definitions_cz": "1) po porodu",
+      "lemma": "שִׁלְיָה",
+      "hebrew": "שליה",
+      "xlit": "shilyâh",
+      "translated": true
+    },
+    "H7989": {
+      "definitions_cz": "1) mít mistrovství, panovačný, mistr | 1a) ovládat | 1a1) pravítko (subst) | 1b) panovačný, panovačný",
+      "lemma": "שַׁלִּיט",
+      "hebrew": "שליט",
+      "xlit": "shallîyṭ",
+      "translated": true
+    },
+    "H7990": {
+      "definitions_cz": "1) mít vládu, mít autoritu, vládnout | 1a) mít nebo vykonávat mistrovství, vládnout | 1b) pravítko (subst) | 1c) mít pravomoc | 1c1) je povoleno",
+      "lemma": "שַׁלִּיט",
+      "hebrew": "שליט",
+      "xlit": "shallîyṭ",
+      "translated": true
+    },
+    "H7991": {
+      "definitions_cz": "1) třetí část | 1a) název opatření | 2) hudební nástroj | 2a) možná třístrunné, trojúhelníkového tvaru nebo trojtyčové | 2b) možná sistrum nebo trojúhelník | 3) nosič štítů, pobočník, důstojník, kapitán",
+      "lemma": "שָׁלִישׁ",
+      "hebrew": "שליש",
+      "xlit": "shâlîysh",
+      "translated": true
+    },
+    "H7992": {
+      "definitions_cz": "1) potřetí, třetina, třetí část, potřetí | 1a) pořadové číslo",
+      "lemma": "שְׁלִישִׁי",
+      "hebrew": "שלישי",
+      "xlit": "shᵉlîyshîy",
+      "translated": true
+    },
+    "H7993": {
+      "definitions_cz": "1) házet, házet, mrštit, házet | 1a) (Hiphil) | 1a1) odhodit, odhodit, odhodit, odhodit, shodit, shodit | 1a2) odlévat (losy) (obr.) | 1b) (Hophal) | 1b1) být vržen, být vržen | 1b2) k vyhození nebo ven | 1b3) bude svrženo | 1b4) k odeslání (metafa)",
+      "lemma": "שָׁלַךְ",
+      "hebrew": "שלך",
+      "xlit": "shâlak",
+      "translated": true
+    },
+    "H7994": {
+      "definitions_cz": "1) dravý pták | 1a) pravděpodobně kormorán",
+      "lemma": "שָׁלָךְ",
+      "hebrew": "שלך",
+      "xlit": "shâlâk",
+      "translated": true
+    },
+    "H7995": {
+      "definitions_cz": "1) kácení (stromu)",
+      "lemma": "שַׁלֶּכֶת",
+      "hebrew": "שלכת",
+      "xlit": "shalleketh",
+      "translated": true
+    },
+    "H7996": {
+      "definitions_cz": "Shallecheth = \"svrhnout\" | 1) jedna z chrámových bran na západní straně",
+      "lemma": "שַׁלֶּכֶת",
+      "hebrew": "שלכת",
+      "xlit": "Shalleketh",
+      "translated": true
+    },
+    "H7997": {
+      "definitions_cz": "1) (Qal) vytáhnout | 2) kazit, drancovat, brát kořist | 2a) (Qal) kazit, plenit | 2b) (Hithpolel) být zkažen, být vydrancován",
+      "lemma": "שָׁלַל",
+      "hebrew": "שלל",
+      "xlit": "shâlal",
+      "translated": true
+    },
+    "H7998": {
+      "definitions_cz": "1) kořist, drancovat, kořist, kořist | 1a) kořist | 1b) kořist, kořist, kořist (války) | 1c) loupení (soukromé) | 1d) zisk (což znamená pochybný)",
+      "lemma": "שָׁלָל",
+      "hebrew": "שלל",
+      "xlit": "shâlâl",
+      "translated": true
+    },
+    "H7999": {
+      "definitions_cz": "1) být ve smlouvě míru, být v pokoji | 1a) (Qal) | 1a1) být v klidu | 1a2) mírová jednička (příčestí) | 1b) (Pual) jeden ve smlouvě míru (participium) | 1c) (Hiphil) | 1c1) uzavřít mír s | 1c2) způsobit mír | 1d) (Hophal) žít v míru | 2) být úplný, být zdravý | 2a) (Qal) | 2a1) být dokončen, být dokončen, být ukončen | 2a2) být zdravý, bez zranění | 2b) (Piel) | 2b1) dokončit, dokončit | 2b2) zajistit bezpečnost | 2b3) učinit celistvé nebo dobré, obnovit, provést kompenzaci",
+      "lemma": "שָׁלַם",
+      "hebrew": "שלם",
+      "xlit": "shâlam",
+      "translated": true
+    },
+    "H8000": {
+      "definitions_cz": "1) být kompletní, být dokončen, být zdravý | 1a) (P'al) ukončeno (příčestí) | 1b) (Aphel) dokončit, ukončit, vykreslit v plném rozsahu",
+      "lemma": "שְׁלַם",
+      "hebrew": "שלם",
+      "xlit": "shᵉlam",
+      "translated": true
+    },
+    "H8001": {
+      "definitions_cz": "1) blahobyt, prosperita, mír, blahobyt",
+      "lemma": "שְׁלָם",
+      "hebrew": "שלם",
+      "xlit": "shᵉlâm",
+      "translated": true
+    },
+    "H8002": {
+      "definitions_cz": "1) mírová oběť, odplata, oběť za spojenectví nebo přátelství | 1a) dobrovolná oběť díků",
+      "lemma": "שֶׁלֶם",
+      "hebrew": "שלם",
+      "xlit": "shelem",
+      "translated": true
+    },
+    "H8003": {
+      "definitions_cz": "1) úplný, bezpečný, klidný, dokonalý, celistvý, plný, v míru | 1a) kompletní | 1a1) plný, dokonalý | 1a2) hotovo | 1b) bezpečný, nepoškozený | 1c) mír (smlouvy o míru, mysli) | 1c1) dokonalý, úplný (dodržování smluvního vztahu)",
+      "lemma": "שָׁלֵם",
+      "hebrew": "שלם",
+      "xlit": "shâlêm",
+      "translated": true
+    },
+    "H8004": {
+      "definitions_cz": "Salem = \"mír\" | 1) místo, jehož králem byl Melchisedech | 1a) většina židovských komentátorů tvrdí, že je to stejné jako Jeruzalém",
+      "lemma": "שָׁלֵם",
+      "hebrew": "שלם",
+      "xlit": "Shâlêm",
+      "translated": true
+    },
+    "H8005": {
+      "definitions_cz": "1) odplata, odplata",
+      "lemma": "שִׁלֵּם",
+      "hebrew": "שלם",
+      "xlit": "shillêm",
+      "translated": true
+    },
+    "H8006": {
+      "definitions_cz": "Shillem = \"splaceno\" | 1) syn Neftaliho",
+      "lemma": "שִׁלֵּם",
+      "hebrew": "שלם",
+      "xlit": "Shillêm",
+      "translated": true
+    },
+    "H8007": {
+      "definitions_cz": "Salma = \"oděv\" | 1) otec Boaz, tchán Rút a děd Davidův | 1a) také 'Losos', 'Salmah'",
+      "lemma": "שַׂלְמָא",
+      "hebrew": "שלמא",
+      "xlit": "Salmâʼ",
+      "translated": true
+    },
+    "H8008": {
+      "definitions_cz": "1) oděv, svrchní oděv, obal, plášť | 1a) oděv, svrchní oděv",
+      "lemma": "שַׂלְמָה",
+      "hebrew": "שלמה",
+      "xlit": "salmâh",
+      "translated": true
+    },
+    "H8009": {
+      "definitions_cz": "Losos = \"oděv\" | 1) otec Boaz, tchán Rút a děd Davidův | 1a) také 'Salmah', 'Salma'",
+      "lemma": "שַׂלְמָה",
+      "hebrew": "שלמה",
+      "xlit": "Salmâh",
+      "translated": true
+    },
+    "H8010": {
+      "definitions_cz": "Šalamoun = \"mír\" | 1) syn Davidův od Batšeby a 3. král Izraele; autor Přísloví a Písně písní",
+      "lemma": "שְׁלֹמֹה",
+      "hebrew": "שלמה",
+      "xlit": "Shᵉlômôh",
+      "translated": true
+    },
+    "H8011": {
+      "definitions_cz": "1) odměna, odplata, odplata",
+      "lemma": "שִׁלֻּמָה",
+      "hebrew": "שלמה",
+      "xlit": "shillumâh",
+      "translated": true
+    },
+    "H8012": {
+      "definitions_cz": "Losos = \"oděv\" | 1) otec Boaz, tchán Rút a děd Davidův | 1a) také 'Salmah', 'Salma'",
+      "lemma": "שַׂלְמוֹן",
+      "hebrew": "שלמון",
+      "xlit": "Salmôwn",
+      "translated": true
+    },
+    "H8013": {
+      "definitions_cz": "Shelomoth nebo Shelomith = \"mírumilovný\" | 1) Geršonský levita, syn Šimeiho v době Davidově | 2) kehatský levita ze synů Izarových v době Davidově | 3) Geršonský levita, syn Zichriho v době Davidově",
+      "lemma": "שְׁלֹמוֹת",
+      "hebrew": "שלמות",
+      "xlit": "Shᵉlômôwth",
+      "translated": true
+    },
+    "H8014": {
+      "definitions_cz": "Shalmai nebo Salmai nebo Shamlai = \"díky\" | 1) předek rodiny chrámových otroků, kteří se vrátili z exilu se Zerubábelem",
+      "lemma": "שַׂלְמַי",
+      "hebrew": "שלמי",
+      "xlit": "Salmay",
+      "translated": true
+    },
+    "H8015": {
+      "definitions_cz": "Shelomi = \"mírumilovný\" | 1) Ašerita, otec Ahihuda, vůdce kmene Asher v době rozdělení země Kanaán",
+      "lemma": "שְׁלֹמִי",
+      "hebrew": "שלמי",
+      "xlit": "Shᵉlômîy",
+      "translated": true
+    },
+    "H8016": {
+      "definitions_cz": "Shillemité = viz Shillem \"odplata\" | 1) potomci Šillema, syna Neftaliho",
+      "lemma": "שִׁלֵּמִי",
+      "hebrew": "שלמי",
+      "xlit": "Shillêmîy",
+      "translated": true
+    },
+    "H8017": {
+      "definitions_cz": "Shelumiel = \"přítel boží\" | 1) syn Zurishaddai a princ kmene Simeon v době exodu",
+      "lemma": "שְׁלֻמִיאֵל",
+      "hebrew": "שלמיאל",
+      "xlit": "Shᵉlumîyʼêl",
+      "translated": true
+    },
+    "H8018": {
+      "definitions_cz": "Šelemiáš = \"odplaceno Jehovou\" | 1) syn Baniho, který za časů Ezry propustil svou cizí manželku | 2) další syn Bani, který za časů Ezry propustil svou cizí manželku | 3) otec Chananjáše, který opravil část jeruzalémských hradeb v době Nehemjáše | 4) kněz v době Nehemjáše, který měl na starosti pokladnu | 5) otec Jehucala nebo Jucala v době Sedekiáše | 6) Levita, na kterého padl los o východní bránu; za časů Davidových | 6a) také „Meshelemiáš“ a „Shallum“",
+      "lemma": "שֶׁלֶמְיָה",
+      "hebrew": "שלמיה",
+      "xlit": "Shelemyâh",
+      "translated": true
+    },
+    "H8019": {
+      "definitions_cz": "Shelomith = \"mírumilovný\" | n pr m | 1) Geršonský levita, syn Zichriho v době Davidově | 1a) také „Shelomoth“; stejně jako H08013 | 2) syn judského krále Rechoboáma od Maaky, vnučky Absolonovy | 3) hlava rodiny vyhnanců, kteří se vrátili s Ezrou | n pr f | 4) žena Danova, dcera Dibriho a matka syna, který se rouhal Bohu a byl ukamenován v době Mojžíše | 5) dcera Zerubábelova",
+      "lemma": "שְׁלֹמִית",
+      "hebrew": "שלמית",
+      "xlit": "Shᵉlômîyth",
+      "translated": true
+    },
+    "H8020": {
+      "definitions_cz": "Shalman = \"uctívač ohně\" | 1) kontrakce pro asyrského krále Shalmanasera | 1a) možná obskurní asyrský král, předchůdce Pul",
+      "lemma": "שַׁלְמַן",
+      "hebrew": "שלמן",
+      "xlit": "Shalman",
+      "translated": true
+    },
+    "H8021": {
+      "definitions_cz": "1) odměna, úplatek",
+      "lemma": "שַׁלְמֹן",
+      "hebrew": "שלמן",
+      "xlit": "shalmôn",
+      "translated": true
+    },
+    "H8022": {
+      "definitions_cz": "Shalmaneser = \"uctívač ohně\" | 1) Asyrský král, který pravděpodobně vládl mezi Tiglat-pileserem a Sargonem; napadl severní izraelské království, když na trůnu seděl poslední král Ošea; donutil Hosheu platit tribut, ale když Hoshea porušil, musel reinvazi; není jisté, zda Shalmaneser nebo Sargon uzavřeli obléhání, které definitivně ukončilo severní království | 1a) možná běžné jméno pro asyrské krále v 8. století před naším letopočtem",
+      "lemma": "שַׁלְמַנְאֶסֶר",
+      "hebrew": "שלמנאסר",
+      "xlit": "Shalmanʼeçer",
+      "translated": true
+    },
+    "H8023": {
+      "definitions_cz": "Shiloni = viz Shiloh \"mírový nositel\" | 1) obyvatel Shiloh",
+      "lemma": "שִׁלֹנִי",
+      "hebrew": "שלני",
+      "xlit": "Shilônîy",
+      "translated": true
+    },
+    "H8024": {
+      "definitions_cz": "Šelanité = viz Šela \"klid\" | 1) potomek Shelaha",
+      "lemma": "שֵׁלָנִי",
+      "hebrew": "שלני",
+      "xlit": "Shêlânîy",
+      "translated": true
+    },
+    "H8025": {
+      "definitions_cz": "1) vytáhnout nebo sundat, vzlétnout | 1a) (Qal) | 1a1) vytáhnout | 1a2) čerpat | 1a3) vystřelit nahoru, vytáhnout (ze stébla trávy na střeše)",
+      "lemma": "שָׁלַף",
+      "hebrew": "שלף",
+      "xlit": "shâlaph",
+      "translated": true
+    },
+    "H8026": {
+      "definitions_cz": "Sheleph = \"výkres\" | 1) 2. syn Joktanův a potomek Semův",
+      "lemma": "שֶׁלֶף",
+      "hebrew": "שלף",
+      "xlit": "sheleph",
+      "translated": true
+    },
+    "H8027": {
+      "definitions_cz": "1) udělat potřetí, udělat třikrát, rozdělit na tři části | 1a) (Piel) udělat potřetí, rozdělte na tři části | 1b) (Pual) být ve věku tří let, být trojnásobný",
+      "lemma": "שָׁלַשׁ",
+      "hebrew": "שלש",
+      "xlit": "shâlash",
+      "translated": true
+    },
+    "H8028": {
+      "definitions_cz": "Shelesh = \"možná\" | 1) Ašerita, syn Helemův",
+      "lemma": "שֶׁלֶשׁ",
+      "hebrew": "שלש",
+      "xlit": "Shelesh",
+      "translated": true
+    },
+    "H8029": {
+      "definitions_cz": "1) týkající se třetí, třetí (generace)",
+      "lemma": "שִׁלֵּשׁ",
+      "hebrew": "שלש",
+      "xlit": "shillêsh",
+      "translated": true
+    },
+    "H8030": {
+      "definitions_cz": "Shilshah = \"silný\" | 1) Ašerejec, syn Cófa",
+      "lemma": "שִׁלְשָׁה",
+      "hebrew": "שלשה",
+      "xlit": "Shilshâh",
+      "translated": true
+    },
+    "H8031": {
+      "definitions_cz": "Shalisha = \"thirs\" | 1) oblast poblíž hory Efraim, kterou Saul procházel, když hledal osly",
+      "lemma": "שָׁלִשָׁה",
+      "hebrew": "שלשה",
+      "xlit": "Shâlishâh",
+      "translated": true
+    },
+    "H8032": {
+      "definitions_cz": "1) předevčírem, před třemi dny | 1a) idiom pro „až dosud v dobách minulých“",
+      "lemma": "שִׁלְשׁוֹם",
+      "hebrew": "שלשום",
+      "xlit": "shilshôwm",
+      "translated": true
+    },
+    "H8033": {
+      "definitions_cz": "1) tam, tam | 1a) tam | 1b) tam (po slovesech pohybu) | 1c) odtud, odtud | 1d) potom (jako příslovce času)",
+      "lemma": "שָׁם",
+      "hebrew": "שם",
+      "xlit": "shâm",
+      "translated": true
+    },
+    "H8034": {
+      "definitions_cz": "1) jméno | 1a) jméno | 1b) pověst, sláva, sláva | 1c) Jméno (jako označení Boha) | 1d) památník, pomník",
+      "lemma": "שֵׁם",
+      "hebrew": "שם",
+      "xlit": "shêm",
+      "translated": true
+    },
+    "H8035": {
+      "definitions_cz": "Shem = \"jméno\" | 1) nejstarší syn Noema a předek semitských kmenů",
+      "lemma": "שֵׁם",
+      "hebrew": "שם",
+      "xlit": "Shêm",
+      "translated": true
+    },
+    "H8036": {
+      "definitions_cz": "1) jméno",
+      "lemma": "שֻׁם",
+      "hebrew": "שם",
+      "xlit": "shum",
+      "translated": true
+    },
+    "H8037": {
+      "definitions_cz": "Shamma = \"poušť\" | 1) Ašerita, syn Zofarův",
+      "lemma": "שַׁמָּא",
+      "hebrew": "שמא",
+      "xlit": "Shammâʼ",
+      "translated": true
+    },
+    "H8038": {
+      "definitions_cz": "Shemeber = \"vznešený let\" | 1) král Zeboim a spojenec krále Sodomy",
+      "lemma": "שֶׁמְאֵבֶר",
+      "hebrew": "שמאבר",
+      "xlit": "Shemʼêber",
+      "translated": true
+    },
+    "H8039": {
+      "definitions_cz": "Shimeah = \"zpráva\" | 1) Benjamínec, syn Miklothův | 1a) také „Shimeam“",
+      "lemma": "שִׁמְאָה",
+      "hebrew": "שמאה",
+      "xlit": "Shimʼâh",
+      "translated": true
+    },
+    "H8040": {
+      "definitions_cz": "1) levá, levá ruka, levá strana | 1a) vlevo | 1b) levá ruka | 1c) sever (jako jeden obličej na východ)",
+      "lemma": "שְׂמֹאול",
+      "hebrew": "שמאול",
+      "xlit": "sᵉmôʼwl",
+      "translated": true
+    },
+    "H8041": {
+      "definitions_cz": "1) pro odbočení doleva jděte doleva | 1a) (Hiphil) | 1a1) přejděte doleva | 1a2) pro otočení (stranou) doleva (obr.) | 1a3) použijte levou ruku",
+      "lemma": "שָׂמַאל",
+      "hebrew": "שמאל",
+      "xlit": "sâmaʼl",
+      "translated": true
+    },
+    "H8042": {
+      "definitions_cz": "1) vlevo, vlevo, vlevo",
+      "lemma": "שְׂמָאלִי",
+      "hebrew": "שמאלי",
+      "xlit": "sᵉmâʼlîy",
+      "translated": true
+    },
+    "H8043": {
+      "definitions_cz": "Shimeam = \"jejich sláva\" | 1) Benjamínec, syn Miklothův | 1a) také 'Shimeah'",
+      "lemma": "שִׁמְאָם",
+      "hebrew": "שמאם",
+      "xlit": "Shimʼâm",
+      "translated": true
+    },
+    "H8044": {
+      "definitions_cz": "Shamgar = \"meč\" | 1) syn Anatha a soudce Izraele; volským bodlem pobil 600 Pelištejců a vysvobodil Izrael",
+      "lemma": "שַׁמְגַּר",
+      "hebrew": "שמגר",
+      "xlit": "Shamgar",
+      "translated": true
+    },
+    "H8045": {
+      "definitions_cz": "1) zničit, vyhubit, být zničen, být vyhuben | 1a) (Niphal) | 1a1) být zničen, být vyhuben | 1a2) být zničen, být zničen | 1b) (hifil) | 1b1) vyhladit, vyhubit | 1b2) zničit",
+      "lemma": "שָׁמַד",
+      "hebrew": "שמד",
+      "xlit": "shâmad",
+      "translated": true
+    },
+    "H8046": {
+      "definitions_cz": "1) (Aphel) zničit",
+      "lemma": "שְׁמַד",
+      "hebrew": "שמד",
+      "xlit": "shᵉmad",
+      "translated": true
+    },
+    "H8047": {
+      "definitions_cz": "1) odpad, hrůza, otřes | 1a) odpad (země, města atd.) | 1b) zděšení, hrůza",
+      "lemma": "שַׁמָּה",
+      "hebrew": "שמה",
+      "xlit": "shammâh",
+      "translated": true
+    },
+    "H8048": {
+      "definitions_cz": "Shammah = \"údiv\" | 1) syn Reuela, vnuka Ezaua a náčelníka Edomu | 2) 3. syn Jišajův a bratr Davidův | 3) syn Agee Hararského a jeden z 30 Davidových mocných válečníků | 4) Harodite, jeden z 30 Davidových mocných válečníků | 5) další Hararijec, jeden z 30 Davidových mocných válečníků",
+      "lemma": "שַׁמָּה",
+      "hebrew": "שמה",
+      "xlit": "Shammâh",
+      "translated": true
+    },
+    "H8049": {
+      "definitions_cz": "Shamhuth = \"pustotina\" | 1) 5. kapitán (vojenských oddílů) pro 5. měsíc v době Davidově | 1a) také „Shammoth“ (H08054) a „Shammah“ (H08048)",
+      "lemma": "שַׁמְהוּת",
+      "hebrew": "שמהות",
+      "xlit": "Shamhûwth",
+      "translated": true
+    },
+    "H8050": {
+      "definitions_cz": "Samuel = \"jmenuje se El\" | 1) syn Elkána od jeho manželky Hany a soudce nebo prorok Izraele za dnů Saula a Davida | 2) syn Ammihud a princ kmene Simeon, který byl vybrán, aby rozdělil zemi Kanaán mezi kmeny. Hláskované 'Shemuel' | 3) syn Toly a vnuk Issachara. Hláskováno 'Shemuel'",
+      "lemma": "שְׁמוּאֵל",
+      "hebrew": "שמואל",
+      "xlit": "Shᵉmûwʼêl",
+      "translated": true
+    },
+    "H8051": {
+      "definitions_cz": "Shammua = \"známý\" | 1) syn Zaccurův a vyzvědač z kmene Ruben | 2) syn Davidův od manželky Batšeby | 2a) také „Shammuah“ a „Shimea“ | 3) aLevit, syn Galalův a otec Abdy, který žil v Jeruzalémě po návratu z vyhnanství v době Nehemjáše | 3a) také 'Shemaiah' | 4) kněz, hlava rodiny Bilgah v době Joakima po návratu z exilu",
+      "lemma": "שַׁמּוּעַ",
+      "hebrew": "שמוע",
+      "xlit": "Shammûwaʻ",
+      "translated": true
+    },
+    "H8052": {
+      "definitions_cz": "1) zpráva, zprávy, pověst | 1a) zpráva, zprávy, zprávy | 1b) zmínit",
+      "lemma": "שְׁמוּעָה",
+      "hebrew": "שמועה",
+      "xlit": "shᵉmûwʻâh",
+      "translated": true
+    },
+    "H8053": {
+      "definitions_cz": "Shamer nebo Shamir = \"strážce\" | 1) Levita ze synů Míchových v době Davidově",
+      "lemma": "שָׁמוּר",
+      "hebrew": "שמור",
+      "xlit": "Shâmûwr",
+      "translated": true
+    },
+    "H8054": {
+      "definitions_cz": "Shammoth = \"pustiny\" | 1) Harodite, jeden z 30 Davidových mocných válečníků",
+      "lemma": "שַׁמּוֹת",
+      "hebrew": "שמות",
+      "xlit": "Shammôwth",
+      "translated": true
+    },
+    "H8055": {
+      "definitions_cz": "1) radovat se, radovat se | 1a) (Qal) | 1a1) radovat se | 1a2) radovat se (arogantně), jásat (at) | 1a3) radovat se (nábožně) | 1b) (Piel) způsobit radost, radost, radost | 1c) (Hifil) způsobit radost, obveselení, obveselení",
+      "lemma": "שָׂמַח",
+      "hebrew": "שמח",
+      "xlit": "sâmach",
+      "translated": true
+    },
+    "H8056": {
+      "definitions_cz": "1) radostný, veselý, rád | 1a) radostný, ukazující radost | 1b) ty, kdo se raduješ (subst)",
+      "lemma": "שָׂמֵחַ",
+      "hebrew": "שמח",
+      "xlit": "sâmêach",
+      "translated": true
+    },
+    "H8057": {
+      "definitions_cz": "1) radost, veselí, radost | 1a) veselí, radost, radost, veselí, potěšení | 1b) radost (Boží) | 1c) šťastný výsledek, šťastný problém",
+      "lemma": "שִׂמְחָה",
+      "hebrew": "שמחה",
+      "xlit": "simchâh",
+      "translated": true
+    },
+    "H8058": {
+      "definitions_cz": "1) uvolnit, nechat spadnout nebo uvolnit nebo odpočinout nebo spadnout | 1a) (Qal) nechat spadnout nebo spadnout | 1b) (Niphal) být přinucen spadnout, být shozen dolů | 1c) (Hiphil) | 1c1) způsobit nechat klesnout | 1c2) uvolnit, nechat klesnout",
+      "lemma": "שָׁמַט",
+      "hebrew": "שמט",
+      "xlit": "shâmaṭ",
+      "translated": true
+    },
+    "H8059": {
+      "definitions_cz": "1) upuštění od vymáhání, (dočasné) prominutí, osvobození (od dluhu)",
+      "lemma": "שְׁמִטָּה",
+      "hebrew": "שמטה",
+      "xlit": "shᵉmiṭṭâh",
+      "translated": true
+    },
+    "H8060": {
+      "definitions_cz": "Shammai = \"pusto\" | 1) Judaita, syn Onamův a potomek Jerahmeela | 2) Judaita, syn Rekema, otce Maona a potomka Jerahmeelova bratra Káleba | 3) Judaita, syn Mereda a bratr Miriam a Ishbah",
+      "lemma": "שַׁמַּי",
+      "hebrew": "שמי",
+      "xlit": "Shammay",
+      "translated": true
+    },
+    "H8061": {
+      "definitions_cz": "Shemida = \"moudrá\" | 1) syn Gileadův, vnuk Manassesův a předek rodiny v Manasse",
+      "lemma": "שְׁמִידָע",
+      "hebrew": "שמידע",
+      "xlit": "Shᵉmîydâʻ",
+      "translated": true
+    },
+    "H8062": {
+      "definitions_cz": "Shemidaites = viz Shemida \"moudrá\" | 1) potomci Šemidy, syna Gileádova a vnuka Manasseho",
+      "lemma": "שְׁמִידָעִי",
+      "hebrew": "שמידעי",
+      "xlit": "Shᵉmîydâʻîy",
+      "translated": true
+    },
+    "H8063": {
+      "definitions_cz": "1) koberec, přikrývka, tlustá přikrývka",
+      "lemma": "שְׂמִיכָה",
+      "hebrew": "שמיכה",
+      "xlit": "sᵉmîykâh",
+      "translated": true
+    },
+    "H8064": {
+      "definitions_cz": "1) nebe, nebesa, nebe | 1a) viditelná nebesa, obloha | 1a1) jako sídlo hvězd | 1a2) jako viditelný vesmír, obloha, atmosféra atd. | 1b) Nebe (jako příbytek Boží)",
+      "lemma": "שָׁמַיִם",
+      "hebrew": "שמים",
+      "xlit": "shâmayim",
+      "translated": true
+    },
+    "H8065": {
+      "definitions_cz": "1) nebe, nebesa, nebe | 1a) viditelná obloha | 1b) Nebe (jako příbytek Boží)",
+      "lemma": "שָׁמַיִן",
+      "hebrew": "שמין",
+      "xlit": "shâmayin",
+      "translated": true
+    },
+    "H8066": {
+      "definitions_cz": "1) osmý (řadové číslo)",
+      "lemma": "שְׁמִינִי",
+      "hebrew": "שמיני",
+      "xlit": "shᵉmîynîy",
+      "translated": true
+    },
+    "H8067": {
+      "definitions_cz": "1) Sheminith | 1a) snad osmistrunný hudební nástroj | 1b) snad notový zápis, t. j. oktáva",
+      "lemma": "שְׁמִינִית",
+      "hebrew": "שמינית",
+      "xlit": "shᵉmîynîyth",
+      "translated": true
+    },
+    "H8068": {
+      "definitions_cz": "1) trn(y), neoblomný, pazourek | 1a) trny, trny-keře | 1b) neoblomný (jako ostrý) | 1c) ostrý kámen, pazourek | 1c1) možná diamant",
+      "lemma": "שָׁמִיר",
+      "hebrew": "שמיר",
+      "xlit": "shâmîyr",
+      "translated": true
+    },
+    "H8069": {
+      "definitions_cz": "Shamir = \"bod\" nebo \"trn\" | n pr loc | 1) město v horské oblasti Juda | 2) město v Efrajimu, kde žil a byl pohřben soudce Tola",
+      "lemma": "שָׁמִיר",
+      "hebrew": "שמיר",
+      "xlit": "Shâmîyr",
+      "translated": true
+    },
+    "H8070": {
+      "definitions_cz": "Shemiramoth = \"jméno výšin\" | 1) merarijský levita ve druhém pořadí v Davidově sboru | 2) Levita v době judského krále Jozafata",
+      "lemma": "שְׁמִירָמוֹת",
+      "hebrew": "שמירמות",
+      "xlit": "Shᵉmîyrâmôwth",
+      "translated": true
+    },
+    "H8071": {
+      "definitions_cz": "1) obal, plášť, krycí oděv, oděvy, oděvy, roucho, látka",
+      "lemma": "שִׂמְלָה",
+      "hebrew": "שמלה",
+      "xlit": "simlâh",
+      "translated": true
+    },
+    "H8072": {
+      "definitions_cz": "Samlah = \"oděv\" | 1) král moábský a nástupce Hadad nebo Hadar",
+      "lemma": "שַׂמְלָה",
+      "hebrew": "שמלה",
+      "xlit": "Samlâh",
+      "translated": true
+    },
+    "H8073": {
+      "definitions_cz": "Shalmai = \"moje šaty\" | 1) rodina, potomci Shamlai, chrámových otroků, kteří se vrátili z exilu se Zerubábelem",
+      "lemma": "שַׁמְלַי",
+      "hebrew": "שמלי",
+      "xlit": "Shamlay",
+      "translated": true
+    },
+    "H8074": {
+      "definitions_cz": "1) být opuštěný, zděšený, omráčený, omráčený | 1a) (Qal) | 1a1) být opuštěný, odkvetlý, opuštěný, zděšený | 1a2) být zděšen, být ohromen | 1b) (Niphal) | 1b1) zpustnout, zpustnout | 1b2) být zděšen | 1c) (Pole) | 1c1) být omráčen | 1c2) otřesný, vyvolávající hrůzu (příčestí) | 1c2a) vyvolávající hrůzu, hrůzu (subst) | 1d) (Hiphil) | 1d1) pustošit, pustošit, zpustošit | 1d2) ke zděšení, ukázat hrůzu | 1e) (Hophal) ležet pustý, být zpustlý |",
+      "lemma": "שָׁמֵם",
+      "hebrew": "שמם",
+      "xlit": "shâmêm",
+      "translated": true
     }
   }
 }
