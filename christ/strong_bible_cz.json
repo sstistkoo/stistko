@@ -67574,6 +67574,706 @@
       "hebrew": "עזריקם",
       "xlit": "ʻAzrîyqâm",
       "translated": true
+    },
+    "H5841": {
+      "definitions_cz": "Gazatité nebo Gazité = viz Gaza \"silní\" | 1) obyvatel města Gazy",
+      "lemma": "עַזָּתִי",
+      "hebrew": "עזתי",
+      "xlit": "ʻAzzâthîy",
+      "translated": true
+    },
+    "H5842": {
+      "definitions_cz": "1) stylus | 1a) železný stylus s diamantovým hrotem používaný k psaní na kámen nebo kov | 1b) rákosové pero použité na roli",
+      "lemma": "עֵט",
+      "hebrew": "עט",
+      "xlit": "ʻêṭ",
+      "translated": true
+    },
+    "H5843": {
+      "definitions_cz": "1) poradce",
+      "lemma": "עֵטָא",
+      "hebrew": "עטא",
+      "xlit": "ʻêṭâʼ",
+      "translated": true
+    },
+    "H5844": {
+      "definitions_cz": "1) zahalit, zabalit, zabalit se, zahalit se | 1a) (Qal) | 1a1) zabalit, obalit se | 1a2) zakrýt (vousy ve smutku) | 1a3) truchlící, kdo kryje (příčestí) | 1b) (Hiphil) zakrýt, obalit, obalit | 2) uchopit | 2a) (Qal) pochopit",
+      "lemma": "עָטָה",
+      "hebrew": "עטה",
+      "xlit": "ʻâṭâh",
+      "translated": true
+    },
+    "H5845": {
+      "definitions_cz": "1) vědro, vědro",
+      "lemma": "עֲטִין",
+      "hebrew": "עטין",
+      "xlit": "ʻăṭîyn",
+      "translated": true
+    },
+    "H5846": {
+      "definitions_cz": "1) kýchání",
+      "lemma": "עֲטִישָׁה",
+      "hebrew": "עטישה",
+      "xlit": "ʻăṭîyshâh",
+      "translated": true
+    },
+    "H5847": {
+      "definitions_cz": "1) netopýr",
+      "lemma": "עֲטַלֵּף",
+      "hebrew": "עטלף",
+      "xlit": "ʻăṭallêph",
+      "translated": true
+    },
+    "H5848": {
+      "definitions_cz": "1) otočit stranou | 1a) (Qal) pro otočení stranou, otočením (pro zakrytí) | 2) zahalit se | 2a) (Qal) zahalit se, zakrýt | 3) být slabý, mdlý, slábnout | 3a) (Qal) být slabý, být slabý | 3b) (Niphal) omdlévat | 3c) (Hiphil) ukázat slabost | 3d) (Hithpael) omdlévat, omdlévat",
+      "lemma": "עָטַף",
+      "hebrew": "עטף",
+      "xlit": "ʻâṭaph",
+      "translated": true
+    },
+    "H5849": {
+      "definitions_cz": "1) obklopit | 1a) (Qal) obklopit | 2) korunovat, korunu dát | 2a) (Piel) ke koruně | 2b) (Hiphil) koruna-dárce (příčestí)",
+      "lemma": "עָטַר",
+      "hebrew": "עטר",
+      "xlit": "ʻâṭar",
+      "translated": true
+    },
+    "H5850": {
+      "definitions_cz": "1) koruna, věnec",
+      "lemma": "עֲטָרָה",
+      "hebrew": "עטרה",
+      "xlit": "ʻăṭârâh",
+      "translated": true
+    },
+    "H5851": {
+      "definitions_cz": "Atarah = \"koruna\" | 1) manželka Jerahmeela a matka Onamova",
+      "lemma": "עֲטָרָה",
+      "hebrew": "עטרה",
+      "xlit": "ʻĂṭârâh",
+      "translated": true
+    },
+    "H5852": {
+      "definitions_cz": "Ataroth = \"koruny\" | 1) město na východ od Jordánu v Gileádu, které bylo dobyto a postaveno kmenem Gád | 2) místo na rozhraní Efraima a Manasse | 3) místo mezi Efraimem a Benjaminem",
+      "lemma": "עֲטָרוֹת",
+      "hebrew": "עטרות",
+      "xlit": "ʻĂṭârôwth",
+      "translated": true
+    },
+    "H5853": {
+      "definitions_cz": "Ataroth-adar nebo Ataroth-addar = \"koruny slávy\" | 1) město Gadite na západní hranici Benjamina",
+      "lemma": "עַטְרוֹת אַדָּר",
+      "hebrew": "עטרות אדר",
+      "xlit": "ʻAṭrôwth ʼAddâr",
+      "translated": true
+    },
+    "H5854": {
+      "definitions_cz": "Ataroth = \"koruny\" | 1) dům Joábův, místo v Judsku",
+      "lemma": "עַטְרוֹת בֵּית יוֹאָב",
+      "hebrew": "עטרות בית יואב",
+      "xlit": "ʻAṭrôwth bêyth Yôwʼâb",
+      "translated": true
+    },
+    "H5855": {
+      "definitions_cz": "Atroth-shophan = \"koruny jejich rapine\" | 1) město na území Gad",
+      "lemma": "עַטְרוֹת שׁוֹפָן",
+      "hebrew": "עטרות שופן",
+      "xlit": "ʻAṭrôwth Shôwphân",
+      "translated": true
+    },
+    "H5856": {
+      "definitions_cz": "1) ruina, hromada ruin",
+      "lemma": "עִי",
+      "hebrew": "עי",
+      "xlit": "ʻîy",
+      "translated": true
+    },
+    "H5857": {
+      "definitions_cz": "Ai nebo Aija nebo Aiath nebo Hai = \"hromada ruin\" | 1) město ležící východně od Bételu a vedle Bethavenu poblíž Jericha a druhého města při invazi do Kanaánu | 2) město Ammonitů na východě Jordánu a zřejmě připojené k Chešbonu",
+      "lemma": "עַי",
+      "hebrew": "עי",
+      "xlit": "ʻAy",
+      "translated": true
+    },
+    "H5858": {
+      "definitions_cz": "Ebal = \"kámen\" nebo \"holá hora\" | n pr m | 1) syn Shobalův | n pr loc | 2) hora prokletí, severně od Sichemu a naproti hoře Gerizim",
+      "lemma": "עֵיבָל",
+      "hebrew": "עיבל",
+      "xlit": "ʻÊybâl",
+      "translated": true
+    },
+    "H5859": {
+      "definitions_cz": "Ijon = \"zřícenina\" | 1) místo na severu Palestiny patřící kmeni Naftali",
+      "lemma": "עִיּוֹן",
+      "hebrew": "עיון",
+      "xlit": "ʻÎyôwn",
+      "translated": true
+    },
+    "H5860": {
+      "definitions_cz": "1) křičet, ječet | 1a) (Qal) křičet | 2) vrhat se chtivě, vrhat se na, spěchat | 2a) (Qal) vrhat se chtivě",
+      "lemma": "עִיט",
+      "hebrew": "עיט",
+      "xlit": "ʻîyṭ",
+      "translated": true
+    },
+    "H5861": {
+      "definitions_cz": "1) dravý pták, swooper",
+      "lemma": "עַיִט",
+      "hebrew": "עיט",
+      "xlit": "ʻayiṭ",
+      "translated": true
+    },
+    "H5862": {
+      "definitions_cz": "Etam = \"doupě divokých zvířat\" | 1) vesnice kmene Simeon | 2) město v Judsku opevněné a obsazené judským králem Rechoboamem a ležící mezi Betlémem a Tekoou | 3) útes; místo nejisté",
+      "lemma": "עֵיטָם",
+      "hebrew": "עיטם",
+      "xlit": "ʻÊyṭâm",
+      "translated": true
+    },
+    "H5863": {
+      "definitions_cz": "Ije-abarim = \"trosky Abarimu\" | 1) stanice Izraele v poušti na jihovýchodní straně Moabu | 2) město v Judsku",
+      "lemma": "עִיֵּי הָעֲבָרִים",
+      "hebrew": "עיי העברים",
+      "xlit": "ʻÎyêy hâ-ʻĂbârîym",
+      "translated": true
+    },
+    "H5864": {
+      "definitions_cz": "Iim = \"ruiny\" | 1) stanice Izraele v poušti na jihovýchodní straně Moabu | 2) město v Judsku",
+      "lemma": "עִיִּים",
+      "hebrew": "עיים",
+      "xlit": "ʻÎyîym",
+      "translated": true
+    },
+    "H5865": {
+      "definitions_cz": "1) navždy, navždy, věčný, věčný, věčný, starý, starověký, svět",
+      "lemma": "עֵילוֹם",
+      "hebrew": "עילום",
+      "xlit": "ʻêylôwm",
+      "translated": true
+    },
+    "H5866": {
+      "definitions_cz": "Ilai = \"vznešený\" | 1) Ahochita, jeden z Davidových mocných válečníků",
+      "lemma": "עִילַי",
+      "hebrew": "עילי",
+      "xlit": "ʻÎylay",
+      "translated": true
+    },
+    "H5867": {
+      "definitions_cz": "Elam = \"věčnost\" | n pr m | 1) Korhijský levita v době Davidově | 2) hlavní muž kmene Benjamin | 3) předek rodiny vyhnanců, kteří se vrátili se Zerubábelem | 4) náčelník lidu, který podepsal smlouvu s Nehemjášem | 5) další předek jiné rodiny vyhnanců, kteří se vrátili se Zerubábelem | 6) kněz, který pomáhal při zasvěcení jeruzalémské zdi v době Nehemjáše | 7) další hlava rodiny vracejících se vyhnanců | n pr loc | 8) provincie východně od",
+      "lemma": "עֵילָם",
+      "hebrew": "עילם",
+      "xlit": "ʻÊylâm",
+      "translated": true
+    },
+    "H5868": {
+      "definitions_cz": "1) svítit, zahřívat | 1a) znamená pochybný",
+      "lemma": "עֲיָם",
+      "hebrew": "עים",
+      "xlit": "ʻăyâm",
+      "translated": true
+    },
+    "H5869": {
+      "definitions_cz": "1) oko | 1a) oko | 1a1) fyzického oka | 1a2) jako projev duševních kvalit | 1a3) duševních a duchovních schopností (obr.) | 2) pramen, fontána",
+      "lemma": "עַיִן",
+      "hebrew": "עין",
+      "xlit": "ʻayin",
+      "translated": true
+    },
+    "H5870": {
+      "definitions_cz": "1) oko",
+      "lemma": "עַיִן",
+      "hebrew": "עין",
+      "xlit": "ʻayin",
+      "translated": true
+    },
+    "H5871": {
+      "definitions_cz": "Ain = \"jaro\" | 1) jeden z orientačních bodů na východní hranici Palestiny | 2) jedno z nejjižnějších měst Judy v Nekebu a přidělené kmenu Simeon a dané kněžím",
+      "lemma": "עַיִן",
+      "hebrew": "עין",
+      "xlit": "ʻAyin",
+      "translated": true
+    },
+    "H5872": {
+      "definitions_cz": "En-gedi = \"zdroj dítěte\" | 1) město v judské poušti na západním břehu Mrtvého moře",
+      "lemma": "עֵין גֶּדִי",
+      "hebrew": "עין גדי",
+      "xlit": "ʻÊyn Gedîy",
+      "translated": true
+    },
+    "H5873": {
+      "definitions_cz": "En-gannim = \"fontána zahrady\" | 1) město v judské nížině | 2) město na hranici Issachar a přidělené geršonským levitům",
+      "lemma": "עֵין גַּנִּים",
+      "hebrew": "עין גנים",
+      "xlit": "ʻÊyn Gannîym",
+      "translated": true
+    },
+    "H5874": {
+      "definitions_cz": "En-dor = \"fontána Dor\" | 1) místo na území Issachar, které je dosud v držení Manasse; nachází 4 míle (6,5 km) severně od Tábora | 1a) místo pobytu spiritisty konzultovaného králem Saulem",
+      "lemma": "עֵין־דֹּאר",
+      "hebrew": "עיןדאר",
+      "xlit": "ʻÊyn-Dôʼr",
+      "translated": true
+    },
+    "H5875": {
+      "definitions_cz": "En-hakkore = \"jaro jednoho volání\" | 1) pramen, který Pán vypustil jako odpověď na Samsonovu stížnost, že má žízeň poté, co právě zabil 1000 mužů čelistí osla",
+      "lemma": "עֵין הַקּוֹרֵא",
+      "hebrew": "עין הקורא",
+      "xlit": "ʻÊyn haq-Qôwrêʼ",
+      "translated": true
+    },
+    "H5876": {
+      "definitions_cz": "En-haddah = \"rychlá fontána\" | 1) jedno z měst na hranici Issacharu",
+      "lemma": "עֵין חַדָּה",
+      "hebrew": "עין חדה",
+      "xlit": "ʻÊyn Chaddâh",
+      "translated": true
+    },
+    "H5877": {
+      "definitions_cz": "En-hazor = \"font of Hazor\" | 1) jedno z oplocených měst na území Naftali",
+      "lemma": "עֵין חָצוֹר",
+      "hebrew": "עין חצור",
+      "xlit": "ʻÊyn Châtsôwr",
+      "translated": true
+    },
+    "H5878": {
+      "definitions_cz": "En-harod = \"pramen Heroda\" | 1) tábořiště Gedeona a Izraele poblíž hory Moreh",
+      "lemma": "עֵין חֲרֹד",
+      "hebrew": "עין חרד",
+      "xlit": "ʻÊyn Chărôd",
+      "translated": true
+    },
+    "H5879": {
+      "definitions_cz": "Enam = \"dvojitá pružina\" | 1) město v nížinách Judska",
+      "lemma": "עֵינַיִם",
+      "hebrew": "עינים",
+      "xlit": "ʻÊynayim",
+      "translated": true
+    },
+    "H5880": {
+      "definitions_cz": "En-mišpat = \"jaro soudu\" | 1) místo blízko jižní Palestiny se shoduje nebo stejné místo jako Kadesh",
+      "lemma": "עֵין מִשְׁפָּט",
+      "hebrew": "עין משפט",
+      "xlit": "ʻÊyn Mishpâṭ",
+      "translated": true
+    },
+    "H5881": {
+      "definitions_cz": "Enan = \"mít oči\" | 1) princ z kmene Neftali při sčítání lidu na hoře Sinaj",
+      "lemma": "עֵינָן",
+      "hebrew": "עינן",
+      "xlit": "ʻÊynân",
+      "translated": true
+    },
+    "H5882": {
+      "definitions_cz": "En-eglaim = \"fontána dvou telat\" | 1) místo u Mrtvého moře; místo nejisté",
+      "lemma": "עֵין עֶגְלַיִם",
+      "hebrew": "עין עגלים",
+      "xlit": "ʻÊyn ʻEglayim",
+      "translated": true
+    },
+    "H5883": {
+      "definitions_cz": "En-rogel = \"zdroj plnějších\" | 1) místo poblíž Jeruzaléma na hranici mezi Judou a Benjamínem a odkud pochází stálý zdroj jezera Siloe",
+      "lemma": "עֵין רֹגֵל",
+      "hebrew": "עין רגל",
+      "xlit": "ʻÊyn Rôgêl",
+      "translated": true
+    },
+    "H5884": {
+      "definitions_cz": "En-rimmon = \"pramen granátového jablka\" | 1) jedno z míst, které vracející se vyhnanci znovu osídlili v Judsku",
+      "lemma": "עֵין רִמּוֹן",
+      "hebrew": "עין רמון",
+      "xlit": "ʻÊyn Rimmôwn",
+      "translated": true
+    },
+    "H5885": {
+      "definitions_cz": "En-shemesh = \"fontána slunce\" | 1) pramen na hranici Judy na jihu a Benjamina na severu",
+      "lemma": "עֵין שֶׁמֶשׁ",
+      "hebrew": "עין שמש",
+      "xlit": "ʻÊyn Shemesh",
+      "translated": true
+    },
+    "H5886": {
+      "definitions_cz": "En-tannim = \"šakalova fontána\" | 1) pramen poblíž Jeruzaléma",
+      "lemma": "עֵין תַּנִּים",
+      "hebrew": "עין תנים",
+      "xlit": "ʻÊyn Tannîym",
+      "translated": true
+    },
+    "H5887": {
+      "definitions_cz": "En-tappuah = \"fontána jablečného města\" | 1) místo na hranici mezi Efraimem a Manassem",
+      "lemma": "עֵין תַּפּוּחַ",
+      "hebrew": "עין תפוח",
+      "xlit": "ʻÊyn Tappûwach",
+      "translated": true
+    },
+    "H5888": {
+      "definitions_cz": "1) být mdlý, být unavený | 1a) (Qal) být mdlý, být unavený",
+      "lemma": "עָיֵף",
+      "hebrew": "עיף",
+      "xlit": "ʻâyêph",
+      "translated": true
+    },
+    "H5889": {
+      "definitions_cz": "1) mdlý, vyčerpaný, unavený",
+      "lemma": "עָיֵף",
+      "hebrew": "עיף",
+      "xlit": "ʻâyêph",
+      "translated": true
+    },
+    "H5890": {
+      "definitions_cz": "1) tma",
+      "lemma": "עֵיפָה",
+      "hebrew": "עיפה",
+      "xlit": "ʻêyphâh",
+      "translated": true
+    },
+    "H5891": {
+      "definitions_cz": "Ephah = \"pochmurný\" | n pr m | 1) syn Midiana | 2) Judaita, syn Jahdai | n pr f | 3) Kálebova konkubína z judské linie",
+      "lemma": "עֵיפָה",
+      "hebrew": "עיפה",
+      "xlit": "ʻÊyphâh",
+      "translated": true
+    },
+    "H5892": {
+      "definitions_cz": "1) vzrušení, úzkost | 1a) teroru | 2) město, město (místo bdění, hlídané) | 2a) město, město",
+      "lemma": "עִיר",
+      "hebrew": "עיר",
+      "xlit": "ʻîyr",
+      "translated": true
+    },
+    "H5893": {
+      "definitions_cz": "Ir = \"patřící k městu\" | 1) syn Bela a otec Huppim a Shuppim",
+      "lemma": "עִיר",
+      "hebrew": "עיר",
+      "xlit": "ʻÎyr",
+      "translated": true
+    },
+    "H5894": {
+      "definitions_cz": "1) bdělý, bdělý, bdělý, hlídač, anděl",
+      "lemma": "עִיר",
+      "hebrew": "עיר",
+      "xlit": "ʻîyr",
+      "translated": true
+    },
+    "H5895": {
+      "definitions_cz": "1) zadek, mužský zadek",
+      "lemma": "עַיִר",
+      "hebrew": "עיר",
+      "xlit": "ʻayir",
+      "translated": true
+    },
+    "H5896": {
+      "definitions_cz": "Ira = \"pozor na město\" | 1) Jairita, jeden z Davidových velkých důstojníků | 2) jeden z Davidových mocných válečníků | 3) Tekoita, syn Ikkešův a další z Davidových mocných válečníků",
+      "lemma": "עִירָא",
+      "hebrew": "עירא",
+      "xlit": "ʻÎyrâʼ",
+      "translated": true
+    },
+    "H5897": {
+      "definitions_cz": "Irad = \"flotila\" | 1) syn Enocha, vnuka Kaina a otce Mehujaela",
+      "lemma": "עִירָד",
+      "hebrew": "עירד",
+      "xlit": "ʻÎyrâd",
+      "translated": true
+    },
+    "H5898": {
+      "definitions_cz": "Ir-hammelech = \"město soli\" | 1) místo v judské poušti",
+      "lemma": "עִיר הַמֶּלַח",
+      "hebrew": "עיר המלח",
+      "xlit": "ʻÎyr ham-Melach",
+      "translated": true
+    },
+    "H5899": {
+      "definitions_cz": "Ir-hatmarim = \"město palem\" | 1) jiný název pro 'Jericho'",
+      "lemma": "עִיר הַתְּמָרִים",
+      "hebrew": "עיר התמרים",
+      "xlit": "ʻÎyr hat-Tᵉmârîym",
+      "translated": true
+    },
+    "H5900": {
+      "definitions_cz": "Iru = \"hlídat\" | 1) syn Kálebův a vnuk Jefunneův",
+      "lemma": "עִירוּ",
+      "hebrew": "עירו",
+      "xlit": "ʻÎyrûw",
+      "translated": true
+    },
+    "H5901": {
+      "definitions_cz": "Iri = \"patřící k městu\" | 1) Benjamínec, syn Bela",
+      "lemma": "עִירִי",
+      "hebrew": "עירי",
+      "xlit": "ʻÎyrîy",
+      "translated": true
+    },
+    "H5902": {
+      "definitions_cz": "Iram = \"patřící k městu\" | 1) vůdce Edomitů",
+      "lemma": "עִירָם",
+      "hebrew": "עירם",
+      "xlit": "ʻÎyrâm",
+      "translated": true
+    },
+    "H5903": {
+      "definitions_cz": "adj | 1) nahá | n m | 2) nahota",
+      "lemma": "עֵירֹם",
+      "hebrew": "עירם",
+      "xlit": "ʻêyrôm",
+      "translated": true
+    },
+    "H5904": {
+      "definitions_cz": "Ir-nahash = \"město hada\" | 1) judaita",
+      "lemma": "עִיר נָחָשׁ",
+      "hebrew": "עיר נחש",
+      "xlit": "ʻÎyr Nâchâsh",
+      "translated": true
+    },
+    "H5905": {
+      "definitions_cz": "Ir-shemesh = \"město boha Slunce\" | 1) město v Danu; pravděpodobně to samé jako 'Bet-Šemeš'",
+      "lemma": "עִיר שֶׁמֶשׁ",
+      "hebrew": "עיר שמש",
+      "xlit": "ʻÎyr Shemesh",
+      "translated": true
+    },
+    "H5906": {
+      "definitions_cz": "1) souhvězdí | 1a) Velký medvěd, Velká medvědice | 1b) (TWOT) Arcturus",
+      "lemma": "עַיִשׁ",
+      "hebrew": "עיש",
+      "xlit": "ʻAyish",
+      "translated": true
+    },
+    "H5907": {
+      "definitions_cz": "Achbor = \"myš\" | 1) otec edomského krále Baal-chanana | 2) syn Michaiášův a současník judského krále Josiáše",
+      "lemma": "עַכְבּוֹר",
+      "hebrew": "עכבור",
+      "xlit": "ʻAkbôwr",
+      "translated": true
+    },
+    "H5908": {
+      "definitions_cz": "1) pavouk | 1a) pavouk | 1b) web (pavoučí dům)",
+      "lemma": "עַכָּבִישׁ",
+      "hebrew": "עכביש",
+      "xlit": "ʻakkâbîysh",
+      "translated": true
+    },
+    "H5909": {
+      "definitions_cz": "1) myš",
+      "lemma": "עַכְבָּר",
+      "hebrew": "עכבר",
+      "xlit": "ʻakbâr",
+      "translated": true
+    },
+    "H5910": {
+      "definitions_cz": "Accho = \"jeho těsnost\" | 1) přístavní město v Asher severně od hory Karmel a na jih od Tyru",
+      "lemma": "עַכּוֹ",
+      "hebrew": "עכו",
+      "xlit": "ʻAkkôw",
+      "translated": true
+    },
+    "H5911": {
+      "definitions_cz": "1) potíže, poruchy | 1a) Achor – jako údolí potíží, kde byli ukamenováni Achan a jeho rodina",
+      "lemma": "עָכוֹר",
+      "hebrew": "עכור",
+      "xlit": "ʻÂkôwr",
+      "translated": true
+    },
+    "H5912": {
+      "definitions_cz": "Achan = \"potížista\" | 1) Judaita, který porušil zvláštní Boží zákaz vzít si jakoukoli kořist z dobytého města Jericho a byl za toto porušení ukamenován spolu se svou rodinou",
+      "lemma": "עָכָן",
+      "hebrew": "עכן",
+      "xlit": "ʻÂkân",
+      "translated": true
+    },
+    "H5913": {
+      "definitions_cz": "1) (Piel) třást náramky, chrastit, cinkat",
+      "lemma": "עָכַס",
+      "hebrew": "עכס",
+      "xlit": "ʻâkaç",
+      "translated": true
+    },
+    "H5914": {
+      "definitions_cz": "1) náramek, náramek",
+      "lemma": "עֶכֶס",
+      "hebrew": "עכס",
+      "xlit": "ʻekeç",
+      "translated": true
+    },
+    "H5915": {
+      "definitions_cz": "Achsah = \"kotníkový řetěz\" nebo \"kotník\" | 1) dcera Caleba a manželka Calebova bratra Otniela, kterému byla dána jako odměna za dopadení Debir",
+      "lemma": "עַכְסָה",
+      "hebrew": "עכסה",
+      "xlit": "ʻAkçâh",
+      "translated": true
+    },
+    "H5916": {
+      "definitions_cz": "1) trápit, vzrušovat, znepokojovat, dělat (někoho) tabu | 1a) (Qal) rušit, potíže | 1b) (Niphal) | 1b1) být rušen, být rozrušen | 1b2) porucha, neštěstí (příčestí)",
+      "lemma": "עָכַר",
+      "hebrew": "עכר",
+      "xlit": "ʻâkar",
+      "translated": true
+    },
+    "H5917": {
+      "definitions_cz": "Achar = \"potížista\" | 1) Judaita, který porušil zvláštní Boží zákaz vzít si jakoukoli kořist z dobytého města Jericho a byl za toto porušení spolu se svou rodinou ukamenován | 1a) alternativní pravopis pro „Achan“",
+      "lemma": "עָכָר",
+      "hebrew": "עכר",
+      "xlit": "ʻÂkâr",
+      "translated": true
+    },
+    "H5918": {
+      "definitions_cz": "Ocran = \"utrápený\" | 1) Ašerita, otec Pagiela",
+      "lemma": "עׇכְרָן",
+      "hebrew": "עכרן",
+      "xlit": "ʻOkrân",
+      "translated": true
+    },
+    "H5919": {
+      "definitions_cz": "1) asp, zmije | 1a) asp, zmije | 1b) možná pavouk",
+      "lemma": "עַכְשׁוּב",
+      "hebrew": "עכשוב",
+      "xlit": "ʻakshûwb",
+      "translated": true
+    },
+    "H5920": {
+      "definitions_cz": "subst | 1) výška | adv | 2) nahoře, nahoru, nahoře",
+      "lemma": "עַל",
+      "hebrew": "על",
+      "xlit": "ʻal",
+      "translated": true
+    },
+    "H5921": {
+      "definitions_cz": "příprava | 1) z důvodu, podle, z důvodu, jménem, ​​týkající se, vedle, kromě, spolu s, za, nad, přes, na, na, směrem, k, proti | 1a) na základě, na základě, z důvodu, proto, v zájmu, pro, s, navzdory, bez ohledu na to, ve věci, pokud jde | 1b) nad, nad, nad (nad) | 1c) nad, nad (nadmořskou výškou nebo předností) | 1",
+      "lemma": "עַל",
+      "hebrew": "על",
+      "xlit": "ʻal",
+      "translated": true
+    },
+    "H5922": {
+      "definitions_cz": "1) po, nad, z důvodu, nad, proti | 1a) na, přes, z důvodu, ohledně, týkající se, jménem | 1b) over (se slovesy vládnutí) | 1c) výše, nad rámec (ve srovnání) | 1d) do, proti (směru)",
+      "lemma": "עַל",
+      "hebrew": "על",
+      "xlit": "ʻal",
+      "translated": true
+    },
+    "H5923": {
+      "definitions_cz": "1) jho",
+      "lemma": "עֹל",
+      "hebrew": "על",
+      "xlit": "ʻôl",
+      "translated": true
+    },
+    "H5924": {
+      "definitions_cz": "1) výše",
+      "lemma": "עֵלָּא",
+      "hebrew": "עלא",
+      "xlit": "ʻêllâʼ",
+      "translated": true
+    },
+    "H5925": {
+      "definitions_cz": "Ulla = \"jho\" | 1) Ašerita, hlava rodiny ve svém kmeni",
+      "lemma": "עֻלָּא",
+      "hebrew": "עלא",
+      "xlit": "ʻUllâʼ",
+      "translated": true
+    },
+    "H5926": {
+      "definitions_cz": "1) mluvit neartikulovaně, koktat",
+      "lemma": "עִלֵּג",
+      "hebrew": "עלג",
+      "xlit": "ʻillêg",
+      "translated": true
+    },
+    "H5927": {
+      "definitions_cz": "1) jít nahoru, stoupat, stoupat | 1a) (Qal) | 1a1) jít nahoru, stoupat | 1a2) setkat se, navštívit, následovat, odejít, stáhnout se, ustoupit | 1a3) jít nahoru, vystoupit (zvířat) | 1a4) vyrůst, růst, vyrážet (z vegetace) | 1a5) stoupat, stoupat, stoupat (přírodního jevu) | 1a6) vystoupit (před Boha) | 1a7) jít nahoru, jít nahoru, rozšířit (o hranici) | 1a8) vyniknout, být lepší než | 1b) (Niphal) | 1b1) být vzat, být vychován, být odebrán | 1b2) odnést se | 1",
+      "lemma": "עָלָה",
+      "hebrew": "עלה",
+      "xlit": "ʻâlâh",
+      "translated": true
+    },
+    "H5928": {
+      "definitions_cz": "1) zápalná oběť, holocaust",
+      "lemma": "עֲלָה",
+      "hebrew": "עלה",
+      "xlit": "ʻălâh",
+      "translated": true
+    },
+    "H5929": {
+      "definitions_cz": "1) list, list",
+      "lemma": "עָלֶה",
+      "hebrew": "עלה",
+      "xlit": "ʻâleh",
+      "translated": true
+    },
+    "H5930": {
+      "definitions_cz": "1) celá zápalná oběť | 2) výstup, schodiště, schody",
+      "lemma": "עֹלָה",
+      "hebrew": "עלה",
+      "xlit": "ʻôlâh",
+      "translated": true
+    },
+    "H5931": {
+      "definitions_cz": "1) záležitost, záležitost, příležitost",
+      "lemma": "עִלָּה",
+      "hebrew": "עלה",
+      "xlit": "ʻillâh",
+      "translated": true
+    },
+    "H5932": {
+      "definitions_cz": "1) nespravedlnost, nespravedlnost, nepravost",
+      "lemma": "עַלְוָה",
+      "hebrew": "עלוה",
+      "xlit": "ʻalvâh",
+      "translated": true
+    },
+    "H5933": {
+      "definitions_cz": "Aliah nebo Alvah = \"zlo\" | 1) vévoda z Edomu",
+      "lemma": "עַלְוָה",
+      "hebrew": "עלוה",
+      "xlit": "ʻAlvâh",
+      "translated": true
+    },
+    "H5934": {
+      "definitions_cz": "1) mládí, mladistvost, elán",
+      "lemma": "עָלוּם",
+      "hebrew": "עלום",
+      "xlit": "ʻâlûwm",
+      "translated": true
+    },
+    "H5935": {
+      "definitions_cz": "Alian nebo Alvan = \"vysoký\" | 1) Chorite, syn Šóbalův",
+      "lemma": "עַלְוָן",
+      "hebrew": "עלון",
+      "xlit": "ʻAlvân",
+      "translated": true
+    },
+    "H5936": {
+      "definitions_cz": "1) pijavice",
+      "lemma": "עֲלוּקָה",
+      "hebrew": "עלוקה",
+      "xlit": "ʻălûwqâh",
+      "translated": true
+    },
+    "H5937": {
+      "definitions_cz": "1) (Qal) jásat, radovat se, triumfovat",
+      "lemma": "עָלַז",
+      "hebrew": "עלז",
+      "xlit": "ʻâlaz",
+      "translated": true
+    },
+    "H5938": {
+      "definitions_cz": "1) jásající, jásající",
+      "lemma": "עָלֵז",
+      "hebrew": "עלז",
+      "xlit": "ʻâlêz",
+      "translated": true
+    },
+    "H5939": {
+      "definitions_cz": "1) hustá tma",
+      "lemma": "עֲלָטָה",
+      "hebrew": "עלטה",
+      "xlit": "ʻălâṭâh",
+      "translated": true
+    },
+    "H5940": {
+      "definitions_cz": "1) palička",
+      "lemma": "עֱלִי",
+      "hebrew": "עלי",
+      "xlit": "ʻĕlîy",
+      "translated": true
     }
   }
 }
