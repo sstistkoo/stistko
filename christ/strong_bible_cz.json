@@ -57277,6 +57277,20 @@
       "hebrew": "מכנה",
       "xlit": "mᵉkunâh",
       "translated": true
+    },
+    "H4370": {
+      "definitions_cz": "1) spodní prádlo, zásuvky, kalhoty | 1a) kněžské spodní prádlo z plátna",
+      "lemma": "מִכְנָס",
+      "hebrew": "מכנס",
+      "xlit": "miknâç",
+      "translated": true
+    },
+    "H4371": {
+      "definitions_cz": "1) výpočet, poměr, který má být zaplacen, tribut, daň",
+      "lemma": "מֶכֶס",
+      "hebrew": "מכס",
+      "xlit": "mekeç",
+      "translated": true
     }
   }
 }
