@@ -33401,6 +33401,906 @@
       "translit": "pínax",
       "pronunciation": "pin'-ax",
       "translated": true
+    },
+    "G4095": {
+      "definitions_cz": "nasávat (doslova nebo obrazně)",
+      "translit": "pínō",
+      "pronunciation": "pee'-no",
+      "translated": true
+    },
+    "G4096": {
+      "definitions_cz": "možná podobný alternativě [ŘECKO:4095]",
+      "translit": "piótēs",
+      "pronunciation": "pee-ot'-ace",
+      "translated": true
+    },
+    "G4097": {
+      "definitions_cz": "ze základny [ŘECKO:4008]",
+      "translit": "pipráskō",
+      "pronunciation": "pip-ras'-ko",
+      "translated": true
+    },
+    "G4098": {
+      "definitions_cz": "padat\n (doslova nebo obrazně)",
+      "translit": "píptō",
+      "pronunciation": "pip'-to",
+      "translated": true
+    },
+    "G4099": {
+      "definitions_cz": "Pisidia, oblast Malé Asie",
+      "translit": "Pisidía",
+      "pronunciation": "pis-id-ee'-ah",
+      "translated": true
+    },
+    "G4100": {
+      "definitions_cz": "mít víru (v, na nebo s ohledem na osobu nebo\n věc), tj. úvěr; implicitně svěřit (zejména své\n duchovní blaho Kristu)",
+      "translit": "pisteúō",
+      "pronunciation": "pist-yoo'-o",
+      "translated": true
+    },
+    "G4101": {
+      "definitions_cz": "důvěryhodný, tj. pravý (nefalšovaný)",
+      "translit": "pistikós",
+      "pronunciation": "pis-tik-os'",
+      "translated": true
+    },
+    "G4102": {
+      "definitions_cz": "přesvědčování, t. j. věrohodnost; morální přesvědčení (náboženského\n pravda, nebo pravdomluvnost Boha nebo náboženského učitele), zvláště\n spoléhání se na Krista pro spasení; abstraktně stálost v takových\n povolání; v rozšíření systém náboženské (evangelní) pravdy\n sám",
+      "translit": "pístis",
+      "pronunciation": "pis'-tis",
+      "translated": true
+    },
+    "G4103": {
+      "definitions_cz": "objektivně, důvěryhodně; subjektivně,\n důvěřivý",
+      "translit": "pistós",
+      "pronunciation": "pis-tos'",
+      "translated": true
+    },
+    "G4104": {
+      "definitions_cz": "zajistit",
+      "translit": "pistóō",
+      "pronunciation": "pis-to'-o",
+      "translated": true
+    },
+    "G4105": {
+      "definitions_cz": "toulat se (správně, způsobit) toulat se (z bezpečí, pravdy, popř\n ctnost)",
+      "translit": "planáō",
+      "pronunciation": "plan-ah'-o",
+      "translated": true
+    },
+    "G4106": {
+      "definitions_cz": "objektivně, podvod;\n subjektivně vybočení z ortodoxie nebo zbožnosti",
+      "translit": "plánē",
+      "pronunciation": "plan'-ay",
+      "translated": true
+    },
+    "G4107": {
+      "definitions_cz": "rover (\"planeta\"), tedy (obrazně) bludný\n učitel",
+      "translit": "planḗtēs",
+      "pronunciation": "plan-ay'-tace",
+      "translated": true
+    },
+    "G4108": {
+      "definitions_cz": "potulovat se (jako tulák), tj. (implicitně) an\n podvodník nebo podvodník;",
+      "translit": "plános",
+      "pronunciation": "plan'-os",
+      "translated": true
+    },
+    "G4109": {
+      "definitions_cz": "formovací deska, tedy rovný povrch (\"talíř\" nebo tablet,\n doslova nebo obrazně)",
+      "translit": "pláx",
+      "pronunciation": "plax",
+      "translated": true
+    },
+    "G4110": {
+      "definitions_cz": "něco tvarovaného",
+      "translit": "plásma",
+      "pronunciation": "plas'-mah",
+      "translated": true
+    },
+    "G4111": {
+      "definitions_cz": "formovat, tj. tvarovat nebo vyrábět",
+      "translit": "plássō",
+      "pronunciation": "plas'-so",
+      "translated": true
+    },
+    "G4112": {
+      "definitions_cz": "tvarované, tj. (implicitně) umělé nebo (obrazně)\n fiktivní (nepravdivý)",
+      "translit": "plastós",
+      "pronunciation": "plas-tos'",
+      "translated": true
+    },
+    "G4113": {
+      "definitions_cz": "široký „plat“ nebo „place“, tedy otevřený čtverec",
+      "translit": "plateîa",
+      "pronunciation": "plat-i'-ah",
+      "translated": true
+    },
+    "G4114": {
+      "definitions_cz": "šířka",
+      "translit": "plátos",
+      "pronunciation": "plat'-os",
+      "translated": true
+    },
+    "G4115": {
+      "definitions_cz": "rozšířit (doslova nebo obrazně)",
+      "translit": "platýnō",
+      "pronunciation": "plat-oo'-no",
+      "translated": true
+    },
+    "G4116": {
+      "definitions_cz": "rozprostřený „plochý“ („parcela“), t. j. široký",
+      "translit": "platýs",
+      "pronunciation": "plat-oos'",
+      "translated": true
+    },
+    "G4117": {
+      "definitions_cz": "cop (z vlasů)",
+      "translit": "plégma",
+      "pronunciation": "pleg'-mah",
+      "translated": true
+    },
+    "G4118": {
+      "definitions_cz": "největší počet nebo velmi velký",
+      "translit": "pleîstos",
+      "pronunciation": "plice'-tos",
+      "translated": true
+    },
+    "G4119": {
+      "definitions_cz": "více v množství, počtu nebo kvalitě; také (v\n množné číslo) hlavní část",
+      "translit": "pleíōn",
+      "pronunciation": "pli-own",
+      "translated": true
+    },
+    "G4120": {
+      "definitions_cz": "do provázku nebo copu",
+      "translit": "plékō",
+      "pronunciation": "plek'-o",
+      "translated": true
+    },
+    "G4121": {
+      "definitions_cz": "dělat, dělat nebo být více, tj. zvyšovat (přechodně nebo\n netranzitivně); rozšířením přehršel",
+      "translit": "pleonázō",
+      "pronunciation": "pleh-on-ad'-zo",
+      "translated": true
+    },
+    "G4122": {
+      "definitions_cz": "být žádostivý, tj. (implicitně) přehánět",
+      "translit": "pleonektéō",
+      "pronunciation": "pleh-on-cek-teh'-o",
+      "translated": true
+    },
+    "G4123": {
+      "definitions_cz": "více držící (toužící), t. j. dychtící po zisku\n (hrabivý, tedy podvodník)",
+      "translit": "pleonéktēs",
+      "pronunciation": "pleh-on-ek'-tace",
+      "translated": true
+    },
+    "G4124": {
+      "definitions_cz": "hrabivost, tj. (implicitně) podvod,\n vydírání",
+      "translit": "pleonexía",
+      "pronunciation": "pleh-on-ex-ee'-ah",
+      "translated": true
+    },
+    "G4125": {
+      "definitions_cz": "žebro, tj. (prodloužením) strana",
+      "translit": "pleurá",
+      "pronunciation": "plyoo-rah'",
+      "translated": true
+    },
+    "G4126": {
+      "definitions_cz": "projít v plavidle",
+      "translit": "pléō",
+      "pronunciation": "pleh'-o",
+      "translated": true
+    },
+    "G4127": {
+      "definitions_cz": "mrtvice; implicitně rána; přeneseně, a\n neštěstí",
+      "translit": "plēgḗ",
+      "pronunciation": "play-gay'",
+      "translated": true
+    },
+    "G4128": {
+      "definitions_cz": "plnost, t. j. velký počet, zástup, populace",
+      "translit": "plēthos",
+      "pronunciation": "play'-thos",
+      "translated": true
+    },
+    "G4129": {
+      "definitions_cz": "zvýšit (přechodně popř\n netranzitivně)",
+      "translit": "plēthýnō",
+      "pronunciation": "play-thoo'-no",
+      "translated": true
+    },
+    "G4130": {
+      "definitions_cz": "„naplnit“ (doslova nebo přeneseně (naplnit, ovlivnit, dodat));\n speciálně, splnit (čas)",
+      "translit": "plḗthō",
+      "pronunciation": "play'-tho",
+      "translated": true
+    },
+    "G4131": {
+      "definitions_cz": "bijec, tj. bojovný (svárlivý)",
+      "translit": "plḗktēs",
+      "pronunciation": "plake'-tace",
+      "translated": true
+    },
+    "G4132": {
+      "definitions_cz": "záplava-příliv, tj. (analogicky) freshet",
+      "translit": "plḗmmyra",
+      "pronunciation": "plame-moo'-rah",
+      "translated": true
+    },
+    "G4133": {
+      "definitions_cz": "navíc (kromě toho), tj. i když s výjimkou toho,\n ještě",
+      "translit": "plḗn",
+      "pronunciation": "plane",
+      "translated": true
+    },
+    "G4134": {
+      "definitions_cz": "plný nebo překrytý; analogicky kompletní",
+      "translit": "plḗrēs",
+      "pronunciation": "play'-race",
+      "translated": true
+    },
+    "G4135": {
+      "definitions_cz": "provést plně (v důkazech), t. j. úplně\n zajistit (nebo přesvědčit), zcela splnit",
+      "translit": "plērophoréō",
+      "pronunciation": "play-rof-or-eh'-o",
+      "translated": true
+    },
+    "G4136": {
+      "definitions_cz": "celou důvěru",
+      "translit": "plērophoría",
+      "pronunciation": "play-rof-or-ee'-ah",
+      "translated": true
+    },
+    "G4137": {
+      "definitions_cz": "naplnit, tj. (doslova) nacpat (síť), vyrovnat\n (dutina), nebo (obrazně) poskytnout (nebo naplnit, rozptýlit,\n ovlivnit), uspokojit, vykonat (kancelář), dokončit (období nebo úkol),\n ověřit (nebo se shodovat s předpovědí) atd.",
+      "translit": "plēróō",
+      "pronunciation": "play-ro'-o",
+      "translated": true
+    },
+    "G4138": {
+      "definitions_cz": "doplnění nebo dokončení, tj. (subjektivně), co naplňuje (jako\n obsah, doplněk, hojnost, mnohost), nebo (objektivně) co\n je naplněn (jako kontejner, výkon, období)",
+      "translit": "plḗrōma",
+      "pronunciation": "play'-ro-mah",
+      "translated": true
+    },
+    "G4139": {
+      "definitions_cz": "(příslovečně) blízko; jako\n podstatné jméno, soused, tj. druh (jako muž, krajan, křesťan nebo\n přítel)",
+      "translit": "plēsíon",
+      "pronunciation": "play-see'-on",
+      "translated": true
+    },
+    "G4140": {
+      "definitions_cz": "plnění, tj. (obrazně)\n uspokojení",
+      "translit": "plēsmonḗ",
+      "pronunciation": "place-mon-ay'",
+      "translated": true
+    },
+    "G4141": {
+      "definitions_cz": "bušit, tj. (obrazně) způsobit (neštěstí)",
+      "translit": "plḗssō",
+      "pronunciation": "place'-so",
+      "translated": true
+    },
+    "G4142": {
+      "definitions_cz": "člun",
+      "translit": "ploiárion",
+      "pronunciation": "ploy-ar'-ee-on",
+      "translated": true
+    },
+    "G4143": {
+      "definitions_cz": "námořník, tedy plavidlo",
+      "translit": "ploîon",
+      "pronunciation": "ploy'-on",
+      "translated": true
+    },
+    "G4144": {
+      "definitions_cz": "plachta, tedy navigace",
+      "translit": "plóos",
+      "pronunciation": "plo'-os",
+      "translated": true
+    },
+    "G4145": {
+      "definitions_cz": "bohatý; přeneseně oplývající",
+      "translit": "ploúsios",
+      "pronunciation": "ploo'-see-os",
+      "translated": true
+    },
+    "G4146": {
+      "definitions_cz": "hojně",
+      "translit": "plousíōs",
+      "pronunciation": "ploo-see'-oce",
+      "translated": true
+    },
+    "G4147": {
+      "definitions_cz": "být (nebo se stát) bohatým (doslova nebo obrazně)",
+      "translit": "ploutéō",
+      "pronunciation": "ploo-teh'-o",
+      "translated": true
+    },
+    "G4148": {
+      "definitions_cz": "zbohatnout (obrazně)",
+      "translit": "ploutízō",
+      "pronunciation": "ploo-tid'-zo",
+      "translated": true
+    },
+    "G4149": {
+      "definitions_cz": "bohatství (jako plnost), tedy (doslova) peníze,\n majetek, nebo (obrazně) hojnost, bohatství, (zvláště),\n cenné darování",
+      "translit": "ploûtos",
+      "pronunciation": "ploo'-tos",
+      "translated": true
+    },
+    "G4150": {
+      "definitions_cz": "\"ponořit se\", tzn.\n prát oblečení",
+      "translit": "plýnō",
+      "pronunciation": "ploo'-no",
+      "translated": true
+    },
+    "G4151": {
+      "definitions_cz": "proud vzduchu, tj. dech (výboj) nebo vánek; podle\n analogicky nebo obrazně, duch, tj. (člověk) rozumná duše, (tím\n implikace) vitální princip, duševní dispozice apod., popř\n (nadčlověk) anděl, démon nebo (božský) Bůh, Kristův duch\n Duch svatý",
+      "translit": "pneûma",
+      "pronunciation": "pnyoo'-mah",
+      "translated": true
+    },
+    "G4152": {
+      "definitions_cz": "netělesné, tj. (lidsky) éterické (na rozdíl od hrubého),\n nebo (dæmonicky) duch (konkrétně) nebo (božsky) nadpřirozený,\n regenerovat, náboženský",
+      "translit": "pneumatikós",
+      "pronunciation": "pnyoo-mat-ik-os'",
+      "translated": true
+    },
+    "G4153": {
+      "definitions_cz": "nefyzicky, tedy božsky,\n přeneseně",
+      "translit": "pneumatikōs",
+      "pronunciation": "pnyoo-mat-ik-oce'",
+      "translated": true
+    },
+    "G4154": {
+      "definitions_cz": "těžce dýchat, t. j. vánek",
+      "translit": "pnéō",
+      "pronunciation": "pneh'-o",
+      "translated": true
+    },
+    "G4155": {
+      "definitions_cz": "sípat, tj. (příčinně, implikovaně) k\n škrtit nebo škrtit (utopit se)",
+      "translit": "pnígō",
+      "pronunciation": "pnee'-go",
+      "translated": true
+    },
+    "G4156": {
+      "definitions_cz": "škrtil, t. j. (konkrétně kastrovaný) zvíře udušené\n smrt (nevykrvácela)",
+      "translit": "pniktós",
+      "pronunciation": "pnik-tos'",
+      "translated": true
+    },
+    "G4157": {
+      "definitions_cz": "dýchání, vánek",
+      "translit": "pnoḗ",
+      "pronunciation": "pno-ay'",
+      "translated": true
+    },
+    "G4158": {
+      "definitions_cz": "šaty ([ŘECKO:2066]",
+      "translit": "podḗrēs",
+      "pronunciation": "pod-ay'-race",
+      "translated": true
+    },
+    "G4159": {
+      "definitions_cz": "ze kterého (jako\n tázací) nebo jaké (jako relativní) místo, stát, zdroj popř\n způsobit",
+      "translit": "póthen",
+      "pronunciation": "poth'-en",
+      "translated": true
+    },
+    "G4160": {
+      "definitions_cz": "dělat nebo dělat (v\n velmi široké použití, víceméně přímé)",
+      "translit": "poiéō",
+      "pronunciation": "poy-eh'-o",
+      "translated": true
+    },
+    "G4161": {
+      "definitions_cz": "produkt, tj. látka (doslova nebo přeneseně)",
+      "translit": "poíēma",
+      "pronunciation": "poy'-ay-mah",
+      "translated": true
+    },
+    "G4162": {
+      "definitions_cz": "jednání, tj. plnění (zákona)",
+      "translit": "poíēsis",
+      "pronunciation": "poy'-ay-sis",
+      "translated": true
+    },
+    "G4163": {
+      "definitions_cz": "účinkující; speciálně „básník“;",
+      "translit": "poiētḗs",
+      "pronunciation": "poy-ay-tace'",
+      "translated": true
+    },
+    "G4164": {
+      "definitions_cz": "pestré, t. j. různého charakteru",
+      "translit": "poikílos",
+      "pronunciation": "poy-kee'-los",
+      "translated": true
+    },
+    "G4165": {
+      "definitions_cz": "starat se jako pastýř (obrazně dozorce)",
+      "translit": "poimaínō",
+      "pronunciation": "poy-mah'-ee-no",
+      "translated": true
+    },
+    "G4166": {
+      "definitions_cz": "pastýř (doslova nebo\n přeneseně)",
+      "translit": "poimḗn",
+      "pronunciation": "poy-mane'",
+      "translated": true
+    },
+    "G4167": {
+      "definitions_cz": "hejno (doslova nebo přeneseně)",
+      "translit": "poímnē",
+      "pronunciation": "poym'-nay",
+      "translated": true
+    },
+    "G4168": {
+      "definitions_cz": "hejno, tj. (obrazně)\n skupina (věřících)",
+      "translit": "poímnion",
+      "pronunciation": "poym'-nee-on",
+      "translated": true
+    },
+    "G4169": {
+      "definitions_cz": "individualizující tázací (o\n znak) jaký druh, nebo (počet) kterého",
+      "translit": "poîos",
+      "pronunciation": "poy'-os",
+      "translated": true
+    },
+    "G4170": {
+      "definitions_cz": "být (zapojen) do válčení, tj. do bitvy (doslova nebo\n přeneseně)",
+      "translit": "poleméō",
+      "pronunciation": "pol-em-eh'-o",
+      "translated": true
+    },
+    "G4171": {
+      "definitions_cz": "válčení (doslova nebo obrazně; jeden\n setkání nebo série)",
+      "translit": "pólemos",
+      "pronunciation": "pol'-em-os",
+      "translated": true
+    },
+    "G4172": {
+      "definitions_cz": "město\n (správně, se stěnami, větší nebo menší velikosti)",
+      "translit": "pólis",
+      "pronunciation": "pol'-is",
+      "translated": true
+    },
+    "G4173": {
+      "definitions_cz": "městský úředník, t. j. magistrát",
+      "translit": "politárchēs",
+      "pronunciation": "pol-it-ar'-khace",
+      "translated": true
+    },
+    "G4174": {
+      "definitions_cz": "občanství; konkrétně, a\n společenství",
+      "translit": "politeía",
+      "pronunciation": "pol-ee-ti'-ah",
+      "translated": true
+    },
+    "G4175": {
+      "definitions_cz": "společenství, tedy (abstraktně) občanství\n (obrazně)",
+      "translit": "políteuma",
+      "pronunciation": "pol-it'-yoo-mah",
+      "translated": true
+    },
+    "G4176": {
+      "definitions_cz": "chovat se jako občan\n (obrazně)",
+      "translit": "politeúomai",
+      "pronunciation": "pol-it-yoo'-om-ahee",
+      "translated": true
+    },
+    "G4177": {
+      "definitions_cz": "měšťan",
+      "translit": "polítēs",
+      "pronunciation": "pol-ee'-tace",
+      "translated": true
+    },
+    "G4178": {
+      "definitions_cz": "mnohokrát, tzn.\n často",
+      "translit": "pollákis",
+      "pronunciation": "pol-lak'-is",
+      "translated": true
+    },
+    "G4179": {
+      "definitions_cz": "manifold, tj. (neutr jako\n podstatné jméno) mnohem více",
+      "translit": "pollaplasíōn",
+      "pronunciation": "pol-lap-las-ee'-ohn",
+      "translated": true
+    },
+    "G4180": {
+      "definitions_cz": "loquacity, tj. prolixita",
+      "translit": "polylogía",
+      "pronunciation": "pol-oo-log-ee'-ah",
+      "translated": true
+    },
+    "G4181": {
+      "definitions_cz": "v mnoha porcích, tzn.\n různě podle času a agentury (po částech)",
+      "translit": "polymerōs",
+      "pronunciation": "pol-oo-mer'-oce",
+      "translated": true
+    },
+    "G4182": {
+      "definitions_cz": "hodně pestrý, t. j. rozmanitý",
+      "translit": "polypoíkilos",
+      "pronunciation": "pol-oo-poy'-kil-os",
+      "translated": true
+    },
+    "G4183": {
+      "definitions_cz": "(jednotné číslo) hodně (v jakémkoli\n respekt) nebo (množné číslo) mnoho; střední (jednotné) jako adverbiální, převážně;\n střední (množné číslo) jako příslovce nebo podstatné jméno často, většinou, z velké části",
+      "translit": "polýs",
+      "pronunciation": "pol-oos'",
+      "translated": true
+    },
+    "G4184": {
+      "definitions_cz": "nesmírně soucitný",
+      "translit": "polýsplanchnos",
+      "pronunciation": "pol-oo'-splankh-nos",
+      "translated": true
+    },
+    "G4185": {
+      "definitions_cz": "extrémně drahé",
+      "translit": "polytelḗs",
+      "pronunciation": "pol-oo-tel-ace'",
+      "translated": true
+    },
+    "G4186": {
+      "definitions_cz": "nesmírně cenné",
+      "translit": "polýtimos",
+      "pronunciation": "pol-oot'-ee-mos",
+      "translated": true
+    },
+    "G4187": {
+      "definitions_cz": "mnoha způsoby, tedy různě\n pokud jde o způsob nebo formu",
+      "translit": "polytrópōs",
+      "pronunciation": "pol-oot-rop'-oce",
+      "translated": true
+    },
+    "G4188": {
+      "definitions_cz": "nápoj",
+      "translit": "póma",
+      "pronunciation": "pom'-ah",
+      "translated": true
+    },
+    "G4189": {
+      "definitions_cz": "zkaženost, tj. (zvláště), zloba; množné číslo (konkrétně)\n úklady, hříchy",
+      "translit": "ponēría",
+      "pronunciation": "pon-ay-ree'-ah",
+      "translated": true
+    },
+    "G4190": {
+      "definitions_cz": "ubližující, tj. zlý (správně, ve skutečnosti nebo\n vliv, a tím se liší od [ŘECKO:2556][ŘECKO:4550]",
+      "translit": "ponērós",
+      "pronunciation": "pon-ay-ros'",
+      "translated": true
+    },
+    "G4191": {
+      "definitions_cz": "více zla",
+      "translit": "ponēróteros",
+      "pronunciation": "pon-ay-rot'-er-os",
+      "translated": true
+    },
+    "G4192": {
+      "definitions_cz": "dřina, tedy (implicitně) trápení",
+      "translit": "pónos",
+      "pronunciation": "pon'-os",
+      "translated": true
+    },
+    "G4193": {
+      "definitions_cz": "Pontican, t. j. rodák z Pontu",
+      "translit": "Pontikós",
+      "pronunciation": "pon-tik-os'",
+      "translated": true
+    },
+    "G4194": {
+      "definitions_cz": "zřejmě přemostěna; Pontius, Říman",
+      "translit": "Póntios",
+      "pronunciation": "pon'-tee-os",
+      "translated": true
+    },
+    "G4195": {
+      "definitions_cz": "moře; Pontus, oblast Malé Asie",
+      "translit": "Póntos",
+      "pronunciation": "pon'-tos",
+      "translated": true
+    },
+    "G4196": {
+      "definitions_cz": "zřejmě „populární“; Poplius (tj. Publius), a\n Roman",
+      "translit": "Póplios",
+      "pronunciation": "pop'-lee-os",
+      "translated": true
+    },
+    "G4197": {
+      "definitions_cz": "cestování (po zemi); přeneseně (množné číslo) řízení, tzn.\n kariéra",
+      "translit": "poreía",
+      "pronunciation": "por-i'-ah",
+      "translated": true
+    },
+    "G4198": {
+      "definitions_cz": "procházet, tzn.\n cestovat (doslova nebo obrazně; zejména odstranit (obrazně,\n zemřít), žít atd.);",
+      "translit": "poreúomai",
+      "pronunciation": "por-yoo'-om-ahee",
+      "translated": true
+    },
+    "G4199": {
+      "definitions_cz": "pustošit\n (obrazně)",
+      "translit": "porthéō",
+      "pronunciation": "por-theh'-o",
+      "translated": true
+    },
+    "G4200": {
+      "definitions_cz": "zařizování\n (obstarávání), tj. (implicitně) získávání peněz (pořízení)",
+      "translit": "porismós",
+      "pronunciation": "por-is-mos'",
+      "translated": true
+    },
+    "G4201": {
+      "definitions_cz": "zdánlivě svina; Porcius, Říman",
+      "translit": "Pórkios",
+      "pronunciation": "por'-kee-os",
+      "translated": true
+    },
+    "G4202": {
+      "definitions_cz": "smilstvo (včetně cizoložství a incestu); přeneseně,\n modlářství",
+      "translit": "porneía",
+      "pronunciation": "por-ni'-ah",
+      "translated": true
+    },
+    "G4203": {
+      "definitions_cz": "jednat jako nevěstka, tj. (doslova) oddávat se nezákonnému chtíči\n (jakéhokoli pohlaví), nebo (obrazně) praktikovat modloslužbu",
+      "translit": "porneúō",
+      "pronunciation": "porn-yoo'-o",
+      "translated": true
+    },
+    "G4204": {
+      "definitions_cz": "brnkačka; přeneseně modloslužebník",
+      "translit": "pórnē",
+      "pronunciation": "por'-nay",
+      "translated": true
+    },
+    "G4205": {
+      "definitions_cz": "podobný základu [ŘECKO:4097]",
+      "translit": "pórnos",
+      "pronunciation": "por'-nos",
+      "translated": true
+    },
+    "G4206": {
+      "definitions_cz": "dopředu, tedy na dálku",
+      "translit": "pórrhō",
+      "pronunciation": "por'-rho",
+      "translated": true
+    },
+    "G4207": {
+      "definitions_cz": "z dálky nebo (podle\n implikace) na dálku, tj. vzdáleně",
+      "translit": "pórrhōthen",
+      "pronunciation": "por'-rho-then",
+      "translated": true
+    },
+    "G4208": {
+      "definitions_cz": "dále, tedy větší\n vzdálenost",
+      "translit": "porrhōtérō",
+      "pronunciation": "por-rho-ter'-o",
+      "translated": true
+    },
+    "G4209": {
+      "definitions_cz": "\"fialová\" mušle, tj. (implicitně)\n samá červenomodrá barva a nakonec s ní barvený oděv",
+      "translit": "porphýra",
+      "pronunciation": "por-foo'-rah",
+      "translated": true
+    },
+    "G4210": {
+      "definitions_cz": "purpurová, t. j. modročervená",
+      "translit": "porphyroûs",
+      "pronunciation": "por-foo-rooce'",
+      "translated": true
+    },
+    "G4211": {
+      "definitions_cz": "žena obchodník ve fialovém\n plátno",
+      "translit": "porphyrópōlis",
+      "pronunciation": "por-foo-rop'-o-lis",
+      "translated": true
+    },
+    "G4212": {
+      "definitions_cz": "kolikrát",
+      "translit": "posákis",
+      "pronunciation": "pos-ak'-is",
+      "translated": true
+    },
+    "G4213": {
+      "definitions_cz": "pití (akt), tj. (konkrétně) a\n návrh",
+      "translit": "pósis",
+      "pronunciation": "pos'-is",
+      "translated": true
+    },
+    "G4214": {
+      "definitions_cz": "tázací zájmeno (of\n množství), kolik (velké, dlouhé nebo (množné číslo) mnoho)",
+      "translit": "pósos",
+      "pronunciation": "pos'-os",
+      "translated": true
+    },
+    "G4215": {
+      "definitions_cz": "a\n proud, potok nebo freshet (jako pitná), tedy tekoucí voda",
+      "translit": "potamós",
+      "pronunciation": "pot-am-os'",
+      "translated": true
+    },
+    "G4216": {
+      "definitions_cz": "říční, t. j. zahlcený a\n proud",
+      "translit": "potamophórētos",
+      "pronunciation": "pot-am-of-or'-ay-tos",
+      "translated": true
+    },
+    "G4217": {
+      "definitions_cz": "tázavě, cokoliv,\n tedy jakého možného druhu",
+      "translit": "potapós",
+      "pronunciation": "pot-ap-os'",
+      "translated": true
+    },
+    "G4218": {
+      "definitions_cz": "neurčité příslovce, někdy,\n vůbec",
+      "translit": "poté",
+      "pronunciation": "pot-eh'",
+      "translated": true
+    },
+    "G4219": {
+      "definitions_cz": "tázací přísudek, v jaké době",
+      "translit": "póte",
+      "pronunciation": "pot'-eh",
+      "translated": true
+    },
+    "G4220": {
+      "definitions_cz": "tázací jako příslovce,\n který (ze dvou), t. j. je to ten či onen",
+      "translit": "póteron",
+      "pronunciation": "pot'-er-on",
+      "translated": true
+    },
+    "G4221": {
+      "definitions_cz": "nádoba na pití; podle\n nástavec, jeho obsah, t. j. šálek (nálev);\n přeneseně hodně nebo osud",
+      "translit": "potḗrion",
+      "pronunciation": "pot-ay'-ree-on",
+      "translated": true
+    },
+    "G4222": {
+      "definitions_cz": "dodat pití,\n zavlažovat",
+      "translit": "potízō",
+      "pronunciation": "pot-id'-zo",
+      "translated": true
+    },
+    "G4223": {
+      "definitions_cz": "studánky, t. j. minerální prameny; Potioli (tj.\n Puteoli), místo v Itálii",
+      "translit": "Potíoloi",
+      "pronunciation": "pot-ee'-ol-oy",
+      "translated": true
+    },
+    "G4224": {
+      "definitions_cz": "pitka nebo kolotoč",
+      "translit": "pótos",
+      "pronunciation": "pot'-os",
+      "translated": true
+    },
+    "G4225": {
+      "definitions_cz": "jako příslovce místa, někde, tj. téměř",
+      "translit": "poú",
+      "pronunciation": "poo",
+      "translated": true
+    },
+    "G4226": {
+      "definitions_cz": "jako příslovce místa; při (implicitně, k) čemu\n lokalitě",
+      "translit": "poû",
+      "pronunciation": "poo",
+      "translated": true
+    },
+    "G4227": {
+      "definitions_cz": "skromný; Pudes (t. j. Pudens), křesťan",
+      "translit": "Poúdēs",
+      "pronunciation": "poo'-dace",
+      "translated": true
+    },
+    "G4228": {
+      "definitions_cz": "\"noha\" (obrazně nebo doslova)",
+      "translit": "poús",
+      "pronunciation": "pooce",
+      "translated": true
+    },
+    "G4229": {
+      "definitions_cz": "skutek; implicitně aféra; rozšířením předmět\n (materiál)",
+      "translit": "prâgma",
+      "pronunciation": "prag'-mah",
+      "translated": true
+    },
+    "G4230": {
+      "definitions_cz": "transakce, tedy vyjednávání",
+      "translit": "pragmateía",
+      "pronunciation": "prag-mat-i'-ah",
+      "translated": true
+    },
+    "G4231": {
+      "definitions_cz": "zaměstnávat se, t. j. obchodovat",
+      "translit": "pragmateúomai",
+      "pronunciation": "prag-mat-yoo'-om-ahee",
+      "translated": true
+    },
+    "G4232": {
+      "definitions_cz": "prætorium nebo guvernérova soudní síň (někdy\n včetně celé budovy a tábora)",
+      "translit": "praitṓrion",
+      "pronunciation": "prahee-to'-ree-on",
+      "translated": true
+    },
+    "G4233": {
+      "definitions_cz": "praktik, tj. (zvláště), úředník\n sběratel",
+      "translit": "práktōr",
+      "pronunciation": "prak'-tor",
+      "translated": true
+    },
+    "G4234": {
+      "definitions_cz": "praxe, tj. (konkrétně) čin; rozšířením, a\n funkce",
+      "translit": "prâxis",
+      "pronunciation": "prax'-is",
+      "translated": true
+    },
+    "G4235": {
+      "definitions_cz": "jemný, tedy pokorný",
+      "translit": "prâios",
+      "pronunciation": "prah'-os",
+      "translated": true
+    },
+    "G4236": {
+      "definitions_cz": "jemnost, implicitně, pokora",
+      "translit": "praiótēs",
+      "pronunciation": "prah-ot'-ace",
+      "translated": true
+    },
+    "G4237": {
+      "definitions_cz": "pozemek na zahradě,\n tj. (implicitně, pravidelných postelí) řada (opakuje se v množném čísle od\n hebraismus, pro označení uspořádání)",
+      "translit": "prasiá",
+      "pronunciation": "pras-ee-ah'",
+      "translated": true
+    },
+    "G4238": {
+      "definitions_cz": "„cvičit“, tj. provádět opakovaně nebo navykle\n (tím se liší od [ŘECKO:4160]",
+      "translit": "prássō",
+      "pronunciation": "pras'-so",
+      "translated": true
+    },
+    "G4239": {
+      "definitions_cz": "mírný, tedy (implicitně) pokorný",
+      "translit": "praÿs",
+      "pronunciation": "prah-ooce'",
+      "translated": true
+    },
+    "G4240": {
+      "definitions_cz": "mírnost, tedy (implicitně) pokora",
+      "translit": "praÿtēs",
+      "pronunciation": "prah-oo'-tace",
+      "translated": true
+    },
+    "G4241": {
+      "definitions_cz": "tyčit se (být nápadný), tj. (tím\n implikace) být vhodný nebo správný (třetí osoba jednotného čísla přítomna\n orientační, často používané neosobně, je vhodné nebo správné)",
+      "translit": "prépō",
+      "pronunciation": "prep'-o",
+      "translated": true
+    },
+    "G4242": {
+      "definitions_cz": "seniorita (staršovstvo), tedy (implicitně) velvyslanectví\n (konkrétně velvyslanci)",
+      "translit": "presbeía",
+      "pronunciation": "pres-bi'-ah",
+      "translated": true
+    },
+    "G4243": {
+      "definitions_cz": "být senior, tj. (implicitně) působit jako a\n zástupce (obrazně kazatel)",
+      "translit": "presbeúō",
+      "pronunciation": "pres-byoo'-o",
+      "translated": true
+    },
+    "G4244": {
+      "definitions_cz": "řád starších, tzn.\n (speciálně), izraelský Sanhedrin nebo křesťanské \"presbytář\"",
+      "translit": "presbytérion",
+      "pronunciation": "pres-boo-ter'-ee-on",
+      "translated": true
     }
   }
 }
