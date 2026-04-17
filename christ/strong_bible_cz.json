@@ -79362,6 +79362,356 @@
       "hebrew": "רצח",
       "xlit": "retsach",
       "translated": true
+    },
+    "H7525": {
+      "definitions_cz": "Rezia = \"rozkoš\" | 1) Ašerita ze synů Ully",
+      "lemma": "רִצְיָא",
+      "hebrew": "רציא",
+      "xlit": "Ritsyâʼ",
+      "translated": true
+    },
+    "H7526": {
+      "definitions_cz": "Rezin = \"pevný\" | 1) král Damašku za vlády judských králů Jótama a Achaza | 2) předek rodiny chrámových otroků, kteří se vrátili ze zajetí se Zerubábelem",
+      "lemma": "רְצִין",
+      "hebrew": "רצין",
+      "xlit": "Rᵉtsîyn",
+      "translated": true
+    },
+    "H7527": {
+      "definitions_cz": "1) (Qal) vrtat, prorážet | 1a) ucha",
+      "lemma": "רָצַע",
+      "hebrew": "רצע",
+      "xlit": "râtsaʻ",
+      "translated": true
+    },
+    "H7528": {
+      "definitions_cz": "1) k sobě pasovat, pasovat, vzor | 1a) (Qal) k vybavení, návrh",
+      "lemma": "רָצַף",
+      "hebrew": "רצף",
+      "xlit": "râtsaph",
+      "translated": true
+    },
+    "H7529": {
+      "definitions_cz": "1) žhavý kámen, žhavý kámen nebo uhlí, plamen, blesk, jiskra",
+      "lemma": "רֶצֶף",
+      "hebrew": "רצף",
+      "xlit": "retseph",
+      "translated": true
+    },
+    "H7530": {
+      "definitions_cz": "Rezeph = \"žhavý kámen\" | 1) místo dobyté Asýrií",
+      "lemma": "רֶצֶף",
+      "hebrew": "רצף",
+      "xlit": "Retseph",
+      "translated": true
+    },
+    "H7531": {
+      "definitions_cz": "1) chodník | 2) žhavý kámen nebo uhlí, živé uhlí",
+      "lemma": "רִצְפָּה",
+      "hebrew": "רצפה",
+      "xlit": "ritspâh",
+      "translated": true
+    },
+    "H7532": {
+      "definitions_cz": "Rizpah = \"dláždění\" | 1) konkubína krále Saula a matka Armoniho a Mefibošeta",
+      "lemma": "רִצְפָּה",
+      "hebrew": "רצפה",
+      "xlit": "Ritspâh",
+      "translated": true
+    },
+    "H7533": {
+      "definitions_cz": "1) drtit, utlačovat | 1a) (Qal) | 1a1) rozdrtit, rozdrtit, rozdrtit | 1a2) drtit, utlačovat (obr.) | 1a3) drcený (příčestí pasivní) | 1b) (Niphal) k rozdrcení, rozbití | 1c) (Piel) | 1c1) rozdrtit na kousky | 1c2) těžce utlačovat (obr.) | 1d) (Poel) utlačovat (obr.) | 1e) (Hiphil) rozdrtit | 1f) (Hithpoel) se navzájem rozdrtit",
+      "lemma": "רָצַץ",
+      "hebrew": "רצץ",
+      "xlit": "râtsats",
+      "translated": true
+    },
+    "H7534": {
+      "definitions_cz": "adj | 1) hubená, štíhlá",
+      "lemma": "רַק",
+      "hebrew": "רק",
+      "xlit": "raq",
+      "translated": true
+    },
+    "H7535": {
+      "definitions_cz": "1) pouze, zcela jistě | 1a) pouze | 1b) pouze, nic, ale zcela (v omezení) | 1c) uložit, kromě (po záporu) | 1d) pouze, zcela, jistě (s kladným) | 1e) pokud pouze, pouze za předpokladu (předpona pro zvýraznění) | 1f) pouze, výhradně (pro zdůraznění)",
+      "lemma": "רַק",
+      "hebrew": "רק",
+      "xlit": "raq",
+      "translated": true
+    },
+    "H7536": {
+      "definitions_cz": "1) plivat",
+      "lemma": "רֹק",
+      "hebrew": "רק",
+      "xlit": "rôq",
+      "translated": true
+    },
+    "H7537": {
+      "definitions_cz": "1) (Qal) hnít",
+      "lemma": "רָקַב",
+      "hebrew": "רקב",
+      "xlit": "râqab",
+      "translated": true
+    },
+    "H7538": {
+      "definitions_cz": "1) hniloba, rozklad (vždy obr)",
+      "lemma": "רָקָב",
+      "hebrew": "רקב",
+      "xlit": "râqâb",
+      "translated": true
+    },
+    "H7539": {
+      "definitions_cz": "1) hniloba, rozklad, rozpad",
+      "lemma": "רִקָּבוֹן",
+      "hebrew": "רקבון",
+      "xlit": "riqqâbôwn",
+      "translated": true
+    },
+    "H7540": {
+      "definitions_cz": "1) přeskočit o | 1a) (Qal) přeskočit o | 1b) (Piel) tančit, skákat | 1c) (Hiphil) pro přeskočení",
+      "lemma": "רָקַד",
+      "hebrew": "רקד",
+      "xlit": "râqad",
+      "translated": true
+    },
+    "H7541": {
+      "definitions_cz": "1) chrám, chrám (hlavy)",
+      "lemma": "רַקָּה",
+      "hebrew": "רקה",
+      "xlit": "raqqâh",
+      "translated": true
+    },
+    "H7542": {
+      "definitions_cz": "Rakkon = \"chrám\" | 1) dobře zavlažované místo v Danu u Joppy",
+      "lemma": "רַקּוֹן",
+      "hebrew": "רקון",
+      "xlit": "Raqqôwn",
+      "translated": true
+    },
+    "H7543": {
+      "definitions_cz": "1) míchat, skládat | 1a) (Qal) | 1a1) míchat, skládat | 1a2) mísič, mísič, voňavkář (participium) (subst) | 1b) (Pual) smíšený (příčestí) | 1c) (Hiphil) smíchat",
+      "lemma": "רָקַח",
+      "hebrew": "רקח",
+      "xlit": "râqach",
+      "translated": true
+    },
+    "H7544": {
+      "definitions_cz": "1) koření, koření",
+      "lemma": "רֶקַח",
+      "hebrew": "רקח",
+      "xlit": "reqach",
+      "translated": true
+    },
+    "H7545": {
+      "definitions_cz": "1) směs koření, parfém, mast",
+      "lemma": "רֹקַח",
+      "hebrew": "רקח",
+      "xlit": "rôqach",
+      "translated": true
+    },
+    "H7546": {
+      "definitions_cz": "1) mastičkář, voňavkář",
+      "lemma": "רַקָּח",
+      "hebrew": "רקח",
+      "xlit": "raqqâch",
+      "translated": true
+    },
+    "H7547": {
+      "definitions_cz": "1) parfumerie, parfém, nemastný",
+      "lemma": "רַקֻּחַ",
+      "hebrew": "רקח",
+      "xlit": "raqquach",
+      "translated": true
+    },
+    "H7548": {
+      "definitions_cz": "1) mastičkář (žena), parfumér (žena)",
+      "lemma": "רַקָּחָה",
+      "hebrew": "רקחה",
+      "xlit": "raqqâchâh",
+      "translated": true
+    },
+    "H7549": {
+      "definitions_cz": "1) rozšířená plocha (plná), rozloha, obloha | 1a) rozloha (plochá jako základna, podpěra) | 1b) nebeská klenba podpírající vody nahoře | 1b1), které Hebrejci považují za pevné a podpůrné „vody“ výše",
+      "lemma": "רָקִיעַ",
+      "hebrew": "רקיע",
+      "xlit": "râqîyaʻ",
+      "translated": true
+    },
+    "H7550": {
+      "definitions_cz": "1) tenký koláč, oplatka",
+      "lemma": "רָקִיק",
+      "hebrew": "רקיק",
+      "xlit": "râqîyq",
+      "translated": true
+    },
+    "H7551": {
+      "definitions_cz": "1) pro zpestření, míchání barev | 1a) (Qal) variegator (dělnice v barvách) (příčestí) | 1b) (Pual) být dovedně tepaný nebo tkaný",
+      "lemma": "רָקַם",
+      "hebrew": "רקם",
+      "xlit": "râqam",
+      "translated": true
+    },
+    "H7552": {
+      "definitions_cz": "Rekem = \"pestření\" | n pr m 1) jeden z 5 králů Midian zabitých Izraelity | 2) jeden ze 4 synů Hebrona a otce Šammajova | 3) Manassite, syn Machira, jeho manželky Maachah | n pr loc | 4) město v Benjaminu; místo neznámé",
+      "lemma": "רֶקֶם",
+      "hebrew": "רקם",
+      "xlit": "Reqem",
+      "translated": true
+    },
+    "H7553": {
+      "definitions_cz": "1) pestré věci, vyšívané",
+      "lemma": "רִקְמָה",
+      "hebrew": "רקמה",
+      "xlit": "riqmâh",
+      "translated": true
+    },
+    "H7554": {
+      "definitions_cz": "1) tlouct, dupat, vytlouct, roztáhnout, natáhnout | 1a) (Qal) | 1a1) vyrazit, vytlouct | 1a2) ten, kdo vybije (příčestí) | 1b) (Piel) k překrytí, vyklepání (pro pokovení) | 1c) (Pual) vybitý (příčestí) | 1d) (Hiphil) k rozprostření (mraků)",
+      "lemma": "רָקַע",
+      "hebrew": "רקע",
+      "xlit": "râqaʻ",
+      "translated": true
+    },
+    "H7555": {
+      "definitions_cz": "1) expanze (desek)",
+      "lemma": "רִקֻּעַ",
+      "hebrew": "רקע",
+      "xlit": "riqquaʻ",
+      "translated": true
+    },
+    "H7556": {
+      "definitions_cz": "1) (Qal) plivat",
+      "lemma": "רָקַק",
+      "hebrew": "רקק",
+      "xlit": "râqaq",
+      "translated": true
+    },
+    "H7557": {
+      "definitions_cz": "Rakkath = \"břeh\" | 1) opevněné město v Naftali",
+      "lemma": "רַקַּת",
+      "hebrew": "רקת",
+      "xlit": "Raqqath",
+      "translated": true
+    },
+    "H7558": {
+      "definitions_cz": "1) povolení",
+      "lemma": "רִשְׁיוֹן",
+      "hebrew": "רשיון",
+      "xlit": "rishyôwn",
+      "translated": true
+    },
+    "H7559": {
+      "definitions_cz": "1) zapsat, poznámka | 1a) (Qal) to, co je vepsáno (příčestí)",
+      "lemma": "רָשַׁם",
+      "hebrew": "רשם",
+      "xlit": "râsham",
+      "translated": true
+    },
+    "H7560": {
+      "definitions_cz": "1) zapsat, podepsat | 1a) (P'al) vepsat, podepsat | 1b) (P'al) | 1b1) být zapsán, být napsán | 1b2) k podpisu",
+      "lemma": "רְשַׁם",
+      "hebrew": "רשם",
+      "xlit": "rᵉsham",
+      "translated": true
+    },
+    "H7561": {
+      "definitions_cz": "1) být zlý, jednat bezbožně | 1a) (Qal) | 1a1) být zlý, jednat bezbožně | 1a2) být vinen, být odsouzen | 1b) (hifil) | 1b1) odsoudit jako vinného (v občanskoprávních vztazích) | 1b2) odsoudit jako vinného (v etických nebo náboženských vztazích) | 1b3) jednat bezbožně (v etice a náboženství)",
+      "lemma": "רָשַׁע",
+      "hebrew": "רשע",
+      "xlit": "râshaʻ",
+      "translated": true
+    },
+    "H7562": {
+      "definitions_cz": "1) křivda, špatnost, vina | 1a) bezbožnost (jako násilí a zločin proti občanskému právu) | 1b) špatnost (nepřátel) | 1c) špatnost (v etických vztazích)",
+      "lemma": "רֶשַׁע",
+      "hebrew": "רשע",
+      "xlit": "reshaʻ",
+      "translated": true
+    },
+    "H7563": {
+      "definitions_cz": "1) zlý, zločinný | 1a) vinen jeden, jeden vinen trestným činem (subst) | 1b) zlý (bohu nepřátelský) | 1c) zlý, vinný hříchem (proti Bohu nebo člověku)",
+      "lemma": "רָשָׁע",
+      "hebrew": "רשע",
+      "xlit": "râshâʻ",
+      "translated": true
+    },
+    "H7564": {
+      "definitions_cz": "1) špatnost, vina | 1a) bezbožnost (v občanskoprávních vztazích) | 1b) špatnost (nepřátel) | 1c) špatnost (etická a náboženská)",
+      "lemma": "רִשְׁעָה",
+      "hebrew": "רשעה",
+      "xlit": "rishʻâh",
+      "translated": true
+    },
+    "H7565": {
+      "definitions_cz": "1) plamen, blesk, jiskra | 1a) plamen | 1b) požární šroub",
+      "lemma": "רֶשֶׁף",
+      "hebrew": "רשף",
+      "xlit": "resheph",
+      "translated": true
+    },
+    "H7566": {
+      "definitions_cz": "Resheph = \"plamen\" | 1) syn Efraimův",
+      "lemma": "רֶשֶׁף",
+      "hebrew": "רשף",
+      "xlit": "Resheph",
+      "translated": true
+    },
+    "H7567": {
+      "definitions_cz": "1) porazit, rozbít | 1a) (Poel) porazit, rozbít | 1b) (Pual) k poražení",
+      "lemma": "רָשַׁשׁ",
+      "hebrew": "רשש",
+      "xlit": "râshash",
+      "translated": true
+    },
+    "H7568": {
+      "definitions_cz": "1) čistý | 1a) čisté | 1a1) pro chytání | 1a2) rozsudku (obr.) | 1a3) vůdců vedoucích lidi k hříchu | 1a4) jako past na člověka | 1b) síť (mosazná pro oltář svatostánku)",
+      "lemma": "רֶשֶׁת",
+      "hebrew": "רשת",
+      "xlit": "resheth",
+      "translated": true
+    },
+    "H7569": {
+      "definitions_cz": "1) řetěz",
+      "lemma": "רַתּוֹק",
+      "hebrew": "רתוק",
+      "xlit": "rattôwq",
+      "translated": true
+    },
+    "H7570": {
+      "definitions_cz": "1) vařit | 1a) (Piel) způsobit var | 1b) (Pual) k varu | 1c) (Hiphil) způsobit var",
+      "lemma": "רָתַח",
+      "hebrew": "רתח",
+      "xlit": "râthach",
+      "translated": true
+    },
+    "H7571": {
+      "definitions_cz": "1) vaření",
+      "lemma": "רֶתַח",
+      "hebrew": "רתח",
+      "xlit": "rethach",
+      "translated": true
+    },
+    "H7572": {
+      "definitions_cz": "1) řetěz",
+      "lemma": "רַתִּיקָה",
+      "hebrew": "רתיקה",
+      "xlit": "rattîyqâh",
+      "translated": true
+    },
+    "H7573": {
+      "definitions_cz": "1) (Qal) vázat, přikládat",
+      "lemma": "רָתַם",
+      "hebrew": "רתם",
+      "xlit": "râtham",
+      "translated": true
+    },
+    "H7574": {
+      "definitions_cz": "1) metla, retem | 1a) druh rostliny metly",
+      "lemma": "רֶתֶם",
+      "hebrew": "רתם",
+      "xlit": "rethem",
+      "translated": true
     }
   }
 }
