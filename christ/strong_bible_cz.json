@@ -73524,6 +73524,244 @@
       "hebrew": "צופח",
       "xlit": "Tsôwphach",
       "translated": true
+    },
+    "H6691": {
+      "definitions_cz": "Zofar = \"vrabec\" | 1) 3. přítel Job",
+      "lemma": "צוֹפַר",
+      "hebrew": "צופר",
+      "xlit": "Tsôwphar",
+      "translated": true
+    },
+    "H6692": {
+      "definitions_cz": "1) kvést, zářit, třpytit | 1a) (Qal) | 1a1) vzkvétat | 1a2) zářit, zářit | 1b) (Hiphil) kvést, vysazovat květy, dávat květy | 2) (Hiphil) dívat se, koukat, mrknout, rozzářit oči",
+      "lemma": "צוּץ",
+      "hebrew": "צוץ",
+      "xlit": "tsûwts",
+      "translated": true
+    },
+    "H6693": {
+      "definitions_cz": "1) (Hiphil) omezovat, tlačit, přivádět do úžiny, tísnit, utlačovat",
+      "lemma": "צוּק",
+      "hebrew": "צוק",
+      "xlit": "tsûwq",
+      "translated": true
+    },
+    "H6694": {
+      "definitions_cz": "1) (Qal) vylít, roztavit",
+      "lemma": "צוּק",
+      "hebrew": "צוק",
+      "xlit": "tsûwq",
+      "translated": true
+    },
+    "H6695": {
+      "definitions_cz": "n m | 1) omezení, úzkost, úžina | 1a) tíseň, úzkost (obr.) | n f | 2) tlak, tíseň",
+      "lemma": "צוֹק",
+      "hebrew": "צוק",
+      "xlit": "tsôwq",
+      "translated": true
+    },
+    "H6696": {
+      "definitions_cz": "1) spoutat, obléhat, omezovat, křeč | 1a) (Qal) | 1a1) omezit, zajistit | 1a2) zavřít, obležet | 1a3) držet hubu, přiložit | 2) (Qal) projevit nepřátelství, být protivníkem, jednat jako nepřítel | 3) (Qal) tvořit, utvářet, vymezovat",
+      "lemma": "צוּר",
+      "hebrew": "צור",
+      "xlit": "tsûwr",
+      "translated": true
+    },
+    "H6697": {
+      "definitions_cz": "1) skála, útes | 1a) skalnatá stěna, útes | 1b) skála (s rovným povrchem) | 1c) blok kamene, balvan | 1d) rock (specifický) | 1e) skála (boží) | 1f) skála (pohanských bohů) n pr dei | 1g) Kámen",
+      "lemma": "צוּר",
+      "hebrew": "צור",
+      "xlit": "tsûwr",
+      "translated": true
+    },
+    "H6698": {
+      "definitions_cz": "Zur = \"skála\" | 1) otec Cozbi a jeden z 5 midianských knížat, kteří byli zabiti, když Balám padl | 2) syn Jechiela, otce nebo vůdce Gibeonu",
+      "lemma": "צוּר",
+      "hebrew": "צור",
+      "xlit": "Tsûwr",
+      "translated": true
+    },
+    "H6699": {
+      "definitions_cz": "1) forma, móda, design",
+      "lemma": "צוּרָה",
+      "hebrew": "צורה",
+      "xlit": "tsûwrâh",
+      "translated": true
+    },
+    "H6700": {
+      "definitions_cz": "Zuriel = \"má skála je Bůh\" | 1) syn Abihailův a náčelník merarijských levitů v době exodu",
+      "lemma": "צוּרִיאֵל",
+      "hebrew": "צוריאל",
+      "xlit": "Tsûwrîyʼêl",
+      "translated": true
+    },
+    "H6701": {
+      "definitions_cz": "Zurishaddai = \"moje skála je všemohoucí\" | 1) otec Šelumiela, náčelníka Simeonitů v době exodu",
+      "lemma": "צוּרִישַׁדַּי",
+      "hebrew": "צורישדי",
+      "xlit": "Tsûwrîyshadday",
+      "translated": true
+    },
+    "H6702": {
+      "definitions_cz": "1) (Hiphil) zapálit, spálit, zapálit",
+      "lemma": "צוּת",
+      "hebrew": "צות",
+      "xlit": "tsûwth",
+      "translated": true
+    },
+    "H6703": {
+      "definitions_cz": "1) oslňující, zářící, jasný, jasný",
+      "lemma": "צַח",
+      "hebrew": "צח",
+      "xlit": "tsach",
+      "translated": true
+    },
+    "H6704": {
+      "definitions_cz": "1) vyprahlá",
+      "lemma": "צִחֶה",
+      "hebrew": "צחה",
+      "xlit": "tsicheh",
+      "translated": true
+    },
+    "H6705": {
+      "definitions_cz": "1) (Qal) být oslnivý, zářit, zářit",
+      "lemma": "צָחַח",
+      "hebrew": "צחח",
+      "xlit": "tsâchach",
+      "translated": true
+    },
+    "H6706": {
+      "definitions_cz": "1) lesklý nebo oslnivý povrch, záře",
+      "lemma": "צְחִיחַ",
+      "hebrew": "צחיח",
+      "xlit": "tsᵉchîyach",
+      "translated": true
+    },
+    "H6707": {
+      "definitions_cz": "1) spálená země, vyprahlá, spálená",
+      "lemma": "צְחִיחָה",
+      "hebrew": "צחיחה",
+      "xlit": "tsᵉchîychâh",
+      "translated": true
+    },
+    "H6708": {
+      "definitions_cz": "1) lesklý nebo oslnivý povrch, holá místa",
+      "lemma": "צְחִיחִי",
+      "hebrew": "צחיחי",
+      "xlit": "tsᵉchîychîy",
+      "translated": true
+    },
+    "H6709": {
+      "definitions_cz": "1) smrad, nepříjemný zápach",
+      "lemma": "צַחֲנָה",
+      "hebrew": "צחנה",
+      "xlit": "tsachănâh",
+      "translated": true
+    },
+    "H6710": {
+      "definitions_cz": "1) spálený kraj, vyprahlá země",
+      "lemma": "צַחְצָחָה",
+      "hebrew": "צחצחה",
+      "xlit": "tsachtsâchâh",
+      "translated": true
+    },
+    "H6711": {
+      "definitions_cz": "1) smát se, vysmívat se, hrát si | 1a) (Qal) k smíchu | 1b) (Piel) | 1b1) žertovat | 1b2) sportovat, hrát si, sportovat, hrát si s, dělat si hračku",
+      "lemma": "צָחַק",
+      "hebrew": "צחק",
+      "xlit": "tsâchaq",
+      "translated": true
+    },
+    "H6712": {
+      "definitions_cz": "1) smích, smích",
+      "lemma": "צְחֹק",
+      "hebrew": "צחק",
+      "xlit": "tsᵉchôq",
+      "translated": true
+    },
+    "H6713": {
+      "definitions_cz": "1) červenošedá, žlutohnědá",
+      "lemma": "צַחַר",
+      "hebrew": "צחר",
+      "xlit": "tsachar",
+      "translated": true
+    },
+    "H6714": {
+      "definitions_cz": "Zohar = \"hnědý\" | 1) Judaita, syn Ashura, manželky Helah | 2) otec Efrona Chetejce | 3) jeden ze synů Simeonových; také 'Zerah'",
+      "lemma": "צֹחַר",
+      "hebrew": "צחר",
+      "xlit": "Tsôchar",
+      "translated": true
+    },
+    "H6715": {
+      "definitions_cz": "1) žlutohnědá",
+      "lemma": "צָחֹר",
+      "hebrew": "צחר",
+      "xlit": "tsâchôr",
+      "translated": true
+    },
+    "H6716": {
+      "definitions_cz": "1) loď",
+      "lemma": "צִי",
+      "hebrew": "צי",
+      "xlit": "tsîy",
+      "translated": true
+    },
+    "H6717": {
+      "definitions_cz": "Ziba = \"socha\" | 1) služebník Saulova, kterého David ustanovil správcem Jonatanova syna Mefibošeta",
+      "lemma": "צִיבָא",
+      "hebrew": "ציבא",
+      "xlit": "Tsîybâʼ",
+      "translated": true
+    },
+    "H6718": {
+      "definitions_cz": "1) lov, zvěř | 1a) lov | 1b) lovená zvěř | 2) poskytování potravin | 2a) zaopatření, strava, zásobování potravinami",
+      "lemma": "צַיִד",
+      "hebrew": "ציד",
+      "xlit": "tsayid",
+      "translated": true
+    },
+    "H6719": {
+      "definitions_cz": "1) myslivec",
+      "lemma": "צַיָּד",
+      "hebrew": "ציד",
+      "xlit": "tsayâd",
+      "translated": true
+    },
+    "H6720": {
+      "definitions_cz": "1) zaopatření, jídlo",
+      "lemma": "צֵידָה",
+      "hebrew": "צידה",
+      "xlit": "tsêydâh",
+      "translated": true
+    },
+    "H6721": {
+      "definitions_cz": "Sidon = \"lov\" | 1) starověké fénické město na pobřeží Středozemního moře severně od Tyru",
+      "lemma": "צִידוֹן",
+      "hebrew": "צידון",
+      "xlit": "Tsîydôwn",
+      "translated": true
+    },
+    "H6722": {
+      "definitions_cz": "Sidonci = viz lov \"lov\" | 1) obyvatel Sidonu",
+      "lemma": "צִידֹנִי",
+      "hebrew": "צידני",
+      "xlit": "Tsîydônîy",
+      "translated": true
+    },
+    "H6723": {
+      "definitions_cz": "1) sucho, sucho, poušť",
+      "lemma": "צִיָּה",
+      "hebrew": "ציה",
+      "xlit": "tsîyâh",
+      "translated": true
+    },
+    "H6724": {
+      "definitions_cz": "1) sucho, vysušená země nebo zem",
+      "lemma": "צִיוֹן",
+      "hebrew": "ציון",
+      "xlit": "tsîyôwn",
+      "translated": true
     }
   }
 }
