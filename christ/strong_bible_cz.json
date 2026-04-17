@@ -51677,6 +51677,706 @@
       "hebrew": "כושי",
       "xlit": "Kûwshîy",
       "translated": true
+    },
+    "H3570": {
+      "definitions_cz": "Cushi = \"jejich černost\" | 1) praotec Jehudi (Jer. 36.14) | 2) otec proroka Sofonjáše (Sep. 1,1)",
+      "lemma": "כּוּשִׁי",
+      "hebrew": "כושי",
+      "xlit": "Kûwshîy",
+      "translated": true
+    },
+    "H3571": {
+      "definitions_cz": "1) kušitská žena, Mojžíšova manželka, takzvaná Miriam a Áron",
+      "lemma": "כּוּשִׁית",
+      "hebrew": "כושית",
+      "xlit": "Kûwshîyth",
+      "translated": true
+    },
+    "H3572": {
+      "definitions_cz": "Cushan = \"jejich černota\" | 1) místo v Arábii nebo Mezopotámii; místo neznámé",
+      "lemma": "כּוּשָׁן",
+      "hebrew": "כושן",
+      "xlit": "Kûwshân",
+      "translated": true
+    },
+    "H3573": {
+      "definitions_cz": "Chushan-rishathaim = \"dvakrát zlý Cushan\" | 1) mezopotámský král poražený soudcem Otnielem, zetěm Kálebovým",
+      "lemma": "כּוּשַׁן רִשְׁעָתַיִם",
+      "hebrew": "כושן רשעתים",
+      "xlit": "Kûwshan Rishʻâthayim",
+      "translated": true
+    },
+    "H3574": {
+      "definitions_cz": "1) prosperita | 2) (TWOT) zpěv",
+      "lemma": "כּוֹשָׁרָה",
+      "hebrew": "כושרה",
+      "xlit": "kôwshârâh",
+      "translated": true
+    },
+    "H3575": {
+      "definitions_cz": "Cuth = \"drcení\" | 1) místo, odkud asyrský král Sargon importoval kolonisty do Izraele; pravděpodobně umístění asi 20 (32 km) mil severovýchodně od Babylonu",
+      "lemma": "כּוּת",
+      "hebrew": "כות",
+      "xlit": "Kûwth",
+      "translated": true
+    },
+    "H3576": {
+      "definitions_cz": "1) lhát, lhát, být lhář, být shledán lhářem, být nadarmo, selhat | 1a) (Qal) lhář (příčestí) | 1b) (Niphal) musí být prokázáno, že lže | 1c) (Piel) | 1c1) lhát, lhát, lhát s, klamat | 1c2) zklamat, selhat | 1d) (Hiphil) dělat lháře, dokázat, že jsi lhář",
+      "lemma": "כָּזַב",
+      "hebrew": "כזב",
+      "xlit": "kâzab",
+      "translated": true
+    },
+    "H3577": {
+      "definitions_cz": "1) lež, nepravda, lež, klamná věc",
+      "lemma": "כָּזָב",
+      "hebrew": "כזב",
+      "xlit": "kâzâb",
+      "translated": true
+    },
+    "H3578": {
+      "definitions_cz": "Chozeba = \"nepravda\" | 1) město v Judsku",
+      "lemma": "כֹּזְבָא",
+      "hebrew": "כזבא",
+      "xlit": "Kôzᵉbâʼ",
+      "translated": true
+    },
+    "H3579": {
+      "definitions_cz": "Cozbi = \"moje lež\" | 1) dcera Zura, náčelníka Midjánců, který byl zabit Pinchasem kvůli své cizoložství",
+      "lemma": "כֹּזְבִי",
+      "hebrew": "כזבי",
+      "xlit": "Kôzᵉbîy",
+      "translated": true
+    },
+    "H3580": {
+      "definitions_cz": "Chezib = \"nepravda\" | 1) město v Judsku",
+      "lemma": "כְּזִיב",
+      "hebrew": "כזיב",
+      "xlit": "Kᵉzîyb",
+      "translated": true
+    },
+    "H3581": {
+      "definitions_cz": "1) síla, síla, síla | 1a) lidská síla | 1b) síla (andělů) | 1c) moc (Boží) | 1d) síla (zvířat) | 1e) síla, produkce, bohatství (půdy) | 2) malý plaz, pravděpodobně druh ještěrky, který je nečistý | 2a) možná vyhynulé zvíře, přesný význam není znám",
+      "lemma": "כֹּחַ",
+      "hebrew": "כח",
+      "xlit": "kôach",
+      "translated": true
+    },
+    "H3582": {
+      "definitions_cz": "1) schovat se, zatajit, odseknout, podřezat, zpustošit, kopnout | 1a) (Niphal) | 1a1) ke skrytí | 1a2) být smazán, zničen, být odříznut | 1b) (Piel) zakrýt, skrýt | 1c) (Hiphil) | 1c1) skrýt | 1c2) smazat, zničit",
+      "lemma": "כָּחַד",
+      "hebrew": "כחד",
+      "xlit": "kâchad",
+      "translated": true
+    },
+    "H3583": {
+      "definitions_cz": "1) (Qal) malovati (oči), zdobiti barvou",
+      "lemma": "כָּחַל",
+      "hebrew": "כחל",
+      "xlit": "kâchal",
+      "translated": true
+    },
+    "H3584": {
+      "definitions_cz": "1) klamat, lhát, selhávat, hubnout, být zklamáním, být nepravdivý, být nedostatečný, být shledán lhářem, klamat, popírat, přetvářet, jednat falešně | 1a) (Qal) zhubnout | 1b) (Niphal) krčit se, předstírat poslušnost | 1c) (Piel) | 1c1) klamat, falešně popírat | 1c2) jednat klamavě | 1c3) krčit se | 1c4) zklamat, selhat | 1d) (Hithpael) krčit se, předstírat poslušnost",
+      "lemma": "כָּחַשׁ",
+      "hebrew": "כחש",
+      "xlit": "kâchash",
+      "translated": true
+    },
+    "H3585": {
+      "definitions_cz": "1) lhaní, podvod | 2) štíhlost, selhání",
+      "lemma": "כַּחַשׁ",
+      "hebrew": "כחש",
+      "xlit": "kachash",
+      "translated": true
+    },
+    "H3586": {
+      "definitions_cz": "1) klamný, falešný, klamný, lživý",
+      "lemma": "כֶּחָשׁ",
+      "hebrew": "כחש",
+      "xlit": "kechâsh",
+      "translated": true
+    },
+    "H3587": {
+      "definitions_cz": "1) pálení, branding",
+      "lemma": "כִּי",
+      "hebrew": "כי",
+      "xlit": "kîy",
+      "translated": true
+    },
+    "H3588": {
+      "definitions_cz": "1) že, pro, protože, když, jako by, jako, protože to, ale, pak, jistě, kromě, jistě, protože | 1a) že | 1a1) ano, skutečně | 1b) kdy (času) | 1b1) když, jestliže, ačkoli (s koncesivní silou) | 1c) protože, protože (příčinná souvislost) | 1d), ale (po záporu) | 1e) že jestliže, pro jestliže, opravdu jestliže, pro ačkoli, ale jestliže | 1f) ale spíše, ale | 1g) kromě | 1h) pouze, nicméně | 1i) určitě | 1j) to je | 1k), ale pokud | 1l) pro ačkoli | 1m), protože pro to",
+      "lemma": "כִּי",
+      "hebrew": "כי",
+      "xlit": "kîy",
+      "translated": true
+    },
+    "H3589": {
+      "definitions_cz": "1) zmar, zničení",
+      "lemma": "כִּיד",
+      "hebrew": "כיד",
+      "xlit": "kîyd",
+      "translated": true
+    },
+    "H3590": {
+      "definitions_cz": "1) jiskra",
+      "lemma": "כִידוֹד",
+      "hebrew": "כידוד",
+      "xlit": "kîydôwd",
+      "translated": true
+    },
+    "H3591": {
+      "definitions_cz": "1) oštěp, krátký meč, šipka | 2) goget, kus brnění na hrdlo (1Sa 17,6)",
+      "lemma": "כִּידוֹן",
+      "hebrew": "כידון",
+      "xlit": "kîydôwn",
+      "translated": true
+    },
+    "H3592": {
+      "definitions_cz": "Chidon = \"oštěp\" | 1) majitel nebo místo Uzzijášovy smrti za to, že se dotkl archy",
+      "lemma": "כִּידוֹן",
+      "hebrew": "כידון",
+      "xlit": "Kîydôwn",
+      "translated": true
+    },
+    "H3593": {
+      "definitions_cz": "1) útok, nápor, nástup",
+      "lemma": "כִּידוֹר",
+      "hebrew": "כידור",
+      "xlit": "kîydôwr",
+      "translated": true
+    },
+    "H3594": {
+      "definitions_cz": "Chiun = \"obrázek\" nebo \"sloupek\" | 1) pravděpodobně socha asyrsko-babylonského boha planety Saturn a symbolizovala izraelskou apostazi",
+      "lemma": "כִּיּוּן",
+      "hebrew": "כיון",
+      "xlit": "Kîyûwn",
+      "translated": true
+    },
+    "H3595": {
+      "definitions_cz": "1) hrnec, umyvadlo, umyvadlo, pánev | 1a) hrnec, kotel | 1b) ohniště, gril | 1c) umyvadlo, umyvadlo | 1d) nástupiště, jeviště",
+      "lemma": "כִּיּוֹר",
+      "hebrew": "כיור",
+      "xlit": "kîyôwr",
+      "translated": true
+    },
+    "H3596": {
+      "definitions_cz": "1) darebák, darebák",
+      "lemma": "כִּילַי",
+      "hebrew": "כילי",
+      "xlit": "kîylay",
+      "translated": true
+    },
+    "H3597": {
+      "definitions_cz": "1) velké sekery, sekera",
+      "lemma": "כֵּילַף",
+      "hebrew": "כילף",
+      "xlit": "kêylaph",
+      "translated": true
+    },
+    "H3598": {
+      "definitions_cz": "1) Plejády, souhvězdí sedmi hvězd",
+      "lemma": "כִּימָה",
+      "hebrew": "כימה",
+      "xlit": "Kîymâh",
+      "translated": true
+    },
+    "H3599": {
+      "definitions_cz": "1) taška, peněženka | 1a) na váhy, peníze",
+      "lemma": "כִּיס",
+      "hebrew": "כיס",
+      "xlit": "kîyç",
+      "translated": true
+    },
+    "H3600": {
+      "definitions_cz": "1) sporák, sporák, varná pec",
+      "lemma": "כִּיר",
+      "hebrew": "כיר",
+      "xlit": "kîyr",
+      "translated": true
+    },
+    "H3601": {
+      "definitions_cz": "1) vřeteno-celý, distaff",
+      "lemma": "כִּישׁוֹר",
+      "hebrew": "כישור",
+      "xlit": "kîyshôwr",
+      "translated": true
+    },
+    "H3602": {
+      "definitions_cz": "1) takto",
+      "lemma": "כָּכָה",
+      "hebrew": "ככה",
+      "xlit": "kâkâh",
+      "translated": true
+    },
+    "H3603": {
+      "definitions_cz": "1) kolo | 1a) okrouhlý okres (okolí údolí Jordánu) | 1b) kulatý bochník (chleba) | 1c) kulatá váha, talent (ze zlata, stříbra, bronzu, železa)",
+      "lemma": "כִּכָּר",
+      "hebrew": "ככר",
+      "xlit": "kikkâr",
+      "translated": true
+    },
+    "H3604": {
+      "definitions_cz": "1) talent",
+      "lemma": "כִּכֵּר",
+      "hebrew": "ככר",
+      "xlit": "kikkêr",
+      "translated": true
+    },
+    "H3605": {
+      "definitions_cz": "1) všechny, celé | 1a) všechny, celé | 1b) jakýkoli, každý, každý, cokoli | 1c) totalita, všechno",
+      "lemma": "כֹּל",
+      "hebrew": "כל",
+      "xlit": "kôl",
+      "translated": true
+    },
+    "H3606": {
+      "definitions_cz": "1) celý, celý, celý | 1a) celek, vše | 1b) každý, jakýkoli, žádný",
+      "lemma": "כֹּל",
+      "hebrew": "כל",
+      "xlit": "kôl",
+      "translated": true
+    },
+    "H3607": {
+      "definitions_cz": "1) omezit, omezit, zadržet, zavřít, držet zpátky, zdržet se, zakázat | 1a) (Qal) | 1a1) držet hubu | 1a2) omezit | 1a3) zadržet | 1b) (Niphal) být zadržen | 1c) (Piel) dokončit",
+      "lemma": "כָּלָא",
+      "hebrew": "כלא",
+      "xlit": "kâlâʼ",
+      "translated": true
+    },
+    "H3608": {
+      "definitions_cz": "1) uvěznění, vězení, omezení",
+      "lemma": "כֶּלֶא",
+      "hebrew": "כלא",
+      "xlit": "keleʼ",
+      "translated": true
+    },
+    "H3609": {
+      "definitions_cz": "Chileab = \"jako jeho otec\" | 1) 2. syn Davidův, od Abigail",
+      "lemma": "כִּלְאָב",
+      "hebrew": "כלאב",
+      "xlit": "Kilʼâb",
+      "translated": true
+    },
+    "H3610": {
+      "definitions_cz": "1) dva druhy, směs | 1a) zakázané praktiky mezi dobytkem (křížení), semeny (setí) a látkovými oděvy (materiál)",
+      "lemma": "כִּלְאַיִם",
+      "hebrew": "כלאים",
+      "xlit": "kilʼayim",
+      "translated": true
+    },
+    "H3611": {
+      "definitions_cz": "1) pes | 1a) pes (doslovně) | 1b) pohrdání nebo ponižování (obr.) | 1c) pohanské oběti | 1d) kultovní mužské prostitutky (obr.)",
+      "lemma": "כֶּלֶב",
+      "hebrew": "כלב",
+      "xlit": "keleb",
+      "translated": true
+    },
+    "H3612": {
+      "definitions_cz": "Caleb = \"pes\" | 1) zbožný syn Jefunneho a věrný špeh, který příznivě hlásil zaslíbenou zemi a naléhal na její dobytí | 2) syn Chezróna a vnuk Fáreza a pravnuka Judy a otce Hura a děda zvěda Káleba",
+      "lemma": "כָּלֵב",
+      "hebrew": "כלב",
+      "xlit": "Kâlêb",
+      "translated": true
+    },
+    "H3613": {
+      "definitions_cz": "Caleb-ephratah = \"pes nebo hromada popela\" | 1) místo v Gileadu",
+      "lemma": "כָּלֵב אֶפְרָתָה",
+      "hebrew": "כלב אפרתה",
+      "xlit": "Kâlêb ʼEphrâthâh",
+      "translated": true
+    },
+    "H3614": {
+      "definitions_cz": "Calebit = viz Caleb \"pes\" | 1) potomek Caleba",
+      "lemma": "כָּלִבּוֹ",
+      "hebrew": "כלבו",
+      "xlit": "Kâlibbôw",
+      "translated": true
+    },
+    "H3615": {
+      "definitions_cz": "1) dosáhnout, přestat, konzumovat, určit, ukončit, selhat, dokončit, být kompletní, být splněn, být ukončen, být u konce, být dokončen, být utracen | 1a) (Qal) | 1a1) být úplný, být na konci | 1a2) dokončit, dokončit | 1a3) má být splněno, musí být splněno | 1a4) určit, vykreslit (špatný smysl) | 1a5) k utracení, vyčerpání | 1a6) ztratit se, být vyčerpaný, selhat | 1a7) skončit, zmizet, zahynout, být zničen | 1b) (Piel) | 1b1) doplnit, přinést",
+      "lemma": "כָּלָה",
+      "hebrew": "כלה",
+      "xlit": "kâlâh",
+      "translated": true
+    },
+    "H3616": {
+      "definitions_cz": "1) selhávání s touhou, touhou, touhou",
+      "lemma": "כָּלֶה",
+      "hebrew": "כלה",
+      "xlit": "kâleh",
+      "translated": true
+    },
+    "H3617": {
+      "definitions_cz": "1) dokončení, ukončení, úplný konec, úplné zničení, spotřeba, zničení | 1a) dokončení | 1a1) úplně, úplně (adv) | 1b) úplné zničení, konzumace, zničení",
+      "lemma": "כָּלָה",
+      "hebrew": "כלה",
+      "xlit": "kâlâh",
+      "translated": true
+    },
+    "H3618": {
+      "definitions_cz": "1) nevěsta, snacha | 1a) snacha | 1b) nevěsta, mladá manželka",
+      "lemma": "כַּלָּה",
+      "hebrew": "כלה",
+      "xlit": "kallâh",
+      "translated": true
+    },
+    "H3619": {
+      "definitions_cz": "1) klec, košík, klec pro psa",
+      "lemma": "כְּלוּב",
+      "hebrew": "כלוב",
+      "xlit": "kᵉlûwb",
+      "translated": true
+    },
+    "H3620": {
+      "definitions_cz": "Chelub = \"v kleci\" | 1) potomek Judy | 2) otec Ezriho, jednoho z Davidových důstojníků",
+      "lemma": "כְּלוּב",
+      "hebrew": "כלוב",
+      "xlit": "Kᵉlûwb",
+      "translated": true
+    },
+    "H3621": {
+      "definitions_cz": "Chelub ai = \"můj v kleci\" | 1) syn Ezróna z Judska; také 'Caleb'",
+      "lemma": "כְּלוּבַי",
+      "hebrew": "כלובי",
+      "xlit": "Kᵉlûwbay",
+      "translated": true
+    },
+    "H3622": {
+      "definitions_cz": "Chelluh = \"můj úspěch\" | 1) muž s cizí manželkou v době Ezry",
+      "lemma": "כְּלוּהַי",
+      "hebrew": "כלוהי",
+      "xlit": "Kᵉlûwhay",
+      "translated": true
+    },
+    "H3623": {
+      "definitions_cz": "1) zásnuby, zásnuby",
+      "lemma": "כְּלוּלָה",
+      "hebrew": "כלולה",
+      "xlit": "kᵉlûwlâh",
+      "translated": true
+    },
+    "H3624": {
+      "definitions_cz": "1) plná síla, pevná nebo drsná síla, ráznost",
+      "lemma": "כֶּלַח",
+      "hebrew": "כלח",
+      "xlit": "kelach",
+      "translated": true
+    },
+    "H3625": {
+      "definitions_cz": "Calah = \"energičnost\" | 1) jedno z nejstarších měst Asýrie; možná moderní 'Nimrud' ležící na soutoku řek Tigris a Zab",
+      "lemma": "כֶּלַח",
+      "hebrew": "כלח",
+      "xlit": "Kelach",
+      "translated": true
+    },
+    "H3626": {
+      "definitions_cz": "Col-hozeh = \"vševidoucí\" | 1) otec opraváře jeruzalémských hradeb za časů Nehemjáše",
+      "lemma": "כׇּל־חֹזֶה",
+      "hebrew": "כלחזה",
+      "xlit": "Kol-Chôzeh",
+      "translated": true
+    },
+    "H3627": {
+      "definitions_cz": "1) předmět, nádoba, nářadí, náčiní | 1a) článek, předmět (obecně) | 1b) nádobí, nářadí, zařízení, nádoba | 1b1) nářadí (lovu nebo války) | 1b2) nástroj (hudby) | 1b3) nářadí, nástroj (práce) | 1b4) zařízení, jho (volů) | 1b5) nádobí, nábytek | 1c) nádoba, nádoba (obecně) | 1d) plavidla (čluny) z papírového rákosu",
+      "lemma": "כְּלִי",
+      "hebrew": "כלי",
+      "xlit": "kᵉlîy",
+      "translated": true
+    },
+    "H3628": {
+      "definitions_cz": "1) vězení",
+      "lemma": "כְּלִיא",
+      "hebrew": "כליא",
+      "xlit": "kᵉlîyʼ",
+      "translated": true
+    },
+    "H3629": {
+      "definitions_cz": "1) ledviny | 1a) fyzického orgánu (lit.) | 1b) sídla emocí a náklonnosti (obr.) | 1c) obětních zvířat | 2) (TWOT) otěže",
+      "lemma": "כִּלְיָה",
+      "hebrew": "כליה",
+      "xlit": "kilyâh",
+      "translated": true
+    },
+    "H3630": {
+      "definitions_cz": "Chilion = \"pining\" | 1) Efraimec a syn Elimelecha od Noemi a zesnulého manžela Ruth (nebo možná zesnulého manžela Orpy)",
+      "lemma": "כִּלְיוֹן",
+      "hebrew": "כליון",
+      "xlit": "Kilyôwn",
+      "translated": true
+    },
+    "H3631": {
+      "definitions_cz": "1) dokončení, zničení, spotřeba, zničení | 2) selhávání, pindání",
+      "lemma": "כִּלָּיוֹן",
+      "hebrew": "כליון",
+      "xlit": "killâyôwn",
+      "translated": true
+    },
+    "H3632": {
+      "definitions_cz": "adj | 1) celý, celý, dokonalý | adv | 2) celý | subst | 3) celá, celá zápalná oběť, holocaust, celistvost",
+      "lemma": "כָּלִיל",
+      "hebrew": "כליל",
+      "xlit": "kâlîyl",
+      "translated": true
+    },
+    "H3633": {
+      "definitions_cz": "Calcol nebo Chalcol = \"udržování\" | 1) syn nebo potomek Zeracha z Judska a jeden z mudrců, s nimiž byl Šalomoun srovnáván",
+      "lemma": "כַּלְכֹּל",
+      "hebrew": "כלכל",
+      "xlit": "Kalkôl",
+      "translated": true
+    },
+    "H3634": {
+      "definitions_cz": "1) dokončit, zdokonalit, zkompletovat, zdokonalit | 1a) (Qal) k dokonalosti",
+      "lemma": "כָּלַל",
+      "hebrew": "כלל",
+      "xlit": "kâlal",
+      "translated": true
+    },
+    "H3635": {
+      "definitions_cz": "1) dokončit, dokončit | 1a) (Shaphel) dokončit | 1b) (Ištaphel) bude doplněno",
+      "lemma": "כְּלַל",
+      "hebrew": "כלל",
+      "xlit": "kᵉlal",
+      "translated": true
+    },
+    "H3636": {
+      "definitions_cz": "Chelal = \"dokončeno\" | 1) Izraelita, který měl v době Ezdráše cizí manželku",
+      "lemma": "כְּלָל",
+      "hebrew": "כלל",
+      "xlit": "Kᵉlâl",
+      "translated": true
+    },
+    "H3637": {
+      "definitions_cz": "1) urážet, hanbit se, ponižovat, červenat se, stydět se, být zahanben, být vyčítán, být uveden do zmatku, být ponižován | 1a) (Niphal) | 1a1) být ponížen, stydět se | 1a2) být zahanben, zneuctěn, zahanben | 1b) (hifil) | 1b1) zahanbit, urazit, ponížit, způsobit hanbu | 1b2) projevovat hanbu | 1c) (Hophal) | 1c1) být uražen, být ponížen | 1c2) být zahanben, zneuctěn, zahanben",
+      "lemma": "כָּלַם",
+      "hebrew": "כלם",
+      "xlit": "kâlam",
+      "translated": true
+    },
+    "H3638": {
+      "definitions_cz": "Chilmad = \"ohrada\" | 1) město Asýrie zmíněné ve spojení se Shebou a Asshur",
+      "lemma": "כִּלְמָד",
+      "hebrew": "כלמד",
+      "xlit": "Kilmâd",
+      "translated": true
+    },
+    "H3639": {
+      "definitions_cz": "1) hanba, výčitka, hanba, zmatek, dehonestace, urážka, potupa | 1a) urážka, výtka | 1b) výtka, potupa",
+      "lemma": "כְּלִמָּה",
+      "hebrew": "כלמה",
+      "xlit": "kᵉlimmâh",
+      "translated": true
+    },
+    "H3640": {
+      "definitions_cz": "1) hanba, hanba, hanba",
+      "lemma": "כְּלִמּוּת",
+      "hebrew": "כלמות",
+      "xlit": "kᵉlimmûwth",
+      "translated": true
+    },
+    "H3641": {
+      "definitions_cz": "Calneh nebo Calno = \"pevnost Anu\" | 1) město Babylonie jmenované mezi městy Nimrod | 1a) možná moderní 'Niffer' | 2) asyrské město poblíž Aleppa | 2a) možná stejný jako 1, protože byl zajat Asýrií v 8. století před naším letopočtem",
+      "lemma": "כַּלְנֶה",
+      "hebrew": "כלנה",
+      "xlit": "Kalneh",
+      "translated": true
+    },
+    "H3642": {
+      "definitions_cz": "1) (Qal) toužit, omdlévat, omdlévat steskem",
+      "lemma": "כָּמַהּ",
+      "hebrew": "כמה",
+      "xlit": "kâmahh",
+      "translated": true
+    },
+    "H3643": {
+      "definitions_cz": "Chimham = \"jejich touha\" | n pr m | 1) následovník a pravděpodobně syn Barzillaie Gileadského, který se vrátil zpoza Jordánska s Davidem; David mu zřejmě daroval majetek v Betlémě, na kterém v pozdějších dobách stával hostinec | n pr loc | 2) hostinec v Betlémě, který se zjevně nachází v majetku, který dal David Chimhamovi, stoupenci nebo synovi Barzillaie Gileadského",
+      "lemma": "כִּמְהָם",
+      "hebrew": "כמהם",
+      "xlit": "Kimhâm",
+      "translated": true
+    },
+    "H3644": {
+      "definitions_cz": "adv | 1) jako, jako, z nichž podobné | conj | 2) když podle toho, jak to bylo",
+      "lemma": "כְּמוֹ",
+      "hebrew": "כמו",
+      "xlit": "kᵉmôw",
+      "translated": true
+    },
+    "H3645": {
+      "definitions_cz": "Chemosh = \"subduer\" | 1) národní božstvo Moábců a bůh Ammonitů | 1a) také identifikován s „Baal-peor“, „Baal-zebub“, „Mars“ a „Saturn“ | 1b) uctívání tohoto boha zavedl do Jeruzaléma Šalomoun a zrušil judský král Josijáš",
+      "lemma": "כְּמוֹשׁ",
+      "hebrew": "כמוש",
+      "xlit": "Kᵉmôwsh",
+      "translated": true
+    },
+    "H3646": {
+      "definitions_cz": "1) kmín, kmín | 1a) semeno používané jako koření",
+      "lemma": "כַּמֹּן",
+      "hebrew": "כמן",
+      "xlit": "kammôn",
+      "translated": true
+    },
+    "H3647": {
+      "definitions_cz": "1) uložit, uložit | 1a) (Qal) uložen (příčestí)",
+      "lemma": "כָּמַס",
+      "hebrew": "כמס",
+      "xlit": "kâmaç",
+      "translated": true
+    },
+    "H3648": {
+      "definitions_cz": "1) toužit, být zapálený, být černý (žhavý), být teplý a něžný, být nebo být horký, být horký, být emocionálně rozrušený | 1a) (Niphal) | 1a1) aby se zahřála a byla křehká | 1a2) být nebo se rozpálit",
+      "lemma": "כָּמַר",
+      "hebrew": "כמר",
+      "xlit": "kâmar",
+      "translated": true
+    },
+    "H3649": {
+      "definitions_cz": "1) kněz, modlářský kněz",
+      "lemma": "כָּמָר",
+      "hebrew": "כמר",
+      "xlit": "kâmâr",
+      "translated": true
+    },
+    "H3650": {
+      "definitions_cz": "1) tma, šero, tma",
+      "lemma": "כִּמְרִיר",
+      "hebrew": "כמריר",
+      "xlit": "kimrîyr",
+      "translated": true
+    },
+    "H3651": {
+      "definitions_cz": "adv | 1) tak, tedy, takto | 1a) tedy, takže | 1b) jen tak | 1c) proto | 1d) tak...jako (spárováno s adv) | 1e) pak | 1f) pokud (ve frázi) | 1g) (s přípravou) | 1g1), proto je to tak (specifické) | 1g2) dosud | 1g3) proto z tohoto důvodu (obecně) | 1g4) poté | 1g5) v takovém případě | adj | 2) správně, spravedlivě, čestně, pravdivě, pravdivě | 2a) správně, spravedlivě, čestně | 2b) správně | 2c) pravda, opravdová | 2d) pravda!, správně!, správně! (v souhlasu)",
+      "lemma": "כֵּן",
+      "hebrew": "כן",
+      "xlit": "kên",
+      "translated": true
+    },
+    "H3652": {
+      "definitions_cz": "1) tak, tak, následovně",
+      "lemma": "כֵּן",
+      "hebrew": "כן",
+      "xlit": "kên",
+      "translated": true
+    },
+    "H3653": {
+      "definitions_cz": "1) základna, stojan, podstavec, kancelář, noha, místo, majetek | 1a) podstavec, podstavec | 1b) kancelář, místo",
+      "lemma": "כֵּן",
+      "hebrew": "כן",
+      "xlit": "kên",
+      "translated": true
+    },
+    "H3654": {
+      "definitions_cz": "1) komár, komár, komár-roj",
+      "lemma": "כֵּן",
+      "hebrew": "כן",
+      "xlit": "kên",
+      "translated": true
+    },
+    "H3655": {
+      "definitions_cz": "1) k titulu, příjmení, být příjmením, uvést epiteton nebo přídomek, uvést lichotivý titul | 1a) (Piel) volat jménem, ​​dát titul, titul",
+      "lemma": "כָּנָה",
+      "hebrew": "כנה",
+      "xlit": "kânâh",
+      "translated": true
+    },
+    "H3656": {
+      "definitions_cz": "Canneh = \"udělit lichotivý titul\" | 1) město zřejmě v Mezopotámii",
+      "lemma": "כַּנֶּה",
+      "hebrew": "כנה",
+      "xlit": "Kanneh",
+      "translated": true
+    },
+    "H3657": {
+      "definitions_cz": "1) kořen, opora (stromu), výhonek, zásoba",
+      "lemma": "כַּנָּה",
+      "hebrew": "כנה",
+      "xlit": "kannâh",
+      "translated": true
+    },
+    "H3658": {
+      "definitions_cz": "1) lyra, harfa",
+      "lemma": "כִּנּוֹר",
+      "hebrew": "כנור",
+      "xlit": "kinnôwr",
+      "translated": true
+    },
+    "H3659": {
+      "definitions_cz": "Coniáš = \"Jehova ustanoví\" | 1) jiné jméno pro judského krále Jehojakina, dalšího předposledního krále na trůnu před zajetím",
+      "lemma": "כׇּנְיָהוּ",
+      "hebrew": "כניהו",
+      "xlit": "Konyâhûw",
+      "translated": true
+    },
+    "H3660": {
+      "definitions_cz": "1) tak, tak, tedy, následovně",
+      "lemma": "כְּנֵמָא",
+      "hebrew": "כנמא",
+      "xlit": "kᵉnêmâʼ",
+      "translated": true
+    },
+    "H3661": {
+      "definitions_cz": "1) (Qal) kořen, opora (stromu), výhonek, zásoba",
+      "lemma": "כָּנַן",
+      "hebrew": "כנן",
+      "xlit": "kânan",
+      "translated": true
+    },
+    "H3662": {
+      "definitions_cz": "Chenani = \"moje stanice\" | 1) jeden z Levitů, kteří pomáhali při slavnostním očištění lidu za Ezdráše",
+      "lemma": "כְּנָנִי",
+      "hebrew": "כנני",
+      "xlit": "Kᵉnânîy",
+      "translated": true
+    },
+    "H3663": {
+      "definitions_cz": "Chenaniah = \"Jehova ustanovil\" | 1) vůdce levitské písně, který asistoval v průvodu při přepravě archy | 2) izharský důstojník Davidův",
+      "lemma": "כְּנַנְיָה",
+      "hebrew": "כנניה",
+      "xlit": "Kᵉnanyâh",
+      "translated": true
+    },
+    "H3664": {
+      "definitions_cz": "1) sbírat, sbírat, balit | 1a) (Qal) shromáždit | 1b) (Piel) shromáždit | 1c) (Hithpael) shromáždit se, zabalit se",
+      "lemma": "כָּנַס",
+      "hebrew": "כנס",
+      "xlit": "kânaç",
+      "translated": true
+    },
+    "H3665": {
+      "definitions_cz": "1) být pokorný, být pokořen, být podroben, být svržen, být nízký, být poddán, být podroben | 1a) (Niphal) | 1a1) pokořit se | 1a2) být pokořen, být pokořen | 1b) (hifil) | 1b1) pokořit | 1b2) podrobit",
+      "lemma": "כָּנַע",
+      "hebrew": "כנע",
+      "xlit": "kânaʻ",
+      "translated": true
+    },
+    "H3666": {
+      "definitions_cz": "1) svazek, taška, balení",
+      "lemma": "כִּנְעָה",
+      "hebrew": "כנעה",
+      "xlit": "kinʻâh",
+      "translated": true
+    },
+    "H3667": {
+      "definitions_cz": "Kanaán = \"nížina\" | n pr m | 1) 4. syn Hama a předek Féničanů a různých národů, které obývaly pobřeží Palestiny | n pr loc | 2) země západně od Jordánu osídlená potomky Kanaánu a následně dobytá Izraelity pod Jozuem | n m | 3) obchodník, obchodník",
+      "lemma": "כְּנַעַן",
+      "hebrew": "כנען",
+      "xlit": "Kᵉnaʻan",
+      "translated": true
+    },
+    "H3668": {
+      "definitions_cz": "Chenaanah = \"obchodník\" | 1) otec Sedekiáše, falešného proroka Achaba | 2) syn Bilhana, vnuka Jediaela a pravnuka Benjamina a zakladatele domu Benjamina",
+      "lemma": "כְּנַעֲנָה",
+      "hebrew": "כנענה",
+      "xlit": "Kᵉnaʻănâh",
+      "translated": true
+    },
+    "H3669": {
+      "definitions_cz": "Kananejský = viz Kána \"horlivý\" | adj | 1) potomek obyvatele Kanaánu | n | 2) potomek nebo obyvatel Kanaánu | 3) obchodník, obchodník",
+      "lemma": "כְּנַעַנִי",
+      "hebrew": "כנעני",
+      "xlit": "Kᵉnaʻanîy",
+      "translated": true
     }
   }
 }
