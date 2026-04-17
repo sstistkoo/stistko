@@ -70374,6 +70374,706 @@
       "hebrew": "עשר",
       "xlit": "ʻâsâr",
       "translated": true
+    },
+    "H6241": {
+      "definitions_cz": "1) desátý díl, desátek",
+      "lemma": "עִשָּׂרוֹן",
+      "hebrew": "עשרון",
+      "xlit": "ʻissârôwn",
+      "translated": true
+    },
+    "H6242": {
+      "definitions_cz": "1) dvacátý, dvacátý",
+      "lemma": "עֶשְׂרִים",
+      "hebrew": "עשרים",
+      "xlit": "ʻesrîym",
+      "translated": true
+    },
+    "H6243": {
+      "definitions_cz": "1) dvacet",
+      "lemma": "עֶשְׂרִין",
+      "hebrew": "עשרי",
+      "xlit": "ʻesrîyn",
+      "translated": true
+    },
+    "H6244": {
+      "definitions_cz": "1) (Qal) promarnit, selhat",
+      "lemma": "עָשֵׁשׁ",
+      "hebrew": "עשש",
+      "xlit": "ʻâshêsh",
+      "translated": true
+    },
+    "H6245": {
+      "definitions_cz": "1) (Qal) být hladký, lesklý, zářit | 2) (Hithpael) přemýšlet",
+      "lemma": "עָשַׁת",
+      "hebrew": "עשת",
+      "xlit": "ʻâshath",
+      "translated": true
+    },
+    "H6246": {
+      "definitions_cz": "1) (P'al) myslet, plánovat",
+      "lemma": "עֲשִׁת",
+      "hebrew": "עשת",
+      "xlit": "ʻăshith",
+      "translated": true
+    },
+    "H6247": {
+      "definitions_cz": "1) deska, deska, něco vyrobeného",
+      "lemma": "עֶשֶׁת",
+      "hebrew": "עשת",
+      "xlit": "ʻesheth",
+      "translated": true
+    },
+    "H6248": {
+      "definitions_cz": "1) myšlenka, nápad",
+      "lemma": "עַשְׁתּוּת",
+      "hebrew": "עשתות",
+      "xlit": "ʻashtûwth",
+      "translated": true
+    },
+    "H6249": {
+      "definitions_cz": "1) jedna, jedenáctá, jedenáctá | 1a) jedna v kombinaci s deseti (H06240)",
+      "lemma": "עַשְׁתֵּי",
+      "hebrew": "עשתי",
+      "xlit": "ʻashtêy",
+      "translated": true
+    },
+    "H6250": {
+      "definitions_cz": "1) myslel",
+      "lemma": "עֶשְׁתֹּנָה",
+      "hebrew": "עשתנה",
+      "xlit": "ʻeshtônâh",
+      "translated": true
+    },
+    "H6251": {
+      "definitions_cz": "1) ovečka, stádo, přírůstek, mládě",
+      "lemma": "עַשְׁתְּרָה",
+      "hebrew": "עשתרה",
+      "xlit": "ʻashtᵉrâh",
+      "translated": true
+    },
+    "H6252": {
+      "definitions_cz": "Ashtaroth nebo Astaroth = \"hvězda\" | n pr f božstvo | 1) falešné bohyně v kanaánském náboženství, obvykle související s kultem plodnosti | n pr loc | 2) město v Bášanu východně od Jordánu dané Manassesovi | 2a) stejně jako H06255",
+      "lemma": "עַשְׁתָּרוֹת",
+      "hebrew": "עשתרות",
+      "xlit": "ʻAshtârôwth",
+      "translated": true
+    },
+    "H6253": {
+      "definitions_cz": "Ashtoreth = \"hvězda\" | 1) hlavní ženské božstvo Féničanů uctívané ve válce a plodnosti | 1a) také „Ištar“ z Asýrie a „Astarte“ od Řeků a Římanů",
+      "lemma": "עַשְׁתֹּרֶת",
+      "hebrew": "עשתרת",
+      "xlit": "ʻAshtôreth",
+      "translated": true
+    },
+    "H6254": {
+      "definitions_cz": "Ashterathite = viz Astaroth \"hvězda\" | 1) obyvatel města Aštarot",
+      "lemma": "עַשְׁתְּרָתִי",
+      "hebrew": "עשתרתי",
+      "xlit": "ʻAshtᵉrâthîy",
+      "translated": true
+    },
+    "H6255": {
+      "definitions_cz": "Ashtoreth-karnaim = \"Ashtoreth dvou rohů nebo vrcholů\" | 1) město v Bášanu východně od Jordánu dané Manassesovi | 1a) stejně jako H06252",
+      "lemma": "עַשְׁתְּרֹת קַרְנַיִם",
+      "hebrew": "עשתרת קרנים",
+      "xlit": "ʻAshtᵉrôth Qarnayim",
+      "translated": true
+    },
+    "H6256": {
+      "definitions_cz": "1) čas | 1a) čas (události) | 1b) čas (obvyklý) | 1c) zkušenosti, štěstí | 1d) výskyt, příležitost",
+      "lemma": "עֵת",
+      "hebrew": "עת",
+      "xlit": "ʻêth",
+      "translated": true
+    },
+    "H6257": {
+      "definitions_cz": "1) být připraven, připravit, připravit | 1a) (Piel) připravit | 1b) (Hithpael) k přípravě",
+      "lemma": "עָתַד",
+      "hebrew": "עתד",
+      "xlit": "ʻâthad",
+      "translated": true
+    },
+    "H6258": {
+      "definitions_cz": "1) nyní | 1a) nyní | 1b) ve frázích",
+      "lemma": "עַתָּה",
+      "hebrew": "עתה",
+      "xlit": "ʻattâh",
+      "translated": true
+    },
+    "H6259": {
+      "definitions_cz": "1) připraveno, připraveno",
+      "lemma": "עָתוּד",
+      "hebrew": "עתוד",
+      "xlit": "ʻâthûwd",
+      "translated": true
+    },
+    "H6260": {
+      "definitions_cz": "1) beran, kozel, hlavní",
+      "lemma": "עַתּוּד",
+      "hebrew": "עתוד",
+      "xlit": "ʻattûwd",
+      "translated": true
+    },
+    "H6261": {
+      "definitions_cz": "1) včas, připraven",
+      "lemma": "עִתִּי",
+      "hebrew": "עתי",
+      "xlit": "ʻittîy",
+      "translated": true
+    },
+    "H6262": {
+      "definitions_cz": "Attai = \"příležitost\" | 1) Judaita, vnuk Šešana Jerahmeelského po dceři Ahlai, kterou provdal za Jarhu, svou egyptskou otrokyni; jeho vnuk Zabad byl jedním z Davidových mocných válečníků | 2) jeden z gádských válečníků se lví tváří, velitelé vojska, kteří se připojili k Davidovi v poušti | 3) 2. syn judského krále Rechoboáma od Maachy, dcery Absolonovy",
+      "lemma": "עַתַּי",
+      "hebrew": "עתי",
+      "xlit": "ʻAttay",
+      "translated": true
+    },
+    "H6263": {
+      "definitions_cz": "1) připraveno, připraveno",
+      "lemma": "עֲתִיד",
+      "hebrew": "עתיד",
+      "xlit": "ʻăthîyd",
+      "translated": true
+    },
+    "H6264": {
+      "definitions_cz": "1) připraveno, připraveno | 1a) připraven | 1b) připravený, zručný | 1c) připravené, hrozící | 1d) připravený, uložený, poklad",
+      "lemma": "עָתִיד",
+      "hebrew": "עתיד",
+      "xlit": "ʻâthîyd",
+      "translated": true
+    },
+    "H6265": {
+      "definitions_cz": "Athaiah = \"Jehova pomohl\" | 1) potomek Judy přes Peres; bydlel v Jeruzalémě po návratu z vyhnanství v Babylóně",
+      "lemma": "עֲתָיָה",
+      "hebrew": "עתיה",
+      "xlit": "ʻĂthâyâh",
+      "translated": true
+    },
+    "H6266": {
+      "definitions_cz": "1) vynikající, převyšující, výběr, skvělý | 2) (TWOT) odolné",
+      "lemma": "עָתִיק",
+      "hebrew": "עתיק",
+      "xlit": "ʻâthîyq",
+      "translated": true
+    },
+    "H6267": {
+      "definitions_cz": "1) odstraněno, odstaveno, staré, prastaré, odebrané | 1a) odstraněno, odstaveno | 1b) starý, prastarý",
+      "lemma": "עַתִּיק",
+      "hebrew": "עתיק",
+      "xlit": "ʻattîyq",
+      "translated": true
+    },
+    "H6268": {
+      "definitions_cz": "1) starověký, pokročilý, letitý, starý, odebraný",
+      "lemma": "עַתִּיק",
+      "hebrew": "עתיק",
+      "xlit": "ʻattîyq",
+      "translated": true
+    },
+    "H6269": {
+      "definitions_cz": "Athach = \"ubytovací místo\" | 1) město v Judsku",
+      "lemma": "עֲתָךְ",
+      "hebrew": "עתך",
+      "xlit": "ʻĂthâk",
+      "translated": true
+    },
+    "H6270": {
+      "definitions_cz": "Athlai = \"koho Jehova sužuje\" | 1) jeden ze synů Bebai a ten, který za Ezdráše propustil svou cizí manželku",
+      "lemma": "עַתְלַי",
+      "hebrew": "עתלי",
+      "xlit": "ʻAthlay",
+      "translated": true
+    },
+    "H6271": {
+      "definitions_cz": "Ataliah = \"ztrápená Hospodinem\" | n pr m | 1) syn Jerohama z kmene Benjamína | 2) otec Ješaiáše ze synů Elama, který byl jednou z hlav rodiny, která se vrátila s Ezdrášem z vyhnanství | n pr f | 3) dcera Achaba a Jezábel a manželka judského krále Jehorama; zabiják všech členů judské královské rodiny s výjimkou jednoho dítěte jménem Joaše, které byl ukryt veleknězem Jojadou, dokud neuplynulo 6 let a Jojada vedl revoluci, aby ho uvrhla.",
+      "lemma": "עֲתַלְיָה",
+      "hebrew": "עתליה",
+      "xlit": "ʻĂthalyâh",
+      "translated": true
+    },
+    "H6272": {
+      "definitions_cz": "1) (Niphal) být spálen, být spálen | 1a) znamená pochybný",
+      "lemma": "עָתַם",
+      "hebrew": "עתם",
+      "xlit": "ʻâtham",
+      "translated": true
+    },
+    "H6273": {
+      "definitions_cz": "Othni = \"lev Jehovův\" | 1) Levita, syn Šemajáše, prvorozený Obed-edomův",
+      "lemma": "עׇתְנִי",
+      "hebrew": "עתני",
+      "xlit": "ʻOthnîy",
+      "translated": true
+    },
+    "H6274": {
+      "definitions_cz": "Othniel = \"lev boží\" | 1) syn Kenaze, mladšího bratra Kálebova, a manžela Achsy, dcery Kálebovy a jeho vlastní neteře; první soudce Izraele, který po smrti Jozue vysvobodil Izraelity z útlaku Chushanrishathaim",
+      "lemma": "עׇתְנִיאֵל",
+      "hebrew": "עתניאל",
+      "xlit": "ʻOthnîyʼêl",
+      "translated": true
+    },
+    "H6275": {
+      "definitions_cz": "1) přestěhovat se, pokračovat, postoupit, jít dál, zestárnout, být odstraněn | 1a) (Qal) | 1a1) přesunout | 1a2) postoupit (v letech), zestárnout a slábnout | 1b) (hifil) | 1b1) posunout se vpřed, pokračovat, pokračovat | 1b2) odstranit | 1b3) přepsat",
+      "lemma": "עָתַק",
+      "hebrew": "עתק",
+      "xlit": "ʻâthaq",
+      "translated": true
+    },
+    "H6276": {
+      "definitions_cz": "1) předaný, pokročilý, trvalý, trvanlivý, cenný, významný, převyšující",
+      "lemma": "עָתֵק",
+      "hebrew": "עתק",
+      "xlit": "ʻâthêq",
+      "translated": true
+    },
+    "H6277": {
+      "definitions_cz": "1) vpřed, odvážný, arogantní | 1a) řeči",
+      "lemma": "עָתָק",
+      "hebrew": "עתק",
+      "xlit": "ʻâthâq",
+      "translated": true
+    },
+    "H6278": {
+      "definitions_cz": "Ittah-kazin = \"čas soudce\" | 1) jeden z orientačních bodů hranice Zabulun; místo neznámé",
+      "lemma": "עֵת קָצִין",
+      "hebrew": "עת קצין",
+      "xlit": "ʻÊth Qâtsîyn",
+      "translated": true
+    },
+    "H6279": {
+      "definitions_cz": "1) modlit se, prosit, prosit | 1a) (Qal) modlit se, prosit | 1b) (Niphal) k prosbě, prosit | 1c) (Hiphil) prosit, prosit",
+      "lemma": "עָתַר",
+      "hebrew": "עתר",
+      "xlit": "ʻâthar",
+      "translated": true
+    },
+    "H6280": {
+      "definitions_cz": "1) být hojný | 1a) (Niphal) být hojný | 1b) (Hiphil) množit se, stávat se hojným",
+      "lemma": "עָתַר",
+      "hebrew": "עתר",
+      "xlit": "ʻâthar",
+      "translated": true
+    },
+    "H6281": {
+      "definitions_cz": "Éter = \"hojný\" | 1) město v nížinách Judy přidělené Simeonovi",
+      "lemma": "עֶתֶר",
+      "hebrew": "עתר",
+      "xlit": "ʻEther",
+      "translated": true
+    },
+    "H6282": {
+      "definitions_cz": "1) prosebník, ctitel | 2) vůně, kadidlo (vonný kouř)",
+      "lemma": "עָתָר",
+      "hebrew": "עתר",
+      "xlit": "ʻâthâr",
+      "translated": true
+    },
+    "H6283": {
+      "definitions_cz": "1) hojnost, nadbytek, hojnost",
+      "lemma": "עֲתֶרֶת",
+      "hebrew": "עתרת",
+      "xlit": "ʻăthereth",
+      "translated": true
+    },
+    "H6284": {
+      "definitions_cz": "1) štěpit na kusy, rozbíjet na kusy, rozbíjet | 1a) (Hiphil) rozštípat na kusy, rozbít na kusy",
+      "lemma": "פָּאָה",
+      "hebrew": "פאה",
+      "xlit": "pâʼâh",
+      "translated": true
+    },
+    "H6285": {
+      "definitions_cz": "1) roh, hrana, strana, čtvrtina, konec | 1a) roh | 1b) strana",
+      "lemma": "פֵּאָה",
+      "hebrew": "פאה",
+      "xlit": "pêʼâh",
+      "translated": true
+    },
+    "H6286": {
+      "definitions_cz": "1) oslavovat, krášlit, zdobit | 1a) (Piel) oslavit, zkrášlit | 1b) (Hithpael) | 1b1) oslavit se | 1b2) získat slávu pro sebe, být oslaven | 2) (Piel) jít přes větve",
+      "lemma": "פָּאַר",
+      "hebrew": "פאר",
+      "xlit": "pâʼar",
+      "translated": true
+    },
+    "H6287": {
+      "definitions_cz": "1) pokrývka hlavy, ozdoba, turban",
+      "lemma": "פְּאֵר",
+      "hebrew": "פאר",
+      "xlit": "pᵉʼêr",
+      "translated": true
+    },
+    "H6288": {
+      "definitions_cz": "1) větev, větev, výhonek",
+      "lemma": "פְּאֹרָה",
+      "hebrew": "פארה",
+      "xlit": "pᵉʼôrâh",
+      "translated": true
+    },
+    "H6289": {
+      "definitions_cz": "1) svítit, zahřívat | 1a) znamená pochybný",
+      "lemma": "פָּארוּר",
+      "hebrew": "פארור",
+      "xlit": "pâʼrûwr",
+      "translated": true
+    },
+    "H6290": {
+      "definitions_cz": "Paran = \"místo jeskyní\" | 1) oblast divočiny ohraničená na severu Palestinou, na západě pustinou Etham, na jihu pouští Sinaj a na východě údolím Arabah; exodus byl přes tuto oblast a pravděpodobně všech 18 zastávek bylo v této oblasti",
+      "lemma": "פָּארָן",
+      "hebrew": "פארן",
+      "xlit": "Pâʼrân",
+      "translated": true
+    },
+    "H6291": {
+      "definitions_cz": "1) zelený fík, raný obr",
+      "lemma": "פַּג",
+      "hebrew": "פג",
+      "xlit": "pag",
+      "translated": true
+    },
+    "H6292": {
+      "definitions_cz": "1) odporná věc, odmítnout | 1a) nečisté obětní maso (pouze použít)",
+      "lemma": "פִּגּוּל",
+      "hebrew": "פגול",
+      "xlit": "piggûwl",
+      "translated": true
+    },
+    "H6293": {
+      "definitions_cz": "1) setkat se, setkat se, dosáhnout, prosit, přimlouvat se | 1a) (Qal) | 1a1) setkat se, rozsvítit se, připojit se | 1a2) setkat se (laskavě) | 1a3) setkat se, padnout na (nepřátelství) | 1a4) setkat se, prosit (na žádost) | 1a5) udeřit, dotknout se (hranice) | 1b) (hifil) | 1b1) způsobit rozsvícení | 1b2) přimět k prosbě | 1b3) prosit, vložit | 1b4) provést útok | 1b5) k dosažení značky",
+      "lemma": "פָּגַע",
+      "hebrew": "פגע",
+      "xlit": "pâgaʻ",
+      "translated": true
+    },
+    "H6294": {
+      "definitions_cz": "1) výskyt, událost, náhoda",
+      "lemma": "פֶּגַע",
+      "hebrew": "פגע",
+      "xlit": "pegaʻ",
+      "translated": true
+    },
+    "H6295": {
+      "definitions_cz": "Pagiel = \"událost Boží\" | 1) syn Ocranův a náčelník kmene Asher v době exodu",
+      "lemma": "פַּגְעִיאֵל",
+      "hebrew": "פגעיאל",
+      "xlit": "Pagʻîyʼêl",
+      "translated": true
+    },
+    "H6296": {
+      "definitions_cz": "1) (Piel) být vyčerpaný, být mdlý",
+      "lemma": "פָּגַר",
+      "hebrew": "פגר",
+      "xlit": "pâgar",
+      "translated": true
+    },
+    "H6297": {
+      "definitions_cz": "1) mrtvola, zdechlina, pomník, stéla | 1a) mrtvola (člověka) | 1b) jatečně upravená těla (zvířat)",
+      "lemma": "פֶּגֶר",
+      "hebrew": "פגר",
+      "xlit": "peger",
+      "translated": true
+    },
+    "H6298": {
+      "definitions_cz": "1) setkat se, připojit se, setkat se | 1a) (Qal) setkat se, setkat se | 1b) (Niphal) setkat se spolu, setkat se navzájem | 1c) (Piel) setkat se, setkat se",
+      "lemma": "פָּגַשׁ",
+      "hebrew": "פגש",
+      "xlit": "pâgash",
+      "translated": true
+    },
+    "H6299": {
+      "definitions_cz": "1) vykoupit, vykoupit, zachránit, dodat | 1a) (Qal) k výkupnému | 1b) (Niphal) bude vykoupen | 1c) (Hiphil), aby bylo možné někoho vykoupit | 1d) (Hophal) vykoupen",
+      "lemma": "פָּדָה",
+      "hebrew": "פדה",
+      "xlit": "pâdâh",
+      "translated": true
+    },
+    "H6300": {
+      "definitions_cz": "Pedahel = \"vykoupen Bohem\" | 1) syn Ammihuda a kníže kmene Neftali",
+      "lemma": "פְּדַהְאֵל",
+      "hebrew": "פדהאל",
+      "xlit": "Pᵉdahʼêl",
+      "translated": true
+    },
+    "H6301": {
+      "definitions_cz": "Pedahzur = \"Skála vykoupila\" | 1) otec Gamaliela, který byl vůdcem kmene Manasses v době exodu",
+      "lemma": "פְּדָהצוּר",
+      "hebrew": "פדהצור",
+      "xlit": "Pᵉdâhtsûwr",
+      "translated": true
+    },
+    "H6302": {
+      "definitions_cz": "1) výkupné",
+      "lemma": "פָּדוּי",
+      "hebrew": "פדוי",
+      "xlit": "pâdûwy",
+      "translated": true
+    },
+    "H6303": {
+      "definitions_cz": "Padon = \"výkupné\" | 1) hlava nebo předek rodiny chrámových otroků, kteří se vrátili se Zerubábelem",
+      "lemma": "פָּדוֹן",
+      "hebrew": "פדון",
+      "xlit": "Pâdôwn",
+      "translated": true
+    },
+    "H6304": {
+      "definitions_cz": "1) výkupné",
+      "lemma": "פְּדוּת",
+      "hebrew": "פדות",
+      "xlit": "pᵉdûwth",
+      "translated": true
+    },
+    "H6305": {
+      "definitions_cz": "Pedaiah = \"Jehova vykoupil\" | 1) otec Zebudy, manželky krále Josiáše a matky judského krále Joakima | 2) otec Zerubbábela a bratr Shealtiela, který je obvykle nazýván otcem Zerubbábela pravděpodobně kvůli nedostatku dědice ze Shealtiela, který byl v přímé následnictví",
+      "lemma": "פְּדָיָה",
+      "hebrew": "פדיה",
+      "xlit": "Pᵉdâyâh",
+      "translated": true
+    },
+    "H6306": {
+      "definitions_cz": "1) výkupné, vykoupení",
+      "lemma": "פִּדְיוֹם",
+      "hebrew": "פדיום",
+      "xlit": "pidyôwm",
+      "translated": true
+    },
+    "H6307": {
+      "definitions_cz": "Padan nebo Padan-aram = \"pole\" | 1) rovina nebo náhorní plošina v severní Mezopotámii v Aramu, oblasti Sýrie",
+      "lemma": "פַּדָּן",
+      "hebrew": "פדן",
+      "xlit": "Paddân",
+      "translated": true
+    },
+    "H6308": {
+      "definitions_cz": "1) (Qal) dodat | 1a) znamená nejistý",
+      "lemma": "פָּדַע",
+      "hebrew": "פדע",
+      "xlit": "pâdaʻ",
+      "translated": true
+    },
+    "H6309": {
+      "definitions_cz": "1) tuk, lůj",
+      "lemma": "פֶּדֶר",
+      "hebrew": "פדר",
+      "xlit": "peder",
+      "translated": true
+    },
+    "H6310": {
+      "definitions_cz": "peh | 1) ústa | 1a) ústa (člověka) | 1b) ústa (jako orgán řeči) | 1c) ústa (zvířat) | 1d) ústí, otvor, ústí (studny, řeky atd.) | 1e) končetina, konec pim | 2) váha rovnající se jedné třetině šekelu se vyskytuje pouze v 1Sa 13:21",
+      "lemma": "פֶּה",
+      "hebrew": "פה",
+      "xlit": "peh",
+      "translated": true
+    },
+    "H6311": {
+      "definitions_cz": "1) sem, odtud, sem | 1a) zde | 1b) zde",
+      "lemma": "פֹּה",
+      "hebrew": "פה",
+      "xlit": "pôh",
+      "translated": true
+    },
+    "H6312": {
+      "definitions_cz": "Puah nebo Pua nebo Phuvah = \"skvělý\" | 1) syn Issacharův | 1a) také „Pua“ a „Phuvah“ | 2) muž Issachar, otec Tola, soudce Izraele po Abimelechovi",
+      "lemma": "פּוּאָה",
+      "hebrew": "פואה",
+      "xlit": "Pûwʼâh",
+      "translated": true
+    },
+    "H6313": {
+      "definitions_cz": "1) otupit, být slabý, být otupělý | 1a) (Qal) být slabý | 1b) (Niphal) být znecitlivěn",
+      "lemma": "פּוּג",
+      "hebrew": "פוג",
+      "xlit": "pûwg",
+      "translated": true
+    },
+    "H6314": {
+      "definitions_cz": "1) otupení, zastavení, odpočinek, úleva",
+      "lemma": "פּוּגָה",
+      "hebrew": "פוגה",
+      "xlit": "pûwgâh",
+      "translated": true
+    },
+    "H6315": {
+      "definitions_cz": "1) dýchat, foukat | 1a) (Qal) dýchat | 1b) (hifil) | 1b1) způsobit výdech nebo nádech | 1b2) bafnout, smrkat | 1b3) vzrušovat, rozněcovat | 1b4) nafouknout, nadechnout si to | 1b5) vydechnout, vyslovit | 1b6) foukat, odstřelovat",
+      "lemma": "פּוּחַ",
+      "hebrew": "פוח",
+      "xlit": "pûwach",
+      "translated": true
+    },
+    "H6316": {
+      "definitions_cz": "Phut nebo Put = \"mašle\" | 1) národ a lidé ze severní Afriky; pravděpodobně Libyjci",
+      "lemma": "פּוּט",
+      "hebrew": "פוט",
+      "xlit": "Pûwṭ",
+      "translated": true
+    },
+    "H6317": {
+      "definitions_cz": "Putiel = \"sužován Bohem\" | 1) otec manželky Eleazara, syna Áronova",
+      "lemma": "פּוּטִיאֵל",
+      "hebrew": "פוטיאל",
+      "xlit": "Pûwṭîyʼêl",
+      "translated": true
+    },
+    "H6318": {
+      "definitions_cz": "Potiphar = \"patřící slunci\" | 1) faraónův důstojník, šéf katů a pán, kterému byl Josef prodán jako otrok",
+      "lemma": "פּוֹטִיפַר",
+      "hebrew": "פוטיפר",
+      "xlit": "Pôwṭîyphar",
+      "translated": true
+    },
+    "H6319": {
+      "definitions_cz": "Poti-pherah = \"ten, koho dal Ra\" | 1) Egypťan, kněz On, otec Asenath, manželky, kterou dal farao Josefovi",
+      "lemma": "פּוֹטִי פֶרַע",
+      "hebrew": "פוטי פרע",
+      "xlit": "Pôwṭîy Pheraʻ",
+      "translated": true
+    },
+    "H6320": {
+      "definitions_cz": "1) antimon, stibium, černá barva | 1a) oční kosmetika",
+      "lemma": "פּוּךְ",
+      "hebrew": "פוך",
+      "xlit": "pûwk",
+      "translated": true
+    },
+    "H6321": {
+      "definitions_cz": "1) fazole",
+      "lemma": "פּוֹל",
+      "hebrew": "פול",
+      "xlit": "pôwl",
+      "translated": true
+    },
+    "H6322": {
+      "definitions_cz": "Pul = \"rozlišovací\" | 1) Babylonské jméno pro Tiglat-pilesera III., krále Asýrie",
+      "lemma": "פּוּל",
+      "hebrew": "פול",
+      "xlit": "Pûwl",
+      "translated": true
+    },
+    "H6323": {
+      "definitions_cz": "1) (Qal) být zmaten, být rozptýlen | 1a) znamená pochybný",
+      "lemma": "פּוּן",
+      "hebrew": "פון",
+      "xlit": "pûwn",
+      "translated": true
+    },
+    "H6324": {
+      "definitions_cz": "Punité = viz Puah \"rozházená\" | 1) potomci Puacha, syna Issacharova",
+      "lemma": "פּוּנִי",
+      "hebrew": "פוני",
+      "xlit": "Pûwnîy",
+      "translated": true
+    },
+    "H6325": {
+      "definitions_cz": "Punon = \"temnota\" | 1) stanice Izraele na jejich toulkách pouští",
+      "lemma": "פּוּנֹן",
+      "hebrew": "פונן",
+      "xlit": "Pûwnôn",
+      "translated": true
+    },
+    "H6326": {
+      "definitions_cz": "Puah = \"skvělý\" | 1) jedna ze 2 porodních asistentek Hebrejců, které faraon nařídil zabít všechny mužské děti narozené Izraeli; čas Mojžíšův",
+      "lemma": "פּוּעָה",
+      "hebrew": "פועה",
+      "xlit": "Pûwʻâh",
+      "translated": true
+    },
+    "H6327": {
+      "definitions_cz": "1) rozptýlit se, být rozptýlen, být rozptýlen | 1a) (Qal) být rozptýlen, být rozptýlen | 1b) (Niphal) | 1b1) k rozptýlení | 1b2) k šíření do zahraničí | 1c) (Hiphil) rozptýlit | 1d) Hithpael) rozptyl | 2) (Qal) proudit, přetékat | 3) rozbít | 3a) (Polel) k rozbití | 3b) (Pilpel) roztrhat na kusy",
+      "lemma": "פּוּץ",
+      "hebrew": "פוץ",
+      "xlit": "pûwts",
+      "translated": true
+    },
+    "H6328": {
+      "definitions_cz": "1) navíjet, potácet se, klopýtat | 1a) (Qal) k navíjení | 1b) (hifil) | 1b1) kolébat se, kolébat | 1b2) způsobovat kymácení",
+      "lemma": "פּוּק",
+      "hebrew": "פוק",
+      "xlit": "pûwq",
+      "translated": true
+    },
+    "H6329": {
+      "definitions_cz": "1) vynést, vybavit, propagovat, vyjít, vydat | 1a) (Hiphil) | 1a1) vyrábět, dodávat | 1a2) vyvolat, vyvolat, získat, způsobit vyjít z | 1a3) podporovat | 1a4) přimět jít ven",
+      "lemma": "פּוּק",
+      "hebrew": "פוק",
+      "xlit": "pûwq",
+      "translated": true
+    },
+    "H6330": {
+      "definitions_cz": "1) vrávorání, vrávorání, klopýtání | 1a) Výčitky svědomí (obr.)",
+      "lemma": "פּוּקָה",
+      "hebrew": "פוקה",
+      "xlit": "pûwqâh",
+      "translated": true
+    },
+    "H6331": {
+      "definitions_cz": "1) (Hiphil) zlomit, rozdrtit",
+      "lemma": "פּוּר",
+      "hebrew": "פור",
+      "xlit": "pûwr",
+      "translated": true
+    },
+    "H6332": {
+      "definitions_cz": "Pur nebo Purim = \"šarže\" nebo \"kus\" | 1) partie | 1a) zvláštní svátek mezi postexilními Židy na oslavu jejich vysvobození z Hamanova zničení prostřednictvím hrdinských činů královny Ester",
+      "lemma": "פּוּר",
+      "hebrew": "פור",
+      "xlit": "Pûwr",
+      "translated": true
+    },
+    "H6333": {
+      "definitions_cz": "1) lis na víno",
+      "lemma": "פּוּרָה",
+      "hebrew": "פורה",
+      "xlit": "pûwrâh",
+      "translated": true
+    },
+    "H6334": {
+      "definitions_cz": "Poratha = \"plodnost\" nebo \"frustrace\" | 1) jeden z deseti synů Hamana, nepřítele Mordechaje a Ester",
+      "lemma": "פּוֹרָתָא",
+      "hebrew": "פורתא",
+      "xlit": "Pôwrâthâʼ",
+      "translated": true
+    },
+    "H6335": {
+      "definitions_cz": "1) na jaře asi | 1a) (Qal) prohánět se, jednat hrdě (obr.) | 2) (Niphal) být rozptýlen, být rozšířen",
+      "lemma": "פּוּשׁ",
+      "hebrew": "פוש",
+      "xlit": "pûwsh",
+      "translated": true
+    },
+    "H6336": {
+      "definitions_cz": "Puhites = \"otevřenost\" | 1) judská rodina",
+      "lemma": "פּוּתִי",
+      "hebrew": "פותי",
+      "xlit": "Pûwthîy",
+      "translated": true
+    },
+    "H6337": {
+      "definitions_cz": "1) rafinované nebo čisté zlato",
+      "lemma": "פָּז",
+      "hebrew": "פז",
+      "xlit": "pâz",
+      "translated": true
+    },
+    "H6338": {
+      "definitions_cz": "1) zušlechťovat, zušlechťovat | 1a) (Hophal) k upřesnění",
+      "lemma": "פָּזַז",
+      "hebrew": "פזז",
+      "xlit": "pâzaz",
+      "translated": true
+    },
+    "H6339": {
+      "definitions_cz": "1) svázat, být obratný, být pružný | 1a) (Qal) být svižný | 1b) (Piel) skočit, ukázat hbitost",
+      "lemma": "פָּזַז",
+      "hebrew": "פזז",
+      "xlit": "pâzaz",
+      "translated": true
+    },
+    "H6340": {
+      "definitions_cz": "1) rozptýlit, rozptýlit | 1a) (Qal) | 1a1) rozházet | 1a2) rozptýlené (příčestí) | 1b) (Niphal) k rozptýlení | 1c) (Piel) k rozptylu | 1d) (Pual) k rozptýlení",
+      "lemma": "פָּזַר",
+      "hebrew": "פזר",
+      "xlit": "pâzar",
+      "translated": true
     }
   }
 }
