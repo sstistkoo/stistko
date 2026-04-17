@@ -49227,6 +49227,356 @@
       "hebrew": "ילקיט",
       "xlit": "yalqûwṭ",
       "translated": true
+    },
+    "H3220": {
+      "definitions_cz": "1) moře | 1a) Středozemní moře | 1b) Rudé moře | 1c) Mrtvé moře | 1d) Galilejské jezero | 1e) moře (obecně) | 1f) mohutná řeka (Nil) | 1g) moře (velká pánev na nádvoří chrámu) | 1h) k moři, na západ, na západ",
+      "lemma": "יָם",
+      "hebrew": "ים",
+      "xlit": "yâm",
+      "translated": true
+    },
+    "H3221": {
+      "definitions_cz": "1) moře",
+      "lemma": "יָם",
+      "hebrew": "ים",
+      "xlit": "yâm",
+      "translated": true
+    },
+    "H3222": {
+      "definitions_cz": "1) s významem nejistý, což znamená možná muly nebo horké prameny",
+      "lemma": "יֵם",
+      "hebrew": "ים",
+      "xlit": "yêm",
+      "translated": true
+    },
+    "H3223": {
+      "definitions_cz": "Jemuel = \"den Boží\" | 1) nejstarší syn Simeonův",
+      "lemma": "יְמוּאֵל",
+      "hebrew": "ימואל",
+      "xlit": "Yᵉmûwʼêl",
+      "translated": true
+    },
+    "H3224": {
+      "definitions_cz": "Jemima = \"den za dnem\" | 1) jedna z Jobových dcer narozených po restaurování",
+      "lemma": "יְמִימָה",
+      "hebrew": "ימימה",
+      "xlit": "Yᵉmîymâh",
+      "translated": true
+    },
+    "H3225": {
+      "definitions_cz": "1) pravá, pravá ruka, pravá strana | 1a) pravá ruka | 1b) vpravo (ve směru) | 1c) na jih (směr pravé ruky při pohledu na východ)",
+      "lemma": "יָמִין",
+      "hebrew": "ימין",
+      "xlit": "yâmîyn",
+      "translated": true
+    },
+    "H3226": {
+      "definitions_cz": "Jamin = \"pravá ruka\" | 1) 2. syn Simeonův; zakladatel rodu Jaminitů | 2) Judaita, druhý syn Ráma Jerahmeelského | 3) Levita, který pomáhal Ezrovi vykládat Zákon",
+      "lemma": "יָמִין",
+      "hebrew": "ימין",
+      "xlit": "Yâmîyn",
+      "translated": true
+    },
+    "H3227": {
+      "definitions_cz": "1) vpravo, vpravo, vpravo",
+      "lemma": "יְמִינִי",
+      "hebrew": "ימיני",
+      "xlit": "yᵉmîynîy",
+      "translated": true
+    },
+    "H3228": {
+      "definitions_cz": "Jaminites = viz Jamin \"pravá ruka\" | 1) potomci Jaminovi",
+      "lemma": "יְמִינִי",
+      "hebrew": "ימיני",
+      "xlit": "Yᵉmîynîy",
+      "translated": true
+    },
+    "H3229": {
+      "definitions_cz": "Imlah nebo Imla = \"koho Bůh naplní\" | 1) otec proroka Michaiáše",
+      "lemma": "יִמְלָא",
+      "hebrew": "ימלא",
+      "xlit": "Yimlâʼ",
+      "translated": true
+    },
+    "H3230": {
+      "definitions_cz": "Jamlech = \"Bude kralovat\" | 1) náčelník kmene Simeon",
+      "lemma": "יַמְלֵךְ",
+      "hebrew": "ימלך",
+      "xlit": "Yamlêk",
+      "translated": true
+    },
+    "H3231": {
+      "definitions_cz": "1) (Hiphil) vybrat si právo, jít doprava, použít pravou ruku, být pravák",
+      "lemma": "יָמַן",
+      "hebrew": "ימן",
+      "xlit": "yâman",
+      "translated": true
+    },
+    "H3232": {
+      "definitions_cz": "Imna nebo Imnah nebo Jimnah = \"pravá ruka\" | n pr m | 1) prvorozený syn Ashera | 2) Levita, potomek Imny, který pomáhal při reformách Ezechiáše | n patr | 3) potomci Imny, syna Asherova",
+      "lemma": "יִמְנָה",
+      "hebrew": "ימנה",
+      "xlit": "Yimnâh",
+      "translated": true
+    },
+    "H3233": {
+      "definitions_cz": "1) pravá, pravá ruka",
+      "lemma": "יְמָנִי",
+      "hebrew": "ימני",
+      "xlit": "yᵉmânîy",
+      "translated": true
+    },
+    "H3234": {
+      "definitions_cz": "Imna = \"On se omezí\" | 1) syn Helemův, potomek Asherův a vůdce kmene Asher",
+      "lemma": "יִמְנָע",
+      "hebrew": "ימנע",
+      "xlit": "Yimnâʻ",
+      "translated": true
+    },
+    "H3235": {
+      "definitions_cz": "1) vyměnit | 1a) (Hiphil) k výměně | 1b) (Hithpael) vstoupit do, být změněn na | 2) (TWOT) slíbit",
+      "lemma": "יָמַר",
+      "hebrew": "ימר",
+      "xlit": "yâmar",
+      "translated": true
+    },
+    "H3236": {
+      "definitions_cz": "Imrah = \"hořkost\" | 1) potomek Ašera z rodu Zofa a náčelník kmene",
+      "lemma": "יִמְרָה",
+      "hebrew": "ימרה",
+      "xlit": "Yimrâh",
+      "translated": true
+    },
+    "H3237": {
+      "definitions_cz": "1) dotknout se | 1a) (Hiphil) dotýkat se, cítit",
+      "lemma": "יָמַשׁ",
+      "hebrew": "ימש",
+      "xlit": "yâmash",
+      "translated": true
+    },
+    "H3238": {
+      "definitions_cz": "1) utlačovat, potlačovat, zacházet násilně, týrat, otravovat, dělat špatně | 1a) (Qal) utlačovat, potlačovat | 1b) (Hiphil) jednat násilně, týrat",
+      "lemma": "יָנָה",
+      "hebrew": "ינה",
+      "xlit": "yânâh",
+      "translated": true
+    },
+    "H3239": {
+      "definitions_cz": "Janoah nebo Janohah = \"Odpočívá\" | 1) místo zjevně na severu Galileje v Neftali, které obsadil Tiglat-pileser při svém prvním vpádu do Palestiny",
+      "lemma": "יָנוֹחַ",
+      "hebrew": "ינוח",
+      "xlit": "Yânôwach",
+      "translated": true
+    },
+    "H3240": {
+      "definitions_cz": "1) odpočívat | 1a) (Qal) | 1a1) odpočívat, usadit se a zůstat | 1a2) odpočívat, odpočívat, být zticha | 1b) (hifil) | 1b1) přimět k odpočinku, dát odpočinek, ztišit | 1b2) přimět k odpočinku, přimět sestoupit, položit | 1b3) položit nebo položit, uložit, nechat ležet, položit | 1b4) nechat zůstat, odejít | 1b5) odejít, odjet z | 1b6) opustit | 1b7) povolit | 1c) (Hophal) | 1c1) získat odpočinek, získat odpočinek | 1c2) být ponechán, být umístěn | 1c3) otevřený prostor (subst)",
+      "lemma": "יָנַח",
+      "hebrew": "ינח",
+      "xlit": "yânach",
+      "translated": true
+    },
+    "H3241": {
+      "definitions_cz": "Janum = \"spí\" | 1) město v judských horách zřejmě nedaleko od Hebronu",
+      "lemma": "יָנִים",
+      "hebrew": "ינים",
+      "xlit": "Yânîym",
+      "translated": true
+    },
+    "H3242": {
+      "definitions_cz": "1) mladá rostlina, větvička, mladý výhonek",
+      "lemma": "יְנִיקָה",
+      "hebrew": "יניקה",
+      "xlit": "yᵉnîyqâh",
+      "translated": true
+    },
+    "H3243": {
+      "definitions_cz": "1) sát, kojit, sát | 1a) (Qal) | 1a1) vysát | 1a2) kojení, kotě (subst) | 1b) (hifil) | 1b1) dát sát, sestro | 1b2) ošetřovatelka, kojící žena, sestra (příčestí)",
+      "lemma": "יָנַק",
+      "hebrew": "ינק",
+      "xlit": "yânaq",
+      "translated": true
+    },
+    "H3244": {
+      "definitions_cz": "1) sova velká, puštík ušatý | 1a) nečisté zvíře",
+      "lemma": "יַנְשׁוּף",
+      "hebrew": "ינשוף",
+      "xlit": "yanshûwph",
+      "translated": true
+    },
+    "H3245": {
+      "definitions_cz": "1) založit, opravit, založit, položit základy | 1a) (Qal) založit, založit, začít | 1b) (Niphal) | 1b1) aby se zafixovali nebo seděli blízko u sebe, posaďte se v konkláve | 1b2) bude založeno | 1c) (Piel) | 1c1) k nalezení | 1c2) zakládat, jmenovat, ordinovat | 1d) (Pual) bude založen, bude položen | 1e) (Hophal) k založení",
+      "lemma": "יָסַד",
+      "hebrew": "יסד",
+      "xlit": "yâçad",
+      "translated": true
+    },
+    "H3246": {
+      "definitions_cz": "1) počátek, základ, to, co je založeno",
+      "lemma": "יְסֻד",
+      "hebrew": "יסד",
+      "xlit": "yᵉçud",
+      "translated": true
+    },
+    "H3247": {
+      "definitions_cz": "1) základ, základ | 1a) nadace | 1b) základna, dno",
+      "lemma": "יְסוֹד",
+      "hebrew": "יסוד",
+      "xlit": "yᵉçôwd",
+      "translated": true
+    },
+    "H3248": {
+      "definitions_cz": "1) základ | 1a) založení města",
+      "lemma": "יְסוּדָה",
+      "hebrew": "יסודה",
+      "xlit": "yᵉçûwdâh",
+      "translated": true
+    },
+    "H3249": {
+      "definitions_cz": "1) odcházející, bouřící se",
+      "lemma": "יָסוּר",
+      "hebrew": "יסור",
+      "xlit": "yâçûwr",
+      "translated": true
+    },
+    "H3250": {
+      "definitions_cz": "1) hledač závad, reprover, ten, kdo kárá",
+      "lemma": "יִסּוֹר",
+      "hebrew": "יסור",
+      "xlit": "yiççôwr",
+      "translated": true
+    },
+    "H3251": {
+      "definitions_cz": "1) (Qal) pomazat, být nalit,",
+      "lemma": "יָסַךְ",
+      "hebrew": "יסך",
+      "xlit": "yâçak",
+      "translated": true
+    },
+    "H3252": {
+      "definitions_cz": "Iscah = \"ten, kdo hledá\" | 1) dcera Hárana, neteře Abrahamova, sestra Lota a Milky",
+      "lemma": "יִסְכָּה",
+      "hebrew": "יסכה",
+      "xlit": "Yiçkâh",
+      "translated": true
+    },
+    "H3253": {
+      "definitions_cz": "Ismachiah = \"Jehova podporuje\" | 1) Levita a dozorce nad obětmi během probuzení v době krále Ezechiáše",
+      "lemma": "יִסְמַכְיָהוּ",
+      "hebrew": "יסמכיהו",
+      "xlit": "Yiçmakyâhûw",
+      "translated": true
+    },
+    "H3254": {
+      "definitions_cz": "1) přidat, zvýšit, udělat znovu | 1a) (Qal) přidat, zvýšit, udělat znovu | 1b) (Niphal) | 1b1) připojit se, připojit se k | 1b2), které mají být spojeny, přidat do | 1c) (Hiphil) | 1c1) způsobit přidání, zvýšení | 1c2), chcete-li udělat více, udělejte to znovu",
+      "lemma": "יָסַף",
+      "hebrew": "יסף",
+      "xlit": "yâçaph",
+      "translated": true
+    },
+    "H3255": {
+      "definitions_cz": "1) přidat | 1a) (Hophal) doplněno",
+      "lemma": "יְסַף",
+      "hebrew": "יסף",
+      "xlit": "yᵉçaph",
+      "translated": true
+    },
+    "H3256": {
+      "definitions_cz": "1) trestat, ukázňovat, poučovat, napomínat | 1a)(Qal) | 1a1) trestat, napomínat | 1a2) poučit | 1a3) k disciplíně | 1b) (Niphal) nechat se kárat nebo napravovat či napomínat | 1c) (Piel) | 1c1) ukáznit, opravit | 1c2) trestat, trestat | 1d) (Hiphil) trestat | 1e) (Nithpael) učit",
+      "lemma": "יָסַר",
+      "hebrew": "יסר",
+      "xlit": "yâçar",
+      "translated": true
+    },
+    "H3257": {
+      "definitions_cz": "1) lopata",
+      "lemma": "יָע",
+      "hebrew": "יע",
+      "xlit": "yâʻ",
+      "translated": true
+    },
+    "H3258": {
+      "definitions_cz": "Jabez = \"smutek\" | n pr m | 1) hlava calebitské rodiny | n pr loc | 2) město v Judsku zřejmě poblíž Betléma",
+      "lemma": "יַעְבֵּץ",
+      "hebrew": "יעבץ",
+      "xlit": "Yaʻbêts",
+      "translated": true
+    },
+    "H3259": {
+      "definitions_cz": "1) opravit, jmenovat, sestavit, setkat se, nastavit, zasnoubit | 1a)(Qal) jmenovat, přidělovat, jmenovat | 1b) (Niphal) | 1b1) splnit | 1b2) sejít se po domluvě | 1b3) shromáždit, shromáždit po domluvě | 1c) (Hiphil) způsobit setkání | 1d) (Hophal) nastavit, umístit před, opravit",
+      "lemma": "יָעַד",
+      "hebrew": "יעד",
+      "xlit": "yâʻad",
+      "translated": true
+    },
+    "H3260": {
+      "definitions_cz": "Iddo = \"jmenován\" | 1) věštec, který hlásal izraelskému králi Jeroboámovi",
+      "lemma": "יֶעְדִּי",
+      "hebrew": "יעדי",
+      "xlit": "Yeʻdîy",
+      "translated": true
+    },
+    "H3261": {
+      "definitions_cz": "1) (Qal) zamést, zamést, zamést spolu",
+      "lemma": "יָעָה",
+      "hebrew": "יעה",
+      "xlit": "yâʻâh",
+      "translated": true
+    },
+    "H3262": {
+      "definitions_cz": "Jeuel = \"Bůh smete\" | 1) syn Zerachův a přední judský muž",
+      "lemma": "יְעוּאֵל",
+      "hebrew": "יעואל",
+      "xlit": "Yᵉʻûwʼêl",
+      "translated": true
+    },
+    "H3263": {
+      "definitions_cz": "Jeuz = \"rádce\" | 1) hlava Benjaminova domu",
+      "lemma": "יְעוּץ",
+      "hebrew": "יעוץ",
+      "xlit": "Yᵉʻûwts",
+      "translated": true
+    },
+    "H3264": {
+      "definitions_cz": "1) dřevo, les, houština, zalesněná výška",
+      "lemma": "יָעוֹר",
+      "hebrew": "יעור",
+      "xlit": "yâʻôwr",
+      "translated": true
+    },
+    "H3265": {
+      "definitions_cz": "Jair = \"zalesněný\" | 1) otec Elchanana, zabijáka obrů, jednoho z Davidových mocných válečníků | 1a) také nazývaný „Jaare-oregim“",
+      "lemma": "יָעוּר",
+      "hebrew": "יעור",
+      "xlit": "Yâʻûwr",
+      "translated": true
+    },
+    "H3266": {
+      "definitions_cz": "Jehush nebo Jeush = \"Spěchá na pomoc\" | 1) syn Esheka, vzdálený potomek krále Saula | 2) geršonský levita z domu Šimei | 3) syn judského krále Rechabeáma",
+      "lemma": "יְעוּשׁ",
+      "hebrew": "יעוש",
+      "xlit": "Yᵉʻûwsh",
+      "translated": true
+    },
+    "H3267": {
+      "definitions_cz": "1) být silný, být divoký (což znamená pochybný) | 1a) (Niphal) barbarský (příčestí)",
+      "lemma": "יָעַז",
+      "hebrew": "יעז",
+      "xlit": "yâʻaz",
+      "translated": true
+    },
+    "H3268": {
+      "definitions_cz": "Jaaziel = \"od Boha smělý\" | 1) jeden z Levitů, kterého David jmenoval, aby vykonával hudební službu před archou",
+      "lemma": "יַעֲזִיאֵל",
+      "hebrew": "יעזיאל",
+      "xlit": "Yaʻăzîyʼêl",
+      "translated": true
+    },
+    "H3269": {
+      "definitions_cz": "Jaaziah = \"smělý od Jehovy\" | 1) Levita, zřejmě 3. syn nebo potomek Merariho",
+      "lemma": "יַעֲזִיָּהוּ",
+      "hebrew": "יעזיהו",
+      "xlit": "Yaʻăzîyâhûw",
+      "translated": true
     }
   }
 }
