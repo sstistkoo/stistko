@@ -66174,6 +66174,356 @@
       "hebrew": "סתם",
       "xlit": "çâtham",
       "translated": true
+    },
+    "H5641": {
+      "definitions_cz": "1) skrýt, skrýt | 1a) (Niphal) | 1a1) schovat se | 1a2) být skryt, být skryt | 1b) (Piel) pečlivě schovat | 1c) (Pual) být pečlivě skryt, být skrytý | 1d) (Hiphil) skrýt, skrýt | 1e) (Hithpael) pečlivě se schovat",
+      "lemma": "סָתַר",
+      "hebrew": "סתר",
+      "xlit": "çâthar",
+      "translated": true
+    },
+    "H5642": {
+      "definitions_cz": "1) (Pael) schovat, odstranit z dohledu | 2) (P'al) zničit",
+      "lemma": "סְתַר",
+      "hebrew": "סתר",
+      "xlit": "çᵉthar",
+      "translated": true
+    },
+    "H5643": {
+      "definitions_cz": "n m | 1) krytí, úkryt, úkryt, utajení | 1a) kryt, kryt | 1b) úkryt, úkryt, tajné místo | 1c) utajení | 1c1) utajení (jazyk je pomlouvačný) | n f | 2) úkryt, ochrana",
+      "lemma": "סֵתֶר",
+      "hebrew": "סתר",
+      "xlit": "çêther",
+      "translated": true
+    },
+    "H5644": {
+      "definitions_cz": "Zithri = \"ochrana Jehovy\" | 1) son of Uzziel and grandson of Kohath the son of Levi | 1a) přesněji 'Sithri'",
+      "lemma": "סִתְרִי",
+      "hebrew": "סתרי",
+      "xlit": "Çithrîy",
+      "translated": true
+    },
+    "H5645": {
+      "definitions_cz": "1) tma, mrak, houština | 1a) temný mrak | 1b) hmotnost oblačnosti | 1c) houština (jako útočiště)",
+      "lemma": "עָב",
+      "hebrew": "עב",
+      "xlit": "ʻâb",
+      "translated": true
+    },
+    "H5646": {
+      "definitions_cz": "1) architektonický termín | 1a) význam pochybný; možná vyčnívající střecha, podesta, tlustý trám, prkno, práh",
+      "lemma": "עָב",
+      "hebrew": "עב",
+      "xlit": "ʻâb",
+      "translated": true
+    },
+    "H5647": {
+      "definitions_cz": "1) pracovat, sloužit | 1a) (Qal) | 1a1) pracovat, pracovat, dělat práci | 1a2) pracovat pro jiného, ​​sloužit jinému prací | 1a3) sloužit jako subjekty | 1a4) sloužit (Bohu) | 1a5) sloužit (s levitskou službou) | 1b) (Niphal) | 1b1) obdělávat, obdělávat (země) | 1b2) udělat ze sebe sluhu | 1c) (Pual) k opracování | 1d) (Hiphil) | 1d1) nutit pracovat nebo pracovat, přimět pracovat, přimět sloužit | 1d2) způsobit sloužit jako subjekty | 1e) (Hophal) nechat se vést nebo nalákat ke službě",
+      "lemma": "עָבַד",
+      "hebrew": "עבד",
+      "xlit": "ʻâbad",
+      "translated": true
+    },
+    "H5648": {
+      "definitions_cz": "1) dělat, dělat | 1a)(P'al) | 1a1) vyrobit, vytvořit | 1a2) dělat, provádět | 1b) (Ithp'al) | 1b1), z nichž se má vytvořit | 1b2) být vykonán, zpracován, proveden, proveden, proveden",
+      "lemma": "עֲבַד",
+      "hebrew": "עבד",
+      "xlit": "ʻăbad",
+      "translated": true
+    },
+    "H5649": {
+      "definitions_cz": "1) sluha, otrok",
+      "lemma": "עֲבַד",
+      "hebrew": "עבד",
+      "xlit": "ʻăbad",
+      "translated": true
+    },
+    "H5650": {
+      "definitions_cz": "1) otrok, sluha | 1a) otrok, sluha, muž-sluha | 1b) předměty | 1c) služebníci, ctitelé (Boha) | 1d) služebník (ve zvláštním smyslu jako proroci, levité atd.) | 1e) služebník (Izraele) | 1f) sluha (jako forma adresy mezi rovnými)",
+      "lemma": "עֶבֶד",
+      "hebrew": "עבד",
+      "xlit": "ʻebed",
+      "translated": true
+    },
+    "H5651": {
+      "definitions_cz": "Ebed = \"sluha\" | 1) otec Gaal v době soudců | 2) syn Jonathanův a jeden ze synů Adina, který se vrátil z vyhnanství s Ezrou",
+      "lemma": "עֶבֶד",
+      "hebrew": "עבד",
+      "xlit": "ʻEbed",
+      "translated": true
+    },
+    "H5652": {
+      "definitions_cz": "1) práce",
+      "lemma": "עֲבָד",
+      "hebrew": "עבד",
+      "xlit": "ʻăbâd",
+      "translated": true
+    },
+    "H5653": {
+      "definitions_cz": "Abda = \"služebník Jehovův\" | 1) otec Adonirama | 2) Levita, syn Šammuův; také nazývaný 'Obadiah'",
+      "lemma": "עַבְדָּא",
+      "hebrew": "עבדא",
+      "xlit": "ʻAbdâʼ",
+      "translated": true
+    },
+    "H5654": {
+      "definitions_cz": "Obed-edom = \"služebník Edom\" | 1) Levita a Gittite, kteří drželi archu poté, co byl Uzza zabit Bohem za to, že se archy dotkl, když byla odvážena do Jeruzaléma | 2) merarijský levita a zpěvák a strážce brány | 2a) rodina pocházela z něho",
+      "lemma": "עֹבֵד אֱדוֹם",
+      "hebrew": "עבד אדום",
+      "xlit": "ʻÔbêd ʼĔdôwm",
+      "translated": true
+    },
+    "H5655": {
+      "definitions_cz": "Abdeel = \"služebník Boží\" | 1) otec Šelemiáše z Judska v době Jeremjáše",
+      "lemma": "עַבְדְּאֵל",
+      "hebrew": "עבדאל",
+      "xlit": "ʻAbdᵉʼêl",
+      "translated": true
+    },
+    "H5656": {
+      "definitions_cz": "1) práce, služby | 1a) práce, práce | 1b) práce (služebníka nebo otroka) | 1c) práce, služby (zajatých nebo poddaných) | 1d) služba (Boží)",
+      "lemma": "עֲבֹדָה",
+      "hebrew": "עבדה",
+      "xlit": "ʻăbôdâh",
+      "translated": true
+    },
+    "H5657": {
+      "definitions_cz": "1) služba, služebnictvo v domácnosti",
+      "lemma": "עֲבֻדָּה",
+      "hebrew": "עבדה",
+      "xlit": "ʻăbuddâh",
+      "translated": true
+    },
+    "H5658": {
+      "definitions_cz": "Abdon = \"servilní\" | n pr m | 1) soudce Izraele v době soudců; možná stejně jako 'Bedan' | 2) benjamínec, syn Šašakův | 3) Gibeoňan, syn Jehielův a vnuk Gedeonův | 4) syn Micheášův v době judského krále Josiáše; také 'Achbor' | n pr loc | 5) město v Ašeru přidělené geršonským levitům; nachází se 10 mil (16 km) severně od Accho; moderní 'Abdeh'",
+      "lemma": "עַבְדוֹן",
+      "hebrew": "עבדון",
+      "xlit": "ʻAbdôwn",
+      "translated": true
+    },
+    "H5659": {
+      "definitions_cz": "1) nevolnictví, otroctví",
+      "lemma": "עַבְדוּת",
+      "hebrew": "עבדות",
+      "xlit": "ʻabdûwth",
+      "translated": true
+    },
+    "H5660": {
+      "definitions_cz": "Abdi = \"služebník Jehovův\" | 1) merarijský levita a předek zpěváka Ethana | 2) merarijský levita, otec Kiše, v době judského krále Ezechiáše | 3) jeden z rodiny Elamů, který měl v době Ezdráše cizí manželku",
+      "lemma": "עַבְדִּי",
+      "hebrew": "עבדי",
+      "xlit": "ʻAbdîy",
+      "translated": true
+    },
+    "H5661": {
+      "definitions_cz": "Abdiel = \"služebník Boží\" | 1) Gádita, syn Guniho a otec Ahiho a ten, kdo se usadil v zemi Bášan v době judského krále Jothama",
+      "lemma": "עַבְדִיאֵל",
+      "hebrew": "עבדיאל",
+      "xlit": "ʻAbdîyʼêl",
+      "translated": true
+    },
+    "H5662": {
+      "definitions_cz": "Abdiáš = \"služebník Jehovův\" | 1) 4. z 12 menších proroků; není o něm známo nic osobního, ale je pravděpodobné, že byl současníkem Jeremiáše, Ezechiela a Daniela | 1a) jeho prorocká kniha; prorokuje proti Edom | 2) otec Izmaiáše, jednoho z náčelníků Zabulonových v době Davidově | 3) merarijský levita, dozorce nad prací na obnově chrámu v době judského krále Josiáše | 4) vůdce rodiny izraelského krále Achaba; oddaný ctitel Jeho",
+      "lemma": "עֹבַדְיָה",
+      "hebrew": "עבדיה",
+      "xlit": "ʻÔbadyâh",
+      "translated": true
+    },
+    "H5663": {
+      "definitions_cz": "Ebed-melech = \"služebník krále\" | 1) etiopský eunuch ve službách krále Sedekiáše, jehož zásahem byl Jeremiáš propuštěn z vězení",
+      "lemma": "עֶבֶד מֶלֶךְ",
+      "hebrew": "עבד מלך",
+      "xlit": "ʻEbed Melek",
+      "translated": true
+    },
+    "H5664": {
+      "definitions_cz": "Abed-nego = \"služebník Nebo\" | 1) zbožný přítel Daniela, kterého Nabuchodonozor přejmenoval na Abednego; jeden ze tří přátel, kteří se s Danielem odmítli znečišťovat tím, že jedli jídlo z králova stolu, což bylo v rozporu se stravovacími zákony, které Bůh dal Židům; také jeden ze tří, kteří byli vhozeni do ohnivé pece za to, že se odmítli poklonit rytému obrazu Nabuchodonozora a kteří byli zachráněni andělem Páně | 1a) také „Azariah“ (H05838 nebo H05839)",
+      "lemma": "עֲבֵד נְגוֹ",
+      "hebrew": "עבד נגו",
+      "xlit": "ʻĂbêd Nᵉgôw",
+      "translated": true
+    },
+    "H5665": {
+      "definitions_cz": "Abed-nego = \"služebník Nebo\" | 1) zbožný přítel Daniela, kterého Nabuchodonozor přejmenoval na Abednego; jeden ze tří přátel, kteří se s Danielem odmítli znečišťovat tím, že jedli jídlo z králova stolu, což bylo v rozporu se stravovacími zákony, které Bůh dal Židům; také jeden ze tří, kteří byli vhozeni do ohnivé pece za to, že se odmítli poklonit rytému obrazu Nabuchodonozora a kteří byli zachráněni andělem Páně | 1a) také „Azariah“ (H05838 nebo H05839)",
+      "lemma": "עֲבֵד נְגוֹא",
+      "hebrew": "עבד נגוא",
+      "xlit": "ʻĂbêd Nᵉgôwʼ",
+      "translated": true
+    },
+    "H5666": {
+      "definitions_cz": "1) být tlustý, být tlustý, být hrubý | 1a) (Qal) být tlustý, být tlustý, být hrubý",
+      "lemma": "עָבָה",
+      "hebrew": "עבה",
+      "xlit": "ʻâbâh",
+      "translated": true
+    },
+    "H5667": {
+      "definitions_cz": "1) zástava, věc daná jako zajištění, předmět zastavený jako zajištění dluhu",
+      "lemma": "עֲבוֹט",
+      "hebrew": "עבוט",
+      "xlit": "ʻăbôwṭ",
+      "translated": true
+    },
+    "H5668": {
+      "definitions_cz": "příprava | 1) z důvodu, z důvodu, z důvodu, aby | conj | 2) aby to bylo",
+      "lemma": "עָבוּר",
+      "hebrew": "עבור",
+      "xlit": "ʻâbûwr",
+      "translated": true
+    },
+    "H5669": {
+      "definitions_cz": "1) vyrábět, vynášet",
+      "lemma": "עָבוּר",
+      "hebrew": "עבור",
+      "xlit": "ʻâbûwr",
+      "translated": true
+    },
+    "H5670": {
+      "definitions_cz": "1) vzít zástavu, dát zástavu (za dluh) | 1a) (Qal) vzít zástavu, dát zástavu (za dluh) | 1b)(Piel) k výměně | 1c) (Hifil) přimět dát slib",
+      "lemma": "עָבַט",
+      "hebrew": "עבט",
+      "xlit": "ʻâbaṭ",
+      "translated": true
+    },
+    "H5671": {
+      "definitions_cz": "1) váha zástav, těžké dluhy",
+      "lemma": "עַבְטִיט",
+      "hebrew": "עבטיט",
+      "xlit": "ʻabṭîyṭ",
+      "translated": true
+    },
+    "H5672": {
+      "definitions_cz": "1) tloušťka",
+      "lemma": "עֲבִי",
+      "hebrew": "עבי",
+      "xlit": "ʻăbîy",
+      "translated": true
+    },
+    "H5673": {
+      "definitions_cz": "1) práce, služba, rituál, uctívání | 1a) práce, administrativa | 1b) rituál, služba",
+      "lemma": "עֲבִידָה",
+      "hebrew": "עבידה",
+      "xlit": "ʻăbîydâh",
+      "translated": true
+    },
+    "H5674": {
+      "definitions_cz": "1) přejít nebo projít, odcizit, přinést, nést, odnést, vzít, odnést, přestoupit | 1a) (Qal) | 1a1) přejít, přejít, přejít, přejít, pochodovat, přetéct, přejít | 1a2) přejít za | 1a3) projít, projet | 1a3a) procházející (příčestí) | 1a3b) projít (části oběti ve smlouvě) | 1a4) míjet, míjet, předjíždět a míjet, míjet | 1a4a) kolemjdoucí (příčestí) | 1a4b) být minulostí, být u konce | 1a5) předat dál, pokračovat,",
+      "lemma": "עָבַר",
+      "hebrew": "עבר",
+      "xlit": "ʻâbar",
+      "translated": true
+    },
+    "H5675": {
+      "definitions_cz": "1) oblast za nebo napříč",
+      "lemma": "עֲבַר",
+      "hebrew": "עבר",
+      "xlit": "ʻăbar",
+      "translated": true
+    },
+    "H5676": {
+      "definitions_cz": "1) oblast za nebo napříč, strana | 1a) region napříč nebo za | 1b) strana, protilehlá strana",
+      "lemma": "עֵבֶר",
+      "hebrew": "עבר",
+      "xlit": "ʻêber",
+      "translated": true
+    },
+    "H5677": {
+      "definitions_cz": "Eber nebo Heber = \"kraj za\" | 1) syn Salaha, pravnuka Shema, otce Pelega a Joktana | 2) náčelník Gaditů | 3) Benjamínec, syn Elpaalův a potomek Sharahaim | 4) Benjamínec, syn Šašakův | 5) knězem za dnů Joakima, syna Ješuova",
+      "lemma": "עֵבֵר",
+      "hebrew": "עבר",
+      "xlit": "ʻÊbêr",
+      "translated": true
+    },
+    "H5678": {
+      "definitions_cz": "1) výlev, přetékání, přemíra, zuřivost, hněv, arogance | 1a) přetečení, přebytek, výron | 1b) arogance | 1c) překypující vztek nebo zuřivost",
+      "lemma": "עֶבְרָה",
+      "hebrew": "עברה",
+      "xlit": "ʻebrâh",
+      "translated": true
+    },
+    "H5679": {
+      "definitions_cz": "1) brod",
+      "lemma": "עֲבָרָה",
+      "hebrew": "עברה",
+      "xlit": "ʻăbârâh",
+      "translated": true
+    },
+    "H5680": {
+      "definitions_cz": "Hebrejština = \"jeden zpoza\" | n pr | 1) označení patriarchů a Izraelitů | adj | 2) označení patriarchů a Izraelitů",
+      "lemma": "עִבְרִי",
+      "hebrew": "עברי",
+      "xlit": "ʻIbrîy",
+      "translated": true
+    },
+    "H5681": {
+      "definitions_cz": "Ibri = \"hebrejština\" | 1) merarijský levita z rodu Jaaziášových v době Davidově",
+      "lemma": "עִבְרִי",
+      "hebrew": "עברי",
+      "xlit": "ʻIbrîy",
+      "translated": true
+    },
+    "H5682": {
+      "definitions_cz": "Abarim = \"regiony za\" | 1) hora nebo pásmo hor na východě Jordánu, v zemi Moáb, naproti Jerichu; Mount Nebo je součástí tohoto pohoří",
+      "lemma": "עֲבָרִים",
+      "hebrew": "עברים",
+      "xlit": "ʻĂbârîym",
+      "translated": true
+    },
+    "H5683": {
+      "definitions_cz": "Hebron = \"spojenectví\" | 1) město Juda ležící v horách 20 (32 km) mil jižně od Jeruzaléma a 20 (32 km) mil severně od Beersheby",
+      "lemma": "עֶבְרֹן",
+      "hebrew": "עברן",
+      "xlit": "ʻEbrôn",
+      "translated": true
+    },
+    "H5684": {
+      "definitions_cz": "Ebronah = \"průchod\" | 1) jedna ze stanic Izraelitů v poušti bezprostředně předcházející Ezion-geber",
+      "lemma": "עֶבְרֹנָה",
+      "hebrew": "עברנה",
+      "xlit": "ʻEbrônâh",
+      "translated": true
+    },
+    "H5685": {
+      "definitions_cz": "1) (Qal) scvrknout se, zchátrat",
+      "lemma": "עָבַשׁ",
+      "hebrew": "עבש",
+      "xlit": "ʻâbash",
+      "translated": true
+    },
+    "H5686": {
+      "definitions_cz": "1) (Piel) navíjet, plést, spřádat",
+      "lemma": "עָבַת",
+      "hebrew": "עבת",
+      "xlit": "ʻâbath",
+      "translated": true
+    },
+    "H5687": {
+      "definitions_cz": "1) mající protkané listy, listnaté, husté s listy",
+      "lemma": "עָבֹת",
+      "hebrew": "עבת",
+      "xlit": "ʻâbôth",
+      "translated": true
+    },
+    "H5688": {
+      "definitions_cz": "1) šňůra, lano, šňůra, listí, protkané listí | 1a) šňůra, lano, šňůra, řetěz | 1b) propletené listy",
+      "lemma": "עֲבֹת",
+      "hebrew": "עבת",
+      "xlit": "ʻăbôth",
+      "translated": true
+    },
+    "H5689": {
+      "definitions_cz": "1) (Qal) mít nadměrnou náklonnost nebo chtíč | 1a) chtíč (příčestí) | 1b) paramours (participium jako subst)",
+      "lemma": "עֲגַב",
+      "hebrew": "עגב",
+      "xlit": "ʻăgab",
+      "translated": true
+    },
+    "H5690": {
+      "definitions_cz": "1) (smyslná) láska",
+      "lemma": "עֶגֶב",
+      "hebrew": "עגב",
+      "xlit": "ʻegeb",
+      "translated": true
     }
   }
 }
