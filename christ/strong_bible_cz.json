@@ -62674,6 +62674,706 @@
       "hebrew": "נזל",
       "xlit": "nâzal",
       "translated": true
+    },
+    "H5141": {
+      "definitions_cz": "1) prsten, prsten do nosu, náušnice | 1a) kroužek v nose (dámská ozdoba) | 1b) náušnice (ozdoba pro muže nebo ženy)",
+      "lemma": "נֶזֶם",
+      "hebrew": "נזם",
+      "xlit": "nezem",
+      "translated": true
+    },
+    "H5142": {
+      "definitions_cz": "1) utrpět zranění | 1a) (P'al) utrpět zranění | 1b) (Aphel) zranit",
+      "lemma": "נְזַק",
+      "hebrew": "נזק",
+      "xlit": "nᵉzaq",
+      "translated": true
+    },
+    "H5143": {
+      "definitions_cz": "1) zranění, poškození",
+      "lemma": "נֵזֶק",
+      "hebrew": "נזק",
+      "xlit": "nêzeq",
+      "translated": true
+    },
+    "H5144": {
+      "definitions_cz": "1) zasvětit, zasvětit, oddělit | 1a) (Niphal) věnovat se, věnovat se | 1b) (Hiphil) udržovat posvátně oddělené | 2) (Hiphil) být nazarejcem, žít jako nazarejec",
+      "lemma": "נָזַר",
+      "hebrew": "נזר",
+      "xlit": "nâzar",
+      "translated": true
+    },
+    "H5145": {
+      "definitions_cz": "1) zasvěcení, koruna, oddělení, nazarejství | 1a) korunka (jako znamení zasvěcení), náušnice | 1a1) kameny koruny, diadém, kameny okouzlující | 1b) ženské vlasy | 1c) zasvěcení | 1c1) velekněze | 1c2) nazarejského",
+      "lemma": "נֶזֶר",
+      "hebrew": "נזר",
+      "xlit": "nezer",
+      "translated": true
+    },
+    "H5146": {
+      "definitions_cz": "Noah = \"odpočinek\" | 1) syn Lámecha, otce Šema, Chama a Jafeta; stavitel archy, která zachránila jeho rodinu před zkázou světa, kterou Bůh seslal na svět potopou; se stal novou klíčovou hlavou lidstva, protože jeho rodina jako jediní přežili potopu",
+      "lemma": "נֹחַ",
+      "hebrew": "נח",
+      "xlit": "Nôach",
+      "translated": true
+    },
+    "H5147": {
+      "definitions_cz": "Nahbi = \"skryté\" | 1) syn Vophsiho, Naftalita a jeden z 12 vyzvědačů vyslaných špehovat zaslíbenou zemi",
+      "lemma": "נַחְבִּי",
+      "hebrew": "נחבי",
+      "xlit": "Nachbîy",
+      "translated": true
+    },
+    "H5148": {
+      "definitions_cz": "1) vést, vést | 1a) (Qal) vést, přinést | 1b) (Hifil) vést, vést",
+      "lemma": "נָחָה",
+      "hebrew": "נחה",
+      "xlit": "nâchâh",
+      "translated": true
+    },
+    "H5149": {
+      "definitions_cz": "Nehum = \"komfort\" | 1) jeden z vyhnanců, kteří se vrátili z vyhnanství se Zerubábelem",
+      "lemma": "נְחוּם",
+      "hebrew": "נחום",
+      "xlit": "Nᵉchûwm",
+      "translated": true
+    },
+    "H5150": {
+      "definitions_cz": "1) pohodlí, soucit | 1a) pohodlí | 1b) soucit",
+      "lemma": "נִחוּם",
+      "hebrew": "נחום",
+      "xlit": "nichûwm",
+      "translated": true
+    },
+    "H5151": {
+      "definitions_cz": "Nahum = \"komfort\" | 1) Elkoshite, prorok, který předpověděl pád a zničení Ninive; autor knihy svým jménem; osobní historie a situace neznámé",
+      "lemma": "נַחוּם",
+      "hebrew": "נחום",
+      "xlit": "Nachûwm",
+      "translated": true
+    },
+    "H5152": {
+      "definitions_cz": "Nahor = \"frkání\" | 1) syn Seruga, otce Teracha a děda Abrahama | 2) syn Teracha a bratr Abrahamův",
+      "lemma": "נָחוֹר",
+      "hebrew": "נחור",
+      "xlit": "Nâchôwr",
+      "translated": true
+    },
+    "H5153": {
+      "definitions_cz": "1) bronz",
+      "lemma": "נָחוּשׁ",
+      "hebrew": "נחוש",
+      "xlit": "nâchûwsh",
+      "translated": true
+    },
+    "H5154": {
+      "definitions_cz": "1) měď, bronz | 1a) měď (vyrobená z tavení měděné rudy) | 1b) bronz (vyrobený z mědi a slitiny)",
+      "lemma": "נְחוּשָׁה",
+      "hebrew": "נחושה",
+      "xlit": "nᵉchûwshâh",
+      "translated": true
+    },
+    "H5155": {
+      "definitions_cz": "1) znamená nejistý | 1a) může být název melodie | 1b) může být hudební nástroj | 1c) nachází se pouze v názvu Ž 5:1",
+      "lemma": "נְחִילָה",
+      "hebrew": "נחילה",
+      "xlit": "nᵉchîylâh",
+      "translated": true
+    },
+    "H5156": {
+      "definitions_cz": "1) nosní dírka",
+      "lemma": "נְחִיר",
+      "hebrew": "נחיר",
+      "xlit": "nᵉchîyr",
+      "translated": true
+    },
+    "H5157": {
+      "definitions_cz": "1) získat jako majetek, získat, zdědit, vlastnit | 1a) (Qal) | 1a1) převzít majetek, zdědit | 1a2) mít nebo získat jako majetek nebo majetek (obr.) | 1a3) rozdělit pozemek do vlastnictví | 1a4) získat (svědectví) (obr.) | 1b) (Piel) k rozdělení za majetek | 1c) (Hithpael) vlastnit | 1d) (Hiphil) | 1d1) dát jako majetek | 1d2) přimět k dědictví, dát jako dědictví | 1e) (Hophal) být přidělen, být přinucen vlastnit",
+      "lemma": "נָחַל",
+      "hebrew": "נחל",
+      "xlit": "nâchal",
+      "translated": true
+    },
+    "H5158": {
+      "definitions_cz": "1) torrent, údolí, vádí, torrent-valley | 1a) torrent | 1b) torrentové údolí, vádí (jako koryto potoka) | 1c) šachta (moje) | 2) palma | 2a) znamená pochybný",
+      "lemma": "נַחַל",
+      "hebrew": "נחל",
+      "xlit": "nachal",
+      "translated": true
+    },
+    "H5159": {
+      "definitions_cz": "1) držba, majetek, dědictví, dědictví | 1a) majetek | 1b) podíl, podíl | 1c) dědictví, podíl",
+      "lemma": "נַחֲלָה",
+      "hebrew": "נחלה",
+      "xlit": "nachălâh",
+      "translated": true
+    },
+    "H5160": {
+      "definitions_cz": "Nahaliel = \"přítoky boží\" | 1) stanice Izraele v poušti; nachází severně od Arnonu",
+      "lemma": "נַחֲלִיאֵל",
+      "hebrew": "נחליאל",
+      "xlit": "Nachălîyʼêl",
+      "translated": true
+    },
+    "H5161": {
+      "definitions_cz": "Nehelamit = \"on ze snu\" | 1) označení falešného proroka Šemajáše odvlečeného do zajetí do Babylóna; jméno je tvořeno z jeho rodného místa nebo jeho předka",
+      "lemma": "נֶחֱלָמִי",
+      "hebrew": "נחלמי",
+      "xlit": "Nechĕlâmîy",
+      "translated": true
+    },
+    "H5162": {
+      "definitions_cz": "1) litovat, utěšovat se, činit pokání, litovat, utěšit, utěšovat | 1a) (Niphal) | 1a1) litovat, být dojatý k lítosti, mít soucit | 1a2) litovat, litovat, trpět žalem, činit pokání | 1a3) utěšit se, utěšit se | 1a4) utěšit se, ulevit si | 1b) (Piel) ke komfortu, konzole | 1c) (Pual) být utěšen, být utěšen | 1d) (Hithpael) | 1d1) litovat, mít soucit | 1d2) litovat, činit pokání z | 1d3) utěšit se, utěšit se | 1d4) ulevit si",
+      "lemma": "נָחַם",
+      "hebrew": "נחם",
+      "xlit": "nâcham",
+      "translated": true
+    },
+    "H5163": {
+      "definitions_cz": "Naham = \"komfort\" | 1) bratr IIodiah nebo Jehudijah, manželky Ezdráše",
+      "lemma": "נַחַם",
+      "hebrew": "נחם",
+      "xlit": "Nacham",
+      "translated": true
+    },
+    "H5164": {
+      "definitions_cz": "1) pokání, smutek",
+      "lemma": "נֹחַם",
+      "hebrew": "נחם",
+      "xlit": "nôcham",
+      "translated": true
+    },
+    "H5165": {
+      "definitions_cz": "1) pohodlí",
+      "lemma": "נֶחָמָה",
+      "hebrew": "נחמה",
+      "xlit": "nechâmâh",
+      "translated": true
+    },
+    "H5166": {
+      "definitions_cz": "Nehemiáš = \"Jehova utěšuje\" | 1) syn Hachaljášův, číšník krále Artaxerxa, který se po návratu z vyhnanství stal judským místodržitelem | 2) jedna z 12 hlav lidí, kteří se vrátili z exilu se Zerubábelem | 3) syn Azbuka a vládce poloviny Bét-zuru, který pomáhal opravovat jeruzalémskou zeď",
+      "lemma": "נְחֶמְיָה",
+      "hebrew": "נחמיה",
+      "xlit": "Nᵉchemyâh",
+      "translated": true
+    },
+    "H5167": {
+      "definitions_cz": "Nahamani = \"milosrdný\" | 1) hlavní muž mezi vyhnanci, který se vrátil z Babylonu se Zerubábelem",
+      "lemma": "נַחֲמָנִי",
+      "hebrew": "נחמני",
+      "xlit": "Nachămânîy",
+      "translated": true
+    },
+    "H5168": {
+      "definitions_cz": "1) my",
+      "lemma": "נַחְנוּ",
+      "hebrew": "נחנו",
+      "xlit": "nachnûw",
+      "translated": true
+    },
+    "H5169": {
+      "definitions_cz": "1) (Qal) naléhat | 1a) být naléhavý (příčestí)",
+      "lemma": "נָחַץ",
+      "hebrew": "נחץ",
+      "xlit": "nâchats",
+      "translated": true
+    },
+    "H5170": {
+      "definitions_cz": "1) smrkání",
+      "lemma": "נַחַר",
+      "hebrew": "נחר",
+      "xlit": "nachar",
+      "translated": true
+    },
+    "H5171": {
+      "definitions_cz": "Naharai = \"šňupe\" | 1) jeden z Davidových mocných bojovníků a zbrojnoš Joabův",
+      "lemma": "נַחֲרַי",
+      "hebrew": "נחרי",
+      "xlit": "Nachăray",
+      "translated": true
+    },
+    "H5172": {
+      "definitions_cz": "1) praktikovat věštění, věštit, pozorovat znamení, učit se zkušenostmi, pilně pozorovat, praktikovat věštění, brát jako znamení | 1a) (Piel) | 1a1) cvičit věštění | 1a2) sledovat znamení nebo znamení",
+      "lemma": "נָחַשׁ",
+      "hebrew": "נחש",
+      "xlit": "nâchash",
+      "translated": true
+    },
+    "H5173": {
+      "definitions_cz": "1) věštění, čarování",
+      "lemma": "נַחַשׁ",
+      "hebrew": "נחש",
+      "xlit": "nachash",
+      "translated": true
+    },
+    "H5174": {
+      "definitions_cz": "1) měď, bronz",
+      "lemma": "נְחָשׁ",
+      "hebrew": "נחש",
+      "xlit": "nᵉchâsh",
+      "translated": true
+    },
+    "H5175": {
+      "definitions_cz": "1) had, had | 1a) had | 1b) obraz (hada) | 1c) prchající had (mytologický)",
+      "lemma": "נָחָשׁ",
+      "hebrew": "נחש",
+      "xlit": "nâchâsh",
+      "translated": true
+    },
+    "H5176": {
+      "definitions_cz": "Nahash = \"had\" | n pr m | 1) král Ammonitů za dob krále Saula | 2) otec Abigail, matky Amasy, velitele Absolonovy armády",
+      "lemma": "נָחָשׁ",
+      "hebrew": "נחש",
+      "xlit": "Nâchâsh",
+      "translated": true
+    },
+    "H5177": {
+      "definitions_cz": "Nahshon = \"zaklínač\" | 1) syn Amminadabův a princ Judy při prvním sečtení na poušti; 5. v rodokmenu z Judy v Kristově rodokmenu",
+      "lemma": "נַחְשׁוֹן",
+      "hebrew": "נחשון",
+      "xlit": "Nachshôwn",
+      "translated": true
+    },
+    "H5178": {
+      "definitions_cz": "1) měď, bronz | 1a) měď (ruda), bronz (jako slitina mědi) | 1b) pouta (z mědi nebo bronzu) | 1c) měď (jako hodnota) | 2) chtíč, smilstvo | 2a) znamená pochybný",
+      "lemma": "נְחֹשֶׁת",
+      "hebrew": "נחשת",
+      "xlit": "nᵉchôsheth",
+      "translated": true
+    },
+    "H5179": {
+      "definitions_cz": "Nehushta = \"mosaz\" | 1) dcera Elnatana, manželka judského krále Joakima a matka judského krále Jojakina",
+      "lemma": "נְחֻשְׁתָּא",
+      "hebrew": "נחשתא",
+      "xlit": "Nᵉchushtâʼ",
+      "translated": true
+    },
+    "H5180": {
+      "definitions_cz": "Nehushtan = \"věc z mosazi\" | 1) jméno, pod kterým byl uctíván měděný had vyrobený Mojžíšem na poušti v době judského krále Ezechiáše, než jej zničil",
+      "lemma": "נְחֻשְׁתָּן",
+      "hebrew": "נחשתן",
+      "xlit": "Nᵉchushtân",
+      "translated": true
+    },
+    "H5181": {
+      "definitions_cz": "1) jít dolů, sestoupit | 1a) (Qal) | 1a1) jít dolů, sestoupit | 1a2) sestoupit, sestoupit do (kázeň) (obr.) | 1b) (Niphal) sestoupit do, proniknout | 1c) (Piel) přimět sestoupit, stisknout, natáhnout (úklon) | 1d) (Hiphil) srazit dolů",
+      "lemma": "נָחַת",
+      "hebrew": "נחת",
+      "xlit": "nâchath",
+      "translated": true
+    },
+    "H5182": {
+      "definitions_cz": "1) sestoupit | 1a) (P'al) sestoupit | 1b) (Aphel) uložit | 1c) (Hophal) být sesazen, být svržen",
+      "lemma": "נְחַת",
+      "hebrew": "נחת",
+      "xlit": "nᵉchath",
+      "translated": true
+    },
+    "H5183": {
+      "definitions_cz": "1) odpočinek, ticho | 1a) tichost, klidný postoj | 1b) odpočinek (po smrti) | 2) sestup (souzení)",
+      "lemma": "נַחַת",
+      "hebrew": "נחת",
+      "xlit": "Nachath",
+      "translated": true
+    },
+    "H5184": {
+      "definitions_cz": "Nahath = \"odpočinek\" | 1) jeden z edomských vévodů, syn Reuelův a vnuk Ezaua | 2) kehatský levita, syn Cófai a vnuk Elkána | 3) levitský dozorce v době Ezechiáše",
+      "lemma": "נַחַת",
+      "hebrew": "נחת",
+      "xlit": "Nachath",
+      "translated": true
+    },
+    "H5185": {
+      "definitions_cz": "1) sestupně",
+      "lemma": "נָחֵת",
+      "hebrew": "נחת",
+      "xlit": "nâchêth",
+      "translated": true
+    },
+    "H5186": {
+      "definitions_cz": "1) natáhnout, prodloužit, roztáhnout, naklonit, otočit, převrátit, naklonit, ohnout, uklonit | 1a) (Qal) | 1a1) natáhnout, rozšířit, natáhnout, nabídnout | 1a2) rozložit, rozložit (stan) | 1a3) ohýbat, otáčet, naklánět | 1a3a) odklonit se, naklonit se, sklopit, sklonit se | 1a3b) ohnout, sklonit | 1a3c) vydržet, vysunout (obr.) | 1b) (Niphal) k natažení | 1c) (Hiphil) | 1c1) natáhnout se | 1c2) rozložit | 1c3) otáčet, naklánět, ovlivňovat, ohýbat se, držet se, natahovat se, přitlačovat jako",
+      "lemma": "נָטָה",
+      "hebrew": "נטה",
+      "xlit": "nâṭâh",
+      "translated": true
+    },
+    "H5187": {
+      "definitions_cz": "1) naložený",
+      "lemma": "נְטִיל",
+      "hebrew": "נטיל",
+      "xlit": "nᵉṭîyl",
+      "translated": true
+    },
+    "H5188": {
+      "definitions_cz": "1) pokles | 1a) přívěsek, ozdoba",
+      "lemma": "נְטִיפָה",
+      "hebrew": "נטיפה",
+      "xlit": "nᵉṭîyphâh",
+      "translated": true
+    },
+    "H5189": {
+      "definitions_cz": "1) větvička, úponek, úponky vinné révy (rozložené)",
+      "lemma": "נְטִישָׁה",
+      "hebrew": "נטישה",
+      "xlit": "nᵉṭîyshâh",
+      "translated": true
+    },
+    "H5190": {
+      "definitions_cz": "1) zvedat, nést, nést | 1a) (Qal) zvednout, zvednout, zvednout, postavit | 1b) (Piel) vydržet",
+      "lemma": "נָטַל",
+      "hebrew": "נטל",
+      "xlit": "nâṭal",
+      "translated": true
+    },
+    "H5191": {
+      "definitions_cz": "1) zvednout | 1a) (P'al) zvednout, zvednout | 1b) (P'il) být zvednut",
+      "lemma": "נְטַל",
+      "hebrew": "נטל",
+      "xlit": "nᵉṭal",
+      "translated": true
+    },
+    "H5192": {
+      "definitions_cz": "1) zátěž, váha",
+      "lemma": "נֵטֶל",
+      "hebrew": "נטל",
+      "xlit": "nêṭel",
+      "translated": true
+    },
+    "H5193": {
+      "definitions_cz": "1) zasadit, upevnit, upevnit, založit | 1a) (Qal) | 1a1) zasadit | 1a2) zasadit, založit (obr.) | 1b) (Niphal) | 1b1) k výsadbě | 1b2) bude stanoveno (obr.)",
+      "lemma": "נָטַע",
+      "hebrew": "נטע",
+      "xlit": "nâṭaʻ",
+      "translated": true
+    },
+    "H5194": {
+      "definitions_cz": "1) plantáž, rostlina, výsadba | 1a) plantáž | 1b) výsadba (akt) | 1c) rostlina",
+      "lemma": "נֶטַע",
+      "hebrew": "נטע",
+      "xlit": "neṭaʻ",
+      "translated": true
+    },
+    "H5195": {
+      "definitions_cz": "1) rostlina (obr. silných synů)",
+      "lemma": "נָטִיעַ",
+      "hebrew": "נטיע",
+      "xlit": "nâṭîyaʻ",
+      "translated": true
+    },
+    "H5196": {
+      "definitions_cz": "Netaim = \"mezi rostlinami\" | 1) místo v Palestině",
+      "lemma": "נְטָעִים",
+      "hebrew": "נטעים",
+      "xlit": "Nᵉṭâʻîym",
+      "translated": true
+    },
+    "H5197": {
+      "definitions_cz": "1) kapat, kapat, destilovat, prorokovat, kázat, promlouvat | 1a) (Qal) klesnout, kapat | 1b) (hifil) | 1b1) kapat | 1b2) upustit (proroctví)",
+      "lemma": "נָטַף",
+      "hebrew": "נטף",
+      "xlit": "nâṭaph",
+      "translated": true
+    },
+    "H5198": {
+      "definitions_cz": "1) pokles | 2) žvýkačka, kapky stactu | 2a) aromatická gumová pryskyřice keře používaného v kadidle",
+      "lemma": "נָטָף",
+      "hebrew": "נטף",
+      "xlit": "nâṭâph",
+      "translated": true
+    },
+    "H5199": {
+      "definitions_cz": "Netophah = \"klesání\" | 1) město v Judsku přesídlené vyhnanci, kteří se vraceli z Babylonu se Zerubábelem",
+      "lemma": "נְטֹפָה",
+      "hebrew": "נטפה",
+      "xlit": "Nᵉṭôphâh",
+      "translated": true
+    },
+    "H5200": {
+      "definitions_cz": "Netophathite = viz Netophath \"klesající\" | 1) obyvatel Netofahu",
+      "lemma": "נְטֹפָתִי",
+      "hebrew": "נטפתי",
+      "xlit": "Nᵉṭôphâthîy",
+      "translated": true
+    },
+    "H5201": {
+      "definitions_cz": "1) držet, hlídat, hlídat, udržovat | 1a) (Qal) | 1a1) udržovat, udržovat | 1a2) držet, střežit",
+      "lemma": "נָטַר",
+      "hebrew": "נטר",
+      "xlit": "nâṭar",
+      "translated": true
+    },
+    "H5202": {
+      "definitions_cz": "1) (P'al) zachovat",
+      "lemma": "נְטַר",
+      "hebrew": "נטר",
+      "xlit": "nᵉṭar",
+      "translated": true
+    },
+    "H5203": {
+      "definitions_cz": "1) odejít, dovolit, opustit, odhodit nebo pryč, odmítnout, trpět, připojit se, rozšířit se nebo do zahraničí, být propuštěn, přestat, opustit, skončit, viset na svobodě, svrhnout, provést nájezd, ležet ladem, nechat spadnout, vzdát se, táhnout | 1a) (Qal) | 1a1) nechat, natož ležet ladem, svěřit | 1a2) opustit, opustit | 1a3) povolit | 1b) (Niphal) | 1b1) být opuštěn | 1b2) být uvolněn, být uvolněn | 1b3) být propuštěn, rozšířen do zahraničí | 1c) (Pual) být opuštěný, být opuštěný",
+      "lemma": "נָטַשׁ",
+      "hebrew": "נטש",
+      "xlit": "nâṭash",
+      "translated": true
+    },
+    "H5204": {
+      "definitions_cz": "1) nářek",
+      "lemma": "נִי",
+      "hebrew": "ני",
+      "xlit": "nîy",
+      "translated": true
+    },
+    "H5205": {
+      "definitions_cz": "1) chvění (pohyb) rtů",
+      "lemma": "נִיד",
+      "hebrew": "ניד",
+      "xlit": "nîyd",
+      "translated": true
+    },
+    "H5206": {
+      "definitions_cz": "1) nečistý, špinavost, nečistota",
+      "lemma": "נִידָה",
+      "hebrew": "נידה",
+      "xlit": "nîydâh",
+      "translated": true
+    },
+    "H5207": {
+      "definitions_cz": "1) uklidňující, uklidňující, uklidňující",
+      "lemma": "נִיחוֹחַ",
+      "hebrew": "ניחוח",
+      "xlit": "nîychôwach",
+      "translated": true
+    },
+    "H5208": {
+      "definitions_cz": "1) uklidňující, uklidňující",
+      "lemma": "נִיחוֹחַ",
+      "hebrew": "ניחוח",
+      "xlit": "nîychôwach",
+      "translated": true
+    },
+    "H5209": {
+      "definitions_cz": "1) potomstvo, potomstvo",
+      "lemma": "נִין",
+      "hebrew": "נין",
+      "xlit": "nîyn",
+      "translated": true
+    },
+    "H5210": {
+      "definitions_cz": "Ninive = \"příbytek Ninus\" | 1) hlavní město starověkého království Asýrie; nachází se na východním břehu řeky Tigris, 550 mil (880 km) od jejího ústí a 250 mil (400 km) severně od Babylonu",
+      "lemma": "נִינְוֵה",
+      "hebrew": "נינוה",
+      "xlit": "Nîynᵉvêh",
+      "translated": true
+    },
+    "H5211": {
+      "definitions_cz": "1) útočiště, prchající",
+      "lemma": "נִיס",
+      "hebrew": "ניס",
+      "xlit": "nîyç",
+      "translated": true
+    },
+    "H5212": {
+      "definitions_cz": "Nisan = \"jejich let\" | 1) 1. měsíc židovského kalendáře odpovídající březnu nebo dubnu",
+      "lemma": "נִיסָן",
+      "hebrew": "ניסן",
+      "xlit": "Nîyçân",
+      "translated": true
+    },
+    "H5213": {
+      "definitions_cz": "1) jiskra",
+      "lemma": "נִיצוֹץ",
+      "hebrew": "ניצוץ",
+      "xlit": "nîytsôwts",
+      "translated": true
+    },
+    "H5214": {
+      "definitions_cz": "1) (Qal) roztrhat, čerstvě orat nebo obdělávat",
+      "lemma": "נִיר",
+      "hebrew": "ניר",
+      "xlit": "nîyr",
+      "translated": true
+    },
+    "H5215": {
+      "definitions_cz": "1) obdělávatelná nebo neobdělávaná nebo ladem ležící půda",
+      "lemma": "נִיר",
+      "hebrew": "ניר",
+      "xlit": "nîyr",
+      "translated": true
+    },
+    "H5216": {
+      "definitions_cz": "1) lampa",
+      "lemma": "נִיר",
+      "hebrew": "ניר",
+      "xlit": "nîyr",
+      "translated": true
+    },
+    "H5217": {
+      "definitions_cz": "1) (Niph) udeřit, bičovat, bít",
+      "lemma": "נָכָא",
+      "hebrew": "נכא",
+      "xlit": "nâkâʼ",
+      "translated": true
+    },
+    "H5218": {
+      "definitions_cz": "1) zasažený",
+      "lemma": "נָכֵא",
+      "hebrew": "נכא",
+      "xlit": "nâkêʼ",
+      "translated": true
+    },
+    "H5219": {
+      "definitions_cz": "1) koření | 1a) snad tragantová guma",
+      "lemma": "נְכֹאת",
+      "hebrew": "נכאת",
+      "xlit": "nᵉkôʼth",
+      "translated": true
+    },
+    "H5220": {
+      "definitions_cz": "1) potomstvo, potomstvo",
+      "lemma": "נֶכֶד",
+      "hebrew": "נכד",
+      "xlit": "neked",
+      "translated": true
+    },
+    "H5221": {
+      "definitions_cz": "1) udeřit, bít, bít, bít, zabíjet, zabíjet | 1a)(Niphal) k úderu nebo úderu | 1b) (Pual) k úderu nebo úderu | 1c) (Hiphil) | 1c1) udeřit, udeřit, bít, bičovat, tleskat, tleskat, přirážet | 1c2) udeřit, zabít, zabít (člověka nebo zvíře) | 1c3) bít, útočit, útočit a ničit, dobývat, podrobovat si, pustošit | 1c4) bít, trestat, soudit, trestat, ničit | 1d) (Hophal) k poražení | 1d1) dostat ránu | 1d2) být zraněn | 1d3) být poražen",
+      "lemma": "נָכָה",
+      "hebrew": "נכה",
+      "xlit": "nâkâh",
+      "translated": true
+    },
+    "H5222": {
+      "definitions_cz": "1) zasažený, zbitý",
+      "lemma": "נֵכֶה",
+      "hebrew": "נכה",
+      "xlit": "nêkeh",
+      "translated": true
+    },
+    "H5223": {
+      "definitions_cz": "1) zasažený, zbitý",
+      "lemma": "נָכֶה",
+      "hebrew": "נכה",
+      "xlit": "nâkeh",
+      "translated": true
+    },
+    "H5224": {
+      "definitions_cz": "Necho = \"kulhavý\" | 1) egyptský faraon v době judského krále Josiáše",
+      "lemma": "נְכוֹ",
+      "hebrew": "נכו",
+      "xlit": "Nᵉkôw",
+      "translated": true
+    },
+    "H5225": {
+      "definitions_cz": "Nachon = \"připraveno\" | 1) Majitel mlatu, kterým archa projížděla na cestě do Jeruzaléma, když začala padat z vozu, Uza ho ustál a Bůh ho zabil za to, že se jí dotkl",
+      "lemma": "נָכוֹן",
+      "hebrew": "נכון",
+      "xlit": "Nâkôwn",
+      "translated": true
+    },
+    "H5226": {
+      "definitions_cz": "subst | 1) být před | adv | 2) před, naproti, na dohled, před, vpředu, vpravo na | příprava | 3) směrem dopředu, před, jménem, ​​až před",
+      "lemma": "נֵכַח",
+      "hebrew": "נכח",
+      "xlit": "nêkach",
+      "translated": true
+    },
+    "H5227": {
+      "definitions_cz": "subst | 1) být před | adv | 2) před, naproti, na dohled, před, vpředu, vpravo na | příprava | 3) směrem dopředu, před, jménem, ​​až před",
+      "lemma": "נֹכַח",
+      "hebrew": "נכח",
+      "xlit": "nôkach",
+      "translated": true
+    },
+    "H5228": {
+      "definitions_cz": "1) rovně, vpravo, přímočarost, být před",
+      "lemma": "נָכֹחַ",
+      "hebrew": "נכח",
+      "xlit": "nâkôach",
+      "translated": true
+    },
+    "H5229": {
+      "definitions_cz": "1) rovně vpředu, být vpředu, rovně, vpravo, přímost | 1a) pravdivé věci (proroctví) | 1b) přímost (subst)",
+      "lemma": "נְכֹחָה",
+      "hebrew": "נכחה",
+      "xlit": "nᵉkôchâh",
+      "translated": true
+    },
+    "H5230": {
+      "definitions_cz": "1) být lstivý, být lstivý, být lstivý | 1a) (Qal) | 1a1) být knavish | 1a2) podvodník (příčestí) | 1b) (Piel) oklamat | 1c) (Hithpael) jednat lstivě, jednat lstivě, jednat lstivě",
+      "lemma": "נָכַל",
+      "hebrew": "נכל",
+      "xlit": "nâkal",
+      "translated": true
+    },
+    "H5231": {
+      "definitions_cz": "1) mazanost, chytrost, řemeslo, lstivost",
+      "lemma": "נֵכֶל",
+      "hebrew": "נכל",
+      "xlit": "nêkel",
+      "translated": true
+    },
+    "H5232": {
+      "definitions_cz": "1) bohatství, majetek",
+      "lemma": "נְכַס",
+      "hebrew": "נכס",
+      "xlit": "nᵉkaç",
+      "translated": true
+    },
+    "H5233": {
+      "definitions_cz": "1) bohatství, poklady",
+      "lemma": "נֶכֶס",
+      "hebrew": "נכס",
+      "xlit": "nekeç",
+      "translated": true
+    },
+    "H5234": {
+      "definitions_cz": "1) rozpoznávat, uznávat, znát, respektovat, rozlišovat, brát ohled | 1a) (Niphal) k uznání | 1b) (Piel) s ohledem na | 1c) (Hiphil) | 1c1) brát ohled, pozorovat, věnovat pozornost, věnovat pozornost, všímat si | 1c2) rozpoznat (jak bylo dříve známo), vnímat | 1c3) být ochoten uznat nebo uznat, uznat se ctí | 1c4) seznámit se s | 1c5) rozlišovat, rozumět | 1d) (Hithpael) dát o sobě vědět | 2) chovat se nebo se k nim chovat jako k cizímu nebo podivnému, přestrojení, nesprávnému",
+      "lemma": "נָכַר",
+      "hebrew": "נכר",
+      "xlit": "nâkar",
+      "translated": true
+    },
+    "H5235": {
+      "definitions_cz": "1) pohroma, katastrofa, neštěstí",
+      "lemma": "נֶכֶר",
+      "hebrew": "נכר",
+      "xlit": "neker",
+      "translated": true
+    },
+    "H5236": {
+      "definitions_cz": "1) cizí, cizí, cizí, to, co je cizí | 1a) cizost, cizí bohové | 1b) cizinec, cizinec | 1c) cizí (marnosti)",
+      "lemma": "נֵכָר",
+      "hebrew": "נכר",
+      "xlit": "nêkâr",
+      "translated": true
+    },
+    "H5237": {
+      "definitions_cz": "1) cizí, cizí | 1a) zahraniční | 1b) cizinec (subst) | 1c) cizí žena, nevěstka | 1d) neznámý, neznámý (obr.)",
+      "lemma": "נׇכְרִי",
+      "hebrew": "נכרי",
+      "xlit": "nokrîy",
+      "translated": true
+    },
+    "H5238": {
+      "definitions_cz": "1) poklad",
+      "lemma": "נְכֹת",
+      "hebrew": "נכת",
+      "xlit": "nᵉkôth",
+      "translated": true
+    },
+    "H5239": {
+      "definitions_cz": "1) (Hiphil) dokončit, ukončit | 1a) znamená pochybný",
+      "lemma": "נָלָה",
+      "hebrew": "נלה",
+      "xlit": "nâlâh",
+      "translated": true
+    },
+    "H5240": {
+      "definitions_cz": "1) odporný, opovrhovaný, opovrhovaný, držený v pohrdání",
+      "lemma": "נְמִבְזֶה",
+      "hebrew": "נמבזה",
+      "xlit": "nᵉmibzeh",
+      "translated": true
     }
   }
 }
