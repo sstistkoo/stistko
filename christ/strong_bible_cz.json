@@ -56227,6 +56227,356 @@
       "hebrew": "מזרק",
       "xlit": "mizrâq",
       "translated": true
+    },
+    "H4220": {
+      "definitions_cz": "1) vykrmený, tlustý",
+      "lemma": "מֵחַ",
+      "hebrew": "מח",
+      "xlit": "mêach",
+      "translated": true
+    },
+    "H4221": {
+      "definitions_cz": "1) dřeň",
+      "lemma": "מֹחַ",
+      "hebrew": "מח",
+      "xlit": "môach",
+      "translated": true
+    },
+    "H4222": {
+      "definitions_cz": "1) udeřit, tleskat (rukama) | 1a) (Qal) tleskat (radosti) | 1b) (Piel) tleskat (jásání)",
+      "lemma": "מָחָא",
+      "hebrew": "מחא",
+      "xlit": "mâchâʼ",
+      "translated": true
+    },
+    "H4223": {
+      "definitions_cz": "1) udeřit, udeřit, zabít | 1a) (P'al) udeřit | 1b) (Pael) bránit | 1c) (Ithp'al), aby bylo možné udeřit",
+      "lemma": "מְחָא",
+      "hebrew": "מחא",
+      "xlit": "mᵉchâʼ",
+      "translated": true
+    },
+    "H4224": {
+      "definitions_cz": "1) úkryt | 2) (TWOT) ňadra",
+      "lemma": "מַחֲבֵא",
+      "hebrew": "מחבא",
+      "xlit": "machăbêʼ",
+      "translated": true
+    },
+    "H4225": {
+      "definitions_cz": "1) věc spojená, spoj, šev, místo spojení | 1a) věc spojená | 1b) místo připojení",
+      "lemma": "מַחְבֶּרֶת",
+      "hebrew": "מחברת",
+      "xlit": "machbereth",
+      "translated": true
+    },
+    "H4226": {
+      "definitions_cz": "1) pojivo, svorka, spoj",
+      "lemma": "מְחַבְּרָה",
+      "hebrew": "מחברה",
+      "xlit": "mᵉchabbᵉrâh",
+      "translated": true
+    },
+    "H4227": {
+      "definitions_cz": "1) plochý talíř, pánev, pánev | 1a) na pečení",
+      "lemma": "מַחֲבַת",
+      "hebrew": "מחבת",
+      "xlit": "machăbath",
+      "translated": true
+    },
+    "H4228": {
+      "definitions_cz": "1) ovinutí, opásání, křídlo, cinktura",
+      "lemma": "מַחֲגֹרֶת",
+      "hebrew": "מחגרת",
+      "xlit": "machăgôreth",
+      "translated": true
+    },
+    "H4229": {
+      "definitions_cz": "1) setřít, setřít | 1a) (Qal) | 1a1) vymazat | 1a2) vymazat, vymazat | 1a3) vymazat, vyhubit | 1b) (Niphal) | 1b1) k vymazání | 1b2) k vymazání | 1b3) bude vyhlazeno | 1c) (Hiphil) k vymazání (z paměti) | 2) (Qal) udeřit | 3) (Pual) plný dřeně (příčestí)",
+      "lemma": "מָחָה",
+      "hebrew": "מחה",
+      "xlit": "mâchâh",
+      "translated": true
+    },
+    "H4230": {
+      "definitions_cz": "1) kruhový nástroj, kompas",
+      "lemma": "מְחוּגָה",
+      "hebrew": "מחוגה",
+      "xlit": "mᵉchûwgâh",
+      "translated": true
+    },
+    "H4231": {
+      "definitions_cz": "1) město, přístav",
+      "lemma": "מָחוֹז",
+      "hebrew": "מחוז",
+      "xlit": "mâchôwz",
+      "translated": true
+    },
+    "H4232": {
+      "definitions_cz": "Mehujael = \"zabit Bohem\" | 1) syn Iradův a pravnuk Kainův",
+      "lemma": "מְחוּיָאֵל",
+      "hebrew": "מחויאל",
+      "xlit": "Mᵉchûwyâʼêl",
+      "translated": true
+    },
+    "H4233": {
+      "definitions_cz": "Mahavit = \"propagátoři\" | 1) zřejmě obyvatel místa zvaného „Macheweh“ | 1a) označení Eliela, jednoho z Davidových mocných válečníků",
+      "lemma": "מַחֲוִים",
+      "hebrew": "מחוים",
+      "xlit": "Machăvîym",
+      "translated": true
+    },
+    "H4234": {
+      "definitions_cz": "1) tanec, tanec",
+      "lemma": "מָחוֹל",
+      "hebrew": "מחול",
+      "xlit": "mâchôwl",
+      "translated": true
+    },
+    "H4235": {
+      "definitions_cz": "Mahol = \"tanec\" | 1) otec Hemana",
+      "lemma": "מָחוֹל",
+      "hebrew": "מחול",
+      "xlit": "Mâchôwl",
+      "translated": true
+    },
+    "H4236": {
+      "definitions_cz": "1) vidění (v extatickém stavu)",
+      "lemma": "מַחֲזֶה",
+      "hebrew": "מחזה",
+      "xlit": "machăzeh",
+      "translated": true
+    },
+    "H4237": {
+      "definitions_cz": "1) světlo, okno, místo vidění",
+      "lemma": "מֶחֱזָה",
+      "hebrew": "מחזה",
+      "xlit": "mechĕzâh",
+      "translated": true
+    },
+    "H4238": {
+      "definitions_cz": "Mahazioth = \"vize\" | 1) jeden ze 14 synů Hémana Kohátského a šéf skupiny zpěváků",
+      "lemma": "מַחֲזִיאוֹת",
+      "hebrew": "מחזיאות",
+      "xlit": "Machăzîyʼôwth",
+      "translated": true
+    },
+    "H4239": {
+      "definitions_cz": "1) zdvih (beranidla)",
+      "lemma": "מְחִי",
+      "hebrew": "מחי",
+      "xlit": "mᵉchîy",
+      "translated": true
+    },
+    "H4240": {
+      "definitions_cz": "Mehida = \"slavný\" nebo \"vznešený\" | 1) hlava rodiny vyhnanců vracejících se se Zerubábelem",
+      "lemma": "מְחִידָא",
+      "hebrew": "מחידא",
+      "xlit": "Mᵉchîydâʼ",
+      "translated": true
+    },
+    "H4241": {
+      "definitions_cz": "1) zachování života, obživa | 1a) zachování života | 1b) výživa | 1c) oživení | 1d) výkrm z masa, živé maso, jemné nebo syrové maso",
+      "lemma": "מִחְיָה",
+      "hebrew": "מחיה",
+      "xlit": "michyâh",
+      "translated": true
+    },
+    "H4242": {
+      "definitions_cz": "1) cena, pronájem | 1a) cena | 1b) najmout, odměnit, získat",
+      "lemma": "מְחִיר",
+      "hebrew": "מחיר",
+      "xlit": "mᵉchîyr",
+      "translated": true
+    },
+    "H4243": {
+      "definitions_cz": "Mehir = \"cena\" | 1) syn Cheluba, bratra Šuacha",
+      "lemma": "מְחִיר",
+      "hebrew": "מחיר",
+      "xlit": "Mᵉchîyr",
+      "translated": true
+    },
+    "H4244": {
+      "definitions_cz": "Mahlah = \"nemoc\" | 1) nejstarší z 5 dcer Celofchada, vnuka Manasseho | 2) Gileadita",
+      "lemma": "מַחְלָה",
+      "hebrew": "מחלה",
+      "xlit": "Machlâh",
+      "translated": true
+    },
+    "H4245": {
+      "definitions_cz": "1) nemoc, nemoc",
+      "lemma": "מַחֲלֶה",
+      "hebrew": "מחלה",
+      "xlit": "machăleh",
+      "translated": true
+    },
+    "H4246": {
+      "definitions_cz": "1) tanec, tanec",
+      "lemma": "מְחֹלָה",
+      "hebrew": "מחלה",
+      "xlit": "mᵉchôlâh",
+      "translated": true
+    },
+    "H4247": {
+      "definitions_cz": "1) díra, jeskyně",
+      "lemma": "מְחִלָּה",
+      "hebrew": "מחלה",
+      "xlit": "mᵉchillâh",
+      "translated": true
+    },
+    "H4248": {
+      "definitions_cz": "Mahlon = \"nemocný\" | 1) syn Elimelech od Noemi a první manžel Ruth",
+      "lemma": "מַחְלוֹן",
+      "hebrew": "מחלון",
+      "xlit": "Machlôwn",
+      "translated": true
+    },
+    "H4249": {
+      "definitions_cz": "Mahli = \"nemocný\" | 1) syn Merariho a vnuk Leviho; předek rodu Mahlitů | 2) syn Mushiho, vnuka Merariho a pravnuka Leviho",
+      "lemma": "מַחְלִי",
+      "hebrew": "מחלי",
+      "xlit": "Machlîy",
+      "translated": true
+    },
+    "H4250": {
+      "definitions_cz": "Mahlites = viz Mahli \"moje nemoc\" | 1) potomci Mahliho, vnuka Leviho",
+      "lemma": "מַחְלִי",
+      "hebrew": "מחלי",
+      "xlit": "Machlîy",
+      "translated": true
+    },
+    "H4251": {
+      "definitions_cz": "1) nemoc, utrpení | 1a) způsobené ranami",
+      "lemma": "מַחְלֻי",
+      "hebrew": "מחלי",
+      "xlit": "machluy",
+      "translated": true
+    },
+    "H4252": {
+      "definitions_cz": "1) nůž",
+      "lemma": "מַחֲלָף",
+      "hebrew": "מחלף",
+      "xlit": "machălâph",
+      "translated": true
+    },
+    "H4253": {
+      "definitions_cz": "1) cop, zámek, cop | 1a) vlasů",
+      "lemma": "מַחְלָפָה",
+      "hebrew": "מחלפה",
+      "xlit": "machlâphâh",
+      "translated": true
+    },
+    "H4254": {
+      "definitions_cz": "1) státní župan",
+      "lemma": "מַחֲלָצָה",
+      "hebrew": "מחלצה",
+      "xlit": "machălâtsâh",
+      "translated": true
+    },
+    "H4255": {
+      "definitions_cz": "1) třída, divize | 1a) kněží a levitů",
+      "lemma": "מַחְלְקָה",
+      "hebrew": "מחלקה",
+      "xlit": "machlᵉqâh",
+      "translated": true
+    },
+    "H4256": {
+      "definitions_cz": "1) rozdělení, kurz, třída, podíl, příděl | 1a) divize, část | 1b) divize, třída, kurz | 1b1) kněží, levité (technický termín organizace)",
+      "lemma": "מַחֲלֹקֶת",
+      "hebrew": "מחלקת",
+      "xlit": "machălôqeth",
+      "translated": true
+    },
+    "H4257": {
+      "definitions_cz": "1) Mahalath | 1a) nalezený v nadpisech Ž 53:1 a Ž 81:1 | 1a1) znamená pochybný, pravděpodobně heslo v písni, která dává název melodii",
+      "lemma": "מַחֲלַת",
+      "hebrew": "מחלת",
+      "xlit": "machălath",
+      "translated": true
+    },
+    "H4258": {
+      "definitions_cz": "Mahalath = \"strunný nástroj\" | 1) dcera Jerimota, syna krále Davida, a manželky, zřejmě 1., krále Rechoboáma, vnuka krále Davida | 2) dcera Izmaela a manželka Ezaua",
+      "lemma": "מַחֲלַת",
+      "hebrew": "מחלת",
+      "xlit": "Machălath",
+      "translated": true
+    },
+    "H4259": {
+      "definitions_cz": "Meholathite = Mehola \"tančení\" | 1) obyvatel místa zjevně pojmenovaného 'Meholah' | 1a) připisovaný Adriel a Barzillai",
+      "lemma": "מְחֹלָתִי",
+      "hebrew": "מחלתי",
+      "xlit": "Mᵉchôlâthîy",
+      "translated": true
+    },
+    "H4260": {
+      "definitions_cz": "1) tvarohovitý, hladký, mastný, pokrytecký | 1a) slova lichotky (obr.)",
+      "lemma": "מַחֲמָאָה",
+      "hebrew": "מחמאה",
+      "xlit": "machămâʼâh",
+      "translated": true
+    },
+    "H4261": {
+      "definitions_cz": "1) touha, žádoucí věc, příjemná věc",
+      "lemma": "מַחְמָד",
+      "hebrew": "מחמד",
+      "xlit": "machmâd",
+      "translated": true
+    },
+    "H4262": {
+      "definitions_cz": "1) žádoucí, vzácná věc",
+      "lemma": "מַחְמֻד",
+      "hebrew": "מחמד",
+      "xlit": "machmud",
+      "translated": true
+    },
+    "H4263": {
+      "definitions_cz": "1) předmět soucitu nebo lítosti, věc litovaná | 2) (TWOT) předmět hluboké lásky",
+      "lemma": "מַחְמָל",
+      "hebrew": "מחמל",
+      "xlit": "machmâl",
+      "translated": true
+    },
+    "H4264": {
+      "definitions_cz": "1) tábořiště, tábor | 1a) tábor, místo tábořiště | 1b) tábor ozbrojených hostitelů, vojenský tábor | 1c) ti, kteří táboří, společnost, skupina lidí",
+      "lemma": "מַחֲנֶה",
+      "hebrew": "מחנה",
+      "xlit": "machăneh",
+      "translated": true
+    },
+    "H4265": {
+      "definitions_cz": "Mahaneh-dan = \"tábor Dan\" | 1) kemp kmene Dan; místo za Kirjath-jearim a mezi Zarah a Eshtaol",
+      "lemma": "מַחֲנֵה־דָן",
+      "hebrew": "מחנהדן",
+      "xlit": "Machănêh-Dân",
+      "translated": true
+    },
+    "H4266": {
+      "definitions_cz": "Mahanaim = \"dva tábory\" | 1) místo východně od Jordánu, pojmenované podle Jákobova setkání s anděly | 2) levitské město v Gadu",
+      "lemma": "מַחֲנַיִם",
+      "hebrew": "מחנים",
+      "xlit": "Machănayim",
+      "translated": true
+    },
+    "H4267": {
+      "definitions_cz": "1) uškrcení, udušení | 1a) jako způsob smrti",
+      "lemma": "מַחֲנַק",
+      "hebrew": "מחנק",
+      "xlit": "machănaq",
+      "translated": true
+    },
+    "H4268": {
+      "definitions_cz": "1) útočiště, přístřešek | 1a) před deštěm nebo bouří, před nebezpečím | 1b) nepravdy",
+      "lemma": "מַחֲסֶה",
+      "hebrew": "מחסה",
+      "xlit": "machăçeh",
+      "translated": true
+    },
+    "H4269": {
+      "definitions_cz": "1) náhubek",
+      "lemma": "מַחְסוֹם",
+      "hebrew": "מחסום",
+      "xlit": "machçôwm",
+      "translated": true
     }
   }
 }
