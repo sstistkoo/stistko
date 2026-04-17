@@ -70024,6 +70024,356 @@
       "hebrew": "ערלה",
       "xlit": "ʻorlâh",
       "translated": true
+    },
+    "H6191": {
+      "definitions_cz": "1) být lstivý, být chytrý, být lstivý, dávat si pozor, lstivě radit, být prozíravý | 1a) (Qal) být lstivý, být rafinovaný | 1b) (Hiphil) být lstivý, být nebo se stát chytrým",
+      "lemma": "עָרַם",
+      "hebrew": "ערם",
+      "xlit": "ʻâram",
+      "translated": true
+    },
+    "H6192": {
+      "definitions_cz": "1) (Niphal) hromadit, hromadit, být hromadit",
+      "lemma": "עָרַם",
+      "hebrew": "ערם",
+      "xlit": "ʻâram",
+      "translated": true
+    },
+    "H6193": {
+      "definitions_cz": "1) jemnost, bystrost, rafinovanost",
+      "lemma": "עֹרֶם",
+      "hebrew": "ערם",
+      "xlit": "ʻôrem",
+      "translated": true
+    },
+    "H6194": {
+      "definitions_cz": "1) hromada, hromada",
+      "lemma": "עָרֵם",
+      "hebrew": "ערם",
+      "xlit": "ʻârêm",
+      "translated": true
+    },
+    "H6195": {
+      "definitions_cz": "1) bystrost, chytrost, obezřetnost",
+      "lemma": "עׇרְמָה",
+      "hebrew": "ערמה",
+      "xlit": "ʻormâh",
+      "translated": true
+    },
+    "H6196": {
+      "definitions_cz": "1) platan | 1a) jako zbavené kůry",
+      "lemma": "עַרְמוֹן",
+      "hebrew": "ערמון",
+      "xlit": "ʻarmôwn",
+      "translated": true
+    },
+    "H6197": {
+      "definitions_cz": "Eran = \"pozorovatel\" | 1) nejstarší syn Efraimův",
+      "lemma": "עֵרָן",
+      "hebrew": "ערן",
+      "xlit": "ʻÊrân",
+      "translated": true
+    },
+    "H6198": {
+      "definitions_cz": "Eranites = viz Eran \"hlídač\" | 1) potomci Erana, syna Efraimova",
+      "lemma": "עֵרָנִי",
+      "hebrew": "ערני",
+      "xlit": "ʻÊrânîy",
+      "translated": true
+    },
+    "H6199": {
+      "definitions_cz": "1) svlečený, nemajetný",
+      "lemma": "עַרעָר",
+      "hebrew": "ערער",
+      "xlit": "ʻarʻâr",
+      "translated": true
+    },
+    "H6200": {
+      "definitions_cz": "Aroerite = viz Aroer \"opuštěný\" | 1) obyvatel Aroeru",
+      "lemma": "עֲרֹעֵרִי",
+      "hebrew": "ערערי",
+      "xlit": "ʻĂrôʻêrîy",
+      "translated": true
+    },
+    "H6201": {
+      "definitions_cz": "1) kapat, kapat | 1a) (Qal) klesnout, stékat",
+      "lemma": "עָרַף",
+      "hebrew": "ערף",
+      "xlit": "ʻâraph",
+      "translated": true
+    },
+    "H6202": {
+      "definitions_cz": "1) (Qal) zlomit vaz (zvířeti)",
+      "lemma": "עָרַף",
+      "hebrew": "ערף",
+      "xlit": "ʻâraph",
+      "translated": true
+    },
+    "H6203": {
+      "definitions_cz": "1) krk, zadní část krku, záda | 1a) zadní část krku | 1a1) prchajícího nepřítele | 1a2) apostaze (obr.) | 1b) ztuhlá šíje, tvrdohlavá (obr.)",
+      "lemma": "עֹרֶף",
+      "hebrew": "ערף",
+      "xlit": "ʻôreph",
+      "translated": true
+    },
+    "H6204": {
+      "definitions_cz": "Orpa = \"gazela\" | 1) Moábská žena, manželka Chiliona, syna Noemi, a švagrová Ruth",
+      "lemma": "עׇרְפָּה",
+      "hebrew": "ערפה",
+      "xlit": "ʻOrpâh",
+      "translated": true
+    },
+    "H6205": {
+      "definitions_cz": "1) mrak, těžký nebo temný mrak, tma, hrubá tma, hustá tma",
+      "lemma": "עֲרָפֶל",
+      "hebrew": "ערפל",
+      "xlit": "ʻărâphel",
+      "translated": true
+    },
+    "H6206": {
+      "definitions_cz": "1) třást se, děsit se, bát se, utlačovat, zvítězit, zlomit se, děsit se, třást se | 1a) (Qal) | 1a1) způsobit chvění, hrůzu | 1b2) třást se, cítit strach | 1b) (Niphal) být úžasný, být hrozný | 1c) (Hiphil) | 1c1) považovat nebo zacházet s úžasem, považovat nebo zacházet jako s hrozným | 1c2) inspirovat úžasem, děsit",
+      "lemma": "עָרַץ",
+      "hebrew": "ערץ",
+      "xlit": "ʻârats",
+      "translated": true
+    },
+    "H6207": {
+      "definitions_cz": "1) (Qal) hlodat, žvýkat",
+      "lemma": "עָרַק",
+      "hebrew": "ערק",
+      "xlit": "ʻâraq",
+      "translated": true
+    },
+    "H6208": {
+      "definitions_cz": "Arkite = viz Arki \"hlodat\" | 1) obyvatel Arki nebo Arka",
+      "lemma": "עַרְקִי",
+      "hebrew": "ערקי",
+      "xlit": "ʻArqîy",
+      "translated": true
+    },
+    "H6209": {
+      "definitions_cz": "1) svléknout se, obnažit se, svléknout se | 1a) (Qal) svléknout se, svléknout se | 1b) (Poel) odhalit | 1c) (Hithpalpel) být zcela svléknut, být zcela obnažen | 1d) (Pilpel) přestávka",
+      "lemma": "עָרַר",
+      "hebrew": "ערר",
+      "xlit": "ʻârar",
+      "translated": true
+    },
+    "H6210": {
+      "definitions_cz": "1) gauč, pohovka, postel",
+      "lemma": "עֶרֶשׂ",
+      "hebrew": "ערש",
+      "xlit": "ʻeres",
+      "translated": true
+    },
+    "H6211": {
+      "definitions_cz": "1) můra | 2) byliny, tráva",
+      "lemma": "עָשׁ",
+      "hebrew": "עש",
+      "xlit": "ʻâsh",
+      "translated": true
+    },
+    "H6212": {
+      "definitions_cz": "1) bylina, bylina, tráva, zelené rostliny",
+      "lemma": "עֶשֶׂב",
+      "hebrew": "עשב",
+      "xlit": "ʻeseb",
+      "translated": true
+    },
+    "H6213": {
+      "definitions_cz": "1) dělat, vyrábět, dělat, dělat | 1a) (Qal) | 1a1) dělat, pracovat, vyrábět, vyrábět | 1a1a) udělat | 1a1b) do práce | 1a1c) zabývat se (s) | 1a1d) jednat, jednat s účinkem, účinkem | 1a2) udělat | 1a2a) udělat | 1a2b) vyrábět | 1a2c) připravit | 1a2d) učinit (nabídku) | 1a2e) věnovat se, dát do pořádku | 1a2f) pozorovat, slavit | 1a2g) nabýt (majetek) | 1a2h) jmenovat, ordinovat, institut | 1a2i) způsobit | 1a2j) použít | 1a2k) utratit, projít | 1b) (Niphal) | 1b",
+      "lemma": "עָשָׂה",
+      "hebrew": "עשה",
+      "xlit": "ʻâsâh",
+      "translated": true
+    },
+    "H6214": {
+      "definitions_cz": "Asahel = \"stvořený Bohem\" | 1) synovec Davida, syna Davidovy sestry Ceruje, a bratr Joaba a Abisaie; rychlým krokem byl zabit Abnerem, když ho pronásledoval v bitvě a chytil ho | 2) Levita za vlády judského krále Jozafata, který procházel královstvím a vyučoval zákon | 3) Levita za vlády judského krále Ezechiáše, který měl na starosti desátky a zasvěcené věci v chrámu | 4) kněz, otec Jonathana, v době Ezdráše",
+      "lemma": "עֲשָׂהאֵל",
+      "hebrew": "עשהאל",
+      "xlit": "ʻĂsâhʼêl",
+      "translated": true
+    },
+    "H6215": {
+      "definitions_cz": "Ezau = \"chlupatý\" | 1) nejstarší syn Izáka a Rebeky a dvojče Jákoba; prodal prvorozenství za jídlo, když měl hlad a boží požehnání dostalo Jákoba; předchůdce arabských národů",
+      "lemma": "עֵשָׂו",
+      "hebrew": "עשו",
+      "xlit": "ʻÊsâv",
+      "translated": true
+    },
+    "H6216": {
+      "definitions_cz": "1) utlačovatel, vyděrač",
+      "lemma": "עָשׁוֹק",
+      "hebrew": "עשוק",
+      "xlit": "ʻâshôwq",
+      "translated": true
+    },
+    "H6217": {
+      "definitions_cz": "1) útlak, vydírání",
+      "lemma": "עָשׁוּק",
+      "hebrew": "עשוק",
+      "xlit": "ʻâshûwq",
+      "translated": true
+    },
+    "H6218": {
+      "definitions_cz": "1) deset, desetiletí | 1a) desítka, desátá | 1b) desetistrunná, harfa",
+      "lemma": "עָשׂוֹר",
+      "hebrew": "עשור",
+      "xlit": "ʻâsôwr",
+      "translated": true
+    },
+    "H6219": {
+      "definitions_cz": "1) hladká, lesklá",
+      "lemma": "עָשׁוֹת",
+      "hebrew": "עשות",
+      "xlit": "ʻâshôwth",
+      "translated": true
+    },
+    "H6220": {
+      "definitions_cz": "Ashvath = \"elegantní\" | 1) jeden ze synů Jafleta z pokolení Ašer",
+      "lemma": "עַשְׁוָת",
+      "hebrew": "עשות",
+      "xlit": "ʻAshvâth",
+      "translated": true
+    },
+    "H6221": {
+      "definitions_cz": "Asiel = \"stvořeno Bohem\" | 1) Simeonite a předchůdce Jehu",
+      "lemma": "עֲשִׂיאֵל",
+      "hebrew": "עשיאל",
+      "xlit": "ʻĂsîyʼêl",
+      "translated": true
+    },
+    "H6222": {
+      "definitions_cz": "Asaiah nebo Asahiah = \"vytvořený Jehovou\" | 1) kníže z kmene Simeon za časů judského krále Ezechiáše | 2) služebník judského krále Josiáše | 3) merarijský levita, náčelník svého rodu, v době Davida",
+      "lemma": "עֲשָׂיָה",
+      "hebrew": "עשיה",
+      "xlit": "ʻĂsâyâh",
+      "translated": true
+    },
+    "H6223": {
+      "definitions_cz": "adj | 1) bohatý, bohatý | n | 2) bohatý, bohatý, bohatý muž",
+      "lemma": "עָשִׁיר",
+      "hebrew": "עשיר",
+      "xlit": "ʻâshîyr",
+      "translated": true
+    },
+    "H6224": {
+      "definitions_cz": "1) pořadové číslo | 1a) desetinu",
+      "lemma": "עֲשִׂירִי",
+      "hebrew": "עשירי",
+      "xlit": "ʻăsîyrîy",
+      "translated": true
+    },
+    "H6225": {
+      "definitions_cz": "1) kouřit, zlobit se, hněvat se | 1a) (Qal) | 1a1) kouřit | 1a2) vztekat se, hněvat se, zuřit",
+      "lemma": "עָשַׁן",
+      "hebrew": "עשן",
+      "xlit": "ʻâshan",
+      "translated": true
+    },
+    "H6226": {
+      "definitions_cz": "1) kouření",
+      "lemma": "עָשֵׁן",
+      "hebrew": "עשן",
+      "xlit": "ʻâshên",
+      "translated": true
+    },
+    "H6227": {
+      "definitions_cz": "1) kouř | 1a) kouř | 1b) v metafoře, přirovnání | 1c) kouř (obr.)",
+      "lemma": "עָשָׁן",
+      "hebrew": "עשן",
+      "xlit": "ʻâshân",
+      "translated": true
+    },
+    "H6228": {
+      "definitions_cz": "Ashan = \"kouř\" | 1) město v nížině Judy, o kterém se později mluví jako o městě Simeonovi",
+      "lemma": "עָשָׁן",
+      "hebrew": "עשן",
+      "xlit": "ʻÂshân",
+      "translated": true
+    },
+    "H6229": {
+      "definitions_cz": "1) (Hithpael) snažit se, bojovat, hádat se",
+      "lemma": "עָשַׂק",
+      "hebrew": "עשק",
+      "xlit": "ʻâsaq",
+      "translated": true
+    },
+    "H6230": {
+      "definitions_cz": "Esek = \"spor\" | 1) studna, kterou pastevci Izáka vykopali v údolí Gerar",
+      "lemma": "עֵשֶׂק",
+      "hebrew": "עשק",
+      "xlit": "ʻêseq",
+      "translated": true
+    },
+    "H6231": {
+      "definitions_cz": "1) naléhat, utlačovat, porušovat, podvádět, páchat násilí, lstí, křivdit, vydírat | 1a) (Qal) | 1a1) utlačovat, křivdit, vydírat | 1a2) utlačovat | 1b) (Pual) být vykořisťován, rozdrcen",
+      "lemma": "עָשַׁק",
+      "hebrew": "עשק",
+      "xlit": "ʻâshaq",
+      "translated": true
+    },
+    "H6232": {
+      "definitions_cz": "Eshek = \"utlačovatel\" | 1) Benjamínec, pozdní potomek Saula",
+      "lemma": "עֵשֶׁק",
+      "hebrew": "עשק",
+      "xlit": "ʻÊsheq",
+      "translated": true
+    },
+    "H6233": {
+      "definitions_cz": "1) útlak, vydírání, ubližování | 1a) útlak | 1b) vydírání | 1c) zisk vydíráním",
+      "lemma": "עֹשֶׁק",
+      "hebrew": "עשק",
+      "xlit": "ʻôsheq",
+      "translated": true
+    },
+    "H6234": {
+      "definitions_cz": "1) útlak, zneužívání, úzkost",
+      "lemma": "עׇשְׁקָה",
+      "hebrew": "עשקה",
+      "xlit": "ʻoshqâh",
+      "translated": true
+    },
+    "H6235": {
+      "definitions_cz": "1) deset | 1a) deset | 1b) s jinými čísly",
+      "lemma": "עֶשֶׂר",
+      "hebrew": "עשר",
+      "xlit": "ʻeser",
+      "translated": true
+    },
+    "H6236": {
+      "definitions_cz": "1) deset",
+      "lemma": "עֲשַׂר",
+      "hebrew": "עשר",
+      "xlit": "ʻăsar",
+      "translated": true
+    },
+    "H6237": {
+      "definitions_cz": "1) desátovat, brát desátý díl, dávat desátek, brát desátek | 1a) (Qal) desátkem | 1b) (Piel) dát desátek | 1c) (Hifil) vzít desátek",
+      "lemma": "עָשַׂר",
+      "hebrew": "עשר",
+      "xlit": "ʻâsar",
+      "translated": true
+    },
+    "H6238": {
+      "definitions_cz": "1) být nebo se stát bohatým nebo bohatým, obohacovat, předstírat, že jsem bohatý | 1a) (Qal) zbohatnout nebo zbohatnout | 1b) (hifil) | 1b1) zbohatnout | 1b2) získat bohatství | 1c) (Hithpael) obohatit se, předstírat, že jste bohatý",
+      "lemma": "עָשַׁר",
+      "hebrew": "עשר",
+      "xlit": "ʻâshar",
+      "translated": true
+    },
+    "H6239": {
+      "definitions_cz": "1) bohatství, bohatství",
+      "lemma": "עֹשֶׁר",
+      "hebrew": "עשר",
+      "xlit": "ʻôsher",
+      "translated": true
+    },
+    "H6240": {
+      "definitions_cz": "1) deset, -teen (v kombinaci s jinými čísly) | 1a) používá se pouze v kombinaci k vytvoření čísel 11-19",
+      "lemma": "עָשָׂר",
+      "hebrew": "עשר",
+      "xlit": "ʻâsâr",
+      "translated": true
     }
   }
 }
