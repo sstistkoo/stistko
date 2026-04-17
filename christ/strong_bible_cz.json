@@ -67224,6 +67224,356 @@
       "hebrew": "עות",
       "xlit": "ʻûwth",
       "translated": true
+    },
+    "H5791": {
+      "definitions_cz": "1) být ohnutý, být křivý, ohýbat, dělat křivý, zvrhnout | 1a)(Piel) | 1a1) dělat křivé, falšovat, převracet, podvracet | 1a2) ohnout, udělat křivý | 1b) (Pual) věc ohnutá (příčestí) | 1c) (Hithpael) ohnout se",
+      "lemma": "עָוַת",
+      "hebrew": "עות",
+      "xlit": "ʻâvath",
+      "translated": true
+    },
+    "H5792": {
+      "definitions_cz": "1) podvracení, ohýbání",
+      "lemma": "עַוָּתָה",
+      "hebrew": "עותה",
+      "xlit": "ʻavvâthâh",
+      "translated": true
+    },
+    "H5793": {
+      "definitions_cz": "Uthai = \"užitečné\" | 1) syn Ammihudův a potomek Phareze z Judska | 2) jeden ze synů Bigvaie, který se vrátil z exilu s 2. karavanou s Ezrou",
+      "lemma": "עוּתַי",
+      "hebrew": "עותי",
+      "xlit": "ʻÛwthay",
+      "translated": true
+    },
+    "H5794": {
+      "definitions_cz": "1) silný, mocný, divoký",
+      "lemma": "עַז",
+      "hebrew": "עז",
+      "xlit": "ʻaz",
+      "translated": true
+    },
+    "H5795": {
+      "definitions_cz": "1) koza, koza, koza, kůzle",
+      "lemma": "עֵז",
+      "hebrew": "עז",
+      "xlit": "ʻêz",
+      "translated": true
+    },
+    "H5796": {
+      "definitions_cz": "1) koza",
+      "lemma": "עֵז",
+      "hebrew": "עז",
+      "xlit": "ʻêz",
+      "translated": true
+    },
+    "H5797": {
+      "definitions_cz": "1) síla, síla | 1a) materiální nebo fyzické | 1b) osobní nebo sociální nebo politické",
+      "lemma": "עֹז",
+      "hebrew": "עז",
+      "xlit": "ʻôz",
+      "translated": true
+    },
+    "H5798": {
+      "definitions_cz": "Uzza nebo Uzzah = \"síla\" | n pr m | 1) muž zabitý Jehovou za to, že se dotkl posvátné archy | 2) Benjamínec ze synů Ehudových | 3) předek rodiny chrámových otroků, kteří se vrátili z exilu se Zerubábelem | 4) merarijský levita | n pr loc | 5) zahrada, kde byli pohřbeni judští králové Manasse a Amon",
+      "lemma": "עֻזָּא",
+      "hebrew": "עזא",
+      "xlit": "ʻUzzâʼ",
+      "translated": true
+    },
+    "H5799": {
+      "definitions_cz": "1) úplné odstranění, obětní beránek | 1a) se týká kozla používaného k obětování za hříchy lidu | 1b) znamená pochybný",
+      "lemma": "עֲזָאזֵל",
+      "hebrew": "עזאזל",
+      "xlit": "ʻăzâʼzêl",
+      "translated": true
+    },
+    "H5800": {
+      "definitions_cz": "1) opustit, uvolnit, opustit | 1a) (Qal) odejít | 1a1) odejít, nechat za sebou, odejít, natož | 1a2) opustit, opustit, opustit, zanedbávat, odpadnout | 1a3) uvolnit, osvobodit, pustit, osvobodit | 1b) (Niphal) | 1b1) ponechat | 1b2) být opuštěn | 1c) (Pual) bude opuštěný | 2) obnovit, opravit | 2a) (Qal) opravit",
+      "lemma": "עָזַב",
+      "hebrew": "עזב",
+      "xlit": "ʻâzab",
+      "translated": true
+    },
+    "H5801": {
+      "definitions_cz": "1) zboží, zboží",
+      "lemma": "עִזָּבוֹן",
+      "hebrew": "עזבון",
+      "xlit": "ʻizzâbôwn",
+      "translated": true
+    },
+    "H5802": {
+      "definitions_cz": "Azbuk = \"silná devastace\" | 1) otec Nehemjáše, vůdce poloviny okresu Beth Zur a opraváře jeruzalémských hradeb za jiného Nehemjáše",
+      "lemma": "עַזְבּוּק",
+      "hebrew": "עזבוק",
+      "xlit": "ʻAzbûwq",
+      "translated": true
+    },
+    "H5803": {
+      "definitions_cz": "Azgad = \"Gad je mocný\" | 1) předek rodiny laiků, kteří se vrátili z exilu se Zerubábelem | 2) muž, který zpečetil smlouvu s Nehemjášem",
+      "lemma": "עַזְגָּד",
+      "hebrew": "עזגד",
+      "xlit": "ʻAzgâd",
+      "translated": true
+    },
+    "H5804": {
+      "definitions_cz": "Azzah = \"silný\" | 1) jiný název pro „Gaza“, město Pelištejců, které se nachází na extrémním jihozápadě Palestiny poblíž Středozemního moře",
+      "lemma": "עַזָּה",
+      "hebrew": "עזה",
+      "xlit": "ʻAzzâh",
+      "translated": true
+    },
+    "H5805": {
+      "definitions_cz": "1) opuštěnost, opuštěnost",
+      "lemma": "עֲזוּבָה",
+      "hebrew": "עזובה",
+      "xlit": "ʻăzûwbâh",
+      "translated": true
+    },
+    "H5806": {
+      "definitions_cz": "Azubah = \"opuštěný\" | 1) manželka Káleba, syna Hezrónova | 2) dcera Šilhiho, manželka krále Asy a matka judského krále Jóšafata",
+      "lemma": "עֲזוּבָה",
+      "hebrew": "עזובה",
+      "xlit": "ʻĂzûwbâh",
+      "translated": true
+    },
+    "H5807": {
+      "definitions_cz": "1) síla, dravost, síla",
+      "lemma": "עֱזוּז",
+      "hebrew": "עזוז",
+      "xlit": "ʻĕzûwz",
+      "translated": true
+    },
+    "H5808": {
+      "definitions_cz": "1) mocný, mocný",
+      "lemma": "עִזּוּז",
+      "hebrew": "עזוז",
+      "xlit": "ʻizzûwz",
+      "translated": true
+    },
+    "H5809": {
+      "definitions_cz": "Azur nebo Azzur = \"ten, kdo pomáhá\" | 1) Benjamínec z Gibeonu, otec falešného proroka Chananiáše | 2) otec Jaazanjáše, jednoho z knížat, proti kterému bylo Ezechielovi přikázáno prorokovat",
+      "lemma": "עַזּוּר",
+      "hebrew": "עזור",
+      "xlit": "ʻAzzûwr",
+      "translated": true
+    },
+    "H5810": {
+      "definitions_cz": "1) být silný | 1a) (Qal) být silný, převaž | 1b) (Hiphil) zpevnit, posílit",
+      "lemma": "עָזַז",
+      "hebrew": "עזז",
+      "xlit": "ʻâzaz",
+      "translated": true
+    },
+    "H5811": {
+      "definitions_cz": "Azaz = \"silný\" | 1) Rubenite, otec Bela",
+      "lemma": "עָזָז",
+      "hebrew": "עזז",
+      "xlit": "ʻÂzâz",
+      "translated": true
+    },
+    "H5812": {
+      "definitions_cz": "Azaziah = \"Jehova je mocný\" | 1) levitský hudebník za vlády Davida, který hrál na harfu v průvodu, který přinesl archu z Obed-edomu do Jeruzaléma | 2) Levita za vlády judského krále Ezechiáše, který měl na starosti desátky | 3) otec Ošey, kníže kmene Efraim, když David provedl sčítání lidu",
+      "lemma": "עֲזַזְיָהוּ",
+      "hebrew": "עזזיהו",
+      "xlit": "ʻĂzazyâhûw",
+      "translated": true
+    },
+    "H5813": {
+      "definitions_cz": "Uzzi = \"silný\" | 1) Levita, syn Bukkiho a otec Zerahjáše v linii velekněze, ačkoli sám velekněz zřejmě nikdy nebyl | 2) syn Toly a vnuk Issachar | 3) Benjamínec, syn Bela a hlava rodiny Benjamina | 4) syn Michriho a otec Elah a předek rodiny navrácených vyhnanců usazujících se v Jeruzalémě. Možná stejně jako 3 | 5) Levita, syn Baniho, a dozorce nad levity v Jeruzalémě za časů Nehemiášových | 6) kněz, náčelník th",
+      "lemma": "עֻזִּי",
+      "hebrew": "עזי",
+      "xlit": "ʻUzzîy",
+      "translated": true
+    },
+    "H5814": {
+      "definitions_cz": "Uzzia = \"síla Jehovy\" | 1) jeden z Davidových mocných válečníků",
+      "lemma": "עֻזִּיָּא",
+      "hebrew": "עזיא",
+      "xlit": "ʻUzzîyâʼ",
+      "translated": true
+    },
+    "H5815": {
+      "definitions_cz": "Aziel = \"koho Bůh utěšuje\" | 1) levita; také \"Jaaziel\"",
+      "lemma": "עֲזִיאֵל",
+      "hebrew": "עזיאל",
+      "xlit": "ʻĂzîyʼêl",
+      "translated": true
+    },
+    "H5816": {
+      "definitions_cz": "Uzziel = \"mou silou je Bůh\" | 1) 4. syn Kohatův a vnuk Léviho, strýc Mojžíše a Árona | 2) simeonský kapitán, syn Ishi, za dnů judského krále Ezechiáše | 3) potomek Bely, hlava rodiny v kmeni Benjamin | 4) hudebník synů Hémanových v době Davidově | 5) Levita ze synů Jeduthunových za dnů judského krále Ezechiáše | 6) syn Harhaiášův, pravděpodobně kněz a zlatník, který se podílel na opravě zdi pod Nehemiášem",
+      "lemma": "עֻזִּיאֵל",
+      "hebrew": "עזיאל",
+      "xlit": "ʻUzzîyʼêl",
+      "translated": true
+    },
+    "H5817": {
+      "definitions_cz": "Uzzielité = viz Uzziel \"mou silou je Bůh\" | 1) potomci Uzziela",
+      "lemma": "עׇזִּיאֵלִי",
+      "hebrew": "עזיאלי",
+      "xlit": "ʻOzzîyʼêlîy",
+      "translated": true
+    },
+    "H5818": {
+      "definitions_cz": "Uzziah = \"moje síla je Jehova\" | 1) syn judského krále Amaziáše a samotného judského krále na 52 let; také 'Azariah' | 2) kehatský levita a předek Samuela | 3) kněz ze synů Harima, který si vzal cizí manželku za časů Ezdráše | 4) Judaita, otec Athaiah nebo Uthai | 5) otec Jehonatana, jednoho z Davidových dozorců",
+      "lemma": "עֻזִּיָּה",
+      "hebrew": "עזיה",
+      "xlit": "ʻUzzîyâh",
+      "translated": true
+    },
+    "H5819": {
+      "definitions_cz": "Aziza = \"silný\" | 1) laik z rodu Zattu, který si v době Ezdráše vzal cizí manželku",
+      "lemma": "עֲזִיזָא",
+      "hebrew": "עזיזא",
+      "xlit": "ʻĂzîyzâʼ",
+      "translated": true
+    },
+    "H5820": {
+      "definitions_cz": "Azmaveth = \"silný až k smrti\" | n pr m | 1) jeden z Davidových mocných válečníků | 2) potomek Mefibošeta, syna Jonathana a vnuka krále Saula | 3) Benjamínec, otec Jeziela a Peleta, kteří byli dvěma Davidovými muži, kteří se k němu připojili v Ziklagu | 4) správce královských pokladů za vlády Davida | n pr loc | 5) místo v Benjaminu; také \"Beth-azmeveth\"",
+      "lemma": "עַזְמָוֶת",
+      "hebrew": "עזמות",
+      "xlit": "ʻAzmâveth",
+      "translated": true
+    },
+    "H5821": {
+      "definitions_cz": "Azzan = \"velmi silný\" | 1) otec Paltiela princ z kmene Issachar, který zastupoval svůj kmen při dělení zaslíbené země",
+      "lemma": "עַזָּן",
+      "hebrew": "עזן",
+      "xlit": "ʻAzzân",
+      "translated": true
+    },
+    "H5822": {
+      "definitions_cz": "1) nečistý dravec | 1a) orl obecný, orel černý, káně lesní | 1b) možná vyhynulý pták, přesný význam neznámý",
+      "lemma": "עׇזְנִיָּה",
+      "hebrew": "עזניה",
+      "xlit": "ʻoznîyâh",
+      "translated": true
+    },
+    "H5823": {
+      "definitions_cz": "1) (Piel) kopat",
+      "lemma": "עָזַק",
+      "hebrew": "עזק",
+      "xlit": "ʻâzaq",
+      "translated": true
+    },
+    "H5824": {
+      "definitions_cz": "1) pečetní prsten",
+      "lemma": "עִזְקָא",
+      "hebrew": "עזקא",
+      "xlit": "ʻizqâʼ",
+      "translated": true
+    },
+    "H5825": {
+      "definitions_cz": "Azeka = \"překopaný\" | 1) město v nížinách Judska",
+      "lemma": "עֲזֵקָה",
+      "hebrew": "עזקה",
+      "xlit": "ʻĂzêqâh",
+      "translated": true
+    },
+    "H5826": {
+      "definitions_cz": "1) pomáhat, pomáhat, podporovat | 1a) (Qal) pomoci | 1b) (Niphal), kterému je třeba pomoci | 1c) (Hiphil) pomoci",
+      "lemma": "עָזַר",
+      "hebrew": "עזר",
+      "xlit": "ʻâzar",
+      "translated": true
+    },
+    "H5827": {
+      "definitions_cz": "Ezer = \"poklad\" | 1) syn Efraimův, který byl zabit obyvateli Gatu | 2) kněz, který pomáhal při zasvěcení jeruzalémských hradeb za Nehemjáše",
+      "lemma": "עֶזֶר",
+      "hebrew": "עזר",
+      "xlit": "ʻEzer",
+      "translated": true
+    },
+    "H5828": {
+      "definitions_cz": "1) pomoc, pomoc | 1a) pomoc, pomoc | 1b) ten, kdo pomáhá",
+      "lemma": "עֵזֶר",
+      "hebrew": "עזר",
+      "xlit": "ʻêzer",
+      "translated": true
+    },
+    "H5829": {
+      "definitions_cz": "Ezer = \"poklad\" | 1) otec Chušy ze synů Hur | 2) náčelník Gaditů, který bojoval s Davidem | 3) Levita, který pomáhal při opravě jeruzalémské zdi v době Nehemjáše",
+      "lemma": "עֵזֶר",
+      "hebrew": "עזר",
+      "xlit": "ʻÊzer",
+      "translated": true
+    },
+    "H5830": {
+      "definitions_cz": "Ezra = \"pomoc\" | 1) kněz a písař, který vedl reformy navrácených exulantů v Jeruzalémě; spolupracovník Nehemiáše | 2) kněz se Zerubábelem | 3) další poexilní Žid",
+      "lemma": "עֶזְרָא",
+      "hebrew": "עזרא",
+      "xlit": "ʻEzrâʼ",
+      "translated": true
+    },
+    "H5831": {
+      "definitions_cz": "Ezra = \"pomoc\" | 1) kněz a písař, který vedl reformy navrácených exulantů v Jeruzalémě; spolupracovník Nehemiáše",
+      "lemma": "עֶזְרָא",
+      "hebrew": "עזרא",
+      "xlit": "ʻEzrâʼ",
+      "translated": true
+    },
+    "H5832": {
+      "definitions_cz": "Azarael nebo Azareel = \"Bůh pomohl\" | 1) korhitský válečník Davida, který se k němu připojil v Ziklagu | 2) levitský hudebník z rodu Hémanů v době Davidově | 3) Dán, syn Jerohamův a kníže kmene při sčítání lidu Davida | 4) jeden ze synů Baniho, který si vzal cizí manželku v době Ezry | 5) kněz, praotec Maasiai nebo Amashai, kněz v Jeruzalémě po návratu z exilu | 6) kněz a hudebník v době Nehemiáše",
+      "lemma": "עֲזַרְאֵל",
+      "hebrew": "עזראל",
+      "xlit": "ʻĂzarʼêl",
+      "translated": true
+    },
+    "H5833": {
+      "definitions_cz": "1) pomoc, pomoc, pomoc | 1a) pomoc, pomoc | 1b) ten, kdo pomáhá",
+      "lemma": "עֶזְרָה",
+      "hebrew": "עזרה",
+      "xlit": "ʻezrâh",
+      "translated": true
+    },
+    "H5834": {
+      "definitions_cz": "Ezra = \"pomoc\" | 1) Judaita, otec Jethera, Mereda, Efera a Jalona",
+      "lemma": "עֶזְרָה",
+      "hebrew": "עזרה",
+      "xlit": "ʻEzrâh",
+      "translated": true
+    },
+    "H5835": {
+      "definitions_cz": "1) kryt | 1a) římsa (obklopující Ezechielův oltář) | 1b) dvůr (vnější z chrámu)",
+      "lemma": "עֲזָרָה",
+      "hebrew": "עזרה",
+      "xlit": "ʻăzârâh",
+      "translated": true
+    },
+    "H5836": {
+      "definitions_cz": "Ezri = \"pomoc Jehovova\" | 1) syn Chelubův a správce zemědělských dělníků krále Davida",
+      "lemma": "עֶזְרִי",
+      "hebrew": "עזרי",
+      "xlit": "ʻEzrîy",
+      "translated": true
+    },
+    "H5837": {
+      "definitions_cz": "Azriel = \"mou pomocí je Bůh\" | 1) hlava domu poloviny kmene Manasse za Jordánskem | 2) Naftalita, praotec Jerimot, hlava kmene v době sčítání lidu Davida | 3) otec Seraiáše, důstojníka judského krále Joakima",
+      "lemma": "עַזְרִיאֵל",
+      "hebrew": "עזריאל",
+      "xlit": "ʻAzrîyʼêl",
+      "translated": true
+    },
+    "H5838": {
+      "definitions_cz": "Azariah = \"Jehova pomohl\" | 1) syn judského krále Amaziáše a samotného judského krále na 52 let; také 'Uzziáš' | 2) zbožný přítel Daniela, kterého Nabuchodonozor přejmenoval na Abednego; jeden ze tří přátel, kteří se s Danielem odmítli znečišťovat tím, že jedli jídlo z králova stolu, což bylo v rozporu se stravovacími zákony, které Bůh dal Židům; také jeden ze tří, kteří byli vhozeni do ohnivé pece za to, že se odmítli poklonit rytému obrazu Nabuchodonozora a kteří byli",
+      "lemma": "עֲזַרְיָה",
+      "hebrew": "עזריה",
+      "xlit": "ʻĂzaryâh",
+      "translated": true
+    },
+    "H5839": {
+      "definitions_cz": "Azariah = \"Jehova pomohl\" | 1) zbožný přítel Daniela, kterého Nabuchodonozor přejmenoval na Abednego; jeden ze tří přátel, kteří se s Danielem odmítli znečišťovat tím, že jedli jídlo z králova stolu, což bylo v rozporu se stravovacími zákony, které Bůh dal Židům; také jeden ze tří, kteří byli vhozeni do ohnivé pece za to, že se odmítli poklonit rytému obrazu Nabuchodonozora a kteří byli zachráněni andělem Páně | 1a) také „Abednego“ (H05664 nebo H05665)",
+      "lemma": "עֲזַרְיָה",
+      "hebrew": "עזריה",
+      "xlit": "ʻĂzaryâh",
+      "translated": true
+    },
+    "H5840": {
+      "definitions_cz": "Azrikam = \"pomoc proti nepříteli\" | 1) syn Nearjášův a potomek Zerubbábela z královské linie Judy | 2) Benjamínec, nejstarší syn Azelův a potomek Saula | 3) Levita, předek Šemajáše v době Nehemjáše | 4) guvernér paláce judského krále Achaza a oběť vraždy Zichriho",
+      "lemma": "עַזְרִיקָם",
+      "hebrew": "עזריקם",
+      "xlit": "ʻAzrîyqâm",
+      "translated": true
     }
   }
 }
