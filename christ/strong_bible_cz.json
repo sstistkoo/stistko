@@ -84612,6 +84612,706 @@
       "hebrew": "שרביה",
       "xlit": "Shêrêbᵉyâh",
       "translated": true
+    },
+    "H8275": {
+      "definitions_cz": "1) žezlo | 2) (TWOT) šipka, kopí",
+      "lemma": "שַׁרְבִיט",
+      "hebrew": "שרביט",
+      "xlit": "sharbîyṭ",
+      "translated": true
+    },
+    "H8276": {
+      "definitions_cz": "1) být propleten | 1a) (Pual) k propletení | 1b) (Hithpael) proplétat se",
+      "lemma": "שָׂרַג",
+      "hebrew": "שרג",
+      "xlit": "sârag",
+      "translated": true
+    },
+    "H8277": {
+      "definitions_cz": "1) (Qal) uniknout, přežít",
+      "lemma": "שָׂרַד",
+      "hebrew": "שרד",
+      "xlit": "sârad",
+      "translated": true
+    },
+    "H8278": {
+      "definitions_cz": "1) pletená nebo pletená práce",
+      "lemma": "שְׂרָד",
+      "hebrew": "שרד",
+      "xlit": "sᵉrâd",
+      "translated": true
+    },
+    "H8279": {
+      "definitions_cz": "1) stylus, čára, značka | 1a) značkovací nástroj na dřevo",
+      "lemma": "שֶׂרֶד",
+      "hebrew": "שרד",
+      "xlit": "sered",
+      "translated": true
+    },
+    "H8280": {
+      "definitions_cz": "1) bojovat, mít moc, bojovat, vytrvat, namáhat se, vytrvat | 1a) (Qal) vytrvat, potýkat se s",
+      "lemma": "שָׂרָה",
+      "hebrew": "שרה",
+      "xlit": "sârâh",
+      "translated": true
+    },
+    "H8281": {
+      "definitions_cz": "1) uvolnit, zdarma | 1a) (Qal) uvolnit | 1b) (Piel) uvolnit",
+      "lemma": "שָׁרָה",
+      "hebrew": "שרה",
+      "xlit": "shârâh",
+      "translated": true
+    },
+    "H8282": {
+      "definitions_cz": "1) princezna, šlechtična, vznešená paní",
+      "lemma": "שָׂרָה",
+      "hebrew": "שרה",
+      "xlit": "sârâh",
+      "translated": true
+    },
+    "H8283": {
+      "definitions_cz": "Sarah = \"šlechtica\" | 1) manželka Abrahamova a matka Izákova",
+      "lemma": "שָׂרָה",
+      "hebrew": "שרה",
+      "xlit": "Sârâh",
+      "translated": true
+    },
+    "H8284": {
+      "definitions_cz": "1) stěna | 2) (CLBL) vinný řádek",
+      "lemma": "שָׁרָה",
+      "hebrew": "שרה",
+      "xlit": "shârâh",
+      "translated": true
+    },
+    "H8285": {
+      "definitions_cz": "1) náramek",
+      "lemma": "שֵׁרָה",
+      "hebrew": "שרה",
+      "xlit": "shêrâh",
+      "translated": true
+    },
+    "H8286": {
+      "definitions_cz": "Serug = \"větev\" | 1) syn Reu a pradědeček Abrahamův",
+      "lemma": "שְׂרוּג",
+      "hebrew": "שרוג",
+      "xlit": "Sᵉrûwg",
+      "translated": true
+    },
+    "H8287": {
+      "definitions_cz": "Sharuhen = \"útočiště milosti\" | 1) město v Judsku přidělené Simeonovi",
+      "lemma": "שָׁרוּחֶן",
+      "hebrew": "שרוחן",
+      "xlit": "Shârûwchen",
+      "translated": true
+    },
+    "H8288": {
+      "definitions_cz": "1) sandálová tanga",
+      "lemma": "שְׂרוֹךְ",
+      "hebrew": "שרוך",
+      "xlit": "sᵉrôwk",
+      "translated": true
+    },
+    "H8289": {
+      "definitions_cz": "n m | 1) rovina, rovina | Sharon = \"rovina\" | n pr loc | 2) okres ležící mezi horami střední Palestiny a Středozemním mořem a severně od Joppy | 3) okres na východě Jordánu kolem Gileadu a Bášanu",
+      "lemma": "שָׁרוֹן",
+      "hebrew": "שרון",
+      "xlit": "Shârôwn",
+      "translated": true
+    },
+    "H8290": {
+      "definitions_cz": "Sharonite = viz Sharon \"rovina\" | 1) obyvatel okresu Sharon",
+      "lemma": "שָׁרוֹנִי",
+      "hebrew": "שרוני",
+      "xlit": "Shârôwnîy",
+      "translated": true
+    },
+    "H8291": {
+      "definitions_cz": "1) vinné úponky nebo hrozny",
+      "lemma": "שָׂרוּק",
+      "hebrew": "שרוק",
+      "xlit": "sârûwq",
+      "translated": true
+    },
+    "H8292": {
+      "definitions_cz": "1) potrubí, pískání, syčení",
+      "lemma": "שְׁרוּקָה",
+      "hebrew": "שרוקה",
+      "xlit": "shᵉrûwqâh",
+      "translated": true
+    },
+    "H8293": {
+      "definitions_cz": "1) zbytek",
+      "lemma": "שֵׁרוּת",
+      "hebrew": "שרות",
+      "xlit": "shêrûwth",
+      "translated": true
+    },
+    "H8294": {
+      "definitions_cz": "Serah = \"princ vydechl\" | 1) dcera Ashera | 1a) také 'Sarah'",
+      "lemma": "שֶׂרַח",
+      "hebrew": "שרח",
+      "xlit": "Serach",
+      "translated": true
+    },
+    "H8295": {
+      "definitions_cz": "1) nařezávat, škrábat, tetovat, řezat | 1a) (Qal) k provedení řezu | 1b) (Niphal), který má být poškrábaný nebo tržný, být řezán",
+      "lemma": "שָׂרַט",
+      "hebrew": "שרט",
+      "xlit": "sâraṭ",
+      "translated": true
+    },
+    "H8296": {
+      "definitions_cz": "1) řez, řez",
+      "lemma": "שֶׂרֶט",
+      "hebrew": "שרט",
+      "xlit": "sereṭ",
+      "translated": true
+    },
+    "H8297": {
+      "definitions_cz": "Sarai = \"princezna\" | 1) původní jméno Sáry, manželky Abrama nebo Abrahama",
+      "lemma": "שָׂרַי",
+      "hebrew": "שרי",
+      "xlit": "Sâray",
+      "translated": true
+    },
+    "H8298": {
+      "definitions_cz": "Sharai = \"uvolňovač\" | 1) syn Baniho, který v době Ezdráše propustil svou cizí manželku",
+      "lemma": "שָׁרַי",
+      "hebrew": "שרי",
+      "xlit": "Shâray",
+      "translated": true
+    },
+    "H8299": {
+      "definitions_cz": "1) úponek, větvička, větev",
+      "lemma": "שָׂרִיג",
+      "hebrew": "שריג",
+      "xlit": "sârîyg",
+      "translated": true
+    },
+    "H8300": {
+      "definitions_cz": "1) přeživší, zbytek, to, co zbylo | 1a) přeživší",
+      "lemma": "שָׂרִיד",
+      "hebrew": "שריד",
+      "xlit": "sârîyd",
+      "translated": true
+    },
+    "H8301": {
+      "definitions_cz": "Sarid = \"přeživší\" | 1) místo nebo orientační bod na hranici Zabulunu",
+      "lemma": "שָׂרִיד",
+      "hebrew": "שריד",
+      "xlit": "Sârîyd",
+      "translated": true
+    },
+    "H8302": {
+      "definitions_cz": "1) neprůstřelná vesty | 2) zbraň | 2a) možná kopí, oštěp",
+      "lemma": "שִׁרְיוֹן",
+      "hebrew": "שריון",
+      "xlit": "shiryôwn",
+      "translated": true
+    },
+    "H8303": {
+      "definitions_cz": "Sirion = \"náprsník\" | 1) jedno ze jmen hory Hermon, toto užívali Sidonci",
+      "lemma": "שִׁרְיוֹן",
+      "hebrew": "שריון",
+      "xlit": "Shiryôwn",
+      "translated": true
+    },
+    "H8304": {
+      "definitions_cz": "Seraiah = \"Jehova je vládce\" | n pr m | 1) písař nebo sekretář Davidův | 2) syn Azarjáše, otce Jozadaka, a nejvyššího kněze za vlády judského krále Sedekjáše a v době dobytí Jeruzaléma | 3) syn Tanhumetha Netofatského a jeden z mužů, kteří šli ke Gedaljášovi, místodržiteli nad Judou ustanovenému Nabuchodonozorem, a přísahali, že budou sloužit babylonskému králi | 4) Judaita, syn Kenazův, bratr Otnieelův a otec Joabův | 5) Simeonit, f",
+      "lemma": "שְׂרָיָה",
+      "hebrew": "שריה",
+      "xlit": "Sᵉrâyâh",
+      "translated": true
+    },
+    "H8305": {
+      "definitions_cz": "1) mykané, česané, jemné (ze lnu)",
+      "lemma": "שְׂרִיקָה",
+      "hebrew": "שריקה",
+      "xlit": "sᵉrîyqâh",
+      "translated": true
+    },
+    "H8306": {
+      "definitions_cz": "1) šlacha, sval",
+      "lemma": "שָׁרִיר",
+      "hebrew": "שריר",
+      "xlit": "shârîyr",
+      "translated": true
+    },
+    "H8307": {
+      "definitions_cz": "1) tvrdohlavost, tvrdost, pevnost",
+      "lemma": "שְׁרִירוּת",
+      "hebrew": "שרירות",
+      "xlit": "shᵉrîyrûwth",
+      "translated": true
+    },
+    "H8308": {
+      "definitions_cz": "1) kroutit | 1a) (Piel) křižovat, kroutit, proplétat",
+      "lemma": "שָׂרַךְ",
+      "hebrew": "שרך",
+      "xlit": "sârak",
+      "translated": true
+    },
+    "H8309": {
+      "definitions_cz": "1) pole",
+      "lemma": "שְׁרֵמָה",
+      "hebrew": "שרמה",
+      "xlit": "shᵉrêmâh",
+      "translated": true
+    },
+    "H8310": {
+      "definitions_cz": "Sarsechim = \"princ eunuchů\" | 1) vládce nebo generál Nabuchodonozora při dobytí Jeruzaléma",
+      "lemma": "שַׂרְסְכִים",
+      "hebrew": "שרסכים",
+      "xlit": "Sarçᵉkîym",
+      "translated": true
+    },
+    "H8311": {
+      "definitions_cz": "1) prodloužit, natáhnout | 1a) (Qal) rozšířen (příčestí) | 1b) (Hithpael) protáhnout se",
+      "lemma": "שָׂרַע",
+      "hebrew": "שרע",
+      "xlit": "sâraʻ",
+      "translated": true
+    },
+    "H8312": {
+      "definitions_cz": "1) znepokojivé myšlenky, myšlenky",
+      "lemma": "שַׂרְעַף",
+      "hebrew": "שרעף",
+      "xlit": "sarʻaph",
+      "translated": true
+    },
+    "H8313": {
+      "definitions_cz": "1) spálit | 1a) (Qal) spálit | 1b) (Niphal) ke spálení | 1c) (Piel) hořák, hořící (příčestí) | 1d) (Pual) být spálen, být spálen",
+      "lemma": "שָׂרַף",
+      "hebrew": "שרף",
+      "xlit": "sâraph",
+      "translated": true
+    },
+    "H8314": {
+      "definitions_cz": "1) had, ohnivý had | 1a) jedovatý had (ohnivý z pálivého účinku jedu) | 2) serafín, serafín | 2a) majestátní bytosti se 6 křídly, lidskýma rukama nebo hlasy v přítomnosti Boha",
+      "lemma": "שָׂרָף",
+      "hebrew": "שרף",
+      "xlit": "sârâph",
+      "translated": true
+    },
+    "H8315": {
+      "definitions_cz": "Saraf = \"spálit\" | 1) Judaita, syn Šela, který vládl v Moabu",
+      "lemma": "שָׂרָף",
+      "hebrew": "שרף",
+      "xlit": "Sârâph",
+      "translated": true
+    },
+    "H8316": {
+      "definitions_cz": "1) pálení",
+      "lemma": "שְׂרֵפָה",
+      "hebrew": "שרפה",
+      "xlit": "sᵉrêphâh",
+      "translated": true
+    },
+    "H8317": {
+      "definitions_cz": "1) (Qal) se hemžit, rojit, množit | 1a) rojit se, hemžit se | 1b2) rojit se",
+      "lemma": "שָׁרַץ",
+      "hebrew": "שרץ",
+      "xlit": "shârats",
+      "translated": true
+    },
+    "H8318": {
+      "definitions_cz": "1) hemžící se nebo hemžící se věci, popínavé rostliny, rojovky | 1a) hmyzu, zvířat, malých plazů, čtyřnožců",
+      "lemma": "שֶׁרֶץ",
+      "hebrew": "שרץ",
+      "xlit": "sherets",
+      "translated": true
+    },
+    "H8319": {
+      "definitions_cz": "1) syčet, pískat, dýmka | 1a) (Qal) zasyčet (jako signál)",
+      "lemma": "שָׁרַק",
+      "hebrew": "שרק",
+      "xlit": "shâraq",
+      "translated": true
+    },
+    "H8320": {
+      "definitions_cz": "1) šťovík, načervenalý, žlutohnědý, hnědák",
+      "lemma": "שָׂרֻק",
+      "hebrew": "שרק",
+      "xlit": "sâruq",
+      "translated": true
+    },
+    "H8321": {
+      "definitions_cz": "1) výběrové druhy révy, výběrové hrozny",
+      "lemma": "שֹׂרֵק",
+      "hebrew": "שרק",
+      "xlit": "sôrêq",
+      "translated": true
+    },
+    "H8322": {
+      "definitions_cz": "1) syčení, pískání",
+      "lemma": "שְׁרֵקָה",
+      "hebrew": "שרקה",
+      "xlit": "shᵉrêqâh",
+      "translated": true
+    },
+    "H8323": {
+      "definitions_cz": "1) být nebo jednat jako princ, vládnout, bojovat, mít moc, převládat, vládnout, vládnout | 1a) (Qal) vládnout, vládnout | 1b) (Hithpael), aby to panoval",
+      "lemma": "שָׂרַר",
+      "hebrew": "שרר",
+      "xlit": "sârar",
+      "translated": true
+    },
+    "H8324": {
+      "definitions_cz": "1) (Qal) být nepřítelem",
+      "lemma": "שָׁרַר",
+      "hebrew": "שרר",
+      "xlit": "shârar",
+      "translated": true
+    },
+    "H8325": {
+      "definitions_cz": "Sharar = \"nepřítel\" | 1) otec Ahiama, jednoho z Davidových mocných válečníků",
+      "lemma": "שָׁרַר",
+      "hebrew": "שרר",
+      "xlit": "Shârar",
+      "translated": true
+    },
+    "H8326": {
+      "definitions_cz": "1) pupek, pupeční šňůra",
+      "lemma": "שֹׁרֶר",
+      "hebrew": "שרר",
+      "xlit": "shôrer",
+      "translated": true
+    },
+    "H8327": {
+      "definitions_cz": "1) vykořenit, zakořenit, vypořádat se s kořeny | 1a) (Piel) vykořenit, vykořenit | 1b) (Pual) bude vykořeněn nebo odstraněn (z produkce) | 1c) (Poel) zakořenit | 1d) (Poal) zakořenit | 1e) (Hifil) zakořenit, způsobit zakořenění",
+      "lemma": "שָׁרַשׁ",
+      "hebrew": "שרש",
+      "xlit": "shârash",
+      "translated": true
+    },
+    "H8328": {
+      "definitions_cz": "1) kořen | 1a) kořen (doslova) | 1b) kořen (osob zahrnujících pevnost nebo stálost) (obr.) | 1c) kořen, dno (jako nejnižší vrstva) (obr.)",
+      "lemma": "שֶׁרֶשׁ",
+      "hebrew": "שרש",
+      "xlit": "sheresh",
+      "translated": true
+    },
+    "H8329": {
+      "definitions_cz": "Sheresh = \"kořen\" | 1) syn Machirův a vnuk Manassesův",
+      "lemma": "שֶׁרֶשׁ",
+      "hebrew": "שרש",
+      "xlit": "Sheresh",
+      "translated": true
+    },
+    "H8330": {
+      "definitions_cz": "1) kořen",
+      "lemma": "שֹׁרֶשׁ",
+      "hebrew": "שרש",
+      "xlit": "shôresh",
+      "translated": true
+    },
+    "H8331": {
+      "definitions_cz": "1) řetěz",
+      "lemma": "שַׁרְשָׁה",
+      "hebrew": "שרשה",
+      "xlit": "sharshâh",
+      "translated": true
+    },
+    "H8332": {
+      "definitions_cz": "1) vykořenění, vyhnání",
+      "lemma": "שְׁרֹשׁוּ",
+      "hebrew": "שרשו",
+      "xlit": "shᵉrôshûw",
+      "translated": true
+    },
+    "H8333": {
+      "definitions_cz": "1) řetěz",
+      "lemma": "שַׁרְשְׁרָה",
+      "hebrew": "שרשרה",
+      "xlit": "sharshᵉrâh",
+      "translated": true
+    },
+    "H8334": {
+      "definitions_cz": "1) (Piel) ministrovat, sloužit, ministrovat",
+      "lemma": "שָׁרַת",
+      "hebrew": "שרת",
+      "xlit": "shârath",
+      "translated": true
+    },
+    "H8335": {
+      "definitions_cz": "1) služba, náboženská služba, služba ve svatostánku",
+      "lemma": "שָׁרֵת",
+      "hebrew": "שרת",
+      "xlit": "shârêth",
+      "translated": true
+    },
+    "H8336": {
+      "definitions_cz": "1) něco běleného bílého, byssus, len, jemné prádlo | 2) alabastr, podobný kámen, mramor",
+      "lemma": "שֵׁשׁ",
+      "hebrew": "שש",
+      "xlit": "shêsh",
+      "translated": true
+    },
+    "H8337": {
+      "definitions_cz": "1) šest | 1a) šest (hlavní číslo) | 1b) šestý (řadové číslo) | 1c) v kombinaci s jinými čísly",
+      "lemma": "שֵׁשׁ",
+      "hebrew": "שש",
+      "xlit": "shêsh",
+      "translated": true
+    },
+    "H8338": {
+      "definitions_cz": "1) (Piel) vést, vést na | 2a) význam zdánlivý",
+      "lemma": "שָׁשָׁא",
+      "hebrew": "ששא",
+      "xlit": "shâshâʼ",
+      "translated": true
+    },
+    "H8339": {
+      "definitions_cz": "Sheshbazzar = \"ctitel ohně\" | 1) judský princ při prvním návratu z vyhnanství v Babylóně; obvykle identifikován jako babylonské jméno pro Zerubbábel",
+      "lemma": "שֵׁשְׁבַּצַּר",
+      "hebrew": "ששבצר",
+      "xlit": "Shêshᵉbatstsar",
+      "translated": true
+    },
+    "H8340": {
+      "definitions_cz": "Sheshbazzar = \"ctitel ohně\" | 1) judský princ při prvním návratu z vyhnanství v Babylóně; obvykle identifikován jako babylonské jméno pro Zerubbábel",
+      "lemma": "שֵׁשְׁבַּצַּר",
+      "hebrew": "ששבצר",
+      "xlit": "Shêshᵉbatstsar",
+      "translated": true
+    },
+    "H8341": {
+      "definitions_cz": "1) (Piel) dát šestý díl, dát šestý díl",
+      "lemma": "שָׁשָׁה",
+      "hebrew": "ששה",
+      "xlit": "shâshâh",
+      "translated": true
+    },
+    "H8342": {
+      "definitions_cz": "1) radost, radost, jásání, jásání | 1a) jásání, radost",
+      "lemma": "שָׂשׂוֹן",
+      "hebrew": "ששון",
+      "xlit": "sâsôwn",
+      "translated": true
+    },
+    "H8343": {
+      "definitions_cz": "Shashai = \"vznešený\" | 1) syn Baniho, který v době Ezdráše propustil svou cizí manželku",
+      "lemma": "שָׁשַׁי",
+      "hebrew": "ששי",
+      "xlit": "Shâshay",
+      "translated": true
+    },
+    "H8344": {
+      "definitions_cz": "Sheshai = \"vznešený\" | 1) syn Anak, jeden z obrů v zemi Kanaán",
+      "lemma": "שֵׁשַׁי",
+      "hebrew": "ששי",
+      "xlit": "Shêshay",
+      "translated": true
+    },
+    "H8345": {
+      "definitions_cz": "1) šestý | 1a) šestý (řadové číslo) | 1b) šestý (jako zlomek)",
+      "lemma": "שִׁשִּׁי",
+      "hebrew": "ששי",
+      "xlit": "shishshîy",
+      "translated": true
+    },
+    "H8346": {
+      "definitions_cz": "1) šedesát, tři skóre",
+      "lemma": "שִׁשִּׁים",
+      "hebrew": "ששים",
+      "xlit": "shishshîym",
+      "translated": true
+    },
+    "H8347": {
+      "definitions_cz": "Šešach = \"tvé jemné prádlo\" | 1) jiný název pro Babylon zřejmě převzatý od bohyně 'Shach'",
+      "lemma": "שֵׁשַׁךְ",
+      "hebrew": "ששך",
+      "xlit": "Shêshak",
+      "translated": true
+    },
+    "H8348": {
+      "definitions_cz": "Sheshan = \"vznešený\" | 1) Judaita z rodů Chezron a Jerahmeel, syn Ishi a otec Ahlai",
+      "lemma": "שֵׁשָׁן",
+      "hebrew": "ששן",
+      "xlit": "Shêshân",
+      "translated": true
+    },
+    "H8349": {
+      "definitions_cz": "Shashak = \"touha\" | 1) Benjamínec, syn Beriášův a otec Ifedeiáše a Penuela",
+      "lemma": "שָׁשַׁק",
+      "hebrew": "ששק",
+      "xlit": "Shâshaq",
+      "translated": true
+    },
+    "H8350": {
+      "definitions_cz": "1) červená barva, rumělková | 1a) dříve získané z hmyzu „kermes“.",
+      "lemma": "שָׁשַׁר",
+      "hebrew": "ששר",
+      "xlit": "shâshar",
+      "translated": true
+    },
+    "H8351": {
+      "definitions_cz": "1) sed těla, hýždě Nu 24:17",
+      "lemma": "שֵׁת",
+      "hebrew": "שת",
+      "xlit": "shêth",
+      "translated": true
+    },
+    "H8352": {
+      "definitions_cz": "Seth = \"kompenzace\" | 1) 3. syn Adamův od Evy | 1a) také „Sheth“",
+      "lemma": "שֵׁת",
+      "hebrew": "שת",
+      "xlit": "Shêth",
+      "translated": true
+    },
+    "H8353": {
+      "definitions_cz": "1) šest (jako kardinální číslo)",
+      "lemma": "שֵׁת",
+      "hebrew": "שת",
+      "xlit": "shêth",
+      "translated": true
+    },
+    "H8354": {
+      "definitions_cz": "1) pít | 1a) (Qal) | 1a1) pít | 1a1a) kalich Božího hněvu, porážky, zlých skutků (obr.) | 1a2) hodovat | 1b) (Niphal) k opilosti",
+      "lemma": "שָׁתָה",
+      "hebrew": "שתה",
+      "xlit": "shâthâh",
+      "translated": true
+    },
+    "H8355": {
+      "definitions_cz": "1) (P'al) pít",
+      "lemma": "שְׁתָה",
+      "hebrew": "שתה",
+      "xlit": "shᵉthâh",
+      "translated": true
+    },
+    "H8356": {
+      "definitions_cz": "1) nadace, podpora, pobyt",
+      "lemma": "שָׁתָה",
+      "hebrew": "שתה",
+      "xlit": "shâthâh",
+      "translated": true
+    },
+    "H8357": {
+      "definitions_cz": "1) sed (těla), hýždě",
+      "lemma": "שֵׁתָה",
+      "hebrew": "שתה",
+      "xlit": "shêthâh",
+      "translated": true
+    },
+    "H8358": {
+      "definitions_cz": "1) pitka, pitka Ec 10:17",
+      "lemma": "שְׁתִי",
+      "hebrew": "שתי",
+      "xlit": "shᵉthîy",
+      "translated": true
+    },
+    "H8359": {
+      "definitions_cz": "1) osnova, tkaný materiál",
+      "lemma": "שְׁתִי",
+      "hebrew": "שתי",
+      "xlit": "shᵉthîy",
+      "translated": true
+    },
+    "H8360": {
+      "definitions_cz": "1) pití (způsob nebo způsob nebo množství)",
+      "lemma": "שְׁתִיָּה",
+      "hebrew": "שתיה",
+      "xlit": "shᵉthîyâh",
+      "translated": true
+    },
+    "H8361": {
+      "definitions_cz": "1) šedesát, třista",
+      "lemma": "שִׁתִּין",
+      "hebrew": "שתין",
+      "xlit": "shittîyn",
+      "translated": true
+    },
+    "H8362": {
+      "definitions_cz": "1) (Qal) zasadit, přesadit",
+      "lemma": "שָׁתַל",
+      "hebrew": "שתל",
+      "xlit": "shâthal",
+      "translated": true
+    },
+    "H8363": {
+      "definitions_cz": "1) rostlina, řez, přesazený výhon, skluz",
+      "lemma": "שְׁתִל",
+      "hebrew": "שתל",
+      "xlit": "shᵉthil",
+      "translated": true
+    },
+    "H8364": {
+      "definitions_cz": "Shuthalhites = viz Shuthelah \"čerstvě jmenovaný\" | 1) potomci Šutelácha, syna Efraimova, a jeho syna stejného jména",
+      "lemma": "שֻׁתַלְחִי",
+      "hebrew": "שתלחי",
+      "xlit": "Shuthalchîy",
+      "translated": true
+    },
+    "H8365": {
+      "definitions_cz": "1) (Qal) otevřít | 1a) znamená pochybný",
+      "lemma": "שָׁתַם",
+      "hebrew": "שתם",
+      "xlit": "shâtham",
+      "translated": true
+    },
+    "H8366": {
+      "definitions_cz": "1) (Hiphil) k močení | 1a) ten, kdo močí (používá se jako označení muže)",
+      "lemma": "שָׁתַן",
+      "hebrew": "שתן",
+      "xlit": "shâthan",
+      "translated": true
+    },
+    "H8367": {
+      "definitions_cz": "1) (Qal) být zticha, mlčet",
+      "lemma": "שָׁתַק",
+      "hebrew": "שתק",
+      "xlit": "shâthaq",
+      "translated": true
+    },
+    "H8368": {
+      "definitions_cz": "1) (Niphal) vybuchnout, vypuknout",
+      "lemma": "שָׂתַר",
+      "hebrew": "שתר",
+      "xlit": "sâthar",
+      "translated": true
+    },
+    "H8369": {
+      "definitions_cz": "Shethar = \"hvězda\" | 1) jeden ze 7 knížat Media nebo Perské říše",
+      "lemma": "שֵׁתָר",
+      "hebrew": "שתר",
+      "xlit": "Shêthâr",
+      "translated": true
+    },
+    "H8370": {
+      "definitions_cz": "Shethar-boznai = \"hvězda nádhery\" | 1) perský důstojník za vlády Daria",
+      "lemma": "שְׁתַר בּוֹזְנַי",
+      "hebrew": "שתר בוזני",
+      "xlit": "Shᵉthar Bôwzᵉnay",
+      "translated": true
+    },
+    "H8371": {
+      "definitions_cz": "1) (Qal) nastavit, jmenovat",
+      "lemma": "שָׁתַת",
+      "hebrew": "שתת",
+      "xlit": "shâthath",
+      "translated": true
+    },
+    "H8372": {
+      "definitions_cz": "1) komora, strážnice",
+      "lemma": "תָּא",
+      "hebrew": "תא",
+      "xlit": "tâʼ",
+      "translated": true
+    },
+    "H8373": {
+      "definitions_cz": "1) (Qal) toužit",
+      "lemma": "תָּאַב",
+      "hebrew": "תאב",
+      "xlit": "tâʼab",
+      "translated": true
+    },
+    "H8374": {
+      "definitions_cz": "1) (Piel) nenávidět, hnusit se",
+      "lemma": "תָּאַב",
+      "hebrew": "תאב",
+      "xlit": "tâʼab",
+      "translated": true
     }
   }
 }
