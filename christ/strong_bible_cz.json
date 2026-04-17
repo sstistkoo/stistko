@@ -59041,6 +59041,356 @@
       "hebrew": "מעצד",
       "xlit": "maʻătsâd",
       "translated": true
+    },
+    "H4622": {
+      "definitions_cz": "1) omezení, překážka",
+      "lemma": "מַעְצוֹר",
+      "hebrew": "מעצור",
+      "xlit": "maʻtsôwr",
+      "translated": true
+    },
+    "H4623": {
+      "definitions_cz": "1) zdrženlivost, kontrola",
+      "lemma": "מַעְצָר",
+      "hebrew": "מעצר",
+      "xlit": "maʻtsâr",
+      "translated": true
+    },
+    "H4624": {
+      "definitions_cz": "1) parapet | 1a) nízká zídka na okraji balkonu, střechy apod. nebo po stranách mostu apod.,",
+      "lemma": "מַעֲקֶה",
+      "hebrew": "מעקה",
+      "xlit": "maʻăqeh",
+      "translated": true
+    },
+    "H4625": {
+      "definitions_cz": "1) křivé místo, zkroucené, křivé věci",
+      "lemma": "מַעֲקָשׁ",
+      "hebrew": "מעקש",
+      "xlit": "maʻăqâsh",
+      "translated": true
+    },
+    "H4626": {
+      "definitions_cz": "1) holé, nahé místo, nahota | 1a) holé místo | 1b) nahota, pudenda (odhalená za trest)",
+      "lemma": "מַעַר",
+      "hebrew": "מער",
+      "xlit": "maʻar",
+      "translated": true
+    },
+    "H4627": {
+      "definitions_cz": "1) zboží, směnky",
+      "lemma": "מַעֲרָב",
+      "hebrew": "מערב",
+      "xlit": "maʻărâb",
+      "translated": true
+    },
+    "H4628": {
+      "definitions_cz": "1) místo nastavení, západ, západ",
+      "lemma": "מַעֲרָב",
+      "hebrew": "מערב",
+      "xlit": "maʻărâb",
+      "translated": true
+    },
+    "H4629": {
+      "definitions_cz": "1) holý prostor, otevřená rovina | 2) (TWOT) nahota",
+      "lemma": "מַעֲרֶה",
+      "hebrew": "מערה",
+      "xlit": "maʻăreh",
+      "translated": true
+    },
+    "H4630": {
+      "definitions_cz": "1) armáda, bitevní linie | 2) (TWOT) nahota",
+      "lemma": "מַעֲרָה",
+      "hebrew": "מערה",
+      "xlit": "maʻărâh",
+      "translated": true
+    },
+    "H4631": {
+      "definitions_cz": "1) jeskyně, doupě, díra",
+      "lemma": "מְעָרָה",
+      "hebrew": "מערה",
+      "xlit": "mᵉʻârâh",
+      "translated": true
+    },
+    "H4632": {
+      "definitions_cz": "Mearah = \"jeskyně\" | 1) oblast nebo jeskyně v sousedství východně od Sidonu",
+      "lemma": "מְעָרָה",
+      "hebrew": "מערה",
+      "xlit": "Mᵉʻârâh",
+      "translated": true
+    },
+    "H4633": {
+      "definitions_cz": "1) uspořádání, plán, příprava",
+      "lemma": "מַעֲרָךְ",
+      "hebrew": "מערך",
+      "xlit": "maʻărâk",
+      "translated": true
+    },
+    "H4634": {
+      "definitions_cz": "1) řada, hodnost, bojová linie | 1a) bitevní linie | 1b) pořadí | 1c) řádek",
+      "lemma": "מַעֲרָכָה",
+      "hebrew": "מערכה",
+      "xlit": "maʻărâkâh",
+      "translated": true
+    },
+    "H4635": {
+      "definitions_cz": "1) řádek, řádek",
+      "lemma": "מַעֲרֶכֶת",
+      "hebrew": "מערכת",
+      "xlit": "maʻăreketh",
+      "translated": true
+    },
+    "H4636": {
+      "definitions_cz": "1) nahá věc, nahota",
+      "lemma": "מַעֲרֹם",
+      "hebrew": "מערם",
+      "xlit": "maʻărôm",
+      "translated": true
+    },
+    "H4637": {
+      "definitions_cz": "1) hrozný šok, havárie, hrůza",
+      "lemma": "מַעֲרָצָה",
+      "hebrew": "מערצה",
+      "xlit": "maʻărâtsâh",
+      "translated": true
+    },
+    "H4638": {
+      "definitions_cz": "Maarath = \"holost\" | 1) město v judské horské oblasti",
+      "lemma": "מַעֲרָת",
+      "hebrew": "מערת",
+      "xlit": "Maʻărâth",
+      "translated": true
+    },
+    "H4639": {
+      "definitions_cz": "1) skutek, práce | 1a) čin, věc učiněná, čin | 1b) práce, práce | 1c) podnikání, pronásledování | 1d) podnik, podnik | 1e) úspěch | 1f) skutky, práce (osvobození a rozsudek) | 1g) práce, věc vyrobená | 1h) dílo (Boží) | 1i) produkt",
+      "lemma": "מַעֲשֶׂה",
+      "hebrew": "מעשה",
+      "xlit": "maʻăseh",
+      "translated": true
+    },
+    "H4640": {
+      "definitions_cz": "Maasiai = \"dílo Páně\" | 1) kněz, který se vrátil z exilu",
+      "lemma": "מַעֲשַׂי",
+      "hebrew": "מעשי",
+      "xlit": "Maʻăsay",
+      "translated": true
+    },
+    "H4641": {
+      "definitions_cz": "Maaseiah = \"dílo Jehovovo\" | 1) potomek Jeshua, který si v době Ezdráše vzal cizí manželku | 2) kněz ze synů Harima, který si za časů Ezdráše vzal cizí manželku | 3) kněz ze synů Pashura, který si vzal za Ezdráše cizí manželku | 4) potomek Pahat-moab, který si za Ezdráše vzal cizí manželku | 5) otec Azariáše | 6) ten, kdo stál po pravici Ezdráše, když četl lidem zákon | 7) Levita, který pomáhal, když Ezra rea",
+      "lemma": "מַעֲשֵׂיָה",
+      "hebrew": "מעשיה",
+      "xlit": "Maʻăsêyâh",
+      "translated": true
+    },
+    "H4642": {
+      "definitions_cz": "1) vyděračský čin, vydírání",
+      "lemma": "מַעֲשַׁקָּה",
+      "hebrew": "מעשקה",
+      "xlit": "maʻăshaqqâh",
+      "translated": true
+    },
+    "H4643": {
+      "definitions_cz": "1) desátek, desátý díl | 1a) desátá část | 1b) desátek, platba desátého dílu",
+      "lemma": "מַעֲשֵׂר",
+      "hebrew": "מעשר",
+      "xlit": "maʻăsêr",
+      "translated": true
+    },
+    "H4644": {
+      "definitions_cz": "Memphis = \"útočiště dobra\" | 1) hlavní město Dolního Egypta ležící na západním břehu Nilu asi 9 mil (15 km) jižně od Káhiry",
+      "lemma": "מֹף",
+      "hebrew": "מף",
+      "xlit": "Môph",
+      "translated": true
+    },
+    "H4645": {
+      "definitions_cz": "1) zasažená věc, značka, cíl, předmět útoku",
+      "lemma": "מִפְגָּע",
+      "hebrew": "מפגע",
+      "xlit": "miphgâʻ",
+      "translated": true
+    },
+    "H4646": {
+      "definitions_cz": "1) výdech, výdech, výdech (života)",
+      "lemma": "מַפָּח",
+      "hebrew": "מפח",
+      "xlit": "mappâch",
+      "translated": true
+    },
+    "H4647": {
+      "definitions_cz": "1) měch",
+      "lemma": "מַפֻּחַ",
+      "hebrew": "מפח",
+      "xlit": "mappuach",
+      "translated": true
+    },
+    "H4648": {
+      "definitions_cz": "Mephibosheth = \"vyhlazení modly\" | 1) vnuk Saula a syna Rizpy, dcery Ajy, Saulovy konkubíny; on a jeho bratr Armoni byli mezi 7 oběťmi, které David vydal Gibeonitům, aby odvrátil hladomor | 2) syn Jonathanův a vnuk Saulova | 2a) také „Merib-baal“",
+      "lemma": "מְפִיבֹשֶׁת",
+      "hebrew": "מפיבשת",
+      "xlit": "Mᵉphîybôsheth",
+      "translated": true
+    },
+    "H4649": {
+      "definitions_cz": "Muppim = \"had\" | 1) Benjamínec a jeden ze 14 potomků Ráchel, kteří patřili k původní kolonii synů Jákobových v Egyptě | 1a) také 'Shupham'",
+      "lemma": "מֻפִּים",
+      "hebrew": "מפים",
+      "xlit": "Muppîym",
+      "translated": true
+    },
+    "H4650": {
+      "definitions_cz": "1) rozptylovač, rozptylovač, rozptylovací klub",
+      "lemma": "מֵפִיץ",
+      "hebrew": "מפיץ",
+      "xlit": "mêphîyts",
+      "translated": true
+    },
+    "H4651": {
+      "definitions_cz": "1) odpadky, závěsné díly | 1a) pády, odpad | 1b) závěsné části (krokodýla)",
+      "lemma": "מַפָּל",
+      "hebrew": "מפל",
+      "xlit": "mappâl",
+      "translated": true
+    },
+    "H4652": {
+      "definitions_cz": "1) úžasné dílo",
+      "lemma": "מִפְלָאָה",
+      "hebrew": "מפלאה",
+      "xlit": "miphlâʼâh",
+      "translated": true
+    },
+    "H4653": {
+      "definitions_cz": "1) rozdělení (kněží pro službu)",
+      "lemma": "מִפְלַגָּה",
+      "hebrew": "מפלגה",
+      "xlit": "miphlaggâh",
+      "translated": true
+    },
+    "H4654": {
+      "definitions_cz": "1) ruina",
+      "lemma": "מַפָּלָה",
+      "hebrew": "מפלה",
+      "xlit": "mappâlâh",
+      "translated": true
+    },
+    "H4655": {
+      "definitions_cz": "1) útěk, místo útěku",
+      "lemma": "מִפְלָט",
+      "hebrew": "מפלט",
+      "xlit": "miphlâṭ",
+      "translated": true
+    },
+    "H4656": {
+      "definitions_cz": "1) příšerná věc, příšerná věc",
+      "lemma": "מִפְלֶצֶת",
+      "hebrew": "מפלצת",
+      "xlit": "miphletseth",
+      "translated": true
+    },
+    "H4657": {
+      "definitions_cz": "1) kymácení, držení těla, balancování",
+      "lemma": "מִפְלָשׂ",
+      "hebrew": "מפלש",
+      "xlit": "miphlâs",
+      "translated": true
+    },
+    "H4658": {
+      "definitions_cz": "1) mršina, zmar, svržení | 1a) jatečně upravené tělo | 1b) zničit, svrhnout",
+      "lemma": "מַפֶּלֶת",
+      "hebrew": "מפלת",
+      "xlit": "mappeleth",
+      "translated": true
+    },
+    "H4659": {
+      "definitions_cz": "1) práce, věc vyrobená",
+      "lemma": "מִפְעָל",
+      "hebrew": "מפעל",
+      "xlit": "miphʻâl",
+      "translated": true
+    },
+    "H4660": {
+      "definitions_cz": "1) rozbití (druhu zbraně)",
+      "lemma": "מַפָּץ",
+      "hebrew": "מפץ",
+      "xlit": "mappâts",
+      "translated": true
+    },
+    "H4661": {
+      "definitions_cz": "1) válečný kyj, kyj, bitevní sekera, kladivo",
+      "lemma": "מַפֵּץ",
+      "hebrew": "מפץ",
+      "xlit": "mappêts",
+      "translated": true
+    },
+    "H4662": {
+      "definitions_cz": "1) shromáždění, jmenování, určené místo | 1a) shromáždění (lidí) | 1b) jmenování | 1c) určené místo | 2) (TWOT) číslo",
+      "lemma": "מִפְקָד",
+      "hebrew": "מפקד",
+      "xlit": "miphqâd",
+      "translated": true
+    },
+    "H4663": {
+      "definitions_cz": "Miphkad = \"příkaz\" | 1) jedna z bran Jeruzaléma",
+      "lemma": "מִפְקָד",
+      "hebrew": "מפקד",
+      "xlit": "Miphqâd",
+      "translated": true
+    },
+    "H4664": {
+      "definitions_cz": "1) místo přistání",
+      "lemma": "מִפְרָץ",
+      "hebrew": "מפרץ",
+      "xlit": "miphrâts",
+      "translated": true
+    },
+    "H4665": {
+      "definitions_cz": "1) krk",
+      "lemma": "מִפְרֶקֶת",
+      "hebrew": "מפרקת",
+      "xlit": "miphreqeth",
+      "translated": true
+    },
+    "H4666": {
+      "definitions_cz": "1) rozprostření, věc rozprostřená",
+      "lemma": "מִפְרָשׂ",
+      "hebrew": "מפרש",
+      "xlit": "miphrâs",
+      "translated": true
+    },
+    "H4667": {
+      "definitions_cz": "1) kyčle, hýždě, nášlapná oblast těla",
+      "lemma": "מִפְשָׂעָה",
+      "hebrew": "מפשעה",
+      "xlit": "miphsâʻâh",
+      "translated": true
+    },
+    "H4668": {
+      "definitions_cz": "1) klíč, otvírací nástroj",
+      "lemma": "מַפְתֵּחַ",
+      "hebrew": "מפתח",
+      "xlit": "maphtêach",
+      "translated": true
+    },
+    "H4669": {
+      "definitions_cz": "1) otevření, promluva",
+      "lemma": "מִפְתָּח",
+      "hebrew": "מפתח",
+      "xlit": "miphtâch",
+      "translated": true
+    },
+    "H4670": {
+      "definitions_cz": "1) práh",
+      "lemma": "מִפְתָּן",
+      "hebrew": "מפתן",
+      "xlit": "miphtân",
+      "translated": true
+    },
+    "H4671": {
+      "definitions_cz": "1) plevy | 1a) vždy jako poháněné větrem",
+      "lemma": "מֹץ",
+      "hebrew": "מץ",
+      "xlit": "môts",
+      "translated": true
     }
   }
 }
