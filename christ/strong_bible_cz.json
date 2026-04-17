@@ -81462,6 +81462,706 @@
       "hebrew": "שחיף",
       "xlit": "shâchîyph",
       "translated": true
+    },
+    "H7825": {
+      "definitions_cz": "1) jáma",
+      "lemma": "שְׁחִית",
+      "hebrew": "שחית",
+      "xlit": "shᵉchîyth",
+      "translated": true
+    },
+    "H7826": {
+      "definitions_cz": "1) lev | 1a) Jehovy, zlí lidé (obr.)",
+      "lemma": "שַׁחַל",
+      "hebrew": "שחל",
+      "xlit": "shachal",
+      "translated": true
+    },
+    "H7827": {
+      "definitions_cz": "1) onycha | 1a) přísada používaná do posvátného kadidla",
+      "lemma": "שְׁחֵלֶת",
+      "hebrew": "שחלת",
+      "xlit": "shᵉchêleth",
+      "translated": true
+    },
+    "H7828": {
+      "definitions_cz": "1) obřadně nečistý pták | 1a) cuckow, racek, racek, sea-mew | 1b) možná vyhynulý pták, přesný význam neznámý",
+      "lemma": "שַׁחַף",
+      "hebrew": "שחף",
+      "xlit": "shachaph",
+      "translated": true
+    },
+    "H7829": {
+      "definitions_cz": "1) spotřeba, plýtvání nemocí | 1a) plísňové onemocnění plic",
+      "lemma": "שַׁחֶפֶת",
+      "hebrew": "שחפת",
+      "xlit": "shachepheth",
+      "translated": true
+    },
+    "H7830": {
+      "definitions_cz": "1) důstojnost, hrdost | 1a) majestátní divoká zvířata",
+      "lemma": "שַׁחַץ",
+      "hebrew": "שחץ",
+      "xlit": "shachats",
+      "translated": true
+    },
+    "H7831": {
+      "definitions_cz": "Shahazimah = \"směrem k výšinám\" | 1) město v Issacharu",
+      "lemma": "שַׁחֲצוֹם",
+      "hebrew": "שחצום",
+      "xlit": "Shachătsôwm",
+      "translated": true
+    },
+    "H7832": {
+      "definitions_cz": "1) smát se, hrát si, vysmívat se | 1a) (Qal) | 1a1) smát se (obvykle s opovržením nebo výsměchem) | 1a2) sportovat, hrát | 1b) (Piel) | 1b1) dělat sport | 1b2) žertovat | 1b3) hrát (včetně instrumentální hudby, zpěvu, tance) | 1c) (Hifil) posměšně se smát",
+      "lemma": "שָׂחַק",
+      "hebrew": "שחק",
+      "xlit": "sâchaq",
+      "translated": true
+    },
+    "H7833": {
+      "definitions_cz": "1) rozetřete, jemně rozklepejte, rozdrťte | 1a) (Qal) | 1a1) setřet | 1a1a) kadidla, kameny | 1a1b) nepřátel (obr.)",
+      "lemma": "שָׁחַק",
+      "hebrew": "שחק",
+      "xlit": "shâchaq",
+      "translated": true
+    },
+    "H7834": {
+      "definitions_cz": "1) prach, mrak | 1a) jemný prach | 1b) (tenký) oblak",
+      "lemma": "שַׁחַק",
+      "hebrew": "שחק",
+      "xlit": "shachaq",
+      "translated": true
+    },
+    "H7835": {
+      "definitions_cz": "1) být černý | 1a) (Qal) být černý (kůže)",
+      "lemma": "שָׁחַר",
+      "hebrew": "שחר",
+      "xlit": "shâchar",
+      "translated": true
+    },
+    "H7836": {
+      "definitions_cz": "1) hledat, hledat brzy nebo vážně, hledat brzy nebo pilně | 1a) (Qal) pilně hledat, hledat | 1b) (Piel) hledat, hledat brzy",
+      "lemma": "שָׁחַר",
+      "hebrew": "שחר",
+      "xlit": "shâchar",
+      "translated": true
+    },
+    "H7837": {
+      "definitions_cz": "1) svítání | 1a) svítání | 1b) za úsvitu (jako příslovce)",
+      "lemma": "שַׁחַר",
+      "hebrew": "שחר",
+      "xlit": "shachar",
+      "translated": true
+    },
+    "H7838": {
+      "definitions_cz": "1) černá",
+      "lemma": "שָׁחֹר",
+      "hebrew": "שחר",
+      "xlit": "shâchôr",
+      "translated": true
+    },
+    "H7839": {
+      "definitions_cz": "1) černota | 1a) černost (vlasů naznačující mládí)",
+      "lemma": "שַׁחֲרוּת",
+      "hebrew": "שחרות",
+      "xlit": "shachărûwth",
+      "translated": true
+    },
+    "H7840": {
+      "definitions_cz": "1) načernalé",
+      "lemma": "שְׁחַרְחֹרֶת",
+      "hebrew": "שחרחרת",
+      "xlit": "shᵉcharchôreth",
+      "translated": true
+    },
+    "H7841": {
+      "definitions_cz": "Shehariah = \"úsvit Jehovy\" | 1) Benjamínec, syn Jehoramův",
+      "lemma": "שְׁחַרְיָה",
+      "hebrew": "שחריה",
+      "xlit": "Shᵉcharyâh",
+      "translated": true
+    },
+    "H7842": {
+      "definitions_cz": "Shaharaim = \"dvojitý úsvit\" | 1) Benjamite, otec Jobab, Zibia, Mesha, Malcham, Jeuz, Shachia, Mirma, Abitub a Elpaal",
+      "lemma": "שַׁחֲרַיִם",
+      "hebrew": "שחרים",
+      "xlit": "Shachărayim",
+      "translated": true
+    },
+    "H7843": {
+      "definitions_cz": "1) zničit, zkazit, zruinovat, chátrat | 1a) (Niphal) být zkažen, být zkažený, být zkažený, být zkažený, být zraněn, být zničen, být shnilý | 1b) (Piel) | 1b1) zkazit, zničit | 1b2) překrucovat, korumpovat, obchodovat korupčně (morálně) | 1c) (Hiphil) | 1c1) zkazit, zničit, zničit | 1c2) překrucovat, korumpovat (morálně) | 1c3) ničitel (příčestí) | 1d) (Hophal) zkažený, zničený (příčestí)",
+      "lemma": "שָׁחַת",
+      "hebrew": "שחת",
+      "xlit": "shâchath",
+      "translated": true
+    },
+    "H7844": {
+      "definitions_cz": "1) korumpovat | 1a) (P'al) | 1a1) zkorumpovaný (příčestí) | 1a2) chyba (subst)",
+      "lemma": "שְׁחַת",
+      "hebrew": "שחת",
+      "xlit": "shᵉchath",
+      "translated": true
+    },
+    "H7845": {
+      "definitions_cz": "1) jáma, zničení, hrob | 1a) jáma (na chytání lvů) | 1b) jáma (pekla)",
+      "lemma": "שַׁחַת",
+      "hebrew": "שחת",
+      "xlit": "shachath",
+      "translated": true
+    },
+    "H7846": {
+      "definitions_cz": "1) vybočovač, vzbouřenec, rebel, činy, které uhýbají",
+      "lemma": "שֵׂט",
+      "hebrew": "שט",
+      "xlit": "sêṭ",
+      "translated": true
+    },
+    "H7847": {
+      "definitions_cz": "1) otočit se stranou, jít stranou, otočit se, klesnout | 1a) (Qal) odvrátit",
+      "lemma": "שָׂטָה",
+      "hebrew": "שטה",
+      "xlit": "sâṭâh",
+      "translated": true
+    },
+    "H7848": {
+      "definitions_cz": "1) akátový strom, akátové dřevo",
+      "lemma": "שִׁטָּה",
+      "hebrew": "שטה",
+      "xlit": "shiṭṭâh",
+      "translated": true
+    },
+    "H7849": {
+      "definitions_cz": "1) šířit se, šířit do zahraničí, natahovat se | 1a) (Qal) | 1a1) šířit | 1a2) rozšiřování, rozšiřování (příčestí) | 1b) (Piel) rozprostřít",
+      "lemma": "שָׁטַח",
+      "hebrew": "שטח",
+      "xlit": "shâṭach",
+      "translated": true
+    },
+    "H7850": {
+      "definitions_cz": "1) metla",
+      "lemma": "שֹׁטֵט",
+      "hebrew": "שטט",
+      "xlit": "shôṭêṭ",
+      "translated": true
+    },
+    "H7851": {
+      "definitions_cz": "Shittim = \"akácie\" | 1) místo izraelského tábora mezi dobytím transjordánského regionu a přechodem přes Jordán do Kanaánu | 2) místo západně od Jeruzaléma",
+      "lemma": "שִׁטִּים",
+      "hebrew": "שטים",
+      "xlit": "Shiṭṭîym",
+      "translated": true
+    },
+    "H7852": {
+      "definitions_cz": "1) nenávidět, odporovat si, nést zášť, udržovat nepřátelství vůči, chovat si nepřátelství vůči | 1a) (Qal) chovat nepřátelství vůči",
+      "lemma": "שָׂטַם",
+      "hebrew": "שטם",
+      "xlit": "sâṭam",
+      "translated": true
+    },
+    "H7853": {
+      "definitions_cz": "1) (Qal) být nebo působit jako protivník, vzdorovat, oponovat",
+      "lemma": "שָׂטַן",
+      "hebrew": "שטן",
+      "xlit": "sâṭan",
+      "translated": true
+    },
+    "H7854": {
+      "definitions_cz": "1) protivník, ten, kdo obstojí | 1a) protivník (obecně-osobní nebo národní) | 2) nadlidský protivník | 2a) Satan (jako podstatné jméno pr)",
+      "lemma": "שָׂטָן",
+      "hebrew": "שטן",
+      "xlit": "sâṭân",
+      "translated": true
+    },
+    "H7855": {
+      "definitions_cz": "1) obviňování, nepřátelství",
+      "lemma": "שִׂטְנָה",
+      "hebrew": "שטנה",
+      "xlit": "siṭnâh",
+      "translated": true
+    },
+    "H7856": {
+      "definitions_cz": "Sitnah = \"svár\" | 1) 2. ze 2 studní vykopaných Izákem v údolí Gerar",
+      "lemma": "שִׂטְנָה",
+      "hebrew": "שטנה",
+      "xlit": "Siṭnâh",
+      "translated": true
+    },
+    "H7857": {
+      "definitions_cz": "1) k mytí, máchání, přelévání, pohlcování, máchání nebo smývání | 1a) (Qal) | 1a1) k přetečení | 1a2) proudit, běžet | 1a3) opláchnout nebo smýt | 1b) (Niphal) k smetení, vypláchnutí | 1c) (Pual) k opláchnutí, vydrhnutí a opláchnutí",
+      "lemma": "שָׁטַף",
+      "hebrew": "שטף",
+      "xlit": "shâṭaph",
+      "translated": true
+    },
+    "H7858": {
+      "definitions_cz": "1) povodeň, liják",
+      "lemma": "שֶׁטֶף",
+      "hebrew": "שטף",
+      "xlit": "sheṭeph",
+      "translated": true
+    },
+    "H7859": {
+      "definitions_cz": "1) strana (Da 7:5)",
+      "lemma": "שְׁטַר",
+      "hebrew": "שטר",
+      "xlit": "shᵉṭar",
+      "translated": true
+    },
+    "H7860": {
+      "definitions_cz": "1) (Qal) úředník, důstojník",
+      "lemma": "שֹׁטֵר",
+      "hebrew": "שטר",
+      "xlit": "shôṭêr",
+      "translated": true
+    },
+    "H7861": {
+      "definitions_cz": "Shitrai = \"moji důstojníci\" | 1) Davidův úředník",
+      "lemma": "שִׁטְרַי",
+      "hebrew": "שטרי",
+      "xlit": "Shiṭray",
+      "translated": true
+    },
+    "H7862": {
+      "definitions_cz": "1) dar, dárek, dar nabízený jako pocta",
+      "lemma": "שַׁי",
+      "hebrew": "שי",
+      "xlit": "shay",
+      "translated": true
+    },
+    "H7863": {
+      "definitions_cz": "1) vznešenost (pýchy)",
+      "lemma": "שִׂיא",
+      "hebrew": "שיא",
+      "xlit": "sîyʼ",
+      "translated": true
+    },
+    "H7864": {
+      "definitions_cz": "Sheva = \"Jehova tvrdí\" | 1) písař Davidův | 1a) také 'Seraiah', 'Shisha' a 'Shavsha'",
+      "lemma": "שְׁיָא",
+      "hebrew": "שיא",
+      "xlit": "Shᵉyâʼ",
+      "translated": true
+    },
+    "H7865": {
+      "definitions_cz": "Sion = \"vznešený\" | 1) jiný název pro horu Hermon",
+      "lemma": "שִׂיאֹן",
+      "hebrew": "שיאן",
+      "xlit": "Sîyʼôn",
+      "translated": true
+    },
+    "H7866": {
+      "definitions_cz": "Shion = \"zřícenina\" | 1) město Issachar ležící poblíž hory Tábor",
+      "lemma": "שִׁיאוֹן",
+      "hebrew": "שיאון",
+      "xlit": "Shîyʼôwn",
+      "translated": true
+    },
+    "H7867": {
+      "definitions_cz": "1) (Qal) být ošklivý, být šedý",
+      "lemma": "שִׂיב",
+      "hebrew": "שיב",
+      "xlit": "sîyb",
+      "translated": true
+    },
+    "H7868": {
+      "definitions_cz": "1) být šedivý, být ošumělý, být ošumělý | 1a) (P'al) starší (subst)",
+      "lemma": "שִׂיב",
+      "hebrew": "שיב",
+      "xlit": "sîyb",
+      "translated": true
+    },
+    "H7869": {
+      "definitions_cz": "1) šedohlavý věk, šedohlavý věk",
+      "lemma": "שֵׂיב",
+      "hebrew": "שיב",
+      "xlit": "sêyb",
+      "translated": true
+    },
+    "H7870": {
+      "definitions_cz": "1) restaurování",
+      "lemma": "שִׁיבָה",
+      "hebrew": "שיבה",
+      "xlit": "shîybâh",
+      "translated": true
+    },
+    "H7871": {
+      "definitions_cz": "1) pobyt",
+      "lemma": "שִׁיבָה",
+      "hebrew": "שיבה",
+      "xlit": "shîybâh",
+      "translated": true
+    },
+    "H7872": {
+      "definitions_cz": "1) věk, šedivé vlasy, otřepaná hlava, stáří | 1a) šedivé vlasy, osrstěná hlava | 1b) stáří",
+      "lemma": "שֵׂיבָה",
+      "hebrew": "שיבה",
+      "xlit": "sêybâh",
+      "translated": true
+    },
+    "H7873": {
+      "definitions_cz": "1) odstěhování, troska",
+      "lemma": "שִׂיג",
+      "hebrew": "שיג",
+      "xlit": "sîyg",
+      "translated": true
+    },
+    "H7874": {
+      "definitions_cz": "1) (Qal) k vybílení",
+      "lemma": "שִׂיד",
+      "hebrew": "שיד",
+      "xlit": "sîyd",
+      "translated": true
+    },
+    "H7875": {
+      "definitions_cz": "1) vápno, vápno | 1a) vyrobené pálením kostí",
+      "lemma": "שִׂיד",
+      "hebrew": "שיד",
+      "xlit": "sîyd",
+      "translated": true
+    },
+    "H7876": {
+      "definitions_cz": "1) (Qal) zapomenout, zbavit",
+      "lemma": "שָׁיָה",
+      "hebrew": "שיה",
+      "xlit": "shâyâh",
+      "translated": true
+    },
+    "H7877": {
+      "definitions_cz": "Shiza = \"nádhera\" | 1) Rúbenita, otec Adiny, jednoho z Davidových mocných válečníků",
+      "lemma": "שִׁיזָא",
+      "hebrew": "שיזא",
+      "xlit": "Shîyzâʼ",
+      "translated": true
+    },
+    "H7878": {
+      "definitions_cz": "1) předkládat, zprostředkovávat, přemítat, komunikovat, mluvit, stěžovat si, uvažovat, zpívat | 1a) (Qal) | 1a1) stěžovat si | 1a2) přemýšlet, meditovat, studovat, přemýšlet | 1a3) mluvit, zpívat, mluvit | 1b) (Polel) meditovat, uvažovat, vykládat myšlenky",
+      "lemma": "שִׂיחַ",
+      "hebrew": "שיח",
+      "xlit": "sîyach",
+      "translated": true
+    },
+    "H7879": {
+      "definitions_cz": "1) meditace, stížnosti, dumání | 1a) stížnost, stížnost | 1b) následující jsou pochybné | 1b1) dumání | 1b2) úzkost, potíže | 1b3) mluvit",
+      "lemma": "שִׂיחַ",
+      "hebrew": "שיח",
+      "xlit": "sîyach",
+      "translated": true
+    },
+    "H7880": {
+      "definitions_cz": "1) keř, rostlina, keř",
+      "lemma": "שִׂיחַ",
+      "hebrew": "שיח",
+      "xlit": "sîyach",
+      "translated": true
+    },
+    "H7881": {
+      "definitions_cz": "1) meditace, reflexe, modlitba, oddanost, stížnost, dumání | 1a) stížnost | 1b) dumání, studium (objektu)",
+      "lemma": "שִׂיחָה",
+      "hebrew": "שיחה",
+      "xlit": "sîychâh",
+      "translated": true
+    },
+    "H7882": {
+      "definitions_cz": "1) jáma",
+      "lemma": "שִׁיחָה",
+      "hebrew": "שיחה",
+      "xlit": "shîychâh",
+      "translated": true
+    },
+    "H7883": {
+      "definitions_cz": "Shihor nebo Sihor = \"tmavý\" | 1) řeka nebo kanál na východní hranici Egypta a rameno Nilu",
+      "lemma": "שִׁיחוֹר",
+      "hebrew": "שיחור",
+      "xlit": "Shîychôwr",
+      "translated": true
+    },
+    "H7884": {
+      "definitions_cz": "Shihor-libnath = \"černota bělosti\" | 1) proud v Asheru",
+      "lemma": "שִׁיחוֹר לִבְנָת",
+      "hebrew": "שיחור לבנת",
+      "xlit": "Shîychôwr Libnâth",
+      "translated": true
+    },
+    "H7885": {
+      "definitions_cz": "1) veslování | 1a) veslování | 1b) metla (obr.)",
+      "lemma": "שַׁיִט",
+      "hebrew": "שיט",
+      "xlit": "shayiṭ",
+      "translated": true
+    },
+    "H7886": {
+      "definitions_cz": "1) ten, koho to je, to, co mu patří, klid | 1a) znamená nejistý",
+      "lemma": "שִׁילֹה",
+      "hebrew": "שילה",
+      "xlit": "Shîylôh",
+      "translated": true
+    },
+    "H7887": {
+      "definitions_cz": "Shiloh = \"místo odpočinku\" | 1) město v Efrajimu a dočasný domov Archy úmluvy a svatostánku, místo, kde Samuel vyrůstal",
+      "lemma": "שִׁילֹה",
+      "hebrew": "שילה",
+      "xlit": "Shîylôh",
+      "translated": true
+    },
+    "H7888": {
+      "definitions_cz": "Shilonit = viz Shiloh \"místo odpočinku\" | 1) obyvatel Shiloh",
+      "lemma": "שִׁילוֹנִי",
+      "hebrew": "שילוני",
+      "xlit": "Shîylôwnîy",
+      "translated": true
+    },
+    "H7889": {
+      "definitions_cz": "Šimon = \"poušť\" | 1) Judaita, otec Amnona, Rinny, Ben-Hanana a Tilona",
+      "lemma": "שִׁימוֹן",
+      "hebrew": "שימון",
+      "xlit": "Shîymôwn",
+      "translated": true
+    },
+    "H7890": {
+      "definitions_cz": "1) moč",
+      "lemma": "שַׁיִן",
+      "hebrew": "שין",
+      "xlit": "shayin",
+      "translated": true
+    },
+    "H7891": {
+      "definitions_cz": "1) zpívat | 1a) (Qal) | 1a1) zpívat | 1a2) zpěvačka, zpěvačky (příčestí) | 1b) (Pole) | 1b1) zpívat | 1b2) zpěvačka, zpěvačka (příčestí) | 1c) (Hophal) ke zpěvu | ++++ | V Jobovi 36:24 je slovo přeloženo „Hle“; v moderních verzích se překládá „Zpívejte“. Staré překlady považovaly hebrejské slovo za z jiného kořene než H07788, proto je rozdíl v překladech.",
+      "lemma": "שִׁיר",
+      "hebrew": "שיר",
+      "xlit": "shîyr",
+      "translated": true
+    },
+    "H7892": {
+      "definitions_cz": "n m | 1) píseň | 1a) lyrická píseň | 1b) náboženská píseň | 1c) píseň levitských sborů | n f | 2) píseň | 2a) píseň, óda",
+      "lemma": "שִׁיר",
+      "hebrew": "שיר",
+      "xlit": "shîyr",
+      "translated": true
+    },
+    "H7893": {
+      "definitions_cz": "1) alabastr",
+      "lemma": "שַׁיִשׁ",
+      "hebrew": "שיש",
+      "xlit": "shayish",
+      "translated": true
+    },
+    "H7894": {
+      "definitions_cz": "Shisha = \"Jehova tvrdí\" | 1) otec Elihorefa a Achiáše, královských tajemníků za vlády Šalomouna | 1a) zřejmě stejný jako 'Shavsha', který zastával stejnou pozici za Davida",
+      "lemma": "שִׁישָׁא",
+      "hebrew": "שישא",
+      "xlit": "Shîyshâʼ",
+      "translated": true
+    },
+    "H7895": {
+      "definitions_cz": "Shishak = \"chtivý jemného prádla\" | 1) egyptský král, Šešonk I., 1. král bubastinské 22. dynastie; vládl v Egyptě za vlády Šalomouna a Rechabeáma a zaútočil na jižní království pod Rechoboámem a zřejmě z něj učinil přítok",
+      "lemma": "שִׁישַׁק",
+      "hebrew": "שישק",
+      "xlit": "Shîyshaq",
+      "translated": true
+    },
+    "H7896": {
+      "definitions_cz": "1) dát, nastavit | 1a) (Qal) | 1a1) položit, položit (ruku na) | 1a2) nastavit, umístit, jmenovat, opravit, nastavit mysl na | 1a3) konstituovat, dělat (jednoho), dělat jako, provádět | 1a4) zaujmout stanovisko | 1a5) odkládat odpad | 1b) (Hophal) má být uloženo",
+      "lemma": "שִׁית",
+      "hebrew": "שית",
+      "xlit": "shîyth",
+      "translated": true
+    },
+    "H7897": {
+      "definitions_cz": "1) oděv",
+      "lemma": "שִׁית",
+      "hebrew": "שית",
+      "xlit": "shîyth",
+      "translated": true
+    },
+    "H7898": {
+      "definitions_cz": "1) trnové keře",
+      "lemma": "שַׁיִת",
+      "hebrew": "שית",
+      "xlit": "shayith",
+      "translated": true
+    },
+    "H7899": {
+      "definitions_cz": "1) trn",
+      "lemma": "שֵׂךְ",
+      "hebrew": "שך",
+      "xlit": "sêk",
+      "translated": true
+    },
+    "H7900": {
+      "definitions_cz": "1) stánek, pavilon",
+      "lemma": "שֹׂךְ",
+      "hebrew": "שך",
+      "xlit": "sôk",
+      "translated": true
+    },
+    "H7901": {
+      "definitions_cz": "1) to lie down | 1a) (Qal) | 1a1) to lie,  lie down,  lie on | 1a2) to lodge | 1a3) to lie (of sexual relations) | 1a4) to lie down (in death) | 1a5) to rest,  relax (fig) | 1b) (Niphal) to be lain with (sexually) | 1c) (Pual) to be lain with (sexually) | 1d) (Hiphil) to make to lie down | 1e) (Hophal) to be laid",
+      "lemma": "שָׁכַב",
+      "hebrew": "שכב",
+      "xlit": "shâkab",
+      "translated": true
+    },
+    "H7902": {
+      "definitions_cz": "1) akt lhaní, vrstvení, potahování | 1a) akt lži (sexuálních vztahů) | 1b) vrstva",
+      "lemma": "שְׁכָבָה",
+      "hebrew": "שכבה",
+      "xlit": "shᵉkâbâh",
+      "translated": true
+    },
+    "H7903": {
+      "definitions_cz": "1) kopulace",
+      "lemma": "שְׁכֹבֶת",
+      "hebrew": "שכבת",
+      "xlit": "shᵉkôbeth",
+      "translated": true
+    },
+    "H7904": {
+      "definitions_cz": "1) (Hiphil) chlípný (příčestí) | 1a) znamená nejistý",
+      "lemma": "שָׁכָה",
+      "hebrew": "שכה",
+      "xlit": "shâkâh",
+      "translated": true
+    },
+    "H7905": {
+      "definitions_cz": "1) ozub, kopí",
+      "lemma": "שֻׂכָּה",
+      "hebrew": "שכה",
+      "xlit": "sukkâh",
+      "translated": true
+    },
+    "H7906": {
+      "definitions_cz": "Sechu = \"strážní věž\" | 1) místo poblíž Rámy s velkou studnou",
+      "lemma": "שֵׂכוּ",
+      "hebrew": "שכו",
+      "xlit": "Sêkûw",
+      "translated": true
+    },
+    "H7907": {
+      "definitions_cz": "1) nebeský vzhled nebo jev, mysl | 1a) znamená pochybný",
+      "lemma": "שֶׂכְוִי",
+      "hebrew": "שכוי",
+      "xlit": "sekvîy",
+      "translated": true
+    },
+    "H7908": {
+      "definitions_cz": "1) zármutek, ztráta dětí",
+      "lemma": "שְׁכוֹל",
+      "hebrew": "שכול",
+      "xlit": "shᵉkôwl",
+      "translated": true
+    },
+    "H7909": {
+      "definitions_cz": "1) bezdětný (prostřednictvím zármutku) | 2) pozůstalí, okradení o potomstvo",
+      "lemma": "שַׁכּוּל",
+      "hebrew": "שכול",
+      "xlit": "shakkûwl",
+      "translated": true
+    },
+    "H7910": {
+      "definitions_cz": "1) opilý | 1a) opilý | 1b) opilec, opilec (subst)",
+      "lemma": "שִׁכּוֹר",
+      "hebrew": "שכור",
+      "xlit": "shikkôwr",
+      "translated": true
+    },
+    "H7911": {
+      "definitions_cz": "1) zapomenout, ignorovat, chřadnout | 1a) (Qal) | 1a1) zapomenout | 1a2) přestat se starat | 1b) (Niphal) na zapomenutí | 1c) (Piel) způsobit zapomenutí | 1d) (Hiphil) způsobit nebo způsobit zapomenutí | 1e) (Hithpael) být zapomenut",
+      "lemma": "שָׁכַח",
+      "hebrew": "שכח",
+      "xlit": "shâkach",
+      "translated": true
+    },
+    "H7912": {
+      "definitions_cz": "1) najít | 1a) (Aphel) najít | 1b) (Ithp'al) k nalezení",
+      "lemma": "שְׁכַח",
+      "hebrew": "שכח",
+      "xlit": "shᵉkach",
+      "translated": true
+    },
+    "H7913": {
+      "definitions_cz": "1) zapomenout, zapomenout, zapomenout",
+      "lemma": "שָׁכֵחַ",
+      "hebrew": "שכח",
+      "xlit": "shâkêach",
+      "translated": true
+    },
+    "H7914": {
+      "definitions_cz": "1) obrázek, loď, řemeslo | 1a) což znamená velmi pochybné",
+      "lemma": "שְׂכִיָּה",
+      "hebrew": "שכיה",
+      "xlit": "sᵉkîyâh",
+      "translated": true
+    },
+    "H7915": {
+      "definitions_cz": "1) nůž",
+      "lemma": "שַׂכִּין",
+      "hebrew": "שכין",
+      "xlit": "sakkîyn",
+      "translated": true
+    },
+    "H7916": {
+      "definitions_cz": "1) najal | 1a) najatý (zvířat) | 1b) nájemník, najatý dělník (subst) | 1b1) žoldák",
+      "lemma": "שָׂכִיר",
+      "hebrew": "שכיר",
+      "xlit": "sâkîyr",
+      "translated": true
+    },
+    "H7917": {
+      "definitions_cz": "1) najal | 1a) najatý (zvířat) | 1b) nájemník, najatý dělník (subst) | 1b1) žoldák",
+      "lemma": "שְׂכִירָה",
+      "hebrew": "שכירה",
+      "xlit": "sᵉkîyrâh",
+      "translated": true
+    },
+    "H7918": {
+      "definitions_cz": "1) ustoupit, zmírnit se, snížit | 1a) (Qal) ke snížení | 1b) (Hiphil) zmírnit",
+      "lemma": "שָׁכַךְ",
+      "hebrew": "שכך",
+      "xlit": "shâkak",
+      "translated": true
+    },
+    "H7919": {
+      "definitions_cz": "1) být obezřetný, být obezřetný, moudře rozumět, prosperovat | 1a) (Qal) být obezřetný, být obezřetný | 1b) (hifil) | 1b1) podívat se na nebo na, mít přehled | 1b2) věnovat pozornost, uvažovat, přemýšlet, být obezřetný | 1b3) mít přehled, mít porozumění | 1b3a) vhled, porozumění (subst) | 1b4) přimět uvažovat, dát nahlédnout, učit | 1b4a) učitelé, moudří | 1b5) jednat obezřetně, jednat obezřetně, jednat moudře | 1b6) prosperovat, mít úspěch | 1b7) způsobit",
+      "lemma": "שָׂכַל",
+      "hebrew": "שכל",
+      "xlit": "sâkal",
+      "translated": true
+    },
+    "H7920": {
+      "definitions_cz": "1) (Ithpael) uvažovat, rozjímat",
+      "lemma": "שְׂכַל",
+      "hebrew": "שכל",
+      "xlit": "sᵉkal",
+      "translated": true
+    },
+    "H7921": {
+      "definitions_cz": "1) být pozůstalý, učinit bezdětným, potratit | 1a) (Qal) být pozůstalý | 1b) (Piel) | 1b1) učinit bezdětným | 1b2) způsobit neplodnost, ukázat neplodnost nebo potrat | 1b3) potratit | 1c) (Hiphil) potrat (příčestí)",
+      "lemma": "שָׁכֹל",
+      "hebrew": "שכל",
+      "xlit": "shâkôl",
+      "translated": true
+    },
+    "H7922": {
+      "definitions_cz": "1) opatrnost, vhled, porozumění | 1a) opatrnost, zdravý rozum | 1b) vhled, porozumění | 1c) mazanost, řemeslo (špatný smysl)",
+      "lemma": "שֶׂכֶל",
+      "hebrew": "שכל",
+      "xlit": "sekel",
+      "translated": true
+    },
+    "H7923": {
+      "definitions_cz": "1) bezdětnost, zármutek",
+      "lemma": "שִׁכֻּלִים",
+      "hebrew": "שכלים",
+      "xlit": "shikkulîym",
+      "translated": true
+    },
+    "H7924": {
+      "definitions_cz": "1) vhled",
+      "lemma": "שׇׂכְלְתָנוּ",
+      "hebrew": "שכלתנו",
+      "xlit": "soklᵉthânûw",
+      "translated": true
     }
   }
 }
