@@ -32501,6 +32501,906 @@
       "translit": "paroíchomai",
       "pronunciation": "par-oy'-khom-ahee",
       "translated": true
+    },
+    "G3945": {
+      "definitions_cz": "podobat se",
+      "translit": "paromoiázō",
+      "pronunciation": "par-om-oy-ad'-zo",
+      "translated": true
+    },
+    "G3946": {
+      "definitions_cz": "podobný skoro, t. j. podobný",
+      "translit": "parómoios",
+      "pronunciation": "par-om'-oy-os",
+      "translated": true
+    },
+    "G3947": {
+      "definitions_cz": "ostřit vedle, tzn.\n (obrazně) rozčilovat",
+      "translit": "paroxýnō",
+      "pronunciation": "par-ox-oo'-no",
+      "translated": true
+    },
+    "G3948": {
+      "definitions_cz": "podněcování (k dobru) nebo spor (v\n hněv)",
+      "translit": "paroxysmós",
+      "pronunciation": "par-ox-oos-mos'",
+      "translated": true
+    },
+    "G3949": {
+      "definitions_cz": "hněvat se vedle sebe, t. j. hněvat",
+      "translit": "parorgízō",
+      "pronunciation": "par-org-id'-zo",
+      "translated": true
+    },
+    "G3950": {
+      "definitions_cz": "vztek",
+      "translit": "parorgismós",
+      "pronunciation": "par-org-is-mos'",
+      "translated": true
+    },
+    "G3951": {
+      "definitions_cz": "nutit spolu, tj. stimulovat (k\n nepřátelství)",
+      "translit": "parotrýnō",
+      "pronunciation": "par-ot-roo'-no",
+      "translated": true
+    },
+    "G3952": {
+      "definitions_cz": "blízkost, tj. příchod (často,\n návrat; zvláště Krista potrestat Jeruzalém, nebo konečně\n zlý); (implicitně) fyzicky, aspekt",
+      "translit": "parousía",
+      "pronunciation": "par-oo-see'-ah",
+      "translated": true
+    },
+    "G3953": {
+      "definitions_cz": "příloha (\n nádoba)",
+      "translit": "paropsís",
+      "pronunciation": "par-op-sis'",
+      "translated": true
+    },
+    "G3954": {
+      "definitions_cz": "veškerá otevřenost, tzn.\n upřímnost, otevřenost, publicita; implicitně, ujištění",
+      "translit": "parrhēsía",
+      "pronunciation": "par-rhay-see'-ah",
+      "translated": true
+    },
+    "G3955": {
+      "definitions_cz": "být ve vyjadřování upřímný nebo sebevědomý\n duchem a vystupováním",
+      "translit": "parrhēsiázomai",
+      "pronunciation": "par-hray-see-ad'-zom-ahee",
+      "translated": true
+    },
+    "G3956": {
+      "definitions_cz": "všechny,\n jakýkoli, každý, celek",
+      "translit": "pâs",
+      "pronunciation": "pas",
+      "translated": true
+    },
+    "G3957": {
+      "definitions_cz": "Pesach (jídlo, den,\n festival nebo zvláštní oběti s ním spojené)",
+      "translit": "páscha",
+      "pronunciation": "pas'-khah",
+      "translated": true
+    },
+    "G3958": {
+      "definitions_cz": "zažít pocit nebo dojem\n (obvykle bolestivé)",
+      "translit": "páschō",
+      "pronunciation": "pas'-kho",
+      "translated": true
+    },
+    "G3959": {
+      "definitions_cz": "Patara, místo v Malé Asii",
+      "translit": "Pátara",
+      "pronunciation": "pat'-ar-ah",
+      "translated": true
+    },
+    "G3960": {
+      "definitions_cz": "klepat (jemně nebo zbraní popř\n smrtelně)",
+      "translit": "patássō",
+      "pronunciation": "pat-as'-so",
+      "translated": true
+    },
+    "G3961": {
+      "definitions_cz": "šlapat\n (doslova nebo obrazně)",
+      "translit": "patéō",
+      "pronunciation": "pat-eh'-o",
+      "translated": true
+    },
+    "G3962": {
+      "definitions_cz": "„otec“ (doslova nebo přeneseně, blízký\n nebo vzdálenější)",
+      "translit": "patḗr",
+      "pronunciation": "pat-ayr'",
+      "translated": true
+    },
+    "G3963": {
+      "definitions_cz": "Patmus, ostrůvek v\n Středomoří",
+      "translit": "Pátmos",
+      "pronunciation": "pat'-mos",
+      "translated": true
+    },
+    "G3964": {
+      "definitions_cz": "a\n zavraždění",
+      "translit": "patralṓias",
+      "pronunciation": "pat-ral-o'-as",
+      "translated": true
+    },
+    "G3965": {
+      "definitions_cz": "otcovský původ, tzn.\n (konkrétně) skupina rodin nebo celá rasa (národ)",
+      "translit": "patriá",
+      "pronunciation": "pat-ree-ah'",
+      "translated": true
+    },
+    "G3966": {
+      "definitions_cz": "předek (\"patriarcha\")",
+      "translit": "patriárchēs",
+      "pronunciation": "pat-ree-arkh'-ace",
+      "translated": true
+    },
+    "G3967": {
+      "definitions_cz": "otcovský, t. j. rodový",
+      "translit": "patrikós",
+      "pronunciation": "pat-ree-kos'",
+      "translated": true
+    },
+    "G3968": {
+      "definitions_cz": "vlast, t. j. rodné město; (obrazně) nebeský\n domů",
+      "translit": "patrís",
+      "pronunciation": "pat-rece'",
+      "translated": true
+    },
+    "G3969": {
+      "definitions_cz": "otcovský život; Patrobas, křesťan",
+      "translit": "Patrobâs",
+      "pronunciation": "pat-rob'-as",
+      "translated": true
+    },
+    "G3970": {
+      "definitions_cz": "tradiční",
+      "translit": "patroparádotos",
+      "pronunciation": "pat-rop-ar-ad'-ot-os",
+      "translated": true
+    },
+    "G3971": {
+      "definitions_cz": "otcovské, tedy dědičné",
+      "translit": "patrōios",
+      "pronunciation": "pat-ro'-os",
+      "translated": true
+    },
+    "G3972": {
+      "definitions_cz": "(málo; ale vzdáleně z odvozeniny [ŘECKO:3973]",
+      "translit": "Paûlos",
+      "pronunciation": "pow'-los",
+      "translated": true
+    },
+    "G3973": {
+      "definitions_cz": "zastavit (tranzitivně nebo netranzitivně),\n tj. omezit, přestat, upustit, skončit",
+      "translit": "paúō",
+      "pronunciation": "pow'-o",
+      "translated": true
+    },
+    "G3974": {
+      "definitions_cz": "Paphus, místo na Kypru",
+      "translit": "Páphos",
+      "pronunciation": "paf'-os",
+      "translated": true
+    },
+    "G3975": {
+      "definitions_cz": "zahustit, tj\n implikace) vykrmit (obrazně, omráčit nebo učinit bezcitným)",
+      "translit": "pachýnō",
+      "pronunciation": "pakh-oo'-no",
+      "translated": true
+    },
+    "G3976": {
+      "definitions_cz": "pouto na nohy",
+      "translit": "pédē",
+      "pronunciation": "ped'-ay",
+      "translated": true
+    },
+    "G3977": {
+      "definitions_cz": "úroveň (tak snadné pro\n nohy)",
+      "translit": "pedinós",
+      "pronunciation": "ped-ee-nos'",
+      "translated": true
+    },
+    "G3978": {
+      "definitions_cz": "jít na cestu, t. j. cestovat po zemi",
+      "translit": "pezeúō",
+      "pronunciation": "ped-zyoo'-o",
+      "translated": true
+    },
+    "G3979": {
+      "definitions_cz": "nohama,\n tedy chůzí",
+      "translit": "pezēi",
+      "pronunciation": "ped-zay'",
+      "translated": true
+    },
+    "G3980": {
+      "definitions_cz": "nechat se přesvědčit vládcem, tzn.\n (genitivní pád) podřídit se autoritě; analogicky se přizpůsobit\n radu",
+      "translit": "peitharchéō",
+      "pronunciation": "pi-tharkh-eh'-o",
+      "translated": true
+    },
+    "G3981": {
+      "definitions_cz": "přesvědčivý",
+      "translit": "peithós",
+      "pronunciation": "pi-thos'",
+      "translated": true
+    },
+    "G3982": {
+      "definitions_cz": "přesvědčit (argumentem, pravdivým nebo nepravdivým); analogicky,\n uklidnit nebo usmířit (jinými spravedlivými prostředky); reflexně popř\n pasivně, souhlasit (k důkazu nebo autoritě), spoléhat se (vnitřním\n jistota)",
+      "translit": "peíthō",
+      "pronunciation": "pi'-tho",
+      "translated": true
+    },
+    "G3983": {
+      "definitions_cz": "\"borovice\"); do\n hladomor (absolutně nebo relativně); přeneseně toužit",
+      "translit": "peináō",
+      "pronunciation": "pi-nah'-o",
+      "translated": true
+    },
+    "G3984": {
+      "definitions_cz": "test, tzn.\n pokus, zkušenost",
+      "translit": "peîra",
+      "pronunciation": "pi'-rah",
+      "translated": true
+    },
+    "G3985": {
+      "definitions_cz": "testovat (objektivně), tj. snažit se, zkoumat, lákat,\n disciplína",
+      "translit": "peirázō",
+      "pronunciation": "pi-rad'-zo",
+      "translated": true
+    },
+    "G3986": {
+      "definitions_cz": "dokazování (experimentem (dobrého), zkušeností (o\n zlo), nabádání, kázeň nebo provokace); implicitně,\n protivenství",
+      "translit": "peirasmós",
+      "pronunciation": "pi-ras-mos'",
+      "translated": true
+    },
+    "G3987": {
+      "definitions_cz": "testovat (subjektivně), tj. (reflexivně) k\n pokus",
+      "translit": "peiráō",
+      "pronunciation": "pi-rah'-o",
+      "translated": true
+    },
+    "G3988": {
+      "definitions_cz": "přesvědčivost, tzn.\n důvěřivost",
+      "translit": "peismonḗ",
+      "pronunciation": "pice-mon-ay'",
+      "translated": true
+    },
+    "G3989": {
+      "definitions_cz": "hluboké nebo otevřené moře, t. j. hlavní",
+      "translit": "pélagos",
+      "pronunciation": "pel'-ag-os",
+      "translated": true
+    },
+    "G3990": {
+      "definitions_cz": "useknout (hlavu),\n tj. zkrátit",
+      "translit": "pelekízō",
+      "pronunciation": "pel-ek-id'-zo",
+      "translated": true
+    },
+    "G3991": {
+      "definitions_cz": "pátý",
+      "translit": "pémptos",
+      "pronunciation": "pemp'-tos",
+      "translated": true
+    },
+    "G3992": {
+      "definitions_cz": "odeslat (ze subjektivního pohledu resp\n výchozí bod, zatímco ἵημιεἶμιterminus ad quem[ŘECKO:4724]",
+      "translit": "pémpō",
+      "pronunciation": "pem'-po",
+      "translated": true
+    },
+    "G3993": {
+      "definitions_cz": "hladovění, tzn.\n nemajetný",
+      "translit": "pénēs",
+      "pronunciation": "pen'-ace",
+      "translated": true
+    },
+    "G3994": {
+      "definitions_cz": "matka manželky",
+      "translit": "pentherá",
+      "pronunciation": "pen-ther-ah'",
+      "translated": true
+    },
+    "G3995": {
+      "definitions_cz": "otec manželky",
+      "translit": "pentherós",
+      "pronunciation": "pen-ther-os'",
+      "translated": true
+    },
+    "G3996": {
+      "definitions_cz": "truchlit (pocit nebo čin)",
+      "translit": "penthéō",
+      "pronunciation": "pen-theh'-o",
+      "translated": true
+    },
+    "G3997": {
+      "definitions_cz": "smutek",
+      "translit": "pénthos",
+      "pronunciation": "pen'-thos",
+      "translated": true
+    },
+    "G3998": {
+      "definitions_cz": "nezbytně nutné",
+      "translit": "penichrós",
+      "pronunciation": "pen-tikh-ros'",
+      "translated": true
+    },
+    "G3999": {
+      "definitions_cz": "pětkrát",
+      "translit": "pentákis",
+      "pronunciation": "pen-tak-ece'",
+      "translated": true
+    },
+    "G4000": {
+      "definitions_cz": "pětkrát tisíc",
+      "translit": "pentakischílioi",
+      "pronunciation": "pen-tak-is-khil'-ee-oy",
+      "translated": true
+    },
+    "G4001": {
+      "definitions_cz": "pět set",
+      "translit": "pentakósioi",
+      "pronunciation": "pen-tak-os'-ee-oy",
+      "translated": true
+    },
+    "G4002": {
+      "definitions_cz": "\"pět\"",
+      "translit": "pénte",
+      "pronunciation": "pen'-teh",
+      "translated": true
+    },
+    "G4003": {
+      "definitions_cz": "pátý a desátý",
+      "translit": "pentekaidékatos",
+      "pronunciation": "pen-tek-ahee-dek'-at-os",
+      "translated": true
+    },
+    "G4004": {
+      "definitions_cz": "padesát",
+      "translit": "pentḗkonta",
+      "pronunciation": "pen-tay'-kon-tah",
+      "translated": true
+    },
+    "G4005": {
+      "definitions_cz": "padesátý ([ŘECKO:2250]",
+      "translit": "pentēkostḗ",
+      "pronunciation": "pen-tay-kos-tay'",
+      "translated": true
+    },
+    "G4006": {
+      "definitions_cz": "důvěra",
+      "translit": "pepoíthēsis",
+      "pronunciation": "pep-oy'-thay-sis",
+      "translated": true
+    },
+    "G4007": {
+      "definitions_cz": "enklitická částice významná hojností\n (důkladnost), tj. důraz; hodně, hodně nebo někdy",
+      "translit": "per",
+      "pronunciation": "per",
+      "translated": true
+    },
+    "G4008": {
+      "definitions_cz": "přes (jako příslovce nebo předložka), t. j. napříč",
+      "translit": "péran",
+      "pronunciation": "per'-an",
+      "translated": true
+    },
+    "G4009": {
+      "definitions_cz": "končetina",
+      "translit": "péras",
+      "pronunciation": "per'-as",
+      "translated": true
+    },
+    "G4010": {
+      "definitions_cz": "opevněný; Pergamus, místo v Malé Asii",
+      "translit": "Pérgamos",
+      "pronunciation": "per'-gam-os",
+      "translated": true
+    },
+    "G4011": {
+      "definitions_cz": "věž; Perga, místo v Asii\n Menší",
+      "translit": "Pérgē",
+      "pronunciation": "perg'-ay",
+      "translated": true
+    },
+    "G4012": {
+      "definitions_cz": "řádně, skrz (celé), t. j. kolem;\n přeneseně s ohledem na; používá se v různých aplikacích, na místě,\n příčina nebo čas (přičemž genitiv označuje předmět nebo příležitost\n nebo superlativní bod; s akuzativem lokalita, okruh,\n věc, okolnost nebo obecné období)",
+      "translit": "perí",
+      "pronunciation": "per-ee'",
+      "translated": true
+    },
+    "G4013": {
+      "definitions_cz": "vzít kolem sebe (jako společníka); reflexně, k\n chodit kolem",
+      "translit": "periágō",
+      "pronunciation": "per-ee-ag'-o",
+      "translated": true
+    },
+    "G4014": {
+      "definitions_cz": "odstranit všude kolem,\n t. j. odhalit, odhodit (kotvu); obrazně řečeno odčinit",
+      "translit": "periairéō",
+      "pronunciation": "per-ee-ahee-reh'-o",
+      "translated": true
+    },
+    "G4015": {
+      "definitions_cz": "kolem dokola blikat, t. j. zahalit do světla",
+      "translit": "periastráptō",
+      "pronunciation": "per-ee-as-trap'-to",
+      "translated": true
+    },
+    "G4016": {
+      "definitions_cz": "házet dokola, t. j. investovat (palisádou\n nebo s oblečením)",
+      "translit": "peribállō",
+      "pronunciation": "per-ee-bal'-lo",
+      "translated": true
+    },
+    "G4017": {
+      "definitions_cz": "rozhlédnout se všude kolem",
+      "translit": "periblépō",
+      "pronunciation": "per-ee-blep'-o",
+      "translated": true
+    },
+    "G4018": {
+      "definitions_cz": "něco hozeného kolem jednoho,\n tj. plášť, závoj",
+      "translit": "peribólaion",
+      "pronunciation": "per-ib-ol'-ah-yon",
+      "translated": true
+    },
+    "G4019": {
+      "definitions_cz": "ovázat kolem jednoho, t. j. omotat",
+      "translit": "peridéō",
+      "pronunciation": "per-ee-deh'-o",
+      "translated": true
+    },
+    "G4020": {
+      "definitions_cz": "pracovat všude kolem, t. j. ruch kolem\n (vměšovat se)",
+      "translit": "periergázomai",
+      "pronunciation": "per-ee-er-gad'-zom-ahee",
+      "translated": true
+    },
+    "G4021": {
+      "definitions_cz": "pracující všude kolem, tj. úřednický (vměšující se,\n magie středního množného čísla)",
+      "translit": "períergos",
+      "pronunciation": "per-ee'-er-gos",
+      "translated": true
+    },
+    "G4022": {
+      "definitions_cz": "přijít všude kolem, tzn.\n procházet se, kolísat, otáčet se",
+      "translit": "periérchomai",
+      "pronunciation": "per-ee-er'-khom-ahee",
+      "translated": true
+    },
+    "G4023": {
+      "definitions_cz": "držet dokola, t. j. zahrnovat, spona\n (obrazně)",
+      "translit": "periéchō",
+      "pronunciation": "per-ee-ekh'-o",
+      "translated": true
+    },
+    "G4024": {
+      "definitions_cz": "opásat všude kolem, tj. (střední hlas nebo pasivum)\n připoutat se na opasek (doslova nebo přeneseně)",
+      "translit": "perizṓnnymi",
+      "pronunciation": "per-id-zone'-noo-mee",
+      "translated": true
+    },
+    "G4025": {
+      "definitions_cz": "a putting all around, tedy zdobení se\n s",
+      "translit": "períthesis",
+      "pronunciation": "per-ith'-es-is",
+      "translated": true
+    },
+    "G4026": {
+      "definitions_cz": "stát všude kolem, tj. (blízko) být a\n přihlížejícím, nebo (odměřeně) držet se dál od",
+      "translit": "periḯstēmi",
+      "pronunciation": "per-ee-is'-tay-mee",
+      "translated": true
+    },
+    "G4027": {
+      "definitions_cz": "něco se uklidilo všude kolem,\n tedy odmítnout (obrazně)",
+      "translit": "perikátharma",
+      "pronunciation": "per-ee-kath'-ar-mah",
+      "translated": true
+    },
+    "G4028": {
+      "definitions_cz": "zakrýt vše kolem, tj. úplně (obličej, a\n povrch)",
+      "translit": "perikalýptō",
+      "pronunciation": "per-ee-kal-oop'-to",
+      "translated": true
+    },
+    "G4029": {
+      "definitions_cz": "dokola ležet, t. j. uzavírat, obepínat, brzdit\n (doslova nebo obrazně)",
+      "translit": "períkeimai",
+      "pronunciation": "per-ik'-i-mahee",
+      "translated": true
+    },
+    "G4030": {
+      "definitions_cz": "obepnutí hlavy,\n tedy přilba",
+      "translit": "perikephalaía",
+      "pronunciation": "per-ee-kef-al-ah'-yah",
+      "translated": true
+    },
+    "G4031": {
+      "definitions_cz": "silný všude kolem, tj. mistr (manažer)",
+      "translit": "perikratḗs",
+      "pronunciation": "per-ee-krat-ace'",
+      "translated": true
+    },
+    "G4032": {
+      "definitions_cz": "skrýt všude kolem, tj. úplně",
+      "translit": "perikrýptō",
+      "pronunciation": "per-ee-kroop'-to",
+      "translated": true
+    },
+    "G4033": {
+      "definitions_cz": "obklíčit všude kolem, t. j. blokáda\n úplně",
+      "translit": "perikyklóō",
+      "pronunciation": "per-ee-koo-klo'-o",
+      "translated": true
+    },
+    "G4034": {
+      "definitions_cz": "osvětlit všude kolem, tj. investovat s a\n halo",
+      "translit": "perilámpō",
+      "pronunciation": "per-ee-lam'-po",
+      "translated": true
+    },
+    "G4035": {
+      "definitions_cz": "odejít všude kolem, tj. (pasivně)\n přežít",
+      "translit": "perileípō",
+      "pronunciation": "per-ee-li'-po",
+      "translated": true
+    },
+    "G4036": {
+      "definitions_cz": "všude kolem zarmoucený, t. j. intenzivně smutný",
+      "translit": "perílypos",
+      "pronunciation": "per-il'-oo-pos",
+      "translated": true
+    },
+    "G4037": {
+      "definitions_cz": "zdržovat se, t. j. čekat",
+      "translit": "periménō",
+      "pronunciation": "per-ee-men'-o",
+      "translated": true
+    },
+    "G4038": {
+      "definitions_cz": "všude kolem, tj. (jako přídavné jméno)\n obklopující",
+      "translit": "périx",
+      "pronunciation": "per'-ix",
+      "translated": true
+    },
+    "G4039": {
+      "definitions_cz": "bydlet kolem, t. j. být sousedem",
+      "translit": "perioikéō",
+      "pronunciation": "per-ee-oy-keh'-o",
+      "translated": true
+    },
+    "G4040": {
+      "definitions_cz": "sídlí kolem, tj. sousedí (používá se elipticky\n jako podstatné jméno)",
+      "translit": "períoikos",
+      "pronunciation": "per-ee'-oy-kos",
+      "translated": true
+    },
+    "G4041": {
+      "definitions_cz": "být mimo obvyklé, tj. zvláštní (vlastní)",
+      "translit": "perioúsios",
+      "pronunciation": "per-ee-oo'-see-os",
+      "translated": true
+    },
+    "G4042": {
+      "definitions_cz": "bytost držená kolem, tj. (konkrétně) průchod (z\n Písmo, jak je vymezeno)",
+      "translit": "periochḗ",
+      "pronunciation": "per-ee-okh-ay'",
+      "translated": true
+    },
+    "G4043": {
+      "definitions_cz": "šlapat všude kolem, t. j. chodit na svobodě\n (zejména jako důkaz schopností); přeneseně žít, deportovat\n sebe, následovat (jako společník nebo volič)",
+      "translit": "peripatéō",
+      "pronunciation": "per-ee-pat-eh'-o",
+      "translated": true
+    },
+    "G4044": {
+      "definitions_cz": "úplně proniknout, t. j. transfixovat\n (obrazně)",
+      "translit": "peripeírō",
+      "pronunciation": "per-ee-pi'-ro",
+      "translated": true
+    },
+    "G4045": {
+      "definitions_cz": "spadnout do něčeho, co je všude kolem, tzn.\n světlem mezi nebo na, být obklopen",
+      "translit": "peripíptō",
+      "pronunciation": "per-ee-pip'-to",
+      "translated": true
+    },
+    "G4046": {
+      "definitions_cz": "dělat kolem sebe, t. j. získat\n (koupit)",
+      "translit": "peripoiéomai",
+      "pronunciation": "per-ee-poy-eh'-om-ahee",
+      "translated": true
+    },
+    "G4047": {
+      "definitions_cz": "pořízení (akt nebo věc); rozšířením,\n zachování",
+      "translit": "peripoíēsis",
+      "pronunciation": "per-ee-poy'-ay-sis",
+      "translated": true
+    },
+    "G4048": {
+      "definitions_cz": "trhat všude kolem, t. j. úplně pryč",
+      "translit": "perirrhḗgnymi",
+      "pronunciation": "per-ir-hrayg'-noo-mee",
+      "translated": true
+    },
+    "G4049": {
+      "definitions_cz": "táhnout dokola, tedy (obrazně) do\n rozptýlit (opatrně)",
+      "translit": "perispáō",
+      "pronunciation": "per-ee-spah'-o",
+      "translated": true
+    },
+    "G4050": {
+      "definitions_cz": "přebytek, tedy nadbytek",
+      "translit": "perisseía",
+      "pronunciation": "per-is-si'-ah",
+      "translated": true
+    },
+    "G4051": {
+      "definitions_cz": "přebytek nebo nadbytek",
+      "translit": "perísseuma",
+      "pronunciation": "per-is'-syoo-mah",
+      "translated": true
+    },
+    "G4052": {
+      "definitions_cz": "přebýt (v kvantitě nebo kvalitě), být v přebytku, být\n nadbytečný; také (přechodně) způsobit k přemnožení nebo\n excel",
+      "translit": "perisseúō",
+      "pronunciation": "per-is-syoo'-o",
+      "translated": true
+    },
+    "G4053": {
+      "definitions_cz": "nadbytečné (v množství) popř\n vynikající (v kvalitě); implikovaně nadměrný; adverbiálně (s\n [ŘECtina:1537]",
+      "translit": "perissós",
+      "pronunciation": "per-is-sos'",
+      "translated": true
+    },
+    "G4054": {
+      "definitions_cz": "hojnějším způsobem",
+      "translit": "perissóteron",
+      "pronunciation": "per-is-sot'-er-on",
+      "translated": true
+    },
+    "G4055": {
+      "definitions_cz": "hojnější (v počtu, stupni nebo\n postava)",
+      "translit": "perissóteros",
+      "pronunciation": "per-is-sot'-er-os",
+      "translated": true
+    },
+    "G4056": {
+      "definitions_cz": "hojněji",
+      "translit": "perissotérōs",
+      "pronunciation": "per-is-sot-er'-oce",
+      "translated": true
+    },
+    "G4057": {
+      "definitions_cz": "nadmíru",
+      "translit": "perissōs",
+      "pronunciation": "per-is-soce'",
+      "translated": true
+    },
+    "G4058": {
+      "definitions_cz": "holub",
+      "translit": "peristerá",
+      "pronunciation": "per-is-ter-ah'",
+      "translated": true
+    },
+    "G4059": {
+      "definitions_cz": "řezat kolem, t. j. (zvláště) do\n obřízka",
+      "translit": "peritémnō",
+      "pronunciation": "per-ee-tem'-no",
+      "translated": true
+    },
+    "G4060": {
+      "definitions_cz": "umístit kolem; implicitně, k\n přítomný",
+      "translit": "peritíthēmi",
+      "pronunciation": "per-ee-tith'-ay-mee",
+      "translated": true
+    },
+    "G4061": {
+      "definitions_cz": "obřízka (obřad, stav nebo lidé,\n doslova nebo obrazně)",
+      "translit": "peritomḗ",
+      "pronunciation": "per-it-om-ay'",
+      "translated": true
+    },
+    "G4062": {
+      "definitions_cz": "otočit se, t. j. (duševně) k\n šílenství",
+      "translit": "peritrépō",
+      "pronunciation": "per-ee-trep'-o",
+      "translated": true
+    },
+    "G4063": {
+      "definitions_cz": "pobíhat, tzn.\n přejíždět",
+      "translit": "peritréchō",
+      "pronunciation": "per-ee-trekh'-o",
+      "translated": true
+    },
+    "G4064": {
+      "definitions_cz": "dopravovat kolem, t. j. dopravovat sem a\n tam",
+      "translit": "periphérō",
+      "pronunciation": "per-ee-fer'-o",
+      "translated": true
+    },
+    "G4065": {
+      "definitions_cz": "myslet dál, t. j. odepisovat\n (pohrdání)",
+      "translit": "periphronéō",
+      "pronunciation": "per-ee-fron-eh'-o",
+      "translated": true
+    },
+    "G4066": {
+      "definitions_cz": "kolem regionu, tj. kolem (jako podstatné jméno,\n s [ŘECKO:1093]",
+      "translit": "períchōros",
+      "pronunciation": "per-ikh'-o-ros",
+      "translated": true
+    },
+    "G4067": {
+      "definitions_cz": "něco všechno otřelo\n kolem, tj. odřezky (obrazně spodina)",
+      "translit": "perípsōma",
+      "pronunciation": "per-ip'-so-mah",
+      "translated": true
+    },
+    "G4068": {
+      "definitions_cz": "možná zdvojením\n základ [ŘECKO:4008]",
+      "translit": "perpereúomai",
+      "pronunciation": "per-per-yoo'-om-ahee",
+      "translated": true
+    },
+    "G4069": {
+      "definitions_cz": "perská žena; Persis, křesťanská žena",
+      "translit": "Persís",
+      "pronunciation": "per-sece'",
+      "translated": true
+    },
+    "G4070": {
+      "definitions_cz": "minulé, tj. (jako podstatné jméno) minulý rok",
+      "translit": "pérysi",
+      "pronunciation": "per'-oo-si",
+      "translated": true
+    },
+    "G4071": {
+      "definitions_cz": "létající zvíře, tedy pták",
+      "translit": "peteinón",
+      "pronunciation": "pet-i-non'",
+      "translated": true
+    },
+    "G4072": {
+      "definitions_cz": "létat",
+      "translit": "pétomai",
+      "pronunciation": "pet'-om-ahee",
+      "translated": true
+    },
+    "G4073": {
+      "definitions_cz": "(hromada) skály (doslova nebo\n přeneseně)",
+      "translit": "pétra",
+      "pronunciation": "pet'-ra",
+      "translated": true
+    },
+    "G4074": {
+      "definitions_cz": "(kus) skály (větší než [ŘECKO:3037]",
+      "translit": "Pétros",
+      "pronunciation": "pet'-ros",
+      "translated": true
+    },
+    "G4075": {
+      "definitions_cz": "rock-like, t. j. skalnatý",
+      "translit": "petrṓdēs",
+      "pronunciation": "pet-ro'-dace",
+      "translated": true
+    },
+    "G4076": {
+      "definitions_cz": "rue (z jejích tlustých nebo masitých listů)",
+      "translit": "pḗganon",
+      "pronunciation": "pay'-gan-on",
+      "translated": true
+    },
+    "G4077": {
+      "definitions_cz": "fontána\n (doslova nebo přeneseně), tj. zdroj nebo zdroj (vody, krve,\n požitek) (ne nutně původní pružina)",
+      "translit": "pēgḗ",
+      "pronunciation": "pay-gay'",
+      "translated": true
+    },
+    "G4078": {
+      "definitions_cz": "opravit („kolíček“), tzn.\n (speciálně) postavit (stan)",
+      "translit": "pḗgnymi",
+      "pronunciation": "payg'-noo-mee",
+      "translated": true
+    },
+    "G4079": {
+      "definitions_cz": "od\n stejné jako [ŘECKO:3976]",
+      "translit": "pēdálion",
+      "pronunciation": "pay-dal'-ee-on",
+      "translated": true
+    },
+    "G4080": {
+      "definitions_cz": "kolik (jako\n neurčitou), tj. velikostí nebo (obrazně) důstojností",
+      "translit": "pēlíkos",
+      "pronunciation": "pay-lee'-kos",
+      "translated": true
+    },
+    "G4081": {
+      "definitions_cz": "jíl",
+      "translit": "pēlós",
+      "pronunciation": "pay-los'",
+      "translated": true
+    },
+    "G4082": {
+      "definitions_cz": "peněženka nebo kožený váček na jídlo",
+      "translit": "pḗra",
+      "pronunciation": "pay'-rah",
+      "translated": true
+    },
+    "G4083": {
+      "definitions_cz": "předloktí, tj. (jako opatření) a\n loket",
+      "translit": "pēchys",
+      "pronunciation": "pay'-khoos",
+      "translated": true
+    },
+    "G4084": {
+      "definitions_cz": "zmáčknout, t.j. uchopit (jemně za\n rukou (tisk), nebo oficiálně (zatčení), nebo v lovu\n (zachytit))",
+      "translit": "piázō",
+      "pronunciation": "pee-ad'-zo",
+      "translated": true
+    },
+    "G4085": {
+      "definitions_cz": "zabalit",
+      "translit": "piézō",
+      "pronunciation": "pee-ed'-zo",
+      "translated": true
+    },
+    "G4086": {
+      "definitions_cz": "přesvědčivý\n jazyk",
+      "translit": "pithanología",
+      "pronunciation": "pith-an-ol-og-ee'-ah",
+      "translated": true
+    },
+    "G4087": {
+      "definitions_cz": "zahořknout (doslova nebo přeneseně)",
+      "translit": "pikraínō",
+      "pronunciation": "pik-rah'-ee-no",
+      "translated": true
+    },
+    "G4088": {
+      "definitions_cz": "štiplavost (zejména jed), doslova nebo\n přeneseně",
+      "translit": "pikría",
+      "pronunciation": "pik-ree'-ah",
+      "translated": true
+    },
+    "G4089": {
+      "definitions_cz": "ostrý (štiplavý),\n tj. štiplavý (doslova nebo přeneseně)",
+      "translit": "pikrós",
+      "pronunciation": "pik-ros'",
+      "translated": true
+    },
+    "G4090": {
+      "definitions_cz": "hořce, tedy (obrazně) násilně",
+      "translit": "pikrōs",
+      "pronunciation": "pik-roce'",
+      "translated": true
+    },
+    "G4091": {
+      "definitions_cz": "těsně lisovaný, t. j. pevný; Pilatus, Říman",
+      "translit": "Pilâtos",
+      "pronunciation": "pil-at'-os",
+      "translated": true
+    },
+    "G4092": {
+      "definitions_cz": "pálit, tj. hořet (obrazně a pasivně, stát se\n zanícený horečkou)",
+      "translit": "pímprēmi",
+      "pronunciation": "pim'-pray-mee",
+      "translated": true
+    },
+    "G4093": {
+      "definitions_cz": "tablet (na psaní)",
+      "translit": "pinakídion",
+      "pronunciation": "pin-ak-id'-ee-on",
+      "translated": true
+    },
+    "G4094": {
+      "definitions_cz": "talíř",
+      "translit": "pínax",
+      "pronunciation": "pin'-ax",
+      "translated": true
     }
   }
 }
