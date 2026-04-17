@@ -71424,6 +71424,706 @@
       "hebrew": "פלגה",
       "xlit": "pᵉlaggâh",
       "translated": true
+    },
+    "H6391": {
+      "definitions_cz": "1) rozdělení",
+      "lemma": "פְּלֻגָּה",
+      "hebrew": "פלגה",
+      "xlit": "pᵉluggâh",
+      "translated": true
+    },
+    "H6392": {
+      "definitions_cz": "1) divize, sekce",
+      "lemma": "פְּלֻגָּה",
+      "hebrew": "פלגה",
+      "xlit": "pᵉluggâh",
+      "translated": true
+    },
+    "H6393": {
+      "definitions_cz": "1) železo, ocel",
+      "lemma": "פְּלָדָה",
+      "hebrew": "פלדה",
+      "xlit": "pᵉlâdâh",
+      "translated": true
+    },
+    "H6394": {
+      "definitions_cz": "Pildash = \"plamen ohně\" | 1) jeden z 8 synů Nachora, bratra Abrahamova, od Milky, jeho manželky nebo neteře",
+      "lemma": "פִּלְדָּשׁ",
+      "hebrew": "פלדש",
+      "xlit": "Pildâsh",
+      "translated": true
+    },
+    "H6395": {
+      "definitions_cz": "1) být odlišný, označený, být oddělen, být rozlišen | 1a) (Niphal) | 1a1) být odlišný, být oddělen, být rozlišován | 1a2) být úžasný | 1b) (Hiphil) oddělit, oddělit",
+      "lemma": "פָּלָה",
+      "hebrew": "פלה",
+      "xlit": "pâlâh",
+      "translated": true
+    },
+    "H6396": {
+      "definitions_cz": "Pallu nebo Phallu = \"významný\" | 1) 2. syn Rubena, otce Eliaba a prapředka izraelské rodiny",
+      "lemma": "פַּלּוּא",
+      "hebrew": "פלוא",
+      "xlit": "Pallûwʼ",
+      "translated": true
+    },
+    "H6397": {
+      "definitions_cz": "Pelonit = \"určitý\" | 1) obyvatelé v současnosti neznámého místa",
+      "lemma": "פְּלוֹנִי",
+      "hebrew": "פלוני",
+      "xlit": "Pᵉlôwnîy",
+      "translated": true
+    },
+    "H6398": {
+      "definitions_cz": "1) štípat, krájet | 1a) (Qal) štípat, orat | 1b) (Piel) | 1b1) pro rozštěpení nebo přes | 1b2) způsobit rozštěpení | 1b3) nakrájet, propíchnout",
+      "lemma": "פָּלַח",
+      "hebrew": "פלח",
+      "xlit": "pâlach",
+      "translated": true
+    },
+    "H6399": {
+      "definitions_cz": "1) sloužit, uctívat, ctít, sloužit, vzdávat úctu | 1a) (P'al) | 1a1) vzdát úctu | 1a2) sloužit",
+      "lemma": "פְּלַח",
+      "hebrew": "פלח",
+      "xlit": "pᵉlach",
+      "translated": true
+    },
+    "H6400": {
+      "definitions_cz": "1) štěpení, mlýnský kámen, řez, plátek, část odříznutá | 1a) mlýnský kámen | 1b) štěpení, plátek",
+      "lemma": "פֶּלַח",
+      "hebrew": "פלח",
+      "xlit": "pelach",
+      "translated": true
+    },
+    "H6401": {
+      "definitions_cz": "Pileha = \"krájení\" | 1) vůdce lidu, který zpečetil smlouvu s Nehemjášem",
+      "lemma": "פִּלְחָא",
+      "hebrew": "פלחא",
+      "xlit": "Pilchâʼ",
+      "translated": true
+    },
+    "H6402": {
+      "definitions_cz": "1) bohoslužba, bohoslužba",
+      "lemma": "פׇּלְחָן",
+      "hebrew": "פלחן",
+      "xlit": "polchân",
+      "translated": true
+    },
+    "H6403": {
+      "definitions_cz": "1) uniknout, zachránit, doručit, vyklouznout | 1a) (Qal) uniknout | 1b) (Piel) | 1b1) uvést do bezpečnosti, dodat | 1b2) způsobit útěk, vyvrhnout | 1b3) k dodání | 1b4) vyklouznout | 1c) (Hiphil) uvést do bezpečí, uvést do bezpečí",
+      "lemma": "פָּלַט",
+      "hebrew": "פלט",
+      "xlit": "pâlaṭ",
+      "translated": true
+    },
+    "H6404": {
+      "definitions_cz": "Pelet = \"vysvobození\" | 1) syn Jahdai a potomek Káleb | 2) syn Azmavetha a jeden z Davidových mocných válečníků, kteří se k němu připojili v Ciklagu",
+      "lemma": "פֶּלֶט",
+      "hebrew": "פלט",
+      "xlit": "Peleṭ",
+      "translated": true
+    },
+    "H6405": {
+      "definitions_cz": "1) vysvobození, útěk",
+      "lemma": "פַּלֵּט",
+      "hebrew": "פלט",
+      "xlit": "pallêṭ",
+      "translated": true
+    },
+    "H6406": {
+      "definitions_cz": "Palti nebo Phalti = \"moje vysvobození\" | 1) syn Raphu, vyzvědač vybraný z kmene Benjamin | 2) syn Laishe, muže, kterému dal král Saul svou dceru Michal za ženu, i když byla již provdána za Davida",
+      "lemma": "פַּלְטִי",
+      "hebrew": "פלטי",
+      "xlit": "Palṭîy",
+      "translated": true
+    },
+    "H6407": {
+      "definitions_cz": "Paltit = \"útěk\" | 1) potomek Palti nebo obyvatel Beth-palet",
+      "lemma": "פַּלְטִי",
+      "hebrew": "פלטי",
+      "xlit": "Palṭîy",
+      "translated": true
+    },
+    "H6408": {
+      "definitions_cz": "Piltai = \"moje vysvobození\" | 1) kněz, zástupce kněžského domu Moadiah; exulant, který se vrátil se Zerubábelem",
+      "lemma": "פִּלְטַי",
+      "hebrew": "פלטי",
+      "xlit": "Pilṭay",
+      "translated": true
+    },
+    "H6409": {
+      "definitions_cz": "Paltiel nebo Phaltiel = \"Bůh vysvobodí\" | 1) syn Azzana a princ kmene Issachar jmenovaný jako jeden z 12, aby rozdělili zemi Kanaán | 2) syn Laishe z Gallimu, kterému Saul dal Michala za ženu poté, co jeho šílená žárlivost vyhnala Davida ven jako psance",
+      "lemma": "פַּלְטִיאֵל",
+      "hebrew": "פלטיאל",
+      "xlit": "Palṭîyʼêl",
+      "translated": true
+    },
+    "H6410": {
+      "definitions_cz": "Pelatiáš = \"Jehova vysvobozuje\" | 1) syn Chananjášův a vnuk Zerubbábelův | 2) Simeonite za dnů judského krále Chizkijáše, který byl jedním z velitelů 500 mužů, kteří porazili uprchlé Amálekovce | 3) jedna z hlav lidu, který zpečetil smlouvu s Nehemjášem | 4) syn Benaiášův a jeden z knížat lidu, proti kterému bylo Ezechielovi nařízeno prorokovat zkázu",
+      "lemma": "פְּלַטְיָה",
+      "hebrew": "פלטיה",
+      "xlit": "Pᵉlaṭyâh",
+      "translated": true
+    },
+    "H6411": {
+      "definitions_cz": "Pelaiah = \"Jehova dělá zázraky\" | 1) syn Elioenai a potomek Davidův v královské linii | 2) kněz, který pomohl Ezrovi vysvětlit zákon lidem a také zpečetil smlouvu s Nehemjášem",
+      "lemma": "פְּלָיָה",
+      "hebrew": "פליה",
+      "xlit": "Pᵉlâyâh",
+      "translated": true
+    },
+    "H6412": {
+      "definitions_cz": "1) uprchlík, uprchlík, jeden uprchl",
+      "lemma": "פָּלִיט",
+      "hebrew": "פליט",
+      "xlit": "pâlîyṭ",
+      "translated": true
+    },
+    "H6413": {
+      "definitions_cz": "1) útěk, vysvobození | 1a) útěk, vysvobození | 1b) uniklý zbytek",
+      "lemma": "פְּלֵיטָה",
+      "hebrew": "פליטה",
+      "xlit": "pᵉlêyṭâh",
+      "translated": true
+    },
+    "H6414": {
+      "definitions_cz": "1) soudce, posouzení, odhad",
+      "lemma": "פָּלִיל",
+      "hebrew": "פליל",
+      "xlit": "pâlîyl",
+      "translated": true
+    },
+    "H6415": {
+      "definitions_cz": "1) úřad soudce nebo rozhodčího | 2) (CLBL) rozsudek, rozhodnutí",
+      "lemma": "פְּלִילָה",
+      "hebrew": "פלילה",
+      "xlit": "pᵉlîylâh",
+      "translated": true
+    },
+    "H6416": {
+      "definitions_cz": "1) pro soudce, vyzývající k soudu, soudní, hodnotitelný, trestní",
+      "lemma": "פְּלִילִי",
+      "hebrew": "פלילי",
+      "xlit": "pᵉlîylîy",
+      "translated": true
+    },
+    "H6417": {
+      "definitions_cz": "1) vydání rozhodnutí, vyhlášení rozsudku, odůvodnění",
+      "lemma": "פְּלִילִיָּה",
+      "hebrew": "פליליה",
+      "xlit": "pᵉlîylîyâh",
+      "translated": true
+    },
+    "H6418": {
+      "definitions_cz": "1) vír vřetena, hůl, okres | 1a) vír vřetena, hůl | 1b) okres, obvod",
+      "lemma": "פֶּלֶךְ",
+      "hebrew": "פלך",
+      "xlit": "pelek",
+      "translated": true
+    },
+    "H6419": {
+      "definitions_cz": "1) zasahovat, vkládat se, modlit se | 1a) (Piel) zprostředkovat, soudit | 1b)(Hithpael) | 1b1) přimlouvat se | 1b2) modlit se",
+      "lemma": "פָּלַל",
+      "hebrew": "פלל",
+      "xlit": "pâlal",
+      "translated": true
+    },
+    "H6420": {
+      "definitions_cz": "Palal = \"soudce\" | 1) syn Uzai a ten, kdo pomáhal při obnově jeruzalémských hradeb v době Nehemjáše",
+      "lemma": "פָּלָל",
+      "hebrew": "פלל",
+      "xlit": "Pâlâl",
+      "translated": true
+    },
+    "H6421": {
+      "definitions_cz": "Pelaliah = \"Jehova rozsoudil\" | 1) syn Amziho a předek kněze Adaiáše v době Nehemiáše",
+      "lemma": "פְּלַלְיָה",
+      "hebrew": "פלליה",
+      "xlit": "Pᵉlalyâh",
+      "translated": true
+    },
+    "H6422": {
+      "definitions_cz": "1) určitý",
+      "lemma": "פַּלְמוֹנִי",
+      "hebrew": "פלמוני",
+      "xlit": "palmôwnîy",
+      "translated": true
+    },
+    "H6423": {
+      "definitions_cz": "1) určitý",
+      "lemma": "פְּלֹנִי",
+      "hebrew": "פלני",
+      "xlit": "pᵉlônîy",
+      "translated": true
+    },
+    "H6424": {
+      "definitions_cz": "1) (Piel) vážit, vyrovnávat, vyvažovat | 1a) zvážit | 1b) aby byly rovné nebo hladké",
+      "lemma": "פָּלַס",
+      "hebrew": "פלס",
+      "xlit": "pâlaç",
+      "translated": true
+    },
+    "H6425": {
+      "definitions_cz": "1) rovnováha, měřítko",
+      "lemma": "פֶּלֶס",
+      "hebrew": "פלס",
+      "xlit": "peleç",
+      "translated": true
+    },
+    "H6426": {
+      "definitions_cz": "1) (Hithpael) třást se, třást se",
+      "lemma": "פָּלַץ",
+      "hebrew": "פלץ",
+      "xlit": "pâlats",
+      "translated": true
+    },
+    "H6427": {
+      "definitions_cz": "1) chvění, chvění",
+      "lemma": "פַּלָּצוּת",
+      "hebrew": "פלצות",
+      "xlit": "pallâtsûwth",
+      "translated": true
+    },
+    "H6428": {
+      "definitions_cz": "1) válet | 1a) (Hithpael) válet se v popelu nebo prachu (jako akt smutku)",
+      "lemma": "פָּלַשׁ",
+      "hebrew": "פלש",
+      "xlit": "pâlash",
+      "translated": true
+    },
+    "H6429": {
+      "definitions_cz": "Filistie = \"země přistěhovalců\" | 1) obecné území na západním pobřeží Kanaánu nebo celé země Palestina",
+      "lemma": "פְּלֶשֶׁת",
+      "hebrew": "פלשת",
+      "xlit": "Pᵉlesheth",
+      "translated": true
+    },
+    "H6430": {
+      "definitions_cz": "Pelištejec = \"přistěhovalci\" | 1) obyvatel Filistie; potomci Mizraim, kteří se přistěhovali z Kaftoru (Kréta?) na západní pobřeží Kanaánu",
+      "lemma": "פְּלִשְׁתִּי",
+      "hebrew": "פלשתי",
+      "xlit": "Pᵉlishtîy",
+      "translated": true
+    },
+    "H6431": {
+      "definitions_cz": "Peleth = \"rychlost\" | 1) Rúbenita, otec Ona, který se vzbouřil s Dátanem a Abiramem ve dnech putování pouští | 2) syn Jonatanův a potomek Jerahmeela z Judy",
+      "lemma": "פֶּלֶת",
+      "hebrew": "פלת",
+      "xlit": "Peleth",
+      "translated": true
+    },
+    "H6432": {
+      "definitions_cz": "Peletité = \"kurýři\" | 1) souhrnné jméno pro strážce Davida | 1a) pravděpodobně potomci neznámé osoby, snad filištínští žoldnéři",
+      "lemma": "פְּלֵתִי",
+      "hebrew": "פלתי",
+      "xlit": "Pᵉlêthîy",
+      "translated": true
+    },
+    "H6433": {
+      "definitions_cz": "1) ústa",
+      "lemma": "פֻּם",
+      "hebrew": "פם",
+      "xlit": "pum",
+      "translated": true
+    },
+    "H6434": {
+      "definitions_cz": "1) roh | 1a) roh (čtvercových předmětů) | 1b) roh (pravítka nebo hlavní-obr.)",
+      "lemma": "פֵּן",
+      "hebrew": "פן",
+      "xlit": "pên",
+      "translated": true
+    },
+    "H6435": {
+      "definitions_cz": "conj | 1) aby, ne, pozor, aby | adv | 2) aby nebylo",
+      "lemma": "פֵּן",
+      "hebrew": "פן",
+      "xlit": "pên",
+      "translated": true
+    },
+    "H6436": {
+      "definitions_cz": "1) Pannag-jedlé jídlo, třeba pečivo | 1a) znamená pochybný",
+      "lemma": "פַּנַּג",
+      "hebrew": "פנג",
+      "xlit": "pannag",
+      "translated": true
+    },
+    "H6437": {
+      "definitions_cz": "1) otočit | 1a) (Qal) | 1a1) pro otočení směrem k nebo od nebo pryč | 1a2) otočit a udělat | 1a3) otočit, pokles (den) | 1a4) obrátit se k, přiblížit se (večera) | 1a5) otočit se a podívat se, podívat se, podívat se zpět nebo na nebo za nebo za | 1b) (Piel) odvrátit se, uhnouti z cesty, vyjasnit, uklizet | 1c) (Hiphil) | 1c1) otočit | 1c2) zatočit, jevit známky otáčení, otočit se zpět | 1d) (Hophal) k otočení zpět",
+      "lemma": "פָּנָה",
+      "hebrew": "פנה",
+      "xlit": "pânâh",
+      "translated": true
+    },
+    "H6438": {
+      "definitions_cz": "1) roh | 1a) roh (čtvercových předmětů) | 1b) roh (pravítka nebo hlavní-obr.)",
+      "lemma": "פִּנָּה",
+      "hebrew": "פנה",
+      "xlit": "pinnâh",
+      "translated": true
+    },
+    "H6439": {
+      "definitions_cz": "Penuel nebo Peniel = \"čelí Bohu\" | n pr m | 1) Benjamínec, syn Šašakův, bratr Ifedeiáše ze Saulova rodu | 2) syn Hura, otce Gedora a potomka Judova | n pr loc | 3) místo, které pojmenoval Jákob, když zápasil s Bohem, a nachází se na severním břehu Jaboku poblíž Jordánu",
+      "lemma": "פְּנוּאֵל",
+      "hebrew": "פנואל",
+      "xlit": "Pᵉnûwʼêl",
+      "translated": true
+    },
+    "H6440": {
+      "definitions_cz": "1) obličej | 1a) obličej, obličeje | 1b) přítomnost, osoba | 1c) obličej (serafínů nebo cherubů) | 1d) obličej (zvířat) | 1e) povrch, povrch (země) | 1f) jako adv loc/temp | 1f1) před a za, směrem, před, vpřed, dříve, před | 1g) s přípravkem | 1g1) před, před, před, v přítomnosti, před, na čele nebo před, před, před, před tváří",
+      "lemma": "פָּנִים",
+      "hebrew": "פנים",
+      "xlit": "pânîym",
+      "translated": true
+    },
+    "H6441": {
+      "definitions_cz": "1) směrem dovnitř, dovnitř, čelem",
+      "lemma": "פְּנִימָה",
+      "hebrew": "פנימה",
+      "xlit": "pᵉnîymâh",
+      "translated": true
+    },
+    "H6442": {
+      "definitions_cz": "1) vnitřní",
+      "lemma": "פְּנִימִי",
+      "hebrew": "פנימי",
+      "xlit": "pᵉnîymîy",
+      "translated": true
+    },
+    "H6443": {
+      "definitions_cz": "1) drahý kámen | 1a) snad korály, rubíny, drahokamy",
+      "lemma": "פָּנִין",
+      "hebrew": "פנין",
+      "xlit": "pânîyn",
+      "translated": true
+    },
+    "H6444": {
+      "definitions_cz": "Penina = \"klenot\" | 1) druhá manželka Elkána kromě Hany",
+      "lemma": "פְּנִנָּה",
+      "hebrew": "פננה",
+      "xlit": "Pᵉninnâh",
+      "translated": true
+    },
+    "H6445": {
+      "definitions_cz": "1) (Piel) dopřát, hýčkat, vychovávat, zacházet jemně",
+      "lemma": "פָּנַק",
+      "hebrew": "פנק",
+      "xlit": "pânaq",
+      "translated": true
+    },
+    "H6446": {
+      "definitions_cz": "1) plochá (ruka nebo noha), dlaň, chodidlo | 1a) tuniky sahající k dlaním a chodidlům (obr.)",
+      "lemma": "פַּס",
+      "hebrew": "פס",
+      "xlit": "paç",
+      "translated": true
+    },
+    "H6447": {
+      "definitions_cz": "1) dlaň ruky",
+      "lemma": "פַּס",
+      "hebrew": "פס",
+      "xlit": "paç",
+      "translated": true
+    },
+    "H6448": {
+      "definitions_cz": "1) (Piel) pro průchod mezi nebo uvnitř | 1a) znamená pochybný",
+      "lemma": "פָּסַג",
+      "hebrew": "פסג",
+      "xlit": "pâçag",
+      "translated": true
+    },
+    "H6449": {
+      "definitions_cz": "Pisgah = \"rozštěp\" | 1) hora v Moabu na severovýchodním pobřeží Mrtvého moře; místo nejisté",
+      "lemma": "פִּסְגָּה",
+      "hebrew": "פסגה",
+      "xlit": "Piçgâh",
+      "translated": true
+    },
+    "H6450": {
+      "definitions_cz": "Pas-dammim = \"hranice krve\" | 1) místo v západním Judsku",
+      "lemma": "פַּס דַּמִּים",
+      "hebrew": "פס דמים",
+      "xlit": "Paç Dammîym",
+      "translated": true
+    },
+    "H6451": {
+      "definitions_cz": "1) hojnost, plnost, hojnost | 1a) znamená pochybný",
+      "lemma": "פִּסָּה",
+      "hebrew": "פסה",
+      "xlit": "piççâh",
+      "translated": true
+    },
+    "H6452": {
+      "definitions_cz": "1) přejít, přeskočit | 1a) (Qal) přejít | 1b) (Piel) přeskočit, přejít | 2) kulhat | 2a) (Qal) kulhat | 2b) (Niphal) být chromý | 2c) (Piel) kulhat",
+      "lemma": "פָּסַח",
+      "hebrew": "פסח",
+      "xlit": "pâçach",
+      "translated": true
+    },
+    "H6453": {
+      "definitions_cz": "1) Pesach | 1a) oběť beránka | 1b) zvířecí oběť Pesach | 1c) svátek Pesach",
+      "lemma": "פֶּסַח",
+      "hebrew": "פסח",
+      "xlit": "peçach",
+      "translated": true
+    },
+    "H6454": {
+      "definitions_cz": "Paseah nebo Phaseah = \"limper\" | 1) syn Eshtona z kmene Juda | 2) předek rodiny chrámových otroků, kteří se vrátili z exilu se Zerubábelem | 3) otec Jojady, který pomáhal opravovat jeruzalémskou zeď v době Nehemjáše",
+      "lemma": "פָּסֵחַ",
+      "hebrew": "פסח",
+      "xlit": "Pâçêach",
+      "translated": true
+    },
+    "H6455": {
+      "definitions_cz": "1) chromý",
+      "lemma": "פִּסֵּחַ",
+      "hebrew": "פסח",
+      "xlit": "piççêach",
+      "translated": true
+    },
+    "H6456": {
+      "definitions_cz": "1) obraz, modla, rytý obraz",
+      "lemma": "פְּסִיל",
+      "hebrew": "פסיל",
+      "xlit": "pᵉçîyl",
+      "translated": true
+    },
+    "H6457": {
+      "definitions_cz": "Pasach = \"odříznout\" | 1) syn Jafleta z kmene Asher",
+      "lemma": "פָּסַךְ",
+      "hebrew": "פסך",
+      "xlit": "Pâçak",
+      "translated": true
+    },
+    "H6458": {
+      "definitions_cz": "1) řezat, ořezávat, vyřezávat do tvaru | 1a) (Qal) vytesat, vysekat, vylomit",
+      "lemma": "פָּסַל",
+      "hebrew": "פסל",
+      "xlit": "pâçal",
+      "translated": true
+    },
+    "H6459": {
+      "definitions_cz": "1) idol, obraz",
+      "lemma": "פֶּסֶל",
+      "hebrew": "פסל",
+      "xlit": "peçel",
+      "translated": true
+    },
+    "H6460": {
+      "definitions_cz": "1) strunný nástroj (trojúhelníkový) | 1a) snad lyra nebo harfa",
+      "lemma": "פְּסַנְטֵרִין",
+      "hebrew": "פסנטרין",
+      "xlit": "pᵉçanṭêrîyn",
+      "translated": true
+    },
+    "H6461": {
+      "definitions_cz": "1) zmizet, zmizet, přestat, selhat | 1a) (Qal) zmizí",
+      "lemma": "פָּסַס",
+      "hebrew": "פסס",
+      "xlit": "pâçaç",
+      "translated": true
+    },
+    "H6462": {
+      "definitions_cz": "Pispah = \"zmizení\" | 1) syn Jeterův z kmene Ašer",
+      "lemma": "פִּסְפָּה",
+      "hebrew": "פספה",
+      "xlit": "Piçpâh",
+      "translated": true
+    },
+    "H6463": {
+      "definitions_cz": "1) (Qal) sténat, křičet, křičet",
+      "lemma": "פָּעָה",
+      "hebrew": "פעה",
+      "xlit": "pâʻâh",
+      "translated": true
+    },
+    "H6464": {
+      "definitions_cz": "Pai nebo Pau = \"blečení\" | 1) hlavní město edomského krále Hadara; místo nejisté",
+      "lemma": "פָּעוּ",
+      "hebrew": "פעו",
+      "xlit": "Pâʻûw",
+      "translated": true
+    },
+    "H6465": {
+      "definitions_cz": "Peor = \"rozštěp\" | n pr loc | 1) horský vrchol v Moabu patřící do pohoří Abarim a poblíž Pisgah | n pr božstvo | 2) falešný bůh uctívaný v Moabu; odpovídá Baalovi",
+      "lemma": "פְּעוֹר",
+      "hebrew": "פעור",
+      "xlit": "Pᵉʻôwr",
+      "translated": true
+    },
+    "H6466": {
+      "definitions_cz": "1) dělat, dělat | 1a) (Qal) | 1a1) dělat | 1a2) vyrobit",
+      "lemma": "פָּעַל",
+      "hebrew": "פעל",
+      "xlit": "pâʻal",
+      "translated": true
+    },
+    "H6467": {
+      "definitions_cz": "1) práce, skutek, konání | 1a) skutek, věc hotová | 1b) práce, věc vyrobená | 1c) mzda za práci | 1d) získání (pokladu)",
+      "lemma": "פֹּעַל",
+      "hebrew": "פעל",
+      "xlit": "pôʻal",
+      "translated": true
+    },
+    "H6468": {
+      "definitions_cz": "1) práce, odměna, odměna | 1a) práce | 1b) mzdy",
+      "lemma": "פְּעֻלָּה",
+      "hebrew": "פעלה",
+      "xlit": "pᵉʻullâh",
+      "translated": true
+    },
+    "H6469": {
+      "definitions_cz": "Peulthai = \"práce\" | 1) levitský vrátný, 8. syn Obed-edoma; také \"Peullethai\"",
+      "lemma": "פְּעֻלְּתַי",
+      "hebrew": "פעלתי",
+      "xlit": "Pᵉʻullᵉthay",
+      "translated": true
+    },
+    "H6470": {
+      "definitions_cz": "1) strkat, pohánět, tlačit, vytrvale bít | 1a) (Qal) pohánět | 1b) (Niphal) být bit, být rušen | 1c) (Hithpael) být rušen",
+      "lemma": "פָּעַם",
+      "hebrew": "פעם",
+      "xlit": "pâʻam",
+      "translated": true
+    },
+    "H6471": {
+      "definitions_cz": "1) úder, úder, noha, krok, kovadlina, výskyt | 1a) noha, úder kopytem, ​​krok, krok | 1b) kovadlina | 1c) výskyt, čas, úder, úder | 1c1) jednou, jednou, dvakrát, třikrát, jako včas, při tomto opakování, jednou, teď zdlouhavě, teď...teď, ​​jednou...v jiném",
+      "lemma": "פַּעַם",
+      "hebrew": "פעם",
+      "xlit": "paʻam",
+      "translated": true
+    },
+    "H6472": {
+      "definitions_cz": "1) zvonek | 1a) na velekněžském rouchu",
+      "lemma": "פַּעֲמֹן",
+      "hebrew": "פעמן",
+      "xlit": "paʻămôn",
+      "translated": true
+    },
+    "H6473": {
+      "definitions_cz": "1) otevřít dokořán, zírat | 1a) (Qal) zírat",
+      "lemma": "פָּעַר",
+      "hebrew": "פער",
+      "xlit": "pâʻar",
+      "translated": true
+    },
+    "H6474": {
+      "definitions_cz": "Paarai = \"zející\" | 1) Arbit, syn Ezbai a jeden z Davidových mocných válečníků",
+      "lemma": "פַּעֲרַי",
+      "hebrew": "פערי",
+      "xlit": "Paʻăray",
+      "translated": true
+    },
+    "H6475": {
+      "definitions_cz": "1) rozdělit, otevřít, oddělit, uvolnit | 1a) (Qal) | 1a1) otevřít (ústa), vyslovit | 1a2) vytrhnout, osvobodit",
+      "lemma": "פָּצָה",
+      "hebrew": "פצה",
+      "xlit": "pâtsâh",
+      "translated": true
+    },
+    "H6476": {
+      "definitions_cz": "1) způsobit prasknutí nebo prasknutí, vylomit se, vylomit | 1a) (Qal) vypuknout, okamžitě prolomit | 1b) (Piel) rozejít se",
+      "lemma": "פָּצַח",
+      "hebrew": "פצח",
+      "xlit": "pâtsach",
+      "translated": true
+    },
+    "H6477": {
+      "definitions_cz": "1) cena, poplatek | 1a) znamená pochybný | 1b) možná (CLBL) ostření nebo (BDB) tupost",
+      "lemma": "פְּצִירָה",
+      "hebrew": "פצירה",
+      "xlit": "pᵉtsîyrâh",
+      "translated": true
+    },
+    "H6478": {
+      "definitions_cz": "1) (Piel) loupat",
+      "lemma": "פָּצַל",
+      "hebrew": "פצל",
+      "xlit": "pâtsal",
+      "translated": true
+    },
+    "H6479": {
+      "definitions_cz": "1) pruh, oloupaná skvrna nebo pruh nebo pruh",
+      "lemma": "פְּצָלָה",
+      "hebrew": "פצלה",
+      "xlit": "pᵉtsâlâh",
+      "translated": true
+    },
+    "H6480": {
+      "definitions_cz": "1) rozdělit nebo rozlomit | 1a) (Qal) k prasknutí",
+      "lemma": "פָּצַם",
+      "hebrew": "פצם",
+      "xlit": "pâtsam",
+      "translated": true
+    },
+    "H6481": {
+      "definitions_cz": "1) k modřině, zranění, zranění modřinou | 1a) (Qal) na ránu rozdrcením",
+      "lemma": "פָּצַע",
+      "hebrew": "פצע",
+      "xlit": "pâtsaʻ",
+      "translated": true
+    },
+    "H6482": {
+      "definitions_cz": "1) modřina, rána",
+      "lemma": "פֶּצַע",
+      "hebrew": "פצע",
+      "xlit": "petsaʻ",
+      "translated": true
+    },
+    "H6483": {
+      "definitions_cz": "Aphses = \"rozbít\" | 1) kněz, náčelník 18. kurzu ve službě chrámu v době Davidově",
+      "lemma": "פִּצֵּץ",
+      "hebrew": "פצץ",
+      "xlit": "Pitstsêts",
+      "translated": true
+    },
+    "H6484": {
+      "definitions_cz": "1) pro stisknutí stiskněte | 1a) (Qal) pro zatlačení stiskněte | 1b) (Hiphil) být drzý, projevovat nátlak (arogance, domýšlivost)",
+      "lemma": "פָּצַר",
+      "hebrew": "פצר",
+      "xlit": "pâtsar",
+      "translated": true
+    },
+    "H6485": {
+      "definitions_cz": "v | 1) starat se, shromažďovat, číslo, počítat, navštěvovat, trestat, jmenovat, starat se o ně | 1a) (Qal) | 1a1) věnovat pozornost, pozorovat | 1a2) zúčastnit se | 1a3) hledat, hledat | 1a4) marně hledat, potřebovat, minout, nedostatek | 1a5) navštívit | 1a6) navštěvovat, trestat | 1a7) projít revizí, shromáždit, číslo | 1a8) jmenovat, přidělit, uložit jako břemeno, uložit | 1b) (Niphal) | 1b1) být hledán, být potřebný, chybět, chybět | 1b2) k návštěvě | 1b3) být vi",
+      "lemma": "פָּקַד",
+      "hebrew": "פקד",
+      "xlit": "pâqad",
+      "translated": true
+    },
+    "H6486": {
+      "definitions_cz": "1) dohled, péče, opatrovnictví, shromáždění, návštěva, obchod | 1a) návštěva, trest | 1b) dozor, pověření, úřad, dozorce, třída důstojníků | 1c) shromažďování | 1d) obchod",
+      "lemma": "פְּקֻדָּה",
+      "hebrew": "פקדה",
+      "xlit": "pᵉquddâh",
+      "translated": true
+    },
+    "H6487": {
+      "definitions_cz": "1) uložit, uložit, zásobit",
+      "lemma": "פִּקָּדוֹן",
+      "hebrew": "פקדון",
+      "xlit": "piqqâdôwn",
+      "translated": true
+    },
+    "H6488": {
+      "definitions_cz": "1) dozorce, dozorce, strážce",
+      "lemma": "פְּקִדֻת",
+      "hebrew": "פקדת",
+      "xlit": "pᵉqiduth",
+      "translated": true
+    },
+    "H6489": {
+      "definitions_cz": "Pekod = \"návštěva\" | 1) lid v babylonské armádě a kmen v jihovýchodní Babylónii sousedící s Elamem",
+      "lemma": "פְּקוֹד",
+      "hebrew": "פקוד",
+      "xlit": "Pᵉqôwd",
+      "translated": true
+    },
+    "H6490": {
+      "definitions_cz": "1) předpis, zákon",
+      "lemma": "פִּקּוּד",
+      "hebrew": "פקוד",
+      "xlit": "piqqûwd",
+      "translated": true
     }
   }
 }
