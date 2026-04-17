@@ -31601,6 +31601,906 @@
       "translit": "ochýrōma",
       "pronunciation": "okh-oo'-ro-mah",
       "translated": true
+    },
+    "G3795": {
+      "definitions_cz": "požitek pro druhé\n jídlo (jakoby vařená omáčka), tj. (speciálně), ryby (pravděpodobně solené\n a sušené jako koření)",
+      "translit": "opsárion",
+      "pronunciation": "op-sar'-ee-on",
+      "translated": true
+    },
+    "G3796": {
+      "definitions_cz": "(adverbiálně) pozdě v den; prodloužením, po uzavření\n den",
+      "translit": "opsé",
+      "pronunciation": "op-seh'",
+      "translated": true
+    },
+    "G3797": {
+      "definitions_cz": "později, tj. jarní (sprchování)",
+      "translit": "ópsimos",
+      "pronunciation": "op'-sim-os",
+      "translated": true
+    },
+    "G3798": {
+      "definitions_cz": "pozdě; ženského rodu (jako podstatné jméno) odpoledne (brzy večer) nebo setmění\n (později večer)",
+      "translit": "ópsios",
+      "pronunciation": "op'-see-os",
+      "translated": true
+    },
+    "G3799": {
+      "definitions_cz": "správně, zrak (akt), tj. (implicitně) ten\n vizáž, vnější show",
+      "translit": "ópsis",
+      "pronunciation": "op'-sis",
+      "translated": true
+    },
+    "G3800": {
+      "definitions_cz": "příděly pro a\n vojáka, tedy (rozšířeně) jeho stipendium nebo plat",
+      "translit": "opsṓnion",
+      "pronunciation": "op-so'-nee-on",
+      "translated": true
+    },
+    "G3801": {
+      "definitions_cz": "ten\n bytí a ten, který byl a který přichází, t. j. Věčný, jako a\n Boží epiteton Krista",
+      "translit": "ho ṑn kaí ho ēn kaí ho erchómenos",
+      "pronunciation": "ho own kahee ho ane kahee ho er-khom'-en-os",
+      "translated": true
+    },
+    "G3802": {
+      "definitions_cz": "lapit (obrazně)",
+      "translit": "pagideúō",
+      "pronunciation": "pag-id-yoo'-o",
+      "translated": true
+    },
+    "G3803": {
+      "definitions_cz": "past (upevněná smyčkou nebo zářezem); přeneseně, a\n trik nebo stav (pokušení)",
+      "translit": "pagís",
+      "pronunciation": "pag-ece'",
+      "translated": true
+    },
+    "G3804": {
+      "definitions_cz": "něco prodělaného, t. j. strádání\n nebo bolest; subjektivně, emoce nebo vliv",
+      "translit": "páthēma",
+      "pronunciation": "path'-ay-mah",
+      "translated": true
+    },
+    "G3805": {
+      "definitions_cz": "náchylný (tj. odsouzený) ke zkušenosti\n bolest",
+      "translit": "pathētós",
+      "pronunciation": "path-ay-tos'",
+      "translated": true
+    },
+    "G3806": {
+      "definitions_cz": "správně, utrpení („patos“), tzn.\n (subjektivně) vášeň (zejména žádostivost)",
+      "translit": "páthos",
+      "pronunciation": "path'-os",
+      "translated": true
+    },
+    "G3807": {
+      "definitions_cz": "chlapec-vůdce, t. j. sluha\n jehož úřad měl vést děti do školy; (implicitně,\n (obrazně) učitel (\"pædagog\")",
+      "translit": "paidagōgós",
+      "pronunciation": "pahee-dag-o-gos'",
+      "translated": true
+    },
+    "G3808": {
+      "definitions_cz": "malý kluk",
+      "translit": "paidárion",
+      "pronunciation": "pahee-dar'-ee-on",
+      "translated": true
+    },
+    "G3809": {
+      "definitions_cz": "doučování, tj. vzdělávání nebo školení; implicitně,\n disciplinární náprava",
+      "translit": "paideía",
+      "pronunciation": "pahee-di'-ah",
+      "translated": true
+    },
+    "G3810": {
+      "definitions_cz": "školitel, tj. učitel nebo (implicitně)\n disciplinárka",
+      "translit": "paideutḗs",
+      "pronunciation": "pahee-dyoo-tace'",
+      "translated": true
+    },
+    "G3811": {
+      "definitions_cz": "vychovávat dítě, tj. vychovávat, nebo (implicitně),\n disciplína (trestem)",
+      "translit": "paideúō",
+      "pronunciation": "pahee-dyoo'-o",
+      "translated": true
+    },
+    "G3812": {
+      "definitions_cz": "od dětství",
+      "translit": "paidióthen",
+      "pronunciation": "pahee-dee-oth'-en",
+      "translated": true
+    },
+    "G3813": {
+      "definitions_cz": "dítě (obého pohlaví), tzn.\n (správně), nemluvně nebo (rozšířeně) napůl dospělý chlapec nebo dívka;\n přeneseně nezralý křesťan",
+      "translit": "paidíon",
+      "pronunciation": "pahee-dee'-on",
+      "translated": true
+    },
+    "G3814": {
+      "definitions_cz": "dívka, tj. (zvláště), otrokyně\n nebo sluha",
+      "translit": "paidískē",
+      "pronunciation": "pahee-dis'-kay",
+      "translated": true
+    },
+    "G3815": {
+      "definitions_cz": "sportovat (jako kluk)",
+      "translit": "paízō",
+      "pronunciation": "paheed'-zo",
+      "translated": true
+    },
+    "G3816": {
+      "definitions_cz": "chlapec (jak je často beztrestně bit) nebo (tím\n analogie), dívka a (genitivní případ) dítě; zvláště otrok nebo\n služebník (zejména ministr krále; a eminence k\n Bůh)",
+      "translit": "paîs",
+      "pronunciation": "paheece",
+      "translated": true
+    },
+    "G3817": {
+      "definitions_cz": "zasáhnout (jakoby jedinou ranou a méně prudce než\n [ŘECKA:5180]",
+      "translit": "paíō",
+      "pronunciation": "pah'-yo",
+      "translated": true
+    },
+    "G3818": {
+      "definitions_cz": "Pacatianian, a\n část Frygie",
+      "translit": "Pakatianḗ",
+      "pronunciation": "pak-at-ee-an-ay'",
+      "translated": true
+    },
+    "G3819": {
+      "definitions_cz": "(příslovečně) dříve nebo (poměrně) někdy poté;\n (elipticky jako přídavné jméno) starověký",
+      "translit": "pálai",
+      "pronunciation": "pal'-ahee",
+      "translated": true
+    },
+    "G3820": {
+      "definitions_cz": "starožitné, t. j. ne nedávné, opotřebované",
+      "translit": "palaiós",
+      "pronunciation": "pal-ah-yos'",
+      "translated": true
+    },
+    "G3821": {
+      "definitions_cz": "zastaralost",
+      "translit": "palaiótēs",
+      "pronunciation": "pal-ah-yot'-ace",
+      "translated": true
+    },
+    "G3822": {
+      "definitions_cz": "učinit (pasivně, stát se) opotřebovaným nebo prohlásit\n zastaralé",
+      "translit": "palaióō",
+      "pronunciation": "pal-ah-yo'-o",
+      "translated": true
+    },
+    "G3823": {
+      "definitions_cz": "jiný formulář pro [ŘECKO:906]",
+      "translit": "pálē",
+      "pronunciation": "pal'-ay",
+      "translated": true
+    },
+    "G3824": {
+      "definitions_cz": "(duchovní) znovuzrození (stav nebo akt), tzn.\n (obrazně) duchovní renovace; zvláště mesiášský\n restaurování",
+      "translit": "palingenesía",
+      "pronunciation": "pal-ing-ghen-es-ee'-ah",
+      "translated": true
+    },
+    "G3825": {
+      "definitions_cz": "(příslovečně) nově, t. j. (místa) zpět, (času) jednou\n více, nebo (konjunkčně) dále nebo na druhé straně",
+      "translit": "pálin",
+      "pronunciation": "pal'-in",
+      "translated": true
+    },
+    "G3826": {
+      "definitions_cz": "v plné výši\n více, tj. společně nebo současně",
+      "translit": "pamplētheí",
+      "pronunciation": "pam-play-thi'",
+      "translated": true
+    },
+    "G3827": {
+      "definitions_cz": "plno mnoho, t. j. nesmírné",
+      "translit": "pámpolys",
+      "pronunciation": "pam-pol-ooce",
+      "translated": true
+    },
+    "G3828": {
+      "definitions_cz": "každý-kmenový, tedy heterogenní\n ([ŘECKO:5561]",
+      "translit": "Pamphylía",
+      "pronunciation": "pam-fool-ee'-ah",
+      "translated": true
+    },
+    "G3829": {
+      "definitions_cz": "všepřijímací, tedy veřejné ubytování (karavanserai popř\n khan)",
+      "translit": "pandocheîon",
+      "pronunciation": "pan-dokk-i'-on",
+      "translated": true
+    },
+    "G3830": {
+      "definitions_cz": "hostinský (správce karavanseraje)",
+      "translit": "pandocheús",
+      "pronunciation": "pan-dokh-yoos'",
+      "translated": true
+    },
+    "G3831": {
+      "definitions_cz": "hromadné setkání, tj. (obrazně)\n univerzální společnost",
+      "translit": "panḗgyris",
+      "pronunciation": "pan-ay'-goo-ris",
+      "translated": true
+    },
+    "G3832": {
+      "definitions_cz": "s celou rodinou",
+      "translit": "panoikí",
+      "pronunciation": "pan-oy-kee'",
+      "translated": true
+    },
+    "G3833": {
+      "definitions_cz": "plné brnění (\"panoply\")",
+      "translit": "panoplía",
+      "pronunciation": "pan-op-lee'-ah",
+      "translated": true
+    },
+    "G3834": {
+      "definitions_cz": "obratnost, t. j. (ve špatném smyslu) lstivost popř\n sofistika",
+      "translit": "panourgía",
+      "pronunciation": "pan-oorg-ee'-ah",
+      "translated": true
+    },
+    "G3835": {
+      "definitions_cz": "všepracující, tj. obratný (bystrý)",
+      "translit": "panoûrgos",
+      "pronunciation": "pan-oor'-gos",
+      "translated": true
+    },
+    "G3836": {
+      "definitions_cz": "ze všech směrů",
+      "translit": "pantachóthen",
+      "pronunciation": "pan-takh-oth'-en",
+      "translated": true
+    },
+    "G3837": {
+      "definitions_cz": "všeobecně",
+      "translit": "pantachoû",
+      "pronunciation": "pan-takh-oo'",
+      "translated": true
+    },
+    "G3838": {
+      "definitions_cz": "úplný, tj. celý (neutr jako podstatné jméno,\n dokončení)",
+      "translit": "pantelḗs",
+      "pronunciation": "pan-tel-ace'",
+      "translated": true
+    },
+    "G3839": {
+      "definitions_cz": "zcela",
+      "translit": "pántē",
+      "pronunciation": "pan'-tay",
+      "translated": true
+    },
+    "G3840": {
+      "definitions_cz": "ze (tj. ze všech stran).",
+      "translit": "pántothen",
+      "pronunciation": "pan-toth'-en",
+      "translated": true
+    },
+    "G3841": {
+      "definitions_cz": "vševládnoucí, tj. Bůh (jako absolutní a\n univerzální suverén)",
+      "translit": "pantokrátōr",
+      "pronunciation": "pan-tok-rat'-ore",
+      "translated": true
+    },
+    "G3842": {
+      "definitions_cz": "pokaždé, tj. kdykoli",
+      "translit": "pántote",
+      "pronunciation": "pan'-tot-eh",
+      "translated": true
+    },
+    "G3843": {
+      "definitions_cz": "zcela; zvláště, za všech okolností, (s negativním,\n následující) v žádném případě",
+      "translit": "pántōs",
+      "pronunciation": "pan'-toce",
+      "translated": true
+    },
+    "G3844": {
+      "definitions_cz": "správně, blízko; tj. (s genitivním pádem) od\n vedle (doslova nebo přeneseně), (s dativem) u (nebo v) the\n okolí (objektivně nebo subjektivně), (s akuzativem) k\n blízkost s (lokální (zejména mimo nebo protikladná) nebo kauzální).\n (kvůli)",
+      "translit": "pará",
+      "pronunciation": "par-ah'",
+      "translated": true
+    },
+    "G3845": {
+      "definitions_cz": "jít v rozporu s, tj. porušit a\n příkaz",
+      "translit": "parabaínō",
+      "pronunciation": "par-ab-ah'-ee-no",
+      "translated": true
+    },
+    "G3846": {
+      "definitions_cz": "hodit vedle, tj. (reflexivně) dosáhnout a\n místo, nebo (obrazně) připodobnit",
+      "translit": "parabállō",
+      "pronunciation": "par-ab-al'-lo",
+      "translated": true
+    },
+    "G3847": {
+      "definitions_cz": "porušení",
+      "translit": "parábasis",
+      "pronunciation": "par-ab'-as-is",
+      "translated": true
+    },
+    "G3848": {
+      "definitions_cz": "narušitel",
+      "translit": "parabátēs",
+      "pronunciation": "par-ab-at'-ace",
+      "translated": true
+    },
+    "G3849": {
+      "definitions_cz": "nutit v rozporu s (přírodou),\n tedy vynutit (prosbou)",
+      "translit": "parabiázomai",
+      "pronunciation": "par-ab-ee-ad'-zom-ahee",
+      "translated": true
+    },
+    "G3850": {
+      "definitions_cz": "podobenství (\"podobenství\"), tedy (symbolické) fiktivní\n vyprávění (o běžném životě přenášející morálku), apotegma nebo\n pořekadlo",
+      "translit": "parabolḗ",
+      "pronunciation": "par-ab-ol-ay'",
+      "translated": true
+    },
+    "G3851": {
+      "definitions_cz": "nedomluvit se, tzn.\n ignorovat",
+      "translit": "parabouleúomai",
+      "pronunciation": "par-ab-ool-yoo'-om-ahee",
+      "translated": true
+    },
+    "G3852": {
+      "definitions_cz": "mandát",
+      "translit": "parangelía",
+      "pronunciation": "par-ang-gel-ee'-ah",
+      "translated": true
+    },
+    "G3853": {
+      "definitions_cz": "předat zprávu, tj\n implikace) nařizovat",
+      "translit": "parangéllō",
+      "pronunciation": "par-ang-gel'-lo",
+      "translated": true
+    },
+    "G3854": {
+      "definitions_cz": "přiblížit se, t. j. přiblížit se (přišli); podle\n implikace, vystupovat veřejně",
+      "translit": "paragínomai",
+      "pronunciation": "par-ag-in'-om-ahee",
+      "translated": true
+    },
+    "G3855": {
+      "definitions_cz": "vést blízko, tj. (reflexivně nebo netranzitivně)\n jít spolu nebo pryč",
+      "translit": "parágō",
+      "pronunciation": "par-ag'-o",
+      "translated": true
+    },
+    "G3856": {
+      "definitions_cz": "ukazovat vedle (veřejnosti), t. j. vystavovat\n hanba",
+      "translit": "paradeigmatízō",
+      "pronunciation": "par-ad-igue-mat-id'-zo",
+      "translated": true
+    },
+    "G3857": {
+      "definitions_cz": "park, tj. (speciálně), Eden\n (místo budoucího štěstí, \"ráj\")",
+      "translit": "parádeisos",
+      "pronunciation": "par-ad'-i-sos",
+      "translated": true
+    },
+    "G3858": {
+      "definitions_cz": "přijmout blízko, tj. přiznat nebo (implicitně)\n těšit se",
+      "translit": "paradéchomai",
+      "pronunciation": "par-ad-ekh'-om-ahee",
+      "translated": true
+    },
+    "G3859": {
+      "definitions_cz": "nesprávné zaměstnání, tzn.\n všetečnost",
+      "translit": "paradiatribḗ",
+      "pronunciation": "par-ad-ee-at-ree-bay'",
+      "translated": true
+    },
+    "G3860": {
+      "definitions_cz": "vzdát se, tj. vzdát se, svěřit se,\n vysílat",
+      "translit": "paradídōmi",
+      "pronunciation": "par-ad-id'-o-mee",
+      "translated": true
+    },
+    "G3861": {
+      "definitions_cz": "proti očekávání,\n tedy mimořádné (\"paradox\")",
+      "translit": "parádoxos",
+      "pronunciation": "par-ad'-ox-os",
+      "translated": true
+    },
+    "G3862": {
+      "definitions_cz": "přenos, tj. (konkrétně) předpis; speciálně,\n židovské tradiční právo",
+      "translit": "parádosis",
+      "pronunciation": "par-ad'-os-is",
+      "translated": true
+    },
+    "G3863": {
+      "definitions_cz": "stimulovat vedle, t. j. vzrušovat k\n rivalita",
+      "translit": "parazēlóō",
+      "pronunciation": "par-ad-zay-lo'-o",
+      "translated": true
+    },
+    "G3864": {
+      "definitions_cz": "podél moře, tj. námořní (jezerní)",
+      "translit": "parathalássios",
+      "pronunciation": "par-ath-al-as'-see-os",
+      "translated": true
+    },
+    "G3865": {
+      "definitions_cz": "přehlížet nebo ignorovat",
+      "translit": "paratheōréō",
+      "pronunciation": "par-ath-eh-o-reh'-o",
+      "translated": true
+    },
+    "G3866": {
+      "definitions_cz": "vklad, tedy (obrazně) svěřenství",
+      "translit": "parathḗkē",
+      "pronunciation": "par-ath-ay'-kay",
+      "translated": true
+    },
+    "G3867": {
+      "definitions_cz": "špatně chválit, tj. doporučit nebo radit (jiný\n kurz)",
+      "translit": "parainéō",
+      "pronunciation": "par-ahee-neh'-o",
+      "translated": true
+    },
+    "G3868": {
+      "definitions_cz": "prosit, tj. zavrhovat,\n klesat, vyhýbat se",
+      "translit": "paraitéomai",
+      "pronunciation": "par-ahee-teh'-om-ahee",
+      "translated": true
+    },
+    "G3869": {
+      "definitions_cz": "posadit se poblíž",
+      "translit": "parakathízō",
+      "pronunciation": "par-ak-ath-id'-zo",
+      "translated": true
+    },
+    "G3870": {
+      "definitions_cz": "zavolat blízko, tj. pozvat, vyvolat (prosbou,\n hortace nebo útěcha)",
+      "translit": "parakaléō",
+      "pronunciation": "par-ak-al-eh'-o",
+      "translated": true
+    },
+    "G3871": {
+      "definitions_cz": "přikrýt vedle, t. j. závoj\n (obrazně)",
+      "translit": "parakalýptō",
+      "pronunciation": "par-ak-al-oop'-to",
+      "translated": true
+    },
+    "G3872": {
+      "definitions_cz": "něco odloženého vedle sebe, např\n vklad (posvátná důvěra)",
+      "translit": "parakatathḗkē",
+      "pronunciation": "par-ak-at-ath-ay'-kay",
+      "translated": true
+    },
+    "G3873": {
+      "definitions_cz": "ležet blízko, tj. být po ruce (obrazně být\n rychlé nebo snadné)",
+      "translit": "parákeimai",
+      "pronunciation": "par-ak'-i-mahee",
+      "translated": true
+    },
+    "G3874": {
+      "definitions_cz": "prosba, hortace, útěcha",
+      "translit": "paráklēsis",
+      "pronunciation": "par-ak'-lay-sis",
+      "translated": true
+    },
+    "G3875": {
+      "definitions_cz": "přímluvce, utěšovatel",
+      "translit": "paráklētos",
+      "pronunciation": "par-ak'-lay-tos",
+      "translated": true
+    },
+    "G3876": {
+      "definitions_cz": "nepozornost, tj. (implicitně)\n neposlušnost",
+      "translit": "parakoḗ",
+      "pronunciation": "par-ak-o-ay'",
+      "translated": true
+    },
+    "G3877": {
+      "definitions_cz": "následovat blízko, tj. (obrazně) navštěvovat (jako a\n výsledek), vysledovat, přizpůsobit se",
+      "translit": "parakolouthéō",
+      "pronunciation": "par-ak-ol-oo-theh'-o",
+      "translated": true
+    },
+    "G3878": {
+      "definitions_cz": "špatně slyšet, t. j. (implicitně) k\n neuposlechnout",
+      "translit": "parakoúō",
+      "pronunciation": "par-ak-oo'-o",
+      "translated": true
+    },
+    "G3879": {
+      "definitions_cz": "ohnout se vedle, t.j. naklonit se (abychom nahlédli\n uvnitř)",
+      "translit": "parakýptō",
+      "pronunciation": "par-ak-oop'-to",
+      "translated": true
+    },
+    "G3880": {
+      "definitions_cz": "přijímat blízko, tj. stýkat se se sebou samým (v\n jakýkoli známý nebo intimní akt nebo vztah); analogicky předpokládat an\n kancelář; obrazně řečeno učit se",
+      "translit": "paralambánō",
+      "pronunciation": "par-al-am-ban'-o",
+      "translated": true
+    },
+    "G3881": {
+      "definitions_cz": "(zejména), položit kurz blízko, tj. proplout kolem",
+      "translit": "paralégomai",
+      "pronunciation": "par-al-eg'-om-ahee",
+      "translated": true
+    },
+    "G3882": {
+      "definitions_cz": "vedle soli (mořské), t. j. námořní",
+      "translit": "parálios",
+      "pronunciation": "par-al'-ee-os",
+      "translated": true
+    },
+    "G3883": {
+      "definitions_cz": "transmutace (fáze nebo oběžné dráhy),\n tj. (obrazně) vrtkavost",
+      "translit": "parallagḗ",
+      "pronunciation": "par-al-lag-ay'",
+      "translated": true
+    },
+    "G3884": {
+      "definitions_cz": "špatně počítat, t. j. klamat",
+      "translit": "paralogízomai",
+      "pronunciation": "par-al-og-id'-zom-ahee",
+      "translated": true
+    },
+    "G3885": {
+      "definitions_cz": "jakoby rozpuštěný, tedy „paralytický“",
+      "translit": "paralytikós",
+      "pronunciation": "par-al-oo-tee-kos'",
+      "translated": true
+    },
+    "G3886": {
+      "definitions_cz": "uvolnit se vedle, tj. uvolnit se (dokonalé pasivum\n příčestí, ochrnuté nebo oslabené)",
+      "translit": "paralýō",
+      "pronunciation": "par-al-oo'-o",
+      "translated": true
+    },
+    "G3887": {
+      "definitions_cz": "zůstat nablízku, tj. zůstat (doslova dehtovat; nebo\n přeneseně být trvalý, vytrvat)",
+      "translit": "paraménō",
+      "pronunciation": "par-am-en'-o",
+      "translated": true
+    },
+    "G3888": {
+      "definitions_cz": "vztahovat se\n blízko, t. j. (implicitně) povzbuzovat, utěšovat",
+      "translit": "paramythéomai",
+      "pronunciation": "par-am-oo-theh'-om-ahee",
+      "translated": true
+    },
+    "G3889": {
+      "definitions_cz": "útěcha (správně, abstraktní)",
+      "translit": "paramythía",
+      "pronunciation": "par-am-oo-thee'-ah",
+      "translated": true
+    },
+    "G3890": {
+      "definitions_cz": "útěcha (správně, konkrétně)",
+      "translit": "paramýthion",
+      "pronunciation": "par-am-oo'-thee-on",
+      "translated": true
+    },
+    "G3891": {
+      "definitions_cz": "býti proti zákonu, t. j\n přestoupit",
+      "translit": "paranoméō",
+      "pronunciation": "par-an-om-eh'-o",
+      "translated": true
+    },
+    "G3892": {
+      "definitions_cz": "přestupek",
+      "translit": "paranomía",
+      "pronunciation": "par-an-om-ee'-ah",
+      "translated": true
+    },
+    "G3893": {
+      "definitions_cz": "rozhořčit vedle, t. j. (obrazně) k\n podrážděný",
+      "translit": "parapikraínō",
+      "pronunciation": "par-ap-ik-rah'-ee-no",
+      "translated": true
+    },
+    "G3894": {
+      "definitions_cz": "podráždění",
+      "translit": "parapikrasmós",
+      "pronunciation": "par-ap-ik-ras-mos'",
+      "translated": true
+    },
+    "G3895": {
+      "definitions_cz": "odpadnout, t. j. (obrazně) k\n odpadnout od víry",
+      "translit": "parapíptō",
+      "pronunciation": "par-ap-ip'-to",
+      "translated": true
+    },
+    "G3896": {
+      "definitions_cz": "plout blízko",
+      "translit": "parapléō",
+      "pronunciation": "par-ap-leh'-o",
+      "translated": true
+    },
+    "G3897": {
+      "definitions_cz": "zavřít\n tím, tedy (obrazně) téměř",
+      "translit": "paraplḗsion",
+      "pronunciation": "par-ap-lay'-see-on",
+      "translated": true
+    },
+    "G3898": {
+      "definitions_cz": "způsobem blízkým, tj. (obrazně)\n podobně",
+      "translit": "paraplēsíōs",
+      "pronunciation": "par-ap-lay-see'-oce",
+      "translated": true
+    },
+    "G3899": {
+      "definitions_cz": "cestovat blízko",
+      "translit": "paraporeúomai",
+      "pronunciation": "par-ap-or-yoo'-om-ahee",
+      "translated": true
+    },
+    "G3900": {
+      "definitions_cz": "boční uklouznutí (chyba nebo odchylka), tj. (neúmyslné)\n omyl nebo (úmyslný) přestupek",
+      "translit": "paráptōma",
+      "pronunciation": "par-ap'-to-mah",
+      "translated": true
+    },
+    "G3901": {
+      "definitions_cz": "protékat, tj. (obrazně)\n nedbale projít (slečna)",
+      "translit": "pararrhyéō",
+      "pronunciation": "par-ar-hroo-eh'-o",
+      "translated": true
+    },
+    "G3902": {
+      "definitions_cz": "postranně označené, tj. označené (s a\n odznak (hlava figurky) lodi)",
+      "translit": "parásēmos",
+      "pronunciation": "par-as'-ay-mos",
+      "translated": true
+    },
+    "G3903": {
+      "definitions_cz": "vybavit stranou, t. j. získat\n připraven",
+      "translit": "paraskeuázō",
+      "pronunciation": "par-ask-yoo-ad'-zo",
+      "translated": true
+    },
+    "G3904": {
+      "definitions_cz": "připravenost",
+      "translit": "paraskeuḗ",
+      "pronunciation": "par-ask-yoo-ay'",
+      "translated": true
+    },
+    "G3905": {
+      "definitions_cz": "prodloužit, tj. prodloužit (v\n časový okamžik)",
+      "translit": "parateínō",
+      "pronunciation": "par-at-i'-no",
+      "translated": true
+    },
+    "G3906": {
+      "definitions_cz": "prohlédnout vedle, t. j. poznamenat zákeřně popř\n úzkostlivě",
+      "translit": "paratēréō",
+      "pronunciation": "par-at-ay-reh'-o",
+      "translated": true
+    },
+    "G3907": {
+      "definitions_cz": "inspekce, tedy oční důkaz",
+      "translit": "paratḗrēsis",
+      "pronunciation": "par-at-ay'-ray-sis",
+      "translated": true
+    },
+    "G3908": {
+      "definitions_cz": "umístit vedle, t. j. přítomný (jídlo, pravda); podle\n implikace, uložit (jako svěřenský fond nebo na ochranu)",
+      "translit": "paratíthēmi",
+      "pronunciation": "par-at-ith'-ay-mee",
+      "translated": true
+    },
+    "G3909": {
+      "definitions_cz": "náhodě blízko, t. j. zapadnout",
+      "translit": "paratynchánō",
+      "pronunciation": "par-at-oong-khan'-o",
+      "translated": true
+    },
+    "G3910": {
+      "definitions_cz": "v tu chvíli, tzn.\n momentální",
+      "translit": "parautíka",
+      "pronunciation": "par-ow-tee'-kah",
+      "translated": true
+    },
+    "G3911": {
+      "definitions_cz": "snášet s sebou nebo\n stranou, tj. odnést (doslova nebo přeneseně); implicitně, k\n odvrátit",
+      "translit": "paraphérō",
+      "pronunciation": "par-af-er'-o",
+      "translated": true
+    },
+    "G3912": {
+      "definitions_cz": "myslet si špatně, tj. být šílený (hloupý)",
+      "translit": "paraphronéō",
+      "pronunciation": "par-af-ron-eh'-o",
+      "translated": true
+    },
+    "G3913": {
+      "definitions_cz": "šílenství, tj. pošetilost",
+      "translit": "paraphronía",
+      "pronunciation": "par-af-ron-ee'-ah",
+      "translated": true
+    },
+    "G3914": {
+      "definitions_cz": "do zimy blízko, t. j. zůstat s přes deštivý\n sezóně",
+      "translit": "paracheimázō",
+      "pronunciation": "par-akh-i-mad'-zo",
+      "translated": true
+    },
+    "G3915": {
+      "definitions_cz": "přezimování",
+      "translit": "paracheimasía",
+      "pronunciation": "par-akh-i-mas-ee'-ah",
+      "translated": true
+    },
+    "G3916": {
+      "definitions_cz": "u věci samé, tzn.\n okamžitě",
+      "translit": "parachrēma",
+      "pronunciation": "par-akh-ray'-mah",
+      "translated": true
+    },
+    "G3917": {
+      "definitions_cz": "leopard",
+      "translit": "párdalis",
+      "pronunciation": "par'-dal-is",
+      "translated": true
+    },
+    "G3918": {
+      "definitions_cz": "být blízko, tj\n ruka; střední rod přítomné příčestí (jednotné číslo) čas, nebo (množné číslo)\n majetek",
+      "translit": "páreimi",
+      "pronunciation": "par'-i-mee",
+      "translated": true
+    },
+    "G3919": {
+      "definitions_cz": "vést stranou, t. j. zavést\n tajně",
+      "translit": "pareiságō",
+      "pronunciation": "par-ice-ag'-o",
+      "translated": true
+    },
+    "G3920": {
+      "definitions_cz": "propašoval dovnitř",
+      "translit": "pareísaktos",
+      "pronunciation": "par-ice'-ak-tos",
+      "translated": true
+    },
+    "G3921": {
+      "definitions_cz": "usadit se vedle sebe,\n t. j. ubytovat se pokradmu",
+      "translit": "pareisdýnō",
+      "pronunciation": "par-ice-doo'-no",
+      "translated": true
+    },
+    "G3922": {
+      "definitions_cz": "vstoupit vedle, t. j. dodatečně supervenovat\n nebo tajně",
+      "translit": "pareisérchomai",
+      "pronunciation": "par-ice-er'-khom-ahee",
+      "translated": true
+    },
+    "G3923": {
+      "definitions_cz": "nést vedle, t. j. zavést\n současně",
+      "translit": "pareisphérō",
+      "pronunciation": "par-ice-fer'-o",
+      "translated": true
+    },
+    "G3924": {
+      "definitions_cz": "blízko venku, tj",
+      "translit": "parektós",
+      "pronunciation": "par-ek-tos'",
+      "translated": true
+    },
+    "G3925": {
+      "definitions_cz": "vhazování vedle\n (juxtapozice), tj. (zvláště), bitevní pole, tábor nebo\n kasárna (věž Antonia)",
+      "translit": "parembolḗ",
+      "pronunciation": "par-em-bol-ay'",
+      "translated": true
+    },
+    "G3926": {
+      "definitions_cz": "dále obtěžovat, t. j. otravovat",
+      "translit": "parenochléō",
+      "pronunciation": "par-en-okh-leh'-o",
+      "translated": true
+    },
+    "G3927": {
+      "definitions_cz": "cizinec vedle sebe, tedy rezident\n cizinec",
+      "translit": "parepídēmos",
+      "pronunciation": "par-ep-id'-ay-mos",
+      "translated": true
+    },
+    "G3928": {
+      "definitions_cz": "přiblížit se nebo ustoupit, tj. přiblížit se (přijít),\n jít kolem (nebo pryč), (obrazně) zahynout nebo zanedbávat, (příčinný)\n odvrátit",
+      "translit": "parérchomai",
+      "pronunciation": "par-er'-khom-ahee",
+      "translated": true
+    },
+    "G3929": {
+      "definitions_cz": "praetermission, tj. snášenlivost",
+      "translit": "páresis",
+      "pronunciation": "par'-es-is",
+      "translated": true
+    },
+    "G3930": {
+      "definitions_cz": "držet blízko, tj. prezentovat, dovolit, vystavovat,\n vybavit příležitost",
+      "translit": "paréchō",
+      "pronunciation": "par-ekh'-o",
+      "translated": true
+    },
+    "G3931": {
+      "definitions_cz": "adresu vedle, tj. (speciálně),\n útěcha",
+      "translit": "parēgoría",
+      "pronunciation": "par-ay-gor-ee'-ah",
+      "translated": true
+    },
+    "G3932": {
+      "definitions_cz": "panenství",
+      "translit": "parthenía",
+      "pronunciation": "par-then-ee'-ah",
+      "translated": true
+    },
+    "G3933": {
+      "definitions_cz": "panna; implicitně svobodný\n dcera",
+      "translit": "parthénos",
+      "pronunciation": "par-then'-os",
+      "translated": true
+    },
+    "G3934": {
+      "definitions_cz": "parth, t. j. obyvatel\n Parthia",
+      "translit": "Párthos",
+      "pronunciation": "par'-thos",
+      "translated": true
+    },
+    "G3935": {
+      "definitions_cz": "nechat, t. j. relaxovat",
+      "translit": "paríēmi",
+      "pronunciation": "par-ee'-ay-mi",
+      "translated": true
+    },
+    "G3936": {
+      "definitions_cz": "stát vedle, tj. (přechodně) vystavovat,\n nabídnout, (zvláště), doporučit, (obrazně) podložit; nebo\n (nepřechodně) být po ruce (nebo připraven), pomoc",
+      "translit": "parístēmi",
+      "pronunciation": "par-is'-tay-mee",
+      "translated": true
+    },
+    "G3937": {
+      "definitions_cz": "konstantní; Parmenas, křesťan",
+      "translit": "Parmenâs",
+      "pronunciation": "par-men-as'",
+      "translated": true
+    },
+    "G3938": {
+      "definitions_cz": "vedlejší silnice, tedy (aktivně) trasa",
+      "translit": "párodos",
+      "pronunciation": "par'-od-os",
+      "translated": true
+    },
+    "G3939": {
+      "definitions_cz": "bydlet blízko, tj. bydlet jako a\n cizinec",
+      "translit": "paroikéō",
+      "pronunciation": "par-oy-keh'-o",
+      "translated": true
+    },
+    "G3940": {
+      "definitions_cz": "zahraniční pobyt",
+      "translit": "paroikía",
+      "pronunciation": "par-oy-kee'-ah",
+      "translated": true
+    },
+    "G3941": {
+      "definitions_cz": "mít domov blízko, tj. (jako podstatné jméno) vedlejší obyvatel\n (cizí obyvatel)",
+      "translit": "pároikos",
+      "pronunciation": "par'-oy-kos",
+      "translated": true
+    },
+    "G3942": {
+      "definitions_cz": "zřejmě a\n uvést vedle domněnky, tj. (konkrétně) pořekadlo; speciálně,\n tajemná nebo fiktivní ilustrace",
+      "translit": "paroimía",
+      "pronunciation": "par-oy-mee'-ah",
+      "translated": true
+    },
+    "G3943": {
+      "definitions_cz": "pobyt u vína, t.j. naklánění (toper)",
+      "translit": "pároinos",
+      "pronunciation": "par'-oy-nos",
+      "translated": true
+    },
+    "G3944": {
+      "definitions_cz": "utéct spolu, tj. být\n pryč",
+      "translit": "paroíchomai",
+      "pronunciation": "par-oy'-khom-ahee",
+      "translated": true
     }
   }
 }
