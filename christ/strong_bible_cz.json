@@ -83212,6 +83212,356 @@
       "hebrew": "שמם",
       "xlit": "shâmêm",
       "translated": true
+    },
+    "H8075": {
+      "definitions_cz": "1) (Ithpolel) [CLBL] být zděšen, být omráčen",
+      "lemma": "שְׁמַם",
+      "hebrew": "שמם",
+      "xlit": "shᵉmam",
+      "translated": true
+    },
+    "H8076": {
+      "definitions_cz": "1) zpustošený, opuštěný, pustý",
+      "lemma": "שָׁמֵם",
+      "hebrew": "שמם",
+      "xlit": "shâmêm",
+      "translated": true
+    },
+    "H8077": {
+      "definitions_cz": "1) devastace, plýtvání, zpustošení",
+      "lemma": "שְׁמָמָה",
+      "hebrew": "שממה",
+      "xlit": "shᵉmâmâh",
+      "translated": true
+    },
+    "H8078": {
+      "definitions_cz": "1) hrůza, zděšení, zděšení",
+      "lemma": "שִׁמָּמוֹן",
+      "hebrew": "שממון",
+      "xlit": "shimmâmôwn",
+      "translated": true
+    },
+    "H8079": {
+      "definitions_cz": "1) druh ještěrky",
+      "lemma": "שְׂמָמִית",
+      "hebrew": "שממית",
+      "xlit": "sᵉmâmîyth",
+      "translated": true
+    },
+    "H8080": {
+      "definitions_cz": "1) být nebo se stát tlustým, ztloustnout | 1a) (Qal) tuk (subst) | 1b) (Hiphil) udělat tuk, ukázat tlustost",
+      "lemma": "שָׁמַן",
+      "hebrew": "שמן",
+      "xlit": "shâman",
+      "translated": true
+    },
+    "H8081": {
+      "definitions_cz": "1) tuk, olej | 1a) tuk, tučnost | 1b) olej, olivový olej | 1b1) jako střiž, léčivo nebo mastnota | 1b2) k pomazání | 1c) tuk (úrodné země, údolí) (metafa)",
+      "lemma": "שֶׁמֶן",
+      "hebrew": "שמן",
+      "xlit": "shemen",
+      "translated": true
+    },
+    "H8082": {
+      "definitions_cz": "1) tučný, bohatý, robustní | 1a) tučné, bohaté (na potraviny) | 1b) statný, robustní (u mužů)",
+      "lemma": "שָׁמֵן",
+      "hebrew": "שמן",
+      "xlit": "shâmên",
+      "translated": true
+    },
+    "H8083": {
+      "definitions_cz": "1) osmý, osmý | 1a) osm (jako kardinální číslo) | 1b) osmý (jako pořadové číslo) | 1c) v kombinaci s jinými čísly",
+      "lemma": "שְׁמֹנֶה",
+      "hebrew": "שמנה",
+      "xlit": "shᵉmôneh",
+      "translated": true
+    },
+    "H8084": {
+      "definitions_cz": "1) osmdesát, čtyři skóre | 1a) osmdesát (jako kardinální číslo) | 1b) osmdesátý (jako pořadové číslo) | 1c) v kombinaci s jinými čísly",
+      "lemma": "שְׁמֹנִים",
+      "hebrew": "שמנים",
+      "xlit": "shᵉmônîym",
+      "translated": true
+    },
+    "H8085": {
+      "definitions_cz": "v | 1) slyšet, poslouchat, poslouchat | 1a) (Qal) | 1a1) slyšet (vnímat sluchem) | 1a2) slyšet o | 1a3) slyšet (mít sílu slyšet) | 1a4) slyšet s pozorností nebo zájmem, poslouchat | 1a5) rozumět (jazyk) | 1a6) projednávat (soudních případů) | 1a7) poslouchat, dávat pozor | 1a7a) souhlasit, souhlasit | 1a7b) vyhovět žádosti | 1a8) poslouchat, poddat se | 1a9) poslouchat, být poslušný | 1b) (Niphal) | 1b1) být slyšen (hlasu nebo zvuku) | 1b2) slyšet | 1b3) být znovu",
+      "lemma": "שָׁמַע",
+      "hebrew": "שמע",
+      "xlit": "shâmaʻ",
+      "translated": true
+    },
+    "H8086": {
+      "definitions_cz": "1) slyšet | 1a) (P'al) slyšet, mít smysl pro sluch | 1b) (Ithpael) ukázat se poslušným",
+      "lemma": "שְׁמַע",
+      "hebrew": "שמע",
+      "xlit": "shᵉmaʻ",
+      "translated": true
+    },
+    "H8087": {
+      "definitions_cz": "Shema = \"slyšet\" | n pr m | 1) Rúbenita, syn Joela, otce Azaze, a děda Bely | 2) Judaita, syn Hebrona a otec Rahama | 3) Benjamínec, syn Elpaalův, který byl spolu se svým bratrem Beriahem hlavami svých otců v Ajalónu a který vyhnal obyvatele Gatu. Pravděpodobně stejné jako 'Shimhi' | 4) Izraelita, který stál po pravici Ezdráše, když četl lidem Zákon",
+      "lemma": "שֶׁמַע",
+      "hebrew": "שמע",
+      "xlit": "Shemaʻ",
+      "translated": true
+    },
+    "H8088": {
+      "definitions_cz": "1) zpráva, slyšení",
+      "lemma": "שֵׁמַע",
+      "hebrew": "שמע",
+      "xlit": "shêmaʻ",
+      "translated": true
+    },
+    "H8089": {
+      "definitions_cz": "1) zpráva, pověst, zprávy, sláva",
+      "lemma": "שֹׁמַע",
+      "hebrew": "שמע",
+      "xlit": "shômaʻ",
+      "translated": true
+    },
+    "H8090": {
+      "definitions_cz": "Shema = \"slyšet\" | 1) město v Judsku na hranicích kmene směrem k Edomu na jihu | la) stejné jako H08088; toto slovo 08090 nebylo v hebrejském textu nalezeno",
+      "lemma": "שְׁמָע",
+      "hebrew": "שמע",
+      "xlit": "Shᵉmâʻ",
+      "translated": true
+    },
+    "H8091": {
+      "definitions_cz": "Shama = \"poslušný\" | 1) syn Hothama Aroerita, bratr Jeiel, oba uvedeni jako mocní bojovníci Davida",
+      "lemma": "שָׁמָע",
+      "hebrew": "שמע",
+      "xlit": "Shâmâʻ",
+      "translated": true
+    },
+    "H8092": {
+      "definitions_cz": "Shimea = \"sláva\" | 1) syn Davidův od Batšeby | 2) bratr Davida, 3. syna Jisseho | 2a) také „Shammah“, „Shimma“ a „Shimeah“ | 3) Geršonský levita, otec Berachiášův a děd Asafův | 4) merarijský levita, syn Uzy a otec Haggiášův",
+      "lemma": "שִׁמְעָא",
+      "hebrew": "שמעא",
+      "xlit": "Shimʻâʼ",
+      "translated": true
+    },
+    "H8093": {
+      "definitions_cz": "Shimeah = \"sláva\" | 1) bratr Davidův, 3. syn Jisseho | 1a) také „Shammah“ a „Shimma“",
+      "lemma": "שִׁמְעָה",
+      "hebrew": "שמעה",
+      "xlit": "Shimʻâh",
+      "translated": true
+    },
+    "H8094": {
+      "definitions_cz": "Shemaah = \"pověst\" | 1) Benjamínec, Gibeatejec, otec Achiezera a Joaše, oba mocní Davidovi válečníci, kteří se k němu připojili v Ciklagu",
+      "lemma": "שְׁמָעָה",
+      "hebrew": "שמעה",
+      "xlit": "Shᵉmâʻâh",
+      "translated": true
+    },
+    "H8095": {
+      "definitions_cz": "Simeon nebo Shimeon = \"slyšel\" | 1) 2. syn Jákobův od manželky Ley a předek kmene Simeon | 2) Izraelita ze synů Baniho, který měl v době Ezdráše cizí manželku",
+      "lemma": "שִׁמְעוֹן",
+      "hebrew": "שמעון",
+      "xlit": "Shimʻôwn",
+      "translated": true
+    },
+    "H8096": {
+      "definitions_cz": "Shimei nebo Shimhi nebo Shimi nebo Shimea = \"známý\" | 1) Benjamínec, syn Gera z domu Saulova v době Davidově | 2) Benjamínec, syn Elaha a úředník komisariátu v době Šalomouna | 3) Rámatejec, který má na starosti Davidovy vinice | 4) syn Geršonův a vnuk Leviho | 5) Levita, syn Jeduthunův a náčelník 10. oddílu zpěváků v době Davidově | 6) Levita ze synů Hémanových, kteří se podíleli na čištění chrámu v době krále Ezeka",
+      "lemma": "שִׁמְעִי",
+      "hebrew": "שמעי",
+      "xlit": "Shimʻîy",
+      "translated": true
+    },
+    "H8097": {
+      "definitions_cz": "Shimites = viz Shimei \"proslulý\" | 1) potomci Shimei nebo Shimi",
+      "lemma": "שִׁמְעִי",
+      "hebrew": "שמעי",
+      "xlit": "Shimʻîy",
+      "translated": true
+    },
+    "H8098": {
+      "definitions_cz": "Shemaiah = \"slyšen Jehovou\" | 1) prorok Hospodinův za vlády judského krále Rechoboáma | 2) Nehelamit, falešný prorok v době proroka Jeremiáše | 3) otec Delaiáše, jednoho z judských knížat v době proroka Jeremiáše | 4) obyvatel Kirjathjearimu a otec Urijaha, prorok Páně v době proroka Jeremiáše | 5) Judaita, syn Šechanjáše, otce Hatúše a potomka Zerubbábela | 6) Simeonite, otec Šimriho |",
+      "lemma": "שְׁמַעְיָה",
+      "hebrew": "שמעיה",
+      "xlit": "Shᵉmaʻyâh",
+      "translated": true
+    },
+    "H8099": {
+      "definitions_cz": "Simeonité = viz Simeon \"naslouchající\" | 1) potomci Simeonovi",
+      "lemma": "שִׁמְעֹנִי",
+      "hebrew": "שמעני",
+      "xlit": "Shimʻônîy",
+      "translated": true
+    },
+    "H8100": {
+      "definitions_cz": "Shimeath = \"zpráva\" | 1) Ammonitka, matka Jozachara nebo Zabada, jedna z vrahů judského krále Joaše",
+      "lemma": "שִׁמְעַת",
+      "hebrew": "שמעת",
+      "xlit": "Shimʻath",
+      "translated": true
+    },
+    "H8101": {
+      "definitions_cz": "Shimeathites =viz Shimeath \"zpráva\" | 1) rodina písaře",
+      "lemma": "שִׁמְעָתִי",
+      "hebrew": "שמעתי",
+      "xlit": "Shimʻâthîy",
+      "translated": true
+    },
+    "H8102": {
+      "definitions_cz": "1) šeptat, málo",
+      "lemma": "שֶׁמֶץ",
+      "hebrew": "שמץ",
+      "xlit": "shemets",
+      "translated": true
+    },
+    "H8103": {
+      "definitions_cz": "1) šeptání, výsměch, šeptání",
+      "lemma": "שִׁמְצָה",
+      "hebrew": "שמצה",
+      "xlit": "shimtsâh",
+      "translated": true
+    },
+    "H8104": {
+      "definitions_cz": "1) držet, střežit, pozorovat, dávat pozor | 1a) (Qal) | 1a1) uchovávat, mít na starosti | 1a2) udržovat, střežit, hlídat a chránit, chránit, zachraňovat život | 1a2a) hlídač, hlídač (příčestí) | 1a3) sledovat, čekat | 1a4) sledovat, pozorovat | 1a5) uchovávat, uchovávat, uchovávat (v paměti) | 1a6) zachovat (v mezích), omezit | 1a7) dodržovat, slavit, zachovávat (sabat nebo smlouva nebo příkazy), plnit (slib) | 1a8) uchovávat, uchovávat, chránit | 1a9) ponechat, rezervovat | 1b) (Niphal) | 1b1)",
+      "lemma": "שָׁמַר",
+      "hebrew": "שמר",
+      "xlit": "shâmar",
+      "translated": true
+    },
+    "H8105": {
+      "definitions_cz": "1) kaly, kaly",
+      "lemma": "שֶׁמֶר",
+      "hebrew": "שמר",
+      "xlit": "shemer",
+      "translated": true
+    },
+    "H8106": {
+      "definitions_cz": "Shemer nebo Shamer nebo Shamed = \"zachovalý\" | 1) majitel kopce, kde bylo postaveno město Samaří | 2) merarijský levita, syn Mahliho a otec Bani | 3) Ašerejec, syn Heberův a otec Ahiho, Rohgy, Jehubby a Arama. Také 'Shomer' | 4) Benjamínec, syn Elpaalův a stavitel měst Ono a Lod",
+      "lemma": "שֶׁמֶר",
+      "hebrew": "שמר",
+      "xlit": "Shemer",
+      "translated": true
+    },
+    "H8107": {
+      "definitions_cz": "n m | 1) noční hlídka, hlídání, bdění",
+      "lemma": "שִׁמֻּר",
+      "hebrew": "שמר",
+      "xlit": "shimmur",
+      "translated": true
+    },
+    "H8108": {
+      "definitions_cz": "1) hlídat, hlídat",
+      "lemma": "שׇׁמְרָה",
+      "hebrew": "שמרה",
+      "xlit": "shomrâh",
+      "translated": true
+    },
+    "H8109": {
+      "definitions_cz": "1) oční víčko",
+      "lemma": "שְׁמֻרָה",
+      "hebrew": "שמרה",
+      "xlit": "shᵉmurâh",
+      "translated": true
+    },
+    "H8110": {
+      "definitions_cz": "Shimron = \"výška hodinek\" | n pr m | 1) 4. syn Issacharův a předek rodu Šimronitů | n pr loc | 2) kananejské královské město přidělené Zabulonovi",
+      "lemma": "שִׁמְרוֹן",
+      "hebrew": "שמרון",
+      "xlit": "Shimrôwn",
+      "translated": true
+    },
+    "H8111": {
+      "definitions_cz": "Samaria = \"hlídková hora\" | 1) oblast severní Palestiny spojená se severním královstvím 10 izraelských kmenů, které se oddělily od království po Šalamounově smrti za vlády jeho syna Rechabeáma a byly pod vládou Jeroboáma | 2) hlavní město severního Izraelského království ležící 30 mil (50 km) severně od Jeruzaléma a 6 mil (10 km) severozápadně od Sichemu",
+      "lemma": "שֹׁמְרוֹן",
+      "hebrew": "שמרון",
+      "xlit": "Shômᵉrôwn",
+      "translated": true
+    },
+    "H8112": {
+      "definitions_cz": "Shimron-meron = \"výška hodinek Meronu\" | 1) kanaánské královské město přidělené Zabulonovi | 1a) pravděpodobně stejné jako 'Shimron'",
+      "lemma": "שִׁמְרוֹן מְראוֹן",
+      "hebrew": "שמרון מראון",
+      "xlit": "Shimrôwn Mᵉrʼôwn",
+      "translated": true
+    },
+    "H8113": {
+      "definitions_cz": "Shimri = \"bdělý\" | 1) Simeonita, syn Šemajášův a otec Jedajášův | 2) otec Jediaela, jednoho z Davidových mocných válečníků | 3) merarijský levita, syn Hosův | 4) kehatský levita ze synů Elizafanových",
+      "lemma": "שִׁמְרִי",
+      "hebrew": "שמרי",
+      "xlit": "Shimrîy",
+      "translated": true
+    },
+    "H8114": {
+      "definitions_cz": "Shemariah = \"chován Jehovou\" | 1) Benjamínec, jeden z Davidových mocných válečníků, kteří se k němu připojili v Ziklagu | 2) syn judského krále Rechoboáma | 3) Izraelita ze synů Harima, který měl v době Ezdráše cizí manželku | 4) Izraelita ze synů Baniho, který měl v době Ezdráše cizí manželku",
+      "lemma": "שְׁמַרְיָה",
+      "hebrew": "שמריה",
+      "xlit": "Shᵉmaryâh",
+      "translated": true
+    },
+    "H8115": {
+      "definitions_cz": "Samaria = \"hlídková hora\" | 1) oblast severní Palestiny spojená se severním královstvím 10 izraelských kmenů, které se oddělily od království po Šalamounově smrti za vlády jeho syna Rechabeáma a byly pod vládou Jeroboáma | 2) hlavní město severního Izraelského království ležící 30 mil (50 km) severně od Jeruzaléma a 6 mil (10 km) severozápadně od Sichemu",
+      "lemma": "שׇׁמְרַיִן",
+      "hebrew": "שמרין",
+      "xlit": "Shomrayin",
+      "translated": true
+    },
+    "H8116": {
+      "definitions_cz": "Shimrith = \"bdělý\" | 1) Moábka, matka Jehozabada, jeden z vrahů judského krále Joaše",
+      "lemma": "שִׁמְרִית",
+      "hebrew": "שמרית",
+      "xlit": "Shimrîyth",
+      "translated": true
+    },
+    "H8117": {
+      "definitions_cz": "Shimronité = viz Shimron \"strážce\" | 1) potomci Shimrona",
+      "lemma": "שִׁמְרֹנִי",
+      "hebrew": "שמרני",
+      "xlit": "Shimrônîy",
+      "translated": true
+    },
+    "H8118": {
+      "definitions_cz": "Samaritáni = \"ze Samaří\" | 1) obyvatelé Samaří",
+      "lemma": "שֹׁמרֹנִי",
+      "hebrew": "שמרני",
+      "xlit": "Shômrônîy",
+      "translated": true
+    },
+    "H8119": {
+      "definitions_cz": "Shimrath = \"stráž\" | 1) Benjamínec, syn Šimeiho",
+      "lemma": "שִׁמְרָת",
+      "hebrew": "שמרת",
+      "xlit": "Shimrâth",
+      "translated": true
+    },
+    "H8120": {
+      "definitions_cz": "1) (Pael) ministrovat, sloužit",
+      "lemma": "שְׁמַשׁ",
+      "hebrew": "שמש",
+      "xlit": "shᵉmash",
+      "translated": true
+    },
+    "H8121": {
+      "definitions_cz": "1) slunce | 1a) slunce | 1b) východ slunce, východ slunce, východ, západ slunce, západ (od směru) | 1c) slunce (jako předmět nedovoleného uctívání) | 1d) otevřeně, veřejně (jinými frázemi) | 1e) vrcholy, cimbuří, štíty (jako třpytivé nebo lesklé)",
+      "lemma": "שֶׁמֶשׁ",
+      "hebrew": "שמש",
+      "xlit": "shemesh",
+      "translated": true
+    },
+    "H8122": {
+      "definitions_cz": "1) slunce",
+      "lemma": "שֶׁמֶשׁ",
+      "hebrew": "שמש",
+      "xlit": "shemesh",
+      "translated": true
+    },
+    "H8123": {
+      "definitions_cz": "Samson = \"jako slunce\" | 1) Dán, syn Manoachův, doživotní nazarejec a 20 let soudce Izraele",
+      "lemma": "שִׁמְשׁוֹן",
+      "hebrew": "שמשון",
+      "xlit": "Shimshôwn",
+      "translated": true
+    },
+    "H8124": {
+      "definitions_cz": "Shimshai = \"slunečno\" | 1) písař pro Rehum, satrapa z Judeje pro perskou vládu",
+      "lemma": "שִׁמְשַׁי",
+      "hebrew": "שמשי",
+      "xlit": "Shimshay",
+      "translated": true
     }
   }
 }
