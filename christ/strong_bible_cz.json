@@ -75512,6 +75512,356 @@
       "hebrew": "קוץ",
       "xlit": "qûwts",
       "translated": true
+    },
+    "H6975": {
+      "definitions_cz": "1) trn, trnovník | 1a) trnovník | 1b) trn",
+      "lemma": "קוֹץ",
+      "hebrew": "קוץ",
+      "xlit": "qôwts",
+      "translated": true
+    },
+    "H6976": {
+      "definitions_cz": "Koz = \"trn\" | 1) potomek Judy | 2) kněz, který se vrátil z exilu se Zerubábelem",
+      "lemma": "קוֹץ",
+      "hebrew": "קוץ",
+      "xlit": "Qôwts",
+      "translated": true
+    },
+    "H6977": {
+      "definitions_cz": "1) zámek, prameny vlasů",
+      "lemma": "קְוֻצָּה",
+      "hebrew": "קוצה",
+      "xlit": "qᵉvutstsâh",
+      "translated": true
+    },
+    "H6978": {
+      "definitions_cz": "1) možná",
+      "lemma": "קַו־קַו",
+      "hebrew": "קוקי",
+      "xlit": "qav-qav",
+      "translated": true
+    },
+    "H6979": {
+      "definitions_cz": "1) (Qal) vrtat, kopat, kopat vodu | 2) být studený | 2a) (Hiphil) vyrobit nebo uchovat v chladu | 3) (Pilpel) zničit, rozložit",
+      "lemma": "קוּר",
+      "hebrew": "קור",
+      "xlit": "qûwr",
+      "translated": true
+    },
+    "H6980": {
+      "definitions_cz": "1) vlákno, film, web",
+      "lemma": "קוּר",
+      "hebrew": "קור",
+      "xlit": "qûwr",
+      "translated": true
+    },
+    "H6981": {
+      "definitions_cz": "Kore = \"křikloun\" | 1) Korachitský levita, praotec Šalluma a Mešelemiáše, hlavní vrátní za vlády Davida | 2) Levita, syn Imna, za vlády judského krále Ezechiáše",
+      "lemma": "קוֹרֵא",
+      "hebrew": "קורא",
+      "xlit": "Qôwrêʼ",
+      "translated": true
+    },
+    "H6982": {
+      "definitions_cz": "1) krokev, trám",
+      "lemma": "קוֹרָה",
+      "hebrew": "קורה",
+      "xlit": "qôwrâh",
+      "translated": true
+    },
+    "H6983": {
+      "definitions_cz": "1) (Qal) položit návnadu nebo návnadu, položit léčku, návnadu",
+      "lemma": "קוֹשׁ",
+      "hebrew": "קוש",
+      "xlit": "qôwsh",
+      "translated": true
+    },
+    "H6984": {
+      "definitions_cz": "Kushaiah = \"luk Jehovův\" | 1) otec Ethana Merarijského | 1a) stejné jako „Kish“ nebo „Kishi“",
+      "lemma": "קוּשָׁיָהוּ",
+      "hebrew": "קושיהו",
+      "xlit": "qûwshâyâhûw",
+      "translated": true
+    },
+    "H6985": {
+      "definitions_cz": "1) maličkost, málo, pouze (adv) | 1a) znamená pochybný",
+      "lemma": "קַט",
+      "hebrew": "קט",
+      "xlit": "qaṭ",
+      "translated": true
+    },
+    "H6986": {
+      "definitions_cz": "1) zničení",
+      "lemma": "קֶטֶב",
+      "hebrew": "קטב",
+      "xlit": "qeṭeb",
+      "translated": true
+    },
+    "H6987": {
+      "definitions_cz": "1) zničení",
+      "lemma": "קֹטֶב",
+      "hebrew": "קטב",
+      "xlit": "qôṭeb",
+      "translated": true
+    },
+    "H6988": {
+      "definitions_cz": "1) obětní dým, kadidlo",
+      "lemma": "קְטוֹרָה",
+      "hebrew": "קטורה",
+      "xlit": "qᵉṭôwrâh",
+      "translated": true
+    },
+    "H6989": {
+      "definitions_cz": "Ketura = \"kadidlo\" | 1) manželka Abrahama po smrti Sáry",
+      "lemma": "קְטוּרָה",
+      "hebrew": "קטורה",
+      "xlit": "Qᵉṭûwrâh",
+      "translated": true
+    },
+    "H6990": {
+      "definitions_cz": "1) (Qal) k odříznutí, zlomení, zaklapnutí | 1a) znamená pochybný",
+      "lemma": "קָטַט",
+      "hebrew": "קטט",
+      "xlit": "qâṭaṭ",
+      "translated": true
+    },
+    "H6991": {
+      "definitions_cz": "1) (Qal) zabít, zabít",
+      "lemma": "קָטַל",
+      "hebrew": "קטל",
+      "xlit": "qâṭal",
+      "translated": true
+    },
+    "H6992": {
+      "definitions_cz": "1) zabít, zabít | 1a) (P'al) být zabit | 1b) (Pael) zabít | 1c) (Ithp'al) bude zabit | 1d) (Ithpael) být zabit",
+      "lemma": "קְטַל",
+      "hebrew": "קטל",
+      "xlit": "qᵉṭal",
+      "translated": true
+    },
+    "H6993": {
+      "definitions_cz": "1) porážka",
+      "lemma": "קֶטֶל",
+      "hebrew": "קטל",
+      "xlit": "qeṭel",
+      "translated": true
+    },
+    "H6994": {
+      "definitions_cz": "1) být malý, být bezvýznamný | 1a) (Qal) být nevýznamný | 1b) (Hiphil) udělat malý, výrazně snížit",
+      "lemma": "קָטֹן",
+      "hebrew": "קטן",
+      "xlit": "qâṭôn",
+      "translated": true
+    },
+    "H6995": {
+      "definitions_cz": "1) malíček",
+      "lemma": "קֹטֶן",
+      "hebrew": "קטן",
+      "xlit": "qôṭen",
+      "translated": true
+    },
+    "H6996": {
+      "definitions_cz": "1) mladý, malý, bezvýznamný, nedůležitý | 1a) malý | 1b) bezvýznamné | 1c) mladý | 1d) nedůležité",
+      "lemma": "קָטָן",
+      "hebrew": "קטן",
+      "xlit": "qâṭân",
+      "translated": true
+    },
+    "H6997": {
+      "definitions_cz": "Hakkatan = \"malý\" | 1) otec Johanana, náčelníka Bene-Azgadu, který se vrátil z vyhnanství s Ezrou",
+      "lemma": "קָטָן",
+      "hebrew": "קטן",
+      "xlit": "Qâṭân",
+      "translated": true
+    },
+    "H6998": {
+      "definitions_cz": "1) utrhnout nebo vyjmout, odříznout | 1a) (Qal) utrhnout | 1b) (Niphal) k utržení",
+      "lemma": "קָטַף",
+      "hebrew": "קטף",
+      "xlit": "qâṭaph",
+      "translated": true
+    },
+    "H6999": {
+      "definitions_cz": "v | 1) obětovat, pálit kadidlo, pálit oběti, obětovat kouř | 1a) (Piel) | 1a1) přinášet oběti kouř | 1a2) obětovat | 1b) (Pual) kouřit oběť | 1c) (Hiphil) | 1c1) obětovat kouř | 1c2) způsobit kouření kadidla, nabídnout kadidlo | 1c3) vytvořit kouř na | 1d) (Hophal) ke kouření | n m | 2) kadidlo | n f | 3) kadidlový oltář",
+      "lemma": "קָטַר",
+      "hebrew": "קטר",
+      "xlit": "qâṭar",
+      "translated": true
+    },
+    "H7000": {
+      "definitions_cz": "1) (Qal) uzavřít, uzavřít, připojit | 1a) znamená pochybný",
+      "lemma": "קָטַר",
+      "hebrew": "קטר",
+      "xlit": "qâṭar",
+      "translated": true
+    },
+    "H7001": {
+      "definitions_cz": "1) uzel, kloub, problém | 1a) klouby (kyčelní) | 1b) potíže, pochybnosti (obr.)",
+      "lemma": "קְטַר",
+      "hebrew": "קטר",
+      "xlit": "qᵉṭar",
+      "translated": true
+    },
+    "H7002": {
+      "definitions_cz": "1) kadidlo",
+      "lemma": "קִטֵּר",
+      "hebrew": "קטר",
+      "xlit": "qiṭṭêr",
+      "translated": true
+    },
+    "H7003": {
+      "definitions_cz": "Kitron = \"kadidlo\" | 1) město v Zebulunu",
+      "lemma": "קִטְרוֹן",
+      "hebrew": "קטרון",
+      "xlit": "Qiṭrôwn",
+      "translated": true
+    },
+    "H7004": {
+      "definitions_cz": "1) kadidlo, kouř, vůně (hořící) oběti | 1a) sladký kouř oběti | 1b) kadidlo | 1c) parfém",
+      "lemma": "קְטֹרֶת",
+      "hebrew": "קטרת",
+      "xlit": "qᵉṭôreth",
+      "translated": true
+    },
+    "H7005": {
+      "definitions_cz": "Kattath = \"malý\" | 1) město v Zebulunu",
+      "lemma": "קַטָּת",
+      "hebrew": "קטת",
+      "xlit": "Qaṭṭâth",
+      "translated": true
+    },
+    "H7006": {
+      "definitions_cz": "1) (Qal) zvracet, zvracet, vyvrhovat",
+      "lemma": "קָיָה",
+      "hebrew": "קיה",
+      "xlit": "qâyâh",
+      "translated": true
+    },
+    "H7007": {
+      "definitions_cz": "1) léto",
+      "lemma": "קַיִט",
+      "hebrew": "קיט",
+      "xlit": "qayiṭ",
+      "translated": true
+    },
+    "H7008": {
+      "definitions_cz": "1) hustý kouř, kouř",
+      "lemma": "קִיטוֹר",
+      "hebrew": "קיטור",
+      "xlit": "qîyṭôwr",
+      "translated": true
+    },
+    "H7009": {
+      "definitions_cz": "1) protivník",
+      "lemma": "קִים",
+      "hebrew": "קים",
+      "xlit": "qîym",
+      "translated": true
+    },
+    "H7010": {
+      "definitions_cz": "1) vyhláška, statut",
+      "lemma": "קְיָם",
+      "hebrew": "קים",
+      "xlit": "qᵉyâm",
+      "translated": true
+    },
+    "H7011": {
+      "definitions_cz": "1) bezpečné, trvalé",
+      "lemma": "קַיָּם",
+      "hebrew": "קים",
+      "xlit": "qayâm",
+      "translated": true
+    },
+    "H7012": {
+      "definitions_cz": "1) vstávání",
+      "lemma": "קִימָה",
+      "hebrew": "קימה",
+      "xlit": "qîymâh",
+      "translated": true
+    },
+    "H7013": {
+      "definitions_cz": "1) kopí",
+      "lemma": "קַיִן",
+      "hebrew": "קין",
+      "xlit": "qayin",
+      "translated": true
+    },
+    "H7014": {
+      "definitions_cz": "Kain = \"držba\" | n pr m | 1) nejstarší syn Adama a Evy a první vrah, který zavraždil svého bratra Abela | Kenite = \"kováři\" | n pr pán | 2) kmen, jehož členem byl Mojžíšův tchán a který žil v oblasti mezi jižní Palestinou a horami Sinaj",
+      "lemma": "קַיִן",
+      "hebrew": "קין",
+      "xlit": "Qayin",
+      "translated": true
+    },
+    "H7015": {
+      "definitions_cz": "1) nářek, žalozpěv, elegie",
+      "lemma": "קִינָה",
+      "hebrew": "קינה",
+      "xlit": "qîynâh",
+      "translated": true
+    },
+    "H7016": {
+      "definitions_cz": "Cina = \"nářek\" | 1) město na extrémní jižní hranici Judy vedle Edomu",
+      "lemma": "קִינָה",
+      "hebrew": "קינה",
+      "xlit": "Qîynâh",
+      "translated": true
+    },
+    "H7017": {
+      "definitions_cz": "Kenite = \"kováři\" | 1) kmen, jehož členem byl Mojžíšův tchán a který žil v oblasti mezi jižní Palestinou a horami Sinaj",
+      "lemma": "קֵינִי",
+      "hebrew": "קיני",
+      "xlit": "Qêynîy",
+      "translated": true
+    },
+    "H7018": {
+      "definitions_cz": "Kenan = \"držba\" | 1) syn Enošův a otec Mahalaleel | 1a) také 'Cainan'",
+      "lemma": "קֵינָן",
+      "hebrew": "קינן",
+      "xlit": "Qêynân",
+      "translated": true
+    },
+    "H7019": {
+      "definitions_cz": "1) léto, léto-ovoce | 1a) léto | 1b) letní ovoce",
+      "lemma": "קַיִץ",
+      "hebrew": "קיץ",
+      "xlit": "qayits",
+      "translated": true
+    },
+    "H7020": {
+      "definitions_cz": "1) na konci, krajní, vnější",
+      "lemma": "קִיצוֹן",
+      "hebrew": "קיצון",
+      "xlit": "qîytsôwn",
+      "translated": true
+    },
+    "H7021": {
+      "definitions_cz": "1) rostlina | 1a) možná tykev, ricinový olej, lahvový tykev",
+      "lemma": "קִיקָיוֹן",
+      "hebrew": "קיקיון",
+      "xlit": "qîyqâyôwn",
+      "translated": true
+    },
+    "H7022": {
+      "definitions_cz": "1) ostuda, hanba",
+      "lemma": "קִיקָלוֹן",
+      "hebrew": "קיקלון",
+      "xlit": "qîyqâlôwn",
+      "translated": true
+    },
+    "H7023": {
+      "definitions_cz": "1) stěna, boční | 1a) stěna (domu nebo komory) | 1b) boky (oltáře)",
+      "lemma": "קִיר",
+      "hebrew": "קיר",
+      "xlit": "qîyr",
+      "translated": true
+    },
+    "H7024": {
+      "definitions_cz": "Kir = \"zeď\" | 1) místo v Mezopotámii",
+      "lemma": "קִיר",
+      "hebrew": "קיר",
+      "xlit": "Qîyr",
+      "translated": true
     }
   }
 }
