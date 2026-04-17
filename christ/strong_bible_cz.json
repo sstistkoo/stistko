@@ -78312,6 +78312,356 @@
       "hebrew": "רטט",
       "xlit": "reṭeṭ",
       "translated": true
+    },
+    "H7375": {
+      "definitions_cz": "1) (Niphal) růst čerstvý, být pěstován čerstvý",
+      "lemma": "רֻטֲפַשׁ",
+      "hebrew": "רטפש",
+      "xlit": "ruṭăphash",
+      "translated": true
+    },
+    "H7376": {
+      "definitions_cz": "1) rozbít na kusy | 1a) (Piel) čárkovat po částech | 1b) (Pual) má být přerušováno po částech",
+      "lemma": "רָטָשׁ",
+      "hebrew": "רטש",
+      "xlit": "râṭâsh",
+      "translated": true
+    },
+    "H7377": {
+      "definitions_cz": "1) vlhkost",
+      "lemma": "רִי",
+      "hebrew": "רי",
+      "xlit": "rîy",
+      "translated": true
+    },
+    "H7378": {
+      "definitions_cz": "1) snažit se, bojovat | 1a) (Qal) | 1a1) usilovat | 1a1a) fyzicky | 1a1b) se slovy | 1a2) vést případ nebo žalobu (právní), žalovat | 1a3) podat stížnost | 1a4) hádat se | 1b) (Hiphil) bojovat proti",
+      "lemma": "רִיב",
+      "hebrew": "ריב",
+      "xlit": "rîyb",
+      "translated": true
+    },
+    "H7379": {
+      "definitions_cz": "1) svár, kontroverze, spor | 1a) svár, hádka | 1b) spor, polemika, judikatura",
+      "lemma": "רִיב",
+      "hebrew": "ריב",
+      "xlit": "rîyb",
+      "translated": true
+    },
+    "H7380": {
+      "definitions_cz": "Ribai = \"přímluvce u Jehovy\" | 1) otec Ittaje Benjamínce z Gibeje",
+      "lemma": "רִיבַי",
+      "hebrew": "ריבי",
+      "xlit": "Rîybay",
+      "translated": true
+    },
+    "H7381": {
+      "definitions_cz": "1) vůně, vůně, vůně, vůně | 1a) vůně, vůně | 1b) uklidňující vůně (odborný termín pro oběť Bohu)",
+      "lemma": "רֵיחַ",
+      "hebrew": "ריח",
+      "xlit": "rêyach",
+      "translated": true
+    },
+    "H7382": {
+      "definitions_cz": "1) vůně, vůně",
+      "lemma": "רֵיחַ",
+      "hebrew": "ריח",
+      "xlit": "rêyach",
+      "translated": true
+    },
+    "H7383": {
+      "definitions_cz": "1) obilí nebo ovoce (na mletí) | 1a) znamená pochybný",
+      "lemma": "רִיפָה",
+      "hebrew": "ריפה",
+      "xlit": "rîyphâh",
+      "translated": true
+    },
+    "H7384": {
+      "definitions_cz": "Riphath = \"mluvený\" | 1) 2. syn Gomer",
+      "lemma": "רִיפַת",
+      "hebrew": "ריפת",
+      "xlit": "Rîyphath",
+      "translated": true
+    },
+    "H7385": {
+      "definitions_cz": "1) prázdnota, marnost, prázdný, nečinný, marný",
+      "lemma": "רִיק",
+      "hebrew": "ריק",
+      "xlit": "rîyq",
+      "translated": true
+    },
+    "H7386": {
+      "definitions_cz": "1) prázdný, marný | 1a) prázdný (nádob) | 1b) prázdný, nečinný, bezcenný (eticky)",
+      "lemma": "רֵיק",
+      "hebrew": "ריק",
+      "xlit": "rêyq",
+      "translated": true
+    },
+    "H7387": {
+      "definitions_cz": "1) marně, naprázdno | 1a) v prázdném stavu, prázdný, prázdný | 1b) marně, bez účinku, marně",
+      "lemma": "רֵיקָם",
+      "hebrew": "ריקם",
+      "xlit": "rêyqâm",
+      "translated": true
+    },
+    "H7388": {
+      "definitions_cz": "1) slizová šťáva nebo tekutina, plivat",
+      "lemma": "רִיר",
+      "hebrew": "ריר",
+      "xlit": "rîyr",
+      "translated": true
+    },
+    "H7389": {
+      "definitions_cz": "1) chudoba",
+      "lemma": "רֵישׁ",
+      "hebrew": "ריש",
+      "xlit": "rêysh",
+      "translated": true
+    },
+    "H7390": {
+      "definitions_cz": "1) něžný, měkký, jemný, slabý | 1a) jemné, jemné (z masa) | 1b) slabý v srdci, bázlivý | 1c) měkký (slov) | 1c1) jemná slova (subst)",
+      "lemma": "רַךְ",
+      "hebrew": "רך",
+      "xlit": "rak",
+      "translated": true
+    },
+    "H7391": {
+      "definitions_cz": "1) něžnost, jemnost | 1a) ženy",
+      "lemma": "רֹךְ",
+      "hebrew": "רך",
+      "xlit": "rôk",
+      "translated": true
+    },
+    "H7392": {
+      "definitions_cz": "1) nasednout a jezdit, jezdit | 1a) (Qal) | 1a1) k nasednutí, nasednutí a sezení nebo jízdě | 1a2) jezdit, jezdit | 1a3) jezdec (subst) | 1b) (hifil) | 1b1) způsobit jízdu, způsobit (nasednout a) jezdit | 1b2) způsobit tažení (pluh atd.) | 1b3) způsobit jízdu na (obr.)",
+      "lemma": "רָכַב",
+      "hebrew": "רכב",
+      "xlit": "râkab",
+      "translated": true
+    },
+    "H7393": {
+      "definitions_cz": "1) tým, vůz, vůz, mlýnský kámen, jezdci | 1a) vůz, vozy | 1b) vůz (samostatný) | 1c) horní mlýnský kámen (jako jízda na spodním mlýnském kameni) | 1d) jezdci, oddíl (jezdců), jezdci, dvojice jezdců, muži na koni, jezdci na oslech, jezdci na velbloudech",
+      "lemma": "רֶכֶב",
+      "hebrew": "רכב",
+      "xlit": "rekeb",
+      "translated": true
+    },
+    "H7394": {
+      "definitions_cz": "Rechab = \"jezdec\" | n pr m | 1) otec Jehonadab v době krále Jehu severního království Izraele | 2) otec Malchiáše, vůdce distriktu Beth Haccerem a opraváře jeruzalémských hradeb v době Nehemjáše | 3) jeden ze 2 kapitánů, které Ishbosheth vzal do svých služeb a kteří se spikli, aby ho zavraždili | Rechabites = viz Rechab \"jezdec\" | adj pr | 4) potomci Rechab",
+      "lemma": "רֵכָב",
+      "hebrew": "רכב",
+      "xlit": "Rêkâb",
+      "translated": true
+    },
+    "H7395": {
+      "definitions_cz": "1) řidič, vozataj, jezdec | 1a) vozataj | 1b) jezdec",
+      "lemma": "רַכָּב",
+      "hebrew": "רכב",
+      "xlit": "rakkâb",
+      "translated": true
+    },
+    "H7396": {
+      "definitions_cz": "1) ježdění, (akt) ježdění",
+      "lemma": "רִכְבָּה",
+      "hebrew": "רכבה",
+      "xlit": "rikbâh",
+      "translated": true
+    },
+    "H7397": {
+      "definitions_cz": "Rechah = \"nejzazší část\" | 1) místo v Judsku | 1a) možná vesnice 'Rashiah' 3 míle (5 km) jižně od Jeruzaléma",
+      "lemma": "רֵכָה",
+      "hebrew": "רכה",
+      "xlit": "Rêkâh",
+      "translated": true
+    },
+    "H7398": {
+      "definitions_cz": "1) kočár",
+      "lemma": "רְכוּב",
+      "hebrew": "רכוב",
+      "xlit": "rᵉkûwb",
+      "translated": true
+    },
+    "H7399": {
+      "definitions_cz": "1) majetek, zboží, majetek | 1a) majetek, zboží | 1a1) obecný pojem pro veškeré movité věci | 1a2) hospodářských zvířat | 1a3) obchodů, nádobí atd",
+      "lemma": "רְכוּשׁ",
+      "hebrew": "רכוש",
+      "xlit": "rᵉkûwsh",
+      "translated": true
+    },
+    "H7400": {
+      "definitions_cz": "1) pomlouvat, pomlouvat, povídat, udavač",
+      "lemma": "רָכִיל",
+      "hebrew": "רכיל",
+      "xlit": "râkîyl",
+      "translated": true
+    },
+    "H7401": {
+      "definitions_cz": "1) být něžný, měkký, slabý | 1a) (Qal) | 1a1) být něžný, být slabý (srdce) | 1a1a) být bázlivý, bát se | 1a1b) být obměkčen, být kajícný | 1a2) být měkký (zrádných slov) | 1b) (Pual) ke změkčení | 1c) (Hiphil) způsobit být slabý | 1d) (Niphal) nabídka",
+      "lemma": "רָכַךְ",
+      "hebrew": "רכך",
+      "xlit": "râkak",
+      "translated": true
+    },
+    "H7402": {
+      "definitions_cz": "1) jít o (myšleno pochybné) | 1a) (Qal) překupník, obchodník (příčestí) (subst)",
+      "lemma": "רָכַל",
+      "hebrew": "רכל",
+      "xlit": "râkal",
+      "translated": true
+    },
+    "H7403": {
+      "definitions_cz": "Rachal = \"obchod\" | 1) město v jižním Judsku, kam David posílal dárky",
+      "lemma": "רָכָל",
+      "hebrew": "רכל",
+      "xlit": "Râkâl",
+      "translated": true
+    },
+    "H7404": {
+      "definitions_cz": "1) zboží, provoz, obchod",
+      "lemma": "רְכֻלָּה",
+      "hebrew": "רכלה",
+      "xlit": "rᵉkullâh",
+      "translated": true
+    },
+    "H7405": {
+      "definitions_cz": "1) (Qal) vázat",
+      "lemma": "רָכַס",
+      "hebrew": "רכס",
+      "xlit": "râkaç",
+      "translated": true
+    },
+    "H7406": {
+      "definitions_cz": "1) drsnost nebo vázání, překážky, neschůdné nebo horské pásmo, drsné místo | 1a) znamená pochybný",
+      "lemma": "רֶכֶס",
+      "hebrew": "רכס",
+      "xlit": "rekeç",
+      "translated": true
+    },
+    "H7407": {
+      "definitions_cz": "1) nástrahy, spiknutí, kapela, liga, spiknutí | 1a) znamená pochybný",
+      "lemma": "רֹכֶס",
+      "hebrew": "רכס",
+      "xlit": "rôkeç",
+      "translated": true
+    },
+    "H7408": {
+      "definitions_cz": "1) (Qal) sbírat nebo shromažďovat majetek",
+      "lemma": "רָכַשׁ",
+      "hebrew": "רכש",
+      "xlit": "râkash",
+      "translated": true
+    },
+    "H7409": {
+      "definitions_cz": "1) oře, koně",
+      "lemma": "רֶכֶשׁ",
+      "hebrew": "רכש",
+      "xlit": "rekesh",
+      "translated": true
+    },
+    "H7410": {
+      "definitions_cz": "Ram = \"vysoký\" nebo \"vznešený\" | 1) Judaita, syn Hezronův, otec Amminadabův a praotec Davidův | 2) Judaita, syn Jerahmeelův | 3) příbuzný Elihua, přítele Joba",
+      "lemma": "רָם",
+      "hebrew": "רם",
+      "xlit": "Râm",
+      "translated": true
+    },
+    "H7411": {
+      "definitions_cz": "1) vrhat, střílet, vrhat | 1a) (Qal) | 1a1) hodit | 1a2) lukostřelci, lučištníci (příčestí) | 1b) (Piel) shodit dolů | 2) oklamat, oklamat, uvést v omyl, zrádně jednat | 2a) (Piel) | 2a1) oklamat, oklamat, svést, podvést | 2a2) jednat zrádně, zradit",
+      "lemma": "רָמָה",
+      "hebrew": "רמה",
+      "xlit": "râmâh",
+      "translated": true
+    },
+    "H7412": {
+      "definitions_cz": "1) házet, házet | 1a) (P'al) | 1a1) odlévat | 1a2) hodit | 1a2a) holdu (obr.) | 1b) (Slupka) | 1b1) k odlití | 1b2) umístit, nastavit | 1c) (Ithp'el) k obsazení",
+      "lemma": "רְמָה",
+      "hebrew": "רמה",
+      "xlit": "rᵉmâh",
+      "translated": true
+    },
+    "H7413": {
+      "definitions_cz": "1) výška, vysoké místo | 1a) jako místo nezákonného uctívání",
+      "lemma": "רָמָה",
+      "hebrew": "רמה",
+      "xlit": "râmâh",
+      "translated": true
+    },
+    "H7414": {
+      "definitions_cz": "Ráma = \"kopec\" | 1) město v Benjamin na hranici Efraim asi 5 mil (8 km) od Jeruzaléma a poblíž Gibea | 2) Samuelův domov v pohoří Efraim | 3) opevněné město v Naftali | 4) orientační bod na hranici Asher, zřejmě mezi Tyre a Zidon | 5) místo bitvy mezi Izraelem a Sýrií | 5a) také „Ramoth-gilead“ | 6) místo, které po návratu ze zajetí znovu obývali benjamínci",
+      "lemma": "רָמָה",
+      "hebrew": "רמה",
+      "xlit": "Râmâh",
+      "translated": true
+    },
+    "H7415": {
+      "definitions_cz": "1) červ, červ (jako příčina a známka rozkladu)",
+      "lemma": "רִמָּה",
+      "hebrew": "רמה",
+      "xlit": "rimmâh",
+      "translated": true
+    },
+    "H7416": {
+      "definitions_cz": "1) granátové jablko | 1a) jako strom | 1b) jako ovoce | 1c) jako ozdoby ve tvaru granátového jablka v chrámu",
+      "lemma": "רִמּוֹן",
+      "hebrew": "רמון",
+      "xlit": "rimmôwn",
+      "translated": true
+    },
+    "H7417": {
+      "definitions_cz": "Rimmon = \"granátové jablko\" | n pr dei | 1) božstvo větru, deště a bouře, uctívané Syřany z Damašku | n pr m | 2) Benjamita z Beeroth, otec Rechab a Baanah, vrazi Ishbosheth | n pr loc | 3) skála; útes nebo nepřístupná přírodní pevnost, do které se uchýlilo 600 benjamínců, kteří unikli z masakru v Gibeji | 4) město v jižní části Judy přidělené Simeonovi | 5) levitské město v Zebulun ležící přibližně 6 mil severně od Nazy",
+      "lemma": "רִמּוֹן",
+      "hebrew": "רמון",
+      "xlit": "Rimmôwn",
+      "translated": true
+    },
+    "H7418": {
+      "definitions_cz": "Ramoth= \"výšky\" | 1) místo v Judsku, které dostalo dary od Davida | 1a) místo pochybné",
+      "lemma": "רָמוֹת",
+      "hebrew": "רמות",
+      "xlit": "Râmôwth",
+      "translated": true
+    },
+    "H7419": {
+      "definitions_cz": "1) výška, vysoký vzrůst | 2) (CLBL) hromada (mrtvých těl), ostatků, mrtvol",
+      "lemma": "רָמוּת",
+      "hebrew": "רמות",
+      "xlit": "râmûwth",
+      "translated": true
+    },
+    "H7420": {
+      "definitions_cz": "1) kopí, kopí",
+      "lemma": "רֹמַח",
+      "hebrew": "רמח",
+      "xlit": "rômach",
+      "translated": true
+    },
+    "H7421": {
+      "definitions_cz": "syrský = viz Sýrie \"vyvýšená\" | 1) obyvatel Sýrie",
+      "lemma": "רַמִּי",
+      "hebrew": "רמי",
+      "xlit": "rammîy",
+      "translated": true
+    },
+    "H7422": {
+      "definitions_cz": "Ramia = \"Jehova uvolnil\" | 1) muž, který měl v době Ezdráše cizí manželku",
+      "lemma": "רַמְיָה",
+      "hebrew": "רמיה",
+      "xlit": "Ramyâh",
+      "translated": true
+    },
+    "H7423": {
+      "definitions_cz": "1) laxnost, lenost, ochablost, podvod, zrada",
+      "lemma": "רְמִיָּה",
+      "hebrew": "רמיה",
+      "xlit": "rᵉmîyâh",
+      "translated": true
+    },
+    "H7424": {
+      "definitions_cz": "1) klisna | 1a) znamená pochybný",
+      "lemma": "רַמָּךְ",
+      "hebrew": "רמך",
+      "xlit": "rammâk",
+      "translated": true
     }
   }
 }
