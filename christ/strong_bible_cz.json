@@ -38801,6 +38801,906 @@
       "translit": "sōphronízō",
       "pronunciation": "so-fron-id'-zo",
       "translated": true
+    },
+    "G4995": {
+      "definitions_cz": "disciplína, tedy sebeovládání",
+      "translit": "sōphronismós",
+      "pronunciation": "so-fron-is-mos'",
+      "translated": true
+    },
+    "G4996": {
+      "definitions_cz": "se zdravým rozumem, tedy přiměřeně",
+      "translit": "sōphrónōs",
+      "pronunciation": "so-fron'-oce",
+      "translated": true
+    },
+    "G4997": {
+      "definitions_cz": "zdravost mysli, tedy (doslova) příčetnost nebo\n (obrazně) sebeovládání",
+      "translit": "sōphrosýnē",
+      "pronunciation": "so-fros-oo'-nay",
+      "translated": true
+    },
+    "G4998": {
+      "definitions_cz": "bezpečný (zvuk) na mysli, tzn.\n sebeovládaný (umírněný, pokud jde o názor nebo vášeň)",
+      "translit": "sṓphrōn",
+      "pronunciation": "so'-frone",
+      "translated": true
+    },
+    "G4999": {
+      "definitions_cz": "chatrče nebo budovy s dřevěnými stěnami;\n Tabernæ",
+      "translit": "Tabérnai",
+      "pronunciation": "tab-er'-nahee",
+      "translated": true
+    },
+    "G5000": {
+      "definitions_cz": "gazela; Tabitha (tj.\n Tabjetha), křesťanka",
+      "translit": "Tabithá",
+      "pronunciation": "tab-ee-thah'",
+      "translated": true
+    },
+    "G5001": {
+      "definitions_cz": "něco pořádného v uspořádání (tlupa), tzn.\n (obrazně) série nebo posloupnost",
+      "translit": "tágma",
+      "pronunciation": "tag'-mah",
+      "translated": true
+    },
+    "G5002": {
+      "definitions_cz": "uspořádaný, t. j. ustanovený nebo uvedený",
+      "translit": "taktós",
+      "pronunciation": "tak-tos'",
+      "translated": true
+    },
+    "G5003": {
+      "definitions_cz": "být ubohý, t. j. uvědomit si vlastní bídu",
+      "translit": "talaipōréō",
+      "pronunciation": "tal-ahee-po-reh'-o",
+      "translated": true
+    },
+    "G5004": {
+      "definitions_cz": "bída, t. j. neštěstí",
+      "translit": "talaipōría",
+      "pronunciation": "tal-ahee-po-ree'-ah",
+      "translated": true
+    },
+    "G5005": {
+      "definitions_cz": "trvalé\n zkušební, t. j. mizerný",
+      "translit": "talaípōros",
+      "pronunciation": "tal-ah'-ee-po-ros",
+      "translated": true
+    },
+    "G5006": {
+      "definitions_cz": "na váze jako talent",
+      "translit": "talantiaîos",
+      "pronunciation": "tal-an-tee-ah'-yos",
+      "translated": true
+    },
+    "G5007": {
+      "definitions_cz": "ekvivalentní [ŘECKO:5342]",
+      "translit": "tálanton",
+      "pronunciation": "tal'-an-ton",
+      "translated": true
+    },
+    "G5008": {
+      "definitions_cz": "ta svěží, tj. mladá dívka; talitha\n (Ó děvče)",
+      "translit": "talithá",
+      "pronunciation": "tal-ee-thah'",
+      "translated": true
+    },
+    "G5009": {
+      "definitions_cz": "podobný τέμνω",
+      "translit": "tameîon",
+      "pronunciation": "tam-i'-on",
+      "translated": true
+    },
+    "G5010": {
+      "definitions_cz": "pravidelné uspořádání, tj. (časově) pevná posloupnost (z\n hodnost nebo charakter), úřední důstojnost",
+      "translit": "táxis",
+      "pronunciation": "tax'-is",
+      "translated": true
+    },
+    "G5011": {
+      "definitions_cz": "depresivní, tj. (obrazně) ponížený (in\n okolnosti nebo dispozice)",
+      "translit": "tapeinós",
+      "pronunciation": "tap-i-nos'",
+      "translated": true
+    },
+    "G5012": {
+      "definitions_cz": "ponížení mysli,\n tedy skromnost",
+      "translit": "tapeinophrosýnē",
+      "pronunciation": "tap-i-nof-ros-oo'-nay",
+      "translated": true
+    },
+    "G5013": {
+      "definitions_cz": "deprimovat; přeneseně ponížit (ve stavu resp\n srdce)",
+      "translit": "tapeinóō",
+      "pronunciation": "tap-i-no'-o",
+      "translated": true
+    },
+    "G5014": {
+      "definitions_cz": "deprese (v postavení nebo pocitu)",
+      "translit": "tapeínōsis",
+      "pronunciation": "tap-i'-no-sis",
+      "translated": true
+    },
+    "G5015": {
+      "definitions_cz": "míchat nebo míchat (vařit vodu)",
+      "translit": "tarássō",
+      "pronunciation": "tar-as'-so",
+      "translated": true
+    },
+    "G5016": {
+      "definitions_cz": "narušení, tj. víření (vody) nebo (a\n dav) pobuřování",
+      "translit": "tarachḗ",
+      "pronunciation": "tar-akh-ay'",
+      "translated": true
+    },
+    "G5017": {
+      "definitions_cz": "rozruch, tedy (populární) vřava",
+      "translit": "tárachos",
+      "pronunciation": "tar'-akh-os",
+      "translated": true
+    },
+    "G5018": {
+      "definitions_cz": "Tarsean, tedy původem z Tarsu",
+      "translit": "Tarseús",
+      "pronunciation": "tar-syoos'",
+      "translated": true
+    },
+    "G5019": {
+      "definitions_cz": "Tarsus, místo v Asii\n Menší",
+      "translit": "Tarsós",
+      "pronunciation": "tar-sos'",
+      "translated": true
+    },
+    "G5020": {
+      "definitions_cz": "uvěznit ve věčném vězení\n trápení",
+      "translit": "tartaróō",
+      "pronunciation": "tar-tar-o'-o",
+      "translated": true
+    },
+    "G5021": {
+      "definitions_cz": "spořádaně zařídit, t.j. přidělit popř\n disponovat (do určité pozice nebo partie)",
+      "translit": "tássō",
+      "pronunciation": "tas'-so",
+      "translated": true
+    },
+    "G5022": {
+      "definitions_cz": "býk",
+      "translit": "taûros",
+      "pronunciation": "tow'-ros",
+      "translated": true
+    },
+    "G5023": {
+      "definitions_cz": "tyto věci",
+      "translit": "taûta",
+      "pronunciation": "tow'-tah",
+      "translated": true
+    },
+    "G5024": {
+      "definitions_cz": "stejně",
+      "translit": "tautá",
+      "pronunciation": "tow-tah'",
+      "translated": true
+    },
+    "G5025": {
+      "definitions_cz": "(k nebo s nebo pomocí atd.) těchto",
+      "translit": "taútais",
+      "pronunciation": "tow'-taheece",
+      "translated": true
+    },
+    "G5026": {
+      "definitions_cz": "(směrem k nebo z) tohoto",
+      "translit": "taútēi",
+      "pronunciation": "tow'-tay",
+      "translated": true
+    },
+    "G5027": {
+      "definitions_cz": "pohřeb (akt)",
+      "translit": "taphḗ",
+      "pronunciation": "taf-ay'",
+      "translated": true
+    },
+    "G5028": {
+      "definitions_cz": "hrob (místo pohřbu)",
+      "translit": "táphos",
+      "pronunciation": "taf'-os",
+      "translated": true
+    },
+    "G5029": {
+      "definitions_cz": "krátce, tzn.\n (obrazně) možná",
+      "translit": "tácha",
+      "pronunciation": "takh'-ah",
+      "translated": true
+    },
+    "G5030": {
+      "definitions_cz": "krátce, tj. (v čase) rychle, nebo (způsobem)\n rychle",
+      "translit": "tachéōs",
+      "pronunciation": "takh-eh'-oce",
+      "translated": true
+    },
+    "G5031": {
+      "definitions_cz": "strohý, tj. hrozící",
+      "translit": "tachinós",
+      "pronunciation": "takh-ee-nos'",
+      "translated": true
+    },
+    "G5032": {
+      "definitions_cz": "rychleji,\n tj. (způsobem) rychleji, nebo (v čase) rychleji",
+      "translit": "táchion",
+      "pronunciation": "takh'-ee-on",
+      "translated": true
+    },
+    "G5033": {
+      "definitions_cz": "nejrychleji,\n tj. (s [ŘECKO:5613]",
+      "translit": "táchista",
+      "pronunciation": "takh'-is-tah",
+      "translated": true
+    },
+    "G5034": {
+      "definitions_cz": "krátký prostor (času), tj. (s [ŘECKO:1722]",
+      "translit": "táchos",
+      "pronunciation": "takh'-os",
+      "translated": true
+    },
+    "G5035": {
+      "definitions_cz": "v krátké době, tj. bez prodlení,\n brzy, nebo (překvapením) náhle nebo (implicitně snadno)\n snadno",
+      "translit": "tachý",
+      "pronunciation": "takh-oo'",
+      "translated": true
+    },
+    "G5036": {
+      "definitions_cz": "flotila, tedy (obrazně) pohotové resp\n připraven",
+      "translit": "tachýs",
+      "pronunciation": "takh-oos'",
+      "translated": true
+    },
+    "G5037": {
+      "definitions_cz": "obojí nebo také\n (správně, jako korelace [ŘECKO:2532]",
+      "translit": "té",
+      "pronunciation": "teh",
+      "translated": true
+    },
+    "G5038": {
+      "definitions_cz": "zeď (jako forma domu)",
+      "translit": "teîchos",
+      "pronunciation": "ti'-khos",
+      "translated": true
+    },
+    "G5039": {
+      "definitions_cz": "a\n token (jako definující skutečnost), tedy kritérium jistoty",
+      "translit": "tekmḗrion",
+      "pronunciation": "tek-may'-ree-on",
+      "translated": true
+    },
+    "G5040": {
+      "definitions_cz": "nemluvně, tedy (množné číslo přeneseně) miláčci\n (křesťanští konvertité)",
+      "translit": "tekníon",
+      "pronunciation": "tek-nee'-on",
+      "translated": true
+    },
+    "G5041": {
+      "definitions_cz": "být nositelem dítěte,\n tedy rodič (matka)",
+      "translit": "teknogonéō",
+      "pronunciation": "tek-nog-on-eh'-o",
+      "translated": true
+    },
+    "G5042": {
+      "definitions_cz": "porod (rodičovství), tj. (implicitně)\n mateřství (plnění mateřských povinností)",
+      "translit": "teknogonía",
+      "pronunciation": "tek-nog-on-ee'-ah",
+      "translated": true
+    },
+    "G5043": {
+      "definitions_cz": "dítě (jak bylo vyrobeno)",
+      "translit": "téknon",
+      "pronunciation": "tek'-non",
+      "translated": true
+    },
+    "G5044": {
+      "definitions_cz": "být vychovatelem dětí, tj. splnit\n povinnosti rodičky",
+      "translit": "teknotrophéō",
+      "pronunciation": "tek-not-rof-eh'-o",
+      "translated": true
+    },
+    "G5045": {
+      "definitions_cz": "umělce (jako výrobce látek), tzn.\n (zejména), řemeslník ve dřevě",
+      "translit": "téktōn",
+      "pronunciation": "tek'-tone",
+      "translated": true
+    },
+    "G5046": {
+      "definitions_cz": "kompletní (v různých aplikacích práce, růstu, mentální\n a morální charakter atd.); střední rod (jako podstatné jméno s [ŘECKO:3588]",
+      "translit": "téleios",
+      "pronunciation": "tel'-i-os",
+      "translated": true
+    },
+    "G5047": {
+      "definitions_cz": "(stav) úplnost (duševně popř\n morálně)",
+      "translit": "teleiótēs",
+      "pronunciation": "tel-i-ot'-ace",
+      "translated": true
+    },
+    "G5048": {
+      "definitions_cz": "dokončit, tj. (doslova) splnit, nebo (obrazně)\n dokonalý (povahově)",
+      "translit": "teleióō",
+      "pronunciation": "tel-i-o'-o",
+      "translated": true
+    },
+    "G5049": {
+      "definitions_cz": "úplně, t. j. (naděje) bez zakolísání",
+      "translit": "teleíōs",
+      "pronunciation": "tel-i'-oce",
+      "translated": true
+    },
+    "G5050": {
+      "definitions_cz": "(akt) dokončení, tj. ověření (proroctví), popř\n (o odčinění) rozhřešení",
+      "translit": "teleíōsis",
+      "pronunciation": "tel-i'-o-sis",
+      "translated": true
+    },
+    "G5051": {
+      "definitions_cz": "dovršitel, tj. konzument",
+      "translit": "teleiōtḗs",
+      "pronunciation": "tel-i-o-tace'",
+      "translated": true
+    },
+    "G5052": {
+      "definitions_cz": "být nositelem až do konce\n (zralost), tedy dozrát ovoce (obrazně)",
+      "translit": "telesphoréō",
+      "pronunciation": "tel-es-for-eh'-o",
+      "translated": true
+    },
+    "G5053": {
+      "definitions_cz": "dokončit život (implicitně, of\n [ŘECtina:979]",
+      "translit": "teleutáō",
+      "pronunciation": "tel-yoo-tah'-o",
+      "translated": true
+    },
+    "G5054": {
+      "definitions_cz": "zesnout",
+      "translit": "teleutḗ",
+      "pronunciation": "tel-yoo-tay'",
+      "translated": true
+    },
+    "G5055": {
+      "definitions_cz": "ukončit, tj. dokončit, provést, uzavřít, vybít (a\n dluh)",
+      "translit": "teléō",
+      "pronunciation": "tel-eh'-o",
+      "translated": true
+    },
+    "G5056": {
+      "definitions_cz": "správně, bod zaměřený jako limita, tj. (implicitně) the\n uzavření aktu nebo stavu (ukončení (doslova, přeneseně nebo\n neurčitě), výsledek (okamžitý, konečný nebo prorocký), účel);\n zejména vklad nebo poplatek (jak je zaplacen)",
+      "translit": "télos",
+      "pronunciation": "tel'-os",
+      "translated": true
+    },
+    "G5057": {
+      "definitions_cz": "daňový rolník, t. j. výběrčí veřejných\n příjmy",
+      "translit": "telṓnēs",
+      "pronunciation": "tel-o'-nace",
+      "translated": true
+    },
+    "G5058": {
+      "definitions_cz": "místo výběrčího daní\n podnikání",
+      "translit": "telṓnion",
+      "pronunciation": "tel-o'-nee-on",
+      "translated": true
+    },
+    "G5059": {
+      "definitions_cz": "zázračné dítě nebo znamení",
+      "translit": "téras",
+      "pronunciation": "ter'-as",
+      "translated": true
+    },
+    "G5060": {
+      "definitions_cz": "třetí; Tertius, křesťan",
+      "translit": "Tértios",
+      "pronunciation": "ter'-tee-os",
+      "translated": true
+    },
+    "G5061": {
+      "definitions_cz": "Tertullus, Říman",
+      "translit": "Tértyllos",
+      "pronunciation": "ter'-tool-los",
+      "translated": true
+    },
+    "G5062": {
+      "definitions_cz": "čtyřicet",
+      "translit": "tessarákonta",
+      "pronunciation": "tes-sar-ak'-on-tah",
+      "translated": true
+    },
+    "G5063": {
+      "definitions_cz": "ve věku čtyřiceti let",
+      "translit": "tessarakontaetḗs",
+      "pronunciation": "tes-sar-ak-on-tah-et-ace'",
+      "translated": true
+    },
+    "G5064": {
+      "definitions_cz": "čtyři",
+      "translit": "téssares",
+      "pronunciation": "tes'-sar-es",
+      "translated": true
+    },
+    "G5065": {
+      "definitions_cz": "čtrnáctý",
+      "translit": "tessareskaidékatos",
+      "pronunciation": "tes-sar-es-kahee-dek'-at-os",
+      "translated": true
+    },
+    "G5066": {
+      "definitions_cz": "týkající se čtvrtého dne",
+      "translit": "tetartaîos",
+      "pronunciation": "tet-ar-tah'-yos",
+      "translated": true
+    },
+    "G5067": {
+      "definitions_cz": "čtvrtý",
+      "translit": "tétartos",
+      "pronunciation": "tet'-ar-tos",
+      "translated": true
+    },
+    "G5068": {
+      "definitions_cz": "čtyřhranný, t. j. čtvercový",
+      "translit": "tetrágōnos",
+      "pronunciation": "tet-rag'-o-nos",
+      "translated": true
+    },
+    "G5069": {
+      "definitions_cz": "od [ŘECKO:5064]",
+      "translit": "tetrádion",
+      "pronunciation": "tet-rad'-ee-on",
+      "translated": true
+    },
+    "G5070": {
+      "definitions_cz": "čtyřikrát a\n tisíc",
+      "translit": "tetrakischílioi",
+      "pronunciation": "tet-rak-is-khil'-ee-oy",
+      "translated": true
+    },
+    "G5071": {
+      "definitions_cz": "čtyři sta",
+      "translit": "tetrakósioi",
+      "pronunciation": "tet-rak-os'-ee-oy",
+      "translated": true
+    },
+    "G5072": {
+      "definitions_cz": "čtyřměsíční prostor",
+      "translit": "tetrámēnon",
+      "pronunciation": "tet-ram'-ay-non",
+      "translated": true
+    },
+    "G5073": {
+      "definitions_cz": "čtyřnásobek",
+      "translit": "tetraplóos",
+      "pronunciation": "tet-rap-lo'-os",
+      "translated": true
+    },
+    "G5074": {
+      "definitions_cz": "čtyřnožec",
+      "translit": "tetrápous",
+      "pronunciation": "tet-rap'-ooce",
+      "translated": true
+    },
+    "G5075": {
+      "definitions_cz": "být tetrarchou",
+      "translit": "tetrarchéō",
+      "pronunciation": "tet-rar-kheh'-o",
+      "translated": true
+    },
+    "G5076": {
+      "definitions_cz": "vládce čtvrté části země\n (\"tetrarch\")",
+      "translit": "tetrárchēs",
+      "pronunciation": "tet-rar'-khace",
+      "translated": true
+    },
+    "G5077": {
+      "definitions_cz": "spálit, tj. spotřebovat",
+      "translit": "tephróō",
+      "pronunciation": "tef-ro'-o",
+      "translated": true
+    },
+    "G5078": {
+      "definitions_cz": "umění (jako produktivní), tj. (zvláště), obchod,\n nebo (obecně) dovednost",
+      "translit": "téchnē",
+      "pronunciation": "tekh'-nay",
+      "translated": true
+    },
+    "G5079": {
+      "definitions_cz": "řemeslník; přeneseně zakladatel (stvořitel)",
+      "translit": "technítēs",
+      "pronunciation": "tekh-nee'-tace",
+      "translated": true
+    },
+    "G5080": {
+      "definitions_cz": "zkapalnit",
+      "translit": "tḗkō",
+      "pronunciation": "tay'-ko",
+      "translated": true
+    },
+    "G5081": {
+      "definitions_cz": "v a\n daleko svítícím způsobem, t. j. jasně",
+      "translit": "tēlaugōs",
+      "pronunciation": "tay-low-goce'",
+      "translated": true
+    },
+    "G5082": {
+      "definitions_cz": "jako je tento, tj. (v\n (obrazná) velikost) tak obrovský",
+      "translit": "tēlikoûtos",
+      "pronunciation": "tay-lik-oo'-tos",
+      "translated": true
+    },
+    "G5083": {
+      "definitions_cz": "možná podobný [ŘEK:2334][ŘEK:5442][ŘEK:2892]",
+      "translit": "tēréō",
+      "pronunciation": "tay-reh'-o",
+      "translated": true
+    },
+    "G5084": {
+      "definitions_cz": "sledování, tj. (obrazně) dodržování, nebo (konkrétně)\n vězení",
+      "translit": "tḗrēsis",
+      "pronunciation": "tay'-ray-sis",
+      "translated": true
+    },
+    "G5085": {
+      "definitions_cz": "Tiberias, jméno města a jezera v\n Palestina",
+      "translit": "Tiberiás",
+      "pronunciation": "tib-er-ee-as'",
+      "translated": true
+    },
+    "G5086": {
+      "definitions_cz": "pravděpodobně náležející k řece Tiberis nebo Tiber;\n Tiberius, římský císař",
+      "translit": "Tibérios",
+      "pronunciation": "tib-er'-ee-os",
+      "translated": true
+    },
+    "G5087": {
+      "definitions_cz": "umístit (v nejširším uplatnění, doslova i přeneseně;\n správně, v pasivní nebo horizontální pozici, a tím se liší od\n [ŘEK:2476][ŘEK:2749]",
+      "translit": "títhēmi",
+      "pronunciation": "tith'-ay-mee",
+      "translated": true
+    },
+    "G5088": {
+      "definitions_cz": "produkovat (ze semene, jako matka, a\n rostlina, země atd.), doslova nebo přeneseně",
+      "translit": "tíktō",
+      "pronunciation": "tik'-to",
+      "translated": true
+    },
+    "G5089": {
+      "definitions_cz": "tahat\n vypnuto",
+      "translit": "tíllō",
+      "pronunciation": "til'-lo",
+      "translated": true
+    },
+    "G5090": {
+      "definitions_cz": "Timæus (tj. Timay), an\n Izraelita",
+      "translit": "Timaîos",
+      "pronunciation": "tim'-ah-yos",
+      "translated": true
+    },
+    "G5091": {
+      "definitions_cz": "ocenit, tj. stanovit ocenění; implicitně, k\n ctít",
+      "translit": "timáō",
+      "pronunciation": "tim-ah'-o",
+      "translated": true
+    },
+    "G5092": {
+      "definitions_cz": "hodnotu, tj. zaplacené peníze, nebo (konkrétně a společně)\n cennosti; analogicky úcta (zejména nejvyššího stupně), popř\n samotná důstojnost",
+      "translit": "timḗ",
+      "pronunciation": "tee-may'",
+      "translated": true
+    },
+    "G5093": {
+      "definitions_cz": "hodnotný, tj. (objektivně) nákladný, nebo (subjektivně)\n ctěný, vážený nebo (obrazně) milovaný",
+      "translit": "tímios",
+      "pronunciation": "tim'-ee-os",
+      "translated": true
+    },
+    "G5094": {
+      "definitions_cz": "drahota, tj. (implicitně)\n velkolepost",
+      "translit": "timiótēs",
+      "pronunciation": "tim-ee-ot'-ace",
+      "translated": true
+    },
+    "G5095": {
+      "definitions_cz": "drahý Bohu; Timotheus, křesťan",
+      "translit": "Timótheos",
+      "pronunciation": "tee-moth'-eh-os",
+      "translated": true
+    },
+    "G5096": {
+      "definitions_cz": "cenný; Timon, křesťan",
+      "translit": "Tímōn",
+      "pronunciation": "tee'-mone",
+      "translated": true
+    },
+    "G5097": {
+      "definitions_cz": "správně, chránit\n něčí čest, tj. pomstít (udělat trest)",
+      "translit": "timōréō",
+      "pronunciation": "tim-o-reh'-o",
+      "translated": true
+    },
+    "G5098": {
+      "definitions_cz": "ospravedlnění, tedy (implicitně) trest",
+      "translit": "timōría",
+      "pronunciation": "tee-mo-ree'-ah",
+      "translated": true
+    },
+    "G5099": {
+      "definitions_cz": "zaplatit cenu, tedy jako pokutu",
+      "translit": "tínō",
+      "pronunciation": "tee'-no",
+      "translated": true
+    },
+    "G5100": {
+      "definitions_cz": "nějakou nebo jakoukoli osobu nebo předmět",
+      "translit": "tìs",
+      "pronunciation": "tis",
+      "translated": true
+    },
+    "G5101": {
+      "definitions_cz": "tázací zájmeno, kdo, který nebo\n co (v přímých nebo nepřímých otázkách)",
+      "translit": "tís",
+      "pronunciation": "tis",
+      "translated": true
+    },
+    "G5102": {
+      "definitions_cz": "titulus nebo \"titul\" (placard)",
+      "translit": "títlos",
+      "pronunciation": "tit'-los",
+      "translated": true
+    },
+    "G5103": {
+      "definitions_cz": "Společnost Titus, a\n Christian",
+      "translit": "Títos",
+      "pronunciation": "tee'-tos",
+      "translated": true
+    },
+    "G5104": {
+      "definitions_cz": "enklitická částice\n zhodnocení pomocí kontrastu; v klidu",
+      "translit": "toí",
+      "pronunciation": "toy",
+      "translated": true
+    },
+    "G5105": {
+      "definitions_cz": "skutečně pro tehdy, tzn.\n následně",
+      "translit": "toigaroûn",
+      "pronunciation": "toy-gar-oon'",
+      "translated": true
+    },
+    "G5106": {
+      "definitions_cz": "skutečně nyní, tedy podle toho",
+      "translit": "toínyn",
+      "pronunciation": "toy'-noon",
+      "translated": true
+    },
+    "G5107": {
+      "definitions_cz": "takový jako tehdy, tedy tak skvělý",
+      "translit": "toiósde",
+      "pronunciation": "toy-os'-deh",
+      "translated": true
+    },
+    "G5108": {
+      "definitions_cz": "opravdu tohle,\n tj. tohoto druhu (k označení charakteru nebo individuality)",
+      "translit": "toioûtos",
+      "pronunciation": "toy-oo'-tos",
+      "translated": true
+    },
+    "G5109": {
+      "definitions_cz": "zeď",
+      "translit": "toîchos",
+      "pronunciation": "toy'-khos",
+      "translated": true
+    },
+    "G5110": {
+      "definitions_cz": "úroky z půjčených peněz (jako a\n vyrábět)",
+      "translit": "tókos",
+      "pronunciation": "tok'-os",
+      "translated": true
+    },
+    "G5111": {
+      "definitions_cz": "pravděpodobně sám od základu [ŘECKO:5056][ŘECKO:2292]",
+      "translit": "tolmáō",
+      "pronunciation": "tol-mah'-o",
+      "translated": true
+    },
+    "G5112": {
+      "definitions_cz": "odvážněji, t. j. s větší jistotou než\n jinak",
+      "translit": "tolmēróteron",
+      "pronunciation": "tol-may-rot'-er-on",
+      "translated": true
+    },
+    "G5113": {
+      "definitions_cz": "odvážný (drzý) muž",
+      "translit": "tolmētḗs",
+      "pronunciation": "tol-may-tace'",
+      "translated": true
+    },
+    "G5114": {
+      "definitions_cz": "více\n komplexní nebo rozhodující než [ŘECKO:2875]",
+      "translit": "tomṓteros",
+      "pronunciation": "tom-o'-ter-os",
+      "translated": true
+    },
+    "G5115": {
+      "definitions_cz": "luk (zřejmě jako nejjednodušší\n tkanina)",
+      "translit": "tóxon",
+      "pronunciation": "tox'-on",
+      "translated": true
+    },
+    "G5116": {
+      "definitions_cz": "nejistého původu); drahokam, pravděpodobně chryzolit",
+      "translit": "topázion",
+      "pronunciation": "top-ad'-zee-on",
+      "translated": true
+    },
+    "G5117": {
+      "definitions_cz": "místo (obecné v prostoru, ale omezené\n obsazenost; zatímco [ŘECKO:5561]",
+      "translit": "tópos",
+      "pronunciation": "top'-os",
+      "translated": true
+    },
+    "G5118": {
+      "definitions_cz": "zřejmě z [ŘEK:3588][ŘEK:3739][ŘEK:3778]",
+      "translit": "tosoûtos",
+      "pronunciation": "tos-oo'-tos",
+      "translated": true
+    },
+    "G5119": {
+      "definitions_cz": "kdy, tj. v době, kdy\n (minulosti nebo budoucnosti, také v důsledku)",
+      "translit": "tóte",
+      "pronunciation": "tot'-eh",
+      "translated": true
+    },
+    "G5120": {
+      "definitions_cz": "někdy se používá pro [ŘECKO:5127]",
+      "translit": "toû",
+      "pronunciation": "too",
+      "translated": true
+    },
+    "G5121": {
+      "definitions_cz": "na\n naopak",
+      "translit": "tounantíon",
+      "pronunciation": "too-nan-tee'-on",
+      "translated": true
+    },
+    "G5122": {
+      "definitions_cz": "jméno (je)",
+      "translit": "toúnoma",
+      "pronunciation": "too'-no-mah",
+      "translated": true
+    },
+    "G5123": {
+      "definitions_cz": "to znamená",
+      "translit": "toutésti",
+      "pronunciation": "toot-es'-tee",
+      "translated": true
+    },
+    "G5124": {
+      "definitions_cz": "že\n věc",
+      "translit": "toûto",
+      "pronunciation": "too'-to",
+      "translated": true
+    },
+    "G5125": {
+      "definitions_cz": "to (pro, v, s nebo\n těmito (osobami nebo věcmi)",
+      "translit": "toútois",
+      "pronunciation": "too'-toice",
+      "translated": true
+    },
+    "G5126": {
+      "definitions_cz": "toto (osoba jako objektivní\n slovesa nebo předložky)",
+      "translit": "toûton",
+      "pronunciation": "too'-ton",
+      "translated": true
+    },
+    "G5127": {
+      "definitions_cz": "z (z nebo\n týkající se této (osoby nebo věci)",
+      "translit": "toútou",
+      "pronunciation": "too'-too",
+      "translated": true
+    },
+    "G5128": {
+      "definitions_cz": "tyto (osoby, jako objektivní\n slovesa nebo předložky)",
+      "translit": "toútous",
+      "pronunciation": "too'-tooce",
+      "translated": true
+    },
+    "G5129": {
+      "definitions_cz": "komu (v, s nebo prostřednictvím)\n toto (osoba nebo věc)",
+      "translit": "toútōi",
+      "pronunciation": "too'-to",
+      "translated": true
+    },
+    "G5130": {
+      "definitions_cz": "z (z nebo\n týkající se) těchto (osob nebo věcí)",
+      "translit": "toútōn",
+      "pronunciation": "too'-tone",
+      "translated": true
+    },
+    "G5131": {
+      "definitions_cz": "kozel (jako hlodavec)",
+      "translit": "trágos",
+      "pronunciation": "trag'-os",
+      "translated": true
+    },
+    "G5132": {
+      "definitions_cz": "stůl nebo stolička (jako bytí\n čtyřnohý), obvykle k jídlu (obrazně k jídlu); také pult\n za peníze (obrazně, makléřská kancelář pro půjčky na\n zájem)",
+      "translit": "trápeza",
+      "pronunciation": "trap'-ed-zah",
+      "translated": true
+    },
+    "G5133": {
+      "definitions_cz": "peněžního makléře nebo bankéře",
+      "translit": "trapezítēs",
+      "pronunciation": "trap-ed-zee'-tace",
+      "translated": true
+    },
+    "G5134": {
+      "definitions_cz": "podobný základu [ŘEK:2352][ŘEK:5147][ŘEK:5149]",
+      "translit": "traûma",
+      "pronunciation": "trow'-mah",
+      "translated": true
+    },
+    "G5135": {
+      "definitions_cz": "zasadit ránu",
+      "translit": "traumatízō",
+      "pronunciation": "trow-mat-id'-zo",
+      "translated": true
+    },
+    "G5136": {
+      "definitions_cz": "uchopit za hrdlo nebo krk, t. j. obnažit jícen\n oběti za zabití (obecně odhalit)",
+      "translit": "trachēlízō",
+      "pronunciation": "trakh-ay-lid'-zo",
+      "translated": true
+    },
+    "G5137": {
+      "definitions_cz": "hrdlo (krk),\n tedy (obrazně) život",
+      "translit": "tráchēlos",
+      "pronunciation": "trakh'-ay-los",
+      "translated": true
+    },
+    "G5138": {
+      "definitions_cz": "nerovný, skalnatý (skalnatý)",
+      "translit": "trachýs",
+      "pronunciation": "trakh-oos'",
+      "translated": true
+    },
+    "G5139": {
+      "definitions_cz": "drsný okres; Trachonitida, oblast\n Sýrie",
+      "translit": "Trachōnîtis",
+      "pronunciation": "trakh-o-nee'-tis",
+      "translated": true
+    },
+    "G5140": {
+      "definitions_cz": "\"tři\"",
+      "translit": "treîs",
+      "pronunciation": "trice",
+      "translated": true
+    },
+    "G5141": {
+      "definitions_cz": "\"třást se\"\n nebo strach",
+      "translit": "trémō",
+      "pronunciation": "trem'-o",
+      "translated": true
+    },
+    "G5142": {
+      "definitions_cz": "ale možná posílena z\n základ [ŘECKO:5157]",
+      "translit": "tréphō",
+      "pronunciation": "tref'-o",
+      "translated": true
+    },
+    "G5143": {
+      "definitions_cz": "porovnej [ŘECKO:2359]δρέμω(drem'-o)[ŘECKO:1408]",
+      "translit": "tréchō",
+      "pronunciation": "trekh'-o",
+      "translated": true
+    },
+    "G5144": {
+      "definitions_cz": "třicet",
+      "translit": "triákonta",
+      "pronunciation": "tree-ak'-on-tah",
+      "translated": true
     }
   }
 }
