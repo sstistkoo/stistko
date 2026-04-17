@@ -48177,6 +48177,356 @@
       "hebrew": "יהוה",
       "xlit": "Yᵉhôvih",
       "translated": true
+    },
+    "H3070": {
+      "definitions_cz": "Jehova-jireh = \"Jehova vidí\" | 1) symbolické jméno, které dal Abraham hoře Moriah na památku zásahu Jehovova anděla, který zabránil oběti Izáka a poskytl náhradu",
+      "lemma": "יְהֹוָה יִרְאֶה",
+      "hebrew": "יהוה יראה",
+      "xlit": "Yᵉhôvâh yirʼeh",
+      "translated": true
+    },
+    "H3071": {
+      "definitions_cz": "Jehovah-nissi = \"Jehova je můj prapor\" | 1) jméno, které dal Mojžíš oltáři, který postavil na památku zničení Amalekitů",
+      "lemma": "יְהֹוָה נִסִּי",
+      "hebrew": "יהוה נסי",
+      "xlit": "Yᵉhôvâh niççîy",
+      "translated": true
+    },
+    "H3072": {
+      "definitions_cz": "Jehova je naše spravedlnost | 1) posvátné jméno, které se symbolicky vztahuje na Jeruzalém a Mesiáše",
+      "lemma": "יְהֹוָה צִדְקֵנוּ",
+      "hebrew": "יהוה צדקנו",
+      "xlit": "Yᵉhôvâh tsidqênûw",
+      "translated": true
+    },
+    "H3073": {
+      "definitions_cz": "Jehova-šalom = \"Jehova je pokoj\" | 1) jméno posvátného oltáře postaveného Gedeonem v Ofře",
+      "lemma": "יְהֹוָה שָׁלוֹם",
+      "hebrew": "יהוה שלום",
+      "xlit": "Yᵉhôvâh shâlôwm",
+      "translated": true
+    },
+    "H3074": {
+      "definitions_cz": "Jehova-shammah = \"Jehova je tam\" | 1) symbolické jméno pro Jeruzalém",
+      "lemma": "יְהֹוָה שָׁמָּה",
+      "hebrew": "יהוה שמה",
+      "xlit": "Yᵉhôvâh shâmmâh",
+      "translated": true
+    },
+    "H3075": {
+      "definitions_cz": "Jehozabad = „Jehova obdařil“ | 1) syn Šomera, moábské ženy, která zavraždila judského krále Joaše | 2) benjamínec, kapitán 180 000 ozbrojených mužů, za dnů Jozafata | 3) Korchitský levita, 2. syn Obededoma a jeden z vrátných tamního chrámu a skladiště za časů Davida",
+      "lemma": "יְהוֹזָבָד",
+      "hebrew": "יהוזבד",
+      "xlit": "Yᵉhôwzâbâd",
+      "translated": true
+    },
+    "H3076": {
+      "definitions_cz": "Jehohanan = \"Jehova obdařil\" | 1) kněz za velekněžského úřadu Joakima, který se vrátil se Zerubábelem | 2) velekněz v době Ezdráše | 3) levitský kněz, který se účastnil zasvěcení zdi v době Nehemjáše | 4) syn Tobiášův | 5) Korhijský levita a jeden ze vrátných do svatostánku v době Davidově | 6) kapitán Judy za krále Jozafata | 7) Efraimský | 8) Izraelita s cizí manželkou v době Ezdráše | 9) židovský kapitán po",
+      "lemma": "יְהוֹחָנָן",
+      "hebrew": "יהוחנן",
+      "xlit": "Yᵉhôwchânân",
+      "translated": true
+    },
+    "H3077": {
+      "definitions_cz": "Joiada = \"Jehova ví\" | 1) otec Benaiáše, Davidova mocného bojovníka | 2) vůdce kněží, kteří se připojili k Davidovi v Hebronu | 3) velekněz v době, kdy Atalia uzurpovala judský trůn; Šest let skrýval králova syna Joaše a nakonec ho nahradil na judském trůnu | 4) druhý kněz neboli sagan veleknězi Seraiášovi",
+      "lemma": "יְהוֹיָדָע",
+      "hebrew": "יהוידע",
+      "xlit": "Yᵉhôwyâdâʻ",
+      "translated": true
+    },
+    "H3078": {
+      "definitions_cz": "Jehojachin = \"Jehova ustanovil\" | 1) judský král, syn Joakimův a další předposlední judský král před babylonským zajetím; kralování trvalo 3 měsíce a 10 dní, než se vzdal Nabuchodonozorovi, který ho vzal do Babylóna a uvěznil na 36 let, když byl konečně propuštěn",
+      "lemma": "יְהוֹיָכִין",
+      "hebrew": "יהויכין",
+      "xlit": "Yᵉhôwyâkîyn",
+      "translated": true
+    },
+    "H3079": {
+      "definitions_cz": "Joakim = \"Jehova zvedá\" | 1) syn Josiášův a třetí z posledního judského krále; poddaný Nabuchodonozorův vladař, který vládl 11 let, než zemřel násilnou smrtí buď v boji, nebo rukama svých poddaných",
+      "lemma": "יְהוֹיָקִים",
+      "hebrew": "יהויקים",
+      "xlit": "Yᵉhôwyâqîym",
+      "translated": true
+    },
+    "H3080": {
+      "definitions_cz": "Jehojarib = \"Jehova tvrdí\" | 1) Kněz v Jeruzalémě | 2) vedoucí 1. z 24 kursů kněží v Davidově době",
+      "lemma": "יְהוֹיָרִיב",
+      "hebrew": "יהויריב",
+      "xlit": "Yᵉhôwyârîyb",
+      "translated": true
+    },
+    "H3081": {
+      "definitions_cz": "Jehucal = \"Jehova je schopen\" | 1) syn Šelemjášův a služebník krále Sedekjáše, kterého poslal k Jeremjášovi, aby ho prosil o modlitby a rady",
+      "lemma": "יְהוּכַל",
+      "hebrew": "יהוכל",
+      "xlit": "Yᵉhûwkal",
+      "translated": true
+    },
+    "H3082": {
+      "definitions_cz": "Jehonadab = \"Jehova je ochoten\" | 1) syn Rechaba, náčelníka Rechabitů, za časů Jehua a Achaba | 2) Davidův synovec",
+      "lemma": "יְהוֹנָדָב",
+      "hebrew": "יהונדב",
+      "xlit": "Yᵉhôwnâdâb",
+      "translated": true
+    },
+    "H3083": {
+      "definitions_cz": "Jonathan nebo Jehonathan = \"Jehova dal\" | 1) syn krále Saula a přítel Davidův | 2) syn velekněze Abiatara a posledního potomka Eliho, o kterém slyšíme | 3) Davidův synovec, který jako David zabil obra z Gatu | 4) strýc Davidův | 5) jeden z Davidových mocných válečníků | 6) jeden z Davidových pokladníků | 7) písař za časů Jeremiášových | 8) Levita a otec Zachariáše, kněze, který zatroubil na trubku při posvěcení zdi | 9) syn nebo potomek Gershom,",
+      "lemma": "יְהוֹנָתָן",
+      "hebrew": "יהונתן",
+      "xlit": "Yᵉhôwnâthân",
+      "translated": true
+    },
+    "H3084": {
+      "definitions_cz": "Josef = \"Jehova přidal\" | 1) nejstarší syn Jákobův od Ráchel",
+      "lemma": "יְהוֹסֵף",
+      "hebrew": "יהוסף",
+      "xlit": "Yᵉhôwçêph",
+      "translated": true
+    },
+    "H3085": {
+      "definitions_cz": "Joadah = \"Jehova ozdobil\" | 1) potomek Saula skrze Jonatana",
+      "lemma": "יְהוֹעַדָּה",
+      "hebrew": "יהועדה",
+      "xlit": "Yᵉhôwʻaddâh",
+      "translated": true
+    },
+    "H3086": {
+      "definitions_cz": "Joaddan = \"Jehova těší\" | 1) manželka krále Joaše a matka judského krále Amaziáše",
+      "lemma": "יְהוֹעַדִּין",
+      "hebrew": "יהועדין",
+      "xlit": "Yᵉhôwʻaddîyn",
+      "translated": true
+    },
+    "H3087": {
+      "definitions_cz": "Jehozadak nebo Josedech = \"Jehova je spravedlivý\" | 1) vnuk velekněze Hilkiáše; syn velekněze Seraiáše; a otec velekněze Jozue; sám nikdy nedosáhl úřadu velekněze, protože ho Nabuchodonozor odnesl do zajetí do Babylóna",
+      "lemma": "יְהוֹצָדָק",
+      "hebrew": "יהוצדק",
+      "xlit": "Yᵉhôwtsâdâq",
+      "translated": true
+    },
+    "H3088": {
+      "definitions_cz": "Jehoram nebo Joram = \"Jehova je vyvýšen\" | 1) syn judského krále Jozafata a sám král judský na 8 let; jeho manželkou byla zlá Ataliah, která pravděpodobně podněcovala jeho návrat judského národa k uctívání Baala | 2) syn krále Achaba ze severního království Izraele a samotného krále Izraele po dobu 12 let; byl zavražděn Jehu na pozemku, pro který jeho otec zavraždil Nábota, čímž se do písmene naplnilo Eliášovo proroctví | 3) kněz v",
+      "lemma": "יְהוֹרָם",
+      "hebrew": "יהורם",
+      "xlit": "Yᵉhôwrâm",
+      "translated": true
+    },
+    "H3089": {
+      "definitions_cz": "Jehošeba = \"Jehova přísahal\" | 1) dcera judského krále Jorama a manželka velekněze Joiady | 1a) alternativní hláskování 'Jehoshabeath' - H03090",
+      "lemma": "יְהוֹשֶׁבַע",
+      "hebrew": "יהושבע",
+      "xlit": "Yᵉhôwshebaʻ",
+      "translated": true
+    },
+    "H3090": {
+      "definitions_cz": "Joshabeath = \"Jehova je přísaha\" | 1) dcera judského krále Jorama a manželka velekněze Joiady | 1a) střídání pravopisu „Jehosheba- H3089",
+      "lemma": "יְהוֹשַׁבְעַת",
+      "hebrew": "יהושבעת",
+      "xlit": "Yᵉhôwshabʻath",
+      "translated": true
+    },
+    "H3091": {
+      "definitions_cz": "Joshua nebo Joshua = \"Jehova je spása\" | n pr m | 1) syn Nuna z kmene Efraim a nástupce Mojžíše jako vůdce synů Izraele; vedl dobytí Kanaánu | 2) obyvatel Bet-šemeše, na jehož půdě se zastavila Archa úmluvy poté, co ji Pelištejci vrátili | 3) syn Jehozadaka a velekněze po obnově | 4) místodržitel Jeruzaléma za krále Josiáše, který dal své jméno bráně města Jeruzaléma",
+      "lemma": "יְהוֹשׁוּעַ",
+      "hebrew": "יהושוע",
+      "xlit": "Yᵉhôwshûwaʻ",
+      "translated": true
+    },
+    "H3092": {
+      "definitions_cz": "Jozafat = \"Jehova rozsoudil\" | n pr m | 1) syn krále Asy a sám král judský na 25 let; jeden z nejlepších, nejzbožnějších a prosperujících králů Judy | 2) syn Nimshiho a otec krále Jehu ze severního království Izraele | 3) syn Ahiludův a kronikář za Davida a Šalomouna | 4) syn Paruaha a jeden z 12 komisních důstojníků pod vedením Šalomouna | 5) kněz a trubač v době Davidově | n pr loc | 6) symbolický název údolí u Jeruzaléma, které je místem o",
+      "lemma": "יְהוֹשָׁפָט",
+      "hebrew": "יהושפט",
+      "xlit": "Yᵉhôwshâphâṭ",
+      "translated": true
+    },
+    "H3093": {
+      "definitions_cz": "1) hrdý, arogantní, povýšený",
+      "lemma": "יָהִיר",
+      "hebrew": "יהיר",
+      "xlit": "yâhîyr",
+      "translated": true
+    },
+    "H3094": {
+      "definitions_cz": "Jehaleleel nebo Jehalelel = \"Bůh je chválen\" | 1) kalebský potomek Judy | 2) otec Azariáše a merarijský levita v době Ezechiáše",
+      "lemma": "יְהַלֶּלְאֵל",
+      "hebrew": "יהללאל",
+      "xlit": "Yᵉhallelʼêl",
+      "translated": true
+    },
+    "H3095": {
+      "definitions_cz": "1) drahý kámen (známý svou tvrdostí) | 1a) možná jaspis, onyx nebo diamant",
+      "lemma": "יַהֲלֹם",
+      "hebrew": "יהלם",
+      "xlit": "yahălôm",
+      "translated": true
+    },
+    "H3096": {
+      "definitions_cz": "Jahaz nebo Jahazah nebo Jahzah = \"ušlapán\" | 1) místo v Rubenu východně od Mrtvého moře, kde Izrael porazil amorejského krále Sihona; místo nejisté",
+      "lemma": "יַהַץ",
+      "hebrew": "יהץ",
+      "xlit": "Yahats",
+      "translated": true
+    },
+    "H3097": {
+      "definitions_cz": "Joab = \"Jehova je otec\" | 1) syn Davidovy sestry Ceruje a generál Davidova vojska | 2) judaitský potomek Kenaz | 3) postexilová rodina",
+      "lemma": "יוֹאָב",
+      "hebrew": "יואב",
+      "xlit": "Yôwʼâb",
+      "translated": true
+    },
+    "H3098": {
+      "definitions_cz": "Joah = \"Jehova je bratr\" | 1) syn Asafův a kronikář Ezechiáše | 2) geršonský syn nebo vnuk Zimmah | 3) Korhite, 3. syn Obed-edoma a vrátný za časů Davidových | 4) syn Joachazův a kronikář krále Josiáše",
+      "lemma": "יוֹאָח",
+      "hebrew": "יואח",
+      "xlit": "Yôwʼâch",
+      "translated": true
+    },
+    "H3099": {
+      "definitions_cz": "Joahaz nebo Joahaz = \"Jehova uchopil\" | 1) otec Joacha, Josiášova kronikáře",
+      "lemma": "יוֹאָחָז",
+      "hebrew": "יואחז",
+      "xlit": "Yôwʼâchâz",
+      "translated": true
+    },
+    "H3100": {
+      "definitions_cz": "Joel = \"Jehova je Bůh\" | 1) syn Pethuelův a 2. z 12 menších proroků s knihou se jménem; pravděpodobně prorokováno v době judského krále Uziáše | 2) nejstarší syn proroka Samuela a otec zpěváka Hémana | 3) simeonitský náčelník | 4) a Reubenite | 5) náčelník Gadu | 6) syn Izrachiášův a náčelník Issachar | 7) bratr Nátana ze Zoby a jeden z Davidových mocných bojovníků | 8) syn Pedaiášův a náčelník poloviny kmene Manasse na západ od Jordánu v době D.",
+      "lemma": "יוֹאֵל",
+      "hebrew": "יואל",
+      "xlit": "Yôwʼêl",
+      "translated": true
+    },
+    "H3101": {
+      "definitions_cz": "Joaš = \"dáno od Hospodina\" | 1) syn krále Achazjáše a 8. krále judského | 2) syn krále Joachaze a 12. král severního království Izraele | 3) otec Gideona | 4) syn krále Achaba | 5) potomek Šela, syna Judova; buď syn Shelahův, nebo syn Jokimův | 6) syn Šemy z Gibeje, který se uchýlil k Davidovi do Ciklagu",
+      "lemma": "יוֹאָשׁ",
+      "hebrew": "יואש",
+      "xlit": "Yôwʼâsh",
+      "translated": true
+    },
+    "H3102": {
+      "definitions_cz": "Job = \"pronásledovaný\" | 1) 3. syn Issacharův, nazývaný také 'Jashub'",
+      "lemma": "יוֹב",
+      "hebrew": "יוב",
+      "xlit": "Yôwb",
+      "translated": true
+    },
+    "H3103": {
+      "definitions_cz": "Jobab = \"poušť\" | 1) poslední v pořadí synů Joktana, potomka Shema | 2) jeden z králů Edom | 3) král Madon, který se nachází v severním Kanaánu, a jeden z králů, kteří se postavili Jozuovi během dobytí a kteří byli u Meronu poraženi | 4) hlava benjamitského domu | 5) další benjamínec",
+      "lemma": "יוֹבָב",
+      "hebrew": "יובב",
+      "xlit": "Yôwbâb",
+      "translated": true
+    },
+    "H3104": {
+      "definitions_cz": "1) beran, beraní roh, trubka, kornout | 1a) beran (pouze v kombinaci) | 1a1) beraní roh, trubka | 1b) jubilejní rok (ve znamení foukání kornoutů) (meton)",
+      "lemma": "יוֹבֵל",
+      "hebrew": "יובל",
+      "xlit": "yôwbêl",
+      "translated": true
+    },
+    "H3105": {
+      "definitions_cz": "1) stream",
+      "lemma": "יוּבַל",
+      "hebrew": "יובל",
+      "xlit": "yûwbal",
+      "translated": true
+    },
+    "H3106": {
+      "definitions_cz": "Jubal = \"proud\" | 1) syn Lámecha od Adah a vynálezce hudebních nástrojů",
+      "lemma": "יוּבַל",
+      "hebrew": "יובל",
+      "xlit": "Yûwbal",
+      "translated": true
+    },
+    "H3107": {
+      "definitions_cz": "Jozabad nebo Josabad = \"Jehova obdařil\" | 1) Korchitský levita, 2. syn Obededoma a jeden z vrátných chrámu a skladiště v době Davidově | 2) jeden z Davidových mocných válečníků | 3) další z Davidových mocných bojovníků | 4) čtyři další kněží nebo levité",
+      "lemma": "יוֹזָבָד",
+      "hebrew": "יוזבד",
+      "xlit": "Yôwzâbâd",
+      "translated": true
+    },
+    "H3108": {
+      "definitions_cz": "Jozachar = \"Jehova pamatuje\" | 1) služebník judského krále Joaše a jeden z jeho vrahů | 1a) také nazývaný „Zabad“",
+      "lemma": "יוֹזָכָר",
+      "hebrew": "יוזכר",
+      "xlit": "Yôwzâkâr",
+      "translated": true
+    },
+    "H3109": {
+      "definitions_cz": "Joha = \"Jehova dává život\" | 1) jeden ze synů Beriáše Benjamínce | 2) Tizite, jeden z Davidových mocných válečníků",
+      "lemma": "יוֹחָא",
+      "hebrew": "יוחא",
+      "xlit": "Yôwchâʼ",
+      "translated": true
+    },
+    "H3110": {
+      "definitions_cz": "Johanan = \"Jehova obdařil\" | 1) kněz za velekněžského úřadu Joakima, který se vrátil se Zerubábelem | 2) židovský kapitán po pádu Jeruzaléma | 3) nejstarší syn krále Josiáše | 4) postexilní princ z rodu Davidova | 5) otec Azariáše, kněze za Šalomounovy doby | 6) Benjamínec, jeden z Davidových mocných válečníků | 7) Gadit, jeden z Davidových mocných válečníků | 8) vracející se exil",
+      "lemma": "יוֹחָנָן",
+      "hebrew": "יוחנן",
+      "xlit": "Yôwchânân",
+      "translated": true
+    },
+    "H3111": {
+      "definitions_cz": "Joiada nebo Joiada = \"Jehova ví\" | 1) syn Paseah, který pomáhal opravovat starou bránu Jeruzaléma | 2) syn velekněze Eljašiba v době Nehemjáše",
+      "lemma": "יוֹיָדָע",
+      "hebrew": "יוידע",
+      "xlit": "Yôwyâdâʻ",
+      "translated": true
+    },
+    "H3112": {
+      "definitions_cz": "Jehojachin = \"Jehova ustanovil\" | 1) judský král, syn Joakimův a další předposlední judský král před babylonským zajetím; kralování trvalo 3 měsíce a 10 dní, než se vzdal Nabuchodonozorovi, který ho vzal do Babylóna a uvěznil na 36 let, když byl konečně propuštěn",
+      "lemma": "יוֹיָכִין",
+      "hebrew": "יויכין",
+      "xlit": "Yôwyâkîyn",
+      "translated": true
+    },
+    "H3113": {
+      "definitions_cz": "Joakim nebo Joakim = \"Jehova zvedá\" | 1) kněz a syn Jeshuy, velekněze",
+      "lemma": "יוֹיָקִים",
+      "hebrew": "יויקים",
+      "xlit": "Yôwyâqîym",
+      "translated": true
+    },
+    "H3114": {
+      "definitions_cz": "Joiarib = \"Jehova tvrdí\" | 1) vedoucí 1. z 24 kněžských kursů v Davidově době | 2) učitel v době Ezry | 3) Judaita v době Nehemjáše",
+      "lemma": "יוֹיָרִיב",
+      "hebrew": "יויריב",
+      "xlit": "Yôwyârîyb",
+      "translated": true
+    },
+    "H3115": {
+      "definitions_cz": "Jochebed = \"Jehova je sláva\" | 1) dcera Léviho, manželka a zároveň teta Amramova, a matka Mojžíše, Árona a Miriam",
+      "lemma": "יוֹכֶבֶד",
+      "hebrew": "יוכבד",
+      "xlit": "Yôwkebed",
+      "translated": true
+    },
+    "H3116": {
+      "definitions_cz": "Jucal = \"Jehova je schopen\" | 1) syn Šelemjášův a služebník krále Sedekjáše, kterého poslal k Jeremjášovi, aby ho prosil o modlitby a rady",
+      "lemma": "יוּכַל",
+      "hebrew": "יוכל",
+      "xlit": "Yûwkal",
+      "translated": true
+    },
+    "H3117": {
+      "definitions_cz": "1) den, čas, rok | 1a) den (na rozdíl od noci) | 1b) den (24 hodin) | 1b1) podle definice večera a rána v Genesis 1 | 1b2) jako dělení času | 1b2a) pracovní den, den cesty | 1c) dny, životnost (pl.) | 1d) čas, období (obecně) | 1e) rok | 1f) časové odkazy | 1f1) dnes | 1f2) včera | 1f3) zítra",
+      "lemma": "יוֹם",
+      "hebrew": "יום",
+      "xlit": "yôwm",
+      "translated": true
+    },
+    "H3118": {
+      "definitions_cz": "1) den | 2) den se vždy vztahuje na období dvaceti čtyř hodin, kdy je slovo upraveno určitým nebo kardinálním číslem",
+      "lemma": "יוֹם",
+      "hebrew": "יום",
+      "xlit": "yôwm",
+      "translated": true
+    },
+    "H3119": {
+      "definitions_cz": "adv | 1) ve dne, ve dne | subst | 2) přes den",
+      "lemma": "יוֹמָם",
+      "hebrew": "יומם",
+      "xlit": "yôwmâm",
+      "translated": true
     }
   }
 }
