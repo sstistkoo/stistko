@@ -52727,6 +52727,706 @@
       "hebrew": "כפן",
       "xlit": "kâphan",
       "translated": true
+    },
+    "H3720": {
+      "definitions_cz": "1) hlad, hlad, bolestivý hlad",
+      "lemma": "כָּפָן",
+      "hebrew": "כפן",
+      "xlit": "kâphân",
+      "translated": true
+    },
+    "H3721": {
+      "definitions_cz": "1) sklonit se, sklonit se, sklonit se, sklonit se, sklonit se | 1a) (Qal) sklonit se, sklonit se | 1b) (Niphal) poklonit se",
+      "lemma": "כָּפַף",
+      "hebrew": "כפף",
+      "xlit": "kâphaph",
+      "translated": true
+    },
+    "H3722": {
+      "definitions_cz": "1) přikrýt, očistit, usmířit, usmířit, zakrýt smolou | 1a) (Qal) k potažení nebo pokrytí smolou | 1b) (Piel) | 1b1) zakrýt, uklidnit, usmířit | 1b2) přikrýt, odčinit hřích, usmířit | 1b3) přikrýt, odčinit hřích a osoby zákonnými obřady | 1c) (Pual) | 1c1) překrýt | 1c2) usmířit za | 1d) (Hithpael) na pokrytí",
+      "lemma": "כָּפַר",
+      "hebrew": "כפר",
+      "xlit": "kâphar",
+      "translated": true
+    },
+    "H3723": {
+      "definitions_cz": "1) vesnice",
+      "lemma": "כָּפָר",
+      "hebrew": "כפר",
+      "xlit": "kâphâr",
+      "translated": true
+    },
+    "H3724": {
+      "definitions_cz": "1) cena života, výkupné, úplatek | 2) asfalt, smola (jako krytina) | 3) rostlina henna, název rostliny (henna?) | 4) vesnice",
+      "lemma": "כֹּפֶר",
+      "hebrew": "כפר",
+      "xlit": "kôpher",
+      "translated": true
+    },
+    "H3725": {
+      "definitions_cz": "1) odčinění",
+      "lemma": "כִּפֻּר",
+      "hebrew": "כפר",
+      "xlit": "kippur",
+      "translated": true
+    },
+    "H3726": {
+      "definitions_cz": "Chephar-haammonai = \"vesnice Ammonitů\" | 1) vesnice v Benjaminu",
+      "lemma": "כְּפַר הָעַמּוֹנִי",
+      "hebrew": "כפר העמוני",
+      "xlit": "Kᵉphar hâ-ʻAmmôwnîy",
+      "translated": true
+    },
+    "H3727": {
+      "definitions_cz": "1) slitovnice, místo smíření | 1a) zlatý talíř smíření, na který velekněz 7krát pokropil sedadlo v Den smíření symbolicky smiřující Jehovu a Jeho vyvolený lid | 1a1) zlatá deska na vrcholu archy smlouvy o rozměrech 2,5 x 1,5 lokte; na něm a jeho části byli proti sobě dva zlatí cherubíni, jejichž rozepjatá křídla se nahoře spojila a tvořili Boží trůn.",
+      "lemma": "כַּפֹּרֶת",
+      "hebrew": "כפרת",
+      "xlit": "kappôreth",
+      "translated": true
+    },
+    "H3728": {
+      "definitions_cz": "1) (Hiphil) pro ohýbání, lisování nebo ohýbání dohromady | 2) (CLBL) pro ohnutí dolů | 2a) (Hiphil) způsobit sehnutí, dupání",
+      "lemma": "כָּפַשׁ",
+      "hebrew": "כפש",
+      "xlit": "kâphash",
+      "translated": true
+    },
+    "H3729": {
+      "definitions_cz": "1) vázat | 1a) (P'il) bude vázán | 1b) (Pael) zavázat",
+      "lemma": "כְּפַת",
+      "hebrew": "כפת",
+      "xlit": "kᵉphath",
+      "translated": true
+    },
+    "H3730": {
+      "definitions_cz": "1) žárovka, knoflík, kapitál, kapitál sloupu | 1a) knoflík, žárovka (jako ozdoba) | 1b) kapitál (pilíře)",
+      "lemma": "כַּפְתֹּר",
+      "hebrew": "כפתר",
+      "xlit": "kaphtôr",
+      "translated": true
+    },
+    "H3731": {
+      "definitions_cz": "Caphtor = \"koruna\" | 1) původní domov Pelištejců, možná na jihozápadním pobřeží Malé Asie, možná v Egyptě nebo blízko, nebo spíše na ostrově Kréta | 2) (TWOT) ostrov Kréta, vlast nebo místo pobytu Pelištejců",
+      "lemma": "כַּפְתֹּר",
+      "hebrew": "כפתר",
+      "xlit": "Kaphtôr",
+      "translated": true
+    },
+    "H3732": {
+      "definitions_cz": "Caphtorim = viz Caphtor \"koruna\" | 1) Kréťané jako obyvatelé Kaftoru na rozdíl od Pelištejců",
+      "lemma": "כַּפְתֹּרִי",
+      "hebrew": "כפתרי",
+      "xlit": "Kaphtôrîy",
+      "translated": true
+    },
+    "H3733": {
+      "definitions_cz": "1) howdah, nosítka, košíkové sedlo | 1a) uzavřený jezdecký prostor vztyčený na velbloudím sedle | 2) pastvina, louka | 3) beran, jehně, jehně | 4) beranidlo",
+      "lemma": "כַּר",
+      "hebrew": "כר",
+      "xlit": "kar",
+      "translated": true
+    },
+    "H3734": {
+      "definitions_cz": "1) kor, míra (obvykle suchá) | 1a) suchá nebo tekutá míra rovnající se 10 ephahů nebo koupelí | 1a1) suchá odměrka obsahující 6,25 bušlu (220 l) | 1a2) kapalná odměrka 58 galonů (263 l)",
+      "lemma": "כֹּר",
+      "hebrew": "כר",
+      "xlit": "kôr",
+      "translated": true
+    },
+    "H3735": {
+      "definitions_cz": "1) (Ithp'el) být v tísni, být zarmoucen",
+      "lemma": "כָּרָא",
+      "hebrew": "כרא",
+      "xlit": "Kârâʼ",
+      "translated": true
+    },
+    "H3736": {
+      "definitions_cz": "1) nasadit plášť, být plášť, ovázat kolem | 1a) (Pual) bemanted (příčestí)",
+      "lemma": "כַּרְבֵּל",
+      "hebrew": "כרבל",
+      "xlit": "karbêl",
+      "translated": true
+    },
+    "H3737": {
+      "definitions_cz": "1) plášť, roucho, čepice, turban, přilba",
+      "lemma": "כַּרְבְּלָא",
+      "hebrew": "כרבלא",
+      "xlit": "karbᵉlâʼ",
+      "translated": true
+    },
+    "H3738": {
+      "definitions_cz": "1) kopat, hloubit, prokopávat | 1a) (Qal) kopat | 1b) (Niphal) k vykopání | 2) (Qal) uspořádat banket nebo hostinu | 3) (Qal) získat obchodem, obchodem, nákupem",
+      "lemma": "כָּרָה",
+      "hebrew": "כרה",
+      "xlit": "kârâh",
+      "translated": true
+    },
+    "H3739": {
+      "definitions_cz": "1) (Qal) získat obchodem, obchodovat, kupovat, vyjednávat",
+      "lemma": "כָּרָה",
+      "hebrew": "כרה",
+      "xlit": "kârâh",
+      "translated": true
+    },
+    "H3740": {
+      "definitions_cz": "1) svátek",
+      "lemma": "כֵּרָה",
+      "hebrew": "כרה",
+      "xlit": "kêrâh",
+      "translated": true
+    },
+    "H3741": {
+      "definitions_cz": "1) chata",
+      "lemma": "כָּרָה",
+      "hebrew": "כרה",
+      "xlit": "kârâh",
+      "translated": true
+    },
+    "H3742": {
+      "definitions_cz": "1) cherubín, cherubín (pl) | 1a) andělská bytost | 1a1) jako strážci Edenu | 1a2) jako lemující Boží trůn | 1a3) jako obrazová forma vznášející se nad archou úmluvy | 1a4) jako Jehovův vůz (obr.)",
+      "lemma": "כְּרוּב",
+      "hebrew": "כרוב",
+      "xlit": "kᵉrûwb",
+      "translated": true
+    },
+    "H3743": {
+      "definitions_cz": "Cherubín = \"požehnání\" | 1) zjevné exilové osídlení v Babylónii, odkud se se Zerubábelem vrátily některé osoby pochybného původu",
+      "lemma": "כְּרוּב",
+      "hebrew": "כרוב",
+      "xlit": "Kᵉrûwb",
+      "translated": true
+    },
+    "H3744": {
+      "definitions_cz": "1) hlasatel",
+      "lemma": "כָּרוֹז",
+      "hebrew": "כרוז",
+      "xlit": "kârôwz",
+      "translated": true
+    },
+    "H3745": {
+      "definitions_cz": "1) (Aphel) hlásat, hlásat, hlásat",
+      "lemma": "כְּרַז",
+      "hebrew": "כרז",
+      "xlit": "kᵉraz",
+      "translated": true
+    },
+    "H3746": {
+      "definitions_cz": "1) skupina cizích žoldnéřských vojáků sloužících jako tělesná stráž krále Davida; také kati",
+      "lemma": "כָּרִי",
+      "hebrew": "כרי",
+      "xlit": "kârîy",
+      "translated": true
+    },
+    "H3747": {
+      "definitions_cz": "Cherith = \"řezání\" | 1) potok, kde byl Eliáš ukryt během sucha; na východ od Jordánska",
+      "lemma": "כְּרִית",
+      "hebrew": "כרית",
+      "xlit": "Kᵉrîyth",
+      "translated": true
+    },
+    "H3748": {
+      "definitions_cz": "1) rozvod, propuštění, rozvod",
+      "lemma": "כְּרִיתוּת",
+      "hebrew": "כריתות",
+      "xlit": "kᵉrîythûwth",
+      "translated": true
+    },
+    "H3749": {
+      "definitions_cz": "1) okraj, okraj",
+      "lemma": "כַּרְכֹּב",
+      "hebrew": "כרכב",
+      "xlit": "karkôb",
+      "translated": true
+    },
+    "H3750": {
+      "definitions_cz": "1) šafrán | 1a) oranžovo-žlutý květ z čeledi krokusů, používaný k ochucení nápojů a cukrovinek za účelem podpory pocení za účelem ochlazení těla",
+      "lemma": "כַּרְכֹּם",
+      "hebrew": "כרכם",
+      "xlit": "karkôm",
+      "translated": true
+    },
+    "H3751": {
+      "definitions_cz": "Carchemish = \"pevnost Chemosh\" | 1) hlavní město Chetitů severovýchodně od Izraele na řece Eufrat dobyté faraonem Nechem a poté od něj Nabuchodonozorem",
+      "lemma": "כַּרְכְּמִישׁ",
+      "hebrew": "כרכמיש",
+      "xlit": "Karkᵉmîysh",
+      "translated": true
+    },
+    "H3752": {
+      "definitions_cz": "Carcas = \"těžké\" | 1) 7. ze 7 eunuchů krále Ahasvera",
+      "lemma": "כַּרְכַּס",
+      "hebrew": "כרכס",
+      "xlit": "Karkaç",
+      "translated": true
+    },
+    "H3753": {
+      "definitions_cz": "1) dromedár, velbloud dromedár, šelmy",
+      "lemma": "כַּרְכָּרָה",
+      "hebrew": "כרכרה",
+      "xlit": "karkârâh",
+      "translated": true
+    },
+    "H3754": {
+      "definitions_cz": "1) vinice",
+      "lemma": "כֶּרֶם",
+      "hebrew": "כרם",
+      "xlit": "kerem",
+      "translated": true
+    },
+    "H3755": {
+      "definitions_cz": "1) ošetřovat vinnou révu nebo vinice, ošetřovat vinnou révu nebo vinice | 1a) (Qal) vinaři (příčestí)",
+      "lemma": "כֹּרֵם",
+      "hebrew": "כרם",
+      "xlit": "kôrêm",
+      "translated": true
+    },
+    "H3756": {
+      "definitions_cz": "Carmi = \"moje vinice\" | 1) 4. syn Rubenův a prapředek Karmitů | 2) Judaita, otec Achana, ‚potížisty Izraele‘ v době Jozue",
+      "lemma": "כַּרְמִי",
+      "hebrew": "כרמי",
+      "xlit": "Karmîy",
+      "translated": true
+    },
+    "H3757": {
+      "definitions_cz": "Carmites = viz Carmi \"moje vinice\" | 1) potomci Carmiho, čtvrtého syna Rubena",
+      "lemma": "כַּרְמִי",
+      "hebrew": "כרמי",
+      "xlit": "Karmîy",
+      "translated": true
+    },
+    "H3758": {
+      "definitions_cz": "1) karmínová, červená, karmínová",
+      "lemma": "כַּרְמִיל",
+      "hebrew": "כרמיל",
+      "xlit": "karmîyl",
+      "translated": true
+    },
+    "H3759": {
+      "definitions_cz": "1) plantáž, zahrada, sad, ovocný sad | 2) ovoce, zahradnictví (meton)",
+      "lemma": "כַּרְמֶל",
+      "hebrew": "כרמל",
+      "xlit": "karmel",
+      "translated": true
+    },
+    "H3760": {
+      "definitions_cz": "Karmel = \"zahrada-země\" | 1) hora na pobřeží Středozemního moře v severním Izraeli, těsně pod Haifou | 2) město v horách na západní straně Mrtvého moře a jižně od Hebronu",
+      "lemma": "כַּרְמֶל",
+      "hebrew": "כרמל",
+      "xlit": "Karmel",
+      "translated": true
+    },
+    "H3761": {
+      "definitions_cz": "Karmelitán = viz Karmel \"zahrada-země\" | 1) obyvatel Karmelu",
+      "lemma": "כַּרְמְלִי",
+      "hebrew": "כרמלי",
+      "xlit": "Karmᵉlîy",
+      "translated": true
+    },
+    "H3762": {
+      "definitions_cz": "Karmelitánka = viz Karmel \"zahrada-země\" | 1) obyvatelka Karmelu | 2) Abigail, manželka Davidova, který pocházel z Karmelu",
+      "lemma": "כַּרְמְלִית",
+      "hebrew": "כרמלית",
+      "xlit": "Karmᵉlîyth",
+      "translated": true
+    },
+    "H3763": {
+      "definitions_cz": "Cheran = \"lyra\" | 1) Edomita, jeden ze synů Dišona, horejského vévody",
+      "lemma": "כְּרָן",
+      "hebrew": "כרן",
+      "xlit": "Kᵉrân",
+      "translated": true
+    },
+    "H3764": {
+      "definitions_cz": "1) trůn, královský stolec",
+      "lemma": "כׇּרְסֵא",
+      "hebrew": "כרסא",
+      "xlit": "korçêʼ",
+      "translated": true
+    },
+    "H3765": {
+      "definitions_cz": "1) (Piel) roztrhat, zpustošit, odtrhnout",
+      "lemma": "כִּרְסֵם",
+      "hebrew": "כרסם",
+      "xlit": "kirçêm",
+      "translated": true
+    },
+    "H3766": {
+      "definitions_cz": "1) sklonit se, pokleknout, poklonit se, poklonit se, pokleknout na kolena, pokleknout k odpočinku (zvířat), v úctě pokleknout | 1a) (Qal) | 1a1) sklonit se | 1a2) sklonit se, přikrčit se | 1a3) sklonit se nad | 1a4) naklonit, naklonit | 1b) (Hiphil) způsobit poklonu",
+      "lemma": "כָּרַע",
+      "hebrew": "כרע",
+      "xlit": "kâraʻ",
+      "translated": true
+    },
+    "H3767": {
+      "definitions_cz": "1) noha",
+      "lemma": "כָּרָע",
+      "hebrew": "כרע",
+      "xlit": "kârâʻ",
+      "translated": true
+    },
+    "H3768": {
+      "definitions_cz": "1) bavlna nebo jemné prádlo",
+      "lemma": "כַּרְפַּס",
+      "hebrew": "כרפס",
+      "xlit": "karpaç",
+      "translated": true
+    },
+    "H3769": {
+      "definitions_cz": "1) (Pilpel) vířit, tančit | 1a) víření, tanec (příčestí)",
+      "lemma": "כָּרַר",
+      "hebrew": "כרר",
+      "xlit": "kârar",
+      "translated": true
+    },
+    "H3770": {
+      "definitions_cz": "1) břicho",
+      "lemma": "כְּרֵשׂ",
+      "hebrew": "כרש",
+      "xlit": "kᵉrês",
+      "translated": true
+    },
+    "H3771": {
+      "definitions_cz": "Carshena = \"slavný\" | 1) jeden ze 7 knížat Persie a Médie za krále Ahasvera",
+      "lemma": "כַּרְשְׁנָא",
+      "hebrew": "כרשנא",
+      "xlit": "Karshᵉnâʼ",
+      "translated": true
+    },
+    "H3772": {
+      "definitions_cz": "1) odříznout, odříznout, podříznout, uříznout část těla, vyříznout, odstranit, zabít, podříznout smlouvu | 1a) (Qal) | 1a1) odříznout | 1a1a) odříznout část těla, setnout hlavu | 1a2) pokácet | 1a3) vytesat | 1a4) uzavřít nebo uzavřít smlouvu | 1b) (Niphal) | 1b1) k odříznutí | 1b2) ke kácení | 1b3) ke žvýkání | 1b4) k odříznutí, selhání | 1c) (Pual) | 1c1) k odříznutí | 1c2) ke kácení | 1d) (Hiphil) | 1d1) odříznout | 1d2) odříznout, zničit | 1d3) pokácet, zničit | 1d4) vzít",
+      "lemma": "כָּרַת",
+      "hebrew": "כרת",
+      "xlit": "kârath",
+      "translated": true
+    },
+    "H3773": {
+      "definitions_cz": "1) trámy, tesané trámy",
+      "lemma": "כָּרֻתָה",
+      "hebrew": "כרתה",
+      "xlit": "kâruthâh",
+      "translated": true
+    },
+    "H3774": {
+      "definitions_cz": "Cherethites = \"katové\" | 1) skupina cizích žoldnéřských vojáků sloužících jako tělesná stráž krále Davida; také kati | 2) buď Kréťané, nebo proto-Filištíni (obecně)",
+      "lemma": "כְּרֵתִי",
+      "hebrew": "כרתי",
+      "xlit": "Kᵉrêthîy",
+      "translated": true
+    },
+    "H3775": {
+      "definitions_cz": "1) jehněčí, mladý beran, ovce",
+      "lemma": "כֶּשֶׂב",
+      "hebrew": "כשב",
+      "xlit": "keseb",
+      "translated": true
+    },
+    "H3776": {
+      "definitions_cz": "1) ovečka-jehně, jehně, ovce",
+      "lemma": "כִּשְׂבָּה",
+      "hebrew": "כשבה",
+      "xlit": "kisbâh",
+      "translated": true
+    },
+    "H3777": {
+      "definitions_cz": "Chesed = \"zvýšit\" | 1) 4. syn Nachora, synovce Abrahamova",
+      "lemma": "כֶּשֶׂד",
+      "hebrew": "כשד",
+      "xlit": "Kesed",
+      "translated": true
+    },
+    "H3778": {
+      "definitions_cz": "Chaldejci nebo Chaldejci = \"lámači hrud\" | n pr loc | 1) území v dolní Mezopotámii hraničící s Perským zálivem | n pr m | 2) obyvatelé Chaldeje, žijící na dolním Eufratu a Tigridu | 3) osoby považované za nejmoudřejší v zemi (v rozšíření)",
+      "lemma": "כַּשְׂדִּי",
+      "hebrew": "כשדי",
+      "xlit": "Kasdîy",
+      "translated": true
+    },
+    "H3779": {
+      "definitions_cz": "chaldejština = \"lámači hrud\" | 1) obyvatelé Chaldeje, žijící na dolním Eufratu a Tigridu | 2) osoby považované za nejmoudřejší v zemi (v rozšíření)",
+      "lemma": "כַּשְׂדַּי",
+      "hebrew": "כשדי",
+      "xlit": "Kasday",
+      "translated": true
+    },
+    "H3780": {
+      "definitions_cz": "1) (Qal), abyste se nasytili, byli nasyceni jídlem",
+      "lemma": "כָּשָׂה",
+      "hebrew": "כשה",
+      "xlit": "kâsâh",
+      "translated": true
+    },
+    "H3781": {
+      "definitions_cz": "1) sekera",
+      "lemma": "כַּשִּׁיל",
+      "hebrew": "כשיל",
+      "xlit": "kashshîyl",
+      "translated": true
+    },
+    "H3782": {
+      "definitions_cz": "1) klopýtat, vrávorat, potácet se | 1a) (Qal) | 1a1) zakopnout | 1a2) potácet se | 1b) (Niphal) | 1b1) zakopnout | 1b2) být potácející se, být slabý | 1c) (Hiphil) | 1c1) způsobit klopýtnutí, způsobit zranění nebo zmar, svrhnout | 1c2) oslabit, oslabit | 1d) (Hophal) k klopýtnutí | 1e) (Piel) pozůstalí",
+      "lemma": "כָּשַׁל",
+      "hebrew": "כשל",
+      "xlit": "kâshal",
+      "translated": true
+    },
+    "H3783": {
+      "definitions_cz": "1) klopýtnutí, pád, neštěstí",
+      "lemma": "כִּשָּׁלוֹן",
+      "hebrew": "כשלון",
+      "xlit": "kishshâlôwn",
+      "translated": true
+    },
+    "H3784": {
+      "definitions_cz": "1) (Piel) k praktikování čarodějnictví nebo čarodějnictví použijte čarodějnictví | 1a) čaroděj, čarodějka (příčestí)",
+      "lemma": "כָּשַׁף",
+      "hebrew": "כשף",
+      "xlit": "kâshaph",
+      "translated": true
+    },
+    "H3785": {
+      "definitions_cz": "1) čarodějnictví, čarodějnictví",
+      "lemma": "כֶּשֶׁף",
+      "hebrew": "כשף",
+      "xlit": "kesheph",
+      "translated": true
+    },
+    "H3786": {
+      "definitions_cz": "1) čaroděj",
+      "lemma": "כַּשָּׁף",
+      "hebrew": "כשף",
+      "xlit": "kashshâph",
+      "translated": true
+    },
+    "H3787": {
+      "definitions_cz": "1) uspět, prosím, být vhodný, být správný, být výhodný, být správný a správný k | 1a) (Qal) prosím, slušně | 1b) (Hiphil) dát úspěch",
+      "lemma": "כָּשֵׁר",
+      "hebrew": "כשר",
+      "xlit": "kâshêr",
+      "translated": true
+    },
+    "H3788": {
+      "definitions_cz": "1) úspěch, dovednost, zisk | 1a) dovednost | 1b) úspěch, zisk",
+      "lemma": "כִּשְׁרוֹן",
+      "hebrew": "כשרון",
+      "xlit": "kishrôwn",
+      "translated": true
+    },
+    "H3789": {
+      "definitions_cz": "1) psát, nahrávat, zapisovat | 1a) (Qal) | 1a1) psát, zapisovat, ryt, zapisovat, psát na | 1a2) zapsat, písemně popsat | 1a3) zaregistrovat, přihlásit, zaznamenat | 1a4) k vyhlášce | 1b) (Niphal) | 1b1) bude zapsáno | 1b2) zapsat, zaznamenat, zapsat | 1c) (Piel) pokračovat v psaní",
+      "lemma": "כָּתַב",
+      "hebrew": "כתב",
+      "xlit": "kâthab",
+      "translated": true
+    },
+    "H3790": {
+      "definitions_cz": "1) psát | 1a) (P'al) psáti, býti psáno",
+      "lemma": "כְּתַב",
+      "hebrew": "כתב",
+      "xlit": "kᵉthab",
+      "translated": true
+    },
+    "H3791": {
+      "definitions_cz": "1) spis, dokument, edikt | 1a) registrace, zápis, zápis | 1b) způsob psaní, znak, písmeno | 1c) dopis, dokument, psaní | 1d) písemný edikt | 1d1) královského nařízení | 1d2) božské autority",
+      "lemma": "כָּתָב",
+      "hebrew": "כתב",
+      "xlit": "kâthâb",
+      "translated": true
+    },
+    "H3792": {
+      "definitions_cz": "1) psaní | 1a) písmo, nápis | 1b) písemná vyhláška, písemný požadavek",
+      "lemma": "כְּתָב",
+      "hebrew": "כתב",
+      "xlit": "kᵉthâb",
+      "translated": true
+    },
+    "H3793": {
+      "definitions_cz": "1) otisk, nápis, značka | 1a) v těle, možná tetování",
+      "lemma": "כְּתֹבֶת",
+      "hebrew": "כתבת",
+      "xlit": "kᵉthôbeth",
+      "translated": true
+    },
+    "H3794": {
+      "definitions_cz": "Chittim nebo Kittim = \"bruisery\" | 1) obecný pojem pro všechny ostrovany Středozemního moře | 2) potomci Javana, syna Jafetova a vnuka Noeho",
+      "lemma": "כִּתִּי",
+      "hebrew": "יתתכ",
+      "xlit": "Kittîy",
+      "translated": true
+    },
+    "H3795": {
+      "definitions_cz": "1) vytlučený, čistý, jemně roztlučený (v hmoždíři), drahý | 1a) olivového oleje",
+      "lemma": "כָּתִית",
+      "hebrew": "כתית",
+      "xlit": "kâthîyth",
+      "translated": true
+    },
+    "H3796": {
+      "definitions_cz": "1) zeď (domu)",
+      "lemma": "כֹּתֶל",
+      "hebrew": "כתל",
+      "xlit": "kôthel",
+      "translated": true
+    },
+    "H3797": {
+      "definitions_cz": "1) zeď",
+      "lemma": "כְּתַל",
+      "hebrew": "כתל",
+      "xlit": "kᵉthal",
+      "translated": true
+    },
+    "H3798": {
+      "definitions_cz": "1) jedno z nížinných měst v Judsku",
+      "lemma": "כִּתְלִישׁ",
+      "hebrew": "כתליש",
+      "xlit": "Kithlîysh",
+      "translated": true
+    },
+    "H3799": {
+      "definitions_cz": "1) (Niphal) být potřísněn, být poskvrněn, být hluboce potřísněn",
+      "lemma": "כָּתַם",
+      "hebrew": "כתם",
+      "xlit": "kâtham",
+      "translated": true
+    },
+    "H3800": {
+      "definitions_cz": "1) zlato, čisté zlato",
+      "lemma": "כֶּתֶם",
+      "hebrew": "כתם",
+      "xlit": "kethem",
+      "translated": true
+    },
+    "H3801": {
+      "definitions_cz": "1) tunika, spodní prádlo | 1a) dlouhý oděv podobný košili obvykle ze lnu",
+      "lemma": "כְּתֹנֶת",
+      "hebrew": "כתנת",
+      "xlit": "kᵉthôneth",
+      "translated": true
+    },
+    "H3802": {
+      "definitions_cz": "1) rameno, lopatka, boční, sklon | 1a) rameno, lopatka (člověka) | 1b) plec, náramenice (zvířat) | 1c) strana, svah (hora) | 1d) podpěry (umyvadla)",
+      "lemma": "כָּתֵף",
+      "hebrew": "כתף",
+      "xlit": "kâthêph",
+      "translated": true
+    },
+    "H3803": {
+      "definitions_cz": "1) obklopit | 1a) (Piel) obklopit | 1b) (Hiphil) obklopit, obklíčit",
+      "lemma": "כָּתַר",
+      "hebrew": "כתר",
+      "xlit": "kâthar",
+      "translated": true
+    },
+    "H3804": {
+      "definitions_cz": "1) koruna",
+      "lemma": "כֶּתֶר",
+      "hebrew": "כתר",
+      "xlit": "kether",
+      "translated": true
+    },
+    "H3805": {
+      "definitions_cz": "1) kapitálová koruna, kapitál pilíře",
+      "lemma": "כֹתֶרֶת",
+      "hebrew": "כתרת",
+      "xlit": "kôthereth",
+      "translated": true
+    },
+    "H3806": {
+      "definitions_cz": "1) (Qal) tlouct, míchat tlučením, tlouci jemně, brejkovat",
+      "lemma": "כָּתַשׁ",
+      "hebrew": "כתש",
+      "xlit": "kâthash",
+      "translated": true
+    },
+    "H3807": {
+      "definitions_cz": "1) šlehat, drtit bitím, drtit na kousky, drtit jemně | 1a) (Qal) | 1a1) jemně šlehat nebo drtit | 1a2) bít, kladivo | 1b) (Piel) | 1b1) jemně mlátit nebo drtit | 1b2) bít, kladivo | 1c) (Pual) k výprasku | 1d) (Hiphil) rozbít na kusy, rozbít | 1e) (Hophal) být bit, být rozdrcen",
+      "lemma": "כָּתַת",
+      "hebrew": "כתת",
+      "xlit": "kâthath",
+      "translated": true
+    },
+    "H3808": {
+      "definitions_cz": "1) ne, ne | 1a) ne (s absolutním zákazem slovesa) | 1b) ne (s modifikátorem-negací) | 1c) nic (subst) | 1d) bez (s částicí) | 1e) před (času)",
+      "lemma": "לֹא",
+      "hebrew": "לא",
+      "xlit": "lôʼ",
+      "translated": true
+    },
+    "H3809": {
+      "definitions_cz": "1) ne, ne, nic",
+      "lemma": "לָא",
+      "hebrew": "לא",
+      "xlit": "lâʼ",
+      "translated": true
+    },
+    "H3810": {
+      "definitions_cz": "Lo-debar = \"není pastvina\" | 1) město v Manasse v Gileadu východně od Jordánu",
+      "lemma": "לֹא דְבַר",
+      "hebrew": "לא דבר",
+      "xlit": "Lôʼ Dᵉbar",
+      "translated": true
+    },
+    "H3811": {
+      "definitions_cz": "1) být unavený, netrpělivý, zarmoucený, uražený | 1a) (Qal) být unavený, být netrpělivý | 1b) (Niphal) být z něčeho unavený, unavený sám | 1c) (Hiphil) unavit, unavovat, vyčerpat",
+      "lemma": "לָאָה",
+      "hebrew": "לאה",
+      "xlit": "lâʼâh",
+      "translated": true
+    },
+    "H3812": {
+      "definitions_cz": "Leah = \"unavená\" | 1) dcera Lábana, první manželky Jákobova, a matka Rubena, Simeona, Leviho, Judy, Issachara, Zabulona a Diny",
+      "lemma": "לֵאָה",
+      "hebrew": "לאה",
+      "xlit": "Lêʼâh",
+      "translated": true
+    },
+    "H3813": {
+      "definitions_cz": "1) (Qal) na pokrytí",
+      "lemma": "לָאַט",
+      "hebrew": "לאט",
+      "xlit": "lâʼaṭ",
+      "translated": true
+    },
+    "H3814": {
+      "definitions_cz": "1) tajemství, tajemství | 1a) utajení, tajně | 1b) tajemno, očarování",
+      "lemma": "לָאט",
+      "hebrew": "לאט",
+      "xlit": "lâʼṭ",
+      "translated": true
+    },
+    "H3815": {
+      "definitions_cz": "Lael = \"patřící Bohu\" | 1) Levita, otec Eliasafův a potomek Geršonův",
+      "lemma": "לָאֵל",
+      "hebrew": "לאל",
+      "xlit": "Lâʼêl",
+      "translated": true
+    },
+    "H3816": {
+      "definitions_cz": "1) lid, národ",
+      "lemma": "לְאֹם",
+      "hebrew": "לאם",
+      "xlit": "lᵉʼôm",
+      "translated": true
+    },
+    "H3817": {
+      "definitions_cz": "Leummim = \"lidé\" | 1) syn Dedana a vnuk Jokshan",
+      "lemma": "לְאֻמִּים",
+      "hebrew": "לאמים",
+      "xlit": "Lᵉʼummîym",
+      "translated": true
+    },
+    "H3818": {
+      "definitions_cz": "Lo-ammi = \"ne můj lid\" | 1) symbolické jméno, které dal prorok Ozeáš svému druhému synovi Gomer",
+      "lemma": "לֹא עַמִּי",
+      "hebrew": "לא עמי",
+      "xlit": "Lôʼ ʻAmmîy",
+      "translated": true
+    },
+    "H3819": {
+      "definitions_cz": "Lo-ruhamah = \"žádné slitování\" | 1) (Pual) symbolické jméno, které dal prorok Ozeáš své dceři",
+      "lemma": "לֹא רֻחָמָה",
+      "hebrew": "לא רחמה",
+      "xlit": "Lôʼ Ruchâmâh",
+      "translated": true
     }
   }
 }
