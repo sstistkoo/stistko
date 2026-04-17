@@ -37901,6 +37901,906 @@
       "translit": "sympínō",
       "pronunciation": "soom-pee'-no",
       "translated": true
+    },
+    "G4845": {
+      "definitions_cz": "úplně naplnit, t. j. (prostoru) zaplavit\n (loď), nebo (času) splnit (pasivní, být kompletní)",
+      "translit": "symplēróō",
+      "pronunciation": "soom-play-ro'-o",
+      "translated": true
+    },
+    "G4846": {
+      "definitions_cz": "úplně uškrtit, tj. (doslova) utopit,\n nebo (obrazně) dav",
+      "translit": "sympnígō",
+      "pronunciation": "soom-pnee'-go",
+      "translated": true
+    },
+    "G4847": {
+      "definitions_cz": "rodák ze stejného města, tj. (obrazně)\n spoluvěřící (spolukřesťan)",
+      "translit": "sympolítēs",
+      "pronunciation": "soom-pol-ee'-tace",
+      "translated": true
+    },
+    "G4848": {
+      "definitions_cz": "cestovat spolu; implicitně, k\n sestavit",
+      "translit": "symporeúomai",
+      "pronunciation": "soom-por-yoo'-om-ahee",
+      "translated": true
+    },
+    "G4849": {
+      "definitions_cz": "pijácký večírek\n (\"symposium\"), tedy (v rozšíření) pokoj hostů",
+      "translit": "sympósion",
+      "pronunciation": "soom-pos'-ee-on",
+      "translated": true
+    },
+    "G4850": {
+      "definitions_cz": "spolupresbyter",
+      "translit": "sympresbýteros",
+      "pronunciation": "soom-pres-boo'-ter-os",
+      "translated": true
+    },
+    "G4851": {
+      "definitions_cz": "snášet spolu\n (přispívat), tj. (doslova) sbírat, nebo (obrazně) do\n vést; zejména (hlavní příčestí jako podstatné jméno) výhoda",
+      "translit": "symphérō",
+      "pronunciation": "soom-fer'-o",
+      "translated": true
+    },
+    "G4852": {
+      "definitions_cz": "společně říci, t. j. souhlasit s",
+      "translit": "sýmphēmi",
+      "pronunciation": "soom'-fay-mee",
+      "translated": true
+    },
+    "G4853": {
+      "definitions_cz": "spolukmen, t. j. rodák z\n stejné zemi",
+      "translit": "symphylétēs",
+      "pronunciation": "soom-foo-let'-ace",
+      "translated": true
+    },
+    "G4854": {
+      "definitions_cz": "pěstované spolu s (connate), tzn.\n (obrazně) úzce spojena s",
+      "translit": "sýmphytos",
+      "pronunciation": "soom'-foo-tos",
+      "translated": true
+    },
+    "G4855": {
+      "definitions_cz": "pasivní, společně růst",
+      "translit": "symphýō",
+      "pronunciation": "soom-foo'-o",
+      "translated": true
+    },
+    "G4856": {
+      "definitions_cz": "být harmonický, tj. (obrazně) souhlasit (být\n vhodné, souhlasit) nebo stanovit (kompaktem)",
+      "translit": "symphōnéō",
+      "pronunciation": "soom-fo-neh'-o",
+      "translated": true
+    },
+    "G4857": {
+      "definitions_cz": "soulad",
+      "translit": "symphṓnēsis",
+      "pronunciation": "soom-fo'-nay-sis",
+      "translated": true
+    },
+    "G4858": {
+      "definitions_cz": "unisono zvuku („symfonie“), tedy koncert nástrojů\n (harmonická nota)",
+      "translit": "symphōnía",
+      "pronunciation": "soom-fo-nee'-ah",
+      "translated": true
+    },
+    "G4859": {
+      "definitions_cz": "znějící společně (podobně), tj. (obrazně)\n souhlasný (střední rod jako podstatné jméno, souhlas)",
+      "translit": "sýmphōnos",
+      "pronunciation": "soom'-fo-nos",
+      "translated": true
+    },
+    "G4860": {
+      "definitions_cz": "společně počítat",
+      "translit": "sympsēphízō",
+      "pronunciation": "soom-psay-fid'-zo",
+      "translated": true
+    },
+    "G4861": {
+      "definitions_cz": "spoluduchovní, t. j. podobný v\n sentiment",
+      "translit": "sýmpsychos",
+      "pronunciation": "soom'-psoo-khos",
+      "translated": true
+    },
+    "G4862": {
+      "definitions_cz": "s nebo společně (ale hodně\n blíže než [ŘEK:3326][ŘEK:3844]",
+      "translit": "sýn",
+      "pronunciation": "soon",
+      "translated": true
+    },
+    "G4863": {
+      "definitions_cz": "společně vést, t. j. sbírat nebo svolávat;\n speciálně pobavit (pohostinně)",
+      "translit": "synágō",
+      "pronunciation": "soon-ag'-o",
+      "translated": true
+    },
+    "G4864": {
+      "definitions_cz": "shromáždění osob;\n speciálně židovská „synagoga“ (shromáždění nebo místo); podle\n analogie, křesťanská církev",
+      "translit": "synagōgḗ",
+      "pronunciation": "soon-ag-o-gay'",
+      "translated": true
+    },
+    "G4865": {
+      "definitions_cz": "potýkat se ve společnosti s, tedy (obrazně) k\n být partnerem (asistentem)",
+      "translit": "synagōnízomai",
+      "pronunciation": "soon-ag-o-nid'-zom-ahee",
+      "translated": true
+    },
+    "G4866": {
+      "definitions_cz": "zápasit ve společnosti s, tedy (obrazně) s\n hledat společně",
+      "translit": "synathléō",
+      "pronunciation": "soon-ath-leh'-o",
+      "translated": true
+    },
+    "G4867": {
+      "definitions_cz": "svolat",
+      "translit": "synathroízō",
+      "pronunciation": "soon-ath-royd'-zo",
+      "translated": true
+    },
+    "G4868": {
+      "definitions_cz": "skládat dohromady, tedy (obrazně) počítat\n (účet)",
+      "translit": "synaírō",
+      "pronunciation": "soon-ah'-ee-ro",
+      "translated": true
+    },
+    "G4869": {
+      "definitions_cz": "spoluzajatec",
+      "translit": "synaichmálōtos",
+      "pronunciation": "soon-aheekh-mal'-o-tos",
+      "translated": true
+    },
+    "G4870": {
+      "definitions_cz": "doprovázet",
+      "translit": "synakolouthéō",
+      "pronunciation": "soon-ak-ol-oo-theh'-o",
+      "translated": true
+    },
+    "G4871": {
+      "definitions_cz": "hromadit, tzn.\n svolat",
+      "translit": "synalízō",
+      "pronunciation": "soon-al-id'-zo",
+      "translated": true
+    },
+    "G4872": {
+      "definitions_cz": "stoupat ve společnosti s",
+      "translit": "synanabaínō",
+      "pronunciation": "soon-an-ab-ah'-ee-no",
+      "translated": true
+    },
+    "G4873": {
+      "definitions_cz": "ležet ve společnosti (při jídle)",
+      "translit": "synanákeimai",
+      "pronunciation": "soon-an-ak'-i-mahee",
+      "translated": true
+    },
+    "G4874": {
+      "definitions_cz": "smíchat dohromady, tzn.\n (obrazně) spojovat s",
+      "translit": "synanamígnymi",
+      "pronunciation": "soon-an-am-ig'-noo-mee",
+      "translated": true
+    },
+    "G4875": {
+      "definitions_cz": "naverbovat se ve společnosti",
+      "translit": "synanapaúomai",
+      "pronunciation": "soon-an-ap-ow'-om-ahee",
+      "translated": true
+    },
+    "G4876": {
+      "definitions_cz": "setkat se s; přeneseně do\n dojít",
+      "translit": "synantáō",
+      "pronunciation": "soon-an-tah'-o",
+      "translated": true
+    },
+    "G4877": {
+      "definitions_cz": "setkání s",
+      "translit": "synántēsis",
+      "pronunciation": "soon-an'-tay-sis",
+      "translated": true
+    },
+    "G4878": {
+      "definitions_cz": "společně uchopit protiklad, t. j. spolupracovat\n (pomoc)",
+      "translit": "synantilambánomai",
+      "pronunciation": "soon-an-tee-lam-ban'-om-ahee",
+      "translated": true
+    },
+    "G4879": {
+      "definitions_cz": "vzlétnout společně, tj. přepravit s (svést,\n pasivně, výnos)",
+      "translit": "synapágō",
+      "pronunciation": "soon-ap-ag'-o",
+      "translated": true
+    },
+    "G4880": {
+      "definitions_cz": "zemřít (doslova) ve společnosti s, popř\n (obrazně), podobně jako",
+      "translit": "synapothnḗskō",
+      "pronunciation": "soon-ap-oth-nace'-ko",
+      "translated": true
+    },
+    "G4881": {
+      "definitions_cz": "zničit (středním hlasem nebo pasivně, být zabit) v\n společnost s",
+      "translit": "synapóllymi",
+      "pronunciation": "soon-ap-ol'-loo-mee",
+      "translated": true
+    },
+    "G4882": {
+      "definitions_cz": "odeslat (na pochůzku) ve společnosti",
+      "translit": "synapostéllō",
+      "pronunciation": "soon-ap-os-tel'-lo",
+      "translated": true
+    },
+    "G4883": {
+      "definitions_cz": "omítnout těsně spojené dohromady, tzn.\n kompaktně organizovat",
+      "translit": "synarmologéō",
+      "pronunciation": "soon-ar-mol-og-eh'-o",
+      "translated": true
+    },
+    "G4884": {
+      "definitions_cz": "chňapnout spolu, t. j. uchopit",
+      "translit": "synarpázō",
+      "pronunciation": "soon-ar-pad'-zo",
+      "translated": true
+    },
+    "G4885": {
+      "definitions_cz": "společně zvětšovat (vyrůstat).",
+      "translit": "synauxánō",
+      "pronunciation": "soon-owx-an'-o",
+      "translated": true
+    },
+    "G4886": {
+      "definitions_cz": "kloubní vaz, tedy vaz, (obrazně) spojující\n princip, ovládání",
+      "translit": "sýndesmos",
+      "pronunciation": "soon'-des-mos",
+      "translated": true
+    },
+    "G4887": {
+      "definitions_cz": "vázat se, tj. (pasivně) být a\n spoluvězeň (obrazně)",
+      "translit": "syndéō",
+      "pronunciation": "soon-deh'-o",
+      "translated": true
+    },
+    "G4888": {
+      "definitions_cz": "povýšit na důstojnost ve společnosti (tj. podobně)\n s",
+      "translit": "syndoxázō",
+      "pronunciation": "soon-dox-ad'-zo",
+      "translated": true
+    },
+    "G4889": {
+      "definitions_cz": "spoluotrok, tj. služebník nebo ministrant\n stejný pán (lidský nebo božský)",
+      "translit": "sýndoulos",
+      "pronunciation": "soon'-doo-los",
+      "translated": true
+    },
+    "G4890": {
+      "definitions_cz": "společný běh, tj.\n hala",
+      "translit": "syndromḗ",
+      "pronunciation": "soon-drom-ay'",
+      "translated": true
+    },
+    "G4891": {
+      "definitions_cz": "vzbudit (ze smrti) ve společnosti s, tzn.\n (obrazně) oživit (duchovně) podobně jako",
+      "translit": "synegeírō",
+      "pronunciation": "soon-eg-i'-ro",
+      "translated": true
+    },
+    "G4892": {
+      "definitions_cz": "společné zasedání, tj. (zvláště), židovský Sanhedrin; podle\n analogie, podřízený soud",
+      "translit": "synédrion",
+      "pronunciation": "soon-ed'-ree-on",
+      "translated": true
+    },
+    "G4893": {
+      "definitions_cz": "spoluvnímání, t. j. mravní\n vědomí",
+      "translit": "syneídēsis",
+      "pronunciation": "soon-i'-day-sis",
+      "translated": true
+    },
+    "G4894": {
+      "definitions_cz": "vidět úplně; používán (stejně jako jeho primární) pouze v\n dva minulé časy, které znamenají porozumět nebo si uvědomit,\n a být při vědomí nebo (tajně) informován",
+      "translit": "syneídō",
+      "pronunciation": "soon-i'-do",
+      "translated": true
+    },
+    "G4895": {
+      "definitions_cz": "být in\n společnost s, t. j. přítomná v té době",
+      "translit": "sýneimi",
+      "pronunciation": "soon'-i-mee",
+      "translated": true
+    },
+    "G4896": {
+      "definitions_cz": "sestavit",
+      "translit": "sýneimi",
+      "pronunciation": "soon'-i-mee",
+      "translated": true
+    },
+    "G4897": {
+      "definitions_cz": "vstoupit do společnosti",
+      "translit": "syneisérchomai",
+      "pronunciation": "soon-ice-er'-khom-ahee",
+      "translated": true
+    },
+    "G4898": {
+      "definitions_cz": "spolunepřítomný z domova, tzn.\n spolucestující",
+      "translit": "synékdēmos",
+      "pronunciation": "soon-ek'-day-mos",
+      "translated": true
+    },
+    "G4899": {
+      "definitions_cz": "vybrán ve společnosti s, tzn.\n spoluvolit (spolukřesťan)",
+      "translit": "syneklektós",
+      "pronunciation": "soon-ek-lek-tos'",
+      "translated": true
+    },
+    "G4900": {
+      "definitions_cz": "společně řídit, tj. (obrazně) nabádat (k\n usmíření)",
+      "translit": "synelaúnō",
+      "pronunciation": "soon-el-ow'-no",
+      "translated": true
+    },
+    "G4901": {
+      "definitions_cz": "svědčit dále společně, t. j. sjednotit se v přidání\n důkazy",
+      "translit": "synepimartyréō",
+      "pronunciation": "soon-ep-ee-mar-too-reh'-o",
+      "translated": true
+    },
+    "G4902": {
+      "definitions_cz": "zúčastnit se\n (cestování) ve společnosti s",
+      "translit": "synépomai",
+      "pronunciation": "soon-ep'-om-ahee",
+      "translated": true
+    },
+    "G4903": {
+      "definitions_cz": "být spolupracovníkem, t. j. spolupracovat",
+      "translit": "synergéō",
+      "pronunciation": "soon-erg-eh'-o",
+      "translated": true
+    },
+    "G4904": {
+      "definitions_cz": "spolupracovník,\n tj. koadjutor",
+      "translit": "synergós",
+      "pronunciation": "soon-er-gos'",
+      "translated": true
+    },
+    "G4905": {
+      "definitions_cz": "svolávat, odcházet ve společnosti, sdružovat se\n s, nebo (zvláště), kohabitovat (manželsky)",
+      "translit": "synérchomai",
+      "pronunciation": "soon-er'-khom-ahee",
+      "translated": true
+    },
+    "G4906": {
+      "definitions_cz": "vzít si jídlo ve společnosti\n s",
+      "translit": "synesthíō",
+      "pronunciation": "soon-es-thee'-o",
+      "translated": true
+    },
+    "G4907": {
+      "definitions_cz": "mentální skládání dohromady, tj. inteligence popř\n (konkrétně) intelekt",
+      "translit": "sýnesis",
+      "pronunciation": "soon'-es-is",
+      "translated": true
+    },
+    "G4908": {
+      "definitions_cz": "mentálně dát (nebo dát) dohromady, tzn.\n bystrý",
+      "translit": "synetós",
+      "pronunciation": "soon-et'-os",
+      "translated": true
+    },
+    "G4909": {
+      "definitions_cz": "společně dobře myslet, t. j. souhlasit, cítit\n spokojený s",
+      "translit": "syneudokéō",
+      "pronunciation": "soon-yoo-dok-eh'-o",
+      "translated": true
+    },
+    "G4910": {
+      "definitions_cz": "přepychově pobavit\n společnost s, tj. (střední hlas nebo pasivum), aby si společně libovali",
+      "translit": "syneuōchéō",
+      "pronunciation": "soon-yoo-o-kheh'-o",
+      "translated": true
+    },
+    "G4911": {
+      "definitions_cz": "postavit se společně, tj. vzdorovat (nebo útoku)\n společně",
+      "translit": "synephístēmi",
+      "pronunciation": "soon-ef-is'-tay-mee",
+      "translated": true
+    },
+    "G4912": {
+      "definitions_cz": "držet pohromadě, t. j. stlačit (uši, s\n dav nebo obležení) nebo zatčení (vězeň); přeneseně donutit,\n zmatený, sužovat, zaujatý",
+      "translit": "synéchō",
+      "pronunciation": "soon-ekh'-o",
+      "translated": true
+    },
+    "G4913": {
+      "definitions_cz": "radovat se s\n sebe, tj. cítit uspokojení týkající se",
+      "translit": "synḗdomai",
+      "pronunciation": "soon-ay'-dom-ahee",
+      "translated": true
+    },
+    "G4914": {
+      "definitions_cz": "vzájemné navykání, tzn.\n použití",
+      "translit": "synḗtheia",
+      "pronunciation": "soon-ay'-thi-ah",
+      "translated": true
+    },
+    "G4915": {
+      "definitions_cz": "spoluvěrný člověk, tedy obdobný v\n let",
+      "translit": "synēlikiṓtēs",
+      "pronunciation": "soon-ay-lik-ee-o'-tace",
+      "translated": true
+    },
+    "G4916": {
+      "definitions_cz": "inter in company with, tedy (obrazně) do\n duchovně se přizpůsobit (Kristu hrobem jako hříchu)",
+      "translit": "syntháptō",
+      "pronunciation": "soon-thap'-to",
+      "translated": true
+    },
+    "G4917": {
+      "definitions_cz": "řítit se spolu, tzn.\n rozbít",
+      "translit": "synthláō",
+      "pronunciation": "soon-thlah'-o",
+      "translated": true
+    },
+    "G4918": {
+      "definitions_cz": "stlačit, t. j. hromadit se na všechny strany",
+      "translit": "synthlíbō",
+      "pronunciation": "soon-thlee'-bo",
+      "translated": true
+    },
+    "G4919": {
+      "definitions_cz": "drtit dohromady, tzn.\n (obrazně) despirovat",
+      "translit": "synthrýptō",
+      "pronunciation": "soon-throop'-to",
+      "translated": true
+    },
+    "G4920": {
+      "definitions_cz": "dát dohromady, t. j. (duševně) k\n pochopit; implicitně jednat zbožně",
+      "translit": "syníēmi",
+      "pronunciation": "soon-ee'-ay-mee",
+      "translated": true
+    },
+    "G4921": {
+      "definitions_cz": "dát dohromady,\n tj. (implicitně) uvést (příznivě), nebo (obrazně) do\n vystavovat; intranzitivně, stát blízko nebo (obrazně) k\n tvoří",
+      "translit": "synistáō",
+      "pronunciation": "soon-is-tah'-o",
+      "translated": true
+    },
+    "G4922": {
+      "definitions_cz": "cestovat ve společnosti",
+      "translit": "synodeúō",
+      "pronunciation": "soon-od-yoo'-o",
+      "translated": true
+    },
+    "G4923": {
+      "definitions_cz": "společnost na a\n cesta, tedy (implicitně), karavan",
+      "translit": "synodía",
+      "pronunciation": "soon-od-ee'-ah",
+      "translated": true
+    },
+    "G4924": {
+      "definitions_cz": "bydlet spolu (jako rodina)",
+      "translit": "synoikéō",
+      "pronunciation": "soon-oy-keh'-o",
+      "translated": true
+    },
+    "G4925": {
+      "definitions_cz": "konstruovat, tj. (pasivně) skládat (v\n společnost s jinými křesťany, obrazně)",
+      "translit": "synoikodoméō",
+      "pronunciation": "soon-oy-kod-om-eh'-o",
+      "translated": true
+    },
+    "G4926": {
+      "definitions_cz": "vzájemně konverzovat",
+      "translit": "synomiléō",
+      "pronunciation": "soon-om-il-eh'-o",
+      "translated": true
+    },
+    "G4927": {
+      "definitions_cz": "ohraničovat spolu, t. j. sousedit",
+      "translit": "synomoréō",
+      "pronunciation": "soon-om-or-eh'-o",
+      "translated": true
+    },
+    "G4928": {
+      "definitions_cz": "zdrženlivost, tedy (obrazně) úzkost",
+      "translit": "synochḗ",
+      "pronunciation": "soon-okh-ay'",
+      "translated": true
+    },
+    "G4929": {
+      "definitions_cz": "společně zařídit, t. j. (obrazně) k\n přímý",
+      "translit": "syntássō",
+      "pronunciation": "soon-tas-so",
+      "translated": true
+    },
+    "G4930": {
+      "definitions_cz": "úplné dokončení, tj. dovršení (a\n dispenzace)",
+      "translit": "syntéleia",
+      "pronunciation": "soon-tel'-i-ah",
+      "translated": true
+    },
+    "G4931": {
+      "definitions_cz": "úplně dokončit; obecně provést\n (doslova nebo obrazně)",
+      "translit": "synteléō",
+      "pronunciation": "soon-tel-eh'-o",
+      "translated": true
+    },
+    "G4932": {
+      "definitions_cz": "kontrahovat řezáním, tzn.\n (obrazně) udělat stručně (rychle)",
+      "translit": "syntémnō",
+      "pronunciation": "soon-tem'-no",
+      "translated": true
+    },
+    "G4933": {
+      "definitions_cz": "držet těsně pohromadě, tj. (implicitně) k\n konzervovat (z ruiny); mentálně, pamatovat si (a poslouchat)",
+      "translit": "syntēréō",
+      "pronunciation": "soon-tay-reh'-o",
+      "translated": true
+    },
+    "G4934": {
+      "definitions_cz": "umístit společně, tj. (obrazně)\n souhlasit (smlouvat, sjednávat), souhlasit",
+      "translit": "syntíthemai",
+      "pronunciation": "soon-tith'-em-ahee",
+      "translated": true
+    },
+    "G4935": {
+      "definitions_cz": "stručně (stručně)",
+      "translit": "syntómōs",
+      "pronunciation": "soon-tom'-oce",
+      "translated": true
+    },
+    "G4936": {
+      "definitions_cz": "spěchat spolu\n (rychle se shromáždit) nebo po hlavě (obrazně)",
+      "translit": "syntréchō",
+      "pronunciation": "soon-trekh'-o",
+      "translated": true
+    },
+    "G4937": {
+      "definitions_cz": "úplně rozdrtit, t. j. roztříštit\n (doslova nebo obrazně)",
+      "translit": "syntríbō",
+      "pronunciation": "soon-tree'-bo",
+      "translated": true
+    },
+    "G4938": {
+      "definitions_cz": "otřes mozku nebo naprostá zlomenina (správně, konkrétně), tzn.\n úplná zkáza",
+      "translit": "sýntrimma",
+      "pronunciation": "soon-trim'-mah",
+      "translated": true
+    },
+    "G4939": {
+      "definitions_cz": "spolukojící, tzn.\n soudruh",
+      "translit": "sýntrophos",
+      "pronunciation": "soon'-trof-os",
+      "translated": true
+    },
+    "G4940": {
+      "definitions_cz": "náhodně spolu, tj. setkat se s (dosáhnout)",
+      "translit": "syntynchánō",
+      "pronunciation": "soon-toong-khan'-o",
+      "translated": true
+    },
+    "G4941": {
+      "definitions_cz": "nehoda; Syntyche, křesťanská žena",
+      "translit": "Syntýchē",
+      "pronunciation": "soon-too'-khay",
+      "translated": true
+    },
+    "G4942": {
+      "definitions_cz": "jednat pokrytecky ve shodě s",
+      "translit": "synypokrínomai",
+      "pronunciation": "soon-oo-pok-rin'-om-ahee",
+      "translated": true
+    },
+    "G4943": {
+      "definitions_cz": "být spolupomocným, tedy asistovat",
+      "translit": "synypourgéō",
+      "pronunciation": "soon-oop-oorg-eh'-o",
+      "translated": true
+    },
+    "G4944": {
+      "definitions_cz": "mít (porodní) bolesti ve společnosti (koncert,\n současně) s, tj. (obrazně) sympatizovat (v\n očekávání úlevy od utrpení)",
+      "translit": "synōdínō",
+      "pronunciation": "soon-o-dee'-no",
+      "translated": true
+    },
+    "G4945": {
+      "definitions_cz": "společná nadávka, tj\n implikace) zápletka",
+      "translit": "synōmosía",
+      "pronunciation": "soon-o-mos-ee'-ah",
+      "translated": true
+    },
+    "G4946": {
+      "definitions_cz": "Syrakusy, hlavní město\n Sicílie",
+      "translit": "Syrákousai",
+      "pronunciation": "soo-rak'-oo-sahee",
+      "translated": true
+    },
+    "G4947": {
+      "definitions_cz": "Sýrie (tj. Tsyria nebo Tyre), a\n oblast Asie",
+      "translit": "Syría",
+      "pronunciation": "soo-ree'-ah",
+      "translated": true
+    },
+    "G4948": {
+      "definitions_cz": "Syřan (t. j. pravděpodobně Tyrian), původem z\n Sýrie",
+      "translit": "Sýros",
+      "pronunciation": "soo'-ros",
+      "translated": true
+    },
+    "G4949": {
+      "definitions_cz": "syrofeničan\n žena, tedy žena pocházející z Fénicie v Sýrii",
+      "translit": "Syrophoínissa",
+      "pronunciation": "soo-rof-oy'-nis-sah",
+      "translated": true
+    },
+    "G4950": {
+      "definitions_cz": "mělčina (z písku, který tam táhly vlny), tzn.\n Syrtis Major nebo velký záliv na severním pobřeží\n Africe",
+      "translit": "sýrtis",
+      "pronunciation": "soor'-tis",
+      "translated": true
+    },
+    "G4951": {
+      "definitions_cz": "stopovat",
+      "translit": "sýrō",
+      "pronunciation": "soo'-ro",
+      "translated": true
+    },
+    "G4952": {
+      "definitions_cz": "úplně se roztrhnout, t. j. (analogicky) zmítat se\n násilně",
+      "translit": "sysparássō",
+      "pronunciation": "soos-par-as'-so",
+      "translated": true
+    },
+    "G4953": {
+      "definitions_cz": "společné znamení,\n tj. předem dohodnutý signál",
+      "translit": "sýssēmon",
+      "pronunciation": "soos'-say-mon",
+      "translated": true
+    },
+    "G4954": {
+      "definitions_cz": "společného těla, tj. (obrazně) a\n spolučlen křesťanského společenství",
+      "translit": "sýssōmos",
+      "pronunciation": "soos'-so-mos",
+      "translated": true
+    },
+    "G4955": {
+      "definitions_cz": "a\n spolupovstalcem",
+      "translit": "systasiastḗs",
+      "pronunciation": "soos-tas-ee-as-tace'",
+      "translated": true
+    },
+    "G4956": {
+      "definitions_cz": "úvodní, tedy doporučující",
+      "translit": "systatikós",
+      "pronunciation": "soos-tat-ee-kos'",
+      "translated": true
+    },
+    "G4957": {
+      "definitions_cz": "napíchnout ve společnosti s (doslova popř\n přeneseně)",
+      "translit": "systauróō",
+      "pronunciation": "soos-tow-ro'-o",
+      "translated": true
+    },
+    "G4958": {
+      "definitions_cz": "poslat (kreslit) společně, tj. zabalit (zahalit a\n mrtvola k pohřbu), smlouva (interval)",
+      "translit": "systéllō",
+      "pronunciation": "soos-tel'-lo",
+      "translated": true
+    },
+    "G4959": {
+      "definitions_cz": "sténat společně, tj. (obrazně) prožívat a\n běžné neštěstí",
+      "translit": "systenázō",
+      "pronunciation": "soos-ten-ad'-zo",
+      "translated": true
+    },
+    "G4960": {
+      "definitions_cz": "podat dohromady (jako vojáci v hodnostech), tzn.\n (obrazně) odpovídat",
+      "translit": "systoichéō",
+      "pronunciation": "soos-toy-kheh'-o",
+      "translated": true
+    },
+    "G4961": {
+      "definitions_cz": "spolukampaně, tedy (obrazně) společník\n v křesťanské dřině",
+      "translit": "systratiṓtēs",
+      "pronunciation": "soos-trat-ee-o'-tace",
+      "translated": true
+    },
+    "G4962": {
+      "definitions_cz": "kroutit dohromady, tj. sbírat (svazek, a\n dav)",
+      "translit": "systréphō",
+      "pronunciation": "soos-tref'-o",
+      "translated": true
+    },
+    "G4963": {
+      "definitions_cz": "kroucení dohromady, tedy (obrazně) tajemství\n koalice, bouřící dav",
+      "translit": "systrophḗ",
+      "pronunciation": "soos-trof-ay'",
+      "translated": true
+    },
+    "G4964": {
+      "definitions_cz": "k módě podobně, tj. přizpůsobit se\n stejný vzor (obrazně)",
+      "translit": "syschēmatízō",
+      "pronunciation": "soos-khay-mat-id'-zo",
+      "translated": true
+    },
+    "G4965": {
+      "definitions_cz": "Sychar (t. j. Shekar), místo v\n Palestina",
+      "translit": "Sychár",
+      "pronunciation": "soo-khar'",
+      "translated": true
+    },
+    "G4966": {
+      "definitions_cz": "Sychem (t. j. Shekem), jméno Kananejce\n a místo v Palestině",
+      "translit": "Sychém",
+      "pronunciation": "soo-khem'",
+      "translated": true
+    },
+    "G4967": {
+      "definitions_cz": "řeznictví (zvířat k jídlu nebo obětování, popř\n (obrazně) mužů (zničení))",
+      "translit": "sphagḗ",
+      "pronunciation": "sfag-ay'",
+      "translated": true
+    },
+    "G4968": {
+      "definitions_cz": "oběť (v oběti)",
+      "translit": "sphágion",
+      "pronunciation": "sfag'-ee-on",
+      "translated": true
+    },
+    "G4969": {
+      "definitions_cz": "řezníkovi (zejména zvíře k jídlu nebo v\n obětovat) nebo (obecně) zabíjet nebo (zvláště) mrzačit\n (násilně)",
+      "translit": "spházō",
+      "pronunciation": "sfad'-zo",
+      "translated": true
+    },
+    "G4970": {
+      "definitions_cz": "neurčitého odvození) jako\n příslovce; vehementně, tedy ve vysoké míře, hodně",
+      "translit": "sphódra",
+      "pronunciation": "sfod'-rah",
+      "translated": true
+    },
+    "G4971": {
+      "definitions_cz": "velmi mnoho",
+      "translit": "sphodrōs",
+      "pronunciation": "sfod-roce'",
+      "translated": true
+    },
+    "G4972": {
+      "definitions_cz": "orazítkovat (s pečetním nebo soukromým znakem) pro jistotu popř\n konzervace (doslova nebo přeneseně); implicitně zachovat\n tajemství, potvrdit",
+      "translit": "sphragízō",
+      "pronunciation": "sfrag-id'-zo",
+      "translated": true
+    },
+    "G4973": {
+      "definitions_cz": "pečeť (jako oplocení nebo ochrana\n ze zpronevěry); implicitně, razítko vtisknuté (jako známka\n soukromí nebo pravosti), doslova nebo obrazně",
+      "translit": "sphragís",
+      "pronunciation": "sfrag-ece'",
+      "translated": true
+    },
+    "G4974": {
+      "definitions_cz": "porovnejte ženský rod σφῦρα",
+      "translit": "sphyrón",
+      "pronunciation": "sfoo-ron'",
+      "translated": true
+    },
+    "G4975": {
+      "definitions_cz": "blízko, tedy skoro",
+      "translit": "schedón",
+      "pronunciation": "skhed-on'",
+      "translated": true
+    },
+    "G4976": {
+      "definitions_cz": "figura (jako způsob nebo okolnost), tzn.\n (implicitně) vnější stav",
+      "translit": "schēma",
+      "pronunciation": "skhay'-mah",
+      "translated": true
+    },
+    "G4977": {
+      "definitions_cz": "rozdělit nebo oddělit (doslova popř\n přeneseně)",
+      "translit": "schízō",
+      "pronunciation": "skhid'-zo",
+      "translated": true
+    },
+    "G4978": {
+      "definitions_cz": "rozkol nebo mezera (\"schizma\"), doslova nebo\n přeneseně",
+      "translit": "schísma",
+      "pronunciation": "skhis'-mah",
+      "translated": true
+    },
+    "G4979": {
+      "definitions_cz": "nejisté\n odvození); rákos, tj. tráva nebo kravata (obecně)",
+      "translit": "schoiníon",
+      "pronunciation": "skhoy-nee'-on",
+      "translated": true
+    },
+    "G4980": {
+      "definitions_cz": "vzít si dovolenou, tj. mít volno (implicitně,\n plně se věnovat); přeneseně být prázdný (a\n dům)",
+      "translit": "scholázō",
+      "pronunciation": "skhol-ad'-zo",
+      "translated": true
+    },
+    "G4981": {
+      "definitions_cz": "správně, flákání (jako zadržování se v práci) popř\n volný čas, tj. (implicitně) „škola“ (jako dovolená od fyzického\n zaměstnání)",
+      "translit": "scholḗ",
+      "pronunciation": "skhol-ay'",
+      "translated": true
+    },
+    "G4982": {
+      "definitions_cz": "zachránit,\n tj. dodat nebo chránit (doslova nebo obrazně)",
+      "translit": "sṓzō",
+      "pronunciation": "sode'-zo",
+      "translated": true
+    },
+    "G4983": {
+      "definitions_cz": "tělo (jako zvukový celek), používané ve velmi široké\n aplikace, doslova nebo obrazně",
+      "translit": "sōma",
+      "pronunciation": "so'-mah",
+      "translated": true
+    },
+    "G4984": {
+      "definitions_cz": "tělesné nebo fyzické",
+      "translit": "sōmatikós",
+      "pronunciation": "so-mat-ee-kos'",
+      "translated": true
+    },
+    "G4985": {
+      "definitions_cz": "tělesně nebo fyzicky",
+      "translit": "sōmatikōs",
+      "pronunciation": "so-mat-ee-koce'",
+      "translated": true
+    },
+    "G4986": {
+      "definitions_cz": "bezpečného otce; Společnost Sopatrus, a\n Christian",
+      "translit": "Sṓpatros",
+      "pronunciation": "so'-pat-ros",
+      "translated": true
+    },
+    "G4987": {
+      "definitions_cz": "hromadit (doslova popř\n přeneseně)",
+      "translit": "sōreúō",
+      "pronunciation": "sore-yoo'-o",
+      "translated": true
+    },
+    "G4988": {
+      "definitions_cz": "bezpečné pevnosti; Společnost Sosthenes, a\n Christian",
+      "translit": "Sōsthénēs",
+      "pronunciation": "soce-then'-ace",
+      "translated": true
+    },
+    "G4989": {
+      "definitions_cz": "Sosipatrus, křesťan",
+      "translit": "Sōsípatros",
+      "pronunciation": "so-sip'-at-ros",
+      "translated": true
+    },
+    "G4990": {
+      "definitions_cz": "vysvoboditel, tj. Bůh nebo Kristus",
+      "translit": "sōtḗr",
+      "pronunciation": "so-tare'",
+      "translated": true
+    },
+    "G4991": {
+      "definitions_cz": "záchrana\n nebo bezpečnost (fyzicky nebo morálně)",
+      "translit": "sōtēría",
+      "pronunciation": "so-tay-ree'-ah",
+      "translated": true
+    },
+    "G4992": {
+      "definitions_cz": "obránce popř\n (implicitně) obrana",
+      "translit": "sōtḗrion",
+      "pronunciation": "so-tay'-ree-on",
+      "translated": true
+    },
+    "G4993": {
+      "definitions_cz": "mít zdravou mysl, tj. rozumný, (obrazně)\n mírný",
+      "translit": "sōphronéō",
+      "pronunciation": "so-fron-eh'-o",
+      "translated": true
+    },
+    "G4994": {
+      "definitions_cz": "učinit ze zdravé mysli, tj. (obrazně) ukáznit nebo\n správně",
+      "translit": "sōphronízō",
+      "pronunciation": "so-fron-id'-zo",
+      "translated": true
     }
   }
 }
