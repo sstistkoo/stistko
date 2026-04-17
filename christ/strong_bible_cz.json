@@ -73762,6 +73762,706 @@
       "hebrew": "ציון",
       "xlit": "tsîyôwn",
       "translated": true
+    },
+    "H6725": {
+      "definitions_cz": "1) rozcestník, památník, trh",
+      "lemma": "צִיּוּן",
+      "hebrew": "ציון",
+      "xlit": "tsîyûwn",
+      "translated": true
+    },
+    "H6726": {
+      "definitions_cz": "Sion = \"vyprahlé místo\" | 1) jiné jméno pro Jeruzalém, zvláště v prorockých knihách",
+      "lemma": "צִיּוֹן",
+      "hebrew": "ציון",
+      "xlit": "Tsîyôwn",
+      "translated": true
+    },
+    "H6727": {
+      "definitions_cz": "Ziha = \"vyprahlý\" | 1) předek rodiny chrámových otroků, kteří se vrátili z vyhnanství v Babylóně se Zerubábelem | 2) náčelník chrámových otroků v Ofelu v době Nehemjáše",
+      "lemma": "צִיחָא",
+      "hebrew": "ציחא",
+      "xlit": "Tsîychâʼ",
+      "translated": true
+    },
+    "H6728": {
+      "definitions_cz": "1) divoká šelma, obyvatel pouště, křikloun, křikloun | 1a) konkrétní divoká šelma, která však není s jistotou identifikována",
+      "lemma": "צִיִּי",
+      "hebrew": "ציי",
+      "xlit": "tsîyîy",
+      "translated": true
+    },
+    "H6729": {
+      "definitions_cz": "1) pranýř, zásoby",
+      "lemma": "צִינֹק",
+      "hebrew": "צינק",
+      "xlit": "tsîynôq",
+      "translated": true
+    },
+    "H6730": {
+      "definitions_cz": "Zior = \"malost\" | 1) město v judských horách patřící do stejné skupiny jako Hebron",
+      "lemma": "צִיעֹר",
+      "hebrew": "ציער",
+      "xlit": "Tsîyʻôr",
+      "translated": true
+    },
+    "H6731": {
+      "definitions_cz": "1) květ, květ | 1a) květ, květ | 1b) zářící věc (ze zlatého plátu na mitře velekněze) (metaf.) | 2) pírko, křídlo | 2a) znamená pochybný",
+      "lemma": "צִיץ",
+      "hebrew": "ציץ",
+      "xlit": "tsîyts",
+      "translated": true
+    },
+    "H6732": {
+      "definitions_cz": "Ziz = \"květina\" | 1) průsmyk vedoucí od břehů Mrtvého moře do judské pustiny poblíž Tekoa",
+      "lemma": "צִיץ",
+      "hebrew": "ציץ",
+      "xlit": "Tsîyts",
+      "translated": true
+    },
+    "H6733": {
+      "definitions_cz": "1) květ, květ",
+      "lemma": "צִיצָה",
+      "hebrew": "ציצה",
+      "xlit": "tsîytsâh",
+      "translated": true
+    },
+    "H6734": {
+      "definitions_cz": "1) třásně, střapec, zámek",
+      "lemma": "צִיצִת",
+      "hebrew": "ציצת",
+      "xlit": "tsîytsith",
+      "translated": true
+    },
+    "H6735": {
+      "definitions_cz": "1) vyslanec, posel | 2) čep dveří, pant | 3) bolest, úzkost",
+      "lemma": "צִיר",
+      "hebrew": "ציר",
+      "xlit": "tsîyr",
+      "translated": true
+    },
+    "H6736": {
+      "definitions_cz": "1) obraz, idol",
+      "lemma": "צִיר",
+      "hebrew": "ציר",
+      "xlit": "tsîyr",
+      "translated": true
+    },
+    "H6737": {
+      "definitions_cz": "1) (BDB) (Hithpael) zásobovat se zásobami, brát jako zásobu | 2) (CLBL) působit jako vyslanec",
+      "lemma": "צָיַר",
+      "hebrew": "ציר",
+      "xlit": "tsâyar",
+      "translated": true
+    },
+    "H6738": {
+      "definitions_cz": "1) stín, stín | 1a) stín (na číselníku) | 1b) stín, stín (jako ochrana) | 1c) stín (symbol pomíjivosti života)",
+      "lemma": "צֵל",
+      "hebrew": "צל",
+      "xlit": "tsêl",
+      "translated": true
+    },
+    "H6739": {
+      "definitions_cz": "1) (Pael) se modlit",
+      "lemma": "צְלָא",
+      "hebrew": "צלא",
+      "xlit": "tsᵉlâʼ",
+      "translated": true
+    },
+    "H6740": {
+      "definitions_cz": "1) (Qal) upéct",
+      "lemma": "צָלָה",
+      "hebrew": "צלה",
+      "xlit": "tsâlâh",
+      "translated": true
+    },
+    "H6741": {
+      "definitions_cz": "Zillah = \"stín\" | 1) 2. manželka Lámecha a matka Tubal-kaina, učitelka každého řemeslníka z bronzu a železa",
+      "lemma": "צִלָּה",
+      "hebrew": "צלה",
+      "xlit": "Tsillâh",
+      "translated": true
+    },
+    "H6742": {
+      "definitions_cz": "1) dort, kulatý bochník, kulatý, válení",
+      "lemma": "צְלוּל",
+      "hebrew": "צלול",
+      "xlit": "tsᵉlûwl",
+      "translated": true
+    },
+    "H6743": {
+      "definitions_cz": "1) (Qal) spěchat | 2) postupovat, prosperovat, dělat pokrok, uspět, být ziskový | 2a) (Qal) prosperovat | 2b) (hifil) | 2b1) učinit prosperující, přivést k úspěšnému vydání, způsobit prosperitu | 2b2) ukázat nebo zažít prosperitu, prosperovat",
+      "lemma": "צָלַח",
+      "hebrew": "צלח",
+      "xlit": "tsâlach",
+      "translated": true
+    },
+    "H6744": {
+      "definitions_cz": "1) prosperovat | 1a) (Aphel) | 1a1) způsobit prosperitu | 1a2) ukázat prosperitu, být prosperující, mít úspěch, být úspěšný",
+      "lemma": "צְלַח",
+      "hebrew": "צלח",
+      "xlit": "tsᵉlach",
+      "translated": true
+    },
+    "H6745": {
+      "definitions_cz": "1) hrnec na vaření, hrnec",
+      "lemma": "צֵלָחָה",
+      "hebrew": "צלחה",
+      "xlit": "tsêlâchâh",
+      "translated": true
+    },
+    "H6746": {
+      "definitions_cz": "1) sklenice, miska",
+      "lemma": "צְלֹחִית",
+      "hebrew": "צלחית",
+      "xlit": "tsᵉlôchîyth",
+      "translated": true
+    },
+    "H6747": {
+      "definitions_cz": "1) miska, miska",
+      "lemma": "צַלַּחַת",
+      "hebrew": "צלחת",
+      "xlit": "tsallachath",
+      "translated": true
+    },
+    "H6748": {
+      "definitions_cz": "n m | 1) pražený, pečený | adj | 2) (CLBL) pražené",
+      "lemma": "צָלִי",
+      "hebrew": "צלי",
+      "xlit": "tsâlîy",
+      "translated": true
+    },
+    "H6749": {
+      "definitions_cz": "1) (Qal) potopit se, být ponořen",
+      "lemma": "צָלַל",
+      "hebrew": "צלל",
+      "xlit": "tsâlal",
+      "translated": true
+    },
+    "H6750": {
+      "definitions_cz": "1) brnět, chvět | 1a) (Qal) | 1a1) brnět (uší) | 1a2) chvět se (strachem)",
+      "lemma": "צָלַל",
+      "hebrew": "צלל",
+      "xlit": "tsâlal",
+      "translated": true
+    },
+    "H6751": {
+      "definitions_cz": "1) být nebo se stát nebo ztmavnout | 1a) (Qal) stát se nebo ztmavnout | 1b) (Hiphil) do stínu",
+      "lemma": "צָלַל",
+      "hebrew": "צלל",
+      "xlit": "tsâlal",
+      "translated": true
+    },
+    "H6752": {
+      "definitions_cz": "1) stín, stín | 1a) stín (na číselníku) | 1b) stín, stín (jako ochrana) | 1c) stín (symbol pomíjivosti života)",
+      "lemma": "צֵלֶל",
+      "hebrew": "צלל",
+      "xlit": "tsêlel",
+      "translated": true
+    },
+    "H6753": {
+      "definitions_cz": "Hazetelponi = \"čelem stínu\" | 1) sestra synů Etamových v rodokmenech Judy",
+      "lemma": "צְלֶלְפּוֹנִי",
+      "hebrew": "צללפוני",
+      "xlit": "Tsᵉlelpôwnîy",
+      "translated": true
+    },
+    "H6754": {
+      "definitions_cz": "1) obrázek | 1a) obrazy (nádorů, myší, pohanských bohů) | 1b) obraz, podoba (podobnosti) | 1c) pouhý, prázdný, obraz, zdání (obr.)",
+      "lemma": "צֶלֶם",
+      "hebrew": "צלם",
+      "xlit": "tselem",
+      "translated": true
+    },
+    "H6755": {
+      "definitions_cz": "1) obraz, idol",
+      "lemma": "צֶלֶם",
+      "hebrew": "צלם",
+      "xlit": "tselem",
+      "translated": true
+    },
+    "H6756": {
+      "definitions_cz": "Zalmon = \"stinný\" | n pr m | 1) Ahochita, jeden z Davidových mocných válečníků | n pr loc | 2) zalesněný kopec v Samaří u Sichemu",
+      "lemma": "צַלְמוֹן",
+      "hebrew": "צלמון",
+      "xlit": "Tsalmôwn",
+      "translated": true
+    },
+    "H6757": {
+      "definitions_cz": "1) stín smrti, hluboký stín, hluboká tma, stín smrti | 1a) stín smrti | 1b) stín smrti, hluboký stín, temnota | 1c) stín smrti (z tísně, extrémního nebezpečí) (obr.) | 1d) stín smrti (místa mrtvých) (obr.)",
+      "lemma": "צַלְמָוֶת",
+      "hebrew": "צלמות",
+      "xlit": "tsalmâveth",
+      "translated": true
+    },
+    "H6758": {
+      "definitions_cz": "Zalmonah = \"stinný\" | 1) stanice Izraele během putování pouští na východní straně Edomu",
+      "lemma": "צַלְמֹנָה",
+      "hebrew": "צלמנה",
+      "xlit": "Tsalmônâh",
+      "translated": true
+    },
+    "H6759": {
+      "definitions_cz": "Zalmunna = \"zbavený ochrany\" | 1) Madianský král zabitý Gedeonem",
+      "lemma": "צַלְמֻנָּע",
+      "hebrew": "צלמנע",
+      "xlit": "Tsalmunnâʻ",
+      "translated": true
+    },
+    "H6760": {
+      "definitions_cz": "1) kulhat, být chromý | 1a) (Qal) | 1a1) kulhat | 1a2) být chromý",
+      "lemma": "צָלַע",
+      "hebrew": "צלע",
+      "xlit": "tsâlaʻ",
+      "translated": true
+    },
+    "H6761": {
+      "definitions_cz": "1) kulhání, klopýtání",
+      "lemma": "צֶלַע",
+      "hebrew": "צלע",
+      "xlit": "tselaʻ",
+      "translated": true
+    },
+    "H6762": {
+      "definitions_cz": "Zelah = \"žebro\" | 1) město v Benjamínu obsahující Saulovo rodinné pohřebiště",
+      "lemma": "צֶלַע",
+      "hebrew": "צלע",
+      "xlit": "Tselaʻ",
+      "translated": true
+    },
+    "H6763": {
+      "definitions_cz": "1) bok, žebro, nosník | 1a) žebro (člověka) | 1b) žebro (kopce, hřebene atd.) | 1c) postranní komůrky nebo buňky (spánkové konstrukce) | 1d) žebro, prkno, prkno (z cedru nebo jedle) | 1e) křídla (dveře) | 1f) strana (archy)",
+      "lemma": "צֵלָע",
+      "hebrew": "צלע",
+      "xlit": "tsêlâʻ",
+      "translated": true
+    },
+    "H6764": {
+      "definitions_cz": "Zalaph = \"rána\" | 1) otec Hanuna, který pomáhal při přestavbě městské hradby Jeruzaléma po návratu z exilu",
+      "lemma": "צָלָף",
+      "hebrew": "צלף",
+      "xlit": "Tsâlâph",
+      "translated": true
+    },
+    "H6765": {
+      "definitions_cz": "Zelophehad = \"prvorozený\" | 1) Manassite, syn Heferův a vnuk Gileadův; vyšel z Egypta s Mojžíšem a zemřel v pustině a zanechal po sobě pouze pět dcer jako dědice; jejich právo na dědictví bylo potvrzeno božským vedením",
+      "lemma": "צְלׇפְחָד",
+      "hebrew": "צלפחד",
+      "xlit": "Tsᵉlophchâd",
+      "translated": true
+    },
+    "H6766": {
+      "definitions_cz": "Zelzah = \"stín\" | 1) místo na hranici Benjamína, poblíž hrobky Ráchel, 5 mil (8 km) jihozápadně od Jeruzaléma",
+      "lemma": "צֶלְצַח",
+      "hebrew": "צלצח",
+      "xlit": "Tseltsach",
+      "translated": true
+    },
+    "H6767": {
+      "definitions_cz": "1) bzučení, bzučení | 2) oštěp | 3) vrčící kobylka",
+      "lemma": "צְלָצַל",
+      "hebrew": "צלצל",
+      "xlit": "tsᵉlâtsal",
+      "translated": true
+    },
+    "H6768": {
+      "definitions_cz": "Zelek = \"puklina\" | 1) Ammonita a válečníka pro Davida",
+      "lemma": "צֶלֶק",
+      "hebrew": "צלק",
+      "xlit": "Tseleq",
+      "translated": true
+    },
+    "H6769": {
+      "definitions_cz": "Zilthai = \"temný\" | 1) Benjamínec ze synů Šimhiho | 2) Manassite a velitel tisíců, který přišel k Davidovi do Ciklagu",
+      "lemma": "צִלְּתַי",
+      "hebrew": "צלתי",
+      "xlit": "Tsillᵉthay",
+      "translated": true
+    },
+    "H6770": {
+      "definitions_cz": "1) (Qal) mít žízeň",
+      "lemma": "צָמֵא",
+      "hebrew": "צמא",
+      "xlit": "tsâmêʼ",
+      "translated": true
+    },
+    "H6771": {
+      "definitions_cz": "1) žízeň",
+      "lemma": "צָמֵא",
+      "hebrew": "צמא",
+      "xlit": "tsâmêʼ",
+      "translated": true
+    },
+    "H6772": {
+      "definitions_cz": "1) žízeň",
+      "lemma": "צָמָא",
+      "hebrew": "צמא",
+      "xlit": "tsâmâʼ",
+      "translated": true
+    },
+    "H6773": {
+      "definitions_cz": "1) vyprahlý stav, žízeň, dehydratace",
+      "lemma": "צִמְאָה",
+      "hebrew": "צמאה",
+      "xlit": "tsimʼâh",
+      "translated": true
+    },
+    "H6774": {
+      "definitions_cz": "1) žíznivá půda",
+      "lemma": "צִמָּאוֹן",
+      "hebrew": "צמאון",
+      "xlit": "tsimmâʼôwn",
+      "translated": true
+    },
+    "H6775": {
+      "definitions_cz": "1) vázat, spojovat, upevňovat | 1a) (Niphal) připojit se, připojit se nebo se připojit k | 1b) (Pual) k upevnění, svázání | 1c)(Hiphil) spojit, zapadnout, zapřáhnout",
+      "lemma": "צָמַד",
+      "hebrew": "צמד",
+      "xlit": "tsâmad",
+      "translated": true
+    },
+    "H6776": {
+      "definitions_cz": "1) pár, pár, tým, jho | 1a) pár, pár, rozpětí (obvykle zvířat) | 1b) akr | 1b1) množství půdy, které by sáh volů mohl orat za jeden den",
+      "lemma": "צֶמֶד",
+      "hebrew": "צמד",
+      "xlit": "tsemed",
+      "translated": true
+    },
+    "H6777": {
+      "definitions_cz": "1) závoj, ženský závoj",
+      "lemma": "צַמָּה",
+      "hebrew": "צמה",
+      "xlit": "tsammâh",
+      "translated": true
+    },
+    "H6778": {
+      "definitions_cz": "1) svazek rozinek, rozinkový svazek",
+      "lemma": "צַמּוּק",
+      "hebrew": "צמוק",
+      "xlit": "tsammûwq",
+      "translated": true
+    },
+    "H6779": {
+      "definitions_cz": "1) vyklíčit, vyrašit, vyrůst | 1a)(Qal) | 1a1) vyklíčit, vyrašit | 1a1a) rostlin | 1a1b) vlasů | 1a1c) řeči (obr.) | 1b) (Piel) růst hojně nebo hustě | 1c) (Hiphil) | 1c1) způsobit růst | 1c2) způsobit pučení",
+      "lemma": "צָמַח",
+      "hebrew": "צמח",
+      "xlit": "tsâmach",
+      "translated": true
+    },
+    "H6780": {
+      "definitions_cz": "1) klíček, růst, větev | 1a) rašení, růst, rašení | 1b) růst (procesu) | 1c) vyklíčit, vystřelit (Mesiáše z Davidova stromu)",
+      "lemma": "צֶמַח",
+      "hebrew": "צמח",
+      "xlit": "tsemach",
+      "translated": true
+    },
+    "H6781": {
+      "definitions_cz": "1) náramek | 2) kryt (plavidla)",
+      "lemma": "צָמִיד",
+      "hebrew": "צמיד",
+      "xlit": "tsâmîyd",
+      "translated": true
+    },
+    "H6782": {
+      "definitions_cz": "1) past, past, smyčka | 1a) znamená pochybný",
+      "lemma": "צַמִּים",
+      "hebrew": "צמים",
+      "xlit": "tsammîym",
+      "translated": true
+    },
+    "H6783": {
+      "definitions_cz": "1) dokončení, konečnost, navěky",
+      "lemma": "צְמִיתֻת",
+      "hebrew": "צמיתת",
+      "xlit": "tsᵉmîythuth",
+      "translated": true
+    },
+    "H6784": {
+      "definitions_cz": "1) uschnout, uschnout, scvrknout | 1a) (Qal) ke scvrknutí (ženských prsou)",
+      "lemma": "צָמַק",
+      "hebrew": "צמק",
+      "xlit": "tsâmaq",
+      "translated": true
+    },
+    "H6785": {
+      "definitions_cz": "1) vlna | 1a) vlna | 1b) bělost (metaf.) | 1c) vlna (v oděvech)",
+      "lemma": "צֶמֶר",
+      "hebrew": "צמר",
+      "xlit": "tsemer",
+      "translated": true
+    },
+    "H6786": {
+      "definitions_cz": "Zemarit = viz Zemaraim \"dvojité vlny\" | 1) jeden z hamitských kmenů pocházející z Kanaánu a obyvatel neznámého kananejského města",
+      "lemma": "צְמָרִי",
+      "hebrew": "צמרי",
+      "xlit": "Tsᵉmârîy",
+      "translated": true
+    },
+    "H6787": {
+      "definitions_cz": "Zemaraim = \"dvojité rouno z vlny\" | 1) město v severní části Benjamin poblíž Bethel | 2) kopec v Efraim",
+      "lemma": "צְמָרַיִם",
+      "hebrew": "צמרים",
+      "xlit": "Tsᵉmârayim",
+      "translated": true
+    },
+    "H6788": {
+      "definitions_cz": "1) koruna stromu",
+      "lemma": "צַמֶּרֶת",
+      "hebrew": "צמרת",
+      "xlit": "tsammereth",
+      "translated": true
+    },
+    "H6789": {
+      "definitions_cz": "1) ukončit, odříznout, zničit, vyhubit, vyhubit | 1a) (Qal) ukončit, ukončit | 1b) (Niphal) bude ukončen, bude zničen, bude vyhuben | 1c) (Piel) ukončit | 1d) (Pilel), který má být vyhuben, bude zničen | 1e) (Hiphil) vyhubit, vyhladit",
+      "lemma": "צָמַת",
+      "hebrew": "צמת",
+      "xlit": "tsâmath",
+      "translated": true
+    },
+    "H6790": {
+      "definitions_cz": "Zin = \"plochý\" | 1) jméno dané části pouštního úseku mezi Mrtvým mořem a Arabah na východě, kde se nacházela Kadesh-barnea",
+      "lemma": "צִן",
+      "hebrew": "צן",
+      "xlit": "Tsin",
+      "translated": true
+    },
+    "H6791": {
+      "definitions_cz": "1) trn, trn | 1a) znamená pochybný",
+      "lemma": "צֵן",
+      "hebrew": "צן",
+      "xlit": "tsên",
+      "translated": true
+    },
+    "H6792": {
+      "definitions_cz": "1) stádo, ovce",
+      "lemma": "צֹנֵא",
+      "hebrew": "צנא",
+      "xlit": "tsônêʼ",
+      "translated": true
+    },
+    "H6793": {
+      "definitions_cz": "1) něco piercing, háček, protihrot | 1a) znamená pochybný | 2) chlad, chlad (sněhu) | 3) štít, velký štít, štít | 3a) štít",
+      "lemma": "צִנָּה",
+      "hebrew": "צנה",
+      "xlit": "tsinnâh",
+      "translated": true
+    },
+    "H6794": {
+      "definitions_cz": "1) potrubí, výtok, potrubí, vodovodní potrubí",
+      "lemma": "צִנּוּר",
+      "hebrew": "צנור",
+      "xlit": "tsinnûwr",
+      "translated": true
+    },
+    "H6795": {
+      "definitions_cz": "1) (Qal) jít dolů, sestoupit",
+      "lemma": "צָנַח",
+      "hebrew": "צנח",
+      "xlit": "tsânach",
+      "translated": true
+    },
+    "H6796": {
+      "definitions_cz": "1) trn, píchání",
+      "lemma": "צָנִין",
+      "hebrew": "צנין",
+      "xlit": "tsânîyn",
+      "translated": true
+    },
+    "H6797": {
+      "definitions_cz": "1) turban, čelenka",
+      "lemma": "צָנִיף",
+      "hebrew": "צניף",
+      "xlit": "tsânîyph",
+      "translated": true
+    },
+    "H6798": {
+      "definitions_cz": "1) (Qal) vyschnout, ztvrdnout, uschnout",
+      "lemma": "צָנַם",
+      "hebrew": "צנם",
+      "xlit": "tsânam",
+      "translated": true
+    },
+    "H6799": {
+      "definitions_cz": "Zenan = \"špičatý\" | 1) město v judské nížině",
+      "lemma": "צְנָן",
+      "hebrew": "צנן",
+      "xlit": "Tsᵉnân",
+      "translated": true
+    },
+    "H6800": {
+      "definitions_cz": "1) být pokorný, skromný, ponížený | 1a) (Qal) ukázat pokoru | 2) (Hiphil) skromný",
+      "lemma": "צָנַע",
+      "hebrew": "צנע",
+      "xlit": "tsânaʻ",
+      "translated": true
+    },
+    "H6801": {
+      "definitions_cz": "1) (Qal) zabalit, zabalit nebo navinout dohromady, namotat se",
+      "lemma": "צָנַף",
+      "hebrew": "צנף",
+      "xlit": "tsânaph",
+      "translated": true
+    },
+    "H6802": {
+      "definitions_cz": "1) vinutí, věc zabalená, koule",
+      "lemma": "צְנֵפָה",
+      "hebrew": "צנפה",
+      "xlit": "tsᵉnêphâh",
+      "translated": true
+    },
+    "H6803": {
+      "definitions_cz": "1) sklenice, hrnec, nádoba",
+      "lemma": "צִנְצֶנֶת",
+      "hebrew": "צנצנת",
+      "xlit": "tsintseneth",
+      "translated": true
+    },
+    "H6804": {
+      "definitions_cz": "1) potrubí | 1a) trubky napájející lampy olejem",
+      "lemma": "צַנְתָּרָה",
+      "hebrew": "צנתרה",
+      "xlit": "tsantârâh",
+      "translated": true
+    },
+    "H6805": {
+      "definitions_cz": "1) krok, pochod, krok | 1a) (Qal) do kroku, pochodu | 1b) (Hiphil) přimět k pochodu",
+      "lemma": "צָעַד",
+      "hebrew": "צעד",
+      "xlit": "tsâʻad",
+      "translated": true
+    },
+    "H6806": {
+      "definitions_cz": "1) krok, tempo, krok | 1a) krok, tempo | 1b) krok, kroky (samozřejmě života) (obr.)",
+      "lemma": "צַעַד",
+      "hebrew": "צעד",
+      "xlit": "tsaʻad",
+      "translated": true
+    },
+    "H6807": {
+      "definitions_cz": "1) pochodující | 2) náramek, nánožník, nášlapné řetízky",
+      "lemma": "צְעָדָה",
+      "hebrew": "צעדה",
+      "xlit": "tsᵉʻâdâh",
+      "translated": true
+    },
+    "H6808": {
+      "definitions_cz": "1) sklonit se, ohnout, naklonit | 1a) (Qal) | 1a1) sklonit se, ohnout | 1a2) naklonit, naklonit | 1b) (Piel) k převrácení",
+      "lemma": "צָעָה",
+      "hebrew": "צעה",
+      "xlit": "tsâʻâh",
+      "translated": true
+    },
+    "H6809": {
+      "definitions_cz": "1) zavinovačka, šátek, závoj",
+      "lemma": "צָעִיף",
+      "hebrew": "צעיף",
+      "xlit": "tsâʻîyph",
+      "translated": true
+    },
+    "H6810": {
+      "definitions_cz": "1) malý, bezvýznamný, mladý | 1a) málo, bezvýznamné | 1b) bezvýznamný, střední | 1c) mladý, mladší, nejmladší",
+      "lemma": "צָעִיר",
+      "hebrew": "צעיר",
+      "xlit": "tsâʻîyr",
+      "translated": true
+    },
+    "H6811": {
+      "definitions_cz": "Zair = \"malý\" | 1) město v Edomu",
+      "lemma": "צָעִיר",
+      "hebrew": "צעיר",
+      "xlit": "Tsâʻîyr",
+      "translated": true
+    },
+    "H6812": {
+      "definitions_cz": "1) mládí",
+      "lemma": "צְעִירָה",
+      "hebrew": "צעירה",
+      "xlit": "tsᵉʻîyrâh",
+      "translated": true
+    },
+    "H6813": {
+      "definitions_cz": "1) (Qal) putovat, cestovat",
+      "lemma": "צָעַן",
+      "hebrew": "צען",
+      "xlit": "tsâʻan",
+      "translated": true
+    },
+    "H6814": {
+      "definitions_cz": "Zoan = \"místo odjezdu\" | 1) starověké město dolního Egypta nazývané Řeky Tanis; nachází se na východním břehu tanitského ramene Nilu; hlavní město pastýřské dynastie, postavené 7 let po Hebronu a existující před Abrahamem a obydlí faraona v době exodu | 1a) moderní „San“",
+      "lemma": "צֹעַן",
+      "hebrew": "צען",
+      "xlit": "Tsôʻan",
+      "translated": true
+    },
+    "H6815": {
+      "definitions_cz": "Zaanannim nebo Zaanaim = \"odstranění\" | 1) místo v Naftali poblíž Kedeshe",
+      "lemma": "צַעֲנַנִּים",
+      "hebrew": "צעננים",
+      "xlit": "Tsaʻănannîym",
+      "translated": true
+    },
+    "H6816": {
+      "definitions_cz": "1) formované věci, obrazy, vyřezávané postavy",
+      "lemma": "צַעְצֻעַ",
+      "hebrew": "צעצע",
+      "xlit": "tsaʻtsuaʻ",
+      "translated": true
+    },
+    "H6817": {
+      "definitions_cz": "1) plakat, křičet, volat, volat o pomoc | 1a) (Qal) | 1a1) plakat, křičet (o pomoc) | 1a2) plakat, křičet (v nouzi nebo v nouzi) | 1a3) křičet, křičet | 1b) (Niphal) bude předvolán | 1c) (Piel) nahlas plakat (žalem) | 1d) (Hiphil) zavolat spolu",
+      "lemma": "צָעַק",
+      "hebrew": "צעק",
+      "xlit": "tsâʻaq",
+      "translated": true
+    },
+    "H6818": {
+      "definitions_cz": "1) plakat, křičet | 1a) výkřik (proti) | 1b) výkřik úzkosti (zejména tak, jak jej slyšel Bůh)",
+      "lemma": "צַעֲקָה",
+      "hebrew": "צעקה",
+      "xlit": "tsaʻăqâh",
+      "translated": true
+    },
+    "H6819": {
+      "definitions_cz": "1) být nebo růst bezvýznamný, růst malý | 1a) (Qal) na ge nevýznamné",
+      "lemma": "צָעַר",
+      "hebrew": "צער",
+      "xlit": "tsâʻar",
+      "translated": true
+    },
+    "H6820": {
+      "definitions_cz": "Zoar = \"bezvýznamnost\" | 1) město na jihovýchodním konci Mrtvého moře seskupené se Sodomou a Gomorou jako jedno z 5 měst navržených ke zničení Bohem; ušetřen na Lotovu prosbu jako své útočiště",
+      "lemma": "צֹעַר",
+      "hebrew": "צער",
+      "xlit": "Tsôʻar",
+      "translated": true
+    },
+    "H6821": {
+      "definitions_cz": "1) sestavit, uzavřít smlouvu, sestavit | 1a) (Qal) sepisovat, smlouvat, scvrkávat",
+      "lemma": "צָפַד",
+      "hebrew": "צפד",
+      "xlit": "tsâphad",
+      "translated": true
+    },
+    "H6822": {
+      "definitions_cz": "1) dívat se ven nebo kolem, špehovat, hlídat, pozorovat, sledovat | 1a)(Qal) hlídat, špion | 1b) (Piel) sledovat, pozorně sledovat",
+      "lemma": "צָפָה",
+      "hebrew": "צפה",
+      "xlit": "tsâphâh",
+      "translated": true
+    },
+    "H6823": {
+      "definitions_cz": "1) rozložit, položit, překrýt, zakrýt | 1a) (Piel) k překrytí, plechu, čepu | 1b) (Pual) k přeložení",
+      "lemma": "צָפָה",
+      "hebrew": "צפה",
+      "xlit": "tsâphâh",
+      "translated": true
+    },
+    "H6824": {
+      "definitions_cz": "1) odtok, přepad, vypouštění",
+      "lemma": "צָפָה",
+      "hebrew": "צפה",
+      "xlit": "tsâphâh",
+      "translated": true
     }
   }
 }
