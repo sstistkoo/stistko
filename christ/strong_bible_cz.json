@@ -71074,6 +71074,356 @@
       "hebrew": "פזר",
       "xlit": "pâzar",
       "translated": true
+    },
+    "H6341": {
+      "definitions_cz": "1) past na ptáky, past, past | 1a) past na ptáky (doslova) | 1b) kalamit, parcel, zdroje nebo původce kalamity (obr.) | 2) deska (kovová)",
+      "lemma": "פַּח",
+      "hebrew": "פח",
+      "xlit": "pach",
+      "translated": true
+    },
+    "H6342": {
+      "definitions_cz": "1) bát se, třást se, ctít, děsit se, být v úžasu nebo děsit se | 1a) (Qal) | 1a1) být ve strachu | 1a2) být v úžasu | 1b) (Piel) být ve velké hrůze | 1c) (Hiphil) způsobit strach",
+      "lemma": "פָּחַד",
+      "hebrew": "פחד",
+      "xlit": "pâchad",
+      "translated": true
+    },
+    "H6343": {
+      "definitions_cz": "1) hrůza, děs | 1a) hrůza | 1b) objekt strachu",
+      "lemma": "פַּחַד",
+      "hebrew": "פחד",
+      "xlit": "pachad",
+      "translated": true
+    },
+    "H6344": {
+      "definitions_cz": "1) stehno",
+      "lemma": "פַּחַד",
+      "hebrew": "פחד",
+      "xlit": "pachad",
+      "translated": true
+    },
+    "H6345": {
+      "definitions_cz": "1) děs, strach, bázeň, náboženská bázeň",
+      "lemma": "פַּחְדָּה",
+      "hebrew": "פחדה",
+      "xlit": "pachdâh",
+      "translated": true
+    },
+    "H6346": {
+      "definitions_cz": "1) guvernér",
+      "lemma": "פֶּחָה",
+      "hebrew": "פחה",
+      "xlit": "pechâh",
+      "translated": true
+    },
+    "H6347": {
+      "definitions_cz": "1) guvernér",
+      "lemma": "פֶּחָה",
+      "hebrew": "פחה",
+      "xlit": "pechâh",
+      "translated": true
+    },
+    "H6348": {
+      "definitions_cz": "1) (Qal) být rozpustilý, být lehkomyslný, být pěnivý",
+      "lemma": "פָּחַז",
+      "hebrew": "פחז",
+      "xlit": "pâchaz",
+      "translated": true
+    },
+    "H6349": {
+      "definitions_cz": "1) lehkomyslnost, svévolnost, nespoutaná licence, pěnivost",
+      "lemma": "פַּחַז",
+      "hebrew": "פחז",
+      "xlit": "pachaz",
+      "translated": true
+    },
+    "H6350": {
+      "definitions_cz": "1) nerozvážnost, marnotratnost, lehkovážnost",
+      "lemma": "פַּחֲזוּת",
+      "hebrew": "פחזות",
+      "xlit": "pachăzûwth",
+      "translated": true
+    },
+    "H6351": {
+      "definitions_cz": "1) (Hiphil) lapit, past",
+      "lemma": "פָּחַח",
+      "hebrew": "פחח",
+      "xlit": "pâchach",
+      "translated": true
+    },
+    "H6352": {
+      "definitions_cz": "1) uhlí, dřevěné uhlí, žhavé uhlí",
+      "lemma": "פֶּחָם",
+      "hebrew": "פחם",
+      "xlit": "pechâm",
+      "translated": true
+    },
+    "H6353": {
+      "definitions_cz": "1) hrnčíř",
+      "lemma": "פֶּחָר",
+      "hebrew": "פחר",
+      "xlit": "pechâr",
+      "translated": true
+    },
+    "H6354": {
+      "definitions_cz": "1) jáma, díra",
+      "lemma": "פַּחַת",
+      "hebrew": "פחת",
+      "xlit": "pachath",
+      "translated": true
+    },
+    "H6355": {
+      "definitions_cz": "Pahath-moab = \"moabská jáma\" | 1) předek jedné nebo dvou rodin Izraele, kteří se vrátili z vyhnanství v Babylóně | 2) vůdce lidu, otec stavitele zdí Hašuba a ten, kdo podepsal smlouvu s Nehemjášem",
+      "lemma": "פַּחַת מוֹאָב",
+      "hebrew": "פחת מואב",
+      "xlit": "Pachath Môwʼâb",
+      "translated": true
+    },
+    "H6356": {
+      "definitions_cz": "1) nuda nebo jídlo venku, díra, dutina | 1a) malomocného rozkladu v oděvu",
+      "lemma": "פְּחֶתֶת",
+      "hebrew": "פחתת",
+      "xlit": "pᵉchetheth",
+      "translated": true
+    },
+    "H6357": {
+      "definitions_cz": "1) topaz nebo chryzolit | 1a) drahý kámen",
+      "lemma": "פִּטְדָה",
+      "hebrew": "פטדה",
+      "xlit": "piṭdâh",
+      "translated": true
+    },
+    "H6358": {
+      "definitions_cz": "1) otevřeno | 1a) (Qal) propuštěn | 1b) (Hiphil) vystřelit",
+      "lemma": "פָּטוּר",
+      "hebrew": "פטור",
+      "xlit": "pâṭûwr",
+      "translated": true
+    },
+    "H6359": {
+      "definitions_cz": "1) neobsazeno, volně pracovat",
+      "lemma": "פָּטִיר",
+      "hebrew": "פטיר",
+      "xlit": "pâṭîyr",
+      "translated": true
+    },
+    "H6360": {
+      "definitions_cz": "1) kovářské kladivo, kladivo",
+      "lemma": "פַּטִּישׁ",
+      "hebrew": "פטיש",
+      "xlit": "paṭṭîysh",
+      "translated": true
+    },
+    "H6361": {
+      "definitions_cz": "1) oděv, kabát, tunika | 1a) znamená pochybný",
+      "lemma": "פַּטִּישׁ",
+      "hebrew": "פטיש",
+      "xlit": "paṭṭîysh",
+      "translated": true
+    },
+    "H6362": {
+      "definitions_cz": "1) oddělit, uvolnit, odstranit, otevřít, uniknout, prorazit | 1a) (Qal) | 1a1) odstranit (se), uniknout | 1a2) osvobodit, vypustit",
+      "lemma": "פָּטַר",
+      "hebrew": "פטר",
+      "xlit": "pâṭar",
+      "translated": true
+    },
+    "H6363": {
+      "definitions_cz": "1) prvorozený, prvorozený, to, co se odděluje nebo jako první otevírá",
+      "lemma": "פֶּטֶר",
+      "hebrew": "פטר",
+      "xlit": "peṭer",
+      "translated": true
+    },
+    "H6364": {
+      "definitions_cz": "Pi-beseth = \"ústa hnusu\" | 1) město v dolním Egyptě ležící na západním břehu Peluského ramene Nilu asi 40 mil od Memphisu | 1a) stejně jako „Bubastis“ pojmenované po bohyni stejného jména",
+      "lemma": "פִּי־בֶסֶת",
+      "hebrew": "פיבסת",
+      "xlit": "Pîy-Beçeth",
+      "translated": true
+    },
+    "H6365": {
+      "definitions_cz": "1) zmar, katastrofa, zkáza",
+      "lemma": "פִּיד",
+      "hebrew": "פיד",
+      "xlit": "pîyd",
+      "translated": true
+    },
+    "H6366": {
+      "definitions_cz": "1) ostří (meče)",
+      "lemma": "פֵּיָה",
+      "hebrew": "פיה",
+      "xlit": "pêyâh",
+      "translated": true
+    },
+    "H6367": {
+      "definitions_cz": "Pi-hahiroth = \"místo, kde roste ostřice\" | 1) 3. tábor Izraelitů po opuštění Gošenu v Egyptě a poslední před překročením Rudého moře",
+      "lemma": "פִּי הַחִירֹת",
+      "hebrew": "פי החרת",
+      "xlit": "Pîy ha-Chîyrôth",
+      "translated": true
+    },
+    "H6368": {
+      "definitions_cz": "1) saze, popel",
+      "lemma": "פִּיחַ",
+      "hebrew": "פיח",
+      "xlit": "pîyach",
+      "translated": true
+    },
+    "H6369": {
+      "definitions_cz": "Phichol = \"silný\" | 1) vrchní velitel vojska krále Abimelecha z Pelištejců z Geraru za dnů Abrahama a Izáka",
+      "lemma": "פִּיכֹל",
+      "hebrew": "פיכל",
+      "xlit": "Pîykôl",
+      "translated": true
+    },
+    "H6370": {
+      "definitions_cz": "1) konkubína, milenka | 1a) konkubína | 1b) milenec",
+      "lemma": "פִּילֶגֶשׁ",
+      "hebrew": "פילגש",
+      "xlit": "pîylegesh",
+      "translated": true
+    },
+    "H6371": {
+      "definitions_cz": "1) super hojnost (tuku), nadměrný tuk",
+      "lemma": "פִּימָה",
+      "hebrew": "פימה",
+      "xlit": "pîymâh",
+      "translated": true
+    },
+    "H6372": {
+      "definitions_cz": "Phinehas = \"ústa z mosazi\" | 1) syn Eleazarův a vnuk Áronův; jeho horlivost pro Hospodina odvrátila pohromu na Izrael a získala mu Hospodinův slib věčného kněžství v jeho rodině | 2) kněz a syn kněze Eli | 3) otec pomocníka Ezry",
+      "lemma": "פִּינְחָס",
+      "hebrew": "פינחס",
+      "xlit": "Pîynᵉchâç",
+      "translated": true
+    },
+    "H6373": {
+      "definitions_cz": "Pinon = \"tma\" | 1) jeden z náčelníků Edomu",
+      "lemma": "פִּינֹן",
+      "hebrew": "פינן",
+      "xlit": "pîynôn",
+      "translated": true
+    },
+    "H6374": {
+      "definitions_cz": "1) zub, hrana, ústa",
+      "lemma": "פִּיפִיָּה",
+      "hebrew": "פיפיה",
+      "xlit": "pîyphîyâh",
+      "translated": true
+    },
+    "H6375": {
+      "definitions_cz": "1) vrávorání, vrávorání, vrávorání, klopýtnutí",
+      "lemma": "פִּיק",
+      "hebrew": "פיק",
+      "xlit": "pîyq",
+      "translated": true
+    },
+    "H6376": {
+      "definitions_cz": "Pison = \"zvýšit\" | 1) jedna ze čtyř řek používaných k popisu umístění zahrady Eden",
+      "lemma": "פִּישׁוֹן",
+      "hebrew": "פישון",
+      "xlit": "Pîyshôwn",
+      "translated": true
+    },
+    "H6377": {
+      "definitions_cz": "Pithon = \"neškodný\" | 1) syn Micheášův, vnuk Mefibošetova, potomek Saulova",
+      "lemma": "פִּיתוֹן",
+      "hebrew": "פיתון",
+      "xlit": "Pîythôwn",
+      "translated": true
+    },
+    "H6378": {
+      "definitions_cz": "1) lahvička, baňka",
+      "lemma": "פַּךְ",
+      "hebrew": "פך",
+      "xlit": "pak",
+      "translated": true
+    },
+    "H6379": {
+      "definitions_cz": "1) stékat, nalévat | 1a) (Piel) stékat, klesat dolů (voda)",
+      "lemma": "פָּכָה",
+      "hebrew": "פכה",
+      "xlit": "pâkâh",
+      "translated": true
+    },
+    "H6380": {
+      "definitions_cz": "Pochereth ze Zebaim = \"zde odříznutí\" | 1) služebník Šalomounův, jehož potomci se vrátili z vyhnanství se Zerubábelem",
+      "lemma": "פֹּכֶרֶת צְבָיִים",
+      "hebrew": "פכרת צביים",
+      "xlit": "Pôkereth Tsᵉbâyîym",
+      "translated": true
+    },
+    "H6381": {
+      "definitions_cz": "1) být úžasný, báječný, převyšující, mimořádný, oddělený rozlišováním akce | 1a) (Niphal) | 1a1) být nad své síly, těžko to udělat | 1a2) být obtížné pochopit | 1a3) být úžasný, být mimořádný | 1a3a) podivuhodný (příčestí) | 1b) (Piel) k oddělení (nabídka) | 1c) (Hiphil) | 1c1) udělat mimořádnou nebo těžkou nebo obtížnou věc | 1c2) dělat úžasné, dělat úžasně | 1d) (Hithpael) ukázat se úžasné nebo úžasné",
+      "lemma": "פָּלָא",
+      "hebrew": "פלא",
+      "xlit": "pâlâʼ",
+      "translated": true
+    },
+    "H6382": {
+      "definitions_cz": "1) div se, div se | 1a) div (mimořádná, těžko pochopitelná věc) | 1b) zázrak (Boží skutky soudu a vykoupení)",
+      "lemma": "פֶּלֶא",
+      "hebrew": "פלא",
+      "xlit": "peleʼ",
+      "translated": true
+    },
+    "H6383": {
+      "definitions_cz": "1) úžasné, nepochopitelné, mimořádné",
+      "lemma": "פִּלְאִי",
+      "hebrew": "פלאי",
+      "xlit": "pilʼîy",
+      "translated": true
+    },
+    "H6384": {
+      "definitions_cz": "Palluité = viz Pallu \"úžasný\" | 1) potomci Pallu, 2. syna Rubena",
+      "lemma": "פַּלֻּאִי",
+      "hebrew": "פלאי",
+      "xlit": "Palluʼîy",
+      "translated": true
+    },
+    "H6385": {
+      "definitions_cz": "1) rozdělit, rozdělit | 1a) (Niphal) k rozdělení, k rozdělení | 1b) (Piel) | 1b1) štěpit, štěpit | 1b2) rozdělit",
+      "lemma": "פָּלַג",
+      "hebrew": "פלג",
+      "xlit": "pâlag",
+      "translated": true
+    },
+    "H6386": {
+      "definitions_cz": "1) rozdělit | 1a) (P'al) k rozdělení",
+      "lemma": "פְּלַג",
+      "hebrew": "פלג",
+      "xlit": "pᵉlag",
+      "translated": true
+    },
+    "H6387": {
+      "definitions_cz": "1) polovina",
+      "lemma": "פְּלַג",
+      "hebrew": "פלג",
+      "xlit": "pᵉlag",
+      "translated": true
+    },
+    "H6388": {
+      "definitions_cz": "1) kanál, kanál",
+      "lemma": "פֶּלֶג",
+      "hebrew": "פלג",
+      "xlit": "peleg",
+      "translated": true
+    },
+    "H6389": {
+      "definitions_cz": "Peleg = \"divize\" | 1) syn Eberův a bratr Joktanův",
+      "lemma": "פֶּלֶג",
+      "hebrew": "פלג",
+      "xlit": "Peleg",
+      "translated": true
+    },
+    "H6390": {
+      "definitions_cz": "1) potok, divize, řeka | 1a) proud | 1b) divize, sekce",
+      "lemma": "פְּלַגָּה",
+      "hebrew": "פלגה",
+      "xlit": "pᵉlaggâh",
+      "translated": true
     }
   }
 }
