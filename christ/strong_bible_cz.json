@@ -61491,6 +61491,139 @@
       "hebrew": "מתכנת",
       "xlit": "mathkôneth",
       "translated": true
+    },
+    "H4972": {
+      "definitions_cz": "1) jaká únava, dřina, strádání, únava",
+      "lemma": "מַתְּלָאָה",
+      "hebrew": "מתלאה",
+      "xlit": "mattᵉlâʼâh",
+      "translated": true
+    },
+    "H4973": {
+      "definitions_cz": "1) zuby, tesáky, řezáky",
+      "lemma": "מְתַלְּעָה",
+      "hebrew": "מתלעה",
+      "xlit": "mᵉthallᵉʻâh",
+      "translated": true
+    },
+    "H4974": {
+      "definitions_cz": "1) solidnost, úplnost, celistvost",
+      "lemma": "מְתֹם",
+      "hebrew": "מתם",
+      "xlit": "mᵉthôm",
+      "translated": true
+    },
+    "H4975": {
+      "definitions_cz": "1) bedra, boky | la) použitý s H02223 v Pr 30:31; možná vyhynulé zvíře, přesný význam neznámý",
+      "lemma": "מֹתֶן",
+      "hebrew": "מתן",
+      "xlit": "môthen",
+      "translated": true
+    },
+    "H4976": {
+      "definitions_cz": "1) dárky, obětiny, dárky",
+      "lemma": "מַתָּן",
+      "hebrew": "מתן",
+      "xlit": "mattân",
+      "translated": true
+    },
+    "H4977": {
+      "definitions_cz": "Mattan = \"dárek\" | 1) Baalův kněz v Jeruzalémě v době Atalia | 2) otec Šefatjáše v době Jeremjáše",
+      "lemma": "מַתָּן",
+      "hebrew": "מתן",
+      "xlit": "Mattân",
+      "translated": true
+    },
+    "H4978": {
+      "definitions_cz": "1) dárek",
+      "lemma": "מַתְּנָא",
+      "hebrew": "מתנא",
+      "xlit": "mattᵉnâʼ",
+      "translated": true
+    },
+    "H4979": {
+      "definitions_cz": "1) dárek",
+      "lemma": "מַתָּנָה",
+      "hebrew": "מתנה",
+      "xlit": "mattânâh",
+      "translated": true
+    },
+    "H4980": {
+      "definitions_cz": "Mattanah = \"dar Jehovův\" | 1) stanice Izraelitů v poslední části jejich putování se nachází východně od Jordánu a pravděpodobně jihovýchodně od Mrtvého moře",
+      "lemma": "מַתָּנָה",
+      "hebrew": "מתנה",
+      "xlit": "Mattânâh",
+      "translated": true
+    },
+    "H4981": {
+      "definitions_cz": "Mithnite = \"sportovec\" | 1) neznámé odvození | 1a) použitý v popisu Jozafata, jednoho z Davidových strážců",
+      "lemma": "מִתְנִי",
+      "hebrew": "מתני",
+      "xlit": "Mithnîy",
+      "translated": true
+    },
+    "H4982": {
+      "definitions_cz": "Mattenai = \"dar Jehovův\" | 1) kněz, syn Joiaribův, v době Joakim | 2) Izraelita, který měl a propustil svou cizí manželku v době Ezdráše | 3) jiný Izraelita, který měl a propustil svou cizí manželku v době Ezdráše",
+      "lemma": "מַתְּנַי",
+      "hebrew": "מתני",
+      "xlit": "Mattᵉnay",
+      "translated": true
+    },
+    "H4983": {
+      "definitions_cz": "Mattaniáš = \"dar Jehovův\" | 1) původní jméno posledního judského krále před zajetím; také známý jako 'Zedekiah' | 2) Levita, syn Hémanův, jehož úřadem bylo troubit na rohy v chrámové službě, jak určil David | 3) Levita z rodu Asafova | 4) Levita z rodu Asafů, který pomáhal při čištění chrámu za vlády Ezechiáše | 5) Levita z rodu Asafova, který se účastnil zasvěcení jeruzalémských hradeb; vůdce chrámu ch",
+      "lemma": "מַתַּנְיָה",
+      "hebrew": "מתניה",
+      "xlit": "Mattanyâh",
+      "translated": true
+    },
+    "H4984": {
+      "definitions_cz": "1) (Hithpael) ten, kdo se povyšuje",
+      "lemma": "מִתְנַשֵּׂא",
+      "hebrew": "מתנשא",
+      "xlit": "mithnassêʼ",
+      "translated": true
+    },
+    "H4985": {
+      "definitions_cz": "1) být nebo se stát sladkým nebo příjemným | 1a) (Qal) | 1a1) být nebo se stát sladkým | 1a2) být nebo se stát příjemným | 1a3) vysát | 1b) (Hiphil) dát sladkou chuť",
+      "lemma": "מָתַק",
+      "hebrew": "מתק",
+      "xlit": "mâthaq",
+      "translated": true
+    },
+    "H4986": {
+      "definitions_cz": "1) sladkost",
+      "lemma": "מֶתֶק",
+      "hebrew": "מתק",
+      "xlit": "metheq",
+      "translated": true
+    },
+    "H4987": {
+      "definitions_cz": "1) sladkost",
+      "lemma": "מֹתֶק",
+      "hebrew": "מתק",
+      "xlit": "môtheq",
+      "translated": true
+    },
+    "H4988": {
+      "definitions_cz": "1) (Qal) sladce krmit",
+      "lemma": "מָתָק",
+      "hebrew": "מתק",
+      "xlit": "mâthâq",
+      "translated": true
+    },
+    "H4989": {
+      "definitions_cz": "Mithcah = \"sladkost\" | 1) stanice Izraele v poušti; místo neznámé",
+      "lemma": "מִתְקָה",
+      "hebrew": "מתקה",
+      "xlit": "Mithqâh",
+      "translated": true
+    },
+    "H4990": {
+      "definitions_cz": "Mithredath = \"dané Mithrou\" | 1) pokladník perského krále Kýra | 2) perský důstojník umístěný v Samaří v době Artaxerxa",
+      "lemma": "מִתְרְדָת",
+      "hebrew": "מתרדת",
+      "xlit": "Mithrᵉdâth",
+      "translated": true
     }
   }
 }
