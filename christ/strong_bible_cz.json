@@ -59391,6 +59391,706 @@
       "hebrew": "מץ",
       "xlit": "môts",
       "translated": true
+    },
+    "H4672": {
+      "definitions_cz": "1) najít, dosáhnout | 1a) (Qal) | 1a1) najít | 1a1a) najít, zajistit, získat, získat (hledanou věc) | 1a1b) najít (co je ztraceno) | 1a1c) setkat se, setkat se | 1a1d) najít (podmínka) | 1a1e) učit se, vymýšlet | 1a2) zjistit | 1a2a) zjistit | 1a2b) zjistit | 1a2c) hádat | 1a3) přijít, světlo na | 1a3a) narazit, setkat se, spadnout s | 1a3b) zasáhnout | 1a3c) postihnout | 1b) (Niphal) | 1b1) k nalezení | 1b1a) se setkat, být osvětlen, být objeven",
+      "lemma": "מָצָא",
+      "hebrew": "מצא",
+      "xlit": "mâtsâʼ",
+      "translated": true
+    },
+    "H4673": {
+      "definitions_cz": "1) stanice, posádka, stání | 1a) stání (nohy) | 1b) stanice, kancelář, pozice | 1c) posádka, pošta, základna",
+      "lemma": "מַצָּב",
+      "hebrew": "מצב",
+      "xlit": "matstsâb",
+      "translated": true
+    },
+    "H4674": {
+      "definitions_cz": "1) opevnění, obležení, palisáda, sloup",
+      "lemma": "מֻצָּב",
+      "hebrew": "מצב",
+      "xlit": "mutstsâb",
+      "translated": true
+    },
+    "H4675": {
+      "definitions_cz": "1) stráž, hlídka, armáda",
+      "lemma": "מַצָּבָה",
+      "hebrew": "מצבה",
+      "xlit": "matstsâbâh",
+      "translated": true
+    },
+    "H4676": {
+      "definitions_cz": "1) sloup, mastaba, pařez | 1a) pilíř | 1a1) jako pomník, osobní památník | 1a2) s oltářem | 1b) (Hoph) kmen, pařez (stromu)",
+      "lemma": "מַצֵּבָה",
+      "hebrew": "מצבה",
+      "xlit": "matstsêbâh",
+      "translated": true
+    },
+    "H4677": {
+      "definitions_cz": "Mesobaite = \"nastavení JAH\" | 1) Jaasiela, jednoho z Davidových mocných válečníků | 1a) tvar nevhodný pro adj",
+      "lemma": "מְצֹבָיָה",
+      "hebrew": "מצביה",
+      "xlit": "Mᵉtsôbâyâh",
+      "translated": true
+    },
+    "H4678": {
+      "definitions_cz": "1) sloup, mastaba, pařez | 1a) pilíř | 1a1) jako pomník, osobní památník | 1a2) s oltářem | 1b) (Hoph) kmen, pařez (stromu)",
+      "lemma": "מַצֶּבֶת",
+      "hebrew": "מצבת",
+      "xlit": "matstsebeth",
+      "translated": true
+    },
+    "H4679": {
+      "definitions_cz": "1) pevnost, pevnost, pevnost | 1a) horská stálost | 1b) tvrz",
+      "lemma": "מְצַד",
+      "hebrew": "מצד",
+      "xlit": "mᵉtsad",
+      "translated": true
+    },
+    "H4680": {
+      "definitions_cz": "1) vypustit, vypustit | 1a) (Qal) vypustit, vypustit | 1b) (Niphal) vypustit",
+      "lemma": "מָצָה",
+      "hebrew": "מצה",
+      "xlit": "mâtsâh",
+      "translated": true
+    },
+    "H4681": {
+      "definitions_cz": "Mozah = \"fontána\" | 1) jedno z měst v Benjaminu; místo neznámé",
+      "lemma": "מֹצָה",
+      "hebrew": "מצה",
+      "xlit": "Môtsâh",
+      "translated": true
+    },
+    "H4682": {
+      "definitions_cz": "1) nekynuté (chléb, koláč), bez kvásku.",
+      "lemma": "מַצָּה",
+      "hebrew": "מצה",
+      "xlit": "matstsâh",
+      "translated": true
+    },
+    "H4683": {
+      "definitions_cz": "1) sváry, sváry",
+      "lemma": "מַצָּה",
+      "hebrew": "מצה",
+      "xlit": "matstsâh",
+      "translated": true
+    },
+    "H4684": {
+      "definitions_cz": "1) řehtá",
+      "lemma": "מַצְהָלָה",
+      "hebrew": "מצהלה",
+      "xlit": "matshâlâh",
+      "translated": true
+    },
+    "H4685": {
+      "definitions_cz": "n m | 1) obléhací děla, opevnění | 2) lovecké nářadí, síť | n f | 3) čistý | 4) stálost, pevnost",
+      "lemma": "מָצוֹד",
+      "hebrew": "מצוד",
+      "xlit": "mâtsôwd",
+      "translated": true
+    },
+    "H4686": {
+      "definitions_cz": "1) síť, kořist, čistá kořist | 1a) čisté | 1b) kořist | 2) stálost, pevnost",
+      "lemma": "מָצוּד",
+      "hebrew": "מצוד",
+      "xlit": "mâtsûwd",
+      "translated": true
+    },
+    "H4687": {
+      "definitions_cz": "1) přikázání | 1a) přikázání (člověka) | 1b) přikázání (Boží) | 1c) přikázání (kodexu moudrosti)",
+      "lemma": "מִצְוָה",
+      "hebrew": "מצוה",
+      "xlit": "mitsvâh",
+      "translated": true
+    },
+    "H4688": {
+      "definitions_cz": "1) hloubka, hlubina, hluboké moře",
+      "lemma": "מְצוֹלָה",
+      "hebrew": "מצולה",
+      "xlit": "mᵉtsôwlâh",
+      "translated": true
+    },
+    "H4689": {
+      "definitions_cz": "1) tíseň, tíseň, úzkost, stres, úzkost",
+      "lemma": "מָצוֹק",
+      "hebrew": "מצוק",
+      "xlit": "mâtsôwq",
+      "translated": true
+    },
+    "H4690": {
+      "definitions_cz": "1) roztavená podpěra, pilíř, sloup",
+      "lemma": "מָצוּק",
+      "hebrew": "מצוק",
+      "xlit": "mâtsûwq",
+      "translated": true
+    },
+    "H4691": {
+      "definitions_cz": "1) tíseň, tíseň, tíseň, stres",
+      "lemma": "מְצוּקָה",
+      "hebrew": "מצוקה",
+      "xlit": "mᵉtsûwqâh",
+      "translated": true
+    },
+    "H4692": {
+      "definitions_cz": "1) obléhací ohrada, obléhání, opevnění, obléhací práce | 1a) obléhání | 1b) ohrazení, obléhací děla, val",
+      "lemma": "מָצוֹר",
+      "hebrew": "מצור",
+      "xlit": "mâtsôwr",
+      "translated": true
+    },
+    "H4693": {
+      "definitions_cz": "1) \"Matsor\", název pro Egypt | 2) (TWOT) obležení, opevnění",
+      "lemma": "מָצוֹר",
+      "hebrew": "מצור",
+      "xlit": "mâtsôwr",
+      "translated": true
+    },
+    "H4694": {
+      "definitions_cz": "1) obléhací stavby, tvrz, val | 1a) obléhací stavby | 1b) val",
+      "lemma": "מְצוּרָה",
+      "hebrew": "מצורה",
+      "xlit": "mᵉtsûwrâh",
+      "translated": true
+    },
+    "H4695": {
+      "definitions_cz": "1) sváry, sváry",
+      "lemma": "מַצּוּת",
+      "hebrew": "מצות",
+      "xlit": "matstsûwth",
+      "translated": true
+    },
+    "H4696": {
+      "definitions_cz": "1) obočí, čelo",
+      "lemma": "מֵצַח",
+      "hebrew": "מצח",
+      "xlit": "mêtsach",
+      "translated": true
+    },
+    "H4697": {
+      "definitions_cz": "1) škvarky, brnění na nohy",
+      "lemma": "מִצְחָה",
+      "hebrew": "מצחה",
+      "xlit": "mitschâh",
+      "translated": true
+    },
+    "H4698": {
+      "definitions_cz": "1) zvonek",
+      "lemma": "מְצִלָּה",
+      "hebrew": "מצלה",
+      "xlit": "mᵉtsillâh",
+      "translated": true
+    },
+    "H4699": {
+      "definitions_cz": "1) rokle, pánev, prohlubeň | 1a) zřejmě místo poblíž Jeruzaléma",
+      "lemma": "מְצֻלָּה",
+      "hebrew": "מצלה",
+      "xlit": "mᵉtsullâh",
+      "translated": true
+    },
+    "H4700": {
+      "definitions_cz": "1) činely",
+      "lemma": "מְצֵלֶת",
+      "hebrew": "מצלת",
+      "xlit": "mᵉtsêleth",
+      "translated": true
+    },
+    "H4701": {
+      "definitions_cz": "1) turban (velekněze)",
+      "lemma": "מִצְנֶפֶת",
+      "hebrew": "מצנפת",
+      "xlit": "mitsnepheth",
+      "translated": true
+    },
+    "H4702": {
+      "definitions_cz": "1) gauč, postel",
+      "lemma": "מַצָּע",
+      "hebrew": "מצע",
+      "xlit": "matstsâʻ",
+      "translated": true
+    },
+    "H4703": {
+      "definitions_cz": "1) krok",
+      "lemma": "מִצְעָד",
+      "hebrew": "מצעד",
+      "xlit": "mitsʻâd",
+      "translated": true
+    },
+    "H4704": {
+      "definitions_cz": "1) malá, bezvýznamná, maličkost",
+      "lemma": "מִצְּעִירָה",
+      "hebrew": "מצעירה",
+      "xlit": "mitstsᵉʻîyrâh",
+      "translated": true
+    },
+    "H4705": {
+      "definitions_cz": "1) maličkost | 1a) maličkost | 1b) malou chvíli (času)",
+      "lemma": "מִצְעָר",
+      "hebrew": "מצער",
+      "xlit": "mitsʻâr",
+      "translated": true
+    },
+    "H4706": {
+      "definitions_cz": "Mizar = \"malý\" | 1) hora zřejmě v severní části Transjordánska poblíž hory Hermon",
+      "lemma": "מִצְעָר",
+      "hebrew": "מצער",
+      "xlit": "Mitsʻâr",
+      "translated": true
+    },
+    "H4707": {
+      "definitions_cz": "1) strážní věž, vyhlídka",
+      "lemma": "מִצְפֶּה",
+      "hebrew": "מצפה",
+      "xlit": "mitspeh",
+      "translated": true
+    },
+    "H4708": {
+      "definitions_cz": "Mizpeh = \"strážní věž\" | 1) město v okrese Shephelah nebo nížiny Judy | 2) místo v Moabu na východě Jordánu | 3) místo v Gileadu | 4) místo poblíž hory Hermon | 5) místo v Benjaminu; také 'Mizpa'",
+      "lemma": "מִצְפֶּה",
+      "hebrew": "מצפה",
+      "xlit": "Mitspeh",
+      "translated": true
+    },
+    "H4709": {
+      "definitions_cz": "Mizpa = \"strážní věž\" | 1) místo v Gileadu severně od Jabboku a umístění Labanovy mohyly | 2) místo v Gileadu jižně od Jaboku; místo neznámé | 3) místo poblíž hory Hermon | 4) staré posvátné místo v Benjaminu",
+      "lemma": "מִצְפָּה",
+      "hebrew": "מצפה",
+      "xlit": "Mitspâh",
+      "translated": true
+    },
+    "H4710": {
+      "definitions_cz": "1) skrytý poklad, poklad",
+      "lemma": "מִצְפֻּן",
+      "hebrew": "מצפן",
+      "xlit": "mitspun",
+      "translated": true
+    },
+    "H4711": {
+      "definitions_cz": "1) (Qal) vysát, vysát",
+      "lemma": "מָצַץ",
+      "hebrew": "מצץ",
+      "xlit": "mâtsats",
+      "translated": true
+    },
+    "H4712": {
+      "definitions_cz": "1) úžiny, tíseň",
+      "lemma": "מֵצַר",
+      "hebrew": "מצר",
+      "xlit": "mêtsar",
+      "translated": true
+    },
+    "H4713": {
+      "definitions_cz": "egyptský = viz egyptské \"dvojité úžiny\" | 1) Egypťan-obyvatel nebo občan Egypta | 1a) Egypťan | 1b) egyptský",
+      "lemma": "מִצְרִי",
+      "hebrew": "מצרי",
+      "xlit": "Mitsrîy",
+      "translated": true
+    },
+    "H4714": {
+      "definitions_cz": "Egypt = \"země Koptů\" | n pr loc | 1) země v severovýchodní části Afriky sousedící s Palestinou, kterou protéká Nil | Egypťané = \"dvojité úžiny\" | adj | 2) obyvatelé nebo domorodci Egypta",
+      "lemma": "מִצְרַיִם",
+      "hebrew": "מצרים",
+      "xlit": "Mitsrayim",
+      "translated": true
+    },
+    "H4715": {
+      "definitions_cz": "1) kelímek",
+      "lemma": "מִצְרֵף",
+      "hebrew": "מצרף",
+      "xlit": "mitsrêph",
+      "translated": true
+    },
+    "H4716": {
+      "definitions_cz": "1) rozklad, hniloba",
+      "lemma": "מַק",
+      "hebrew": "מק",
+      "xlit": "maq",
+      "translated": true
+    },
+    "H4717": {
+      "definitions_cz": "1) kladivo",
+      "lemma": "מַקָּבָה",
+      "hebrew": "מקבה",
+      "xlit": "maqqâbâh",
+      "translated": true
+    },
+    "H4718": {
+      "definitions_cz": "1) otvor, výkop, perforace | 2) kladivo, perforátor",
+      "lemma": "מַקֶּבֶת",
+      "hebrew": "מקבת",
+      "xlit": "maqqebeth",
+      "translated": true
+    },
+    "H4719": {
+      "definitions_cz": "Makkeda = \"místo pastýřů\" | 1) umístění jeskyně v Judsku, kde Jozue během dobytí zajal a popravil pět kananejských králů; se nachází v blízkosti Bethoron a Libnah",
+      "lemma": "מַקֵּדָה",
+      "hebrew": "מקדה",
+      "xlit": "Maqqêdâh",
+      "translated": true
+    },
+    "H4720": {
+      "definitions_cz": "1) posvátné místo, svatyně, svaté místo | 1a) svatyně | 1a1) chrámu | 1a2) svatostánku | 1a3) Ezechielova chrámu | 1a4) Jehovy",
+      "lemma": "מִקְדָּשׁ",
+      "hebrew": "מקדש",
+      "xlit": "miqdâsh",
+      "translated": true
+    },
+    "H4721": {
+      "definitions_cz": "1) shromáždění, sbor",
+      "lemma": "מַקְהֵל",
+      "hebrew": "מקהל",
+      "xlit": "maqhêl",
+      "translated": true
+    },
+    "H4722": {
+      "definitions_cz": "Makheloth = \"místo shromáždění\" | 1) stanice Izraelitů v poušti",
+      "lemma": "מַקְהֵלֹת",
+      "hebrew": "מקהלת",
+      "xlit": "Maqhêlôth",
+      "translated": true
+    },
+    "H4723": {
+      "definitions_cz": "n m | 1) naděje | 1a) naděje | 1b) důvod naděje | 1c) doufané věci, výsledek | 2) sběr, sebraná hmota | n pr m | 3) (CLBL) Kue, místo v Kilikii, odkud Šalamoun dovezl koně",
+      "lemma": "מִקְוֶה",
+      "hebrew": "מקוה",
+      "xlit": "miqveh",
+      "translated": true
+    },
+    "H4724": {
+      "definitions_cz": "1) nádrž | 2) (TWOT) sběr, sebraná hmota",
+      "lemma": "מִקְוָה",
+      "hebrew": "מקוה",
+      "xlit": "miqvâh",
+      "translated": true
+    },
+    "H4725": {
+      "definitions_cz": "1) stání, místo | 1a) stání, nádraží, pošta, úřad | 1b) místo, místo lidského pobytu | 1c) město, pozemek, kraj | 1d) místo, lokalita, místo | 1e) prostor, místnost, vzdálenost | 1f) region, čtvrtletí, směr | 1g) dát místo, místo",
+      "lemma": "מָקוֹם",
+      "hebrew": "מקום",
+      "xlit": "mâqôwm",
+      "translated": true
+    },
+    "H4726": {
+      "definitions_cz": "1) pramen, fontána | 1a) jaro | 1a1) zdroj života, radosti, očisty (obr.) | 1b) oka (obr.) | 1c) zdroj (menstruační krve) | 1d) průtok (krve po narození dítěte)",
+      "lemma": "מָקוֹר",
+      "hebrew": "מקור",
+      "xlit": "mâqôwr",
+      "translated": true
+    },
+    "H4727": {
+      "definitions_cz": "1) brát, přijímat, přijímat (úplatku)",
+      "lemma": "מִקָּח",
+      "hebrew": "מקח",
+      "xlit": "miqqâch",
+      "translated": true
+    },
+    "H4728": {
+      "definitions_cz": "1) zboží",
+      "lemma": "מַקָּחָה",
+      "hebrew": "מקחה",
+      "xlit": "maqqâchâh",
+      "translated": true
+    },
+    "H4729": {
+      "definitions_cz": "1) místo obětního kouře, oltář, ohniště, kadidlo",
+      "lemma": "מִקְטָר",
+      "hebrew": "מקטר",
+      "xlit": "miqṭâr",
+      "translated": true
+    },
+    "H4730": {
+      "definitions_cz": "1) kadidelnice",
+      "lemma": "מִקְטֶרֶת",
+      "hebrew": "מקטרת",
+      "xlit": "miqṭereth",
+      "translated": true
+    },
+    "H4731": {
+      "definitions_cz": "1) tyč, hůl | 1a) tyč, hůl | 1b) zaměstnanci (na cestách) | 1c) hůlka (věštkyně)",
+      "lemma": "מַקֵּל",
+      "hebrew": "מקל",
+      "xlit": "maqqêl",
+      "translated": true
+    },
+    "H4732": {
+      "definitions_cz": "Mikloth = \"staves\" | 1) jeden ze synů Jechiela, otce nebo knížete Gibeonu, jeho manželky Maachy; benjamín | 2) vůdce 2. oddílu Davidova vojska",
+      "lemma": "מִקְלוֹת",
+      "hebrew": "מקלות",
+      "xlit": "Miqlôwth",
+      "translated": true
+    },
+    "H4733": {
+      "definitions_cz": "1) útočiště, azyl",
+      "lemma": "מִקְלָט",
+      "hebrew": "מקלט",
+      "xlit": "miqlâṭ",
+      "translated": true
+    },
+    "H4734": {
+      "definitions_cz": "1) řezbářství",
+      "lemma": "מִקְלַעַת",
+      "hebrew": "מקלעת",
+      "xlit": "miqlaʻath",
+      "translated": true
+    },
+    "H4735": {
+      "definitions_cz": "1) skot, hospodářská zvířata | 1a) skot, hospodářská zvířata | 1a1) obecně pro prodejné domácí zvíře | 1b) krávy, ovce, kozy (ve stádech a hejnech)",
+      "lemma": "מִקְנֶה",
+      "hebrew": "מקנה",
+      "xlit": "miqneh",
+      "translated": true
+    },
+    "H4736": {
+      "definitions_cz": "1) nákup | 1a) nákup | 1b) kupní cena | 1c) vlastnictví (získané koupí)",
+      "lemma": "מִקְנָה",
+      "hebrew": "מקנה",
+      "xlit": "miqnâh",
+      "translated": true
+    },
+    "H4737": {
+      "definitions_cz": "Miknejáš = \"vlastnictví Jehovy\" | 1) jeden z levitů 2. řady, strážců archy, jmenovaný Davidem, aby hráli v chrámové kapele",
+      "lemma": "מִקְנֵיָהוּ",
+      "hebrew": "מקניהו",
+      "xlit": "Miqnêyâhûw",
+      "translated": true
+    },
+    "H4738": {
+      "definitions_cz": "1) věštění",
+      "lemma": "מִקְסָם",
+      "hebrew": "מקסם",
+      "xlit": "miqçâm",
+      "translated": true
+    },
+    "H4739": {
+      "definitions_cz": "Makaz = \"konec\" | 1) místo v Izraeli; místo neznámé",
+      "lemma": "מָקַץ",
+      "hebrew": "מקץ",
+      "xlit": "Mâqats",
+      "translated": true
+    },
+    "H4740": {
+      "definitions_cz": "1) místo rohové konstrukce, rohová opěra, vnitřní rohová opěra | 1a) rohový sloupek, opěrné místo, opěrka",
+      "lemma": "מַקְצוֹעַ",
+      "hebrew": "מקצוע",
+      "xlit": "maqtsôwaʻ",
+      "translated": true
+    },
+    "H4741": {
+      "definitions_cz": "1) škrabací nástroj (používaný při výrobě idolů)",
+      "lemma": "מַקְצֻעָה",
+      "hebrew": "מקצעה",
+      "xlit": "maqtsuʻâh",
+      "translated": true
+    },
+    "H4742": {
+      "definitions_cz": "1) místo rohové konstrukce, rohová opěra, vnitřní rohová opěra | 1a) rohový sloupek",
+      "lemma": "מְקֻצְעָה",
+      "hebrew": "מקצעה",
+      "xlit": "mᵉqutsʻâh",
+      "translated": true
+    },
+    "H4743": {
+      "definitions_cz": "1) chátrat, borovice pryč, hnít, hnisat | 1a) (Niphal) | 1a1) hnisat (rány) | 1a2) hnít, hnít | 1a3) odformovat | 1a4) borovat pryč | 1b) (Hifil) způsobit hnilobu",
+      "lemma": "מָקַק",
+      "hebrew": "מקק",
+      "xlit": "mâqaq",
+      "translated": true
+    },
+    "H4744": {
+      "definitions_cz": "1) svolání, svolání, čtení, společné svolání | 1a) svolání, posvátné shromáždění | 1b) svolávací | 1c) čtení",
+      "lemma": "מִקְרָא",
+      "hebrew": "מקרא",
+      "xlit": "miqrâʼ",
+      "translated": true
+    },
+    "H4745": {
+      "definitions_cz": "1) nepředvídané setkání nebo událost, nehoda, událost, náhoda, štěstí | 1a) nehoda, náhoda | 1b) štěstí, osud",
+      "lemma": "מִקְרֶה",
+      "hebrew": "מקרה",
+      "xlit": "miqreh",
+      "translated": true
+    },
+    "H4746": {
+      "definitions_cz": "1) práce s paprskem",
+      "lemma": "מְקָרֶה",
+      "hebrew": "מקרה",
+      "xlit": "mᵉqâreh",
+      "translated": true
+    },
+    "H4747": {
+      "definitions_cz": "1) chlad, chlazení",
+      "lemma": "מְקֵרָה",
+      "hebrew": "מקרה",
+      "xlit": "mᵉqêrâh",
+      "translated": true
+    },
+    "H4748": {
+      "definitions_cz": "1) soustružená práce, dobře upravené vlasy, dobře nastavené vlasy, soustružnická práce | 1a) význam nejistý; možné s odkazem na umění účesu",
+      "lemma": "מִקְשֶׁה",
+      "hebrew": "מקשה",
+      "xlit": "miqsheh",
+      "translated": true
+    },
+    "H4749": {
+      "definitions_cz": "1) tepaná práce, jemně zdobené kultovní předměty ze zlata nebo stříbra",
+      "lemma": "מִקְשָׁה",
+      "hebrew": "מקשה",
+      "xlit": "miqshâh",
+      "translated": true
+    },
+    "H4750": {
+      "definitions_cz": "1) místo nebo pole okurek",
+      "lemma": "מִקְשָׁה",
+      "hebrew": "מקשה",
+      "xlit": "miqshâh",
+      "translated": true
+    },
+    "H4751": {
+      "definitions_cz": "adj | 1) hořkost, hořkost | 1a) vody nebo potravin | 1b) konec nevěstky, konec špatnosti, pláč (obr.) | 1c) bolesti (subst) | adv | 2) hořce",
+      "lemma": "מַר",
+      "hebrew": "מר",
+      "xlit": "mar",
+      "translated": true
+    },
+    "H4752": {
+      "definitions_cz": "1) kapka, stékání dolů",
+      "lemma": "מַר",
+      "hebrew": "מר",
+      "xlit": "mar",
+      "translated": true
+    },
+    "H4753": {
+      "definitions_cz": "1) myrha | 1a) arabská guma z kůry stromu, používaná v posvátném oleji a parfému",
+      "lemma": "מֹר",
+      "hebrew": "מר",
+      "xlit": "môr",
+      "translated": true
+    },
+    "H4754": {
+      "definitions_cz": "1) (Hiphil) bít (vzduch), mávat (křídly) | 1a) znamená pochybný | 2) (Qal) špinavý",
+      "lemma": "מָרָא",
+      "hebrew": "מרא",
+      "xlit": "mârâʼ",
+      "translated": true
+    },
+    "H4755": {
+      "definitions_cz": "Mara = \"hořkost\" | 1) jméno, které si Naomi říkala kvůli svým pohromám",
+      "lemma": "מָרָא",
+      "hebrew": "מרא",
+      "xlit": "Mârâʼ",
+      "translated": true
+    },
+    "H4756": {
+      "definitions_cz": "1) pán | 1a) krále | 1b) Boha",
+      "lemma": "מָרֵא",
+      "hebrew": "מרא",
+      "xlit": "mârêʼ",
+      "translated": true
+    },
+    "H4757": {
+      "definitions_cz": "Merodach-baladan = \"Marduk dal syna\" | 1) babylonský král za dnů judského krále Ezechiáše",
+      "lemma": "מְרֹאדַךְ בַּלְאָדָן",
+      "hebrew": "מרא דך בלאדן",
+      "xlit": "Mᵉrôʼdak Balʼâdân",
+      "translated": true
+    },
+    "H4758": {
+      "definitions_cz": "1) zrak, vzhled, vidění | 1a) zrak, jev, podívaná, vzhled, vidění | 1b) co je vidět | 1c) vize (nadpřirozená) | 1d) zrak, vidění (síla vidění)",
+      "lemma": "מַרְאֶה",
+      "hebrew": "מראה",
+      "xlit": "marʼeh",
+      "translated": true
+    },
+    "H4759": {
+      "definitions_cz": "1) vize | 1a) způsob zjevení | 2) zrcadlo",
+      "lemma": "מַרְאָה",
+      "hebrew": "מראה",
+      "xlit": "marʼâh",
+      "translated": true
+    },
+    "H4760": {
+      "definitions_cz": "1) obilí nebo krákání (ptáka), trávicí trubice (ptáka)",
+      "lemma": "מֻרְאָה",
+      "hebrew": "מראה",
+      "xlit": "murʼâh",
+      "translated": true
+    },
+    "H4761": {
+      "definitions_cz": "n f | 1) místo v čele, panství, místo hlavy | adv | 2) na místě hlavy",
+      "lemma": "מַרְאָשָׁה",
+      "hebrew": "מראשה",
+      "xlit": "marʼâshâh",
+      "translated": true
+    },
+    "H4762": {
+      "definitions_cz": "Mareshah = \"hřeben kopce\" | 1) jedno z měst v nížinách Judska",
+      "lemma": "מַרְאֵשָׁה",
+      "hebrew": "מראשה",
+      "xlit": "Marʼêshâh",
+      "translated": true
+    },
+    "H4763": {
+      "definitions_cz": "n f | 1) místo v čele, panství, místo hlavy | adv | 2) na místě hlavy",
+      "lemma": "מְרַאֲשָׁה",
+      "hebrew": "מראשה",
+      "xlit": "mᵉraʼăshâh",
+      "translated": true
+    },
+    "H4764": {
+      "definitions_cz": "Merab = \"zvýšit\" | 1) nejstarší dcera krále Saula; slíbil Davidovi, ale místo toho dal Adrielovi Meholatskému; matka 5 dětí",
+      "lemma": "מֵרָב",
+      "hebrew": "מרב",
+      "xlit": "Mêrâb",
+      "translated": true
+    },
+    "H4765": {
+      "definitions_cz": "1) pomazánka, přikrývka",
+      "lemma": "מַרְבַד",
+      "hebrew": "מרבד",
+      "xlit": "marbad",
+      "translated": true
+    },
+    "H4766": {
+      "definitions_cz": "1) hojnost, zvýšení | 1a) hojnost | 1b) zvýšení | ++++ | Konečná forma m použitá uprostřed tohoto slova v Iz 9:7.",
+      "lemma": "מַרְבֶה",
+      "hebrew": "מרבה",
+      "xlit": "marbeh",
+      "translated": true
+    },
+    "H4767": {
+      "definitions_cz": "1) hodně",
+      "lemma": "מִרְבָּה",
+      "hebrew": "מרבה",
+      "xlit": "mirbâh",
+      "translated": true
+    },
+    "H4768": {
+      "definitions_cz": "1) nárůst, velký počet, množství, velikost | 1a) zvýšení | 1a1) rodiny | 1a2) přírůstek, úrok, lichva | 1b) velký počet (lidí) | 1c) velikost (moudrosti)",
+      "lemma": "מַרְבִּית",
+      "hebrew": "מרבית",
+      "xlit": "marbîyth",
+      "translated": true
+    },
+    "H4769": {
+      "definitions_cz": "1) místo pro ležení, místo odpočinku nebo bydlení | 1a) divokých šelem",
+      "lemma": "מַרְבֵּץ",
+      "hebrew": "מרבץ",
+      "xlit": "marbêts",
+      "translated": true
+    },
+    "H4770": {
+      "definitions_cz": "1) stání (zvířat)",
+      "lemma": "מַרְבֵּק",
+      "hebrew": "מרבק",
+      "xlit": "marbêq",
+      "translated": true
+    },
+    "H4771": {
+      "definitions_cz": "1) odpočinek",
+      "lemma": "מַרְגּוֹעַ",
+      "hebrew": "מרגוע",
+      "xlit": "margôwaʻ",
+      "translated": true
     }
   }
 }
