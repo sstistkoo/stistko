@@ -41491,6 +41491,906 @@
       "translit": "phýllon",
       "pronunciation": "fool'-lon",
       "translated": true
+    },
+    "G5441": {
+      "definitions_cz": "hlídač nebo hlídač",
+      "translit": "phýlax",
+      "pronunciation": "foo'-lax",
+      "translated": true
+    },
+    "G5445": {
+      "definitions_cz": "možná\n podobný [ŘECKO:5453]",
+      "translit": "phýrama",
+      "pronunciation": "foo'-ram-ah",
+      "translated": true
+    },
+    "G5446": {
+      "definitions_cz": "\"fyzické\", tedy (implicitně) instinktivní",
+      "translit": "physikós",
+      "pronunciation": "foo-see-kos'",
+      "translated": true
+    },
+    "G5447": {
+      "definitions_cz": "\"fyzicky\", tj. (implicitně)\n instinktivně",
+      "translit": "physikōs",
+      "pronunciation": "foo-see-koce'",
+      "translated": true
+    },
+    "G5448": {
+      "definitions_cz": "nafukovat, tzn.\n (obrazně) dělat hrdý (povýšený)",
+      "translit": "physióō",
+      "pronunciation": "foo-see-o'-o",
+      "translated": true
+    },
+    "G5449": {
+      "definitions_cz": "růst (klíčením nebo expanzí), tj. (implicitně)\n přirozená produkce (lineární sestup); podle rozšíření rod nebo druh;\n přeneseně, nativní dispozice, složení nebo použití",
+      "translit": "phýsis",
+      "pronunciation": "foo'-sis",
+      "translated": true
+    },
+    "G5450": {
+      "definitions_cz": "inflace, tedy (obrazně) povýšenost",
+      "translit": "physíōsis",
+      "pronunciation": "foo-see'-o-sis",
+      "translated": true
+    },
+    "G5451": {
+      "definitions_cz": "přesazování, tedy (konkrétně) keř popř\n zeleniny",
+      "translit": "phyteía",
+      "pronunciation": "foo-ti'-ah",
+      "translated": true
+    },
+    "G5452": {
+      "definitions_cz": "vydat se do země, t. j. implantovat;\n přeneseně, vštípit doktrínu",
+      "translit": "phyteúō",
+      "pronunciation": "foot-yoo'-o",
+      "translated": true
+    },
+    "G5453": {
+      "definitions_cz": "asi původně, \"nafukovat\" nebo foukat, t. j. bobtnat\n nahoru; ale používá se pouze v implikovaném smyslu, ke klíčení nebo růstu (klíčení,\n vyrobit), doslova nebo přeneseně",
+      "translit": "phýō",
+      "pronunciation": "foo'-o",
+      "translated": true
+    },
+    "G5454": {
+      "definitions_cz": "nora nebo číhací místo",
+      "translit": "phōleós",
+      "pronunciation": "fo-leh-os'",
+      "translated": true
+    },
+    "G5455": {
+      "definitions_cz": "vydávat zvuk (zvířecí, lidský nebo instrumentální); podle\n implikace, oslovovat slovy nebo jménem, také imitací",
+      "translit": "phōnéō",
+      "pronunciation": "fo-neh'-o",
+      "translated": true
+    },
+    "G5456": {
+      "definitions_cz": "tón\n (artikulovaný, bestiální nebo umělý); implicitně adresa (pro\n jakýkoli účel), rčení nebo jazyk",
+      "translit": "phōnḗ",
+      "pronunciation": "fo-nay'",
+      "translated": true
+    },
+    "G5457": {
+      "definitions_cz": "porovnejte [ŘECKO:5316][ŘECKO:5346]",
+      "translit": "phōs",
+      "pronunciation": "foce",
+      "translated": true
+    },
+    "G5458": {
+      "definitions_cz": "iluminátor, tedy (konkrétně) svítidlo, popř\n (abstraktně) brilantnost",
+      "translit": "phōstḗr",
+      "pronunciation": "foce-tare'",
+      "translated": true
+    },
+    "G5459": {
+      "definitions_cz": "světlonosné (\"fosfor\"), tj. (speciálně),\n ranní hvězda (obrazně)",
+      "translit": "phōsphóros",
+      "pronunciation": "foce-for'-os",
+      "translated": true
+    },
+    "G5460": {
+      "definitions_cz": "lesklé, tj. průhledné nebo dobře osvětlené\n (obrazně)",
+      "translit": "phōteinós",
+      "pronunciation": "fo-ti-nos'",
+      "translated": true
+    },
+    "G5461": {
+      "definitions_cz": "vrhat paprsky, t. j. svítit nebo (přechodně) rozjasňovat\n nahoru (doslova nebo obrazně)",
+      "translit": "phōtízō",
+      "pronunciation": "fo-tid'-zo",
+      "translated": true
+    },
+    "G5462": {
+      "definitions_cz": "osvětlení (obrazně)",
+      "translit": "phōtismós",
+      "pronunciation": "fo-tis-mos'",
+      "translated": true
+    },
+    "G5463": {
+      "definitions_cz": "být „veselý“, tj. klidně šťastný nebo dobře situovaný;\n neosobně, zejména jako pozdrav (při setkání nebo rozchodu), být\n dobře",
+      "translit": "chaírō",
+      "pronunciation": "khah'-ee-ro",
+      "translated": true
+    },
+    "G5464": {
+      "definitions_cz": "kroupy",
+      "translit": "chálaza",
+      "pronunciation": "khal'-ad-zah",
+      "translated": true
+    },
+    "G5465": {
+      "definitions_cz": "snížit (jako do prázdna)",
+      "translit": "chaláō",
+      "pronunciation": "khal-ah'-o",
+      "translated": true
+    },
+    "G5466": {
+      "definitions_cz": "Chaldæan (tj. Kasdi), nebo domorodec nebo\n oblast dolního Eufratu",
+      "translit": "Chaldaîos",
+      "pronunciation": "khal-dah'-yos",
+      "translated": true
+    },
+    "G5467": {
+      "definitions_cz": "obtížné, tedy nebezpečné, nebo (implicitně) zběsilé",
+      "translit": "chalepós",
+      "pronunciation": "khal-ep-os'",
+      "translated": true
+    },
+    "G5468": {
+      "definitions_cz": "být a\n bit-leader, tj. omezit (obrazně)",
+      "translit": "chalinagōgéō",
+      "pronunciation": "khal-in-ag-ogue-eh'-o",
+      "translated": true
+    },
+    "G5469": {
+      "definitions_cz": "obrubník nebo hlavička (jako omezení ducha)",
+      "translit": "chalinós",
+      "pronunciation": "khal-ee-nos'",
+      "translated": true
+    },
+    "G5470": {
+      "definitions_cz": "měděný",
+      "translit": "chálkeos",
+      "pronunciation": "khal'-keh-os",
+      "translated": true
+    },
+    "G5471": {
+      "definitions_cz": "měděný dělník nebo topič",
+      "translit": "chalkeús",
+      "pronunciation": "khalk-yooce'",
+      "translated": true
+    },
+    "G5472": {
+      "definitions_cz": "podobné mědi, tzn.\n \"chalcedon\"",
+      "translit": "chalkēdṓn",
+      "pronunciation": "khal-kay-dohn'",
+      "translated": true
+    },
+    "G5473": {
+      "definitions_cz": "měděná miska",
+      "translit": "chalkíon",
+      "pronunciation": "khal-kee'-on",
+      "translated": true
+    },
+    "G5474": {
+      "definitions_cz": "leštěná měď, slitina mědi (příp\n zlato) a stříbro s brilantním leskem",
+      "translit": "chalkolíbanon",
+      "pronunciation": "khal-kol-ib'-an-on",
+      "translated": true
+    },
+    "G5475": {
+      "definitions_cz": "měď (látka, popř\n nějaké nářadí nebo mince z něj vyrobené)",
+      "translit": "chalkós",
+      "pronunciation": "khal-kos'",
+      "translated": true
+    },
+    "G5476": {
+      "definitions_cz": "k zemi, tedy k zemi",
+      "translit": "chamaí",
+      "pronunciation": "kham-ah'-ee",
+      "translated": true
+    },
+    "G5477": {
+      "definitions_cz": "Chanaan (tj Kenaan), rané jméno\n Palestina",
+      "translit": "Chanaán",
+      "pronunciation": "khan-ah-an'",
+      "translated": true
+    },
+    "G5478": {
+      "definitions_cz": "Chanaanæan (tj. Kenaanite) nebo původem z nežidů\n Palestina",
+      "translit": "Chanaanaîos",
+      "pronunciation": "khan-ah-an-ah'-yos",
+      "translated": true
+    },
+    "G5479": {
+      "definitions_cz": "veselost, t. j. klidná rozkoš",
+      "translit": "chará",
+      "pronunciation": "khar-ah'",
+      "translated": true
+    },
+    "G5480": {
+      "definitions_cz": "vryp nebo lept, tedy razítko (jako odznak\n nevolnictví), nebo vytesaná postava (socha)",
+      "translit": "cháragma",
+      "pronunciation": "khar'-ag-mah",
+      "translated": true
+    },
+    "G5481": {
+      "definitions_cz": "hrubší (nástroj nebo osoba), tj\n implikace) rytina ((\"znak\"), postava vyražená, tzn\n přesná kopie nebo (obrazně) znázornění)",
+      "translit": "charaktḗr",
+      "pronunciation": "khar-ak-tare'",
+      "translated": true
+    },
+    "G5482": {
+      "definitions_cz": "podobný [ŘECKO:1125]",
+      "translit": "chárax",
+      "pronunciation": "khar'-ax",
+      "translated": true
+    },
+    "G5483": {
+      "definitions_cz": "udělit jako laskavost, t. j. bezúplatně, v\n laskavost, odpuštění nebo záchranu",
+      "translit": "charízomai",
+      "pronunciation": "khar-id'-zom-ahee",
+      "translated": true
+    },
+    "G5484": {
+      "definitions_cz": "ve prospěch, tj. na\n účet",
+      "translit": "chárin",
+      "pronunciation": "khar'-in",
+      "translated": true
+    },
+    "G5485": {
+      "definitions_cz": "laskavost (jako potěšující), způsobu nebo jednání (abstraktní nebo\n beton; doslovný, obrazný nebo duchovní; zejména božské\n vliv na srdce a jeho odraz v životě; včetně\n vděčnost)",
+      "translit": "cháris",
+      "pronunciation": "khar'-ece",
+      "translated": true
+    },
+    "G5486": {
+      "definitions_cz": "(božský) dar, tedy vysvobození (z nebezpečí nebo\n vášeň); (speciálně), (duchovní) nadání, tj. (subjektivně)\n náboženská kvalifikace nebo (objektivně) zázračná schopnost",
+      "translit": "chárisma",
+      "pronunciation": "khar'-is-mah",
+      "translated": true
+    },
+    "G5487": {
+      "definitions_cz": "k milosti, t. j. přisluhovat se zvláštní ctí",
+      "translit": "charitóō",
+      "pronunciation": "khar-ee-to'-o",
+      "translated": true
+    },
+    "G5488": {
+      "definitions_cz": "Charrhan (t. j. Charan), místo v\n Mezopotámie",
+      "translit": "Charrhán",
+      "pronunciation": "khar-hran'",
+      "translated": true
+    },
+    "G5489": {
+      "definitions_cz": "list (\"tabulka\") psacího materiálu (jak má být\n načmáraný)",
+      "translit": "chártēs",
+      "pronunciation": "khar'-tace",
+      "translated": true
+    },
+    "G5490": {
+      "definitions_cz": "a\n \"propast\" nebo volné místo (neprůchodný interval)",
+      "translit": "chásma",
+      "pronunciation": "khas'-mah",
+      "translated": true
+    },
+    "G5491": {
+      "definitions_cz": "ret (jako vylévací místo);\n přeneseně, okraj (vody)",
+      "translit": "cheîlos",
+      "pronunciation": "khi'-los",
+      "translated": true
+    },
+    "G5492": {
+      "definitions_cz": "bouřit, tj. (pasivně) pracovat pod a\n vichřice",
+      "translit": "cheimázō",
+      "pronunciation": "khi-mad'-zo",
+      "translated": true
+    },
+    "G5493": {
+      "definitions_cz": "bouřka, tzn.\n zimní torrent",
+      "translit": "cheímarrhos",
+      "pronunciation": "khi'-mar-hros",
+      "translated": true
+    },
+    "G5494": {
+      "definitions_cz": "podobný základu 5490 přes\n myšlenka kanálu), což znamená bouři (jako liják); podle\n implikace, období dešťů, tedy zima",
+      "translit": "cheimṓn",
+      "pronunciation": "khi-mone'",
+      "translated": true
+    },
+    "G5495": {
+      "definitions_cz": "ruku\n (doslova nebo přeneseně (moc); zejména (hebraismem) prostředek\n nebo nástroj)",
+      "translit": "cheír",
+      "pronunciation": "khire",
+      "translated": true
+    },
+    "G5496": {
+      "definitions_cz": "být ručním vůdcem, tj. vést (nevidomého)",
+      "translit": "cheiragōgéō",
+      "pronunciation": "khi-rag-ogue-eh'-o",
+      "translated": true
+    },
+    "G5497": {
+      "definitions_cz": "ruční vedoucí, tedy osobní\n dirigent (nevidomého)",
+      "translit": "cheiragōgós",
+      "pronunciation": "khi-rag-o-gos'",
+      "translated": true
+    },
+    "G5498": {
+      "definitions_cz": "něco ručně psaného\n (\"chirograf\"), tj. rukopis (zejména právní dokument nebo dluhopis\n (obrazně))",
+      "translit": "cheirógraphon",
+      "pronunciation": "khi-rog'-raf-on",
+      "translated": true
+    },
+    "G5499": {
+      "definitions_cz": "vyrobené, tj. lidské\n konstrukce",
+      "translit": "cheiropoíētos",
+      "pronunciation": "khi-rop-oy'-ay-tos",
+      "translated": true
+    },
+    "G5500": {
+      "definitions_cz": "být a\n dosah ruky nebo volič (zvednutím ruky), tedy (obecně) k\n vybrat nebo jmenovat",
+      "translit": "cheirotonéō",
+      "pronunciation": "khi-rot-on-eh'-o",
+      "translated": true
+    },
+    "G5501": {
+      "definitions_cz": "ze zastaralého ekvivalentu\n χέρης",
+      "translit": "cheírōn",
+      "pronunciation": "khi'-rone",
+      "translated": true
+    },
+    "G5502": {
+      "definitions_cz": "\"cherubíni\" (tj. cherubíni popř\n kerubim)",
+      "translit": "cheroubím",
+      "pronunciation": "kher-oo-beem'",
+      "translated": true
+    },
+    "G5503": {
+      "definitions_cz": "vdova (jako bez manžela),\n doslova nebo obrazně",
+      "translit": "chḗra",
+      "pronunciation": "khay'-rah",
+      "translated": true
+    },
+    "G5504": {
+      "definitions_cz": "\"včera\"; rozšířením, v době minulé popř\n dosud",
+      "translit": "chthés",
+      "pronunciation": "khthes",
+      "translated": true
+    },
+    "G5505": {
+      "definitions_cz": "tisíc (\"chiliáda\")",
+      "translit": "chiliás",
+      "pronunciation": "khil-ee-as'",
+      "translated": true
+    },
+    "G5506": {
+      "definitions_cz": "velitel tisíce vojáků (\"chiliarch\";\n tj. plukovník",
+      "translit": "chilíarchos",
+      "pronunciation": "khil-ee'-ar-khos",
+      "translated": true
+    },
+    "G5507": {
+      "definitions_cz": "tisíc",
+      "translit": "chílioi",
+      "pronunciation": "khil'-ee-oy",
+      "translated": true
+    },
+    "G5508": {
+      "definitions_cz": "Chios, ostrov v\n Středomoří",
+      "translit": "Chíos",
+      "pronunciation": "khee'-os",
+      "translated": true
+    },
+    "G5509": {
+      "definitions_cz": "tunika nebo košile",
+      "translit": "chitṓn",
+      "pronunciation": "khee-tone'",
+      "translated": true
+    },
+    "G5510": {
+      "definitions_cz": "sněžení",
+      "translit": "chiṓn",
+      "pronunciation": "khee-one'",
+      "translated": true
+    },
+    "G5511": {
+      "definitions_cz": "vojenský plášť",
+      "translit": "chlamýs",
+      "pronunciation": "khlam-ooce'",
+      "translated": true
+    },
+    "G5512": {
+      "definitions_cz": "vyhodit ret, t. j. posmívat se\n v",
+      "translit": "chleuázō",
+      "pronunciation": "khlyoo-ad'-zo",
+      "translated": true
+    },
+    "G5513": {
+      "definitions_cz": "vlažný",
+      "translit": "chliarós",
+      "pronunciation": "khlee-ar-os'",
+      "translated": true
+    },
+    "G5514": {
+      "definitions_cz": "\"zelený\"; Chloë, křesťanka\n samice",
+      "translit": "Chlóē",
+      "pronunciation": "khlo'-ay",
+      "translated": true
+    },
+    "G5515": {
+      "definitions_cz": "nazelenalý, t. j. zelený, šedohnědý",
+      "translit": "chlōrós",
+      "pronunciation": "khlo-ros'",
+      "translated": true
+    },
+    "G5516": {
+      "definitions_cz": "666 jako číslice",
+      "translit": "chx stigma",
+      "pronunciation": "khee xee stig'-ma",
+      "translated": true
+    },
+    "G5517": {
+      "definitions_cz": "prašný nebo špinavý (jako půda), tj. (implicitně)\n terrene",
+      "translit": "choïkós",
+      "pronunciation": "kho-ik-os'",
+      "translated": true
+    },
+    "G5518": {
+      "definitions_cz": "chœnix nebo určitá suchá míra",
+      "translit": "choînix",
+      "pronunciation": "khoy'-nix",
+      "translated": true
+    },
+    "G5519": {
+      "definitions_cz": "prase",
+      "translit": "choîros",
+      "pronunciation": "khoy'-ros",
+      "translated": true
+    },
+    "G5520": {
+      "definitions_cz": "být žlučový, tj. (implicitně) podrážděný (rozzuřený,\n \"cholerik\")",
+      "translit": "choláō",
+      "pronunciation": "khol-ah'-o",
+      "translated": true
+    },
+    "G5521": {
+      "definitions_cz": "\"žluč\" nebo žluč, tj. (analogicky) jed nebo anodyn\n (pelyněk, mák atd.)",
+      "translit": "cholḗ",
+      "pronunciation": "khol-ay'",
+      "translated": true
+    },
+    "G5522": {
+      "definitions_cz": "hromada (jako vysypaná), t. j. odpadky; volný\n špína",
+      "translit": "chóos",
+      "pronunciation": "kho'-os",
+      "translated": true
+    },
+    "G5523": {
+      "definitions_cz": "Chorazin, místo v Palestině",
+      "translit": "Chorazín",
+      "pronunciation": "khor-ad-zin'",
+      "translated": true
+    },
+    "G5524": {
+      "definitions_cz": "být tanečním vůdcem, tj. (obecně)\n vybavit",
+      "translit": "chorēgéō",
+      "pronunciation": "khor-ayg-eh'-o",
+      "translated": true
+    },
+    "G5525": {
+      "definitions_cz": "prsten, tj. kulatý tanec (\"sbor\"",
+      "translit": "chorós",
+      "pronunciation": "khor-os'",
+      "translated": true
+    },
+    "G5526": {
+      "definitions_cz": "krmit, t. j. (obecně) rokovat (dodávat potravu v\n hojnost)",
+      "translit": "chortázō",
+      "pronunciation": "khor-tad'-zo",
+      "translated": true
+    },
+    "G5527": {
+      "definitions_cz": "píce, tedy potrava",
+      "translit": "chórtasma",
+      "pronunciation": "khor'-tas-mah",
+      "translated": true
+    },
+    "G5528": {
+      "definitions_cz": "\"dvůr\" nebo \"zahrada\", tj\n důsledek pastvy) bylin nebo vegetace",
+      "translit": "chórtos",
+      "pronunciation": "khor'-tos",
+      "translated": true
+    },
+    "G5529": {
+      "definitions_cz": "Chuzas, Herodův důstojník",
+      "translit": "Chouzâs",
+      "pronunciation": "khood-zas'",
+      "translated": true
+    },
+    "G5530": {
+      "definitions_cz": "vybavit, co je potřeba; (dejte orákulum, \"pást se\" (lehce se dotkněte),\n světlo na atd.), tj. (implicitně) používat nebo (rozšířeně)\n jednat vůči jednomu daným způsobem",
+      "translit": "chráomai",
+      "pronunciation": "khrah'-om-ahee",
+      "translated": true
+    },
+    "G5531": {
+      "definitions_cz": "půjčit",
+      "translit": "chráō",
+      "pronunciation": "khrah'-o",
+      "translated": true
+    },
+    "G5532": {
+      "definitions_cz": "zaměstnání, t. j. poměr; také (podle\n implikace) příležitost, požadavek, požadavek nebo nedostatek",
+      "translit": "chreía",
+      "pronunciation": "khri'-ah",
+      "translated": true
+    },
+    "G5533": {
+      "definitions_cz": "úvěrový, tedy zadlužený\n osoba",
+      "translit": "chreōpheilétēs",
+      "pronunciation": "khreh-o-fi-let'-ace",
+      "translated": true
+    },
+    "G5534": {
+      "definitions_cz": "to potřebuje (musí nebo by mělo) být",
+      "translit": "chrḗ",
+      "pronunciation": "khray",
+      "translated": true
+    },
+    "G5535": {
+      "definitions_cz": "činit (t. j. mít) nutnost, t. j. být v nouzi",
+      "translit": "chrḗizō",
+      "pronunciation": "khrade'-zo",
+      "translated": true
+    },
+    "G5536": {
+      "definitions_cz": "něco užitečného nebo potřebného, ​​t. j. bohatství, cena",
+      "translit": "chrēma",
+      "pronunciation": "khray'-mah",
+      "translated": true
+    },
+    "G5537": {
+      "definitions_cz": "vyslovit orákulum (srovnej původní smysl [ŘECKO:5530][ŘECKO:5532]",
+      "translit": "chrēmatízō",
+      "pronunciation": "khray-mat-id'-zo",
+      "translated": true
+    },
+    "G5538": {
+      "definitions_cz": "Boží odpověď nebo zjevení",
+      "translit": "chrēmatismós",
+      "pronunciation": "khray-mat-is-mos'",
+      "translated": true
+    },
+    "G5539": {
+      "definitions_cz": "provozuschopný",
+      "translit": "chrḗsimos",
+      "pronunciation": "khray'-see-mos",
+      "translated": true
+    },
+    "G5540": {
+      "definitions_cz": "zaměstnání, tj. (zvláště), pohlavní styk (jako an\n obsazení těla)",
+      "translit": "chrēsis",
+      "pronunciation": "khray'-sis",
+      "translated": true
+    },
+    "G5541": {
+      "definitions_cz": "ukázat se užitečným, t. j. jednat\n benevolentně",
+      "translit": "chrēsteúomai",
+      "pronunciation": "khraste-yoo'-om-ahee",
+      "translated": true
+    },
+    "G5542": {
+      "definitions_cz": "slušná řeč, tzn.\n věrohodnosti",
+      "translit": "chrēstología",
+      "pronunciation": "khrase-tol-og-ee'-ah",
+      "translated": true
+    },
+    "G5543": {
+      "definitions_cz": "využitý, tj. (implicitně) užitečný (způsobem resp\n morálka)",
+      "translit": "chrēstós",
+      "pronunciation": "khrase-tos'",
+      "translated": true
+    },
+    "G5544": {
+      "definitions_cz": "užitečnost, tj. morálně, dokonalost (povahově popř\n chování)",
+      "translit": "chrēstótēs",
+      "pronunciation": "khray-stot'-ace",
+      "translated": true
+    },
+    "G5545": {
+      "definitions_cz": "nemastný nebo mazlivý, tedy (obrazně) zvláštní\n obdarování („chrism“) Duchem svatým",
+      "translit": "chrîsma",
+      "pronunciation": "khris'-mah",
+      "translated": true
+    },
+    "G5546": {
+      "definitions_cz": "křesťan, t. j. následovník Krista",
+      "translit": "Christianós",
+      "pronunciation": "khris-tee-an-os'",
+      "translated": true
+    },
+    "G5547": {
+      "definitions_cz": "pomazaný, t. j. Mesiáš, přídomek Ježíšův",
+      "translit": "Christós",
+      "pronunciation": "khris-tos'",
+      "translated": true
+    },
+    "G5548": {
+      "definitions_cz": "namazat nebo rozetřít\n olejem, tedy (implicitně) zasvětit na úřad popř\n bohoslužba",
+      "translit": "chríō",
+      "pronunciation": "khree'-o",
+      "translated": true
+    },
+    "G5549": {
+      "definitions_cz": "mít čas, t. j. zdržovat se",
+      "translit": "chronízō",
+      "pronunciation": "khron-id'-zo",
+      "translated": true
+    },
+    "G5550": {
+      "definitions_cz": "časový prostor (obecně a tedy\n správně odlišit od [ŘECKO:2540][ŘECKO:165]",
+      "translit": "chrónos",
+      "pronunciation": "khron'-os",
+      "translated": true
+    },
+    "G5551": {
+      "definitions_cz": "být a\n nositel času, tj. prokrastinovat (zdržovat se)",
+      "translit": "chronotribéō",
+      "pronunciation": "khron-ot-rib-eh'-o",
+      "translated": true
+    },
+    "G5552": {
+      "definitions_cz": "ze zlata",
+      "translit": "chrýseos",
+      "pronunciation": "khroo'-seh-os",
+      "translated": true
+    },
+    "G5553": {
+      "definitions_cz": "zlatý artikl, t. j. zlacení, ozdoba, popř\n mince",
+      "translit": "chrysíon",
+      "pronunciation": "khroo-see'-on",
+      "translated": true
+    },
+    "G5554": {
+      "definitions_cz": "zlatý prsten, t. j. nošení zlatého prstenu na prst nebo\n podobné šperky",
+      "translit": "chrysodaktýlios",
+      "pronunciation": "khroo-sod-ak-too'-lee-os",
+      "translated": true
+    },
+    "G5555": {
+      "definitions_cz": "zlato-kámen, t. j. žlutý drahokam\n (\"chryzolit\")",
+      "translit": "chrysólithos",
+      "pronunciation": "khroo-sol'-ee-thos",
+      "translated": true
+    },
+    "G5556": {
+      "definitions_cz": "zelenožlutý drahokam\n (\"chrysoprase\")",
+      "translit": "chrysóprasos",
+      "pronunciation": "khroo-sop'-ras-os",
+      "translated": true
+    },
+    "G5557": {
+      "definitions_cz": "zlato; rozšířením zlatý článek, jako ozdoba popř\n mince",
+      "translit": "chrysós",
+      "pronunciation": "khroo-sos'",
+      "translated": true
+    },
+    "G5558": {
+      "definitions_cz": "pozlatit, t. j. ozdobit zlatými ozdobami",
+      "translit": "chrysóō",
+      "pronunciation": "khroo-so'-o",
+      "translated": true
+    },
+    "G5559": {
+      "definitions_cz": "a\n tělo (správně jeho povrch nebo kůže)",
+      "translit": "chrṓs",
+      "pronunciation": "khroce",
+      "translated": true
+    },
+    "G5560": {
+      "definitions_cz": "\"halt\", tedy kulhání",
+      "translit": "chōlós",
+      "pronunciation": "kho-los'",
+      "translated": true
+    },
+    "G5561": {
+      "definitions_cz": "místnost, tj. prostor území (více či méně rozsáhlý;\n často včetně jejích obyvatel)",
+      "translit": "chṓra",
+      "pronunciation": "kho'-rah",
+      "translated": true
+    },
+    "G5562": {
+      "definitions_cz": "být v (dát) prostoru, tj. (nepřechodně) projít,\n vstoupit, nebo (přechodně) držet, připustit (doslova nebo\n přeneseně)",
+      "translit": "chōréō",
+      "pronunciation": "kho-reh'-o",
+      "translated": true
+    },
+    "G5563": {
+      "definitions_cz": "umístit mezi, tj. část; reflexivně, jít\n pryč",
+      "translit": "chōrízō",
+      "pronunciation": "kho-rid'-zo",
+      "translated": true
+    },
+    "G5564": {
+      "definitions_cz": "místo nebo pozemek",
+      "translit": "chōríon",
+      "pronunciation": "kho-ree'-on",
+      "translated": true
+    },
+    "G5565": {
+      "definitions_cz": "v prostoru, tj. samostatně nebo odděleně od (často jako\n předložka)",
+      "translit": "chōrís",
+      "pronunciation": "kho-rece'",
+      "translated": true
+    },
+    "G5566": {
+      "definitions_cz": "severozápadním větru",
+      "translit": "chōros",
+      "pronunciation": "kho'-ros",
+      "translated": true
+    },
+    "G5567": {
+      "definitions_cz": "porovnat\n [ŘECKA:5597]",
+      "translit": "psállō",
+      "pronunciation": "psal'-lo",
+      "translated": true
+    },
+    "G5568": {
+      "definitions_cz": "hudební soubor, tedy posvátná óda (s doprovodem\n hlas, harfu nebo jiný nástroj; \"žalm\"); společně,\n kniha žalmů",
+      "translit": "psalmós",
+      "pronunciation": "psal-mos'",
+      "translated": true
+    },
+    "G5569": {
+      "definitions_cz": "podvržený bratr, t. j. předstíraný společník",
+      "translit": "pseudádelphos",
+      "pronunciation": "psyoo-dad'-el-fos",
+      "translated": true
+    },
+    "G5570": {
+      "definitions_cz": "podvržený apoštol, t. j. předstíraný pracher",
+      "translit": "pseudapóstolos",
+      "pronunciation": "psyoo-dap-os'-tol-os",
+      "translated": true
+    },
+    "G5571": {
+      "definitions_cz": "nepravdivý, t. j. chybný, lstivý, zlý",
+      "translit": "pseudḗs",
+      "pronunciation": "psyoo-dace'",
+      "translated": true
+    },
+    "G5572": {
+      "definitions_cz": "falešný učitel, t. j. šiřitel chybných\n křesťanská doktrína",
+      "translit": "pseudodidáskalos",
+      "pronunciation": "psyoo-dod-id-as'-kal-os",
+      "translated": true
+    },
+    "G5573": {
+      "definitions_cz": "lživý, t. j. hlásající chybný křesťan\n doktrína",
+      "translit": "pseudológos",
+      "pronunciation": "psyoo-dol-og'-os",
+      "translated": true
+    },
+    "G5574": {
+      "definitions_cz": "vyslovit nepravdu popř\n pokus o klamání lží",
+      "translit": "pseúdomai",
+      "pronunciation": "psyoo'-dom-ahee",
+      "translated": true
+    },
+    "G5575": {
+      "definitions_cz": "falešný svědek, tedy nositel\n z nepravdivého svědectví",
+      "translit": "pseudomártyr",
+      "pronunciation": "psyoo-dom-ar'-toor",
+      "translated": true
+    },
+    "G5576": {
+      "definitions_cz": "být nepravdivým svědkem, tj. nabízet nepravdu v\n důkazy",
+      "translit": "pseudomartyréō",
+      "pronunciation": "psyoo-dom-ar-too-reh'-o",
+      "translated": true
+    },
+    "G5577": {
+      "definitions_cz": "nepravdivé svědectví",
+      "translit": "pseudomartyría",
+      "pronunciation": "psyoo-dom-ar-too-ree'-ah",
+      "translated": true
+    },
+    "G5578": {
+      "definitions_cz": "falešný prorok, t. j. předstíraný prorok popř\n náboženský podvodník",
+      "translit": "pseudoprophḗtēs",
+      "pronunciation": "psyoo-dop-rof-ay'-tace",
+      "translated": true
+    },
+    "G5579": {
+      "definitions_cz": "faleš",
+      "translit": "pseûdos",
+      "pronunciation": "psyoo'-dos",
+      "translated": true
+    },
+    "G5580": {
+      "definitions_cz": "falešný Mesiáš",
+      "translit": "pseudóchristos",
+      "pronunciation": "psyoo-dokh'-ris-tos",
+      "translated": true
+    },
+    "G5581": {
+      "definitions_cz": "nepravdivě pojmenovaný",
+      "translit": "pseudṓnymos",
+      "pronunciation": "psyoo-do'-noo-mos",
+      "translated": true
+    },
+    "G5582": {
+      "definitions_cz": "výmysl, tedy lež",
+      "translit": "pseûsma",
+      "pronunciation": "psyoos'-mah",
+      "translated": true
+    },
+    "G5583": {
+      "definitions_cz": "falzifikátor",
+      "translit": "pseústēs",
+      "pronunciation": "psyoos-tace'",
+      "translated": true
+    },
+    "G5584": {
+      "definitions_cz": "manipulovat, t. j. ověřit tím\n kontakt; obrazně řečeno hledat",
+      "translit": "psēlapháō",
+      "pronunciation": "psay-laf-ah'-o",
+      "translated": true
+    },
+    "G5585": {
+      "definitions_cz": "používat oblázky ve výčtu, tj. (obecně) k\n spočítat",
+      "translit": "psēphízō",
+      "pronunciation": "psay-fid'-zo",
+      "translated": true
+    },
+    "G5586": {
+      "definitions_cz": "oblázek (jak se hladce nosí při manipulaci), tj\n implikace, použití jako protipól nebo hlasovací lístek) verdikt (osvobození)\n nebo vstupenka (vstupné); hlasování",
+      "translit": "psēphos",
+      "pronunciation": "psay'-fos",
+      "translated": true
+    },
+    "G5587": {
+      "definitions_cz": "implicitně pomluva;\n pravděpodobně podobný [ŘECKO:5574]",
+      "translit": "psithyrismós",
+      "pronunciation": "psith-oo-ris-mos'",
+      "translated": true
+    },
+    "G5588": {
+      "definitions_cz": "tajný pomlouvač",
+      "translit": "psithyristḗs",
+      "pronunciation": "psith-oo-ris-tace'",
+      "translated": true
+    },
+    "G5589": {
+      "definitions_cz": "a\n trochu nebo sousto",
+      "translit": "psichíon",
+      "pronunciation": "psikh-ee'-on",
+      "translated": true
+    },
+    "G5590": {
+      "definitions_cz": "dech, tedy (implicitně) duch, abstraktně či\n konkrétně (pouze princip zvířecího vnímání; takto rozlišeno na\n jedna strana z [ŘECKO:4151][ŘECKO:2222][HEBREW:05315][HEBREW:07307][HEBREW:02416]",
+      "translit": "psychḗ",
+      "pronunciation": "psoo-khay'",
+      "translated": true
+    },
+    "G5591": {
+      "definitions_cz": "citlivý, tj. živý (v rozlišení na jedné straně\n z [ŘEK:4152][ŘEK:5446]",
+      "translit": "psychikós",
+      "pronunciation": "psoo-khee-kos'",
+      "translated": true
+    },
+    "G5592": {
+      "definitions_cz": "chlad",
+      "translit": "psýchos",
+      "pronunciation": "psoo'-khos",
+      "translated": true
+    },
+    "G5593": {
+      "definitions_cz": "chladný (doslova nebo obrazně)",
+      "translit": "psychrós",
+      "pronunciation": "psoo-chros'",
+      "translated": true
     }
   }
 }
