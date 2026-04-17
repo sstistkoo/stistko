@@ -53777,6 +53777,706 @@
       "hebrew": "לוז",
       "xlit": "lûwz",
       "translated": true
+    },
+    "H3870": {
+      "definitions_cz": "Luz = \"mandloň\" | 1) raný název Bethel a pravděpodobně název města v těsné blízkosti skutečného umístění oltáře a Jakubova sloupu | 2) jméno města v zemi Chetitů; místo neznámé",
+      "lemma": "לוּז",
+      "hebrew": "לוז",
+      "xlit": "Lûwz",
+      "translated": true
+    },
+    "H3871": {
+      "definitions_cz": "1) deska, deska, tablet, prkno | 1a) tablety (kamenné) | 1b) desky (ze dřeva) | 1c) deska (kovová)",
+      "lemma": "לוּחַ",
+      "hebrew": "לוח",
+      "xlit": "lûwach",
+      "translated": true
+    },
+    "H3872": {
+      "definitions_cz": "Luhith = \"tablety\" | 1) město Moab, jižně od řeky Arnon",
+      "lemma": "לוּחִית",
+      "hebrew": "לוחית",
+      "xlit": "Lûwchîyth",
+      "translated": true
+    },
+    "H3873": {
+      "definitions_cz": "Hallohesh = \"našeptávač\" | 1) otec náčelníka Jeruzaléma po vyhnanství, který zpečetil smlouvu s Nehemjášem",
+      "lemma": "לוֹחֵשׁ",
+      "hebrew": "לוחש",
+      "xlit": "Lôwchêsh",
+      "translated": true
+    },
+    "H3874": {
+      "definitions_cz": "1) těsně nebo těsně zabalit, zabalit, zabalit | 1a) (Qal) pevně zabalit | 1b) (Hiphil) zabalit, zabalit",
+      "lemma": "לוּט",
+      "hebrew": "לוט",
+      "xlit": "lûwṭ",
+      "translated": true
+    },
+    "H3875": {
+      "definitions_cz": "1) obal, obálka",
+      "lemma": "לוֹט",
+      "hebrew": "לוט",
+      "xlit": "lôwṭ",
+      "translated": true
+    },
+    "H3876": {
+      "definitions_cz": "Položka = \"krytí\" | 1) syn Hárana a Abrahamova synovce, který se usadil v Sodomě a byl vysvobozen z jejího zničení Bohem",
+      "lemma": "לוֹט",
+      "hebrew": "לוט",
+      "xlit": "Lôwṭ",
+      "translated": true
+    },
+    "H3877": {
+      "definitions_cz": "Lotan = \"krytí\" | 1) nejstarší syn Seira Horejského",
+      "lemma": "לוֹטָן",
+      "hebrew": "לוטן",
+      "xlit": "Lôwṭân",
+      "translated": true
+    },
+    "H3878": {
+      "definitions_cz": "Levi = \"připojen k\" | 1) 3. syn Jákobův od Ley a předek kmene Levitů",
+      "lemma": "לֵוִי",
+      "hebrew": "לוי",
+      "xlit": "Lêvîy",
+      "translated": true
+    },
+    "H3879": {
+      "definitions_cz": "Levita = viz Levi \"připojil se k\" | 1) potomci Léviho, 3. syna Jákobova od Ley | 1a) kmen pocházející z Leviho, který Bůh speciálně vyčlenil pro svou službu",
+      "lemma": "לֵוִי",
+      "hebrew": "לוי",
+      "xlit": "Lêvîy",
+      "translated": true
+    },
+    "H3880": {
+      "definitions_cz": "1) věnec",
+      "lemma": "לִוְיָה",
+      "hebrew": "לויה",
+      "xlit": "livyâh",
+      "translated": true
+    },
+    "H3881": {
+      "definitions_cz": "Levita = viz Levi \"připojil se k\" | 1) potomci Léviho, 3. syna Jákobova od Ley | 1a) kmen pocházející z Leviho, který Bůh speciálně vyčlenil pro svou službu",
+      "lemma": "לֵוִיִּי",
+      "hebrew": "לויי",
+      "xlit": "Lêvîyîy",
+      "translated": true
+    },
+    "H3882": {
+      "definitions_cz": "1) leviatan, mořská příšera, drak | 1a) velký vodní živočich | 1b) možná vyhynulý dinosaurus, plesiosaurus, přesný význam neznámý | ++++ | Někteří si myslí, že je to krokodýl, ale z popisu v Job 41:1-34 je to zjevně absurdní. Zdá se, že jde o nějaké velké zvíře dýchající oheň. Stejně jako brouk brouk má mechanismus produkující explozi, tak velký mořský drak může mít mechanismus produkující výbušniny, který mu umožňuje stát se skutečným drakem dýchajícím oheň.",
+      "lemma": "לִוְיָתָן",
+      "hebrew": "לויתן",
+      "xlit": "livyâthân",
+      "translated": true
+    },
+    "H3883": {
+      "definitions_cz": "1) schodiště, točité schodiště, šachta nebo uzavřený prostor se schůdky nebo žebříkem",
+      "lemma": "לוּל",
+      "hebrew": "לול",
+      "xlit": "lûwl",
+      "translated": true
+    },
+    "H3884": {
+      "definitions_cz": "1) pokud, pokud ne, kromě",
+      "lemma": "לוּלֵא",
+      "hebrew": "לולא",
+      "xlit": "lûwlêʼ",
+      "translated": true
+    },
+    "H3885": {
+      "definitions_cz": "1) ubytovat se, zastavit se, přespat, zůstat | 1a) (Qal) | 1a1) ubytovat se, přespat | 1a2) zůstat, zůstat (obr.) | 1b) (Hiphil) způsobit odpočinek nebo nocleh | 1c) (Hithpalpel) přebývat, přebývat | 2) reptat, stěžovat si, reptat | 2a) (Niphal) reptat | 2b) (Hifil) stěžovat si, způsobit reptání",
+      "lemma": "לוּן",
+      "hebrew": "לון",
+      "xlit": "lûwn",
+      "translated": true
+    },
+    "H3886": {
+      "definitions_cz": "1) (Qal) polknout, spolknout",
+      "lemma": "לוּעַ",
+      "hebrew": "לוע",
+      "xlit": "lûwaʻ",
+      "translated": true
+    },
+    "H3887": {
+      "definitions_cz": "1) pohrdat, dělat ústa, mluvit arogantně | 1a) (Qal) | 1a1) chlubit se | 1a2) pohrdat | 1b) (hifil) | 1b1) vysmívat se, vysmívat se | 1b2) vykládat (jazyk) | 1b2a) tlumočník (příčestí) | 1b2b) velvyslanec (obr.) | 1c) (Hithpalpel) být nafouknutý, vysmívat se, působit jako posměvač, ukazovat se jako posměvač",
+      "lemma": "לוּץ",
+      "hebrew": "לוץ",
+      "xlit": "lûwts",
+      "translated": true
+    },
+    "H3888": {
+      "definitions_cz": "1) (Qal) hníst (těsto)",
+      "lemma": "לוּשׁ",
+      "hebrew": "לוש",
+      "xlit": "lûwsh",
+      "translated": true
+    },
+    "H3889": {
+      "definitions_cz": "Laish = \"lev\" | 1) otec Faltiela, muže, kterému král Saul provdal svou dceru Michal, i když byla již provdána za Davida",
+      "lemma": "לוּשׁ",
+      "hebrew": "לוש",
+      "xlit": "Lûwsh",
+      "translated": true
+    },
+    "H3890": {
+      "definitions_cz": "1) k, při, vedle, blízko, s",
+      "lemma": "לְוָת",
+      "hebrew": "לות",
+      "xlit": "lᵉvâth",
+      "translated": true
+    },
+    "H3891": {
+      "definitions_cz": "1) odchylka, zvrácenost, křivost",
+      "lemma": "לְזוּת",
+      "hebrew": "לזות",
+      "xlit": "lᵉzûwth",
+      "translated": true
+    },
+    "H3892": {
+      "definitions_cz": "1) vlhký, čerstvý, nový | 1a) vlhké, čerstvé (rostlin) | 1b) nové (šňůry, šlachy)",
+      "lemma": "לַח",
+      "hebrew": "לח",
+      "xlit": "lach",
+      "translated": true
+    },
+    "H3893": {
+      "definitions_cz": "1) vlhkost, svěžest, vitalita",
+      "lemma": "לֵחַ",
+      "hebrew": "לח",
+      "xlit": "lêach",
+      "translated": true
+    },
+    "H3894": {
+      "definitions_cz": "1) střeva, střeva | 1a) význam nejistý | 2) (CLBL) jídlo, něco snědeného",
+      "lemma": "לָחוּם",
+      "hebrew": "לחום",
+      "xlit": "lâchûwm",
+      "translated": true
+    },
+    "H3895": {
+      "definitions_cz": "1) čelist, tvář | 1a) čelist, čelistní kost (zvíře) | 1b) tvář (muže)",
+      "lemma": "לְחִי",
+      "hebrew": "לחי",
+      "xlit": "lᵉchîy",
+      "translated": true
+    },
+    "H3896": {
+      "definitions_cz": "Lehi = \"čelist\" | 1) místo v Judsku, které muselo být v Šefele, blízko hranic judských hor; místo nejisté | 1a) místo je známé jako místo, kde Samson zabil 1000 mužů čelistí osla",
+      "lemma": "לֶחִי",
+      "hebrew": "לחי",
+      "xlit": "Lechîy",
+      "translated": true
+    },
+    "H3897": {
+      "definitions_cz": "1) lízat, lízat | 1a) (Qal) olíznout | 1b) (Piel) olíznout",
+      "lemma": "לָחַךְ",
+      "hebrew": "לחך",
+      "xlit": "lâchak",
+      "translated": true
+    },
+    "H3898": {
+      "definitions_cz": "1) bojovat, bojovat, vést válku | 1a) (Qal) bojovat, bojovat | 1b) (Niphal) zapojit se do bitvy, vést válku | 2) (Qal) jíst, používat jako jídlo",
+      "lemma": "לָחַם",
+      "hebrew": "לחם",
+      "xlit": "lâcham",
+      "translated": true
+    },
+    "H3899": {
+      "definitions_cz": "1) chléb, jídlo, obilí | 1a) chléb | 1a1) chléb | 1a2) chlebová kukuřice | 1b) jídlo (obecně)",
+      "lemma": "לֶחֶם",
+      "hebrew": "לחם",
+      "xlit": "lechem",
+      "translated": true
+    },
+    "H3900": {
+      "definitions_cz": "1) hostina, chléb",
+      "lemma": "לְחֶם",
+      "hebrew": "לחם",
+      "xlit": "lᵉchem",
+      "translated": true
+    },
+    "H3901": {
+      "definitions_cz": "1) válka | 1a) znamená nejistý",
+      "lemma": "לָחֶם",
+      "hebrew": "לחם",
+      "xlit": "lâchem",
+      "translated": true
+    },
+    "H3902": {
+      "definitions_cz": "Lahmi = \"můj chléb\" | 1) bratr Goliáše Gittského a zabitý Elchananem, synem Zairovým",
+      "lemma": "לַחְמִי",
+      "hebrew": "לחמי",
+      "xlit": "Lachmîy",
+      "translated": true
+    },
+    "H3903": {
+      "definitions_cz": "Lahmam = \"ustanovení\" | 1) město v judské nížině",
+      "lemma": "לַחְמָס",
+      "hebrew": "לחמס",
+      "xlit": "Lachmâç",
+      "translated": true
+    },
+    "H3904": {
+      "definitions_cz": "1) konkubína",
+      "lemma": "לְחֵנָה",
+      "hebrew": "לחנה",
+      "xlit": "lᵉchênâh",
+      "translated": true
+    },
+    "H3905": {
+      "definitions_cz": "1) mačkat, tisknout, utlačovat | 1a) (Qal) | 1a1) pro zmáčknutí stiskněte | 1a2) utlačovat | 1b) (Niphal) zmáčknout se",
+      "lemma": "לָחַץ",
+      "hebrew": "לחץ",
+      "xlit": "lâchats",
+      "translated": true
+    },
+    "H3906": {
+      "definitions_cz": "1) útlak, tíseň, tlak",
+      "lemma": "לַחַץ",
+      "hebrew": "לחץ",
+      "xlit": "lachats",
+      "translated": true
+    },
+    "H3907": {
+      "definitions_cz": "1) šeptat, okouzlovat, kouzlit | 1a) (Piel) zaklínači, zaklínači, našeptávači (příčestí) | 1b) (Hithpael) šeptat si navzájem",
+      "lemma": "לָחַשׁ",
+      "hebrew": "לחש",
+      "xlit": "lâchash",
+      "translated": true
+    },
+    "H3908": {
+      "definitions_cz": "1) šeptající, okouzlující | 1a) hadí okouzlující | 1b) kouzla, amulety (nosí je ženy) | 1c) šeptat (modlitby)",
+      "lemma": "לַחַשׁ",
+      "hebrew": "לחש",
+      "xlit": "lachash",
+      "translated": true
+    },
+    "H3909": {
+      "definitions_cz": "1) tajemství, tajemství, kouzlení | 1a) utajení, tajně | 1b) tajemno, očarování",
+      "lemma": "לָט",
+      "hebrew": "לט",
+      "xlit": "lâṭ",
+      "translated": true
+    },
+    "H3910": {
+      "definitions_cz": "1) myrha | 1a) aromatická guma vyzařovaná listy skalní růže",
+      "lemma": "לֹט",
+      "hebrew": "לט",
+      "xlit": "lôṭ",
+      "translated": true
+    },
+    "H3911": {
+      "definitions_cz": "1) druh ještěrky | 1a) označen jako nečistý | 1b) možná vyhynulé zvíře, přesný význam není znám",
+      "lemma": "לְטָאָה",
+      "hebrew": "לטאה",
+      "xlit": "lᵉṭâʼâh",
+      "translated": true
+    },
+    "H3912": {
+      "definitions_cz": "Letushim = \"tlouci\" | 1) 2. syn Dedana, vnuka Jokšana, pravnuka Abrahama od Ketury",
+      "lemma": "לְטוּשִׁם",
+      "hebrew": "לטושם",
+      "xlit": "Lᵉṭûwshim",
+      "translated": true
+    },
+    "H3913": {
+      "definitions_cz": "1) ostřit, kladivo, brousit | 1a) (Qal) | 1a1) zatlouct | 1a2) naostřit (meč) | 1a3) kladivo (příčestí) | 1b) (Pual) k ostření",
+      "lemma": "לָטַשׁ",
+      "hebrew": "לטש",
+      "xlit": "lâṭash",
+      "translated": true
+    },
+    "H3914": {
+      "definitions_cz": "1) věnec, věnec | 1a) znamená pochybný",
+      "lemma": "לֹיָה",
+      "hebrew": "ליה",
+      "xlit": "lôyâh",
+      "translated": true
+    },
+    "H3915": {
+      "definitions_cz": "1) noc | 1a) noc (na rozdíl od dne) | 1b) šera, ochranný stín (obr.)",
+      "lemma": "לַיִל",
+      "hebrew": "ליל",
+      "xlit": "layil",
+      "translated": true
+    },
+    "H3916": {
+      "definitions_cz": "1) noc",
+      "lemma": "לֵילְיָא",
+      "hebrew": "ליליא",
+      "xlit": "lêylᵉyâʼ",
+      "translated": true
+    },
+    "H3917": {
+      "definitions_cz": "1) \"Lilith\", jméno ženské bohyně známé jako noční démon, který straší na pustých místech Edomu | 1a) může být noční zvíře, které obývá pustá místa",
+      "lemma": "לִילִית",
+      "hebrew": "לילית",
+      "xlit": "lîylîyth",
+      "translated": true
+    },
+    "H3918": {
+      "definitions_cz": "1) lev",
+      "lemma": "לַיִשׁ",
+      "hebrew": "ליש",
+      "xlit": "layish",
+      "translated": true
+    },
+    "H3919": {
+      "definitions_cz": "Laish = \"lev\" | n pr m | 1) otec Faltiela, muže, kterému dal král Saul svou dceru Michal za ženu, i když byla již provdána za Davida | n pr loc | 2) rané jméno pro Dan, město v severním Izraeli | 3) a place north of Jerusalem; místo neznámé",
+      "lemma": "לַיִשׁ",
+      "hebrew": "ליש",
+      "xlit": "Layish",
+      "translated": true
+    },
+    "H3920": {
+      "definitions_cz": "1) zachytit, vzít, zmocnit se | 1a) (Qal) | 1a1) zajmout, zmocnit se | 1a2) zajmout (mužů) (obr.) | 1a3) vzít (losem) | 1b) (Niphal) | 1b1) k zachycení | 1b2) být chycen (mužů v pasti, pasti) (obr.) | 1c) (Hithpael), aby se navzájem chytili",
+      "lemma": "לָכַד",
+      "hebrew": "לכד",
+      "xlit": "lâkad",
+      "translated": true
+    },
+    "H3921": {
+      "definitions_cz": "1) převzetí, zachycení",
+      "lemma": "לֶכֶד",
+      "hebrew": "לכד",
+      "xlit": "leked",
+      "translated": true
+    },
+    "H3922": {
+      "definitions_cz": "Lecah = \"cesta\" | 1) město v Judsku; místo neznámé",
+      "lemma": "לֵכָה",
+      "hebrew": "לכה",
+      "xlit": "lêkâh",
+      "translated": true
+    },
+    "H3923": {
+      "definitions_cz": "Lachish = \"nepřemožitelný\" | 1) město ležící jižně od Jeruzaléma na hranicích Simeon a které patřilo Amorejcům, dokud je nedobyl Jozua a přidělil Judovi",
+      "lemma": "לָכִישׁ",
+      "hebrew": "לכיש",
+      "xlit": "Lâkîysh",
+      "translated": true
+    },
+    "H3924": {
+      "definitions_cz": "1) smyčka | 1a) používané při připevňování závěsů na háčky",
+      "lemma": "לֻלָאָה",
+      "hebrew": "ללאה",
+      "xlit": "lulâʼâh",
+      "translated": true
+    },
+    "H3925": {
+      "definitions_cz": "1) učit se. učit, cvičit v | 1a) (Qal) učit se | 1b) (Piel) učit | 1c) (Pual) být vyučován, být školen",
+      "lemma": "לָמַד",
+      "hebrew": "למד",
+      "xlit": "lâmad",
+      "translated": true
+    },
+    "H3926": {
+      "definitions_cz": "1) at, to, for, in, of, by, s odkazem na | 1a) básnická forma neoddělitelné předložky",
+      "lemma": "לְמוֹ",
+      "hebrew": "למו",
+      "xlit": "lᵉmôw",
+      "translated": true
+    },
+    "H3927": {
+      "definitions_cz": "Lemuel = \"pro Boha\" | 1) jméno neznámého krále, kterému jeho matka adresovala obezřetnostní zásady obsažené v některých příslovích | 1a) může být stejný jako král Šalomoun",
+      "lemma": "לְמוּאֵל",
+      "hebrew": "למואל",
+      "xlit": "Lᵉmûwʼêl",
+      "translated": true
+    },
+    "H3928": {
+      "definitions_cz": "1) učil, učil, učil | 1a) učil | 1b) zvyklý (na něco)",
+      "lemma": "לִמּוּד",
+      "hebrew": "למוד",
+      "xlit": "limmûwd",
+      "translated": true
+    },
+    "H3929": {
+      "definitions_cz": "Lamech = \"mocný\" | 1) 5. liniový potomek Kaina, manžela Ady a Zillah, otce synů Jabala, Jubala a Tubal-kaina a dcery Naamy | 2) otec Noeho",
+      "lemma": "לֶמֶךְ",
+      "hebrew": "למך",
+      "xlit": "Lemek",
+      "translated": true
+    },
+    "H3930": {
+      "definitions_cz": "1) hrdlo",
+      "lemma": "לֹעַ",
+      "hebrew": "לע",
+      "xlit": "lôaʻ",
+      "translated": true
+    },
+    "H3931": {
+      "definitions_cz": "1) žertovat, žertovat | 1a) (Hiphil) dělat vtipy",
+      "lemma": "לָעַב",
+      "hebrew": "לעב",
+      "xlit": "lâʻab",
+      "translated": true
+    },
+    "H3932": {
+      "definitions_cz": "1) zesměšňovat, vysmívat se, zesměšňovat | 1a) (Qal) vysmívat se, vysmívat se, vysmívat se | 1b) (Niphal) koktat | 1c) (Hiphil) vysmívat se, vysmívat se",
+      "lemma": "לָעַג",
+      "hebrew": "לעג",
+      "xlit": "lâʻag",
+      "translated": true
+    },
+    "H3933": {
+      "definitions_cz": "1) zesměšňování, výsměch, koktání | 1a) výsměch, výsměch | 1b) koktání",
+      "lemma": "לַעַג",
+      "hebrew": "לעג",
+      "xlit": "laʻag",
+      "translated": true
+    },
+    "H3934": {
+      "definitions_cz": "1) zesměšňování | 1a) posměvač (podstatné jméno cstr)",
+      "lemma": "לָעֵג",
+      "hebrew": "לעג",
+      "xlit": "lâʻêg",
+      "translated": true
+    },
+    "H3935": {
+      "definitions_cz": "Laadah = \"objednávka\" | 1) syn Šela a vnuk Juda",
+      "lemma": "לַעְדָּה",
+      "hebrew": "לעדה",
+      "xlit": "Laʻdâh",
+      "translated": true
+    },
+    "H3936": {
+      "definitions_cz": "Laadan = \"dát do pořádku\" | 1) Efraimský předek Jozue, syna Nuna | 2) levita, syn Geršomův; také \"Libni\"",
+      "lemma": "לַעְדָּן",
+      "hebrew": "לעדן",
+      "xlit": "Laʻdân",
+      "translated": true
+    },
+    "H3937": {
+      "definitions_cz": "1) (Qal) mluvit nezřetelně, mluvit nesrozumitelně",
+      "lemma": "לָעַז",
+      "hebrew": "לעז",
+      "xlit": "lâʻaz",
+      "translated": true
+    },
+    "H3938": {
+      "definitions_cz": "1) (Hiphil) hltavě polykat, hltat",
+      "lemma": "לָעַט",
+      "hebrew": "לעט",
+      "xlit": "lâʻaṭ",
+      "translated": true
+    },
+    "H3939": {
+      "definitions_cz": "1) pelyněk | 1a) hořkost (metaph.)",
+      "lemma": "לַעֲנָה",
+      "hebrew": "לענה",
+      "xlit": "laʻănâh",
+      "translated": true
+    },
+    "H3940": {
+      "definitions_cz": "1) pochodeň",
+      "lemma": "לַפִּיד",
+      "hebrew": "לפיד",
+      "xlit": "lappîyd",
+      "translated": true
+    },
+    "H3941": {
+      "definitions_cz": "Lapidoth = \"pochodně\" | 1) manžel Debory, prorokyně v době soudců",
+      "lemma": "לַפִּידוֹת",
+      "hebrew": "לפידות",
+      "xlit": "Lappîydôwth",
+      "translated": true
+    },
+    "H3942": {
+      "definitions_cz": "1) před, do tváře",
+      "lemma": "לִפְנַי",
+      "hebrew": "לפני",
+      "xlit": "liphnay",
+      "translated": true
+    },
+    "H3943": {
+      "definitions_cz": "1) kroutit, uchopovat, otáčet, uchopovat točivým pohybem | 1a) (Qal) uchopit | 1b) (Niphal) kroutit, tkát, větrat",
+      "lemma": "לָפַת",
+      "hebrew": "לפת",
+      "xlit": "lâphath",
+      "translated": true
+    },
+    "H3944": {
+      "definitions_cz": "1) pohrdání, vychloubání",
+      "lemma": "לָצוֹן",
+      "hebrew": "לצון",
+      "xlit": "lâtsôwn",
+      "translated": true
+    },
+    "H3945": {
+      "definitions_cz": "1) (Qal) pohrdat, dělat ústa, mluvit arogantně",
+      "lemma": "לָצַץ",
+      "hebrew": "לצץ",
+      "xlit": "lâtsats",
+      "translated": true
+    },
+    "H3946": {
+      "definitions_cz": "Lakum = \"opevnění\" | 1) město na severní hranici Naftali",
+      "lemma": "לַקּוּם",
+      "hebrew": "לקום",
+      "xlit": "Laqqûwm",
+      "translated": true
+    },
+    "H3947": {
+      "definitions_cz": "1) vzít, získat, aportovat, zmocnit se, zmocnit se, obdržet, získat, koupit, přivést, oženit se, vzít si ženu, urvat, odvézt | 1a) (Qal) | 1a1) vzít, vzít do ruky | 1a2) vzít a nosit s sebou | 1a3) vzít, vzít, vzít, odnést, odnést | 1a4) vzít pro osobu nebo pro osobu, obstarat, získat, zmocnit se, vybrat, vybrat, vzít si, přijmout, přijmout | 1a5) nabrat nebo na, nasadit | 1a6) vyzvednout | 1a7) vzít, vést, vést | 1a8) vzíti, zachytiti",
+      "lemma": "לָקַח",
+      "hebrew": "לקח",
+      "xlit": "lâqach",
+      "translated": true
+    },
+    "H3948": {
+      "definitions_cz": "1) učení, výuka, náhled | 1a) pokyn (obj) | 1b) vyučování (vyučovaná věc) | 1b1) učební síla | 1b2) přesvědčivost",
+      "lemma": "לֶקַח",
+      "hebrew": "לקח",
+      "xlit": "leqach",
+      "translated": true
+    },
+    "H3949": {
+      "definitions_cz": "Likhi = \"učení\" | 1) syn Shemida a vnuk Manasses",
+      "lemma": "לִקְחִי",
+      "hebrew": "לקחי",
+      "xlit": "Liqchîy",
+      "translated": true
+    },
+    "H3950": {
+      "definitions_cz": "1) sbírat, sbírat, sbírat, sbírat | 1a) (Qal) | 1a1) vyzvednout, shromáždit | 1a2) sbírat | 1b) (Piel) | 1b1) shromáždit, shromáždit | 1b2) vybírat (peníze) | 1b3) sbírat | 1c) (Pual) k vyzvednutí | 1d) (Hithpael) sebrat se",
+      "lemma": "לָקַט",
+      "hebrew": "לקט",
+      "xlit": "lâqaṭ",
+      "translated": true
+    },
+    "H3951": {
+      "definitions_cz": "1) paběrkování",
+      "lemma": "לֶקֶט",
+      "hebrew": "לקט",
+      "xlit": "leqeṭ",
+      "translated": true
+    },
+    "H3952": {
+      "definitions_cz": "1) klínat, lízat, lapovat | 1a) (Qal) na kolo, kolo nahoru | 1b) (Piel) na kole nahoru",
+      "lemma": "לָקַק",
+      "hebrew": "לקק",
+      "xlit": "lâqaq",
+      "translated": true
+    },
+    "H3953": {
+      "definitions_cz": "1) sbírat, sbírat, brát následky, brát všechno | 1a) (Piel) plenit, sbírat vše z, svlékat",
+      "lemma": "לָקַשׁ",
+      "hebrew": "לקש",
+      "xlit": "lâqash",
+      "translated": true
+    },
+    "H3954": {
+      "definitions_cz": "1) porost, porost, jarní plodina, pozdní porost",
+      "lemma": "לֶקֶשׁ",
+      "hebrew": "לקש",
+      "xlit": "leqesh",
+      "translated": true
+    },
+    "H3955": {
+      "definitions_cz": "1) džus, šťavnatý kousek, lahodný kousek",
+      "lemma": "לְשַׁד",
+      "hebrew": "לשד",
+      "xlit": "lᵉshad",
+      "translated": true
+    },
+    "H3956": {
+      "definitions_cz": "1) jazyk | 1a) jazyk (muži) | 1a1) jazyk (doslovně) | 1a2) jazyk (orgán řeči) | 1b) jazyk | 1c) jazyk (zvířat) | 1d) jazyk (ohnivého) | 1e) klín, mořský záliv (ve tvaru jazyka)",
+      "lemma": "לָשׁוֹן",
+      "hebrew": "לשון",
+      "xlit": "lâshôwn",
+      "translated": true
+    },
+    "H3957": {
+      "definitions_cz": "1) pokoj, komora, síň, cela",
+      "lemma": "לִשְׁכָּה",
+      "hebrew": "לשכה",
+      "xlit": "lishkâh",
+      "translated": true
+    },
+    "H3958": {
+      "definitions_cz": "1) drahý kámen | 1a) drahý kámen v náprsníku velekněze | 1a1) pravděpodobně jacinth nebo ligure",
+      "lemma": "לֶשֶׁם",
+      "hebrew": "לשם",
+      "xlit": "leshem",
+      "translated": true
+    },
+    "H3959": {
+      "definitions_cz": "Leshem = \"drahokam\" | 1) město západně od hory Hermon, nazývané také „Laish“ a později „Dan“",
+      "lemma": "לֶשֶׁם",
+      "hebrew": "לשם",
+      "xlit": "Leshem",
+      "translated": true
+    },
+    "H3960": {
+      "definitions_cz": "1) používat jazyk, pomlouvat | 1a) (Poel) pomlouvat | 1b) (Piel) pomlouvat | 1c) (Hiphil) obvinit",
+      "lemma": "לָשַׁן",
+      "hebrew": "לשן",
+      "xlit": "lâshan",
+      "translated": true
+    },
+    "H3961": {
+      "definitions_cz": "1) jazyk, jazyk | 1a) jazyk, jazyk | 1b) lidé (obr.)",
+      "lemma": "לִשָּׁן",
+      "hebrew": "לשן",
+      "xlit": "lishshân",
+      "translated": true
+    },
+    "H3962": {
+      "definitions_cz": "Lasha = \"prasklina\" | 1) místo na jihovýchodě Palestiny na hranici kananejského území, poblíž Sodomy a Gomory",
+      "lemma": "לֶשַׁע",
+      "hebrew": "לשע",
+      "xlit": "Leshaʻ",
+      "translated": true
+    },
+    "H3963": {
+      "definitions_cz": "1) ječmen-odměrka | 1a) nejisté měření, ale předpokládá se, že jde o polovinu homer-5 efahů",
+      "lemma": "לֶתֶךְ",
+      "hebrew": "לתך",
+      "xlit": "lethek",
+      "translated": true
+    },
+    "H3964": {
+      "definitions_cz": "1) co, cokoliv | 1a) co? | 1b) cokoliv, co, cokoliv | 1c) jak?, proč?, proč? (s předponami)",
+      "lemma": "מָא",
+      "hebrew": "מא",
+      "xlit": "mâʼ",
+      "translated": true
+    },
+    "H3965": {
+      "definitions_cz": "1) sklad, sýpka",
+      "lemma": "מַאֲבוּס",
+      "hebrew": "מאבוס",
+      "xlit": "maʼăbûwç",
+      "translated": true
+    },
+    "H3966": {
+      "definitions_cz": "adv | 1) nadmíru, moc | subst | 2) moc, síla, hojnost | n m | 3) mnohost, síla, hojnost, nesmírně | 3a) síla, síla | 3b) nadmíru, velmi, velmi (idiomy ukazující velikost nebo stupeň) | 3b1) nadmíru | 3b2) až do hojnosti, do značné míry, nadmíru | 3b3) s mnohostí, mnohostí",
+      "lemma": "מְאֹד",
+      "hebrew": "מאד",
+      "xlit": "mᵉʼôd",
+      "translated": true
+    },
+    "H3967": {
+      "definitions_cz": "1) sto | 1a) jako prosté číslo | 1b) jako součást většího počtu | 1c) jako zlomek jedna setina (1/100)",
+      "lemma": "מֵאָה",
+      "hebrew": "מאה",
+      "xlit": "mêʼâh",
+      "translated": true
+    },
+    "H3968": {
+      "definitions_cz": "Meah = \"sto\" | 1) věž na severním opevnění Jeruzaléma ve zdi Nehemiáše",
+      "lemma": "מֵאָה",
+      "hebrew": "מאה",
+      "xlit": "Mêʼâh",
+      "translated": true
+    },
+    "H3969": {
+      "definitions_cz": "1) sto, sto",
+      "lemma": "מְאָה",
+      "hebrew": "מאה",
+      "xlit": "mᵉʼâh",
+      "translated": true
     }
   }
 }
