@@ -72124,6 +72124,356 @@
       "hebrew": "פקוד",
       "xlit": "piqqûwd",
       "translated": true
+    },
+    "H6491": {
+      "definitions_cz": "1) otevřít (oči) | 1a) (Qal) | 1a1) otevřít (oči) | 1a2) otevřít (uši) | 1b) (Niphal) k otevření",
+      "lemma": "פָּקַח",
+      "hebrew": "פקח",
+      "xlit": "pâqach",
+      "translated": true
+    },
+    "H6492": {
+      "definitions_cz": "Pekah = \"otevřeno\" | 1) syn Remaliáše, původně kapitán izraelského krále Pekachiáše, zavraždil Pekachiáše, zmocnil se trůnu a stal se 18. králem severního izraelského království",
+      "lemma": "פֶּקַח",
+      "hebrew": "פקח",
+      "xlit": "Peqach",
+      "translated": true
+    },
+    "H6493": {
+      "definitions_cz": "1) vidící, bystrozraký",
+      "lemma": "פִּקֵּחַ",
+      "hebrew": "פקח",
+      "xlit": "piqqêach",
+      "translated": true
+    },
+    "H6494": {
+      "definitions_cz": "Pekahiah = \"Jehova vidí\" | 1) syn krále Menahema ze severního izraelského království, nastoupil na trůn jako 17. král a vládl 2 roky, když byl zavražděn jedním z kapitánů jeho armády Pekahem",
+      "lemma": "פְּקַחְיָה",
+      "hebrew": "פקחיה",
+      "xlit": "Pᵉqachyâh",
+      "translated": true
+    },
+    "H6495": {
+      "definitions_cz": "1) otevření (očí), široké",
+      "lemma": "פְּקַח־קוֹחַ",
+      "hebrew": "פקחקוח",
+      "xlit": "pᵉqach-qôwach",
+      "translated": true
+    },
+    "H6496": {
+      "definitions_cz": "1) komisař, zástupce, dozorce, důstojník",
+      "lemma": "פָּקִיד",
+      "hebrew": "פקיד",
+      "xlit": "pâqîyd",
+      "translated": true
+    },
+    "H6497": {
+      "definitions_cz": "1) vyřezávaná dřevěná nebo kovová ozdoba ve tvaru knoflíku nebo koule nebo tykve",
+      "lemma": "פֶּקַע",
+      "hebrew": "פקע",
+      "xlit": "peqaʻ",
+      "translated": true
+    },
+    "H6498": {
+      "definitions_cz": "1) tykve",
+      "lemma": "פַּקֻּעָה",
+      "hebrew": "פקעה",
+      "xlit": "paqquʻâh",
+      "translated": true
+    },
+    "H6499": {
+      "definitions_cz": "1) mladý býk, vůl, býček",
+      "lemma": "פַּר",
+      "hebrew": "פר",
+      "xlit": "par",
+      "translated": true
+    },
+    "H6500": {
+      "definitions_cz": "1) (Hifil) nést ovoce, plodit",
+      "lemma": "פָּרָא",
+      "hebrew": "פרא",
+      "xlit": "pârâʼ",
+      "translated": true
+    },
+    "H6501": {
+      "definitions_cz": "1) divoký zadek",
+      "lemma": "פֶּרֶא",
+      "hebrew": "פרא",
+      "xlit": "pereʼ",
+      "translated": true
+    },
+    "H6502": {
+      "definitions_cz": "Piram = \"jako divoký osel\" | 1) amorejský král Jarmut v době dobytí",
+      "lemma": "פִּרְאָם",
+      "hebrew": "פראם",
+      "xlit": "Pirʼâm",
+      "translated": true
+    },
+    "H6503": {
+      "definitions_cz": "Parbar = \"otevřený byt\" | 1) stavba nebo budova připojená k západní straně Šalomounova chrámu",
+      "lemma": "פַּרְבָּר",
+      "hebrew": "פרבר",
+      "xlit": "Parbâr",
+      "translated": true
+    },
+    "H6504": {
+      "definitions_cz": "1) oddělit, rozdělit | 1a) (Qal) rozdělit | 1b) (Niphal) | 1b1) rozdělit, oddělit | 1b2) rozdělit, oddělit | 1c) (Piel) k oddělení | 1d) (Pual) k rozdělení | 1e) (hifil) | 1e1) rozdělit, oddělit | 1e2) pro rozdělení, proveďte oddělení | 1f) (Hithpael) být rozdělen, být oddělen, být oddělen",
+      "lemma": "פָּרַד",
+      "hebrew": "פרד",
+      "xlit": "pârad",
+      "translated": true
+    },
+    "H6505": {
+      "definitions_cz": "1) mezek",
+      "lemma": "פֶּרֶד",
+      "hebrew": "פרד",
+      "xlit": "pered",
+      "translated": true
+    },
+    "H6506": {
+      "definitions_cz": "1) ona-mezek, mezek",
+      "lemma": "פִּרְדָּה",
+      "hebrew": "פרדה",
+      "xlit": "pirdâh",
+      "translated": true
+    },
+    "H6507": {
+      "definitions_cz": "1) semeno, zrno semene",
+      "lemma": "פְּרֻדָה",
+      "hebrew": "פרדה",
+      "xlit": "pᵉrudâh",
+      "translated": true
+    },
+    "H6508": {
+      "definitions_cz": "1) park, rezervace, uzavřená zahrada, les",
+      "lemma": "פַּרְדֵּס",
+      "hebrew": "פרדס",
+      "xlit": "pardêç",
+      "translated": true
+    },
+    "H6509": {
+      "definitions_cz": "1) nést ovoce, být plodný, větvit se | 1a) (Qal) nést ovoce, plodit | 1b) (hifil) | 1b1) přimět nést ovoce | 1b2) učinit plodným | 1b3) ukázat plodnost, nést ovoce",
+      "lemma": "פָּרָה",
+      "hebrew": "פרה",
+      "xlit": "pârâh",
+      "translated": true
+    },
+    "H6510": {
+      "definitions_cz": "1) kráva, jalovice",
+      "lemma": "פָּרָה",
+      "hebrew": "פרה",
+      "xlit": "pârâh",
+      "translated": true
+    },
+    "H6511": {
+      "definitions_cz": "Parah = \"město jalovic\" | 1) město v Benjaminu",
+      "lemma": "פָּרָה",
+      "hebrew": "פרה",
+      "xlit": "Pârâh",
+      "translated": true
+    },
+    "H6512": {
+      "definitions_cz": "1) krtek",
+      "lemma": "פֵּרָה",
+      "hebrew": "פרה",
+      "xlit": "pêrâh",
+      "translated": true
+    },
+    "H6513": {
+      "definitions_cz": "Phurah = \"větev\" | 1) Gideonův služebník, pravděpodobně jeho zbrojnoš",
+      "lemma": "פֻּרָה",
+      "hebrew": "פרה",
+      "xlit": "Purâh",
+      "translated": true
+    },
+    "H6514": {
+      "definitions_cz": "Peruda nebo Perida = \"zrno\" nebo \"jádro\" | 1) předchůdce rodiny chrámových otroků, kteří se vrátili z exilu se Zerubábelem",
+      "lemma": "פְּרוּדָא",
+      "hebrew": "פרודא",
+      "xlit": "Pᵉrûwdâʼ",
+      "translated": true
+    },
+    "H6515": {
+      "definitions_cz": "Paruah = \"výhonek\" | 1) otec Jozafata, důstojníka Šalomounova komisariátu v Issacharu",
+      "lemma": "פָּרוּחַ",
+      "hebrew": "פרוח",
+      "xlit": "Pârûwach",
+      "translated": true
+    },
+    "H6516": {
+      "definitions_cz": "Parvaim = \"orientální oblasti\" | 1) oblast známá těžbou zlata, možná v Arábii",
+      "lemma": "פַּרְוַיִם",
+      "hebrew": "פרוים",
+      "xlit": "Parvayim",
+      "translated": true
+    },
+    "H6517": {
+      "definitions_cz": "1) pánev, hrnec",
+      "lemma": "פָּרוּר",
+      "hebrew": "פרור",
+      "xlit": "pârûwr",
+      "translated": true
+    },
+    "H6518": {
+      "definitions_cz": "1) náčelník, vůdce, válečník | 1a) znamená pochybný",
+      "lemma": "פָּרָז",
+      "hebrew": "פרז",
+      "xlit": "pârâz",
+      "translated": true
+    },
+    "H6519": {
+      "definitions_cz": "1) otevřený kraj, vesnička, neopevněná vesnice, otevřená krajina",
+      "lemma": "פְּרָזָה",
+      "hebrew": "פרזה",
+      "xlit": "pᵉrâzâh",
+      "translated": true
+    },
+    "H6520": {
+      "definitions_cz": "1) venkovské obyvatelstvo, venkované, venkovští lidé, lidé z neopevněných vesnic | 1a) znamená pochybný",
+      "lemma": "פְּרָזוֹן",
+      "hebrew": "פרזון",
+      "xlit": "pᵉrâzôwn",
+      "translated": true
+    },
+    "H6521": {
+      "definitions_cz": "1) vesničan, obyvatel venkova, obyvatel vesnice | 2) (TWOT) otevřená oblast",
+      "lemma": "פְּרָזִי",
+      "hebrew": "פרזי",
+      "xlit": "pᵉrâzîy",
+      "translated": true
+    },
+    "H6522": {
+      "definitions_cz": "Perizzit = \"patřící k vesnici\" | 1) lidé, kteří obývali jižní Kanaán před dobytím",
+      "lemma": "פְּרִזִּי",
+      "hebrew": "פרזי",
+      "xlit": "Pᵉrizzîy",
+      "translated": true
+    },
+    "H6523": {
+      "definitions_cz": "1) železo",
+      "lemma": "פַּרְזֶל",
+      "hebrew": "פרזל",
+      "xlit": "parzel",
+      "translated": true
+    },
+    "H6524": {
+      "definitions_cz": "1) pučet, rašit, střílet, kvést | 1a) (Qal) pučet, rašit, vysílat výhonky, kvést | 1b) (hifil) | 1b1) způsobit pučení nebo pučení | 1b2) pro zobrazení pupenů nebo klíčků | 2) (Qal) propuknout (z malomocenství) | 3) (Qal) létat",
+      "lemma": "פָּרַח",
+      "hebrew": "פרח",
+      "xlit": "pârach",
+      "translated": true
+    },
+    "H6525": {
+      "definitions_cz": "1) pupen, klíček",
+      "lemma": "פֶּרַח",
+      "hebrew": "פרח",
+      "xlit": "perach",
+      "translated": true
+    },
+    "H6526": {
+      "definitions_cz": "1) plod",
+      "lemma": "פִּרְחַח",
+      "hebrew": "פרחח",
+      "xlit": "pirchach",
+      "translated": true
+    },
+    "H6527": {
+      "definitions_cz": "1) (Qal) nedbale improvizovat, zpívat, koktat | 1a) znamená pochybný",
+      "lemma": "פָּרַט",
+      "hebrew": "פרט",
+      "xlit": "pâraṭ",
+      "translated": true
+    },
+    "H6528": {
+      "definitions_cz": "1) odlomené, něco rozptýlené | 1a) padlé hrozny",
+      "lemma": "פֶּרֶט",
+      "hebrew": "פרט",
+      "xlit": "pereṭ",
+      "translated": true
+    },
+    "H6529": {
+      "definitions_cz": "1) ovoce | 1a) ovoce, produkce (ze země) | 1b) plod, potomstvo, děti, potomstvo (lůna) | 1c) ovoce (činů) (obr.)",
+      "lemma": "פְּרִי",
+      "hebrew": "פרי",
+      "xlit": "pᵉrîy",
+      "translated": true
+    },
+    "H6530": {
+      "definitions_cz": "1) násilný, jistič | 1a) lupič, vrah",
+      "lemma": "פְּרִיץ",
+      "hebrew": "פריץ",
+      "xlit": "pᵉrîyts",
+      "translated": true
+    },
+    "H6531": {
+      "definitions_cz": "1) tvrdost, tvrdost, krutost",
+      "lemma": "פֶּרֶךְ",
+      "hebrew": "פרך",
+      "xlit": "perek",
+      "translated": true
+    },
+    "H6532": {
+      "definitions_cz": "1) závěs, závoj",
+      "lemma": "פֹּרֶכֶת",
+      "hebrew": "פרכת",
+      "xlit": "pôreketh",
+      "translated": true
+    },
+    "H6533": {
+      "definitions_cz": "1) (Qal) roztrhat, roztrhat oděv, roztrhat",
+      "lemma": "פָּרַם",
+      "hebrew": "פרם",
+      "xlit": "pâram",
+      "translated": true
+    },
+    "H6534": {
+      "definitions_cz": "Parmašta = \"nadřazený\" | 1) jeden z 10 synů Hamana, nepřítele Mordechaje a královny Ester",
+      "lemma": "פַּרְמַשְׁתָּא",
+      "hebrew": "פרמשתא",
+      "xlit": "Parmashtâʼ",
+      "translated": true
+    },
+    "H6535": {
+      "definitions_cz": "Parnach = \"delikátní\" | 1) otec Elizafana, kníže kmene Zabulun, který byl vybrán, aby pomohl rozdělit zaslíbenou zemi mezi kmeny",
+      "lemma": "פַּרְנַךְ",
+      "hebrew": "פרנך",
+      "xlit": "Parnak",
+      "translated": true
+    },
+    "H6536": {
+      "definitions_cz": "1) rozdělit, rozdělit na dvě | 1a) (Qal) rozbít, rozbít | 1b) (Hiphil) k rozdělení (z kopyt)",
+      "lemma": "פָּרַס",
+      "hebrew": "פרס",
+      "xlit": "pâraç",
+      "translated": true
+    },
+    "H6537": {
+      "definitions_cz": "v | 1) (P'al) rozdělit na dvě části, rozdělit | n m | 2) půl mina, půl šekel | 2a) jednotka míry a hmotnosti",
+      "lemma": "פְּרַס",
+      "hebrew": "פרס",
+      "xlit": "pᵉraç",
+      "translated": true
+    },
+    "H6538": {
+      "definitions_cz": "1) dravý pták | 1a) snad orlosup bradatý nebo ossifrage | 1b) snad vyhynulý živočich, přesný význam neznámý",
+      "lemma": "פֶּרֶס",
+      "hebrew": "פרס",
+      "xlit": "pereç",
+      "translated": true
+    },
+    "H6539": {
+      "definitions_cz": "Persie = \"čistá\" nebo \"skvělá\" | 1) říše Persie; zahrnoval území od Indie na východě po Egypt a Thrákii na západě a zahrnoval kromě části Evropy a Afriky i celou západní Asii mezi Černým mořem, Kavkazem, Kaspickým mořem a Jaxartes na severu, Arabskou pouští, Perským zálivem a Indickým oceánem na jihu | 1a) Vlastní Persie byla ohraničena na západě Susianou nebo Elamem, na severu Médií, na jihu Perským zálivem a dále",
+      "lemma": "פָּרַס",
+      "hebrew": "פרס",
+      "xlit": "Pâraç",
+      "translated": true
+    },
+    "H6540": {
+      "definitions_cz": "Persie = \"čistá\" nebo \"skvělá\" | 1) říše Persie; zahrnoval území od Indie na východě po Egypt a Thrákii na západě a zahrnoval kromě části Evropy a Afriky i celou západní Asii mezi Černým mořem, Kavkazem, Kaspickým mořem a Jaxartes na severu, Arabskou pouští, Perským zálivem a Indickým oceánem na jihu | 1a) Vlastní Persie byla ohraničena na západě Susianou nebo Elamem, na severu Médií, na jihu Perským zálivem a dále",
+      "lemma": "פָּרַס",
+      "hebrew": "פרס",
+      "xlit": "Pâraç",
+      "translated": true
     }
   }
 }
