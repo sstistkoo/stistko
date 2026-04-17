@@ -76912,6 +76912,706 @@
       "hebrew": "קרקר",
       "xlit": "Qarqôr",
       "translated": true
+    },
+    "H7175": {
+      "definitions_cz": "1) prkno, prkna, prkno | 1a) deska | 1b) desky",
+      "lemma": "קֶרֶשׁ",
+      "hebrew": "קרש",
+      "xlit": "qeresh",
+      "translated": true
+    },
+    "H7176": {
+      "definitions_cz": "1) město, město",
+      "lemma": "קֶרֶת",
+      "hebrew": "קרת",
+      "xlit": "qereth",
+      "translated": true
+    },
+    "H7177": {
+      "definitions_cz": "Kartah = \"město\" | 1) město v Zabulunu přidělené merarijským levitům",
+      "lemma": "קַרְתָּה",
+      "hebrew": "קרתה",
+      "xlit": "Qartâh",
+      "translated": true
+    },
+    "H7178": {
+      "definitions_cz": "Kartan = \"dvě města\" | 1) město v Neftali přidělené geršonským levitům | 1a) také „Kirjathaim“",
+      "lemma": "קַרְתָּן",
+      "hebrew": "קרתן",
+      "xlit": "Qartân",
+      "translated": true
+    },
+    "H7179": {
+      "definitions_cz": "1) strniště, plevy",
+      "lemma": "קַשׁ",
+      "hebrew": "קש",
+      "xlit": "qash",
+      "translated": true
+    },
+    "H7180": {
+      "definitions_cz": "1) okurka",
+      "lemma": "קִשֻּׁא",
+      "hebrew": "קשא",
+      "xlit": "qishshuʼ",
+      "translated": true
+    },
+    "H7181": {
+      "definitions_cz": "1) slyšet, být pozorný, dbát, naklánět (uší), sledovat (uší), poslouchat, dávat pozor, poslouchat | 1a) (Qal) naklánět se, navštěvovat (uší), poslouchat, dávat pozor, poslouchat | 1b) (Hiphil) dávat pozor, dávat pozor",
+      "lemma": "קָשַׁב",
+      "hebrew": "קשב",
+      "xlit": "qâshab",
+      "translated": true
+    },
+    "H7182": {
+      "definitions_cz": "1) pozornost, pozornost",
+      "lemma": "קֶשֶׁב",
+      "hebrew": "קשב",
+      "xlit": "qesheb",
+      "translated": true
+    },
+    "H7183": {
+      "definitions_cz": "1) pozorný",
+      "lemma": "קַשָּׁב",
+      "hebrew": "קשב",
+      "xlit": "qashshâb",
+      "translated": true
+    },
+    "H7184": {
+      "definitions_cz": "1) jakýsi džbán, sklenice",
+      "lemma": "קָשָׂה",
+      "hebrew": "קשה",
+      "xlit": "qâsâh",
+      "translated": true
+    },
+    "H7185": {
+      "definitions_cz": "1) být tvrdý, být přísný, být divoký, být drsný | 1a) (Qal) | 1a1) být těžký, být těžký | 1a2) být tvrdý, být tvrdý | 1b) (Niphal) | 1b1) být špatně zacházeno | 1b2) být silně stlačen | 1c) (Piel) mít těžký porod (ženy) | 1d) (Hiphil) | 1d1) ztížit, ztížit | 1d2) ztížit, ztížit | 1d3) dělat tvrdý, dělat tuhý, dělat tvrdohlavý | 1d3a) tvrdohlavosti (obr.) | 1d4) ukázat tvrdohlavost",
+      "lemma": "קָשָׁה",
+      "hebrew": "קשה",
+      "xlit": "qâshâh",
+      "translated": true
+    },
+    "H7186": {
+      "definitions_cz": "1) tvrdý, krutý, přísný, tvrdohlavý | 1a) těžké, těžké | 1b) závažné | 1c) divoký, intenzivní, vehementní | 1d) tvrdohlavý, se ztuhlou šíjí, se ztuhlou šíjí | 1e) přísný (boje)",
+      "lemma": "קָשֶׁה",
+      "hebrew": "קשה",
+      "xlit": "qâsheh",
+      "translated": true
+    },
+    "H7187": {
+      "definitions_cz": "1) pravda",
+      "lemma": "קְשׁוֹט",
+      "hebrew": "קשוט",
+      "xlit": "qᵉshôwṭ",
+      "translated": true
+    },
+    "H7188": {
+      "definitions_cz": "1) ztěžovat, tvrdě zacházet, tvrdě zacházet | 1a) (Hiphil) | 1a1) dělat tvrdý, dělat tvrdohlavý | 1a2) zacházet stěží, zacházet hrubě",
+      "lemma": "קָשַׁח",
+      "hebrew": "קשח",
+      "xlit": "qâshach",
+      "translated": true
+    },
+    "H7189": {
+      "definitions_cz": "1) luk | 2) pravda, vyvážená pravdivost",
+      "lemma": "קֹשֶׁט",
+      "hebrew": "קשט",
+      "xlit": "qôsheṭ",
+      "translated": true
+    },
+    "H7190": {
+      "definitions_cz": "1) tvrdohlavost, tvrdohlavost",
+      "lemma": "קְשִׁי",
+      "hebrew": "קשי",
+      "xlit": "qᵉshîy",
+      "translated": true
+    },
+    "H7191": {
+      "definitions_cz": "Kishion = \"tvrdý\" | 1) město na hranici Issachar přidělené geršonským levitům",
+      "lemma": "קִשְׁיוֹן",
+      "hebrew": "קשיון",
+      "xlit": "Qishyôwn",
+      "translated": true
+    },
+    "H7192": {
+      "definitions_cz": "1) jednotka neznámé hodnoty | 1a) snad váha, peníze",
+      "lemma": "קְשִׂיטָה",
+      "hebrew": "קשיטה",
+      "xlit": "qᵉsîyṭâh",
+      "translated": true
+    },
+    "H7193": {
+      "definitions_cz": "1) šupina (ryb, vodních živočichů)",
+      "lemma": "קַשְׂקֶשֶׂת",
+      "hebrew": "קשקשת",
+      "xlit": "qasqeseth",
+      "translated": true
+    },
+    "H7194": {
+      "definitions_cz": "1) svázat, svázat, svázat, spolčit se, konspirovat | 1a) (Qal) | 1a1) vázat, omezovat | 1a2) spojit se spolu, konspirovat | 1b) (Niphal) být svázán, být svázán | 1c) (Piel) | 1c1) vázat na | 1c2) rychle svázat | 1c3) vázat, vázat | 1c4) vázat se k sobě | 1d) (Pual) robustní, rázný (příčestí) | 1e) (Hithpael) konspirovat",
+      "lemma": "קָשַׁר",
+      "hebrew": "קשר",
+      "xlit": "qâshar",
+      "translated": true
+    },
+    "H7195": {
+      "definitions_cz": "1) spiknutí, zrada, (nezákonné) spojenectví",
+      "lemma": "קֶשֶׁר",
+      "hebrew": "קשר",
+      "xlit": "qesher",
+      "translated": true
+    },
+    "H7196": {
+      "definitions_cz": "1) pásky, šerpy, čelenky | 1a) ozdoby, které jsou vázané",
+      "lemma": "קִשֻּׁר",
+      "hebrew": "קשר",
+      "xlit": "qishshur",
+      "translated": true
+    },
+    "H7197": {
+      "definitions_cz": "1) sbírat, sestavovat, sbírat, sbírat strniště nebo klacky | 1a) (Qal) shromáždit se | 1b) (Poel) sbírat strniště | 1c) (Hithpoel) shromáždit se",
+      "lemma": "קָשַׁשׁ",
+      "hebrew": "קשש",
+      "xlit": "qâshash",
+      "translated": true
+    },
+    "H7198": {
+      "definitions_cz": "1) luk | 1a) luk (pro lov, bitvu) | 1b) lučištníci, lukostřelci | 1c) luk (obr. moci) | 1d) duha",
+      "lemma": "קֶשֶׁת",
+      "hebrew": "קשת",
+      "xlit": "qesheth",
+      "translated": true
+    },
+    "H7199": {
+      "definitions_cz": "1) lukostřelec, lukostřelec",
+      "lemma": "קַשָּׁת",
+      "hebrew": "קשת",
+      "xlit": "qashshâth",
+      "translated": true
+    },
+    "H7200": {
+      "definitions_cz": "1) vidět, dívat se, prohlížet, vnímat, uvažovat | 1a) (Qal) | 1a1) vidět | 1a2) vidět, vnímat | 1a3) vidět, mít vidění | 1a4) dívat se na, vidět, pozorovat, starat se o, vidět po, dozvědět se o, pozorovat, sledovat, dívat se na, dívat se, zjistit | 1a5) vidět, pozorovat, uvažovat, dívat se, věnovat pozornost, rozlišovat, rozlišovat | 1a6) dívat se, dívat se | 1b) (Niphal) | 1b1) objevit se, prezentovat se | 1b2) k vidění | 1b3), aby bylo vidět | 1c) (Pual) k vidění | 1d) (Hiphil) |",
+      "lemma": "רָאָה",
+      "hebrew": "ראה",
+      "xlit": "râʼâh",
+      "translated": true
+    },
+    "H7201": {
+      "definitions_cz": "1) dravý pták | 1a) možná luňák nebo jestřáb",
+      "lemma": "רָאָה",
+      "hebrew": "ראה",
+      "xlit": "râʼâh",
+      "translated": true
+    },
+    "H7202": {
+      "definitions_cz": "1) (Qal) vidět",
+      "lemma": "רָאֶה",
+      "hebrew": "ראה",
+      "xlit": "râʼeh",
+      "translated": true
+    },
+    "H7203": {
+      "definitions_cz": "1) věštec, prorok | 2) (prorocké) vidění",
+      "lemma": "רֹאֶה",
+      "hebrew": "ראה",
+      "xlit": "rôʼeh",
+      "translated": true
+    },
+    "H7204": {
+      "definitions_cz": "Haroeh = \"vize\" | 1) muž z Judy",
+      "lemma": "רֹאֵה",
+      "hebrew": "ראה",
+      "xlit": "Rôʼêh",
+      "translated": true
+    },
+    "H7205": {
+      "definitions_cz": "Ruben = \"hle syn\" | 1) nejstarší syn Jákobův od Ley | 2) kmen pocházející z Rubena | 3) území obývané kmenem Ruben",
+      "lemma": "רְאוּבֵן",
+      "hebrew": "ראובן",
+      "xlit": "Rᵉʼûwbên",
+      "translated": true
+    },
+    "H7206": {
+      "definitions_cz": "Rubenite = viz Ruben \"hle syn\" | 1) potomek Rubena, syna Jákobova",
+      "lemma": "רְאוּבֵנִי",
+      "hebrew": "ראובני",
+      "xlit": "Rᵉʼûwbênîy",
+      "translated": true
+    },
+    "H7207": {
+      "definitions_cz": "1) vidět",
+      "lemma": "רַאֲוָה",
+      "hebrew": "ראוה",
+      "xlit": "raʼăvâh",
+      "translated": true
+    },
+    "H7208": {
+      "definitions_cz": "Reumah = \"vyvýšený\" | 1) konkubína Náchora, bratra Abrahamova",
+      "lemma": "רְאוּמָה",
+      "hebrew": "ראומה",
+      "xlit": "Rᵉʼûwmâh",
+      "translated": true
+    },
+    "H7209": {
+      "definitions_cz": "1) zrcadlo",
+      "lemma": "רְאִי",
+      "hebrew": "ראי",
+      "xlit": "rᵉʼîy",
+      "translated": true
+    },
+    "H7210": {
+      "definitions_cz": "1) pohled, vzhled, vidění, zrak | 1a) vidět | 1b) vzhled | 1c) zrak, podívaná",
+      "lemma": "רֳאִי",
+      "hebrew": "ראי",
+      "xlit": "rŏʼîy",
+      "translated": true
+    },
+    "H7211": {
+      "definitions_cz": "Reaia nebo Reaiah = \"Jehova viděl\" | 1) potomek Šóbala, syna Judova | 2) Rúbenejec, syn Micheášův a otec Baalův | 3) předek rodiny chrámových otroků, kteří se vrátili z exilu se Zerubábelem",
+      "lemma": "רְאָיָה",
+      "hebrew": "ראיה",
+      "xlit": "Rᵉʼâyâh",
+      "translated": true
+    },
+    "H7212": {
+      "definitions_cz": "1) (Qal) vzhled",
+      "lemma": "רְאִית",
+      "hebrew": "ראית",
+      "xlit": "rᵉʼîyth",
+      "translated": true
+    },
+    "H7213": {
+      "definitions_cz": "1) (Qal) stoupat",
+      "lemma": "רָאַם",
+      "hebrew": "ראם",
+      "xlit": "râʼam",
+      "translated": true
+    },
+    "H7214": {
+      "definitions_cz": "1) pravděpodobně velcí zubři nebo divocí býci, kteří jsou nyní vyhynulí. Přesný význam není znám.",
+      "lemma": "רְאֵם",
+      "hebrew": "ראם",
+      "xlit": "rᵉʼêm",
+      "translated": true
+    },
+    "H7215": {
+      "definitions_cz": "1) korály",
+      "lemma": "רָאמָה",
+      "hebrew": "ראמה",
+      "xlit": "râʼmâh",
+      "translated": true
+    },
+    "H7216": {
+      "definitions_cz": "Ramoth = \"výšky\" | 1) místo v Gileadu; stránka pochybná | 2) levitské město v Issacharu",
+      "lemma": "רָאמוֹת",
+      "hebrew": "ראמות",
+      "xlit": "Râʼmôwth",
+      "translated": true
+    },
+    "H7217": {
+      "definitions_cz": "1) náčelník, vedoucí | 1a) hlava (člověka) | 1b) hlava (jako sídlo vizí) | 1c) hlavní | 1d) součet (základní obsah)",
+      "lemma": "רֵאשׁ",
+      "hebrew": "ראש",
+      "xlit": "rêʼsh",
+      "translated": true
+    },
+    "H7218": {
+      "definitions_cz": "1) hlava, vrchol, vrchol, horní část, hlavní, celkem, součet, výška, přední, začátek | 1a) hlava (člověka, zvířat) | 1b) vrchol, vrchol (hory) | 1c) výška (hvězd) | 1d) náčelník, hlava (člověka, města, národa, místa, rodiny, kněze) | 1e) hlava, přední, začátek | 1f) hlavní, nejvybranější, nejlepší | 1g) vedoucí, divize, společnost, kapela | 1h) součet",
+      "lemma": "רֹאשׁ",
+      "hebrew": "ראש",
+      "xlit": "rôʼsh",
+      "translated": true
+    },
+    "H7219": {
+      "definitions_cz": "1) žlučový, jedovatý, hořký, jedovatý",
+      "lemma": "רֹאשׁ",
+      "hebrew": "ראש",
+      "xlit": "rôʼsh",
+      "translated": true
+    },
+    "H7220": {
+      "definitions_cz": "Roš = \"hlava\" | n pr m | 1) syn Benjamina",
+      "lemma": "רֹאשׁ",
+      "hebrew": "ראש",
+      "xlit": "Rôʼsh",
+      "translated": true
+    },
+    "H7221": {
+      "definitions_cz": "1) čas začátku, čas začátku",
+      "lemma": "רִאשָׁה",
+      "hebrew": "ראשה",
+      "xlit": "riʼshâh",
+      "translated": true
+    },
+    "H7222": {
+      "definitions_cz": "1) nahoře, nahoře",
+      "lemma": "רֹאשָׁה",
+      "hebrew": "ראשה",
+      "xlit": "rôʼshâh",
+      "translated": true
+    },
+    "H7223": {
+      "definitions_cz": "adj | 1) první, primární, bývalý | 1a) bývalý (času) | 1a1) předci | 1a2) bývalé věci | 1b) především (místa) | 1c) první (v čase) | 1d) první, šéf (ve stupni) | adv | 2) nejprve, předtím, dříve, nejprve",
+      "lemma": "רִאשׁוֹן",
+      "hebrew": "ראשון",
+      "xlit": "riʼshôwn",
+      "translated": true
+    },
+    "H7224": {
+      "definitions_cz": "1) první",
+      "lemma": "רִאשֹׁנִי",
+      "hebrew": "ראשני",
+      "xlit": "riʼshônîy",
+      "translated": true
+    },
+    "H7225": {
+      "definitions_cz": "1) první, začátek, nejlepší, hlavní | 1a) začátek | 1b) první | 1c) hlavní | 1d) výběrová část",
+      "lemma": "רֵאשִׁית",
+      "hebrew": "ראשית",
+      "xlit": "rêʼshîyth",
+      "translated": true
+    },
+    "H7226": {
+      "definitions_cz": "1) místo hlavy, místo u hlavy",
+      "lemma": "רַאֲשֹׁת",
+      "hebrew": "ראשת",
+      "xlit": "raʼăshôth",
+      "translated": true
+    },
+    "H7227": {
+      "definitions_cz": "adj | 1) mnoho, mnoho, skvělé | 1a) hodně | 1b) mnoho | 1c) oplývající | 1d) četnější než | 1e) hojný, dostatek | 1f) skvělé | 1g) silný | 1h) větší než | adv | 1i) hodně, nadmíru | n m | 2) kapitán, náčelník",
+      "lemma": "רַב",
+      "hebrew": "רב",
+      "xlit": "rab",
+      "translated": true
+    },
+    "H7228": {
+      "definitions_cz": "1) lukostřelec",
+      "lemma": "רַב",
+      "hebrew": "רב",
+      "xlit": "rab",
+      "translated": true
+    },
+    "H7229": {
+      "definitions_cz": "adj | 1) skvělé | 1a) skvělé | 1b) velký (fík moci) | n | 2) kapitán, náčelník",
+      "lemma": "רַב",
+      "hebrew": "רב",
+      "xlit": "rab",
+      "translated": true
+    },
+    "H7230": {
+      "definitions_cz": "1) množství, hojnost, velikost | 1a) množství | 1a1) hojnost, hojnost | 1a2) četné | 1b) velikost",
+      "lemma": "רֹב",
+      "hebrew": "רב",
+      "xlit": "rôb",
+      "translated": true
+    },
+    "H7231": {
+      "definitions_cz": "1) být nebo se stát mnoha, být nebo se stát mnoho, být nebo se stát velkým | 1a)(Qal) | 1a1) být nebo se stát mnoha | 1a2) být nebo se stát velkým | 1a3) být dlouhý (cesty) | 2) (Pual) deset tisíc",
+      "lemma": "רָבַב",
+      "hebrew": "רבב",
+      "xlit": "râbab",
+      "translated": true
+    },
+    "H7232": {
+      "definitions_cz": "1) (Qal) střílet",
+      "lemma": "רָבַב",
+      "hebrew": "רבב",
+      "xlit": "râbab",
+      "translated": true
+    },
+    "H7233": {
+      "definitions_cz": "1) množství, nesčetné množství, deset tisíc",
+      "lemma": "רְבָבָה",
+      "hebrew": "רבבה",
+      "xlit": "rᵉbâbâh",
+      "translated": true
+    },
+    "H7234": {
+      "definitions_cz": "1) (Qal) šířit, bespread, deck",
+      "lemma": "רָבַד",
+      "hebrew": "רבד",
+      "xlit": "râbad",
+      "translated": true
+    },
+    "H7235": {
+      "definitions_cz": "1) buď nebo se staň velkým, buď nebo se staň mnoha, buď nebo se staň hodně, buď nebo se staň početným | 1a) (Qal) | 1a1) stát se mnoha, stát se četnými, množit se (lidí, zvířat, věcí) | 1a2) být nebo růst skvělý | 1b) (Piel) zvětšit, zvětšit, zvětšit, stát se mnoha | 1c) (Hiphil) | 1c1) dělat hodně, dělat mnoho, mít mnoho | 1c1a) násobit, zvětšovat | 1c1b) hodně dělat, hodně dělat, hodně se provinit | 1c1c) výrazně nebo nadměrně zvýšit | 1c2) udělat velký, zvětšit",
+      "lemma": "רָבָה",
+      "hebrew": "רבה",
+      "xlit": "râbâh",
+      "translated": true
+    },
+    "H7236": {
+      "definitions_cz": "1) růst skvěle | 1a) (P'al) vyrůst dlouhý, vysoký a velký, velký růst, zvětšovat se | 1b) (Pael) udělat skvělé",
+      "lemma": "רְבָה",
+      "hebrew": "רבה",
+      "xlit": "rᵉbâh",
+      "translated": true
+    },
+    "H7237": {
+      "definitions_cz": "Rabbath = \"velký\" | 1) hlavní město Ammonitů ležící východně od Jordánu | 2) město v Judsku; místo nejisté",
+      "lemma": "רַבָּה",
+      "hebrew": "רבה",
+      "xlit": "Rabbâh",
+      "translated": true
+    },
+    "H7238": {
+      "definitions_cz": "1) velikost",
+      "lemma": "רְבוּ",
+      "hebrew": "רבו",
+      "xlit": "rᵉbûw",
+      "translated": true
+    },
+    "H7239": {
+      "definitions_cz": "1) deset tisíc, nespočet",
+      "lemma": "רִבּוֹ",
+      "hebrew": "רבו",
+      "xlit": "ribbôw",
+      "translated": true
+    },
+    "H7240": {
+      "definitions_cz": "1) nesčetné množství, deset tisíc krát deset tisíc",
+      "lemma": "רִבּוֹ",
+      "hebrew": "רבו",
+      "xlit": "ribbôw",
+      "translated": true
+    },
+    "H7241": {
+      "definitions_cz": "1) vydatné přeháňky, silné přeháňky | 1a) jako přinášející plodnost | 1b) prorockého vlivu (obr.)",
+      "lemma": "רָבִיב",
+      "hebrew": "רביב",
+      "xlit": "râbîyb",
+      "translated": true
+    },
+    "H7242": {
+      "definitions_cz": "1) řetízek (ozdoba na krk a náhrdelník)",
+      "lemma": "רָבִיד",
+      "hebrew": "רביד",
+      "xlit": "râbîyd",
+      "translated": true
+    },
+    "H7243": {
+      "definitions_cz": "1) čtvrtý | 1a) čtvrtý | 1b) čtyři čtvercové | 1c) čtvrtá část",
+      "lemma": "רְבִיעִי",
+      "hebrew": "רביעי",
+      "xlit": "rᵉbîyʻîy",
+      "translated": true
+    },
+    "H7244": {
+      "definitions_cz": "1) čtvrtý",
+      "lemma": "רְבִיעַי",
+      "hebrew": "רביעי",
+      "xlit": "rᵉbîyʻay",
+      "translated": true
+    },
+    "H7245": {
+      "definitions_cz": "Králík = \"množství\" | 1) město v Issacharu",
+      "lemma": "רַבִּית",
+      "hebrew": "רבית",
+      "xlit": "Rabbîyth",
+      "translated": true
+    },
+    "H7246": {
+      "definitions_cz": "1) promíchat, promíchat | 1a) (Hophal) ke smíchání",
+      "lemma": "רָבַךְ",
+      "hebrew": "רבך",
+      "xlit": "râbak",
+      "translated": true
+    },
+    "H7247": {
+      "definitions_cz": "Ribla = \"plodnost\" | 1) místo na východní hranici Izraele | 2) město v zemi Chamat na velké cestě mezi Babylonem a Palestinou",
+      "lemma": "רִבְלָה",
+      "hebrew": "רבלה",
+      "xlit": "Riblâh",
+      "translated": true
+    },
+    "H7248": {
+      "definitions_cz": "1) věštec, kouzelník, hlavní věštec | 1a) Rab-mag, hlavní věštec nebo šéf knížat, úředník Babylonie",
+      "lemma": "רַב־מָג",
+      "hebrew": "רבמג",
+      "xlit": "Rab-Mâg",
+      "translated": true
+    },
+    "H7249": {
+      "definitions_cz": "1) hlavní eunuch | 1a) Rab-saris, hlavní eunuch, vysoký babylonský úředník",
+      "lemma": "רַב־סָרִיס",
+      "hebrew": "רבסריס",
+      "xlit": "Rab-Çârîyç",
+      "translated": true
+    },
+    "H7250": {
+      "definitions_cz": "1) ležet natažený, ležet | 1a) (Qal) | 1a1) lehnout | 1a1a) pro odpočinek | 1a1b) pro kopulaci (ženy se šelmou) | 1b) (Hiphil) přimět k položení (chovu dobytka)",
+      "lemma": "רָבַע",
+      "hebrew": "רבע",
+      "xlit": "râbaʻ",
+      "translated": true
+    },
+    "H7251": {
+      "definitions_cz": "1) na čtverec, být na druhou | 1a) (Qal) čtverec (příčestí) | 1b) (Pual) čtverec (příčestí)",
+      "lemma": "רָבַע",
+      "hebrew": "רבע",
+      "xlit": "râbaʻ",
+      "translated": true
+    },
+    "H7252": {
+      "definitions_cz": "1) ležet, ležet natažený | 1a) (Qal) vleže (infinitiv)",
+      "lemma": "רֶבַע",
+      "hebrew": "רבע",
+      "xlit": "rebaʻ",
+      "translated": true
+    },
+    "H7253": {
+      "definitions_cz": "1) čtvrtá část, čtyři strany | 1a) čtvrtá část | 1b) čtyři strany",
+      "lemma": "רֶבַע",
+      "hebrew": "רבע",
+      "xlit": "rebaʻ",
+      "translated": true
+    },
+    "H7254": {
+      "definitions_cz": "Reba = \"čtyři\" | 1) jeden z 5 králů Midian zabitých Izraelity, když padl Balám",
+      "lemma": "רֶבַע",
+      "hebrew": "רבע",
+      "xlit": "Rebaʻ",
+      "translated": true
+    },
+    "H7255": {
+      "definitions_cz": "1) čtvrtá část",
+      "lemma": "רֹבַע",
+      "hebrew": "רבע",
+      "xlit": "rôbaʻ",
+      "translated": true
+    },
+    "H7256": {
+      "definitions_cz": "1) týkající se čtvrtého",
+      "lemma": "רִבֵּעַ",
+      "hebrew": "רבע",
+      "xlit": "ribbêaʻ",
+      "translated": true
+    },
+    "H7257": {
+      "definitions_cz": "1) natáhnout se, lehnout si, ležet natažený | 1a) (Qal) ležet, ležet | 1b)(Hiphil) způsobit ulehnutí | 1b1) pokládání (kameny)",
+      "lemma": "רָבַץ",
+      "hebrew": "רבץ",
+      "xlit": "râbats",
+      "translated": true
+    },
+    "H7258": {
+      "definitions_cz": "1) místo odpočinku nebo obydlí, místo ležení",
+      "lemma": "רֵבֶץ",
+      "hebrew": "רבץ",
+      "xlit": "rêbets",
+      "translated": true
+    },
+    "H7259": {
+      "definitions_cz": "Rebekah = \"nápadník\" | 1) dcera Bethuela, sestra Lábanova, manželka Izáka a matka Ezaua a Jákoba",
+      "lemma": "רִבְקָה",
+      "hebrew": "רבקה",
+      "xlit": "Ribqâh",
+      "translated": true
+    },
+    "H7260": {
+      "definitions_cz": "adj | 1) skvělé | 1a) skvělé | 1b) velký (obr. síly) | n | 2) kapitán, náčelník",
+      "lemma": "רַבְרַב",
+      "hebrew": "רברב",
+      "xlit": "rabrab",
+      "translated": true
+    },
+    "H7261": {
+      "definitions_cz": "1) pán, urozený",
+      "lemma": "רַבְרְבָן",
+      "hebrew": "רברבן",
+      "xlit": "rabrᵉbân",
+      "translated": true
+    },
+    "H7262": {
+      "definitions_cz": "1) vrchní pohárník, náčelník důstojníků? | 1a) Rabshakeh",
+      "lemma": "רַבְשָׁקֵה",
+      "hebrew": "רבשקה",
+      "xlit": "Rabshâqêh",
+      "translated": true
+    },
+    "H7263": {
+      "definitions_cz": "1) hrudka (země)",
+      "lemma": "רֶגֶב",
+      "hebrew": "רגב",
+      "xlit": "regeb",
+      "translated": true
+    },
+    "H7264": {
+      "definitions_cz": "1) třást se, chvět, zuřit, chvět, být rozrušený, vzrušený, rozrušený | 1a)(Qal) se třást, být znepokojený, vzrušený, rozrušený | 1b) (Hiphil) způsobit zemětřesení, neklid, rozhořčení, vyrušení | 1c) (Hithpael) vzrušit se",
+      "lemma": "רָגַז",
+      "hebrew": "רגז",
+      "xlit": "râgaz",
+      "translated": true
+    },
+    "H7265": {
+      "definitions_cz": "1) (Aphel) zuřit, rozzuřit",
+      "lemma": "רְגַז",
+      "hebrew": "רגז",
+      "xlit": "rᵉgaz",
+      "translated": true
+    },
+    "H7266": {
+      "definitions_cz": "1) vztek",
+      "lemma": "רְגַז",
+      "hebrew": "רגז",
+      "xlit": "rᵉgaz",
+      "translated": true
+    },
+    "H7267": {
+      "definitions_cz": "1) neklid, vzrušení, běsnění, potíže, nepokoj, chvění | 1a) zmatek, neklid, běsnění | 1b) chvění, chvění",
+      "lemma": "רֹגֶז",
+      "hebrew": "רגז",
+      "xlit": "rôgez",
+      "translated": true
+    },
+    "H7268": {
+      "definitions_cz": "1) chvění, chvění, chvění",
+      "lemma": "רַגָּז",
+      "hebrew": "רגז",
+      "xlit": "raggâz",
+      "translated": true
+    },
+    "H7269": {
+      "definitions_cz": "1) chvění, chvění, chvění",
+      "lemma": "רׇגְזָה",
+      "hebrew": "רגזה",
+      "xlit": "rogzâh",
+      "translated": true
+    },
+    "H7270": {
+      "definitions_cz": "1) jít pěšky, špehovat, chodit, chodit, chodit, hýbat nohama | 1a) (Qal) být nositelem pohádek, pomlouvat, chodit | 1b) (Piel) | 1b1) pomlouvat | 1b2) jít jako průzkumník, špión | 1c) (Tiphel) učit chodit",
+      "lemma": "רָגַל",
+      "hebrew": "רגל",
+      "xlit": "râgal",
+      "translated": true
+    },
+    "H7271": {
+      "definitions_cz": "1) noha",
+      "lemma": "רְגַל",
+      "hebrew": "רגל",
+      "xlit": "rᵉgal",
+      "translated": true
+    },
+    "H7272": {
+      "definitions_cz": "1) noha | 1a) noha, noha | 1b) Boží (antropomorfní) | 1c) serafů, cherubů, bůžků, zvířat, stolu | 1d) podle tempa (s přípravou) | 1e) třikrát (stopy, kroky)",
+      "lemma": "רֶגֶל",
+      "hebrew": "רגל",
+      "xlit": "regel",
+      "translated": true
+    },
+    "H7273": {
+      "definitions_cz": "1) pěšky | 1a) muž pěší, lokaj, pěšák",
+      "lemma": "רַגְלִי",
+      "hebrew": "רגלי",
+      "xlit": "raglîy",
+      "translated": true
+    },
+    "H7274": {
+      "definitions_cz": "Rogelim = \"místo fullers\" | 1) místo na vysočině východně od Jordánu",
+      "lemma": "רֹגְלִים",
+      "hebrew": "רגלים",
+      "xlit": "Rôgᵉlîym",
+      "translated": true
     }
   }
 }
