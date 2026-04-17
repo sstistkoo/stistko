@@ -76562,6 +76562,356 @@
       "hebrew": "קרא",
       "xlit": "qôrêʼ",
       "translated": true
+    },
+    "H7125": {
+      "definitions_cz": "n m | 1) (BDB) setkat se, setkat se, setkat se | 1a) (Qal) | 1a1) setkat se, setkat se | 1a2) narazit (obr.)",
+      "lemma": "קִרְאָה",
+      "hebrew": "קראה",
+      "xlit": "qirʼâh",
+      "translated": true
+    },
+    "H7126": {
+      "definitions_cz": "1) přiblížit se, přiblížit se, vstoupit do, přiblížit se | 1a) (Qal) přiblížit se, přiblížit se | 1b) (Niphal) přiblížit | 1c) (Piel) způsobit přiblížení, přiblížit se, přiblížit | 1d) (Hiphil) přiblížit, přinést, předložit",
+      "lemma": "קָרַב",
+      "hebrew": "קרב",
+      "xlit": "qârab",
+      "translated": true
+    },
+    "H7127": {
+      "definitions_cz": "1) přiblížit se, přiblížit se | 1a) (P'al) přiblížit se | 1b) (Pael) nabídnout, přiblížit se | 1c) (Aphel) bude předvolán",
+      "lemma": "קְרֵב",
+      "hebrew": "קרב",
+      "xlit": "qᵉrêb",
+      "translated": true
+    },
+    "H7128": {
+      "definitions_cz": "1) bitva, válka",
+      "lemma": "קְרָב",
+      "hebrew": "קרב",
+      "xlit": "qᵉrâb",
+      "translated": true
+    },
+    "H7129": {
+      "definitions_cz": "1) válka",
+      "lemma": "קְרָב",
+      "hebrew": "קרב",
+      "xlit": "qᵉrâb",
+      "translated": true
+    },
+    "H7130": {
+      "definitions_cz": "1) uprostřed, mezi, vnitřní část, uprostřed | 1a) vnitřní část | 1a1) fyzický smysl | 1a2) jako sídlo myšlení a emocí | 1a3) jako schopnost myšlení a emocí | 1b) uprostřed, mezi, z řady osob | 1c) vnitřnosti (z obětních zvířat)",
+      "lemma": "קֶרֶב",
+      "hebrew": "קרב",
+      "xlit": "qereb",
+      "translated": true
+    },
+    "H7131": {
+      "definitions_cz": "1) blízko, blížící se",
+      "lemma": "קָרֵב",
+      "hebrew": "קרב",
+      "xlit": "qârêb",
+      "translated": true
+    },
+    "H7132": {
+      "definitions_cz": "1) přiblížení, přiblížení",
+      "lemma": "קְרָבָה",
+      "hebrew": "קרבה",
+      "xlit": "qᵉrâbâh",
+      "translated": true
+    },
+    "H7133": {
+      "definitions_cz": "1) obětina, obětina",
+      "lemma": "קׇרְבָּן",
+      "hebrew": "קרבן",
+      "xlit": "qorbân",
+      "translated": true
+    },
+    "H7134": {
+      "definitions_cz": "1) sekera",
+      "lemma": "קַרְדֹּם",
+      "hebrew": "קרדם",
+      "xlit": "qardôm",
+      "translated": true
+    },
+    "H7135": {
+      "definitions_cz": "1) zima",
+      "lemma": "קָרָה",
+      "hebrew": "קרה",
+      "xlit": "qârâh",
+      "translated": true
+    },
+    "H7136": {
+      "definitions_cz": "1) setkat se, setkat se, potkat se, stát se, setkat se | 1a) (Qal) | 1a1) setkat se, setkat se | 1a2) potkat | 1b) (Niphal) | 1b1) setkat se, setkat se (bez předběžného ujednání) | 1b2) k šanci být přítomen | 1b3) vyjít vstříc | 1c) (Hiphil) přimět se sejít, jmenovat | 2) stavět s trámy | 2a) (Piel) položit trámy, vybavit trámy",
+      "lemma": "קָרָה",
+      "hebrew": "קרה",
+      "xlit": "qârâh",
+      "translated": true
+    },
+    "H7137": {
+      "definitions_cz": "1) náhoda, nehoda | 1a) nočního znečištění vyžadujícího dočasný exodus z tábora",
+      "lemma": "קָרֶה",
+      "hebrew": "קרה",
+      "xlit": "qâreh",
+      "translated": true
+    },
+    "H7138": {
+      "definitions_cz": "1) poblíž | 1a) místa | 1b) času | 1c) osobního vztahu | 1c1) příbuzenství",
+      "lemma": "קָרוֹב",
+      "hebrew": "קרוב",
+      "xlit": "qârôwb",
+      "translated": true
+    },
+    "H7139": {
+      "definitions_cz": "1) být plešatý, udělat plešatý | 1a) (Qal) udělat pleš, udělat pleš | 1b) (Niphal) udělat se plešatý | 1c) (Hiphil) udělat se plešatý | 1d)(Hophal) udělat plešatý",
+      "lemma": "קָרַח",
+      "hebrew": "קרח",
+      "xlit": "qârach",
+      "translated": true
+    },
+    "H7140": {
+      "definitions_cz": "1) mráz, led, ledový krystal | 1a) mráz (noční) | 1b) led",
+      "lemma": "קֶרַח",
+      "hebrew": "קרח",
+      "xlit": "qerach",
+      "translated": true
+    },
+    "H7141": {
+      "definitions_cz": "Korah = \"plešatý\" | 1) syn Izhara, vnuka Kehata, pravnuka Léviho a vůdce povstání Izraelitů proti Mojžíšovi a Áronovi v poušti; potrestán a zemřel zemětřesením a plameny ohně | 2) 3. syn Ezau od Aholibamy a jednoho z edomských vévodů | 3) syn Elifaz od Ady, vévody edomského a synovce z 1 | 4) jeden ze ‚synů‘ Hebronu",
+      "lemma": "קֹרַח",
+      "hebrew": "קרח",
+      "xlit": "Qôrach",
+      "translated": true
+    },
+    "H7142": {
+      "definitions_cz": "1) plešatý",
+      "lemma": "קֵרֵחַ",
+      "hebrew": "קרח",
+      "xlit": "qêrêach",
+      "translated": true
+    },
+    "H7143": {
+      "definitions_cz": "Kareah = \"plešatý\" | 1) otec Jochanana a Jonatana, který podporoval Gedaliášovu autoritu a pomstil jeho vraždu",
+      "lemma": "קָרֵחַ",
+      "hebrew": "קרח",
+      "xlit": "Qârêach",
+      "translated": true
+    },
+    "H7144": {
+      "definitions_cz": "1) plešatost, pleš",
+      "lemma": "קׇרְחָה",
+      "hebrew": "קרחה",
+      "xlit": "qorchâh",
+      "translated": true
+    },
+    "H7145": {
+      "definitions_cz": "Korahite = \"jeden z Korach\" | 1) potomci Kóracha, syna Léviho",
+      "lemma": "קׇרְחִי",
+      "hebrew": "קרחי",
+      "xlit": "Qorchîy",
+      "translated": true
+    },
+    "H7146": {
+      "definitions_cz": "1) plešatost hlavy, plešatost zad, lysina",
+      "lemma": "קָרַחַת",
+      "hebrew": "קרחת",
+      "xlit": "qârachath",
+      "translated": true
+    },
+    "H7147": {
+      "definitions_cz": "1) opozice, protiklad, střetnutí, protikladné nebo nepřátelské střetnutí",
+      "lemma": "קְרִי",
+      "hebrew": "קרי",
+      "xlit": "qᵉrîy",
+      "translated": true
+    },
+    "H7148": {
+      "definitions_cz": "1) volal, volal, volal jeden",
+      "lemma": "קָרִיא",
+      "hebrew": "קריא",
+      "xlit": "qârîyʼ",
+      "translated": true
+    },
+    "H7149": {
+      "definitions_cz": "1) město",
+      "lemma": "קִרְיָא",
+      "hebrew": "קריא",
+      "xlit": "qiryâʼ",
+      "translated": true
+    },
+    "H7150": {
+      "definitions_cz": "1) hlásání, kázání",
+      "lemma": "קְרִיאָה",
+      "hebrew": "קריאה",
+      "xlit": "qᵉrîyʼâh",
+      "translated": true
+    },
+    "H7151": {
+      "definitions_cz": "1) město, město | 1a) obecně | 1b) konkrétně | 1c) kolektivní | 1d) neurčitou",
+      "lemma": "קִרְיָה",
+      "hebrew": "קריה",
+      "xlit": "qiryâh",
+      "translated": true
+    },
+    "H7152": {
+      "definitions_cz": "Kerioth = \"města\" | 1) město v jižní části Judska | 2) město v Moabu",
+      "lemma": "קְרִיּוֹת",
+      "hebrew": "קריות",
+      "xlit": "Qᵉrîyôwth",
+      "translated": true
+    },
+    "H7153": {
+      "definitions_cz": "Kirjath-arba = \"město Arba\" | 1) rané jméno města, které se po dobytí nazývalo „Hebron“",
+      "lemma": "קִרְיַת אַרְבַּע",
+      "hebrew": "קרית ארבע",
+      "xlit": "Qiryath ʼArbaʻ",
+      "translated": true
+    },
+    "H7154": {
+      "definitions_cz": "Kirjath-baal = \"město Baal\" | 1) město na severní hranici Judska a na západní a jižní hranici Benjamina | 1a) také „Kirjath-jearim“ a „Baalah“",
+      "lemma": "קִרְיַת בַּעַל",
+      "hebrew": "קרית בעל",
+      "xlit": "Qiryath Baʻal",
+      "translated": true
+    },
+    "H7155": {
+      "definitions_cz": "Kirjath-huzoth = \"město ulic\" | 1) město v Moabu",
+      "lemma": "קִרְיַת חֻצוֹת",
+      "hebrew": "קרית חצות",
+      "xlit": "Qiryath Chutsôwth",
+      "translated": true
+    },
+    "H7156": {
+      "definitions_cz": "Kiriathaim = \"dvě města\" | 1) město východně od Jordánu v Moabu | 2) město v Neftali přidělené geršonským levitům",
+      "lemma": "קִרְיָתַיִם",
+      "hebrew": "קריתים",
+      "xlit": "Qiryâthayim",
+      "translated": true
+    },
+    "H7157": {
+      "definitions_cz": "Kirjath-jearim = \"město lesů\" | 1) město na severní hranici Judska a na západní a jižní hranici Benjamina | 1a) také „Kirjath-baal“ a „Baalah“",
+      "lemma": "קִרְיַת יְעָרִים",
+      "hebrew": "קרית יערים",
+      "xlit": "Qiryath Yᵉʻârîym",
+      "translated": true
+    },
+    "H7158": {
+      "definitions_cz": "Kirjath-sepher nebo Kirjath-sannah = \"město knihy\" | 1) město v judských horách na západ od Hebronu",
+      "lemma": "קִרְיַת סַנָּה",
+      "hebrew": "קרית סנה",
+      "xlit": "Qiryath Çannâh",
+      "translated": true
+    },
+    "H7159": {
+      "definitions_cz": "1) roztáhnout nebo něco položit, zakrýt, rozložit | 1a) (Qal) rozložit",
+      "lemma": "קָרַם",
+      "hebrew": "קרם",
+      "xlit": "qâram",
+      "translated": true
+    },
+    "H7160": {
+      "definitions_cz": "1) zářit | 1a) (Qal) vysílat paprsky | 1b) (Hiphil) vystavovat nebo pěstovat rohy, být rohatý",
+      "lemma": "קָרַן",
+      "hebrew": "קרן",
+      "xlit": "qâran",
+      "translated": true
+    },
+    "H7161": {
+      "definitions_cz": "n f | 1) klakson | 1a) klakson | 1b) pevnosti (obr.) | 1c) baňka (nádoba na olej) | 1d) lesní roh (jako hudební nástroj) | 1e) roh (rohovitých výstupků na oltáři) | 1f) paprsků světla | 1g) kopec | n pr loc | 2) (BDB) místo dobyté Izraelem pravděpodobně v Bášanu",
+      "lemma": "קֶרֶן",
+      "hebrew": "קרן",
+      "xlit": "qeren",
+      "translated": true
+    },
+    "H7162": {
+      "definitions_cz": "1) klakson | 1a) jako hudební nástroj | 1b) symbolický (ve vizích) | 1c) zvířete",
+      "lemma": "קֶרֶן",
+      "hebrew": "קרן",
+      "xlit": "qeren",
+      "translated": true
+    },
+    "H7163": {
+      "definitions_cz": "Keren-happuch = \"roh antimonu\" | 1) jedna z dcer Jobových narozených po jeho soudu",
+      "lemma": "קֶרֶן הַפּוּךְ",
+      "hebrew": "קרן הפוך",
+      "xlit": "qeren hap-pûwk",
+      "translated": true
+    },
+    "H7164": {
+      "definitions_cz": "1) (Qal) sklonit se, sklonit se, přikrčit se",
+      "lemma": "קָרַס",
+      "hebrew": "קרס",
+      "xlit": "qâraç",
+      "translated": true
+    },
+    "H7165": {
+      "definitions_cz": "1) háček",
+      "lemma": "קֶרֶס",
+      "hebrew": "קרס",
+      "xlit": "qereç",
+      "translated": true
+    },
+    "H7166": {
+      "definitions_cz": "1) kotník",
+      "lemma": "קַרְסֹל",
+      "hebrew": "קרסל",
+      "xlit": "qarçôl",
+      "translated": true
+    },
+    "H7167": {
+      "definitions_cz": "1) trhat, trhat na kusy | 1a) (Qal) | 1a1) trhat, trhat | 1a2) odtrhnout nebo vytrhnout | 1a3) roztrhat, roztrhat | 1a3a) udělat široké nebo velké (očí) | 1a3b) roztrhnout (nebes) | 1a4) trhat, trhat (z divokých zvířat) | 1b) (Niphal) pronajmout, rozdělit",
+      "lemma": "קָרַע",
+      "hebrew": "קרע",
+      "xlit": "qâraʻ",
+      "translated": true
+    },
+    "H7168": {
+      "definitions_cz": "1) hadr, roztrhané kusy oděvu nebo látky",
+      "lemma": "קֶרַע",
+      "hebrew": "קרע",
+      "xlit": "qeraʻ",
+      "translated": true
+    },
+    "H7169": {
+      "definitions_cz": "1) zužovat, formovat, štípat, štípat, mačkat, mrknout, peněženku | 1a) (Qal) k sevření | 1b) (Pual), který se má uštípnout nebo odštípnout, vytvořit",
+      "lemma": "קָרַץ",
+      "hebrew": "קרץ",
+      "xlit": "qârats",
+      "translated": true
+    },
+    "H7170": {
+      "definitions_cz": "1) kus | 1a) odsuzovat, pomlouvat, zlomyslně obviňovat, žvýkat (idiom)",
+      "lemma": "קְרַץ",
+      "hebrew": "קרץ",
+      "xlit": "qᵉrats",
+      "translated": true
+    },
+    "H7171": {
+      "definitions_cz": "1) štípání, kleště, žihadlo | 1a) bodavý nebo bodavý hmyz, gadfly",
+      "lemma": "קֶרֶץ",
+      "hebrew": "קרץ",
+      "xlit": "qerets",
+      "translated": true
+    },
+    "H7172": {
+      "definitions_cz": "1) podlaha, dno",
+      "lemma": "קַרְקַע",
+      "hebrew": "קרקע",
+      "xlit": "qarqaʻ",
+      "translated": true
+    },
+    "H7173": {
+      "definitions_cz": "Karkaa = \"podlaha\" | 1) orientační bod na jižní hranici Judska | 1a) místo neznámé",
+      "lemma": "קַרְקַע",
+      "hebrew": "קרקע",
+      "xlit": "Qarqaʻ",
+      "translated": true
+    },
+    "H7174": {
+      "definitions_cz": "Karkor = \"nadace\" | 1) místo východně od Jordánu v Gileadu, kde byli Gedeon znovu poraženi Zebah a Zalmunna",
+      "lemma": "קַרְקֹר",
+      "hebrew": "קרקר",
+      "xlit": "Qarqôr",
+      "translated": true
     }
   }
 }
