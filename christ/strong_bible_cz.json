@@ -87062,6 +87062,356 @@
       "hebrew": "תקיף",
       "xlit": "taqqîyph",
       "translated": true
+    },
+    "H8625": {
+      "definitions_cz": "v | 1) vážit | 1a) (P'il) ke zvážení | n m | 2) tekel, šekel | 2a) (P'al) tekel-jednotka hmotnosti, šekel",
+      "lemma": "תְּקַל",
+      "hebrew": "תקל",
+      "xlit": "tᵉqal",
+      "translated": true
+    },
+    "H8626": {
+      "definitions_cz": "1) vyrovnat, narovnat, narovnat | 1a) (Qal) stát se rovným | 1b) (Piel) udělat rovně, postavit rovně, uspořádat v pořádku, nastavit v pořadí",
+      "lemma": "תָּקַן",
+      "hebrew": "תקן",
+      "xlit": "tâqan",
+      "translated": true
+    },
+    "H8627": {
+      "definitions_cz": "1) být v pořádku | 1a) (Hophal) zřídit, znovu zřídit, potvrdit",
+      "lemma": "תְּקַן",
+      "hebrew": "תקן",
+      "xlit": "tᵉqan",
+      "translated": true
+    },
+    "H8628": {
+      "definitions_cz": "1) foukat, tleskat, udeřit, zvuk, strčit, dát ránu, výbuch | 1a) (Qal) | 1a1) narážet, řídit (zbraně) | 1a2) dát ránu, dát ránu | 1a3) udeřit nebo tleskat rukama | 1b) (Niphal) | 1b1) k foukání, zatroubení (troubení) | 1b2) udeřit nebo se zavázat",
+      "lemma": "תָּקַע",
+      "hebrew": "תקע",
+      "xlit": "tâqaʻ",
+      "translated": true
+    },
+    "H8629": {
+      "definitions_cz": "1) zvuk, troubení (roh), troubení",
+      "lemma": "תֵּקַע",
+      "hebrew": "תקע",
+      "xlit": "têqaʻ",
+      "translated": true
+    },
+    "H8630": {
+      "definitions_cz": "1) (Qal) zvítězit nad nebo proti, překonat, přemoci",
+      "lemma": "תָּקַף",
+      "hebrew": "תקף",
+      "xlit": "tâqaph",
+      "translated": true
+    },
+    "H8631": {
+      "definitions_cz": "1) růst silný, být otužilý | 1a) (P'al) | 1a1) sílit, být otužilý | 1a2) vyrůst arogantní (obr.) | 1b) (Pael) učinit silným, učinit pevným, učinit přísným",
+      "lemma": "תְּקֵף",
+      "hebrew": "תקף",
+      "xlit": "tᵉqêph",
+      "translated": true
+    },
+    "H8632": {
+      "definitions_cz": "1) síla, síla",
+      "lemma": "תְּקֹף",
+      "hebrew": "תקף",
+      "xlit": "tᵉqôph",
+      "translated": true
+    },
+    "H8633": {
+      "definitions_cz": "1) autorita, moc, síla, energie",
+      "lemma": "תֹּקֶף",
+      "hebrew": "תקף",
+      "xlit": "tôqeph",
+      "translated": true
+    },
+    "H8634": {
+      "definitions_cz": "Taralah = \"motání\" | 1) město na území Benjamina",
+      "lemma": "תַּרְאֲלָה",
+      "hebrew": "תראלה",
+      "xlit": "Tarʼălâh",
+      "translated": true
+    },
+    "H8635": {
+      "definitions_cz": "1) přírůstek, plod, potomstvo, potomstvo",
+      "lemma": "תַּרְבּוּת",
+      "hebrew": "תרבות",
+      "xlit": "tarbûwth",
+      "translated": true
+    },
+    "H8636": {
+      "definitions_cz": "1) přírůstek, lichva, úrok, bonus",
+      "lemma": "תַּרְבִּית",
+      "hebrew": "תרבית",
+      "xlit": "tarbîyth",
+      "translated": true
+    },
+    "H8637": {
+      "definitions_cz": "1) jít pěšky, špehovat, přimět chodit | 1a) (Tiphel) učit chodit",
+      "lemma": "תִּרְגַּל",
+      "hebrew": "תרגל",
+      "xlit": "tirgal",
+      "translated": true
+    },
+    "H8638": {
+      "definitions_cz": "1) (Pual) tlumočit, překládat",
+      "lemma": "תִּרְגַּם",
+      "hebrew": "תרגם",
+      "xlit": "tirgam",
+      "translated": true
+    },
+    "H8639": {
+      "definitions_cz": "1) hluboký spánek, trans",
+      "lemma": "תַּרְדֵּמָה",
+      "hebrew": "תרדמה",
+      "xlit": "tardêmâh",
+      "translated": true
+    },
+    "H8640": {
+      "definitions_cz": "Tirhakah = \"vyhledal zbožné: vyhledal číšníka\" | 1) král Etiopie a Egypta v době Senacheriba",
+      "lemma": "תִּרְהָקָה",
+      "hebrew": "תרהקה",
+      "xlit": "Tirhâqâh",
+      "translated": true
+    },
+    "H8641": {
+      "definitions_cz": "1) příspěvek, nabídka | 1a) oběť pozdvižení | 1b) jakákoli nabídka | 1c) oběť Bohu | 1d) oběť (obilí, peněz atd.) | 1e) příspěvek",
+      "lemma": "תְּרוּמָה",
+      "hebrew": "תרומה",
+      "xlit": "tᵉrûwmâh",
+      "translated": true
+    },
+    "H8642": {
+      "definitions_cz": "1) podíl, příspěvek, co patří k příspěvku nebo průvodci nebo vedlejšímu příspěvku nebo pododdělení",
+      "lemma": "תְּרוּמִיָּה",
+      "hebrew": "תרומיה",
+      "xlit": "tᵉrûwmîyâh",
+      "translated": true
+    },
+    "H8643": {
+      "definitions_cz": "1) poplach, signál, zvuk bouře, křik, křik nebo výbuch války nebo poplach nebo radost | 1a) válečný poplach, válečný pokřik, válečný pokřik | 1b) výbuch (pro pochod) | 1c) radostný výkřik (s náboženským impulsem) | 1d) výkřik radosti (obecně)",
+      "lemma": "תְּרוּעָה",
+      "hebrew": "תרועה",
+      "xlit": "tᵉrûwʻâh",
+      "translated": true
+    },
+    "H8644": {
+      "definitions_cz": "1) léčení",
+      "lemma": "תְּרוּפָה",
+      "hebrew": "תרופה",
+      "xlit": "tᵉrûwphâh",
+      "translated": true
+    },
+    "H8645": {
+      "definitions_cz": "1) druh stromu | 1a) snad cypřiš, cesmína | 1b) což znamená velmi pochybné",
+      "lemma": "תִּרְזָה",
+      "hebrew": "תרזה",
+      "xlit": "tirzâh",
+      "translated": true
+    },
+    "H8646": {
+      "definitions_cz": "Terah = \"stanice\" | n pr m | 1) otec Abrahamův | Tarah = \"zpoždění\" | n pr loc | 2) stanice Izraele v poušti",
+      "lemma": "תֶּרַח",
+      "hebrew": "תרח",
+      "xlit": "Terach",
+      "translated": true
+    },
+    "H8647": {
+      "definitions_cz": "Tirhanah = \"přízeň\" | 1) Judaita, syn Kálebův od své konkubíny Maachy",
+      "lemma": "תִּרְחֲנָה",
+      "hebrew": "תרחנה",
+      "xlit": "Tirchănâh",
+      "translated": true
+    },
+    "H8648": {
+      "definitions_cz": "1) dva | 1a) dva (jako kardinální číslo) | 1b) druhý (jako pořadové číslo) | 1c) dva (v kombinaci s jinými čísly)",
+      "lemma": "תְּרֵין",
+      "hebrew": "תרין",
+      "xlit": "tᵉrêyn",
+      "translated": true
+    },
+    "H8649": {
+      "definitions_cz": "1) zrada, podvod, podvod, lstivost",
+      "lemma": "תׇּרְמָה",
+      "hebrew": "תרמה",
+      "xlit": "tormâh",
+      "translated": true
+    },
+    "H8650": {
+      "definitions_cz": "1) maják, stožár, stožár",
+      "lemma": "תֹּרֶן",
+      "hebrew": "תרן",
+      "xlit": "tôren",
+      "translated": true
+    },
+    "H8651": {
+      "definitions_cz": "1) brána, dveře | 1a) dveře | 1b) brána | 1c) soud",
+      "lemma": "תְּרַע",
+      "hebrew": "תרע",
+      "xlit": "tᵉraʻ",
+      "translated": true
+    },
+    "H8652": {
+      "definitions_cz": "1) vrátný, vrátný (v chrámu)",
+      "lemma": "תָּרָע",
+      "hebrew": "תרע",
+      "xlit": "târâʻ",
+      "translated": true
+    },
+    "H8653": {
+      "definitions_cz": "1) navíjení, vrávorání",
+      "lemma": "תַּרְעֵלָה",
+      "hebrew": "תרעלה",
+      "xlit": "tarʻêlâh",
+      "translated": true
+    },
+    "H8654": {
+      "definitions_cz": "Tiratité = \"muži brány\" | 1) jedna ze 3 rodin kenitských písařů žijících v Jabez",
+      "lemma": "תִּרְעָתִי",
+      "hebrew": "תרעתי",
+      "xlit": "Tirʻâthîy",
+      "translated": true
+    },
+    "H8655": {
+      "definitions_cz": "1) modloslužba, idoly, obraz(y), teraphim, rodinný idol | 1a) druh modly používané v domácích svatyních nebo bohoslužbách",
+      "lemma": "תְּרָפִים",
+      "hebrew": "תרפים",
+      "xlit": "tᵉrâphîym",
+      "translated": true
+    },
+    "H8656": {
+      "definitions_cz": "Tirzah = \"příznivý\" | n pr f | 1) jedna ze 7 dcer Celofchada, syna Hefera z kmene Manasses | n pr loc | 2) jedno z království na západě Jordánu dobyté Jozuem a Izraelity | 3) kanaánské město, později hlavní město severního království Izraele",
+      "lemma": "תִּרְצָה",
+      "hebrew": "תרצה",
+      "xlit": "Tirtsâh",
+      "translated": true
+    },
+    "H8657": {
+      "definitions_cz": "Teresh = \"přísnost\" | 1) jeden ze 2 eunuchů, kteří plánovali zabít perského krále Ahasvera, ale jehož spiknutí objevil Mordechaj",
+      "lemma": "תֶּרֶשׁ",
+      "hebrew": "תרש",
+      "xlit": "Teresh",
+      "translated": true
+    },
+    "H8658": {
+      "definitions_cz": "1) drahokam nebo polodrahokam | 1a) možná chryzolit, žlutý jaspis nebo jiný žlutý kámen",
+      "lemma": "תַּרְשִׁישׁ",
+      "hebrew": "תרשיש",
+      "xlit": "tarshîysh",
+      "translated": true
+    },
+    "H8659": {
+      "definitions_cz": "Tarshish nebo Tharshish = \"žlutý jaspis\" | n pr m | 1) syn Javana | 2) benjamínec, syn Bilhanův | 3) jeden z mudrců blízkých perskému králi Ahasverovi | n pr loc | 4) město Féničanů v odlehlé části Středozemního moře, do kterého se snažil uprchnout prorok Jonáš | 1a) místo neznámé, ale možná na Kypru nebo ve Španělsku | 5) město někde poblíž a přístupné Rudému moři, do kterého měly plout lodě postavené v Ezion-geber v Elanitickém zálivu na Rudém moři",
+      "lemma": "תַּרְשִׁישׁ",
+      "hebrew": "תרשיש",
+      "xlit": "Tarshîysh",
+      "translated": true
+    },
+    "H8660": {
+      "definitions_cz": "1) Tirshatha-guvernér | 1a) titul používaný perským guvernérem v Judeji | 1a1) Nehemjáš použil tento titul",
+      "lemma": "תִּרְשָׁתָא",
+      "hebrew": "תרשתא",
+      "xlit": "Tirshâthâʼ",
+      "translated": true
+    },
+    "H8661": {
+      "definitions_cz": "1) Tartan-polní maršál, generál nebo velitel | 1a) titul používaný asyrskou armádou",
+      "lemma": "תַּרְתָּן",
+      "hebrew": "תרתן",
+      "xlit": "Tartân",
+      "translated": true
+    },
+    "H8662": {
+      "definitions_cz": "Tartak = \"princ temnot\" | 1) jedno z božstev avitského lidu Samaří | 1a) podle tradice uctíván v podobě osla",
+      "lemma": "תַּרְתָּק",
+      "hebrew": "תרתק",
+      "xlit": "Tartâq",
+      "translated": true
+    },
+    "H8663": {
+      "definitions_cz": "1) hluk, hluk",
+      "lemma": "תְּשֻׁאָה",
+      "hebrew": "תשאה",
+      "xlit": "tᵉshuʼâh",
+      "translated": true
+    },
+    "H8664": {
+      "definitions_cz": "Tishbite = \"zajetí\" | n pr loc | 1) Eliášův domov | 1a) místo neznámé, ale možná město Tishbe | adj gent | 2) obyvatel Tishbe nebo Tishbi nebo Tesheb | 2a) místo neznámé a název nejistý",
+      "lemma": "תִּשְׁבִּי",
+      "hebrew": "תשבי",
+      "xlit": "Tishbîy",
+      "translated": true
+    },
+    "H8665": {
+      "definitions_cz": "1) tkané práce, kostkovaný materiál, kostkované nebo pletené práce",
+      "lemma": "תַּשְׁבֵּץ",
+      "hebrew": "תשבץ",
+      "xlit": "tashbêts",
+      "translated": true
+    },
+    "H8666": {
+      "definitions_cz": "1) opakování, odpověď, návrat | 1a) vrátit | 1a1) ukončení roku, návratnost roku | 1b) při návratu (konstruovat) | 1c) odpovědět, odpovědět",
+      "lemma": "תְּשׁוּבָה",
+      "hebrew": "תשובה",
+      "xlit": "tᵉshûwbâh",
+      "translated": true
+    },
+    "H8667": {
+      "definitions_cz": "1) zástava, jistota, záloha",
+      "lemma": "תְּשׂוּמֶת",
+      "hebrew": "תשומת",
+      "xlit": "tᵉsûwmeth",
+      "translated": true
+    },
+    "H8668": {
+      "definitions_cz": "1) spasení, vysvobození | 1a) vysvobození (obvykle Bohem prostřednictvím lidského jednání) | 1b) spasení (ve smyslu duchovní)",
+      "lemma": "תְּשׁוּעָה",
+      "hebrew": "תשועה",
+      "xlit": "tᵉshûwʻâh",
+      "translated": true
+    },
+    "H8669": {
+      "definitions_cz": "1) touha, touha, touha | 1a) muže pro ženu | 1b) ženy pro muže | 1c) šelmy sežrat",
+      "lemma": "תְּשׁוּקָה",
+      "hebrew": "תשוקה",
+      "xlit": "tᵉshûwqâh",
+      "translated": true
+    },
+    "H8670": {
+      "definitions_cz": "1) dárek, dárek",
+      "lemma": "תְּשׁוּרָה",
+      "hebrew": "תשורה",
+      "xlit": "tᵉshûwrâh",
+      "translated": true
+    },
+    "H8671": {
+      "definitions_cz": "1) devátý (jako pořadové číslo)",
+      "lemma": "תְּשִׁיעִי",
+      "hebrew": "תשיעי",
+      "xlit": "tᵉshîyʻîy",
+      "translated": true
+    },
+    "H8672": {
+      "definitions_cz": "1) devět, nonad | 1a) devět (jako kardinální číslo) | 1b) devátý (jako pořadové číslo) | 1c) v kombinaci s jinými čísly",
+      "lemma": "תֵּשַׁע",
+      "hebrew": "תשע",
+      "xlit": "têshaʻ",
+      "translated": true
+    },
+    "H8673": {
+      "definitions_cz": "1) devadesát",
+      "lemma": "תִּשְׁעִים",
+      "hebrew": "תשעים",
+      "xlit": "tishʻîym",
+      "translated": true
+    },
+    "H8674": {
+      "definitions_cz": "Tatnai = \"dárek\" | 1) perský guvernér v Sýrii, který byl proti přestavbě Jeruzaléma",
+      "lemma": "תַּתְּנַי",
+      "hebrew": "תתני",
+      "xlit": "Tattᵉnay",
+      "translated": true
     }
   }
 }
