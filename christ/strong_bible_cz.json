@@ -57991,6 +57991,356 @@
       "hebrew": "ממרא",
       "xlit": "Mamrêʼ",
       "translated": true
+    },
+    "H4472": {
+      "definitions_cz": "1) hořká věc, hořkost",
+      "lemma": "מַמְרֹר",
+      "hebrew": "ממרר",
+      "xlit": "mamrôr",
+      "translated": true
+    },
+    "H4473": {
+      "definitions_cz": "1) pomazaný, expanze | 1a) znamená nejistý",
+      "lemma": "מִמְשַׁח",
+      "hebrew": "ממשח",
+      "xlit": "mimshach",
+      "translated": true
+    },
+    "H4474": {
+      "definitions_cz": "1) panství, vládce | 1a) panství | 1b) pravítko",
+      "lemma": "מִמְשָׁל",
+      "hebrew": "ממשל",
+      "xlit": "mimshâl",
+      "translated": true
+    },
+    "H4475": {
+      "definitions_cz": "1) pravidlo, panství, říše | 1a) pravidlo, panství, říše, doména | 1b) pravidlo | 1c) vláda, nadvláda (Boží)",
+      "lemma": "מֶמְשָׁלָה",
+      "hebrew": "ממשלה",
+      "xlit": "memshâlâh",
+      "translated": true
+    },
+    "H4476": {
+      "definitions_cz": "1) posed, místo posedlý",
+      "lemma": "מִמְשָׁק",
+      "hebrew": "ממשק",
+      "xlit": "mimshâq",
+      "translated": true
+    },
+    "H4477": {
+      "definitions_cz": "1) sladkost, sladká věc",
+      "lemma": "מַמְתַּק",
+      "hebrew": "ממתק",
+      "xlit": "mamtaq",
+      "translated": true
+    },
+    "H4478": {
+      "definitions_cz": "1) manna | 1a) chléb z nebe, který nasytil Izraelity po 40 let putování pouští | 1b) znamená 'Co to je?'",
+      "lemma": "מָן",
+      "hebrew": "מן",
+      "xlit": "mân",
+      "translated": true
+    },
+    "H4479": {
+      "definitions_cz": "1) kdo?, co?, kdokoli, kdokoli",
+      "lemma": "מָן",
+      "hebrew": "מן",
+      "xlit": "mân",
+      "translated": true
+    },
+    "H4480": {
+      "definitions_cz": "příprava | 1) z, z, z důvodu, pryč, ze strany, od, nad, než, takže ne, více než | 1a) od (vyjadřující oddělení), mimo, na straně | 1b) z | 1b1) (se slovesy řízení, odstranění, vyloučení) | 1b2) (z materiálu, ze kterého je něco vyrobeno) | 1b3) (zdroje nebo původu) | 1c) z, některé z, z (částečně) | 1d) od, od, po (času) | 1e) než, více než (ve srovnání) | 1f) od...dokonce do, obojí...a, buď...nebo | 1g) než m",
+      "lemma": "מִן",
+      "hebrew": "מן",
+      "xlit": "min",
+      "translated": true
+    },
+    "H4481": {
+      "definitions_cz": "1) od, z, podle, z důvodu, v, více než | 1a) z, z (místa) | 1b) od, podle, v důsledku, z důvodu, v, podle, (ze zdroje) | 1c) od (času) | 1d) dále, více než (ve srovnání)",
+      "lemma": "מִן",
+      "hebrew": "מן",
+      "xlit": "min",
+      "translated": true
+    },
+    "H4482": {
+      "definitions_cz": "1) struna (harfy) | 2) část (BDB).",
+      "lemma": "מֵן",
+      "hebrew": "מן",
+      "xlit": "mên",
+      "translated": true
+    },
+    "H4483": {
+      "definitions_cz": "1) očíslovat, počítat | 1a) (P'al) k číslu | 1b) (Pael) jmenovat",
+      "lemma": "מְנָא",
+      "hebrew": "מנא",
+      "xlit": "mᵉnâʼ",
+      "translated": true
+    },
+    "H4484": {
+      "definitions_cz": "1) (P'al) mina, maneh | 1a) hmotnost nebo měření; obvykle 50 šekelů, ale možná 60 šekelů",
+      "lemma": "מְנֵא",
+      "hebrew": "מנא",
+      "xlit": "mᵉnêʼ",
+      "translated": true
+    },
+    "H4485": {
+      "definitions_cz": "1) posměšná nebo posměšná píseň",
+      "lemma": "מַנְגִּינָה",
+      "hebrew": "מנגינה",
+      "xlit": "mangîynâh",
+      "translated": true
+    },
+    "H4486": {
+      "definitions_cz": "1) znalost, síla vědění",
+      "lemma": "מַנְדַּע",
+      "hebrew": "מנדע",
+      "xlit": "mandaʻ",
+      "translated": true
+    },
+    "H4487": {
+      "definitions_cz": "1) počítat, počítat, číslo, přidělovat, říkat, jmenovat, připravovat | 1a) (Qal) | 1a1) počítat, číslo | 1a2) počítat, přidělovat, jmenovat | 1b) (Niphal) | 1b1) být započítán, být očíslován | 1b2) k započtení, přiděleno | 1c) (Piel) jmenovat, ordinovat | 1d) (Pual) jmenován (příčestí)",
+      "lemma": "מָנָה",
+      "hebrew": "מנה",
+      "xlit": "mânâh",
+      "translated": true
+    },
+    "H4488": {
+      "definitions_cz": "1) maneh, mina, libra | 1a) 60 šekelů a 1/50 talentu (stříbra) | 1a1) 1/60 talentu v raně babylonském standardu | 1b) 100 šekelů a 1/100 talentu (zlata)",
+      "lemma": "מָנֶה",
+      "hebrew": "מנה",
+      "xlit": "mâneh",
+      "translated": true
+    },
+    "H4489": {
+      "definitions_cz": "1) něco naváženo, spočítané číslo, čas",
+      "lemma": "מֹנֶה",
+      "hebrew": "מנה",
+      "xlit": "môneh",
+      "translated": true
+    },
+    "H4490": {
+      "definitions_cz": "1) část, část",
+      "lemma": "מָנָה",
+      "hebrew": "מנה",
+      "xlit": "mânâh",
+      "translated": true
+    },
+    "H4491": {
+      "definitions_cz": "1) řízení, vozatajství",
+      "lemma": "מִנְהָג",
+      "hebrew": "מנהג",
+      "xlit": "minhâg",
+      "translated": true
+    },
+    "H4492": {
+      "definitions_cz": "1) štěrbiny, rokle, horské rozsedliny, doupě, výkopové jámy | 1a) znamená pochybný",
+      "lemma": "מִנְהָרָה",
+      "hebrew": "מנהרה",
+      "xlit": "minhârâh",
+      "translated": true
+    },
+    "H4493": {
+      "definitions_cz": "1) třepání, vrtění",
+      "lemma": "מָנוֹד",
+      "hebrew": "מנוד",
+      "xlit": "mânôwd",
+      "translated": true
+    },
+    "H4494": {
+      "definitions_cz": "1) místo odpočinku, stav nebo podmínky odpočinku, místo | 1a) místo odpočinku | 1b) odpočinek, odpočinek, stav klidu | 1c) příchod na odpočinek",
+      "lemma": "מָנוֹחַ",
+      "hebrew": "מנוח",
+      "xlit": "mânôwach",
+      "translated": true
+    },
+    "H4495": {
+      "definitions_cz": "Manoah = \"odpočinek\" | 1) Dán, otec soudce Samsona a obyvatel Zary",
+      "lemma": "מָנוֹחַ",
+      "hebrew": "מנוח",
+      "xlit": "Mânôwach",
+      "translated": true
+    },
+    "H4496": {
+      "definitions_cz": "1) místo odpočinku, odpočinek | 1a) místo odpočinku | 1b) odpočinek, ticho",
+      "lemma": "מְנוּחָה",
+      "hebrew": "מנוחה",
+      "xlit": "mᵉnûwchâh",
+      "translated": true
+    },
+    "H4497": {
+      "definitions_cz": "1) smutek, potomstvo, nevděčný | 1a) znamená nejistý",
+      "lemma": "מָנוֹן",
+      "hebrew": "מנון",
+      "xlit": "mânôwn",
+      "translated": true
+    },
+    "H4498": {
+      "definitions_cz": "1) útěk, útočiště, místo úniku | 1a) let | 1b) útočiště, místo útěku",
+      "lemma": "מָנוֹס",
+      "hebrew": "מנוס",
+      "xlit": "mânôwç",
+      "translated": true
+    },
+    "H4499": {
+      "definitions_cz": "1) útěk, ústup",
+      "lemma": "מְנוּסָה",
+      "hebrew": "מנוסה",
+      "xlit": "mᵉnûwçâh",
+      "translated": true
+    },
+    "H4500": {
+      "definitions_cz": "1) paprsek | 1a) trám (nesoucí nitěnky ve stavu)",
+      "lemma": "מָנוֹר",
+      "hebrew": "מנור",
+      "xlit": "mânôwr",
+      "translated": true
+    },
+    "H4501": {
+      "definitions_cz": "1) stojan na lampu",
+      "lemma": "מְנוֹרָה",
+      "hebrew": "מנורה",
+      "xlit": "mᵉnôwrâh",
+      "translated": true
+    },
+    "H4502": {
+      "definitions_cz": "1) knížata, pomazaná, zasvěcená | 1a) znamená pochybný",
+      "lemma": "מִנְּזָר",
+      "hebrew": "מנזר",
+      "xlit": "minnᵉzâr",
+      "translated": true
+    },
+    "H4503": {
+      "definitions_cz": "1) dar, hold, dar, dar, obětina, oběť, masná oběť | 1a) dárek, dárek | 1b) hold | 1c) obětování (Bohu) | 1d) oběť obilí",
+      "lemma": "מִנְחָה",
+      "hebrew": "מנחה",
+      "xlit": "minchâh",
+      "translated": true
+    },
+    "H4504": {
+      "definitions_cz": "1) dar, nabídka | 1a) obětina, oběť (Bohu prostřednictvím zástupce) | 1b) nabídka jídla",
+      "lemma": "מִנְחָה",
+      "hebrew": "מנחה",
+      "xlit": "minchâh",
+      "translated": true
+    },
+    "H4505": {
+      "definitions_cz": "Menahem = \"utěšitel\" | 1) syn Gadiho a král severního království Izraele; zabil uzurpátora Shalluma, aby nastoupil na trůn a vládl deset let; současník s proroky Ozeášem a Amosem",
+      "lemma": "מְנַחֵם",
+      "hebrew": "מנחם",
+      "xlit": "Mᵉnachêm",
+      "translated": true
+    },
+    "H4506": {
+      "definitions_cz": "Manahath = \"odpočinek\" | n pr m | 1) syn Shobalův a potomek Seira Horejce | n pr loc | 2) místo v Benjaminu; místo neznámé",
+      "lemma": "מָנַחַת",
+      "hebrew": "מנחת",
+      "xlit": "Mânachath",
+      "translated": true
+    },
+    "H4507": {
+      "definitions_cz": "Meni = \"osud\" nebo \"štěstí\" | 1) bůh osudu, kterého Židé uctívali v Babylonii",
+      "lemma": "מְנִי",
+      "hebrew": "מני",
+      "xlit": "Mᵉnîy",
+      "translated": true
+    },
+    "H4508": {
+      "definitions_cz": "Minni = \"divize\" | 1) oblast v Arménii",
+      "lemma": "מִנִּי",
+      "hebrew": "מני",
+      "xlit": "Minnîy",
+      "translated": true
+    },
+    "H4509": {
+      "definitions_cz": "Miniamin = \"z pravé ruky\" | 1) Levita v době Ezechiáše | 2) kněz, který byl přítomen zasvěcení jeruzalémské zdi v době Nehemjáše",
+      "lemma": "מִנְיָמִין",
+      "hebrew": "מנימין",
+      "xlit": "Minyâmîyn",
+      "translated": true
+    },
+    "H4510": {
+      "definitions_cz": "1) číslo",
+      "lemma": "מִנְיָן",
+      "hebrew": "מנין",
+      "xlit": "minyân",
+      "translated": true
+    },
+    "H4511": {
+      "definitions_cz": "Minnith = \"distribuce\" | 1) místo východně od Jordánu na území Ammonitů; místo neznámé",
+      "lemma": "מִנִּית",
+      "hebrew": "מנית",
+      "xlit": "Minnîyth",
+      "translated": true
+    },
+    "H4512": {
+      "definitions_cz": "1) zisk, bohatství, akvizice | 1a) znamená pochybný",
+      "lemma": "מִנְלֶה",
+      "hebrew": "מנלה",
+      "xlit": "minleh",
+      "translated": true
+    },
+    "H4513": {
+      "definitions_cz": "1) zadržovat, zadržovat, zadržovat, zdržovat se, popírat, držet zdrženlivost, bránit | 1a) (Qal) zadržet | 1b) (Niphal) bude zadrženo",
+      "lemma": "מָנַע",
+      "hebrew": "מנע",
+      "xlit": "mânaʻ",
+      "translated": true
+    },
+    "H4514": {
+      "definitions_cz": "1) šroub",
+      "lemma": "מַנְעוּל",
+      "hebrew": "מנעול",
+      "xlit": "manʻûwl",
+      "translated": true
+    },
+    "H4515": {
+      "definitions_cz": "1) bota",
+      "lemma": "מִנְעָל",
+      "hebrew": "מנעל",
+      "xlit": "minʻâl",
+      "translated": true
+    },
+    "H4516": {
+      "definitions_cz": "1) lahůdky, lahůdky",
+      "lemma": "מַנְעַם",
+      "hebrew": "מנעם",
+      "xlit": "manʻam",
+      "translated": true
+    },
+    "H4517": {
+      "definitions_cz": "1) druh chrastítka | 1a) druh chrastítka používaného jako hudební nástroj",
+      "lemma": "מְנַעְנַע",
+      "hebrew": "מנענע",
+      "xlit": "mᵉnaʻnaʻ",
+      "translated": true
+    },
+    "H4518": {
+      "definitions_cz": "1) obětní miska nebo pohár",
+      "lemma": "מְנַקִּית",
+      "hebrew": "מנקית",
+      "xlit": "mᵉnaqqîyth",
+      "translated": true
+    },
+    "H4519": {
+      "definitions_cz": "Manasseh = \"způsobit zapomenutí\" | 1) nejstarší syn Josefův a předek kmene Manasses | 1a) kmen pocházející z Manasse | 1b) území obsazené kmenem Manasses | 2) syn judského krále Ezechiáše a sám král judský; byl bezprostřední a přímou příčinou exilu | 3) potomek Pahat-moab, který za Ezdráše propustil cizí manželku | 4) potomek Hashuma, který v době Ezdráše propustil cizí manželku",
+      "lemma": "מְנַשֶּׁה",
+      "hebrew": "מנשה",
+      "xlit": "Mᵉnashsheh",
+      "translated": true
+    },
+    "H4520": {
+      "definitions_cz": "Manassites = Manasses \"způsobující zapomenutí\" | 1) potomci Manasse, syna Josefova a vnuka Jákoba | 1a) konkrétně používána pouze polovina, která žila na východ od Jordánu",
+      "lemma": "מְנַשִּׁי",
+      "hebrew": "מנשי",
+      "xlit": "Mᵉnashshîy",
+      "translated": true
+    },
+    "H4521": {
+      "definitions_cz": "1) část",
+      "lemma": "מְנָת",
+      "hebrew": "מנת",
+      "xlit": "mᵉnâth",
+      "translated": true
     }
   }
 }
