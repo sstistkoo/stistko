@@ -56577,6 +56577,706 @@
       "hebrew": "מחסום",
       "xlit": "machçôwm",
       "translated": true
+    },
+    "H4270": {
+      "definitions_cz": "1) potřeba, chudoba, potřebná věc | 1a) potřeba, potřebná věc | 1b) nedostatek, chtít | 1c) nouze, chudoba",
+      "lemma": "מַחְסוֹר",
+      "hebrew": "מחסור",
+      "xlit": "machçôwr",
+      "translated": true
+    },
+    "H4271": {
+      "definitions_cz": "Maaseiah = \"Jehova je útočiště\" | 1) kněz a předek Barucha, přítele a písaře Jeremiášova | 2) předek Seraiáše, který nesl Jeremiášovu knihu do Babylonu",
+      "lemma": "מַחְסֵיָה",
+      "hebrew": "מחסיה",
+      "xlit": "Machçêyâh",
+      "translated": true
+    },
+    "H4272": {
+      "definitions_cz": "1) prorazit, rozbít, těžce ranit | 1a) (Qal) | 1a1) rozbít | 1a2) roztříštění (příčestí)",
+      "lemma": "מָחַץ",
+      "hebrew": "מחץ",
+      "xlit": "mâchats",
+      "translated": true
+    },
+    "H4273": {
+      "definitions_cz": "1) těžká rána, pohmoždění",
+      "lemma": "מַחַץ",
+      "hebrew": "מחץ",
+      "xlit": "machats",
+      "translated": true
+    },
+    "H4274": {
+      "definitions_cz": "1) tesání, tesané | 1a) kamenů",
+      "lemma": "מַחְצֵב",
+      "hebrew": "מחצב",
+      "xlit": "machtsêb",
+      "translated": true
+    },
+    "H4275": {
+      "definitions_cz": "1) polovina | 1a) kořisti",
+      "lemma": "מֶחֱצָה",
+      "hebrew": "מחצה",
+      "xlit": "mechĕtsâh",
+      "translated": true
+    },
+    "H4276": {
+      "definitions_cz": "1) polovina, střední | 1a) polovina | 1b) uprostřed, v poledne, v poledne",
+      "lemma": "מַחֲצִית",
+      "hebrew": "מחצית",
+      "xlit": "machătsîyth",
+      "translated": true
+    },
+    "H4277": {
+      "definitions_cz": "1) (Qal) zcela zničit, vyhladit",
+      "lemma": "מָחַק",
+      "hebrew": "מחק",
+      "xlit": "mâchaq",
+      "translated": true
+    },
+    "H4278": {
+      "definitions_cz": "1) rozsah, prostor, pole",
+      "lemma": "מֶחְקָר",
+      "hebrew": "מחקר",
+      "xlit": "mechqâr",
+      "translated": true
+    },
+    "H4279": {
+      "definitions_cz": "1) zítra, v nadcházejícím čase, v budoucnosti | 1a) zítra (jako den následující po současnosti) | 1b) v budoucnu",
+      "lemma": "מָחָר",
+      "hebrew": "מחר",
+      "xlit": "mâchâr",
+      "translated": true
+    },
+    "H4280": {
+      "definitions_cz": "1) kanalizace, žumpa, kloaka | 2) (TWOT) návrh domu",
+      "lemma": "מַחֲרָאָה",
+      "hebrew": "מחראה",
+      "xlit": "machărâʼâh",
+      "translated": true
+    },
+    "H4281": {
+      "definitions_cz": "1) radlice",
+      "lemma": "מַחֲרֵשָׁה",
+      "hebrew": "מחרשה",
+      "xlit": "machărêshâh",
+      "translated": true
+    },
+    "H4282": {
+      "definitions_cz": "1) radlice pluhu",
+      "lemma": "מַחֲרֶשֶׁת",
+      "hebrew": "מחרשת",
+      "xlit": "machăresheth",
+      "translated": true
+    },
+    "H4283": {
+      "definitions_cz": "1) zítra, pozítří",
+      "lemma": "מׇחֳרָת",
+      "hebrew": "מחרת",
+      "xlit": "mochŏrâth",
+      "translated": true
+    },
+    "H4284": {
+      "definitions_cz": "1) myšlenka, zařízení | 1a) myšlenka | 1b) zařízení, plán, účel | 1c) vynález",
+      "lemma": "מַחֲשָׁבָה",
+      "hebrew": "מחשבה",
+      "xlit": "machăshâbâh",
+      "translated": true
+    },
+    "H4285": {
+      "definitions_cz": "1) temné místo, tma, tajemství | 1a) úkryt | 1b) tmavá oblast | 1c) hrob",
+      "lemma": "מַחְשָׁךְ",
+      "hebrew": "מחשך",
+      "xlit": "machshâk",
+      "translated": true
+    },
+    "H4286": {
+      "definitions_cz": "1) svlékání, pokládání | 1a) kůry",
+      "lemma": "מַחְשֹׂף",
+      "hebrew": "מחשף",
+      "xlit": "machsôph",
+      "translated": true
+    },
+    "H4287": {
+      "definitions_cz": "Mahath = \"uchopení\" | 1) kehatský levita z domu Koracha | 2) kehatský levita za vlády krále Ezechiáše",
+      "lemma": "מַחַת",
+      "hebrew": "מחת",
+      "xlit": "Machath",
+      "translated": true
+    },
+    "H4288": {
+      "definitions_cz": "1) destrukce, zmar, teror, rozbití | 1a) teror, zděšení, předmět teroru | 1b) ruina",
+      "lemma": "מְחִתָּה",
+      "hebrew": "מחתה",
+      "xlit": "mᵉchittâh",
+      "translated": true
+    },
+    "H4289": {
+      "definitions_cz": "1) držák na oheň, kadidelnice, pánev, šňupací miska, tác | 1a) šňupací tabák | 1b) pánve | 1c) kadidelnice",
+      "lemma": "מַחְתָּה",
+      "hebrew": "מחתה",
+      "xlit": "machtâh",
+      "translated": true
+    },
+    "H4290": {
+      "definitions_cz": "1) vloupání, vloupání",
+      "lemma": "מַחְתֶּרֶת",
+      "hebrew": "מחתרת",
+      "xlit": "machtereth",
+      "translated": true
+    },
+    "H4291": {
+      "definitions_cz": "1) dosáhnout, přijít, dosáhnout | 1a) (P'al) | 1a1) dosáhnout, přijít na | 1a2) dosáhnout, rozšířit | 1a3) přijít",
+      "lemma": "מְטָא",
+      "hebrew": "מטא",
+      "xlit": "mᵉṭâʼ",
+      "translated": true
+    },
+    "H4292": {
+      "definitions_cz": "1) koště, metla",
+      "lemma": "מַטְאֲטֵא",
+      "hebrew": "מטאטא",
+      "xlit": "maṭʼăṭêʼ",
+      "translated": true
+    },
+    "H4293": {
+      "definitions_cz": "1) porážkové místo, porážka",
+      "lemma": "מַטְבֵּחַ",
+      "hebrew": "מטבח",
+      "xlit": "maṭbêach",
+      "translated": true
+    },
+    "H4294": {
+      "definitions_cz": "1) zaměstnanci, větev, kmen | 1a) hůl, tyč, hřídel | 1b) větev (révy vinné) | 1c) kmen | 1c1) společnost vedená náčelníkem se zaměstnanci (původně)",
+      "lemma": "מַטֶּה",
+      "hebrew": "מטה",
+      "xlit": "maṭṭeh",
+      "translated": true
+    },
+    "H4295": {
+      "definitions_cz": "1) dolů, pod | 1a) dolů | 1b) nezletilí | 1c) níže",
+      "lemma": "מַטָּה",
+      "hebrew": "מטה",
+      "xlit": "maṭṭâh",
+      "translated": true
+    },
+    "H4296": {
+      "definitions_cz": "1) gauč, postel, pivo",
+      "lemma": "מִטָּה",
+      "hebrew": "מטה",
+      "xlit": "miṭṭâh",
+      "translated": true
+    },
+    "H4297": {
+      "definitions_cz": "1) perverze, to, co je zvrácené nebo pokřivené, zvrácené",
+      "lemma": "מֻטֶּה",
+      "hebrew": "מטה",
+      "xlit": "muṭṭeh",
+      "translated": true
+    },
+    "H4298": {
+      "definitions_cz": "1) šíření, šíření, šíření",
+      "lemma": "מֻטָּה",
+      "hebrew": "מטה",
+      "xlit": "muṭṭâh",
+      "translated": true
+    },
+    "H4299": {
+      "definitions_cz": "1) to, co je předené, příze",
+      "lemma": "מַטְוֶה",
+      "hebrew": "מטוה",
+      "xlit": "maṭveh",
+      "translated": true
+    },
+    "H4300": {
+      "definitions_cz": "1) tepaná tyč, tyč z tepaného železa, tyč z tepaného kovu",
+      "lemma": "מְטִיל",
+      "hebrew": "מטיל",
+      "xlit": "mᵉṭîyl",
+      "translated": true
+    },
+    "H4301": {
+      "definitions_cz": "1) skrytý poklad, poklad",
+      "lemma": "מַטְמוֹן",
+      "hebrew": "מטמון",
+      "xlit": "maṭmôwn",
+      "translated": true
+    },
+    "H4302": {
+      "definitions_cz": "1) místo nebo úkon výsadby, výsadby, výsadby | 1a) místo výsadby | 1b) akt výsadby | 1c) plantáž",
+      "lemma": "מַטָּע",
+      "hebrew": "מטע",
+      "xlit": "maṭṭâʻ",
+      "translated": true
+    },
+    "H4303": {
+      "definitions_cz": "1) chutné nebo slané jídlo, delikátní jídlo, pochoutky",
+      "lemma": "מַטְעַם",
+      "hebrew": "מטעם",
+      "xlit": "maṭʻam",
+      "translated": true
+    },
+    "H4304": {
+      "definitions_cz": "1) plášť",
+      "lemma": "מִטְפַּחַת",
+      "hebrew": "מטפחת",
+      "xlit": "miṭpachath",
+      "translated": true
+    },
+    "H4305": {
+      "definitions_cz": "1) pršet | 1a) (Niphal) na nebo na | 1b) (hifil) | 1b1) pršet, posílat déšť | 1b2) pršet kroupy, posílat kroupy",
+      "lemma": "מָטַר",
+      "hebrew": "מטר",
+      "xlit": "mâṭar",
+      "translated": true
+    },
+    "H4306": {
+      "definitions_cz": "1) déšť",
+      "lemma": "מָטַר",
+      "hebrew": "מטר",
+      "xlit": "mâṭar",
+      "translated": true
+    },
+    "H4307": {
+      "definitions_cz": "1) stráž, oddělení, vězení, značka, cíl | 1a) stráž, oddělení, vězení | 1b) cíl, značka (obr. trestu)",
+      "lemma": "מַטָּרָא",
+      "hebrew": "מטרא",
+      "xlit": "maṭṭârâʼ",
+      "translated": true
+    },
+    "H4308": {
+      "definitions_cz": "Matred = \"tlačí vpřed\" | 1) dcera Mezahaba a matka Mehetabel, manželka Hadara (Hadada) z Pau, krále Edomu",
+      "lemma": "מַטְרֵד",
+      "hebrew": "מטרד",
+      "xlit": "Maṭrêd",
+      "translated": true
+    },
+    "H4309": {
+      "definitions_cz": "Matri = \"Jehovův déšť\" | 1) rod z kmene Benjamín, ke kterému patřil král Saul",
+      "lemma": "מַטְרִי",
+      "hebrew": "מטרי",
+      "xlit": "Maṭrîy",
+      "translated": true
+    },
+    "H4310": {
+      "definitions_cz": "1) kdo?, čí?, kdo?, by to, kdokoli, kdokoli",
+      "lemma": "מִי",
+      "hebrew": "מי",
+      "xlit": "mîy",
+      "translated": true
+    },
+    "H4311": {
+      "definitions_cz": "Medeba = \"voda odpočinku\" | 1) město v Moabu přidělené Rúbenovi a ležící 4 míle (6 km) jihozápadně od Heshbonu; stále existující",
+      "lemma": "מֵידְבָא",
+      "hebrew": "מידבא",
+      "xlit": "Mêydᵉbâʼ",
+      "translated": true
+    },
+    "H4312": {
+      "definitions_cz": "Medad = \"láska\" | 1) jeden ze 70 starších, kterým byla sdělena Mojžíšova prorocká moc a kteří prorokovali v táboře Izraelitů na poušti",
+      "lemma": "מֵידָד",
+      "hebrew": "מידד",
+      "xlit": "Mêydâd",
+      "translated": true
+    },
+    "H4313": {
+      "definitions_cz": "Me-jarkon = \"vody žlutosti\" | 1) město v Dan nedaleko Joppy",
+      "lemma": "מֵי הַיַּרְקוֹן",
+      "hebrew": "מי הירקון",
+      "xlit": "Mêy hay-Yarqôwn",
+      "translated": true
+    },
+    "H4314": {
+      "definitions_cz": "Mezahab = \"vody zlata\" | 1) otec Matred a děd Mehetabel, manželka Hadada, posledně jmenovaného krále Edomu",
+      "lemma": "מֵי זָהָב",
+      "hebrew": "מי זהב",
+      "xlit": "Mêy Zâhâb",
+      "translated": true
+    },
+    "H4315": {
+      "definitions_cz": "1) nejlepší | 1a) jako superlativ",
+      "lemma": "מֵיטָב",
+      "hebrew": "מיטב",
+      "xlit": "mêyṭâb",
+      "translated": true
+    },
+    "H4316": {
+      "definitions_cz": "Micha = \"kdo je jako Bůh\" | 1) syn Mefibošetův | 2) Levita, který podepsal smlouvu s Nehemjášem | 3) otec Mattaniáše, geršonského levity a potomka Asafa",
+      "lemma": "מִיכָא",
+      "hebrew": "מיכא",
+      "xlit": "Mîykâʼ",
+      "translated": true
+    },
+    "H4317": {
+      "definitions_cz": "Michael = \"kdo je jako Bůh\" | 1) jeden z náčelníků nebo první archanděl, který je popisován jako ten, kdo stojí v době konfliktu pro děti Izraele | 2) Ašerita, otec Sethura, jednoho z 12 izraelských špionů | 3) jeden z Gádovců, kteří se usadili v zemi Bášan | 4) další Gadit, předek Abihail | 5) geršonský levita, předek Asafa | 6) jeden z 5 synů Izrachiáše z kmene Issachar | 7) Benjamínec ze synů Beriášových | 8) jeden z kapitánů",
+      "lemma": "מִיכָאֵל",
+      "hebrew": "מיכאל",
+      "xlit": "Mîykâʼêl",
+      "translated": true
+    },
+    "H4318": {
+      "definitions_cz": "Micah nebo Micaiah nebo Michah = \"kdo je jako Bůh\" | 1) 6. v pořadí menších proroků; pocházel z Morešetu, prorokoval za vlády Jótama, Achaza a Ezechiáše z Judy a byl současníkem proroků Ozeáše, Amose a Izajáše | 2) Efraimský během období soudců | 3) potomek Joela Rubenita | 4) syn Meribbaalův a vnuk Jonathanův | 5) kehatský levita, nejstarší syn Uzziela, bratra Amramova | 6) otec Abdona, vysoký muž",
+      "lemma": "מִיכָה",
+      "hebrew": "מיכה",
+      "xlit": "Mîykâh",
+      "translated": true
+    },
+    "H4319": {
+      "definitions_cz": "Michaiah = \"kdo je jako Bůh\" | 1) syn Imlahův a prorok Samaří, který předpověděl porážku a smrt izraelského krále Achaba",
+      "lemma": "מִיכָהוּ",
+      "hebrew": "מיכהו",
+      "xlit": "Mîykâhûw",
+      "translated": true
+    },
+    "H4320": {
+      "definitions_cz": "Micah nebo Michaiah = \"kdo je jako Bůh\" | 1) 6. v pořadí menších proroků; pocházel z Morešetu, prorokoval za vlády Jótama, Achaza a Ezechiáše z Judy a byl současníkem proroků Ozeáše, Amose a Izajáše | 2) otec Achbora, muže vysokého postavení za vlády Josiáše | 3) jeden z kněží při zasvěcení jeruzalémské zdi",
+      "lemma": "מִיכָיָה",
+      "hebrew": "מיכיה",
+      "xlit": "Mîykâyâh",
+      "translated": true
+    },
+    "H4321": {
+      "definitions_cz": "Micah nebo Micaiah nebo Michaiah = \"kdo je jako Bůh\" | 1) Efraimský během období soudců | 2) syn Imlahův a prorok Samaří, který předpověděl porážku a smrt izraelského krále Achaba | 3) syn Gemarjáše za časů Jeremiášových",
+      "lemma": "מִיכָיְהוּ",
+      "hebrew": "מיכיהו",
+      "xlit": "Mîykâyᵉhûw",
+      "translated": true
+    },
+    "H4322": {
+      "definitions_cz": "Michaiah = \"kdo je jako Bůh\" | n pr m | 1) jeden z knížat Jozafata, kterého poslal učit Jehovův zákon do judských měst | 2) dcera Uriela z Gibeje, manželka judského krále Rechoboáma a matka judského krále Abiáše",
+      "lemma": "מִיכָיָהוּ",
+      "hebrew": "מיכיהו",
+      "xlit": "Mîykâyâhûw",
+      "translated": true
+    },
+    "H4323": {
+      "definitions_cz": "1) potok, potok | 1a) znamená pochybný",
+      "lemma": "מִיכָל",
+      "hebrew": "מיכל",
+      "xlit": "mîykâl",
+      "translated": true
+    },
+    "H4324": {
+      "definitions_cz": "Michal = \"kdo je jako Bůh\" | 1) dcera krále Saula, sestra Jonatana, manželka krále Davida a matka pěti dětí; dán Davidovi za manželku za cenu nevěsty 100 filištínských předkožek; zatímco byla ještě vdaná za Davida, její otec ji provdal za jiného, ​​Faltiela; po smrti Saula ji David donutil vrátit se",
+      "lemma": "מִיכָל",
+      "hebrew": "מיכל",
+      "xlit": "Mîykâl",
+      "translated": true
+    },
+    "H4325": {
+      "definitions_cz": "1) voda, vody | 1a) voda | 1b) voda z nohou, moč | 1c) nebezpečí, násilí, pomíjivé věci, občerstvení (obr.)",
+      "lemma": "מַיִם",
+      "hebrew": "מים",
+      "xlit": "mayim",
+      "translated": true
+    },
+    "H4326": {
+      "definitions_cz": "Miamin nebo Mijamin = \"z pravé ruky\" | 1) náčelník 6. kurzu kněží zřízený Davidem | 2) kněz, který podepsal smlouvu s Nehemjášem | 3) kněz, který šel nahoru se Zerubábelem | 4) kněz, který si v době Ezdráše vzal cizí manželku",
+      "lemma": "מִיָּמִן",
+      "hebrew": "מימן",
+      "xlit": "Mîyâmin",
+      "translated": true
+    },
+    "H4327": {
+      "definitions_cz": "1) druh, někdy druh (obvykle zvířat) | ++++ | Skupiny živých organismů patří do stejného stvořeného „druhu“, pokud pocházejí ze stejného genofondu předků. To nevylučuje nové druhy, protože to představuje rozdělení původního genofondu. Informace jsou ztraceny nebo konzervovány nebyly získány. Nový druh by mohl vzniknout, když je populace izolována a dojde k příbuzenskému křížení. Podle této definice není nový druh novým „druhem“, ale dalším rozdělením existujícího „druhu“.",
+      "lemma": "מִין",
+      "hebrew": "מין",
+      "xlit": "mîyn",
+      "translated": true
+    },
+    "H4328": {
+      "definitions_cz": "1) být založen, být položen | 1a) základ (příčestí)",
+      "lemma": "מְיֻסָּדָה",
+      "hebrew": "מיסדה",
+      "xlit": "mᵉyuççâdâh",
+      "translated": true
+    },
+    "H4329": {
+      "definitions_cz": "1) krytá struktura, skrytá",
+      "lemma": "מֵיסָךְ",
+      "hebrew": "מיסך",
+      "xlit": "mêyçâk",
+      "translated": true
+    },
+    "H4330": {
+      "definitions_cz": "1) mačkání, lisování, ždímání",
+      "lemma": "מִיץ",
+      "hebrew": "מיץ",
+      "xlit": "mîyts",
+      "translated": true
+    },
+    "H4331": {
+      "definitions_cz": "Mesha = \"svoboda\" | 1) Benjamínec, syn Šaharaima od své ženy Hodeše, která ho porodila v moábské zemi",
+      "lemma": "מֵישָׁא",
+      "hebrew": "מישא",
+      "xlit": "Mêyshâʼ",
+      "translated": true
+    },
+    "H4332": {
+      "definitions_cz": "Mishael = \"kdo je to, co je Bůh\" | 1) zbožný přítel Daniela, kterého Nabuchodonozor přejmenoval na Mešacha; jeden ze tří přátel, kteří se s Danielem odmítli znečišťovat tím, že jedli jídlo z králova stolu, což bylo v rozporu se stravovacími zákony, které Bůh dal Židům; také jeden ze tří, kteří byli vhozeni do ohnivé pece za to, že se odmítli poklonit rytému obrazu Nabuchodonozora a kteří byli zachráněni andělem Páně | 2) syn Uzziela a bratranec Mojžíše a Árona | 3",
+      "lemma": "מִישָׁאֵל",
+      "hebrew": "מישאל",
+      "xlit": "Mîyshâʼêl",
+      "translated": true
+    },
+    "H4333": {
+      "definitions_cz": "Mishael = \"kdo je to, co je Bůh\" | 1) zbožný přítel Daniela, kterého Nabuchodonozor přejmenoval na Mešacha; jeden ze tří přátel, kteří se s Danielem odmítli znečišťovat tím, že jedli jídlo z králova stolu, což bylo v rozporu se stravovacími zákony, které Bůh dal Židům; také jeden ze tří, kteří byli vhozeni do ohnivé pece, protože se odmítli poklonit rytému obrazu Nabuchodonozora a kteří byli zachráněni andělem Páně",
+      "lemma": "מִישָׁאֵל",
+      "hebrew": "מישאל",
+      "xlit": "Mîyshâʼêl",
+      "translated": true
+    },
+    "H4334": {
+      "definitions_cz": "1) rovné místo, vzpřímenost | 1a) rovinatá země, náhorní plošina, rovina | 1b) místo na úrovni | 1c) vzpřímenost",
+      "lemma": "מִישׁוֹר",
+      "hebrew": "מישור",
+      "xlit": "mîyshôwr",
+      "translated": true
+    },
+    "H4335": {
+      "definitions_cz": "Meshach = \"královský host\" | 1) zbožný přítel Daniela, kterého Nabuchodonozor přejmenoval na Mešacha; jeden ze tří přátel, kteří se s Danielem odmítli znečišťovat tím, že jedli jídlo z králova stolu, což bylo v rozporu se stravovacími zákony, které Bůh dal Židům; také jeden ze tří, kteří byli vhozeni do ohnivé pece za to, že se odmítli poklonit rytému obrazu Nabuchodonozora a kteří byli zachráněni andělem Páně | 1a) původní jméno 'Mishael'",
+      "lemma": "מֵישַׁךְ",
+      "hebrew": "מישך",
+      "xlit": "Mêyshak",
+      "translated": true
+    },
+    "H4336": {
+      "definitions_cz": "Meshach = \"králův host\" | 1) zbožný přítel Daniela, kterého Nabuchodonozor přejmenoval na Mešacha; jeden ze tří přátel, kteří se s Danielem odmítli znečišťovat tím, že jedli jídlo z králova stolu, což bylo v rozporu se stravovacími zákony, které Bůh dal Židům; také jeden ze tří, kteří byli vhozeni do ohnivé pece za to, že se odmítli poklonit rytému obrazu Nabuchodonozora a kteří byli zachráněni andělem Páně | 1a) původní jméno 'Mishael'",
+      "lemma": "מֵישַׁךְ",
+      "hebrew": "מישך",
+      "xlit": "Mêyshak",
+      "translated": true
+    },
+    "H4337": {
+      "definitions_cz": "Mesha = \"vysvobození\" | 1) nejstarší syn Káleb od jeho manželky Azuby a vnuka Hezróna",
+      "lemma": "מֵישָׁע",
+      "hebrew": "מישע",
+      "xlit": "Mêyshâʻ",
+      "translated": true
+    },
+    "H4338": {
+      "definitions_cz": "Mesha = \"vysvobození\" | 1) Moábský král v době Achaba a Jehorama",
+      "lemma": "מֵישַׁע",
+      "hebrew": "מישע",
+      "xlit": "Mêyshaʻ",
+      "translated": true
+    },
+    "H4339": {
+      "definitions_cz": "1) rovnost, vzpřímenost, přímost, rovnost | 1a) rovnoměrnost, úroveň, hladkost | 1b) čestnost, rovnost | 1c) správně (jako adv)",
+      "lemma": "מֵישָׁר",
+      "hebrew": "מישר",
+      "xlit": "mêyshâr",
+      "translated": true
+    },
+    "H4340": {
+      "definitions_cz": "1) šňůra, provázek",
+      "lemma": "מֵיתָר",
+      "hebrew": "מיתר",
+      "xlit": "mêythâr",
+      "translated": true
+    },
+    "H4341": {
+      "definitions_cz": "1) bolest, smutek | 1a) bolest (fyzická) | 1b) bolest (psychická)",
+      "lemma": "מַכְאֹב",
+      "hebrew": "מכאב",
+      "xlit": "makʼôb",
+      "translated": true
+    },
+    "H4342": {
+      "definitions_cz": "1) (Hiphil) být v hojnosti | 1a) hojnost (příčestí)",
+      "lemma": "מַכְבִּיר",
+      "hebrew": "מכביר",
+      "xlit": "makbîyr",
+      "translated": true
+    },
+    "H4343": {
+      "definitions_cz": "Machbenah = \"vazba\" | 1) syn Sheva a vnuk Caleb",
+      "lemma": "מַכְבֵּנָא",
+      "hebrew": "מכבנא",
+      "xlit": "Makbênâʼ",
+      "translated": true
+    },
+    "H4344": {
+      "definitions_cz": "Machbanai = \"svazek Páně\" | 1) Gadit a jeden z Davidových mocných válečníků, kteří se k němu připojili v Ziklagu",
+      "lemma": "מַכְבַּנַּי",
+      "hebrew": "מכבני",
+      "xlit": "Makbannay",
+      "translated": true
+    },
+    "H4345": {
+      "definitions_cz": "1) mřížkování, mřížkování",
+      "lemma": "מַכְבֵּר",
+      "hebrew": "מכבר",
+      "xlit": "makbêr",
+      "translated": true
+    },
+    "H4346": {
+      "definitions_cz": "1) síťovaná tkanina nebo přikrývka",
+      "lemma": "מַכְבָּר",
+      "hebrew": "מכבר",
+      "xlit": "makbâr",
+      "translated": true
+    },
+    "H4347": {
+      "definitions_cz": "1) rána, rána, porážka | 1a) rána, pruh | 1b) bití, bičování | 1c) rána | 1d) porážka | 1e) porážka, dobytí | 1f) mor",
+      "lemma": "מַכָּה",
+      "hebrew": "מכה",
+      "xlit": "makkâh",
+      "translated": true
+    },
+    "H4348": {
+      "definitions_cz": "1) popálené místo, jizva po popálení",
+      "lemma": "מִכְוָה",
+      "hebrew": "מכוה",
+      "xlit": "mikvâh",
+      "translated": true
+    },
+    "H4349": {
+      "definitions_cz": "1) pevné nebo zřízené místo, základ | 1a) pevné místo | 1b) nadace",
+      "lemma": "מָכוֹן",
+      "hebrew": "מכון",
+      "xlit": "mâkôwn",
+      "translated": true
+    },
+    "H4350": {
+      "definitions_cz": "1) pevné odpočívadlo, základna, podstavec",
+      "lemma": "מְכוֹנָה",
+      "hebrew": "מכונה",
+      "xlit": "mᵉkôwnâh",
+      "translated": true
+    },
+    "H4351": {
+      "definitions_cz": "1) původ",
+      "lemma": "מְכוּרָה",
+      "hebrew": "מכורה",
+      "xlit": "mᵉkûwrâh",
+      "translated": true
+    },
+    "H4352": {
+      "definitions_cz": "Machi = \"snížit\" | 1) otec Geuela Gadita, který byl jedním z 12 vyzvědačů Izraele",
+      "lemma": "מָכִי",
+      "hebrew": "מכי",
+      "xlit": "Mâkîy",
+      "translated": true
+    },
+    "H4353": {
+      "definitions_cz": "Machir = \"prodáno\" | 1) nejstarší syn Manasseho z aramitské nebo syrské konkubíny a předchůdce velké rodiny | 2) syn Ammiela, mocného náčelníka jednoho z transjordánských kmenů, který prokázal základní služby Saulovi a Davidovi",
+      "lemma": "מָכִיר",
+      "hebrew": "מכיר",
+      "xlit": "Mâkîyr",
+      "translated": true
+    },
+    "H4354": {
+      "definitions_cz": "Machirites = \"prodavač\" | 1) potomci Machira, otce Gileadova",
+      "lemma": "מָכִירִי",
+      "hebrew": "מכירי",
+      "xlit": "Mâkîyrîy",
+      "translated": true
+    },
+    "H4355": {
+      "definitions_cz": "1) být nízký, být ponížen | 1a) (Qal) být nízký, být ponížen | 1b) (Niphal) potopit | 1c) (Hophal) snížit",
+      "lemma": "מָכַךְ",
+      "hebrew": "מכך",
+      "xlit": "mâkak",
+      "translated": true
+    },
+    "H4356": {
+      "definitions_cz": "1) záhyb, ohrádka",
+      "lemma": "מִכְלָאָה",
+      "hebrew": "מכלאה",
+      "xlit": "miklâʼâh",
+      "translated": true
+    },
+    "H4357": {
+      "definitions_cz": "1) úplnost, dokonalost",
+      "lemma": "מִכְלָה",
+      "hebrew": "מכלה",
+      "xlit": "miklâh",
+      "translated": true
+    },
+    "H4358": {
+      "definitions_cz": "n m | 1) dokonalost, nádherné oblečení | adv | 2) dokonale, nejnádherněji",
+      "lemma": "מִכְלוֹל",
+      "hebrew": "מכלול",
+      "xlit": "miklôwl",
+      "translated": true
+    },
+    "H4359": {
+      "definitions_cz": "1) úplnost, dokonalost",
+      "lemma": "מִכְלָל",
+      "hebrew": "מכלל",
+      "xlit": "miklâl",
+      "translated": true
+    },
+    "H4360": {
+      "definitions_cz": "1) dokonalá věc, dokonalá věc, nádherný oděv nebo věci | 2) (TWOT) všelijaké věci",
+      "lemma": "מִכְלֻל",
+      "hebrew": "מכלל",
+      "xlit": "miklul",
+      "translated": true
+    },
+    "H4361": {
+      "definitions_cz": "1) jídlo, jídlo",
+      "lemma": "מַכֹּלֶת",
+      "hebrew": "מכלת",
+      "xlit": "makkôleth",
+      "translated": true
+    },
+    "H4362": {
+      "definitions_cz": "1) skryté obchody, skrytý poklad",
+      "lemma": "מִכְמַן",
+      "hebrew": "מכמן",
+      "xlit": "mikman",
+      "translated": true
+    },
+    "H4363": {
+      "definitions_cz": "Michmas nebo Michmash = \"skrytý\" | 1) město v Benjamin ležící poblíž Rámy a přibližně 16 km severně od Jeruzaléma; pravděpodobně moderní 'Mukhmas'",
+      "lemma": "מִכְמָס",
+      "hebrew": "מכמס",
+      "xlit": "Mikmâç",
+      "translated": true
+    },
+    "H4364": {
+      "definitions_cz": "1) síť, nástraha",
+      "lemma": "מַכְמָר",
+      "hebrew": "מכמר",
+      "xlit": "makmâr",
+      "translated": true
+    },
+    "H4365": {
+      "definitions_cz": "1) síť, rybářská síť",
+      "lemma": "מִכְמֶרֶת",
+      "hebrew": "מכמרת",
+      "xlit": "mikmereth",
+      "translated": true
+    },
+    "H4366": {
+      "definitions_cz": "Michmethah = \"úkryt\" | 1) místo v severovýchodní Efraimu poblíž hranice Manasse mezi Sichem a Taanath-shilo",
+      "lemma": "מִכְמְתָת",
+      "hebrew": "מכמתת",
+      "xlit": "Mikmᵉthâth",
+      "translated": true
+    },
+    "H4367": {
+      "definitions_cz": "Machnadebai = \"snížil mé ochotné\" | 1) jeden ze synů Baniho, který na příkaz Ezry propustil svou cizí manželku",
+      "lemma": "מַכְנַדְבַי",
+      "hebrew": "מכנדבי",
+      "xlit": "Maknadbay",
+      "translated": true
+    },
+    "H4368": {
+      "definitions_cz": "Mekonah = \"základ\" | 1) jedno z měst, které bylo po návratu z exilu znovu osídleno",
+      "lemma": "מְכֹנָה",
+      "hebrew": "מכנה",
+      "xlit": "Mᵉkônâh",
+      "translated": true
+    },
+    "H4369": {
+      "definitions_cz": "1) místo odpočinku, základna",
+      "lemma": "מְכֻנָה",
+      "hebrew": "מכנה",
+      "xlit": "mᵉkunâh",
+      "translated": true
     }
   }
 }
