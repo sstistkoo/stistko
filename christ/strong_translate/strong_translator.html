@@ -1070,10 +1070,56 @@ async function translateSelected() {
   if (!keys.length) return;
   
   document.getElementById('btnTranslateSelected').textContent = '⏳ Překládám...';
-  await translateBatch(keys);
+  
+  const apiKey = document.getElementById('apiKey').value.trim();
+  const model  = document.getElementById('modelRun').value;
+  const prov   = document.getElementById('providerRun').value;
+  
+  if (!apiKey) { showToast('✗ Zadej API klíč!'); return; }
+  
+  const batch = keys.map(k => entries.find(e => e.key === k)).filter(Boolean);
+  const prompt = buildPrompt(batch);
+  
+  try {
+    const raw = await callAIWithRetry(prov, apiKey, model, prompt);
+    parseTranslations(raw, keys);
+    
+    // Retry pro chybejici
+    const missingKeys = keys.filter(k => !translated[k]?.vyznam);
+    if (missingKeys.length > 0) {
+      const retryPrompt = `CHYBA: V minulé odpovědi jsi vynechal formátovací značky ###G. 
+ZOPAKUJ PŘEKLAD a u každého hesla MUSÍŠ začít řádkem ###G[číslo]###.
+
+${keys.map(k => {
+  const e = entries.find(x => x.key === k);
+  return e ? `${e.key}\nDEF: ${e.def}\nKJV: ${e.kjv}` : '';
+}).join('\n\n')}`;
+      
+      const raw2 = await callOnce(prov, apiKey, model, retryPrompt);
+      parseTranslations(raw2, keys);
+    }
+    
+    // Shromazdi nove preklady
+    const newTranslations = {};
+    for (const key of keys) {
+      if (translated[key]?.vyznam) {
+        newTranslations[key] = { ...translated[key] };
+      }
+    }
+    
+    if (Object.keys(newTranslations).length > 0) {
+      showPreviewModal(newTranslations);
+    } else {
+      showToast('⚠ Žádné překlady se nepodařilo získat');
+    }
+    
+  } catch(e) {
+    showToast('✗ Chyba: ' + e.message);
+  }
+  
   selectedKeys.clear();
   renderList();
-  updateStats();
+  document.getElementById('btnTranslateSelected').textContent = '⚡ Přeložit vybrané';
 }
 
 function filterList() { renderList(); }
@@ -1831,6 +1877,83 @@ function log(msg) {
   const el = document.getElementById('autoLog');
   if (el) el.textContent = msg;
   console.log(msg);
+}
+
+// Preview modal pro hromadny preklad
+let pendingTranslations = {};
+
+function showPreviewModal(previewData) {
+  pendingTranslations = previewData;
+  
+  const modal = document.createElement('div');
+  modal.id = 'previewModal';
+  modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:9999;overflow-y:auto;padding:20px';
+  
+  let html = `<div style="max-width:900px;margin:0 auto;background:var(--bg2);border:1px solid var(--brd);border-radius:8px;padding:20px">
+    <h2 style="color:var(--acc);margin:0 0 20px 0">Náhled překladu (${Object.keys(previewData).length} hesel)</h2>
+    <div style="display:flex;gap:10px;margin-bottom:20px">
+      <button class="hbtn grn" onclick="acceptPreview()">✓ Uložit vše</button>
+      <button class="hbtn red" onclick="discardPreview()">✕ Zrušit</button>
+    </div>`;
+  
+  for (const [key, data] of Object.entries(previewData)) {
+    const e = entries.find(x => x.key === key);
+    const old = translated[key];
+    html += `
+    <div style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;margin:0 0 15px 0;padding:15px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <span style="font-family:'JetBrains Mono';color:var(--acc);font-weight:bold">${key}</span>
+        <span style="color:var(--txt2)">${escHtml(e?.greek || '')}</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px">
+        <div>
+          <div style="color:var(--txt3);font-size:10px;margin-bottom:5px">NOVÝ PŘEKLAD</div>
+          <div style="font-size:12px">
+            <div><b>Význam:</b> ${escHtml(data.vyznam || '—')}</div>
+            <div style="margin-top:5px"><b>Definice:</b> ${escHtml(data.definice || '—')}</div>
+            <div style="margin-top:5px"><b>Použití:</b> ${escHtml(data.pouziti || '—')}</div>
+            <div style="margin-top:5px"><b>Původ:</b> ${escHtml(data.puvod || '—')}</div>
+          </div>
+        </div>
+        <div>
+          <div style="color:var(--txt3);font-size:10px;margin-bottom:5px">${old ? 'PŮVODNÍ' : 'PŘEDCHOZÍ'}</div>
+          ${old ? `
+          <div style="font-size:12px;color:var(--txt2)">
+            <div><b>Význam:</b> ${escHtml(old.vyznam || '—')}</div>
+            <div style="margin-top:5px"><b>Definice:</b> ${escHtml(old.definice || '—')}</div>
+            <div style="margin-top:5px"><b>Použití:</b> ${escHtml(old.pouziti || '—')}</div>
+            <div style="margin-top:5px"><b>Původ:</b> ${escHtml(old.puvod || '—')}</div>
+          </div>` : '<div style="color:var(--txt3);font-style:italic">— žádný —</div>'}
+        </div>
+      </div>
+    </div>`;
+  }
+  
+  html += `</div>`;
+  modal.innerHTML = html;
+  document.body.appendChild(modal);
+}
+
+function acceptPreview() {
+  for (const [key, data] of Object.entries(pendingTranslations)) {
+    translated[key] = data;
+  }
+  saveProgress();
+  renderList();
+  updateStats();
+  closePreviewModal();
+  showToast(`✓ Uloženo ${Object.keys(pendingTranslations).length} hesel`);
+}
+
+function discardPreview() {
+  closePreviewModal();
+  showToast('✕ Překlad zrušen');
+}
+
+function closePreviewModal() {
+  const modal = document.getElementById('previewModal');
+  if (modal) modal.remove();
+  pendingTranslations = {};
 }
 </script>
 </body>
