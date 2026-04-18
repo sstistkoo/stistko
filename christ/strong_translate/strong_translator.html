@@ -1128,6 +1128,7 @@ ${batchKeys.map(k => {
         
         const raw2 = await callOnce(prov, apiKey, model, retryPrompt);
         parseTranslations(raw2.content, batchKeys);
+      }
       
       const newTranslations = {};
       for (const key of batchKeys) {
