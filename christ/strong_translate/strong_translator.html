@@ -1607,10 +1607,10 @@ function parseTranslations(raw, keys) {
     if (!key || !keys.includes(key)) continue;
     
     translated[key] = {
-      vyznam:   get('Český význam') || get('VYZNAM') || get('Význam'),
+      vyznam:   get('Český význam') || get('VYZNAM') || get('Význam') || get('Překlad'),
       definice: get('DEFINICE') || get('Definice'),
-      pouziti:  get('POUZITI') || get('Použití') || get('Biblické užití'),
-      puvod:    get('PUVOD') || get('Původ'),
+      pouziti:  get('POUZITI') || get('Použití') || get('Biblické užití') || get('KJV'),
+      puvod:    get('PUVOD') || get('Původ') || get('Původ/význam'),
       raw:      block
     };
   }
