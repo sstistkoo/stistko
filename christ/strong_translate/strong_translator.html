@@ -1120,6 +1120,7 @@ async function translateSelected() {
       
       const missingKeys = batchKeys.filter(k => !translated[k]?.vyznam);
       if (missingKeys.length > 0) {
+        console.log(`⚠ ${missingKeys.length} hesel bez překladu: ${missingKeys.join(', ')}`);
         const retryPrompt = `CHYBA: V minulé odpovědi jsi vynechal formátovací značky ###G. 
 ZOPAKUJ PŘEKLAD a u každého hesla MUSÍŠ začít řádkem ###G[číslo]###.
 
@@ -1129,6 +1130,7 @@ ${batchKeys.map(k => {
 }).join('\n\n')}`;
         
         const raw2 = await callOnce(prov, apiKey, model, retryPrompt);
+        console.log(`📥 Retry odpověď pro ${missingKeys.join(', ')}:`, raw2.content);
         parseTranslations(raw2.content, batchKeys);
       }
       
@@ -1429,6 +1431,7 @@ async function translateBatch(keys) {
     
     // Pokud něco chybí, zkus opravný retry
     if (missingKeys.length > 0) {
+      console.log(`⚠ ${missingKeys.length} hesel bez překladu: ${missingKeys.join(', ')}`);
       log(`⚠ Pokus o opravu formátu pro ${missingKeys.join(', ')}...`);
       const retryPrompt = `CHYBA: V minulé odpovědi jsi vynechal formátovací značky ###G. 
 ZOPAKUJ PŘEKLAD a u každého hesla MUSÍŠ začít řádkem ###G[číslo]###. 
@@ -1442,6 +1445,7 @@ ${keys.map(k => {
       
       try {
         const raw2 = await callOnce(prov, apiKey, model, retryPrompt);
+        console.log(`📥 Retry odpověď:`, raw2.content);
         missingKeys = parseTranslations(raw2.content, keys);
         const retryCount = keys.length - missingKeys.length;
         if (retryCount > 0) {
