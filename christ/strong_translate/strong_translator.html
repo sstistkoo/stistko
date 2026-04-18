@@ -703,6 +703,8 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       <button class="hbtn" onclick="jumpToStart()" title="Přeskočit na toto číslo">→</button>
     </div>
     <div class="hdr-btns">
+      <button class="hbtn" id="btnImport" onclick="document.getElementById('importFileInput').click()">⬆ Import TXT</button>
+      <input type="file" id="importFileInput" accept=".txt" style="display:none" onchange="importTXT(this)">
       <button class="hbtn" id="btnAuto" onclick="toggleAuto()">▶ AUTO</button>
       <button class="hbtn" id="btnStep" onclick="translateNext()">⚡ Dávka</button>
       <button class="hbtn grn" onclick="exportTXT()">⬇ TXT</button>
@@ -1969,6 +1971,59 @@ function acceptPreview() {
 function discardPreview() {
   closePreviewModal();
   showToast('✕ Překlad zrušen');
+}
+
+// ══ IMPORT TXT ════════════════════════════════════════════════════════
+function importTXT(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const text = ev.target.result;
+      const imported = parseCzTXT(text);
+      const count = Object.keys(imported).length;
+      if (!count) { showToast('✗ Žádná hesla nenalezena v souboru'); return; }
+      const previewData = {};
+      for (const [key, data] of Object.entries(imported)) {
+        previewData[key] = data;
+      }
+      showPreviewModal(previewData);
+      showToast(`📥 Nalezeno ${count} hesel k importu`);
+    } catch(e) {
+      showToast('✗ Chyba importu: ' + e.message);
+    }
+    input.value = '';
+  };
+  reader.readAsText(file, 'utf-8');
+}
+
+// Parsuje formát: "G12 | ἄβυσσος\nČeský význam: ...\nDefinice: ..."
+function parseCzTXT(text) {
+  const result = {};
+  const blocks = text.trim().split(/\n(?=G\d+\s*\|)/);
+  for (const block of blocks) {
+    const lines = block.trim().split('\n');
+    const header = lines[0];
+    const m = header.match(/^(G\d+)\s*\|/);
+    if (!m) continue;
+    const key = m[1];
+    const get = (labels) => {
+      for (const label of labels) {
+        const line = lines.find(l => l.startsWith(label + ':'));
+        if (line) return line.slice(label.length + 1).trim();
+      }
+      return '';
+    };
+    const vyznam = get(['Český význam', 'Vyznam', 'VYZNAM']);
+    const definice = get(['Definice', 'DEFINICE']);
+    const pouziti = get(['Biblické užití (KJV)', 'Pouziti', 'POUZITI', 'Použití']);
+    const puvod = get(['Původ', 'Puvod', 'PUVOD']);
+    if (vyznam || definice) {
+      result[key] = { vyznam, definice, pouziti, puvod };
+    }
+  }
+  return result;
 }
 
 function closePreviewModal() {
