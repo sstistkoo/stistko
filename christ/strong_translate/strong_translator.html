@@ -808,8 +808,10 @@ let autoRunning = false;
 let currentBatchSize = 10;
 let currentInterval  = 10;
 let filteredKeys = [];
+let retryMode = false;
+let retryKeysList = [];
 
-// ══ PROVIDER SETUP ═══════════════════════════════════════════════
+// ══ PROVIDER SETUP ══════════════════════════════════════════════════
 const PROVIDERS = {
   groq: {
     label: 'Groq (console.groq.com)',
@@ -1138,6 +1140,9 @@ ${batchKeys.map(k => {
       }
       
       allNewTranslations = { ...allNewTranslations, ...newTranslations };
+      saveProgress();
+      updateFailedCount();
+      renderList();
       
     } catch(e) {
       showToast('✗ Chyba: ' + e.message);
@@ -1312,8 +1317,34 @@ ORIG: ${e.orig}`;
 // ══ PŘEKLAD — DÁVKA ══════════════════════════════════════════════
 async function translateNext() {
   if (autoRunning) return;
-  const batch = getNextBatch(currentBatchSize);
-  if (!batch.length) { showToast('✓ Vše přeloženo!'); return; }
+  
+  // Retry mode - použij retryKeysList místo getNextBatch
+  let batch;
+  if (retryMode && retryKeysList.length > 0) {
+    batch = retryKeysList.slice(0, currentBatchSize);
+    retryKeysList = retryKeysList.slice(currentBatchSize);
+    if (retryKeysList.length === 0) {
+      retryMode = false;
+    }
+  } else {
+    batch = getNextBatch(currentBatchSize);
+  }
+  
+  if (!batch.length) { 
+    if (retryMode) {
+      showToast('✓ Retry dokončeno!');
+      retryMode = false;
+    } else {
+      showToast('✓ Vše přeloženo!'); 
+    }
+    return; 
+  }
+  
+  // Info o retry módu
+  if (retryMode) {
+    document.getElementById('btnStep').title = `Retry: zbývá ${retryKeysList.length + batch.length} hesel`;
+  }
+  
   document.getElementById('btnStep').disabled = true;
   document.getElementById('btnStep').textContent = '⏳ ...';
   await translateBatch(batch);
@@ -2195,13 +2226,11 @@ function retryFailed(failedKeysStr) {
   renderList();
   document.getElementById('failedModal').remove();
   
-  // Použij nastavenou velikost dávky
-  const bs = parseInt(document.getElementById('batchSizeRun')?.value) || 
-              parseInt(document.getElementById('batchSize')?.value) || 10;
-  showToast(`⏳ Spouštím překlad ${keys.length} hesel po ${bs}...`);
+  // Nastav retry režim - příští translateNext/AUTO vezme tyto klíče
+  retryMode = true;
+  retryKeysList = keys;
   
-  // Spusť překlad vybraných
-  translateSelected();
+  showToast(`✓ Označeno ${keys.length} hesel — klikni na "⚡ Dávka" nebo "▶ AUTO"`);
 }
 
 function closePreviewModal() {
