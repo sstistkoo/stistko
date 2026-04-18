@@ -1126,6 +1126,14 @@ ${batchKeys.map(k => {
     }
     
     processed += batchKeys.length;
+    
+    // Interval mezi dávkami (ochrana rate limitu)
+    if (processed < keys.length) {
+      const interval = parseInt(document.getElementById('intervalRun')?.value) || 
+                       parseInt(document.getElementById('interval')?.value) || 20;
+      document.getElementById('btnTranslateSelected').textContent = `⏳ Čekám ${interval}s...`;
+      await new Promise(r => setTimeout(r, interval * 1000));
+    }
   }
   
   selectedKeys.clear();
@@ -2156,7 +2164,14 @@ function retryFailed(failedKeysStr) {
   selectedKeys = new Set(keys);
   renderList();
   document.getElementById('failedModal').remove();
-  showToast(`✓ Označeno ${keys.length} hesel k opakovanému překladu`);
+  
+  // Použij nastavenou velikost dávky
+  const bs = parseInt(document.getElementById('batchSizeRun')?.value) || 
+              parseInt(document.getElementById('batchSize')?.value) || 10;
+  showToast(`⏳ Spouštím překlad ${keys.length} hesel po ${bs}...`);
+  
+  // Spusť překlad vybraných
+  translateSelected();
 }
 
 function closePreviewModal() {
