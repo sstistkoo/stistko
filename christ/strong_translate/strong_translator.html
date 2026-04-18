@@ -1080,57 +1080,67 @@ async function translateSelected() {
   const keys = Array.from(selectedKeys);
   if (!keys.length) return;
   
-  document.getElementById('btnTranslateSelected').textContent = '⏳ Překládám...';
+  const bs = parseInt(document.getElementById('batchSizeRun')?.value) || 10;
+  let processed = 0;
+  let allNewTranslations = {};
   
-  const apiKey = document.getElementById('apiKey').value.trim();
-  const model  = document.getElementById('modelRun').value;
-  const prov   = document.getElementById('providerRun').value;
-  
-  if (!apiKey) { showToast('✗ Zadej API klíč!'); return; }
-  
-  const batch = keys.map(k => entries.find(e => e.key === k)).filter(Boolean);
-  const prompt = buildPrompt(batch);
-  
-  try {
-    const raw = await callAIWithRetry(prov, apiKey, model, prompt);
-    parseTranslations(raw, keys);
+  while (processed < keys.length) {
+    const batchKeys = keys.slice(processed, processed + bs);
+    document.getElementById('btnTranslateSelected').textContent = `⏳ ${processed + batchKeys.length}/${keys.length}...`;
     
-    // Retry pro chybejici
-    const missingKeys = keys.filter(k => !translated[k]?.vyznam);
-    if (missingKeys.length > 0) {
-      const retryPrompt = `CHYBA: V minulé odpovědi jsi vynechal formátovací značky ###G. 
+    const apiKey = document.getElementById('apiKey').value.trim();
+    const model  = document.getElementById('modelRun').value;
+    const prov   = document.getElementById('providerRun').value;
+    
+    if (!apiKey) { showToast('✗ Zadej API klíč!'); return; }
+    
+    const batch = batchKeys.map(k => entries.find(e => e.key === k)).filter(Boolean);
+    const prompt = buildPrompt(batch);
+    
+    try {
+      const raw = await callAIWithRetry(prov, apiKey, model, prompt);
+      parseTranslations(raw, batchKeys);
+      
+      const missingKeys = batchKeys.filter(k => !translated[k]?.vyznam);
+      if (missingKeys.length > 0) {
+        const retryPrompt = `CHYBA: V minulé odpovědi jsi vynechal formátovací značky ###G. 
 ZOPAKUJ PŘEKLAD a u každého hesla MUSÍŠ začít řádkem ###G[číslo]###.
 
-${keys.map(k => {
+${batchKeys.map(k => {
   const e = entries.find(x => x.key === k);
   return e ? `${e.key}\nDEF: ${e.def}\nKJV: ${e.kjv}` : '';
 }).join('\n\n')}`;
-      
-      const raw2 = await callOnce(prov, apiKey, model, retryPrompt);
-      parseTranslations(raw2, keys);
-    }
-    
-    // Shromazdi nove preklady
-    const newTranslations = {};
-    for (const key of keys) {
-      if (translated[key]?.vyznam) {
-        newTranslations[key] = { ...translated[key] };
+        
+        const raw2 = await callOnce(prov, apiKey, model, retryPrompt);
+        parseTranslations(raw2, batchKeys);
       }
+      
+      const newTranslations = {};
+      for (const key of batchKeys) {
+        if (translated[key]?.vyznam) {
+          newTranslations[key] = { ...translated[key] };
+        }
+      }
+      
+      allNewTranslations = { ...allNewTranslations, ...newTranslations };
+      
+    } catch(e) {
+      showToast('✗ Chyba: ' + e.message);
     }
     
-    if (Object.keys(newTranslations).length > 0) {
-      showPreviewModal(newTranslations);
-    } else {
-      showToast('⚠ Žádné překlady se nepodařilo získat');
-    }
-    
-  } catch(e) {
-    showToast('✗ Chyba: ' + e.message);
+    processed += batchKeys.length;
   }
   
   selectedKeys.clear();
   renderList();
   document.getElementById('btnTranslateSelected').textContent = '⚡ Přeložit vybrané';
+  
+  if (Object.keys(allNewTranslations).length > 0) {
+    showPreviewModal(allNewTranslations);
+    showToast(`✓ Přeloženo ${Object.keys(allNewTranslations).length} hesel`);
+  } else {
+    showToast('⚠ Žádné překlady se nepodařilo získat');
+  }
 }
 
 function filterList() { renderList(); }
