@@ -689,6 +689,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
     <div class="stat">Přeloženo: <b id="sDone">0</b></div>
     <div class="stat">Zbývá: <b id="sRemain">0</b></div>
     <div class="stat">Celkem: <b id="sTotal">0</b></div>
+    <div class="stat" style="color:var(--acc)" id="tokenStats">📊 Tokeny: 0</div>
     <div class="pbar-wrap"><div class="pbar-fill" id="pbar" style="width:0%"></div></div>
     <div style="display:flex;align-items:center;gap:5px;flex-shrink:0">
       <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt3)">od G</span>
@@ -1106,7 +1107,9 @@ async function translateSelected() {
       if (usage) {
         const inT = usage.prompt_tokens || usage.promptTokenCount || 0;
         const outT = usage.completion_tokens || usage.candidatesTokenCount || 0;
-        log(`📊 ${prov}: ${inT} in / ${outT} out = ${inT + outT} celkem`);
+        const total = inT + outT;
+        log(`📊 ${prov}: ${inT} in / ${outT} out = ${total} celkem`);
+        logTokenEntry(prov, inT, outT, total);
       }
       
       // Log do konzoly pro úspěšné
@@ -1417,7 +1420,9 @@ async function translateBatch(keys) {
     if (usage) {
       const inT = usage.prompt_tokens || usage.promptTokenCount || 0;
       const outT = usage.completion_tokens || usage.candidatesTokenCount || 0;
-      log(`📊 ${prov}: ${inT} in / ${outT} out = ${inT + outT} celkem`);
+      const total = inT + outT;
+      log(`📊 ${prov}: ${inT} in / ${outT} out = ${total} celkem`);
+      logTokenEntry(prov, inT, outT, total);
     }
     
     // Log do konzoly pro úspěšné
@@ -2029,6 +2034,19 @@ function showToast(msg) {
 function log(msg) {
   const el = document.getElementById('autoLog');
   if (el) el.textContent = msg;
+}
+
+let totalTokens = { in: 0, out: 0, total: 0 };
+
+function logTokenEntry(provider, inT, outT, total) {
+  totalTokens.in += inT;
+  totalTokens.out += outT;
+  totalTokens.total += total;
+  
+  const el = document.getElementById('tokenStats');
+  if (el) {
+    el.textContent = `📊 Celkem: ${totalTokens.in} in / ${totalTokens.out} out = ${totalTokens.total}`;
+  }
 }
 
 // Preview modal pro hromadny preklad
