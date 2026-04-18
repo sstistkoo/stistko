@@ -711,6 +711,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       <button class="hbtn grn" onclick="exportTXT()">⬇ TXT</button>
       <button class="hbtn grn" onclick="exportJSON()">⬇ JSON</button>
       <button class="hbtn" onclick="exportRange()" title="Export vybraného rozsahu G čísel">⬇ Rozsah</button>
+      <button class="hbtn red" onclick="showFailedEntries()" title="Zobrazit neúspěšné překlady">⚠ Neúspěšné <span id="failedCount"></span></button>
       <button class="hbtn red" onclick="clearProgress()">✕ Reset</button>
     </div>
   </div>
@@ -1133,6 +1134,7 @@ ${batchKeys.map(k => {
   
   selectedKeys.clear();
   renderList();
+  updateFailedCount();
   document.getElementById('btnTranslateSelected').textContent = '⚡ Přeložit vybrané';
   
   if (Object.keys(allNewTranslations).length > 0) {
@@ -1389,6 +1391,7 @@ ${keys.map(k => {
     }
     
     saveProgress();
+    updateFailedCount();
     logEntry(keys, raw);
     log(`✓ Přeloženo ${keys.length} hesel (${keys[0]}–${keys[keys.length-1]})`);
   } catch(e) {
@@ -1788,6 +1791,7 @@ function loadSavedSettings() {
   document.getElementById('model').addEventListener('change', () => {
     localStorage.setItem('strong_model', document.getElementById('model').value);
   });
+  updateFailedCount();
 }
 
 // Volej po načtení stránky
@@ -2036,6 +2040,79 @@ function parseCzTXT(text) {
     }
   }
   return result;
+}
+
+// ══ NEÚSPĚŠNÉ PŘEKLADY ════════════════════════════════════════════════
+function updateFailedCount() {
+  let count = 0;
+  for (const key of Object.keys(translated)) {
+    const t = translated[key];
+    if (!t.vyznam || t.vyznam === '—') count++;
+  }
+  const el = document.getElementById('failedCount');
+  if (el) el.textContent = count > 0 ? `(${count})` : '';
+}
+
+function showFailedEntries() {
+  const failed = [];
+  for (const key of Object.keys(translated)) {
+    const t = translated[key];
+    if (!t.vyznam || t.vyznam === '—') {
+      failed.push({ key, raw: t.raw, greek: entries.find(e => e.key === key)?.greek });
+    }
+  }
+  
+  if (!failed.length) {
+    showToast('✓ Všechny překlady jsou úspěšné');
+    return;
+  }
+  
+  console.log('═ NEÚSPĚŠNÉ PŘEKLADY ═');
+  for (const f of failed) {
+    console.log(`\n--- ${f.key} | ${f.greek} ---`);
+    console.log('AI odpověď:', f.raw);
+  }
+  
+  const failedKeys = failed.map(f => f.key);
+  
+  const modal = document.createElement('div');
+  modal.id = 'failedModal';
+  modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.88);z-index:9999;overflow-y:auto;padding:20px';
+  
+  let cards = '';
+  for (const f of failed) {
+    const rawText = f.raw || '(prázdné)';
+    cards += `<div style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;margin:0 0 10px 0;padding:12px">
+      <div style="font-family:'JetBrains Mono';color:var(--acc);font-weight:bold;margin-bottom:6px">${f.key} | ${escHtml(f.greek || '')}</div>
+      <div style="font-size:11px;color:var(--txt2);white-space:pre-wrap;max-height:120px;overflow-y:auto;background:var(--bg1);padding:8px;border-radius:4px">${escHtml(rawText)}</div>
+    </div>`;
+  }
+  
+  modal.innerHTML = `
+  <div style="max-width:800px;margin:0 auto;background:var(--bg2);border:1px solid var(--brd);border-radius:8px;padding:22px">
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;flex-wrap:wrap">
+      <h2 style="color:var(--acc);font-family:'JetBrains Mono',monospace;font-size:14px;margin:0">
+        ⚠ Neúspěšné překlady — ${failed.length} hesel
+      </h2>
+      <button class="hbtn grn" onclick="retryFailed('${failedKeys.join(',')}')">↻ Přeložit znovu</button>
+      <button class="hbtn red" onclick="document.getElementById('failedModal').remove()">✕ Zavřít</button>
+    </div>
+    <div style="font-size:12px;color:var(--txt3);margin-bottom:14px">
+      AI nevrátila správný formát (nebo prázdný překlad). Detaily v console (F12).
+    </div>
+    <div id="failedCards">${cards}</div>
+  </div>`;
+  
+  document.body.appendChild(modal);
+  showToast(`⚠ Nalezeno ${failed.length} neúspěšných překladů (viz console)`);
+}
+
+function retryFailed(failedKeysStr) {
+  const keys = failedKeysStr.split(',');
+  selectedKeys = new Set(keys);
+  renderList();
+  document.getElementById('failedModal').remove();
+  showToast(`✓ Označeno ${keys.length} hesel k opakovanému překladu`);
 }
 
 function closePreviewModal() {
