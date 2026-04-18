@@ -1541,6 +1541,7 @@ async function callOnce(provider, apiKey, model, prompt) {
 
 // ══ PARSOVÁNÍ ODPOVĚDI AI ════════════════════════════════════════
 function parseTranslations(raw, keys) {
+  try {
   // Podporujeme 2 formáty:
   // 1. ###G{číslo}### - preferovaný formát
   // 2. G{číslo} | ... - alternativní formát bez ###
@@ -1618,6 +1619,11 @@ function parseTranslations(raw, keys) {
     }
   }
   return missingKeys;
+  } catch(e) {
+    console.error('Chyba parsování překladu:', e);
+    log('⚠ Chyba parsování: ' + e.message);
+    return keys;
+  }
 }
 
 // ══ AUTO REŽIM ═══════════════════════════════════════════════════
