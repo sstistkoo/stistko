@@ -1,0 +1,1544 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strong GR → CZ Překladač</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap');
+
+:root {
+  --bg:   #0d0c0b;
+  --bg2:  #161412;
+  --bg3:  #1e1c19;
+  --bg4:  #252320;
+  --brd:  #2e2b27;
+  --brd2: #3d3930;
+  --acc:  #b8924a;
+  --acc2: #7a5f28;
+  --acc3: #d4a85c;
+  --txt:  #ddd5c0;
+  --txt2: #8a8070;
+  --txt3: #5a5448;
+  --grn:  #4a8a5c;
+  --red:  #8a3a34;
+  --ylw:  #8a7a3a;
+  --blue: #3a5a8a;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--txt);
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 15px;
+  min-height: 100vh;
+}
+
+/* ══ SETUP ════════════════════════════════════════════════════ */
+#setup {
+  max-width: 680px;
+  margin: 36px auto;
+  padding: 30px;
+  background: var(--bg2);
+  border: 1px solid var(--brd);
+  border-radius: 6px;
+}
+
+#setup h1 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--acc);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+#setup p {
+  font-size: 13px;
+  color: var(--txt2);
+  margin-bottom: 22px;
+  line-height: 1.6;
+}
+
+.row { margin-bottom: 14px; }
+
+.row label {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--txt3);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.row input[type=text],
+.row input[type=password],
+.row select {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--brd);
+  border-radius: 3px;
+  padding: 8px 11px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--txt);
+  outline: none;
+  transition: border-color .2s;
+}
+.row input:focus, .row select:focus { border-color: var(--acc); }
+.row input::placeholder { color: var(--txt3); }
+
+.file-row { display: flex; align-items: center; gap: 10px; }
+.file-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  padding: 7px 14px;
+  background: var(--bg3);
+  border: 1px solid var(--brd);
+  border-radius: 3px;
+  color: var(--txt2);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all .2s;
+}
+.file-btn:hover { border-color: var(--acc); color: var(--acc); }
+.file-status { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--txt3); }
+.file-status.ok { color: var(--grn); }
+
+hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
+
+.resume-box {
+  background: var(--bg3);
+  border: 1px solid var(--ylw);
+  border-radius: 4px;
+  padding: 12px 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--acc3);
+  margin-bottom: 16px;
+  display: none;
+}
+
+.start-btn {
+  width: 100%;
+  padding: 11px;
+  background: var(--acc2);
+  border: 1px solid var(--acc);
+  border-radius: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--acc3);
+  cursor: pointer;
+  letter-spacing: .06em;
+  transition: all .2s;
+}
+.start-btn:hover { background: var(--acc); color: var(--bg); }
+.start-btn:disabled { opacity: .4; cursor: default; }
+
+/* ══ APP ══════════════════════════════════════════════════════ */
+#app { display: none; flex-direction: column; height: 100vh; }
+
+/* Header */
+.hdr {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--brd);
+  padding: 10px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.hdr-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--acc);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.stat {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--txt3);
+}
+.stat b { color: var(--acc3); }
+
+.pbar-wrap { flex: 1; min-width: 80px; height: 4px; background: var(--bg4); border-radius: 2px; overflow: hidden; }
+.pbar-fill { height: 100%; background: var(--acc); border-radius: 2px; transition: width .5s ease; }
+
+.hdr-btns { display: flex; gap: 6px; margin-left: auto; flex-wrap: wrap; }
+
+.hbtn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  padding: 5px 11px;
+  background: transparent;
+  border: 1px solid var(--brd);
+  border-radius: 3px;
+  color: var(--txt2);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all .2s;
+}
+.hbtn:hover { border-color: var(--acc); color: var(--acc); }
+.hbtn.grn { border-color: var(--grn); color: var(--grn); }
+.hbtn.grn:hover { background: var(--grn); color: var(--bg); }
+.hbtn.red { border-color: var(--red); color: #c05050; }
+.hbtn.red:hover { background: var(--red); color: var(--txt); }
+.hbtn.active { background: var(--acc2); border-color: var(--acc); color: var(--acc3); }
+.hbtn:disabled { opacity: .4; cursor: default; }
+
+/* Auto panel */
+.auto-panel {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--brd);
+  padding: 8px 18px;
+  display: none;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+.auto-panel.show { display: flex; }
+
+.auto-info {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--txt2);
+}
+.auto-info b { color: var(--acc3); }
+
+.countdown {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--acc);
+  min-width: 36px;
+  text-align: center;
+}
+
+.auto-log {
+  flex: 1;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--txt3);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Log panel — v pravém panelu nahoře */
+.log-panel {
+  background: var(--bg);
+  border-bottom: 2px solid var(--brd2);
+  flex-shrink: 0;
+  height: 50%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.log-head {
+  padding: 6px 14px;
+  border-bottom: 1px solid var(--brd);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  background: var(--bg2);
+}
+.log-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+}
+.log-entry {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--brd);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  line-height: 1.65;
+  transition: background .1s;
+}
+.log-entry:hover { background: var(--bg3); }
+.log-key-line { margin-bottom: 3px; }
+.log-key { color: var(--acc); font-weight: 700; }
+.log-greek { color: var(--txt2); font-style: italic; margin-left: 6px; font-family: 'Crimson Pro', serif; font-size: 13px; }
+.log-orig { color: var(--txt3); font-size: 10px; margin-bottom: 4px; }
+.log-vyznam { color: var(--acc3); margin-bottom: 2px; }
+.log-vyznam b { color: var(--acc3); }
+.log-definice { color: var(--txt2); font-size: 11px; }
+.log-err { color: #c05050; }
+.log-info { color: var(--txt3); font-style: italic; }
+
+/* Main split */
+.split {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* Left — seznam hesel */
+.list-pane {
+  background: var(--bg2);
+  border-right: 1px solid var(--brd);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.list-search {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--brd);
+  flex-shrink: 0;
+}
+.list-search input {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--brd);
+  border-radius: 3px;
+  padding: 6px 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--txt);
+  outline: none;
+}
+.list-search input:focus { border-color: var(--acc); }
+.list-search input::placeholder { color: var(--txt3); }
+
+.list-scroll { flex: 1; overflow-y: auto; }
+
+.list-item {
+  display: grid;
+  grid-template-columns: 50px 1fr 20px;
+  align-items: center;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--brd);
+  transition: background .1s;
+  gap: 8px;
+}
+.list-item:hover { background: var(--bg3); }
+.list-item.active { background: var(--bg3); border-left: 2px solid var(--acc); }
+.list-item.done { }
+.list-item.done .li-key { color: var(--grn); }
+
+.li-key {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--acc);
+  font-weight: 700;
+}
+.li-greek {
+  font-size: 13px;
+  color: var(--txt2);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.li-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--brd2);
+  justify-self: end;
+}
+.li-dot.done { background: var(--grn); }
+.li-dot.pending { background: var(--ylw); animation: blink 1.2s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+/* Right — detail */
+.detail-pane {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.detail-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px;
+  min-height: 0;
+}
+
+.detail-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--txt3);
+}
+
+.entry-header {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--brd);
+}
+
+.entry-key {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--acc);
+}
+
+.entry-greek {
+  font-size: 20px;
+  color: var(--txt);
+  font-style: italic;
+}
+
+.entry-status {
+  margin-left: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  padding: 3px 9px;
+  border-radius: 2px;
+  border: 1px solid var(--brd);
+  color: var(--txt3);
+}
+.entry-status.done { border-color: var(--grn); color: var(--grn); }
+
+/* Sekce originálu */
+.orig-section {
+  background: var(--bg3);
+  border: 1px solid var(--brd);
+  border-radius: 4px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.orig-section .label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--txt3);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.orig-section .value { color: var(--txt2); font-style: italic; }
+
+/* Výsledek překladu */
+.translation-box {
+  background: var(--bg2);
+  border: 1px solid var(--brd);
+  border-radius: 4px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.tbox-head {
+  display: flex;
+  align-items: center;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--brd);
+  background: var(--bg3);
+}
+
+.tbox-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--acc);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.tbox-actions { margin-left: auto; display: flex; gap: 6px; }
+
+.tbox-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  padding: 3px 8px;
+  border-radius: 2px;
+  border: 1px solid var(--brd);
+  background: transparent;
+  color: var(--txt3);
+  cursor: pointer;
+  transition: all .15s;
+}
+.tbox-btn:hover { border-color: var(--acc); color: var(--acc); }
+.tbox-btn.ok { border-color: var(--grn); color: var(--grn); }
+
+.tbox-body {
+  padding: 12px 14px;
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--txt);
+  min-height: 60px;
+  white-space: pre-wrap;
+}
+
+.tbox-body.waiting {
+  color: var(--txt3);
+  font-style: italic;
+  font-size: 13px;
+}
+
+.tbox-edit {
+  display: none;
+  padding: 0 14px 12px;
+}
+.tbox-edit.show { display: block; }
+.tbox-edit textarea {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--brd);
+  border-radius: 3px;
+  padding: 8px 10px;
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 14px;
+  color: var(--txt);
+  resize: vertical;
+  min-height: 100px;
+  outline: none;
+  line-height: 1.7;
+}
+.tbox-edit textarea:focus { border-color: var(--acc); }
+.tbox-save {
+  margin-top: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  padding: 5px 12px;
+  background: var(--acc2);
+  border: 1px solid var(--acc);
+  border-radius: 3px;
+  color: var(--acc3);
+  cursor: pointer;
+}
+.tbox-save:hover { background: var(--acc); color: var(--bg); }
+
+/* Tlačítko přeložit */
+.translate-btn {
+  width: 100%;
+  padding: 10px;
+  background: var(--bg3);
+  border: 1px solid var(--acc2);
+  border-radius: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--acc);
+  cursor: pointer;
+  transition: all .2s;
+  margin-bottom: 16px;
+}
+.translate-btn:hover { background: var(--acc2); }
+.translate-btn:disabled { opacity: .4; cursor: default; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--brd2); border-radius: 3px; }
+
+/* Toast */
+#toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg3);
+  border: 1px solid var(--brd2);
+  border-radius: 4px;
+  padding: 9px 18px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--txt);
+  z-index: 999;
+  opacity: 0;
+  transition: opacity .3s;
+  white-space: nowrap;
+  pointer-events: none;
+}
+</style>
+</head>
+<body>
+
+<!-- ══ SETUP ══════════════════════════════════════════════════════ -->
+<div id="setup">
+  <h1>⟁ Strong GR → CZ — Překladač slovníku</h1>
+  <p>Nahraje Strong řecký slovník (TXT), přeloží hesla do češtiny pomocí AI ve zvoleném formátu. Průběh se automaticky ukládá do lokální paměti.</p>
+
+  <div id="resumeBox" class="resume-box"></div>
+
+  <div class="row">
+    <label>Provider</label>
+    <select id="provider" onchange="onProviderChange()">
+      <option value="groq">Groq (zdarma)</option>
+      <option value="gemini">Google Gemini (zdarma)</option>
+      <option value="openrouter">OpenRouter</option>
+    </select>
+  </div>
+
+  <div class="row">
+    <label id="keyLabel">API Klíč — Groq (console.groq.com)</label>
+    <input type="password" id="apiKey" placeholder="gsk_..." onchange="saveApiKey()">
+  </div>
+
+  <div class="row">
+    <label>Model</label>
+    <select id="model">
+      <option value="llama-3.3-70b-versatile">llama-3.3-70b-versatile</option>
+      <option value="llama-3.1-8b-instant">llama-3.1-8b-instant (rychlejší)</option>
+      <option value="qwen-qwq-32b">qwen-qwq-32b</option>
+    </select>
+  </div>
+
+  <div class="row">
+    <label>Velikost dávky (hesel na jedno volání)</label>
+    <select id="batchSize">
+      <option value="5">5 hesel</option>
+      <option value="10" selected>10 hesel</option>
+      <option value="15">15 hesel</option>
+      <option value="20">20 hesel</option>
+    </select>
+  </div>
+
+  <div class="row">
+    <label>Interval mezi dávkami (vteřiny) — ochrana rate limitu</label>
+    <select id="interval">
+      <option value="5">5 s (Groq fast)</option>
+      <option value="10">10 s (bezpečné)</option>
+      <option value="20" selected>20 s (Gemini free)</option>
+      <option value="30">30 s (při chybách)</option>
+    </select>
+  </div>
+
+  <hr class="div">
+
+  <div class="row">
+    <label>TXT soubor — strong_greek_detailed.txt</label>
+    <div class="file-row">
+      <label class="file-btn" for="fileTXT">📂 Vybrat</label>
+      <input type="file" id="fileTXT" accept=".txt" onchange="loadTXT(this)" style="display:none">
+      <span class="file-status" id="statusTXT">— nevybráno</span>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <div class="row">
+    <label>Prompt (upravitelný) — posílá se AI pro každou dávku</label>
+    <textarea id="promptEditor" rows="12" style="width:100%;background:var(--bg3);border:1px solid var(--brd);
+      border-radius:3px;padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;
+      color:var(--txt2);resize:vertical;outline:none;line-height:1.6;"></textarea>
+    <div style="display:flex;gap:8px;margin-top:6px">
+      <button onclick="resetPrompt()" style="font-family:'JetBrains Mono',monospace;font-size:10px;
+        padding:5px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:3px;
+        color:var(--txt3);cursor:pointer;">↺ Výchozí prompt</button>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt3);
+        align-self:center">Proměnné: {HESLA} — sem se vloží hesla</span>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <button class="start-btn" id="startBtn" onclick="startApp()" disabled>
+    Zahájit překlad →
+  </button>
+</div>
+
+<!-- ══ APP ════════════════════════════════════════════════════════ -->
+<div id="app">
+
+  <!-- Header -->
+  <div class="hdr">
+    <div class="hdr-title">⟁ Strong GR→CZ</div>
+    <div class="stat">Přeloženo: <b id="sDone">0</b></div>
+    <div class="stat">Zbývá: <b id="sRemain">0</b></div>
+    <div class="stat">Celkem: <b id="sTotal">0</b></div>
+    <div class="pbar-wrap"><div class="pbar-fill" id="pbar" style="width:0%"></div></div>
+    <div style="display:flex;align-items:center;gap:5px;flex-shrink:0">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt3)">od G</span>
+      <input type="number" id="startFrom" min="1" max="5624" placeholder="1"
+        style="width:60px;background:var(--bg3);border:1px solid var(--brd);border-radius:3px;
+        padding:4px 6px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt);
+        outline:none;text-align:center"
+        title="Začít překlad od tohoto čísla">
+      <button class="hbtn" onclick="jumpToStart()" title="Přeskočit na toto číslo">→</button>
+    </div>
+    <div class="hdr-btns">
+      <button class="hbtn" id="btnAuto" onclick="toggleAuto()">▶ AUTO</button>
+      <button class="hbtn" id="btnStep" onclick="translateNext()">⚡ Dávka</button>
+      <button class="hbtn grn" onclick="exportTXT()">⬇ TXT</button>
+      <button class="hbtn grn" onclick="exportJSON()">⬇ JSON</button>
+      <button class="hbtn red" onclick="clearProgress()">✕ Reset</button>
+    </div>
+  </div>
+
+  <!-- Auto panel -->
+  <div class="auto-panel" id="autoPanel">
+    <div class="auto-info">AUTO: dávka <b id="autoBatch">—</b>, interval <b id="autoInterval">—</b>s</div>
+    <div class="countdown" id="countdown">—</div>
+    <div class="auto-log" id="autoLog">Čeká na start...</div>
+    <button class="hbtn red" onclick="stopAuto()">■ Stop</button>
+  </div>
+
+  <!-- Split -->
+  <div class="split">
+
+    <!-- Seznam -->
+    <div class="list-pane">
+      <div class="list-search">
+        <input type="text" id="searchInput" placeholder="Hledat G číslo nebo řecké slovo..."
+          oninput="filterList()">
+      </div>
+      <div class="list-scroll" id="listScroll"></div>
+    </div>
+
+    <!-- Pravý panel: log nahoře + detail dole, nebo jen jedno z toho -->
+    <div class="detail-pane">
+
+      <!-- Log překladu — scrolluje dovnitř pravého panelu -->
+      <div class="log-panel" id="logPanel">
+        <div class="log-head">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--acc);letter-spacing:.1em">⟁ LOG PŘEKLADU</span>
+          <span id="logCount" style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt3);margin-left:10px"></span>
+          <button class="hbtn" style="margin-left:auto;font-size:9px;padding:2px 8px" onclick="showSetup()">← Nastavení</button>
+          <button class="hbtn" style="font-size:9px;padding:2px 8px" onclick="clearLog()">✕ Vymazat</button>
+        </div>
+        <div style="display:flex;gap:8px;padding:8px 12px;background:var(--bg2);border-bottom:1px solid var(--brd);flex-wrap:wrap;align-items:center">
+          <select id="providerRun" onchange="onProviderChangeRun()" style="font-size:10px;padding:2px 4px;background:var(--bg3);color:var(--txt);border:1px solid var(--brd);border-radius:3px">
+            <option value="groq">Groq</option>
+            <option value="gemini">Gemini</option>
+            <option value="openrouter">OpenRouter</option>
+          </select>
+          <select id="modelRun" style="font-size:10px;padding:2px 4px;background:var(--bg3);color:var(--txt);border:1px solid var(--brd);border-radius:3px;max-width:180px"></select>
+          <select id="intervalRun" style="font-size:10px;padding:2px 4px;background:var(--bg3);color:var(--txt);border:1px solid var(--brd);border-radius:3px">
+            <option value="5">5s</option>
+            <option value="10">10s</option>
+            <option value="20" selected>20s</option>
+            <option value="30">30s</option>
+          </select>
+          <span style="font-size:9px;color:var(--txt3)">rychlost</span>
+        </div>
+        <div class="log-scroll" id="logScroll">
+          <div style="padding:20px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt3)">
+            Překlady se budou zobrazovat zde automaticky...
+          </div>
+        </div>
+      </div>
+
+      <!-- Detail vybraného hesla -->
+      <div class="detail-scroll" id="detailPane">
+        <div class="detail-empty">← Klikni na heslo v seznamu pro detail</div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ══ STORAGE KEY ══════════════════════════════════════════════════
+const STORE_KEY = 'strong_gr_cz_v2';
+
+// ══ STATE ════════════════════════════════════════════════════════
+let entries     = [];      // [{key, greek, def, kjv, orig}]
+let translated  = {};      // key -> {vyznam, definice, pouziti, puvod, raw}
+let activeKey   = null;
+let autoTimer   = null;
+let autoCountTimer = null;
+let autoRunning = false;
+let currentBatchSize = 10;
+let currentInterval  = 10;
+let filteredKeys = [];
+
+// ══ PROVIDER SETUP ═══════════════════════════════════════════════
+const PROVIDERS = {
+  groq: {
+    label: 'Groq (console.groq.com)',
+    ph: 'gsk_...',
+    models: [
+      ['meta-llama/llama-4-scout-17b-16e-instruct', 'Llama 4 Scout (Vysoký limit TPM)'],
+      ['llama-4-maverick-17b-128e-instruct', 'Llama 4 Maverick (Nový)'],
+      ['llama-3.3-70b-versatile', 'Llama 3.3 70B (Nejvyšší kvalita)'],
+      ['llama-3.1-8b-instant', 'Llama 3.1 8B (Rychlý, pozor na limity)'],
+    ]
+  },
+  gemini: {
+    label: 'Google AI Studio (aistudio.google.com)',
+    ph: 'AIza...',
+    models: [
+      ['gemini-2.5-flash', 'Gemini 2.5 Flash (Doporučeno)'],
+      ['gemini-2.5-flash-lite', 'Gemini 2.5 Flash-Lite (Rychlý, levný)'],
+    ]
+  },
+  openrouter: {
+    label: 'OpenRouter (openrouter.ai)',
+    ph: 'sk-or-...',
+    models: [
+      ['meta-llama/llama-3.3-70b-instruct','llama-3.3-70b-instruct'],
+      ['google/gemini-flash-1.5','gemini-flash-1.5'],
+      ['mistralai/mistral-7b-instruct','mistral-7b-instruct'],
+      ['meta-llama/llama-3.1-8b-instruct:free','llama-3.1-8b (free)'],
+    ]
+  }
+};
+
+function onProviderChange() {
+  const newProv = document.getElementById('provider').value;
+  const currentProv = document.getElementById('provider')._lastProvider || newProv;
+  
+  // Save current key before switching
+  const currentKey = document.getElementById('apiKey').value.trim();
+  if (currentKey && currentProv !== newProv) {
+    localStorage.setItem('strong_apikey_' + currentProv, currentKey);
+    console.log('Saved key for', currentProv, ':', currentKey.substring(0,5) + '...');
+  }
+  
+  // Load key for new provider
+  const newKey = localStorage.getItem('strong_apikey_' + newProv);
+  console.log('Loading key for', newProv, ':', newKey ? newKey.substring(0,5) + '...' : 'NONE');
+  
+  document.getElementById('keyLabel').textContent = 'API Klíč — ' + PROVIDERS[newProv].label;
+  document.getElementById('apiKey').placeholder = PROVIDERS[newProv].ph;
+  document.getElementById('apiKey').value = newKey || '';
+  document.getElementById('model').innerHTML =
+    PROVIDERS[newProv].models.map(([v,l]) => `<option value="${v}">${l}</option>`).join('');
+  
+  localStorage.setItem('strong_provider', newProv);
+  document.getElementById('provider')._lastProvider = newProv;
+}
+
+function onProviderChangeRun() {
+  const p = PROVIDERS[document.getElementById('providerRun').value];
+  document.getElementById('modelRun').innerHTML =
+    p.models.map(([v,l]) => `<option value="${v}">${l}</option>`).join('');
+}
+
+function initRunSelects() {
+  document.getElementById('providerRun').value = document.getElementById('provider').value;
+  onProviderChangeRun();
+  document.getElementById('intervalRun').value = document.getElementById('interval').value;
+}
+
+// ══ LOAD TXT ═════════════════════════════════════════════════════
+function loadTXT(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      entries = parseTXT(ev.target.result);
+      const el = document.getElementById('statusTXT');
+      el.textContent = `✓ ${file.name} — ${entries.length} hesel`;
+      el.className = 'file-status ok';
+      document.getElementById('startBtn').disabled = false;
+      checkResume();
+    } catch(e) {
+      document.getElementById('statusTXT').textContent = '✗ Chyba: ' + e.message;
+    }
+  };
+  reader.readAsText(file, 'utf-8');
+}
+
+function parseTXT(text) {
+  const blocks = text.trim().split(/\n(?=G\d+\s*\|)/);
+  const result = [];
+  for (const block of blocks) {
+    const lines = block.trim().split('\n');
+    const header = lines[0];
+    const m = header.match(/^(G\d+)\s*\|\s*(.+)/);
+    if (!m) continue;
+    const entry = { key: m[1], greek: m[2].trim(), def: '', kjv: '', orig: '' };
+    for (const line of lines.slice(1)) {
+      if (line.startsWith('Definice:'))    entry.def  = line.slice(9).trim();
+      else if (line.startsWith('KJV Významy:')) entry.kjv  = line.slice(12).trim();
+      else if (line.startsWith('Původ:'))  entry.orig = line.slice(6).trim();
+    }
+    result.push(entry);
+  }
+  return result;
+}
+
+// ══ RESUME ═══════════════════════════════════════════════════════
+function checkResume() {
+  try {
+    const saved = localStorage.getItem(STORE_KEY);
+    if (saved) {
+      const data = JSON.parse(saved);
+      const count = Object.keys(data.translated || {}).length;
+      if (count > 0) {
+        const box = document.getElementById('statusTXT');
+        box.innerHTML = `⚑ Nalezen uložený průběh: <b>${count}</b> přeložených hesel. Po spuštění bude automaticky obnoven.`;
+      }
+    }
+  } catch(e) {}
+}
+
+function showSetup() {
+  document.getElementById('setup').style.display = 'block';
+  document.getElementById('app').style.display = 'none';
+}
+
+// ══ START ════════════════════════════════════════════════════════
+function startApp() {
+  currentBatchSize = parseInt(document.getElementById('batchSize').value);
+  currentInterval  = parseInt(document.getElementById('interval').value);
+
+  // Obnov uložený překlad
+  try {
+    const saved = localStorage.getItem(STORE_KEY);
+    if (saved) {
+      const data = JSON.parse(saved);
+      translated = data.translated || {};
+    }
+  } catch(e) { translated = {}; }
+
+  document.getElementById('setup').style.display = 'none';
+  document.getElementById('app').style.display   = 'flex';
+
+  filteredKeys = entries.map(e => e.key);
+  renderList();
+  updateStats();
+  initRunSelects();
+}
+
+// ══ LIST ═════════════════════════════════════════════════════════
+function renderList() {
+  const scroll = document.getElementById('listScroll');
+  const q = document.getElementById('searchInput').value.toLowerCase();
+
+  filteredKeys = entries
+    .filter(e => !q || e.key.toLowerCase().includes(q) || e.greek.toLowerCase().includes(q) ||
+      e.def.toLowerCase().includes(q))
+    .map(e => e.key);
+
+  // Virtual render — zobraz jen viditelné (výkon pro 5624 hesel)
+  scroll.innerHTML = '';
+  const frag = document.createDocumentFragment();
+
+  for (const key of filteredKeys) {
+    const e = entries.find(x => x.key === key);
+    const done = !!translated[key];
+    const div = document.createElement('div');
+    div.className = 'list-item' + (done ? ' done' : '') + (key === activeKey ? ' active' : '');
+    div.dataset.key = key;
+    div.onclick = () => showDetail(key);
+    div.innerHTML = `
+      <div class="li-key">${key}</div>
+      <div class="li-greek">${escHtml(e.greek)}</div>
+      <div class="li-dot ${done ? 'done' : ''}"></div>
+    `;
+    frag.appendChild(div);
+  }
+  scroll.appendChild(frag);
+}
+
+function filterList() { renderList(); }
+
+function scrollToActive() {
+  const el = document.querySelector(`.list-item[data-key="${activeKey}"]`);
+  if (el) el.scrollIntoView({ block: 'nearest' });
+}
+
+// ══ DETAIL ═══════════════════════════════════════════════════════
+function showDetail(key) {
+  activeKey = key;
+  // Update active state v listu
+  document.querySelectorAll('.list-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.key === key);
+  });
+  renderDetail();
+}
+
+function renderDetail() {
+  if (!activeKey) return;
+  const e = entries.find(x => x.key === activeKey);
+  if (!e) return;
+  const t = translated[activeKey];
+  const pane = document.getElementById('detailPane');
+
+  pane.innerHTML = `
+    <div class="entry-header">
+      <div class="entry-key">${e.key}</div>
+      <div class="entry-greek">${escHtml(e.greek)}</div>
+      <div class="entry-status ${t ? 'done' : ''}">${t ? '✓ Přeloženo' : 'Čeká'}</div>
+    </div>
+
+    <div class="orig-section">
+      <div class="label">Definice (EN)</div>
+      <div class="value">${escHtml(e.def)}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">KJV překlady</div>
+      <div class="value">${escHtml(e.kjv)}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">Původ / Etymologie</div>
+      <div class="value">${escHtml(e.orig)}</div>
+    </div>
+
+    ${!t ? `<button class="translate-btn" onclick="translateSingle('${e.key}')">⚡ Přeložit toto heslo</button>` : ''}
+
+    ${renderTranslation(e.key, t)}
+  `;
+}
+
+function renderTranslation(key, t) {
+  if (!t) return `
+    <div class="translation-box">
+      <div class="tbox-head"><div class="tbox-label">Český překlad</div></div>
+      <div class="tbox-body waiting">Čeká na překlad...</div>
+    </div>`;
+
+  const sections = [
+    { id: 'vyznam',   label: 'Český význam',       field: t.vyznam },
+    { id: 'definice', label: 'Definice',            field: t.definice },
+    { id: 'pouziti',  label: 'Biblické užití (KJV)',field: t.pouziti },
+    { id: 'puvod',    label: 'Původ / Etymologie',  field: t.puvod },
+  ];
+
+  return sections.map(s => `
+    <div class="translation-box">
+      <div class="tbox-head">
+        <div class="tbox-label">${s.label}</div>
+        <div class="tbox-actions">
+          <button class="tbox-btn" onclick="toggleEditSection('${key}','${s.id}')">✎ Upravit</button>
+        </div>
+      </div>
+      <div class="tbox-body" id="tval-${key}-${s.id}">${escHtml(s.field || '—')}</div>
+      <div class="tbox-edit" id="tedit-${key}-${s.id}">
+        <textarea id="tinput-${key}-${s.id}">${escHtml(s.field || '')}</textarea>
+        <button class="tbox-save" onclick="saveSection('${key}','${s.id}')">Uložit</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleEditSection(key, id) {
+  const el = document.getElementById(`tedit-${key}-${id}`);
+  el.classList.toggle('show');
+  if (el.classList.contains('show')) {
+    document.getElementById(`tinput-${key}-${id}`).focus();
+  }
+}
+
+function saveSection(key, id) {
+  const val = document.getElementById(`tinput-${key}-${id}`).value;
+  if (!translated[key]) translated[key] = {};
+  translated[key][id] = val;
+  saveProgress();
+  document.getElementById(`tval-${key}-${id}`).textContent = val || '—';
+  document.getElementById(`tedit-${key}-${id}`).classList.remove('show');
+}
+
+// ══ PŘEKLAD — SINGLE ════════════════════════════════════════════
+async function translateSingle(key) {
+  const btn = document.querySelector('.translate-btn');
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ Překládám...'; }
+  await translateBatch([key]);
+  renderDetail();
+  updateStats();
+  renderList();
+}
+
+// ══ PŘEKLAD — DÁVKA ══════════════════════════════════════════════
+async function translateNext() {
+  if (autoRunning) return;
+  const batch = getNextBatch(currentBatchSize);
+  if (!batch.length) { showToast('✓ Vše přeloženo!'); return; }
+  document.getElementById('btnStep').disabled = true;
+  document.getElementById('btnStep').textContent = '⏳ ...';
+  await translateBatch(batch);
+  document.getElementById('btnStep').disabled = false;
+  document.getElementById('btnStep').textContent = '⚡ Dávka';
+  updateStats();
+  renderList();
+  if (activeKey && translated[activeKey]) renderDetail();
+}
+
+function jumpToStart() {
+  const num = parseInt(document.getElementById('startFrom').value);
+  if (!num || num < 1) { showToast('Zadej číslo G hesla'); return; }
+  const key = 'G' + num;
+  const found = entries.find(e => e.key === key);
+  if (!found) { showToast(`G${num} nenalezeno v souboru`); return; }
+
+  // Označ všechna hesla PŘED tímto číslem jako přeskočená (zachováme existující překlady)
+  for (const e of entries) {
+    const n = parseInt(e.key.slice(1));
+    if (n < num && !translated[e.key]) {
+      translated[e.key] = { vyznam: '—', definice: '(přeskočeno)', pouziti: '—', puvod: '—', skipped: true };
+    }
+  }
+  saveProgress();
+  updateStats();
+  renderList();
+  showToast(`✓ Překlad bude pokračovat od G${num}`);
+  // Scroll na heslo v listu
+  setTimeout(() => {
+    const el = document.querySelector(`.list-item[data-key="${key}"]`);
+    if (el) el.scrollIntoView({ block: 'center' });
+  }, 100);
+}
+
+
+function getNextBatch(size) {
+  const result = [];
+  for (const e of entries) {
+    if (result.length >= size) break;
+    if (!translated[e.key] && !e.key.startsWith('skip-')) {
+      result.push(e.key);
+    }
+  }
+  return result;
+}
+
+async function translateBatch(keys) {
+  const apiKey = document.getElementById('apiKey').value.trim();
+  const model  = document.getElementById('modelRun').value;
+  const prov   = document.getElementById('providerRun').value;
+  currentInterval = parseInt(document.getElementById('intervalRun').value);
+
+  if (!apiKey) { showToast('✗ Zadej API klíč!'); return; }
+
+  const batch = keys.map(k => entries.find(e => e.key === k)).filter(Boolean);
+  const prompt = buildPrompt(batch);
+
+  try {
+    const raw = await callAIWithRetry(prov, apiKey, model, prompt);
+    parseTranslations(raw, keys);
+    saveProgress();
+    logEntry(keys, raw);
+    log(`✓ Přeloženo ${keys.length} hesel (${keys[0]}–${keys[keys.length-1]})`);
+  } catch(e) {
+    log(`✗ Chyba: ${e.message}`);
+    logMsg(`✗ Chyba při překladu ${keys[0]}–${keys[keys.length-1]}: ${e.message}`, 'err');
+    showToast('✗ ' + e.message);
+  }
+}
+
+const DEFAULT_PROMPT = `Jsi odborný biblický lexikograf. Překládáš Strongův řecko-český slovník.
+Strongův slovník je referenční dílo — heslo musí obsahovat VŠECHNY relevantní překlady pokud jsou k dispozici
+
+Pro každé heslo vrať PŘESNĚ tento formát (nic jiného, žádný úvod, žádný závěr):
+
+###KLÍČ###
+VYZNAM: [Všechna hlavní česká překladová slova oddělená čárkou, pokud má více významů]
+DEFINICE: [Přesný výklad — doslovný i přenesený. U sloves uveď různé odstíny použití. 2–4 věty.]
+POUZITI: [Konkrétní české překlady z KJV kontextu — výčet variant jak se slovo v Bibli skutečně překládá]
+PUVOD: [Etymologie: z jakého kořene pochází, složeniny, příbuzná slova, hebrejské kořeny jsou-li relevantní]
+
+Pravidla překladu:
+- VYZNAM musí mít více synonym pokud anglický originál uvádí více slov (např. "love, charity, dear" = 3 varianty)
+- Piš přirozenou odbornou češtinou — ne "Slovo označující...", rovnou definuj
+- Zachovej biblickou terminologii (milost, vykoupení, smíření, pokání atd.)
+- Vlastní jména pouze transliteruj, ale přidej stručný výklad kdo/co to je
+- Nepoužívej frázi "Tento termín" ani "Slovo označující"
+- POUZITI: uveď jak se konkrétně překládá, ne jen "překládá se jako"
+
+{HESLA}`;
+
+function buildPrompt(batch) {
+  const items = batch.map(e =>
+    `${e.key} | ${e.greek}\nDEF: ${e.def}\nKJV: ${e.kjv}\nORIG: ${e.orig}`
+  ).join('\n\n');
+
+  const tmpl = document.getElementById('promptEditor')?.value || DEFAULT_PROMPT;
+  return tmpl.replace('{HESLA}', 'HESLA:\n' + items);
+}
+
+function resetPrompt() {
+  document.getElementById('promptEditor').value = DEFAULT_PROMPT;
+  localStorage.setItem('strong_prompt', DEFAULT_PROMPT);
+}
+
+
+// ══ AI VOLÁNÍ S RETRY A FALLBACK ════════════════════════════════
+const FALLBACKS = {
+  groq:       ['meta-llama/llama-4-scout-17b-16e-instruct', 'llama-3.1-8b-instant', 'llama-3.3-70b-versatile'],
+  gemini:     ['gemini-2.5-flash', 'gemini-2.5-flash-lite'],
+  openrouter: ['meta-llama/llama-3.3-70b-instruct', 'google/gemini-flash-1.5', 'mistralai/mistral-7b-instruct']
+};
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+async function callAIWithRetry(provider, apiKey, model, prompt) {
+  const tryModels = [model, ...(FALLBACKS[provider] || []).filter(m => m !== model)];
+  let lastErr = null;
+
+  for (const m of tryModels) {
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        return await callOnce(provider, apiKey, m, prompt);
+      } catch(e) {
+        lastErr = e;
+        const msg = (e.message || '').toLowerCase();
+        const isRate = msg.includes('429') || msg.includes('quota') || msg.includes('rate') || msg.includes('too many');
+        const isBanned = msg.includes('restricted') || msg.includes('organization');
+        const is404 = msg.includes('404') || msg.includes('not found') || msg.includes('not found');
+
+        if (is404) {
+          log('✗ Chyba 404: Model nenalezen, vyberte jiný v nastavení');
+          throw new Error('Chyba 404: Model nenalezen, vyberte jiný v nastavení');
+        }
+        if (isRate) {
+          const wait = (attempt + 1) * 10;
+          log(`⏳ Rate limit na ${m}, čekám ${wait}s...`);
+          showToast(`⏳ Rate limit — čekám ${wait}s`);
+          await sleep(wait * 1000);
+          continue;
+        }
+        if (isBanned) { log(`✗ Blokovaný účet: ${m}`); break; }
+        break;
+      }
+    }
+  }
+  throw lastErr || new Error('Všechny modely selhaly');
+}
+
+async function callOnce(provider, apiKey, model, prompt) {
+  apiKey = apiKey.trim();
+  if (provider === 'groq') {
+    const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + apiKey, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model, messages: [{ role: 'user', content: prompt }],
+        temperature: 0.3, max_tokens: 2500 })
+    });
+    const d = await r.json();
+    if (!r.ok) {
+      if (r.status === 429) {
+        const retryAfter = r.headers.get('retry-after');
+        throw new Error(`Rate limit! Zkuste za ${retryAfter || 'několik'}s. Info: groq.com/pricing`);
+      }
+      throw new Error(d.error?.message || String(r.status));
+    }
+    if (d.usage) {
+      log(`📊 Groq: ${d.usage.prompt_tokens} in / ${d.usage.completion_tokens} out / ${d.usage.total_tokens} total`);
+    }
+    return d.choices[0].message.content;
+
+  } else if (provider === 'gemini') {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+    const r = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.3, maxOutputTokens: 2500 } })
+    });
+    const d = await r.json();
+    if (!r.ok) {
+      if (d.error?.status === 'RESOURCE_EXHAUSTED') {
+        throw new Error(`Gemini limit vyčerpán! Počkej ~20min nebo přepni na Groq.`);
+      }
+      throw new Error(d.error?.message || String(r.status));
+    }
+    if (d.usageMetadata) {
+      log(`📊 Gemini: ${d.usageMetadata.promptTokenCount} in / ${d.usageMetadata.candidatesTokenCount} out`);
+    }
+    return d.candidates[0].content.parts[0].text;
+
+  } else if (provider === 'openrouter') {
+    const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + apiKey, 'Content-Type': 'application/json',
+        'HTTP-Referer': 'https://strong-bible-gr-cz.local' },
+      body: JSON.stringify({ model, messages: [{ role: 'user', content: prompt }],
+        temperature: 0.3, max_tokens: 2500 })
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error?.message || String(r.status));
+    return d.choices[0].message.content;
+  }
+  throw new Error('Neznámý provider');
+}
+
+// ══ PARSOVÁNÍ ODPOVĚDI AI ════════════════════════════════════════
+function parseTranslations(raw, keys) {
+  // Rozdělí podle ###KLÍČ### bloků
+  const blocks = raw.split(/(?=###G\d+###)/);
+  
+  // Diagnostika: kontrola formátování
+  const hasValidBlocks = blocks.some(b => b.includes('###G'));
+  if (!hasValidBlocks) {
+    log('⚠ Varování: AI nedodržela formátování u hesla, zkuste zmenšit velikost dávky.');
+  }
+  
+  for (const block of blocks) {
+    const km = block.match(/###(G\d+)###/);
+    if (!km) continue;
+    const key = km[1];
+    if (!keys.includes(key)) continue;
+
+    const get = (label) => {
+      const m = block.match(new RegExp(label + ':\\s*([^\\n]+(?:\\n(?!(?:VYZNAM|DEFINICE|POUZITI|PUVOD|###))[^\\n]+)*)'));
+      return m ? m[1].trim() : '';
+    };
+
+    translated[key] = {
+      vyznam:   get('VYZNAM'),
+      definice: get('DEFINICE'),
+      pouziti:  get('POUZITI'),
+      puvod:    get('PUVOD'),
+      raw:      block
+    };
+  }
+}
+
+// ══ AUTO REŽIM ═══════════════════════════════════════════════════
+function toggleAuto() {
+  if (autoRunning) { stopAuto(); return; }
+  startAuto();
+}
+
+function startAuto() {
+  autoRunning = true;
+  document.getElementById('btnAuto').classList.add('active');
+  document.getElementById('btnAuto').textContent = '■ AUTO';
+  document.getElementById('autoPanel').classList.add('show');
+  document.getElementById('autoInterval').textContent = currentInterval;
+  runAutoStep();
+}
+
+function stopAuto() {
+  autoRunning = false;
+  clearTimeout(autoTimer);
+  clearInterval(autoCountTimer);
+  document.getElementById('btnAuto').classList.remove('active');
+  document.getElementById('btnAuto').textContent = '▶ AUTO';
+  document.getElementById('autoPanel').classList.remove('show');
+  document.getElementById('countdown').textContent = '—';
+}
+
+async function runAutoStep() {
+  if (!autoRunning) return;
+
+  const batch = getNextBatch(currentBatchSize);
+  if (!batch.length) {
+    stopAuto();
+    showToast('✓ Překlad dokončen!');
+    return;
+  }
+
+  document.getElementById('autoBatch').textContent = batch[0] + '–' + batch[batch.length-1];
+  log(`⚡ Překládám ${batch[0]}–${batch[batch.length-1]}...`);
+
+  await translateBatch(batch);
+  updateStats();
+  renderList();
+  if (activeKey && translated[activeKey]) renderDetail();
+
+  if (!autoRunning) return;
+
+  // Odpočet do další dávky
+  let remaining = currentInterval;
+  document.getElementById('countdown').textContent = remaining;
+  clearInterval(autoCountTimer);
+  autoCountTimer = setInterval(() => {
+    remaining--;
+    document.getElementById('countdown').textContent = remaining;
+    if (remaining <= 0) clearInterval(autoCountTimer);
+  }, 1000);
+
+  autoTimer = setTimeout(runAutoStep, currentInterval * 1000);
+}
+
+// ══ STATS & SAVE ════════════════════════════════════════════════
+function updateStats() {
+  const done   = Object.keys(translated).length;
+  const total  = entries.length;
+  const remain = total - done;
+  const pct    = total ? (done / total * 100).toFixed(1) : 0;
+  document.getElementById('sDone').textContent   = done;
+  document.getElementById('sRemain').textContent = remain;
+  document.getElementById('sTotal').textContent  = total;
+  document.getElementById('pbar').style.width    = pct + '%';
+}
+
+function saveProgress() {
+  try {
+    localStorage.setItem(STORE_KEY, JSON.stringify({ translated, ts: Date.now() }));
+  } catch(e) {
+    showToast('⚠ localStorage plný — exportuj zálohu!');
+  }
+}
+
+function clearProgress() {
+  if (!confirm('Smazat veškerý uložený průběh překladu a log?')) return;
+  localStorage.removeItem(STORE_KEY);
+  translated = {};
+  updateStats();
+  renderList();
+  clearLog();
+  const pane = document.getElementById('detailPane');
+  if (pane) pane.innerHTML = '<div class="detail-empty">← Klikni na heslo v seznamu pro detail</div>';
+  showToast('Průběh smazán — začni od začátku');
+}
+
+// ══ EXPORT ═══════════════════════════════════════════════════════
+function exportTXT() {
+  console.log('exportTXT clicked, entries:', entries.length, 'translated:', Object.keys(translated).length);
+  const done = entries.filter(e => translated[e.key]);
+  if (!done.length) { showToast('Žádné přeložené heslo'); return; }
+
+  const lines = done.map(e => {
+    const t = translated[e.key];
+    return [
+      `${e.key} | ${e.greek}`,
+      `Český význam: ${t.vyznam || '—'}`,
+      `Definice: ${t.definice || '—'}`,
+      `Biblické užití (KJV): ${t.pouziti || '—'}`,
+      `Původ: ${t.puvod || '—'}`,
+      ''
+    ].join('\n');
+  });
+
+  download('strong_gr_cz.txt', lines.join('\n'), 'text/plain');
+  showToast(`✓ Exportováno ${done.length} hesel`);
+}
+
+function exportJSON() {
+  const out = {};
+  for (const e of entries) {
+    if (!translated[e.key]) continue;
+    out[e.key] = { greek: e.greek, ...translated[e.key] };
+  }
+  download('strong_gr_cz.json', JSON.stringify(out, null, 2), 'application/json');
+  showToast(`✓ Exportováno ${Object.keys(out).length} hesel`);
+}
+
+function download(name, content, type) {
+  const blob = new Blob([content], { type });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  a.click();
+}
+
+function saveApiKey() {
+  const v = document.getElementById('apiKey').value;
+  const prov = document.getElementById('provider').value;
+  if (v) {
+    localStorage.setItem('strong_apikey_' + prov, v);
+    localStorage.setItem('strong_apikey', v);
+  }
+}
+
+function loadSavedSettings() {
+  const prov = localStorage.getItem('strong_provider') || 'groq';
+  document.getElementById('provider').value = prov;
+  document.getElementById('provider')._lastProvider = prov;
+  
+  const k = localStorage.getItem('strong_apikey_' + prov);
+  document.getElementById('apiKey').value = k || '';
+  
+  const p = localStorage.getItem('strong_prompt') || DEFAULT_PROMPT;
+  document.getElementById('promptEditor').value = p;
+  
+  // Uložit prompt při každé změně
+  document.getElementById('promptEditor').addEventListener('input', () => {
+    localStorage.setItem('strong_prompt', document.getElementById('promptEditor').value);
+  });
+  // Uložit provider/model
+  const mod = localStorage.getItem('strong_model');
+  if (mod) document.getElementById('model').value = mod;
+  // Inicializace model dropdownu
+  onProviderChange();
+  document.getElementById('provider').addEventListener('change', () => {
+    onProviderChange();
+  });
+  document.getElementById('model').addEventListener('change', () => {
+    localStorage.setItem('strong_model', document.getElementById('model').value);
+  });
+}
+
+// Volej po načtení stránky
+window.addEventListener('DOMContentLoaded', loadSavedSettings);
+
+function logEntry(keys, rawResponse) {
+  const scroll = document.getElementById('logScroll');
+  if (!scroll) return;
+
+  // Vymaž placeholder text při prvním záznamu
+  if (scroll.querySelector('div[style]')) scroll.innerHTML = '';
+
+  for (const key of [...keys].reverse()) {
+    const e = entries.find(x => x.key === key);
+    const t = translated[key];
+    if (!e) continue;
+
+    const div = document.createElement('div');
+    div.className = 'log-entry';
+    div.innerHTML = `
+      <div class="log-key-line">
+        <span class="log-key">${key}</span>
+        <span class="log-greek">${escHtml(e.greek)}</span>
+      </div>
+      ${t && !t.skipped
+        ? `<div class="log-vyznam"><b>Význam:</b> ${escHtml(t.vyznam || '—')}</div>
+           <div class="log-definice">${escHtml((t.definice || '').slice(0, 120))}${(t.definice || '').length > 120 ? '…' : ''}</div>
+           <div class="log-orig"><b>Použití:</b> ${escHtml((t.pouziti || '').slice(0, 80))}${(t.pouziti || '').length > 80 ? '…' : ''}</div>`
+        : `<div class="log-err">⚠ Neparsováno</div>`
+      }
+    `;
+    scroll.insertBefore(div, scroll.firstChild);
+  }
+
+  // Počítadlo
+  const cnt = scroll.children.length;
+  const countEl = document.getElementById('logCount');
+  if (countEl) countEl.textContent = `${cnt} záznamů`;
+
+  // Limit 300
+  while (scroll.children.length > 300) scroll.removeChild(scroll.lastChild);
+}
+
+function clearLog() {
+  const s = document.getElementById('logScroll');
+  if (s) s.innerHTML = '<div style="padding:20px;font-family:\'JetBrains Mono\',monospace;font-size:11px;color:var(--txt3)">Překlady se budou zobrazovat zde automaticky...</div>';
+  const c = document.getElementById('logCount');
+  if (c) c.textContent = '';
+}
+
+function logMsg(msg, type) {
+  const scroll = document.getElementById('logScroll');
+  if (!scroll) return;
+  if (scroll.querySelector('div[style]')) scroll.innerHTML = '';
+  const div = document.createElement('div');
+  div.className = `log-entry`;
+  div.style.color = type === 'err' ? '#c05050' : 'var(--txt3)';
+  div.style.fontFamily = "'JetBrains Mono', monospace";
+  div.style.fontSize = '11px';
+  div.style.padding = '8px 14px';
+  div.textContent = msg;
+  scroll.insertBefore(div, scroll.firstChild);
+}
+
+
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.opacity = '1';
+  clearTimeout(t._t);
+  t._t = setTimeout(() => { t.style.opacity = '0'; }, 3500);
+}
+
+function log(msg) {
+  const el = document.getElementById('autoLog');
+  if (el) el.textContent = msg;
+  console.log(msg);
+}
+</script>
+</body>
+</html>
