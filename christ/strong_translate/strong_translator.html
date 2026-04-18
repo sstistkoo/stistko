@@ -1096,7 +1096,25 @@ async function translateSelected() {
     
     try {
       const raw = await callAIWithRetry(prov, apiKey, model, prompt);
-      parseTranslations(raw, batchKeys);
+      const content = raw.content;
+      parseTranslations(content, batchKeys);
+      
+      // Log tokenů
+      const usage = raw.usage || raw.usageMetadata;
+      if (usage) {
+        const inT = usage.prompt_tokens || usage.promptTokenCount || 0;
+        const outT = usage.completion_tokens || usage.candidatesTokenCount || 0;
+        log(`📊 ${prov}: ${inT} in / ${outT} out = ${inT + outT} celkem`);
+      }
+      
+      // Log do konzoly pro úspěšné
+      for (const key of batchKeys) {
+        const t = translated[key];
+        if (t?.vyznam && t.vyznam !== '—') {
+          console.log(`✓ ${key}: ${t.vyznam?.slice(0, 60)}...`);
+        }
+      }
+      logEntry(batchKeys, content);
       
       const missingKeys = batchKeys.filter(k => !translated[k]?.vyznam);
       if (missingKeys.length > 0) {
@@ -1109,8 +1127,7 @@ ${batchKeys.map(k => {
 }).join('\n\n')}`;
         
         const raw2 = await callOnce(prov, apiKey, model, retryPrompt);
-        parseTranslations(raw2, batchKeys);
-      }
+        parseTranslations(raw2.content, batchKeys);
       
       const newTranslations = {};
       for (const key of batchKeys) {
@@ -1358,7 +1375,25 @@ async function translateBatch(keys) {
 
   try {
     const raw = await callAIWithRetry(prov, apiKey, model, prompt);
-    let missingKeys = parseTranslations(raw, keys);
+    const content = raw.content;
+    let missingKeys = parseTranslations(content, keys);
+    
+    // Log tokenů
+    const usage = raw.usage || raw.usageMetadata;
+    if (usage) {
+      const inT = usage.prompt_tokens || usage.promptTokenCount || 0;
+      const outT = usage.completion_tokens || usage.candidatesTokenCount || 0;
+      log(`📊 ${prov}: ${inT} in / ${outT} out = ${inT + outT} celkem`);
+    }
+    
+    // Log do konzoly pro úspěšné
+    for (const key of keys) {
+      const t = translated[key];
+      if (t?.vyznam && t.vyznam !== '—') {
+        console.log(`✓ ${key}: ${t.vyznam?.slice(0, 60)}...`);
+      }
+    }
+    logEntry(keys, content);
     
     // Pokud něco chybí, zkus opravný retry
     if (missingKeys.length > 0) {
@@ -1375,7 +1410,7 @@ ${keys.map(k => {
       
       try {
         const raw2 = await callOnce(prov, apiKey, model, retryPrompt);
-        missingKeys = parseTranslations(raw2, keys);
+        missingKeys = parseTranslations(raw2.content, keys);
         const retryCount = keys.length - missingKeys.length;
         if (retryCount > 0) {
           log(`✓ Opravný překlad: ${retryCount} hesel, chybí: ${missingKeys.length > 0 ? missingKeys.join(', ') : 'nic'}`);
@@ -1396,7 +1431,7 @@ ${keys.map(k => {
     
     saveProgress();
     updateFailedCount();
-    logEntry(keys, raw);
+    logEntry(keys, content);
     log(`✓ Přeloženo ${keys.length} hesel (${keys[0]}–${keys[keys.length-1]})`);
   } catch(e) {
     log(`✗ Chyba: ${e.message}`);
@@ -1519,7 +1554,7 @@ async function callOnce(provider, apiKey, model, prompt) {
       console.log(content);
       throw new Error('AI vrátila nesmyslnou odpověď - zkuste delší interval');
     }
-    return content;
+    return { content, usage: d.usage };
 
   } else if (provider === 'gemini') {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
@@ -1542,7 +1577,7 @@ async function callOnce(provider, apiKey, model, prompt) {
     if (!d.candidates || !d.candidates[0]?.content?.parts?.[0]?.text) {
       throw new Error('Prázdná odpověď od AI - zkuste menší dávku');
     }
-    return d.candidates[0].content.parts[0].text;
+    return { content: d.candidates[0].content.parts[0].text, usage: d.usageMetadata };
 
   } else if (provider === 'openrouter') {
     const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
@@ -1554,7 +1589,7 @@ async function callOnce(provider, apiKey, model, prompt) {
     });
     const d = await r.json();
     if (!r.ok) throw new Error(d.error?.message || String(r.status));
-    return d.choices[0].message.content;
+    return { content: d.choices[0].message.content, usage: d.usage };
   }
   throw new Error('Neznámý provider');
   } finally {
@@ -2117,12 +2152,6 @@ function showFailedEntries() {
   if (!failed.length) {
     showToast('✓ Všechny překlady jsou úspěšné');
     return;
-  }
-  
-  console.log('═ NEÚSPĚŠNÉ PŘEKLADY ═');
-  for (const f of failed) {
-    console.log(`\n--- ${f.key} | ${f.greek} ---`);
-    console.log('AI odpověď:', f.raw);
   }
   
   const failedKeys = failed.map(f => f.key);
