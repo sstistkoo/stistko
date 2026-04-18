@@ -660,11 +660,11 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   </div>
 
   <div class="row">
-    <label style="cursor:pointer" onclick="document.getElementById('promptSection').toggleAttribute('open')">
-      Prompt ▼
+    <label style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-size:12px" onclick="document.getElementById('promptSection').toggleAttribute('open')">
+      📝 Prompt
     </label>
-    <details id="promptSection" style="width:100%">
-      <summary style="display:none">Prompt</summary>
+    <details id="promptSection" style="width:100%;margin-top:10px">
+      <summary style="cursor:pointer;color:var(--txt2);font-size:12px;padding:6px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;list-style:none">📝 Prompt ▼</summary>
       <textarea id="promptEditor" rows="8" style="width:100%;background:var(--bg3);border:1px solid var(--brd);
         border-radius:3px;padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;
         color:var(--txt2);resize:vertical;outline:none;line-height:1.6;"></textarea>
