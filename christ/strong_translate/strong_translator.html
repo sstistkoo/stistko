@@ -653,10 +653,11 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       <button onclick="loadDefaultFile()" id="btnLoadDefault" style="font-size:10px;padding:4px 10px;background:var(--bg4);border:1px solid var(--brd);border-radius:3px;cursor:pointer;display:none;color:var(--txt)">📄 Automaticky</button>
       <span class="file-status" id="statusTXT">— nevybráno</span>
       <span id="fileReady" style="display:none;width:8px;height:8px;border-radius:50%;background:#5a9a6c;margin-left:6px"></span>
+      <button class="start-btn" id="startBtn" onclick="startApp()" disabled style="margin-left:auto;width:auto;padding:8px 16px">
+        Zahájit překlad →
+      </button>
     </div>
   </div>
-
-  <hr class="div">
 
   <div class="row">
     <label style="cursor:pointer" onclick="document.getElementById('promptSection').toggleAttribute('open')">
@@ -677,11 +678,6 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
     </details>
   </div>
 
-  <hr class="div">
-
-  <button class="start-btn" id="startBtn" onclick="startApp()" disabled>
-    Zahájit překlad →
-  </button>
 </div>
 
 <!-- ══ APP ════════════════════════════════════════════════════════ -->
