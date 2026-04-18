@@ -1928,8 +1928,12 @@ function showPreviewModal(previewData) {
   
   let html = `<div style="max-width:900px;margin:0 auto;background:var(--bg2);border:1px solid var(--brd);border-radius:8px;padding:20px">
     <h2 style="color:var(--acc);margin:0 0 20px 0">Náhled překladu (${Object.keys(previewData).length} hesel)</h2>
-    <div style="display:flex;gap:10px;margin-bottom:20px">
-      <button class="hbtn grn" onclick="acceptPreview()">✓ Uložit vše</button>
+    <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:6px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px">
+        <input type="checkbox" id="checkAllPreview" checked onchange="toggleAllPreview(this.checked)" style="width:16px;height:16px;accent-color:var(--acc)">
+        <span style="font-size:12px">Označit vše</span>
+      </label>
+      <button class="hbtn grn" onclick="acceptPreview()">✓ Uložit označené</button>
       <button class="hbtn red" onclick="discardPreview()">✕ Zrušit</button>
     </div>`;
   
@@ -1939,7 +1943,10 @@ function showPreviewModal(previewData) {
     html += `
     <div style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;margin:0 0 15px 0;padding:15px">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-        <span style="font-family:'JetBrains Mono';color:var(--acc);font-weight:bold">${key}</span>
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
+          <input type="checkbox" class="preview-check" data-key="${key}" checked style="width:18px;height:18px;accent-color:var(--acc)">
+          <span style="font-family:'JetBrains Mono';color:var(--acc);font-weight:bold">${key}</span>
+        </label>
         <span style="color:var(--txt2)">${escHtml(e?.greek || '')}</span>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px">
@@ -1971,15 +1978,26 @@ function showPreviewModal(previewData) {
   document.body.appendChild(modal);
 }
 
+function toggleAllPreview(checked) {
+  document.querySelectorAll('.preview-check').forEach(cb => cb.checked = checked);
+}
+
 function acceptPreview() {
-  for (const [key, data] of Object.entries(pendingTranslations)) {
+  const selected = {};
+  document.querySelectorAll('.preview-check:checked').forEach(cb => {
+    const key = cb.dataset.key;
+    selected[key] = pendingTranslations[key];
+  });
+  
+  for (const [key, data] of Object.entries(selected)) {
     translated[key] = data;
   }
   saveProgress();
   renderList();
   updateStats();
+  updateFailedCount();
   closePreviewModal();
-  showToast(`✓ Uloženo ${Object.keys(pendingTranslations).length} hesel`);
+  showToast(`✓ Uloženo ${Object.keys(selected).length} hesel`);
 }
 
 function discardPreview() {
