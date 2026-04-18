@@ -1094,10 +1094,10 @@ async function translateSelected() {
     if (!apiKey) { showToast('✗ Zadej API klíč!'); return; }
     
     const batch = batchKeys.map(k => entries.find(e => e.key === k)).filter(Boolean);
-    const prompt = buildPrompt(batch);
+    const messages = buildPromptMessages(batch);
     
     try {
-      const raw = await callAIWithRetry(prov, apiKey, model, prompt);
+      const raw = await callAIWithRetry(prov, apiKey, model, messages);
       const content = raw.content;
       parseTranslations(content, batchKeys);
       
@@ -1121,7 +1121,7 @@ async function translateSelected() {
       const missingKeys = batchKeys.filter(k => !translated[k]?.vyznam);
       if (missingKeys.length > 0) {
         console.log(`⚠ ${missingKeys.length} hesel bez překladu: ${missingKeys.join(', ')}`);
-        const retryPrompt = `CHYBA: V minulé odpovědi jsi vynechal formátovací značky ###G. 
+        const retryContent = `CHYBA: V minulé odpovědi jsi vynechal formátovací značky ###G. 
 ZOPAKUJ PŘEKLAD a u každého hesla MUSÍŠ začít řádkem ###G[číslo]###.
 
 ${batchKeys.map(k => {
@@ -1129,7 +1129,7 @@ ${batchKeys.map(k => {
   return e ? `${e.key}\nDEF: ${e.def}\nKJV: ${e.kjv}` : '';
 }).join('\n\n')}`;
         
-        const raw2 = await callOnce(prov, apiKey, model, retryPrompt);
+        const raw2 = await callOnce(prov, apiKey, model, buildRetryMessages(retryContent));
         console.log(`📥 Retry odpověď pro ${missingKeys.join(', ')}:`, raw2.content);
         parseTranslations(raw2.content, batchKeys);
       }
@@ -1283,15 +1283,15 @@ async function translateSingle(key) {
     return;
   }
   
-  const prompt = buildPrompt([e]);
+  const messages = buildPromptMessages([e]);
   
   try {
-    const raw = await callAIWithRetry(prov, apiKey, model, prompt);
+    const raw = await callAIWithRetry(prov, apiKey, model, messages);
     
     let missingKeys = parseTranslations(raw, [key]);
     
     if (missingKeys.length > 0) {
-      const retryPrompt = `CHYBA: V minulé odpovědi jsi vynechal formátovací značky ###G. 
+      const retryContent = `CHYBA: V minulé odpovědi jsi vynechal formátovací značky ###G. 
 ZOPAKUJ PŘEKLAD a u každého hesla MUSÍŠ začít řádkem ###G[číslo]###. 
 Bez toho nebude překlad zpracován!
 
@@ -1301,7 +1301,7 @@ DEF: ${e.def}
 KJV: ${e.kjv}
 ORIG: ${e.orig}`;
       
-      const raw2 = await callOnce(prov, apiKey, model, retryPrompt);
+      const raw2 = await callOnce(prov, apiKey, model, buildRetryMessages(retryContent));
       missingKeys = parseTranslations(raw2, [key]);
     }
     
@@ -1405,10 +1405,10 @@ async function translateBatch(keys) {
   if (!apiKey) { showToast('✗ Zadej API klíč!'); return; }
 
   const batch = keys.map(k => entries.find(e => e.key === k)).filter(Boolean);
-  const prompt = buildPrompt(batch);
+  const messages = buildPromptMessages(batch);
 
   try {
-    const raw = await callAIWithRetry(prov, apiKey, model, prompt);
+    const raw = await callAIWithRetry(prov, apiKey, model, messages);
     const content = raw.content;
     let missingKeys = parseTranslations(content, keys);
     
@@ -1433,7 +1433,7 @@ async function translateBatch(keys) {
     if (missingKeys.length > 0) {
       console.log(`⚠ ${missingKeys.length} hesel bez překladu: ${missingKeys.join(', ')}`);
       log(`⚠ Pokus o opravu formátu pro ${missingKeys.join(', ')}...`);
-      const retryPrompt = `CHYBA: V minulé odpovědi jsi vynechal formátovací značky ###G. 
+      const retryContent = `CHYBA: V minulé odpovědi jsi vynechal formátovací značky ###G. 
 ZOPAKUJ PŘEKLAD a u každého hesla MUSÍŠ začít řádkem ###G[číslo]###. 
 Bez toho nebude překlad zpracován!
 
@@ -1444,7 +1444,7 @@ ${keys.map(k => {
 }).join('\n\n')}`;
       
       try {
-        const raw2 = await callOnce(prov, apiKey, model, retryPrompt);
+        const raw2 = await callOnce(prov, apiKey, model, buildRetryMessages(retryContent));
         console.log(`📥 Retry odpověď:`, raw2.content);
         missingKeys = parseTranslations(raw2.content, keys);
         const retryCount = keys.length - missingKeys.length;
@@ -1476,34 +1476,40 @@ ${keys.map(k => {
   }
 }
 
-const DEFAULT_PROMPT = `Jsi odborný biblický lexikograf. Překládáš Strongův řecko-český slovník.
-Strongův slovník je referenční dílo — heslo musí obsahovat VŠECHNY relevantní překlady pokud jsou k dispozici
+const SYSTEM_MESSAGE = `Jsi biblický lexikograf. Překládáš Strongův řecko-český slovník. Formát: ###GXXX### VYZNAM: [české překlady] DEFINICE: [výklad 2-4 věty] POUZITI: [KJV překlady] PUVOD: [etymologie] Pravidla: více synonym, přirozená čeština, biblická terminologie, vlastní jména transliteruj.`;
 
-Pro každé heslo vrať PŘESNĚ tento formát (nic jiného, žádný úvod, žádný závěr):
+const DEFAULT_PROMPT = `Jsi biblický lexikograf. Překládáš Strongův řecko-český slovník.
 
-###KLÍČ###
-VYZNAM: [Všechna hlavní česká překladová slova oddělená čárkou, pokud má více významů]
-DEFINICE: [Přesný výklad — doslovný i přenesený. U sloves uveď různé odstíny použití. 2–4 věty.]
-POUZITI: [Konkrétní české překlady z KJV kontextu — výčet variant jak se slovo v Bibli skutečně překládá]
-PUVOD: [Etymologie: z jakého kořene pochází, složeniny, příbuzná slova, hebrejské kořeny jsou-li relevantní]
+Formát:
+###GXXX###
+VYZNAM: [české překlady]
+DEFINICE: [výklad 2-4 věty]
+POUZITI: [KJV překlady]
+PUVOD: [etymologie]
 
-Pravidla překladu:
-- VYZNAM musí mít více synonym pokud anglický originál uvádí více slov (např. "love, charity, dear" = 3 varianty)
-- Piš přirozenou odbornou češtinou — ne "Slovo označující...", rovnou definuj
-- Zachovej biblickou terminologii (milost, vykoupení, smíření, pokání atd.)
-- Vlastní jména pouze transliteruj, ale přidej stručný výklad kdo/co to je
-- Nepoužívej frázi "Tento termín" ani "Slovo označující"
-- POUZITI: uveď jak se konkrétně překládá, ne jen "překládá se jako"
+Pravidla: více synonym, přirozená čeština, biblická terminologie, vlastní jména transliteruj.
 
 {HESLA}`;
 
-function buildPrompt(batch) {
+function buildPromptMessages(batch) {
   const items = batch.map(e =>
     `${e.key} | ${e.greek}\nDEF: ${e.def}\nKJV: ${e.kjv}\nORIG: ${e.orig}`
   ).join('\n\n');
 
   const tmpl = document.getElementById('promptEditor')?.value || DEFAULT_PROMPT;
-  return tmpl.replace('{HESLA}', 'HESLA:\n' + items);
+  const userContent = tmpl.replace('{HESLA}', 'HESLA:\n' + items);
+  
+  return [
+    { role: 'system', content: SYSTEM_MESSAGE },
+    { role: 'user', content: userContent }
+  ];
+}
+
+function buildRetryMessages(userContent) {
+  return [
+    { role: 'system', content: SYSTEM_MESSAGE },
+    { role: 'user', content: userContent }
+  ];
 }
 
 function resetPrompt() {
@@ -1521,14 +1527,14 @@ const FALLBACKS = {
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-async function callAIWithRetry(provider, apiKey, model, prompt) {
+async function callAIWithRetry(provider, apiKey, model, messages) {
   const tryModels = [model, ...(FALLBACKS[provider] || []).filter(m => m !== model)];
   let lastErr = null;
 
   for (const m of tryModels) {
     for (let attempt = 0; attempt < 3; attempt++) {
       try {
-        return await callOnce(provider, apiKey, m, prompt);
+        return await callOnce(provider, apiKey, m, messages);
       } catch(e) {
         lastErr = e;
         const msg = (e.message || '').toLowerCase();
@@ -1555,16 +1561,16 @@ async function callAIWithRetry(provider, apiKey, model, prompt) {
   throw lastErr || new Error('Všechny modely selhaly');
 }
 
-async function callOnce(provider, apiKey, model, prompt) {
+async function callOnce(provider, apiKey, model, messages) {
   apiKey = apiKey.trim();
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 120000); // 2min timeout
+  const timeout = setTimeout(() => controller.abort(), 120000);
   try {
     if (provider === 'groq') {
     const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: { 'Authorization': 'Bearer ' + apiKey, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model, messages: [{ role: 'user', content: prompt }],
+      body: JSON.stringify({ model, messages,
         temperature: 0.3, max_tokens: 2500 }),
       signal: controller.signal
     });
@@ -1593,11 +1599,13 @@ async function callOnce(provider, apiKey, model, prompt) {
     return { content, usage: d.usage };
 
   } else if (provider === 'gemini') {
+    const userContent = messages.find(m => m.role === 'user')?.content || '';
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
     const r = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }],
+      body: JSON.stringify({ contents: [{ parts: [{ text: userContent }] }],
+        systemInstruction: { parts: [{ text: messages.find(m => m.role === 'system')?.content || '' }] },
         generationConfig: { temperature: 0.3, maxOutputTokens: 2500 } })
     });
     const d = await r.json();
@@ -1620,7 +1628,7 @@ async function callOnce(provider, apiKey, model, prompt) {
       method: 'POST',
       headers: { 'Authorization': 'Bearer ' + apiKey, 'Content-Type': 'application/json',
         'HTTP-Referer': 'https://strong-bible-gr-cz.local' },
-      body: JSON.stringify({ model, messages: [{ role: 'user', content: prompt }],
+      body: JSON.stringify({ model, messages,
         temperature: 0.3, max_tokens: 2500 })
     });
     const d = await r.json();
