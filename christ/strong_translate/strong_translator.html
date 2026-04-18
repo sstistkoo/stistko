@@ -1478,12 +1478,16 @@ async function callAIWithRetry(provider, apiKey, model, prompt) {
 
 async function callOnce(provider, apiKey, model, prompt) {
   apiKey = apiKey.trim();
-  if (provider === 'groq') {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 120000); // 2min timeout
+  try {
+    if (provider === 'groq') {
     const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: { 'Authorization': 'Bearer ' + apiKey, 'Content-Type': 'application/json' },
       body: JSON.stringify({ model, messages: [{ role: 'user', content: prompt }],
-        temperature: 0.3, max_tokens: 2500 })
+        temperature: 0.3, max_tokens: 2500 }),
+      signal: controller.signal
     });
     const d = await r.json();
     if (!r.ok) {
@@ -1499,7 +1503,15 @@ async function callOnce(provider, apiKey, model, prompt) {
     if (!d.choices?.[0]?.message?.content) {
       throw new Error('Prázdná odpověď od AI - zkuste menší dávku');
     }
-    return d.choices[0].message.content;
+    const content = d.choices[0].message.content;
+    // Kontrola na nesmyslnou odpověď
+    const weirdChars = (content.match(/[^\x20-\x7E\n\r\těščřžýáíéúůťďňĚŠČŘŽÝÁÍÉÚŮŤĎŇ]/g) || []).length;
+    if (content.length > 0 && weirdChars > content.length * 0.5) {
+      console.log('═ PODEZŘELÁ ODPOVĚĎ ═');
+      console.log(content);
+      throw new Error('AI vrátila nesmyslnou odpověď - zkuste delší interval');
+    }
+    return content;
 
   } else if (provider === 'gemini') {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
@@ -1537,6 +1549,9 @@ async function callOnce(provider, apiKey, model, prompt) {
     return d.choices[0].message.content;
   }
   throw new Error('Neznámý provider');
+  } finally {
+    clearTimeout(timeout);
+  }
 }
 
 // ══ PARSOVÁNÍ ODPOVĚDI AI ════════════════════════════════════════
@@ -1565,6 +1580,13 @@ function parseTranslations(raw, keys) {
     log('⚠ Varování: AI nedodržela formátování - zkuste menší dávku');
     console.log('═ AI ODPOVĚĎ (ŠPATNÉ FORMÁTOVÁNÍ) ═');
     console.log(raw);
+    // Kontrola: vypadá to jako nesmyslná odpověď?
+    const weirdChars = (raw.match(/[^\x20-\x7E\n\r\t]/g) || []).length;
+    const totalChars = raw.length;
+    if (weirdChars > totalChars * 0.3 || totalChars < 50) {
+      log('⚠ Odpověď vypadá jako chyba/rate limit - zkuste delší interval');
+      return keys;
+    }
   }
   
   for (const block of blocks) {
