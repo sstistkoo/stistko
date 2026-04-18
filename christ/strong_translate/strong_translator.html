@@ -1113,7 +1113,37 @@ async function translateBatch(keys) {
 
   try {
     const raw = await callAIWithRetry(prov, apiKey, model, prompt);
-    parseTranslations(raw, keys);
+    let missingKeys = parseTranslations(raw, keys);
+    
+    // Pokud něco chybí, zkus opravný retry
+    if (missingKeys.length > 0) {
+      log(`⚠ Pokus o opravu formátu pro ${missingKeys.join(', ')}...`);
+      const retryPrompt = `CHYBA: V minulé odpovědi jsi vynechal formátovací značky ###G. 
+ZOPAKUJ PŘEKLAD a u každého hesla MUSÍŠ začít řádkem ###G[číslo]###. 
+Bez toho nebude překlad zpracován!
+
+Přelož tato hesla:
+${keys.map(k => {
+  const e = entries.find(x => x.key === k);
+  return e ? `${e.key} | ${e.greek}\nDEF: ${e.def}\nKJV: ${e.kjv}` : '';
+}).join('\n\n')}`;
+      
+      try {
+        const raw2 = await callOnce(prov, apiKey, model, retryPrompt);
+        missingKeys = parseTranslations(raw2, keys);
+        log(`✓ Opravný překlad dokončen, chybí: ${missingKeys.length > 0 ? missingKeys.join(', ') : 'nic'}`);
+      } catch(e2) {
+        log(`✗ Opravný pokus selhal: ${e2.message}`);
+      }
+    }
+    
+    // Kontrola: přeložena všechna hesla?
+    const translatedCount = keys.filter(k => translated[k]?.vyznam).length;
+    if (translatedCount < keys.length) {
+      log(`⚠ Pozor: Přeloženo ${translatedCount}/${keys.length} hesel. Zkuste menší dávku.`);
+      showToast(`⚠ Přeloženo ${translatedCount}/${keys.length} hesel`);
+    }
+    
     saveProgress();
     logEntry(keys, raw);
     log(`✓ Přeloženo ${keys.length} hesel (${keys[0]}–${keys[keys.length-1]})`);
@@ -1223,6 +1253,9 @@ async function callOnce(provider, apiKey, model, prompt) {
     if (d.usage) {
       log(`📊 Groq: ${d.usage.prompt_tokens} in / ${d.usage.completion_tokens} out / ${d.usage.total_tokens} total`);
     }
+    if (!d.choices?.[0]?.message?.content) {
+      throw new Error('Prázdná odpověď od AI - zkuste menší dávku');
+    }
     return d.choices[0].message.content;
 
   } else if (provider === 'gemini') {
@@ -1242,6 +1275,9 @@ async function callOnce(provider, apiKey, model, prompt) {
     }
     if (d.usageMetadata) {
       log(`📊 Gemini: ${d.usageMetadata.promptTokenCount} in / ${d.usageMetadata.candidatesTokenCount} out`);
+    }
+    if (!d.candidates || !d.candidates[0]?.content?.parts?.[0]?.text) {
+      throw new Error('Prázdná odpověď od AI - zkuste menší dávku');
     }
     return d.candidates[0].content.parts[0].text;
 
@@ -1290,6 +1326,15 @@ function parseTranslations(raw, keys) {
       raw:      block
     };
   }
+  
+  // Zjisti chybějící klíče
+  const missingKeys = [];
+  for (const key of keys) {
+    if (!translated[key] || !translated[key].vyznam) {
+      missingKeys.push(key);
+    }
+  }
+  return missingKeys;
 }
 
 // ══ AUTO REŽIM ═══════════════════════════════════════════════════
