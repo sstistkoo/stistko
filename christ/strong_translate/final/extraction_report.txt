@@ -1,0 +1,136 @@
+=== EXTRACTION REPORT ===
+Generated: 2026-04-18T08:37:20.827Z
+Total input: 14298
+Unique: 14298
+Duplicates: 0
+H count: 8674, G count: 5624
+
+--- WARNINGS (103) ---
+G02717: prázdný překlad (původ: "...")
+G03203: prázdný překlad (původ: "...")
+G03204: prázdný překlad (původ: "...")
+G03205: prázdný překlad (původ: "...")
+G03206: prázdný překlad (původ: "...")
+G03207: prázdný překlad (původ: "...")
+G03208: prázdný překlad (původ: "...")
+G03209: prázdný překlad (původ: "...")
+G03210: prázdný překlad (původ: "...")
+G03211: prázdný překlad (původ: "...")
+G03212: prázdný překlad (původ: "...")
+G03213: prázdný překlad (původ: "...")
+G03214: prázdný překlad (původ: "...")
+G03215: prázdný překlad (původ: "...")
+G03216: prázdný překlad (původ: "...")
+G03217: prázdný překlad (původ: "...")
+G03218: prázdný překlad (původ: "...")
+G03219: prázdný překlad (původ: "...")
+G03220: prázdný překlad (původ: "...")
+G03221: prázdný překlad (původ: "...")
+G03222: prázdný překlad (původ: "...")
+G03223: prázdný překlad (původ: "...")
+G03224: prázdný překlad (původ: "...")
+G03225: prázdný překlad (původ: "...")
+G03226: prázdný překlad (původ: "...")
+G03227: prázdný překlad (původ: "...")
+G03228: prázdný překlad (původ: "...")
+G03229: prázdný překlad (původ: "...")
+G03230: prázdný překlad (původ: "...")
+G03231: prázdný překlad (původ: "...")
+G03232: prázdný překlad (původ: "...")
+G03233: prázdný překlad (původ: "...")
+G03234: prázdný překlad (původ: "...")
+G03235: prázdný překlad (původ: "...")
+G03236: prázdný překlad (původ: "...")
+G03237: prázdný překlad (původ: "...")
+G03238: prázdný překlad (původ: "...")
+G03239: prázdný překlad (původ: "...")
+G03240: prázdný překlad (původ: "...")
+G03241: prázdný překlad (původ: "...")
+G03242: prázdný překlad (původ: "...")
+G03243: prázdný překlad (původ: "...")
+G03244: prázdný překlad (původ: "...")
+G03245: prázdný překlad (původ: "...")
+G03246: prázdný překlad (původ: "...")
+G03247: prázdný překlad (původ: "...")
+G03248: prázdný překlad (původ: "...")
+G03249: prázdný překlad (původ: "...")
+G03250: prázdný překlad (původ: "...")
+G03251: prázdný překlad (původ: "...")
+G03252: prázdný překlad (původ: "...")
+G03253: prázdný překlad (původ: "...")
+G03254: prázdný překlad (původ: "...")
+G03255: prázdný překlad (původ: "...")
+G03256: prázdný překlad (původ: "...")
+G03257: prázdný překlad (původ: "...")
+G03258: prázdný překlad (původ: "...")
+G03259: prázdný překlad (původ: "...")
+G03260: prázdný překlad (původ: "...")
+G03261: prázdný překlad (původ: "...")
+G03262: prázdný překlad (původ: "...")
+G03263: prázdný překlad (původ: "...")
+G03264: prázdný překlad (původ: "...")
+G03265: prázdný překlad (původ: "...")
+G03266: prázdný překlad (původ: "...")
+G03267: prázdný překlad (původ: "...")
+G03268: prázdný překlad (původ: "...")
+G03269: prázdný překlad (původ: "...")
+G03270: prázdný překlad (původ: "...")
+G03271: prázdný překlad (původ: "...")
+G03272: prázdný překlad (původ: "...")
+G03273: prázdný překlad (původ: "...")
+G03274: prázdný překlad (původ: "...")
+G03275: prázdný překlad (původ: "...")
+G03276: prázdný překlad (původ: "...")
+G03277: prázdný překlad (původ: "...")
+G03278: prázdný překlad (původ: "...")
+G03279: prázdný překlad (původ: "...")
+G03280: prázdný překlad (původ: "...")
+G03281: prázdný překlad (původ: "...")
+G03282: prázdný překlad (původ: "...")
+G03283: prázdný překlad (původ: "...")
+G03284: prázdný překlad (původ: "...")
+G03285: prázdný překlad (původ: "...")
+G03286: prázdný překlad (původ: "...")
+G03287: prázdný překlad (původ: "...")
+G03288: prázdný překlad (původ: "...")
+G03289: prázdný překlad (původ: "...")
+G03290: prázdný překlad (původ: "...")
+G03291: prázdný překlad (původ: "...")
+G03292: prázdný překlad (původ: "...")
+G03293: prázdný překlad (původ: "...")
+G03294: prázdný překlad (původ: "...")
+G03295: prázdný překlad (původ: "...")
+G03296: prázdný překlad (původ: "...")
+G03297: prázdný překlad (původ: "...")
+G03298: prázdný překlad (původ: "...")
+G03299: prázdný překlad (původ: "...")
+G03300: prázdný překlad (původ: "...")
+G03301: prázdný překlad (původ: "...")
+G03302: prázdný překlad (původ: "...")
+G03588: prázdný překlad (původ: "(někdy být
+ dodáno, jinde vynecháno, v anglickém i...")
+H03487: prázdný překlad (původ: "1) (značka přímého předmětu nebo akuzativu a nepře...")
+
+--- DUPLICATES (0) ---
+
+--- SAMPLE (first 20) ---
+H00001: "otec jednotlivce"
+H00002: "otec"
+H00003: "svěžest"
+H00004: "ovoce"
+H00005: "Abagtha"
+H00006: "zahynout"
+H00007: "zahynout"
+H00008: "zničení"
+H00009: "ztracená věc"
+H00010: "ztracená věc"
+H00011: "místo zkázy"
+H00012: "zničení"
+H00013: "zničení"
+H00014: "být ochoten"
+H00015: "prosba"
+H00016: "rákos"
+H00017: "Ach"
+H00018: "jesličky"
+H00019: "porážka"
+H00020: "meloun"

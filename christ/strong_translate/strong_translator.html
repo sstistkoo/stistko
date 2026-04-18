@@ -707,6 +707,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       <button class="hbtn" id="btnStep" onclick="translateNext()">⚡ Dávka</button>
       <button class="hbtn grn" onclick="exportTXT()">⬇ TXT</button>
       <button class="hbtn grn" onclick="exportJSON()">⬇ JSON</button>
+      <button class="hbtn" onclick="exportRange()" title="Export vybraného rozsahu G čísel">⬇ Rozsah</button>
       <button class="hbtn red" onclick="clearProgress()">✕ Reset</button>
     </div>
   </div>
@@ -716,6 +717,9 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
     <div class="auto-info">AUTO: dávka <b id="autoBatch">—</b>, interval <b id="autoInterval">—</b>s</div>
     <div class="countdown" id="countdown">—</div>
     <div class="auto-log" id="autoLog">Čeká na start...</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt3);white-space:nowrap">
+      ⏱ <span id="etaLabel">—</span>
+    </div>
     <button class="hbtn red" onclick="stopAuto()">■ Stop</button>
   </div>
 
@@ -744,7 +748,8 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
         <div class="log-head">
           <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--acc);letter-spacing:.1em">⟁ LOG PŘEKLADU</span>
           <span id="logCount" style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt3);margin-left:10px"></span>
-          <button class="hbtn" style="margin-left:auto;font-size:9px;padding:2px 8px" onclick="showSetup()">← Nastavení</button>
+          <span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--txt3)" title="Space=dávka  A=auto  ↑↓=navigace  Esc=zavřít modal">⌨ Space·A·↑↓</span>
+          <button class="hbtn" style="font-size:9px;padding:2px 8px;margin-left:8px" onclick="showSetup()">← Nastavení</button>
           <button class="hbtn" style="font-size:9px;padding:2px 8px" onclick="clearLog()">✕ Vymazat</button>
         </div>
         <div style="display:flex;gap:8px;padding:8px 12px;background:var(--bg2);border-bottom:1px solid var(--brd);flex-wrap:wrap;align-items:center">
@@ -843,12 +848,10 @@ function onProviderChange() {
   const currentKey = document.getElementById('apiKey').value.trim();
   if (currentKey && currentProv !== newProv) {
     localStorage.setItem('strong_apikey_' + currentProv, currentKey);
-    console.log('Saved key for', currentProv, ':', currentKey.substring(0,5) + '...');
   }
   
   // Load key for new provider
   const newKey = localStorage.getItem('strong_apikey_' + newProv);
-  console.log('Loading key for', newProv, ':', newKey ? newKey.substring(0,5) + '...' : 'NONE');
   
   document.getElementById('keyLabel').textContent = 'API Klíč — ' + PROVIDERS[newProv].label;
   document.getElementById('apiKey').placeholder = PROVIDERS[newProv].ph;
@@ -949,13 +952,17 @@ function parseTXT(text) {
 function checkResume() {
   try {
     const saved = localStorage.getItem(STORE_KEY);
-    if (saved) {
-      const data = JSON.parse(saved);
-      const count = Object.keys(data.translated || {}).length;
-      if (count > 0) {
-        const box = document.getElementById('statusTXT');
-        box.innerHTML = `⚑ Nalezen uložený průběh: <b>${count}</b> přeložených hesel. Po spuštění bude automaticky obnoven.`;
-      }
+    if (!saved) return;
+    const data = JSON.parse(saved);
+    const count = Object.keys(data.translated || {}).filter(k => {
+      const t = data.translated[k];
+      return t && t.vyznam && t.vyznam !== '—' && !t.skipped;
+    }).length;
+    if (count > 0) {
+      const box = document.getElementById('resumeBox');
+      box.style.display = 'block';
+      const ts = data.ts ? new Date(data.ts).toLocaleString('cs') : '?';
+      box.innerHTML = `⚑ Nalezen uložený průběh: <b>${count}</b> přeložených hesel (uloženo ${ts}). Po spuštění bude automaticky obnoven.`;
     }
   } catch(e) {}
 }
@@ -1225,40 +1232,20 @@ async function translateSingle(key) {
   const model  = document.getElementById('modelRun').value;
   const prov   = document.getElementById('providerRun').value;
   
-  console.log('═'.repeat(50));
-  console.log('SINGLE PŘEKLAD REPORT');
-  console.log('═'.repeat(50));
-  console.log('Klíč:', key);
-  console.log('Provider:', prov);
-  console.log('Model:', model);
-  
   const e = entries.find(x => x.key === key);
   if (!e) {
-    console.log('✗ Heslo nenalezeno!');
     if (btn) { btn.disabled = false; btn.textContent = '⚡ Přeložit toto heslo'; }
     return;
   }
   
-  console.log('Řecké slovo:', e.greek);
-  console.log('Definice (EN):', e.def);
-  console.log('KJV:', e.kjv);
-  console.log('Původ:', e.orig);
-  
   const prompt = buildPrompt([e]);
-  console.log('Prompt odeslán:', prompt.substring(0, 200) + '...');
   
   try {
     const raw = await callAIWithRetry(prov, apiKey, model, prompt);
-    console.log('─'.repeat(50));
-    console.log('RAW ODPOVĚĎ AI:');
-    console.log(raw);
-    console.log('─'.repeat(50));
     
     let missingKeys = parseTranslations(raw, [key]);
-    console.log('Chybějící klíče po prvním parsování:', missingKeys);
     
     if (missingKeys.length > 0) {
-      console.log('⚠ Spouštím opravný retry...');
       const retryPrompt = `CHYBA: V minulé odpovědi jsi vynechal formátovací značky ###G. 
 ZOPAKUJ PŘEKLAD a u každého hesla MUSÍŠ začít řádkem ###G[číslo]###. 
 Bez toho nebude překlad zpracován!
@@ -1270,22 +1257,12 @@ KJV: ${e.kjv}
 ORIG: ${e.orig}`;
       
       const raw2 = await callOnce(prov, apiKey, model, retryPrompt);
-      console.log('OPRAVNÁ ODPOVĚĎ:', raw2);
       missingKeys = parseTranslations(raw2, [key]);
-      console.log('Chybějící po retry:', missingKeys);
     }
     
     const result = translated[key];
-    console.log('─'.repeat(50));
-    console.log('VÝSLEDEK:');
-    console.log('vyznam:', result?.vyznam || '❌ PRÁZDNÉ');
-    console.log('definice:', result?.definice || '❌ PRÁZDNÉ');
-    console.log('pouziti:', result?.pouziti || '❌ PRÁZDNÉ');
-    console.log('puvod:', result?.puvod || '❌ PRÁZDNÉ');
-    console.log('═'.repeat(50));
     
   } catch(e) {
-    console.log('✗ CHYBA:', e.message);
   }
   
   if (btn) { btn.disabled = false; btn.textContent = '⚡ Přeložit toto heslo'; }
@@ -1339,7 +1316,7 @@ function getNextBatch(size) {
   const result = [];
   for (const e of entries) {
     if (result.length >= size) break;
-    if (!translated[e.key] && !e.key.startsWith('skip-')) {
+    if (!translated[e.key] || translated[e.key].skipped) {
       result.push(e.key);
     }
   }
@@ -1347,9 +1324,10 @@ function getNextBatch(size) {
 }
 
 async function translateBatch(keys) {
-  const apiKey = document.getElementById('apiKey').value.trim();
-  const model  = document.getElementById('modelRun').value;
   const prov   = document.getElementById('providerRun').value;
+  const model  = document.getElementById('modelRun').value;
+  // Klíč vždy dle aktuálního run providera
+  const apiKey = (localStorage.getItem('strong_apikey_' + prov) || document.getElementById('apiKey').value || '').trim();
   currentInterval = parseInt(document.getElementById('intervalRun').value);
   currentBatchSize = parseInt(document.getElementById('batchSizeRun').value);
 
@@ -1664,6 +1642,7 @@ async function runAutoStep() {
 
   document.getElementById('autoBatch').textContent = batch[0] + '–' + batch[batch.length-1];
   log(`⚡ Překládám ${batch[0]}–${batch[batch.length-1]}...`);
+  updateETA();
 
   await translateBatch(batch);
   updateStats();
@@ -1696,10 +1675,10 @@ function updateStats() {
   document.getElementById('sRemain').textContent = remain;
   document.getElementById('sTotal').textContent  = total;
   document.getElementById('pbar').style.width    = pct + '%';
+  if (autoRunning) updateETA();
 }
 
 function saveProgress() {
-  console.log('💾 Ukládám progress, počet přeložených:', Object.keys(translated).length);
   try {
     localStorage.setItem(STORE_KEY, JSON.stringify({ translated, ts: Date.now() }));
   } catch(e) {
@@ -1721,8 +1700,10 @@ function clearProgress() {
 
 // ══ EXPORT ═══════════════════════════════════════════════════════
 function exportTXT() {
-  console.log('exportTXT clicked, entries:', entries.length, 'translated:', Object.keys(translated).length);
-  const done = entries.filter(e => translated[e.key]);
+  const done = entries.filter(e => {
+    const t = translated[e.key];
+    return t && t.vyznam && t.vyznam !== '—' && !t.skipped;
+  });
   if (!done.length) { showToast('Žádné přeložené heslo'); return; }
 
   const lines = done.map(e => {
@@ -1786,13 +1767,10 @@ function loadSavedSettings() {
   // Uložit provider/model
   const mod = localStorage.getItem('strong_model');
   if (mod) document.getElementById('model').value = mod;
-  // Inicializace model dropdownu
+  // Inicializace model dropdownu (jen jednou)
   onProviderChange();
   // Kontrola defaultního souboru
   checkDefaultFile();
-  document.getElementById('provider').addEventListener('change', () => {
-    onProviderChange();
-  });
   document.getElementById('model').addEventListener('change', () => {
     localStorage.setItem('strong_model', document.getElementById('model').value);
   });
@@ -1815,6 +1793,9 @@ function logEntry(keys, rawResponse) {
 
     const div = document.createElement('div');
     div.className = 'log-entry';
+    div.style.cursor = 'pointer';
+    div.title = 'Klikni pro detail hesla';
+    div.onclick = () => showDetail(key);
     div.innerHTML = `
       <div class="log-key-line">
         <span class="log-key">${key}</span>
@@ -1861,6 +1842,47 @@ function logMsg(msg, type) {
 }
 
 
+
+// ── ETA — odhad zbývajícího času ─────────────────────────────
+function updateETA() {
+  const el = document.getElementById('etaLabel');
+  if (!el) return;
+  const remain = entries.filter(e => !translated[e.key] || translated[e.key].skipped).length;
+  if (!remain) { el.textContent = 'hotovo!'; return; }
+  const bs = parseInt(document.getElementById('batchSizeRun').value) || currentBatchSize;
+  const iv = parseInt(document.getElementById('intervalRun').value) || currentInterval;
+  const batches = Math.ceil(remain / bs);
+  const secs = batches * iv;
+  if (secs < 60) el.textContent = `~${secs}s`;
+  else if (secs < 3600) el.textContent = `~${Math.ceil(secs/60)} min`;
+  else el.textContent = `~${(secs/3600).toFixed(1)} hod`;
+}
+
+// ── Export vybraného rozsahu ───────────────────────────────────
+function exportRange() {
+  const from = parseInt(prompt('Od G čísla:', '1') || '1');
+  const to   = parseInt(prompt('Do G čísla:', '100') || '100');
+  if (isNaN(from) || isNaN(to)) return;
+
+  const done = entries.filter(e => {
+    const n = parseInt(e.key.slice(1));
+    const t = translated[e.key];
+    return n >= from && n <= to && t && t.vyznam && t.vyznam !== '—' && !t.skipped;
+  });
+  if (!done.length) { showToast(`Žádná přeložená hesla v rozsahu G${from}–G${to}`); return; }
+
+  const lines = done.map(e => {
+    const t = translated[e.key];
+    return [`${e.key} | ${e.greek}`,
+      `Český význam: ${t.vyznam || '—'}`,
+      `Definice: ${t.definice || '—'}`,
+      `Biblické užití (KJV): ${t.pouziti || '—'}`,
+      `Původ: ${t.puvod || '—'}`, ''].join('\n');
+  });
+  download(`strong_gr_cz_G${from}-G${to}.txt`, lines.join('\n'), 'text/plain');
+  showToast(`✓ Exportováno ${done.length} hesel (G${from}–G${to})`);
+}
+
 function escHtml(s) {
   return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
@@ -1876,7 +1898,6 @@ function showToast(msg) {
 function log(msg) {
   const el = document.getElementById('autoLog');
   if (el) el.textContent = msg;
-  console.log(msg);
 }
 
 // Preview modal pro hromadny preklad
@@ -1955,6 +1976,24 @@ function closePreviewModal() {
   if (modal) modal.remove();
   pendingTranslations = {};
 }
+
+// Escape zavře modal
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closePreviewModal();
+  if (document.getElementById('app').style.display === 'none') return;
+  // Klávesové zkratky v app
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
+  if (e.key === ' ') { e.preventDefault(); translateNext(); }
+  if (e.key === 'a' || e.key === 'A') toggleAuto();
+  if (e.key === 'ArrowDown') {
+    const idx = filteredKeys.indexOf(activeKey);
+    if (idx < filteredKeys.length - 1) showDetail(filteredKeys[idx + 1]);
+  }
+  if (e.key === 'ArrowUp') {
+    const idx = filteredKeys.indexOf(activeKey);
+    if (idx > 0) showDetail(filteredKeys[idx - 1]);
+  }
+});
 </script>
 </body>
 </html>
