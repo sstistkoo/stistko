@@ -623,9 +623,9 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
     <div class="file-row">
       <label class="file-btn" for="fileTXT">📂 Vybrat</label>
       <input type="file" id="fileTXT" accept=".txt" onchange="loadTXT(this)" style="display:none">
+      <button onclick="loadDefaultFile()" id="btnLoadDefault" style="font-size:10px;padding:4px 10px;background:var(--bg4);border:1px solid var(--brd);border-radius:3px;cursor:pointer;display:none;color:var(--txt)">📄 Automaticky</button>
       <span class="file-status" id="statusTXT">— nevybráno</span>
-      <button onclick="loadDefaultFile()" id="btnLoadDefault" style="font-size:10px;padding:4px 8px;background:var(--bg3);border:1px solid var(--brd);border-radius:3px;cursor:pointer;display:none">📄 Načti strong_greek_detailed.txt</button>
-      <span id="fileReady" style="display:none;width:8px;height:8px;border-radius:50%;background:#4f4;margin-left:6px"></span>
+      <span id="fileReady" style="display:none;width:8px;height:8px;border-radius:50%;background:#5a9a6c;margin-left:6px"></span>
     </div>
   </div>
 
@@ -884,7 +884,10 @@ function checkDefaultFile() {
         document.getElementById('btnLoadDefault').style.display = 'inline-block';
       }
     })
-    .catch(() => {});
+    .catch(() => {
+      // Fetch nefunguje (file://), zobrazíme tlačítko pro uživatele co spustí přes HTTP
+      document.getElementById('btnLoadDefault').style.display = 'inline-block';
+    });
 }
 
 function parseTXT(text) {
