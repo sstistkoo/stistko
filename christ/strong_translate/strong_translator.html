@@ -624,6 +624,8 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       <label class="file-btn" for="fileTXT">📂 Vybrat</label>
       <input type="file" id="fileTXT" accept=".txt" onchange="loadTXT(this)" style="display:none">
       <span class="file-status" id="statusTXT">— nevybráno</span>
+      <button onclick="loadDefaultFile()" id="btnLoadDefault" style="font-size:10px;padding:4px 8px;background:var(--bg3);border:1px solid var(--brd);border-radius:3px;cursor:pointer;display:none">📄 Načti strong_greek_detailed.txt</button>
+      <span id="fileReady" style="display:none;width:8px;height:8px;border-radius:50%;background:#4f4;margin-left:6px"></span>
     </div>
   </div>
 
@@ -716,6 +718,13 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
             <option value="openrouter">OpenRouter</option>
           </select>
           <select id="modelRun" style="font-size:10px;padding:2px 4px;background:var(--bg3);color:var(--txt);border:1px solid var(--brd);border-radius:3px;max-width:180px"></select>
+          <select id="batchSizeRun" style="font-size:10px;padding:2px 4px;background:var(--bg3);color:var(--txt);border:1px solid var(--brd);border-radius:3px">
+            <option value="5">5</option>
+            <option value="10" selected>10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+          </select>
+          <span style="font-size:9px;color:var(--txt3)">hesel</span>
           <select id="intervalRun" style="font-size:10px;padding:2px 4px;background:var(--bg3);color:var(--txt);border:1px solid var(--brd);border-radius:3px">
             <option value="5">5s</option>
             <option value="10">10s</option>
@@ -824,6 +833,7 @@ function onProviderChangeRun() {
 function initRunSelects() {
   document.getElementById('providerRun').value = document.getElementById('provider').value;
   onProviderChangeRun();
+  document.getElementById('batchSizeRun').value = document.getElementById('batchSize').value;
   document.getElementById('intervalRun').value = document.getElementById('interval').value;
 }
 
@@ -845,6 +855,36 @@ function loadTXT(input) {
     }
   };
   reader.readAsText(file, 'utf-8');
+}
+
+function loadDefaultFile() {
+  fetch('strong_greek_detailed.txt')
+    .then(r => {
+      if (!r.ok) throw new Error('Soubor nenalezen');
+      return r.text();
+    })
+    .then(text => {
+      entries = parseTXT(text);
+      document.getElementById('statusTXT').innerHTML = `✓ strong_greek_detailed.txt — ${entries.length} hesel`;
+      document.getElementById('statusTXT').className = 'file-status ok';
+      document.getElementById('fileReady').style.display = 'block';
+      document.getElementById('startBtn').disabled = false;
+      checkResume();
+    })
+    .catch(e => {
+      document.getElementById('statusTXT').textContent = '✗ ' + e.message;
+      document.getElementById('btnLoadDefault').style.display = 'none';
+    });
+}
+
+function checkDefaultFile() {
+  fetch('strong_greek_detailed.txt')
+    .then(r => {
+      if (r.ok) {
+        document.getElementById('btnLoadDefault').style.display = 'inline-block';
+      }
+    })
+    .catch(() => {});
 }
 
 function parseTXT(text) {
@@ -1105,6 +1145,7 @@ async function translateBatch(keys) {
   const model  = document.getElementById('modelRun').value;
   const prov   = document.getElementById('providerRun').value;
   currentInterval = parseInt(document.getElementById('intervalRun').value);
+  currentBatchSize = parseInt(document.getElementById('batchSizeRun').value);
 
   if (!apiKey) { showToast('✗ Zadej API klíč!'); return; }
 
@@ -1496,6 +1537,8 @@ function loadSavedSettings() {
   if (mod) document.getElementById('model').value = mod;
   // Inicializace model dropdownu
   onProviderChange();
+  // Kontrola defaultního souboru
+  checkDefaultFile();
   document.getElementById('provider').addEventListener('change', () => {
     onProviderChange();
   });
