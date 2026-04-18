@@ -1566,6 +1566,8 @@ function parseTranslations(raw, keys) {
   const hasValidBlocks = blocks.some(b => /###G\d+|G\d+\s*\|/.test(b));
   if (!hasValidBlocks) {
     log('⚠ Varování: AI nedodržela formátování - zkuste menší dávku');
+    console.log('═ AI ODPOVĚĎ (ŠPATNÉ FORMÁTOVÁNÍ) ═');
+    console.log(raw);
   }
   
   for (const block of blocks) {
