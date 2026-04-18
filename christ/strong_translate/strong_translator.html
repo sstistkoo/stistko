@@ -973,7 +973,9 @@ function renderList() {
 
   for (const key of filteredKeys) {
     const e = entries.find(x => x.key === key);
-    const done = !!translated[key];
+    // Kontrola: má překlad s obsahem (vyznam musí mít text)
+    const t = translated[key];
+    const done = t && t.vyznam && t.vyznam.trim().length > 0;
     const div = document.createElement('div');
     div.className = 'list-item' + (done ? ' done' : '') + (key === activeKey ? ' active' : '');
     div.dataset.key = key;
@@ -981,7 +983,7 @@ function renderList() {
     div.innerHTML = `
       <div class="li-key">${key}</div>
       <div class="li-greek">${escHtml(e.greek)}</div>
-      <div class="li-dot ${done ? 'done' : ''}"></div>
+      <div class="li-dot ${done ? 'done' : ''}">${done ? '✓' : '✗'}</div>
     `;
     frag.appendChild(div);
   }
@@ -1010,13 +1012,15 @@ function renderDetail() {
   const e = entries.find(x => x.key === activeKey);
   if (!e) return;
   const t = translated[activeKey];
+  // Kontrola: má překlad s obsahem
+  const hasTranslation = t && t.vyznam && t.vyznam.trim().length > 0;
   const pane = document.getElementById('detailPane');
 
   pane.innerHTML = `
     <div class="entry-header">
       <div class="entry-key">${e.key}</div>
       <div class="entry-greek">${escHtml(e.greek)}</div>
-      <div class="entry-status ${t ? 'done' : ''}">${t ? '✓ Přeloženo' : 'Čeká'}</div>
+      <div class="entry-status ${hasTranslation ? 'done' : ''}">${hasTranslation ? '✓ Přeloženo' : 'Čeká'}</div>
     </div>
 
     <div class="orig-section">
@@ -1032,24 +1036,18 @@ function renderDetail() {
       <div class="value">${escHtml(e.orig)}</div>
     </div>
 
-    ${!t ? `<button class="translate-btn" onclick="translateSingle('${e.key}')">⚡ Přeložit toto heslo</button>` : ''}
+    ${!hasTranslation ? `<button class="translate-btn" onclick="translateSingle('${e.key}')">⚡ Přeložit toto heslo</button>` : ''}
 
     ${renderTranslation(e.key, t)}
   `;
 }
 
 function renderTranslation(key, t) {
-  if (!t) return `
-    <div class="translation-box">
-      <div class="tbox-head"><div class="tbox-label">Český překlad</div></div>
-      <div class="tbox-body waiting">Čeká na překlad...</div>
-    </div>`;
-
   const sections = [
-    { id: 'vyznam',   label: 'Český význam',       field: t.vyznam },
-    { id: 'definice', label: 'Definice',            field: t.definice },
-    { id: 'pouziti',  label: 'Biblické užití (KJV)',field: t.pouziti },
-    { id: 'puvod',    label: 'Původ / Etymologie',  field: t.puvod },
+    { id: 'vyznam',   label: 'Český význam',       field: t?.vyznam },
+    { id: 'definice', label: 'Definice',            field: t?.definice },
+    { id: 'pouziti',  label: 'Biblické užití (KJV)',field: t?.pouziti },
+    { id: 'puvod',    label: 'Původ / Etymologie',  field: t?.puvod },
   ];
 
   return sections.map(s => `
@@ -1090,7 +1088,75 @@ function saveSection(key, id) {
 async function translateSingle(key) {
   const btn = document.querySelector('.translate-btn');
   if (btn) { btn.disabled = true; btn.textContent = '⏳ Překládám...'; }
-  await translateBatch([key]);
+  
+  const apiKey = document.getElementById('apiKey').value.trim();
+  const model  = document.getElementById('modelRun').value;
+  const prov   = document.getElementById('providerRun').value;
+  
+  console.log('═'.repeat(50));
+  console.log('SINGLE PŘEKLAD REPORT');
+  console.log('═'.repeat(50));
+  console.log('Klíč:', key);
+  console.log('Provider:', prov);
+  console.log('Model:', model);
+  
+  const e = entries.find(x => x.key === key);
+  if (!e) {
+    console.log('✗ Heslo nenalezeno!');
+    if (btn) { btn.disabled = false; btn.textContent = '⚡ Přeložit toto heslo'; }
+    return;
+  }
+  
+  console.log('Řecké slovo:', e.greek);
+  console.log('Definice (EN):', e.def);
+  console.log('KJV:', e.kjv);
+  console.log('Původ:', e.orig);
+  
+  const prompt = buildPrompt([e]);
+  console.log('Prompt odeslán:', prompt.substring(0, 200) + '...');
+  
+  try {
+    const raw = await callAIWithRetry(prov, apiKey, model, prompt);
+    console.log('─'.repeat(50));
+    console.log('RAW ODPOVĚĎ AI:');
+    console.log(raw);
+    console.log('─'.repeat(50));
+    
+    let missingKeys = parseTranslations(raw, [key]);
+    console.log('Chybějící klíče po prvním parsování:', missingKeys);
+    
+    if (missingKeys.length > 0) {
+      console.log('⚠ Spouštím opravný retry...');
+      const retryPrompt = `CHYBA: V minulé odpovědi jsi vynechal formátovací značky ###G. 
+ZOPAKUJ PŘEKLAD a u každého hesla MUSÍŠ začít řádkem ###G[číslo]###. 
+Bez toho nebude překlad zpracován!
+
+Přelož tato hesla:
+${key}
+DEF: ${e.def}
+KJV: ${e.kjv}
+ORIG: ${e.orig}`;
+      
+      const raw2 = await callOnce(prov, apiKey, model, retryPrompt);
+      console.log('OPRAVNÁ ODPOVĚĎ:', raw2);
+      missingKeys = parseTranslations(raw2, [key]);
+      console.log('Chybějící po retry:', missingKeys);
+    }
+    
+    const result = translated[key];
+    console.log('─'.repeat(50));
+    console.log('VÝSLEDEK:');
+    console.log('vyznam:', result?.vyznam || '❌ PRÁZDNÉ');
+    console.log('definice:', result?.definice || '❌ PRÁZDNÉ');
+    console.log('pouziti:', result?.pouziti || '❌ PRÁZDNÉ');
+    console.log('puvod:', result?.puvod || '❌ PRÁZDNÉ');
+    console.log('═'.repeat(50));
+    
+  } catch(e) {
+    console.log('✗ CHYBA:', e.message);
+  }
+  
+  if (btn) { btn.disabled = false; btn.textContent = '⚡ Přeložit toto heslo'; }
   renderDetail();
   updateStats();
   renderList();
@@ -1352,36 +1418,74 @@ async function callOnce(provider, apiKey, model, prompt) {
 
 // ══ PARSOVÁNÍ ODPOVĚDI AI ════════════════════════════════════════
 function parseTranslations(raw, keys) {
-  // Rozdělí podle ###KLÍČ### bloků
-  const blocks = raw.split(/(?=###G\d+###)/);
+  // Podporujeme 2 formáty:
+  // 1. ###G{číslo}### - preferovaný formát
+  // 2. G{číslo} | ... - alternativní formát bez ###
+  let blocks;
+  let usePlainFormat = false;
   
-  // Diagnostika: kontrola formátování
-  const hasValidBlocks = blocks.some(b => b.includes('###G'));
+  if (raw.includes('###G')) {
+    blocks = raw.split(/(?=###G\d+###)/);
+  } else {
+    // Zkus alternativní formát
+    blocks = raw.split(/(?=G\d+\s*\|)/);
+    if (blocks.length > 1 && /G\d+\s*\|/.test(blocks[0])) {
+      usePlainFormat = true;
+      log('📝 Alternativní formát detekován');
+    }
+  }
+  
+  // Diagnostika
+  const hasValidBlocks = blocks.some(b => /###G\d+|G\d+\s*\|/.test(b));
   if (!hasValidBlocks) {
-    log('⚠ Varování: AI nedodržela formátování u hesla, zkuste zmenšit velikost dávky.');
+    log('⚠ Varování: AI nedodržela formátování - zkuste menší dávku');
   }
   
   for (const block of blocks) {
-    const km = block.match(/###(G\d+)###/);
-    if (!km) continue;
-    const key = km[1];
-    if (!keys.includes(key)) continue;
-
-    const get = (label) => {
-      const m = block.match(new RegExp(label + ':\\s*([^\\n]+(?:\\n(?!(?:VYZNAM|DEFINICE|POUZITI|PUVOD|###))[^\\n]+)*)'));
-      return m ? m[1].trim() : '';
-    };
-
+    let key, get;
+    
+    // Formát s ###: ###G{číslo}###
+    const kmHash = block.match(/###(G\d+)###/);
+    // Formát bez ###: G{číslo} |
+    const kmPlain = block.match(/G(\d+)\s*\|/);
+    
+    if (kmHash) {
+      key = kmHash[1];
+      if (!keys.includes(key)) continue;
+      get = (label) => {
+        const m = block.match(new RegExp(label + ':\\s*([^\\n]+(?:\\n(?!(?:VYZNAM|DEFINICE|POUZITI|PUVOD|###))[^\\n]+)*)'));
+        return m ? m[1].trim() : '';
+      };
+    } else if (kmPlain) {
+      key = 'G' + kmPlain[1];
+      if (!keys.includes(key)) continue;
+      get = (label) => {
+        const patterns = [
+          label + ':\\s*([\\s\\S]*?)(?=\\n\\nG\\d+|\\nG\\d+\\s*\\|)',
+          label + ':\\s*([\\s\\S]*?)(?=G\\d+\\s*\\|)',
+          label + ':\\s*([\\s\\S]*?)$'
+        ];
+        for (const pat of patterns) {
+          const m = block.match(new RegExp(pat, 'i'));
+          if (m) return m[1].replace(/^#+\\s*/, '').trim();
+        }
+        return '';
+      };
+    } else {
+      continue;
+    }
+    
+    if (!key || !keys.includes(key)) continue;
+    
     translated[key] = {
-      vyznam:   get('VYZNAM'),
-      definice: get('DEFINICE'),
-      pouziti:  get('POUZITI'),
-      puvod:    get('PUVOD'),
+      vyznam:   get('Český význam') || get('VYZNAM') || get('Význam'),
+      definice: get('DEFINICE') || get('Definice'),
+      pouziti:  get('POUZITI') || get('Použití') || get('Biblické užití'),
+      puvod:    get('PUVOD') || get('Původ'),
       raw:      block
     };
   }
   
-  // Zjisti chybějící klíče
   const missingKeys = [];
   for (const key of keys) {
     if (!translated[key] || !translated[key].vyznam) {
@@ -1462,6 +1566,7 @@ function updateStats() {
 }
 
 function saveProgress() {
+  console.log('💾 Ukládám progress, počet přeložených:', Object.keys(translated).length);
   try {
     localStorage.setItem(STORE_KEY, JSON.stringify({ translated, ts: Date.now() }));
   } catch(e) {
