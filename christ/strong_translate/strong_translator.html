@@ -632,17 +632,22 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   <hr class="div">
 
   <div class="row">
-    <label>Prompt (upravitelný) — posílá se AI pro každou dávku</label>
-    <textarea id="promptEditor" rows="12" style="width:100%;background:var(--bg3);border:1px solid var(--brd);
-      border-radius:3px;padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;
-      color:var(--txt2);resize:vertical;outline:none;line-height:1.6;"></textarea>
-    <div style="display:flex;gap:8px;margin-top:6px">
-      <button onclick="resetPrompt()" style="font-family:'JetBrains Mono',monospace;font-size:10px;
-        padding:5px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:3px;
-        color:var(--txt3);cursor:pointer;">↺ Výchozí prompt</button>
-      <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt3);
-        align-self:center">Proměnné: {HESLA} — sem se vloží hesla</span>
-    </div>
+    <label style="cursor:pointer" onclick="document.getElementById('promptSection').toggleAttribute('open')">
+      Prompt ▼
+    </label>
+    <details id="promptSection" style="width:100%">
+      <summary style="display:none">Prompt</summary>
+      <textarea id="promptEditor" rows="8" style="width:100%;background:var(--bg3);border:1px solid var(--brd);
+        border-radius:3px;padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;
+        color:var(--txt2);resize:vertical;outline:none;line-height:1.6;"></textarea>
+      <div style="display:flex;gap:8px;margin-top:6px">
+        <button onclick="resetPrompt()" style="font-family:'JetBrains Mono',monospace;font-size:10px;
+          padding:5px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:3px;
+          color:var(--txt3);cursor:pointer;">↺ Výchozí</button>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt3);
+          align-self:center">Proměnné: {HESLA}</span>
+      </div>
+    </details>
   </div>
 
   <hr class="div">
@@ -1175,7 +1180,12 @@ ${keys.map(k => {
       try {
         const raw2 = await callOnce(prov, apiKey, model, retryPrompt);
         missingKeys = parseTranslations(raw2, keys);
-        log(`✓ Opravný překlad dokončen, chybí: ${missingKeys.length > 0 ? missingKeys.join(', ') : 'nic'}`);
+        const retryCount = keys.length - missingKeys.length;
+        if (retryCount > 0) {
+          log(`✓ Opravný překlad: ${retryCount} hesel, chybí: ${missingKeys.length > 0 ? missingKeys.join(', ') : 'nic'}`);
+        } else {
+          log(`✗ Opravný překlad nepomohl, chybí: ${missingKeys.join(', ')}`);
+        }
       } catch(e2) {
         log(`✗ Opravný pokus selhal: ${e2.message}`);
       }
