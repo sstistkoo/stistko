@@ -1,0 +1,39 @@
+=== AUGMENTATION REPORT ===
+Generated: 2026-04-18T08:43:11.350Z
+Total entries: 14298
+Hebrew lemmas added: 8674
+Greek lemmas added: 5624
+Missing Hebrew: 0
+Missing Greek: 0
+
+--- SAMPLE (first 30) ---
+H00001: cz="otec jednotlivce" | src="אב" [awb]
+H00002: cz="otec" | src="אב" [ab]
+H00003: cz="svěžest" | src="אב" [abe]
+H00004: cz="ovoce" | src="אב" [abe]
+H00005: cz="Abagtha" | src="אבגתא" [ab-ag-thaw']
+H00006: cz="zahynout" | src="אבד" [aw-bad']
+H00007: cz="zahynout" | src="אבד" [ab-ad']
+H00008: cz="zničení" | src="אבד" [o-bade']
+H00009: cz="ztracená věc" | src="אבדה" [ab-ay-daw']
+H00010: cz="ztracená věc" | src="אבדה" [ab-ad-do']
+H00011: cz="místo zkázy" | src="אבדון" [ab-ad-done']
+H00012: cz="zničení" | src="אבדן" [ab-dawn']
+H00013: cz="zničení" | src="אבדן" [ob-dawn']
+H00014: cz="být ochoten" | src="אבה" [aw-baw']
+H00015: cz="prosba" | src="אבה" [aw-beh']
+H00016: cz="rákos" | src="אבה" [ay-beh']
+H00017: cz="Ach" | src="אבוי" [ab-o'ee]
+H00018: cz="jesličky" | src="אבוס" [ay-booce']
+H00019: cz="porážka" | src="אבחה" [ib-khaw']
+H00020: cz="meloun" | src="אבטיח" [ab-at-tee'-akh]
+H00021: cz="Abi" | src="אבי" [ab-ee']
+H00022: cz="Abiel" | src="אביאל" [ab-ee-ale']
+H00023: cz="Abiasaf" | src="אביאסף" [ab-ee-aw-sawf']
+H00024: cz="čerstvé" | src="אביב" [aw-beeb']
+H00025: cz="Abi Gibon" | src="אבי גבעון" [ab-ee' ghib-one']
+H00026: cz="Abigail" | src="אביגיל" [ab-ee-gah'-yil]
+H00027: cz="Abidan" | src="אבידן" [ab-ee-dawn']
+H00028: cz="Abida nebo Abidah" | src="אבידע" [ab-ee-daw']
+H00029: cz="Abia nebo Abiah nebo Abijah" | src="אביה" [ab-ee-yaw']
+H00030: cz="Abihu" | src="אביהוא" [ab-ee-hoo']
