@@ -298,9 +298,12 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   padding: 10px 12px;
   border-bottom: 1px solid var(--brd);
   flex-shrink: 0;
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 .list-search input {
-  width: 100%;
+  flex: 1;
   background: var(--bg3);
   border: 1px solid var(--brd);
   border-radius: 3px;
@@ -313,11 +316,26 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
 .list-search input:focus { border-color: var(--acc); }
 .list-search input::placeholder { color: var(--txt3); }
 
+.list-actions {
+  display: flex;
+  gap: 4px;
+}
+.sbtn {
+  background: var(--bg3);
+  border: 1px solid var(--brd);
+  border-radius: 3px;
+  color: var(--txt2);
+  cursor: pointer;
+  padding: 4px 8px;
+  font-size: 12px;
+}
+.sbtn:hover { background: var(--bg4); border-color: var(--acc); }
+
 .list-scroll { flex: 1; overflow-y: auto; }
 
 .list-item {
   display: grid;
-  grid-template-columns: 50px 1fr 20px;
+  grid-template-columns: 24px 50px 1fr 20px;
   align-items: center;
   padding: 6px 12px;
   cursor: pointer;
@@ -327,8 +345,16 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
 }
 .list-item:hover { background: var(--bg3); }
 .list-item.active { background: var(--bg3); border-left: 2px solid var(--acc); }
+.list-item.selected { background: var(--bg4); }
 .list-item.done { }
 .list-item.done .li-key { color: var(--grn); }
+
+.li-check {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--acc);
+}
 
 .li-key {
   font-family: 'JetBrains Mono', monospace;
@@ -701,7 +727,12 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       <div class="list-search">
         <input type="text" id="searchInput" placeholder="Hledat G číslo nebo řecké slovo..."
           oninput="filterList()">
+        <div class="list-actions">
+          <button class="sbtn" onclick="selectAll()" title="Vybrat vše">☑</button>
+          <button class="sbtn" onclick="selectNone()" title="Zrušit výběr">☐</button>
+        </div>
       </div>
+      <button class="hbtn grn" id="btnTranslateSelected" onclick="translateSelected()" style="display:none;margin:5px;width:calc(100% - 10px)">⚡ Přeložit vybrané</button>
       <div class="list-scroll" id="listScroll"></div>
     </div>
 
@@ -958,6 +989,9 @@ function startApp() {
 }
 
 // ══ LIST ═════════════════════════════════════════════════════════
+// Store for selected keys
+let selectedKeys = new Set();
+
 function renderList() {
   const scroll = document.getElementById('listScroll');
   const q = document.getElementById('searchInput').value.toLowerCase();
@@ -976,11 +1010,17 @@ function renderList() {
     // Kontrola: má překlad s obsahem (vyznam musí mít text)
     const t = translated[key];
     const done = t && t.vyznam && t.vyznam.trim().length > 0;
+    const isSelected = selectedKeys.has(key);
     const div = document.createElement('div');
-    div.className = 'list-item' + (done ? ' done' : '') + (key === activeKey ? ' active' : '');
+    div.className = 'list-item' + (done ? ' done' : '') + (key === activeKey ? ' active' : '') + (isSelected ? ' selected' : '');
     div.dataset.key = key;
-    div.onclick = () => showDetail(key);
+    div.onclick = (e) => {
+      // Pokud klik na checkbox, ne na řádek
+      if (e.target.classList.contains('li-check')) return;
+      showDetail(key);
+    };
     div.innerHTML = `
+      <input type="checkbox" class="li-check" ${isSelected ? 'checked' : ''} onclick="toggleSelect('${key}', event)">
       <div class="li-key">${key}</div>
       <div class="li-greek">${escHtml(e.greek)}</div>
       <div class="li-dot ${done ? 'done' : ''}">${done ? '✓' : '✗'}</div>
@@ -988,6 +1028,52 @@ function renderList() {
     frag.appendChild(div);
   }
   scroll.appendChild(frag);
+  
+  // Update tlačítko pro překlad vybraných
+  updateSelectedBtn();
+}
+
+function toggleSelect(key, event) {
+  event.stopPropagation();
+  if (selectedKeys.has(key)) {
+    selectedKeys.delete(key);
+  } else {
+    selectedKeys.add(key);
+  }
+  renderList();
+}
+
+function selectAll() {
+  for (const key of filteredKeys) {
+    selectedKeys.add(key);
+  }
+  renderList();
+}
+
+function selectNone() {
+  selectedKeys.clear();
+  renderList();
+}
+
+function updateSelectedBtn() {
+  const btn = document.getElementById('btnTranslateSelected');
+  if (selectedKeys.size > 0) {
+    btn.style.display = 'inline-block';
+    btn.textContent = `⚡ Přeložit ${selectedKeys.size} vybraných`;
+  } else {
+    btn.style.display = 'none';
+  }
+}
+
+async function translateSelected() {
+  const keys = Array.from(selectedKeys);
+  if (!keys.length) return;
+  
+  document.getElementById('btnTranslateSelected').textContent = '⏳ Překládám...';
+  await translateBatch(keys);
+  selectedKeys.clear();
+  renderList();
+  updateStats();
 }
 
 function filterList() { renderList(); }
@@ -1555,7 +1641,8 @@ async function runAutoStep() {
 
 // ══ STATS & SAVE ════════════════════════════════════════════════
 function updateStats() {
-  const done   = Object.keys(translated).length;
+  // Počítej jen hesla která mají skutečný překlad (vyznam má text)
+  const done = Object.values(translated).filter(t => t && t.vyznam && t.vyznam.trim().length > 0).length;
   const total  = entries.length;
   const remain = total - done;
   const pct    = total ? (done / total * 100).toFixed(1) : 0;
