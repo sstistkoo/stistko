@@ -1218,7 +1218,7 @@ function populateOpenRouterModels(selectElement, savedModel, callback) {
   if (cached) {
     try {
       const { timestamp, models } = JSON.parse(cached);
-      if (Date.now() - timestamp < CACHE_TTL) {
+      if (Date.now() - timestamp < CACHE_TTL && models.length >= 2) {
         // Use cached models
         selectElement.innerHTML = models.map(([v, l]) => `<option value="${v}">${l}</option>`).join('');
         selectElement.disabled = false;
@@ -1242,25 +1242,22 @@ function populateOpenRouterModels(selectElement, savedModel, callback) {
     .then(data => {
       const models = (data.data || []).filter(m => m.id && m.id.endsWith(':free'));
       
-      // Top modely - 3 nejlepší free modely
-      const TOP_MODELS = [
-        'meta-llama/llama-3.3-70b-instruct', // 1. Nejlepší kvalita
-        'nvidia/nemotron-3-super-120b-a12b', // 2. Complex tasks
-        'deepseek/deepseek-r1'             // 3. Reasoning
+      // Top modely - pevně dané pro spolehlivost
+      const topOptions = [
+        { value: 'openrouter/free', label: '★ Auto Router (doporučeno)' },
+        { value: 'deepseek/deepseek-r1:free', label: '★ DeepSeek R1' }
       ];
       
-      const options = models.map(m => {
-        const idNoFree = m.id.replace(/:free$/, '');
-        const label = m.name || idNoFree;
-        const priority = TOP_MODELS.findIndex(t => idNoFree === t || idNoFree.startsWith(t + ':'));
-        const isTop = priority !== -1;
-        return { value: m.id, label: (isTop ? '★ ' : '') + label, priority, isTop };
-      }).sort((a, b) => {
-        if (a.isTop && b.isTop) return a.priority - b.priority;
-        if (a.isTop && !b.isTop) return -1;
-        if (!a.isTop && b.isTop) return 1;
-        return a.label.localeCompare(b.label);
-      });
+      // Ostatní modely z API jako alternativy
+      const otherOptions = models
+        .filter(m => !['openrouter/free', 'deepseek/deepseek-r1:free'].includes(m.id))
+        .map(m => ({
+          value: m.id,
+          label: (m.name || m.id.replace(/:free$/, ''))
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+      
+      const options = [...topOptions, ...otherOptions];
 
       if (options.length === 0) {
         selectElement.innerHTML = '<option value="">Žádné free modely nenalezeny</option>';
