@@ -19,7 +19,7 @@
   --acc3: #e4c060;
   --txt:  #e8e0d0;
   --txt2: #a09080;
-  --txt3: #706858;
+  --txt3: #908878;
   --grn:  #5a9a6c;
   --red:  #a04540;
   --ylw:  #a08840;
@@ -344,6 +344,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   gap: 8px;
 }
 .list-item:hover { background: var(--bg3); }
+.list-item:focus { outline: 2px solid var(--acc); outline-offset: -2px; }
 .list-item.active { background: var(--bg3); border-left: 2px solid var(--acc); }
 .list-item.selected { background: var(--bg4); }
 .list-item.done { }
@@ -600,8 +601,8 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   <div id="resumeBox" class="resume-box"></div>
 
   <div class="row">
-    <label>Provider</label>
-    <select id="provider" onchange="onProviderChange()">
+    <label for="provider">Provider</label>
+    <select id="provider" onchange="onProviderChange()" aria-label="Výběr AI providera">
       <option value="groq">Groq (zdarma)</option>
       <option value="gemini">Google Gemini (zdarma)</option>
       <option value="openrouter">OpenRouter</option>
@@ -609,13 +610,13 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   </div>
 
   <div class="row">
-    <label id="keyLabel">API Klíč — Groq (console.groq.com)</label>
-    <input type="password" id="apiKey" placeholder="gsk_..." onchange="saveApiKey()">
+    <label for="apiKey" id="keyLabel">API Klíč — Groq (console.groq.com)</label>
+    <input type="password" id="apiKey" placeholder="gsk_..." onchange="saveApiKey()" aria-label="API klíč providera">
   </div>
 
   <div class="row">
-    <label>Model</label>
-    <select id="model">
+    <label for="model">Model</label>
+    <select id="model" aria-label="Výběr AI modelu">
       <option value="llama-3.3-70b-versatile">llama-3.3-70b-versatile</option>
       <option value="llama-3.1-8b-instant">llama-3.1-8b-instant (rychlejší)</option>
       <option value="qwen-qwq-32b">qwen-qwq-32b</option>
@@ -623,8 +624,8 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   </div>
 
   <div class="row">
-    <label>Velikost dávky (hesel na jedno volání)</label>
-    <select id="batchSize">
+    <label for="batchSize">Velikost dávky (hesel na jedno volání)</label>
+    <select id="batchSize" aria-label="Počet hesel na jednu dávku">
       <option value="1">1 heslo</option>
       <option value="5">5 hesel</option>
       <option value="10" selected>10 hesel</option>
@@ -634,8 +635,8 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   </div>
 
   <div class="row">
-    <label>Interval mezi dávkami (vteřiny) — ochrana rate limitu</label>
-    <select id="interval">
+    <label for="interval">Interval mezi dávkami (vteřiny) — ochrana rate limitu</label>
+    <select id="interval" aria-label="Interval mezi dávkami v sekundách">
       <option value="5">5 s (Groq fast)</option>
       <option value="10">10 s (bezpečné)</option>
       <option value="20" selected>20 s (Gemini free)</option>
@@ -646,14 +647,14 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   <hr class="div">
 
   <div class="row">
-    <label>TXT soubor — strong_greek_detailed.txt</label>
+    <label for="fileTXT">TXT soubor — strong_greek_detailed.txt</label>
     <div class="file-row">
-      <label class="file-btn" for="fileTXT">📂 Vybrat</label>
-      <input type="file" id="fileTXT" accept=".txt" onchange="loadTXT(this)" style="display:none">
-      <button onclick="loadDefaultFile()" id="btnLoadDefault" style="font-size:10px;padding:4px 10px;background:var(--bg4);border:1px solid var(--brd);border-radius:3px;cursor:pointer;display:none;color:var(--txt)">📄 Automaticky</button>
-      <span class="file-status" id="statusTXT">— nevybráno</span>
-      <span id="fileReady" style="display:none;width:8px;height:8px;border-radius:50%;background:#5a9a6c;margin-left:6px"></span>
-      <button class="start-btn" id="startBtn" onclick="startApp()" disabled style="margin-left:auto;width:auto;padding:8px 16px">
+      <label class="file-btn" for="fileTXT" aria-label="Vybrat TXT soubor">📂 Vybrat</label>
+      <input type="file" id="fileTXT" accept=".txt" onchange="loadTXT(this)" style="display:none" aria-label="Výběr TXT souboru se Strong slovníkem">
+      <button onclick="loadDefaultFile()" id="btnLoadDefault" style="font-size:10px;padding:4px 10px;background:var(--bg4);border:1px solid var(--brd);border-radius:3px;cursor:pointer;display:none;color:var(--txt)" aria-label="Načíst výchozí soubor">📄 Automaticky</button>
+      <span class="file-status" id="statusTXT" aria-live="polite">— nevybráno</span>
+      <span id="fileReady" style="display:none;width:8px;height:8px;border-radius:50%;background:#5a9a6c;margin-left:6px" aria-hidden="true"></span>
+      <button class="start-btn" id="startBtn" onclick="startApp()" disabled style="margin-left:auto;width:auto;padding:8px 16px" aria-label="Zahájit překlad">
         Zahájit překlad →
       </button>
     </div>
@@ -667,11 +668,11 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       <summary style="cursor:pointer;color:var(--txt2);font-size:12px;padding:6px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;list-style:none">📝 Prompt ▼</summary>
       <textarea id="promptEditor" rows="8" style="width:100%;background:var(--bg3);border:1px solid var(--brd);
         border-radius:3px;padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;
-        color:var(--txt2);resize:vertical;outline:none;line-height:1.6;"></textarea>
+        color:var(--txt2);resize:vertical;outline:none;line-height:1.6;" aria-label="Prompt pro AI překladač"></textarea>
       <div style="display:flex;gap:8px;margin-top:6px">
         <button onclick="resetPrompt()" style="font-family:'JetBrains Mono',monospace;font-size:10px;
           padding:5px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:3px;
-          color:var(--txt3);cursor:pointer;">↺ Výchozí</button>
+          color:var(--txt3);cursor:pointer;" aria-label="Obnovit výchozí prompt">↺ Výchozí</button>
         <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt3);
           align-self:center">Proměnné: {HESLA}</span>
       </div>
@@ -689,27 +690,29 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
     <div class="stat">Přeloženo: <b id="sDone">0</b></div>
     <div class="stat">Zbývá: <b id="sRemain">0</b></div>
     <div class="stat">Celkem: <b id="sTotal">0</b></div>
-    <div class="stat" style="color:var(--acc)" id="tokenStats">📊 Tokeny: 0</div>
-    <div class="pbar-wrap"><div class="pbar-fill" id="pbar" style="width:0%"></div></div>
+    <div class="stat" style="color:var(--acc)" id="tokenStats" role="status" aria-live="polite">📊 Tokeny: 0</div>
+  <div class="stat" id="timeElapsed" style="color:var(--txt3);font-size:10px">⏱ <span id="elapsedTime">0:00</span></div>
+    <div class="pbar-wrap" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="pbarContainer"><div class="pbar-fill" id="pbar" style="width:0%"></div></div>
     <div style="display:flex;align-items:center;gap:5px;flex-shrink:0">
       <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt3)">od G</span>
       <input type="number" id="startFrom" min="1" max="5624" placeholder="1"
         style="width:60px;background:var(--bg3);border:1px solid var(--brd);border-radius:3px;
         padding:4px 6px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt);
         outline:none;text-align:center"
-        title="Začít překlad od tohoto čísla">
-      <button class="hbtn" onclick="jumpToStart()" title="Přeskočit na toto číslo">→</button>
+        title="Začít překlad od tohoto čísla"
+        aria-label="Začít překlad od G čísla">
+      <button class="hbtn" onclick="jumpToStart()" title="Přeskočit na toto číslo" aria-label="Přeskočit na zadané G číslo">→</button>
     </div>
     <div class="hdr-btns">
-      <button class="hbtn" id="btnImport" onclick="document.getElementById('importFileInput').click()">⬆ Import TXT</button>
-      <input type="file" id="importFileInput" accept=".txt" style="display:none" onchange="importTXT(this)">
-      <button class="hbtn" id="btnAuto" onclick="toggleAuto()">▶ AUTO</button>
-      <button class="hbtn" id="btnStep" onclick="translateNext()">⚡ Dávka</button>
-      <button class="hbtn grn" onclick="exportTXT()">⬇ TXT</button>
-      <button class="hbtn grn" onclick="exportJSON()">⬇ JSON</button>
-      <button class="hbtn" onclick="exportRange()" title="Export vybraného rozsahu G čísel">⬇ Rozsah</button>
-      <button class="hbtn red" onclick="showFailedEntries()" title="Zobrazit neúspěšné překlady">⚠ Neúspěšné <span id="failedCount"></span></button>
-      <button class="hbtn red" onclick="clearProgress()">✕ Reset</button>
+      <button class="hbtn" id="btnImport" onclick="document.getElementById('importFileInput').click()" aria-label="Importovat TXT soubor s překlady">⬆ Import TXT</button>
+      <input type="file" id="importFileInput" accept=".txt" style="display:none" onchange="importTXT(this)" aria-label="Výběr TXT souboru k importu">
+      <button class="hbtn" id="btnAuto" onclick="toggleAuto()" aria-label="Spustit automatický překlad">▶ AUTO</button>
+      <button class="hbtn" id="btnStep" onclick="translateNext()" aria-label="Přeložit další dávku">⚡ Dávka</button>
+      <button class="hbtn grn" onclick="exportTXT()" aria-label="Exportovat do TXT">⬇ TXT</button>
+      <button class="hbtn grn" onclick="exportJSON()" aria-label="Exportovat do JSON">⬇ JSON</button>
+      <button class="hbtn" onclick="exportRange()" title="Export vybraného rozsahu G čísel" aria-label="Exportovat rozsah G čísel">⬇ Rozsah</button>
+      <button class="hbtn red" onclick="showFailedEntries()" title="Zobrazit neúspěšné překlady" aria-label="Zobrazit neúspěšné překlady">⚠ Neúspěšné <span id="failedCount"></span></button>
+      <button class="hbtn red" onclick="clearProgress()" aria-label="Smazat veškerý uložený průběh">✕ Reset</button>
     </div>
   </div>
 
@@ -721,7 +724,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
     <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt3);white-space:nowrap">
       ⏱ <span id="etaLabel">—</span>
     </div>
-    <button class="hbtn red" onclick="stopAuto()">■ Stop</button>
+    <button class="hbtn red" onclick="stopAuto()" aria-label="Zastavit automatický překlad">■ Stop</button>
   </div>
 
   <!-- Split -->
@@ -730,14 +733,24 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
     <!-- Seznam -->
     <div class="list-pane">
       <div class="list-search">
+        <select id="filterStatus" onchange="filterList()" aria-label="Filtrovat podle stavu" style="font-size:11px;padding:4px 6px;background:var(--bg3);color:var(--txt);border:1px solid var(--brd);border-radius:3px">
+          <option value="all">Vše</option>
+          <option value="pending">Čeká</option>
+          <option value="done">Přeloženo</option>
+          <option value="failed">Neúspěšné</option>
+        </select>
+        <select id="sortBy" onchange="filterList()" aria-label="Řadit podle" style="font-size:11px;padding:4px 6px;background:var(--bg3);color:var(--txt);border:1px solid var(--brd);border-radius:3px">
+          <option value="num">▲ G číslo</option>
+          <option value="greek">Řecké slovo</option>
+        </select>
         <input type="text" id="searchInput" placeholder="Hledat G číslo nebo řecké slovo..."
-          oninput="filterList()">
+          oninput="filterList()" aria-label="Hledat G číslo nebo řecké slovo">
         <div class="list-actions">
-          <button class="sbtn" onclick="selectAll()" title="Vybrat vše">☑</button>
-          <button class="sbtn" onclick="selectNone()" title="Zrušit výběr">☐</button>
+          <button class="sbtn" onclick="selectAll()" title="Vybrat vše" aria-label="Vybrat všechna hesla">☑</button>
+          <button class="sbtn" onclick="selectNone()" title="Zrušit výběr" aria-label="Zrušit výběr všech hesel">☐</button>
         </div>
       </div>
-      <button class="hbtn grn" id="btnTranslateSelected" onclick="translateSelected()" style="display:none;margin:5px;width:calc(100% - 10px)">⚡ Přeložit vybrané</button>
+      <button class="hbtn grn" id="btnTranslateSelected" onclick="translateSelected()" style="display:none;margin:5px;width:calc(100% - 10px)" aria-label="Přeložit vybraná hesla">⚡ Přeložit vybrané</button>
       <div class="list-scroll" id="listScroll"></div>
     </div>
 
@@ -750,17 +763,17 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
           <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--acc);letter-spacing:.1em">⟁ LOG PŘEKLADU</span>
           <span id="logCount" style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt3);margin-left:10px"></span>
           <span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--txt3)" title="Space=dávka  A=auto  ↑↓=navigace  Esc=zavřít modal">⌨ Space·A·↑↓</span>
-          <button class="hbtn" style="font-size:9px;padding:2px 8px;margin-left:8px" onclick="showSetup()">← Nastavení</button>
-          <button class="hbtn" style="font-size:9px;padding:2px 8px" onclick="clearLog()">✕ Vymazat</button>
+          <button class="hbtn" style="font-size:9px;padding:2px 8px;margin-left:8px" onclick="showSetup()" aria-label="Zpět do nastavení">← Nastavení</button>
+          <button class="hbtn" style="font-size:9px;padding:2px 8px" onclick="clearLog()" aria-label="Vymazat log">✕ Vymazat</button>
         </div>
         <div style="display:flex;gap:8px;padding:8px 12px;background:var(--bg2);border-bottom:1px solid var(--brd);flex-wrap:wrap;align-items:center">
-          <select id="providerRun" onchange="onProviderChangeRun()" style="font-size:10px;padding:2px 4px;background:var(--bg3);color:var(--txt);border:1px solid var(--brd);border-radius:3px">
+          <select id="providerRun" onchange="onProviderChangeRun()" style="font-size:10px;padding:2px 4px;background:var(--bg3);color:var(--txt);border:1px solid var(--brd);border-radius:3px" aria-label="AI provider pro běh">
             <option value="groq">Groq</option>
             <option value="gemini">Gemini</option>
             <option value="openrouter">OpenRouter</option>
           </select>
-          <select id="modelRun" style="font-size:10px;padding:2px 4px;background:var(--bg3);color:var(--txt);border:1px solid var(--brd);border-radius:3px;max-width:180px"></select>
-          <select id="batchSizeRun" style="font-size:10px;padding:2px 4px;background:var(--bg3);color:var(--txt);border:1px solid var(--brd);border-radius:3px">
+          <select id="modelRun" style="font-size:10px;padding:2px 4px;background:var(--bg3);color:var(--txt);border:1px solid var(--brd);border-radius:3px;max-width:180px" aria-label="AI model pro běh"></select>
+          <select id="batchSizeRun" style="font-size:10px;padding:2px 4px;background:var(--bg3);color:var(--txt);border:1px solid var(--brd);border-radius:3px" aria-label="Počet hesel na dávku">
             <option value="1">1</option>
             <option value="5">5</option>
             <option value="10" selected>10</option>
@@ -768,7 +781,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
             <option value="20">20</option>
           </select>
           <span style="font-size:9px;color:var(--txt3)">hesel</span>
-          <select id="intervalRun" style="font-size:10px;padding:2px 4px;background:var(--bg3);color:var(--txt);border:1px solid var(--brd);border-radius:3px">
+          <select id="intervalRun" style="font-size:10px;padding:2px 4px;background:var(--bg3);color:var(--txt);border:1px solid var(--brd);border-radius:3px" aria-label="Interval mezi dávkami">
             <option value="5">5s</option>
             <option value="10">10s</option>
             <option value="20" selected>20s</option>
@@ -776,7 +789,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
           </select>
           <span style="font-size:9px;color:var(--txt3)">rychlost</span>
         </div>
-        <div class="log-scroll" id="logScroll">
+        <div class="log-scroll" id="logScroll" role="log" aria-label="Log překladů">
           <div style="padding:20px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt3)">
             Překlady se budou zobrazovat zde automaticky...
           </div>
@@ -793,7 +806,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   </div>
 </div>
 
-<div id="toast"></div>
+<div id="toast" aria-live="polite" aria-atomic="true"></div>
 
 <script>
 // ══ STORAGE KEY ══════════════════════════════════════════════════
@@ -811,6 +824,8 @@ let currentInterval  = 10;
 let filteredKeys = [];
 let retryMode = false;
 let retryKeysList = [];
+let startTime = null;
+let elapsedTimer = null;
 
 // ══ PROVIDER SETUP ══════════════════════════════════════════════════
 const PROVIDERS = {
@@ -997,6 +1012,7 @@ function startApp() {
   renderList();
   updateStats();
   initRunSelects();
+  updateFailedCount();
 }
 
 // ══ LIST ═════════════════════════════════════════════════════════
@@ -1005,12 +1021,8 @@ let selectedKeys = new Set();
 
 function renderList() {
   const scroll = document.getElementById('listScroll');
-  const q = document.getElementById('searchInput').value.toLowerCase();
 
-  filteredKeys = entries
-    .filter(e => !q || e.key.toLowerCase().includes(q) || e.greek.toLowerCase().includes(q) ||
-      e.def.toLowerCase().includes(q))
-    .map(e => e.key);
+  filteredKeys = getFilteredEntries().map(e => e.key);
 
   // Virtual render — zobraz jen viditelné (výkon pro 5624 hesel)
   scroll.innerHTML = '';
@@ -1025,16 +1037,23 @@ function renderList() {
     const div = document.createElement('div');
     div.className = 'list-item' + (done ? ' done' : '') + (key === activeKey ? ' active' : '') + (isSelected ? ' selected' : '');
     div.dataset.key = key;
+    div.setAttribute('tabindex', '0');
     div.onclick = (e) => {
       // Pokud klik na checkbox, ne na řádek
       if (e.target.classList.contains('li-check')) return;
       showDetail(key);
     };
+    div.onkeydown = (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleSelect(key, e);
+      }
+    };
     div.innerHTML = `
-      <input type="checkbox" class="li-check" ${isSelected ? 'checked' : ''} onclick="toggleSelect('${key}', event)">
+      <input type="checkbox" class="li-check" ${isSelected ? 'checked' : ''} onclick="toggleSelect('${key}', event)" aria-label="Vybrat heslo ${key}">
       <div class="li-key">${key}</div>
       <div class="li-greek">${escHtml(e.greek)}</div>
-      <div class="li-dot ${done ? 'done' : ''}">${done ? '✓' : '✗'}</div>
+      <div class="li-dot ${done ? 'done' : ''}" aria-hidden="true">${done ? '✓' : '✗'}</div>
     `;
     frag.appendChild(div);
   }
@@ -1179,6 +1198,35 @@ ${batchKeys.map(k => {
 
 function filterList() { renderList(); }
 
+function getFilteredEntries() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const status = document.getElementById('filterStatus')?.value || 'all';
+  const sortBy = document.getElementById('sortBy')?.value || 'num';
+  
+  let filtered = entries.filter(e => {
+    const matchesSearch = !q || e.key.toLowerCase().includes(q) || 
+      e.greek.toLowerCase().includes(q) || e.def.toLowerCase().includes(q);
+    if (!matchesSearch) return false;
+    
+    const t = translated[e.key];
+    const hasTranslation = t && t.vyznam && t.vyznam.trim().length > 0;
+    const isFailed = t && (!t.vyznam || t.vyznam === '—');
+    
+    if (status === 'pending') return !hasTranslation;
+    if (status === 'done') return hasTranslation && !isFailed;
+    if (status === 'failed') return isFailed;
+    return true;
+  });
+  
+  if (sortBy === 'greek') {
+    filtered.sort((a, b) => a.greek.localeCompare(b.greek));
+  } else {
+    filtered.sort((a, b) => parseInt(a.key.slice(1)) - parseInt(b.key.slice(1)));
+  }
+  
+  return filtered;
+}
+
 function scrollToActive() {
   const el = document.querySelector(`.list-item[data-key="${activeKey}"]`);
   if (el) el.scrollIntoView({ block: 'nearest' });
@@ -1238,17 +1286,17 @@ function renderTranslation(key, t) {
   ];
 
   return sections.map(s => `
-    <div class="translation-box">
+    <div class="translation-box" role="group" aria-label="${s.label}">
       <div class="tbox-head">
         <div class="tbox-label">${s.label}</div>
         <div class="tbox-actions">
-          <button class="tbox-btn" onclick="toggleEditSection('${key}','${s.id}')">✎ Upravit</button>
+          <button class="tbox-btn" onclick="toggleEditSection('${key}','${s.id}')" aria-label="Upravit ${s.label}">✎ Upravit</button>
         </div>
       </div>
       <div class="tbox-body" id="tval-${key}-${s.id}">${escHtml(s.field || '—')}</div>
       <div class="tbox-edit" id="tedit-${key}-${s.id}">
-        <textarea id="tinput-${key}-${s.id}">${escHtml(s.field || '')}</textarea>
-        <button class="tbox-save" onclick="saveSection('${key}','${s.id}')">Uložit</button>
+        <textarea id="tinput-${key}-${s.id}" aria-label="${s.label}">${escHtml(s.field || '')}</textarea>
+        <button class="tbox-save" onclick="saveSection('${key}','${s.id}')" aria-label="Uložit ${s.label}">Uložit</button>
       </div>
     </div>
   `).join('');
@@ -1342,6 +1390,7 @@ async function translateNext() {
     } else {
       showToast('✓ Vše přeloženo!'); 
     }
+    stopElapsedTimer();
     return; 
   }
   
@@ -1406,6 +1455,12 @@ async function translateBatch(keys) {
   currentBatchSize = parseInt(document.getElementById('batchSizeRun').value);
 
   if (!apiKey) { showToast('✗ Zadej API klíč!'); return; }
+
+  // Start timer při prvním překladu
+  if (!startTime) {
+    startTime = Date.now();
+    startElapsedTimer();
+  }
 
   const batch = keys.map(k => entries.find(e => e.key === k)).filter(Boolean);
   const messages = buildPromptMessages(batch);
@@ -1763,6 +1818,7 @@ function stopAuto() {
   document.getElementById('btnAuto').textContent = '▶ AUTO';
   document.getElementById('autoPanel').classList.remove('show');
   document.getElementById('countdown').textContent = '—';
+  stopElapsedTimer();
 }
 
 async function runAutoStep() {
@@ -1810,6 +1866,11 @@ function updateStats() {
   document.getElementById('sRemain').textContent = remain;
   document.getElementById('sTotal').textContent  = total;
   document.getElementById('pbar').style.width    = pct + '%';
+  const pbarContainer = document.getElementById('pbarContainer');
+  if (pbarContainer) {
+    pbarContainer.setAttribute('aria-valuenow', pct);
+    pbarContainer.setAttribute('aria-valuetext', `${done} z ${total} hesel přeloženo (${pct}%)`);
+  }
   if (autoRunning) updateETA();
 }
 
@@ -1978,6 +2039,28 @@ function logMsg(msg, type) {
 }
 
 
+
+// ── Elapsed time ─────────────────────────────────────────────
+function startElapsedTimer() {
+  if (elapsedTimer) clearInterval(elapsedTimer);
+  elapsedTimer = setInterval(updateElapsedTime, 1000);
+}
+
+function stopElapsedTimer() {
+  if (elapsedTimer) {
+    clearInterval(elapsedTimer);
+    elapsedTimer = null;
+  }
+}
+
+function updateElapsedTime() {
+  if (!startTime) return;
+  const elapsed = Math.floor((Date.now() - startTime) / 1000);
+  const mins = Math.floor(elapsed / 60);
+  const secs = elapsed % 60;
+  const el = document.getElementById('elapsedTime');
+  if (el) el.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+}
 
 // ── ETA — odhad zbývajícího času ─────────────────────────────
 function updateETA() {
