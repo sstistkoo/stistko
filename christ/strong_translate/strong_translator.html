@@ -1142,6 +1142,9 @@ function showSetup() {
 function toggleListPane() {
   const pane = document.querySelector('.list-pane');
   const btn = document.getElementById('btnToggleList');
+  const resizeHandle = document.getElementById('resizeHandle');
+  const logPanel = document.querySelector('.log-panel');
+  const detailPane = document.querySelector('.detail-pane');
   const isMobile = window.innerWidth <= 600;
   const isHidden = pane.classList.contains('hidden');
   
@@ -1150,12 +1153,22 @@ function toggleListPane() {
     btn.textContent = '◀';
     if (isMobile) {
       pane.style.height = '45%';
+      resizeHandle.style.display = 'flex';
+      logPanel.style.height = '50%';
+      logPanel.style.flex = 'none';
+      detailPane.style.height = '50%';
+      detailPane.style.flex = 'none';
     }
   } else {
     pane.classList.add('hidden');
     btn.textContent = '▶';
     if (isMobile) {
       pane.style.height = '0';
+      resizeHandle.style.display = 'none';
+      logPanel.style.height = '100%';
+      logPanel.style.flex = '1';
+      detailPane.style.height = 'auto';
+      detailPane.style.flex = '1';
     }
   }
 }
@@ -2440,12 +2453,15 @@ function doResize(e) {
   if (!resizing) return;
   const currY = e.touches ? e.touches[0].clientY : e.clientY;
   const delta = currY - startY;
+  const split = document.querySelector('.split');
   const logPanel = document.querySelector('.log-panel');
-  const detailPane = document.querySelector('.detail-scroll');
-  const newLog = Math.max(100, Math.min(startLogHeight + delta, window.innerHeight * 0.8));
+  const detailPane = document.querySelector('.detail-pane');
+  const newLog = Math.max(100, Math.min(startLogHeight + delta, split.offsetHeight - 120));
   const newDetail = Math.max(100, startLogHeight + startDetailHeight - newLog);
   logPanel.style.height = newLog + 'px';
   detailPane.style.height = newDetail + 'px';
+  logPanel.style.flex = 'none';
+  detailPane.style.flex = 'none';
 }
 
 function stopResize() {
