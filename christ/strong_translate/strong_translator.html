@@ -337,7 +337,8 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   .hdr-btns #btnToggleList,
   .hdr-btns #btnAuto,
   .hdr-btns [onclick="clearProgress()"],
-  .hdr-btns [onclick="showFailedEntries()"] { display: inline-block; }
+  .hdr-btns [onclick="showFailedEntries()"],
+  .hdr-btns [onclick="showSettingsModal()"] { display: inline-block; }
   .log-head { flex-wrap: wrap; }
   
   /* Resize handle */
@@ -945,6 +946,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       <button class="hbtn grn" onclick="exportJSON()" aria-label="Exportovat do JSON">⬇ JSON</button>
       <button class="hbtn" onclick="exportRange()" title="Export vybraného rozsahu G čísel" aria-label="Exportovat rozsah G čísel">⬇ Rozsah</button>
       <button class="hbtn red" onclick="showFailedEntries()" title="Zobrazit neúspěšné překlady" aria-label="Zobrazit neúspěšné překlady">⚠ Neus. <span id="failedCount"></span></button>
+      <button class="hbtn" onclick="showSettingsModal()" title="Nastavení AI (provider, model, dávka)" aria-label="Nastavení AI">⚙ AI</button>
       <button class="hbtn red" id="mobileMenuBtn" onclick="showMobileActions()" aria-label="Zobrazit akce">☰</button>
     </div>
   </div>
