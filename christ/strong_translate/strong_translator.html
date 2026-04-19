@@ -304,8 +304,16 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   .split { display: flex; flex-direction: column; }
   .list-pane { width: 100%; height: 45%; flex-shrink: 0; transition: height .3s; }
   .list-pane.hidden { height: 0 !important; overflow: hidden; }
-  .detail-pane { width: 100%; height: 55%; }
+  .detail-pane { width: 100%; height: 50%; }
   .log-panel { height: 50%; }
+  
+  /* Header buttons - mobile */
+  .hdr-btns { width: 100%; justify-content: center; gap: 3px; flex-wrap: wrap; margin-left: 0; margin-top: 4px; }
+  .hbtn { font-size: 8px; padding: 4px 6px; }
+  .stat:not(:first-of-type) { display: none; }
+  #tokenStats, #timeElapsed { display: none; }
+  .hdr > div[style*="display:flex"] { display: none !important; }
+  .pbar-wrap { width: 100%; order: 10; margin-top: 4px; }
 }
 
 .list-search {
@@ -742,14 +750,14 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
     </div>
     <div class="hdr-btns">
       <button class="hbtn" id="btnToggleList" onclick="toggleListPane()" title="Skrýt seznam">◀</button>
-      <button class="hbtn" id="btnImport" onclick="document.getElementById('importFileInput').click()" aria-label="Importovat TXT soubor s překlady">⬆ Import TXT</button>
+      <button class="hbtn" id="btnImport" onclick="document.getElementById('importFileInput').click()" aria-label="Importovat TXT soubor s překlady">⬆ Import</button>
       <input type="file" id="importFileInput" accept=".txt" style="display:none" onchange="importTXT(this)" aria-label="Výběr TXT souboru k importu">
       <button class="hbtn" id="btnAuto" onclick="toggleAuto()" aria-label="Spustit automatický překlad">▶ AUTO</button>
       <button class="hbtn" id="btnStep" onclick="translateNext()" aria-label="Přeložit další dávku">⚡ Dávka</button>
       <button class="hbtn grn" onclick="exportTXT()" aria-label="Exportovat do TXT">⬇ TXT</button>
       <button class="hbtn grn" onclick="exportJSON()" aria-label="Exportovat do JSON">⬇ JSON</button>
-      <button class="hbtn" onclick="exportRange()" title="Export vybraného rozsahu G čísel" aria-label="Exportovat rozsah G čísel">⬇ Rozsah</button>
-      <button class="hbtn red" onclick="showFailedEntries()" title="Zobrazit neúspěšné překlady" aria-label="Zobrazit neúspěšné překlady">⚠ Neúspěšné <span id="failedCount"></span></button>
+      <button class="hbtn" id="btnSelectRange" onclick="selectRange()" title="Označit rozsah hesel k překladu">⬇ Rozsah</button>
+      <button class="hbtn red" onclick="showFailedEntries()" title="Zobrazit neúspěšné překlady" aria-label="Zobrazit neúspěšné překlady">⚠ <span id="failedCount"></span></button>
       <button class="hbtn red" onclick="clearProgress()" aria-label="Smazat veškerý uložený průběh">✕ Reset</button>
     </div>
   </div>
@@ -2283,6 +2291,22 @@ function exportRange() {
   });
   download(`strong_gr_cz_G${from}-G${to}.txt`, lines.join('\n'), 'text/plain');
   showToast(`✓ Exportováno ${done.length} hesel (G${from}–G${to})`);
+}
+
+// ── Označit rozsah hesel k překladu ───────────────────────────────────
+function selectRange() {
+  const from = parseInt(prompt('Od G čísla:', '1') || '1');
+  const to   = parseInt(prompt('Do G čísla:', '100') || '100');
+  if (isNaN(from) || isNaN(to)) return;
+
+  selectedKeys.clear();
+  entries.forEach(e => {
+    const n = parseInt(e.key.slice(1));
+    if (n >= from && n <= to) selectedKeys.add(e.key);
+  });
+  
+  renderList();
+  showToast(`✓ Označeno ${selectedKeys.size} hesel (G${from}–G${to})`);
 }
 
 function escHtml(s) {
