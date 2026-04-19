@@ -306,6 +306,25 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   .list-pane.hidden { height: 0 !important; overflow: hidden; }
   .detail-pane { width: 100%; height: 50%; flex-shrink: 0; }
   .log-panel { height: 50%; flex-shrink: 0; }
+  
+  /* Resize handle */
+  .resize-handle {
+    height: 16px;
+    background: var(--brd);
+    cursor: row-resize;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .resize-handle::after {
+    content: '';
+    width: 40px;
+    height: 4px;
+    background: var(--txt3);
+    border-radius: 2px;
+  }
+  .resize-handle:hover { background: var(--acc); }
 }
 
 .list-search {
@@ -896,6 +915,9 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
         </div>
       </div>
 
+      <!-- Resize handle for mobile -->
+      <div class="resize-handle" id="resizeHandle"></div>
+
       <!-- Detail vybraného hesla -->
       <div class="detail-scroll" id="detailPane">
         <div class="detail-empty">← Klikni na heslo v seznamu pro detail</div>
@@ -1131,6 +1153,7 @@ function toggleListPane() {
     btn.textContent = '◀';
     if (isMobile) {
       pane.style.height = '45%';
+      resizeHandle.style.display = 'flex';
       logPanel.style.height = '50%';
       logPanel.style.flex = 'none';
       detailPane.style.height = '50%';
@@ -1141,6 +1164,7 @@ function toggleListPane() {
     btn.textContent = '▶';
     if (isMobile) {
       pane.style.height = '0';
+      resizeHandle.style.display = 'none';
       logPanel.style.height = '100%';
       logPanel.style.flex = '1';
       detailPane.style.height = 'auto';
@@ -1172,11 +1196,10 @@ function startApp() {
    renderList();
    updateStats();
    initRunSelects();
-updateFailedCount();
-    
-   if (window.innerWidth <= 600) {
-     toggleListPane();
-    }
+   updateFailedCount();
+   
+   document.getElementById('resizeHandle').addEventListener('mousedown', startResize);
+   document.getElementById('resizeHandle').addEventListener('touchstart', startResize, {passive: false});
  }
 
 // ══ LIST ═════════════════════════════════════════════════════════
@@ -2406,6 +2429,52 @@ function exportRange() {
 }
 
 // ══ RESIZE PANELS ──────────────────────────────────────────────
+let resizing = false;
+let startY = 0;
+let startLogHeight = 0;
+let startDetailHeight = 0;
+
+function startResize(e) {
+  if (window.innerWidth > 600) return;
+  e.preventDefault();
+  resizing = true;
+  startY = e.touches ? e.touches[0].clientY : e.clientY;
+  const logPanel = document.querySelector('.log-panel');
+  const detailPane = document.querySelector('.detail-scroll');
+  startLogHeight = logPanel.offsetHeight;
+  startDetailHeight = detailPane.offsetHeight;
+  document.addEventListener('mousemove', doResize);
+  document.addEventListener('mouseup', stopResize);
+  document.addEventListener('touchmove', doResize);
+  document.addEventListener('touchend', stopResize);
+}
+
+function doResize(e) {
+  if (!resizing) return;
+  const currY = e.touches ? e.touches[0].clientY : e.clientY;
+  const delta = currY - startY;
+  const split = document.querySelector('.split');
+  const logPanel = document.querySelector('.log-panel');
+  const detailPane = document.querySelector('.detail-pane');
+  const newLog = Math.max(100, Math.min(startLogHeight + delta, split.offsetHeight - 120));
+  const newDetail = Math.max(100, startLogHeight + startDetailHeight - newLog);
+  logPanel.style.height = newLog + 'px';
+  detailPane.style.height = newDetail + 'px';
+  logPanel.style.flex = 'none';
+  detailPane.style.flex = 'none';
+}
+
+function stopResize() {
+  resizing = false;
+  document.removeEventListener('mousemove', doResize);
+  document.removeEventListener('mouseup', stopResize);
+  document.removeEventListener('touchmove', doResize);
+  document.removeEventListener('touchend', stopResize);
+  
+  const logPanel = document.querySelector('.log-panel');
+  console.log('LOG_PANEL_HEIGHT:' + logPanel.offsetHeight);
+}
+
 function escHtml(s) {
   return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
