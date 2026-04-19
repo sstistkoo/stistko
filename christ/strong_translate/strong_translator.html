@@ -945,38 +945,84 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
    </div>
  </div>
 
- <script>
-// ══ STORAGE KEY ══════════════════════════════════════════════════
-const STORE_KEY = 'strong_gr_cz_v2';
+  <script type="module">
+  // ══ CORE MODULE IMPORT ═══════════════════════════════════════════
+  import core from './strong_translator_core.js';
+  // Re-export for use in this module
+   const {
+     parseTXT: parseTXTCore,
+     parseTranslations: parseTranslationsCore,
+     buildPromptMessages: buildPromptMessagesCore,
+     buildRetryMessages: buildRetryMessagesCore,
+     escHtml: escHtmlCore,
+     validateAPIResponse,
+     SYSTEM_MESSAGE,
+     DEFAULT_PROMPT
+   } = core;
 
-// ══ STATE ════════════════════════════════════════════════════════
-let entries     = [];      // [{key, greek, def, kjv, orig}]
-let entryMap    = new Map();   // key → entry
-let translated  = {};      // key -> {vyznam, definice, pouziti, puvod, raw}
-let activeKey   = null;
-let autoTimer   = null;
-let autoCountTimer = null;
-let autoRunning = false;
-let currentBatchSize = 10;
-let currentInterval  = 10;
-let filteredKeys = [];
-let retryMode = false;
-let retryKeysList = [];
-let startTime = null;
-let elapsedTimer = null;
+  // ══ STORAGE KEY ══════════════════════════════════════════════════
+  const STORE_KEY = 'strong_gr_cz_v2';
 
-// Virtual scrolling
-const ITEM_HEIGHT = 32; // px, must match CSS .list-item height
-const BUFFER_ITEMS = 10; // number of extra items above/below viewport
-let virtualInitialized = false;
-let phantomSpacer = null;
-let visibleContainer = null;
-let lastRenderRange = { start: -1, end: -1 };
-let scrollTicking = false;
-let resizeTicking = false;
+  // ══ ERROR LOGGER ═════════════════════════════════════════════════
+  /**
+   * Structured error logger with context and stack traces.
+   * Logs to both console and UI log panel.
+   */
+  function logError(context, error, extra = {}) {
+    const timestamp = new Date().toISOString();
+    const stack = error.stack ? `\nStack: ${error.stack}` : '';
+    const contextStr = `[${timestamp}] [${context}]`;
 
-// ══ PROVIDER SETUP ══════════════════════════════════════════════════
-const PROVIDERS = {
+    // Console with full details
+    console.error(`${contextStr} ${error.message}`, {
+      context,
+      error: error.message,
+      ...extra
+    }, stack);
+
+    // UI log
+    logMsg(`✗ ${context}: ${error.message}`, 'err');
+  }
+
+  function logWarn(context, message, extra = {}) {
+    console.warn(`[${new Date().toISOString()}] [${context}]`, message, extra);
+    log(`⚠ ${context}: ${message}`);
+  }
+
+  function logInfo(context, message) {
+    console.log(`[${new Date().toISOString()}] [${context}]`, message);
+    log(`ℹ ${context}: ${message}`);
+  }
+  // ══ STATE ════════════════════════════════════════════════════════
+  let entries     = [];      // [{key, greek, def, kjv, orig}]
+  let entryMap    = new Map();   // key → entry
+  let translated  = {};      // key -> {vyznam, definice, pouziti, puvod, raw}
+  let activeKey   = null;
+  let autoTimer   = null;
+  let autoCountTimer = null;
+  let autoRunning = false;
+  let currentBatchSize = 10;
+  let currentInterval  = 10;
+  let filteredKeys = [];
+  let retryMode = false;
+  let retryKeysList = [];
+  let startTime = null;
+  let elapsedTimer = null;
+  let selectedKeys = new Set();
+  let totalTokens = { in: 0, out: 0, total: 0 };
+
+  // Virtual scrolling
+  const ITEM_HEIGHT = 32;
+  const BUFFER_ITEMS = 10;
+  let virtualInitialized = false;
+  let phantomSpacer = null;
+  let visibleContainer = null;
+  let lastRenderRange = { start: -1, end: -1 };
+  let scrollTicking = false;
+  let resizeTicking = false;
+
+  // ══ PROVIDER SETUP ══════════════════════════════════════════════════
+  const PROVIDERS = {
   groq: {
     label: 'Groq (console.groq.com)',
     ph: 'gsk_...',
@@ -1056,9 +1102,11 @@ function loadTXT(input) {
       el.className = 'file-status ok';
       document.getElementById('startBtn').disabled = false;
       checkResume();
-    } catch(e) {
-      document.getElementById('statusTXT').textContent = '✗ Chyba: ' + e.message;
-    }
+     } catch(e) {
+       logError('loadTXT', e, { fileName: file?.name });
+       const el = document.getElementById('statusTXT');
+       el.textContent = '✗ Chyba parsování: ' + e.message;
+     }
   };
   reader.readAsText(file, 'utf-8');
 }
@@ -1076,11 +1124,12 @@ function loadDefaultFile() {
       document.getElementById('fileReady').style.display = 'block';
       document.getElementById('startBtn').disabled = false;
       checkResume();
-    })
-    .catch(e => {
-      document.getElementById('statusTXT').textContent = '✗ ' + e.message;
-      document.getElementById('btnLoadDefault').style.display = 'none';
-    });
+     })
+     .catch(e => {
+       logError('loadDefaultFile', e, { file: 'strong_greek_detailed.txt' });
+       document.getElementById('statusTXT').textContent = '✗ ' + e.message;
+       document.getElementById('btnLoadDefault').style.display = 'none';
+     });
 }
 
 function checkDefaultFile() {
@@ -1096,24 +1145,15 @@ function checkDefaultFile() {
     });
 }
 
-function parseTXT(text) {
-  const blocks = text.trim().split(/\n(?=G\d+\s*\|)/);
-  const result = [];
-  for (const block of blocks) {
-    const lines = block.trim().split('\n');
-    const header = lines[0];
-    const m = header.match(/^(G\d+)\s*\|\s*(.+)/);
-    if (!m) continue;
-    const entry = { key: m[1], greek: m[2].trim(), def: '', kjv: '', orig: '' };
-    for (const line of lines.slice(1)) {
-      if (line.startsWith('Definice:'))    entry.def  = line.slice(9).trim();
-      else if (line.startsWith('KJV Významy:')) entry.kjv  = line.slice(12).trim();
-      else if (line.startsWith('Původ:'))  entry.orig = line.slice(6).trim();
+  // Use core module for parsing
+  function parseTXT(text) {
+    try {
+      return parseTXTCore(text);
+    } catch(e) {
+      logError('parseTXT', e, { textLength: text?.length });
+      throw e;
     }
-    result.push(entry);
   }
-  return result;
-}
 
 // ══ RESUME ═══════════════════════════════════════════════════════
 function checkResume() {
@@ -1130,8 +1170,10 @@ function checkResume() {
       box.style.display = 'block';
       const ts = data.ts ? new Date(data.ts).toLocaleString('cs') : '?';
       box.innerHTML = `⚑ Nalezen uložený průběh: <b>${count}</b> přeložených hesel (uloženo ${ts}). Po spuštění bude automaticky obnoven.`;
-    }
-  } catch(e) {}
+     }
+   } catch(e) {
+     logWarn('checkResume', 'Failed to parse saved progress', { error: e.message });
+   }
 }
 
 function showSetup() {
@@ -1183,7 +1225,10 @@ function startApp() {
       const data = JSON.parse(saved);
       translated = data.translated || {};
     }
-  } catch(e) { translated = {}; }
+   } catch(e) {
+     logWarn('startApp', 'Failed to load saved progress, starting fresh', { error: e.message });
+     translated = {};
+   }
 
   document.getElementById('setup').style.display = 'none';
   document.getElementById('app').style.display   = 'flex';
@@ -1205,8 +1250,7 @@ updateFailedCount();
  }
 
 // ══ LIST ═════════════════════════════════════════════════════════
-// Store for selected keys
-let selectedKeys = new Set();
+// Store for selected keys (declared in STATE section above)
 
 function renderList() {
   // Update filtered keys based on current filter/sort/search
@@ -1327,9 +1371,15 @@ ${batchKeys.map(k => {
       updateFailedCount();
       renderList();
       
-    } catch(e) {
-      showToast('✗ Chyba: ' + e.message);
-    }
+     } catch(e) {
+       logError('translateSelected', e, {
+         batchKeys,
+         batchSize: batchKeys.length,
+         provider: document.getElementById('providerRun').value,
+         model: document.getElementById('modelRun').value
+       });
+       showToast('✗ Chyba: ' + e.message);
+     }
     
     processed += batchKeys.length;
     
@@ -1518,16 +1568,18 @@ function onVirtualScroll() {
 function showDetail(key) {
   activeKey = key;
   // Update active state v listu (virtuální render)
-  if (virtualInitialized) {
-    const idx = filteredKeys.indexOf(key);
-    if (idx !== -1) {
-      const scroll = document.getElementById('listScroll');
-      const targetTop = idx * ITEM_HEIGHT - (scroll.clientHeight / 2) + (ITEM_HEIGHT / 2);
-      scroll.scrollTop = targetTop;
-      // Okamžitě překresli viditelné položky s novým active stavem
-      renderVisible();
-    }
-  } else {
+   if (virtualInitialized) {
+     const idx = filteredKeys.indexOf(key);
+     if (idx !== -1) {
+       const scroll = document.getElementById('listScroll');
+       const targetTop = idx * ITEM_HEIGHT - (scroll.clientHeight / 2) + (ITEM_HEIGHT / 2);
+       scroll.scrollTop = targetTop;
+       // Defer render to next animation frame to avoid race with scroll event
+       requestAnimationFrame(() => {
+         if (virtualInitialized) renderVisible();
+       });
+     }
+   } else {
     // Fallback pro ne-inicializovaný virtuální scrolling
     document.querySelectorAll('.list-item').forEach(el => {
       el.classList.toggle('active', el.dataset.key === key);
@@ -1618,11 +1670,17 @@ async function translateSingle(key) {
   const btn = document.querySelector('.translate-btn');
   if (btn) { btn.disabled = true; btn.textContent = '⏳ Překládám...'; }
   
-  const apiKey = document.getElementById('apiKey').value.trim();
-  const model  = document.getElementById('modelRun').value;
-  const prov   = document.getElementById('providerRun').value;
-  
-  const e = entries.find(x => x.key === key);
+   const apiKey = document.getElementById('apiKey').value.trim();
+   const model  = document.getElementById('modelRun').value;
+   const prov   = document.getElementById('providerRun').value;
+
+   if (!apiKey) {
+     showToast('✗ Zadej API klíč!');
+     if (btn) { btn.disabled = false; btn.textContent = '⚡ Přeložit toto heslo'; }
+     return;
+   }
+
+   const e = entries.find(x => x.key === key);
   if (!e) {
     if (btn) { btn.disabled = false; btn.textContent = '⚡ Přeložit toto heslo'; }
     return;
@@ -1646,14 +1704,18 @@ DEF: ${e.def}
 KJV: ${e.kjv}
 ORIG: ${e.orig}`;
       
-      const raw2 = await callOnce(prov, apiKey, model, buildRetryMessages(retryContent));
-      missingKeys = parseTranslations(raw2, [key]);
-    }
-    
-    const result = translated[key];
-    
-  } catch(e) {
-  }
+       const raw2 = await callOnce(prov, apiKey, model, buildRetryMessages(retryContent));
+       missingKeys = parseTranslations(raw2, [key]);
+     }
+
+   } catch(e) {
+     logError('translateSingle', e, {
+       key,
+       provider: prov,
+       model
+     });
+     showToast('✗ Chyba: ' + e.message);
+   }
   
   if (btn) { btn.disabled = false; btn.textContent = '⚡ Přeložit toto heslo'; }
   renderDetail();
@@ -1822,32 +1884,23 @@ ${keys.map(k => {
       showToast(`⚠ Přeloženo ${translatedCount}/${keys.length} hesel`);
     }
     
-    saveProgress();
-    updateFailedCount();
-    logEntry(keys, content);
-    log(`✓ Přeloženo ${keys.length} hesel (${keys[0]}–${keys[keys.length-1]})`);
-  } catch(e) {
-    log(`✗ Chyba: ${e.message}`);
-    logMsg(`✗ Chyba při překladu ${keys[0]}–${keys[keys.length-1]}: ${e.message}`, 'err');
-    showToast('✗ ' + e.message);
-  }
+     saveProgress();
+     updateFailedCount();
+     // logEntry already called above after initial parse
+     log(`✓ Přeloženo ${keys.length} hesel (${keys[0]}–${keys[keys.length-1]})`);
+   } catch(e) {
+     logError('translateBatch', e, {
+       keys: keys.slice(0, 5), // first 5 keys only
+       keyRange: `${keys[0]}-${keys[keys.length-1]}`,
+       provider: document.getElementById('providerRun')?.value,
+       batchSize: keys.length
+     });
+     showToast('✗ ' + e.message);
+    }
 }
 
-const SYSTEM_MESSAGE = `Jsi biblický lexikograf. Překládáš Strongův řecko-český slovník. Formát: ###GXXX### VYZNAM: [české překlady] DEFINICE: [výklad 2-4 věty] POUZITI: [KJV překlady] PUVOD: [etymologie] Pravidla: více synonym, přirozená čeština, biblická terminologie, vlastní jména transliteruj.`;
-
-const DEFAULT_PROMPT = `Jsi biblický lexikograf. Překládáš Strongův řecko-český slovník.
-
-Formát:
-###GXXX###
-VYZNAM: [české překlady]
-DEFINICE: [výklad 2-4 věty]
-POUZITI: [KJV překlady]
-PUVOD: [etymologie]
-
-Pravidla: více synonym, přirozená čeština, biblická terminologie, vlastní jména transliteruj.
-
-{HESLA}`;
-
+// ══ BUILD PROMPT MESSAGES ═══════════════════════════════════════
+// Uses SYSTEM_MESSAGE and DEFAULT_PROMPT imported from core module
 function buildPromptMessages(batch) {
   const items = batch.map(e =>
     `${e.key} | ${e.greek}\nDEF: ${e.def}\nKJV: ${e.kjv}\nORIG: ${e.orig}`
@@ -1892,27 +1945,42 @@ async function callAIWithRetry(provider, apiKey, model, messages) {
     for (let attempt = 0; attempt < 3; attempt++) {
       try {
         return await callOnce(provider, apiKey, m, messages);
-      } catch(e) {
-        lastErr = e;
-        const msg = (e.message || '').toLowerCase();
-        const isRate = msg.includes('429') || msg.includes('quota') || msg.includes('rate') || msg.includes('too many');
-        const isBanned = msg.includes('restricted') || msg.includes('organization');
-        const is404 = msg.includes('404') || msg.includes('not found') || msg.includes('not found');
+       } catch(e) {
+         lastErr = e;
+         const msg = (e.message || '').toLowerCase();
+         const isRate = msg.includes('429') || msg.includes('quota') || msg.includes('rate') || msg.includes('too many');
+         const isBanned = msg.includes('restricted') || msg.includes('organization');
+         const is404 = msg.includes('404') || msg.includes('not found') || msg.includes('not found');
 
-        if (is404) {
-          log('✗ Chyba 404: Model nenalezen, vyberte jiný v nastavení');
-          throw new Error('Chyba 404: Model nenalezen, vyberte jiný v nastavení');
-        }
-        if (isRate) {
-          const wait = (attempt + 1) * 10;
-          log(`⏳ Rate limit na ${m}, čekám ${wait}s...`);
-          showToast(`⏳ Rate limit — čekám ${wait}s`);
-          await sleep(wait * 1000);
-          continue;
-        }
-        if (isBanned) { log(`✗ Blokovaný účet: ${m}`); break; }
-        break;
-      }
+         if (is404) {
+           const errMsg = 'Chyba 404: Model nenalezen, vyberte jiný v nastavení';
+           logError('callAIWithRetry', new Error(errMsg), {
+             provider, model: m, attempt: attempt + 1,
+             statusCode: 404
+           });
+           throw new Error(errMsg);
+         }
+         if (isRate) {
+           const wait = (attempt + 1) * 10;
+           logWarn('callAIWithRetry', `Rate limit na ${m}, čekám ${wait}s...`, {
+             provider, model: m, attempt: attempt + 1, waitSeconds: wait
+           });
+           showToast(`⏳ Rate limit — čekám ${wait}s`);
+           await sleep(wait * 1000);
+           continue;
+         }
+         if (isBanned) {
+           logError('callAIWithRetry', new Error(`Blokovaný účet: ${m}`), {
+             provider, model: m, attempt: attempt + 1
+           });
+           break;
+         }
+         // Other errors - log and try next model/attempt
+         logWarn('callAIWithRetry', `Chyba při volání ${m} (pokus ${attempt+1}): ${e.message}`, {
+           provider, model: m, attempt: attempt + 1, error: e.message
+         });
+         break;
+       }
     }
   }
   throw lastErr || new Error('Všechny modely selhaly');
@@ -1932,20 +2000,19 @@ async function callOnce(provider, apiKey, model, messages) {
       signal: controller.signal
     });
     const d = await r.json();
-    if (!r.ok) {
-      if (r.status === 429) {
-        const retryAfter = r.headers.get('retry-after');
-        throw new Error(`Rate limit! Zkuste za ${retryAfter || 'několik'}s. Info: groq.com/pricing`);
-      }
-      throw new Error(d.error?.message || String(r.status));
-    }
-    if (d.usage) {
-      log(`📊 Groq: ${d.usage.prompt_tokens} in / ${d.usage.completion_tokens} out / ${d.usage.total_tokens} total`);
-    }
-    if (!d.choices?.[0]?.message?.content) {
-      throw new Error('Prázdná odpověď od AI - zkuste menší dávku');
-    }
-    const content = d.choices[0].message.content;
+     if (!r.ok) {
+       if (r.status === 429) {
+         const retryAfter = r.headers.get('retry-after');
+         throw new Error(`Rate limit! Zkuste za ${retryAfter || 'několik'}s. Info: groq.com/pricing`);
+       }
+       throw new Error(d.error?.message || String(r.status));
+     }
+     // Validate response structure
+     validateAPIResponse(d, 'groq');
+     if (d.usage) {
+       log(`📊 Groq: ${d.usage.prompt_tokens} in / ${d.usage.completion_tokens} out / ${d.usage.total_tokens} total`);
+     }
+     const content = d.choices[0].message.content;
     // Kontrola na nesmyslnou odpověď
     const weirdChars = (content.match(/[^\x20-\x7E\n\r\těščřžýáíéúůťďňĚŠČŘŽÝÁÍÉÚŮŤĎŇ]/g) || []).length;
     if (content.length > 0 && weirdChars > content.length * 0.5) {
@@ -1966,21 +2033,21 @@ async function callOnce(provider, apiKey, model, messages) {
         generationConfig: { temperature: 0.3, maxOutputTokens: 2500 } })
     });
     const d = await r.json();
-    if (!r.ok) {
-      if (d.error?.status === 'RESOURCE_EXHAUSTED') {
-        throw new Error(`Gemini limit vyčerpán! Počkej ~20min nebo přepni na Groq.`);
-      }
-      throw new Error(d.error?.message || String(r.status));
-    }
-    if (d.usageMetadata) {
-      log(`📊 Gemini: ${d.usageMetadata.promptTokenCount} in / ${d.usageMetadata.candidatesTokenCount} out`);
-    }
-    if (!d.candidates || !d.candidates[0]?.content?.parts?.[0]?.text) {
-      throw new Error('Prázdná odpověď od AI - zkuste menší dávku');
-    }
-    return { content: d.candidates[0].content.parts[0].text, usage: d.usageMetadata };
+     if (!r.ok) {
+       if (d.error?.status === 'RESOURCE_EXHAUSTED') {
+         throw new Error(`Gemini limit vyčerpán! Počkej ~20min nebo přepni na Groq.`);
+       }
+       throw new Error(d.error?.message || String(r.status));
+     }
+     // Validate response structure
+     validateAPIResponse(d, 'gemini');
+     if (d.usageMetadata) {
+       log(`📊 Gemini: ${d.usageMetadata.promptTokenCount} in / ${d.usageMetadata.candidatesTokenCount} out`);
+     }
+      const content = d.candidates[0].content.parts[0].text;
+      return { content, usage: d.usageMetadata };
 
-  } else if (provider === 'openrouter') {
+   } else if (provider === 'openrouter') {
     const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: { 'Authorization': 'Bearer ' + apiKey, 'Content-Type': 'application/json',
@@ -1988,9 +2055,10 @@ async function callOnce(provider, apiKey, model, messages) {
       body: JSON.stringify({ model, messages,
         temperature: 0.3, max_tokens: 2500 })
     });
-    const d = await r.json();
-    if (!r.ok) throw new Error(d.error?.message || String(r.status));
-    return { content: d.choices[0].message.content, usage: d.usage };
+     const d = await r.json();
+     if (!r.ok) throw new Error(d.error?.message || String(r.status));
+     validateAPIResponse(d, 'openrouter');
+     return { content: d.choices[0].message.content, usage: d.usage };
   }
   throw new Error('Neznámý provider');
   } finally {
@@ -1998,101 +2066,22 @@ async function callOnce(provider, apiKey, model, messages) {
   }
 }
 
-// ══ PARSOVÁNÍ ODPOVĚDI AI ════════════════════════════════════════
-function parseTranslations(raw, keys) {
-  try {
-  // Podporujeme 2 formáty:
-  // 1. ###G{číslo}### - preferovaný formát
-  // 2. G{číslo} | ... - alternativní formát bez ###
-  let blocks;
-  let usePlainFormat = false;
-  
-  if (raw.includes('###G')) {
-    blocks = raw.split(/(?=###G\d+###)/);
-  } else {
-    // Zkus alternativní formát
-    blocks = raw.split(/(?=G\d+\s*\|)/);
-    if (blocks.length > 1 && /G\d+\s*\|/.test(blocks[0])) {
-      usePlainFormat = true;
-      log('📝 Alternativní formát detekován');
-    }
-  }
-  
-  // Diagnostika
-  const hasValidBlocks = blocks.some(b => /###G\d+|G\d+\s*\|/.test(b));
-  if (!hasValidBlocks) {
-    log('⚠ Varování: AI nedodržela formátování - zkuste menší dávku');
-    console.log('═ AI ODPOVĚĎ (ŠPATNÉ FORMÁTOVÁNÍ) ═');
-    console.log(raw);
-    // Kontrola: vypadá to jako nesmyslná odpověď?
-    const weirdChars = (raw.match(/[^\x20-\x7E\n\r\t]/g) || []).length;
-    const totalChars = raw.length;
-    if (weirdChars > totalChars * 0.3 || totalChars < 50) {
-      log('⚠ Odpověď vypadá jako chyba/rate limit - zkuste delší interval');
+  // Use core module with error handling
+  function parseTranslations(raw, keys) {
+    try {
+      return parseTranslationsCore(raw, keys, translated);
+    } catch(e) {
+      logError('parseTranslations', e, {
+        rawLength: raw?.length,
+        keysCount: keys?.length,
+        keysSample: keys?.slice(0, 5)
+      });
+      // Return all keys as missing to trigger retry
       return keys;
     }
   }
-  
-  for (const block of blocks) {
-    let key, get;
-    
-    // Formát s ###: ###G{číslo}###
-    const kmHash = block.match(/###(G\d+)###/);
-    // Formát bez ###: G{číslo} |
-    const kmPlain = block.match(/G(\d+)\s*\|/);
-    
-    if (kmHash) {
-      key = kmHash[1];
-      if (!keys.includes(key)) continue;
-      get = (label) => {
-        const m = block.match(new RegExp(label + ':\\s*([^\\n]+(?:\\n(?!(?:VYZNAM|DEFINICE|POUZITI|PUVOD|###))[^\\n]+)*)'));
-        return m ? m[1].trim() : '';
-      };
-    } else if (kmPlain) {
-      key = 'G' + kmPlain[1];
-      if (!keys.includes(key)) continue;
-      get = (label) => {
-        const patterns = [
-          label + ':\\s*([\\s\\S]*?)(?=\\n\\nG\\d+|\\nG\\d+\\s*\\|)',
-          label + ':\\s*([\\s\\S]*?)(?=G\\d+\\s*\\|)',
-          label + ':\\s*([\\s\\S]*?)$'
-        ];
-        for (const pat of patterns) {
-          const m = block.match(new RegExp(pat, 'i'));
-          if (m) return m[1].replace(/^#+\\s*/, '').trim();
-        }
-        return '';
-      };
-    } else {
-      continue;
-    }
-    
-    if (!key || !keys.includes(key)) continue;
-    
-    translated[key] = {
-      vyznam:   get('Český význam') || get('VYZNAM') || get('Význam') || get('Překlad'),
-      definice: get('DEFINICE') || get('Definice'),
-      pouziti:  get('POUZITI') || get('Použití') || get('Biblické užití') || get('KJV'),
-      puvod:    get('PUVOD') || get('Původ') || get('Původ/význam'),
-      raw:      block
-    };
-  }
-  
-  const missingKeys = [];
-  for (const key of keys) {
-    if (!translated[key] || !translated[key].vyznam) {
-      missingKeys.push(key);
-    }
-  }
-  return missingKeys;
-  } catch(e) {
-    console.error('Chyba parsování překladu:', e);
-    log('⚠ Chyba parsování: ' + e.message);
-    return keys;
-  }
-}
 
-// ══ AUTO REŽIM ═══════════════════════════════════════════════════
+  // ══ AUTO REŽIM ═══════════════════════════════════════════════════
 function toggleAuto() {
   if (autoRunning) { stopAuto(); return; }
   startAuto();
@@ -2172,11 +2161,15 @@ function updateStats() {
 }
 
 function saveProgress() {
-  try {
-    localStorage.setItem(STORE_KEY, JSON.stringify({ translated, ts: Date.now() }));
-  } catch(e) {
-    showToast('⚠ localStorage plný — exportuj zálohu!');
-  }
+   try {
+     localStorage.setItem(STORE_KEY, JSON.stringify({ translated, ts: Date.now() }));
+   } catch(e) {
+     logError('saveProgress', e, {
+       translatedCount: Object.keys(translated).length,
+       approxSizeKB: JSON.stringify(translated).length / 1024
+     });
+     showToast('⚠ localStorage plný — exportuj zálohu!');
+   }
 }
 
 function clearProgress() {
@@ -2493,14 +2486,12 @@ function showToast(msg) {
   t._t = setTimeout(() => { t.style.opacity = '0'; }, 3500);
 }
 
-function log(msg) {
-  const el = document.getElementById('autoLog');
-  if (el) el.textContent = msg;
-}
+ function log(msg) {
+   const el = document.getElementById('autoLog');
+   if (el) el.textContent = msg;
+ }
 
-let totalTokens = { in: 0, out: 0, total: 0 };
-
-function logTokenEntry(provider, inT, outT, total) {
+ function logTokenEntry(provider, inT, outT, total) {
   totalTokens.in += inT;
   totalTokens.out += outT;
   totalTokens.total += total;
@@ -2615,11 +2606,12 @@ function importTXT(input) {
       for (const [key, data] of Object.entries(imported)) {
         previewData[key] = data;
       }
-      showPreviewModal(previewData);
-      showToast(`📥 Nalezeno ${count} hesel k importu`);
-    } catch(e) {
-      showToast('✗ Chyba importu: ' + e.message);
-    }
+       showPreviewModal(previewData);
+       showToast(`📥 Nalezeno ${count} hesel k importu`);
+     } catch(e) {
+       logError('importTXT', e, { fileName: file?.name });
+       showToast('✗ Chyba importu: ' + e.message);
+     }
     input.value = '';
   };
   reader.readAsText(file, 'utf-8');
@@ -2748,6 +2740,42 @@ document.addEventListener('keydown', e => {
     if (idx > 0) showDetail(filteredKeys[idx - 1]);
   }
 });
+// Expose functions to global scope for HTML event handlers
+window.loadTXT = loadTXT;
+window.loadDefaultFile = loadDefaultFile;
+window.startApp = startApp;
+window.toggleAuto = toggleAuto;
+window.onProviderChange = onProviderChange;
+window.onProviderChangeRun = onProviderChangeRun;
+window.saveApiKey = saveApiKey;
+window.resetPrompt = resetPrompt;
+window.jumpToStart = jumpToStart;
+window.toggleListPane = toggleListPane;
+window.importTXT = importTXT;
+window.translateNext = translateNext;
+window.selectRange = selectRange;
+window.exportTXT = exportTXT;
+window.exportJSON = exportJSON;
+window.exportRange = exportRange;
+window.showFailedEntries = showFailedEntries;
+window.clearProgress = clearProgress;
+window.stopAuto = stopAuto;
+window.filterList = filterList;
+window.selectAll = selectAll;
+window.selectNone = selectNone;
+window.translateSelected = translateSelected;
+window.showSetup = showSetup;
+window.clearLog = clearLog;
+window.closeModal = closeModal;
+window.confirmModal = confirmModal;
+window.toggleSelect = toggleSelect;
+window.translateSingle = translateSingle;
+window.toggleEditSection = toggleEditSection;
+window.saveSection = saveSection;
+window.toggleAllPreview = toggleAllPreview;
+window.acceptPreview = acceptPreview;
+window.discardPreview = discardPreview;
+window.retryFailed = retryFailed;
 </script>
 </body>
 </html>
