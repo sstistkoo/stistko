@@ -2461,14 +2461,13 @@ function doResize(e) {
   const split = document.querySelector('.split');
   const logPanel = document.querySelector('.log-panel');
   const detailPane = document.querySelector('.detail-pane');
-  const newLog = Math.max(80, startLogHeight + delta);
-  const newDetail = split.offsetHeight - newLog;
-  if (newDetail >= 80 && newLog >= 80) {
-    logPanel.style.height = newLog + 'px';
-    detailPane.style.height = newDetail + 'px';
-    logPanel.style.flex = 'none';
-    detailPane.style.flex = 'none';
-  }
+  const totalHeight = split.offsetHeight;
+  const newLog = Math.max(80, Math.min(totalHeight - 80, startLogHeight + delta));
+  const newDetail = totalHeight - newLog;
+  logPanel.style.height = newLog + 'px';
+  detailPane.style.height = newDetail + 'px';
+  logPanel.style.flex = 'none';
+  detailPane.style.flex = 'none';
 }
 
 function stopResize() {
