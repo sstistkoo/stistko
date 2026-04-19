@@ -21,7 +21,7 @@
   --txt2: #a09080;
   --txt3: #908878;
   --grn:  #5a9a6c;
-  --red:  #a04540;
+  --red:  #ff4040;
   --ylw:  #a08840;
   --blue: #4a6a9a;
 }
@@ -177,6 +177,8 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
 
 .hdr-btns { display: flex; gap: 6px; margin-left: auto; flex-wrap: wrap; }
 
+#mobileMenuBtn { display: none; }
+
 .hbtn {
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
@@ -192,10 +194,23 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
 .hbtn:hover { border-color: var(--acc); color: var(--acc); }
 .hbtn.grn { border-color: var(--grn); color: var(--grn); }
 .hbtn.grn:hover { background: var(--grn); color: var(--bg); }
-.hbtn.red { border-color: var(--red); color: #c05050; }
-.hbtn.red:hover { background: var(--red); color: var(--txt); }
+.hbtn.red { border-color: #ff5555; color: #ff5555; background: #2a2020; }
+.hbtn.red:hover { background: #ff5555; color: var(--bg); }
 .hbtn.active { background: var(--acc2); border-color: var(--acc); color: var(--acc3); }
 .hbtn:disabled { opacity: .4; cursor: default; }
+
+.hbtn.auto {
+  border-color: var(--grn);
+  color: var(--grn);
+  font-weight: 700;
+  animation: autoPulse 2s infinite;
+}
+@keyframes autoPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(90, 154, 108, 0.4); }
+  50% { box-shadow: 0 0 8px 2px rgba(90, 154, 108, 0.6); }
+}
+.hbtn.auto:hover { background: var(--grn); color: var(--bg); }
+.hbtn.auto.active { background: var(--red); border-color: var(--red); color: var(--txt); animation: none; }
 
 /* Auto panel */
 .auto-panel {
@@ -306,6 +321,16 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   .list-pane.hidden { height: 0 !important; overflow: hidden; }
   .detail-pane { width: 100%; height: 50%; flex-shrink: 0; }
   .log-panel { height: 50%; flex-shrink: 0; }
+  
+  /* Mobile menu button - show only on mobile */
+  #mobileMenuBtn { display: inline-block; }
+  .hdr-btns .hbtn { display: none; }
+  .hdr-btns #mobileMenuBtn,
+  .hdr-btns #btnToggleList,
+  .hdr-btns #btnAuto,
+  .hdr-btns [onclick="clearProgress()"],
+  .hdr-btns [onclick="showFailedEntries()"] { display: inline-block; }
+  .log-head { flex-wrap: wrap; }
   
   /* Resize handle */
   .resize-handle {
@@ -678,8 +703,89 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
  }
  .modal-btn.ok { background: var(--acc2); border: 1px solid var(--acc); color: var(--acc3); }
  .modal-btn.ok:hover { background: var(--acc); color: var(--bg); }
- .modal-btn.cancel { background: var(--bg3); border: 1px solid var(--brd); color: var(--txt2); }
- .modal-btn.cancel:hover { border-color: var(--txt3); }
+.modal-btn.cancel { background: var(--bg3); border: 1px solid var(--brd); color: var(--txt2); }
+  .modal-btn.cancel:hover { border-color: var(--txt3); }
+
+ /* Mobile Actions Modal */
+ #mobileActionsModal {
+   position: fixed;
+   top: 0; left: 0; right: 0; bottom: 0;
+   background: rgba(0,0,0,0.8);
+   display: none;
+   align-items: center;
+   justify-content: center;
+   z-index: 1001;
+ }
+ #mobileActionsModal.show { display: flex; }
+ .mobl-modal-box {
+   background: var(--bg2);
+   border: 1px solid var(--brd);
+   border-radius: 8px;
+   padding: 16px;
+   max-width: 280px;
+   width: 85%;
+ }
+ .mobl-modal-title {
+   font-family: 'JetBrains Mono', monospace;
+   font-size: 12px;
+   color: var(--acc);
+   margin-bottom: 14px;
+   text-align: center;
+   letter-spacing: .1em;
+ }
+ .mobl-btn {
+   width: 100%;
+   padding: 12px;
+   margin-bottom: 8px;
+   border-radius: 4px;
+   font-family: 'JetBrains Mono', monospace;
+   font-size: 12px;
+   cursor: pointer;
+   background: var(--bg3);
+   border: 1px solid var(--brd);
+   color: var(--txt);
+   transition: all .2s;
+ }
+ .mobl-btn:last-of-type { margin-bottom: 0; }
+ .mobl-btn:hover { border-color: var(--acc); color: var(--acc); }
+ .mobl-btn.grn { border-color: var(--grn); color: var(--grn); }
+ .mobl-btn.grn:hover { background: var(--grn); color: var(--bg); }
+ .mobl-btn.cancel { background: var(--red); border-color: var(--red); color: var(--txt); }
+ .mobl-btn.cancel:hover { background: #c05050; }
+
+ /* Settings Modal */
+ #settingsModal {
+   position: fixed;
+   top: 0; left: 0; right: 0; bottom: 0;
+   background: rgba(0,0,0,0.8);
+   display: none;
+   align-items: center;
+   justify-content: center;
+   z-index: 1001;
+ }
+ #settingsModal.show { display: flex; }
+ .mobl-set-row {
+   margin-bottom: 12px;
+ }
+ .mobl-set-row label {
+   display: block;
+   font-family: 'JetBrains Mono', monospace;
+   font-size: 10px;
+   color: var(--txt3);
+   margin-bottom: 4px;
+   text-transform: uppercase;
+   letter-spacing: .1em;
+ }
+ .mobl-set-row select {
+   width: 100%;
+   padding: 10px;
+   background: var(--bg3);
+   border: 1px solid var(--brd);
+   border-radius: 4px;
+   color: var(--txt);
+   font-family: 'JetBrains Mono', monospace;
+   font-size: 12px;
+ }
 
 /* Virtual scrolling */
 .list-scroll {
@@ -821,13 +927,14 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       <button class="hbtn" id="btnToggleList" onclick="toggleListPane()" title="Skrýt seznam">◀</button>
       <button class="hbtn" id="btnImport" onclick="document.getElementById('importFileInput').click()" aria-label="Importovat TXT soubor s překlady">⬆ Import TXT</button>
       <input type="file" id="importFileInput" accept=".txt" style="display:none" onchange="importTXT(this)" aria-label="Výběr TXT souboru k importu">
-      <button class="hbtn" id="btnAuto" onclick="toggleAuto()" aria-label="Spustit automatický překlad">▶ AUTO</button>
+      <button class="hbtn auto" id="btnAuto" onclick="toggleAuto()" aria-label="Spustit automatický překlad">▶ AUTO</button>
       <button class="hbtn" id="btnStep" onclick="translateNext()" aria-label="Přeložit další dávku">⚡ Dávka</button>
       <button class="hbtn" onclick="selectRange()" title="Označit rozsah hesel k překladu" aria-label="Označit rozsah">☑ Přek</button>
       <button class="hbtn grn" onclick="exportTXT()" aria-label="Exportovat do TXT">⬇ TXT</button>
       <button class="hbtn grn" onclick="exportJSON()" aria-label="Exportovat do JSON">⬇ JSON</button>
       <button class="hbtn" onclick="exportRange()" title="Export vybraného rozsahu G čísel" aria-label="Exportovat rozsah G čísel">⬇ Rozsah</button>
       <button class="hbtn red" onclick="showFailedEntries()" title="Zobrazit neúspěšné překlady" aria-label="Zobrazit neúspěšné překlady">⚠ Neúspěšné <span id="failedCount"></span></button>
+      <button class="hbtn red" id="mobileMenuBtn" onclick="showMobileActions()" aria-label="Zobrazit akce">☰</button>
       <button class="hbtn red" onclick="clearProgress()" aria-label="Smazat veškerý uložený průběh">✕ Reset</button>
     </div>
   </div>
@@ -885,29 +992,8 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
           <button class="hbtn" style="font-size:9px;padding:2px 8px;margin-left:8px" onclick="showSetup()" aria-label="Zpět do nastavení">← Nastavení</button>
           <button class="hbtn" style="font-size:9px;padding:2px 8px" onclick="clearLog()" aria-label="Vymazat log">✕ Vymazat</button>
         </div>
-        <div style="display:flex;gap:8px;padding:8px 12px;background:var(--bg2);border-bottom:1px solid var(--brd);flex-wrap:wrap;align-items:center">
-          <select id="providerRun" onchange="onProviderChangeRun()" style="font-size:10px;padding:2px 4px;background:var(--bg3);color:var(--txt);border:1px solid var(--brd);border-radius:3px" aria-label="AI provider pro běh">
-            <option value="groq">Groq</option>
-            <option value="gemini">Gemini</option>
-            <option value="openrouter">OpenRouter</option>
-          </select>
-          <select id="modelRun" style="font-size:10px;padding:2px 4px;background:var(--bg3);color:var(--txt);border:1px solid var(--brd);border-radius:3px;max-width:180px" aria-label="AI model pro běh"></select>
-          <select id="batchSizeRun" style="font-size:10px;padding:2px 4px;background:var(--bg3);color:var(--txt);border:1px solid var(--brd);border-radius:3px" aria-label="Počet hesel na dávku">
-            <option value="1">1</option>
-            <option value="5">5</option>
-            <option value="10" selected>10</option>
-            <option value="15">15</option>
-            <option value="20">20</option>
-          </select>
-          <span style="font-size:9px;color:var(--txt3)">hesel</span>
-          <select id="intervalRun" style="font-size:10px;padding:2px 4px;background:var(--bg3);color:var(--txt);border:1px solid var(--brd);border-radius:3px" aria-label="Interval mezi dávkami">
-            <option value="5">5s</option>
-            <option value="10">10s</option>
-            <option value="20" selected>20s</option>
-            <option value="30">30s</option>
-          </select>
-          <span style="font-size:9px;color:var(--txt3)">rychlost</span>
-        </div>
+        <input type="hidden" id="batchSizeRun" value="10">
+        <input type="hidden" id="intervalRun" value="20">
         <div class="log-scroll" id="logScroll" role="log" aria-label="Log překladů">
           <div style="padding:20px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt3)">
             Překlady se budou zobrazovat zde automaticky...
@@ -930,20 +1016,71 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
 
 <div id="toast" aria-live="polite" aria-atomic="true"></div>
 
- <!-- Custom Modal -->
- <div id="customModal">
-   <div class="modal-box">
-     <div class="modal-title" id="modalTitle">Rozsah hesel</div>
-     <div class="modal-row">
-       <input type="number" class="modal-input" id="modalFrom" placeholder="Od G1" value="1">
-       <input type="number" class="modal-input" id="modalTo" placeholder="Do G100" value="100">
-     </div>
-     <div class="modal-btns">
-       <button class="modal-btn cancel" onclick="closeModal()">Zrušit</button>
-       <button class="modal-btn ok" onclick="confirmModal()">OK</button>
-     </div>
-   </div>
- </div>
+<!-- Custom Modal -->
+  <div id="customModal">
+    <div class="modal-box">
+      <div class="modal-title" id="modalTitle">Rozsah hesel</div>
+      <div class="modal-row">
+        <input type="number" class="modal-input" id="modalFrom" placeholder="Od G1" value="1">
+        <input type="number" class="modal-input" id="modalTo" placeholder="Do G100" value="100">
+      </div>
+      <div class="modal-btns">
+        <button class="modal-btn cancel" onclick="closeModal()">Zrušit</button>
+        <button class="modal-btn ok" onclick="confirmModal()">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Actions Modal -->
+  <div id="mobileActionsModal">
+    <div class="mobl-modal-box">
+      <div class="mobl-modal-title">Akce</div>
+      <button class="mobl-btn" onclick="closeMobileModal(); document.getElementById('importFileInput').click()" aria-label="Importovat TXT soubor">⬆ Import TXT</button>
+      <button class="mobl-btn" onclick="closeMobileModal(); translateNext()" aria-label="Přeložit další dávku">⚡ Dávka k překladu</button>
+      <button class="mobl-btn" onclick="closeMobileModal(); selectRange()" aria-label="Označit rozsah">☑ Výběr do překladače</button>
+      <button class="mobl-btn grn" onclick="closeMobileModal(); exportTXT()" aria-label="Exportovat do TXT">⬇ Export TXT</button>
+      <button class="mobl-btn grn" onclick="closeMobileModal(); exportJSON()" aria-label="Exportovat do JSON">⬇ Export JSON</button>
+      <button class="mobl-btn" onclick="closeMobileModal(); exportRange()" aria-label="Exportovat rozsah">⬇ Výběr k exportu</button>
+      <button class="mobl-btn" onclick="closeMobileModal(); showSettingsModal()" aria-label="Nastavení AI">⚙ Nastavení AI</button>
+      <button class="mobl-btn cancel" onclick="closeMobileModal()" aria-label="Zavřít">✕ Zavřít</button>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settingsModal">
+    <div class="mobl-modal-box">
+      <div class="mobl-modal-title">⚙ Nastavení AI</div>
+      <div class="mobl-set-row">
+        <label>Provider</label>
+        <select id="providerRunMobile" onchange="onProviderChangeRunMobile()"></select>
+      </div>
+      <div class="mobl-set-row">
+        <label>Model</label>
+        <select id="modelRunMobile"></select>
+      </div>
+      <div class="mobl-set-row">
+        <label>Dávka</label>
+        <select id="batchSizeRunMobile">
+          <option value="1">1 heslo</option>
+          <option value="5">5 hesel</option>
+          <option value="10">10 hesel</option>
+          <option value="15">15 hesel</option>
+          <option value="20">20 hesel</option>
+        </select>
+      </div>
+      <div class="mobl-set-row">
+        <label>Rychlost</label>
+        <select id="intervalRunMobile">
+          <option value="5">5s</option>
+          <option value="10">10s</option>
+          <option value="20">20s</option>
+          <option value="30">30s</option>
+        </select>
+      </div>
+      <button class="mobl-btn grn" onclick="closeSettingsModal()" aria-label="Uložit">✓ Uložit</button>
+      <button class="mobl-btn cancel" onclick="closeSettingsModal()" aria-label="Zavřít">✕ Zavřít</button>
+    </div>
+  </div>
 
   <script type="module">
   // ══ CORE MODULE IMPORT ═══════════════════════════════════════════
@@ -1076,17 +1213,11 @@ function onProviderChange() {
   document.getElementById('provider')._lastProvider = newProv;
 }
 
-function onProviderChangeRun() {
-  const p = PROVIDERS[document.getElementById('providerRun').value];
-  document.getElementById('modelRun').innerHTML =
-    p.models.map(([v,l]) => `<option value="${v}">${l}</option>`).join('');
-}
-
 function initRunSelects() {
-  document.getElementById('providerRun').value = document.getElementById('provider').value;
-  onProviderChangeRun();
-  document.getElementById('batchSizeRun').value = document.getElementById('batchSize').value;
-  document.getElementById('intervalRun').value = document.getElementById('interval').value;
+  const bs = document.getElementById('batchSizeRun');
+  if (bs) bs.value = document.getElementById('batchSize').value;
+  const iv = document.getElementById('intervalRun');
+  if (iv) iv.value = document.getElementById('interval').value;
 }
 
 // ══ LOAD TXT ═════════════════════════════════════════════════════
@@ -1332,8 +1463,8 @@ async function translateSelected() {
     document.getElementById('btnTranslateSelected').textContent = `⏳ ${processed + batchKeys.length}/${keys.length}...`;
     
     const apiKey = document.getElementById('apiKey').value.trim();
-    const model  = document.getElementById('modelRun').value;
-    const prov   = document.getElementById('providerRun').value;
+    const model  = document.getElementById('model').value;
+    const prov   = document.getElementById('provider').value;
     
     if (!apiKey) { showToast('✗ Zadej API klíč!'); return; }
     
@@ -1396,8 +1527,8 @@ ${batchKeys.map(k => {
        logError('translateSelected', e, {
          batchKeys,
          batchSize: batchKeys.length,
-         provider: document.getElementById('providerRun').value,
-         model: document.getElementById('modelRun').value
+provider: document.getElementById('provider').value,
+          model: document.getElementById('model').value
        });
        showToast('✗ Chyba: ' + e.message);
      }
@@ -1692,8 +1823,8 @@ async function translateSingle(key) {
   if (btn) { btn.disabled = true; btn.textContent = '⏳ Překládám...'; }
   
    const apiKey = document.getElementById('apiKey').value.trim();
-   const model  = document.getElementById('modelRun').value;
-   const prov   = document.getElementById('providerRun').value;
+const model  = document.getElementById('model').value;
+    const prov   = document.getElementById('provider').value;
 
    if (!apiKey) {
      showToast('✗ Zadej API klíč!');
@@ -1827,8 +1958,8 @@ function getNextBatch(size) {
 }
 
 async function translateBatch(keys) {
-  const prov   = document.getElementById('providerRun').value;
-  const model  = document.getElementById('modelRun').value;
+  const prov   = document.getElementById('provider').value;
+  const model  = document.getElementById('model').value;
   // Klíč vždy dle aktuálního run providera
   const apiKey = (localStorage.getItem('strong_apikey_' + prov) || document.getElementById('apiKey').value || '').trim();
   currentInterval = parseInt(document.getElementById('intervalRun').value);
@@ -1913,7 +2044,7 @@ ${keys.map(k => {
      logError('translateBatch', e, {
        keys: keys.slice(0, 5), // first 5 keys only
        keyRange: `${keys[0]}-${keys[keys.length-1]}`,
-       provider: document.getElementById('providerRun')?.value,
+       provider: document.getElementById('provider')?.value,
        batchSize: keys.length
      });
      showToast('✗ ' + e.message);
@@ -2415,8 +2546,50 @@ function closeModal() {
 }
 
 function confirmModal() {
-  if (modalCallback) modalCallback();
+  // Implementation based on modal type
+  const title = document.getElementById('modalTitle').textContent;
+  if (title.includes('Rozsah')) {
+    const from = parseInt(document.getElementById('modalFrom').value) || 1;
+    const to = parseInt(document.getElementById('modalTo').value) || 100;
+    selectRangeConfirm(from, to);
+  }
   closeModal();
+}
+
+// Mobile Actions Modal
+function showMobileActions() {
+  document.getElementById('mobileActionsModal').classList.add('show');
+}
+
+function closeMobileModal() {
+  document.getElementById('mobileActionsModal').classList.remove('show');
+}
+
+// Settings Modal
+function showSettingsModal() {
+  const p = PROVIDERS[document.getElementById('provider').value];
+  document.getElementById('providerRunMobile').innerHTML = Object.keys(PROVIDERS).map(k => `<option value="${k}">${PROVIDERS[k].label.split(' ')[0]}</option>`).join('');
+  document.getElementById('providerRunMobile').value = document.getElementById('provider').value;
+  onProviderChangeRunMobile();
+  document.getElementById('batchSizeRunMobile').value = document.getElementById('batchSize').value;
+  document.getElementById('intervalRunMobile').value = document.getElementById('interval').value;
+  document.getElementById('settingsModal').classList.add('show');
+}
+
+function onProviderChangeRunMobile() {
+  const p = PROVIDERS[document.getElementById('providerRunMobile').value];
+  document.getElementById('modelRunMobile').innerHTML = p.models.map(([v,l]) => `<option value="${v}">${l}</option>`).join('');
+  document.getElementById('modelRunMobile').value = document.getElementById('model').value;
+}
+
+function closeSettingsModal() {
+  document.getElementById('provider').value = document.getElementById('providerRunMobile').value;
+  document.getElementById('model').value = document.getElementById('modelRunMobile').value;
+  document.getElementById('batchSize').value = document.getElementById('batchSizeRunMobile').value;
+  document.getElementById('interval').value = document.getElementById('intervalRunMobile').value;
+  onProviderChange();
+  initRunSelects();
+  document.getElementById('settingsModal').classList.remove('show');
 }
 
 // ── Export vybraného rozsahu ───────────────────────────────────
@@ -2767,7 +2940,6 @@ window.loadDefaultFile = loadDefaultFile;
 window.startApp = startApp;
 window.toggleAuto = toggleAuto;
 window.onProviderChange = onProviderChange;
-window.onProviderChangeRun = onProviderChangeRun;
 window.saveApiKey = saveApiKey;
 window.resetPrompt = resetPrompt;
 window.jumpToStart = jumpToStart;
@@ -2797,6 +2969,11 @@ window.toggleAllPreview = toggleAllPreview;
 window.acceptPreview = acceptPreview;
 window.discardPreview = discardPreview;
 window.retryFailed = retryFailed;
+window.showMobileActions = showMobileActions;
+window.closeMobileModal = closeMobileModal;
+window.showSettingsModal = showSettingsModal;
+window.closeSettingsModal = closeSettingsModal;
+window.onProviderChangeRunMobile = onProviderChangeRunMobile;
 </script>
 </body>
 </html>
