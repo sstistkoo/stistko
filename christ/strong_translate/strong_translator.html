@@ -1090,9 +1090,12 @@ function initRunSelects() {
 }
 
 // ══ LOAD TXT ═════════════════════════════════════════════════════
+const LAST_FILE_KEY = 'strong_last_file';
+
 function loadTXT(input) {
   const file = input.files[0];
   if (!file) return;
+  localStorage.setItem(LAST_FILE_KEY, file.name);
   const reader = new FileReader();
   reader.onload = ev => {
     try {
@@ -1100,7 +1103,9 @@ function loadTXT(input) {
       const el = document.getElementById('statusTXT');
       el.textContent = `✓ ${file.name} — ${entries.length} hesel`;
       el.className = 'file-status ok';
+      document.getElementById('fileReady').style.display = 'block';
       document.getElementById('startBtn').disabled = false;
+      updateAutoBtn();
       checkResume();
      } catch(e) {
        logError('loadTXT', e, { fileName: file?.name });
@@ -1112,27 +1117,37 @@ function loadTXT(input) {
 }
 
 function loadDefaultFile() {
-  fetch('strong_greek_detailed.txt')
+  const lastFile = localStorage.getItem(LAST_FILE_KEY) || 'strong_greek_detailed.txt';
+  fetch(lastFile)
     .then(r => {
       if (!r.ok) throw new Error('Soubor nenalezen');
       return r.text();
     })
     .then(text => {
       entries = parseTXT(text);
-      document.getElementById('statusTXT').innerHTML = `✓ strong_greek_detailed.txt — ${entries.length} hesel`;
+      document.getElementById('statusTXT').innerHTML = `✓ ${lastFile} — ${entries.length} hesel`;
       document.getElementById('statusTXT').className = 'file-status ok';
       document.getElementById('fileReady').style.display = 'block';
       document.getElementById('startBtn').disabled = false;
       checkResume();
      })
-     .catch(e => {
-       logError('loadDefaultFile', e, { file: 'strong_greek_detailed.txt' });
-       document.getElementById('statusTXT').textContent = '✗ ' + e.message;
-       document.getElementById('btnLoadDefault').style.display = 'none';
-     });
+    .catch(e => {
+      if (lastFile !== 'strong_greek_detailed.txt') {
+        localStorage.setItem(LAST_FILE_KEY, 'strong_greek_detailed.txt');
+        loadDefaultFile();
+        return;
+      }
+      logError('loadDefaultFile', e, { file: lastFile });
+      document.getElementById('statusTXT').textContent = '✗ ' + e.message;
+    });
 }
 
 function checkDefaultFile() {
+  const lastFile = localStorage.getItem(LAST_FILE_KEY);
+  if (lastFile) {
+    document.getElementById('btnLoadDefault').style.display = 'inline-block';
+    return;
+  }
   fetch('strong_greek_detailed.txt')
     .then(r => {
       if (r.ok) {
@@ -1140,9 +1155,15 @@ function checkDefaultFile() {
       }
     })
     .catch(() => {
-      // Fetch nefunguje (file://), zobrazíme tlačítko pro uživatele co spustí přes HTTP
       document.getElementById('btnLoadDefault').style.display = 'inline-block';
     });
+}
+
+function updateAutoBtn() {
+  const lastFile = localStorage.getItem(LAST_FILE_KEY);
+  if (lastFile) {
+    document.getElementById('btnLoadDefault').style.display = 'inline-block';
+  }
 }
 
   // Use core module for parsing
