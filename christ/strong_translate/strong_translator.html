@@ -309,11 +309,20 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   
   /* Resize handle */
   .resize-handle {
-    height: 8px;
+    height: 16px;
     background: var(--brd);
     cursor: row-resize;
     flex-shrink: 0;
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .resize-handle::after {
+    content: '';
+    width: 40px;
+    height: 4px;
+    background: var(--txt3);
+    border-radius: 2px;
   }
   .resize-handle:hover { background: var(--acc); }
 }
@@ -907,7 +916,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       </div>
 
       <!-- Resize handle for mobile -->
-      <div class="resize-handle" onmousedown="startResize(event)" touchstart="startResize(event)"></div>
+      <div class="resize-handle" id="resizeHandle"></div>
 
       <!-- Detail vybraného hesla -->
       <div class="detail-scroll" id="detailPane">
@@ -1175,6 +1184,9 @@ function startApp() {
    updateStats();
    initRunSelects();
    updateFailedCount();
+   
+   document.getElementById('resizeHandle').addEventListener('mousedown', startResize);
+   document.getElementById('resizeHandle').addEventListener('touchstart', startResize, {passive: false});
  }
 
 // ══ LIST ═════════════════════════════════════════════════════════
