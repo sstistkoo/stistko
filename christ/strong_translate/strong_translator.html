@@ -1196,10 +1196,14 @@ function startApp() {
    renderList();
    updateStats();
    initRunSelects();
-   updateFailedCount();
-   
+updateFailedCount();
+    
    document.getElementById('resizeHandle').addEventListener('mousedown', startResize);
    document.getElementById('resizeHandle').addEventListener('touchstart', startResize, {passive: false});
+   
+   if (window.innerWidth <= 600) {
+     toggleListPane();
+   }
  }
 
 // ══ LIST ═════════════════════════════════════════════════════════
@@ -2472,7 +2476,6 @@ function stopResize() {
   document.removeEventListener('touchend', stopResize);
   
   const logPanel = document.querySelector('.log-panel');
-  console.log('LOG_PANEL_HEIGHT:' + logPanel.offsetHeight);
 }
 
 function escHtml(s) {
