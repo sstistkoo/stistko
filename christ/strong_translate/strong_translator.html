@@ -2471,14 +2471,6 @@ function doResize(e) {
 
 function stopResize() {
   resizing = false;
-  // Log the height when released
-  const logPanel = document.querySelector('.log-panel');
-  console.log('LOG_PANEL_HEIGHT:' + logPanel.offsetHeight);
-}
-  document.removeEventListener('mouseup', stopResize);
-  document.removeEventListener('touchmove', doResize);
-  document.removeEventListener('touchend', stopResize);
-  
   const logPanel = document.querySelector('.log-panel');
   console.log('LOG_PANEL_HEIGHT:' + logPanel.offsetHeight);
 }
