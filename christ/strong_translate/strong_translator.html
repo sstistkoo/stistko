@@ -602,7 +602,65 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   transition: opacity .3s;
   white-space: nowrap;
    pointer-events: none;
+  }
+
+ /* Custom Modal */
+ #customModal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.7);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
  }
+ #customModal.show { display: flex; }
+ .modal-box {
+  background: var(--bg2);
+  border: 1px solid var(--brd);
+  border-radius: 6px;
+  padding: 20px;
+  max-width: 320px;
+  width: 90%;
+ }
+ .modal-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--acc);
+  margin-bottom: 16px;
+ }
+ .modal-input {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--brd);
+  border-radius: 3px;
+  padding: 8px 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--txt);
+  margin-bottom: 10px;
+ }
+ .modal-input:focus { border-color: var(--acc); outline: none; }
+ .modal-row { display: flex; gap: 10px; }
+ .modal-row input { flex: 1; }
+ .modal-btns {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+ }
+ .modal-btn {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  cursor: pointer;
+  text-align: center;
+ }
+ .modal-btn.ok { background: var(--acc2); border: 1px solid var(--acc); color: var(--acc3); }
+ .modal-btn.ok:hover { background: var(--acc); color: var(--bg); }
+ .modal-btn.cancel { background: var(--bg3); border: 1px solid var(--brd); color: var(--txt2); }
+ .modal-btn.cancel:hover { border-color: var(--txt3); }
 
 /* Virtual scrolling */
 .list-scroll {
@@ -746,7 +804,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       <input type="file" id="importFileInput" accept=".txt" style="display:none" onchange="importTXT(this)" aria-label="Výběr TXT souboru k importu">
       <button class="hbtn" id="btnAuto" onclick="toggleAuto()" aria-label="Spustit automatický překlad">▶ AUTO</button>
       <button class="hbtn" id="btnStep" onclick="translateNext()" aria-label="Přeložit další dávku">⚡ Dávka</button>
-      <button class="hbtn" onclick="selectRange()" title="Označit rozsah hesel k překladu" aria-label="Označit rozsah">☑ Rozsah</button>
+      <button class="hbtn" onclick="selectRange()" title="Označit rozsah hesel k překladu" aria-label="Označit rozsah">☑ Přek</button>
       <button class="hbtn grn" onclick="exportTXT()" aria-label="Exportovat do TXT">⬇ TXT</button>
       <button class="hbtn grn" onclick="exportJSON()" aria-label="Exportovat do JSON">⬇ JSON</button>
       <button class="hbtn" onclick="exportRange()" title="Export vybraného rozsahu G čísel" aria-label="Exportovat rozsah G čísel">⬇ Rozsah</button>
@@ -850,7 +908,22 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
 
 <div id="toast" aria-live="polite" aria-atomic="true"></div>
 
-<script>
+ <!-- Custom Modal -->
+ <div id="customModal">
+   <div class="modal-box">
+     <div class="modal-title" id="modalTitle">Rozsah hesel</div>
+     <div class="modal-row">
+       <input type="number" class="modal-input" id="modalFrom" placeholder="Od G1" value="1">
+       <input type="number" class="modal-input" id="modalTo" placeholder="Do G100" value="100">
+     </div>
+     <div class="modal-btns">
+       <button class="modal-btn cancel" onclick="closeModal()">Zrušit</button>
+       <button class="modal-btn ok" onclick="confirmModal()">OK</button>
+     </div>
+   </div>
+ </div>
+
+ <script>
 // ══ STORAGE KEY ══════════════════════════════════════════════════
 const STORE_KEY = 'strong_gr_cz_v2';
 
@@ -2262,19 +2335,34 @@ function updateETA() {
 }
 
 // ── Označit rozsah hesel k překladu ───────────────────────────────────
-function selectRange() {
-  const from = parseInt(prompt('Od G čísla:', '1') || '1');
-  const to   = parseInt(prompt('Do G čísla:', '100') || '100');
-  if (isNaN(from) || isNaN(to)) return;
+let modalCallback = null;
 
-  selectedKeys.clear();
-  entries.forEach(e => {
-    const n = parseInt(e.key.slice(1));
-    if (n >= from && n <= to) selectedKeys.add(e.key);
-  });
-  
-  renderList();
-  showToast(`✓ Označeno ${selectedKeys.size} hesel (G${from}–G${to})`);
+function selectRange() {
+  document.getElementById('modalTitle').textContent = 'Označit rozsah hesel';
+  document.getElementById('modalFrom').value = '1';
+  document.getElementById('modalTo').value = '100';
+  modalCallback = function() {
+    const from = parseInt(document.getElementById('modalFrom').value) || 1;
+    const to   = parseInt(document.getElementById('modalTo').value) || 100;
+    if (from > to) return;
+    selectedKeys.clear();
+    entries.forEach(e => {
+      const n = parseInt(e.key.slice(1));
+      if (n >= from && n <= to) selectedKeys.add(e.key);
+    });
+    renderList();
+    showToast(`✓ Označeno ${selectedKeys.size} hesel (G${from}–G${to})`);
+  };
+  document.getElementById('customModal').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('customModal').classList.remove('show');
+}
+
+function confirmModal() {
+  if (modalCallback) modalCallback();
+  closeModal();
 }
 
 // ── Export vybraného rozsahu ───────────────────────────────────
