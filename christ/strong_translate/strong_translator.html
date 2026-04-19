@@ -1153,7 +1153,6 @@ function toggleListPane() {
     btn.textContent = '◀';
     if (isMobile) {
       pane.style.height = '45%';
-      resizeHandle.style.display = 'flex';
       logPanel.style.height = '50%';
       logPanel.style.flex = 'none';
       detailPane.style.height = '50%';
@@ -1164,7 +1163,6 @@ function toggleListPane() {
     btn.textContent = '▶';
     if (isMobile) {
       pane.style.height = '0';
-      resizeHandle.style.display = 'none';
       logPanel.style.height = '100%';
       logPanel.style.flex = '1';
       detailPane.style.height = 'auto';
@@ -1204,6 +1202,10 @@ function startApp() {
    window.addEventListener('mouseup', stopResize);
    window.addEventListener('touchmove', doResize, {passive: false});
    window.addEventListener('touchend', stopResize);
+   
+   if (window.innerWidth <= 600) {
+     toggleListPane();
+   }
  }
 
 // ══ LIST ═════════════════════════════════════════════════════════
