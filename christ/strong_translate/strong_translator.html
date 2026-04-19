@@ -1153,11 +1153,10 @@ function toggleListPane() {
     btn.textContent = '◀';
     if (isMobile) {
       pane.style.height = '45%';
-      resizeHandle.style.display = 'flex';
       logPanel.style.height = '50%';
       logPanel.style.flex = 'none';
-      detailPane.style.height = '50%';
-      detailPane.style.flex = 'none';
+      detailPane.style.height = 'auto';
+      detailPane.style.flex = '1';
     }
   } else {
     pane.classList.add('hidden');
@@ -2442,10 +2441,12 @@ function startResize(e) {
   e.preventDefault();
   resizing = true;
   startY = e.touches ? e.touches[0].clientY : e.clientY;
+  const split = document.querySelector('.split');
+  const listPane = document.querySelector('.list-pane');
   const logPanel = document.querySelector('.log-panel');
-  const detailPane = document.querySelector('.detail-scroll');
+  const detailScroll = document.querySelector('.detail-scroll');
   startLogHeight = logPanel.offsetHeight;
-  startDetailHeight = detailPane.offsetHeight;
+  startDetailHeight = detailScroll.offsetHeight;
   document.addEventListener('mousemove', doResize);
   document.addEventListener('mouseup', stopResize);
   document.addEventListener('touchmove', doResize);
@@ -2457,14 +2458,17 @@ function doResize(e) {
   const currY = e.touches ? e.touches[0].clientY : e.clientY;
   const delta = currY - startY;
   const split = document.querySelector('.split');
+  const listPane = document.querySelector('.list-pane');
   const logPanel = document.querySelector('.log-panel');
-  const detailPane = document.querySelector('.detail-pane');
-  const newLog = Math.max(100, Math.min(startLogHeight + delta, split.offsetHeight - 120));
-  const newDetail = Math.max(100, startLogHeight + startDetailHeight - newLog);
+  const detailScroll = document.querySelector('.detail-scroll');
+  const availHeight = split.offsetHeight;
+  const listPaneHeight = listPane.offsetHeight;
+  const newLog = Math.max(50, Math.min(startLogHeight + delta, availHeight - listPaneHeight - 120));
+  const newDetail = Math.max(50, availHeight - listPaneHeight - newLog);
   logPanel.style.height = newLog + 'px';
-  detailPane.style.height = newDetail + 'px';
+  detailScroll.style.height = newDetail + 'px';
   logPanel.style.flex = 'none';
-  detailPane.style.flex = 'none';
+  detailScroll.style.flex = 'none';
 }
 
 function stopResize() {
