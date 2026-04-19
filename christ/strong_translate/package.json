@@ -1,0 +1,14 @@
+{
+  "name": "strong-translator",
+  "version": "1.0.0",
+  "description": "Strong Greek → Czech Bible Dictionary Translator",
+  "type": "module",
+   "scripts": {
+     "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
+     "test:watch": "jest --watch",
+     "test:coverage": "jest --coverage"
+   },
+   "devDependencies": {
+     "jest": "^29.7.0"
+   }
+}
