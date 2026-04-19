@@ -1200,6 +1200,10 @@ function startApp() {
    
    document.getElementById('resizeHandle').addEventListener('mousedown', startResize);
    document.getElementById('resizeHandle').addEventListener('touchstart', startResize, {passive: false});
+   window.addEventListener('mousemove', doResize);
+   window.addEventListener('mouseup', stopResize);
+   window.addEventListener('touchmove', doResize, {passive: false});
+   window.addEventListener('touchend', stopResize);
  }
 
 // ══ LIST ═════════════════════════════════════════════════════════
@@ -2436,37 +2440,41 @@ let startDetailHeight = 0;
 
 function startResize(e) {
   if (window.innerWidth > 600) return;
-  e.preventDefault();
+  if (e.type === 'mousedown' || e.type === 'touchstart') {
+    e.preventDefault();
+  }
   resizing = true;
   startY = e.touches ? e.touches[0].clientY : e.clientY;
   const logPanel = document.querySelector('.log-panel');
-  const detailPane = document.querySelector('.detail-scroll');
+  const detailPane = document.querySelector('.detail-pane');
   startLogHeight = logPanel.offsetHeight;
   startDetailHeight = detailPane.offsetHeight;
-  document.addEventListener('mousemove', doResize);
-  document.addEventListener('mouseup', stopResize);
-  document.addEventListener('touchmove', doResize);
-  document.addEventListener('touchend', stopResize);
 }
 
 function doResize(e) {
   if (!resizing) return;
+  e.preventDefault();
   const currY = e.touches ? e.touches[0].clientY : e.clientY;
   const delta = currY - startY;
   const split = document.querySelector('.split');
   const logPanel = document.querySelector('.log-panel');
   const detailPane = document.querySelector('.detail-pane');
-  const newLog = Math.max(100, Math.min(startLogHeight + delta, split.offsetHeight - 120));
-  const newDetail = Math.max(100, startLogHeight + startDetailHeight - newLog);
-  logPanel.style.height = newLog + 'px';
-  detailPane.style.height = newDetail + 'px';
-  logPanel.style.flex = 'none';
-  detailPane.style.flex = 'none';
+  const newLog = Math.max(80, startLogHeight + delta);
+  const newDetail = split.offsetHeight - newLog;
+  if (newDetail >= 80 && newLog >= 80) {
+    logPanel.style.height = newLog + 'px';
+    detailPane.style.height = newDetail + 'px';
+    logPanel.style.flex = 'none';
+    detailPane.style.flex = 'none';
+  }
 }
 
 function stopResize() {
   resizing = false;
-  document.removeEventListener('mousemove', doResize);
+  // Log the height when released
+  const logPanel = document.querySelector('.log-panel');
+  console.log('LOG_PANEL_HEIGHT:' + logPanel.offsetHeight);
+}
   document.removeEventListener('mouseup', stopResize);
   document.removeEventListener('touchmove', doResize);
   document.removeEventListener('touchend', stopResize);
