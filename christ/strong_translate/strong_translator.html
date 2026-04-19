@@ -746,6 +746,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       <input type="file" id="importFileInput" accept=".txt" style="display:none" onchange="importTXT(this)" aria-label="Výběr TXT souboru k importu">
       <button class="hbtn" id="btnAuto" onclick="toggleAuto()" aria-label="Spustit automatický překlad">▶ AUTO</button>
       <button class="hbtn" id="btnStep" onclick="translateNext()" aria-label="Přeložit další dávku">⚡ Dávka</button>
+      <button class="hbtn" onclick="selectRange()" title="Označit rozsah hesel k překladu" aria-label="Označit rozsah">☑ Rozsah</button>
       <button class="hbtn grn" onclick="exportTXT()" aria-label="Exportovat do TXT">⬇ TXT</button>
       <button class="hbtn grn" onclick="exportJSON()" aria-label="Exportovat do JSON">⬇ JSON</button>
       <button class="hbtn" onclick="exportRange()" title="Export vybraného rozsahu G čísel" aria-label="Exportovat rozsah G čísel">⬇ Rozsah</button>
@@ -2258,6 +2259,22 @@ function updateETA() {
   if (secs < 60) el.textContent = `~${secs}s`;
   else if (secs < 3600) el.textContent = `~${Math.ceil(secs/60)} min`;
   else el.textContent = `~${(secs/3600).toFixed(1)} hod`;
+}
+
+// ── Označit rozsah hesel k překladu ───────────────────────────────────
+function selectRange() {
+  const from = parseInt(prompt('Od G čísla:', '1') || '1');
+  const to   = parseInt(prompt('Do G čísla:', '100') || '100');
+  if (isNaN(from) || isNaN(to)) return;
+
+  selectedKeys.clear();
+  entries.forEach(e => {
+    const n = parseInt(e.key.slice(1));
+    if (n >= from && n <= to) selectedKeys.add(e.key);
+  });
+  
+  renderList();
+  showToast(`✓ Označeno ${selectedKeys.size} hesel (G${from}–G${to})`);
 }
 
 // ── Export vybraného rozsahu ───────────────────────────────────
