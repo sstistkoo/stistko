@@ -301,11 +301,11 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   #setup { max-width: 100%; margin: 10px auto; padding: 16px; }
   .file-row { gap: 8px; }
   .start-btn { width: 100%; margin-top: 8px; }
-  .split { display: flex; flex-direction: column; height: 100%; overflow: hidden; }
+  .split { display: flex; flex-direction: column; }
   .list-pane { width: 100%; height: 45%; flex-shrink: 0; transition: height .3s; }
   .list-pane.hidden { height: 0 !important; overflow: hidden; }
-  .detail-pane { width: 100%; height: 50%; flex-shrink: 0; flex: 1; overflow: hidden; }
-  .log-panel { height: 50%; flex-shrink: 0; flex: 1; overflow: hidden; }
+  .detail-pane { width: 100%; height: 50%; flex-shrink: 0; }
+  .log-panel { height: 50%; flex-shrink: 0; }
   
   /* Resize handle */
   .resize-handle {
@@ -1142,6 +1142,7 @@ function showSetup() {
 function toggleListPane() {
   const pane = document.querySelector('.list-pane');
   const btn = document.getElementById('btnToggleList');
+  const resizeHandle = document.getElementById('resizeHandle');
   const logPanel = document.querySelector('.log-panel');
   const detailPane = document.querySelector('.detail-pane');
   const isMobile = window.innerWidth <= 600;
@@ -1162,12 +1163,10 @@ function toggleListPane() {
     btn.textContent = '▶';
     if (isMobile) {
       pane.style.height = '0';
-      const split = document.querySelector('.split');
-      const half = Math.floor(split.offsetHeight / 2);
-      logPanel.style.height = half + 'px';
-      logPanel.style.flex = 'none';
-      detailPane.style.height = (split.offsetHeight - half - 16) + 'px';
-      detailPane.style.flex = 'none';
+      logPanel.style.height = '100%';
+      logPanel.style.flex = '1';
+      detailPane.style.height = 'auto';
+      detailPane.style.flex = '1';
     }
   }
 }
@@ -2448,17 +2447,10 @@ function startResize(e) {
   }
   resizing = true;
   startY = e.touches ? e.touches[0].clientY : e.clientY;
-  
   const logPanel = document.querySelector('.log-panel');
   const detailPane = document.querySelector('.detail-pane');
-  
-  // Get current heights
   startLogHeight = logPanel.offsetHeight;
   startDetailHeight = detailPane.offsetHeight;
-  
-  // Ensure we have valid values
-  if (startLogHeight < 50) startLogHeight = 150;
-  if (startDetailHeight < 50) startDetailHeight = 150;
 }
 
 function doResize(e) {
@@ -2469,17 +2461,12 @@ function doResize(e) {
   const split = document.querySelector('.split');
   const logPanel = document.querySelector('.log-panel');
   const detailPane = document.querySelector('.detail-pane');
-  
-  let newLog = startLogHeight + delta;
-  let newDetail = startDetailHeight - delta;
-  
-  // Clamp values to minimum 80px
-  if (newLog < 80) newLog = 80;
-  if (newDetail < 80) newDetail = 80;
-  
+  const totalHeight = split.offsetHeight;
+  const newLog = Math.max(80, Math.min(totalHeight - 80, startLogHeight + delta));
+  const newDetail = totalHeight - newLog;
   logPanel.style.height = newLog + 'px';
-  logPanel.style.flex = 'none';
   detailPane.style.height = newDetail + 'px';
+  logPanel.style.flex = 'none';
   detailPane.style.flex = 'none';
 }
 
