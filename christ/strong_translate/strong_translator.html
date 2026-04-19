@@ -294,6 +294,15 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   min-height: 0;
 }
 
+/* Mobile responsive */
+@media (max-width: 600px) {
+  .split { display: flex; flex-direction: column; }
+  .list-pane { width: 100%; height: 45%; flex-shrink: 0; transition: height .3s; }
+  .list-pane.hidden { height: 0 !important; overflow: hidden; }
+  .detail-pane { width: 100%; height: 55%; }
+  .log-panel { height: 50%; }
+}
+
 .list-search {
   padding: 10px 12px;
   border-bottom: 1px solid var(--brd);
@@ -587,8 +596,31 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   opacity: 0;
   transition: opacity .3s;
   white-space: nowrap;
+   pointer-events: none;
+ }
+
+/* Virtual scrolling */
+.list-scroll {
+  position: relative;
+}
+.phantom-spacer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   pointer-events: none;
 }
+.visible-items {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+.list-item {
+  position: absolute;
+  height: 32px;
+}
+
 </style>
 </head>
 <body>
@@ -704,6 +736,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       <button class="hbtn" onclick="jumpToStart()" title="Přeskočit na toto číslo" aria-label="Přeskočit na zadané G číslo">→</button>
     </div>
     <div class="hdr-btns">
+      <button class="hbtn" id="btnToggleList" onclick="toggleListPane()" title="Skrýt seznam">◀</button>
       <button class="hbtn" id="btnImport" onclick="document.getElementById('importFileInput').click()" aria-label="Importovat TXT soubor s překlady">⬆ Import TXT</button>
       <input type="file" id="importFileInput" accept=".txt" style="display:none" onchange="importTXT(this)" aria-label="Výběr TXT souboru k importu">
       <button class="hbtn" id="btnAuto" onclick="toggleAuto()" aria-label="Spustit automatický překlad">▶ AUTO</button>
@@ -750,9 +783,12 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
           <button class="sbtn" onclick="selectNone()" title="Zrušit výběr" aria-label="Zrušit výběr všech hesel">☐</button>
         </div>
       </div>
-      <button class="hbtn grn" id="btnTranslateSelected" onclick="translateSelected()" style="display:none;margin:5px;width:calc(100% - 10px)" aria-label="Přeložit vybraná hesla">⚡ Přeložit vybrané</button>
-      <div class="list-scroll" id="listScroll"></div>
-    </div>
+       <button class="hbtn grn" id="btnTranslateSelected" onclick="translateSelected()" style="display:none;margin:5px;width:calc(100% - 10px)" aria-label="Přeložit vybraná hesla">⚡ Přeložit vybrané</button>
+       <div class="list-scroll" id="listScroll">
+         <div class="phantom-spacer"></div>
+         <div class="visible-items"></div>
+       </div>
+     </div>
 
     <!-- Pravý panel: log nahoře + detail dole, nebo jen jedno z toho -->
     <div class="detail-pane">
@@ -814,6 +850,7 @@ const STORE_KEY = 'strong_gr_cz_v2';
 
 // ══ STATE ════════════════════════════════════════════════════════
 let entries     = [];      // [{key, greek, def, kjv, orig}]
+let entryMap    = new Map();   // key → entry
 let translated  = {};      // key -> {vyznam, definice, pouziti, puvod, raw}
 let activeKey   = null;
 let autoTimer   = null;
@@ -826,6 +863,16 @@ let retryMode = false;
 let retryKeysList = [];
 let startTime = null;
 let elapsedTimer = null;
+
+// Virtual scrolling
+const ITEM_HEIGHT = 32; // px, must match CSS .list-item height
+const BUFFER_ITEMS = 10; // number of extra items above/below viewport
+let virtualInitialized = false;
+let phantomSpacer = null;
+let visibleContainer = null;
+let lastRenderRange = { start: -1, end: -1 };
+let scrollTicking = false;
+let resizeTicking = false;
 
 // ══ PROVIDER SETUP ══════════════════════════════════════════════════
 const PROVIDERS = {
@@ -991,6 +1038,27 @@ function showSetup() {
   document.getElementById('app').style.display = 'none';
 }
 
+function toggleListPane() {
+  const pane = document.querySelector('.list-pane');
+  const btn = document.getElementById('btnToggleList');
+  const isMobile = window.innerWidth <= 600;
+  const isHidden = pane.classList.contains('hidden');
+  
+  if (isHidden) {
+    pane.classList.remove('hidden');
+    btn.textContent = '◀';
+    if (isMobile) {
+      pane.style.height = '45%';
+    }
+  } else {
+    pane.classList.add('hidden');
+    btn.textContent = '▶';
+    if (isMobile) {
+      pane.style.height = '0';
+    }
+  }
+}
+
 // ══ START ════════════════════════════════════════════════════════
 function startApp() {
   currentBatchSize = parseInt(document.getElementById('batchSize').value);
@@ -1007,59 +1075,31 @@ function startApp() {
 
   document.getElementById('setup').style.display = 'none';
   document.getElementById('app').style.display   = 'flex';
+  entryMap = new Map(entries.map(e => [e.key, e]));
 
   filteredKeys = entries.map(e => e.key);
-  renderList();
-  updateStats();
-  initRunSelects();
-  updateFailedCount();
-}
+   initVirtualScroll();
+   renderList();
+   updateStats();
+   initRunSelects();
+   updateFailedCount();
+ }
 
 // ══ LIST ═════════════════════════════════════════════════════════
 // Store for selected keys
 let selectedKeys = new Set();
 
 function renderList() {
-  const scroll = document.getElementById('listScroll');
-
+  // Update filtered keys based on current filter/sort/search
   filteredKeys = getFilteredEntries().map(e => e.key);
-
-  // Virtual render — zobraz jen viditelné (výkon pro 5624 hesel)
-  scroll.innerHTML = '';
-  const frag = document.createDocumentFragment();
-
-  for (const key of filteredKeys) {
-    const e = entries.find(x => x.key === key);
-    // Kontrola: má překlad s obsahem (vyznam musí mít text)
-    const t = translated[key];
-    const done = t && t.vyznam && t.vyznam.trim().length > 0;
-    const isSelected = selectedKeys.has(key);
-    const div = document.createElement('div');
-    div.className = 'list-item' + (done ? ' done' : '') + (key === activeKey ? ' active' : '') + (isSelected ? ' selected' : '');
-    div.dataset.key = key;
-    div.setAttribute('tabindex', '0');
-    div.onclick = (e) => {
-      // Pokud klik na checkbox, ne na řádek
-      if (e.target.classList.contains('li-check')) return;
-      showDetail(key);
-    };
-    div.onkeydown = (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        toggleSelect(key, e);
-      }
-    };
-    div.innerHTML = `
-      <input type="checkbox" class="li-check" ${isSelected ? 'checked' : ''} onclick="toggleSelect('${key}', event)" aria-label="Vybrat heslo ${key}">
-      <div class="li-key">${key}</div>
-      <div class="li-greek">${escHtml(e.greek)}</div>
-      <div class="li-dot ${done ? 'done' : ''}" aria-hidden="true">${done ? '✓' : '✗'}</div>
-    `;
-    frag.appendChild(div);
-  }
-  scroll.appendChild(frag);
   
-  // Update tlačítko pro překlad vybraných
+  if (virtualInitialized) {
+    // Force re-render of visible items
+    lastRenderRange = { start: -1, end: -1 };
+    updatePhantomHeight();
+    renderVisible();
+  }
+  
   updateSelectedBtn();
 }
 
@@ -1196,7 +1236,13 @@ ${batchKeys.map(k => {
   }
 }
 
-function filterList() { renderList(); }
+function filterList() {
+  renderList();
+  if (virtualInitialized) {
+    const scroll = document.getElementById('listScroll');
+    scroll.scrollTop = 0;
+  }
+}
 
 function getFilteredEntries() {
   const q = document.getElementById('searchInput').value.toLowerCase();
@@ -1232,19 +1278,148 @@ function scrollToActive() {
   if (el) el.scrollIntoView({ block: 'nearest' });
 }
 
+// Virtual scrolling infrastructure
+function initVirtualScroll() {
+  const scroll = document.getElementById('listScroll');
+  // Create the structural elements
+  phantomSpacer = document.createElement('div');
+  phantomSpacer.className = 'phantom-spacer';
+  visibleContainer = document.createElement('div');
+  visibleContainer.className = 'visible-items';
+  
+  // Reset container and append new structure
+  scroll.innerHTML = '';
+  scroll.appendChild(phantomSpacer);
+  scroll.appendChild(visibleContainer);
+  scroll.style.position = 'relative';
+  
+  // Attach scroll listener (remove old to avoid duplicates)
+  scroll.removeEventListener('scroll', onVirtualScroll);
+  scroll.addEventListener('scroll', onVirtualScroll, { passive: true });
+  
+  virtualInitialized = true;
+  updatePhantomHeight();
+  
+  // Add window resize handler (once)
+  if (!window._virtualScrollResizeAdded) {
+    window.addEventListener('resize', () => {
+      if (!resizeTicking) {
+        requestAnimationFrame(() => {
+          renderVisible();
+          resizeTicking = false;
+        });
+        resizeTicking = true;
+      }
+    });
+    window._virtualScrollResizeAdded = true;
+  }
+}
+
+function updatePhantomHeight() {
+  if (!phantomSpacer) return;
+  const total = filteredKeys.length;
+  phantomSpacer.style.height = `${total * ITEM_HEIGHT}px`;
+}
+
+function renderVisible() {
+  if (!visibleContainer || !virtualInitialized) return;
+  
+  const scroll = document.getElementById('listScroll');
+  const scrollTop = scroll.scrollTop;
+  const viewportHeight = scroll.clientHeight;
+  const total = filteredKeys.length;
+  
+  if (total === 0) {
+    visibleContainer.innerHTML = '';
+    lastRenderRange = { start: -1, end: -1 };
+    return;
+  }
+  
+  const startIndex = Math.max(0, Math.floor(scrollTop / ITEM_HEIGHT) - BUFFER_ITEMS);
+  const endIndex = Math.min(total - 1, Math.ceil((scrollTop + viewportHeight) / ITEM_HEIGHT) + BUFFER_ITEMS);
+  
+  if (startIndex === lastRenderRange.start && endIndex === lastRenderRange.end) return;
+  
+  lastRenderRange = { start: startIndex, end: endIndex };
+  
+  const fragment = document.createDocumentFragment();
+  
+  for (let i = startIndex; i <= endIndex; i++) {
+    const key = filteredKeys[i];
+    if (!key) continue;
+    const e = entries.find(x => x.key === key);
+    const t = translated[key];
+    const done = t && t.vyznam && t.vyznam.trim().length > 0;
+    const isSelected = selectedKeys.has(key);
+    
+    const div = document.createElement('div');
+    div.className = 'list-item' + (done ? ' done' : '') + (key === activeKey ? ' active' : '') + (isSelected ? ' selected' : '');
+    div.dataset.key = key;
+    div.setAttribute('tabindex', '0');
+    div.style.position = 'absolute';
+    div.style.left = '0';
+    div.style.right = '0';
+    div.style.top = `${i * ITEM_HEIGHT}px`;
+    div.style.height = `${ITEM_HEIGHT}px`;
+    div.onclick = (e) => {
+      if (e.target.classList.contains('li-check')) return;
+      showDetail(key);
+    };
+    div.onkeydown = (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleSelect(key, e);
+      }
+    };
+    div.innerHTML = `
+      <input type="checkbox" class="li-check" ${isSelected ? 'checked' : ''} onclick="toggleSelect('${key}', event)" aria-label="Vybrat heslo ${key}">
+      <div class="li-key">${key}</div>
+      <div class="li-greek">${escHtml(e.greek)}</div>
+      <div class="li-dot ${done ? 'done' : ''}" aria-hidden="true">${done ? '✓' : '✗'}</div>
+    `;
+    fragment.appendChild(div);
+  }
+  
+  visibleContainer.innerHTML = '';
+  visibleContainer.appendChild(fragment);
+}
+
+// Throttled scroll handler
+function onVirtualScroll() {
+  if (!scrollTicking) {
+    requestAnimationFrame(() => {
+      renderVisible();
+      scrollTicking = false;
+    });
+    scrollTicking = true;
+  }
+}
+
 // ══ DETAIL ═══════════════════════════════════════════════════════
 function showDetail(key) {
   activeKey = key;
-  // Update active state v listu
-  document.querySelectorAll('.list-item').forEach(el => {
-    el.classList.toggle('active', el.dataset.key === key);
-  });
+  // Update active state v listu (virtuální render)
+  if (virtualInitialized) {
+    const idx = filteredKeys.indexOf(key);
+    if (idx !== -1) {
+      const scroll = document.getElementById('listScroll');
+      const targetTop = idx * ITEM_HEIGHT - (scroll.clientHeight / 2) + (ITEM_HEIGHT / 2);
+      scroll.scrollTop = targetTop;
+      // Okamžitě překresli viditelné položky s novým active stavem
+      renderVisible();
+    }
+  } else {
+    // Fallback pro ne-inicializovaný virtuální scrolling
+    document.querySelectorAll('.list-item').forEach(el => {
+      el.classList.toggle('active', el.dataset.key === key);
+    });
+  }
   renderDetail();
 }
 
 function renderDetail() {
   if (!activeKey) return;
-  const e = entries.find(x => x.key === activeKey);
+  const e = entryMap.get(activeKey);
   if (!e) return;
   const t = translated[activeKey];
   // Kontrola: má překlad s obsahem
@@ -1423,16 +1598,19 @@ function jumpToStart() {
       translated[e.key] = { vyznam: '—', definice: '(přeskočeno)', pouziti: '—', puvod: '—', skipped: true };
     }
   }
-  saveProgress();
-  updateStats();
-  renderList();
-  showToast(`✓ Překlad bude pokračovat od G${num}`);
-  // Scroll na heslo v listu
-  setTimeout(() => {
-    const el = document.querySelector(`.list-item[data-key="${key}"]`);
-    if (el) el.scrollIntoView({ block: 'center' });
-  }, 100);
-}
+   saveProgress();
+   updateStats();
+   renderList();
+   showToast(`✓ Překlad bude pokračovat od G${num}`);
+   // Scroll na heslo v listu (virtuální)
+   setTimeout(() => {
+     const scroll = document.getElementById('listScroll');
+     const idx = filteredKeys.indexOf(key);
+     if (idx !== -1) {
+       scroll.scrollTop = idx * ITEM_HEIGHT - (scroll.clientHeight / 2) + (ITEM_HEIGHT / 2);
+     }
+   }, 0);
+ }
 
 
 function getNextBatch(size) {
