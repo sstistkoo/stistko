@@ -833,7 +833,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
     <select id="provider" onchange="onProviderChange()" aria-label="Výběr AI providera">
       <option value="groq">Groq (zdarma)</option>
       <option value="gemini">Google Gemini (zdarma)</option>
-      <option value="openrouter">OpenRouter</option>
+      <option value="openrouter">OpenRouter - zdarma</option>
     </select>
   </div>
 
@@ -1189,36 +1189,145 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
     ]
   },
   openrouter: {
-    label: 'OpenRouter (openrouter.ai)',
+    label: 'OpenRouter - zdarma',
     ph: 'sk-or-...',
-    models: [
-      ['meta-llama/llama-3.3-70b-instruct','llama-3.3-70b-instruct'],
-      ['google/gemini-flash-1.5','gemini-flash-1.5'],
-      ['mistralai/mistral-7b-instruct','mistral-7b-instruct'],
-      ['meta-llama/llama-3.1-8b-instruct:free','llama-3.1-8b (free)'],
-    ]
+    models: []
   }
 };
+
+function populateOpenRouterModels(selectElement, savedModel, callback) {
+  const CACHE_KEY = 'openrouter_free_models_cache';
+  const CACHE_TTL = 5 * 60 * 1000; // 5 minutes in ms (pro jistotu vždy aktuální)
+
+  function restoreModel() {
+    // Restore saved model or use first available
+    if (savedModel && selectElement.querySelector(`option[value="${savedModel}"]`)) {
+      selectElement.value = savedModel;
+    } else if (selectElement.options.length > 0 && selectElement.options[0].value) {
+      selectElement.value = selectElement.options[0].value;
+    }
+    // Save the selected model to localStorage
+    if (selectElement.value) {
+      localStorage.setItem('strong_model', selectElement.value);
+    }
+    if (callback) callback();
+  }
+
+  // Check cache first
+  const cached = localStorage.getItem(CACHE_KEY);
+  if (cached) {
+    try {
+      const { timestamp, models } = JSON.parse(cached);
+      if (Date.now() - timestamp < CACHE_TTL) {
+        // Use cached models
+        selectElement.innerHTML = models.map(([v, l]) => `<option value="${v}">${l}</option>`).join('');
+        selectElement.disabled = false;
+        restoreModel();
+        return;
+      }
+    } catch (e) {
+      // Invalid cache, fall through to fetch
+    }
+  }
+
+  // Loading state
+  selectElement.disabled = true;
+  selectElement.innerHTML = '<option value="">Načítám free modely…</option>';
+
+  fetch('https://openrouter.ai/api/v1/models?free=true')
+    .then(r => {
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      return r.json();
+    })
+    .then(data => {
+      const models = (data.data || []).filter(m => m.id && m.id.endsWith(':free'));
+      
+      // Top modely - 3 nejlepší free modely
+      const TOP_MODELS = [
+        'meta-llama/llama-3.3-70b-instruct', // 1. Nejlepší kvalita
+        'nvidia/nemotron-3-super-120b-a12b', // 2. Complex tasks
+        'deepseek/deepseek-r1'             // 3. Reasoning
+      ];
+      
+      const options = models.map(m => {
+        const idNoFree = m.id.replace(/:free$/, '');
+        const label = m.name || idNoFree;
+        const priority = TOP_MODELS.findIndex(t => idNoFree === t || idNoFree.startsWith(t + ':'));
+        const isTop = priority !== -1;
+        return { value: m.id, label: (isTop ? '★ ' : '') + label, priority, isTop };
+      }).sort((a, b) => {
+        if (a.isTop && b.isTop) return a.priority - b.priority;
+        if (a.isTop && !b.isTop) return -1;
+        if (!a.isTop && b.isTop) return 1;
+        return a.label.localeCompare(b.label);
+      });
+
+      if (options.length === 0) {
+        selectElement.innerHTML = '<option value="">Žádné free modely nenalezeny</option>';
+        selectElement.disabled = true;
+        restoreModel();
+        return;
+      }
+
+      const optionHtml = options.map(o => `<option value="${o.value}">${o.label}</option>`).join('');
+      selectElement.innerHTML = optionHtml;
+      selectElement.disabled = false;
+
+      // Cache the results
+      try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify({
+          timestamp: Date.now(),
+          models: options.map(o => [o.value, o.label])
+        }));
+      } catch (e) {
+        // Storage full, ignore
+      }
+
+      restoreModel();
+    })
+    .catch(err => {
+      console.error('OpenRouter models fetch failed:', err);
+      selectElement.innerHTML = '<option value="">Chyba načítání — zkontroluj připojení</option>';
+      selectElement.disabled = true;
+      restoreModel();
+    });
+}
 
 function onProviderChange() {
   const newProv = document.getElementById('provider').value;
   const currentProv = document.getElementById('provider')._lastProvider || newProv;
-  
+
   // Save current key before switching
   const currentKey = document.getElementById('apiKey').value.trim();
   if (currentKey && currentProv !== newProv) {
     localStorage.setItem('strong_apikey_' + currentProv, currentKey);
   }
-  
+
   // Load key for new provider
   const newKey = localStorage.getItem('strong_apikey_' + newProv);
-  
+
   document.getElementById('keyLabel').textContent = 'API Klíč — ' + PROVIDERS[newProv].label;
   document.getElementById('apiKey').placeholder = PROVIDERS[newProv].ph;
   document.getElementById('apiKey').value = newKey || '';
-  document.getElementById('model').innerHTML =
-    PROVIDERS[newProv].models.map(([v,l]) => `<option value="${v}">${l}</option>`).join('');
-  
+
+  const modelSelect = document.getElementById('model');
+
+  if (newProv === 'openrouter') {
+    const savedModel = localStorage.getItem('strong_model');
+    populateOpenRouterModels(modelSelect, savedModel, () => {
+      // Guard: if provider changed while loading, abort
+      if (document.getElementById('provider').value !== 'openrouter') return;
+    });
+  } else {
+    modelSelect.innerHTML = PROVIDERS[newProv].models.map(([v,l]) => `<option value="${v}">${l}</option>`).join('');
+    modelSelect.disabled = false;
+    // Restore saved model if still available
+    const savedModel = localStorage.getItem('strong_model');
+    if (savedModel && modelSelect.querySelector(`option[value="${savedModel}"]`)) {
+      modelSelect.value = savedModel;
+    }
+  }
+
   localStorage.setItem('strong_provider', newProv);
   document.getElementById('provider')._lastProvider = newProv;
 }
@@ -2094,7 +2203,13 @@ function resetPrompt() {
 const FALLBACKS = {
   groq:       ['meta-llama/llama-4-scout-17b-16e-instruct', 'llama-3.1-8b-instant', 'llama-3.3-70b-versatile'],
   gemini:     ['gemini-2.5-flash', 'gemini-2.5-flash-lite'],
-  openrouter: ['meta-llama/llama-3.3-70b-instruct', 'google/gemini-flash-1.5', 'mistralai/mistral-7b-instruct']
+  openrouter: [
+    'meta-llama/llama-3.1-8b-instruct:free',
+    'meta-llama/llama-3.3-70b-instruct:free',
+    'google/gemma-2-27b-it:free',
+    'nvidia/nemotron-3-70b-instruct:free',
+    'mistralai/mistral-7b-instruct:free'
+  ]
 };
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
@@ -2209,14 +2324,18 @@ async function callOnce(provider, apiKey, model, messages) {
       const content = d.candidates[0].content.parts[0].text;
       return { content, usage: d.usageMetadata };
 
-   } else if (provider === 'openrouter') {
-    const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-      method: 'POST',
-      headers: { 'Authorization': 'Bearer ' + apiKey, 'Content-Type': 'application/json',
-        'HTTP-Referer': 'https://strong-bible-gr-cz.local' },
-      body: JSON.stringify({ model, messages,
-        temperature: 0.3, max_tokens: 2500 })
-    });
+    } else if (provider === 'openrouter') {
+     const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+       method: 'POST',
+       headers: { 
+         'Authorization': 'Bearer ' + apiKey, 
+         'Content-Type': 'application/json',
+         'HTTP-Referer': 'https://strong-bible-gr-cz.local',
+         'X-Title': 'Strong GR-CZ Translator'
+       },
+       body: JSON.stringify({ model, messages,
+         temperature: 0.3, max_tokens: 2500 })
+     });
      const d = await r.json();
      if (!r.ok) throw new Error(d.error?.message || String(r.status));
      validateAPIResponse(d, 'openrouter');
@@ -2412,9 +2531,7 @@ function loadSavedSettings() {
   document.getElementById('promptEditor').addEventListener('input', () => {
     localStorage.setItem('strong_prompt', document.getElementById('promptEditor').value);
   });
-  // Uložit provider/model
-  const mod = localStorage.getItem('strong_model');
-  if (mod) document.getElementById('model').value = mod;
+  // Uložit provider/model - ale až po onProviderChange pro OpenRouter (jinak select nemá options)
   // Inicializace model dropdownu (jen jednou)
   onProviderChange();
   // Kontrola defaultního souboru
@@ -2587,9 +2704,30 @@ function showSettingsModal() {
 }
 
 function onProviderChangeRunMobile() {
-  const p = PROVIDERS[document.getElementById('providerRunMobile').value];
-  document.getElementById('modelRunMobile').innerHTML = p.models.map(([v,l]) => `<option value="${v}">${l}</option>`).join('');
-  document.getElementById('modelRunMobile').value = document.getElementById('model').value;
+  const prov = document.getElementById('providerRunMobile').value;
+  const modelSelect = document.getElementById('modelRunMobile');
+
+  if (prov === 'openrouter') {
+    const savedModel = localStorage.getItem('strong_model');
+    populateOpenRouterModels(modelSelect, savedModel, () => {
+      // Guard: if provider changed while loading, abort
+      if (document.getElementById('providerRunMobile').value !== 'openrouter') return;
+      // Sync with main model
+      const mainModel = document.getElementById('model').value;
+      if (modelSelect.querySelector(`option[value="${mainModel}"]`)) {
+        modelSelect.value = mainModel;
+      }
+    });
+  } else {
+    const p = PROVIDERS[prov];
+    modelSelect.innerHTML = p.models.map(([v,l]) => `<option value="${v}">${l}</option>`).join('');
+    modelSelect.disabled = false;
+    // Sync with main model
+    const mainModel = document.getElementById('model').value;
+    if (modelSelect.querySelector(`option[value="${mainModel}"]`)) {
+      modelSelect.value = mainModel;
+    }
+  }
 }
 
 function closeSettingsModal() {
