@@ -1577,6 +1577,25 @@ function toggleListPane() {
 
 // ══ START ════════════════════════════════════════════════════════
 function startApp() {
+  // Ukaž loading hned
+  document.getElementById('setup').style.display = 'none';
+  const app = document.getElementById('app');
+  app.style.display = 'flex';
+  const loadingEl = document.createElement('div');
+  loadingEl.id = 'appLoading';
+  loadingEl.style.cssText = 'display:flex;align-items:center;justify-content:center;height:100%;color:var(--txt3);font-family:JetBrains Mono,monospace;font-size:14px';
+  loadingEl.textContent = '⏳ Načítám...';
+  app.appendChild(loadingEl);
+  
+  // Deffered init
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      initApp(loadingEl);
+    }, 10);
+  });
+}
+
+function initApp(loadingEl) {
   currentBatchSize = parseInt(document.getElementById('batchSize').value);
   currentInterval  = parseInt(document.getElementById('interval').value);
 
@@ -1592,9 +1611,11 @@ function startApp() {
      translated = {};
    }
 
-  document.getElementById('setup').style.display = 'none';
-  document.getElementById('app').style.display   = 'flex';
+  document.getElementById('app').style.display = 'flex';
   entryMap = new Map(entries.map(e => [e.key, e]));
+  
+  // Vytvoř index pro rychlé řazení podle původního pořadí
+  window._entryIndexMap = new Map(entries.map((e, i) => [e.key, i]));
 
   filteredKeys = entries.map(e => e.key);
   initVirtualScroll();
@@ -1815,8 +1836,8 @@ function getFilteredEntries() {
     filtered.sort((a, b) => a.greek.localeCompare(b.greek));
   } else if (sortBy === 'original') {
     filtered.sort((a, b) => {
-      const idxA = entries.findIndex(e => e.key === a.key);
-      const idxB = entries.findIndex(e => e.key === b.key);
+      const idxA = window._entryIndexMap?.get(a.key) ?? entries.findIndex(e => e.key === a.key);
+      const idxB = window._entryIndexMap?.get(b.key) ?? entries.findIndex(e => e.key === b.key);
       return idxA - idxB;
     });
   } else {
