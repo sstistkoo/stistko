@@ -1876,6 +1876,11 @@ function renderVisible() {
     const e = entries.find(x => x.key === key);
     const t = translated[key];
     const done = !!(t && t.vyznam && t.vyznam.trim() && t.vyznam !== '—');
+    // Debug for G31-40 range
+    if (key >= 'G31' && key <= 'G40') {
+      console.log(`display ${key}: t=${!!t}, vyznam="${t?.vyznam?.slice(0,20)}", done=${done}`);
+    }
+    const done = !!(t && t.vyznam && t.vyznam.trim() && t.vyznam !== '—');
     const isSelected = selectedKeys.has(key);
     
     const div = document.createElement('div');
