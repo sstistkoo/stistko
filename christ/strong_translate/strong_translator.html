@@ -1610,6 +1610,7 @@ updateFailedCount();
 function renderList() {
   // Update filtered keys based on current filter/sort/search
   filteredKeys = getFilteredEntries().map(e => e.key);
+  console.log('filteredKeys sample:', filteredKeys.slice(0,10));
   
   if (virtualInitialized) {
     // Force re-render of visible items
@@ -1875,6 +1876,7 @@ function renderVisible() {
     if (!key) continue;
     const e = entries.find(x => x.key === key);
     const t = translated[key];
+    if (i <= 5) console.log(`render ${key}: translated=${!!t}, vyznam="${t?.vyznam}"`);
     const done = !!(t && t.vyznam && t.vyznam.trim() && t.vyznam !== '—');
     const isSelected = selectedKeys.has(key);
     
