@@ -1948,7 +1948,7 @@ function renderDetail() {
   const e = entryMap.get(activeKey);
   if (!e) return;
   const t = translated[activeKey];
-  const hasTranslation = t && t.vyznam && t.vyznam.trim().length > 0;
+  const hasTranslation = t && t.vyznam && t.vyznam.trim().length > 0 && t.vyznam !== '—';
   const pane = document.getElementById('detailPane');
 
   // Detekce typu podle klíče
