@@ -1881,6 +1881,10 @@ function renderVisible() {
     const e = entries.find(x => x.key === key);
     const t = translated[key];
     const done = !!(t && t.vyznam && t.vyznam.trim() && t.vyznam !== '—');
+    // Debug log for first few items only
+    if (i <= 3) {
+      console.log(`done check: ${key} t=${t}, t.vyznam="${t?.vyznam}", trim="${t?.vyznam?.trim()}", equalsDash=${t?.vyznam === '—'}, done=${done}`);
+    }
     const isSelected = selectedKeys.has(key);
     
     const div = document.createElement('div');
