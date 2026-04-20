@@ -1635,7 +1635,12 @@ function initApp(loadingEl) {
   initRunSelects();
   updateFailedCount();
   console.log('initApp: all done');
-    
+  
+  // Odstraň loading element
+  if (loadingEl && loadingEl.parentNode) {
+    loadingEl.parentNode.removeChild(loadingEl);
+  }
+  
   document.getElementById('resizeHandle').addEventListener('mousedown', startResize);
   document.getElementById('resizeHandle').addEventListener('touchstart', startResize, {passive: false});
    
