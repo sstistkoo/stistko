@@ -1848,13 +1848,6 @@ function updatePhantomHeight() {
 function renderVisible() {
   if (!visibleContainer || !virtualInitialized) return;
   
-  // Debug: vypiš vzorové klíče
-  if (startIndex <= 5 && endIndex >= 5) {
-    const sampleKey = filteredKeys[5];
-    const sampleT = translated[sampleKey];
-    console.log(`DEBUG: ${sampleKey} => vyznam: "${sampleT?.vyznam}", definice: "${sampleT?.definice}"`);
-  }
-  
   const scroll = document.getElementById('listScroll');
   const scrollTop = scroll.scrollTop;
   const viewportHeight = scroll.clientHeight;
@@ -1868,6 +1861,13 @@ function renderVisible() {
   
   const startIndex = Math.max(0, Math.floor(scrollTop / ITEM_HEIGHT) - BUFFER_ITEMS);
   const endIndex = Math.min(total - 1, Math.ceil((scrollTop + viewportHeight) / ITEM_HEIGHT) + BUFFER_ITEMS);
+  
+  // Debug: vypiš první viditelný klíč
+  if (startIndex < filteredKeys.length) {
+    const sampleKey = filteredKeys[startIndex];
+    const sampleT = translated[sampleKey];
+    console.log(`DEBUG: ${sampleKey} => vyznam: "${sampleT?.vyznam}", definice: "${sampleT?.definice}"`);
+  }
   
   if (startIndex === lastRenderRange.start && endIndex === lastRenderRange.end) return;
   
