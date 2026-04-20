@@ -1038,19 +1038,20 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
     <!-- Seznam -->
     <div class="list-pane">
       <div class="list-search">
-        <select id="filterStatus" onchange="filterList()" aria-label="Filtrovat podle stavu" style="font-size:11px;padding:4px 6px;background:var(--bg3);color:var(--txt);border:1px solid var(--brd);border-radius:3px">
+        <select id="filterStatus" onchange="filterList()" aria-label="Filtrovat" style="font-size:11px;padding:4px 6px;background:var(--bg3);color:var(--txt);border:1px solid var(--brd);border-radius:3px">
           <option value="all">Vše</option>
           <option value="pending">Čeká</option>
           <option value="done">Přeloženo</option>
           <option value="failed">Neúspěšné</option>
-        </select>
-        <select id="filterLang" onchange="filterList()" aria-label="Filtrovat podle jazyka" style="font-size:11px;padding:4px 6px;background:var(--bg3);color:var(--txt);border:1px solid var(--brd);border-radius:3px">
-          <option value="all">Všechny jazyky</option>
-          <option value="G">Jen Řecké (G)</option>
-          <option value="H">Jen Hebrejské (H)</option>
+          <option value="g_all">Řecké (G) - Vše</option>
+          <option value="g_pending">Řecké (G) - Čeká</option>
+          <option value="g_done">Řecké (G) - Přeloženo</option>
+          <option value="h_all">Hebrejské (H) - Vše</option>
+          <option value="h_pending">Hebrejské (H) - Čeká</option>
+          <option value="h_done">Hebrejské (H) - Přeloženo</option>
         </select>
         <select id="sortBy" onchange="filterList()" aria-label="Řadit podle" style="font-size:11px;padding:4px 6px;background:var(--bg3);color:var(--txt);border:1px solid var(--brd);border-radius:3px">
-          <option value="original">▲ Původní (z TXT)</option>
+          <option value="original">▲ Původní</option>
           <option value="num">▲ G číslo</option>
           <option value="greek">Řecké slovo</option>
         </select>
@@ -1774,9 +1775,22 @@ function filterList() {
 
 function getFilteredEntries() {
   const q = document.getElementById('searchInput').value.toLowerCase();
-  const status = document.getElementById('filterStatus')?.value || 'all';
-  const lang = document.getElementById('filterLang')?.value || 'all';
-  const sortBy = document.getElementById('sortBy')?.value || 'num';
+  const filter = document.getElementById('filterStatus')?.value || 'all';
+  const sortBy = document.getElementById('sortBy')?.value || 'original';
+  
+  let lang = 'all';
+  let status = 'all';
+  
+  // Rozděl kombinovaný filtr na jazyk a stav
+  if (filter.startsWith('g_')) {
+    lang = 'G';
+    status = filter.slice(2);
+  } else if (filter.startsWith('h_')) {
+    lang = 'H';
+    status = filter.slice(2);
+  } else {
+    status = filter;
+  }
   
   let filtered = entries.filter(e => {
     const matchesSearch = !q || e.key.toLowerCase().includes(q) || 
@@ -1787,12 +1801,12 @@ function getFilteredEntries() {
     const hasTranslation = t && t.vyznam && t.vyznam.trim().length > 0 && t.vyznam !== '—';
     const isFailed = t && (!t.vyznam || t.vyznam === '—');
     
+    if (lang === 'G' && !e.key.startsWith('G')) return false;
+    if (lang === 'H' && !e.key.startsWith('H')) return false;
+    
     if (status === 'pending') return !hasTranslation;
     if (status === 'done') return hasTranslation && !isFailed;
     if (status === 'failed') return isFailed;
-    
-    if (lang === 'G' && !e.key.startsWith('G')) return false;
-    if (lang === 'H' && !e.key.startsWith('H')) return false;
     
     return true;
   });
@@ -1800,7 +1814,6 @@ function getFilteredEntries() {
   if (sortBy === 'greek') {
     filtered.sort((a, b) => a.greek.localeCompare(b.greek));
   } else if (sortBy === 'original') {
-    // Zachovat původní řazení z TXT souboru
     filtered.sort((a, b) => {
       const idxA = entries.findIndex(e => e.key === a.key);
       const idxB = entries.findIndex(e => e.key === b.key);
