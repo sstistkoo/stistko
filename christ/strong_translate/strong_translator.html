@@ -1044,12 +1044,18 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
           <option value="done">Přeloženo</option>
           <option value="failed">Neúspěšné</option>
         </select>
+        <select id="filterLang" onchange="filterList()" aria-label="Filtrovat podle jazyka" style="font-size:11px;padding:4px 6px;background:var(--bg3);color:var(--txt);border:1px solid var(--brd);border-radius:3px">
+          <option value="all">Všechny jazyky</option>
+          <option value="G">Jen Řecké (G)</option>
+          <option value="H">Jen Hebrejské (H)</option>
+        </select>
         <select id="sortBy" onchange="filterList()" aria-label="Řadit podle" style="font-size:11px;padding:4px 6px;background:var(--bg3);color:var(--txt);border:1px solid var(--brd);border-radius:3px">
+          <option value="original">▲ Původní (z TXT)</option>
           <option value="num">▲ G číslo</option>
           <option value="greek">Řecké slovo</option>
         </select>
-        <input type="text" id="searchInput" placeholder="Hledat G číslo nebo řecké slovo..."
-          oninput="filterList()" aria-label="Hledat G číslo nebo řecké slovo">
+        <input type="text" id="searchInput" placeholder="Hledat heslo..."
+          oninput="filterList()" aria-label="Hledat heslo">
         <div class="list-actions">
           <button class="sbtn" onclick="selectAll()" title="Vybrat vše" aria-label="Vybrat všechna hesla">☑</button>
           <button class="sbtn" onclick="selectNone()" title="Zrušit výběr" aria-label="Zrušit výběr všech hesel">☐</button>
@@ -1251,7 +1257,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   let virtualInitialized = false;
   let phantomSpacer = null;
   let visibleContainer = null;
-  let lastRenderRange = { start: -1, end: -1 };
+  let lastRenderRange = { start: -1, end: -1, doneStates: {} };
   let scrollTicking = false;
   let resizeTicking = false;
 
@@ -1608,11 +1614,9 @@ updateFailedCount();
 // Store for selected keys (declared in STATE section above)
 
 function renderList() {
-  // Update filtered keys based on current filter/sort/search
   filteredKeys = getFilteredEntries().map(e => e.key);
   
   if (virtualInitialized) {
-    // Force re-render of visible items
     lastRenderRange = { start: -1, end: -1 };
     updatePhantomHeight();
     renderVisible();
@@ -1771,11 +1775,12 @@ function filterList() {
 function getFilteredEntries() {
   const q = document.getElementById('searchInput').value.toLowerCase();
   const status = document.getElementById('filterStatus')?.value || 'all';
+  const lang = document.getElementById('filterLang')?.value || 'all';
   const sortBy = document.getElementById('sortBy')?.value || 'num';
   
   let filtered = entries.filter(e => {
     const matchesSearch = !q || e.key.toLowerCase().includes(q) || 
-      e.greek.toLowerCase().includes(q) || e.def.toLowerCase().includes(q);
+      e.greek.toLowerCase().includes(q) || (e.definice || e.def || '').toLowerCase().includes(q);
     if (!matchesSearch) return false;
     
     const t = translated[e.key];
@@ -1785,13 +1790,29 @@ function getFilteredEntries() {
     if (status === 'pending') return !hasTranslation;
     if (status === 'done') return hasTranslation && !isFailed;
     if (status === 'failed') return isFailed;
+    
+    if (lang === 'G' && !e.key.startsWith('G')) return false;
+    if (lang === 'H' && !e.key.startsWith('H')) return false;
+    
     return true;
   });
   
   if (sortBy === 'greek') {
     filtered.sort((a, b) => a.greek.localeCompare(b.greek));
+  } else if (sortBy === 'original') {
+    // Zachovat původní řazení z TXT souboru
+    filtered.sort((a, b) => {
+      const idxA = entries.findIndex(e => e.key === a.key);
+      const idxB = entries.findIndex(e => e.key === b.key);
+      return idxA - idxB;
+    });
   } else {
-    filtered.sort((a, b) => parseInt(a.key.slice(1)) - parseInt(b.key.slice(1)));
+    filtered.sort((a, b) => {
+      const numA = parseInt(a.key.slice(1));
+      const numB = parseInt(b.key.slice(1));
+      if (numA !== numB) return numA - numB;
+      return a.key.localeCompare(b.key); // G před H při stejném čísle
+    });
   }
   
   return filtered;
@@ -1864,9 +1885,20 @@ function renderVisible() {
   
   
   
-  if (startIndex === lastRenderRange.start && endIndex === lastRenderRange.end) return;
+  if (startIndex === lastRenderRange.start && endIndex === lastRenderRange.end) {
+    // Still need to check if translation status changed
+    const needsUpdate = [...Array(endIndex - startIndex + 1)].some((_, idx) => {
+      const key = filteredKeys[startIndex + idx];
+      if (!key) return false;
+      const t = translated[key];
+      const wasDone = lastRenderRange.doneStates?.[key];
+      const isDone = !!(t && t.vyznam && t.vyznam.trim() && t.vyznam !== '—');
+      return wasDone !== isDone;
+    });
+    if (!needsUpdate) return;
+  }
   
-  lastRenderRange = { start: startIndex, end: endIndex };
+  const doneStates = {};
   
   const fragment = document.createDocumentFragment();
   
@@ -1876,12 +1908,9 @@ function renderVisible() {
     const e = entries.find(x => x.key === key);
     const t = translated[key];
     const done = !!(t && t.vyznam && t.vyznam.trim() && t.vyznam !== '—');
+    doneStates[key] = done;
     
     const isSelected = selectedKeys.has(key);
-    const keyNum = parseInt(key.slice(1));
-    if (key.startsWith('G') && keyNum >= 31 && keyNum <= 40) {
-      console.log(`display ${key}: t=${!!t}, vyznam="${t?.vyznam?.slice(0,20)}", done=${done}`);
-    }
     
     const div = document.createElement('div');
     div.className = 'list-item' + (done ? ' done' : '') + (key === activeKey ? ' active' : '') + (isSelected ? ' selected' : '');
@@ -1911,6 +1940,7 @@ function renderVisible() {
     fragment.appendChild(div);
   }
   
+  lastRenderRange = { start: startIndex, end: endIndex, doneStates };
   visibleContainer.innerHTML = '';
   visibleContainer.appendChild(fragment);
 }
