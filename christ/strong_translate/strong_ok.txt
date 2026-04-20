@@ -90293,6 +90293,9 @@ G21370 | πλάνης
 Prepis: planēs
 Tvaroslovi: G:N-F
 Definice: πλάνης, -ητος, ό, see: πλανήτης πλανήτης, -ου, ὁ (πλανάω), [in LXX: [Hos.9:17] (נָדַד) * ;] = πλάνης, a wanderer: ἀστέρες π. (cl. planets), wandering stars, [Ju 13] (WH, mg., -τες).† (AS)
+En: wanderer, wandering.
+En Definition: A wanderer; specifically in a spiritual or physical sense; used of "wandering stars" to describe those who have gone astray from the truth.
+KJV Významy: wandering, wanderer.
 
 G21371 | ἄβρωτος
 Tvaroslovi: G:A

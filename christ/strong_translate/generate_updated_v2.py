@@ -237,6 +237,66 @@ for step_key in sort_strongs_keys(step_greek.keys(), "G"):
     eng_entry = english_strongs.get(f"G{num.zfill(4)}", {}) or english_strongs.get(
         f"G{num}", {}
     )
+
+    # Try to get derivation from "see" reference if main entry has no derivation (useful for G21370 etc.)
+    derivation = None
+    if not eng_entry or not eng_entry.get("derivation"):
+        # First try: look up from "see" array in our_entry
+        for see_ref in see_array:
+            ref_strongs = see_ref.get("strongs")
+            ref_lang = see_ref.get("language")
+            if ref_strongs and ref_lang == "GREEK":
+                ref_key = f"G{str(int(ref_strongs)).zfill(4)}"
+                ref_eng = english_strongs.get(ref_key, {})
+                if ref_eng.get("derivation"):
+                    derivation = ref_eng.get("derivation")
+                    break
+
+        # Second try: parse definition for "see: X" pattern (e.g., "see: πλανήτης" for G21370)
+        if not derivation:
+            definition_text = entry.get("definition", "")
+            see_match = re.search(r"see:\s*([^\s<]+)", definition_text)
+            if see_match:
+                greek_word_ref = see_match.group(1)
+                # Find entry in english_strongs by matching lemma
+                for eng_key, eng_val in english_strongs.items():
+                    lemma = eng_val.get("lemma", "")
+                    if lemma and greek_word_ref in lemma:
+                        if eng_val.get("derivation"):
+                            derivation = eng_val.get("derivation")
+                            break
+
+        # Third try: look in strongsgreek.json for derivation from "see" reference
+        if not derivation and see_array:
+            for see_ref in see_array:
+                ref_strongs = see_ref.get("strongs")
+                ref_lang = see_ref.get("language")
+                if ref_strongs and ref_lang == "GREEK":
+                    ref_key_our = str(int(ref_strongs)).zfill(4)
+                    our_ref_entry = our_greek["entries"].get(ref_key_our, {})
+                    if our_ref_entry.get("derivation"):
+                        derivation = our_ref_entry.get("derivation")
+                        break
+
+    # Use derivation from main entry, or from "see" reference if not available
+    final_derivation = eng_entry.get("derivation") if eng_entry else None
+    if not final_derivation and derivation:
+        final_derivation = derivation
+
+    # DEBUG: Print info for G21370
+    if num == "21370":
+        eng_key_try1 = f"G{num.zfill(4)}"
+        eng_key_try2 = f"G{num}"
+        print(
+            f"DEBUG G21370: eng_key_try1={eng_key_try1}, exists={eng_key_try1 in english_strongs}"
+        )
+        print(
+            f"DEBUG G21370: eng_key_try2={eng_key_try2}, exists={eng_key_try2 in english_strongs}"
+        )
+        print(
+            f"DEBUG G21370: step_greek entry definition={entry.get('definition', '')[:100]}"
+        )
+
     if eng_entry:
         if eng_entry.get("kjv_def"):
             output_lines.append(f"En: {eng_entry.get('kjv_def')}")
@@ -250,6 +310,10 @@ for step_key in sort_strongs_keys(step_greek.keys(), "G"):
         if ext_greek:
             if ext_greek.get("kjv_def"):
                 output_lines.append(f"En: {ext_greek.get('kjv_def')}")
+
+    # Output derivation if available (either from main entry or from "see" reference)
+    if final_derivation:
+        output_lines.append(f"Původ: {final_derivation}")
 
     # KJV Gloss
     gloss = entry.get("gloss", "")
@@ -328,6 +392,8 @@ for base_num in sorted(heb_by_base.keys(), key=int):
             output_lines.append(
                 f"En Definition: {eng_entry.get('strongs_def').strip()}"
             )
+        if eng_entry.get("derivation"):
+            output_lines.append(f"Původ: {eng_entry.get('derivation')}")
 
     # Extended Hebrew Data (zbytek.txt) - for H9001+
     ext_entry = extended_hebrew.get(base_num, {})
