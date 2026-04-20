@@ -1922,18 +1922,11 @@ function onVirtualScroll() {
 // ══ DETAIL ═══════════════════════════════════════════════════════
 function showDetail(key) {
   activeKey = key;
-  // Update active state v listu (virtuální render)
+  // Update active state v listu (virtuální render) - bez scrollování
    if (virtualInitialized) {
-     const idx = filteredKeys.indexOf(key);
-     if (idx !== -1) {
-       const scroll = document.getElementById('listScroll');
-       const targetTop = idx * ITEM_HEIGHT - (scroll.clientHeight / 2) + (ITEM_HEIGHT / 2);
-       scroll.scrollTop = targetTop;
-       // Defer render to next animation frame to avoid race with scroll event
-       requestAnimationFrame(() => {
-         if (virtualInitialized) renderVisible();
-       });
-     }
+     requestAnimationFrame(() => {
+       if (virtualInitialized) renderVisible();
+     });
    } else {
     // Fallback pro ne-inicializovaný virtuální scrolling
     document.querySelectorAll('.list-item').forEach(el => {
