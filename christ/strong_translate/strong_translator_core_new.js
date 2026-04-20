@@ -94,9 +94,29 @@ export function parseTranslations(raw, keys, translated = {}) {
   const normalized = raw.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
   const blocks = normalized.split(/(?=###[GH]\d+###)/);
   
+  // Sestavíme mapu: číslo → správný klíč (pro případ že AI použije špatný prefix)
+  const numToKey = {};
+  for (const k of keys) {
+    const num = k.slice(1); // '123' z 'G123' nebo 'H123'
+    numToKey[num] = k;
+  }
+  
   for (const block of blocks) {
     const km = block.match(/###([GH]\d+)###/);
-    if (!km || !keys.includes(km[1])) continue;
+    if (!km) continue;
+    
+    const foundKey = km[1];
+    const num = foundKey.slice(1);
+    
+    // Exact match nebo fallback přes číslo (AI použila špatný prefix)
+    let targetKey = null;
+    if (keys.includes(foundKey)) {
+      targetKey = foundKey;
+    } else if (numToKey[num]) {
+      targetKey = numToKey[num]; // fallback: stejné číslo, správný prefix
+    } else {
+      continue;
+    }
     
     const content = block.slice(km[0].length).trim();
     const fields = {};
@@ -110,11 +130,10 @@ export function parseTranslations(raw, keys, translated = {}) {
       }
     });
     
-    const key = km[1];
-    translated[key] = {
+    translated[targetKey] = {
       vyznam: fields['VYZNAM'] || '',
       definice: fields['DEFINICE'] || '',
-      pouziti: fields['POUZITI'] || '',  // Czech biblical references
+      pouziti: fields['POUZITI'] || '',
       puvod: fields['PUVOD'] || ''
     };
   }
@@ -122,9 +141,9 @@ export function parseTranslations(raw, keys, translated = {}) {
   return keys.filter(k => !translated[k]?.vyznam);
 }
 
-export const SYSTEM_MESSAGE = 'Prekladac Strong slovniku. EN = originalni anglicka definice. Preloz ji do cestiny. VYZNAM = cesky ekvivalent. DEFINICE = CESKY PREKLAD EN definice. POUZITI = biblicka posta. PUVOD = etymologie. Format: ###G123###\nVYZNAM: [cesky ekvivalent]\nDEFINICE: [cesky preklad EN definice]\nPOUZITI: [posta]\nPUVOD: [puvod]. Pouzij presne tyto nazvy poli.';
+export const SYSTEM_MESSAGE = 'Prekladac Strong slovniku. EN = originalni anglicka definice. Preloz ji do cestiny. VYZNAM = cesky ekvivalent. DEFINICE = CESKY PREKLAD EN definice. POUZITI = biblicka posta. PUVOD = etymologie. DULEZITE: Zachovej presne puvodni klic hesla (G nebo H prefix) ve formatu. Format: ###G123### nebo ###H456###\nVYZNAM: [cesky ekvivalent]\nDEFINICE: [cesky preklad EN definice]\nPOUZITI: [posta]\nPUVOD: [puvod]. Pouzij presne tyto nazvy poli a presne puvodni klic hesla.';
 
-export const DEFAULT_PROMPT = 'Preloz hesla. Ulohy:\n1. VYZNAM = cesky ekvivalent\n2. DEFINICE = PRELOZ anglickou definici (EN) do cestiny\n3. POUZITI = biblicka posta\n4. PUVOD = etymologie\nFormat:\n###G123###\nVYZNAM: [preklad]\nDEFINICE: [cesky preklad en definice]\nPOUZITI: [posta]\nPUVOD: [puvod]\n{HESLA}';
+export const DEFAULT_PROMPT = 'Preloz hesla. Ulohy:\n1. VYZNAM = cesky ekvivalent\n2. DEFINICE = PRELOZ anglickou definici (EN) do cestiny\n3. POUZITI = biblicka posta\n4. PUVOD = etymologie\nDULEZITE: U kazdeho hesla zachovej presne jeho klic (napr. G123 nebo H456) ve znacce.\nFormat:\n###KLIC### (kde KLIC je presne G123 nebo H456 z hesla)\nVYZNAM: [preklad]\nDEFINICE: [cesky preklad en definice]\nPOUZITI: [posta]\nPUVOD: [puvod]\n{HESLA}';
 
 export function escHtml(s) {
   return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
