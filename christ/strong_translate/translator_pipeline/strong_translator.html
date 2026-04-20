@@ -1,0 +1,3526 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strong GR → CZ Překladač</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap');
+
+:root {
+  --bg:   #1a1815;
+  --bg2:  #252220;
+  --bg3:  #2d2925;
+  --bg4:  #353230;
+  --brd:  #4a4540;
+  --brd2: #5a554a;
+  --acc:  #d4a848;
+  --acc2: #8a7030;
+  --acc3: #e4c060;
+  --txt:  #e8e0d0;
+  --txt2: #a09080;
+  --txt3: #908878;
+  --grn:  #5a9a6c;
+  --red:  #ff4040;
+  --ylw:  #a08840;
+  --blue: #4a6a9a;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--txt);
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 15px;
+  min-height: 100vh;
+}
+
+/* ══ SETUP ════════════════════════════════════════════════════ */
+#setup {
+  max-width: 680px;
+  margin: 36px auto;
+  padding: 30px;
+  background: var(--bg2);
+  border: 1px solid var(--brd);
+  border-radius: 6px;
+}
+
+#setup h1 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--acc);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+#setup p {
+  font-size: 13px;
+  color: var(--txt2);
+  margin-bottom: 22px;
+  line-height: 1.6;
+}
+
+.row { margin-bottom: 14px; }
+
+.row label {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--txt3);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.row input[type=text],
+.row input[type=password],
+.row select {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--brd);
+  border-radius: 3px;
+  padding: 8px 11px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--txt);
+  outline: none;
+  transition: border-color .2s;
+}
+.row input:focus, .row select:focus { border-color: var(--acc); }
+.row input::placeholder { color: var(--txt3); }
+
+.file-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.file-row > * { flex-shrink: 0; }
+.file-row .start-btn { flex: 1 1 auto; min-width: 140px; }
+.file-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  padding: 7px 14px;
+  background: var(--bg3);
+  border: 1px solid var(--brd);
+  border-radius: 3px;
+  color: var(--txt2);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all .2s;
+}
+.file-btn:hover { border-color: var(--acc); color: var(--acc); }
+.file-status { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--txt3); }
+.file-status.ok { color: var(--grn); }
+
+hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
+
+.resume-box {
+  background: var(--bg3);
+  border: 1px solid var(--ylw);
+  border-radius: 4px;
+  padding: 12px 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--acc3);
+  margin-bottom: 16px;
+  display: none;
+}
+
+.start-btn {
+  width: 100%;
+  padding: 11px;
+  background: var(--acc2);
+  border: 1px solid var(--acc);
+  border-radius: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--acc3);
+  cursor: pointer;
+  letter-spacing: .06em;
+  transition: all .2s;
+}
+.start-btn:hover { background: var(--acc); color: var(--bg); }
+.start-btn:disabled { opacity: .4; cursor: default; }
+
+/* ══ APP ══════════════════════════════════════════════════════ */
+#app { display: none; flex-direction: column; height: 100vh; }
+
+/* Header */
+.hdr {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--brd);
+  padding: 10px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.hdr-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--acc);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+.hdr-close {
+  margin-left: 10px;
+  padding: 3px 6px;
+  font-size: 10px;
+}
+
+.stat {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--txt3);
+}
+.stat b { color: var(--acc3); }
+
+.pbar-wrap { flex: 1; min-width: 80px; height: 4px; background: var(--bg4); border-radius: 2px; overflow: hidden; }
+.pbar-fill { height: 100%; background: var(--acc); border-radius: 2px; transition: width .5s ease; }
+
+.hdr-btns { display: flex; gap: 6px; margin-left: auto; flex-wrap: wrap; }
+
+#mobileMenuBtn { display: none; }
+
+.hbtn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  padding: 5px 11px;
+  background: transparent;
+  border: 1px solid var(--brd);
+  border-radius: 3px;
+  color: var(--txt2);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all .2s;
+}
+.hbtn:hover { border-color: var(--acc); color: var(--acc); }
+.hbtn.grn { border-color: var(--grn); color: var(--grn); }
+.hbtn.grn:hover { background: var(--grn); color: var(--bg); }
+.hbtn.red { border-color: #ff5555; color: #ff5555; background: #2a2020; }
+.hbtn.red:hover { background: #ff5555; color: var(--bg); }
+.hbtn.active { background: var(--acc2); border-color: var(--acc); color: var(--acc3); }
+.hbtn:disabled { opacity: .4; cursor: default; }
+
+.hbtn.auto {
+  border-color: var(--grn);
+  color: var(--grn);
+  font-weight: 700;
+  animation: autoPulse 2s infinite;
+}
+@keyframes autoPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(90, 154, 108, 0.4); }
+  50% { box-shadow: 0 0 8px 2px rgba(90, 154, 108, 0.6); }
+}
+.hbtn.auto:hover { background: var(--grn); color: var(--bg); }
+.hbtn.auto.active { background: var(--red); border-color: var(--red); color: var(--txt); animation: none; }
+
+/* Auto panel */
+.auto-panel {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--brd);
+  padding: 8px 18px;
+  display: none;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+.auto-panel.show { display: flex; }
+
+.auto-info {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--txt2);
+}
+.auto-info b { color: var(--acc3); }
+
+.countdown {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--acc);
+  min-width: 36px;
+  text-align: center;
+}
+
+.auto-log {
+  flex: 1;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--txt3);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Log panel — v pravém panelu nahoře */
+.log-panel {
+  background: var(--bg);
+  border-bottom: 2px solid var(--brd2);
+  flex-shrink: 0;
+  height: 50%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.log-head {
+  padding: 6px 14px;
+  border-bottom: 1px solid var(--brd);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  background: var(--bg2);
+}
+.log-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+}
+.log-entry {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--brd);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  line-height: 1.65;
+  transition: background .1s;
+}
+.log-entry:hover { background: var(--bg3); }
+.log-key-line { margin-bottom: 3px; }
+.log-key { color: var(--acc); font-weight: 700; }
+.log-greek { color: var(--txt2); font-style: italic; margin-left: 6px; font-family: 'Crimson Pro', serif; font-size: 13px; }
+.log-orig { color: var(--txt3); font-size: 10px; margin-bottom: 4px; }
+.log-vyznam { color: var(--acc3); margin-bottom: 2px; }
+.log-vyznam b { color: var(--acc3); }
+.log-definice { color: var(--txt2); font-size: 11px; }
+.log-err { color: #c05050; }
+.log-info { color: var(--txt3); font-style: italic; }
+
+/* Main split */
+.split {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* Left — seznam hesel */
+.list-pane {
+  background: var(--bg2);
+  border-right: 1px solid var(--brd);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* Mobile responsive */
+@media (max-width: 600px) {
+  #setup { max-width: 100%; margin: 10px auto; padding: 16px; }
+  .file-row { gap: 8px; }
+  .start-btn { width: 100%; margin-top: 8px; }
+  .split { display: flex; flex-direction: column; }
+  .list-pane { width: 100%; height: 45%; flex-shrink: 0; transition: height .3s; }
+  .list-pane.hidden { height: 0 !important; overflow: hidden; }
+  .detail-pane { width: 100%; height: 50%; flex-shrink: 0; }
+  .log-panel { height: 50%; flex-shrink: 0; }
+  
+  /* Mobile menu button - show only on mobile */
+  #mobileMenuBtn { display: inline-block; }
+  .hdr-btns .hbtn { display: none; }
+  .hdr-btns #mobileMenuBtn,
+  .hdr-btns #btnToggleList,
+  .hdr-btns #btnAuto,
+  .hdr-btns [onclick="clearProgress()"],
+  .hdr-btns [onclick="showFailedEntries()"],
+  .hdr-btns [onclick="showSettingsModal()"] { display: inline-block; }
+  .log-head { flex-wrap: wrap; }
+  
+  /* Resize handle */
+  .resize-handle {
+    height: 16px;
+    background: var(--brd);
+    cursor: row-resize;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .resize-handle::after {
+    content: '';
+    width: 40px;
+    height: 4px;
+    background: var(--txt3);
+    border-radius: 2px;
+  }
+  .resize-handle:hover { background: var(--acc); }
+}
+
+.list-search {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--brd);
+  flex-shrink: 0;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.list-search input {
+  flex: 1;
+  background: var(--bg3);
+  border: 1px solid var(--brd);
+  border-radius: 3px;
+  padding: 6px 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--txt);
+  outline: none;
+}
+.list-search input:focus { border-color: var(--acc); }
+.list-search input::placeholder { color: var(--txt3); }
+
+.list-actions {
+  display: flex;
+  gap: 4px;
+}
+.sbtn {
+  background: var(--bg3);
+  border: 1px solid var(--brd);
+  border-radius: 3px;
+  color: var(--txt2);
+  cursor: pointer;
+  padding: 4px 8px;
+  font-size: 12px;
+}
+.sbtn:hover { background: var(--bg4); border-color: var(--acc); }
+
+.list-scroll { flex: 1; overflow-y: auto; }
+
+.list-item {
+  display: grid;
+  grid-template-columns: 24px 50px 1fr 20px;
+  align-items: center;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--brd);
+  transition: background .1s;
+  gap: 8px;
+}
+.list-item:hover { background: var(--bg3); }
+.list-item:focus { outline: 2px solid var(--acc); outline-offset: -2px; }
+.list-item.active { background: var(--bg3); border-left: 2px solid var(--acc); }
+.list-item.selected { background: var(--bg4); }
+.list-item.done { }
+.list-item.done .li-key { color: var(--grn); }
+
+.li-check {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--acc);
+}
+
+.li-key {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--acc);
+  font-weight: 700;
+}
+.li-greek {
+  font-size: 13px;
+  color: var(--txt2);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.li-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--brd2);
+  justify-self: end;
+}
+.li-dot.done { background: var(--grn); }
+.li-dot.pending { background: var(--ylw); animation: blink 1.2s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+/* Right — detail */
+.detail-pane {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.detail-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px;
+  min-height: 0;
+}
+
+.detail-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--txt3);
+}
+
+.entry-header {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--brd);
+}
+
+.entry-key {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--acc);
+}
+
+.entry-greek {
+  font-size: 20px;
+  color: var(--txt);
+  font-style: italic;
+}
+
+.entry-status {
+  margin-left: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  padding: 3px 9px;
+  border-radius: 2px;
+  border: 1px solid var(--brd);
+  color: var(--txt3);
+}
+.entry-status.done { border-color: var(--grn); color: var(--grn); }
+
+/* Sekce originálu */
+.orig-section {
+  background: var(--bg3);
+  border: 1px solid var(--brd);
+  border-radius: 4px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.orig-section .label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--txt3);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.orig-section .value { color: var(--txt2); font-style: italic; }
+
+/* Výsledek překladu */
+.translation-box {
+  background: var(--bg2);
+  border: 1px solid var(--brd);
+  border-radius: 4px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.tbox-head {
+  display: flex;
+  align-items: center;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--brd);
+  background: var(--bg3);
+}
+
+.tbox-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--acc);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.tbox-actions { margin-left: auto; display: flex; gap: 6px; }
+
+.tbox-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  padding: 3px 8px;
+  border-radius: 2px;
+  border: 1px solid var(--brd);
+  background: transparent;
+  color: var(--txt3);
+  cursor: pointer;
+  transition: all .15s;
+}
+.tbox-btn:hover { border-color: var(--acc); color: var(--acc); }
+.tbox-btn.ok { border-color: var(--grn); color: var(--grn); }
+
+.tbox-body {
+  padding: 12px 14px;
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--txt);
+  min-height: 60px;
+  white-space: pre-wrap;
+}
+
+.tbox-body.waiting {
+  color: var(--txt3);
+  font-style: italic;
+  font-size: 13px;
+}
+
+.tbox-edit {
+  display: none;
+  padding: 0 14px 12px;
+}
+.tbox-edit.show { display: block; }
+.tbox-edit textarea {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--brd);
+  border-radius: 3px;
+  padding: 8px 10px;
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 14px;
+  color: var(--txt);
+  resize: vertical;
+  min-height: 100px;
+  outline: none;
+  line-height: 1.7;
+}
+.tbox-edit textarea:focus { border-color: var(--acc); }
+.tbox-save {
+  margin-top: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  padding: 5px 12px;
+  background: var(--acc2);
+  border: 1px solid var(--acc);
+  border-radius: 3px;
+  color: var(--acc3);
+  cursor: pointer;
+}
+.tbox-save:hover { background: var(--acc); color: var(--bg); }
+
+/* Tlačítko přeložit */
+.translate-btn {
+  width: 100%;
+  padding: 10px;
+  background: var(--bg3);
+  border: 1px solid var(--acc2);
+  border-radius: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--acc);
+  cursor: pointer;
+  transition: all .2s;
+  margin-bottom: 16px;
+}
+.translate-btn:hover { background: var(--acc2); }
+.translate-btn:disabled { opacity: .4; cursor: default; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--brd2); border-radius: 3px; }
+
+/* Toast */
+#toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg3);
+  border: 1px solid var(--brd2);
+  border-radius: 4px;
+  padding: 9px 18px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--txt);
+  z-index: 999;
+  opacity: 0;
+  transition: opacity .3s;
+  white-space: nowrap;
+   pointer-events: none;
+  }
+
+ /* Custom Modal */
+ #customModal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.7);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+ }
+ #customModal.show { display: flex; }
+ .modal-box {
+  background: var(--bg2);
+  border: 1px solid var(--brd);
+  border-radius: 6px;
+  padding: 20px;
+  max-width: 320px;
+  width: 90%;
+ }
+ .modal-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--acc);
+  margin-bottom: 16px;
+ }
+ .modal-input {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--brd);
+  border-radius: 3px;
+  padding: 8px 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--txt);
+  margin-bottom: 10px;
+ }
+ .modal-input:focus { border-color: var(--acc); outline: none; }
+ .modal-row { display: flex; gap: 10px; }
+ .modal-row input { flex: 1; }
+ .modal-btns {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+ }
+ .modal-btn {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  cursor: pointer;
+  text-align: center;
+ }
+ .modal-btn.ok { background: var(--acc2); border: 1px solid var(--acc); color: var(--acc3); }
+ .modal-btn.ok:hover { background: var(--acc); color: var(--bg); }
+.modal-btn.cancel { background: var(--bg3); border: 1px solid var(--brd); color: var(--txt2); }
+   .modal-btn.cancel:hover { border-color: var(--txt3); }
+
+  /* Limits Modal */
+  #limitsModal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.8);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1002;
+  }
+  #limitsModal.show { display: flex; }
+  .limits-modal-box {
+    background: var(--bg2);
+    border: 1px solid var(--brd);
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 380px;
+    width: 90%;
+  }
+  .limits-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--acc);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .limits-provider {
+    font-size: 11px;
+    color: var(--txt3);
+    margin-bottom: 12px;
+    padding: 8px 10px;
+    background: var(--bg3);
+    border-radius: 4px;
+  }
+  .limits-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--brd);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+  }
+  .limits-row:last-child { border-bottom: none; }
+  .limits-label { color: var(--txt3); }
+  .limits-value { color: var(--txt); font-weight: 600; }
+  .limits-value.ok { color: var(--grn); }
+  .limits-value.warn { color: var(--ylw); }
+  .limits-value.danger { color: var(--red); }
+  .limits-note {
+    font-size: 10px;
+    color: var(--txt3);
+    margin-top: 12px;
+    padding: 8px;
+    background: var(--bg3);
+    border-radius: 4px;
+    line-height: 1.5;
+  }
+  .limits-note a { color: var(--acc); text-decoration: none; }
+  .limits-note a:hover { text-decoration: underline; }
+  .limits-loading {
+    text-align: center;
+    padding: 20px;
+    color: var(--txt3);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+  }
+
+  /* Mobile Actions Modal */
+ #mobileActionsModal {
+   position: fixed;
+   top: 0; left: 0; right: 0; bottom: 0;
+   background: rgba(0,0,0,0.8);
+   display: none;
+   align-items: center;
+   justify-content: center;
+   z-index: 1001;
+ }
+ #mobileActionsModal.show { display: flex; }
+ .mobl-modal-box {
+   background: var(--bg2);
+   border: 1px solid var(--brd);
+   border-radius: 8px;
+   padding: 16px;
+   max-width: 280px;
+   width: 85%;
+ }
+ .mobl-modal-title {
+   font-family: 'JetBrains Mono', monospace;
+   font-size: 12px;
+   color: var(--acc);
+   margin-bottom: 14px;
+   text-align: center;
+   letter-spacing: .1em;
+ }
+ .mobl-btn {
+   width: 100%;
+   padding: 12px;
+   margin-bottom: 8px;
+   border-radius: 4px;
+   font-family: 'JetBrains Mono', monospace;
+   font-size: 12px;
+   cursor: pointer;
+   background: var(--bg3);
+   border: 1px solid var(--brd);
+   color: var(--txt);
+   transition: all .2s;
+ }
+ .mobl-btn:last-of-type { margin-bottom: 0; }
+ .mobl-btn:hover { border-color: var(--acc); color: var(--acc); }
+ .mobl-btn.grn { border-color: var(--grn); color: var(--grn); }
+ .mobl-btn.grn:hover { background: var(--grn); color: var(--bg); }
+ .mobl-btn.cancel { background: var(--red); border-color: var(--red); color: var(--txt); }
+ .mobl-btn.cancel:hover { background: #c05050; }
+
+ /* Settings Modal */
+ #settingsModal {
+   position: fixed;
+   top: 0; left: 0; right: 0; bottom: 0;
+   background: rgba(0,0,0,0.8);
+   display: none;
+   align-items: center;
+   justify-content: center;
+   z-index: 1001;
+ }
+ #settingsModal.show { display: flex; }
+ .mobl-set-row {
+   margin-bottom: 12px;
+ }
+ .mobl-set-row label {
+   display: block;
+   font-family: 'JetBrains Mono', monospace;
+   font-size: 10px;
+   color: var(--txt3);
+   margin-bottom: 4px;
+   text-transform: uppercase;
+   letter-spacing: .1em;
+ }
+ .mobl-set-row select {
+   width: 100%;
+   padding: 10px;
+   background: var(--bg3);
+   border: 1px solid var(--brd);
+   border-radius: 4px;
+   color: var(--txt);
+   font-family: 'JetBrains Mono', monospace;
+   font-size: 12px;
+ }
+
+/* Virtual scrolling */
+.list-scroll {
+  position: relative;
+}
+.phantom-spacer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+.visible-items {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+.list-item {
+  position: absolute;
+  height: 32px;
+}
+
+</style>
+</head>
+<body>
+
+<!-- ══ SETUP ══════════════════════════════════════════════════════ -->
+<div id="setup">
+  <h1>⟁ Strong GR → CZ — Překladač slovníku</h1>
+  
+
+  <div id="resumeBox" class="resume-box"></div>
+
+  <div class="row">
+    <label for="provider">Provider</label>
+    <select id="provider" onchange="onProviderChange()" aria-label="Výběr AI providera">
+      <option value="groq">Groq (zdarma)</option>
+      <option value="gemini">Google Gemini (zdarma)</option>
+      <option value="openrouter">OpenRouter - zdarma</option>
+    </select>
+  </div>
+
+  <div class="row">
+    <label for="apiKey" id="keyLabel">API Klíč — Groq (console.groq.com)</label>
+    <input type="password" id="apiKey" placeholder="gsk_..." onchange="saveApiKey()" aria-label="API klíč providera">
+  </div>
+
+  <div class="row">
+    <label for="model">Model</label>
+    <select id="model" aria-label="Výběr AI modelu">
+      <option value="llama-3.3-70b-versatile">llama-3.3-70b-versatile</option>
+      <option value="llama-3.1-8b-instant">llama-3.1-8b-instant (rychlejší)</option>
+      <option value="qwen-qwq-32b">qwen-qwq-32b</option>
+    </select>
+  </div>
+
+  <div class="row">
+    <label for="batchSize">Velikost dávky (hesel na jedno volání)</label>
+    <select id="batchSize" aria-label="Počet hesel na jednu dávku">
+      <option value="1">1 heslo</option>
+      <option value="5">5 hesel</option>
+      <option value="10" selected>10 hesel</option>
+      <option value="15">15 hesel</option>
+      <option value="20">20 hesel</option>
+    </select>
+  </div>
+
+  <div class="row">
+    <label for="interval">Interval mezi dávkami (vteřiny) — ochrana rate limitu</label>
+    <select id="interval" aria-label="Interval mezi dávkami v sekundách">
+      <option value="5">5 s (Groq fast)</option>
+      <option value="10">10 s (bezpečné)</option>
+      <option value="20" selected>20 s (Gemini free)</option>
+      <option value="30">30 s (při chybách)</option>
+    </select>
+  </div>
+
+  <hr class="div">
+
+  <div class="row">
+    <label for="fileTXT">txt soubor</label>
+    <div class="file-row">
+      <label class="file-btn" for="fileTXT" aria-label="Vybrat TXT soubor">📂 Vybrat</label>
+      <input type="file" id="fileTXT" accept=".txt" onchange="loadTXT(this)" style="display:none" aria-label="Výběr TXT souboru se Strong slovníkem">
+      <button onclick="loadDefaultFile()" id="btnLoadDefault" style="font-size:10px;padding:4px 10px;background:var(--bg4);border:1px solid var(--brd);border-radius:3px;cursor:pointer;display:none;color:var(--txt)" aria-label="Načíst výchozí soubor">📄 Automaticky</button>
+      <span class="file-status" id="statusTXT" aria-live="polite">— nevybráno</span>
+      <span id="fileReady" style="display:none;width:8px;height:8px;border-radius:50%;background:#5a9a6c;margin-left:6px" aria-hidden="true"></span>
+      <button class="start-btn" id="startBtn" onclick="startApp()" disabled aria-label="Zahájit překlad" style="flex:1">
+        Zahájit překlad →
+      </button>
+      <button onclick="showLimitsModal()" style="font-family:'JetBrains Mono',monospace;font-size:11px;padding:8px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:3px;color:var(--txt3);cursor:pointer;white-space:nowrap" aria-label="Zobrazit limity providera" title="Zobrazit limity providera">📊 Limity</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <label style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-size:12px" onclick="document.getElementById('promptSection').toggleAttribute('open')">
+      📝 Prompt
+    </label>
+    <details id="promptSection" style="width:100%;margin-top:10px">
+      <summary style="cursor:pointer;color:var(--txt2);font-size:12px;padding:6px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;list-style:none">📝 Prompt ▼</summary>
+      <textarea id="promptEditor" rows="8" style="width:100%;background:var(--bg3);border:1px solid var(--brd);
+        border-radius:3px;padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;
+        color:var(--txt2);resize:vertical;outline:none;line-height:1.6;" aria-label="Prompt pro AI překladač"></textarea>
+      <div style="display:flex;gap:8px;margin-top:6px">
+        <button onclick="resetPrompt()" style="font-family:'JetBrains Mono',monospace;font-size:10px;
+          padding:5px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:3px;
+          color:var(--txt3);cursor:pointer;" aria-label="Obnovit výchozí prompt">↺ Výchozí</button>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt3);
+          align-self:center">Proměnné: {HESLA}</span>
+      </div>
+    </details>
+  </div>
+
+</div>
+
+<!-- ══ APP ════════════════════════════════════════════════════════ -->
+<div id="app">
+
+  <!-- Header -->
+  <div class="hdr">
+    <div class="hdr-title">
+      <span>GR-CZ</span>
+      <button class="hbtn red hdr-close" onclick="clearProgress()" title="Smazat veškerý uložený průběh" aria-label="Smazat veškerý uložený průběh">Res.</button>
+    </div>
+    <div class="stat">Přeloženo: <b id="sDone">0</b></div>
+    <div class="stat">Zbývá: <b id="sRemain">0</b></div>
+    <div class="stat">Celkem: <b id="sTotal">0</b></div>
+    <div class="stat" style="color:var(--acc)" id="tokenStats" role="status" aria-live="polite">📊 Tokeny: 0</div>
+  <div class="stat" id="timeElapsed" style="color:var(--txt3);font-size:10px">⏱ <span id="elapsedTime">0:00</span></div>
+    <div class="pbar-wrap" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="pbarContainer"><div class="pbar-fill" id="pbar" style="width:0%"></div></div>
+    <div style="display:flex;align-items:center;gap:5px;flex-shrink:0">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt3)">od G</span>
+      <input type="number" id="startFrom" min="1" max="5624" placeholder="1"
+        style="width:60px;background:var(--bg3);border:1px solid var(--brd);border-radius:3px;
+        padding:4px 6px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt);
+        outline:none;text-align:center"
+        title="Začít překlad od tohoto čísla"
+        aria-label="Začít překlad od G čísla">
+      <button class="hbtn" onclick="jumpToStart()" title="Přeskočit na toto číslo" aria-label="Přeskočit na zadané G číslo">→</button>
+    </div>
+    <div class="hdr-btns">
+      <button class="hbtn" id="btnImport" onclick="document.getElementById('importFileInput').click()" aria-label="Importovat TXT soubor s překlady">⬆ Import TXT</button>
+      <input type="file" id="importFileInput" accept=".txt" style="display:none" onchange="importTXT(this)" aria-label="Výběr TXT souboru k importu">
+      <button class="hbtn auto" id="btnAuto" onclick="toggleAuto()" aria-label="Spustit automatický překlad">▶ AUTO</button>
+      <button class="hbtn" id="btnToggleList" onclick="toggleListPane()" title="Skrýt/ukázat seznam" aria-label="Skrýt/ukázat seznam">≡ Seznam</button>
+      <button class="hbtn" id="btnStep" onclick="translateNext()" aria-label="Přeložit další dávku">⚡ Dávka</button>
+      <button class="hbtn" onclick="selectRange()" title="Označit rozsah hesel k překladu" aria-label="Označit rozsah">☑ Přek</button>
+      <button class="hbtn grn" onclick="exportTXT()" aria-label="Exportovat do TXT">⬇ TXT</button>
+      <button class="hbtn grn" onclick="exportJSON()" aria-label="Exportovat do JSON">⬇ JSON</button>
+      <button class="hbtn" onclick="exportRange()" title="Export vybraného rozsahu G čísel" aria-label="Exportovat rozsah G čísel">⬇ Rozsah</button>
+      <button class="hbtn red" onclick="showFailedEntries()" title="Zobrazit neúspěšné překlady" aria-label="Zobrazit neúspěšné překlady">⚠ Neus. <span id="failedCount"></span></button>
+      <button class="hbtn" onclick="showSettingsModal()" title="Nastavení AI (provider, model, dávka)" aria-label="Nastavení AI">⚙ AI</button>
+      <button class="hbtn red" id="mobileMenuBtn" onclick="showMobileActions()" aria-label="Zobrazit akce">☰</button>
+    </div>
+  </div>
+
+  <!-- Auto panel -->
+  <div class="auto-panel" id="autoPanel">
+    <div class="auto-info">AUTO: dávka <b id="autoBatch">—</b>, interval <b id="autoInterval">—</b>s</div>
+    <div class="countdown" id="countdown">—</div>
+    <div class="auto-log" id="autoLog">Čeká na start...</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt3);white-space:nowrap">
+      ⏱ <span id="etaLabel">—</span>
+    </div>
+    <button class="hbtn red" onclick="stopAuto()" aria-label="Zastavit automatický překlad">■ Stop</button>
+  </div>
+
+  <!-- Split -->
+  <div class="split">
+
+    <!-- Seznam -->
+    <div class="list-pane">
+      <div class="list-search">
+        <select id="filterStatus" onchange="filterList()" aria-label="Filtrovat podle stavu" style="font-size:11px;padding:4px 6px;background:var(--bg3);color:var(--txt);border:1px solid var(--brd);border-radius:3px">
+          <option value="all">Vše</option>
+          <option value="pending">Čeká</option>
+          <option value="done">Přeloženo</option>
+          <option value="failed">Neúspěšné</option>
+        </select>
+        <select id="sortBy" onchange="filterList()" aria-label="Řadit podle" style="font-size:11px;padding:4px 6px;background:var(--bg3);color:var(--txt);border:1px solid var(--brd);border-radius:3px">
+          <option value="num">▲ G číslo</option>
+          <option value="greek">Řecké slovo</option>
+        </select>
+        <input type="text" id="searchInput" placeholder="Hledat G číslo nebo řecké slovo..."
+          oninput="filterList()" aria-label="Hledat G číslo nebo řecké slovo">
+        <div class="list-actions">
+          <button class="sbtn" onclick="selectAll()" title="Vybrat vše" aria-label="Vybrat všechna hesla">☑</button>
+          <button class="sbtn" onclick="selectNone()" title="Zrušit výběr" aria-label="Zrušit výběr všech hesel">☐</button>
+        </div>
+      </div>
+       <button class="hbtn grn" id="btnTranslateSelected" onclick="translateSelected()" style="display:none;margin:5px;width:calc(100% - 10px)" aria-label="Přeložit vybraná hesla">⚡ Přeložit vybrané</button>
+       <div class="list-scroll" id="listScroll">
+         <div class="phantom-spacer"></div>
+         <div class="visible-items"></div>
+       </div>
+     </div>
+
+    <!-- Pravý panel: log nahoře + detail dole, nebo jen jedno z toho -->
+    <div class="detail-pane">
+
+      <!-- Log překladu — scrolluje dovnitř pravého panelu -->
+      <div class="log-panel" id="logPanel">
+        <div class="log-head">
+          <span></span>
+          <span id="logCount" style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt3);margin-left:10px"></span>
+          <span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--txt3)" title="Space=dávka  A=auto  ↑↓=navigace  Esc=zavřít modal">⌨ Space·A·↑↓</span>
+          <button class="hbtn" style="font-size:9px;padding:2px 8px;margin-left:8px" onclick="showSetup()" aria-label="Zpět do nastavení">← Nastavení</button>
+          <button class="hbtn" style="font-size:9px;padding:2px 8px" onclick="clearLog()" aria-label="Vymazat log">✕ Vymazat</button>
+        </div>
+        <input type="hidden" id="batchSizeRun" value="10">
+        <input type="hidden" id="intervalRun" value="20">
+        <div class="log-scroll" id="logScroll" role="log" aria-label="Log překladů">
+          <div style="padding:20px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt3)">
+            Překlady se budou zobrazovat zde automaticky...
+          </div>
+        </div>
+      </div>
+
+      <!-- Resize handle for mobile -->
+      <div class="resize-handle" id="resizeHandle"></div>
+
+      <!-- Detail vybraného hesla -->
+      <div class="detail-scroll" id="detailPane">
+        <div class="detail-empty">← Klikni na heslo v seznamu pro detail</div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<div id="toast" aria-live="polite" aria-atomic="true"></div>
+
+<!-- Custom Modal -->
+  <div id="customModal">
+    <div class="modal-box">
+      <div class="modal-title" id="modalTitle">Rozsah hesel</div>
+      <div class="modal-row">
+        <input type="number" class="modal-input" id="modalFrom" placeholder="Od G1" value="1">
+        <input type="number" class="modal-input" id="modalTo" placeholder="Do G100" value="100">
+      </div>
+      <div class="modal-btns">
+        <button class="modal-btn cancel" onclick="closeModal()">Zrušit</button>
+        <button class="modal-btn ok" onclick="confirmModal()">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Actions Modal -->
+  <div id="mobileActionsModal">
+    <div class="mobl-modal-box">
+      <div class="mobl-modal-title">Akce</div>
+      <button class="mobl-btn" onclick="closeMobileModal(); document.getElementById('importFileInput').click()" aria-label="Importovat TXT soubor">⬆ Import TXT</button>
+      <button class="mobl-btn" onclick="closeMobileModal(); translateNext()" aria-label="Přeložit další dávku">⚡ Dávka k překladu</button>
+      <button class="mobl-btn" onclick="closeMobileModal(); selectRange()" aria-label="Označit rozsah">☑ Výběr do překladače</button>
+      <button class="mobl-btn grn" onclick="closeMobileModal(); exportTXT()" aria-label="Exportovat do TXT">⬇ Export TXT</button>
+      <button class="mobl-btn grn" onclick="closeMobileModal(); exportJSON()" aria-label="Exportovat do JSON">⬇ Export JSON</button>
+      <button class="mobl-btn" onclick="closeMobileModal(); exportRange()" aria-label="Exportovat rozsah">⬇ Výběr k exportu</button>
+      <button class="mobl-btn" onclick="closeMobileModal(); showSettingsModal()" aria-label="Nastavení AI">⚙ Nastavení AI</button>
+      <button class="mobl-btn cancel" onclick="closeMobileModal()" aria-label="Zavřít">✕ Zavřít</button>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settingsModal">
+    <div class="mobl-modal-box">
+      <div class="mobl-modal-title">⚙ Nastavení AI</div>
+      <div class="mobl-set-row">
+        <label>Provider</label>
+        <select id="providerRunMobile" onchange="onProviderChangeRunMobile()"></select>
+      </div>
+      <div class="mobl-set-row">
+        <label>Model</label>
+        <select id="modelRunMobile"></select>
+      </div>
+      <div class="mobl-set-row">
+        <label>Dávka</label>
+        <select id="batchSizeRunMobile">
+          <option value="1">1 heslo</option>
+          <option value="5">5 hesel</option>
+          <option value="10">10 hesel</option>
+          <option value="15">15 hesel</option>
+          <option value="20">20 hesel</option>
+        </select>
+      </div>
+      <div class="mobl-set-row">
+        <label>Rychlost</label>
+        <select id="intervalRunMobile">
+          <option value="5">5s</option>
+          <option value="10">10s</option>
+          <option value="20">20s</option>
+          <option value="30">30s</option>
+        </select>
+      </div>
+<button class="mobl-btn grn" onclick="closeSettingsModal()" aria-label="Uložit">✓ Uložit</button>
+      <button class="mobl-btn cancel" onclick="closeSettingsModal()" aria-label="Zavřít">✕ Zavřít</button>
+    </div>
+  </div>
+
+  <!-- Limits Modal -->
+  <div id="limitsModal">
+    <div class="limits-modal-box">
+      <div class="limits-title">📊 Limity providera</div>
+      <div class="limits-provider" id="limitsProviderInfo">Provider: —</div>
+      <div id="limitsContent">
+        <div class="limits-loading">Načítám...</div>
+      </div>
+      <div class="limits-note" id="limitsNote" style="display:none">
+        ℹ️ <span id="limitsNoteText"></span>
+      </div>
+      <button class="modal-btn cancel" onclick="closeLimitsModal()" style="margin-top:14px;width:100%">✕ Zavřít</button>
+    </div>
+  </div>
+
+  <script type="module">
+  // ══ CORE MODULE IMPORT ═══════════════════════════════════════════
+  import core from './strong_translator_core.js';
+  // Re-export for use in this module
+   const {
+     parseTXT: parseTXTCore,
+     parseTranslations: parseTranslationsCore,
+     buildPromptMessages: buildPromptMessagesCore,
+     buildRetryMessages: buildRetryMessagesCore,
+     escHtml: escHtmlCore,
+     validateAPIResponse,
+     SYSTEM_MESSAGE,
+     DEFAULT_PROMPT
+   } = core;
+
+  // ══ STORAGE KEY ══════════════════════════════════════════════════
+  const STORE_KEY = 'strong_gr_cz_v2';
+
+  // ══ ERROR LOGGER ═════════════════════════════════════════════════
+  /**
+   * Structured error logger with context and stack traces.
+   * Logs to both console and UI log panel.
+   */
+  function logError(context, error, extra = {}) {
+    const timestamp = new Date().toISOString();
+    const stack = error.stack ? `\nStack: ${error.stack}` : '';
+    const contextStr = `[${timestamp}] [${context}]`;
+
+    // Console with full details
+    console.error(`${contextStr} ${error.message}`, {
+      context,
+      error: error.message,
+      ...extra
+    }, stack);
+
+    // UI log
+    logMsg(`✗ ${context}: ${error.message}`, 'err');
+  }
+
+  function logWarn(context, message, extra = {}) {
+    console.warn(`[${new Date().toISOString()}] [${context}]`, message, extra);
+    log(`⚠ ${context}: ${message}`);
+  }
+
+  function logInfo(context, message) {
+    console.log(`[${new Date().toISOString()}] [${context}]`, message);
+    log(`ℹ ${context}: ${message}`);
+  }
+  // ══ STATE ════════════════════════════════════════════════════════
+  let entries     = [];      // [{key, greek, def, kjv, orig}]
+  let entryMap    = new Map();   // key → entry
+  let translated  = {};      // key -> {vyznam, definice, pouziti, puvod, raw}
+  let activeKey   = null;
+  let autoTimer   = null;
+  let autoCountTimer = null;
+  let autoRunning = false;
+  let currentBatchSize = 10;
+  let currentInterval  = 10;
+  let filteredKeys = [];
+  let retryMode = false;
+  let retryKeysList = [];
+  let startTime = null;
+  let elapsedTimer = null;
+  let selectedKeys = new Set();
+  let totalTokens = { in: 0, out: 0, total: 0 };
+
+  // Virtual scrolling
+  const ITEM_HEIGHT = 32;
+  const BUFFER_ITEMS = 10;
+  let virtualInitialized = false;
+  let phantomSpacer = null;
+  let visibleContainer = null;
+  let lastRenderRange = { start: -1, end: -1 };
+  let scrollTicking = false;
+  let resizeTicking = false;
+
+  // ══ PROVIDER SETUP ══════════════════════════════════════════════════
+  const PROVIDERS = {
+  groq: {
+    label: 'Groq (console.groq.com)',
+    ph: 'gsk_...',
+    models: [
+      ['meta-llama/llama-4-scout-17b-16e-instruct', 'Llama 4 Scout (Vysoký limit TPM)'],
+      ['llama-4-maverick-17b-128e-instruct', 'Llama 4 Maverick (Nový)'],
+      ['llama-3.3-70b-versatile', 'Llama 3.3 70B (Nejvyšší kvalita)'],
+      ['llama-3.1-8b-instant', 'Llama 3.1 8B (Rychlý, pozor na limity)'],
+    ]
+  },
+  gemini: {
+    label: 'Google AI Studio (aistudio.google.com)',
+    ph: 'AIza...',
+    models: [
+      ['gemini-2.5-flash', 'Gemini 2.5 Flash (Doporučeno)'],
+      ['gemini-2.5-flash-lite', 'Gemini 2.5 Flash-Lite (Rychlý, levný)'],
+    ]
+  },
+  openrouter: {
+    label: 'OpenRouter - zdarma',
+    ph: 'sk-or-...',
+    models: []
+  }
+};
+
+function populateOpenRouterModels(selectElement, savedModel, callback) {
+  const CACHE_KEY = 'openrouter_free_models_cache';
+  const CACHE_TTL = 5 * 60 * 1000; // 5 minutes in ms (pro jistotu vždy aktuální)
+
+  function restoreModel() {
+    // Restore saved model or use first available
+    if (savedModel && selectElement.querySelector(`option[value="${savedModel}"]`)) {
+      selectElement.value = savedModel;
+    } else if (selectElement.options.length > 0 && selectElement.options[0].value) {
+      selectElement.value = selectElement.options[0].value;
+    }
+    // Save the selected model to localStorage
+    if (selectElement.value) {
+      localStorage.setItem('strong_model', selectElement.value);
+    }
+    if (callback) callback();
+  }
+
+  // Check cache first
+  const cached = localStorage.getItem(CACHE_KEY);
+  if (cached) {
+    try {
+      const { timestamp, models } = JSON.parse(cached);
+      if (Date.now() - timestamp < CACHE_TTL && models.length >= 2) {
+        // Use cached models
+        selectElement.innerHTML = models.map(([v, l]) => `<option value="${v}">${l}</option>`).join('');
+        selectElement.disabled = false;
+        restoreModel();
+        return;
+      }
+    } catch (e) {
+      // Invalid cache, fall through to fetch
+    }
+  }
+
+  // Loading state
+  selectElement.disabled = true;
+  selectElement.innerHTML = '<option value="">Načítám free modely…</option>';
+
+  fetch('https://openrouter.ai/api/v1/models?free=true')
+    .then(r => {
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      return r.json();
+    })
+    .then(data => {
+      const models = (data.data || []).filter(m => m.id && m.id.endsWith(':free'));
+      
+      // Top modely - pevně dané pro spolehlivost
+      const topOptions = [
+        { value: 'openrouter/free', label: '★ Auto Router (doporučeno)' },
+        { value: 'deepseek/deepseek-r1:free', label: '★ DeepSeek R1' }
+      ];
+      
+      // Ostatní modely z API jako alternativy
+      const otherOptions = models
+        .filter(m => !['openrouter/free', 'deepseek/deepseek-r1:free'].includes(m.id))
+        .map(m => ({
+          value: m.id,
+          label: (m.name || m.id.replace(/:free$/, ''))
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+      
+      const options = [...topOptions, ...otherOptions];
+
+      if (options.length === 0) {
+        selectElement.innerHTML = '<option value="">Žádné free modely nenalezeny</option>';
+        selectElement.disabled = true;
+        restoreModel();
+        return;
+      }
+
+      const optionHtml = options.map(o => `<option value="${o.value}">${o.label}</option>`).join('');
+      selectElement.innerHTML = optionHtml;
+      selectElement.disabled = false;
+
+      // Cache the results
+      try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify({
+          timestamp: Date.now(),
+          models: options.map(o => [o.value, o.label])
+        }));
+      } catch (e) {
+        // Storage full, ignore
+      }
+
+      restoreModel();
+    })
+    .catch(err => {
+      console.error('OpenRouter models fetch failed:', err);
+      selectElement.innerHTML = '<option value="">Chyba načítání — zkontroluj připojení</option>';
+      selectElement.disabled = true;
+      restoreModel();
+    });
+}
+
+function onProviderChange() {
+  const newProv = document.getElementById('provider').value;
+  const currentProv = document.getElementById('provider')._lastProvider || newProv;
+
+  // Save current key before switching
+  const currentKey = document.getElementById('apiKey').value.trim();
+  if (currentKey && currentProv !== newProv) {
+    localStorage.setItem('strong_apikey_' + currentProv, currentKey);
+  }
+
+  // Load key for new provider
+  const newKey = localStorage.getItem('strong_apikey_' + newProv);
+
+  document.getElementById('keyLabel').textContent = 'API Klíč — ' + PROVIDERS[newProv].label;
+  document.getElementById('apiKey').placeholder = PROVIDERS[newProv].ph;
+  document.getElementById('apiKey').value = newKey || '';
+
+  const modelSelect = document.getElementById('model');
+
+  if (newProv === 'openrouter') {
+    const savedModel = localStorage.getItem('strong_model');
+    populateOpenRouterModels(modelSelect, savedModel, () => {
+      // Guard: if provider changed while loading, abort
+      if (document.getElementById('provider').value !== 'openrouter') return;
+    });
+  } else {
+    modelSelect.innerHTML = PROVIDERS[newProv].models.map(([v,l]) => `<option value="${v}">${l}</option>`).join('');
+    modelSelect.disabled = false;
+    // Restore saved model if still available
+    const savedModel = localStorage.getItem('strong_model');
+    if (savedModel && modelSelect.querySelector(`option[value="${savedModel}"]`)) {
+      modelSelect.value = savedModel;
+    }
+  }
+
+  localStorage.setItem('strong_provider', newProv);
+  document.getElementById('provider')._lastProvider = newProv;
+}
+
+function initRunSelects() {
+  const bs = document.getElementById('batchSizeRun');
+  if (bs) bs.value = document.getElementById('batchSize').value;
+  const iv = document.getElementById('intervalRun');
+  if (iv) iv.value = document.getElementById('interval').value;
+}
+
+// ══ LOAD TXT ═════════════════════════════════════════════════════
+const LAST_FILE_KEY = 'strong_last_file';
+
+function loadTXT(input) {
+  const file = input.files[0];
+  if (!file) return;
+  localStorage.setItem(LAST_FILE_KEY, file.name);
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      entries = parseTXT(ev.target.result);
+      const el = document.getElementById('statusTXT');
+      el.textContent = `✓ ${file.name} — ${entries.length} hesel`;
+      el.className = 'file-status ok';
+      document.getElementById('fileReady').style.display = 'block';
+      document.getElementById('startBtn').disabled = false;
+      updateAutoBtn();
+      checkResume();
+     } catch(e) {
+       logError('loadTXT', e, { fileName: file?.name });
+       const el = document.getElementById('statusTXT');
+       el.textContent = '✗ Chyba parsování: ' + e.message;
+     }
+  };
+  reader.readAsText(file, 'utf-8');
+}
+
+function loadDefaultFile() {
+  const lastFile = localStorage.getItem(LAST_FILE_KEY) || 'strong_greek_detailed.txt';
+  fetch(lastFile)
+    .then(r => {
+      if (!r.ok) throw new Error('Soubor nenalezen');
+      return r.text();
+    })
+    .then(text => {
+      entries = parseTXT(text);
+      document.getElementById('statusTXT').innerHTML = `✓ ${lastFile} — ${entries.length} hesel`;
+      document.getElementById('statusTXT').className = 'file-status ok';
+      document.getElementById('fileReady').style.display = 'block';
+      document.getElementById('startBtn').disabled = false;
+      checkResume();
+     })
+    .catch(e => {
+      if (lastFile !== 'strong_greek_detailed.txt') {
+        localStorage.setItem(LAST_FILE_KEY, 'strong_greek_detailed.txt');
+        loadDefaultFile();
+        return;
+      }
+      logError('loadDefaultFile', e, { file: lastFile });
+      document.getElementById('statusTXT').textContent = '✗ ' + e.message;
+    });
+}
+
+function checkDefaultFile() {
+  const lastFile = localStorage.getItem(LAST_FILE_KEY);
+  if (lastFile) {
+    document.getElementById('btnLoadDefault').style.display = 'inline-block';
+    return;
+  }
+  fetch('strong_greek_detailed.txt')
+    .then(r => {
+      if (r.ok) {
+        document.getElementById('btnLoadDefault').style.display = 'inline-block';
+      }
+    })
+    .catch(() => {
+      document.getElementById('btnLoadDefault').style.display = 'inline-block';
+    });
+}
+
+function updateAutoBtn() {
+  const lastFile = localStorage.getItem(LAST_FILE_KEY);
+  if (lastFile) {
+    document.getElementById('btnLoadDefault').style.display = 'inline-block';
+  }
+}
+
+  // Use core module for parsing
+  function parseTXT(text) {
+    try {
+      return parseTXTCore(text);
+    } catch(e) {
+      logError('parseTXT', e, { textLength: text?.length });
+      throw e;
+    }
+  }
+
+// ══ RESUME ═══════════════════════════════════════════════════════
+function checkResume() {
+  try {
+    const saved = localStorage.getItem(STORE_KEY);
+    if (!saved) return;
+    const data = JSON.parse(saved);
+    const count = Object.keys(data.translated || {}).filter(k => {
+      const t = data.translated[k];
+      return t && t.vyznam && t.vyznam !== '—' && !t.skipped;
+    }).length;
+    if (count > 0) {
+      const box = document.getElementById('resumeBox');
+      box.style.display = 'block';
+      const ts = data.ts ? new Date(data.ts).toLocaleString('cs') : '?';
+      box.innerHTML = `⚑ Nalezen uložený průběh: <b>${count}</b> přeložených hesel (uloženo ${ts}). Po spuštění bude automaticky obnoven.`;
+     }
+   } catch(e) {
+     logWarn('checkResume', 'Failed to parse saved progress', { error: e.message });
+   }
+}
+
+function showSetup() {
+  document.getElementById('setup').style.display = 'block';
+  document.getElementById('app').style.display = 'none';
+}
+
+function toggleListPane() {
+  const pane = document.querySelector('.list-pane');
+  const btn = document.getElementById('btnToggleList');
+  const resizeHandle = document.getElementById('resizeHandle');
+  const logPanel = document.querySelector('.log-panel');
+  const detailPane = document.querySelector('.detail-pane');
+  const isMobile = window.innerWidth <= 600;
+  const isHidden = pane.classList.contains('hidden');
+  
+  if (isHidden) {
+    pane.classList.remove('hidden');
+    btn.textContent = '≡ Seznam';
+    if (isMobile) {
+      pane.style.height = '45%';
+      logPanel.style.height = '50%';
+      logPanel.style.flex = 'none';
+      detailPane.style.height = 'auto';
+      detailPane.style.flex = '1';
+    }
+  } else {
+    pane.classList.add('hidden');
+    btn.textContent = '≡ Seznam';
+    if (isMobile) {
+      pane.style.height = '0';
+      logPanel.style.height = '100%';
+      logPanel.style.flex = '1';
+      detailPane.style.height = 'auto';
+      detailPane.style.flex = '1';
+    }
+  }
+}
+
+// ══ START ════════════════════════════════════════════════════════
+function startApp() {
+  currentBatchSize = parseInt(document.getElementById('batchSize').value);
+  currentInterval  = parseInt(document.getElementById('interval').value);
+
+  // Obnov uložený překlad
+  try {
+    const saved = localStorage.getItem(STORE_KEY);
+    if (saved) {
+      const data = JSON.parse(saved);
+      translated = data.translated || {};
+    }
+   } catch(e) {
+     logWarn('startApp', 'Failed to load saved progress, starting fresh', { error: e.message });
+     translated = {};
+   }
+
+  document.getElementById('setup').style.display = 'none';
+  document.getElementById('app').style.display   = 'flex';
+  entryMap = new Map(entries.map(e => [e.key, e]));
+
+  filteredKeys = entries.map(e => e.key);
+   initVirtualScroll();
+   renderList();
+   updateStats();
+   initRunSelects();
+updateFailedCount();
+    
+   document.getElementById('resizeHandle').addEventListener('mousedown', startResize);
+   document.getElementById('resizeHandle').addEventListener('touchstart', startResize, {passive: false});
+   
+   if (window.innerWidth <= 600) {
+     toggleListPane();
+   }
+ }
+
+// ══ LIST ═════════════════════════════════════════════════════════
+// Store for selected keys (declared in STATE section above)
+
+function renderList() {
+  // Update filtered keys based on current filter/sort/search
+  filteredKeys = getFilteredEntries().map(e => e.key);
+  
+  if (virtualInitialized) {
+    // Force re-render of visible items
+    lastRenderRange = { start: -1, end: -1 };
+    updatePhantomHeight();
+    renderVisible();
+  }
+  
+  updateSelectedBtn();
+}
+
+function toggleSelect(key, event) {
+  event.stopPropagation();
+  if (selectedKeys.has(key)) {
+    selectedKeys.delete(key);
+  } else {
+    selectedKeys.add(key);
+  }
+  renderList();
+}
+
+function selectAll() {
+  for (const key of filteredKeys) {
+    selectedKeys.add(key);
+  }
+  renderList();
+}
+
+function selectNone() {
+  selectedKeys.clear();
+  renderList();
+}
+
+function updateSelectedBtn() {
+  const btn = document.getElementById('btnTranslateSelected');
+  if (selectedKeys.size > 0) {
+    btn.style.display = 'inline-block';
+    btn.textContent = `⚡ Přeložit ${selectedKeys.size} vybraných`;
+  } else {
+    btn.style.display = 'none';
+  }
+}
+
+async function translateSelected() {
+  const keys = Array.from(selectedKeys);
+  if (!keys.length) return;
+  
+  const bs = parseInt(document.getElementById('batchSizeRun')?.value) || 10;
+  let processed = 0;
+  let allNewTranslations = {};
+  
+  while (processed < keys.length) {
+    const batchKeys = keys.slice(processed, processed + bs);
+    document.getElementById('btnTranslateSelected').textContent = `⏳ ${processed + batchKeys.length}/${keys.length}...`;
+    
+    const apiKey = document.getElementById('apiKey').value.trim();
+    const model  = document.getElementById('model').value;
+    const prov   = document.getElementById('provider').value;
+    
+    if (!apiKey) { showToast('✗ Zadej API klíč!'); return; }
+    
+    const batch = batchKeys.map(k => entries.find(e => e.key === k)).filter(Boolean);
+    const messages = buildPromptMessages(batch);
+    
+    try {
+      const raw = await callAIWithRetry(prov, apiKey, model, messages);
+      const content = raw.content;
+      parseTranslations(content, batchKeys);
+      
+      // Log tokenů
+      const usage = raw.usage || raw.usageMetadata;
+      if (usage) {
+        const inT = usage.prompt_tokens || usage.promptTokenCount || 0;
+        const outT = usage.completion_tokens || usage.candidatesTokenCount || 0;
+        const total = inT + outT;
+        log(`📊 ${prov}: ${inT} in / ${outT} out = ${total} celkem`);
+        logTokenEntry(prov, inT, outT, total);
+      }
+      
+      // Log do konzoly pro úspěšné
+      for (const key of batchKeys) {
+        const t = translated[key];
+        if (t?.vyznam && t.vyznam !== '—') {
+          console.log(`✓ ${key}: ${t.vyznam?.slice(0, 60)}...`);
+        }
+      }
+      logEntry(batchKeys, content);
+      
+      const missingKeys = batchKeys.filter(k => !translated[k]?.vyznam);
+      if (missingKeys.length > 0) {
+        console.log(`⚠ ${missingKeys.length} hesel bez překladu: ${missingKeys.join(', ')}`);
+        const retryContent = `CHYBA: V minulé odpovědi jsi vynechal formátovací značky ###G. 
+ZOPAKUJ PŘEKLAD a u každého hesla MUSÍŠ začít řádkem ###G[číslo]###.
+
+${batchKeys.map(k => {
+  const e = entries.find(x => x.key === k);
+  return e ? `${e.key}\nDEF: ${e.def}\nKJV: ${e.kjv}` : '';
+}).join('\n\n')}`;
+        
+        const raw2 = await callOnce(prov, apiKey, model, buildRetryMessages(retryContent));
+        console.log(`📥 Retry odpověď pro ${missingKeys.join(', ')}:`, raw2.content);
+        parseTranslations(raw2.content, batchKeys);
+      }
+      
+      const newTranslations = {};
+      for (const key of batchKeys) {
+        if (translated[key]?.vyznam) {
+          newTranslations[key] = { ...translated[key] };
+        }
+      }
+      
+      allNewTranslations = { ...allNewTranslations, ...newTranslations };
+      saveProgress();
+      updateFailedCount();
+      renderList();
+      
+     } catch(e) {
+       logError('translateSelected', e, {
+         batchKeys,
+         batchSize: batchKeys.length,
+provider: document.getElementById('provider').value,
+          model: document.getElementById('model').value
+       });
+       showToast('✗ Chyba: ' + e.message);
+     }
+    
+    processed += batchKeys.length;
+    
+    // Interval mezi dávkami (ochrana rate limitu)
+    if (processed < keys.length) {
+      const interval = parseInt(document.getElementById('intervalRun')?.value) || 
+                       parseInt(document.getElementById('interval')?.value) || 20;
+      document.getElementById('btnTranslateSelected').textContent = `⏳ Čekám ${interval}s...`;
+      await new Promise(r => setTimeout(r, interval * 1000));
+    }
+  }
+  
+  selectedKeys.clear();
+  renderList();
+  updateFailedCount();
+  document.getElementById('btnTranslateSelected').textContent = '⚡ Přeložit vybrané';
+  
+  if (Object.keys(allNewTranslations).length > 0) {
+    showPreviewModal(allNewTranslations);
+    showToast(`✓ Přeloženo ${Object.keys(allNewTranslations).length} hesel`);
+  } else {
+    showToast('⚠ Žádné překlady se nepodařilo získat');
+  }
+}
+
+function filterList() {
+  renderList();
+  if (virtualInitialized) {
+    const scroll = document.getElementById('listScroll');
+    scroll.scrollTop = 0;
+  }
+}
+
+function getFilteredEntries() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const status = document.getElementById('filterStatus')?.value || 'all';
+  const sortBy = document.getElementById('sortBy')?.value || 'num';
+  
+  let filtered = entries.filter(e => {
+    const matchesSearch = !q || e.key.toLowerCase().includes(q) || 
+      e.greek.toLowerCase().includes(q) || e.def.toLowerCase().includes(q);
+    if (!matchesSearch) return false;
+    
+    const t = translated[e.key];
+    const hasTranslation = t && t.vyznam && t.vyznam.trim().length > 0;
+    const isFailed = t && (!t.vyznam || t.vyznam === '—');
+    
+    if (status === 'pending') return !hasTranslation;
+    if (status === 'done') return hasTranslation && !isFailed;
+    if (status === 'failed') return isFailed;
+    return true;
+  });
+  
+  if (sortBy === 'greek') {
+    filtered.sort((a, b) => a.greek.localeCompare(b.greek));
+  } else {
+    filtered.sort((a, b) => parseInt(a.key.slice(1)) - parseInt(b.key.slice(1)));
+  }
+  
+  return filtered;
+}
+
+function scrollToActive() {
+  const el = document.querySelector(`.list-item[data-key="${activeKey}"]`);
+  if (el) el.scrollIntoView({ block: 'nearest' });
+}
+
+// Virtual scrolling infrastructure
+function initVirtualScroll() {
+  const scroll = document.getElementById('listScroll');
+  // Create the structural elements
+  phantomSpacer = document.createElement('div');
+  phantomSpacer.className = 'phantom-spacer';
+  visibleContainer = document.createElement('div');
+  visibleContainer.className = 'visible-items';
+  
+  // Reset container and append new structure
+  scroll.innerHTML = '';
+  scroll.appendChild(phantomSpacer);
+  scroll.appendChild(visibleContainer);
+  scroll.style.position = 'relative';
+  
+  // Attach scroll listener (remove old to avoid duplicates)
+  scroll.removeEventListener('scroll', onVirtualScroll);
+  scroll.addEventListener('scroll', onVirtualScroll, { passive: true });
+  
+  virtualInitialized = true;
+  updatePhantomHeight();
+  
+  // Add window resize handler (once)
+  if (!window._virtualScrollResizeAdded) {
+    window.addEventListener('resize', () => {
+      if (!resizeTicking) {
+        requestAnimationFrame(() => {
+          renderVisible();
+          resizeTicking = false;
+        });
+        resizeTicking = true;
+      }
+    });
+    window._virtualScrollResizeAdded = true;
+  }
+}
+
+function updatePhantomHeight() {
+  if (!phantomSpacer) return;
+  const total = filteredKeys.length;
+  phantomSpacer.style.height = `${total * ITEM_HEIGHT}px`;
+}
+
+function renderVisible() {
+  if (!visibleContainer || !virtualInitialized) return;
+  
+  const scroll = document.getElementById('listScroll');
+  const scrollTop = scroll.scrollTop;
+  const viewportHeight = scroll.clientHeight;
+  const total = filteredKeys.length;
+  
+  if (total === 0) {
+    visibleContainer.innerHTML = '';
+    lastRenderRange = { start: -1, end: -1 };
+    return;
+  }
+  
+  const startIndex = Math.max(0, Math.floor(scrollTop / ITEM_HEIGHT) - BUFFER_ITEMS);
+  const endIndex = Math.min(total - 1, Math.ceil((scrollTop + viewportHeight) / ITEM_HEIGHT) + BUFFER_ITEMS);
+  
+  if (startIndex === lastRenderRange.start && endIndex === lastRenderRange.end) return;
+  
+  lastRenderRange = { start: startIndex, end: endIndex };
+  
+  const fragment = document.createDocumentFragment();
+  
+  for (let i = startIndex; i <= endIndex; i++) {
+    const key = filteredKeys[i];
+    if (!key) continue;
+    const e = entries.find(x => x.key === key);
+    const t = translated[key];
+    const done = t && t.vyznam && t.vyznam.trim().length > 0;
+    const isSelected = selectedKeys.has(key);
+    
+    const div = document.createElement('div');
+    div.className = 'list-item' + (done ? ' done' : '') + (key === activeKey ? ' active' : '') + (isSelected ? ' selected' : '');
+    div.dataset.key = key;
+    div.setAttribute('tabindex', '0');
+    div.style.position = 'absolute';
+    div.style.left = '0';
+    div.style.right = '0';
+    div.style.top = `${i * ITEM_HEIGHT}px`;
+    div.style.height = `${ITEM_HEIGHT}px`;
+    div.onclick = (e) => {
+      if (e.target.classList.contains('li-check')) return;
+      showDetail(key);
+    };
+    div.onkeydown = (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleSelect(key, e);
+      }
+    };
+    div.innerHTML = `
+      <input type="checkbox" class="li-check" ${isSelected ? 'checked' : ''} onclick="toggleSelect('${key}', event)" aria-label="Vybrat heslo ${key}">
+      <div class="li-key">${key}</div>
+      <div class="li-greek">${escHtml(e.greek)}</div>
+      <div class="li-dot ${done ? 'done' : ''}" aria-hidden="true">${done ? '✓' : '✗'}</div>
+    `;
+    fragment.appendChild(div);
+  }
+  
+  visibleContainer.innerHTML = '';
+  visibleContainer.appendChild(fragment);
+}
+
+// Throttled scroll handler
+function onVirtualScroll() {
+  if (!scrollTicking) {
+    requestAnimationFrame(() => {
+      renderVisible();
+      scrollTicking = false;
+    });
+    scrollTicking = true;
+  }
+}
+
+// ══ DETAIL ═══════════════════════════════════════════════════════
+function showDetail(key) {
+  activeKey = key;
+  // Update active state v listu (virtuální render)
+   if (virtualInitialized) {
+     const idx = filteredKeys.indexOf(key);
+     if (idx !== -1) {
+       const scroll = document.getElementById('listScroll');
+       const targetTop = idx * ITEM_HEIGHT - (scroll.clientHeight / 2) + (ITEM_HEIGHT / 2);
+       scroll.scrollTop = targetTop;
+       // Defer render to next animation frame to avoid race with scroll event
+       requestAnimationFrame(() => {
+         if (virtualInitialized) renderVisible();
+       });
+     }
+   } else {
+    // Fallback pro ne-inicializovaný virtuální scrolling
+    document.querySelectorAll('.list-item').forEach(el => {
+      el.classList.toggle('active', el.dataset.key === key);
+    });
+  }
+  renderDetail();
+}
+
+function renderDetail() {
+  if (!activeKey) return;
+  const e = entryMap.get(activeKey);
+  if (!e) return;
+  const t = translated[activeKey];
+  // Kontrola: má překlad s obsahem
+  const hasTranslation = t && t.vyznam && t.vyznam.trim().length > 0;
+  const pane = document.getElementById('detailPane');
+
+  pane.innerHTML = `
+    <div class="entry-header">
+      <div class="entry-key">${e.key}</div>
+      <div class="entry-greek">${escHtml(e.greek)}</div>
+      <div class="entry-status ${hasTranslation ? 'done' : ''}">${hasTranslation ? '✓ Přeloženo' : 'Čeká'}</div>
+    </div>
+
+    <div class="orig-section">
+      <div class="label">Definice (EN)</div>
+      <div class="value">${escHtml(e.def)}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">KJV překlady</div>
+      <div class="value">${escHtml(e.kjv)}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">Původ / Etymologie</div>
+      <div class="value">${escHtml(e.orig)}</div>
+    </div>
+
+    ${!hasTranslation ? `<button class="translate-btn" onclick="translateSingle('${e.key}')">⚡ Přeložit toto heslo</button>` : ''}
+
+    ${renderTranslation(e.key, t)}
+  `;
+}
+
+function renderTranslation(key, t) {
+  const sections = [
+    { id: 'vyznam',   label: 'Český význam',       field: t?.vyznam },
+    { id: 'definice', label: 'Definice',            field: t?.definice },
+    { id: 'pouziti',  label: 'Biblické užití (KJV)',field: t?.pouziti },
+    { id: 'puvod',    label: 'Původ / Etymologie',  field: t?.puvod },
+  ];
+
+  return sections.map(s => `
+    <div class="translation-box" role="group" aria-label="${s.label}">
+      <div class="tbox-head">
+        <div class="tbox-label">${s.label}</div>
+        <div class="tbox-actions">
+          <button class="tbox-btn" onclick="toggleEditSection('${key}','${s.id}')" aria-label="Upravit ${s.label}">✎ Upravit</button>
+        </div>
+      </div>
+      <div class="tbox-body" id="tval-${key}-${s.id}">${escHtml(s.field || '—')}</div>
+      <div class="tbox-edit" id="tedit-${key}-${s.id}">
+        <textarea id="tinput-${key}-${s.id}" aria-label="${s.label}">${escHtml(s.field || '')}</textarea>
+        <button class="tbox-save" onclick="saveSection('${key}','${s.id}')" aria-label="Uložit ${s.label}">Uložit</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleEditSection(key, id) {
+  const el = document.getElementById(`tedit-${key}-${id}`);
+  el.classList.toggle('show');
+  if (el.classList.contains('show')) {
+    document.getElementById(`tinput-${key}-${id}`).focus();
+  }
+}
+
+function saveSection(key, id) {
+  const val = document.getElementById(`tinput-${key}-${id}`).value;
+  if (!translated[key]) translated[key] = {};
+  translated[key][id] = val;
+  saveProgress();
+  document.getElementById(`tval-${key}-${id}`).textContent = val || '—';
+  document.getElementById(`tedit-${key}-${id}`).classList.remove('show');
+}
+
+// ══ PŘEKLAD — SINGLE ════════════════════════════════════════════
+async function translateSingle(key) {
+  const btn = document.querySelector('.translate-btn');
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ Překládám...'; }
+  
+   const apiKey = document.getElementById('apiKey').value.trim();
+const model  = document.getElementById('model').value;
+    const prov   = document.getElementById('provider').value;
+
+   if (!apiKey) {
+     showToast('✗ Zadej API klíč!');
+     if (btn) { btn.disabled = false; btn.textContent = '⚡ Přeložit toto heslo'; }
+     return;
+   }
+
+   const e = entries.find(x => x.key === key);
+  if (!e) {
+    if (btn) { btn.disabled = false; btn.textContent = '⚡ Přeložit toto heslo'; }
+    return;
+  }
+  
+  const messages = buildPromptMessages([e]);
+  
+  try {
+    const raw = await callAIWithRetry(prov, apiKey, model, messages);
+    
+    let missingKeys = parseTranslations(raw, [key]);
+    
+    if (missingKeys.length > 0) {
+      const retryContent = `CHYBA: V minulé odpovědi jsi vynechal formátovací značky ###G. 
+ZOPAKUJ PŘEKLAD a u každého hesla MUSÍŠ začít řádkem ###G[číslo]###. 
+Bez toho nebude překlad zpracován!
+
+Přelož tato hesla:
+${key}
+DEF: ${e.def}
+KJV: ${e.kjv}
+ORIG: ${e.orig}`;
+      
+       const raw2 = await callOnce(prov, apiKey, model, buildRetryMessages(retryContent));
+       missingKeys = parseTranslations(raw2, [key]);
+     }
+
+   } catch(e) {
+     logError('translateSingle', e, {
+       key,
+       provider: prov,
+       model
+     });
+     showToast('✗ Chyba: ' + e.message);
+   }
+  
+  if (btn) { btn.disabled = false; btn.textContent = '⚡ Přeložit toto heslo'; }
+  renderDetail();
+  updateStats();
+  renderList();
+}
+
+// ══ PŘEKLAD — DÁVKA ══════════════════════════════════════════════
+async function translateNext() {
+  if (autoRunning) return;
+  
+  // Retry mode - použij retryKeysList místo getNextBatch
+  let batch;
+  if (retryMode && retryKeysList.length > 0) {
+    batch = retryKeysList.slice(0, currentBatchSize);
+    retryKeysList = retryKeysList.slice(currentBatchSize);
+    if (retryKeysList.length === 0) {
+      retryMode = false;
+    }
+  } else {
+    batch = getNextBatch(currentBatchSize);
+  }
+  
+  if (!batch.length) { 
+    if (retryMode) {
+      showToast('✓ Retry dokončeno!');
+      retryMode = false;
+    } else {
+      showToast('✓ Vše přeloženo!'); 
+    }
+    stopElapsedTimer();
+    return; 
+  }
+  
+  // Info o retry módu
+  if (retryMode) {
+    document.getElementById('btnStep').title = `Retry: zbývá ${retryKeysList.length + batch.length} hesel`;
+  }
+  
+  document.getElementById('btnStep').disabled = true;
+  document.getElementById('btnStep').textContent = '⏳ ...';
+  await translateBatch(batch);
+  document.getElementById('btnStep').disabled = false;
+  document.getElementById('btnStep').textContent = '⚡ Dávka';
+  updateStats();
+  renderList();
+  if (activeKey && translated[activeKey]) renderDetail();
+}
+
+function jumpToStart() {
+  const num = parseInt(document.getElementById('startFrom').value);
+  if (!num || num < 1) { showToast('Zadej číslo G hesla'); return; }
+  const key = 'G' + num;
+  const found = entries.find(e => e.key === key);
+  if (!found) { showToast(`G${num} nenalezeno v souboru`); return; }
+
+  // Označ všechna hesla PŘED tímto číslem jako přeskočená (zachováme existující překlady)
+  for (const e of entries) {
+    const n = parseInt(e.key.slice(1));
+    if (n < num && !translated[e.key]) {
+      translated[e.key] = { vyznam: '—', definice: '(přeskočeno)', pouziti: '—', puvod: '—', skipped: true };
+    }
+  }
+   saveProgress();
+   updateStats();
+   renderList();
+   showToast(`✓ Překlad bude pokračovat od G${num}`);
+   // Scroll na heslo v listu (virtuální)
+   setTimeout(() => {
+     const scroll = document.getElementById('listScroll');
+     const idx = filteredKeys.indexOf(key);
+     if (idx !== -1) {
+       scroll.scrollTop = idx * ITEM_HEIGHT - (scroll.clientHeight / 2) + (ITEM_HEIGHT / 2);
+     }
+   }, 0);
+ }
+
+
+function getNextBatch(size) {
+  const result = [];
+  for (const e of entries) {
+    if (result.length >= size) break;
+    if (!translated[e.key] || translated[e.key].skipped) {
+      result.push(e.key);
+    }
+  }
+  return result;
+}
+
+async function translateBatch(keys) {
+  const prov   = document.getElementById('provider').value;
+  const model  = document.getElementById('model').value;
+  // Klíč vždy dle aktuálního run providera
+  const apiKey = (localStorage.getItem('strong_apikey_' + prov) || document.getElementById('apiKey').value || '').trim();
+  currentInterval = parseInt(document.getElementById('intervalRun').value);
+  currentBatchSize = parseInt(document.getElementById('batchSizeRun').value);
+
+  if (!apiKey) { showToast('✗ Zadej API klíč!'); return; }
+
+  // Start timer při prvním překladu
+  if (!startTime) {
+    startTime = Date.now();
+    startElapsedTimer();
+  }
+
+  const batch = keys.map(k => entries.find(e => e.key === k)).filter(Boolean);
+  const messages = buildPromptMessages(batch);
+
+  try {
+    const raw = await callAIWithRetry(prov, apiKey, model, messages);
+    const content = raw.content;
+    let missingKeys = parseTranslations(content, keys);
+    
+    // Log tokenů
+    const usage = raw.usage || raw.usageMetadata;
+    if (usage) {
+      const inT = usage.prompt_tokens || usage.promptTokenCount || 0;
+      const outT = usage.completion_tokens || usage.candidatesTokenCount || 0;
+      const total = inT + outT;
+      log(`📊 ${prov}: ${inT} in / ${outT} out = ${total} celkem`);
+      logTokenEntry(prov, inT, outT, total);
+    }
+    
+    // Log do konzoly pro úspěšné
+    for (const key of keys) {
+      const t = translated[key];
+      if (t?.vyznam && t.vyznam !== '—') {
+        console.log(`✓ ${key}: ${t.vyznam?.slice(0, 60)}...`);
+      }
+    }
+    logEntry(keys, content);
+    
+    // Pokud něco chybí, zkus opravný retry
+    if (missingKeys.length > 0) {
+      console.log(`⚠ ${missingKeys.length} hesel bez překladu: ${missingKeys.join(', ')}`);
+      log(`⚠ Pokus o opravu formátu pro ${missingKeys.join(', ')}...`);
+      const retryContent = `CHYBA: V minulé odpovědi jsi vynechal formátovací značky ###G. 
+ZOPAKUJ PŘEKLAD a u každého hesla MUSÍŠ začít řádkem ###G[číslo]###. 
+Bez toho nebude překlad zpracován!
+
+Přelož tato hesla:
+${keys.map(k => {
+  const e = entries.find(x => x.key === k);
+  return e ? `${e.key} | ${e.greek}\nDEF: ${e.def}\nKJV: ${e.kjv}` : '';
+}).join('\n\n')}`;
+      
+      try {
+        const raw2 = await callOnce(prov, apiKey, model, buildRetryMessages(retryContent));
+        console.log(`📥 Retry odpověď:`, raw2.content);
+        missingKeys = parseTranslations(raw2.content, keys);
+        const retryCount = keys.length - missingKeys.length;
+        if (retryCount > 0) {
+          log(`✓ Opravný překlad: ${retryCount} hesel, chybí: ${missingKeys.length > 0 ? missingKeys.join(', ') : 'nic'}`);
+        } else {
+          log(`✗ Opravný překlad nepomohl, chybí: ${missingKeys.join(', ')}`);
+        }
+      } catch(e2) {
+        log(`✗ Opravný pokus selhal: ${e2.message}`);
+      }
+    }
+    
+    // Kontrola: přeložena všechna hesla?
+    const translatedCount = keys.filter(k => translated[k]?.vyznam).length;
+    if (translatedCount < keys.length) {
+      log(`⚠ Pozor: Přeloženo ${translatedCount}/${keys.length} hesel. Zkuste menší dávku.`);
+      showToast(`⚠ Přeloženo ${translatedCount}/${keys.length} hesel`);
+    }
+    
+     saveProgress();
+     updateFailedCount();
+     // logEntry already called above after initial parse
+     log(`✓ Přeloženo ${keys.length} hesel (${keys[0]}–${keys[keys.length-1]})`);
+   } catch(e) {
+     logError('translateBatch', e, {
+       keys: keys.slice(0, 5), // first 5 keys only
+       keyRange: `${keys[0]}-${keys[keys.length-1]}`,
+       provider: document.getElementById('provider')?.value,
+       batchSize: keys.length
+     });
+     showToast('✗ ' + e.message);
+    }
+}
+
+// ══ BUILD PROMPT MESSAGES ═══════════════════════════════════════
+// Uses SYSTEM_MESSAGE and DEFAULT_PROMPT imported from core module
+function buildPromptMessages(batch) {
+  const items = batch.map(e =>
+    `${e.key} | ${e.greek}\nDEF: ${e.def}\nKJV: ${e.kjv}\nORIG: ${e.orig}`
+  ).join('\n\n');
+
+  const tmpl = document.getElementById('promptEditor')?.value || DEFAULT_PROMPT;
+  const userContent = tmpl.replace('{HESLA}', 'HESLA:\n' + items);
+  
+  return [
+    { role: 'system', content: SYSTEM_MESSAGE },
+    { role: 'user', content: userContent }
+  ];
+}
+
+function buildRetryMessages(userContent) {
+  return [
+    { role: 'system', content: SYSTEM_MESSAGE },
+    { role: 'user', content: userContent }
+  ];
+}
+
+function resetPrompt() {
+  document.getElementById('promptEditor').value = DEFAULT_PROMPT;
+  localStorage.setItem('strong_prompt', DEFAULT_PROMPT);
+}
+
+
+// ══ AI VOLÁNÍ S RETRY A FALLBACK ════════════════════════════════
+const FALLBACKS = {
+  groq:       ['meta-llama/llama-4-scout-17b-16e-instruct', 'llama-3.1-8b-instant', 'llama-3.3-70b-versatile'],
+  gemini:     ['gemini-2.5-flash', 'gemini-2.5-flash-lite'],
+  openrouter: [
+    'meta-llama/llama-3.1-8b-instruct:free',
+    'meta-llama/llama-3.3-70b-instruct:free',
+    'google/gemma-2-27b-it:free',
+    'nvidia/nemotron-3-70b-instruct:free',
+    'mistralai/mistral-7b-instruct:free'
+  ]
+};
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+async function callAIWithRetry(provider, apiKey, model, messages) {
+  const tryModels = [model, ...(FALLBACKS[provider] || []).filter(m => m !== model)];
+  let lastErr = null;
+
+  for (const m of tryModels) {
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        return await callOnce(provider, apiKey, m, messages);
+       } catch(e) {
+         lastErr = e;
+         const msg = (e.message || '').toLowerCase();
+         const isRate = msg.includes('429') || msg.includes('quota') || msg.includes('rate') || msg.includes('too many');
+         const isBanned = msg.includes('restricted') || msg.includes('organization');
+         const is404 = msg.includes('404') || msg.includes('not found') || msg.includes('not found');
+
+         if (is404) {
+           const errMsg = 'Chyba 404: Model nenalezen, vyberte jiný v nastavení';
+           logError('callAIWithRetry', new Error(errMsg), {
+             provider, model: m, attempt: attempt + 1,
+             statusCode: 404
+           });
+           throw new Error(errMsg);
+         }
+         if (isRate) {
+           const wait = (attempt + 1) * 10;
+           logWarn('callAIWithRetry', `Rate limit na ${m}, čekám ${wait}s...`, {
+             provider, model: m, attempt: attempt + 1, waitSeconds: wait
+           });
+           showToast(`⏳ Rate limit — čekám ${wait}s`);
+           await sleep(wait * 1000);
+           continue;
+         }
+         if (isBanned) {
+           logError('callAIWithRetry', new Error(`Blokovaný účet: ${m}`), {
+             provider, model: m, attempt: attempt + 1
+           });
+           break;
+         }
+         // Other errors - log and try next model/attempt
+         logWarn('callAIWithRetry', `Chyba při volání ${m} (pokus ${attempt+1}): ${e.message}`, {
+           provider, model: m, attempt: attempt + 1, error: e.message
+         });
+         break;
+       }
+    }
+  }
+  throw lastErr || new Error('Všechny modely selhaly');
+}
+
+async function callOnce(provider, apiKey, model, messages) {
+  apiKey = apiKey.trim();
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 120000);
+  try {
+    if (provider === 'groq') {
+    const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + apiKey, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model, messages,
+        temperature: 0.3, max_tokens: 2500 }),
+      signal: controller.signal
+    });
+    const d = await r.json();
+     if (!r.ok) {
+       if (r.status === 429) {
+         const retryAfter = r.headers.get('retry-after');
+         throw new Error(`Rate limit! Zkuste za ${retryAfter || 'několik'}s. Info: groq.com/pricing`);
+       }
+       throw new Error(d.error?.message || String(r.status));
+     }
+     // Validate response structure
+     validateAPIResponse(d, 'groq');
+     if (d.usage) {
+       log(`📊 Groq: ${d.usage.prompt_tokens} in / ${d.usage.completion_tokens} out / ${d.usage.total_tokens} total`);
+     }
+     const content = d.choices[0].message.content;
+    // Kontrola na nesmyslnou odpověď
+    const weirdChars = (content.match(/[^\x20-\x7E\n\r\těščřžýáíéúůťďňĚŠČŘŽÝÁÍÉÚŮŤĎŇ]/g) || []).length;
+    if (content.length > 0 && weirdChars > content.length * 0.5) {
+      console.log('═ PODEZŘELÁ ODPOVĚĎ ═');
+      console.log(content);
+      throw new Error('AI vrátila nesmyslnou odpověď - zkuste delší interval');
+    }
+    return { content, usage: d.usage };
+
+  } else if (provider === 'gemini') {
+    const userContent = messages.find(m => m.role === 'user')?.content || '';
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+    const r = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contents: [{ parts: [{ text: userContent }] }],
+        systemInstruction: { parts: [{ text: messages.find(m => m.role === 'system')?.content || '' }] },
+        generationConfig: { temperature: 0.3, maxOutputTokens: 2500 } })
+    });
+    const d = await r.json();
+     if (!r.ok) {
+       if (d.error?.status === 'RESOURCE_EXHAUSTED') {
+         throw new Error(`Gemini limit vyčerpán! Počkej ~20min nebo přepni na Groq.`);
+       }
+       throw new Error(d.error?.message || String(r.status));
+     }
+     // Validate response structure
+     validateAPIResponse(d, 'gemini');
+     if (d.usageMetadata) {
+       log(`📊 Gemini: ${d.usageMetadata.promptTokenCount} in / ${d.usageMetadata.candidatesTokenCount} out`);
+     }
+      const content = d.candidates[0].content.parts[0].text;
+      return { content, usage: d.usageMetadata };
+
+    } else if (provider === 'openrouter') {
+     const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+       method: 'POST',
+       headers: { 
+         'Authorization': 'Bearer ' + apiKey, 
+         'Content-Type': 'application/json',
+         'HTTP-Referer': 'https://strong-bible-gr-cz.local',
+         'X-Title': 'Strong GR-CZ Translator'
+       },
+       body: JSON.stringify({ model, messages,
+         temperature: 0.3, max_tokens: 2500 })
+     });
+     const d = await r.json();
+     if (!r.ok) throw new Error(d.error?.message || String(r.status));
+     validateAPIResponse(d, 'openrouter');
+     return { content: d.choices[0].message.content, usage: d.usage };
+  }
+  throw new Error('Neznámý provider');
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+  // Use core module with error handling
+  function parseTranslations(raw, keys) {
+    try {
+      return parseTranslationsCore(raw, keys, translated);
+    } catch(e) {
+      logError('parseTranslations', e, {
+        rawLength: raw?.length,
+        keysCount: keys?.length,
+        keysSample: keys?.slice(0, 5)
+      });
+      // Return all keys as missing to trigger retry
+      return keys;
+    }
+  }
+
+  // ══ AUTO REŽIM ═══════════════════════════════════════════════════
+function toggleAuto() {
+  if (autoRunning) { stopAuto(); return; }
+  startAuto();
+}
+
+function startAuto() {
+  autoRunning = true;
+  document.getElementById('btnAuto').classList.add('active');
+  document.getElementById('btnAuto').textContent = '■ AUTO';
+  document.getElementById('autoPanel').classList.add('show');
+  document.getElementById('autoInterval').textContent = currentInterval;
+  runAutoStep();
+}
+
+function stopAuto() {
+  autoRunning = false;
+  clearTimeout(autoTimer);
+  clearInterval(autoCountTimer);
+  document.getElementById('btnAuto').classList.remove('active');
+  document.getElementById('btnAuto').textContent = '▶ AUTO';
+  document.getElementById('autoPanel').classList.remove('show');
+  document.getElementById('countdown').textContent = '—';
+  stopElapsedTimer();
+}
+
+async function runAutoStep() {
+  if (!autoRunning) return;
+
+  const batch = getNextBatch(currentBatchSize);
+  if (!batch.length) {
+    stopAuto();
+    showToast('✓ Překlad dokončen!');
+    return;
+  }
+
+  document.getElementById('autoBatch').textContent = batch[0] + '–' + batch[batch.length-1];
+  log(`⚡ Překládám ${batch[0]}–${batch[batch.length-1]}...`);
+  updateETA();
+
+  await translateBatch(batch);
+  updateStats();
+  renderList();
+  if (activeKey && translated[activeKey]) renderDetail();
+
+  if (!autoRunning) return;
+
+  // Odpočet do další dávky
+  let remaining = currentInterval;
+  document.getElementById('countdown').textContent = remaining;
+  clearInterval(autoCountTimer);
+  autoCountTimer = setInterval(() => {
+    remaining--;
+    document.getElementById('countdown').textContent = remaining;
+    if (remaining <= 0) clearInterval(autoCountTimer);
+  }, 1000);
+
+  autoTimer = setTimeout(runAutoStep, currentInterval * 1000);
+}
+
+// ══ STATS & SAVE ════════════════════════════════════════════════
+function updateStats() {
+  // Počítej jen hesla která mají skutečný překlad (vyznam má text)
+  const done = Object.values(translated).filter(t => t && t.vyznam && t.vyznam.trim().length > 0).length;
+  const total  = entries.length;
+  const remain = total - done;
+  const pct    = total ? (done / total * 100).toFixed(1) : 0;
+  document.getElementById('sDone').textContent   = done;
+  document.getElementById('sRemain').textContent = remain;
+  document.getElementById('sTotal').textContent  = total;
+  document.getElementById('pbar').style.width    = pct + '%';
+  const pbarContainer = document.getElementById('pbarContainer');
+  if (pbarContainer) {
+    pbarContainer.setAttribute('aria-valuenow', pct);
+    pbarContainer.setAttribute('aria-valuetext', `${done} z ${total} hesel přeloženo (${pct}%)`);
+  }
+  if (autoRunning) updateETA();
+}
+
+function saveProgress() {
+   try {
+     localStorage.setItem(STORE_KEY, JSON.stringify({ translated, ts: Date.now() }));
+   } catch(e) {
+     logError('saveProgress', e, {
+       translatedCount: Object.keys(translated).length,
+       approxSizeKB: JSON.stringify(translated).length / 1024
+     });
+     showToast('⚠ localStorage plný — exportuj zálohu!');
+   }
+}
+
+function clearProgress() {
+  if (!confirm('Smazat veškerý uložený průběh překladu a log?')) return;
+  localStorage.removeItem(STORE_KEY);
+  translated = {};
+  updateStats();
+  renderList();
+  clearLog();
+  const pane = document.getElementById('detailPane');
+  if (pane) pane.innerHTML = '<div class="detail-empty">← Klikni na heslo v seznamu pro detail</div>';
+  showToast('Průběh smazán — začni od začátku');
+}
+
+// ══ EXPORT ═══════════════════════════════════════════════════════
+function exportTXT() {
+  const done = entries.filter(e => {
+    const t = translated[e.key];
+    return t && t.vyznam && t.vyznam !== '—' && !t.skipped;
+  });
+  if (!done.length) { showToast('Žádné přeložené heslo'); return; }
+
+  const lines = done.map(e => {
+    const t = translated[e.key];
+    return [
+      `${e.key} | ${e.greek}`,
+      `Český význam: ${t.vyznam || '—'}`,
+      `Definice: ${t.definice || '—'}`,
+      `Biblické užití (KJV): ${t.pouziti || '—'}`,
+      `Původ: ${t.puvod || '—'}`,
+      ''
+    ].join('\n');
+  });
+
+  download('strong_gr_cz.txt', lines.join('\n'), 'text/plain');
+  showToast(`✓ Exportováno ${done.length} hesel`);
+}
+
+function exportJSON() {
+  const out = {};
+  for (const e of entries) {
+    if (!translated[e.key]) continue;
+    out[e.key] = { greek: e.greek, ...translated[e.key] };
+  }
+  download('strong_gr_cz.json', JSON.stringify(out, null, 2), 'application/json');
+  showToast(`✓ Exportováno ${Object.keys(out).length} hesel`);
+}
+
+function download(name, content, type) {
+  const blob = new Blob([content], { type });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  a.click();
+}
+
+function saveApiKey() {
+  const v = document.getElementById('apiKey').value;
+  const prov = document.getElementById('provider').value;
+  if (v) {
+    localStorage.setItem('strong_apikey_' + prov, v);
+    localStorage.setItem('strong_apikey', v);
+  }
+}
+
+function loadSavedSettings() {
+  const prov = localStorage.getItem('strong_provider') || 'groq';
+  document.getElementById('provider').value = prov;
+  document.getElementById('provider')._lastProvider = prov;
+  
+  const k = localStorage.getItem('strong_apikey_' + prov);
+  document.getElementById('apiKey').value = k || '';
+  
+  const p = localStorage.getItem('strong_prompt') || DEFAULT_PROMPT;
+  document.getElementById('promptEditor').value = p;
+  
+  // Uložit prompt při každé změně
+  document.getElementById('promptEditor').addEventListener('input', () => {
+    localStorage.setItem('strong_prompt', document.getElementById('promptEditor').value);
+  });
+  // Uložit provider/model - ale až po onProviderChange pro OpenRouter (jinak select nemá options)
+  // Inicializace model dropdownu (jen jednou)
+  onProviderChange();
+  // Kontrola defaultního souboru
+  checkDefaultFile();
+  document.getElementById('model').addEventListener('change', () => {
+    localStorage.setItem('strong_model', document.getElementById('model').value);
+  });
+  updateFailedCount();
+}
+
+// Volej po načtení stránky
+window.addEventListener('DOMContentLoaded', loadSavedSettings);
+
+function logEntry(keys, rawResponse) {
+  const scroll = document.getElementById('logScroll');
+  if (!scroll) return;
+
+  // Vymaž placeholder text při prvním záznamu
+  if (scroll.querySelector('div[style]')) scroll.innerHTML = '';
+
+  for (const key of [...keys].reverse()) {
+    const e = entries.find(x => x.key === key);
+    const t = translated[key];
+    if (!e) continue;
+
+    const div = document.createElement('div');
+    div.className = 'log-entry';
+    div.style.cursor = 'pointer';
+    div.title = 'Klikni pro detail hesla';
+    div.onclick = () => showDetail(key);
+    div.innerHTML = `
+      <div class="log-key-line">
+        <span class="log-key">${key}</span>
+        <span class="log-greek">${escHtml(e.greek)}</span>
+      </div>
+      ${t && !t.skipped
+        ? `<div class="log-vyznam"><b>Význam:</b> ${escHtml(t.vyznam || '—')}</div>
+           <div class="log-definice">${escHtml((t.definice || '').slice(0, 120))}${(t.definice || '').length > 120 ? '…' : ''}</div>
+           <div class="log-orig"><b>Použití:</b> ${escHtml((t.pouziti || '').slice(0, 80))}${(t.pouziti || '').length > 80 ? '…' : ''}</div>`
+        : `<div class="log-err">⚠ Neparsováno</div>`
+      }
+    `;
+    scroll.insertBefore(div, scroll.firstChild);
+  }
+
+  // Počítadlo
+  const cnt = scroll.children.length;
+  const countEl = document.getElementById('logCount');
+  if (countEl) countEl.textContent = `${cnt} záznamů`;
+
+  // Limit 300
+  while (scroll.children.length > 300) scroll.removeChild(scroll.lastChild);
+}
+
+function clearLog() {
+  const s = document.getElementById('logScroll');
+  if (s) s.innerHTML = '<div style="padding:20px;font-family:\'JetBrains Mono\',monospace;font-size:11px;color:var(--txt3)">Překlady se budou zobrazovat zde automaticky...</div>';
+  const c = document.getElementById('logCount');
+  if (c) c.textContent = '';
+}
+
+function logMsg(msg, type) {
+  const scroll = document.getElementById('logScroll');
+  if (!scroll) return;
+  if (scroll.querySelector('div[style]')) scroll.innerHTML = '';
+  const div = document.createElement('div');
+  div.className = `log-entry`;
+  div.style.color = type === 'err' ? '#c05050' : 'var(--txt3)';
+  div.style.fontFamily = "'JetBrains Mono', monospace";
+  div.style.fontSize = '11px';
+  div.style.padding = '8px 14px';
+  div.textContent = msg;
+  scroll.insertBefore(div, scroll.firstChild);
+}
+
+
+
+// ── Elapsed time ─────────────────────────────────────────────
+function startElapsedTimer() {
+  if (elapsedTimer) clearInterval(elapsedTimer);
+  elapsedTimer = setInterval(updateElapsedTime, 1000);
+}
+
+function stopElapsedTimer() {
+  if (elapsedTimer) {
+    clearInterval(elapsedTimer);
+    elapsedTimer = null;
+  }
+}
+
+function updateElapsedTime() {
+  if (!startTime) return;
+  const elapsed = Math.floor((Date.now() - startTime) / 1000);
+  const mins = Math.floor(elapsed / 60);
+  const secs = elapsed % 60;
+  const el = document.getElementById('elapsedTime');
+  if (el) el.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+}
+
+// ── ETA — odhad zbývajícího času ─────────────────────────────
+function updateETA() {
+  const el = document.getElementById('etaLabel');
+  if (!el) return;
+  const remain = entries.filter(e => !translated[e.key] || translated[e.key].skipped).length;
+  if (!remain) { el.textContent = 'hotovo!'; return; }
+  const bs = parseInt(document.getElementById('batchSizeRun').value) || currentBatchSize;
+  const iv = parseInt(document.getElementById('intervalRun').value) || currentInterval;
+  const batches = Math.ceil(remain / bs);
+  const secs = batches * iv;
+  if (secs < 60) el.textContent = `~${secs}s`;
+  else if (secs < 3600) el.textContent = `~${Math.ceil(secs/60)} min`;
+  else el.textContent = `~${(secs/3600).toFixed(1)} hod`;
+}
+
+// ── Označit rozsah hesel k překladu ───────────────────────────────────
+let modalCallback = null;
+
+function selectRange() {
+  document.getElementById('modalTitle').textContent = 'Označit rozsah hesel';
+  document.getElementById('modalFrom').value = '1';
+  document.getElementById('modalTo').value = '100';
+  modalCallback = function() {
+    const from = parseInt(document.getElementById('modalFrom').value) || 1;
+    const to   = parseInt(document.getElementById('modalTo').value) || 100;
+    if (from > to) return;
+    selectedKeys.clear();
+    entries.forEach(e => {
+      const n = parseInt(e.key.slice(1));
+      if (n >= from && n <= to) selectedKeys.add(e.key);
+    });
+    renderList();
+    showToast(`✓ Označeno ${selectedKeys.size} hesel (G${from}–G${to})`);
+  };
+  document.getElementById('customModal').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('customModal').classList.remove('show');
+}
+
+function confirmModal() {
+  // Implementation based on modal type
+  const title = document.getElementById('modalTitle').textContent;
+  if (title.includes('Rozsah')) {
+    const from = parseInt(document.getElementById('modalFrom').value) || 1;
+    const to = parseInt(document.getElementById('modalTo').value) || 100;
+    selectRangeConfirm(from, to);
+  }
+  closeModal();
+}
+
+// Mobile Actions Modal
+function showMobileActions() {
+  document.getElementById('mobileActionsModal').classList.add('show');
+}
+
+function closeMobileModal() {
+  document.getElementById('mobileActionsModal').classList.remove('show');
+}
+
+// Settings Modal
+function showSettingsModal() {
+  const p = PROVIDERS[document.getElementById('provider').value];
+  document.getElementById('providerRunMobile').innerHTML = Object.keys(PROVIDERS).map(k => `<option value="${k}">${PROVIDERS[k].label.split(' ')[0]}</option>`).join('');
+  document.getElementById('providerRunMobile').value = document.getElementById('provider').value;
+  onProviderChangeRunMobile();
+  document.getElementById('batchSizeRunMobile').value = document.getElementById('batchSize').value;
+  document.getElementById('intervalRunMobile').value = document.getElementById('interval').value;
+  document.getElementById('settingsModal').classList.add('show');
+}
+
+function onProviderChangeRunMobile() {
+  const prov = document.getElementById('providerRunMobile').value;
+  const modelSelect = document.getElementById('modelRunMobile');
+
+  if (prov === 'openrouter') {
+    const savedModel = localStorage.getItem('strong_model');
+    populateOpenRouterModels(modelSelect, savedModel, () => {
+      // Guard: if provider changed while loading, abort
+      if (document.getElementById('providerRunMobile').value !== 'openrouter') return;
+      // Sync with main model
+      const mainModel = document.getElementById('model').value;
+      if (modelSelect.querySelector(`option[value="${mainModel}"]`)) {
+        modelSelect.value = mainModel;
+      }
+    });
+  } else {
+    const p = PROVIDERS[prov];
+    modelSelect.innerHTML = p.models.map(([v,l]) => `<option value="${v}">${l}</option>`).join('');
+    modelSelect.disabled = false;
+    // Sync with main model
+    const mainModel = document.getElementById('model').value;
+    if (modelSelect.querySelector(`option[value="${mainModel}"]`)) {
+      modelSelect.value = mainModel;
+    }
+  }
+}
+
+function closeSettingsModal() {
+  document.getElementById('provider').value = document.getElementById('providerRunMobile').value;
+  document.getElementById('model').value = document.getElementById('modelRunMobile').value;
+  document.getElementById('batchSize').value = document.getElementById('batchSizeRunMobile').value;
+  document.getElementById('interval').value = document.getElementById('intervalRunMobile').value;
+  onProviderChange();
+  initRunSelects();
+  document.getElementById('settingsModal').classList.remove('show');
+}
+
+// ── Limits Modal ──────────────────────────────────────────────────────
+function showLimitsModal() {
+  const prov = document.getElementById('provider').value;
+  const model = document.getElementById('model').value;
+  const modelLabel = document.getElementById('model')?.selectedOptions?.[0]?.text || model;
+  
+  document.getElementById('limitsProviderInfo').textContent = `Provider: ${PROVIDERS[prov]?.label || prov} | Model: ${modelLabel}`;
+  document.getElementById('limitsContent').innerHTML = '<div class="limits-loading">Načítám...</div>';
+  document.getElementById('limitsNote').style.display = 'none';
+  document.getElementById('limitsModal').classList.add('show');
+  
+  fetchLimits(prov, model);
+}
+
+function closeLimitsModal() {
+  document.getElementById('limitsModal').classList.remove('show');
+}
+
+async function fetchLimits(prov, model) {
+  const content = document.getElementById('limitsContent');
+  const note = document.getElementById('limitsNote');
+  const noteText = document.getElementById('limitsNoteText');
+  
+  try {
+    if (prov === 'groq') {
+      // Groq - make a test request to get actual rate limit headers
+      const apiKey = document.getElementById('apiKey').value;
+      if (!apiKey) {
+        content.innerHTML = '<div style="color:var(--red);padding:10px">Nejsou nastaveny limity. Zadejte API klíč.</div>';
+        return;
+      }
+      // Show static limits for Groq (API doesn't return rate limit headers in browser)
+      const limits = getGroqLimits(model);
+      content.innerHTML = renderLimitsTable(limits);
+      note.style.display = 'block';
+      noteText.innerHTML = '⚠️ Groq neumožňuje zjistit aktuální limity z prohlížeče.<br>Aktuální limity se zobrazí v konzoli po každém API volání (pokud je zachytíš).<br>Více info: <a href="https://console.groq.com/docs/rate-limits" target="_blank">console.groq.com/docs/rate-limits</a>';
+    } else if (prov === 'openrouter') {
+      // OpenRouter - can fetch via API
+      const apiKey = document.getElementById('apiKey').value;
+      if (!apiKey) {
+        content.innerHTML = '<div style="color:var(--red);padding:10px">Nejsou nastaveny limity. Zadejte API klíč.</div>';
+        return;
+      }
+      const [keyData, creditsData] = await Promise.all([
+        fetchOpenRouterLimits(apiKey),
+        fetchOpenRouterCredits(apiKey).catch(() => null)
+      ]);
+      content.innerHTML = renderOpenRouterLimits(keyData, creditsData);
+      // Add rate limit info for OpenRouter
+      const rateLimitInfo = getOpenRouterRateLimits(keyData);
+      content.innerHTML = renderOpenRouterLimits(keyData, creditsData) + rateLimitInfo;
+      note.style.display = 'block';
+      noteText.innerHTML = 'Rate limity: free modely mají ~20 RPM / ~200 RPD.<br>Více info: <a href="https://openrouter.ai/docs/api/reference/limits" target="_blank">openrouter.ai/docs</a>';
+    } else if (prov === 'gemini') {
+      // Gemini - no API for limits, show static info
+      const limits = getGeminiLimits(model);
+      content.innerHTML = renderLimitsTable(limits);
+      note.style.display = 'block';
+      noteText.innerHTML = 'Google neposkytuje API pro kontrolu limitů. Zkontrolujte limity manuálně v <a href="https://aistudio.google.com/app" target="_blank">AI Studio</a> nebo Google Cloud Console → Quotas.<br>Limity se resetují o půlnoci Pacific Time.';
+    }
+  } catch (e) {
+    content.innerHTML = `<div style="color:var(--red);padding:10px">Chyba: ${e.message}</div>`;
+  }
+}
+
+function getGroqLimits(model) {
+  // Known limits for Groq free tier (April 2026)
+  const limits = {
+    'meta-llama/llama-4-scout-17b-16e-instruct': { rpm: 30, rpd: 1000, tpm: 30000, tpd: 500000 },
+    'meta-llama/llama-4-maverick-17b-128e-instruct': { rpm: 15, rpd: 500, tpm: 3000, tpd: 0 },
+    'llama-3.3-70b-versatile': { rpm: 30, rpd: 1000, tpm: 12000, tpd: 100000 },
+    'llama-3.1-8b-instant': { rpm: 30, rpd: 14400, tpm: 6000, tpd: 500000 },
+    'qwen-qwq-32b': { rpm: 30, rpd: 1000, tpm: 6000, tpd: 500000 },
+  };
+  return limits[model] || { rpm: 30, rpd: 1000, tpm: 6000, tpd: 500000 };
+}
+
+function getGeminiLimits(model) {
+  // Known limits for Gemini free tier (April 2026)
+  const limits = {
+    'gemini-2.5-pro': { rpm: 5, rpd: 50, tpm: 1000000, tpd: 0 },
+    'gemini-2.5-flash': { rpm: 15, rpd: 1500, tpm: 1000000, tpd: 0 },
+    'gemini-2.5-flash-lite': { rpm: 30, rpd: 1500, tpm: 1000000, tpd: 0 },
+  };
+  return limits[model] || { rpm: 15, rpd: 1500, tpm: 1000000, tpd: 0 };
+}
+
+function renderLimitsTable(limits) {
+  const rows = [];
+  if (limits.rpm) rows.push(`<div class="limits-row"><span class="limits-label">RPM (requests/min)</span><span class="limits-value">${limits.rpm}</span></div>`);
+  if (limits.rpd) rows.push(`<div class="limits-row"><span class="limits-label">RPD (requests/den)</span><span class="limits-value">${limits.rpd.toLocaleString()}</span></div>`);
+  if (limits.tpm) rows.push(`<div class="limits-row"><span class="limits-label">TPM (tokens/min)</span><span class="limits-value">${limits.tpm.toLocaleString()}</span></div>`);
+  if (limits.tpd) rows.push(`<div class="limits-row"><span class="limits-label">TPD (tokens/den)</span><span class="limits-value">${limits.tpd.toLocaleString()}</span></div>`);
+  return rows.join('');
+}
+
+async function fetchOpenRouterLimits(apiKey) {
+  const res = await fetch('https://openrouter.ai/api/v1/key', {
+    headers: { 'Authorization': 'Bearer ' + apiKey }
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  return data.data;
+}
+
+async function fetchOpenRouterCredits(apiKey) {
+  const res = await fetch('https://openrouter.ai/api/v1/credits', {
+    headers: { 'Authorization': 'Bearer ' + apiKey }
+  });
+  if (!res.ok) return null;
+  const data = await res.json();
+  return data.data;
+}
+
+async function fetchGroqLimits(apiKey, model) {
+  // Try models list endpoint first - it should have headers
+  try {
+    const modelsRes = await fetch('https://api.groq.com/openai/v1/models', {
+      headers: { 'Authorization': 'Bearer ' + apiKey }
+    });
+    
+    const headers = {};
+    const allHeaders = [];
+    modelsRes.headers.forEach((value, name) => {
+      allHeaders.push([name, value]);
+      if (name.startsWith('x-ratelimit-')) {
+        headers[name] = value;
+      }
+    });
+    
+    if (Object.keys(headers).length > 0) {
+      return { headers, errorMsg: '', status: modelsRes.status };
+    }
+  } catch (e) { console.log('models err', e); }
+  
+  // Fallback to chat request
+  const defaultModel = model || 'llama-3.1-8b-instant';
+  const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer ' + apiKey,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      model: defaultModel,
+      messages: [{ role: 'user', content: 'hi' }],
+      max_tokens: 1
+    })
+  });
+  
+  // Even error responses contain rate limit headers
+  const headers = {};
+  const allHeaders = [];
+  res.headers.forEach((value, name) => {
+    allHeaders.push([name, value]);
+    if (name.startsWith('x-ratelimit-')) {
+      headers[name] = value;
+    }
+  });
+  headers._all = allHeaders;
+  
+  // Also get any error message
+  let errorMsg = '';
+  if (!res.ok) {
+    try {
+      const err = await res.json();
+      errorMsg = err.error?.message || `HTTP ${res.status}`;
+    } catch (e) {
+      errorMsg = `HTTP ${res.status}`;
+    }
+  }
+  
+  return { headers, errorMsg, status: res.status };
+}
+
+function renderGroqLimits(result) {
+  const { headers, errorMsg, status } = result;
+  const rows = [];
+  
+  // Debug info
+  if (errorMsg && Object.keys(headers).length === 0) {
+    return `<div style="color:var(--red);padding:10px">Chyba: ${errorMsg}</div>`;
+  }
+  
+  // Show all rate limit headers for debugging
+  const rateLimitHeaders = Object.entries(headers).filter(([k]) => k.startsWith('x-ratelimit-'));
+  
+  // Requests per minute
+  if (headers['x-ratelimit-remaining-requests'] !== undefined) {
+    const limit = parseInt(headers['x-ratelimit-limit-requests'] || '30');
+    const remaining = parseInt(headers['x-ratelimit-remaining-requests'] || '0');
+    const pct = limit > 0 ? Math.round((remaining / limit) * 100) : 0;
+    const cls = pct > 50 ? 'ok' : pct > 20 ? 'warn' : 'danger';
+    rows.push(`<div class="limits-row"><span class="limits-label">RPM</span><span class="limits-value ${cls}">${remaining} / ${limit}</span></div>`);
+  } else if (headers['x-ratelimit-limit-requests']) {
+    rows.push(`<div class="limits-row"><span class="limits-label">RPM limit</span><span class="limits-value">${headers['x-ratelimit-limit-requests']}</span></div>`);
+  }
+  
+  // Tokens per minute
+  if (headers['x-ratelimit-remaining-tokens'] !== undefined) {
+    const limit = parseInt(headers['x-ratelimit-limit-tokens'] || '6000');
+    const remaining = parseInt(headers['x-ratelimit-remaining-tokens'] || '0');
+    const pct = limit > 0 ? Math.round((remaining / limit) * 100) : 0;
+    const cls = pct > 50 ? 'ok' : pct > 20 ? 'warn' : 'danger';
+    rows.push(`<div class="limits-row"><span class="limits-label">TPM</span><span class="limits-value ${cls}">${remaining.toLocaleString()} / ${limit.toLocaleString()}</span></div>`);
+  } else if (headers['x-ratelimit-limit-tokens']) {
+    rows.push(`<div class="limits-row"><span class="limits-label">TPM limit</span><span class="limits-value">${headers['x-ratelimit-limit-tokens']}</span></div>`);
+  }
+  
+  // Reset times
+  if (headers['x-ratelimit-reset-requests']) {
+    rows.push(`<div class="limits-row"><span class="limits-label">Reset RPM</span><span class="limits-value">${headers['x-ratelimit-reset-requests']}</span></div>`);
+  }
+  if (headers['x-ratelimit-reset-tokens']) {
+    rows.push(`<div class="limits-row"><span class="limits-label">Reset TPM</span><span class="limits-value">${headers['x-ratelimit-reset-tokens']}</span></div>`);
+  }
+  
+  // Debug: show all headers if nothing parsed
+  const debugHeaders = headers._all || rateLimitHeaders;
+  if ( rows.length === 0 && debugHeaders.length > 0) {
+    rows.push(`<div style="color:var(--ylw);font-size:10px;margin-bottom:8px">Debug - všechny hlavičky:</div>`);
+    debugHeaders.slice(0, 20).forEach(([k, v]) => {
+      rows.push(`<div class="limits-row"><span class="limits-label">${k}</span><span class="limits-value" style="font-size:9px">${String(v).slice(0, 50)}</span></div>`);
+    });
+    if (debugHeaders.length > 20) {
+      rows.push(`<div style="font-size:9px;color:var(--txt3)">...a dalších ${debugHeaders.length - 20}</div>`);
+    }
+  }
+  
+  if (rows.length === 0) {
+    return `<div style="color:var(--txt3);padding:10px">Žádné hlavičky.<br>Status: ${status}<br>Error: ${errorMsg || 'žádná'}</div>`;
+  }
+  
+  // Model specific limits (static fallback)
+  const staticLimits = '<div style="margin-top:10px;border-top:1px solid var(--brd);padding-top:8px"><span style="color:var(--txt3);font-size:10px">📌 Výchozí limity pro model:</span></div>';
+  return rows.join('') + staticLimits;
+}
+
+function renderOpenRouterLimits(keyData, creditsData) {
+  if (!keyData) return '<div style="color:var(--red);padding:10px">Nelze načíst limity</div>';
+  
+  const rows = [];
+  
+  // Credit info from /credits endpoint (if available)
+  if (creditsData) {
+    if (creditsData.total_credits !== undefined) {
+      rows.push(`<div class="limits-row"><span class="limits-label">Kredity celkem</span><span class="limits-value">$${creditsData.total_credits?.toFixed(2) || '0'}</span></div>`);
+    }
+    if (creditsData.total_usage !== undefined) {
+      rows.push(`<div class="limits-row"><span class="limits-label">Kredity použito</span><span class="limits-value">$${creditsData.total_usage?.toFixed(2) || '0'}</span></div>`);
+    }
+    if (creditsData.total_credits !== undefined && creditsData.total_usage !== undefined) {
+      const remaining = creditsData.total_credits - creditsData.total_usage;
+      const cls = remaining > 1 ? 'ok' : remaining > 0.1 ? 'warn' : 'danger';
+      rows.push(`<div class="limits-row"><span class="limits-label">Kredity zbývá</span><span class="limits-value ${cls}">$${remaining?.toFixed(2) || '0'}</span></div>`);
+    }
+  }
+  
+  // Key usage info from /key endpoint
+  if (keyData.usage !== undefined) {
+    rows.push(`<div class="limits-row"><span class="limits-label">Použito celkem (USD)</span><span class="limits-value">$${keyData.usage?.toFixed(4) || '0'}</span></div>`);
+  }
+  if (keyData.usage_daily !== undefined) {
+    rows.push(`<div class="limits-row"><span class="limits-label">Použito dnes (USD)</span><span class="limits-value">$${keyData.usage_daily?.toFixed(4) || '0'}</span></div>`);
+  }
+  if (keyData.usage_weekly !== undefined) {
+    rows.push(`<div class="limits-row"><span class="limits-label">Použito týden (USD)</span><span class="limits-value">$${keyData.usage_weekly?.toFixed(4) || '0'}</span></div>`);
+  }
+  if (keyData.usage_monthly !== undefined) {
+    rows.push(`<div class="limits-row"><span class="limits-label">Použito měsíc (USD)</span><span class="limits-value">$${keyData.usage_monthly?.toFixed(4) || '0'}</span></div>`);
+  }
+  if (keyData.limit !== undefined && keyData.limit > 0) {
+    rows.push(`<div class="limits-row"><span class="limits-label">Limit</span><span class="limits-value">$${keyData.limit?.toFixed(2) || '0'}</span></div>`);
+  }
+  if (keyData.limit_remaining !== null && keyData.limit_remaining !== undefined && keyData.limit > 0) {
+    const pct = Math.round((keyData.limit_remaining / keyData.limit) * 100);
+    const cls = pct > 50 ? 'ok' : pct > 20 ? 'warn' : 'danger';
+    rows.push(`<div class="limits-row"><span class="limits-label">Limit zbývá</span><span class="limits-value ${cls}">$${keyData.limit_remaining?.toFixed(2) || '0'} (${pct}%)</span></div>`);
+  }
+  if (keyData.is_free_tier !== undefined) {
+    rows.push(`<div class="limits-row"><span class="limits-label">Free tier</span><span class="limits-value ${keyData.is_free_tier ? 'ok' : ''}">${keyData.is_free_tier ? '✓' : '—'}</span></div>`);
+  }
+  if (keyData.label) {
+    rows.push(`<div class="limits-row"><span class="limits-label">Klíč</span><span class="limits-value" style="font-size:10px">${keyData.label || '—'}</span></div>`);
+  }
+  if (rows.length === 0) return '<div style="color:var(--txt3);padding:10px">Žádné limity k zobrazení</div>';
+  return rows.join('');
+}
+
+function getOpenRouterRateLimits(keyData) {
+  // OpenRouter rate limits depend on whether user has credits
+  const hasCredits = keyData?.usage !== undefined || keyData?.limit_remaining > 0;
+  const hasPurchasedCredits = keyData?.is_free_tier === false || keyData?.limit > 0;
+  
+  // Free model limits (models ending with :free)
+  const freeRpm = 20;
+  const freeRpd = hasPurchasedCredits ? 500 : 200;
+  
+  // Paid models - no strict limits, depends on credits
+  const rows = [];
+  rows.push(`<div class="limits-row" style="margin-top:10px;border-top:1px solid var(--brd);padding-top:8px"><span class="limits-label" style="color:var(--acc)">Rate Limity</span><span class="limits-value"></span></div>`);
+  rows.push(`<div class="limits-row"><span class="limits-label">Free modely (RPM)</span><span class="limits-value">${freeRpm}</span></div>`);
+  rows.push(`<div class="limits-row"><span class="limits-label">Free modely (RPD)</span><span class="limits-value">${freeRpd}</span></div>`);
+  rows.push(`<div class="limits-row"><span class="limits-label">Placené modely</span><span class="limits-value ok">bez limitu</span></div>`);
+  
+  return rows.join('');
+}
+
+// Make functions globally accessible for onclick handlers
+window.showLimitsModal = showLimitsModal;
+window.closeLimitsModal = closeLimitsModal;
+
+// ── Export vybraného rozsahu ───────────────────────────────────
+function exportRange() {
+  const from = parseInt(prompt('Od G čísla:', '1') || '1');
+  const to   = parseInt(prompt('Do G čísla:', '100') || '100');
+  if (isNaN(from) || isNaN(to)) return;
+
+  const done = entries.filter(e => {
+    const n = parseInt(e.key.slice(1));
+    const t = translated[e.key];
+    return n >= from && n <= to && t && t.vyznam && t.vyznam !== '—' && !t.skipped;
+  });
+  if (!done.length) { showToast(`Žádná přeložená hesla v rozsahu G${from}–G${to}`); return; }
+
+  const lines = done.map(e => {
+    const t = translated[e.key];
+    return [`${e.key} | ${e.greek}`,
+      `Český význam: ${t.vyznam || '—'}`,
+      `Definice: ${t.definice || '—'}`,
+      `Biblické užití (KJV): ${t.pouziti || '—'}`,
+      `Původ: ${t.puvod || '—'}`, ''].join('\n');
+  });
+  download(`strong_gr_cz_G${from}-G${to}.txt`, lines.join('\n'), 'text/plain');
+  showToast(`✓ Exportováno ${done.length} hesel (G${from}–G${to})`);
+}
+
+// ══ RESIZE PANELS ──────────────────────────────────────────────
+let resizing = false;
+let startY = 0;
+let startLogHeight = 0;
+let startDetailHeight = 0;
+
+function startResize(e) {
+  if (window.innerWidth > 600) return;
+  e.preventDefault();
+  resizing = true;
+  startY = e.touches ? e.touches[0].clientY : e.clientY;
+  const split = document.querySelector('.split');
+  const listPane = document.querySelector('.list-pane');
+  const logPanel = document.querySelector('.log-panel');
+  const detailScroll = document.querySelector('.detail-scroll');
+  startLogHeight = logPanel.offsetHeight;
+  startDetailHeight = detailScroll.offsetHeight;
+  document.addEventListener('mousemove', doResize);
+  document.addEventListener('mouseup', stopResize);
+  document.addEventListener('touchmove', doResize);
+  document.addEventListener('touchend', stopResize);
+}
+
+function doResize(e) {
+  if (!resizing) return;
+  const currY = e.touches ? e.touches[0].clientY : e.clientY;
+  const delta = currY - startY;
+  const split = document.querySelector('.split');
+  const listPane = document.querySelector('.list-pane');
+  const logPanel = document.querySelector('.log-panel');
+  const detailScroll = document.querySelector('.detail-scroll');
+  const availHeight = split.offsetHeight;
+  const listPaneHeight = listPane.offsetHeight;
+  const newLog = Math.max(50, Math.min(startLogHeight + delta, availHeight - listPaneHeight - 120));
+  const newDetail = Math.max(50, availHeight - listPaneHeight - newLog);
+  logPanel.style.height = newLog + 'px';
+  detailScroll.style.height = newDetail + 'px';
+  logPanel.style.flex = 'none';
+  detailScroll.style.flex = 'none';
+}
+
+function stopResize() {
+  resizing = false;
+  document.removeEventListener('mousemove', doResize);
+  document.removeEventListener('mouseup', stopResize);
+  document.removeEventListener('touchmove', doResize);
+  document.removeEventListener('touchend', stopResize);
+  
+  const logPanel = document.querySelector('.log-panel');
+}
+
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.opacity = '1';
+  clearTimeout(t._t);
+  t._t = setTimeout(() => { t.style.opacity = '0'; }, 3500);
+}
+
+ function log(msg) {
+   const el = document.getElementById('autoLog');
+   if (el) el.textContent = msg;
+ }
+
+ function logTokenEntry(provider, inT, outT, total) {
+  totalTokens.in += inT;
+  totalTokens.out += outT;
+  totalTokens.total += total;
+  
+  const el = document.getElementById('tokenStats');
+  if (el) {
+    el.textContent = `📊 Celkem: ${totalTokens.in} in / ${totalTokens.out} out = ${totalTokens.total}`;
+  }
+}
+
+// Preview modal pro hromadny preklad
+let pendingTranslations = {};
+
+function showPreviewModal(previewData) {
+  pendingTranslations = previewData;
+  
+  const modal = document.createElement('div');
+  modal.id = 'previewModal';
+  modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:9999;overflow-y:auto;padding:20px';
+  
+  let html = `<div style="max-width:900px;margin:0 auto;background:var(--bg2);border:1px solid var(--brd);border-radius:8px;padding:20px">
+    <h2 style="color:var(--acc);margin:0 0 20px 0">Náhled překladu (${Object.keys(previewData).length} hesel)</h2>
+    <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:6px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px">
+        <input type="checkbox" id="checkAllPreview" checked onchange="toggleAllPreview(this.checked)" style="width:16px;height:16px;accent-color:var(--acc)">
+        <span style="font-size:12px">Označit vše</span>
+      </label>
+      <button class="hbtn grn" onclick="acceptPreview()">✓ Uložit označené</button>
+      <button class="hbtn red" onclick="discardPreview()">✕ Zrušit</button>
+    </div>`;
+  
+  for (const [key, data] of Object.entries(previewData)) {
+    const e = entries.find(x => x.key === key);
+    const old = translated[key];
+    html += `
+    <div style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;margin:0 0 15px 0;padding:15px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
+          <input type="checkbox" class="preview-check" data-key="${key}" checked style="width:18px;height:18px;accent-color:var(--acc)">
+          <span style="font-family:'JetBrains Mono';color:var(--acc);font-weight:bold">${key}</span>
+        </label>
+        <span style="color:var(--txt2)">${escHtml(e?.greek || '')}</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px">
+        <div>
+          <div style="color:var(--txt3);font-size:10px;margin-bottom:5px">NOVÝ PŘEKLAD</div>
+          <div style="font-size:12px">
+            <div><b>Význam:</b> ${escHtml(data.vyznam || '—')}</div>
+            <div style="margin-top:5px"><b>Definice:</b> ${escHtml(data.definice || '—')}</div>
+            <div style="margin-top:5px"><b>Použití:</b> ${escHtml(data.pouziti || '—')}</div>
+            <div style="margin-top:5px"><b>Původ:</b> ${escHtml(data.puvod || '—')}</div>
+          </div>
+        </div>
+        <div>
+          <div style="color:var(--txt3);font-size:10px;margin-bottom:5px">${old ? 'PŮVODNÍ' : 'PŘEDCHOZÍ'}</div>
+          ${old ? `
+          <div style="font-size:12px;color:var(--txt2)">
+            <div><b>Význam:</b> ${escHtml(old.vyznam || '—')}</div>
+            <div style="margin-top:5px"><b>Definice:</b> ${escHtml(old.definice || '—')}</div>
+            <div style="margin-top:5px"><b>Použití:</b> ${escHtml(old.pouziti || '—')}</div>
+            <div style="margin-top:5px"><b>Původ:</b> ${escHtml(old.puvod || '—')}</div>
+          </div>` : '<div style="color:var(--txt3);font-style:italic">— žádný —</div>'}
+        </div>
+      </div>
+    </div>`;
+  }
+  
+  html += `</div>`;
+  modal.innerHTML = html;
+  document.body.appendChild(modal);
+}
+
+function toggleAllPreview(checked) {
+  document.querySelectorAll('.preview-check').forEach(cb => cb.checked = checked);
+}
+
+function acceptPreview() {
+  const selected = {};
+  document.querySelectorAll('.preview-check:checked').forEach(cb => {
+    const key = cb.dataset.key;
+    selected[key] = pendingTranslations[key];
+  });
+  
+  for (const [key, data] of Object.entries(selected)) {
+    translated[key] = data;
+  }
+  saveProgress();
+  renderList();
+  updateStats();
+  updateFailedCount();
+  closePreviewModal();
+  showToast(`✓ Uloženo ${Object.keys(selected).length} hesel`);
+}
+
+function discardPreview() {
+  closePreviewModal();
+  showToast('✕ Překlad zrušen');
+}
+
+// ══ IMPORT TXT ════════════════════════════════════════════════════════
+function importTXT(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const text = ev.target.result;
+      const imported = parseCzTXT(text);
+      const count = Object.keys(imported).length;
+      if (!count) { showToast('✗ Žádná hesla nenalezena v souboru'); return; }
+      const previewData = {};
+      for (const [key, data] of Object.entries(imported)) {
+        previewData[key] = data;
+      }
+       showPreviewModal(previewData);
+       showToast(`📥 Nalezeno ${count} hesel k importu`);
+     } catch(e) {
+       logError('importTXT', e, { fileName: file?.name });
+       showToast('✗ Chyba importu: ' + e.message);
+     }
+    input.value = '';
+  };
+  reader.readAsText(file, 'utf-8');
+}
+
+// Parsuje formát: "G12 | ἄβυσσος\nČeský význam: ...\nDefinice: ..."
+function parseCzTXT(text) {
+  const result = {};
+  const blocks = text.trim().split(/\n(?=G\d+\s*\|)/);
+  for (const block of blocks) {
+    const lines = block.trim().split('\n');
+    const header = lines[0];
+    const m = header.match(/^(G\d+)\s*\|/);
+    if (!m) continue;
+    const key = m[1];
+    const get = (labels) => {
+      for (const label of labels) {
+        const line = lines.find(l => l.startsWith(label + ':'));
+        if (line) return line.slice(label.length + 1).trim();
+      }
+      return '';
+    };
+    const vyznam = get(['Český význam', 'Vyznam', 'VYZNAM']);
+    const definice = get(['Definice', 'DEFINICE']);
+    const pouziti = get(['Biblické užití (KJV)', 'Pouziti', 'POUZITI', 'Použití']);
+    const puvod = get(['Původ', 'Puvod', 'PUVOD']);
+    if (vyznam || definice) {
+      result[key] = { vyznam, definice, pouziti, puvod };
+    }
+  }
+  return result;
+}
+
+// ══ NEÚSPĚŠNÉ PŘEKLADY ════════════════════════════════════════════════
+function updateFailedCount() {
+  let count = 0;
+  for (const key of Object.keys(translated)) {
+    const t = translated[key];
+    if (!t.vyznam || t.vyznam === '—') count++;
+  }
+  const el = document.getElementById('failedCount');
+  if (el) el.textContent = count > 0 ? `(${count})` : '';
+}
+
+function showFailedEntries() {
+  const failed = [];
+  for (const key of Object.keys(translated)) {
+    const t = translated[key];
+    if (!t.vyznam || t.vyznam === '—') {
+      failed.push({ key, raw: t.raw, greek: entries.find(e => e.key === key)?.greek });
+    }
+  }
+  
+  if (!failed.length) {
+    showToast('✓ Všechny překlady jsou úspěšné');
+    return;
+  }
+  
+  const failedKeys = failed.map(f => f.key);
+  
+  const modal = document.createElement('div');
+  modal.id = 'failedModal';
+  modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.88);z-index:9999;overflow-y:auto;padding:20px';
+  
+  let cards = '';
+  for (const f of failed) {
+    const rawText = f.raw || '(prázdné)';
+    cards += `<div style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;margin:0 0 10px 0;padding:12px">
+      <div style="font-family:'JetBrains Mono';color:var(--acc);font-weight:bold;margin-bottom:6px">${f.key} | ${escHtml(f.greek || '')}</div>
+      <div style="font-size:11px;color:var(--txt2);white-space:pre-wrap;max-height:120px;overflow-y:auto;background:var(--bg1);padding:8px;border-radius:4px">${escHtml(rawText)}</div>
+    </div>`;
+  }
+  
+  modal.innerHTML = `
+  <div style="max-width:800px;margin:0 auto;background:var(--bg2);border:1px solid var(--brd);border-radius:8px;padding:22px">
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;flex-wrap:wrap">
+      <h2 style="color:var(--acc);font-family:'JetBrains Mono',monospace;font-size:14px;margin:0">
+        ⚠ Neúspěšné překlady — ${failed.length} hesel
+      </h2>
+      <button class="hbtn grn" onclick="retryFailed('${failedKeys.join(',')}')">↻ Přeložit znovu</button>
+      <button class="hbtn red" onclick="document.getElementById('failedModal').remove()">✕ Zavřít</button>
+    </div>
+    <div style="font-size:12px;color:var(--txt3);margin-bottom:14px">
+      AI nevrátila správný formát (nebo prázdný překlad). Detaily v console (F12).
+    </div>
+    <div id="failedCards">${cards}</div>
+  </div>`;
+  
+  document.body.appendChild(modal);
+  showToast(`⚠ Nalezeno ${failed.length} neúspěšných překladů (viz console)`);
+}
+
+function retryFailed(failedKeysStr) {
+  const keys = failedKeysStr.split(',');
+  selectedKeys = new Set(keys);
+  renderList();
+  document.getElementById('failedModal').remove();
+  
+  // Nastav retry režim - příští translateNext/AUTO vezme tyto klíče
+  retryMode = true;
+  retryKeysList = keys;
+  
+  showToast(`✓ Označeno ${keys.length} hesel — klikni na "⚡ Dávka" nebo "▶ AUTO"`);
+}
+
+function closePreviewModal() {
+  const modal = document.getElementById('previewModal');
+  if (modal) modal.remove();
+  pendingTranslations = {};
+}
+
+// Escape zavře modal
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closePreviewModal();
+    closeLimitsModal();
+  }
+  if (document.getElementById('app').style.display === 'none') return;
+  // Klávesové zkratky v app
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
+  if (e.key === ' ') { e.preventDefault(); translateNext(); }
+  if (e.key === 'a' || e.key === 'A') toggleAuto();
+  if (e.key === 'ArrowDown') {
+    const idx = filteredKeys.indexOf(activeKey);
+    if (idx < filteredKeys.length - 1) showDetail(filteredKeys[idx + 1]);
+  }
+  if (e.key === 'ArrowUp') {
+    const idx = filteredKeys.indexOf(activeKey);
+    if (idx > 0) showDetail(filteredKeys[idx - 1]);
+  }
+});
+// Expose functions to global scope for HTML event handlers
+window.loadTXT = loadTXT;
+window.loadDefaultFile = loadDefaultFile;
+window.startApp = startApp;
+window.toggleAuto = toggleAuto;
+window.onProviderChange = onProviderChange;
+window.saveApiKey = saveApiKey;
+window.resetPrompt = resetPrompt;
+window.jumpToStart = jumpToStart;
+window.toggleListPane = toggleListPane;
+window.importTXT = importTXT;
+window.translateNext = translateNext;
+window.selectRange = selectRange;
+window.exportTXT = exportTXT;
+window.exportJSON = exportJSON;
+window.exportRange = exportRange;
+window.showFailedEntries = showFailedEntries;
+window.clearProgress = clearProgress;
+window.stopAuto = stopAuto;
+window.filterList = filterList;
+window.selectAll = selectAll;
+window.selectNone = selectNone;
+window.translateSelected = translateSelected;
+window.showSetup = showSetup;
+window.clearLog = clearLog;
+window.closeModal = closeModal;
+window.confirmModal = confirmModal;
+window.toggleSelect = toggleSelect;
+window.translateSingle = translateSingle;
+window.toggleEditSection = toggleEditSection;
+window.saveSection = saveSection;
+window.toggleAllPreview = toggleAllPreview;
+window.acceptPreview = acceptPreview;
+window.discardPreview = discardPreview;
+window.retryFailed = retryFailed;
+window.showMobileActions = showMobileActions;
+window.closeMobileModal = closeMobileModal;
+window.showSettingsModal = showSettingsModal;
+window.closeSettingsModal = closeSettingsModal;
+window.onProviderChangeRunMobile = onProviderChangeRunMobile;
+</script>
+</body>
+</html>
