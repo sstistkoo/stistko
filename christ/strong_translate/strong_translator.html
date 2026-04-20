@@ -1577,22 +1577,6 @@ function toggleListPane() {
 
 // ══ START ════════════════════════════════════════════════════════
 function startApp() {
-  // Ukaž loading
-  const setup = document.getElementById('setup');
-  const app = document.getElementById('app');
-  setup.style.display = 'none';
-  app.style.display = 'flex';
-  app.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--txt3);font-family:JetBrains Mono,monospace">⏳ Načítám...</div>';
-  
-  requestAnimationFrame(() => {
-    setTimeout(initApp, 10);
-  });
-}
-
-function initApp() {
-  const app = document.getElementById('app');
-  app.innerHTML = ''; // Clear loading
-  
   currentBatchSize = parseInt(document.getElementById('batchSize').value);
   currentInterval  = parseInt(document.getElementById('interval').value);
 
@@ -1608,7 +1592,10 @@ function initApp() {
      translated = {};
    }
 
+  document.getElementById('setup').style.display = 'none';
+  document.getElementById('app').style.display   = 'flex';
   entryMap = new Map(entries.map(e => [e.key, e]));
+
   filteredKeys = entries.map(e => e.key);
   initVirtualScroll();
   renderList();
