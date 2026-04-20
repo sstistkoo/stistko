@@ -1,4 +1,0 @@
-Found: 4 fields
-Raw: 'G21370|πλάνης|planēs|\n'
-Fields: ['G21370', 'πλάνης', 'planēs', '']
-Count: 1
