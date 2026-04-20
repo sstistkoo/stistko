@@ -2365,6 +2365,13 @@ async function translateBatch(keys) {
     }
     logEntry(keys, content);
     
+    // Ulož raw odpověď pro každý klíč (pro pozdější zobrazení chyb)
+    for (const key of keys) {
+      if (translated[key]) {
+        translated[key].raw = content;
+      }
+    }
+    
     // Pokud něco chybí, zkus opravný retry
     if (missingKeys.length > 0) {
       console.log(`⚠ ${missingKeys.length} hesel bez překladu: ${missingKeys.join(', ')}`);
@@ -2397,6 +2404,15 @@ ${keys.map(k => {
     // Kontrola: přeložena všechna hesla?
     const translatedCount = keys.filter(k => translated[k]?.vyznam).length;
     if (translatedCount < keys.length) {
+      // Označ chybějící hesla jako neúspěšná
+      for (const key of keys) {
+        if (!translated[key] || !translated[key].vyznam || translated[key].vyznam === '—') {
+          translated[key] = translated[key] || {};
+          if (!translated[key].vyznam || translated[key].vyznam === '—') {
+            translated[key].vyznam = '—';
+          }
+        }
+      }
       log(`⚠ Pozor: Přeloženo ${translatedCount}/${keys.length} hesel. Zkuste menší dávku.`);
       showToast(`⚠ Přeloženo ${translatedCount}/${keys.length} hesel`);
     }
@@ -2405,15 +2421,23 @@ ${keys.map(k => {
      updateFailedCount();
      // logEntry already called above after initial parse
      log(`✓ Přeloženo ${keys.length} hesel (${keys[0]}–${keys[keys.length-1]})`);
-   } catch(e) {
-     logError('translateBatch', e, {
-       keys: keys.slice(0, 5), // first 5 keys only
-       keyRange: `${keys[0]}-${keys[keys.length-1]}`,
-       provider: document.getElementById('provider')?.value,
-       batchSize: keys.length
-     });
-     showToast('✗ ' + e.message);
-    }
+} catch(e) {
+      logError('translateBatch', e, {
+        keys: keys.slice(0, 5), // first 5 keys only
+        keyRange: `${keys[0]}-${keys[keys.length-1]}`,
+        provider: document.getElementById('provider')?.value,
+        batchSize: keys.length
+      });
+      // Označ chybná hesla jako neúspěšná, aby šla zobrazit v "Neúspěšné překlady"
+      for (const key of keys) {
+        if (!translated[key]) {
+          translated[key] = { vyznam: '—', definice: '', pouziti: '', puvod: '', raw: `CHYBA: ${e.message}` };
+        }
+      }
+      saveProgress();
+      updateFailedCount();
+      showToast('✗ ' + e.message);
+   }
 }
 
 // ══ BUILD PROMPT MESSAGES ═══════════════════════════════════════
@@ -3582,7 +3606,8 @@ function showFailedEntries() {
   
   let cards = '';
   for (const f of failed) {
-    const rawText = f.raw || '(prázdné)';
+    const info = entries.find(e => e.key === f.key);
+    const rawText = f.raw || (info ? `${info.greek}\n\nDEF: ${info.def || ''}\nKJV: ${info.kjv || ''}` : '(prázdné)');
     cards += `<div style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;margin:0 0 10px 0;padding:12px">
       <div style="font-family:'JetBrains Mono';color:var(--acc);font-weight:bold;margin-bottom:6px">${f.key} | ${escHtml(f.greek || '')}</div>
       <div style="font-size:11px;color:var(--txt2);white-space:pre-wrap;max-height:120px;overflow-y:auto;background:var(--bg1);padding:8px;border-radius:4px">${escHtml(rawText)}</div>
