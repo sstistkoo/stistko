@@ -1,0 +1,49 @@
+H9001: '/וַ' | Verbal vav: joined to verb with no intervening prefix (usually conversive)  (future<->past)
+H9002: '/וְ' | Conjunctive vav -  i.e. followed by prefix, suffix or non-verb (conjunctive) (‘and/but’)
+H9003: '/ב' | Prefix beth: in, among, with,
+H9004: '/כ' | Prefix kaph: like, as
+H9005: '/ל' | Prefix lamed: to
+H9006: '/מ' | Prefix mem: from
+H9007: '/שׁ' | Prefix shin: of
+H9008: '/ה' | Prefix hé interrogative: at the start of a question
+H9009: '/ה' | Prefix hé article: the for a subject, not object
+H9010: 'א/' | Suffix aleph: definite article the in Aramaic
+H9011: 'ה/' | Suffix hé – directional: towards
+H9012: 'ה/' | Suffix  hé – paragogic: adds emphasis
+H9013: 'ן/' | Punctuation  nun – paragogic: adds emphasis
+H9014: '-' | Punctuation Maqqef: links words
+H9015: '|' | Punctuation Paseq: separates words
+H9016: ':' | Punctuation Sof-Pasuq: ends a verse
+H9017: 'פ' | Punctuation Pe paragraph: ends a literary section
+H9018: 'ס' | Punctuation Sameq paragraph: ends a lectionary section
+H9019: '/׆' | Punctuation Inverted Nun paragraph: ends a lectionary section
+H9020: 'י' | Personal possessive pronoun - suffix for nouns, adjectives and passive participles:  1st person sing
+H9021: 'ךָ' | Personal possessive pronoun - suffix for nouns, adjectives and passive participles:  2nd person masc
+H9022: 'ךְ' | Personal possessive pronoun - suffix for nouns, adjectives and passive participles:  2nd person femi
+H9023: 'הוּ' | Personal possessive pronoun - suffix for nouns, adjectives and passive participles:  3rd person masc
+H9024: 'הּ' | Personal possessive pronoun - suffix for nouns, adjectives and passive participles:  3rd person femi
+H9025: 'נוּ' | Personal possessive pronoun - suffix for nouns, adjectives and passive participles:  1st person plur
+H9026: 'כֶם' | Personal possessive pronoun - suffix for nouns, adjectives and passive participles:  2nd person masc
+H9027: 'כֶן' | Personal possessive pronoun - suffix for nouns, adjectives and passive participles:  2nd person femi
+H9028: 'הֶם' | Personal possessive pronoun - suffix for nouns, adjectives and passive participles:  3rd person masc
+H9029: 'הֶן' | Personal possessive pronoun - suffix for nouns, adjectives and passive participles:  3rd person femi
+H9030: 'נִי' | Personal object pronoun -  suffix for propositions and verbs without an object: 1st person singular
+H9031: 'ךָּ' | Personal object pronoun -  suffix for propositions and verbs without an object: 2nd person masculine
+H9032: 'ךְ' | Personal object pronoun -  suffix for propositions and verbs without an object: 2nd person feminine 
+H9033: 'וֹ' | Personal object pronoun -  suffix for propositions and verbs without an object: 3rd person masculine
+H9034: 'הָ' | Personal object pronoun -  suffix for propositions and verbs without an object: 3rd person feminine 
+H9035: 'נוּ' | Personal object pronoun -  suffix for propositions and verbs without an object: 1st person plural
+H9036: 'כֶם' | Personal object pronoun -  suffix for propositions and verbs without an object: 2nd person masculine
+H9037: 'כֶן' | Personal object pronoun -  suffix for propositions and verbs without an object: 2nd person feminine 
+H9038: 'הֶם' | Personal object pronoun -  suffix for propositions and verbs without an object: 3rd person masculine
+H9039: 'הֶן' | Personal object pronoun -  suffix for propositions and verbs without an object: 3rd person feminine 
+H9040: 'נִי' | Personal subject pronoun -  suffix for some adverbs and infinitives:  1st person singular
+H9041: 'ךָ' | Personal subject pronoun -  suffix for some adverbs and infinitives:  2nd person masculine singular
+H9042: 'ךְ' | Personal subject pronoun -  suffix for some adverbs and infinitives:  2nd person feminine singular
+H9043: 'נּוּ' | Personal subject pronoun -  suffix for some adverbs and infinitives:  3rd person masculine singular
+H9044: 'נָּה' | Personal subject pronoun -  suffix for some adverbs and infinitives:  3rd person feminine singular
+H9045: 'נוּ' | Personal subject pronoun -  suffix for some adverbs and infinitives:  1st person plural
+H9046: 'כוֹן' | Personal subject pronoun -  suffix for some adverbs and infinitives:  2nd person masculine plural
+H9047: 'כֶן' | Personal subject pronoun -  suffix for some adverbs and infinitives:  2nd person feminine  plural
+H9048: 'ם' | Personal subject pronoun -  suffix for some adverbs and infinitives:  3rd person masculine plural
+H9049: 'ינה' | Personal subject pronoun -  suffix for some adverbs and infinitives:  3rd person feminine plural
