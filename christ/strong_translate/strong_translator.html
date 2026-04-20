@@ -1577,6 +1577,7 @@ function toggleListPane() {
 
 // ══ START ════════════════════════════════════════════════════════
 function startApp() {
+  console.log('startApp: BEGIN');
   // Ukaž loading hned
   document.getElementById('setup').style.display = 'none';
   const app = document.getElementById('app');
@@ -1586,16 +1587,20 @@ function startApp() {
   loadingEl.style.cssText = 'display:flex;align-items:center;justify-content:center;height:100%;color:var(--txt3);font-family:JetBrains Mono,monospace;font-size:14px';
   loadingEl.textContent = '⏳ Načítám...';
   app.appendChild(loadingEl);
+  console.log('startApp: loading element created');
   
   // Deffered init
   requestAnimationFrame(() => {
+    console.log('startApp: requestAnimationFrame fired');
     setTimeout(() => {
+      console.log('startApp: setTimeout fired, calling initApp');
       initApp(loadingEl);
     }, 10);
   });
 }
 
 function initApp(loadingEl) {
+  console.log('initApp: BEGIN');
   currentBatchSize = parseInt(document.getElementById('batchSize').value);
   currentInterval  = parseInt(document.getElementById('interval').value);
 
@@ -1605,6 +1610,7 @@ function initApp(loadingEl) {
     if (saved) {
       const data = JSON.parse(saved);
       translated = data.translated || {};
+      console.log('initApp: loaded', Object.keys(translated).length, 'translations');
     }
    } catch(e) {
      logWarn('startApp', 'Failed to load saved progress, starting fresh', { error: e.message });
@@ -1613,16 +1619,22 @@ function initApp(loadingEl) {
 
   document.getElementById('app').style.display = 'flex';
   entryMap = new Map(entries.map(e => [e.key, e]));
+  console.log('initApp: entryMap created with', entries.length, 'entries');
   
   // Vytvoř index pro rychlé řazení podle původního pořadí
   window._entryIndexMap = new Map(entries.map((e, i) => [e.key, i]));
+  console.log('initApp: index map created');
 
   filteredKeys = entries.map(e => e.key);
+  console.log('initApp: calling initVirtualScroll');
   initVirtualScroll();
+  console.log('initApp: initVirtualScroll done');
   renderList();
+  console.log('initApp: renderList done');
   updateStats();
   initRunSelects();
   updateFailedCount();
+  console.log('initApp: all done');
     
   document.getElementById('resizeHandle').addEventListener('mousedown', startResize);
   document.getElementById('resizeHandle').addEventListener('touchstart', startResize, {passive: false});
