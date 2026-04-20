@@ -1862,12 +1862,7 @@ function renderVisible() {
   const startIndex = Math.max(0, Math.floor(scrollTop / ITEM_HEIGHT) - BUFFER_ITEMS);
   const endIndex = Math.min(total - 1, Math.ceil((scrollTop + viewportHeight) / ITEM_HEIGHT) + BUFFER_ITEMS);
   
-  // Debug: vypiš první viditelný klíč
-  if (startIndex < filteredKeys.length) {
-    const sampleKey = filteredKeys[startIndex];
-    const sampleT = translated[sampleKey];
-    console.log(`DEBUG: ${sampleKey} => vyznam: "${sampleT?.vyznam}", definice: "${sampleT?.definice}"`);
-  }
+  
   
   if (startIndex === lastRenderRange.start && endIndex === lastRenderRange.end) return;
   
@@ -1881,10 +1876,6 @@ function renderVisible() {
     const e = entries.find(x => x.key === key);
     const t = translated[key];
     const done = !!(t && t.vyznam && t.vyznam.trim() && t.vyznam !== '—');
-    // Debug log for first few items only
-    if (i <= 3) {
-      console.log(`done check: ${key} t=${t}, t.vyznam="${t?.vyznam}", trim="${t?.vyznam?.trim()}", equalsDash=${t?.vyznam === '—'}, done=${done}`);
-    }
     const isSelected = selectedKeys.has(key);
     
     const div = document.createElement('div');
