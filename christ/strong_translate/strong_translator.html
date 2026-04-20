@@ -1610,6 +1610,7 @@ updateFailedCount();
 function renderList() {
   // Update filtered keys based on current filter/sort/search
   filteredKeys = getFilteredEntries().map(e => e.key);
+  console.log(`renderList: filteredKeys.length=${filteredKeys.length}, sample=${filteredKeys.slice(0,5).join(',')}`);
   
   if (virtualInitialized) {
     // Force re-render of visible items
@@ -1874,6 +1875,7 @@ function renderVisible() {
     const e = entries.find(x => x.key === key);
     const t = translated[key];
     const done = t && t.vyznam && t.vyznam.trim().length > 0 && t.vyznam !== '—';
+    console.log(`renderVisible: ${key} -> t=${!!t}, vyznam=${t?.vyznam}, trim=${t?.vyznam?.trim()?.length}, done=${done}`);
     const isSelected = selectedKeys.has(key);
     
     const div = document.createElement('div');
@@ -1922,6 +1924,8 @@ function onVirtualScroll() {
 // ══ DETAIL ═══════════════════════════════════════════════════════
 function showDetail(key) {
   activeKey = key;
+  const t = translated[key];
+  console.log(`showDetail: ${key} -> t=${!!t}, vyznam=${t?.vyznam}, definice=${t?.definice}`);
   // Update active state v listu (virtuální render)
    if (virtualInitialized) {
      const idx = filteredKeys.indexOf(key);
