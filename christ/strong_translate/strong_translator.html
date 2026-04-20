@@ -1848,6 +1848,13 @@ function updatePhantomHeight() {
 function renderVisible() {
   if (!visibleContainer || !virtualInitialized) return;
   
+  // Debug: vypiš vzorové klíče
+  if (startIndex <= 5 && endIndex >= 5) {
+    const sampleKey = filteredKeys[5];
+    const sampleT = translated[sampleKey];
+    console.log(`DEBUG: ${sampleKey} => vyznam: "${sampleT?.vyznam}", definice: "${sampleT?.definice}"`);
+  }
+  
   const scroll = document.getElementById('listScroll');
   const scrollTop = scroll.scrollTop;
   const viewportHeight = scroll.clientHeight;
