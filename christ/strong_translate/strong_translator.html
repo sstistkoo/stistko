@@ -1181,7 +1181,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
 
   <script type="module">
   // ══ CORE MODULE IMPORT ═══════════════════════════════════════════
-  import core from './strong_translator_core.js';
+  import core from './strong_translator_core_new.js';
   // Re-export for use in this module
    const {
      parseTXT: parseTXTCore,
@@ -1948,9 +1948,166 @@ function renderDetail() {
   const e = entryMap.get(activeKey);
   if (!e) return;
   const t = translated[activeKey];
-  // Kontrola: má překlad s obsahem
   const hasTranslation = t && t.vyznam && t.vyznam.trim().length > 0;
   const pane = document.getElementById('detailPane');
+
+  // Detekce typu podle klíče
+  const num = parseInt(activeKey.slice(1));
+  const isGreek = activeKey.startsWith('G');
+  const isHebrew = activeKey.startsWith('H') && num < 9000;
+  const isGrammar = activeKey.startsWith('H') && num >= 9000;
+  
+  // Sestavení sekcí podle typu
+  let sections = '';
+  
+  if (isGreek) {
+    sections = `
+    <div class="orig-section">
+      <div class="label">Beta Code</div>
+      <div class="value">${escHtml(e.beta || '—')}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">Transliterace</div>
+      <div class="value">${escHtml(e.prepis || '—')}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">Gramatika</div>
+      <div class="value">${escHtml(e.tvaroslovi || '—')}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">Definice (EN)</div>
+      <div class="value">${escHtml(e.definice || e.def || '—')}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">English</div>
+      <div class="value">${escHtml(e.en || '—')}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">KJV překlady</div>
+      <div class="value">${escHtml(e.kjv || '—')}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">biblické užití (KJV)</div>
+      <div class="value">${escHtml(e.vyskyt || '—')}</div>
+    </div>`;
+  } else if (isHebrew) {
+    sections = `
+    <div class="orig-section">
+      <div class="label">Vokalizace</div>
+      <div class="value">${escHtml(e.vokalizace || '—')}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">Výslovnost</div>
+      <div class="value">${escHtml(e.vyslovnost || '—')}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">Etymologie</div>
+      <div class="value">${escHtml(e.etimol || e.orig || '—')}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">Transliterace</div>
+      <div class="value">${escHtml(e.prepis || '—')}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">Gramatika</div>
+      <div class="value">${escHtml(e.tvaroslovi || '—')}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">Definice (EN)</div>
+      <div class="value">${escHtml(e.definice || e.def || '—')}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">English</div>
+      <div class="value">${escHtml(e.en || '—')}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">KJV překlady</div>
+      <div class="value">${escHtml(e.kjv || '—')}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">Výskyt</div>
+      <div class="value">${escHtml(e.vyskyt || '—')}</div>
+    </div>`;
+  } else if (isHebrew) {
+    sections = `
+    <div class="orig-section">
+      <div class="label">Vokalizace</div>
+      <div class="value">${escHtml(e.vokalizace || '—')}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">Výslovnost</div>
+      <div class="value">${escHtml(e.vyslovnost || '—')}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">Etymologie</div>
+      <div class="value">${escHtml(e.etimol || e.orig || '—')}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">Transliterace</div>
+      <div class="value">${escHtml(e.prepis || '—')}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">Gramatika</div>
+      <div class="value">${escHtml(e.tvaroslovi || '—')}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">Definice (EN)</div>
+      <div class="value">${escHtml(e.definice || e.def || '—')}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">English</div>
+      <div class="value">${escHtml(e.en || '—')}</div>
+    </div>
+<div class="orig-section">
+      <div class="label">KJV překlady</div>
+      <div class="value">${escHtml(e.kjv || '—')}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">Výskyt</div>
+      <div class="value">${escHtml(e.vyskyt || '—')}</div>
+    </div>`;
+  } else if (isGrammar) {
+    sections = `
+    <div class="orig-section">
+      <div class="label">Vokalizace</div>
+      <div class="value">${escHtml(e.vokalizace || '—')}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">Kategorie</div>
+      <div class="value">${escHtml(e.kategorie || '—')}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">Význam (CZ)</div>
+      <div class="value">${escHtml(e.vyznamCz || '—')}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">Transliterace</div>
+      <div class="value">${escHtml(e.prepis || '—')}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">Gramatika</div>
+      <div class="value">${escHtml(e.tvaroslovi || '—')}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">Definice (EN)</div>
+      <div class="value">${escHtml(e.definice || e.def || '—')}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">English</div>
+      <div class="value">${escHtml(e.en || '—')}</div>
+    </div>`;
+  } else {
+    // Fallback pro starý formát
+    sections = `
+    <div class="orig-section">
+      <div class="label">Definice (EN)</div>
+      <div class="value">${escHtml(e.definice || e.def || '—')}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">KJV překlady</div>
+      <div class="value">${escHtml(e.kjv || '—')}</div>
+    </div>`;
+  }
 
   pane.innerHTML = `
     <div class="entry-header">
@@ -1959,18 +2116,7 @@ function renderDetail() {
       <div class="entry-status ${hasTranslation ? 'done' : ''}">${hasTranslation ? '✓ Přeloženo' : 'Čeká'}</div>
     </div>
 
-    <div class="orig-section">
-      <div class="label">Definice (EN)</div>
-      <div class="value">${escHtml(e.def)}</div>
-    </div>
-    <div class="orig-section">
-      <div class="label">KJV překlady</div>
-      <div class="value">${escHtml(e.kjv)}</div>
-    </div>
-    <div class="orig-section">
-      <div class="label">Původ / Etymologie</div>
-      <div class="value">${escHtml(e.orig)}</div>
-    </div>
+    ${sections}
 
     ${!hasTranslation ? `<button class="translate-btn" onclick="translateSingle('${e.key}')">⚡ Přeložit toto heslo</button>` : ''}
 
@@ -2257,9 +2403,13 @@ ${keys.map(k => {
 // ══ BUILD PROMPT MESSAGES ═══════════════════════════════════════
 // Uses SYSTEM_MESSAGE and DEFAULT_PROMPT imported from core module
 function buildPromptMessages(batch) {
-  const items = batch.map(e =>
-    `${e.key} | ${e.greek}\nDEF: ${e.def}\nKJV: ${e.kjv}\nORIG: ${e.orig}`
-  ).join('\n\n');
+  const items = batch.map(e => {
+    const def = e.definice || e.def || '';
+    const en = e.en || '';
+    const kjv = e.kjv || '';
+    const orig = e.orig || e.etimol || '';
+    return `${e.key} | ${e.greek}\nEN: ${en}\nDEF: ${def}\nKJV: ${kjv}\nORIG: ${orig}`;
+  }).join('\n\n');
 
   const tmpl = document.getElementById('promptEditor')?.value || DEFAULT_PROMPT;
   const userContent = tmpl.replace('{HESLA}', 'HESLA:\n' + items);
