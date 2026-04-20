@@ -2051,6 +2051,10 @@ function renderDetail() {
       <div class="value">${escHtml(e.tvaroslovi || '—')}</div>
     </div>
     <div class="orig-section">
+      <div class="label">TWOT</div>
+      <div class="value">${escHtml(e.twot || '—')}</div>
+    </div>
+    <div class="orig-section">
       <div class="label">Definice (EN)</div>
       <div class="value">${escHtml(e.definice || e.def || '—')}</div>
     </div>
@@ -2058,13 +2062,25 @@ function renderDetail() {
       <div class="label">English</div>
       <div class="value">${escHtml(e.en || '—')}</div>
     </div>
-<div class="orig-section">
+    <div class="orig-section">
       <div class="label">KJV překlady</div>
       <div class="value">${escHtml(e.kjv || '—')}</div>
     </div>
     <div class="orig-section">
       <div class="label">Výskyt</div>
       <div class="value">${escHtml(e.vyskyt || '—')}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">Překlad</div>
+      <div class="value">${escHtml(e.preklad || '—')}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">Vysvětlení</div>
+      <div class="value">${escHtml(e.vysvetleni || '—')}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">Řecké refs</div>
+      <div class="value">${escHtml(e.greekRefs || '—')}</div>
     </div>`;
   } else if (isGrammar) {
     sections = `
