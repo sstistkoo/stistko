@@ -37,6 +37,7 @@ export function parseTXT(text) {
     const fieldName = lineTrim.slice(0, colonIdx).trim();
     const fieldValue = lineTrim.slice(colonIdx + 1).trim();
     
+    // Greek fields
     if (fieldName === 'BETA') current.beta = fieldValue;
     else if (fieldName === 'Prepis') current.prepis = fieldValue;
     else if (fieldName === 'Tvaroslovi') current.tvaroslovi = fieldValue;
@@ -45,9 +46,16 @@ export function parseTXT(text) {
     else if (fieldName === 'En Definition') current.enDef = fieldValue;
     else if (fieldName === 'KJV Významy') current.kjv = fieldValue;
     else if (fieldName === 'Cz') current.cz = fieldValue;
+    // Hebrew fields
     else if (fieldName === 'Vokalizace') current.vokalizace = fieldValue;
     else if (fieldName === 'Vyslovnost') current.vyslovnost = fieldValue;
     else if (fieldName === 'Etymol') current.etymol = fieldValue;
+    else if (fieldName === 'TWOT') current.twot = fieldValue;
+    else if (fieldName === 'Poznamky') current.poznamky = fieldValue;
+    else if (fieldName === 'Překlad') current.preklad = fieldValue;
+    else if (fieldName === 'Vysvětlení') current.vysvetleni = fieldValue;
+    else if (fieldName === 'Řecké refs') current.greekRefs = fieldValue;
+    // Grammar fields
     else if (fieldName === 'Kategorie') current.kategorie = fieldValue;
     else if (fieldName === 'Vyznam_Cz') current.vyznamCz = fieldValue;
   }
@@ -62,24 +70,23 @@ export function parseTXT(text) {
 
 function extractVyskyt(defText) {
   if (!defText) return '';
-  // Match references like [Rev.13:10], [1Pe.2:17], etc.
   const matches = defText.match(/\[[\w]+\.?\d*:\d+\]/g);
   if (!matches) return '';
-  const result = matches.map(m => m.replace(/[\[\]]/g, '')).join(', ');
-  console.log('VYSKYT debug: ' + result);
-  return result;
+  return matches.map(m => m.replace(/[\[\]]/g, '')).join(', ');
 }
 
 function finishEntry(e) {
-  const base = { key: e.key, greek: e.greek, definice: e.definice || '', orig: e.tvaroslovi || '' };
+  const base = { key: e.key, greek: e.greek, definice: e.definice || '' };
   const vyskyt = extractVyskyt(e.definice);
+  const tvaroslovi = e.tvaroslovi || '';
   
   if (e.type === 'greek') {
-    return { ...base, en: e.en || '', enDef: e.enDef || '', kjv: e.cz || e.kjv || '', beta: e.beta || '', prepis: e.prepis || '', vyskyt: vyskyt };
+    return { ...base, orig: tvaroslovi, en: e.en || '', enDef: e.enDef || '', kjv: e.cz || e.kjv || '', beta: e.beta || '', prepis: e.prepis || '', tvaroslovi: tvaroslovi, vyskyt: vyskyt };
   } else if (e.type === 'hebrew') {
-    return { ...base, en: e.en || '', enDef: e.enDef || '', kjv: e.cz || e.kjv || '', prepis: e.prepis || '', vokalizace: e.vokalizace || '', vyslovnost: e.vyslovnost || '', etymol: e.etymol || '', vyskyt: vyskyt };
+    return { ...base, orig: tvaroslovi, en: e.en || '', enDef: e.enDef || '', kjv: e.cz || e.kjv || '', beta: '', prepis: e.prepis || '', tvaroslovi: tvaroslovi, vokalizace: e.vokalizace || '', vyslovnost: e.vyslovnost || '', etymol: e.etymol || '', twot: e.twot || '', poznamky: e.poznamky || '', preklad: e.preklad || '', vysvetleni: e.vysvetleni || '', greekRefs: e.greekRefs || '', vyskyt: vyskyt };
   } else {
-    return { ...base, en: e.en || '', kjv: e.vyznamCz || e.cz || '', prepis: e.prepis || '', vokalizace: e.vokalizace || '', kategorie: e.kategorie || '' };
+    // Grammar
+    return { ...base, orig: tvaroslovi, en: e.en || '', enDef: e.enDef || '', kjv: e.vyznamCz || e.cz || '', beta: '', prepis: e.prepis || '', tvaroslovi: tvaroslovi, vokalizace: e.vokalizace || '', kategorie: e.kategorie || '', vyznamCz: e.vyznamCz || '' };
   }
 }
 
