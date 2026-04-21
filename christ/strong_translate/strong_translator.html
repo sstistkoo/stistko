@@ -398,8 +398,6 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
 }
 .sbtn:hover { background: var(--bg4); border-color: var(--acc); }
 
-.list-scroll { flex: 1; overflow-y: auto; }
-
 .list-item {
   display: grid;
   grid-template-columns: 24px 50px 1fr 20px;
@@ -831,39 +829,158 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
  .mobl-btn.cancel { background: var(--red); border-color: var(--red); color: var(--txt); }
  .mobl-btn.cancel:hover { background: #c05050; }
 
- /* Settings Modal */
- #settingsModal {
-   position: fixed;
-   top: 0; left: 0; right: 0; bottom: 0;
-   background: rgba(0,0,0,0.8);
-   display: none;
-   align-items: center;
-   justify-content: center;
-   z-index: 1001;
- }
- #settingsModal.show { display: flex; }
- .mobl-set-row {
-   margin-bottom: 12px;
- }
- .mobl-set-row label {
-   display: block;
-   font-family: 'JetBrains Mono', monospace;
-   font-size: 10px;
-   color: var(--txt3);
-   margin-bottom: 4px;
-   text-transform: uppercase;
-   letter-spacing: .1em;
- }
- .mobl-set-row select {
-   width: 100%;
-   padding: 10px;
-   background: var(--bg3);
-   border: 1px solid var(--brd);
-   border-radius: 4px;
-   color: var(--txt);
-   font-family: 'JetBrains Mono', monospace;
-   font-size: 12px;
- }
+  /* Settings Modal */
+  #settingsModal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.8);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1001;
+  }
+  #settingsModal.show { display: flex; }
+  .mobl-set-row {
+    margin-bottom: 12px;
+  }
+  .mobl-set-row label {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--txt3);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+  }
+  .mobl-set-row select {
+    width: 100%;
+    padding: 10px;
+    background: var(--bg3);
+    border: 1px solid var(--brd);
+    border-radius: 4px;
+    color: var(--txt);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+  }
+
+  /* Prompt Library Modal */
+  #promptLibraryModal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1003;
+  }
+  #promptLibraryModal.show { display: flex; }
+  .prompt-modal-box {
+    background: var(--bg2);
+    border: 1px solid var(--brd);
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 700px;
+    width: 90%;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+  }
+  .prompt-modal-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--acc);
+    margin-bottom: 16px;
+    letter-spacing: .1em;
+  }
+  .prompt-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .prompt-tab {
+    padding: 6px 12px;
+    background: var(--bg3);
+    border: 1px solid var(--brd);
+    border-radius: 4px;
+    color: var(--txt2);
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    transition: all .2s;
+  }
+  .prompt-tab:hover { border-color: var(--acc); color: var(--acc); }
+  .prompt-tab.active { background: var(--acc2); border-color: var(--acc); color: var(--acc3); }
+  .prompt-list {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 12px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 8px;
+    align-content: start;
+  }
+  .prompt-item {
+    background: var(--bg3);
+    border: 1px solid var(--brd);
+    border-radius: 4px;
+    padding: 10px;
+    cursor: pointer;
+    transition: all .2s;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .prompt-item:hover { border-color: var(--acc); background: var(--bg4); }
+  .prompt-item.selected { border-color: var(--acc); box-shadow: 0 0 0 2px rgba(212, 168, 72, 0.3); }
+  .prompt-item-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--acc);
+    font-weight: 600;
+  }
+  .prompt-item-desc {
+    font-size: 10px;
+    color: var(--txt3);
+    line-height: 1.4;
+  }
+  .prompt-preview {
+    background: var(--bg);
+    border: 1px solid var(--brd);
+    border-radius: 4px;
+    padding: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--txt2);
+    max-height: 120px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+  .prompt-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .prompt-btn {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: 3px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    cursor: pointer;
+    text-align: center;
+    min-width: 80px;
+  }
+  .prompt-btn.ok { background: var(--acc2); border: 1px solid var(--acc); color: var(--acc3); }
+  .prompt-btn.ok:hover { background: var(--acc); color: var(--bg); }
+  .prompt-btn.cancel { background: var(--bg3); border: 1px solid var(--brd); color: var(--txt2); }
+  .prompt-btn.cancel:hover { border-color: var(--txt3); }
+  .prompt-btn.ai { background: var(--blue); border: 1px solid var(--blue); color: var(--txt); }
+  .prompt-btn.ai:hover { background: #5a7a9a; }
+  .prompt-btn.lang { background: var(--grn); border: 1px solid var(--grn); color: var(--bg); }
+  .prompt-btn.lang:hover { background: #4a8a5c; }
 
 /* Virtual scrolling - merged with base list-scroll */
 .list-scroll {
@@ -970,24 +1087,17 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
     </div>
   </div>
 
-  <div class="row">
-    <label style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-size:12px" onclick="document.getElementById('promptSection').toggleAttribute('open')">
-      📝 Prompt
-    </label>
-    <details id="promptSection" style="width:100%;margin-top:10px">
-      <summary style="cursor:pointer;color:var(--txt2);font-size:12px;padding:6px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;list-style:none">📝 Prompt ▼</summary>
-      <textarea id="promptEditor" rows="8" style="width:100%;background:var(--bg3);border:1px solid var(--brd);
-        border-radius:3px;padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;
-        color:var(--txt2);resize:vertical;outline:none;line-height:1.6;" aria-label="Prompt pro AI překladač"></textarea>
-      <div style="display:flex;gap:8px;margin-top:6px">
-        <button onclick="resetPrompt()" style="font-family:'JetBrains Mono',monospace;font-size:10px;
-          padding:5px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:3px;
-          color:var(--txt3);cursor:pointer;" aria-label="Obnovit výchozí prompt">↺ Výchozí</button>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt3);
-          align-self:center">Proměnné: {HESLA}</span>
-      </div>
-    </details>
-  </div>
+   <div class="row">
+     <label style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-size:12px" onclick="showPromptLibraryModal()" title="Otevřít knihovnu promptů">
+       📝 Prompt
+     </label>
+     <span id="promptStatus" style="font-family:'JetBrains Mono',monospace;font-size:11px;padding:4px 8px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;display:inline-flex;align-items:center;gap:6px;margin-left:8px" title="Stav promptu">
+       <span id="promptMode" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ylw)"></span>
+       <span id="promptName">–</span>
+     </span>
+     <button onclick="showPromptLibraryModal()" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-size:12px;margin-left:8px" title="Otevřít knihovnu promptů">📚 Knihovna</button>
+     <textarea id="promptEditor" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" aria-hidden="true"></textarea>
+   </div>
 
 </div>
 
@@ -1197,22 +1307,118 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
     </div>
   </div>
 
-  <!-- Limits Modal -->
-  <div id="limitsModal">
-    <div class="limits-modal-box">
-      <div class="limits-title">📊 Limity providera</div>
-      <div class="limits-provider" id="limitsProviderInfo">Provider: —</div>
-      <div id="limitsContent">
-        <div class="limits-loading">Načítám...</div>
+   <!-- Limits Modal -->
+   <div id="limitsModal">
+     <div class="limits-modal-box">
+       <div class="limits-title">📊 Limity providera</div>
+       <div class="limits-provider" id="limitsProviderInfo">Provider: —</div>
+       <div id="limitsContent">
+         <div class="limits-loading">Načítám...</div>
+       </div>
+       <div class="limits-note" id="limitsNote" style="display:none">
+         ℹ️ <span id="limitsNoteText"></span>
+       </div>
+       <button class="modal-btn cancel" onclick="closeLimitsModal()" style="margin-top:14px;width:100%">✕ Zavřít</button>
+     </div>
+   </div>
+
+  <!-- Prompt Library Modal -->
+  <div id="promptLibraryModal">
+    <div class="prompt-modal-box">
+      <div class="prompt-modal-title">📚 Knihovna promptů</div>
+      
+      <div class="prompt-tabs" id="promptTabs">
+        <div class="prompt-tab active" data-category="default">Výchozí</div>
+        <div class="prompt-tab" data-category="detailed">Detailní</div>
+        <div class="prompt-tab" data-category="concise">Stručné</div>
+        <div class="prompt-tab" data-category="literal">Doslovné</div>
+        <div class="prompt-tab" data-category="custom">Vlastní</div>
       </div>
-      <div class="limits-note" id="limitsNote" style="display:none">
-        ℹ️ <span id="limitsNoteText"></span>
+
+      <div class="prompt-list" id="promptList">
+        <!-- Prompts will be populated by JavaScript -->
       </div>
-      <button class="modal-btn cancel" onclick="closeLimitsModal()" style="margin-top:14px;width:100%">✕ Zavřít</button>
+
+      <div class="prompt-preview" id="promptPreview">
+        Vyberte prompt z knihovny pro náhled...
+      </div>
+
+      <div style="margin-top:10px">
+        <textarea id="promptLibraryEditor" rows="6" style="width:100%;background:var(--bg3);border:1px solid var(--brd);border-radius:3px;padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt2);resize:vertical;outline:none;line-height:1.6;" placeholder="Uprav prompt..."></textarea>
+      </div>
+
+       <div class="prompt-actions">
+         <button class="prompt-btn ai" onclick="showPromptAIModal()">🤖 AI</button>
+         <button class="prompt-btn lang" onclick="showPromptLangModal()">🌐 Jazyk</button>
+         <button class="prompt-btn" onclick="showExternalLibrary()" style="background:var(--blue);border:1px solid var(--blue);color:var(--txt)">📚 Knihovna</button>
+         <button class="prompt-btn cancel" onclick="closePromptLibraryModal()">✕ Zavřít</button>
+         <button class="prompt-btn ok" onclick="applySelectedPrompt()">✓ Uložit a použít</button>
+       </div>
     </div>
   </div>
 
-  <script type="module">
+   <!-- AI Settings Sub-modal -->
+   <div id="promptAIModal" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);display:none;align-items:center;justify-content:center;z-index:1004;">
+     <div class="prompt-modal-box" style="max-width:400px;">
+       <div class="prompt-modal-title">🤖 AI nastavení</div>
+       <div class="mobl-set-row">
+         <label>Temperature (kreativita)</label>
+         <select id="aiTemperature" style="width:100%;padding:10px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:12px;">
+           <option value="0.1">0.1 – velmi přesný</option>
+           <option value="0.3" selected>0.3 – balanc</option>
+           <option value="0.5">0.5 – střední</option>
+           <option value="0.7">0.7 – kreativní</option>
+           <option value="1.0">1.0 – velmi kreativní</option>
+         </select>
+       </div>
+       <div class="mobl-set-row">
+         <label>Max tokenů</label>
+         <select id="aiMaxTokens" style="width:100%;padding:10px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:12px;">
+           <option value="1000">1000</option>
+           <option value="2000" selected>2000</option>
+           <option value="3000">3000</option>
+           <option value="4000">4000</option>
+         </select>
+       </div>
+       <div class="prompt-actions">
+         <button class="prompt-btn cancel" onclick="closePromptAIModal()">✕ Zavřít</button>
+         <button class="prompt-btn ok" onclick="saveAISettings()">✓ Uložit</button>
+       </div>
+     </div>
+   </div>
+
+   <!-- Language Settings Sub-modal -->
+   <div id="promptLangModal" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);display:none;align-items:center;justify-content:center;z-index:1004;">
+     <div class="prompt-modal-box" style="max-width:400px;">
+       <div class="prompt-modal-title">🌐 Cílový jazyk</div>
+       <div class="mobl-set-row">
+         <label>Překlad do</label>
+         <select id="targetLanguage" style="width:100%;padding:10px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:12px;">
+           <option value="cs" selected>Čeština</option>
+           <option value="en">English</option>
+           <option value="de">Deutsch</option>
+           <option value="fr">Français</option>
+           <option value="es">Español</option>
+           <option value="it">Italiano</option>
+           <option value="pl">Polski</option>
+           <option value="sk">Slovenčina</option>
+         </select>
+       </div>
+        <div class="mobl-set-row">
+          <label>Zdrojový jazyk</label>
+          <select id="sourceLanguage" style="width:100%;padding:10px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:12px;">
+            <option value="gr" selected>Řečtina (Strong G)</option>
+            <option value="he">Hebrejština (Strong H)</option>
+          </select>
+        </div>
+       <div class="prompt-actions">
+         <button class="prompt-btn cancel" onclick="closePromptLangModal()">✕ Zavřít</button>
+         <button class="prompt-btn ok" onclick="saveLangSettings()">✓ Uložit</button>
+       </div>
+    </div>
+  </div>
+
+   <script type="module">
   // ══ CORE MODULE IMPORT ═══════════════════════════════════════════
   import core from './strong_translator_core_new.js';
   // Re-export for use in this module
@@ -1227,9 +1433,50 @@ const {
       DEFAULT_PROMPT
     } = core;
     
-    // Use core functions for prompt building
-    const buildPromptMessages = buildPromptMessagesCore;
-    const buildRetryMessages = buildRetryMessagesCore;
+   // Use core functions, but override buildPromptMessages to support custom prompts
+   // buildPromptMessagesCore is already destructured above
+   const buildRetryMessages = buildRetryMessagesCore;
+   
+   // Custom buildPromptMessages that reads from localStorage
+    function buildPromptMessages(batch) {
+      const items = batch.map(e => {
+        const def = e.definice || e.def || '';
+        return `${e.key} | ${e.greek}\nDEF: ${def}`;
+      }).join('\n\n');
+      
+      const userPromptTemplate = localStorage.getItem('strong_prompt') || core.DEFAULT_PROMPT;
+      
+      // Language substitution
+      const targetLang = localStorage.getItem('strong_target_lang') || 'cs';
+      const sourceLang = localStorage.getItem('strong_source_lang') || 'gr';
+      const langNames = {
+        cs: 'češtiny',
+        en: 'angličtiny',
+        de: 'němčiny',
+        fr: 'francouzštiny',
+        es: 'španělštiny',
+        it: 'italštiny',
+        pl: 'polštiny',
+        sk: 'slovenštiny',
+        gr: 'řečtiny',
+        he: 'hebrejštiny'
+      };
+      const targetName = langNames[targetLang] || 'češtiny';
+      const sourceName = langNames[sourceLang] || 'řečtiny';
+      
+      let processedPrompt = userPromptTemplate
+        .replace(/{TARGET_LANG}/g, targetName)
+        .replace(/{SOURCE_LANG}/g, sourceName);
+      
+      const userContent = processedPrompt.includes('{HESLA}') 
+        ? processedPrompt.replace(/{HESLA}/g, items)
+        : processedPrompt + '\n\n' + items;
+      
+      return [
+        { role: 'system', content: core.SYSTEM_MESSAGE },
+        { role: 'user', content: userContent }
+      ];
+    }
 
   // ══ STORAGE KEY ══════════════════════════════════════════════════
   const STORE_KEY = 'strong_gr_cz_v2';
@@ -1283,8 +1530,15 @@ const {
   let totalTokens = { in: 0, out: 0, total: 0 };
 
   // Virtual scrolling
-  const ITEM_HEIGHT = 32;
-  const BUFFER_ITEMS = 10;
+  const CONFIG = {
+    ITEM_HEIGHT: 32,
+    BUFFER_ITEMS: 5,
+    LOG_MAX_ENTRIES: 300,
+    TOAST_DURATION: 3500,
+    API_TIMEOUT: 120000
+  };
+  const ITEM_HEIGHT = CONFIG.ITEM_HEIGHT;
+  const BUFFER_ITEMS = CONFIG.BUFFER_ITEMS;
   let virtualInitialized = false;
   let phantomSpacer = null;
   let visibleContainer = null;
@@ -2572,6 +2826,7 @@ ${keys.map(k => {
 function resetPrompt() {
   document.getElementById('promptEditor').value = DEFAULT_PROMPT;
   localStorage.setItem('strong_prompt', DEFAULT_PROMPT);
+  updatePromptStatusIndicator();
 }
 
 
@@ -2642,14 +2897,19 @@ async function callAIWithRetry(provider, apiKey, model, messages) {
 async function callOnce(provider, apiKey, model, messages) {
   apiKey = apiKey.trim();
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 120000);
+  const timeout = setTimeout(() => controller.abort(), CONFIG.API_TIMEOUT);
+  
+  // Load AI settings from localStorage
+  const temperature = parseFloat(localStorage.getItem('strong_ai_temperature')) || 0.3;
+  const maxTokens = parseInt(localStorage.getItem('strong_ai_max_tokens')) || 2500;
+  
   try {
     if (provider === 'groq') {
     const r = await fetch('https://corsproxy.io/?https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: { 'Authorization': 'Bearer ' + apiKey, 'Content-Type': 'application/json' },
       body: JSON.stringify({ model, messages,
-        temperature: 0.3, max_tokens: 2500 }),
+        temperature: temperature, max_tokens: maxTokens }),
       signal: controller.signal
     });
     const d = await r.json();
@@ -2675,16 +2935,16 @@ async function callOnce(provider, apiKey, model, messages) {
     }
     return { content, usage: d.usage };
 
-  } else if (provider === 'gemini') {
-    const userContent = messages.find(m => m.role === 'user')?.content || '';
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-    const r = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ contents: [{ parts: [{ text: userContent }] }],
-        systemInstruction: { parts: [{ text: messages.find(m => m.role === 'system')?.content || '' }] },
-        generationConfig: { temperature: 0.3, maxOutputTokens: 2500 } })
-    });
+   } else if (provider === 'gemini') {
+     const userContent = messages.find(m => m.role === 'user')?.content || '';
+     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+     const r = await fetch(url, {
+       method: 'POST',
+       headers: { 'Content-Type': 'application/json' },
+       body: JSON.stringify({ contents: [{ parts: [{ text: userContent }] }],
+         systemInstruction: { parts: [{ text: messages.find(m => m.role === 'system')?.content || '' }] },
+         generationConfig: { temperature: temperature, maxOutputTokens: maxTokens } })
+     });
     const d = await r.json();
      if (!r.ok) {
        if (d.error?.status === 'RESOURCE_EXHAUSTED') {
@@ -2700,18 +2960,18 @@ async function callOnce(provider, apiKey, model, messages) {
       const content = d.candidates[0].content.parts[0].text;
       return { content, usage: d.usageMetadata };
 
-    } else if (provider === 'openrouter') {
-     const r = await fetch('https://corsproxy.io/?https://openrouter.ai/api/v1/chat/completions', {
-       method: 'POST',
-       headers: { 
-         'Authorization': 'Bearer ' + apiKey, 
-         'Content-Type': 'application/json',
-         'HTTP-Referer': 'https://strong-bible-gr-cz.local',
-         'X-Title': 'Strong GR-CZ Translator'
-       },
-       body: JSON.stringify({ model, messages,
-         temperature: 0.3, max_tokens: 2500 })
-     });
+     } else if (provider === 'openrouter') {
+      const r = await fetch('https://corsproxy.io/?https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: { 
+          'Authorization': 'Bearer ' + apiKey, 
+          'Content-Type': 'application/json',
+          'HTTP-Referer': 'https://strong-bible-gr-cz.local',
+          'X-Title': 'Strong GR-CZ Translator'
+        },
+        body: JSON.stringify({ model, messages,
+          temperature: temperature, max_tokens: maxTokens })
+      });
      const d = await r.json();
      if (!r.ok) throw new Error(d.error?.message || String(r.status));
      validateAPIResponse(d, 'openrouter');
@@ -2898,28 +3158,36 @@ function saveApiKey() {
 
 function loadSavedSettings() {
   const prov = localStorage.getItem('strong_provider') || 'groq';
-  document.getElementById('provider').value = prov;
-  document.getElementById('provider')._lastProvider = prov;
+  const providerEl = document.getElementById('provider');
+  if (providerEl) {
+    providerEl.value = prov;
+    providerEl._lastProvider = prov;
+  }
   
   const k = localStorage.getItem('strong_apikey_' + prov);
-  document.getElementById('apiKey').value = k || '';
+  const apiKeyEl = document.getElementById('apiKey');
+  if (apiKeyEl) apiKeyEl.value = k || '';
   
   const p = localStorage.getItem('strong_prompt') || DEFAULT_PROMPT;
-  document.getElementById('promptEditor').value = p;
+  const promptEditor = document.getElementById('promptEditor');
+  if (promptEditor) {
+    promptEditor.value = p;
+    promptEditor.addEventListener('input', () => {
+      localStorage.setItem('strong_prompt', promptEditor.value);
+    });
+  }
   
-  // Uložit prompt při každé změně
-  document.getElementById('promptEditor').addEventListener('input', () => {
-    localStorage.setItem('strong_prompt', document.getElementById('promptEditor').value);
-  });
-  // Uložit provider/model - ale až po onProviderChange pro OpenRouter (jinak select nemá options)
-  // Inicializace model dropdownu (jen jednou)
-  onProviderChange();
-  // Kontrola defaultního souboru
+  const modelSelect = document.getElementById('model');
+  if (modelSelect) {
+    onProviderChange();
+    modelSelect.addEventListener('change', () => {
+      localStorage.setItem('strong_model', modelSelect.value);
+    });
+  }
+  
   checkDefaultFile();
-  document.getElementById('model').addEventListener('change', () => {
-    localStorage.setItem('strong_model', document.getElementById('model').value);
-  });
   updateFailedCount();
+  updatePromptStatusIndicator();
 }
 
 // Volej po načtení stránky
@@ -2963,8 +3231,8 @@ function logEntry(keys, rawResponse) {
   const countEl = document.getElementById('logCount');
   if (countEl) countEl.textContent = `${cnt} záznamů`;
 
-  // Limit 300
-  while (scroll.children.length > 300) scroll.removeChild(scroll.lastChild);
+  // Limit entries in log
+  while (scroll.children.length > CONFIG.LOG_MAX_ENTRIES) scroll.removeChild(scroll.lastChild);
 }
 
 function clearLog() {
@@ -3426,11 +3694,434 @@ function getOpenRouterRateLimits(keyData) {
   rows.push(`<div class="limits-row"><span class="limits-label">Placené modely</span><span class="limits-value ok">bez limitu</span></div>`);
   
   return rows.join('');
+ }
+
+// ══ PROMPT LIBRARY ═══════════════════════════════════════════════
+// Czech labels for prompt category tabs
+const CATEGORY_LABELS = {
+  default: 'Systémový',
+  detailed: 'Detailní',
+  concise: 'Stručné',
+  literal: 'Doslovné',
+  custom: 'Vlastní',
+  library: 'Knihovna'
+};
+
+const PROMPT_LIBRARY = {
+  default: [
+    {
+      name: 'Systémový',
+      desc: 'Původní systémový prompt',
+      text: DEFAULT_PROMPT
+    }
+  ],
+  detailed: [
+    {
+      name: 'Vysoce detailní',
+      desc: 'Hluboký překlad s all etymology',
+      text: `Jsi odborník na biblické řecký a hebrejský jazyk. Přelož very carefully.
+
+HESLA:
+{HESLA}
+
+Pro každé heslo poskytni:
+1. Český význam (přesný, s考dosť)
+2. Podrobná definice s gramatickými detaily
+3. Etmologii a korenn slova
+4. Všechny KJV překlady s kontextem
+5. Biblické užití s referencemi (Strong čísla)
+
+Formát výstupu:
+###G[číslo]###
+VÝZNAM: [přesný překlad]
+DEFINICE: [podrobný, gramatický popis]
+ETYMOLOGIE: [kořen, slovní vývin]
+KJV: [všechny překlady]
+VYSKYT: [umelecké reference]
+`
+    }
+  ],
+  concise: [
+    {
+      name: 'Stručné',
+      desc: 'Krátký a jasný překlad',
+      text: `Přelož do češtiny:
+
+{HESLA}
+
+Formát:
+###G[číslo]###
+VÝZNAM: [krátký význam]
+DEFINICE: [stručná definice]
+KJV: [překlady]
+`
+    }
+  ],
+  literal: [
+    {
+      name: 'Doslovné',
+      desc: 'Slovo po slově překlad',
+      text: `Přelož doslovně, slovo po slově:
+
+{HESLA}
+
+Vrať:
+###G[číslo]###
+VIZ: [doslovný překlad]
+DEF: [lexikální definice]
+KJV: [KJV translation]
+`
+    }
+  ],
+  custom: [
+    {
+      name: 'Moje vlastní',
+      desc: 'Uložený vlastní prompt',
+      text: localStorage.getItem('strong_custom_prompt') || ''
+    }
+  ],
+  library: [
+    {
+      name: 'Přesný',
+      desc: 'Vysoká přesnost a věrnost',
+      text: `Jsi odborník na biblické řecký a hebrejštinu. Přelož velmi přesně a věrně.
+
+HESLA:
+{HESLA}
+
+Vrať strictně ve formátu:
+###G[číslo]###
+VÝZNAM: [přesný český překlad]
+DEFINICE: [podrobný popis]
+KJV: [KJV překlady]
+
+Nepřidávej žádné vysvětlení, pouze data.`
+    },
+    {
+      name: 'Teologický',
+      desc: 'S důrazem na teologický kontext',
+      text: `Přelož s hlubokým porozuměním teologického kontextu.
+
+{HESLA}
+
+Pro každé heslo zahrň:
+- Význam v kontextu Bible
+- Teologické implikace
+- KJV překlady
+- Reference
+
+Formát:
+###G[číslo]###
+VÝZNAM: [český překlad]
+DEFINICE: [teologický popis]
+KJV: [překlady]
+KONTEXT: [biblické využití]`
+    },
+    {
+      name: 'Rychlý',
+      desc: 'Stručný a rychlý',
+      text: `Rychlý překlad do češtiny.
+
+{HESLA}
+
+Formát:
+###G[číslo]###
+VÝZNAM: [věta]
+DEF: [věta]
+KJV: [věta]`
+    }
+  ]
+};
+
+let selectedPromptCategory = 'default';
+let selectedPromptIndex = 0;
+
+function showPromptLibraryModal() {
+  const modal = document.getElementById('promptLibraryModal');
+  const tabs = document.getElementById('promptTabs');
+  const list = document.getElementById('promptList');
+  const editor = document.getElementById('promptLibraryEditor');
+  
+  // Load current saved prompt
+  const savedPrompt = localStorage.getItem('strong_prompt') || DEFAULT_PROMPT;
+  
+  // Initialize library with saved custom prompt if exists
+  const customSaved = localStorage.getItem('strong_custom_prompt');
+  if (customSaved) {
+    PROMPT_LIBRARY.custom = [{
+      name: 'Moje vlastní',
+      desc: 'Uložený vlastní prompt',
+      text: customSaved
+    }];
+  }
+  
+  // Reset selection to default
+  selectedPromptCategory = 'default';
+  selectedPromptIndex = 0;
+  
+   // Populate tabs with Czech labels
+   tabs.innerHTML = Object.keys(PROMPT_LIBRARY).map(cat => 
+     `<div class="prompt-tab ${cat === 'default' ? 'active' : ''}" data-category="${cat}">${CATEGORY_LABELS[cat] || cat}</div>`
+   ).join('');
+  
+  // Add click handlers to tabs
+  tabs.querySelectorAll('.prompt-tab').forEach(tab => {
+    tab.onclick = () => {
+      tabs.querySelectorAll('.prompt-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      selectedPromptCategory = tab.dataset.category;
+      selectedPromptIndex = 0;
+      renderPromptList();
+      renderPromptPreview();
+    };
+  });
+  
+  // Set editor to current saved prompt
+  editor.value = savedPrompt;
+  
+  // Try to find matching preset to pre-select it
+  matchPromptToPreset(savedPrompt);
+  
+  // Initial render
+  renderPromptList();
+  renderPromptPreview();
+  
+  // Show modal
+  modal.classList.add('show');
+  
+  // Close on backdrop click
+  modal.onclick = (e) => {
+    if (e.target === modal) closePromptLibraryModal();
+  };
 }
 
-// Make functions globally accessible for onclick handlers
-window.showLimitsModal = showLimitsModal;
-window.closeLimitsModal = closeLimitsModal;
+function matchPromptToPreset(promptText) {
+  // Try to find which preset the current saved prompt matches
+  let foundMatch = false;
+  for (const [category, prompts] of Object.entries(PROMPT_LIBRARY)) {
+    for (let i = 0; i < prompts.length; i++) {
+      if (prompts[i].text === promptText) {
+        selectedPromptCategory = category;
+        selectedPromptIndex = i;
+        foundMatch = true;
+        break;
+      }
+    }
+    if (foundMatch) break;
+  }
+  // If no match found, switch to custom tab
+  if (!foundMatch) {
+    selectedPromptCategory = 'custom';
+    selectedPromptIndex = 0;
+    // Ensure custom entry reflects current saved prompt
+    PROMPT_LIBRARY.custom = [{
+      name: 'Moje vlastní',
+      desc: 'Uložený vlastní prompt (aktuální)',
+      text: promptText
+    }];
+  }
+}
+
+function closePromptLibraryModal() {
+  document.getElementById('promptLibraryModal').classList.remove('show');
+}
+
+function renderPromptList() {
+  const list = document.getElementById('promptList');
+  const prompts = PROMPT_LIBRARY[selectedPromptCategory] || [];
+  
+  if (prompts.length === 0) {
+    list.innerHTML = '<div style="color:var(--txt3);font-size:11px;padding:10px">Žádné prompty v této kategorii</div>';
+    return;
+  }
+  
+  list.innerHTML = prompts.map((p, idx) => `
+    <div class="prompt-item ${idx === selectedPromptIndex ? 'selected' : ''}" data-index="${idx}" onclick="selectPrompt(${idx})">
+      <div class="prompt-item-name">${p.name}</div>
+      <div class="prompt-item-desc">${p.desc}</div>
+    </div>
+  `).join('');
+}
+
+function renderPromptPreview() {
+  const preview = document.getElementById('promptPreview');
+  const editor = document.getElementById('promptLibraryEditor');
+  const prompts = PROMPT_LIBRARY[selectedPromptCategory] || [];
+  const prompt = prompts[selectedPromptIndex];
+  
+  if (prompt) {
+    preview.textContent = prompt.text;
+    // Also update editor with selected preset
+    if (editor) {
+      editor.value = prompt.text;
+    }
+  } else {
+    preview.textContent = 'Vyberte prompt z knihovny...';
+  }
+}
+
+function selectPrompt(index) {
+  selectedPromptIndex = index;
+  const prompts = PROMPT_LIBRARY[selectedPromptCategory] || [];
+  const prompt = prompts[index];
+  
+  if (prompt) {
+    // Load the selected preset into the editor
+    document.getElementById('promptLibraryEditor').value = prompt.text;
+  }
+  
+  renderPromptList();
+  renderPromptPreview();
+}
+
+function applySelectedPrompt() {
+  const editor = document.getElementById('promptLibraryEditor');
+  const promptText = editor ? editor.value.trim() : '';
+  
+  if (!promptText) {
+    showToast('✗ Prompt je prázdný');
+    return;
+  }
+  
+  // Save to main prompt storage
+  localStorage.setItem('strong_prompt', promptText);
+  
+  // Also save to custom category if we're in custom tab
+  if (selectedPromptCategory === 'custom') {
+    // Update the custom prompt in library
+    if (!PROMPT_LIBRARY.custom) PROMPT_LIBRARY.custom = [];
+    PROMPT_LIBRARY.custom[0] = {
+      name: 'Moje vlastní',
+      desc: 'Uložený vlastní prompt',
+      text: promptText
+    };
+    localStorage.setItem('strong_custom_prompt', promptText);
+  }
+  
+  // Update the main prompt editor if it exists (on setup page)
+  const mainEditor = document.getElementById('promptEditor');
+  if (mainEditor) {
+    mainEditor.value = promptText;
+    mainEditor.dispatchEvent(new Event('input'));
+  }
+  
+   closePromptLibraryModal();
+   showToast('✓ Prompt uložen a použit');
+   updatePromptStatusIndicator();
+}
+
+function updatePromptStatusIndicator() {
+  const modeDot = document.getElementById('promptMode');
+  const nameEl = document.getElementById('promptName');
+  if (!modeDot || !nameEl) return;
+  
+  const currentPrompt = localStorage.getItem('strong_prompt') || '';
+  const customSaved = localStorage.getItem('strong_custom_prompt') || '';
+  
+  // Check if current prompt matches any preset
+  let matched = false;
+  let matchedName = '';
+  
+  // Try DEFAULT_PROMPT
+  if (currentPrompt === DEFAULT_PROMPT) {
+    matched = true;
+    matchedName = 'Originální';
+  }
+  
+  // Check other presets
+  if (!matched) {
+    for (const [category, prompts] of Object.entries(PROMPT_LIBRARY)) {
+      for (const p of prompts) {
+        if (p.text === currentPrompt && category !== 'custom') {
+          matched = true;
+          matchedName = p.name;
+          break;
+        }
+      }
+      if (matched) break;
+    }
+  }
+  
+  if (matched) {
+    // Preset mode – automatic/green
+    modeDot.style.background = 'var(--grn)';
+    modeDot.style.boxShadow = '0 0 6px var(--grn)';
+    nameEl.textContent = matchedName;
+    nameEl.style.color = 'var(--grn)';
+  } else {
+    // Custom mode – manual/red
+    modeDot.style.background = 'var(--red)';
+    modeDot.style.boxShadow = 'none';
+    nameEl.textContent = currentPrompt ? 'Vlastní (upravený)' : 'Žádný';
+    nameEl.style.color = 'var(--red)';
+  }
+}
+
+// ── AI & Language Modals ───────────────────────────────────────────
+function showPromptAIModal() {
+  const modal = document.getElementById('promptAIModal');
+  // Load saved values or defaults
+  const savedTemp = localStorage.getItem('strong_ai_temperature') || '0.3';
+  const savedMax = localStorage.getItem('strong_ai_max_tokens') || '2000';
+  document.getElementById('aiTemperature').value = savedTemp;
+  document.getElementById('aiMaxTokens').value = savedMax;
+  modal.style.display = 'flex';
+  // Close on backdrop click
+  modal.onclick = (e) => {
+    if (e.target === modal) closePromptAIModal();
+  };
+}
+
+function closePromptAIModal() {
+  document.getElementById('promptAIModal').style.display = 'none';
+}
+
+function saveAISettings() {
+  const temp = document.getElementById('aiTemperature').value;
+  const max = document.getElementById('aiMaxTokens').value;
+  localStorage.setItem('strong_ai_temperature', temp);
+  localStorage.setItem('strong_ai_max_tokens', max);
+  closePromptAIModal();
+  showToast('✓ AI nastavení uložena');
+}
+
+function showPromptLangModal() {
+  const modal = document.getElementById('promptLangModal');
+  const savedLang = localStorage.getItem('strong_target_lang') || 'cs';
+  const savedSource = localStorage.getItem('strong_source_lang') || 'gr';
+  document.getElementById('targetLanguage').value = savedLang;
+  document.getElementById('sourceLanguage').value = savedSource;
+  modal.style.display = 'flex';
+  // Close on backdrop click
+  modal.onclick = (e) => {
+    if (e.target === modal) closePromptLangModal();
+  };
+}
+
+function closePromptLangModal() {
+  document.getElementById('promptLangModal').style.display = 'none';
+}
+
+function saveLangSettings() {
+  const target = document.getElementById('targetLanguage').value;
+  const source = document.getElementById('sourceLanguage').value;
+  localStorage.setItem('strong_target_lang', target);
+  localStorage.setItem('strong_source_lang', source);
+  closePromptLangModal();
+  showToast('✓ Jazyková nastavení uložena');
+}
+
+// Expose functions to window
+window.showPromptLibraryModal = showPromptLibraryModal;
+window.closePromptLibraryModal = closePromptLibraryModal;
+window.selectPrompt = selectPrompt;
+window.applySelectedPrompt = applySelectedPrompt;
+window.showPromptAIModal = showPromptAIModal;
+window.closePromptAIModal = closePromptAIModal;
+window.saveAISettings = saveAISettings;
+window.showPromptLangModal = showPromptLangModal;
+window.closePromptLangModal = closePromptLangModal;
+window.saveLangSettings = saveLangSettings;
 
 // ── Export vybraného rozsahu ───────────────────────────────────
 function exportRange() {
@@ -3518,7 +4209,7 @@ function showToast(msg) {
   t.textContent = msg;
   t.style.opacity = '1';
   clearTimeout(t._t);
-  t._t = setTimeout(() => { t.style.opacity = '0'; }, 3500);
+  t._t = setTimeout(() => { t.style.opacity = '0'; }, CONFIG.TOAST_DURATION);
 }
 
  function log(msg) {
@@ -3762,10 +4453,26 @@ function closePreviewModal() {
 
 // Escape zavře modal
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    closePreviewModalSafe();
-    closeLimitsModal();
+  // Ctrl+S = uložit progress (Ctrl is either)
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+    e.preventDefault();
+    saveProgress();
+    showToast('✓ Progress uložen');
+    return;
   }
+  // Ctrl+E = export do TXT
+  if ((e.ctrlKey || e.metaKey) && e.key === 'e') {
+    e.preventDefault();
+    exportTXT();
+    return;
+  }
+    if (e.key === 'Escape') {
+      closePreviewModalSafe();
+      closeLimitsModal();
+      closePromptLibraryModal();
+      closePromptAIModal();
+      closePromptLangModal();
+    }
   if (document.getElementById('app').style.display === 'none') return;
   // Klávesové zkratky v app
   if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
@@ -3824,6 +4531,16 @@ window.onProviderChangeRunMobile = onProviderChangeRunMobile;
 window.escHtml = escHtml;
 window.updateFailedCount = updateFailedCount;
 window.parseCzTXT = parseCzTXT;
+window.showPromptLibraryModal = showPromptLibraryModal;
+window.closePromptLibraryModal = closePromptLibraryModal;
+window.applySelectedPrompt = applySelectedPrompt;
+window.showPromptAIModal = showPromptAIModal;
+window.closePromptAIModal = closePromptAIModal;
+window.saveAISettings = saveAISettings;
+window.showPromptLangModal = showPromptLangModal;
+window.closePromptLangModal = closePromptLangModal;
+window.saveLangSettings = saveLangSettings;
+window.updatePromptStatusIndicator = updatePromptStatusIndicator;
 
 // Null-safe modal close helpers
 function closePreviewModalSafe() {
@@ -3844,22 +4561,14 @@ window.closeFailedModalSafe = closeFailedModalSafe;
 window.PROVIDERS = PROVIDERS;
 window.populateOpenRouterModels = populateOpenRouterModels;
 
-// Cleanup on page unload
+// Cleanup on page unload - auto-save progress
 window.addEventListener('beforeunload', () => {
   if (autoTimer) clearTimeout(autoTimer);
   if (autoCountTimer) clearInterval(autoCountTimer);
   if (elapsedTimer) clearInterval(elapsedTimer);
   stopResize();
+  saveProgress();
 });
-
-// Resize handler cleanup
-function stopResize() {
-  resizing = false;
-  document.removeEventListener('mousemove', doResize);
-  document.removeEventListener('mouseup', stopResize);
-  document.removeEventListener('touchmove', doResize);
-  document.removeEventListener('touchend', stopResize);
-}
 </script>
 </body>
 </html>
