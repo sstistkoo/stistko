@@ -2829,14 +2829,18 @@ function exportTXT() {
 
   const lines = done.map(e => {
     const t = translated[e.key];
-    return [
+    const parts = [
       `${e.key} | ${e.greek}`,
+      `Gramatika: ${e.tvaroslovi || '—'}`,
       `Český význam: ${t.vyznam || '—'}`,
-      `Definice: ${t.definice || '—'}`,
+      `Definice (EN): ${e.definice || e.def || '—'}`,
+      `Česká definice: ${t.definice || '—'}`,
+      `KJV překlady: ${e.kjv || '—'}`,
       `Biblické užití (KJV): ${t.pouziti || '—'}`,
       `Původ: ${t.puvod || '—'}`,
       ''
-    ].join('\n');
+    ];
+    return parts.join('\n');
   });
 
   download('strong_gr_cz.txt', lines.join('\n'), 'text/plain');
