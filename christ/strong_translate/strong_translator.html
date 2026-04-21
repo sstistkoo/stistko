@@ -1951,7 +1951,7 @@ function renderVisible() {
   
   const scroll = document.getElementById('listScroll');
   const scrollTop = scroll.scrollTop;
-  const viewportHeight = scroll.clientHeight;
+  let viewportHeight = scroll.clientHeight;
   const total = filteredKeys.length;
   
   if (total === 0) {
@@ -1960,9 +1960,19 @@ function renderVisible() {
     return;
   }
   
-  const startIndex = Math.max(0, Math.floor(scrollTop / ITEM_HEIGHT) - BUFFER_ITEMS);
-  const endIndex = Math.min(total - 1, Math.ceil((scrollTop + viewportHeight) / ITEM_HEIGHT) + BUFFER_ITEMS);
+  // Fix: Ensure minimum viewport height on first load
+  if (viewportHeight < 100) {
+    viewportHeight = 300;
+  }
   
+  let startIndex = Math.max(0, Math.floor(scrollTop / ITEM_HEIGHT) - BUFFER_ITEMS);
+  let endIndex = Math.min(total - 1, Math.ceil((scrollTop + viewportHeight) / ITEM_HEIGHT) + BUFFER_ITEMS);
+  
+  // Force render first time or if range is invalid
+  if (lastRenderRange.start === -1 || endIndex - startIndex < 5) {
+    startIndex = 0;
+    endIndex = Math.min(total - 1, Math.ceil(viewportHeight / ITEM_HEIGHT) + BUFFER_ITEMS);
+  }
   
   
   if (startIndex === lastRenderRange.start && endIndex === lastRenderRange.end) {
@@ -2137,60 +2147,6 @@ function renderDetail() {
     <div class="orig-section">
       <div class="label">Výskyt</div>
       <div class="value">${escHtml(e.vyskyt || '—')}</div>
-    </div>`;
-  } else if (isHebrew) {
-    sections = `
-    <div class="orig-section">
-      <div class="label">Vokalizace</div>
-      <div class="value">${escHtml(e.vokalizace || '—')}</div>
-    </div>
-    <div class="orig-section">
-      <div class="label">Výslovnost</div>
-      <div class="value">${escHtml(e.vyslovnost || '—')}</div>
-    </div>
-    <div class="orig-section">
-      <div class="label">Etymologie</div>
-      <div class="value">${escHtml(e.etimol || e.orig || '—')}</div>
-    </div>
-    <div class="orig-section">
-      <div class="label">Transliterace</div>
-      <div class="value">${escHtml(e.prepis || '—')}</div>
-    </div>
-    <div class="orig-section">
-      <div class="label">Gramatika</div>
-      <div class="value">${escHtml(e.tvaroslovi || '—')}</div>
-    </div>
-    <div class="orig-section">
-      <div class="label">TWOT</div>
-      <div class="value">${escHtml(e.twot || '—')}</div>
-    </div>
-    <div class="orig-section">
-      <div class="label">Definice (EN)</div>
-      <div class="value">${escHtml(e.definice || e.def || '—')}${(t?.definice && t.definice.trim()) ? '<hr style="border:none;border-top:1px solid var(--brd);margin:6px 0"><div style="color:var(--acc3)">' + escHtml(t.definice) + '</div>' : (e.czDef ? '<hr style="border:none;border-top:1px solid var(--brd);margin:6px 0"><div style="color:var(--acc3)">' + escHtml(e.czDef) + '</div>' : '')}</div>
-    </div>
-    <div class="orig-section">
-      <div class="label">English</div>
-      <div class="value">${escHtml(e.en || '—')}</div>
-    </div>
-    <div class="orig-section">
-      <div class="label">KJV překlady</div>
-      <div class="value">${escHtml(e.kjv || '—')}</div>
-    </div>
-    <div class="orig-section">
-      <div class="label">Výskyt</div>
-      <div class="value">${escHtml(e.vyskyt || '—')}</div>
-    </div>
-    <div class="orig-section">
-      <div class="label">Překlad</div>
-      <div class="value">${escHtml(e.preklad || '—')}</div>
-    </div>
-    <div class="orig-section">
-      <div class="label">Vysvětlení</div>
-      <div class="value">${escHtml(e.vysvetleni || '—')}</div>
-    </div>
-    <div class="orig-section">
-      <div class="label">Řecké refs</div>
-      <div class="value">${escHtml(e.greekRefs || '—')}</div>
     </div>`;
   } else if (isGrammar) {
     sections = `
@@ -2607,7 +2563,7 @@ async function callAIWithRetry(provider, apiKey, model, messages) {
          const msg = (e.message || '').toLowerCase();
          const isRate = msg.includes('429') || msg.includes('quota') || msg.includes('rate') || msg.includes('too many');
          const isBanned = msg.includes('restricted') || msg.includes('organization');
-         const is404 = msg.includes('404') || msg.includes('not found') || msg.includes('not found');
+         const is404 = msg.includes('404') || msg.includes('not found');
 
          if (is404) {
            const errMsg = 'Chyba 404: Model nenalezen, vyberte jiný v nastavení';
@@ -3053,12 +3009,9 @@ function closeModal() {
 }
 
 function confirmModal() {
-  // Implementation based on modal type
-  const title = document.getElementById('modalTitle').textContent;
-  if (title.includes('Rozsah')) {
-    const from = parseInt(document.getElementById('modalFrom').value) || 1;
-    const to = parseInt(document.getElementById('modalTo').value) || 100;
-    selectRangeConfirm(from, to);
+  if (modalCallback) {
+    modalCallback();
+    modalCallback = null;
   }
   closeModal();
 }
