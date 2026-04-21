@@ -3704,7 +3704,37 @@ const CATEGORY_LABELS = {
   concise: 'Stručné',
   literal: 'Doslovné',
   custom: 'Vlastní',
-  library: 'Knihovna'
+  library: 'Knihovna',
+  final: 'Finální'
+};
+
+// Final custom prompt – ušitý na míru
+const FINAL_PROMPT = {
+  name: 'Finální',
+  desc: 'Kompletní překlad se všemi poli',
+  text: `Jsi odborník na biblické řecký a hebrejský jazyk. Přelož následující hesla s maximální přesností.
+
+Pro každé heslo poskytni VŠECHNY následující položky:
+- VÝZNAM: Český překlad slova (přesný, s diakritikou)
+- DEFINICE: Podrobný popis významu, gramatiky, usage
+- PREPIS: Transliterace (latinka)
+- TVAROSLOVI: Gramatické označení
+- KJV: Všechny překlady z King James Bible (odděluj |)
+- PŮVOD: Etymologie (řecký/hebrejský kořen)
+
+HESLA:
+{HESLA}
+
+Vrať výstup STRICTně v tomto formátu pro každé heslo:
+###G[číslo]###
+VÝZNAM: [překlad]
+DEFINICE: [definice]
+PREPIS: [transliterace]
+TVAROSLOVI: [tvarosloví]
+KJV: [překlady]
+PŮVOD: [původ]
+
+ŽÁDNÉ dodatečné komentáře, pouze data. Zachovej pořadí hesel.`
 };
 
 const PROMPT_LIBRARY = {
@@ -3772,15 +3802,9 @@ DEF: [lexikální definice]
 KJV: [KJV translation]
 `
     }
-  ],
-  custom: [
-    {
-      name: 'Moje vlastní',
-      desc: 'Uložený vlastní prompt',
-      text: localStorage.getItem('strong_custom_prompt') || ''
-    }
-  ],
-  library: [
+   ],
+   custom: [],  // naplní se dynamicky v showPromptLibraryModal()
+   library: [
     {
       name: 'Přesný',
       desc: 'Vysoká přesnost a věrnost',
@@ -3842,18 +3866,22 @@ function showPromptLibraryModal() {
   const list = document.getElementById('promptList');
   const editor = document.getElementById('promptLibraryEditor');
   
-  // Load current saved prompt
-  const savedPrompt = localStorage.getItem('strong_prompt') || DEFAULT_PROMPT;
-  
-  // Initialize library with saved custom prompt if exists
-  const customSaved = localStorage.getItem('strong_custom_prompt');
-  if (customSaved) {
-    PROMPT_LIBRARY.custom = [{
-      name: 'Moje vlastní',
-      desc: 'Uložený vlastní prompt',
-      text: customSaved
-    }];
-  }
+   // Load current saved prompt
+   const savedPrompt = localStorage.getItem('strong_prompt') || DEFAULT_PROMPT;
+   
+   // Initialize library with saved custom prompt + built-in final prompt
+   const customSaved = localStorage.getItem('strong_custom_prompt');
+   const customEntries = [];
+   if (customSaved) {
+     customEntries.push({
+       name: 'Moje vlastní',
+       desc: 'Uložený vlastní prompt',
+       text: customSaved
+     });
+   }
+   // Vždy přidáme vestavěný Finální prompt
+   customEntries.push(FINAL_PROMPT);
+   PROMPT_LIBRARY.custom = customEntries;
   
   // Reset selection to default
   selectedPromptCategory = 'default';
