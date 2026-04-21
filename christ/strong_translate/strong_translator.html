@@ -2623,7 +2623,7 @@ async function callOnce(provider, apiKey, model, messages) {
   const timeout = setTimeout(() => controller.abort(), 120000);
   try {
     if (provider === 'groq') {
-    const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    const r = await fetch('https://corsproxy.io/?https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: { 'Authorization': 'Bearer ' + apiKey, 'Content-Type': 'application/json' },
       body: JSON.stringify({ model, messages,
@@ -2679,7 +2679,7 @@ async function callOnce(provider, apiKey, model, messages) {
       return { content, usage: d.usageMetadata };
 
     } else if (provider === 'openrouter') {
-     const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+     const r = await fetch('https://corsproxy.io/?https://openrouter.ai/api/v1/chat/completions', {
        method: 'POST',
        headers: { 
          'Authorization': 'Bearer ' + apiKey, 
