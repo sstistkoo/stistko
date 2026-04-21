@@ -118,20 +118,20 @@ export function parseTranslations(raw, keys, translated = {}) {
     
     const content = block.slice(km[0].length).trim();
     
-    const normalizedLabels = { 'DEF': 'DEFINICE', 'CZ': 'VYZNAM', 'VÝZNAM': 'VYZNAM', 'DEFINITION': 'DEFINICE', 'MEANING': 'VYZNAM', 'USAGE': 'POUZITI', 'ORIGIN': 'PUVOD' };
+    const normalizedLabels = { 'DEF': 'DEFINICE', 'CZ': 'VYZNAM', 'VÝZNAM': 'VYZNAM', 'DEFINITION': 'DEFINICE', 'MEANING': 'VYZNAM', 'USAGE': 'POUZITI', 'ORIGIN': 'PUVOD', 'KJV': 'KJV' };
     
     const fieldPositions = [];
     const lines = content.split('\n');
     
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
-      const labelMatch = line.match(/^(VYZNAM|DEFINICE|POUZITI|PUVOD|DEF|DEFINITION|MEANING|USAGE|ORIGIN)\s*[-:–—=.]?\s*/i);
+      const labelMatch = line.match(/^(VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|DEF|DEFINITION|MEANING|USAGE|ORIGIN)\s*[-:–—=.]?\s*/i);
       if (labelMatch) {
         let label = labelMatch[1].toUpperCase();
         if (normalizedLabels[label]) {
           label = normalizedLabels[label];
         }
-        if (['VYZNAM', 'DEFINICE', 'POUZITI', 'PUVOD'].includes(label)) {
+        if (['VYZNAM', 'DEFINICE', 'POUZITI', 'PUVOD', 'KJV'].includes(label)) {
           fieldPositions.push({ label, startLine: i, labelLen: labelMatch[0].length });
         }
       }
@@ -168,6 +168,7 @@ export function parseTranslations(raw, keys, translated = {}) {
       definice: fields['DEFINICE'] || '',
       pouziti: fields['POUZITI'] || '',
       puvod: fields['PUVOD'] || '',
+      kjv: fields['KJV'] || '',
       _rawDefinition: fields['DEFINICE'] || ''
     };
   }
@@ -175,35 +176,55 @@ export function parseTranslations(raw, keys, translated = {}) {
   return keys.filter(k => !translated[k]?.vyznam);
 }
 
-export const SYSTEM_MESSAGE = `Prekladac Strongova slovniku.
+export const SYSTEM_MESSAGE = `Prekladac Strongova slovniku do cestiny.
 
-Odpovez v tomto formatu:
+Odpovez JEN v tomto formatu - NIC JINEHO:
 ###G123###
-VYZNAM: [cesky ekvivalent]
-DEFINICE: [cely preklad DEF: - cely text, nic nezkracuj!]
-POUZITI: [biblicka posta]
+VYZNAM: [cesky]
+DEFINICE: [cesky preklad]
+POUZITI: [refs v hranatych zavorkach]
 PUVOD: [etymologie]
+KJV: [preklad]
 
-DULEZITE: V DEFINICI preloz CELOU definici z DEF: - nic nevynechavej, nic nezkracej!`;
+ZAKAZY:
+- Nepiste "ZVLASTNI:" ani jine pokyny
+- "__1." nahradte cislem 1.
+- "__2." nahradte cislem 2.
+- "al." = "v dalsich mistech"
+- HODNOTY V DEFINICI: 1., 2., 3. (CISLA, ne __1.)`;
 
-export const DEFAULT_PROMPT = `Preloz hesla. DULEZITE: preloz CELOU definici z DEF: - nic nevynechavej!
+export const DEFAULT_PROMPT = `Preloz hesla do CESTINY.
+
+ZVLASTNI - POVINNE:
+- "__1." -> "1.", "__2." -> "2." (CISLA, ne podtrzitka!)
+- "al." = "v dalsich mistech"
+- indecl. = nezmenitelny
+- POUZITI: [Luk.1:5], [Mk 14:36]
+- PUVOD: z řeckého X / z hebrejskeho Y
+- ZAKAZ: Nepiste "ZVLASTNI:"!
 
 Priklad:
+VSTUP: G2 | Ἀαρών
+DEF: Ἀαρών (Heb. אַהֲרוֹן), indecl. (in FlJ, -ῶνος), Aaron ([Exo.4:14], al.): [Luk.1:5], [Act.7:40].
+
+SPRAVNE:
+###G2###
+VYZNAM: Árón
+DEFINICE: Árón (hebrejsky אַהֲרוֹן), nesklonnitelný: [Exo 4:14], v dalsich mistech, [Luk.1:5], [Sk 7:40].
+POUZITI: [Luk.1:5], [Skutky 7:40]
+PUVOD: z hebrejskeho אַהֲרוֹן
+KJV: Árón
+
 VSTUP: G24 | ἀγανάκτησις
 DEF: ἀγανάκτησις, -εως, ἡ (ἀγανακτέω), [in LXX:] indignation: [2Co.7:11].
 
 SPRAVNE:
 ###G24###
 VYZNAM: rozhořčení
-DEFINICE: ἀγανάκτησις, -εως, ἡ (ἀγανακτέω), [v LXX:] rozhořčení: [2Co.7:11].
-POUZITI: 2. Korinťanům 7:11
+DEFINICE: rozhořčení (ἀγανάκτησις, -εως, ἡ [v LXX:] indignation: [2Ko.7:11]).
+POUZITI: [Lukas 1:5], [2Kor 7:11]
 PUVOD: z řeckého ἀγανακτέω
-
-###KLIC###
-VYZNAM: [ekvivalent]
-DEFINICE: [cely preklad DEF:]
-POUZITI: [posta]
-PUVOD: [puvod]
+KJV: rozhořčení
 
 {HESLA}`;
 

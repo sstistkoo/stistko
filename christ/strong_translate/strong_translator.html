@@ -1252,7 +1252,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   // ══ STATE ════════════════════════════════════════════════════════
   let entries     = [];      // [{key, greek, def, kjv, orig}]
   let entryMap    = new Map();   // key → entry
-  let translated  = {};      // key -> {vyznam, definice, pouziti, puvod, raw}
+  let translated  = {};      // key -> {vyznam, definice, pouziti, puvod, kjv, raw}
   let activeKey   = null;
   let autoTimer   = null;
   let autoCountTimer = null;
@@ -2222,6 +2222,7 @@ function renderTranslation(key, t) {
       rawField: hasRaw ? rawDef : null
     },
     { id: 'vyznam',   label: 'Český význam',        field: t?.vyznam },
+    { id: 'kjv',     label: 'KJV překlady (CZ)', field: t?.kjv },
     { id: 'pouziti',  label: 'Biblické užití',     field: t?.pouziti },
     { id: 'puvod',    label: 'Původ / Etymologie',  field: t?.puvod },
   ];
@@ -2442,6 +2443,9 @@ async function translateBatch(keys) {
   try {
     const raw = await callAIWithRetry(prov, apiKey, model, messages);
     const content = raw.content;
+    console.log('=== AI PROMPT SENT ===');
+    console.log(JSON.stringify(messages, null, 2));
+    console.log('=== END PROMPT ===');
     console.log('=== AI RAW RESPONSE ===');
     console.log(content);
     console.log('=== END RAW ===');
@@ -2850,7 +2854,7 @@ function exportTXT() {
       `Český význam: ${t.vyznam || '—'}`,
       `Definice (EN): ${e.definice || e.def || '—'}`,
       `Česká definice: ${t.definice || '—'}`,
-      `KJV překlady: ${e.kjv || '—'}`,
+      `KJV překlady: ${t.kjv || e.kjv || '—'}`,
       `Biblické užití (KJV): ${t.pouziti || '—'}`,
       `Původ: ${t.puvod || '—'}`,
       ''
@@ -2943,6 +2947,7 @@ function logEntry(keys, rawResponse) {
       ${t && !t.skipped
         ? `<div class="log-vyznam"><b>Význam:</b> ${escHtml(t.vyznam || '—')}</div>
            <div class="log-definice">${escHtml((t.definice || '').slice(0, 120))}${(t.definice || '').length > 120 ? '…' : ''}</div>
+           ${t.kjv ? `<div class="log-orig"><b>KJV:</b> ${escHtml(t.kjv.slice(0, 80))}${(t.kjv || '').length > 80 ? '…' : ''}</div>` : ''}
            <div class="log-orig"><b>Použití:</b> ${escHtml((t.pouziti || '').slice(0, 80))}${(t.pouziti || '').length > 80 ? '…' : ''}</div>`
         : `<div class="log-err">⚠ Neparsováno</div>`
       }
@@ -3657,12 +3662,13 @@ function parseCzTXT(text) {
       }
       return '';
     };
-    const vyznam = get(['Český význam', 'Vyznam', 'VYZNAM']);
-    const definice = get(['Definice', 'DEFINICE']);
+    const vyznam = get(['Český význam', 'Vyznam', 'VYZNAM', 'Cz:']);
+    const definice = get(['Česká definice', 'Definice', 'DEFINICE']);
     const pouziti = get(['Biblické užití (KJV)', 'Pouziti', 'POUZITI', 'Použití']);
     const puvod = get(['Původ', 'Puvod', 'PUVOD']);
+    const kjv = get(['KJV překlady', 'KJV', 'KJV_PREKLADY', 'KJV Významy']);
     if (vyznam || definice) {
-      result[key] = { vyznam, definice, pouziti, puvod };
+      result[key] = { vyznam, definice, pouziti, puvod, kjv };
     }
   }
   return result;
