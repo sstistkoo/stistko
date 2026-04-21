@@ -94,10 +94,9 @@ export function parseTranslations(raw, keys, translated = {}) {
   const normalized = raw.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
   const blocks = normalized.split(/(?=###[GH]\d+###)/);
   
-  // Sestavíme mapu: číslo → správný klíč (pro případ že AI použije špatný prefix)
   const numToKey = {};
   for (const k of keys) {
-    const num = k.slice(1); // '123' z 'G123' nebo 'H123'
+    const num = k.slice(1);
     numToKey[num] = k;
   }
   
@@ -108,42 +107,105 @@ export function parseTranslations(raw, keys, translated = {}) {
     const foundKey = km[1];
     const num = foundKey.slice(1);
     
-    // Exact match nebo fallback přes číslo (AI použila špatný prefix)
     let targetKey = null;
     if (keys.includes(foundKey)) {
       targetKey = foundKey;
     } else if (numToKey[num]) {
-      targetKey = numToKey[num]; // fallback: stejné číslo, správný prefix
+      targetKey = numToKey[num];
     } else {
       continue;
     }
     
     const content = block.slice(km[0].length).trim();
-    const fields = {};
-    content.split('\n').forEach(line => {
-      const ci = line.indexOf(':');
-      if (ci > 0) {
-        let label = line.slice(0, ci).trim().toUpperCase();
-        if (label === 'DEF') label = 'DEFINICE';
-        if (label === 'CZ') label = 'VYZNAM';
-        fields[label] = line.slice(ci + 1).trim();
+    
+    const normalizedLabels = { 'DEF': 'DEFINICE', 'CZ': 'VYZNAM', 'VÝZNAM': 'VYZNAM', 'DEFINITION': 'DEFINICE', 'MEANING': 'VYZNAM', 'USAGE': 'POUZITI', 'ORIGIN': 'PUVOD' };
+    
+    const fieldPositions = [];
+    const lines = content.split('\n');
+    
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      const labelMatch = line.match(/^(VYZNAM|DEFINICE|POUZITI|PUVOD|DEF|DEFINITION|MEANING|USAGE|ORIGIN)\s*[-:–—=.]?\s*/i);
+      if (labelMatch) {
+        let label = labelMatch[1].toUpperCase();
+        if (normalizedLabels[label]) {
+          label = normalizedLabels[label];
+        }
+        if (['VYZNAM', 'DEFINICE', 'POUZITI', 'PUVOD'].includes(label)) {
+          fieldPositions.push({ label, startLine: i, labelLen: labelMatch[0].length });
+        }
       }
-    });
+    }
+    
+    const fields = {};
+    for (let i = 0; i < fieldPositions.length; i++) {
+      const current = fieldPositions[i];
+      const label = current.label;
+      const startLine = current.startLine;
+      const labelLen = current.labelLen;
+      
+      let endLine = lines.length;
+      if (i < fieldPositions.length - 1) {
+        endLine = fieldPositions[i + 1].startLine;
+      }
+      
+      let value = '';
+      for (let j = startLine; j < endLine; j++) {
+        let lineContent = lines[j];
+        if (j === startLine) {
+          lineContent = lineContent.slice(labelLen).trim();
+        }
+        lineContent = lineContent.trim();
+        if (lineContent) {
+          value += (value ? ' ' : '') + lineContent;
+        }
+      }
+      fields[label] = value.trim();
+    }
     
     translated[targetKey] = {
       vyznam: fields['VYZNAM'] || '',
       definice: fields['DEFINICE'] || '',
       pouziti: fields['POUZITI'] || '',
-      puvod: fields['PUVOD'] || ''
+      puvod: fields['PUVOD'] || '',
+      _rawDefinition: fields['DEFINICE'] || ''
     };
   }
   
   return keys.filter(k => !translated[k]?.vyznam);
 }
 
-export const SYSTEM_MESSAGE = 'Prekladac Strong slovniku. VYZNAM=cz ekvivalent. DEFINICE=cz preklad CELÉ anglicke definice z DEF:. POUZITI=biblicka posta. PUVOD=etymologie. Format: ###G123###\nVYZNAM: [cz ekvivalent]\nDEFINICE: [cz preklad]\nPOUZITI: [posta]\nPUVOD: [puvod].';
+export const SYSTEM_MESSAGE = `Prekladac Strongova slovniku.
 
-export const DEFAULT_PROMPT = 'Preloz hesla. Ulohy:\n1. VYZNAM = cesky ekvivalent (kratce)\n2. DEFINICE = CESKY PREKLAD VSEHO z DEF: - vsechna anglicka slova PRELOZ, NIC NENECHAVEJ v anglictine!\n3. POUZITI = biblicka posta\n4. PUVOD = etymologie\nDULEZITE: V DEFINICI preloz ABSOLUTNE VSE do cestiny!\nFormat:\n###KLIC###\nVYZNAM: [cesky ekvivalent]\nDEFINICE: [cely cesky preklad - zadna anglicka slova nezustavaj!]\nPOUZITI: [posta]\nPUVOD: [puvod]\n{HESLA}';
+Odpovez v tomto formatu:
+###G123###
+VYZNAM: [cesky ekvivalent]
+DEFINICE: [cely preklad DEF: - cely text, nic nezkracuj!]
+POUZITI: [biblicka posta]
+PUVOD: [etymologie]
+
+DULEZITE: V DEFINICI preloz CELOU definici z DEF: - nic nevynechavej, nic nezkracej!`;
+
+export const DEFAULT_PROMPT = `Preloz hesla. DULEZITE: preloz CELOU definici z DEF: - nic nevynechavej!
+
+Priklad:
+VSTUP: G24 | ἀγανάκτησις
+DEF: ἀγανάκτησις, -εως, ἡ (ἀγανακτέω), [in LXX:] indignation: [2Co.7:11].
+
+SPRAVNE:
+###G24###
+VYZNAM: rozhořčení
+DEFINICE: ἀγανάκτησις, -εως, ἡ (ἀγανακτέω), [v LXX:] rozhořčení: [2Co.7:11].
+POUZITI: 2. Korinťanům 7:11
+PUVOD: z řeckého ἀγανακτέω
+
+###KLIC###
+VYZNAM: [ekvivalent]
+DEFINICE: [cely preklad DEF:]
+POUZITI: [posta]
+PUVOD: [puvod]
+
+{HESLA}`;
 
 export function escHtml(s) {
   return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
