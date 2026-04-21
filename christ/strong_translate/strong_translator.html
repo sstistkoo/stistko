@@ -1615,6 +1615,21 @@ function initApp(loadingEl) {
    }
 
   document.getElementById('app').style.display = 'flex';
+  
+  // Dedup entries - pokud jsou duplicitní klíče, bereme jen první výskyt
+  const uniqueEntries = [];
+  const seenKeys = new Set();
+  for (const e of entries) {
+    if (!seenKeys.has(e.key)) {
+      seenKeys.add(e.key);
+      uniqueEntries.push(e);
+    }
+  }
+  if (uniqueEntries.length < entries.length) {
+    console.log('WARNING: Removed', entries.length - uniqueEntries.length, 'duplicate entries');
+  }
+  entries = uniqueEntries;
+  
   entryMap = new Map(entries.map(e => [e.key, e]));
   
   // Vytvoř index pro rychlé řazení podle původního pořadí
