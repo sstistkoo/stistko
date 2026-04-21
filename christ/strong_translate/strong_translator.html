@@ -1745,6 +1745,9 @@ async function translateSelected() {
     try {
       const raw = await callAIWithRetry(prov, apiKey, model, messages);
       const content = raw.content;
+      console.log('=== AI RAW RESPONSE ===');
+      console.log(content);
+      console.log('=== END RAW ===');
       parseTranslations(content, batchKeys);
       
       // Log tokenů
@@ -2096,7 +2099,7 @@ function renderDetail() {
     </div>
     <div class="orig-section">
       <div class="label">Definice (EN)</div>
-      <div class="value">${escHtml(e.definice || e.def || '—')}${(t?.definice && t.definice.trim()) ? '<hr style="border:none;border-top:1px solid var(--brd);margin:6px 0"><div style="color:var(--acc3)">' + escHtml(t.definice) + '</div>' : (e.czDef ? '<hr style="border:none;border-top:1px solid var(--brd);margin:6px 0"><div style="color:var(--acc3)">' + escHtml(e.czDef) + '</div>' : '')}</div>
+      <div class="value">${escHtml(e.definice || e.def || '—')}${e.czDef ? '<hr style="border:none;border-top:1px solid var(--brd);margin:6px 0"><div style="color:var(--acc3)">' + escHtml(e.czDef) + '</div>' : ''}</div>
     </div>
     <div class="orig-section">
       <div class="label">English</div>
@@ -2134,7 +2137,7 @@ function renderDetail() {
     </div>
     <div class="orig-section">
       <div class="label">Definice (EN)</div>
-      <div class="value">${escHtml(e.definice || e.def || '—')}${(t?.definice && t.definice.trim()) ? '<hr style="border:none;border-top:1px solid var(--brd);margin:6px 0"><div style="color:var(--acc3)">' + escHtml(t.definice) + '</div>' : (e.czDef ? '<hr style="border:none;border-top:1px solid var(--brd);margin:6px 0"><div style="color:var(--acc3)">' + escHtml(e.czDef) + '</div>' : '')}</div>
+      <div class="value">${escHtml(e.definice || e.def || '—')}${e.czDef ? '<hr style="border:none;border-top:1px solid var(--brd);margin:6px 0"><div style="color:var(--acc3)">' + escHtml(e.czDef) + '</div>' : ''}</div>
     </div>
     <div class="orig-section">
       <div class="label">English</div>
@@ -2172,7 +2175,7 @@ function renderDetail() {
     </div>
     <div class="orig-section">
       <div class="label">Definice (EN)</div>
-      <div class="value">${escHtml(e.definice || e.def || '—')}${(t?.definice && t.definice.trim()) ? '<hr style="border:none;border-top:1px solid var(--brd);margin:6px 0"><div style="color:var(--acc3)">' + escHtml(t.definice) + '</div>' : (e.czDef ? '<hr style="border:none;border-top:1px solid var(--brd);margin:6px 0"><div style="color:var(--acc3)">' + escHtml(e.czDef) + '</div>' : '')}</div>
+      <div class="value">${escHtml(e.definice || e.def || '—')}${e.czDef ? '<hr style="border:none;border-top:1px solid var(--brd);margin:6px 0"><div style="color:var(--acc3)">' + escHtml(e.czDef) + '</div>' : ''}</div>
     </div>
     <div class="orig-section">
       <div class="label">English</div>
@@ -2183,7 +2186,7 @@ function renderDetail() {
     sections = `
     <div class="orig-section">
       <div class="label">Definice (EN)</div>
-      <div class="value">${escHtml(e.definice || e.def || '—')}${(t?.definice && t.definice.trim()) ? '<hr style="border:none;border-top:1px solid var(--brd);margin:6px 0"><div style="color:var(--acc3)">' + escHtml(t.definice) + '</div>' : (e.czDef ? '<hr style="border:none;border-top:1px solid var(--brd);margin:6px 0"><div style="color:var(--acc3)">' + escHtml(e.czDef) + '</div>' : '')}</div>
+      <div class="value">${escHtml(e.definice || e.def || '—')}${e.czDef ? '<hr style="border:none;border-top:1px solid var(--brd);margin:6px 0"><div style="color:var(--acc3)">' + escHtml(e.czDef) + '</div>' : ''}</div>
     </div>
     <div class="orig-section">
       <div class="label">KJV překlady</div>
@@ -2208,9 +2211,18 @@ function renderDetail() {
 }
 
 function renderTranslation(key, t) {
+  const rawDef = t?._rawDefinition || '';
+  const hasRaw = rawDef && rawDef.length > 10;
+  
   const sections = [
-    { id: 'vyznam',   label: 'Český význam',       field: t?.vyznam },
-    { id: 'pouziti',  label: 'Biblické užití',field: t?.pouziti },
+    { 
+      id: 'definice', 
+      label: 'Definice (CZ)', 
+      field: t?.definice,
+      rawField: hasRaw ? rawDef : null
+    },
+    { id: 'vyznam',   label: 'Český význam',        field: t?.vyznam },
+    { id: 'pouziti',  label: 'Biblické užití',     field: t?.pouziti },
     { id: 'puvod',    label: 'Původ / Etymologie',  field: t?.puvod },
   ];
 
@@ -2222,7 +2234,8 @@ function renderTranslation(key, t) {
           <button class="tbox-btn" onclick="toggleEditSection('${key}','${s.id}')" aria-label="Upravit ${s.label}">✎ Upravit</button>
         </div>
       </div>
-      <div class="tbox-body" id="tval-${key}-${s.id}">${escHtml(s.field || '—')}</div>
+      ${s.rawField ? `<div class="tbox-body" id="tval-${key}-${s.id}" style="color:var(--txt2);font-size:12px;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--brd)">${escHtml(s.rawField)}</div>` : ''}
+      <div class="tbox-body ${s.rawField ? '' : ''}" id="tval-${key}-${s.id}" style="${s.rawField ? 'font-weight:bold;color:var(--acc3)' : ''}">${escHtml(s.field || '—')}</div>
       <div class="tbox-edit" id="tedit-${key}-${s.id}">
         <textarea id="tinput-${key}-${s.id}" aria-label="${s.label}">${escHtml(s.field || '')}</textarea>
         <button class="tbox-save" onclick="saveSection('${key}','${s.id}')" aria-label="Uložit ${s.label}">Uložit</button>
@@ -2273,8 +2286,10 @@ const model  = document.getElementById('model').value;
   
   try {
     const raw = await callAIWithRetry(prov, apiKey, model, messages);
-    
-    let missingKeys = parseTranslations(raw, [key]);
+    console.log('=== AI RAW RESPONSE ===');
+    console.log(raw.content);
+    console.log('=== END RAW ===');
+    let missingKeys = parseTranslations(raw.content, [key]);
     
     if (missingKeys.length > 0) {
       const retryContent = `CHYBA: V minulé odpovědi jsi vynechal formátovací značky ###G. 
@@ -2427,6 +2442,9 @@ async function translateBatch(keys) {
   try {
     const raw = await callAIWithRetry(prov, apiKey, model, messages);
     const content = raw.content;
+    console.log('=== AI RAW RESPONSE ===');
+    console.log(content);
+    console.log('=== END RAW ===');
     let missingKeys = parseTranslations(content, keys);
     
     // Log tokenů
@@ -2528,10 +2546,7 @@ ${keys.map(k => {
 function buildPromptMessages(batch) {
   const items = batch.map(e => {
     const def = e.definice || e.def || '';
-    const en = e.en || '';
-    const kjv = e.kjv || '';
-    const orig = e.orig || e.etimol || '';
-    return `${e.key} | ${e.greek}\nEN: ${en}\nDEF: ${def}\nKJV: ${kjv}\nORIG: ${orig}`;
+    return `${e.key} | ${e.greek}\nDEF: ${def}`;
   }).join('\n\n');
 
   return [
@@ -3535,6 +3550,8 @@ function showPreviewModal(previewData) {
   for (const [key, data] of Object.entries(previewData)) {
     const e = entryMap.get(key);
     const old = translated[key];
+    const rawDef = data._rawDefinition || data.definice || '';
+    const hasRaw = rawDef && rawDef.length > 10;
     html += `
     <div style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;margin:0 0 15px 0;padding:15px">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
@@ -3550,6 +3567,7 @@ function showPreviewModal(previewData) {
           <div style="font-size:12px">
             <div><b>Význam:</b> ${escHtml(data.vyznam || '—')}</div>
             <div style="margin-top:5px"><b>Definice:</b> ${escHtml(data.definice || '—')}</div>
+            ${hasRaw && rawDef !== data.definice ? `<div style="margin-top:8px;padding:8px;background:var(--bg2);border-radius:4px;border-left:2px solid var(--acc);font-size:11px;color:var(--txt2)"><b>📝 Celý překlad:</b><br>${escHtml(rawDef)}</div>` : ''}
             <div style="margin-top:5px"><b>Použití:</b> ${escHtml(data.pouziti || '—')}</div>
             <div style="margin-top:5px"><b>Původ:</b> ${escHtml(data.puvod || '—')}</div>
           </div>
