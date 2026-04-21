@@ -45,7 +45,7 @@ export function parseTXT(text) {
     else if (fieldName === 'En') current.en = fieldValue;
     else if (fieldName === 'En Definition') current.enDef = fieldValue;
     else if (fieldName === 'KJV Významy') current.kjv = fieldValue;
-    else if (fieldName === 'Cz') current.cz = fieldValue;
+    else if (fieldName === 'Cz') { current.cz = fieldValue; current.czDef = fieldValue; }
     // Hebrew fields
     else if (fieldName === 'Vokalizace') current.vokalizace = fieldValue;
     else if (fieldName === 'Vyslovnost') current.vyslovnost = fieldValue;
@@ -81,7 +81,7 @@ function finishEntry(e) {
   const tvaroslovi = e.tvaroslovi || '';
   
   if (e.type === 'greek') {
-    return { ...base, orig: tvaroslovi, en: e.en || '', enDef: e.enDef || '', kjv: e.cz || e.kjv || '', beta: e.beta || '', prepis: e.prepis || '', tvaroslovi: tvaroslovi, vyskyt: vyskyt };
+    return { ...base, orig: tvaroslovi, en: e.en || '', enDef: e.enDef || '', kjv: e.cz || e.kjv || '', czDef: e.czDef || '', beta: e.beta || '', prepis: e.prepis || '', tvaroslovi: tvaroslovi, vyskyt: vyskyt };
   } else if (e.type === 'hebrew') {
     return { ...base, orig: tvaroslovi, en: e.en || '', enDef: e.enDef || '', kjv: e.cz || e.kjv || '', beta: '', prepis: e.prepis || '', tvaroslovi: tvaroslovi, vokalizace: e.vokalizace || '', vyslovnost: e.vyslovnost || '', etymol: e.etymol || '', twot: e.twot || '', poznamky: e.poznamky || '', preklad: e.preklad || '', vysvetleni: e.vysvetleni || '', greekRefs: e.greekRefs || '', vyskyt: vyskyt };
   } else {
@@ -141,9 +141,9 @@ export function parseTranslations(raw, keys, translated = {}) {
   return keys.filter(k => !translated[k]?.vyznam);
 }
 
-export const SYSTEM_MESSAGE = 'Prekladac Strong slovniku. EN = originalni anglicka definice. Preloz ji do cestiny. VYZNAM = cesky ekvivalent. DEFINICE = CESKY PREKLAD EN definice. POUZITI = biblicka posta. PUVOD = etymologie. DULEZITE: Zachovej presne puvodni klic hesla (G nebo H prefix) ve formatu. Format: ###G123### nebo ###H456###\nVYZNAM: [cesky ekvivalent]\nDEFINICE: [cesky preklad EN definice]\nPOUZITI: [posta]\nPUVOD: [puvod]. Pouzij presne tyto nazvy poli a presne puvodni klic hesla.';
+export const SYSTEM_MESSAGE = 'Prekladac Strong slovniku. VYZNAM = cesky ekvivalent. DEFINICE = CESKY PREKLAD CELÉ anglicke definice z DEF: - PRELOZ vse do cestiny! Vsechna anglicka slova preloz do cestiny. NE kopiruj, ale PRELOZ! POUZITI = biblicka posta. PUVOD = etymologie. Format: ###G123### nebo ###H456###\nVYZNAM: [cesky ekvivalent]\nDEFINICE: [prelozena definice v cestine - cely preklad!]\nPOUZITI: [posta]\nPUVOD: [puvod].';
 
-export const DEFAULT_PROMPT = 'Preloz hesla. Ulohy:\n1. VYZNAM = cesky ekvivalent\n2. DEFINICE = PRELOZ anglickou definici (EN) do cestiny\n3. POUZITI = biblicka posta\n4. PUVOD = etymologie\nDULEZITE: U kazdeho hesla zachovej presne jeho klic (napr. G123 nebo H456) ve znacce.\nFormat:\n###KLIC### (kde KLIC je presne G123 nebo H456 z hesla)\nVYZNAM: [preklad]\nDEFINICE: [cesky preklad en definice]\nPOUZITI: [posta]\nPUVOD: [puvod]\n{HESLA}';
+export const DEFAULT_PROMPT = 'Preloz hesla. ULOHY:\n1. VYZNAM = cesky ekvivalent (kratce)\n2. DEFINICE = CESKY PREKLAD VSEHO z DEF: - vsechna anglicka slova PRELOZ, NIC NENECHAVEJ v anglictine!\n3. POUZITI = biblicka posta\n4. PUVOD = etymologie\nDULEZITE: V DEFINICI preloz ABSOLUTNE VSE do cestiny!\nFormat:\n###KLIC###\nVYZNAM: [cesky ekvivalent]\nDEFINICE: [cely cesky preklad - zadna anglicka slova nezustavaj!]\nPOUZITI: [posta]\nPUVOD: [puvod]\n{HESLA}';
 
 export function escHtml(s) {
   return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');

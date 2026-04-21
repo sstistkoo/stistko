@@ -2086,7 +2086,7 @@ function renderDetail() {
     </div>
     <div class="orig-section">
       <div class="label">Definice (EN)</div>
-      <div class="value">${escHtml(e.definice || e.def || '—')}</div>
+      <div class="value">${escHtml(e.definice || e.def || '—')}${e.czDef ? '<hr style="border:none;border-top:1px solid var(--brd);margin:6px 0"><div style="color:var(--acc3)">' + escHtml(e.czDef) + '</div>' : ''}</div>
     </div>
     <div class="orig-section">
       <div class="label">English</div>
@@ -2118,13 +2118,13 @@ function renderDetail() {
       <div class="label">Transliterace</div>
       <div class="value">${escHtml(e.prepis || '—')}</div>
     </div>
-    <div class="orig-section">
+<div class="orig-section">
       <div class="label">Gramatika</div>
       <div class="value">${escHtml(e.tvaroslovi || '—')}</div>
     </div>
     <div class="orig-section">
       <div class="label">Definice (EN)</div>
-      <div class="value">${escHtml(e.definice || e.def || '—')}</div>
+      <div class="value">${escHtml(e.definice || e.def || '—')}${(t?.definice && t.definice.trim()) ? '<hr style="border:none;border-top:1px solid var(--brd);margin:6px 0"><div style="color:var(--acc3)">' + escHtml(t.definice) + '</div>' : (e.czDef ? '<hr style="border:none;border-top:1px solid var(--brd);margin:6px 0"><div style="color:var(--acc3)">' + escHtml(e.czDef) + '</div>' : '')}</div>
     </div>
     <div class="orig-section">
       <div class="label">English</div>
@@ -2166,7 +2166,7 @@ function renderDetail() {
     </div>
     <div class="orig-section">
       <div class="label">Definice (EN)</div>
-      <div class="value">${escHtml(e.definice || e.def || '—')}</div>
+      <div class="value">${escHtml(e.definice || e.def || '—')}${(t?.definice && t.definice.trim()) ? '<hr style="border:none;border-top:1px solid var(--brd);margin:6px 0"><div style="color:var(--acc3)">' + escHtml(t.definice) + '</div>' : (e.czDef ? '<hr style="border:none;border-top:1px solid var(--brd);margin:6px 0"><div style="color:var(--acc3)">' + escHtml(e.czDef) + '</div>' : '')}</div>
     </div>
     <div class="orig-section">
       <div class="label">English</div>
@@ -2216,7 +2216,7 @@ function renderDetail() {
     </div>
     <div class="orig-section">
       <div class="label">Definice (EN)</div>
-      <div class="value">${escHtml(e.definice || e.def || '—')}</div>
+      <div class="value">${escHtml(e.definice || e.def || '—')}${(t?.definice && t.definice.trim()) ? '<hr style="border:none;border-top:1px solid var(--brd);margin:6px 0"><div style="color:var(--acc3)">' + escHtml(t.definice) + '</div>' : (e.czDef ? '<hr style="border:none;border-top:1px solid var(--brd);margin:6px 0"><div style="color:var(--acc3)">' + escHtml(e.czDef) + '</div>' : '')}</div>
     </div>
     <div class="orig-section">
       <div class="label">English</div>
@@ -2227,7 +2227,7 @@ function renderDetail() {
     sections = `
     <div class="orig-section">
       <div class="label">Definice (EN)</div>
-      <div class="value">${escHtml(e.definice || e.def || '—')}</div>
+      <div class="value">${escHtml(e.definice || e.def || '—')}${(t?.definice && t.definice.trim()) ? '<hr style="border:none;border-top:1px solid var(--brd);margin:6px 0"><div style="color:var(--acc3)">' + escHtml(t.definice) + '</div>' : (e.czDef ? '<hr style="border:none;border-top:1px solid var(--brd);margin:6px 0"><div style="color:var(--acc3)">' + escHtml(e.czDef) + '</div>' : '')}</div>
     </div>
     <div class="orig-section">
       <div class="label">KJV překlady</div>
@@ -2251,11 +2251,14 @@ function renderDetail() {
 }
 
 function renderTranslation(key, t) {
+  const e = entryMap.get(key);
   const sections = [
     { id: 'vyznam',   label: 'Český význam',       field: t?.vyznam },
-    { id: 'definice', label: 'Definice',            field: t?.definice },
-    { id: 'pouziti',  label: 'Biblické užití (KJV)',field: t?.pouziti },
+    { id: 'definice', label: 'Český překlad (AI)',field: t?.definice },
+    { id: 'pouziti',  label: 'Biblické užití',field: t?.pouziti },
     { id: 'puvod',    label: 'Původ / Etymologie',  field: t?.puvod },
+    { id: 'en',        label: 'English',            field: e?.en || '—' },
+    { id: 'kjv',       label: 'KJV překlady',      field: e?.kjv || '—' },
   ];
 
   return sections.map(s => `
@@ -3562,7 +3565,7 @@ function showPreviewModal(previewData) {
     </div>`;
   
   for (const [key, data] of Object.entries(previewData)) {
-    const e = entries.find(x => x.key === key);
+    const e = entryMap.get(key);
     const old = translated[key];
     html += `
     <div style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;margin:0 0 15px 0;padding:15px">
@@ -3575,7 +3578,7 @@ function showPreviewModal(previewData) {
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px">
         <div>
-          <div style="color:var(--txt3);font-size:10px;margin-bottom:5px">NOVÝ PŘEKLAD</div>
+          <div style="color:var(--acc);font-size:10px;margin-bottom:5px">🔄 ČESKÝ PŘEKLAD (od AI)</div>
           <div style="font-size:12px">
             <div><b>Význam:</b> ${escHtml(data.vyznam || '—')}</div>
             <div style="margin-top:5px"><b>Definice:</b> ${escHtml(data.definice || '—')}</div>
@@ -3584,14 +3587,10 @@ function showPreviewModal(previewData) {
           </div>
         </div>
         <div>
-          <div style="color:var(--txt3);font-size:10px;margin-bottom:5px">${old ? 'PŮVODNÍ' : 'PŘEDCHOZÍ'}</div>
-          ${old ? `
+          <div style="color:var(--txt3);font-size:10px;margin-bottom:5px">📖 ANGLICKÝ ORIGINÁL</div>
           <div style="font-size:12px;color:var(--txt2)">
-            <div><b>Význam:</b> ${escHtml(old.vyznam || '—')}</div>
-            <div style="margin-top:5px"><b>Definice:</b> ${escHtml(old.definice || '—')}</div>
-            <div style="margin-top:5px"><b>Použití:</b> ${escHtml(old.pouziti || '—')}</div>
-            <div style="margin-top:5px"><b>Původ:</b> ${escHtml(old.puvod || '—')}</div>
-          </div>` : '<div style="color:var(--txt3);font-style:italic">— žádný —</div>'}
+            <div><b>Definice:</b> ${escHtml(e?.definice || e?.def || '—')}</div>
+          </div>
         </div>
       </div>
     </div>`;
