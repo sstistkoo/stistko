@@ -1039,24 +1039,32 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
     <div class="list-pane">
       <div class="list-search">
         <select id="filterStatus" onchange="filterList()" aria-label="Filtrovat" style="font-size:11px;padding:4px 6px;background:var(--bg3);color:var(--txt);border:1px solid var(--brd);border-radius:3px;min-width:90px">
-          <option value="all|original">Vše</option>
-          <option value="pending|original">Čeká</option>
-          <option value="done|original">Přeloženo</option>
-          <option value="failed|original">Neús.</option>
-          <option value="g_all|original">G - Vše</option>
-          <option value="g_pending|original">G - Čeká</option>
-          <option value="g_done|original">G - Přel.</option>
-          <option value="h_all|original">H - Vše</option>
-          <option value="h_pending|original">H - Čeká</option>
-          <option value="h_done|original">H - Přel.</option>
-          <option value="all|num">Vše →G</option>
-          <option value="pending|num">Čeká →G</option>
-          <option value="done|num">Přel. →G</option>
-          <option value="g_all|num">G →G</option>
-          <option value="g_pending|num">G-Čeká →G</option>
-          <option value="g_done|num">G-Přel. →G</option>
-          <option value="all|greek">Vše A-Z</option>
-          <option value="g_all|greek">G A-Z</option>
+          <optgroup label="Vše">
+            <option value="all|original" selected>Vše - původní</option>
+            <option value="all|num">Vše - podle G</option>
+            <option value="all|greek">Vše - A-Z</option>
+          </optgroup>
+          <optgroup label="Čeká">
+            <option value="pending|original">Čeká - původní</option>
+            <option value="pending|num">Čeká - podle G</option>
+          </optgroup>
+          <optgroup label="Přeloženo">
+            <option value="done|original">Přel. - původní</option>
+            <option value="done|num">Přel. - podle G</option>
+          </optgroup>
+          <optgroup label="Řecké (G)">
+            <option value="g_all|original">G vše - původní</option>
+            <option value="g_all|num">G vše - podle G</option>
+            <option value="g_all|greek">G vše - A-Z</option>
+            <option value="g_pending|original">G čeká</option>
+            <option value="g_done|original">G přeloženo</option>
+          </optgroup>
+          <optgroup label="Hebrejské (H)">
+            <option value="h_all|original">H vše - původní</option>
+            <option value="h_all|num">H vše - podle G</option>
+            <option value="h_pending|original">H čeká</option>
+            <option value="h_done|original">H přeloženo</option>
+          </optgroup>
         </select>
         <input type="text" id="searchInput" placeholder="Hledat..."
           oninput="filterList()" aria-label="Hledat heslo" style="flex:1">
