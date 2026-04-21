@@ -75,6 +75,25 @@ function extractVyskyt(defText) {
   return matches.map(m => m.replace(/[\[\]]/g, '')).join(', ');
 }
 
+export function buildPromptMessages(batch) {
+  const items = batch.map(e => {
+    const def = e.definice || e.def || '';
+    return `${e.key} | ${e.greek}\nDEF: ${def}`;
+  }).join('\n\n');
+
+  return [
+    { role: 'system', content: SYSTEM_MESSAGE },
+    { role: 'user', content: 'Preloz hesla:\n' + items }
+  ];
+}
+
+export function buildRetryMessages(userContent) {
+  return [
+    { role: 'system', content: SYSTEM_MESSAGE },
+    { role: 'user', content: userContent }
+  ];
+}
+
 function finishEntry(e) {
   const base = { key: e.key, greek: e.greek, definice: e.definice || '' };
   const vyskyt = extractVyskyt(e.definice);
@@ -169,7 +188,7 @@ export function parseTranslations(raw, keys, translated = {}) {
       pouziti: fields['POUZITI'] || '',
       puvod: fields['PUVOD'] || '',
       kjv: fields['KJV'] || '',
-      _rawDefinition: fields['DEFINICE'] || ''
+      _rawDefinition: content  // Store full raw content
     };
   }
   
@@ -240,4 +259,4 @@ export function validateAPIResponse(d, p) {
   return true;
 }
 
-export default { parseTXT, parseTranslations, SYSTEM_MESSAGE, DEFAULT_PROMPT, escHtml, validateAPIResponse };
+export default { parseTXT, parseTranslations, buildPromptMessages, buildRetryMessages, SYSTEM_MESSAGE, DEFAULT_PROMPT, escHtml, validateAPIResponse };

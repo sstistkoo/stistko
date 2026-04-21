@@ -1205,16 +1205,20 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   // ══ CORE MODULE IMPORT ═══════════════════════════════════════════
   import core from './strong_translator_core_new.js';
   // Re-export for use in this module
-   const {
-     parseTXT: parseTXTCore,
-     parseTranslations: parseTranslationsCore,
-     buildPromptMessages: buildPromptMessagesCore,
-     buildRetryMessages: buildRetryMessagesCore,
-     escHtml: escHtmlCore,
-     validateAPIResponse,
-     SYSTEM_MESSAGE,
-     DEFAULT_PROMPT
-   } = core;
+const {
+      parseTXT: parseTXTCore,
+      parseTranslations: parseTranslationsCore,
+      buildPromptMessages: buildPromptMessagesCore,
+      buildRetryMessages: buildRetryMessagesCore,
+      escHtml: escHtmlCore,
+      validateAPIResponse,
+      SYSTEM_MESSAGE,
+      DEFAULT_PROMPT
+    } = core;
+    
+    // Use core functions for prompt building
+    const buildPromptMessages = buildPromptMessagesCore;
+    const buildRetryMessages = buildRetryMessagesCore;
 
   // ══ STORAGE KEY ══════════════════════════════════════════════════
   const STORE_KEY = 'strong_gr_cz_v2';
@@ -2546,25 +2550,7 @@ ${keys.map(k => {
 }
 
 // ══ BUILD PROMPT MESSAGES ═══════════════════════════════════════
-// Uses SYSTEM_MESSAGE and DEFAULT_PROMPT imported from core module
-function buildPromptMessages(batch) {
-  const items = batch.map(e => {
-    const def = e.definice || e.def || '';
-    return `${e.key} | ${e.greek}\nDEF: ${def}`;
-  }).join('\n\n');
-
-  return [
-    { role: 'system', content: SYSTEM_MESSAGE },
-    { role: 'user', content: 'Preloz hesla:\n' + items }
-  ];
-}
-
-function buildRetryMessages(userContent) {
-  return [
-    { role: 'system', content: SYSTEM_MESSAGE },
-    { role: 'user', content: userContent }
-  ];
-}
+// Uses buildPromptMessages and buildRetryMessages from core module
 
 function resetPrompt() {
   document.getElementById('promptEditor').value = DEFAULT_PROMPT;
