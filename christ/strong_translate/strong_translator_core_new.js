@@ -141,9 +141,9 @@ export function parseTranslations(raw, keys, translated = {}) {
   return keys.filter(k => !translated[k]?.vyznam);
 }
 
-export const SYSTEM_MESSAGE = 'Prekladac Strong slovniku. VYZNAM = cesky ekvivalent. DEFINICE = CESKY PREKLAD CELÉ anglicke definice z DEF: - PRELOZ vse do cestiny! Vsechna anglicka slova preloz do cestiny. NE kopiruj, ale PRELOZ! POUZITI = biblicka posta. PUVOD = etymologie. Format: ###G123### nebo ###H456###\nVYZNAM: [cesky ekvivalent]\nDEFINICE: [prelozena definice v cestine - cely preklad!]\nPOUZITI: [posta]\nPUVOD: [puvod].';
+export const SYSTEM_MESSAGE = 'Prekladac Strong slovniku. VYZNAM=cz ekvivalent. DEFINICE=cz preklad CELÉ anglicke definice z DEF:. POUZITI=biblicka posta. PUVOD=etymologie. Format: ###G123###\nVYZNAM: [cz ekvivalent]\nDEFINICE: [cz preklad]\nPOUZITI: [posta]\nPUVOD: [puvod].';
 
-export const DEFAULT_PROMPT = 'Preloz hesla. ULOHY:\n1. VYZNAM = cesky ekvivalent (kratce)\n2. DEFINICE = CESKY PREKLAD VSEHO z DEF: - vsechna anglicka slova PRELOZ, NIC NENECHAVEJ v anglictine!\n3. POUZITI = biblicka posta\n4. PUVOD = etymologie\nDULEZITE: V DEFINICI preloz ABSOLUTNE VSE do cestiny!\nFormat:\n###KLIC###\nVYZNAM: [cesky ekvivalent]\nDEFINICE: [cely cesky preklad - zadna anglicka slova nezustavaj!]\nPOUZITI: [posta]\nPUVOD: [puvod]\n{HESLA}';
+export const DEFAULT_PROMPT = 'Preloz hesla. Ulohy:\n1. VYZNAM = cesky ekvivalent (kratce)\n2. DEFINICE = CESKY PREKLAD VSEHO z DEF: - vsechna anglicka slova PRELOZ, NIC NENECHAVEJ v anglictine!\n3. POUZITI = biblicka posta\n4. PUVOD = etymologie\nDULEZITE: V DEFINICI preloz ABSOLUTNE VSE do cestiny!\nFormat:\n###KLIC###\nVYZNAM: [cesky ekvivalent]\nDEFINICE: [cely cesky preklad - zadna anglicka slova nezustavaj!]\nPOUZITI: [posta]\nPUVOD: [puvod]\n{HESLA}';
 
 export function escHtml(s) {
   return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');

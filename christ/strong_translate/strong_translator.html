@@ -2560,12 +2560,9 @@ function buildPromptMessages(batch) {
     return `${e.key} | ${e.greek}\nEN: ${en}\nDEF: ${def}\nKJV: ${kjv}\nORIG: ${orig}`;
   }).join('\n\n');
 
-  const tmpl = document.getElementById('promptEditor')?.value || DEFAULT_PROMPT;
-  const userContent = tmpl.replace('{HESLA}', 'HESLA:\n' + items);
-  
   return [
     { role: 'system', content: SYSTEM_MESSAGE },
-    { role: 'user', content: userContent }
+    { role: 'user', content: 'Preloz hesla:\n' + items }
   ];
 }
 
