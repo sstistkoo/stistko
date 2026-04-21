@@ -2086,7 +2086,7 @@ function renderDetail() {
     </div>
     <div class="orig-section">
       <div class="label">Definice (EN)</div>
-      <div class="value">${escHtml(e.definice || e.def || '—')}${e.czDef ? '<hr style="border:none;border-top:1px solid var(--brd);margin:6px 0"><div style="color:var(--acc3)">' + escHtml(e.czDef) + '</div>' : ''}</div>
+      <div class="value">${escHtml(e.definice || e.def || '—')}${(t?.definice && t.definice.trim()) ? '<hr style="border:none;border-top:1px solid var(--brd);margin:6px 0"><div style="color:var(--acc3)">' + escHtml(t.definice) + '</div>' : (e.czDef ? '<hr style="border:none;border-top:1px solid var(--brd);margin:6px 0"><div style="color:var(--acc3)">' + escHtml(e.czDef) + '</div>' : '')}</div>
     </div>
     <div class="orig-section">
       <div class="label">English</div>
@@ -2251,14 +2251,10 @@ function renderDetail() {
 }
 
 function renderTranslation(key, t) {
-  const e = entryMap.get(key);
   const sections = [
     { id: 'vyznam',   label: 'Český význam',       field: t?.vyznam },
-    { id: 'definice', label: 'Český překlad (AI)',field: t?.definice },
     { id: 'pouziti',  label: 'Biblické užití',field: t?.pouziti },
     { id: 'puvod',    label: 'Původ / Etymologie',  field: t?.puvod },
-    { id: 'en',        label: 'English',            field: e?.en || '—' },
-    { id: 'kjv',       label: 'KJV překlady',      field: e?.kjv || '—' },
   ];
 
   return sections.map(s => `
