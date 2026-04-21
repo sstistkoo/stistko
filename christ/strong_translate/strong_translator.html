@@ -1858,7 +1858,6 @@ function getFilteredEntries() {
   const q = document.getElementById('searchInput').value.toLowerCase();
   const combined = document.getElementById('filterStatus')?.value || 'all|original';
   
-  // Rozděl kombinovaný filtr na status|sort
   const parts = combined.split('|');
   const statusFilter = parts[0];
   const sortBy = parts[1] || 'original';
@@ -1866,7 +1865,6 @@ function getFilteredEntries() {
   let lang = 'all';
   let status = 'all';
   
-  // Rozděl kombinovaný filtr na jazyk a stav
   if (statusFilter.startsWith('g_')) {
     lang = 'G';
     status = statusFilter.slice(2);
@@ -1900,8 +1898,16 @@ function getFilteredEntries() {
     filtered.sort((a, b) => a.greek.localeCompare(b.greek));
   } else if (sortBy === 'original') {
     filtered.sort((a, b) => {
-      const idxA = window._entryIndexMap?.get(a.key) ?? entries.findIndex(e => e.key === a.key);
-      const idxB = window._entryIndexMap?.get(b.key) ?? entries.findIndex(e => e.key === b.key);
+      // Safely get index without findIndex loop
+      let idxA, idxB;
+      if (window._entryIndexMap?.has(a.key)) {
+        idxA = window._entryIndexMap.get(a.key);
+        idxB = window._entryIndexMap.get(b.key);
+      } else {
+        // Fallback: use binary search if map exists, else linear
+        idxA = window._entryIndexMap ? entries.findIndex(x => x.key === a.key) : entries.indexOf(a);
+        idxB = window._entryIndexMap ? entries.findIndex(x => x.key === b.key) : entries.indexOf(b);
+      }
       return idxA - idxB;
     });
   } else {
@@ -1909,7 +1915,7 @@ function getFilteredEntries() {
       const numA = parseInt(a.key.slice(1));
       const numB = parseInt(b.key.slice(1));
       if (numA !== numB) return numA - numB;
-      return a.key.localeCompare(b.key); // G před H při stejném čísle
+      return a.key.localeCompare(b.key);
     });
   }
   
@@ -3843,7 +3849,17 @@ window.addEventListener('beforeunload', () => {
   if (autoTimer) clearTimeout(autoTimer);
   if (autoCountTimer) clearInterval(autoCountTimer);
   if (elapsedTimer) clearInterval(elapsedTimer);
+  stopResize();
 });
+
+// Resize handler cleanup
+function stopResize() {
+  resizing = false;
+  document.removeEventListener('mousemove', doResize);
+  document.removeEventListener('mouseup', stopResize);
+  document.removeEventListener('touchmove', doResize);
+  document.removeEventListener('touchend', stopResize);
+}
 </script>
 </body>
 </html>
