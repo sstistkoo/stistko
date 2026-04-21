@@ -865,8 +865,10 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
    font-size: 12px;
  }
 
-/* Virtual scrolling */
+/* Virtual scrolling - merged with base list-scroll */
 .list-scroll {
+  flex: 1;
+  overflow-y: auto;
   position: relative;
 }
 .phantom-spacer {
@@ -882,7 +884,16 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   left: 0;
   right: 0;
 }
+/* Virtual list-item - merged with base .list-item */
 .list-item {
+  display: grid;
+  grid-template-columns: 24px 50px 1fr 20px;
+  align-items: center;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--brd);
+  transition: background .1s;
+  gap: 8px;
   position: absolute;
   height: 32px;
 }
@@ -3826,6 +3837,13 @@ window.closeFailedModalSafe = closeFailedModalSafe;
 // Expose for debugging
 window.PROVIDERS = PROVIDERS;
 window.populateOpenRouterModels = populateOpenRouterModels;
+
+// Cleanup on page unload
+window.addEventListener('beforeunload', () => {
+  if (autoTimer) clearTimeout(autoTimer);
+  if (autoCountTimer) clearInterval(autoCountTimer);
+  if (elapsedTimer) clearInterval(elapsedTimer);
+});
 </script>
 </body>
 </html>
