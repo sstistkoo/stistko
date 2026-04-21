@@ -2195,7 +2195,8 @@ function renderDetail() {
     <div class="entry-header">
       <div class="entry-key">${e.key}</div>
       <div class="entry-greek">${escHtml(e.greek)}</div>
-      <div class="entry-status ${hasTranslation ? 'done' : ''}">${hasTranslation ? '✓ Přeloženo' : 'Čeká'}</div>
+      <div class="entry-status ${hasTranslation ? 'done' : ''}">${hasTranslation ? '✓' : '—'}</div>
+      ${hasTranslation ? `<button class="hbtn" style="margin-left:8px;font-size:10px;padding:3px 8px" onclick="retranslateSingle('${e.key}')" title="Přeložit znovu">↻</button>` : ''}
     </div>
 
     ${sections}
@@ -2303,6 +2304,23 @@ ORIG: ${e.orig}`;
   renderDetail();
   updateStats();
   renderList();
+}
+
+// ══ PŘEKLAD — ZNOVU ════════════════════════════════════════════
+async function retranslateSingle(key) {
+  if (!confirm(`Přeložit znovu heslo ${key}? Stávající překlad bude nahrazen.`)) return;
+  
+  // Označ jako nepřeložené pro další zpracování
+  delete translated[key];
+  saveProgress();
+  
+  // Vyber jen tento klíč
+  selectedKeys.clear();
+  selectedKeys.add(key);
+  renderList();
+  
+  // Zavolej překlad
+  await translateSelected();
 }
 
 // ══ PŘEKLAD — DÁVKA ══════════════════════════════════════════════
@@ -3756,6 +3774,7 @@ window.closeModal = closeModal;
 window.confirmModal = confirmModal;
 window.toggleSelect = toggleSelect;
 window.translateSingle = translateSingle;
+window.retranslateSingle = retranslateSingle;
 window.toggleEditSection = toggleEditSection;
 window.saveSection = saveSection;
 window.toggleAllPreview = toggleAllPreview;
