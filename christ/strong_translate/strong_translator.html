@@ -1650,6 +1650,13 @@ function initApp(loadingEl) {
   filteredKeys = entries.map(e => e.key);
   initVirtualScroll();
   renderList();
+  
+  // Scroll na začátek po načtení a znovu vykresli
+  const listScroll = document.getElementById('listScroll');
+  if (listScroll) listScroll.scrollTop = 0;
+  lastRenderRange = { start: -1, end: -1, doneStates: {} };
+  renderVisible();
+  
   updateStats();
   initRunSelects();
   updateFailedCount();
