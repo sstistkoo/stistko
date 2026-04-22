@@ -1127,8 +1127,8 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       <button class="hbtn" onclick="jumpToStart()" title="Přeskočit na toto číslo" aria-label="Přeskočit na zadané G číslo">→</button>
     </div>
     <div class="hdr-btns">
-      <button class="hbtn" id="btnImport" onclick="document.getElementById('importFileInput').click()" aria-label="Importovat TXT soubor s překlady">⬆ Import TXT</button>
-      <input type="file" id="importFileInput" accept=".txt" style="display:none" onchange="importTXT(this)" aria-label="Výběr TXT souboru k importu">
+      <button class="hbtn" id="btnImport" onclick="document.getElementById('importFileInput').click()" aria-label="Importovat TXT nebo JSON soubor s překlady">⬆ Import TXT/JSON</button>
+      <input type="file" id="importFileInput" accept=".txt,.json,application/json,text/plain" style="display:none" onchange="importFile(this)" aria-label="Výběr TXT nebo JSON souboru k importu">
       <button class="hbtn auto" id="btnAuto" onclick="toggleAuto()" aria-label="Spustit automatický překlad">▶ AUTO</button>
       <button class="hbtn" id="btnToggleList" onclick="toggleListPane()" title="Skrýt/ukázat seznam" aria-label="Skrýt/ukázat seznam">≡ Seznam</button>
       <button class="hbtn" id="btnStep" onclick="translateNext()" aria-label="Přeložit další dávku">⚡ Dávka</button>
@@ -1540,6 +1540,7 @@ const {
   let autoTimer   = null;
   let autoCountTimer = null;
   let autoRunning = false;
+let autoStepRunning = false;
   let currentBatchSize = 10;
   let currentInterval  = 10;
   let filteredKeys = [];
@@ -1596,7 +1597,7 @@ const {
 
 function populateOpenRouterModels(selectElement, savedModel, callback) {
   const CACHE_KEY = 'openrouter_free_models_cache';
-  const CACHE_TTL = 5 * 60 * 1000; // 5 minutes in ms (pro jistotu vždy aktuální)
+  const CACHE_TTL = 5 * 60 * 1000; // 5 minutes in ms
 
   function restoreModel() {
     // Restore saved model or use first available
@@ -1612,26 +1613,46 @@ function populateOpenRouterModels(selectElement, savedModel, callback) {
     if (callback) callback();
   }
 
-  // Check cache first
+  function normalizeCachedModels(models) {
+    if (!Array.isArray(models)) return [];
+    return models.map(m => {
+      if (Array.isArray(m) && m.length >= 2) {
+        return { value: String(m[0] || ''), label: String(m[1] || m[0] || '') };
+      }
+      if (m && typeof m === 'object') {
+        const value = String(m.value || m.id || '');
+        const label = String(m.label || m.name || value);
+        return { value, label };
+      }
+      return null;
+    }).filter(Boolean).filter(o => o.value);
+  }
+
+  // Try cache first (rychlý start), ale vždy následně zkus aktualizaci z API
+  let hadFreshCache = false;
+  const preferredModel = selectElement.value || savedModel || '';
   const cached = localStorage.getItem(CACHE_KEY);
   if (cached) {
     try {
       const { timestamp, models } = JSON.parse(cached);
-      if (Date.now() - timestamp < CACHE_TTL && models.length >= 2) {
+      const normalized = normalizeCachedModels(models);
+      if (Date.now() - timestamp < CACHE_TTL && normalized.length >= 2) {
         // Use cached models
-        selectElement.innerHTML = models.map(([v, l]) => `<option value="${v}">${l}</option>`).join('');
+        selectElement.innerHTML = normalized.map(o => `<option value="${o.value}">${o.label}</option>`).join('');
         selectElement.disabled = false;
         restoreModel();
-        return;
+        hadFreshCache = true;
       }
     } catch (e) {
       // Invalid cache, fall through to fetch
     }
   }
 
-  // Loading state
-  selectElement.disabled = true;
-  selectElement.innerHTML = '<option value="">Načítám free modely…</option>';
+  // Loading state only when no cache available
+  if (!hadFreshCache) {
+    selectElement.disabled = true;
+    selectElement.innerHTML = '<option value="">Načítám free modely…</option>';
+  }
 
   fetch('https://openrouter.ai/api/v1/models?free=true')
     .then(r => {
@@ -1668,21 +1689,44 @@ function populateOpenRouterModels(selectElement, savedModel, callback) {
       const optionHtml = options.map(o => `<option value="${o.value}">${o.label}</option>`).join('');
       selectElement.innerHTML = optionHtml;
       selectElement.disabled = false;
+      if (preferredModel && selectElement.querySelector(`option[value="${preferredModel}"]`)) {
+        selectElement.value = preferredModel;
+      }
 
       // Cache the results
       try {
         localStorage.setItem(CACHE_KEY, JSON.stringify({
           timestamp: Date.now(),
-          models: options.map(o => [o.value, o.label])
+          models: options.map(o => ({ value: o.value, label: o.label }))
         }));
       } catch (e) {
         // Storage full, ignore
       }
 
-      restoreModel();
+      if (!hadFreshCache) restoreModel();
     })
     .catch(err => {
       console.error('OpenRouter models fetch failed:', err);
+      if (hadFreshCache) return;
+
+      // Fallback na jakoukoli dostupnou cache (i starou), aby app zůstala provozní
+      try {
+        const fallbackRaw = localStorage.getItem(CACHE_KEY);
+        if (fallbackRaw) {
+          const fallbackParsed = JSON.parse(fallbackRaw);
+          const fallbackModels = normalizeCachedModels(fallbackParsed.models);
+          if (fallbackModels.length > 0) {
+            selectElement.innerHTML = fallbackModels.map(o => `<option value="${o.value}">${o.label}</option>`).join('');
+            selectElement.disabled = false;
+            restoreModel();
+            showToast('⚠ OpenRouter API nedostupné, používám uložený seznam modelů');
+            return;
+          }
+        }
+      } catch (e) {
+        // Ignore parse errors and show final error state
+      }
+
       selectElement.innerHTML = '<option value="">Chyba načítání — zkontroluj připojení</option>';
       selectElement.disabled = true;
       restoreModel();
@@ -2551,6 +2595,7 @@ function renderTranslation(key, t) {
       <div class="tbox-head">
         <div class="tbox-label">${s.label}</div>
         <div class="tbox-actions">
+          <button class="tbox-btn" onclick="openTopicPromptModal('${key}','${s.id}')" aria-label="AI prompt pro ${s.label}">🤖 Prompt</button>
           <button class="tbox-btn" onclick="toggleEditSection('${key}','${s.id}')" aria-label="Upravit ${s.label}">✎ Upravit</button>
         </div>
       </div>
@@ -2579,6 +2624,155 @@ function saveSection(key, id) {
   saveProgress();
   document.getElementById(`tval-${key}-${id}`).textContent = val || '—';
   document.getElementById(`tedit-${key}-${id}`).classList.remove('show');
+}
+
+const TOPIC_LABELS = {
+  vyznam: 'Význam',
+  definice: 'Definice',
+  pouziti: 'Použití',
+  puvod: 'Původ / Etymologie',
+  kjv: 'KJV překlady'
+};
+
+let topicPromptState = null;
+
+function buildTopicPrompt(key, topicId) {
+  const e = entryMap.get(key) || {};
+  const t = translated[key] || {};
+  const topicLabel = TOPIC_LABELS[topicId] || topicId;
+  const promptTemplate = localStorage.getItem('strong_prompt') || DEFAULT_PROMPT;
+  const sourceText = [
+    `${e.key || key} | ${e.greek || ''}`,
+    `DEF: ${e.definice || e.def || ''}`,
+    e.kjv ? `KJV: ${e.kjv}` : '',
+    e.orig ? `ORIG: ${e.orig}` : ''
+  ].filter(Boolean).join('\n');
+  const existing = [
+    `Význam: ${t.vyznam || '—'}`,
+    `Definice: ${t.definice || '—'}`,
+    `Použití: ${t.pouziti || '—'}`,
+    `Původ: ${t.puvod || '—'}`
+  ].join('\n');
+
+  return `${promptTemplate}
+
+---
+TEĎ PŘELOŽ POUZE JEDNO TÉMA.
+- Heslo: ${key}
+- Pole: ${topicLabel} (${topicId})
+- Vrať jen čistý text pro toto jedno pole bez dalších sekcí.
+
+Zdrojová data:
+${sourceText}
+
+Aktuální překlad (kontext):
+${existing}`;
+}
+
+function openTopicPromptModal(key, topicId) {
+  const topicLabel = TOPIC_LABELS[topicId] || topicId;
+  topicPromptState = {
+    key,
+    topicId,
+    prompt: buildTopicPrompt(key, topicId)
+  };
+
+  closeTopicPromptModal();
+  const modal = document.createElement('div');
+  modal.id = 'topicPromptModal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:10020;padding:16px';
+  modal.innerHTML = `
+    <div style="width:min(980px,95vw);max-height:92vh;overflow:auto;background:var(--bg2);border:1px solid var(--brd);border-radius:8px;padding:16px">
+      <h3 style="margin:0 0 10px 0;color:var(--acc)">🤖 Prompt pro téma: ${escHtml(topicLabel)} (${escHtml(key)})</h3>
+      <div style="font-size:11px;color:var(--txt2);margin-bottom:8px">Prompt můžeš upravit před odesláním.</div>
+      <textarea id="topicPromptInput" style="width:100%;min-height:220px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:10px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.5"></textarea>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+        <button class="hbtn grn" id="topicPromptRunBtn" onclick="runTopicPromptAI()">▶ Odeslat AI</button>
+        <button class="hbtn" onclick="closeTopicPromptModal()">✕ Zavřít</button>
+      </div>
+      <div style="margin-top:14px">
+        <div style="font-size:11px;color:var(--txt2);margin-bottom:6px">Výsledek od AI (lze upravit před vložením):</div>
+        <textarea id="topicPromptResult" style="width:100%;min-height:180px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:10px;font-family:inherit;font-size:13px;line-height:1.5" placeholder="Po odeslání se sem vloží odpověď..."></textarea>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+          <button class="hbtn grn" onclick="applyTopicPromptResult()">✓ Vložit do pole</button>
+        </div>
+      </div>
+    </div>`;
+
+  document.body.appendChild(modal);
+  const promptInput = document.getElementById('topicPromptInput');
+  if (promptInput) promptInput.value = topicPromptState.prompt;
+}
+
+async function runTopicPromptAI() {
+  if (!topicPromptState) return;
+  const prov = document.getElementById('provider').value;
+  const model = document.getElementById('model').value;
+  const apiKey = (localStorage.getItem('strong_apikey_' + prov) || document.getElementById('apiKey').value || '').trim();
+  if (!apiKey) {
+    showToast('✗ Zadej API klíč!');
+    return;
+  }
+
+  const promptInput = document.getElementById('topicPromptInput');
+  const resultInput = document.getElementById('topicPromptResult');
+  const runBtn = document.getElementById('topicPromptRunBtn');
+  if (!promptInput || !resultInput || !runBtn) return;
+
+  const customPrompt = promptInput.value.trim();
+  if (!customPrompt) {
+    showToast('✗ Prompt je prázdný');
+    return;
+  }
+
+  runBtn.disabled = true;
+  runBtn.textContent = '⏳ Odesílám...';
+  try {
+    const messages = [
+      { role: 'system', content: SYSTEM_MESSAGE },
+      { role: 'user', content: customPrompt }
+    ];
+    const raw = await callAIWithRetry(prov, apiKey, model, messages);
+    resultInput.value = (raw?.content || '').trim();
+    log(`🤖 Překlad tématu: ${getTranslationEngineLabel(raw, prov, model)}`);
+  } catch (e) {
+    logError('runTopicPromptAI', e, { key: topicPromptState.key, topic: topicPromptState.topicId });
+    showToast('✗ Chyba: ' + e.message);
+  } finally {
+    runBtn.disabled = false;
+    runBtn.textContent = '▶ Odeslat AI';
+  }
+}
+
+function applyTopicPromptResult() {
+  if (!topicPromptState) return;
+  const { key, topicId } = topicPromptState;
+  const resultInput = document.getElementById('topicPromptResult');
+  if (!resultInput) return;
+  const val = resultInput.value.trim();
+  if (!translated[key]) translated[key] = {};
+  translated[key][topicId] = val || '—';
+  saveProgress();
+  renderDetail();
+  renderList();
+  updateStats();
+  showToast(`✓ Uloženo do pole ${TOPIC_LABELS[topicId] || topicId}`);
+}
+
+function closeTopicPromptModal() {
+  const modal = document.getElementById('topicPromptModal');
+  if (modal) modal.remove();
+}
+
+function formatPreviewRawTranslation(rawDef) {
+  const text = String(rawDef || '').trim();
+  if (!text) return '—';
+  const esc = escHtml(text);
+  const formatted = esc
+    .replace(/(VÝZNAM:|Význam:)/g, '<br><b>$1</b>')
+    .replace(/(DEFINICE:|Definice:)/g, '<br><b>$1</b>')
+    .replace(/(POUŽIT[ÍI]:|Použit[íi]:)/g, '<br><b>$1</b>');
+  return formatted.replace(/^<br>/, '');
 }
 
 // ══ PŘEKLAD — SINGLE ════════════════════════════════════════════
@@ -2751,7 +2945,7 @@ async function translateBatch(keys) {
   currentInterval = parseInt(document.getElementById('intervalRun').value);
   currentBatchSize = parseInt(document.getElementById('batchSizeRun').value);
 
-  if (!apiKey) { showToast('✗ Zadej API klíč!'); return; }
+  if (!apiKey) { showToast('✗ Zadej API klíč!'); return { ok: false }; }
 
   // Start timer při prvním překladu
   if (!startTime) {
@@ -2850,7 +3044,21 @@ ${keys.map(k => {
      updateFailedCount();
      // logEntry already called above after initial parse
      log(`✓ Přeloženo ${keys.length} hesel (${keys[0]}–${keys[keys.length-1]})`);
+     return { ok: true };
 } catch(e) {
+      const msg = (e?.message || '').toLowerCase();
+      const isRate = msg.includes('429') || msg.includes('rate limit') || msg.includes('quota') || msg.includes('too many');
+      if (isRate) {
+        const cooldownSeconds = Math.max(currentInterval, 60);
+        logWarn('translateBatch', `Rate limit dávky ${keys[0]}-${keys[keys.length-1]}, odklad ${cooldownSeconds}s`, {
+          provider: document.getElementById('provider')?.value,
+          keyRange: `${keys[0]}-${keys[keys.length-1]}`,
+          cooldownSeconds,
+          error: e.message
+        });
+        showToast(`⏳ Rate limit — další pokus za ${cooldownSeconds}s`);
+        return { ok: false, rateLimited: true, cooldownSeconds };
+      }
       logError('translateBatch', e, {
         keys: keys.slice(0, 5), // first 5 keys only
         keyRange: `${keys[0]}-${keys[keys.length-1]}`,
@@ -2866,6 +3074,7 @@ ${keys.map(k => {
       saveProgress();
       updateFailedCount();
       showToast('✗ ' + e.message);
+      return { ok: false };
    }
 }
 
@@ -2894,7 +3103,12 @@ function getFallbackModels(provider) {
       if (raw) {
         const cached = JSON.parse(raw);
         if (cached && Array.isArray(cached.models) && cached.models.length) {
-          return cached.models.map(m => m.id).filter(Boolean).slice(0, 5);
+          const ids = cached.models.map(m => {
+            if (Array.isArray(m)) return m[0];
+            if (m && typeof m === 'object') return m.id || m.value;
+            return null;
+          }).filter(Boolean);
+          return [...new Set(ids)].slice(0, 5);
         }
       }
     } catch(e) { /* ignore */ }
@@ -2922,7 +3136,7 @@ function debounce(fn, delay) {
 }
 
 async function callAIWithRetry(provider, apiKey, model, messages) {
-  const tryModels = [model, ...getFallbackModels(provider).filter(m => m !== model)];
+  const tryModels = [...new Set([model, ...getFallbackModels(provider).filter(m => m !== model)])];
   let lastErr = null;
 
   for (const m of tryModels) {
@@ -2942,6 +3156,7 @@ async function callAIWithRetry(provider, apiKey, model, messages) {
          const isRate = msg.includes('429') || msg.includes('quota') || msg.includes('rate') || msg.includes('too many');
          const isBanned = msg.includes('restricted') || msg.includes('organization');
          const is404 = msg.includes('404') || msg.includes('not found');
+         const isTimeout = e?.name === 'AbortError' || msg.includes('signal is aborted') || msg.includes('timeout');
 
          if (is404) {
            const errMsg = 'Chyba 404: Model nenalezen, vyberte jiný v nastavení';
@@ -2957,6 +3172,15 @@ async function callAIWithRetry(provider, apiKey, model, messages) {
              provider, model: m, attempt: attempt + 1, waitSeconds: wait
            });
            showToast(`⏳ Rate limit — čekám ${wait}s`);
+           await sleep(wait * 1000);
+           continue;
+         }
+         if (isTimeout) {
+           const wait = Math.min(8, (attempt + 1) * 2);
+           logWarn('callAIWithRetry', `Timeout/abort na ${m} (pokus ${attempt + 1}), opakuji za ${wait}s...`, {
+             provider, model: m, attempt: attempt + 1, waitSeconds: wait, error: e.message
+           });
+           showToast(`⏳ Timeout API — opakuji pokus za ${wait}s`);
            await sleep(wait * 1000);
            continue;
          }
@@ -3006,7 +3230,11 @@ function getTranslationEngineLabel(raw, fallbackProvider, fallbackModel) {
 async function callOnce(provider, apiKey, model, messages) {
   apiKey = apiKey.trim();
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), CONFIG.API_TIMEOUT);
+  let timedOut = false;
+  const timeout = setTimeout(() => {
+    timedOut = true;
+    controller.abort();
+  }, CONFIG.API_TIMEOUT);
   
   // Load AI settings from localStorage
   const temperature = parseFloat(localStorage.getItem('strong_ai_temperature')) || 0.3;
@@ -3084,13 +3312,25 @@ async function callOnce(provider, apiKey, model, messages) {
         signal: controller.signal
       });
      const d = await r.json();
-     if (!r.ok) throw new Error(d.error?.message || String(r.status));
+     if (!r.ok) {
+       const errMsg = d?.error?.message || d?.message || String(r.status);
+       const errCode = String(d?.error?.code || '');
+       if (r.status === 429 || errCode === '429') {
+         throw new Error(`429 Rate limit: ${errMsg}`);
+       }
+       throw new Error(`OpenRouter ${r.status}: ${errMsg}`);
+     }
      validateAPIResponse(d, 'openrouter');
      const content = extractOpenRouterText(d);
      if (!content) throw new Error('OpenRouter nevrátil čitelný text');
      return { content, usage: d.usage, resolvedModel: d.model || model };
   }
   throw new Error('Neznámý provider');
+  } catch (e) {
+    if (timedOut && e?.name === 'AbortError') {
+      throw new Error(`API timeout po ${Math.round(CONFIG.API_TIMEOUT / 1000)}s`);
+    }
+    throw e;
   } finally {
     clearTimeout(timeout);
   }
@@ -3138,37 +3378,43 @@ function stopAuto() {
 }
 
 async function runAutoStep() {
-  if (!autoRunning) return;
+  if (!autoRunning || autoStepRunning) return;
+  autoStepRunning = true;
 
-  const batch = getNextBatch(currentBatchSize);
-  if (!batch.length) {
-    stopAuto();
-    showToast('✓ Překlad dokončen!');
-    return;
-  }
+  try {
+    const batch = getNextBatch(currentBatchSize);
+    if (!batch.length) {
+      stopAuto();
+      showToast('✓ Překlad dokončen!');
+      return;
+    }
 
-  document.getElementById('autoBatch').textContent = batch[0] + '–' + batch[batch.length-1];
-  log(`⚡ Překládám ${batch[0]}–${batch[batch.length-1]}...`);
-  updateETA();
+    document.getElementById('autoBatch').textContent = batch[0] + '–' + batch[batch.length-1];
+    log(`⚡ Překládám ${batch[0]}–${batch[batch.length-1]}...`);
+    updateETA();
 
-  await translateBatch(batch);
-  updateStats();
-  renderList();
-  if (activeKey && translated[activeKey]) renderDetail();
+    const result = await translateBatch(batch);
+    updateStats();
+    renderList();
+    if (activeKey && translated[activeKey]) renderDetail();
 
-  if (!autoRunning) return;
+    if (!autoRunning) return;
 
-  // Odpočet do další dávky
-  let remaining = currentInterval;
-  document.getElementById('countdown').textContent = remaining;
-  clearInterval(autoCountTimer);
-  autoCountTimer = setInterval(() => {
-    remaining--;
+    // Odpočet do další dávky (u rate limitu delší odklad)
+    const delaySeconds = result?.rateLimited ? (result.cooldownSeconds || 60) : currentInterval;
+    let remaining = delaySeconds;
     document.getElementById('countdown').textContent = remaining;
-    if (remaining <= 0) clearInterval(autoCountTimer);
-  }, 1000);
+    clearInterval(autoCountTimer);
+    autoCountTimer = setInterval(() => {
+      remaining--;
+      document.getElementById('countdown').textContent = remaining;
+      if (remaining <= 0) clearInterval(autoCountTimer);
+    }, 1000);
 
-  autoTimer = setTimeout(runAutoStep, currentInterval * 1000);
+    autoTimer = setTimeout(runAutoStep, delaySeconds * 1000);
+  } finally {
+    autoStepRunning = false;
+  }
 }
 
 // ══ STATS & SAVE ════════════════════════════════════════════════
@@ -4578,7 +4824,7 @@ function showPreviewModal(previewData) {
           <div style="font-size:12px">
             <div><b>Význam:</b> ${escHtml(data.vyznam || '—')}</div>
             <div style="margin-top:5px"><b>Definice:</b> ${escHtml(data.definice || '—')}</div>
-            ${hasRaw && rawDef !== data.definice ? `<div style="margin-top:8px;padding:8px;background:var(--bg2);border-radius:4px;border-left:2px solid var(--acc);font-size:11px;color:var(--txt2)"><b>📝 Celý překlad:</b><br>${escHtml(rawDef)}</div>` : ''}
+            ${hasRaw && rawDef !== data.definice ? `<div style="margin-top:8px;padding:8px;background:var(--bg2);border-radius:4px;border-left:2px solid var(--acc);font-size:11px;color:var(--txt2)"><b>📝 Celý překlad:</b><div style="margin-top:5px;line-height:1.5">${formatPreviewRawTranslation(rawDef)}</div></div>` : ''}
             <div style="margin-top:5px"><b>Použití:</b> ${escHtml(data.pouziti || '—')}</div>
             <div style="margin-top:5px"><b>Původ:</b> ${escHtml(data.puvod || '—')}</div>
           </div>
@@ -4661,15 +4907,28 @@ function discardPreview() {
   showToast('✕ Překlad zrušen');
 }
 
-// ══ IMPORT TXT ════════════════════════════════════════════════════════
-function importTXT(input) {
+// ══ IMPORT TXT/JSON ═══════════════════════════════════════════════════
+function importFile(input) {
   const file = input.files[0];
   if (!file) return;
   const reader = new FileReader();
   reader.onload = ev => {
     try {
       const text = ev.target.result;
-      const imported = parseCzTXT(text);
+      const lowerName = (file.name || '').toLowerCase();
+      let imported = {};
+      if (lowerName.endsWith('.json')) {
+        imported = parseImportJSON(text);
+      } else if (lowerName.endsWith('.txt')) {
+        imported = parseCzTXT(text);
+      } else {
+        // Fallback: zkus JSON, pak TXT
+        try {
+          imported = parseImportJSON(text);
+        } catch (_) {
+          imported = parseCzTXT(text);
+        }
+      }
       const count = Object.keys(imported).length;
       if (!count) { showToast('✗ Žádná hesla nenalezena v souboru'); return; }
       const previewData = {};
@@ -4677,9 +4936,9 @@ function importTXT(input) {
         previewData[key] = data;
       }
        showPreviewModal(previewData);
-       showToast(`📥 Nalezeno ${count} hesel k importu`);
+       showToast(`📥 Nalezeno ${count} hesel k importu (${lowerName.endsWith('.json') ? 'JSON' : lowerName.endsWith('.txt') ? 'TXT' : 'auto'})`);
      } catch(e) {
-       logError('importTXT', e, { fileName: file?.name });
+       logError('importFile', e, { fileName: file?.name });
        showToast('✗ Chyba importu: ' + e.message);
      }
     input.value = '';
@@ -4687,25 +4946,34 @@ function importTXT(input) {
   reader.readAsText(file, 'utf-8');
 }
 
+function importTXT(input) {
+  // Zachováno kvůli zpětné kompatibilitě (historické volání z UI/externích skriptů)
+  return importFile(input);
+}
+
 // Parsuje formát: "G12 | ἄβυσσος\nČeský význam: ...\nDefinice: ..."
 function parseCzTXT(text) {
   const result = {};
-  const blocks = text.trim().split(/\n(?=G\d+\s*\|)/);
+  const normalizedText = String(text || '').replace(/^\uFEFF/, '').replace(/\r\n/g, '\n').trim();
+  const blocks = normalizedText.split(/\n(?=[GH]\d+\s*\|)/);
   for (const block of blocks) {
     const lines = block.trim().split('\n');
     const header = lines[0];
-    const m = header.match(/^(G\d+)\s*\|/);
+    const m = header.match(/^([GH]\d+)\s*\|/);
     if (!m) continue;
     const key = m[1];
     const get = (labels) => {
       for (const label of labels) {
-        const line = lines.find(l => l.startsWith(label + ':'));
+        const line = lines.find(l => {
+          const trimmed = l.trim();
+          return trimmed.startsWith(label + ':') || trimmed.startsWith(label + '：');
+        });
         if (line) return line.slice(label.length + 1).trim();
       }
       return '';
     };
-    const vyznam = get(['Český význam', 'Vyznam', 'VYZNAM', 'Cz:']);
-    const definice = get(['Česká definice', 'Definice', 'DEFINICE']);
+    const vyznam = get(['Český význam', 'Vyznam', 'VÝZNAM', 'VYZNAM', 'Význam', 'Cz', 'CZ']);
+    const definice = get(['Česká definice', 'Definice', 'DEFINICE', 'Definice (CZ)', 'CZ definice']);
     const pouziti = get(['Biblické užití (KJV)', 'Pouziti', 'POUZITI', 'Použití']);
     const puvod = get(['Původ', 'Puvod', 'PUVOD']);
     const kjv = get(['KJV překlady', 'KJV', 'KJV_PREKLADY', 'KJV Významy']);
@@ -4713,6 +4981,58 @@ function parseCzTXT(text) {
       result[key] = { vyznam, definice, pouziti, puvod, kjv };
     }
   }
+  return result;
+}
+
+function parseImportJSON(text) {
+  const parsed = JSON.parse(text);
+  const result = {};
+  const FIELDS = ['vyznam', 'definice', 'pouziti', 'puvod', 'kjv'];
+
+  const normalizeRecord = (record) => {
+    if (!record || typeof record !== 'object') return null;
+    const out = {};
+    for (const field of FIELDS) {
+      const val = record[field];
+      out[field] = typeof val === 'string' ? val.trim() : '';
+    }
+    return out;
+  };
+
+  const addRecord = (key, value) => {
+    if (!/^G\d+$/.test(key) && !/^H\d+$/.test(key)) return;
+    const normalized = normalizeRecord(value);
+    if (!normalized) return;
+    if (!FIELDS.some(f => normalized[f])) return;
+    result[key] = normalized;
+  };
+
+  if (Array.isArray(parsed)) {
+    for (const row of parsed) {
+      const key = row?.key || row?.strong || row?.id;
+      if (typeof key !== 'string') continue;
+      addRecord(key.trim(), row);
+    }
+    return result;
+  }
+
+  if (parsed && typeof parsed === 'object') {
+    // Variant A: přímý map exportu { "G1": {...}, "G2": {...} }
+    for (const [key, value] of Object.entries(parsed)) {
+      addRecord(String(key).trim(), value);
+    }
+
+    // Variant B: obálka s polem entries/translations
+    const wrapped = parsed.entries || parsed.translations || parsed.data;
+    if (Array.isArray(wrapped)) {
+      for (const row of wrapped) {
+        const key = row?.key || row?.strong || row?.id;
+        if (typeof key !== 'string') continue;
+        addRecord(key.trim(), row);
+      }
+    }
+  }
+
   return result;
 }
 
@@ -4814,6 +5134,7 @@ document.addEventListener('keydown', e => {
       closePromptLibraryModal();
       closePromptAIModal();
       closePromptLangModal();
+      closeTopicPromptModal();
     }
   if (document.getElementById('app').style.display === 'none') return;
   // Klávesové zkratky v app
@@ -4839,6 +5160,7 @@ window.saveApiKey = saveApiKey;
 window.resetPrompt = resetPrompt;
 window.jumpToStart = jumpToStart;
 window.toggleListPane = toggleListPane;
+window.importFile = importFile;
 window.importTXT = importTXT;
 window.translateNext = translateNext;
 window.selectRange = selectRange;
@@ -4866,6 +5188,10 @@ window.saveSection = saveSection;
 window.toggleAllPreview = toggleAllPreview;
 window.acceptPreview = acceptPreview;
 window.discardPreview = discardPreview;
+window.openTopicPromptModal = openTopicPromptModal;
+window.runTopicPromptAI = runTopicPromptAI;
+window.applyTopicPromptResult = applyTopicPromptResult;
+window.closeTopicPromptModal = closeTopicPromptModal;
 window.retryFailed = retryFailed;
 window.showMobileActions = showMobileActions;
 window.closeMobileModal = closeMobileModal;
