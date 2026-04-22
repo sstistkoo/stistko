@@ -1781,6 +1781,8 @@ function initRunSelects() {
 
 // ══ LOAD TXT ═════════════════════════════════════════════════════
 const LAST_FILE_KEY = 'strong_last_file';
+const DEFAULT_TXT_FILE = 'strong_finalni_verze.txt';
+const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/sstistkoo/stistko/main/christ/strong_translate/';
 
 function loadTXT(input) {
   const file = input.files[0];
@@ -1808,28 +1810,42 @@ function loadTXT(input) {
 }
 
 function loadDefaultFile() {
-  const lastFile = localStorage.getItem(LAST_FILE_KEY) || 'strong_greek_detailed.txt';
-  fetch(lastFile)
-    .then(r => {
-      if (!r.ok) throw new Error('Soubor nenalezen');
-      return r.text();
-    })
-    .then(text => {
+  const lastFile = localStorage.getItem(LAST_FILE_KEY) || DEFAULT_TXT_FILE;
+  const githubUrl = `${GITHUB_RAW_BASE}${encodeURIComponent(lastFile)}`;
+  const fallbacks = [githubUrl, lastFile, 'strong_greek_detailed.txt'];
+
+  const tryFetch = (idx) => {
+    if (idx >= fallbacks.length) {
+      throw new Error('Soubor nenalezen (GitHub ani lokální fallback)');
+    }
+    const target = fallbacks[idx];
+    return fetch(target)
+      .then(r => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.text();
+      })
+      .then(text => ({ text, source: target }))
+      .catch(() => tryFetch(idx + 1));
+  };
+
+  tryFetch(0)
+    .then(({ text, source }) => {
       entries = parseTXT(text);
       currentFileId = computeFileId(entries);
+      localStorage.setItem(LAST_FILE_KEY, lastFile);
       document.getElementById('statusTXT').innerHTML = `✓ ${lastFile} — ${entries.length} hesel`;
       document.getElementById('statusTXT').className = 'file-status ok';
       document.getElementById('fileReady').style.display = 'block';
       document.getElementById('startBtn').disabled = false;
       checkResume();
+      if (source === githubUrl) {
+        showToast('✓ Načteno z GitHubu');
+      } else {
+        showToast('⚠ Načten fallback soubor');
+      }
      })
     .catch(e => {
-      if (lastFile !== 'strong_greek_detailed.txt') {
-        localStorage.setItem(LAST_FILE_KEY, 'strong_greek_detailed.txt');
-        loadDefaultFile();
-        return;
-      }
-      logError('loadDefaultFile', e, { file: lastFile });
+      logError('loadDefaultFile', e, { file: lastFile, githubUrl });
       document.getElementById('statusTXT').textContent = '✗ ' + e.message;
     });
 }
