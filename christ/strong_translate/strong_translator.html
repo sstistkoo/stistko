@@ -1375,6 +1375,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
          <select id="aiMaxTokens" style="width:100%;padding:10px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:12px;">
            <option value="1000">1000</option>
            <option value="2000" selected>2000</option>
+          <option value="2500">2500</option>
            <option value="3000">3000</option>
            <option value="4000">4000</option>
          </select>
@@ -1795,15 +1796,8 @@ function checkDefaultFile() {
     document.getElementById('btnLoadDefault').style.display = 'inline-block';
     return;
   }
-  fetch('strong_greek_detailed.txt')
-    .then(r => {
-      if (r.ok) {
-        document.getElementById('btnLoadDefault').style.display = 'inline-block';
-      }
-    })
-    .catch(() => {
-      document.getElementById('btnLoadDefault').style.display = 'inline-block';
-    });
+  // Neprovádíme testovací fetch, aby se v konzoli neobjevoval zbytečný 404.
+  document.getElementById('btnLoadDefault').style.display = 'inline-block';
 }
 
 function updateAutoBtn() {
@@ -2057,6 +2051,7 @@ async function translateSelected() {
     try {
       const raw = await callAIWithRetry(prov, apiKey, model, messages);
       const content = raw.content;
+      log(`🤖 Překlad: ${getTranslationEngineLabel(raw, prov, model)}`);
       if (window.DEBUG_AI) {
         console.groupCollapsed(`AI selected ${batchKeys[0]}–${batchKeys[batchKeys.length-1]}`);
         console.log('response:', content);
@@ -2611,6 +2606,7 @@ const model  = document.getElementById('model').value;
   
   try {
     const raw = await callAIWithRetry(prov, apiKey, model, messages);
+    log(`🤖 Překlad: ${getTranslationEngineLabel(raw, prov, model)}`);
     if (window.DEBUG_AI) {
       console.groupCollapsed(`AI single ${key}`);
       console.log('response:', raw.content);
@@ -2769,6 +2765,7 @@ async function translateBatch(keys) {
   try {
     const raw = await callAIWithRetry(prov, apiKey, model, messages);
     const content = raw.content;
+    log(`🤖 Překlad: ${getTranslationEngineLabel(raw, prov, model)}`);
     // Verbose logy pouze když je aktivní režim pro debug (window.DEBUG_AI = true v konzoli)
     if (window.DEBUG_AI) {
       console.groupCollapsed(`AI batch ${keys[0]}–${keys[keys.length-1]}`);
@@ -2931,7 +2928,14 @@ async function callAIWithRetry(provider, apiKey, model, messages) {
   for (const m of tryModels) {
     for (let attempt = 0; attempt < 3; attempt++) {
       try {
-        return await callOnce(provider, apiKey, m, messages);
+        const res = await callOnce(provider, apiKey, m, messages);
+        return {
+          ...res,
+          providerUsed: provider,
+          requestedModel: model,
+          attemptedModel: m,
+          resolvedModel: res.resolvedModel || m
+        };
        } catch(e) {
          lastErr = e;
          const msg = (e.message || '').toLowerCase();
@@ -2973,6 +2977,32 @@ async function callAIWithRetry(provider, apiKey, model, messages) {
   throw lastErr || new Error('Všechny modely selhaly');
 }
 
+function extractOpenRouterText(d) {
+  const content = d?.choices?.[0]?.message?.content;
+  if (typeof content === 'string') return content;
+  if (Array.isArray(content)) {
+    return content.map(part => {
+      if (typeof part === 'string') return part;
+      if (part && typeof part.text === 'string') return part.text;
+      return '';
+    }).join('').trim();
+  }
+  return '';
+}
+
+function getTranslationEngineLabel(raw, fallbackProvider, fallbackModel) {
+  const provider = raw?.providerUsed || fallbackProvider || '?';
+  const resolved = raw?.resolvedModel || raw?.attemptedModel || fallbackModel || '?';
+  const requested = raw?.requestedModel || fallbackModel || resolved;
+  if (provider === 'openrouter' && requested === 'openrouter/free' && resolved !== requested) {
+    return `${provider} | auto-router -> ${resolved}`;
+  }
+  if (resolved !== requested) {
+    return `${provider} | ${resolved} (fallback from ${requested})`;
+  }
+  return `${provider} | ${resolved}`;
+}
+
 async function callOnce(provider, apiKey, model, messages) {
   apiKey = apiKey.trim();
   const controller = new AbortController();
@@ -3012,7 +3042,7 @@ async function callOnce(provider, apiKey, model, messages) {
       console.log(content);
       throw new Error('AI vrátila nesmyslnou odpověď - zkuste delší interval');
     }
-    return { content, usage: d.usage };
+    return { content, usage: d.usage, resolvedModel: d.model || model };
 
    } else if (provider === 'gemini') {
      const userContent = messages.find(m => m.role === 'user')?.content || '';
@@ -3038,7 +3068,7 @@ async function callOnce(provider, apiKey, model, messages) {
        log(`📊 Gemini: ${d.usageMetadata.promptTokenCount} in / ${d.usageMetadata.candidatesTokenCount} out`);
      }
       const content = d.candidates[0].content.parts[0].text;
-      return { content, usage: d.usageMetadata };
+      return { content, usage: d.usageMetadata, resolvedModel: d.modelVersion || d.model || model };
 
      } else if (provider === 'openrouter') {
       const r = await fetch('https://corsproxy.io/?https://openrouter.ai/api/v1/chat/completions', {
@@ -3056,7 +3086,9 @@ async function callOnce(provider, apiKey, model, messages) {
      const d = await r.json();
      if (!r.ok) throw new Error(d.error?.message || String(r.status));
      validateAPIResponse(d, 'openrouter');
-     return { content: d.choices[0].message.content, usage: d.usage };
+     const content = extractOpenRouterText(d);
+     if (!content) throw new Error('OpenRouter nevrátil čitelný text');
+     return { content, usage: d.usage, resolvedModel: d.model || model };
   }
   throw new Error('Neznámý provider');
   } finally {

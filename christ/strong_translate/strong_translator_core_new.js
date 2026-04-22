@@ -255,7 +255,15 @@ export function validateAPIResponse(d, p) {
   if (!d) throw new Error('Empty');
   if (p === 'groq' && !d.choices?.[0]?.message?.content) throw new Error('Invalid Groq');
   if (p === 'gemini' && !d.candidates?.[0]?.content?.parts?.[0]?.text) throw new Error('Invalid Gemini');
-  if (p === 'openrouter' && !d.choices?.[0]?.message?.content) throw new Error('Invalid OpenRouter');
+  if (p === 'openrouter') {
+    const content = d.choices?.[0]?.message?.content;
+    const hasString = typeof content === 'string' && content.trim().length > 0;
+    const hasArrayText = Array.isArray(content) && content.some(part =>
+      typeof part === 'string' ||
+      (part && typeof part.text === 'string' && part.text.trim().length > 0)
+    );
+    if (!hasString && !hasArrayText) throw new Error('Invalid OpenRouter');
+  }
   return true;
 }
 
