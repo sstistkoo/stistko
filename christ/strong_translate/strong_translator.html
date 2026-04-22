@@ -1439,7 +1439,19 @@ const {
    // buildPromptMessagesCore is already destructured above
    const buildRetryMessages = buildRetryMessagesCore;
    
-   // Custom buildPromptMessages that reads from localStorage
+  function enforceSpecialistaFormat(promptText) {
+    const text = String(promptText || '');
+    const hasSpecialista = /SPECIALISTA|VYKLAD|EXEGEZE|COMMENTARY/i.test(text);
+    if (hasSpecialista) return text;
+    return `${text}
+
+POVINNÝ VÝSTUP NAVÍC:
+- Přidej řádek SPECIALISTA: [detailní odstavec 3-5 vět jako biblický specialista].
+- Odstavec má vysvětlit teologický a biblický význam slova v kontextu.
+- Nepiš body ani seznam, jen souvislý odstavec.`;
+  }
+
+  // Custom buildPromptMessages that reads from localStorage
     function buildPromptMessages(batch) {
       const items = batch.map(e => {
         const def = e.definice || e.def || '';
@@ -1469,6 +1481,7 @@ const {
       let processedPrompt = userPromptTemplate
         .replace(/{TARGET_LANG}/g, targetName)
         .replace(/{SOURCE_LANG}/g, sourceName);
+      processedPrompt = enforceSpecialistaFormat(processedPrompt);
       
       const userContent = processedPrompt.includes('{HESLA}') 
         ? processedPrompt.replace(/{HESLA}/g, items)
@@ -2701,7 +2714,16 @@ function buildTopicPrompt(key, topicId) {
     `Specialista: ${t.specialista || '—'}`
   ].join('\n');
 
-  return `${promptTemplate}
+  const specialistaDetailRule = topicId === 'specialista'
+    ? `
+
+POŽADAVEK NA STYL:
+- Vrať detailní exegetický odstavec (3-5 vět), jako biblický specialista.
+- Vysvětli význam slova v širším biblickém a teologickém kontextu.
+- Bez odrážek, bez číslování, bez dalších polí.`
+    : '';
+
+  return `${enforceSpecialistaFormat(promptTemplate)}
 
 ---
 TEĎ PŘELOŽ POUZE JEDNO TÉMA.
@@ -2713,7 +2735,7 @@ Zdrojová data:
 ${sourceText}
 
 Aktuální překlad (kontext):
-${existing}`;
+${existing}${specialistaDetailRule}`;
 }
 
 function openTopicPromptModal(key, topicId) {

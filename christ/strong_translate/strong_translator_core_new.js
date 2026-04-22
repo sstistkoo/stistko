@@ -205,7 +205,7 @@ export function parseTranslations(raw, keys, translated = {}) {
     };
   }
   
-  return keys.filter(k => !translated[k]?.vyznam);
+  return keys.filter(k => !translated[k]?.vyznam || !translated[k]?.specialista);
 }
 
 export const SYSTEM_MESSAGE = `Prekladac Strongova slovniku do cestiny.
