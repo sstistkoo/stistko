@@ -226,41 +226,25 @@ ZAKAZY:
 - "al." = "v dalsich mistech"
 - HODNOTY V DEFINICI: 1., 2., 3. (CISLA, ne __1.)`;
 
-export const DEFAULT_PROMPT = `Preloz hesla do CESTINY.
+export const DEFAULT_PROMPT = `Preloz hesla do {TARGET_LANG} ze {SOURCE_LANG}.
 
-ZVLASTNI - POVINNE:
-- "__1." -> "1.", "__2." -> "2." (CISLA, ne podtrzitka!)
-- "al." = "v dalsich mistech"
-- indecl. = nezmenitelny
-- POUZITI: [Luk.1:5], [Mk 14:36]
-- PUVOD: z řeckého X / z hebrejskeho Y
-- ZAKAZ: Nepiste "ZVLASTNI:"!
+Vrat JEN data, bez komentaru navic. Zachovej poradi hesel.
+Pouzij pro kazde heslo presne tento format:
+###G[cislo]###
+VYZNAM: [kratky presny preklad]
+DEFINICE: [lexikalni vyznam a gramatika]
+POUZITI: [biblicke reference v hranatych zavorkach]
+PUVOD: [etymologie: z reckeho / z hebrejskeho korene]
+KJV: [hlavni KJV preklad]
+SPECIALISTA: [souvisly odstavec 3-5 vet, bez odrazek]
 
-Priklad:
-VSTUP: G2 | Ἀαρών
-DEF: Ἀαρών (Heb. אַהֲרוֹן), indecl. (in FlJ, -ῶνος), Aaron ([Exo.4:14], al.): [Luk.1:5], [Act.7:40].
+Pravidla normalizace:
+- "__1." a "__2." prepis na "1." a "2."
+- "al." prepis na "v dalsich mistech"
+- "indecl." preloz jako "nezmenitelny"
+- Nepis "ZVLASTNI:" ani jine instrukce
 
-SPRAVNE:
-###G2###
-VYZNAM: Árón
-DEFINICE: Árón (hebrejsky אַהֲרוֹן), nesklonnitelný: [Exo 4:14], v dalsich mistech, [Luk.1:5], [Sk 7:40].
-POUZITI: [Luk.1:5], [Skutky 7:40]
-PUVOD: z hebrejskeho אַהֲרוֹן
-KJV: Árón
-SPECIALISTA: Jmeno Aaron v biblickem kontextu casto nese rodovou a knezskou autoritu; v NZ je spojeno s chrámovou sluzbou a starozakonnim odkazem.
-
-VSTUP: G24 | ἀγανάκτησις
-DEF: ἀγανάκτησις, -εως, ἡ (ἀγανακτέω), [in LXX:] indignation: [2Co.7:11].
-
-SPRAVNE:
-###G24###
-VYZNAM: rozhořčení
-DEFINICE: rozhořčení (ἀγανάκτησις, -εως, ἡ [v LXX:] indignation: [2Ko.7:11]).
-POUZITI: [Lukas 1:5], [2Kor 7:11]
-PUVOD: z řeckého ἀγανακτέω
-KJV: rozhořčení
-SPECIALISTA: Vyraz popisuje morální poboureni nad zlem; v biblickem diskurzu nejde jen o emoci, ale i o eticky postoj vedouci k naprave.
-
+HESLA:
 {HESLA}`;
 
 export function escHtml(s) {
