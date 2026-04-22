@@ -1115,6 +1115,13 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
     <div class="stat">Zbývá: <b id="sRemain">0</b></div>
     <div class="stat">Celkem: <b id="sTotal">0</b></div>
     <div class="stat" style="color:var(--acc)" id="tokenStats" role="status" aria-live="polite">📊 Tokeny: 0</div>
+    <label class="stat" for="autoTokenLimit" style="display:flex;align-items:center;gap:6px;color:var(--txt3);font-size:10px">
+      🛑 Stop tokeny
+      <input type="number" id="autoTokenLimit" min="0" step="100" placeholder="0 = vypnuto"
+        style="width:110px;background:var(--bg3);border:1px solid var(--brd);border-radius:3px;padding:3px 6px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt);outline:none"
+        title="Po dosažení této hodnoty se AUTO zastaví. 0 = bez limitu."
+        aria-label="Limit tokenů pro automatické zastavení překladu">
+    </label>
   <div class="stat" id="timeElapsed" style="color:var(--txt3);font-size:10px">⏱ <span id="elapsedTime">0:00</span></div>
     <div class="pbar-wrap" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="pbarContainer"><div class="pbar-fill" id="pbar" style="width:0%"></div></div>
     <div style="display:flex;align-items:center;gap:5px;flex-shrink:0">
@@ -1566,6 +1573,7 @@ let autoStepRunning = false;
   let elapsedTimer = null;
   let selectedKeys = new Set();
   let totalTokens = { in: 0, out: 0, total: 0 };
+  const AUTO_TOKEN_LIMIT_KEY = 'strong_auto_token_limit';
 
   // Virtual scrolling
   const CONFIG = {
@@ -3489,6 +3497,11 @@ function startAuto() {
   document.getElementById('btnAuto').textContent = '■ AUTO';
   document.getElementById('autoPanel').classList.add('show');
   document.getElementById('autoInterval').textContent = currentInterval;
+  if (isAutoTokenLimitReached()) {
+    stopAuto();
+    showToast('⚠ AUTO nestartoval: dosažen limit tokenů');
+    return;
+  }
   runAutoStep();
 }
 
@@ -3508,6 +3521,13 @@ async function runAutoStep() {
   autoStepRunning = true;
 
   try {
+    if (isAutoTokenLimitReached()) {
+      stopAuto();
+      log('🛑 AUTO zastaven: dosažen limit tokenů');
+      showToast('🛑 AUTO zastaven: dosažen limit tokenů');
+      return;
+    }
+
     const batch = getNextBatch(currentBatchSize);
     if (!batch.length) {
       stopAuto();
@@ -3796,6 +3816,13 @@ function loadSavedSettings() {
   const sourceEl = document.getElementById('sourceLanguage');
   if (targetEl) targetEl.value = targetLang;
   if (sourceEl) sourceEl.value = sourceLang;
+
+  const tokenLimitEl = document.getElementById('autoTokenLimit');
+  if (tokenLimitEl) {
+    tokenLimitEl.value = localStorage.getItem(AUTO_TOKEN_LIMIT_KEY) || '';
+    tokenLimitEl.oninput = saveAutoTokenLimit;
+  }
+  refreshTokenStatsDisplay();
 }
 
 // Volej po načtení stránky
@@ -4320,29 +4347,20 @@ const CATEGORY_LABELS = {
 const FINAL_PROMPT = {
   name: 'Finální',
   desc: 'Kompletní překlad se všemi poli',
-  text: `Jsi odborník na biblické řecký a hebrejský jazyk. Přelož následující hesla s maximální přesností.
+  text: `Přelož hesla do {TARGET_LANG} ze {SOURCE_LANG} přesně a konzistentně.
 
-Pro každé heslo poskytni VŠECHNY následující položky:
-- VÝZNAM: Český překlad slova (přesný, s diakritikou)
-- DEFINICE: Podrobný popis významu, gramatiky, usage
-- PREPIS: Transliterace (latinka)
-- TVAROSLOVI: Gramatické označení
-- KJV: Všechny překlady z King James Bible (odděluj |)
-- PŮVOD: Etymologie (řecký/hebrejský kořen)
+Vrať pouze data, bez komentářů navíc. Zachovej pořadí hesel.
+Formát pro každé heslo musí být:
+###G[číslo]###
+VÝZNAM: [přesný překlad]
+DEFINICE: [lexikální význam a gramatika]
+POUZITI: [biblické reference v hranatých závorkách]
+PUVOD: [etymologie]
+KJV: [hlavní KJV překlad]
+SPECIALISTA: [souvislý odstavec 3-5 vět bez odrážek]
 
 HESLA:
-{HESLA}
-
-Vrať výstup STRICTně v tomto formátu pro každé heslo:
-###G[číslo]###
-VÝZNAM: [překlad]
-DEFINICE: [definice]
-PREPIS: [transliterace]
-TVAROSLOVI: [tvarosloví]
-KJV: [překlady]
-PŮVOD: [původ]
-
-ŽÁDNÉ dodatečné komentáře, pouze data. Zachovej pořadí hesel.`
+{HESLA}`
 };
 
 const PROMPT_LIBRARY = {
@@ -4956,11 +4974,49 @@ function showToastWithAction(msg, actionLabel, onClick) {
   totalTokens.in += inT;
   totalTokens.out += outT;
   totalTokens.total += total;
-  
-  const el = document.getElementById('tokenStats');
-  if (el) {
-    el.textContent = `📊 Celkem: ${totalTokens.in} in / ${totalTokens.out} out = ${totalTokens.total}`;
+  refreshTokenStatsDisplay();
+
+  if (autoRunning && isAutoTokenLimitReached()) {
+    stopAuto();
+    log('🛑 AUTO zastaven po dávce: dosažen limit tokenů');
+    showToast('🛑 AUTO zastaven: dosažen limit tokenů');
   }
+}
+
+function saveAutoTokenLimit() {
+  const input = document.getElementById('autoTokenLimit');
+  if (!input) return;
+  const raw = String(input.value || '').trim();
+  const value = parseInt(raw, 10);
+  if (!raw || Number.isNaN(value) || value <= 0) {
+    localStorage.removeItem(AUTO_TOKEN_LIMIT_KEY);
+    input.value = '';
+  } else {
+    input.value = String(value);
+    localStorage.setItem(AUTO_TOKEN_LIMIT_KEY, String(value));
+  }
+  refreshTokenStatsDisplay();
+}
+
+function getAutoTokenLimit() {
+  const input = document.getElementById('autoTokenLimit');
+  const fromInput = parseInt(String(input?.value || '').trim(), 10);
+  if (!Number.isNaN(fromInput) && fromInput > 0) return fromInput;
+  const fromStorage = parseInt(localStorage.getItem(AUTO_TOKEN_LIMIT_KEY) || '0', 10);
+  return Number.isNaN(fromStorage) ? 0 : Math.max(0, fromStorage);
+}
+
+function isAutoTokenLimitReached() {
+  const limit = getAutoTokenLimit();
+  return limit > 0 && totalTokens.total >= limit;
+}
+
+function refreshTokenStatsDisplay() {
+  const el = document.getElementById('tokenStats');
+  if (!el) return;
+  const limit = getAutoTokenLimit();
+  const suffix = limit > 0 ? ` / limit ${limit}` : '';
+  el.textContent = `📊 Celkem: ${totalTokens.in} in / ${totalTokens.out} out = ${totalTokens.total}${suffix}`;
 }
 
 // Preview modal pro hromadny preklad
