@@ -3372,6 +3372,16 @@ function loadSavedSettings() {
   checkDefaultFile();
   updateFailedCount();
   updatePromptStatusIndicator();
+
+  // Load language settings
+  let targetLang = localStorage.getItem('strong_target_lang') || 'cz';
+  if (targetLang === 'cs') targetLang = 'cz'; // Migration from old code
+  let sourceLang = localStorage.getItem('strong_source_lang') || 'gr';
+  
+  const targetEl = document.getElementById('targetLanguage');
+  const sourceEl = document.getElementById('sourceLanguage');
+  if (targetEl) targetEl.value = targetLang;
+  if (sourceEl) sourceEl.value = sourceLang;
 }
 
 // Volej po načtení stránky
