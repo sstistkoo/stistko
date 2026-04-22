@@ -2632,6 +2632,7 @@ function renderTranslation(key, t) {
     { id: 'kjv',     label: 'KJV překlady (CZ)', field: t?.kjv },
     { id: 'pouziti',  label: 'Biblické užití',     field: t?.pouziti },
     { id: 'puvod',    label: 'Původ / Etymologie',  field: t?.puvod },
+    { id: 'specialista', label: 'Biblický výklad (specialista)', field: t?.specialista },
   ];
 
   return sections.map(s => `
@@ -2675,7 +2676,8 @@ const TOPIC_LABELS = {
   definice: 'Definice',
   pouziti: 'Použití',
   puvod: 'Původ / Etymologie',
-  kjv: 'KJV překlady'
+  kjv: 'KJV překlady',
+  specialista: 'Biblický výklad (specialista)'
 };
 
 let topicPromptState = null;
@@ -2695,7 +2697,8 @@ function buildTopicPrompt(key, topicId) {
     `Význam: ${t.vyznam || '—'}`,
     `Definice: ${t.definice || '—'}`,
     `Použití: ${t.pouziti || '—'}`,
-    `Původ: ${t.puvod || '—'}`
+    `Původ: ${t.puvod || '—'}`,
+    `Specialista: ${t.specialista || '—'}`
   ].join('\n');
 
   return `${promptTemplate}
@@ -2818,7 +2821,8 @@ function extractTopicValueFromAI(rawText, topicId) {
     definice: 'DEFINICE',
     pouziti: 'POUZITI',
     puvod: 'PUVOD',
-    kjv: 'KJV'
+    kjv: 'KJV',
+    specialista: 'SPECIALISTA'
   }[topicId] || '';
 
   let cleaned = text
@@ -2829,13 +2833,14 @@ function extractTopicValueFromAI(rawText, topicId) {
   const lines = cleaned.split('\n');
   const fieldPositions = [];
   for (let i = 0; i < lines.length; i++) {
-    const m = lines[i].match(/^(VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|DEF|DEFINITION|MEANING|USAGE|ORIGIN)\s*[-:–—=.]?\s*/i);
+    const m = lines[i].match(/^(VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|SPECIALISTA|VYKLAD|KOMENTAR|EXEGEZE|DEF|DEFINITION|MEANING|USAGE|ORIGIN|COMMENTARY|EXEGESIS)\s*[-:–—=.]?\s*/i);
     if (!m) continue;
     let label = m[1].toUpperCase();
     if (label === 'DEF' || label === 'DEFINITION') label = 'DEFINICE';
     if (label === 'MEANING') label = 'VYZNAM';
     if (label === 'USAGE') label = 'POUZITI';
     if (label === 'ORIGIN') label = 'PUVOD';
+    if (label === 'VYKLAD' || label === 'KOMENTAR' || label === 'EXEGEZE' || label === 'COMMENTARY' || label === 'EXEGESIS') label = 'SPECIALISTA';
     fieldPositions.push({ label, line: i, len: m[0].length });
   }
 
@@ -2866,7 +2871,8 @@ function formatPreviewRawTranslation(rawDef) {
   const formatted = esc
     .replace(/(VÝZNAM:|Význam:)/g, '<br><b>$1</b>')
     .replace(/(DEFINICE:|Definice:)/g, '<br><b>$1</b>')
-    .replace(/(POUŽIT[ÍI]:|Použit[íi]:)/g, '<br><b>$1</b>');
+    .replace(/(POUŽIT[ÍI]:|Použit[íi]:)/g, '<br><b>$1</b>')
+    .replace(/(SPECIALISTA:|Specialista:|VÝKLAD:|Výklad:)/g, '<br><b>$1</b>');
   return formatted.replace(/^<br>/, '');
 }
 
@@ -3163,7 +3169,7 @@ ${keys.map(k => {
       // Označ chybná hesla jako neúspěšná, aby šla zobrazit v "Neúspěšné překlady"
       for (const key of keys) {
         if (!translated[key]) {
-          translated[key] = { vyznam: '—', definice: '', pouziti: '', puvod: '', raw: `CHYBA: ${e.message}` };
+          translated[key] = { vyznam: '—', definice: '', pouziti: '', puvod: '', specialista: '', raw: `CHYBA: ${e.message}` };
         }
       }
       saveProgress();
@@ -4922,6 +4928,7 @@ function showPreviewModal(previewData) {
             ${hasRaw && rawDef !== data.definice ? `<div style="margin-top:8px;padding:8px;background:var(--bg2);border-radius:4px;border-left:2px solid var(--acc);font-size:11px;color:var(--txt2)"><b>📝 Celý překlad:</b><div style="margin-top:5px;line-height:1.5">${formatPreviewRawTranslation(rawDef)}</div></div>` : ''}
             <div style="margin-top:5px"><b>Použití:</b> ${escHtml(data.pouziti || '—')}</div>
             <div style="margin-top:5px"><b>Původ:</b> ${escHtml(data.puvod || '—')}</div>
+            <div style="margin-top:5px"><b>Specialista:</b> ${escHtml(data.specialista || '—')}</div>
           </div>
         </div>
         <div>
@@ -4946,7 +4953,7 @@ function toggleAllPreview(checked) {
 function acceptPreview() {
   const mode = (document.querySelector('input[name="importMode"]:checked') || {}).value || 'missing';
 
-  const FIELDS = ['vyznam', 'definice', 'pouziti', 'puvod', 'kjv'];
+  const FIELDS = ['vyznam', 'definice', 'pouziti', 'puvod', 'specialista', 'kjv'];
   const isEmpty = v => !v || v === '—';
 
   let applied = 0, skippedConflicts = 0, mergedFields = 0;
@@ -5071,9 +5078,10 @@ function parseCzTXT(text) {
     const definice = get(['Česká definice', 'Definice', 'DEFINICE', 'Definice (CZ)', 'CZ definice']);
     const pouziti = get(['Biblické užití (KJV)', 'Pouziti', 'POUZITI', 'Použití']);
     const puvod = get(['Původ', 'Puvod', 'PUVOD']);
+    const specialista = get(['Specialista', 'VÝKLAD', 'VYKLAD', 'Komentář', 'KOMENTAR', 'Exegeze', 'EXEGEZE']);
     const kjv = get(['KJV překlady', 'KJV', 'KJV_PREKLADY', 'KJV Významy']);
     if (vyznam || definice) {
-      result[key] = { vyznam, definice, pouziti, puvod, kjv };
+      result[key] = { vyznam, definice, pouziti, puvod, specialista, kjv };
     }
   }
   return result;
@@ -5082,7 +5090,7 @@ function parseCzTXT(text) {
 function parseImportJSON(text) {
   const parsed = JSON.parse(text);
   const result = {};
-  const FIELDS = ['vyznam', 'definice', 'pouziti', 'puvod', 'kjv'];
+  const FIELDS = ['vyznam', 'definice', 'pouziti', 'puvod', 'specialista', 'kjv'];
 
   const normalizeRecord = (record) => {
     if (!record || typeof record !== 'object') return null;

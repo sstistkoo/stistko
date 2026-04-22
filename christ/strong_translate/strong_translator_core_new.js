@@ -137,20 +137,32 @@ export function parseTranslations(raw, keys, translated = {}) {
     
     const content = block.slice(km[0].length).trim();
     
-    const normalizedLabels = { 'DEF': 'DEFINICE', 'CZ': 'VYZNAM', 'VÝZNAM': 'VYZNAM', 'DEFINITION': 'DEFINICE', 'MEANING': 'VYZNAM', 'USAGE': 'POUZITI', 'ORIGIN': 'PUVOD', 'KJV': 'KJV' };
+    const normalizedLabels = {
+      'DEF': 'DEFINICE',
+      'CZ': 'VYZNAM',
+      'VÝZNAM': 'VYZNAM',
+      'DEFINITION': 'DEFINICE',
+      'MEANING': 'VYZNAM',
+      'USAGE': 'POUZITI',
+      'ORIGIN': 'PUVOD',
+      'COMMENTARY': 'SPECIALISTA',
+      'EXEGESIS': 'SPECIALISTA',
+      'KJV': 'KJV'
+    };
     
     const fieldPositions = [];
     const lines = content.split('\n');
     
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
-      const labelMatch = line.match(/^(VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|DEF|DEFINITION|MEANING|USAGE|ORIGIN)\s*[-:–—=.]?\s*/i);
+      const labelMatch = line.match(/^(VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|SPECIALISTA|VYKLAD|KOMENTAR|EXEGEZE|DEF|DEFINITION|MEANING|USAGE|ORIGIN|COMMENTARY|EXEGESIS)\s*[-:–—=.]?\s*/i);
       if (labelMatch) {
         let label = labelMatch[1].toUpperCase();
+        if (label === 'VYKLAD' || label === 'KOMENTAR' || label === 'EXEGEZE') label = 'SPECIALISTA';
         if (normalizedLabels[label]) {
           label = normalizedLabels[label];
         }
-        if (['VYZNAM', 'DEFINICE', 'POUZITI', 'PUVOD', 'KJV'].includes(label)) {
+        if (['VYZNAM', 'DEFINICE', 'POUZITI', 'PUVOD', 'KJV', 'SPECIALISTA'].includes(label)) {
           fieldPositions.push({ label, startLine: i, labelLen: labelMatch[0].length });
         }
       }
@@ -187,6 +199,7 @@ export function parseTranslations(raw, keys, translated = {}) {
       definice: fields['DEFINICE'] || '',
       pouziti: fields['POUZITI'] || '',
       puvod: fields['PUVOD'] || '',
+      specialista: fields['SPECIALISTA'] || '',
       kjv: fields['KJV'] || '',
       _rawDefinition: content  // Store full raw content
     };
@@ -204,6 +217,7 @@ DEFINICE: [cesky preklad]
 POUZITI: [refs v hranatych zavorkach]
 PUVOD: [etymologie]
 KJV: [preklad]
+SPECIALISTA: [biblicky odborny vyklad vlastnimi slovy]
 
 ZAKAZY:
 - Nepiste "ZVLASTNI:" ani jine pokyny
@@ -233,6 +247,7 @@ DEFINICE: Árón (hebrejsky אַהֲרוֹן), nesklonnitelný: [Exo 4:14], v da
 POUZITI: [Luk.1:5], [Skutky 7:40]
 PUVOD: z hebrejskeho אַהֲרוֹן
 KJV: Árón
+SPECIALISTA: Jmeno Aaron v biblickem kontextu casto nese rodovou a knezskou autoritu; v NZ je spojeno s chrámovou sluzbou a starozakonnim odkazem.
 
 VSTUP: G24 | ἀγανάκτησις
 DEF: ἀγανάκτησις, -εως, ἡ (ἀγανακτέω), [in LXX:] indignation: [2Co.7:11].
@@ -244,6 +259,7 @@ DEFINICE: rozhořčení (ἀγανάκτησις, -εως, ἡ [v LXX:] indignat
 POUZITI: [Lukas 1:5], [2Kor 7:11]
 PUVOD: z řeckého ἀγανακτέω
 KJV: rozhořčení
+SPECIALISTA: Vyraz popisuje morální poboureni nad zlem; v biblickem diskurzu nejde jen o emoci, ale i o eticky postoj vedouci k naprave.
 
 {HESLA}`;
 
