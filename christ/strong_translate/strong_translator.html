@@ -1043,9 +1043,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   <div class="row">
     <label for="model">Model</label>
     <select id="model" aria-label="Výběr AI modelu">
-      <option value="llama-3.3-70b-versatile">llama-3.3-70b-versatile</option>
-      <option value="llama-3.1-8b-instant">llama-3.1-8b-instant (rychlejší)</option>
-      <option value="qwen-qwq-32b">qwen-qwq-32b</option>
+      <!-- Naplní se dynamicky podle vybraného providera (setupProviderSwitcher) -->
     </select>
   </div>
 
@@ -1108,7 +1106,9 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   <div class="hdr">
     <div class="hdr-title">
       <span>GR-CZ</span>
+      <span id="fileIdBadge" title="Aktivní soubor (vlastní slot průběhu)" style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--txt3);padding:2px 6px;border:1px solid var(--brd);border-radius:3px;display:none"></span>
       <button class="hbtn red hdr-close" onclick="clearProgress()" title="Smazat veškerý uložený průběh" aria-label="Smazat veškerý uložený průběh">Res.</button>
+      <button class="hbtn hdr-close" id="btnRestoreBackup" onclick="restoreFromBackup('backup')" title="Obnovit ze zálohy" aria-label="Obnovit ze zálohy" style="display:none">↺ Záloha</button>
     </div>
     <div class="stat">Přeloženo: <b id="sDone">0</b></div>
     <div class="stat">Zbývá: <b id="sRemain">0</b></div>
@@ -1192,7 +1192,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
           </optgroup>
         </select>
         <input type="text" id="searchInput" placeholder="Hledat..."
-          oninput="filterList()" aria-label="Hledat heslo" style="flex:1">
+          oninput="filterListDebounced()" aria-label="Hledat heslo" style="flex:1">
         <div class="list-actions">
           <button class="sbtn" onclick="selectAll()" title="Vybrat vše" aria-label="Vybrat všechna hesla">☑</button>
           <button class="sbtn" onclick="selectNone()" title="Zrušit výběr" aria-label="Zrušit výběr všech hesel">☐</button>
@@ -1220,7 +1220,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
         <input type="hidden" id="batchSizeRun" value="10">
         <input type="hidden" id="intervalRun" value="20">
         <div class="log-scroll" id="logScroll" role="log" aria-label="Log překladů">
-          <div style="padding:20px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt3)">
+          <div class="log-placeholder" style="padding:20px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt3)">
             Překlady se budou zobrazovat zde automaticky...
           </div>
         </div>
@@ -1350,7 +1350,6 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
        <div class="prompt-actions">
          <button class="prompt-btn ai" onclick="showPromptAIModal()">🤖 AI</button>
          <button class="prompt-btn lang" onclick="showPromptLangModal()">🌐 Jazyk</button>
-         <button class="prompt-btn" onclick="showExternalLibrary()" style="background:var(--blue);border:1px solid var(--blue);color:var(--txt)">📚 Knihovna</button>
          <button class="prompt-btn cancel" onclick="closePromptLibraryModal()">✕ Zavřít</button>
          <button class="prompt-btn ok" onclick="applySelectedPrompt()">✓ Uložit a použít</button>
        </div>
@@ -1393,24 +1392,26 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
        <div class="prompt-modal-title">🌐 Cílový jazyk</div>
        <div class="mobl-set-row">
          <label>Překlad do</label>
-         <select id="targetLanguage" style="width:100%;padding:10px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:12px;">
-           <option value="cs" selected>Čeština</option>
-           <option value="en">English</option>
-           <option value="de">Deutsch</option>
-           <option value="fr">Français</option>
-           <option value="es">Español</option>
-           <option value="it">Italiano</option>
-           <option value="pl">Polski</option>
-           <option value="sk">Slovenčina</option>
+        <select id="targetLanguage" style="width:100%;padding:10px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:12px;">
+          <option value="cz" selected>Čeština</option>
+          <option value="en">English</option>
+          <option value="bg">Bulharština</option>
+          <option value="ch">Čínština</option>
+          <option value="sp">Španělština</option>
+          <option value="sk">Slovenčina</option>
+          <option value="pl">Polski</option>
+          <option value="gr">Řečtina</option>
+          <option value="he">Hebrejština</option>
+        </select>
+      </div>
+       <div class="mobl-set-row">
+         <label>Zdrojový jazyk</label>
+         <select id="sourceLanguage" style="width:100%;padding:10px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:12px;">
+           <option value="gr" selected>Řečtina (Strong G)</option>
+           <option value="he">Hebrejština (Strong H)</option>
+           <option value="both">Řečtina i Hebrejština (oba)</option>
          </select>
        </div>
-        <div class="mobl-set-row">
-          <label>Zdrojový jazyk</label>
-          <select id="sourceLanguage" style="width:100%;padding:10px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:12px;">
-            <option value="gr" selected>Řečtina (Strong G)</option>
-            <option value="he">Hebrejština (Strong H)</option>
-          </select>
-        </div>
        <div class="prompt-actions">
          <button class="prompt-btn cancel" onclick="closePromptLangModal()">✕ Zavřít</button>
          <button class="prompt-btn ok" onclick="saveLangSettings()">✓ Uložit</button>
@@ -1447,19 +1448,19 @@ const {
       const userPromptTemplate = localStorage.getItem('strong_prompt') || core.DEFAULT_PROMPT;
       
       // Language substitution
-      const targetLang = localStorage.getItem('strong_target_lang') || 'cs';
+      const targetLang = localStorage.getItem('strong_target_lang') || 'cz';
       const sourceLang = localStorage.getItem('strong_source_lang') || 'gr';
       const langNames = {
-        cs: 'češtiny',
+        cz: 'češtiny',
         en: 'angličtiny',
-        de: 'němčiny',
-        fr: 'francouzštiny',
-        es: 'španělštiny',
-        it: 'italštiny',
-        pl: 'polštiny',
+        bg: 'bulharštiny',
+        ch: 'čínštiny',
+        sp: 'španělštiny',
         sk: 'slovenštiny',
+        pl: 'polštiny',
         gr: 'řečtiny',
-        he: 'hebrejštiny'
+        he: 'hebrejštiny',
+        both: 'řečtiny i hebrejštiny'
       };
       const targetName = langNames[targetLang] || 'češtiny';
       const sourceName = langNames[sourceLang] || 'řečtiny';
@@ -1479,7 +1480,26 @@ const {
     }
 
   // ══ STORAGE KEY ══════════════════════════════════════════════════
-  const STORE_KEY = 'strong_gr_cz_v2';
+  const LEGACY_STORE_KEY = 'strong_gr_cz_v2';
+  const STORE_KEY_PREFIX = 'strong_gr_cz_v3__';
+  let currentFileId = null;
+
+  function computeFileId(parsedEntries) {
+    if (!parsedEntries || !parsedEntries.length) return null;
+    const first = parsedEntries[0].key;
+    const last = parsedEntries[parsedEntries.length - 1].key;
+    const n = parsedEntries.length;
+    // Přidáme typ (G / H / mix) pro čitelnost slotu
+    const types = new Set(parsedEntries.slice(0, 50).map(e => e.key[0]));
+    const typeTag = types.size === 1 ? [...types][0] : 'X';
+    return `${typeTag}_${n}_${first}_${last}`;
+  }
+
+  // Dynamické klíče – vždy se řídí aktuálním fileId.
+  // Dokud není soubor načtený (= currentFileId === null), padáme na legacy klíč.
+  function storeKey()  { return currentFileId ? STORE_KEY_PREFIX + currentFileId : LEGACY_STORE_KEY; }
+  function backupKey() { return storeKey() + '_backup'; }
+  function undoKey()   { return storeKey() + '_undo'; }
 
   // ══ ERROR LOGGER ═════════════════════════════════════════════════
   /**
@@ -1725,6 +1745,7 @@ function loadTXT(input) {
   reader.onload = ev => {
     try {
       entries = parseTXT(ev.target.result);
+      currentFileId = computeFileId(entries);
       const el = document.getElementById('statusTXT');
       el.textContent = `✓ ${file.name} — ${entries.length} hesel`;
       el.className = 'file-status ok';
@@ -1750,6 +1771,7 @@ function loadDefaultFile() {
     })
     .then(text => {
       entries = parseTXT(text);
+      currentFileId = computeFileId(entries);
       document.getElementById('statusTXT').innerHTML = `✓ ${lastFile} — ${entries.length} hesel`;
       document.getElementById('statusTXT').className = 'file-status ok';
       document.getElementById('fileReady').style.display = 'block';
@@ -1804,19 +1826,26 @@ function updateAutoBtn() {
 // ══ RESUME ═══════════════════════════════════════════════════════
 function checkResume() {
   try {
-    const saved = localStorage.getItem(STORE_KEY);
+    const box = document.getElementById('resumeBox');
+    if (box) box.style.display = 'none';
+    let saved = localStorage.getItem(storeKey());
+    let source = 'aktuální slot';
+    // Pokud nemáme nic pod aktuálním fileId, ale máme legacy data, nabídneme je
+    if (!saved && currentFileId) {
+      const legacy = localStorage.getItem(LEGACY_STORE_KEY);
+      if (legacy) { saved = legacy; source = 'legacy slot (bude migrován)'; }
+    }
     if (!saved) return;
     const data = JSON.parse(saved);
     const count = Object.keys(data.translated || {}).filter(k => {
       const t = data.translated[k];
       return t && t.vyznam && t.vyznam !== '—' && !t.skipped;
     }).length;
-    if (count > 0) {
-      const box = document.getElementById('resumeBox');
+    if (count > 0 && box) {
       box.style.display = 'block';
       const ts = data.ts ? new Date(data.ts).toLocaleString('cs') : '?';
-      box.innerHTML = `⚑ Nalezen uložený průběh: <b>${count}</b> přeložených hesel (uloženo ${ts}). Po spuštění bude automaticky obnoven.`;
-     }
+      box.innerHTML = `⚑ Nalezen uložený průběh (${source}): <b>${count}</b> přeložených hesel (uloženo ${ts}). Po spuštění bude automaticky obnoven.`;
+    }
    } catch(e) {
      logWarn('checkResume', 'Failed to parse saved progress', { error: e.message });
    }
@@ -1883,12 +1912,24 @@ function initApp(loadingEl) {
   currentBatchSize = parseInt(document.getElementById('batchSize').value);
   currentInterval  = parseInt(document.getElementById('interval').value);
 
-  // Obnov uložený překlad
+  // Obnov uložený překlad – pro aktuálně načtený soubor
   try {
-    const saved = localStorage.getItem(STORE_KEY);
+    const saved = localStorage.getItem(storeKey());
     if (saved) {
       const data = JSON.parse(saved);
       translated = data.translated || {};
+    } else if (currentFileId) {
+      // Pokus o migraci ze starého (legacy) slotu při prvním použití nového prefixu
+      const legacy = localStorage.getItem(LEGACY_STORE_KEY);
+      if (legacy) {
+        const data = JSON.parse(legacy);
+        if (data && data.translated && Object.keys(data.translated).length > 0) {
+          translated = data.translated;
+          // Ulož pod novým klíčem, legacy zachováme – uživatel může mít víc souborů
+          localStorage.setItem(storeKey(), JSON.stringify({ translated, ts: Date.now(), fileId: currentFileId, migrated: true }));
+          logInfo('migrate', `Migrováno ${Object.keys(translated).length} hesel z legacy slotu`);
+        }
+      }
     }
    } catch(e) {
      logWarn('startApp', 'Failed to load saved progress, starting fresh', { error: e.message });
@@ -1929,6 +1970,8 @@ function initApp(loadingEl) {
   updateStats();
   initRunSelects();
   updateFailedCount();
+  updateBackupButtonVisibility();
+  updateFileIdBadge();
   
   // Odstraň loading element
   if (loadingEl && loadingEl.parentNode) {
@@ -2008,15 +2051,17 @@ async function translateSelected() {
     
     if (!apiKey) { showToast('✗ Zadej API klíč!'); return; }
     
-    const batch = batchKeys.map(k => entries.find(e => e.key === k)).filter(Boolean);
+    const batch = batchKeys.map(k => entryMap.get(k)).filter(Boolean);
     const messages = buildPromptMessages(batch);
     
     try {
       const raw = await callAIWithRetry(prov, apiKey, model, messages);
       const content = raw.content;
-      console.log('=== AI RAW RESPONSE ===');
-      console.log(content);
-      console.log('=== END RAW ===');
+      if (window.DEBUG_AI) {
+        console.groupCollapsed(`AI selected ${batchKeys[0]}–${batchKeys[batchKeys.length-1]}`);
+        console.log('response:', content);
+        console.groupEnd();
+      }
       parseTranslations(content, batchKeys);
       
       // Log tokenů
@@ -2045,8 +2090,8 @@ async function translateSelected() {
 ZOPAKUJ PŘEKLAD a u každého hesla MUSÍŠ začít řádkem ###G[číslo]###.
 
 ${batchKeys.map(k => {
-  const e = entries.find(x => x.key === k);
-  return e ? `${e.key}\nDEF: ${e.def}\nKJV: ${e.kjv}` : '';
+  const e = entryMap.get(k);
+  return e ? `${e.key}\nDEF: ${e.definice || e.def || ''}\nKJV: ${e.kjv || ''}` : '';
 }).join('\n\n')}`;
         
         const raw2 = await callOnce(prov, apiKey, model, buildRetryMessages(retryContent));
@@ -2107,6 +2152,9 @@ function filterList() {
     scroll.scrollTop = 0;
   }
 }
+
+// Debounced varianta pro oninput (zabráni překreslení celého listu na každý znak)
+const filterListDebounced = debounce(filterList, 180);
 
 function getFilteredEntries() {
   const q = document.getElementById('searchInput').value.toLowerCase();
@@ -2273,7 +2321,8 @@ function renderVisible() {
   for (let i = startIndex; i <= endIndex; i++) {
     const key = filteredKeys[i];
     if (!key) continue;
-    const e = entries.find(x => x.key === key);
+    const e = entryMap.get(key);
+    if (!e) continue;
     const t = translated[key];
     const done = !!(t && t.vyznam && t.vyznam.trim() && t.vyznam !== '—');
     doneStates[key] = done;
@@ -2510,8 +2559,8 @@ function renderTranslation(key, t) {
           <button class="tbox-btn" onclick="toggleEditSection('${key}','${s.id}')" aria-label="Upravit ${s.label}">✎ Upravit</button>
         </div>
       </div>
-      ${s.rawField ? `<div class="tbox-body" id="tval-${key}-${s.id}" style="color:var(--txt2);font-size:12px;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--brd)">${escHtml(s.rawField)}</div>` : ''}
-      <div class="tbox-body ${s.rawField ? '' : ''}" id="tval-${key}-${s.id}" style="${s.rawField ? 'font-weight:bold;color:var(--acc3)' : ''}">${escHtml(s.field || '—')}</div>
+      ${s.rawField ? `<div class="tbox-body" id="traw-${key}-${s.id}" style="color:var(--txt2);font-size:12px;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--brd)">${escHtml(s.rawField)}</div>` : ''}
+      <div class="tbox-body" id="tval-${key}-${s.id}" style="${s.rawField ? 'font-weight:bold;color:var(--acc3)' : ''}">${escHtml(s.field || '—')}</div>
       <div class="tbox-edit" id="tedit-${key}-${s.id}">
         <textarea id="tinput-${key}-${s.id}" aria-label="${s.label}">${escHtml(s.field || '')}</textarea>
         <button class="tbox-save" onclick="saveSection('${key}','${s.id}')" aria-label="Uložit ${s.label}">Uložit</button>
@@ -2552,7 +2601,7 @@ const model  = document.getElementById('model').value;
      return;
    }
 
-   const e = entries.find(x => x.key === key);
+   const e = entryMap.get(key);
   if (!e) {
     if (btn) { btn.disabled = false; btn.textContent = '⚡ Přeložit toto heslo'; }
     return;
@@ -2562,9 +2611,11 @@ const model  = document.getElementById('model').value;
   
   try {
     const raw = await callAIWithRetry(prov, apiKey, model, messages);
-    console.log('=== AI RAW RESPONSE ===');
-    console.log(raw.content);
-    console.log('=== END RAW ===');
+    if (window.DEBUG_AI) {
+      console.groupCollapsed(`AI single ${key}`);
+      console.log('response:', raw.content);
+      console.groupEnd();
+    }
     let missingKeys = parseTranslations(raw.content, [key]);
     
     if (missingKeys.length > 0) {
@@ -2574,12 +2625,12 @@ Bez toho nebude překlad zpracován!
 
 Přelož tato hesla:
 ${key}
-DEF: ${e.def}
-KJV: ${e.kjv}
-ORIG: ${e.orig}`;
+DEF: ${e.definice || e.def || ''}
+KJV: ${e.kjv || ''}
+ORIG: ${e.orig || ''}`;
       
        const raw2 = await callOnce(prov, apiKey, model, buildRetryMessages(retryContent));
-       missingKeys = parseTranslations(raw2, [key]);
+       missingKeys = parseTranslations(raw2.content, [key]);
      }
 
    } catch(e) {
@@ -2660,7 +2711,7 @@ function jumpToStart() {
   const num = parseInt(document.getElementById('startFrom').value);
   if (!num || num < 1) { showToast('Zadej číslo G hesla'); return; }
   const key = 'G' + num;
-  const found = entries.find(e => e.key === key);
+  const found = entryMap.get(key);
   if (!found) { showToast(`G${num} nenalezeno v souboru`); return; }
 
   // Označ všechna hesla PŘED tímto číslem jako přeskočená (zachováme existující překlady)
@@ -2712,18 +2763,19 @@ async function translateBatch(keys) {
     startElapsedTimer();
   }
 
-  const batch = keys.map(k => entries.find(e => e.key === k)).filter(Boolean);
+  const batch = keys.map(k => entryMap.get(k)).filter(Boolean);
   const messages = buildPromptMessages(batch);
 
   try {
     const raw = await callAIWithRetry(prov, apiKey, model, messages);
     const content = raw.content;
-    console.log('=== AI PROMPT SENT ===');
-    console.log(JSON.stringify(messages, null, 2));
-    console.log('=== END PROMPT ===');
-    console.log('=== AI RAW RESPONSE ===');
-    console.log(content);
-    console.log('=== END RAW ===');
+    // Verbose logy pouze když je aktivní režim pro debug (window.DEBUG_AI = true v konzoli)
+    if (window.DEBUG_AI) {
+      console.groupCollapsed(`AI batch ${keys[0]}–${keys[keys.length-1]}`);
+      console.log('prompt:', messages);
+      console.log('response:', content);
+      console.groupEnd();
+    }
     let missingKeys = parseTranslations(content, keys);
     
     // Log tokenů
@@ -2762,8 +2814,8 @@ Bez toho nebude překlad zpracován!
 
 Přelož tato hesla:
 ${keys.map(k => {
-  const e = entries.find(x => x.key === k);
-  return e ? `${e.key} | ${e.greek}\nDEF: ${e.def}\nKJV: ${e.kjv}` : '';
+  const e = entryMap.get(k);
+  return e ? `${e.key} | ${e.greek}\nDEF: ${e.definice || e.def || ''}\nKJV: ${e.kjv || ''}` : '';
 }).join('\n\n')}`;
       
       try {
@@ -2831,22 +2883,49 @@ function resetPrompt() {
 
 
 // ══ AI VOLÁNÍ S RETRY A FALLBACK ════════════════════════════════
-const FALLBACKS = {
-  groq:       ['meta-llama/llama-4-scout-17b-16e-instruct', 'llama-3.1-8b-instant', 'llama-3.3-70b-versatile'],
-  gemini:     ['gemini-2.5-flash', 'gemini-2.5-flash-lite'],
-  openrouter: [
-    'meta-llama/llama-3.1-8b-instruct:free',
-    'meta-llama/llama-3.3-70b-instruct:free',
-    'google/gemma-2-27b-it:free',
-    'nvidia/nemotron-3-70b-instruct:free',
-    'mistralai/mistral-7b-instruct:free'
-  ]
+// Statické fallbacky jen pro providery s fixním katalogem. OpenRouter
+// používá dynamickou cache modelů (openrouter_free_models_cache).
+const FALLBACKS_STATIC = {
+  groq:   ['meta-llama/llama-4-scout-17b-16e-instruct', 'llama-3.1-8b-instant', 'llama-3.3-70b-versatile'],
+  gemini: ['gemini-2.5-flash', 'gemini-2.5-flash-lite']
 };
+
+function getFallbackModels(provider) {
+  if (provider === 'openrouter') {
+    try {
+      const raw = localStorage.getItem('openrouter_free_models_cache');
+      if (raw) {
+        const cached = JSON.parse(raw);
+        if (cached && Array.isArray(cached.models) && cached.models.length) {
+          return cached.models.map(m => m.id).filter(Boolean).slice(0, 5);
+        }
+      }
+    } catch(e) { /* ignore */ }
+    // Minimální fallback, kdyby cache ještě neexistovala
+    return ['meta-llama/llama-3.3-70b-instruct:free', 'meta-llama/llama-3.1-8b-instruct:free'];
+  }
+  return FALLBACKS_STATIC[provider] || [];
+}
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
+function debounce(fn, delay) {
+  let timer = null;
+  const debounced = (...args) => {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(() => { timer = null; fn(...args); }, delay);
+  };
+  debounced.flush = () => {
+    if (timer) { clearTimeout(timer); timer = null; fn(); }
+  };
+  debounced.cancel = () => {
+    if (timer) { clearTimeout(timer); timer = null; }
+  };
+  return debounced;
+}
+
 async function callAIWithRetry(provider, apiKey, model, messages) {
-  const tryModels = [model, ...(FALLBACKS[provider] || []).filter(m => m !== model)];
+  const tryModels = [model, ...getFallbackModels(provider).filter(m => m !== model)];
   let lastErr = null;
 
   for (const m of tryModels) {
@@ -2943,7 +3022,8 @@ async function callOnce(provider, apiKey, model, messages) {
        headers: { 'Content-Type': 'application/json' },
        body: JSON.stringify({ contents: [{ parts: [{ text: userContent }] }],
          systemInstruction: { parts: [{ text: messages.find(m => m.role === 'system')?.content || '' }] },
-         generationConfig: { temperature: temperature, maxOutputTokens: maxTokens } })
+         generationConfig: { temperature: temperature, maxOutputTokens: maxTokens } }),
+       signal: controller.signal
      });
     const d = await r.json();
      if (!r.ok) {
@@ -2970,7 +3050,8 @@ async function callOnce(provider, apiKey, model, messages) {
           'X-Title': 'Strong GR-CZ Translator'
         },
         body: JSON.stringify({ model, messages,
-          temperature: temperature, max_tokens: maxTokens })
+          temperature: temperature, max_tokens: maxTokens }),
+        signal: controller.signal
       });
      const d = await r.json();
      if (!r.ok) throw new Error(d.error?.message || String(r.status));
@@ -3077,9 +3158,14 @@ function updateStats() {
   if (autoRunning) updateETA();
 }
 
-function saveProgress() {
+function saveProgressImmediate() {
    try {
-     localStorage.setItem(STORE_KEY, JSON.stringify({ translated, ts: Date.now() }));
+     localStorage.setItem(storeKey(), JSON.stringify({
+       translated,
+       ts: Date.now(),
+       fileId: currentFileId
+     }));
+     maybeAutoBackup();
    } catch(e) {
      logError('saveProgress', e, {
        translatedCount: Object.keys(translated).length,
@@ -3089,16 +3175,114 @@ function saveProgress() {
    }
 }
 
+// Debounced save – shlukne rychlé za sebou jdoucí úpravy (editace, import, atd.)
+const saveProgress = debounce(saveProgressImmediate, 500);
+
+// ── Undo + auto-backup infrastruktura ─────────────────────────────
+const AUTO_BACKUP_EVERY_N_BATCHES = 10;
+let batchesSinceBackup = 0;
+
+function writeBackup(key, payload) {
+  try {
+    localStorage.setItem(key, JSON.stringify(payload));
+    return true;
+  } catch(e) {
+    logWarn('writeBackup', `Nelze uložit backup (${key})`, { error: e.message });
+    return false;
+  }
+}
+
+function maybeAutoBackup() {
+  batchesSinceBackup++;
+  if (batchesSinceBackup < AUTO_BACKUP_EVERY_N_BATCHES) return;
+  batchesSinceBackup = 0;
+  const doneCount = Object.values(translated)
+    .filter(t => t && t.vyznam && t.vyznam !== '—' && !t.skipped).length;
+  if (doneCount === 0) return;
+  writeBackup(backupKey(), { translated, ts: Date.now(), count: doneCount, fileId: currentFileId });
+  logInfo('autoBackup', `Automatická záloha: ${doneCount} hesel`);
+  updateBackupButtonVisibility();
+}
+
+function updateFileIdBadge() {
+  const badge = document.getElementById('fileIdBadge');
+  if (!badge) return;
+  if (!currentFileId) { badge.style.display = 'none'; return; }
+  // Zkrácený identifikátor — typ + počet
+  const parts = currentFileId.split('_');
+  const typeTag = parts[0] || '?';
+  const count = parts[1] || '?';
+  const typeName = typeTag === 'G' ? 'GR' : typeTag === 'H' ? 'HE' : typeTag;
+  badge.textContent = `${typeName}·${count}`;
+  badge.style.display = 'inline-block';
+  badge.title = `Aktivní soubor: ${currentFileId}\nSlot průběhu: ${storeKey()}`;
+}
+
+function updateBackupButtonVisibility() {
+  const btn = document.getElementById('btnRestoreBackup');
+  if (!btn) return;
+  const b = hasBackup();
+  if (b && b.count > 0) {
+    btn.style.display = 'inline-block';
+    btn.title = `Obnovit ze zálohy (${b.count} hesel, ${new Date(b.ts).toLocaleString('cs')})`;
+  } else {
+    btn.style.display = 'none';
+  }
+}
+
+function hasBackup() {
+  const raw = localStorage.getItem(backupKey());
+  if (!raw) return null;
+  try {
+    const d = JSON.parse(raw);
+    if (!d || !d.translated) return null;
+    return d;
+  } catch(e) { return null; }
+}
+
+function hasUndo() {
+  const raw = localStorage.getItem(undoKey());
+  if (!raw) return null;
+  try {
+    const d = JSON.parse(raw);
+    if (!d || !d.translated) return null;
+    // Undo je platné jen pár minut
+    if (Date.now() - (d.ts || 0) > 10 * 60 * 1000) {
+      localStorage.removeItem(undoKey());
+      return null;
+    }
+    return d;
+  } catch(e) { return null; }
+}
+
+function restoreFromBackup(source) {
+  const d = source === 'undo' ? hasUndo() : hasBackup();
+  if (!d) { showToast('✗ Žádná záloha není k dispozici'); return; }
+  const count = Object.keys(d.translated).length;
+  if (!confirm(`Obnovit ${count} hesel ze zálohy (${new Date(d.ts).toLocaleString('cs')})? Současný stav bude přepsán.`)) return;
+  // Ulož aktuální stav jako undo před přepsáním
+  writeBackup(undoKey(), { translated, ts: Date.now(), fileId: currentFileId });
+  translated = d.translated;
+  saveProgressImmediate();
+  updateStats();
+  renderList();
+  updateFailedCount();
+  if (source === 'undo') localStorage.removeItem(undoKey());
+  showToast(`✓ Obnoveno ${count} hesel`);
+}
+
 function clearProgress() {
-  if (!confirm('Smazat veškerý uložený průběh překladu a log?')) return;
-  localStorage.removeItem(STORE_KEY);
+  if (!confirm('Smazat veškerý uložený průběh překladu a log?\n\n(Do 10 minut půjde obnovit přes „↺ Obnovit".)')) return;
+  // Ulož snapshot jako undo
+  writeBackup(undoKey(), { translated, ts: Date.now(), fileId: currentFileId });
+  localStorage.removeItem(storeKey());
   translated = {};
   updateStats();
   renderList();
   clearLog();
   const pane = document.getElementById('detailPane');
   if (pane) pane.innerHTML = '<div class="detail-empty">← Klikni na heslo v seznamu pro detail</div>';
-  showToast('Průběh smazán — začni od začátku');
+  showToastWithAction('Průběh smazán. Obnovit?', 'Obnovit', () => restoreFromBackup('undo'));
 }
 
 // ══ EXPORT ═══════════════════════════════════════════════════════
@@ -3197,11 +3381,11 @@ function logEntry(keys, rawResponse) {
   const scroll = document.getElementById('logScroll');
   if (!scroll) return;
 
-  // Vymaž placeholder text při prvním záznamu
-  if (scroll.querySelector('div[style]')) scroll.innerHTML = '';
+  const placeholder = scroll.querySelector('.log-placeholder');
+  if (placeholder) placeholder.remove();
 
   for (const key of [...keys].reverse()) {
-    const e = entries.find(x => x.key === key);
+    const e = entryMap.get(key);
     const t = translated[key];
     if (!e) continue;
 
@@ -3237,7 +3421,7 @@ function logEntry(keys, rawResponse) {
 
 function clearLog() {
   const s = document.getElementById('logScroll');
-  if (s) s.innerHTML = '<div style="padding:20px;font-family:\'JetBrains Mono\',monospace;font-size:11px;color:var(--txt3)">Překlady se budou zobrazovat zde automaticky...</div>';
+  if (s) s.innerHTML = '<div class="log-placeholder" style="padding:20px;font-family:\'JetBrains Mono\',monospace;font-size:11px;color:var(--txt3)">Překlady se budou zobrazovat zde automaticky...</div>';
   const c = document.getElementById('logCount');
   if (c) c.textContent = '';
 }
@@ -3245,7 +3429,8 @@ function clearLog() {
 function logMsg(msg, type) {
   const scroll = document.getElementById('logScroll');
   if (!scroll) return;
-  if (scroll.querySelector('div[style]')) scroll.innerHTML = '';
+  const placeholder = scroll.querySelector('.log-placeholder');
+  if (placeholder) placeholder.remove();
   const div = document.createElement('div');
   div.className = `log-entry`;
   div.style.color = type === 'err' ? '#c05050' : 'var(--txt3)';
@@ -3460,7 +3645,6 @@ function getGroqLimits(model) {
     'meta-llama/llama-4-maverick-17b-128e-instruct': { rpm: 15, rpd: 500, tpm: 3000, tpd: 0 },
     'llama-3.3-70b-versatile': { rpm: 30, rpd: 1000, tpm: 12000, tpd: 100000 },
     'llama-3.1-8b-instant': { rpm: 30, rpd: 14400, tpm: 6000, tpd: 500000 },
-    'qwen-qwq-32b': { rpm: 30, rpd: 1000, tpm: 6000, tpd: 500000 },
   };
   return limits[model] || { rpm: 30, rpd: 1000, tpm: 6000, tpd: 500000 };
 }
@@ -3699,7 +3883,7 @@ function getOpenRouterRateLimits(keyData) {
 // ══ PROMPT LIBRARY ═══════════════════════════════════════════════
 // Czech labels for prompt category tabs
 const CATEGORY_LABELS = {
-  default: 'Systémový',
+  default: 'Výchozí',
   detailed: 'Detailní',
   concise: 'Stručné',
   literal: 'Doslovné',
@@ -4090,7 +4274,7 @@ function showPromptAIModal() {
   const modal = document.getElementById('promptAIModal');
   // Load saved values or defaults
   const savedTemp = localStorage.getItem('strong_ai_temperature') || '0.3';
-  const savedMax = localStorage.getItem('strong_ai_max_tokens') || '2000';
+  const savedMax = localStorage.getItem('strong_ai_max_tokens') || '2500';
   document.getElementById('aiTemperature').value = savedTemp;
   document.getElementById('aiMaxTokens').value = savedMax;
   modal.style.display = 'flex';
@@ -4236,8 +4420,33 @@ function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.style.opacity = '1';
+  t.style.pointerEvents = 'none';
   clearTimeout(t._t);
   t._t = setTimeout(() => { t.style.opacity = '0'; }, CONFIG.TOAST_DURATION);
+}
+
+// Toast s akčním tlačítkem (např. Undo). Vydrží 2× déle.
+function showToastWithAction(msg, actionLabel, onClick) {
+  const t = document.getElementById('toast');
+  t.textContent = '';
+  const span = document.createElement('span');
+  span.textContent = msg + ' ';
+  const btn = document.createElement('button');
+  btn.textContent = actionLabel;
+  btn.style.cssText = 'margin-left:10px;background:var(--acc2);border:1px solid var(--acc);color:var(--acc3);padding:3px 10px;border-radius:3px;cursor:pointer;font-family:inherit;font-size:inherit';
+  btn.onclick = () => {
+    t.style.opacity = '0';
+    try { onClick(); } catch(e) { logError('toastAction', e); }
+  };
+  t.appendChild(span);
+  t.appendChild(btn);
+  t.style.opacity = '1';
+  t.style.pointerEvents = 'auto';
+  clearTimeout(t._t);
+  t._t = setTimeout(() => {
+    t.style.opacity = '0';
+    t.style.pointerEvents = 'none';
+  }, CONFIG.TOAST_DURATION * 2);
 }
 
  function log(msg) {
@@ -4269,8 +4478,33 @@ function showPreviewModal(previewData) {
   modal.id = 'previewModal';
   modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:9999;overflow-y:auto;padding:20px';
   
+  // Spočítej kolik klíčů v importu už máme přeložené (kolize)
+  let conflicts = 0, newOnes = 0;
+  for (const k of Object.keys(previewData)) {
+    const cur = translated[k];
+    if (cur && cur.vyznam && cur.vyznam !== '—' && !cur.skipped) conflicts++; else newOnes++;
+  }
+
   let html = `<div style="max-width:900px;margin:0 auto;background:var(--bg2);border:1px solid var(--brd);border-radius:8px;padding:20px">
-    <h2 style="color:var(--acc);margin:0 0 20px 0">Náhled překladu (${Object.keys(previewData).length} hesel)</h2>
+    <h2 style="color:var(--acc);margin:0 0 10px 0">Náhled překladu (${Object.keys(previewData).length} hesel)</h2>
+    <div style="font-size:11px;color:var(--txt2);margin-bottom:15px">
+      <b style="color:var(--acc3)">${newOnes}</b> nových · <b style="color:var(--acc2)">${conflicts}</b> už přeloženo v aktuálním slotu
+    </div>
+    <div style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;padding:10px 12px;margin-bottom:15px">
+      <div style="font-size:11px;color:var(--txt2);margin-bottom:8px"><b>Režim importu:</b></div>
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;margin-bottom:4px">
+        <input type="radio" name="importMode" value="missing" checked style="accent-color:var(--acc)">
+        <span>Jen chybějící — přidat pouze hesla, která zatím nejsou přeložena (<b>${newOnes}</b>)</span>
+      </label>
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;margin-bottom:4px">
+        <input type="radio" name="importMode" value="all" style="accent-color:var(--acc)">
+        <span>Přepsat vše — nahradit stávající překlady (<b>${Object.keys(previewData).length}</b>)</span>
+      </label>
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px">
+        <input type="radio" name="importMode" value="fillgaps" style="accent-color:var(--acc)">
+        <span>Doplnit prázdná pole — zachovat existující, přepsat jen „—" a prázdné hodnoty</span>
+      </label>
+    </div>
     <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap">
       <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:6px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px">
         <input type="checkbox" id="checkAllPreview" checked onchange="toggleAllPreview(this.checked)" style="width:16px;height:16px;accent-color:var(--acc)">
@@ -4283,14 +4517,16 @@ function showPreviewModal(previewData) {
   for (const [key, data] of Object.entries(previewData)) {
     const e = entryMap.get(key);
     const old = translated[key];
+    const isConflict = old && old.vyznam && old.vyznam !== '—' && !old.skipped;
     const rawDef = data._rawDefinition || data.definice || '';
     const hasRaw = rawDef && rawDef.length > 10;
     html += `
     <div style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;margin:0 0 15px 0;padding:15px">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
         <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
-          <input type="checkbox" class="preview-check" data-key="${key}" checked style="width:18px;height:18px;accent-color:var(--acc)">
+          <input type="checkbox" class="preview-check" data-key="${key}" data-conflict="${isConflict ? '1' : '0'}" checked style="width:18px;height:18px;accent-color:var(--acc)">
           <span style="font-family:'JetBrains Mono';color:var(--acc);font-weight:bold">${key}</span>
+          ${isConflict ? '<span style="font-size:9px;padding:1px 6px;background:var(--acc2);color:#000;border-radius:3px">kolize</span>' : '<span style="font-size:9px;padding:1px 6px;background:var(--acc3);color:#000;border-radius:3px">nové</span>'}
         </label>
         <span style="color:var(--txt2)">${escHtml(e?.greek || '')}</span>
       </div>
@@ -4325,21 +4561,57 @@ function toggleAllPreview(checked) {
 }
 
 function acceptPreview() {
-  const selected = {};
+  const mode = (document.querySelector('input[name="importMode"]:checked') || {}).value || 'missing';
+
+  const FIELDS = ['vyznam', 'definice', 'pouziti', 'puvod', 'kjv'];
+  const isEmpty = v => !v || v === '—';
+
+  let applied = 0, skippedConflicts = 0, mergedFields = 0;
+
   document.querySelectorAll('.preview-check:checked').forEach(cb => {
     const key = cb.dataset.key;
-    selected[key] = pendingTranslations[key];
+    const incoming = pendingTranslations[key];
+    if (!incoming) return;
+    const existing = translated[key];
+    const hasExisting = existing && existing.vyznam && existing.vyznam !== '—' && !existing.skipped;
+
+    if (mode === 'all') {
+      translated[key] = incoming;
+      applied++;
+    } else if (mode === 'missing') {
+      if (hasExisting) { skippedConflicts++; return; }
+      translated[key] = incoming;
+      applied++;
+    } else if (mode === 'fillgaps') {
+      if (!hasExisting) {
+        translated[key] = incoming;
+        applied++;
+        return;
+      }
+      // Doplň jen prázdná pole v existujícím překladu
+      let changed = false;
+      const merged = { ...existing };
+      for (const f of FIELDS) {
+        if (isEmpty(merged[f]) && !isEmpty(incoming[f])) {
+          merged[f] = incoming[f];
+          changed = true;
+          mergedFields++;
+        }
+      }
+      if (changed) { translated[key] = merged; applied++; }
+      else skippedConflicts++;
+    }
   });
-  
-  for (const [key, data] of Object.entries(selected)) {
-    translated[key] = data;
-  }
+
   saveProgress();
   renderList();
   updateStats();
   updateFailedCount();
   closePreviewModal();
-  showToast(`✓ Uloženo ${Object.keys(selected).length} hesel`);
+  const extra = mode === 'fillgaps' && mergedFields
+    ? ` (${mergedFields} polí doplněno)`
+    : skippedConflicts ? ` · ${skippedConflicts} přeskočeno (kolize)` : '';
+  showToast(`✓ Uloženo ${applied} hesel${extra}`);
 }
 
 function discardPreview() {
@@ -4418,7 +4690,7 @@ function showFailedEntries() {
   for (const key of Object.keys(translated)) {
     const t = translated[key];
     if (!t.vyznam || t.vyznam === '—') {
-      failed.push({ key, raw: t.raw, greek: entries.find(e => e.key === key)?.greek });
+      failed.push({ key, raw: t.raw, greek: entryMap.get(key)?.greek });
     }
   }
   
@@ -4435,8 +4707,8 @@ function showFailedEntries() {
   
   let cards = '';
   for (const f of failed) {
-    const info = entries.find(e => e.key === f.key);
-    const rawText = f.raw || (info ? `${info.greek}\n\nDEF: ${info.def || ''}\nKJV: ${info.kjv || ''}` : '(prázdné)');
+    const info = entryMap.get(f.key);
+    const rawText = f.raw || (info ? `${info.greek}\n\nDEF: ${info.definice || info.def || ''}\nKJV: ${info.kjv || ''}` : '(prázdné)');
     cards += `<div style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;margin:0 0 10px 0;padding:12px">
       <div style="font-family:'JetBrains Mono';color:var(--acc);font-weight:bold;margin-bottom:6px">${f.key} | ${escHtml(f.greek || '')}</div>
       <div style="font-size:11px;color:var(--txt2);white-space:pre-wrap;max-height:120px;overflow-y:auto;background:var(--bg1);padding:8px;border-radius:4px">${escHtml(rawText)}</div>
@@ -4533,8 +4805,10 @@ window.exportJSON = exportJSON;
 window.exportRange = exportRange;
 window.showFailedEntries = showFailedEntries;
 window.clearProgress = clearProgress;
+window.restoreFromBackup = restoreFromBackup;
 window.stopAuto = stopAuto;
 window.filterList = filterList;
+window.filterListDebounced = filterListDebounced;
 window.selectAll = selectAll;
 window.selectNone = selectNone;
 window.translateSelected = translateSelected;
@@ -4595,7 +4869,12 @@ window.addEventListener('beforeunload', () => {
   if (autoCountTimer) clearInterval(autoCountTimer);
   if (elapsedTimer) clearInterval(elapsedTimer);
   stopResize();
-  saveProgress();
+  // Debounced save musí být proveden synchronně před zavřením
+  saveProgress.flush();
+});
+// Při skrytí tabu také flushni, aby se nic neztratilo
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') saveProgress.flush();
 });
 </script>
 </body>
