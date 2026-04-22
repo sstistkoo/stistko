@@ -2793,19 +2793,70 @@ function applyTopicPromptResult() {
   const { key, topicId } = topicPromptState;
   const resultInput = document.getElementById('topicPromptResult');
   if (!resultInput) return;
-  const val = resultInput.value.trim();
+  const val = extractTopicValueFromAI(resultInput.value, topicId);
   if (!translated[key]) translated[key] = {};
   translated[key][topicId] = val || '—';
   saveProgress();
   renderDetail();
   renderList();
   updateStats();
+  closeTopicPromptModal();
   showToast(`✓ Uloženo do pole ${TOPIC_LABELS[topicId] || topicId}`);
 }
 
 function closeTopicPromptModal() {
   const modal = document.getElementById('topicPromptModal');
   if (modal) modal.remove();
+}
+
+function extractTopicValueFromAI(rawText, topicId) {
+  const text = String(rawText || '').replace(/\r\n/g, '\n').trim();
+  if (!text) return '';
+
+  const keyForTopic = {
+    vyznam: 'VYZNAM',
+    definice: 'DEFINICE',
+    pouziti: 'POUZITI',
+    puvod: 'PUVOD',
+    kjv: 'KJV'
+  }[topicId] || '';
+
+  let cleaned = text
+    .replace(/^###[GH]\d+###\s*/i, '')
+    .replace(/^###[GH]\d+###\s*/i, '')
+    .trim();
+
+  const lines = cleaned.split('\n');
+  const fieldPositions = [];
+  for (let i = 0; i < lines.length; i++) {
+    const m = lines[i].match(/^(VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|DEF|DEFINITION|MEANING|USAGE|ORIGIN)\s*[-:–—=.]?\s*/i);
+    if (!m) continue;
+    let label = m[1].toUpperCase();
+    if (label === 'DEF' || label === 'DEFINITION') label = 'DEFINICE';
+    if (label === 'MEANING') label = 'VYZNAM';
+    if (label === 'USAGE') label = 'POUZITI';
+    if (label === 'ORIGIN') label = 'PUVOD';
+    fieldPositions.push({ label, line: i, len: m[0].length });
+  }
+
+  if (keyForTopic && fieldPositions.some(f => f.label === keyForTopic)) {
+    const idx = fieldPositions.findIndex(f => f.label === keyForTopic);
+    const cur = fieldPositions[idx];
+    const endLine = idx < fieldPositions.length - 1 ? fieldPositions[idx + 1].line : lines.length;
+    let out = '';
+    for (let i = cur.line; i < endLine; i++) {
+      let part = lines[i];
+      if (i === cur.line) part = part.slice(cur.len);
+      part = part.trim();
+      if (part) out += (out ? ' ' : '') + part;
+    }
+    return out.trim();
+  }
+
+  if (keyForTopic) {
+    cleaned = cleaned.replace(new RegExp(`^${keyForTopic}\\s*[-:–—=.]?\\s*`, 'i'), '').trim();
+  }
+  return cleaned;
 }
 
 function formatPreviewRawTranslation(rawDef) {
