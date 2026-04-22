@@ -2458,6 +2458,18 @@ function renderDetail() {
   const isGreek = activeKey.startsWith('G');
   const isHebrew = activeKey.startsWith('H') && num < 9000;
   const isGrammar = activeKey.startsWith('H') && num >= 9000;
+  const englishSource = (e.en || e.enDef || e.definice || e.def || '').trim();
+  const strongNum = activeKey.slice(1);
+  const bibleHubPath = activeKey.startsWith('H') ? 'hebrew' : 'greek';
+  const studyLinks = `
+    <div class="orig-section">
+      <div class="label">Studijní odkazy</div>
+      <div class="value">
+        <a href="https://biblehub.com/${bibleHubPath}/${strongNum}.htm" target="_blank" rel="noopener noreferrer">BibleHub</a> ·
+        <a href="https://www.blueletterbible.org/lexicon/${activeKey}/kjv/tr/0-1/" target="_blank" rel="noopener noreferrer">Blue Letter Bible</a> ·
+        <a href="https://www.stepbible.org/?q=strong=${activeKey}" target="_blank" rel="noopener noreferrer">STEP Bible</a>
+      </div>
+    </div>`;
   
   // Sestavení sekcí podle typu
   let sections = '';
@@ -2481,8 +2493,8 @@ function renderDetail() {
       <div class="value">${escHtml(e.definice || e.def || '—')}${e.czDef ? '<hr style="border:none;border-top:1px solid var(--brd);margin:6px 0"><div style="color:var(--acc3)">' + escHtml(e.czDef) + '</div>' : ''}</div>
     </div>
     <div class="orig-section">
-      <div class="label">English</div>
-      <div class="value">${escHtml(e.en || '—')}</div>
+      <div class="label">English (zdroj)</div>
+      <div class="value">${escHtml(englishSource || '—')}</div>
     </div>
     <div class="orig-section">
       <div class="label">KJV překlady</div>
@@ -2491,7 +2503,8 @@ function renderDetail() {
     <div class="orig-section">
       <div class="label">biblické užití (KJV)</div>
       <div class="value">${escHtml(e.vyskyt || '—')}</div>
-    </div>`;
+    </div>
+    ${studyLinks}`;
   } else if (isHebrew) {
     sections = `
     <div class="orig-section">
@@ -2519,8 +2532,8 @@ function renderDetail() {
       <div class="value">${escHtml(e.definice || e.def || '—')}${e.czDef ? '<hr style="border:none;border-top:1px solid var(--brd);margin:6px 0"><div style="color:var(--acc3)">' + escHtml(e.czDef) + '</div>' : ''}</div>
     </div>
     <div class="orig-section">
-      <div class="label">English</div>
-      <div class="value">${escHtml(e.en || '—')}</div>
+      <div class="label">English (zdroj)</div>
+      <div class="value">${escHtml(englishSource || '—')}</div>
     </div>
     <div class="orig-section">
       <div class="label">KJV překlady</div>
@@ -2529,7 +2542,20 @@ function renderDetail() {
     <div class="orig-section">
       <div class="label">Výskyt</div>
       <div class="value">${escHtml(e.vyskyt || '—')}</div>
-    </div>`;
+    </div>
+    <div class="orig-section">
+      <div class="label">TWOT</div>
+      <div class="value">${escHtml(e.twot || '—')}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">Poznámky</div>
+      <div class="value">${escHtml(e.poznamky || '—')}</div>
+    </div>
+    <div class="orig-section">
+      <div class="label">Řecké reference</div>
+      <div class="value">${escHtml(e.greekRefs || '—')}</div>
+    </div>
+    ${studyLinks}`;
   } else if (isGrammar) {
     sections = `
     <div class="orig-section">
@@ -2557,9 +2583,10 @@ function renderDetail() {
       <div class="value">${escHtml(e.definice || e.def || '—')}${e.czDef ? '<hr style="border:none;border-top:1px solid var(--brd);margin:6px 0"><div style="color:var(--acc3)">' + escHtml(e.czDef) + '</div>' : ''}</div>
     </div>
     <div class="orig-section">
-      <div class="label">English</div>
-      <div class="value">${escHtml(e.en || '—')}</div>
-    </div>`;
+      <div class="label">English (zdroj)</div>
+      <div class="value">${escHtml(englishSource || '—')}</div>
+    </div>
+    ${studyLinks}`;
   } else {
     // Fallback pro starý formát
     sections = `
@@ -2570,7 +2597,8 @@ function renderDetail() {
     <div class="orig-section">
       <div class="label">KJV překlady</div>
       <div class="value">${escHtml(e.kjv || '—')}</div>
-    </div>`;
+    </div>
+    ${studyLinks}`;
   }
 
   pane.innerHTML = `
