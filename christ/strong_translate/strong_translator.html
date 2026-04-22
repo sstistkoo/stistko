@@ -1089,7 +1089,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
      <label style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-size:12px" onclick="showPromptLibraryModal()" title="Otevřít knihovnu promptů">
        📝 Prompt
      </label>
-     <span id="promptStatus" style="font-family:'JetBrains Mono',monospace;font-size:11px;padding:4px 8px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;display:inline-flex;align-items:center;gap:6px;margin-left:8px" title="Stav promptu">
+    <span id="promptStatus" style="cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;padding:4px 8px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;display:inline-flex;align-items:center;gap:6px;margin-left:8px" title="Klikni pro přepnutí Systémový/Vlastní" onclick="togglePromptModeQuick()">
        <span id="promptMode" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ylw)"></span>
        <span id="promptName">–</span>
      </span>
@@ -1348,6 +1348,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       </div>
 
        <div class="prompt-actions">
+         <button class="prompt-btn" onclick="applySystemPromptForCurrentTask()" title="Nastavit systémový prompt dle aktuálního režimu">🛠 System</button>
          <button class="prompt-btn ai" onclick="showPromptAIModal()">🤖 AI</button>
          <button class="prompt-btn lang" onclick="showPromptLangModal()">🌐 Jazyk</button>
          <button class="prompt-btn cancel" onclick="closePromptLibraryModal()">✕ Zavřít</button>
@@ -3705,12 +3706,13 @@ function exportTXT() {
       `KJV překlady: ${t.kjv || e.kjv || '—'}`,
       `Biblické užití (KJV): ${t.pouziti || '—'}`,
       `Původ: ${t.puvod || '—'}`,
+      `Specialista: ${t.specialista || '—'}`,
       ''
     ];
     return parts.join('\n');
   });
 
-  download('strong_gr_cz.txt', lines.join('\n'), 'text/plain');
+  download('strong_gr_cz_v2.txt', lines.join('\n'), 'text/plain');
   showToast(`✓ Exportováno ${done.length} hesel`);
 }
 
@@ -3720,7 +3722,7 @@ function exportJSON() {
     if (!translated[e.key]) continue;
     out[e.key] = { greek: e.greek, ...translated[e.key] };
   }
-  download('strong_gr_cz.json', JSON.stringify(out, null, 2), 'application/json');
+  download('strong_gr_cz_v2.json', JSON.stringify(out, null, 2), 'application/json');
   showToast(`✓ Exportováno ${Object.keys(out).length} hesel`);
 }
 
@@ -3753,12 +3755,18 @@ function loadSavedSettings() {
   const apiKeyEl = document.getElementById('apiKey');
   if (apiKeyEl) apiKeyEl.value = k || '';
   
-  const p = localStorage.getItem('strong_prompt') || DEFAULT_PROMPT;
+  let p = localStorage.getItem('strong_prompt') || '';
+  if (!p.trim()) {
+    p = getSystemPromptForCurrentTask('batch');
+    localStorage.setItem('strong_prompt', p);
+    localStorage.setItem('strong_prompt_mode', 'system');
+  }
   const promptEditor = document.getElementById('promptEditor');
   if (promptEditor) {
     promptEditor.value = p;
     promptEditor.addEventListener('input', () => {
       localStorage.setItem('strong_prompt', promptEditor.value);
+      localStorage.setItem('strong_prompt_mode', 'custom');
     });
   }
   
@@ -4452,6 +4460,54 @@ KJV: [věta]`
   ]
 };
 
+function getSystemPromptForCurrentTask(context = 'batch') {
+  let prompt = DEFAULT_PROMPT;
+  if (context === 'topic') {
+    prompt += `
+
+DODATEK PRO JEDNO TÉMA:
+- Pokud je požadováno jen jedno pole, vrať pouze hodnotu pro dané pole.
+- U pole SPECIALISTA vrať detailní souvislý odstavec 3-5 vět bez odrážek.`;
+  }
+  return enforceSpecialistaFormat(prompt);
+}
+
+function setMainPrompt(promptText, mode = 'custom') {
+  localStorage.setItem('strong_prompt', String(promptText || '').trim());
+  localStorage.setItem('strong_prompt_mode', mode);
+  const mainEditor = document.getElementById('promptEditor');
+  if (mainEditor) {
+    mainEditor.value = localStorage.getItem('strong_prompt') || '';
+    mainEditor.dispatchEvent(new Event('input'));
+  }
+  updatePromptStatusIndicator();
+}
+
+function applySystemPromptForCurrentTask() {
+  const context = topicPromptState ? 'topic' : 'batch';
+  const systemPrompt = getSystemPromptForCurrentTask(context);
+  setMainPrompt(systemPrompt, 'system');
+  const editor = document.getElementById('promptLibraryEditor');
+  if (editor) editor.value = systemPrompt;
+  showToast(`✓ Nastaven systémový prompt (${context === 'topic' ? 'téma' : 'dávka'})`);
+}
+
+function togglePromptModeQuick() {
+  const mode = localStorage.getItem('strong_prompt_mode') || 'custom';
+  const customSaved = localStorage.getItem('strong_custom_prompt') || '';
+  if (mode === 'custom') {
+    setMainPrompt(getSystemPromptForCurrentTask('batch'), 'system');
+    showToast('✓ Přepnuto na systémový prompt');
+    return;
+  }
+  if (customSaved.trim()) {
+    setMainPrompt(customSaved, 'custom');
+    showToast('✓ Přepnuto na vlastní prompt');
+    return;
+  }
+  showToast('⚠ Vlastní prompt není uložen');
+}
+
 let selectedPromptCategory = 'default';
 let selectedPromptIndex = 0;
 
@@ -4607,7 +4663,7 @@ function applySelectedPrompt() {
   }
   
   // Save to main prompt storage
-  localStorage.setItem('strong_prompt', promptText);
+  setMainPrompt(promptText, 'custom');
   
   // Also save to custom category if we're in custom tab
   if (selectedPromptCategory === 'custom') {
@@ -4621,16 +4677,8 @@ function applySelectedPrompt() {
     localStorage.setItem('strong_custom_prompt', promptText);
   }
   
-  // Update the main prompt editor if it exists (on setup page)
-  const mainEditor = document.getElementById('promptEditor');
-  if (mainEditor) {
-    mainEditor.value = promptText;
-    mainEditor.dispatchEvent(new Event('input'));
-  }
-  
-   closePromptLibraryModal();
-   showToast('✓ Prompt uložen a použit');
-   updatePromptStatusIndicator();
+  closePromptLibraryModal();
+  showToast('✓ Prompt uložen a použit');
 }
 
 function updatePromptStatusIndicator() {
@@ -4639,6 +4687,7 @@ function updatePromptStatusIndicator() {
   if (!modeDot || !nameEl) return;
   
   const currentPrompt = localStorage.getItem('strong_prompt') || '';
+  const mode = localStorage.getItem('strong_prompt_mode') || 'custom';
   const customSaved = localStorage.getItem('strong_custom_prompt') || '';
   
   // Check if current prompt matches any preset
@@ -4665,11 +4714,11 @@ function updatePromptStatusIndicator() {
     }
   }
   
-  if (matched) {
+  if (mode === 'system' || matched) {
     // Preset mode – automatic/green
     modeDot.style.background = 'var(--grn)';
     modeDot.style.boxShadow = '0 0 6px var(--grn)';
-    nameEl.textContent = matchedName;
+    nameEl.textContent = mode === 'system' ? 'Systémový (auto)' : matchedName;
     nameEl.style.color = 'var(--grn)';
   } else {
     // Custom mode – manual/red
@@ -5329,6 +5378,8 @@ window.parseCzTXT = parseCzTXT;
 window.showPromptLibraryModal = showPromptLibraryModal;
 window.closePromptLibraryModal = closePromptLibraryModal;
 window.applySelectedPrompt = applySelectedPrompt;
+window.applySystemPromptForCurrentTask = applySystemPromptForCurrentTask;
+window.togglePromptModeQuick = togglePromptModeQuick;
 window.showPromptAIModal = showPromptAIModal;
 window.closePromptAIModal = closePromptAIModal;
 window.saveAISettings = saveAISettings;
