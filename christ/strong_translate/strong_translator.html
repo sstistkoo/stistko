@@ -1093,7 +1093,8 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
        <span id="promptMode" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ylw)"></span>
        <span id="promptName">–</span>
      </span>
-     <button onclick="showPromptLibraryModal()" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-size:12px;margin-left:8px" title="Otevřít knihovnu promptů">📚 Knihovna</button>
+    <button onclick="showPromptLibraryModal()" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-size:12px;margin-left:8px" title="Otevřít knihovnu promptů">📚 Knihovna</button>
+    <button id="btnPromptAuto" onclick="togglePromptAutoMode()" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-size:12px;margin-left:8px" title="Automaticky aplikovat systémový prompt">⚡ Auto prompt: ON</button>
      <textarea id="promptEditor" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" aria-hidden="true"></textarea>
    </div>
 
@@ -1137,7 +1138,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       <button class="hbtn grn" onclick="exportJSON()" aria-label="Exportovat do JSON">⬇ JSON</button>
       <button class="hbtn" onclick="exportRange()" title="Export vybraného rozsahu G čísel" aria-label="Exportovat rozsah G čísel">⬇ Rozsah</button>
       <button class="hbtn red" onclick="showFailedEntries()" title="Zobrazit neúspěšné překlady" aria-label="Zobrazit neúspěšné překlady">⚠ Neus. <span id="failedCount"></span></button>
-      <button class="hbtn" onclick="showSettingsModal()" title="Nastavení AI (provider, model, dávka)" aria-label="Nastavení AI">⚙ AI</button>
+      <button class="hbtn" id="btnAISettingsDesktop" onclick="showSettingsModal()" title="Nastavení AI (provider, model, dávka)" aria-label="Nastavení AI">⚙ Nastavení AI</button>
       <button class="hbtn red" id="mobileMenuBtn" onclick="showMobileActions()" aria-label="Zobrazit akce">☰</button>
     </div>
   </div>
@@ -1441,6 +1442,7 @@ const {
    const buildRetryMessages = buildRetryMessagesCore;
    
   function enforceSpecialistaFormat(promptText) {
+    if (!isPromptAutoModeEnabled()) return String(promptText || '');
     const text = String(promptText || '');
     const hasSpecialista = /SPECIALISTA|VYKLAD|EXEGEZE|COMMENTARY/i.test(text);
     if (hasSpecialista) return text;
@@ -3766,7 +3768,9 @@ function loadSavedSettings() {
     promptEditor.value = p;
     promptEditor.addEventListener('input', () => {
       localStorage.setItem('strong_prompt', promptEditor.value);
-      localStorage.setItem('strong_prompt_mode', 'custom');
+      if (!isProgrammaticPromptSet) {
+        localStorage.setItem('strong_prompt_mode', 'custom');
+      }
     });
   }
   
@@ -3781,6 +3785,7 @@ function loadSavedSettings() {
   checkDefaultFile();
   updateFailedCount();
   updatePromptStatusIndicator();
+  updatePromptAutoButton();
 
   // Load language settings
   let targetLang = localStorage.getItem('strong_target_lang') || 'cz';
@@ -4472,14 +4477,24 @@ DODATEK PRO JEDNO TÉMA:
   return enforceSpecialistaFormat(prompt);
 }
 
+function isPromptAutoModeEnabled() {
+  const saved = localStorage.getItem('strong_prompt_auto');
+  return saved !== 'off';
+}
+
+let isProgrammaticPromptSet = false;
+
 function setMainPrompt(promptText, mode = 'custom') {
+  const text = String(promptText || '').trim();
+  isProgrammaticPromptSet = true;
   localStorage.setItem('strong_prompt', String(promptText || '').trim());
   localStorage.setItem('strong_prompt_mode', mode);
   const mainEditor = document.getElementById('promptEditor');
   if (mainEditor) {
-    mainEditor.value = localStorage.getItem('strong_prompt') || '';
+    mainEditor.value = text;
     mainEditor.dispatchEvent(new Event('input'));
   }
+  isProgrammaticPromptSet = false;
   updatePromptStatusIndicator();
 }
 
@@ -4506,6 +4521,22 @@ function togglePromptModeQuick() {
     return;
   }
   showToast('⚠ Vlastní prompt není uložen');
+}
+
+function updatePromptAutoButton() {
+  const btn = document.getElementById('btnPromptAuto');
+  if (!btn) return;
+  const on = isPromptAutoModeEnabled();
+  btn.textContent = `⚡ Auto prompt: ${on ? 'ON' : 'OFF'}`;
+  btn.style.borderColor = on ? 'var(--grn)' : 'var(--brd)';
+  btn.style.color = on ? 'var(--grn)' : 'var(--txt2)';
+}
+
+function togglePromptAutoMode() {
+  const on = isPromptAutoModeEnabled();
+  localStorage.setItem('strong_prompt_auto', on ? 'off' : 'on');
+  updatePromptAutoButton();
+  showToast(`✓ Auto prompt ${on ? 'vypnut' : 'zapnut'}`);
 }
 
 let selectedPromptCategory = 'default';
@@ -4726,6 +4757,10 @@ function updatePromptStatusIndicator() {
     modeDot.style.boxShadow = 'none';
     nameEl.textContent = currentPrompt ? 'Vlastní (upravený)' : 'Žádný';
     nameEl.style.color = 'var(--red)';
+  }
+
+  if (!isPromptAutoModeEnabled()) {
+    nameEl.textContent += ' · auto OFF';
   }
 }
 
@@ -5380,6 +5415,7 @@ window.closePromptLibraryModal = closePromptLibraryModal;
 window.applySelectedPrompt = applySelectedPrompt;
 window.applySystemPromptForCurrentTask = applySystemPromptForCurrentTask;
 window.togglePromptModeQuick = togglePromptModeQuick;
+window.togglePromptAutoMode = togglePromptAutoMode;
 window.showPromptAIModal = showPromptAIModal;
 window.closePromptAIModal = closePromptAIModal;
 window.saveAISettings = saveAISettings;
