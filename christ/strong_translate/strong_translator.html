@@ -1707,6 +1707,7 @@ let autoStepRunning = false;
   let modelTestAbortController = null;
   let modelTestCountdownInterval = null;
   let modelTestNextRequestEtaSec = 0;
+  let modelTestRunEndTs = 0;
   let modelTestLibraryActive = false;
   let modelTestOutputBackupBeforeLibrary = '';
   let modelTestParsedExportChunks = [];
@@ -4369,7 +4370,16 @@ function modelTestWaitWithCountdown(ms, signal) {
         return;
       }
       modelTestNextRequestEtaSec = Math.ceil(left / 1000);
-      modelTestSetCountdownLabel(`Další požadavek za cca ${modelTestNextRequestEtaSec} s`);
+      const leftTestSec = modelTestRunEndTs > Date.now()
+        ? Math.ceil((modelTestRunEndTs - Date.now()) / 1000)
+        : 0;
+      if (leftTestSec > 0) {
+        const mm = Math.floor(leftTestSec / 60);
+        const ss = leftTestSec % 60;
+        modelTestSetCountdownLabel(`Další požadavek za cca ${modelTestNextRequestEtaSec} s | Zbývá testu ${mm}:${String(ss).padStart(2, '0')}`);
+      } else {
+        modelTestSetCountdownLabel(`Další požadavek za cca ${modelTestNextRequestEtaSec} s`);
+      }
       updateModelTestRunButton();
     };
     tick();
@@ -4480,11 +4490,18 @@ function excerptRawForLastKey(rawContent, lastKey, maxLen = 2200) {
 /**
  * Průběžná kontrola: jen poslední heslo v dávce + stav formátu.
  */
-function appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, missing, rawContent = '') {
+function appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, missing, rawContent = '', totals = null) {
   const lastKey = Array.isArray(batchKeys) && batchKeys.length ? batchKeys[batchKeys.length - 1] : '';
   if (!lastKey || typeof appendReport !== 'function') return;
+  const missingSet = new Set(Array.isArray(missing) ? missing : []);
+  const failedKeys = (Array.isArray(batchKeys) ? batchKeys : []).filter(k => {
+    const tk = parsed && parsed[k];
+    return missingSet.has(k) || !tk || !isTranslationComplete(tk);
+  });
+  const firstFailed = failedKeys.length ? failedKeys[0] : '';
+  const lastFailed = failedKeys.length ? failedKeys[failedKeys.length - 1] : '';
   const t = parsed && parsed[lastKey];
-  const inMissing = Array.isArray(missing) && missing.includes(lastKey);
+  const inMissing = missingSet.has(lastKey);
   const complete = !!t && isTranslationComplete(t);
   const badFields = t && !complete
     ? ['vyznam', 'definice', 'pouziti', 'puvod', 'kjv', 'specialista'].filter(f => !hasMeaningfulValue(t[f]))
@@ -4492,25 +4509,34 @@ function appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, missi
   const rangeLabel = Array.isArray(batchKeys) && batchKeys.length
     ? `${batchKeys[0]} až ${batchKeys[batchKeys.length - 1]} (${batchKeys.length} hesel)`
     : `${lastKey} až ${lastKey} (1 heslo)`;
+  const totalsSuffix = totals ? ` | Σ OK ${totals.okKeys || 0} / NEÚSP ${totals.failedKeys || 0}` : '';
 
   appendReport(`  ▸ Rozsah dávky: ${rangeLabel}`);
   appendReport(`  ▸ Poslední heslo: ${lastKey}`);
   if (complete) {
-    modelTestSetLastStatus(`OK | ${rangeLabel} | ${lastKey}`, 'ok');
+    modelTestSetLastStatus(`OK | ${rangeLabel} | ${lastKey}${totalsSuffix}`, 'ok');
     appendReport('  Stav posledního hesla: OK — nalezeno v odpovědi a všechna povinná pole vyplněna ve správném formátu.');
     appendReport('  Data AI pro poslední heslo:');
     for (const ln of formatModelTestParsedBlock(lastKey, t, entryMap.get(lastKey)).split('\n')) {
       appendReport(`    ${ln}`);
     }
   } else if (inMissing || !t) {
-    modelTestSetLastStatus(`NEÚSPĚCH | ${rangeLabel} | ${lastKey}`, 'error');
+    modelTestSetLastStatus(`NEÚSPĚCH | ${rangeLabel} | ${lastKey}${totalsSuffix}`, 'error');
     appendReport('  🔴 CHYBA FORMATU / PÁROVÁNÍ');
     appendReport('  Stav posledního hesla: NEÚSPĚCH — heslo v odpovědi nešlo spárovat / chybí blok (špatný formát nebo model vynechal heslo).');
+    if (failedKeys.length) {
+      appendReport(`  Neúspěšné v dávce: ${failedKeys.length}/${batchKeys.length} | první ${firstFailed} | poslední ${lastFailed}`);
+    }
+    if (firstFailed && firstFailed !== lastFailed) {
+      appendReport(`  RAW odpověď AI pro první neúspěšné ${firstFailed}:`);
+      appendReport(excerptRawForLastKey(rawContent, firstFailed, 1200));
+      appendReport('  ---');
+    }
     appendReport(`  RAW odpověď AI pro ${lastKey} (pokud blok není nalezen, jen zkrácený výřez):`);
     appendReport(excerptRawForLastKey(rawContent, lastKey));
     appendReport('  --- /RAW ---');
   } else {
-    modelTestSetLastStatus(`NEÚPLNÉ | ${rangeLabel} | ${lastKey}`, 'warn');
+    modelTestSetLastStatus(`NEÚPLNÉ | ${rangeLabel} | ${lastKey}${totalsSuffix}`, 'warn');
     appendReport(`  Stav posledního hesla: NEÚPLNÉ — chybí nebo jsou neplatná pole: ${badFields.join(', ') || '?'}`);
     appendReport('  Data AI pro poslední heslo (to, co šlo vyparsovat):');
     for (const ln of formatModelTestParsedBlock(lastKey, t, entryMap.get(lastKey)).split('\n')) {
@@ -4522,16 +4548,20 @@ function appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, missi
   const exportLines = [
     `Rozsah dávky: ${rangeLabel}`,
     `Poslední heslo: ${lastKey}`,
+    totals ? `Celkem v běhu: OK ${totals.okKeys || 0} | NEÚSP ${totals.failedKeys || 0}` : '',
     complete
       ? 'Stav: OK'
       : (inMissing || !t)
         ? 'Stav: NEÚSPĚCH'
         : `Stav: NEÚPLNÉ (${badFields.join(', ') || '?'})`
-  ];
+  ].filter(Boolean);
   if (t) {
     exportLines.push('');
     exportLines.push(formatModelTestParsedBlock(lastKey, t, entryMap.get(lastKey)));
   } else if (inMissing || !t) {
+    if (firstFailed && firstFailed !== lastFailed) {
+      exportLines.push('', `RAW odpověď AI pro první neúspěšné ${firstFailed}:`, excerptRawForLastKey(rawContent, firstFailed, 1200));
+    }
     exportLines.push('', `RAW odpověď AI pro ${lastKey}:`, excerptRawForLastKey(rawContent, lastKey));
   }
   exportLines.push('----------------------------------------', '');
@@ -4619,7 +4649,7 @@ function showModelTestLibrary() {
   for (const item of history.slice(0, 80)) {
     const when = new Date(item.ts).toLocaleString('cs-CZ');
     if (item.type === 'model-test') {
-      lines.push(`[${when}] TEST | ${item.provider} | režim ${item.mode || 'smoke'} | OK ${item.ok}/${item.total} | PART ${item.partial || 0} | RL ${item.rateLimited} | ERR ${item.error}`);
+      lines.push(`[${when}] TEST | ${item.provider} | režim ${item.mode || 'smoke'} | OK ${item.ok}/${item.total} | PART ${item.partial || 0} | RL ${item.rateLimited} | ERR ${item.error} | HESLA OK ${item.keysOk || 0} / NEÚSP ${item.keysFailed || 0} | CYKLY ${item.cycles || 0}`);
       if (Array.isArray(item.topModels) && item.topModels.length) {
         lines.push(`TOP: ${item.topModels.join(', ')}`);
       }
@@ -4668,12 +4698,15 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
   const batchSize = parseInt(document.getElementById('batchSizeRun')?.value || '10', 10) || 10;
   const intervalSec = parseInt(document.getElementById('intervalRun')?.value || '20', 10) || 20;
   const startTs = Date.now();
+  modelTestRunEndTs = startTs + durationMs;
   let cycle = 0;
   let cursor = 0;
+  let totalOkKeys = 0;
+  let totalFailedKeys = 0;
   const sourceEntries = entries.filter(e => e && e.key);
   if (sourceEntries.length < batchSize) {
     appendReport('⚠ Auto test: málo načtených hesel pro zvolenou dávku.');
-    return;
+    return { cycles: 0, okKeys: 0, failedKeys: 0 };
   }
 
   const providerKeys = fixedProvider
@@ -4681,7 +4714,7 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
     : Object.keys(PROVIDERS).filter(p => !!getApiKeyForModelTest(p));
   if (providerKeys.length === 0) {
     appendReport('⚠ Auto test: nejsou dostupné API klíče.');
-    return;
+    return { cycles: 0, okKeys: 0, failedKeys: 0 };
   }
 
   appendReport(`Auto test délka: ${durationMin} min`);
@@ -4724,14 +4757,18 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
       const content = String(raw?.content || '');
       const parsed = {};
       const missing = parseTranslationsCore(content, batchKeys, parsed);
-      const ok = batchKeys.length - missing.length;
+      const failedInBatch = batchKeys.filter(k => !parsed[k] || !isTranslationComplete(parsed[k]));
+      const ok = batchKeys.length - failedInBatch.length;
       const status = ok === batchKeys.length ? 'OK' : 'PARTIAL';
+      totalOkKeys += ok;
+      totalFailedKeys += failedInBatch.length;
       testResults.push({ model: `${prov}:${chosenModel.value}`, status });
       appendReport(`[#${cycle}] ${providerLabel} | ${chosenModel.value} | ${ok}/${batchKeys.length} hesel | klíče ${batchKeys[0]}…${batchKeys[batchKeys.length - 1]}`);
-      appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, missing, content);
+      appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, failedInBatch, content, { okKeys: totalOkKeys, failedKeys: totalFailedKeys });
     } catch (e) {
       const msg = String(e?.message || '');
       const isRate = /429|rate limit|too many/i.test(msg);
+      totalFailedKeys += batchKeys.length;
       testResults.push({ model: `${prov}:${chosenModel.value}`, status: isRate ? 'RATE_LIMITED' : 'ERROR' });
       appendReport(`[#${cycle}] ${providerLabel} | ${chosenModel.value} | ${isRate ? 'RATE LIMITED' : 'ERROR'} (${msg})`);
     }
@@ -4739,6 +4776,7 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
     if (modelTestCancelRequested) break;
     await waitMs(intervalSec * 1000);
   }
+  return { cycles: cycle, okKeys: totalOkKeys, failedKeys: totalFailedKeys };
 }
 
 async function testCurrentProviderModels(forcedProvider = null, resetReport = true, forcedMode = null) {
@@ -4797,6 +4835,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
   const cancelBtn = document.getElementById('btnCancelModelTest');
   modelTestRunning = true;
   modelTestCancelRequested = false;
+  modelTestRunEndTs = 0;
   modelTestParsedExportChunks = [];
   modelTestLastKeyAuditExportChunks = [];
   modelTestSetLastStatus('Běží test modelů…', 'idle');
@@ -4818,9 +4857,10 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
     const sampleEntries = testMode === 'translate3' ? getSampleEntriesForModelTest(3) : [];
     const sampleKeys = sampleEntries.map(e => e.key);
     if (testMode === 'auto-live') {
-      await runAutoLiveModelTest(appendReport, waitMs, testResults, modelTestAbortController.signal, forcedProvider ? prov : null);
+      const autoStats = await runAutoLiveModelTest(appendReport, waitMs, testResults, modelTestAbortController.signal, forcedProvider ? prov : null);
       const okModels = testResults.filter(r => r.status === 'OK').map(r => r.model).slice(0, 3);
       appendReport('');
+      appendReport(`Souhrn hesel: OK ${autoStats.okKeys} | NEÚSP ${autoStats.failedKeys} | cykly ${autoStats.cycles}`);
       appendReport(`TOP modely z tohoto běhu: ${okModels.length ? okModels.join(', ') : 'žádné plně stabilní'}`);
       appendReport(modelTestCancelRequested ? 'Ukončeno.' : 'Hotovo.');
       pushTestHistory({
@@ -4832,6 +4872,9 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
         rateLimited: testResults.filter(r => r.status === 'RATE_LIMITED').length,
         error: testResults.filter(r => r.status === 'ERROR').length,
         partial: testResults.filter(r => r.status === 'PARTIAL').length,
+        cycles: autoStats.cycles,
+        keysOk: autoStats.okKeys,
+        keysFailed: autoStats.failedKeys,
         topModels: okModels
       });
       showToast(modelTestCancelRequested ? '⏹ Test modelů zrušen' : '✓ Auto test dokončen');
@@ -4989,6 +5032,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
   } finally {
     modelTestClearCountdownInterval();
     modelTestNextRequestEtaSec = 0;
+    modelTestRunEndTs = 0;
     modelTestSetCountdownLabel('');
     if (modelTestCancelRequested) {
       modelTestSetLastStatus('Test zastaven uživatelem.', 'warn');
