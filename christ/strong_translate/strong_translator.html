@@ -1449,17 +1449,33 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       </label>
       <div id="modelTestCountdown" class="limits-provider" style="margin-bottom:6px;min-height:1.2em;font-size:12px;color:var(--txt2)"></div>
       <div id="modelTestLastStatus" style="margin-bottom:8px;min-height:1.2em;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--txt2)"></div>
+      <div style="margin-bottom:8px;border:1px solid var(--brd);border-radius:6px;overflow:auto;max-height:180px">
+        <table id="modelStatsTable" style="width:100%;border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:10px">
+          <thead>
+            <tr style="background:var(--bg3);position:sticky;top:0">
+              <th style="text-align:left;padding:6px;border-bottom:1px solid var(--brd)">Provider/Model</th>
+              <th style="text-align:right;padding:6px;border-bottom:1px solid var(--brd)">Úspěšnost</th>
+              <th style="text-align:right;padding:6px;border-bottom:1px solid var(--brd)">OK/NEÚSP</th>
+              <th style="text-align:right;padding:6px;border-bottom:1px solid var(--brd)">Prům. AI</th>
+              <th style="text-align:right;padding:6px;border-bottom:1px solid var(--brd)">Volání</th>
+              <th style="text-align:right;padding:6px;border-bottom:1px solid var(--brd)">Akce</th>
+            </tr>
+          </thead>
+          <tbody id="modelStatsBody"></tbody>
+        </table>
+      </div>
       <textarea id="modelTestOutput" style="width:100%;min-height:240px;max-height:45vh;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:10px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.5;resize:vertical" placeholder="Nastav režim a providera, pak spusť ▶ Test provideru. Odpočet ukáže čekání do dalšího volání API."></textarea>
       <div class="modal-btns" style="margin-top:12px">
         <button class="modal-btn ok" id="btnRunModelTest" onclick="runModelTestFromModal()">▶ Test provideru</button>
         <button class="modal-btn" onclick="showModelTestLibrary()">📚 Knihovna</button>
+        <button class="modal-btn" type="button" onclick="document.getElementById('modelTestLoadFileInput').click()">📂 Načíst test.txt</button>
         <button class="modal-btn ok" type="button" onclick="saveModelTestOutputTxt()">💾 Uložit test.txt</button>
-        <button class="modal-btn" type="button" onclick="restoreModelTestReportFromBackup()">📄 Zpět na report</button>
         <button class="modal-btn" type="button" onclick="resetModelTestModal()">↺ Reset</button>
         <button class="modal-btn cancel" id="btnCancelModelTest" onclick="cancelModelTest()" style="display:none">■ Zrušit test</button>
         <button class="modal-btn ok" onclick="copyModelTestOutput()">📋 Kopírovat</button>
         <button class="modal-btn cancel" onclick="closeModelTestModal()">✕ Zavřít</button>
       </div>
+      <input type="file" id="modelTestLoadFileInput" accept=".txt,text/plain" style="display:none" onchange="loadModelTestOutputFromFile(this)">
     </div>
   </div>
 
@@ -1720,6 +1736,7 @@ let autoStepRunning = false;
   const AUTO_TOKEN_LIMIT_KEY = 'strong_auto_token_limit';
   const TEST_HISTORY_KEY = 'strong_test_history_v1';
   const MODEL_TEST_OUTPUT_KEY = 'strong_model_test_output_v1';
+  const MODEL_TEST_STATS_KEY = 'strong_model_test_stats_v1';
   const API_KEY_PROFILES_PREFIX = 'strong_apikey_profiles_';
   const API_KEY_ACTIVE_PROFILE_PREFIX = 'strong_apikey_active_';
 
@@ -4284,6 +4301,7 @@ function showModelTestModal(providerLabel, clearOutput = false) {
   }
   modal.classList.add('show');
   updateModelTestRunButton();
+  renderModelStatsTable();
 }
 
 function closeModelTestModal() {
@@ -4360,6 +4378,87 @@ function clearModelTestOutputFromStorage() {
   try { localStorage.removeItem(MODEL_TEST_OUTPUT_KEY); } catch (e) {}
 }
 
+function getModelTestStatsMap() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(MODEL_TEST_STATS_KEY) || '{}');
+    return parsed && typeof parsed === 'object' ? parsed : {};
+  } catch (e) {
+    return {};
+  }
+}
+
+function saveModelTestStatsMap(map) {
+  try { localStorage.setItem(MODEL_TEST_STATS_KEY, JSON.stringify(map || {})); } catch (e) {}
+}
+
+function upsertModelTestStats(prov, model, payload) {
+  const key = `${prov}::${model}`;
+  const map = getModelTestStatsMap();
+  const row = map[key] || {
+    provider: prov, model,
+    calls: 0, okBatches: 0, partialBatches: 0, errorBatches: 0, rateLimited: 0,
+    okKeys: 0, failedKeys: 0, latencyMsTotal: 0, latencySamples: 0, lastTs: 0
+  };
+  row.calls += 1;
+  if (payload.status === 'OK') row.okBatches += 1;
+  else if (payload.status === 'PARTIAL') row.partialBatches += 1;
+  else if (payload.status === 'RATE_LIMITED') row.rateLimited += 1;
+  else row.errorBatches += 1;
+  row.okKeys += Math.max(0, payload.okKeys || 0);
+  row.failedKeys += Math.max(0, payload.failedKeys || 0);
+  if (Number.isFinite(payload.latencyMs) && payload.latencyMs > 0) {
+    row.latencyMsTotal += payload.latencyMs;
+    row.latencySamples += 1;
+  }
+  row.lastTs = Date.now();
+  map[key] = row;
+  saveModelTestStatsMap(map);
+  renderModelStatsTable();
+}
+
+function deleteModelTestStatsRow(keyEncoded) {
+  const key = decodeURIComponent(String(keyEncoded || ''));
+  const map = getModelTestStatsMap();
+  if (!map[key]) return;
+  delete map[key];
+  saveModelTestStatsMap(map);
+  renderModelStatsTable();
+}
+
+function renderModelStatsTable() {
+  const body = document.getElementById('modelStatsBody');
+  if (!body) return;
+  const rows = Object.entries(getModelTestStatsMap()).map(([key, row]) => ({ key, ...row }));
+  rows.sort((a, b) => {
+    const aTotal = Math.max(1, a.okKeys + a.failedKeys);
+    const bTotal = Math.max(1, b.okKeys + b.failedKeys);
+    const aRate = a.okKeys / aTotal;
+    const bRate = b.okKeys / bTotal;
+    if (bRate !== aRate) return bRate - aRate;
+    const aLat = a.latencySamples ? a.latencyMsTotal / a.latencySamples : Number.POSITIVE_INFINITY;
+    const bLat = b.latencySamples ? b.latencyMsTotal / b.latencySamples : Number.POSITIVE_INFINITY;
+    if (aLat !== bLat) return aLat - bLat;
+    return (b.calls || 0) - (a.calls || 0);
+  });
+  if (!rows.length) {
+    body.innerHTML = `<tr><td colspan="6" style="padding:8px;color:var(--txt3)">Zatím bez dat.</td></tr>`;
+    return;
+  }
+  body.innerHTML = rows.map(r => {
+    const total = Math.max(1, (r.okKeys || 0) + (r.failedKeys || 0));
+    const rate = ((r.okKeys || 0) / total) * 100;
+    const avgMs = r.latencySamples ? (r.latencyMsTotal / r.latencySamples) : 0;
+    return `<tr>
+      <td style="padding:6px;border-top:1px solid var(--brd)">${escHtml(r.provider)}<br><span style="color:var(--txt3)">${escHtml(r.model)}</span></td>
+      <td style="padding:6px;border-top:1px solid var(--brd);text-align:right">${rate.toFixed(1)}%</td>
+      <td style="padding:6px;border-top:1px solid var(--brd);text-align:right">${r.okKeys || 0}/${r.failedKeys || 0}</td>
+      <td style="padding:6px;border-top:1px solid var(--brd);text-align:right">${formatAiResponseTime(avgMs)}</td>
+      <td style="padding:6px;border-top:1px solid var(--brd);text-align:right">${r.calls || 0}</td>
+      <td style="padding:6px;border-top:1px solid var(--brd);text-align:right"><button class="modal-btn cancel" style="padding:4px 8px;font-size:10px" onclick="deleteModelTestStatsRow('${encodeURIComponent(r.key)}')">Smazat</button></td>
+    </tr>`;
+  }).join('');
+}
+
 async function saveModelTestOutputTxt() {
   const text = document.getElementById('modelTestOutput')?.value || '';
   if (!text.trim()) {
@@ -4395,6 +4494,29 @@ async function saveModelTestOutputTxt() {
   download(DEFAULT_MODEL_TEST_LOG_FILENAME, text, 'text/plain');
   modelTestSetLastStatus(`Staženo: ${DEFAULT_MODEL_TEST_LOG_FILENAME}`, 'ok');
   showToast(`✓ Staženo: ${DEFAULT_MODEL_TEST_LOG_FILENAME}`);
+}
+
+function loadModelTestOutputFromFile(input) {
+  const file = input?.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const text = String(ev?.target?.result || '');
+    const out = document.getElementById('modelTestOutput');
+    if (out) {
+      out.value = text;
+      out.scrollTop = out.scrollHeight;
+    }
+    saveModelTestOutputToStorage(text);
+    modelTestSetLastStatus(`Načteno: ${file.name}`, 'ok');
+    showToast(`✓ Načteno: ${file.name}`);
+    if (input) input.value = '';
+  };
+  reader.onerror = () => {
+    showToast('✗ Soubor se nepodařilo načíst');
+    if (input) input.value = '';
+  };
+  reader.readAsText(file, 'utf-8');
 }
 
 function modelTestWaitWithCountdown(ms, signal) {
@@ -4708,7 +4830,7 @@ function showModelTestLibrary() {
   for (const item of history.slice(0, 80)) {
     const when = new Date(item.ts).toLocaleString('cs-CZ');
     if (item.type === 'model-test') {
-      lines.push(`[${when}] TEST | ${item.provider} | režim ${item.mode || 'smoke'} | OK ${item.ok}/${item.total} | PART ${item.partial || 0} | RL ${item.rateLimited} | ERR ${item.error} | HESLA OK ${item.keysOk || 0} / NEÚSP ${item.keysFailed || 0} | CYKLY ${item.cycles || 0}`);
+      lines.push(`[${when}] TEST | ${item.provider} | režim ${item.mode || 'smoke'} | OK ${item.ok}/${item.total} | PART ${item.partial || 0} | RL ${item.rateLimited} | ERR ${item.error} | HESLA OK ${item.keysOk || 0} / NEÚSP ${item.keysFailed || 0} | CYKLY ${item.cycles || 0} | LAT ${formatAiResponseTime(item.avgLatencyMs || 0)}`);
       if (Array.isArray(item.topModels) && item.topModels.length) {
         lines.push(`TOP: ${item.topModels.join(', ')}`);
       }
@@ -4769,6 +4891,8 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
   let cursor = 0;
   let totalOkKeys = 0;
   let totalFailedKeys = 0;
+  let latencyMsTotal = 0;
+  let latencySamples = 0;
   const sourceEntries = entries.filter(e => e && e.key);
   if (sourceEntries.length < batchSize) {
     appendReport('⚠ Auto test: málo načtených hesel pro zvolenou dávku.');
@@ -4822,6 +4946,8 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
     try {
       const raw = await callOnce(prov, apiKey, chosenModel.value, messages, abortSignal);
       const reqMs = performance.now() - reqStart;
+      latencyMsTotal += reqMs;
+      latencySamples += 1;
       const content = String(raw?.content || '');
       const parsed = {};
       const missing = parseTranslationsCore(content, batchKeys, parsed);
@@ -4831,15 +4957,29 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
       totalOkKeys += ok;
       totalFailedKeys += failedInBatch.length;
       testResults.push({ model: `${prov}:${chosenModel.value}`, status });
+      upsertModelTestStats(prov, chosenModel.value, {
+        status,
+        okKeys: ok,
+        failedKeys: failedInBatch.length,
+        latencyMs: reqMs
+      });
       console.log(`[AUTO TEST] #${cycle} ${prov} | ${chosenModel.value} | OK ${ok}/${batchKeys.length} | ${formatAiResponseTime(reqMs)}`);
       appendReport(`[#${cycle}] ${providerLabel} | ${chosenModel.value} | ${ok}/${batchKeys.length} hesel | klíče ${batchKeys[0]}…${batchKeys[batchKeys.length - 1]} | AI ${formatAiResponseTime(reqMs)}`);
       appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, failedInBatch, content, { okKeys: totalOkKeys, failedKeys: totalFailedKeys });
     } catch (e) {
       const reqMs = performance.now() - reqStart;
+      latencyMsTotal += reqMs;
+      latencySamples += 1;
       const msg = String(e?.message || '');
       const isRate = /429|rate limit|too many/i.test(msg);
       totalFailedKeys += batchKeys.length;
       testResults.push({ model: `${prov}:${chosenModel.value}`, status: isRate ? 'RATE_LIMITED' : 'ERROR' });
+      upsertModelTestStats(prov, chosenModel.value, {
+        status: isRate ? 'RATE_LIMITED' : 'ERROR',
+        okKeys: 0,
+        failedKeys: batchKeys.length,
+        latencyMs: reqMs
+      });
       console.log(`[AUTO TEST] #${cycle} ${prov} | ${chosenModel.value} | ${isRate ? 'RATE LIMITED' : 'ERROR'} | ${formatAiResponseTime(reqMs)} | ${msg}`);
       appendReport(`[#${cycle}] ${providerLabel} | ${chosenModel.value} | ${isRate ? 'RATE LIMITED' : 'ERROR'} (${msg})${reqMs > 0 ? ` | AI ${formatAiResponseTime(reqMs)}` : ''}`);
     }
@@ -4847,7 +4987,12 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
     if (modelTestCancelRequested) break;
     await waitMs(intervalSec * 1000);
   }
-  return { cycles: cycle, okKeys: totalOkKeys, failedKeys: totalFailedKeys };
+  return {
+    cycles: cycle,
+    okKeys: totalOkKeys,
+    failedKeys: totalFailedKeys,
+    avgLatencyMs: latencySamples ? (latencyMsTotal / latencySamples) : 0
+  };
 }
 
 async function testCurrentProviderModels(forcedProvider = null, resetReport = true, forcedMode = null) {
@@ -4933,7 +5078,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
       const autoStats = await runAutoLiveModelTest(appendReport, waitMs, testResults, modelTestAbortController.signal, forcedProvider ? prov : null);
       const okModels = testResults.filter(r => r.status === 'OK').map(r => r.model).slice(0, 3);
       appendReport('');
-      appendReport(`Souhrn hesel: OK ${autoStats.okKeys} | NEÚSP ${autoStats.failedKeys} | cykly ${autoStats.cycles}`);
+      appendReport(`Souhrn hesel: OK ${autoStats.okKeys} | NEÚSP ${autoStats.failedKeys} | cykly ${autoStats.cycles} | prům. AI ${formatAiResponseTime(autoStats.avgLatencyMs || 0)}`);
       appendReport(`TOP modely z tohoto běhu: ${okModels.length ? okModels.join(', ') : 'žádné plně stabilní'}`);
       appendReport(modelTestCancelRequested ? 'Ukončeno.' : 'Hotovo.');
       pushTestHistory({
@@ -4948,6 +5093,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
         cycles: autoStats.cycles,
         keysOk: autoStats.okKeys,
         keysFailed: autoStats.failedKeys,
+        avgLatencyMs: autoStats.avgLatencyMs || 0,
         topModels: okModels
       });
       showToast(modelTestCancelRequested ? '⏹ Test modelů zrušen' : '✓ Auto test dokončen');
@@ -6740,7 +6886,8 @@ window.openModelTestModal = openModelTestModal;
 window.resetModelTestModal = resetModelTestModal;
 window.restoreModelTestReportFromBackup = restoreModelTestReportFromBackup;
 window.saveModelTestOutputTxt = saveModelTestOutputTxt;
-window.exportModelTestTranslationsTxt = exportModelTestTranslationsTxt;
+window.loadModelTestOutputFromFile = loadModelTestOutputFromFile;
+window.deleteModelTestStatsRow = deleteModelTestStatsRow;
 window.showModelTestLibrary = showModelTestLibrary;
 window.showHelpModal = showHelpModal;
 window.closeHelpModal = closeHelpModal;
