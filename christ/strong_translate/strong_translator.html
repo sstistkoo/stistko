@@ -1201,7 +1201,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       <button class="hbtn auto" id="btnAuto" onclick="toggleAuto()" aria-label="Spustit automatický překlad">▶ AUTO</button>
       <button class="hbtn" id="btnToggleList" onclick="toggleListPane()" title="Skrýt/ukázat seznam" aria-label="Skrýt/ukázat seznam">≡ Seznam</button>
       <button class="hbtn" id="btnStep" onclick="translateNext()" aria-label="Přeložit další dávku">⚡ Dávka</button>
-      <button class="hbtn" id="btnTestModels" onclick="testCurrentProviderModels()" title="Otestovat všechny modely aktuálního providera" aria-label="Otestovat modely aktuálního providera">🧪 Test modelů</button>
+      <button class="hbtn" id="btnTestModels" onclick="openModelTestModal()" title="Nastavit a spustit test modelů (nejdřív modal, pak ▶ Test provideru)" aria-label="Test modelů — otevře nastavení">🧪 Test modelů</button>
       <button class="hbtn" onclick="selectRange()" title="Označit rozsah hesel k překladu" aria-label="Označit rozsah">☑ Přek</button>
       <button class="hbtn grn" onclick="exportTXT()" aria-label="Exportovat do TXT">⬇ TXT</button>
       <button class="hbtn grn" onclick="exportJSON()" aria-label="Exportovat do JSON">⬇ JSON</button>
@@ -1447,10 +1447,14 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
         <input type="checkbox" id="modelTestAppend" checked>
         Připojit výsledek do stejného reportu
       </label>
-      <textarea id="modelTestOutput" style="width:100%;min-height:320px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:10px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.5;resize:vertical" placeholder="Po spuštění testu se sem vypíše report..."></textarea>
+      <div id="modelTestCountdown" class="limits-provider" style="margin-bottom:8px;min-height:1.2em;font-size:12px;color:var(--txt2)"></div>
+      <textarea id="modelTestOutput" style="width:100%;min-height:320px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:10px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.5;resize:vertical" placeholder="Nastav režim a providera, pak spusť ▶ Test provideru. Odpočet ukáže čekání do dalšího volání API."></textarea>
       <div class="modal-btns" style="margin-top:12px">
         <button class="modal-btn ok" onclick="runModelTestFromModal()">▶ Test provideru</button>
         <button class="modal-btn" onclick="showModelTestLibrary()">📚 Knihovna</button>
+        <button class="modal-btn" type="button" onclick="restoreModelTestReportFromBackup()">📄 Zpět na report</button>
+        <button class="modal-btn" type="button" onclick="resetModelTestModal()">↺ Reset</button>
+        <button class="modal-btn ok" type="button" onclick="exportModelTestTranslationsTxt()">⬇ Překlady TXT</button>
         <button class="modal-btn cancel" id="btnCancelModelTest" onclick="cancelModelTest()" style="display:none">■ Zrušit test</button>
         <button class="modal-btn ok" onclick="copyModelTestOutput()">📋 Kopírovat</button>
         <button class="modal-btn cancel" onclick="closeModelTestModal()">✕ Zavřít</button>
@@ -1700,6 +1704,10 @@ let autoStepRunning = false;
   let modelTestRunning = false;
   let modelTestCancelRequested = false;
   let modelTestAbortController = null;
+  let modelTestCountdownInterval = null;
+  let modelTestLibraryActive = false;
+  let modelTestOutputBackupBeforeLibrary = '';
+  let modelTestParsedExportChunks = [];
   let startTime = null;
   let elapsedTimer = null;
   let selectedKeys = new Set();
@@ -4170,6 +4178,9 @@ function loadSavedSettings() {
   }
   
   checkDefaultFile();
+  if (localStorage.getItem(LAST_FILE_KEY)) {
+    loadDefaultFile();
+  }
   updateFailedCount();
   updatePromptStatusIndicator();
   updatePromptAutoButton();
@@ -4278,6 +4289,136 @@ function cancelModelTest() {
   showToast('⏹ Ruším test modelů...');
 }
 
+function modelTestClearCountdownInterval() {
+  if (modelTestCountdownInterval) {
+    clearInterval(modelTestCountdownInterval);
+    modelTestCountdownInterval = null;
+  }
+}
+
+function modelTestSetCountdownLabel(text) {
+  const el = document.getElementById('modelTestCountdown');
+  if (el) el.textContent = text || '';
+}
+
+function modelTestWaitWithCountdown(ms, signal) {
+  return new Promise(resolve => {
+    modelTestClearCountdownInterval();
+    if (ms <= 0 || modelTestCancelRequested) {
+      modelTestSetCountdownLabel('');
+      resolve();
+      return;
+    }
+    const t0 = Date.now();
+    const tick = () => {
+      if (modelTestCancelRequested || signal?.aborted) {
+        modelTestClearCountdownInterval();
+        modelTestSetCountdownLabel('');
+        resolve();
+        return;
+      }
+      const left = ms - (Date.now() - t0);
+      if (left <= 0) {
+        modelTestClearCountdownInterval();
+        modelTestSetCountdownLabel('');
+        resolve();
+        return;
+      }
+      modelTestSetCountdownLabel(`Další požadavek za cca ${Math.ceil(left / 1000)} s`);
+    };
+    tick();
+    modelTestCountdownInterval = setInterval(tick, 400);
+  });
+}
+
+function scrollModelTestOutputIntoView() {
+  const ta = document.getElementById('modelTestOutput');
+  if (ta) {
+    ta.focus({ preventScroll: true });
+    ta.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+}
+
+function openModelTestModal() {
+  if (autoRunning || autoStepRunning) {
+    showToast('⚠ Nejdřív zastav AUTO');
+    return;
+  }
+  const prov = document.getElementById('provider')?.value || 'groq';
+  const providerLabel = PROVIDERS[prov]?.label || prov;
+  showModelTestModal(providerLabel, false);
+  const modalProviderSelect = document.getElementById('modelTestProvider');
+  if (modalProviderSelect) modalProviderSelect.value = prov;
+  scrollModelTestOutputIntoView();
+}
+
+function resetModelTestModal() {
+  if (modelTestRunning) {
+    showToast('⚠ Nejprve zruš probíhající test');
+    return;
+  }
+  const output = document.getElementById('modelTestOutput');
+  if (output) output.value = '';
+  modelTestLibraryActive = false;
+  modelTestOutputBackupBeforeLibrary = '';
+  modelTestParsedExportChunks = [];
+  modelTestSetCountdownLabel('');
+}
+
+function restoreModelTestReportFromBackup() {
+  const output = document.getElementById('modelTestOutput');
+  if (!output) return;
+  if (modelTestLibraryActive) {
+    output.value = modelTestOutputBackupBeforeLibrary;
+    modelTestLibraryActive = false;
+  }
+  scrollModelTestOutputIntoView();
+}
+
+function formatModelTestParsedBlock(key, t, e) {
+  if (!e || !t) return '';
+  const parts = [
+    `${key} | ${e.greek}`,
+    `Gramatika: ${e.tvaroslovi || '—'}`,
+    `Český význam: ${t.vyznam || '—'}`,
+    `Definice (EN): ${e.definice || e.def || '—'}`,
+    `Česká definice: ${t.definice || '—'}`,
+    `KJV překlady: ${t.kjv || e.kjv || '—'}`,
+    `Biblické užití (KJV): ${t.pouziti || '—'}`,
+    `Původ: ${t.puvod || '—'}`,
+    `Specialista: ${t.specialista || '—'}`,
+    ''
+  ];
+  return parts.join('\n');
+}
+
+function appendModelTestExportParsed(keys, parsed) {
+  if (!parsed || typeof parsed !== 'object') return;
+  for (const key of keys) {
+    const t = parsed[key];
+    if (!t) continue;
+    const e = entryMap.get(key);
+    if (!e) continue;
+    modelTestParsedExportChunks.push(formatModelTestParsedBlock(key, t, e));
+  }
+}
+
+function exportModelTestTranslationsTxt() {
+  const out = document.getElementById('modelTestOutput');
+  const reportFallback = (out?.value || '').trim();
+  let body = '';
+  if (modelTestParsedExportChunks.length) {
+    body = `# Export parsovaných překladů z testu modelů\n# ${new Date().toLocaleString('cs-CZ')}\n\n${modelTestParsedExportChunks.join('\n')}`;
+  } else if (reportFallback) {
+    body = `# Žádné nově parsované bloky v paměti — celý aktuální text z okna\n# ${new Date().toLocaleString('cs-CZ')}\n\n${reportFallback}`;
+  } else {
+    showToast('⚠ Není co exportovat');
+    return;
+  }
+  download(`strong_model_test_export_${Date.now()}.txt`, body, 'text/plain');
+  showToast('✓ Stažení TXT');
+}
+
 function getApiKeyForModelTest(prov) {
   const activeProvider = document.getElementById('provider')?.value || '';
   if (activeProvider === prov) {
@@ -4313,6 +4454,8 @@ async function runModelTestFromModal() {
     showToast('⚠ Už běží test modelů');
     return;
   }
+  restoreModelTestReportFromBackup();
+  scrollModelTestOutputIntoView();
   const providerSelect = document.getElementById('modelTestProvider');
   const modeSelect = document.getElementById('modelTestMode');
   if (!providerSelect) return;
@@ -4324,6 +4467,10 @@ async function runModelTestFromModal() {
 function showModelTestLibrary() {
   const output = document.getElementById('modelTestOutput');
   if (!output) return;
+  if (!modelTestLibraryActive) {
+    modelTestOutputBackupBeforeLibrary = output.value;
+  }
+  modelTestLibraryActive = true;
   const history = getTestHistory();
   if (!history.length) {
     output.value = 'Knihovna testů je zatím prázdná.';
@@ -4441,6 +4588,7 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
       const ok = batchKeys.length - missing.length;
       const status = ok === batchKeys.length ? 'OK' : 'PARTIAL';
       testResults.push({ model: `${prov}:${chosenModel.value}`, status });
+      appendModelTestExportParsed(batchKeys, parsed);
       appendReport(`[#${cycle}] ${providerLabel} | ${chosenModel.value} | ${ok}/${batchKeys.length} hesel | klíče ${batchKeys[0]}…${batchKeys[batchKeys.length - 1]}`);
       if (cycle % 10 === 0) {
         appendReport(`--- RAW ODPOVĚĎ #${cycle} (kompletní text od modelu) ---`);
@@ -4492,13 +4640,15 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
   const providerLabel = PROVIDERS[prov]?.label || prov;
   const outputEl = document.getElementById('modelTestOutput');
   const shouldAppend = appendCheckbox?.checked && !resetReport;
-  showModelTestModal(providerLabel, !shouldAppend);
+  const snapshotBefore = outputEl ? outputEl.value : '';
+  const report = shouldAppend && snapshotBefore ? snapshotBefore.split('\n') : [];
+  showModelTestModal(providerLabel, false);
   if (modalProviderSelect) modalProviderSelect.value = prov;
   if (!outputEl) {
     showToast('✗ Chybí výstupní okno testu modelů');
     return;
   }
-  const report = shouldAppend && outputEl.value ? outputEl.value.split('\n') : [];
+  outputEl.value = shouldAppend ? snapshotBefore : '';
   const MODEL_TEST_DELAY_MS = 3500;
   const MAX_CONSECUTIVE_RATE_LIMITS = 4;
   let consecutiveRateLimited = 0;
@@ -4508,13 +4658,15 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
     outputEl.value = report.join('\n');
     outputEl.scrollTop = outputEl.scrollHeight;
   };
-  const waitMs = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
   const originalText = btn.textContent;
   const cancelBtn = document.getElementById('btnCancelModelTest');
   modelTestRunning = true;
   modelTestCancelRequested = false;
+  modelTestParsedExportChunks = [];
   modelTestAbortController = new AbortController();
+  const signal = modelTestAbortController.signal;
+  const waitMs = (ms) => modelTestWaitWithCountdown(ms, signal);
   btn.disabled = true;
   if (cancelBtn) cancelBtn.style.display = 'inline-block';
   appendReport(`# TEST MODELU`);
@@ -4584,6 +4736,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
           appendReport(`VÝSTUP: ${firstContent || '(prázdná odpověď)'}`);
           const parsed = {};
           const missingAfterFirst = parseTranslationsCore(firstContent || '', sampleKeys, parsed);
+          appendModelTestExportParsed(sampleKeys, parsed);
           const okCount = sampleKeys.length - missingAfterFirst.length;
           appendReport(`PARSOVÁNÍ: ${okCount}/${sampleKeys.length} hesel`);
           if (missingAfterFirst.length > 0) appendReport(`CHYBÍ: ${missingAfterFirst.join(', ')}`);
@@ -4698,6 +4851,8 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
     });
     showToast(modelTestCancelRequested ? '⏹ Test modelů zrušen' : `✓ Test modelů dokončen (${options.length})`);
   } finally {
+    modelTestClearCountdownInterval();
+    modelTestSetCountdownLabel('');
     modelTestRunning = false;
     modelTestCancelRequested = false;
     modelTestAbortController = null;
@@ -6323,6 +6478,10 @@ window.closeModelTestModal = closeModelTestModal;
 window.copyModelTestOutput = copyModelTestOutput;
 window.cancelModelTest = cancelModelTest;
 window.runModelTestFromModal = runModelTestFromModal;
+window.openModelTestModal = openModelTestModal;
+window.resetModelTestModal = resetModelTestModal;
+window.restoreModelTestReportFromBackup = restoreModelTestReportFromBackup;
+window.exportModelTestTranslationsTxt = exportModelTestTranslationsTxt;
 window.showModelTestLibrary = showModelTestLibrary;
 window.showHelpModal = showHelpModal;
 window.closeHelpModal = closeHelpModal;
