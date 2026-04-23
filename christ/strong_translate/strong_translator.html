@@ -781,6 +781,49 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
   }
+  .key-switch-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .key-switch-row select {
+    flex: 1;
+    min-width: 180px;
+  }
+  #helpModal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.82);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1003;
+  }
+  #helpModal.show { display: flex; }
+  .help-modal-box {
+    background: var(--bg2);
+    border: 1px solid var(--brd);
+    border-radius: 8px;
+    padding: 18px;
+    max-width: 760px;
+    width: 92%;
+    max-height: 86vh;
+    overflow: auto;
+  }
+  .help-block {
+    margin-bottom: 14px;
+    padding: 10px 12px;
+    background: var(--bg3);
+    border: 1px solid var(--brd);
+    border-radius: 6px;
+    font-size: 11px;
+    line-height: 1.6;
+  }
+  .help-block b { color: var(--acc); }
+  .help-block a { color: var(--acc); text-decoration: none; }
+  .help-block a:hover { text-decoration: underline; }
 
   /* Mobile Actions Modal */
  #mobileActionsModal {
@@ -1038,6 +1081,13 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   <div class="row">
     <label for="apiKey" id="keyLabel">API Klíč — Groq (console.groq.com)</label>
     <input type="password" id="apiKey" placeholder="gsk_..." onchange="saveApiKey()" aria-label="API klíč providera">
+    <div class="key-switch-row">
+      <select id="apiKeyProfile" onchange="onApiKeyProfileChange()" aria-label="Výběr uloženého API klíče">
+        <option value="__manual__">Ruční klíč (aktuální pole)</option>
+      </select>
+      <button class="hbtn" style="padding:6px 10px;font-size:10px" onclick="saveCurrentApiKeyAsProfile()" title="Uložit aktuální API klíč do knihovny">💾 Uložit klíč</button>
+      <button class="hbtn red" style="padding:6px 10px;font-size:10px" onclick="deleteApiKeyProfile()" title="Smazat vybraný API klíč">🗑 Smazat</button>
+    </div>
   </div>
 
   <div class="row">
@@ -1081,6 +1131,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       <button class="start-btn" id="startBtn" onclick="startApp()" disabled aria-label="Zahájit překlad" style="flex:1">
         Zahájit překlad →
       </button>
+      <button onclick="showHelpModal()" style="font-family:'JetBrains Mono',monospace;font-size:11px;padding:8px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:3px;color:var(--txt3);cursor:pointer;white-space:nowrap" aria-label="Zobrazit nápovědu k aplikaci" title="Nápověda">❓ Nápověda</button>
       <button onclick="showLimitsModal()" style="font-family:'JetBrains Mono',monospace;font-size:11px;padding:8px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:3px;color:var(--txt3);cursor:pointer;white-space:nowrap" aria-label="Zobrazit limity providera" title="Zobrazit limity providera">📊 Limity</button>
     </div>
   </div>
@@ -1330,6 +1381,35 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
      </div>
    </div>
 
+  <div id="helpModal">
+    <div class="help-modal-box">
+      <div class="limits-title">❓ Nápověda Strong GR → CZ</div>
+      <div class="help-block">
+        <b>O čem aplikace je</b><br>
+        Tento nástroj překládá hesla Strong slovníku (řečtina/hebrejština) do češtiny po dávkách přes AI provider (`Groq`, `Gemini`, `OpenRouter`).
+        Umí ukládat průběh, zastavit AUTO podle tokenů, importovat/exportovat TXT/JSON a znovu zpracovat neúspěšné položky.
+      </div>
+      <div class="help-block">
+        <b>Jak získat API klíče</b><br>
+        `Groq`: vytvoř klíč v <a href="https://console.groq.com/keys" target="_blank" rel="noopener noreferrer">console.groq.com/keys</a>.<br>
+        `Gemini`: vytvoř klíč v <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer">AI Studio</a>.<br>
+        `OpenRouter`: vytvoř klíč v <a href="https://openrouter.ai/keys" target="_blank" rel="noopener noreferrer">openrouter.ai/keys</a>.<br>
+        Pak vlož klíč do pole API a můžeš ho uložit do knihovny tlačítkem <b>Uložit klíč</b>.
+      </div>
+      <div class="help-block">
+        <b>Knihovna API klíčů</b><br>
+        Pro každého providera můžeš mít více klíčů. Vyber klíč v rozbalovacím menu pod API polem a přepni ho jedním klikem.
+        Aktivní klíč se používá pro překlad i kontrolu limitů.
+      </div>
+      <div class="help-block">
+        <b>Limity a kvóty</b><br>
+        Tlačítko `📊 Limity` zobrazuje dostupné údaje o kreditech/limitech z API providera a doplňkové odhady.
+        U některých providerů nejsou všechny metriky veřejně dostupné, proto se kombinují živá data a fallback informace.
+      </div>
+      <button class="modal-btn cancel" onclick="closeHelpModal()" style="width:100%">✕ Zavřít</button>
+    </div>
+  </div>
+
   <!-- Prompt Library Modal -->
   <div id="promptLibraryModal">
     <div class="prompt-modal-box">
@@ -1574,6 +1654,8 @@ let autoStepRunning = false;
   let selectedKeys = new Set();
   let totalTokens = { in: 0, out: 0, total: 0 };
   const AUTO_TOKEN_LIMIT_KEY = 'strong_auto_token_limit';
+  const API_KEY_PROFILES_PREFIX = 'strong_apikey_profiles_';
+  const API_KEY_ACTIVE_PROFILE_PREFIX = 'strong_apikey_active_';
 
   // Virtual scrolling
   const CONFIG = {
@@ -1773,6 +1855,7 @@ function onProviderChange() {
   document.getElementById('keyLabel').textContent = 'API Klíč — ' + PROVIDERS[newProv].label;
   document.getElementById('apiKey').placeholder = PROVIDERS[newProv].ph;
   document.getElementById('apiKey').value = newKey || '';
+  setupApiKeySwitcher(newProv);
 
   const modelSelect = document.getElementById('model');
 
@@ -2123,9 +2206,9 @@ async function translateSelected() {
     const batchKeys = keys.slice(processed, processed + bs);
     document.getElementById('btnTranslateSelected').textContent = `⏳ ${processed + batchKeys.length}/${keys.length}...`;
     
-    const apiKey = document.getElementById('apiKey').value.trim();
-    const model  = document.getElementById('model').value;
     const prov   = document.getElementById('provider').value;
+    const apiKey = getCurrentApiKey(prov);
+    const model  = document.getElementById('model').value;
     
     if (!apiKey) { showToast('✗ Zadej API klíč!'); return; }
     
@@ -2788,7 +2871,7 @@ async function runTopicPromptAI() {
   if (!topicPromptState) return;
   const prov = document.getElementById('provider').value;
   const model = document.getElementById('model').value;
-  const apiKey = (localStorage.getItem('strong_apikey_' + prov) || document.getElementById('apiKey').value || '').trim();
+  const apiKey = getCurrentApiKey(prov);
   if (!apiKey) {
     showToast('✗ Zadej API klíč!');
     return;
@@ -2914,9 +2997,9 @@ async function translateSingle(key) {
   const btn = document.querySelector('.translate-btn');
   if (btn) { btn.disabled = true; btn.textContent = '⏳ Překládám...'; }
   
-   const apiKey = document.getElementById('apiKey').value.trim();
-const model  = document.getElementById('model').value;
-    const prov   = document.getElementById('provider').value;
+  const prov = document.getElementById('provider').value;
+  const apiKey = getCurrentApiKey(prov);
+  const model = document.getElementById('model').value;
 
    if (!apiKey) {
      showToast('✗ Zadej API klíč!');
@@ -3075,7 +3158,7 @@ async function translateBatch(keys) {
   const prov   = document.getElementById('provider').value;
   const model  = document.getElementById('model').value;
   // Klíč vždy dle aktuálního run providera
-  const apiKey = (localStorage.getItem('strong_apikey_' + prov) || document.getElementById('apiKey').value || '').trim();
+  const apiKey = getCurrentApiKey(prov);
   currentInterval = parseInt(document.getElementById('intervalRun').value);
   currentBatchSize = parseInt(document.getElementById('batchSizeRun').value);
 
@@ -3757,12 +3840,133 @@ function download(name, content, type) {
 }
 
 function saveApiKey() {
-  const v = document.getElementById('apiKey').value;
+  const v = document.getElementById('apiKey').value.trim();
   const prov = document.getElementById('provider').value;
   if (v) {
     localStorage.setItem('strong_apikey_' + prov, v);
     localStorage.setItem('strong_apikey', v);
+  } else {
+    localStorage.removeItem('strong_apikey_' + prov);
   }
+  const selected = document.getElementById('apiKeyProfile')?.value;
+  if (selected && selected !== '__manual__') {
+    const profiles = getApiKeyProfiles(prov);
+    const idx = profiles.findIndex(p => p.id === selected);
+    if (idx !== -1) {
+      profiles[idx].key = v;
+      localStorage.setItem(API_KEY_PROFILES_PREFIX + prov, JSON.stringify(profiles));
+    }
+  }
+}
+
+function getApiKeyProfiles(prov) {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(API_KEY_PROFILES_PREFIX + prov) || '[]');
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter(p => p && p.id && typeof p.key === 'string');
+  } catch (e) {
+    return [];
+  }
+}
+
+function setApiKeyProfiles(prov, profiles) {
+  localStorage.setItem(API_KEY_PROFILES_PREFIX + prov, JSON.stringify(profiles));
+}
+
+function maskApiKey(v) {
+  const s = String(v || '').trim();
+  if (!s) return 'prázdný';
+  if (s.length < 10) return s;
+  return `${s.slice(0, 5)}...${s.slice(-4)}`;
+}
+
+function setupApiKeySwitcher(prov) {
+  const select = document.getElementById('apiKeyProfile');
+  if (!select) return;
+  const profiles = getApiKeyProfiles(prov);
+  const activeId = localStorage.getItem(API_KEY_ACTIVE_PROFILE_PREFIX + prov) || '__manual__';
+  const options = ['<option value="__manual__">Ruční klíč (aktuální pole)</option>'];
+  for (const p of profiles) {
+    options.push(`<option value="${p.id}">${escHtml(p.name || 'Klíč')} · ${maskApiKey(p.key)}</option>`);
+  }
+  select.innerHTML = options.join('');
+  if (activeId !== '__manual__' && select.querySelector(`option[value="${activeId}"]`)) {
+    select.value = activeId;
+    const active = profiles.find(p => p.id === activeId);
+    if (active) document.getElementById('apiKey').value = active.key || '';
+  } else {
+    select.value = '__manual__';
+  }
+}
+
+function onApiKeyProfileChange() {
+  const prov = document.getElementById('provider').value;
+  const select = document.getElementById('apiKeyProfile');
+  if (!select) return;
+  const selected = select.value;
+  if (selected === '__manual__') {
+    localStorage.removeItem(API_KEY_ACTIVE_PROFILE_PREFIX + prov);
+    saveApiKey();
+    return;
+  }
+  const profiles = getApiKeyProfiles(prov);
+  const profile = profiles.find(p => p.id === selected);
+  if (!profile) return;
+  document.getElementById('apiKey').value = profile.key || '';
+  localStorage.setItem(API_KEY_ACTIVE_PROFILE_PREFIX + prov, profile.id);
+  saveApiKey();
+  showToast(`✓ Aktivní API klíč: ${profile.name || 'bez názvu'}`);
+}
+
+function saveCurrentApiKeyAsProfile() {
+  const prov = document.getElementById('provider').value;
+  const key = document.getElementById('apiKey').value.trim();
+  if (!key) {
+    showToast('✗ Nejdřív vlož API klíč');
+    return;
+  }
+  const defaultName = `${PROVIDERS[prov]?.label?.split(' ')[0] || prov} ${new Date().toLocaleDateString('cs-CZ')}`;
+  const name = (prompt('Název pro tento API klíč:', defaultName) || '').trim();
+  if (!name) return;
+  const profiles = getApiKeyProfiles(prov);
+  const existing = profiles.find(p => p.key === key);
+  if (existing) {
+    existing.name = name;
+    setApiKeyProfiles(prov, profiles);
+    localStorage.setItem(API_KEY_ACTIVE_PROFILE_PREFIX + prov, existing.id);
+  } else {
+    const id = `k_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+    profiles.push({ id, name, key });
+    setApiKeyProfiles(prov, profiles);
+    localStorage.setItem(API_KEY_ACTIVE_PROFILE_PREFIX + prov, id);
+  }
+  setupApiKeySwitcher(prov);
+  onApiKeyProfileChange();
+}
+
+function deleteApiKeyProfile() {
+  const prov = document.getElementById('provider').value;
+  const select = document.getElementById('apiKeyProfile');
+  if (!select || select.value === '__manual__') {
+    showToast('⚠ Vyber uložený klíč k odstranění');
+    return;
+  }
+  const profiles = getApiKeyProfiles(prov);
+  const profile = profiles.find(p => p.id === select.value);
+  if (!profile) return;
+  if (!confirm(`Smazat API klíč "${profile.name}"?`)) return;
+  const filtered = profiles.filter(p => p.id !== select.value);
+  setApiKeyProfiles(prov, filtered);
+  localStorage.removeItem(API_KEY_ACTIVE_PROFILE_PREFIX + prov);
+  setupApiKeySwitcher(prov);
+  showToast('✓ API klíč odstraněn z knihovny');
+}
+
+function getCurrentApiKey(prov) {
+  const provider = prov || document.getElementById('provider')?.value;
+  const fromInput = (document.getElementById('apiKey')?.value || '').trim();
+  if (fromInput) return fromInput;
+  return (localStorage.getItem('strong_apikey_' + provider) || '').trim();
 }
 
 function loadSavedSettings() {
@@ -3776,6 +3980,7 @@ function loadSavedSettings() {
   const k = localStorage.getItem('strong_apikey_' + prov);
   const apiKeyEl = document.getElementById('apiKey');
   if (apiKeyEl) apiKeyEl.value = k || '';
+  setupApiKeySwitcher(prov);
   
   let p = localStorage.getItem('strong_prompt') || '';
   if (!p.trim()) {
@@ -4038,6 +4243,14 @@ function showLimitsModal() {
   fetchLimits(prov, model);
 }
 
+function showHelpModal() {
+  document.getElementById('helpModal').classList.add('show');
+}
+
+function closeHelpModal() {
+  document.getElementById('helpModal').classList.remove('show');
+}
+
 function closeLimitsModal() {
   document.getElementById('limitsModal').classList.remove('show');
 }
@@ -4049,20 +4262,19 @@ async function fetchLimits(prov, model) {
   
   try {
     if (prov === 'groq') {
-      // Groq - make a test request to get actual rate limit headers
-      const apiKey = document.getElementById('apiKey').value;
+      const apiKey = getCurrentApiKey(prov);
       if (!apiKey) {
         content.innerHTML = '<div style="color:var(--red);padding:10px">Nejsou nastaveny limity. Zadejte API klíč.</div>';
         return;
       }
-      // Show static limits for Groq (API doesn't return rate limit headers in browser)
-      const limits = getGroqLimits(model);
-      content.innerHTML = renderLimitsTable(limits);
+      const dynamicLimits = await fetchGroqLimits(apiKey, model);
+      const staticLimits = getGroqLimits(model);
+      content.innerHTML = renderGroqLimits(dynamicLimits) + '<div style="margin-top:10px;border-top:1px solid var(--brd);padding-top:8px">' + renderLimitsTable(staticLimits) + '</div>';
       note.style.display = 'block';
-      noteText.innerHTML = '⚠️ Groq neumožňuje zjistit aktuální limity z prohlížeče.<br>Aktuální limity se zobrazí v konzoli po každém API volání (pokud je zachytíš).<br>Více info: <a href="https://console.groq.com/docs/rate-limits" target="_blank">console.groq.com/docs/rate-limits</a>';
+      noteText.innerHTML = 'Groq: zobrazuji živé rate-limit hlavičky (pokud je API vrátí) + fallback limity modelu.<br>Více info: <a href="https://console.groq.com/docs/rate-limits" target="_blank">console.groq.com/docs/rate-limits</a>';
     } else if (prov === 'openrouter') {
       // OpenRouter - can fetch via API
-      const apiKey = document.getElementById('apiKey').value;
+      const apiKey = getCurrentApiKey(prov);
       if (!apiKey) {
         content.innerHTML = '<div style="color:var(--red);padding:10px">Nejsou nastaveny limity. Zadejte API klíč.</div>';
         return;
@@ -4076,7 +4288,7 @@ async function fetchLimits(prov, model) {
       const rateLimitInfo = getOpenRouterRateLimits(keyData);
       content.innerHTML = renderOpenRouterLimits(keyData, creditsData) + rateLimitInfo;
       note.style.display = 'block';
-      noteText.innerHTML = 'Rate limity: free modely mají ~20 RPM / ~200 RPD.<br>Více info: <a href="https://openrouter.ai/docs/api/reference/limits" target="_blank">openrouter.ai/docs</a>';
+      noteText.innerHTML = 'OpenRouter: ukazuji usage/credits/limit data z API klíče + orientační rate limity free tieru.<br>Více info: <a href="https://openrouter.ai/docs/api-reference/limits" target="_blank">openrouter.ai/docs</a>';
     } else if (prov === 'gemini') {
       // Gemini - no API for limits, show static info
       const limits = getGeminiLimits(model);
@@ -4239,6 +4451,18 @@ function renderGroqLimits(result) {
   if (headers['x-ratelimit-reset-tokens']) {
     rows.push(`<div class="limits-row"><span class="limits-label">Reset TPM</span><span class="limits-value">${headers['x-ratelimit-reset-tokens']}</span></div>`);
   }
+  const knownHeaders = new Set([
+    'x-ratelimit-remaining-requests',
+    'x-ratelimit-limit-requests',
+    'x-ratelimit-remaining-tokens',
+    'x-ratelimit-limit-tokens',
+    'x-ratelimit-reset-requests',
+    'x-ratelimit-reset-tokens'
+  ]);
+  for (const [k, v] of Object.entries(headers)) {
+    if (!k.startsWith('x-ratelimit-') || knownHeaders.has(k)) continue;
+    rows.push(`<div class="limits-row"><span class="limits-label">${k.replace('x-ratelimit-', '')}</span><span class="limits-value">${escHtml(String(v))}</span></div>`);
+  }
   
   // Debug: show all headers if nothing parsed
   const debugHeaders = headers._all || rateLimitHeaders;
@@ -4256,9 +4480,7 @@ function renderGroqLimits(result) {
     return `<div style="color:var(--txt3);padding:10px">Žádné hlavičky.<br>Status: ${status}<br>Error: ${errorMsg || 'žádná'}</div>`;
   }
   
-  // Model specific limits (static fallback)
-  const staticLimits = '<div style="margin-top:10px;border-top:1px solid var(--brd);padding-top:8px"><span style="color:var(--txt3);font-size:10px">📌 Výchozí limity pro model:</span></div>';
-  return rows.join('') + staticLimits;
+  return rows.join('');
 }
 
 function renderOpenRouterLimits(keyData, creditsData) {
@@ -4307,6 +4529,11 @@ function renderOpenRouterLimits(keyData, creditsData) {
   }
   if (keyData.label) {
     rows.push(`<div class="limits-row"><span class="limits-label">Klíč</span><span class="limits-value" style="font-size:10px">${keyData.label || '—'}</span></div>`);
+  }
+  const known = new Set(['usage', 'usage_daily', 'usage_weekly', 'usage_monthly', 'limit', 'limit_remaining', 'is_free_tier', 'label']);
+  for (const [k, v] of Object.entries(keyData || {})) {
+    if (known.has(k) || v == null || typeof v === 'object') continue;
+    rows.push(`<div class="limits-row"><span class="limits-label">${escHtml(k)}</span><span class="limits-value">${escHtml(String(v))}</span></div>`);
   }
   if (rows.length === 0) return '<div style="color:var(--txt3);padding:10px">Žádné limity k zobrazení</div>';
   return rows.join('');
@@ -5400,6 +5627,7 @@ document.addEventListener('keydown', e => {
       closePromptAIModal();
       closePromptLangModal();
       closeTopicPromptModal();
+      closeHelpModal();
     }
   if (document.getElementById('app').style.display === 'none') return;
   // Klávesové zkratky v app
@@ -5463,6 +5691,13 @@ window.closeMobileModal = closeMobileModal;
 window.showSettingsModal = showSettingsModal;
 window.closeSettingsModal = closeSettingsModal;
 window.onProviderChangeRunMobile = onProviderChangeRunMobile;
+window.showLimitsModal = showLimitsModal;
+window.closeLimitsModal = closeLimitsModal;
+window.showHelpModal = showHelpModal;
+window.closeHelpModal = closeHelpModal;
+window.onApiKeyProfileChange = onApiKeyProfileChange;
+window.saveCurrentApiKeyAsProfile = saveCurrentApiKeyAsProfile;
+window.deleteApiKeyProfile = deleteApiKeyProfile;
 window.escHtml = escHtml;
 window.updateFailedCount = updateFailedCount;
 window.parseCzTXT = parseCzTXT;
