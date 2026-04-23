@@ -1191,6 +1191,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       <button class="hbtn auto" id="btnAuto" onclick="toggleAuto()" aria-label="Spustit automatický překlad">▶ AUTO</button>
       <button class="hbtn" id="btnToggleList" onclick="toggleListPane()" title="Skrýt/ukázat seznam" aria-label="Skrýt/ukázat seznam">≡ Seznam</button>
       <button class="hbtn" id="btnStep" onclick="translateNext()" aria-label="Přeložit další dávku">⚡ Dávka</button>
+      <button class="hbtn" id="btnTestModels" onclick="testCurrentProviderModels()" title="Otestovat všechny modely aktuálního providera" aria-label="Otestovat modely aktuálního providera">🧪 Test modelů</button>
       <button class="hbtn" onclick="selectRange()" title="Označit rozsah hesel k překladu" aria-label="Označit rozsah">☑ Přek</button>
       <button class="hbtn grn" onclick="exportTXT()" aria-label="Exportovat do TXT">⬇ TXT</button>
       <button class="hbtn grn" onclick="exportJSON()" aria-label="Exportovat do JSON">⬇ JSON</button>
@@ -1407,6 +1408,19 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
         U některých providerů nejsou všechny metriky veřejně dostupné, proto se kombinují živá data a fallback informace.
       </div>
       <button class="modal-btn cancel" onclick="closeHelpModal()" style="width:100%">✕ Zavřít</button>
+    </div>
+  </div>
+
+  <!-- Model Test Output Modal -->
+  <div id="modelTestModal">
+    <div class="limits-modal-box" style="max-width:760px">
+      <div class="limits-title">🧪 Výstup testu modelů</div>
+      <div class="limits-provider" id="modelTestInfo">Provider: —</div>
+      <textarea id="modelTestOutput" style="width:100%;min-height:320px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:10px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.5;resize:vertical" placeholder="Po spuštění testu se sem vypíše report..."></textarea>
+      <div class="modal-btns" style="margin-top:12px">
+        <button class="modal-btn ok" onclick="copyModelTestOutput()">📋 Kopírovat</button>
+        <button class="modal-btn cancel" onclick="closeModelTestModal()">✕ Zavřít</button>
+      </div>
     </div>
   </div>
 
@@ -2318,6 +2332,14 @@ function filterList() {
 // Debounced varianta pro oninput (zabráni překreslení celého listu na každý znak)
 const filterListDebounced = debounce(filterList, 180);
 
+function getStrongKeyNumber(key) {
+  const normalized = String(key || '').trim();
+  const match = normalized.match(/^(?:[GH])?(\d+)$/i);
+  if (!match) return Number.POSITIVE_INFINITY;
+  const parsed = parseInt(match[1], 10);
+  return Number.isFinite(parsed) ? parsed : Number.POSITIVE_INFINITY;
+}
+
 function getFilteredEntries() {
   const q = document.getElementById('searchInput').value.toLowerCase();
   const combined = document.getElementById('filterStatus')?.value || 'all|original';
@@ -2376,8 +2398,8 @@ function getFilteredEntries() {
     });
   } else {
     filtered.sort((a, b) => {
-      const numA = parseInt(a.key.slice(1));
-      const numB = parseInt(b.key.slice(1));
+      const numA = getStrongKeyNumber(a.key);
+      const numB = getStrongKeyNumber(b.key);
       if (numA !== numB) return numA - numB;
       return a.key.localeCompare(b.key);
     });
@@ -4040,7 +4062,7 @@ function logEntry(keys, rawResponse) {
   const placeholder = scroll.querySelector('.log-placeholder');
   if (placeholder) placeholder.remove();
 
-  for (const key of [...keys].reverse()) {
+  for (const key of keys) {
     const e = entryMap.get(key);
     const t = translated[key];
     if (!e) continue;
@@ -4063,8 +4085,10 @@ function logEntry(keys, rawResponse) {
         : `<div class="log-err">⚠ Neparsováno</div>`
       }
     `;
-    scroll.insertBefore(div, scroll.firstChild);
+    scroll.appendChild(div);
   }
+
+  scroll.scrollTop = scroll.scrollHeight;
 
   // Počítadlo
   const cnt = scroll.children.length;
@@ -4072,7 +4096,7 @@ function logEntry(keys, rawResponse) {
   if (countEl) countEl.textContent = `${cnt} záznamů`;
 
   // Limit entries in log
-  while (scroll.children.length > CONFIG.LOG_MAX_ENTRIES) scroll.removeChild(scroll.lastChild);
+  while (scroll.children.length > CONFIG.LOG_MAX_ENTRIES) scroll.removeChild(scroll.firstChild);
 }
 
 function clearLog() {
@@ -4080,6 +4104,131 @@ function clearLog() {
   if (s) s.innerHTML = '<div class="log-placeholder" style="padding:20px;font-family:\'JetBrains Mono\',monospace;font-size:11px;color:var(--txt3)">Překlady se budou zobrazovat zde automaticky...</div>';
   const c = document.getElementById('logCount');
   if (c) c.textContent = '';
+}
+
+function showModelTestModal(providerLabel) {
+  const modal = document.getElementById('modelTestModal');
+  const info = document.getElementById('modelTestInfo');
+  const output = document.getElementById('modelTestOutput');
+  if (!modal || !info || !output) return;
+  info.textContent = `Provider: ${providerLabel || '—'}`;
+  output.value = '';
+  modal.classList.add('show');
+}
+
+function closeModelTestModal() {
+  const modal = document.getElementById('modelTestModal');
+  if (modal) modal.classList.remove('show');
+}
+
+async function copyModelTestOutput() {
+  const output = document.getElementById('modelTestOutput');
+  if (!output) return;
+  const text = output.value || '';
+  if (!text.trim()) {
+    showToast('⚠ Není co kopírovat');
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(text);
+    showToast('✓ Výstup zkopírován');
+  } catch (e) {
+    output.focus();
+    output.select();
+    document.execCommand('copy');
+    showToast('✓ Výstup zkopírován');
+  }
+}
+
+async function testCurrentProviderModels() {
+  if (autoRunning || autoStepRunning) {
+    showToast('⚠ Nejdřív zastav AUTO');
+    return;
+  }
+
+  const providerSelect = document.getElementById('provider');
+  const modelSelect = document.getElementById('model');
+  const btn = document.getElementById('btnTestModels');
+  if (!providerSelect || !modelSelect || !btn) return;
+
+  const prov = providerSelect.value;
+  const apiKey = getCurrentApiKey(prov);
+  if (!apiKey) {
+    showToast('✗ Zadej API klíč pro test modelů');
+    return;
+  }
+
+  const options = Array.from(modelSelect.options).filter(opt => opt.value);
+  if (!options.length) {
+    showToast('⚠ Pro tohoto providera nejsou dostupné modely');
+    return;
+  }
+  const providerLabel = PROVIDERS[prov]?.label || prov;
+  const outputEl = document.getElementById('modelTestOutput');
+  showModelTestModal(providerLabel);
+  if (!outputEl) {
+    showToast('✗ Chybí výstupní okno testu modelů');
+    return;
+  }
+  const report = [];
+  const appendReport = (line = '') => {
+    report.push(line);
+    outputEl.value = report.join('\n');
+    outputEl.scrollTop = outputEl.scrollHeight;
+  };
+
+  const originalModel = modelSelect.value;
+  const originalText = btn.textContent;
+  btn.disabled = true;
+  appendReport(`# TEST MODELU`);
+  appendReport(`Provider: ${providerLabel}`);
+  appendReport(`Čas: ${new Date().toLocaleString('cs-CZ')}`);
+  appendReport(`Modelů: ${options.length}`);
+  appendReport('');
+
+  try {
+    for (let i = 0; i < options.length; i++) {
+      const opt = options[i];
+      modelSelect.value = opt.value;
+      localStorage.setItem('strong_model', opt.value);
+      btn.textContent = `🧪 ${i + 1}/${options.length}`;
+      appendReport(`## ${i + 1}/${options.length} ${opt.value}`);
+
+      const messages = [
+        { role: 'system', content: 'Odpovídej stručně a bez komentářů navíc.' },
+        { role: 'user', content: 'Napiš dvakrát po sobě slovo "heslo".' }
+      ];
+
+      try {
+        const first = await callOnce(prov, apiKey, opt.value, messages);
+        const firstContent = String(first?.content || '').trim();
+        console.log(`[MODEL TEST] ${prov} | ${opt.value} | 1: ${firstContent}`);
+        appendReport(`1) ${firstContent || '(prázdná odpověď)'}`);
+
+        const second = await callOnce(prov, apiKey, opt.value, messages);
+        const secondContent = String(second?.content || '').trim();
+        console.log(`[MODEL TEST] ${prov} | ${opt.value} | 2: ${secondContent}`);
+        appendReport(`2) ${secondContent || '(prázdná odpověď)'}`);
+        appendReport('Stav: OK');
+        appendReport('');
+
+        log(`🧪 ${opt.text || opt.value}: OK`);
+      } catch (e) {
+        console.error(`[MODEL TEST] ${prov} | ${opt.value} | ERROR`, e);
+        appendReport(`CHYBA: ${e.message}`);
+        appendReport('');
+        log(`🧪 ${opt.text || opt.value}: CHYBA (${e.message})`);
+      }
+    }
+
+    appendReport('Hotovo.');
+    showToast(`✓ Test modelů dokončen (${options.length})`);
+  } finally {
+    modelSelect.value = originalModel;
+    if (originalModel) localStorage.setItem('strong_model', originalModel);
+    btn.disabled = false;
+    btn.textContent = originalText;
+  }
 }
 
 function logMsg(msg, type) {
@@ -5693,6 +5842,8 @@ window.closeSettingsModal = closeSettingsModal;
 window.onProviderChangeRunMobile = onProviderChangeRunMobile;
 window.showLimitsModal = showLimitsModal;
 window.closeLimitsModal = closeLimitsModal;
+window.closeModelTestModal = closeModelTestModal;
+window.copyModelTestOutput = copyModelTestOutput;
 window.showHelpModal = showHelpModal;
 window.closeHelpModal = closeHelpModal;
 window.onApiKeyProfileChange = onApiKeyProfileChange;
@@ -5714,6 +5865,7 @@ window.showPromptLangModal = showPromptLangModal;
 window.closePromptLangModal = closePromptLangModal;
 window.saveLangSettings = saveLangSettings;
 window.updatePromptStatusIndicator = updatePromptStatusIndicator;
+window.testCurrentProviderModels = testCurrentProviderModels;
 
 // Null-safe modal close helpers
 function closePreviewModalSafe() {
