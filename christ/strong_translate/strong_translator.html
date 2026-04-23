@@ -1431,6 +1431,13 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
         <label>Provider testu</label>
         <select id="modelTestProvider"></select>
       </div>
+      <div class="mobl-set-row">
+        <label>Režim testu</label>
+        <select id="modelTestMode">
+          <option value="smoke" selected>Smoke test (slovo 2x)</option>
+          <option value="translate3">Překlad 3 hesel</option>
+        </select>
+      </div>
       <label class="stat" style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
         <input type="checkbox" id="modelTestAppend" checked>
         Připojit výsledek do stejného reportu
@@ -4302,8 +4309,9 @@ async function runModelTestFromModal() {
     return;
   }
   const providerSelect = document.getElementById('modelTestProvider');
+  const modeSelect = document.getElementById('modelTestMode');
   if (!providerSelect) return;
-  await testCurrentProviderModels(providerSelect.value, false);
+  await testCurrentProviderModels(providerSelect.value, false, modeSelect?.value || 'smoke');
 }
 
 function showModelTestLibrary() {
@@ -4318,7 +4326,7 @@ function showModelTestLibrary() {
   for (const item of history.slice(0, 80)) {
     const when = new Date(item.ts).toLocaleString('cs-CZ');
     if (item.type === 'model-test') {
-      lines.push(`[${when}] TEST | ${item.provider} | OK ${item.ok}/${item.total} | RL ${item.rateLimited} | ERR ${item.error}`);
+      lines.push(`[${when}] TEST | ${item.provider} | režim ${item.mode || 'smoke'} | OK ${item.ok}/${item.total} | PART ${item.partial || 0} | RL ${item.rateLimited} | ERR ${item.error}`);
       if (Array.isArray(item.topModels) && item.topModels.length) {
         lines.push(`TOP: ${item.topModels.join(', ')}`);
       }
@@ -4348,7 +4356,14 @@ async function copyModelTestOutput() {
   }
 }
 
-async function testCurrentProviderModels(forcedProvider = null, resetReport = true) {
+function getSampleEntriesForModelTest(count = 3) {
+  if (!Array.isArray(entries) || entries.length === 0) return [];
+  const preferred = entries.filter(e => e?.key && e.key.startsWith('G')).slice(0, count);
+  if (preferred.length >= count) return preferred;
+  return entries.slice(0, count).filter(Boolean);
+}
+
+async function testCurrentProviderModels(forcedProvider = null, resetReport = true, forcedMode = null) {
   if (autoRunning || autoStepRunning) {
     showToast('⚠ Nejdřív zastav AUTO');
     return;
@@ -4360,7 +4375,9 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
 
   const modalProviderSelect = document.getElementById('modelTestProvider');
   const appendCheckbox = document.getElementById('modelTestAppend');
+  const modeSelect = document.getElementById('modelTestMode');
   const prov = forcedProvider || modalProviderSelect?.value || providerSelect.value;
+  const testMode = forcedMode || modeSelect?.value || 'smoke';
   const apiKey = getApiKeyForModelTest(prov);
   if (!apiKey) {
     showToast(`✗ Chybí API klíč pro ${PROVIDERS[prov]?.label || prov}`);
@@ -4402,11 +4419,24 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
   if (cancelBtn) cancelBtn.style.display = 'inline-block';
   appendReport(`# TEST MODELU`);
   appendReport(`Provider: ${providerLabel}`);
+  appendReport(`Režim: ${testMode === 'translate3' ? 'Překlad 3 hesel' : 'Smoke test (slovo 2x)'}`);
   appendReport(`Čas: ${new Date().toLocaleString('cs-CZ')}`);
   appendReport(`Modelů: ${options.length}`);
   appendReport('');
 
   try {
+    const sampleEntries = testMode === 'translate3' ? getSampleEntriesForModelTest(3) : [];
+    const sampleKeys = sampleEntries.map(e => e.key);
+    if (testMode === 'translate3') {
+      if (sampleEntries.length < 3) {
+        appendReport('⚠ Nelze spustit test překladu 3 hesel (není načtený slovník nebo má málo záznamů).');
+        appendReport('Ukončeno.');
+        return;
+      }
+      appendReport(`Vzorek hesel: ${sampleKeys.join(', ')}`);
+      appendReport('');
+    }
+
     for (let i = 0; i < options.length; i++) {
       if (modelTestCancelRequested) {
         appendReport('⏹ Test byl ručně zrušen uživatelem.');
@@ -4417,15 +4447,34 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
       btn.textContent = `🧪 ${i + 1}/${options.length}`;
       appendReport(`## ${i + 1}/${options.length} ${opt.value}`);
 
-      const messages = [
-        { role: 'system', content: 'Odpovídej stručně a bez komentářů navíc.' },
-        { role: 'user', content: 'Napiš dvakrát po sobě slovo "heslo".' }
-      ];
+      const messages = testMode === 'translate3'
+        ? buildPromptMessages(sampleEntries)
+        : [
+            { role: 'system', content: 'Odpovídej stručně a bez komentářů navíc.' },
+            { role: 'user', content: 'Napiš dvakrát po sobě slovo "heslo".' }
+          ];
 
       try {
         const first = await callOnce(prov, apiKey, opt.value, messages, modelTestAbortController.signal);
         const firstContent = String(first?.content || '').trim();
         console.log(`[MODEL TEST] ${prov} | ${opt.value} | 1: ${firstContent}`);
+        appendReport(`MODEL: ${opt.value}`);
+        if (testMode === 'translate3') {
+          appendReport(`VÝSTUP: ${firstContent || '(prázdná odpověď)'}`);
+          const parsed = {};
+          const missingAfterFirst = parseTranslationsCore(firstContent || '', sampleKeys, parsed);
+          const okCount = sampleKeys.length - missingAfterFirst.length;
+          appendReport(`PARSOVÁNÍ: ${okCount}/${sampleKeys.length} hesel`);
+          if (missingAfterFirst.length > 0) appendReport(`CHYBÍ: ${missingAfterFirst.join(', ')}`);
+          appendReport(okCount === sampleKeys.length ? 'Stav: OK' : 'Stav: ČÁSTEČNÉ');
+          appendReport('');
+          testResults.push({ model: opt.value, status: okCount === sampleKeys.length ? 'OK' : 'PARTIAL' });
+          log(`🧪 ${opt.label || opt.value}: ${okCount}/${sampleKeys.length} hesel`);
+          consecutiveRateLimited = 0;
+          if (!modelTestCancelRequested) await waitMs(MODEL_TEST_DELAY_MS);
+          continue;
+        }
+
         appendReport(`1) ${firstContent || '(prázdná odpověď)'}`);
 
         if (modelTestCancelRequested) {
@@ -4508,17 +4557,22 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
       }
     }
 
-    const okModels = testResults.filter(r => r.status === 'OK').map(r => r.model).slice(0, 3);
+    const okModels = testResults
+      .filter(r => r.status === 'OK' || (testMode === 'translate3' && r.status === 'PARTIAL'))
+      .map(r => r.model)
+      .slice(0, 3);
     appendReport('');
     appendReport(`TOP modely z tohoto běhu: ${okModels.length ? okModels.join(', ') : 'žádné plně stabilní'}`);
     appendReport(modelTestCancelRequested ? 'Ukončeno.' : 'Hotovo.');
     pushTestHistory({
       type: 'model-test',
       provider: providerLabel,
+      mode: testMode,
       total: options.length,
       ok: testResults.filter(r => r.status === 'OK' || r.status === 'OK_RETRY').length,
       rateLimited: testResults.filter(r => r.status === 'RATE_LIMITED').length,
       error: testResults.filter(r => r.status === 'ERROR').length,
+      partial: testResults.filter(r => r.status === 'PARTIAL').length,
       topModels: okModels
     });
     showToast(modelTestCancelRequested ? '⏹ Test modelů zrušen' : `✓ Test modelů dokončen (${options.length})`);
