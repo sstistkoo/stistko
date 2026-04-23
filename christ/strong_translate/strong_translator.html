@@ -1456,7 +1456,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
               <th style="text-align:left;padding:6px;border-bottom:1px solid var(--brd)">Provider/Model</th>
               <th style="text-align:right;padding:6px;border-bottom:1px solid var(--brd)">Úspěšnost</th>
               <th style="text-align:right;padding:6px;border-bottom:1px solid var(--brd)">OK/NEÚSP</th>
-              <th style="text-align:right;padding:6px;border-bottom:1px solid var(--brd)">Prům. AI</th>
+              <th style="text-align:right;padding:6px;border-bottom:1px solid var(--brd)">Prům. doba AI</th>
               <th style="text-align:right;padding:6px;border-bottom:1px solid var(--brd)">Volání</th>
               <th style="text-align:right;padding:6px;border-bottom:1px solid var(--brd)">Akce</th>
             </tr>
@@ -4817,6 +4817,10 @@ async function runModelTestFromModal() {
 function showModelTestLibrary() {
   const output = document.getElementById('modelTestOutput');
   if (!output) return;
+  if (modelTestRunning) {
+    showToast('⚠ Knihovna je dostupná po zastavení testu, aby se nepřepsal živý report.');
+    return;
+  }
   if (!modelTestLibraryActive) {
     modelTestOutputBackupBeforeLibrary = output.value;
   }
@@ -4826,7 +4830,7 @@ function showModelTestLibrary() {
     output.value = 'Knihovna testů je zatím prázdná.';
     return;
   }
-  const lines = ['# KNIHOVNA TESTŮ A PŘEKLADŮ', `Záznamů: ${history.length}`, ''];
+  const lines = ['# KNIHOVNA TESTŮ A PŘEKLADŮ', `Záznamů: ${history.length}`, 'Pozn.: tabulka modelů je nahoře v modalu a řadí se podle úspěšnosti + latence.', ''];
   for (const item of history.slice(0, 80)) {
     const when = new Date(item.ts).toLocaleString('cs-CZ');
     if (item.type === 'model-test') {
@@ -4906,6 +4910,18 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
     appendReport('⚠ Auto test: nejsou dostupné API klíče.');
     return { cycles: 0, okKeys: 0, failedKeys: 0 };
   }
+  const modelQueue = [];
+  for (const p of providerKeys) {
+    const opts = await getProviderModelOptions(p);
+    for (const m of opts) {
+      if (m?.value) modelQueue.push({ prov: p, model: m.value, label: m.label || m.value });
+    }
+  }
+  if (!modelQueue.length) {
+    appendReport('⚠ Auto test: u zvolených providerů nejsou dostupné modely.');
+    return { cycles: 0, okKeys: 0, failedKeys: 0 };
+  }
+  let queueIdx = 0;
 
   appendReport(`Auto test délka: ${durationMin} min`);
   appendReport(`Dávka/interval: ${batchSize} hesel / ${intervalSec}s`);
@@ -4914,7 +4930,9 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
 
   while (!modelTestCancelRequested && (Date.now() - startTs) < durationMs) {
     cycle++;
-    const prov = pickRandom(providerKeys);
+    const current = modelQueue[queueIdx % modelQueue.length];
+    queueIdx++;
+    const prov = current.prov;
     const providerLabel = PROVIDERS[prov]?.label || prov;
     const apiKey = getApiKeyForModelTest(prov);
     if (!apiKey) {
@@ -4924,14 +4942,7 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
       continue;
     }
 
-    const modelOptions = await getProviderModelOptions(prov);
-    if (!modelOptions.length) {
-      testResults.push({ model: `${prov}/(bez-modelu)`, status: 'ERROR' });
-      appendReport(`[#${cycle}] ${providerLabel} | bez dostupných modelů`);
-      await waitMs(1000);
-      continue;
-    }
-    const chosenModel = pickRandom(modelOptions);
+    const chosenModel = { value: current.model, label: current.label };
 
     const batch = [];
     for (let i = 0; i < batchSize; i++) {
