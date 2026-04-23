@@ -1449,13 +1449,14 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       </label>
       <div id="modelTestCountdown" class="limits-provider" style="margin-bottom:6px;min-height:1.2em;font-size:12px;color:var(--txt2)"></div>
       <div id="modelTestLastStatus" style="margin-bottom:8px;min-height:1.2em;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--txt2)"></div>
-      <div id="modelTestLogStatus" style="margin-bottom:8px;min-height:1.2em;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt3)">TXT log: nenapojen (vyber model_test_live_report.txt ve složce projektu)</div>
+      <div id="modelTestLogStatus" style="margin-bottom:8px;min-height:1.2em;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt3)">TXT log: nenapojen (doporučeno ukládat ručně do test.txt)</div>
       <textarea id="modelTestOutput" style="width:100%;min-height:240px;max-height:45vh;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:10px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.5;resize:vertical" placeholder="Nastav režim a providera, pak spusť ▶ Test provideru. Odpočet ukáže čekání do dalšího volání API."></textarea>
       <div class="modal-btns" style="margin-top:12px">
         <button class="modal-btn ok" id="btnRunModelTest" onclick="runModelTestFromModal()">▶ Test provideru</button>
         <button class="modal-btn" onclick="showModelTestLibrary()">📚 Knihovna</button>
         <button class="modal-btn" type="button" onclick="bindModelTestLogFile()">🔗 Napojit TXT log</button>
         <button class="modal-btn" type="button" onclick="unbindModelTestLogFile()">⛔ Odpojit TXT log</button>
+        <button class="modal-btn ok" type="button" onclick="saveModelTestOutputTxt()">💾 Uložit test.txt</button>
         <button class="modal-btn" type="button" onclick="restoreModelTestReportFromBackup()">📄 Zpět na report</button>
         <button class="modal-btn" type="button" onclick="resetModelTestModal()">↺ Reset</button>
         <button class="modal-btn ok" type="button" onclick="exportModelTestTranslationsTxt()">⬇ Překlady TXT</button>
@@ -1717,7 +1718,7 @@ let autoStepRunning = false;
   let modelTestLastKeyAuditExportChunks = [];
   let modelTestLogFileHandle = null;
   let modelTestLogWriteTimer = null;
-  const DEFAULT_MODEL_TEST_LOG_FILENAME = 'model_test_live_report.txt';
+  const DEFAULT_MODEL_TEST_LOG_FILENAME = 'test.txt';
   let startTime = null;
   let elapsedTimer = null;
   let selectedKeys = new Set();
@@ -4358,7 +4359,7 @@ function updateModelTestLogStatusLine() {
   const el = document.getElementById('modelTestLogStatus');
   if (!el) return;
   if (!modelTestLogFileHandle) {
-    el.textContent = `TXT log: nenapojen (vyber ${DEFAULT_MODEL_TEST_LOG_FILENAME} ve složce projektu)`;
+    el.textContent = `TXT log: nenapojen (ulož ručně přes "Uložit ${DEFAULT_MODEL_TEST_LOG_FILENAME}")`;
     el.style.color = 'var(--txt3)';
     return;
   }
@@ -4410,6 +4411,7 @@ async function bindModelTestLogFile() {
     modelTestSetLastStatus('TXT log nelze napojit v tomto režimu.', 'error');
     appendModelTestOutputNote(err);
     showToast(err);
+    saveModelTestOutputTxt();
     return;
   }
   try {
@@ -4447,6 +4449,17 @@ function unbindModelTestLogFile() {
   updateModelTestLogStatusLine();
   modelTestSetLastStatus('TXT log odpojen.', 'warn');
   showToast('TXT log odpojen');
+}
+
+function saveModelTestOutputTxt() {
+  const text = document.getElementById('modelTestOutput')?.value || '';
+  if (!text.trim()) {
+    showToast('⚠ Není co uložit do test.txt');
+    return;
+  }
+  download(DEFAULT_MODEL_TEST_LOG_FILENAME, text, 'text/plain');
+  modelTestSetLastStatus(`Uloženo ručně: ${DEFAULT_MODEL_TEST_LOG_FILENAME}`, 'ok');
+  showToast(`✓ Uloženo: ${DEFAULT_MODEL_TEST_LOG_FILENAME}`);
 }
 
 function modelTestWaitWithCountdown(ms, signal) {
@@ -6779,6 +6792,7 @@ window.resetModelTestModal = resetModelTestModal;
 window.restoreModelTestReportFromBackup = restoreModelTestReportFromBackup;
 window.bindModelTestLogFile = bindModelTestLogFile;
 window.unbindModelTestLogFile = unbindModelTestLogFile;
+window.saveModelTestOutputTxt = saveModelTestOutputTxt;
 window.exportModelTestTranslationsTxt = exportModelTestTranslationsTxt;
 window.showModelTestLibrary = showModelTestLibrary;
 window.showHelpModal = showHelpModal;
