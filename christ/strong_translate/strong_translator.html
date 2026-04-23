@@ -1428,6 +1428,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       <div class="limits-provider" id="modelTestInfo">Provider: —</div>
       <textarea id="modelTestOutput" style="width:100%;min-height:320px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:10px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.5;resize:vertical" placeholder="Po spuštění testu se sem vypíše report..."></textarea>
       <div class="modal-btns" style="margin-top:12px">
+        <button class="modal-btn cancel" id="btnCancelModelTest" onclick="cancelModelTest()" style="display:none">■ Zrušit test</button>
         <button class="modal-btn ok" onclick="copyModelTestOutput()">📋 Kopírovat</button>
         <button class="modal-btn cancel" onclick="closeModelTestModal()">✕ Zavřít</button>
       </div>
@@ -1673,6 +1674,9 @@ let autoStepRunning = false;
   let filteredKeys = [];
   let retryMode = false;
   let retryKeysList = [];
+  let modelTestRunning = false;
+  let modelTestCancelRequested = false;
+  let modelTestAbortController = null;
   let startTime = null;
   let elapsedTimer = null;
   let selectedKeys = new Set();
@@ -3476,9 +3480,18 @@ function getTranslationEngineLabel(raw, fallbackProvider, fallbackModel) {
   return `${provider} | ${resolved}`;
 }
 
-async function callOnce(provider, apiKey, model, messages) {
+async function callOnce(provider, apiKey, model, messages, externalSignal = null) {
   apiKey = apiKey.trim();
   const controller = new AbortController();
+  let externalAbortHandler = null;
+  if (externalSignal) {
+    if (externalSignal.aborted) {
+      controller.abort();
+    } else {
+      externalAbortHandler = () => controller.abort();
+      externalSignal.addEventListener('abort', externalAbortHandler, { once: true });
+    }
+  }
   let timedOut = false;
   const timeout = setTimeout(() => {
     timedOut = true;
@@ -3579,8 +3592,14 @@ async function callOnce(provider, apiKey, model, messages) {
     if (timedOut && e?.name === 'AbortError') {
       throw new Error(`API timeout po ${Math.round(CONFIG.API_TIMEOUT / 1000)}s`);
     }
+    if (externalSignal?.aborted && e?.name === 'AbortError') {
+      throw new Error('Požadavek zrušen uživatelem');
+    }
     throw e;
   } finally {
+    if (externalSignal && externalAbortHandler) {
+      externalSignal.removeEventListener('abort', externalAbortHandler);
+    }
     clearTimeout(timeout);
   }
 }
@@ -4127,8 +4146,19 @@ function showModelTestModal(providerLabel) {
 }
 
 function closeModelTestModal() {
+  if (modelTestRunning) {
+    showToast('⚠ Nejdřív zruš probíhající test');
+    return;
+  }
   const modal = document.getElementById('modelTestModal');
   if (modal) modal.classList.remove('show');
+}
+
+function cancelModelTest() {
+  if (!modelTestRunning) return;
+  modelTestCancelRequested = true;
+  if (modelTestAbortController) modelTestAbortController.abort();
+  showToast('⏹ Ruším test modelů...');
 }
 
 async function copyModelTestOutput() {
@@ -4193,7 +4223,12 @@ async function testCurrentProviderModels() {
 
   const originalModel = modelSelect.value;
   const originalText = btn.textContent;
+  const cancelBtn = document.getElementById('btnCancelModelTest');
+  modelTestRunning = true;
+  modelTestCancelRequested = false;
+  modelTestAbortController = new AbortController();
   btn.disabled = true;
+  if (cancelBtn) cancelBtn.style.display = 'inline-block';
   appendReport(`# TEST MODELU`);
   appendReport(`Provider: ${providerLabel}`);
   appendReport(`Čas: ${new Date().toLocaleString('cs-CZ')}`);
@@ -4202,6 +4237,11 @@ async function testCurrentProviderModels() {
 
   try {
     for (let i = 0; i < options.length; i++) {
+      if (modelTestCancelRequested) {
+        appendReport('⏹ Test byl ručně zrušen uživatelem.');
+        appendReport('');
+        break;
+      }
       const opt = options[i];
       modelSelect.value = opt.value;
       localStorage.setItem('strong_model', opt.value);
@@ -4214,13 +4254,18 @@ async function testCurrentProviderModels() {
       ];
 
       try {
-        const first = await callOnce(prov, apiKey, opt.value, messages);
+        const first = await callOnce(prov, apiKey, opt.value, messages, modelTestAbortController.signal);
         const firstContent = String(first?.content || '').trim();
         console.log(`[MODEL TEST] ${prov} | ${opt.value} | 1: ${firstContent}`);
         appendReport(`1) ${firstContent || '(prázdná odpověď)'}`);
 
+        if (modelTestCancelRequested) {
+          appendReport('⏹ Test byl ručně zrušen uživatelem.');
+          appendReport('');
+          break;
+        }
         await waitMs(MODEL_TEST_DELAY_MS);
-        const second = await callOnce(prov, apiKey, opt.value, messages);
+        const second = await callOnce(prov, apiKey, opt.value, messages, modelTestAbortController.signal);
         const secondContent = String(second?.content || '').trim();
         console.log(`[MODEL TEST] ${prov} | ${opt.value} | 2: ${secondContent}`);
         appendReport(`2) ${secondContent || '(prázdná odpověď)'}`);
@@ -4237,7 +4282,7 @@ async function testCurrentProviderModels() {
           appendReport(`↻ Opakuji po ${Math.round(MODEL_TEST_DELAY_MS / 1000)}s...`);
           await waitMs(MODEL_TEST_DELAY_MS);
           try {
-            const retry = await callOnce(prov, apiKey, opt.value, messages);
+            const retry = await callOnce(prov, apiKey, opt.value, messages, modelTestAbortController.signal);
             const retryContent = String(retry?.content || '').trim();
             console.log(`[MODEL TEST] ${prov} | ${opt.value} | RETRY: ${retryContent}`);
             appendReport(`retry) ${retryContent || '(prázdná odpověď)'}`);
@@ -4246,6 +4291,11 @@ async function testCurrentProviderModels() {
             consecutiveRateLimited = 0;
             log(`🧪 ${opt.text || opt.value}: OK po retry`);
           } catch (eRetry) {
+            if (modelTestCancelRequested || /zrušen uživatelem/i.test(String(eRetry?.message || ''))) {
+              appendReport('⏹ Test byl ručně zrušen uživatelem.');
+              appendReport('');
+              break;
+            }
             console.error(`[MODEL TEST] ${prov} | ${opt.value} | ERROR`, eRetry);
             appendReport(`RETRY CHYBA: ${eRetry.message}`);
             appendReport('Stav: RATE LIMITED');
@@ -4254,6 +4304,11 @@ async function testCurrentProviderModels() {
             log(`🧪 ${opt.text || opt.value}: RATE LIMIT (${eRetry.message})`);
           }
         } else {
+          if (modelTestCancelRequested || /zrušen uživatelem/i.test(msg)) {
+            appendReport('⏹ Test byl ručně zrušen uživatelem.');
+            appendReport('');
+            break;
+          }
           console.error(`[MODEL TEST] ${prov} | ${opt.value} | ERROR`, e);
           appendReport(`CHYBA: ${msg}`);
           appendReport('Stav: ERROR');
@@ -4275,16 +4330,22 @@ async function testCurrentProviderModels() {
         showToast('⚠ Test předčasně ukončen kvůli rate limitu');
         break;
       }
-      await waitMs(MODEL_TEST_DELAY_MS);
+      if (!modelTestCancelRequested) {
+        await waitMs(MODEL_TEST_DELAY_MS);
+      }
     }
 
-    appendReport('Hotovo.');
-    showToast(`✓ Test modelů dokončen (${options.length})`);
+    appendReport(modelTestCancelRequested ? 'Ukončeno.' : 'Hotovo.');
+    showToast(modelTestCancelRequested ? '⏹ Test modelů zrušen' : `✓ Test modelů dokončen (${options.length})`);
   } finally {
+    modelTestRunning = false;
+    modelTestCancelRequested = false;
+    modelTestAbortController = null;
     modelSelect.value = originalModel;
     if (originalModel) localStorage.setItem('strong_model', originalModel);
     btn.disabled = false;
     btn.textContent = originalText;
+    if (cancelBtn) cancelBtn.style.display = 'none';
   }
 }
 
@@ -5901,6 +5962,7 @@ window.showLimitsModal = showLimitsModal;
 window.closeLimitsModal = closeLimitsModal;
 window.closeModelTestModal = closeModelTestModal;
 window.copyModelTestOutput = copyModelTestOutput;
+window.cancelModelTest = cancelModelTest;
 window.showHelpModal = showHelpModal;
 window.closeHelpModal = closeHelpModal;
 window.onApiKeyProfileChange = onApiKeyProfileChange;
