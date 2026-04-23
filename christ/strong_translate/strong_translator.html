@@ -1453,6 +1453,8 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       <div class="modal-btns" style="margin-top:12px">
         <button class="modal-btn ok" id="btnRunModelTest" onclick="runModelTestFromModal()">▶ Test provideru</button>
         <button class="modal-btn" onclick="showModelTestLibrary()">📚 Knihovna</button>
+        <button class="modal-btn" type="button" onclick="bindModelTestLogFile()">🔗 Napojit TXT log</button>
+        <button class="modal-btn" type="button" onclick="unbindModelTestLogFile()">⛔ Odpojit TXT log</button>
         <button class="modal-btn" type="button" onclick="restoreModelTestReportFromBackup()">📄 Zpět na report</button>
         <button class="modal-btn" type="button" onclick="resetModelTestModal()">↺ Reset</button>
         <button class="modal-btn ok" type="button" onclick="exportModelTestTranslationsTxt()">⬇ Překlady TXT</button>
@@ -1712,6 +1714,8 @@ let autoStepRunning = false;
   let modelTestOutputBackupBeforeLibrary = '';
   let modelTestParsedExportChunks = [];
   let modelTestLastKeyAuditExportChunks = [];
+  let modelTestLogFileHandle = null;
+  let modelTestLogWriteTimer = null;
   let startTime = null;
   let elapsedTimer = null;
   let selectedKeys = new Set();
@@ -4340,6 +4344,68 @@ function modelTestSetLastStatus(text, kind = 'idle') {
   }
 }
 
+function clearModelTestLogWriteTimer() {
+  if (modelTestLogWriteTimer) {
+    clearTimeout(modelTestLogWriteTimer);
+    modelTestLogWriteTimer = null;
+  }
+}
+
+async function writeModelTestLogNow(text) {
+  if (!modelTestLogFileHandle) return;
+  try {
+    const perm = await modelTestLogFileHandle.queryPermission({ mode: 'readwrite' });
+    if (perm !== 'granted') {
+      const req = await modelTestLogFileHandle.requestPermission({ mode: 'readwrite' });
+      if (req !== 'granted') return;
+    }
+    const writable = await modelTestLogFileHandle.createWritable();
+    await writable.write(String(text || ''));
+    await writable.close();
+  } catch (e) {
+    modelTestLogFileHandle = null;
+    showToast('⚠ TXT log nelze zapisovat (odpojeno)');
+  }
+}
+
+function queueModelTestLogWrite(text) {
+  if (!modelTestLogFileHandle) return;
+  clearModelTestLogWriteTimer();
+  modelTestLogWriteTimer = setTimeout(() => {
+    writeModelTestLogNow(text);
+  }, 250);
+}
+
+async function bindModelTestLogFile() {
+  if (!window.showSaveFilePicker) {
+    showToast('✗ Tento prohlížeč nepodporuje přímý zápis do souboru');
+    return;
+  }
+  try {
+    const handle = await window.showSaveFilePicker({
+      suggestedName: 'model_test_live_report.txt',
+      types: [
+        {
+          description: 'Text files',
+          accept: { 'text/plain': ['.txt'] }
+        }
+      ]
+    });
+    modelTestLogFileHandle = handle;
+    const current = document.getElementById('modelTestOutput')?.value || '';
+    await writeModelTestLogNow(current);
+    showToast('✓ TXT log napojen (report se bude průběžně přepisovat)');
+  } catch (e) {
+    // Uživatel zrušil výběr souboru.
+  }
+}
+
+function unbindModelTestLogFile() {
+  modelTestLogFileHandle = null;
+  clearModelTestLogWriteTimer();
+  showToast('TXT log odpojen');
+}
+
 function modelTestWaitWithCountdown(ms, signal) {
   return new Promise(resolve => {
     modelTestClearCountdownInterval();
@@ -4827,8 +4893,10 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
   const testResults = [];
   const appendReport = (line = '') => {
     report.push(line);
-    outputEl.value = report.join('\n');
+    const nextText = report.join('\n');
+    outputEl.value = nextText;
     outputEl.scrollTop = outputEl.scrollHeight;
+    queueModelTestLogWrite(nextText);
   };
 
   const originalText = btn.textContent;
@@ -6666,6 +6734,8 @@ window.runModelTestFromModal = runModelTestFromModal;
 window.openModelTestModal = openModelTestModal;
 window.resetModelTestModal = resetModelTestModal;
 window.restoreModelTestReportFromBackup = restoreModelTestReportFromBackup;
+window.bindModelTestLogFile = bindModelTestLogFile;
+window.unbindModelTestLogFile = unbindModelTestLogFile;
 window.exportModelTestTranslationsTxt = exportModelTestTranslationsTxt;
 window.showModelTestLibrary = showModelTestLibrary;
 window.showHelpModal = showHelpModal;
