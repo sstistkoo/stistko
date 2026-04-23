@@ -1449,6 +1449,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       </label>
       <div id="modelTestCountdown" class="limits-provider" style="margin-bottom:6px;min-height:1.2em;font-size:12px;color:var(--txt2)"></div>
       <div id="modelTestLastStatus" style="margin-bottom:8px;min-height:1.2em;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--txt2)"></div>
+      <div id="modelTestLogStatus" style="margin-bottom:8px;min-height:1.2em;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt3)">TXT log: nenapojen (vyber model_test_live_report.txt ve složce projektu)</div>
       <textarea id="modelTestOutput" style="width:100%;min-height:320px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:10px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.5;resize:vertical" placeholder="Nastav režim a providera, pak spusť ▶ Test provideru. Odpočet ukáže čekání do dalšího volání API."></textarea>
       <div class="modal-btns" style="margin-top:12px">
         <button class="modal-btn ok" id="btnRunModelTest" onclick="runModelTestFromModal()">▶ Test provideru</button>
@@ -1716,6 +1717,7 @@ let autoStepRunning = false;
   let modelTestLastKeyAuditExportChunks = [];
   let modelTestLogFileHandle = null;
   let modelTestLogWriteTimer = null;
+  const DEFAULT_MODEL_TEST_LOG_FILENAME = 'model_test_live_report.txt';
   let startTime = null;
   let elapsedTimer = null;
   let selectedKeys = new Set();
@@ -4280,6 +4282,7 @@ function showModelTestModal(providerLabel, clearOutput = false) {
   if (clearOutput) output.value = '';
   modal.classList.add('show');
   updateModelTestRunButton();
+  updateModelTestLogStatusLine();
 }
 
 function closeModelTestModal() {
@@ -4351,6 +4354,19 @@ function clearModelTestLogWriteTimer() {
   }
 }
 
+function updateModelTestLogStatusLine() {
+  const el = document.getElementById('modelTestLogStatus');
+  if (!el) return;
+  if (!modelTestLogFileHandle) {
+    el.textContent = `TXT log: nenapojen (vyber ${DEFAULT_MODEL_TEST_LOG_FILENAME} ve složce projektu)`;
+    el.style.color = 'var(--txt3)';
+    return;
+  }
+  const name = modelTestLogFileHandle.name || '(soubor)';
+  el.textContent = `TXT log: napojen (${name})`;
+  el.style.color = '#5a9a6c';
+}
+
 async function writeModelTestLogNow(text) {
   if (!modelTestLogFileHandle) return;
   try {
@@ -4364,6 +4380,7 @@ async function writeModelTestLogNow(text) {
     await writable.close();
   } catch (e) {
     modelTestLogFileHandle = null;
+    updateModelTestLogStatusLine();
     showToast('⚠ TXT log nelze zapisovat (odpojeno)');
   }
 }
@@ -4377,13 +4394,14 @@ function queueModelTestLogWrite(text) {
 }
 
 async function bindModelTestLogFile() {
+  showToast(`Vyber TXT soubor pro živý log (${DEFAULT_MODEL_TEST_LOG_FILENAME})…`);
   if (!window.showSaveFilePicker) {
-    showToast('✗ Tento prohlížeč nepodporuje přímý zápis do souboru');
+    showToast('✗ Tento prohlížeč nepodporuje přímý zápis do souboru (zkus Edge/Chrome v https nebo localhost)');
     return;
   }
   try {
     const handle = await window.showSaveFilePicker({
-      suggestedName: 'model_test_live_report.txt',
+      suggestedName: DEFAULT_MODEL_TEST_LOG_FILENAME,
       types: [
         {
           description: 'Text files',
@@ -4392,17 +4410,24 @@ async function bindModelTestLogFile() {
       ]
     });
     modelTestLogFileHandle = handle;
+    updateModelTestLogStatusLine();
     const current = document.getElementById('modelTestOutput')?.value || '';
     await writeModelTestLogNow(current);
     showToast('✓ TXT log napojen (report se bude průběžně přepisovat)');
   } catch (e) {
-    // Uživatel zrušil výběr souboru.
+    const msg = String(e?.message || '');
+    if (/AbortError/i.test(msg)) {
+      showToast('Napojení logu zrušeno');
+    } else {
+      showToast(`✗ Napojení logu selhalo: ${msg || 'neznámá chyba'}`);
+    }
   }
 }
 
 function unbindModelTestLogFile() {
   modelTestLogFileHandle = null;
   clearModelTestLogWriteTimer();
+  updateModelTestLogStatusLine();
   showToast('TXT log odpojen');
 }
 
