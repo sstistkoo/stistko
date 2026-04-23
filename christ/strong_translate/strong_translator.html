@@ -1456,6 +1456,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
               <th style="text-align:left;padding:6px;border-bottom:1px solid var(--brd)">Provider/Model</th>
               <th style="text-align:right;padding:6px;border-bottom:1px solid var(--brd)">Úspěšnost</th>
               <th style="text-align:right;padding:6px;border-bottom:1px solid var(--brd)">OK/NEÚSP</th>
+              <th style="text-align:right;padding:6px;border-bottom:1px solid var(--brd)">Hesel</th>
               <th style="text-align:right;padding:6px;border-bottom:1px solid var(--brd)">Prům. doba AI</th>
               <th style="text-align:right;padding:6px;border-bottom:1px solid var(--brd)">Volání</th>
               <th style="text-align:right;padding:6px;border-bottom:1px solid var(--brd)">Akce</th>
@@ -3330,8 +3331,10 @@ async function translateBatch(keys, depth = 0) {
   const batch = keys.map(k => entryMap.get(k)).filter(Boolean);
   const messages = buildPromptMessages(batch);
 
+  const reqStart = performance.now();
   try {
     const raw = await callAIWithRetry(prov, apiKey, model, messages);
+    const reqMs = performance.now() - reqStart;
     const content = raw.content;
     log(`🤖 Překlad: ${getTranslationEngineLabel(raw, prov, model)}`);
     // Verbose logy pouze když je aktivní režim pro debug (window.DEBUG_AI = true v konzoli)
@@ -3413,13 +3416,21 @@ ${keys.map(k => {
     }
 
     const translatedCount = keys.filter(k => isTranslationComplete(translated[k])).length;
+    upsertModelTestStats(prov, model, {
+      status: translatedCount === keys.length ? 'OK' : 'PARTIAL',
+      okKeys: translatedCount,
+      failedKeys: keys.length - translatedCount,
+      totalKeys: keys.length,
+      latencyMs: reqMs
+    });
     pushTestHistory({
       type: 'translate-batch',
       provider: prov,
       model,
       total: keys.length,
       ok: translatedCount,
-      missing: keys.length - translatedCount
+      missing: keys.length - translatedCount,
+      avgLatencyMs: reqMs
     });
     if (translatedCount < keys.length) {
       // Označ chybějící hesla jako neúspěšná
@@ -3441,9 +3452,26 @@ ${keys.map(k => {
      log(`✓ Přeloženo ${keys.length} hesel (${keys[0]}–${keys[keys.length-1]})`);
      return { ok: true };
 } catch(e) {
+      const reqMs = performance.now() - reqStart;
       const msg = (e?.message || '').toLowerCase();
       const isRate = msg.includes('429') || msg.includes('rate limit') || msg.includes('quota') || msg.includes('too many');
+      upsertModelTestStats(prov, model, {
+        status: isRate ? 'RATE_LIMITED' : 'ERROR',
+        okKeys: 0,
+        failedKeys: keys.length,
+        totalKeys: keys.length,
+        latencyMs: reqMs
+      });
       if (isRate) {
+        pushTestHistory({
+          type: 'translate-batch',
+          provider: prov,
+          model,
+          total: keys.length,
+          ok: 0,
+          missing: keys.length,
+          avgLatencyMs: reqMs
+        });
         const cooldownSeconds = Math.max(currentInterval, 60);
         logWarn('translateBatch', `Rate limit dávky ${keys[0]}-${keys[keys.length-1]}, odklad ${cooldownSeconds}s`, {
           provider: document.getElementById('provider')?.value,
@@ -3467,6 +3495,15 @@ ${keys.map(k => {
         }
       }
       saveProgress();
+      pushTestHistory({
+        type: 'translate-batch',
+        provider: prov,
+        model,
+        total: keys.length,
+        ok: 0,
+        missing: keys.length,
+        avgLatencyMs: reqMs
+      });
       updateFailedCount();
       showToast('✗ ' + e.message);
       return { ok: false };
@@ -4397,7 +4434,7 @@ function upsertModelTestStats(prov, model, payload) {
   const row = map[key] || {
     provider: prov, model,
     calls: 0, okBatches: 0, partialBatches: 0, errorBatches: 0, rateLimited: 0,
-    okKeys: 0, failedKeys: 0, latencyMsTotal: 0, latencySamples: 0, lastTs: 0
+    okKeys: 0, failedKeys: 0, totalKeys: 0, latencyMsTotal: 0, latencySamples: 0, lastTs: 0
   };
   row.calls += 1;
   if (payload.status === 'OK') row.okBatches += 1;
@@ -4406,6 +4443,7 @@ function upsertModelTestStats(prov, model, payload) {
   else row.errorBatches += 1;
   row.okKeys += Math.max(0, payload.okKeys || 0);
   row.failedKeys += Math.max(0, payload.failedKeys || 0);
+  row.totalKeys += Math.max(0, payload.totalKeys || (payload.okKeys || 0) + (payload.failedKeys || 0));
   if (Number.isFinite(payload.latencyMs) && payload.latencyMs > 0) {
     row.latencyMsTotal += payload.latencyMs;
     row.latencySamples += 1;
@@ -4441,7 +4479,7 @@ function renderModelStatsTable() {
     return (b.calls || 0) - (a.calls || 0);
   });
   if (!rows.length) {
-    body.innerHTML = `<tr><td colspan="6" style="padding:8px;color:var(--txt3)">Zatím bez dat.</td></tr>`;
+    body.innerHTML = `<tr><td colspan="7" style="padding:8px;color:var(--txt3)">Zatím bez dat.</td></tr>`;
     return;
   }
   body.innerHTML = rows.map(r => {
@@ -4452,6 +4490,7 @@ function renderModelStatsTable() {
       <td style="padding:6px;border-top:1px solid var(--brd)">${escHtml(r.provider)}<br><span style="color:var(--txt3)">${escHtml(r.model)}</span></td>
       <td style="padding:6px;border-top:1px solid var(--brd);text-align:right">${rate.toFixed(1)}%</td>
       <td style="padding:6px;border-top:1px solid var(--brd);text-align:right">${r.okKeys || 0}/${r.failedKeys || 0}</td>
+      <td style="padding:6px;border-top:1px solid var(--brd);text-align:right">${r.totalKeys || 0}</td>
       <td style="padding:6px;border-top:1px solid var(--brd);text-align:right">${formatAiResponseTime(avgMs)}</td>
       <td style="padding:6px;border-top:1px solid var(--brd);text-align:right">${r.calls || 0}</td>
       <td style="padding:6px;border-top:1px solid var(--brd);text-align:right"><button class="modal-btn cancel" style="padding:4px 8px;font-size:10px" onclick="deleteModelTestStatsRow('${encodeURIComponent(r.key)}')">Smazat</button></td>
@@ -4830,16 +4869,37 @@ function showModelTestLibrary() {
     output.value = 'Knihovna testů je zatím prázdná.';
     return;
   }
-  const lines = ['# KNIHOVNA TESTŮ A PŘEKLADŮ', `Záznamů: ${history.length}`, 'Pozn.: tabulka modelů je nahoře v modalu a řadí se podle úspěšnosti + latence.', ''];
+  const lines = ['# KNIHOVNA TESTŮ A PŘEKLADŮ', `Záznamů: ${history.length}`, ''];
+  const statsRows = Object.values(getModelTestStatsMap());
+  if (statsRows.length) {
+    lines.push('## Souhrn podle provideru/modelu (modely řazeny podle četnosti)');
+    const providers = {};
+    for (const r of statsRows) {
+      if (!providers[r.provider]) providers[r.provider] = [];
+      providers[r.provider].push(r);
+    }
+    for (const providerName of Object.keys(providers).sort((a, b) => a.localeCompare(b, 'cs'))) {
+      lines.push(`### ${providerName}`);
+      const models = providers[providerName].sort((a, b) => (b.calls || 0) - (a.calls || 0));
+      for (const r of models) {
+        const total = Math.max(1, (r.okKeys || 0) + (r.failedKeys || 0));
+        const rate = (((r.okKeys || 0) / total) * 100).toFixed(1);
+        const avgMs = r.latencySamples ? (r.latencyMsTotal / r.latencySamples) : 0;
+        lines.push(`- ${r.model} | volání ${r.calls || 0} | hesel ${r.totalKeys || 0} | OK ${r.okKeys || 0} / NEÚSP ${r.failedKeys || 0} | úspěšnost ${rate}% | doba AI ${formatAiResponseTime(avgMs)}`);
+      }
+      lines.push('');
+    }
+  }
+  lines.push('## Poslední běhy');
   for (const item of history.slice(0, 80)) {
     const when = new Date(item.ts).toLocaleString('cs-CZ');
     if (item.type === 'model-test') {
-      lines.push(`[${when}] TEST | ${item.provider} | režim ${item.mode || 'smoke'} | OK ${item.ok}/${item.total} | PART ${item.partial || 0} | RL ${item.rateLimited} | ERR ${item.error} | HESLA OK ${item.keysOk || 0} / NEÚSP ${item.keysFailed || 0} | CYKLY ${item.cycles || 0} | LAT ${formatAiResponseTime(item.avgLatencyMs || 0)}`);
+      lines.push(`[${when}] TEST | ${item.provider} | režim ${item.mode || 'smoke'} | OK ${item.ok}/${item.total} | PART ${item.partial || 0} | RL ${item.rateLimited} | ERR ${item.error} | HESLA ${item.keysOk || 0}/${item.keysFailed || 0} | CYKLY ${item.cycles || 0} | AI ${formatAiResponseTime(item.avgLatencyMs || 0)}`);
       if (Array.isArray(item.topModels) && item.topModels.length) {
         lines.push(`TOP: ${item.topModels.join(', ')}`);
       }
     } else if (item.type === 'translate-batch') {
-      lines.push(`[${when}] BATCH | ${item.provider}/${item.model} | ${item.ok}/${item.total} kompletní | missing ${item.missing}`);
+      lines.push(`[${when}] BATCH | ${item.provider}/${item.model} | ${item.ok}/${item.total} kompletní | missing ${item.missing} | AI ${formatAiResponseTime(item.avgLatencyMs || 0)}`);
     }
   }
   output.value = lines.join('\n');
@@ -4972,6 +5032,7 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
         status,
         okKeys: ok,
         failedKeys: failedInBatch.length,
+        totalKeys: batchKeys.length,
         latencyMs: reqMs
       });
       console.log(`[AUTO TEST] #${cycle} ${prov} | ${chosenModel.value} | OK ${ok}/${batchKeys.length} | ${formatAiResponseTime(reqMs)}`);
@@ -4989,6 +5050,7 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
         status: isRate ? 'RATE_LIMITED' : 'ERROR',
         okKeys: 0,
         failedKeys: batchKeys.length,
+        totalKeys: batchKeys.length,
         latencyMs: reqMs
       });
       console.log(`[AUTO TEST] #${cycle} ${prov} | ${chosenModel.value} | ${isRate ? 'RATE LIMITED' : 'ERROR'} | ${formatAiResponseTime(reqMs)} | ${msg}`);
