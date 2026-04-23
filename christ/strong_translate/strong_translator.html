@@ -1436,7 +1436,12 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
         <select id="modelTestMode">
           <option value="smoke" selected>Smoke test (slovo 2x)</option>
           <option value="translate3">Překlad 3 hesel</option>
+          <option value="auto-live">Auto test (náhodné modely/providers)</option>
         </select>
+      </div>
+      <div class="mobl-set-row">
+        <label>Délka auto testu (min)</label>
+        <input type="number" id="modelTestDurationMin" min="1" max="240" value="10" style="width:100%;padding:10px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:12px;">
       </div>
       <label class="stat" style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
         <input type="checkbox" id="modelTestAppend" checked>
@@ -4311,7 +4316,9 @@ async function runModelTestFromModal() {
   const providerSelect = document.getElementById('modelTestProvider');
   const modeSelect = document.getElementById('modelTestMode');
   if (!providerSelect) return;
-  await testCurrentProviderModels(providerSelect.value, false, modeSelect?.value || 'smoke');
+  const mode = modeSelect?.value || 'smoke';
+  const forcedProvider = mode === 'auto-live' ? null : providerSelect.value;
+  await testCurrentProviderModels(forcedProvider, false, mode);
 }
 
 function showModelTestLibrary() {
@@ -4363,6 +4370,88 @@ function getSampleEntriesForModelTest(count = 3) {
   return entries.slice(0, count).filter(Boolean);
 }
 
+function pickRandom(arr) {
+  if (!Array.isArray(arr) || arr.length === 0) return null;
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSignal, fixedProvider = null) {
+  const durationInput = document.getElementById('modelTestDurationMin');
+  const durationMin = Math.max(1, parseInt(durationInput?.value || '10', 10) || 10);
+  const durationMs = durationMin * 60 * 1000;
+  const batchSize = parseInt(document.getElementById('batchSizeRun')?.value || '10', 10) || 10;
+  const intervalSec = parseInt(document.getElementById('intervalRun')?.value || '20', 10) || 20;
+  const startTs = Date.now();
+  let cycle = 0;
+  let cursor = 0;
+  const sourceEntries = entries.filter(e => e && e.key);
+  if (sourceEntries.length < batchSize) {
+    appendReport('⚠ Auto test: málo načtených hesel pro zvolenou dávku.');
+    return;
+  }
+
+  const providerKeys = fixedProvider
+    ? [fixedProvider]
+    : Object.keys(PROVIDERS).filter(p => !!getApiKeyForModelTest(p));
+  if (providerKeys.length === 0) {
+    appendReport('⚠ Auto test: nejsou dostupné API klíče.');
+    return;
+  }
+
+  appendReport(`Auto test délka: ${durationMin} min`);
+  appendReport(`Dávka/interval: ${batchSize} hesel / ${intervalSec}s`);
+  appendReport('');
+
+  while (!modelTestCancelRequested && (Date.now() - startTs) < durationMs) {
+    cycle++;
+    const prov = pickRandom(providerKeys);
+    const providerLabel = PROVIDERS[prov]?.label || prov;
+    const apiKey = getApiKeyForModelTest(prov);
+    if (!apiKey) {
+      testResults.push({ model: `${prov}/(bez-klíče)`, status: 'ERROR' });
+      appendReport(`[#${cycle}] ${providerLabel} | bez API klíče`);
+      await waitMs(1000);
+      continue;
+    }
+
+    const modelOptions = await getProviderModelOptions(prov);
+    if (!modelOptions.length) {
+      testResults.push({ model: `${prov}/(bez-modelu)`, status: 'ERROR' });
+      appendReport(`[#${cycle}] ${providerLabel} | bez dostupných modelů`);
+      await waitMs(1000);
+      continue;
+    }
+    const chosenModel = pickRandom(modelOptions);
+
+    const batch = [];
+    for (let i = 0; i < batchSize; i++) {
+      const idx = (cursor + i) % sourceEntries.length;
+      batch.push(sourceEntries[idx]);
+    }
+    cursor = (cursor + batchSize) % sourceEntries.length;
+    const batchKeys = batch.map(b => b.key);
+    const messages = buildPromptMessages(batch);
+
+    try {
+      const raw = await callOnce(prov, apiKey, chosenModel.value, messages, abortSignal);
+      const parsed = {};
+      const missing = parseTranslationsCore(String(raw?.content || ''), batchKeys, parsed);
+      const ok = batchKeys.length - missing.length;
+      const status = ok === batchKeys.length ? 'OK' : 'PARTIAL';
+      testResults.push({ model: `${prov}:${chosenModel.value}`, status });
+      appendReport(`[#${cycle}] ${providerLabel} | ${chosenModel.value} | ${ok}/${batchKeys.length} hesel`);
+    } catch (e) {
+      const msg = String(e?.message || '');
+      const isRate = /429|rate limit|too many/i.test(msg);
+      testResults.push({ model: `${prov}:${chosenModel.value}`, status: isRate ? 'RATE_LIMITED' : 'ERROR' });
+      appendReport(`[#${cycle}] ${providerLabel} | ${chosenModel.value} | ${isRate ? 'RATE LIMITED' : 'ERROR'} (${msg})`);
+    }
+
+    if (modelTestCancelRequested) break;
+    await waitMs(intervalSec * 1000);
+  }
+}
+
 async function testCurrentProviderModels(forcedProvider = null, resetReport = true, forcedMode = null) {
   if (autoRunning || autoStepRunning) {
     showToast('⚠ Nejdřív zastav AUTO');
@@ -4378,16 +4467,20 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
   const modeSelect = document.getElementById('modelTestMode');
   const prov = forcedProvider || modalProviderSelect?.value || providerSelect.value;
   const testMode = forcedMode || modeSelect?.value || 'smoke';
-  const apiKey = getApiKeyForModelTest(prov);
-  if (!apiKey) {
-    showToast(`✗ Chybí API klíč pro ${PROVIDERS[prov]?.label || prov}`);
-    return;
-  }
+  let apiKey = null;
+  let options = [];
+  if (testMode !== 'auto-live') {
+    apiKey = getApiKeyForModelTest(prov);
+    if (!apiKey) {
+      showToast(`✗ Chybí API klíč pro ${PROVIDERS[prov]?.label || prov}`);
+      return;
+    }
 
-  const options = await getProviderModelOptions(prov);
-  if (!options.length) {
-    showToast('⚠ Pro tohoto providera nejsou dostupné modely');
-    return;
+    options = await getProviderModelOptions(prov);
+    if (!options.length) {
+      showToast('⚠ Pro tohoto providera nejsou dostupné modely');
+      return;
+    }
   }
   const providerLabel = PROVIDERS[prov]?.label || prov;
   const outputEl = document.getElementById('modelTestOutput');
@@ -4419,7 +4512,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
   if (cancelBtn) cancelBtn.style.display = 'inline-block';
   appendReport(`# TEST MODELU`);
   appendReport(`Provider: ${providerLabel}`);
-  appendReport(`Režim: ${testMode === 'translate3' ? 'Překlad 3 hesel' : 'Smoke test (slovo 2x)'}`);
+  appendReport(`Režim: ${testMode === 'translate3' ? 'Překlad 3 hesel' : testMode === 'auto-live' ? 'Auto test (náhodné modely/providers)' : 'Smoke test (slovo 2x)'}`);
   appendReport(`Čas: ${new Date().toLocaleString('cs-CZ')}`);
   appendReport(`Modelů: ${options.length}`);
   appendReport('');
@@ -4427,6 +4520,27 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
   try {
     const sampleEntries = testMode === 'translate3' ? getSampleEntriesForModelTest(3) : [];
     const sampleKeys = sampleEntries.map(e => e.key);
+    if (testMode === 'auto-live') {
+      await runAutoLiveModelTest(appendReport, waitMs, testResults, modelTestAbortController.signal, forcedProvider ? prov : null);
+      const okModels = testResults.filter(r => r.status === 'OK').map(r => r.model).slice(0, 3);
+      appendReport('');
+      appendReport(`TOP modely z tohoto běhu: ${okModels.length ? okModels.join(', ') : 'žádné plně stabilní'}`);
+      appendReport(modelTestCancelRequested ? 'Ukončeno.' : 'Hotovo.');
+      pushTestHistory({
+        type: 'model-test',
+        provider: forcedProvider ? providerLabel : 'mix-provider',
+        mode: testMode,
+        total: testResults.length,
+        ok: testResults.filter(r => r.status === 'OK').length,
+        rateLimited: testResults.filter(r => r.status === 'RATE_LIMITED').length,
+        error: testResults.filter(r => r.status === 'ERROR').length,
+        partial: testResults.filter(r => r.status === 'PARTIAL').length,
+        topModels: okModels
+      });
+      showToast(modelTestCancelRequested ? '⏹ Test modelů zrušen' : '✓ Auto test dokončen');
+      return;
+    }
+
     if (testMode === 'translate3') {
       if (sampleEntries.length < 3) {
         appendReport('⚠ Nelze spustit test překladu 3 hesel (není načtený slovník nebo má málo záznamů).');
