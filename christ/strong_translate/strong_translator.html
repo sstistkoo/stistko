@@ -2694,7 +2694,9 @@ function renderDetail() {
   const isGreek = activeKey.startsWith('G');
   const isHebrew = activeKey.startsWith('H') && num < 9000;
   const isGrammar = activeKey.startsWith('H') && num >= 9000;
-  const englishSource = (e.en || e.enDef || e.definice || e.def || '').trim();
+  const definitionEn = (e.definice || e.def || '').trim();
+  const englishSourceRaw = (e.en || e.enDef || '').trim();
+  const englishSource = (englishSourceRaw && englishSourceRaw !== definitionEn) ? englishSourceRaw : '';
   const strongNum = activeKey.slice(1);
   const bibleHubPath = activeKey.startsWith('H') ? 'hebrew' : 'greek';
   const studyLinks = `
@@ -2726,12 +2728,13 @@ function renderDetail() {
     </div>
     <div class="orig-section">
       <div class="label">Definice (EN)</div>
-      <div class="value">${escHtml(e.definice || e.def || '—')}${e.czDef ? '<hr style="border:none;border-top:1px solid var(--brd);margin:6px 0"><div style="color:var(--acc3)">' + escHtml(e.czDef) + '</div>' : ''}</div>
+      <div class="value">${escHtml(e.definice || e.def || '—')}</div>
     </div>
+    ${englishSource ? `
     <div class="orig-section">
       <div class="label">English (zdroj)</div>
-      <div class="value">${escHtml(englishSource || '—')}</div>
-    </div>
+      <div class="value">${escHtml(englishSource)}</div>
+    </div>` : ''}
     <div class="orig-section">
       <div class="label">KJV překlady</div>
       <div class="value">${escHtml(e.kjv || '—')}</div>
@@ -2765,12 +2768,13 @@ function renderDetail() {
     </div>
     <div class="orig-section">
       <div class="label">Definice (EN)</div>
-      <div class="value">${escHtml(e.definice || e.def || '—')}${e.czDef ? '<hr style="border:none;border-top:1px solid var(--brd);margin:6px 0"><div style="color:var(--acc3)">' + escHtml(e.czDef) + '</div>' : ''}</div>
+      <div class="value">${escHtml(e.definice || e.def || '—')}</div>
     </div>
+    ${englishSource ? `
     <div class="orig-section">
       <div class="label">English (zdroj)</div>
-      <div class="value">${escHtml(englishSource || '—')}</div>
-    </div>
+      <div class="value">${escHtml(englishSource)}</div>
+    </div>` : ''}
     <div class="orig-section">
       <div class="label">KJV překlady</div>
       <div class="value">${escHtml(e.kjv || '—')}</div>
@@ -2816,19 +2820,20 @@ function renderDetail() {
     </div>
     <div class="orig-section">
       <div class="label">Definice (EN)</div>
-      <div class="value">${escHtml(e.definice || e.def || '—')}${e.czDef ? '<hr style="border:none;border-top:1px solid var(--brd);margin:6px 0"><div style="color:var(--acc3)">' + escHtml(e.czDef) + '</div>' : ''}</div>
+      <div class="value">${escHtml(e.definice || e.def || '—')}</div>
     </div>
+    ${englishSource ? `
     <div class="orig-section">
       <div class="label">English (zdroj)</div>
-      <div class="value">${escHtml(englishSource || '—')}</div>
-    </div>
+      <div class="value">${escHtml(englishSource)}</div>
+    </div>` : ''}
     ${studyLinks}`;
   } else {
     // Fallback pro starý formát
     sections = `
     <div class="orig-section">
       <div class="label">Definice (EN)</div>
-      <div class="value">${escHtml(e.definice || e.def || '—')}${e.czDef ? '<hr style="border:none;border-top:1px solid var(--brd);margin:6px 0"><div style="color:var(--acc3)">' + escHtml(e.czDef) + '</div>' : ''}</div>
+      <div class="value">${escHtml(e.definice || e.def || '—')}</div>
     </div>
     <div class="orig-section">
       <div class="label">KJV překlady</div>
@@ -2854,15 +2859,20 @@ function renderDetail() {
 }
 
 function renderTranslation(key, t) {
-  const rawDef = t?._rawDefinition || '';
-  const hasRaw = rawDef && rawDef.length > 10;
+  const e = entryMap.get(key) || {};
+  const sourceCzDef = String(e.czDef || '').trim();
+  const translatedDef = String(t?.definice || '').trim();
+  const looksEnglish = /(\bin general\b|\bused of\b|\bin itself\b|\bthat which\b|\bopposite to\b|\bwhere it is contrasted\b|\bsee word\b|\bSYN\.:|\bchiefly for\b)/i.test(translatedDef);
+  const hasDetailedTranslatedDef = translatedDef.length >= 80 && /(\b1\.\b|\b2\.\b|[a-z]\)|\(|\[)/i.test(translatedDef);
+  const shouldPreferSourceDef = hasMeaningfulValue(sourceCzDef) && (looksEnglish || !hasDetailedTranslatedDef);
+  const definitionDisplay = shouldPreferSourceDef ? sourceCzDef : translatedDef;
   
   const sections = [
     { 
       id: 'definice', 
       label: 'Definice (CZ)', 
-      field: t?.definice,
-      rawField: hasRaw ? rawDef : null
+      field: definitionDisplay,
+      rawField: null
     },
     { id: 'vyznam',   label: 'Český význam',        field: t?.vyznam },
     { id: 'kjv',     label: 'KJV překlady (CZ)', field: t?.kjv },
