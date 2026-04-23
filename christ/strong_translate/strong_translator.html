@@ -4686,7 +4686,7 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
 
   appendReport(`Auto test délka: ${durationMin} min`);
   appendReport(`Dávka/interval: ${batchSize} hesel / ${intervalSec}s`);
-  appendReport('Každých 10 cyklů: kompletní surová odpověď AI. Po každém cyklu: kontrola jen posledního hesla v dávce (OK / neúplné / neúspěch).');
+  appendReport('Po každém cyklu: kontrola jen posledního hesla v dávce (OK / neúplné / neúspěch). RAW se vypíše jen pro poslední heslo při neúspěchu.');
   appendReport('');
 
   while (!modelTestCancelRequested && (Date.now() - startTs) < durationMs) {
@@ -4729,11 +4729,6 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
       testResults.push({ model: `${prov}:${chosenModel.value}`, status });
       appendReport(`[#${cycle}] ${providerLabel} | ${chosenModel.value} | ${ok}/${batchKeys.length} hesel | klíče ${batchKeys[0]}…${batchKeys[batchKeys.length - 1]}`);
       appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, missing, content);
-      if (cycle % 10 === 0) {
-        appendReport(`--- RAW ODPOVĚĎ #${cycle} (kompletní text od modelu) ---`);
-        appendReport(content || '(prázdné)');
-        appendReport('--- /RAW ---');
-      }
     } catch (e) {
       const msg = String(e?.message || '');
       const isRate = /429|rate limit|too many/i.test(msg);
