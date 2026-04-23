@@ -1415,7 +1415,8 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       <div class="help-block">
         <b>Limity a kvóty</b><br>
         Tlačítko `📊 Limity` zobrazuje dostupné údaje o kreditech/limitech z API providera a doplňkové odhady.
-        U některých providerů nejsou všechny metriky veřejně dostupné, proto se kombinují živá data a fallback informace.
+        U některých providerů nejsou všechny metriky veřejně dostupné, proto se kombinují živá data a fallback informace.<br>
+        OpenRouter má pro `:free` modely vlastní limity (RPM/RPD). Po dobití kreditu (v aktuální dokumentaci je prahová částka, často kolem 10 USD) se navyšuje denní free limit, ale minutový limit a dostupnost endpointů se může dál lišit model od modelu.
       </div>
       <button class="modal-btn cancel" onclick="closeHelpModal()" style="width:100%">✕ Zavřít</button>
     </div>
@@ -1437,6 +1438,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       <textarea id="modelTestOutput" style="width:100%;min-height:320px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:10px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.5;resize:vertical" placeholder="Po spuštění testu se sem vypíše report..."></textarea>
       <div class="modal-btns" style="margin-top:12px">
         <button class="modal-btn ok" onclick="runModelTestFromModal()">▶ Test provideru</button>
+        <button class="modal-btn" onclick="showModelTestLibrary()">📚 Knihovna</button>
         <button class="modal-btn cancel" id="btnCancelModelTest" onclick="cancelModelTest()" style="display:none">■ Zrušit test</button>
         <button class="modal-btn ok" onclick="copyModelTestOutput()">📋 Kopírovat</button>
         <button class="modal-btn cancel" onclick="closeModelTestModal()">✕ Zavřít</button>
@@ -1691,8 +1693,24 @@ let autoStepRunning = false;
   let selectedKeys = new Set();
   let totalTokens = { in: 0, out: 0, total: 0 };
   const AUTO_TOKEN_LIMIT_KEY = 'strong_auto_token_limit';
+  const TEST_HISTORY_KEY = 'strong_test_history_v1';
   const API_KEY_PROFILES_PREFIX = 'strong_apikey_profiles_';
   const API_KEY_ACTIVE_PROFILE_PREFIX = 'strong_apikey_active_';
+
+  function getTestHistory() {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(TEST_HISTORY_KEY) || '[]');
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function pushTestHistory(entry) {
+    const history = getTestHistory();
+    history.unshift({ ts: Date.now(), ...entry });
+    localStorage.setItem(TEST_HISTORY_KEY, JSON.stringify(history.slice(0, 300)));
+  }
 
   // Virtual scrolling
   const CONFIG = {
@@ -2366,6 +2384,17 @@ function filterList() {
 // Debounced varianta pro oninput (zabráni překreslení celého listu na každý znak)
 const filterListDebounced = debounce(filterList, 180);
 
+function hasMeaningfulValue(v) {
+  const s = String(v || '').trim();
+  return !!s && s !== '—' && s !== '(přeskočeno)';
+}
+
+function isTranslationComplete(t) {
+  if (!t || t.skipped) return false;
+  const required = ['vyznam', 'definice', 'pouziti', 'puvod', 'kjv', 'specialista'];
+  return required.every(field => hasMeaningfulValue(t[field]));
+}
+
 function getStrongKeyNumber(key) {
   const normalized = String(key || '').trim();
   const match = normalized.match(/^(?:[GH])?(\d+)$/i);
@@ -2401,8 +2430,8 @@ function getFilteredEntries() {
     if (!matchesSearch) return false;
     
     const t = translated[e.key];
-    const hasTranslation = t && t.vyznam && t.vyznam.trim().length > 0 && t.vyznam !== '—';
-    const isFailed = t && (!t.vyznam || t.vyznam === '—');
+    const hasTranslation = isTranslationComplete(t);
+    const isFailed = t && !isTranslationComplete(t);
     
     if (lang === 'G' && !e.key.startsWith('G')) return false;
     if (lang === 'H' && !e.key.startsWith('H')) return false;
@@ -2526,7 +2555,7 @@ function renderVisible() {
       if (!key) return false;
       const t = translated[key];
       const wasDone = lastRenderRange.doneStates?.[key];
-      const isDone = !!(t && t.vyznam && t.vyznam.trim() && t.vyznam !== '—');
+      const isDone = isTranslationComplete(t);
       return wasDone !== isDone;
     });
     if (!needsUpdate) return;
@@ -2542,7 +2571,7 @@ function renderVisible() {
     const e = entryMap.get(key);
     if (!e) continue;
     const t = translated[key];
-    const done = !!(t && t.vyznam && t.vyznam.trim() && t.vyznam !== '—');
+    const done = isTranslationComplete(t);
     doneStates[key] = done;
     
     const isSelected = selectedKeys.has(key);
@@ -2613,7 +2642,7 @@ function renderDetail() {
   const e = entryMap.get(activeKey);
   if (!e) return;
   const t = translated[activeKey];
-  const hasTranslation = t && t.vyznam && t.vyznam.trim().length > 0 && t.vyznam !== '—';
+  const hasTranslation = isTranslationComplete(t);
   const pane = document.getElementById('detailPane');
 
   // Detekce typu podle klíče
@@ -2804,6 +2833,7 @@ function renderTranslation(key, t) {
         <div class="tbox-label">${s.label}</div>
         <div class="tbox-actions">
           <button class="tbox-btn" onclick="openTopicPromptModal('${key}','${s.id}')" aria-label="AI prompt pro ${s.label}">🤖 Prompt</button>
+          ${!hasMeaningfulValue(s.field) ? `<button class="tbox-btn" onclick="refillSingleField('${key}','${s.id}')" aria-label="Doplnit ${s.label} přes AI">✨ Doplnit</button>` : ''}
           <button class="tbox-btn" onclick="toggleEditSection('${key}','${s.id}')" aria-label="Upravit ${s.label}">✎ Upravit</button>
         </div>
       </div>
@@ -2832,6 +2862,34 @@ function saveSection(key, id) {
   saveProgress();
   document.getElementById(`tval-${key}-${id}`).textContent = val || '—';
   document.getElementById(`tedit-${key}-${id}`).classList.remove('show');
+}
+
+async function refillSingleField(key, topicId) {
+  const prov = document.getElementById('provider').value;
+  const model = document.getElementById('model').value;
+  const apiKey = getCurrentApiKey(prov);
+  if (!apiKey) {
+    showToast('✗ Zadej API klíč!');
+    return;
+  }
+  const prompt = buildTopicPrompt(key, topicId);
+  try {
+    const messages = [
+      { role: 'system', content: SYSTEM_MESSAGE },
+      { role: 'user', content: prompt }
+    ];
+    const raw = await callAIWithRetry(prov, apiKey, model, messages);
+    const val = extractTopicValueFromAI(raw?.content || '', topicId);
+    if (!translated[key]) translated[key] = {};
+    translated[key][topicId] = val || '—';
+    saveProgress();
+    renderDetail();
+    renderList();
+    updateStats();
+    showToast(`✓ Doplněno pole ${TOPIC_LABELS[topicId] || topicId}`);
+  } catch (e) {
+    showToast('✗ Doplnění selhalo: ' + e.message);
+  }
 }
 
 const TOPIC_LABELS = {
@@ -3210,7 +3268,7 @@ function getNextBatch(size) {
   return result;
 }
 
-async function translateBatch(keys) {
+async function translateBatch(keys, depth = 0) {
   const prov   = document.getElementById('provider').value;
   const model  = document.getElementById('model').value;
   // Klíč vždy dle aktuálního run providera
@@ -3297,12 +3355,33 @@ ${keys.map(k => {
       }
     }
     
-    // Kontrola: přeložena všechna hesla?
-    const translatedCount = keys.filter(k => translated[k]?.vyznam).length;
+    // Fallback strategie: pokud po retry chybí část dávky, zkus menší dávku.
+    if (missingKeys.length > 0 && keys.length > 1 && depth < 4) {
+      log(`↘ Fallback dávky: dělím ${missingKeys.length} klíčů na menší bloky (úroveň ${depth + 1})`);
+      const pivot = Math.ceil(missingKeys.length / 2);
+      const chunks = [missingKeys.slice(0, pivot), missingKeys.slice(pivot)].filter(ch => ch.length > 0);
+      for (const chunk of chunks) {
+        if (chunk.length === 1) {
+          await translateBatch(chunk, depth + 1);
+        } else {
+          await translateBatch(chunk, depth + 1);
+        }
+      }
+    }
+
+    const translatedCount = keys.filter(k => isTranslationComplete(translated[k])).length;
+    pushTestHistory({
+      type: 'translate-batch',
+      provider: prov,
+      model,
+      total: keys.length,
+      ok: translatedCount,
+      missing: keys.length - translatedCount
+    });
     if (translatedCount < keys.length) {
       // Označ chybějící hesla jako neúspěšná
       for (const key of keys) {
-        if (!translated[key] || !translated[key].vyznam || translated[key].vyznam === '—') {
+        if (!isTranslationComplete(translated[key])) {
           translated[key] = translated[key] || {};
           if (!translated[key].vyznam || translated[key].vyznam === '—') {
             translated[key].vyznam = '—';
@@ -3719,8 +3798,8 @@ async function runAutoStep() {
 
 // ══ STATS & SAVE ════════════════════════════════════════════════
 function updateStats() {
-  // Počítej jen hesla která mají skutečný překlad (vyznam má text)
-  const done = Object.values(translated).filter(t => t && t.vyznam && t.vyznam.trim().length > 0).length;
+  // Počítej jen kompletní překlady se všemi požadovanými poli
+  const done = Object.values(translated).filter(t => isTranslationComplete(t)).length;
   const total  = entries.length;
   const remain = total - done;
   const pct    = total ? (done / total * 100).toFixed(1) : 0;
@@ -3775,7 +3854,7 @@ function maybeAutoBackup() {
   if (batchesSinceBackup < AUTO_BACKUP_EVERY_N_BATCHES) return;
   batchesSinceBackup = 0;
   const doneCount = Object.values(translated)
-    .filter(t => t && t.vyznam && t.vyznam !== '—' && !t.skipped).length;
+    .filter(t => isTranslationComplete(t)).length;
   if (doneCount === 0) return;
   writeBackup(backupKey(), { translated, ts: Date.now(), count: doneCount, fileId: currentFileId });
   logInfo('autoBackup', `Automatická záloha: ${doneCount} hesel`);
@@ -4227,6 +4306,29 @@ async function runModelTestFromModal() {
   await testCurrentProviderModels(providerSelect.value, false);
 }
 
+function showModelTestLibrary() {
+  const output = document.getElementById('modelTestOutput');
+  if (!output) return;
+  const history = getTestHistory();
+  if (!history.length) {
+    output.value = 'Knihovna testů je zatím prázdná.';
+    return;
+  }
+  const lines = ['# KNIHOVNA TESTŮ A PŘEKLADŮ', `Záznamů: ${history.length}`, ''];
+  for (const item of history.slice(0, 80)) {
+    const when = new Date(item.ts).toLocaleString('cs-CZ');
+    if (item.type === 'model-test') {
+      lines.push(`[${when}] TEST | ${item.provider} | OK ${item.ok}/${item.total} | RL ${item.rateLimited} | ERR ${item.error}`);
+      if (Array.isArray(item.topModels) && item.topModels.length) {
+        lines.push(`TOP: ${item.topModels.join(', ')}`);
+      }
+    } else if (item.type === 'translate-batch') {
+      lines.push(`[${when}] BATCH | ${item.provider}/${item.model} | ${item.ok}/${item.total} kompletní | missing ${item.missing}`);
+    }
+  }
+  output.value = lines.join('\n');
+}
+
 async function copyModelTestOutput() {
   const output = document.getElementById('modelTestOutput');
   if (!output) return;
@@ -4283,6 +4385,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
   const MODEL_TEST_DELAY_MS = 3500;
   const MAX_CONSECUTIVE_RATE_LIMITS = 4;
   let consecutiveRateLimited = 0;
+  const testResults = [];
   const appendReport = (line = '') => {
     report.push(line);
     outputEl.value = report.join('\n');
@@ -4338,6 +4441,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
         appendReport('Stav: OK');
         appendReport('');
         consecutiveRateLimited = 0;
+        testResults.push({ model: opt.value, status: 'OK' });
 
         log(`🧪 ${opt.label || opt.value}: OK`);
       } catch (e) {
@@ -4355,6 +4459,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
             appendReport('Stav: OK po retry');
             appendReport('');
             consecutiveRateLimited = 0;
+            testResults.push({ model: opt.value, status: 'OK_RETRY' });
             log(`🧪 ${opt.label || opt.value}: OK po retry`);
           } catch (eRetry) {
             if (modelTestCancelRequested || /zrušen uživatelem/i.test(String(eRetry?.message || ''))) {
@@ -4367,6 +4472,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
             appendReport('Stav: RATE LIMITED');
             appendReport('');
             consecutiveRateLimited++;
+            testResults.push({ model: opt.value, status: 'RATE_LIMITED' });
             log(`🧪 ${opt.label || opt.value}: RATE LIMIT (${eRetry.message})`);
           }
         } else {
@@ -4380,6 +4486,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
           appendReport('Stav: ERROR');
           appendReport('');
           consecutiveRateLimited = 0;
+          testResults.push({ model: opt.value, status: 'ERROR' });
           log(`🧪 ${opt.label || opt.value}: CHYBA (${msg})`);
         }
       }
@@ -4401,7 +4508,19 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
       }
     }
 
+    const okModels = testResults.filter(r => r.status === 'OK').map(r => r.model).slice(0, 3);
+    appendReport('');
+    appendReport(`TOP modely z tohoto běhu: ${okModels.length ? okModels.join(', ') : 'žádné plně stabilní'}`);
     appendReport(modelTestCancelRequested ? 'Ukončeno.' : 'Hotovo.');
+    pushTestHistory({
+      type: 'model-test',
+      provider: providerLabel,
+      total: options.length,
+      ok: testResults.filter(r => r.status === 'OK' || r.status === 'OK_RETRY').length,
+      rateLimited: testResults.filter(r => r.status === 'RATE_LIMITED').length,
+      error: testResults.filter(r => r.status === 'ERROR').length,
+      topModels: okModels
+    });
     showToast(modelTestCancelRequested ? '⏹ Test modelů zrušen' : `✓ Test modelů dokončen (${options.length})`);
   } finally {
     modelTestRunning = false;
@@ -5864,7 +5983,7 @@ function updateFailedCount() {
   let count = 0;
   for (const key of Object.keys(translated)) {
     const t = translated[key];
-    if (!t.vyznam || t.vyznam === '—') count++;
+    if (!isTranslationComplete(t)) count++;
   }
   const el = document.getElementById('failedCount');
   if (el) el.textContent = count > 0 ? `(${count})` : '';
@@ -5874,7 +5993,7 @@ function showFailedEntries() {
   const failed = [];
   for (const key of Object.keys(translated)) {
     const t = translated[key];
-    if (!t.vyznam || t.vyznam === '—') {
+    if (!isTranslationComplete(t)) {
       failed.push({ key, raw: t.raw, greek: entryMap.get(key)?.greek });
     }
   }
@@ -6015,6 +6134,7 @@ window.discardPreview = discardPreview;
 window.openTopicPromptModal = openTopicPromptModal;
 window.runTopicPromptAI = runTopicPromptAI;
 window.applyTopicPromptResult = applyTopicPromptResult;
+window.refillSingleField = refillSingleField;
 window.closeTopicPromptModal = closeTopicPromptModal;
 window.retryFailed = retryFailed;
 window.showMobileActions = showMobileActions;
@@ -6028,6 +6148,7 @@ window.closeModelTestModal = closeModelTestModal;
 window.copyModelTestOutput = copyModelTestOutput;
 window.cancelModelTest = cancelModelTest;
 window.runModelTestFromModal = runModelTestFromModal;
+window.showModelTestLibrary = showModelTestLibrary;
 window.showHelpModal = showHelpModal;
 window.closeHelpModal = closeHelpModal;
 window.onApiKeyProfileChange = onApiKeyProfileChange;
