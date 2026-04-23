@@ -1449,17 +1449,13 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       </label>
       <div id="modelTestCountdown" class="limits-provider" style="margin-bottom:6px;min-height:1.2em;font-size:12px;color:var(--txt2)"></div>
       <div id="modelTestLastStatus" style="margin-bottom:8px;min-height:1.2em;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--txt2)"></div>
-      <div id="modelTestLogStatus" style="margin-bottom:8px;min-height:1.2em;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt3)">TXT log: nenapojen (doporučeno ukládat ručně do test.txt)</div>
       <textarea id="modelTestOutput" style="width:100%;min-height:240px;max-height:45vh;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:10px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.5;resize:vertical" placeholder="Nastav režim a providera, pak spusť ▶ Test provideru. Odpočet ukáže čekání do dalšího volání API."></textarea>
       <div class="modal-btns" style="margin-top:12px">
         <button class="modal-btn ok" id="btnRunModelTest" onclick="runModelTestFromModal()">▶ Test provideru</button>
         <button class="modal-btn" onclick="showModelTestLibrary()">📚 Knihovna</button>
-        <button class="modal-btn" type="button" onclick="bindModelTestLogFile()">🔗 Napojit TXT log</button>
-        <button class="modal-btn" type="button" onclick="unbindModelTestLogFile()">⛔ Odpojit TXT log</button>
         <button class="modal-btn ok" type="button" onclick="saveModelTestOutputTxt()">💾 Uložit test.txt</button>
         <button class="modal-btn" type="button" onclick="restoreModelTestReportFromBackup()">📄 Zpět na report</button>
         <button class="modal-btn" type="button" onclick="resetModelTestModal()">↺ Reset</button>
-        <button class="modal-btn ok" type="button" onclick="exportModelTestTranslationsTxt()">⬇ Překlady TXT</button>
         <button class="modal-btn cancel" id="btnCancelModelTest" onclick="cancelModelTest()" style="display:none">■ Zrušit test</button>
         <button class="modal-btn ok" onclick="copyModelTestOutput()">📋 Kopírovat</button>
         <button class="modal-btn cancel" onclick="closeModelTestModal()">✕ Zavřít</button>
@@ -1716,8 +1712,6 @@ let autoStepRunning = false;
   let modelTestOutputBackupBeforeLibrary = '';
   let modelTestParsedExportChunks = [];
   let modelTestLastKeyAuditExportChunks = [];
-  let modelTestLogFileHandle = null;
-  let modelTestLogWriteTimer = null;
   const DEFAULT_MODEL_TEST_LOG_FILENAME = 'test.txt';
   let startTime = null;
   let elapsedTimer = null;
@@ -1725,6 +1719,7 @@ let autoStepRunning = false;
   let totalTokens = { in: 0, out: 0, total: 0 };
   const AUTO_TOKEN_LIMIT_KEY = 'strong_auto_token_limit';
   const TEST_HISTORY_KEY = 'strong_test_history_v1';
+  const MODEL_TEST_OUTPUT_KEY = 'strong_model_test_output_v1';
   const API_KEY_PROFILES_PREFIX = 'strong_apikey_profiles_';
   const API_KEY_ACTIVE_PROFILE_PREFIX = 'strong_apikey_active_';
 
@@ -4280,10 +4275,15 @@ function showModelTestModal(providerLabel, clearOutput = false) {
   const currentProvider = document.getElementById('provider')?.value || 'groq';
   providerSelect.value = currentProvider;
   info.textContent = `Provider: ${providerLabel || '—'}`;
-  if (clearOutput) output.value = '';
+  if (clearOutput) {
+    output.value = '';
+    clearModelTestOutputFromStorage();
+  } else if (!output.value.trim()) {
+    const saved = loadModelTestOutputFromStorage();
+    if (saved) output.value = saved;
+  }
   modal.classList.add('show');
   updateModelTestRunButton();
-  updateModelTestLogStatusLine();
 }
 
 function closeModelTestModal() {
@@ -4348,107 +4348,16 @@ function modelTestSetLastStatus(text, kind = 'idle') {
   }
 }
 
-function clearModelTestLogWriteTimer() {
-  if (modelTestLogWriteTimer) {
-    clearTimeout(modelTestLogWriteTimer);
-    modelTestLogWriteTimer = null;
-  }
+function saveModelTestOutputToStorage(text) {
+  try { localStorage.setItem(MODEL_TEST_OUTPUT_KEY, String(text || '')); } catch (e) {}
 }
 
-function updateModelTestLogStatusLine() {
-  const el = document.getElementById('modelTestLogStatus');
-  if (!el) return;
-  if (!modelTestLogFileHandle) {
-    el.textContent = `TXT log: nenapojen (ulož ručně přes "Uložit ${DEFAULT_MODEL_TEST_LOG_FILENAME}")`;
-    el.style.color = 'var(--txt3)';
-    return;
-  }
-  const name = modelTestLogFileHandle.name || '(soubor)';
-  el.textContent = `TXT log: napojen (${name})`;
-  el.style.color = '#5a9a6c';
+function loadModelTestOutputFromStorage() {
+  try { return localStorage.getItem(MODEL_TEST_OUTPUT_KEY) || ''; } catch (e) { return ''; }
 }
 
-function appendModelTestOutputNote(line) {
-  const output = document.getElementById('modelTestOutput');
-  if (!output) return;
-  const prefix = output.value.trim() ? '\n' : '';
-  output.value += `${prefix}${line}`;
-  output.scrollTop = output.scrollHeight;
-}
-
-async function writeModelTestLogNow(text) {
-  if (!modelTestLogFileHandle) return;
-  try {
-    const perm = await modelTestLogFileHandle.queryPermission({ mode: 'readwrite' });
-    if (perm !== 'granted') {
-      const req = await modelTestLogFileHandle.requestPermission({ mode: 'readwrite' });
-      if (req !== 'granted') return;
-    }
-    const writable = await modelTestLogFileHandle.createWritable();
-    await writable.write(String(text || ''));
-    await writable.close();
-  } catch (e) {
-    modelTestLogFileHandle = null;
-    updateModelTestLogStatusLine();
-    showToast('⚠ TXT log nelze zapisovat (odpojeno)');
-  }
-}
-
-function queueModelTestLogWrite(text) {
-  if (!modelTestLogFileHandle) return;
-  clearModelTestLogWriteTimer();
-  modelTestLogWriteTimer = setTimeout(() => {
-    writeModelTestLogNow(text);
-  }, 250);
-}
-
-async function bindModelTestLogFile() {
-  modelTestSetLastStatus('Napojování TXT logu...', 'idle');
-  showToast(`Vyber TXT soubor pro živý log (${DEFAULT_MODEL_TEST_LOG_FILENAME})…`);
-  if (!window.showSaveFilePicker) {
-    const err = '✗ Tento prohlížeč/režim nepodporuje přímý zápis do souboru (zkus Edge/Chrome v https nebo localhost).';
-    updateModelTestLogStatusLine();
-    modelTestSetLastStatus('TXT log nelze napojit v tomto režimu.', 'error');
-    appendModelTestOutputNote(err);
-    showToast(err);
-    saveModelTestOutputTxt();
-    return;
-  }
-  try {
-    const handle = await window.showSaveFilePicker({
-      suggestedName: DEFAULT_MODEL_TEST_LOG_FILENAME,
-      types: [
-        {
-          description: 'Text files',
-          accept: { 'text/plain': ['.txt'] }
-        }
-      ]
-    });
-    modelTestLogFileHandle = handle;
-    updateModelTestLogStatusLine();
-    const current = document.getElementById('modelTestOutput')?.value || '';
-    await writeModelTestLogNow(current);
-    modelTestSetLastStatus(`TXT log napojen: ${handle?.name || DEFAULT_MODEL_TEST_LOG_FILENAME}`, 'ok');
-    showToast('✓ TXT log napojen (report se bude průběžně přepisovat)');
-  } catch (e) {
-    const msg = String(e?.message || '');
-    if (/AbortError/i.test(msg)) {
-      modelTestSetLastStatus('Napojení TXT logu zrušeno.', 'warn');
-      showToast('Napojení logu zrušeno');
-    } else {
-      modelTestSetLastStatus('Napojení TXT logu selhalo.', 'error');
-      appendModelTestOutputNote(`✗ Napojení logu selhalo: ${msg || 'neznámá chyba'}`);
-      showToast(`✗ Napojení logu selhalo: ${msg || 'neznámá chyba'}`);
-    }
-  }
-}
-
-function unbindModelTestLogFile() {
-  modelTestLogFileHandle = null;
-  clearModelTestLogWriteTimer();
-  updateModelTestLogStatusLine();
-  modelTestSetLastStatus('TXT log odpojen.', 'warn');
-  showToast('TXT log odpojen');
+function clearModelTestOutputFromStorage() {
+  try { localStorage.removeItem(MODEL_TEST_OUTPUT_KEY); } catch (e) {}
 }
 
 async function saveModelTestOutputTxt() {
@@ -4570,6 +4479,7 @@ function resetModelTestModal() {
   modelTestNextRequestEtaSec = 0;
   modelTestSetCountdownLabel('');
   modelTestSetLastStatus('');
+  clearModelTestOutputFromStorage();
   updateModelTestRunButton();
 }
 
@@ -4579,6 +4489,7 @@ function restoreModelTestReportFromBackup() {
   if (modelTestLibraryActive) {
     output.value = modelTestOutputBackupBeforeLibrary;
     modelTestLibraryActive = false;
+    saveModelTestOutputToStorage(output.value);
   }
   scrollModelTestOutputIntoView();
 }
@@ -4806,6 +4717,7 @@ function showModelTestLibrary() {
     }
   }
   output.value = lines.join('\n');
+  saveModelTestOutputToStorage(output.value);
 }
 
 async function copyModelTestOutput() {
@@ -4919,6 +4831,7 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
       totalOkKeys += ok;
       totalFailedKeys += failedInBatch.length;
       testResults.push({ model: `${prov}:${chosenModel.value}`, status });
+      console.log(`[AUTO TEST] #${cycle} ${prov} | ${chosenModel.value} | OK ${ok}/${batchKeys.length} | ${formatAiResponseTime(reqMs)}`);
       appendReport(`[#${cycle}] ${providerLabel} | ${chosenModel.value} | ${ok}/${batchKeys.length} hesel | klíče ${batchKeys[0]}…${batchKeys[batchKeys.length - 1]} | AI ${formatAiResponseTime(reqMs)}`);
       appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, failedInBatch, content, { okKeys: totalOkKeys, failedKeys: totalFailedKeys });
     } catch (e) {
@@ -4927,6 +4840,7 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
       const isRate = /429|rate limit|too many/i.test(msg);
       totalFailedKeys += batchKeys.length;
       testResults.push({ model: `${prov}:${chosenModel.value}`, status: isRate ? 'RATE_LIMITED' : 'ERROR' });
+      console.log(`[AUTO TEST] #${cycle} ${prov} | ${chosenModel.value} | ${isRate ? 'RATE LIMITED' : 'ERROR'} | ${formatAiResponseTime(reqMs)} | ${msg}`);
       appendReport(`[#${cycle}] ${providerLabel} | ${chosenModel.value} | ${isRate ? 'RATE LIMITED' : 'ERROR'} (${msg})${reqMs > 0 ? ` | AI ${formatAiResponseTime(reqMs)}` : ''}`);
     }
 
@@ -4987,7 +4901,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
     const nextText = report.join('\n');
     outputEl.value = nextText;
     outputEl.scrollTop = outputEl.scrollHeight;
-    queueModelTestLogWrite(nextText);
+    saveModelTestOutputToStorage(nextText);
   };
 
   const originalText = btn.textContent;
@@ -6825,8 +6739,6 @@ window.runModelTestFromModal = runModelTestFromModal;
 window.openModelTestModal = openModelTestModal;
 window.resetModelTestModal = resetModelTestModal;
 window.restoreModelTestReportFromBackup = restoreModelTestReportFromBackup;
-window.bindModelTestLogFile = bindModelTestLogFile;
-window.unbindModelTestLogFile = unbindModelTestLogFile;
 window.saveModelTestOutputTxt = saveModelTestOutputTxt;
 window.exportModelTestTranslationsTxt = exportModelTestTranslationsTxt;
 window.showModelTestLibrary = showModelTestLibrary;
