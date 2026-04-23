@@ -4451,15 +4451,41 @@ function unbindModelTestLogFile() {
   showToast('TXT log odpojen');
 }
 
-function saveModelTestOutputTxt() {
+async function saveModelTestOutputTxt() {
   const text = document.getElementById('modelTestOutput')?.value || '';
   if (!text.trim()) {
     showToast('⚠ Není co uložit do test.txt');
     return;
   }
+  if (window.showSaveFilePicker) {
+    try {
+      const handle = await window.showSaveFilePicker({
+        suggestedName: DEFAULT_MODEL_TEST_LOG_FILENAME,
+        types: [
+          {
+            description: 'Text files',
+            accept: { 'text/plain': ['.txt'] }
+          }
+        ]
+      });
+      const writable = await handle.createWritable();
+      await writable.write(text);
+      await writable.close();
+      modelTestSetLastStatus(`Uloženo: ${handle.name || DEFAULT_MODEL_TEST_LOG_FILENAME}`, 'ok');
+      showToast(`✓ Uloženo: ${handle.name || DEFAULT_MODEL_TEST_LOG_FILENAME}`);
+      return;
+    } catch (e) {
+      const msg = String(e?.message || '');
+      if (/AbortError/i.test(msg)) {
+        showToast('Uložení zrušeno');
+        return;
+      }
+      showToast(`⚠ Uložení přes dialog selhalo, použiji stažení: ${msg || 'neznámá chyba'}`);
+    }
+  }
   download(DEFAULT_MODEL_TEST_LOG_FILENAME, text, 'text/plain');
-  modelTestSetLastStatus(`Uloženo ručně: ${DEFAULT_MODEL_TEST_LOG_FILENAME}`, 'ok');
-  showToast(`✓ Uloženo: ${DEFAULT_MODEL_TEST_LOG_FILENAME}`);
+  modelTestSetLastStatus(`Staženo: ${DEFAULT_MODEL_TEST_LOG_FILENAME}`, 'ok');
+  showToast(`✓ Staženo: ${DEFAULT_MODEL_TEST_LOG_FILENAME}`);
 }
 
 function modelTestWaitWithCountdown(ms, signal) {
@@ -4813,6 +4839,15 @@ function pickRandom(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
+function formatRemainingTestTime(runEndTs) {
+  const leftSec = runEndTs > Date.now()
+    ? Math.max(0, Math.ceil((runEndTs - Date.now()) / 1000))
+    : 0;
+  const mm = Math.floor(leftSec / 60);
+  const ss = leftSec % 60;
+  return `${mm}:${String(ss).padStart(2, '0')}`;
+}
+
 async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSignal, fixedProvider = null) {
   const durationInput = document.getElementById('modelTestDurationMin');
   const durationMin = Math.max(1, parseInt(durationInput?.value || '10', 10) || 10);
@@ -4885,14 +4920,14 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
       totalOkKeys += ok;
       totalFailedKeys += failedInBatch.length;
       testResults.push({ model: `${prov}:${chosenModel.value}`, status });
-      appendReport(`[#${cycle}] ${providerLabel} | ${chosenModel.value} | ${ok}/${batchKeys.length} hesel | klíče ${batchKeys[0]}…${batchKeys[batchKeys.length - 1]}`);
+      appendReport(`[#${cycle}] ${providerLabel} | ${chosenModel.value} | ${ok}/${batchKeys.length} hesel | klíče ${batchKeys[0]}…${batchKeys[batchKeys.length - 1]} | zbývá ${formatRemainingTestTime(modelTestRunEndTs)}`);
       appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, failedInBatch, content, { okKeys: totalOkKeys, failedKeys: totalFailedKeys });
     } catch (e) {
       const msg = String(e?.message || '');
       const isRate = /429|rate limit|too many/i.test(msg);
       totalFailedKeys += batchKeys.length;
       testResults.push({ model: `${prov}:${chosenModel.value}`, status: isRate ? 'RATE_LIMITED' : 'ERROR' });
-      appendReport(`[#${cycle}] ${providerLabel} | ${chosenModel.value} | ${isRate ? 'RATE LIMITED' : 'ERROR'} (${msg})`);
+      appendReport(`[#${cycle}] ${providerLabel} | ${chosenModel.value} | ${isRate ? 'RATE LIMITED' : 'ERROR'} (${msg}) | zbývá ${formatRemainingTestTime(modelTestRunEndTs)}`);
     }
 
     if (modelTestCancelRequested) break;
