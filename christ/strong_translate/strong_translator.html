@@ -1424,7 +1424,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
 
   <!-- Model Test Output Modal -->
   <div id="modelTestModal">
-    <div class="limits-modal-box" style="max-width:760px">
+    <div class="limits-modal-box" style="max-width:860px;max-height:92vh;display:flex;flex-direction:column;overflow:auto">
       <div class="limits-title">🧪 Výstup testu modelů</div>
       <div class="limits-provider" id="modelTestInfo">Provider: —</div>
       <div class="mobl-set-row">
@@ -1450,7 +1450,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       <div id="modelTestCountdown" class="limits-provider" style="margin-bottom:6px;min-height:1.2em;font-size:12px;color:var(--txt2)"></div>
       <div id="modelTestLastStatus" style="margin-bottom:8px;min-height:1.2em;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--txt2)"></div>
       <div id="modelTestLogStatus" style="margin-bottom:8px;min-height:1.2em;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt3)">TXT log: nenapojen (vyber model_test_live_report.txt ve složce projektu)</div>
-      <textarea id="modelTestOutput" style="width:100%;min-height:320px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:10px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.5;resize:vertical" placeholder="Nastav režim a providera, pak spusť ▶ Test provideru. Odpočet ukáže čekání do dalšího volání API."></textarea>
+      <textarea id="modelTestOutput" style="width:100%;min-height:240px;max-height:45vh;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:10px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.5;resize:vertical" placeholder="Nastav režim a providera, pak spusť ▶ Test provideru. Odpočet ukáže čekání do dalšího volání API."></textarea>
       <div class="modal-btns" style="margin-top:12px">
         <button class="modal-btn ok" id="btnRunModelTest" onclick="runModelTestFromModal()">▶ Test provideru</button>
         <button class="modal-btn" onclick="showModelTestLibrary()">📚 Knihovna</button>
@@ -4367,6 +4367,14 @@ function updateModelTestLogStatusLine() {
   el.style.color = '#5a9a6c';
 }
 
+function appendModelTestOutputNote(line) {
+  const output = document.getElementById('modelTestOutput');
+  if (!output) return;
+  const prefix = output.value.trim() ? '\n' : '';
+  output.value += `${prefix}${line}`;
+  output.scrollTop = output.scrollHeight;
+}
+
 async function writeModelTestLogNow(text) {
   if (!modelTestLogFileHandle) return;
   try {
@@ -4394,9 +4402,14 @@ function queueModelTestLogWrite(text) {
 }
 
 async function bindModelTestLogFile() {
+  modelTestSetLastStatus('Napojování TXT logu...', 'idle');
   showToast(`Vyber TXT soubor pro živý log (${DEFAULT_MODEL_TEST_LOG_FILENAME})…`);
   if (!window.showSaveFilePicker) {
-    showToast('✗ Tento prohlížeč nepodporuje přímý zápis do souboru (zkus Edge/Chrome v https nebo localhost)');
+    const err = '✗ Tento prohlížeč/režim nepodporuje přímý zápis do souboru (zkus Edge/Chrome v https nebo localhost).';
+    updateModelTestLogStatusLine();
+    modelTestSetLastStatus('TXT log nelze napojit v tomto režimu.', 'error');
+    appendModelTestOutputNote(err);
+    showToast(err);
     return;
   }
   try {
@@ -4413,12 +4426,16 @@ async function bindModelTestLogFile() {
     updateModelTestLogStatusLine();
     const current = document.getElementById('modelTestOutput')?.value || '';
     await writeModelTestLogNow(current);
+    modelTestSetLastStatus(`TXT log napojen: ${handle?.name || DEFAULT_MODEL_TEST_LOG_FILENAME}`, 'ok');
     showToast('✓ TXT log napojen (report se bude průběžně přepisovat)');
   } catch (e) {
     const msg = String(e?.message || '');
     if (/AbortError/i.test(msg)) {
+      modelTestSetLastStatus('Napojení TXT logu zrušeno.', 'warn');
       showToast('Napojení logu zrušeno');
     } else {
+      modelTestSetLastStatus('Napojení TXT logu selhalo.', 'error');
+      appendModelTestOutputNote(`✗ Napojení logu selhalo: ${msg || 'neznámá chyba'}`);
       showToast(`✗ Napojení logu selhalo: ${msg || 'neznámá chyba'}`);
     }
   }
@@ -4428,6 +4445,7 @@ function unbindModelTestLogFile() {
   modelTestLogFileHandle = null;
   clearModelTestLogWriteTimer();
   updateModelTestLogStatusLine();
+  modelTestSetLastStatus('TXT log odpojen.', 'warn');
   showToast('TXT log odpojen');
 }
 
