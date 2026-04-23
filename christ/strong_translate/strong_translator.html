@@ -1803,23 +1803,34 @@ function populateOpenRouterModels(selectElement, savedModel, callback) {
       return r.json();
     })
     .then(data => {
-      const models = (data.data || []).filter(m => m.id && m.id.endsWith(':free'));
-      
-      // Top modely - pevně dané pro spolehlivost
-      const topOptions = [
-        { value: 'openrouter/free', label: '★ Auto Router (doporučeno)' },
-        { value: 'deepseek/deepseek-r1:free', label: '★ DeepSeek R1' }
+      const modelsRaw = (data.data || []).filter(m => m.id && m.id.endsWith(':free'));
+      // Některé položky API mohou být metadata bez reálně routovatelného endpointu
+      // (pak při testu vrací 404 "No endpoints found"). Zkusíme je vyřadit.
+      const models = modelsRaw.filter(m => {
+        if (Array.isArray(m.endpoints) && m.endpoints.length === 0) return false;
+        if (m?.top_provider && m.top_provider.is_disabled === true) return false;
+        return true;
+      });
+      const modelMap = new Map(models.map(m => [m.id, m]));
+
+      const topCandidates = [
+        { id: 'openrouter/free', fixedLabel: '★ Auto Router (doporučeno)' },
+        { id: 'openai/gpt-oss-20b:free', fixedLabel: '★ OpenAI GPT-OSS 20B (free)' },
+        { id: 'nvidia/nemotron-nano-9b-v2:free', fixedLabel: '★ NVIDIA Nemotron Nano 9B v2 (free)' }
       ];
-      
-      // Ostatní modely z API jako alternativy
+      const topOptions = topCandidates
+        .filter(c => c.id === 'openrouter/free' || modelMap.has(c.id))
+        .map(c => ({ value: c.id, label: c.fixedLabel }));
+
+      const topIds = new Set(topOptions.map(o => o.value));
       const otherOptions = models
-        .filter(m => !['openrouter/free', 'deepseek/deepseek-r1:free'].includes(m.id))
+        .filter(m => !topIds.has(m.id))
         .map(m => ({
           value: m.id,
           label: (m.name || m.id.replace(/:free$/, ''))
         }))
         .sort((a, b) => a.label.localeCompare(b.label));
-      
+
       const options = [...topOptions, ...otherOptions];
 
       if (options.length === 0) {
