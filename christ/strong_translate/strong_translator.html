@@ -4839,13 +4839,10 @@ function pickRandom(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-function formatRemainingTestTime(runEndTs) {
-  const leftSec = runEndTs > Date.now()
-    ? Math.max(0, Math.ceil((runEndTs - Date.now()) / 1000))
-    : 0;
-  const mm = Math.floor(leftSec / 60);
-  const ss = leftSec % 60;
-  return `${mm}:${String(ss).padStart(2, '0')}`;
+function formatAiResponseTime(ms) {
+  const safe = Math.max(0, Number(ms) || 0);
+  if (safe < 1000) return `${Math.round(safe)}ms`;
+  return `${(safe / 1000).toFixed(2)}s`;
 }
 
 async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSignal, fixedProvider = null) {
@@ -4909,8 +4906,10 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
     const batchKeys = batch.map(b => b.key);
     const messages = buildPromptMessages(batch);
 
+    const reqStart = performance.now();
     try {
       const raw = await callOnce(prov, apiKey, chosenModel.value, messages, abortSignal);
+      const reqMs = performance.now() - reqStart;
       const content = String(raw?.content || '');
       const parsed = {};
       const missing = parseTranslationsCore(content, batchKeys, parsed);
@@ -4920,14 +4919,15 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
       totalOkKeys += ok;
       totalFailedKeys += failedInBatch.length;
       testResults.push({ model: `${prov}:${chosenModel.value}`, status });
-      appendReport(`[#${cycle}] ${providerLabel} | ${chosenModel.value} | ${ok}/${batchKeys.length} hesel | klíče ${batchKeys[0]}…${batchKeys[batchKeys.length - 1]} | zbývá ${formatRemainingTestTime(modelTestRunEndTs)}`);
+      appendReport(`[#${cycle}] ${providerLabel} | ${chosenModel.value} | ${ok}/${batchKeys.length} hesel | klíče ${batchKeys[0]}…${batchKeys[batchKeys.length - 1]} | AI ${formatAiResponseTime(reqMs)}`);
       appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, failedInBatch, content, { okKeys: totalOkKeys, failedKeys: totalFailedKeys });
     } catch (e) {
+      const reqMs = performance.now() - reqStart;
       const msg = String(e?.message || '');
       const isRate = /429|rate limit|too many/i.test(msg);
       totalFailedKeys += batchKeys.length;
       testResults.push({ model: `${prov}:${chosenModel.value}`, status: isRate ? 'RATE_LIMITED' : 'ERROR' });
-      appendReport(`[#${cycle}] ${providerLabel} | ${chosenModel.value} | ${isRate ? 'RATE LIMITED' : 'ERROR'} (${msg}) | zbývá ${formatRemainingTestTime(modelTestRunEndTs)}`);
+      appendReport(`[#${cycle}] ${providerLabel} | ${chosenModel.value} | ${isRate ? 'RATE LIMITED' : 'ERROR'} (${msg})${reqMs > 0 ? ` | AI ${formatAiResponseTime(reqMs)}` : ''}`);
     }
 
     if (modelTestCancelRequested) break;
