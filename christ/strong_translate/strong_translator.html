@@ -4182,6 +4182,8 @@ async function testCurrentProviderModels() {
   }
   const report = [];
   const MODEL_TEST_DELAY_MS = 3500;
+  const MAX_CONSECUTIVE_RATE_LIMITS = 4;
+  let consecutiveRateLimited = 0;
   const appendReport = (line = '') => {
     report.push(line);
     outputEl.value = report.join('\n');
@@ -4224,6 +4226,7 @@ async function testCurrentProviderModels() {
         appendReport(`2) ${secondContent || '(prázdná odpověď)'}`);
         appendReport('Stav: OK');
         appendReport('');
+        consecutiveRateLimited = 0;
 
         log(`🧪 ${opt.text || opt.value}: OK`);
       } catch (e) {
@@ -4240,12 +4243,14 @@ async function testCurrentProviderModels() {
             appendReport(`retry) ${retryContent || '(prázdná odpověď)'}`);
             appendReport('Stav: OK po retry');
             appendReport('');
+            consecutiveRateLimited = 0;
             log(`🧪 ${opt.text || opt.value}: OK po retry`);
           } catch (eRetry) {
             console.error(`[MODEL TEST] ${prov} | ${opt.value} | ERROR`, eRetry);
             appendReport(`RETRY CHYBA: ${eRetry.message}`);
             appendReport('Stav: RATE LIMITED');
             appendReport('');
+            consecutiveRateLimited++;
             log(`🧪 ${opt.text || opt.value}: RATE LIMIT (${eRetry.message})`);
           }
         } else {
@@ -4253,8 +4258,22 @@ async function testCurrentProviderModels() {
           appendReport(`CHYBA: ${msg}`);
           appendReport('Stav: ERROR');
           appendReport('');
+          consecutiveRateLimited = 0;
           log(`🧪 ${opt.text || opt.value}: CHYBA (${msg})`);
         }
+      }
+
+      if (consecutiveRateLimited >= MAX_CONSECUTIVE_RATE_LIMITS) {
+        appendReport(`⚠ Test zastaven: ${consecutiveRateLimited}x po sobě RATE LIMITED (globální free limit OpenRouteru).`);
+        appendReport('Zbytek modelů je přeskočen, spusť test znovu později.');
+        appendReport('');
+        for (let j = i + 1; j < options.length; j++) {
+          appendReport(`## ${j + 1}/${options.length} ${options[j].value}`);
+          appendReport('Stav: PŘESKOČENO (global rate limit)');
+          appendReport('');
+        }
+        showToast('⚠ Test předčasně ukončen kvůli rate limitu');
+        break;
       }
       await waitMs(MODEL_TEST_DELAY_MS);
     }
