@@ -1447,7 +1447,8 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
         <input type="checkbox" id="modelTestAppend" checked>
         Připojit výsledek do stejného reportu
       </label>
-      <div id="modelTestCountdown" class="limits-provider" style="margin-bottom:8px;min-height:1.2em;font-size:12px;color:var(--txt2)"></div>
+      <div id="modelTestCountdown" class="limits-provider" style="margin-bottom:6px;min-height:1.2em;font-size:12px;color:var(--txt2)"></div>
+      <div id="modelTestLastStatus" style="margin-bottom:8px;min-height:1.2em;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--txt2)"></div>
       <textarea id="modelTestOutput" style="width:100%;min-height:320px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:10px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.5;resize:vertical" placeholder="Nastav režim a providera, pak spusť ▶ Test provideru. Odpočet ukáže čekání do dalšího volání API."></textarea>
       <div class="modal-btns" style="margin-top:12px">
         <button class="modal-btn ok" onclick="runModelTestFromModal()">▶ Test provideru</button>
@@ -4302,6 +4303,21 @@ function modelTestSetCountdownLabel(text) {
   if (el) el.textContent = text || '';
 }
 
+function modelTestSetLastStatus(text, kind = 'idle') {
+  const el = document.getElementById('modelTestLastStatus');
+  if (!el) return;
+  el.textContent = text || '';
+  if (kind === 'error') {
+    el.style.color = '#d25f5f';
+  } else if (kind === 'ok') {
+    el.style.color = '#5a9a6c';
+  } else if (kind === 'warn') {
+    el.style.color = '#d8a85f';
+  } else {
+    el.style.color = 'var(--txt2)';
+  }
+}
+
 function modelTestWaitWithCountdown(ms, signal) {
   return new Promise(resolve => {
     modelTestClearCountdownInterval();
@@ -4365,6 +4381,7 @@ function resetModelTestModal() {
   modelTestParsedExportChunks = [];
   modelTestLastKeyAuditExportChunks = [];
   modelTestSetCountdownLabel('');
+  modelTestSetLastStatus('');
 }
 
 function restoreModelTestReportFromBackup() {
@@ -4408,7 +4425,7 @@ function appendModelTestExportParsed(keys, parsed) {
 /**
  * Průběžná kontrola: jen poslední heslo v dávce + stav formátu.
  */
-function appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, missing) {
+function appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, missing, rawContent = '') {
   const lastKey = Array.isArray(batchKeys) && batchKeys.length ? batchKeys[batchKeys.length - 1] : '';
   if (!lastKey || typeof appendReport !== 'function') return;
   const t = parsed && parsed[lastKey];
@@ -4424,14 +4441,21 @@ function appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, missi
   appendReport(`  ▸ Rozsah dávky: ${rangeLabel}`);
   appendReport(`  ▸ Poslední heslo: ${lastKey}`);
   if (complete) {
+    modelTestSetLastStatus(`OK | ${rangeLabel} | ${lastKey}`, 'ok');
     appendReport('  Stav posledního hesla: OK — nalezeno v odpovědi a všechna povinná pole vyplněna ve správném formátu.');
     appendReport('  Data AI pro poslední heslo:');
     for (const ln of formatModelTestParsedBlock(lastKey, t, entryMap.get(lastKey)).split('\n')) {
       appendReport(`    ${ln}`);
     }
   } else if (inMissing || !t) {
+    modelTestSetLastStatus(`NEÚSPĚCH | ${rangeLabel} | ${lastKey}`, 'error');
+    appendReport('  🔴 CHYBA FORMATU / PÁROVÁNÍ');
     appendReport('  Stav posledního hesla: NEÚSPĚCH — heslo v odpovědi nešlo spárovat / chybí blok (špatný formát nebo model vynechal heslo).');
+    appendReport('  RAW odpověď AI (pro kontrolu chyby):');
+    appendReport(String(rawContent || '(prázdné)'));
+    appendReport('  --- /RAW ---');
   } else {
+    modelTestSetLastStatus(`NEÚPLNÉ | ${rangeLabel} | ${lastKey}`, 'warn');
     appendReport(`  Stav posledního hesla: NEÚPLNÉ — chybí nebo jsou neplatná pole: ${badFields.join(', ') || '?'}`);
     appendReport('  Data AI pro poslední heslo (to, co šlo vyparsovat):');
     for (const ln of formatModelTestParsedBlock(lastKey, t, entryMap.get(lastKey)).split('\n')) {
@@ -4452,6 +4476,8 @@ function appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, missi
   if (t) {
     exportLines.push('');
     exportLines.push(formatModelTestParsedBlock(lastKey, t, entryMap.get(lastKey)));
+  } else if (inMissing || !t) {
+    exportLines.push('', 'RAW odpověď AI:', String(rawContent || '(prázdné)'));
   }
   exportLines.push('----------------------------------------', '');
   modelTestLastKeyAuditExportChunks.push(exportLines.join('\n'));
@@ -4646,7 +4672,7 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
       const status = ok === batchKeys.length ? 'OK' : 'PARTIAL';
       testResults.push({ model: `${prov}:${chosenModel.value}`, status });
       appendReport(`[#${cycle}] ${providerLabel} | ${chosenModel.value} | ${ok}/${batchKeys.length} hesel | klíče ${batchKeys[0]}…${batchKeys[batchKeys.length - 1]}`);
-      appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, missing);
+      appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, missing, content);
       if (cycle % 10 === 0) {
         appendReport(`--- RAW ODPOVĚĎ #${cycle} (kompletní text od modelu) ---`);
         appendReport(content || '(prázdné)');
@@ -4722,6 +4748,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
   modelTestCancelRequested = false;
   modelTestParsedExportChunks = [];
   modelTestLastKeyAuditExportChunks = [];
+  modelTestSetLastStatus('Běží test modelů…', 'idle');
   modelTestAbortController = new AbortController();
   const signal = modelTestAbortController.signal;
   const waitMs = (ms) => modelTestWaitWithCountdown(ms, signal);
@@ -4796,7 +4823,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
           const okCount = sampleKeys.length - missingAfterFirst.length;
           appendReport(`PARSOVÁNÍ (celá dávka): ${okCount}/${sampleKeys.length} hesel`);
           if (missingAfterFirst.length > 0) appendReport(`CHYBÍ v odpovědi: ${missingAfterFirst.join(', ')}`);
-          appendModelTestLastBatchKeyAudit(appendReport, sampleKeys, parsed, missingAfterFirst);
+          appendModelTestLastBatchKeyAudit(appendReport, sampleKeys, parsed, missingAfterFirst, firstContent || '');
           appendReport('');
           testResults.push({ model: opt.value, status: okCount === sampleKeys.length ? 'OK' : 'PARTIAL' });
           log(`🧪 ${opt.label || opt.value}: ${okCount}/${sampleKeys.length} hesel`);
@@ -4909,6 +4936,9 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
   } finally {
     modelTestClearCountdownInterval();
     modelTestSetCountdownLabel('');
+    if (modelTestCancelRequested) {
+      modelTestSetLastStatus('Test zastaven uživatelem.', 'warn');
+    }
     modelTestRunning = false;
     modelTestCancelRequested = false;
     modelTestAbortController = null;
