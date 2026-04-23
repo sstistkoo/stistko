@@ -4403,6 +4403,41 @@ function appendModelTestExportParsed(keys, parsed) {
   }
 }
 
+/** Zkrácení dlouhé AI odpovědi pro report (hlava + ocas). */
+function excerptAiResponseForReport(content, maxTotal = 3600) {
+  const s = String(content || '');
+  if (!s) return '(prázdné)';
+  if (s.length <= maxTotal) return s;
+  const head = Math.min(1400, Math.floor(maxTotal / 3));
+  const tailLen = Math.max(900, maxTotal - head - 80);
+  return `${s.slice(0, head)}\n… ─── zkráceno (${s.length} znaků) ─── …\n${s.slice(-tailLen)}`;
+}
+
+/**
+ * Průběžná kontrola: poslední heslo v dávce — úryvek surové odpovědi AI a stav parsování / formátu polí.
+ */
+function appendModelTestLastBatchKeyAudit(appendReport, lastKey, content, parsed, missing) {
+  if (!lastKey || typeof appendReport !== 'function') return;
+  const t = parsed && parsed[lastKey];
+  const inMissing = Array.isArray(missing) && missing.includes(lastKey);
+  const complete = !!t && isTranslationComplete(t);
+  const badFields = t && !complete
+    ? ['vyznam', 'definice', 'pouziti', 'puvod', 'kjv', 'specialista'].filter(f => !hasMeaningfulValue(t[f]))
+    : [];
+
+  appendReport(`  ▸ Poslední heslo v dávce: ${lastKey}`);
+  appendReport('  Text odpovědi AI (pro kontrolu formátu; u dlouhých odpovědí zkráceno):');
+  appendReport(excerptAiResponseForReport(content));
+  appendReport('  ---');
+  if (complete) {
+    appendReport('  Stav posledního hesla: OK — nalezeno v odpovědi a všechna povinná pole vyplněna ve správném formátu.');
+  } else if (inMissing || !t) {
+    appendReport('  Stav posledního hesla: NEÚSPĚCH — heslo v odpovědi nešlo spárovat / chybí blok (špatný formát nebo model vynechal heslo).');
+  } else {
+    appendReport(`  Stav posledního hesla: NEÚPLNÉ — chybí nebo jsou neplatná pole: ${badFields.join(', ') || '?'}`);
+  }
+}
+
 function exportModelTestTranslationsTxt() {
   const out = document.getElementById('modelTestOutput');
   const reportFallback = (out?.value || '').trim();
@@ -4547,7 +4582,7 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
 
   appendReport(`Auto test délka: ${durationMin} min`);
   appendReport(`Dávka/interval: ${batchSize} hesel / ${intervalSec}s`);
-  appendReport('Každých 10 cyklů se připojí kompletní surová odpověď AI (cykly 1–9 jen řádek se shrnutím).');
+  appendReport('Každých 10 cyklů: kompletní surová odpověď AI. Po každém cyklu: poslední heslo v dávce + úryvek odpovědi + OK / neúplné / neúspěch.');
   appendReport('');
 
   while (!modelTestCancelRequested && (Date.now() - startTs) < durationMs) {
@@ -4590,6 +4625,7 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
       testResults.push({ model: `${prov}:${chosenModel.value}`, status });
       appendModelTestExportParsed(batchKeys, parsed);
       appendReport(`[#${cycle}] ${providerLabel} | ${chosenModel.value} | ${ok}/${batchKeys.length} hesel | klíče ${batchKeys[0]}…${batchKeys[batchKeys.length - 1]}`);
+      appendModelTestLastBatchKeyAudit(appendReport, batchKeys[batchKeys.length - 1], content, parsed, missing);
       if (cycle % 10 === 0) {
         appendReport(`--- RAW ODPOVĚĎ #${cycle} (kompletní text od modelu) ---`);
         appendReport(content || '(prázdné)');
@@ -4733,14 +4769,14 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
         console.log(`[MODEL TEST] ${prov} | ${opt.value} | 1: ${firstContent}`);
         appendReport(`MODEL: ${opt.value}`);
         if (testMode === 'translate3') {
-          appendReport(`VÝSTUP: ${firstContent || '(prázdná odpověď)'}`);
           const parsed = {};
           const missingAfterFirst = parseTranslationsCore(firstContent || '', sampleKeys, parsed);
           appendModelTestExportParsed(sampleKeys, parsed);
           const okCount = sampleKeys.length - missingAfterFirst.length;
-          appendReport(`PARSOVÁNÍ: ${okCount}/${sampleKeys.length} hesel`);
-          if (missingAfterFirst.length > 0) appendReport(`CHYBÍ: ${missingAfterFirst.join(', ')}`);
-          appendReport(okCount === sampleKeys.length ? 'Stav: OK' : 'Stav: ČÁSTEČNÉ');
+          appendReport(`PARSOVÁNÍ (celá dávka): ${okCount}/${sampleKeys.length} hesel`);
+          if (missingAfterFirst.length > 0) appendReport(`CHYBÍ v odpovědi: ${missingAfterFirst.join(', ')}`);
+          const lastSampleKey = sampleKeys[sampleKeys.length - 1];
+          appendModelTestLastBatchKeyAudit(appendReport, lastSampleKey, firstContent || '', parsed, missingAfterFirst);
           appendReport('');
           testResults.push({ model: opt.value, status: okCount === sampleKeys.length ? 'OK' : 'PARTIAL' });
           log(`🧪 ${opt.label || opt.value}: ${okCount}/${sampleKeys.length} hesel`);
