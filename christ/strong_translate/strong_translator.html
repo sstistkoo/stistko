@@ -4400,6 +4400,7 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
 
   appendReport(`Auto test délka: ${durationMin} min`);
   appendReport(`Dávka/interval: ${batchSize} hesel / ${intervalSec}s`);
+  appendReport('Každých 10 cyklů se připojí kompletní surová odpověď AI (cykly 1–9 jen řádek se shrnutím).');
   appendReport('');
 
   while (!modelTestCancelRequested && (Date.now() - startTs) < durationMs) {
@@ -4434,12 +4435,18 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
 
     try {
       const raw = await callOnce(prov, apiKey, chosenModel.value, messages, abortSignal);
+      const content = String(raw?.content || '');
       const parsed = {};
-      const missing = parseTranslationsCore(String(raw?.content || ''), batchKeys, parsed);
+      const missing = parseTranslationsCore(content, batchKeys, parsed);
       const ok = batchKeys.length - missing.length;
       const status = ok === batchKeys.length ? 'OK' : 'PARTIAL';
       testResults.push({ model: `${prov}:${chosenModel.value}`, status });
-      appendReport(`[#${cycle}] ${providerLabel} | ${chosenModel.value} | ${ok}/${batchKeys.length} hesel`);
+      appendReport(`[#${cycle}] ${providerLabel} | ${chosenModel.value} | ${ok}/${batchKeys.length} hesel | klíče ${batchKeys[0]}…${batchKeys[batchKeys.length - 1]}`);
+      if (cycle % 10 === 0) {
+        appendReport(`--- RAW ODPOVĚĎ #${cycle} (kompletní text od modelu) ---`);
+        appendReport(content || '(prázdné)');
+        appendReport('--- /RAW ---');
+      }
     } catch (e) {
       const msg = String(e?.message || '');
       const isRate = /429|rate limit|too many/i.test(msg);
