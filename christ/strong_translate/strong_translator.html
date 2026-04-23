@@ -1426,8 +1426,17 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
     <div class="limits-modal-box" style="max-width:760px">
       <div class="limits-title">🧪 Výstup testu modelů</div>
       <div class="limits-provider" id="modelTestInfo">Provider: —</div>
+      <div class="mobl-set-row">
+        <label>Provider testu</label>
+        <select id="modelTestProvider"></select>
+      </div>
+      <label class="stat" style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
+        <input type="checkbox" id="modelTestAppend" checked>
+        Připojit výsledek do stejného reportu
+      </label>
       <textarea id="modelTestOutput" style="width:100%;min-height:320px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:10px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.5;resize:vertical" placeholder="Po spuštění testu se sem vypíše report..."></textarea>
       <div class="modal-btns" style="margin-top:12px">
+        <button class="modal-btn ok" onclick="runModelTestFromModal()">▶ Test provideru</button>
         <button class="modal-btn cancel" id="btnCancelModelTest" onclick="cancelModelTest()" style="display:none">■ Zrušit test</button>
         <button class="modal-btn ok" onclick="copyModelTestOutput()">📋 Kopírovat</button>
         <button class="modal-btn cancel" onclick="closeModelTestModal()">✕ Zavřít</button>
@@ -4135,13 +4144,19 @@ function clearLog() {
   if (c) c.textContent = '';
 }
 
-function showModelTestModal(providerLabel) {
+function showModelTestModal(providerLabel, clearOutput = false) {
   const modal = document.getElementById('modelTestModal');
   const info = document.getElementById('modelTestInfo');
   const output = document.getElementById('modelTestOutput');
-  if (!modal || !info || !output) return;
+  const providerSelect = document.getElementById('modelTestProvider');
+  if (!modal || !info || !output || !providerSelect) return;
+  providerSelect.innerHTML = Object.keys(PROVIDERS)
+    .map(k => `<option value="${k}">${PROVIDERS[k].label}</option>`)
+    .join('');
+  const currentProvider = document.getElementById('provider')?.value || 'groq';
+  providerSelect.value = currentProvider;
   info.textContent = `Provider: ${providerLabel || '—'}`;
-  output.value = '';
+  if (clearOutput) output.value = '';
   modal.classList.add('show');
 }
 
@@ -4159,6 +4174,46 @@ function cancelModelTest() {
   modelTestCancelRequested = true;
   if (modelTestAbortController) modelTestAbortController.abort();
   showToast('⏹ Ruším test modelů...');
+}
+
+function getApiKeyForModelTest(prov) {
+  const activeProvider = document.getElementById('provider')?.value || '';
+  if (activeProvider === prov) {
+    const fromInput = (document.getElementById('apiKey')?.value || '').trim();
+    if (fromInput) return fromInput;
+  }
+  return (localStorage.getItem('strong_apikey_' + prov) || '').trim();
+}
+
+function getProviderModelOptions(prov) {
+  if (prov !== 'openrouter') {
+    return Promise.resolve((PROVIDERS[prov]?.models || []).map(([value, label]) => ({ value, label })));
+  }
+  return new Promise(resolve => {
+    const tempSelect = document.createElement('select');
+    const savedModel = localStorage.getItem('strong_model');
+    let settled = false;
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      const options = Array.from(tempSelect.options)
+        .filter(opt => opt.value)
+        .map(opt => ({ value: opt.value, label: opt.text }));
+      resolve(options);
+    };
+    populateOpenRouterModels(tempSelect, savedModel, finish);
+    setTimeout(finish, 8000);
+  });
+}
+
+async function runModelTestFromModal() {
+  if (modelTestRunning) {
+    showToast('⚠ Už běží test modelů');
+    return;
+  }
+  const providerSelect = document.getElementById('modelTestProvider');
+  if (!providerSelect) return;
+  await testCurrentProviderModels(providerSelect.value, false);
 }
 
 async function copyModelTestOutput() {
@@ -4180,37 +4235,40 @@ async function copyModelTestOutput() {
   }
 }
 
-async function testCurrentProviderModels() {
+async function testCurrentProviderModels(forcedProvider = null, resetReport = true) {
   if (autoRunning || autoStepRunning) {
     showToast('⚠ Nejdřív zastav AUTO');
     return;
   }
 
   const providerSelect = document.getElementById('provider');
-  const modelSelect = document.getElementById('model');
   const btn = document.getElementById('btnTestModels');
-  if (!providerSelect || !modelSelect || !btn) return;
+  if (!providerSelect || !btn) return;
 
-  const prov = providerSelect.value;
-  const apiKey = getCurrentApiKey(prov);
+  const modalProviderSelect = document.getElementById('modelTestProvider');
+  const appendCheckbox = document.getElementById('modelTestAppend');
+  const prov = forcedProvider || modalProviderSelect?.value || providerSelect.value;
+  const apiKey = getApiKeyForModelTest(prov);
   if (!apiKey) {
-    showToast('✗ Zadej API klíč pro test modelů');
+    showToast(`✗ Chybí API klíč pro ${PROVIDERS[prov]?.label || prov}`);
     return;
   }
 
-  const options = Array.from(modelSelect.options).filter(opt => opt.value);
+  const options = await getProviderModelOptions(prov);
   if (!options.length) {
     showToast('⚠ Pro tohoto providera nejsou dostupné modely');
     return;
   }
   const providerLabel = PROVIDERS[prov]?.label || prov;
   const outputEl = document.getElementById('modelTestOutput');
-  showModelTestModal(providerLabel);
+  const shouldAppend = appendCheckbox?.checked && !resetReport;
+  showModelTestModal(providerLabel, !shouldAppend);
+  if (modalProviderSelect) modalProviderSelect.value = prov;
   if (!outputEl) {
     showToast('✗ Chybí výstupní okno testu modelů');
     return;
   }
-  const report = [];
+  const report = shouldAppend && outputEl.value ? outputEl.value.split('\n') : [];
   const MODEL_TEST_DELAY_MS = 3500;
   const MAX_CONSECUTIVE_RATE_LIMITS = 4;
   let consecutiveRateLimited = 0;
@@ -4221,7 +4279,6 @@ async function testCurrentProviderModels() {
   };
   const waitMs = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-  const originalModel = modelSelect.value;
   const originalText = btn.textContent;
   const cancelBtn = document.getElementById('btnCancelModelTest');
   modelTestRunning = true;
@@ -4243,8 +4300,6 @@ async function testCurrentProviderModels() {
         break;
       }
       const opt = options[i];
-      modelSelect.value = opt.value;
-      localStorage.setItem('strong_model', opt.value);
       btn.textContent = `🧪 ${i + 1}/${options.length}`;
       appendReport(`## ${i + 1}/${options.length} ${opt.value}`);
 
@@ -4273,7 +4328,7 @@ async function testCurrentProviderModels() {
         appendReport('');
         consecutiveRateLimited = 0;
 
-        log(`🧪 ${opt.text || opt.value}: OK`);
+        log(`🧪 ${opt.label || opt.value}: OK`);
       } catch (e) {
         const msg = String(e?.message || '');
         const isRateLimit = /429|rate limit|too many/i.test(msg);
@@ -4289,7 +4344,7 @@ async function testCurrentProviderModels() {
             appendReport('Stav: OK po retry');
             appendReport('');
             consecutiveRateLimited = 0;
-            log(`🧪 ${opt.text || opt.value}: OK po retry`);
+            log(`🧪 ${opt.label || opt.value}: OK po retry`);
           } catch (eRetry) {
             if (modelTestCancelRequested || /zrušen uživatelem/i.test(String(eRetry?.message || ''))) {
               appendReport('⏹ Test byl ručně zrušen uživatelem.');
@@ -4301,7 +4356,7 @@ async function testCurrentProviderModels() {
             appendReport('Stav: RATE LIMITED');
             appendReport('');
             consecutiveRateLimited++;
-            log(`🧪 ${opt.text || opt.value}: RATE LIMIT (${eRetry.message})`);
+            log(`🧪 ${opt.label || opt.value}: RATE LIMIT (${eRetry.message})`);
           }
         } else {
           if (modelTestCancelRequested || /zrušen uživatelem/i.test(msg)) {
@@ -4314,7 +4369,7 @@ async function testCurrentProviderModels() {
           appendReport('Stav: ERROR');
           appendReport('');
           consecutiveRateLimited = 0;
-          log(`🧪 ${opt.text || opt.value}: CHYBA (${msg})`);
+          log(`🧪 ${opt.label || opt.value}: CHYBA (${msg})`);
         }
       }
 
@@ -4341,8 +4396,6 @@ async function testCurrentProviderModels() {
     modelTestRunning = false;
     modelTestCancelRequested = false;
     modelTestAbortController = null;
-    modelSelect.value = originalModel;
-    if (originalModel) localStorage.setItem('strong_model', originalModel);
     btn.disabled = false;
     btn.textContent = originalText;
     if (cancelBtn) cancelBtn.style.display = 'none';
@@ -5963,6 +6016,7 @@ window.closeLimitsModal = closeLimitsModal;
 window.closeModelTestModal = closeModelTestModal;
 window.copyModelTestOutput = copyModelTestOutput;
 window.cancelModelTest = cancelModelTest;
+window.runModelTestFromModal = runModelTestFromModal;
 window.showHelpModal = showHelpModal;
 window.closeHelpModal = closeHelpModal;
 window.onApiKeyProfileChange = onApiKeyProfileChange;
