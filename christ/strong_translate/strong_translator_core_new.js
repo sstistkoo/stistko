@@ -208,16 +208,30 @@ export function parseTranslations(raw, keys, translated = {}) {
   return keys.filter(k => !translated[k]?.vyznam || !translated[k]?.specialista);
 }
 
-export const SYSTEM_MESSAGE = `Prekladac Strongova slovniku do cestiny.
+export const SYSTEM_MESSAGE = `Jsi specialista na biblistiku, koine rectinu/hebrejstinu a Strongova cisla.
+Prekladac Strongova slovniku do cestiny.
 
 Odpovez JEN v tomto formatu - NIC JINEHO:
 ###G123###
 VYZNAM: [cesky]
-DEFINICE: [cesky preklad]
+DEFINICE: [co nejvernejsi cesky preklad cele EN definice]
 POUZITI: [refs v hranatych zavorkach]
 PUVOD: [etymologie]
 KJV: [preklad]
 SPECIALISTA: [biblicky odborny vyklad vlastnimi slovy]
+
+PRAVIDLA PRO DEFINICE:
+- Preloz EN definici co nejpresneji, zachovej strukturu vyctu (1., 2., a), b)).
+- Zachovej zavorky, stredniky, zkratky a poznamky typu "cf.", "SYN.", "opp.", pokud jsou v predloze.
+- Nic nevynechavej ani nezjednodusuj do jedne kratke parafraze.
+- Pokud je v EN definici vice casti, preved vsechny casti do CZ ve stejnem poradi.
+- Pokud EN definice obsahuje biblicke reference v hranatych zavorkach, zachovej je i v poli DEFINICE.
+
+PRAVIDLA PRO OSTATNI POLE:
+- POUZITI: uved odkazy z EN definice jako samostatny souhrn v hranatych zavorkach.
+- PUVOD: uved konkretni puvod (jazyk + koren/slovo v puvodnim pismu, je-li dostupne), ne jen obecne "z hebrejskeho" nebo "z reckeho".
+- KJV: uved KJV ekvivalent, necopyruj zbytecne obsah z DEFINICE.
+- SPECIALISTA: 3-5 vet, pridat kontext vyznamu v biblickem uziti; nesmi to byt jen parafraze jedne kratke vety.
 
 ZAKAZY:
 - Nepiste "ZVLASTNI:" ani jine pokyny
@@ -226,13 +240,14 @@ ZAKAZY:
 - "al." = "v dalsich mistech"
 - HODNOTY V DEFINICI: 1., 2., 3. (CISLA, ne __1.)`;
 
-export const DEFAULT_PROMPT = `Preloz hesla do {TARGET_LANG} ze {SOURCE_LANG}.
+export const DEFAULT_PROMPT = `Jsi specialista na biblistiku, koine rectinu/hebrejstinu a Strongova cisla.
+Preloz hesla do {TARGET_LANG} ze {SOURCE_LANG}.
 
 Vrat JEN data, bez komentaru navic. Zachovej poradi hesel.
 Pouzij pro kazde heslo presne tento format:
 ###G[cislo]###
 VYZNAM: [kratky presny preklad]
-DEFINICE: [lexikalni vyznam a gramatika]
+DEFINICE: [co nejvernejsi preklad cele EN definice, vcetne zavorek a cislovani]
 POUZITI: [biblicke reference v hranatych zavorkach]
 PUVOD: [etymologie: z reckeho / z hebrejskeho korene]
 KJV: [hlavni KJV preklad]
@@ -243,6 +258,11 @@ Pravidla normalizace:
 - "al." prepis na "v dalsich mistech"
 - "indecl." preloz jako "nezmenitelny"
 - Nepis "ZVLASTNI:" ani jine instrukce
+- V DEFINICI neparafrazuj: zachovej poradi bodu, podbodu i zavorkove vlozky.
+- Zachovej odborny ton lexikonu; nic nedovymyslej, jen presne preved obsah.
+- Pokud jsou reference [Mat./Mrk./...], zachovej je i v DEFINICI a soucasne je dej do POUZITI.
+- V PUVOD uvadej konkretni etymologii (napr. "z heb. אֲבִיָּהוּד"), ne obecne formulace.
+- SPECIALISTA nesmi byt 1 veta ani opis KJV/DEFINICE; musi pridat vecny biblicky kontext.
 
 HESLA:
 {HESLA}`;
