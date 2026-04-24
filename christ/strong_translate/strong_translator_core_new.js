@@ -253,16 +253,18 @@ PUVOD: [etymologie: z reckeho / z hebrejskeho korene]
 KJV: [hlavni KJV preklad]
 SPECIALISTA: [souvisly odstavec 3-5 vet, bez odrazek]
 
-Pravidla normalizace:
+Pravidla normalizace a kvality:
 - "__1." a "__2." prepis na "1." a "2."
 - "al." prepis na "v dalsich mistech"
 - "indecl." preloz jako "nezmenitelny"
 - Nepis "ZVLASTNI:" ani jine instrukce
 - V DEFINICI neparafrazuj: zachovej poradi bodu, podbodu i zavorkove vlozky.
-- Zachovej odborny ton lexikonu; nic nedovymyslej, jen presne preved obsah.
+- Nezkracuj odborny obsah: zachovej vyznam vsech casti puvodni definice (vcetne gramatickych a lexikalnich poznamek).
+- Zakaz EN zbytku v DEFINICI: preloz i kratke segmenty typu "figuratively", "metaphorically", "properly", "esp.", "lit.".
 - Pokud jsou reference [Mat./Mrk./...], zachovej je i v DEFINICI a soucasne je dej do POUZITI.
 - V PUVOD uvadej konkretni etymologii (napr. "z heb. אֲבִיָּהוּד"), ne obecne formulace.
 - SPECIALISTA nesmi byt 1 veta ani opis KJV/DEFINICE; musi pridat vecny biblicky kontext.
+- Interni QA pred odevzdanim: zkontroluj, ze zadny blok neni useknuty a posledni heslo davky je kompletni.
 
 HESLA:
 {HESLA}`;
