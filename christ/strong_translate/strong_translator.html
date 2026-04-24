@@ -5582,6 +5582,26 @@ function appendModelTestRateLimitStatus(appendReport) {
   appendReport(`Rate limit stav: 429=${h.hits429 || 0} | retry-after=${h.lastRetryAfterSec || 0}s | remaining=${h.lastRemaining || 'n/a'} | reset=${h.lastReset || 'n/a'}${h.lastRequestId ? ` | req=${h.lastRequestId}` : ''}`);
 }
 
+function getUsageTotals(raw) {
+  const usage = raw?.usage || raw?.usageMetadata;
+  if (!usage || typeof usage !== 'object') return null;
+  const inT = Number(usage.prompt_tokens || usage.promptTokenCount || usage.input_tokens || 0) || 0;
+  const outT = Number(usage.completion_tokens || usage.candidatesTokenCount || usage.output_tokens || 0) || 0;
+  const total = Number(usage.total_tokens || usage.totalTokenCount || usage.total || (inT + outT)) || (inT + outT);
+  return { inT, outT, total };
+}
+
+function appendModelTestUsage(appendReport, provider, model, raw) {
+  if (typeof appendReport !== 'function') return;
+  const totals = getUsageTotals(raw);
+  if (!totals) {
+    appendReport(`Tokeny: ${provider} | ${model} | n/a`);
+    return;
+  }
+  appendReport(`Tokeny: ${provider} | ${model} | ${totals.inT} in / ${totals.outT} out = ${totals.total}`);
+  logTokenEntry(provider, totals.inT, totals.outT, totals.total);
+}
+
 function rateInfoFromErrorMessage(msg) {
   const text = String(msg || '');
   const retry = text.match(/za\s+(\d+)s/i);
@@ -5746,6 +5766,7 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
         latencyMsTotal += reqMs;
         latencySamples += 1;
         updateModelTestRateLimitHealth(raw?.rateInfo);
+        appendModelTestUsage(appendReport, current.prov, current.model, raw);
         let content = String(raw?.content || '');
         modelTestRawResponses.push({
           ts: Date.now(),
@@ -5772,6 +5793,7 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
           const strictMessages = buildModelTestMessages(batch, 'auto-live', 'preset_v13', true);
           const rawRetry = await callOnce(current.prov, apiKey, current.model, strictMessages, abortSignal);
           updateModelTestRateLimitHealth(rawRetry?.rateInfo);
+          appendModelTestUsage(appendReport, current.prov, current.model, rawRetry);
           const retryContent = String(rawRetry?.content || '');
           modelTestRawResponses.push({
             ts: Date.now(),
@@ -6042,6 +6064,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
       try {
         const first = await callOnce(currentProvider, currentApiKey, opt.value, messages, modelTestAbortController.signal);
         updateModelTestRateLimitHealth(first?.rateInfo);
+        appendModelTestUsage(appendReport, currentProvider, opt.value, first);
         const firstContent = String(first?.content || '').trim();
         modelTestRawResponses.push({
           ts: Date.now(),
@@ -6088,6 +6111,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
         await waitMs(MODEL_TEST_DELAY_MS);
         const second = await callOnce(currentProvider, currentApiKey, opt.value, messages, modelTestAbortController.signal);
         updateModelTestRateLimitHealth(second?.rateInfo);
+        appendModelTestUsage(appendReport, currentProvider, opt.value, second);
         const secondContent = String(second?.content || '').trim();
         modelTestRawResponses.push({
           ts: Date.now(),
@@ -6122,6 +6146,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
           try {
             const retry = await callOnce(currentProvider, currentApiKey, opt.value, messages, modelTestAbortController.signal);
             updateModelTestRateLimitHealth(retry?.rateInfo);
+            appendModelTestUsage(appendReport, currentProvider, opt.value, retry);
             const retryContent = String(retry?.content || '').trim();
             modelTestRawResponses.push({
               ts: Date.now(),
