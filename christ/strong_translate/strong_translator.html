@@ -3873,12 +3873,18 @@ async function requestTopicFallbackForProvider(prov, key, topicId) {
         topicId,
         message: msg
       });
+      // Pokud provider spadl do delšího cooldownu (např. Gemini 429), fallback hned ukončíme,
+      // aby neblokoval další Groq dávky.
+      if (cooldownSec >= 30) {
+        return null;
+      }
       const canTryNext = i < modelQueue.length - 1;
       if (canTryNext) {
         const waitMs = getSecondaryRetryDelayMsByError(msgLower);
         const cooldownMs = getProviderCooldownLeftSec(prov) * 1000;
         const effectiveWaitMs = Math.max(waitMs, cooldownMs);
-        log(`↻ ${prov}: model ${model} selhal (${msg}). Za ${Math.max(1, Math.round(effectiveWaitMs / 1000))}s zkusím další model.`);
+        // Retry detail necháváme pouze v konzoli, AUTO řádek zůstává stručný.
+        console.warn(`[FALLBACK][${prov}] retry next model in ${Math.max(1, Math.round(effectiveWaitMs / 1000))}s`);
         await sleepMs(effectiveWaitMs);
       }
     }
