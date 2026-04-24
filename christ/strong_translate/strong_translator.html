@@ -2975,7 +2975,7 @@ function updateTopicRepairModalUI() {
   if (startSeqBtn) {
     const enabledProvCount = ['groq', 'gemini', 'openrouter'].filter(p => state.providerEnabled[p]).length;
     const wantStart = state.repairStrategy === 'sequential' && !state.sequentialEverStarted
-      && state.tasks.some(t => t.status === 'waiting');
+      && getTopicRepairModalVisibleTasks(state).some(t => t.status === 'waiting');
     const canSeqStart = wantStart && enabledProvCount > 0;
     startSeqBtn.style.display = wantStart ? '' : 'none';
     startSeqBtn.disabled = !canSeqStart;
@@ -3146,25 +3146,6 @@ function renderTopicRepairModal() {
       <details id="topicRepairBulkDetails" style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;padding:10px;margin-bottom:10px" ${state.repairStrategy === 'bulk' ? 'open' : ''}>
         <summary style="cursor:pointer;color:var(--acc)">Hromadná oprava jednoho tématu (dávka)</summary>
         <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:8px">
-          <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--txt2)">
-            Téma
-            <select id="topicRepairBulkTopicSelect" onchange="refreshTopicRepairBatchPromptEditor()" style="min-width:220px;background:var(--bg2);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:6px;font-size:12px">
-              <option value="all" ${state.bulkTopicId === 'all' ? 'selected' : ''}>Vše</option>
-              <option value="definice" ${state.bulkTopicId === 'definice' ? 'selected' : ''}>${escHtml(TOPIC_LABELS.definice)}</option>
-              <option value="vyznam" ${state.bulkTopicId === 'vyznam' ? 'selected' : ''}>${escHtml(TOPIC_LABELS.vyznam)}</option>
-              <option value="kjv" ${state.bulkTopicId === 'kjv' ? 'selected' : ''}>${escHtml(TOPIC_LABELS.kjv)}</option>
-              <option value="pouziti" ${state.bulkTopicId === 'pouziti' ? 'selected' : ''}>${escHtml(TOPIC_LABELS.pouziti)}</option>
-              <option value="puvod" ${state.bulkTopicId === 'puvod' ? 'selected' : ''}>${escHtml(TOPIC_LABELS.puvod)}</option>
-              <option value="specialista" ${state.bulkTopicId === 'specialista' ? 'selected' : ''}>${escHtml(TOPIC_LABELS.specialista)}</option>
-            </select>
-          </label>
-          <div id="topicRepairBulkListFilterRow" style="display:${state.bulkTopicId === 'all' ? 'flex' : 'none'};flex-wrap:wrap;gap:10px 14px;align-items:center;width:100%;margin-top:8px;padding-top:8px;border-top:1px solid var(--brd);font-size:11px;color:var(--txt2)">
-            <span style="width:100%;margin-bottom:2px">Zobrazit v seznamu (jen vybraná témata):</span>
-            ${TOPIC_REPAIR_BULK_TOPIC_ORDER.map(tid => {
-              const on = (state.bulkListTopicFilter || defaultBulkListTopicFilter())[tid] !== false;
-              return `<label style="display:flex;align-items:center;gap:4px;cursor:pointer;white-space:nowrap"><input type="checkbox" ${on ? 'checked' : ''} onchange="toggleTopicRepairBulkListFilter('${tid}', this.checked)" style="accent-color:var(--acc)">${escHtml(TOPIC_LABELS[tid] || tid)}</label>`;
-            }).join('')}
-          </div>
           <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--txt3);cursor:pointer">
             <input type="checkbox" id="topicRepairBulkOnlyFailed" checked style="accent-color:var(--acc)">
             jen chyby / prázdné
@@ -3194,6 +3175,29 @@ function renderTopicRepairModal() {
           </div>
         </div>
       </details>
+      <div style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;padding:10px;margin-bottom:10px">
+        <div style="font-size:12px;color:var(--txt);margin-bottom:6px"><b>Téma v seznamu</b> — podle výběru se zobrazí jen odpovídající řádky (sekvenční i dávka).</div>
+        <label style="display:flex;align-items:center;gap:10px;font-size:12px;color:var(--txt2);flex-wrap:wrap">
+          <span style="white-space:nowrap">Vybrat</span>
+          <select id="topicRepairBulkTopicSelect" onchange="refreshTopicRepairBatchPromptEditor()" style="min-width:240px;flex:1;max-width:100%;background:var(--bg2);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:6px;font-size:12px">
+            <option value="all" ${state.bulkTopicId === 'all' ? 'selected' : ''}>Vše</option>
+            <option value="definice" ${state.bulkTopicId === 'definice' ? 'selected' : ''}>${escHtml(TOPIC_LABELS.definice)}</option>
+            <option value="vyznam" ${state.bulkTopicId === 'vyznam' ? 'selected' : ''}>${escHtml(TOPIC_LABELS.vyznam)}</option>
+            <option value="kjv" ${state.bulkTopicId === 'kjv' ? 'selected' : ''}>${escHtml(TOPIC_LABELS.kjv)}</option>
+            <option value="pouziti" ${state.bulkTopicId === 'pouziti' ? 'selected' : ''}>${escHtml(TOPIC_LABELS.pouziti)}</option>
+            <option value="puvod" ${state.bulkTopicId === 'puvod' ? 'selected' : ''}>${escHtml(TOPIC_LABELS.puvod)}</option>
+            <option value="specialista" ${state.bulkTopicId === 'specialista' ? 'selected' : ''}>${escHtml(TOPIC_LABELS.specialista)}</option>
+          </select>
+        </label>
+        <div id="topicRepairBulkListFilterRow" style="display:${state.bulkTopicId === 'all' ? 'flex' : 'none'};flex-wrap:wrap;gap:10px 14px;align-items:center;width:100%;margin-top:10px;padding-top:10px;border-top:1px solid var(--brd);font-size:11px;color:var(--txt2)">
+          <span style="width:100%;margin-bottom:2px">U „Vše“ omez typy témat:</span>
+          ${TOPIC_REPAIR_BULK_TOPIC_ORDER.map(tid => {
+            const on = (state.bulkListTopicFilter || defaultBulkListTopicFilter())[tid] !== false;
+            return `<label style="display:flex;align-items:center;gap:4px;cursor:pointer;white-space:nowrap"><input type="checkbox" ${on ? 'checked' : ''} onchange="toggleTopicRepairBulkListFilter('${tid}', this.checked)" style="accent-color:var(--acc)">${escHtml(TOPIC_LABELS[tid] || tid)}</label>`;
+          }).join('')}
+        </div>
+        <div style="font-size:10px;color:var(--txt3);margin-top:8px">Batch prompt a ⚡ hromadný překlad zůstávají v sekci „Hromadná oprava“ výše — výběr témat je stejný.</div>
+      </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:center">
         <button class="hbtn grn" id="topicRepairStartSequentialBtn" type="button" onclick="startTopicRepairSequentialWorker()">▶ Spustit sekvenční opravu</button>
         <button class="hbtn grn" id="topicRepairToggleBtn" onclick="toggleTopicRepairRun()">⏸ Pauza</button>
@@ -3258,8 +3262,8 @@ function setTopicRepairStrategy(strategy) {
 function startTopicRepairSequentialWorker() {
   const state = topicRepairState;
   if (!state || state.repairStrategy !== 'sequential') return;
-  if (!state.tasks.some(t => t.status === 'waiting')) {
-    showToast('⚠ Žádná témata ve frontě (čekající).');
+  if (!findNextTopicRepairWaitingTask(state)) {
+    showToast('⚠ Ve zvoleném tématu není nic ve frontě (čekající) — změň výběr nebo dokonči viditelné řádky.');
     return;
   }
   const enabledProviders = ['groq', 'gemini', 'openrouter'].filter(p => state.providerEnabled[p]);
@@ -3283,7 +3287,7 @@ async function processTopicRepairQueue() {
         await sleep(350);
         continue;
       }
-      const nextTask = topicRepairState.tasks.find(t => t.status === 'waiting');
+      const nextTask = findNextTopicRepairWaitingTask(topicRepairState);
       if (!nextTask) break;
       const enabledProviders = ['groq', 'gemini', 'openrouter'].filter(p => topicRepairState?.providerEnabled?.[p]);
       if (!enabledProviders.length) {
@@ -3419,8 +3423,8 @@ async function processTopicRepairQueue() {
     }
     updateTopicRepairModalUI();
     if (topicRepairState && !topicRepairState.closed) {
-      const waiting = topicRepairState.tasks.filter(t => t.status === 'waiting').length;
-      if (waiting === 0) showToast('✓ Oprava témat doběhla, zkontroluj a potvrď přepsání.');
+      const waitingVis = getTopicRepairModalVisibleTasks(topicRepairState).filter(t => t.status === 'waiting').length;
+      if (waitingVis === 0) showToast('✓ Oprava viditelné fronty doběhla, zkontroluj a potvrď přepsání.');
     }
   } finally {
     topicRepairWorkerRunning = false;
@@ -4319,9 +4323,19 @@ function defaultBulkListTopicFilter() {
 
 function getTopicRepairModalVisibleTasks(state) {
   if (!state || !Array.isArray(state.tasks)) return [];
-  if (state.bulkTopicId !== 'all') return state.tasks;
-  const m = state.bulkListTopicFilter || defaultBulkListTopicFilter();
-  return state.tasks.filter(t => m[t.topicId] !== false);
+  const bid = state.bulkTopicId || 'all';
+  if (bid === 'all') {
+    const m = state.bulkListTopicFilter || defaultBulkListTopicFilter();
+    return state.tasks.filter(t => m[t.topicId] !== false);
+  }
+  return state.tasks.filter(t => t.topicId === bid);
+}
+
+/** Další čekající úloha v pořadí `state.tasks`, ale jen pokud spadá do aktuálního filtru tématu. */
+function findNextTopicRepairWaitingTask(state) {
+  if (!state || !Array.isArray(state.tasks)) return null;
+  const vset = new Set(getTopicRepairModalVisibleTasks(state));
+  return state.tasks.find(t => t.status === 'waiting' && vset.has(t)) || null;
 }
 
 const TOPIC_REPAIR_BATCH_PROMPT_STORAGE_PREFIX = 'strong_topic_repair_batch_prompt_v1_';
@@ -4409,6 +4423,7 @@ function refreshTopicRepairBatchPromptEditor() {
     ta.readOnly = false;
     ta.value = applyPromptLanguageTokens(getTopicRepairBatchPromptTemplate(topicId));
   }
+  updateTopicRepairModalUI();
 }
 
 function toggleTopicRepairBulkListFilter(topicId, checked) {
