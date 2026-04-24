@@ -345,27 +345,30 @@ Interní QA před odevzdáním (nevypisuj):
 Vstup:
 {HESLA}`
   },
+  preset_topic_definice: {
+    label: 'Téma: Definice (CZ)',
+    topicLabel: 'Definice (CZ)',
+    template: `Úkol: vytvoř pouze pole DEFINICE pro jedno heslo Strong.
+
+Pravidla:
+- Vrať jen finální text definice v češtině (bez labelu, bez markdownu, bez dalších polí).
+- Zachovej věcný význam, gramatické informace a lexikální nuance.
+- Nepoužívej anglické výplňové fráze (which see, used in, only in, indecl., see word).
+- Pokud zdroj nestačí, napiš: neuvedeno ve zdroji.
+
+Vstup:
+{HESLA}`
+  },
   preset_topic_vyznam: {
     label: 'Téma: Český význam',
     topicLabel: 'Český význam',
-    template: `Jsi biblický lexikální překladatel. Priorita testu: pole VYZNAM (Český význam).
+    template: `Úkol: vytvoř pouze pole VYZNAM pro jedno heslo Strong.
 
-Zaměř se hlavně na VYZNAM:
-- Stručný, přesný český význam bez omáčky.
+Pravidla:
+- Vrať jen finální text českého významu (bez labelu, bez markdownu, bez dalších polí).
+- Stručně a přesně (typicky 2-8 slov).
 - Bez anglických zbytků.
-- Konzistence napříč hesly.
-
-Současně vrať kompletní blok (parser-safe):
-###Gx###
-VYZNAM: ...
-DEFINICE: ...
-POUZITI: ...
-PUVOD: ...
-KJV: ...
-SPECIALISTA: ...
-
-Fallback pro nejasné údaje: neuvedeno ve zdroji.
-Žádný text mimo bloky.
+- Pokud není význam jistý, napiš: neuvedeno ve zdroji.
 
 Vstup:
 {HESLA}`
@@ -373,24 +376,13 @@ Vstup:
   preset_topic_kjv: {
     label: 'Téma: KJV překlady (CZ)',
     topicLabel: 'KJV překlady (CZ)',
-    template: `Jsi biblický lexikální překladatel. Priorita testu: pole KJV (KJV překlady v češtině).
+    template: `Úkol: vytvoř pouze pole KJV pro jedno heslo Strong.
 
-Zaměř se hlavně na KJV:
-- Uveď hlavní KJV ekvivalent v češtině.
-- Drž se lexikálního významu hesla.
-- Nevkládej dlouhé parafráze.
-
-Současně vrať kompletní blok (parser-safe):
-###Gx###
-VYZNAM: ...
-DEFINICE: ...
-POUZITI: ...
-PUVOD: ...
-KJV: ...
-SPECIALISTA: ...
-
-Fallback pro nejasné údaje: neuvedeno ve zdroji.
-Žádný text mimo bloky.
+Pravidla:
+- Vrať jen finální text KJV překladu (bez labelu, bez markdownu, bez dalších polí).
+- Uveď hlavní český ekvivalent(y) odpovídající KJV použití.
+- Bez dlouhých parafrází, bez komentáře.
+- Pokud zdroj chybí, napiš: neuvedeno ve zdroji.
 
 Vstup:
 {HESLA}`
@@ -398,23 +390,13 @@ Vstup:
   preset_topic_pouziti: {
     label: 'Téma: Biblické užití',
     topicLabel: 'Biblické užití',
-    template: `Jsi biblický lexikální překladatel. Priorita testu: pole POUZITI (Biblické užití).
+    template: `Úkol: vytvoř pouze pole POUZITI pro jedno heslo Strong.
 
-Zaměř se hlavně na POUZITI:
-- Uveď biblické reference v hranatých závorkách.
-- Jen ověřitelné odkazy; nic nevymýšlej.
-- Pokud chybí zdroj, napiš: neuvedeno ve zdroji.
-
-Současně vrať kompletní blok (parser-safe):
-###Gx###
-VYZNAM: ...
-DEFINICE: ...
-POUZITI: ...
-PUVOD: ...
-KJV: ...
-SPECIALISTA: ...
-
-Žádný text mimo bloky.
+Pravidla:
+- Vrať jen finální text biblického užití (bez labelu, bez markdownu, bez dalších polí).
+- Preferuj konkrétní biblické odkazy v hranatých závorkách.
+- Nic nevymýšlej; jen údaje podložené vstupem.
+- Pokud nejsou data, napiš: neuvedeno ve zdroji.
 
 Vstup:
 {HESLA}`
@@ -422,24 +404,13 @@ Vstup:
   preset_topic_puvod: {
     label: 'Téma: Původ / Etymologie',
     topicLabel: 'Původ / Etymologie',
-    template: `Jsi biblický lexikální překladatel. Priorita testu: pole PUVOD (Původ / etymologie).
+    template: `Úkol: vytvoř pouze pole PUVOD pro jedno heslo Strong.
 
-Zaměř se hlavně na PUVOD:
-- Uveď konkrétní etymologii (jazyk + kořen/slovo, je-li dostupné).
-- Napiš věcně a stručně.
-- Nejen obecné formulace typu "z hebrejštiny".
-
-Současně vrať kompletní blok (parser-safe):
-###Gx###
-VYZNAM: ...
-DEFINICE: ...
-POUZITI: ...
-PUVOD: ...
-KJV: ...
-SPECIALISTA: ...
-
-Fallback pro nejasné údaje: neuvedeno ve zdroji.
-Žádný text mimo bloky.
+Pravidla:
+- Vrať jen finální text etymologie (bez labelu, bez markdownu, bez dalších polí).
+- Uveď jazyk + kořen/slovní základ, pokud je dostupný.
+- Piš stručně a věcně.
+- Pokud zdroj nestačí, napiš: neuvedeno ve zdroji.
 
 Vstup:
 {HESLA}`
@@ -447,25 +418,14 @@ Vstup:
   preset_topic_specialista: {
     label: 'Téma: Biblický výklad (specialista)',
     topicLabel: 'Biblický výklad (specialista)',
-    template: `Jsi biblický specialista. Priorita testu: pole SPECIALISTA (Biblický výklad).
+    template: `Úkol: vytvoř pouze pole SPECIALISTA pro jedno heslo Strong.
 
-Zaměř se hlavně na SPECIALISTA:
+Pravidla:
+- Vrať jen finální text (bez labelu, bez markdownu, bez dalších polí).
 - Napiš souvislý odstavec 3-5 vět.
-- Přidej věcný biblický a teologický kontext.
-- Neopakuj jen definici nebo KJV.
-- Bez odrážek.
-
-Současně vrať kompletní blok (parser-safe):
-###Gx###
-VYZNAM: ...
-DEFINICE: ...
-POUZITI: ...
-PUVOD: ...
-KJV: ...
-SPECIALISTA: ...
-
-Fallback pro nejasné údaje: neuvedeno ve zdroji.
-Žádný text mimo bloky.
+- Přidej stručný biblický a teologický kontext.
+- Neopakuj mechanicky definici ani KJV.
+- Pokud chybí podklady, napiš: neuvedeno ve zdroji.
 
 Vstup:
 {HESLA}`
