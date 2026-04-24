@@ -2931,6 +2931,8 @@ function updateTopicRepairModalUI() {
   const toggleBtn = document.getElementById('topicRepairToggleBtn');
   if (toggleBtn) toggleBtn.textContent = state.paused ? '▶ Spustit' : '⏸ Pauza';
   const rows = state.tasks.map((task, idx) => {
+    const extraTopicsForUi = (Array.isArray(task.detectedTopics) ? task.detectedTopics : [])
+      .filter(row => row && row.topicId && row.topicId !== 'specialista' && row.topicId !== task.topicId);
     const statusColor = task.status === 'done' ? 'var(--acc3)' : (task.status === 'failed' ? 'var(--red)' : (task.status === 'running' ? 'var(--ylw)' : 'var(--txt3)'));
     const statusText = task.status === 'done' ? 'hotovo' : (task.status === 'failed' ? 'chyba' : (task.status === 'running' ? 'běží' : 'čeká'));
     return `
@@ -2965,10 +2967,10 @@ function updateTopicRepairModalUI() {
                 </div>
               </details>
             ` : ''}
-            ${Array.isArray(task.detectedTopics) && task.detectedTopics.length > 0 ? `
+            ${extraTopicsForUi.length > 0 ? `
               <details style="margin-top:6px;background:var(--bg2);border:1px solid var(--brd);border-radius:4px;padding:6px">
-                <summary style="cursor:pointer;color:var(--acc2)">Další témata z AI odpovědi (${task.detectedTopics.length})</summary>
-                ${(task.detectedTopics || []).map(row => `
+                <summary style="cursor:pointer;color:var(--acc2)">Další témata z AI odpovědi (${extraTopicsForUi.length})</summary>
+                ${extraTopicsForUi.map(row => `
                   <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--brd)">
                     <div style="font-size:11px;color:var(--txt2)"><b>${escHtml(TOPIC_LABELS[row.topicId] || row.topicId)}</b> · stav: ${escHtml(row.decision || 'beze změny')}</div>
                     <div style="margin-top:4px;color:var(--txt2)"><b>Původní:</b> ${escHtml(row.previousValue || '—')}</div>
@@ -3114,7 +3116,6 @@ async function processTopicRepairQueue() {
       }
       nextTask.status = 'running';
       nextTask.error = '';
-      nextTask.detectedTopics = [];
       updateTopicRepairModalUI();
       let success = false;
       for (const prov of enabledProviders) {
@@ -3125,6 +3126,7 @@ async function processTopicRepairQueue() {
         topicRepairState.currentTask = { provider: prov };
         updateTopicRepairProviderStatus();
         try {
+          nextTask.detectedTopics = [];
           const messages = [
             { role: 'system', content: SYSTEM_MESSAGE },
             { role: 'user', content: buildTopicPrompt(nextTask.key, nextTask.topicId) }
@@ -3136,12 +3138,18 @@ async function processTopicRepairQueue() {
           console.log(rawText || '(prázdná odpověď)');
           console.groupEnd();
 
-          // Kontrola všech témat: když AI přibalí i jiné téma, zobraz ho a případně auto aplikuj.
+          // Kontrola dalších témat: zobraz jen skutečně označená pole v RAW odpovědi (striktní parser).
           translated[nextTask.key] = translated[nextTask.key] || {};
+          const baselineTopicValues = cloneTranslationTopicFields(translated[nextTask.key]);
+
+          const primaryCandidate = String(extractTopicValueFromAI(rawText, nextTask.topicId, 'strict') || '').trim();
           for (const topicId of FALLBACK_TOPIC_ORDER) {
-            const candidateTopicVal = String(extractTopicValueFromAI(rawText, topicId) || '').trim();
+            if (topicId === 'specialista') continue;
+            if (topicId === nextTask.topicId) continue;
+            const candidateTopicVal = String(extractTopicValueFromAI(rawText, topicId, 'strict') || '').trim();
             if (!hasMeaningfulValue(candidateTopicVal)) continue;
-            const previousTopicVal = String(translated?.[nextTask.key]?.[topicId] || '').trim();
+            if (primaryCandidate && candidateTopicVal === primaryCandidate) continue;
+            const previousTopicVal = String(baselineTopicValues?.[topicId] || '').trim();
             const acceptAuto = shouldAutoAcceptDetectedTopic(topicId, previousTopicVal, candidateTopicVal);
             if (acceptAuto) {
               translated[nextTask.key][topicId] = candidateTopicVal;
@@ -3154,16 +3162,22 @@ async function processTopicRepairQueue() {
             });
           }
 
-          const specRow = (nextTask.detectedTopics || []).find(x => x.topicId === 'specialista');
-          nextTask.specialistaInRaw = !!specRow;
-          nextTask.specialistaPreviousValue = specRow ? String(specRow.previousValue || '').trim() : '';
-          nextTask.specialistaCandidateValue = specRow ? String(specRow.candidateValue || '').trim() : '';
-          nextTask.specialistaDecision = specRow ? String(specRow.decision || '') : '';
-          if (specRow && specRow.decision.startsWith('přijat')) {
+          const prevSpecialista = String(baselineTopicValues?.specialista || '').trim();
+          const candidateSpecialista = String(extractTopicValueFromAI(rawText, 'specialista', 'strict') || '').trim();
+          nextTask.specialistaInRaw = hasMeaningfulValue(candidateSpecialista);
+          nextTask.specialistaPreviousValue = prevSpecialista;
+          nextTask.specialistaCandidateValue = candidateSpecialista;
+          if (shouldReplaceSpecialista(prevSpecialista, candidateSpecialista)) {
+            translated[nextTask.key].specialista = String(candidateSpecialista || '').trim();
+            nextTask.specialistaDecision = 'přijat (auto)';
             log(`🧠 SPECIALISTA auto-upgrade ${nextTask.key}: použit kvalitnější text z opravy tématu`);
+          } else if (nextTask.specialistaInRaw) {
+            nextTask.specialistaDecision = 'zamítnut (auto)';
+          } else {
+            nextTask.specialistaDecision = '';
           }
 
-          const candidate = extractTopicValueFromAI(raw?.content || '', nextTask.topicId);
+          const candidate = extractTopicValueFromAI(raw?.content || '', nextTask.topicId, 'strict');
           if (!hasMeaningfulValue(candidate)) {
             throw new Error('AI vrátila prázdný výsledek');
           }
@@ -3994,7 +4008,7 @@ async function refillSingleField(key, topicId) {
       { role: 'user', content: prompt }
     ];
     const raw = await callAIWithRetry(prov, apiKey, model, messages);
-    const val = extractTopicValueFromAI(raw?.content || '', topicId);
+    const val = extractTopicValueFromAI(raw?.content || '', topicId, 'strict');
     if (!translated[key]) translated[key] = {};
     translated[key][topicId] = val || '—';
     saveProgress();
@@ -4181,11 +4195,11 @@ function applyTopicPromptResult() {
   const resultInput = document.getElementById('topicPromptResult');
   if (!resultInput) return;
   const rawAiText = String(resultInput.value || '');
-  const val = extractTopicValueFromAI(rawAiText, topicId);
+  const val = extractTopicValueFromAI(rawAiText, topicId, 'strict');
   if (!translated[key]) translated[key] = {};
   const prevSpecialista = String(translated[key]?.specialista || '').trim();
   translated[key][topicId] = val || '—';
-  const candidateSpecialista = extractTopicValueFromAI(rawAiText, 'specialista');
+  const candidateSpecialista = extractTopicValueFromAI(rawAiText, 'specialista', 'strict');
   if (shouldReplaceSpecialista(prevSpecialista, candidateSpecialista)) {
     translated[key].specialista = String(candidateSpecialista || '').trim();
     log(`🧠 SPECIALISTA auto-upgrade ${key}: použit kvalitnější text z AI odpovědi`);
@@ -4324,7 +4338,7 @@ function closeSystemPromptModal() {
   if (modal) modal.remove();
 }
 
-function extractTopicValueFromAI(rawText, topicId) {
+function extractTopicValueFromAI(rawText, topicId, mode = 'loose') {
   const text = String(rawText || '').replace(/\r\n/g, '\n').trim();
   if (!text) return '';
 
@@ -4356,6 +4370,10 @@ function extractTopicValueFromAI(rawText, topicId) {
     fieldPositions.push({ label, line: i, len: m[0].length });
   }
 
+  if (mode === 'strict' && fieldPositions.length === 0 && keyForTopic) {
+    return '';
+  }
+
   if (keyForTopic && fieldPositions.some(f => f.label === keyForTopic)) {
     const idx = fieldPositions.findIndex(f => f.label === keyForTopic);
     const cur = fieldPositions[idx];
@@ -4382,6 +4400,9 @@ function extractTopicValueFromAI(rawText, topicId) {
 
   // Když chybí explicitní label cílového tématu, ale AI vrátí další labely
   // (např. SPECIALISTA), ber jen text před prvním cizím labelem.
+  if (mode === 'strict' && fieldPositions.length > 0 && keyForTopic && !fieldPositions.some(f => f.label === keyForTopic)) {
+    return '';
+  }
   if (fieldPositions.length > 0 && keyForTopic && !fieldPositions.some(f => f.label === keyForTopic)) {
     const firstOther = fieldPositions[0];
     if (firstOther.line > 0) {
@@ -4861,7 +4882,7 @@ async function requestTopicFallbackForProvider(prov, key, topicId, abortVersion)
       let candidate = String(parsed?.[key]?.[topicId] || '').trim();
       if (!candidate) {
         // Topic prompty mohou vracet čistou hodnotu pole bez parser-safe bloku.
-        candidate = extractTopicValueFromAI(rawText, topicId);
+        candidate = extractTopicValueFromAI(rawText, topicId, 'strict');
       }
       appendModelTestUsage(() => {}, prov, model, raw);
       if (shouldAcceptTopicFallback(topicId, candidate)) {
