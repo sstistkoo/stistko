@@ -3778,40 +3778,86 @@ function shouldAcceptTopicFallback(topicId, candidate) {
   return true;
 }
 
+const SECONDARY_PROVIDER_MODEL_RANKING = {
+  // Z test/test (13).txt: nejstabilnější Gemini modely
+  gemini: ['gemini-2.5-flash-lite', 'gemini-2.5-flash'],
+  // Z test/test (13).txt: OpenRouter smoke/auto TOP pořadí
+  openrouter: ['openrouter/free', 'openai/gpt-oss-20b:free', 'nvidia/nemotron-nano-9b-v2:free']
+};
+
+function getSecondaryProviderModelQueue(prov) {
+  const selected = String(getPipelineModelForProvider(prov) || getModelTestSelectedModelForProvider(prov) || '').trim();
+  const ranked = Array.isArray(SECONDARY_PROVIDER_MODEL_RANKING[prov]) ? SECONDARY_PROVIDER_MODEL_RANKING[prov] : [];
+  const queue = [selected, ...ranked].filter(Boolean);
+  return [...new Set(queue)].slice(0, 3);
+}
+
+function getSecondaryRetryDelayMsByError(msgLower) {
+  if (/resource_exhausted|too many|rate limit|429|high demand/.test(msgLower)) return 8000;
+  if (/503|service unavailable|timeout|api timeout/.test(msgLower)) return 5000;
+  if (/400|invalid/.test(msgLower)) return 1500;
+  return 2500;
+}
+
+function getSecondaryCooldownSecByError(prov, rawMsg) {
+  const msg = String(rawMsg || '');
+  const low = msg.toLowerCase();
+  if (prov === 'gemini' && (/resource_exhausted|429|high demand|limit vyčerpán/.test(low))) return 20 * 60;
+  if (/503|service unavailable|api timeout/.test(low)) return 45;
+  if (/429|rate limit|too many|quota/.test(low)) {
+    const parsed = rateInfoFromErrorMessage(msg)?.retryAfterSec || 0;
+    return Math.max(20, parsed || 30);
+  }
+  return 0;
+}
+
+function sleepMs(ms) {
+  return new Promise(resolve => setTimeout(resolve, Math.max(0, Number(ms) || 0)));
+}
+
 async function requestTopicFallbackForProvider(prov, key, topicId) {
   const apiKey = getApiKeyForModelTest(prov);
-  const model = getPipelineModelForProvider(prov) || getModelTestSelectedModelForProvider(prov);
-  if (!apiKey || !model) return null;
-  await waitForProviderCooldown(prov);
+  const modelQueue = getSecondaryProviderModelQueue(prov);
+  if (!apiKey || !modelQueue.length) return null;
   const entry = entryMap.get(key);
   if (!entry) return null;
   const promptType = TOPIC_PROMPT_PRESET_MAP[topicId];
   if (!promptType) return null;
   const messages = buildModelTestMessages([entry], 'auto-live', promptType, true);
-  const reqStart = performance.now();
-  try {
-    const raw = await callOnce(prov, apiKey, model, messages);
-    const reqMs = Math.round(performance.now() - reqStart);
-    const parsed = {};
-    parseWithOpenRouterNormalization(String(raw?.content || ''), [key], parsed);
-    applyFallbacksToParsedMap([key], parsed);
-    const candidate = String(parsed?.[key]?.[topicId] || '').trim();
-    appendModelTestUsage(() => {}, prov, model, raw);
-    if (shouldAcceptTopicFallback(topicId, candidate)) {
-      log(`↳ Fallback ${prov}/${model} ${key}.${topicId} OK (${reqMs}ms)`);
-      return { prov, model, value: candidate, reqMs };
+
+  for (let i = 0; i < modelQueue.length; i++) {
+    const model = modelQueue[i];
+    await waitForProviderCooldown(prov);
+    const reqStart = performance.now();
+    try {
+      const raw = await callOnce(prov, apiKey, model, messages);
+      const reqMs = Math.round(performance.now() - reqStart);
+      const parsed = {};
+      parseWithOpenRouterNormalization(String(raw?.content || ''), [key], parsed);
+      applyFallbacksToParsedMap([key], parsed);
+      const candidate = String(parsed?.[key]?.[topicId] || '').trim();
+      appendModelTestUsage(() => {}, prov, model, raw);
+      if (shouldAcceptTopicFallback(topicId, candidate)) {
+        log(`↳ Fallback ${prov}/${model} ${key}.${topicId} OK (${reqMs}ms)`);
+        return { prov, model, value: candidate, reqMs };
+      }
+      log(`⚠ Fallback ${prov}/${model} ${key}.${topicId}: odpověď neprošla kvalitou, zkouším další model.`);
+    } catch (e) {
+      const msg = String(e?.message || '');
+      const msgLower = msg.toLowerCase();
+      const isRate = /429|rate limit|too many|quota|resource_exhausted|high demand/.test(msgLower);
+      const cooldownSec = getSecondaryCooldownSecByError(prov, msg);
+      if (cooldownSec > 0) setProviderCooldown(prov, cooldownSec, isRate ? 'rate limit' : 'provider error');
+      logWarn('requestTopicFallbackForProvider', `${msg} [model=${model}]`, { prov, key, topicId });
+      const canTryNext = i < modelQueue.length - 1;
+      if (canTryNext) {
+        const waitMs = getSecondaryRetryDelayMsByError(msgLower);
+        log(`↻ ${prov}: model ${model} selhal (${msg}). Za ${Math.round(waitMs / 1000)}s zkusím další model.`);
+        await sleepMs(waitMs);
+      }
     }
-    return null;
-  } catch (e) {
-    const msg = String(e?.message || '');
-    const isRate = /429|rate limit|too many|quota|resource_exhausted/i.test(msg);
-    if (isRate) {
-      const retry = Math.max(10, rateInfoFromErrorMessage(msg)?.retryAfterSec || 30);
-      setProviderCooldown(prov, retry, 'rate limit');
-    }
-    logWarn('requestTopicFallbackForProvider', msg, { prov, key, topicId });
-    return null;
   }
+  return null;
 }
 
 async function runParallelTopicFallback(keys) {
