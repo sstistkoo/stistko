@@ -1429,15 +1429,64 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       <div class="limits-provider" id="modelTestInfo">Provider: —</div>
       <div class="mobl-set-row">
         <label>Provider testu</label>
-        <select id="modelTestProvider"></select>
+        <select id="modelTestProvider" onchange="updateModelTestProviderUi()"></select>
+      </div>
+      <div class="modal-btns" style="margin:4px 0 10px 0">
+        <button class="modal-btn ok" id="btnRunModelTestTop" onclick="runModelTestFromModal()">▶ Test provideru</button>
+      </div>
+      <div id="modelTestProviderModels" style="margin-bottom:8px;border:1px solid var(--brd);border-radius:6px;padding:8px;background:var(--bg2)">
+        <div class="mobl-set-row" id="modelRow_groq">
+          <label>Model (Groq)</label>
+          <select id="modelTestModel_groq" onchange="saveModelTestModelSelections()"></select>
+        </div>
+        <div class="mobl-set-row" id="modelRow_gemini">
+          <label>Model (Gemini)</label>
+          <select id="modelTestModel_gemini" onchange="saveModelTestModelSelections()"></select>
+        </div>
+        <div class="mobl-set-row" id="modelRow_openrouter">
+          <label>Model (OpenRouter)</label>
+          <select id="modelTestModel_openrouter" onchange="saveModelTestModelSelections()"></select>
+        </div>
       </div>
       <div class="mobl-set-row">
         <label>Režim testu</label>
         <select id="modelTestMode">
           <option value="smoke">Smoke test (slovo 2x)</option>
+          <option value="translate1">Překlad 1 hesla</option>
           <option value="translate3">Překlad 3 hesel</option>
-          <option value="auto-live" selected>Auto test (náhodné modely/providers)</option>
+          <option value="auto-live" selected>Auto test</option>
         </select>
+      </div>
+      <div class="mobl-set-row">
+        <label>Prompty</label>
+        <select id="modelTestPromptType">
+          <optgroup label="Obecné testovací prompty">
+            <option value="preset_v1">v1 - vyvážený</option>
+            <option value="preset_v2">v2 - audit striktní</option>
+            <option value="preset_v3" selected>v3 - anti-prázdná pole</option>
+            <option value="preset_v4">v4 - CZ-first terminologie</option>
+          </optgroup>
+          <optgroup label="Groq optimalizace (kvalita definic)">
+            <option value="preset_v5">v5 - úplnost všech polí</option>
+            <option value="preset_v6">v6 - česká DEFINICE</option>
+            <option value="preset_v7">v7 - audit-safe parser</option>
+            <option value="preset_v8">v8 - CZ-only DEFINICE hard</option>
+            <option value="preset_v9">v9 - přelož EN segmenty</option>
+            <option value="preset_v10">v10 - QA self-check</option>
+            <option value="preset_v11">v11 - ALL-IN-ONE</option>
+            <option value="preset_v12">v12 - v8+ anti-EN normalizace</option>
+          </optgroup>
+          <option disabled>────────────</option>
+          <option value="custom">Vlastní prompt</option>
+        </select>
+      </div>
+      <label class="stat" style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
+        <input type="checkbox" id="modelTestEnablePrompt" checked>
+        Testovat prompt (když je vypnuto, jede běžný test modelu)
+      </label>
+      <div class="mobl-set-row" id="modelTestCustomPromptRow">
+        <label>Vlastní prompt pro test</label>
+        <textarea id="modelTestCustomPromptInput" rows="5" style="width:100%;padding:10px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.5;resize:vertical" placeholder="Sem vlož vlastní prompt pro test modelů. Pokud necháš prázdné, použije se hlavní strong_prompt."></textarea>
       </div>
       <div class="mobl-set-row">
         <label>Délka auto testu (min)</label>
@@ -1448,6 +1497,11 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
         Připojit výsledek do stejného reportu
       </label>
       <div id="modelTestCountdown" class="limits-provider" style="margin-bottom:6px;min-height:1.2em;font-size:12px;color:var(--txt2)"></div>
+      <div id="modelTestProviderCountdowns" style="margin-bottom:6px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt2);display:grid;gap:3px">
+        <div id="modelTestCountdown_groq">Groq: —</div>
+        <div id="modelTestCountdown_gemini">Gemini: —</div>
+        <div id="modelTestCountdown_openrouter">OpenRouter: —</div>
+      </div>
       <div id="modelTestLastStatus" style="margin-bottom:8px;min-height:1.2em;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--txt2)"></div>
       <div style="margin-bottom:8px;border:1px solid var(--brd);border-radius:6px;overflow:auto;max-height:180px">
         <table id="modelStatsTable" style="width:100%;border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:10px">
@@ -1465,15 +1519,19 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
           <tbody id="modelStatsBody"></tbody>
         </table>
       </div>
-      <textarea id="modelTestOutput" style="width:100%;min-height:240px;max-height:45vh;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:10px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.5;resize:vertical" placeholder="Nastav režim a providera, pak spusť ▶ Test provideru. Odpočet ukáže čekání do dalšího volání API."></textarea>
+      <div style="display:flex;justify-content:flex-end;margin:4px 0">
+        <button class="modal-btn cancel" type="button" onclick="clearModelTestOutput()">✕ Vymazat výstup</button>
+      </div>
+      <textarea id="modelTestOutput" style="width:100%;min-height:240px;max-height:45vh;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:10px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.5;resize:vertical" placeholder="Nastav režim, providera a modely, pak spusť ▶ Test provideru. Odpočet ukáže čekání do dalšího volání API."></textarea>
       <div class="modal-btns" style="margin-top:12px">
         <button class="modal-btn ok" id="btnRunModelTest" onclick="runModelTestFromModal()">▶ Test provideru</button>
         <button class="modal-btn" onclick="showModelTestLibrary()">📚 Knihovna</button>
+        <button class="modal-btn ok" type="button" onclick="saveModelTestRawOutputTxt()">🧾 Uložit raw odpovědi</button>
         <button class="modal-btn" type="button" onclick="document.getElementById('modelTestLoadFileInput').click()">📂 Načíst test.txt</button>
         <button class="modal-btn ok" type="button" onclick="saveModelTestOutputTxt()">💾 Uložit test.txt</button>
         <button class="modal-btn" type="button" onclick="resetModelTestModal()">↺ Reset</button>
         <button class="modal-btn cancel" id="btnCancelModelTest" onclick="cancelModelTest()" style="display:none">■ Zrušit test</button>
-        <button class="modal-btn ok" onclick="copyModelTestOutput()">📋 Kopírovat</button>
+        <button class="modal-btn ok" id="btnCopyModelTestOutput" onclick="copyModelTestOutput()">📋 Kopírovat</button>
         <button class="modal-btn cancel" onclick="closeModelTestModal()">✕ Zavřít</button>
       </div>
       <input type="file" id="modelTestLoadFileInput" accept=".txt,text/plain" style="display:none" onchange="loadModelTestOutputFromFile(this)">
@@ -1582,6 +1640,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
    <script type="module">
   // ══ CORE MODULE IMPORT ═══════════════════════════════════════════
   import core from './strong_translator_core_new.js';
+  import modelTestPromptCatalog from './strong_model_test_prompts.js';
   // Re-export for use in this module
 const {
       parseTXT: parseTXTCore,
@@ -1651,6 +1710,84 @@ POVINNÝ VÝSTUP NAVÍC:
         { role: 'system', content: core.SYSTEM_MESSAGE },
         { role: 'user', content: userContent }
       ];
+    }
+
+    function getModelTestPromptType() {
+      return localStorage.getItem(MODEL_TEST_PROMPT_TYPE_KEY) || 'preset_v3';
+    }
+
+    function isModelTestPromptEnabled() {
+      const v = localStorage.getItem(MODEL_TEST_ENABLE_PROMPT_KEY);
+      return v === null ? true : v === '1';
+    }
+
+    function getModelTestCustomPromptText() {
+      return localStorage.getItem(MODEL_TEST_CUSTOM_PROMPT_KEY) || '';
+    }
+
+    function getModelTestPromptTemplate(promptType) {
+      const fromCatalog = modelTestPromptCatalog?.[promptType]?.template;
+      if (fromCatalog) return fromCatalog;
+      const custom = getModelTestCustomPromptText().trim();
+      if (custom) return custom;
+      return localStorage.getItem('strong_prompt') || core.DEFAULT_PROMPT;
+    }
+
+    function getModelTestPromptTypeLabel(promptType) {
+      if (promptType === 'custom') return 'Vlastní';
+      const fromCatalog = modelTestPromptCatalog?.[promptType]?.label;
+      return fromCatalog || 'Vlastní';
+    }
+
+    function buildPromptMessagesForModelTest(batch, promptType) {
+      const items = batch.map(e => {
+        const def = e.definice || e.def || '';
+        return `${e.key} | ${e.greek}\nDEF: ${def}`;
+      }).join('\n\n');
+
+      const targetLang = localStorage.getItem('strong_target_lang') || 'cz';
+      const sourceLang = localStorage.getItem('strong_source_lang') || 'gr';
+      const langNames = {
+        cz: 'češtiny',
+        en: 'angličtiny',
+        bg: 'bulharštiny',
+        ch: 'čínštiny',
+        sp: 'španělštiny',
+        sk: 'slovenštiny',
+        pl: 'polštiny',
+        gr: 'řečtiny',
+        he: 'hebrejštiny',
+        both: 'řečtiny i hebrejštiny'
+      };
+      const targetName = langNames[targetLang] || 'češtiny';
+      const sourceName = langNames[sourceLang] || 'řečtiny';
+
+      const userPromptTemplate = getModelTestPromptTemplate(promptType);
+      let processedPrompt = String(userPromptTemplate || '')
+        .replace(/{TARGET_LANG}/g, targetName)
+        .replace(/{SOURCE_LANG}/g, sourceName);
+      processedPrompt = enforceSpecialistaFormat(processedPrompt);
+      const userContent = processedPrompt.includes('{HESLA}')
+        ? processedPrompt.replace(/{HESLA}/g, items)
+        : `${processedPrompt}\n\n${items}`;
+
+      return [
+        { role: 'system', content: core.SYSTEM_MESSAGE },
+        { role: 'user', content: userContent }
+      ];
+    }
+
+    function buildModelTestMessages(batch, testMode, promptType, promptEnabled) {
+      if (testMode === 'smoke') {
+        return [
+          { role: 'system', content: 'Odpovídej stručně a bez komentářů navíc.' },
+          { role: 'user', content: 'Napiš dvakrát po sobě slovo "heslo".' }
+        ];
+      }
+      if (promptEnabled) {
+        return buildPromptMessagesForModelTest(batch, promptType);
+      }
+      return buildPromptMessages(batch);
     }
 
   // ══ STORAGE KEY ══════════════════════════════════════════════════
@@ -1723,12 +1860,15 @@ let autoStepRunning = false;
   let modelTestCancelRequested = false;
   let modelTestAbortController = null;
   let modelTestCountdownInterval = null;
+  let modelTestProviderCountdownInterval = null;
+  let modelTestProviderEta = { groq: 0, gemini: 0, openrouter: 0 };
   let modelTestNextRequestEtaSec = 0;
   let modelTestRunEndTs = 0;
   let modelTestLibraryActive = false;
   let modelTestOutputBackupBeforeLibrary = '';
   let modelTestParsedExportChunks = [];
   let modelTestLastKeyAuditExportChunks = [];
+  let modelTestRawResponses = [];
   const DEFAULT_MODEL_TEST_LOG_FILENAME = 'test.txt';
   let startTime = null;
   let elapsedTimer = null;
@@ -1738,6 +1878,16 @@ let autoStepRunning = false;
   const TEST_HISTORY_KEY = 'strong_test_history_v1';
   const MODEL_TEST_OUTPUT_KEY = 'strong_model_test_output_v1';
   const MODEL_TEST_STATS_KEY = 'strong_model_test_stats_v1';
+  const MODEL_TEST_PROMPT_TYPE_KEY = 'strong_model_test_prompt_type_v1';
+  const MODEL_TEST_CUSTOM_PROMPT_KEY = 'strong_model_test_custom_prompt_v1';
+  const MODEL_TEST_ENABLE_PROMPT_KEY = 'strong_model_test_enable_prompt_v1';
+  const MODEL_TEST_RAW_OUTPUT_KEY = 'strong_model_test_raw_output_v1';
+  const MODEL_TEST_MODEL_STORAGE_KEY = 'strong_model_test_model_';
+  const MODEL_TEST_PINNED_MODELS = [
+    { prov: 'groq', value: 'meta-llama/llama-4-scout-17b-16e-instruct', label: 'Llama 4 Scout (Vysoký limit TPM)' },
+    { prov: 'gemini', value: 'gemini-2.5-flash-lite', label: 'Gemini 2.5 Flash-Lite (Rychlý, levný)' },
+    { prov: 'openrouter', value: 'openai/gpt-oss-20b:free', label: 'openai/gpt-oss-20b:free' }
+  ];
   const API_KEY_PROFILES_PREFIX = 'strong_apikey_profiles_';
   const API_KEY_ACTIVE_PROFILE_PREFIX = 'strong_apikey_active_';
 
@@ -2433,10 +2583,132 @@ function hasMeaningfulValue(v) {
   return !!s && s !== '—' && s !== '(přeskočeno)';
 }
 
+function isDefinitionLikelyEnglish(text) {
+  const s = String(text || '').trim();
+  if (!s) return false;
+  const markers = [
+    /\bwithout\b/i,
+    /\bwith\b/i,
+    /\bnot\b/i,
+    /\bgood(?:ness)?\b/i,
+    /\bto do\b/i,
+    /\bjoy\b/i,
+    /\bfrom\b/i,
+    /\bmetaphor(?:ically)?\b/i,
+    /\bsee word\b/i,
+    /\bweight\b/i
+  ];
+  return markers.some(re => re.test(s));
+}
+
 function isTranslationComplete(t) {
   if (!t || t.skipped) return false;
-  const required = ['vyznam', 'definice', 'pouziti', 'puvod', 'kjv', 'specialista'];
+  if (isDefinitionLikelyEnglish(t.definice)) return false;
+  const required = ['definice', 'pouziti', 'puvod', 'kjv', 'specialista'];
   return required.every(field => hasMeaningfulValue(t[field]));
+}
+
+function fillMissingVyznamFromSource(keys) {
+  if (!Array.isArray(keys)) return;
+  for (const key of keys) {
+    const t = translated[key];
+    if (!t || hasMeaningfulValue(t.vyznam)) continue;
+    const e = entryMap.get(key);
+    const fallback = String(e?.vyznamCz || e?.cz || '').trim();
+    if (fallback) {
+      t.vyznam = fallback;
+    }
+  }
+}
+
+function fillMissingKjvFromSource(keys) {
+  if (!Array.isArray(keys)) return;
+  for (const key of keys) {
+    const t = translated[key];
+    if (!t || hasMeaningfulValue(t.kjv)) continue;
+    const e = entryMap.get(key);
+    const fallback = String(e?.kjv || '').trim();
+    if (fallback) {
+      t.kjv = `${fallback} [POZN.: v angličtině ze vstupu]`;
+    }
+  }
+}
+
+function annotateEnglishDefinitionsInTranslated(keys) {
+  if (!Array.isArray(keys)) return;
+  for (const key of keys) {
+    const t = translated[key];
+    if (!t) continue;
+    if (!isDefinitionLikelyEnglish(t.definice)) continue;
+    const original = String(t.definice || '').trim();
+    if (!original) continue;
+    if (/\[POZN\.: text je v angličtině - špatný překlad\]/.test(original)) continue;
+    t.definice = `${original} [POZN.: text je v angličtině - špatný překlad]`;
+  }
+}
+
+function applyFallbacksToParsedMap(keys, parsedMap) {
+  if (!Array.isArray(keys) || !parsedMap || typeof parsedMap !== 'object') return;
+  for (const key of keys) {
+    const t = parsedMap[key];
+    if (!t) continue;
+    const e = entryMap.get(key);
+    if (!hasMeaningfulValue(t.vyznam)) {
+      const vyznamFallback = String(e?.vyznamCz || e?.cz || '').trim();
+      if (vyznamFallback) t.vyznam = vyznamFallback;
+    }
+    if (!hasMeaningfulValue(t.kjv)) {
+      const kjvFallback = String(e?.kjv || '').trim();
+      if (kjvFallback) t.kjv = `${kjvFallback} [POZN.: v angličtině ze vstupu]`;
+    }
+    if (isDefinitionLikelyEnglish(t.definice)) {
+      t.definice = `${String(t.definice || '').trim()} [POZN.: text je v angličtině - špatný překlad]`.trim();
+    }
+  }
+}
+
+function tryNormalizeNumberedOpenRouterResponse(raw, keys) {
+  const text = String(raw || '').trim();
+  if (!text) return null;
+  if (/###\s*[GH]?\d+\s*###/i.test(text)) return null;
+  const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+  if (!lines.length) return null;
+  const headerLine = lines.find(l => /^(?:\d+\.)?\s*[GH]\d+\b/i.test(l));
+  if (!headerLine) return null;
+  const keyMatch = headerLine.match(/([GH]\d+)/i);
+  if (!keyMatch) return null;
+  const foundKey = keyMatch[1].toUpperCase();
+  if (Array.isArray(keys) && keys.length && !keys.includes(foundKey)) return null;
+
+  const defLine = lines.find(l => /^DEF\s*:/i.test(l) || /^\d+\.\s*.*\|.*$/i.test(l) || /^\d+\.\s*[^\n]+$/i.test(l));
+  const specialistaTail = lines.slice(Math.max(0, lines.length - 6)).join(' ');
+  const normalized = [
+    `###${foundKey}###`,
+    `VYZNAM:`,
+    `DEFINICE: ${defLine ? defLine.replace(/^\d+\.\s*/, '').replace(/^DEF\s*:/i, '').trim() : text.slice(0, 600)}`,
+    `POUZITI:`,
+    `PUVOD:`,
+    `KJV:`,
+    `SPECIALISTA: ${specialistaTail || ''}`
+  ].join('\n');
+  return normalized;
+}
+
+function parseWithOpenRouterNormalization(raw, keys, targetObj) {
+  const missingOriginal = parseTranslationsCore(raw, keys, targetObj);
+  if (!Array.isArray(missingOriginal) || missingOriginal.length === 0) {
+    return { missing: missingOriginal || [], normalizedUsed: false, normalizedText: '' };
+  }
+  const normalized = tryNormalizeNumberedOpenRouterResponse(raw, keys);
+  if (!normalized) {
+    return { missing: missingOriginal, normalizedUsed: false, normalizedText: '' };
+  }
+  const missingAfterNorm = parseTranslationsCore(normalized, keys, targetObj);
+  return {
+    missing: Array.isArray(missingAfterNorm) ? missingAfterNorm : missingOriginal,
+    normalizedUsed: (missingAfterNorm || []).length < missingOriginal.length,
+    normalizedText: normalized
+  };
 }
 
 function getStrongKeyNumber(key) {
@@ -2947,11 +3219,11 @@ async function refillSingleField(key, topicId) {
 }
 
 const TOPIC_LABELS = {
-  vyznam: 'Význam',
-  definice: 'Definice',
-  pouziti: 'Použití',
+  vyznam: 'Český význam',
+  definice: 'Definice (CZ)',
+  pouziti: 'Biblické užití',
   puvod: 'Původ / Etymologie',
-  kjv: 'KJV překlady',
+  kjv: 'KJV překlady (CZ)',
   specialista: 'Biblický výklad (specialista)'
 };
 
@@ -2959,7 +3231,6 @@ let topicPromptState = null;
 
 function buildTopicPrompt(key, topicId) {
   const e = entryMap.get(key) || {};
-  const t = translated[key] || {};
   const topicLabel = TOPIC_LABELS[topicId] || topicId;
   const promptTemplate = localStorage.getItem('strong_prompt') || DEFAULT_PROMPT;
   const sourceText = [
@@ -2968,13 +3239,6 @@ function buildTopicPrompt(key, topicId) {
     e.kjv ? `KJV: ${e.kjv}` : '',
     e.orig ? `ORIG: ${e.orig}` : ''
   ].filter(Boolean).join('\n');
-  const existing = [
-    `Význam: ${t.vyznam || '—'}`,
-    `Definice: ${t.definice || '—'}`,
-    `Použití: ${t.pouziti || '—'}`,
-    `Původ: ${t.puvod || '—'}`,
-    `Specialista: ${t.specialista || '—'}`
-  ].join('\n');
 
   const specialistaDetailRule = topicId === 'specialista'
     ? `
@@ -2995,9 +3259,7 @@ TEĎ PŘELOŽ POUZE JEDNO TÉMA.
 
 Zdrojová data:
 ${sourceText}
-
-Aktuální překlad (kontext):
-${existing}${specialistaDetailRule}`;
+${specialistaDetailRule}`;
 }
 
 function openTopicPromptModal(key, topicId) {
@@ -3355,6 +3617,9 @@ async function translateBatch(keys, depth = 0) {
       console.groupEnd();
     }
     let missingKeys = parseTranslations(content, keys);
+    fillMissingVyznamFromSource(keys);
+    fillMissingKjvFromSource(keys);
+    annotateEnglishDefinitionsInTranslated(keys);
     
     // Log tokenů
     const usage = raw.usage || raw.usageMetadata;
@@ -3400,6 +3665,9 @@ ${keys.map(k => {
         const raw2 = await callOnce(prov, apiKey, model, buildRetryMessages(retryContent));
         console.log(`📥 Retry odpověď:`, raw2.content);
         missingKeys = parseTranslations(raw2.content, keys);
+        fillMissingVyznamFromSource(keys);
+        fillMissingKjvFromSource(keys);
+        annotateEnglishDefinitionsInTranslated(keys);
         const retryCount = keys.length - missingKeys.length;
         if (retryCount > 0) {
           log(`✓ Opravný překlad: ${retryCount} hesel, chybí: ${missingKeys.length > 0 ? missingKeys.join(', ') : 'nic'}`);
@@ -3796,7 +4064,11 @@ async function callOnce(provider, apiKey, model, messages, externalSignal = null
   // Use core module with error handling
   function parseTranslations(raw, keys) {
     try {
-      return parseTranslationsCore(raw, keys, translated);
+      const parsed = parseWithOpenRouterNormalization(raw, keys, translated);
+      if (parsed.normalizedUsed) {
+        log('ℹ AUTO_NORMALIZOVANO_Z_OPENROUTER_FORMATU');
+      }
+      return parsed.missing;
     } catch(e) {
       logError('parseTranslations', e, {
         rawLength: raw?.length,
@@ -4270,6 +4542,28 @@ function loadSavedSettings() {
     tokenLimitEl.value = localStorage.getItem(AUTO_TOKEN_LIMIT_KEY) || '';
     tokenLimitEl.oninput = saveAutoTokenLimit;
   }
+  const modelTestPromptTypeEl = document.getElementById('modelTestPromptType');
+  const modelTestPromptEnableEl = document.getElementById('modelTestEnablePrompt');
+  const modelTestCustomPromptEl = document.getElementById('modelTestCustomPromptInput');
+  if (modelTestPromptEnableEl) {
+    modelTestPromptEnableEl.checked = isModelTestPromptEnabled();
+    modelTestPromptEnableEl.onchange = () => {
+      saveModelTestPromptSettings();
+      updateModelTestPromptUi();
+    };
+  }
+  if (modelTestPromptTypeEl) {
+    modelTestPromptTypeEl.value = getModelTestPromptType();
+    modelTestPromptTypeEl.onchange = () => {
+      saveModelTestPromptSettings();
+      updateModelTestPromptUi();
+    };
+  }
+  if (modelTestCustomPromptEl) {
+    modelTestCustomPromptEl.value = getModelTestCustomPromptText();
+    modelTestCustomPromptEl.oninput = saveModelTestPromptSettings;
+  }
+  updateModelTestPromptUi();
   refreshTokenStatsDisplay();
 }
 
@@ -4332,12 +4626,22 @@ function showModelTestModal(providerLabel, clearOutput = false) {
   const info = document.getElementById('modelTestInfo');
   const output = document.getElementById('modelTestOutput');
   const providerSelect = document.getElementById('modelTestProvider');
+  const promptEnable = document.getElementById('modelTestEnablePrompt');
+  const promptTypeSelect = document.getElementById('modelTestPromptType');
+  const customPromptInput = document.getElementById('modelTestCustomPromptInput');
   if (!modal || !info || !output || !providerSelect) return;
-  providerSelect.innerHTML = Object.keys(PROVIDERS)
+  providerSelect.innerHTML = [
+    `<option value="parallel-3">3 provideři paralelně</option>`,
+    ...Object.keys(PROVIDERS)
     .map(k => `<option value="${k}">${PROVIDERS[k].label}</option>`)
-    .join('');
+  ].join('');
   const currentProvider = document.getElementById('provider')?.value || 'groq';
   providerSelect.value = currentProvider;
+  populateModelTestModelSelect('groq');
+  populateModelTestModelSelect('gemini');
+  populateModelTestModelSelect('openrouter');
+  saveModelTestModelSelections();
+  updateModelTestProviderUi();
   info.textContent = `Provider: ${providerLabel || '—'}`;
   if (clearOutput) {
     output.value = '';
@@ -4346,9 +4650,44 @@ function showModelTestModal(providerLabel, clearOutput = false) {
     const saved = loadModelTestOutputFromStorage();
     if (saved) output.value = saved;
   }
+  if (promptEnable) {
+    promptEnable.checked = isModelTestPromptEnabled();
+  }
+  if (promptTypeSelect) {
+    promptTypeSelect.value = getModelTestPromptType();
+  }
+  if (customPromptInput) {
+    customPromptInput.value = getModelTestCustomPromptText();
+  }
+  updateModelTestPromptUi();
   modal.classList.add('show');
   updateModelTestRunButton();
   renderModelStatsTable();
+}
+
+function updateModelTestPromptUi() {
+  const promptEnable = document.getElementById('modelTestEnablePrompt');
+  const promptTypeSelect = document.getElementById('modelTestPromptType');
+  const customPromptRow = document.getElementById('modelTestCustomPromptRow');
+  const enabled = !!promptEnable?.checked;
+  if (promptTypeSelect) promptTypeSelect.disabled = !enabled;
+  const isCustom = enabled && (promptTypeSelect?.value || 'custom') === 'custom';
+  if (customPromptRow) customPromptRow.style.display = isCustom ? 'block' : 'none';
+}
+
+function saveModelTestPromptSettings() {
+  const promptEnable = document.getElementById('modelTestEnablePrompt');
+  const promptTypeSelect = document.getElementById('modelTestPromptType');
+  const customPromptInput = document.getElementById('modelTestCustomPromptInput');
+  if (promptEnable) {
+    localStorage.setItem(MODEL_TEST_ENABLE_PROMPT_KEY, promptEnable.checked ? '1' : '0');
+  }
+  if (promptTypeSelect) {
+    localStorage.setItem(MODEL_TEST_PROMPT_TYPE_KEY, promptTypeSelect.value || 'preset_v3');
+  }
+  if (customPromptInput) {
+    localStorage.setItem(MODEL_TEST_CUSTOM_PROMPT_KEY, customPromptInput.value || '');
+  }
 }
 
 function closeModelTestModal() {
@@ -4380,22 +4719,64 @@ function modelTestSetCountdownLabel(text) {
   if (el) el.textContent = text || '';
 }
 
+function renderModelTestProviderCountdowns() {
+  const labels = {
+    groq: 'Groq',
+    gemini: 'Gemini',
+    openrouter: 'OpenRouter'
+  };
+  Object.keys(labels).forEach(prov => {
+    const el = document.getElementById(`modelTestCountdown_${prov}`);
+    if (!el) return;
+    const sec = Math.max(0, Math.ceil(Number(modelTestProviderEta[prov] || 0)));
+    el.textContent = `${labels[prov]}: ${sec > 0 ? `další požadavek za ~${sec}s` : 'připraveno'}`;
+  });
+}
+
+function modelTestSetProviderEta(prov, sec) {
+  if (!Object.prototype.hasOwnProperty.call(modelTestProviderEta, prov)) return;
+  modelTestProviderEta[prov] = Math.max(0, Number(sec) || 0);
+  renderModelTestProviderCountdowns();
+}
+
+function modelTestResetProviderEta() {
+  modelTestProviderEta = { groq: 0, gemini: 0, openrouter: 0 };
+  renderModelTestProviderCountdowns();
+}
+
+function modelTestStartProviderCountdownTicker() {
+  if (modelTestProviderCountdownInterval) clearInterval(modelTestProviderCountdownInterval);
+  modelTestProviderCountdownInterval = setInterval(renderModelTestProviderCountdowns, 500);
+}
+
+function modelTestStopProviderCountdownTicker() {
+  if (modelTestProviderCountdownInterval) {
+    clearInterval(modelTestProviderCountdownInterval);
+    modelTestProviderCountdownInterval = null;
+  }
+}
+
 function updateModelTestRunButton() {
-  const btn = document.getElementById('btnRunModelTest');
-  if (!btn) return;
+  const buttons = ['btnRunModelTest', 'btnRunModelTestTop']
+    .map(id => document.getElementById(id))
+    .filter(Boolean);
+  if (!buttons.length) return;
+  const apply = (text, className) => {
+    buttons.forEach(btn => {
+      btn.textContent = text;
+      btn.className = className;
+    });
+  };
   if (modelTestRunning) {
     if (modelTestCancelRequested) {
-      btn.textContent = '⏹ Zastavuji...';
-      btn.className = 'modal-btn cancel';
+      apply('⏹ Zastavuji...', 'modal-btn cancel');
       return;
     }
     const sec = Math.max(0, Math.ceil(Number(modelTestNextRequestEtaSec || 0)));
-    btn.textContent = sec > 0 ? `■ Běží (${sec}s)` : '■ Běží';
-    btn.className = 'modal-btn cancel';
+    apply(sec > 0 ? `■ Běží (${sec}s)` : '■ Běží', 'modal-btn cancel');
     return;
   }
-  btn.textContent = '▶ Test provideru';
-  btn.className = 'modal-btn ok';
+  apply('▶ Test provideru', 'modal-btn ok');
 }
 
 function modelTestSetLastStatus(text, kind = 'idle') {
@@ -4545,6 +4926,30 @@ async function saveModelTestOutputTxt() {
   showToast(`✓ Staženo: ${DEFAULT_MODEL_TEST_LOG_FILENAME}`);
 }
 
+function saveModelTestRawOutputToStorage() {
+  try { localStorage.setItem(MODEL_TEST_RAW_OUTPUT_KEY, JSON.stringify(modelTestRawResponses || [])); } catch (e) {}
+}
+
+function clearModelTestRawOutputFromStorage() {
+  try { localStorage.removeItem(MODEL_TEST_RAW_OUTPUT_KEY); } catch (e) {}
+}
+
+async function saveModelTestRawOutputTxt() {
+  const rows = Array.isArray(modelTestRawResponses) ? modelTestRawResponses : [];
+  if (!rows.length) {
+    showToast('⚠ Zatím není žádná raw odpověď k uložení');
+    return;
+  }
+  const body = rows.map((row, idx) => {
+    const header = `### ${idx + 1} | provider=${row.prov} | model=${row.model} | režim=${row.mode} | promptTest=${row.promptEnabled ? 'on' : 'off'} | prompt=${row.promptType} | ${new Date(row.ts).toLocaleString('cs-CZ')}`;
+    const promptBlock = `--- ODESLANÝ PROMPT ---\n${row.promptSent || '(není dostupný)'}\n--- /ODESLANÝ PROMPT ---`;
+    const rawBlock = `--- RAW ODPOVĚĎ AI ---\n${row.raw || ''}\n--- /RAW ODPOVĚĎ AI ---`;
+    return `${header}\n${promptBlock}\n${rawBlock}`;
+  }).join('\n\n');
+  download(`strong_model_test_raw_${Date.now()}.txt`, body, 'text/plain');
+  showToast('✓ Raw odpovědi staženy');
+}
+
 function loadModelTestOutputFromFile(input) {
   const file = input?.files?.[0];
   if (!file) return;
@@ -4647,10 +5052,14 @@ function resetModelTestModal() {
   modelTestOutputBackupBeforeLibrary = '';
   modelTestParsedExportChunks = [];
   modelTestLastKeyAuditExportChunks = [];
+  modelTestRawResponses = [];
   modelTestNextRequestEtaSec = 0;
+  modelTestResetProviderEta();
+  modelTestStopProviderCountdownTicker();
   modelTestSetCountdownLabel('');
   modelTestSetLastStatus('');
   clearModelTestOutputFromStorage();
+  clearModelTestRawOutputFromStorage();
   updateModelTestRunButton();
 }
 
@@ -4667,12 +5076,17 @@ function restoreModelTestReportFromBackup() {
 
 function formatModelTestParsedBlock(key, t, e) {
   if (!e || !t) return '';
+  const defEnglish = isDefinitionLikelyEnglish(t.definice);
+  const defValue = t.definice || '—';
+  const defDisplay = defEnglish && !/\[POZN\.: text je v angličtině - špatný překlad\]/.test(defValue)
+    ? `${defValue} [POZN.: text je v angličtině - špatný překlad]`
+    : defValue;
   const parts = [
     `${key} | ${e.greek}`,
     `Gramatika: ${e.tvaroslovi || '—'}`,
     `Český význam: ${t.vyznam || '—'}`,
     `Definice (EN): ${e.definice || e.def || '—'}`,
-    `Česká definice: ${t.definice || '—'}`,
+    `Česká definice: ${defDisplay}`,
     `KJV překlady: ${t.kjv || e.kjv || '—'}`,
     `Biblické užití (KJV): ${t.pouziti || '—'}`,
     `Původ: ${t.puvod || '—'}`,
@@ -4718,7 +5132,7 @@ function excerptRawForLastKey(rawContent, lastKey, maxLen = 2200) {
 }
 
 /**
- * Průběžná kontrola: jen poslední heslo v dávce + stav formátu.
+ * Průběžná audit kontrola: všechna hesla v dávce + stav formátu.
  */
 function appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, missing, rawContent = '', totals = null) {
   const lastKey = Array.isArray(batchKeys) && batchKeys.length ? batchKeys[batchKeys.length - 1] : '';
@@ -4733,8 +5147,12 @@ function appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, missi
   const t = parsed && parsed[lastKey];
   const inMissing = missingSet.has(lastKey);
   const complete = !!t && isTranslationComplete(t);
+  const englishDefinitionFlag = !!(t && isDefinitionLikelyEnglish(t.definice));
   const badFields = t && !complete
-    ? ['vyznam', 'definice', 'pouziti', 'puvod', 'kjv', 'specialista'].filter(f => !hasMeaningfulValue(t[f]))
+    ? [
+        ...['definice', 'pouziti', 'puvod', 'kjv', 'specialista'].filter(f => !hasMeaningfulValue(t[f])),
+        ...(englishDefinitionFlag ? ['definice(EN)'] : [])
+      ]
     : [];
   const rangeLabel = Array.isArray(batchKeys) && batchKeys.length
     ? `${batchKeys[0]} až ${batchKeys[batchKeys.length - 1]} (${batchKeys.length} hesel)`
@@ -4742,13 +5160,23 @@ function appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, missi
   const totalsSuffix = totals ? ` | Σ OK ${totals.okKeys || 0} / NEÚSP ${totals.failedKeys || 0}` : '';
 
   appendReport(`  ▸ Rozsah dávky: ${rangeLabel}`);
-  appendReport(`  ▸ Poslední heslo: ${lastKey}`);
+  appendReport('');
+  appendReport('  AUDIT: kontrola všech hesel v dávce a jejich parsovatelnosti.');
+  appendReport(`  ▸ Poslední heslo (stavový indikátor): ${lastKey}`);
+  appendReport(`  ▸ Auditovaný počet hesel: ${batchKeys.length}`);
+  appendReport(`  ▸ Neúspěšné v dávce: ${failedKeys.length}`);
+  appendReport('');
   if (complete) {
     modelTestSetLastStatus(`OK | ${rangeLabel} | ${lastKey}${totalsSuffix}`, 'ok');
     appendReport('  Stav posledního hesla: OK — nalezeno v odpovědi a všechna povinná pole vyplněna ve správném formátu.');
-    appendReport('  Data AI pro poslední heslo:');
-    for (const ln of formatModelTestParsedBlock(lastKey, t, entryMap.get(lastKey)).split('\n')) {
-      appendReport(`    ${ln}`);
+    appendReport('  Data AI pro všechna hesla v dávce:');
+    for (const key of batchKeys) {
+      const tk = parsed && parsed[key];
+      if (!tk) continue;
+      appendReport(`    --- ${key} ---`);
+      for (const ln of formatModelTestParsedBlock(key, tk, entryMap.get(key)).split('\n')) {
+        appendReport(`    ${ln}`);
+      }
     }
   } else if (inMissing || !t) {
     modelTestSetLastStatus(`NEÚSPĚCH | ${rangeLabel} | ${lastKey}${totalsSuffix}`, 'error');
@@ -4762,22 +5190,31 @@ function appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, missi
       appendReport(excerptRawForLastKey(rawContent, firstFailed, 1200));
       appendReport('  ---');
     }
-    appendReport(`  RAW odpověď AI pro ${lastKey} (pokud blok není nalezen, jen zkrácený výřez):`);
-    appendReport(excerptRawForLastKey(rawContent, lastKey));
+    appendReport('  RAW odpověď AI pro audit celé dávky:');
+    appendReport(rawContent || '(prázdná odpověď)');
     appendReport('  --- /RAW ---');
   } else {
     modelTestSetLastStatus(`NEÚPLNÉ | ${rangeLabel} | ${lastKey}${totalsSuffix}`, 'warn');
     appendReport(`  Stav posledního hesla: NEÚPLNÉ — chybí nebo jsou neplatná pole: ${badFields.join(', ') || '?'}`);
-    appendReport('  Data AI pro poslední heslo (to, co šlo vyparsovat):');
-    for (const ln of formatModelTestParsedBlock(lastKey, t, entryMap.get(lastKey)).split('\n')) {
-      appendReport(`    ${ln}`);
+    if (englishDefinitionFlag) {
+      appendReport('  POZN.: DEFINICE obsahuje angličtinu, je hodnoceno jako špatný překlad.');
+    }
+    appendReport('  Data AI pro všechna hesla v dávce (to, co šlo vyparsovat):');
+    for (const key of batchKeys) {
+      const tk = parsed && parsed[key];
+      if (!tk) continue;
+      appendReport(`    --- ${key} ---`);
+      for (const ln of formatModelTestParsedBlock(key, tk, entryMap.get(key)).split('\n')) {
+        appendReport(`    ${ln}`);
+      }
     }
   }
   appendReport('');
 
   const exportLines = [
     `Rozsah dávky: ${rangeLabel}`,
-    `Poslední heslo: ${lastKey}`,
+    `Audit: všechna hesla v dávce (${batchKeys.length})`,
+    `Poslední heslo (stav): ${lastKey}`,
     totals ? `Celkem v běhu: OK ${totals.okKeys || 0} | NEÚSP ${totals.failedKeys || 0}` : '',
     complete
       ? 'Stav: OK'
@@ -4785,14 +5222,19 @@ function appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, missi
         ? 'Stav: NEÚSPĚCH'
         : `Stav: NEÚPLNÉ (${badFields.join(', ') || '?'})`
   ].filter(Boolean);
-  if (t) {
+  const parsedKeys = batchKeys.filter(k => parsed && parsed[k]);
+  if (parsedKeys.length) {
     exportLines.push('');
-    exportLines.push(formatModelTestParsedBlock(lastKey, t, entryMap.get(lastKey)));
+    exportLines.push('Data AI pro všechna hesla v dávce:');
+    for (const key of parsedKeys) {
+      exportLines.push(`--- ${key} ---`);
+      exportLines.push(formatModelTestParsedBlock(key, parsed[key], entryMap.get(key)));
+    }
   } else if (inMissing || !t) {
     if (firstFailed && firstFailed !== lastFailed) {
       exportLines.push('', `RAW odpověď AI pro první neúspěšné ${firstFailed}:`, excerptRawForLastKey(rawContent, firstFailed, 1200));
     }
-    exportLines.push('', `RAW odpověď AI pro ${lastKey}:`, excerptRawForLastKey(rawContent, lastKey));
+    exportLines.push('', 'RAW odpověď AI pro audit celé dávky:', rawContent || '(prázdná odpověď)');
   }
   exportLines.push('----------------------------------------', '');
   modelTestLastKeyAuditExportChunks.push(exportLines.join('\n'));
@@ -4803,7 +5245,7 @@ function exportModelTestTranslationsTxt() {
   const reportFallback = (out?.value || '').trim();
   let body = '';
   if (modelTestLastKeyAuditExportChunks.length) {
-    body = `# Export kontroly posledního hesla z dávek (test modelů)\n# ${new Date().toLocaleString('cs-CZ')}\n\n${modelTestLastKeyAuditExportChunks.join('\n')}`;
+    body = `# Export auditu všech hesel z dávek (test modelů)\n# ${new Date().toLocaleString('cs-CZ')}\n\n${modelTestLastKeyAuditExportChunks.join('\n')}`;
   } else if (modelTestParsedExportChunks.length) {
     body = `# Export parsovaných překladů z testu modelů\n# ${new Date().toLocaleString('cs-CZ')}\n\n${modelTestParsedExportChunks.join('\n')}`;
   } else if (reportFallback) {
@@ -4823,6 +5265,82 @@ function getApiKeyForModelTest(prov) {
     if (fromInput) return fromInput;
   }
   return (localStorage.getItem('strong_apikey_' + prov) || '').trim();
+}
+
+function getPinnedModelOptionsForProvider(prov) {
+  return MODEL_TEST_PINNED_MODELS
+    .filter(item => item.prov === prov)
+    .map(item => ({ value: item.value, label: item.label }));
+}
+
+function getPinnedModelQueue() {
+  return MODEL_TEST_PINNED_MODELS
+    .filter(item => !!getApiKeyForModelTest(item.prov))
+    .map(item => ({ prov: item.prov, model: item.value, label: item.label }));
+}
+
+function getDefaultPinnedModelByProvider(prov) {
+  const found = MODEL_TEST_PINNED_MODELS.find(item => item.prov === prov);
+  return found ? found.value : '';
+}
+
+function getModelTestSelectedModelForProvider(prov) {
+  const select = document.getElementById(`modelTestModel_${prov}`);
+  const selected = String(select?.value || '').trim();
+  if (selected) return selected;
+  const saved = String(localStorage.getItem(MODEL_TEST_MODEL_STORAGE_KEY + prov) || '').trim();
+  if (saved) return saved;
+  return getDefaultPinnedModelByProvider(prov);
+}
+
+function saveModelTestModelSelections() {
+  ['groq', 'gemini', 'openrouter'].forEach(prov => {
+    const val = String(document.getElementById(`modelTestModel_${prov}`)?.value || '').trim();
+    if (val) localStorage.setItem(MODEL_TEST_MODEL_STORAGE_KEY + prov, val);
+  });
+}
+
+function populateModelTestModelSelect(prov) {
+  const select = document.getElementById(`modelTestModel_${prov}`);
+  if (!select) return;
+  const providerOptions = (PROVIDERS[prov]?.models || []).map(([value, label]) => ({ value, label: label || value }));
+  const pinned = MODEL_TEST_PINNED_MODELS
+    .filter(item => item.prov === prov)
+    .map(item => ({ value: item.value, label: item.label || item.value }));
+  const merged = [...pinned];
+  for (const opt of providerOptions) {
+    if (!merged.find(x => x.value === opt.value)) merged.push(opt);
+  }
+  if (!merged.length) merged.push({ value: getDefaultPinnedModelByProvider(prov), label: getDefaultPinnedModelByProvider(prov) || '—' });
+  select.innerHTML = merged
+    .filter(opt => opt.value)
+    .map(opt => `<option value="${opt.value}">${opt.label}</option>`)
+    .join('');
+  const saved = String(localStorage.getItem(MODEL_TEST_MODEL_STORAGE_KEY + prov) || '').trim();
+  const wanted = saved || getDefaultPinnedModelByProvider(prov);
+  if (wanted && Array.from(select.options).some(o => o.value === wanted)) {
+    select.value = wanted;
+  } else if (select.options.length) {
+    select.selectedIndex = 0;
+  }
+}
+
+function updateModelTestProviderUi() {
+  const providerMode = document.getElementById('modelTestProvider')?.value || 'parallel-3';
+  const isParallel = providerMode === 'parallel-3';
+  ['groq', 'gemini', 'openrouter'].forEach(prov => {
+    const row = document.getElementById(`modelRow_${prov}`);
+    const select = document.getElementById(`modelTestModel_${prov}`);
+    if (!row) return;
+    const visible = isParallel || providerMode === prov;
+    row.style.display = visible ? 'grid' : 'none';
+    row.hidden = !visible;
+    if (select) select.disabled = !visible;
+  });
+  const wrap = document.getElementById('modelTestProviderModels');
+  if (wrap) {
+    wrap.style.display = isParallel || ['groq', 'gemini', 'openrouter'].includes(providerMode) ? 'block' : 'none';
+  }
 }
 
 function getProviderModelOptions(prov) {
@@ -4856,11 +5374,18 @@ async function runModelTestFromModal() {
   scrollModelTestOutputIntoView();
   const providerSelect = document.getElementById('modelTestProvider');
   const modeSelect = document.getElementById('modelTestMode');
+  const promptEnableEl = document.getElementById('modelTestEnablePrompt');
+  const promptTypeSelect = document.getElementById('modelTestPromptType');
   if (!providerSelect) return;
+  saveModelTestPromptSettings();
+  saveModelTestModelSelections();
   const mode = modeSelect?.value || 'smoke';
-  const forcedProvider = mode === 'auto-live' ? null : providerSelect.value;
+  const promptEnabled = !!promptEnableEl?.checked;
+  const promptType = promptTypeSelect?.value || getModelTestPromptType();
+  const providerMode = providerSelect.value || 'parallel-3';
+  const forcedProvider = providerMode === 'parallel-3' ? null : providerMode;
   updateModelTestRunButton();
-  await testCurrentProviderModels(forcedProvider, false, mode);
+  await testCurrentProviderModels(forcedProvider, false, mode, promptType, promptEnabled);
 }
 
 function showModelTestLibrary() {
@@ -4918,6 +5443,8 @@ function showModelTestLibrary() {
 
 async function copyModelTestOutput() {
   const output = document.getElementById('modelTestOutput');
+  const btn = document.getElementById('btnCopyModelTestOutput');
+  const originalBtnText = btn?.textContent || '📋 Kopírovat';
   if (!output) return;
   const text = output.value || '';
   if (!text.trim()) {
@@ -4927,12 +5454,30 @@ async function copyModelTestOutput() {
   try {
     await navigator.clipboard.writeText(text);
     showToast('✓ Výstup zkopírován');
+    if (btn) {
+      btn.textContent = '✓ Zkopírováno';
+      setTimeout(() => { btn.textContent = originalBtnText; }, 1200);
+    }
   } catch (e) {
     output.focus();
     output.select();
     document.execCommand('copy');
     showToast('✓ Výstup zkopírován');
+    if (btn) {
+      btn.textContent = '✓ Zkopírováno';
+      setTimeout(() => { btn.textContent = originalBtnText; }, 1200);
+    }
   }
+}
+
+function clearModelTestOutput() {
+  const output = document.getElementById('modelTestOutput');
+  if (!output) return;
+  output.value = '';
+  modelTestOutputBackupBeforeLibrary = '';
+  modelTestLibraryActive = false;
+  clearModelTestOutputFromStorage();
+  showToast('✓ Výstup testu vymazán');
 }
 
 function getSampleEntriesForModelTest(count = 3) {
@@ -4953,7 +5498,7 @@ function formatAiResponseTime(ms) {
   return `${(safe / 1000).toFixed(2)}s`;
 }
 
-async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSignal, fixedProvider = null) {
+async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSignal, fixedProvider = null, promptType = 'custom', promptEnabled = true) {
   const durationInput = document.getElementById('modelTestDurationMin');
   const durationMin = Math.max(1, parseInt(durationInput?.value || '10', 10) || 10);
   const durationMs = durationMin * 60 * 1000;
@@ -4962,7 +5507,6 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
   const startTs = Date.now();
   modelTestRunEndTs = startTs + durationMs;
   let cycle = 0;
-  let cursor = 0;
   let totalOkKeys = 0;
   let totalFailedKeys = 0;
   let latencyMsTotal = 0;
@@ -4975,101 +5519,139 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
 
   const providerKeys = fixedProvider
     ? [fixedProvider]
-    : Object.keys(PROVIDERS).filter(p => !!getApiKeyForModelTest(p));
+    : ['groq', 'gemini', 'openrouter'];
   if (providerKeys.length === 0) {
     appendReport('⚠ Auto test: nejsou dostupné API klíče.');
     return { cycles: 0, okKeys: 0, failedKeys: 0 };
   }
-  const modelQueue = [];
-  for (const p of providerKeys) {
-    const opts = await getProviderModelOptions(p);
-    for (const m of opts) {
-      if (m?.value) modelQueue.push({ prov: p, model: m.value, label: m.label || m.value });
-    }
-  }
+  const modelQueue = providerKeys
+    .map(prov => {
+      const model = getModelTestSelectedModelForProvider(prov);
+      return model ? { prov, model, label: model } : null;
+    })
+    .filter(Boolean)
+    .filter(item => !!getApiKeyForModelTest(item.prov));
   if (!modelQueue.length) {
     appendReport('⚠ Auto test: u zvolených providerů nejsou dostupné modely.');
     return { cycles: 0, okKeys: 0, failedKeys: 0 };
   }
-  let queueIdx = 0;
-
   appendReport(`Auto test délka: ${durationMin} min`);
   appendReport(`Dávka/interval: ${batchSize} hesel / ${intervalSec}s`);
-  appendReport('Po každém cyklu: kontrola jen posledního hesla v dávce (OK / neúplné / neúspěch). RAW se vypíše jen pro poslední heslo při neúspěchu.');
+  appendReport(`Po každém cyklu: audit všech hesel v dávce (OK / neúplné / neúspěch) + RAW odpověď AI pro celou dávku.${promptEnabled ? ' (test promptu zapnut)' : ' (test promptu vypnut)'}`);
+  appendReport(providerKeys.length > 1
+    ? 'Paralelní režim: každý provider běží samostatně, se svým vlastním odpočtem a limitem.'
+    : 'Režim: vybraný provider běží samostatně.');
   appendReport('');
+  modelTestStartProviderCountdownTicker();
+  const waitProviderMs = (prov, ms) => new Promise(resolve => {
+    if (ms <= 0 || modelTestCancelRequested || abortSignal?.aborted) {
+      modelTestSetProviderEta(prov, 0);
+      resolve();
+      return;
+    }
+    const t0 = Date.now();
+    const tick = () => {
+      if (modelTestCancelRequested || abortSignal?.aborted) {
+        modelTestSetProviderEta(prov, 0);
+        resolve();
+        return;
+      }
+      const left = ms - (Date.now() - t0);
+      if (left <= 0) {
+        modelTestSetProviderEta(prov, 0);
+        resolve();
+        return;
+      }
+      modelTestSetProviderEta(prov, Math.ceil(left / 1000));
+      setTimeout(tick, 300);
+    };
+    tick();
+  });
 
-  while (!modelTestCancelRequested && (Date.now() - startTs) < durationMs) {
-    cycle++;
-    const current = modelQueue[queueIdx % modelQueue.length];
-    queueIdx++;
-    const prov = current.prov;
-    const providerLabel = PROVIDERS[prov]?.label || prov;
-    const apiKey = getApiKeyForModelTest(prov);
+  const workers = modelQueue.map((current, workerIdx) => (async () => {
+    let localCursor = (workerIdx * 17) % sourceEntries.length;
+    let localCycle = 0;
+    const providerLabel = PROVIDERS[current.prov]?.label || current.prov;
+    const apiKey = getApiKeyForModelTest(current.prov);
     if (!apiKey) {
-      testResults.push({ model: `${prov}/(bez-klíče)`, status: 'ERROR' });
-      appendReport(`[#${cycle}] ${providerLabel} | bez API klíče`);
-      await waitMs(1000);
-      continue;
+      appendReport(`[#${current.prov}] ${providerLabel} | bez API klíče`);
+      return;
     }
-
-    const chosenModel = { value: current.model, label: current.label };
-
-    const batch = [];
-    for (let i = 0; i < batchSize; i++) {
-      const idx = (cursor + i) % sourceEntries.length;
-      batch.push(sourceEntries[idx]);
+    while (!modelTestCancelRequested && (Date.now() - startTs) < durationMs) {
+      localCycle++;
+      cycle++;
+      const takeSize = Math.max(1, Math.min(batchSize, sourceEntries.length));
+      const batch = [];
+      for (let i = 0; i < takeSize; i++) {
+        const idx = (localCursor + i) % sourceEntries.length;
+        batch.push(sourceEntries[idx]);
+      }
+      localCursor = (localCursor + (takeSize * 2)) % sourceEntries.length;
+      const batchKeys = batch.map(b => b.key);
+      const messages = buildModelTestMessages(batch, 'auto-live', promptType, promptEnabled);
+      const reqStart = performance.now();
+      try {
+        const raw = await callOnce(current.prov, apiKey, current.model, messages, abortSignal);
+        const reqMs = performance.now() - reqStart;
+        latencyMsTotal += reqMs;
+        latencySamples += 1;
+        const content = String(raw?.content || '');
+        modelTestRawResponses.push({
+          ts: Date.now(),
+          prov: current.prov,
+          model: current.model,
+          mode: 'auto-live',
+          promptType,
+          promptEnabled,
+          promptSent: String(messages?.[1]?.content || ''),
+          raw: content
+        });
+        saveModelTestRawOutputToStorage();
+        const parsed = {};
+        const parsedNorm = parseWithOpenRouterNormalization(content, batchKeys, parsed);
+        applyFallbacksToParsedMap(batchKeys, parsed);
+        const failedInBatch = batchKeys.filter(k => !parsed[k] || !isTranslationComplete(parsed[k]));
+        const ok = batchKeys.length - failedInBatch.length;
+        const status = ok === batchKeys.length ? 'OK' : 'PARTIAL';
+        totalOkKeys += ok;
+        totalFailedKeys += failedInBatch.length;
+        testResults.push({ model: `${current.prov}:${current.model}`, status });
+        upsertModelTestStats(current.prov, current.model, {
+          status,
+          okKeys: ok,
+          failedKeys: failedInBatch.length,
+          totalKeys: batchKeys.length,
+          latencyMs: reqMs
+        });
+        console.log(`[AUTO TEST RAW] #${cycle} ${current.prov} | ${current.model} | prompt=${promptType}\n${content}`);
+        appendReport(`[#${cycle}] ${providerLabel} | ${current.model} | ${ok}/${batchKeys.length} hesel | klíče ${batchKeys[0]}…${batchKeys[batchKeys.length - 1]} | AI ${formatAiResponseTime(reqMs)}`);
+        if (parsedNorm.normalizedUsed) appendReport('ℹ AUTO_NORMALIZOVANO_Z_OPENROUTER_FORMATU');
+        appendReport(`RAW: ${content || '(prázdná odpověď)'}`);
+        appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, failedInBatch, content, { okKeys: totalOkKeys, failedKeys: totalFailedKeys });
+      } catch (e) {
+        const reqMs = performance.now() - reqStart;
+        latencyMsTotal += reqMs;
+        latencySamples += 1;
+        const msg = String(e?.message || '');
+        const isRate = /429|rate limit|too many/i.test(msg);
+        totalFailedKeys += batchKeys.length;
+        testResults.push({ model: `${current.prov}:${current.model}`, status: isRate ? 'RATE_LIMITED' : 'ERROR' });
+        upsertModelTestStats(current.prov, current.model, {
+          status: isRate ? 'RATE_LIMITED' : 'ERROR',
+          okKeys: 0,
+          failedKeys: batchKeys.length,
+          totalKeys: batchKeys.length,
+          latencyMs: reqMs
+        });
+        appendReport(`[#${cycle}] ${providerLabel} | ${current.model} | ${isRate ? 'RATE LIMITED' : 'ERROR'} (${msg})${reqMs > 0 ? ` | AI ${formatAiResponseTime(reqMs)}` : ''}`);
+      }
+      if (modelTestCancelRequested) break;
+      await waitProviderMs(current.prov, intervalSec * 1000);
     }
-    cursor = (cursor + batchSize) % sourceEntries.length;
-    const batchKeys = batch.map(b => b.key);
-    const messages = buildPromptMessages(batch);
-
-    const reqStart = performance.now();
-    try {
-      const raw = await callOnce(prov, apiKey, chosenModel.value, messages, abortSignal);
-      const reqMs = performance.now() - reqStart;
-      latencyMsTotal += reqMs;
-      latencySamples += 1;
-      const content = String(raw?.content || '');
-      const parsed = {};
-      const missing = parseTranslationsCore(content, batchKeys, parsed);
-      const failedInBatch = batchKeys.filter(k => !parsed[k] || !isTranslationComplete(parsed[k]));
-      const ok = batchKeys.length - failedInBatch.length;
-      const status = ok === batchKeys.length ? 'OK' : 'PARTIAL';
-      totalOkKeys += ok;
-      totalFailedKeys += failedInBatch.length;
-      testResults.push({ model: `${prov}:${chosenModel.value}`, status });
-      upsertModelTestStats(prov, chosenModel.value, {
-        status,
-        okKeys: ok,
-        failedKeys: failedInBatch.length,
-        totalKeys: batchKeys.length,
-        latencyMs: reqMs
-      });
-      console.log(`[AUTO TEST] #${cycle} ${prov} | ${chosenModel.value} | OK ${ok}/${batchKeys.length} | ${formatAiResponseTime(reqMs)}`);
-      appendReport(`[#${cycle}] ${providerLabel} | ${chosenModel.value} | ${ok}/${batchKeys.length} hesel | klíče ${batchKeys[0]}…${batchKeys[batchKeys.length - 1]} | AI ${formatAiResponseTime(reqMs)}`);
-      appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, failedInBatch, content, { okKeys: totalOkKeys, failedKeys: totalFailedKeys });
-    } catch (e) {
-      const reqMs = performance.now() - reqStart;
-      latencyMsTotal += reqMs;
-      latencySamples += 1;
-      const msg = String(e?.message || '');
-      const isRate = /429|rate limit|too many/i.test(msg);
-      totalFailedKeys += batchKeys.length;
-      testResults.push({ model: `${prov}:${chosenModel.value}`, status: isRate ? 'RATE_LIMITED' : 'ERROR' });
-      upsertModelTestStats(prov, chosenModel.value, {
-        status: isRate ? 'RATE_LIMITED' : 'ERROR',
-        okKeys: 0,
-        failedKeys: batchKeys.length,
-        totalKeys: batchKeys.length,
-        latencyMs: reqMs
-      });
-      console.log(`[AUTO TEST] #${cycle} ${prov} | ${chosenModel.value} | ${isRate ? 'RATE LIMITED' : 'ERROR'} | ${formatAiResponseTime(reqMs)} | ${msg}`);
-      appendReport(`[#${cycle}] ${providerLabel} | ${chosenModel.value} | ${isRate ? 'RATE LIMITED' : 'ERROR'} (${msg})${reqMs > 0 ? ` | AI ${formatAiResponseTime(reqMs)}` : ''}`);
-    }
-
-    if (modelTestCancelRequested) break;
-    await waitMs(intervalSec * 1000);
-  }
+  })());
+  await Promise.all(workers);
+  modelTestStopProviderCountdownTicker();
+  modelTestResetProviderEta();
   return {
     cycles: cycle,
     okKeys: totalOkKeys,
@@ -5078,7 +5660,7 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
   };
 }
 
-async function testCurrentProviderModels(forcedProvider = null, resetReport = true, forcedMode = null) {
+async function testCurrentProviderModels(forcedProvider = null, resetReport = true, forcedMode = null, forcedPromptType = null, forcedPromptEnabled = null) {
   if (autoRunning || autoStepRunning) {
     showToast('⚠ Nejdřív zastav AUTO');
     return;
@@ -5091,30 +5673,50 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
   const modalProviderSelect = document.getElementById('modelTestProvider');
   const appendCheckbox = document.getElementById('modelTestAppend');
   const modeSelect = document.getElementById('modelTestMode');
-  const prov = forcedProvider || modalProviderSelect?.value || providerSelect.value;
+  const promptEnableEl = document.getElementById('modelTestEnablePrompt');
+  const promptTypeSelect = document.getElementById('modelTestPromptType');
+  const providerMode = forcedProvider || modalProviderSelect?.value || providerSelect.value;
+  const fallbackProvider = providerSelect.value || 'groq';
+  const prov = providerMode === 'parallel-3' ? fallbackProvider : providerMode;
   const testMode = forcedMode || modeSelect?.value || 'smoke';
-  let apiKey = null;
-  let options = [];
+  const promptEnabled = typeof forcedPromptEnabled === 'boolean' ? forcedPromptEnabled : !!promptEnableEl?.checked;
+  const promptType = forcedPromptType || promptTypeSelect?.value || getModelTestPromptType();
+  const providerTargets = providerMode === 'parallel-3' ? ['groq', 'gemini', 'openrouter'] : [prov];
+  const executionQueue = [];
   if (testMode !== 'auto-live') {
-    apiKey = getApiKeyForModelTest(prov);
-    if (!apiKey) {
-      showToast(`✗ Chybí API klíč pro ${PROVIDERS[prov]?.label || prov}`);
-      return;
+    for (const currentProv of providerTargets) {
+      const apiKey = getApiKeyForModelTest(currentProv);
+      if (!apiKey) {
+        showToast(`✗ Chybí API klíč pro ${PROVIDERS[currentProv]?.label || currentProv}`);
+        continue;
+      }
+      const selectedModel = getModelTestSelectedModelForProvider(currentProv);
+      if (!selectedModel) {
+        showToast(`⚠ Není vybraný model pro ${PROVIDERS[currentProv]?.label || currentProv}`);
+        continue;
+      }
+      executionQueue.push({
+        prov: currentProv,
+        apiKey,
+        opt: { value: selectedModel, label: selectedModel }
+      });
     }
-
-    options = await getProviderModelOptions(prov);
-    if (!options.length) {
-      showToast('⚠ Pro tohoto providera nejsou dostupné modely');
-      return;
-    }
+    if (!executionQueue.length) return;
   }
-  const providerLabel = PROVIDERS[prov]?.label || prov;
+  const providerLabel = forcedProvider
+    ? (PROVIDERS[prov]?.label || prov)
+    : ((modalProviderSelect?.value === 'parallel-3')
+      ? '3 provideři paralelně'
+      : (PROVIDERS[prov]?.label || prov));
   const outputEl = document.getElementById('modelTestOutput');
   const shouldAppend = appendCheckbox?.checked && !resetReport;
   const snapshotBefore = outputEl ? outputEl.value : '';
   const report = shouldAppend && snapshotBefore ? snapshotBefore.split('\n') : [];
   showModelTestModal(providerLabel, false);
-  if (modalProviderSelect) modalProviderSelect.value = prov;
+  if (modalProviderSelect) {
+    modalProviderSelect.value = providerMode === 'parallel-3' ? 'parallel-3' : prov;
+    updateModelTestProviderUi();
+  }
   if (!outputEl) {
     showToast('✗ Chybí výstupní okno testu modelů');
     return;
@@ -5124,6 +5726,11 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
   const MAX_CONSECUTIVE_RATE_LIMITS = 4;
   let consecutiveRateLimited = 0;
   const testResults = [];
+  const autoProviders = forcedProvider ? [forcedProvider] : ['groq', 'gemini', 'openrouter'];
+  const autoModelCount = autoProviders
+    .map(p => getModelTestSelectedModelForProvider(p))
+    .filter(Boolean).length;
+  const queueModelCount = executionQueue.length;
   const appendReport = (line = '') => {
     report.push(line);
     const nextText = report.join('\n');
@@ -5139,6 +5746,8 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
   modelTestRunEndTs = 0;
   modelTestParsedExportChunks = [];
   modelTestLastKeyAuditExportChunks = [];
+  modelTestRawResponses = [];
+  clearModelTestRawOutputFromStorage();
   modelTestSetLastStatus('Běží test modelů…', 'idle');
   modelTestAbortController = new AbortController();
   const signal = modelTestAbortController.signal;
@@ -5147,18 +5756,21 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
   updateModelTestRunButton();
   btn.disabled = true;
   if (cancelBtn) cancelBtn.style.display = 'inline-block';
-  appendReport(`# TEST MODELU`);
+  appendReport(promptEnabled ? `# TEST PROMPTU MODELU` : `# TEST MODELU`);
   appendReport(`Provider: ${providerLabel}`);
-  appendReport(`Režim: ${testMode === 'translate3' ? 'Překlad 3 hesel' : testMode === 'auto-live' ? 'Auto test (náhodné modely/providers)' : 'Smoke test (slovo 2x)'}`);
+  appendReport(`Režim: ${testMode === 'translate3' ? 'Překlad 3 hesel' : testMode === 'translate1' ? 'Překlad 1 hesla' : testMode === 'auto-live' ? 'Auto test' : 'Smoke test (slovo 2x)'}`);
+  appendReport(`Prompt test: ${promptEnabled ? 'zapnutý' : 'vypnutý'}`);
+  appendReport(`Prompt režim: ${getModelTestPromptTypeLabel(promptType)}`);
   appendReport(`Čas: ${new Date().toLocaleString('cs-CZ')}`);
-  appendReport(`Modelů: ${options.length}`);
+  appendReport(`Modelů: ${testMode === 'auto-live' ? autoModelCount : queueModelCount}`);
   appendReport('');
 
   try {
-    const sampleEntries = testMode === 'translate3' ? getSampleEntriesForModelTest(3) : [];
+    const sampleCount = testMode === 'translate1' ? 1 : testMode === 'translate3' ? 3 : 0;
+    const sampleEntries = sampleCount ? getSampleEntriesForModelTest(sampleCount) : [];
     const sampleKeys = sampleEntries.map(e => e.key);
     if (testMode === 'auto-live') {
-      const autoStats = await runAutoLiveModelTest(appendReport, waitMs, testResults, modelTestAbortController.signal, forcedProvider ? prov : null);
+      const autoStats = await runAutoLiveModelTest(appendReport, waitMs, testResults, modelTestAbortController.signal, forcedProvider ? prov : null, promptType, promptEnabled);
       const okModels = testResults.filter(r => r.status === 'OK').map(r => r.model).slice(0, 3);
       appendReport('');
       appendReport(`Souhrn hesel: OK ${autoStats.okKeys} | NEÚSP ${autoStats.failedKeys} | cykly ${autoStats.cycles} | prům. AI ${formatAiResponseTime(autoStats.avgLatencyMs || 0)}`);
@@ -5166,7 +5778,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
       appendReport(modelTestCancelRequested ? 'Ukončeno.' : 'Hotovo.');
       pushTestHistory({
         type: 'model-test',
-        provider: forcedProvider ? providerLabel : 'mix-provider',
+        provider: forcedProvider ? providerLabel : 'parallel-3-providers',
         mode: testMode,
         total: testResults.length,
         ok: testResults.filter(r => r.status === 'OK').length,
@@ -5183,9 +5795,9 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
       return;
     }
 
-    if (testMode === 'translate3') {
-      if (sampleEntries.length < 3) {
-        appendReport('⚠ Nelze spustit test překladu 3 hesel (není načtený slovník nebo má málo záznamů).');
+    if (testMode === 'translate3' || testMode === 'translate1') {
+      if (sampleEntries.length < sampleCount) {
+        appendReport(`⚠ Nelze spustit test překladu ${sampleCount} hesla/hesel (není načtený slovník nebo má málo záznamů).`);
         appendReport('Ukončeno.');
         return;
       }
@@ -5193,37 +5805,52 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
       appendReport('');
     }
 
-    for (let i = 0; i < options.length; i++) {
+    for (let i = 0; i < executionQueue.length; i++) {
       if (modelTestCancelRequested) {
         appendReport('⏹ Test byl ručně zrušen uživatelem.');
         appendReport('');
         break;
       }
-      const opt = options[i];
-      btn.textContent = `🧪 ${i + 1}/${options.length}`;
-      appendReport(`## ${i + 1}/${options.length} ${opt.value}`);
+      const current = executionQueue[i];
+      const currentProvider = current.prov;
+      const currentApiKey = current.apiKey;
+      const opt = current.opt;
+      const currentProviderLabel = PROVIDERS[currentProvider]?.label || currentProvider;
+      btn.textContent = `🧪 ${i + 1}/${executionQueue.length}`;
+      appendReport(`## ${i + 1}/${executionQueue.length} ${currentProviderLabel} | ${opt.value}`);
 
-      const messages = testMode === 'translate3'
-        ? buildPromptMessages(sampleEntries)
-        : [
-            { role: 'system', content: 'Odpovídej stručně a bez komentářů navíc.' },
-            { role: 'user', content: 'Napiš dvakrát po sobě slovo "heslo".' }
-          ];
+      const messages = buildModelTestMessages(sampleEntries, testMode, promptType, promptEnabled);
 
       try {
-        const first = await callOnce(prov, apiKey, opt.value, messages, modelTestAbortController.signal);
+        const first = await callOnce(currentProvider, currentApiKey, opt.value, messages, modelTestAbortController.signal);
         const firstContent = String(first?.content || '').trim();
-        console.log(`[MODEL TEST] ${prov} | ${opt.value} | 1: ${firstContent}`);
+        modelTestRawResponses.push({
+          ts: Date.now(),
+          prov: currentProvider,
+          model: opt.value,
+          mode: testMode,
+          promptType,
+          promptEnabled,
+          promptSent: String(messages?.[1]?.content || ''),
+          raw: firstContent
+        });
+        saveModelTestRawOutputToStorage();
+        console.log(`[MODEL TEST RAW] ${currentProvider} | ${opt.value} | mode=${testMode} | prompt=${promptType}\n${firstContent}`);
+        console.log(`[MODEL TEST] ${currentProvider} | ${opt.value} | 1: ${firstContent}`);
         appendReport(`MODEL: ${opt.value}`);
-        if (testMode === 'translate3') {
+        if (testMode === 'translate3' || testMode === 'translate1') {
           const parsed = {};
-          const missingAfterFirst = parseTranslationsCore(firstContent || '', sampleKeys, parsed);
+          const parsedNorm = parseWithOpenRouterNormalization(firstContent || '', sampleKeys, parsed);
+          applyFallbacksToParsedMap(sampleKeys, parsed);
+          const missingAfterFirst = sampleKeys.filter(k => !parsed[k] || !isTranslationComplete(parsed[k]));
           const okCount = sampleKeys.length - missingAfterFirst.length;
+          if (parsedNorm.normalizedUsed) appendReport('ℹ AUTO_NORMALIZOVANO_Z_OPENROUTER_FORMATU');
+          appendReport(`RAW: ${firstContent || '(prázdná odpověď)'}`);
           appendReport(`PARSOVÁNÍ (celá dávka): ${okCount}/${sampleKeys.length} hesel`);
           if (missingAfterFirst.length > 0) appendReport(`CHYBÍ v odpovědi: ${missingAfterFirst.join(', ')}`);
           appendModelTestLastBatchKeyAudit(appendReport, sampleKeys, parsed, missingAfterFirst, firstContent || '');
           appendReport('');
-          testResults.push({ model: opt.value, status: okCount === sampleKeys.length ? 'OK' : 'PARTIAL' });
+          testResults.push({ model: `${currentProvider}:${opt.value}`, status: okCount === sampleKeys.length ? 'OK' : 'PARTIAL' });
           log(`🧪 ${opt.label || opt.value}: ${okCount}/${sampleKeys.length} hesel`);
           consecutiveRateLimited = 0;
           if (!modelTestCancelRequested) await waitMs(MODEL_TEST_DELAY_MS);
@@ -5238,14 +5865,26 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
           break;
         }
         await waitMs(MODEL_TEST_DELAY_MS);
-        const second = await callOnce(prov, apiKey, opt.value, messages, modelTestAbortController.signal);
+        const second = await callOnce(currentProvider, currentApiKey, opt.value, messages, modelTestAbortController.signal);
         const secondContent = String(second?.content || '').trim();
-        console.log(`[MODEL TEST] ${prov} | ${opt.value} | 2: ${secondContent}`);
+        modelTestRawResponses.push({
+          ts: Date.now(),
+          prov: currentProvider,
+          model: opt.value,
+          mode: testMode,
+          promptType,
+          promptEnabled,
+          promptSent: String(messages?.[1]?.content || ''),
+          raw: secondContent
+        });
+        saveModelTestRawOutputToStorage();
+        console.log(`[MODEL TEST RAW] ${currentProvider} | ${opt.value} | mode=${testMode} | prompt=${promptType}\n${secondContent}`);
+        console.log(`[MODEL TEST] ${currentProvider} | ${opt.value} | 2: ${secondContent}`);
         appendReport(`2) ${secondContent || '(prázdná odpověď)'}`);
         appendReport('Stav: OK');
         appendReport('');
         consecutiveRateLimited = 0;
-        testResults.push({ model: opt.value, status: 'OK' });
+        testResults.push({ model: `${currentProvider}:${opt.value}`, status: 'OK' });
 
         log(`🧪 ${opt.label || opt.value}: OK`);
       } catch (e) {
@@ -5256,14 +5895,26 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
           appendReport(`↻ Opakuji po ${Math.round(MODEL_TEST_DELAY_MS / 1000)}s...`);
           await waitMs(MODEL_TEST_DELAY_MS);
           try {
-            const retry = await callOnce(prov, apiKey, opt.value, messages, modelTestAbortController.signal);
+            const retry = await callOnce(currentProvider, currentApiKey, opt.value, messages, modelTestAbortController.signal);
             const retryContent = String(retry?.content || '').trim();
-            console.log(`[MODEL TEST] ${prov} | ${opt.value} | RETRY: ${retryContent}`);
+            modelTestRawResponses.push({
+              ts: Date.now(),
+              prov: currentProvider,
+              model: opt.value,
+              mode: testMode,
+              promptType,
+              promptEnabled,
+              promptSent: String(messages?.[1]?.content || ''),
+              raw: retryContent
+            });
+            saveModelTestRawOutputToStorage();
+            console.log(`[MODEL TEST RAW] ${currentProvider} | ${opt.value} | mode=${testMode} | prompt=${promptType}\n${retryContent}`);
+            console.log(`[MODEL TEST] ${currentProvider} | ${opt.value} | RETRY: ${retryContent}`);
             appendReport(`retry) ${retryContent || '(prázdná odpověď)'}`);
             appendReport('Stav: OK po retry');
             appendReport('');
             consecutiveRateLimited = 0;
-            testResults.push({ model: opt.value, status: 'OK_RETRY' });
+            testResults.push({ model: `${currentProvider}:${opt.value}`, status: 'OK_RETRY' });
             log(`🧪 ${opt.label || opt.value}: OK po retry`);
           } catch (eRetry) {
             if (modelTestCancelRequested || /zrušen uživatelem/i.test(String(eRetry?.message || ''))) {
@@ -5271,12 +5922,12 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
               appendReport('');
               break;
             }
-            console.error(`[MODEL TEST] ${prov} | ${opt.value} | ERROR`, eRetry);
+            console.error(`[MODEL TEST] ${currentProvider} | ${opt.value} | ERROR`, eRetry);
             appendReport(`RETRY CHYBA: ${eRetry.message}`);
             appendReport('Stav: RATE LIMITED');
             appendReport('');
             consecutiveRateLimited++;
-            testResults.push({ model: opt.value, status: 'RATE_LIMITED' });
+            testResults.push({ model: `${currentProvider}:${opt.value}`, status: 'RATE_LIMITED' });
             log(`🧪 ${opt.label || opt.value}: RATE LIMIT (${eRetry.message})`);
           }
         } else {
@@ -5285,12 +5936,12 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
             appendReport('');
             break;
           }
-          console.error(`[MODEL TEST] ${prov} | ${opt.value} | ERROR`, e);
+          console.error(`[MODEL TEST] ${currentProvider} | ${opt.value} | ERROR`, e);
           appendReport(`CHYBA: ${msg}`);
           appendReport('Stav: ERROR');
           appendReport('');
           consecutiveRateLimited = 0;
-          testResults.push({ model: opt.value, status: 'ERROR' });
+          testResults.push({ model: `${currentProvider}:${opt.value}`, status: 'ERROR' });
           log(`🧪 ${opt.label || opt.value}: CHYBA (${msg})`);
         }
       }
@@ -5299,8 +5950,8 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
         appendReport(`⚠ Test zastaven: ${consecutiveRateLimited}x po sobě RATE LIMITED (globální free limit OpenRouteru).`);
         appendReport('Zbytek modelů je přeskočen, spusť test znovu později.');
         appendReport('');
-        for (let j = i + 1; j < options.length; j++) {
-          appendReport(`## ${j + 1}/${options.length} ${options[j].value}`);
+        for (let j = i + 1; j < executionQueue.length; j++) {
+          appendReport(`## ${j + 1}/${executionQueue.length} ${executionQueue[j].prov} | ${executionQueue[j].opt.value}`);
           appendReport('Stav: PŘESKOČENO (global rate limit)');
           appendReport('');
         }
@@ -5313,7 +5964,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
     }
 
     const okModels = testResults
-      .filter(r => r.status === 'OK' || (testMode === 'translate3' && r.status === 'PARTIAL'))
+      .filter(r => r.status === 'OK' || ((testMode === 'translate3' || testMode === 'translate1') && r.status === 'PARTIAL'))
       .map(r => r.model)
       .slice(0, 3);
     appendReport('');
@@ -5323,16 +5974,18 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
       type: 'model-test',
       provider: providerLabel,
       mode: testMode,
-      total: options.length,
+      total: executionQueue.length,
       ok: testResults.filter(r => r.status === 'OK' || r.status === 'OK_RETRY').length,
       rateLimited: testResults.filter(r => r.status === 'RATE_LIMITED').length,
       error: testResults.filter(r => r.status === 'ERROR').length,
       partial: testResults.filter(r => r.status === 'PARTIAL').length,
       topModels: okModels
     });
-    showToast(modelTestCancelRequested ? '⏹ Test modelů zrušen' : `✓ Test modelů dokončen (${options.length})`);
+    showToast(modelTestCancelRequested ? '⏹ Test modelů zrušen' : `✓ Test modelů dokončen (${executionQueue.length})`);
   } finally {
     modelTestClearCountdownInterval();
+    modelTestStopProviderCountdownTicker();
+    modelTestResetProviderEta();
     modelTestNextRequestEtaSec = 0;
     modelTestRunEndTs = 0;
     modelTestSetCountdownLabel('');
@@ -6963,12 +7616,14 @@ window.showLimitsModal = showLimitsModal;
 window.closeLimitsModal = closeLimitsModal;
 window.closeModelTestModal = closeModelTestModal;
 window.copyModelTestOutput = copyModelTestOutput;
+window.clearModelTestOutput = clearModelTestOutput;
 window.cancelModelTest = cancelModelTest;
 window.runModelTestFromModal = runModelTestFromModal;
 window.openModelTestModal = openModelTestModal;
 window.resetModelTestModal = resetModelTestModal;
 window.restoreModelTestReportFromBackup = restoreModelTestReportFromBackup;
 window.saveModelTestOutputTxt = saveModelTestOutputTxt;
+window.saveModelTestRawOutputTxt = saveModelTestRawOutputTxt;
 window.loadModelTestOutputFromFile = loadModelTestOutputFromFile;
 window.deleteModelTestStatsRow = deleteModelTestStatsRow;
 window.showModelTestLibrary = showModelTestLibrary;
