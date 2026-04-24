@@ -1748,6 +1748,8 @@ POVINNÝ VÝSTUP NAVÍC:
     }
 
     function getModelTestPromptTemplate(promptType) {
+      const topicTemplate = getTopicPromptTemplateByPromptType(promptType);
+      if (topicTemplate) return topicTemplate;
       const fromCatalog = modelTestPromptCatalog?.[promptType]?.template;
       if (fromCatalog) return fromCatalog;
       const custom = getModelTestCustomPromptText().trim();
@@ -1895,6 +1897,7 @@ let autoStepRunning = false;
   let modelTestLastKeyAuditExportChunks = [];
   let modelTestRawResponses = [];
   let modelTestRateLimitHealth = { hits429: 0, lastRetryAfterSec: 0, lastRequestId: '', lastRemaining: '', lastReset: '' };
+  let providerCooldownUntil = { groq: 0, gemini: 0, openrouter: 0 };
   const DEFAULT_MODEL_TEST_LOG_FILENAME = 'test.txt';
   let startTime = null;
   let elapsedTimer = null;
@@ -3255,12 +3258,47 @@ const TOPIC_LABELS = {
   specialista: 'Biblický výklad (specialista)'
 };
 
+const TOPIC_PROMPT_PRESET_MAP = {
+  vyznam: 'preset_topic_vyznam',
+  definice: 'preset_v12',
+  kjv: 'preset_topic_kjv',
+  pouziti: 'preset_topic_pouziti',
+  puvod: 'preset_topic_puvod',
+  specialista: 'preset_topic_specialista'
+};
+
+function getTopicPromptTemplateByPromptType(promptType) {
+  const topicType = String(promptType || '').trim();
+  if (!topicType || !topicType.startsWith('preset_topic_')) return '';
+  return String(modelTestPromptCatalog?.[topicType]?.template || '').trim();
+}
+
+function getTopicPromptTemplate(topicId) {
+  const promptType = TOPIC_PROMPT_PRESET_MAP[topicId] || '';
+  const fromTopicPreset = getTopicPromptTemplateByPromptType(promptType);
+  if (fromTopicPreset) return fromTopicPreset;
+  return String(localStorage.getItem('strong_prompt') || DEFAULT_PROMPT || '').trim();
+}
+
+function syncTopicPromptTemplatesReport() {
+  const mismatched = Object.entries(TOPIC_PROMPT_PRESET_MAP).filter(([topicId, promptType]) => {
+    const fromCatalog = String(modelTestPromptCatalog?.[promptType]?.template || '').trim();
+    const fromDetailBase = String(getTopicPromptTemplate(topicId) || '').trim();
+    return !fromCatalog || fromCatalog !== fromDetailBase;
+  });
+  if (mismatched.length > 0) {
+    log(`⚠ Topic prompt sync: ${mismatched.map(([topicId]) => topicId).join(', ')}`);
+  } else {
+    log('✓ Topic prompt sync: testy/detail jsou 1:1');
+  }
+}
+
 let topicPromptState = null;
 
 function buildTopicPrompt(key, topicId) {
   const e = entryMap.get(key) || {};
   const topicLabel = TOPIC_LABELS[topicId] || topicId;
-  const promptTemplate = localStorage.getItem('strong_prompt') || DEFAULT_PROMPT;
+  const promptTemplate = getTopicPromptTemplate(topicId);
   const sourceText = [
     `${e.key || key} | ${e.greek || ''}`,
     `DEF: ${e.definice || e.def || ''}`,
@@ -3612,6 +3650,107 @@ function getNextBatch(size) {
   return result;
 }
 
+const FALLBACK_TOPIC_ORDER = ['definice', 'vyznam', 'kjv', 'pouziti', 'puvod', 'specialista'];
+
+function getFailedTopicsForFallback(translationEntry) {
+  const t = translationEntry || {};
+  const failed = [];
+  for (const topicId of FALLBACK_TOPIC_ORDER) {
+    const val = String(t[topicId] || '').trim();
+    if (!hasMeaningfulValue(val)) {
+      failed.push(topicId);
+      continue;
+    }
+    if (topicId === 'definice' && isDefinitionLikelyEnglish(val)) {
+      failed.push(topicId);
+    }
+  }
+  return failed;
+}
+
+function getProviderCooldownLeftSec(prov) {
+  const until = Number(providerCooldownUntil?.[prov] || 0);
+  return Math.max(0, Math.ceil((until - Date.now()) / 1000));
+}
+
+function setProviderCooldown(prov, seconds, reason = '') {
+  const sec = Math.max(0, Number(seconds) || 0);
+  if (!Object.prototype.hasOwnProperty.call(providerCooldownUntil, prov)) return;
+  providerCooldownUntil[prov] = sec > 0 ? (Date.now() + sec * 1000) : 0;
+  if (sec > 0) {
+    log(`⏳ Cooldown ${prov}: ${sec}s${reason ? ` (${reason})` : ''}`);
+  }
+}
+
+async function waitForProviderCooldown(prov) {
+  while (getProviderCooldownLeftSec(prov) > 0) {
+    const left = getProviderCooldownLeftSec(prov);
+    log(`⏱ ${prov} cooldown: zbývá ${left}s`);
+    await new Promise(resolve => setTimeout(resolve, Math.min(1500, left * 1000)));
+  }
+}
+
+function shouldAcceptTopicFallback(topicId, candidate) {
+  if (!hasMeaningfulValue(candidate)) return false;
+  if (topicId === 'definice' && isDefinitionLikelyEnglish(candidate)) return false;
+  return true;
+}
+
+async function requestTopicFallbackForProvider(prov, key, topicId) {
+  const apiKey = getApiKeyForModelTest(prov);
+  const model = getModelTestSelectedModelForProvider(prov);
+  if (!apiKey || !model) return null;
+  await waitForProviderCooldown(prov);
+  const entry = entryMap.get(key);
+  if (!entry) return null;
+  const promptType = TOPIC_PROMPT_PRESET_MAP[topicId];
+  if (!promptType) return null;
+  const messages = buildModelTestMessages([entry], 'auto-live', promptType, true);
+  const reqStart = performance.now();
+  try {
+    const raw = await callOnce(prov, apiKey, model, messages);
+    const reqMs = Math.round(performance.now() - reqStart);
+    const parsed = {};
+    parseWithOpenRouterNormalization(String(raw?.content || ''), [key], parsed);
+    applyFallbacksToParsedMap([key], parsed);
+    const candidate = String(parsed?.[key]?.[topicId] || '').trim();
+    appendModelTestUsage(() => {}, prov, model, raw);
+    if (shouldAcceptTopicFallback(topicId, candidate)) {
+      log(`↳ Fallback ${prov}/${model} ${key}.${topicId} OK (${reqMs}ms)`);
+      return { prov, model, value: candidate, reqMs };
+    }
+    return null;
+  } catch (e) {
+    const msg = String(e?.message || '');
+    const isRate = /429|rate limit|too many|quota|resource_exhausted/i.test(msg);
+    if (isRate) {
+      const retry = Math.max(10, rateInfoFromErrorMessage(msg)?.retryAfterSec || 30);
+      setProviderCooldown(prov, retry, 'rate limit');
+    }
+    logWarn('requestTopicFallbackForProvider', msg, { prov, key, topicId });
+    return null;
+  }
+}
+
+async function runParallelTopicFallback(keys) {
+  const keyList = Array.isArray(keys) ? keys : [];
+  if (!keyList.length) return;
+  const sideProviders = ['openrouter', 'gemini'];
+  await Promise.all(keyList.map(async (key) => {
+    const t = translated[key] || {};
+    const failedTopics = getFailedTopicsForFallback(t);
+    if (!failedTopics.length) return;
+    for (const topicId of failedTopics) {
+      const winner = await Promise.all(sideProviders.map(prov => requestTopicFallbackForProvider(prov, key, topicId)));
+      const chosen = winner.find(x => !!x) || null;
+      if (!chosen) continue;
+      translated[key] = translated[key] || {};
+      translated[key][topicId] = chosen.value;
+      log(`✓ Fallback převzat ${key}.${topicId} <= ${chosen.prov}/${chosen.model}`);
+    }
+  }));
+}
+
 async function translateBatch(keys, depth = 0) {
   const prov   = document.getElementById('provider').value;
   const model  = document.getElementById('model').value;
@@ -3719,6 +3858,15 @@ ${keys.map(k => {
           await translateBatch(chunk, depth + 1);
         }
       }
+    }
+
+    const keysBeforeSideFallback = keys.filter(k => !isTranslationComplete(translated[k]));
+    if (keysBeforeSideFallback.length > 0) {
+      log(`↻ Paralelní side fallback: ${keysBeforeSideFallback.length} hesel (OpenRouter + Gemini)`);
+      await runParallelTopicFallback(keysBeforeSideFallback);
+      fillMissingVyznamFromSource(keys);
+      fillMissingKjvFromSource(keys);
+      annotateEnglishDefinitionsInTranslated(keys);
     }
 
     const translatedCount = keys.filter(k => isTranslationComplete(translated[k])).length;
@@ -4615,6 +4763,7 @@ function loadSavedSettings() {
     modelTestCustomPromptEl.oninput = saveModelTestPromptSettings;
   }
   updateModelTestPromptUi();
+  syncTopicPromptTemplatesReport();
   refreshTokenStatsDisplay();
 }
 
