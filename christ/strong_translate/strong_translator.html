@@ -1088,7 +1088,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
     </select>
   </div>
 
-  <div class="row" id="legacyModelRow" style="display:none">
+  <div class="row">
     <label for="apiKey" id="keyLabel">API Klíč — Groq (console.groq.com)</label>
     <input type="password" id="apiKey" placeholder="gsk_..." onchange="saveApiKey()" aria-label="API klíč providera">
     <div class="key-switch-row">
@@ -1100,7 +1100,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
     </div>
   </div>
 
-  <div class="row">
+  <div class="row" id="legacyModelRow" style="display:none">
     <label for="model">Model</label>
     <select id="model" aria-label="Výběr AI modelu">
       <!-- Naplní se dynamicky podle vybraného providera (setupProviderSwitcher) -->
