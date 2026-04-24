@@ -3354,7 +3354,10 @@ async function processTopicRepairQueue() {
           if (!hasMeaningfulValue(candidateSpecialista)) {
             candidateSpecialista = String(extractTopicValueFromAI(rawText, 'specialista', 'loose') || '').trim();
           }
-          const specHeader = /(?:^|[\n\u0085\u2028\u2029])[\s\u00A0]*SPECIALISTA\s*[:\uFF1A\u2013\u2014=\.\-]/i.test(stripLeadingGHeaders(normalizeAiTopicRawText(rawText)));
+          const normStrip = stripLeadingGHeaders(normalizeAiTopicRawText(rawText)).trim();
+          const specHeader =
+            (nextTask.rawHeaderTopics || []).includes('specialista') ||
+            !!matchSpecialistaHeaderBlockStart(normStrip);
           nextTask.specialistaInRaw = hasMeaningfulValue(candidateSpecialista) || specHeader;
           nextTask.specialistaPreviousValue = prevSpecialista;
           nextTask.specialistaCandidateValue = candidateSpecialista;
@@ -5034,11 +5037,17 @@ function syncTopicRepairMinimizeBusyIndicator() {
 /** Když strict parser SPECIALISTU nechytí (jiné mezery/znaky), vezmi text od nadpisu do dalšího pole. */
 function extractSpecialistaLooseFallback(rawText) {
   let t = stripLeadingGHeaders(normalizeAiTopicRawText(rawText).trim()).trim();
-  const m = t.match(/(?:^|[\n\u0085\u2028\u2029])[\s\u00A0]*SPECIALISTA\s*[:\uFF1A\u2013\u2014=\.\-]\s*/i);
+  if (!t) return '';
+  const byAnchors = extractTopicSegmentByAnchors(t, 'SPECIALISTA');
+  if (hasMeaningfulValue(byAnchors)) return byAnchors.trim();
+
+  const m = matchSpecialistaHeaderBlockStart(t);
   if (!m || m.index === undefined) return '';
   const start = m.index + m[0].length;
   const rest = t.slice(start);
-  const m2 = rest.search(/(?:^|[\n\u0085\u2028\u2029])[\s\u00A0]*(?:VYZNAM|DEFINICE|POUZITI|PUVOD|KJV)\s*[:\uFF1A\u2013\u2014=\.\-]/i);
+  const nextHdr =
+    /(?:^|[\n\u0085\u2028\u2029])[\s\u00A0]*(?:VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|SPECIALISTA|VYKLAD|VÝKLAD|KOMENTAR|KOMENTÁŘ|EXEGEZE|COMMENTARY|EXEGESIS|DEFINITION|MEANING|USAGE|ORIGIN|DEF)\s*(?:\([^)\n]{0,240}\))?\s*(?:[:\uFF1A\u2013\u2014=\.\-|]|\n{1,4}\s*)/iu;
+  const m2 = rest.search(nextHdr);
   const body = m2 >= 0 ? rest.slice(0, m2) : rest;
   return body.trim();
 }
@@ -5065,11 +5074,40 @@ function normalizeTopicFieldLabel(raw) {
   return u;
 }
 
+/** Alternace názvů polí v AI odpovědi (jednotný zdroj pro anchor / řádkové parsování). */
+const TOPIC_FIELD_LABEL_ALTS_FOR_RE = 'VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|SPECIALISTA|VYKLAD|VÝKLAD|KOMENTAR|KOMENTÁŘ|EXEGEZE|DEFINITION|MEANING|USAGE|ORIGIN|COMMENTARY|EXEGESIS|DEF';
+
+/** Po klíčovém slově často následuje „(specialista)“ / poznámka v závorce — bez toho selhával \s*[-:]. */
+function makeTopicFieldHeaderScanRegex() {
+  return new RegExp(`\\b(${TOPIC_FIELD_LABEL_ALTS_FOR_RE})(?:\\*\\*|__)?\\s*(?:\\([^)\\n]{0,240}\\))?\\s*[-:–—=.|]{0,3}\\s*`, 'giu');
+}
+
+/** Stejná pravidla jako u anchor regexu, navíc prefix markdownu / číslování na začátku řádku. */
+function makeTopicFieldLineStartRegex() {
+  return new RegExp(
+    `^(?:(?:\\d+)[.)]\\s+)?(?:(?:[-*+>]|#{1,6})\\s+)?(?:(?:\\*\\*|__)\\s*)?(${TOPIC_FIELD_LABEL_ALTS_FOR_RE})(?:\\*\\*|__)?\\s*(?:\\([^)\\n]{0,240}\\))?\\s*[-:–—=.|]{0,3}\\s*`,
+    'iu'
+  );
+}
+
+/** Hlavička sekce specialisty (aliasy + závorka + dvojtečka nebo nový řádek těla). */
+function matchSpecialistaHeaderBlockStart(t) {
+  const s = String(t || '');
+  if (!s) return null;
+  const LINE_START = '(?:^|[\n\u0085\u2028\u2029])[\\s\u00A0]*';
+  const ALIAS = '(?:SPECIALISTA|VYKLAD|VÝKLAD|KOMENTAR|KOMENTÁŘ|EXEGEZE|COMMENTARY|EXEGESIS)';
+  const PAREN_OPT = '(?:\\([^)\\n]{0,240}\\))?';
+  const SEP = '(?:[:\\uFF1A\\u2013\\u2014=\\.\\-|]|\\n{1,4}\\s*)';
+  const prefix = '(?:(?:\\d+)[.)]\\s+)?(?:(?:[-*+>]|#{1,6})\\s+)?(?:(?:\\*\\*|__)\\s*)?';
+  const re = new RegExp(LINE_START + prefix + ALIAS + '(?:\\*\\*|__)?\\s*' + PAREN_OPT + '\\s*' + SEP + '\\s*', 'iu');
+  return s.match(re);
+}
+
 /** Výřez bloku podle libovolného výskytu labelu v textu (i více polí na jednom řádku). */
 function extractTopicSegmentByAnchors(cleaned, wantLabel) {
   const c = String(cleaned || '');
   if (!c || !wantLabel) return '';
-  const re = /\b(VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|SPECIALISTA|VYKLAD|VÝKLAD|KOMENTAR|KOMENTÁŘ|EXEGEZE|DEFINITION|MEANING|USAGE|ORIGIN|COMMENTARY|EXEGESIS|DEF)\s*[-:–—=.]{0,3}\s*/giu;
+  const re = makeTopicFieldHeaderScanRegex();
   const spans = [];
   let m;
   while ((m = re.exec(c)) !== null) {
@@ -5100,7 +5138,7 @@ function scanRawForTopicHeaderTopicIds(rawText) {
   const text = normalizeAiTopicRawText(rawText).trim();
   if (!text) return [];
   let cleaned = stripLeadingGHeaders(text).trim();
-  const re = /\b(VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|SPECIALISTA|VYKLAD|VÝKLAD|KOMENTAR|KOMENTÁŘ|EXEGEZE|DEFINITION|MEANING|USAGE|ORIGIN|COMMENTARY|EXEGESIS|DEF)\s*[-:–—=.]{0,3}\s*/giu;
+  const re = makeTopicFieldHeaderScanRegex();
   const out = [];
   const seen = new Set();
   let m;
@@ -5135,7 +5173,7 @@ function extractTopicValueFromAI(rawText, topicId, mode = 'loose') {
     const rawLine = lines[i];
     const trimL = rawLine.replace(/^\uFEFF/, '').replace(/^\s*\u200B+/, '').trimStart();
     const lead = rawLine.length - trimL.length;
-    const m = trimL.match(/^(?:(?:\d+)[.)]\s+)?(?:(?:[-*+>]|#{1,6})\s+)?(?:(?:\*\*|__)\s*)?(VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|SPECIALISTA|VYKLAD|VÝKLAD|KOMENTAR|KOMENTÁŘ|EXEGEZE|DEFINITION|MEANING|USAGE|ORIGIN|COMMENTARY|EXEGESIS|DEF)(?:\*\*|__)?\s*[-:–—=.]{0,3}\s*/iu);
+    const m = trimL.match(makeTopicFieldLineStartRegex());
     if (!m) continue;
     const label = normalizeTopicFieldLabel(m[1]);
     fieldPositions.push({ label, line: i, len: lead + m[0].length });
