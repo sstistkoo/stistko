@@ -344,6 +344,131 @@ Interní QA před odevzdáním (nevypisuj):
 
 Vstup:
 {HESLA}`
+  },
+  preset_topic_vyznam: {
+    label: 'Téma: Český význam',
+    topicLabel: 'Český význam',
+    template: `Jsi biblický lexikální překladatel. Priorita testu: pole VYZNAM (Český význam).
+
+Zaměř se hlavně na VYZNAM:
+- Stručný, přesný český význam bez omáčky.
+- Bez anglických zbytků.
+- Konzistence napříč hesly.
+
+Současně vrať kompletní blok (parser-safe):
+###Gx###
+VYZNAM: ...
+DEFINICE: ...
+POUZITI: ...
+PUVOD: ...
+KJV: ...
+SPECIALISTA: ...
+
+Fallback pro nejasné údaje: neuvedeno ve zdroji.
+Žádný text mimo bloky.
+
+Vstup:
+{HESLA}`
+  },
+  preset_topic_kjv: {
+    label: 'Téma: KJV překlady (CZ)',
+    topicLabel: 'KJV překlady (CZ)',
+    template: `Jsi biblický lexikální překladatel. Priorita testu: pole KJV (KJV překlady v češtině).
+
+Zaměř se hlavně na KJV:
+- Uveď hlavní KJV ekvivalent v češtině.
+- Drž se lexikálního významu hesla.
+- Nevkládej dlouhé parafráze.
+
+Současně vrať kompletní blok (parser-safe):
+###Gx###
+VYZNAM: ...
+DEFINICE: ...
+POUZITI: ...
+PUVOD: ...
+KJV: ...
+SPECIALISTA: ...
+
+Fallback pro nejasné údaje: neuvedeno ve zdroji.
+Žádný text mimo bloky.
+
+Vstup:
+{HESLA}`
+  },
+  preset_topic_pouziti: {
+    label: 'Téma: Biblické užití',
+    topicLabel: 'Biblické užití',
+    template: `Jsi biblický lexikální překladatel. Priorita testu: pole POUZITI (Biblické užití).
+
+Zaměř se hlavně na POUZITI:
+- Uveď biblické reference v hranatých závorkách.
+- Jen ověřitelné odkazy; nic nevymýšlej.
+- Pokud chybí zdroj, napiš: neuvedeno ve zdroji.
+
+Současně vrať kompletní blok (parser-safe):
+###Gx###
+VYZNAM: ...
+DEFINICE: ...
+POUZITI: ...
+PUVOD: ...
+KJV: ...
+SPECIALISTA: ...
+
+Žádný text mimo bloky.
+
+Vstup:
+{HESLA}`
+  },
+  preset_topic_puvod: {
+    label: 'Téma: Původ / Etymologie',
+    topicLabel: 'Původ / Etymologie',
+    template: `Jsi biblický lexikální překladatel. Priorita testu: pole PUVOD (Původ / etymologie).
+
+Zaměř se hlavně na PUVOD:
+- Uveď konkrétní etymologii (jazyk + kořen/slovo, je-li dostupné).
+- Napiš věcně a stručně.
+- Nejen obecné formulace typu "z hebrejštiny".
+
+Současně vrať kompletní blok (parser-safe):
+###Gx###
+VYZNAM: ...
+DEFINICE: ...
+POUZITI: ...
+PUVOD: ...
+KJV: ...
+SPECIALISTA: ...
+
+Fallback pro nejasné údaje: neuvedeno ve zdroji.
+Žádný text mimo bloky.
+
+Vstup:
+{HESLA}`
+  },
+  preset_topic_specialista: {
+    label: 'Téma: Biblický výklad (specialista)',
+    topicLabel: 'Biblický výklad (specialista)',
+    template: `Jsi biblický specialista. Priorita testu: pole SPECIALISTA (Biblický výklad).
+
+Zaměř se hlavně na SPECIALISTA:
+- Napiš souvislý odstavec 3-5 vět.
+- Přidej věcný biblický a teologický kontext.
+- Neopakuj jen definici nebo KJV.
+- Bez odrážek.
+
+Současně vrať kompletní blok (parser-safe):
+###Gx###
+VYZNAM: ...
+DEFINICE: ...
+POUZITI: ...
+PUVOD: ...
+KJV: ...
+SPECIALISTA: ...
+
+Fallback pro nejasné údaje: neuvedeno ve zdroji.
+Žádný text mimo bloky.
+
+Vstup:
+{HESLA}`
   }
 };
 
