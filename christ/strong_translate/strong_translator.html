@@ -1574,6 +1574,16 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
             <option value="preset_topic_pouziti">Téma: Biblické užití (CZ)</option>
             <option value="preset_topic_puvod">Téma: Původ / Etymologie (CZ)</option>
             <option value="preset_topic_specialista">Téma: Biblický výklad (specialista) (CZ)</option>
+          </optgroup>
+          <optgroup label="Tematické prompty — dávka (CZ)">
+            <option value="preset_topic_vyznam_batch">Téma: Český význam (CZ) — dávka</option>
+            <option value="preset_topic_definice_batch">Téma: Definice (CZ) — dávka</option>
+            <option value="preset_topic_kjv_batch">Téma: KJV překlady (CZ) — dávka</option>
+            <option value="preset_topic_pouziti_batch">Téma: Biblické užití (CZ) — dávka</option>
+            <option value="preset_topic_puvod_batch">Téma: Původ / Etymologie (CZ) — dávka</option>
+            <option value="preset_topic_specialista_batch">Téma: Biblický výklad (specialista) (CZ) — dávka</option>
+          </optgroup>
+          <optgroup label="Tematické prompty (En)">
             <option value="preset_topic_vyznam_en">Téma: Český význam (En)</option>
             <option value="preset_topic_definice_en">Téma: Definice (En)</option>
             <option value="preset_topic_kjv_en">Téma: KJV překlady (En)</option>
@@ -2168,6 +2178,7 @@ let listRangeFilter = null;
   let topicRepairState = null;
   let topicRepairWorkerRunning = false;
   let topicRepairTicker = null;
+  let topicRepairBulkRunning = false;
   const AUTO_TOKEN_LIMIT_KEY = 'strong_auto_token_limit';
   const TEST_HISTORY_KEY = 'strong_test_history_v1';
   const MODEL_TEST_OUTPUT_KEY = 'strong_model_test_output_v1';
@@ -2943,6 +2954,10 @@ function updateTopicRepairModalUI() {
             <span style="font-family:'JetBrains Mono',monospace;color:var(--acc)">${task.key}</span>
             <span>${escHtml(TOPIC_LABELS[task.topicId] || task.topicId)}</span>
           </label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;color:var(--txt3);font-size:11px">
+            <input type="checkbox" ${task.includeBulk !== false ? 'checked' : ''} onchange="toggleTopicRepairBulkInclude(${idx}, this.checked)" style="accent-color:var(--acc)">
+            dávka
+          </label>
           <span style="font-size:11px;color:${statusColor}">${statusText}${task.provider ? ` · ${task.provider}` : ''}</span>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
@@ -3004,6 +3019,7 @@ function buildTopicRepairTasks(keys) {
         topicId,
         status: 'waiting',
         checked: true,
+        includeBulk: true,
         currentValue: String(t[topicId] || '').trim(),
         sourceValue: getTopicSourceTextForPreview(key, topicId),
         candidateValue: '',
@@ -3056,6 +3072,40 @@ function renderTopicRepairModal() {
           <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="topicRepairEnable_openrouter" ${state.providerEnabled.openrouter ? 'checked' : ''} onchange="applyTopicRepairProviderCheckboxes()" style="accent-color:var(--acc)">OR <span id="topicRepairProvider_openrouter">OpenRouter: —</span></label>
         </div>
       </div>
+      <details style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;padding:10px;margin-bottom:10px">
+        <summary style="cursor:pointer;color:var(--acc)">Hromadná oprava jednoho tématu (dávka)</summary>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:8px">
+          <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--txt2)">
+            Téma
+            <select id="topicRepairBulkTopicSelect" onchange="refreshTopicRepairBatchPromptEditor()" style="min-width:220px;background:var(--bg2);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:6px;font-size:12px">
+              <option value="definice" ${state.bulkTopicId === 'definice' ? 'selected' : ''}>${escHtml(TOPIC_LABELS.definice)}</option>
+              <option value="vyznam" ${state.bulkTopicId === 'vyznam' ? 'selected' : ''}>${escHtml(TOPIC_LABELS.vyznam)}</option>
+              <option value="kjv" ${state.bulkTopicId === 'kjv' ? 'selected' : ''}>${escHtml(TOPIC_LABELS.kjv)}</option>
+              <option value="pouziti" ${state.bulkTopicId === 'pouziti' ? 'selected' : ''}>${escHtml(TOPIC_LABELS.pouziti)}</option>
+              <option value="puvod" ${state.bulkTopicId === 'puvod' ? 'selected' : ''}>${escHtml(TOPIC_LABELS.puvod)}</option>
+              <option value="specialista" ${state.bulkTopicId === 'specialista' ? 'selected' : ''}>${escHtml(TOPIC_LABELS.specialista)}</option>
+            </select>
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--txt3);cursor:pointer">
+            <input type="checkbox" id="topicRepairBulkOnlyFailed" checked style="accent-color:var(--acc)">
+            jen chyby / prázdné
+          </label>
+          <button class="hbtn" type="button" onclick="setTopicRepairBulkIncludeAll(true)">☑ Dávka: vše</button>
+          <button class="hbtn" type="button" onclick="setTopicRepairBulkIncludeAll(false)">☐ Dávka: nic</button>
+        </div>
+        <div style="margin-top:8px">
+          <div style="font-size:11px;color:var(--txt2);margin-bottom:6px">Batch prompt (uložený per téma). Placeholder <span style="font-family:'JetBrains Mono',monospace">{HESLA}</span> = vstupní hesla.</div>
+          <textarea id="topicRepairBatchPrompt" style="width:100%;min-height:160px;background:var(--bg2);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:10px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.45"></textarea>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+            <button class="hbtn" type="button" onclick="saveTopicRepairBatchPromptDraft()">💾 Uložit prompt</button>
+            <button class="hbtn" type="button" onclick="resetTopicRepairBatchPromptToDefault()">↺ Výchozí z katalogu</button>
+            <button class="hbtn grn" id="topicRepairBulkRunBtn" type="button" onclick="runTopicRepairBulkTranslation()">⚡ Hromadný překlad (vybrané)</button>
+          </div>
+          <div style="font-size:11px;color:var(--txt3);margin-top:8px">
+            Tip: pokud běží sekvenční oprava, dej nejdřív Pauza — hromadný běh počká, až doběhne aktuální pokus.
+          </div>
+        </div>
+      </details>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
         <button class="hbtn grn" id="topicRepairToggleBtn" onclick="toggleTopicRepairRun()">⏸ Pauza</button>
         <button class="hbtn grn" id="topicRepairApplyBtn" onclick="applyTopicRepairSelected()">✓ Potvrdit přepsání (0)</button>
@@ -3064,6 +3114,7 @@ function renderTopicRepairModal() {
     </div>
   `;
   document.body.appendChild(modal);
+  refreshTopicRepairBatchPromptEditor();
   updateTopicRepairModalUI();
 }
 
@@ -3078,6 +3129,7 @@ function startTopicRepairFlow(keys) {
     paused: false,
     closed: false,
     minimized: false,
+    bulkTopicId: tasks[0]?.topicId || 'definice',
     currentTask: null,
     providerEnabled: {
       groq: isAutoProviderEnabled('groq'),
@@ -4038,6 +4090,276 @@ const TOPIC_PROMPT_PRESET_MAP = {
   puvod: 'preset_topic_puvod',
   specialista: 'preset_topic_specialista'
 };
+
+const TOPIC_BATCH_PROMPT_PRESET_MAP = {
+  vyznam: 'preset_topic_vyznam_batch',
+  definice: 'preset_topic_definice_batch',
+  kjv: 'preset_topic_kjv_batch',
+  pouziti: 'preset_topic_pouziti_batch',
+  puvod: 'preset_topic_puvod_batch',
+  specialista: 'preset_topic_specialista_batch'
+};
+
+const TOPIC_REPAIR_BATCH_PROMPT_STORAGE_PREFIX = 'strong_topic_repair_batch_prompt_v1_';
+
+function getTopicRepairBatchPromptStorageKey(topicId) {
+  return `${TOPIC_REPAIR_BATCH_PROMPT_STORAGE_PREFIX}${topicId}`;
+}
+
+function applyPromptLanguageTokens(promptText) {
+  const targetLang = localStorage.getItem('strong_target_lang') || 'cz';
+  const sourceLang = localStorage.getItem('strong_source_lang') || 'gr';
+  const langNames = {
+    cz: 'češtiny',
+    en: 'angličtiny',
+    bg: 'bulharštiny',
+    ch: 'čínštiny',
+    sp: 'španělštiny',
+    sk: 'slovenštiny',
+    pl: 'polštiny',
+    gr: 'řečtiny',
+    he: 'hebrejštiny',
+    both: 'řečtiny i hebrejštiny'
+  };
+  const targetName = langNames[targetLang] || 'češtiny';
+  const sourceName = langNames[sourceLang] || 'řečtiny';
+  return String(promptText || '')
+    .replace(/{TARGET_LANG}/g, targetName)
+    .replace(/{SOURCE_LANG}/g, sourceName);
+}
+
+function getDefaultBatchTopicPromptTemplate(topicId) {
+  const promptType = TOPIC_BATCH_PROMPT_PRESET_MAP[topicId] || '';
+  return String(getTopicPromptTemplateByPromptType(promptType) || '').trim();
+}
+
+function getTopicRepairBatchPromptTemplate(topicId) {
+  const key = getTopicRepairBatchPromptStorageKey(topicId);
+  const saved = String(localStorage.getItem(key) || '').trim();
+  if (saved) return saved;
+  return getDefaultBatchTopicPromptTemplate(topicId);
+}
+
+function saveTopicRepairBatchPromptDraft() {
+  const state = topicRepairState;
+  if (!state) return;
+  const topicId = document.getElementById('topicRepairBulkTopicSelect')?.value || state.bulkTopicId || 'definice';
+  const ta = document.getElementById('topicRepairBatchPrompt');
+  if (!ta) return;
+  localStorage.setItem(getTopicRepairBatchPromptStorageKey(topicId), String(ta.value || ''));
+  showToast(`✓ Uložen batch prompt pro ${TOPIC_LABELS[topicId] || topicId}`);
+}
+
+function resetTopicRepairBatchPromptToDefault() {
+  const state = topicRepairState;
+  if (!state) return;
+  const topicId = document.getElementById('topicRepairBulkTopicSelect')?.value || state.bulkTopicId || 'definice';
+  localStorage.removeItem(getTopicRepairBatchPromptStorageKey(topicId));
+  const ta = document.getElementById('topicRepairBatchPrompt');
+  if (ta) ta.value = applyPromptLanguageTokens(getDefaultBatchTopicPromptTemplate(topicId));
+  showToast(`↺ Obnoven výchozí batch prompt pro ${TOPIC_LABELS[topicId] || topicId}`);
+}
+
+function refreshTopicRepairBatchPromptEditor() {
+  const state = topicRepairState;
+  if (!state) return;
+  const topicId = document.getElementById('topicRepairBulkTopicSelect')?.value || state.bulkTopicId || 'definice';
+  state.bulkTopicId = topicId;
+  const ta = document.getElementById('topicRepairBatchPrompt');
+  if (!ta) return;
+  ta.value = applyPromptLanguageTokens(getTopicRepairBatchPromptTemplate(topicId));
+}
+
+function buildTopicRepairBatchHeslaText(keys, topicId) {
+  const list = Array.isArray(keys) ? keys : [];
+  return list.map(key => {
+    const e = entryMap.get(key) || {};
+    return [
+      `${e.key || key} | ${e.greek || ''}`,
+      `DEF: ${e.definice || e.def || ''}`,
+      e.kjv ? `KJV: ${e.kjv}` : '',
+      e.orig ? `ORIG: ${e.orig}` : ''
+    ].filter(Boolean).join('\n');
+  }).join('\n\n---\n\n');
+}
+
+function getTopicBatchAiLabel(topicId) {
+  return ({
+    vyznam: 'VYZNAM',
+    definice: 'DEFINICE',
+    kjv: 'KJV',
+    pouziti: 'POUZITI',
+    puvod: 'PUVOD',
+    specialista: 'SPECIALISTA'
+  })[topicId] || 'VYZNAM';
+}
+
+function parseTopicRepairBatchResponse(rawText, topicId) {
+  const label = getTopicBatchAiLabel(topicId);
+  const text = String(rawText || '').replace(/\r\n/g, '\n');
+  const blocks = String(text || '').split(/\n(?=###\s*[GH]\d+)/i);
+  const out = {};
+  for (const block of blocks) {
+    const b = String(block || '').trim();
+    if (!b) continue;
+    const header = b.match(/^###\s*([GH]\d+)\s*###?/i);
+    if (!header) continue;
+    const key = String(header[1] || '').trim().toUpperCase();
+    const re = new RegExp(`^${label}\\s*[:\\-–—=.]?\\s*`, 'im');
+    const m = b.match(re);
+    if (!m) continue;
+    const start = m.index + m[0].length;
+    const tail = b.slice(start);
+    const next = tail.search(/\n\s*(?:VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|SPECIALISTA|VYKLAD|KOMENTAR|EXEGEZE)\s*[:\\-–—=.]/i);
+    const val = (next >= 0 ? tail.slice(0, next) : tail).trim();
+    if (hasMeaningfulValue(val)) out[key] = val;
+  }
+  return out;
+}
+
+async function waitTopicRepairSequentialIdle(maxMs = 60000) {
+  const start = Date.now();
+  while (Date.now() - start < maxMs) {
+    const running = !!topicRepairState?.tasks?.some(t => t.status === 'running');
+    const current = !!topicRepairState?.currentTask;
+    if (!running && !current) return true;
+    await sleep(120);
+  }
+  return false;
+}
+
+async function runTopicRepairBulkTranslation() {
+  const state = topicRepairState;
+  if (!state || topicRepairBulkRunning) return;
+  const topicId = document.getElementById('topicRepairBulkTopicSelect')?.value || state.bulkTopicId || 'definice';
+  const onlyFailed = !!document.getElementById('topicRepairBulkOnlyFailed')?.checked;
+  const bs = parseInt(document.getElementById('batchSizeRun')?.value, 10) || 10;
+
+  const tasks = state.tasks.filter(t => t && t.topicId === topicId && t.includeBulk !== false);
+  const picked = onlyFailed
+    ? tasks.filter(t => t.status === 'failed' || !hasMeaningfulValue(t.candidateValue))
+    : tasks;
+
+  const keys = picked.map(t => t.key);
+  if (!keys.length) {
+    showToast('⚠ Nic není vybrané pro hromadný běh (zkontroluj checkboxy / filtr chyb).');
+    return;
+  }
+
+  const activeProvider = resolveMainBatchProvider(document.getElementById('provider')?.value || '');
+  if (!isAutoProviderEnabled(activeProvider)) {
+    showToast('⚠ Zapni alespoň jednoho AI providera pro hromadný překlad.');
+    return;
+  }
+
+  topicRepairBulkRunning = true;
+  const bulkBtn = document.getElementById('topicRepairBulkRunBtn');
+  if (bulkBtn) {
+    bulkBtn.disabled = true;
+    bulkBtn.textContent = '⏳ Hromadně...';
+  }
+
+  const wasPaused = !!state.paused;
+  state.paused = true;
+  const idleOk = await waitTopicRepairSequentialIdle();
+  if (!idleOk) {
+    showToast('⚠ Sekvenční oprava stále běží — nejdřív dej Pauza a počkej na dokončení aktuálního pokusu.');
+    state.paused = wasPaused;
+    topicRepairBulkRunning = false;
+    if (bulkBtn) {
+      bulkBtn.disabled = false;
+      bulkBtn.textContent = '⚡ Hromadný překlad (vybrané)';
+    }
+    return;
+  }
+
+  try {
+    const promptTemplate = applyPromptLanguageTokens(String(document.getElementById('topicRepairBatchPrompt')?.value || '').trim());
+    if (!promptTemplate) {
+      showToast('✗ Batch prompt je prázdný');
+      return;
+    }
+
+    let processed = 0;
+    while (processed < keys.length) {
+      const batchKeys = keys.slice(processed, processed + bs);
+      const hesla = buildTopicRepairBatchHeslaText(batchKeys, topicId);
+      const userContent = promptTemplate.includes('{HESLA}')
+        ? promptTemplate.replace(/{HESLA}/g, hesla)
+        : `${promptTemplate}\n\n${hesla}`;
+
+      const prov = resolveMainBatchProvider(document.getElementById('provider')?.value || '');
+      const model = getPipelineModelForProvider(prov) || document.getElementById('model')?.value;
+      const apiKey = getCurrentApiKey(prov);
+      if (!apiKey) {
+        showToast(`✗ Zadej API klíč pro ${prov}.`);
+        return;
+      }
+
+      const raw = await callAIWithRetry(prov, apiKey, model, [
+        { role: 'system', content: SYSTEM_MESSAGE },
+        { role: 'user', content: enforceSpecialistaFormat(userContent) }
+      ]);
+
+      const rawText = String(raw?.content || '').trim();
+      log(`📥 RAW AI batch oprava ${topicId}: vypsáno do konzole`);
+      console.groupCollapsed(`🤖 RAW AI batch oprava ${topicId} (${prov}/${model})`);
+      console.log(rawText || '(prázdná odpověď)');
+      console.groupEnd();
+
+      const parsedMap = parseTopicRepairBatchResponse(rawText, topicId);
+      for (const key of batchKeys) {
+        const task = state.tasks.find(t => t.key === key && t.topicId === topicId);
+        if (!task) continue;
+        const val = String(parsedMap[key] || '').trim();
+        if (hasMeaningfulValue(val)) {
+          task.candidateValue = val;
+          task.provider = prov;
+          task.status = 'done';
+          task.error = '';
+        } else {
+          task.status = 'failed';
+          task.error = 'AI nevrátila hodnotu pro toto heslo (zkontroluj formát odpovědi).';
+        }
+      }
+
+      saveProgress();
+      updateTopicRepairModalUI();
+      processed += batchKeys.length;
+
+      if (processed < keys.length) {
+        const interval = parseInt(document.getElementById('intervalRun')?.value) || parseInt(document.getElementById('interval')?.value) || 20;
+        await sleep(interval * 1000);
+      }
+    }
+
+    showToast(`✓ Hromadná oprava tématu dokončena: ${TOPIC_LABELS[topicId] || topicId} (${keys.length})`);
+  } catch (e) {
+    showToast('✗ Hromadná oprava selhala: ' + e.message);
+  } finally {
+    state.paused = wasPaused;
+    topicRepairBulkRunning = false;
+    if (bulkBtn) {
+      bulkBtn.disabled = false;
+      bulkBtn.textContent = '⚡ Hromadný překlad (vybrané)';
+    }
+    updateTopicRepairModalUI();
+    if (!state.paused && !topicRepairWorkerRunning) processTopicRepairQueue();
+  }
+}
+
+function toggleTopicRepairBulkInclude(index, checked) {
+  const state = topicRepairState;
+  if (!state || !state.tasks[index]) return;
+  state.tasks[index].includeBulk = !!checked;
+}
+
+function setTopicRepairBulkIncludeAll(checked) {
+  const state = topicRepairState;
+  if (!state) return;
+  for (const t of state.tasks) t.includeBulk = !!checked;
+  updateTopicRepairModalUI();
+}
 
 function getTopicPromptTemplateByPromptType(promptType) {
   const topicType = String(promptType || '').trim();
@@ -9538,6 +9860,12 @@ window.toggleTopicRepairTask = toggleTopicRepairTask;
 window.applyTopicRepairProviderCheckboxes = applyTopicRepairProviderCheckboxes;
 window.minimizeTopicRepairModal = minimizeTopicRepairModal;
 window.closeTopicRepairModalOnly = closeTopicRepairModalOnly;
+window.refreshTopicRepairBatchPromptEditor = refreshTopicRepairBatchPromptEditor;
+window.saveTopicRepairBatchPromptDraft = saveTopicRepairBatchPromptDraft;
+window.resetTopicRepairBatchPromptToDefault = resetTopicRepairBatchPromptToDefault;
+window.runTopicRepairBulkTranslation = runTopicRepairBulkTranslation;
+window.toggleTopicRepairBulkInclude = toggleTopicRepairBulkInclude;
+window.setTopicRepairBulkIncludeAll = setTopicRepairBulkIncludeAll;
 window.retryFailed = retryFailed;
 window.showMobileActions = showMobileActions;
 window.closeMobileModal = closeMobileModal;
