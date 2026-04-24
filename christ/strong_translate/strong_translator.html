@@ -4320,8 +4320,8 @@ function exportTXT() {
       `Český význam: ${t.vyznam || '—'}`,
       `Definice (EN): ${e.definice || e.def || '—'}`,
       `Česká definice: ${t.definice || '—'}`,
-      `KJV překlady: ${t.kjv || e.kjv || '—'}`,
-      `Biblické užití (KJV): ${t.pouziti || '—'}`,
+      `KJV překlady (CZ): ${t.kjv || e.kjv || '—'}`,
+      `Biblické užití: ${t.pouziti || '—'}`,
       `Původ: ${t.puvod || '—'}`,
       `Specialista: ${t.specialista || '—'}`,
       ''
@@ -5087,8 +5087,8 @@ function formatModelTestParsedBlock(key, t, e) {
     `Český význam: ${t.vyznam || '—'}`,
     `Definice (EN): ${e.definice || e.def || '—'}`,
     `Česká definice: ${defDisplay}`,
-    `KJV překlady: ${t.kjv || e.kjv || '—'}`,
-    `Biblické užití (KJV): ${t.pouziti || '—'}`,
+    `KJV překlady (CZ): ${t.kjv || e.kjv || '—'}`,
+    `Biblické užití: ${t.pouziti || '—'}`,
     `Původ: ${t.puvod || '—'}`,
     `Specialista: ${t.specialista || '—'}`,
     ''
@@ -7013,7 +7013,7 @@ function exportRange() {
     return [`${e.key} | ${e.greek}`,
       `Český význam: ${t.vyznam || '—'}`,
       `Definice: ${t.definice || '—'}`,
-      `Biblické užití (KJV): ${t.pouziti || '—'}`,
+      `Biblické užití: ${t.pouziti || '—'}`,
       `Původ: ${t.puvod || '—'}`, ''].join('\n');
   });
   download(`strong_gr_cz_G${from}-G${to}.txt`, lines.join('\n'), 'text/plain');
@@ -7362,7 +7362,7 @@ function importTXT(input) {
   return importFile(input);
 }
 
-// Parsuje formát: "G12 | ἄβυσσος\nČeský význam: ...\nDefinice: ..."
+// Parsuje formát: "G12 | ἄβυσσος\nČeský význam: ...\nDefinice (CZ): ..."
 function parseCzTXT(text) {
   const result = {};
   const normalizedText = String(text || '').replace(/^\uFEFF/, '').replace(/\r\n/g, '\n').trim();
@@ -7384,11 +7384,11 @@ function parseCzTXT(text) {
       return '';
     };
     const vyznam = get(['Český význam', 'Vyznam', 'VÝZNAM', 'VYZNAM', 'Význam', 'Cz', 'CZ']);
-    const definice = get(['Česká definice', 'Definice', 'DEFINICE', 'Definice (CZ)', 'CZ definice']);
-    const pouziti = get(['Biblické užití (KJV)', 'Pouziti', 'POUZITI', 'Použití']);
+    const definice = get(['Definice (CZ)', 'Česká definice', 'Definice', 'DEFINICE', 'CZ definice']);
+    const pouziti = get(['Biblické užití', 'Biblické užití (KJV)', 'Pouziti', 'POUZITI', 'Použití']);
     const puvod = get(['Původ', 'Puvod', 'PUVOD']);
     const specialista = get(['Specialista', 'VÝKLAD', 'VYKLAD', 'Komentář', 'KOMENTAR', 'Exegeze', 'EXEGEZE']);
-    const kjv = get(['KJV překlady', 'KJV', 'KJV_PREKLADY', 'KJV Významy']);
+    const kjv = get(['KJV překlady (CZ)', 'KJV překlady', 'KJV', 'KJV_PREKLADY', 'KJV Významy']);
     if (vyznam || definice) {
       result[key] = { vyznam, definice, pouziti, puvod, specialista, kjv };
     }
