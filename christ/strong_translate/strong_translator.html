@@ -1474,7 +1474,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
             <option value="preset_v9">v9 - přelož EN segmenty</option>
             <option value="preset_v10">v10 - QA self-check</option>
             <option value="preset_v11">v11 - ALL-IN-ONE</option>
-            <option value="preset_v12">v12 - v8+ anti-EN normalizace</option>
+            <option value="preset_v12" selected>⭐ TOP v12 - anti-EN normalizace</option>
             <option value="preset_v13">v13 - anti-EN + anti-truncace</option>
           </optgroup>
           <option disabled>────────────</option>
@@ -1722,7 +1722,7 @@ POVINNÝ VÝSTUP NAVÍC:
     }
 
     function getModelTestPromptType() {
-      return localStorage.getItem(MODEL_TEST_PROMPT_TYPE_KEY) || 'preset_v3';
+      return localStorage.getItem(MODEL_TEST_PROMPT_TYPE_KEY) || 'preset_v12';
     }
     function getModelTestPromptCompareType() {
       return localStorage.getItem(MODEL_TEST_PROMPT_COMPARE_TYPE_KEY) || 'preset_v12';
@@ -4742,7 +4742,7 @@ function saveModelTestPromptSettings() {
     localStorage.setItem(MODEL_TEST_ENABLE_PROMPT_KEY, promptEnable.checked ? '1' : '0');
   }
   if (promptTypeSelect) {
-    localStorage.setItem(MODEL_TEST_PROMPT_TYPE_KEY, promptTypeSelect.value || 'preset_v3');
+    localStorage.setItem(MODEL_TEST_PROMPT_TYPE_KEY, promptTypeSelect.value || 'preset_v12');
   }
   if (promptCompareEnable) {
     localStorage.setItem(MODEL_TEST_PROMPT_COMPARE_ENABLE_KEY, promptCompareEnable.checked ? '1' : '0');

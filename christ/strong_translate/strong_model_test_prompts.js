@@ -271,7 +271,7 @@ Vstup:
 {HESLA}`
   },
   preset_v12: {
-    label: 'Předdefinovaný v12 (Groq: v8+ anti-EN normalizace)',
+    label: 'TOP ⭐ v12 (Groq: anti-EN normalizace)',
     template: `Jsi biblický lexikální překladatel optimalizovaný pro Groq Llama 4.
 
 Úkol:
