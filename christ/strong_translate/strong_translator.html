@@ -4636,12 +4636,18 @@ async function callAIWithRetry(provider, apiKey, model, messages) {
            throw new Error(errMsg);
          }
          if (isRate) {
-           const wait = (attempt + 1) * 10;
+           const parsedRetry = rateInfoFromErrorMessage(e?.message || '')?.retryAfterSec || 0;
+           const wait = Math.max(2, Math.min(20, parsedRetry || ((attempt + 1) * 10)));
+           const shouldSwitchModelImmediately = provider === 'groq';
            logWarn('callAIWithRetry', `Rate limit na ${m}, čekám ${wait}s...`, {
              provider, model: m, attempt: attempt + 1, waitSeconds: wait
            });
-           showToast(`⏳ Rate limit — čekám ${wait}s`);
+           showToast(`⏳ Rate limit — čekám ${wait}s${shouldSwitchModelImmediately ? ', pak zkusím jiný model' : ''}`);
            await sleep(wait * 1000);
+           if (shouldSwitchModelImmediately) {
+             // U Groq je praktičtější při rate limitu rychle přeskočit na další model.
+             break;
+           }
            continue;
          }
          if (isTimeout) {
