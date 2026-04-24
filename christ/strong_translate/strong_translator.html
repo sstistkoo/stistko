@@ -2107,7 +2107,6 @@ let listRangeFilter = null;
     ph: 'gsk_...',
     models: [
       ['meta-llama/llama-4-scout-17b-16e-instruct', 'Llama 4 Scout (Vysoký limit TPM)'],
-      ['meta-llama/llama-4-maverick-17b-128e-instruct', 'Llama 4 Maverick (Nový)'],
       ['llama-3.3-70b-versatile', 'Llama 3.3 70B (Nejvyšší kvalita)'],
       ['llama-3.1-8b-instant', 'Llama 3.1 8B (Rychlý, pozor na limity)'],
     ]
@@ -6202,11 +6201,22 @@ const PIPELINE_MODEL_STORAGE_KEY = 'strong_pipeline_model_';
 const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
 
 function getPipelineModelForProvider(prov) {
+  const hasStaticModel = (provider, model) => {
+    if (!model) return false;
+    if (provider === 'openrouter') return true;
+    const providerModels = Array.isArray(PROVIDERS?.[provider]?.models) ? PROVIDERS[provider].models : [];
+    return providerModels.some(item => Array.isArray(item) && String(item[0] || '').trim() === model);
+  };
   const saved = String(localStorage.getItem(PIPELINE_MODEL_STORAGE_KEY + prov) || '').trim();
-  if (saved) return saved;
+  if (saved && hasStaticModel(prov, saved)) return saved;
+  if (saved && !hasStaticModel(prov, saved)) {
+    localStorage.removeItem(PIPELINE_MODEL_STORAGE_KEY + prov);
+  }
   const testSelected = String(getModelTestSelectedModelForProvider(prov) || '').trim();
-  if (testSelected) return testSelected;
-  return getDefaultPinnedModelByProvider(prov);
+  if (testSelected && hasStaticModel(prov, testSelected)) return testSelected;
+  const fallback = String(getDefaultPinnedModelByProvider(prov) || '').trim();
+  if (fallback && hasStaticModel(prov, fallback)) return fallback;
+  return '';
 }
 
 function setPipelineModelForProvider(prov, model) {
@@ -7443,7 +7453,6 @@ function getGroqLimits(model) {
   // Known limits for Groq free tier (April 2026)
   const limits = {
     'meta-llama/llama-4-scout-17b-16e-instruct': { rpm: 30, rpd: 1000, tpm: 30000, tpd: 500000 },
-    'meta-llama/llama-4-maverick-17b-128e-instruct': { rpm: 15, rpd: 500, tpm: 3000, tpd: 0 },
     'llama-3.3-70b-versatile': { rpm: 30, rpd: 1000, tpm: 12000, tpd: 100000 },
     'llama-3.1-8b-instant': { rpm: 30, rpd: 14400, tpm: 6000, tpd: 500000 },
   };
