@@ -3515,7 +3515,22 @@ function applyTopicRepairSelected() {
       showToast('⚠ Nic nebylo označeno k přepsání');
     }
   } else {
-    showToast(`✓ Přepsáno ${applied} témat`);
+    const keysInModal = [...new Set(state.tasks.map(t => t.key))];
+    const allTopicsOk = keysInModal.every(k => getFailedTopicsForFallback(translated[k] || {}).length === 0);
+    if (allTopicsOk) {
+      showToast(`✓ Přepsáno ${applied} témat — u těchto hesel je vše v pořádku, zavírám okno opravy.`);
+      stopTopicRepairTicker();
+      topicRepairState.closed = true;
+      closeTopicRepairModalSafe();
+      topicRepairState = null;
+      const miniBtn = document.getElementById('btnTopicRepairMini');
+      if (miniBtn) {
+        miniBtn.style.display = 'none';
+        miniBtn.classList.remove('topicRepairMiniBusy');
+      }
+    } else {
+      showToast(`✓ Přepsáno ${applied} témat`);
+    }
   }
   syncTopicRepairMinimizeBusyIndicator();
 }
@@ -3577,8 +3592,16 @@ function hasMeaningfulValue(v) {
   return !!s && s !== '—' && s !== '(přeskočeno)';
 }
 
+/** Anglická část za „Originál:“ nesmí označit celou definici jako EN (běžné u CZ+AS dvojice). */
+function stripDefinitionOriginReferenceTail(text) {
+  const s = String(text || '');
+  const m = s.match(/\bOriginál\s*:/iu);
+  if (!m || m.index === undefined || m.index <= 0) return s.trim();
+  return s.slice(0, m.index).trim();
+}
+
 function isDefinitionLikelyEnglish(text) {
-  const s = String(text || '').trim();
+  const s = stripDefinitionOriginReferenceTail(String(text || '').trim());
   if (!s) return false;
   const markers = [
     /\bwithout\b/i,
@@ -4384,11 +4407,60 @@ function parseTopicRepairBatchResponse(rawText, topicId) {
     if (!m) continue;
     const start = m.index + m[0].length;
     const tail = b.slice(start);
-    const next = tail.search(/\n\s*(?:VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|SPECIALISTA|VYKLAD|KOMENTAR|EXEGEZE)\s*[:\\-–—=.]/i);
+    const next = tail.search(/\n\s*(?:VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|SPECIALISTA|VYKLAD|VÝKLAD|KOMENTAR|KOMENTÁŘ|EXEGEZE|COMMENTARY|EXEGESIS)\s*[:\\-–—=.]/i);
     const val = (next >= 0 ? tail.slice(0, next) : tail).trim();
     if (hasMeaningfulValue(val)) out[key] = val;
   }
   return out;
+}
+
+/** Výřez bloku jednoho hesla z hromadné RAW odpovědi (pro parsování SPECIALISTA apod.). */
+function extractTopicRepairBatchBlockForKey(rawText, key) {
+  const text = String(normalizeAiTopicRawText(rawText) || '').trim();
+  const upperKey = String(key || '').trim().toUpperCase();
+  if (!text || !upperKey) return '';
+  const blocks = text.split(/\n(?=###\s*[GH]\d+)/i);
+  for (const block of blocks) {
+    const b = String(block || '').trim();
+    if (!b) continue;
+    const header = b.match(/^###\s*([GH]\d+)\s*###?/i);
+    if (!header) continue;
+    const k = String(header[1] || '').trim().toUpperCase();
+    if (k === upperKey) return b;
+  }
+  return '';
+}
+
+/** Naplní specialista* u tasku z libovolného RAW (dávka = jen blok ###G12###…). */
+function syncTopicRepairTaskSpecialistaFromRaw(task, rawText) {
+  if (!task) return;
+  const baseline = translated[task.key] || {};
+  const prevSpecialista = String(baseline.specialista || '').trim();
+  let candidateSpecialista = String(extractTopicValueFromAI(rawText, 'specialista', 'strict') || '').trim();
+  if (!hasMeaningfulValue(candidateSpecialista)) {
+    candidateSpecialista = String(extractSpecialistaLooseFallback(rawText) || '').trim();
+  }
+  if (!hasMeaningfulValue(candidateSpecialista)) {
+    candidateSpecialista = String(extractTopicValueFromAI(rawText, 'specialista', 'loose') || '').trim();
+  }
+  const normStrip = stripLeadingGHeaders(normalizeAiTopicRawText(rawText)).trim();
+  const hdrTopics = scanRawForTopicHeaderTopicIds(rawText);
+  const specHeader = hdrTopics.includes('specialista') || !!matchSpecialistaHeaderBlockStart(normStrip);
+  task.specialistaInRaw = hasMeaningfulValue(candidateSpecialista) || specHeader;
+  task.specialistaPreviousValue = prevSpecialista;
+  task.specialistaCandidateValue = candidateSpecialista;
+  if (specHeader && !hasMeaningfulValue(candidateSpecialista)) {
+    log(`⚠ ${task.key} (dávka): v bloku je nadpis SPECIALISTA/alias, ale tělo se nepodařilo strojově vyčíst — viz konzole RAW.`);
+  }
+  translated[task.key] = translated[task.key] || {};
+  if (shouldReplaceSpecialista(prevSpecialista, candidateSpecialista)) {
+    translated[task.key].specialista = String(candidateSpecialista || '').trim();
+    task.specialistaDecision = 'přijat (auto)';
+  } else if (task.specialistaInRaw) {
+    task.specialistaDecision = 'zamítnut (auto)';
+  } else {
+    task.specialistaDecision = '';
+  }
 }
 
 async function waitTopicRepairSequentialIdle(maxMs = 60000) {
@@ -4532,6 +4604,8 @@ async function runTopicRepairBulkTranslation() {
           task.status = 'done';
           task.error = '';
           task.checked = shouldAutoCheckTopicRepairTask(topicId, task.currentValue, val);
+          const blockRaw = extractTopicRepairBatchBlockForKey(rawText, key) || rawText;
+          syncTopicRepairTaskSpecialistaFromRaw(task, blockRaw);
         } else {
           task.status = 'failed';
           task.error = 'AI nevrátila hodnotu pro toto heslo (zkontroluj formát odpovědi).';
