@@ -465,7 +465,9 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   justify-self: end;
 }
 .li-dot.done { background: var(--grn); }
-.li-dot.pending { background: var(--ylw); animation: blink 1.2s infinite; }
+.li-dot.pending { background: #ff4d4f; }
+.li-dot.failed { background: #ff8f1f; }
+.li-dot.missing-topic { background: #4fa3ff; }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
 
 /* Right — detail */
@@ -1201,6 +1203,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
        <span id="promptName">–</span>
      </span>
     <button onclick="showPromptLibraryModal()" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-size:12px;margin-left:8px" title="Otevřít knihovnu promptů">📚 Knihovna</button>
+    <button id="btnPromptLang" onclick="showPromptLangModal()" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-size:12px;margin-left:8px" title="Nastavit cílový a zdrojový jazyk">🌐 Jazyk (cz)</button>
     <button id="btnPromptAuto" onclick="togglePromptAutoMode()" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-size:12px;margin-left:8px" title="Automaticky aplikovat systémový prompt">⚡ Auto prompt: ON</button>
      <textarea id="promptEditor" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" aria-hidden="true"></textarea>
    </div>
@@ -1314,7 +1317,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
             <option value="all" selected>Vše</option>
             <option value="pending">K překladu</option>
             <option value="missing_topic">Chybí téma</option>
-            <option value="failed">Neúplné / chybné</option>
+            <option value="failed">Neúspěšné</option>
             <option value="done">Hotovo</option>
             <option value="g_all">Jen řecké (G)</option>
             <option value="h_all">Jen hebrejské (H)</option>
@@ -1666,7 +1669,9 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
        <div class="prompt-actions">
          <button class="prompt-btn" onclick="applySystemPromptForCurrentTask()" title="Nastavit systémový prompt dle aktuálního režimu">🛠 System</button>
          <button class="prompt-btn ai" onclick="showPromptAIModal()">🤖 AI</button>
-         <button class="prompt-btn lang" onclick="showPromptLangModal()">🌐 Jazyk</button>
+         <button class="prompt-btn" onclick="exportPromptLibraryToTxt()" title="Stáhnout prompty do TXT">⬇ TXT</button>
+         <button class="prompt-btn" type="button" onclick="document.getElementById('promptLibraryFileInput').click()" title="Načíst prompty ze souboru TXT">⬆ Načíst</button>
+         <input type="file" id="promptLibraryFileInput" accept=".txt,text/plain" style="display:none" onchange="importPromptLibraryFromFile(this)">
          <button class="prompt-btn cancel" onclick="closePromptLibraryModal()">✕ Zavřít</button>
          <button class="prompt-btn ok" onclick="applySelectedPrompt()">✓ Uložit a použít</button>
        </div>
@@ -1780,7 +1785,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
    <script type="module">
   // ══ CORE MODULE IMPORT ═══════════════════════════════════════════
   import core from './strong_translator_core_new.js';
-  import modelTestPromptCatalog from './strong_model_test_prompts.js';
+  import prompts from './strong_prompts.js';
   // Re-export for use in this module
 const {
       parseTXT: parseTXTCore,
@@ -1792,6 +1797,12 @@ const {
       SYSTEM_MESSAGE,
       DEFAULT_PROMPT
     } = core;
+const {
+      CATEGORY_LABELS,
+      FINAL_PROMPT,
+      PROMPT_LIBRARY_BASE,
+      MODEL_TEST_PROMPT_CATALOG: modelTestPromptCatalog
+    } = prompts;
     
    // Use core functions, but override buildPromptMessages to support custom prompts
    // buildPromptMessagesCore is already destructured above
@@ -2785,6 +2796,23 @@ function isTranslationComplete(t) {
   return required.every(field => hasMeaningfulValue(t[field]));
 }
 
+function hasAnyTranslationContent(t) {
+  if (!t || t.skipped) return false;
+  const fields = ['vyznam', 'definice', 'pouziti', 'puvod', 'kjv', 'specialista'];
+  return fields.some(field => hasMeaningfulValue(t[field]));
+}
+
+function getTranslationStateForKey(key) {
+  const t = translated[key];
+  if (!t || t.skipped) return 'pending';
+  if (isTranslationComplete(t)) return 'done';
+  const hasTopicMissing = getFailedTopicsForFallback(t).length > 0 &&
+    FALLBACK_TOPIC_ORDER.some(topicId => hasMeaningfulValue(t[topicId]));
+  if (hasTopicMissing) return 'missing_topic';
+  if (!hasAnyTranslationContent(t)) return 'failed';
+  return 'failed_partial';
+}
+
 function fillMissingVyznamFromSource(keys) {
   if (!Array.isArray(keys)) return;
   for (const key of keys) {
@@ -2923,18 +2951,15 @@ function getFilteredEntries() {
       e.greek.toLowerCase().includes(q) || (e.definice || e.def || '').toLowerCase().includes(q);
     if (!matchesSearch) return false;
     
-    const t = translated[e.key];
-    const hasTranslation = isTranslationComplete(t);
-    const isFailed = t && !isTranslationComplete(t);
-    const hasTopicMissing = !!(t && !t.skipped && getFailedTopicsForFallback(t).length > 0 && FALLBACK_TOPIC_ORDER.some(topicId => hasMeaningfulValue(t[topicId])));
+    const state = getTranslationStateForKey(e.key);
     
     if (lang === 'G' && !e.key.startsWith('G')) return false;
     if (lang === 'H' && !e.key.startsWith('H')) return false;
     
-    if (status === 'pending') return !hasTranslation;
-    if (status === 'done') return hasTranslation && !isFailed;
-    if (status === 'failed') return isFailed;
-    if (status === 'missing_topic') return hasTopicMissing;
+    if (status === 'pending') return state === 'pending';
+    if (status === 'done') return state === 'done';
+    if (status === 'failed') return state === 'failed';
+    if (status === 'missing_topic') return state === 'missing_topic';
     
     return true;
   });
@@ -3056,10 +3081,9 @@ function renderVisible() {
     const needsUpdate = [...Array(endIndex - startIndex + 1)].some((_, idx) => {
       const key = filteredKeys[startIndex + idx];
       if (!key) return false;
-      const t = translated[key];
-      const wasDone = lastRenderRange.doneStates?.[key];
-      const isDone = isTranslationComplete(t);
-      return wasDone !== isDone;
+      const state = getTranslationStateForKey(key);
+      const prev = lastRenderRange.doneStates?.[key];
+      return prev !== state;
     });
     if (!needsUpdate) return;
   }
@@ -3073,9 +3097,9 @@ function renderVisible() {
     if (!key) continue;
     const e = entryMap.get(key);
     if (!e) continue;
-    const t = translated[key];
-    const done = isTranslationComplete(t);
-    doneStates[key] = done;
+    const state = getTranslationStateForKey(key);
+    const done = state === 'done';
+    doneStates[key] = state;
     
     const isSelected = selectedKeys.has(key);
     
@@ -3102,7 +3126,7 @@ function renderVisible() {
       <input type="checkbox" class="li-check" ${isSelected ? 'checked' : ''} onclick="toggleSelect('${key}', event)" aria-label="Vybrat heslo ${key}">
       <div class="li-key">${key}</div>
       <div class="li-greek">${escHtml(e.greek)}</div>
-      <div class="li-dot ${done ? 'done' : ''}" aria-hidden="true">${done ? '✓' : '✗'}</div>
+      <div class="li-dot ${state === 'done' ? 'done' : (state === 'pending' ? 'pending' : (state === 'missing_topic' ? 'missing-topic' : 'failed'))}" aria-hidden="true">${state === 'done' ? '✓' : '•'}</div>
     `;
     fragment.appendChild(div);
   }
@@ -4048,9 +4072,11 @@ function shouldAcceptTopicFallback(topicId, candidate) {
   return true;
 }
 
+const GEMINI_SPECIAL_TRANSLATION_MODELS = ['gemini-2.5-flash-lite', 'gemini-2.5-flash'];
+
 const SECONDARY_PROVIDER_MODEL_RANKING = {
-  // Z test/test (13).txt: nejstabilnější Gemini modely
-  gemini: ['gemini-2.5-flash-lite', 'gemini-2.5-flash'],
+  // Pro speciální topic fallback držíme Gemini omezeně (rychlost + stabilita).
+  gemini: GEMINI_SPECIAL_TRANSLATION_MODELS,
   // Z test/test (13).txt: OpenRouter smoke/auto TOP pořadí
   openrouter: ['openrouter/free', 'openai/gpt-oss-20b:free', 'nvidia/nemotron-nano-9b-v2:free']
 };
@@ -4058,7 +4084,10 @@ const SECONDARY_PROVIDER_MODEL_RANKING = {
 function getSecondaryProviderModelCandidates(prov) {
   const selected = String(getPipelineModelForProvider(prov) || getModelTestSelectedModelForProvider(prov) || '').trim();
   const ranked = Array.isArray(SECONDARY_PROVIDER_MODEL_RANKING[prov]) ? SECONDARY_PROVIDER_MODEL_RANKING[prov] : [];
-  return [...new Set([selected, ...ranked].filter(Boolean))].slice(0, 4);
+  const configured = prov === 'gemini' ? getProviderConfiguredModels('gemini') : [];
+  const queue = [...new Set([selected, ...ranked, ...configured].filter(Boolean))];
+  if (prov === 'gemini') return queue;
+  return queue.slice(0, 4);
 }
 
 function getSecondaryProviderModelQueue(prov) {
@@ -4513,7 +4542,20 @@ const FALLBACKS_STATIC = {
   gemini: ['gemini-2.5-flash', 'gemini-2.5-flash-lite']
 };
 
+function getProviderConfiguredModels(provider) {
+  const cfg = PROVIDERS?.[provider];
+  if (!cfg || !Array.isArray(cfg.models)) return [];
+  return cfg.models
+    .map(item => Array.isArray(item) ? String(item[0] || '').trim() : '')
+    .filter(Boolean);
+}
+
 function getFallbackModels(provider) {
+  if (provider === 'gemini') {
+    // Běžný retry: rotuj všechny modely, které máš dostupné v Gemini seznamu.
+    const configured = getProviderConfiguredModels('gemini');
+    if (configured.length) return [...new Set(configured)];
+  }
   if (provider === 'openrouter') {
     try {
       const raw = localStorage.getItem('openrouter_free_models_cache');
@@ -5348,6 +5390,7 @@ function loadSavedSettings() {
   updateFailedCount();
   updatePromptStatusIndicator();
   updatePromptAutoButton();
+  updatePromptLangButtonLabel();
 
   // Load language settings
   let targetLang = localStorage.getItem('strong_target_lang') || 'cz';
@@ -7662,156 +7705,89 @@ function getOpenRouterRateLimits(keyData) {
  }
 
 // ══ PROMPT LIBRARY ═══════════════════════════════════════════════
-// Czech labels for prompt category tabs
-const CATEGORY_LABELS = {
-  default: 'Výchozí',
-  detailed: 'Detailní',
-  concise: 'Stručné',
-  literal: 'Doslovné',
-  custom: 'Vlastní',
-  library: 'Knihovna',
-  final: 'Finální'
-};
+const PROMPT_LIBRARY_CUSTOM_KEY = 'strong_prompt_library_custom';
+const PROMPT_LIBRARY_IMPORTED_KEY = 'strong_prompt_library_imported';
+let PROMPT_LIBRARY = {};
 
-// Final custom prompt – ušitý na míru
-const FINAL_PROMPT = {
-  name: 'Finální',
-  desc: 'Kompletní překlad se všemi poli',
-  text: `Přelož hesla do {TARGET_LANG} ze {SOURCE_LANG} přesně a konzistentně.
+function clonePromptLibraryBase() {
+  return JSON.parse(JSON.stringify(PROMPT_LIBRARY_BASE || {}));
+}
 
-Vrať pouze data, bez komentářů navíc. Zachovej pořadí hesel.
-Formát pro každé heslo musí být:
-###G[číslo]###
-VÝZNAM: [přesný překlad]
-DEFINICE: [lexikální význam a gramatika]
-POUZITI: [biblické reference v hranatých závorkách]
-PUVOD: [etymologie]
-KJV: [hlavní KJV překlad]
-SPECIALISTA: [souvislý odstavec 3-5 vět bez odrážek]
+function getStoredCustomPromptLibrary() {
+  try {
+    const raw = localStorage.getItem(PROMPT_LIBRARY_CUSTOM_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter((p) => p && typeof p.name === 'string' && typeof p.desc === 'string' && typeof p.text === 'string');
+  } catch {
+    return [];
+  }
+}
 
-HESLA:
-{HESLA}`
-};
+function saveStoredCustomPromptLibrary(entries) {
+  localStorage.setItem(PROMPT_LIBRARY_CUSTOM_KEY, JSON.stringify(entries || []));
+}
 
-const PROMPT_LIBRARY = {
-  default: [
-    {
-      name: 'Systémový',
-      desc: 'Původní systémový prompt',
-      text: DEFAULT_PROMPT
+function getStoredImportedPromptLibrary() {
+  try {
+    const raw = localStorage.getItem(PROMPT_LIBRARY_IMPORTED_KEY);
+    const parsed = raw ? JSON.parse(raw) : {};
+    if (!parsed || typeof parsed !== 'object') return {};
+    return parsed;
+  } catch {
+    return {};
+  }
+}
+
+function saveStoredImportedPromptLibrary(data) {
+  localStorage.setItem(PROMPT_LIBRARY_IMPORTED_KEY, JSON.stringify(data || {}));
+}
+
+function rebuildPromptLibrary(currentSavedPrompt = '') {
+  PROMPT_LIBRARY = clonePromptLibraryBase();
+  const importedByCategory = getStoredImportedPromptLibrary();
+  for (const [category, prompts] of Object.entries(importedByCategory)) {
+    if (!Array.isArray(prompts)) continue;
+    if (!PROMPT_LIBRARY[category]) PROMPT_LIBRARY[category] = [];
+    for (const item of prompts) {
+      if (!item || typeof item.text !== 'string') continue;
+      if (!PROMPT_LIBRARY[category].some((p) => p.text === item.text)) {
+        PROMPT_LIBRARY[category].push({
+          name: String(item.name || 'Importovaný'),
+          desc: String(item.desc || 'Import ze souboru'),
+          text: item.text
+        });
+      }
     }
-  ],
-  detailed: [
-    {
-      name: 'Vysoce detailní',
-      desc: 'Hluboký překlad s all etymology',
-      text: `Jsi odborník na biblické řecký a hebrejský jazyk. Přelož very carefully.
+  }
+  const customSaved = localStorage.getItem('strong_custom_prompt');
+  const importedCustom = getStoredCustomPromptLibrary();
+  const customEntries = [];
 
-HESLA:
-{HESLA}
+  if (customSaved && customSaved.trim()) {
+    customEntries.push({
+      name: 'Moje vlastní',
+      desc: 'Uložený vlastní prompt',
+      text: customSaved
+    });
+  }
 
-Pro každé heslo poskytni:
-1. Český význam (přesný, s考dosť)
-2. Podrobná definice s gramatickými detaily
-3. Etmologii a korenn slova
-4. Všechny KJV překlady s kontextem
-5. Biblické užití s referencemi (Strong čísla)
+  for (const item of importedCustom) {
+    if (item.text !== customSaved) customEntries.push(item);
+  }
 
-Formát výstupu:
-###G[číslo]###
-VÝZNAM: [přesný překlad]
-DEFINICE: [podrobný, gramatický popis]
-ETYMOLOGIE: [kořen, slovní vývin]
-KJV: [všechny překlady]
-VYSKYT: [umelecké reference]
-`
-    }
-  ],
-  concise: [
-    {
-      name: 'Stručné',
-      desc: 'Krátký a jasný překlad',
-      text: `Přelož do češtiny:
+  customEntries.push(FINAL_PROMPT);
 
-{HESLA}
+  if (currentSavedPrompt && !customEntries.some((p) => p.text === currentSavedPrompt)) {
+    customEntries.unshift({
+      name: 'Aktuální',
+      desc: 'Aktuálně aktivní prompt',
+      text: currentSavedPrompt
+    });
+  }
 
-Formát:
-###G[číslo]###
-VÝZNAM: [krátký význam]
-DEFINICE: [stručná definice]
-KJV: [překlady]
-`
-    }
-  ],
-  literal: [
-    {
-      name: 'Doslovné',
-      desc: 'Slovo po slově překlad',
-      text: `Přelož doslovně, slovo po slově:
-
-{HESLA}
-
-Vrať:
-###G[číslo]###
-VIZ: [doslovný překlad]
-DEF: [lexikální definice]
-KJV: [KJV translation]
-`
-    }
-   ],
-   custom: [],  // naplní se dynamicky v showPromptLibraryModal()
-   library: [
-    {
-      name: 'Přesný',
-      desc: 'Vysoká přesnost a věrnost',
-      text: `Jsi odborník na biblické řecký a hebrejštinu. Přelož velmi přesně a věrně.
-
-HESLA:
-{HESLA}
-
-Vrať strictně ve formátu:
-###G[číslo]###
-VÝZNAM: [přesný český překlad]
-DEFINICE: [podrobný popis]
-KJV: [KJV překlady]
-
-Nepřidávej žádné vysvětlení, pouze data.`
-    },
-    {
-      name: 'Teologický',
-      desc: 'S důrazem na teologický kontext',
-      text: `Přelož s hlubokým porozuměním teologického kontextu.
-
-{HESLA}
-
-Pro každé heslo zahrň:
-- Význam v kontextu Bible
-- Teologické implikace
-- KJV překlady
-- Reference
-
-Formát:
-###G[číslo]###
-VÝZNAM: [český překlad]
-DEFINICE: [teologický popis]
-KJV: [překlady]
-KONTEXT: [biblické využití]`
-    },
-    {
-      name: 'Rychlý',
-      desc: 'Stručný a rychlý',
-      text: `Rychlý překlad do češtiny.
-
-{HESLA}
-
-Formát:
-###G[číslo]###
-VÝZNAM: [věta]
-DEF: [věta]
-KJV: [věta]`
-    }
-  ]
-};
+  PROMPT_LIBRARY.custom = customEntries;
+}
 
 function getSystemPromptForCurrentTask(context = 'batch') {
   let prompt = DEFAULT_PROMPT;
@@ -7889,6 +7865,7 @@ function togglePromptAutoMode() {
 
 let selectedPromptCategory = 'default';
 let selectedPromptIndex = 0;
+rebuildPromptLibrary(localStorage.getItem('strong_prompt') || DEFAULT_PROMPT);
 
 function showPromptLibraryModal() {
   const modal = document.getElementById('promptLibraryModal');
@@ -7899,19 +7876,7 @@ function showPromptLibraryModal() {
    // Load current saved prompt
    const savedPrompt = localStorage.getItem('strong_prompt') || DEFAULT_PROMPT;
    
-   // Initialize library with saved custom prompt + built-in final prompt
-   const customSaved = localStorage.getItem('strong_custom_prompt');
-   const customEntries = [];
-   if (customSaved) {
-     customEntries.push({
-       name: 'Moje vlastní',
-       desc: 'Uložený vlastní prompt',
-       text: customSaved
-     });
-   }
-   // Vždy přidáme vestavěný Finální prompt
-   customEntries.push(FINAL_PROMPT);
-   PROMPT_LIBRARY.custom = customEntries;
+   rebuildPromptLibrary(savedPrompt);
   
   // Reset selection to default
   selectedPromptCategory = 'default';
@@ -7971,12 +7936,7 @@ function matchPromptToPreset(promptText) {
   if (!foundMatch) {
     selectedPromptCategory = 'custom';
     selectedPromptIndex = 0;
-    // Ensure custom entry reflects current saved prompt
-    PROMPT_LIBRARY.custom = [{
-      name: 'Moje vlastní',
-      desc: 'Uložený vlastní prompt (aktuální)',
-      text: promptText
-    }];
+    rebuildPromptLibrary(promptText);
   }
 }
 
@@ -8046,18 +8006,92 @@ function applySelectedPrompt() {
   
   // Also save to custom category if we're in custom tab
   if (selectedPromptCategory === 'custom') {
-    // Update the custom prompt in library
-    if (!PROMPT_LIBRARY.custom) PROMPT_LIBRARY.custom = [];
-    PROMPT_LIBRARY.custom[0] = {
-      name: 'Moje vlastní',
-      desc: 'Uložený vlastní prompt',
-      text: promptText
-    };
     localStorage.setItem('strong_custom_prompt', promptText);
+    const imported = getStoredCustomPromptLibrary().filter((item) => item.text !== promptText);
+    saveStoredCustomPromptLibrary(imported);
+    rebuildPromptLibrary(promptText);
   }
   
   closePromptLibraryModal();
   showToast('✓ Prompt uložen a použit');
+}
+
+function exportPromptLibraryToTxt() {
+  rebuildPromptLibrary(localStorage.getItem('strong_prompt') || '');
+  const lines = [
+    '# Strong Prompt Library Export v1',
+    `# Generated: ${new Date().toISOString()}`
+  ];
+  for (const [category, prompts] of Object.entries(PROMPT_LIBRARY)) {
+    lines.push(`## CATEGORY: ${category}`);
+    for (const prompt of prompts || []) {
+      lines.push(`### PROMPT: ${prompt.name || 'Bez názvu'}`);
+      lines.push(`DESC: ${prompt.desc || ''}`);
+      lines.push('---BEGIN---');
+      lines.push(String(prompt.text || ''));
+      lines.push('---END---');
+    }
+  }
+  const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `strong_prompty_${new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-')}.txt`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+  showToast('✓ Prompty exportovány do TXT');
+}
+
+function importPromptLibraryFromFile(input) {
+  const file = input?.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const text = String(reader.result || '');
+      const regex = /## CATEGORY:\s*([^\n]+)\n### PROMPT:\s*([^\n]+)\nDESC:\s*([^\n]*)\n---BEGIN---\n([\s\S]*?)\n---END---/g;
+      const importedCustom = [];
+      const importedByCategory = getStoredImportedPromptLibrary();
+      let totalImported = 0;
+      let match;
+      while ((match = regex.exec(text)) !== null) {
+        const category = (match[1] || '').trim().toLowerCase();
+        const name = (match[2] || '').trim() || 'Importovaný';
+        const desc = (match[3] || '').trim() || 'Import ze souboru';
+        const body = (match[4] || '').trim();
+        if (!body) continue;
+        totalImported += 1;
+        if (category === 'custom') {
+          importedCustom.push({ name, desc, text: body });
+          continue;
+        }
+        if (!importedByCategory[category]) importedByCategory[category] = [];
+        if (!importedByCategory[category].some((p) => p.text === body)) {
+          importedByCategory[category].push({ name, desc, text: body });
+        }
+      }
+
+      const existingCustom = getStoredCustomPromptLibrary();
+      const merged = [...existingCustom];
+      for (const item of importedCustom) {
+        if (!merged.some((e) => e.text === item.text)) merged.push(item);
+      }
+      saveStoredCustomPromptLibrary(merged);
+      saveStoredImportedPromptLibrary(importedByCategory);
+      rebuildPromptLibrary(localStorage.getItem('strong_prompt') || '');
+      renderPromptList();
+      renderPromptPreview();
+      showToast(`✓ Načteno promptů: ${totalImported}`);
+    } catch (err) {
+      showToast('✗ Nepodařilo se načíst soubor promptů');
+      console.error(err);
+    } finally {
+      input.value = '';
+    }
+  };
+  reader.readAsText(file, 'utf-8');
 }
 
 function updatePromptStatusIndicator() {
@@ -8147,7 +8181,7 @@ function saveAISettings() {
 
 function showPromptLangModal() {
   const modal = document.getElementById('promptLangModal');
-  const savedLang = localStorage.getItem('strong_target_lang') || 'cs';
+  const savedLang = localStorage.getItem('strong_target_lang') || 'cz';
   const savedSource = localStorage.getItem('strong_source_lang') || 'gr';
   document.getElementById('targetLanguage').value = savedLang;
   document.getElementById('sourceLanguage').value = savedSource;
@@ -8162,11 +8196,20 @@ function closePromptLangModal() {
   document.getElementById('promptLangModal').style.display = 'none';
 }
 
+function updatePromptLangButtonLabel() {
+  const btn = document.getElementById('btnPromptLang');
+  if (!btn) return;
+  let target = String(localStorage.getItem('strong_target_lang') || 'cz').toLowerCase();
+  if (target === 'cs') target = 'cz';
+  btn.textContent = `🌐 Jazyk (${target})`;
+}
+
 function saveLangSettings() {
   const target = document.getElementById('targetLanguage').value;
   const source = document.getElementById('sourceLanguage').value;
   localStorage.setItem('strong_target_lang', target);
   localStorage.setItem('strong_source_lang', source);
+  updatePromptLangButtonLabel();
   closePromptLangModal();
   showToast('✓ Jazyková nastavení uložena');
 }
@@ -8176,6 +8219,8 @@ window.showPromptLibraryModal = showPromptLibraryModal;
 window.closePromptLibraryModal = closePromptLibraryModal;
 window.selectPrompt = selectPrompt;
 window.applySelectedPrompt = applySelectedPrompt;
+window.exportPromptLibraryToTxt = exportPromptLibraryToTxt;
+window.importPromptLibraryFromFile = importPromptLibraryFromFile;
 window.showPromptAIModal = showPromptAIModal;
 window.closePromptAIModal = closePromptAIModal;
 window.saveAISettings = saveAISettings;
@@ -8640,8 +8685,7 @@ function parseImportJSON(text) {
 function updateFailedCount() {
   let count = 0;
   for (const key of Object.keys(translated)) {
-    const t = translated[key];
-    if (!isTranslationComplete(t)) count++;
+    if (getTranslationStateForKey(key) === 'failed') count++;
   }
   const el = document.getElementById('failedCount');
   if (el) el.textContent = count > 0 ? `(${count})` : '';
@@ -8650,14 +8694,14 @@ function updateFailedCount() {
 function showFailedEntries() {
   const failed = [];
   for (const key of Object.keys(translated)) {
-    const t = translated[key];
-    if (!isTranslationComplete(t)) {
+    if (getTranslationStateForKey(key) === 'failed') {
+      const t = translated[key];
       failed.push({ key, raw: t.raw, greek: entryMap.get(key)?.greek });
     }
   }
   
   if (!failed.length) {
-    showToast('✓ Všechny překlady jsou úspěšné');
+    showToast('✓ Žádné neúspěšné překlady');
     return;
   }
   
@@ -8830,6 +8874,8 @@ window.parseCzTXT = parseCzTXT;
 window.showPromptLibraryModal = showPromptLibraryModal;
 window.closePromptLibraryModal = closePromptLibraryModal;
 window.applySelectedPrompt = applySelectedPrompt;
+window.exportPromptLibraryToTxt = exportPromptLibraryToTxt;
+window.importPromptLibraryFromFile = importPromptLibraryFromFile;
 window.applySystemPromptForCurrentTask = applySystemPromptForCurrentTask;
 window.togglePromptModeQuick = togglePromptModeQuick;
 window.togglePromptAutoMode = togglePromptAutoMode;
