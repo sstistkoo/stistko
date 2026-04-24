@@ -1240,6 +1240,11 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   <div class="auto-panel" id="autoPanel">
     <div class="auto-info">AUTO: dávka <b id="autoBatch">—</b>, interval <b id="autoInterval">—</b>s</div>
     <div class="countdown" id="countdown">—</div>
+    <div id="autoProviderCountdowns" style="display:grid;gap:2px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt2)">
+      <div id="autoCountdown_groq">Groq: —</div>
+      <div id="autoCountdown_gemini">Gemini: —</div>
+      <div id="autoCountdown_openrouter">OpenRouter: —</div>
+    </div>
     <div class="auto-log" id="autoLog">Čeká na start...</div>
     <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt3);white-space:nowrap">
       ⏱ <span id="etaLabel">—</span>
@@ -1952,6 +1957,7 @@ POVINNÝ VÝSTUP NAVÍC:
   let activeKey   = null;
   let autoTimer   = null;
   let autoCountTimer = null;
+  let autoProviderCountdownTimer = null;
   let autoRunning = false;
 let autoStepRunning = false;
   let currentBatchSize = 10;
@@ -4354,6 +4360,7 @@ function startAuto() {
   document.getElementById('btnAuto').textContent = '■ AUTO';
   document.getElementById('autoPanel').classList.add('show');
   document.getElementById('autoInterval').textContent = currentInterval;
+  startAutoProviderCountdownTicker();
   if (isAutoTokenLimitReached()) {
     stopAuto();
     showToast('⚠ AUTO nestartoval: dosažen limit tokenů');
@@ -4366,11 +4373,49 @@ function stopAuto() {
   autoRunning = false;
   clearTimeout(autoTimer);
   clearInterval(autoCountTimer);
+  stopAutoProviderCountdownTicker();
   document.getElementById('btnAuto').classList.remove('active');
   document.getElementById('btnAuto').textContent = '▶ AUTO';
   document.getElementById('autoPanel').classList.remove('show');
   document.getElementById('countdown').textContent = '—';
+  setAutoProviderCountdownLabel('groq', 'Groq: —');
+  setAutoProviderCountdownLabel('gemini', 'Gemini: —');
+  setAutoProviderCountdownLabel('openrouter', 'OpenRouter: —');
   stopElapsedTimer();
+}
+
+function setAutoProviderCountdownLabel(prov, text) {
+  const el = document.getElementById(`autoCountdown_${prov}`);
+  if (el) el.textContent = text;
+}
+
+function updateAutoProviderCountdowns() {
+  const mainLeft = Math.max(0, parseInt(document.getElementById('countdown')?.textContent || '0', 10) || 0);
+  setAutoProviderCountdownLabel('groq', mainLeft > 0 ? `Groq: další dávka za ${mainLeft}s` : 'Groq: běží');
+  ['gemini', 'openrouter'].forEach(prov => {
+    const enabled = isPipelineSecondaryEnabled(prov);
+    if (!enabled) {
+      setAutoProviderCountdownLabel(prov, `${PROVIDERS[prov]?.label?.split(' ')[0] || prov}: vypnuto`);
+      return;
+    }
+    const left = getProviderCooldownLeftSec(prov);
+    if (left > 0) {
+      setAutoProviderCountdownLabel(prov, `${PROVIDERS[prov]?.label?.split(' ')[0] || prov}: cooldown ${left}s`);
+      return;
+    }
+    setAutoProviderCountdownLabel(prov, `${PROVIDERS[prov]?.label?.split(' ')[0] || prov}: připraven`);
+  });
+}
+
+function startAutoProviderCountdownTicker() {
+  stopAutoProviderCountdownTicker();
+  updateAutoProviderCountdowns();
+  autoProviderCountdownTimer = setInterval(updateAutoProviderCountdowns, 500);
+}
+
+function stopAutoProviderCountdownTicker() {
+  clearInterval(autoProviderCountdownTimer);
+  autoProviderCountdownTimer = null;
 }
 
 async function runAutoStep() {
@@ -4413,6 +4458,7 @@ async function runAutoStep() {
       document.getElementById('countdown').textContent = remaining;
       if (remaining <= 0) clearInterval(autoCountTimer);
     }, 1000);
+    updateAutoProviderCountdowns();
 
     autoTimer = setTimeout(runAutoStep, delaySeconds * 1000);
   } finally {
@@ -8245,6 +8291,7 @@ window.populateOpenRouterModels = populateOpenRouterModels;
 window.addEventListener('beforeunload', () => {
   if (autoTimer) clearTimeout(autoTimer);
   if (autoCountTimer) clearInterval(autoCountTimer);
+  if (autoProviderCountdownTimer) clearInterval(autoProviderCountdownTimer);
   if (elapsedTimer) clearInterval(elapsedTimer);
   stopResize();
   // Debounced save musí být proveden synchronně před zavřením
