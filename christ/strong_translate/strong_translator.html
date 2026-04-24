@@ -1982,6 +1982,8 @@ let autoStepRunning = false;
   let modelTestRawResponses = [];
   let modelTestRateLimitHealth = { hits429: 0, lastRetryAfterSec: 0, lastRequestId: '', lastRemaining: '', lastReset: '' };
   let providerCooldownUntil = { groq: 0, gemini: 0, openrouter: 0 };
+  let providerFallbackQueue = { groq: Promise.resolve(), gemini: Promise.resolve(), openrouter: Promise.resolve() };
+  let providerCooldownLogTick = { groq: -1, gemini: -1, openrouter: -1 };
   const DEFAULT_MODEL_TEST_LOG_FILENAME = 'test.txt';
   let startTime = null;
   let elapsedTimer = null;
@@ -3769,9 +3771,14 @@ function setProviderCooldown(prov, seconds, reason = '') {
 async function waitForProviderCooldown(prov) {
   while (getProviderCooldownLeftSec(prov) > 0) {
     const left = getProviderCooldownLeftSec(prov);
-    log(`⏱ ${prov} cooldown: zbývá ${left}s`);
+    const tick = Math.floor(left / 10);
+    if (providerCooldownLogTick[prov] !== tick) {
+      providerCooldownLogTick[prov] = tick;
+      log(`⏱ ${prov} cooldown: zbývá ${left}s`);
+    }
     await new Promise(resolve => setTimeout(resolve, Math.min(1500, left * 1000)));
   }
+  providerCooldownLogTick[prov] = -1;
 }
 
 function shouldAcceptTopicFallback(topicId, candidate) {
@@ -3817,6 +3824,17 @@ function sleepMs(ms) {
   return new Promise(resolve => setTimeout(resolve, Math.max(0, Number(ms) || 0)));
 }
 
+function runProviderFallbackTaskSequential(prov, taskFn) {
+  if (!Object.prototype.hasOwnProperty.call(providerFallbackQueue, prov)) {
+    providerFallbackQueue[prov] = Promise.resolve();
+  }
+  const chain = providerFallbackQueue[prov]
+    .catch(() => undefined)
+    .then(() => taskFn());
+  providerFallbackQueue[prov] = chain.catch(() => undefined);
+  return chain;
+}
+
 async function requestTopicFallbackForProvider(prov, key, topicId) {
   const apiKey = getApiKeyForModelTest(prov);
   const modelQueue = getSecondaryProviderModelQueue(prov);
@@ -3854,8 +3872,10 @@ async function requestTopicFallbackForProvider(prov, key, topicId) {
       const canTryNext = i < modelQueue.length - 1;
       if (canTryNext) {
         const waitMs = getSecondaryRetryDelayMsByError(msgLower);
-        log(`↻ ${prov}: model ${model} selhal (${msg}). Za ${Math.round(waitMs / 1000)}s zkusím další model.`);
-        await sleepMs(waitMs);
+        const cooldownMs = getProviderCooldownLeftSec(prov) * 1000;
+        const effectiveWaitMs = Math.max(waitMs, cooldownMs);
+        log(`↻ ${prov}: model ${model} selhal (${msg}). Za ${Math.max(1, Math.round(effectiveWaitMs / 1000))}s zkusím další model.`);
+        await sleepMs(effectiveWaitMs);
       }
     }
   }
@@ -3879,7 +3899,7 @@ async function runParallelTopicFallback(keys) {
         let pending = sideProviders.length;
         let done = false;
         sideProviders.forEach(prov => {
-          requestTopicFallbackForProvider(prov, key, topicId)
+          runProviderFallbackTaskSequential(prov, () => requestTopicFallbackForProvider(prov, key, topicId))
             .then(result => {
               if (done) return;
               if (result) {
