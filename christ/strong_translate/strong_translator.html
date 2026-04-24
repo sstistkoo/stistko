@@ -3965,13 +3965,19 @@ ${keys.map(k => {
       }
     }
 
-    const keysBeforeSideFallback = keys.filter(k => !isTranslationComplete(translated[k]));
-    if (keysBeforeSideFallback.length > 0) {
-      log(`↻ Paralelní side fallback: ${keysBeforeSideFallback.length} hesel (OpenRouter + Gemini)`);
-      await runParallelTopicFallback(keysBeforeSideFallback);
-      fillMissingVyznamFromSource(keys);
-      fillMissingKjvFromSource(keys);
-      annotateEnglishDefinitionsInTranslated(keys);
+    // Sekundární fallback spouštěj až po dokončení všech Groq pokusů pro danou dávku
+    // (tj. pouze v top-level volání). Tím se vyhneme "střídání" providerů během hlavního překladu.
+    if (depth === 0) {
+      const keysBeforeSideFallback = keys.filter(k => !isTranslationComplete(translated[k]));
+      if (keysBeforeSideFallback.length > 0) {
+        log(`↻ Analýza po Groq: ${keysBeforeSideFallback.length} hesel má chyby/neúplná témata; spouštím sekundární topic fallback.`);
+        await runParallelTopicFallback(keysBeforeSideFallback);
+        fillMissingVyznamFromSource(keys);
+        fillMissingKjvFromSource(keys);
+        annotateEnglishDefinitionsInTranslated(keys);
+      } else {
+        log('✓ Analýza po Groq: dávka kompletní, sekundární fallback není potřeba.');
+      }
     }
 
     const translatedCount = keys.filter(k => isTranslationComplete(translated[k])).length;
