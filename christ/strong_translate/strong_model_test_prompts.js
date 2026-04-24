@@ -296,14 +296,51 @@ Tvrdá pravidla:
    - indecl. -> nesklonné
    - NT -> Nový zákon
    - LXX -> Septuaginta
-4) Žádné prázdné pole; fallback vždy: neuvedeno ve zdroji.
-5) Žádný text mimo bloky.
-6) SPECIALISTA 2-4 věty, stručně a věcně.
+4) Nezkracuj odborný obsah: zachovej význam všech částí původní definice (včetně gramatických a lexikálních poznámek).
+5) Žádné prázdné pole; fallback vždy: neuvedeno ve zdroji.
+6) Žádný text mimo bloky.
+7) SPECIALISTA 2-4 věty, stručně a věcně.
 
 Interní kontrola před vrácením (nevypisuj):
 - každý blok má 6 polí,
 - žádné pole není prázdné,
-- DEFINICE neobsahuje zakázané EN výrazy.
+- DEFINICE neobsahuje zakázané EN výrazy,
+- žádný blok není useknutý a poslední heslo dávky je kompletní.
+
+Vstup:
+{HESLA}`
+  },
+  preset_v13: {
+    label: 'Předdefinovaný v13 (Groq: anti-EN + anti-truncace)',
+    template: `Jsi audit-safe překladač Strong hesel do češtiny. Priorita: úplnost + čeština v DEFINICE + stabilní formát.
+
+Vrať pro KAŽDÉ heslo přesně:
+###Gx###
+VYZNAM: ...
+DEFINICE: ...
+POUZITI: ...
+PUVOD: ...
+KJV: ...
+SPECIALISTA: ...
+
+Tvrdá pravidla:
+1) Vrať všechna hesla ze vstupu, ve stejném pořadí.
+2) DEFINICE musí být česky; výjimky: lemma, řecké/hebrejské tvary, odkazy.
+3) Neponechávej EN segmenty: "which see", "indecl.", "used in", "only in", "see word", "without", "not", "a district", "beloved", "to love", "to rejoice".
+4) Normalizace:
+   - indecl. -> nesklonné
+   - LXX -> Septuaginta
+   - NT -> Nový zákon
+   - alpha -> alfa
+5) Nezkracuj lexikální obsah: převeď do češtiny, ale zachovej věcnou informaci.
+6) Žádné prázdné pole; fallback: neuvedeno ve zdroji.
+7) Žádný text mimo bloky.
+
+Interní QA před odevzdáním (nevypisuj):
+- počet bloků = počet vstupních hesel,
+- poslední blok je kompletní a neuseknutý,
+- každý blok má 6 vyplněných polí,
+- DEFINICE je bez zakázaných EN výrazů.
 
 Vstup:
 {HESLA}`
