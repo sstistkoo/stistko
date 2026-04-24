@@ -2325,6 +2325,8 @@ function syncAutoPanelSettingsInputs() {
   if (intervalInput) intervalInput.value = String(iv);
   const autoIntervalEl = document.getElementById('autoInterval');
   if (autoIntervalEl) autoIntervalEl.textContent = String(iv);
+  const autoBatchEl = document.getElementById('autoBatch');
+  if (autoBatchEl && !autoRunning) autoBatchEl.textContent = `${bs} hesel`;
 }
 
 function applyAutoPanelSettings() {
@@ -2346,6 +2348,8 @@ function applyAutoPanelSettings() {
   currentInterval = iv;
   const autoIntervalEl = document.getElementById('autoInterval');
   if (autoIntervalEl) autoIntervalEl.textContent = String(iv);
+  const autoBatchEl = document.getElementById('autoBatch');
+  if (autoBatchEl && !autoRunning) autoBatchEl.textContent = `${bs} hesel`;
   updateETA();
 }
 
@@ -4851,12 +4855,7 @@ function setAutoProviderEnabled(prov, enabled) {
   const on = !!enabled;
   if (prov === 'gemini' || prov === 'openrouter') {
     setPipelineSecondaryEnabled(prov, on);
-    const cbSetup = document.getElementById(prov === 'gemini' ? 'pipelineEnableSecondaryGemini' : 'pipelineEnableSecondaryOpenrouter');
-    const cbModal = document.getElementById(prov === 'gemini' ? 'providerRunEnableSecondaryGemini' : 'providerRunEnableSecondaryOpenrouter');
-    if (cbSetup) cbSetup.checked = on;
-    if (cbModal) cbModal.checked = on;
-    applyPipelineSecondaryToggleUi(prov, on, prov === 'gemini' ? 'pipelineModelSecondaryGemini' : 'pipelineModelSecondaryOpenrouter');
-    applyPipelineSecondaryToggleUi(prov, on, prov === 'gemini' ? 'providerRunSecondaryGeminiModel' : 'providerRunSecondaryOpenrouterModel');
+    syncSecondaryProviderToggles(prov, on);
     return;
   }
   localStorage.setItem(AUTO_PROVIDER_ENABLED_KEY + prov, on ? '1' : '0');
@@ -6185,6 +6184,37 @@ function setPipelineSecondaryEnabled(prov, enabled) {
   localStorage.setItem(PIPELINE_SECONDARY_ENABLED_KEY + prov, enabled ? '1' : '0');
 }
 
+function syncSecondaryProviderToggles(prov, enabled) {
+  if (prov !== 'gemini' && prov !== 'openrouter') return;
+  const on = !!enabled;
+  const map = {
+    gemini: {
+      autoCb: 'autoEnable_gemini',
+      setupCb: 'pipelineEnableSecondaryGemini',
+      modalCb: 'providerRunEnableSecondaryGemini',
+      setupModel: 'pipelineModelSecondaryGemini',
+      modalModel: 'providerRunSecondaryGeminiModel'
+    },
+    openrouter: {
+      autoCb: 'autoEnable_openrouter',
+      setupCb: 'pipelineEnableSecondaryOpenrouter',
+      modalCb: 'providerRunEnableSecondaryOpenrouter',
+      setupModel: 'pipelineModelSecondaryOpenrouter',
+      modalModel: 'providerRunSecondaryOpenrouterModel'
+    }
+  };
+  const cfg = map[prov];
+  if (!cfg) return;
+  const autoCb = document.getElementById(cfg.autoCb);
+  const setupCb = document.getElementById(cfg.setupCb);
+  const modalCb = document.getElementById(cfg.modalCb);
+  if (autoCb) autoCb.checked = on;
+  if (setupCb) setupCb.checked = on;
+  if (modalCb) modalCb.checked = on;
+  applyPipelineSecondaryToggleUi(prov, on, cfg.setupModel);
+  applyPipelineSecondaryToggleUi(prov, on, cfg.modalModel);
+}
+
 function applyPipelineSecondaryToggleUi(prov, checked, selectId) {
   const select = document.getElementById(selectId);
   if (select) select.disabled = !checked;
@@ -6194,10 +6224,11 @@ function bindPipelineSecondaryToggle(checkboxId, prov, selectId) {
   const cb = document.getElementById(checkboxId);
   if (!cb) return;
   cb.checked = isPipelineSecondaryEnabled(prov);
+  syncSecondaryProviderToggles(prov, cb.checked);
   applyPipelineSecondaryToggleUi(prov, cb.checked, selectId);
   cb.onchange = () => {
-    setPipelineSecondaryEnabled(prov, cb.checked);
-    applyPipelineSecondaryToggleUi(prov, cb.checked, selectId);
+    setAutoProviderEnabled(prov, cb.checked);
+    updateAutoProviderCountdowns();
   };
 }
 
@@ -7284,6 +7315,9 @@ function closeSettingsModal() {
   if (secOpenRouter) setPipelineModelForProvider('openrouter', secOpenRouter);
   setPipelineSecondaryEnabled('gemini', secGeminiEnabled);
   setPipelineSecondaryEnabled('openrouter', secOpenRouterEnabled);
+  syncSecondaryProviderToggles('gemini', secGeminiEnabled);
+  syncSecondaryProviderToggles('openrouter', secOpenRouterEnabled);
+  updateAutoProviderCountdowns();
   document.getElementById('provider').value = 'groq';
   if (mainGroq) document.getElementById('model').value = mainGroq;
   document.getElementById('batchSize').value = document.getElementById('batchSizeRunMobile').value;
