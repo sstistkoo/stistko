@@ -2967,6 +2967,7 @@ function updateTopicRepairModalUI() {
           </div>
           <div style="font-size:11px;color:var(--txt)">
             <div><b>Nový návrh:</b> ${escHtml(task.candidateValue || '—')}</div>
+            ${formatTopicRepairQuickCompare(task.topicId, task.currentValue, task.candidateValue)}
             <div style="margin-top:4px;color:var(--txt2)">
               <b>SPECIALISTA v odpovědi:</b> ${task.specialistaInRaw ? 'ano' : 'ne'}
               ${task.specialistaInRaw ? ` · <b>stav:</b> ${escHtml(task.specialistaDecision || 'beze změny')}` : ''}
@@ -2990,6 +2991,7 @@ function updateTopicRepairModalUI() {
                     <div style="font-size:11px;color:var(--txt2)"><b>${escHtml(TOPIC_LABELS[row.topicId] || row.topicId)}</b> · stav: ${escHtml(row.decision || 'beze změny')}</div>
                     <div style="margin-top:4px;color:var(--txt2)"><b>Původní:</b> ${escHtml(row.previousValue || '—')}</div>
                     <div style="margin-top:4px;color:var(--txt)"><b>AI:</b> ${escHtml(row.candidateValue || '—')}</div>
+                    ${formatTopicRepairQuickCompare(row.topicId, row.previousValue, row.candidateValue)}
                     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">
                       <button class="hbtn grn" onclick="setTopicRepairDetectedTopicDecision(${idx}, '${row.topicId}', 'accept')">✓ Potvrdit</button>
                       <button class="hbtn red" onclick="setTopicRepairDetectedTopicDecision(${idx}, '${row.topicId}', 'reject')">✕ Zamítnout</button>
@@ -4563,6 +4565,117 @@ function shouldReplaceSpecialista(currentText, candidateText) {
   if (nextScore > currentScore + 1) return true;
   if (nextScore === currentScore && next.length > current.length + 80) return true;
   return false;
+}
+
+function countCzDiacritics(text) {
+  return (String(text || '').match(/[áčďéěíňóřšťúůýžÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ]/g) || []).length;
+}
+
+function countEnglishNoiseWords(text) {
+  return (String(text || '').match(/\b(the|and|which|used|only|without|see|word|in|of|to)\b/gi) || []).length;
+}
+
+function countBracketRefs(text) {
+  return (String(text || '').match(/\[[^\]]{2,}\]/g) || []).length;
+}
+
+function scoreTopicRepairText(topicId, text) {
+  const t = String(text || '').trim();
+  if (!hasMeaningfulValue(t)) return { score: 0, notes: ['prázdné'] };
+  const notes = [];
+  let score = 0;
+
+  if (topicId === 'definice') {
+    const len = t.length;
+    score += Math.min(6, Math.floor(len / 120));
+    score += Math.min(3, countBracketRefs(t));
+    score += Math.min(3, Math.floor(countCzDiacritics(t) / 6));
+    if (isDefinitionLowQuality(t)) {
+      score -= 8;
+      notes.push('definice: nízká kvalita / příliš krátké');
+    }
+    if (isDefinitionLikelyEnglish(t)) {
+      score -= 6;
+      notes.push('definice: anglický nádech');
+    }
+    score -= Math.min(4, countEnglishNoiseWords(t));
+    return { score, notes };
+  }
+
+  if (topicId === 'vyznam') {
+    const words = t.split(/\s+/).filter(Boolean).length;
+    score += Math.min(4, words);
+    score += Math.min(3, Math.floor(countCzDiacritics(t) / 2));
+    score -= Math.min(4, countEnglishNoiseWords(t));
+    if (words > 14) {
+      score -= 2;
+      notes.push('význam: hodně dlouhý');
+    }
+    return { score, notes };
+  }
+
+  if (topicId === 'kjv') {
+    score += Math.min(5, Math.floor(t.length / 40));
+    score += Math.min(3, countBracketRefs(t));
+    score += Math.min(3, Math.floor(countCzDiacritics(t) / 4));
+    score -= Math.min(5, countEnglishNoiseWords(t));
+    return { score, notes };
+  }
+
+  if (topicId === 'pouziti') {
+    const refs = countBracketRefs(t);
+    score += Math.min(6, refs * 2);
+    score += Math.min(3, Math.floor(t.length / 80));
+    score += Math.min(2, Math.floor(countCzDiacritics(t) / 6));
+    score -= Math.min(4, countEnglishNoiseWords(t));
+    if (refs === 0) notes.push('užití: málo odkazů []');
+    return { score, notes };
+  }
+
+  if (topicId === 'puvod') {
+    score += Math.min(5, Math.floor(t.length / 60));
+    score += Math.min(3, Math.floor(countCzDiacritics(t) / 5));
+    score -= Math.min(4, countEnglishNoiseWords(t));
+    if (!/(řec|hebr|lat|sém|indoev|kořen|odvoz)/i.test(t)) notes.push('původ: chybí jazykový kontext');
+    return { score, notes };
+  }
+
+  if (topicId === 'specialista') {
+    const s = getSpecialistaQualityScore(t);
+    score += s;
+    notes.push(`specialista: skóre ${s}`);
+    return { score, notes };
+  }
+
+  score += Math.min(6, Math.floor(t.length / 80));
+  score -= Math.min(4, countEnglishNoiseWords(t));
+  return { score, notes };
+}
+
+function verdictTopicRepairCompare(prevScore, nextScore) {
+  if (!Number.isFinite(prevScore) || !Number.isFinite(nextScore)) return { label: 'nejasné', tone: 'var(--txt3)' };
+  const d = nextScore - prevScore;
+  if (nextScore <= 0 && prevScore > 0) return { label: 'horší', tone: 'var(--red)' };
+  if (d >= 2) return { label: 'lepší', tone: 'var(--acc3)' };
+  if (d <= -2) return { label: 'horší', tone: 'var(--red)' };
+  return { label: 'podobné', tone: 'var(--txt3)' };
+}
+
+function formatTopicRepairQuickCompare(topicId, previousValue, candidateValue) {
+  const prev = String(previousValue || '').trim();
+  const next = String(candidateValue || '').trim();
+  if (!hasMeaningfulValue(next)) {
+    return `<div style="margin-top:6px;padding:8px;border:1px dashed var(--brd);border-radius:6px;background:var(--bg2);font-size:11px;color:var(--txt3)"><b>Analýza:</b> nelze porovnat (chybí nový návrh)</div>`;
+  }
+  const p = scoreTopicRepairText(topicId, prev);
+  const n = scoreTopicRepairText(topicId, next);
+  const v = verdictTopicRepairCompare(p.score, n.score);
+  const notes = [...new Set([...(p.notes || []), ...(n.notes || [])])].slice(0, 3);
+  const notesHtml = notes.length ? ` · ${notes.map(x => escHtml(x)).join(' · ')}` : '';
+  return `<div style="margin-top:6px;padding:8px;border:1px solid var(--brd);border-radius:6px;background:var(--bg2);font-size:11px;color:var(--txt2)">
+    <b>Analýza:</b> <span style="color:${v.tone};font-weight:bold">${escHtml(v.label)}</span>
+    <span style="color:var(--txt3)">(skóre ${p.score} → ${n.score})</span>${notesHtml}
+  </div>`;
 }
 
 function closeTopicPromptModal() {
