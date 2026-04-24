@@ -90,7 +90,7 @@ Vstup:
 {HESLA}`
   },
   preset_v5: {
-    label: 'Předdefinovaný v5 (Groq: úplnost všech polí)',
+    label: 'v5 - Úplnost všech polí (včetně Biblický výklad / specialista)',
     template: `Jsi překladový engine pro Strong slovník optimalizovaný pro model Groq Llama 4.
 
 Hlavní cíl: vrátit kompletní, plně vyplněný výstup pro každé heslo.
@@ -114,7 +114,7 @@ Vstup:
 {HESLA}`
   },
   preset_v6: {
-    label: 'Předdefinovaný v6 (Groq: česká DEFINICE)',
+    label: 'v6 - DETAIL: DEFINICE česky (bez EN vět)',
     template: `Jsi biblický lexikální překladatel. Překládáš Strong hesla do češtiny.
 
 Priorita kvality:
@@ -139,7 +139,7 @@ Vstup:
 {HESLA}`
   },
   preset_v7: {
-    label: 'Předdefinovaný v7 (Groq: audit-safe parser)',
+    label: 'v7 - DETAIL: Striktní formát bloků (parser-safe)',
     template: `Jsi "audit-safe" překladač pro Strong slovník.
 
 Tvůj výstup bude strojově parsován. Dodrž přesně:
@@ -163,7 +163,7 @@ Vstup:
 {HESLA}`
   },
   preset_v8: {
-    label: 'Předdefinovaný v8 (Groq: CZ-only DEFINICE hard)',
+    label: 'v8 - DETAIL: DEFINICE 100% CZ (hard anti-EN)',
     template: `Jsi biblický překladový model. Optimalizace pro Groq Llama 4.
 
 Kritický požadavek:
@@ -191,7 +191,7 @@ Vstup:
 {HESLA}`
   },
   preset_v9: {
-    label: 'Předdefinovaný v9 (Groq: přelož EN segmenty)',
+    label: 'v9 - DETAIL: Překlad EN segmentů v DEFINICI',
     template: `Jsi editor slovníkového překladu Strong hesel do češtiny.
 
 Postup pro každé heslo:
@@ -216,7 +216,7 @@ Vstup:
 {HESLA}`
   },
   preset_v10: {
-    label: 'Předdefinovaný v10 (Groq: QA self-check)',
+    label: 'v10 - DETAIL: QA self-check + Biblický výklad (specialista)',
     template: `Jsi překladový QA model pro Strong slovník.
 
 Nejdřív interně přelož, pak interně proveď QA kontrolu a teprve poté vrať odpověď.
