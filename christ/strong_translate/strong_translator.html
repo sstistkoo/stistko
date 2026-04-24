@@ -1786,6 +1786,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   // ══ CORE MODULE IMPORT ═══════════════════════════════════════════
   import core from './strong_translator_core_new.js';
   import prompts from './strong_prompts.js';
+  import { getProviderConfiguredModelsForAI, buildSecondaryProviderModelCandidates } from './strong_translator_ai.js';
   // Re-export for use in this module
 const {
       parseTXT: parseTXTCore,
@@ -4080,12 +4081,13 @@ const SECONDARY_PROVIDER_MODEL_RANKING = {
 };
 
 function getSecondaryProviderModelCandidates(prov) {
-  const selected = String(getPipelineModelForProvider(prov) || getModelTestSelectedModelForProvider(prov) || '').trim();
-  const ranked = Array.isArray(SECONDARY_PROVIDER_MODEL_RANKING[prov]) ? SECONDARY_PROVIDER_MODEL_RANKING[prov] : [];
-  const configured = prov === 'gemini' ? getProviderConfiguredModels('gemini') : [];
-  const queue = [...new Set([selected, ...ranked, ...configured].filter(Boolean))];
-  if (prov === 'gemini') return queue;
-  return queue.slice(0, 4);
+  return buildSecondaryProviderModelCandidates({
+    provider: prov,
+    providers: PROVIDERS,
+    selectedModel: getPipelineModelForProvider(prov) || getModelTestSelectedModelForProvider(prov) || '',
+    rankedModels: SECONDARY_PROVIDER_MODEL_RANKING[prov] || [],
+    maxNonGemini: 4
+  });
 }
 
 function getSecondaryProviderModelQueue(prov) {
@@ -4541,12 +4543,7 @@ const FALLBACKS_STATIC = {
 };
 
 function getProviderConfiguredModels(provider) {
-  const cfg = PROVIDERS?.[provider];
-  if (!cfg || !Array.isArray(cfg.models)) return [];
-  return cfg.models
-    .map(item => Array.isArray(item) ? String(item[0] || '').trim() : '')
-    .filter(model => !(provider === 'gemini' && model === 'gemini-2.5-pro'))
-    .filter(Boolean);
+  return getProviderConfiguredModelsForAI(provider, PROVIDERS);
 }
 
 function getFallbackModels(provider) {
