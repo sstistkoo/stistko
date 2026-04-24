@@ -4855,6 +4855,36 @@ function closeSystemPromptModal() {
   if (modal) modal.remove();
 }
 
+/** Jednotná normalizace názvů polí z AI (vč. VÝKLAD → SPECIALISTA). */
+function normalizeTopicFieldLabel(raw) {
+  const u = String(raw || '').trim().toUpperCase();
+  if (u === 'DEF' || u === 'DEFINITION') return 'DEFINICE';
+  if (u === 'MEANING') return 'VYZNAM';
+  if (u === 'USAGE') return 'POUZITI';
+  if (u === 'ORIGIN') return 'PUVOD';
+  if (u === 'VYKLAD' || u === 'VÝKLAD' || u === 'KOMENTAR' || u === 'KOMENTÁŘ' || u === 'EXEGEZE' || u === 'COMMENTARY' || u === 'EXEGESIS') return 'SPECIALISTA';
+  return u;
+}
+
+/** Výřez bloku podle libovolného výskytu labelu v textu (i více polí na jednom řádku). */
+function extractTopicSegmentByAnchors(cleaned, wantLabel) {
+  const c = String(cleaned || '');
+  if (!c || !wantLabel) return '';
+  const re = /\b(VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|SPECIALISTA|VYKLAD|VÝKLAD|KOMENTAR|KOMENTÁŘ|EXEGEZE|DEFINITION|MEANING|USAGE|ORIGIN|COMMENTARY|EXEGESIS|DEF)\s*[-:–—=.]{0,3}\s*/giu;
+  const spans = [];
+  let m;
+  while ((m = re.exec(c)) !== null) {
+    const lab = normalizeTopicFieldLabel(m[1]);
+    if (!lab) continue;
+    spans.push({ lab, endHeader: m.index + m[0].length, blockStart: m.index });
+  }
+  if (!spans.length) return '';
+  const idx = spans.findIndex(s => s.lab === wantLabel);
+  if (idx < 0) return '';
+  const endPos = idx + 1 < spans.length ? spans[idx + 1].blockStart : c.length;
+  return c.slice(spans[idx].endHeader, endPos).trim();
+}
+
 function extractTopicValueFromAI(rawText, topicId, mode = 'loose') {
   const text = String(rawText || '').replace(/\r\n/g, '\n').trim();
   if (!text) return '';
@@ -4876,18 +4906,18 @@ function extractTopicValueFromAI(rawText, topicId, mode = 'loose') {
   const lines = cleaned.split('\n');
   const fieldPositions = [];
   for (let i = 0; i < lines.length; i++) {
-    const m = lines[i].match(/^(VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|SPECIALISTA|VYKLAD|KOMENTAR|EXEGEZE|DEF|DEFINITION|MEANING|USAGE|ORIGIN|COMMENTARY|EXEGESIS)\s*[-:–—=.]?\s*/i);
+    const rawLine = lines[i];
+    const trimL = rawLine.replace(/^\uFEFF/, '').replace(/^\s*\u200B+/, '').trimStart();
+    const lead = rawLine.length - trimL.length;
+    const m = trimL.match(/^(?:(?:\d+)[.)]\s+)?(?:(?:[-*+>]|#{1,6})\s+)?(?:(?:\*\*|__)\s*)?(VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|SPECIALISTA|VYKLAD|VÝKLAD|KOMENTAR|KOMENTÁŘ|EXEGEZE|DEFINITION|MEANING|USAGE|ORIGIN|COMMENTARY|EXEGESIS|DEF)(?:\*\*|__)?\s*[-:–—=.]{0,3}\s*/iu);
     if (!m) continue;
-    let label = m[1].toUpperCase();
-    if (label === 'DEF' || label === 'DEFINITION') label = 'DEFINICE';
-    if (label === 'MEANING') label = 'VYZNAM';
-    if (label === 'USAGE') label = 'POUZITI';
-    if (label === 'ORIGIN') label = 'PUVOD';
-    if (label === 'VYKLAD' || label === 'KOMENTAR' || label === 'EXEGEZE' || label === 'COMMENTARY' || label === 'EXEGESIS') label = 'SPECIALISTA';
-    fieldPositions.push({ label, line: i, len: m[0].length });
+    const label = normalizeTopicFieldLabel(m[1]);
+    fieldPositions.push({ label, line: i, len: lead + m[0].length });
   }
 
   if (mode === 'strict' && fieldPositions.length === 0 && keyForTopic) {
+    const anchor = extractTopicSegmentByAnchors(cleaned, keyForTopic);
+    if (hasMeaningfulValue(anchor)) return anchor.trim();
     return '';
   }
 
@@ -4904,11 +4934,13 @@ function extractTopicValueFromAI(rawText, topicId, mode = 'loose') {
     }
     out = out.trim();
     // Ořízni případ, kdy AI přidá další téma ve stejné větě/řádku.
-    const foreignInline = out.match(/\b(VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|SPECIALISTA|VYKLAD|KOMENTAR|EXEGEZE|DEF|DEFINITION|MEANING|USAGE|ORIGIN|COMMENTARY|EXEGESIS)\s*[-:–—=.]?\s*/i);
+    const foreignInline = out.match(/\b(VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|SPECIALISTA|VYKLAD|VÝKLAD|KOMENTAR|KOMENTÁŘ|EXEGEZE|DEF|DEFINITION|MEANING|USAGE|ORIGIN|COMMENTARY|EXEGESIS)\s*[-:–—=.]?\s*/iu);
     if (foreignInline && foreignInline.index !== undefined) {
-      const label = String(foreignInline[1] || '').toUpperCase();
-      const normalizedTarget = keyForTopic === 'SPECIALISTA' ? ['SPECIALISTA', 'VYKLAD', 'KOMENTAR', 'EXEGEZE'] : [keyForTopic];
-      if (!normalizedTarget.includes(label) && foreignInline.index > 0) {
+      const nl = normalizeTopicFieldLabel(foreignInline[1]);
+      const sameBucket = keyForTopic === 'SPECIALISTA'
+        ? nl === 'SPECIALISTA'
+        : nl === keyForTopic;
+      if (!sameBucket && foreignInline.index > 0) {
         out = out.slice(0, foreignInline.index).trim();
       }
     }
@@ -4918,6 +4950,8 @@ function extractTopicValueFromAI(rawText, topicId, mode = 'loose') {
   // Když chybí explicitní label cílového tématu, ale AI vrátí další labely
   // (např. SPECIALISTA), ber jen text před prvním cizím labelem.
   if (mode === 'strict' && fieldPositions.length > 0 && keyForTopic && !fieldPositions.some(f => f.label === keyForTopic)) {
+    const anchor = extractTopicSegmentByAnchors(cleaned, keyForTopic);
+    if (hasMeaningfulValue(anchor)) return anchor.trim();
     return '';
   }
   if (fieldPositions.length > 0 && keyForTopic && !fieldPositions.some(f => f.label === keyForTopic)) {
@@ -4934,11 +4968,13 @@ function extractTopicValueFromAI(rawText, topicId, mode = 'loose') {
   }
   // Poslední ochrana: u single-topic odpovědi ořízni navazující cizí labely i v rámci jednoho řádku.
   if (keyForTopic) {
-    const foreignInlineGlobal = cleaned.match(/\b(VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|SPECIALISTA|VYKLAD|KOMENTAR|EXEGEZE|DEF|DEFINITION|MEANING|USAGE|ORIGIN|COMMENTARY|EXEGESIS)\s*[-:–—=.]?\s*/i);
+    const foreignInlineGlobal = cleaned.match(/\b(VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|SPECIALISTA|VYKLAD|VÝKLAD|KOMENTAR|KOMENTÁŘ|EXEGEZE|DEF|DEFINITION|MEANING|USAGE|ORIGIN|COMMENTARY|EXEGESIS)\s*[-:–—=.]?\s*/iu);
     if (foreignInlineGlobal && foreignInlineGlobal.index !== undefined) {
-      const label = String(foreignInlineGlobal[1] || '').toUpperCase();
-      const normalizedTarget = keyForTopic === 'SPECIALISTA' ? ['SPECIALISTA', 'VYKLAD', 'KOMENTAR', 'EXEGEZE'] : [keyForTopic];
-      if (!normalizedTarget.includes(label) && foreignInlineGlobal.index > 0) {
+      const nl = normalizeTopicFieldLabel(foreignInlineGlobal[1]);
+      const sameBucket = keyForTopic === 'SPECIALISTA'
+        ? nl === 'SPECIALISTA'
+        : nl === keyForTopic;
+      if (!sameBucket && foreignInlineGlobal.index > 0) {
         cleaned = cleaned.slice(0, foreignInlineGlobal.index).trim();
       }
     }
