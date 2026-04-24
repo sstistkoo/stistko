@@ -2042,6 +2042,7 @@ let autoStepRunning = false;
   let providerCooldownUntil = { groq: 0, gemini: 0, openrouter: 0 };
   let providerFallbackQueue = { groq: Promise.resolve(), gemini: Promise.resolve(), openrouter: Promise.resolve() };
 let providerFallbackPendingCount = { groq: 0, gemini: 0, openrouter: 0 };
+let sideFallbackAbortVersion = 0;
   let providerCooldownLogTick = { groq: -1, gemini: -1, openrouter: -1 };
   let providerFailBadgeUntil = { groq: 0, gemini: 0, openrouter: 0 };
   let providerModelCooldownUntil = { groq: {}, gemini: {}, openrouter: {} };
@@ -4056,17 +4057,20 @@ function setModelCooldown(prov, model, seconds) {
   providerModelCooldownUntil[prov][model] = sec > 0 ? (Date.now() + sec * 1000) : 0;
 }
 
-async function waitForProviderCooldown(prov) {
+async function waitForProviderCooldown(prov, abortVersion = 0) {
   while (getProviderCooldownLeftSec(prov) > 0) {
+    if (isSideFallbackAborted(abortVersion)) return false;
     const left = getProviderCooldownLeftSec(prov);
     const tick = Math.floor(left / 10);
     if (providerCooldownLogTick[prov] !== tick) {
       providerCooldownLogTick[prov] = tick;
       log(`⏱ ${prov} cooldown: zbývá ${left}s`);
     }
-    await new Promise(resolve => setTimeout(resolve, Math.min(1500, left * 1000)));
+    const ok = await sleepMsWithAbort(Math.min(1500, left * 1000), abortVersion);
+    if (!ok) return false;
   }
   providerCooldownLogTick[prov] = -1;
+  return true;
 }
 
 function shouldAcceptTopicFallback(topicId, candidate) {
@@ -4158,6 +4162,21 @@ function sleepMs(ms) {
   return new Promise(resolve => setTimeout(resolve, Math.max(0, Number(ms) || 0)));
 }
 
+function isSideFallbackAborted(abortVersion) {
+  return Number(abortVersion || 0) !== Number(sideFallbackAbortVersion || 0);
+}
+
+async function sleepMsWithAbort(ms, abortVersion) {
+  let left = Math.max(0, Number(ms) || 0);
+  while (left > 0) {
+    if (isSideFallbackAborted(abortVersion)) return false;
+    const chunk = Math.min(left, 500);
+    await sleepMs(chunk);
+    left -= chunk;
+  }
+  return !isSideFallbackAborted(abortVersion);
+}
+
 function runProviderFallbackTaskSequential(prov, taskFn) {
   if (!Object.prototype.hasOwnProperty.call(providerFallbackQueue, prov)) {
     providerFallbackQueue[prov] = Promise.resolve();
@@ -4176,7 +4195,8 @@ function runProviderFallbackTaskSequential(prov, taskFn) {
   return chain;
 }
 
-async function requestTopicFallbackForProvider(prov, key, topicId) {
+async function requestTopicFallbackForProvider(prov, key, topicId, abortVersion) {
+  if (isSideFallbackAborted(abortVersion)) return null;
   const apiKey = getApiKeyForModelTest(prov);
   const modelQueue = getSecondaryProviderModelQueue(prov);
   if (!apiKey || !modelQueue.length) return null;
@@ -4188,8 +4208,11 @@ async function requestTopicFallbackForProvider(prov, key, topicId) {
   const messages = buildModelTestMessages([entry], 'auto-live', promptType, true);
 
   for (let i = 0; i < modelQueue.length; i++) {
+    if (isSideFallbackAborted(abortVersion)) return null;
     const model = modelQueue[i];
-    await waitForProviderCooldown(prov);
+    const cooldownOk = await waitForProviderCooldown(prov, abortVersion);
+    if (!cooldownOk) return null;
+    if (isSideFallbackAborted(abortVersion)) return null;
     const modelCooldownLeft = getModelCooldownLeftSec(prov, model);
     if (modelCooldownLeft > 0) {
       console.warn(`[FALLBACK][${prov}] skip model cooldown: ${model} (${modelCooldownLeft}s)`);
@@ -4240,14 +4263,16 @@ async function requestTopicFallbackForProvider(prov, key, topicId) {
         const effectiveWaitMs = Math.max(waitMs, cooldownMs);
         // Retry detail necháváme pouze v konzoli, AUTO řádek zůstává stručný.
         console.warn(`[FALLBACK][${prov}] retry next model in ${Math.max(1, Math.round(effectiveWaitMs / 1000))}s`);
-        await sleepMs(effectiveWaitMs);
+        const keptRunning = await sleepMsWithAbort(effectiveWaitMs, abortVersion);
+        if (!keptRunning) return null;
       }
     }
   }
   return null;
 }
 
-async function runParallelTopicFallback(keys) {
+async function runParallelTopicFallback(keys, abortVersion) {
+  if (isSideFallbackAborted(abortVersion)) return;
   const keyList = Array.isArray(keys) ? keys : [];
   if (!keyList.length) return;
   const sideProviders = ['openrouter', 'gemini'].filter(prov => isPipelineSecondaryEnabled(prov));
@@ -4256,15 +4281,17 @@ async function runParallelTopicFallback(keys) {
     return;
   }
   await Promise.all(keyList.map(async (key) => {
+    if (isSideFallbackAborted(abortVersion)) return;
     const t = translated[key] || {};
     const failedTopics = getFailedTopicsForFallback(t);
     if (!failedTopics.length) return;
     for (const topicId of failedTopics) {
+      if (isSideFallbackAborted(abortVersion)) return;
       const chosen = await new Promise(resolve => {
         let pending = sideProviders.length;
         let done = false;
         sideProviders.forEach(prov => {
-          runProviderFallbackTaskSequential(prov, () => requestTopicFallbackForProvider(prov, key, topicId))
+          runProviderFallbackTaskSequential(prov, () => requestTopicFallbackForProvider(prov, key, topicId, abortVersion))
             .then(result => {
               if (done) return;
               if (result) {
@@ -4282,6 +4309,7 @@ async function runParallelTopicFallback(keys) {
         });
       });
       if (!chosen) continue;
+      if (isSideFallbackAborted(abortVersion)) return;
       translated[key] = translated[key] || {};
       translated[key][topicId] = chosen.value;
       log(`✓ Fallback převzat ${key}.${topicId} <= ${chosen.prov}/${chosen.model}`);
@@ -4292,11 +4320,13 @@ async function runParallelTopicFallback(keys) {
 function enqueueSideFallbackBackground(keys) {
   const keyList = Array.isArray(keys) ? keys.filter(Boolean) : [];
   if (!keyList.length) return;
+  const abortVersion = sideFallbackAbortVersion;
   sideFallbackBackgroundQueue = sideFallbackBackgroundQueue
     .catch(() => undefined)
     .then(async () => {
+      if (isSideFallbackAborted(abortVersion)) return;
       try {
-        await runParallelTopicFallback(keyList);
+        await runParallelTopicFallback(keyList, abortVersion);
       } catch (e) {
         console.warn('[FALLBACK] background run failed', e);
       }
@@ -4839,6 +4869,7 @@ function startAuto() {
 
 function stopAuto() {
   autoRunning = false;
+  sideFallbackAbortVersion++;
   clearTimeout(autoTimer);
   clearInterval(autoCountTimer);
   document.getElementById('btnAuto').classList.remove('active');
