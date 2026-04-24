@@ -2117,7 +2117,6 @@ let listRangeFilter = null;
     models: [
       ['gemini-2.5-flash-lite', 'Gemini 2.5 Flash-Lite (Rychlý, levný)'],
       ['gemini-2.5-flash', 'Gemini 2.5 Flash (Stabilní)'],
-      ['gemini-2.5-pro', 'Gemini 2.5 Pro (pomalejší, kvalitní)'],
       ['gemini-3.1-flash-lite-preview', 'Gemini 3.1 Flash-Lite Preview'],
       ['gemini-3.1-pro-preview', 'Gemini 3.1 Pro Preview'],
       ['gemini-2.5-flash-lite-preview-09-2025', 'Gemini 2.5 Flash-Lite Preview (legacy)'],
@@ -2806,10 +2805,9 @@ function getTranslationStateForKey(key) {
   const t = translated[key];
   if (!t || t.skipped) return 'pending';
   if (isTranslationComplete(t)) return 'done';
-  const hasTopicMissing = getFailedTopicsForFallback(t).length > 0 &&
-    FALLBACK_TOPIC_ORDER.some(topicId => hasMeaningfulValue(t[topicId]));
-  if (hasTopicMissing) return 'missing_topic';
   if (!hasAnyTranslationContent(t)) return 'failed';
+  const missingTopicsOnly = FALLBACK_TOPIC_ORDER.some(topicId => !hasMeaningfulValue(t?.[topicId]));
+  if (missingTopicsOnly) return 'missing_topic';
   return 'failed_partial';
 }
 
@@ -4547,6 +4545,7 @@ function getProviderConfiguredModels(provider) {
   if (!cfg || !Array.isArray(cfg.models)) return [];
   return cfg.models
     .map(item => Array.isArray(item) ? String(item[0] || '').trim() : '')
+    .filter(model => !(provider === 'gemini' && model === 'gemini-2.5-pro'))
     .filter(Boolean);
 }
 
