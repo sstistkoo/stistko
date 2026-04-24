@@ -3324,10 +3324,20 @@ async function processTopicRepairQueue() {
           }
 
           const prevSpecialista = String(baselineTopicValues?.specialista || '').trim();
-          const candidateSpecialista = String(extractTopicValueFromAI(rawText, 'specialista', 'strict') || '').trim();
-          nextTask.specialistaInRaw = hasMeaningfulValue(candidateSpecialista);
+          let candidateSpecialista = String(extractTopicValueFromAI(rawText, 'specialista', 'strict') || '').trim();
+          if (!hasMeaningfulValue(candidateSpecialista)) {
+            candidateSpecialista = String(extractSpecialistaLooseFallback(rawText) || '').trim();
+          }
+          if (!hasMeaningfulValue(candidateSpecialista)) {
+            candidateSpecialista = String(extractTopicValueFromAI(rawText, 'specialista', 'loose') || '').trim();
+          }
+          const specHeader = /(?:^|\n)\s*SPECIALISTA\s*[:\uFF1A\-–—=.]/im.test(normalizeAiTopicRawText(rawText));
+          nextTask.specialistaInRaw = hasMeaningfulValue(candidateSpecialista) || specHeader;
           nextTask.specialistaPreviousValue = prevSpecialista;
           nextTask.specialistaCandidateValue = candidateSpecialista;
+          if (specHeader && !hasMeaningfulValue(candidateSpecialista)) {
+            log(`⚠ ${nextTask.key}: v RAW je nadpis SPECIALISTA, ale tělo se nepodařilo strojově vyčíst — viz konzole RAW.`);
+          }
           if (shouldReplaceSpecialista(prevSpecialista, candidateSpecialista)) {
             translated[nextTask.key].specialista = String(candidateSpecialista || '').trim();
             nextTask.specialistaDecision = 'přijat (auto)';
@@ -3349,6 +3359,7 @@ async function processTopicRepairQueue() {
           }
           nextTask.provider = prov;
           nextTask.candidateValue = String(candidate || '').trim();
+          nextTask.checked = shouldAutoCheckTopicRepairTask(nextTask.topicId, nextTask.currentValue, nextTask.candidateValue);
           nextTask.status = 'done';
           success = true;
           log(`✓ Oprava tématu ${nextTask.key}.${nextTask.topicId} přes ${prov}`);
@@ -4478,6 +4489,7 @@ async function runTopicRepairBulkTranslation() {
           task.provider = prov;
           task.status = 'done';
           task.error = '';
+          task.checked = shouldAutoCheckTopicRepairTask(topicId, task.currentValue, val);
         } else {
           task.status = 'failed';
           task.error = 'AI nevrátila hodnotu pro toto heslo (zkontroluj formát odpovědi).';
@@ -4934,6 +4946,42 @@ function closeSystemPromptModal() {
   if (modal) modal.remove();
 }
 
+/** Sjednocení znaků z AI odpovědi (NFKC, ZWSP, plnocelá dvojtečka) kvůli parsování labelů. */
+function normalizeAiTopicRawText(s) {
+  return String(s || '')
+    .replace(/\r\n/g, '\n')
+    .replace(/\uFEFF/g, '')
+    .replace(/[\u200B-\u200D\u2060]/g, '')
+    .replace(/\uFF1A/g, ':')
+    .replace(/\uFF1F/g, '?')
+    .normalize('NFKC');
+}
+
+/** Když strict parser SPECIALISTU nechytí (jiné mezery/znaky), vezmi text od nadpisu do dalšího pole. */
+function extractSpecialistaLooseFallback(rawText) {
+  const t = normalizeAiTopicRawText(rawText);
+  const m = t.match(/(?:^|\n)\s*SPECIALISTA\s*[:\uFF1A\-–—=.]\s*/im);
+  if (!m || m.index === undefined) return '';
+  const start = m.index + m[0].length;
+  const rest = t.slice(start);
+  const m2 = rest.search(/(?:^|\n)\s*(?:VYZNAM|DEFINICE|POUZITI|PUVOD|KJV)\s*[:\uFF1A\-–—=.]/im);
+  const body = m2 >= 0 ? rest.slice(0, m2) : rest;
+  return body.trim();
+}
+
+/** Po opravě tématu: nezaškrtávat hromadné přepsání, když je výsledek horší nebo definice nízké kvality. */
+function shouldAutoCheckTopicRepairTask(topicId, currentValue, candidateValue) {
+  const prev = String(currentValue || '').trim();
+  const next = String(candidateValue || '').trim();
+  if (!hasMeaningfulValue(next)) return false;
+  const p = scoreTopicRepairText(topicId, prev);
+  const n = scoreTopicRepairText(topicId, next);
+  const v = verdictTopicRepairCompare(p.score, n.score);
+  if (v.label === 'horší') return false;
+  if (topicId === 'definice' && isDefinitionLowQuality(next)) return false;
+  return true;
+}
+
 /** Jednotná normalizace názvů polí z AI (vč. VÝKLAD → SPECIALISTA). */
 function normalizeTopicFieldLabel(raw) {
   const u = String(raw || '').trim().toUpperCase();
@@ -4977,7 +5025,7 @@ function mapNormalizedLabelToTopicId(norm) {
 
 /** Pořadí témat podle prvního výskytu nadpisu v RAW (pro log a doplnění „dalších“). */
 function scanRawForTopicHeaderTopicIds(rawText) {
-  const text = String(rawText || '').replace(/\r\n/g, '\n').trim();
+  const text = normalizeAiTopicRawText(rawText).trim();
   if (!text) return [];
   let cleaned = text.replace(/^###[GH]\d+###\s*/gi, '').trim();
   cleaned = cleaned.replace(/^###[GH]\d+###\s*/gi, '').trim();
@@ -4996,7 +5044,7 @@ function scanRawForTopicHeaderTopicIds(rawText) {
 }
 
 function extractTopicValueFromAI(rawText, topicId, mode = 'loose') {
-  const text = String(rawText || '').replace(/\r\n/g, '\n').trim();
+  const text = normalizeAiTopicRawText(rawText).trim();
   if (!text) return '';
 
   const keyForTopic = {
