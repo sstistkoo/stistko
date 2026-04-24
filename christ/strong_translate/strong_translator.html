@@ -1786,7 +1786,12 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   // ══ CORE MODULE IMPORT ═══════════════════════════════════════════
   import core from './strong_translator_core_new.js';
   import prompts from './strong_prompts.js';
-  import { getProviderConfiguredModelsForAI, buildSecondaryProviderModelCandidates } from './strong_translator_ai.js';
+  import {
+    getProviderConfiguredModelsForAI,
+    buildSecondaryProviderModelCandidates,
+    getRankedModelsForSecondary,
+    getStaticFallbackModels
+  } from './strong_translator_ai.js';
   // Re-export for use in this module
 const {
       parseTXT: parseTXTCore,
@@ -4070,21 +4075,12 @@ function shouldAcceptTopicFallback(topicId, candidate) {
   return true;
 }
 
-const GEMINI_SPECIAL_TRANSLATION_MODELS = ['gemini-2.5-flash-lite', 'gemini-2.5-flash'];
-
-const SECONDARY_PROVIDER_MODEL_RANKING = {
-  // Pro speciální topic fallback držíme Gemini omezeně (rychlost + stabilita).
-  gemini: GEMINI_SPECIAL_TRANSLATION_MODELS,
-  // Z test/test (13).txt: OpenRouter smoke/auto TOP pořadí
-  openrouter: ['openrouter/free', 'openai/gpt-oss-20b:free', 'nvidia/nemotron-nano-9b-v2:free']
-};
-
 function getSecondaryProviderModelCandidates(prov) {
   return buildSecondaryProviderModelCandidates({
     provider: prov,
     providers: PROVIDERS,
     selectedModel: getPipelineModelForProvider(prov) || getModelTestSelectedModelForProvider(prov) || '',
-    rankedModels: SECONDARY_PROVIDER_MODEL_RANKING[prov] || [],
+    rankedModels: getRankedModelsForSecondary(prov),
     maxNonGemini: 4
   });
 }
@@ -4534,23 +4530,12 @@ function resetPrompt() {
 
 
 // ══ AI VOLÁNÍ S RETRY A FALLBACK ════════════════════════════════
-// Statické fallbacky jen pro providery s fixním katalogem. OpenRouter
-// používá dynamickou cache modelů (openrouter_free_models_cache).
-const FALLBACKS_STATIC = {
-  groq:   ['meta-llama/llama-4-scout-17b-16e-instruct', 'llama-3.1-8b-instant', 'llama-3.3-70b-versatile'],
-  gemini: ['gemini-2.5-flash', 'gemini-2.5-flash-lite']
-};
-
 function getProviderConfiguredModels(provider) {
   return getProviderConfiguredModelsForAI(provider, PROVIDERS);
 }
 
 function getFallbackModels(provider) {
-  if (provider === 'gemini') {
-    // Běžný retry: rotuj všechny modely, které máš dostupné v Gemini seznamu.
-    const configured = getProviderConfiguredModels('gemini');
-    if (configured.length) return [...new Set(configured)];
-  }
+  if (provider !== 'openrouter') return getStaticFallbackModels(provider, PROVIDERS);
   if (provider === 'openrouter') {
     try {
       const raw = localStorage.getItem('openrouter_free_models_cache');
@@ -4569,7 +4554,7 @@ function getFallbackModels(provider) {
     // Minimální fallback, kdyby cache ještě neexistovala
     return ['meta-llama/llama-3.3-70b-instruct:free', 'meta-llama/llama-3.1-8b-instruct:free'];
   }
-  return FALLBACKS_STATIC[provider] || [];
+  return [];
 }
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
