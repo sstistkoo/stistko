@@ -1241,11 +1241,13 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
     <div class="auto-info">AUTO: dávka <b id="autoBatch">—</b>, interval <b id="autoInterval">—</b>s</div>
     <div class="countdown" id="countdown">—</div>
     <div id="autoProviderCountdowns" style="display:grid;gap:2px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt2)">
-      <div id="autoCountdown_groq">Groq: —</div>
+      <div style="display:flex;align-items:center;gap:8px;min-width:320px">
+        <div id="autoCountdown_groq">Groq: —</div>
+        <div class="auto-log" id="autoLog">Čeká na start...</div>
+      </div>
       <div id="autoCountdown_gemini">Gemini: —</div>
       <div id="autoCountdown_openrouter">OpenRouter: —</div>
     </div>
-    <div class="auto-log" id="autoLog">Čeká na start...</div>
     <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt3);white-space:nowrap">
       ⏱ <span id="etaLabel">—</span>
     </div>
