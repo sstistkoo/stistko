@@ -64,6 +64,7 @@ const CATEGORY_LABELS = {
   detailed: 'Detailní',
   concise: 'Stručné',
   literal: 'Doslovné',
+  test: 'Test',
   custom: 'Vlastní',
   library: 'Knihovna',
   final: 'Finální'
@@ -154,6 +155,7 @@ KJV: [KJV translation]
 `
     }
   ],
+  test: [],
   custom: [],
   library: [
     {
@@ -552,7 +554,50 @@ Vstup:
 {HESLA}`
   },
   preset_v14: {
-    label: 'TOP ⭐ v14 (Groq: CZ původní v12)',
+    label: '🔥 v14 HARD (Definice CZ strict)',
+    template: `Jsi audit-safe překladač Strong hesel do češtiny.
+Priorita #1: DEFINICE musí být kvalitní čeština, ne parafráze ani zbytky EN.
+
+Vrať pro KAŽDÉ heslo přesně:
+###Gx###
+VYZNAM: ...
+DEFINICE: ...
+POUZITI: ...
+PUVOD: ...
+KJV: ...
+SPECIALISTA: ...
+
+TVRDÁ PRAVIDLA (bez výjimky):
+1) Vrať všechna hesla ze vstupu ve stejném pořadí.
+2) DEFINICE:
+   - musí být plně česky (výjimka: lemma, původní písmo, biblické odkazy),
+   - minimálně 8 slov a minimálně 60 znaků,
+   - nesmí být zkrácená na obecné fráze typu "podobný základu",
+   - nesmí obsahovat UI/artefakt texty typu "Prompt", "Upravit", "klik", "button".
+3) Zakázané EN výrazy v DEFINICE:
+   "which see", "indecl.", "used in", "only in", "see word", "without", "not", "metaphorically", "properly".
+4) Normalizace termínů:
+   - indecl. -> nesklonné
+   - NT -> Nový zákon
+   - LXX -> Septuaginta
+   - alpha -> alfa
+5) Nevynechávej odborné části definice (gramatika, lexikální nuance, poznámky, závorky).
+6) Žádné prázdné pole; fallback vždy: neuvedeno ve zdroji.
+7) Žádný text mimo bloky.
+8) SPECIALISTA musí být 2-4 věty a nesmí jen opakovat DEFINICE.
+
+Interní QA před odevzdáním (nevypisuj):
+- počet bloků = počet vstupních hesel,
+- každý blok má všech 6 polí,
+- každé pole je vyplněné,
+- DEFINICE splňuje min. délku a neobsahuje zakázané EN výrazy,
+- poslední blok dávky není useknutý.
+
+Vstup:
+{HESLA}`
+  },
+  preset_v15: {
+    label: 'v15 - CZ klasika (osvědčený)',
     template: `Jsi biblický lexikální překladatel optimalizovaný pro Groq Llama 4.
 
 Úkol:
@@ -672,6 +717,114 @@ Pravidla:
 - Přidej stručný biblický a teologický kontext.
 - Neopakuj mechanicky definici ani KJV.
 - Pokud chybí podklady, napiš: neuvedeno ve zdroji.
+
+Vstup:
+{HESLA}`
+  },
+  preset_topic_definice_batch: {
+    label: 'Téma: Definice (CZ) — dávka',
+    topicLabel: 'Definice (CZ)',
+    template: `Úkol: vytvoř pouze pole DEFINICE pro více hesel Strong najednou.
+
+Pravidla:
+- Vrať jen DEFINICE pro každé heslo, nic jiného.
+- Nepoužívej anglické výplňové fráze (which see, used in, only in, indecl., see word).
+- Pokud zdroj nestačí, napiš: neuvedeno ve zdroji.
+
+Povinný výstup (pro každé heslo zvlášť, v tomto pořadí):
+###Gx###
+DEFINICE: ...
+
+Poznámka:
+- Řádek ###Gx### musí být přesně podle klíče z vstupu (G/H + číslo).
+
+Vstup:
+{HESLA}`
+  },
+  preset_topic_vyznam_batch: {
+    label: 'Téma: Český význam (CZ) — dávka',
+    topicLabel: 'Český význam (CZ)',
+    template: `Úkol: vytvoř pouze pole VYZNAM pro více hesel Strong najednou.
+
+Pravidla:
+- Vrať jen VYZNAM pro každé heslo, nic jiného.
+- Stručně a přesně (typicky 2-8 slov).
+- Pokud není význam jistý, napiš: neuvedeno ve zdroji.
+
+Povinný výstup:
+###Gx###
+VYZNAM: ...
+
+Vstup:
+{HESLA}`
+  },
+  preset_topic_kjv_batch: {
+    label: 'Téma: KJV překlady (CZ) — dávka',
+    topicLabel: 'KJV překlady (CZ)',
+    template: `Úkol: vytvoř pouze pole KJV pro více hesel Strong najednou.
+
+Pravidla:
+- Vrať jen KJV pro každé heslo, nic jiného.
+- Uveď hlavní český ekvivalent(y) odpovídající KJV použití.
+- Pokud zdroj chybí, napiš: neuvedeno ve zdroji.
+
+Povinný výstup:
+###Gx###
+KJV: ...
+
+Vstup:
+{HESLA}`
+  },
+  preset_topic_pouziti_batch: {
+    label: 'Téma: Biblické užití (CZ) — dávka',
+    topicLabel: 'Biblické užití (CZ)',
+    template: `Úkol: vytvoř pouze pole POUZITI pro více hesel Strong najednou.
+
+Pravidla:
+- Vrať jen POUZITI pro každé heslo, nic jiného.
+- Preferuj konkrétní biblické odkazy v hranatých závorkách.
+- Nic nevymýšlej; jen údaje podložené vstupem.
+- Pokud nejsou data, napiš: neuvedeno ve zdroji.
+
+Povinný výstup:
+###Gx###
+POUZITI: ...
+
+Vstup:
+{HESLA}`
+  },
+  preset_topic_puvod_batch: {
+    label: 'Téma: Původ / Etymologie (CZ) — dávka',
+    topicLabel: 'Původ / Etymologie (CZ)',
+    template: `Úkol: vytvoř pouze pole PUVOD pro více hesel Strong najednou.
+
+Pravidla:
+- Vrať jen PUVOD pro každé heslo, nic jiného.
+- Piš stručně a věcně.
+- Pokud zdroj nestačí, napiš: neuvedeno ve zdroji.
+
+Povinný výstup:
+###Gx###
+PUVOD: ...
+
+Vstup:
+{HESLA}`
+  },
+  preset_topic_specialista_batch: {
+    label: 'Téma: Biblický výklad (specialista) (CZ) — dávka',
+    topicLabel: 'Biblický výklad (specialista) (CZ)',
+    template: `Úkol: vytvoř pouze pole SPECIALISTA pro více hesel Strong najednou.
+
+Pravidla:
+- Vrať jen SPECIALISTA pro každé heslo, nic jiného.
+- Napiš souvislý odstavec 3-5 vět.
+- Přidej stručný biblický a teologický kontext.
+- Neopakuj mechanicky definici ani KJV.
+- Pokud chybí podklady, napiš: neuvedeno ve zdroji.
+
+Povinný výstup:
+###Gx###
+SPECIALISTA: ...
 
 Vstup:
 {HESLA}`
