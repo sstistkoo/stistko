@@ -2935,12 +2935,34 @@ function updateTopicRepairModalUI() {
   const waiting = state.tasks.filter(t => t.status === 'waiting').length;
   const failed = state.tasks.filter(t => t.status === 'failed').length;
   const statusEl = document.getElementById('topicRepairStatus');
-  if (statusEl) statusEl.textContent = `✓ Hotovo ${done} · ⏳ Běží ${running} · 🕓 Čeká ${waiting} · ✗ Chyba ${failed}`;
+  const idleHint = (state.repairStrategy === 'sequential' && !state.sequentialEverStarted && waiting > 0)
+    ? '⏸ Čeká na spuštění · '
+    : '';
+  if (statusEl) statusEl.textContent = `${idleHint}✓ Hotovo ${done} · ⏳ Běží ${running} · 🕓 Čeká ${waiting} · ✗ Chyba ${failed}`;
   const applyCount = state.tasks.filter(t => t.checked && t.candidateValue && t.candidateValue !== '—').length;
   const applyBtn = document.getElementById('topicRepairApplyBtn');
   if (applyBtn) applyBtn.textContent = `✓ Potvrdit přepsání (${applyCount})`;
   const toggleBtn = document.getElementById('topicRepairToggleBtn');
-  if (toggleBtn) toggleBtn.textContent = state.paused ? '▶ Spustit' : '⏸ Pauza';
+  if (toggleBtn) {
+    toggleBtn.textContent = state.paused ? '▶ Pokračovat' : '⏸ Pauza';
+    const showPause = state.repairStrategy === 'sequential' && state.sequentialEverStarted;
+    toggleBtn.style.display = showPause ? '' : 'none';
+  }
+  const startSeqBtn = document.getElementById('topicRepairStartSequentialBtn');
+  if (startSeqBtn) {
+    const enabledProvCount = ['groq', 'gemini', 'openrouter'].filter(p => state.providerEnabled[p]).length;
+    const wantStart = state.repairStrategy === 'sequential' && !state.sequentialEverStarted
+      && state.tasks.some(t => t.status === 'waiting');
+    const canSeqStart = wantStart && enabledProvCount > 0;
+    startSeqBtn.style.display = wantStart ? '' : 'none';
+    startSeqBtn.disabled = !canSeqStart;
+  }
+  const rSeq = document.getElementById('topicRepairStrategySeq');
+  const rBulk = document.getElementById('topicRepairStrategyBulk');
+  if (rSeq) rSeq.checked = state.repairStrategy === 'sequential';
+  if (rBulk) rBulk.checked = state.repairStrategy === 'bulk';
+  const bulkHint = document.getElementById('topicRepairBulkStrategyHint');
+  if (bulkHint) bulkHint.style.display = state.repairStrategy === 'bulk' ? 'block' : 'none';
   const rows = state.tasks.map((task, idx) => {
     const extraTopicsForUi = (Array.isArray(task.detectedTopics) ? task.detectedTopics : [])
       .filter(row => row && row.topicId && row.topicId !== 'specialista' && row.topicId !== task.topicId);
@@ -3065,7 +3087,21 @@ function renderTopicRepairModal() {
           <button class="hbtn" onclick="closeTopicRepairModalOnly()">✕ Zavřít okno</button>
         </div>
       </div>
-      <div style="font-size:11px;color:var(--txt2);margin:8px 0 10px 0">Překládám jen chybějící témata přes jejich vlastní 🤖 prompt šablony.</div>
+      <div style="font-size:11px;color:var(--txt2);margin:8px 0 10px 0">Chybějící témata — nic se nespouští automaticky; zvol režim a teprve pak spusť překlad.</div>
+      <div style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;padding:10px;margin-bottom:10px">
+        <div style="font-size:12px;color:var(--txt);margin-bottom:8px"><b>Režim</b></div>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--txt2)">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+            <input type="radio" name="topicRepairStrategy" id="topicRepairStrategySeq" value="sequential" ${state.repairStrategy === 'sequential' ? 'checked' : ''} onchange="setTopicRepairStrategy('sequential')" style="accent-color:var(--acc)">
+            Po jednom (sekvenčně — vlastní prompt pro každé chybějící téma)
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+            <input type="radio" name="topicRepairStrategy" id="topicRepairStrategyBulk" value="bulk" ${state.repairStrategy === 'bulk' ? 'checked' : ''} onchange="setTopicRepairStrategy('bulk')" style="accent-color:var(--acc)">
+            Hromadně (dávka jednoho tématu — sekce níže, tlačítko „Hromadný překlad“)
+          </label>
+        </div>
+        <div id="topicRepairBulkStrategyHint" style="margin-top:8px;font-size:11px;color:var(--txt3);display:${state.repairStrategy === 'bulk' ? 'block' : 'none'}">Sekvenční fronta se nespustí. Rozbal „Hromadná oprava“, zkontroluj prompt a dej ⚡ Hromadný překlad.</div>
+      </div>
       <div style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;padding:10px;margin-bottom:10px">
         <div id="topicRepairStatus" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt3)">—</div>
         <div style="display:grid;gap:2px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt2);margin-top:6px">
@@ -3074,7 +3110,7 @@ function renderTopicRepairModal() {
           <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="topicRepairEnable_openrouter" ${state.providerEnabled.openrouter ? 'checked' : ''} onchange="applyTopicRepairProviderCheckboxes()" style="accent-color:var(--acc)">OR <span id="topicRepairProvider_openrouter">OpenRouter: —</span></label>
         </div>
       </div>
-      <details style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;padding:10px;margin-bottom:10px">
+      <details id="topicRepairBulkDetails" style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;padding:10px;margin-bottom:10px" ${state.repairStrategy === 'bulk' ? 'open' : ''}>
         <summary style="cursor:pointer;color:var(--acc)">Hromadná oprava jednoho tématu (dávka)</summary>
         <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:8px">
           <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--txt2)">
@@ -3108,7 +3144,8 @@ function renderTopicRepairModal() {
           </div>
         </div>
       </details>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:center">
+        <button class="hbtn grn" id="topicRepairStartSequentialBtn" type="button" onclick="startTopicRepairSequentialWorker()">▶ Spustit sekvenční opravu</button>
         <button class="hbtn grn" id="topicRepairToggleBtn" onclick="toggleTopicRepairRun()">⏸ Pauza</button>
         <button class="hbtn grn" id="topicRepairApplyBtn" onclick="applyTopicRepairSelected()">✓ Potvrdit přepsání (0)</button>
       </div>
@@ -3128,7 +3165,9 @@ function startTopicRepairFlow(keys) {
   }
   topicRepairState = {
     tasks,
-    paused: false,
+    paused: true,
+    repairStrategy: 'sequential',
+    sequentialEverStarted: false,
     closed: false,
     minimized: false,
     bulkTopicId: tasks[0]?.topicId || 'definice',
@@ -3144,9 +3183,42 @@ function startTopicRepairFlow(keys) {
   if (miniBtn) miniBtn.style.display = 'none';
   stopTopicRepairTicker();
   topicRepairTicker = setInterval(updateTopicRepairProviderStatus, 1000);
-  if (!topicRepairWorkerRunning) {
-    processTopicRepairQueue();
+}
+
+function setTopicRepairStrategy(strategy) {
+  const state = topicRepairState;
+  if (!state) return;
+  const busy = state.tasks.some(t => t.status === 'running') || !!state.currentTask || topicRepairBulkRunning;
+  if (busy) {
+    showToast('⚠ Nelze měnit režim během běžícího překladu.');
+    updateTopicRepairModalUI();
+    return;
   }
+  state.repairStrategy = strategy === 'bulk' ? 'bulk' : 'sequential';
+  if (state.repairStrategy === 'bulk') state.paused = true;
+  const det = document.getElementById('topicRepairBulkDetails');
+  if (det) det.open = state.repairStrategy === 'bulk';
+  const bulkHint = document.getElementById('topicRepairBulkStrategyHint');
+  if (bulkHint) bulkHint.style.display = state.repairStrategy === 'bulk' ? 'block' : 'none';
+  updateTopicRepairModalUI();
+}
+
+function startTopicRepairSequentialWorker() {
+  const state = topicRepairState;
+  if (!state || state.repairStrategy !== 'sequential') return;
+  if (!state.tasks.some(t => t.status === 'waiting')) {
+    showToast('⚠ Žádná témata ve frontě (čekající).');
+    return;
+  }
+  const enabledProviders = ['groq', 'gemini', 'openrouter'].filter(p => state.providerEnabled[p]);
+  if (!enabledProviders.length) {
+    showToast('⚠ Zapni alespoň jednoho providera pro opravu témat.');
+    return;
+  }
+  state.sequentialEverStarted = true;
+  state.paused = false;
+  updateTopicRepairModalUI();
+  if (!topicRepairWorkerRunning) processTopicRepairQueue();
 }
 
 async function processTopicRepairQueue() {
@@ -3154,6 +3226,7 @@ async function processTopicRepairQueue() {
   topicRepairWorkerRunning = true;
   try {
     while (topicRepairState && !topicRepairState.closed) {
+      if (topicRepairState.repairStrategy !== 'sequential') break;
       if (topicRepairState.paused) {
         await sleep(350);
         continue;
@@ -3274,9 +3347,14 @@ function toggleTopicRepairTask(index, checked) {
 
 function toggleTopicRepairRun() {
   if (!topicRepairState) return;
-  topicRepairState.paused = !topicRepairState.paused;
+  const state = topicRepairState;
+  if (state.repairStrategy !== 'sequential' || !state.sequentialEverStarted) {
+    showToast(state.repairStrategy === 'bulk' ? 'V režimu hromadně použij sekci dávky níže.' : 'Nejdřív klikni na „Spustit sekvenční opravu“.');
+    return;
+  }
+  state.paused = !state.paused;
   updateTopicRepairModalUI();
-  if (!topicRepairState.paused && !topicRepairWorkerRunning) processTopicRepairQueue();
+  if (!state.paused && !topicRepairWorkerRunning) processTopicRepairQueue();
 }
 
 function shouldAutoAcceptDetectedTopic(topicId, previousValue, candidateValue) {
@@ -3370,7 +3448,9 @@ function restoreTopicRepairModal() {
   renderTopicRepairModal();
   const miniBtn = document.getElementById('btnTopicRepairMini');
   if (miniBtn) miniBtn.style.display = 'none';
-  if (!topicRepairWorkerRunning && !topicRepairState.paused) processTopicRepairQueue();
+  if (!topicRepairWorkerRunning && !topicRepairState.paused && topicRepairState.sequentialEverStarted && topicRepairState.repairStrategy === 'sequential') {
+    processTopicRepairQueue();
+  }
 }
 
 function resolveProviderForInteractiveAction(preferredProv = '') {
@@ -4346,7 +4426,9 @@ async function runTopicRepairBulkTranslation() {
       bulkBtn.textContent = '⚡ Hromadný překlad (vybrané)';
     }
     updateTopicRepairModalUI();
-    if (!state.paused && !topicRepairWorkerRunning) processTopicRepairQueue();
+    if (state.sequentialEverStarted && state.repairStrategy === 'sequential' && !state.paused && !topicRepairWorkerRunning) {
+      processTopicRepairQueue();
+    }
   }
 }
 
@@ -9966,6 +10048,8 @@ window.refillSingleField = refillSingleField;
 window.closeTopicPromptModal = closeTopicPromptModal;
 window.restoreTopicRepairModal = restoreTopicRepairModal;
 window.toggleTopicRepairRun = toggleTopicRepairRun;
+window.setTopicRepairStrategy = setTopicRepairStrategy;
+window.startTopicRepairSequentialWorker = startTopicRepairSequentialWorker;
 window.setTopicRepairSpecialistaDecision = setTopicRepairSpecialistaDecision;
 window.setTopicRepairDetectedTopicDecision = setTopicRepairDetectedTopicDecision;
 window.applyTopicRepairSelected = applyTopicRepairSelected;
