@@ -5643,7 +5643,7 @@ function appendPromptCompareSummary(appendReport, promptA, promptB, statsA, stat
   appendReport(`Vítěz: ${winner}`);
 }
 
-async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSignal, fixedProvider = null, promptType = 'custom', promptEnabled = true) {
+async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSignal, fixedProvider = null, promptType = 'custom', promptEnabled = true, fixedCyclesPerWorker = null) {
   const durationInput = document.getElementById('modelTestDurationMin');
   const durationMin = Math.max(1, parseInt(durationInput?.value || '10', 10) || 10);
   const durationMs = durationMin * 60 * 1000;
@@ -5681,6 +5681,9 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
     return { cycles: 0, okKeys: 0, failedKeys: 0 };
   }
   appendReport(`Auto test délka: ${durationMin} min`);
+  if (Number.isFinite(fixedCyclesPerWorker) && fixedCyclesPerWorker > 0) {
+    appendReport(`Režim cyklů: pevně ${fixedCyclesPerWorker} cykly na prompt`);
+  }
   appendReport(`Dávka/interval: ${batchSize} hesel / ${intervalSec}s`);
   appendReport(`Po každém cyklu: audit všech hesel v dávce (OK / neúplné / neúspěch) + RAW odpověď AI pro celou dávku.${promptEnabled ? ' (test promptu zapnut)' : ' (test promptu vypnut)'}`);
   appendReport(providerKeys.length > 1
@@ -5722,7 +5725,9 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
       appendReport(`[#${current.prov}] ${providerLabel} | bez API klíče`);
       return;
     }
-    while (!modelTestCancelRequested && (Date.now() - startTs) < durationMs) {
+    while (!modelTestCancelRequested
+      && (Date.now() - startTs) < durationMs
+      && (!Number.isFinite(fixedCyclesPerWorker) || fixedCyclesPerWorker <= 0 || localCycle < fixedCyclesPerWorker)) {
       localCycle++;
       cycle++;
       const takeSize = Math.max(1, Math.min(batchSize, sourceEntries.length));
@@ -5969,12 +5974,12 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
         const testResultsB = [];
         appendReport('');
         appendReport(`--- BĚH A: ${getModelTestPromptTypeLabel(promptType)} ---`);
-        const autoStatsA = await runAutoLiveModelTest(appendReport, waitMs, testResultsA, modelTestAbortController.signal, forcedProvider ? prov : null, promptType, true);
+        const autoStatsA = await runAutoLiveModelTest(appendReport, waitMs, testResultsA, modelTestAbortController.signal, forcedProvider ? prov : null, promptType, true, 3);
         appendModelTestFinalOverview(appendReport, testResultsA, testMode, autoStatsA);
         if (!modelTestCancelRequested) {
           appendReport('');
           appendReport(`--- BĚH B: ${getModelTestPromptTypeLabel(comparePromptType)} ---`);
-          const autoStatsB = await runAutoLiveModelTest(appendReport, waitMs, testResultsB, modelTestAbortController.signal, forcedProvider ? prov : null, comparePromptType, true);
+          const autoStatsB = await runAutoLiveModelTest(appendReport, waitMs, testResultsB, modelTestAbortController.signal, forcedProvider ? prov : null, comparePromptType, true, 3);
           appendModelTestFinalOverview(appendReport, testResultsB, testMode, autoStatsB);
           appendPromptCompareSummary(appendReport, promptType, comparePromptType, autoStatsA, autoStatsB, testResultsA, testResultsB);
         }
