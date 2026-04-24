@@ -1337,6 +1337,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
             <button class="sbtn" onclick="filterMissingTopicsList()" title="Zobrazit hesla, kde chybí některé téma" aria-label="Filtrovat hesla s chybějícími tématy">⚠ Téma</button>
             <button class="sbtn" onclick="selectAll()" title="Vybrat vše" aria-label="Vybrat všechna hesla">☑</button>
             <button class="sbtn" onclick="selectNone()" title="Zrušit výběr" aria-label="Zrušit výběr všech hesel">☐</button>
+            <button class="sbtn" id="btnTopicRepairMini" onclick="restoreTopicRepairModal()" title="Obnovit okno opravy témat" aria-label="Obnovit okno opravy témat" style="display:none">🗔 Oprava témat</button>
           </div>
         </div>
       </div>
@@ -1545,7 +1546,8 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       </div>
       <div class="mobl-set-row">
         <label>Prompty</label>
-        <select id="modelTestPromptType">
+        <div style="display:flex;gap:8px;align-items:center">
+          <select id="modelTestPromptType" style="flex:1">
           <optgroup label="Obecné testovací prompty">
             <option value="preset_v1">v1 - vyvážený</option>
             <option value="preset_v2">v2 - audit striktní</option>
@@ -1562,6 +1564,8 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
             <option value="preset_v11">v11 - ALL-IN-ONE</option>
             <option value="preset_v12" selected>⭐ TOP v12 - anti-EN normalizace</option>
             <option value="preset_v13">v13 - anti-EN + anti-truncace</option>
+            <option value="preset_v14">🔥 v14 - HARD CZ definice (test)</option>
+            <option value="preset_v15">v15 - CZ klasika (osvědčený)</option>
           </optgroup>
           <optgroup label="Tematické prompty (dle detailu hesla)">
             <option value="preset_topic_vyznam">Téma: Český význam (CZ)</option>
@@ -1579,7 +1583,9 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
           </optgroup>
           <option disabled>────────────</option>
           <option value="custom">Vlastní prompt</option>
-        </select>
+          </select>
+          <button class="modal-btn" type="button" onclick="openModelTestPromptPreviewModal()" title="Otevřít náhled vybraného promptu">👁</button>
+        </div>
       </div>
       <label class="stat" style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
         <input type="checkbox" id="modelTestEnablePromptCompare">
@@ -1647,6 +1653,19 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
     </div>
   </div>
 
+  <!-- Model Test Prompt Preview Modal -->
+  <div id="modelTestPromptPreviewModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);align-items:center;justify-content:center;z-index:1005;padding:18px">
+    <div class="prompt-modal-box" style="max-width:980px;width:100%;max-height:90vh">
+      <div class="prompt-modal-title">👁 Náhled test promptu</div>
+      <div id="modelTestPromptPreviewLabel" style="font-size:12px;color:var(--txt2);margin-bottom:8px">Prompt: -</div>
+      <textarea id="modelTestPromptPreviewText" readonly style="width:100%;min-height:340px;max-height:62vh;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:10px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.5;resize:vertical"></textarea>
+      <div class="modal-btns" style="margin-top:12px">
+        <button class="modal-btn ok" type="button" onclick="copyModelTestPromptPreview()">📋 Kopírovat</button>
+        <button class="modal-btn cancel" type="button" onclick="closeModelTestPromptPreviewModal()">✕ Zavřít</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Prompt Library Modal -->
   <div id="promptLibraryModal">
     <div class="prompt-modal-box">
@@ -1657,6 +1676,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
         <div class="prompt-tab" data-category="detailed">Detailní</div>
         <div class="prompt-tab" data-category="concise">Stručné</div>
         <div class="prompt-tab" data-category="literal">Doslovné</div>
+        <div class="prompt-tab" data-category="test">Test</div>
         <div class="prompt-tab" data-category="custom">Vlastní</div>
       </div>
 
@@ -1953,6 +1973,42 @@ POVINNÝ VÝSTUP NAVÍC:
       const fromCatalog = modelTestPromptCatalog?.[promptType]?.label;
       return fromCatalog || 'Vlastní';
     }
+
+function openModelTestPromptPreviewModal() {
+  const modal = document.getElementById('modelTestPromptPreviewModal');
+  const textEl = document.getElementById('modelTestPromptPreviewText');
+  const labelEl = document.getElementById('modelTestPromptPreviewLabel');
+  if (!modal || !textEl || !labelEl) return;
+  const promptTypeSelect = document.getElementById('modelTestPromptType');
+  const promptType = promptTypeSelect?.value || getModelTestPromptType();
+  const isCustom = promptType === 'custom';
+  const customPrompt = String(document.getElementById('modelTestCustomPromptInput')?.value || '').trim();
+  const promptText = isCustom
+    ? (customPrompt || localStorage.getItem('strong_prompt') || DEFAULT_PROMPT)
+    : getModelTestPromptTemplate(promptType);
+  labelEl.textContent = `Prompt: ${getModelTestPromptTypeLabel(promptType)}`;
+  textEl.value = String(promptText || '').trim();
+  modal.style.display = 'flex';
+}
+
+function closeModelTestPromptPreviewModal() {
+  const modal = document.getElementById('modelTestPromptPreviewModal');
+  if (modal) modal.style.display = 'none';
+}
+
+async function copyModelTestPromptPreview() {
+  const text = String(document.getElementById('modelTestPromptPreviewText')?.value || '');
+  if (!text.trim()) {
+    showToast('⚠ Náhled promptu je prázdný');
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(text);
+    showToast('✓ Prompt zkopírován');
+  } catch (_) {
+    showToast('✗ Kopírování selhalo');
+  }
+}
     function getModelTestPromptTopicLabel(promptType) {
       if (isEnTopicPromptType(promptType)) {
         const base = String(EN_TOPIC_PROMPT_LABEL_BASE[promptType] || '').replace(/^Téma:\s*/i, '');
@@ -2109,6 +2165,9 @@ let listRangeFilter = null;
   let elapsedTimer = null;
   let selectedKeys = new Set();
   let totalTokens = { in: 0, out: 0, total: 0 };
+  let topicRepairState = null;
+  let topicRepairWorkerRunning = false;
+  let topicRepairTicker = null;
   const AUTO_TOKEN_LIMIT_KEY = 'strong_auto_token_limit';
   const TEST_HISTORY_KEY = 'strong_test_history_v1';
   const MODEL_TEST_OUTPUT_KEY = 'strong_model_test_output_v1';
@@ -2738,12 +2797,19 @@ function updateSelectedBtn() {
 }
 
 async function translateSelected() {
-  if (!isAutoProviderEnabled('groq')) {
-    showToast('⚠ Pro hromadný překlad zapni Groq (systémový provider).');
+  const activeProvider = resolveMainBatchProvider(document.getElementById('provider')?.value || '');
+  if (!isAutoProviderEnabled(activeProvider)) {
+    showToast('⚠ Zapni alespoň jednoho AI providera pro hromadný překlad.');
     return;
   }
   const keys = Array.from(selectedKeys);
   if (!keys.length) return;
+  const filterStatus = document.getElementById('filterStatus')?.value || '';
+  const shouldRunTopicRepair = filterStatus === 'missing_topic';
+  if (shouldRunTopicRepair) {
+    startTopicRepairFlow(keys);
+    return;
+  }
   
   const bs = parseInt(document.getElementById('batchSizeRun')?.value) || 10;
   let processed = 0;
@@ -2776,8 +2842,8 @@ async function translateSelected() {
        logError('translateSelected', e, {
          batchKeys,
          batchSize: batchKeys.length,
-         provider: 'groq',
-         model: getPipelineModelForProvider('groq')
+         provider: activeProvider,
+         model: getPipelineModelForProvider(activeProvider)
        });
        showToast('✗ Chyba: ' + e.message);
     }
@@ -2806,12 +2872,453 @@ async function translateSelected() {
   }
 }
 
+function getTopicSourceTextForPreview(key, topicId) {
+  const e = entryMap.get(key) || {};
+  if (topicId === 'definice') return String(e.definice || e.def || '').trim();
+  if (topicId === 'kjv') return String(e.kjv || '').trim();
+  if (topicId === 'vyznam') return String(e.vyznamCz || e.cz || '').trim();
+  return String(e.orig || e.definice || e.def || '').trim();
+}
+
+function closeTopicRepairModalSafe() {
+  const modal = document.getElementById('topicRepairModal');
+  if (modal) modal.remove();
+}
+
+function stopTopicRepairTicker() {
+  if (topicRepairTicker) {
+    clearInterval(topicRepairTicker);
+    topicRepairTicker = null;
+  }
+}
+
+function updateTopicRepairProviderStatus() {
+  const state = topicRepairState;
+  if (!state) return;
+  const providers = ['groq', 'gemini', 'openrouter'];
+  for (const prov of providers) {
+    const line = document.getElementById(`topicRepairProvider_${prov}`);
+    if (!line) continue;
+    const enabled = !!state.providerEnabled[prov];
+    if (!enabled) {
+      const label = prov === 'groq' ? 'Groq' : (prov === 'gemini' ? 'Google' : 'OpenRouter');
+      line.textContent = `${label}: vypnuto`;
+      continue;
+    }
+    if (state.currentTask && state.currentTask.provider === prov) {
+      const label = prov === 'groq' ? 'Groq' : (prov === 'gemini' ? 'Google' : 'OpenRouter');
+      line.textContent = `${label}: běží`;
+      continue;
+    }
+    const left = getProviderCooldownLeftSec(prov);
+    const label = prov === 'groq' ? 'Groq' : (prov === 'gemini' ? 'Google' : 'OpenRouter');
+    line.textContent = left > 0 ? `${label}: další dávka za ${left}s` : `${label}: připraven`;
+  }
+}
+
+function updateTopicRepairModalUI() {
+  const state = topicRepairState;
+  if (!state) return;
+  const done = state.tasks.filter(t => t.status === 'done').length;
+  const running = state.tasks.filter(t => t.status === 'running').length;
+  const waiting = state.tasks.filter(t => t.status === 'waiting').length;
+  const failed = state.tasks.filter(t => t.status === 'failed').length;
+  const statusEl = document.getElementById('topicRepairStatus');
+  if (statusEl) statusEl.textContent = `✓ Hotovo ${done} · ⏳ Běží ${running} · 🕓 Čeká ${waiting} · ✗ Chyba ${failed}`;
+  const applyCount = state.tasks.filter(t => t.checked && t.candidateValue && t.candidateValue !== '—').length;
+  const applyBtn = document.getElementById('topicRepairApplyBtn');
+  if (applyBtn) applyBtn.textContent = `✓ Potvrdit přepsání (${applyCount})`;
+  const toggleBtn = document.getElementById('topicRepairToggleBtn');
+  if (toggleBtn) toggleBtn.textContent = state.paused ? '▶ Spustit' : '⏸ Pauza';
+  const rows = state.tasks.map((task, idx) => {
+    const statusColor = task.status === 'done' ? 'var(--acc3)' : (task.status === 'failed' ? 'var(--red)' : (task.status === 'running' ? 'var(--ylw)' : 'var(--txt3)'));
+    const statusText = task.status === 'done' ? 'hotovo' : (task.status === 'failed' ? 'chyba' : (task.status === 'running' ? 'běží' : 'čeká'));
+    return `
+      <div style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;padding:10px;margin:0 0 10px 0">
+        <div style="display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+            <input type="checkbox" ${task.checked ? 'checked' : ''} ${!task.candidateValue ? 'disabled' : ''} onchange="toggleTopicRepairTask(${idx}, this.checked)" style="accent-color:var(--acc)">
+            <span style="font-family:'JetBrains Mono',monospace;color:var(--acc)">${task.key}</span>
+            <span>${escHtml(TOPIC_LABELS[task.topicId] || task.topicId)}</span>
+          </label>
+          <span style="font-size:11px;color:${statusColor}">${statusText}${task.provider ? ` · ${task.provider}` : ''}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div style="font-size:11px;color:var(--txt2)">
+            <div><b>Původní téma:</b> ${escHtml(task.currentValue || '—')}</div>
+            <div style="margin-top:4px"><b>Originál:</b> ${escHtml(task.sourceValue || '—')}</div>
+          </div>
+          <div style="font-size:11px;color:var(--txt)">
+            <div><b>Nový návrh:</b> ${escHtml(task.candidateValue || '—')}</div>
+            <div style="margin-top:4px;color:var(--txt2)">
+              <b>SPECIALISTA v odpovědi:</b> ${task.specialistaInRaw ? 'ano' : 'ne'}
+              ${task.specialistaInRaw ? ` · <b>stav:</b> ${escHtml(task.specialistaDecision || 'beze změny')}` : ''}
+            </div>
+            ${task.specialistaInRaw ? `
+              <details style="margin-top:6px;background:var(--bg2);border:1px solid var(--brd);border-radius:4px;padding:6px">
+                <summary style="cursor:pointer;color:var(--acc)">SPECIALISTA detail</summary>
+                <div style="margin-top:6px;color:var(--txt2)"><b>Původní SPECIALISTA:</b> ${escHtml(task.specialistaPreviousValue || '—')}</div>
+                <div style="margin-top:6px;color:var(--txt)"><b>AI SPECIALISTA:</b> ${escHtml(task.specialistaCandidateValue || '—')}</div>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
+                  <button class="hbtn grn" onclick="setTopicRepairSpecialistaDecision(${idx}, 'accept')">✓ Potvrdit SPECIALISTA</button>
+                  <button class="hbtn red" onclick="setTopicRepairSpecialistaDecision(${idx}, 'reject')">✕ Zamítnout SPECIALISTA</button>
+                </div>
+              </details>
+            ` : ''}
+            ${Array.isArray(task.detectedTopics) && task.detectedTopics.length > 0 ? `
+              <details style="margin-top:6px;background:var(--bg2);border:1px solid var(--brd);border-radius:4px;padding:6px">
+                <summary style="cursor:pointer;color:var(--acc2)">Další témata z AI odpovědi (${task.detectedTopics.length})</summary>
+                ${(task.detectedTopics || []).map(row => `
+                  <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--brd)">
+                    <div style="font-size:11px;color:var(--txt2)"><b>${escHtml(TOPIC_LABELS[row.topicId] || row.topicId)}</b> · stav: ${escHtml(row.decision || 'beze změny')}</div>
+                    <div style="margin-top:4px;color:var(--txt2)"><b>Původní:</b> ${escHtml(row.previousValue || '—')}</div>
+                    <div style="margin-top:4px;color:var(--txt)"><b>AI:</b> ${escHtml(row.candidateValue || '—')}</div>
+                    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">
+                      <button class="hbtn grn" onclick="setTopicRepairDetectedTopicDecision(${idx}, '${row.topicId}', 'accept')">✓ Potvrdit</button>
+                      <button class="hbtn red" onclick="setTopicRepairDetectedTopicDecision(${idx}, '${row.topicId}', 'reject')">✕ Zamítnout</button>
+                    </div>
+                  </div>
+                `).join('')}
+              </details>
+            ` : ''}
+            ${task.error ? `<div style="margin-top:4px;color:var(--red)">✗ ${escHtml(task.error)}</div>` : ''}
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+  const listEl = document.getElementById('topicRepairList');
+  if (listEl) listEl.innerHTML = rows || '<div style="font-size:12px;color:var(--txt3)">Žádná témata k opravě.</div>';
+  updateTopicRepairProviderStatus();
+}
+
+function buildTopicRepairTasks(keys) {
+  const tasks = [];
+  for (const key of keys) {
+    const t = translated[key] || {};
+    const missing = getMissingTopicsForRepair(t);
+    for (const topicId of missing) {
+      tasks.push({
+        key,
+        topicId,
+        status: 'waiting',
+        checked: true,
+        currentValue: String(t[topicId] || '').trim(),
+        sourceValue: getTopicSourceTextForPreview(key, topicId),
+        candidateValue: '',
+        provider: '',
+        error: '',
+        specialistaInRaw: false,
+        specialistaDecision: '',
+        specialistaPreviousValue: String(t.specialista || '').trim(),
+        specialistaCandidateValue: '',
+        detectedTopics: []
+      });
+    }
+  }
+  return tasks;
+}
+
+function applyTopicRepairProviderCheckboxes() {
+  const state = topicRepairState;
+  if (!state) return;
+  for (const prov of ['groq', 'gemini', 'openrouter']) {
+    const el = document.getElementById(`topicRepairEnable_${prov}`);
+    if (!el) continue;
+    state.providerEnabled[prov] = !!el.checked;
+  }
+  updateTopicRepairProviderStatus();
+}
+
+function renderTopicRepairModal() {
+  const state = topicRepairState;
+  if (!state) return;
+  closeTopicRepairModalSafe();
+  const modal = document.createElement('div');
+  modal.id = 'topicRepairModal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:10025;overflow-y:auto;padding:16px';
+  modal.innerHTML = `
+    <div style="max-width:980px;margin:0 auto;background:var(--bg2);border:1px solid var(--brd);border-radius:8px;padding:16px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+        <h2 style="color:var(--acc);margin:0">Oprava témat (${state.tasks.length})</h2>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="hbtn" id="topicRepairMinimizeBtn" onclick="minimizeTopicRepairModal()">▁ Minimalizovat</button>
+          <button class="hbtn" onclick="closeTopicRepairModalOnly()">✕ Zavřít okno</button>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--txt2);margin:8px 0 10px 0">Překládám jen chybějící témata přes jejich vlastní 🤖 prompt šablony.</div>
+      <div style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;padding:10px;margin-bottom:10px">
+        <div id="topicRepairStatus" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt3)">—</div>
+        <div style="display:grid;gap:2px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt2);margin-top:6px">
+          <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="topicRepairEnable_groq" ${state.providerEnabled.groq ? 'checked' : ''} onchange="applyTopicRepairProviderCheckboxes()" style="accent-color:var(--acc)">G <span id="topicRepairProvider_groq">Groq: —</span></label>
+          <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="topicRepairEnable_gemini" ${state.providerEnabled.gemini ? 'checked' : ''} onchange="applyTopicRepairProviderCheckboxes()" style="accent-color:var(--acc)">Gm <span id="topicRepairProvider_gemini">Google: —</span></label>
+          <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="topicRepairEnable_openrouter" ${state.providerEnabled.openrouter ? 'checked' : ''} onchange="applyTopicRepairProviderCheckboxes()" style="accent-color:var(--acc)">OR <span id="topicRepairProvider_openrouter">OpenRouter: —</span></label>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+        <button class="hbtn grn" id="topicRepairToggleBtn" onclick="toggleTopicRepairRun()">⏸ Pauza</button>
+        <button class="hbtn grn" id="topicRepairApplyBtn" onclick="applyTopicRepairSelected()">✓ Potvrdit přepsání (0)</button>
+      </div>
+      <div id="topicRepairList"></div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  updateTopicRepairModalUI();
+}
+
+function startTopicRepairFlow(keys) {
+  const tasks = buildTopicRepairTasks(keys);
+  if (!tasks.length) {
+    showToast('⚠ Ve výběru nejsou hesla s max. 2 chybějícími tématy.');
+    return;
+  }
+  topicRepairState = {
+    tasks,
+    paused: false,
+    closed: false,
+    minimized: false,
+    currentTask: null,
+    providerEnabled: {
+      groq: isAutoProviderEnabled('groq'),
+      gemini: isAutoProviderEnabled('gemini'),
+      openrouter: isAutoProviderEnabled('openrouter')
+    }
+  };
+  renderTopicRepairModal();
+  const miniBtn = document.getElementById('btnTopicRepairMini');
+  if (miniBtn) miniBtn.style.display = 'none';
+  stopTopicRepairTicker();
+  topicRepairTicker = setInterval(updateTopicRepairProviderStatus, 1000);
+  if (!topicRepairWorkerRunning) {
+    processTopicRepairQueue();
+  }
+}
+
+async function processTopicRepairQueue() {
+  if (!topicRepairState || topicRepairWorkerRunning) return;
+  topicRepairWorkerRunning = true;
+  try {
+    while (topicRepairState && !topicRepairState.closed) {
+      if (topicRepairState.paused) {
+        await sleep(350);
+        continue;
+      }
+      const nextTask = topicRepairState.tasks.find(t => t.status === 'waiting');
+      if (!nextTask) break;
+      const enabledProviders = ['groq', 'gemini', 'openrouter'].filter(p => topicRepairState?.providerEnabled?.[p]);
+      if (!enabledProviders.length) {
+        showToast('⚠ Zapni alespoň jednoho providera pro opravu témat.');
+        topicRepairState.paused = true;
+        updateTopicRepairModalUI();
+        await sleep(500);
+        continue;
+      }
+      nextTask.status = 'running';
+      nextTask.error = '';
+      nextTask.detectedTopics = [];
+      updateTopicRepairModalUI();
+      let success = false;
+      for (const prov of enabledProviders) {
+        if (!topicRepairState || topicRepairState.closed || topicRepairState.paused) break;
+        const model = getPipelineModelForProvider(prov) || document.getElementById('model')?.value || '';
+        const apiKey = getCurrentApiKey(prov);
+        if (!apiKey) continue;
+        topicRepairState.currentTask = { provider: prov };
+        updateTopicRepairProviderStatus();
+        try {
+          const messages = [
+            { role: 'system', content: SYSTEM_MESSAGE },
+            { role: 'user', content: buildTopicPrompt(nextTask.key, nextTask.topicId) }
+          ];
+          const raw = await callAIWithRetry(prov, apiKey, model, messages);
+          const rawText = String(raw?.content || '').trim();
+          log(`📥 RAW AI oprava ${nextTask.key}.${nextTask.topicId}: vypsáno do konzole`);
+          console.groupCollapsed(`🤖 RAW AI oprava ${nextTask.key}.${nextTask.topicId} (${prov}/${model})`);
+          console.log(rawText || '(prázdná odpověď)');
+          console.groupEnd();
+
+          // Kontrola všech témat: když AI přibalí i jiné téma, zobraz ho a případně auto aplikuj.
+          translated[nextTask.key] = translated[nextTask.key] || {};
+          for (const topicId of FALLBACK_TOPIC_ORDER) {
+            const candidateTopicVal = String(extractTopicValueFromAI(rawText, topicId) || '').trim();
+            if (!hasMeaningfulValue(candidateTopicVal)) continue;
+            const previousTopicVal = String(translated?.[nextTask.key]?.[topicId] || '').trim();
+            const acceptAuto = shouldAutoAcceptDetectedTopic(topicId, previousTopicVal, candidateTopicVal);
+            if (acceptAuto) {
+              translated[nextTask.key][topicId] = candidateTopicVal;
+            }
+            nextTask.detectedTopics.push({
+              topicId,
+              previousValue: previousTopicVal,
+              candidateValue: candidateTopicVal,
+              decision: acceptAuto ? 'přijat (auto)' : 'zamítnut (auto)'
+            });
+          }
+
+          const specRow = (nextTask.detectedTopics || []).find(x => x.topicId === 'specialista');
+          nextTask.specialistaInRaw = !!specRow;
+          nextTask.specialistaPreviousValue = specRow ? String(specRow.previousValue || '').trim() : '';
+          nextTask.specialistaCandidateValue = specRow ? String(specRow.candidateValue || '').trim() : '';
+          nextTask.specialistaDecision = specRow ? String(specRow.decision || '') : '';
+          if (specRow && specRow.decision.startsWith('přijat')) {
+            log(`🧠 SPECIALISTA auto-upgrade ${nextTask.key}: použit kvalitnější text z opravy tématu`);
+          }
+
+          const candidate = extractTopicValueFromAI(raw?.content || '', nextTask.topicId);
+          if (!hasMeaningfulValue(candidate)) {
+            throw new Error('AI vrátila prázdný výsledek');
+          }
+          nextTask.provider = prov;
+          nextTask.candidateValue = String(candidate || '').trim();
+          nextTask.status = 'done';
+          success = true;
+          log(`✓ Oprava tématu ${nextTask.key}.${nextTask.topicId} přes ${prov}`);
+          break;
+        } catch (e) {
+          nextTask.error = e.message || 'Neznámá chyba';
+        } finally {
+          topicRepairState.currentTask = null;
+          updateTopicRepairProviderStatus();
+        }
+      }
+      if (!success) {
+        nextTask.status = 'failed';
+      }
+      updateTopicRepairModalUI();
+      saveProgress();
+      await sleep(80);
+    }
+    updateTopicRepairModalUI();
+    if (topicRepairState && !topicRepairState.closed) {
+      const waiting = topicRepairState.tasks.filter(t => t.status === 'waiting').length;
+      if (waiting === 0) showToast('✓ Oprava témat doběhla, zkontroluj a potvrď přepsání.');
+    }
+  } finally {
+    topicRepairWorkerRunning = false;
+  }
+}
+
+function toggleTopicRepairTask(index, checked) {
+  const state = topicRepairState;
+  if (!state || !state.tasks[index]) return;
+  state.tasks[index].checked = !!checked;
+  updateTopicRepairModalUI();
+}
+
+function toggleTopicRepairRun() {
+  if (!topicRepairState) return;
+  topicRepairState.paused = !topicRepairState.paused;
+  updateTopicRepairModalUI();
+  if (!topicRepairState.paused && !topicRepairWorkerRunning) processTopicRepairQueue();
+}
+
+function shouldAutoAcceptDetectedTopic(topicId, previousValue, candidateValue) {
+  if (!hasMeaningfulValue(candidateValue)) return false;
+  if (topicId === 'definice' && isDefinitionLowQuality(candidateValue)) return false;
+  if (topicId === 'specialista') return shouldReplaceSpecialista(previousValue, candidateValue);
+  return !hasMeaningfulValue(previousValue);
+}
+
+function setTopicRepairSpecialistaDecision(index, decision) {
+  const state = topicRepairState;
+  if (!state || !state.tasks[index]) return;
+  const task = state.tasks[index];
+  if (!task.specialistaInRaw || !hasMeaningfulValue(task.specialistaCandidateValue)) return;
+  translated[task.key] = translated[task.key] || {};
+  if (decision === 'accept') {
+    translated[task.key].specialista = String(task.specialistaCandidateValue || '').trim();
+    task.specialistaDecision = 'přijat ručně';
+    showToast(`✓ SPECIALISTA potvrzen: ${task.key}`);
+  } else {
+    translated[task.key].specialista = String(task.specialistaPreviousValue || '').trim();
+    task.specialistaDecision = 'zamítnut ručně';
+    showToast(`✕ SPECIALISTA zamítnut: ${task.key}`);
+  }
+  saveProgress();
+  if (activeKey === task.key) renderDetail();
+  updateTopicRepairModalUI();
+}
+
+function setTopicRepairDetectedTopicDecision(taskIndex, topicId, decision) {
+  const state = topicRepairState;
+  if (!state || !state.tasks[taskIndex]) return;
+  const task = state.tasks[taskIndex];
+  const row = (task.detectedTopics || []).find(x => x.topicId === topicId);
+  if (!row || !hasMeaningfulValue(row.candidateValue)) return;
+  translated[task.key] = translated[task.key] || {};
+  if (decision === 'accept') {
+    translated[task.key][topicId] = String(row.candidateValue || '').trim();
+    row.decision = 'přijat ručně';
+    showToast(`✓ Potvrzeno ${TOPIC_LABELS[topicId] || topicId}: ${task.key}`);
+  } else {
+    translated[task.key][topicId] = String(row.previousValue || '').trim();
+    row.decision = 'zamítnut ručně';
+    showToast(`✕ Zamítnuto ${TOPIC_LABELS[topicId] || topicId}: ${task.key}`);
+  }
+  if (topicId === 'specialista') {
+    task.specialistaDecision = row.decision;
+  }
+  saveProgress();
+  if (activeKey === task.key) renderDetail();
+  updateTopicRepairModalUI();
+}
+
+function applyTopicRepairSelected() {
+  const state = topicRepairState;
+  if (!state) return;
+  let applied = 0;
+  for (const task of state.tasks) {
+    if (!task.checked || !hasMeaningfulValue(task.candidateValue)) continue;
+    translated[task.key] = translated[task.key] || {};
+    translated[task.key][task.topicId] = task.candidateValue;
+    applied++;
+  }
+  if (applied > 0) {
+    saveProgress();
+    renderList();
+    if (activeKey) renderDetail();
+    updateStats();
+    updateFailedCount();
+  }
+  selectedKeys.clear();
+  renderList();
+  showToast(applied > 0 ? `✓ Přepsáno ${applied} témat` : '⚠ Nic nebylo označeno k přepsání');
+}
+
+function closeTopicRepairModalOnly() {
+  closeTopicRepairModalSafe();
+}
+
+function minimizeTopicRepairModal() {
+  if (!topicRepairState) return;
+  topicRepairState.minimized = true;
+  closeTopicRepairModalSafe();
+  const miniBtn = document.getElementById('btnTopicRepairMini');
+  if (miniBtn) miniBtn.style.display = 'inline-block';
+}
+
+function restoreTopicRepairModal() {
+  if (!topicRepairState) return;
+  topicRepairState.minimized = false;
+  renderTopicRepairModal();
+  const miniBtn = document.getElementById('btnTopicRepairMini');
+  if (miniBtn) miniBtn.style.display = 'none';
+  if (!topicRepairWorkerRunning && !topicRepairState.paused) processTopicRepairQueue();
+}
+
 function resolveProviderForInteractiveAction(preferredProv = '') {
   const normalizedPreferred = String(preferredProv || '').trim();
   const order = ['groq', 'gemini', 'openrouter'];
   if (normalizedPreferred && isAutoProviderEnabled(normalizedPreferred)) return normalizedPreferred;
   const firstEnabled = order.find(p => isAutoProviderEnabled(p));
   return firstEnabled || normalizedPreferred || 'groq';
+}
+
+function resolveMainBatchProvider(preferredProv = '') {
+  const preferred = resolveProviderForInteractiveAction(preferredProv);
+  const order = ['groq', 'gemini', 'openrouter'];
+  if (isAutoProviderEnabled('groq') && getApiKeyForModelTest('groq')) return 'groq';
+  const firstReady = order.find(p => isAutoProviderEnabled(p) && !!getApiKeyForModelTest(p));
+  return firstReady || preferred;
 }
 
 function filterList() {
@@ -2848,9 +3355,22 @@ function isDefinitionLikelyEnglish(text) {
   return markers.some(re => re.test(s));
 }
 
+function isDefinitionLowQuality(text) {
+  const s = String(text || '').trim();
+  if (!s) return true;
+  if (isDefinitionLikelyEnglish(s)) return true;
+  // UI artefakty nebo technický šum místo definice.
+  if (/(🤖|✎|prompt|upravit|edit|button|klik)/i.test(s)) return true;
+  // Definice má být věcně detailní, ne 2-3 slova.
+  const words = s.split(/\s+/).filter(Boolean);
+  if (words.length < 8) return true;
+  if (s.length < 60) return true;
+  return false;
+}
+
 function isTranslationComplete(t) {
   if (!t || t.skipped) return false;
-  if (isDefinitionLikelyEnglish(t.definice)) return false;
+  if (isDefinitionLowQuality(t.definice)) return false;
   const required = ['definice', 'pouziti', 'puvod', 'kjv', 'specialista'];
   return required.every(field => hasMeaningfulValue(t[field]));
 }
@@ -2866,8 +3386,8 @@ function getTranslationStateForKey(key) {
   if (!t || t.skipped) return 'pending';
   if (isTranslationComplete(t)) return 'done';
   if (!hasAnyTranslationContent(t)) return 'failed';
-  const missingTopicsOnly = FALLBACK_TOPIC_ORDER.some(topicId => !hasMeaningfulValue(t?.[topicId]));
-  if (missingTopicsOnly) return 'missing_topic';
+  const missingTopics = getFailedTopicsForFallback(t);
+  if (missingTopics.length > 0 && missingTopics.length <= 2) return 'missing_topic';
   return 'failed_partial';
 }
 
@@ -3016,7 +3536,7 @@ function getFilteredEntries() {
     
     if (status === 'pending') return state === 'pending';
     if (status === 'done') return state === 'done';
-    if (status === 'failed') return state === 'failed';
+    if (status === 'failed') return state === 'failed' || state === 'failed_partial';
     if (status === 'missing_topic') return state === 'missing_topic';
     
     return true;
@@ -3905,12 +4425,12 @@ async function translateSingle(key) {
   const btn = document.querySelector('.translate-btn');
   if (btn) { btn.disabled = true; btn.textContent = '⏳ Překládám...'; }
   
-  const prov = 'groq';
+  const prov = resolveMainBatchProvider(document.getElementById('provider')?.value || '');
   const apiKey = getCurrentApiKey(prov);
-  const model = getPipelineModelForProvider('groq') || document.getElementById('model').value;
+  const model = getPipelineModelForProvider(prov) || document.getElementById('model').value;
 
    if (!apiKey) {
-     showToast('✗ Zadej API klíč!');
+     showToast(`✗ Zadej API klíč pro ${prov}.`);
      if (btn) { btn.disabled = false; btn.textContent = '⚡ Přeložit toto heslo'; }
      return;
    }
@@ -3983,8 +4503,9 @@ async function retranslateSingle(key) {
 // ══ PŘEKLAD — DÁVKA ══════════════════════════════════════════════
 async function translateNext() {
   if (autoRunning) return;
-  if (!isAutoProviderEnabled('groq')) {
-    showToast('⚠ Pro hromadný překlad zapni Groq (systémový provider).');
+  const activeProvider = resolveMainBatchProvider(document.getElementById('provider')?.value || '');
+  if (!isAutoProviderEnabled(activeProvider)) {
+    showToast('⚠ Zapni alespoň jednoho AI providera pro hromadný překlad.');
     return;
   }
   
@@ -4077,11 +4598,68 @@ function getFailedTopicsForFallback(translationEntry) {
       failed.push(topicId);
       continue;
     }
-    if (topicId === 'definice' && isDefinitionLikelyEnglish(val)) {
+    if (topicId === 'definice' && isDefinitionLowQuality(val)) {
       failed.push(topicId);
     }
   }
   return failed;
+}
+
+function getMissingTopicsForRepair(translationEntry) {
+  const allMissing = getFailedTopicsForFallback(translationEntry);
+  return allMissing.slice(0, 2);
+}
+
+function cloneTranslationTopicFields(entry) {
+  const src = entry || {};
+  return {
+    vyznam: String(src.vyznam || ''),
+    definice: String(src.definice || ''),
+    kjv: String(src.kjv || ''),
+    pouziti: String(src.pouziti || ''),
+    puvod: String(src.puvod || ''),
+    specialista: String(src.specialista || '')
+  };
+}
+
+function isBetterGenericTopicValue(prev, next) {
+  const prevText = String(prev || '').trim();
+  const nextText = String(next || '').trim();
+  if (!hasMeaningfulValue(nextText)) return false;
+  if (!hasMeaningfulValue(prevText)) return true;
+  if (nextText.length >= prevText.length + 40) return true;
+  return false;
+}
+
+function shouldReplaceTopicValue(topicId, previousValue, candidateValue) {
+  const prev = String(previousValue || '').trim();
+  const next = String(candidateValue || '').trim();
+  if (!hasMeaningfulValue(next)) return false;
+  if (!hasMeaningfulValue(prev)) return true;
+  if (topicId === 'specialista') return shouldReplaceSpecialista(prev, next);
+  if (topicId === 'definice') {
+    if (isDefinitionLowQuality(next)) return false;
+    if (isDefinitionLowQuality(prev) && !isDefinitionLowQuality(next)) return true;
+    return isBetterGenericTopicValue(prev, next);
+  }
+  return isBetterGenericTopicValue(prev, next);
+}
+
+function preserveBetterTopicsAfterBatch(keys, previousMap) {
+  const topics = ['vyznam', 'definice', 'kjv', 'pouziti', 'puvod', 'specialista'];
+  for (const key of (Array.isArray(keys) ? keys : [])) {
+    const current = translated[key];
+    if (!current) continue;
+    const previous = previousMap?.[key] || {};
+    for (const topicId of topics) {
+      const prevVal = String(previous[topicId] || '').trim();
+      const curVal = String(current[topicId] || '').trim();
+      const acceptCurrent = shouldReplaceTopicValue(topicId, prevVal, curVal);
+      if (!acceptCurrent && hasMeaningfulValue(prevVal)) {
+        current[topicId] = prevVal;
+      }
+    }
+  }
 }
 
 function getProviderCooldownLeftSec(prov) {
@@ -4129,7 +4707,7 @@ async function waitForProviderCooldown(prov, abortVersion = 0) {
 
 function shouldAcceptTopicFallback(topicId, candidate) {
   if (!hasMeaningfulValue(candidate)) return false;
-  if (topicId === 'definice' && isDefinitionLikelyEnglish(candidate)) return false;
+  if (topicId === 'definice' && isDefinitionLowQuality(candidate)) return false;
   return true;
 }
 
@@ -4329,7 +4907,7 @@ async function runParallelTopicFallback(keys, abortVersion) {
   if (isSideFallbackAborted(abortVersion)) return;
   const keyList = Array.isArray(keys) ? keys : [];
   if (!keyList.length) return;
-  const sideProviders = ['openrouter', 'gemini'].filter(prov => isPipelineSecondaryEnabled(prov));
+  const sideProviders = ['gemini', 'openrouter'].filter(prov => isPipelineSecondaryEnabled(prov));
   if (!sideProviders.length) {
     log('ℹ Sekundární fallback vypnutý (žádný provider není zaškrtnut).');
     return;
@@ -4341,27 +4919,17 @@ async function runParallelTopicFallback(keys, abortVersion) {
     if (!failedTopics.length) return;
     for (const topicId of failedTopics) {
       if (isSideFallbackAborted(abortVersion)) return;
-      const chosen = await new Promise(resolve => {
-        let pending = sideProviders.length;
-        let done = false;
-        sideProviders.forEach(prov => {
-          runProviderFallbackTaskSequential(prov, () => requestTopicFallbackForProvider(prov, key, topicId, abortVersion))
-            .then(result => {
-              if (done) return;
-              if (result) {
-                done = true;
-                resolve(result);
-                return;
-              }
-              pending--;
-              if (pending <= 0 && !done) resolve(null);
-            })
-            .catch(() => {
-              pending--;
-              if (pending <= 0 && !done) resolve(null);
-            });
-        });
-      });
+      let chosen = null;
+      for (const prov of sideProviders) {
+        const result = await runProviderFallbackTaskSequential(
+          prov,
+          () => requestTopicFallbackForProvider(prov, key, topicId, abortVersion)
+        ).catch(() => null);
+        if (result) {
+          chosen = result;
+          break;
+        }
+      }
       if (!chosen) continue;
       if (isSideFallbackAborted(abortVersion)) return;
       translated[key] = translated[key] || {};
@@ -4388,14 +4956,15 @@ function enqueueSideFallbackBackground(keys) {
 }
 
 async function translateBatch(keys, depth = 0) {
-  const prov   = 'groq';
-  const model  = getPipelineModelForProvider('groq') || document.getElementById('model').value;
+  const preferredProvider = document.getElementById('provider')?.value || '';
+  const prov   = resolveMainBatchProvider(preferredProvider);
+  const model  = getPipelineModelForProvider(prov) || document.getElementById('model').value;
   // Klíč vždy dle aktuálního run providera
   const apiKey = getCurrentApiKey(prov);
   currentInterval = parseInt(document.getElementById('intervalRun').value);
   currentBatchSize = parseInt(document.getElementById('batchSizeRun').value);
 
-  if (!apiKey) { showToast('✗ Zadej API klíč!'); return { ok: false }; }
+  if (!apiKey) { showToast(`✗ Zadej API klíč pro ${prov}.`); return { ok: false }; }
 
   // Start timer při prvním překladu
   if (!startTime) {
@@ -4408,6 +4977,10 @@ async function translateBatch(keys, depth = 0) {
 
   const reqStart = performance.now();
   try {
+    const previousMap = {};
+    for (const key of keys) {
+      previousMap[key] = cloneTranslationTopicFields(translated[key]);
+    }
     const raw = await callAIWithRetry(prov, apiKey, model, messages);
     const reqMs = performance.now() - reqStart;
     const content = raw.content;
@@ -4420,6 +4993,7 @@ async function translateBatch(keys, depth = 0) {
       console.groupEnd();
     }
     let missingKeys = parseTranslations(content, keys);
+    preserveBetterTopicsAfterBatch(keys, previousMap);
     fillMissingVyznamFromSource(keys);
     fillMissingKjvFromSource(keys);
     annotateEnglishDefinitionsInTranslated(keys);
@@ -4468,6 +5042,7 @@ ${keys.map(k => {
         const raw2 = await callOnce(prov, apiKey, model, buildRetryMessages(retryContent));
         console.log(`📥 Retry odpověď:`, raw2.content);
         missingKeys = parseTranslations(raw2.content, keys);
+        preserveBetterTopicsAfterBatch(keys, previousMap);
         fillMissingVyznamFromSource(keys);
         fillMissingKjvFromSource(keys);
         annotateEnglishDefinitionsInTranslated(keys);
@@ -4496,15 +5071,15 @@ ${keys.map(k => {
       }
     }
 
-    // Sekundární fallback spouštěj až po dokončení všech Groq pokusů pro danou dávku
+    // Sekundární fallback spouštěj až po dokončení všech pokusů hlavního providera pro danou dávku
     // (tj. pouze v top-level volání). Tím se vyhneme "střídání" providerů během hlavního překladu.
     if (depth === 0) {
       const keysBeforeSideFallback = keys.filter(k => !isTranslationComplete(translated[k]));
       if (keysBeforeSideFallback.length > 0) {
-        log(`↻ Analýza po Groq: ${keysBeforeSideFallback.length} hesel má chyby/neúplná témata; sekundární topic fallback běží na pozadí.`);
+        log(`↻ Analýza po ${prov}: ${keysBeforeSideFallback.length} hesel má chyby/neúplná témata; sekundární topic fallback běží na pozadí.`);
         enqueueSideFallbackBackground(keysBeforeSideFallback);
       } else {
-        log('✓ Analýza po Groq: dávka kompletní, sekundární fallback není potřeba.');
+        log(`✓ Analýza po ${prov}: dávka kompletní, sekundární fallback není potřeba.`);
       }
     }
 
@@ -4567,7 +5142,7 @@ ${keys.map(k => {
         });
         const cooldownSeconds = Math.max(currentInterval, 60);
         logWarn('translateBatch', `Rate limit dávky ${keys[0]}-${keys[keys.length-1]}, odklad ${cooldownSeconds}s`, {
-          provider: document.getElementById('provider')?.value,
+          provider: prov,
           keyRange: `${keys[0]}-${keys[keys.length-1]}`,
           cooldownSeconds,
           error: e.message
@@ -4578,7 +5153,7 @@ ${keys.map(k => {
       logError('translateBatch', e, {
         keys: keys.slice(0, 5), // first 5 keys only
         keyRange: `${keys[0]}-${keys[keys.length-1]}`,
-        provider: document.getElementById('provider')?.value,
+        provider: prov,
         batchSize: keys.length
       });
       // Označ chybná hesla jako neúspěšná, aby šla zobrazit v "Neúspěšné překlady"
@@ -5403,10 +5978,13 @@ function deleteApiKeyProfile() {
 }
 
 function getCurrentApiKey(prov) {
-  const provider = prov || document.getElementById('provider')?.value;
-  const fromInput = (document.getElementById('apiKey')?.value || '').trim();
-  if (fromInput) return fromInput;
-  return (localStorage.getItem('strong_apikey_' + provider) || '').trim();
+  const requestedProvider = prov || document.getElementById('provider')?.value;
+  const activeProvider = document.getElementById('provider')?.value || '';
+  if (!prov || requestedProvider === activeProvider) {
+    const fromInput = (document.getElementById('apiKey')?.value || '').trim();
+    if (fromInput) return fromInput;
+  }
+  return (localStorage.getItem('strong_apikey_' + requestedProvider) || '').trim();
 }
 
 function loadSavedSettings() {
@@ -8769,7 +9347,8 @@ function parseImportJSON(text) {
 function updateFailedCount() {
   let count = 0;
   for (const key of Object.keys(translated)) {
-    if (getTranslationStateForKey(key) === 'failed') count++;
+    const state = getTranslationStateForKey(key);
+    if (state === 'failed' || state === 'failed_partial') count++;
   }
   const el = document.getElementById('failedCount');
   if (el) el.textContent = count > 0 ? `(${count})` : '';
@@ -8778,7 +9357,8 @@ function updateFailedCount() {
 function showFailedEntries() {
   const failed = [];
   for (const key of Object.keys(translated)) {
-    if (getTranslationStateForKey(key) === 'failed') {
+    const state = getTranslationStateForKey(key);
+    if (state === 'failed' || state === 'failed_partial') {
       const t = translated[key];
       failed.push({ key, raw: t.raw, greek: entryMap.get(key)?.greek });
     }
@@ -8863,6 +9443,7 @@ document.addEventListener('keydown', e => {
       closePromptAIModal();
       closePromptLangModal();
       closeTopicPromptModal();
+      closeTopicRepairModalSafe();
       closeHelpModal();
     }
   if (document.getElementById('app').style.display === 'none') return;
@@ -8927,6 +9508,15 @@ window.runTopicPromptAI = runTopicPromptAI;
 window.applyTopicPromptResult = applyTopicPromptResult;
 window.refillSingleField = refillSingleField;
 window.closeTopicPromptModal = closeTopicPromptModal;
+window.restoreTopicRepairModal = restoreTopicRepairModal;
+window.toggleTopicRepairRun = toggleTopicRepairRun;
+window.setTopicRepairSpecialistaDecision = setTopicRepairSpecialistaDecision;
+window.setTopicRepairDetectedTopicDecision = setTopicRepairDetectedTopicDecision;
+window.applyTopicRepairSelected = applyTopicRepairSelected;
+window.toggleTopicRepairTask = toggleTopicRepairTask;
+window.applyTopicRepairProviderCheckboxes = applyTopicRepairProviderCheckboxes;
+window.minimizeTopicRepairModal = minimizeTopicRepairModal;
+window.closeTopicRepairModalOnly = closeTopicRepairModalOnly;
 window.retryFailed = retryFailed;
 window.showMobileActions = showMobileActions;
 window.closeMobileModal = closeMobileModal;
@@ -8940,6 +9530,9 @@ window.clearModelTestOutput = clearModelTestOutput;
 window.cancelModelTest = cancelModelTest;
 window.runModelTestFromModal = runModelTestFromModal;
 window.openModelTestModal = openModelTestModal;
+window.openModelTestPromptPreviewModal = openModelTestPromptPreviewModal;
+window.closeModelTestPromptPreviewModal = closeModelTestPromptPreviewModal;
+window.copyModelTestPromptPreview = copyModelTestPromptPreview;
 window.resetModelTestModal = resetModelTestModal;
 window.restoreModelTestReportFromBackup = restoreModelTestReportFromBackup;
 window.saveModelTestOutputTxt = saveModelTestOutputTxt;
@@ -8986,6 +9579,7 @@ function closeFailedModalSafe() {
 
 window.closePreviewModalSafe = closePreviewModalSafe;
 window.closeFailedModalSafe = closeFailedModalSafe;
+window.closeTopicRepairModalSafe = closeTopicRepairModalSafe;
 
 // Expose for debugging
 window.PROVIDERS = PROVIDERS;
@@ -8996,6 +9590,7 @@ window.addEventListener('beforeunload', () => {
   if (autoTimer) clearTimeout(autoTimer);
   if (autoCountTimer) clearInterval(autoCountTimer);
   if (autoProviderCountdownTimer) clearInterval(autoProviderCountdownTimer);
+  stopTopicRepairTicker();
   if (elapsedTimer) clearInterval(elapsedTimer);
   stopResize();
   // Debounced save musí být proveden synchronně před zavřením
