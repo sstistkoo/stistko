@@ -3827,8 +3827,27 @@ async function runParallelTopicFallback(keys) {
     const failedTopics = getFailedTopicsForFallback(t);
     if (!failedTopics.length) return;
     for (const topicId of failedTopics) {
-      const winner = await Promise.all(sideProviders.map(prov => requestTopicFallbackForProvider(prov, key, topicId)));
-      const chosen = winner.find(x => !!x) || null;
+      const chosen = await new Promise(resolve => {
+        let pending = sideProviders.length;
+        let done = false;
+        sideProviders.forEach(prov => {
+          requestTopicFallbackForProvider(prov, key, topicId)
+            .then(result => {
+              if (done) return;
+              if (result) {
+                done = true;
+                resolve(result);
+                return;
+              }
+              pending--;
+              if (pending <= 0 && !done) resolve(null);
+            })
+            .catch(() => {
+              pending--;
+              if (pending <= 0 && !done) resolve(null);
+            });
+        });
+      });
       if (!chosen) continue;
       translated[key] = translated[key] || {};
       translated[key][topicId] = chosen.value;
@@ -5743,6 +5762,19 @@ function saveModelTestModelSelections() {
 function populateModelTestModelSelect(prov) {
   const select = document.getElementById(`modelTestModel_${prov}`);
   if (!select) return;
+  if (prov === 'openrouter') {
+    const wanted = String(localStorage.getItem(MODEL_TEST_MODEL_STORAGE_KEY + prov) || getDefaultPinnedModelByProvider(prov) || '').trim();
+    populateOpenRouterModels(select, wanted, () => {
+      const saved = String(localStorage.getItem(MODEL_TEST_MODEL_STORAGE_KEY + prov) || '').trim();
+      const preferred = saved || wanted;
+      if (preferred && Array.from(select.options).some(o => o.value === preferred)) {
+        select.value = preferred;
+      } else if (select.options.length) {
+        select.selectedIndex = 0;
+      }
+    });
+    return;
+  }
   const providerOptions = (PROVIDERS[prov]?.models || []).map(([value, label]) => ({ value, label: label || value }));
   const pinned = MODEL_TEST_PINNED_MODELS
     .filter(item => item.prov === prov)
@@ -5768,6 +5800,9 @@ function populateModelTestModelSelect(prov) {
 function updateModelTestProviderUi() {
   const providerMode = document.getElementById('modelTestProvider')?.value || 'parallel-3';
   const isParallel = providerMode === 'parallel-3';
+  if (!isParallel && ['groq', 'gemini', 'openrouter'].includes(providerMode)) {
+    populateModelTestModelSelect(providerMode);
+  }
   ['groq', 'gemini', 'openrouter'].forEach(prov => {
     const row = document.getElementById(`modelRow_${prov}`);
     const select = document.getElementById(`modelTestModel_${prov}`);
