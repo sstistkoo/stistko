@@ -2966,6 +2966,10 @@ function updateTopicRepairModalUI() {
   const rows = state.tasks.map((task, idx) => {
     const extraTopicsForUi = (Array.isArray(task.detectedTopics) ? task.detectedTopics : [])
       .filter(row => row && row.topicId && row.topicId !== 'specialista' && row.topicId !== task.topicId);
+    const rhOther = (Array.isArray(task.rawHeaderTopics) ? task.rawHeaderTopics : []).filter(id => id && id !== task.topicId);
+    const rawHeadersHint = (task.status === 'done' || task.status === 'failed') && rhOther.length > 0
+      ? `<div style="font-size:10px;color:var(--acc2);margin-top:6px">📎 V odpovědi také nadpisy: ${rhOther.map(id => escHtml(TOPIC_LABELS[id] || id)).join(', ')}${extraTopicsForUi.length ? '' : ' — bez tabulky „další témata“ zkontroluj 📎 v logu a F12 → RAW.'}</div>`
+      : '';
     const statusColor = task.status === 'done' ? 'var(--acc3)' : (task.status === 'failed' ? 'var(--red)' : (task.status === 'running' ? 'var(--ylw)' : 'var(--txt3)'));
     const statusText = task.status === 'done' ? 'hotovo' : (task.status === 'failed' ? 'chyba' : (task.status === 'running' ? 'běží' : 'čeká'));
     return `
@@ -2990,6 +2994,7 @@ function updateTopicRepairModalUI() {
           <div style="font-size:11px;color:var(--txt)">
             <div><b>Nový návrh:</b> ${escHtml(task.candidateValue || '—')}</div>
             ${formatTopicRepairQuickCompare(task.topicId, task.currentValue, task.candidateValue)}
+            ${rawHeadersHint}
             <div style="margin-top:4px;color:var(--txt2)">
               <b>SPECIALISTA v odpovědi:</b> ${task.specialistaInRaw ? 'ano' : 'ne'}
               ${task.specialistaInRaw ? ` · <b>stav:</b> ${escHtml(task.specialistaDecision || 'beze změny')}` : ''}
@@ -3053,7 +3058,8 @@ function buildTopicRepairTasks(keys) {
         specialistaDecision: '',
         specialistaPreviousValue: String(t.specialista || '').trim(),
         specialistaCandidateValue: '',
-        detectedTopics: []
+        detectedTopics: [],
+        rawHeaderTopics: []
       });
     }
   }
@@ -3131,6 +3137,15 @@ function renderTopicRepairModal() {
           <button class="hbtn" type="button" onclick="setTopicRepairBulkIncludeAll(true)">☑ Dávka: vše</button>
           <button class="hbtn" type="button" onclick="setTopicRepairBulkIncludeAll(false)">☐ Dávka: nic</button>
         </div>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:10px;font-size:12px;color:var(--txt2)">
+          <label style="display:flex;align-items:center;gap:6px">Dávka (hesel)
+            <input type="number" id="topicRepairBulkBatchInput" min="1" max="100" step="1" style="width:64px;padding:4px 6px;background:var(--bg2);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:12px" title="Synchronizuje skryté batchSizeRun (stejné jako AUTO)" oninput="syncTopicRepairBulkRunInputsToHidden()">
+          </label>
+          <label style="display:flex;align-items:center;gap:6px">Interval (s)
+            <input type="number" id="topicRepairBulkIntervalInput" min="0" max="600" step="1" style="width:64px;padding:4px 6px;background:var(--bg2);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:12px" title="Synchronizuje skryté intervalRun — pauza mezi dávkami" oninput="syncTopicRepairBulkRunInputsToHidden()">
+          </label>
+          <span id="topicRepairBulkRunSummary" style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt3)"></span>
+        </div>
         <div style="margin-top:8px">
           <div style="font-size:11px;color:var(--txt2);margin-bottom:6px">Batch prompt (uložený per téma). Placeholder <span style="font-family:'JetBrains Mono',monospace">{HESLA}</span> = vstupní hesla.</div>
           <textarea id="topicRepairBatchPrompt" style="width:100%;min-height:160px;background:var(--bg2);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:10px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.45"></textarea>
@@ -3154,6 +3169,7 @@ function renderTopicRepairModal() {
   `;
   document.body.appendChild(modal);
   refreshTopicRepairBatchPromptEditor();
+  initTopicRepairBulkRunInputs();
   updateTopicRepairModalUI();
 }
 
@@ -3270,12 +3286,12 @@ async function processTopicRepairQueue() {
           const baselineTopicValues = cloneTranslationTopicFields(translated[nextTask.key]);
 
           const primaryCandidate = String(extractTopicValueFromAI(rawText, nextTask.topicId, 'strict') || '').trim();
-          for (const topicId of FALLBACK_TOPIC_ORDER) {
-            if (topicId === 'specialista') continue;
-            if (topicId === nextTask.topicId) continue;
-            const candidateTopicVal = String(extractTopicValueFromAI(rawText, topicId, 'strict') || '').trim();
-            if (!hasMeaningfulValue(candidateTopicVal)) continue;
-            if (primaryCandidate && candidateTopicVal === primaryCandidate) continue;
+          nextTask.rawHeaderTopics = scanRawForTopicHeaderTopicIds(rawText);
+
+          const pushDetectedExtraTopic = (topicId, candidateTopicVal) => {
+            if (!hasMeaningfulValue(candidateTopicVal)) return;
+            if (primaryCandidate && candidateTopicVal === primaryCandidate) return;
+            if (nextTask.detectedTopics.some(d => d.topicId === topicId)) return;
             const previousTopicVal = String(baselineTopicValues?.[topicId] || '').trim();
             const acceptAuto = shouldAutoAcceptDetectedTopic(topicId, previousTopicVal, candidateTopicVal);
             if (acceptAuto) {
@@ -3287,6 +3303,24 @@ async function processTopicRepairQueue() {
               candidateValue: candidateTopicVal,
               decision: acceptAuto ? 'přijat (auto)' : 'zamítnut (auto)'
             });
+          };
+
+          for (const topicId of FALLBACK_TOPIC_ORDER) {
+            if (topicId === 'specialista') continue;
+            if (topicId === nextTask.topicId) continue;
+            const candidateTopicVal = String(extractTopicValueFromAI(rawText, topicId, 'strict') || '').trim();
+            pushDetectedExtraTopic(topicId, candidateTopicVal);
+          }
+
+          const headerExtras = (nextTask.rawHeaderTopics || []).filter(
+            tid => tid !== nextTask.topicId && tid !== 'specialista'
+          );
+          for (const topicId of headerExtras) {
+            let v = String(extractTopicValueFromAI(rawText, topicId, 'strict') || '').trim();
+            if (!hasMeaningfulValue(v)) {
+              v = String(extractTopicValueFromAI(rawText, topicId, 'loose') || '').trim();
+            }
+            pushDetectedExtraTopic(topicId, v);
           }
 
           const prevSpecialista = String(baselineTopicValues?.specialista || '').trim();
@@ -3303,6 +3337,11 @@ async function processTopicRepairQueue() {
           } else {
             nextTask.specialistaDecision = '';
           }
+
+          const hdrOther = (nextTask.rawHeaderTopics || []).filter(id => id !== nextTask.topicId);
+          const hdrLabels = hdrOther.map(id => TOPIC_LABELS[id] || id).join(', ') || '—';
+          const dtIds = (nextTask.detectedTopics || []).map(d => TOPIC_LABELS[d.topicId] || d.topicId).join(', ') || '—';
+          log(`📎 ${nextTask.key} · „${TOPIC_LABELS[nextTask.topicId] || nextTask.topicId}“: v RAW bloky [${hdrLabels}] → další témata (UI): [${dtIds}] · SPECIALISTA: ${nextTask.specialistaInRaw ? 'ano' : 'ne'}`);
 
           const candidate = extractTopicValueFromAI(raw?.content || '', nextTask.topicId, 'strict');
           if (!hasMeaningfulValue(candidate)) {
@@ -4310,9 +4349,46 @@ async function waitTopicRepairSequentialIdle(maxMs = 60000) {
   return false;
 }
 
+function syncTopicRepairBulkRunInputsToHidden() {
+  const bIn = document.getElementById('topicRepairBulkBatchInput');
+  const iIn = document.getElementById('topicRepairBulkIntervalInput');
+  const hB = document.getElementById('batchSizeRun');
+  const hI = document.getElementById('intervalRun');
+  if (bIn && hB) {
+    const n = Math.min(100, Math.max(1, parseInt(bIn.value, 10) || 10));
+    bIn.value = String(n);
+    hB.value = String(n);
+  }
+  if (iIn && hI) {
+    const n = Math.min(600, Math.max(0, parseInt(iIn.value, 10) || 20));
+    iIn.value = String(n);
+    hI.value = String(n);
+  }
+  updateTopicRepairBulkRunSummarySpan();
+}
+
+function updateTopicRepairBulkRunSummarySpan() {
+  const el = document.getElementById('topicRepairBulkRunSummary');
+  if (!el) return;
+  const bs = parseInt(document.getElementById('batchSizeRun')?.value, 10) || 10;
+  const iv = parseInt(document.getElementById('intervalRun')?.value, 10) || 20;
+  el.textContent = `jako AUTO: dávka ${bs} hesel · interval ${iv}s`;
+}
+
+function initTopicRepairBulkRunInputs() {
+  const bIn = document.getElementById('topicRepairBulkBatchInput');
+  const iIn = document.getElementById('topicRepairBulkIntervalInput');
+  const hB = document.getElementById('batchSizeRun');
+  const hI = document.getElementById('intervalRun');
+  if (bIn && hB) bIn.value = String(Math.min(100, Math.max(1, parseInt(hB.value, 10) || 10)));
+  if (iIn && hI) iIn.value = String(Math.min(600, Math.max(0, parseInt(hI.value, 10) || 20)));
+  updateTopicRepairBulkRunSummarySpan();
+}
+
 async function runTopicRepairBulkTranslation() {
   const state = topicRepairState;
   if (!state || topicRepairBulkRunning) return;
+  syncTopicRepairBulkRunInputsToHidden();
   const topicId = document.getElementById('topicRepairBulkTopicSelect')?.value || state.bulkTopicId || 'definice';
   const onlyFailed = !!document.getElementById('topicRepairBulkOnlyFailed')?.checked;
   const bs = parseInt(document.getElementById('batchSizeRun')?.value, 10) || 10;
@@ -4361,6 +4437,9 @@ async function runTopicRepairBulkTranslation() {
       showToast('✗ Batch prompt je prázdný');
       return;
     }
+
+    const iv0 = parseInt(document.getElementById('intervalRun')?.value, 10) || 20;
+    log(`⚡ Hromadná oprava témat „${TOPIC_LABELS[topicId] || topicId}“: ${keys.length} hesel, dávka ${bs}, interval ${iv0}s`);
 
     let processed = 0;
     while (processed < keys.length) {
@@ -4883,6 +4962,37 @@ function extractTopicSegmentByAnchors(cleaned, wantLabel) {
   if (idx < 0) return '';
   const endPos = idx + 1 < spans.length ? spans[idx + 1].blockStart : c.length;
   return c.slice(spans[idx].endHeader, endPos).trim();
+}
+
+function mapNormalizedLabelToTopicId(norm) {
+  const n = String(norm || '').toUpperCase();
+  if (n === 'VYZNAM') return 'vyznam';
+  if (n === 'DEFINICE') return 'definice';
+  if (n === 'POUZITI') return 'pouziti';
+  if (n === 'PUVOD') return 'puvod';
+  if (n === 'KJV') return 'kjv';
+  if (n === 'SPECIALISTA') return 'specialista';
+  return null;
+}
+
+/** Pořadí témat podle prvního výskytu nadpisu v RAW (pro log a doplnění „dalších“). */
+function scanRawForTopicHeaderTopicIds(rawText) {
+  const text = String(rawText || '').replace(/\r\n/g, '\n').trim();
+  if (!text) return [];
+  let cleaned = text.replace(/^###[GH]\d+###\s*/gi, '').trim();
+  cleaned = cleaned.replace(/^###[GH]\d+###\s*/gi, '').trim();
+  const re = /\b(VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|SPECIALISTA|VYKLAD|VÝKLAD|KOMENTAR|KOMENTÁŘ|EXEGEZE|DEFINITION|MEANING|USAGE|ORIGIN|COMMENTARY|EXEGESIS|DEF)\s*[-:–—=.]{0,3}\s*/giu;
+  const out = [];
+  const seen = new Set();
+  let m;
+  while ((m = re.exec(cleaned)) !== null) {
+    const norm = normalizeTopicFieldLabel(m[1]);
+    const tid = mapNormalizedLabelToTopicId(norm);
+    if (!tid || seen.has(tid)) continue;
+    seen.add(tid);
+    out.push(tid);
+  }
+  return out;
 }
 
 function extractTopicValueFromAI(rawText, topicId, mode = 'loose') {
@@ -10097,6 +10207,7 @@ window.refreshTopicRepairBatchPromptEditor = refreshTopicRepairBatchPromptEditor
 window.saveTopicRepairBatchPromptDraft = saveTopicRepairBatchPromptDraft;
 window.resetTopicRepairBatchPromptToDefault = resetTopicRepairBatchPromptToDefault;
 window.runTopicRepairBulkTranslation = runTopicRepairBulkTranslation;
+window.syncTopicRepairBulkRunInputsToHidden = syncTopicRepairBulkRunInputsToHidden;
 window.toggleTopicRepairBulkInclude = toggleTopicRepairBulkInclude;
 window.setTopicRepairBulkIncludeAll = setTopicRepairBulkIncludeAll;
 window.retryFailed = retryFailed;
