@@ -1884,6 +1884,7 @@ let autoStepRunning = false;
   let modelTestParsedExportChunks = [];
   let modelTestLastKeyAuditExportChunks = [];
   let modelTestRawResponses = [];
+  let modelTestRateLimitHealth = { hits429: 0, lastRetryAfterSec: 0, lastRequestId: '', lastRemaining: '', lastReset: '' };
   const DEFAULT_MODEL_TEST_LOG_FILENAME = 'test.txt';
   let startTime = null;
   let elapsedTimer = null;
@@ -3986,10 +3987,16 @@ async function callOnce(provider, apiKey, model, messages, externalSignal = null
       signal: controller.signal
     });
     const d = await r.json();
+    const rateInfo = {
+      provider: 'groq',
+      requestId: r.headers.get('x-request-id') || r.headers.get('request-id') || '',
+      retryAfterSec: Number(r.headers.get('retry-after') || 0) || 0,
+      remaining: r.headers.get('x-ratelimit-remaining-requests') || r.headers.get('x-ratelimit-remaining-tokens') || '',
+      reset: r.headers.get('x-ratelimit-reset-requests') || r.headers.get('x-ratelimit-reset-tokens') || ''
+    };
      if (!r.ok) {
        if (r.status === 429) {
-         const retryAfter = r.headers.get('retry-after');
-         throw new Error(`Rate limit! Zkuste za ${retryAfter || 'několik'}s. Info: groq.com/pricing`);
+         throw new Error(`Rate limit! Zkuste za ${rateInfo.retryAfterSec || 'několik'}s. Info: groq.com/pricing${rateInfo.requestId ? ` [req:${rateInfo.requestId}]` : ''}`);
        }
        throw new Error(d.error?.message || String(r.status));
      }
@@ -4006,7 +4013,7 @@ async function callOnce(provider, apiKey, model, messages, externalSignal = null
       console.log(content);
       throw new Error('AI vrátila nesmyslnou odpověď - zkuste delší interval');
     }
-    return { content, usage: d.usage, resolvedModel: d.model || model };
+    return { content, usage: d.usage, resolvedModel: d.model || model, rateInfo };
 
    } else if (provider === 'gemini') {
      const userContent = messages.find(m => m.role === 'user')?.content || '';
@@ -4032,7 +4039,7 @@ async function callOnce(provider, apiKey, model, messages, externalSignal = null
        log(`📊 Gemini: ${d.usageMetadata.promptTokenCount} in / ${d.usageMetadata.candidatesTokenCount} out`);
      }
       const content = d.candidates[0].content.parts[0].text;
-      return { content, usage: d.usageMetadata, resolvedModel: d.modelVersion || d.model || model };
+      return { content, usage: d.usageMetadata, resolvedModel: d.modelVersion || d.model || model, rateInfo: { provider: 'gemini' } };
 
      } else if (provider === 'openrouter') {
       const r = await fetch('https://corsproxy.io/?https://openrouter.ai/api/v1/chat/completions', {
@@ -4059,7 +4066,7 @@ async function callOnce(provider, apiKey, model, messages, externalSignal = null
      validateAPIResponse(d, 'openrouter');
      const content = extractOpenRouterText(d);
      if (!content) throw new Error('OpenRouter nevrátil čitelný text');
-     return { content, usage: d.usage, resolvedModel: d.model || model };
+    return { content, usage: d.usage, resolvedModel: d.model || model, rateInfo: { provider: 'openrouter' } };
   }
   throw new Error('Neznámý provider');
   } catch (e) {
@@ -5556,6 +5563,36 @@ function formatAiResponseTime(ms) {
   return `${(safe / 1000).toFixed(2)}s`;
 }
 
+function resetModelTestRateLimitHealth() {
+  modelTestRateLimitHealth = { hits429: 0, lastRetryAfterSec: 0, lastRequestId: '', lastRemaining: '', lastReset: '' };
+}
+
+function updateModelTestRateLimitHealth(rate) {
+  if (!rate || typeof rate !== 'object') return;
+  if (rate.requestId) modelTestRateLimitHealth.lastRequestId = String(rate.requestId);
+  if (rate.remaining !== undefined && rate.remaining !== null && rate.remaining !== '') modelTestRateLimitHealth.lastRemaining = String(rate.remaining);
+  if (rate.reset !== undefined && rate.reset !== null && rate.reset !== '') modelTestRateLimitHealth.lastReset = String(rate.reset);
+  if (rate.retryAfterSec !== undefined && rate.retryAfterSec !== null && rate.retryAfterSec !== '') modelTestRateLimitHealth.lastRetryAfterSec = Number(rate.retryAfterSec) || 0;
+  if (rate.is429) modelTestRateLimitHealth.hits429 += 1;
+}
+
+function appendModelTestRateLimitStatus(appendReport) {
+  if (typeof appendReport !== 'function') return;
+  const h = modelTestRateLimitHealth || {};
+  appendReport(`Rate limit stav: 429=${h.hits429 || 0} | retry-after=${h.lastRetryAfterSec || 0}s | remaining=${h.lastRemaining || 'n/a'} | reset=${h.lastReset || 'n/a'}${h.lastRequestId ? ` | req=${h.lastRequestId}` : ''}`);
+}
+
+function rateInfoFromErrorMessage(msg) {
+  const text = String(msg || '');
+  const retry = text.match(/za\s+(\d+)s/i);
+  const req = text.match(/\[req:([^\]]+)\]/i);
+  return {
+    is429: /rate limit|429|too many/i.test(text),
+    retryAfterSec: retry ? Number(retry[1]) : 0,
+    requestId: req ? req[1] : ''
+  };
+}
+
 function appendModelTestFinalOverview(appendReport, testResults, testMode, extra = {}) {
   if (typeof appendReport !== 'function') return;
   const rows = Array.isArray(testResults) ? testResults : [];
@@ -5703,6 +5740,7 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
         const reqMs = performance.now() - reqStart;
         latencyMsTotal += reqMs;
         latencySamples += 1;
+        updateModelTestRateLimitHealth(raw?.rateInfo);
         let content = String(raw?.content || '');
         modelTestRawResponses.push({
           ts: Date.now(),
@@ -5728,6 +5766,7 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
           appendReport('↻ Auto retry se striktním promptem v13 (anti-EN + anti-truncace)…');
           const strictMessages = buildModelTestMessages(batch, 'auto-live', 'preset_v13', true);
           const rawRetry = await callOnce(current.prov, apiKey, current.model, strictMessages, abortSignal);
+          updateModelTestRateLimitHealth(rawRetry?.rateInfo);
           const retryContent = String(rawRetry?.content || '');
           modelTestRawResponses.push({
             ts: Date.now(),
@@ -5769,6 +5808,7 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
         });
         console.log(`[AUTO TEST RAW] #${cycle} ${current.prov} | ${current.model} | prompt=${promptType}\n${content}`);
         appendReport(`[#${cycle}] ${providerLabel} | ${current.model} | ${ok}/${batchKeys.length} hesel | klíče ${batchKeys[0]}…${batchKeys[batchKeys.length - 1]} | AI ${formatAiResponseTime(reqMs)}`);
+        appendModelTestRateLimitStatus(appendReport);
         if (parsedNorm.normalizedUsed) appendReport('ℹ AUTO_NORMALIZOVANO_Z_OPENROUTER_FORMATU');
         appendReport(`RAW: ${content || '(prázdná odpověď)'}`);
         appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, failedInBatch, content, { okKeys: totalOkKeys, failedKeys: totalFailedKeys });
@@ -5778,6 +5818,7 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
         latencySamples += 1;
         const msg = String(e?.message || '');
         const isRate = /429|rate limit|too many/i.test(msg);
+        updateModelTestRateLimitHealth(rateInfoFromErrorMessage(msg));
         totalFailedKeys += batchKeys.length;
         testResults.push({ model: `${current.prov}:${current.model}`, status: isRate ? 'RATE_LIMITED' : 'ERROR' });
         upsertModelTestStats(current.prov, current.model, {
@@ -5788,6 +5829,7 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
           latencyMs: reqMs
         });
         appendReport(`[#${cycle}] ${providerLabel} | ${current.model} | ${isRate ? 'RATE LIMITED' : 'ERROR'} (${msg})${reqMs > 0 ? ` | AI ${formatAiResponseTime(reqMs)}` : ''}`);
+        appendModelTestRateLimitStatus(appendReport);
       }
       if (modelTestCancelRequested) break;
       await waitProviderMs(current.prov, intervalSec * 1000);
@@ -5895,6 +5937,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
   modelTestParsedExportChunks = [];
   modelTestLastKeyAuditExportChunks = [];
   modelTestRawResponses = [];
+  resetModelTestRateLimitHealth();
   clearModelTestRawOutputFromStorage();
   modelTestSetLastStatus('Běží test modelů…', 'idle');
   modelTestAbortController = new AbortController();
@@ -5993,6 +6036,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
 
       try {
         const first = await callOnce(currentProvider, currentApiKey, opt.value, messages, modelTestAbortController.signal);
+        updateModelTestRateLimitHealth(first?.rateInfo);
         const firstContent = String(first?.content || '').trim();
         modelTestRawResponses.push({
           ts: Date.now(),
@@ -6016,6 +6060,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
           const okCount = sampleKeys.length - missingAfterFirst.length;
           if (parsedNorm.normalizedUsed) appendReport('ℹ AUTO_NORMALIZOVANO_Z_OPENROUTER_FORMATU');
           appendReport(`RAW: ${firstContent || '(prázdná odpověď)'}`);
+          appendModelTestRateLimitStatus(appendReport);
           appendReport(`PARSOVÁNÍ (celá dávka): ${okCount}/${sampleKeys.length} hesel`);
           if (missingAfterFirst.length > 0) appendReport(`CHYBÍ v odpovědi: ${missingAfterFirst.join(', ')}`);
           appendModelTestLastBatchKeyAudit(appendReport, sampleKeys, parsed, missingAfterFirst, firstContent || '');
@@ -6028,6 +6073,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
         }
 
         appendReport(`1) ${firstContent || '(prázdná odpověď)'}`);
+        appendModelTestRateLimitStatus(appendReport);
 
         if (modelTestCancelRequested) {
           appendReport('⏹ Test byl ručně zrušen uživatelem.');
@@ -6036,6 +6082,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
         }
         await waitMs(MODEL_TEST_DELAY_MS);
         const second = await callOnce(currentProvider, currentApiKey, opt.value, messages, modelTestAbortController.signal);
+        updateModelTestRateLimitHealth(second?.rateInfo);
         const secondContent = String(second?.content || '').trim();
         modelTestRawResponses.push({
           ts: Date.now(),
@@ -6051,6 +6098,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
         console.log(`[MODEL TEST RAW] ${currentProvider} | ${opt.value} | mode=${testMode} | prompt=${promptType}\n${secondContent}`);
         console.log(`[MODEL TEST] ${currentProvider} | ${opt.value} | 2: ${secondContent}`);
         appendReport(`2) ${secondContent || '(prázdná odpověď)'}`);
+        appendModelTestRateLimitStatus(appendReport);
         appendReport('Stav: OK');
         appendReport('');
         consecutiveRateLimited = 0;
@@ -6060,12 +6108,15 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
       } catch (e) {
         const msg = String(e?.message || '');
         const isRateLimit = /429|rate limit|too many/i.test(msg);
+        updateModelTestRateLimitHealth(rateInfoFromErrorMessage(msg));
         if (isRateLimit) {
           appendReport(`CHYBA: ${msg}`);
+          appendModelTestRateLimitStatus(appendReport);
           appendReport(`↻ Opakuji po ${Math.round(MODEL_TEST_DELAY_MS / 1000)}s...`);
           await waitMs(MODEL_TEST_DELAY_MS);
           try {
             const retry = await callOnce(currentProvider, currentApiKey, opt.value, messages, modelTestAbortController.signal);
+            updateModelTestRateLimitHealth(retry?.rateInfo);
             const retryContent = String(retry?.content || '').trim();
             modelTestRawResponses.push({
               ts: Date.now(),
@@ -6081,6 +6132,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
             console.log(`[MODEL TEST RAW] ${currentProvider} | ${opt.value} | mode=${testMode} | prompt=${promptType}\n${retryContent}`);
             console.log(`[MODEL TEST] ${currentProvider} | ${opt.value} | RETRY: ${retryContent}`);
             appendReport(`retry) ${retryContent || '(prázdná odpověď)'}`);
+            appendModelTestRateLimitStatus(appendReport);
             appendReport('Stav: OK po retry');
             appendReport('');
             consecutiveRateLimited = 0;
@@ -6094,6 +6146,8 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
             }
             console.error(`[MODEL TEST] ${currentProvider} | ${opt.value} | ERROR`, eRetry);
             appendReport(`RETRY CHYBA: ${eRetry.message}`);
+            updateModelTestRateLimitHealth(rateInfoFromErrorMessage(eRetry?.message || ''));
+            appendModelTestRateLimitStatus(appendReport);
             appendReport('Stav: RATE LIMITED');
             appendReport('');
             consecutiveRateLimited++;
@@ -6108,6 +6162,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
           }
           console.error(`[MODEL TEST] ${currentProvider} | ${opt.value} | ERROR`, e);
           appendReport(`CHYBA: ${msg}`);
+          appendModelTestRateLimitStatus(appendReport);
           appendReport('Stav: ERROR');
           appendReport('');
           consecutiveRateLimited = 0;
