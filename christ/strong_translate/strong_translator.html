@@ -4392,23 +4392,22 @@ function getTopicBatchAiLabel(topicId) {
 }
 
 function parseTopicRepairBatchResponse(rawText, topicId) {
-  const label = getTopicBatchAiLabel(topicId);
-  const text = String(rawText || '').replace(/\r\n/g, '\n');
-  const blocks = String(text || '').split(/\n(?=###\s*[GH]\d+)/i);
+  const text = normalizeAiTopicRawText(rawText).trim();
+  if (!text) return {};
+  const blocks = text.split(/\n(?=#{1,6}\s*[gGhH]\d+)/i);
   const out = {};
+  const headerRe = /^#{2,6}\s*([gGhH])(\d+)\s*(?:#+\s*)?(?=\n|$|\r)/im;
   for (const block of blocks) {
     const b = String(block || '').trim();
     if (!b) continue;
-    const header = b.match(/^###\s*([GH]\d+)\s*###?/i);
+    const header = b.match(headerRe);
     if (!header) continue;
-    const key = String(header[1] || '').trim().toUpperCase();
-    const re = new RegExp(`^${label}\\s*[:\\-–—=.]?\\s*`, 'im');
-    const m = b.match(re);
-    if (!m) continue;
-    const start = m.index + m[0].length;
-    const tail = b.slice(start);
-    const next = tail.search(/\n\s*(?:VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|SPECIALISTA|VYKLAD|VÝKLAD|KOMENTAR|KOMENTÁŘ|EXEGEZE|COMMENTARY|EXEGESIS)\s*[:\\-–—=.]/i);
-    const val = (next >= 0 ? tail.slice(0, next) : tail).trim();
+    const key = (String(header[1] || '') + String(header[2] || '')).toUpperCase();
+    const rest = b.slice(header.index + header[0].length).trim();
+    let val = String(extractTopicValueFromAI(rest, topicId, 'strict') || '').trim();
+    if (!hasMeaningfulValue(val)) {
+      val = String(extractTopicValueFromAI(rest, topicId, 'loose') || '').trim();
+    }
     if (hasMeaningfulValue(val)) out[key] = val;
   }
   return out;
@@ -4419,13 +4418,14 @@ function extractTopicRepairBatchBlockForKey(rawText, key) {
   const text = String(normalizeAiTopicRawText(rawText) || '').trim();
   const upperKey = String(key || '').trim().toUpperCase();
   if (!text || !upperKey) return '';
-  const blocks = text.split(/\n(?=###\s*[GH]\d+)/i);
+  const blocks = text.split(/\n(?=#{1,6}\s*[gGhH]\d+)/i);
+  const headerRe = /^#{2,6}\s*([gGhH])(\d+)\s*(?:#+\s*)?(?=\n|$|\r)/im;
   for (const block of blocks) {
     const b = String(block || '').trim();
     if (!b) continue;
-    const header = b.match(/^###\s*([GH]\d+)\s*###?/i);
+    const header = b.match(headerRe);
     if (!header) continue;
-    const k = String(header[1] || '').trim().toUpperCase();
+    const k = (String(header[1] || '') + String(header[2] || '')).toUpperCase();
     if (k === upperKey) return b;
   }
   return '';
@@ -5077,11 +5077,11 @@ function normalizeAiTopicRawText(s) {
     .normalize('NFKC');
 }
 
-/** Odstraní opakované hlavičky ###G12### / ###H3### včetně mezer (i mimořádné varianty). */
+/** Odstraní opakované hlavičky ###G12### / ### G132 / ##H4 včetně mezer (i bez uzavíracích #). */
 function stripLeadingGHeaders(text) {
   let t = String(text || '');
   for (let i = 0; i < 8; i++) {
-    const next = t.replace(/^\s*###\s*[gGhH]\d+\s*###\s*/i, '').trimStart();
+    const next = t.replace(/^\s*#{2,6}\s*[gGhH]\d+\s*(?:#+\s*)?/i, '').trimStart();
     if (next === t) break;
     t = next;
   }
@@ -5120,7 +5120,7 @@ function extractSpecialistaLooseFallback(rawText) {
   const start = m.index + m[0].length;
   const rest = t.slice(start);
   const nextHdr =
-    /(?:^|[\n\u0085\u2028\u2029])[\s\u00A0]*(?:VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|SPECIALISTA|VYKLAD|VÝKLAD|KOMENTAR|KOMENTÁŘ|EXEGEZE|COMMENTARY|EXEGESIS|DEFINITION|MEANING|USAGE|ORIGIN|DEF)\s*(?:\([^)\n]{0,240}\))?\s*(?:[:\uFF1A\u2013\u2014=\.\-|]|\n{1,4}\s*)/iu;
+    /(?:^|[\n\u0085\u2028\u2029])[\s\u00A0]*(?:VYZNAM|DEFINICE|POUZITI|PUVOD|POUVOD|POVOD|KJV|SPECIALISTA|VYKLAD|VÝKLAD|KOMENTAR|KOMENTÁŘ|EXEGEZE|COMMENTARY|EXEGESIS|DEFINITION|MEANING|USAGE|ORIGIN|DEF)\s*(?:\([^)\n]{0,240}\))?\s*(?:[:\uFF1A\u2013\u2014=\.\-|]|\n{1,4}\s*)/iu;
   const m2 = rest.search(nextHdr);
   const body = m2 >= 0 ? rest.slice(0, m2) : rest;
   return body.trim();
@@ -5144,12 +5144,13 @@ function normalizeTopicFieldLabel(raw) {
   if (u === 'MEANING') return 'VYZNAM';
   if (u === 'USAGE') return 'POUZITI';
   if (u === 'ORIGIN') return 'PUVOD';
+  if (u === 'POVOD' || u === 'POUVOD') return 'PUVOD';
   if (u === 'VYKLAD' || u === 'VÝKLAD' || u === 'KOMENTAR' || u === 'KOMENTÁŘ' || u === 'EXEGEZE' || u === 'COMMENTARY' || u === 'EXEGESIS') return 'SPECIALISTA';
   return u;
 }
 
 /** Alternace názvů polí v AI odpovědi (jednotný zdroj pro anchor / řádkové parsování). */
-const TOPIC_FIELD_LABEL_ALTS_FOR_RE = 'VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|SPECIALISTA|VYKLAD|VÝKLAD|KOMENTAR|KOMENTÁŘ|EXEGEZE|DEFINITION|MEANING|USAGE|ORIGIN|COMMENTARY|EXEGESIS|DEF';
+const TOPIC_FIELD_LABEL_ALTS_FOR_RE = 'VYZNAM|DEFINICE|POUZITI|PUVOD|POUVOD|POVOD|KJV|SPECIALISTA|VYKLAD|VÝKLAD|KOMENTAR|KOMENTÁŘ|EXEGEZE|DEFINITION|MEANING|USAGE|ORIGIN|COMMENTARY|EXEGESIS|DEF';
 
 /** Po klíčovém slově často následuje „(specialista)“ / poznámka v závorce — bez toho selhával \s*[-:]. */
 function makeTopicFieldHeaderScanRegex() {
