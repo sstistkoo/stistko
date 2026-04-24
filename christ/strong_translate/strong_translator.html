@@ -5595,7 +5595,7 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
         const reqMs = performance.now() - reqStart;
         latencyMsTotal += reqMs;
         latencySamples += 1;
-        const content = String(raw?.content || '');
+        let content = String(raw?.content || '');
         modelTestRawResponses.push({
           ts: Date.now(),
           prov: current.prov,
@@ -5607,10 +5607,46 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
           raw: content
         });
         saveModelTestRawOutputToStorage();
-        const parsed = {};
+        let parsed = {};
         const parsedNorm = parseWithOpenRouterNormalization(content, batchKeys, parsed);
         applyFallbacksToParsedMap(batchKeys, parsed);
-        const failedInBatch = batchKeys.filter(k => !parsed[k] || !isTranslationComplete(parsed[k]));
+        let failedInBatch = batchKeys.filter(k => !parsed[k] || !isTranslationComplete(parsed[k]));
+        const englishDefinitionKeys = batchKeys.filter(k => {
+          const t = parsed && parsed[k];
+          return !!(t && isDefinitionLikelyEnglish(t.definice));
+        });
+        if (englishDefinitionKeys.length > 0 && promptEnabled && promptType !== 'preset_v12') {
+          appendReport(`⚠ Quality gate: DEFINICE(EN) u ${englishDefinitionKeys.length}/${batchKeys.length} hesel (${englishDefinitionKeys.slice(0, 3).join(', ')}${englishDefinitionKeys.length > 3 ? ', …' : ''})`);
+          appendReport('↻ Auto retry se striktním promptem v12 (anti-EN)…');
+          const strictMessages = buildModelTestMessages(batch, 'auto-live', 'preset_v12', true);
+          const rawRetry = await callOnce(current.prov, apiKey, current.model, strictMessages, abortSignal);
+          const retryContent = String(rawRetry?.content || '');
+          modelTestRawResponses.push({
+            ts: Date.now(),
+            prov: current.prov,
+            model: current.model,
+            mode: 'auto-live',
+            promptType: 'preset_v12',
+            promptEnabled: true,
+            promptSent: String(strictMessages?.[1]?.content || ''),
+            raw: retryContent
+          });
+          saveModelTestRawOutputToStorage();
+          const parsedRetry = {};
+          parseWithOpenRouterNormalization(retryContent, batchKeys, parsedRetry);
+          applyFallbacksToParsedMap(batchKeys, parsedRetry);
+          const failedRetry = batchKeys.filter(k => !parsedRetry[k] || !isTranslationComplete(parsedRetry[k]));
+          if (failedRetry.length <= failedInBatch.length) {
+            content = retryContent;
+            parsed = parsedRetry;
+            failedInBatch = failedRetry;
+            appendReport(`✓ Retry výsledek převzat (${batchKeys.length - failedRetry.length}/${batchKeys.length})`);
+          } else {
+            appendReport(`ℹ Retry nepomohl (${batchKeys.length - failedRetry.length}/${batchKeys.length}), ponechán původní výsledek.`);
+          }
+        } else if (englishDefinitionKeys.length > 0 && !promptEnabled) {
+          appendReport('⚠ Quality gate: nalezena EN definice, ale test promptu je vypnutý (auto-retry přeskočen).');
+        }
         const ok = batchKeys.length - failedInBatch.length;
         const status = ok === batchKeys.length ? 'OK' : 'PARTIAL';
         totalOkKeys += ok;
