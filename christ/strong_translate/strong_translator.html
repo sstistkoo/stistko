@@ -1475,6 +1475,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
             <option value="preset_v10">v10 - QA self-check</option>
             <option value="preset_v11">v11 - ALL-IN-ONE</option>
             <option value="preset_v12">v12 - v8+ anti-EN normalizace</option>
+            <option value="preset_v13">v13 - anti-EN + anti-truncace</option>
           </optgroup>
           <option disabled>────────────</option>
           <option value="custom">Vlastní prompt</option>
@@ -5498,6 +5499,27 @@ function formatAiResponseTime(ms) {
   return `${(safe / 1000).toFixed(2)}s`;
 }
 
+function appendModelTestFinalOverview(appendReport, testResults, testMode, extra = {}) {
+  if (typeof appendReport !== 'function') return;
+  const rows = Array.isArray(testResults) ? testResults : [];
+  const countBy = (status) => rows.filter(r => r.status === status).length;
+  const ok = countBy('OK');
+  const okRetry = countBy('OK_RETRY');
+  const partial = countBy('PARTIAL');
+  const rateLimited = countBy('RATE_LIMITED');
+  const error = countBy('ERROR');
+  const total = rows.length;
+  const done = ok + okRetry + partial;
+  const successPct = total > 0 ? Math.round((done / total) * 100) : 0;
+  appendReport('');
+  appendReport('=== KONEČNÝ PŘEHLED TESTU ===');
+  appendReport(`Výsledky modelů: OK ${ok} | OK po retry ${okRetry} | PARTIAL ${partial} | RATE_LIMIT ${rateLimited} | ERROR ${error} | CELKEM ${total}`);
+  appendReport(`Úspěšnost modelů: ${successPct}%`);
+  if (testMode === 'auto-live') {
+    appendReport(`Hesla: OK ${extra.okKeys || 0} | NEÚSP ${extra.failedKeys || 0} | cykly ${extra.cycles || 0}${extra.avgLatencyMs ? ` | prům. AI ${formatAiResponseTime(extra.avgLatencyMs)}` : ''}`);
+  }
+}
+
 async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSignal, fixedProvider = null, promptType = 'custom', promptEnabled = true) {
   const durationInput = document.getElementById('modelTestDurationMin');
   const durationMin = Math.max(1, parseInt(durationInput?.value || '10', 10) || 10);
@@ -5615,10 +5637,10 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
           const t = parsed && parsed[k];
           return !!(t && isDefinitionLikelyEnglish(t.definice));
         });
-        if (englishDefinitionKeys.length > 0 && promptEnabled && promptType !== 'preset_v12') {
+        if (englishDefinitionKeys.length > 0 && promptEnabled && promptType !== 'preset_v13') {
           appendReport(`⚠ Quality gate: DEFINICE(EN) u ${englishDefinitionKeys.length}/${batchKeys.length} hesel (${englishDefinitionKeys.slice(0, 3).join(', ')}${englishDefinitionKeys.length > 3 ? ', …' : ''})`);
-          appendReport('↻ Auto retry se striktním promptem v12 (anti-EN)…');
-          const strictMessages = buildModelTestMessages(batch, 'auto-live', 'preset_v12', true);
+          appendReport('↻ Auto retry se striktním promptem v13 (anti-EN + anti-truncace)…');
+          const strictMessages = buildModelTestMessages(batch, 'auto-live', 'preset_v13', true);
           const rawRetry = await callOnce(current.prov, apiKey, current.model, strictMessages, abortSignal);
           const retryContent = String(rawRetry?.content || '');
           modelTestRawResponses.push({
@@ -5626,7 +5648,7 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
             prov: current.prov,
             model: current.model,
             mode: 'auto-live',
-            promptType: 'preset_v12',
+            promptType: 'preset_v13',
             promptEnabled: true,
             promptSent: String(strictMessages?.[1]?.content || ''),
             raw: retryContent
@@ -5811,6 +5833,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
       appendReport('');
       appendReport(`Souhrn hesel: OK ${autoStats.okKeys} | NEÚSP ${autoStats.failedKeys} | cykly ${autoStats.cycles} | prům. AI ${formatAiResponseTime(autoStats.avgLatencyMs || 0)}`);
       appendReport(`TOP modely z tohoto běhu: ${okModels.length ? okModels.join(', ') : 'žádné plně stabilní'}`);
+      appendModelTestFinalOverview(appendReport, testResults, testMode, autoStats);
       appendReport(modelTestCancelRequested ? 'Ukončeno.' : 'Hotovo.');
       pushTestHistory({
         type: 'model-test',
@@ -6005,6 +6028,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
       .slice(0, 3);
     appendReport('');
     appendReport(`TOP modely z tohoto běhu: ${okModels.length ? okModels.join(', ') : 'žádné plně stabilní'}`);
+    appendModelTestFinalOverview(appendReport, testResults, testMode);
     appendReport(modelTestCancelRequested ? 'Ukončeno.' : 'Hotovo.');
     pushTestHistory({
       type: 'model-test',
