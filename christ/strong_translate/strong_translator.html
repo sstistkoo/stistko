@@ -1564,12 +1564,18 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
             <option value="preset_v13">v13 - anti-EN + anti-truncace</option>
           </optgroup>
           <optgroup label="Tematické prompty (dle detailu hesla)">
-            <option value="preset_topic_vyznam">Téma: Český význam</option>
+            <option value="preset_topic_vyznam">Téma: Český význam (CZ)</option>
             <option value="preset_topic_definice">Téma: Definice (CZ)</option>
             <option value="preset_topic_kjv">Téma: KJV překlady (CZ)</option>
-            <option value="preset_topic_pouziti">Téma: Biblické užití</option>
-            <option value="preset_topic_puvod">Téma: Původ / Etymologie</option>
-            <option value="preset_topic_specialista">Téma: Biblický výklad (specialista)</option>
+            <option value="preset_topic_pouziti">Téma: Biblické užití (CZ)</option>
+            <option value="preset_topic_puvod">Téma: Původ / Etymologie (CZ)</option>
+            <option value="preset_topic_specialista">Téma: Biblický výklad (specialista) (CZ)</option>
+            <option value="preset_topic_vyznam_en">Téma: Český význam (En)</option>
+            <option value="preset_topic_definice_en">Téma: Definice (En)</option>
+            <option value="preset_topic_kjv_en">Téma: KJV překlady (En)</option>
+            <option value="preset_topic_pouziti_en">Téma: Biblické užití (En)</option>
+            <option value="preset_topic_puvod_en">Téma: Původ / Etymologie (En)</option>
+            <option value="preset_topic_specialista_en">Téma: Biblický výklad (specialista) (En)</option>
           </optgroup>
           <option disabled>────────────</option>
           <option value="custom">Vlastní prompt</option>
@@ -1898,12 +1904,60 @@ POVINNÝ VÝSTUP NAVÍC:
       return localStorage.getItem('strong_prompt') || core.DEFAULT_PROMPT;
     }
 
+    const EN_TOPIC_PROMPT_LABEL_BASE = {
+      preset_topic_vyznam_en: 'Téma: Český význam',
+      preset_topic_definice_en: 'Téma: Definice',
+      preset_topic_kjv_en: 'Téma: KJV překlady',
+      preset_topic_pouziti_en: 'Téma: Biblické užití',
+      preset_topic_puvod_en: 'Téma: Původ / Etymologie',
+      preset_topic_specialista_en: 'Téma: Biblický výklad (specialista)'
+    };
+
+    function getCurrentTargetLangCode() {
+      let target = String(localStorage.getItem('strong_target_lang') || 'cz').toLowerCase();
+      if (target === 'cs') target = 'cz';
+      return target.toUpperCase();
+    }
+
+    function formatEnTopicPromptLabel(baseLabel) {
+      return `${baseLabel} (EN -> ${getCurrentTargetLangCode()})`;
+    }
+
+    function isEnTopicPromptType(promptType) {
+      return Object.prototype.hasOwnProperty.call(EN_TOPIC_PROMPT_LABEL_BASE, String(promptType || ''));
+    }
+
+    function refreshLanguageAwarePromptOptionLabels() {
+      const promptTypeSelect = document.getElementById('modelTestPromptType');
+      if (!promptTypeSelect) return;
+      const selected = promptTypeSelect.value;
+      Object.entries(EN_TOPIC_PROMPT_LABEL_BASE).forEach(([promptType, baseLabel]) => {
+        const option = promptTypeSelect.querySelector(`option[value="${promptType}"]`);
+        if (option) option.textContent = formatEnTopicPromptLabel(baseLabel);
+      });
+      if (selected) promptTypeSelect.value = selected;
+
+      const promptTypeCompareSelect = document.getElementById('modelTestPromptTypeCompare');
+      if (promptTypeCompareSelect) {
+        const selectedCompare = promptTypeCompareSelect.value;
+        promptTypeCompareSelect.innerHTML = promptTypeSelect.innerHTML;
+        if (selectedCompare) promptTypeCompareSelect.value = selectedCompare;
+      }
+    }
+
     function getModelTestPromptTypeLabel(promptType) {
       if (promptType === 'custom') return 'Vlastní';
+      if (isEnTopicPromptType(promptType)) {
+        return formatEnTopicPromptLabel(EN_TOPIC_PROMPT_LABEL_BASE[promptType]);
+      }
       const fromCatalog = modelTestPromptCatalog?.[promptType]?.label;
       return fromCatalog || 'Vlastní';
     }
     function getModelTestPromptTopicLabel(promptType) {
+      if (isEnTopicPromptType(promptType)) {
+        const base = String(EN_TOPIC_PROMPT_LABEL_BASE[promptType] || '').replace(/^Téma:\s*/i, '');
+        return `${base} (EN -> ${getCurrentTargetLangCode()})`;
+      }
       return modelTestPromptCatalog?.[promptType]?.topicLabel || '';
     }
 
@@ -3361,11 +3415,11 @@ function renderTranslation(key, t) {
       field: definitionDisplay,
       rawField: null
     },
-    { id: 'vyznam',   label: 'Český význam',        field: t?.vyznam },
+    { id: 'vyznam',   label: 'Český význam (CZ)',        field: t?.vyznam },
     { id: 'kjv',     label: 'KJV překlady (CZ)', field: t?.kjv },
-    { id: 'pouziti',  label: 'Biblické užití',     field: t?.pouziti },
-    { id: 'puvod',    label: 'Původ / Etymologie',  field: t?.puvod },
-    { id: 'specialista', label: 'Biblický výklad (specialista)', field: t?.specialista },
+    { id: 'pouziti',  label: 'Biblické užití (CZ)',     field: t?.pouziti },
+    { id: 'puvod',    label: 'Původ / Etymologie (CZ)',  field: t?.puvod },
+    { id: 'specialista', label: 'Biblický výklad (specialista) (CZ)', field: t?.specialista },
   ];
 
   return sections.map(s => `
@@ -3434,12 +3488,12 @@ async function refillSingleField(key, topicId) {
 }
 
 const TOPIC_LABELS = {
-  vyznam: 'Český význam',
+  vyznam: 'Český význam (CZ)',
   definice: 'Definice (CZ)',
-  pouziti: 'Biblické užití',
-  puvod: 'Původ / Etymologie',
+  pouziti: 'Biblické užití (CZ)',
+  puvod: 'Původ / Etymologie (CZ)',
   kjv: 'KJV překlady (CZ)',
-  specialista: 'Biblický výklad (specialista)'
+  specialista: 'Biblický výklad (specialista) (CZ)'
 };
 
 const TOPIC_PROMPT_PRESET_MAP = {
@@ -5437,6 +5491,7 @@ function loadSavedSettings() {
     };
   }
   if (modelTestPromptTypeEl) {
+    refreshLanguageAwarePromptOptionLabels();
     modelTestPromptTypeEl.value = getModelTestPromptType();
     modelTestPromptTypeEl.onchange = () => {
       saveModelTestPromptSettings();
@@ -8236,9 +8291,11 @@ function saveLangSettings() {
   const source = document.getElementById('sourceLanguage').value;
   localStorage.setItem('strong_target_lang', target);
   localStorage.setItem('strong_source_lang', source);
+  refreshLanguageAwarePromptOptionLabels();
+  applySystemPromptForCurrentTask();
   updatePromptLangButtonLabel();
   closePromptLangModal();
-  showToast('✓ Jazyková nastavení uložena');
+  showToast('✓ Jazyková nastavení uložena + aktivován systémový prompt');
 }
 
 // Expose functions to window
