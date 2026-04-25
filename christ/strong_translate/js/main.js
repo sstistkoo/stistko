@@ -1762,7 +1762,7 @@ const settingsModalsApi = createSettingsModalsApi({
   renderList: (...a) => renderList(...a),
   saveProgress: (...a) => saveProgress(...a),
   refreshLanguageAwarePromptOptionLabels,
-  applySystemPromptForCurrentTask,
+  applySystemPromptForCurrentTask: (...a) => applySystemPromptForCurrentTask(...a),
   applyUiLanguage,
   DEFAULT_UI_LANG,
   UI_LANGS,
