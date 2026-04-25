@@ -1758,6 +1758,12 @@ const settingsModalsApi = createSettingsModalsApi({
   refreshTopicLabels,
   renderList: (...a) => renderList(...a),
   saveProgress: (...a) => saveProgress(...a),
+  refreshLanguageAwarePromptOptionLabels,
+  applySystemPromptForCurrentTask,
+  applyUiLanguage,
+  DEFAULT_UI_LANG,
+  UI_LANGS,
+  UI_LANG_KEY,
 });
 const { showSettingsModal, closeSettingsModal, showPromptAIModal, closePromptAIModal, saveAISettings, showPromptLangModal, closePromptLangModal, updatePromptLangButtonLabel, saveLangSettings } = settingsModalsApi;
 
@@ -1921,24 +1927,6 @@ async function loadSavedSettings() {
   startAutoProviderCountdownTicker();
   bindSetupCompactSummaryEvents();
   updateSetupCompactSummary();
-}
-
-
-// Settings Modal
-function saveLanguageSettings() {
-  const target = document.getElementById('targetLanguage').value;
-  const source = document.getElementById('sourceLanguage').value;
-  const uiRaw = String(document.getElementById('uiLanguage')?.value || DEFAULT_UI_LANG).toLowerCase();
-  const ui = UI_LANGS.has(uiRaw) ? uiRaw : DEFAULT_UI_LANG;
-  localStorage.setItem('strong_target_lang', target);
-  localStorage.setItem('strong_source_lang', source);
-  localStorage.setItem(UI_LANG_KEY, ui);
-  refreshLanguageAwarePromptOptionLabels();
-  applySystemPromptForCurrentTask();
-  applyUiLanguage();
-  updatePromptLangButtonLabel();
-  closePromptLangModal();
-  showToast(t('toast.lang.settings.saved'));
 }
 
 // Expose functions to window
