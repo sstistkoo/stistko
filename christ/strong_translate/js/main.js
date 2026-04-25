@@ -1609,6 +1609,7 @@ const {
 // ══ SETTINGS + MODEL TEST OUTPUT API ════════════════════════════
 const settingsApi = createSettingsApi({
   MODEL_TEST_PINNED_MODELS, MODEL_TEST_MODEL_STORAGE_KEY, PIPELINE_SECONDARY_ENABLED_KEY,
+  setAutoProviderEnabled: (...a) => setAutoProviderEnabled(...a),
 });
 const {
   getApiKeyForModelTest, getPinnedModelOptionsForProvider, getPinnedModelQueue,
@@ -1729,6 +1730,7 @@ const modelTestOutputApi = createModelTestOutputApi({
   showToast,
   log,
   modelTestStopProviderCountdownTicker,
+  showModelTestModal: (...a) => showModelTestModal(...a),
 });
 const {
   logEntry, clearLog,
@@ -1773,6 +1775,10 @@ const settingsModalsApi = createSettingsModalsApi({
   DEFAULT_UI_LANG,
   UI_LANGS,
   UI_LANG_KEY,
+  setPipelineModelForProvider: (...a) => setPipelineModelForProvider(...a),
+  setPipelineSecondaryEnabled: (...a) => setPipelineSecondaryEnabled(...a),
+  syncSecondaryProviderToggles: (...a) => syncSecondaryProviderToggles(...a),
+  updateAutoProviderCountdowns: (...a) => updateAutoProviderCountdowns(...a),
 });
 const { showSettingsModal, closeSettingsModal, showPromptAIModal, closePromptAIModal, saveAISettings, showPromptLangModal, closePromptLangModal, updatePromptLangButtonLabel, saveLangSettings } = settingsModalsApi;
 
@@ -2037,6 +2043,15 @@ window.importTXT = importTXT;
 window.showFailedEntries = showFailedEntries;
 window.retryFailed = retryFailed;
 window.closeTopicRepairModalSafe = closeTopicRepairModalSafe;
+window.toggleEditSection = toggleEditSection;
+window.saveSection = saveSection;
+window.toggleSourceEntryEdit = toggleSourceEntryEdit;
+window.saveSourceEntryField = saveSourceEntryField;
+window.refillSingleField = refillSingleField;
+window.openTopicPromptModal = openTopicPromptModal;
+window.runTopicPromptAI = runTopicPromptAI;
+window.applyTopicPromptResult = applyTopicPromptResult;
+window.closeTopicPromptModal = closeTopicPromptModal;
 
 // Settings modals + API keys + backup exposures
 window.showSettingsModal = showSettingsModal;

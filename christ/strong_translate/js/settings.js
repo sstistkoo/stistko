@@ -2,7 +2,7 @@
 import { state } from './state.js';
 import { uiLabel } from './i18n.js';
 
-export function createSettingsApi({ MODEL_TEST_PINNED_MODELS, MODEL_TEST_MODEL_STORAGE_KEY, PIPELINE_SECONDARY_ENABLED_KEY }) {
+export function createSettingsApi({ MODEL_TEST_PINNED_MODELS, MODEL_TEST_MODEL_STORAGE_KEY, PIPELINE_SECONDARY_ENABLED_KEY, setAutoProviderEnabled }) {
 function getApiKeyForModelTest(prov) {
   const activeProvider = document.getElementById('provider')?.value || '';
   if (activeProvider === prov) {
