@@ -118,13 +118,33 @@
                                 <button onclick="sendMessage()" id="sendBtn">Odeslat</button>
                                 <button class="clear-chat" onclick="clearChat()">Smazat</button>
                             </div>
-                        </div>
+                         </div>
                     </div>
-                    <button class="scroll-to-bottom" id="scrollBtn" onclick="scrollToBottom()">↓</button>
-                </div>
-            </div>
+                     <button class="scroll-to-bottom" id="scrollBtn" onclick="scrollToBottom()">↓</button>
+                 </div>
+             </div>
 
-            <!-- TOKEN USAGE PANEL -->
+             <!-- MANUAL RETRY PANEL -->
+             <div class="section">
+                 <div class="section-title">🔄 Ruční opakování požadavku</div>
+                 <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                     <div style="flex: 1; min-width: 250px;">
+                         <div style="font-size: 13px; font-weight: 600; color: #333; margin-bottom: 5px;">Čas čekání před opakováním:</div>
+                         <input type="number" id="manualRetryDelay" value="30" min="1" max="3600" style="width: 100%; padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px;" placeholder="Zadej čas v sekundách">
+                     </div>
+                     <div style="display: flex; flex-direction: column; gap: 8px;">
+                         <button onclick="retryLastMessage()" style="background: #ff9800; padding: 12px 24px; border: none; border-radius: 8px; color: white; font-size: 14px; font-weight: 600; cursor: pointer;">🔄 Opakovat poslední zprávu</button>
+                         <div style="font-size: 11px; color: #666; line-height: 1.4;">
+                             <strong>💡 Doporučení:</strong><br>
+                             • Server chyba: <strong>5-10 sekund</strong><br>
+                             • Přetížení (429): <strong>30-60 sekund</strong><br>
+                             • Vyčerpání limitu: <strong>5-15 minut</strong>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+
+             <!-- TOKEN USAGE PANEL -->
             <div class="section">
                 <div class="section-title">📊 Token usage statistics</div>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px;">
@@ -602,13 +622,14 @@
                 return;
             }
             const input = document.getElementById('chatInput');
-            const message = optionalText || input.value.trim();
-            if (!message && !optionalText) return;
-            if (!optionalText) {
-                input.value = '';
-                input.style.height = 'auto';
-            }
-            addMessage('user', message);
+             const message = optionalText || input.value.trim();
+             if (!message && !optionalText) return;
+             if (!optionalText) {
+                 input.value = '';
+                 input.style.height = 'auto';
+                 lastUserMessage = message;
+             }
+             addMessage('user', message);
             conversationHistory.push({ role: 'user', parts: [{ text: message }] });
             const sendBtn = document.getElementById('sendBtn');
             sendBtn.disabled = true;
@@ -685,6 +706,24 @@
                      }
                  }
               }
+
+          let lastUserMessage = '';
+
+          function retryLastMessage() {
+              if (!lastUserMessage) {
+                  showStatus('Žádná předchozí zpráva k opakování!', 'error');
+                  return;
+              }
+              const delay = parseInt(document.getElementById('manualRetryDelay').value) || 30;
+              if (isNaN(delay) || delay < 1) {
+                  showStatus('Zadej platný čas čekání (min 1 sekunda)!', 'error');
+                  return;
+              }
+              showStatus(`Opakování zprávy za ${delay} sekund...`, 'info');
+              setTimeout(() => {
+                  sendMessage(lastUserMessage, false);
+              }, delay * 1000);
+          }
 
           setInterval(() => {
              if (isBatchRunning) {
