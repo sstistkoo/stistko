@@ -61,7 +61,10 @@
     hasMeaningfulValue, isDefinitionLowQuality, isTranslationComplete,
     hasAnyTranslationContent, getStrongKeyNumber,
     stripDefinitionOriginReferenceTail, isDefinitionLikelyEnglish,
-    tryNormalizeNumberedOpenRouterResponse
+    tryNormalizeNumberedOpenRouterResponse,
+    getTranslationStateForKey,
+    fillMissingVyznamFromSource, fillMissingKjvFromSource, annotateEnglishDefinitionsInTranslated,
+    applyFallbacksToParsedMap, parseWithOpenRouterNormalization
   } from './translation/utils.js';
   // Re-export for use in this module
 const {
