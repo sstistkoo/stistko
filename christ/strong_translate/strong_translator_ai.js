@@ -1,6 +1,8 @@
 export const GEMINI_ROTATION_EXCLUDED_MODELS = new Set([
   'gemini-2.5-pro',
-  'gemini-3.1-pro-preview'
+  'gemini-3.1-pro-preview',
+  // Legacy endpoint often returns 404 for generateContent in current API.
+  'gemini-2.5-flash-lite-preview-09-2025'
 ]);
 
 export const SECONDARY_PROVIDER_MODEL_RANKING = {
@@ -9,6 +11,7 @@ export const SECONDARY_PROVIDER_MODEL_RANKING = {
   // OpenRouter smoke/auto TOP pořadí.
   openrouter: ['openrouter/free', 'openai/gpt-oss-20b:free', 'nvidia/nemotron-nano-9b-v2:free']
 };
+const GEMINI_SECONDARY_LOCKED_MODEL = 'gemini-3.1-flash-lite-preview';
 
 export const STATIC_FALLBACK_MODELS = {
   groq: ['meta-llama/llama-4-scout-17b-16e-instruct', 'llama-3.1-8b-instant', 'llama-3.3-70b-versatile'],
@@ -38,14 +41,15 @@ export function buildSecondaryProviderModelCandidates({
   rankedModels,
   maxNonGemini = 4
 }) {
+  if (provider === 'gemini') {
+    // Gemini secondary fallback is hard-locked to a single model (no rotation/no auto switching).
+    return [GEMINI_SECONDARY_LOCKED_MODEL];
+  }
   const selected = String(selectedModel || '').trim();
   const ranked = Array.isArray(rankedModels) ? rankedModels : [];
-  const configured = provider === 'gemini'
-    ? getProviderConfiguredModelsForAI('gemini', providers)
-    : [];
+  const configured = [];
   const queue = [...new Set([selected, ...ranked, ...configured].filter(Boolean))]
-    .filter(model => !(provider === 'gemini' && isGeminiAutoExcludedModel(model)));
-  if (provider === 'gemini') return queue;
+    .filter(Boolean);
   return queue.slice(0, Math.max(1, Number(maxNonGemini) || 4));
 }
 

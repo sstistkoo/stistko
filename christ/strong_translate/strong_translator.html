@@ -30,6 +30,9 @@
 
 body {
   background: var(--bg);
+  background-image:
+    radial-gradient(1200px 700px at 10% -10%, rgba(212, 168, 72, 0.10), transparent 55%),
+    radial-gradient(1000px 600px at 90% 0%, rgba(74, 106, 154, 0.10), transparent 58%);
   color: var(--txt);
   font-family: 'Crimson Pro', Georgia, serif;
   font-size: 15px;
@@ -38,21 +41,35 @@ body {
 
 /* ══ SETUP ════════════════════════════════════════════════════ */
 #setup {
+  position: relative;
   max-width: 680px;
-  margin: 36px auto;
-  padding: 30px;
-  background: var(--bg2);
-  border: 1px solid var(--brd);
-  border-radius: 6px;
+  margin: 42px auto;
+  padding: 28px;
+  background: linear-gradient(180deg, rgba(45, 41, 37, 0.96) 0%, rgba(33, 30, 27, 0.96) 100%);
+  border: 1px solid rgba(228, 192, 96, 0.22);
+  border-radius: 14px;
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+}
+
+#setup::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(135deg, rgba(212, 168, 72, 0.07), transparent 40%);
 }
 
 #setup h1 {
+  position: relative;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  color: var(--acc);
-  letter-spacing: .14em;
+  font-size: 13px;
+  color: #f0c874;
+  letter-spacing: .12em;
   text-transform: uppercase;
-  margin-bottom: 6px;
+  margin-bottom: 14px;
 }
 
 #setup p {
@@ -62,34 +79,77 @@ body {
   line-height: 1.6;
 }
 
-.row { margin-bottom: 14px; }
+#setup .row {
+  margin-bottom: 12px;
+  padding: 12px;
+  background: rgba(53, 50, 48, 0.38);
+  border: 1px solid rgba(90, 85, 74, 0.8);
+  border-radius: 10px;
+}
 
-.row label {
+#setup .row label {
   display: block;
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
   color: var(--txt3);
-  letter-spacing: .1em;
+  letter-spacing: .08em;
   text-transform: uppercase;
-  margin-bottom: 5px;
+  margin-bottom: 7px;
 }
 
-.row input[type=text],
-.row input[type=password],
-.row select {
+#setup .row input[type=text],
+#setup .row input[type=password],
+#setup .row select {
   width: 100%;
-  background: var(--bg3);
-  border: 1px solid var(--brd);
-  border-radius: 3px;
-  padding: 8px 11px;
+  background: #23201d;
+  border: 1px solid #5a554a;
+  border-radius: 8px;
+  padding: 10px 12px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 12px;
   color: var(--txt);
   outline: none;
-  transition: border-color .2s;
+  transition: border-color .2s, box-shadow .2s, transform .1s;
 }
-.row input:focus, .row select:focus { border-color: var(--acc); }
-.row input::placeholder { color: var(--txt3); }
+#setup .row input:focus, #setup .row select:focus {
+  border-color: var(--acc);
+  box-shadow: 0 0 0 3px rgba(212, 168, 72, 0.18);
+}
+#setup .row input::placeholder { color: var(--txt3); }
+
+.setup-compact {
+  margin-bottom: 12px;
+  padding: 12px 14px;
+  background: rgba(28, 25, 23, 0.85);
+  border: 1px solid rgba(212, 168, 72, 0.3);
+  border-radius: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--acc3);
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.45;
+}
+
+.setup-advanced details {
+  margin-bottom: 12px;
+  background: rgba(37, 34, 32, 0.9);
+  border: 1px solid rgba(90, 85, 74, 0.9);
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.setup-advanced summary {
+  cursor: pointer;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--acc3);
+  font-weight: 600;
+}
+
+.setup-advanced details[open] summary {
+  margin-bottom: 10px;
+}
 
 .file-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .file-row > * { flex-shrink: 0; }
@@ -97,16 +157,16 @@ body {
 .file-btn {
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
-  padding: 7px 14px;
-  background: var(--bg3);
-  border: 1px solid var(--brd);
-  border-radius: 3px;
+  padding: 8px 14px;
+  background: #2f2a26;
+  border: 1px solid #5a554a;
+  border-radius: 8px;
   color: var(--txt2);
   cursor: pointer;
   white-space: nowrap;
   transition: all .2s;
 }
-.file-btn:hover { border-color: var(--acc); color: var(--acc); }
+.file-btn:hover { border-color: var(--acc); color: var(--acc); transform: translateY(-1px); }
 .file-status { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--txt3); }
 .file-status.ok { color: var(--grn); }
 
@@ -126,19 +186,19 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
 
 .start-btn {
   width: 100%;
-  padding: 11px;
-  background: var(--acc2);
+  padding: 12px;
+  background: linear-gradient(180deg, #b68b36 0%, #8a7030 100%);
   border: 1px solid var(--acc);
-  border-radius: 3px;
+  border-radius: 8px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 13px;
   font-weight: 700;
-  color: var(--acc3);
+  color: #1d1712;
   cursor: pointer;
   letter-spacing: .06em;
   transition: all .2s;
 }
-.start-btn:hover { background: var(--acc); color: var(--bg); }
+.start-btn:hover { filter: brightness(1.06); transform: translateY(-1px); }
 .start-btn:disabled { opacity: .4; cursor: default; }
 
 /* ══ APP ══════════════════════════════════════════════════════ */
@@ -1125,6 +1185,12 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
 
   <div id="resumeBox" class="resume-box"></div>
 
+  <div id="setupCompactSummary" class="setup-compact" title="Souhrn aktuálního nastavení">—</div>
+
+  <div class="setup-advanced">
+    <details id="setupAdvancedDetails">
+      <summary>Pokročilé nastavení</summary>
+
   <div class="row" id="legacyProviderRow" style="display:none">
     <label for="provider">Provider</label>
     <select id="provider" onchange="onProviderChange()" aria-label="Výběr AI providera">
@@ -1196,6 +1262,9 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       <option value="20" selected>20 s (Gemini free)</option>
       <option value="30">30 s (při chybách)</option>
     </select>
+  </div>
+
+    </details>
   </div>
 
   <hr class="div">
@@ -1880,1054 +1949,10 @@ const {
   const UI_LANGS = new Set(['cs', 'en']);
   const INLINE_UI_MESSAGES = {
     cs: {
-      'setup.title': '⟁ Strong GR → CZ — Překladač slovníku',
-      'setup.start': 'Zahájit překlad →',
-      'setup.help': '❓ Nápověda',
-      'setup.limits': '📊 Limity',
-      'setup.file.none': '— nevybráno',
-      'setup.batchSize': 'Velikost dávky (hesel na jedno volání)',
-      'setup.interval': 'Interval mezi dávkami (vteřiny) — ochrana rate limitu',
-      'setup.interval.option.5': '5 s (Groq fast)',
-      'setup.interval.option.10': '10 s (bezpečné)',
-      'setup.interval.option.20': '20 s (Gemini free)',
-      'setup.interval.option.30': '30 s (při chybách)',
-      'pipeline.group': 'AI pipeline (hlavní + sekundární)',
-      'pipeline.main': 'Hlavní (Groq)',
-      'pipeline.secondaryGemini': 'Sekundární (Gemini)',
-      'pipeline.secondaryOpenrouter': 'Sekundární (OpenRouter)',
-      'pipeline.enableFixes': 'zapnout opravy',
-      'setup.batchSize.aria': 'Počet hesel na jednu dávku',
-      'setup.file.input.aria': 'Výběr TXT souboru se Strong slovníkem',
-      'setup.provider.aria': 'Výběr AI providera',
-      'setup.apiKey.input.aria': 'API klíč providera',
-      'setup.apiKey.profile.aria': 'Výběr uloženého API klíče',
-      'setup.model.aria': 'Výběr AI modelu',
-      'pipeline.mainGroq.aria': 'Hlavní model Groq',
-      'pipeline.secondaryGemini.aria': 'Sekundární model Gemini',
-      'pipeline.secondaryOpenrouter.aria': 'Sekundární model OpenRouter',
-      'pipeline.enableGemini.aria': 'Zapnout sekundární Gemini',
-      'pipeline.enableOpenrouter.aria': 'Zapnout sekundární OpenRouter',
-      'auto.enableGroq.aria': 'Zapnout Groq v AUTO',
-      'auto.enableGemini.aria': 'Zapnout Gemini v AUTO',
-      'auto.enableOpenrouter.aria': 'Zapnout OpenRouter v AUTO',
-      'log.scroll.aria': 'Log překladů',
-      'setup.file': 'txt soubor',
-      'setup.chooseFile': '📂 Vybrat',
-      'setup.loadAuto': '📄 Automaticky',
-      'lang.modal.title': '🌐 Nastavení jazyků',
-      'lang.modal.ui': 'Jazyk rozhraní',
-      'lang.modal.target': 'Překlad do',
-      'lang.modal.source': 'Zdrojový jazyk',
-      'lang.option.cs': 'Čeština',
-      'lang.option.en': 'English',
-      'lang.option.bg': 'Bulharština',
-      'lang.option.ch': 'Čínština',
-      'lang.option.sp': 'Španělština',
-      'lang.option.sk': 'Slovenčina',
-      'lang.option.pl': 'Polski',
-      'lang.option.gr': 'Řečtina',
-      'lang.option.he': 'Hebrejština',
-      'lang.source.gr': 'Řečtina (Strong G)',
-      'lang.source.he': 'Hebrejština (Strong H)',
-      'lang.source.both': 'Řečtina i Hebrejština (oba)',
-      'lang.modal.close': '✕ Zavřít',
-      'lang.modal.save': '✓ Uložit',
-      'prompt.status.title': 'Klikni pro přepnutí Systémový/Vlastní',
-      'prompt.auto.title': 'Automaticky aplikovat systémový prompt',
-      'file.active.title': 'Aktivní soubor (vlastní slot průběhu)',
-      'list.entry.checkbox': 'Vybrat heslo {key}',
-      'confirm.clearProgress': 'Smazat veškerý uložený průběh překladu a log?\n\n(Do 10 minut půjde obnovit přes „↺ Obnovit".)',
-      'prompt.apiKeyName': 'Název pro tento API klíč:',
-      'prompt.range.from': 'Od G čísla:',
-      'prompt.range.to': 'Do G čísla:',
-      'lang.btn.title': 'Nastavit jazyky UI a promptu',
-      'lang.btn.label': '🌐 Jazyky (UI: {ui} | AI: {ai})',
-      'entries.count': '{count} hesel',
-      'stats.done': 'Přeloženo:',
-      'stats.remain': 'Zbývá:',
-      'stats.total': 'Celkem:',
-      'stats.tokenLimit': '🛑 Stop tokeny',
-      'stats.tokenLimit.placeholder': '0 = vypnuto',
-      'stats.tokenLimit.title': 'Po dosažení této hodnoty se AUTO zastaví. 0 = bez limitu.',
-      'stats.tokens': '📊 Celkem: {input} in / {output} out = {total}{suffix}',
-      'hdr.import': '⬆ Import TXT/JSON',
-      'hdr.import.aria': 'Importovat TXT nebo JSON soubor s překlady',
-      'hdr.auto': '▶ AUTO',
-      'hdr.auto.aria': 'Spustit automatický překlad',
-      'hdr.list': '≡ Seznam',
-      'hdr.list.title': 'Skrýt/ukázat seznam',
-      'hdr.list.aria': 'Skrýt/ukázat seznam',
-      'hdr.batch': '⚡ Dávka',
-      'hdr.batch.aria': 'Přeložit další dávku',
-      'hdr.testModels': '🧪 Test modelů',
-      'hdr.testModels.title': 'Nastavit a spustit test modelů (nejdřív modal, pak ▶ Test provideru)',
-      'hdr.testModels.aria': 'Test modelů — otevře nastavení',
-      'hdr.exportRange': '⬇ Rozsah',
-      'hdr.exportRange.title': 'Export vybraného rozsahu G čísel',
-      'hdr.exportRange.aria': 'Exportovat rozsah G čísel',
-      'hdr.failed': '⚠ Neus.',
-      'hdr.failed.title': 'Zobrazit neúspěšné překlady',
-      'hdr.failed.aria': 'Zobrazit neúspěšné překlady',
-      'hdr.aiSettings': '⚙ Nastavení AI',
-      'hdr.aiSettings.title': 'Nastavení AI (provider, model, dávka)',
-      'hdr.aiSettings.aria': 'Nastavení AI',
-      'hdr.mobileActions.aria': 'Zobrazit akce',
-      'hdr.reset.title': 'Smazat veškerý uložený průběh',
-      'hdr.reset.aria': 'Smazat veškerý uložený průběh',
-      'hdr.restoreBackup': '↺ Záloha',
-      'hdr.restoreBackup.title': 'Obnovit ze zálohy',
-      'hdr.restoreBackup.aria': 'Obnovit ze zálohy',
-      'auto.info.prefix': 'AUTO: dávka',
-      'auto.info.settings': 'nastavení',
-      'auto.info.seconds': 's',
-      'auto.info.interval': 'interval',
-      'auto.log.waiting': 'Čeká na start...',
-      'auto.stop': '■ Stop',
-      'auto.stop.aria': 'Zastavit automatický překlad',
-      'prompt.library.title': '📚 Knihovna promptů',
-      'prompt.library.preview.empty': 'Vyberte prompt z knihovny pro náhled...',
-      'prompt.library.editor.placeholder': 'Uprav prompt...',
-      'prompt.library.system.title': 'Nastavit systémový prompt dle aktuálního režimu',
-      'prompt.library.load.title': 'Načíst prompty ze souboru TXT',
-      'prompt.library.export.title': 'Stáhnout prompty do TXT',
-      'prompt.library.load': '⬆ Načíst',
-      'prompt.library.close': '✕ Zavřít',
-      'prompt.library.saveApply': '✓ Uložit a použít',
-      'modelTest.title': '🧪 Výstup testu modelů',
-      'modelTest.providerLabel': 'Provider testu',
-      'modelTest.model.groq': 'Model (Groq)',
-      'modelTest.model.gemini': 'Model (Gemini)',
-      'modelTest.model.openrouter': 'Model (OpenRouter)',
-      'modelTest.modeLabel': 'Režim testu',
-      'modelTest.mode.smoke': 'Smoke test (slovo 2x)',
-      'modelTest.mode.translate1': 'Překlad 1 hesla',
-      'modelTest.mode.translate3': 'Překlad 3 hesel',
-      'modelTest.mode.autoLive': 'Auto test',
-      'modelTest.promptsLabel': 'Prompty',
-      'modelTest.comparePrompts': 'Automaticky porovnat 2 prompty (A/B)',
-      'modelTest.promptB': 'Prompt B (porovnání)',
-      'modelTest.enablePrompt': 'Testovat prompt (když je vypnuto, jede běžný test modelu)',
-      'modelTest.customPromptLabel': 'Vlastní prompt pro test',
-      'modelTest.customPromptPlaceholder': 'Sem vlož vlastní prompt pro test modelů. Pokud necháš prázdné, použije se hlavní strong_prompt.',
-      'modelTest.duration': 'Délka auto testu (min)',
-      'modelTest.appendResult': 'Připojit výsledek do stejného reportu',
-      'modelTest.table.providerModel': 'Provider/Model',
-      'modelTest.table.success': 'Úspěšnost',
-      'modelTest.table.okFail': 'OK/NEÚSP',
-      'modelTest.table.entries': 'Hesel',
-      'modelTest.table.avgAi': 'Prům. doba AI',
-      'modelTest.table.calls': 'Volání',
-      'modelTest.table.actions': 'Akce',
-      'modelTest.clearOutput': '✕ Vymazat výstup',
-      'modelTest.outputPlaceholder': 'Nastav režim, providera a modely, pak spusť ▶ Test provideru. Odpočet ukáže čekání do dalšího volání API.',
-      'modelTest.runProvider': '▶ Test provideru',
-      'modelTest.library': '📚 Knihovna',
-      'modelTest.saveRaw': '🧾 Uložit raw odpovědi',
-      'modelTest.loadTxt': '📂 Načíst test.txt',
-      'modelTest.saveTxt': '💾 Uložit test.txt',
-      'modelTest.reset': '↺ Reset',
-      'modelTest.cancel': '■ Zrušit test',
-      'modelTest.close': '✕ Zavřít',
-      'promptAi.title': '🤖 AI nastavení',
-      'promptAi.groq.temp': 'Groq (hlavní) · Temperature',
-      'promptAi.groq.max': 'Groq (hlavní) · Max tokenů',
-      'promptAi.gemini.temp': 'Gemini (sekundární) · Temperature',
-      'promptAi.gemini.max': 'Gemini (sekundární) · Max tokenů',
-      'promptAi.openrouter.temp': 'OpenRouter (sekundární) · Temperature',
-      'promptAi.openrouter.max': 'OpenRouter (sekundární) · Max tokenů',
-      'promptAi.temp.0.1': '0.1 – velmi přesný',
-      'promptAi.temp.0.3': '0.3 – balanc',
-      'promptAi.temp.0.5': '0.5 – střední',
-      'promptAi.temp.0.7': '0.7 – kreativní',
-      'promptAi.temp.1.0': '1.0 – velmi kreativní',
-      'promptAi.close': '✕ Zavřít',
-      'promptAi.save': '✓ Uložit',
-      'prompt.preview.title': '👁 Náhled test promptu',
-      'prompt.preview.copy': '📋 Kopírovat',
-      'prompt.preview.close': '✕ Zavřít',
-      'list.search.placeholder': 'Hledat...',
-      'list.search.aria': 'Hledat heslo',
-      'list.selectRange': '☑ Výběr',
-      'list.selectRange.title': 'Označit rozsah hesel k překladu',
-      'list.selectRange.aria': 'Označit rozsah hesel',
-      'list.filterStatus.aria': 'Co zobrazit',
-      'list.filterStatus.all': 'Vše',
-      'list.filterStatus.pending': 'K překladu',
-      'list.filterStatus.missing_topic': 'Chybí téma',
-      'list.filterStatus.failed': 'Neúspěšné',
-      'list.filterStatus.done': 'Hotovo',
-      'list.filterStatus.g_all': 'Jen řecké (G)',
-      'list.filterStatus.h_all': 'Jen hebrejské (H)',
-      'list.filterStatus.g_pending': 'G: k překladu',
-      'list.filterStatus.h_pending': 'H: k překladu',
-      'list.filterStatus.g_done': 'G: hotovo',
-      'list.filterStatus.h_done': 'H: hotovo',
-      'list.filterSort.aria': 'Řazení',
-      'list.filterSort.original': 'Řazení: původní',
-      'list.filterSort.num': 'Řazení: podle čísla',
-      'list.filterSort.greek': 'Řazení: A-Z',
-      'list.topicFilter': '⚠ Téma',
-      'list.topicFilter.title': 'Zobrazit hesla, kde chybí některé téma',
-      'list.topicFilter.aria': 'Filtrovat hesla s chybějícími tématy',
-      'list.selectAll.title': 'Vybrat vše',
-      'list.selectAll.aria': 'Vybrat všechna hesla',
-      'list.selectNone.title': 'Zrušit výběr',
-      'list.selectNone.aria': 'Zrušit výběr všech hesel',
-      'list.selectAllVisible': '☑ Označit vše zobrazené',
-      'list.selectAllVisible.aria': 'Označit všechna zobrazená hesla',
-      'list.translateSelected': '⚡ Přeložit vybrané',
-      'list.translateSelected.aria': 'Přeložit vybraná hesla',
-      'log.back': '← Nastavení',
-      'log.back.aria': 'Zpět do nastavení',
-      'log.clear': '✕ Vymazat',
-      'log.clear.aria': 'Vymazat log',
-      'log.placeholder': 'Překlady se budou zobrazovat zde automaticky...',
-      'detail.empty': '← Klikni na heslo v seznamu pro detail',
-      'detail.label.studyLinks': 'Studijní odkazy',
-      'detail.label.transliteration': 'Transliterace',
-      'detail.label.grammar': 'Gramatika',
-      'detail.label.definitionEn': 'Definice (EN)',
-      'detail.label.englishSource': 'English (zdroj)',
-      'detail.label.kjv': 'KJV překlady',
-      'detail.label.usageKjv': 'biblické užití (KJV)',
-      'detail.label.vocalization': 'Vokalizace',
-      'detail.label.pronunciation': 'Výslovnost',
-      'detail.label.etymology': 'Etymologie',
-      'detail.label.occurrence': 'Výskyt',
-      'detail.label.twot': 'TWOT',
-      'detail.label.notes': 'Poznámky',
-      'detail.label.greekRefs': 'Řecké reference',
-      'detail.label.category': 'Kategorie',
-      'detail.label.meaningCz': 'Význam (CZ)',
-      'detail.systemPrompt.title': 'Otevřít systémový prompt pro překlad tohoto hesla',
-      'detail.systemPrompt.button': 'System prompt',
-      'detail.translateThis': '⚡ Přeložit toto heslo',
-      'detail.promptButton': '🤖 Prompt',
-      'detail.promptButton.aria': 'AI prompt pro {label}',
-      'detail.editButton': '✎ Upravit',
-      'detail.editButton.aria': 'Upravit {label}',
-      'topicPrompt.title': '🤖 Prompt pro téma: {topic} ({key})',
-      'topicPrompt.editBeforeSend': 'Prompt můžeš upravit před odesláním.',
-      'topicPrompt.send': '▶ Odeslat AI',
-      'topicPrompt.close': '✕ Zavřít',
-      'topicPrompt.currentFilled': 'Aktuálně vyplněno v poli (kontrola před přijetím):',
-      'topicPrompt.resultEditable': 'Výsledek od AI (lze upravit před vložením):',
-      'topicPrompt.resultPlaceholder': 'Po odeslání se sem vloží odpověď...',
-      'topicPrompt.applyToField': '✓ Vložit do pole',
-      'systemPrompt.title': 'System prompt: {key}',
-      'systemPrompt.editBeforeSend': 'Před odesláním můžeš upravit prompt.',
-      'systemPrompt.send': '▶ Odeslat AI',
-      'systemPrompt.sending': '⏳ Odesílám...',
-      'systemPrompt.close': '✕ Zavřít',
-      'systemPrompt.result': 'Výsledek AI:',
-      'systemPrompt.resultPlaceholder': 'Po odeslání se sem vloží odpověď...',
-      'customModal.title': 'Rozsah hesel',
-      'customModal.from': 'Od G1',
-      'customModal.to': 'Do G100',
-      'customModal.cancel': 'Zrušit',
-      'customModal.ok': 'OK',
-      'mobile.actions.title': 'Akce',
-      'mobile.import': '⬆ Import TXT',
-      'mobile.import.aria': 'Importovat TXT soubor',
-      'mobile.batch': '⚡ Dávka k překladu',
-      'mobile.batch.aria': 'Přeložit další dávku',
-      'mobile.selectRange': '☑ Výběr do překladače',
-      'mobile.selectRange.aria': 'Označit rozsah',
-      'mobile.missingTopic': '⚠ Chybí téma',
-      'mobile.missingTopic.aria': 'Filtrovat hesla s chybějícími tématy',
-      'mobile.exportTxt': '⬇ Export TXT',
-      'mobile.exportTxt.aria': 'Exportovat do TXT',
-      'mobile.exportJson': '⬇ Export JSON',
-      'mobile.exportJson.aria': 'Exportovat do JSON',
-      'mobile.exportRange': '⬇ Výběr k exportu',
-      'mobile.exportRange.aria': 'Exportovat rozsah',
-      'mobile.aiSettings': '⚙ Nastavení AI',
-      'mobile.aiSettings.aria': 'Nastavení AI',
-      'mobile.close': '✕ Zavřít',
-      'mobile.close.aria': 'Zavřít',
-      'settings.title': '⚙ Nastavení AI',
-      'settings.mainModel': 'Hlavní model (Groq)',
-      'settings.secondaryGemini': 'Sekundární model (Gemini)',
-      'settings.secondaryOpenrouter': 'Sekundární model (OpenRouter)',
-      'settings.enableFixes': 'zapnout opravy',
-      'settings.batch': 'Dávka',
-      'settings.speed': 'Rychlost',
-      'settings.save': '✓ Uložit',
-      'settings.save.aria': 'Uložit',
-      'settings.close': '✕ Zavřít',
-      'settings.close.aria': 'Zavřít',
-      'limits.title': '📊 Limity providera',
-      'limits.loading': 'Načítám...',
-      'limits.close': '✕ Zavřít',
-      'help.title': '❓ Nápověda Strong GR → CZ',
-      'help.about': 'O čem aplikace je',
-      'help.keys': 'Jak získat API klíče',
-      'help.library': 'Knihovna API klíčů',
-      'help.limits': 'Limity a kvóty',
-      'help.close': '✕ Zavřít',
-      'openrouter.loading': 'Načítám free modely…',
-      'openrouter.none': 'Žádné free modely nenalezeny',
-      'openrouter.error': 'Chyba načítání — zkontroluj připojení',
-      'toast.ai.settings.saved': '✓ AI nastavení (hlavní + sekundární) uložena',
-      'toast.lang.settings.saved': '✓ Jazyková nastavení uložena + aktivován systémový prompt',
-      'toast.loaded.github': '✓ Načteno z GitHubu',
-      'toast.loaded.fallback': '⚠ Načten fallback soubor',
-      'toast.openrouter.cache': '⚠ OpenRouter API nedostupné, používám uložený seznam modelů'
-      ,'toast.prompt.preview.empty': '⚠ Náhled promptu je prázdný'
-      ,'toast.prompt.copied': '✓ Prompt zkopírován'
-      ,'toast.copy.failed': '✗ Kopírování selhalo'
-      ,'toast.provider.enableOne': '⚠ Zapni alespoň jednoho AI providera pro hromadný překlad.'
-      ,'toast.translation.none': '⚠ Žádné překlady se nepodařilo získat'
-      ,'toast.filter.missingTopic': '✓ Filtr: chybí některé téma'
-      ,'toast.apiKey.enter': '✗ Zadej API klíč!'
-      ,'toast.prompt.empty': '✗ Prompt je prázdný'
-      ,'toast.entry.notFound': '✗ Heslo nenalezeno'
-      ,'toast.retry.done': '✓ Retry dokončeno!'
-      ,'toast.allTranslated': '✓ Vše přeloženo!'
-      ,'toast.auto.notStartedTokenLimit': '⚠ AUTO nestartoval: dosažen limit tokenů'
-      ,'toast.auto.enableGroq': '⚠ Zapni Groq checkbox pro AUTO překlad'
-      ,'toast.auto.stoppedTokenLimit': '🛑 AUTO zastaven: dosažen limit tokenů'
-      ,'toast.translation.done': '✓ Překlad dokončen!'
-      ,'toast.storage.full': '⚠ localStorage plný — exportuj zálohu!'
-      ,'toast.backup.none': '✗ Žádná záloha není k dispozici'
-      ,'toast.noTranslatedEntry': 'Žádné přeložené heslo'
-      ,'toast.apiKey.insertFirst': '✗ Nejdřív vlož API klíč'
-      ,'toast.apiKey.selectToDelete': '⚠ Vyber uložený klíč k odstranění'
-      ,'toast.apiKey.deleted': '✓ API klíč odstraněn z knihovny'
-      ,'toast.test.cancelFirst': '⚠ Nejdřív zruš probíhající test'
-      ,'toast.test.canceling': '⏹ Ruším test modelů...'
-      ,'toast.test.nothingToSave': '⚠ Není co uložit do test.txt'
-      ,'toast.save.canceled': 'Uložení zrušeno'
-      ,'toast.test.noRawYet': '⚠ Zatím není žádná raw odpověď k uložení'
-      ,'toast.test.rawDownloaded': '✓ Raw odpovědi staženy'
-      ,'toast.file.loadFailed': '✗ Soubor se nepodařilo načíst'
-      ,'toast.auto.stopFirst': '⚠ Nejdřív zastav AUTO'
-      ,'toast.export.nothing': '⚠ Není co exportovat'
-      ,'toast.export.txtDownloaded': '✓ Stažení TXT'
-      ,'toast.copy.nothing': '⚠ Není co kopírovat'
-      ,'toast.output.copied': '✓ Výstup zkopírován'
-      ,'toast.output.cleared': '✓ Výstup testu vymazán'
-      ,'toast.test.outputMissing': '✗ Chybí výstupní okno testu modelů'
-      ,'toast.test.rateLimitAbort': '⚠ Test předčasně ukončen kvůli rate limitu'
-      ,'toast.prompt.switchedSystem': '✓ Přepnuto na systémový prompt'
-      ,'toast.prompt.switchedCustom': '✓ Přepnuto na vlastní prompt'
-      ,'toast.prompt.customNotSaved': '⚠ Vlastní prompt není uložen'
-      ,'toast.prompt.savedApplied': '✓ Prompt uložen a použit'
-      ,'toast.prompt.exported': '✓ Prompty exportovány do TXT'
-      ,'toast.prompt.importFailed': '✗ Nepodařilo se načíst soubor promptů'
-      ,'toast.translation.canceled': '✕ Překlad zrušen'
-      ,'toast.import.noEntries': '✗ Žádná hesla nenalezena v souboru'
-      ,'toast.failed.none': '✓ Žádné neúspěšné překlady'
-      ,'toast.progress.saved': '✓ Progress uložen'
-      ,'toast.topicRepair.noEligible': '⚠ Ve výběru nejsou hesla s max. 2 chybějícími tématy.'
-      ,'toast.topicRepair.modeLocked': '⚠ Nelze měnit režim během běžícího překladu.'
-      ,'toast.topicRepair.queueEmpty': '⚠ Ve zvoleném tématu není nic ve frontě (čekající) — změň výběr nebo dokonči viditelné řádky.'
-      ,'toast.topicRepair.enableProvider': '⚠ Zapni alespoň jednoho providera pro opravu témat.'
-      ,'toast.topicRepair.visibleDone': '✓ Oprava viditelné fronty doběhla, zkontroluj a potvrď přepsání.'
-      ,'toast.topicRepair.checkValidRows': '⚠ Zaškrtni řádky s platným návrhem (po „horší“ analýze zůstávají odškrtnuté).'
-      ,'toast.topicRepair.noValidProposal': '⚠ Žádný platný návrh k přepsání.'
-      ,'toast.topicRepair.nothingMarked': '⚠ Nic nebylo označeno k přepsání'
-      ,'toast.prompt.pickSpecificTopicSave': '⚠ Pro uložení promptu vyber konkrétní téma (ne „Vše“).'
-      ,'toast.prompt.pickSpecificTopicReset': '⚠ Pro obnovu výchozího promptu vyber konkrétní téma (ne „Vše“).'
-      ,'toast.topicRepair.sequentialRunning': '⚠ Sekvenční oprava stále běží — nejdřív dej Pauza a počkej na dokončení aktuálního pokusu.'
-      ,'toast.topicRepair.pickTopicInAllMode': '⚠ V režimu „Vše“ zaškrtni aspoň jedno téma v „Zobrazit v seznamu“.'
-      ,'toast.batchPrompt.empty': '✗ Batch prompt je prázdný'
-      ,'toast.batchRun.nothingSelected': '⚠ Nic není vybrané pro hromadný běh (zkontroluj checkboxy / filtr chyb).'
-      ,'toast.aiResponse.unmatched': '⚠ AI odpověď nešla spárovat na toto heslo'
-      ,'toast.jump.enterGNumber': 'Zadej číslo G hesla'
-      ,'toast.test.cancelFirstAlt': '⚠ Nejprve zruš probíhající test'
-      ,'toast.test.pausing': '⏸ Test se zastaví. Další kliknutí na ▶ spustí nový běh.'
-      ,'toast.test.libraryAfterStop': '⚠ Knihovna je dostupná po zastavení testu, aby se nepřepsal živý report.'
-      ,'toast.error.withMessage': '✗ Chyba: {message}'
-      ,'toast.translated.count': '✓ Přeloženo {count} hesel'
-      ,'toast.specialista.approved': '✓ SPECIALISTA potvrzen: {key}'
-      ,'toast.specialista.rejected': '✕ SPECIALISTA zamítnut: {key}'
-      ,'toast.topic.approved': '✓ Potvrzeno {topic}: {key}'
-      ,'toast.topic.rejected': '✕ Zamítnuto {topic}: {key}'
-      ,'toast.topic.overwritten.count': '✓ Přepsáno {count} témat'
-      ,'toast.topic.overwrittenAndClosing': '✓ Přepsáno {count} témat — u těchto hesel je vše v pořádku, zavírám okno opravy.'
-      ,'toast.field.filled': '✓ Doplněno pole {topic}'
-      ,'toast.batchPrompt.saved': '✓ Uložen batch prompt pro {topic}'
-      ,'toast.batchPrompt.reset': '↺ Obnoven výchozí batch prompt pro {topic}'
-      ,'toast.apiKey.enterForProvider': '✗ Zadej API klíč pro {provider}.'
-      ,'toast.topic.bulkDone': '✓ Hromadná oprava tématu dokončena: {topic} ({count})'
-      ,'toast.topic.savedToField': '✓ Uloženo do pole {topic}'
-      ,'toast.translatedSystem.key': '✓ Přeloženo přes System prompt: {key}'
-      ,'toast.entry.notFoundInFile': '{key} nenalezeno v souboru'
-      ,'toast.translation.resumeFrom': '✓ Překlad bude pokračovat od {key}'
-      ,'toast.translated.partial': '⚠ Přeloženo {translated}/{total} hesel'
-      ,'toast.rateLimit.retryIn': '⏳ Rate limit — další pokus za {seconds}s'
-      ,'toast.rateLimit.waiting': '⏳ Rate limit — čekám {seconds}s{suffix}'
-      ,'toast.timeout.retryIn': '⏳ Timeout API — opakuji pokus za {seconds}s'
-      ,'toast.serviceUnavailable.retryIn': '⏳ 503 Service Unavailable — opakuji pokus za {seconds}s'
-      ,'toast.restored.count': '✓ Obnoveno {count} hesel'
-      ,'toast.exported.count': '✓ Exportováno {count} hesel'
-      ,'toast.apiKey.activeProfile': '✓ Aktivní API klíč: {name}'
-      ,'toast.saved.filename': '✓ Uloženo: {name}'
-      ,'toast.saveDialogFailedFallback': '⚠ Uložení přes dialog selhalo, použiji stažení: {message}'
-      ,'toast.downloaded.filename': '✓ Staženo: {name}'
-      ,'toast.loaded.filename': '✓ Načteno: {name}'
-      ,'toast.apiKey.missingForProviderLabel': '✗ Chybí API klíč pro {provider}'
-      ,'toast.model.notSelectedForProviderLabel': '⚠ Není vybraný model pro {provider}'
-      ,'toast.modelTest.doneWithCount': '✓ Test modelů dokončen ({count})'
-      ,'toast.parseError': '✗ Chyba parsování: {message}'
-      ,'topicRepair.hint.bulkMode': 'V režimu hromadně použij sekci dávky níže.'
-      ,'topicRepair.hint.startSequential': 'Nejdřív klikni na „Spustit sekvenční opravu“.'
-      ,'topicRepair.bulk.running': '⏳ Hromadně...'
-      ,'topicRepair.bulk.button': '⚡ Hromadný překlad (vybrané)'
-      ,'topicRepair.bulkAllDone': '✓ Hromadná oprava „Vše“ doběhla ({count} typů témat v pořadí).'
-      ,'topicRepair.bulkAllNone': '⚠ Pro „Vše“ nebyly žádné úlohy k běhu nebo chybí uložené batch prompty (💾 u každého tématu).'
-      ,'topicPrompt.sending': '⏳ Odesílám...'
-      ,'translate.single.translating': '⏳ Překládám...'
-      ,'translate.single.button': '⚡ Přeložit toto heslo'
-      ,'confirm.retranslate': 'Přeložit znovu heslo {key}? Stávající překlad bude nahrazen.'
-      ,'btn.step.loading': '⏳ ...'
-      ,'btn.step.default': '⚡ Dávka'
-      ,'confirm.restoreBackup': 'Obnovit {count} hesel ze zálohy ({ts})? Současný stav bude přepsán.'
-      ,'confirm.apiKey.delete': 'Smazat API klíč "{name}"?'
-      ,'toast.output.copiedShort': '✓ Zkopírováno'
-      ,'toast.modelTest.abCanceled': '⏹ A/B test promptů zrušen'
-      ,'toast.modelTest.abDone': '✓ A/B test promptů dokončen'
-      ,'toast.modelTest.canceled': '⏹ Test modelů zrušen'
-      ,'toast.modelTest.autoDone': '✓ Auto test dokončen'
-      ,'toast.selected.range': '✓ Označeno {count} hesel, zobrazen rozsah {from}–{to}'
-      ,'toast.systemPrompt.set': '✓ Nastaven systémový prompt ({mode})'
-      ,'toast.autoPrompt.toggled': '✓ Auto prompt {state}'
-      ,'toast.prompts.loaded.count': '✓ Načteno promptů: {count}'
-      ,'toast.noTranslatedInRange': 'Žádná přeložená hesla v rozsahu {from}–{to}'
-      ,'toast.exported.range': '✓ Exportováno {count} hesel ({from}–{to})'
-      ,'toast.saved.entriesWithExtra': '✓ Uloženo {count} hesel{extra}'
-      ,'toast.import.found': '📥 Nalezeno {count} hesel k importu ({format})'
-      ,'toast.failed.found': '⚠ Nalezeno {count} neúspěšných překladů (viz console)'
-      ,'toast.selectedForBatch': '✓ Označeno {count} hesel — klikni na "⚡ Dávka" nebo "▶ AUTO"'
-      ,'resume.found': '⚑ Nalezen uložený průběh ({source}): <b>{count}</b> přeložených hesel (uloženo {ts}). Po spuštění bude automaticky obnoven.'
-      ,'limits.error': 'Chyba: {message}'
-      ,'modal.selectRange.title': 'Označit rozsah hesel'
-      ,'failed.modal.title': '⚠ Neúspěšné překlady — {count} hesel'
-      ,'failed.modal.retry': '↻ Přeložit znovu'
-      ,'failed.modal.close': '✕ Zavřít'
-      ,'failed.modal.note': 'AI nevrátila správný formát (nebo prázdný překlad). Detaily v console (F12).'
-      ,'log.meaning': 'Význam:'
-      ,'log.usage': 'Použití:'
-      ,'log.unparsed': '⚠ Neparsováno'
-      ,'log.records': '{count} záznamů'
-      ,'import.preview.title': 'Náhled překladu ({count} hesel)'
-      ,'import.preview.summary': '<b style="color:var(--acc3)">{newOnes}</b> nových · <b style="color:var(--acc2)">{conflicts}</b> už přeloženo v aktuálním slotu'
-      ,'import.mode.title': 'Režim importu:'
-      ,'import.mode.missing': 'Jen chybějící — přidat pouze hesla, která zatím nejsou přeložena (<b>{count}</b>)'
-      ,'import.mode.all': 'Přepsat vše — nahradit stávající překlady (<b>{count}</b>)'
-      ,'import.mode.fillgaps': 'Doplnit prázdná pole — zachovat existující, přepsat jen „—" a prázdné hodnoty'
-      ,'import.selectAll': 'Označit vše'
-      ,'import.saveSelected': '✓ Uložit označené'
-      ,'import.cancel': '✕ Zrušit'
-      ,'import.badge.conflict': 'kolize'
-      ,'import.badge.new': 'nové'
-      ,'import.czTranslationAi': '🔄 ČESKÝ PŘEKLAD (od AI)'
-      ,'import.fullTranslation': '📝 Celý překlad:'
-      ,'import.enOriginal': '📖 ANGLICKÝ ORIGINÁL'
-      ,'field.meaning': 'Význam:'
-      ,'field.definition': 'Definice:'
-      ,'field.usage': 'Použití:'
-      ,'field.origin': 'Původ:'
-      ,'field.specialist': 'Specialista:'
-      ,'topicRepair.batchLabel': 'dávka'
-      ,'topicRepair.originalTopic': 'Původní téma:'
-      ,'topicRepair.original': 'Originál:'
-      ,'topicRepair.newProposal': 'Nový návrh:'
-      ,'topicRepair.specialistInResponse': 'SPECIALISTA v odpovědi:'
-      ,'topicRepair.yes': 'ano'
-      ,'topicRepair.no': 'ne'
-      ,'topicRepair.status': 'stav:'
-      ,'topicRepair.unchanged': 'beze změny'
-      ,'topicRepair.specialistDetail': 'SPECIALISTA detail'
-      ,'topicRepair.originalSpecialist': 'Původní SPECIALISTA:'
-      ,'topicRepair.aiSpecialist': 'AI SPECIALISTA:'
-      ,'topicRepair.confirmSpecialist': '✓ Potvrdit SPECIALISTA'
-      ,'topicRepair.rejectSpecialist': '✕ Zamítnout SPECIALISTA'
-      ,'topicRepair.extraTopics': 'Další témata z AI odpovědi ({count})'
-      ,'topicRepair.originalShort': 'Původní:'
-      ,'topicRepair.aiShort': 'AI:'
-      ,'topicRepair.confirm': '✓ Potvrdit'
-      ,'topicRepair.reject': '✕ Zamítnout'
-      ,'topicRepair.none': 'Žádná témata k opravě.'
-      ,'list.selectAllVisibleWithCount': '☑ Označit vše zobrazené ({count})'
-      ,'list.translateSelectedCount': '⚡ Přeložit {count} vybraných'
-      ,'list.translateWaiting': '⏳ Čekám {seconds}s...'
-      ,'list.batchCount': '{count} hesel'
-      ,'provider.status.disabled': '{label}: vypnuto'
-      ,'provider.status.running': '{label}: běží'
-      ,'provider.status.ready': '{label}: připraven'
-      ,'provider.status.nextIn': '{label}: další dávka za {seconds}s'
-      ,'topicRepair.status.waitingToStart': '⏸ Čeká na spuštění · '
-      ,'topicRepair.status.summary': '✓ Hotovo {done} · ⏳ Běží {running} · 🕓 Čeká {waiting} · ✗ Chyba {failed}'
-      ,'topicRepair.applyOverwrite': '✓ Potvrdit přepsání ({count})'
-      ,'topicRepair.resume': '▶ Pokračovat'
-      ,'topicRepair.pause': '⏸ Pauza'
-      ,'apiKey.saveButton': '💾 Uložit klíč'
-      ,'apiKey.saveButton.title': 'Uložit aktuální API klíč do knihovny'
-      ,'apiKey.deleteButton': '🗑 Smazat'
-      ,'apiKey.deleteButton.title': 'Smazat vybraný API klíč'
-      ,'prompt.library.openButton': '📚 Knihovna'
-      ,'prompt.library.openButton.title': 'Otevřít knihovnu promptů'
-      ,'prompt.tab.default': 'Výchozí'
-      ,'prompt.tab.detailed': 'Detailní'
-      ,'prompt.tab.concise': 'Stručné'
-      ,'prompt.tab.literal': 'Doslovné'
-      ,'prompt.tab.test': 'Test'
-      ,'prompt.tab.custom': 'Vlastní'
-      ,'provider.top.autoRouter': '★ Auto Router (doporučeno)'
-      ,'resume.source.currentSlot': 'aktuální slot'
-      ,'resume.source.legacySlot': 'legacy slot (bude migrován)'
-      ,'provider.status.failed': '{label}: selhal'
-      ,'auto.groqEnableHint': '⚠ Zapni G (Groq) v AUTO panelu'
-      ,'topic.langTag': 'CZ'
-      ,'topic.label.definice': 'Definice'
-      ,'topic.label.vyznam': 'Český význam'
-      ,'topic.label.kjv': 'KJV překlady'
-      ,'topic.label.pouziti': 'Biblické užití'
-      ,'topic.label.puvod': 'Původ / Etymologie'
-      ,'topic.label.specialista': 'Biblický výklad (specialista)'
-      ,'model.groq.llama4scout': 'Llama 4 Scout (Vysoký limit TPM)'
-      ,'model.groq.llama33': 'Llama 3.3 70B (Nejvyšší kvalita)'
-      ,'model.groq.llama31': 'Llama 3.1 8B (Rychlý, pozor na limity)'
-      ,'model.gemini.flashLite31': 'Gemini 3.1 Flash-Lite (Systémový výchozí)'
-      ,'model.gemini.flashLite25': 'Gemini 2.5 Flash-Lite (Rychlý, levný)'
-      ,'model.gemini.flash25': 'Gemini 2.5 Flash (Stabilní)'
-      ,'prompt.topic.prefix': 'Téma:'
-      ,'prompt.topic.group.detail': 'Tematické prompty (dle detailu hesla)'
-      ,'prompt.topic.group.batch': 'Tematické prompty — dávka ({lang})'
-      ,'prompt.topic.group.en': 'Tematické prompty (EN -> {lang})'
-      ,'prompt.topic.batchSuffix': '— dávka'
-      ,'prompt.custom': 'Vlastní prompt'
-      ,'api.key.label': 'API Klíč — {provider}'
-      ,'log.entry.title': 'Klikni pro detail hesla'
-      ,'toast.progressClearedRestore.message': 'Průběh smazán. Obnovit?'
-      ,'toast.progressClearedRestore.action': 'Obnovit'
+      'toast.error.withMessage': '✗ Chyba: {message}'
     },
     en: {
-      'setup.title': '⟁ Strong GR → CZ — Dictionary Translator',
-      'setup.start': 'Start translation →',
-      'setup.help': '❓ Help',
-      'setup.limits': '📊 Limits',
-      'setup.file.none': '— none selected',
-      'setup.batchSize': 'Batch size (entries per request)',
-      'setup.interval': 'Interval between batches (seconds) — rate limit protection',
-      'setup.interval.option.5': '5 s (Groq fast)',
-      'setup.interval.option.10': '10 s (safe)',
-      'setup.interval.option.20': '20 s (Gemini free)',
-      'setup.interval.option.30': '30 s (on errors)',
-      'pipeline.group': 'AI pipeline (primary + secondary)',
-      'pipeline.main': 'Primary (Groq)',
-      'pipeline.secondaryGemini': 'Secondary (Gemini)',
-      'pipeline.secondaryOpenrouter': 'Secondary (OpenRouter)',
-      'pipeline.enableFixes': 'enable fixes',
-      'setup.batchSize.aria': 'Number of entries per batch',
-      'setup.file.input.aria': 'Select TXT file with Strong dictionary',
-      'setup.provider.aria': 'AI provider selection',
-      'setup.apiKey.input.aria': 'Provider API key',
-      'setup.apiKey.profile.aria': 'Saved API key selection',
-      'setup.model.aria': 'AI model selection',
-      'pipeline.mainGroq.aria': 'Primary Groq model',
-      'pipeline.secondaryGemini.aria': 'Secondary Gemini model',
-      'pipeline.secondaryOpenrouter.aria': 'Secondary OpenRouter model',
-      'pipeline.enableGemini.aria': 'Enable secondary Gemini',
-      'pipeline.enableOpenrouter.aria': 'Enable secondary OpenRouter',
-      'auto.enableGroq.aria': 'Enable Groq in AUTO',
-      'auto.enableGemini.aria': 'Enable Gemini in AUTO',
-      'auto.enableOpenrouter.aria': 'Enable OpenRouter in AUTO',
-      'log.scroll.aria': 'Translation log',
-      'setup.file': 'txt file',
-      'setup.chooseFile': '📂 Choose',
-      'setup.loadAuto': '📄 Auto',
-      'lang.modal.title': '🌐 Language settings',
-      'lang.modal.ui': 'Interface language',
-      'lang.modal.target': 'Translate to',
-      'lang.modal.source': 'Source language',
-      'lang.option.cs': 'Czech',
-      'lang.option.en': 'English',
-      'lang.option.bg': 'Bulgarian',
-      'lang.option.ch': 'Chinese',
-      'lang.option.sp': 'Spanish',
-      'lang.option.sk': 'Slovak',
-      'lang.option.pl': 'Polish',
-      'lang.option.gr': 'Greek',
-      'lang.option.he': 'Hebrew',
-      'lang.source.gr': 'Greek (Strong G)',
-      'lang.source.he': 'Hebrew (Strong H)',
-      'lang.source.both': 'Greek and Hebrew (both)',
-      'lang.modal.close': '✕ Close',
-      'lang.modal.save': '✓ Save',
-      'prompt.status.title': 'Click to toggle System/Custom',
-      'prompt.auto.title': 'Automatically apply system prompt',
-      'file.active.title': 'Active file (separate progress slot)',
-      'list.entry.checkbox': 'Select entry {key}',
-      'confirm.clearProgress': 'Delete all saved translation progress and log?\n\n(Can be restored within 10 minutes via "↺ Restore".)',
-      'prompt.apiKeyName': 'Name for this API key:',
-      'prompt.range.from': 'From G number:',
-      'prompt.range.to': 'To G number:',
-      'lang.btn.title': 'Configure UI and prompt languages',
-      'lang.btn.label': '🌐 Languages (UI: {ui} | AI: {ai})',
-      'entries.count': '{count} entries',
-      'stats.done': 'Done:',
-      'stats.remain': 'Remaining:',
-      'stats.total': 'Total:',
-      'stats.tokenLimit': '🛑 Token stop',
-      'stats.tokenLimit.placeholder': '0 = off',
-      'stats.tokenLimit.title': 'AUTO stops after reaching this value. 0 = unlimited.',
-      'stats.tokens': '📊 Total: {input} in / {output} out = {total}{suffix}',
-      'hdr.import': '⬆ Import TXT/JSON',
-      'hdr.import.aria': 'Import TXT or JSON file with translations',
-      'hdr.auto': '▶ AUTO',
-      'hdr.auto.aria': 'Start automatic translation',
-      'hdr.list': '≡ List',
-      'hdr.list.title': 'Hide/show list',
-      'hdr.list.aria': 'Hide/show list',
-      'hdr.batch': '⚡ Batch',
-      'hdr.batch.aria': 'Translate next batch',
-      'hdr.testModels': '🧪 Model tests',
-      'hdr.testModels.title': 'Configure and run model tests (open modal first, then ▶ Provider test)',
-      'hdr.testModels.aria': 'Model tests — opens configuration',
-      'hdr.exportRange': '⬇ Range',
-      'hdr.exportRange.title': 'Export selected G-number range',
-      'hdr.exportRange.aria': 'Export G-number range',
-      'hdr.failed': '⚠ Failed',
-      'hdr.failed.title': 'Show failed translations',
-      'hdr.failed.aria': 'Show failed translations',
-      'hdr.aiSettings': '⚙ AI Settings',
-      'hdr.aiSettings.title': 'AI settings (provider, model, batch)',
-      'hdr.aiSettings.aria': 'AI settings',
-      'hdr.mobileActions.aria': 'Show actions',
-      'hdr.reset.title': 'Delete all saved progress',
-      'hdr.reset.aria': 'Delete all saved progress',
-      'hdr.restoreBackup': '↺ Backup',
-      'hdr.restoreBackup.title': 'Restore from backup',
-      'hdr.restoreBackup.aria': 'Restore from backup',
-      'auto.info.prefix': 'AUTO: batch',
-      'auto.info.settings': 'settings',
-      'auto.info.seconds': 's',
-      'auto.info.interval': 'interval',
-      'auto.log.waiting': 'Waiting to start...',
-      'auto.stop': '■ Stop',
-      'auto.stop.aria': 'Stop automatic translation',
-      'prompt.library.title': '📚 Prompt Library',
-      'prompt.library.preview.empty': 'Select a prompt from the library for preview...',
-      'prompt.library.editor.placeholder': 'Edit prompt...',
-      'prompt.library.system.title': 'Set system prompt for current mode',
-      'prompt.library.load.title': 'Load prompts from TXT file',
-      'prompt.library.export.title': 'Download prompts to TXT',
-      'prompt.library.load': '⬆ Load',
-      'prompt.library.close': '✕ Close',
-      'prompt.library.saveApply': '✓ Save and apply',
-      'modelTest.title': '🧪 Model test output',
-      'modelTest.providerLabel': 'Test provider',
-      'modelTest.model.groq': 'Model (Groq)',
-      'modelTest.model.gemini': 'Model (Gemini)',
-      'modelTest.model.openrouter': 'Model (OpenRouter)',
-      'modelTest.modeLabel': 'Test mode',
-      'modelTest.mode.smoke': 'Smoke test (word 2x)',
-      'modelTest.mode.translate1': 'Translate 1 entry',
-      'modelTest.mode.translate3': 'Translate 3 entries',
-      'modelTest.mode.autoLive': 'Auto test',
-      'modelTest.promptsLabel': 'Prompts',
-      'modelTest.comparePrompts': 'Automatically compare 2 prompts (A/B)',
-      'modelTest.promptB': 'Prompt B (comparison)',
-      'modelTest.enablePrompt': 'Test prompt (when disabled, regular model test is used)',
-      'modelTest.customPromptLabel': 'Custom test prompt',
-      'modelTest.customPromptPlaceholder': 'Insert a custom prompt for model testing. If left empty, the main strong_prompt is used.',
-      'modelTest.duration': 'Auto test duration (min)',
-      'modelTest.appendResult': 'Append result to the same report',
-      'modelTest.table.providerModel': 'Provider/Model',
-      'modelTest.table.success': 'Success rate',
-      'modelTest.table.okFail': 'OK/FAIL',
-      'modelTest.table.entries': 'Entries',
-      'modelTest.table.avgAi': 'Avg AI time',
-      'modelTest.table.calls': 'Calls',
-      'modelTest.table.actions': 'Actions',
-      'modelTest.clearOutput': '✕ Clear output',
-      'modelTest.outputPlaceholder': 'Set mode, provider, and models, then run ▶ Provider test. Countdown shows wait time before next API call.',
-      'modelTest.runProvider': '▶ Provider test',
-      'modelTest.library': '📚 Library',
-      'modelTest.saveRaw': '🧾 Save raw responses',
-      'modelTest.loadTxt': '📂 Load test.txt',
-      'modelTest.saveTxt': '💾 Save test.txt',
-      'modelTest.reset': '↺ Reset',
-      'modelTest.cancel': '■ Cancel test',
-      'modelTest.close': '✕ Close',
-      'promptAi.title': '🤖 AI settings',
-      'promptAi.groq.temp': 'Groq (primary) · Temperature',
-      'promptAi.groq.max': 'Groq (primary) · Max tokens',
-      'promptAi.gemini.temp': 'Gemini (secondary) · Temperature',
-      'promptAi.gemini.max': 'Gemini (secondary) · Max tokens',
-      'promptAi.openrouter.temp': 'OpenRouter (secondary) · Temperature',
-      'promptAi.openrouter.max': 'OpenRouter (secondary) · Max tokens',
-      'promptAi.temp.0.1': '0.1 – very precise',
-      'promptAi.temp.0.3': '0.3 – balanced',
-      'promptAi.temp.0.5': '0.5 – medium',
-      'promptAi.temp.0.7': '0.7 – creative',
-      'promptAi.temp.1.0': '1.0 – very creative',
-      'promptAi.close': '✕ Close',
-      'promptAi.save': '✓ Save',
-      'prompt.preview.title': '👁 Test prompt preview',
-      'prompt.preview.copy': '📋 Copy',
-      'prompt.preview.close': '✕ Close',
-      'list.search.placeholder': 'Search...',
-      'list.search.aria': 'Search entry',
-      'list.selectRange': '☑ Selection',
-      'list.selectRange.title': 'Select range of entries for translation',
-      'list.selectRange.aria': 'Select entry range',
-      'list.filterStatus.aria': 'What to display',
-      'list.filterStatus.all': 'All',
-      'list.filterStatus.pending': 'To translate',
-      'list.filterStatus.missing_topic': 'Missing topic',
-      'list.filterStatus.failed': 'Failed',
-      'list.filterStatus.done': 'Done',
-      'list.filterStatus.g_all': 'Greek only (G)',
-      'list.filterStatus.h_all': 'Hebrew only (H)',
-      'list.filterStatus.g_pending': 'G: to translate',
-      'list.filterStatus.h_pending': 'H: to translate',
-      'list.filterStatus.g_done': 'G: done',
-      'list.filterStatus.h_done': 'H: done',
-      'list.filterSort.aria': 'Sorting',
-      'list.filterSort.original': 'Sort: original',
-      'list.filterSort.num': 'Sort: by number',
-      'list.filterSort.greek': 'Sort: A-Z',
-      'list.topicFilter': '⚠ Topic',
-      'list.topicFilter.title': 'Show entries with missing topic fields',
-      'list.topicFilter.aria': 'Filter entries with missing topics',
-      'list.selectAll.title': 'Select all',
-      'list.selectAll.aria': 'Select all entries',
-      'list.selectNone.title': 'Clear selection',
-      'list.selectNone.aria': 'Clear selection for all entries',
-      'list.selectAllVisible': '☑ Select all visible',
-      'list.selectAllVisible.aria': 'Select all visible entries',
-      'list.translateSelected': '⚡ Translate selected',
-      'list.translateSelected.aria': 'Translate selected entries',
-      'log.back': '← Settings',
-      'log.back.aria': 'Back to settings',
-      'log.clear': '✕ Clear',
-      'log.clear.aria': 'Clear log',
-      'log.placeholder': 'Translations will appear here automatically...',
-      'detail.empty': '← Click an entry in the list to view details',
-      'detail.label.studyLinks': 'Study links',
-      'detail.label.transliteration': 'Transliteration',
-      'detail.label.grammar': 'Grammar',
-      'detail.label.definitionEn': 'Definition (EN)',
-      'detail.label.englishSource': 'English (source)',
-      'detail.label.kjv': 'KJV translations',
-      'detail.label.usageKjv': 'biblical usage (KJV)',
-      'detail.label.vocalization': 'Vocalization',
-      'detail.label.pronunciation': 'Pronunciation',
-      'detail.label.etymology': 'Etymology',
-      'detail.label.occurrence': 'Occurrence',
-      'detail.label.twot': 'TWOT',
-      'detail.label.notes': 'Notes',
-      'detail.label.greekRefs': 'Greek references',
-      'detail.label.category': 'Category',
-      'detail.label.meaningCz': 'Meaning (CZ)',
-      'detail.systemPrompt.title': 'Open system prompt for this entry translation',
-      'detail.systemPrompt.button': 'System prompt',
-      'detail.translateThis': '⚡ Translate this entry',
-      'detail.promptButton': '🤖 Prompt',
-      'detail.promptButton.aria': 'AI prompt for {label}',
-      'detail.editButton': '✎ Edit',
-      'detail.editButton.aria': 'Edit {label}',
-      'topicPrompt.title': '🤖 Topic prompt: {topic} ({key})',
-      'topicPrompt.editBeforeSend': 'You can edit the prompt before sending.',
-      'topicPrompt.send': '▶ Send to AI',
-      'topicPrompt.close': '✕ Close',
-      'topicPrompt.currentFilled': 'Currently filled in field (review before applying):',
-      'topicPrompt.resultEditable': 'AI result (editable before insert):',
-      'topicPrompt.resultPlaceholder': 'AI response will appear here after sending...',
-      'topicPrompt.applyToField': '✓ Insert into field',
-      'systemPrompt.title': 'System prompt: {key}',
-      'systemPrompt.editBeforeSend': 'You can edit the prompt before sending.',
-      'systemPrompt.send': '▶ Send to AI',
-      'systemPrompt.sending': '⏳ Sending...',
-      'systemPrompt.close': '✕ Close',
-      'systemPrompt.result': 'AI result:',
-      'systemPrompt.resultPlaceholder': 'AI response will appear here after sending...',
-      'customModal.title': 'Entry range',
-      'customModal.from': 'From G1',
-      'customModal.to': 'To G100',
-      'customModal.cancel': 'Cancel',
-      'customModal.ok': 'OK',
-      'mobile.actions.title': 'Actions',
-      'mobile.import': '⬆ Import TXT',
-      'mobile.import.aria': 'Import TXT file',
-      'mobile.batch': '⚡ Batch translation',
-      'mobile.batch.aria': 'Translate next batch',
-      'mobile.selectRange': '☑ Selection for translator',
-      'mobile.selectRange.aria': 'Select range',
-      'mobile.missingTopic': '⚠ Missing topic',
-      'mobile.missingTopic.aria': 'Filter entries with missing topics',
-      'mobile.exportTxt': '⬇ Export TXT',
-      'mobile.exportTxt.aria': 'Export to TXT',
-      'mobile.exportJson': '⬇ Export JSON',
-      'mobile.exportJson.aria': 'Export to JSON',
-      'mobile.exportRange': '⬇ Export selection',
-      'mobile.exportRange.aria': 'Export range',
-      'mobile.aiSettings': '⚙ AI Settings',
-      'mobile.aiSettings.aria': 'AI settings',
-      'mobile.close': '✕ Close',
-      'mobile.close.aria': 'Close',
-      'settings.title': '⚙ AI Settings',
-      'settings.mainModel': 'Main model (Groq)',
-      'settings.secondaryGemini': 'Secondary model (Gemini)',
-      'settings.secondaryOpenrouter': 'Secondary model (OpenRouter)',
-      'settings.enableFixes': 'enable fixes',
-      'settings.batch': 'Batch',
-      'settings.speed': 'Speed',
-      'settings.save': '✓ Save',
-      'settings.save.aria': 'Save',
-      'settings.close': '✕ Close',
-      'settings.close.aria': 'Close',
-      'limits.title': '📊 Provider limits',
-      'limits.loading': 'Loading...',
-      'limits.close': '✕ Close',
-      'help.title': '❓ Help Strong GR → CZ',
-      'help.about': 'What the app does',
-      'help.keys': 'How to get API keys',
-      'help.library': 'API key library',
-      'help.limits': 'Limits and quotas',
-      'help.close': '✕ Close',
-      'openrouter.loading': 'Loading free models…',
-      'openrouter.none': 'No free models found',
-      'openrouter.error': 'Loading failed — check your connection',
-      'toast.ai.settings.saved': '✓ AI settings (main + secondary) saved',
-      'toast.lang.settings.saved': '✓ Language settings saved + system prompt activated',
-      'toast.loaded.github': '✓ Loaded from GitHub',
-      'toast.loaded.fallback': '⚠ Loaded fallback file',
-      'toast.openrouter.cache': '⚠ OpenRouter API unavailable, using cached model list'
-      ,'toast.prompt.preview.empty': '⚠ Prompt preview is empty'
-      ,'toast.prompt.copied': '✓ Prompt copied'
-      ,'toast.copy.failed': '✗ Copy failed'
-      ,'toast.provider.enableOne': '⚠ Enable at least one AI provider for batch translation.'
-      ,'toast.translation.none': '⚠ No translations were received'
-      ,'toast.filter.missingTopic': '✓ Filter: missing some topic'
-      ,'toast.apiKey.enter': '✗ Enter API key!'
-      ,'toast.prompt.empty': '✗ Prompt is empty'
-      ,'toast.entry.notFound': '✗ Entry not found'
-      ,'toast.retry.done': '✓ Retry completed!'
-      ,'toast.allTranslated': '✓ Everything translated!'
-      ,'toast.auto.notStartedTokenLimit': '⚠ AUTO did not start: token limit reached'
-      ,'toast.auto.enableGroq': '⚠ Enable Groq checkbox for AUTO translation'
-      ,'toast.auto.stoppedTokenLimit': '🛑 AUTO stopped: token limit reached'
-      ,'toast.translation.done': '✓ Translation completed!'
-      ,'toast.storage.full': '⚠ localStorage full — export a backup!'
-      ,'toast.backup.none': '✗ No backup is available'
-      ,'toast.noTranslatedEntry': 'No translated entry'
-      ,'toast.apiKey.insertFirst': '✗ Insert API key first'
-      ,'toast.apiKey.selectToDelete': '⚠ Select a stored key to remove'
-      ,'toast.apiKey.deleted': '✓ API key removed from library'
-      ,'toast.test.cancelFirst': '⚠ Cancel running test first'
-      ,'toast.test.canceling': '⏹ Canceling model tests...'
-      ,'toast.test.nothingToSave': '⚠ Nothing to save to test.txt'
-      ,'toast.save.canceled': 'Save canceled'
-      ,'toast.test.noRawYet': '⚠ No raw response available yet'
-      ,'toast.test.rawDownloaded': '✓ Raw responses downloaded'
-      ,'toast.file.loadFailed': '✗ Failed to load file'
-      ,'toast.auto.stopFirst': '⚠ Stop AUTO first'
-      ,'toast.export.nothing': '⚠ Nothing to export'
-      ,'toast.export.txtDownloaded': '✓ TXT downloaded'
-      ,'toast.copy.nothing': '⚠ Nothing to copy'
-      ,'toast.output.copied': '✓ Output copied'
-      ,'toast.output.cleared': '✓ Test output cleared'
-      ,'toast.test.outputMissing': '✗ Missing model test output window'
-      ,'toast.test.rateLimitAbort': '⚠ Test stopped early due to rate limit'
-      ,'toast.prompt.switchedSystem': '✓ Switched to system prompt'
-      ,'toast.prompt.switchedCustom': '✓ Switched to custom prompt'
-      ,'toast.prompt.customNotSaved': '⚠ Custom prompt is not saved'
-      ,'toast.prompt.savedApplied': '✓ Prompt saved and applied'
-      ,'toast.prompt.exported': '✓ Prompts exported to TXT'
-      ,'toast.prompt.importFailed': '✗ Failed to load prompts file'
-      ,'toast.translation.canceled': '✕ Translation canceled'
-      ,'toast.import.noEntries': '✗ No entries found in file'
-      ,'toast.failed.none': '✓ No failed translations'
-      ,'toast.progress.saved': '✓ Progress saved'
-      ,'toast.topicRepair.noEligible': '⚠ No entries with max. 2 missing topics in current selection.'
-      ,'toast.topicRepair.modeLocked': '⚠ Cannot change mode while translation is running.'
-      ,'toast.topicRepair.queueEmpty': '⚠ No waiting items in selected topic queue — change selection or finish visible rows.'
-      ,'toast.topicRepair.enableProvider': '⚠ Enable at least one provider for topic repair.'
-      ,'toast.topicRepair.visibleDone': '✓ Visible queue repair finished, review and confirm overwrite.'
-      ,'toast.topicRepair.checkValidRows': '⚠ Check rows with valid proposal only (worse analysis rows stay unchecked).'
-      ,'toast.topicRepair.noValidProposal': '⚠ No valid proposal to apply.'
-      ,'toast.topicRepair.nothingMarked': '⚠ Nothing was marked for overwrite'
-      ,'toast.prompt.pickSpecificTopicSave': '⚠ To save prompt, select a specific topic (not "All").'
-      ,'toast.prompt.pickSpecificTopicReset': '⚠ To reset default prompt, select a specific topic (not "All").'
-      ,'toast.topicRepair.sequentialRunning': '⚠ Sequential repair is still running — pause first and wait for current attempt to finish.'
-      ,'toast.topicRepair.pickTopicInAllMode': '⚠ In "All" mode, check at least one topic in "Show in list".'
-      ,'toast.batchPrompt.empty': '✗ Batch prompt is empty'
-      ,'toast.batchRun.nothingSelected': '⚠ Nothing selected for batch run (check checkboxes / error filter).'
-      ,'toast.aiResponse.unmatched': '⚠ AI response could not be matched to this entry'
-      ,'toast.jump.enterGNumber': 'Enter G entry number'
-      ,'toast.test.cancelFirstAlt': '⚠ Cancel current test first'
-      ,'toast.test.pausing': '⏸ Test will stop. Next click on ▶ starts a new run.'
-      ,'toast.test.libraryAfterStop': '⚠ Library is available after stopping test to avoid overwriting live report.'
-      ,'toast.error.withMessage': '✗ Error: {message}'
-      ,'toast.translated.count': '✓ Translated {count} entries'
-      ,'toast.specialista.approved': '✓ SPECIALISTA approved: {key}'
-      ,'toast.specialista.rejected': '✕ SPECIALISTA rejected: {key}'
-      ,'toast.topic.approved': '✓ Approved {topic}: {key}'
-      ,'toast.topic.rejected': '✕ Rejected {topic}: {key}'
-      ,'toast.topic.overwritten.count': '✓ Overwritten {count} topics'
-      ,'toast.topic.overwrittenAndClosing': '✓ Overwritten {count} topics — all good for these entries, closing repair window.'
-      ,'toast.field.filled': '✓ Filled field {topic}'
-      ,'toast.batchPrompt.saved': '✓ Saved batch prompt for {topic}'
-      ,'toast.batchPrompt.reset': '↺ Restored default batch prompt for {topic}'
-      ,'toast.apiKey.enterForProvider': '✗ Enter API key for {provider}.'
-      ,'toast.topic.bulkDone': '✓ Topic bulk repair done: {topic} ({count})'
-      ,'toast.topic.savedToField': '✓ Saved to field {topic}'
-      ,'toast.translatedSystem.key': '✓ Translated via System prompt: {key}'
-      ,'toast.entry.notFoundInFile': '{key} not found in file'
-      ,'toast.translation.resumeFrom': '✓ Translation will continue from {key}'
-      ,'toast.translated.partial': '⚠ Translated {translated}/{total} entries'
-      ,'toast.rateLimit.retryIn': '⏳ Rate limit — retry in {seconds}s'
-      ,'toast.rateLimit.waiting': '⏳ Rate limit — waiting {seconds}s{suffix}'
-      ,'toast.timeout.retryIn': '⏳ API timeout — retry in {seconds}s'
-      ,'toast.serviceUnavailable.retryIn': '⏳ 503 Service Unavailable — retry in {seconds}s'
-      ,'toast.restored.count': '✓ Restored {count} entries'
-      ,'toast.exported.count': '✓ Exported {count} entries'
-      ,'toast.apiKey.activeProfile': '✓ Active API key: {name}'
-      ,'toast.saved.filename': '✓ Saved: {name}'
-      ,'toast.saveDialogFailedFallback': '⚠ Save dialog failed, using download: {message}'
-      ,'toast.downloaded.filename': '✓ Downloaded: {name}'
-      ,'toast.loaded.filename': '✓ Loaded: {name}'
-      ,'toast.apiKey.missingForProviderLabel': '✗ Missing API key for {provider}'
-      ,'toast.model.notSelectedForProviderLabel': '⚠ No model selected for {provider}'
-      ,'toast.modelTest.doneWithCount': '✓ Model test finished ({count})'
-      ,'toast.parseError': '✗ Parse error: {message}'
-      ,'topicRepair.hint.bulkMode': 'In bulk mode, use the batch section below.'
-      ,'topicRepair.hint.startSequential': 'First click "Start sequential repair".'
-      ,'topicRepair.bulk.running': '⏳ Bulk running...'
-      ,'topicRepair.bulk.button': '⚡ Bulk translation (selected)'
-      ,'topicRepair.bulkAllDone': '✓ Bulk repair for "All" finished ({count} topic types in order).'
-      ,'topicRepair.bulkAllNone': '⚠ For "All", no tasks were eligible to run or batch prompts are missing (💾 for each topic).'
-      ,'topicPrompt.sending': '⏳ Sending...'
-      ,'translate.single.translating': '⏳ Translating...'
-      ,'translate.single.button': '⚡ Translate this entry'
-      ,'confirm.retranslate': 'Retranslate entry {key}? Current translation will be replaced.'
-      ,'btn.step.loading': '⏳ ...'
-      ,'btn.step.default': '⚡ Batch'
-      ,'confirm.restoreBackup': 'Restore {count} entries from backup ({ts})? Current state will be overwritten.'
-      ,'confirm.apiKey.delete': 'Delete API key "{name}"?'
-      ,'toast.output.copiedShort': '✓ Copied'
-      ,'toast.modelTest.abCanceled': '⏹ Prompt A/B test canceled'
-      ,'toast.modelTest.abDone': '✓ Prompt A/B test finished'
-      ,'toast.modelTest.canceled': '⏹ Model test canceled'
-      ,'toast.modelTest.autoDone': '✓ Auto test finished'
-      ,'toast.selected.range': '✓ Selected {count} entries, showing range {from}–{to}'
-      ,'toast.systemPrompt.set': '✓ System prompt set ({mode})'
-      ,'toast.autoPrompt.toggled': '✓ Auto prompt {state}'
-      ,'toast.prompts.loaded.count': '✓ Loaded prompts: {count}'
-      ,'toast.noTranslatedInRange': 'No translated entries in range {from}–{to}'
-      ,'toast.exported.range': '✓ Exported {count} entries ({from}–{to})'
-      ,'toast.saved.entriesWithExtra': '✓ Saved {count} entries{extra}'
-      ,'toast.import.found': '📥 Found {count} entries to import ({format})'
-      ,'toast.failed.found': '⚠ Found {count} failed translations (see console)'
-      ,'toast.selectedForBatch': '✓ Selected {count} entries — click "⚡ Batch" or "▶ AUTO"'
-      ,'resume.found': '⚑ Saved progress found ({source}): <b>{count}</b> translated entries (saved {ts}). It will be restored after start.'
-      ,'limits.error': 'Error: {message}'
-      ,'modal.selectRange.title': 'Select entry range'
-      ,'failed.modal.title': '⚠ Failed translations — {count} entries'
-      ,'failed.modal.retry': '↻ Translate again'
-      ,'failed.modal.close': '✕ Close'
-      ,'failed.modal.note': 'AI returned invalid format (or empty translation). Details in console (F12).'
-      ,'log.meaning': 'Meaning:'
-      ,'log.usage': 'Usage:'
-      ,'log.unparsed': '⚠ Unparsed'
-      ,'log.records': '{count} records'
-      ,'import.preview.title': 'Translation preview ({count} entries)'
-      ,'import.preview.summary': '<b style="color:var(--acc3)">{newOnes}</b> new · <b style="color:var(--acc2)">{conflicts}</b> already translated in current slot'
-      ,'import.mode.title': 'Import mode:'
-      ,'import.mode.missing': 'Missing only — add only entries not yet translated (<b>{count}</b>)'
-      ,'import.mode.all': 'Overwrite all — replace existing translations (<b>{count}</b>)'
-      ,'import.mode.fillgaps': 'Fill empty fields — keep existing values, overwrite only "—" and empty values'
-      ,'import.selectAll': 'Select all'
-      ,'import.saveSelected': '✓ Save selected'
-      ,'import.cancel': '✕ Cancel'
-      ,'import.badge.conflict': 'conflict'
-      ,'import.badge.new': 'new'
-      ,'import.czTranslationAi': '🔄 CZECH TRANSLATION (from AI)'
-      ,'import.fullTranslation': '📝 Full translation:'
-      ,'import.enOriginal': '📖 ENGLISH ORIGINAL'
-      ,'field.meaning': 'Meaning:'
-      ,'field.definition': 'Definition:'
-      ,'field.usage': 'Usage:'
-      ,'field.origin': 'Origin:'
-      ,'field.specialist': 'Specialist:'
-      ,'topicRepair.batchLabel': 'batch'
-      ,'topicRepair.originalTopic': 'Original topic:'
-      ,'topicRepair.original': 'Original:'
-      ,'topicRepair.newProposal': 'New proposal:'
-      ,'topicRepair.specialistInResponse': 'SPECIALISTA in response:'
-      ,'topicRepair.yes': 'yes'
-      ,'topicRepair.no': 'no'
-      ,'topicRepair.status': 'status:'
-      ,'topicRepair.unchanged': 'unchanged'
-      ,'topicRepair.specialistDetail': 'SPECIALISTA detail'
-      ,'topicRepair.originalSpecialist': 'Original SPECIALISTA:'
-      ,'topicRepair.aiSpecialist': 'AI SPECIALISTA:'
-      ,'topicRepair.confirmSpecialist': '✓ Confirm SPECIALISTA'
-      ,'topicRepair.rejectSpecialist': '✕ Reject SPECIALISTA'
-      ,'topicRepair.extraTopics': 'Additional topics from AI response ({count})'
-      ,'topicRepair.originalShort': 'Original:'
-      ,'topicRepair.aiShort': 'AI:'
-      ,'topicRepair.confirm': '✓ Confirm'
-      ,'topicRepair.reject': '✕ Reject'
-      ,'topicRepair.none': 'No topics to repair.'
-      ,'list.selectAllVisibleWithCount': '☑ Select all visible ({count})'
-      ,'list.translateSelectedCount': '⚡ Translate {count} selected'
-      ,'list.translateWaiting': '⏳ Waiting {seconds}s...'
-      ,'list.batchCount': '{count} entries'
-      ,'provider.status.disabled': '{label}: disabled'
-      ,'provider.status.running': '{label}: running'
-      ,'provider.status.ready': '{label}: ready'
-      ,'provider.status.nextIn': '{label}: next batch in {seconds}s'
-      ,'topicRepair.status.waitingToStart': '⏸ Waiting to start · '
-      ,'topicRepair.status.summary': '✓ Done {done} · ⏳ Running {running} · 🕓 Waiting {waiting} · ✗ Error {failed}'
-      ,'topicRepair.applyOverwrite': '✓ Confirm overwrite ({count})'
-      ,'topicRepair.resume': '▶ Resume'
-      ,'topicRepair.pause': '⏸ Pause'
-      ,'apiKey.saveButton': '💾 Save key'
-      ,'apiKey.saveButton.title': 'Save current API key to library'
-      ,'apiKey.deleteButton': '🗑 Delete'
-      ,'apiKey.deleteButton.title': 'Delete selected API key'
-      ,'prompt.library.openButton': '📚 Library'
-      ,'prompt.library.openButton.title': 'Open prompt library'
-      ,'prompt.tab.default': 'Default'
-      ,'prompt.tab.detailed': 'Detailed'
-      ,'prompt.tab.concise': 'Concise'
-      ,'prompt.tab.literal': 'Literal'
-      ,'prompt.tab.test': 'Test'
-      ,'prompt.tab.custom': 'Custom'
-      ,'provider.top.autoRouter': '★ Auto Router (recommended)'
-      ,'resume.source.currentSlot': 'current slot'
-      ,'resume.source.legacySlot': 'legacy slot (will be migrated)'
-      ,'provider.status.failed': '{label}: failed'
-      ,'auto.groqEnableHint': '⚠ Enable G (Groq) in AUTO panel'
-      ,'topic.langTag': 'EN'
-      ,'topic.label.definice': 'Definition'
-      ,'topic.label.vyznam': 'Czech meaning'
-      ,'topic.label.kjv': 'KJV translations'
-      ,'topic.label.pouziti': 'Biblical usage'
-      ,'topic.label.puvod': 'Origin / Etymology'
-      ,'topic.label.specialista': 'Biblical interpretation (specialist)'
-      ,'model.groq.llama4scout': 'Llama 4 Scout (High TPM limit)'
-      ,'model.groq.llama33': 'Llama 3.3 70B (Highest quality)'
-      ,'model.groq.llama31': 'Llama 3.1 8B (Fast, watch rate limits)'
-      ,'model.gemini.flashLite31': 'Gemini 3.1 Flash-Lite (System default)'
-      ,'model.gemini.flashLite25': 'Gemini 2.5 Flash-Lite (Fast, cheap)'
-      ,'model.gemini.flash25': 'Gemini 2.5 Flash (Stable)'
-      ,'prompt.topic.prefix': 'Topic:'
-      ,'prompt.topic.group.detail': 'Topic prompts (by entry detail)'
-      ,'prompt.topic.group.batch': 'Topic prompts — batch ({lang})'
-      ,'prompt.topic.group.en': 'Topic prompts (EN -> {lang})'
-      ,'prompt.topic.batchSuffix': '— batch'
-      ,'prompt.custom': 'Custom prompt'
-      ,'api.key.label': 'API Key — {provider}'
-      ,'log.entry.title': 'Click to view entry detail'
-      ,'toast.progressClearedRestore.message': 'Progress cleared. Restore?'
-      ,'toast.progressClearedRestore.action': 'Restore'
+      'toast.error.withMessage': '✗ Error: {message}'
     }
   };
   let UI_MESSAGES = INLINE_UI_MESSAGES;
@@ -3783,6 +2808,8 @@ let listRangeFilter = null;
   let topicRepairWorkerRunning = false;
   let topicRepairTicker = null;
   let topicRepairBulkRunning = false;
+  let topicRepairBulkAbortVersion = 0;
+  let sourceEntryEdits = {};
   const AUTO_TOKEN_LIMIT_KEY = 'strong_auto_token_limit';
   const TEST_HISTORY_KEY = 'strong_test_history_v1';
   const MODEL_TEST_OUTPUT_KEY = 'strong_model_test_output_v1';
@@ -3854,7 +2881,6 @@ let listRangeFilter = null;
       ['gemini-2.5-flash-lite', 'model.gemini.flashLite25'],
       ['gemini-2.5-flash', 'model.gemini.flash25'],
       ['gemini-3.1-pro-preview', 'Gemini 3.1 Pro Preview'],
-      ['gemini-2.5-flash-lite-preview-09-2025', 'Gemini 2.5 Flash-Lite Preview (legacy)'],
     ]
   },
   openrouter: {
@@ -4296,6 +3322,7 @@ function initApp(loadingEl) {
     if (saved) {
       const data = JSON.parse(saved);
       translated = data.translated || {};
+      sourceEntryEdits = data.sourceEntryEdits || {};
     } else if (currentFileId) {
       // Pokus o migraci ze starého (legacy) slotu při prvním použití nového prefixu
       const legacy = localStorage.getItem(LEGACY_STORE_KEY);
@@ -4303,8 +3330,9 @@ function initApp(loadingEl) {
         const data = JSON.parse(legacy);
         if (data && data.translated && Object.keys(data.translated).length > 0) {
           translated = data.translated;
+          sourceEntryEdits = data.sourceEntryEdits || {};
           // Ulož pod novým klíčem, legacy zachováme – uživatel může mít víc souborů
-          localStorage.setItem(storeKey(), JSON.stringify({ translated, ts: Date.now(), fileId: currentFileId, migrated: true }));
+          localStorage.setItem(storeKey(), JSON.stringify({ translated, sourceEntryEdits, ts: Date.now(), fileId: currentFileId, migrated: true }));
           logInfo('migrate', `Migrováno ${Object.keys(translated).length} hesel z legacy slotu`);
         }
       }
@@ -4312,6 +3340,7 @@ function initApp(loadingEl) {
    } catch(e) {
      logWarn('startApp', 'Failed to load saved progress, starting fresh', { error: e.message });
      translated = {};
+     sourceEntryEdits = {};
    }
 
   document.getElementById('app').style.display = 'flex';
@@ -4331,6 +3360,7 @@ function initApp(loadingEl) {
   entries = uniqueEntries;
   
   entryMap = new Map(entries.map(e => [e.key, e]));
+  applySourceEntryEditsToEntries();
   
   // Vytvoř index pro rychlé řazení podle původního pořadí
   window._entryIndexMap = new Map(entries.map((e, i) => [e.key, i]));
@@ -4576,6 +3606,11 @@ function updateTopicRepairModalUI() {
   if (rBulk) rBulk.checked = state.repairStrategy === 'bulk';
   const bulkHint = document.getElementById('topicRepairBulkStrategyHint');
   if (bulkHint) bulkHint.style.display = state.repairStrategy === 'bulk' ? 'block' : 'none';
+  const bulkRunBtn = document.getElementById('topicRepairBulkRunBtn');
+  if (bulkRunBtn) {
+    bulkRunBtn.disabled = false;
+    bulkRunBtn.textContent = topicRepairBulkRunning ? '■ Zastavit hromadný překlad' : t('topicRepair.bulk.button');
+  }
   const rows = vis.map(task => {
     const idx = state.tasks.indexOf(task);
     const extraTopicsForUi = (Array.isArray(task.detectedTopics) ? task.detectedTopics : [])
@@ -5231,10 +4266,13 @@ function isDefinitionLowQuality(text) {
   if (isDefinitionLikelyEnglish(s)) return true;
   // UI artefakty nebo technický šum místo definice.
   if (/(🤖|✎|prompt|upravit|edit|button|klik)/i.test(s)) return true;
-  // Definice má být věcně detailní, ne 2-3 slova.
+  // Definice má být věcná; krátké, ale smysluplné formulace nechceme trestat.
   const words = s.split(/\s+/).filter(Boolean);
-  if (words.length < 8) return true;
-  if (s.length < 60) return true;
+  const hasStructure = /[,:;()]/.test(s);
+  const hasCzechDiacritics = /[áčďéěíňóřšťúůýž]/i.test(s);
+  if (words.length < 4) return true;
+  if (s.length < 30 && !hasStructure) return true;
+  if (words.length < 6 && s.length < 45 && !hasStructure && !hasCzechDiacritics) return true;
   return false;
 }
 
@@ -5657,41 +4695,35 @@ function renderDetail() {
         <a href="https://www.stepbible.org/?q=strong=${activeKey}" target="_blank" rel="noopener noreferrer">STEP Bible</a>
       </div>
     </div>`;
+  const editableSourceSection = (label, field, value) => `
+    <div class="orig-section">
+      <div class="label">${label}</div>
+      <div style="display:flex;gap:6px;align-items:center;justify-content:space-between;flex-wrap:wrap">
+        <div class="value" id="srcval-${activeKey}-${field}" style="margin:0;flex:1 1 auto">${escHtml(value || '—')}</div>
+        <button class="tbox-btn" type="button" onclick="toggleSourceEntryEdit('${activeKey}','${field}')">✎ Upravit</button>
+      </div>
+      <div class="tbox-edit" id="srcedit-${activeKey}-${field}">
+        <textarea id="srcinput-${activeKey}-${field}" aria-label="${label}">${escHtml(value || '')}</textarea>
+        <button class="tbox-save" type="button" onclick="saveSourceEntryField('${activeKey}','${field}')">Uložit</button>
+      </div>
+    </div>`;
   
   // Sestavení sekcí podle typu
   let sections = '';
   
   if (isGreek) {
     sections = `
-    <div class="orig-section">
-      <div class="label">Beta Code</div>
-      <div class="value">${escHtml(e.beta || '—')}</div>
-    </div>
-    <div class="orig-section">
-      <div class="label">${detailLabel.transliteration}</div>
-      <div class="value">${escHtml(e.prepis || '—')}</div>
-    </div>
-    <div class="orig-section">
-      <div class="label">${detailLabel.grammar}</div>
-      <div class="value">${escHtml(e.tvaroslovi || '—')}</div>
-    </div>
-    <div class="orig-section">
-      <div class="label">${detailLabel.definitionEn}</div>
-      <div class="value">${escHtml(e.definice || e.def || '—')}</div>
-    </div>
+    ${editableSourceSection('Beta Code', 'beta', e.beta)}
+    ${editableSourceSection(detailLabel.transliteration, 'prepis', e.prepis)}
+    ${editableSourceSection(detailLabel.grammar, 'tvaroslovi', e.tvaroslovi)}
+    ${editableSourceSection(detailLabel.definitionEn, 'definice', e.definice || e.def)}
     ${englishSource ? `
     <div class="orig-section">
       <div class="label">${detailLabel.englishSource}</div>
       <div class="value">${escHtml(englishSource)}</div>
     </div>` : ''}
-    <div class="orig-section">
-      <div class="label">${detailLabel.kjv}</div>
-      <div class="value">${escHtml(e.kjv || '—')}</div>
-    </div>
-    <div class="orig-section">
-      <div class="label">${detailLabel.usageKjv}</div>
-      <div class="value">${escHtml(e.vyskyt || '—')}</div>
-    </div>
+    ${editableSourceSection(detailLabel.kjv, 'kjv', e.kjv)}
+    ${editableSourceSection(detailLabel.usageKjv, 'vyskyt', e.vyskyt)}
     ${studyLinks}`;
   } else if (isHebrew) {
     sections = `
@@ -5707,31 +4739,16 @@ function renderDetail() {
       <div class="label">${detailLabel.etymology}</div>
       <div class="value">${escHtml(e.etimol || e.orig || '—')}</div>
     </div>
-    <div class="orig-section">
-      <div class="label">${detailLabel.transliteration}</div>
-      <div class="value">${escHtml(e.prepis || '—')}</div>
-    </div>
-<div class="orig-section">
-      <div class="label">${detailLabel.grammar}</div>
-      <div class="value">${escHtml(e.tvaroslovi || '—')}</div>
-    </div>
-    <div class="orig-section">
-      <div class="label">${detailLabel.definitionEn}</div>
-      <div class="value">${escHtml(e.definice || e.def || '—')}</div>
-    </div>
+    ${editableSourceSection(detailLabel.transliteration, 'prepis', e.prepis)}
+    ${editableSourceSection(detailLabel.grammar, 'tvaroslovi', e.tvaroslovi)}
+    ${editableSourceSection(detailLabel.definitionEn, 'definice', e.definice || e.def)}
     ${englishSource ? `
     <div class="orig-section">
       <div class="label">${detailLabel.englishSource}</div>
       <div class="value">${escHtml(englishSource)}</div>
     </div>` : ''}
-    <div class="orig-section">
-      <div class="label">${detailLabel.kjv}</div>
-      <div class="value">${escHtml(e.kjv || '—')}</div>
-    </div>
-    <div class="orig-section">
-      <div class="label">${detailLabel.occurrence}</div>
-      <div class="value">${escHtml(e.vyskyt || '—')}</div>
-    </div>
+    ${editableSourceSection(detailLabel.kjv, 'kjv', e.kjv)}
+    ${editableSourceSection(detailLabel.occurrence, 'vyskyt', e.vyskyt)}
     <div class="orig-section">
       <div class="label">${detailLabel.twot}</div>
       <div class="value">${escHtml(e.twot || '—')}</div>
@@ -5759,18 +4776,9 @@ function renderDetail() {
       <div class="label">${detailLabel.meaningCz}</div>
       <div class="value">${escHtml(e.vyznamCz || '—')}</div>
     </div>
-    <div class="orig-section">
-      <div class="label">${detailLabel.transliteration}</div>
-      <div class="value">${escHtml(e.prepis || '—')}</div>
-    </div>
-    <div class="orig-section">
-      <div class="label">${detailLabel.grammar}</div>
-      <div class="value">${escHtml(e.tvaroslovi || '—')}</div>
-    </div>
-    <div class="orig-section">
-      <div class="label">${detailLabel.definitionEn}</div>
-      <div class="value">${escHtml(e.definice || e.def || '—')}</div>
-    </div>
+    ${editableSourceSection(detailLabel.transliteration, 'prepis', e.prepis)}
+    ${editableSourceSection(detailLabel.grammar, 'tvaroslovi', e.tvaroslovi)}
+    ${editableSourceSection(detailLabel.definitionEn, 'definice', e.definice || e.def)}
     ${englishSource ? `
     <div class="orig-section">
       <div class="label">${detailLabel.englishSource}</div>
@@ -5780,14 +4788,8 @@ function renderDetail() {
   } else {
     // Fallback pro starý formát
     sections = `
-    <div class="orig-section">
-      <div class="label">${detailLabel.definitionEn}</div>
-      <div class="value">${escHtml(e.definice || e.def || '—')}</div>
-    </div>
-    <div class="orig-section">
-      <div class="label">${detailLabel.kjv}</div>
-      <div class="value">${escHtml(e.kjv || '—')}</div>
-    </div>
+    ${editableSourceSection(detailLabel.definitionEn, 'definice', e.definice || e.def)}
+    ${editableSourceSection(detailLabel.kjv, 'kjv', e.kjv)}
     ${studyLinks}`;
   }
 
@@ -5807,11 +4809,11 @@ function renderDetail() {
   `;
 }
 
-function renderTranslation(key, t) {
+function renderTranslation(key, tr) {
   refreshTopicLabels();
   const e = entryMap.get(key) || {};
   const sourceCzDef = String(e.czDef || '').trim();
-  const translatedDef = String(t?.definice || '').trim();
+  const translatedDef = String(tr?.definice || '').trim();
   const looksEnglish = /(\bin general\b|\bused of\b|\bin itself\b|\bthat which\b|\bopposite to\b|\bwhere it is contrasted\b|\bsee word\b|\bSYN\.:|\bchiefly for\b)/i.test(translatedDef);
   const hasDetailedTranslatedDef = translatedDef.length >= 80 && /(\b1\.\b|\b2\.\b|[a-z]\)|\(|\[)/i.test(translatedDef);
   const shouldPreferSourceDef = hasMeaningfulValue(sourceCzDef) && (looksEnglish || !hasDetailedTranslatedDef);
@@ -5824,11 +4826,11 @@ function renderTranslation(key, t) {
       field: definitionDisplay,
       rawField: null
     },
-    { id: 'vyznam', label: TOPIC_LABELS.vyznam, field: t?.vyznam },
-    { id: 'kjv', label: TOPIC_LABELS.kjv, field: t?.kjv },
-    { id: 'pouziti', label: TOPIC_LABELS.pouziti, field: t?.pouziti },
-    { id: 'puvod', label: TOPIC_LABELS.puvod, field: t?.puvod },
-    { id: 'specialista', label: TOPIC_LABELS.specialista, field: t?.specialista },
+    { id: 'vyznam', label: TOPIC_LABELS.vyznam, field: tr?.vyznam },
+    { id: 'kjv', label: TOPIC_LABELS.kjv, field: tr?.kjv },
+    { id: 'pouziti', label: TOPIC_LABELS.pouziti, field: tr?.pouziti },
+    { id: 'puvod', label: TOPIC_LABELS.puvod, field: tr?.puvod },
+    { id: 'specialista', label: TOPIC_LABELS.specialista, field: tr?.specialista },
   ];
 
   return sections.map(s => `
@@ -5866,6 +4868,46 @@ function saveSection(key, id) {
   saveProgress();
   document.getElementById(`tval-${key}-${id}`).textContent = val || '—';
   document.getElementById(`tedit-${key}-${id}`).classList.remove('show');
+}
+
+function toggleSourceEntryEdit(key, field) {
+  const el = document.getElementById(`srcedit-${key}-${field}`);
+  if (!el) return;
+  el.classList.toggle('show');
+  if (el.classList.contains('show')) {
+    const input = document.getElementById(`srcinput-${key}-${field}`);
+    if (input) input.focus();
+  }
+}
+
+function applySourceEntryEditsToEntries() {
+  if (!sourceEntryEdits || typeof sourceEntryEdits !== 'object') return;
+  for (const [key, patch] of Object.entries(sourceEntryEdits)) {
+    if (!patch || typeof patch !== 'object') continue;
+    const entry = entryMap.get(key);
+    if (!entry) continue;
+    for (const [field, value] of Object.entries(patch)) {
+      entry[field] = String(value || '');
+      if (field === 'definice') entry.def = entry[field];
+    }
+  }
+}
+
+function saveSourceEntryField(key, field) {
+  const entry = entryMap.get(key);
+  if (!entry) return;
+  const input = document.getElementById(`srcinput-${key}-${field}`);
+  if (!input) return;
+  const next = String(input.value || '').trim();
+  entry[field] = next;
+  if (field === 'definice') entry.def = next;
+  sourceEntryEdits[key] = sourceEntryEdits[key] || {};
+  sourceEntryEdits[key][field] = next;
+  saveProgress();
+  updateStats();
+  renderList();
+  renderDetail();
+  showToast('Upravené pole uloženo.');
 }
 
 async function refillSingleField(key, topicId) {
@@ -6210,7 +5252,9 @@ async function runTopicRepairBulkTranslationCore(state, topicId, promptTemplate,
   log(`⚡ Hromadná oprava „${TOPIC_LABELS[topicId] || topicId}“: ${keys.length} úloh, dávka ${bs}, interval ${iv0}s`);
 
   let processed = 0;
+  const abortVersion = Number(topicRepairBulkAbortVersion || 0);
   while (processed < keys.length) {
+    if (abortVersion !== Number(topicRepairBulkAbortVersion || 0)) break;
     const batchKeys = keys.slice(processed, processed + bs);
     const hesla = buildTopicRepairBatchHeslaText(batchKeys, topicId);
     const userContent = promptTemplate.includes('{HESLA}')
@@ -6229,6 +5273,7 @@ async function runTopicRepairBulkTranslationCore(state, topicId, promptTemplate,
       { role: 'system', content: SYSTEM_MESSAGE },
       { role: 'user', content: enforceSpecialistaFormat(userContent) }
     ]);
+    if (abortVersion !== Number(topicRepairBulkAbortVersion || 0)) break;
 
     const rawText = String(raw?.content || '').trim();
     log(`📥 RAW AI batch oprava ${topicId}: vypsáno do konzole`);
@@ -6261,15 +5306,24 @@ async function runTopicRepairBulkTranslationCore(state, topicId, promptTemplate,
 
     if (processed < keys.length) {
       const interval = parseInt(document.getElementById('intervalRun')?.value, 10) || parseInt(document.getElementById('interval')?.value, 10) || 20;
-      await sleep(interval * 1000);
+      const stopAt = Date.now() + Math.max(0, interval) * 1000;
+      while (Date.now() < stopAt) {
+        if (abortVersion !== Number(topicRepairBulkAbortVersion || 0)) break;
+        await sleep(250);
+      }
     }
   }
-  return { count: keys.length };
+  return { count: processed };
 }
 
 async function runTopicRepairBulkTranslation() {
   const state = topicRepairState;
-  if (!state || topicRepairBulkRunning) return;
+  if (!state) return;
+  if (topicRepairBulkRunning) {
+    topicRepairBulkAbortVersion++;
+    showToast('⏹ Zastavuji hromadný překlad...');
+    return;
+  }
   syncTopicRepairBulkRunInputsToHidden();
   const selTopic = document.getElementById('topicRepairBulkTopicSelect')?.value || state.bulkTopicId || 'all';
   state.bulkTopicId = selTopic;
@@ -6283,10 +5337,11 @@ async function runTopicRepairBulkTranslation() {
   }
 
   topicRepairBulkRunning = true;
+  topicRepairBulkAbortVersion++;
   const bulkBtn = document.getElementById('topicRepairBulkRunBtn');
   if (bulkBtn) {
-    bulkBtn.disabled = true;
-    bulkBtn.textContent = t('topicRepair.bulk.running');
+    bulkBtn.disabled = false;
+    bulkBtn.textContent = '■ Zastavit hromadný překlad';
   }
 
   const wasPaused = !!state.paused;
@@ -6340,7 +5395,7 @@ async function runTopicRepairBulkTranslation() {
       showToast(t('toast.topic.bulkDone', { topic: TOPIC_LABELS[selTopic] || selTopic, count: res.count }));
     }
   } catch (e) {
-    if (e && e.message !== 'missing_api_key') {
+    if (e && e.message !== 'missing_api_key' && e.message !== 'topic_repair_bulk_aborted') {
       showToast(t('toast.error.withMessage', { message: (e.message || e) }));
     }
   } finally {
@@ -7410,7 +6465,9 @@ function getSecondaryModelCooldownSecByError(prov, rawMsg) {
   const minMatch = low.match(/(\d+)\s*min/);
   const fromMinutes = minMatch ? (Number(minMatch[1]) || 0) * 60 : 0;
   if (prov === 'gemini' && (/limit vyčerpán|resource_exhausted/.test(low))) {
-    return Math.max(120, Math.min(25 * 60, fromMinutes || retryAfter || (20 * 60)));
+    // Prefer explicit Retry-After from API over textual "~20min" hint.
+    const preferred = retryAfter || fromMinutes || (20 * 60);
+    return Math.max(20, Math.min(25 * 60, preferred));
   }
   if (/high demand|503|service unavailable/.test(low)) {
     return Math.max(20, Math.min(180, retryAfter || 45));
@@ -8341,6 +7398,7 @@ function saveProgressImmediate() {
    try {
      localStorage.setItem(storeKey(), JSON.stringify({
        translated,
+       sourceEntryEdits,
        ts: Date.now(),
        fileId: currentFileId
      }));
@@ -8481,7 +7539,7 @@ function exportTXT() {
       `Definice (EN): ${e.definice || e.def || '—'}`,
       `Česká definice: ${tr.definice || '—'}`,
       `KJV překlady (CZ): ${tr.kjv || e.kjv || '—'}`,
-      `Biblické užití: ${tr.pouziti || '—'}`,
+      `Biblické užití: ${tr.pouziti || e.vyskyt || '—'}`,
       `Původ: ${tr.puvod || '—'}`,
       `Specialista: ${tr.specialista || '—'}`,
       ''
@@ -8761,6 +7819,46 @@ async function loadSavedSettings() {
   refreshTokenStatsDisplay();
   initAutoProviderToggles();
   startAutoProviderCountdownTicker();
+  bindSetupCompactSummaryEvents();
+  updateSetupCompactSummary();
+}
+
+function getCompactSelectedOptionLabel(selectId, fallback = '—') {
+  const el = document.getElementById(selectId);
+  if (!el) return fallback;
+  const txt = String(el.selectedOptions?.[0]?.text || el.value || '').trim();
+  return txt || fallback;
+}
+
+function getCompactPipelineSecondaryLabel() {
+  const geminiEnabled = !!document.getElementById('pipelineEnableSecondaryGemini')?.checked;
+  const openrouterEnabled = !!document.getElementById('pipelineEnableSecondaryOpenrouter')?.checked;
+  const parts = [];
+  if (geminiEnabled) parts.push(getCompactSelectedOptionLabel('pipelineModelSecondaryGemini', 'Gemini'));
+  if (openrouterEnabled) parts.push(getCompactSelectedOptionLabel('pipelineModelSecondaryOpenrouter', 'OpenRouter'));
+  if (parts.length) return parts.join(' | ');
+  return 'auto router off';
+}
+
+function updateSetupCompactSummary() {
+  const el = document.getElementById('setupCompactSummary');
+  if (!el) return;
+  const main = getCompactSelectedOptionLabel('pipelineModelMainGroq', '—');
+  const secondary = getCompactPipelineSecondaryLabel();
+  const batch = String(document.getElementById('batchSize')?.value || '10');
+  const interval = String(document.getElementById('interval')?.value || '20');
+  const summary = `${main}, ${secondary}, hesel ${batch}, interval ${interval} s`;
+  el.textContent = summary;
+  el.title = summary;
+}
+
+function bindSetupCompactSummaryEvents() {
+  ['batchSize', 'interval'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el || el.dataset.compactSummaryBound === '1') return;
+    el.addEventListener('change', updateSetupCompactSummary);
+    el.dataset.compactSummaryBound = '1';
+  });
 }
 
 // Volej po načtení stránky
@@ -9599,6 +8697,7 @@ function bindPipelineSecondaryToggle(checkboxId, prov, selectId) {
   cb.onchange = () => {
     setAutoProviderEnabled(prov, cb.checked);
     updateAutoProviderCountdowns();
+    updateSetupCompactSummary();
   };
 }
 
@@ -9612,8 +8711,12 @@ function fillPipelineSelectOptions(prov, selectId) {
       if (modelWanted && Array.from(select.options).some(o => o.value === modelWanted)) {
         select.value = modelWanted;
       }
+      updateSetupCompactSummary();
     });
-    select.onchange = () => setPipelineModelForProvider('openrouter', select.value);
+    select.onchange = () => {
+      setPipelineModelForProvider('openrouter', select.value);
+      updateSetupCompactSummary();
+    };
     return;
   }
   const options = (PROVIDERS[prov]?.models || []).map(([value, label]) => ({ value, label: uiLabel(label) || value }));
@@ -9625,7 +8728,10 @@ function fillPipelineSelectOptions(prov, selectId) {
     select.selectedIndex = 0;
   }
   setPipelineModelForProvider(prov, select.value);
-  select.onchange = () => setPipelineModelForProvider(prov, select.value);
+  select.onchange = () => {
+    setPipelineModelForProvider(prov, select.value);
+    updateSetupCompactSummary();
+  };
 }
 
 function initPipelineModelSelectors() {
@@ -10695,6 +9801,7 @@ function closeSettingsModal() {
   onProviderChange();
   initPipelineModelSelectors();
   initRunSelects();
+  updateSetupCompactSummary();
   document.getElementById('settingsModal').classList.remove('show');
 }
 
