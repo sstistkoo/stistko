@@ -1431,19 +1431,19 @@ function stopTopicRepairTicker() {
 }
 
 function updateTopicRepairProviderStatus() {
-  const state = state.topicRepairState;
-  if (!state) return;
+  const topicRepairState = state.topicRepairState;
+  if (!topicRepairState) return;
   const providers = ['groq', 'gemini', 'openrouter'];
   for (const prov of providers) {
     const line = document.getElementById(`topicRepairProvider_${prov}`);
     if (!line) continue;
-    const enabled = !!state.providerEnabled[prov];
+    const enabled = !!topicRepairState.providerEnabled[prov];
     if (!enabled) {
       const label = prov === 'groq' ? 'Groq' : (prov === 'gemini' ? 'Google' : 'OpenRouter');
       line.textContent = t('provider.status.disabled', { label });
       continue;
     }
-    if (state.currentTask && state.currentTask.provider === prov) {
+    if (topicRepairState.currentTask && topicRepairState.currentTask.provider === prov) {
       const label = prov === 'groq' ? 'Groq' : (prov === 'gemini' ? 'Google' : 'OpenRouter');
       line.textContent = t('provider.status.running', { label });
       continue;
@@ -1457,8 +1457,8 @@ function updateTopicRepairProviderStatus() {
 }
 
 function updateTopicRepairModalUI() {
-  const state = state.topicRepairState;
-  if (!state) return;
+  const topicRepairState = state.topicRepairState;
+  if (!topicRepairState) return;
   const vis = getTopicRepairModalVisibleTasks(state);
   const done = vis.filter(t => t.status === 'done').length;
   const running = vis.filter(t => t.status === 'running').length;
@@ -1480,7 +1480,7 @@ function updateTopicRepairModalUI() {
   }
   const startSeqBtn = document.getElementById('topicRepairStartSequentialBtn');
   if (startSeqBtn) {
-    const enabledProvCount = ['groq', 'gemini', 'openrouter'].filter(p => state.providerEnabled[p]).length;
+    const enabledProvCount = ['groq', 'gemini', 'openrouter'].filter(p => topicRepairState.providerEnabled[p]).length;
     const wantStart = state.repairStrategy === 'sequential' && !state.sequentialEverStarted
       && getTopicRepairModalVisibleTasks(state).some(t => t.status === 'waiting');
     const canSeqStart = wantStart && enabledProvCount > 0;
@@ -1499,7 +1499,7 @@ function updateTopicRepairModalUI() {
     bulkRunBtn.textContent = state.topicRepairBulkRunning ? '■ Zastavit hromadný překlad' : t('topicRepair.bulk.button');
   }
   const rows = vis.map(task => {
-    const idx = state.tasks.indexOf(task);
+    const idx = topicRepairState.tasks.indexOf(task);
     const extraTopicsForUi = (Array.isArray(task.detectedTopics) ? task.detectedTopics : [])
       .filter(row => row && row.topicId && row.topicId !== 'specialista' && row.topicId !== task.topicId);
     const rhOther = (Array.isArray(task.rawHeaderTopics) ? task.rawHeaderTopics : []).filter(id => id && id !== task.topicId);
@@ -1604,19 +1604,19 @@ function buildTopicRepairTasks(keys) {
 }
 
 function applyTopicRepairProviderCheckboxes() {
-  const state = state.topicRepairState;
-  if (!state) return;
+  const topicRepairState = state.topicRepairState;
+  if (!topicRepairState) return;
   for (const prov of ['groq', 'gemini', 'openrouter']) {
     const el = document.getElementById(`topicRepairEnable_${prov}`);
     if (!el) continue;
-    state.providerEnabled[prov] = !!el.checked;
+    topicRepairState.providerEnabled[prov] = !!el.checked;
   }
   updateTopicRepairProviderStatus();
 }
 
 function renderTopicRepairModal() {
-  const state = state.topicRepairState;
-  if (!state) return;
+  const topicRepairState = state.topicRepairState;
+  if (!topicRepairState) return;
   if (!state.bulkListTopicFilter) state.bulkListTopicFilter = defaultBulkListTopicFilter();
   if (!state.bulkTopicId) state.bulkTopicId = 'all';
   closeTopicRepairModalSafe();
@@ -1626,7 +1626,7 @@ function renderTopicRepairModal() {
   modal.innerHTML = `
     <div style="max-width:980px;margin:0 auto;background:var(--bg2);border:1px solid var(--brd);border-radius:8px;padding:16px">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
-        <h2 style="color:var(--acc);margin:0">Oprava témat (${state.tasks.length})</h2>
+        <h2 style="color:var(--acc);margin:0">Oprava témat (${topicRepairState.tasks.length})</h2>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <button class="hbtn" id="topicRepairMinimizeBtn" onclick="minimizeTopicRepairModal()">▁ Minimalizovat</button>
           <button class="hbtn" onclick="closeTopicRepairModalOnly()">✕ Zavřít okno</button>
@@ -1650,9 +1650,9 @@ function renderTopicRepairModal() {
       <div style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;padding:10px;margin-bottom:10px">
         <div id="topicRepairStatus" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt3)">—</div>
         <div style="display:grid;gap:2px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt2);margin-top:6px">
-          <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="topicRepairEnable_groq" ${state.providerEnabled.groq ? 'checked' : ''} onchange="applyTopicRepairProviderCheckboxes()" style="accent-color:var(--acc)">G <span id="topicRepairProvider_groq">Groq: —</span></label>
-          <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="topicRepairEnable_gemini" ${state.providerEnabled.gemini ? 'checked' : ''} onchange="applyTopicRepairProviderCheckboxes()" style="accent-color:var(--acc)">Gm <span id="topicRepairProvider_gemini">Google: —</span></label>
-          <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="topicRepairEnable_openrouter" ${state.providerEnabled.openrouter ? 'checked' : ''} onchange="applyTopicRepairProviderCheckboxes()" style="accent-color:var(--acc)">OR <span id="topicRepairProvider_openrouter">OpenRouter: —</span></label>
+          <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="topicRepairEnable_groq" ${topicRepairState.providerEnabled.groq ? 'checked' : ''} onchange="applyTopicRepairProviderCheckboxes()" style="accent-color:var(--acc)">G <span id="topicRepairProvider_groq">Groq: —</span></label>
+          <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="topicRepairEnable_gemini" ${topicRepairState.providerEnabled.gemini ? 'checked' : ''} onchange="applyTopicRepairProviderCheckboxes()" style="accent-color:var(--acc)">Gm <span id="topicRepairProvider_gemini">Google: —</span></label>
+          <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="topicRepairEnable_openrouter" ${topicRepairState.providerEnabled.openrouter ? 'checked' : ''} onchange="applyTopicRepairProviderCheckboxes()" style="accent-color:var(--acc)">OR <span id="topicRepairProvider_openrouter">OpenRouter: —</span></label>
         </div>
       </div>
       <details id="topicRepairBulkDetails" style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;padding:10px;margin-bottom:10px" ${state.repairStrategy === 'bulk' ? 'open' : ''}>
@@ -1754,9 +1754,9 @@ function startTopicRepairFlow(keys) {
 }
 
 function setTopicRepairStrategy(strategy) {
-  const state = state.topicRepairState;
-  if (!state) return;
-  const busy = state.tasks.some(t => t.status === 'running') || !!state.currentTask || state.topicRepairBulkRunning;
+  const topicRepairState = state.topicRepairState;
+  if (!topicRepairState) return;
+  const busy = topicRepairState.tasks.some(t => t.status === 'running') || !!topicRepairState.currentTask || state.topicRepairBulkRunning;
   if (busy) {
     showToast(t('toast.topicRepair.modeLocked'));
     updateTopicRepairModalUI();
@@ -1772,13 +1772,13 @@ function setTopicRepairStrategy(strategy) {
 }
 
 function startTopicRepairSequentialWorker() {
-  const state = state.topicRepairState;
+  const topicRepairState = state.topicRepairState;
   if (!state || state.repairStrategy !== 'sequential') return;
   if (!findNextTopicRepairWaitingTask(state)) {
     showToast(t('toast.topicRepair.queueEmpty'));
     return;
   }
-  const enabledProviders = ['groq', 'gemini', 'openrouter'].filter(p => state.providerEnabled[p]);
+  const enabledProviders = ['groq', 'gemini', 'openrouter'].filter(p => topicRepairState.providerEnabled[p]);
   if (!enabledProviders.length) {
     showToast(t('toast.topicRepair.enableProvider'));
     return;
@@ -1944,15 +1944,15 @@ async function processTopicRepairQueue() {
 }
 
 function toggleTopicRepairTask(index, checked) {
-  const state = state.topicRepairState;
-  if (!state || !state.tasks[index]) return;
-  state.tasks[index].checked = !!checked;
+  const topicRepairState = state.topicRepairState;
+  if (!state || !topicRepairState.tasks[index]) return;
+  topicRepairState.tasks[index].checked = !!checked;
   updateTopicRepairModalUI();
 }
 
 function toggleTopicRepairRun() {
   if (!state.topicRepairState) return;
-  const state = state.topicRepairState;
+  const topicRepairState = state.topicRepairState;
   if (state.repairStrategy !== 'sequential' || !state.sequentialEverStarted) {
     showToast(state.repairStrategy === 'bulk' ? t('topicRepair.hint.bulkMode') : t('topicRepair.hint.startSequential'));
     return;
@@ -1970,9 +1970,9 @@ function shouldAutoAcceptDetectedTopic(topicId, previousValue, candidateValue) {
 }
 
 function setTopicRepairSpecialistaDecision(index, decision) {
-  const state = state.topicRepairState;
-  if (!state || !state.tasks[index]) return;
-  const task = state.tasks[index];
+  const topicRepairState = state.topicRepairState;
+  if (!state || !topicRepairState.tasks[index]) return;
+  const task = topicRepairState.tasks[index];
   if (!task.specialistaInRaw || !hasMeaningfulValue(task.specialistaCandidateValue)) return;
   state.translated[task.key] = state.translated[task.key] || {};
   if (decision === 'accept') {
@@ -1990,9 +1990,9 @@ function setTopicRepairSpecialistaDecision(index, decision) {
 }
 
 function setTopicRepairDetectedTopicDecision(taskIndex, topicId, decision) {
-  const state = state.topicRepairState;
-  if (!state || !state.tasks[taskIndex]) return;
-  const task = state.tasks[taskIndex];
+  const topicRepairState = state.topicRepairState;
+  if (!state || !topicRepairState.tasks[taskIndex]) return;
+  const task = topicRepairState.tasks[taskIndex];
   const row = (task.detectedTopics || []).find(x => x.topicId === topicId);
   if (!row || !hasMeaningfulValue(row.candidateValue)) return;
   state.translated[task.key] = state.translated[task.key] || {};
@@ -2014,10 +2014,10 @@ function setTopicRepairDetectedTopicDecision(taskIndex, topicId, decision) {
 }
 
 function applyTopicRepairSelected() {
-  const state = state.topicRepairState;
-  if (!state) return;
+  const topicRepairState = state.topicRepairState;
+  if (!topicRepairState) return;
   let applied = 0;
-  for (const task of state.tasks) {
+  for (const task of topicRepairState.tasks) {
     if (!task.checked || !hasMeaningfulValue(task.candidateValue)) continue;
     state.translated[task.key] = state.translated[task.key] || {};
     state.translated[task.key][task.topicId] = task.candidateValue;
@@ -2033,8 +2033,8 @@ function applyTopicRepairSelected() {
   }
   state.selectedKeys.clear();
   renderList();
-  const eligible = state.tasks.filter(t => hasMeaningfulValue(t.candidateValue));
-  const checkedOk = state.tasks.filter(t => t.checked && hasMeaningfulValue(t.candidateValue));
+  const eligible = topicRepairState.tasks.filter(t => hasMeaningfulValue(t.candidateValue));
+  const checkedOk = topicRepairState.tasks.filter(t => t.checked && hasMeaningfulValue(t.candidateValue));
   if (applied === 0) {
     if (eligible.length && !checkedOk.length) {
       showToast(t('toast.topicRepair.checkValidRows'));
@@ -2044,7 +2044,7 @@ function applyTopicRepairSelected() {
       showToast(t('toast.topicRepair.nothingMarked'));
     }
   } else {
-    const keysInModal = [...new Set(state.tasks.map(t => t.key))];
+    const keysInModal = [...new Set(topicRepairState.tasks.map(t => t.key))];
     const allTopicsOk = keysInModal.every(k => getFailedTopicsForFallback(state.translated[k] || {}).length === 0);
     if (allTopicsOk) {
       showToast(t('toast.topic.overwrittenAndClosing', { count: applied }));
@@ -2324,15 +2324,15 @@ function getFilteredEntries() {
       e.greek.toLowerCase().includes(q) || (e.definice || e.def || '').toLowerCase().includes(q);
     if (!matchesSearch) return false;
     
-    const state = getTranslationStateForKey(e.key);
+    const translationState = getTranslationStateForKey(e.key);
     
     if (lang === 'G' && !e.key.startsWith('G')) return false;
     if (lang === 'H' && !e.key.startsWith('H')) return false;
     
-    if (status === 'pending') return state === 'pending';
-    if (status === 'done') return state === 'done';
-    if (status === 'failed') return state === 'failed' || state === 'failed_partial';
-    if (status === 'missing_topic') return state === 'missing_topic';
+    if (status === 'pending') return translationState === 'pending';
+    if (status === 'done') return translationState === 'done';
+    if (status === 'failed') return translationState === 'failed' || translationState === 'failed_partial';
+    if (status === 'missing_topic') return translationState === 'missing_topic';
     
     return true;
   });
@@ -2454,7 +2454,7 @@ function renderVisible() {
     const needsUpdate = [...Array(endIndex - startIndex + 1)].some((_, idx) => {
       const key = state.filteredKeys[startIndex + idx];
       if (!key) return false;
-      const state = getTranslationStateForKey(key);
+      const translationState = getTranslationStateForKey(key);
       const prev = state.lastRenderRange.doneStates?.[key];
       return prev !== state;
     });
@@ -2470,7 +2470,7 @@ function renderVisible() {
     if (!key) continue;
     const e = state.entryMap.get(key);
     if (!e) continue;
-    const state = getTranslationStateForKey(key);
+    const translationState = getTranslationStateForKey(key);
     const done = state === 'done';
     doneStates[key] = state;
     
@@ -2871,20 +2871,20 @@ function defaultBulkListTopicFilter() {
 }
 
 function getTopicRepairModalVisibleTasks(state) {
-  if (!state || !Array.isArray(state.tasks)) return [];
+  if (!state || !Array.isArray(topicRepairState.tasks)) return [];
   const bid = state.bulkTopicId || 'all';
   if (bid === 'all') {
     const m = state.bulkListTopicFilter || defaultBulkListTopicFilter();
-    return state.tasks.filter(t => m[t.topicId] !== false);
+    return topicRepairState.tasks.filter(t => m[t.topicId] !== false);
   }
-  return state.tasks.filter(t => t.topicId === bid);
+  return topicRepairState.tasks.filter(t => t.topicId === bid);
 }
 
-/** Další čekající úloha v pořadí `state.tasks`, ale jen pokud spadá do aktuálního filtru tématu. */
+/** Další čekající úloha v pořadí `topicRepairState.tasks`, ale jen pokud spadá do aktuálního filtru tématu. */
 function findNextTopicRepairWaitingTask(state) {
-  if (!state || !Array.isArray(state.tasks)) return null;
+  if (!state || !Array.isArray(topicRepairState.tasks)) return null;
   const vset = new Set(getTopicRepairModalVisibleTasks(state));
-  return state.tasks.find(t => t.status === 'waiting' && vset.has(t)) || null;
+  return topicRepairState.tasks.find(t => t.status === 'waiting' && vset.has(t)) || null;
 }
 
 const TOPIC_REPAIR_BATCH_PROMPT_STORAGE_PREFIX = 'strong_topic_repair_batch_prompt_v1_';
@@ -2928,8 +2928,8 @@ function getTopicRepairBatchPromptTemplate(topicId) {
 }
 
 function saveTopicRepairBatchPromptDraft() {
-  const state = state.topicRepairState;
-  if (!state) return;
+  const topicRepairState = state.topicRepairState;
+  if (!topicRepairState) return;
   const topicId = document.getElementById('topicRepairBulkTopicSelect')?.value || state.bulkTopicId || 'all';
   if (topicId === 'all') {
     showToast(t('toast.prompt.pickSpecificTopicSave'));
@@ -2942,8 +2942,8 @@ function saveTopicRepairBatchPromptDraft() {
 }
 
 function resetTopicRepairBatchPromptToDefault() {
-  const state = state.topicRepairState;
-  if (!state) return;
+  const topicRepairState = state.topicRepairState;
+  if (!topicRepairState) return;
   const topicId = document.getElementById('topicRepairBulkTopicSelect')?.value || state.bulkTopicId || 'all';
   if (topicId === 'all') {
     showToast(t('toast.prompt.pickSpecificTopicReset'));
@@ -2956,8 +2956,8 @@ function resetTopicRepairBatchPromptToDefault() {
 }
 
 function refreshTopicRepairBatchPromptEditor() {
-  const state = state.topicRepairState;
-  if (!state) return;
+  const topicRepairState = state.topicRepairState;
+  if (!topicRepairState) return;
   const topicId = document.getElementById('topicRepairBulkTopicSelect')?.value || state.bulkTopicId || 'all';
   state.bulkTopicId = topicId;
   const row = document.getElementById('topicRepairBulkListFilterRow');
@@ -2976,7 +2976,7 @@ function refreshTopicRepairBatchPromptEditor() {
 }
 
 function toggleTopicRepairBulkListFilter(topicId, checked) {
-  const state = state.topicRepairState;
+  const topicRepairState = state.topicRepairState;
   if (!state || state.bulkTopicId !== 'all') return;
   state.bulkListTopicFilter = state.bulkListTopicFilter || defaultBulkListTopicFilter();
   state.bulkListTopicFilter[topicId] = !!checked;
@@ -3128,7 +3128,7 @@ function initTopicRepairBulkRunInputs() {
 
 /** Jedno téma — vnitřní smyčka dávek (režim „Vše“ i jedno téma z editoru). */
 async function runTopicRepairBulkTranslationCore(state, topicId, promptTemplate, onlyFailed, bs) {
-  const tasks = state.tasks.filter(t => t && t.topicId === topicId && t.includeBulk !== false);
+  const tasks = topicRepairState.tasks.filter(t => t && t.topicId === topicId && t.includeBulk !== false);
   const picked = onlyFailed
     ? tasks.filter(t => t.status === 'failed' || !hasMeaningfulValue(t.candidateValue))
     : tasks;
@@ -3170,7 +3170,7 @@ async function runTopicRepairBulkTranslationCore(state, topicId, promptTemplate,
 
     const parsedMap = parseTopicRepairBatchResponse(rawText, topicId);
     for (const key of batchKeys) {
-      const task = state.tasks.find(t => t.key === key && t.topicId === topicId);
+      const task = topicRepairState.tasks.find(t => t.key === key && t.topicId === topicId);
       if (!task) continue;
       const val = String(parsedMap[key] || '').trim();
       if (hasMeaningfulValue(val)) {
@@ -3204,8 +3204,8 @@ async function runTopicRepairBulkTranslationCore(state, topicId, promptTemplate,
 }
 
 async function runTopicRepairBulkTranslation() {
-  const state = state.topicRepairState;
-  if (!state) return;
+  const topicRepairState = state.topicRepairState;
+  if (!topicRepairState) return;
   if (state.topicRepairBulkRunning) {
     state.topicRepairBulkAbortVersion++;
     showToast('⏹ Zastavuji hromadný překlad...');
@@ -3300,15 +3300,15 @@ async function runTopicRepairBulkTranslation() {
 }
 
 function toggleTopicRepairBulkInclude(index, checked) {
-  const state = state.topicRepairState;
-  if (!state || !state.tasks[index]) return;
-  state.tasks[index].includeBulk = !!checked;
+  const topicRepairState = state.topicRepairState;
+  if (!state || !topicRepairState.tasks[index]) return;
+  topicRepairState.tasks[index].includeBulk = !!checked;
 }
 
 function setTopicRepairBulkIncludeAll(checked) {
-  const state = state.topicRepairState;
-  if (!state) return;
-  for (const t of state.tasks) t.includeBulk = !!checked;
+  const topicRepairState = state.topicRepairState;
+  if (!topicRepairState) return;
+  for (const t of topicRepairState.tasks) t.includeBulk = !!checked;
   updateTopicRepairModalUI();
 }
 
@@ -5111,9 +5111,9 @@ function updateAutoProviderCountdowns() {
       setAutoProviderCountdownLabel(prov, `${providerLabel(prov)}: ${getUiLang() === 'en' ? 'processing partial' : 'zpracovává neúplné'} (${pending})`);
       return;
     }
-    const state = getSecondaryNextOperationState(prov);
-    if (state.exhausted && state.nextSec > 0) {
-      setAutoProviderCountdownLabel(prov, `${providerLabel(prov)}: ${getUiLang() === 'en' ? 'waiting' : 'čeká'} ${state.nextSec}s ${getUiLang() === 'en' ? 'for next attempt' : 'do dalšího pokusu'}`);
+    const nextState = getSecondaryNextOperationState(prov);
+    if (nextState.exhausted && nextState.nextSec > 0) {
+      setAutoProviderCountdownLabel(prov, `${providerLabel(prov)}: ${getUiLang() === 'en' ? 'waiting' : 'čeká'} ${nextState.nextSec}s ${getUiLang() === 'en' ? 'for next attempt' : 'do dalšího pokusu'}`);
       return;
     }
     setAutoProviderCountdownLabel(prov, t('provider.status.ready', { label: providerLabel(prov) }));
@@ -8890,7 +8890,7 @@ function parseImportJSON(text) {
 function updateFailedCount() {
   let count = 0;
   for (const key of Object.keys(state.translated)) {
-    const state = getTranslationStateForKey(key);
+    const translationState = getTranslationStateForKey(key);
     if (state === 'failed' || state === 'failed_partial') count++;
   }
   const el = document.getElementById('failedCount');
@@ -8900,7 +8900,7 @@ function updateFailedCount() {
 function showFailedEntries() {
   const failed = [];
   for (const key of Object.keys(state.translated)) {
-    const state = getTranslationStateForKey(key);
+    const translationState = getTranslationStateForKey(key);
     if (state === 'failed' || state === 'failed_partial') {
       const tr = state.translated[key];
       failed.push({ key, raw: tr.raw, greek: state.entryMap.get(key)?.greek });
@@ -9153,3 +9153,5 @@ window.addEventListener('beforeunload', () => {
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'hidden') saveProgress.flush();
 });
+
+
