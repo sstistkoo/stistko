@@ -1394,6 +1394,7 @@ const TOPIC_PROMPT_PRESET_MAP = {
 const callApi = createCallApi({
   log, logError, logWarn, showToast: (...a) => showToast(...a), t,
   rateInfoFromErrorMessage: (...a) => rateInfoFromErrorMessage(...a),
+  parseWithOpenRouterNormalization,
 });
 const { callAIWithRetry, callOnce, getTranslationEngineLabel, getProviderConfiguredModels, getFallbackModels, resetPrompt, parseTranslations } = callApi;
 

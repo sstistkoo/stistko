@@ -6,7 +6,7 @@ import core from '../../strong_translator_core_new.js';
 
 const { validateAPIResponse, DEFAULT_PROMPT } = core;
 
-export function createCallApi({ log, logError, logWarn, showToast, t, rateInfoFromErrorMessage }) {
+export function createCallApi({ log, logError, logWarn, showToast, t, rateInfoFromErrorMessage, parseWithOpenRouterNormalization }) {
 function resetPrompt() {
   document.getElementById('promptEditor').value = DEFAULT_PROMPT;
   localStorage.setItem('strong_prompt', DEFAULT_PROMPT);
