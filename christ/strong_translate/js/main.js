@@ -1389,12 +1389,6 @@ const TOPIC_PROMPT_PRESET_MAP = {
 
 
 
-// â•â• BUILD PROMPT MESSAGES â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// Uses buildPromptMessages and buildRetryMessages from core module
-
-      return keys;
-    }
-  }
 
 // ══ AI CALL API ═════════════════════════════════════════════════
 const callApi = createCallApi({
