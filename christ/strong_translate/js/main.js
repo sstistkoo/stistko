@@ -1,4 +1,4 @@
-  // ══ CORE MODULE IMPORT ═══════════════════════════════════════════
+﻿  // ══ CORE MODULE IMPORT ═══════════════════════════════════════════
   import core from '../strong_translator_core_new.js';
   import prompts from '../strong_prompts.js';
   import {
@@ -668,6 +668,8 @@ POVINNÝ VÝSTUP NAVÍC:
       return fromCatalog || t('prompt.custom');
     }
 
+let _modelTestPromptPreviewOriginal = '';
+
 function openModelTestPromptPreviewModal() {
   const modal = document.getElementById('modelTestPromptPreviewModal');
   const textEl = document.getElementById('modelTestPromptPreviewText');
@@ -682,12 +684,18 @@ function openModelTestPromptPreviewModal() {
     : getModelTestPromptTemplate(promptType);
   labelEl.textContent = `Prompt: ${getModelTestPromptTypeLabel(promptType)}`;
   textEl.value = String(promptText || '').trim();
+  _modelTestPromptPreviewOriginal = textEl.value;
   modal.style.display = 'flex';
 }
 
 function closeModelTestPromptPreviewModal() {
   const modal = document.getElementById('modelTestPromptPreviewModal');
   if (modal) modal.style.display = 'none';
+}
+
+function resetModelTestPromptPreview() {
+  const textEl = document.getElementById('modelTestPromptPreviewText');
+  if (textEl) textEl.value = _modelTestPromptPreviewOriginal;
 }
 
 async function copyModelTestPromptPreview() {
@@ -2183,6 +2191,7 @@ window.onProviderChange = onProviderChange;
 window.showSetup = showSetup;
 window.toggleListPane = toggleListPane;
 window.copyModelTestPromptPreview = copyModelTestPromptPreview;
+window.resetModelTestPromptPreview = resetModelTestPromptPreview;
 
 // Z batchApi
 window.translateNext = translateNext;
