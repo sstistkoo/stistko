@@ -1,6 +1,8 @@
 ﻿import { state } from './state.js';
 import { PROVIDERS } from './config.js';
 import { API_KEY_PROFILES_PREFIX, API_KEY_ACTIVE_PROFILE_PREFIX } from './config.js';
+import { escHtml } from './utils.js';
+import { getUiLang } from './i18n.js';
 
 export function createApiKeysApi({ t, showToast }) {
 

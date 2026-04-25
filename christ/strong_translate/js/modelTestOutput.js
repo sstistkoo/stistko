@@ -1,7 +1,7 @@
 ﻿import { state } from './state.js';
 import { escHtml } from './utils.js';
 import { t } from './i18n.js';
-import { PROVIDERS } from './config.js';
+import { CONFIG, PROVIDERS } from './config.js';
 
 export function createModelTestOutputApi({ MODEL_TEST_RAW_OUTPUT_KEY, showToast, log, modelTestStopProviderCountdownTicker }) {
 function logEntry(keys, rawResponse) {
