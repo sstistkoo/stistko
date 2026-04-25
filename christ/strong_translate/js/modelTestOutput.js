@@ -3,7 +3,7 @@ import { escHtml } from './utils.js';
 import { t } from './i18n.js';
 import { CONFIG, PROVIDERS } from './config.js';
 
-export function createModelTestOutputApi({ MODEL_TEST_RAW_OUTPUT_KEY, showToast, log, modelTestStopProviderCountdownTicker }) {
+export function createModelTestOutputApi({ MODEL_TEST_RAW_OUTPUT_KEY, showToast, log, modelTestStopProviderCountdownTicker, showModelTestModal }) {
 function logEntry(keys, rawResponse) {
   const scroll = document.getElementById('logScroll');
   if (!scroll) return;
