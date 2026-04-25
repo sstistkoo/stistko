@@ -2,13 +2,16 @@ import { PROVIDERS } from './config.js';
 
 export const UI_LANG_KEY = 'strong_ui_lang';
 export const DEFAULT_UI_LANG = 'cs';
-export const UI_LANGS = new Set(['cs', 'en']);
+export const UI_LANGS = new Set(['cs', 'en', 'sk']);
 export const INLINE_UI_MESSAGES = {
   cs: {
     'toast.error.withMessage': '✗ Chyba: {message}'
   },
   en: {
     'toast.error.withMessage': '✗ Error: {message}'
+  },
+  sk: {
+    'toast.error.withMessage': '✗ Chyba: {message}'
   }
 };
 
