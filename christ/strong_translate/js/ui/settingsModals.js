@@ -1,6 +1,6 @@
 ﻿import { t } from './i18n.js';
 
-export function createSettingsModalsApi({ initRunSelects, updateSetupCompactSummary, initPipelineModelSelectors, initPipelineModelSelectorsInSettingsModal, showToast, refreshTopicLabels, renderList, saveProgress }) {
+export function createSettingsModalsApi({ initRunSelects, updateSetupCompactSummary, initPipelineModelSelectors, initPipelineModelSelectorsInSettingsModal, showToast, refreshTopicLabels, renderList, saveProgress, refreshLanguageAwarePromptOptionLabels, applySystemPromptForCurrentTask, applyUiLanguage, DEFAULT_UI_LANG, UI_LANGS, UI_LANG_KEY }) {
 
 function showSettingsModal() {
   initPipelineModelSelectorsInSettingsModal();
@@ -101,6 +101,20 @@ function updatePromptLangButtonLabel() {
 }
 
 function saveLangSettings() {
+  const target = document.getElementById('targetLanguage').value;
+  const source = document.getElementById('sourceLanguage').value;
+  const uiRaw = String(document.getElementById('uiLanguage')?.value || DEFAULT_UI_LANG).toLowerCase();
+  const ui = UI_LANGS.has(uiRaw) ? uiRaw : DEFAULT_UI_LANG;
+  localStorage.setItem('strong_target_lang', target);
+  localStorage.setItem('strong_source_lang', source);
+  localStorage.setItem(UI_LANG_KEY, ui);
+  refreshLanguageAwarePromptOptionLabels();
+  applySystemPromptForCurrentTask();
+  applyUiLanguage();
+  updatePromptLangButtonLabel();
+  closePromptLangModal();
+  showToast(t('toast.lang.settings.saved'));
+}
 
   return { showSettingsModal, closeSettingsModal, showPromptAIModal, closePromptAIModal, saveAISettings, showPromptLangModal, closePromptLangModal, updatePromptLangButtonLabel, saveLangSettings };
 }
