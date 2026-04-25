@@ -1,6 +1,6 @@
 /**
  * Detail hesla — renderDetail, editace polí, refillSingleField.
- * Deps: state, t, escHtml, hasMeaningfulValue, isTranslationComplete,
+ * Deps: state, t, escHtml,
  *       TOPIC_LABELS, refreshTopicLabels,
  *       saveProgress, renderList, updateStats, showToast, log,
  *       buildTopicPrompt, openTopicPromptModal,
@@ -8,8 +8,9 @@
  *       resolveProviderForInteractiveAction, getPipelineModelForProvider,
  *       getCurrentApiKey, SYSTEM_MESSAGE
  */
+import { hasMeaningfulValue, isTranslationComplete } from '../translation/utils.js';
 export function createDetailApi({
-  state, t, escHtml, hasMeaningfulValue, isTranslationComplete,
+  state, t, escHtml,
   TOPIC_LABELS, refreshTopicLabels,
   saveProgress, renderList, updateStats, showToast, log,
   buildTopicPrompt, openTopicPromptModal,

@@ -6,6 +6,9 @@ import {
   getProviderConfiguredModelsForAI,
   getStaticFallbackModels
 } from '../../strong_translator_ai.js';
+import {
+  hasMeaningfulValue, isDefinitionLowQuality, isTranslationComplete
+} from './utils.js';
 import core from '../../strong_translator_core_new.js';
 
 const { buildRetryMessages } = core;
@@ -16,7 +19,6 @@ export function createBatchApi(deps) {
     log, logError, logWarn,
     showToast,
     TOPIC_PROMPT_PRESET_MAP,
-    isTranslationComplete, hasMeaningfulValue, isDefinitionLowQuality,
     parseTranslations,
     parseWithOpenRouterNormalization, applyFallbacksToParsedMap,
     extractTopicValueFromAI,
