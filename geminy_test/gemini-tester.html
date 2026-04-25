@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini API Tester</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 32px; margin-bottom: 10px; }
+        .header p { opacity: 0.9; font-size: 14px; }
+        .content { padding: 30px; }
+        .section { margin-bottom: 30px; }
+        .section-title { font-size: 18px; font-weight: 600; margin-bottom: 15px; color: #333; display: flex; align-items: center; gap: 8px; }
+        .api-key-input { display: flex; gap: 10px; margin-bottom: 20px; }
+        input[type="text"], input[type="password"] { flex: 1; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; transition: all 0.3s; }
+        input[type="text"]:focus, input[type="password"]:focus { outline: none; border-color: #667eea; }
+        button { padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+        button:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4); }
+        button:active { transform: translateY(0); }
+        button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .model-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .model-card { border: 2px solid #e0e0e0; border-radius: 12px; padding: 16px; cursor: pointer; transition: all 0.3s; background: white; }
+        .model-card:hover { border-color: #667eea; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2); }
+        .model-card.selected { border-color: #667eea; background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%); }
+        .model-name { font-weight: 600; font-size: 16px; margin-bottom: 8px; color: #333; }
+        .model-info { font-size: 13px; color: #666; line-height: 1.6; }
+        .model-info div { margin-bottom: 4px; }
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; margin-left: 8px; }
+        .badge-free { background: #4caf50; color: white; }
+        .badge-pro { background: #ff9800; color: white; }
+        .chat-container { border: 2px solid #e0e0e0; border-radius: 12px; height: 500px; display: flex; flex-direction: column; }
+        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; background: #f9f9f9; }
+        .message { margin-bottom: 16px; display: flex; gap: 12px; }
+        .message-avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; flex-shrink: 0; }
+        .message.user .message-avatar { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .message.assistant .message-avatar { background: #e0e0e0; color: #333; }
+        .message-content { flex: 1; background: white; padding: 12px 16px; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); line-height: 1.6; }
+        .message.user .message-content { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .chat-input-area { padding: 16px; border-top: 2px solid #e0e0e0; display: flex; gap: 10px; }
+        .chat-input { flex: 1; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; resize: none; font-family: inherit; }
+        .chat-input:focus { outline: none; border-color: #667eea; }
+        .status { padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; }
+        .status.success { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
+        .status.error { background: #ffebee; color: #c62828; border: 1px solid #ef9a9a; }
+        .status.info { background: #e3f2fd; color: #1565c0; border: 1px solid #90caf9; }
+        .limits-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 15px; }
+        .limits-table th, .limits-table td { padding: 10px; text-align: left; border-bottom: 1px solid #e0e0e0; }
+        .limits-table th { background: #f5f5f5; font-weight: 600; color: #333; }
+        .limits-table tr:last-child td { border-bottom: none; }
+        .typing-indicator { display: none; padding: 12px; background: white; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); width: fit-content; }
+        .typing-indicator.active { display: block; }
+        .typing-indicator span { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #667eea; margin: 0 2px; animation: typing 1.4s infinite; }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typing { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-10px); } }
+        .clear-chat { padding: 8px 16px; background: #f44336; font-size: 13px; }
+        .scroll-to-bottom { position: absolute; bottom: 80px; right: 30px; width: 40px; height: 40px; border-radius: 50%; background: #667eea; color: white; border: none; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.2); display: none; align-items: center; justify-content: center; font-size: 20px; }
+        code { background: #f5f5f5; padding: 2px 6px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 13px; }
+        pre { background: #f5f5f5; padding: 12px; border-radius: 8px; overflow-x: auto; margin: 8px 0; }
+        pre code { background: none; padding: 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 Gemini API Tester</h1>
+            <p>Testovací prostředí pro Google Gemini API – pouze textové modely (duben 2026)</p>
+        </div>
+        
+        <div class="content">
+            <div class="section">
+                <div class="section-title">🔑 API klíč</div>
+                <div class="api-key-input">
+                    <input type="password" id="apiKey" placeholder="Vlož svůj Gemini API klíč (začíná AIzaSy...)">
+                    <button onclick="saveApiKey()">Uložit klíč</button>
+                </div>
+                <div id="apiStatus"></div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">📊 Textové modely Gemini (FREE tier)</div>
+                <div style="display: flex; gap: 10px; align-items: flex-end; margin-bottom: 15px;">
+                    <div style="flex: 1;">
+                        <div style="font-size: 13px; font-weight: 600; color: #333; margin-bottom: 5px;">Vyber model:</div>
+                        <select id="modelSelect" onchange="selectModel(this.value)" style="width: 100%; padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; background: white;">
+                            <!-- Options generated by JS -->
+                        </select>
+                    </div>
+                    <button onclick="showModelInfo()" style="padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer;">ℹ️ Info o modelu</button>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">💬 Chat</div>
+                <div style="position: relative;">
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="message assistant">
+                                <div class="message-avatar">AI</div>
+                                <div class="message-content">
+                                    Ahoj! Jsem Gemini. Zvol si model nahoře a můžeme začít chatovat. 
+                                    Nezapomeň vložit API klíč!
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-input-area">
+                            <textarea 
+                                class="chat-input" 
+                                id="chatInput" 
+                                placeholder="Napiš svou zprávu..."
+                                rows="2"
+                                onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault();sendMessage();}"
+                            ></textarea>
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <button onclick="sendMessage()" id="sendBtn">Odeslat</button>
+                                <button class="clear-chat" onclick="clearChat()">Smazat</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="scroll-to-bottom" id="scrollBtn" onclick="scrollToBottom()">↓</button>
+                </div>
+            </div>
+
+            <!-- TOKEN USAGE PANEL -->
+            <div class="section">
+                <div class="section-title">📊 Token usage statistics</div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px;">
+                    <div style="background: #e8f5e9; padding: 15px; border-radius: 8px;">
+                        <div style="font-size: 12px; color: #666; margin-bottom: 5px;">Prompt tokens (poslední)</div>
+                        <div id="lastPromptTokens" style="font-size: 24px; font-weight: 700; color: #2e7d32;">0</div>
+                    </div>
+                    <div style="background: #e3f2fd; padding: 15px; border-radius: 8px;">
+                        <div style="font-size: 12px; color: #666; margin-bottom: 5px;">Output tokens (poslední)</div>
+                        <div id="lastOutputTokens" style="font-size: 24px; font-weight: 700; color: #1565c0;">0</div>
+                    </div>
+                    <div style="background: #fff3e0; padding: 15px; border-radius: 8px;">
+                        <div style="font-size: 12px; color: #666; margin-bottom: 5px;">Total tokens (poslední)</div>
+                        <div id="lastTotalTokens" style="font-size: 24px; font-weight: 700; color: #e65100;">0</div>
+                    </div>
+                    <div style="background: #fce4ec; padding: 15px; border-radius: 8px;">
+                        <div style="font-size: 12px; color: #666; margin-bottom: 5px;">Celkem všech tokenů</div>
+                        <div id="cumulativeTokens" style="font-size: 24px; font-weight: 700; color: #c62828;">0</div>
+                    </div>
+                </div>
+
+                <div style="background: #f5f5f5; padding: 12px; border-radius: 8px; font-size: 13px; line-height: 1.6;">
+                    <strong>📈 Co tyto čísla znamenají:</strong>
+                    <ul style="margin: 8px 0 0 20px;">
+                        <li><strong>Prompt tokens</strong> – počet tokenů tvé otázky (input)</li>
+                        <li><strong>Output tokens</strong> – počet tokenů odpovědi AI (response)</li>
+                        <li><strong>Total tokens</strong> – součet input + output pro jednu konverzaci</li>
+                        <li><strong>Cumulative</strong> – všechy tokeny za celou touto session</li>
+                        <li><strong>Poznámka:</strong> Delší odpovědi = více tokenů = rychlejší spotřebovaní TPM limitu</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- BATCH TESTING SECTION -->
+            <div class="section">
+                <div class="section-title">📋 Bible / Strong's Concordance - testování throughputu</div>
+                <div style="display: flex; gap: 10px; margin-bottom: 15px; align-items: flex-end;">
+                    <div style="flex: 1;">
+                        <div style="font-size: 13px; font-weight: 600; color: #333; margin-bottom: 5px;">Interval mezi otázkami (sekundy):</div>
+                        <input type="number" id="intervalSeconds" value="30" min="5" max="3600" style="width: 100%; padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px;">
+                    </div>
+                    <button onclick="startBatch()" id="startBatchBtn" style="background: #4caf50;">▶️ Spustit sérii</button>
+                    <button onclick="stopBatch()" id="stopBatchBtn" style="background: #f44336; display: none;">⏹️ Zastavit</button>
+                </div>
+
+                <div id="batchStatus" style="font-size: 13px; color: #666; margin-bottom: 10px;"></div>
+
+                <div style="background: #f5f5f5; padding: 12px; border-radius: 8px; font-size: 13px; margin-bottom: 15px;">
+                    <strong>Připravené otázky (30) - biblické termíny (Strong's Concordance):</strong>
+                    <ol style="margin: 8px 0 0 20px; line-height: 1.6;" id="batchQuestionsList"></ol>
+                    <div style="margin-top: 10px; font-size: 12px; color: #666;">
+                        <strong>POZNÁMKA:</strong> Tyto otázky jsou zaměřeny na biblické termíny, jazykové analýzy a teologické pojemky. Slouží k testování kvality odpovědí, využití tokenů a schopnosti modelu pracovat s complexními exegetickými tématy. Modely s vyšším TPM/RPD atraining na religious texts (např. Gemini 2.5 Pro) budou konat lépe.
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📋 Rate limity modelů (Free tier - duben 2026)</div>
+                <table class="limits-table">
+                    <thead>
+                        <tr>
+                            <th>Model</th>
+                            <th>RPM</th>
+                            <th>RPD</th>
+                            <th>TPM</th>
+                            <th>Poznámka</th>
+                        </tr>
+                    </thead>
+                    <tbody id="limitsTable"></tbody>
+                </table>
+
+                <div style="margin-top: 20px; padding: 16px; background: #e3f2fd; border-radius: 8px; font-size: 14px; line-height: 1.6;">
+                    <strong style="display: block; margin-bottom: 10px;">ℹ️ Důležité informace o rate limits (duben 2026):</strong>
+                    <ul style="margin: 0 0 0 20px;">
+                        <li><strong>Tier systém:</strong> Limity se liší podle tieru projektu (Free / Tier 1 / Tier 2 / Tier 3).</li>
+                        <li><strong>Free tier – oficiální čísla:</strong>
+                            <ul style="margin: 4px 0 0 20px;">
+                                <li>Gemini 2.5 Flash-Lite: 15 RPM / 1 500 RPD / 1M TPM</li>
+                                <li>Gemini 2.5 Flash: ~15 RPM / 1 500 RPD / 1M TPM</li>
+                                <li>Gemini 2.5 Pro: 5 RPM / <strong style="color: #c62828;">50 RPD</strong> / 1M TPM</li>
+                                <li>Gemini 3 Flash Preview: ~15 RPM / 1 500 RPD / 1M TPM</li>
+                                <li>Gemini 3.1 Flash-Lite Preview: ~15 RPM / 1 500 RPD / 1M TPM</li>
+                            </ul>
+                        </li>
+                        <li><strong>Pozor na account-specific limity:</strong> Nové/volné účty mohou mít nižší limity (např. jen 20 RPD). Chyba "quota exceeded" znamená, že jsi dosáhl svého aktuálního limitu.</li>
+                        <li><strong>Waiting time:</strong> Při quota exceed se zobrazí čas do resetu (např. 59s pro RPM, půlnoc pro RPD).</li>
+                        <li><strong>Reset časů:</strong> RPD resetuje každý den o půlnoci Pacific Time. RPM je 1-minútový rolling window.</li>
+                        <li><strong>Preview modely:</strong> Mají často nižší limity a mohou být deprecated s 2 týdny upozornění.</li>
+                        <li><strong>Odstraněné audio modely:</strong> Gemini 3.1 Flash Live a TTS vyřazeny – nevrací textový output.</li>
+                        <li><strong>Monitorování:</strong> Kontrola aktuálních limitů ve <a href="https://aistudio.google.com/rate-limit" target="_blank" style="color: #1565c0;">AI Studio</a> nebo pomocí <code style="background:#f5f5f5;padding:2px 6px;border-radius:4px;">GET https://generativelanguage.googleapis.com/v1beta/models?key=YOUR_KEY</code>.</li>
+                    </ul>
+                </div>
+
+                <div style="margin-top: 20px; padding: 16px; background: #fff3e0; border-radius: 8px; font-size: 13px; line-height: 1.6; color: #e65100;">
+                    <strong>⚠️ Zbylé a deprecated modely (již neaktivní):</strong>
+                    <ul style="margin: 8px 0 0 20px;">
+                        <li>Gemini 2.0 Flash / Flash-Lite – deprecated 1.6.2026</li>
+                        <li>Gemini 3 Pro Preview – deprecated 9.3.2026</li>
+                        <li>Gemini 1.5系列 – již nejsou aktuální</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const MODELS = [
+            {
+                name: 'gemini-3.1-flash-lite-preview',
+                displayName: 'Gemini 3.1 Flash-Lite Preview',
+                description: 'Nejnovější 3.1 - nejlevnější a nejrychlejší',
+                tier: 'free',
+                capabilities: ['Text-only input/output', 'Nízká latence', 'Velký context (1M)', 'Nejlepší cena'],
+                limitations: ['Preview model', 'Nižší reasoning', 'Omezené multimodality'],
+                note: 'Free tier - limitováno projektem'
+            },
+            {
+                name: 'gemini-3-flash-preview',
+                displayName: 'Gemini 3 Flash Preview',
+                description: 'Nejchytřejší Flash - rychlost + inteligence',
+                tier: 'free',
+                capabilities: ['Vysoká年级inteligence', 'Rychlé odpovědi', '1M token context', 'Multimodální'],
+                limitations: ['Preview model', 'Může změnat API', 'Vyšší cena'],
+                note: 'Preview - může se měnit'
+            },
+            {
+                name: 'gemini-2.5-pro',
+                displayName: 'Gemini 2.5 Pro',
+                description: 'Nejlepší kvalita - coding a reasoning',
+                tier: 'free',
+                capabilities: ['Nejlepší reasoning', 'Pokročilý coding', 'Analytické úkoly', '1M token context'],
+                limitations: ['Pouze 50 RPD free', 'Pomalejší než Flash', 'Vyšší náklady'],
+                note: 'Stabilní produkční model'
+            },
+            {
+                name: 'gemini-2.5-flash',
+                displayName: 'Gemini 2.5 Flash',
+                description: 'První hybrid reasoning - thinking budgets',
+                tier: 'free',
+                capabilities: ['Adaptivní thinking', 'Rychlost + kvalita', 'Thinking control', '1M context'],
+                limitations: ['Vyčerpává tokeny rychleji', 'Nejlepší pro dlouhé výstupy'],
+                note: 'Stabilní model s 1M context'
+            },
+            {
+                name: 'gemini-2.5-flash-lite',
+                displayName: 'Gemini 2.5 Flash-Lite',
+                description: 'Nejmenší a nejlevnější 2.5',
+                tier: 'free',
+                capabilities: ['Nejnižší cena', 'Vysoký throughput', '30 RPM free', 'Skvělý pro batch'],
+                limitations: ['Základní inteligence', 'Hraní s complexními úkoly', 'Nízké token limits'],
+                note: 'Pro velké objemy'
+            },
+            {
+                name: 'gemini-2.5-flash-lite-preview-09-2025',
+                displayName: 'Gemini 2.5 Flash-Lite Preview',
+                description: 'Preview verze Flash-Lite',
+                tier: 'free',
+                capabilities: ['Nejnovější flash-lite', 'Experimentální featury', 'Lepší cena'],
+                limitations: ['Preview – nepro produkci', 'Může být deprecated', 'Omezené podporování'],
+                note: 'Preview model'
+            }
+        ];
+
+        let selectedModel = MODELS[0].name;
+        let apiKey = localStorage.getItem('gemini_api_key') || '';
+        let conversationHistory = [];
+
+        let totalTokensUsed = 0;
+        let requestCount = 0;
+        let lastResponseTokens = { prompt: 0, output: 0, total: 0 };
+
+        function initModels() {
+            const select = document.getElementById('modelSelect');
+            const limitsTable = document.getElementById('limitsTable');
+
+            const rateLimits = {
+                'gemini-3.1-flash-lite-preview': { rpm: '~15', rpd: '1 500', tpm: '1 000 000' },
+                'gemini-3-flash-preview': { rpm: '~15', rpd: '1 500', tpm: '1 000 000' },
+                'gemini-2.5-pro': { rpm: '5', rpd: '50', tpm: '1 000 000' },
+                'gemini-2.5-flash': { rpm: '~15', rpd: '1 500', tpm: '1 000 000' },
+                'gemini-2.5-flash-lite': { rpm: '15', rpd: '1 500', tpm: '1 000 000' },
+                'gemini-2.5-flash-lite-preview-09-2025': { rpm: '~15', rpd: '1 500', tpm: '1 000 000' }
+            };
+
+            MODELS.forEach((model, index) => {
+                const option = document.createElement('option');
+                option.value = model.name;
+                option.textContent = model.displayName;
+                if (model.name === selectedModel) {
+                    option.selected = true;
+                }
+                select.appendChild(option);
+            });
+
+            if (!selectedModel) {
+                selectedModel = 'gemini-3.1-flash-lite-preview';
+                select.value = selectedModel;
+            }
+
+            MODELS.forEach(model => {
+                const limits = rateLimits[model.name] || { rpm: '–', rpd: '–', tpm: '–' };
+                let note = model.note;
+                if (model.name === 'gemini-2.5-flash-lite') {
+                    note += ' (tvůj account má aktuálně 20 RPD – může být increased později)';
+                }
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${model.displayName}</strong></td>
+                    <td>${limits.rpm} RPM</td>
+                    <td>${limits.rpd} RPD</td>
+                    <td>${limits.tpm} TPM</td>
+                    <td style="color: #666; font-size: 12px;">${note}</td>
+                `;
+                limitsTable.appendChild(row);
+            });
+
+            if (apiKey) {
+                document.getElementById('apiKey').value = apiKey;
+                showStatus('API klíč načten z localStorage', 'success');
+            }
+        }
+
+        function selectModel(modelName) {
+            selectedModel = modelName;
+            const model = MODELS.find(m => m.name === modelName);
+            showStatus(`Vybrán model: ${model.displayName}`, 'info');
+        }
+
+        function showModelInfo() {
+            const model = MODELS.find(m => m.name === selectedModel);
+            const capabilitiesList = model.capabilities.map(c => `• ${c}`).join('\n');
+            const limitationsList = model.limitations.map(l => `• ${l}`).join('\n');
+            alert(`${model.displayName}\n\n${model.description}\n\n✅ Co umí:\n${capabilitiesList}\n\n⚠️ Omezení:\n${limitationsList}\n\n📝 Poznámka: ${model.note}`);
+        }
+
+        function saveApiKey() {
+            const key = document.getElementById('apiKey').value.trim();
+            if (!key) {
+                showStatus('Zadej platný API klíč!', 'error');
+                return;
+            }
+            if (!key.startsWith('AIzaSy')) {
+                showStatus('API klíč by měl začínat na "AIzaSy"', 'error');
+                return;
+            }
+            apiKey = key;
+            localStorage.setItem('gemini_api_key', key);
+            showStatus('API klíč úspěšně uložen!', 'success');
+        }
+
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('apiStatus');
+            statusDiv.className = `status ${type}`;
+            statusDiv.textContent = message;
+            setTimeout(() => {
+                statusDiv.className = '';
+                statusDiv.textContent = '';
+            }, 5000);
+        }
+
+        function addMessage(role, content) {
+            const messagesDiv = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role}`;
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.textContent = role === 'user' ? 'TY' : 'AI';
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            contentDiv.innerHTML = formatMessage(content);
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(contentDiv);
+            messagesDiv.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        function formatMessage(text) {
+            text = text.replace(/```(\w+)?\n([\s\S]+?)```/g, (match, lang, code) => {
+                return `<pre><code>${escapeHtml(code.trim())}</code></pre>`;
+            });
+            text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+            text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+            text = text.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+            text = text.replace(/\n/g, '<br>');
+            return text;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        async function makeRequestWithRetry(maxRetries = 3) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${selectedModel}:generateContent?key=${apiKey}`;
+            const options = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ role: 'user', parts: [{ text: conversationHistory[conversationHistory.length - 1].parts[0].text }] }]
+                })
+            };
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (response.status === 429 && i < maxRetries - 1) {
+                        await new Promise(r => setTimeout(r, 1000 * Math.pow(2, i)));
+                        continue;
+                    }
+                    return response;
+                 } catch (e) {
+                     if (i === maxRetries - 1) throw e;
+                     await new Promise(r => setTimeout(r, 1000 * Math.pow(2, i)));
+                 }
+             }
+         }
+
+         function classifyError(message) {
+            if (message.includes('API key not valid') || message.includes('API_KEY_INVALID')) {
+                return { type: 'API_KEY_ERROR', title: 'Neplatný API klíč', suggestion: 'Zkontroluj API klíč v nastavení a ulož ho znovu.' };
+            }
+            if (message.includes('quota') || message.includes('RATE_LIMIT') || message.includes('429')) {
+                return { type: 'RATE_LIMIT', title: 'Denní limit vyčerpán', suggestion: 'Počkej na reset limitu (obvykle půlnoc Pacific Time) nebo zvýš tier projektu.' };
+            }
+            if (message.includes('context length') || message.includes('CONTEXT')) {
+                return { type: 'CONTEXT', title: 'Příliš dlouhý kontext', suggestion: 'Smaž starší zprávy v chatu pomocí tlačítka Smazat.' };
+            }
+            if (message.includes('500') || message.includes('503')) {
+                return { type: 'SERVER', title: 'Chyba serveru Gemini', suggestion: 'Zkus to znovu za chvíli. Server může být dočasně nedostupný.' };
+            }
+            return { type: 'UNKNOWN', title: 'Neznámá chyba', suggestion: 'Zkus aktualizovat stránku nebo zkontrolovat konzoli pro více detailů.' };
+        }
+
+        function updateTokenDisplay() {
+            const lastPromptEl = document.getElementById('lastPromptTokens');
+            const lastOutputEl = document.getElementById('lastOutputTokens');
+            const lastTotalEl = document.getElementById('lastTotalTokens');
+            const cumulativeEl = document.getElementById('cumulativeTokens');
+            if (lastPromptEl) lastPromptEl.textContent = lastResponseTokens.prompt;
+            if (lastOutputEl) lastOutputEl.textContent = lastResponseTokens.output;
+            if (lastTotalEl) lastTotalEl.textContent = lastResponseTokens.total;
+            if (cumulativeEl) cumulativeEl.textContent = totalTokensUsed.toLocaleString();
+        }
+
+        function scrollToBottom() {
+            const messagesDiv = document.getElementById('chatMessages');
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function clearChat() {
+            conversationHistory = [];
+            const messagesDiv = document.getElementById('chatMessages');
+            messagesDiv.innerHTML = `<div class="message assistant">
+                <div class="message-avatar">AI</div>
+                <div class="message-content">
+                    Ahoj! Jsem Gemini. Zvol si model nahoře a můžeme začít chatovat. Nezapomeň vložit API klíč!
+                </div>
+            </div>`;
+        }
+
+        const BATCH_QUESTIONS = [
+            'Co znamená řecké slovo \'agapao\' (G25) v kontextu 1. Korintským 13? Vysvětli rozdíl oproti \'phileo\' (G5374) a jak to ovlivňuje chápání lásky v křesťanské etice.',
+            'Jaký je původ a význam hebrejského slova \'Elohim\' (H430)? Proč je použito v nesouhlasném čísle? Jaký je jeho vztah k \'YHWH\' (H3068)?',
+            'Vysvětli význam řeckého termínu \'Logos\' (G305) v Janovi 1:1–14. Jak to ovlivňuje chápání božství Ježíše? Srovnej s \'doxa\' (G1391).',
+            'Co je podstatný rozdíl mezi \'kleronomeo\' (G2816) a \'diadechomai\' (G1207)? Které se používá pro duchovní dědictví vs. materiálního?',
+            'Jaký kontext měli \'aiónios\' (G166) a \'aídios\' (G126)? Proč některé překlady používají \'věčný\' vs. \'navždy\'? Uveď teologické implikace.',
+            'Vysvětli roli hebrejského \'chesed\' (H2617) v Žalme 136. Jak se překládá do českých překladů? Proč je to klíčové pro smlouvu?',
+            'Co je \'ebraismus\' a jak se projevuje v řeckém textu Nového zákona? Ukaž 3 příklady hebraismů v Matouši.',
+            'Jaký význam má řecké \'hypostasis\' (G5287) v Hebrejům 1:3? Odkazuj na filozofické použití u Platóna.',
+            'Vysvětli rozdíl mezi \'dikaiosune\' (G1343) a \'chesed\' (H2617). Jak se pojmová \'spravedlnost\' liší od \'milost\'?',
+            'Co znamená \'šāḇaṭ\' (H7673) v Exodus 20:8–11? Proč je \'odpočinek\' překládán jako \'šabath\'?',
+            'Jaké jsou jazykové znaky \'inclusio\' ve Starém zákoně? Ukaž příklad z Genesis 1–2.',
+            'Vysvětli pojem \'semantické pole\' v biblické exegezi. Jak analyzuješ \'láska\' (agape, phileo, storge)?',
+            'Co je \'textual criticism\' a jak pomáhá určit původní text Bible? Uveď 2 kritické varianty.',
+            'Jak rozlišuješ \'historické\' od \'teologického\' významu proroctví? Ukaž na Izaiáš 7:14.',
+            'Vysvětli využití \'pesher\' v Qumran textech. Jak to porovnáš s \'midrašem\'?',
+            'Co je \'intertextualita\' mezi Starým a Novým zákonem? Ukaž na Malachiáš 3:1 v Matouši 11:10.',
+            'Jaký je rozdíl mezi \'kerygmatem\' a \'didakaloským\' stylem v evangeliích?',
+            'Vysvětli \'targum\' a jeho roli v synagogálních čteních. Jak ovlivnil Septuagintu?',
+            'Co znamená \'eschatologický inverted\'? Ukaž na příklad z Daniela 7.',
+            'Jaké jsou jazykové projevy \'divine passive\' v hebrejštině? Ukaž na Exodus 14:21.',
+            'Vysvětli pojem \'sensus plenior\'. Jak může mít Starý zákon hlubší význam v Novém zákoně?',
+            'Co je \'typologie\'? Porovnej \'Adama\' (Rim 5:14) s \'Kristus\'. Jaký je rozdíl oproti \'alegorii\' (Gal 4:24)?',
+            'Jak rozlišuješ \'prophetic perfect\' od \'future imperfect\' v proroctvích?',
+            'Vysvětli pojem \'interlinear gloss\' a jak se používá v lingvistické analýze biblických jazyků.',
+            'Co je \'canonical criticism\'? Jak se liší od \'source criticism\'?',
+            'Jaké jsou hlavní rysy \'koine řečtiny\' v Novém zákoně? Uveď 3 znaky.',
+            'Vysvětli význam \'tetragrammaton\' (YHWH) a jak je přeneseno do překladů.',
+            'Co je \'gematria\' a jak se používala v židovské gnóse? Ukaž na příklad z Zjavení 13:18.',
+            'Jaký je rozdíl mezi \'elohim\' (H430) a \'YHWH\' (H3068) v kontextu tvoření?',
+            'Vysvětli pojem \'dynamic equivalence\' vs \'formal equivalence\' v překladatelské teorii.',
+            'Co je "Strong\'s Concordance" a jak se používá pro nalezení významu slova \'agape\' pomocí G25?'
+        ];
+
+        let currentBatchIndex = 0;
+        let isBatchRunning = false;
+        let batchStartTime = null;
+        let isWaitingForResponse = false;
+        let nextSendTime = null;
+        let scheduleTimeout = null;
+
+        function startBatch() {
+            if (isBatchRunning) return;
+            const intervalSec = parseInt(document.getElementById('intervalSeconds').value);
+            if (isNaN(intervalSec) || intervalSec < 5) {
+                alert('Zadej platný interval (minimálně 5 sekund)');
+                return;
+            }
+            isBatchRunning = true;
+            currentBatchIndex = 0;
+            batchStartTime = Date.now();
+            nextSendTime = null;
+            if (scheduleTimeout) clearTimeout(scheduleTimeout);
+            document.getElementById('startBatchBtn').style.display = 'none';
+            document.getElementById('stopBatchBtn').style.display = 'block';
+            document.getElementById('intervalSeconds').disabled = true;
+            displayBatchStatus();
+            sendNextBatchQuestion();
+        }
+
+        function stopBatch() {
+            isBatchRunning = false;
+            if (scheduleTimeout) {
+                clearTimeout(scheduleTimeout);
+                scheduleTimeout = null;
+            }
+            nextSendTime = null;
+            document.getElementById('startBatchBtn').style.display = 'block';
+            document.getElementById('stopBatchBtn').style.display = 'none';
+            document.getElementById('intervalSeconds').disabled = false;
+            document.getElementById('batchStatus').innerHTML = '<strong>🛑 Série zastavena.</strong>';
+        }
+
+        function sendNextBatchQuestion() {
+            if (!isBatchRunning || currentBatchIndex >= BATCH_QUESTIONS.length) {
+                stopBatch();
+                return;
+            }
+            if (isWaitingForResponse) {
+                console.log('%c[BATCH] Stále čekám na odpověď – zkouším znovu za 1s...', 'color: #ff9800;');
+                setTimeout(sendNextBatchQuestion, 1000);
+                return;
+            }
+            const question = BATCH_QUESTIONS[currentBatchIndex];
+            currentBatchIndex++;
+            displayBatchStatus();
+            console.log(`%c[BATCH] Odesílám otázku ${currentBatchIndex}/${BATCH_QUESTIONS.length}: "${question.substring(0, 60)}..."`, 'color: #4caf50; font-weight: bold;');
+            sendMessage(question, true);
+        }
+
+        function displayBatchStatus() {
+            const total = BATCH_QUESTIONS.length;
+            const sent = currentBatchIndex;
+            const remaining = total - sent;
+            let rightStatus = '';
+            if (nextSendTime) {
+                const remainingMs = Math.max(0, nextSendTime - Date.now());
+                const seconds = Math.ceil(remainingMs / 1000);
+                rightStatus = `Další za: <span id="countdown">${seconds}</span>s`;
+            } else if (isWaitingForResponse) {
+                rightStatus = '<span style="color: #ff9800;">⏳ Čekám na odpověď...</span>';
+            } else {
+                rightStatus = 'Připraveno k odeslání...';
+            }
+            document.getElementById('batchStatus').innerHTML = `
+                <strong>🔄 Batch stav:</strong> Odesláno: ${sent}/${total} | Zbývá: ${remaining}
+                | ${rightStatus}
+                | <button onclick="stopBatch()" style="padding: 2px 8px; margin-left: 10px; background: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">Zastavit</button>
+            `;
+        }
+
+        async function sendMessage(optionalText = null, fromBatch = false) {
+            if (!apiKey) {
+                showStatus('Nejdřív vlož API klíč!', 'error');
+                return;
+            }
+            const input = document.getElementById('chatInput');
+            const message = optionalText || input.value.trim();
+            if (!message && !optionalText) return;
+            if (!optionalText) {
+                input.value = '';
+                input.style.height = 'auto';
+            }
+            addMessage('user', message);
+            conversationHistory.push({ role: 'user', parts: [{ text: message }] });
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.disabled = true;
+            sendBtn.textContent = 'Načítám...';
+            isWaitingForResponse = true;
+
+            try {
+                const response = await makeRequestWithRetry();
+                if (!response.ok) {
+                    const error = await response.json();
+                    const errorMsg = error.error?.message || `HTTP ${response.status}`;
+                    throw new Error(errorMsg);
+                }
+                const data = await response.json();
+                const usage = data.usageMetadata || {};
+                const promptTokens = usage.promptTokenCount || 0;
+                const outputTokens = usage.candidatesTokenCount || 0;
+                const totalTokens = usage.totalTokenCount || (promptTokens + outputTokens);
+                totalTokensUsed += totalTokens;
+                requestCount++;
+                lastResponseTokens = { prompt: promptTokens, output: outputTokens, total: totalTokens };
+                console.log(`%c[TOKENS]`, 'color: #4caf50; font-weight: bold;', {
+                    prompt: promptTokens, output: outputTokens, total: totalTokens,
+                    cumulative: totalTokensUsed, requests: requestCount, model: selectedModel
+                });
+                updateTokenDisplay();
+                const aiResponse = data.candidates[0].content.parts[0].text;
+                conversationHistory.push({ role: 'model', parts: [{ text: aiResponse }] });
+                addMessage('assistant', aiResponse);
+
+                 if (fromBatch && BATCH_QUESTIONS.length > 0) {
+                     const intervalSec = parseInt(document.getElementById('intervalSeconds').value) || 30;
+                     nextSendTime = Date.now() + intervalSec * 1000;
+                     isWaitingForResponse = false;
+                     const updateCountdown = () => {
+                         if (!nextSendTime || !isBatchRunning) return;
+                         const remainingMs = Math.max(0, nextSendTime - Date.now());
+                         if (remainingMs <= 0) {
+                             sendNextBatchQuestion();
+                         } else {
+                             displayBatchStatus();
+                             requestAnimationFrame(updateCountdown);
+                         }
+                     };
+                     updateCountdown();
+                 } else if (fromBatch) {
+                     isWaitingForResponse = false;
+                     sendBtn.disabled = false;
+                     sendBtn.textContent = 'Odeslat';
+                  }
+                } catch (error) {
+                     console.error('Chyba:', error);
+                     const errorInfo = classifyError(error.message);
+                     showStatus(`${errorInfo.title}: ${error.message}`, 'error');
+                     addMessage('assistant', `❌ ${errorInfo.title}\n\n${error.message}\n\n${errorInfo.suggestion}`);
+                     console.log(`%c[GEMINI ERROR]`, 'color: #c62828; font-weight: bold;', {
+                         type: errorInfo.type, title: errorInfo.title, message: error.message,
+                         suggestion: errorInfo.suggestion, timestamp: new Date().toISOString()
+                     });
+                     if (!fromBatch) {
+                         isWaitingForResponse = false;
+                         sendBtn.disabled = false;
+                         sendBtn.textContent = 'Odeslat';
+                     } else {
+                         isWaitingForResponse = false;
+                     }
+                 } finally {
+                     if (!fromBatch) {
+                         isWaitingForResponse = false;
+                         sendBtn.disabled = false;
+                         sendBtn.textContent = 'Odeslat';
+                     } else {
+                         isWaitingForResponse = false;
+                     }
+                 }
+              }
+
+          setInterval(() => {
+             if (isBatchRunning) {
+                 displayBatchStatus();
+             }
+         }, 1000);
+
+        updateTokenDisplay();
+        initModels();
+    </script>
+</body>
+</html>
