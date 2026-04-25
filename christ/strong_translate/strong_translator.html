@@ -2214,11 +2214,12 @@ let listRangeFilter = null;
   const MODEL_TEST_MODEL_STORAGE_KEY = 'strong_model_test_model_';
   const MODEL_TEST_PINNED_MODELS = [
     { prov: 'groq', value: 'meta-llama/llama-4-scout-17b-16e-instruct', label: 'Llama 4 Scout (Vysoký limit TPM)' },
-    { prov: 'gemini', value: 'gemini-2.5-flash-lite', label: 'Gemini 2.5 Flash-Lite (Rychlý, levný)' },
-    { prov: 'openrouter', value: 'openai/gpt-oss-20b:free', label: 'openai/gpt-oss-20b:free' }
+    { prov: 'gemini', value: 'gemini-3.1-flash-lite-preview', label: 'Gemini 3.1 Flash-Lite (Systémový výchozí)' },
+    { prov: 'openrouter', value: 'openrouter/free', label: 'OpenRouter Auto Router (Systémový výchozí)' }
   ];
   const API_KEY_PROFILES_PREFIX = 'strong_apikey_profiles_';
   const API_KEY_ACTIVE_PROFILE_PREFIX = 'strong_apikey_active_';
+  const GEMINI_SYSTEM_MODEL = 'gemini-3.1-flash-lite-preview';
 
   function getTestHistory() {
     try {
@@ -2267,9 +2268,9 @@ let listRangeFilter = null;
     label: 'Google AI Studio (aistudio.google.com)',
     ph: 'AIza...',
     models: [
+      ['gemini-3.1-flash-lite-preview', 'Gemini 3.1 Flash-Lite (Systémový výchozí)'],
       ['gemini-2.5-flash-lite', 'Gemini 2.5 Flash-Lite (Rychlý, levný)'],
       ['gemini-2.5-flash', 'Gemini 2.5 Flash (Stabilní)'],
-      ['gemini-3.1-flash-lite-preview', 'Gemini 3.1 Flash-Lite Preview'],
       ['gemini-3.1-pro-preview', 'Gemini 3.1 Pro Preview'],
       ['gemini-2.5-flash-lite-preview-09-2025', 'Gemini 2.5 Flash-Lite Preview (legacy)'],
     ]
@@ -2459,10 +2460,15 @@ function onProviderChange() {
   } else {
     modelSelect.innerHTML = PROVIDERS[newProv].models.map(([v,l]) => `<option value="${v}">${l}</option>`).join('');
     modelSelect.disabled = false;
-    // Restore saved model if still available
-    const savedModel = localStorage.getItem('strong_model');
-    if (savedModel && modelSelect.querySelector(`option[value="${savedModel}"]`)) {
-      modelSelect.value = savedModel;
+    if (newProv === 'gemini' && modelSelect.querySelector(`option[value="${GEMINI_SYSTEM_MODEL}"]`)) {
+      modelSelect.value = GEMINI_SYSTEM_MODEL;
+      localStorage.setItem('strong_model', GEMINI_SYSTEM_MODEL);
+    } else {
+      // Restore saved model if still available
+      const savedModel = localStorage.getItem('strong_model');
+      if (savedModel && modelSelect.querySelector(`option[value="${savedModel}"]`)) {
+        modelSelect.value = savedModel;
+      }
     }
   }
 
@@ -6249,7 +6255,9 @@ function debounce(fn, delay) {
 }
 
 async function callAIWithRetry(provider, apiKey, model, messages) {
-  const tryModels = [...new Set([model, ...getFallbackModels(provider).filter(m => m !== model)])];
+  const tryModels = (provider === 'gemini' || (provider === 'openrouter' && model === 'openrouter/free'))
+    ? [model]
+    : [...new Set([model, ...getFallbackModels(provider).filter(m => m !== model)])];
   let lastErr = null;
 
   for (const m of tryModels) {
@@ -6269,6 +6277,7 @@ async function callAIWithRetry(provider, apiKey, model, messages) {
          const isRate = msg.includes('429') || msg.includes('quota') || msg.includes('rate') || msg.includes('too many');
          const isBanned = msg.includes('restricted') || msg.includes('organization');
          const is404 = msg.includes('404') || msg.includes('not found');
+         const is503 = msg.includes('503') || msg.includes('service unavailable');
          const isTimeout = e?.name === 'AbortError' || msg.includes('signal is aborted') || msg.includes('timeout');
 
          if (is404) {
@@ -6300,6 +6309,15 @@ async function callAIWithRetry(provider, apiKey, model, messages) {
              provider, model: m, attempt: attempt + 1, waitSeconds: wait, error: e.message
            });
            showToast(`⏳ Timeout API — opakuji pokus za ${wait}s`);
+           await sleep(wait * 1000);
+           continue;
+         }
+         if (is503) {
+           const wait = Math.min(20, Math.max(3, (attempt + 1) * 5));
+           logWarn('callAIWithRetry', `503 Service Unavailable na ${m} (pokus ${attempt + 1}), opakuji za ${wait}s...`, {
+             provider, model: m, attempt: attempt + 1, waitSeconds: wait, error: e.message
+           });
+           showToast(`⏳ 503 Service Unavailable — opakuji pokus za ${wait}s`);
            await sleep(wait * 1000);
            continue;
          }
@@ -6419,6 +6437,9 @@ async function callOnce(provider, apiKey, model, messages, externalSignal = null
      });
     const d = await r.json();
      if (!r.ok) {
+       if (r.status === 503 || d.error?.status === 'UNAVAILABLE') {
+         throw new Error('503 Service Unavailable: Gemini je dočasně přetížené, opakuji později.');
+       }
        if (d.error?.status === 'RESOURCE_EXHAUSTED') {
          const details = String(d.error?.message || '').trim();
          throw new Error(`Gemini limit vyčerpán! Počkej ~20min nebo přepni na Groq.${details ? ` Detail: ${details}` : ''}`);
