@@ -1395,7 +1395,7 @@ const callApi = createCallApi({
   log, logError, logWarn, showToast: (...a) => showToast(...a), t,
   rateInfoFromErrorMessage: (...a) => rateInfoFromErrorMessage(...a),
 });
-const { callAIWithRetry, callOnce, getTranslationEngineLabel, getProviderConfiguredModels, getFallbackModels, resetPrompt } = callApi;
+const { callAIWithRetry, callOnce, getTranslationEngineLabel, getProviderConfiguredModels, getFallbackModels, resetPrompt, parseTranslations } = callApi;
 
 // ══ UI MODULY ═══════════════════════════════════════════════════
 const toastApi = createToastApi({ CONFIG, logError });
