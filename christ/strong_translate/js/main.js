@@ -1465,7 +1465,7 @@ const listApi = createListApi({
   getTranslationStateForKey,
   isAutoProviderEnabled: (...a) => isAutoProviderEnabled(...a),
   resolveMainBatchProvider,
-  getPipelineModelForProvider,
+  getPipelineModelForProvider: (...a) => getPipelineModelForProvider(...a),
   translateBatch,
   startTopicRepairFlow: (...a) => startTopicRepairFlow(...a),
   showPreviewModal,
@@ -1493,8 +1493,8 @@ _detailApi = createDetailApi({
   openTopicPromptModal: (...a) => openTopicPromptModal(...a),
   callAIWithRetry, extractTopicValueFromAI: (...a) => extractTopicValueFromAI(...a),
   translateSingle,
-  resolveProviderForInteractiveAction, getPipelineModelForProvider,
-  getCurrentApiKey, SYSTEM_MESSAGE
+  resolveProviderForInteractiveAction, getPipelineModelForProvider: (...a) => getPipelineModelForProvider(...a),
+  getCurrentApiKey: (...a) => getCurrentApiKey(...a), SYSTEM_MESSAGE
 });
 const {
   renderDetail, renderTranslation, toggleEditSection, saveSection,
@@ -1550,7 +1550,8 @@ const topicRepairApi = createTopicRepairApi({
   renderList, renderDetail, updateStats,
   TOPIC_LABELS, TOPIC_PROMPT_PRESET_MAP,
   callAIWithRetry,
-  getPipelineModelForProvider, getCurrentApiKey,
+  getPipelineModelForProvider: (...a) => getPipelineModelForProvider(...a),
+  getCurrentApiKey: (...a) => getCurrentApiKey(...a),
   enforceSpecialistaFormat,
   parseWithOpenRouterNormalization, applyFallbacksToParsedMap,
   isAutoProviderEnabled,
@@ -1582,7 +1583,7 @@ const {
 
 // ══ LIMITS + PREVIEW API ════════════════════════════════════════
 const limitsApi = createLimitsApi({
-  getCurrentApiKey,
+  getCurrentApiKey: (...a) => getCurrentApiKey(...a),
   getModelTestSelectedModelForProvider: (...a) => getModelTestSelectedModelForProvider(...a),
   showToast,
 });
