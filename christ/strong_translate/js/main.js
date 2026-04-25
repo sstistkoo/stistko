@@ -5213,9 +5213,9 @@ function updateStats() {
 
 function saveProgressImmediate() {
    try {
-     localStorage.setItem(storeKey(), JSON.stringify({
-       state.translated,
-       state.sourceEntryEdits,
+    localStorage.setItem(storeKey(), JSON.stringify({
+      translated: state.translated,
+      sourceEntryEdits: state.sourceEntryEdits,
        ts: Date.now(),
        fileId: state.currentFileId
      }));
