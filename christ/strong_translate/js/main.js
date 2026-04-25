@@ -45,6 +45,9 @@
   import { sleepMs, sleep, debounce, formatAiResponseTime, escHtml } from './utils.js';
   import { extractOpenRouterText } from './ai/client.js';
   import { isSideFallbackAborted, sleepMsWithAbort, runProviderFallbackTaskSequential } from './ai/fallback.js';
+  import { createAutoApi } from './auto.js';
+  import { createModelTestUiApi, createModelTestRunnerApi } from './modelTest.js';
+  import { createPromptLibraryApi } from './promptLibrary.js';
   import { startResize, doResize, stopResize } from './ui/resize.js';
   import { createExportApi } from './exportData.js';
   // Re-export for use in this module
@@ -64,6 +67,7 @@ const {
       PROMPT_LIBRARY_BASE,
       MODEL_TEST_PROMPT_CATALOG: modelTestPromptCatalog
     } = prompts;
+const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
 
   function applyUiLanguage() {
     refreshTopicLabels();
@@ -5044,196 +5048,179 @@ async function callOnce(provider, apiKey, model, messages, externalSignal = null
     }
   }
 
-  // ══ AUTO REŽIM ═══════════════════════════════════════════════════
-function toggleAuto() {
-  if (state.autoRunning) { stopAuto(); return; }
-  startAuto();
-}
+const autoApi = createAutoApi({
+  state,
+  t,
+  getUiLang,
+  PROVIDERS,
+  AUTO_PROVIDER_ENABLED_KEY,
+  AUTO_TOKEN_LIMIT_KEY,
+  PIPELINE_SECONDARY_ENABLED_KEY,
+  setPipelineSecondaryEnabled,
+  syncSecondaryProviderToggles,
+  getSecondaryNextOperationState,
+  stopElapsedTimer,
+  showToast,
+  log,
+  getNextBatch,
+  updateETA,
+  translateBatch,
+  updateStats,
+  renderList,
+  renderDetail
+});
 
-function startAuto() {
-  state.autoRunning = true;
-  document.getElementById('btnAuto').classList.add('active');
-  document.getElementById('btnAuto').textContent = '■ AUTO';
-  document.getElementById('autoPanel').classList.add('show');
-  document.getElementById('autoInterval').textContent = state.currentInterval;
-  startAutoProviderCountdownTicker();
-  if (isAutoTokenLimitReached()) {
-    stopAuto();
-    showToast(t('toast.auto.notStartedTokenLimit'));
-    return;
-  }
-  runAutoStep();
-}
+const {
+  toggleAuto,
+  stopAuto,
+  isAutoProviderEnabled,
+  setAutoProviderEnabled,
+  initAutoProviderToggles,
+  updateAutoProviderCountdowns,
+  startAutoProviderCountdownTicker,
+  saveAutoTokenLimit,
+  isAutoTokenLimitReached,
+  refreshTokenStatsDisplay
+} = autoApi;
 
-function stopAuto() {
-  state.autoRunning = false;
-  state.sideFallbackAbortVersion++;
-  clearTimeout(state.autoTimer);
-  clearInterval(state.autoCountTimer);
-  document.getElementById('btnAuto').classList.remove('active');
-  document.getElementById('btnAuto').textContent = '▶ AUTO';
-  if (window.innerWidth <= 600) {
-    document.getElementById('autoPanel').classList.remove('show');
-  }
-  document.getElementById('countdown').textContent = '—';
-  updateAutoProviderCountdowns();
-  stopElapsedTimer();
-}
+const modelTestUiApi = createModelTestUiApi({
+  state,
+  t,
+  PROVIDERS,
+  MODEL_TEST_OUTPUT_KEY,
+  MODEL_TEST_STATS_KEY,
+  MODEL_TEST_PROMPT_TYPE_KEY,
+  MODEL_TEST_PROMPT_COMPARE_TYPE_KEY,
+  MODEL_TEST_PROMPT_COMPARE_ENABLE_KEY,
+  MODEL_TEST_CUSTOM_PROMPT_KEY,
+  MODEL_TEST_ENABLE_PROMPT_KEY,
+  showToast,
+  escHtml,
+  formatAiResponseTime,
+  populateModelTestModelSelect,
+  saveModelTestModelSelections,
+  updateModelTestProviderUi,
+  isModelTestPromptEnabled,
+  isModelTestPromptCompareEnabled,
+  getModelTestPromptType,
+  getModelTestPromptCompareType,
+  getModelTestCustomPromptText
+});
 
-function setAutoProviderCountdownLabel(prov, text) {
-  const el = document.getElementById(`autoCountdown_${prov}`);
-  if (el) el.textContent = text;
-}
+const {
+  showModelTestModal,
+  updateModelTestPromptUi,
+  saveModelTestPromptSettings,
+  closeModelTestModal,
+  cancelModelTest,
+  modelTestClearCountdownInterval,
+  modelTestSetCountdownLabel,
+  modelTestSetProviderEta,
+  modelTestResetProviderEta,
+  modelTestStartProviderCountdownTicker,
+  modelTestStopProviderCountdownTicker,
+  updateModelTestRunButton,
+  modelTestSetLastStatus,
+  saveModelTestOutputToStorage,
+  loadModelTestOutputFromStorage,
+  clearModelTestOutputFromStorage,
+  getModelTestStatsMap,
+  saveModelTestStatsMap,
+  upsertModelTestStats,
+  deleteModelTestStatsRow,
+  renderModelStatsTable
+} = modelTestUiApi;
 
-function isAutoProviderEnabled(prov) {
-  if (prov === 'gemini' || prov === 'openrouter') {
-    const raw = localStorage.getItem(PIPELINE_SECONDARY_ENABLED_KEY + prov);
-    if (raw === null) {
-      setPipelineSecondaryEnabled(prov, true);
-      return true;
-    }
-    return raw === '1';
-  }
-  const raw = localStorage.getItem(AUTO_PROVIDER_ENABLED_KEY + prov);
-  if (raw === null) {
-    localStorage.setItem(AUTO_PROVIDER_ENABLED_KEY + prov, '1');
-    return true;
-  }
-  return raw === '1';
-}
+const modelTestRunnerApi = createModelTestRunnerApi({
+  state,
+  t,
+  getUiLang,
+  PROVIDERS,
+  showToast,
+  log,
+  logTokenEntry,
+  formatAiResponseTime,
+  getModelTestPromptType,
+  getModelTestPromptCompareType,
+  getModelTestPromptTypeLabel,
+  getModelTestPromptTopicLabel,
+  getApiKeyForModelTest,
+  getModelTestSelectedModelForProvider,
+  modelTestWaitWithCountdown,
+  modelTestSetProviderEta,
+  modelTestStartProviderCountdownTicker,
+  modelTestStopProviderCountdownTicker,
+  modelTestResetProviderEta,
+  modelTestSetLastStatus,
+  updateModelTestRunButton,
+  modelTestSetCountdownLabel,
+  modelTestClearCountdownInterval,
+  saveModelTestOutputToStorage,
+  saveModelTestRawOutputToStorage,
+  clearModelTestRawOutputFromStorage,
+  upsertModelTestStats,
+  showModelTestModal,
+  updateModelTestProviderUi,
+  pushTestHistory,
+  appendModelTestLastBatchKeyAudit,
+  buildModelTestMessages,
+  parseWithOpenRouterNormalization,
+  applyFallbacksToParsedMap,
+  isTranslationComplete,
+  isDefinitionLikelyEnglish,
+  callOnce
+});
 
-function setAutoProviderEnabled(prov, enabled) {
-  const on = !!enabled;
-  if (prov === 'gemini' || prov === 'openrouter') {
-    setPipelineSecondaryEnabled(prov, on);
-    syncSecondaryProviderToggles(prov, on);
-    return;
-  }
-  localStorage.setItem(AUTO_PROVIDER_ENABLED_KEY + prov, on ? '1' : '0');
-}
+const {
+  getSampleEntriesForModelTest,
+  resetModelTestRateLimitHealth,
+  updateModelTestRateLimitHealth,
+  appendModelTestRateLimitStatus,
+  getUsageTotals,
+  appendModelTestUsage,
+  rateInfoFromErrorMessage,
+  appendModelTestFinalOverview,
+  getModelTestSuccessRatePercent,
+  appendPromptCompareSummary,
+  runAutoLiveModelTest,
+  testCurrentProviderModels
+} = modelTestRunnerApi;
 
-function initAutoProviderToggles() {
-  ['groq', 'gemini', 'openrouter'].forEach(prov => {
-    const cb = document.getElementById(`autoEnable_${prov}`);
-    if (!cb) return;
-    cb.checked = isAutoProviderEnabled(prov);
-    cb.onchange = () => {
-      setAutoProviderEnabled(prov, cb.checked);
-      updateAutoProviderCountdowns();
-    };
-  });
-}
+const promptLibraryApi = createPromptLibraryApi({
+  state,
+  t,
+  getUiLang,
+  DEFAULT_PROMPT,
+  FINAL_PROMPT,
+  PROMPT_LIBRARY_BASE,
+  enforceSpecialistaFormat,
+  showToast
+});
 
-function updateAutoProviderCountdowns() {
-  const mainLeft = Math.max(0, parseInt(document.getElementById('countdown')?.textContent || '0', 10) || 0);
-  const providerLabel = (prov) => String(PROVIDERS[prov]?.label || prov).split(' ')[0];
-  const groqLabel = 'Groq';
-  if (!isAutoProviderEnabled('groq')) {
-    setAutoProviderCountdownLabel('groq', t('provider.status.disabled', { label: groqLabel }));
-  } else {
-    if (state.autoRunning) {
-      setAutoProviderCountdownLabel('groq', mainLeft > 0
-        ? t('provider.status.nextIn', { label: groqLabel, seconds: mainLeft })
-        : t('provider.status.running', { label: groqLabel }));
-    } else {
-      setAutoProviderCountdownLabel('groq', t('provider.status.ready', { label: groqLabel }));
-    }
-  }
-  ['gemini', 'openrouter'].forEach(prov => {
-    if (Date.now() < Number(state.providerFailBadgeUntil[prov] || 0)) {
-      setAutoProviderCountdownLabel(prov, t('provider.status.failed', { label: providerLabel(prov) }));
-      return;
-    }
-    const enabled = isAutoProviderEnabled(prov);
-    if (!enabled) {
-      setAutoProviderCountdownLabel(prov, t('provider.status.disabled', { label: providerLabel(prov) }));
-      return;
-    }
-    const pending = Math.max(0, Number(state.providerFallbackPendingCount?.[prov] || 0));
-    if (pending > 0) {
-      setAutoProviderCountdownLabel(prov, `${providerLabel(prov)}: ${getUiLang() === 'en' ? 'processing partial' : 'zpracovává neúplné'} (${pending})`);
-      return;
-    }
-    const nextState = getSecondaryNextOperationState(prov);
-    if (nextState.exhausted && nextState.nextSec > 0) {
-      setAutoProviderCountdownLabel(prov, `${providerLabel(prov)}: ${getUiLang() === 'en' ? 'waiting' : 'čeká'} ${nextState.nextSec}s ${getUiLang() === 'en' ? 'for next attempt' : 'do dalšího pokusu'}`);
-      return;
-    }
-    setAutoProviderCountdownLabel(prov, t('provider.status.ready', { label: providerLabel(prov) }));
-  });
-}
-
-function startAutoProviderCountdownTicker() {
-  stopAutoProviderCountdownTicker();
-  updateAutoProviderCountdowns();
-  state.autoProviderCountdownTimer = setInterval(updateAutoProviderCountdowns, 500);
-}
-
-function stopAutoProviderCountdownTicker() {
-  clearInterval(state.autoProviderCountdownTimer);
-  state.autoProviderCountdownTimer = null;
-}
-
-async function runAutoStep() {
-  if (!state.autoRunning || state.autoStepRunning) return;
-  state.autoStepRunning = true;
-
-  try {
-    if (!isAutoProviderEnabled('groq')) {
-      stopAuto();
-      log('🛑 AUTO zastaven: Groq je vypnutý v AUTO panelu');
-      const groqHint = t('auto.groqEnableHint');
-      const autoLogEl = document.getElementById('autoLog');
-      if (autoLogEl) autoLogEl.textContent = groqHint;
-      setAutoProviderCountdownLabel('groq', groqHint);
-      if (window.innerWidth <= 600) {
-        document.getElementById('autoPanel')?.classList.add('show');
-      }
-      showToast(t('toast.auto.enableGroq'));
-      return;
-    }
-    if (isAutoTokenLimitReached()) {
-      stopAuto();
-      log('🛑 AUTO zastaven: dosažen limit tokenů');
-      showToast(t('toast.auto.stoppedTokenLimit'));
-      return;
-    }
-
-    const batch = getNextBatch(state.currentBatchSize);
-    if (!batch.length) {
-      stopAuto();
-      showToast(t('toast.translation.done'));
-      return;
-    }
-
-    document.getElementById('autoBatch').textContent = batch[0] + '–' + batch[batch.length-1];
-    log(`⚡ Překládám ${batch[0]}–${batch[batch.length-1]}...`);
-    updateETA();
-
-    const result = await translateBatch(batch);
-    updateStats();
-    renderList();
-    if (state.activeKey && state.translated[state.activeKey]) renderDetail();
-
-    if (!state.autoRunning) return;
-
-    // Odpočet do další dávky (u rate limitu delší odklad)
-    const delaySeconds = result?.rateLimited ? (result.cooldownSeconds || 60) : state.currentInterval;
-    let remaining = delaySeconds;
-    document.getElementById('countdown').textContent = remaining;
-    clearInterval(state.autoCountTimer);
-    state.autoCountTimer = setInterval(() => {
-      remaining--;
-      document.getElementById('countdown').textContent = remaining;
-      if (remaining <= 0) clearInterval(state.autoCountTimer);
-    }, 1000);
-    updateAutoProviderCountdowns();
-
-    state.autoTimer = setTimeout(runAutoStep, delaySeconds * 1000);
-  } finally {
-    state.autoStepRunning = false;
-  }
-}
+const {
+  initializePromptLibrary,
+  getStoredCustomPromptLibrary,
+  saveStoredCustomPromptLibrary,
+  getStoredImportedPromptLibrary,
+  saveStoredImportedPromptLibrary,
+  rebuildPromptLibrary,
+  getSystemPromptForCurrentTask,
+  isPromptAutoModeEnabled,
+  setMainPrompt,
+  applySystemPromptForCurrentTask,
+  togglePromptModeQuick,
+  updatePromptAutoButton,
+  togglePromptAutoMode,
+  showPromptLibraryModal,
+  closePromptLibraryModal,
+  renderPromptList,
+  renderPromptPreview,
+  selectPrompt,
+  applySelectedPrompt,
+  exportPromptLibraryToTxt,
+  importPromptLibraryFromFile,
+  updatePromptStatusIndicator
+} = promptLibraryApi;
 
 // ══ STATS & SAVE ════════════════════════════════════════════════
 function updateStats() {
@@ -5731,298 +5718,6 @@ function clearLog() {
   if (c) c.textContent = '';
 }
 
-function showModelTestModal(providerLabel, clearOutput = false) {
-  const modal = document.getElementById('modelTestModal');
-  const info = document.getElementById('modelTestInfo');
-  const output = document.getElementById('modelTestOutput');
-  const providerSelect = document.getElementById('modelTestProvider');
-  const promptEnable = document.getElementById('modelTestEnablePrompt');
-  const promptTypeSelect = document.getElementById('modelTestPromptType');
-  const promptCompareEnable = document.getElementById('modelTestEnablePromptCompare');
-  const promptCompareTypeSelect = document.getElementById('modelTestPromptTypeCompare');
-  const customPromptInput = document.getElementById('modelTestCustomPromptInput');
-  if (!modal || !info || !output || !providerSelect) return;
-  providerSelect.innerHTML = [
-    `<option value="parallel-3">3 provideři paralelně</option>`,
-    ...Object.keys(PROVIDERS)
-    .map(k => `<option value="${k}">${PROVIDERS[k].label}</option>`)
-  ].join('');
-  const currentProvider = document.getElementById('provider')?.value || 'groq';
-  providerSelect.value = currentProvider;
-  populateModelTestModelSelect('groq');
-  populateModelTestModelSelect('gemini');
-  populateModelTestModelSelect('openrouter');
-  saveModelTestModelSelections();
-  updateModelTestProviderUi();
-  info.textContent = `Provider: ${providerLabel || '—'}`;
-  if (clearOutput) {
-    output.value = '';
-    clearModelTestOutputFromStorage();
-  } else if (!output.value.trim()) {
-    const saved = loadModelTestOutputFromStorage();
-    if (saved) output.value = saved;
-  }
-  if (promptEnable) {
-    promptEnable.checked = isModelTestPromptEnabled();
-  }
-  if (promptTypeSelect) {
-    promptTypeSelect.value = getModelTestPromptType();
-  }
-  if (promptCompareTypeSelect && promptTypeSelect) {
-    promptCompareTypeSelect.innerHTML = promptTypeSelect.innerHTML;
-    promptCompareTypeSelect.value = getModelTestPromptCompareType();
-  }
-  if (promptCompareEnable) {
-    promptCompareEnable.checked = isModelTestPromptCompareEnabled();
-  }
-  if (customPromptInput) {
-    customPromptInput.value = getModelTestCustomPromptText();
-  }
-  updateModelTestPromptUi();
-  modal.classList.add('show');
-  updateModelTestRunButton();
-  renderModelStatsTable();
-}
-
-function updateModelTestPromptUi() {
-  const promptEnable = document.getElementById('modelTestEnablePrompt');
-  const promptTypeSelect = document.getElementById('modelTestPromptType');
-  const promptCompareEnable = document.getElementById('modelTestEnablePromptCompare');
-  const promptCompareTypeSelect = document.getElementById('modelTestPromptTypeCompare');
-  const promptCompareRow = document.getElementById('modelTestPromptCompareRow');
-  const customPromptRow = document.getElementById('modelTestCustomPromptRow');
-  const enabled = !!promptEnable?.checked;
-  if (promptTypeSelect) promptTypeSelect.disabled = !enabled;
-  if (promptCompareEnable) promptCompareEnable.disabled = !enabled;
-  const compareEnabled = enabled && !!promptCompareEnable?.checked;
-  if (promptCompareTypeSelect) promptCompareTypeSelect.disabled = !compareEnabled;
-  if (promptCompareRow) promptCompareRow.style.display = compareEnabled ? 'block' : 'none';
-  const isCustom = enabled && (promptTypeSelect?.value || 'custom') === 'custom';
-  if (customPromptRow) customPromptRow.style.display = isCustom ? 'block' : 'none';
-}
-
-function saveModelTestPromptSettings() {
-  const promptEnable = document.getElementById('modelTestEnablePrompt');
-  const promptTypeSelect = document.getElementById('modelTestPromptType');
-  const promptCompareEnable = document.getElementById('modelTestEnablePromptCompare');
-  const promptCompareTypeSelect = document.getElementById('modelTestPromptTypeCompare');
-  const customPromptInput = document.getElementById('modelTestCustomPromptInput');
-  if (promptEnable) {
-    localStorage.setItem(MODEL_TEST_ENABLE_PROMPT_KEY, promptEnable.checked ? '1' : '0');
-  }
-  if (promptTypeSelect) {
-    localStorage.setItem(MODEL_TEST_PROMPT_TYPE_KEY, promptTypeSelect.value || 'preset_v12');
-  }
-  if (promptCompareEnable) {
-    localStorage.setItem(MODEL_TEST_PROMPT_COMPARE_ENABLE_KEY, promptCompareEnable.checked ? '1' : '0');
-  }
-  if (promptCompareTypeSelect) {
-    localStorage.setItem(MODEL_TEST_PROMPT_COMPARE_TYPE_KEY, promptCompareTypeSelect.value || 'preset_v12');
-  }
-  if (customPromptInput) {
-    localStorage.setItem(MODEL_TEST_CUSTOM_PROMPT_KEY, customPromptInput.value || '');
-  }
-}
-
-function closeModelTestModal() {
-  if (state.modelTestRunning) {
-    showToast(t('toast.test.cancelFirst'));
-    return;
-  }
-  const modal = document.getElementById('modelTestModal');
-  if (modal) modal.classList.remove('show');
-}
-
-function cancelModelTest() {
-  if (!state.modelTestRunning) return;
-  state.modelTestCancelRequested = true;
-  if (state.modelTestAbortController) state.modelTestAbortController.abort();
-  updateModelTestRunButton();
-  showToast(t('toast.test.canceling'));
-}
-
-function modelTestClearCountdownInterval() {
-  if (state.modelTestCountdownInterval) {
-    clearInterval(state.modelTestCountdownInterval);
-    state.modelTestCountdownInterval = null;
-  }
-}
-
-function modelTestSetCountdownLabel(text) {
-  const el = document.getElementById('modelTestCountdown');
-  if (el) el.textContent = text || '';
-}
-
-function renderModelTestProviderCountdowns() {
-  const labels = {
-    groq: 'Groq',
-    gemini: 'Gemini',
-    openrouter: 'OpenRouter'
-  };
-  Object.keys(labels).forEach(prov => {
-    const el = document.getElementById(`modelTestCountdown_${prov}`);
-    if (!el) return;
-    const sec = Math.max(0, Math.ceil(Number(state.modelTestProviderEta[prov] || 0)));
-    el.textContent = `${labels[prov]}: ${sec > 0 ? `další požadavek za ~${sec}s` : 'připraveno'}`;
-  });
-}
-
-function modelTestSetProviderEta(prov, sec) {
-  if (!Object.prototype.hasOwnProperty.call(state.modelTestProviderEta, prov)) return;
-  state.modelTestProviderEta[prov] = Math.max(0, Number(sec) || 0);
-  renderModelTestProviderCountdowns();
-}
-
-function modelTestResetProviderEta() {
-  state.modelTestProviderEta = { groq: 0, gemini: 0, openrouter: 0 };
-  renderModelTestProviderCountdowns();
-}
-
-function modelTestStartProviderCountdownTicker() {
-  if (state.modelTestProviderCountdownInterval) clearInterval(state.modelTestProviderCountdownInterval);
-  state.modelTestProviderCountdownInterval = setInterval(renderModelTestProviderCountdowns, 500);
-}
-
-function modelTestStopProviderCountdownTicker() {
-  if (state.modelTestProviderCountdownInterval) {
-    clearInterval(state.modelTestProviderCountdownInterval);
-    state.modelTestProviderCountdownInterval = null;
-  }
-}
-
-function updateModelTestRunButton() {
-  const buttons = ['btnRunModelTest', 'btnRunModelTestTop']
-    .map(id => document.getElementById(id))
-    .filter(Boolean);
-  if (!buttons.length) return;
-  const apply = (text, className) => {
-    buttons.forEach(btn => {
-      btn.textContent = text;
-      btn.className = className;
-    });
-  };
-  if (state.modelTestRunning) {
-    if (state.modelTestCancelRequested) {
-      apply('⏹ Zastavuji...', 'modal-btn cancel');
-      return;
-    }
-    const sec = Math.max(0, Math.ceil(Number(state.modelTestNextRequestEtaSec || 0)));
-    apply(sec > 0 ? `■ Běží (${sec}s)` : '■ Běží', 'modal-btn cancel');
-    return;
-  }
-  apply('▶ Test provideru', 'modal-btn ok');
-}
-
-function modelTestSetLastStatus(text, kind = 'idle') {
-  const el = document.getElementById('modelTestLastStatus');
-  if (!el) return;
-  el.textContent = text || '';
-  if (kind === 'error') {
-    el.style.color = '#d25f5f';
-  } else if (kind === 'ok') {
-    el.style.color = '#5a9a6c';
-  } else if (kind === 'warn') {
-    el.style.color = '#d8a85f';
-  } else {
-    el.style.color = 'var(--txt2)';
-  }
-}
-
-function saveModelTestOutputToStorage(text) {
-  try { localStorage.setItem(MODEL_TEST_OUTPUT_KEY, String(text || '')); } catch (e) {}
-}
-
-function loadModelTestOutputFromStorage() {
-  try { return localStorage.getItem(MODEL_TEST_OUTPUT_KEY) || ''; } catch (e) { return ''; }
-}
-
-function clearModelTestOutputFromStorage() {
-  try { localStorage.removeItem(MODEL_TEST_OUTPUT_KEY); } catch (e) {}
-}
-
-function getModelTestStatsMap() {
-  try {
-    const parsed = JSON.parse(localStorage.getItem(MODEL_TEST_STATS_KEY) || '{}');
-    return parsed && typeof parsed === 'object' ? parsed : {};
-  } catch (e) {
-    return {};
-  }
-}
-
-function saveModelTestStatsMap(map) {
-  try { localStorage.setItem(MODEL_TEST_STATS_KEY, JSON.stringify(map || {})); } catch (e) {}
-}
-
-function upsertModelTestStats(prov, model, payload) {
-  const key = `${prov}::${model}`;
-  const map = getModelTestStatsMap();
-  const row = map[key] || {
-    provider: prov, model,
-    calls: 0, okBatches: 0, partialBatches: 0, errorBatches: 0, rateLimited: 0,
-    okKeys: 0, failedKeys: 0, totalKeys: 0, latencyMsTotal: 0, latencySamples: 0, lastTs: 0
-  };
-  row.calls += 1;
-  if (payload.status === 'OK') row.okBatches += 1;
-  else if (payload.status === 'PARTIAL') row.partialBatches += 1;
-  else if (payload.status === 'RATE_LIMITED') row.rateLimited += 1;
-  else row.errorBatches += 1;
-  row.okKeys += Math.max(0, payload.okKeys || 0);
-  row.failedKeys += Math.max(0, payload.failedKeys || 0);
-  row.totalKeys += Math.max(0, payload.totalKeys || (payload.okKeys || 0) + (payload.failedKeys || 0));
-  if (Number.isFinite(payload.latencyMs) && payload.latencyMs > 0) {
-    row.latencyMsTotal += payload.latencyMs;
-    row.latencySamples += 1;
-  }
-  row.lastTs = Date.now();
-  map[key] = row;
-  saveModelTestStatsMap(map);
-  renderModelStatsTable();
-}
-
-function deleteModelTestStatsRow(keyEncoded) {
-  const key = decodeURIComponent(String(keyEncoded || ''));
-  const map = getModelTestStatsMap();
-  if (!map[key]) return;
-  delete map[key];
-  saveModelTestStatsMap(map);
-  renderModelStatsTable();
-}
-
-function renderModelStatsTable() {
-  const body = document.getElementById('modelStatsBody');
-  if (!body) return;
-  const rows = Object.entries(getModelTestStatsMap()).map(([key, row]) => ({ key, ...row }));
-  rows.sort((a, b) => {
-    const aTotal = Math.max(1, a.okKeys + a.failedKeys);
-    const bTotal = Math.max(1, b.okKeys + b.failedKeys);
-    const aRate = a.okKeys / aTotal;
-    const bRate = b.okKeys / bTotal;
-    if (bRate !== aRate) return bRate - aRate;
-    const aLat = a.latencySamples ? a.latencyMsTotal / a.latencySamples : Number.POSITIVE_INFINITY;
-    const bLat = b.latencySamples ? b.latencyMsTotal / b.latencySamples : Number.POSITIVE_INFINITY;
-    if (aLat !== bLat) return aLat - bLat;
-    return (b.calls || 0) - (a.calls || 0);
-  });
-  if (!rows.length) {
-    body.innerHTML = `<tr><td colspan="7" style="padding:8px;color:var(--txt3)">Zatím bez dat.</td></tr>`;
-    return;
-  }
-  body.innerHTML = rows.map(r => {
-    const total = Math.max(1, (r.okKeys || 0) + (r.failedKeys || 0));
-    const rate = ((r.okKeys || 0) / total) * 100;
-    const avgMs = r.latencySamples ? (r.latencyMsTotal / r.latencySamples) : 0;
-    return `<tr>
-      <td style="padding:6px;border-top:1px solid var(--brd)">${escHtml(r.provider)}<br><span style="color:var(--txt3)">${escHtml(r.model)}</span></td>
-      <td style="padding:6px;border-top:1px solid var(--brd);text-align:right">${rate.toFixed(1)}%</td>
-      <td style="padding:6px;border-top:1px solid var(--brd);text-align:right">${r.okKeys || 0}/${r.failedKeys || 0}</td>
-      <td style="padding:6px;border-top:1px solid var(--brd);text-align:right">${r.totalKeys || 0}</td>
-      <td style="padding:6px;border-top:1px solid var(--brd);text-align:right">${formatAiResponseTime(avgMs)}</td>
-      <td style="padding:6px;border-top:1px solid var(--brd);text-align:right">${r.calls || 0}</td>
-      <td style="padding:6px;border-top:1px solid var(--brd);text-align:right"><button class="modal-btn cancel" style="padding:4px 8px;font-size:10px" onclick="deleteModelTestStatsRow('${encodeURIComponent(r.key)}')">Smazat</button></td>
-    </tr>`;
-  }).join('');
-}
-
 async function saveModelTestOutputTxt() {
   const text = document.getElementById('modelTestOutput')?.value || '';
   if (!text.trim()) {
@@ -6428,7 +6123,6 @@ function getModelTestSelectedModelForProvider(prov) {
 }
 
 const PIPELINE_MODEL_STORAGE_KEY = 'strong_pipeline_model_';
-const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
 
 function getPipelineModelForProvider(prov) {
   const hasStaticModel = (provider, model) => {
@@ -6762,717 +6456,6 @@ function clearModelTestOutput() {
   state.modelTestLibraryActive = false;
   clearModelTestOutputFromStorage();
   showToast(t('toast.output.cleared'));
-}
-
-function getSampleEntriesForModelTest(count = 3) {
-  if (!Array.isArray(state.entries) || state.entries.length === 0) return [];
-  const preferred = state.entries.filter(e => e?.key && e.key.startsWith('G')).slice(0, count);
-  if (preferred.length >= count) return preferred;
-  return state.entries.slice(0, count).filter(Boolean);
-}
-
-function pickRandom(arr) {
-  if (!Array.isArray(arr) || arr.length === 0) return null;
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-
-function resetModelTestRateLimitHealth() {
-  state.modelTestRateLimitHealth = { hits429: 0, lastRetryAfterSec: 0, lastRequestId: '', lastRemaining: '', lastReset: '' };
-}
-
-function updateModelTestRateLimitHealth(rate) {
-  if (!rate || typeof rate !== 'object') return;
-  if (rate.requestId) state.modelTestRateLimitHealth.lastRequestId = String(rate.requestId);
-  if (rate.remaining !== undefined && rate.remaining !== null && rate.remaining !== '') state.modelTestRateLimitHealth.lastRemaining = String(rate.remaining);
-  if (rate.reset !== undefined && rate.reset !== null && rate.reset !== '') state.modelTestRateLimitHealth.lastReset = String(rate.reset);
-  if (rate.retryAfterSec !== undefined && rate.retryAfterSec !== null && rate.retryAfterSec !== '') state.modelTestRateLimitHealth.lastRetryAfterSec = Number(rate.retryAfterSec) || 0;
-  if (rate.is429) state.modelTestRateLimitHealth.hits429 += 1;
-}
-
-function appendModelTestRateLimitStatus(appendReport) {
-  if (typeof appendReport !== 'function') return;
-  const h = state.modelTestRateLimitHealth || {};
-  appendReport(`Rate limit stav: 429=${h.hits429 || 0} | retry-after=${h.lastRetryAfterSec || 0}s | remaining=${h.lastRemaining || 'n/a'} | reset=${h.lastReset || 'n/a'}${h.lastRequestId ? ` | req=${h.lastRequestId}` : ''}`);
-}
-
-function getUsageTotals(raw) {
-  const usage = raw?.usage || raw?.usageMetadata;
-  if (!usage || typeof usage !== 'object') return null;
-  const inT = Number(usage.prompt_tokens || usage.promptTokenCount || usage.input_tokens || 0) || 0;
-  const outT = Number(usage.completion_tokens || usage.candidatesTokenCount || usage.output_tokens || 0) || 0;
-  const total = Number(usage.total_tokens || usage.totalTokenCount || usage.total || (inT + outT)) || (inT + outT);
-  return { inT, outT, total };
-}
-
-function appendModelTestUsage(appendReport, provider, model, raw) {
-  if (typeof appendReport !== 'function') return;
-  const totals = getUsageTotals(raw);
-  if (!totals) {
-    appendReport(`Tokeny: ${provider} | ${model} | n/a`);
-    return;
-  }
-  appendReport(`Tokeny: ${provider} | ${model} | ${totals.inT} in / ${totals.outT} out = ${totals.total}`);
-  logTokenEntry(provider, totals.inT, totals.outT, totals.total);
-}
-
-function rateInfoFromErrorMessage(msg) {
-  const text = String(msg || '');
-  const retry = text.match(/za\s+(\d+)s/i);
-  const req = text.match(/\[req:([^\]]+)\]/i);
-  return {
-    is429: /rate limit|429|too many/i.test(text),
-    retryAfterSec: retry ? Number(retry[1]) : 0,
-    requestId: req ? req[1] : ''
-  };
-}
-
-function appendModelTestFinalOverview(appendReport, testResults, testMode, extra = {}) {
-  if (typeof appendReport !== 'function') return;
-  const rows = Array.isArray(testResults) ? testResults : [];
-  const countBy = (status) => rows.filter(r => r.status === status).length;
-  const ok = countBy('OK');
-  const okRetry = countBy('OK_RETRY');
-  const partial = countBy('PARTIAL');
-  const rateLimited = countBy('RATE_LIMITED');
-  const error = countBy('ERROR');
-  const total = rows.length;
-  const done = ok + okRetry + partial;
-  const successPct = total > 0 ? Math.round((done / total) * 100) : 0;
-  appendReport('');
-  appendReport('=== KONEČNÝ PŘEHLED TESTU ===');
-  appendReport(`Výsledky modelů: OK ${ok} | OK po retry ${okRetry} | PARTIAL ${partial} | RATE_LIMIT ${rateLimited} | ERROR ${error} | CELKEM ${total}`);
-  appendReport(`Úspěšnost modelů: ${successPct}%`);
-  if (testMode === 'auto-live') {
-    appendReport(`Hesla: OK ${extra.okKeys || 0} | NEÚSP ${extra.failedKeys || 0} | cykly ${extra.cycles || 0}${extra.avgLatencyMs ? ` | prům. AI ${formatAiResponseTime(extra.avgLatencyMs)}` : ''}`);
-  }
-}
-
-function getModelTestSuccessRatePercent(results) {
-  const rows = Array.isArray(results) ? results : [];
-  if (!rows.length) return 0;
-  const success = rows.filter(r => r.status === 'OK' || r.status === 'OK_RETRY' || r.status === 'PARTIAL').length;
-  return Math.round((success / rows.length) * 100);
-}
-
-function appendPromptCompareSummary(appendReport, promptA, promptB, statsA, statsB, resultsA, resultsB) {
-  const failA = Number(statsA?.failedKeys || 0);
-  const failB = Number(statsB?.failedKeys || 0);
-  const succA = getModelTestSuccessRatePercent(resultsA);
-  const succB = getModelTestSuccessRatePercent(resultsB);
-  const latA = Number(statsA?.avgLatencyMs || 0);
-  const latB = Number(statsB?.avgLatencyMs || 0);
-  let winner = 'REMÍZA';
-  if (failA < failB) winner = `A (${getModelTestPromptTypeLabel(promptA)})`;
-  else if (failB < failA) winner = `B (${getModelTestPromptTypeLabel(promptB)})`;
-  else if (succA > succB) winner = `A (${getModelTestPromptTypeLabel(promptA)})`;
-  else if (succB > succA) winner = `B (${getModelTestPromptTypeLabel(promptB)})`;
-  else if (latA > 0 && latB > 0 && latA < latB) winner = `A (${getModelTestPromptTypeLabel(promptA)})`;
-  else if (latA > 0 && latB > 0 && latB < latA) winner = `B (${getModelTestPromptTypeLabel(promptB)})`;
-
-  appendReport('');
-  appendReport('=== A/B POROVNÁNÍ PROMPTŮ ===');
-  appendReport(`A: ${getModelTestPromptTypeLabel(promptA)} | hesla OK ${statsA?.okKeys || 0} / NEÚSP ${failA} | model úspěšnost ${succA}% | prům. AI ${formatAiResponseTime(latA)}`);
-  appendReport(`B: ${getModelTestPromptTypeLabel(promptB)} | hesla OK ${statsB?.okKeys || 0} / NEÚSP ${failB} | model úspěšnost ${succB}% | prům. AI ${formatAiResponseTime(latB)}`);
-  appendReport(`Vítěz: ${winner}`);
-}
-
-async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSignal, fixedProvider = null, promptType = 'custom', promptEnabled = true, fixedCyclesPerWorker = null) {
-  const durationInput = document.getElementById('modelTestDurationMin');
-  const durationMin = Math.max(1, parseInt(durationInput?.value || '10', 10) || 10);
-  const durationMs = durationMin * 60 * 1000;
-  const batchSize = parseInt(document.getElementById('batchSizeRun')?.value || '10', 10) || 10;
-  const intervalSec = parseInt(document.getElementById('intervalRun')?.value || '20', 10) || 20;
-  const startTs = Date.now();
-  state.modelTestRunEndTs = startTs + durationMs;
-  let cycle = 0;
-  let totalOkKeys = 0;
-  let totalFailedKeys = 0;
-  let latencyMsTotal = 0;
-  let latencySamples = 0;
-  const sourceEntries = state.entries.filter(e => e && e.key);
-  if (sourceEntries.length < batchSize) {
-    appendReport('⚠ Auto test: málo načtených hesel pro zvolenou dávku.');
-    return { cycles: 0, okKeys: 0, failedKeys: 0 };
-  }
-
-  const providerKeys = fixedProvider
-    ? [fixedProvider]
-    : ['groq', 'gemini', 'openrouter'];
-  if (providerKeys.length === 0) {
-    appendReport('⚠ Auto test: nejsou dostupné API klíče.');
-    return { cycles: 0, okKeys: 0, failedKeys: 0 };
-  }
-  const modelQueue = providerKeys
-    .map(prov => {
-      const model = getModelTestSelectedModelForProvider(prov);
-      return model ? { prov, model, label: model } : null;
-    })
-    .filter(Boolean)
-    .filter(item => !!getApiKeyForModelTest(item.prov));
-  if (!modelQueue.length) {
-    appendReport('⚠ Auto test: u zvolených providerů nejsou dostupné modely.');
-    return { cycles: 0, okKeys: 0, failedKeys: 0 };
-  }
-  appendReport(`Auto test délka: ${durationMin} min`);
-  if (Number.isFinite(fixedCyclesPerWorker) && fixedCyclesPerWorker > 0) {
-    appendReport(`Režim cyklů: pevně ${fixedCyclesPerWorker} cykly na prompt`);
-  }
-  appendReport(`Dávka/interval: ${batchSize} hesel / ${intervalSec}s`);
-  appendReport(`Po každém cyklu: audit všech hesel v dávce (OK / neúplné / neúspěch) + RAW odpověď AI pro celou dávku.${promptEnabled ? ' (test promptu zapnut)' : ' (test promptu vypnut)'}`);
-  appendReport(providerKeys.length > 1
-    ? 'Paralelní režim: každý provider běží samostatně, se svým vlastním odpočtem a limitem.'
-    : 'Režim: vybraný provider běží samostatně.');
-  appendReport('');
-  modelTestStartProviderCountdownTicker();
-  const waitProviderMs = (prov, ms) => new Promise(resolve => {
-    if (ms <= 0 || state.modelTestCancelRequested || abortSignal?.aborted) {
-      modelTestSetProviderEta(prov, 0);
-      resolve();
-      return;
-    }
-    const t0 = Date.now();
-    const tick = () => {
-      if (state.modelTestCancelRequested || abortSignal?.aborted) {
-        modelTestSetProviderEta(prov, 0);
-        resolve();
-        return;
-      }
-      const left = ms - (Date.now() - t0);
-      if (left <= 0) {
-        modelTestSetProviderEta(prov, 0);
-        resolve();
-        return;
-      }
-      modelTestSetProviderEta(prov, Math.ceil(left / 1000));
-      setTimeout(tick, 300);
-    };
-    tick();
-  });
-
-  const workers = modelQueue.map((current, workerIdx) => (async () => {
-    let localCursor = (workerIdx * 17) % sourceEntries.length;
-    let localCycle = 0;
-    const providerLabel = PROVIDERS[current.prov]?.label || current.prov;
-    const apiKey = getApiKeyForModelTest(current.prov);
-    if (!apiKey) {
-      appendReport(`[#${current.prov}] ${providerLabel} | bez API klíče`);
-      return;
-    }
-    while (!state.modelTestCancelRequested
-      && (Date.now() - startTs) < durationMs
-      && (!Number.isFinite(fixedCyclesPerWorker) || fixedCyclesPerWorker <= 0 || localCycle < fixedCyclesPerWorker)) {
-      localCycle++;
-      cycle++;
-      const takeSize = Math.max(1, Math.min(batchSize, sourceEntries.length));
-      const batch = [];
-      for (let i = 0; i < takeSize; i++) {
-        const idx = (localCursor + i) % sourceEntries.length;
-        batch.push(sourceEntries[idx]);
-      }
-      localCursor = (localCursor + (takeSize * 2)) % sourceEntries.length;
-      const batchKeys = batch.map(b => b.key);
-      const messages = buildModelTestMessages(batch, 'auto-live', promptType, promptEnabled);
-      const reqStart = performance.now();
-      try {
-        const raw = await callOnce(current.prov, apiKey, current.model, messages, abortSignal);
-        const reqMs = performance.now() - reqStart;
-        latencyMsTotal += reqMs;
-        latencySamples += 1;
-        updateModelTestRateLimitHealth(raw?.rateInfo);
-        appendModelTestUsage(appendReport, current.prov, current.model, raw);
-        let content = String(raw?.content || '');
-        state.modelTestRawResponses.push({
-          ts: Date.now(),
-          prov: current.prov,
-          model: current.model,
-          mode: 'auto-live',
-          promptType,
-          promptEnabled,
-          promptSent: String(messages?.[1]?.content || ''),
-          raw: content
-        });
-        saveModelTestRawOutputToStorage();
-        let parsed = {};
-        const parsedNorm = parseWithOpenRouterNormalization(content, batchKeys, parsed);
-        applyFallbacksToParsedMap(batchKeys, parsed);
-        let failedInBatch = batchKeys.filter(k => !parsed[k] || !isTranslationComplete(parsed[k]));
-        const englishDefinitionKeys = batchKeys.filter(k => {
-          const t = parsed && parsed[k];
-          return !!(t && isDefinitionLikelyEnglish(t.definice));
-        });
-        if (englishDefinitionKeys.length > 0 && promptEnabled && promptType !== 'preset_v13') {
-          appendReport(`⚠ Quality gate: DEFINICE(EN) u ${englishDefinitionKeys.length}/${batchKeys.length} hesel (${englishDefinitionKeys.slice(0, 3).join(', ')}${englishDefinitionKeys.length > 3 ? ', …' : ''})`);
-          appendReport('↻ Auto retry se striktním promptem v13 (anti-EN + anti-truncace)…');
-          const strictMessages = buildModelTestMessages(batch, 'auto-live', 'preset_v13', true);
-          const rawRetry = await callOnce(current.prov, apiKey, current.model, strictMessages, abortSignal);
-          updateModelTestRateLimitHealth(rawRetry?.rateInfo);
-          appendModelTestUsage(appendReport, current.prov, current.model, rawRetry);
-          const retryContent = String(rawRetry?.content || '');
-          state.modelTestRawResponses.push({
-            ts: Date.now(),
-            prov: current.prov,
-            model: current.model,
-            mode: 'auto-live',
-            promptType: 'preset_v13',
-            promptEnabled: true,
-            promptSent: String(strictMessages?.[1]?.content || ''),
-            raw: retryContent
-          });
-          saveModelTestRawOutputToStorage();
-          const parsedRetry = {};
-          parseWithOpenRouterNormalization(retryContent, batchKeys, parsedRetry);
-          applyFallbacksToParsedMap(batchKeys, parsedRetry);
-          const failedRetry = batchKeys.filter(k => !parsedRetry[k] || !isTranslationComplete(parsedRetry[k]));
-          if (failedRetry.length <= failedInBatch.length) {
-            content = retryContent;
-            parsed = parsedRetry;
-            failedInBatch = failedRetry;
-            appendReport(`✓ Retry výsledek převzat (${batchKeys.length - failedRetry.length}/${batchKeys.length})`);
-          } else {
-            appendReport(`ℹ Retry nepomohl (${batchKeys.length - failedRetry.length}/${batchKeys.length}), ponechán původní výsledek.`);
-          }
-        } else if (englishDefinitionKeys.length > 0 && !promptEnabled) {
-          appendReport('⚠ Quality gate: nalezena EN definice, ale test promptu je vypnutý (auto-retry přeskočen).');
-        }
-        const ok = batchKeys.length - failedInBatch.length;
-        const status = ok === batchKeys.length ? 'OK' : 'PARTIAL';
-        totalOkKeys += ok;
-        totalFailedKeys += failedInBatch.length;
-        testResults.push({ model: `${current.prov}:${current.model}`, status });
-        upsertModelTestStats(current.prov, current.model, {
-          status,
-          okKeys: ok,
-          failedKeys: failedInBatch.length,
-          totalKeys: batchKeys.length,
-          latencyMs: reqMs
-        });
-        console.log(`[AUTO TEST RAW] #${cycle} ${current.prov} | ${current.model} | prompt=${promptType}\n${content}`);
-        appendReport(`[#${cycle}] ${providerLabel} | ${current.model} | ${ok}/${batchKeys.length} hesel | klíče ${batchKeys[0]}…${batchKeys[batchKeys.length - 1]} | AI ${formatAiResponseTime(reqMs)}`);
-        appendModelTestRateLimitStatus(appendReport);
-        if (parsedNorm.normalizedUsed) appendReport('ℹ AUTO_NORMALIZOVANO_Z_OPENROUTER_FORMATU');
-        appendReport(`RAW: ${content || '(prázdná odpověď)'}`);
-        appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, failedInBatch, content, { okKeys: totalOkKeys, failedKeys: totalFailedKeys });
-      } catch (e) {
-        const reqMs = performance.now() - reqStart;
-        latencyMsTotal += reqMs;
-        latencySamples += 1;
-        const msg = String(e?.message || '');
-        const isRate = /429|rate limit|too many/i.test(msg);
-        updateModelTestRateLimitHealth(rateInfoFromErrorMessage(msg));
-        totalFailedKeys += batchKeys.length;
-        testResults.push({ model: `${current.prov}:${current.model}`, status: isRate ? 'RATE_LIMITED' : 'ERROR' });
-        upsertModelTestStats(current.prov, current.model, {
-          status: isRate ? 'RATE_LIMITED' : 'ERROR',
-          okKeys: 0,
-          failedKeys: batchKeys.length,
-          totalKeys: batchKeys.length,
-          latencyMs: reqMs
-        });
-        appendReport(`[#${cycle}] ${providerLabel} | ${current.model} | ${isRate ? 'RATE LIMITED' : 'ERROR'} (${msg})${reqMs > 0 ? ` | AI ${formatAiResponseTime(reqMs)}` : ''}`);
-        appendModelTestRateLimitStatus(appendReport);
-      }
-      if (state.modelTestCancelRequested) break;
-      await waitProviderMs(current.prov, intervalSec * 1000);
-    }
-  })());
-  await Promise.all(workers);
-  modelTestStopProviderCountdownTicker();
-  modelTestResetProviderEta();
-  return {
-    cycles: cycle,
-    okKeys: totalOkKeys,
-    failedKeys: totalFailedKeys,
-    avgLatencyMs: latencySamples ? (latencyMsTotal / latencySamples) : 0
-  };
-}
-
-async function testCurrentProviderModels(forcedProvider = null, resetReport = true, forcedMode = null, forcedPromptType = null, forcedPromptEnabled = null) {
-  if (state.autoRunning || state.autoStepRunning) {
-    showToast(t('toast.auto.stopFirst'));
-    return;
-  }
-
-  const providerSelect = document.getElementById('provider');
-  const btn = document.getElementById('btnTestModels');
-  if (!providerSelect || !btn) return;
-
-  const modalProviderSelect = document.getElementById('modelTestProvider');
-  const appendCheckbox = document.getElementById('modelTestAppend');
-  const modeSelect = document.getElementById('modelTestMode');
-  const promptEnableEl = document.getElementById('modelTestEnablePrompt');
-  const promptTypeSelect = document.getElementById('modelTestPromptType');
-  const promptCompareEnableEl = document.getElementById('modelTestEnablePromptCompare');
-  const promptTypeCompareSelect = document.getElementById('modelTestPromptTypeCompare');
-  const providerMode = forcedProvider || modalProviderSelect?.value || providerSelect.value;
-  const fallbackProvider = providerSelect.value || 'groq';
-  const prov = providerMode === 'parallel-3' ? fallbackProvider : providerMode;
-  const testMode = forcedMode || modeSelect?.value || 'smoke';
-  const promptEnabled = typeof forcedPromptEnabled === 'boolean' ? forcedPromptEnabled : !!promptEnableEl?.checked;
-  const promptType = forcedPromptType || promptTypeSelect?.value || getModelTestPromptType();
-  const compareEnabled = !!promptEnabled && testMode === 'auto-live' && !!promptCompareEnableEl?.checked;
-  const comparePromptType = promptTypeCompareSelect?.value || getModelTestPromptCompareType();
-  const providerTargets = providerMode === 'parallel-3' ? ['groq', 'gemini', 'openrouter'] : [prov];
-  const executionQueue = [];
-  if (testMode !== 'auto-live') {
-    for (const currentProv of providerTargets) {
-      const apiKey = getApiKeyForModelTest(currentProv);
-      if (!apiKey) {
-        showToast(t('toast.apiKey.missingForProviderLabel', { provider: PROVIDERS[currentProv]?.label || currentProv }));
-        continue;
-      }
-      const selectedModel = getModelTestSelectedModelForProvider(currentProv);
-      if (!selectedModel) {
-        showToast(t('toast.model.notSelectedForProviderLabel', { provider: PROVIDERS[currentProv]?.label || currentProv }));
-        continue;
-      }
-      executionQueue.push({
-        prov: currentProv,
-        apiKey,
-        opt: { value: selectedModel, label: selectedModel }
-      });
-    }
-    if (!executionQueue.length) return;
-  }
-  const providerLabel = forcedProvider
-    ? (PROVIDERS[prov]?.label || prov)
-    : ((modalProviderSelect?.value === 'parallel-3')
-      ? '3 provideři paralelně'
-      : (PROVIDERS[prov]?.label || prov));
-  const outputEl = document.getElementById('modelTestOutput');
-  const shouldAppend = appendCheckbox?.checked && !resetReport;
-  const snapshotBefore = outputEl ? outputEl.value : '';
-  const report = shouldAppend && snapshotBefore ? snapshotBefore.split('\n') : [];
-  showModelTestModal(providerLabel, false);
-  if (modalProviderSelect) {
-    modalProviderSelect.value = providerMode === 'parallel-3' ? 'parallel-3' : prov;
-    updateModelTestProviderUi();
-  }
-  if (!outputEl) {
-    showToast(t('toast.test.outputMissing'));
-    return;
-  }
-  outputEl.value = shouldAppend ? snapshotBefore : '';
-  const MODEL_TEST_DELAY_MS = 3500;
-  const MAX_CONSECUTIVE_RATE_LIMITS = 4;
-  let consecutiveRateLimited = 0;
-  const testResults = [];
-  const autoProviders = forcedProvider ? [forcedProvider] : ['groq', 'gemini', 'openrouter'];
-  const autoModelCount = autoProviders
-    .map(p => getModelTestSelectedModelForProvider(p))
-    .filter(Boolean).length;
-  const queueModelCount = executionQueue.length;
-  const appendReport = (line = '') => {
-    report.push(line);
-    const nextText = report.join('\n');
-    outputEl.value = nextText;
-    outputEl.scrollTop = outputEl.scrollHeight;
-    saveModelTestOutputToStorage(nextText);
-  };
-
-  const originalText = btn.textContent;
-  const cancelBtn = document.getElementById('btnCancelModelTest');
-  state.modelTestRunning = true;
-  state.modelTestCancelRequested = false;
-  state.modelTestRunEndTs = 0;
-  state.modelTestParsedExportChunks = [];
-  state.modelTestLastKeyAuditExportChunks = [];
-  state.modelTestRawResponses = [];
-  resetModelTestRateLimitHealth();
-  clearModelTestRawOutputFromStorage();
-  modelTestSetLastStatus('Běží test modelů…', 'idle');
-  state.modelTestAbortController = new AbortController();
-  const signal = state.modelTestAbortController.signal;
-  const waitMs = (ms) => modelTestWaitWithCountdown(ms, signal);
-  state.modelTestNextRequestEtaSec = 0;
-  updateModelTestRunButton();
-  btn.disabled = true;
-  if (cancelBtn) cancelBtn.style.display = 'inline-block';
-  appendReport(promptEnabled ? `# TEST PROMPTU MODELU` : `# TEST MODELU`);
-  appendReport(`Provider: ${providerLabel}`);
-  appendReport(`Režim: ${testMode === 'translate3' ? 'Překlad 3 hesel' : testMode === 'translate1' ? 'Překlad 1 hesla' : testMode === 'auto-live' ? 'Auto test' : 'Smoke test (slovo 2x)'}`);
-  appendReport(`Prompt test: ${promptEnabled ? 'zapnutý' : 'vypnutý'}`);
-  appendReport(`Prompt režim: ${getModelTestPromptTypeLabel(promptType)}`);
-  const promptTopicLabel = getModelTestPromptTopicLabel(promptType);
-  if (promptTopicLabel) appendReport(`Testované téma: ${promptTopicLabel}`);
-  if (compareEnabled && comparePromptType && comparePromptType !== promptType) {
-    appendReport(`A/B porovnání: zapnuto (A=${getModelTestPromptTypeLabel(promptType)} | B=${getModelTestPromptTypeLabel(comparePromptType)})`);
-    const compareTopicLabel = getModelTestPromptTopicLabel(comparePromptType);
-    if (compareTopicLabel) appendReport(`Testované téma B: ${compareTopicLabel}`);
-  }
-  appendReport(`Čas: ${new Date().toLocaleString('cs-CZ')}`);
-  appendReport(`Modelů: ${testMode === 'auto-live' ? autoModelCount : queueModelCount}`);
-  appendReport('');
-
-  try {
-    const sampleCount = testMode === 'translate1' ? 1 : testMode === 'translate3' ? 3 : 0;
-    const sampleEntries = sampleCount ? getSampleEntriesForModelTest(sampleCount) : [];
-    const sampleKeys = sampleEntries.map(e => e.key);
-    if (testMode === 'auto-live') {
-      if (compareEnabled && comparePromptType && comparePromptType !== promptType) {
-        const testResultsA = [];
-        const testResultsB = [];
-        appendReport('');
-        appendReport(`--- BĚH A: ${getModelTestPromptTypeLabel(promptType)} ---`);
-        const autoStatsA = await runAutoLiveModelTest(appendReport, waitMs, testResultsA, state.modelTestAbortController.signal, forcedProvider ? prov : null, promptType, true, 3);
-        appendModelTestFinalOverview(appendReport, testResultsA, testMode, autoStatsA);
-        if (!state.modelTestCancelRequested) {
-          appendReport('');
-          appendReport(`--- BĚH B: ${getModelTestPromptTypeLabel(comparePromptType)} ---`);
-          const autoStatsB = await runAutoLiveModelTest(appendReport, waitMs, testResultsB, state.modelTestAbortController.signal, forcedProvider ? prov : null, comparePromptType, true, 3);
-          appendModelTestFinalOverview(appendReport, testResultsB, testMode, autoStatsB);
-          appendPromptCompareSummary(appendReport, promptType, comparePromptType, autoStatsA, autoStatsB, testResultsA, testResultsB);
-        }
-        appendReport(state.modelTestCancelRequested ? 'Ukončeno.' : 'Hotovo.');
-        showToast(state.modelTestCancelRequested ? t('toast.modelTest.abCanceled') : t('toast.modelTest.abDone'));
-        return;
-      }
-      const autoStats = await runAutoLiveModelTest(appendReport, waitMs, testResults, state.modelTestAbortController.signal, forcedProvider ? prov : null, promptType, promptEnabled);
-      const okModels = testResults.filter(r => r.status === 'OK').map(r => r.model).slice(0, 3);
-      appendReport('');
-      appendReport(`Souhrn hesel: OK ${autoStats.okKeys} | NEÚSP ${autoStats.failedKeys} | cykly ${autoStats.cycles} | prům. AI ${formatAiResponseTime(autoStats.avgLatencyMs || 0)}`);
-      appendReport(`TOP modely z tohoto běhu: ${okModels.length ? okModels.join(', ') : 'žádné plně stabilní'}`);
-      appendModelTestFinalOverview(appendReport, testResults, testMode, autoStats);
-      appendReport(state.modelTestCancelRequested ? 'Ukončeno.' : 'Hotovo.');
-      pushTestHistory({
-        type: 'model-test',
-        provider: forcedProvider ? providerLabel : 'parallel-3-providers',
-        mode: testMode,
-        total: testResults.length,
-        ok: testResults.filter(r => r.status === 'OK').length,
-        rateLimited: testResults.filter(r => r.status === 'RATE_LIMITED').length,
-        error: testResults.filter(r => r.status === 'ERROR').length,
-        partial: testResults.filter(r => r.status === 'PARTIAL').length,
-        cycles: autoStats.cycles,
-        keysOk: autoStats.okKeys,
-        keysFailed: autoStats.failedKeys,
-        avgLatencyMs: autoStats.avgLatencyMs || 0,
-        topModels: okModels
-      });
-      showToast(state.modelTestCancelRequested ? t('toast.modelTest.canceled') : t('toast.modelTest.autoDone'));
-      return;
-    }
-
-    if (testMode === 'translate3' || testMode === 'translate1') {
-      if (sampleEntries.length < sampleCount) {
-        appendReport(`⚠ Nelze spustit test překladu ${sampleCount} hesla/hesel (není načtený slovník nebo má málo záznamů).`);
-        appendReport('Ukončeno.');
-        return;
-      }
-      appendReport(`Vzorek hesel: ${sampleKeys.join(', ')}`);
-      appendReport('');
-    }
-
-    for (let i = 0; i < executionQueue.length; i++) {
-      if (state.modelTestCancelRequested) {
-        appendReport('⏹ Test byl ručně zrušen uživatelem.');
-        appendReport('');
-        break;
-      }
-      const current = executionQueue[i];
-      const currentProvider = current.prov;
-      const currentApiKey = current.apiKey;
-      const opt = current.opt;
-      const currentProviderLabel = PROVIDERS[currentProvider]?.label || currentProvider;
-      btn.textContent = `🧪 ${i + 1}/${executionQueue.length}`;
-      appendReport(`## ${i + 1}/${executionQueue.length} ${currentProviderLabel} | ${opt.value}`);
-
-      const messages = buildModelTestMessages(sampleEntries, testMode, promptType, promptEnabled);
-
-      try {
-        const first = await callOnce(currentProvider, currentApiKey, opt.value, messages, state.modelTestAbortController.signal);
-        updateModelTestRateLimitHealth(first?.rateInfo);
-        appendModelTestUsage(appendReport, currentProvider, opt.value, first);
-        const firstContent = String(first?.content || '').trim();
-        state.modelTestRawResponses.push({
-          ts: Date.now(),
-          prov: currentProvider,
-          model: opt.value,
-          mode: testMode,
-          promptType,
-          promptEnabled,
-          promptSent: String(messages?.[1]?.content || ''),
-          raw: firstContent
-        });
-        saveModelTestRawOutputToStorage();
-        console.log(`[MODEL TEST RAW] ${currentProvider} | ${opt.value} | mode=${testMode} | prompt=${promptType}\n${firstContent}`);
-        console.log(`[MODEL TEST] ${currentProvider} | ${opt.value} | 1: ${firstContent}`);
-        appendReport(`MODEL: ${opt.value}`);
-        if (testMode === 'translate3' || testMode === 'translate1') {
-          const parsed = {};
-          const parsedNorm = parseWithOpenRouterNormalization(firstContent || '', sampleKeys, parsed);
-          applyFallbacksToParsedMap(sampleKeys, parsed);
-          const missingAfterFirst = sampleKeys.filter(k => !parsed[k] || !isTranslationComplete(parsed[k]));
-          const okCount = sampleKeys.length - missingAfterFirst.length;
-          if (parsedNorm.normalizedUsed) appendReport('ℹ AUTO_NORMALIZOVANO_Z_OPENROUTER_FORMATU');
-          appendReport(`RAW: ${firstContent || '(prázdná odpověď)'}`);
-          appendModelTestRateLimitStatus(appendReport);
-          appendReport(`PARSOVÁNÍ (celá dávka): ${okCount}/${sampleKeys.length} hesel`);
-          if (missingAfterFirst.length > 0) appendReport(`CHYBÍ v odpovědi: ${missingAfterFirst.join(', ')}`);
-          appendModelTestLastBatchKeyAudit(appendReport, sampleKeys, parsed, missingAfterFirst, firstContent || '');
-          appendReport('');
-          testResults.push({ model: `${currentProvider}:${opt.value}`, status: okCount === sampleKeys.length ? 'OK' : 'PARTIAL' });
-          log(`🧪 ${opt.label || opt.value}: ${okCount}/${sampleKeys.length} hesel`);
-          consecutiveRateLimited = 0;
-          if (!state.modelTestCancelRequested) await waitMs(MODEL_TEST_DELAY_MS);
-          continue;
-        }
-
-        appendReport(`1) ${firstContent || '(prázdná odpověď)'}`);
-        appendModelTestRateLimitStatus(appendReport);
-
-        if (state.modelTestCancelRequested) {
-          appendReport('⏹ Test byl ručně zrušen uživatelem.');
-          appendReport('');
-          break;
-        }
-        await waitMs(MODEL_TEST_DELAY_MS);
-        const second = await callOnce(currentProvider, currentApiKey, opt.value, messages, state.modelTestAbortController.signal);
-        updateModelTestRateLimitHealth(second?.rateInfo);
-        appendModelTestUsage(appendReport, currentProvider, opt.value, second);
-        const secondContent = String(second?.content || '').trim();
-        state.modelTestRawResponses.push({
-          ts: Date.now(),
-          prov: currentProvider,
-          model: opt.value,
-          mode: testMode,
-          promptType,
-          promptEnabled,
-          promptSent: String(messages?.[1]?.content || ''),
-          raw: secondContent
-        });
-        saveModelTestRawOutputToStorage();
-        console.log(`[MODEL TEST RAW] ${currentProvider} | ${opt.value} | mode=${testMode} | prompt=${promptType}\n${secondContent}`);
-        console.log(`[MODEL TEST] ${currentProvider} | ${opt.value} | 2: ${secondContent}`);
-        appendReport(`2) ${secondContent || '(prázdná odpověď)'}`);
-        appendModelTestRateLimitStatus(appendReport);
-        appendReport('Stav: OK');
-        appendReport('');
-        consecutiveRateLimited = 0;
-        testResults.push({ model: `${currentProvider}:${opt.value}`, status: 'OK' });
-
-        log(`🧪 ${opt.label || opt.value}: OK`);
-      } catch (e) {
-        const msg = String(e?.message || '');
-        const isRateLimit = /429|rate limit|too many/i.test(msg);
-        updateModelTestRateLimitHealth(rateInfoFromErrorMessage(msg));
-        if (isRateLimit) {
-          appendReport(`CHYBA: ${msg}`);
-          appendModelTestRateLimitStatus(appendReport);
-          appendReport(`↻ Opakuji po ${Math.round(MODEL_TEST_DELAY_MS / 1000)}s...`);
-          await waitMs(MODEL_TEST_DELAY_MS);
-          try {
-            const retry = await callOnce(currentProvider, currentApiKey, opt.value, messages, state.modelTestAbortController.signal);
-            updateModelTestRateLimitHealth(retry?.rateInfo);
-            appendModelTestUsage(appendReport, currentProvider, opt.value, retry);
-            const retryContent = String(retry?.content || '').trim();
-            state.modelTestRawResponses.push({
-              ts: Date.now(),
-              prov: currentProvider,
-              model: opt.value,
-              mode: testMode,
-              promptType,
-              promptEnabled,
-              promptSent: String(messages?.[1]?.content || ''),
-              raw: retryContent
-            });
-            saveModelTestRawOutputToStorage();
-            console.log(`[MODEL TEST RAW] ${currentProvider} | ${opt.value} | mode=${testMode} | prompt=${promptType}\n${retryContent}`);
-            console.log(`[MODEL TEST] ${currentProvider} | ${opt.value} | RETRY: ${retryContent}`);
-            appendReport(`retry) ${retryContent || '(prázdná odpověď)'}`);
-            appendModelTestRateLimitStatus(appendReport);
-            appendReport('Stav: OK po retry');
-            appendReport('');
-            consecutiveRateLimited = 0;
-            testResults.push({ model: `${currentProvider}:${opt.value}`, status: 'OK_RETRY' });
-            log(`🧪 ${opt.label || opt.value}: OK po retry`);
-          } catch (eRetry) {
-            if (state.modelTestCancelRequested || /zrušen uživatelem/i.test(String(eRetry?.message || ''))) {
-              appendReport('⏹ Test byl ručně zrušen uživatelem.');
-              appendReport('');
-              break;
-            }
-            console.error(`[MODEL TEST] ${currentProvider} | ${opt.value} | ERROR`, eRetry);
-            appendReport(`RETRY CHYBA: ${eRetry.message}`);
-            updateModelTestRateLimitHealth(rateInfoFromErrorMessage(eRetry?.message || ''));
-            appendModelTestRateLimitStatus(appendReport);
-            appendReport('Stav: RATE LIMITED');
-            appendReport('');
-            consecutiveRateLimited++;
-            testResults.push({ model: `${currentProvider}:${opt.value}`, status: 'RATE_LIMITED' });
-            log(`🧪 ${opt.label || opt.value}: RATE LIMIT (${eRetry.message})`);
-          }
-        } else {
-          if (state.modelTestCancelRequested || /zrušen uživatelem/i.test(msg)) {
-            appendReport('⏹ Test byl ručně zrušen uživatelem.');
-            appendReport('');
-            break;
-          }
-          console.error(`[MODEL TEST] ${currentProvider} | ${opt.value} | ERROR`, e);
-          appendReport(`CHYBA: ${msg}`);
-          appendModelTestRateLimitStatus(appendReport);
-          appendReport('Stav: ERROR');
-          appendReport('');
-          consecutiveRateLimited = 0;
-          testResults.push({ model: `${currentProvider}:${opt.value}`, status: 'ERROR' });
-          log(`🧪 ${opt.label || opt.value}: CHYBA (${msg})`);
-        }
-      }
-
-      if (consecutiveRateLimited >= MAX_CONSECUTIVE_RATE_LIMITS) {
-        appendReport(`⚠ Test zastaven: ${consecutiveRateLimited}x po sobě RATE LIMITED (globální free limit OpenRouteru).`);
-        appendReport('Zbytek modelů je přeskočen, spusť test znovu později.');
-        appendReport('');
-        for (let j = i + 1; j < executionQueue.length; j++) {
-          appendReport(`## ${j + 1}/${executionQueue.length} ${executionQueue[j].prov} | ${executionQueue[j].opt.value}`);
-          appendReport('Stav: PŘESKOČENO (global rate limit)');
-          appendReport('');
-        }
-        showToast(t('toast.test.rateLimitAbort'));
-        break;
-      }
-      if (!state.modelTestCancelRequested) {
-        await waitMs(MODEL_TEST_DELAY_MS);
-      }
-    }
-
-    const okModels = testResults
-      .filter(r => r.status === 'OK' || ((testMode === 'translate3' || testMode === 'translate1') && r.status === 'PARTIAL'))
-      .map(r => r.model)
-      .slice(0, 3);
-    appendReport('');
-    appendReport(`TOP modely z tohoto běhu: ${okModels.length ? okModels.join(', ') : 'žádné plně stabilní'}`);
-    appendModelTestFinalOverview(appendReport, testResults, testMode);
-    appendReport(state.modelTestCancelRequested ? 'Ukončeno.' : 'Hotovo.');
-    pushTestHistory({
-      type: 'model-test',
-      provider: providerLabel,
-      mode: testMode,
-      total: executionQueue.length,
-      ok: testResults.filter(r => r.status === 'OK' || r.status === 'OK_RETRY').length,
-      rateLimited: testResults.filter(r => r.status === 'RATE_LIMITED').length,
-      error: testResults.filter(r => r.status === 'ERROR').length,
-      partial: testResults.filter(r => r.status === 'PARTIAL').length,
-      topModels: okModels
-    });
-    showToast(state.modelTestCancelRequested ? (getUiLang() === 'en' ? '⏹ Model test canceled' : '⏹ Test modelů zrušen') : t('toast.modelTest.doneWithCount', { count: executionQueue.length }));
-  } finally {
-    modelTestClearCountdownInterval();
-    modelTestStopProviderCountdownTicker();
-    modelTestResetProviderEta();
-    state.modelTestNextRequestEtaSec = 0;
-    state.modelTestRunEndTs = 0;
-    modelTestSetCountdownLabel('');
-    if (state.modelTestCancelRequested) {
-      modelTestSetLastStatus('Test zastaven uživatelem.', 'warn');
-    }
-    state.modelTestRunning = false;
-    state.modelTestCancelRequested = false;
-    state.modelTestAbortController = null;
-    updateModelTestRunButton();
-    btn.disabled = false;
-    btn.textContent = originalText;
-    if (cancelBtn) cancelBtn.style.display = 'none';
-  }
 }
 
 function logMsg(msg, type) {
@@ -7940,453 +6923,7 @@ function getOpenRouterRateLimits(keyData) {
   return rows.join('');
  }
 
-// ══ PROMPT LIBRARY ═══════════════════════════════════════════════
-const PROMPT_LIBRARY_CUSTOM_KEY = 'strong_prompt_library_custom';
-const PROMPT_LIBRARY_IMPORTED_KEY = 'strong_prompt_library_imported';
-
-function clonePromptLibraryBase() {
-  return JSON.parse(JSON.stringify(PROMPT_LIBRARY_BASE || {}));
-}
-
-function getStoredCustomPromptLibrary() {
-  try {
-    const raw = localStorage.getItem(PROMPT_LIBRARY_CUSTOM_KEY);
-    const parsed = raw ? JSON.parse(raw) : [];
-    if (!Array.isArray(parsed)) return [];
-    return parsed.filter((p) => p && typeof p.name === 'string' && typeof p.desc === 'string' && typeof p.text === 'string');
-  } catch {
-    return [];
-  }
-}
-
-function saveStoredCustomPromptLibrary(customEntries) {
-  localStorage.setItem(PROMPT_LIBRARY_CUSTOM_KEY, JSON.stringify(customEntries || []));
-}
-
-function getStoredImportedPromptLibrary() {
-  try {
-    const raw = localStorage.getItem(PROMPT_LIBRARY_IMPORTED_KEY);
-    const parsed = raw ? JSON.parse(raw) : {};
-    if (!parsed || typeof parsed !== 'object') return {};
-    return parsed;
-  } catch {
-    return {};
-  }
-}
-
-function saveStoredImportedPromptLibrary(data) {
-  localStorage.setItem(PROMPT_LIBRARY_IMPORTED_KEY, JSON.stringify(data || {}));
-}
-
-function rebuildPromptLibrary(currentSavedPrompt = '') {
-  state.PROMPT_LIBRARY = clonePromptLibraryBase();
-  const importedByCategory = getStoredImportedPromptLibrary();
-  for (const [category, prompts] of Object.entries(importedByCategory)) {
-    if (!Array.isArray(prompts)) continue;
-    if (!state.PROMPT_LIBRARY[category]) state.PROMPT_LIBRARY[category] = [];
-    for (const item of prompts) {
-      if (!item || typeof item.text !== 'string') continue;
-      if (!state.PROMPT_LIBRARY[category].some((p) => p.text === item.text)) {
-        state.PROMPT_LIBRARY[category].push({
-          name: String(item.name || 'Importovaný'),
-          desc: String(item.desc || 'Import ze souboru'),
-          text: item.text
-        });
-      }
-    }
-  }
-  const customSaved = localStorage.getItem('strong_custom_prompt');
-  const importedCustom = getStoredCustomPromptLibrary();
-  const customEntries = [];
-
-  if (customSaved && customSaved.trim()) {
-    customEntries.push({
-      name: 'Moje vlastní',
-      desc: 'Uložený vlastní prompt',
-      text: customSaved
-    });
-  }
-
-  for (const item of importedCustom) {
-    if (item.text !== customSaved) customEntries.push(item);
-  }
-
-  customEntries.push(FINAL_PROMPT);
-
-  if (currentSavedPrompt && !customEntries.some((p) => p.text === currentSavedPrompt)) {
-    customEntries.unshift({
-      name: 'Aktuální',
-      desc: 'Aktuálně aktivní prompt',
-      text: currentSavedPrompt
-    });
-  }
-
-  state.PROMPT_LIBRARY.custom = customEntries;
-}
-
-function getSystemPromptForCurrentTask(context = 'batch') {
-  let prompt = DEFAULT_PROMPT;
-  if (context === 'topic') {
-    prompt += `
-
-DODATEK PRO JEDNO TÉMA:
-- Pokud je požadováno jen jedno pole, vrať pouze hodnotu pro dané pole.
-- U pole SPECIALISTA vrať detailní souvislý odstavec 3-5 vět bez odrážek.`;
-  }
-  return enforceSpecialistaFormat(prompt);
-}
-
-function isPromptAutoModeEnabled() {
-  const saved = localStorage.getItem('strong_prompt_auto');
-  return saved !== 'off';
-}
-
-function setMainPrompt(promptText, mode = 'custom') {
-  const text = String(promptText || '').trim();
-  state.isProgrammaticPromptSet = true;
-  localStorage.setItem('strong_prompt', String(promptText || '').trim());
-  localStorage.setItem('strong_prompt_mode', mode);
-  const mainEditor = document.getElementById('promptEditor');
-  if (mainEditor) {
-    mainEditor.value = text;
-    mainEditor.dispatchEvent(new Event('input'));
-  }
-  state.isProgrammaticPromptSet = false;
-  updatePromptStatusIndicator();
-}
-
-function applySystemPromptForCurrentTask() {
-  const context = state.topicPromptState ? 'topic' : 'batch';
-  const systemPrompt = getSystemPromptForCurrentTask(context);
-  setMainPrompt(systemPrompt, 'system');
-  const editor = document.getElementById('promptLibraryEditor');
-  if (editor) editor.value = systemPrompt;
-  showToast(t('toast.systemPrompt.set', { mode: context === 'topic' ? (getUiLang() === 'en' ? 'topic' : 'téma') : (getUiLang() === 'en' ? 'batch' : 'dávka') }));
-}
-
-function togglePromptModeQuick() {
-  const mode = localStorage.getItem('strong_prompt_mode') || 'custom';
-  const customSaved = localStorage.getItem('strong_custom_prompt') || '';
-  if (mode === 'custom') {
-    setMainPrompt(getSystemPromptForCurrentTask('batch'), 'system');
-    showToast(t('toast.prompt.switchedSystem'));
-    return;
-  }
-  if (customSaved.trim()) {
-    setMainPrompt(customSaved, 'custom');
-    showToast(t('toast.prompt.switchedCustom'));
-    return;
-  }
-  showToast(t('toast.prompt.customNotSaved'));
-}
-
-function updatePromptAutoButton() {
-  const btn = document.getElementById('btnPromptAuto');
-  if (!btn) return;
-  const on = isPromptAutoModeEnabled();
-  btn.textContent = `⚡ Auto prompt: ${on ? 'ON' : 'OFF'}`;
-  btn.style.borderColor = on ? 'var(--grn)' : 'var(--brd)';
-  btn.style.color = on ? 'var(--grn)' : 'var(--txt2)';
-}
-
-function togglePromptAutoMode() {
-  const on = isPromptAutoModeEnabled();
-  localStorage.setItem('strong_prompt_auto', on ? 'off' : 'on');
-  updatePromptAutoButton();
-  showToast(t('toast.autoPrompt.toggled', { state: on ? (getUiLang() === 'en' ? 'off' : 'vypnut') : (getUiLang() === 'en' ? 'on' : 'zapnut') }));
-}
-
-rebuildPromptLibrary(localStorage.getItem('strong_prompt') || DEFAULT_PROMPT);
-
-function showPromptLibraryModal() {
-  const modal = document.getElementById('promptLibraryModal');
-  const tabs = document.getElementById('promptTabs');
-  const list = document.getElementById('promptList');
-  const editor = document.getElementById('promptLibraryEditor');
-  
-   // Load current saved prompt
-   const savedPrompt = localStorage.getItem('strong_prompt') || DEFAULT_PROMPT;
-   
-   rebuildPromptLibrary(savedPrompt);
-  
-  // Reset selection to default
-  state.selectedPromptCategory = 'default';
-  state.selectedPromptIndex = 0;
-  
-  const getPromptTabLabel = (cat) => {
-    const map = {
-      default: 'prompt.tab.default',
-      detailed: 'prompt.tab.detailed',
-      concise: 'prompt.tab.concise',
-      literal: 'prompt.tab.literal',
-      test: 'prompt.tab.test',
-      custom: 'prompt.tab.custom'
-    };
-    return t(map[cat] || cat);
-  };
-  // Populate tabs with localized labels
-   tabs.innerHTML = Object.keys(state.PROMPT_LIBRARY).map(cat => 
-    `<div class="prompt-tab ${cat === 'default' ? 'active' : ''}" data-category="${cat}">${getPromptTabLabel(cat)}</div>`
-   ).join('');
-  
-  // Add click handlers to tabs
-  tabs.querySelectorAll('.prompt-tab').forEach(tab => {
-    tab.onclick = () => {
-      tabs.querySelectorAll('.prompt-tab').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      state.selectedPromptCategory = tab.dataset.category;
-      state.selectedPromptIndex = 0;
-      renderPromptList();
-      renderPromptPreview();
-    };
-  });
-  
-  // Set editor to current saved prompt
-  editor.value = savedPrompt;
-  
-  // Try to find matching preset to pre-select it
-  matchPromptToPreset(savedPrompt);
-  
-  // Initial render
-  renderPromptList();
-  renderPromptPreview();
-  
-  // Show modal
-  modal.classList.add('show');
-  
-  // Close on backdrop click
-  modal.onclick = (e) => {
-    if (e.target === modal) closePromptLibraryModal();
-  };
-}
-
-function matchPromptToPreset(promptText) {
-  // Try to find which preset the current saved prompt matches
-  let foundMatch = false;
-  for (const [category, prompts] of Object.entries(state.PROMPT_LIBRARY)) {
-    for (let i = 0; i < prompts.length; i++) {
-      if (prompts[i].text === promptText) {
-        state.selectedPromptCategory = category;
-        state.selectedPromptIndex = i;
-        foundMatch = true;
-        break;
-      }
-    }
-    if (foundMatch) break;
-  }
-  // If no match found, switch to custom tab
-  if (!foundMatch) {
-    state.selectedPromptCategory = 'custom';
-    state.selectedPromptIndex = 0;
-    rebuildPromptLibrary(promptText);
-  }
-}
-
-function closePromptLibraryModal() {
-  document.getElementById('promptLibraryModal').classList.remove('show');
-}
-
-function renderPromptList() {
-  const list = document.getElementById('promptList');
-  const prompts = state.PROMPT_LIBRARY[state.selectedPromptCategory] || [];
-  
-  if (prompts.length === 0) {
-    list.innerHTML = '<div style="color:var(--txt3);font-size:11px;padding:10px">Žádné prompty v této kategorii</div>';
-    return;
-  }
-  
-  list.innerHTML = prompts.map((p, idx) => `
-    <div class="prompt-item ${idx === state.selectedPromptIndex ? 'selected' : ''}" data-index="${idx}" onclick="selectPrompt(${idx})">
-      <div class="prompt-item-name">${p.name}</div>
-      <div class="prompt-item-desc">${p.desc}</div>
-    </div>
-  `).join('');
-}
-
-function renderPromptPreview() {
-  const preview = document.getElementById('promptPreview');
-  const editor = document.getElementById('promptLibraryEditor');
-  const prompts = state.PROMPT_LIBRARY[state.selectedPromptCategory] || [];
-  const prompt = prompts[state.selectedPromptIndex];
-  
-  if (prompt) {
-    preview.textContent = prompt.text;
-    // Also update editor with selected preset
-    if (editor) {
-      editor.value = prompt.text;
-    }
-  } else {
-    preview.textContent = 'Vyberte prompt z knihovny...';
-  }
-}
-
-function selectPrompt(index) {
-  state.selectedPromptIndex = index;
-  const prompts = state.PROMPT_LIBRARY[state.selectedPromptCategory] || [];
-  const prompt = prompts[index];
-  
-  if (prompt) {
-    // Load the selected preset into the editor
-    document.getElementById('promptLibraryEditor').value = prompt.text;
-  }
-  
-  renderPromptList();
-  renderPromptPreview();
-}
-
-function applySelectedPrompt() {
-  const editor = document.getElementById('promptLibraryEditor');
-  const promptText = editor ? editor.value.trim() : '';
-  
-  if (!promptText) {
-    showToast(t('toast.prompt.empty'));
-    return;
-  }
-  
-  // Save to main prompt storage
-  setMainPrompt(promptText, 'custom');
-  
-  // Also save to custom category if we're in custom tab
-  if (state.selectedPromptCategory === 'custom') {
-    localStorage.setItem('strong_custom_prompt', promptText);
-    const imported = getStoredCustomPromptLibrary().filter((item) => item.text !== promptText);
-    saveStoredCustomPromptLibrary(imported);
-    rebuildPromptLibrary(promptText);
-  }
-  
-  closePromptLibraryModal();
-  showToast(t('toast.prompt.savedApplied'));
-}
-
-function exportPromptLibraryToTxt() {
-  rebuildPromptLibrary(localStorage.getItem('strong_prompt') || '');
-  const lines = [
-    '# Strong Prompt Library Export v1',
-    `# Generated: ${new Date().toISOString()}`
-  ];
-  for (const [category, prompts] of Object.entries(state.PROMPT_LIBRARY)) {
-    lines.push(`## CATEGORY: ${category}`);
-    for (const prompt of prompts || []) {
-      lines.push(`### PROMPT: ${prompt.name || 'Bez názvu'}`);
-      lines.push(`DESC: ${prompt.desc || ''}`);
-      lines.push('---BEGIN---');
-      lines.push(String(prompt.text || ''));
-      lines.push('---END---');
-    }
-  }
-  const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `strong_prompty_${new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-')}.txt`;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-  showToast(t('toast.prompt.exported'));
-}
-
-function importPromptLibraryFromFile(input) {
-  const file = input?.files?.[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = () => {
-    try {
-      const text = String(reader.result || '');
-      const regex = /## CATEGORY:\s*([^\n]+)\n### PROMPT:\s*([^\n]+)\nDESC:\s*([^\n]*)\n---BEGIN---\n([\s\S]*?)\n---END---/g;
-      const importedCustom = [];
-      const importedByCategory = getStoredImportedPromptLibrary();
-      let totalImported = 0;
-      let match;
-      while ((match = regex.exec(text)) !== null) {
-        const category = (match[1] || '').trim().toLowerCase();
-        const name = (match[2] || '').trim() || 'Importovaný';
-        const desc = (match[3] || '').trim() || 'Import ze souboru';
-        const body = (match[4] || '').trim();
-        if (!body) continue;
-        totalImported += 1;
-        if (category === 'custom') {
-          importedCustom.push({ name, desc, text: body });
-          continue;
-        }
-        if (!importedByCategory[category]) importedByCategory[category] = [];
-        if (!importedByCategory[category].some((p) => p.text === body)) {
-          importedByCategory[category].push({ name, desc, text: body });
-        }
-      }
-
-      const existingCustom = getStoredCustomPromptLibrary();
-      const merged = [...existingCustom];
-      for (const item of importedCustom) {
-        if (!merged.some((e) => e.text === item.text)) merged.push(item);
-      }
-      saveStoredCustomPromptLibrary(merged);
-      saveStoredImportedPromptLibrary(importedByCategory);
-      rebuildPromptLibrary(localStorage.getItem('strong_prompt') || '');
-      renderPromptList();
-      renderPromptPreview();
-      showToast(t('toast.prompts.loaded.count', { count: totalImported }));
-    } catch (err) {
-      showToast(t('toast.prompt.importFailed'));
-      console.error(err);
-    } finally {
-      input.value = '';
-    }
-  };
-  reader.readAsText(file, 'utf-8');
-}
-
-function updatePromptStatusIndicator() {
-  const modeDot = document.getElementById('promptMode');
-  const nameEl = document.getElementById('promptName');
-  if (!modeDot || !nameEl) return;
-  
-  const currentPrompt = localStorage.getItem('strong_prompt') || '';
-  const mode = localStorage.getItem('strong_prompt_mode') || 'custom';
-  const customSaved = localStorage.getItem('strong_custom_prompt') || '';
-  
-  // Check if current prompt matches any preset
-  let matched = false;
-  let matchedName = '';
-  
-  // Try DEFAULT_PROMPT
-  if (currentPrompt === DEFAULT_PROMPT) {
-    matched = true;
-    matchedName = 'Originální';
-  }
-  
-  // Check other presets
-  if (!matched) {
-    for (const [category, prompts] of Object.entries(state.PROMPT_LIBRARY)) {
-      for (const p of prompts) {
-        if (p.text === currentPrompt && category !== 'custom') {
-          matched = true;
-          matchedName = p.name;
-          break;
-        }
-      }
-      if (matched) break;
-    }
-  }
-  
-  if (mode === 'system' || matched) {
-    // Preset mode – automatic/green
-    modeDot.style.background = 'var(--grn)';
-    modeDot.style.boxShadow = '0 0 6px var(--grn)';
-    nameEl.textContent = mode === 'system' ? 'Systémový (auto)' : matchedName;
-    nameEl.style.color = 'var(--grn)';
-  } else {
-    // Custom mode – manual/red
-    modeDot.style.background = 'var(--red)';
-    modeDot.style.boxShadow = 'none';
-    nameEl.textContent = currentPrompt ? 'Vlastní (upravený)' : 'Žádný';
-    nameEl.style.color = 'var(--red)';
-  }
-
-  if (!isPromptAutoModeEnabled()) {
-    nameEl.textContent += ' · auto OFF';
-  }
-}
+initializePromptLibrary();
 
 // ── AI & Language Modals ───────────────────────────────────────────
 function showPromptAIModal() {
@@ -8540,47 +7077,6 @@ const { download, exportTXT, exportJSON, exportRange } = createExportApi({
     log('🛑 AUTO zastaven po dávce: dosažen limit tokenů');
     showToast(t('toast.auto.stoppedTokenLimit'));
   }
-}
-
-function saveAutoTokenLimit() {
-  const input = document.getElementById('autoTokenLimit');
-  if (!input) return;
-  const raw = String(input.value || '').trim();
-  const value = parseInt(raw, 10);
-  if (!raw || Number.isNaN(value) || value <= 0) {
-    localStorage.removeItem(AUTO_TOKEN_LIMIT_KEY);
-    input.value = '';
-  } else {
-    input.value = String(value);
-    localStorage.setItem(AUTO_TOKEN_LIMIT_KEY, String(value));
-  }
-  refreshTokenStatsDisplay();
-}
-
-function getAutoTokenLimit() {
-  const input = document.getElementById('autoTokenLimit');
-  const fromInput = parseInt(String(input?.value || '').trim(), 10);
-  if (!Number.isNaN(fromInput) && fromInput > 0) return fromInput;
-  const fromStorage = parseInt(localStorage.getItem(AUTO_TOKEN_LIMIT_KEY) || '0', 10);
-  return Number.isNaN(fromStorage) ? 0 : Math.max(0, fromStorage);
-}
-
-function isAutoTokenLimitReached() {
-  const limit = getAutoTokenLimit();
-  return limit > 0 && state.totalTokens.total >= limit;
-}
-
-function refreshTokenStatsDisplay() {
-  const el = document.getElementById('tokenStats');
-  if (!el) return;
-  const limit = getAutoTokenLimit();
-  const suffix = limit > 0 ? ` / limit ${limit}` : '';
-  el.textContent = t('stats.tokens', {
-    input: state.totalTokens.in,
-    output: state.totalTokens.out,
-    total: state.totalTokens.total,
-    suffix
-  });
 }
 
 // Preview modal pro hromadny preklad
