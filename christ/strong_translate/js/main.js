@@ -1,4 +1,4 @@
-﻿  // ══ CORE MODULE IMPORT ═══════════════════════════════════════════
+﻿  // â•â• CORE MODULE IMPORT â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
   import core from '../strong_translator_core_new.js';
   import prompts from '../strong_prompts.js';
   import {
@@ -50,6 +50,11 @@
   import { createPromptLibraryApi } from './promptLibrary.js';
   import { startResize, doResize, stopResize } from './ui/resize.js';
   import { createExportApi } from './exportData.js';
+  import { createToastApi }  from './ui/toast.js';
+  import { createHeaderApi } from './ui/header.js';
+  import { createModalsApi } from './ui/modals.js';
+  import { createListApi }   from './ui/list.js';
+  import { createDetailApi } from './ui/detail.js';
   // Re-export for use in this module
 const {
       parseTXT: parseTXTCore,
@@ -170,7 +175,7 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     setAttr('btnAutoStop', 'aria-label', t('auto.stop.aria'));
     const autoLog = document.getElementById('autoLog');
     const autoLogText = (autoLog?.textContent || '').trim();
-    if (autoLog && (autoLogText === 'Čeká na start...' || autoLogText === 'Waiting to start...')) {
+    if (autoLog && (autoLogText === 'ÄŒekÃ¡ na start...' || autoLogText === 'Waiting to start...')) {
       autoLog.textContent = t('auto.log.waiting');
     }
     refreshLanguageAwarePromptOptionLabels();
@@ -249,7 +254,7 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     setText('promptLibraryTitle', t('prompt.library.title'));
     const promptPreview = document.getElementById('promptPreview');
     const promptPreviewText = (promptPreview?.textContent || '').trim();
-    if (promptPreview && (promptPreviewText === 'Vyberte prompt z knihovny pro náhled...' || promptPreviewText === 'Select a prompt from the library for preview...')) {
+    if (promptPreview && (promptPreviewText === 'Vyberte prompt z knihovny pro nÃ¡hled...' || promptPreviewText === 'Select a prompt from the library for preview...')) {
       promptPreview.textContent = t('prompt.library.preview.empty');
     }
     setAttr('promptLibraryEditor', 'placeholder', t('prompt.library.editor.placeholder'));
@@ -459,7 +464,7 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     setText('btnPromptLangSave', t('lang.modal.save'));
     const status = document.getElementById('statusTXT');
     const rawStatus = String(status?.textContent || '').trim();
-    if (status && !status.classList.contains('ok') && (rawStatus === '— nevybráno' || rawStatus === '— none selected')) {
+    if (status && !status.classList.contains('ok') && (rawStatus === 'â€” nevybrÃ¡no' || rawStatus === 'â€” none selected')) {
       status.textContent = t('setup.file.none');
     }
     refreshTokenStatsDisplay();
@@ -477,10 +482,10 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     if (hasSpecialista) return text;
     return `${text}
 
-POVINNÝ VÝSTUP NAVÍC:
-- Přidej řádek SPECIALISTA: [detailní odstavec 3-5 vět jako biblický specialista].
-- Odstavec má vysvětlit teologický a biblický význam slova v kontextu.
-- Nepiš body ani seznam, jen souvislý odstavec.`;
+POVINNÃ VÃSTUP NAVÃC:
+- PÅ™idej Å™Ã¡dek SPECIALISTA: [detailnÃ­ odstavec 3-5 vÄ›t jako biblickÃ½ specialista].
+- Odstavec mÃ¡ vysvÄ›tlit teologickÃ½ a biblickÃ½ vÃ½znam slova v kontextu.
+- NepiÅ¡ body ani seznam, jen souvislÃ½ odstavec.`;
   }
 
   // Custom buildPromptMessages that reads from localStorage
@@ -496,19 +501,19 @@ POVINNÝ VÝSTUP NAVÍC:
       const targetLang = localStorage.getItem('strong_target_lang') || 'cz';
       const sourceLang = localStorage.getItem('strong_source_lang') || 'gr';
       const langNames = {
-        cz: 'češtiny',
-        en: 'angličtiny',
-        bg: 'bulharštiny',
-        ch: 'čínštiny',
-        sp: 'španělštiny',
-        sk: 'slovenštiny',
-        pl: 'polštiny',
-        gr: 'řečtiny',
-        he: 'hebrejštiny',
-        both: 'řečtiny i hebrejštiny'
+        cz: 'ÄeÅ¡tiny',
+        en: 'angliÄtiny',
+        bg: 'bulharÅ¡tiny',
+        ch: 'ÄÃ­nÅ¡tiny',
+        sp: 'Å¡panÄ›lÅ¡tiny',
+        sk: 'slovenÅ¡tiny',
+        pl: 'polÅ¡tiny',
+        gr: 'Å™eÄtiny',
+        he: 'hebrejÅ¡tiny',
+        both: 'Å™eÄtiny i hebrejÅ¡tiny'
       };
-      const targetName = langNames[targetLang] || 'češtiny';
-      const sourceName = langNames[sourceLang] || 'řečtiny';
+      const targetName = langNames[targetLang] || 'ÄeÅ¡tiny';
+      const sourceName = langNames[sourceLang] || 'Å™eÄtiny';
       
       let processedPrompt = userPromptTemplate
         .replace(/{TARGET_LANG}/g, targetName)
@@ -680,7 +685,7 @@ async function copyModelTestPromptPreview() {
 }
     function getModelTestPromptTopicLabel(promptType) {
       if (isEnTopicPromptType(promptType)) {
-        const base = String(EN_TOPIC_PROMPT_LABEL_BASE[promptType] || '').replace(/^Téma:\s*/i, '');
+        const base = String(EN_TOPIC_PROMPT_LABEL_BASE[promptType] || '').replace(/^TÃ©ma:\s*/i, '');
         return `${base} (EN -> ${getCurrentTargetLangCode()})`;
       }
       return modelTestPromptCatalog?.[promptType]?.topicLabel || '';
@@ -695,19 +700,19 @@ async function copyModelTestPromptPreview() {
       const targetLang = localStorage.getItem('strong_target_lang') || 'cz';
       const sourceLang = localStorage.getItem('strong_source_lang') || 'gr';
       const langNames = {
-        cz: 'češtiny',
-        en: 'angličtiny',
-        bg: 'bulharštiny',
-        ch: 'čínštiny',
-        sp: 'španělštiny',
-        sk: 'slovenštiny',
-        pl: 'polštiny',
-        gr: 'řečtiny',
-        he: 'hebrejštiny',
-        both: 'řečtiny i hebrejštiny'
+        cz: 'ÄeÅ¡tiny',
+        en: 'angliÄtiny',
+        bg: 'bulharÅ¡tiny',
+        ch: 'ÄÃ­nÅ¡tiny',
+        sp: 'Å¡panÄ›lÅ¡tiny',
+        sk: 'slovenÅ¡tiny',
+        pl: 'polÅ¡tiny',
+        gr: 'Å™eÄtiny',
+        he: 'hebrejÅ¡tiny',
+        both: 'Å™eÄtiny i hebrejÅ¡tiny'
       };
-      const targetName = langNames[targetLang] || 'češtiny';
-      const sourceName = langNames[sourceLang] || 'řečtiny';
+      const targetName = langNames[targetLang] || 'ÄeÅ¡tiny';
+      const sourceName = langNames[sourceLang] || 'Å™eÄtiny';
 
       const userPromptTemplate = getModelTestPromptTemplate(promptType);
       let processedPrompt = String(userPromptTemplate || '')
@@ -727,8 +732,8 @@ async function copyModelTestPromptPreview() {
     function buildModelTestMessages(batch, testMode, promptType, promptEnabled) {
       if (testMode === 'smoke') {
         return [
-          { role: 'system', content: 'Odpovídej stručně a bez komentářů navíc.' },
-          { role: 'user', content: 'Napiš dvakrát po sobě slovo "heslo".' }
+          { role: 'system', content: 'OdpovÃ­dej struÄnÄ› a bez komentÃ¡Å™Å¯ navÃ­c.' },
+          { role: 'user', content: 'NapiÅ¡ dvakrÃ¡t po sobÄ› slovo "heslo".' }
         ];
       }
       if (promptEnabled) {
@@ -737,7 +742,7 @@ async function copyModelTestPromptPreview() {
       return buildPromptMessages(batch);
     }
 
-  // ══ ERROR LOGGER ═════════════════════════════════════════════════
+  // â•â• ERROR LOGGER â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
   /**
    * Structured error logger with context and stack traces.
    * Logs to both console and UI log panel.
@@ -755,17 +760,17 @@ async function copyModelTestPromptPreview() {
     }, stack);
 
     // UI log
-    logMsg(`✗ ${context}: ${error.message}`, 'err');
+    logMsg(`âœ— ${context}: ${error.message}`, 'err');
   }
 
   function logWarn(context, message, extra = {}) {
     console.warn(`[${new Date().toISOString()}] [${context}]`, message, extra);
-    log(`⚠ ${context}: ${message}`);
+    log(`âš  ${context}: ${message}`);
   }
 
   function logInfo(context, message) {
     console.log(`[${new Date().toISOString()}] [${context}]`, message);
-    log(`ℹ ${context}: ${message}`);
+    log(`â„¹ ${context}: ${message}`);
   }
   function getTestHistory() {
     try {
@@ -815,7 +820,7 @@ function populateOpenRouterModels(selectElement, savedModel, callback) {
     }).filter(Boolean).filter(o => o.value);
   }
 
-  // Try cache first (rychlý start), ale vždy následně zkus aktualizaci z API
+  // Try cache first (rychlÃ½ start), ale vÅ¾dy nÃ¡slednÄ› zkus aktualizaci z API
   let hadFreshCache = false;
   const preferredModel = selectElement.value || savedModel || '';
   const cached = localStorage.getItem(CACHE_KEY);
@@ -848,8 +853,8 @@ function populateOpenRouterModels(selectElement, savedModel, callback) {
     })
     .then(data => {
       const modelsRaw = (data.data || []).filter(m => m.id && m.id.endsWith(':free'));
-      // Některé položky API mohou být metadata bez reálně routovatelného endpointu
-      // (pak při testu vrací 404 "No endpoints found"). Zkusíme je vyřadit.
+      // NÄ›kterÃ© poloÅ¾ky API mohou bÃ½t metadata bez reÃ¡lnÄ› routovatelnÃ©ho endpointu
+      // (pak pÅ™i testu vracÃ­ 404 "No endpoints found"). ZkusÃ­me je vyÅ™adit.
       const models = modelsRaw.filter(m => {
         if (Array.isArray(m.endpoints) && m.endpoints.length === 0) return false;
         if (m?.top_provider && m.top_provider.is_disabled === true) return false;
@@ -859,8 +864,8 @@ function populateOpenRouterModels(selectElement, savedModel, callback) {
 
       const topCandidates = [
         { id: 'openrouter/free', fixedLabel: t('provider.top.autoRouter') },
-        { id: 'openai/gpt-oss-20b:free', fixedLabel: '★ OpenAI GPT-OSS 20B (free)' },
-        { id: 'nvidia/nemotron-nano-9b-v2:free', fixedLabel: '★ NVIDIA Nemotron Nano 9B v2 (free)' }
+        { id: 'openai/gpt-oss-20b:free', fixedLabel: 'â˜… OpenAI GPT-OSS 20B (free)' },
+        { id: 'nvidia/nemotron-nano-9b-v2:free', fixedLabel: 'â˜… NVIDIA Nemotron Nano 9B v2 (free)' }
       ];
       const topOptions = topCandidates
         .filter(c => c.id === 'openrouter/free' || modelMap.has(c.id))
@@ -907,7 +912,7 @@ function populateOpenRouterModels(selectElement, savedModel, callback) {
       console.error('OpenRouter models fetch failed:', err);
       if (hadFreshCache) return;
 
-      // Fallback na jakoukoli dostupnou cache (i starou), aby app zůstala provozní
+      // Fallback na jakoukoli dostupnou cache (i starou), aby app zÅ¯stala provoznÃ­
       try {
         const fallbackRaw = localStorage.getItem(CACHE_KEY);
         if (fallbackRaw) {
@@ -1021,7 +1026,7 @@ function applyAutoPanelSettings() {
   updateETA();
 }
 
-// ══ LOAD TXT ═════════════════════════════════════════════════════
+// â•â• LOAD TXT â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const LAST_FILE_KEY = 'strong_last_file';
 const DEFAULT_TXT_FILE = 'strong_finalni_verze.txt';
 const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/sstistkoo/stistko/main/christ/strong_translate/';
@@ -1036,7 +1041,7 @@ function loadTXT(input) {
       state.entries = parseTXT(ev.target.result);
       state.currentFileId = computeFileId(state.entries);
       const el = document.getElementById('statusTXT');
-      el.textContent = `✓ ${file.name} — ${t('entries.count', { count: state.entries.length })}`;
+      el.textContent = `âœ“ ${file.name} â€” ${t('entries.count', { count: state.entries.length })}`;
       el.className = 'file-status ok';
       document.getElementById('fileReady').style.display = 'block';
       document.getElementById('startBtn').disabled = false;
@@ -1058,7 +1063,7 @@ function loadDefaultFile() {
 
   const tryFetch = (idx) => {
     if (idx >= fallbacks.length) {
-      throw new Error('Soubor nenalezen (GitHub ani lokální fallback)');
+      throw new Error('Soubor nenalezen (GitHub ani lokÃ¡lnÃ­ fallback)');
     }
     const target = fallbacks[idx];
     return fetch(target)
@@ -1075,7 +1080,7 @@ function loadDefaultFile() {
       state.entries = parseTXT(text);
       state.currentFileId = computeFileId(state.entries);
       localStorage.setItem(LAST_FILE_KEY, lastFile);
-      document.getElementById('statusTXT').textContent = `✓ ${lastFile} — ${t('entries.count', { count: state.entries.length })}`;
+      document.getElementById('statusTXT').textContent = `âœ“ ${lastFile} â€” ${t('entries.count', { count: state.entries.length })}`;
       document.getElementById('statusTXT').className = 'file-status ok';
       document.getElementById('fileReady').style.display = 'block';
       document.getElementById('startBtn').disabled = false;
@@ -1088,7 +1093,7 @@ function loadDefaultFile() {
      })
     .catch(e => {
       logError('loadDefaultFile', e, { file: lastFile, githubUrl });
-      document.getElementById('statusTXT').textContent = '✗ ' + e.message;
+      document.getElementById('statusTXT').textContent = 'âœ— ' + e.message;
     });
 }
 
@@ -1098,7 +1103,7 @@ function checkDefaultFile() {
     document.getElementById('btnLoadDefault').style.display = 'inline-block';
     return;
   }
-  // Neprovádíme testovací fetch, aby se v konzoli neobjevoval zbytečný 404.
+  // NeprovÃ¡dÃ­me testovacÃ­ fetch, aby se v konzoli neobjevoval zbyteÄnÃ½ 404.
   document.getElementById('btnLoadDefault').style.display = 'inline-block';
 }
 
@@ -1119,14 +1124,14 @@ function updateAutoBtn() {
     }
   }
 
-// ══ RESUME ═══════════════════════════════════════════════════════
+// â•â• RESUME â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function checkResume() {
   try {
     const box = document.getElementById('resumeBox');
     if (box) box.style.display = 'none';
     let saved = localStorage.getItem(storeKey());
     let source = t('resume.source.currentSlot');
-    // Pokud nemáme nic pod aktuálním fileId, ale máme legacy data, nabídneme je
+    // Pokud nemÃ¡me nic pod aktuÃ¡lnÃ­m fileId, ale mÃ¡me legacy data, nabÃ­dneme je
     if (!saved && state.currentFileId) {
       const legacy = localStorage.getItem(LEGACY_STORE_KEY);
       if (legacy) { saved = legacy; source = t('resume.source.legacySlot'); }
@@ -1135,7 +1140,7 @@ function checkResume() {
     const data = JSON.parse(saved);
     const count = Object.keys(data.translated || {}).filter(k => {
       const t = data.translated[k];
-      return t && t.vyznam && t.vyznam !== '—' && !t.skipped;
+      return t && t.vyznam && t.vyznam !== 'â€”' && !t.skipped;
     }).length;
     if (count > 0 && box) {
       box.style.display = 'block';
@@ -1163,7 +1168,7 @@ function toggleListPane() {
   
   if (isHidden) {
     pane.classList.remove('hidden');
-    btn.textContent = '≡ Seznam';
+    btn.textContent = 'â‰¡ Seznam';
     if (isMobile) {
       pane.style.height = '45%';
       logPanel.style.height = '50%';
@@ -1173,7 +1178,7 @@ function toggleListPane() {
     }
   } else {
     pane.classList.add('hidden');
-    btn.textContent = '≡ Seznam';
+    btn.textContent = 'â‰¡ Seznam';
     if (isMobile) {
       pane.style.height = '0';
       logPanel.style.height = '100%';
@@ -1184,16 +1189,16 @@ function toggleListPane() {
   }
 }
 
-// ══ START ════════════════════════════════════════════════════════
+// â•â• START â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function startApp() {
-  // Ukaž loading hned
+  // UkaÅ¾ loading hned
   document.getElementById('setup').style.display = 'none';
   const app = document.getElementById('app');
   app.style.display = 'flex';
   const loadingEl = document.createElement('div');
   loadingEl.id = 'appLoading';
   loadingEl.style.cssText = 'display:flex;align-items:center;justify-content:center;height:100%;color:var(--txt3);font-family:JetBrains Mono,monospace;font-size:14px';
-  loadingEl.textContent = '⏳ Načítám...';
+  loadingEl.textContent = 'â³ NaÄÃ­tÃ¡m...';
   app.appendChild(loadingEl);
   
   // Deffered init
@@ -1208,7 +1213,7 @@ function initApp(loadingEl) {
   state.currentBatchSize = parseInt(document.getElementById('batchSize').value);
   state.currentInterval  = parseInt(document.getElementById('interval').value);
 
-  // Obnov uložený překlad – pro aktuálně načtený soubor
+  // Obnov uloÅ¾enÃ½ pÅ™eklad â€“ pro aktuÃ¡lnÄ› naÄtenÃ½ soubor
   try {
     const saved = localStorage.getItem(storeKey());
     if (saved) {
@@ -1216,16 +1221,16 @@ function initApp(loadingEl) {
       state.translated = data.translated || {};
       state.sourceEntryEdits = data.sourceEntryEdits || {};
     } else if (state.currentFileId) {
-      // Pokus o migraci ze starého (legacy) slotu při prvním použití nového prefixu
+      // Pokus o migraci ze starÃ©ho (legacy) slotu pÅ™i prvnÃ­m pouÅ¾itÃ­ novÃ©ho prefixu
       const legacy = localStorage.getItem(LEGACY_STORE_KEY);
       if (legacy) {
         const data = JSON.parse(legacy);
         if (data && data.translated && Object.keys(data.translated).length > 0) {
           state.translated = data.translated;
           state.sourceEntryEdits = data.sourceEntryEdits || {};
-          // Ulož pod novým klíčem, legacy zachováme – uživatel může mít víc souborů
+          // UloÅ¾ pod novÃ½m klÃ­Äem, legacy zachovÃ¡me â€“ uÅ¾ivatel mÅ¯Å¾e mÃ­t vÃ­c souborÅ¯
           localStorage.setItem(storeKey(), JSON.stringify({ translated: state.translated, sourceEntryEdits: state.sourceEntryEdits, ts: Date.now(), fileId: state.currentFileId, migrated: true }));
-          logInfo('migrate', `Migrováno ${Object.keys(state.translated).length} hesel z legacy slotu`);
+          logInfo('migrate', `MigrovÃ¡no ${Object.keys(state.translated).length} hesel z legacy slotu`);
         }
       }
     }
@@ -1237,7 +1242,7 @@ function initApp(loadingEl) {
 
   document.getElementById('app').style.display = 'flex';
   
-  // Dedup state.entries - pokud jsou duplicitní klíče, bereme jen první výskyt
+  // Dedup state.entries - pokud jsou duplicitnÃ­ klÃ­Äe, bereme jen prvnÃ­ vÃ½skyt
   const uniqueEntries = [];
   const seenKeys = new Set();
   for (const e of state.entries) {
@@ -1254,14 +1259,14 @@ function initApp(loadingEl) {
   state.entryMap = new Map(state.entries.map(e => [e.key, e]));
   applySourceEntryEditsToEntries();
   
-  // Vytvoř index pro rychlé řazení podle původního pořadí
+  // VytvoÅ™ index pro rychlÃ© Å™azenÃ­ podle pÅ¯vodnÃ­ho poÅ™adÃ­
   window._entryIndexMap = new Map(state.entries.map((e, i) => [e.key, i]));
 
   state.filteredKeys = state.entries.map(e => e.key);
   initVirtualScroll();
   renderList();
   
-  // Scroll na začátek po načtení a znovu vykresli
+  // Scroll na zaÄÃ¡tek po naÄtenÃ­ a znovu vykresli
   const listScroll = document.getElementById('listScroll');
   if (listScroll) listScroll.scrollTop = 0;
   state.lastRenderRange = { start: -1, end: -1, doneStates: {} };
@@ -1273,7 +1278,7 @@ function initApp(loadingEl) {
   updateBackupButtonVisibility();
   updateFileIdBadge();
   
-  // Odstraň loading element
+  // OdstraÅˆ loading element
   if (loadingEl && loadingEl.parentNode) {
     loadingEl.parentNode.removeChild(loadingEl);
   }
@@ -1286,134 +1291,8 @@ function initApp(loadingEl) {
   }
 }
 
-// ══ LIST ═════════════════════════════════════════════════════════
-// Store for selected keys (declared in STATE section above)
+// â•â• LIST â€” pÅ™esunuto do js/ui/list.js (viz wiring nÃ­Å¾e) â•â•â•â•â•â•â•â•â•â•
 
-function renderList() {
-  state.filteredKeys = getFilteredEntries().map(e => e.key);
-  
-  if (state.virtualInitialized) {
-    state.lastRenderRange = { start: -1, end: -1 };
-    updatePhantomHeight();
-    renderVisible();
-  }
-  
-  updateSelectedBtn();
-}
-
-function toggleSelect(key, event) {
-  event.stopPropagation();
-  if (state.selectedKeys.has(key)) {
-    state.selectedKeys.delete(key);
-  } else {
-    state.selectedKeys.add(key);
-  }
-  renderList();
-}
-
-function selectAll() {
-  for (const key of state.filteredKeys) {
-    state.selectedKeys.add(key);
-  }
-  renderList();
-}
-
-function selectNone() {
-  state.selectedKeys.clear();
-  renderList();
-}
-
-function updateSelectedBtn() {
-  const btn = document.getElementById('btnTranslateSelected');
-  const btnSelectAllVisible = document.getElementById('btnSelectAllVisible');
-  if (state.selectedKeys.size > 0) {
-    if (btnSelectAllVisible) {
-      btnSelectAllVisible.style.display = 'inline-block';
-      btnSelectAllVisible.textContent = t('list.selectAllVisibleWithCount', { count: state.filteredKeys.length });
-    }
-    btn.style.display = 'inline-block';
-    btn.textContent = t('list.translateSelectedCount', { count: state.selectedKeys.size });
-  } else {
-    if (btnSelectAllVisible) btnSelectAllVisible.style.display = 'none';
-    btn.style.display = 'none';
-  }
-}
-
-async function translateSelected() {
-  const activeProvider = resolveMainBatchProvider(document.getElementById('provider')?.value || '');
-  if (!isAutoProviderEnabled(activeProvider)) {
-    showToast(t('toast.provider.enableOne'));
-    return;
-  }
-  const keys = Array.from(state.selectedKeys);
-  if (!keys.length) return;
-  const filterStatus = document.getElementById('filterStatus')?.value || '';
-  const shouldRunTopicRepair = filterStatus === 'missing_topic';
-  if (shouldRunTopicRepair) {
-    startTopicRepairFlow(keys);
-    return;
-  }
-  
-  const bs = parseInt(document.getElementById('batchSizeRun')?.value) || 10;
-  let processed = 0;
-  let allNewTranslations = {};
-  
-  while (processed < keys.length) {
-    const batchKeys = keys.slice(processed, processed + bs);
-    document.getElementById('btnTranslateSelected').textContent = `⏳ ${processed + batchKeys.length}/${keys.length}...`;
-
-    try {
-      const beforeMap = {};
-      for (const key of batchKeys) {
-        beforeMap[key] = state.translated[key] ? JSON.stringify(state.translated[key]) : '';
-      }
-      await translateBatch(batchKeys);
-      const newTranslations = {};
-      for (const key of batchKeys) {
-        const after = state.translated[key] ? JSON.stringify(state.translated[key]) : '';
-        if (after && after !== beforeMap[key]) {
-          newTranslations[key] = { ...state.translated[key] };
-        }
-      }
-      
-      allNewTranslations = { ...allNewTranslations, ...newTranslations };
-      saveProgress();
-      updateFailedCount();
-      renderList();
-      
-    } catch(e) {
-       logError('translateSelected', e, {
-         batchKeys,
-         batchSize: batchKeys.length,
-         provider: activeProvider,
-         model: getPipelineModelForProvider(activeProvider)
-       });
-       showToast(t('toast.error.withMessage', { message: e.message }));
-    }
-    
-    processed += batchKeys.length;
-    
-    // Interval mezi dávkami (ochrana rate limitu)
-    if (processed < keys.length) {
-      const interval = parseInt(document.getElementById('intervalRun')?.value) || 
-                       parseInt(document.getElementById('interval')?.value) || 20;
-      document.getElementById('btnTranslateSelected').textContent = t('list.translateWaiting', { seconds: interval });
-      await new Promise(r => setTimeout(r, interval * 1000));
-    }
-  }
-  
-  state.selectedKeys.clear();
-  renderList();
-  updateFailedCount();
-  document.getElementById('btnTranslateSelected').textContent = '⚡ Přeložit vybrané';
-  
-  if (Object.keys(allNewTranslations).length > 0) {
-    showPreviewModal(allNewTranslations);
-    showToast(t('toast.translated.count', { count: Object.keys(allNewTranslations).length }));
-  } else {
-    showToast(t('toast.translation.none'));
-  }
-}
 
 function getTopicSourceTextForPreview(key, topicId) {
   const e = state.entryMap.get(key) || {};
@@ -1501,7 +1380,7 @@ function updateTopicRepairModalUI() {
   const bulkRunBtn = document.getElementById('topicRepairBulkRunBtn');
   if (bulkRunBtn) {
     bulkRunBtn.disabled = false;
-    bulkRunBtn.textContent = state.topicRepairBulkRunning ? '■ Zastavit hromadný překlad' : t('topicRepair.bulk.button');
+    bulkRunBtn.textContent = state.topicRepairBulkRunning ? 'â–  Zastavit hromadnÃ½ pÅ™eklad' : t('topicRepair.bulk.button');
   }
   const rows = vis.map(task => {
     const idx = topicRepairState.tasks.indexOf(task);
@@ -1509,10 +1388,10 @@ function updateTopicRepairModalUI() {
       .filter(row => row && row.topicId && row.topicId !== 'specialista' && row.topicId !== task.topicId);
     const rhOther = (Array.isArray(task.rawHeaderTopics) ? task.rawHeaderTopics : []).filter(id => id && id !== task.topicId);
     const rawHeadersHint = (task.status === 'done' || task.status === 'failed') && rhOther.length > 0
-      ? `<div style="font-size:10px;color:var(--acc2);margin-top:6px">📎 V odpovědi také nadpisy: ${rhOther.map(id => escHtml(TOPIC_LABELS[id] || id)).join(', ')}${extraTopicsForUi.length ? '' : ' — bez tabulky „další témata“ zkontroluj 📎 v logu a F12 → RAW.'}</div>`
+      ? `<div style="font-size:10px;color:var(--acc2);margin-top:6px">ðŸ“Ž V odpovÄ›di takÃ© nadpisy: ${rhOther.map(id => escHtml(TOPIC_LABELS[id] || id)).join(', ')}${extraTopicsForUi.length ? '' : ' â€” bez tabulky â€ždalÅ¡Ã­ tÃ©mataâ€œ zkontroluj ðŸ“Ž v logu a F12 â†’ RAW.'}</div>`
       : '';
     const statusColor = task.status === 'done' ? 'var(--acc3)' : (task.status === 'failed' ? 'var(--red)' : (task.status === 'running' ? 'var(--ylw)' : 'var(--txt3)'));
-    const statusText = task.status === 'done' ? 'hotovo' : (task.status === 'failed' ? 'chyba' : (task.status === 'running' ? 'běží' : 'čeká'));
+    const statusText = task.status === 'done' ? 'hotovo' : (task.status === 'failed' ? 'chyba' : (task.status === 'running' ? 'bÄ›Å¾Ã­' : 'ÄekÃ¡'));
     return `
       <div style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;padding:10px;margin:0 0 10px 0">
         <div style="display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px">
@@ -1525,26 +1404,26 @@ function updateTopicRepairModalUI() {
             <input type="checkbox" ${task.includeBulk !== false ? 'checked' : ''} onchange="toggleTopicRepairBulkInclude(${idx}, this.checked)" style="accent-color:var(--acc)">
             ${t('topicRepair.batchLabel')}
           </label>
-          <span style="font-size:11px;color:${statusColor}">${statusText}${task.provider ? ` · ${task.provider}` : ''}</span>
+          <span style="font-size:11px;color:${statusColor}">${statusText}${task.provider ? ` Â· ${task.provider}` : ''}</span>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
           <div style="font-size:11px;color:var(--txt2)">
-            <div><b>${t('topicRepair.originalTopic')}</b> ${escHtml(task.currentValue || '—')}</div>
-            <div style="margin-top:4px"><b>${t('topicRepair.original')}</b> ${escHtml(task.sourceValue || '—')}</div>
+            <div><b>${t('topicRepair.originalTopic')}</b> ${escHtml(task.currentValue || 'â€”')}</div>
+            <div style="margin-top:4px"><b>${t('topicRepair.original')}</b> ${escHtml(task.sourceValue || 'â€”')}</div>
           </div>
           <div style="font-size:11px;color:var(--txt)">
-            <div><b>${t('topicRepair.newProposal')}</b> ${escHtml(task.candidateValue || '—')}</div>
+            <div><b>${t('topicRepair.newProposal')}</b> ${escHtml(task.candidateValue || 'â€”')}</div>
             ${formatTopicRepairQuickCompare(task.topicId, task.currentValue, task.candidateValue)}
             ${rawHeadersHint}
             <div style="margin-top:4px;color:var(--txt2)">
               <b>${t('topicRepair.specialistInResponse')}</b> ${task.specialistaInRaw ? t('topicRepair.yes') : t('topicRepair.no')}
-              ${task.specialistaInRaw ? ` · <b>${t('topicRepair.status')}</b> ${escHtml(task.specialistaDecision || t('topicRepair.unchanged'))}` : ''}
+              ${task.specialistaInRaw ? ` Â· <b>${t('topicRepair.status')}</b> ${escHtml(task.specialistaDecision || t('topicRepair.unchanged'))}` : ''}
             </div>
             ${task.specialistaInRaw ? `
               <details style="margin-top:6px;background:var(--bg2);border:1px solid var(--brd);border-radius:4px;padding:6px">
                 <summary style="cursor:pointer;color:var(--acc)">${t('topicRepair.specialistDetail')}</summary>
-                <div style="margin-top:6px;color:var(--txt2)"><b>${t('topicRepair.originalSpecialist')}</b> ${escHtml(task.specialistaPreviousValue || '—')}</div>
-                <div style="margin-top:6px;color:var(--txt)"><b>${t('topicRepair.aiSpecialist')}</b> ${escHtml(task.specialistaCandidateValue || '—')}</div>
+                <div style="margin-top:6px;color:var(--txt2)"><b>${t('topicRepair.originalSpecialist')}</b> ${escHtml(task.specialistaPreviousValue || 'â€”')}</div>
+                <div style="margin-top:6px;color:var(--txt)"><b>${t('topicRepair.aiSpecialist')}</b> ${escHtml(task.specialistaCandidateValue || 'â€”')}</div>
                 <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
                   <button class="hbtn grn" onclick="setTopicRepairSpecialistaDecision(${idx}, 'accept')">${t('topicRepair.confirmSpecialist')}</button>
                   <button class="hbtn red" onclick="setTopicRepairSpecialistaDecision(${idx}, 'reject')">${t('topicRepair.rejectSpecialist')}</button>
@@ -1556,9 +1435,9 @@ function updateTopicRepairModalUI() {
                 <summary style="cursor:pointer;color:var(--acc2)">${t('topicRepair.extraTopics', { count: extraTopicsForUi.length })}</summary>
                 ${extraTopicsForUi.map(row => `
                   <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--brd)">
-                    <div style="font-size:11px;color:var(--txt2)"><b>${escHtml(TOPIC_LABELS[row.topicId] || row.topicId)}</b> · ${t('topicRepair.status')} ${escHtml(row.decision || t('topicRepair.unchanged'))}</div>
-                    <div style="margin-top:4px;color:var(--txt2)"><b>${t('topicRepair.originalShort')}</b> ${escHtml(row.previousValue || '—')}</div>
-                    <div style="margin-top:4px;color:var(--txt)"><b>${t('topicRepair.aiShort')}</b> ${escHtml(row.candidateValue || '—')}</div>
+                    <div style="font-size:11px;color:var(--txt2)"><b>${escHtml(TOPIC_LABELS[row.topicId] || row.topicId)}</b> Â· ${t('topicRepair.status')} ${escHtml(row.decision || t('topicRepair.unchanged'))}</div>
+                    <div style="margin-top:4px;color:var(--txt2)"><b>${t('topicRepair.originalShort')}</b> ${escHtml(row.previousValue || 'â€”')}</div>
+                    <div style="margin-top:4px;color:var(--txt)"><b>${t('topicRepair.aiShort')}</b> ${escHtml(row.candidateValue || 'â€”')}</div>
                     ${formatTopicRepairQuickCompare(row.topicId, row.previousValue, row.candidateValue)}
                     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">
                       <button class="hbtn grn" onclick="setTopicRepairDetectedTopicDecision(${idx}, '${row.topicId}', 'accept')">${t('topicRepair.confirm')}</button>
@@ -1568,7 +1447,7 @@ function updateTopicRepairModalUI() {
                 `).join('')}
               </details>
             ` : ''}
-            ${task.error ? `<div style="margin-top:4px;color:var(--red)">✗ ${escHtml(task.error)}</div>` : ''}
+            ${task.error ? `<div style="margin-top:4px;color:var(--red)">âœ— ${escHtml(task.error)}</div>` : ''}
           </div>
         </div>
       </div>`;
@@ -1631,73 +1510,73 @@ function renderTopicRepairModal() {
   modal.innerHTML = `
     <div style="max-width:980px;margin:0 auto;background:var(--bg2);border:1px solid var(--brd);border-radius:8px;padding:16px">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
-        <h2 style="color:var(--acc);margin:0">Oprava témat (${topicRepairState.tasks.length})</h2>
+        <h2 style="color:var(--acc);margin:0">Oprava tÃ©mat (${topicRepairState.tasks.length})</h2>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="hbtn" id="topicRepairMinimizeBtn" onclick="minimizeTopicRepairModal()">▁ Minimalizovat</button>
-          <button class="hbtn" onclick="closeTopicRepairModalOnly()">✕ Zavřít okno</button>
+          <button class="hbtn" id="topicRepairMinimizeBtn" onclick="minimizeTopicRepairModal()">â– Minimalizovat</button>
+          <button class="hbtn" onclick="closeTopicRepairModalOnly()">âœ• ZavÅ™Ã­t okno</button>
         </div>
       </div>
-      <div style="font-size:11px;color:var(--txt2);margin:8px 0 10px 0">Chybějící témata — nic se nespouští automaticky; zvol režim a teprve pak spusť překlad.</div>
+      <div style="font-size:11px;color:var(--txt2);margin:8px 0 10px 0">ChybÄ›jÃ­cÃ­ tÃ©mata â€” nic se nespouÅ¡tÃ­ automaticky; zvol reÅ¾im a teprve pak spusÅ¥ pÅ™eklad.</div>
       <div style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;padding:10px;margin-bottom:10px">
-        <div style="font-size:12px;color:var(--txt);margin-bottom:8px"><b>Režim</b></div>
+        <div style="font-size:12px;color:var(--txt);margin-bottom:8px"><b>ReÅ¾im</b></div>
         <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--txt2)">
           <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
             <input type="radio" name="topicRepairStrategy" id="topicRepairStrategySeq" value="sequential" ${state.repairStrategy === 'sequential' ? 'checked' : ''} onchange="setTopicRepairStrategy('sequential')" style="accent-color:var(--acc)">
-            Po jednom (sekvenčně — vlastní prompt pro každé chybějící téma)
+            Po jednom (sekvenÄnÄ› â€” vlastnÃ­ prompt pro kaÅ¾dÃ© chybÄ›jÃ­cÃ­ tÃ©ma)
           </label>
           <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
             <input type="radio" name="topicRepairStrategy" id="topicRepairStrategyBulk" value="bulk" ${state.repairStrategy === 'bulk' ? 'checked' : ''} onchange="setTopicRepairStrategy('bulk')" style="accent-color:var(--acc)">
-            Hromadně (dávka jednoho tématu — sekce níže, tlačítko „Hromadný překlad“)
+            HromadnÄ› (dÃ¡vka jednoho tÃ©matu â€” sekce nÃ­Å¾e, tlaÄÃ­tko â€žHromadnÃ½ pÅ™ekladâ€œ)
           </label>
         </div>
-        <div id="topicRepairBulkStrategyHint" style="margin-top:8px;font-size:11px;color:var(--txt3);display:${state.repairStrategy === 'bulk' ? 'block' : 'none'}">Sekvenční fronta se nespustí. Rozbal „Hromadná oprava“, zkontroluj prompt a dej ⚡ Hromadný překlad.</div>
+        <div id="topicRepairBulkStrategyHint" style="margin-top:8px;font-size:11px;color:var(--txt3);display:${state.repairStrategy === 'bulk' ? 'block' : 'none'}">SekvenÄnÃ­ fronta se nespustÃ­. Rozbal â€žHromadnÃ¡ opravaâ€œ, zkontroluj prompt a dej âš¡ HromadnÃ½ pÅ™eklad.</div>
       </div>
       <div style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;padding:10px;margin-bottom:10px">
-        <div id="topicRepairStatus" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt3)">—</div>
+        <div id="topicRepairStatus" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt3)">â€”</div>
         <div style="display:grid;gap:2px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt2);margin-top:6px">
-          <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="topicRepairEnable_groq" ${topicRepairState.providerEnabled.groq ? 'checked' : ''} onchange="applyTopicRepairProviderCheckboxes()" style="accent-color:var(--acc)">G <span id="topicRepairProvider_groq">Groq: —</span></label>
-          <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="topicRepairEnable_gemini" ${topicRepairState.providerEnabled.gemini ? 'checked' : ''} onchange="applyTopicRepairProviderCheckboxes()" style="accent-color:var(--acc)">Gm <span id="topicRepairProvider_gemini">Google: —</span></label>
-          <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="topicRepairEnable_openrouter" ${topicRepairState.providerEnabled.openrouter ? 'checked' : ''} onchange="applyTopicRepairProviderCheckboxes()" style="accent-color:var(--acc)">OR <span id="topicRepairProvider_openrouter">OpenRouter: —</span></label>
+          <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="topicRepairEnable_groq" ${topicRepairState.providerEnabled.groq ? 'checked' : ''} onchange="applyTopicRepairProviderCheckboxes()" style="accent-color:var(--acc)">G <span id="topicRepairProvider_groq">Groq: â€”</span></label>
+          <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="topicRepairEnable_gemini" ${topicRepairState.providerEnabled.gemini ? 'checked' : ''} onchange="applyTopicRepairProviderCheckboxes()" style="accent-color:var(--acc)">Gm <span id="topicRepairProvider_gemini">Google: â€”</span></label>
+          <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="topicRepairEnable_openrouter" ${topicRepairState.providerEnabled.openrouter ? 'checked' : ''} onchange="applyTopicRepairProviderCheckboxes()" style="accent-color:var(--acc)">OR <span id="topicRepairProvider_openrouter">OpenRouter: â€”</span></label>
         </div>
       </div>
       <details id="topicRepairBulkDetails" style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;padding:10px;margin-bottom:10px" ${state.repairStrategy === 'bulk' ? 'open' : ''}>
-        <summary style="cursor:pointer;color:var(--acc)">Hromadná oprava jednoho tématu (dávka)</summary>
+        <summary style="cursor:pointer;color:var(--acc)">HromadnÃ¡ oprava jednoho tÃ©matu (dÃ¡vka)</summary>
         <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:8px">
           <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--txt3);cursor:pointer">
             <input type="checkbox" id="topicRepairBulkOnlyFailed" checked style="accent-color:var(--acc)">
-            jen chyby / prázdné
+            jen chyby / prÃ¡zdnÃ©
           </label>
-          <button class="hbtn" type="button" onclick="setTopicRepairBulkIncludeAll(true)">☑ Dávka: vše</button>
-          <button class="hbtn" type="button" onclick="setTopicRepairBulkIncludeAll(false)">☐ Dávka: nic</button>
+          <button class="hbtn" type="button" onclick="setTopicRepairBulkIncludeAll(true)">â˜‘ DÃ¡vka: vÅ¡e</button>
+          <button class="hbtn" type="button" onclick="setTopicRepairBulkIncludeAll(false)">â˜ DÃ¡vka: nic</button>
         </div>
         <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:10px;font-size:12px;color:var(--txt2)">
-          <label style="display:flex;align-items:center;gap:6px">Dávka (hesel)
-            <input type="number" id="topicRepairBulkBatchInput" min="1" max="100" step="1" style="width:64px;padding:4px 6px;background:var(--bg2);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:12px" title="Synchronizuje skryté batchSizeRun (stejné jako AUTO)" oninput="syncTopicRepairBulkRunInputsToHidden()">
+          <label style="display:flex;align-items:center;gap:6px">DÃ¡vka (hesel)
+            <input type="number" id="topicRepairBulkBatchInput" min="1" max="100" step="1" style="width:64px;padding:4px 6px;background:var(--bg2);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:12px" title="Synchronizuje skrytÃ© batchSizeRun (stejnÃ© jako AUTO)" oninput="syncTopicRepairBulkRunInputsToHidden()">
           </label>
           <label style="display:flex;align-items:center;gap:6px">Interval (s)
-            <input type="number" id="topicRepairBulkIntervalInput" min="0" max="600" step="1" style="width:64px;padding:4px 6px;background:var(--bg2);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:12px" title="Synchronizuje skryté intervalRun — pauza mezi dávkami" oninput="syncTopicRepairBulkRunInputsToHidden()">
+            <input type="number" id="topicRepairBulkIntervalInput" min="0" max="600" step="1" style="width:64px;padding:4px 6px;background:var(--bg2);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:12px" title="Synchronizuje skrytÃ© intervalRun â€” pauza mezi dÃ¡vkami" oninput="syncTopicRepairBulkRunInputsToHidden()">
           </label>
           <span id="topicRepairBulkRunSummary" style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt3)"></span>
         </div>
         <div style="margin-top:8px">
-          <div style="font-size:11px;color:var(--txt2);margin-bottom:6px">Batch prompt (uložený per téma). Placeholder <span style="font-family:'JetBrains Mono',monospace">{HESLA}</span> = vstupní hesla.</div>
+          <div style="font-size:11px;color:var(--txt2);margin-bottom:6px">Batch prompt (uloÅ¾enÃ½ per tÃ©ma). Placeholder <span style="font-family:'JetBrains Mono',monospace">{HESLA}</span> = vstupnÃ­ hesla.</div>
           <textarea id="topicRepairBatchPrompt" style="width:100%;min-height:160px;background:var(--bg2);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:10px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.45"></textarea>
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
-            <button class="hbtn" type="button" onclick="saveTopicRepairBatchPromptDraft()">💾 Uložit prompt</button>
-            <button class="hbtn" type="button" onclick="resetTopicRepairBatchPromptToDefault()">↺ Výchozí z katalogu</button>
-            <button class="hbtn grn" id="topicRepairBulkRunBtn" type="button" onclick="runTopicRepairBulkTranslation()">⚡ Hromadný překlad (vybrané)</button>
+            <button class="hbtn" type="button" onclick="saveTopicRepairBatchPromptDraft()">ðŸ’¾ UloÅ¾it prompt</button>
+            <button class="hbtn" type="button" onclick="resetTopicRepairBatchPromptToDefault()">â†º VÃ½chozÃ­ z katalogu</button>
+            <button class="hbtn grn" id="topicRepairBulkRunBtn" type="button" onclick="runTopicRepairBulkTranslation()">âš¡ HromadnÃ½ pÅ™eklad (vybranÃ©)</button>
           </div>
           <div style="font-size:11px;color:var(--txt3);margin-top:8px">
-            Tip: pokud běží sekvenční oprava, dej nejdřív Pauza — hromadný běh počká, až doběhne aktuální pokus.
+            Tip: pokud bÄ›Å¾Ã­ sekvenÄnÃ­ oprava, dej nejdÅ™Ã­v Pauza â€” hromadnÃ½ bÄ›h poÄkÃ¡, aÅ¾ dobÄ›hne aktuÃ¡lnÃ­ pokus.
           </div>
         </div>
       </details>
       <div style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;padding:10px;margin-bottom:10px">
-        <div style="font-size:12px;color:var(--txt);margin-bottom:6px"><b>Téma v seznamu</b> — podle výběru se zobrazí jen odpovídající řádky (sekvenční i dávka).</div>
+        <div style="font-size:12px;color:var(--txt);margin-bottom:6px"><b>TÃ©ma v seznamu</b> â€” podle vÃ½bÄ›ru se zobrazÃ­ jen odpovÃ­dajÃ­cÃ­ Å™Ã¡dky (sekvenÄnÃ­ i dÃ¡vka).</div>
         <label style="display:flex;align-items:center;gap:10px;font-size:12px;color:var(--txt2);flex-wrap:wrap">
           <span style="white-space:nowrap">Vybrat</span>
           <select id="topicRepairBulkTopicSelect" onchange="refreshTopicRepairBatchPromptEditor()" style="min-width:240px;flex:1;max-width:100%;background:var(--bg2);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:6px;font-size:12px">
-            <option value="all" ${state.bulkTopicId === 'all' ? 'selected' : ''}>Vše</option>
+            <option value="all" ${state.bulkTopicId === 'all' ? 'selected' : ''}>VÅ¡e</option>
             <option value="definice" ${state.bulkTopicId === 'definice' ? 'selected' : ''}>${escHtml(TOPIC_LABELS.definice)}</option>
             <option value="vyznam" ${state.bulkTopicId === 'vyznam' ? 'selected' : ''}>${escHtml(TOPIC_LABELS.vyznam)}</option>
             <option value="kjv" ${state.bulkTopicId === 'kjv' ? 'selected' : ''}>${escHtml(TOPIC_LABELS.kjv)}</option>
@@ -1707,18 +1586,18 @@ function renderTopicRepairModal() {
           </select>
         </label>
         <div id="topicRepairBulkListFilterRow" style="display:${state.bulkTopicId === 'all' ? 'flex' : 'none'};flex-wrap:wrap;gap:10px 14px;align-items:center;width:100%;margin-top:10px;padding-top:10px;border-top:1px solid var(--brd);font-size:11px;color:var(--txt2)">
-          <span style="width:100%;margin-bottom:2px">U „Vše“ omez typy témat:</span>
+          <span style="width:100%;margin-bottom:2px">U â€žVÅ¡eâ€œ omez typy tÃ©mat:</span>
           ${TOPIC_REPAIR_BULK_TOPIC_ORDER.map(tid => {
             const on = (state.bulkListTopicFilter || defaultBulkListTopicFilter())[tid] !== false;
             return `<label style="display:flex;align-items:center;gap:4px;cursor:pointer;white-space:nowrap"><input type="checkbox" ${on ? 'checked' : ''} onchange="toggleTopicRepairBulkListFilter('${tid}', this.checked)" style="accent-color:var(--acc)">${escHtml(TOPIC_LABELS[tid] || tid)}</label>`;
           }).join('')}
         </div>
-        <div style="font-size:10px;color:var(--txt3);margin-top:8px">Batch prompt a ⚡ hromadný překlad zůstávají v sekci „Hromadná oprava“ výše — výběr témat je stejný.</div>
+        <div style="font-size:10px;color:var(--txt3);margin-top:8px">Batch prompt a âš¡ hromadnÃ½ pÅ™eklad zÅ¯stÃ¡vajÃ­ v sekci â€žHromadnÃ¡ opravaâ€œ vÃ½Å¡e â€” vÃ½bÄ›r tÃ©mat je stejnÃ½.</div>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:center">
-        <button class="hbtn grn" id="topicRepairStartSequentialBtn" type="button" onclick="startTopicRepairSequentialWorker()">▶ Spustit sekvenční opravu</button>
-        <button class="hbtn grn" id="topicRepairToggleBtn" onclick="toggleTopicRepairRun()">⏸ Pauza</button>
-        <button class="hbtn grn" id="topicRepairApplyBtn" onclick="applyTopicRepairSelected()">✓ Potvrdit přepsání (0)</button>
+        <button class="hbtn grn" id="topicRepairStartSequentialBtn" type="button" onclick="startTopicRepairSequentialWorker()">â–¶ Spustit sekvenÄnÃ­ opravu</button>
+        <button class="hbtn grn" id="topicRepairToggleBtn" onclick="toggleTopicRepairRun()">â¸ Pauza</button>
+        <button class="hbtn grn" id="topicRepairApplyBtn" onclick="applyTopicRepairSelected()">âœ“ Potvrdit pÅ™epsÃ¡nÃ­ (0)</button>
       </div>
       <div id="topicRepairList"></div>
     </div>
@@ -1833,12 +1712,12 @@ async function processTopicRepairQueue() {
           ];
           const raw = await callAIWithRetry(prov, apiKey, model, messages);
           const rawText = String(raw?.content || '').trim();
-          log(`📥 RAW AI oprava ${nextTask.key}.${nextTask.topicId}: vypsáno do konzole`);
-          console.groupCollapsed(`🤖 RAW AI oprava ${nextTask.key}.${nextTask.topicId} (${prov}/${model})`);
-          console.log(rawText || '(prázdná odpověď)');
+          log(`ðŸ“¥ RAW AI oprava ${nextTask.key}.${nextTask.topicId}: vypsÃ¡no do konzole`);
+          console.groupCollapsed(`ðŸ¤– RAW AI oprava ${nextTask.key}.${nextTask.topicId} (${prov}/${model})`);
+          console.log(rawText || '(prÃ¡zdnÃ¡ odpovÄ›Ä)');
           console.groupEnd();
 
-          // Kontrola dalších témat: zobraz jen skutečně označená pole v RAW odpovědi (striktní parser).
+          // Kontrola dalÅ¡Ã­ch tÃ©mat: zobraz jen skuteÄnÄ› oznaÄenÃ¡ pole v RAW odpovÄ›di (striktnÃ­ parser).
           state.translated[nextTask.key] = state.translated[nextTask.key] || {};
           const baselineTopicValues = cloneTranslationTopicFields(state.translated[nextTask.key]);
 
@@ -1858,7 +1737,7 @@ async function processTopicRepairQueue() {
               topicId,
               previousValue: previousTopicVal,
               candidateValue: candidateTopicVal,
-              decision: acceptAuto ? 'přijat (auto)' : 'zamítnut (auto)'
+              decision: acceptAuto ? 'pÅ™ijat (auto)' : 'zamÃ­tnut (auto)'
             });
           };
 
@@ -1896,36 +1775,36 @@ async function processTopicRepairQueue() {
           nextTask.specialistaPreviousValue = prevSpecialista;
           nextTask.specialistaCandidateValue = candidateSpecialista;
           if (specHeader && !hasMeaningfulValue(candidateSpecialista)) {
-            log(`⚠ ${nextTask.key}: v RAW je nadpis SPECIALISTA, ale tělo se nepodařilo strojově vyčíst — viz konzole RAW.`);
+            log(`âš  ${nextTask.key}: v RAW je nadpis SPECIALISTA, ale tÄ›lo se nepodaÅ™ilo strojovÄ› vyÄÃ­st â€” viz konzole RAW.`);
           }
           if (shouldReplaceSpecialista(prevSpecialista, candidateSpecialista)) {
             state.translated[nextTask.key].specialista = String(candidateSpecialista || '').trim();
-            nextTask.specialistaDecision = 'přijat (auto)';
-            log(`🧠 SPECIALISTA auto-upgrade ${nextTask.key}: použit kvalitnější text z opravy tématu`);
+            nextTask.specialistaDecision = 'pÅ™ijat (auto)';
+            log(`ðŸ§  SPECIALISTA auto-upgrade ${nextTask.key}: pouÅ¾it kvalitnÄ›jÅ¡Ã­ text z opravy tÃ©matu`);
           } else if (nextTask.specialistaInRaw) {
-            nextTask.specialistaDecision = 'zamítnut (auto)';
+            nextTask.specialistaDecision = 'zamÃ­tnut (auto)';
           } else {
             nextTask.specialistaDecision = '';
           }
 
           const hdrOther = (nextTask.rawHeaderTopics || []).filter(id => id !== nextTask.topicId);
-          const hdrLabels = hdrOther.map(id => TOPIC_LABELS[id] || id).join(', ') || '—';
-          const dtIds = (nextTask.detectedTopics || []).map(d => TOPIC_LABELS[d.topicId] || d.topicId).join(', ') || '—';
-          log(`📎 ${nextTask.key} · „${TOPIC_LABELS[nextTask.topicId] || nextTask.topicId}“: v RAW bloky [${hdrLabels}] → další témata (UI): [${dtIds}] · SPECIALISTA: ${nextTask.specialistaInRaw ? 'ano' : 'ne'}`);
+          const hdrLabels = hdrOther.map(id => TOPIC_LABELS[id] || id).join(', ') || 'â€”';
+          const dtIds = (nextTask.detectedTopics || []).map(d => TOPIC_LABELS[d.topicId] || d.topicId).join(', ') || 'â€”';
+          log(`ðŸ“Ž ${nextTask.key} Â· â€ž${TOPIC_LABELS[nextTask.topicId] || nextTask.topicId}â€œ: v RAW bloky [${hdrLabels}] â†’ dalÅ¡Ã­ tÃ©mata (UI): [${dtIds}] Â· SPECIALISTA: ${nextTask.specialistaInRaw ? 'ano' : 'ne'}`);
 
           const candidate = extractTopicValueFromAI(raw?.content || '', nextTask.topicId, 'strict');
           if (!hasMeaningfulValue(candidate)) {
-            throw new Error('AI vrátila prázdný výsledek');
+            throw new Error('AI vrÃ¡tila prÃ¡zdnÃ½ vÃ½sledek');
           }
           nextTask.provider = prov;
           nextTask.candidateValue = String(candidate || '').trim();
           nextTask.checked = shouldAutoCheckTopicRepairTask(nextTask.topicId, nextTask.currentValue, nextTask.candidateValue);
           nextTask.status = 'done';
           success = true;
-          log(`✓ Oprava tématu ${nextTask.key}.${nextTask.topicId} přes ${prov}`);
+          log(`âœ“ Oprava tÃ©matu ${nextTask.key}.${nextTask.topicId} pÅ™es ${prov}`);
           break;
         } catch (e) {
-          nextTask.error = e.message || 'Neznámá chyba';
+          nextTask.error = e.message || 'NeznÃ¡mÃ¡ chyba';
         } finally {
           state.topicRepairState.currentTask = null;
           updateTopicRepairProviderStatus();
@@ -1982,11 +1861,11 @@ function setTopicRepairSpecialistaDecision(index, decision) {
   state.translated[task.key] = state.translated[task.key] || {};
   if (decision === 'accept') {
     state.translated[task.key].specialista = String(task.specialistaCandidateValue || '').trim();
-    task.specialistaDecision = 'přijat ručně';
+    task.specialistaDecision = 'pÅ™ijat ruÄnÄ›';
     showToast(t('toast.specialista.approved', { key: task.key }));
   } else {
     state.translated[task.key].specialista = String(task.specialistaPreviousValue || '').trim();
-    task.specialistaDecision = 'zamítnut ručně';
+    task.specialistaDecision = 'zamÃ­tnut ruÄnÄ›';
     showToast(t('toast.specialista.rejected', { key: task.key }));
   }
   saveProgress();
@@ -2003,11 +1882,11 @@ function setTopicRepairDetectedTopicDecision(taskIndex, topicId, decision) {
   state.translated[task.key] = state.translated[task.key] || {};
   if (decision === 'accept') {
     state.translated[task.key][topicId] = String(row.candidateValue || '').trim();
-    row.decision = 'přijat ručně';
+    row.decision = 'pÅ™ijat ruÄnÄ›';
     showToast(t('toast.topic.approved', { topic: TOPIC_LABELS[topicId] || topicId, key: task.key }));
   } else {
     state.translated[task.key][topicId] = String(row.previousValue || '').trim();
-    row.decision = 'zamítnut ručně';
+    row.decision = 'zamÃ­tnut ruÄnÄ›';
     showToast(t('toast.topic.rejected', { topic: TOPIC_LABELS[topicId] || topicId, key: task.key }));
   }
   if (topicId === 'specialista') {
@@ -2034,7 +1913,7 @@ function applyTopicRepairSelected() {
     if (state.activeKey) renderDetail();
     updateStats();
     updateFailedCount();
-    log(`✓ Potvrzeno přepsání témat v opravě: ${applied} řádků`);
+    log(`âœ“ Potvrzeno pÅ™epsÃ¡nÃ­ tÃ©mat v opravÄ›: ${applied} Å™Ã¡dkÅ¯`);
   }
   state.selectedKeys.clear();
   renderList();
@@ -2118,18 +1997,18 @@ function filterList() {
   }
 }
 
-// Debounced varianta pro oninput (zabráni překreslení celého listu na každý znak)
+// Debounced varianta pro oninput (zabrÃ¡ni pÅ™ekreslenÃ­ celÃ©ho listu na kaÅ¾dÃ½ znak)
 const filterListDebounced = debounce(filterList, 180);
 
 function hasMeaningfulValue(v) {
   const s = String(v || '').trim();
-  return !!s && s !== '—' && s !== '(přeskočeno)';
+  return !!s && s !== 'â€”' && s !== '(pÅ™eskoÄeno)';
 }
 
-/** Anglická část za „Originál:“ nesmí označit celou definici jako EN (běžné u CZ+AS dvojice). */
+/** AnglickÃ¡ ÄÃ¡st za â€žOriginÃ¡l:â€œ nesmÃ­ oznaÄit celou definici jako EN (bÄ›Å¾nÃ© u CZ+AS dvojice). */
 function stripDefinitionOriginReferenceTail(text) {
   const s = String(text || '');
-  const m = s.match(/\bOriginál\s*:/iu);
+  const m = s.match(/\bOriginÃ¡l\s*:/iu);
   if (!m || m.index === undefined || m.index <= 0) return s.trim();
   return s.slice(0, m.index).trim();
 }
@@ -2156,12 +2035,12 @@ function isDefinitionLowQuality(text) {
   const s = String(text || '').trim();
   if (!s) return true;
   if (isDefinitionLikelyEnglish(s)) return true;
-  // UI artefakty nebo technický šum místo definice.
-  if (/(🤖|✎|prompt|upravit|edit|button|klik)/i.test(s)) return true;
-  // Definice má být věcná; krátké, ale smysluplné formulace nechceme trestat.
+  // UI artefakty nebo technickÃ½ Å¡um mÃ­sto definice.
+  if (/(ðŸ¤–|âœŽ|prompt|upravit|edit|button|klik)/i.test(s)) return true;
+  // Definice mÃ¡ bÃ½t vÄ›cnÃ¡; krÃ¡tkÃ©, ale smysluplnÃ© formulace nechceme trestat.
   const words = s.split(/\s+/).filter(Boolean);
   const hasStructure = /[,:;()]/.test(s);
-  const hasCzechDiacritics = /[áčďéěíňóřšťúůýž]/i.test(s);
+  const hasCzechDiacritics = /[Ã¡ÄÄÃ©Ä›Ã­ÅˆÃ³Å™Å¡Å¥ÃºÅ¯Ã½Å¾]/i.test(s);
   if (words.length < 4) return true;
   if (s.length < 30 && !hasStructure) return true;
   if (words.length < 6 && s.length < 45 && !hasStructure && !hasCzechDiacritics) return true;
@@ -2212,7 +2091,7 @@ function fillMissingKjvFromSource(keys) {
     const e = state.entryMap.get(key);
     const fallback = String(e?.kjv || '').trim();
     if (fallback) {
-      t.kjv = `${fallback} [POZN.: v angličtině ze vstupu]`;
+      t.kjv = `${fallback} [POZN.: v angliÄtinÄ› ze vstupu]`;
     }
   }
 }
@@ -2225,8 +2104,8 @@ function annotateEnglishDefinitionsInTranslated(keys) {
     if (!isDefinitionLikelyEnglish(t.definice)) continue;
     const original = String(t.definice || '').trim();
     if (!original) continue;
-    if (/\[POZN\.: text je v angličtině - špatný překlad\]/.test(original)) continue;
-    t.definice = `${original} [POZN.: text je v angličtině - špatný překlad]`;
+    if (/\[POZN\.: text je v angliÄtinÄ› - Å¡patnÃ½ pÅ™eklad\]/.test(original)) continue;
+    t.definice = `${original} [POZN.: text je v angliÄtinÄ› - Å¡patnÃ½ pÅ™eklad]`;
   }
 }
 
@@ -2242,10 +2121,10 @@ function applyFallbacksToParsedMap(keys, parsedMap) {
     }
     if (!hasMeaningfulValue(t.kjv)) {
       const kjvFallback = String(e?.kjv || '').trim();
-      if (kjvFallback) t.kjv = `${kjvFallback} [POZN.: v angličtině ze vstupu]`;
+      if (kjvFallback) t.kjv = `${kjvFallback} [POZN.: v angliÄtinÄ› ze vstupu]`;
     }
     if (isDefinitionLikelyEnglish(t.definice)) {
-      t.definice = `${String(t.definice || '').trim()} [POZN.: text je v angličtině - špatný překlad]`.trim();
+      t.definice = `${String(t.definice || '').trim()} [POZN.: text je v angliÄtinÄ› - Å¡patnÃ½ pÅ™eklad]`.trim();
     }
   }
 }
@@ -2302,475 +2181,9 @@ function getStrongKeyNumber(key) {
   return Number.isFinite(parsed) ? parsed : Number.POSITIVE_INFINITY;
 }
 
-function getFilteredEntries() {
-  const q = document.getElementById('searchInput').value.toLowerCase();
-  const statusFilter = document.getElementById('filterStatus')?.value || 'all';
-  const sortBy = document.getElementById('filterSort')?.value || 'original';
-  
-  let lang = 'all';
-  let status = 'all';
-  
-  if (statusFilter.startsWith('g_')) {
-    lang = 'G';
-    status = statusFilter.slice(2);
-  } else if (statusFilter.startsWith('h_')) {
-    lang = 'H';
-    status = statusFilter.slice(2);
-  } else {
-    status = statusFilter;
-  }
-  
-  let filtered = state.entries.filter(e => {
-    if (state.listRangeFilter) {
-      const n = getStrongKeyNumber(e.key);
-      if (!Number.isFinite(n) || n < state.listRangeFilter.from || n > state.listRangeFilter.to) return false;
-    }
-    const matchesSearch = !q || e.key.toLowerCase().includes(q) || 
-      e.greek.toLowerCase().includes(q) || (e.definice || e.def || '').toLowerCase().includes(q);
-    if (!matchesSearch) return false;
-    
-    const translationState = getTranslationStateForKey(e.key);
-    
-    if (lang === 'G' && !e.key.startsWith('G')) return false;
-    if (lang === 'H' && !e.key.startsWith('H')) return false;
-    
-    if (status === 'pending') return translationState === 'pending';
-    if (status === 'done') return translationState === 'done';
-    if (status === 'failed') return translationState === 'failed' || translationState === 'failed_partial';
-    if (status === 'missing_topic') return translationState === 'missing_topic';
-    
-    return true;
-  });
-  
-  if (sortBy === 'greek') {
-    filtered.sort((a, b) => a.greek.localeCompare(b.greek));
-  } else if (sortBy === 'original') {
-    filtered.sort((a, b) => {
-      // Safely get index without findIndex loop
-      let idxA, idxB;
-      if (window._entryIndexMap?.has(a.key)) {
-        idxA = window._entryIndexMap.get(a.key);
-        idxB = window._entryIndexMap.get(b.key);
-      } else {
-        // Fallback: use binary search if map exists, else linear
-        idxA = window._entryIndexMap ? state.entries.findIndex(x => x.key === a.key) : state.entries.indexOf(a);
-        idxB = window._entryIndexMap ? state.entries.findIndex(x => x.key === b.key) : state.entries.indexOf(b);
-      }
-      return idxA - idxB;
-    });
-  } else {
-    filtered.sort((a, b) => {
-      const numA = getStrongKeyNumber(a.key);
-      const numB = getStrongKeyNumber(b.key);
-      if (numA !== numB) return numA - numB;
-      return a.key.localeCompare(b.key);
-    });
-  }
-  
-  return filtered;
-}
+// â”€â”€ getFilteredEntries, virtual scroll, showDetail, renderDetail â†’ js/ui/list.js + js/ui/detail.js
 
-function filterMissingTopicsList() {
-  const filterEl = document.getElementById('filterStatus');
-  if (filterEl) filterEl.value = 'missing_topic';
-  renderList();
-  showToast(t('toast.filter.missingTopic'));
-}
-
-function scrollToActive() {
-  const el = document.querySelector(`.list-item[data-key="${state.activeKey}"]`);
-  if (el) el.scrollIntoView({ block: 'nearest' });
-}
-
-// Virtual scrolling infrastructure
-function initVirtualScroll() {
-  const scroll = document.getElementById('listScroll');
-  // Create the structural elements
-  state.phantomSpacer = document.createElement('div');
-  state.phantomSpacer.className = 'phantom-spacer';
-  state.visibleContainer = document.createElement('div');
-  state.visibleContainer.className = 'visible-items';
-  
-  // Reset container and append new structure
-  scroll.innerHTML = '';
-  scroll.appendChild(state.phantomSpacer);
-  scroll.appendChild(state.visibleContainer);
-  scroll.style.position = 'relative';
-  
-  // Attach scroll listener (remove old to avoid duplicates)
-  scroll.removeEventListener('scroll', onVirtualScroll);
-  scroll.addEventListener('scroll', onVirtualScroll, { passive: true });
-  
-  state.virtualInitialized = true;
-  updatePhantomHeight();
-  
-  // Add window resize handler (once)
-  if (!window._virtualScrollResizeAdded) {
-    window.addEventListener('resize', () => {
-      if (!state.resizeTicking) {
-        requestAnimationFrame(() => {
-          renderVisible();
-          state.resizeTicking = false;
-        });
-        state.resizeTicking = true;
-      }
-    });
-    window._virtualScrollResizeAdded = true;
-  }
-}
-
-function updatePhantomHeight() {
-  if (!state.phantomSpacer) return;
-  const total = state.filteredKeys.length;
-  state.phantomSpacer.style.height = `${total * ITEM_HEIGHT}px`;
-}
-
-function renderVisible() {
-  if (!state.visibleContainer || !state.virtualInitialized) return;
-  
-  const scroll = document.getElementById('listScroll');
-  const scrollTop = scroll.scrollTop;
-  let viewportHeight = scroll.clientHeight;
-  const total = state.filteredKeys.length;
-  
-  if (total === 0) {
-    state.visibleContainer.innerHTML = '';
-    state.lastRenderRange = { start: -1, end: -1 };
-    return;
-  }
-  
-  // Fix: Ensure minimum viewport height on first load
-  if (viewportHeight < 100) {
-    viewportHeight = 300;
-  }
-  
-  let startIndex = Math.max(0, Math.floor(scrollTop / ITEM_HEIGHT) - BUFFER_ITEMS);
-  let endIndex = Math.min(total - 1, Math.ceil((scrollTop + viewportHeight) / ITEM_HEIGHT) + BUFFER_ITEMS);
-  
-  // Force render first time or if range is invalid
-  if (state.lastRenderRange.start === -1 || endIndex - startIndex < 5) {
-    startIndex = 0;
-    endIndex = Math.min(total - 1, Math.ceil(viewportHeight / ITEM_HEIGHT) + BUFFER_ITEMS);
-  }
-  
-  
-  if (startIndex === state.lastRenderRange.start && endIndex === state.lastRenderRange.end) {
-    // Still need to check if translation status changed
-    const needsUpdate = [...Array(endIndex - startIndex + 1)].some((_, idx) => {
-      const key = state.filteredKeys[startIndex + idx];
-      if (!key) return false;
-      const translationState = getTranslationStateForKey(key);
-      const prev = state.lastRenderRange.doneStates?.[key];
-      return prev !== state;
-    });
-    if (!needsUpdate) return;
-  }
-  
-  const doneStates = {};
-  
-  const fragment = document.createDocumentFragment();
-  
-  for (let i = startIndex; i <= endIndex; i++) {
-    const key = state.filteredKeys[i];
-    if (!key) continue;
-    const e = state.entryMap.get(key);
-    if (!e) continue;
-    const translationState = getTranslationStateForKey(key);
-    const done = state === 'done';
-    doneStates[key] = state;
-    
-    const isSelected = state.selectedKeys.has(key);
-    
-    const div = document.createElement('div');
-    div.className = 'list-item' + (done ? ' done' : '') + (key === state.activeKey ? ' active' : '') + (isSelected ? ' selected' : '');
-    div.dataset.key = key;
-    div.setAttribute('tabindex', '0');
-    div.style.position = 'absolute';
-    div.style.left = '0';
-    div.style.right = '0';
-    div.style.top = `${i * ITEM_HEIGHT}px`;
-    div.style.height = `${ITEM_HEIGHT}px`;
-    div.onclick = (e) => {
-      if (e.target.classList.contains('li-check')) return;
-      showDetail(key);
-    };
-    div.onkeydown = (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        toggleSelect(key, e);
-      }
-    };
-    div.innerHTML = `
-      <input type="checkbox" class="li-check" ${isSelected ? 'checked' : ''} onclick="toggleSelect('${key}', event)" aria-label="${escHtml(t('list.entry.checkbox', { key }))}">
-      <div class="li-key">${key}</div>
-      <div class="li-greek">${escHtml(e.greek)}</div>
-      <div class="li-dot ${state === 'done' ? 'done' : (state === 'pending' ? 'pending' : (state === 'missing_topic' ? 'missing-topic' : 'failed'))}" aria-hidden="true">${state === 'done' ? '✓' : '•'}</div>
-    `;
-    fragment.appendChild(div);
-  }
-  
-  state.lastRenderRange = { start: startIndex, end: endIndex, doneStates };
-  state.visibleContainer.innerHTML = '';
-  state.visibleContainer.appendChild(fragment);
-}
-
-// Throttled scroll handler
-function onVirtualScroll() {
-  if (!state.scrollTicking) {
-    requestAnimationFrame(() => {
-      renderVisible();
-      state.scrollTicking = false;
-    });
-    state.scrollTicking = true;
-  }
-}
-
-// ══ DETAIL ═══════════════════════════════════════════════════════
-function showDetail(key) {
-  state.activeKey = key;
-  // Update active state v listu (virtuální render) - bez scrollování
-   if (state.virtualInitialized) {
-     requestAnimationFrame(() => {
-       if (state.virtualInitialized) renderVisible();
-     });
-   } else {
-    // Fallback pro ne-inicializovaný virtuální scrolling
-    document.querySelectorAll('.list-item').forEach(el => {
-      el.classList.toggle('active', el.dataset.key === key);
-    });
-  }
-  renderDetail();
-}
-
-function renderDetail() {
-  if (!state.activeKey) return;
-  const e = state.entryMap.get(state.activeKey);
-  if (!e) return;
-  const tr = state.translated[state.activeKey];
-  const hasTranslation = isTranslationComplete(tr);
-  const pane = document.getElementById('detailPane');
-  const detailLabel = {
-    studyLinks: t('detail.label.studyLinks'),
-    transliteration: t('detail.label.transliteration'),
-    grammar: t('detail.label.grammar'),
-    definitionEn: t('detail.label.definitionEn'),
-    englishSource: t('detail.label.englishSource'),
-    kjv: t('detail.label.kjv'),
-    usageKjv: t('detail.label.usageKjv'),
-    vocalization: t('detail.label.vocalization'),
-    pronunciation: t('detail.label.pronunciation'),
-    etymology: t('detail.label.etymology'),
-    occurrence: t('detail.label.occurrence'),
-    twot: t('detail.label.twot'),
-    notes: t('detail.label.notes'),
-    greekRefs: t('detail.label.greekRefs'),
-    category: t('detail.label.category'),
-    meaningCz: t('detail.label.meaningCz')
-  };
-
-  // Detekce typu podle klíče
-  const num = parseInt(state.activeKey.slice(1));
-  const isGreek = state.activeKey.startsWith('G');
-  const isHebrew = state.activeKey.startsWith('H') && num < 9000;
-  const isGrammar = state.activeKey.startsWith('H') && num >= 9000;
-  const definitionEn = (e.definice || e.def || '').trim();
-  const englishSourceRaw = (e.en || e.enDef || '').trim();
-  const englishSource = (englishSourceRaw && englishSourceRaw !== definitionEn) ? englishSourceRaw : '';
-  const strongNum = state.activeKey.slice(1);
-  const bibleHubPath = state.activeKey.startsWith('H') ? 'hebrew' : 'greek';
-  const studyLinks = `
-    <div class="orig-section">
-      <div class="label">${detailLabel.studyLinks}</div>
-      <div class="value">
-        <a href="https://biblehub.com/${bibleHubPath}/${strongNum}.htm" target="_blank" rel="noopener noreferrer">BibleHub</a> ·
-        <a href="https://www.blueletterbible.org/lexicon/${state.activeKey}/kjv/tr/0-1/" target="_blank" rel="noopener noreferrer">Blue Letter Bible</a> ·
-        <a href="https://www.stepbible.org/?q=strong=${state.activeKey}" target="_blank" rel="noopener noreferrer">STEP Bible</a>
-      </div>
-    </div>`;
-  const editableSourceSection = (label, field, value) => `
-    <div class="orig-section">
-      <div class="label">${label}</div>
-      <div style="display:flex;gap:6px;align-items:center;justify-content:space-between;flex-wrap:wrap">
-        <div class="value" id="srcval-${state.activeKey}-${field}" style="margin:0;flex:1 1 auto">${escHtml(value || '—')}</div>
-        <button class="tbox-btn" type="button" onclick="toggleSourceEntryEdit('${state.activeKey}','${field}')">✎ Upravit</button>
-      </div>
-      <div class="tbox-edit" id="srcedit-${state.activeKey}-${field}">
-        <textarea id="srcinput-${state.activeKey}-${field}" aria-label="${label}">${escHtml(value || '')}</textarea>
-        <button class="tbox-save" type="button" onclick="saveSourceEntryField('${state.activeKey}','${field}')">Uložit</button>
-      </div>
-    </div>`;
-  
-  // Sestavení sekcí podle typu
-  let sections = '';
-  
-  if (isGreek) {
-    sections = `
-    ${editableSourceSection('Beta Code', 'beta', e.beta)}
-    ${editableSourceSection(detailLabel.transliteration, 'prepis', e.prepis)}
-    ${editableSourceSection(detailLabel.grammar, 'tvaroslovi', e.tvaroslovi)}
-    ${editableSourceSection(detailLabel.definitionEn, 'definice', e.definice || e.def)}
-    ${englishSource ? `
-    <div class="orig-section">
-      <div class="label">${detailLabel.englishSource}</div>
-      <div class="value">${escHtml(englishSource)}</div>
-    </div>` : ''}
-    ${editableSourceSection(detailLabel.kjv, 'kjv', e.kjv)}
-    ${editableSourceSection(detailLabel.usageKjv, 'vyskyt', e.vyskyt)}
-    ${studyLinks}`;
-  } else if (isHebrew) {
-    sections = `
-    <div class="orig-section">
-      <div class="label">${detailLabel.vocalization}</div>
-      <div class="value">${escHtml(e.vokalizace || '—')}</div>
-    </div>
-    <div class="orig-section">
-      <div class="label">${detailLabel.pronunciation}</div>
-      <div class="value">${escHtml(e.vyslovnost || '—')}</div>
-    </div>
-    <div class="orig-section">
-      <div class="label">${detailLabel.etymology}</div>
-      <div class="value">${escHtml(e.etimol || e.orig || '—')}</div>
-    </div>
-    ${editableSourceSection(detailLabel.transliteration, 'prepis', e.prepis)}
-    ${editableSourceSection(detailLabel.grammar, 'tvaroslovi', e.tvaroslovi)}
-    ${editableSourceSection(detailLabel.definitionEn, 'definice', e.definice || e.def)}
-    ${englishSource ? `
-    <div class="orig-section">
-      <div class="label">${detailLabel.englishSource}</div>
-      <div class="value">${escHtml(englishSource)}</div>
-    </div>` : ''}
-    ${editableSourceSection(detailLabel.kjv, 'kjv', e.kjv)}
-    ${editableSourceSection(detailLabel.occurrence, 'vyskyt', e.vyskyt)}
-    <div class="orig-section">
-      <div class="label">${detailLabel.twot}</div>
-      <div class="value">${escHtml(e.twot || '—')}</div>
-    </div>
-    <div class="orig-section">
-      <div class="label">${detailLabel.notes}</div>
-      <div class="value">${escHtml(e.poznamky || '—')}</div>
-    </div>
-    <div class="orig-section">
-      <div class="label">${detailLabel.greekRefs}</div>
-      <div class="value">${escHtml(e.greekRefs || '—')}</div>
-    </div>
-    ${studyLinks}`;
-  } else if (isGrammar) {
-    sections = `
-    <div class="orig-section">
-      <div class="label">${detailLabel.vocalization}</div>
-      <div class="value">${escHtml(e.vokalizace || '—')}</div>
-    </div>
-    <div class="orig-section">
-      <div class="label">${detailLabel.category}</div>
-      <div class="value">${escHtml(e.kategorie || '—')}</div>
-    </div>
-    <div class="orig-section">
-      <div class="label">${detailLabel.meaningCz}</div>
-      <div class="value">${escHtml(e.vyznamCz || '—')}</div>
-    </div>
-    ${editableSourceSection(detailLabel.transliteration, 'prepis', e.prepis)}
-    ${editableSourceSection(detailLabel.grammar, 'tvaroslovi', e.tvaroslovi)}
-    ${editableSourceSection(detailLabel.definitionEn, 'definice', e.definice || e.def)}
-    ${englishSource ? `
-    <div class="orig-section">
-      <div class="label">${detailLabel.englishSource}</div>
-      <div class="value">${escHtml(englishSource)}</div>
-    </div>` : ''}
-    ${studyLinks}`;
-  } else {
-    // Fallback pro starý formát
-    sections = `
-    ${editableSourceSection(detailLabel.definitionEn, 'definice', e.definice || e.def)}
-    ${editableSourceSection(detailLabel.kjv, 'kjv', e.kjv)}
-    ${studyLinks}`;
-  }
-
-  pane.innerHTML = `
-    <div class="entry-header">
-      <div class="entry-key">${e.key}</div>
-      <div class="entry-greek">${escHtml(e.greek)}</div>
-      <div class="entry-status ${hasTranslation ? 'done' : ''}">${hasTranslation ? '✓' : '—'}</div>
-      <button class="hbtn" style="margin-left:8px;font-size:10px;padding:3px 8px" onclick="openSystemPromptModal('${e.key}')" title="${escHtml(t('detail.systemPrompt.title'))}">${t('detail.systemPrompt.button')}</button>
-    </div>
-
-    ${sections}
-
-    ${!hasTranslation ? `<button class="translate-btn" onclick="translateSingle('${e.key}')">${t('detail.translateThis')}</button>` : ''}
-
-    ${renderTranslation(e.key, tr)}
-  `;
-}
-
-function renderTranslation(key, tr) {
-  refreshTopicLabels();
-  const e = state.entryMap.get(key) || {};
-  const sourceCzDef = String(e.czDef || '').trim();
-  const translatedDef = String(tr?.definice || '').trim();
-  const looksEnglish = /(\bin general\b|\bused of\b|\bin itself\b|\bthat which\b|\bopposite to\b|\bwhere it is contrasted\b|\bsee word\b|\bSYN\.:|\bchiefly for\b)/i.test(translatedDef);
-  const hasDetailedTranslatedDef = translatedDef.length >= 80 && /(\b1\.\b|\b2\.\b|[a-z]\)|\(|\[)/i.test(translatedDef);
-  const shouldPreferSourceDef = hasMeaningfulValue(sourceCzDef) && (looksEnglish || !hasDetailedTranslatedDef);
-  const definitionDisplay = shouldPreferSourceDef ? sourceCzDef : translatedDef;
-  
-  const sections = [
-    { 
-      id: 'definice', 
-      label: TOPIC_LABELS.definice, 
-      field: definitionDisplay,
-      rawField: null
-    },
-    { id: 'vyznam', label: TOPIC_LABELS.vyznam, field: tr?.vyznam },
-    { id: 'kjv', label: TOPIC_LABELS.kjv, field: tr?.kjv },
-    { id: 'pouziti', label: TOPIC_LABELS.pouziti, field: tr?.pouziti },
-    { id: 'puvod', label: TOPIC_LABELS.puvod, field: tr?.puvod },
-    { id: 'specialista', label: TOPIC_LABELS.specialista, field: tr?.specialista },
-  ];
-
-  return sections.map(s => `
-    <div class="translation-box" role="group" aria-label="${s.label}">
-      <div class="tbox-head">
-        <div class="tbox-label">${s.label}</div>
-        <div class="tbox-actions">
-          <button class="tbox-btn" onclick="openTopicPromptModal('${key}','${s.id}')" aria-label="${escHtml(t('detail.promptButton.aria', { label: s.label }))}">${t('detail.promptButton')}</button>
-          ${!hasMeaningfulValue(s.field) ? `<button class="tbox-btn" onclick="refillSingleField('${key}','${s.id}')" aria-label="Doplnit ${s.label} přes AI">✨ Doplnit</button>` : ''}
-          <button class="tbox-btn" onclick="toggleEditSection('${key}','${s.id}')" aria-label="${escHtml(t('detail.editButton.aria', { label: s.label }))}">${t('detail.editButton')}</button>
-        </div>
-      </div>
-      ${s.rawField ? `<div class="tbox-body" id="traw-${key}-${s.id}" style="color:var(--txt2);font-size:12px;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--brd)">${escHtml(s.rawField)}</div>` : ''}
-      <div class="tbox-body" id="tval-${key}-${s.id}" style="${s.rawField ? 'font-weight:bold;color:var(--acc3)' : ''}">${escHtml(s.field || '—')}</div>
-      <div class="tbox-edit" id="tedit-${key}-${s.id}">
-        <textarea id="tinput-${key}-${s.id}" aria-label="${s.label}">${escHtml(s.field || '')}</textarea>
-        <button class="tbox-save" onclick="saveSection('${key}','${s.id}')" aria-label="Uložit ${s.label}">Uložit</button>
-      </div>
-    </div>
-  `).join('');
-}
-
-function toggleEditSection(key, id) {
-  const el = document.getElementById(`tedit-${key}-${id}`);
-  el.classList.toggle('show');
-  if (el.classList.contains('show')) {
-    document.getElementById(`tinput-${key}-${id}`).focus();
-  }
-}
-
-function saveSection(key, id) {
-  const val = document.getElementById(`tinput-${key}-${id}`).value;
-  if (!state.translated[key]) state.translated[key] = {};
-  state.translated[key][id] = val;
-  saveProgress();
-  document.getElementById(`tval-${key}-${id}`).textContent = val || '—';
-  document.getElementById(`tedit-${key}-${id}`).classList.remove('show');
-}
-
-function toggleSourceEntryEdit(key, field) {
-  const el = document.getElementById(`srcedit-${key}-${field}`);
-  if (!el) return;
-  el.classList.toggle('show');
-  if (el.classList.contains('show')) {
-    const input = document.getElementById(`srcinput-${key}-${field}`);
-    if (input) input.focus();
-  }
-}
+// renderDetail, renderTranslation, editace polÃ­ â†’ js/ui/detail.js
 
 function applySourceEntryEditsToEntries() {
   if (!state.sourceEntryEdits || typeof state.sourceEntryEdits !== 'object') return;
@@ -2782,51 +2195,6 @@ function applySourceEntryEditsToEntries() {
       entry[field] = String(value || '');
       if (field === 'definice') entry.def = entry[field];
     }
-  }
-}
-
-function saveSourceEntryField(key, field) {
-  const entry = state.entryMap.get(key);
-  if (!entry) return;
-  const input = document.getElementById(`srcinput-${key}-${field}`);
-  if (!input) return;
-  const next = String(input.value || '').trim();
-  entry[field] = next;
-  if (field === 'definice') entry.def = next;
-  state.sourceEntryEdits[key] = state.sourceEntryEdits[key] || {};
-  state.sourceEntryEdits[key][field] = next;
-  saveProgress();
-  updateStats();
-  renderList();
-  renderDetail();
-  showToast('Upravené pole uloženo.');
-}
-
-async function refillSingleField(key, topicId) {
-  const prov = resolveProviderForInteractiveAction(document.getElementById('provider').value);
-  const model = prov === (document.getElementById('provider').value || '') ? document.getElementById('model').value : getPipelineModelForProvider(prov);
-  const apiKey = getCurrentApiKey(prov);
-  if (!apiKey) {
-    showToast(t('toast.apiKey.enter'));
-    return;
-  }
-  const prompt = buildTopicPrompt(key, topicId);
-  try {
-    const messages = [
-      { role: 'system', content: SYSTEM_MESSAGE },
-      { role: 'user', content: prompt }
-    ];
-    const raw = await callAIWithRetry(prov, apiKey, model, messages);
-    const val = extractTopicValueFromAI(raw?.content || '', topicId, 'strict');
-    if (!state.translated[key]) state.translated[key] = {};
-    state.translated[key][topicId] = val || '—';
-    saveProgress();
-    renderDetail();
-    renderList();
-    updateStats();
-    showToast(t('toast.field.filled', { topic: TOPIC_LABELS[topicId] || topicId }));
-  } catch (e) {
-    showToast(t('toast.error.withMessage', { message: e.message }));
   }
 }
 
@@ -2868,7 +2236,7 @@ const TOPIC_BATCH_PROMPT_PRESET_MAP = {
   specialista: 'preset_topic_specialista_batch'
 };
 
-/** Pořadí témat při hromadné opravě „Vše“. */
+/** PoÅ™adÃ­ tÃ©mat pÅ™i hromadnÃ© opravÄ› â€žVÅ¡eâ€œ. */
 const TOPIC_REPAIR_BULK_TOPIC_ORDER = ['definice', 'vyznam', 'kjv', 'pouziti', 'puvod', 'specialista'];
 
 function defaultBulkListTopicFilter() {
@@ -2885,7 +2253,7 @@ function getTopicRepairModalVisibleTasks(state) {
   return state.tasks.filter(t => t.topicId === bid);
 }
 
-/** Další čekající úloha v pořadí `topicRepairState.tasks`, ale jen pokud spadá do aktuálního filtru tématu. */
+/** DalÅ¡Ã­ ÄekajÃ­cÃ­ Ãºloha v poÅ™adÃ­ `topicRepairState.tasks`, ale jen pokud spadÃ¡ do aktuÃ¡lnÃ­ho filtru tÃ©matu. */
 function findNextTopicRepairWaitingTask(state) {
   if (!state || !Array.isArray(state.tasks)) return null;
   const vset = new Set(getTopicRepairModalVisibleTasks(state));
@@ -2902,19 +2270,19 @@ function applyPromptLanguageTokens(promptText) {
   const targetLang = localStorage.getItem('strong_target_lang') || 'cz';
   const sourceLang = localStorage.getItem('strong_source_lang') || 'gr';
   const langNames = {
-    cz: 'češtiny',
-    en: 'angličtiny',
-    bg: 'bulharštiny',
-    ch: 'čínštiny',
-    sp: 'španělštiny',
-    sk: 'slovenštiny',
-    pl: 'polštiny',
-    gr: 'řečtiny',
-    he: 'hebrejštiny',
-    both: 'řečtiny i hebrejštiny'
+    cz: 'ÄeÅ¡tiny',
+    en: 'angliÄtiny',
+    bg: 'bulharÅ¡tiny',
+    ch: 'ÄÃ­nÅ¡tiny',
+    sp: 'Å¡panÄ›lÅ¡tiny',
+    sk: 'slovenÅ¡tiny',
+    pl: 'polÅ¡tiny',
+    gr: 'Å™eÄtiny',
+    he: 'hebrejÅ¡tiny',
+    both: 'Å™eÄtiny i hebrejÅ¡tiny'
   };
-  const targetName = langNames[targetLang] || 'češtiny';
-  const sourceName = langNames[sourceLang] || 'řečtiny';
+  const targetName = langNames[targetLang] || 'ÄeÅ¡tiny';
+  const sourceName = langNames[sourceLang] || 'Å™eÄtiny';
   return String(promptText || '')
     .replace(/{TARGET_LANG}/g, targetName)
     .replace(/{SOURCE_LANG}/g, sourceName);
@@ -2972,7 +2340,7 @@ function refreshTopicRepairBatchPromptEditor() {
   if (topicId === 'all') {
     ta.readOnly = true;
     ta.value =
-      'Režim „Vše“: seznam řádků filtruješ zaškrtávkami výše. Hromadný překlad postupně použije uložený batch prompt (💾 Uložit prompt) pro každé zaškrtnuté téma — jedno téma vyber v seznamu, uprav text a ulož.';
+      'ReÅ¾im â€žVÅ¡eâ€œ: seznam Å™Ã¡dkÅ¯ filtrujeÅ¡ zaÅ¡krtÃ¡vkami vÃ½Å¡e. HromadnÃ½ pÅ™eklad postupnÄ› pouÅ¾ije uloÅ¾enÃ½ batch prompt (ðŸ’¾ UloÅ¾it prompt) pro kaÅ¾dÃ© zaÅ¡krtnutÃ© tÃ©ma â€” jedno tÃ©ma vyber v seznamu, uprav text a uloÅ¾.';
   } else {
     ta.readOnly = false;
     ta.value = applyPromptLanguageTokens(getTopicRepairBatchPromptTemplate(topicId));
@@ -3034,7 +2402,7 @@ function parseTopicRepairBatchResponse(rawText, topicId) {
   return out;
 }
 
-/** Výřez bloku jednoho hesla z hromadné RAW odpovědi (pro parsování SPECIALISTA apod.). */
+/** VÃ½Å™ez bloku jednoho hesla z hromadnÃ© RAW odpovÄ›di (pro parsovÃ¡nÃ­ SPECIALISTA apod.). */
 function extractTopicRepairBatchBlockForKey(rawText, key) {
   const text = String(normalizeAiTopicRawText(rawText) || '').trim();
   const upperKey = String(key || '').trim().toUpperCase();
@@ -3052,7 +2420,7 @@ function extractTopicRepairBatchBlockForKey(rawText, key) {
   return '';
 }
 
-/** Naplní specialista* u tasku z libovolného RAW (dávka = jen blok ###G12###…). */
+/** NaplnÃ­ specialista* u tasku z libovolnÃ©ho RAW (dÃ¡vka = jen blok ###G12###â€¦). */
 function syncTopicRepairTaskSpecialistaFromRaw(task, rawText) {
   if (!task) return;
   const baseline = state.translated[task.key] || {};
@@ -3071,14 +2439,14 @@ function syncTopicRepairTaskSpecialistaFromRaw(task, rawText) {
   task.specialistaPreviousValue = prevSpecialista;
   task.specialistaCandidateValue = candidateSpecialista;
   if (specHeader && !hasMeaningfulValue(candidateSpecialista)) {
-    log(`⚠ ${task.key} (dávka): v bloku je nadpis SPECIALISTA/alias, ale tělo se nepodařilo strojově vyčíst — viz konzole RAW.`);
+    log(`âš  ${task.key} (dÃ¡vka): v bloku je nadpis SPECIALISTA/alias, ale tÄ›lo se nepodaÅ™ilo strojovÄ› vyÄÃ­st â€” viz konzole RAW.`);
   }
   state.translated[task.key] = state.translated[task.key] || {};
   if (shouldReplaceSpecialista(prevSpecialista, candidateSpecialista)) {
     state.translated[task.key].specialista = String(candidateSpecialista || '').trim();
-    task.specialistaDecision = 'přijat (auto)';
+    task.specialistaDecision = 'pÅ™ijat (auto)';
   } else if (task.specialistaInRaw) {
-    task.specialistaDecision = 'zamítnut (auto)';
+    task.specialistaDecision = 'zamÃ­tnut (auto)';
   } else {
     task.specialistaDecision = '';
   }
@@ -3118,7 +2486,7 @@ function updateTopicRepairBulkRunSummarySpan() {
   if (!el) return;
   const bs = parseInt(document.getElementById('batchSizeRun')?.value, 10) || 10;
   const iv = parseInt(document.getElementById('intervalRun')?.value, 10) || 20;
-  el.textContent = `jako AUTO: dávka ${bs} hesel · interval ${iv}s`;
+  el.textContent = `jako AUTO: dÃ¡vka ${bs} hesel Â· interval ${iv}s`;
 }
 
 function initTopicRepairBulkRunInputs() {
@@ -3131,7 +2499,7 @@ function initTopicRepairBulkRunInputs() {
   updateTopicRepairBulkRunSummarySpan();
 }
 
-/** Jedno téma — vnitřní smyčka dávek (režim „Vše“ i jedno téma z editoru). */
+/** Jedno tÃ©ma â€” vnitÅ™nÃ­ smyÄka dÃ¡vek (reÅ¾im â€žVÅ¡eâ€œ i jedno tÃ©ma z editoru). */
 async function runTopicRepairBulkTranslationCore(state, topicId, promptTemplate, onlyFailed, bs) {
   const tasks = state.tasks.filter(t => t && t.topicId === topicId && t.includeBulk !== false);
   const picked = onlyFailed
@@ -3141,7 +2509,7 @@ async function runTopicRepairBulkTranslationCore(state, topicId, promptTemplate,
   if (!keys.length) return { count: 0 };
 
   const iv0 = parseInt(document.getElementById('intervalRun')?.value, 10) || 20;
-  log(`⚡ Hromadná oprava „${TOPIC_LABELS[topicId] || topicId}“: ${keys.length} úloh, dávka ${bs}, interval ${iv0}s`);
+  log(`âš¡ HromadnÃ¡ oprava â€ž${TOPIC_LABELS[topicId] || topicId}â€œ: ${keys.length} Ãºloh, dÃ¡vka ${bs}, interval ${iv0}s`);
 
   let processed = 0;
   const abortVersion = Number(state.topicRepairBulkAbortVersion || 0);
@@ -3168,9 +2536,9 @@ async function runTopicRepairBulkTranslationCore(state, topicId, promptTemplate,
     if (abortVersion !== Number(state.topicRepairBulkAbortVersion || 0)) break;
 
     const rawText = String(raw?.content || '').trim();
-    log(`📥 RAW AI batch oprava ${topicId}: vypsáno do konzole`);
-    console.groupCollapsed(`🤖 RAW AI batch oprava ${topicId} (${prov}/${model})`);
-    console.log(rawText || '(prázdná odpověď)');
+    log(`ðŸ“¥ RAW AI batch oprava ${topicId}: vypsÃ¡no do konzole`);
+    console.groupCollapsed(`ðŸ¤– RAW AI batch oprava ${topicId} (${prov}/${model})`);
+    console.log(rawText || '(prÃ¡zdnÃ¡ odpovÄ›Ä)');
     console.groupEnd();
 
     const parsedMap = parseTopicRepairBatchResponse(rawText, topicId);
@@ -3188,7 +2556,7 @@ async function runTopicRepairBulkTranslationCore(state, topicId, promptTemplate,
         syncTopicRepairTaskSpecialistaFromRaw(task, blockRaw);
       } else {
         task.status = 'failed';
-        task.error = 'AI nevrátila hodnotu pro toto heslo (zkontroluj formát odpovědi).';
+        task.error = 'AI nevrÃ¡tila hodnotu pro toto heslo (zkontroluj formÃ¡t odpovÄ›di).';
       }
     }
 
@@ -3213,7 +2581,7 @@ async function runTopicRepairBulkTranslation() {
   if (!topicRepairState) return;
   if (state.topicRepairBulkRunning) {
     state.topicRepairBulkAbortVersion++;
-    showToast('⏹ Zastavuji hromadný překlad...');
+    showToast('â¹ Zastavuji hromadnÃ½ pÅ™eklad...');
     return;
   }
   syncTopicRepairBulkRunInputsToHidden();
@@ -3233,7 +2601,7 @@ async function runTopicRepairBulkTranslation() {
   const bulkBtn = document.getElementById('topicRepairBulkRunBtn');
   if (bulkBtn) {
     bulkBtn.disabled = false;
-    bulkBtn.textContent = '■ Zastavit hromadný překlad';
+    bulkBtn.textContent = 'â–  Zastavit hromadnÃ½ pÅ™eklad';
   }
 
   const wasPaused = !!state.paused;
@@ -3265,7 +2633,7 @@ async function runTopicRepairBulkTranslation() {
         const topicId = topicsToRun[ti];
         const promptTemplate = applyPromptLanguageTokens(String(getTopicRepairBatchPromptTemplate(topicId) || '').trim());
         if (!promptTemplate) {
-          log(`⚠ Přeskočeno téma ${topicId} — prázdný uložený batch prompt.`);
+          log(`âš  PÅ™eskoÄeno tÃ©ma ${topicId} â€” prÃ¡zdnÃ½ uloÅ¾enÃ½ batch prompt.`);
           continue;
         }
         const res = await runTopicRepairBulkTranslationCore(state, topicId, promptTemplate, onlyFailed, bs);
@@ -3337,9 +2705,9 @@ function syncTopicPromptTemplatesReport() {
     return !fromCatalog || fromCatalog !== fromDetailBase;
   });
   if (mismatched.length > 0) {
-    log(`⚠ Topic prompt sync: ${mismatched.map(([topicId]) => topicId).join(', ')}`);
+    log(`âš  Topic prompt sync: ${mismatched.map(([topicId]) => topicId).join(', ')}`);
   } else {
-    log('✓ Topic prompt sync: testy/detail jsou 1:1');
+    log('âœ“ Topic prompt sync: testy/detail jsou 1:1');
   }
 }
 
@@ -3357,21 +2725,21 @@ function buildTopicPrompt(key, topicId) {
   const specialistaDetailRule = topicId === 'specialista'
     ? `
 
-POŽADAVEK NA STYL:
-- Vrať detailní exegetický odstavec (3-5 vět), jako biblický specialista.
-- Vysvětli význam slova v širším biblickém a teologickém kontextu.
-- Bez odrážek, bez číslování, bez dalších polí.`
+POÅ½ADAVEK NA STYL:
+- VraÅ¥ detailnÃ­ exegetickÃ½ odstavec (3-5 vÄ›t), jako biblickÃ½ specialista.
+- VysvÄ›tli vÃ½znam slova v Å¡irÅ¡Ã­m biblickÃ©m a teologickÃ©m kontextu.
+- Bez odrÃ¡Å¾ek, bez ÄÃ­slovÃ¡nÃ­, bez dalÅ¡Ã­ch polÃ­.`
     : '';
 
   return `${enforceSpecialistaFormat(promptTemplate)}
 
 ---
-TEĎ PŘELOŽ POUZE JEDNO TÉMA.
+TEÄŽ PÅ˜ELOÅ½ POUZE JEDNO TÃ‰MA.
 - Heslo: ${key}
 - Pole: ${topicLabel} (${topicId})
-- Vrať jen čistý text pro toto jedno pole bez dalších sekcí.
+- VraÅ¥ jen ÄistÃ½ text pro toto jedno pole bez dalÅ¡Ã­ch sekcÃ­.
 
-Zdrojová data:
+ZdrojovÃ¡ data:
 ${sourceText}
 ${specialistaDetailRule}`;
 }
@@ -3416,7 +2784,7 @@ function openTopicPromptModal(key, topicId) {
   const promptInput = document.getElementById('topicPromptInput');
   if (promptInput) promptInput.value = state.topicPromptState.prompt;
   const currentInput = document.getElementById('topicPromptCurrentValue');
-  if (currentInput) currentInput.value = state.topicPromptState.currentValue || '—';
+  if (currentInput) currentInput.value = state.topicPromptState.currentValue || 'â€”';
 }
 
 async function runTopicPromptAI() {
@@ -3450,17 +2818,17 @@ async function runTopicPromptAI() {
     const raw = await callAIWithRetry(prov, apiKey, model, messages);
     const rawText = String(raw?.content || '').trim();
     resultInput.value = rawText;
-    log(`🤖 Překlad tématu: ${getTranslationEngineLabel(raw, prov, model)}`);
-    log(`📥 RAW AI ${state.topicPromptState.key}.${state.topicPromptState.topicId}: vypsáno do konzole`);
-    console.groupCollapsed(`🤖 RAW AI ${state.topicPromptState.key}.${state.topicPromptState.topicId}`);
-    console.log(rawText || '(prázdná odpověď)');
+    log(`ðŸ¤– PÅ™eklad tÃ©matu: ${getTranslationEngineLabel(raw, prov, model)}`);
+    log(`ðŸ“¥ RAW AI ${state.topicPromptState.key}.${state.topicPromptState.topicId}: vypsÃ¡no do konzole`);
+    console.groupCollapsed(`ðŸ¤– RAW AI ${state.topicPromptState.key}.${state.topicPromptState.topicId}`);
+    console.log(rawText || '(prÃ¡zdnÃ¡ odpovÄ›Ä)');
     console.groupEnd();
   } catch (e) {
     logError('runTopicPromptAI', e, { key: state.topicPromptState.key, topic: state.topicPromptState.topicId });
     showToast(t('toast.error.withMessage', { message: e.message }));
   } finally {
     runBtn.disabled = false;
-    runBtn.textContent = '▶ Odeslat AI';
+    runBtn.textContent = 'â–¶ Odeslat AI';
   }
 }
 
@@ -3486,14 +2854,14 @@ function applyTopicPromptResult() {
   if (!state.translated[key]) state.translated[key] = {};
   const prevValue = String(state.translated[key]?.[topicId] || '').trim();
   if (topicId === 'definice' && isDefinitionLowQuality(val)) {
-    showToast('⚠ Definice vypadá nekvalitně, ponechána původní hodnota.');
+    showToast('âš  Definice vypadÃ¡ nekvalitnÄ›, ponechÃ¡na pÅ¯vodnÃ­ hodnota.');
     return;
   }
   if (hasMeaningfulValue(prevValue) && !shouldReplaceTopicValue(topicId, prevValue, val)) {
     if (topicId === 'specialista') {
-      showToast('⚠ Specialista není kvalitnější než aktuální text. Původní hodnota zůstala.');
+      showToast('âš  Specialista nenÃ­ kvalitnÄ›jÅ¡Ã­ neÅ¾ aktuÃ¡lnÃ­ text. PÅ¯vodnÃ­ hodnota zÅ¯stala.');
     } else {
-      showToast(`⚠ Pole ${TOPIC_LABELS[topicId] || topicId}: nový návrh není lepší, původní hodnota zůstala.`);
+      showToast(`âš  Pole ${TOPIC_LABELS[topicId] || topicId}: novÃ½ nÃ¡vrh nenÃ­ lepÅ¡Ã­, pÅ¯vodnÃ­ hodnota zÅ¯stala.`);
     }
     return;
   }
@@ -3504,10 +2872,10 @@ function applyTopicPromptResult() {
   const candidateSpecialista = hasMeaningfulValue(candidateSpecialistaStrict) ? candidateSpecialistaStrict : candidateSpecialistaLoose;
   if (shouldReplaceSpecialista(prevSpecialista, candidateSpecialista)) {
     state.translated[key].specialista = String(candidateSpecialista || '').trim();
-    log(`🧠 SPECIALISTA auto-upgrade ${key}: použit kvalitnější text z AI odpovědi`);
+    log(`ðŸ§  SPECIALISTA auto-upgrade ${key}: pouÅ¾it kvalitnÄ›jÅ¡Ã­ text z AI odpovÄ›di`);
   }
 
-  // Pokud AI vrátí i další témata, zkus je bezpečně sloučit (jen když jsou kvalitnější).
+  // Pokud AI vrÃ¡tÃ­ i dalÅ¡Ã­ tÃ©mata, zkus je bezpeÄnÄ› slouÄit (jen kdyÅ¾ jsou kvalitnÄ›jÅ¡Ã­).
   const topicIds = ['vyznam', 'definice', 'pouziti', 'puvod', 'kjv', 'specialista'];
   for (const extraTopicId of topicIds) {
     if (extraTopicId === topicId) continue;
@@ -3519,7 +2887,7 @@ function applyTopicPromptResult() {
     const prevExtra = String(state.translated[key]?.[extraTopicId] || '').trim();
     if (hasMeaningfulValue(prevExtra) && !shouldReplaceTopicValue(extraTopicId, prevExtra, extraVal)) continue;
     state.translated[key][extraTopicId] = extraVal;
-    log(`✨ DETAIL auto-merge ${key}.${extraTopicId}: aplikováno z jedné AI odpovědi`);
+    log(`âœ¨ DETAIL auto-merge ${key}.${extraTopicId}: aplikovÃ¡no z jednÃ© AI odpovÄ›di`);
   }
   saveProgress();
   renderDetail();
@@ -3541,7 +2909,7 @@ function getSpecialistaQualityScore(text) {
   if (sentenceCount >= 2) score += 1;
   if (sentenceCount >= 3) score += 2;
   if (sentenceCount >= 5) score += 1;
-  const biblicalHints = (t.match(/\b(Bůh|Kristus|Ježíš|evangelium|hřích|spása|soud|milost|víra|teolog|teologie|biblick|zjevení|žalm|job|přísloví|nový zákon|starý zákon)\b/gi) || []).length;
+  const biblicalHints = (t.match(/\b(BÅ¯h|Kristus|JeÅ¾Ã­Å¡|evangelium|hÅ™Ã­ch|spÃ¡sa|soud|milost|vÃ­ra|teolog|teologie|biblick|zjevenÃ­|Å¾alm|job|pÅ™Ã­slovÃ­|novÃ½ zÃ¡kon|starÃ½ zÃ¡kon)\b/gi) || []).length;
   score += Math.min(4, biblicalHints);
   const englishNoise = (t.match(/\b(the|and|which|used|only|without|see|word|in|of|to)\b/gi) || []).length;
   score -= Math.min(4, englishNoise);
@@ -3561,7 +2929,7 @@ function shouldReplaceSpecialista(currentText, candidateText) {
 }
 
 function countCzDiacritics(text) {
-  return (String(text || '').match(/[áčďéěíňóřšťúůýžÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ]/g) || []).length;
+  return (String(text || '').match(/[Ã¡ÄÄÃ©Ä›Ã­ÅˆÃ³Å™Å¡Å¥ÃºÅ¯Ã½Å¾ÃÄŒÄŽÃ‰ÄšÃÅ‡Ã“Å˜Å Å¤ÃšÅ®ÃÅ½]/g) || []).length;
 }
 
 function countEnglishNoiseWords(text) {
@@ -3574,7 +2942,7 @@ function countBracketRefs(text) {
 
 function scoreTopicRepairText(topicId, text) {
   const t = String(text || '').trim();
-  if (!hasMeaningfulValue(t)) return { score: 0, notes: ['prázdné'] };
+  if (!hasMeaningfulValue(t)) return { score: 0, notes: ['prÃ¡zdnÃ©'] };
   const notes = [];
   let score = 0;
 
@@ -3585,11 +2953,11 @@ function scoreTopicRepairText(topicId, text) {
     score += Math.min(3, Math.floor(countCzDiacritics(t) / 6));
     if (isDefinitionLowQuality(t)) {
       score -= 8;
-      notes.push('definice: nízká kvalita / příliš krátké');
+      notes.push('definice: nÃ­zkÃ¡ kvalita / pÅ™Ã­liÅ¡ krÃ¡tkÃ©');
     }
     if (isDefinitionLikelyEnglish(t)) {
       score -= 6;
-      notes.push('definice: anglický nádech');
+      notes.push('definice: anglickÃ½ nÃ¡dech');
     }
     score -= Math.min(4, countEnglishNoiseWords(t));
     return { score, notes };
@@ -3602,7 +2970,7 @@ function scoreTopicRepairText(topicId, text) {
     score -= Math.min(4, countEnglishNoiseWords(t));
     if (words > 14) {
       score -= 2;
-      notes.push('význam: hodně dlouhý');
+      notes.push('vÃ½znam: hodnÄ› dlouhÃ½');
     }
     return { score, notes };
   }
@@ -3621,7 +2989,7 @@ function scoreTopicRepairText(topicId, text) {
     score += Math.min(3, Math.floor(t.length / 80));
     score += Math.min(2, Math.floor(countCzDiacritics(t) / 6));
     score -= Math.min(4, countEnglishNoiseWords(t));
-    if (refs === 0) notes.push('užití: málo odkazů []');
+    if (refs === 0) notes.push('uÅ¾itÃ­: mÃ¡lo odkazÅ¯ []');
     return { score, notes };
   }
 
@@ -3629,14 +2997,14 @@ function scoreTopicRepairText(topicId, text) {
     score += Math.min(5, Math.floor(t.length / 60));
     score += Math.min(3, Math.floor(countCzDiacritics(t) / 5));
     score -= Math.min(4, countEnglishNoiseWords(t));
-    if (!/(řec|hebr|lat|sém|indoev|kořen|odvoz)/i.test(t)) notes.push('původ: chybí jazykový kontext');
+    if (!/(Å™ec|hebr|lat|sÃ©m|indoev|koÅ™en|odvoz)/i.test(t)) notes.push('pÅ¯vod: chybÃ­ jazykovÃ½ kontext');
     return { score, notes };
   }
 
   if (topicId === 'specialista') {
     const s = getSpecialistaQualityScore(t);
     score += s;
-    notes.push(`specialista: skóre ${s}`);
+    notes.push(`specialista: skÃ³re ${s}`);
     return { score, notes };
   }
 
@@ -3646,28 +3014,28 @@ function scoreTopicRepairText(topicId, text) {
 }
 
 function verdictTopicRepairCompare(prevScore, nextScore) {
-  if (!Number.isFinite(prevScore) || !Number.isFinite(nextScore)) return { label: 'nejasné', tone: 'var(--txt3)' };
+  if (!Number.isFinite(prevScore) || !Number.isFinite(nextScore)) return { label: 'nejasnÃ©', tone: 'var(--txt3)' };
   const d = nextScore - prevScore;
-  if (nextScore <= 0 && prevScore > 0) return { label: 'horší', tone: 'var(--red)' };
-  if (d >= 2) return { label: 'lepší', tone: 'var(--acc3)' };
-  if (d <= -2) return { label: 'horší', tone: 'var(--red)' };
-  return { label: 'podobné', tone: 'var(--txt3)' };
+  if (nextScore <= 0 && prevScore > 0) return { label: 'horÅ¡Ã­', tone: 'var(--red)' };
+  if (d >= 2) return { label: 'lepÅ¡Ã­', tone: 'var(--acc3)' };
+  if (d <= -2) return { label: 'horÅ¡Ã­', tone: 'var(--red)' };
+  return { label: 'podobnÃ©', tone: 'var(--txt3)' };
 }
 
 function formatTopicRepairQuickCompare(topicId, previousValue, candidateValue) {
   const prev = String(previousValue || '').trim();
   const next = String(candidateValue || '').trim();
   if (!hasMeaningfulValue(next)) {
-    return `<div style="margin-top:6px;padding:8px;border:1px dashed var(--brd);border-radius:6px;background:var(--bg2);font-size:11px;color:var(--txt3)"><b>Analýza:</b> nelze porovnat (chybí nový návrh)</div>`;
+    return `<div style="margin-top:6px;padding:8px;border:1px dashed var(--brd);border-radius:6px;background:var(--bg2);font-size:11px;color:var(--txt3)"><b>AnalÃ½za:</b> nelze porovnat (chybÃ­ novÃ½ nÃ¡vrh)</div>`;
   }
   const p = scoreTopicRepairText(topicId, prev);
   const n = scoreTopicRepairText(topicId, next);
   const v = verdictTopicRepairCompare(p.score, n.score);
   const notes = [...new Set([...(p.notes || []), ...(n.notes || [])])].slice(0, 3);
-  const notesHtml = notes.length ? ` · ${notes.map(x => escHtml(x)).join(' · ')}` : '';
+  const notesHtml = notes.length ? ` Â· ${notes.map(x => escHtml(x)).join(' Â· ')}` : '';
   return `<div style="margin-top:6px;padding:8px;border:1px solid var(--brd);border-radius:6px;background:var(--bg2);font-size:11px;color:var(--txt2)">
-    <b>Analýza:</b> <span style="color:${v.tone};font-weight:bold">${escHtml(v.label)}</span>
-    <span style="color:var(--txt3)">(skóre ${p.score} → ${n.score})</span>${notesHtml}
+    <b>AnalÃ½za:</b> <span style="color:${v.tone};font-weight:bold">${escHtml(v.label)}</span>
+    <span style="color:var(--txt3)">(skÃ³re ${p.score} â†’ ${n.score})</span>${notesHtml}
   </div>`;
 }
 
@@ -3766,7 +3134,7 @@ function closeSystemPromptModal() {
   if (modal) modal.remove();
 }
 
-/** Sjednocení znaků z AI odpovědi (NFKC, ZWSP, plnocelá dvojtečka) kvůli parsování labelů. */
+/** SjednocenÃ­ znakÅ¯ z AI odpovÄ›di (NFKC, ZWSP, plnocelÃ¡ dvojteÄka) kvÅ¯li parsovÃ¡nÃ­ labelÅ¯. */
 function normalizeAiTopicRawText(s) {
   return String(s || '')
     .replace(/\r\n/g, '\n')
@@ -3781,7 +3149,7 @@ function normalizeAiTopicRawText(s) {
     .normalize('NFKC');
 }
 
-/** Odstraní opakované hlavičky ###G12### / ### G132 / ##H4 včetně mezer (i bez uzavíracích #). */
+/** OdstranÃ­ opakovanÃ© hlaviÄky ###G12### / ### G132 / ##H4 vÄetnÄ› mezer (i bez uzavÃ­racÃ­ch #). */
 function stripLeadingGHeaders(text) {
   let t = String(text || '');
   for (let i = 0; i < 8; i++) {
@@ -3812,7 +3180,7 @@ function syncTopicRepairMinimizeBusyIndicator() {
   btn.classList.toggle('topicRepairMiniBusy', busy);
 }
 
-/** Když strict parser SPECIALISTU nechytí (jiné mezery/znaky), vezmi text od nadpisu do dalšího pole. */
+/** KdyÅ¾ strict parser SPECIALISTU nechytÃ­ (jinÃ© mezery/znaky), vezmi text od nadpisu do dalÅ¡Ã­ho pole. */
 function extractSpecialistaLooseFallback(rawText) {
   let t = stripLeadingGHeaders(normalizeAiTopicRawText(rawText).trim()).trim();
   if (!t) return '';
@@ -3824,13 +3192,13 @@ function extractSpecialistaLooseFallback(rawText) {
   const start = m.index + m[0].length;
   const rest = t.slice(start);
   const nextHdr =
-    /(?:^|[\n\u0085\u2028\u2029])[\s\u00A0]*(?:VYZNAM|DEFINICE|POUZITI|PUVOD|POUVOD|POVOD|KJV|SPECIALISTA|VYKLAD|VÝKLAD|KOMENTAR|KOMENTÁŘ|EXEGEZE|COMMENTARY|EXEGESIS|DEFINITION|MEANING|USAGE|ORIGIN|DEF)\s*(?:\([^)\n]{0,240}\))?\s*(?:[:\uFF1A\u2013\u2014=\.\-|]|\n{1,4}\s*)/iu;
+    /(?:^|[\n\u0085\u2028\u2029])[\s\u00A0]*(?:VYZNAM|DEFINICE|POUZITI|PUVOD|POUVOD|POVOD|KJV|SPECIALISTA|VYKLAD|VÃKLAD|KOMENTAR|KOMENTÃÅ˜|EXEGEZE|COMMENTARY|EXEGESIS|DEFINITION|MEANING|USAGE|ORIGIN|DEF)\s*(?:\([^)\n]{0,240}\))?\s*(?:[:\uFF1A\u2013\u2014=\.\-|]|\n{1,4}\s*)/iu;
   const m2 = rest.search(nextHdr);
   const body = m2 >= 0 ? rest.slice(0, m2) : rest;
   return body.trim();
 }
 
-/** Po opravě tématu: nezaškrtávat hromadné přepsání jen při verdiktu „horší“ (jinak šlo omylem odškrtnout definici). */
+/** Po opravÄ› tÃ©matu: nezaÅ¡krtÃ¡vat hromadnÃ© pÅ™epsÃ¡nÃ­ jen pÅ™i verdiktu â€žhorÅ¡Ã­â€œ (jinak Å¡lo omylem odÅ¡krtnout definici). */
 function shouldAutoCheckTopicRepairTask(topicId, currentValue, candidateValue) {
   const prev = String(currentValue || '').trim();
   const next = String(candidateValue || '').trim();
@@ -3838,10 +3206,10 @@ function shouldAutoCheckTopicRepairTask(topicId, currentValue, candidateValue) {
   const p = scoreTopicRepairText(topicId, prev);
   const n = scoreTopicRepairText(topicId, next);
   const v = verdictTopicRepairCompare(p.score, n.score);
-  return v.label !== 'horší';
+  return v.label !== 'horÅ¡Ã­';
 }
 
-/** Jednotná normalizace názvů polí z AI (vč. VÝKLAD → SPECIALISTA). */
+/** JednotnÃ¡ normalizace nÃ¡zvÅ¯ polÃ­ z AI (vÄ. VÃKLAD â†’ SPECIALISTA). */
 function normalizeTopicFieldLabel(raw) {
   const u = String(raw || '').trim().toUpperCase();
   if (u === 'DEF' || u === 'DEFINITION') return 'DEFINICE';
@@ -3849,32 +3217,32 @@ function normalizeTopicFieldLabel(raw) {
   if (u === 'USAGE') return 'POUZITI';
   if (u === 'ORIGIN') return 'PUVOD';
   if (u === 'POVOD' || u === 'POUVOD') return 'PUVOD';
-  if (u === 'VYKLAD' || u === 'VÝKLAD' || u === 'KOMENTAR' || u === 'KOMENTÁŘ' || u === 'EXEGEZE' || u === 'COMMENTARY' || u === 'EXEGESIS') return 'SPECIALISTA';
+  if (u === 'VYKLAD' || u === 'VÃKLAD' || u === 'KOMENTAR' || u === 'KOMENTÃÅ˜' || u === 'EXEGEZE' || u === 'COMMENTARY' || u === 'EXEGESIS') return 'SPECIALISTA';
   return u;
 }
 
-/** Alternace názvů polí v AI odpovědi (jednotný zdroj pro anchor / řádkové parsování). */
-const TOPIC_FIELD_LABEL_ALTS_FOR_RE = 'VYZNAM|DEFINICE|POUZITI|PUVOD|POUVOD|POVOD|KJV|SPECIALISTA|VYKLAD|VÝKLAD|KOMENTAR|KOMENTÁŘ|EXEGEZE|DEFINITION|MEANING|USAGE|ORIGIN|COMMENTARY|EXEGESIS|DEF';
+/** Alternace nÃ¡zvÅ¯ polÃ­ v AI odpovÄ›di (jednotnÃ½ zdroj pro anchor / Å™Ã¡dkovÃ© parsovÃ¡nÃ­). */
+const TOPIC_FIELD_LABEL_ALTS_FOR_RE = 'VYZNAM|DEFINICE|POUZITI|PUVOD|POUVOD|POVOD|KJV|SPECIALISTA|VYKLAD|VÃKLAD|KOMENTAR|KOMENTÃÅ˜|EXEGEZE|DEFINITION|MEANING|USAGE|ORIGIN|COMMENTARY|EXEGESIS|DEF';
 
-/** Po klíčovém slově často následuje „(specialista)“ / poznámka v závorce — bez toho selhával \s*[-:]. */
+/** Po klÃ­ÄovÃ©m slovÄ› Äasto nÃ¡sleduje â€ž(specialista)â€œ / poznÃ¡mka v zÃ¡vorce â€” bez toho selhÃ¡val \s*[-:]. */
 function makeTopicFieldHeaderScanRegex() {
-  return new RegExp(`\\b(${TOPIC_FIELD_LABEL_ALTS_FOR_RE})(?:\\*\\*|__)?\\s*(?:\\([^)\\n]{0,240}\\))?\\s*[-:–—=.|]{0,3}\\s*`, 'giu');
+  return new RegExp(`\\b(${TOPIC_FIELD_LABEL_ALTS_FOR_RE})(?:\\*\\*|__)?\\s*(?:\\([^)\\n]{0,240}\\))?\\s*[-:â€“â€”=.|]{0,3}\\s*`, 'giu');
 }
 
-/** Stejná pravidla jako u anchor regexu, navíc prefix markdownu / číslování na začátku řádku. */
+/** StejnÃ¡ pravidla jako u anchor regexu, navÃ­c prefix markdownu / ÄÃ­slovÃ¡nÃ­ na zaÄÃ¡tku Å™Ã¡dku. */
 function makeTopicFieldLineStartRegex() {
   return new RegExp(
-    `^(?:(?:\\d+)[.)]\\s+)?(?:(?:[-*+>]|#{1,6})\\s+)?(?:(?:\\*\\*|__)\\s*)?(${TOPIC_FIELD_LABEL_ALTS_FOR_RE})(?:\\*\\*|__)?\\s*(?:\\([^)\\n]{0,240}\\))?\\s*[-:–—=.|]{0,3}\\s*`,
+    `^(?:(?:\\d+)[.)]\\s+)?(?:(?:[-*+>]|#{1,6})\\s+)?(?:(?:\\*\\*|__)\\s*)?(${TOPIC_FIELD_LABEL_ALTS_FOR_RE})(?:\\*\\*|__)?\\s*(?:\\([^)\\n]{0,240}\\))?\\s*[-:â€“â€”=.|]{0,3}\\s*`,
     'iu'
   );
 }
 
-/** Hlavička sekce specialisty (aliasy + závorka + dvojtečka nebo nový řádek těla). */
+/** HlaviÄka sekce specialisty (aliasy + zÃ¡vorka + dvojteÄka nebo novÃ½ Å™Ã¡dek tÄ›la). */
 function matchSpecialistaHeaderBlockStart(t) {
   const s = String(t || '');
   if (!s) return null;
   const LINE_START = '(?:^|[\n\u0085\u2028\u2029])[\\s\u00A0]*';
-  const ALIAS = '(?:SPECIALISTA|VYKLAD|VÝKLAD|KOMENTAR|KOMENTÁŘ|EXEGEZE|COMMENTARY|EXEGESIS)';
+  const ALIAS = '(?:SPECIALISTA|VYKLAD|VÃKLAD|KOMENTAR|KOMENTÃÅ˜|EXEGEZE|COMMENTARY|EXEGESIS)';
   const PAREN_OPT = '(?:\\([^)\\n]{0,240}\\))?';
   const SEP = '(?:[:\\uFF1A\\u2013\\u2014=\\.\\-|]|\\n{1,4}\\s*)';
   const prefix = '(?:(?:\\d+)[.)]\\s+)?(?:(?:[-*+>]|#{1,6})\\s+)?(?:(?:\\*\\*|__)\\s*)?';
@@ -3882,7 +3250,7 @@ function matchSpecialistaHeaderBlockStart(t) {
   return s.match(re);
 }
 
-/** Výřez bloku podle libovolného výskytu labelu v textu (i více polí na jednom řádku). */
+/** VÃ½Å™ez bloku podle libovolnÃ©ho vÃ½skytu labelu v textu (i vÃ­ce polÃ­ na jednom Å™Ã¡dku). */
 function extractTopicSegmentByAnchors(cleaned, wantLabel) {
   const c = String(cleaned || '');
   if (!c || !wantLabel) return '';
@@ -3912,7 +3280,7 @@ function mapNormalizedLabelToTopicId(norm) {
   return null;
 }
 
-/** Pořadí témat podle prvního výskytu nadpisu v RAW (pro log a doplnění „dalších“). */
+/** PoÅ™adÃ­ tÃ©mat podle prvnÃ­ho vÃ½skytu nadpisu v RAW (pro log a doplnÄ›nÃ­ â€ždalÅ¡Ã­châ€œ). */
 function scanRawForTopicHeaderTopicIds(rawText) {
   const text = normalizeAiTopicRawText(rawText).trim();
   if (!text) return [];
@@ -3976,8 +3344,8 @@ function extractTopicValueFromAI(rawText, topicId, mode = 'loose') {
       if (part) out += (out ? ' ' : '') + part;
     }
     out = out.trim();
-    // Ořízni případ, kdy AI přidá další téma ve stejné větě/řádku.
-    const foreignInline = out.match(/\b(VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|SPECIALISTA|VYKLAD|VÝKLAD|KOMENTAR|KOMENTÁŘ|EXEGEZE|DEF|DEFINITION|MEANING|USAGE|ORIGIN|COMMENTARY|EXEGESIS)\s*[-:–—=.]?\s*/iu);
+    // OÅ™Ã­zni pÅ™Ã­pad, kdy AI pÅ™idÃ¡ dalÅ¡Ã­ tÃ©ma ve stejnÃ© vÄ›tÄ›/Å™Ã¡dku.
+    const foreignInline = out.match(/\b(VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|SPECIALISTA|VYKLAD|VÃKLAD|KOMENTAR|KOMENTÃÅ˜|EXEGEZE|DEF|DEFINITION|MEANING|USAGE|ORIGIN|COMMENTARY|EXEGESIS)\s*[-:â€“â€”=.]?\s*/iu);
     if (foreignInline && foreignInline.index !== undefined) {
       const nl = normalizeTopicFieldLabel(foreignInline[1]);
       const sameBucket = keyForTopic === 'SPECIALISTA'
@@ -3990,8 +3358,8 @@ function extractTopicValueFromAI(rawText, topicId, mode = 'loose') {
     return out.trim();
   }
 
-  // Když chybí explicitní label cílového tématu, ale AI vrátí další labely
-  // (např. SPECIALISTA), ber jen text před prvním cizím labelem.
+  // KdyÅ¾ chybÃ­ explicitnÃ­ label cÃ­lovÃ©ho tÃ©matu, ale AI vrÃ¡tÃ­ dalÅ¡Ã­ labely
+  // (napÅ™. SPECIALISTA), ber jen text pÅ™ed prvnÃ­m cizÃ­m labelem.
   if (mode === 'strict' && fieldPositions.length > 0 && keyForTopic && !fieldPositions.some(f => f.label === keyForTopic)) {
     const anchor = extractTopicSegmentByAnchors(cleaned, keyForTopic);
     if (hasMeaningfulValue(anchor)) return anchor.trim();
@@ -4007,11 +3375,11 @@ function extractTopicValueFromAI(rawText, topicId, mode = 'loose') {
   }
 
   if (keyForTopic) {
-    cleaned = cleaned.replace(new RegExp(`^${keyForTopic}\\s*[-:–—=.]?\\s*`, 'i'), '').trim();
+    cleaned = cleaned.replace(new RegExp(`^${keyForTopic}\\s*[-:â€“â€”=.]?\\s*`, 'i'), '').trim();
   }
-  // Poslední ochrana: u single-topic odpovědi ořízni navazující cizí labely i v rámci jednoho řádku.
+  // PoslednÃ­ ochrana: u single-topic odpovÄ›di oÅ™Ã­zni navazujÃ­cÃ­ cizÃ­ labely i v rÃ¡mci jednoho Å™Ã¡dku.
   if (keyForTopic) {
-    const foreignInlineGlobal = cleaned.match(/\b(VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|SPECIALISTA|VYKLAD|VÝKLAD|KOMENTAR|KOMENTÁŘ|EXEGEZE|DEF|DEFINITION|MEANING|USAGE|ORIGIN|COMMENTARY|EXEGESIS)\s*[-:–—=.]?\s*/iu);
+    const foreignInlineGlobal = cleaned.match(/\b(VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|SPECIALISTA|VYKLAD|VÃKLAD|KOMENTAR|KOMENTÃÅ˜|EXEGEZE|DEF|DEFINITION|MEANING|USAGE|ORIGIN|COMMENTARY|EXEGESIS)\s*[-:â€“â€”=.]?\s*/iu);
     if (foreignInlineGlobal && foreignInlineGlobal.index !== undefined) {
       const nl = normalizeTopicFieldLabel(foreignInlineGlobal[1]);
       const sameBucket = keyForTopic === 'SPECIALISTA'
@@ -4027,17 +3395,17 @@ function extractTopicValueFromAI(rawText, topicId, mode = 'loose') {
 
 function formatPreviewRawTranslation(rawDef) {
   const text = String(rawDef || '').trim();
-  if (!text) return '—';
+  if (!text) return 'â€”';
   const esc = escHtml(text);
   const formatted = esc
-    .replace(/(VÝZNAM:|Význam:)/g, '<br><b>$1</b>')
+    .replace(/(VÃZNAM:|VÃ½znam:)/g, '<br><b>$1</b>')
     .replace(/(DEFINICE:|Definice:)/g, '<br><b>$1</b>')
-    .replace(/(POUŽIT[ÍI]:|Použit[íi]:)/g, '<br><b>$1</b>')
-    .replace(/(SPECIALISTA:|Specialista:|VÝKLAD:|Výklad:)/g, '<br><b>$1</b>');
+    .replace(/(POUÅ½IT[ÃI]:|PouÅ¾it[Ã­i]:)/g, '<br><b>$1</b>')
+    .replace(/(SPECIALISTA:|Specialista:|VÃKLAD:|VÃ½klad:)/g, '<br><b>$1</b>');
   return formatted.replace(/^<br>/, '');
 }
 
-// ══ PŘEKLAD — SINGLE ════════════════════════════════════════════
+// â•â• PÅ˜EKLAD â€” SINGLE â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 async function translateSingle(key) {
   const btn = document.querySelector('.translate-btn');
   if (btn) { btn.disabled = true; btn.textContent = t('translate.single.translating'); }
@@ -4062,7 +3430,7 @@ async function translateSingle(key) {
   
   try {
     const raw = await callAIWithRetry(prov, apiKey, model, messages);
-    log(`🤖 Překlad: ${getTranslationEngineLabel(raw, prov, model)}`);
+    log(`ðŸ¤– PÅ™eklad: ${getTranslationEngineLabel(raw, prov, model)}`);
     if (window.DEBUG_AI) {
       console.groupCollapsed(`AI single ${key}`);
       console.log('response:', raw.content);
@@ -4071,11 +3439,11 @@ async function translateSingle(key) {
     let missingKeys = parseTranslations(raw.content, [key]);
     
     if (missingKeys.length > 0) {
-      const retryContent = `CHYBA: V minulé odpovědi jsi vynechal formátovací značky ###G. 
-ZOPAKUJ PŘEKLAD a u každého hesla MUSÍŠ začít řádkem ###G[číslo]###. 
-Bez toho nebude překlad zpracován!
+      const retryContent = `CHYBA: V minulÃ© odpovÄ›di jsi vynechal formÃ¡tovacÃ­ znaÄky ###G. 
+ZOPAKUJ PÅ˜EKLAD a u kaÅ¾dÃ©ho hesla MUSÃÅ  zaÄÃ­t Å™Ã¡dkem ###G[ÄÃ­slo]###. 
+Bez toho nebude pÅ™eklad zpracovÃ¡n!
 
-Přelož tato hesla:
+PÅ™eloÅ¾ tato hesla:
 ${key}
 DEF: ${e.definice || e.def || ''}
 KJV: ${e.kjv || ''}
@@ -4100,24 +3468,24 @@ ORIG: ${e.orig || ''}`;
   renderList();
 }
 
-// ══ PŘEKLAD — ZNOVU ════════════════════════════════════════════
+// â•â• PÅ˜EKLAD â€” ZNOVU â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 async function retranslateSingle(key) {
   if (!confirm(t('confirm.retranslate', { key }))) return;
   
-  // Označ jako nepřeložené pro další zpracování
+  // OznaÄ jako nepÅ™eloÅ¾enÃ© pro dalÅ¡Ã­ zpracovÃ¡nÃ­
   delete state.translated[key];
   saveProgress();
   
-  // Vyber jen tento klíč
+  // Vyber jen tento klÃ­Ä
   state.selectedKeys.clear();
   state.selectedKeys.add(key);
   renderList();
   
-  // Zavolej překlad
+  // Zavolej pÅ™eklad
   await translateSelected();
 }
 
-// ══ PŘEKLAD — DÁVKA ══════════════════════════════════════════════
+// â•â• PÅ˜EKLAD â€” DÃVKA â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 async function translateNext() {
   if (state.autoRunning) return;
   const activeProvider = resolveMainBatchProvider(document.getElementById('provider')?.value || '');
@@ -4126,7 +3494,7 @@ async function translateNext() {
     return;
   }
   
-  // Retry mode - použij state.retryKeysList místo getNextBatch
+  // Retry mode - pouÅ¾ij state.retryKeysList mÃ­sto getNextBatch
   let batch;
   if (state.retryMode && state.retryKeysList.length > 0) {
     batch = state.retryKeysList.slice(0, state.currentBatchSize);
@@ -4149,9 +3517,9 @@ async function translateNext() {
     return; 
   }
   
-  // Info o retry módu
+  // Info o retry mÃ³du
   if (state.retryMode) {
-    document.getElementById('btnStep').title = `Retry: zbývá ${state.retryKeysList.length + batch.length} hesel`;
+    document.getElementById('btnStep').title = `Retry: zbÃ½vÃ¡ ${state.retryKeysList.length + batch.length} hesel`;
   }
   
   document.getElementById('btnStep').disabled = true;
@@ -4171,18 +3539,18 @@ function jumpToStart() {
   const found = state.entryMap.get(key);
   if (!found) { showToast(t('toast.entry.notFoundInFile', { key: `G${num}` })); return; }
 
-  // Označ všechna hesla PŘED tímto číslem jako přeskočená (zachováme existující překlady)
+  // OznaÄ vÅ¡echna hesla PÅ˜ED tÃ­mto ÄÃ­slem jako pÅ™eskoÄenÃ¡ (zachovÃ¡me existujÃ­cÃ­ pÅ™eklady)
   for (const e of state.entries) {
     const n = parseInt(e.key.slice(1));
     if (n < num && !state.translated[e.key]) {
-      state.translated[e.key] = { vyznam: '—', definice: '(přeskočeno)', pouziti: '—', puvod: '—', skipped: true };
+      state.translated[e.key] = { vyznam: 'â€”', definice: '(pÅ™eskoÄeno)', pouziti: 'â€”', puvod: 'â€”', skipped: true };
     }
   }
    saveProgress();
    updateStats();
    renderList();
    showToast(t('toast.translation.resumeFrom', { key: `G${num}` }));
-   // Scroll na heslo v listu (virtuální)
+   // Scroll na heslo v listu (virtuÃ¡lnÃ­)
    setTimeout(() => {
      const scroll = document.getElementById('listScroll');
      const idx = state.filteredKeys.indexOf(key);
@@ -4313,7 +3681,7 @@ async function waitForProviderCooldown(prov, abortVersion = 0) {
     const tick = Math.floor(left / 10);
     if (state.providerCooldownLogTick[prov] !== tick) {
       state.providerCooldownLogTick[prov] = tick;
-      log(`⏱ ${prov} cooldown: zbývá ${left}s`);
+      log(`â± ${prov} cooldown: zbÃ½vÃ¡ ${left}s`);
     }
     const ok = await sleepMsWithAbort(Math.min(1500, left * 1000), abortVersion);
     if (!ok) return false;
@@ -4377,8 +3745,8 @@ function getSecondaryRetryDelayMsByError(msgLower) {
 function getSecondaryCooldownSecByError(prov, rawMsg) {
   const msg = String(rawMsg || '');
   const low = msg.toLowerCase();
-  if (prov === 'gemini' && (/resource_exhausted|429|high demand|limit vyčerpán/.test(low))) {
-    // U Gemini držíme cooldown hlavně per-model, ne per-provider.
+  if (prov === 'gemini' && (/resource_exhausted|429|high demand|limit vyÄerpÃ¡n/.test(low))) {
+    // U Gemini drÅ¾Ã­me cooldown hlavnÄ› per-model, ne per-provider.
     return 0;
   }
   if (/503|service unavailable|api timeout/.test(low)) return 5;
@@ -4395,7 +3763,7 @@ function getSecondaryModelCooldownSecByError(prov, rawMsg) {
   const retryAfter = rateInfoFromErrorMessage(msg)?.retryAfterSec || 0;
   const minMatch = low.match(/(\d+)\s*min/);
   const fromMinutes = minMatch ? (Number(minMatch[1]) || 0) * 60 : 0;
-  if (prov === 'gemini' && (/limit vyčerpán|resource_exhausted/.test(low))) {
+  if (prov === 'gemini' && (/limit vyÄerpÃ¡n|resource_exhausted/.test(low))) {
     // Prefer explicit Retry-After from API over textual "~20min" hint.
     const preferred = retryAfter || fromMinutes || (20 * 60);
     return Math.max(20, Math.min(25 * 60, preferred));
@@ -4442,15 +3810,15 @@ async function requestTopicFallbackForProvider(prov, key, topicId, abortVersion)
       applyFallbacksToParsedMap([key], parsed);
       let candidate = String(parsed?.[key]?.[topicId] || '').trim();
       if (!candidate) {
-        // Topic prompty mohou vracet čistou hodnotu pole bez parser-safe bloku.
+        // Topic prompty mohou vracet Äistou hodnotu pole bez parser-safe bloku.
         candidate = extractTopicValueFromAI(rawText, topicId, 'strict');
       }
       appendModelTestUsage(() => {}, prov, model, raw);
       if (shouldAcceptTopicFallback(topicId, candidate)) {
-        log(`↳ Fallback ${prov}/${model} ${key}.${topicId} OK (${reqMs}ms)`);
+        log(`â†³ Fallback ${prov}/${model} ${key}.${topicId} OK (${reqMs}ms)`);
         return { prov, model, value: candidate, reqMs };
       }
-      log(`⚠ Fallback ${prov}/${model} ${key}.${topicId}: odpověď neprošla kvalitou, zkouším další model.`);
+      log(`âš  Fallback ${prov}/${model} ${key}.${topicId}: odpovÄ›Ä neproÅ¡la kvalitou, zkouÅ¡Ã­m dalÅ¡Ã­ model.`);
     } catch (e) {
       const msg = String(e?.message || '');
       const msgLower = msg.toLowerCase();
@@ -4465,8 +3833,8 @@ async function requestTopicFallbackForProvider(prov, key, topicId, abortVersion)
         topicId,
         message: msg
       });
-      // Pokud provider spadl do delšího cooldownu, fallback hned ukončíme,
-      // aby neblokoval další Groq dávky.
+      // Pokud provider spadl do delÅ¡Ã­ho cooldownu, fallback hned ukonÄÃ­me,
+      // aby neblokoval dalÅ¡Ã­ Groq dÃ¡vky.
       if (cooldownSec >= 45) {
         return null;
       }
@@ -4475,7 +3843,7 @@ async function requestTopicFallbackForProvider(prov, key, topicId, abortVersion)
         const waitMs = getSecondaryRetryDelayMsByError(msgLower);
         const cooldownMs = getProviderCooldownLeftSec(prov) * 1000;
         const effectiveWaitMs = Math.max(waitMs, cooldownMs);
-        // Retry detail necháváme pouze v konzoli, AUTO řádek zůstává stručný.
+        // Retry detail nechÃ¡vÃ¡me pouze v konzoli, AUTO Å™Ã¡dek zÅ¯stÃ¡vÃ¡ struÄnÃ½.
         console.warn(`[FALLBACK][${prov}] retry next model in ${Math.max(1, Math.round(effectiveWaitMs / 1000))}s`);
         const keptRunning = await sleepMsWithAbort(effectiveWaitMs, abortVersion);
         if (!keptRunning) return null;
@@ -4491,7 +3859,7 @@ async function runParallelTopicFallback(keys, abortVersion) {
   if (!keyList.length) return;
   const sideProviders = ['gemini', 'openrouter'].filter(prov => isPipelineSecondaryEnabled(prov));
   if (!sideProviders.length) {
-    log('ℹ Sekundární fallback vypnutý (žádný provider není zaškrtnut).');
+    log('â„¹ SekundÃ¡rnÃ­ fallback vypnutÃ½ (Å¾Ã¡dnÃ½ provider nenÃ­ zaÅ¡krtnut).');
     return;
   }
   await Promise.all(keyList.map(async (key) => {
@@ -4516,7 +3884,7 @@ async function runParallelTopicFallback(keys, abortVersion) {
       if (isSideFallbackAborted(abortVersion)) return;
       state.translated[key] = state.translated[key] || {};
       state.translated[key][topicId] = chosen.value;
-      log(`✓ Fallback převzat ${key}.${topicId} <= ${chosen.prov}/${chosen.model}`);
+      log(`âœ“ Fallback pÅ™evzat ${key}.${topicId} <= ${chosen.prov}/${chosen.model}`);
     }
   }));
 }
@@ -4541,14 +3909,14 @@ async function translateBatch(keys, depth = 0) {
   const preferredProvider = document.getElementById('provider')?.value || '';
   const prov   = resolveMainBatchProvider(preferredProvider);
   const model  = getPipelineModelForProvider(prov) || document.getElementById('model').value;
-  // Klíč vždy dle aktuálního run providera
+  // KlÃ­Ä vÅ¾dy dle aktuÃ¡lnÃ­ho run providera
   const apiKey = getCurrentApiKey(prov);
   state.currentInterval = parseInt(document.getElementById('intervalRun').value);
   state.currentBatchSize = parseInt(document.getElementById('batchSizeRun').value);
 
   if (!apiKey) { showToast(t('toast.apiKey.enterForProvider', { provider: prov })); return { ok: false }; }
 
-  // Start timer při prvním překladu
+  // Start timer pÅ™i prvnÃ­m pÅ™ekladu
   if (!state.startTime) {
     state.startTime = Date.now();
     startElapsedTimer();
@@ -4566,10 +3934,10 @@ async function translateBatch(keys, depth = 0) {
     const raw = await callAIWithRetry(prov, apiKey, model, messages);
     const reqMs = performance.now() - reqStart;
     const content = raw.content;
-    log(`🤖 Překlad: ${getTranslationEngineLabel(raw, prov, model)}`);
-    // Verbose logy pouze když je aktivní režim pro debug (window.DEBUG_AI = true v konzoli)
+    log(`ðŸ¤– PÅ™eklad: ${getTranslationEngineLabel(raw, prov, model)}`);
+    // Verbose logy pouze kdyÅ¾ je aktivnÃ­ reÅ¾im pro debug (window.DEBUG_AI = true v konzoli)
     if (window.DEBUG_AI) {
-      console.groupCollapsed(`AI batch ${keys[0]}–${keys[keys.length-1]}`);
+      console.groupCollapsed(`AI batch ${keys[0]}â€“${keys[keys.length-1]}`);
       console.log('prompt:', messages);
       console.log('response:', content);
       console.groupEnd();
@@ -4580,41 +3948,41 @@ async function translateBatch(keys, depth = 0) {
     fillMissingKjvFromSource(keys);
     annotateEnglishDefinitionsInTranslated(keys);
     
-    // Log tokenů
+    // Log tokenÅ¯
     const usage = raw.usage || raw.usageMetadata;
     if (usage) {
       const inT = usage.prompt_tokens || usage.promptTokenCount || 0;
       const outT = usage.completion_tokens || usage.candidatesTokenCount || 0;
       const total = inT + outT;
-      log(`📊 ${prov}: ${inT} in / ${outT} out = ${total} celkem`);
+      log(`ðŸ“Š ${prov}: ${inT} in / ${outT} out = ${total} celkem`);
       logTokenEntry(prov, inT, outT, total);
     }
     
-    // Log do konzoly pro úspěšné
+    // Log do konzoly pro ÃºspÄ›Å¡nÃ©
     for (const key of keys) {
       const t = state.translated[key];
-      if (t?.vyznam && t.vyznam !== '—') {
-        console.log(`✓ ${key}: ${t.vyznam?.slice(0, 60)}...`);
+      if (t?.vyznam && t.vyznam !== 'â€”') {
+        console.log(`âœ“ ${key}: ${t.vyznam?.slice(0, 60)}...`);
       }
     }
     logEntry(keys, content);
     
-    // Ulož raw odpověď pro každý klíč (pro pozdější zobrazení chyb)
+    // UloÅ¾ raw odpovÄ›Ä pro kaÅ¾dÃ½ klÃ­Ä (pro pozdÄ›jÅ¡Ã­ zobrazenÃ­ chyb)
     for (const key of keys) {
       if (state.translated[key]) {
         state.translated[key].raw = content;
       }
     }
     
-    // Pokud něco chybí, zkus opravný retry
+    // Pokud nÄ›co chybÃ­, zkus opravnÃ½ retry
     if (missingKeys.length > 0) {
-      console.log(`⚠ ${missingKeys.length} hesel bez překladu: ${missingKeys.join(', ')}`);
-      log(`⚠ Pokus o opravu formátu pro ${missingKeys.join(', ')}...`);
-      const retryContent = `CHYBA: V minulé odpovědi jsi vynechal formátovací značky ###G. 
-ZOPAKUJ PŘEKLAD a u každého hesla MUSÍŠ začít řádkem ###G[číslo]###. 
-Bez toho nebude překlad zpracován!
+      console.log(`âš  ${missingKeys.length} hesel bez pÅ™ekladu: ${missingKeys.join(', ')}`);
+      log(`âš  Pokus o opravu formÃ¡tu pro ${missingKeys.join(', ')}...`);
+      const retryContent = `CHYBA: V minulÃ© odpovÄ›di jsi vynechal formÃ¡tovacÃ­ znaÄky ###G. 
+ZOPAKUJ PÅ˜EKLAD a u kaÅ¾dÃ©ho hesla MUSÃÅ  zaÄÃ­t Å™Ã¡dkem ###G[ÄÃ­slo]###. 
+Bez toho nebude pÅ™eklad zpracovÃ¡n!
 
-Přelož tato hesla:
+PÅ™eloÅ¾ tato hesla:
 ${keys.map(k => {
   const e = state.entryMap.get(k);
   return e ? `${e.key} | ${e.greek}\nDEF: ${e.definice || e.def || ''}\nKJV: ${e.kjv || ''}` : '';
@@ -4622,7 +3990,7 @@ ${keys.map(k => {
       
       try {
         const raw2 = await callOnce(prov, apiKey, model, buildRetryMessages(retryContent));
-        console.log(`📥 Retry odpověď:`, raw2.content);
+        console.log(`ðŸ“¥ Retry odpovÄ›Ä:`, raw2.content);
         missingKeys = parseTranslations(raw2.content, keys);
         preserveBetterTopicsAfterBatch(keys, previousMap);
         fillMissingVyznamFromSource(keys);
@@ -4630,18 +3998,18 @@ ${keys.map(k => {
         annotateEnglishDefinitionsInTranslated(keys);
         const retryCount = keys.length - missingKeys.length;
         if (retryCount > 0) {
-          log(`✓ Opravný překlad: ${retryCount} hesel, chybí: ${missingKeys.length > 0 ? missingKeys.join(', ') : 'nic'}`);
+          log(`âœ“ OpravnÃ½ pÅ™eklad: ${retryCount} hesel, chybÃ­: ${missingKeys.length > 0 ? missingKeys.join(', ') : 'nic'}`);
         } else {
-          log(`✗ Opravný překlad nepomohl, chybí: ${missingKeys.join(', ')}`);
+          log(`âœ— OpravnÃ½ pÅ™eklad nepomohl, chybÃ­: ${missingKeys.join(', ')}`);
         }
       } catch(e2) {
-        log(`✗ Opravný pokus selhal: ${e2.message}`);
+        log(`âœ— OpravnÃ½ pokus selhal: ${e2.message}`);
       }
     }
     
-    // Fallback strategie: pokud po retry chybí část dávky, zkus menší dávku.
+    // Fallback strategie: pokud po retry chybÃ­ ÄÃ¡st dÃ¡vky, zkus menÅ¡Ã­ dÃ¡vku.
     if (missingKeys.length > 0 && keys.length > 1 && depth < 4) {
-      log(`↘ Fallback dávky: dělím ${missingKeys.length} klíčů na menší bloky (úroveň ${depth + 1})`);
+      log(`â†˜ Fallback dÃ¡vky: dÄ›lÃ­m ${missingKeys.length} klÃ­ÄÅ¯ na menÅ¡Ã­ bloky (ÃºroveÅˆ ${depth + 1})`);
       const pivot = Math.ceil(missingKeys.length / 2);
       const chunks = [missingKeys.slice(0, pivot), missingKeys.slice(pivot)].filter(ch => ch.length > 0);
       for (const chunk of chunks) {
@@ -4653,15 +4021,15 @@ ${keys.map(k => {
       }
     }
 
-    // Sekundární fallback spouštěj až po dokončení všech pokusů hlavního providera pro danou dávku
-    // (tj. pouze v top-level volání). Tím se vyhneme "střídání" providerů během hlavního překladu.
+    // SekundÃ¡rnÃ­ fallback spouÅ¡tÄ›j aÅ¾ po dokonÄenÃ­ vÅ¡ech pokusÅ¯ hlavnÃ­ho providera pro danou dÃ¡vku
+    // (tj. pouze v top-level volÃ¡nÃ­). TÃ­m se vyhneme "stÅ™Ã­dÃ¡nÃ­" providerÅ¯ bÄ›hem hlavnÃ­ho pÅ™ekladu.
     if (depth === 0) {
       const keysBeforeSideFallback = keys.filter(k => !isTranslationComplete(state.translated[k]));
       if (keysBeforeSideFallback.length > 0) {
-        log(`↻ Analýza po ${prov}: ${keysBeforeSideFallback.length} hesel má chyby/neúplná témata; sekundární topic fallback běží na pozadí.`);
+        log(`â†» AnalÃ½za po ${prov}: ${keysBeforeSideFallback.length} hesel mÃ¡ chyby/neÃºplnÃ¡ tÃ©mata; sekundÃ¡rnÃ­ topic fallback bÄ›Å¾Ã­ na pozadÃ­.`);
         enqueueSideFallbackBackground(keysBeforeSideFallback);
       } else {
-        log(`✓ Analýza po ${prov}: dávka kompletní, sekundární fallback není potřeba.`);
+        log(`âœ“ AnalÃ½za po ${prov}: dÃ¡vka kompletnÃ­, sekundÃ¡rnÃ­ fallback nenÃ­ potÅ™eba.`);
       }
     }
 
@@ -4683,23 +4051,23 @@ ${keys.map(k => {
       avgLatencyMs: reqMs
     });
     if (translatedCount < keys.length) {
-      // Označ chybějící hesla jako neúspěšná
+      // OznaÄ chybÄ›jÃ­cÃ­ hesla jako neÃºspÄ›Å¡nÃ¡
       for (const key of keys) {
         if (!isTranslationComplete(state.translated[key])) {
           state.translated[key] = state.translated[key] || {};
-          if (!state.translated[key].vyznam || state.translated[key].vyznam === '—') {
-            state.translated[key].vyznam = '—';
+          if (!state.translated[key].vyznam || state.translated[key].vyznam === 'â€”') {
+            state.translated[key].vyznam = 'â€”';
           }
         }
       }
-      log(`⚠ Pozor: Přeloženo ${translatedCount}/${keys.length} hesel. Zkuste menší dávku.`);
+      log(`âš  Pozor: PÅ™eloÅ¾eno ${translatedCount}/${keys.length} hesel. Zkuste menÅ¡Ã­ dÃ¡vku.`);
       showToast(t('toast.translated.partial', { translated: translatedCount, total: keys.length }));
     }
     
      saveProgress();
      updateFailedCount();
      // logEntry already called above after initial parse
-     log(`✓ Přeloženo ${keys.length} hesel (${keys[0]}–${keys[keys.length-1]})`);
+     log(`âœ“ PÅ™eloÅ¾eno ${keys.length} hesel (${keys[0]}â€“${keys[keys.length-1]})`);
      return { ok: true };
 } catch(e) {
       const reqMs = performance.now() - reqStart;
@@ -4723,7 +4091,7 @@ ${keys.map(k => {
           avgLatencyMs: reqMs
         });
         const cooldownSeconds = Math.max(state.currentInterval, 60);
-        logWarn('translateBatch', `Rate limit dávky ${keys[0]}-${keys[keys.length-1]}, odklad ${cooldownSeconds}s`, {
+        logWarn('translateBatch', `Rate limit dÃ¡vky ${keys[0]}-${keys[keys.length-1]}, odklad ${cooldownSeconds}s`, {
           provider: prov,
           keyRange: `${keys[0]}-${keys[keys.length-1]}`,
           cooldownSeconds,
@@ -4738,10 +4106,10 @@ ${keys.map(k => {
         provider: prov,
         batchSize: keys.length
       });
-      // Označ chybná hesla jako neúspěšná, aby šla zobrazit v "Neúspěšné překlady"
+      // OznaÄ chybnÃ¡ hesla jako neÃºspÄ›Å¡nÃ¡, aby Å¡la zobrazit v "NeÃºspÄ›Å¡nÃ© pÅ™eklady"
       for (const key of keys) {
         if (!state.translated[key]) {
-          state.translated[key] = { vyznam: '—', definice: '', pouziti: '', puvod: '', specialista: '', raw: `CHYBA: ${e.message}` };
+          state.translated[key] = { vyznam: 'â€”', definice: '', pouziti: '', puvod: '', specialista: '', raw: `CHYBA: ${e.message}` };
         }
       }
       saveProgress();
@@ -4760,7 +4128,7 @@ ${keys.map(k => {
    }
 }
 
-// ══ BUILD PROMPT MESSAGES ═══════════════════════════════════════
+// â•â• BUILD PROMPT MESSAGES â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // Uses buildPromptMessages and buildRetryMessages from core module
 
 function resetPrompt() {
@@ -4770,7 +4138,7 @@ function resetPrompt() {
 }
 
 
-// ══ AI VOLÁNÍ S RETRY A FALLBACK ════════════════════════════════
+// â•â• AI VOLÃNÃ S RETRY A FALLBACK â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function getProviderConfiguredModels(provider) {
   return getProviderConfiguredModelsForAI(provider, PROVIDERS);
 }
@@ -4792,7 +4160,7 @@ function getFallbackModels(provider) {
         }
       }
     } catch(e) { /* ignore */ }
-    // Minimální fallback, kdyby cache ještě neexistovala
+    // MinimÃ¡lnÃ­ fallback, kdyby cache jeÅ¡tÄ› neexistovala
     return ['meta-llama/llama-3.3-70b-instruct:free', 'meta-llama/llama-3.1-8b-instruct:free'];
   }
   return [];
@@ -4825,7 +4193,7 @@ async function callAIWithRetry(provider, apiKey, model, messages) {
          const isTimeout = e?.name === 'AbortError' || msg.includes('signal is aborted') || msg.includes('timeout');
 
          if (is404) {
-           const errMsg = 'Chyba 404: Model nenalezen, vyberte jiný v nastavení';
+           const errMsg = 'Chyba 404: Model nenalezen, vyberte jinÃ½ v nastavenÃ­';
            logError('callAIWithRetry', new Error(errMsg), {
              provider, model: m, attempt: attempt + 1,
              statusCode: 404
@@ -4836,13 +4204,13 @@ async function callAIWithRetry(provider, apiKey, model, messages) {
            const parsedRetry = rateInfoFromErrorMessage(e?.message || '')?.retryAfterSec || 0;
            const wait = Math.max(2, Math.min(20, parsedRetry || ((attempt + 1) * 10)));
            const shouldSwitchModelImmediately = provider === 'groq';
-           logWarn('callAIWithRetry', `Rate limit na ${m}, čekám ${wait}s...`, {
+           logWarn('callAIWithRetry', `Rate limit na ${m}, ÄekÃ¡m ${wait}s...`, {
              provider, model: m, attempt: attempt + 1, waitSeconds: wait
            });
            showToast(t('toast.rateLimit.waiting', { seconds: wait, suffix: shouldSwitchModelImmediately ? ', then try another model' : '' }));
            await sleep(wait * 1000);
            if (shouldSwitchModelImmediately) {
-             // U Groq je praktičtější při rate limitu rychle přeskočit na další model.
+             // U Groq je praktiÄtÄ›jÅ¡Ã­ pÅ™i rate limitu rychle pÅ™eskoÄit na dalÅ¡Ã­ model.
              break;
            }
            continue;
@@ -4866,20 +4234,20 @@ async function callAIWithRetry(provider, apiKey, model, messages) {
            continue;
          }
          if (isBanned) {
-           logError('callAIWithRetry', new Error(`Blokovaný účet: ${m}`), {
+           logError('callAIWithRetry', new Error(`BlokovanÃ½ ÃºÄet: ${m}`), {
              provider, model: m, attempt: attempt + 1
            });
            break;
          }
          // Other errors - log and try next model/attempt
-         logWarn('callAIWithRetry', `Chyba při volání ${m} (pokus ${attempt+1}): ${e.message}`, {
+         logWarn('callAIWithRetry', `Chyba pÅ™i volÃ¡nÃ­ ${m} (pokus ${attempt+1}): ${e.message}`, {
            provider, model: m, attempt: attempt + 1, error: e.message
          });
          break;
        }
     }
   }
-  throw lastErr || new Error('Všechny modely selhaly');
+  throw lastErr || new Error('VÅ¡echny modely selhaly');
 }
 
 function getTranslationEngineLabel(raw, fallbackProvider, fallbackModel) {
@@ -4936,22 +4304,22 @@ async function callOnce(provider, apiKey, model, messages, externalSignal = null
     };
      if (!r.ok) {
        if (r.status === 429) {
-         throw new Error(`Rate limit! Zkuste za ${rateInfo.retryAfterSec || 'několik'}s. Info: groq.com/pricing${rateInfo.requestId ? ` [req:${rateInfo.requestId}]` : ''}`);
+         throw new Error(`Rate limit! Zkuste za ${rateInfo.retryAfterSec || 'nÄ›kolik'}s. Info: groq.com/pricing${rateInfo.requestId ? ` [req:${rateInfo.requestId}]` : ''}`);
        }
        throw new Error(d.error?.message || String(r.status));
      }
      // Validate response structure
      validateAPIResponse(d, 'groq');
      if (d.usage) {
-       log(`📊 Groq: ${d.usage.prompt_tokens} in / ${d.usage.completion_tokens} out / ${d.usage.total_tokens} total`);
+       log(`ðŸ“Š Groq: ${d.usage.prompt_tokens} in / ${d.usage.completion_tokens} out / ${d.usage.total_tokens} total`);
      }
      const content = d.choices[0].message.content;
-    // Kontrola na nesmyslnou odpověď
-    const weirdChars = (content.match(/[^\x20-\x7E\n\r\těščřžýáíéúůťďňĚŠČŘŽÝÁÍÉÚŮŤĎŇ]/g) || []).length;
+    // Kontrola na nesmyslnou odpovÄ›Ä
+    const weirdChars = (content.match(/[^\x20-\x7E\n\r\tÄ›Å¡ÄÅ™Å¾Ã½Ã¡Ã­Ã©ÃºÅ¯Å¥ÄÅˆÄšÅ ÄŒÅ˜Å½ÃÃÃÃ‰ÃšÅ®Å¤ÄŽÅ‡]/g) || []).length;
     if (content.length > 0 && weirdChars > content.length * 0.5) {
-      console.log('═ PODEZŘELÁ ODPOVĚĎ ═');
+      console.log('â• PODEZÅ˜ELÃ ODPOVÄšÄŽ â•');
       console.log(content);
-      throw new Error('AI vrátila nesmyslnou odpověď - zkuste delší interval');
+      throw new Error('AI vrÃ¡tila nesmyslnou odpovÄ›Ä - zkuste delÅ¡Ã­ interval');
     }
     return { content, usage: d.usage, resolvedModel: d.model || model, rateInfo };
 
@@ -4969,18 +4337,18 @@ async function callOnce(provider, apiKey, model, messages, externalSignal = null
     const d = await r.json();
      if (!r.ok) {
        if (r.status === 503 || d.error?.status === 'UNAVAILABLE') {
-         throw new Error('503 Service Unavailable: Gemini je dočasně přetížené, opakuji později.');
+         throw new Error('503 Service Unavailable: Gemini je doÄasnÄ› pÅ™etÃ­Å¾enÃ©, opakuji pozdÄ›ji.');
        }
        if (d.error?.status === 'RESOURCE_EXHAUSTED') {
          const details = String(d.error?.message || '').trim();
-         throw new Error(`Gemini limit vyčerpán! Počkej ~20min nebo přepni na Groq.${details ? ` Detail: ${details}` : ''}`);
+         throw new Error(`Gemini limit vyÄerpÃ¡n! PoÄkej ~20min nebo pÅ™epni na Groq.${details ? ` Detail: ${details}` : ''}`);
        }
        throw new Error(d.error?.message || String(r.status));
      }
      // Validate response structure
      validateAPIResponse(d, 'gemini');
      if (d.usageMetadata) {
-       log(`📊 Gemini: ${d.usageMetadata.promptTokenCount} in / ${d.usageMetadata.candidatesTokenCount} out`);
+       log(`ðŸ“Š Gemini: ${d.usageMetadata.promptTokenCount} in / ${d.usageMetadata.candidatesTokenCount} out`);
      }
       const content = d.candidates[0].content.parts[0].text;
       return { content, usage: d.usageMetadata, resolvedModel: d.modelVersion || d.model || model, rateInfo: { provider: 'gemini' } };
@@ -5009,16 +4377,16 @@ async function callOnce(provider, apiKey, model, messages, externalSignal = null
      }
      validateAPIResponse(d, 'openrouter');
      const content = extractOpenRouterText(d);
-     if (!content) throw new Error('OpenRouter nevrátil čitelný text');
+     if (!content) throw new Error('OpenRouter nevrÃ¡til ÄitelnÃ½ text');
     return { content, usage: d.usage, resolvedModel: d.model || model, rateInfo: { provider: 'openrouter' } };
   }
-  throw new Error('Neznámý provider');
+  throw new Error('NeznÃ¡mÃ½ provider');
   } catch (e) {
     if (timedOut && e?.name === 'AbortError') {
       throw new Error(`API timeout po ${Math.round(CONFIG.API_TIMEOUT / 1000)}s`);
     }
     if (externalSignal?.aborted && e?.name === 'AbortError') {
-      throw new Error('Požadavek zrušen uživatelem');
+      throw new Error('PoÅ¾adavek zruÅ¡en uÅ¾ivatelem');
     }
     throw e;
   } finally {
@@ -5034,7 +4402,7 @@ async function callOnce(provider, apiKey, model, messages, externalSignal = null
     try {
       const parsed = parseWithOpenRouterNormalization(raw, keys, state.translated);
       if (parsed.normalizedUsed) {
-        log('ℹ AUTO_NORMALIZOVANO_Z_OPENROUTER_FORMATU');
+        log('â„¹ AUTO_NORMALIZOVANO_Z_OPENROUTER_FORMATU');
       }
       return parsed.missing;
     } catch(e) {
@@ -5047,6 +4415,65 @@ async function callOnce(provider, apiKey, model, messages, externalSignal = null
       return keys;
     }
   }
+
+// ══ UI MODULY ═══════════════════════════════════════════════════
+const toastApi = createToastApi({ CONFIG, logError });
+const { showToast, showToastWithAction } = toastApi;
+
+const headerApi = createHeaderApi({
+  state, t, isTranslationComplete, getTranslationStateForKey, storeKey, backupKey
+});
+const {
+  logMsg, updateStats, updateETA, startElapsedTimer, stopElapsedTimer,
+  updateElapsedTime, updateFailedCount, updateFileIdBadge,
+  updateBackupButtonVisibility, hasBackup
+} = headerApi;
+
+// Cirkularita list ↔ detail: late-binding přes closure
+let _detailApi;
+const listApi = createListApi({
+  state, t, escHtml, ITEM_HEIGHT, BUFFER_ITEMS,
+  getTranslationStateForKey, getStrongKeyNumber,
+  isAutoProviderEnabled: (...a) => isAutoProviderEnabled(...a),
+  resolveMainBatchProvider,
+  getPipelineModelForProvider,
+  translateBatch,
+  startTopicRepairFlow,
+  showPreviewModal,
+  showToast,
+  logError,
+  updateFailedCount,
+  saveProgress: (...a) => saveProgress(...a),
+  updateStats,
+  renderDetail: (...a) => _detailApi.renderDetail(...a)
+});
+const {
+  getFilteredEntries, filterMissingTopicsList, scrollToActive,
+  initVirtualScroll, updatePhantomHeight, renderVisible, onVirtualScroll,
+  renderList, showDetail, toggleSelect, selectAll, selectNone,
+  updateSelectedBtn, translateSelected
+} = listApi;
+
+_detailApi = createDetailApi({
+  state, t, escHtml, hasMeaningfulValue, isTranslationComplete,
+  TOPIC_LABELS, refreshTopicLabels,
+  saveProgress: (...a) => saveProgress(...a),
+  renderList, updateStats, showToast,
+  log,
+  buildTopicPrompt, openTopicPromptModal,
+  callAIWithRetry, extractTopicValueFromAI, translateSingle,
+  resolveProviderForInteractiveAction, getPipelineModelForProvider,
+  getCurrentApiKey, SYSTEM_MESSAGE
+});
+const {
+  renderDetail, renderTranslation, toggleEditSection, saveSection,
+  toggleSourceEntryEdit, saveSourceEntryField, refillSingleField
+} = _detailApi;
+
+const modalsApi = createModalsApi({
+  state, t, getStrongKeyNumber, renderList, showToast
+});
+const { selectRange, closeModal, confirmModal, showMobileActions, closeMobileModal } = modalsApi;
 
 const autoApi = createAutoApi({
   state,
@@ -5222,24 +4649,8 @@ const {
   updatePromptStatusIndicator
 } = promptLibraryApi;
 
-// ══ STATS & SAVE ════════════════════════════════════════════════
-function updateStats() {
-  // Počítej jen kompletní překlady se všemi požadovanými poli
-  const done = Object.values(state.translated).filter(t => isTranslationComplete(t)).length;
-  const total  = state.entries.length;
-  const remain = total - done;
-  const pct    = total ? (done / total * 100).toFixed(1) : 0;
-  document.getElementById('sDone').textContent   = done;
-  document.getElementById('sRemain').textContent = remain;
-  document.getElementById('sTotal').textContent  = total;
-  document.getElementById('pbar').style.width    = pct + '%';
-  const pbarContainer = document.getElementById('pbarContainer');
-  if (pbarContainer) {
-    pbarContainer.setAttribute('aria-valuenow', pct);
-    pbarContainer.setAttribute('aria-valuetext', `${done} z ${total} hesel přeloženo (${pct}%)`);
-  }
-  if (state.autoRunning) updateETA();
-}
+// â•â• STATS & SAVE â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+
 
 function saveProgressImmediate() {
    try {
@@ -5259,17 +4670,17 @@ function saveProgressImmediate() {
    }
 }
 
-// Debounced save – shlukne rychlé za sebou jdoucí úpravy (editace, import, atd.)
+// Debounced save â€“ shlukne rychlÃ© za sebou jdoucÃ­ Ãºpravy (editace, import, atd.)
 const saveProgress = debounce(saveProgressImmediate, 500);
 
-// ── Undo + auto-backup infrastruktura ─────────────────────────────
+// â”€â”€ Undo + auto-backup infrastruktura â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const AUTO_BACKUP_EVERY_N_BATCHES = 10;
 function writeBackup(key, payload) {
   try {
     localStorage.setItem(key, JSON.stringify(payload));
     return true;
   } catch(e) {
-    logWarn('writeBackup', `Nelze uložit backup (${key})`, { error: e.message });
+    logWarn('writeBackup', `Nelze uloÅ¾it backup (${key})`, { error: e.message });
     return false;
   }
 }
@@ -5282,45 +4693,10 @@ function maybeAutoBackup() {
     .filter(t => isTranslationComplete(t)).length;
   if (doneCount === 0) return;
   writeBackup(backupKey(), { translated: state.translated, ts: Date.now(), count: doneCount, fileId: state.currentFileId });
-  logInfo('autoBackup', `Automatická záloha: ${doneCount} hesel`);
+  logInfo('autoBackup', `AutomatickÃ¡ zÃ¡loha: ${doneCount} hesel`);
   updateBackupButtonVisibility();
 }
 
-function updateFileIdBadge() {
-  const badge = document.getElementById('fileIdBadge');
-  if (!badge) return;
-  if (!state.currentFileId) { badge.style.display = 'none'; return; }
-  // Zkrácený identifikátor — typ + počet
-  const parts = state.currentFileId.split('_');
-  const typeTag = parts[0] || '?';
-  const count = parts[1] || '?';
-  const typeName = typeTag === 'G' ? 'GR' : typeTag === 'H' ? 'HE' : typeTag;
-  badge.textContent = `${typeName}·${count}`;
-  badge.style.display = 'inline-block';
-  badge.title = `Aktivní soubor: ${state.currentFileId}\nSlot průběhu: ${storeKey()}`;
-}
-
-function updateBackupButtonVisibility() {
-  const btn = document.getElementById('btnRestoreBackup');
-  if (!btn) return;
-  const b = hasBackup();
-  if (b && b.count > 0) {
-    btn.style.display = 'inline-block';
-    btn.title = `Obnovit ze zálohy (${b.count} hesel, ${new Date(b.ts).toLocaleString('cs')})`;
-  } else {
-    btn.style.display = 'none';
-  }
-}
-
-function hasBackup() {
-  const raw = localStorage.getItem(backupKey());
-  if (!raw) return null;
-  try {
-    const d = JSON.parse(raw);
-    if (!d || !d.translated) return null;
-    return d;
-  } catch(e) { return null; }
-}
 
 function hasUndo() {
   const raw = localStorage.getItem(undoKey());
@@ -5328,7 +4704,7 @@ function hasUndo() {
   try {
     const d = JSON.parse(raw);
     if (!d || !d.translated) return null;
-    // Undo je platné jen pár minut
+    // Undo je platnÃ© jen pÃ¡r minut
     if (Date.now() - (d.ts || 0) > 10 * 60 * 1000) {
       localStorage.removeItem(undoKey());
       return null;
@@ -5342,7 +4718,7 @@ function restoreFromBackup(source) {
   if (!d) { showToast(t('toast.backup.none')); return; }
   const count = Object.keys(d.translated).length;
   if (!confirm(t('confirm.restoreBackup', { count, ts: new Date(d.ts).toLocaleString(getUiLang() === 'en' ? 'en' : 'cs') }))) return;
-  // Ulož aktuální stav jako undo před přepsáním
+  // UloÅ¾ aktuÃ¡lnÃ­ stav jako undo pÅ™ed pÅ™epsÃ¡nÃ­m
   writeBackup(undoKey(), { translated: state.translated, ts: Date.now(), fileId: state.currentFileId });
   state.translated = d.translated;
   saveProgressImmediate();
@@ -5355,7 +4731,7 @@ function restoreFromBackup(source) {
 
 function clearProgress() {
   if (!confirm(t('confirm.clearProgress'))) return;
-  // Ulož snapshot jako undo
+  // UloÅ¾ snapshot jako undo
   writeBackup(undoKey(), { translated: state.translated, ts: Date.now(), fileId: state.currentFileId });
   localStorage.removeItem(storeKey());
   state.translated = {};
@@ -5403,7 +4779,7 @@ function setApiKeyProfiles(prov, profiles) {
 
 function maskApiKey(v) {
   const s = String(v || '').trim();
-  if (!s) return 'prázdný';
+  if (!s) return 'prÃ¡zdnÃ½';
   if (s.length < 10) return s;
   return `${s.slice(0, 5)}...${s.slice(-4)}`;
 }
@@ -5413,9 +4789,9 @@ function setupApiKeySwitcher(prov) {
   if (!select) return;
   const profiles = getApiKeyProfiles(prov);
   const activeId = localStorage.getItem(API_KEY_ACTIVE_PROFILE_PREFIX + prov) || '__manual__';
-  const options = ['<option value="__manual__">Ruční klíč (aktuální pole)</option>'];
+  const options = ['<option value="__manual__">RuÄnÃ­ klÃ­Ä (aktuÃ¡lnÃ­ pole)</option>'];
   for (const p of profiles) {
-    options.push(`<option value="${p.id}">${escHtml(p.name || 'Klíč')} · ${maskApiKey(p.key)}</option>`);
+    options.push(`<option value="${p.id}">${escHtml(p.name || 'KlÃ­Ä')} Â· ${maskApiKey(p.key)}</option>`);
   }
   select.innerHTML = options.join('');
   if (activeId !== '__manual__' && select.querySelector(`option[value="${activeId}"]`)) {
@@ -5443,7 +4819,7 @@ function onApiKeyProfileChange() {
   document.getElementById('apiKey').value = profile.key || '';
   localStorage.setItem(API_KEY_ACTIVE_PROFILE_PREFIX + prov, profile.id);
   saveApiKey();
-  showToast(t('toast.apiKey.activeProfile', { name: profile.name || (getUiLang() === 'en' ? 'unnamed' : 'bez názvu') }));
+  showToast(t('toast.apiKey.activeProfile', { name: profile.name || (getUiLang() === 'en' ? 'unnamed' : 'bez nÃ¡zvu') }));
 }
 
 function saveCurrentApiKeyAsProfile() {
@@ -5621,7 +4997,7 @@ async function loadSavedSettings() {
   updateSetupCompactSummary();
 }
 
-function getCompactSelectedOptionLabel(selectId, fallback = '—') {
+function getCompactSelectedOptionLabel(selectId, fallback = 'â€”') {
   const el = document.getElementById(selectId);
   if (!el) return fallback;
   const txt = String(el.selectedOptions?.[0]?.text || el.value || '').trim();
@@ -5641,7 +5017,7 @@ function getCompactPipelineSecondaryLabel() {
 function updateSetupCompactSummary() {
   const el = document.getElementById('setupCompactSummary');
   if (!el) return;
-  const main = getCompactSelectedOptionLabel('pipelineModelMainGroq', '—');
+  const main = getCompactSelectedOptionLabel('pipelineModelMainGroq', 'â€”');
   const secondary = getCompactPipelineSecondaryLabel();
   const batch = String(document.getElementById('batchSize')?.value || '10');
   const interval = String(document.getElementById('interval')?.value || '20');
@@ -5659,7 +5035,7 @@ function bindSetupCompactSummaryEvents() {
   });
 }
 
-// Volej po načtení stránky
+// Volej po naÄtenÃ­ strÃ¡nky
 window.addEventListener('DOMContentLoaded', () => {
   loadSavedSettings().catch(err => {
     console.error('[i18n] Startup failed:', err);
@@ -5690,10 +5066,10 @@ function logEntry(keys, rawResponse) {
         <span class="log-greek">${escHtml(e.greek)}</span>
       </div>
       ${tr && !tr.skipped
-        ? `<div class="log-vyznam"><b>${t('log.meaning')}</b> ${escHtml(tr.vyznam || '—')}</div>
-           <div class="log-definice">${escHtml((tr.definice || '').slice(0, 120))}${(tr.definice || '').length > 120 ? '…' : ''}</div>
-           ${tr.kjv ? `<div class="log-orig"><b>KJV:</b> ${escHtml(tr.kjv.slice(0, 80))}${(tr.kjv || '').length > 80 ? '…' : ''}</div>` : ''}
-           <div class="log-orig"><b>${t('log.usage')}</b> ${escHtml((tr.pouziti || '').slice(0, 80))}${(tr.pouziti || '').length > 80 ? '…' : ''}</div>`
+        ? `<div class="log-vyznam"><b>${t('log.meaning')}</b> ${escHtml(tr.vyznam || 'â€”')}</div>
+           <div class="log-definice">${escHtml((tr.definice || '').slice(0, 120))}${(tr.definice || '').length > 120 ? 'â€¦' : ''}</div>
+           ${tr.kjv ? `<div class="log-orig"><b>KJV:</b> ${escHtml(tr.kjv.slice(0, 80))}${(tr.kjv || '').length > 80 ? 'â€¦' : ''}</div>` : ''}
+           <div class="log-orig"><b>${t('log.usage')}</b> ${escHtml((tr.pouziti || '').slice(0, 80))}${(tr.pouziti || '').length > 80 ? 'â€¦' : ''}</div>`
         : `<div class="log-err">${t('log.unparsed')}</div>`
       }
     `;
@@ -5702,7 +5078,7 @@ function logEntry(keys, rawResponse) {
 
   scroll.scrollTop = scroll.scrollHeight;
 
-  // Počítadlo
+  // PoÄÃ­tadlo
   const cnt = scroll.children.length;
   const countEl = document.getElementById('logCount');
   if (countEl) countEl.textContent = t('log.records', { count: cnt });
@@ -5713,7 +5089,7 @@ function logEntry(keys, rawResponse) {
 
 function clearLog() {
   const s = document.getElementById('logScroll');
-  if (s) s.innerHTML = '<div class="log-placeholder" style="padding:20px;font-family:\'JetBrains Mono\',monospace;font-size:11px;color:var(--txt3)">Překlady se budou zobrazovat zde automaticky...</div>';
+  if (s) s.innerHTML = '<div class="log-placeholder" style="padding:20px;font-family:\'JetBrains Mono\',monospace;font-size:11px;color:var(--txt3)">PÅ™eklady se budou zobrazovat zde automaticky...</div>';
   const c = document.getElementById('logCount');
   if (c) c.textContent = '';
 }
@@ -5738,7 +5114,7 @@ async function saveModelTestOutputTxt() {
       const writable = await handle.createWritable();
       await writable.write(text);
       await writable.close();
-      modelTestSetLastStatus(`Uloženo: ${handle.name || DEFAULT_MODEL_TEST_LOG_FILENAME}`, 'ok');
+      modelTestSetLastStatus(`UloÅ¾eno: ${handle.name || DEFAULT_MODEL_TEST_LOG_FILENAME}`, 'ok');
       showToast(t('toast.saved.filename', { name: handle.name || DEFAULT_MODEL_TEST_LOG_FILENAME }));
       return;
     } catch (e) {
@@ -5747,11 +5123,11 @@ async function saveModelTestOutputTxt() {
         showToast(t('toast.save.canceled'));
         return;
       }
-      showToast(t('toast.saveDialogFailedFallback', { message: msg || (getUiLang() === 'en' ? 'unknown error' : 'neznámá chyba') }));
+      showToast(t('toast.saveDialogFailedFallback', { message: msg || (getUiLang() === 'en' ? 'unknown error' : 'neznÃ¡mÃ¡ chyba') }));
     }
   }
   download(DEFAULT_MODEL_TEST_LOG_FILENAME, text, 'text/plain');
-  modelTestSetLastStatus(`Staženo: ${DEFAULT_MODEL_TEST_LOG_FILENAME}`, 'ok');
+  modelTestSetLastStatus(`StaÅ¾eno: ${DEFAULT_MODEL_TEST_LOG_FILENAME}`, 'ok');
   showToast(t('toast.downloaded.filename', { name: DEFAULT_MODEL_TEST_LOG_FILENAME }));
 }
 
@@ -5770,9 +5146,9 @@ async function saveModelTestRawOutputTxt() {
     return;
   }
   const body = rows.map((row, idx) => {
-    const header = `### ${idx + 1} | provider=${row.prov} | model=${row.model} | režim=${row.mode} | promptTest=${row.promptEnabled ? 'on' : 'off'} | prompt=${row.promptType} | ${new Date(row.ts).toLocaleString('cs-CZ')}`;
-    const promptBlock = `--- ODESLANÝ PROMPT ---\n${row.promptSent || '(není dostupný)'}\n--- /ODESLANÝ PROMPT ---`;
-    const rawBlock = `--- RAW ODPOVĚĎ AI ---\n${row.raw || ''}\n--- /RAW ODPOVĚĎ AI ---`;
+    const header = `### ${idx + 1} | provider=${row.prov} | model=${row.model} | reÅ¾im=${row.mode} | promptTest=${row.promptEnabled ? 'on' : 'off'} | prompt=${row.promptType} | ${new Date(row.ts).toLocaleString('cs-CZ')}`;
+    const promptBlock = `--- ODESLANÃ PROMPT ---\n${row.promptSent || '(nenÃ­ dostupnÃ½)'}\n--- /ODESLANÃ PROMPT ---`;
+    const rawBlock = `--- RAW ODPOVÄšÄŽ AI ---\n${row.raw || ''}\n--- /RAW ODPOVÄšÄŽ AI ---`;
     return `${header}\n${promptBlock}\n${rawBlock}`;
   }).join('\n\n');
   download(`strong_model_test_raw_${Date.now()}.txt`, body, 'text/plain');
@@ -5791,7 +5167,7 @@ function loadModelTestOutputFromFile(input) {
       out.scrollTop = out.scrollHeight;
     }
     saveModelTestOutputToStorage(text);
-    modelTestSetLastStatus(`Načteno: ${file.name}`, 'ok');
+    modelTestSetLastStatus(`NaÄteno: ${file.name}`, 'ok');
     showToast(t('toast.loaded.filename', { name: file.name }));
     if (input) input.value = '';
   };
@@ -5838,9 +5214,9 @@ function modelTestWaitWithCountdown(ms, signal) {
       if (leftTestSec > 0) {
         const mm = Math.floor(leftTestSec / 60);
         const ss = leftTestSec % 60;
-        modelTestSetCountdownLabel(`Další požadavek za cca ${state.modelTestNextRequestEtaSec} s | Zbývá testu ${mm}:${String(ss).padStart(2, '0')}`);
+        modelTestSetCountdownLabel(`DalÅ¡Ã­ poÅ¾adavek za cca ${state.modelTestNextRequestEtaSec} s | ZbÃ½vÃ¡ testu ${mm}:${String(ss).padStart(2, '0')}`);
       } else {
-        modelTestSetCountdownLabel(`Další požadavek za cca ${state.modelTestNextRequestEtaSec} s`);
+        modelTestSetCountdownLabel(`DalÅ¡Ã­ poÅ¾adavek za cca ${state.modelTestNextRequestEtaSec} s`);
       }
       updateModelTestRunButton();
     };
@@ -5906,20 +5282,20 @@ function restoreModelTestReportFromBackup() {
 function formatModelTestParsedBlock(key, t, e) {
   if (!e || !t) return '';
   const defEnglish = isDefinitionLikelyEnglish(t.definice);
-  const defValue = t.definice || '—';
-  const defDisplay = defEnglish && !/\[POZN\.: text je v angličtině - špatný překlad\]/.test(defValue)
-    ? `${defValue} [POZN.: text je v angličtině - špatný překlad]`
+  const defValue = t.definice || 'â€”';
+  const defDisplay = defEnglish && !/\[POZN\.: text je v angliÄtinÄ› - Å¡patnÃ½ pÅ™eklad\]/.test(defValue)
+    ? `${defValue} [POZN.: text je v angliÄtinÄ› - Å¡patnÃ½ pÅ™eklad]`
     : defValue;
   const parts = [
     `${key} | ${e.greek}`,
-    `Gramatika: ${e.tvaroslovi || '—'}`,
-    `Český význam: ${t.vyznam || '—'}`,
-    `Definice (EN): ${e.definice || e.def || '—'}`,
-    `Česká definice: ${defDisplay}`,
-    `KJV překlady (CZ): ${t.kjv || e.kjv || '—'}`,
-    `Biblické užití: ${t.pouziti || '—'}`,
-    `Původ: ${t.puvod || '—'}`,
-    `Specialista: ${t.specialista || '—'}`,
+    `Gramatika: ${e.tvaroslovi || 'â€”'}`,
+    `ÄŒeskÃ½ vÃ½znam: ${t.vyznam || 'â€”'}`,
+    `Definice (EN): ${e.definice || e.def || 'â€”'}`,
+    `ÄŒeskÃ¡ definice: ${defDisplay}`,
+    `KJV pÅ™eklady (CZ): ${t.kjv || e.kjv || 'â€”'}`,
+    `BiblickÃ© uÅ¾itÃ­: ${t.pouziti || 'â€”'}`,
+    `PÅ¯vod: ${t.puvod || 'â€”'}`,
+    `Specialista: ${t.specialista || 'â€”'}`,
     ''
   ];
   return parts.join('\n');
@@ -5938,30 +5314,30 @@ function appendModelTestExportParsed(keys, parsed) {
 
 function excerptRawForLastKey(rawContent, lastKey, maxLen = 2200) {
   const raw = String(rawContent || '').trim();
-  if (!raw) return '(prázdné)';
+  if (!raw) return '(prÃ¡zdnÃ©)';
   const escapedKey = String(lastKey || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   if (escapedKey) {
     const markerRe = new RegExp(`###\\s*${escapedKey}\\s*###([\\s\\S]*?)(?=\\n###\\s*G\\d+\\s*###|$)`, 'i');
     const m1 = raw.match(markerRe);
     if (m1) {
       const chunk = `###${lastKey}###${m1[1]}`.trim();
-      return chunk.length <= maxLen ? chunk : `${chunk.slice(0, maxLen)}\n… (zkráceno)`;
+      return chunk.length <= maxLen ? chunk : `${chunk.slice(0, maxLen)}\nâ€¦ (zkrÃ¡ceno)`;
     }
     const lineRe = new RegExp(`(^|\\n)\\s*${escapedKey}\\s*\\|[^\\n]*([\\s\\S]*?)(?=\\n\\s*G\\d+\\s*\\||$)`, 'i');
     const m2 = raw.match(lineRe);
     if (m2) {
       const chunk = m2[0].trim();
-      return chunk.length <= maxLen ? chunk : `${chunk.slice(0, maxLen)}\n… (zkráceno)`;
+      return chunk.length <= maxLen ? chunk : `${chunk.slice(0, maxLen)}\nâ€¦ (zkrÃ¡ceno)`;
     }
   }
   if (raw.length <= maxLen) return raw;
   const head = Math.min(1200, Math.floor(maxLen * 0.65));
   const tail = Math.max(500, maxLen - head - 40);
-  return `${raw.slice(0, head)}\n… (zkráceno) …\n${raw.slice(-tail)}`;
+  return `${raw.slice(0, head)}\nâ€¦ (zkrÃ¡ceno) â€¦\n${raw.slice(-tail)}`;
 }
 
 /**
- * Průběžná audit kontrola: všechna hesla v dávce + stav formátu.
+ * PrÅ¯bÄ›Å¾nÃ¡ audit kontrola: vÅ¡echna hesla v dÃ¡vce + stav formÃ¡tu.
  */
 function appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, missing, rawContent = '', totals = null) {
   const lastKey = Array.isArray(batchKeys) && batchKeys.length ? batchKeys[batchKeys.length - 1] : '';
@@ -5984,21 +5360,21 @@ function appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, missi
       ]
     : [];
   const rangeLabel = Array.isArray(batchKeys) && batchKeys.length
-    ? `${batchKeys[0]} až ${batchKeys[batchKeys.length - 1]} (${batchKeys.length} hesel)`
-    : `${lastKey} až ${lastKey} (1 heslo)`;
-  const totalsSuffix = totals ? ` | Σ OK ${totals.okKeys || 0} / NEÚSP ${totals.failedKeys || 0}` : '';
+    ? `${batchKeys[0]} aÅ¾ ${batchKeys[batchKeys.length - 1]} (${batchKeys.length} hesel)`
+    : `${lastKey} aÅ¾ ${lastKey} (1 heslo)`;
+  const totalsSuffix = totals ? ` | Î£ OK ${totals.okKeys || 0} / NEÃšSP ${totals.failedKeys || 0}` : '';
 
-  appendReport(`  ▸ Rozsah dávky: ${rangeLabel}`);
+  appendReport(`  â–¸ Rozsah dÃ¡vky: ${rangeLabel}`);
   appendReport('');
-  appendReport('  AUDIT: kontrola všech hesel v dávce a jejich parsovatelnosti.');
-  appendReport(`  ▸ Poslední heslo (stavový indikátor): ${lastKey}`);
-  appendReport(`  ▸ Auditovaný počet hesel: ${batchKeys.length}`);
-  appendReport(`  ▸ Neúspěšné v dávce: ${failedKeys.length}`);
+  appendReport('  AUDIT: kontrola vÅ¡ech hesel v dÃ¡vce a jejich parsovatelnosti.');
+  appendReport(`  â–¸ PoslednÃ­ heslo (stavovÃ½ indikÃ¡tor): ${lastKey}`);
+  appendReport(`  â–¸ AuditovanÃ½ poÄet hesel: ${batchKeys.length}`);
+  appendReport(`  â–¸ NeÃºspÄ›Å¡nÃ© v dÃ¡vce: ${failedKeys.length}`);
   appendReport('');
   if (complete) {
     modelTestSetLastStatus(`OK | ${rangeLabel} | ${lastKey}${totalsSuffix}`, 'ok');
-    appendReport('  Stav posledního hesla: OK — nalezeno v odpovědi a všechna povinná pole vyplněna ve správném formátu.');
-    appendReport('  Data AI pro všechna hesla v dávce:');
+    appendReport('  Stav poslednÃ­ho hesla: OK â€” nalezeno v odpovÄ›di a vÅ¡echna povinnÃ¡ pole vyplnÄ›na ve sprÃ¡vnÃ©m formÃ¡tu.');
+    appendReport('  Data AI pro vÅ¡echna hesla v dÃ¡vce:');
     for (const key of batchKeys) {
       const tk = parsed && parsed[key];
       if (!tk) continue;
@@ -6008,27 +5384,27 @@ function appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, missi
       }
     }
   } else if (inMissing || !t) {
-    modelTestSetLastStatus(`NEÚSPĚCH | ${rangeLabel} | ${lastKey}${totalsSuffix}`, 'error');
-    appendReport('  🔴 CHYBA FORMATU / PÁROVÁNÍ');
-    appendReport('  Stav posledního hesla: NEÚSPĚCH — heslo v odpovědi nešlo spárovat / chybí blok (špatný formát nebo model vynechal heslo).');
+    modelTestSetLastStatus(`NEÃšSPÄšCH | ${rangeLabel} | ${lastKey}${totalsSuffix}`, 'error');
+    appendReport('  ðŸ”´ CHYBA FORMATU / PÃROVÃNÃ');
+    appendReport('  Stav poslednÃ­ho hesla: NEÃšSPÄšCH â€” heslo v odpovÄ›di neÅ¡lo spÃ¡rovat / chybÃ­ blok (Å¡patnÃ½ formÃ¡t nebo model vynechal heslo).');
     if (failedKeys.length) {
-      appendReport(`  Neúspěšné v dávce: ${failedKeys.length}/${batchKeys.length} | první ${firstFailed} | poslední ${lastFailed}`);
+      appendReport(`  NeÃºspÄ›Å¡nÃ© v dÃ¡vce: ${failedKeys.length}/${batchKeys.length} | prvnÃ­ ${firstFailed} | poslednÃ­ ${lastFailed}`);
     }
     if (firstFailed && firstFailed !== lastFailed) {
-      appendReport(`  RAW odpověď AI pro první neúspěšné ${firstFailed}:`);
+      appendReport(`  RAW odpovÄ›Ä AI pro prvnÃ­ neÃºspÄ›Å¡nÃ© ${firstFailed}:`);
       appendReport(excerptRawForLastKey(rawContent, firstFailed, 1200));
       appendReport('  ---');
     }
-    appendReport('  RAW odpověď AI pro audit celé dávky:');
-    appendReport(rawContent || '(prázdná odpověď)');
+    appendReport('  RAW odpovÄ›Ä AI pro audit celÃ© dÃ¡vky:');
+    appendReport(rawContent || '(prÃ¡zdnÃ¡ odpovÄ›Ä)');
     appendReport('  --- /RAW ---');
   } else {
-    modelTestSetLastStatus(`NEÚPLNÉ | ${rangeLabel} | ${lastKey}${totalsSuffix}`, 'warn');
-    appendReport(`  Stav posledního hesla: NEÚPLNÉ — chybí nebo jsou neplatná pole: ${badFields.join(', ') || '?'}`);
+    modelTestSetLastStatus(`NEÃšPLNÃ‰ | ${rangeLabel} | ${lastKey}${totalsSuffix}`, 'warn');
+    appendReport(`  Stav poslednÃ­ho hesla: NEÃšPLNÃ‰ â€” chybÃ­ nebo jsou neplatnÃ¡ pole: ${badFields.join(', ') || '?'}`);
     if (englishDefinitionFlag) {
-      appendReport('  POZN.: DEFINICE obsahuje angličtinu, je hodnoceno jako špatný překlad.');
+      appendReport('  POZN.: DEFINICE obsahuje angliÄtinu, je hodnoceno jako Å¡patnÃ½ pÅ™eklad.');
     }
-    appendReport('  Data AI pro všechna hesla v dávce (to, co šlo vyparsovat):');
+    appendReport('  Data AI pro vÅ¡echna hesla v dÃ¡vce (to, co Å¡lo vyparsovat):');
     for (const key of batchKeys) {
       const tk = parsed && parsed[key];
       if (!tk) continue;
@@ -6041,29 +5417,29 @@ function appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, missi
   appendReport('');
 
   const exportLines = [
-    `Rozsah dávky: ${rangeLabel}`,
-    `Audit: všechna hesla v dávce (${batchKeys.length})`,
-    `Poslední heslo (stav): ${lastKey}`,
-    totals ? `Celkem v běhu: OK ${totals.okKeys || 0} | NEÚSP ${totals.failedKeys || 0}` : '',
+    `Rozsah dÃ¡vky: ${rangeLabel}`,
+    `Audit: vÅ¡echna hesla v dÃ¡vce (${batchKeys.length})`,
+    `PoslednÃ­ heslo (stav): ${lastKey}`,
+    totals ? `Celkem v bÄ›hu: OK ${totals.okKeys || 0} | NEÃšSP ${totals.failedKeys || 0}` : '',
     complete
       ? 'Stav: OK'
       : (inMissing || !t)
-        ? 'Stav: NEÚSPĚCH'
-        : `Stav: NEÚPLNÉ (${badFields.join(', ') || '?'})`
+        ? 'Stav: NEÃšSPÄšCH'
+        : `Stav: NEÃšPLNÃ‰ (${badFields.join(', ') || '?'})`
   ].filter(Boolean);
   const parsedKeys = batchKeys.filter(k => parsed && parsed[k]);
   if (parsedKeys.length) {
     exportLines.push('');
-    exportLines.push('Data AI pro všechna hesla v dávce:');
+    exportLines.push('Data AI pro vÅ¡echna hesla v dÃ¡vce:');
     for (const key of parsedKeys) {
       exportLines.push(`--- ${key} ---`);
       exportLines.push(formatModelTestParsedBlock(key, parsed[key], state.entryMap.get(key)));
     }
   } else if (inMissing || !t) {
     if (firstFailed && firstFailed !== lastFailed) {
-      exportLines.push('', `RAW odpověď AI pro první neúspěšné ${firstFailed}:`, excerptRawForLastKey(rawContent, firstFailed, 1200));
+      exportLines.push('', `RAW odpovÄ›Ä AI pro prvnÃ­ neÃºspÄ›Å¡nÃ© ${firstFailed}:`, excerptRawForLastKey(rawContent, firstFailed, 1200));
     }
-    exportLines.push('', 'RAW odpověď AI pro audit celé dávky:', rawContent || '(prázdná odpověď)');
+    exportLines.push('', 'RAW odpovÄ›Ä AI pro audit celÃ© dÃ¡vky:', rawContent || '(prÃ¡zdnÃ¡ odpovÄ›Ä)');
   }
   exportLines.push('----------------------------------------', '');
   state.modelTestLastKeyAuditExportChunks.push(exportLines.join('\n'));
@@ -6074,11 +5450,11 @@ function exportModelTestTranslationsTxt() {
   const reportFallback = (out?.value || '').trim();
   let body = '';
   if (state.modelTestLastKeyAuditExportChunks.length) {
-    body = `# Export auditu všech hesel z dávek (test modelů)\n# ${new Date().toLocaleString('cs-CZ')}\n\n${state.modelTestLastKeyAuditExportChunks.join('\n')}`;
+    body = `# Export auditu vÅ¡ech hesel z dÃ¡vek (test modelÅ¯)\n# ${new Date().toLocaleString('cs-CZ')}\n\n${state.modelTestLastKeyAuditExportChunks.join('\n')}`;
   } else if (state.modelTestParsedExportChunks.length) {
-    body = `# Export parsovaných překladů z testu modelů\n# ${new Date().toLocaleString('cs-CZ')}\n\n${state.modelTestParsedExportChunks.join('\n')}`;
+    body = `# Export parsovanÃ½ch pÅ™ekladÅ¯ z testu modelÅ¯\n# ${new Date().toLocaleString('cs-CZ')}\n\n${state.modelTestParsedExportChunks.join('\n')}`;
   } else if (reportFallback) {
-    body = `# Žádné nově parsované bloky v paměti — celý aktuální text z okna\n# ${new Date().toLocaleString('cs-CZ')}\n\n${reportFallback}`;
+    body = `# Å½Ã¡dnÃ© novÄ› parsovanÃ© bloky v pamÄ›ti â€” celÃ½ aktuÃ¡lnÃ­ text z okna\n# ${new Date().toLocaleString('cs-CZ')}\n\n${reportFallback}`;
   } else {
     showToast(t('toast.export.nothing'));
     return;
@@ -6286,7 +5662,7 @@ function populateModelTestModelSelect(prov) {
   for (const opt of providerOptions) {
     if (!merged.find(x => x.value === opt.value)) merged.push(opt);
   }
-  if (!merged.length) merged.push({ value: getDefaultPinnedModelByProvider(prov), label: getDefaultPinnedModelByProvider(prov) || '—' });
+  if (!merged.length) merged.push({ value: getDefaultPinnedModelByProvider(prov), label: getDefaultPinnedModelByProvider(prov) || 'â€”' });
   select.innerHTML = merged
     .filter(opt => opt.value)
     .map(opt => `<option value="${opt.value}">${opt.label}</option>`)
@@ -6379,13 +5755,13 @@ function showModelTestLibrary() {
   state.modelTestLibraryActive = true;
   const history = getTestHistory();
   if (!history.length) {
-    output.value = 'Knihovna testů je zatím prázdná.';
+    output.value = 'Knihovna testÅ¯ je zatÃ­m prÃ¡zdnÃ¡.';
     return;
   }
-  const lines = ['# KNIHOVNA TESTŮ A PŘEKLADŮ', `Záznamů: ${history.length}`, ''];
+  const lines = ['# KNIHOVNA TESTÅ® A PÅ˜EKLADÅ®', `ZÃ¡znamÅ¯: ${history.length}`, ''];
   const statsRows = Object.values(getModelTestStatsMap());
   if (statsRows.length) {
-    lines.push('## Souhrn podle provideru/modelu (modely řazeny podle četnosti)');
+    lines.push('## Souhrn podle provideru/modelu (modely Å™azeny podle Äetnosti)');
     const providers = {};
     for (const r of statsRows) {
       if (!providers[r.provider]) providers[r.provider] = [];
@@ -6398,21 +5774,21 @@ function showModelTestLibrary() {
         const total = Math.max(1, (r.okKeys || 0) + (r.failedKeys || 0));
         const rate = (((r.okKeys || 0) / total) * 100).toFixed(1);
         const avgMs = r.latencySamples ? (r.latencyMsTotal / r.latencySamples) : 0;
-        lines.push(`- ${r.model} | volání ${r.calls || 0} | hesel ${r.totalKeys || 0} | OK ${r.okKeys || 0} / NEÚSP ${r.failedKeys || 0} | úspěšnost ${rate}% | doba AI ${formatAiResponseTime(avgMs)}`);
+        lines.push(`- ${r.model} | volÃ¡nÃ­ ${r.calls || 0} | hesel ${r.totalKeys || 0} | OK ${r.okKeys || 0} / NEÃšSP ${r.failedKeys || 0} | ÃºspÄ›Å¡nost ${rate}% | doba AI ${formatAiResponseTime(avgMs)}`);
       }
       lines.push('');
     }
   }
-  lines.push('## Poslední běhy');
+  lines.push('## PoslednÃ­ bÄ›hy');
   for (const item of history.slice(0, 80)) {
     const when = new Date(item.ts).toLocaleString('cs-CZ');
     if (item.type === 'model-test') {
-      lines.push(`[${when}] TEST | ${item.provider} | režim ${item.mode || 'smoke'} | OK ${item.ok}/${item.total} | PART ${item.partial || 0} | RL ${item.rateLimited} | ERR ${item.error} | HESLA ${item.keysOk || 0}/${item.keysFailed || 0} | CYKLY ${item.cycles || 0} | AI ${formatAiResponseTime(item.avgLatencyMs || 0)}`);
+      lines.push(`[${when}] TEST | ${item.provider} | reÅ¾im ${item.mode || 'smoke'} | OK ${item.ok}/${item.total} | PART ${item.partial || 0} | RL ${item.rateLimited} | ERR ${item.error} | HESLA ${item.keysOk || 0}/${item.keysFailed || 0} | CYKLY ${item.cycles || 0} | AI ${formatAiResponseTime(item.avgLatencyMs || 0)}`);
       if (Array.isArray(item.topModels) && item.topModels.length) {
         lines.push(`TOP: ${item.topModels.join(', ')}`);
       }
     } else if (item.type === 'translate-batch') {
-      lines.push(`[${when}] BATCH | ${item.provider}/${item.model} | ${item.ok}/${item.total} kompletní | missing ${item.missing} | AI ${formatAiResponseTime(item.avgLatencyMs || 0)}`);
+      lines.push(`[${when}] BATCH | ${item.provider}/${item.model} | ${item.ok}/${item.total} kompletnÃ­ | missing ${item.missing} | AI ${formatAiResponseTime(item.avgLatencyMs || 0)}`);
     }
   }
   output.value = lines.join('\n');
@@ -6422,7 +5798,7 @@ function showModelTestLibrary() {
 async function copyModelTestOutput() {
   const output = document.getElementById('modelTestOutput');
   const btn = document.getElementById('btnCopyModelTestOutput');
-  const originalBtnText = btn?.textContent || '📋 Kopírovat';
+  const originalBtnText = btn?.textContent || 'ðŸ“‹ KopÃ­rovat';
   if (!output) return;
   const text = output.value || '';
   if (!text.trim()) {
@@ -6458,105 +5834,20 @@ function clearModelTestOutput() {
   showToast(t('toast.output.cleared'));
 }
 
-function logMsg(msg, type) {
-  const scroll = document.getElementById('logScroll');
-  if (!scroll) return;
-  const placeholder = scroll.querySelector('.log-placeholder');
-  if (placeholder) placeholder.remove();
-  const div = document.createElement('div');
-  div.className = `log-entry`;
-  div.style.color = type === 'err' ? '#c05050' : 'var(--txt3)';
-  div.style.fontFamily = "'JetBrains Mono', monospace";
-  div.style.fontSize = '11px';
-  div.style.padding = '8px 14px';
-  div.textContent = msg;
-  scroll.insertBefore(div, scroll.firstChild);
-}
 
 
 
-// ── Elapsed time ─────────────────────────────────────────────
-function startElapsedTimer() {
-  if (state.elapsedTimer) clearInterval(state.elapsedTimer);
-  state.elapsedTimer = setInterval(updateElapsedTime, 1000);
-}
+// â”€â”€ Elapsed time â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-function stopElapsedTimer() {
-  if (state.elapsedTimer) {
-    clearInterval(state.elapsedTimer);
-    state.elapsedTimer = null;
-  }
-}
 
-function updateElapsedTime() {
-  if (!state.startTime) return;
-  const elapsed = Math.floor((Date.now() - state.startTime) / 1000);
-  const mins = Math.floor(elapsed / 60);
-  const secs = elapsed % 60;
-  const el = document.getElementById('elapsedTime');
-  if (el) el.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
-}
+// â”€â”€ ETA â€” odhad zbÃ½vajÃ­cÃ­ho Äasu â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-// ── ETA — odhad zbývajícího času ─────────────────────────────
-function updateETA() {
-  const el = document.getElementById('etaLabel');
-  if (!el) return;
-  const remain = state.entries.filter(e => !state.translated[e.key] || state.translated[e.key].skipped).length;
-  if (!remain) { el.textContent = 'hotovo!'; return; }
-  const bs = parseInt(document.getElementById('batchSizeRun').value) || state.currentBatchSize;
-  const iv = parseInt(document.getElementById('intervalRun').value) || state.currentInterval;
-  const batches = Math.ceil(remain / bs);
-  const secs = batches * iv;
-  if (secs < 60) el.textContent = `~${secs}s`;
-  else if (secs < 3600) el.textContent = `~${Math.ceil(secs/60)} min`;
-  else el.textContent = `~${(secs/3600).toFixed(1)} hod`;
-}
 
-// ── Označit rozsah hesel k překladu ───────────────────────────────────
-function selectRange() {
-  document.getElementById('modalTitle').textContent = t('modal.selectRange.title');
-  document.getElementById('modalFrom').value = '1';
-  document.getElementById('modalTo').value = '100';
-  state.modalCallback = function() {
-    const from = parseInt(document.getElementById('modalFrom').value) || 1;
-    const to   = parseInt(document.getElementById('modalTo').value) || 100;
-    if (from > to) return;
-    state.listRangeFilter = { from, to };
-    state.selectedKeys.clear();
-    state.entries.forEach(e => {
-      const n = getStrongKeyNumber(e.key);
-      if (n >= from && n <= to) state.selectedKeys.add(e.key);
-    });
-    const filterStatusEl = document.getElementById('filterStatus');
-    const filterSortEl = document.getElementById('filterSort');
-    if (filterStatusEl) filterStatusEl.value = 'all';
-    if (filterSortEl) filterSortEl.value = 'num';
-    renderList();
-    showToast(t('toast.selected.range', { count: state.selectedKeys.size, from, to }));
-  };
-  document.getElementById('customModal').classList.add('show');
-}
+// â”€â”€ OznaÄit rozsah hesel k pÅ™ekladu â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-function closeModal() {
-  document.getElementById('customModal').classList.remove('show');
-}
-
-function confirmModal() {
-  if (state.modalCallback) {
-    state.modalCallback();
-    state.modalCallback = null;
-  }
-  closeModal();
-}
 
 // Mobile Actions Modal
-function showMobileActions() {
-  document.getElementById('mobileActionsModal').classList.add('show');
-}
 
-function closeMobileModal() {
-  document.getElementById('mobileActionsModal').classList.remove('show');
-}
 
 // Settings Modal
 function showSettingsModal() {
@@ -6591,7 +5882,7 @@ function closeSettingsModal() {
   document.getElementById('settingsModal').classList.remove('show');
 }
 
-// ── Limits Modal ──────────────────────────────────────────────────────
+// â”€â”€ Limits Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function showLimitsModal() {
   const prov = document.getElementById('provider').value;
   const model = document.getElementById('model').value;
@@ -6626,19 +5917,19 @@ async function fetchLimits(prov, model) {
     if (prov === 'groq') {
       const apiKey = getCurrentApiKey(prov);
       if (!apiKey) {
-        content.innerHTML = '<div style="color:var(--red);padding:10px">Nejsou nastaveny limity. Zadejte API klíč.</div>';
+        content.innerHTML = '<div style="color:var(--red);padding:10px">Nejsou nastaveny limity. Zadejte API klÃ­Ä.</div>';
         return;
       }
       const dynamicLimits = await fetchGroqLimits(apiKey, model);
       const staticLimits = getGroqLimits(model);
       content.innerHTML = renderGroqLimits(dynamicLimits) + '<div style="margin-top:10px;border-top:1px solid var(--brd);padding-top:8px">' + renderLimitsTable(staticLimits) + '</div>';
       note.style.display = 'block';
-      noteText.innerHTML = 'Groq: zobrazuji živé rate-limit hlavičky (pokud je API vrátí) + fallback limity modelu.<br>Více info: <a href="https://console.groq.com/docs/rate-limits" target="_blank">console.groq.com/docs/rate-limits</a>';
+      noteText.innerHTML = 'Groq: zobrazuji Å¾ivÃ© rate-limit hlaviÄky (pokud je API vrÃ¡tÃ­) + fallback limity modelu.<br>VÃ­ce info: <a href="https://console.groq.com/docs/rate-limits" target="_blank">console.groq.com/docs/rate-limits</a>';
     } else if (prov === 'openrouter') {
       // OpenRouter - can fetch via API
       const apiKey = getCurrentApiKey(prov);
       if (!apiKey) {
-        content.innerHTML = '<div style="color:var(--red);padding:10px">Nejsou nastaveny limity. Zadejte API klíč.</div>';
+        content.innerHTML = '<div style="color:var(--red);padding:10px">Nejsou nastaveny limity. Zadejte API klÃ­Ä.</div>';
         return;
       }
       const [keyData, creditsData] = await Promise.all([
@@ -6650,13 +5941,13 @@ async function fetchLimits(prov, model) {
       const rateLimitInfo = getOpenRouterRateLimits(keyData);
       content.innerHTML = renderOpenRouterLimits(keyData, creditsData) + rateLimitInfo;
       note.style.display = 'block';
-      noteText.innerHTML = 'OpenRouter: ukazuji usage/credits/limit data z API klíče + orientační rate limity free tieru.<br>Více info: <a href="https://openrouter.ai/docs/api-reference/limits" target="_blank">openrouter.ai/docs</a>';
+      noteText.innerHTML = 'OpenRouter: ukazuji usage/credits/limit data z API klÃ­Äe + orientaÄnÃ­ rate limity free tieru.<br>VÃ­ce info: <a href="https://openrouter.ai/docs/api-reference/limits" target="_blank">openrouter.ai/docs</a>';
     } else if (prov === 'gemini') {
       // Gemini - no API for limits, show static info
       const limits = getGeminiLimits(model);
       content.innerHTML = renderLimitsTable(limits);
       note.style.display = 'block';
-      noteText.innerHTML = 'Google neposkytuje API pro kontrolu limitů. Zkontrolujte limity manuálně v <a href="https://aistudio.google.com/app" target="_blank">AI Studio</a> nebo Google Cloud Console → Quotas.<br>Limity se resetují o půlnoci Pacific Time.';
+      noteText.innerHTML = 'Google neposkytuje API pro kontrolu limitÅ¯. Zkontrolujte limity manuÃ¡lnÄ› v <a href="https://aistudio.google.com/app" target="_blank">AI Studio</a> nebo Google Cloud Console â†’ Quotas.<br>Limity se resetujÃ­ o pÅ¯lnoci Pacific Time.';
     }
   } catch (e) {
     content.innerHTML = `<div style="color:var(--red);padding:10px">${t('limits.error', { message: e.message })}</div>`;
@@ -6832,24 +6123,24 @@ function renderGroqLimits(result) {
   // Debug: show all headers if nothing parsed
   const debugHeaders = headers._all || rateLimitHeaders;
   if ( rows.length === 0 && debugHeaders.length > 0) {
-    rows.push(`<div style="color:var(--ylw);font-size:10px;margin-bottom:8px">Debug - všechny hlavičky:</div>`);
+    rows.push(`<div style="color:var(--ylw);font-size:10px;margin-bottom:8px">Debug - vÅ¡echny hlaviÄky:</div>`);
     debugHeaders.slice(0, 20).forEach(([k, v]) => {
       rows.push(`<div class="limits-row"><span class="limits-label">${k}</span><span class="limits-value" style="font-size:9px">${String(v).slice(0, 50)}</span></div>`);
     });
     if (debugHeaders.length > 20) {
-      rows.push(`<div style="font-size:9px;color:var(--txt3)">...a dalších ${debugHeaders.length - 20}</div>`);
+      rows.push(`<div style="font-size:9px;color:var(--txt3)">...a dalÅ¡Ã­ch ${debugHeaders.length - 20}</div>`);
     }
   }
   
   if (rows.length === 0) {
-    return `<div style="color:var(--txt3);padding:10px">Žádné hlavičky.<br>Status: ${status}<br>Error: ${errorMsg || 'žádná'}</div>`;
+    return `<div style="color:var(--txt3);padding:10px">Å½Ã¡dnÃ© hlaviÄky.<br>Status: ${status}<br>Error: ${errorMsg || 'Å¾Ã¡dnÃ¡'}</div>`;
   }
   
   return rows.join('');
 }
 
 function renderOpenRouterLimits(keyData, creditsData) {
-  if (!keyData) return '<div style="color:var(--red);padding:10px">Nelze načíst limity</div>';
+  if (!keyData) return '<div style="color:var(--red);padding:10px">Nelze naÄÃ­st limity</div>';
   
   const rows = [];
   
@@ -6859,27 +6150,27 @@ function renderOpenRouterLimits(keyData, creditsData) {
       rows.push(`<div class="limits-row"><span class="limits-label">Kredity celkem</span><span class="limits-value">$${creditsData.total_credits?.toFixed(2) || '0'}</span></div>`);
     }
     if (creditsData.total_usage !== undefined) {
-      rows.push(`<div class="limits-row"><span class="limits-label">Kredity použito</span><span class="limits-value">$${creditsData.total_usage?.toFixed(2) || '0'}</span></div>`);
+      rows.push(`<div class="limits-row"><span class="limits-label">Kredity pouÅ¾ito</span><span class="limits-value">$${creditsData.total_usage?.toFixed(2) || '0'}</span></div>`);
     }
     if (creditsData.total_credits !== undefined && creditsData.total_usage !== undefined) {
       const remaining = creditsData.total_credits - creditsData.total_usage;
       const cls = remaining > 1 ? 'ok' : remaining > 0.1 ? 'warn' : 'danger';
-      rows.push(`<div class="limits-row"><span class="limits-label">Kredity zbývá</span><span class="limits-value ${cls}">$${remaining?.toFixed(2) || '0'}</span></div>`);
+      rows.push(`<div class="limits-row"><span class="limits-label">Kredity zbÃ½vÃ¡</span><span class="limits-value ${cls}">$${remaining?.toFixed(2) || '0'}</span></div>`);
     }
   }
   
   // Key usage info from /key endpoint
   if (keyData.usage !== undefined) {
-    rows.push(`<div class="limits-row"><span class="limits-label">Použito celkem (USD)</span><span class="limits-value">$${keyData.usage?.toFixed(4) || '0'}</span></div>`);
+    rows.push(`<div class="limits-row"><span class="limits-label">PouÅ¾ito celkem (USD)</span><span class="limits-value">$${keyData.usage?.toFixed(4) || '0'}</span></div>`);
   }
   if (keyData.usage_daily !== undefined) {
-    rows.push(`<div class="limits-row"><span class="limits-label">Použito dnes (USD)</span><span class="limits-value">$${keyData.usage_daily?.toFixed(4) || '0'}</span></div>`);
+    rows.push(`<div class="limits-row"><span class="limits-label">PouÅ¾ito dnes (USD)</span><span class="limits-value">$${keyData.usage_daily?.toFixed(4) || '0'}</span></div>`);
   }
   if (keyData.usage_weekly !== undefined) {
-    rows.push(`<div class="limits-row"><span class="limits-label">Použito týden (USD)</span><span class="limits-value">$${keyData.usage_weekly?.toFixed(4) || '0'}</span></div>`);
+    rows.push(`<div class="limits-row"><span class="limits-label">PouÅ¾ito tÃ½den (USD)</span><span class="limits-value">$${keyData.usage_weekly?.toFixed(4) || '0'}</span></div>`);
   }
   if (keyData.usage_monthly !== undefined) {
-    rows.push(`<div class="limits-row"><span class="limits-label">Použito měsíc (USD)</span><span class="limits-value">$${keyData.usage_monthly?.toFixed(4) || '0'}</span></div>`);
+    rows.push(`<div class="limits-row"><span class="limits-label">PouÅ¾ito mÄ›sÃ­c (USD)</span><span class="limits-value">$${keyData.usage_monthly?.toFixed(4) || '0'}</span></div>`);
   }
   if (keyData.limit !== undefined && keyData.limit > 0) {
     rows.push(`<div class="limits-row"><span class="limits-label">Limit</span><span class="limits-value">$${keyData.limit?.toFixed(2) || '0'}</span></div>`);
@@ -6887,20 +6178,20 @@ function renderOpenRouterLimits(keyData, creditsData) {
   if (keyData.limit_remaining !== null && keyData.limit_remaining !== undefined && keyData.limit > 0) {
     const pct = Math.round((keyData.limit_remaining / keyData.limit) * 100);
     const cls = pct > 50 ? 'ok' : pct > 20 ? 'warn' : 'danger';
-    rows.push(`<div class="limits-row"><span class="limits-label">Limit zbývá</span><span class="limits-value ${cls}">$${keyData.limit_remaining?.toFixed(2) || '0'} (${pct}%)</span></div>`);
+    rows.push(`<div class="limits-row"><span class="limits-label">Limit zbÃ½vÃ¡</span><span class="limits-value ${cls}">$${keyData.limit_remaining?.toFixed(2) || '0'} (${pct}%)</span></div>`);
   }
   if (keyData.is_free_tier !== undefined) {
-    rows.push(`<div class="limits-row"><span class="limits-label">Free tier</span><span class="limits-value ${keyData.is_free_tier ? 'ok' : ''}">${keyData.is_free_tier ? '✓' : '—'}</span></div>`);
+    rows.push(`<div class="limits-row"><span class="limits-label">Free tier</span><span class="limits-value ${keyData.is_free_tier ? 'ok' : ''}">${keyData.is_free_tier ? 'âœ“' : 'â€”'}</span></div>`);
   }
   if (keyData.label) {
-    rows.push(`<div class="limits-row"><span class="limits-label">Klíč</span><span class="limits-value" style="font-size:10px">${keyData.label || '—'}</span></div>`);
+    rows.push(`<div class="limits-row"><span class="limits-label">KlÃ­Ä</span><span class="limits-value" style="font-size:10px">${keyData.label || 'â€”'}</span></div>`);
   }
   const known = new Set(['usage', 'usage_daily', 'usage_weekly', 'usage_monthly', 'limit', 'limit_remaining', 'is_free_tier', 'label']);
   for (const [k, v] of Object.entries(keyData || {})) {
     if (known.has(k) || v == null || typeof v === 'object') continue;
     rows.push(`<div class="limits-row"><span class="limits-label">${escHtml(k)}</span><span class="limits-value">${escHtml(String(v))}</span></div>`);
   }
-  if (rows.length === 0) return '<div style="color:var(--txt3);padding:10px">Žádné limity k zobrazení</div>';
+  if (rows.length === 0) return '<div style="color:var(--txt3);padding:10px">Å½Ã¡dnÃ© limity k zobrazenÃ­</div>';
   return rows.join('');
 }
 
@@ -6918,14 +6209,14 @@ function getOpenRouterRateLimits(keyData) {
   rows.push(`<div class="limits-row" style="margin-top:10px;border-top:1px solid var(--brd);padding-top:8px"><span class="limits-label" style="color:var(--acc)">Rate Limity</span><span class="limits-value"></span></div>`);
   rows.push(`<div class="limits-row"><span class="limits-label">Free modely (RPM)</span><span class="limits-value">${freeRpm}</span></div>`);
   rows.push(`<div class="limits-row"><span class="limits-label">Free modely (RPD)</span><span class="limits-value">${freeRpd}</span></div>`);
-  rows.push(`<div class="limits-row"><span class="limits-label">Placené modely</span><span class="limits-value ok">bez limitu</span></div>`);
+  rows.push(`<div class="limits-row"><span class="limits-label">PlacenÃ© modely</span><span class="limits-value ok">bez limitu</span></div>`);
   
   return rows.join('');
  }
 
 initializePromptLibrary();
 
-// ── AI & Language Modals ───────────────────────────────────────────
+// â”€â”€ AI & Language Modals â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function showPromptAIModal() {
   const modal = document.getElementById('promptAIModal');
   ['groq', 'gemini', 'openrouter'].forEach(prov => {
@@ -7018,39 +6309,11 @@ window.showPromptLangModal = showPromptLangModal;
 window.closePromptLangModal = closePromptLangModal;
 window.saveLangSettings = saveLangSettings;
 
-// ══ RESIZE PANELS (logika v ./ui/resize.js) ─────────────────────
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.style.opacity = '1';
-  t.style.pointerEvents = 'none';
-  clearTimeout(t._t);
-  t._t = setTimeout(() => { t.style.opacity = '0'; }, CONFIG.TOAST_DURATION);
-}
+// â•â• RESIZE PANELS (logika v ./ui/resize.js) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-// Toast s akčním tlačítkem (např. Undo). Vydrží 2× déle.
-function showToastWithAction(msg, actionLabel, onClick) {
-  const t = document.getElementById('toast');
-  t.textContent = '';
-  const span = document.createElement('span');
-  span.textContent = msg + ' ';
-  const btn = document.createElement('button');
-  btn.textContent = actionLabel;
-  btn.style.cssText = 'margin-left:10px;background:var(--acc2);border:1px solid var(--acc);color:var(--acc3);padding:3px 10px;border-radius:3px;cursor:pointer;font-family:inherit;font-size:inherit';
-  btn.onclick = () => {
-    t.style.opacity = '0';
-    try { onClick(); } catch(e) { logError('toastAction', e); }
-  };
-  t.appendChild(span);
-  t.appendChild(btn);
-  t.style.opacity = '1';
-  t.style.pointerEvents = 'auto';
-  clearTimeout(t._t);
-  t._t = setTimeout(() => {
-    t.style.opacity = '0';
-    t.style.pointerEvents = 'none';
-  }, CONFIG.TOAST_DURATION * 2);
-}
+
+// Toast s akÄnÃ­m tlaÄÃ­tkem (napÅ™. Undo). VydrÅ¾Ã­ 2Ã— dÃ©le.
+
 
 const { download, exportTXT, exportJSON, exportRange } = createExportApi({
   state,
@@ -7074,7 +6337,7 @@ const { download, exportTXT, exportJSON, exportRange } = createExportApi({
 
   if (state.autoRunning && isAutoTokenLimitReached()) {
     stopAuto();
-    log('🛑 AUTO zastaven po dávce: dosažen limit tokenů');
+    log('ðŸ›‘ AUTO zastaven po dÃ¡vce: dosaÅ¾en limit tokenÅ¯');
     showToast(t('toast.auto.stoppedTokenLimit'));
   }
 }
@@ -7087,11 +6350,11 @@ function showPreviewModal(previewData) {
   modal.id = 'previewModal';
   modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:9999;overflow-y:auto;padding:20px';
   
-  // Spočítej kolik klíčů v importu už máme přeložené (kolize)
+  // SpoÄÃ­tej kolik klÃ­ÄÅ¯ v importu uÅ¾ mÃ¡me pÅ™eloÅ¾enÃ© (kolize)
   let conflicts = 0, newOnes = 0;
   for (const k of Object.keys(previewData)) {
     const cur = state.translated[k];
-    if (cur && cur.vyznam && cur.vyznam !== '—' && !cur.skipped) conflicts++; else newOnes++;
+    if (cur && cur.vyznam && cur.vyznam !== 'â€”' && !cur.skipped) conflicts++; else newOnes++;
   }
 
   let html = `<div style="max-width:900px;margin:0 auto;background:var(--bg2);border:1px solid var(--brd);border-radius:8px;padding:20px">
@@ -7126,7 +6389,7 @@ function showPreviewModal(previewData) {
   for (const [key, data] of Object.entries(previewData)) {
     const e = state.entryMap.get(key);
     const old = state.translated[key];
-    const isConflict = old && old.vyznam && old.vyznam !== '—' && !old.skipped;
+    const isConflict = old && old.vyznam && old.vyznam !== 'â€”' && !old.skipped;
     const rawDef = data._rawDefinition || data.definice || '';
     const hasRaw = rawDef && rawDef.length > 10;
     html += `
@@ -7143,18 +6406,18 @@ function showPreviewModal(previewData) {
         <div>
           <div style="color:var(--acc);font-size:10px;margin-bottom:5px">${t('import.czTranslationAi')}</div>
           <div style="font-size:12px">
-            <div><b>${t('field.meaning')}</b> ${escHtml(data.vyznam || '—')}</div>
-            <div style="margin-top:5px"><b>${t('field.definition')}</b> ${escHtml(data.definice || '—')}</div>
+            <div><b>${t('field.meaning')}</b> ${escHtml(data.vyznam || 'â€”')}</div>
+            <div style="margin-top:5px"><b>${t('field.definition')}</b> ${escHtml(data.definice || 'â€”')}</div>
             ${hasRaw && rawDef !== data.definice ? `<div style="margin-top:8px;padding:8px;background:var(--bg2);border-radius:4px;border-left:2px solid var(--acc);font-size:11px;color:var(--txt2)"><b>${t('import.fullTranslation')}</b><div style="margin-top:5px;line-height:1.5">${formatPreviewRawTranslation(rawDef)}</div></div>` : ''}
-            <div style="margin-top:5px"><b>${t('field.usage')}</b> ${escHtml(data.pouziti || '—')}</div>
-            <div style="margin-top:5px"><b>${t('field.origin')}</b> ${escHtml(data.puvod || '—')}</div>
-            <div style="margin-top:5px"><b>${t('field.specialist')}</b> ${escHtml(data.specialista || '—')}</div>
+            <div style="margin-top:5px"><b>${t('field.usage')}</b> ${escHtml(data.pouziti || 'â€”')}</div>
+            <div style="margin-top:5px"><b>${t('field.origin')}</b> ${escHtml(data.puvod || 'â€”')}</div>
+            <div style="margin-top:5px"><b>${t('field.specialist')}</b> ${escHtml(data.specialista || 'â€”')}</div>
           </div>
         </div>
         <div>
           <div style="color:var(--txt3);font-size:10px;margin-bottom:5px">${t('import.enOriginal')}</div>
           <div style="font-size:12px;color:var(--txt2)">
-            <div><b>${t('field.definition')}</b> ${escHtml(e?.definice || e?.def || '—')}</div>
+            <div><b>${t('field.definition')}</b> ${escHtml(e?.definice || e?.def || 'â€”')}</div>
           </div>
         </div>
       </div>
@@ -7174,7 +6437,7 @@ function acceptPreview() {
   const mode = (document.querySelector('input[name="importMode"]:checked') || {}).value || 'missing';
 
   const FIELDS = ['vyznam', 'definice', 'pouziti', 'puvod', 'specialista', 'kjv'];
-  const isEmpty = v => !v || v === '—';
+  const isEmpty = v => !v || v === 'â€”';
 
   let applied = 0, skippedConflicts = 0, mergedFields = 0;
 
@@ -7183,7 +6446,7 @@ function acceptPreview() {
     const incoming = state.pendingTranslations[key];
     if (!incoming) return;
     const existing = state.translated[key];
-    const hasExisting = existing && existing.vyznam && existing.vyznam !== '—' && !existing.skipped;
+    const hasExisting = existing && existing.vyznam && existing.vyznam !== 'â€”' && !existing.skipped;
 
     if (mode === 'all') {
       state.translated[key] = incoming;
@@ -7198,7 +6461,7 @@ function acceptPreview() {
         applied++;
         return;
       }
-      // Doplň jen prázdná pole v existujícím překladu
+      // DoplÅˆ jen prÃ¡zdnÃ¡ pole v existujÃ­cÃ­m pÅ™ekladu
       let changed = false;
       const merged = { ...existing };
       for (const f of FIELDS) {
@@ -7219,8 +6482,8 @@ function acceptPreview() {
   updateFailedCount();
   closePreviewModal();
   const extra = mode === 'fillgaps' && mergedFields
-    ? ` (${mergedFields} polí doplněno)`
-    : skippedConflicts ? ` · ${skippedConflicts} přeskočeno (kolize)` : '';
+    ? ` (${mergedFields} polÃ­ doplnÄ›no)`
+    : skippedConflicts ? ` Â· ${skippedConflicts} pÅ™eskoÄeno (kolize)` : '';
   showToast(t('toast.saved.entriesWithExtra', { count: applied, extra }));
 }
 
@@ -7229,7 +6492,7 @@ function discardPreview() {
   showToast(t('toast.translation.canceled'));
 }
 
-// ══ IMPORT TXT/JSON ═══════════════════════════════════════════════════
+// â•â• IMPORT TXT/JSON â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function importFile(input) {
   const file = input.files[0];
   if (!file) return;
@@ -7269,11 +6532,11 @@ function importFile(input) {
 }
 
 function importTXT(input) {
-  // Zachováno kvůli zpětné kompatibilitě (historické volání z UI/externích skriptů)
+  // ZachovÃ¡no kvÅ¯li zpÄ›tnÃ© kompatibilitÄ› (historickÃ© volÃ¡nÃ­ z UI/externÃ­ch skriptÅ¯)
   return importFile(input);
 }
 
-// Parsuje formát: "G12 | ἄβυσσος\nČeský význam: ...\nDefinice (CZ): ..."
+// Parsuje formÃ¡t: "G12 | á¼„Î²Ï…ÏƒÏƒÎ¿Ï‚\nÄŒeskÃ½ vÃ½znam: ...\nDefinice (CZ): ..."
 function parseCzTXT(text) {
   const result = {};
   const normalizedText = String(text || '').replace(/^\uFEFF/, '').replace(/\r\n/g, '\n').trim();
@@ -7288,18 +6551,18 @@ function parseCzTXT(text) {
       for (const label of labels) {
         const line = lines.find(l => {
           const trimmed = l.trim();
-          return trimmed.startsWith(label + ':') || trimmed.startsWith(label + '：');
+          return trimmed.startsWith(label + ':') || trimmed.startsWith(label + 'ï¼š');
         });
         if (line) return line.slice(label.length + 1).trim();
       }
       return '';
     };
-    const vyznam = get(['Český význam', 'Vyznam', 'VÝZNAM', 'VYZNAM', 'Význam', 'Cz', 'CZ']);
-    const definice = get(['Definice (CZ)', 'Česká definice', 'Definice', 'DEFINICE', 'CZ definice']);
-    const pouziti = get(['Biblické užití', 'Biblické užití (KJV)', 'Pouziti', 'POUZITI', 'Použití']);
-    const puvod = get(['Původ', 'Puvod', 'PUVOD']);
-    const specialista = get(['Specialista', 'VÝKLAD', 'VYKLAD', 'Komentář', 'KOMENTAR', 'Exegeze', 'EXEGEZE']);
-    const kjv = get(['KJV překlady (CZ)', 'KJV překlady', 'KJV', 'KJV_PREKLADY', 'KJV Významy']);
+    const vyznam = get(['ÄŒeskÃ½ vÃ½znam', 'Vyznam', 'VÃZNAM', 'VYZNAM', 'VÃ½znam', 'Cz', 'CZ']);
+    const definice = get(['Definice (CZ)', 'ÄŒeskÃ¡ definice', 'Definice', 'DEFINICE', 'CZ definice']);
+    const pouziti = get(['BiblickÃ© uÅ¾itÃ­', 'BiblickÃ© uÅ¾itÃ­ (KJV)', 'Pouziti', 'POUZITI', 'PouÅ¾itÃ­']);
+    const puvod = get(['PÅ¯vod', 'Puvod', 'PUVOD']);
+    const specialista = get(['Specialista', 'VÃKLAD', 'VYKLAD', 'KomentÃ¡Å™', 'KOMENTAR', 'Exegeze', 'EXEGEZE']);
+    const kjv = get(['KJV pÅ™eklady (CZ)', 'KJV pÅ™eklady', 'KJV', 'KJV_PREKLADY', 'KJV VÃ½znamy']);
     if (vyznam || definice) {
       result[key] = { vyznam, definice, pouziti, puvod, specialista, kjv };
     }
@@ -7340,12 +6603,12 @@ function parseImportJSON(text) {
   }
 
   if (parsed && typeof parsed === 'object') {
-    // Variant A: přímý map exportu { "G1": {...}, "G2": {...} }
+    // Variant A: pÅ™Ã­mÃ½ map exportu { "G1": {...}, "G2": {...} }
     for (const [key, value] of Object.entries(parsed)) {
       addRecord(String(key).trim(), value);
     }
 
-    // Variant B: obálka s polem state.entries/translations
+    // Variant B: obÃ¡lka s polem state.entries/translations
     const wrapped = parsed.entries || parsed.translations || parsed.data;
     if (Array.isArray(wrapped)) {
       for (const row of wrapped) {
@@ -7359,16 +6622,8 @@ function parseImportJSON(text) {
   return result;
 }
 
-// ══ NEÚSPĚŠNÉ PŘEKLADY ════════════════════════════════════════════════
-function updateFailedCount() {
-  let count = 0;
-  for (const key of Object.keys(state.translated)) {
-    const translationState = getTranslationStateForKey(key);
-    if (state === 'failed' || state === 'failed_partial') count++;
-  }
-  const el = document.getElementById('failedCount');
-  if (el) el.textContent = count > 0 ? `(${count})` : '';
-}
+// â•â• NEÃšSPÄšÅ NÃ‰ PÅ˜EKLADY â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+
 
 function showFailedEntries() {
   const failed = [];
@@ -7394,7 +6649,7 @@ function showFailedEntries() {
   let cards = '';
   for (const f of failed) {
     const info = state.entryMap.get(f.key);
-    const rawText = f.raw || (info ? `${info.greek}\n\nDEF: ${info.definice || info.def || ''}\nKJV: ${info.kjv || ''}` : '(prázdné)');
+    const rawText = f.raw || (info ? `${info.greek}\n\nDEF: ${info.definice || info.def || ''}\nKJV: ${info.kjv || ''}` : '(prÃ¡zdnÃ©)');
     cards += `<div style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;margin:0 0 10px 0;padding:12px">
       <div style="font-family:'JetBrains Mono';color:var(--acc);font-weight:bold;margin-bottom:6px">${f.key} | ${escHtml(f.greek || '')}</div>
       <div style="font-size:11px;color:var(--txt2);white-space:pre-wrap;max-height:120px;overflow-y:auto;background:var(--bg1);padding:8px;border-radius:4px">${escHtml(rawText)}</div>
@@ -7426,7 +6681,7 @@ function retryFailed(failedKeysStr) {
   renderList();
   closeFailedModalSafe();
   
-  // Nastav retry režim - příští translateNext/AUTO vezme tyto klíče
+  // Nastav retry reÅ¾im - pÅ™Ã­Å¡tÃ­ translateNext/AUTO vezme tyto klÃ­Äe
   state.retryMode = true;
   state.retryKeysList = keys;
   
@@ -7437,9 +6692,9 @@ function closePreviewModal() {
   closePreviewModalSafe();
 }
 
-// Escape zavře modal
+// Escape zavÅ™e modal
 document.addEventListener('keydown', e => {
-  // Ctrl+S = uložit progress (Ctrl is either)
+  // Ctrl+S = uloÅ¾it progress (Ctrl is either)
   if ((e.ctrlKey || e.metaKey) && e.key === 's') {
     e.preventDefault();
     saveProgress();
@@ -7463,7 +6718,7 @@ document.addEventListener('keydown', e => {
       closeHelpModal();
     }
   if (document.getElementById('app').style.display === 'none') return;
-  // Klávesové zkratky v app
+  // KlÃ¡vesovÃ© zkratky v app
   if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
   if (e.key === ' ') { e.preventDefault(); translateNext(); }
   if (e.key === 'a' || e.key === 'A') toggleAuto();
@@ -7516,6 +6771,8 @@ window.closeSystemPromptModal = closeSystemPromptModal;
 window.applyAutoPanelSettings = applyAutoPanelSettings;
 window.toggleEditSection = toggleEditSection;
 window.saveSection = saveSection;
+window.toggleSourceEntryEdit = toggleSourceEntryEdit;
+window.saveSourceEntryField = saveSourceEntryField;
 window.toggleAllPreview = toggleAllPreview;
 window.acceptPreview = acceptPreview;
 window.discardPreview = discardPreview;
@@ -7619,10 +6876,10 @@ window.addEventListener('beforeunload', () => {
   stopTopicRepairTicker();
   if (state.elapsedTimer) clearInterval(state.elapsedTimer);
   stopResize();
-  // Debounced save musí být proveden synchronně před zavřením
+  // Debounced save musÃ­ bÃ½t proveden synchronnÄ› pÅ™ed zavÅ™enÃ­m
   saveProgress.flush();
 });
-// Při skrytí tabu také flushni, aby se nic neztratilo
+// PÅ™i skrytÃ­ tabu takÃ© flushni, aby se nic neztratilo
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'hidden') saveProgress.flush();
 });
