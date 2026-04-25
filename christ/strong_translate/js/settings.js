@@ -1,5 +1,6 @@
 ﻿import { PROVIDERS } from './config.js';
 import { state } from './state.js';
+import { uiLabel } from './i18n.js';
 
 export function createSettingsApi({ MODEL_TEST_PINNED_MODELS, MODEL_TEST_MODEL_STORAGE_KEY, PIPELINE_SECONDARY_ENABLED_KEY }) {
 function getApiKeyForModelTest(prov) {
