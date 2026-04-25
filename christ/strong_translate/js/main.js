@@ -2041,6 +2041,66 @@ window.logEntry = logEntry;
 window.PROVIDERS = PROVIDERS;
 window.populateOpenRouterModels = populateOpenRouterModels;
 
+// Funkce definovane primo v main.js (ES module - musi byt na window)
+window.startApp = startApp;
+window.loadTXT = loadTXT;
+window.loadDefaultFile = loadDefaultFile;
+window.filterList = filterList;
+window.filterListDebounced = filterListDebounced;
+window.applyAutoPanelSettings = applyAutoPanelSettings;
+window.onProviderChange = onProviderChange;
+window.showSetup = showSetup;
+window.toggleListPane = toggleListPane;
+window.copyModelTestPromptPreview = copyModelTestPromptPreview;
+
+// Z batchApi
+window.translateNext = translateNext;
+window.jumpToStart = jumpToStart;
+
+// Z listApi
+window.translateSelected = translateSelected;
+window.selectAll = selectAll;
+window.selectNone = selectNone;
+window.filterMissingTopicsList = filterMissingTopicsList;
+
+// Z modalsApi
+window.selectRange = selectRange;
+window.showMobileActions = showMobileActions;
+
+// Z autoApi
+window.toggleAuto = toggleAuto;
+window.stopAuto = stopAuto;
+
+// Z topicRepairApi
+window.restoreTopicRepairModal = restoreTopicRepairModal;
+window.applySystemPromptForCurrentTask = applySystemPromptForCurrentTask;
+
+// Z modelTestUiApi
+window.cancelModelTest = cancelModelTest;
+
+// Z modelTestOutputApi
+window.resetModelTestModal = resetModelTestModal;
+
+// Z settingsApi
+window.saveModelTestModelSelections = saveModelTestModelSelections;
+window.updateModelTestProviderUi = updateModelTestProviderUi;
+
+// Z promptLibraryApi
+window.togglePromptAutoMode = togglePromptAutoMode;
+window.togglePromptModeQuick = togglePromptModeQuick;
+
+// Z exportDataApi
+window.exportTXT = exportTXT;
+window.exportJSON = exportJSON;
+window.exportRange = exportRange;
+
+// Z modalsApi + modelTestUiApi + main.js funkce
+window.closeModal = closeModal;
+window.confirmModal = confirmModal;
+window.closeModelTestModal = closeModelTestModal;
+window.openModelTestPromptPreviewModal = openModelTestPromptPreviewModal;
+window.closeModelTestPromptPreviewModal = closeModelTestPromptPreviewModal;
+
 // Cleanup on page unload - auto-save progress
 window.addEventListener('beforeunload', () => {
   if (state.autoTimer) clearTimeout(state.autoTimer);
