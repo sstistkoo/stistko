@@ -1925,6 +1925,7 @@ async function loadSavedSettings() {
 
 
 // Settings Modal
+function saveLanguageSettings() {
   const target = document.getElementById('targetLanguage').value;
   const source = document.getElementById('sourceLanguage').value;
   const uiRaw = String(document.getElementById('uiLanguage')?.value || DEFAULT_UI_LANG).toLowerCase();
