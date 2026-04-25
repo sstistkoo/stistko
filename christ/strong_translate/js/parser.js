@@ -33,7 +33,7 @@ export function parseCzTXT(text) {
   return result;
 }
 
-function parseImportJSON(text) {
+export function parseImportJSON(text) {
   const parsed = JSON.parse(text);
   const result = {};
   const FIELDS = ['vyznam', 'definice', 'pouziti', 'puvod', 'specialista', 'kjv'];
