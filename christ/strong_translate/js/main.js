@@ -1806,6 +1806,44 @@ const {
   updatePromptStatusIndicator
 } = promptLibraryApi;
 initializePromptLibrary();
+
+function getCompactSelectedOptionLabel(selectId, fallback = '???') {
+  const el = document.getElementById(selectId);
+  if (!el) return fallback;
+  const txt = String(el.selectedOptions?.[0]?.text || el.value || '').trim();
+  return txt || fallback;
+}
+
+function getCompactPipelineSecondaryLabel() {
+  const geminiEnabled = !!document.getElementById('pipelineEnableSecondaryGemini')?.checked;
+  const openrouterEnabled = !!document.getElementById('pipelineEnableSecondaryOpenrouter')?.checked;
+  const parts = [];
+  if (geminiEnabled) parts.push(getCompactSelectedOptionLabel('pipelineModelSecondaryGemini', 'Gemini'));
+  if (openrouterEnabled) parts.push(getCompactSelectedOptionLabel('pipelineModelSecondaryOpenrouter', 'OpenRouter'));
+  if (parts.length) return parts.join(' | ');
+  return 'auto router off';
+}
+
+function updateSetupCompactSummary() {
+  const el = document.getElementById('setupCompactSummary');
+  if (!el) return;
+  const main = getCompactSelectedOptionLabel('pipelineModelMainGroq', '???');
+  const secondary = getCompactPipelineSecondaryLabel();
+  const batch = String(document.getElementById('batchSize')?.value || '10');
+  const interval = String(document.getElementById('interval')?.value || '20');
+  const summary = `${main}, ${secondary}, hesel ${batch}, interval ${interval} s`;
+  el.textContent = summary;
+  el.title = summary;
+}
+
+function bindSetupCompactSummaryEvents() {
+  ['batchSize', 'interval'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el || el.dataset.compactSummaryBound === '1') return;
+    el.addEventListener('change', updateSetupCompactSummary);
+    el.dataset.compactSummaryBound = '1';
+  });
+}
 // â•â• STATS & SAVE â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 
