@@ -24,6 +24,7 @@ export function createTopicRepairApi(deps) {
     getProviderCooldownLeftSec,
     appendModelTestUsage,
     buildModelTestMessages,
+    modelTestPromptCatalog,
   } = deps;
 function getTopicSourceTextForPreview(key, topicId) {
   const e = state.entryMap.get(key) || {};
