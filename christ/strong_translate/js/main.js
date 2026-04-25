@@ -2048,7 +2048,94 @@ window.restoreFromBackup = restoreFromBackup;
 window.resetPrompt = resetPrompt;
 window.updateSetupCompactSummary = updateSetupCompactSummary;
 
-// Model test + settings window exposures
+function clearModelTestOutput() {
+  const output = document.getElementById('modelTestOutput');
+  if (!output) return;
+  output.value = '';
+  state.modelTestOutputBackupBeforeLibrary = '';
+  state.modelTestLibraryActive = false;
+  clearModelTestOutputFromStorage();
+  showToast(t('toast.output.cleared'));
+}
+
+async function copyModelTestOutput() {
+  const output = document.getElementById('modelTestOutput');
+  const btn = document.getElementById('btnCopyModelTestOutput');
+  const originalBtnText = btn?.textContent || '';
+  if (!output) return;
+  const text = output.value || '';
+  if (!text.trim()) { showToast(t('toast.copy.nothing')); return; }
+  try {
+    await navigator.clipboard.writeText(text);
+    showToast(t('toast.output.copied'));
+    if (btn) { btn.textContent = t('toast.output.copiedShort'); setTimeout(() => { btn.textContent = originalBtnText; }, 1200); }
+  } catch (e) {
+    output.focus(); output.select(); document.execCommand('copy');
+    showToast(t('toast.output.copied'));
+    if (btn) { btn.textContent = t('toast.output.copiedShort'); setTimeout(() => { btn.textContent = originalBtnText; }, 1200); }
+  }
+}
+
+function showModelTestLibrary() {
+  const output = document.getElementById('modelTestOutput');
+  if (!output) return;
+  if (state.modelTestRunning) { showToast(t('toast.test.libraryAfterStop')); return; }
+  if (!state.modelTestLibraryActive) state.modelTestOutputBackupBeforeLibrary = output.value;
+  state.modelTestLibraryActive = true;
+  const history = getTestHistory();
+  if (!history.length) { output.value = t('modelTest.library.empty'); return; }
+  const lines = [t('modelTest.library.title'), `${t('modelTest.library.count')}: ${history.length}`, ''];
+  const statsRows = Object.values(getModelTestStatsMap());
+  if (statsRows.length) {
+    lines.push(t('modelTest.library.statsHeader'));
+    const providers = {};
+    for (const r of statsRows) { if (!providers[r.provider]) providers[r.provider] = []; providers[r.provider].push(r); }
+    for (const providerName of Object.keys(providers).sort((a, b) => a.localeCompare(b, 'cs'))) {
+      lines.push(`### ${providerName}`);
+      for (const r of providers[providerName].sort((a, b) => (b.calls||0)-(a.calls||0))) {
+        const total = Math.max(1, (r.okKeys||0)+(r.failedKeys||0));
+        const rate = (((r.okKeys||0)/total)*100).toFixed(1);
+        const avgMs = r.latencySamples ? (r.latencyMsTotal/r.latencySamples) : 0;
+        lines.push(`- ${r.model} | ${r.calls||0} volání | ${r.totalKeys||0} hesel | OK ${r.okKeys||0} | ERR ${r.failedKeys||0} | ${rate}% | ${formatAiResponseTime(avgMs)}`);
+      }
+      lines.push('');
+    }
+  }
+  lines.push(t('modelTest.library.runsHeader'));
+  for (const item of history.slice(0, 80)) {
+    const when = new Date(item.ts).toLocaleString('cs-CZ');
+    if (item.type === 'model-test') {
+      lines.push(`[${when}] TEST | ${item.provider} | ${item.mode||'smoke'} | OK ${item.ok}/${item.total} | PART ${item.partial||0} | RL ${item.rateLimited} | ERR ${item.error} | HESLA ${item.keysOk||0}/${item.keysFailed||0} | AI ${formatAiResponseTime(item.avgLatencyMs||0)}`);
+      if (Array.isArray(item.topModels)&&item.topModels.length) lines.push(`TOP: ${item.topModels.join(', ')}`);
+    } else if (item.type === 'translate-batch') {
+      lines.push(`[${when}] BATCH | ${item.provider}/${item.model} | ${item.ok}/${item.total} | missing ${item.missing} | AI ${formatAiResponseTime(item.avgLatencyMs||0)}`);
+    }
+  }
+  output.value = lines.join('\n');
+  saveModelTestOutputToStorage(output.value);
+}
+
+async function runModelTestFromModal() {
+  if (state.modelTestRunning) { cancelModelTest(); showToast(t('toast.test.pausing')); return; }
+  restoreModelTestReportFromBackup();
+  scrollModelTestOutputIntoView();
+  const providerSelect = document.getElementById('modelTestProvider');
+  const modeSelect = document.getElementById('modelTestMode');
+  const promptEnableEl = document.getElementById('modelTestEnablePrompt');
+  const promptTypeSelect = document.getElementById('modelTestPromptType');
+  if (!providerSelect) return;
+  saveModelTestPromptSettings();
+  saveModelTestModelSelections();
+  const mode = modeSelect?.value || 'smoke';
+  const promptEnabled = !!promptEnableEl?.checked;
+  const promptType = promptTypeSelect?.value || getModelTestPromptType();
+  const providerMode = providerSelect.value || 'parallel-3';
+  const forcedProvider = providerMode === 'parallel-3' ? null : providerMode;
+  updateModelTestRunButton();
+  await testCurrentProviderModels(forcedProvider, false, mode, promptType, promptEnabled);
+}
+
+
 window.openModelTestModal = openModelTestModal;
 window.runModelTestFromModal = runModelTestFromModal;
 window.showModelTestLibrary = showModelTestLibrary;
