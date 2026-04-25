@@ -1,4 +1,4 @@
-import { state } from './state.js';
+﻿import { state } from './state.js';
 import { storeKey, backupKey, undoKey } from './storage.js';
 import { debounce } from './utils.js';
 
@@ -6,8 +6,16 @@ export function createBackupApi({ renderList, updateStats, showToast, showToastW
 
 function saveProgressImmediate() {
    try {
+    // Strip 'raw' from each entry – full AI responses kept in memory only,
+    // not persisted (prevents localStorage quota overflow with large datasets).
+    const translatedStripped = {};
+    for (const [k, v] of Object.entries(state.translated)) {
+      if (!v || typeof v !== 'object') { translatedStripped[k] = v; continue; }
+      const { raw: _raw, ...rest } = v;
+      translatedStripped[k] = rest;
+    }
     localStorage.setItem(storeKey(), JSON.stringify({
-      translated: state.translated,
+      translated: translatedStripped,
       sourceEntryEdits: state.sourceEntryEdits,
        ts: Date.now(),
        fileId: state.currentFileId
@@ -44,7 +52,13 @@ function maybeAutoBackup() {
   const doneCount = Object.values(state.translated)
     .filter(t => isTranslationComplete(t)).length;
   if (doneCount === 0) return;
-  writeBackup(backupKey(), { translated: state.translated, ts: Date.now(), count: doneCount, fileId: state.currentFileId });
+  const translatedStripped = {};
+  for (const [k, v] of Object.entries(state.translated)) {
+    if (!v || typeof v !== 'object') { translatedStripped[k] = v; continue; }
+    const { raw: _raw, ...rest } = v;
+    translatedStripped[k] = rest;
+  }
+  writeBackup(backupKey(), { translated: translatedStripped, ts: Date.now(), count: doneCount, fileId: state.currentFileId });
   logInfo('autoBackup', `Automatická záloha: ${doneCount} hesel`);
   updateBackupButtonVisibility();
 }
