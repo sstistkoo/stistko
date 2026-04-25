@@ -1767,7 +1767,6 @@ const settingsModalsApi = createSettingsModalsApi({
   DEFAULT_UI_LANG,
   UI_LANGS,
   UI_LANG_KEY,
-  initializePromptLibrary: (...a) => initializePromptLibrary(...a),
 });
 const { showSettingsModal, closeSettingsModal, showPromptAIModal, closePromptAIModal, saveAISettings, showPromptLangModal, closePromptLangModal, updatePromptLangButtonLabel, saveLangSettings } = settingsModalsApi;
 
@@ -1806,7 +1805,7 @@ const {
   importPromptLibraryFromFile,
   updatePromptStatusIndicator
 } = promptLibraryApi;
-
+initializePromptLibrary();
 // â•â• STATS & SAVE â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 
