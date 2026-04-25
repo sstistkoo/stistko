@@ -1,15 +1,16 @@
 /**
  * Seznam hesel — virtuální scrolling, filtrování, výběr, překlad vybraných.
  * Deps: state, t, escHtml, ITEM_HEIGHT, BUFFER_ITEMS,
- *       getTranslationStateForKey, getStrongKeyNumber,
+ *       getTranslationStateForKey,
  *       isAutoProviderEnabled, resolveMainBatchProvider, getPipelineModelForProvider,
  *       translateBatch, startTopicRepairFlow, showPreviewModal,
  *       showToast, logError, updateFailedCount, saveProgress,
  *       updateStats, renderDetail (late-bound)
  */
+import { getStrongKeyNumber } from '../translation/utils.js';
 export function createListApi({
   state, t, escHtml, ITEM_HEIGHT, BUFFER_ITEMS,
-  getTranslationStateForKey, getStrongKeyNumber,
+  getTranslationStateForKey,
   isAutoProviderEnabled, resolveMainBatchProvider, getPipelineModelForProvider,
   translateBatch, startTopicRepairFlow, showPreviewModal,
   showToast, logError, updateFailedCount, saveProgress,

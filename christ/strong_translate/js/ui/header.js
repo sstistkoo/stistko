@@ -1,8 +1,9 @@
 /**
  * Hlavička / statistiky / timer / log panel.
- * Deps: state, t, isTranslationComplete, getTranslationStateForKey, storeKey, backupKey
+ * Deps: state, t, getTranslationStateForKey, storeKey, backupKey
  */
-export function createHeaderApi({ state, t, isTranslationComplete, getTranslationStateForKey, storeKey, backupKey }) {
+import { isTranslationComplete } from '../translation/utils.js';
+export function createHeaderApi({ state, t, getTranslationStateForKey, storeKey, backupKey }) {
   function logMsg(msg, type) {
     const scroll = document.getElementById('logScroll');
     if (!scroll) return;
