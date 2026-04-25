@@ -292,5 +292,5 @@ async function callOnce(provider, apiKey, model, messages, externalSignal = null
     }
   }
 
-  return { callAIWithRetry, callOnce, getTranslationEngineLabel, getProviderConfiguredModels, getFallbackModels, resetPrompt };
+  return { callAIWithRetry, callOnce, getTranslationEngineLabel, getProviderConfiguredModels, getFallbackModels, resetPrompt, parseTranslations };
 }
