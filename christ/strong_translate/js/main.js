@@ -3465,10 +3465,22 @@ function applyTopicPromptResult() {
   const resultInput = document.getElementById('topicPromptResult');
   if (!resultInput) return;
   const rawAiText = String(resultInput.value || '');
-  const val = extractTopicValueFromAI(rawAiText, topicId, 'strict');
+  let val = extractTopicValueFromAI(rawAiText, topicId, 'strict');
+  if (!hasMeaningfulValue(val)) {
+    val = extractTopicValueFromAI(rawAiText, topicId, 'loose');
+  }
+  if (!hasMeaningfulValue(val)) {
+    // Topic prompt muze vratit jen cisty text bez parser-safe hlavicky.
+    val = normalizeAiTopicRawText(rawAiText);
+  }
+  val = String(val || '').trim();
+  if (!hasMeaningfulValue(val)) {
+    showToast(t('toast.prompt.empty'));
+    return;
+  }
   if (!state.translated[key]) state.translated[key] = {};
   const prevSpecialista = String(state.translated[key]?.specialista || '').trim();
-  state.translated[key][topicId] = val || '—';
+  state.translated[key][topicId] = val;
   const candidateSpecialista = extractTopicValueFromAI(rawAiText, 'specialista', 'strict');
   if (shouldReplaceSpecialista(prevSpecialista, candidateSpecialista)) {
     state.translated[key].specialista = String(candidateSpecialista || '').trim();
