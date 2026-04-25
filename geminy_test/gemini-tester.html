@@ -103,9 +103,9 @@
                                 <div class="message-content">
                                     Ahoj! Jsem Gemini. Zvol si model nahoře a můžeme začít chatovat. 
                                     Nezapomeň vložit API klíč!
-                                </div>
-                            </div>
-                        </div>
+                               </div>
+                      </div>
+                  </div>
                         <div class="chat-input-area">
                             <textarea 
                                 class="chat-input" 
@@ -117,9 +117,9 @@
                             <div style="display: flex; flex-direction: column; gap: 8px;">
                                 <button onclick="sendMessage()" id="sendBtn">Odeslat</button>
                                 <button class="clear-chat" onclick="clearChat()">Smazat</button>
-                            </div>
-                         </div>
-                    </div>
+                           </div>
+                      </div>
+                  </div>
                      <button class="scroll-to-bottom" id="scrollBtn" onclick="scrollToBottom()">↓</button>
                  </div>
              </div>
@@ -133,7 +133,7 @@
                          <input type="number" id="manualRetryDelay" value="30" min="1" max="3600" style="width: 100%; padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px;" placeholder="Zadej čas v sekundách">
                      </div>
                      <div style="display: flex; flex-direction: column; gap: 8px;">
-                         <button onclick="retryLastMessage()" style="background: #ff9800; padding: 12px 24px; border: none; border-radius: 8px; color: white; font-size: 14px; font-weight: 600; cursor: pointer;">🔄 Opakovat poslední zprávu</button>
+                         <button onclick="retryLastMessage()" style="background: #ff9800; padding: 12px 24px; border: none; border-radius: 8px; color: white; font-size: 14px; font-weight: 600; cursor: pointer;" id="retryCountdownBtn">🔄 Opakovat poslední zprávu</button>
                          <div style="font-size: 11px; color: #666; line-height: 1.4;">
                              <strong>💡 Doporučení:</strong><br>
                              • Server chyba: <strong>5-10 sekund</strong><br>
@@ -141,10 +141,15 @@
                              • Vyčerpání limitu: <strong>5-15 minut</strong>
                          </div>
                      </div>
-                 </div>
-             </div>
-
-             <!-- TOKEN USAGE PANEL -->
+                  </div>
+                  <div id="manualRetryProgress" style="margin-top: 10px; display: none;">
+                      <div style="background: #e3f2fd; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
+                          <div style="font-size: 13px; color: #1565c0;">⏳ Čekám na opakování za <span id="manualRetrySeconds" style="font-weight: bold; font-size: 16px;">0</span>s...</div>
+                          <div style="flex: 1; height: 6px; background: #bbdefb; border-radius: 3px; overflow: hidden;">
+                              <div id="manualRetryBar" style="height: 100%; background: linear-gradient(90deg, #2196f3, #21cbf3); width: 0%; transition: width 0.5s;"></div>
+                          </div>
+                      </div>
+                  </div>
             <div class="section">
                 <div class="section-title">📊 Token usage statistics</div>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px;">
@@ -191,6 +196,13 @@
                 </div>
 
                 <div id="batchStatus" style="font-size: 13px; color: #666; margin-bottom: 10px;"></div>
+                  <div id="batchProgress" style="display: none; margin-bottom: 10px;">
+                      <div style="background: #e8f5e9; padding: 8px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
+                          <div style="font-size: 12px; color: #2e7d32;">⏳ Další otázka za <span id="batchCountdownSeconds" style="font-weight: bold;">0</span>s</div>                          <div style="flex: 1; height: 4px; background: #c8e6c9; border-radius: 2px; overflow: hidden;">
+                              <div id="batchCountdownBar" style="height: 100%; background: linear-gradient(90deg, #4caf50, #81c784); width: 0%; transition: width 0.3s;"></div>
+                          </div>
+                      </div>
+                  </div>
 
                 <div style="background: #f5f5f5; padding: 12px; border-radius: 8px; font-size: 13px; margin-bottom: 15px;">
                     <strong>Připravené otázky (30) - biblické termíny (Strong's Concordance):</strong>
@@ -595,26 +607,42 @@
             sendMessage(question, true);
         }
 
-        function displayBatchStatus() {
-            const total = BATCH_QUESTIONS.length;
-            const sent = currentBatchIndex;
-            const remaining = total - sent;
-            let rightStatus = '';
-            if (nextSendTime) {
-                const remainingMs = Math.max(0, nextSendTime - Date.now());
-                const seconds = Math.ceil(remainingMs / 1000);
-                rightStatus = `Další za: <span id="countdown">${seconds}</span>s`;
-            } else if (isWaitingForResponse) {
-                rightStatus = '<span style="color: #ff9800;">⏳ Čekám na odpověď...</span>';
-            } else {
-                rightStatus = 'Připraveno k odeslání...';
-            }
-            document.getElementById('batchStatus').innerHTML = `
-                <strong>🔄 Batch stav:</strong> Odesláno: ${sent}/${total} | Zbývá: ${remaining}
-                | ${rightStatus}
-                | <button onclick="stopBatch()" style="padding: 2px 8px; margin-left: 10px; background: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">Zastavit</button>
-            `;
-        }
+                 function displayBatchStatus() {
+             const total = BATCH_QUESTIONS.length;
+             const sent = currentBatchIndex;
+             const remaining = total - sent;
+             let rightStatus = '';
+             const progressDiv = document.getElementById('batchProgress');
+             const countdownSpan = document.getElementById('batchCountdownSeconds');
+             const barDiv = document.getElementById('batchCountdownBar');
+             
+             if (nextSendTime && isBatchRunning) {
+                 const remainingMs = Math.max(0, nextSendTime - Date.now());
+                 const seconds = Math.ceil(remainingMs / 1000);
+                 rightStatus = `<span style="color: #2e7d32; font-weight: 600;">⏳ Další za ${seconds}s</span>`;
+                 if (progressDiv) {
+                     progressDiv.style.display = 'block';
+                     if (countdownSpan) countdownSpan.textContent = seconds;
+                     if (barDiv) {
+                         const intervalSec = parseInt(document.getElementById('intervalSeconds').value) || 30;
+                         const pct = Math.max(0, (remainingMs / (intervalSec * 1000)) * 100);
+                         barDiv.style.width = pct + '%';
+                     }
+                 }
+             } else {
+                 if (isWaitingForResponse) {
+                     rightStatus = '<span style="color: #ff9800;">⏳ Čekám na odpověď...</span>';
+                 } else {
+                     rightStatus = 'Připraveno k odeslání...';
+                 }
+                 if (progressDiv) progressDiv.style.display = 'none';
+             }
+             document.getElementById('batchStatus').innerHTML = `
+                 <strong>🔄 Batch stav:</strong> Odesláno: ${sent}/${total} | Zbývá: ${remaining}
+                 | ${rightStatus}
+                 | <button onclick="stopBatch()" style="padding: 2px 8px; margin-left: 10px; background: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">Zastavit</button>
+             `;
+         }
 
         async function sendMessage(optionalText = null, fromBatch = false) {
             if (!apiKey) {
@@ -680,59 +708,104 @@
                      sendBtn.disabled = false;
                      sendBtn.textContent = 'Odeslat';
                   }
-                } catch (error) {
-                     console.error('Chyba:', error);
-                     const errorInfo = classifyError(error.message);
-                     showStatus(`${errorInfo.title}: ${error.message}`, 'error');
-                     addMessage('assistant', `❌ ${errorInfo.title}\n\n${error.message}\n\n${errorInfo.suggestion}`);
-                     console.log(`%c[GEMINI ERROR]`, 'color: #c62828; font-weight: bold;', {
-                         type: errorInfo.type, title: errorInfo.title, message: error.message,
-                         suggestion: errorInfo.suggestion, timestamp: new Date().toISOString()
-                     });
-                     if (!fromBatch) {
-                         isWaitingForResponse = false;
-                         sendBtn.disabled = false;
-                         sendBtn.textContent = 'Odeslat';
-                     } else {
-                         isWaitingForResponse = false;
-                     }
-                 } finally {
-                     if (!fromBatch) {
-                         isWaitingForResponse = false;
-                         sendBtn.disabled = false;
-                         sendBtn.textContent = 'Odeslat';
-                     } else {
-                         isWaitingForResponse = false;
-                     }
-                 }
-              }
+                 } catch (error) {
+                      console.error('Chyba:', error);
+                      const errorInfo = classifyError(error.message);
+                      showStatus(`${errorInfo.title}: ${error.message}`, 'error');
+                       addMessage('assistant', `❌ ${errorInfo.title}\n\n${error.message}\n\n${errorInfo.suggestion}`);
+                      console.log(`%c[GEMINI ERROR]`, 'color: #c62828; font-weight: bold;', {
+                          type: errorInfo.type, title: errorInfo.title, message: error.message,
+                          suggestion: errorInfo.suggestion, timestamp: new Date().toISOString()
+                      });
+                      if (!fromBatch) {
+                          isWaitingForResponse = false;
+                          sendBtn.disabled = false;
+                          sendBtn.textContent = 'Odeslat';
+                       } else {
+                           isWaitingForResponse = false;
+                           const intervalSec = parseInt(document.getElementById('intervalSeconds').value) || 30;
+                           nextSendTime = Date.now() + intervalSec * 1000;
+                           // Spustit vizualni countdown i u ručniho retry
+                           const progressDiv = document.getElementById('manualRetryProgress');
+                           const secondsSpan = document.getElementById('manualRetrySeconds');
+                           const barDiv = document.getElementById('manualRetryBar');
+                           const btn = document.getElementById('retryCountdownBtn');
+                           if (progressDiv && secondsSpan && barDiv && btn) {
+                               progressDiv.style.display = 'flex';
+                               btn.disabled = true;
+                               let remaining = intervalSec;
+                               secondsSpan.textContent = remaining;
+                               barDiv.style.width = '100%';
+                               const timer = setInterval(() => {
+                                   remaining--;
+                                   secondsSpan.textContent = remaining;
+                                   barDiv.style.width = Math.max(0, (remaining / intervalSec) * 100) + '%';
+                                   if (remaining <= 0) {
+                                       clearInterval(timer);
+                                       progressDiv.style.display = 'none';
+                                       btn.disabled = false;
+                                   }
+                               }, 1000);
+                           }
+                       }
+                  } finally {
+                      if (!fromBatch) {
+                          isWaitingForResponse = false;
+                          sendBtn.disabled = false;
+                          sendBtn.textContent = 'Odeslat';
+                      } else {
+                          isWaitingForResponse = false;
+                      }
+                  }
+               }
+
 
           let lastUserMessage = '';
 
-          function retryLastMessage() {
-              if (!lastUserMessage) {
-                  showStatus('Žádná předchozí zpráva k opakování!', 'error');
-                  return;
-              }
-              const delay = parseInt(document.getElementById('manualRetryDelay').value) || 30;
-              if (isNaN(delay) || delay < 1) {
-                  showStatus('Zadej platný čas čekání (min 1 sekunda)!', 'error');
-                  return;
-              }
-              showStatus(`Opakování zprávy za ${delay} sekund...`, 'info');
-              setTimeout(() => {
-                  sendMessage(lastUserMessage, false);
-              }, delay * 1000);
-          }
+           function retryLastMessage() {
+                if (!lastUserMessage) {
+                    showStatus('Žádná předchozí zpráva k opakování!', 'error');
+                    return;
+                }
+                const delay = parseInt(document.getElementById('manualRetryDelay').value) || 30;
+                if (isNaN(delay) || delay < 1) {
+                    showStatus('Zadej platný čas čekání (min 1 sekunda)!', 'error');
+                    return;
+                }
+                const progressDiv = document.getElementById('manualRetryProgress');
+                const secondsSpan = document.getElementById('manualRetrySeconds');
+                const barDiv = document.getElementById('manualRetryBar');
+                const btn = document.getElementById('retryCountdownBtn');
+                
+                progressDiv.style.display = 'flex';
+                btn.disabled = true;
+                
+                let remaining = delay;
+                secondsSpan.textContent = remaining;
+                barDiv.style.width = '100%';
+                
+                const timer = setInterval(() => {
+                    remaining--;
+                    secondsSpan.textContent = remaining;
+                    barDiv.style.width = Math.max(0, (remaining / delay) * 100) + '%';
+                    
+                    if (remaining <= 0) {
+                        clearInterval(timer);
+                        progressDiv.style.display = 'none';
+                        btn.disabled = false;
+                        sendMessage(lastUserMessage, false);
+                    }
+                }, 1000);
+           }
 
-          setInterval(() => {
-             if (isBatchRunning) {
-                 displayBatchStatus();
-             }
-         }, 1000);
+           setInterval(() => {
+              if (isBatchRunning) {
+                  displayBatchStatus();
+              }
+          }, 1000);
 
-        updateTokenDisplay();
-        initModels();
-    </script>
-</body>
+         updateTokenDisplay();
+         initModels();
+     </script>
+ </body>
 </html>
