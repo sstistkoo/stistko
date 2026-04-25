@@ -3494,10 +3494,27 @@ function applyTopicPromptResult() {
   }
   const prevSpecialista = String(state.translated[key]?.specialista || '').trim();
   state.translated[key][topicId] = val;
-  const candidateSpecialista = extractTopicValueFromAI(rawAiText, 'specialista', 'strict');
+  const candidateSpecialistaStrict = extractTopicValueFromAI(rawAiText, 'specialista', 'strict');
+  const candidateSpecialistaLoose = extractTopicValueFromAI(rawAiText, 'specialista', 'loose');
+  const candidateSpecialista = hasMeaningfulValue(candidateSpecialistaStrict) ? candidateSpecialistaStrict : candidateSpecialistaLoose;
   if (shouldReplaceSpecialista(prevSpecialista, candidateSpecialista)) {
     state.translated[key].specialista = String(candidateSpecialista || '').trim();
     log(`🧠 SPECIALISTA auto-upgrade ${key}: použit kvalitnější text z AI odpovědi`);
+  }
+
+  // Pokud AI vrátí i další témata, zkus je bezpečně sloučit (jen když jsou kvalitnější).
+  const topicIds = ['vyznam', 'definice', 'pouziti', 'puvod', 'kjv', 'specialista'];
+  for (const extraTopicId of topicIds) {
+    if (extraTopicId === topicId) continue;
+    const strictVal = extractTopicValueFromAI(rawAiText, extraTopicId, 'strict');
+    const looseVal = extractTopicValueFromAI(rawAiText, extraTopicId, 'loose');
+    const extraVal = String(hasMeaningfulValue(strictVal) ? strictVal : looseVal).trim();
+    if (!hasMeaningfulValue(extraVal)) continue;
+    if (extraTopicId === 'definice' && isDefinitionLowQuality(extraVal)) continue;
+    const prevExtra = String(state.translated[key]?.[extraTopicId] || '').trim();
+    if (hasMeaningfulValue(prevExtra) && !shouldReplaceTopicValue(extraTopicId, prevExtra, extraVal)) continue;
+    state.translated[key][extraTopicId] = extraVal;
+    log(`✨ DETAIL auto-merge ${key}.${extraTopicId}: aplikováno z jedné AI odpovědi`);
   }
   saveProgress();
   renderDetail();
