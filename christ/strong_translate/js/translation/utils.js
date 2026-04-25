@@ -1,5 +1,23 @@
-﻿// js/translation/utils.js — čisté pomocné funkce pro překlad (bez state)
+﻿// js/translation/utils.js — pomocné funkce pro překlad
 // Importováno přímo v batch.js, detail.js, list.js, header.js
+import { state } from '../state.js';
+import core from '../../strong_translator_core_new.js';
+
+const { parseTranslations: parseTranslationsCore } = core;
+
+// Lokální kopie pro getTranslationStateForKey (vyhýbá se circular dep s batch.js)
+const _FALLBACK_TOPIC_ORDER = ['definice', 'vyznam', 'kjv', 'pouziti', 'puvod', 'specialista'];
+function _countFailedTopics(translationEntry) {
+  const e = translationEntry || {};
+  let count = 0;
+  for (const topicId of _FALLBACK_TOPIC_ORDER) {
+    const val = String(e[topicId] || '').trim();
+    if (!hasMeaningfulValue(val)) { count++; continue; }
+    if (topicId === 'definice' && isDefinitionLowQuality(val)) count++;
+  }
+  return count;
+}
+
 export function hasMeaningfulValue(v) {
   const s = String(v || '').trim();
   return !!s && s !== 'â€”' && s !== '(pÅ™eskoÄeno)';
@@ -65,8 +83,8 @@ export function getTranslationStateForKey(key) {
   if (!t || t.skipped) return 'pending';
   if (isTranslationComplete(t)) return 'done';
   if (!hasAnyTranslationContent(t)) return 'failed';
-  const missingTopics = getFailedTopicsForFallback(t);
-  if (missingTopics.length > 0 && missingTopics.length <= 2) return 'missing_topic';
+  const failedCount = _countFailedTopics(t);
+  if (failedCount > 0 && failedCount <= 2) return 'missing_topic';
   return 'failed_partial';
 }
 
