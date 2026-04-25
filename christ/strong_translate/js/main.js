@@ -1745,9 +1745,14 @@ const {
 const backupApi = createBackupApi({
   renderList: (...a) => renderList(...a),
   updateStats: (...a) => updateStats(...a),
-  showToast, t, logError,
+  showToast, showToastWithAction, t, logError, logWarn, logInfo,
+  isTranslationComplete,
+  updateBackupButtonVisibility: (...a) => updateBackupButtonVisibility(...a),
+  getUiLang,
+  updateFailedCount: (...a) => updateFailedCount(...a),
+  clearLog: (...a) => clearLog(...a),
 });
-const { saveProgressImmediate, writeBackup, maybeAutoBackup, hasUndo, restoreFromBackup, clearProgress } = backupApi;
+const { saveProgress, saveProgressImmediate, writeBackup, maybeAutoBackup, hasUndo, restoreFromBackup, clearProgress } = backupApi;
 
 const apiKeysApi = createApiKeysApi({ t, showToast });
 const { saveApiKey, getApiKeyProfiles, setApiKeyProfiles, maskApiKey, setupApiKeySwitcher, onApiKeyProfileChange, saveCurrentApiKeyAsProfile, deleteApiKeyProfile, getCurrentApiKey } = apiKeysApi;
