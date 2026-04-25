@@ -3479,6 +3479,19 @@ function applyTopicPromptResult() {
     return;
   }
   if (!state.translated[key]) state.translated[key] = {};
+  const prevValue = String(state.translated[key]?.[topicId] || '').trim();
+  if (topicId === 'definice' && isDefinitionLowQuality(val)) {
+    showToast('⚠ Definice vypadá nekvalitně, ponechána původní hodnota.');
+    return;
+  }
+  if (hasMeaningfulValue(prevValue) && !shouldReplaceTopicValue(topicId, prevValue, val)) {
+    if (topicId === 'specialista') {
+      showToast('⚠ Specialista není kvalitnější než aktuální text. Původní hodnota zůstala.');
+    } else {
+      showToast(`⚠ Pole ${TOPIC_LABELS[topicId] || topicId}: nový návrh není lepší, původní hodnota zůstala.`);
+    }
+    return;
+  }
   const prevSpecialista = String(state.translated[key]?.specialista || '').trim();
   state.translated[key][topicId] = val;
   const candidateSpecialista = extractTopicValueFromAI(rawAiText, 'specialista', 'strict');
