@@ -288,5 +288,9 @@ async function callOnce(provider, apiKey, model, messages, externalSignal = null
         keysSample: keys?.slice(0, 5)
       });
       // Return all keys as missing to trigger retry
+      return keys;
+    }
+  }
+
   return { callAIWithRetry, callOnce, getTranslationEngineLabel, getProviderConfiguredModels, getFallbackModels, resetPrompt };
 }
