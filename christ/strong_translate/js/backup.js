@@ -2,7 +2,7 @@
 import { storeKey, backupKey, undoKey } from './storage.js';
 import { debounce } from './utils.js';
 
-export function createBackupApi({ renderList, updateStats, showToast, t, logError }) {
+export function createBackupApi({ renderList, updateStats, showToast, showToastWithAction, t, logError, logWarn, logInfo, isTranslationComplete, updateBackupButtonVisibility, getUiLang, updateFailedCount, clearLog }) {
 
 function saveProgressImmediate() {
    try {
@@ -95,5 +95,5 @@ function clearProgress() {
   showToastWithAction(t('toast.progressClearedRestore.message'), t('toast.progressClearedRestore.action'), () => restoreFromBackup('undo'));
 }
 
-  return { saveProgressImmediate, writeBackup, maybeAutoBackup, hasUndo, restoreFromBackup, clearProgress };
+  return { saveProgress, saveProgressImmediate, writeBackup, maybeAutoBackup, hasUndo, restoreFromBackup, clearProgress };
 }
