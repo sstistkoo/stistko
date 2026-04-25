@@ -2871,20 +2871,20 @@ function defaultBulkListTopicFilter() {
 }
 
 function getTopicRepairModalVisibleTasks(state) {
-  if (!state || !Array.isArray(topicRepairState.tasks)) return [];
+  if (!state || !Array.isArray(state.tasks)) return [];
   const bid = state.bulkTopicId || 'all';
   if (bid === 'all') {
     const m = state.bulkListTopicFilter || defaultBulkListTopicFilter();
-    return topicRepairState.tasks.filter(t => m[t.topicId] !== false);
+    return state.tasks.filter(t => m[t.topicId] !== false);
   }
-  return topicRepairState.tasks.filter(t => t.topicId === bid);
+  return state.tasks.filter(t => t.topicId === bid);
 }
 
 /** Další čekající úloha v pořadí `topicRepairState.tasks`, ale jen pokud spadá do aktuálního filtru tématu. */
 function findNextTopicRepairWaitingTask(state) {
-  if (!state || !Array.isArray(topicRepairState.tasks)) return null;
+  if (!state || !Array.isArray(state.tasks)) return null;
   const vset = new Set(getTopicRepairModalVisibleTasks(state));
-  return topicRepairState.tasks.find(t => t.status === 'waiting' && vset.has(t)) || null;
+  return state.tasks.find(t => t.status === 'waiting' && vset.has(t)) || null;
 }
 
 const TOPIC_REPAIR_BATCH_PROMPT_STORAGE_PREFIX = 'strong_topic_repair_batch_prompt_v1_';
@@ -3128,7 +3128,7 @@ function initTopicRepairBulkRunInputs() {
 
 /** Jedno téma — vnitřní smyčka dávek (režim „Vše“ i jedno téma z editoru). */
 async function runTopicRepairBulkTranslationCore(state, topicId, promptTemplate, onlyFailed, bs) {
-  const tasks = topicRepairState.tasks.filter(t => t && t.topicId === topicId && t.includeBulk !== false);
+  const tasks = state.tasks.filter(t => t && t.topicId === topicId && t.includeBulk !== false);
   const picked = onlyFailed
     ? tasks.filter(t => t.status === 'failed' || !hasMeaningfulValue(t.candidateValue))
     : tasks;
@@ -3170,7 +3170,7 @@ async function runTopicRepairBulkTranslationCore(state, topicId, promptTemplate,
 
     const parsedMap = parseTopicRepairBatchResponse(rawText, topicId);
     for (const key of batchKeys) {
-      const task = topicRepairState.tasks.find(t => t.key === key && t.topicId === topicId);
+      const task = state.tasks.find(t => t.key === key && t.topicId === topicId);
       if (!task) continue;
       const val = String(parsedMap[key] || '').trim();
       if (hasMeaningfulValue(val)) {
