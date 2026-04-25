@@ -3,6 +3,7 @@ import { sleep } from '../utils.js';
 import { extractOpenRouterText } from './client.js';
 import { getProviderConfiguredModelsForAI, getStaticFallbackModels } from '../../strong_translator_ai.js';
 import core from '../../strong_translator_core_new.js';
+import { state } from '../state.js';
 
 const { validateAPIResponse, DEFAULT_PROMPT } = core;
 
