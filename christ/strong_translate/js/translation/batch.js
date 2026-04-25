@@ -1,4 +1,4 @@
-import { ITEM_HEIGHT, PROVIDERS } from '../config.js';
+﻿import { ITEM_HEIGHT, PROVIDERS } from '../config.js';
 import { isSideFallbackAborted, sleepMsWithAbort, runProviderFallbackTaskSequential } from '../ai/fallback.js';
 import {
   buildSecondaryProviderModelCandidates,
@@ -509,12 +509,16 @@ async function runParallelTopicFallback(keys, abortVersion) {
     log('ℹ Sekundární fallback vypnutý (žádný provider není zaškrtnut).');
     return;
   }
+  // Každý klíč zpracuj paralelně, uvnitř klíče témata také paralelně.
+  // Každý provider má vlastní sekvenční frontu (runProviderFallbackTaskSequential),
+  // takže rate limit je chráněn – souběžná témata se jen seřadí do fronty providera.
+  // Dříve: témata sekvenční → pomalý OpenRouter blokoval Gemini pro další témata.
   await Promise.all(keyList.map(async (key) => {
     if (isSideFallbackAborted(abortVersion)) return;
     const t = state.translated[key] || {};
     const failedTopics = getFailedTopicsForFallback(t);
     if (!failedTopics.length) return;
-    for (const topicId of failedTopics) {
+    await Promise.all(failedTopics.map(async (topicId) => {
       if (isSideFallbackAborted(abortVersion)) return;
       let chosen = null;
       for (const prov of sideProviders) {
@@ -527,12 +531,12 @@ async function runParallelTopicFallback(keys, abortVersion) {
           break;
         }
       }
-      if (!chosen) continue;
+      if (!chosen) return;
       if (isSideFallbackAborted(abortVersion)) return;
       state.translated[key] = state.translated[key] || {};
       state.translated[key][topicId] = chosen.value;
       log(`✓ Fallback převzat ${key}.${topicId} <= ${chosen.prov}/${chosen.model}`);
-    }
+    }));
   }));
 }
 
