@@ -1,4 +1,4 @@
-﻿import { PROVIDERS } from './config.js';
+import { PROVIDERS } from './config.js';
 import { state } from './state.js';
 import { uiLabel } from './i18n.js';
 
