@@ -1830,6 +1830,7 @@ const topicRepairApi = createTopicRepairApi({
   getProviderCooldownLeftSec,
   appendModelTestUsage: (...a) => appendModelTestUsage(...a),
   buildModelTestMessages: (...a) => buildModelTestMessages(...a),
+  modelTestPromptCatalog,
 });
 const {
   startTopicRepairFlow, closeTopicRepairModalSafe, stopTopicRepairTicker,
