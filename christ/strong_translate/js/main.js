@@ -1902,9 +1902,7 @@ async function loadSavedSettings() {
   }
   
   checkDefaultFile();
-  if (localStorage.getItem(LAST_FILE_KEY)) {
-    loadDefaultFile();
-  }
+  loadDefaultFile();
   updateFailedCount();
   updatePromptStatusIndicator();
   updatePromptAutoButton();
@@ -2234,4 +2232,9 @@ document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'hidden') saveProgress.flush();
 });
 
-
+window.addEventListener('DOMContentLoaded', () => {
+  loadSavedSettings().catch(err => {
+    console.error('[i18n] Startup failed:', err);
+    showToast(t('toast.error.withMessage', { message: err?.message || String(err) }));
+  });
+});
