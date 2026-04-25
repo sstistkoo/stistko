@@ -1,4 +1,4 @@
-﻿import { state } from '../state.js';
+import { state } from '../state.js';
 import { t } from '../i18n.js';
 import { escHtml } from '../utils.js';
 import { parseCzTXT, parseImportJSON } from '../parser.js';
@@ -12,11 +12,11 @@ function showPreviewModal(previewData) {
   modal.id = 'previewModal';
   modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:9999;overflow-y:auto;padding:20px';
   
-  // SpoÄÃ­tej kolik klÃ­ÄÅ¯ v importu uÅ¾ mÃ¡me pÅ™eloÅ¾enÃ© (kolize)
+  // Spočítej kolik klíčů v importu už máme přeložené (kolize)
   let conflicts = 0, newOnes = 0;
   for (const k of Object.keys(previewData)) {
     const cur = state.translated[k];
-    if (cur && cur.vyznam && cur.vyznam !== 'â€”' && !cur.skipped) conflicts++; else newOnes++;
+    if (cur && cur.vyznam && cur.vyznam !== '—' && !cur.skipped) conflicts++; else newOnes++;
   }
 
   let html = `<div style="max-width:900px;margin:0 auto;background:var(--bg2);border:1px solid var(--brd);border-radius:8px;padding:20px">
@@ -51,7 +51,7 @@ function showPreviewModal(previewData) {
   for (const [key, data] of Object.entries(previewData)) {
     const e = state.entryMap.get(key);
     const old = state.translated[key];
-    const isConflict = old && old.vyznam && old.vyznam !== 'â€”' && !old.skipped;
+    const isConflict = old && old.vyznam && old.vyznam !== '—' && !old.skipped;
     const rawDef = data._rawDefinition || data.definice || '';
     const hasRaw = rawDef && rawDef.length > 10;
     html += `
@@ -68,18 +68,18 @@ function showPreviewModal(previewData) {
         <div>
           <div style="color:var(--acc);font-size:10px;margin-bottom:5px">${t('import.czTranslationAi')}</div>
           <div style="font-size:12px">
-            <div><b>${t('field.meaning')}</b> ${escHtml(data.vyznam || 'â€”')}</div>
-            <div style="margin-top:5px"><b>${t('field.definition')}</b> ${escHtml(data.definice || 'â€”')}</div>
+            <div><b>${t('field.meaning')}</b> ${escHtml(data.vyznam || '—')}</div>
+            <div style="margin-top:5px"><b>${t('field.definition')}</b> ${escHtml(data.definice || '—')}</div>
             ${hasRaw && rawDef !== data.definice ? `<div style="margin-top:8px;padding:8px;background:var(--bg2);border-radius:4px;border-left:2px solid var(--acc);font-size:11px;color:var(--txt2)"><b>${t('import.fullTranslation')}</b><div style="margin-top:5px;line-height:1.5">${formatPreviewRawTranslation(rawDef)}</div></div>` : ''}
-            <div style="margin-top:5px"><b>${t('field.usage')}</b> ${escHtml(data.pouziti || 'â€”')}</div>
-            <div style="margin-top:5px"><b>${t('field.origin')}</b> ${escHtml(data.puvod || 'â€”')}</div>
-            <div style="margin-top:5px"><b>${t('field.specialist')}</b> ${escHtml(data.specialista || 'â€”')}</div>
+            <div style="margin-top:5px"><b>${t('field.usage')}</b> ${escHtml(data.pouziti || '—')}</div>
+            <div style="margin-top:5px"><b>${t('field.origin')}</b> ${escHtml(data.puvod || '—')}</div>
+            <div style="margin-top:5px"><b>${t('field.specialist')}</b> ${escHtml(data.specialista || '—')}</div>
           </div>
         </div>
         <div>
           <div style="color:var(--txt3);font-size:10px;margin-bottom:5px">${t('import.enOriginal')}</div>
           <div style="font-size:12px;color:var(--txt2)">
-            <div><b>${t('field.definition')}</b> ${escHtml(e?.definice || e?.def || 'â€”')}</div>
+            <div><b>${t('field.definition')}</b> ${escHtml(e?.definice || e?.def || '—')}</div>
           </div>
         </div>
       </div>
@@ -99,7 +99,7 @@ function acceptPreview() {
   const mode = (document.querySelector('input[name="importMode"]:checked') || {}).value || 'missing';
 
   const FIELDS = ['vyznam', 'definice', 'pouziti', 'puvod', 'specialista', 'kjv'];
-  const isEmpty = v => !v || v === 'â€”';
+  const isEmpty = v => !v || v === '—';
 
   let applied = 0, skippedConflicts = 0, mergedFields = 0;
 
@@ -108,7 +108,7 @@ function acceptPreview() {
     const incoming = state.pendingTranslations[key];
     if (!incoming) return;
     const existing = state.translated[key];
-    const hasExisting = existing && existing.vyznam && existing.vyznam !== 'â€”' && !existing.skipped;
+    const hasExisting = existing && existing.vyznam && existing.vyznam !== '—' && !existing.skipped;
 
     if (mode === 'all') {
       state.translated[key] = incoming;
@@ -123,7 +123,7 @@ function acceptPreview() {
         applied++;
         return;
       }
-      // DoplÅˆ jen prÃ¡zdnÃ¡ pole v existujÃ­cÃ­m pÅ™ekladu
+      // Doplň jen prázdná pole v existujícím překladu
       let changed = false;
       const merged = { ...existing };
       for (const f of FIELDS) {
@@ -144,8 +144,8 @@ function acceptPreview() {
   updateFailedCount();
   closePreviewModal();
   const extra = mode === 'fillgaps' && mergedFields
-    ? ` (${mergedFields} polÃ­ doplnÄ›no)`
-    : skippedConflicts ? ` Â· ${skippedConflicts} pÅ™eskoÄeno (kolize)` : '';
+    ? ` (${mergedFields} polí doplněno)`
+    : skippedConflicts ? ` · ${skippedConflicts} přeskočeno (kolize)` : '';
   showToast(t('toast.saved.entriesWithExtra', { count: applied, extra }));
 }
 
@@ -154,7 +154,7 @@ function discardPreview() {
   showToast(t('toast.translation.canceled'));
 }
 
-// â•â• IMPORT TXT/JSON â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══ IMPORT TXT/JSON ═══════════════════════════════════════════════════
 function importFile(input) {
   const file = input.files[0];
   if (!file) return;
@@ -194,12 +194,12 @@ function importFile(input) {
 }
 
 function importTXT(input) {
-  // ZachovÃ¡no kvÅ¯li zpÄ›tnÃ© kompatibilitÄ› (historickÃ© volÃ¡nÃ­ z UI/externÃ­ch skriptÅ¯)
+  // Zachováno kvůli zpětné kompatibilitě (historické volání z UI/externích skriptů)
   return importFile(input);
 }
 
 
-// â•â• NEÃšSPÄšÅ NÃ‰ PÅ˜EKLADY â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══ NEÚSPĚŠNÉ PŘEKLADY ════════════════════════════════════════════════
 
 
 function showFailedEntries() {
@@ -226,7 +226,7 @@ function showFailedEntries() {
   let cards = '';
   for (const f of failed) {
     const info = state.entryMap.get(f.key);
-    const rawText = f.raw || (info ? `${info.greek}\n\nDEF: ${info.definice || info.def || ''}\nKJV: ${info.kjv || ''}` : '(prÃ¡zdnÃ©)');
+    const rawText = f.raw || (info ? `${info.greek}\n\nDEF: ${info.definice || info.def || ''}\nKJV: ${info.kjv || ''}` : '(prázdné)');
     cards += `<div style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;margin:0 0 10px 0;padding:12px">
       <div style="font-family:'JetBrains Mono';color:var(--acc);font-weight:bold;margin-bottom:6px">${f.key} | ${escHtml(f.greek || '')}</div>
       <div style="font-size:11px;color:var(--txt2);white-space:pre-wrap;max-height:120px;overflow-y:auto;background:var(--bg1);padding:8px;border-radius:4px">${escHtml(rawText)}</div>
@@ -258,7 +258,7 @@ function retryFailed(failedKeysStr) {
   renderList();
   closeFailedModalSafe();
   
-  // Nastav retry reÅ¾im - pÅ™Ã­Å¡tÃ­ translateNext/AUTO vezme tyto klÃ­Äe
+  // Nastav retry režim - příští translateNext/AUTO vezme tyto klíče
   state.retryMode = true;
   state.retryKeysList = keys;
   
@@ -269,9 +269,9 @@ function closePreviewModal() {
   closePreviewModalSafe();
 }
 
-// Escape zavÅ™e modal
+// Escape zavře modal
 document.addEventListener('keydown', e => {
-  // Ctrl+S = uloÅ¾it progress (Ctrl is either)
+  // Ctrl+S = uložit progress (Ctrl is either)
   if ((e.ctrlKey || e.metaKey) && e.key === 's') {
     e.preventDefault();
     saveProgress();
@@ -295,7 +295,7 @@ document.addEventListener('keydown', e => {
       closeHelpModal();
     }
   if (document.getElementById('app').style.display === 'none') return;
-  // KlÃ¡vesovÃ© zkratky v app
+  // Klávesové zkratky v app
   if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
   if (e.key === ' ') { e.preventDefault(); translateNext(); }
   if (e.key === 'a' || e.key === 'A') toggleAuto();

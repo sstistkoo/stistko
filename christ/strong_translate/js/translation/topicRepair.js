@@ -1,4 +1,4 @@
-﻿import { PROVIDERS } from '../config.js';
+import { PROVIDERS } from '../config.js';
 import { isSideFallbackAborted, sleepMsWithAbort } from '../ai/fallback.js';
 import { hasMeaningfulValue, isDefinitionLowQuality, isDefinitionLikelyEnglish } from './utils.js';
 import core from '../../strong_translator_core_new.js';
@@ -112,7 +112,7 @@ function updateTopicRepairModalUI() {
   const bulkRunBtn = document.getElementById('topicRepairBulkRunBtn');
   if (bulkRunBtn) {
     bulkRunBtn.disabled = false;
-    bulkRunBtn.textContent = state.topicRepairBulkRunning ? 'â–  Zastavit hromadnÃ½ pÅ™eklad' : t('topicRepair.bulk.button');
+    bulkRunBtn.textContent = state.topicRepairBulkRunning ? '■ Zastavit hromadný překlad' : t('topicRepair.bulk.button');
   }
   const rows = vis.map(task => {
     const idx = topicRepairState.tasks.indexOf(task);
@@ -120,10 +120,10 @@ function updateTopicRepairModalUI() {
       .filter(row => row && row.topicId && row.topicId !== 'specialista' && row.topicId !== task.topicId);
     const rhOther = (Array.isArray(task.rawHeaderTopics) ? task.rawHeaderTopics : []).filter(id => id && id !== task.topicId);
     const rawHeadersHint = (task.status === 'done' || task.status === 'failed') && rhOther.length > 0
-      ? `<div style="font-size:10px;color:var(--acc2);margin-top:6px">ðŸ“Ž V odpovÄ›di takÃ© nadpisy: ${rhOther.map(id => escHtml(TOPIC_LABELS[id] || id)).join(', ')}${extraTopicsForUi.length ? '' : ' â€” bez tabulky â€ždalÅ¡Ã­ tÃ©mataâ€œ zkontroluj ðŸ“Ž v logu a F12 â†’ RAW.'}</div>`
+      ? `<div style="font-size:10px;color:var(--acc2);margin-top:6px">📎 V odpovědi také nadpisy: ${rhOther.map(id => escHtml(TOPIC_LABELS[id] || id)).join(', ')}${extraTopicsForUi.length ? '' : ' — bez tabulky „další témata“ zkontroluj 📎 v logu a F12 → RAW.'}</div>`
       : '';
     const statusColor = task.status === 'done' ? 'var(--acc3)' : (task.status === 'failed' ? 'var(--red)' : (task.status === 'running' ? 'var(--ylw)' : 'var(--txt3)'));
-    const statusText = task.status === 'done' ? 'hotovo' : (task.status === 'failed' ? 'chyba' : (task.status === 'running' ? 'bÄ›Å¾Ã­' : 'ÄekÃ¡'));
+    const statusText = task.status === 'done' ? 'hotovo' : (task.status === 'failed' ? 'chyba' : (task.status === 'running' ? 'běží' : 'čeká'));
     return `
       <div style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;padding:10px;margin:0 0 10px 0">
         <div style="display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px">
@@ -136,26 +136,26 @@ function updateTopicRepairModalUI() {
             <input type="checkbox" ${task.includeBulk !== false ? 'checked' : ''} onchange="toggleTopicRepairBulkInclude(${idx}, this.checked)" style="accent-color:var(--acc)">
             ${t('topicRepair.batchLabel')}
           </label>
-          <span style="font-size:11px;color:${statusColor}">${statusText}${task.provider ? ` Â· ${task.provider}` : ''}</span>
+          <span style="font-size:11px;color:${statusColor}">${statusText}${task.provider ? ` · ${task.provider}` : ''}</span>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
           <div style="font-size:11px;color:var(--txt2)">
-            <div><b>${t('topicRepair.originalTopic')}</b> ${escHtml(task.currentValue || 'â€”')}</div>
-            <div style="margin-top:4px"><b>${t('topicRepair.original')}</b> ${escHtml(task.sourceValue || 'â€”')}</div>
+            <div><b>${t('topicRepair.originalTopic')}</b> ${escHtml(task.currentValue || '—')}</div>
+            <div style="margin-top:4px"><b>${t('topicRepair.original')}</b> ${escHtml(task.sourceValue || '—')}</div>
           </div>
           <div style="font-size:11px;color:var(--txt)">
-            <div><b>${t('topicRepair.newProposal')}</b> ${escHtml(task.candidateValue || 'â€”')}</div>
+            <div><b>${t('topicRepair.newProposal')}</b> ${escHtml(task.candidateValue || '—')}</div>
             ${formatTopicRepairQuickCompare(task.topicId, task.currentValue, task.candidateValue)}
             ${rawHeadersHint}
             <div style="margin-top:4px;color:var(--txt2)">
               <b>${t('topicRepair.specialistInResponse')}</b> ${task.specialistaInRaw ? t('topicRepair.yes') : t('topicRepair.no')}
-              ${task.specialistaInRaw ? ` Â· <b>${t('topicRepair.status')}</b> ${escHtml(task.specialistaDecision || t('topicRepair.unchanged'))}` : ''}
+              ${task.specialistaInRaw ? ` · <b>${t('topicRepair.status')}</b> ${escHtml(task.specialistaDecision || t('topicRepair.unchanged'))}` : ''}
             </div>
             ${task.specialistaInRaw ? `
               <details style="margin-top:6px;background:var(--bg2);border:1px solid var(--brd);border-radius:4px;padding:6px">
                 <summary style="cursor:pointer;color:var(--acc)">${t('topicRepair.specialistDetail')}</summary>
-                <div style="margin-top:6px;color:var(--txt2)"><b>${t('topicRepair.originalSpecialist')}</b> ${escHtml(task.specialistaPreviousValue || 'â€”')}</div>
-                <div style="margin-top:6px;color:var(--txt)"><b>${t('topicRepair.aiSpecialist')}</b> ${escHtml(task.specialistaCandidateValue || 'â€”')}</div>
+                <div style="margin-top:6px;color:var(--txt2)"><b>${t('topicRepair.originalSpecialist')}</b> ${escHtml(task.specialistaPreviousValue || '—')}</div>
+                <div style="margin-top:6px;color:var(--txt)"><b>${t('topicRepair.aiSpecialist')}</b> ${escHtml(task.specialistaCandidateValue || '—')}</div>
                 <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
                   <button class="hbtn grn" onclick="setTopicRepairSpecialistaDecision(${idx}, 'accept')">${t('topicRepair.confirmSpecialist')}</button>
                   <button class="hbtn red" onclick="setTopicRepairSpecialistaDecision(${idx}, 'reject')">${t('topicRepair.rejectSpecialist')}</button>
@@ -167,9 +167,9 @@ function updateTopicRepairModalUI() {
                 <summary style="cursor:pointer;color:var(--acc2)">${t('topicRepair.extraTopics', { count: extraTopicsForUi.length })}</summary>
                 ${extraTopicsForUi.map(row => `
                   <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--brd)">
-                    <div style="font-size:11px;color:var(--txt2)"><b>${escHtml(TOPIC_LABELS[row.topicId] || row.topicId)}</b> Â· ${t('topicRepair.status')} ${escHtml(row.decision || t('topicRepair.unchanged'))}</div>
-                    <div style="margin-top:4px;color:var(--txt2)"><b>${t('topicRepair.originalShort')}</b> ${escHtml(row.previousValue || 'â€”')}</div>
-                    <div style="margin-top:4px;color:var(--txt)"><b>${t('topicRepair.aiShort')}</b> ${escHtml(row.candidateValue || 'â€”')}</div>
+                    <div style="font-size:11px;color:var(--txt2)"><b>${escHtml(TOPIC_LABELS[row.topicId] || row.topicId)}</b> · ${t('topicRepair.status')} ${escHtml(row.decision || t('topicRepair.unchanged'))}</div>
+                    <div style="margin-top:4px;color:var(--txt2)"><b>${t('topicRepair.originalShort')}</b> ${escHtml(row.previousValue || '—')}</div>
+                    <div style="margin-top:4px;color:var(--txt)"><b>${t('topicRepair.aiShort')}</b> ${escHtml(row.candidateValue || '—')}</div>
                     ${formatTopicRepairQuickCompare(row.topicId, row.previousValue, row.candidateValue)}
                     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">
                       <button class="hbtn grn" onclick="setTopicRepairDetectedTopicDecision(${idx}, '${row.topicId}', 'accept')">${t('topicRepair.confirm')}</button>
@@ -179,7 +179,7 @@ function updateTopicRepairModalUI() {
                 `).join('')}
               </details>
             ` : ''}
-            ${task.error ? `<div style="margin-top:4px;color:var(--red)">âœ— ${escHtml(task.error)}</div>` : ''}
+            ${task.error ? `<div style="margin-top:4px;color:var(--red)">✗ ${escHtml(task.error)}</div>` : ''}
           </div>
         </div>
       </div>`;
@@ -242,73 +242,73 @@ function renderTopicRepairModal() {
   modal.innerHTML = `
     <div style="max-width:980px;margin:0 auto;background:var(--bg2);border:1px solid var(--brd);border-radius:8px;padding:16px">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
-        <h2 style="color:var(--acc);margin:0">Oprava tÃ©mat (${topicRepairState.tasks.length})</h2>
+        <h2 style="color:var(--acc);margin:0">Oprava témat (${topicRepairState.tasks.length})</h2>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="hbtn" id="topicRepairMinimizeBtn" onclick="minimizeTopicRepairModal()">â– Minimalizovat</button>
-          <button class="hbtn" onclick="closeTopicRepairModalOnly()">âœ• ZavÅ™Ã­t okno</button>
+          <button class="hbtn" id="topicRepairMinimizeBtn" onclick="minimizeTopicRepairModal()">▁ Minimalizovat</button>
+          <button class="hbtn" onclick="closeTopicRepairModalOnly()">✕ Zavřít okno</button>
         </div>
       </div>
-      <div style="font-size:11px;color:var(--txt2);margin:8px 0 10px 0">ChybÄ›jÃ­cÃ­ tÃ©mata â€” nic se nespouÅ¡tÃ­ automaticky; zvol reÅ¾im a teprve pak spusÅ¥ pÅ™eklad.</div>
+      <div style="font-size:11px;color:var(--txt2);margin:8px 0 10px 0">Chybějící témata — nic se nespouští automaticky; zvol režim a teprve pak spusť překlad.</div>
       <div style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;padding:10px;margin-bottom:10px">
-        <div style="font-size:12px;color:var(--txt);margin-bottom:8px"><b>ReÅ¾im</b></div>
+        <div style="font-size:12px;color:var(--txt);margin-bottom:8px"><b>Režim</b></div>
         <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--txt2)">
           <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
             <input type="radio" name="topicRepairStrategy" id="topicRepairStrategySeq" value="sequential" ${state.repairStrategy === 'sequential' ? 'checked' : ''} onchange="setTopicRepairStrategy('sequential')" style="accent-color:var(--acc)">
-            Po jednom (sekvenÄnÄ› â€” vlastnÃ­ prompt pro kaÅ¾dÃ© chybÄ›jÃ­cÃ­ tÃ©ma)
+            Po jednom (sekvenčně — vlastní prompt pro každé chybějící téma)
           </label>
           <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
             <input type="radio" name="topicRepairStrategy" id="topicRepairStrategyBulk" value="bulk" ${state.repairStrategy === 'bulk' ? 'checked' : ''} onchange="setTopicRepairStrategy('bulk')" style="accent-color:var(--acc)">
-            HromadnÄ› (dÃ¡vka jednoho tÃ©matu â€” sekce nÃ­Å¾e, tlaÄÃ­tko â€žHromadnÃ½ pÅ™ekladâ€œ)
+            Hromadně (dávka jednoho tématu — sekce níže, tlačítko „Hromadný překlad“)
           </label>
         </div>
-        <div id="topicRepairBulkStrategyHint" style="margin-top:8px;font-size:11px;color:var(--txt3);display:${state.repairStrategy === 'bulk' ? 'block' : 'none'}">SekvenÄnÃ­ fronta se nespustÃ­. Rozbal â€žHromadnÃ¡ opravaâ€œ, zkontroluj prompt a dej âš¡ HromadnÃ½ pÅ™eklad.</div>
+        <div id="topicRepairBulkStrategyHint" style="margin-top:8px;font-size:11px;color:var(--txt3);display:${state.repairStrategy === 'bulk' ? 'block' : 'none'}">Sekvenční fronta se nespustí. Rozbal „Hromadná oprava“, zkontroluj prompt a dej ⚡ Hromadný překlad.</div>
       </div>
       <div style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;padding:10px;margin-bottom:10px">
-        <div id="topicRepairStatus" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt3)">â€”</div>
+        <div id="topicRepairStatus" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt3)">—</div>
         <div style="display:grid;gap:2px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt2);margin-top:6px">
-          <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="topicRepairEnable_groq" ${topicRepairState.providerEnabled.groq ? 'checked' : ''} onchange="applyTopicRepairProviderCheckboxes()" style="accent-color:var(--acc)">G <span id="topicRepairProvider_groq">Groq: â€”</span></label>
-          <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="topicRepairEnable_gemini" ${topicRepairState.providerEnabled.gemini ? 'checked' : ''} onchange="applyTopicRepairProviderCheckboxes()" style="accent-color:var(--acc)">Gm <span id="topicRepairProvider_gemini">Google: â€”</span></label>
-          <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="topicRepairEnable_openrouter" ${topicRepairState.providerEnabled.openrouter ? 'checked' : ''} onchange="applyTopicRepairProviderCheckboxes()" style="accent-color:var(--acc)">OR <span id="topicRepairProvider_openrouter">OpenRouter: â€”</span></label>
+          <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="topicRepairEnable_groq" ${topicRepairState.providerEnabled.groq ? 'checked' : ''} onchange="applyTopicRepairProviderCheckboxes()" style="accent-color:var(--acc)">G <span id="topicRepairProvider_groq">Groq: —</span></label>
+          <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="topicRepairEnable_gemini" ${topicRepairState.providerEnabled.gemini ? 'checked' : ''} onchange="applyTopicRepairProviderCheckboxes()" style="accent-color:var(--acc)">Gm <span id="topicRepairProvider_gemini">Google: —</span></label>
+          <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="topicRepairEnable_openrouter" ${topicRepairState.providerEnabled.openrouter ? 'checked' : ''} onchange="applyTopicRepairProviderCheckboxes()" style="accent-color:var(--acc)">OR <span id="topicRepairProvider_openrouter">OpenRouter: —</span></label>
         </div>
       </div>
       <details id="topicRepairBulkDetails" style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;padding:10px;margin-bottom:10px" ${state.repairStrategy === 'bulk' ? 'open' : ''}>
-        <summary style="cursor:pointer;color:var(--acc)">HromadnÃ¡ oprava jednoho tÃ©matu (dÃ¡vka)</summary>
+        <summary style="cursor:pointer;color:var(--acc)">Hromadná oprava jednoho tématu (dávka)</summary>
         <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:8px">
           <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--txt3);cursor:pointer">
             <input type="checkbox" id="topicRepairBulkOnlyFailed" checked style="accent-color:var(--acc)">
-            jen chyby / prÃ¡zdnÃ©
+            jen chyby / prázdné
           </label>
-          <button class="hbtn" type="button" onclick="setTopicRepairBulkIncludeAll(true)">â˜‘ DÃ¡vka: vÅ¡e</button>
-          <button class="hbtn" type="button" onclick="setTopicRepairBulkIncludeAll(false)">â˜ DÃ¡vka: nic</button>
+          <button class="hbtn" type="button" onclick="setTopicRepairBulkIncludeAll(true)">☑ Dávka: vše</button>
+          <button class="hbtn" type="button" onclick="setTopicRepairBulkIncludeAll(false)">☐ Dávka: nic</button>
         </div>
         <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:10px;font-size:12px;color:var(--txt2)">
-          <label style="display:flex;align-items:center;gap:6px">DÃ¡vka (hesel)
-            <input type="number" id="topicRepairBulkBatchInput" min="1" max="100" step="1" style="width:64px;padding:4px 6px;background:var(--bg2);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:12px" title="Synchronizuje skrytÃ© batchSizeRun (stejnÃ© jako AUTO)" oninput="syncTopicRepairBulkRunInputsToHidden()">
+          <label style="display:flex;align-items:center;gap:6px">Dávka (hesel)
+            <input type="number" id="topicRepairBulkBatchInput" min="1" max="100" step="1" style="width:64px;padding:4px 6px;background:var(--bg2);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:12px" title="Synchronizuje skryté batchSizeRun (stejné jako AUTO)" oninput="syncTopicRepairBulkRunInputsToHidden()">
           </label>
           <label style="display:flex;align-items:center;gap:6px">Interval (s)
-            <input type="number" id="topicRepairBulkIntervalInput" min="0" max="600" step="1" style="width:64px;padding:4px 6px;background:var(--bg2);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:12px" title="Synchronizuje skrytÃ© intervalRun â€” pauza mezi dÃ¡vkami" oninput="syncTopicRepairBulkRunInputsToHidden()">
+            <input type="number" id="topicRepairBulkIntervalInput" min="0" max="600" step="1" style="width:64px;padding:4px 6px;background:var(--bg2);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:12px" title="Synchronizuje skryté intervalRun — pauza mezi dávkami" oninput="syncTopicRepairBulkRunInputsToHidden()">
           </label>
           <span id="topicRepairBulkRunSummary" style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt3)"></span>
         </div>
         <div style="margin-top:8px">
-          <div style="font-size:11px;color:var(--txt2);margin-bottom:6px">Batch prompt (uloÅ¾enÃ½ per tÃ©ma). Placeholder <span style="font-family:'JetBrains Mono',monospace">{HESLA}</span> = vstupnÃ­ hesla.</div>
+          <div style="font-size:11px;color:var(--txt2);margin-bottom:6px">Batch prompt (uložený per téma). Placeholder <span style="font-family:'JetBrains Mono',monospace">{HESLA}</span> = vstupní hesla.</div>
           <textarea id="topicRepairBatchPrompt" style="width:100%;min-height:160px;background:var(--bg2);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:10px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.45"></textarea>
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
-            <button class="hbtn" type="button" onclick="saveTopicRepairBatchPromptDraft()">ðŸ’¾ UloÅ¾it prompt</button>
-            <button class="hbtn" type="button" onclick="resetTopicRepairBatchPromptToDefault()">â†º VÃ½chozÃ­ z katalogu</button>
-            <button class="hbtn grn" id="topicRepairBulkRunBtn" type="button" onclick="runTopicRepairBulkTranslation()">âš¡ HromadnÃ½ pÅ™eklad (vybranÃ©)</button>
+            <button class="hbtn" type="button" onclick="saveTopicRepairBatchPromptDraft()">💾 Uložit prompt</button>
+            <button class="hbtn" type="button" onclick="resetTopicRepairBatchPromptToDefault()">↺ Výchozí z katalogu</button>
+            <button class="hbtn grn" id="topicRepairBulkRunBtn" type="button" onclick="runTopicRepairBulkTranslation()">⚡ Hromadný překlad (vybrané)</button>
           </div>
           <div style="font-size:11px;color:var(--txt3);margin-top:8px">
-            Tip: pokud bÄ›Å¾Ã­ sekvenÄnÃ­ oprava, dej nejdÅ™Ã­v Pauza â€” hromadnÃ½ bÄ›h poÄkÃ¡, aÅ¾ dobÄ›hne aktuÃ¡lnÃ­ pokus.
+            Tip: pokud běží sekvenční oprava, dej nejdřív Pauza — hromadný běh počká, až doběhne aktuální pokus.
           </div>
         </div>
       </details>
       <div style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;padding:10px;margin-bottom:10px">
-        <div style="font-size:12px;color:var(--txt);margin-bottom:6px"><b>TÃ©ma v seznamu</b> â€” podle vÃ½bÄ›ru se zobrazÃ­ jen odpovÃ­dajÃ­cÃ­ Å™Ã¡dky (sekvenÄnÃ­ i dÃ¡vka).</div>
+        <div style="font-size:12px;color:var(--txt);margin-bottom:6px"><b>Téma v seznamu</b> — podle výběru se zobrazí jen odpovídající řádky (sekvenční i dávka).</div>
         <label style="display:flex;align-items:center;gap:10px;font-size:12px;color:var(--txt2);flex-wrap:wrap">
           <span style="white-space:nowrap">Vybrat</span>
           <select id="topicRepairBulkTopicSelect" onchange="refreshTopicRepairBatchPromptEditor()" style="min-width:240px;flex:1;max-width:100%;background:var(--bg2);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:6px;font-size:12px">
-            <option value="all" ${state.bulkTopicId === 'all' ? 'selected' : ''}>VÅ¡e</option>
+            <option value="all" ${state.bulkTopicId === 'all' ? 'selected' : ''}>Vše</option>
             <option value="definice" ${state.bulkTopicId === 'definice' ? 'selected' : ''}>${escHtml(TOPIC_LABELS.definice)}</option>
             <option value="vyznam" ${state.bulkTopicId === 'vyznam' ? 'selected' : ''}>${escHtml(TOPIC_LABELS.vyznam)}</option>
             <option value="kjv" ${state.bulkTopicId === 'kjv' ? 'selected' : ''}>${escHtml(TOPIC_LABELS.kjv)}</option>
@@ -318,18 +318,18 @@ function renderTopicRepairModal() {
           </select>
         </label>
         <div id="topicRepairBulkListFilterRow" style="display:${state.bulkTopicId === 'all' ? 'flex' : 'none'};flex-wrap:wrap;gap:10px 14px;align-items:center;width:100%;margin-top:10px;padding-top:10px;border-top:1px solid var(--brd);font-size:11px;color:var(--txt2)">
-          <span style="width:100%;margin-bottom:2px">U â€žVÅ¡eâ€œ omez typy tÃ©mat:</span>
+          <span style="width:100%;margin-bottom:2px">U „Vše“ omez typy témat:</span>
           ${TOPIC_REPAIR_BULK_TOPIC_ORDER.map(tid => {
             const on = (state.bulkListTopicFilter || defaultBulkListTopicFilter())[tid] !== false;
             return `<label style="display:flex;align-items:center;gap:4px;cursor:pointer;white-space:nowrap"><input type="checkbox" ${on ? 'checked' : ''} onchange="toggleTopicRepairBulkListFilter('${tid}', this.checked)" style="accent-color:var(--acc)">${escHtml(TOPIC_LABELS[tid] || tid)}</label>`;
           }).join('')}
         </div>
-        <div style="font-size:10px;color:var(--txt3);margin-top:8px">Batch prompt a âš¡ hromadnÃ½ pÅ™eklad zÅ¯stÃ¡vajÃ­ v sekci â€žHromadnÃ¡ opravaâ€œ vÃ½Å¡e â€” vÃ½bÄ›r tÃ©mat je stejnÃ½.</div>
+        <div style="font-size:10px;color:var(--txt3);margin-top:8px">Batch prompt a ⚡ hromadný překlad zůstávají v sekci „Hromadná oprava“ výše — výběr témat je stejný.</div>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:center">
-        <button class="hbtn grn" id="topicRepairStartSequentialBtn" type="button" onclick="startTopicRepairSequentialWorker()">â–¶ Spustit sekvenÄnÃ­ opravu</button>
-        <button class="hbtn grn" id="topicRepairToggleBtn" onclick="toggleTopicRepairRun()">â¸ Pauza</button>
-        <button class="hbtn grn" id="topicRepairApplyBtn" onclick="applyTopicRepairSelected()">âœ“ Potvrdit pÅ™epsÃ¡nÃ­ (0)</button>
+        <button class="hbtn grn" id="topicRepairStartSequentialBtn" type="button" onclick="startTopicRepairSequentialWorker()">▶ Spustit sekvenční opravu</button>
+        <button class="hbtn grn" id="topicRepairToggleBtn" onclick="toggleTopicRepairRun()">⏸ Pauza</button>
+        <button class="hbtn grn" id="topicRepairApplyBtn" onclick="applyTopicRepairSelected()">✓ Potvrdit přepsání (0)</button>
       </div>
       <div id="topicRepairList"></div>
     </div>
@@ -444,12 +444,12 @@ async function processTopicRepairQueue() {
           ];
           const raw = await callAIWithRetry(prov, apiKey, model, messages);
           const rawText = String(raw?.content || '').trim();
-          log(`ðŸ“¥ RAW AI oprava ${nextTask.key}.${nextTask.topicId}: vypsÃ¡no do konzole`);
-          console.groupCollapsed(`ðŸ¤– RAW AI oprava ${nextTask.key}.${nextTask.topicId} (${prov}/${model})`);
-          console.log(rawText || '(prÃ¡zdnÃ¡ odpovÄ›Ä)');
+          log(`📥 RAW AI oprava ${nextTask.key}.${nextTask.topicId}: vypsáno do konzole`);
+          console.groupCollapsed(`🤖 RAW AI oprava ${nextTask.key}.${nextTask.topicId} (${prov}/${model})`);
+          console.log(rawText || '(prázdná odpověď)');
           console.groupEnd();
 
-          // Kontrola dalÅ¡Ã­ch tÃ©mat: zobraz jen skuteÄnÄ› oznaÄenÃ¡ pole v RAW odpovÄ›di (striktnÃ­ parser).
+          // Kontrola dalších témat: zobraz jen skutečně označená pole v RAW odpovědi (striktní parser).
           state.translated[nextTask.key] = state.translated[nextTask.key] || {};
           const baselineTopicValues = cloneTranslationTopicFields(state.translated[nextTask.key]);
 
@@ -469,7 +469,7 @@ async function processTopicRepairQueue() {
               topicId,
               previousValue: previousTopicVal,
               candidateValue: candidateTopicVal,
-              decision: acceptAuto ? 'pÅ™ijat (auto)' : 'zamÃ­tnut (auto)'
+              decision: acceptAuto ? 'přijat (auto)' : 'zamítnut (auto)'
             });
           };
 
@@ -507,36 +507,36 @@ async function processTopicRepairQueue() {
           nextTask.specialistaPreviousValue = prevSpecialista;
           nextTask.specialistaCandidateValue = candidateSpecialista;
           if (specHeader && !hasMeaningfulValue(candidateSpecialista)) {
-            log(`âš  ${nextTask.key}: v RAW je nadpis SPECIALISTA, ale tÄ›lo se nepodaÅ™ilo strojovÄ› vyÄÃ­st â€” viz konzole RAW.`);
+            log(`⚠ ${nextTask.key}: v RAW je nadpis SPECIALISTA, ale tělo se nepodařilo strojově vyčíst — viz konzole RAW.`);
           }
           if (shouldReplaceSpecialista(prevSpecialista, candidateSpecialista)) {
             state.translated[nextTask.key].specialista = String(candidateSpecialista || '').trim();
-            nextTask.specialistaDecision = 'pÅ™ijat (auto)';
-            log(`ðŸ§  SPECIALISTA auto-upgrade ${nextTask.key}: pouÅ¾it kvalitnÄ›jÅ¡Ã­ text z opravy tÃ©matu`);
+            nextTask.specialistaDecision = 'přijat (auto)';
+            log(`🧠 SPECIALISTA auto-upgrade ${nextTask.key}: použit kvalitnější text z opravy tématu`);
           } else if (nextTask.specialistaInRaw) {
-            nextTask.specialistaDecision = 'zamÃ­tnut (auto)';
+            nextTask.specialistaDecision = 'zamítnut (auto)';
           } else {
             nextTask.specialistaDecision = '';
           }
 
           const hdrOther = (nextTask.rawHeaderTopics || []).filter(id => id !== nextTask.topicId);
-          const hdrLabels = hdrOther.map(id => TOPIC_LABELS[id] || id).join(', ') || 'â€”';
-          const dtIds = (nextTask.detectedTopics || []).map(d => TOPIC_LABELS[d.topicId] || d.topicId).join(', ') || 'â€”';
-          log(`ðŸ“Ž ${nextTask.key} Â· â€ž${TOPIC_LABELS[nextTask.topicId] || nextTask.topicId}â€œ: v RAW bloky [${hdrLabels}] â†’ dalÅ¡Ã­ tÃ©mata (UI): [${dtIds}] Â· SPECIALISTA: ${nextTask.specialistaInRaw ? 'ano' : 'ne'}`);
+          const hdrLabels = hdrOther.map(id => TOPIC_LABELS[id] || id).join(', ') || '—';
+          const dtIds = (nextTask.detectedTopics || []).map(d => TOPIC_LABELS[d.topicId] || d.topicId).join(', ') || '—';
+          log(`📎 ${nextTask.key} · „${TOPIC_LABELS[nextTask.topicId] || nextTask.topicId}“: v RAW bloky [${hdrLabels}] → další témata (UI): [${dtIds}] · SPECIALISTA: ${nextTask.specialistaInRaw ? 'ano' : 'ne'}`);
 
           const candidate = extractTopicValueFromAI(raw?.content || '', nextTask.topicId, 'strict');
           if (!hasMeaningfulValue(candidate)) {
-            throw new Error('AI vrÃ¡tila prÃ¡zdnÃ½ vÃ½sledek');
+            throw new Error('AI vrátila prázdný výsledek');
           }
           nextTask.provider = prov;
           nextTask.candidateValue = String(candidate || '').trim();
           nextTask.checked = shouldAutoCheckTopicRepairTask(nextTask.topicId, nextTask.currentValue, nextTask.candidateValue);
           nextTask.status = 'done';
           success = true;
-          log(`âœ“ Oprava tÃ©matu ${nextTask.key}.${nextTask.topicId} pÅ™es ${prov}`);
+          log(`✓ Oprava tématu ${nextTask.key}.${nextTask.topicId} přes ${prov}`);
           break;
         } catch (e) {
-          nextTask.error = e.message || 'NeznÃ¡mÃ¡ chyba';
+          nextTask.error = e.message || 'Neznámá chyba';
         } finally {
           state.topicRepairState.currentTask = null;
           updateTopicRepairProviderStatus();
@@ -593,11 +593,11 @@ function setTopicRepairSpecialistaDecision(index, decision) {
   state.translated[task.key] = state.translated[task.key] || {};
   if (decision === 'accept') {
     state.translated[task.key].specialista = String(task.specialistaCandidateValue || '').trim();
-    task.specialistaDecision = 'pÅ™ijat ruÄnÄ›';
+    task.specialistaDecision = 'přijat ručně';
     showToast(t('toast.specialista.approved', { key: task.key }));
   } else {
     state.translated[task.key].specialista = String(task.specialistaPreviousValue || '').trim();
-    task.specialistaDecision = 'zamÃ­tnut ruÄnÄ›';
+    task.specialistaDecision = 'zamítnut ručně';
     showToast(t('toast.specialista.rejected', { key: task.key }));
   }
   saveProgress();
@@ -614,11 +614,11 @@ function setTopicRepairDetectedTopicDecision(taskIndex, topicId, decision) {
   state.translated[task.key] = state.translated[task.key] || {};
   if (decision === 'accept') {
     state.translated[task.key][topicId] = String(row.candidateValue || '').trim();
-    row.decision = 'pÅ™ijat ruÄnÄ›';
+    row.decision = 'přijat ručně';
     showToast(t('toast.topic.approved', { topic: TOPIC_LABELS[topicId] || topicId, key: task.key }));
   } else {
     state.translated[task.key][topicId] = String(row.previousValue || '').trim();
-    row.decision = 'zamÃ­tnut ruÄnÄ›';
+    row.decision = 'zamítnut ručně';
     showToast(t('toast.topic.rejected', { topic: TOPIC_LABELS[topicId] || topicId, key: task.key }));
   }
   if (topicId === 'specialista') {
@@ -645,7 +645,7 @@ function applyTopicRepairSelected() {
     if (state.activeKey) renderDetail();
     updateStats();
     updateFailedCount();
-    log(`âœ“ Potvrzeno pÅ™epsÃ¡nÃ­ tÃ©mat v opravÄ›: ${applied} Å™Ã¡dkÅ¯`);
+    log(`✓ Potvrzeno přepsání témat v opravě: ${applied} řádků`);
   }
   state.selectedKeys.clear();
   renderList();
@@ -715,7 +715,7 @@ const TOPIC_BATCH_PROMPT_PRESET_MAP = {
   specialista: 'preset_topic_specialista_batch'
 };
 
-/** PoÅ™adÃ­ tÃ©mat pÅ™i hromadnÃ© opravÄ› â€žVÅ¡eâ€œ. */
+/** Pořadí témat při hromadné opravě „Vše“. */
 const TOPIC_REPAIR_BULK_TOPIC_ORDER = ['definice', 'vyznam', 'kjv', 'pouziti', 'puvod', 'specialista'];
 
 function defaultBulkListTopicFilter() {
@@ -732,7 +732,7 @@ function getTopicRepairModalVisibleTasks(state) {
   return state.tasks.filter(t => t.topicId === bid);
 }
 
-/** DalÅ¡Ã­ ÄekajÃ­cÃ­ Ãºloha v poÅ™adÃ­ `topicRepairState.tasks`, ale jen pokud spadÃ¡ do aktuÃ¡lnÃ­ho filtru tÃ©matu. */
+/** Další čekající úloha v pořadí `topicRepairState.tasks`, ale jen pokud spadá do aktuálního filtru tématu. */
 function findNextTopicRepairWaitingTask(state) {
   if (!state || !Array.isArray(state.tasks)) return null;
   const vset = new Set(getTopicRepairModalVisibleTasks(state));
@@ -749,19 +749,19 @@ function applyPromptLanguageTokens(promptText) {
   const targetLang = localStorage.getItem('strong_target_lang') || 'cz';
   const sourceLang = localStorage.getItem('strong_source_lang') || 'gr';
   const langNames = {
-    cz: 'ÄeÅ¡tiny',
-    en: 'angliÄtiny',
-    bg: 'bulharÅ¡tiny',
-    ch: 'ÄÃ­nÅ¡tiny',
-    sp: 'Å¡panÄ›lÅ¡tiny',
-    sk: 'slovenÅ¡tiny',
-    pl: 'polÅ¡tiny',
-    gr: 'Å™eÄtiny',
-    he: 'hebrejÅ¡tiny',
-    both: 'Å™eÄtiny i hebrejÅ¡tiny'
+    cz: 'češtiny',
+    en: 'angličtiny',
+    bg: 'bulharštiny',
+    ch: 'čínštiny',
+    sp: 'španělštiny',
+    sk: 'slovenštiny',
+    pl: 'polštiny',
+    gr: 'řečtiny',
+    he: 'hebrejštiny',
+    both: 'řečtiny i hebrejštiny'
   };
-  const targetName = langNames[targetLang] || 'ÄeÅ¡tiny';
-  const sourceName = langNames[sourceLang] || 'Å™eÄtiny';
+  const targetName = langNames[targetLang] || 'češtiny';
+  const sourceName = langNames[sourceLang] || 'řečtiny';
   return String(promptText || '')
     .replace(/{TARGET_LANG}/g, targetName)
     .replace(/{SOURCE_LANG}/g, sourceName);
@@ -819,7 +819,7 @@ function refreshTopicRepairBatchPromptEditor() {
   if (topicId === 'all') {
     ta.readOnly = true;
     ta.value =
-      'ReÅ¾im â€žVÅ¡eâ€œ: seznam Å™Ã¡dkÅ¯ filtrujeÅ¡ zaÅ¡krtÃ¡vkami vÃ½Å¡e. HromadnÃ½ pÅ™eklad postupnÄ› pouÅ¾ije uloÅ¾enÃ½ batch prompt (ðŸ’¾ UloÅ¾it prompt) pro kaÅ¾dÃ© zaÅ¡krtnutÃ© tÃ©ma â€” jedno tÃ©ma vyber v seznamu, uprav text a uloÅ¾.';
+      'Režim „Vše“: seznam řádků filtruješ zaškrtávkami výše. Hromadný překlad postupně použije uložený batch prompt (💾 Uložit prompt) pro každé zaškrtnuté téma — jedno téma vyber v seznamu, uprav text a ulož.';
   } else {
     ta.readOnly = false;
     ta.value = applyPromptLanguageTokens(getTopicRepairBatchPromptTemplate(topicId));
@@ -881,7 +881,7 @@ function parseTopicRepairBatchResponse(rawText, topicId) {
   return out;
 }
 
-/** VÃ½Å™ez bloku jednoho hesla z hromadnÃ© RAW odpovÄ›di (pro parsovÃ¡nÃ­ SPECIALISTA apod.). */
+/** Výřez bloku jednoho hesla z hromadné RAW odpovědi (pro parsování SPECIALISTA apod.). */
 function extractTopicRepairBatchBlockForKey(rawText, key) {
   const text = String(normalizeAiTopicRawText(rawText) || '').trim();
   const upperKey = String(key || '').trim().toUpperCase();
@@ -899,7 +899,7 @@ function extractTopicRepairBatchBlockForKey(rawText, key) {
   return '';
 }
 
-/** NaplnÃ­ specialista* u tasku z libovolnÃ©ho RAW (dÃ¡vka = jen blok ###G12###â€¦). */
+/** Naplní specialista* u tasku z libovolného RAW (dávka = jen blok ###G12###…). */
 function syncTopicRepairTaskSpecialistaFromRaw(task, rawText) {
   if (!task) return;
   const baseline = state.translated[task.key] || {};
@@ -918,14 +918,14 @@ function syncTopicRepairTaskSpecialistaFromRaw(task, rawText) {
   task.specialistaPreviousValue = prevSpecialista;
   task.specialistaCandidateValue = candidateSpecialista;
   if (specHeader && !hasMeaningfulValue(candidateSpecialista)) {
-    log(`âš  ${task.key} (dÃ¡vka): v bloku je nadpis SPECIALISTA/alias, ale tÄ›lo se nepodaÅ™ilo strojovÄ› vyÄÃ­st â€” viz konzole RAW.`);
+    log(`⚠ ${task.key} (dávka): v bloku je nadpis SPECIALISTA/alias, ale tělo se nepodařilo strojově vyčíst — viz konzole RAW.`);
   }
   state.translated[task.key] = state.translated[task.key] || {};
   if (shouldReplaceSpecialista(prevSpecialista, candidateSpecialista)) {
     state.translated[task.key].specialista = String(candidateSpecialista || '').trim();
-    task.specialistaDecision = 'pÅ™ijat (auto)';
+    task.specialistaDecision = 'přijat (auto)';
   } else if (task.specialistaInRaw) {
-    task.specialistaDecision = 'zamÃ­tnut (auto)';
+    task.specialistaDecision = 'zamítnut (auto)';
   } else {
     task.specialistaDecision = '';
   }
@@ -965,7 +965,7 @@ function updateTopicRepairBulkRunSummarySpan() {
   if (!el) return;
   const bs = parseInt(document.getElementById('batchSizeRun')?.value, 10) || 10;
   const iv = parseInt(document.getElementById('intervalRun')?.value, 10) || 20;
-  el.textContent = `jako AUTO: dÃ¡vka ${bs} hesel Â· interval ${iv}s`;
+  el.textContent = `jako AUTO: dávka ${bs} hesel · interval ${iv}s`;
 }
 
 function initTopicRepairBulkRunInputs() {
@@ -978,7 +978,7 @@ function initTopicRepairBulkRunInputs() {
   updateTopicRepairBulkRunSummarySpan();
 }
 
-/** Jedno tÃ©ma â€” vnitÅ™nÃ­ smyÄka dÃ¡vek (reÅ¾im â€žVÅ¡eâ€œ i jedno tÃ©ma z editoru). */
+/** Jedno téma — vnitřní smyčka dávek (režim „Vše“ i jedno téma z editoru). */
 async function runTopicRepairBulkTranslationCore(state, topicId, promptTemplate, onlyFailed, bs) {
   const tasks = state.tasks.filter(t => t && t.topicId === topicId && t.includeBulk !== false);
   const picked = onlyFailed
@@ -988,7 +988,7 @@ async function runTopicRepairBulkTranslationCore(state, topicId, promptTemplate,
   if (!keys.length) return { count: 0 };
 
   const iv0 = parseInt(document.getElementById('intervalRun')?.value, 10) || 20;
-  log(`âš¡ HromadnÃ¡ oprava â€ž${TOPIC_LABELS[topicId] || topicId}â€œ: ${keys.length} Ãºloh, dÃ¡vka ${bs}, interval ${iv0}s`);
+  log(`⚡ Hromadná oprava „${TOPIC_LABELS[topicId] || topicId}“: ${keys.length} úloh, dávka ${bs}, interval ${iv0}s`);
 
   let processed = 0;
   const abortVersion = Number(state.topicRepairBulkAbortVersion || 0);
@@ -1015,9 +1015,9 @@ async function runTopicRepairBulkTranslationCore(state, topicId, promptTemplate,
     if (abortVersion !== Number(state.topicRepairBulkAbortVersion || 0)) break;
 
     const rawText = String(raw?.content || '').trim();
-    log(`ðŸ“¥ RAW AI batch oprava ${topicId}: vypsÃ¡no do konzole`);
-    console.groupCollapsed(`ðŸ¤– RAW AI batch oprava ${topicId} (${prov}/${model})`);
-    console.log(rawText || '(prÃ¡zdnÃ¡ odpovÄ›Ä)');
+    log(`📥 RAW AI batch oprava ${topicId}: vypsáno do konzole`);
+    console.groupCollapsed(`🤖 RAW AI batch oprava ${topicId} (${prov}/${model})`);
+    console.log(rawText || '(prázdná odpověď)');
     console.groupEnd();
 
     const parsedMap = parseTopicRepairBatchResponse(rawText, topicId);
@@ -1035,7 +1035,7 @@ async function runTopicRepairBulkTranslationCore(state, topicId, promptTemplate,
         syncTopicRepairTaskSpecialistaFromRaw(task, blockRaw);
       } else {
         task.status = 'failed';
-        task.error = 'AI nevrÃ¡tila hodnotu pro toto heslo (zkontroluj formÃ¡t odpovÄ›di).';
+        task.error = 'AI nevrátila hodnotu pro toto heslo (zkontroluj formát odpovědi).';
       }
     }
 
@@ -1060,7 +1060,7 @@ async function runTopicRepairBulkTranslation() {
   if (!topicRepairState) return;
   if (state.topicRepairBulkRunning) {
     state.topicRepairBulkAbortVersion++;
-    showToast('â¹ Zastavuji hromadnÃ½ pÅ™eklad...');
+    showToast('⏹ Zastavuji hromadný překlad...');
     return;
   }
   syncTopicRepairBulkRunInputsToHidden();
@@ -1080,7 +1080,7 @@ async function runTopicRepairBulkTranslation() {
   const bulkBtn = document.getElementById('topicRepairBulkRunBtn');
   if (bulkBtn) {
     bulkBtn.disabled = false;
-    bulkBtn.textContent = 'â–  Zastavit hromadnÃ½ pÅ™eklad';
+    bulkBtn.textContent = '■ Zastavit hromadný překlad';
   }
 
   const wasPaused = !!state.paused;
@@ -1112,7 +1112,7 @@ async function runTopicRepairBulkTranslation() {
         const topicId = topicsToRun[ti];
         const promptTemplate = applyPromptLanguageTokens(String(getTopicRepairBatchPromptTemplate(topicId) || '').trim());
         if (!promptTemplate) {
-          log(`âš  PÅ™eskoÄeno tÃ©ma ${topicId} â€” prÃ¡zdnÃ½ uloÅ¾enÃ½ batch prompt.`);
+          log(`⚠ Přeskočeno téma ${topicId} — prázdný uložený batch prompt.`);
           continue;
         }
         const res = await runTopicRepairBulkTranslationCore(state, topicId, promptTemplate, onlyFailed, bs);
@@ -1184,9 +1184,9 @@ function syncTopicPromptTemplatesReport() {
     return !fromCatalog || fromCatalog !== fromDetailBase;
   });
   if (mismatched.length > 0) {
-    log(`âš  Topic prompt sync: ${mismatched.map(([topicId]) => topicId).join(', ')}`);
+    log(`⚠ Topic prompt sync: ${mismatched.map(([topicId]) => topicId).join(', ')}`);
   } else {
-    log('âœ“ Topic prompt sync: testy/detail jsou 1:1');
+    log('✓ Topic prompt sync: testy/detail jsou 1:1');
   }
 }
 
@@ -1204,21 +1204,21 @@ function buildTopicPrompt(key, topicId) {
   const specialistaDetailRule = topicId === 'specialista'
     ? `
 
-POÅ½ADAVEK NA STYL:
-- VraÅ¥ detailnÃ­ exegetickÃ½ odstavec (3-5 vÄ›t), jako biblickÃ½ specialista.
-- VysvÄ›tli vÃ½znam slova v Å¡irÅ¡Ã­m biblickÃ©m a teologickÃ©m kontextu.
-- Bez odrÃ¡Å¾ek, bez ÄÃ­slovÃ¡nÃ­, bez dalÅ¡Ã­ch polÃ­.`
+POŽADAVEK NA STYL:
+- Vrať detailní exegetický odstavec (3-5 vět), jako biblický specialista.
+- Vysvětli význam slova v širším biblickém a teologickém kontextu.
+- Bez odrážek, bez číslování, bez dalších polí.`
     : '';
 
   return `${enforceSpecialistaFormat(promptTemplate)}
 
 ---
-TEÄŽ PÅ˜ELOÅ½ POUZE JEDNO TÃ‰MA.
+TEĎ PŘELOŽ POUZE JEDNO TÉMA.
 - Heslo: ${key}
 - Pole: ${topicLabel} (${topicId})
-- VraÅ¥ jen ÄistÃ½ text pro toto jedno pole bez dalÅ¡Ã­ch sekcÃ­.
+- Vrať jen čistý text pro toto jedno pole bez dalších sekcí.
 
-ZdrojovÃ¡ data:
+Zdrojová data:
 ${sourceText}
 ${specialistaDetailRule}`;
 }
@@ -1263,7 +1263,7 @@ function openTopicPromptModal(key, topicId) {
   const promptInput = document.getElementById('topicPromptInput');
   if (promptInput) promptInput.value = state.topicPromptState.prompt;
   const currentInput = document.getElementById('topicPromptCurrentValue');
-  if (currentInput) currentInput.value = state.topicPromptState.currentValue || 'â€”';
+  if (currentInput) currentInput.value = state.topicPromptState.currentValue || '—';
 }
 
 async function runTopicPromptAI() {
@@ -1297,17 +1297,17 @@ async function runTopicPromptAI() {
     const raw = await callAIWithRetry(prov, apiKey, model, messages);
     const rawText = String(raw?.content || '').trim();
     resultInput.value = rawText;
-    log(`ðŸ¤– PÅ™eklad tÃ©matu: ${getTranslationEngineLabel(raw, prov, model)}`);
-    log(`ðŸ“¥ RAW AI ${state.topicPromptState.key}.${state.topicPromptState.topicId}: vypsÃ¡no do konzole`);
-    console.groupCollapsed(`ðŸ¤– RAW AI ${state.topicPromptState.key}.${state.topicPromptState.topicId}`);
-    console.log(rawText || '(prÃ¡zdnÃ¡ odpovÄ›Ä)');
+    log(`🤖 Překlad tématu: ${getTranslationEngineLabel(raw, prov, model)}`);
+    log(`📥 RAW AI ${state.topicPromptState.key}.${state.topicPromptState.topicId}: vypsáno do konzole`);
+    console.groupCollapsed(`🤖 RAW AI ${state.topicPromptState.key}.${state.topicPromptState.topicId}`);
+    console.log(rawText || '(prázdná odpověď)');
     console.groupEnd();
   } catch (e) {
     logError('runTopicPromptAI', e, { key: state.topicPromptState.key, topic: state.topicPromptState.topicId });
     showToast(t('toast.error.withMessage', { message: e.message }));
   } finally {
     runBtn.disabled = false;
-    runBtn.textContent = 'â–¶ Odeslat AI';
+    runBtn.textContent = '▶ Odeslat AI';
   }
 }
 
@@ -1333,14 +1333,14 @@ function applyTopicPromptResult() {
   if (!state.translated[key]) state.translated[key] = {};
   const prevValue = String(state.translated[key]?.[topicId] || '').trim();
   if (topicId === 'definice' && isDefinitionLowQuality(val)) {
-    showToast('âš  Definice vypadÃ¡ nekvalitnÄ›, ponechÃ¡na pÅ¯vodnÃ­ hodnota.');
+    showToast('⚠ Definice vypadá nekvalitně, ponechána původní hodnota.');
     return;
   }
   if (hasMeaningfulValue(prevValue) && !shouldReplaceTopicValue(topicId, prevValue, val)) {
     if (topicId === 'specialista') {
-      showToast('âš  Specialista nenÃ­ kvalitnÄ›jÅ¡Ã­ neÅ¾ aktuÃ¡lnÃ­ text. PÅ¯vodnÃ­ hodnota zÅ¯stala.');
+      showToast('⚠ Specialista není kvalitnější než aktuální text. Původní hodnota zůstala.');
     } else {
-      showToast(`âš  Pole ${TOPIC_LABELS[topicId] || topicId}: novÃ½ nÃ¡vrh nenÃ­ lepÅ¡Ã­, pÅ¯vodnÃ­ hodnota zÅ¯stala.`);
+      showToast(`⚠ Pole ${TOPIC_LABELS[topicId] || topicId}: nový návrh není lepší, původní hodnota zůstala.`);
     }
     return;
   }
@@ -1351,10 +1351,10 @@ function applyTopicPromptResult() {
   const candidateSpecialista = hasMeaningfulValue(candidateSpecialistaStrict) ? candidateSpecialistaStrict : candidateSpecialistaLoose;
   if (shouldReplaceSpecialista(prevSpecialista, candidateSpecialista)) {
     state.translated[key].specialista = String(candidateSpecialista || '').trim();
-    log(`ðŸ§  SPECIALISTA auto-upgrade ${key}: pouÅ¾it kvalitnÄ›jÅ¡Ã­ text z AI odpovÄ›di`);
+    log(`🧠 SPECIALISTA auto-upgrade ${key}: použit kvalitnější text z AI odpovědi`);
   }
 
-  // Pokud AI vrÃ¡tÃ­ i dalÅ¡Ã­ tÃ©mata, zkus je bezpeÄnÄ› slouÄit (jen kdyÅ¾ jsou kvalitnÄ›jÅ¡Ã­).
+  // Pokud AI vrátí i další témata, zkus je bezpečně sloučit (jen když jsou kvalitnější).
   const topicIds = ['vyznam', 'definice', 'pouziti', 'puvod', 'kjv', 'specialista'];
   for (const extraTopicId of topicIds) {
     if (extraTopicId === topicId) continue;
@@ -1366,7 +1366,7 @@ function applyTopicPromptResult() {
     const prevExtra = String(state.translated[key]?.[extraTopicId] || '').trim();
     if (hasMeaningfulValue(prevExtra) && !shouldReplaceTopicValue(extraTopicId, prevExtra, extraVal)) continue;
     state.translated[key][extraTopicId] = extraVal;
-    log(`âœ¨ DETAIL auto-merge ${key}.${extraTopicId}: aplikovÃ¡no z jednÃ© AI odpovÄ›di`);
+    log(`✨ DETAIL auto-merge ${key}.${extraTopicId}: aplikováno z jedné AI odpovědi`);
   }
   saveProgress();
   renderDetail();
@@ -1388,7 +1388,7 @@ function getSpecialistaQualityScore(text) {
   if (sentenceCount >= 2) score += 1;
   if (sentenceCount >= 3) score += 2;
   if (sentenceCount >= 5) score += 1;
-  const biblicalHints = (t.match(/\b(BÅ¯h|Kristus|JeÅ¾Ã­Å¡|evangelium|hÅ™Ã­ch|spÃ¡sa|soud|milost|vÃ­ra|teolog|teologie|biblick|zjevenÃ­|Å¾alm|job|pÅ™Ã­slovÃ­|novÃ½ zÃ¡kon|starÃ½ zÃ¡kon)\b/gi) || []).length;
+  const biblicalHints = (t.match(/\b(Bůh|Kristus|Ježíš|evangelium|hřích|spása|soud|milost|víra|teolog|teologie|biblick|zjevení|žalm|job|přísloví|nový zákon|starý zákon)\b/gi) || []).length;
   score += Math.min(4, biblicalHints);
   const englishNoise = (t.match(/\b(the|and|which|used|only|without|see|word|in|of|to)\b/gi) || []).length;
   score -= Math.min(4, englishNoise);
@@ -1408,7 +1408,7 @@ function shouldReplaceSpecialista(currentText, candidateText) {
 }
 
 function countCzDiacritics(text) {
-  return (String(text || '').match(/[Ã¡ÄÄÃ©Ä›Ã­ÅˆÃ³Å™Å¡Å¥ÃºÅ¯Ã½Å¾ÃÄŒÄŽÃ‰ÄšÃÅ‡Ã“Å˜Å Å¤ÃšÅ®ÃÅ½]/g) || []).length;
+  return (String(text || '').match(/[áčďéěíňóřšťúůýžÁČĎÉĚÍŇÓŘŠŤÚŮݎ]/g) || []).length;
 }
 
 function countEnglishNoiseWords(text) {
@@ -1421,7 +1421,7 @@ function countBracketRefs(text) {
 
 function scoreTopicRepairText(topicId, text) {
   const t = String(text || '').trim();
-  if (!hasMeaningfulValue(t)) return { score: 0, notes: ['prÃ¡zdnÃ©'] };
+  if (!hasMeaningfulValue(t)) return { score: 0, notes: ['prázdné'] };
   const notes = [];
   let score = 0;
 
@@ -1432,11 +1432,11 @@ function scoreTopicRepairText(topicId, text) {
     score += Math.min(3, Math.floor(countCzDiacritics(t) / 6));
     if (isDefinitionLowQuality(t)) {
       score -= 8;
-      notes.push('definice: nÃ­zkÃ¡ kvalita / pÅ™Ã­liÅ¡ krÃ¡tkÃ©');
+      notes.push('definice: nízká kvalita / příliš krátké');
     }
     if (isDefinitionLikelyEnglish(t)) {
       score -= 6;
-      notes.push('definice: anglickÃ½ nÃ¡dech');
+      notes.push('definice: anglický nádech');
     }
     score -= Math.min(4, countEnglishNoiseWords(t));
     return { score, notes };
@@ -1449,7 +1449,7 @@ function scoreTopicRepairText(topicId, text) {
     score -= Math.min(4, countEnglishNoiseWords(t));
     if (words > 14) {
       score -= 2;
-      notes.push('vÃ½znam: hodnÄ› dlouhÃ½');
+      notes.push('význam: hodně dlouhý');
     }
     return { score, notes };
   }
@@ -1468,7 +1468,7 @@ function scoreTopicRepairText(topicId, text) {
     score += Math.min(3, Math.floor(t.length / 80));
     score += Math.min(2, Math.floor(countCzDiacritics(t) / 6));
     score -= Math.min(4, countEnglishNoiseWords(t));
-    if (refs === 0) notes.push('uÅ¾itÃ­: mÃ¡lo odkazÅ¯ []');
+    if (refs === 0) notes.push('užití: málo odkazů []');
     return { score, notes };
   }
 
@@ -1476,14 +1476,14 @@ function scoreTopicRepairText(topicId, text) {
     score += Math.min(5, Math.floor(t.length / 60));
     score += Math.min(3, Math.floor(countCzDiacritics(t) / 5));
     score -= Math.min(4, countEnglishNoiseWords(t));
-    if (!/(Å™ec|hebr|lat|sÃ©m|indoev|koÅ™en|odvoz)/i.test(t)) notes.push('pÅ¯vod: chybÃ­ jazykovÃ½ kontext');
+    if (!/(řec|hebr|lat|sém|indoev|kořen|odvoz)/i.test(t)) notes.push('původ: chybí jazykový kontext');
     return { score, notes };
   }
 
   if (topicId === 'specialista') {
     const s = getSpecialistaQualityScore(t);
     score += s;
-    notes.push(`specialista: skÃ³re ${s}`);
+    notes.push(`specialista: skóre ${s}`);
     return { score, notes };
   }
 
@@ -1493,28 +1493,28 @@ function scoreTopicRepairText(topicId, text) {
 }
 
 function verdictTopicRepairCompare(prevScore, nextScore) {
-  if (!Number.isFinite(prevScore) || !Number.isFinite(nextScore)) return { label: 'nejasnÃ©', tone: 'var(--txt3)' };
+  if (!Number.isFinite(prevScore) || !Number.isFinite(nextScore)) return { label: 'nejasné', tone: 'var(--txt3)' };
   const d = nextScore - prevScore;
-  if (nextScore <= 0 && prevScore > 0) return { label: 'horÅ¡Ã­', tone: 'var(--red)' };
-  if (d >= 2) return { label: 'lepÅ¡Ã­', tone: 'var(--acc3)' };
-  if (d <= -2) return { label: 'horÅ¡Ã­', tone: 'var(--red)' };
-  return { label: 'podobnÃ©', tone: 'var(--txt3)' };
+  if (nextScore <= 0 && prevScore > 0) return { label: 'horší', tone: 'var(--red)' };
+  if (d >= 2) return { label: 'lepší', tone: 'var(--acc3)' };
+  if (d <= -2) return { label: 'horší', tone: 'var(--red)' };
+  return { label: 'podobné', tone: 'var(--txt3)' };
 }
 
 function formatTopicRepairQuickCompare(topicId, previousValue, candidateValue) {
   const prev = String(previousValue || '').trim();
   const next = String(candidateValue || '').trim();
   if (!hasMeaningfulValue(next)) {
-    return `<div style="margin-top:6px;padding:8px;border:1px dashed var(--brd);border-radius:6px;background:var(--bg2);font-size:11px;color:var(--txt3)"><b>AnalÃ½za:</b> nelze porovnat (chybÃ­ novÃ½ nÃ¡vrh)</div>`;
+    return `<div style="margin-top:6px;padding:8px;border:1px dashed var(--brd);border-radius:6px;background:var(--bg2);font-size:11px;color:var(--txt3)"><b>Analýza:</b> nelze porovnat (chybí nový návrh)</div>`;
   }
   const p = scoreTopicRepairText(topicId, prev);
   const n = scoreTopicRepairText(topicId, next);
   const v = verdictTopicRepairCompare(p.score, n.score);
   const notes = [...new Set([...(p.notes || []), ...(n.notes || [])])].slice(0, 3);
-  const notesHtml = notes.length ? ` Â· ${notes.map(x => escHtml(x)).join(' Â· ')}` : '';
+  const notesHtml = notes.length ? ` · ${notes.map(x => escHtml(x)).join(' · ')}` : '';
   return `<div style="margin-top:6px;padding:8px;border:1px solid var(--brd);border-radius:6px;background:var(--bg2);font-size:11px;color:var(--txt2)">
-    <b>AnalÃ½za:</b> <span style="color:${v.tone};font-weight:bold">${escHtml(v.label)}</span>
-    <span style="color:var(--txt3)">(skÃ³re ${p.score} â†’ ${n.score})</span>${notesHtml}
+    <b>Analýza:</b> <span style="color:${v.tone};font-weight:bold">${escHtml(v.label)}</span>
+    <span style="color:var(--txt3)">(skóre ${p.score} → ${n.score})</span>${notesHtml}
   </div>`;
 }
 
@@ -1613,7 +1613,7 @@ function closeSystemPromptModal() {
   if (modal) modal.remove();
 }
 
-/** SjednocenÃ­ znakÅ¯ z AI odpovÄ›di (NFKC, ZWSP, plnocelÃ¡ dvojteÄka) kvÅ¯li parsovÃ¡nÃ­ labelÅ¯. */
+/** Sjednocení znaků z AI odpovědi (NFKC, ZWSP, plnocelá dvojtečka) kvůli parsování labelů. */
 function normalizeAiTopicRawText(s) {
   return String(s || '')
     .replace(/\r\n/g, '\n')
@@ -1628,7 +1628,7 @@ function normalizeAiTopicRawText(s) {
     .normalize('NFKC');
 }
 
-/** OdstranÃ­ opakovanÃ© hlaviÄky ###G12### / ### G132 / ##H4 vÄetnÄ› mezer (i bez uzavÃ­racÃ­ch #). */
+/** Odstraní opakované hlavičky ###G12### / ### G132 / ##H4 včetně mezer (i bez uzavíracích #). */
 function stripLeadingGHeaders(text) {
   let t = String(text || '');
   for (let i = 0; i < 8; i++) {
@@ -1659,7 +1659,7 @@ function syncTopicRepairMinimizeBusyIndicator() {
   btn.classList.toggle('topicRepairMiniBusy', busy);
 }
 
-/** KdyÅ¾ strict parser SPECIALISTU nechytÃ­ (jinÃ© mezery/znaky), vezmi text od nadpisu do dalÅ¡Ã­ho pole. */
+/** Když strict parser SPECIALISTU nechytí (jiné mezery/znaky), vezmi text od nadpisu do dalšího pole. */
 function extractSpecialistaLooseFallback(rawText) {
   let t = stripLeadingGHeaders(normalizeAiTopicRawText(rawText).trim()).trim();
   if (!t) return '';
@@ -1671,13 +1671,13 @@ function extractSpecialistaLooseFallback(rawText) {
   const start = m.index + m[0].length;
   const rest = t.slice(start);
   const nextHdr =
-    /(?:^|[\n\u0085\u2028\u2029])[\s\u00A0]*(?:VYZNAM|DEFINICE|POUZITI|PUVOD|POUVOD|POVOD|KJV|SPECIALISTA|VYKLAD|VÃKLAD|KOMENTAR|KOMENTÃÅ˜|EXEGEZE|COMMENTARY|EXEGESIS|DEFINITION|MEANING|USAGE|ORIGIN|DEF)\s*(?:\([^)\n]{0,240}\))?\s*(?:[:\uFF1A\u2013\u2014=\.\-|]|\n{1,4}\s*)/iu;
+    /(?:^|[\n\u0085\u2028\u2029])[\s\u00A0]*(?:VYZNAM|DEFINICE|POUZITI|PUVOD|POUVOD|POVOD|KJV|SPECIALISTA|VYKLAD|VÝKLAD|KOMENTAR|KOMENTÁŘ|EXEGEZE|COMMENTARY|EXEGESIS|DEFINITION|MEANING|USAGE|ORIGIN|DEF)\s*(?:\([^)\n]{0,240}\))?\s*(?:[:\uFF1A\u2013\u2014=\.\-|]|\n{1,4}\s*)/iu;
   const m2 = rest.search(nextHdr);
   const body = m2 >= 0 ? rest.slice(0, m2) : rest;
   return body.trim();
 }
 
-/** Po opravÄ› tÃ©matu: nezaÅ¡krtÃ¡vat hromadnÃ© pÅ™epsÃ¡nÃ­ jen pÅ™i verdiktu â€žhorÅ¡Ã­â€œ (jinak Å¡lo omylem odÅ¡krtnout definici). */
+/** Po opravě tématu: nezaškrtávat hromadné přepsání jen při verdiktu „horší“ (jinak šlo omylem odškrtnout definici). */
 function shouldAutoCheckTopicRepairTask(topicId, currentValue, candidateValue) {
   const prev = String(currentValue || '').trim();
   const next = String(candidateValue || '').trim();
@@ -1685,10 +1685,10 @@ function shouldAutoCheckTopicRepairTask(topicId, currentValue, candidateValue) {
   const p = scoreTopicRepairText(topicId, prev);
   const n = scoreTopicRepairText(topicId, next);
   const v = verdictTopicRepairCompare(p.score, n.score);
-  return v.label !== 'horÅ¡Ã­';
+  return v.label !== 'horší';
 }
 
-/** JednotnÃ¡ normalizace nÃ¡zvÅ¯ polÃ­ z AI (vÄ. VÃKLAD â†’ SPECIALISTA). */
+/** Jednotná normalizace názvů polí z AI (vč. VÝKLAD → SPECIALISTA). */
 function normalizeTopicFieldLabel(raw) {
   const u = String(raw || '').trim().toUpperCase();
   if (u === 'DEF' || u === 'DEFINITION') return 'DEFINICE';
@@ -1696,32 +1696,32 @@ function normalizeTopicFieldLabel(raw) {
   if (u === 'USAGE') return 'POUZITI';
   if (u === 'ORIGIN') return 'PUVOD';
   if (u === 'POVOD' || u === 'POUVOD') return 'PUVOD';
-  if (u === 'VYKLAD' || u === 'VÃKLAD' || u === 'KOMENTAR' || u === 'KOMENTÃÅ˜' || u === 'EXEGEZE' || u === 'COMMENTARY' || u === 'EXEGESIS') return 'SPECIALISTA';
+  if (u === 'VYKLAD' || u === 'VÝKLAD' || u === 'KOMENTAR' || u === 'KOMENTÁŘ' || u === 'EXEGEZE' || u === 'COMMENTARY' || u === 'EXEGESIS') return 'SPECIALISTA';
   return u;
 }
 
-/** Alternace nÃ¡zvÅ¯ polÃ­ v AI odpovÄ›di (jednotnÃ½ zdroj pro anchor / Å™Ã¡dkovÃ© parsovÃ¡nÃ­). */
-const TOPIC_FIELD_LABEL_ALTS_FOR_RE = 'VYZNAM|DEFINICE|POUZITI|PUVOD|POUVOD|POVOD|KJV|SPECIALISTA|VYKLAD|VÃKLAD|KOMENTAR|KOMENTÃÅ˜|EXEGEZE|DEFINITION|MEANING|USAGE|ORIGIN|COMMENTARY|EXEGESIS|DEF';
+/** Alternace názvů polí v AI odpovědi (jednotný zdroj pro anchor / řádkové parsování). */
+const TOPIC_FIELD_LABEL_ALTS_FOR_RE = 'VYZNAM|DEFINICE|POUZITI|PUVOD|POUVOD|POVOD|KJV|SPECIALISTA|VYKLAD|VÝKLAD|KOMENTAR|KOMENTÁŘ|EXEGEZE|DEFINITION|MEANING|USAGE|ORIGIN|COMMENTARY|EXEGESIS|DEF';
 
-/** Po klÃ­ÄovÃ©m slovÄ› Äasto nÃ¡sleduje â€ž(specialista)â€œ / poznÃ¡mka v zÃ¡vorce â€” bez toho selhÃ¡val \s*[-:]. */
+/** Po klíčovém slově často následuje „(specialista)“ / poznámka v závorce — bez toho selhával \s*[-:]. */
 function makeTopicFieldHeaderScanRegex() {
-  return new RegExp(`\\b(${TOPIC_FIELD_LABEL_ALTS_FOR_RE})(?:\\*\\*|__)?\\s*(?:\\([^)\\n]{0,240}\\))?\\s*[-:â€“â€”=.|]{0,3}\\s*`, 'giu');
+  return new RegExp(`\\b(${TOPIC_FIELD_LABEL_ALTS_FOR_RE})(?:\\*\\*|__)?\\s*(?:\\([^)\\n]{0,240}\\))?\\s*[-:–—=.|]{0,3}\\s*`, 'giu');
 }
 
-/** StejnÃ¡ pravidla jako u anchor regexu, navÃ­c prefix markdownu / ÄÃ­slovÃ¡nÃ­ na zaÄÃ¡tku Å™Ã¡dku. */
+/** Stejná pravidla jako u anchor regexu, navíc prefix markdownu / číslování na začátku řádku. */
 function makeTopicFieldLineStartRegex() {
   return new RegExp(
-    `^(?:(?:\\d+)[.)]\\s+)?(?:(?:[-*+>]|#{1,6})\\s+)?(?:(?:\\*\\*|__)\\s*)?(${TOPIC_FIELD_LABEL_ALTS_FOR_RE})(?:\\*\\*|__)?\\s*(?:\\([^)\\n]{0,240}\\))?\\s*[-:â€“â€”=.|]{0,3}\\s*`,
+    `^(?:(?:\\d+)[.)]\\s+)?(?:(?:[-*+>]|#{1,6})\\s+)?(?:(?:\\*\\*|__)\\s*)?(${TOPIC_FIELD_LABEL_ALTS_FOR_RE})(?:\\*\\*|__)?\\s*(?:\\([^)\\n]{0,240}\\))?\\s*[-:–—=.|]{0,3}\\s*`,
     'iu'
   );
 }
 
-/** HlaviÄka sekce specialisty (aliasy + zÃ¡vorka + dvojteÄka nebo novÃ½ Å™Ã¡dek tÄ›la). */
+/** Hlavička sekce specialisty (aliasy + závorka + dvojtečka nebo nový řádek těla). */
 function matchSpecialistaHeaderBlockStart(t) {
   const s = String(t || '');
   if (!s) return null;
   const LINE_START = '(?:^|[\n\u0085\u2028\u2029])[\\s\u00A0]*';
-  const ALIAS = '(?:SPECIALISTA|VYKLAD|VÃKLAD|KOMENTAR|KOMENTÃÅ˜|EXEGEZE|COMMENTARY|EXEGESIS)';
+  const ALIAS = '(?:SPECIALISTA|VYKLAD|VÝKLAD|KOMENTAR|KOMENTÁŘ|EXEGEZE|COMMENTARY|EXEGESIS)';
   const PAREN_OPT = '(?:\\([^)\\n]{0,240}\\))?';
   const SEP = '(?:[:\\uFF1A\\u2013\\u2014=\\.\\-|]|\\n{1,4}\\s*)';
   const prefix = '(?:(?:\\d+)[.)]\\s+)?(?:(?:[-*+>]|#{1,6})\\s+)?(?:(?:\\*\\*|__)\\s*)?';
@@ -1729,7 +1729,7 @@ function matchSpecialistaHeaderBlockStart(t) {
   return s.match(re);
 }
 
-/** VÃ½Å™ez bloku podle libovolnÃ©ho vÃ½skytu labelu v textu (i vÃ­ce polÃ­ na jednom Å™Ã¡dku). */
+/** Výřez bloku podle libovolného výskytu labelu v textu (i více polí na jednom řádku). */
 function extractTopicSegmentByAnchors(cleaned, wantLabel) {
   const c = String(cleaned || '');
   if (!c || !wantLabel) return '';
@@ -1759,7 +1759,7 @@ function mapNormalizedLabelToTopicId(norm) {
   return null;
 }
 
-/** PoÅ™adÃ­ tÃ©mat podle prvnÃ­ho vÃ½skytu nadpisu v RAW (pro log a doplnÄ›nÃ­ â€ždalÅ¡Ã­châ€œ). */
+/** Pořadí témat podle prvního výskytu nadpisu v RAW (pro log a doplnění „dalších“). */
 function scanRawForTopicHeaderTopicIds(rawText) {
   const text = normalizeAiTopicRawText(rawText).trim();
   if (!text) return [];
@@ -1823,8 +1823,8 @@ function extractTopicValueFromAI(rawText, topicId, mode = 'loose') {
       if (part) out += (out ? ' ' : '') + part;
     }
     out = out.trim();
-    // OÅ™Ã­zni pÅ™Ã­pad, kdy AI pÅ™idÃ¡ dalÅ¡Ã­ tÃ©ma ve stejnÃ© vÄ›tÄ›/Å™Ã¡dku.
-    const foreignInline = out.match(/\b(VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|SPECIALISTA|VYKLAD|VÃKLAD|KOMENTAR|KOMENTÃÅ˜|EXEGEZE|DEF|DEFINITION|MEANING|USAGE|ORIGIN|COMMENTARY|EXEGESIS)\s*[-:â€“â€”=.]?\s*/iu);
+    // Ořízni případ, kdy AI přidá další téma ve stejné větě/řádku.
+    const foreignInline = out.match(/\b(VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|SPECIALISTA|VYKLAD|VÝKLAD|KOMENTAR|KOMENTÁŘ|EXEGEZE|DEF|DEFINITION|MEANING|USAGE|ORIGIN|COMMENTARY|EXEGESIS)\s*[-:–—=.]?\s*/iu);
     if (foreignInline && foreignInline.index !== undefined) {
       const nl = normalizeTopicFieldLabel(foreignInline[1]);
       const sameBucket = keyForTopic === 'SPECIALISTA'
@@ -1837,8 +1837,8 @@ function extractTopicValueFromAI(rawText, topicId, mode = 'loose') {
     return out.trim();
   }
 
-  // KdyÅ¾ chybÃ­ explicitnÃ­ label cÃ­lovÃ©ho tÃ©matu, ale AI vrÃ¡tÃ­ dalÅ¡Ã­ labely
-  // (napÅ™. SPECIALISTA), ber jen text pÅ™ed prvnÃ­m cizÃ­m labelem.
+  // Když chybí explicitní label cílového tématu, ale AI vrátí další labely
+  // (např. SPECIALISTA), ber jen text před prvním cizím labelem.
   if (mode === 'strict' && fieldPositions.length > 0 && keyForTopic && !fieldPositions.some(f => f.label === keyForTopic)) {
     const anchor = extractTopicSegmentByAnchors(cleaned, keyForTopic);
     if (hasMeaningfulValue(anchor)) return anchor.trim();
@@ -1854,11 +1854,11 @@ function extractTopicValueFromAI(rawText, topicId, mode = 'loose') {
   }
 
   if (keyForTopic) {
-    cleaned = cleaned.replace(new RegExp(`^${keyForTopic}\\s*[-:â€“â€”=.]?\\s*`, 'i'), '').trim();
+    cleaned = cleaned.replace(new RegExp(`^${keyForTopic}\\s*[-:–—=.]?\\s*`, 'i'), '').trim();
   }
-  // PoslednÃ­ ochrana: u single-topic odpovÄ›di oÅ™Ã­zni navazujÃ­cÃ­ cizÃ­ labely i v rÃ¡mci jednoho Å™Ã¡dku.
+  // Poslední ochrana: u single-topic odpovědi ořízni navazující cizí labely i v rámci jednoho řádku.
   if (keyForTopic) {
-    const foreignInlineGlobal = cleaned.match(/\b(VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|SPECIALISTA|VYKLAD|VÃKLAD|KOMENTAR|KOMENTÃÅ˜|EXEGEZE|DEF|DEFINITION|MEANING|USAGE|ORIGIN|COMMENTARY|EXEGESIS)\s*[-:â€“â€”=.]?\s*/iu);
+    const foreignInlineGlobal = cleaned.match(/\b(VYZNAM|DEFINICE|POUZITI|PUVOD|KJV|SPECIALISTA|VYKLAD|VÝKLAD|KOMENTAR|KOMENTÁŘ|EXEGEZE|DEF|DEFINITION|MEANING|USAGE|ORIGIN|COMMENTARY|EXEGESIS)\s*[-:–—=.]?\s*/iu);
     if (foreignInlineGlobal && foreignInlineGlobal.index !== undefined) {
       const nl = normalizeTopicFieldLabel(foreignInlineGlobal[1]);
       const sameBucket = keyForTopic === 'SPECIALISTA'

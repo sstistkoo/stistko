@@ -1,4 +1,4 @@
-﻿  // â•â• CORE MODULE IMPORT â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  // ══ CORE MODULE IMPORT ═══════════════════════════════════════════
   import core from '../strong_translator_core_new.js';
   import prompts from '../strong_prompts.js';
   import {
@@ -195,7 +195,7 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     setAttr('btnAutoStop', 'aria-label', t('auto.stop.aria'));
     const autoLog = document.getElementById('autoLog');
     const autoLogText = (autoLog?.textContent || '').trim();
-    if (autoLog && (autoLogText === 'ÄŒekÃ¡ na start...' || autoLogText === 'Waiting to start...')) {
+    if (autoLog && (autoLogText === 'Čeká na start...' || autoLogText === 'Waiting to start...')) {
       autoLog.textContent = t('auto.log.waiting');
     }
     refreshLanguageAwarePromptOptionLabels();
@@ -274,7 +274,7 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     setText('promptLibraryTitle', t('prompt.library.title'));
     const promptPreview = document.getElementById('promptPreview');
     const promptPreviewText = (promptPreview?.textContent || '').trim();
-    if (promptPreview && (promptPreviewText === 'Vyberte prompt z knihovny pro nÃ¡hled...' || promptPreviewText === 'Select a prompt from the library for preview...')) {
+    if (promptPreview && (promptPreviewText === 'Vyberte prompt z knihovny pro náhled...' || promptPreviewText === 'Select a prompt from the library for preview...')) {
       promptPreview.textContent = t('prompt.library.preview.empty');
     }
     setAttr('promptLibraryEditor', 'placeholder', t('prompt.library.editor.placeholder'));
@@ -484,7 +484,7 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     setText('btnPromptLangSave', t('lang.modal.save'));
     const status = document.getElementById('statusTXT');
     const rawStatus = String(status?.textContent || '').trim();
-    if (status && !status.classList.contains('ok') && (rawStatus === 'â€” nevybrÃ¡no' || rawStatus === 'â€” none selected')) {
+    if (status && !status.classList.contains('ok') && (rawStatus === '— nevybráno' || rawStatus === '— none selected')) {
       status.textContent = t('setup.file.none');
     }
     refreshTokenStatsDisplay();
@@ -502,10 +502,10 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     if (hasSpecialista) return text;
     return `${text}
 
-POVINNÃ VÃSTUP NAVÃC:
-- PÅ™idej Å™Ã¡dek SPECIALISTA: [detailnÃ­ odstavec 3-5 vÄ›t jako biblickÃ½ specialista].
-- Odstavec mÃ¡ vysvÄ›tlit teologickÃ½ a biblickÃ½ vÃ½znam slova v kontextu.
-- NepiÅ¡ body ani seznam, jen souvislÃ½ odstavec.`;
+POVINNÝ VÝSTUP NAVÍC:
+- Přidej řádek SPECIALISTA: [detailní odstavec 3-5 vět jako biblický specialista].
+- Odstavec má vysvětlit teologický a biblický význam slova v kontextu.
+- Nepiš body ani seznam, jen souvislý odstavec.`;
   }
 
   // Custom buildPromptMessages that reads from localStorage
@@ -521,19 +521,19 @@ POVINNÃ VÃSTUP NAVÃC:
       const targetLang = localStorage.getItem('strong_target_lang') || 'cz';
       const sourceLang = localStorage.getItem('strong_source_lang') || 'gr';
       const langNames = {
-        cz: 'ÄeÅ¡tiny',
-        en: 'angliÄtiny',
-        bg: 'bulharÅ¡tiny',
-        ch: 'ÄÃ­nÅ¡tiny',
-        sp: 'Å¡panÄ›lÅ¡tiny',
-        sk: 'slovenÅ¡tiny',
-        pl: 'polÅ¡tiny',
-        gr: 'Å™eÄtiny',
-        he: 'hebrejÅ¡tiny',
-        both: 'Å™eÄtiny i hebrejÅ¡tiny'
+        cz: 'češtiny',
+        en: 'angličtiny',
+        bg: 'bulharštiny',
+        ch: 'čínštiny',
+        sp: 'španělštiny',
+        sk: 'slovenštiny',
+        pl: 'polštiny',
+        gr: 'řečtiny',
+        he: 'hebrejštiny',
+        both: 'řečtiny i hebrejštiny'
       };
-      const targetName = langNames[targetLang] || 'ÄeÅ¡tiny';
-      const sourceName = langNames[sourceLang] || 'Å™eÄtiny';
+      const targetName = langNames[targetLang] || 'češtiny';
+      const sourceName = langNames[sourceLang] || 'řečtiny';
       
       let processedPrompt = userPromptTemplate
         .replace(/{TARGET_LANG}/g, targetName)
@@ -705,7 +705,7 @@ async function copyModelTestPromptPreview() {
 }
     function getModelTestPromptTopicLabel(promptType) {
       if (isEnTopicPromptType(promptType)) {
-        const base = String(EN_TOPIC_PROMPT_LABEL_BASE[promptType] || '').replace(/^TÃ©ma:\s*/i, '');
+        const base = String(EN_TOPIC_PROMPT_LABEL_BASE[promptType] || '').replace(/^Téma:\s*/i, '');
         return `${base} (EN -> ${getCurrentTargetLangCode()})`;
       }
       return modelTestPromptCatalog?.[promptType]?.topicLabel || '';
@@ -720,19 +720,19 @@ async function copyModelTestPromptPreview() {
       const targetLang = localStorage.getItem('strong_target_lang') || 'cz';
       const sourceLang = localStorage.getItem('strong_source_lang') || 'gr';
       const langNames = {
-        cz: 'ÄeÅ¡tiny',
-        en: 'angliÄtiny',
-        bg: 'bulharÅ¡tiny',
-        ch: 'ÄÃ­nÅ¡tiny',
-        sp: 'Å¡panÄ›lÅ¡tiny',
-        sk: 'slovenÅ¡tiny',
-        pl: 'polÅ¡tiny',
-        gr: 'Å™eÄtiny',
-        he: 'hebrejÅ¡tiny',
-        both: 'Å™eÄtiny i hebrejÅ¡tiny'
+        cz: 'češtiny',
+        en: 'angličtiny',
+        bg: 'bulharštiny',
+        ch: 'čínštiny',
+        sp: 'španělštiny',
+        sk: 'slovenštiny',
+        pl: 'polštiny',
+        gr: 'řečtiny',
+        he: 'hebrejštiny',
+        both: 'řečtiny i hebrejštiny'
       };
-      const targetName = langNames[targetLang] || 'ÄeÅ¡tiny';
-      const sourceName = langNames[sourceLang] || 'Å™eÄtiny';
+      const targetName = langNames[targetLang] || 'češtiny';
+      const sourceName = langNames[sourceLang] || 'řečtiny';
 
       const userPromptTemplate = getModelTestPromptTemplate(promptType);
       let processedPrompt = String(userPromptTemplate || '')
@@ -752,8 +752,8 @@ async function copyModelTestPromptPreview() {
     function buildModelTestMessages(batch, testMode, promptType, promptEnabled) {
       if (testMode === 'smoke') {
         return [
-          { role: 'system', content: 'OdpovÃ­dej struÄnÄ› a bez komentÃ¡Å™Å¯ navÃ­c.' },
-          { role: 'user', content: 'NapiÅ¡ dvakrÃ¡t po sobÄ› slovo "heslo".' }
+          { role: 'system', content: 'Odpovídej stručně a bez komentářů navíc.' },
+          { role: 'user', content: 'Napiš dvakrát po sobě slovo "heslo".' }
         ];
       }
       if (promptEnabled) {
@@ -762,7 +762,7 @@ async function copyModelTestPromptPreview() {
       return buildPromptMessages(batch);
     }
 
-  // â•â• ERROR LOGGER â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  // ══ ERROR LOGGER ═════════════════════════════════════════════════
   /**
    * Structured error logger with context and stack traces.
    * Logs to both console and UI log panel.
@@ -780,17 +780,17 @@ async function copyModelTestPromptPreview() {
     }, stack);
 
     // UI log
-    logMsg(`âœ— ${context}: ${error.message}`, 'err');
+    logMsg(`✗ ${context}: ${error.message}`, 'err');
   }
 
   function logWarn(context, message, extra = {}) {
     console.warn(`[${new Date().toISOString()}] [${context}]`, message, extra);
-    log(`âš  ${context}: ${message}`);
+    log(`⚠ ${context}: ${message}`);
   }
 
   function logInfo(context, message) {
     console.log(`[${new Date().toISOString()}] [${context}]`, message);
-    log(`â„¹ ${context}: ${message}`);
+    log(`ℹ ${context}: ${message}`);
   }
   function getTestHistory() {
     try {
@@ -840,7 +840,7 @@ function populateOpenRouterModels(selectElement, savedModel, callback) {
     }).filter(Boolean).filter(o => o.value);
   }
 
-  // Try cache first (rychlÃ½ start), ale vÅ¾dy nÃ¡slednÄ› zkus aktualizaci z API
+  // Try cache first (rychlý start), ale vždy následně zkus aktualizaci z API
   let hadFreshCache = false;
   const preferredModel = selectElement.value || savedModel || '';
   const cached = localStorage.getItem(CACHE_KEY);
@@ -873,8 +873,8 @@ function populateOpenRouterModels(selectElement, savedModel, callback) {
     })
     .then(data => {
       const modelsRaw = (data.data || []).filter(m => m.id && m.id.endsWith(':free'));
-      // NÄ›kterÃ© poloÅ¾ky API mohou bÃ½t metadata bez reÃ¡lnÄ› routovatelnÃ©ho endpointu
-      // (pak pÅ™i testu vracÃ­ 404 "No endpoints found"). ZkusÃ­me je vyÅ™adit.
+      // Některé položky API mohou být metadata bez reálně routovatelného endpointu
+      // (pak při testu vrací 404 "No endpoints found"). Zkusíme je vyřadit.
       const models = modelsRaw.filter(m => {
         if (Array.isArray(m.endpoints) && m.endpoints.length === 0) return false;
         if (m?.top_provider && m.top_provider.is_disabled === true) return false;
@@ -884,8 +884,8 @@ function populateOpenRouterModels(selectElement, savedModel, callback) {
 
       const topCandidates = [
         { id: 'openrouter/free', fixedLabel: t('provider.top.autoRouter') },
-        { id: 'openai/gpt-oss-20b:free', fixedLabel: 'â˜… OpenAI GPT-OSS 20B (free)' },
-        { id: 'nvidia/nemotron-nano-9b-v2:free', fixedLabel: 'â˜… NVIDIA Nemotron Nano 9B v2 (free)' }
+        { id: 'openai/gpt-oss-20b:free', fixedLabel: '★ OpenAI GPT-OSS 20B (free)' },
+        { id: 'nvidia/nemotron-nano-9b-v2:free', fixedLabel: '★ NVIDIA Nemotron Nano 9B v2 (free)' }
       ];
       const topOptions = topCandidates
         .filter(c => c.id === 'openrouter/free' || modelMap.has(c.id))
@@ -932,7 +932,7 @@ function populateOpenRouterModels(selectElement, savedModel, callback) {
       console.error('OpenRouter models fetch failed:', err);
       if (hadFreshCache) return;
 
-      // Fallback na jakoukoli dostupnou cache (i starou), aby app zÅ¯stala provoznÃ­
+      // Fallback na jakoukoli dostupnou cache (i starou), aby app zůstala provozní
       try {
         const fallbackRaw = localStorage.getItem(CACHE_KEY);
         if (fallbackRaw) {
@@ -1046,7 +1046,7 @@ function applyAutoPanelSettings() {
   updateETA();
 }
 
-// â•â• LOAD TXT â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══ LOAD TXT ═════════════════════════════════════════════════════
 const LAST_FILE_KEY = 'strong_last_file';
 const DEFAULT_TXT_FILE = 'strong_finalni_verze.txt';
 const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/sstistkoo/stistko/main/christ/strong_translate/';
@@ -1061,7 +1061,7 @@ function loadTXT(input) {
       state.entries = parseTXT(ev.target.result);
       state.currentFileId = computeFileId(state.entries);
       const el = document.getElementById('statusTXT');
-      el.textContent = `âœ“ ${file.name} â€” ${t('entries.count', { count: state.entries.length })}`;
+      el.textContent = `✓ ${file.name} — ${t('entries.count', { count: state.entries.length })}`;
       el.className = 'file-status ok';
       document.getElementById('fileReady').style.display = 'block';
       document.getElementById('startBtn').disabled = false;
@@ -1083,7 +1083,7 @@ function loadDefaultFile() {
 
   const tryFetch = (idx) => {
     if (idx >= fallbacks.length) {
-      throw new Error('Soubor nenalezen (GitHub ani lokÃ¡lnÃ­ fallback)');
+      throw new Error('Soubor nenalezen (GitHub ani lokální fallback)');
     }
     const target = fallbacks[idx];
     return fetch(target)
@@ -1100,7 +1100,7 @@ function loadDefaultFile() {
       state.entries = parseTXT(text);
       state.currentFileId = computeFileId(state.entries);
       localStorage.setItem(LAST_FILE_KEY, lastFile);
-      document.getElementById('statusTXT').textContent = `âœ“ ${lastFile} â€” ${t('entries.count', { count: state.entries.length })}`;
+      document.getElementById('statusTXT').textContent = `✓ ${lastFile} — ${t('entries.count', { count: state.entries.length })}`;
       document.getElementById('statusTXT').className = 'file-status ok';
       document.getElementById('fileReady').style.display = 'block';
       document.getElementById('startBtn').disabled = false;
@@ -1113,7 +1113,7 @@ function loadDefaultFile() {
      })
     .catch(e => {
       logError('loadDefaultFile', e, { file: lastFile, githubUrl });
-      document.getElementById('statusTXT').textContent = 'âœ— ' + e.message;
+      document.getElementById('statusTXT').textContent = '✗ ' + e.message;
     });
 }
 
@@ -1123,7 +1123,7 @@ function checkDefaultFile() {
     document.getElementById('btnLoadDefault').style.display = 'inline-block';
     return;
   }
-  // NeprovÃ¡dÃ­me testovacÃ­ fetch, aby se v konzoli neobjevoval zbyteÄnÃ½ 404.
+  // Neprovádíme testovací fetch, aby se v konzoli neobjevoval zbytečný 404.
   document.getElementById('btnLoadDefault').style.display = 'inline-block';
 }
 
@@ -1144,14 +1144,14 @@ function updateAutoBtn() {
     }
   }
 
-// â•â• RESUME â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══ RESUME ═══════════════════════════════════════════════════════
 function checkResume() {
   try {
     const box = document.getElementById('resumeBox');
     if (box) box.style.display = 'none';
     let saved = localStorage.getItem(storeKey());
     let source = t('resume.source.currentSlot');
-    // Pokud nemÃ¡me nic pod aktuÃ¡lnÃ­m fileId, ale mÃ¡me legacy data, nabÃ­dneme je
+    // Pokud nemáme nic pod aktuálním fileId, ale máme legacy data, nabídneme je
     if (!saved && state.currentFileId) {
       const legacy = localStorage.getItem(LEGACY_STORE_KEY);
       if (legacy) { saved = legacy; source = t('resume.source.legacySlot'); }
@@ -1160,7 +1160,7 @@ function checkResume() {
     const data = JSON.parse(saved);
     const count = Object.keys(data.translated || {}).filter(k => {
       const t = data.translated[k];
-      return t && t.vyznam && t.vyznam !== 'â€”' && !t.skipped;
+      return t && t.vyznam && t.vyznam !== '—' && !t.skipped;
     }).length;
     if (count > 0 && box) {
       box.style.display = 'block';
@@ -1188,7 +1188,7 @@ function toggleListPane() {
   
   if (isHidden) {
     pane.classList.remove('hidden');
-    btn.textContent = 'â‰¡ Seznam';
+    btn.textContent = '≡ Seznam';
     if (isMobile) {
       pane.style.height = '45%';
       logPanel.style.height = '50%';
@@ -1198,7 +1198,7 @@ function toggleListPane() {
     }
   } else {
     pane.classList.add('hidden');
-    btn.textContent = 'â‰¡ Seznam';
+    btn.textContent = '≡ Seznam';
     if (isMobile) {
       pane.style.height = '0';
       logPanel.style.height = '100%';
@@ -1209,16 +1209,16 @@ function toggleListPane() {
   }
 }
 
-// â•â• START â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══ START ════════════════════════════════════════════════════════
 function startApp() {
-  // UkaÅ¾ loading hned
+  // Ukaž loading hned
   document.getElementById('setup').style.display = 'none';
   const app = document.getElementById('app');
   app.style.display = 'flex';
   const loadingEl = document.createElement('div');
   loadingEl.id = 'appLoading';
   loadingEl.style.cssText = 'display:flex;align-items:center;justify-content:center;height:100%;color:var(--txt3);font-family:JetBrains Mono,monospace;font-size:14px';
-  loadingEl.textContent = 'â³ NaÄÃ­tÃ¡m...';
+  loadingEl.textContent = '⏳ Načítám...';
   app.appendChild(loadingEl);
   
   // Deffered init
@@ -1233,7 +1233,7 @@ function initApp(loadingEl) {
   state.currentBatchSize = parseInt(document.getElementById('batchSize').value);
   state.currentInterval  = parseInt(document.getElementById('interval').value);
 
-  // Obnov uloÅ¾enÃ½ pÅ™eklad â€“ pro aktuÃ¡lnÄ› naÄtenÃ½ soubor
+  // Obnov uložený překlad – pro aktuálně načtený soubor
   try {
     const saved = localStorage.getItem(storeKey());
     if (saved) {
@@ -1241,16 +1241,16 @@ function initApp(loadingEl) {
       state.translated = data.translated || {};
       state.sourceEntryEdits = data.sourceEntryEdits || {};
     } else if (state.currentFileId) {
-      // Pokus o migraci ze starÃ©ho (legacy) slotu pÅ™i prvnÃ­m pouÅ¾itÃ­ novÃ©ho prefixu
+      // Pokus o migraci ze starého (legacy) slotu při prvním použití nového prefixu
       const legacy = localStorage.getItem(LEGACY_STORE_KEY);
       if (legacy) {
         const data = JSON.parse(legacy);
         if (data && data.translated && Object.keys(data.translated).length > 0) {
           state.translated = data.translated;
           state.sourceEntryEdits = data.sourceEntryEdits || {};
-          // UloÅ¾ pod novÃ½m klÃ­Äem, legacy zachovÃ¡me â€“ uÅ¾ivatel mÅ¯Å¾e mÃ­t vÃ­c souborÅ¯
+          // Ulož pod novým klíčem, legacy zachováme – uživatel může mít víc souborů
           localStorage.setItem(storeKey(), JSON.stringify({ translated: state.translated, sourceEntryEdits: state.sourceEntryEdits, ts: Date.now(), fileId: state.currentFileId, migrated: true }));
-          logInfo('migrate', `MigrovÃ¡no ${Object.keys(state.translated).length} hesel z legacy slotu`);
+          logInfo('migrate', `Migrováno ${Object.keys(state.translated).length} hesel z legacy slotu`);
         }
       }
     }
@@ -1262,7 +1262,7 @@ function initApp(loadingEl) {
 
   document.getElementById('app').style.display = 'flex';
   
-  // Dedup state.entries - pokud jsou duplicitnÃ­ klÃ­Äe, bereme jen prvnÃ­ vÃ½skyt
+  // Dedup state.entries - pokud jsou duplicitní klíče, bereme jen první výskyt
   const uniqueEntries = [];
   const seenKeys = new Set();
   for (const e of state.entries) {
@@ -1279,14 +1279,14 @@ function initApp(loadingEl) {
   state.entryMap = new Map(state.entries.map(e => [e.key, e]));
   applySourceEntryEditsToEntries();
   
-  // VytvoÅ™ index pro rychlÃ© Å™azenÃ­ podle pÅ¯vodnÃ­ho poÅ™adÃ­
+  // Vytvoř index pro rychlé řazení podle původního pořadí
   window._entryIndexMap = new Map(state.entries.map((e, i) => [e.key, i]));
 
   state.filteredKeys = state.entries.map(e => e.key);
   initVirtualScroll();
   renderList();
   
-  // Scroll na zaÄÃ¡tek po naÄtenÃ­ a znovu vykresli
+  // Scroll na začátek po načtení a znovu vykresli
   const listScroll = document.getElementById('listScroll');
   if (listScroll) listScroll.scrollTop = 0;
   state.lastRenderRange = { start: -1, end: -1, doneStates: {} };
@@ -1298,7 +1298,7 @@ function initApp(loadingEl) {
   updateBackupButtonVisibility();
   updateFileIdBadge();
   
-  // OdstraÅˆ loading element
+  // Odstraň loading element
   if (loadingEl && loadingEl.parentNode) {
     loadingEl.parentNode.removeChild(loadingEl);
   }
@@ -1311,7 +1311,7 @@ function initApp(loadingEl) {
   }
 }
 
-// â•â• LIST â€” pÅ™esunuto do js/ui/list.js (viz wiring nÃ­Å¾e) â•â•â•â•â•â•â•â•â•â•
+// ══ LIST — přesunuto do js/ui/list.js (viz wiring níže) ══════════
 
 
 function resolveProviderForInteractiveAction(preferredProv = '') {
@@ -1338,12 +1338,12 @@ function filterList() {
   }
 }
 
-// Debounced varianta pro oninput (zabrÃ¡ni pÅ™ekreslenÃ­ celÃ©ho listu na kaÅ¾dÃ½ znak)
+// Debounced varianta pro oninput (zabráni překreslení celého listu na každý znak)
 const filterListDebounced = debounce(filterList, 180);
 
-// â”€â”€ getFilteredEntries, virtual scroll, showDetail, renderDetail â†’ js/ui/list.js + js/ui/detail.js
+// ── getFilteredEntries, virtual scroll, showDetail, renderDetail → js/ui/list.js + js/ui/detail.js
 
-// renderDetail, renderTranslation, editace polÃ­ â†’ js/ui/detail.js
+// renderDetail, renderTranslation, editace polí → js/ui/detail.js
 
 function applySourceEntryEditsToEntries() {
   if (!state.sourceEntryEdits || typeof state.sourceEntryEdits !== 'object') return;
@@ -1731,6 +1731,7 @@ const modelTestOutputApi = createModelTestOutputApi({
   log,
   modelTestStopProviderCountdownTicker,
   showModelTestModal: (...a) => showModelTestModal(...a),
+  showDetail: (...a) => showDetail(...a),
 });
 const {
   logEntry, clearLog,
@@ -1856,7 +1857,7 @@ function bindSetupCompactSummaryEvents() {
     el.dataset.compactSummaryBound = '1';
   });
 }
-// â•â• STATS & SAVE â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══ STATS & SAVE ════════════════════════════════════════════════
 
 
 
@@ -1994,10 +1995,10 @@ window.showPromptLangModal = showPromptLangModal;
 window.closePromptLangModal = closePromptLangModal;
 window.saveLangSettings = saveLangSettings;
 
-// â•â• RESIZE PANELS (logika v ./ui/resize.js) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ══ RESIZE PANELS (logika v ./ui/resize.js) ─────────────────────
 
 
-// Toast s akÄnÃ­m tlaÄÃ­tkem (napÅ™. Undo). VydrÅ¾Ã­ 2Ã— dÃ©le.
+// Toast s akčním tlačítkem (např. Undo). Vydrží 2× déle.
 
 
 const { download, exportTXT, exportJSON, exportRange } = createExportApi({
@@ -2022,7 +2023,7 @@ const { download, exportTXT, exportJSON, exportRange } = createExportApi({
 
   if (state.autoRunning && isAutoTokenLimitReached()) {
     stopAuto();
-    log('ðŸ›‘ AUTO zastaven po dÃ¡vce: dosaÅ¾en limit tokenÅ¯');
+    log('🛑 AUTO zastaven po dávce: dosažen limit tokenů');
     showToast(t('toast.auto.stoppedTokenLimit'));
   }
 }
@@ -2239,10 +2240,10 @@ window.addEventListener('beforeunload', () => {
   stopTopicRepairTicker();
   if (state.elapsedTimer) clearInterval(state.elapsedTimer);
   stopResize();
-  // Debounced save musÃ­ bÃ½t proveden synchronnÄ› pÅ™ed zavÅ™enÃ­m
+  // Debounced save musí být proveden synchronně před zavřením
   saveProgress.flush();
 });
-// PÅ™i skrytÃ­ tabu takÃ© flushni, aby se nic neztratilo
+// Při skrytí tabu také flushni, aby se nic neztratilo
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'hidden') saveProgress.flush();
 });

@@ -1,9 +1,9 @@
-﻿import { state } from './state.js';
+import { state } from './state.js';
 import { escHtml } from './utils.js';
 import { t } from './i18n.js';
 import { CONFIG, PROVIDERS } from './config.js';
 
-export function createModelTestOutputApi({ MODEL_TEST_RAW_OUTPUT_KEY, showToast, log, modelTestStopProviderCountdownTicker, showModelTestModal }) {
+export function createModelTestOutputApi({ MODEL_TEST_RAW_OUTPUT_KEY, showToast, log, modelTestStopProviderCountdownTicker, showModelTestModal, showDetail }) {
 function logEntry(keys, rawResponse) {
   const scroll = document.getElementById('logScroll');
   if (!scroll) return;
@@ -27,10 +27,10 @@ function logEntry(keys, rawResponse) {
         <span class="log-greek">${escHtml(e.greek)}</span>
       </div>
       ${tr && !tr.skipped
-        ? `<div class="log-vyznam"><b>${t('log.meaning')}</b> ${escHtml(tr.vyznam || 'â€”')}</div>
-           <div class="log-definice">${escHtml((tr.definice || '').slice(0, 120))}${(tr.definice || '').length > 120 ? 'â€¦' : ''}</div>
-           ${tr.kjv ? `<div class="log-orig"><b>KJV:</b> ${escHtml(tr.kjv.slice(0, 80))}${(tr.kjv || '').length > 80 ? 'â€¦' : ''}</div>` : ''}
-           <div class="log-orig"><b>${t('log.usage')}</b> ${escHtml((tr.pouziti || '').slice(0, 80))}${(tr.pouziti || '').length > 80 ? 'â€¦' : ''}</div>`
+        ? `<div class="log-vyznam"><b>${t('log.meaning')}</b> ${escHtml(tr.vyznam || '—')}</div>
+           <div class="log-definice">${escHtml((tr.definice || '').slice(0, 120))}${(tr.definice || '').length > 120 ? '…' : ''}</div>
+           ${tr.kjv ? `<div class="log-orig"><b>KJV:</b> ${escHtml(tr.kjv.slice(0, 80))}${(tr.kjv || '').length > 80 ? '…' : ''}</div>` : ''}
+           <div class="log-orig"><b>${t('log.usage')}</b> ${escHtml((tr.pouziti || '').slice(0, 80))}${(tr.pouziti || '').length > 80 ? '…' : ''}</div>`
         : `<div class="log-err">${t('log.unparsed')}</div>`
       }
     `;
@@ -39,7 +39,7 @@ function logEntry(keys, rawResponse) {
 
   scroll.scrollTop = scroll.scrollHeight;
 
-  // PoÄÃ­tadlo
+  // Počítadlo
   const cnt = scroll.children.length;
   const countEl = document.getElementById('logCount');
   if (countEl) countEl.textContent = t('log.records', { count: cnt });
@@ -50,7 +50,7 @@ function logEntry(keys, rawResponse) {
 
 function clearLog() {
   const s = document.getElementById('logScroll');
-  if (s) s.innerHTML = '<div class="log-placeholder" style="padding:20px;font-family:\'JetBrains Mono\',monospace;font-size:11px;color:var(--txt3)">PÅ™eklady se budou zobrazovat zde automaticky...</div>';
+  if (s) s.innerHTML = '<div class="log-placeholder" style="padding:20px;font-family:\'JetBrains Mono\',monospace;font-size:11px;color:var(--txt3)">Překlady se budou zobrazovat zde automaticky...</div>';
   const c = document.getElementById('logCount');
   if (c) c.textContent = '';
 }
@@ -75,7 +75,7 @@ async function saveModelTestOutputTxt() {
       const writable = await handle.createWritable();
       await writable.write(text);
       await writable.close();
-      modelTestSetLastStatus(`UloÅ¾eno: ${handle.name || DEFAULT_MODEL_TEST_LOG_FILENAME}`, 'ok');
+      modelTestSetLastStatus(`Uloženo: ${handle.name || DEFAULT_MODEL_TEST_LOG_FILENAME}`, 'ok');
       showToast(t('toast.saved.filename', { name: handle.name || DEFAULT_MODEL_TEST_LOG_FILENAME }));
       return;
     } catch (e) {
@@ -84,11 +84,11 @@ async function saveModelTestOutputTxt() {
         showToast(t('toast.save.canceled'));
         return;
       }
-      showToast(t('toast.saveDialogFailedFallback', { message: msg || (getUiLang() === 'en' ? 'unknown error' : 'neznÃ¡mÃ¡ chyba') }));
+      showToast(t('toast.saveDialogFailedFallback', { message: msg || (getUiLang() === 'en' ? 'unknown error' : 'neznámá chyba') }));
     }
   }
   download(DEFAULT_MODEL_TEST_LOG_FILENAME, text, 'text/plain');
-  modelTestSetLastStatus(`StaÅ¾eno: ${DEFAULT_MODEL_TEST_LOG_FILENAME}`, 'ok');
+  modelTestSetLastStatus(`Staženo: ${DEFAULT_MODEL_TEST_LOG_FILENAME}`, 'ok');
   showToast(t('toast.downloaded.filename', { name: DEFAULT_MODEL_TEST_LOG_FILENAME }));
 }
 
@@ -107,9 +107,9 @@ async function saveModelTestRawOutputTxt() {
     return;
   }
   const body = rows.map((row, idx) => {
-    const header = `### ${idx + 1} | provider=${row.prov} | model=${row.model} | reÅ¾im=${row.mode} | promptTest=${row.promptEnabled ? 'on' : 'off'} | prompt=${row.promptType} | ${new Date(row.ts).toLocaleString('cs-CZ')}`;
-    const promptBlock = `--- ODESLANÃ PROMPT ---\n${row.promptSent || '(nenÃ­ dostupnÃ½)'}\n--- /ODESLANÃ PROMPT ---`;
-    const rawBlock = `--- RAW ODPOVÄšÄŽ AI ---\n${row.raw || ''}\n--- /RAW ODPOVÄšÄŽ AI ---`;
+    const header = `### ${idx + 1} | provider=${row.prov} | model=${row.model} | režim=${row.mode} | promptTest=${row.promptEnabled ? 'on' : 'off'} | prompt=${row.promptType} | ${new Date(row.ts).toLocaleString('cs-CZ')}`;
+    const promptBlock = `--- ODESLANÝ PROMPT ---\n${row.promptSent || '(není dostupný)'}\n--- /ODESLANÝ PROMPT ---`;
+    const rawBlock = `--- RAW ODPOVĚĎ AI ---\n${row.raw || ''}\n--- /RAW ODPOVĚĎ AI ---`;
     return `${header}\n${promptBlock}\n${rawBlock}`;
   }).join('\n\n');
   download(`strong_model_test_raw_${Date.now()}.txt`, body, 'text/plain');
@@ -128,7 +128,7 @@ function loadModelTestOutputFromFile(input) {
       out.scrollTop = out.scrollHeight;
     }
     saveModelTestOutputToStorage(text);
-    modelTestSetLastStatus(`NaÄteno: ${file.name}`, 'ok');
+    modelTestSetLastStatus(`Načteno: ${file.name}`, 'ok');
     showToast(t('toast.loaded.filename', { name: file.name }));
     if (input) input.value = '';
   };
@@ -175,9 +175,9 @@ function modelTestWaitWithCountdown(ms, signal) {
       if (leftTestSec > 0) {
         const mm = Math.floor(leftTestSec / 60);
         const ss = leftTestSec % 60;
-        modelTestSetCountdownLabel(`DalÅ¡Ã­ poÅ¾adavek za cca ${state.modelTestNextRequestEtaSec} s | ZbÃ½vÃ¡ testu ${mm}:${String(ss).padStart(2, '0')}`);
+        modelTestSetCountdownLabel(`Další požadavek za cca ${state.modelTestNextRequestEtaSec} s | Zbývá testu ${mm}:${String(ss).padStart(2, '0')}`);
       } else {
-        modelTestSetCountdownLabel(`DalÅ¡Ã­ poÅ¾adavek za cca ${state.modelTestNextRequestEtaSec} s`);
+        modelTestSetCountdownLabel(`Další požadavek za cca ${state.modelTestNextRequestEtaSec} s`);
       }
       updateModelTestRunButton();
     };
@@ -243,20 +243,20 @@ function restoreModelTestReportFromBackup() {
 function formatModelTestParsedBlock(key, t, e) {
   if (!e || !t) return '';
   const defEnglish = isDefinitionLikelyEnglish(t.definice);
-  const defValue = t.definice || 'â€”';
-  const defDisplay = defEnglish && !/\[POZN\.: text je v angliÄtinÄ› - Å¡patnÃ½ pÅ™eklad\]/.test(defValue)
-    ? `${defValue} [POZN.: text je v angliÄtinÄ› - Å¡patnÃ½ pÅ™eklad]`
+  const defValue = t.definice || '—';
+  const defDisplay = defEnglish && !/\[POZN\.: text je v angličtině - špatný překlad\]/.test(defValue)
+    ? `${defValue} [POZN.: text je v angličtině - špatný překlad]`
     : defValue;
   const parts = [
     `${key} | ${e.greek}`,
-    `Gramatika: ${e.tvaroslovi || 'â€”'}`,
-    `ÄŒeskÃ½ vÃ½znam: ${t.vyznam || 'â€”'}`,
-    `Definice (EN): ${e.definice || e.def || 'â€”'}`,
-    `ÄŒeskÃ¡ definice: ${defDisplay}`,
-    `KJV pÅ™eklady (CZ): ${t.kjv || e.kjv || 'â€”'}`,
-    `BiblickÃ© uÅ¾itÃ­: ${t.pouziti || 'â€”'}`,
-    `PÅ¯vod: ${t.puvod || 'â€”'}`,
-    `Specialista: ${t.specialista || 'â€”'}`,
+    `Gramatika: ${e.tvaroslovi || '—'}`,
+    `Český význam: ${t.vyznam || '—'}`,
+    `Definice (EN): ${e.definice || e.def || '—'}`,
+    `Česká definice: ${defDisplay}`,
+    `KJV překlady (CZ): ${t.kjv || e.kjv || '—'}`,
+    `Biblické užití: ${t.pouziti || '—'}`,
+    `Původ: ${t.puvod || '—'}`,
+    `Specialista: ${t.specialista || '—'}`,
     ''
   ];
   return parts.join('\n');
@@ -275,30 +275,30 @@ function appendModelTestExportParsed(keys, parsed) {
 
 function excerptRawForLastKey(rawContent, lastKey, maxLen = 2200) {
   const raw = String(rawContent || '').trim();
-  if (!raw) return '(prÃ¡zdnÃ©)';
+  if (!raw) return '(prázdné)';
   const escapedKey = String(lastKey || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   if (escapedKey) {
     const markerRe = new RegExp(`###\\s*${escapedKey}\\s*###([\\s\\S]*?)(?=\\n###\\s*G\\d+\\s*###|$)`, 'i');
     const m1 = raw.match(markerRe);
     if (m1) {
       const chunk = `###${lastKey}###${m1[1]}`.trim();
-      return chunk.length <= maxLen ? chunk : `${chunk.slice(0, maxLen)}\nâ€¦ (zkrÃ¡ceno)`;
+      return chunk.length <= maxLen ? chunk : `${chunk.slice(0, maxLen)}\n… (zkráceno)`;
     }
     const lineRe = new RegExp(`(^|\\n)\\s*${escapedKey}\\s*\\|[^\\n]*([\\s\\S]*?)(?=\\n\\s*G\\d+\\s*\\||$)`, 'i');
     const m2 = raw.match(lineRe);
     if (m2) {
       const chunk = m2[0].trim();
-      return chunk.length <= maxLen ? chunk : `${chunk.slice(0, maxLen)}\nâ€¦ (zkrÃ¡ceno)`;
+      return chunk.length <= maxLen ? chunk : `${chunk.slice(0, maxLen)}\n… (zkráceno)`;
     }
   }
   if (raw.length <= maxLen) return raw;
   const head = Math.min(1200, Math.floor(maxLen * 0.65));
   const tail = Math.max(500, maxLen - head - 40);
-  return `${raw.slice(0, head)}\nâ€¦ (zkrÃ¡ceno) â€¦\n${raw.slice(-tail)}`;
+  return `${raw.slice(0, head)}\n… (zkráceno) …\n${raw.slice(-tail)}`;
 }
 
 /**
- * PrÅ¯bÄ›Å¾nÃ¡ audit kontrola: vÅ¡echna hesla v dÃ¡vce + stav formÃ¡tu.
+ * Průběžná audit kontrola: všechna hesla v dávce + stav formátu.
  */
 function appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, missing, rawContent = '', totals = null) {
   const lastKey = Array.isArray(batchKeys) && batchKeys.length ? batchKeys[batchKeys.length - 1] : '';
@@ -321,21 +321,21 @@ function appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, missi
       ]
     : [];
   const rangeLabel = Array.isArray(batchKeys) && batchKeys.length
-    ? `${batchKeys[0]} aÅ¾ ${batchKeys[batchKeys.length - 1]} (${batchKeys.length} hesel)`
-    : `${lastKey} aÅ¾ ${lastKey} (1 heslo)`;
-  const totalsSuffix = totals ? ` | Î£ OK ${totals.okKeys || 0} / NEÃšSP ${totals.failedKeys || 0}` : '';
+    ? `${batchKeys[0]} až ${batchKeys[batchKeys.length - 1]} (${batchKeys.length} hesel)`
+    : `${lastKey} až ${lastKey} (1 heslo)`;
+  const totalsSuffix = totals ? ` | Σ OK ${totals.okKeys || 0} / NEÚSP ${totals.failedKeys || 0}` : '';
 
-  appendReport(`  â–¸ Rozsah dÃ¡vky: ${rangeLabel}`);
+  appendReport(`  ▸ Rozsah dávky: ${rangeLabel}`);
   appendReport('');
-  appendReport('  AUDIT: kontrola vÅ¡ech hesel v dÃ¡vce a jejich parsovatelnosti.');
-  appendReport(`  â–¸ PoslednÃ­ heslo (stavovÃ½ indikÃ¡tor): ${lastKey}`);
-  appendReport(`  â–¸ AuditovanÃ½ poÄet hesel: ${batchKeys.length}`);
-  appendReport(`  â–¸ NeÃºspÄ›Å¡nÃ© v dÃ¡vce: ${failedKeys.length}`);
+  appendReport('  AUDIT: kontrola všech hesel v dávce a jejich parsovatelnosti.');
+  appendReport(`  ▸ Poslední heslo (stavový indikátor): ${lastKey}`);
+  appendReport(`  ▸ Auditovaný počet hesel: ${batchKeys.length}`);
+  appendReport(`  ▸ Neúspěšné v dávce: ${failedKeys.length}`);
   appendReport('');
   if (complete) {
     modelTestSetLastStatus(`OK | ${rangeLabel} | ${lastKey}${totalsSuffix}`, 'ok');
-    appendReport('  Stav poslednÃ­ho hesla: OK â€” nalezeno v odpovÄ›di a vÅ¡echna povinnÃ¡ pole vyplnÄ›na ve sprÃ¡vnÃ©m formÃ¡tu.');
-    appendReport('  Data AI pro vÅ¡echna hesla v dÃ¡vce:');
+    appendReport('  Stav posledního hesla: OK — nalezeno v odpovědi a všechna povinná pole vyplněna ve správném formátu.');
+    appendReport('  Data AI pro všechna hesla v dávce:');
     for (const key of batchKeys) {
       const tk = parsed && parsed[key];
       if (!tk) continue;
@@ -345,27 +345,27 @@ function appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, missi
       }
     }
   } else if (inMissing || !t) {
-    modelTestSetLastStatus(`NEÃšSPÄšCH | ${rangeLabel} | ${lastKey}${totalsSuffix}`, 'error');
-    appendReport('  ðŸ”´ CHYBA FORMATU / PÃROVÃNÃ');
-    appendReport('  Stav poslednÃ­ho hesla: NEÃšSPÄšCH â€” heslo v odpovÄ›di neÅ¡lo spÃ¡rovat / chybÃ­ blok (Å¡patnÃ½ formÃ¡t nebo model vynechal heslo).');
+    modelTestSetLastStatus(`NEÚSPĚCH | ${rangeLabel} | ${lastKey}${totalsSuffix}`, 'error');
+    appendReport('  🔴 CHYBA FORMATU / PÁROVÁNÍ');
+    appendReport('  Stav posledního hesla: NEÚSPĚCH — heslo v odpovědi nešlo spárovat / chybí blok (špatný formát nebo model vynechal heslo).');
     if (failedKeys.length) {
-      appendReport(`  NeÃºspÄ›Å¡nÃ© v dÃ¡vce: ${failedKeys.length}/${batchKeys.length} | prvnÃ­ ${firstFailed} | poslednÃ­ ${lastFailed}`);
+      appendReport(`  Neúspěšné v dávce: ${failedKeys.length}/${batchKeys.length} | první ${firstFailed} | poslední ${lastFailed}`);
     }
     if (firstFailed && firstFailed !== lastFailed) {
-      appendReport(`  RAW odpovÄ›Ä AI pro prvnÃ­ neÃºspÄ›Å¡nÃ© ${firstFailed}:`);
+      appendReport(`  RAW odpověď AI pro první neúspěšné ${firstFailed}:`);
       appendReport(excerptRawForLastKey(rawContent, firstFailed, 1200));
       appendReport('  ---');
     }
-    appendReport('  RAW odpovÄ›Ä AI pro audit celÃ© dÃ¡vky:');
-    appendReport(rawContent || '(prÃ¡zdnÃ¡ odpovÄ›Ä)');
+    appendReport('  RAW odpověď AI pro audit celé dávky:');
+    appendReport(rawContent || '(prázdná odpověď)');
     appendReport('  --- /RAW ---');
   } else {
-    modelTestSetLastStatus(`NEÃšPLNÃ‰ | ${rangeLabel} | ${lastKey}${totalsSuffix}`, 'warn');
-    appendReport(`  Stav poslednÃ­ho hesla: NEÃšPLNÃ‰ â€” chybÃ­ nebo jsou neplatnÃ¡ pole: ${badFields.join(', ') || '?'}`);
+    modelTestSetLastStatus(`NEÚPLNÉ | ${rangeLabel} | ${lastKey}${totalsSuffix}`, 'warn');
+    appendReport(`  Stav posledního hesla: NEÚPLNÉ — chybí nebo jsou neplatná pole: ${badFields.join(', ') || '?'}`);
     if (englishDefinitionFlag) {
-      appendReport('  POZN.: DEFINICE obsahuje angliÄtinu, je hodnoceno jako Å¡patnÃ½ pÅ™eklad.');
+      appendReport('  POZN.: DEFINICE obsahuje angličtinu, je hodnoceno jako špatný překlad.');
     }
-    appendReport('  Data AI pro vÅ¡echna hesla v dÃ¡vce (to, co Å¡lo vyparsovat):');
+    appendReport('  Data AI pro všechna hesla v dávce (to, co šlo vyparsovat):');
     for (const key of batchKeys) {
       const tk = parsed && parsed[key];
       if (!tk) continue;
@@ -378,29 +378,29 @@ function appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, missi
   appendReport('');
 
   const exportLines = [
-    `Rozsah dÃ¡vky: ${rangeLabel}`,
-    `Audit: vÅ¡echna hesla v dÃ¡vce (${batchKeys.length})`,
-    `PoslednÃ­ heslo (stav): ${lastKey}`,
-    totals ? `Celkem v bÄ›hu: OK ${totals.okKeys || 0} | NEÃšSP ${totals.failedKeys || 0}` : '',
+    `Rozsah dávky: ${rangeLabel}`,
+    `Audit: všechna hesla v dávce (${batchKeys.length})`,
+    `Poslední heslo (stav): ${lastKey}`,
+    totals ? `Celkem v běhu: OK ${totals.okKeys || 0} | NEÚSP ${totals.failedKeys || 0}` : '',
     complete
       ? 'Stav: OK'
       : (inMissing || !t)
-        ? 'Stav: NEÃšSPÄšCH'
-        : `Stav: NEÃšPLNÃ‰ (${badFields.join(', ') || '?'})`
+        ? 'Stav: NEÚSPĚCH'
+        : `Stav: NEÚPLNÉ (${badFields.join(', ') || '?'})`
   ].filter(Boolean);
   const parsedKeys = batchKeys.filter(k => parsed && parsed[k]);
   if (parsedKeys.length) {
     exportLines.push('');
-    exportLines.push('Data AI pro vÅ¡echna hesla v dÃ¡vce:');
+    exportLines.push('Data AI pro všechna hesla v dávce:');
     for (const key of parsedKeys) {
       exportLines.push(`--- ${key} ---`);
       exportLines.push(formatModelTestParsedBlock(key, parsed[key], state.entryMap.get(key)));
     }
   } else if (inMissing || !t) {
     if (firstFailed && firstFailed !== lastFailed) {
-      exportLines.push('', `RAW odpovÄ›Ä AI pro prvnÃ­ neÃºspÄ›Å¡nÃ© ${firstFailed}:`, excerptRawForLastKey(rawContent, firstFailed, 1200));
+      exportLines.push('', `RAW odpověď AI pro první neúspěšné ${firstFailed}:`, excerptRawForLastKey(rawContent, firstFailed, 1200));
     }
-    exportLines.push('', 'RAW odpovÄ›Ä AI pro audit celÃ© dÃ¡vky:', rawContent || '(prÃ¡zdnÃ¡ odpovÄ›Ä)');
+    exportLines.push('', 'RAW odpověď AI pro audit celé dávky:', rawContent || '(prázdná odpověď)');
   }
   exportLines.push('----------------------------------------', '');
   state.modelTestLastKeyAuditExportChunks.push(exportLines.join('\n'));
@@ -411,11 +411,11 @@ function exportModelTestTranslationsTxt() {
   const reportFallback = (out?.value || '').trim();
   let body = '';
   if (state.modelTestLastKeyAuditExportChunks.length) {
-    body = `# Export auditu vÅ¡ech hesel z dÃ¡vek (test modelÅ¯)\n# ${new Date().toLocaleString('cs-CZ')}\n\n${state.modelTestLastKeyAuditExportChunks.join('\n')}`;
+    body = `# Export auditu všech hesel z dávek (test modelů)\n# ${new Date().toLocaleString('cs-CZ')}\n\n${state.modelTestLastKeyAuditExportChunks.join('\n')}`;
   } else if (state.modelTestParsedExportChunks.length) {
-    body = `# Export parsovanÃ½ch pÅ™ekladÅ¯ z testu modelÅ¯\n# ${new Date().toLocaleString('cs-CZ')}\n\n${state.modelTestParsedExportChunks.join('\n')}`;
+    body = `# Export parsovaných překladů z testu modelů\n# ${new Date().toLocaleString('cs-CZ')}\n\n${state.modelTestParsedExportChunks.join('\n')}`;
   } else if (reportFallback) {
-    body = `# Å½Ã¡dnÃ© novÄ› parsovanÃ© bloky v pamÄ›ti â€” celÃ½ aktuÃ¡lnÃ­ text z okna\n# ${new Date().toLocaleString('cs-CZ')}\n\n${reportFallback}`;
+    body = `# Žádné nově parsované bloky v paměti — celý aktuální text z okna\n# ${new Date().toLocaleString('cs-CZ')}\n\n${reportFallback}`;
   } else {
     showToast(t('toast.export.nothing'));
     return;

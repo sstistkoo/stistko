@@ -1,4 +1,4 @@
-﻿import { state } from './state.js';
+import { state } from './state.js';
 import { storeKey, backupKey, undoKey } from './storage.js';
 import { debounce } from './utils.js';
 
@@ -22,17 +22,17 @@ function saveProgressImmediate() {
    }
 }
 
-// Debounced save â€“ shlukne rychlÃ© za sebou jdoucÃ­ Ãºpravy (editace, import, atd.)
+// Debounced save – shlukne rychlé za sebou jdoucí úpravy (editace, import, atd.)
 const saveProgress = debounce(saveProgressImmediate, 500);
 
-// â”€â”€ Undo + auto-backup infrastruktura â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Undo + auto-backup infrastruktura ─────────────────────────────
 const AUTO_BACKUP_EVERY_N_BATCHES = 10;
 function writeBackup(key, payload) {
   try {
     localStorage.setItem(key, JSON.stringify(payload));
     return true;
   } catch(e) {
-    logWarn('writeBackup', `Nelze uloÅ¾it backup (${key})`, { error: e.message });
+    logWarn('writeBackup', `Nelze uložit backup (${key})`, { error: e.message });
     return false;
   }
 }
@@ -45,7 +45,7 @@ function maybeAutoBackup() {
     .filter(t => isTranslationComplete(t)).length;
   if (doneCount === 0) return;
   writeBackup(backupKey(), { translated: state.translated, ts: Date.now(), count: doneCount, fileId: state.currentFileId });
-  logInfo('autoBackup', `AutomatickÃ¡ zÃ¡loha: ${doneCount} hesel`);
+  logInfo('autoBackup', `Automatická záloha: ${doneCount} hesel`);
   updateBackupButtonVisibility();
 }
 
@@ -56,7 +56,7 @@ function hasUndo() {
   try {
     const d = JSON.parse(raw);
     if (!d || !d.translated) return null;
-    // Undo je platnÃ© jen pÃ¡r minut
+    // Undo je platné jen pár minut
     if (Date.now() - (d.ts || 0) > 10 * 60 * 1000) {
       localStorage.removeItem(undoKey());
       return null;
@@ -70,7 +70,7 @@ function restoreFromBackup(source) {
   if (!d) { showToast(t('toast.backup.none')); return; }
   const count = Object.keys(d.translated).length;
   if (!confirm(t('confirm.restoreBackup', { count, ts: new Date(d.ts).toLocaleString(getUiLang() === 'en' ? 'en' : 'cs') }))) return;
-  // UloÅ¾ aktuÃ¡lnÃ­ stav jako undo pÅ™ed pÅ™epsÃ¡nÃ­m
+  // Ulož aktuální stav jako undo před přepsáním
   writeBackup(undoKey(), { translated: state.translated, ts: Date.now(), fileId: state.currentFileId });
   state.translated = d.translated;
   saveProgressImmediate();
@@ -83,7 +83,7 @@ function restoreFromBackup(source) {
 
 function clearProgress() {
   if (!confirm(t('confirm.clearProgress'))) return;
-  // UloÅ¾ snapshot jako undo
+  // Ulož snapshot jako undo
   writeBackup(undoKey(), { translated: state.translated, ts: Date.now(), fileId: state.currentFileId });
   localStorage.removeItem(storeKey());
   state.translated = {};
