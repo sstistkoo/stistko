@@ -1141,8 +1141,8 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       <select id="apiKeyProfile" onchange="onApiKeyProfileChange()" aria-label="Výběr uloženého API klíče">
         <option value="__manual__">Ruční klíč (aktuální pole)</option>
       </select>
-      <button class="hbtn" style="padding:6px 10px;font-size:10px" onclick="saveCurrentApiKeyAsProfile()" title="Uložit aktuální API klíč do knihovny">💾 Uložit klíč</button>
-      <button class="hbtn red" style="padding:6px 10px;font-size:10px" onclick="deleteApiKeyProfile()" title="Smazat vybraný API klíč">🗑 Smazat</button>
+      <button class="hbtn" id="btnSaveApiKeyProfile" style="padding:6px 10px;font-size:10px" onclick="saveCurrentApiKeyAsProfile()" title="Uložit aktuální API klíč do knihovny">💾 Uložit klíč</button>
+      <button class="hbtn red" id="btnDeleteApiKeyProfile" style="padding:6px 10px;font-size:10px" onclick="deleteApiKeyProfile()" title="Smazat vybraný API klíč">🗑 Smazat</button>
     </div>
   </div>
 
@@ -1224,7 +1224,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
        <span id="promptMode" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ylw)"></span>
        <span id="promptName">–</span>
      </span>
-    <button onclick="showPromptLibraryModal()" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-size:12px;margin-left:8px" title="Otevřít knihovnu promptů">📚 Knihovna</button>
+    <button id="btnPromptLibraryOpen" onclick="showPromptLibraryModal()" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-size:12px;margin-left:8px" title="Otevřít knihovnu promptů">📚 Knihovna</button>
       <button id="btnPromptLang" onclick="showPromptLangModal()" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-size:12px;margin-left:8px" title="Nastavit jazyky UI a promptu">🌐 Jazyky (UI: cs | AI: cz)</button>
     <button id="btnPromptAuto" onclick="togglePromptAutoMode()" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-size:12px;margin-left:8px" title="Automaticky aplikovat systémový prompt">⚡ Auto prompt: ON</button>
      <textarea id="promptEditor" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" aria-hidden="true"></textarea>
@@ -1589,7 +1589,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
             <option value="preset_v14">🔥 v14 - HARD CZ definice (test)</option>
             <option value="preset_v15">v15 - CZ klasika (osvědčený)</option>
           </optgroup>
-          <optgroup label="Tematické prompty (dle detailu hesla)">
+          <optgroup id="promptGroupTopicDetail" label="Tematické prompty (dle detailu hesla)">
             <option value="preset_topic_vyznam">Téma: Český význam (CZ)</option>
             <option value="preset_topic_definice">Téma: Definice (CZ)</option>
             <option value="preset_topic_kjv">Téma: KJV překlady (CZ)</option>
@@ -1597,7 +1597,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
             <option value="preset_topic_puvod">Téma: Původ / Etymologie (CZ)</option>
             <option value="preset_topic_specialista">Téma: Biblický výklad (specialista) (CZ)</option>
           </optgroup>
-          <optgroup label="Tematické prompty — dávka (CZ)">
+          <optgroup id="promptGroupTopicBatch" label="Tematické prompty — dávka (CZ)">
             <option value="preset_topic_vyznam_batch">Téma: Český význam (CZ) — dávka</option>
             <option value="preset_topic_definice_batch">Téma: Definice (CZ) — dávka</option>
             <option value="preset_topic_kjv_batch">Téma: KJV překlady (CZ) — dávka</option>
@@ -1605,7 +1605,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
             <option value="preset_topic_puvod_batch">Téma: Původ / Etymologie (CZ) — dávka</option>
             <option value="preset_topic_specialista_batch">Téma: Biblický výklad (specialista) (CZ) — dávka</option>
           </optgroup>
-          <optgroup label="Tematické prompty (En)">
+          <optgroup id="promptGroupTopicEn" label="Tematické prompty (En)">
             <option value="preset_topic_vyznam_en">Téma: Český význam (En)</option>
             <option value="preset_topic_definice_en">Téma: Definice (En)</option>
             <option value="preset_topic_kjv_en">Téma: KJV překlady (En)</option>
@@ -2199,6 +2199,55 @@ const {
       ,'topicRepair.confirm': '✓ Potvrdit'
       ,'topicRepair.reject': '✕ Zamítnout'
       ,'topicRepair.none': 'Žádná témata k opravě.'
+      ,'list.selectAllVisibleWithCount': '☑ Označit vše zobrazené ({count})'
+      ,'list.translateSelectedCount': '⚡ Přeložit {count} vybraných'
+      ,'list.translateWaiting': '⏳ Čekám {seconds}s...'
+      ,'list.batchCount': '{count} hesel'
+      ,'provider.status.disabled': '{label}: vypnuto'
+      ,'provider.status.running': '{label}: běží'
+      ,'provider.status.ready': '{label}: připraven'
+      ,'provider.status.nextIn': '{label}: další dávka za {seconds}s'
+      ,'topicRepair.status.waitingToStart': '⏸ Čeká na spuštění · '
+      ,'topicRepair.status.summary': '✓ Hotovo {done} · ⏳ Běží {running} · 🕓 Čeká {waiting} · ✗ Chyba {failed}'
+      ,'topicRepair.applyOverwrite': '✓ Potvrdit přepsání ({count})'
+      ,'topicRepair.resume': '▶ Pokračovat'
+      ,'topicRepair.pause': '⏸ Pauza'
+      ,'apiKey.saveButton': '💾 Uložit klíč'
+      ,'apiKey.saveButton.title': 'Uložit aktuální API klíč do knihovny'
+      ,'apiKey.deleteButton': '🗑 Smazat'
+      ,'apiKey.deleteButton.title': 'Smazat vybraný API klíč'
+      ,'prompt.library.openButton': '📚 Knihovna'
+      ,'prompt.library.openButton.title': 'Otevřít knihovnu promptů'
+      ,'prompt.tab.default': 'Výchozí'
+      ,'prompt.tab.detailed': 'Detailní'
+      ,'prompt.tab.concise': 'Stručné'
+      ,'prompt.tab.literal': 'Doslovné'
+      ,'prompt.tab.test': 'Test'
+      ,'prompt.tab.custom': 'Vlastní'
+      ,'provider.top.autoRouter': '★ Auto Router (doporučeno)'
+      ,'resume.source.currentSlot': 'aktuální slot'
+      ,'resume.source.legacySlot': 'legacy slot (bude migrován)'
+      ,'provider.status.failed': '{label}: selhal'
+      ,'auto.groqEnableHint': '⚠ Zapni G (Groq) v AUTO panelu'
+      ,'topic.langTag': 'CZ'
+      ,'topic.label.definice': 'Definice'
+      ,'topic.label.vyznam': 'Český význam'
+      ,'topic.label.kjv': 'KJV překlady'
+      ,'topic.label.pouziti': 'Biblické užití'
+      ,'topic.label.puvod': 'Původ / Etymologie'
+      ,'topic.label.specialista': 'Biblický výklad (specialista)'
+      ,'model.groq.llama4scout': 'Llama 4 Scout (Vysoký limit TPM)'
+      ,'model.groq.llama33': 'Llama 3.3 70B (Nejvyšší kvalita)'
+      ,'model.groq.llama31': 'Llama 3.1 8B (Rychlý, pozor na limity)'
+      ,'model.gemini.flashLite31': 'Gemini 3.1 Flash-Lite (Systémový výchozí)'
+      ,'model.gemini.flashLite25': 'Gemini 2.5 Flash-Lite (Rychlý, levný)'
+      ,'model.gemini.flash25': 'Gemini 2.5 Flash (Stabilní)'
+      ,'prompt.topic.prefix': 'Téma:'
+      ,'prompt.topic.group.detail': 'Tematické prompty (dle detailu hesla)'
+      ,'prompt.topic.group.batch': 'Tematické prompty — dávka ({lang})'
+      ,'prompt.topic.group.en': 'Tematické prompty (EN -> {lang})'
+      ,'prompt.topic.batchSuffix': '— dávka'
+      ,'prompt.custom': 'Vlastní prompt'
     },
     en: {
       'setup.title': '⟁ Strong GR → CZ — Dictionary Translator',
@@ -2520,6 +2569,55 @@ const {
       ,'topicRepair.confirm': '✓ Confirm'
       ,'topicRepair.reject': '✕ Reject'
       ,'topicRepair.none': 'No topics to repair.'
+      ,'list.selectAllVisibleWithCount': '☑ Select all visible ({count})'
+      ,'list.translateSelectedCount': '⚡ Translate {count} selected'
+      ,'list.translateWaiting': '⏳ Waiting {seconds}s...'
+      ,'list.batchCount': '{count} entries'
+      ,'provider.status.disabled': '{label}: disabled'
+      ,'provider.status.running': '{label}: running'
+      ,'provider.status.ready': '{label}: ready'
+      ,'provider.status.nextIn': '{label}: next batch in {seconds}s'
+      ,'topicRepair.status.waitingToStart': '⏸ Waiting to start · '
+      ,'topicRepair.status.summary': '✓ Done {done} · ⏳ Running {running} · 🕓 Waiting {waiting} · ✗ Error {failed}'
+      ,'topicRepair.applyOverwrite': '✓ Confirm overwrite ({count})'
+      ,'topicRepair.resume': '▶ Resume'
+      ,'topicRepair.pause': '⏸ Pause'
+      ,'apiKey.saveButton': '💾 Save key'
+      ,'apiKey.saveButton.title': 'Save current API key to library'
+      ,'apiKey.deleteButton': '🗑 Delete'
+      ,'apiKey.deleteButton.title': 'Delete selected API key'
+      ,'prompt.library.openButton': '📚 Library'
+      ,'prompt.library.openButton.title': 'Open prompt library'
+      ,'prompt.tab.default': 'Default'
+      ,'prompt.tab.detailed': 'Detailed'
+      ,'prompt.tab.concise': 'Concise'
+      ,'prompt.tab.literal': 'Literal'
+      ,'prompt.tab.test': 'Test'
+      ,'prompt.tab.custom': 'Custom'
+      ,'provider.top.autoRouter': '★ Auto Router (recommended)'
+      ,'resume.source.currentSlot': 'current slot'
+      ,'resume.source.legacySlot': 'legacy slot (will be migrated)'
+      ,'provider.status.failed': '{label}: failed'
+      ,'auto.groqEnableHint': '⚠ Enable G (Groq) in AUTO panel'
+      ,'topic.langTag': 'EN'
+      ,'topic.label.definice': 'Definition'
+      ,'topic.label.vyznam': 'Czech meaning'
+      ,'topic.label.kjv': 'KJV translations'
+      ,'topic.label.pouziti': 'Biblical usage'
+      ,'topic.label.puvod': 'Origin / Etymology'
+      ,'topic.label.specialista': 'Biblical interpretation (specialist)'
+      ,'model.groq.llama4scout': 'Llama 4 Scout (High TPM limit)'
+      ,'model.groq.llama33': 'Llama 3.3 70B (Highest quality)'
+      ,'model.groq.llama31': 'Llama 3.1 8B (Fast, watch rate limits)'
+      ,'model.gemini.flashLite31': 'Gemini 3.1 Flash-Lite (System default)'
+      ,'model.gemini.flashLite25': 'Gemini 2.5 Flash-Lite (Fast, cheap)'
+      ,'model.gemini.flash25': 'Gemini 2.5 Flash (Stable)'
+      ,'prompt.topic.prefix': 'Topic:'
+      ,'prompt.topic.group.detail': 'Topic prompts (by entry detail)'
+      ,'prompt.topic.group.batch': 'Topic prompts — batch ({lang})'
+      ,'prompt.topic.group.en': 'Topic prompts (EN -> {lang})'
+      ,'prompt.topic.batchSuffix': '— batch'
+      ,'prompt.custom': 'Custom prompt'
     }
   };
 
@@ -2539,7 +2637,25 @@ const {
     return text;
   }
 
+  function uiLabel(labelOrKey) {
+    const raw = String(labelOrKey || '').trim();
+    if (!raw) return '';
+    return raw.startsWith('model.') ? t(raw) : raw;
+  }
+
+  function refreshStaticProviderSelectLabel(selectId, prov) {
+    const select = document.getElementById(selectId);
+    if (!select || prov === 'openrouter') return;
+    const selected = String(select.value || '').trim();
+    const options = (PROVIDERS[prov]?.models || []).map(([value, label]) => ({ value, label: uiLabel(label) || value }));
+    select.innerHTML = options.map(o => `<option value="${o.value}">${o.label}</option>`).join('');
+    if (selected && Array.from(select.options).some(o => o.value === selected)) {
+      select.value = selected;
+    }
+  }
+
   function applyUiLanguage() {
+    refreshTopicLabels();
     const setText = (id, value) => {
       const el = document.getElementById(id);
       if (el) el.textContent = value;
@@ -2608,6 +2724,7 @@ const {
     if (autoLog && (autoLogText === 'Čeká na start...' || autoLogText === 'Waiting to start...')) {
       autoLog.textContent = t('auto.log.waiting');
     }
+    refreshLanguageAwarePromptOptionLabels();
     setText('modelTestPromptPreviewTitle', t('prompt.preview.title'));
     setText('btnCopyPromptPreview', t('prompt.preview.copy'));
     setText('btnClosePromptPreview', t('prompt.preview.close'));
@@ -2624,6 +2741,38 @@ const {
     setText('btnPromptLoadTxt', t('prompt.library.load'));
     setText('btnPromptLibraryClose', t('prompt.library.close'));
     setText('btnPromptLibrarySaveApply', t('prompt.library.saveApply'));
+    setText('btnSaveApiKeyProfile', t('apiKey.saveButton'));
+    setAttr('btnSaveApiKeyProfile', 'title', t('apiKey.saveButton.title'));
+    setText('btnDeleteApiKeyProfile', t('apiKey.deleteButton'));
+    setAttr('btnDeleteApiKeyProfile', 'title', t('apiKey.deleteButton.title'));
+    setText('btnPromptLibraryOpen', t('prompt.library.openButton'));
+    setAttr('btnPromptLibraryOpen', 'title', t('prompt.library.openButton.title'));
+    const currentLegacyProv = String(document.getElementById('provider')?.value || '').trim();
+    if (currentLegacyProv === 'groq' || currentLegacyProv === 'gemini') {
+      refreshStaticProviderSelectLabel('model', currentLegacyProv);
+    }
+    refreshStaticProviderSelectLabel('pipelineModelMainGroq', 'groq');
+    refreshStaticProviderSelectLabel('pipelineModelSecondaryGemini', 'gemini');
+    refreshStaticProviderSelectLabel('providerRunMainGroqModel', 'groq');
+    refreshStaticProviderSelectLabel('providerRunSecondaryGeminiModel', 'gemini');
+    refreshStaticProviderSelectLabel('modelTestModel_groq', 'groq');
+    refreshStaticProviderSelectLabel('modelTestModel_gemini', 'gemini');
+    const promptTabsEl = document.getElementById('promptTabs');
+    if (promptTabsEl) {
+      const tabKeyMap = {
+        default: 'prompt.tab.default',
+        detailed: 'prompt.tab.detailed',
+        concise: 'prompt.tab.concise',
+        literal: 'prompt.tab.literal',
+        test: 'prompt.tab.test',
+        custom: 'prompt.tab.custom'
+      };
+      promptTabsEl.querySelectorAll('.prompt-tab').forEach(tab => {
+        const cat = String(tab.dataset.category || '');
+        const key = tabKeyMap[cat];
+        if (key) tab.textContent = t(key);
+      });
+    }
     setAttr('searchInput', 'placeholder', t('list.search.placeholder'));
     setAttr('searchInput', 'aria-label', t('list.search.aria'));
     setText('btnSelectRange', t('list.selectRange'));
@@ -2833,13 +2982,13 @@ POVINNÝ VÝSTUP NAVÍC:
       return localStorage.getItem('strong_prompt') || core.DEFAULT_PROMPT;
     }
 
-    const EN_TOPIC_PROMPT_LABEL_BASE = {
-      preset_topic_vyznam_en: 'Téma: Český význam',
-      preset_topic_definice_en: 'Téma: Definice',
-      preset_topic_kjv_en: 'Téma: KJV překlady',
-      preset_topic_pouziti_en: 'Téma: Biblické užití',
-      preset_topic_puvod_en: 'Téma: Původ / Etymologie',
-      preset_topic_specialista_en: 'Téma: Biblický výklad (specialista)'
+    const EN_TOPIC_PROMPT_MAP = {
+      preset_topic_vyznam_en: 'vyznam',
+      preset_topic_definice_en: 'definice',
+      preset_topic_kjv_en: 'kjv',
+      preset_topic_pouziti_en: 'pouziti',
+      preset_topic_puvod_en: 'puvod',
+      preset_topic_specialista_en: 'specialista'
     };
 
     function getCurrentTargetLangCode() {
@@ -2848,22 +2997,61 @@ POVINNÝ VÝSTUP NAVÍC:
       return target.toUpperCase();
     }
 
-    function formatEnTopicPromptLabel(baseLabel) {
-      return `${baseLabel} (EN -> ${getCurrentTargetLangCode()})`;
+    function getTopicLabelNoTag(topicId) {
+      const keyMap = {
+        vyznam: 'topic.label.vyznam',
+        definice: 'topic.label.definice',
+        kjv: 'topic.label.kjv',
+        pouziti: 'topic.label.pouziti',
+        puvod: 'topic.label.puvod',
+        specialista: 'topic.label.specialista'
+      };
+      return t(keyMap[topicId] || topicId);
+    }
+
+    function formatEnTopicPromptLabel(topicId) {
+      return `${t('prompt.topic.prefix')} ${getTopicLabelNoTag(topicId)} (EN -> ${getCurrentTargetLangCode()})`;
     }
 
     function isEnTopicPromptType(promptType) {
-      return Object.prototype.hasOwnProperty.call(EN_TOPIC_PROMPT_LABEL_BASE, String(promptType || ''));
+      return Object.prototype.hasOwnProperty.call(EN_TOPIC_PROMPT_MAP, String(promptType || ''));
     }
 
     function refreshLanguageAwarePromptOptionLabels() {
       const promptTypeSelect = document.getElementById('modelTestPromptType');
       if (!promptTypeSelect) return;
       const selected = promptTypeSelect.value;
-      Object.entries(EN_TOPIC_PROMPT_LABEL_BASE).forEach(([promptType, baseLabel]) => {
+      const topicByPromptType = {
+        preset_topic_vyznam: 'vyznam',
+        preset_topic_definice: 'definice',
+        preset_topic_kjv: 'kjv',
+        preset_topic_pouziti: 'pouziti',
+        preset_topic_puvod: 'puvod',
+        preset_topic_specialista: 'specialista',
+        preset_topic_vyznam_batch: 'vyznam',
+        preset_topic_definice_batch: 'definice',
+        preset_topic_kjv_batch: 'kjv',
+        preset_topic_pouziti_batch: 'pouziti',
+        preset_topic_puvod_batch: 'puvod',
+        preset_topic_specialista_batch: 'specialista'
+      };
+      Object.entries(topicByPromptType).forEach(([promptType, topicId]) => {
         const option = promptTypeSelect.querySelector(`option[value="${promptType}"]`);
-        if (option) option.textContent = formatEnTopicPromptLabel(baseLabel);
+        if (!option) return;
+        option.textContent = `${t('prompt.topic.prefix')} ${getTopicLabelNoTag(topicId)} (${t('topic.langTag')})${promptType.endsWith('_batch') ? ` ${t('prompt.topic.batchSuffix')}` : ''}`;
       });
+      Object.entries(EN_TOPIC_PROMPT_MAP).forEach(([promptType, topicId]) => {
+        const option = promptTypeSelect.querySelector(`option[value="${promptType}"]`);
+        if (option) option.textContent = formatEnTopicPromptLabel(topicId);
+      });
+      const customOption = promptTypeSelect.querySelector('option[value="custom"]');
+      if (customOption) customOption.textContent = t('prompt.custom');
+      const detailGroup = document.getElementById('promptGroupTopicDetail');
+      if (detailGroup) detailGroup.label = t('prompt.topic.group.detail');
+      const batchGroup = document.getElementById('promptGroupTopicBatch');
+      if (batchGroup) batchGroup.label = t('prompt.topic.group.batch', { lang: t('topic.langTag') });
+      const enGroup = document.getElementById('promptGroupTopicEn');
+      if (enGroup) enGroup.label = t('prompt.topic.group.en', { lang: getCurrentTargetLangCode() });
       if (selected) promptTypeSelect.value = selected;
 
       const promptTypeCompareSelect = document.getElementById('modelTestPromptTypeCompare');
@@ -2875,12 +3063,12 @@ POVINNÝ VÝSTUP NAVÍC:
     }
 
     function getModelTestPromptTypeLabel(promptType) {
-      if (promptType === 'custom') return 'Vlastní';
+      if (promptType === 'custom') return t('prompt.custom');
       if (isEnTopicPromptType(promptType)) {
-        return formatEnTopicPromptLabel(EN_TOPIC_PROMPT_LABEL_BASE[promptType]);
+        return formatEnTopicPromptLabel(EN_TOPIC_PROMPT_MAP[promptType]);
       }
       const fromCatalog = modelTestPromptCatalog?.[promptType]?.label;
-      return fromCatalog || 'Vlastní';
+      return fromCatalog || t('prompt.custom');
     }
 
 function openModelTestPromptPreviewModal() {
@@ -3136,18 +3324,18 @@ let listRangeFilter = null;
     label: 'Groq (console.groq.com)',
     ph: 'gsk_...',
     models: [
-      ['meta-llama/llama-4-scout-17b-16e-instruct', 'Llama 4 Scout (Vysoký limit TPM)'],
-      ['llama-3.3-70b-versatile', 'Llama 3.3 70B (Nejvyšší kvalita)'],
-      ['llama-3.1-8b-instant', 'Llama 3.1 8B (Rychlý, pozor na limity)'],
+      ['meta-llama/llama-4-scout-17b-16e-instruct', 'model.groq.llama4scout'],
+      ['llama-3.3-70b-versatile', 'model.groq.llama33'],
+      ['llama-3.1-8b-instant', 'model.groq.llama31'],
     ]
   },
   gemini: {
     label: 'Google AI Studio (aistudio.google.com)',
     ph: 'AIza...',
     models: [
-      ['gemini-3.1-flash-lite-preview', 'Gemini 3.1 Flash-Lite (Systémový výchozí)'],
-      ['gemini-2.5-flash-lite', 'Gemini 2.5 Flash-Lite (Rychlý, levný)'],
-      ['gemini-2.5-flash', 'Gemini 2.5 Flash (Stabilní)'],
+      ['gemini-3.1-flash-lite-preview', 'model.gemini.flashLite31'],
+      ['gemini-2.5-flash-lite', 'model.gemini.flashLite25'],
+      ['gemini-2.5-flash', 'model.gemini.flash25'],
       ['gemini-3.1-pro-preview', 'Gemini 3.1 Pro Preview'],
       ['gemini-2.5-flash-lite-preview-09-2025', 'Gemini 2.5 Flash-Lite Preview (legacy)'],
     ]
@@ -3235,7 +3423,7 @@ function populateOpenRouterModels(selectElement, savedModel, callback) {
       const modelMap = new Map(models.map(m => [m.id, m]));
 
       const topCandidates = [
-        { id: 'openrouter/free', fixedLabel: '★ Auto Router (doporučeno)' },
+        { id: 'openrouter/free', fixedLabel: t('provider.top.autoRouter') },
         { id: 'openai/gpt-oss-20b:free', fixedLabel: '★ OpenAI GPT-OSS 20B (free)' },
         { id: 'nvidia/nemotron-nano-9b-v2:free', fixedLabel: '★ NVIDIA Nemotron Nano 9B v2 (free)' }
       ];
@@ -3335,7 +3523,7 @@ function onProviderChange() {
       if (document.getElementById('provider').value !== 'openrouter') return;
     });
   } else {
-    modelSelect.innerHTML = PROVIDERS[newProv].models.map(([v,l]) => `<option value="${v}">${l}</option>`).join('');
+    modelSelect.innerHTML = PROVIDERS[newProv].models.map(([v,l]) => `<option value="${v}">${uiLabel(l)}</option>`).join('');
     modelSelect.disabled = false;
     if (newProv === 'gemini' && modelSelect.querySelector(`option[value="${GEMINI_SYSTEM_MODEL}"]`)) {
       modelSelect.value = GEMINI_SYSTEM_MODEL;
@@ -3371,7 +3559,7 @@ function syncAutoPanelSettingsInputs() {
   const autoIntervalEl = document.getElementById('autoInterval');
   if (autoIntervalEl) autoIntervalEl.textContent = String(iv);
   const autoBatchEl = document.getElementById('autoBatch');
-  if (autoBatchEl && !autoRunning) autoBatchEl.textContent = `${bs} hesel`;
+  if (autoBatchEl && !autoRunning) autoBatchEl.textContent = t('list.batchCount', { count: bs });
 }
 
 function applyAutoPanelSettings() {
@@ -3394,7 +3582,7 @@ function applyAutoPanelSettings() {
   const autoIntervalEl = document.getElementById('autoInterval');
   if (autoIntervalEl) autoIntervalEl.textContent = String(iv);
   const autoBatchEl = document.getElementById('autoBatch');
-  if (autoBatchEl && !autoRunning) autoBatchEl.textContent = `${bs} hesel`;
+  if (autoBatchEl && !autoRunning) autoBatchEl.textContent = t('list.batchCount', { count: bs });
   updateETA();
 }
 
@@ -3502,11 +3690,11 @@ function checkResume() {
     const box = document.getElementById('resumeBox');
     if (box) box.style.display = 'none';
     let saved = localStorage.getItem(storeKey());
-    let source = 'aktuální slot';
+    let source = t('resume.source.currentSlot');
     // Pokud nemáme nic pod aktuálním fileId, ale máme legacy data, nabídneme je
     if (!saved && currentFileId) {
       const legacy = localStorage.getItem(LEGACY_STORE_KEY);
-      if (legacy) { saved = legacy; source = 'legacy slot (bude migrován)'; }
+      if (legacy) { saved = legacy; source = t('resume.source.legacySlot'); }
     }
     if (!saved) return;
     const data = JSON.parse(saved);
@@ -3702,10 +3890,10 @@ function updateSelectedBtn() {
   if (selectedKeys.size > 0) {
     if (btnSelectAllVisible) {
       btnSelectAllVisible.style.display = 'inline-block';
-      btnSelectAllVisible.textContent = `☑ Označit vše zobrazené (${filteredKeys.length})`;
+      btnSelectAllVisible.textContent = t('list.selectAllVisibleWithCount', { count: filteredKeys.length });
     }
     btn.style.display = 'inline-block';
-    btn.textContent = `⚡ Přeložit ${selectedKeys.size} vybraných`;
+    btn.textContent = t('list.translateSelectedCount', { count: selectedKeys.size });
   } else {
     if (btnSelectAllVisible) btnSelectAllVisible.style.display = 'none';
     btn.style.display = 'none';
@@ -3770,7 +3958,7 @@ async function translateSelected() {
     if (processed < keys.length) {
       const interval = parseInt(document.getElementById('intervalRun')?.value) || 
                        parseInt(document.getElementById('interval')?.value) || 20;
-      document.getElementById('btnTranslateSelected').textContent = `⏳ Čekám ${interval}s...`;
+      document.getElementById('btnTranslateSelected').textContent = t('list.translateWaiting', { seconds: interval });
       await new Promise(r => setTimeout(r, interval * 1000));
     }
   }
@@ -3818,17 +4006,19 @@ function updateTopicRepairProviderStatus() {
     const enabled = !!state.providerEnabled[prov];
     if (!enabled) {
       const label = prov === 'groq' ? 'Groq' : (prov === 'gemini' ? 'Google' : 'OpenRouter');
-      line.textContent = `${label}: vypnuto`;
+      line.textContent = t('provider.status.disabled', { label });
       continue;
     }
     if (state.currentTask && state.currentTask.provider === prov) {
       const label = prov === 'groq' ? 'Groq' : (prov === 'gemini' ? 'Google' : 'OpenRouter');
-      line.textContent = `${label}: běží`;
+      line.textContent = t('provider.status.running', { label });
       continue;
     }
     const left = getProviderCooldownLeftSec(prov);
     const label = prov === 'groq' ? 'Groq' : (prov === 'gemini' ? 'Google' : 'OpenRouter');
-    line.textContent = left > 0 ? `${label}: další dávka za ${left}s` : `${label}: připraven`;
+    line.textContent = left > 0
+      ? t('provider.status.nextIn', { label, seconds: left })
+      : t('provider.status.ready', { label });
   }
 }
 
@@ -3842,15 +4032,15 @@ function updateTopicRepairModalUI() {
   const failed = vis.filter(t => t.status === 'failed').length;
   const statusEl = document.getElementById('topicRepairStatus');
   const idleHint = (state.repairStrategy === 'sequential' && !state.sequentialEverStarted && waiting > 0)
-    ? '⏸ Čeká na spuštění · '
+    ? t('topicRepair.status.waitingToStart')
     : '';
-  if (statusEl) statusEl.textContent = `${idleHint}✓ Hotovo ${done} · ⏳ Běží ${running} · 🕓 Čeká ${waiting} · ✗ Chyba ${failed}`;
+  if (statusEl) statusEl.textContent = `${idleHint}${t('topicRepair.status.summary', { done, running, waiting, failed })}`;
   const applyCount = vis.filter(t => t.checked && hasMeaningfulValue(t.candidateValue)).length;
   const applyBtn = document.getElementById('topicRepairApplyBtn');
-  if (applyBtn) applyBtn.textContent = `✓ Potvrdit přepsání (${applyCount})`;
+  if (applyBtn) applyBtn.textContent = t('topicRepair.applyOverwrite', { count: applyCount });
   const toggleBtn = document.getElementById('topicRepairToggleBtn');
   if (toggleBtn) {
-    toggleBtn.textContent = state.paused ? '▶ Pokračovat' : '⏸ Pauza';
+    toggleBtn.textContent = state.paused ? t('topicRepair.resume') : t('topicRepair.pause');
     const showPause = state.repairStrategy === 'sequential' && state.sequentialEverStarted;
     toggleBtn.style.display = showPause ? '' : 'none';
   }
@@ -5083,6 +5273,7 @@ function renderDetail() {
 }
 
 function renderTranslation(key, t) {
+  refreshTopicLabels();
   const e = entryMap.get(key) || {};
   const sourceCzDef = String(e.czDef || '').trim();
   const translatedDef = String(t?.definice || '').trim();
@@ -5094,15 +5285,15 @@ function renderTranslation(key, t) {
   const sections = [
     { 
       id: 'definice', 
-      label: 'Definice (CZ)', 
+      label: TOPIC_LABELS.definice, 
       field: definitionDisplay,
       rawField: null
     },
-    { id: 'vyznam',   label: 'Český význam (CZ)',        field: t?.vyznam },
-    { id: 'kjv',     label: 'KJV překlady (CZ)', field: t?.kjv },
-    { id: 'pouziti',  label: 'Biblické užití (CZ)',     field: t?.pouziti },
-    { id: 'puvod',    label: 'Původ / Etymologie (CZ)',  field: t?.puvod },
-    { id: 'specialista', label: 'Biblický výklad (specialista) (CZ)', field: t?.specialista },
+    { id: 'vyznam', label: TOPIC_LABELS.vyznam, field: t?.vyznam },
+    { id: 'kjv', label: TOPIC_LABELS.kjv, field: t?.kjv },
+    { id: 'pouziti', label: TOPIC_LABELS.pouziti, field: t?.pouziti },
+    { id: 'puvod', label: TOPIC_LABELS.puvod, field: t?.puvod },
+    { id: 'specialista', label: TOPIC_LABELS.specialista, field: t?.specialista },
   ];
 
   return sections.map(s => `
@@ -5171,13 +5362,24 @@ async function refillSingleField(key, topicId) {
 }
 
 const TOPIC_LABELS = {
-  vyznam: 'Český význam (CZ)',
-  definice: 'Definice (CZ)',
-  pouziti: 'Biblické užití (CZ)',
-  puvod: 'Původ / Etymologie (CZ)',
-  kjv: 'KJV překlady (CZ)',
-  specialista: 'Biblický výklad (specialista) (CZ)'
+  vyznam: '',
+  definice: '',
+  pouziti: '',
+  puvod: '',
+  kjv: '',
+  specialista: ''
 };
+
+function refreshTopicLabels() {
+  const langTag = t('topic.langTag');
+  TOPIC_LABELS.vyznam = `${t('topic.label.vyznam')} (${langTag})`;
+  TOPIC_LABELS.definice = `${t('topic.label.definice')} (${langTag})`;
+  TOPIC_LABELS.pouziti = `${t('topic.label.pouziti')} (${langTag})`;
+  TOPIC_LABELS.puvod = `${t('topic.label.puvod')} (${langTag})`;
+  TOPIC_LABELS.kjv = `${t('topic.label.kjv')} (${langTag})`;
+  TOPIC_LABELS.specialista = `${t('topic.label.specialista')} (${langTag})`;
+}
+refreshTopicLabels();
 
 const TOPIC_PROMPT_PRESET_MAP = {
   vyznam: 'preset_topic_vyznam',
@@ -7476,36 +7678,40 @@ function initAutoProviderToggles() {
 
 function updateAutoProviderCountdowns() {
   const mainLeft = Math.max(0, parseInt(document.getElementById('countdown')?.textContent || '0', 10) || 0);
+  const providerLabel = (prov) => String(PROVIDERS[prov]?.label || prov).split(' ')[0];
+  const groqLabel = 'Groq';
   if (!isAutoProviderEnabled('groq')) {
-    setAutoProviderCountdownLabel('groq', 'Groq: vypnuto');
+    setAutoProviderCountdownLabel('groq', t('provider.status.disabled', { label: groqLabel }));
   } else {
     if (autoRunning) {
-      setAutoProviderCountdownLabel('groq', mainLeft > 0 ? `Groq: další dávka za ${mainLeft}s` : 'Groq: běží');
+      setAutoProviderCountdownLabel('groq', mainLeft > 0
+        ? t('provider.status.nextIn', { label: groqLabel, seconds: mainLeft })
+        : t('provider.status.running', { label: groqLabel }));
     } else {
-      setAutoProviderCountdownLabel('groq', 'Groq: připraven');
+      setAutoProviderCountdownLabel('groq', t('provider.status.ready', { label: groqLabel }));
     }
   }
   ['gemini', 'openrouter'].forEach(prov => {
     if (Date.now() < Number(providerFailBadgeUntil[prov] || 0)) {
-      setAutoProviderCountdownLabel(prov, `${PROVIDERS[prov]?.label?.split(' ')[0] || prov}: selhal`);
+      setAutoProviderCountdownLabel(prov, t('provider.status.failed', { label: providerLabel(prov) }));
       return;
     }
     const enabled = isAutoProviderEnabled(prov);
     if (!enabled) {
-      setAutoProviderCountdownLabel(prov, `${PROVIDERS[prov]?.label?.split(' ')[0] || prov}: vypnuto`);
+      setAutoProviderCountdownLabel(prov, t('provider.status.disabled', { label: providerLabel(prov) }));
       return;
     }
     const pending = Math.max(0, Number(providerFallbackPendingCount?.[prov] || 0));
     if (pending > 0) {
-      setAutoProviderCountdownLabel(prov, `${PROVIDERS[prov]?.label?.split(' ')[0] || prov}: zpracovává neúplné (${pending})`);
+      setAutoProviderCountdownLabel(prov, `${providerLabel(prov)}: ${getUiLang() === 'en' ? 'processing partial' : 'zpracovává neúplné'} (${pending})`);
       return;
     }
     const state = getSecondaryNextOperationState(prov);
     if (state.exhausted && state.nextSec > 0) {
-      setAutoProviderCountdownLabel(prov, `${PROVIDERS[prov]?.label?.split(' ')[0] || prov}: čeká ${state.nextSec}s do dalšího pokusu`);
+      setAutoProviderCountdownLabel(prov, `${providerLabel(prov)}: ${getUiLang() === 'en' ? 'waiting' : 'čeká'} ${state.nextSec}s ${getUiLang() === 'en' ? 'for next attempt' : 'do dalšího pokusu'}`);
       return;
     }
-    setAutoProviderCountdownLabel(prov, `${PROVIDERS[prov]?.label?.split(' ')[0] || prov}: připraven`);
+    setAutoProviderCountdownLabel(prov, t('provider.status.ready', { label: providerLabel(prov) }));
   });
 }
 
@@ -7528,6 +7734,13 @@ async function runAutoStep() {
     if (!isAutoProviderEnabled('groq')) {
       stopAuto();
       log('🛑 AUTO zastaven: Groq je vypnutý v AUTO panelu');
+      const groqHint = t('auto.groqEnableHint');
+      const autoLogEl = document.getElementById('autoLog');
+      if (autoLogEl) autoLogEl.textContent = groqHint;
+      setAutoProviderCountdownLabel('groq', groqHint);
+      if (window.innerWidth <= 600) {
+        document.getElementById('autoPanel')?.classList.add('show');
+      }
       showToast(t('toast.auto.enableGroq'));
       return;
     }
@@ -8030,7 +8243,7 @@ function logEntry(keys, rawResponse) {
 
   for (const key of keys) {
     const e = entryMap.get(key);
-    const t = translated[key];
+    const tr = translated[key];
     if (!e) continue;
 
     const div = document.createElement('div');
@@ -8043,11 +8256,11 @@ function logEntry(keys, rawResponse) {
         <span class="log-key">${key}</span>
         <span class="log-greek">${escHtml(e.greek)}</span>
       </div>
-      ${t && !t.skipped
-        ? `<div class="log-vyznam"><b>${t('log.meaning')}</b> ${escHtml(t.vyznam || '—')}</div>
-           <div class="log-definice">${escHtml((t.definice || '').slice(0, 120))}${(t.definice || '').length > 120 ? '…' : ''}</div>
-           ${t.kjv ? `<div class="log-orig"><b>KJV:</b> ${escHtml(t.kjv.slice(0, 80))}${(t.kjv || '').length > 80 ? '…' : ''}</div>` : ''}
-           <div class="log-orig"><b>${t('log.usage')}</b> ${escHtml((t.pouziti || '').slice(0, 80))}${(t.pouziti || '').length > 80 ? '…' : ''}</div>`
+      ${tr && !tr.skipped
+        ? `<div class="log-vyznam"><b>${t('log.meaning')}</b> ${escHtml(tr.vyznam || '—')}</div>
+           <div class="log-definice">${escHtml((tr.definice || '').slice(0, 120))}${(tr.definice || '').length > 120 ? '…' : ''}</div>
+           ${tr.kjv ? `<div class="log-orig"><b>KJV:</b> ${escHtml(tr.kjv.slice(0, 80))}${(tr.kjv || '').length > 80 ? '…' : ''}</div>` : ''}
+           <div class="log-orig"><b>${t('log.usage')}</b> ${escHtml((tr.pouziti || '').slice(0, 80))}${(tr.pouziti || '').length > 80 ? '…' : ''}</div>`
         : `<div class="log-err">${t('log.unparsed')}</div>`
       }
     `;
@@ -8866,7 +9079,7 @@ function fillPipelineSelectOptions(prov, selectId) {
     select.onchange = () => setPipelineModelForProvider('openrouter', select.value);
     return;
   }
-  const options = (PROVIDERS[prov]?.models || []).map(([value, label]) => ({ value, label: label || value }));
+  const options = (PROVIDERS[prov]?.models || []).map(([value, label]) => ({ value, label: uiLabel(label) || value }));
   select.innerHTML = options.map(o => `<option value="${o.value}">${o.label}</option>`).join('');
   const wanted = getPipelineModelForProvider(prov);
   if (wanted && Array.from(select.options).some(o => o.value === wanted)) {
@@ -8917,7 +9130,7 @@ function populateModelTestModelSelect(prov) {
     });
     return;
   }
-  const providerOptions = (PROVIDERS[prov]?.models || []).map(([value, label]) => ({ value, label: label || value }));
+  const providerOptions = (PROVIDERS[prov]?.models || []).map(([value, label]) => ({ value, label: uiLabel(label) || value }));
   const pinned = MODEL_TEST_PINNED_MODELS
     .filter(item => item.prov === prov)
     .map(item => ({ value: item.value, label: item.label || item.value }));
@@ -8962,7 +9175,7 @@ function updateModelTestProviderUi() {
 
 function getProviderModelOptions(prov) {
   if (prov !== 'openrouter') {
-    return Promise.resolve((PROVIDERS[prov]?.models || []).map(([value, label]) => ({ value, label })));
+    return Promise.resolve((PROVIDERS[prov]?.models || []).map(([value, label]) => ({ value, label: uiLabel(label) })));
   }
   return new Promise(resolve => {
     const tempSelect = document.createElement('select');
@@ -10458,9 +10671,20 @@ function showPromptLibraryModal() {
   selectedPromptCategory = 'default';
   selectedPromptIndex = 0;
   
-   // Populate tabs with Czech labels
+  const getPromptTabLabel = (cat) => {
+    const map = {
+      default: 'prompt.tab.default',
+      detailed: 'prompt.tab.detailed',
+      concise: 'prompt.tab.concise',
+      literal: 'prompt.tab.literal',
+      test: 'prompt.tab.test',
+      custom: 'prompt.tab.custom'
+    };
+    return t(map[cat] || cat);
+  };
+  // Populate tabs with localized labels
    tabs.innerHTML = Object.keys(PROMPT_LIBRARY).map(cat => 
-     `<div class="prompt-tab ${cat === 'default' ? 'active' : ''}" data-category="${cat}">${CATEGORY_LABELS[cat] || cat}</div>`
+    `<div class="prompt-tab ${cat === 'default' ? 'active' : ''}" data-category="${cat}">${getPromptTabLabel(cat)}</div>`
    ).join('');
   
   // Add click handlers to tabs
