@@ -1120,7 +1120,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
 
 <!-- ══ SETUP ══════════════════════════════════════════════════════ -->
 <div id="setup">
-  <h1>⟁ Strong GR → CZ — Překladač slovníku</h1>
+  <h1 id="setupTitle">⟁ Strong GR → CZ — Překladač slovníku</h1>
   
 
   <div id="resumeBox" class="resume-box"></div>
@@ -1178,7 +1178,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   </div>
 
   <div class="row">
-    <label for="batchSize">Velikost dávky (hesel na jedno volání)</label>
+    <label for="batchSize" id="batchSizeLabel">Velikost dávky (hesel na jedno volání)</label>
     <select id="batchSize" aria-label="Počet hesel na jednu dávku">
       <option value="1">1 heslo</option>
       <option value="5">5 hesel</option>
@@ -1189,7 +1189,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   </div>
 
   <div class="row">
-    <label for="interval">Interval mezi dávkami (vteřiny) — ochrana rate limitu</label>
+    <label for="interval" id="intervalLabel">Interval mezi dávkami (vteřiny) — ochrana rate limitu</label>
     <select id="interval" aria-label="Interval mezi dávkami v sekundách">
       <option value="5">5 s (Groq fast)</option>
       <option value="10">10 s (bezpečné)</option>
@@ -1201,9 +1201,9 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   <hr class="div">
 
   <div class="row">
-    <label for="fileTXT">txt soubor</label>
+    <label for="fileTXT" id="fileLabel">txt soubor</label>
     <div class="file-row">
-      <label class="file-btn" for="fileTXT" aria-label="Vybrat TXT soubor">📂 Vybrat</label>
+      <label class="file-btn" id="btnChooseFile" for="fileTXT" aria-label="Vybrat TXT soubor">📂 Vybrat</label>
       <input type="file" id="fileTXT" accept=".txt" onchange="loadTXT(this)" style="display:none" aria-label="Výběr TXT souboru se Strong slovníkem">
       <button onclick="loadDefaultFile()" id="btnLoadDefault" style="font-size:10px;padding:4px 10px;background:var(--bg4);border:1px solid var(--brd);border-radius:3px;cursor:pointer;display:none;color:var(--txt)" aria-label="Načíst výchozí soubor">📄 Automaticky</button>
       <span class="file-status" id="statusTXT" aria-live="polite">— nevybráno</span>
@@ -1211,8 +1211,8 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       <button class="start-btn" id="startBtn" onclick="startApp()" disabled aria-label="Zahájit překlad" style="flex:1">
         Zahájit překlad →
       </button>
-      <button onclick="showHelpModal()" style="font-family:'JetBrains Mono',monospace;font-size:11px;padding:8px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:3px;color:var(--txt3);cursor:pointer;white-space:nowrap" aria-label="Zobrazit nápovědu k aplikaci" title="Nápověda">❓ Nápověda</button>
-      <button onclick="showLimitsModal()" style="font-family:'JetBrains Mono',monospace;font-size:11px;padding:8px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:3px;color:var(--txt3);cursor:pointer;white-space:nowrap" aria-label="Zobrazit limity providera" title="Zobrazit limity providera">📊 Limity</button>
+      <button id="btnHelp" onclick="showHelpModal()" style="font-family:'JetBrains Mono',monospace;font-size:11px;padding:8px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:3px;color:var(--txt3);cursor:pointer;white-space:nowrap" aria-label="Zobrazit nápovědu k aplikaci" title="Nápověda">❓ Nápověda</button>
+      <button id="btnLimits" onclick="showLimitsModal()" style="font-family:'JetBrains Mono',monospace;font-size:11px;padding:8px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:3px;color:var(--txt3);cursor:pointer;white-space:nowrap" aria-label="Zobrazit limity providera" title="Zobrazit limity providera">📊 Limity</button>
     </div>
   </div>
 
@@ -1225,7 +1225,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
        <span id="promptName">–</span>
      </span>
     <button onclick="showPromptLibraryModal()" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-size:12px;margin-left:8px" title="Otevřít knihovnu promptů">📚 Knihovna</button>
-    <button id="btnPromptLang" onclick="showPromptLangModal()" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-size:12px;margin-left:8px" title="Nastavit cílový a zdrojový jazyk">🌐 Jazyk (cz)</button>
+      <button id="btnPromptLang" onclick="showPromptLangModal()" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-size:12px;margin-left:8px" title="Nastavit jazyky UI a promptu">🌐 Jazyky (UI: cs | AI: cz)</button>
     <button id="btnPromptAuto" onclick="togglePromptAutoMode()" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-size:12px;margin-left:8px" title="Automaticky aplikovat systémový prompt">⚡ Auto prompt: ON</button>
      <textarea id="promptEditor" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" aria-hidden="true"></textarea>
    </div>
@@ -1243,11 +1243,11 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       <button class="hbtn red hdr-close" onclick="clearProgress()" title="Smazat veškerý uložený průběh" aria-label="Smazat veškerý uložený průběh">Res.</button>
       <button class="hbtn hdr-close" id="btnRestoreBackup" onclick="restoreFromBackup('backup')" title="Obnovit ze zálohy" aria-label="Obnovit ze zálohy" style="display:none">↺ Záloha</button>
     </div>
-    <div class="stat">Přeloženo: <b id="sDone">0</b></div>
-    <div class="stat">Zbývá: <b id="sRemain">0</b></div>
-    <div class="stat">Celkem: <b id="sTotal">0</b></div>
+    <div class="stat"><span id="lblDone">Přeloženo:</span> <b id="sDone">0</b></div>
+    <div class="stat"><span id="lblRemain">Zbývá:</span> <b id="sRemain">0</b></div>
+    <div class="stat"><span id="lblTotal">Celkem:</span> <b id="sTotal">0</b></div>
     <div class="stat" style="color:var(--acc)" id="tokenStats" role="status" aria-live="polite">📊 Tokeny: 0</div>
-    <label class="stat" for="autoTokenLimit" style="display:flex;align-items:center;gap:6px;color:var(--txt3);font-size:10px">
+    <label class="stat" id="autoTokenLimitLabel" for="autoTokenLimit" style="display:flex;align-items:center;gap:6px;color:var(--txt3);font-size:10px">
       🛑 Stop tokeny
       <input type="number" id="autoTokenLimit" min="0" step="100" placeholder="0 = vypnuto"
         style="width:110px;background:var(--bg3);border:1px solid var(--brd);border-radius:3px;padding:3px 6px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt);outline:none"
@@ -1273,10 +1273,10 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       <button class="hbtn" id="btnToggleList" onclick="toggleListPane()" title="Skrýt/ukázat seznam" aria-label="Skrýt/ukázat seznam">≡ Seznam</button>
       <button class="hbtn" id="btnStep" onclick="translateNext()" aria-label="Přeložit další dávku">⚡ Dávka</button>
       <button class="hbtn" id="btnTestModels" onclick="openModelTestModal()" title="Nastavit a spustit test modelů (nejdřív modal, pak ▶ Test provideru)" aria-label="Test modelů — otevře nastavení">🧪 Test modelů</button>
-      <button class="hbtn grn" onclick="exportTXT()" aria-label="Exportovat do TXT">⬇ TXT</button>
-      <button class="hbtn grn" onclick="exportJSON()" aria-label="Exportovat do JSON">⬇ JSON</button>
-      <button class="hbtn" onclick="exportRange()" title="Export vybraného rozsahu G čísel" aria-label="Exportovat rozsah G čísel">⬇ Rozsah</button>
-      <button class="hbtn red" onclick="showFailedEntries()" title="Zobrazit neúspěšné překlady" aria-label="Zobrazit neúspěšné překlady">⚠ Neus. <span id="failedCount"></span></button>
+      <button class="hbtn grn" id="btnExportTxt" onclick="exportTXT()" aria-label="Exportovat do TXT">⬇ TXT</button>
+      <button class="hbtn grn" id="btnExportJson" onclick="exportJSON()" aria-label="Exportovat do JSON">⬇ JSON</button>
+      <button class="hbtn" id="btnExportRange" onclick="exportRange()" title="Export vybraného rozsahu G čísel" aria-label="Exportovat rozsah G čísel">⬇ Rozsah</button>
+      <button class="hbtn red" id="btnFailedEntries" onclick="showFailedEntries()" title="Zobrazit neúspěšné překlady" aria-label="Zobrazit neúspěšné překlady">⚠ Neus. <span id="failedCount"></span></button>
       <button class="hbtn" id="btnAISettingsDesktop" onclick="showSettingsModal()" title="Nastavení AI (provider, model, dávka)" aria-label="Nastavení AI">⚙ Nastavení AI</button>
       <button class="hbtn red" id="mobileMenuBtn" onclick="showMobileActions()" aria-label="Zobrazit akce">☰</button>
     </div>
@@ -1285,12 +1285,12 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   <!-- Auto panel -->
   <div class="auto-panel" id="autoPanel">
     <div class="auto-info">
-      AUTO: dávka <b id="autoBatch">—</b>,
-      nastavení
+      <span id="autoInfoPrefix">AUTO: dávka</span> <b id="autoBatch">—</b>,
+      <span id="autoInfoSettings">nastavení</span>
       <input type="number" id="autoBatchSizeInput" min="1" max="200" step="1" value="10" onchange="applyAutoPanelSettings()" style="width:58px;background:var(--bg3);border:1px solid var(--brd);border-radius:3px;padding:2px 4px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt);outline:none">
       /
       <input type="number" id="autoIntervalInput" min="1" max="600" step="1" value="20" onchange="applyAutoPanelSettings()" style="width:58px;background:var(--bg3);border:1px solid var(--brd);border-radius:3px;padding:2px 4px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt);outline:none">
-      s (interval <b id="autoInterval">—</b>s)
+      <span id="autoInfoSeconds">s</span> (<span id="autoInfoInterval">interval</span> <b id="autoInterval">—</b>s)
     </div>
     <div class="countdown" id="countdown">—</div>
     <div id="autoProviderCountdowns" style="display:grid;gap:2px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt2)">
@@ -1320,7 +1320,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
     <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt3);white-space:nowrap">
       ⏱ <span id="etaLabel">—</span>
     </div>
-    <button class="hbtn red" onclick="stopAuto()" aria-label="Zastavit automatický překlad">■ Stop</button>
+    <button class="hbtn red" id="btnAutoStop" onclick="stopAuto()" aria-label="Zastavit automatický překlad">■ Stop</button>
   </div>
 
   <!-- Split -->
@@ -1332,7 +1332,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
         <div class="list-search-row">
           <input type="text" id="searchInput" placeholder="Hledat..."
             oninput="filterListDebounced()" aria-label="Hledat heslo" style="flex:1;min-width:120px">
-          <button class="sbtn" onclick="selectRange()" title="Označit rozsah hesel k překladu" aria-label="Označit rozsah hesel">☑ Výběr</button>
+          <button class="sbtn" id="btnSelectRange" onclick="selectRange()" title="Označit rozsah hesel k překladu" aria-label="Označit rozsah hesel">☑ Výběr</button>
         </div>
         <div class="list-search-row">
           <select id="filterStatus" onchange="filterList()" aria-label="Co zobrazit" style="font-size:11px;padding:4px 6px;background:var(--bg3);color:var(--txt);border:1px solid var(--brd);border-radius:3px;min-width:130px">
@@ -1356,9 +1356,9 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
         </div>
         <div class="list-search-row">
           <div class="list-actions">
-            <button class="sbtn" onclick="filterMissingTopicsList()" title="Zobrazit hesla, kde chybí některé téma" aria-label="Filtrovat hesla s chybějícími tématy">⚠ Téma</button>
-            <button class="sbtn" onclick="selectAll()" title="Vybrat vše" aria-label="Vybrat všechna hesla">☑</button>
-            <button class="sbtn" onclick="selectNone()" title="Zrušit výběr" aria-label="Zrušit výběr všech hesel">☐</button>
+            <button class="sbtn" id="btnMissingTopicFilter" onclick="filterMissingTopicsList()" title="Zobrazit hesla, kde chybí některé téma" aria-label="Filtrovat hesla s chybějícími tématy">⚠ Téma</button>
+            <button class="sbtn" id="btnSelectAllSmall" onclick="selectAll()" title="Vybrat vše" aria-label="Vybrat všechna hesla">☑</button>
+            <button class="sbtn" id="btnSelectNoneSmall" onclick="selectNone()" title="Zrušit výběr" aria-label="Zrušit výběr všech hesel">☐</button>
             <button class="sbtn" id="btnTopicRepairMini" onclick="restoreTopicRepairModal()" title="Obnovit okno opravy témat" aria-label="Obnovit okno opravy témat" style="display:none">🗔 Oprava témat</button>
           </div>
         </div>
@@ -1380,13 +1380,13 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
           <span></span>
           <span id="logCount" style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt3);margin-left:10px"></span>
           <span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--txt3)" title="Space=dávka  A=auto  ↑↓=navigace  Esc=zavřít modal">⌨ Space·A·↑↓</span>
-          <button class="hbtn" style="font-size:9px;padding:2px 8px;margin-left:8px" onclick="showSetup()" aria-label="Zpět do nastavení">← Nastavení</button>
-          <button class="hbtn" style="font-size:9px;padding:2px 8px" onclick="clearLog()" aria-label="Vymazat log">✕ Vymazat</button>
+      <button class="hbtn" id="btnBackToSetup" style="font-size:9px;padding:2px 8px;margin-left:8px" onclick="showSetup()" aria-label="Zpět do nastavení">← Nastavení</button>
+      <button class="hbtn" id="btnClearLog" style="font-size:9px;padding:2px 8px" onclick="clearLog()" aria-label="Vymazat log">✕ Vymazat</button>
         </div>
         <input type="hidden" id="batchSizeRun" value="10">
         <input type="hidden" id="intervalRun" value="20">
         <div class="log-scroll" id="logScroll" role="log" aria-label="Log překladů">
-          <div class="log-placeholder" style="padding:20px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt3)">
+          <div class="log-placeholder" id="logPlaceholder" style="padding:20px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt3)">
             Překlady se budou zobrazovat zde automaticky...
           </div>
         </div>
@@ -1397,7 +1397,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
 
       <!-- Detail vybraného hesla -->
       <div class="detail-scroll" id="detailPane">
-        <div class="detail-empty">← Klikni na heslo v seznamu pro detail</div>
+        <div class="detail-empty" id="detailEmptyText">← Klikni na heslo v seznamu pro detail</div>
       </div>
 
     </div>
@@ -1416,8 +1416,8 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
         <input type="number" class="modal-input" id="modalTo" placeholder="Do G100" value="100">
       </div>
       <div class="modal-btns">
-        <button class="modal-btn cancel" onclick="closeModal()">Zrušit</button>
-        <button class="modal-btn ok" onclick="confirmModal()">OK</button>
+        <button class="modal-btn cancel" id="btnCustomModalCancel" onclick="closeModal()">Zrušit</button>
+        <button class="modal-btn ok" id="btnCustomModalOk" onclick="confirmModal()">OK</button>
       </div>
     </div>
   </div>
@@ -1425,45 +1425,45 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   <!-- Mobile Actions Modal -->
   <div id="mobileActionsModal">
     <div class="mobl-modal-box">
-      <div class="mobl-modal-title">Akce</div>
-      <button class="mobl-btn" onclick="closeMobileModal(); document.getElementById('importFileInput').click()" aria-label="Importovat TXT soubor">⬆ Import TXT</button>
-      <button class="mobl-btn" onclick="closeMobileModal(); translateNext()" aria-label="Přeložit další dávku">⚡ Dávka k překladu</button>
-      <button class="mobl-btn" onclick="closeMobileModal(); selectRange()" aria-label="Označit rozsah">☑ Výběr do překladače</button>
-      <button class="mobl-btn" onclick="closeMobileModal(); filterMissingTopicsList()" aria-label="Filtrovat hesla s chybějícími tématy">⚠ Chybí téma</button>
-      <button class="mobl-btn grn" onclick="closeMobileModal(); exportTXT()" aria-label="Exportovat do TXT">⬇ Export TXT</button>
-      <button class="mobl-btn grn" onclick="closeMobileModal(); exportJSON()" aria-label="Exportovat do JSON">⬇ Export JSON</button>
-      <button class="mobl-btn" onclick="closeMobileModal(); exportRange()" aria-label="Exportovat rozsah">⬇ Výběr k exportu</button>
-      <button class="mobl-btn" onclick="closeMobileModal(); showSettingsModal()" aria-label="Nastavení AI">⚙ Nastavení AI</button>
-      <button class="mobl-btn cancel" onclick="closeMobileModal()" aria-label="Zavřít">✕ Zavřít</button>
+      <div class="mobl-modal-title" id="mobileActionsTitle">Akce</div>
+      <button class="mobl-btn" id="btnMobileImport" onclick="closeMobileModal(); document.getElementById('importFileInput').click()" aria-label="Importovat TXT soubor">⬆ Import TXT</button>
+      <button class="mobl-btn" id="btnMobileBatch" onclick="closeMobileModal(); translateNext()" aria-label="Přeložit další dávku">⚡ Dávka k překladu</button>
+      <button class="mobl-btn" id="btnMobileSelectRange" onclick="closeMobileModal(); selectRange()" aria-label="Označit rozsah">☑ Výběr do překladače</button>
+      <button class="mobl-btn" id="btnMobileMissingTopic" onclick="closeMobileModal(); filterMissingTopicsList()" aria-label="Filtrovat hesla s chybějícími tématy">⚠ Chybí téma</button>
+      <button class="mobl-btn grn" id="btnMobileExportTxt" onclick="closeMobileModal(); exportTXT()" aria-label="Exportovat do TXT">⬇ Export TXT</button>
+      <button class="mobl-btn grn" id="btnMobileExportJson" onclick="closeMobileModal(); exportJSON()" aria-label="Exportovat do JSON">⬇ Export JSON</button>
+      <button class="mobl-btn" id="btnMobileExportRange" onclick="closeMobileModal(); exportRange()" aria-label="Exportovat rozsah">⬇ Výběr k exportu</button>
+      <button class="mobl-btn" id="btnMobileAiSettings" onclick="closeMobileModal(); showSettingsModal()" aria-label="Nastavení AI">⚙ Nastavení AI</button>
+      <button class="mobl-btn cancel" id="btnMobileClose" onclick="closeMobileModal()" aria-label="Zavřít">✕ Zavřít</button>
     </div>
   </div>
 
   <!-- Settings Modal -->
   <div id="settingsModal">
     <div class="mobl-modal-box">
-      <div class="mobl-modal-title">⚙ Nastavení AI</div>
+      <div class="mobl-modal-title" id="settingsModalTitle">⚙ Nastavení AI</div>
       <div class="mobl-set-row">
-        <label>Hlavní model (Groq)</label>
+        <label id="settingsMainModelLabel">Hlavní model (Groq)</label>
         <select id="providerRunMainGroqModel" aria-label="Hlavní model Groq" title="Hlavní model Groq"></select>
       </div>
       <div class="mobl-set-row">
-        <label>Sekundární model (Gemini)</label>
+        <label id="settingsSecondaryGeminiLabel">Sekundární model (Gemini)</label>
         <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--txt2)">
           <input type="checkbox" id="providerRunEnableSecondaryGemini" aria-label="Zapnout sekundární Gemini v nastavení">
-          zapnout opravy
+          <span id="settingsSecondaryGeminiToggleText">zapnout opravy</span>
         </label>
         <select id="providerRunSecondaryGeminiModel" aria-label="Sekundární model Gemini" title="Sekundární model Gemini"></select>
       </div>
       <div class="mobl-set-row">
-        <label>Sekundární model (OpenRouter)</label>
+        <label id="settingsSecondaryOpenrouterLabel">Sekundární model (OpenRouter)</label>
         <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--txt2)">
           <input type="checkbox" id="providerRunEnableSecondaryOpenrouter" aria-label="Zapnout sekundární OpenRouter v nastavení">
-          zapnout opravy
+          <span id="settingsSecondaryOpenrouterToggleText">zapnout opravy</span>
         </label>
         <select id="providerRunSecondaryOpenrouterModel" aria-label="Sekundární model OpenRouter" title="Sekundární model OpenRouter"></select>
       </div>
       <div class="mobl-set-row">
-        <label>Dávka</label>
+        <label id="settingsBatchLabel">Dávka</label>
         <select id="batchSizeRunMobile">
           <option value="1">1 heslo</option>
           <option value="5">5 hesel</option>
@@ -1473,7 +1473,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
         </select>
       </div>
       <div class="mobl-set-row">
-        <label>Rychlost</label>
+        <label id="settingsSpeedLabel">Rychlost</label>
         <select id="intervalRunMobile">
           <option value="5">5s</option>
           <option value="10">10s</option>
@@ -1481,53 +1481,53 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
           <option value="30">30s</option>
         </select>
       </div>
-<button class="mobl-btn grn" onclick="closeSettingsModal()" aria-label="Uložit">✓ Uložit</button>
-      <button class="mobl-btn cancel" onclick="closeSettingsModal()" aria-label="Zavřít">✕ Zavřít</button>
+<button class="mobl-btn grn" id="btnSettingsSave" onclick="closeSettingsModal()" aria-label="Uložit">✓ Uložit</button>
+      <button class="mobl-btn cancel" id="btnSettingsClose" onclick="closeSettingsModal()" aria-label="Zavřít">✕ Zavřít</button>
     </div>
   </div>
 
    <!-- Limits Modal -->
    <div id="limitsModal">
      <div class="limits-modal-box">
-       <div class="limits-title">📊 Limity providera</div>
+       <div class="limits-title" id="limitsTitle">📊 Limity providera</div>
        <div class="limits-provider" id="limitsProviderInfo">Provider: —</div>
        <div id="limitsContent">
-         <div class="limits-loading">Načítám...</div>
+         <div class="limits-loading" id="limitsLoadingText">Načítám...</div>
        </div>
        <div class="limits-note" id="limitsNote" style="display:none">
          ℹ️ <span id="limitsNoteText"></span>
        </div>
-       <button class="modal-btn cancel" onclick="closeLimitsModal()" style="margin-top:14px;width:100%">✕ Zavřít</button>
+       <button class="modal-btn cancel" id="btnLimitsClose" onclick="closeLimitsModal()" style="margin-top:14px;width:100%">✕ Zavřít</button>
      </div>
    </div>
 
   <div id="helpModal">
     <div class="help-modal-box">
-      <div class="limits-title">❓ Nápověda Strong GR → CZ</div>
+      <div class="limits-title" id="helpTitle">❓ Nápověda Strong GR → CZ</div>
       <div class="help-block">
-        <b>O čem aplikace je</b><br>
+        <b id="helpSectionAboutTitle">O čem aplikace je</b><br>
         Tento nástroj překládá hesla Strong slovníku (řečtina/hebrejština) do češtiny po dávkách přes AI provider (`Groq`, `Gemini`, `OpenRouter`).
         Umí ukládat průběh, zastavit AUTO podle tokenů, importovat/exportovat TXT/JSON a znovu zpracovat neúspěšné položky.
       </div>
       <div class="help-block">
-        <b>Jak získat API klíče</b><br>
+        <b id="helpSectionKeysTitle">Jak získat API klíče</b><br>
         `Groq`: vytvoř klíč v <a href="https://console.groq.com/keys" target="_blank" rel="noopener noreferrer">console.groq.com/keys</a>.<br>
         `Gemini`: vytvoř klíč v <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer">AI Studio</a>.<br>
         `OpenRouter`: vytvoř klíč v <a href="https://openrouter.ai/keys" target="_blank" rel="noopener noreferrer">openrouter.ai/keys</a>.<br>
         Pak vlož klíč do pole API a můžeš ho uložit do knihovny tlačítkem <b>Uložit klíč</b>.
       </div>
       <div class="help-block">
-        <b>Knihovna API klíčů</b><br>
+        <b id="helpSectionLibraryTitle">Knihovna API klíčů</b><br>
         Pro každého providera můžeš mít více klíčů. Vyber klíč v rozbalovacím menu pod API polem a přepni ho jedním klikem.
         Aktivní klíč se používá pro překlad i kontrolu limitů.
       </div>
       <div class="help-block">
-        <b>Limity a kvóty</b><br>
+        <b id="helpSectionLimitsTitle">Limity a kvóty</b><br>
         Tlačítko `📊 Limity` zobrazuje dostupné údaje o kreditech/limitech z API providera a doplňkové odhady.
         U některých providerů nejsou všechny metriky veřejně dostupné, proto se kombinují živá data a fallback informace.<br>
         OpenRouter má pro `:free` modely vlastní limity (RPM/RPD). Po dobití kreditu (v aktuální dokumentaci je prahová částka, často kolem 10 USD) se navyšuje denní free limit, ale minutový limit a dostupnost endpointů se může dál lišit model od modelu.
       </div>
-      <button class="modal-btn cancel" onclick="closeHelpModal()" style="width:100%">✕ Zavřít</button>
+      <button class="modal-btn cancel" id="btnHelpClose" onclick="closeHelpModal()" style="width:100%">✕ Zavřít</button>
     </div>
   </div>
 
@@ -1688,12 +1688,12 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   <!-- Model Test Prompt Preview Modal -->
   <div id="modelTestPromptPreviewModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);align-items:center;justify-content:center;z-index:1005;padding:18px">
     <div class="prompt-modal-box" style="max-width:980px;width:100%;max-height:90vh">
-      <div class="prompt-modal-title">👁 Náhled test promptu</div>
+      <div class="prompt-modal-title" id="modelTestPromptPreviewTitle">👁 Náhled test promptu</div>
       <div id="modelTestPromptPreviewLabel" style="font-size:12px;color:var(--txt2);margin-bottom:8px">Prompt: -</div>
       <textarea id="modelTestPromptPreviewText" readonly style="width:100%;min-height:340px;max-height:62vh;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:10px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.5;resize:vertical"></textarea>
       <div class="modal-btns" style="margin-top:12px">
-        <button class="modal-btn ok" type="button" onclick="copyModelTestPromptPreview()">📋 Kopírovat</button>
-        <button class="modal-btn cancel" type="button" onclick="closeModelTestPromptPreviewModal()">✕ Zavřít</button>
+        <button class="modal-btn ok" id="btnCopyPromptPreview" type="button" onclick="copyModelTestPromptPreview()">📋 Kopírovat</button>
+        <button class="modal-btn cancel" id="btnClosePromptPreview" type="button" onclick="closeModelTestPromptPreviewModal()">✕ Zavřít</button>
       </div>
     </div>
   </div>
@@ -1701,7 +1701,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   <!-- Prompt Library Modal -->
   <div id="promptLibraryModal">
     <div class="prompt-modal-box">
-      <div class="prompt-modal-title">📚 Knihovna promptů</div>
+      <div class="prompt-modal-title" id="promptLibraryTitle">📚 Knihovna promptů</div>
       
       <div class="prompt-tabs" id="promptTabs">
         <div class="prompt-tab active" data-category="default">Výchozí</div>
@@ -1725,13 +1725,13 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       </div>
 
        <div class="prompt-actions">
-         <button class="prompt-btn" onclick="applySystemPromptForCurrentTask()" title="Nastavit systémový prompt dle aktuálního režimu">🛠 System</button>
-         <button class="prompt-btn ai" onclick="showPromptAIModal()">🤖 AI</button>
-         <button class="prompt-btn" onclick="exportPromptLibraryToTxt()" title="Stáhnout prompty do TXT">⬇ TXT</button>
-         <button class="prompt-btn" type="button" onclick="document.getElementById('promptLibraryFileInput').click()" title="Načíst prompty ze souboru TXT">⬆ Načíst</button>
+         <button class="prompt-btn" id="btnPromptSystem" onclick="applySystemPromptForCurrentTask()" title="Nastavit systémový prompt dle aktuálního režimu">🛠 System</button>
+         <button class="prompt-btn ai" id="btnPromptAi" onclick="showPromptAIModal()">🤖 AI</button>
+         <button class="prompt-btn" id="btnPromptExportTxt" onclick="exportPromptLibraryToTxt()" title="Stáhnout prompty do TXT">⬇ TXT</button>
+         <button class="prompt-btn" id="btnPromptLoadTxt" type="button" onclick="document.getElementById('promptLibraryFileInput').click()" title="Načíst prompty ze souboru TXT">⬆ Načíst</button>
          <input type="file" id="promptLibraryFileInput" accept=".txt,text/plain" style="display:none" onchange="importPromptLibraryFromFile(this)">
-         <button class="prompt-btn cancel" onclick="closePromptLibraryModal()">✕ Zavřít</button>
-         <button class="prompt-btn ok" onclick="applySelectedPrompt()">✓ Uložit a použít</button>
+         <button class="prompt-btn cancel" id="btnPromptLibraryClose" onclick="closePromptLibraryModal()">✕ Zavřít</button>
+         <button class="prompt-btn ok" id="btnPromptLibrarySaveApply" onclick="applySelectedPrompt()">✓ Uložit a použít</button>
        </div>
     </div>
   </div>
@@ -1810,9 +1810,16 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
    <!-- Language Settings Sub-modal -->
    <div id="promptLangModal" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);display:none;align-items:center;justify-content:center;z-index:1004;">
      <div class="prompt-modal-box" style="max-width:400px;">
-       <div class="prompt-modal-title">🌐 Cílový jazyk</div>
+      <div class="prompt-modal-title" id="promptLangModalTitle">🌐 Nastavení jazyků</div>
+      <div class="mobl-set-row">
+        <label id="uiLanguageLabel">Jazyk rozhraní</label>
+        <select id="uiLanguage" style="width:100%;padding:10px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:12px;">
+          <option value="cs">Čeština</option>
+          <option value="en">English</option>
+        </select>
+      </div>
        <div class="mobl-set-row">
-         <label>Překlad do</label>
+        <label id="targetLanguageLabel">Překlad do</label>
         <select id="targetLanguage" style="width:100%;padding:10px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:12px;">
           <option value="cz" selected>Čeština</option>
           <option value="en">English</option>
@@ -1826,7 +1833,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
         </select>
       </div>
        <div class="mobl-set-row">
-         <label>Zdrojový jazyk</label>
+         <label id="sourceLanguageLabel">Zdrojový jazyk</label>
          <select id="sourceLanguage" style="width:100%;padding:10px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:12px;">
            <option value="gr" selected>Řečtina (Strong G)</option>
            <option value="he">Hebrejština (Strong H)</option>
@@ -1834,8 +1841,8 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
          </select>
        </div>
        <div class="prompt-actions">
-         <button class="prompt-btn cancel" onclick="closePromptLangModal()">✕ Zavřít</button>
-         <button class="prompt-btn ok" onclick="saveLangSettings()">✓ Uložit</button>
+        <button class="prompt-btn cancel" id="btnPromptLangClose" onclick="closePromptLangModal()">✕ Zavřít</button>
+        <button class="prompt-btn ok" id="btnPromptLangSave" onclick="saveLangSettings()">✓ Uložit</button>
        </div>
     </div>
   </div>
@@ -1867,6 +1874,876 @@ const {
       PROMPT_LIBRARY_BASE,
       MODEL_TEST_PROMPT_CATALOG: modelTestPromptCatalog
     } = prompts;
+
+  const UI_LANG_KEY = 'strong_ui_lang';
+  const DEFAULT_UI_LANG = 'cs';
+  const UI_LANGS = new Set(['cs', 'en']);
+  const UI_MESSAGES = {
+    cs: {
+      'setup.title': '⟁ Strong GR → CZ — Překladač slovníku',
+      'setup.start': 'Zahájit překlad →',
+      'setup.help': '❓ Nápověda',
+      'setup.limits': '📊 Limity',
+      'setup.file.none': '— nevybráno',
+      'setup.batchSize': 'Velikost dávky (hesel na jedno volání)',
+      'setup.interval': 'Interval mezi dávkami (vteřiny) — ochrana rate limitu',
+      'setup.file': 'txt soubor',
+      'setup.chooseFile': '📂 Vybrat',
+      'setup.loadAuto': '📄 Automaticky',
+      'lang.modal.title': '🌐 Nastavení jazyků',
+      'lang.modal.ui': 'Jazyk rozhraní',
+      'lang.modal.target': 'Překlad do',
+      'lang.modal.source': 'Zdrojový jazyk',
+      'lang.modal.close': '✕ Zavřít',
+      'lang.modal.save': '✓ Uložit',
+      'lang.btn.title': 'Nastavit jazyky UI a promptu',
+      'lang.btn.label': '🌐 Jazyky (UI: {ui} | AI: {ai})',
+      'entries.count': '{count} hesel',
+      'stats.done': 'Přeloženo:',
+      'stats.remain': 'Zbývá:',
+      'stats.total': 'Celkem:',
+      'stats.tokenLimit': '🛑 Stop tokeny',
+      'stats.tokenLimit.placeholder': '0 = vypnuto',
+      'stats.tokenLimit.title': 'Po dosažení této hodnoty se AUTO zastaví. 0 = bez limitu.',
+      'stats.tokens': '📊 Celkem: {input} in / {output} out = {total}{suffix}',
+      'hdr.import': '⬆ Import TXT/JSON',
+      'hdr.import.aria': 'Importovat TXT nebo JSON soubor s překlady',
+      'hdr.auto': '▶ AUTO',
+      'hdr.auto.aria': 'Spustit automatický překlad',
+      'hdr.list': '≡ Seznam',
+      'hdr.list.title': 'Skrýt/ukázat seznam',
+      'hdr.list.aria': 'Skrýt/ukázat seznam',
+      'hdr.batch': '⚡ Dávka',
+      'hdr.batch.aria': 'Přeložit další dávku',
+      'hdr.testModels': '🧪 Test modelů',
+      'hdr.testModels.title': 'Nastavit a spustit test modelů (nejdřív modal, pak ▶ Test provideru)',
+      'hdr.testModels.aria': 'Test modelů — otevře nastavení',
+      'hdr.exportRange': '⬇ Rozsah',
+      'hdr.exportRange.title': 'Export vybraného rozsahu G čísel',
+      'hdr.exportRange.aria': 'Exportovat rozsah G čísel',
+      'hdr.failed': '⚠ Neus.',
+      'hdr.failed.title': 'Zobrazit neúspěšné překlady',
+      'hdr.failed.aria': 'Zobrazit neúspěšné překlady',
+      'hdr.aiSettings': '⚙ Nastavení AI',
+      'hdr.aiSettings.title': 'Nastavení AI (provider, model, dávka)',
+      'hdr.aiSettings.aria': 'Nastavení AI',
+      'hdr.mobileActions.aria': 'Zobrazit akce',
+      'hdr.reset.title': 'Smazat veškerý uložený průběh',
+      'hdr.reset.aria': 'Smazat veškerý uložený průběh',
+      'hdr.restoreBackup': '↺ Záloha',
+      'hdr.restoreBackup.title': 'Obnovit ze zálohy',
+      'hdr.restoreBackup.aria': 'Obnovit ze zálohy',
+      'auto.info.prefix': 'AUTO: dávka',
+      'auto.info.settings': 'nastavení',
+      'auto.info.seconds': 's',
+      'auto.info.interval': 'interval',
+      'auto.log.waiting': 'Čeká na start...',
+      'auto.stop': '■ Stop',
+      'auto.stop.aria': 'Zastavit automatický překlad',
+      'prompt.library.title': '📚 Knihovna promptů',
+      'prompt.library.preview.empty': 'Vyberte prompt z knihovny pro náhled...',
+      'prompt.library.editor.placeholder': 'Uprav prompt...',
+      'prompt.library.system.title': 'Nastavit systémový prompt dle aktuálního režimu',
+      'prompt.library.load.title': 'Načíst prompty ze souboru TXT',
+      'prompt.library.export.title': 'Stáhnout prompty do TXT',
+      'prompt.library.load': '⬆ Načíst',
+      'prompt.library.close': '✕ Zavřít',
+      'prompt.library.saveApply': '✓ Uložit a použít',
+      'prompt.preview.title': '👁 Náhled test promptu',
+      'prompt.preview.copy': '📋 Kopírovat',
+      'prompt.preview.close': '✕ Zavřít',
+      'list.search.placeholder': 'Hledat...',
+      'list.search.aria': 'Hledat heslo',
+      'list.selectRange': '☑ Výběr',
+      'list.selectRange.title': 'Označit rozsah hesel k překladu',
+      'list.selectRange.aria': 'Označit rozsah hesel',
+      'list.filterStatus.aria': 'Co zobrazit',
+      'list.filterStatus.all': 'Vše',
+      'list.filterStatus.pending': 'K překladu',
+      'list.filterStatus.missing_topic': 'Chybí téma',
+      'list.filterStatus.failed': 'Neúspěšné',
+      'list.filterStatus.done': 'Hotovo',
+      'list.filterStatus.g_all': 'Jen řecké (G)',
+      'list.filterStatus.h_all': 'Jen hebrejské (H)',
+      'list.filterStatus.g_pending': 'G: k překladu',
+      'list.filterStatus.h_pending': 'H: k překladu',
+      'list.filterStatus.g_done': 'G: hotovo',
+      'list.filterStatus.h_done': 'H: hotovo',
+      'list.filterSort.aria': 'Řazení',
+      'list.filterSort.original': 'Řazení: původní',
+      'list.filterSort.num': 'Řazení: podle čísla',
+      'list.filterSort.greek': 'Řazení: A-Z',
+      'list.topicFilter': '⚠ Téma',
+      'list.topicFilter.title': 'Zobrazit hesla, kde chybí některé téma',
+      'list.topicFilter.aria': 'Filtrovat hesla s chybějícími tématy',
+      'list.selectAll.title': 'Vybrat vše',
+      'list.selectAll.aria': 'Vybrat všechna hesla',
+      'list.selectNone.title': 'Zrušit výběr',
+      'list.selectNone.aria': 'Zrušit výběr všech hesel',
+      'list.selectAllVisible': '☑ Označit vše zobrazené',
+      'list.selectAllVisible.aria': 'Označit všechna zobrazená hesla',
+      'list.translateSelected': '⚡ Přeložit vybrané',
+      'list.translateSelected.aria': 'Přeložit vybraná hesla',
+      'log.back': '← Nastavení',
+      'log.back.aria': 'Zpět do nastavení',
+      'log.clear': '✕ Vymazat',
+      'log.clear.aria': 'Vymazat log',
+      'log.placeholder': 'Překlady se budou zobrazovat zde automaticky...',
+      'detail.empty': '← Klikni na heslo v seznamu pro detail',
+      'customModal.title': 'Rozsah hesel',
+      'customModal.from': 'Od G1',
+      'customModal.to': 'Do G100',
+      'customModal.cancel': 'Zrušit',
+      'customModal.ok': 'OK',
+      'mobile.actions.title': 'Akce',
+      'mobile.import': '⬆ Import TXT',
+      'mobile.import.aria': 'Importovat TXT soubor',
+      'mobile.batch': '⚡ Dávka k překladu',
+      'mobile.batch.aria': 'Přeložit další dávku',
+      'mobile.selectRange': '☑ Výběr do překladače',
+      'mobile.selectRange.aria': 'Označit rozsah',
+      'mobile.missingTopic': '⚠ Chybí téma',
+      'mobile.missingTopic.aria': 'Filtrovat hesla s chybějícími tématy',
+      'mobile.exportTxt': '⬇ Export TXT',
+      'mobile.exportTxt.aria': 'Exportovat do TXT',
+      'mobile.exportJson': '⬇ Export JSON',
+      'mobile.exportJson.aria': 'Exportovat do JSON',
+      'mobile.exportRange': '⬇ Výběr k exportu',
+      'mobile.exportRange.aria': 'Exportovat rozsah',
+      'mobile.aiSettings': '⚙ Nastavení AI',
+      'mobile.aiSettings.aria': 'Nastavení AI',
+      'mobile.close': '✕ Zavřít',
+      'mobile.close.aria': 'Zavřít',
+      'settings.title': '⚙ Nastavení AI',
+      'settings.mainModel': 'Hlavní model (Groq)',
+      'settings.secondaryGemini': 'Sekundární model (Gemini)',
+      'settings.secondaryOpenrouter': 'Sekundární model (OpenRouter)',
+      'settings.enableFixes': 'zapnout opravy',
+      'settings.batch': 'Dávka',
+      'settings.speed': 'Rychlost',
+      'settings.save': '✓ Uložit',
+      'settings.save.aria': 'Uložit',
+      'settings.close': '✕ Zavřít',
+      'settings.close.aria': 'Zavřít',
+      'limits.title': '📊 Limity providera',
+      'limits.loading': 'Načítám...',
+      'limits.close': '✕ Zavřít',
+      'help.title': '❓ Nápověda Strong GR → CZ',
+      'help.about': 'O čem aplikace je',
+      'help.keys': 'Jak získat API klíče',
+      'help.library': 'Knihovna API klíčů',
+      'help.limits': 'Limity a kvóty',
+      'help.close': '✕ Zavřít',
+      'openrouter.loading': 'Načítám free modely…',
+      'openrouter.none': 'Žádné free modely nenalezeny',
+      'openrouter.error': 'Chyba načítání — zkontroluj připojení',
+      'toast.ai.settings.saved': '✓ AI nastavení (hlavní + sekundární) uložena',
+      'toast.lang.settings.saved': '✓ Jazyková nastavení uložena + aktivován systémový prompt',
+      'toast.loaded.github': '✓ Načteno z GitHubu',
+      'toast.loaded.fallback': '⚠ Načten fallback soubor',
+      'toast.openrouter.cache': '⚠ OpenRouter API nedostupné, používám uložený seznam modelů'
+      ,'toast.prompt.preview.empty': '⚠ Náhled promptu je prázdný'
+      ,'toast.prompt.copied': '✓ Prompt zkopírován'
+      ,'toast.copy.failed': '✗ Kopírování selhalo'
+      ,'toast.provider.enableOne': '⚠ Zapni alespoň jednoho AI providera pro hromadný překlad.'
+      ,'toast.translation.none': '⚠ Žádné překlady se nepodařilo získat'
+      ,'toast.filter.missingTopic': '✓ Filtr: chybí některé téma'
+      ,'toast.apiKey.enter': '✗ Zadej API klíč!'
+      ,'toast.prompt.empty': '✗ Prompt je prázdný'
+      ,'toast.entry.notFound': '✗ Heslo nenalezeno'
+      ,'toast.retry.done': '✓ Retry dokončeno!'
+      ,'toast.allTranslated': '✓ Vše přeloženo!'
+      ,'toast.auto.notStartedTokenLimit': '⚠ AUTO nestartoval: dosažen limit tokenů'
+      ,'toast.auto.enableGroq': '⚠ Zapni Groq checkbox pro AUTO překlad'
+      ,'toast.auto.stoppedTokenLimit': '🛑 AUTO zastaven: dosažen limit tokenů'
+      ,'toast.translation.done': '✓ Překlad dokončen!'
+      ,'toast.storage.full': '⚠ localStorage plný — exportuj zálohu!'
+      ,'toast.backup.none': '✗ Žádná záloha není k dispozici'
+      ,'toast.noTranslatedEntry': 'Žádné přeložené heslo'
+      ,'toast.apiKey.insertFirst': '✗ Nejdřív vlož API klíč'
+      ,'toast.apiKey.selectToDelete': '⚠ Vyber uložený klíč k odstranění'
+      ,'toast.apiKey.deleted': '✓ API klíč odstraněn z knihovny'
+      ,'toast.test.cancelFirst': '⚠ Nejdřív zruš probíhající test'
+      ,'toast.test.canceling': '⏹ Ruším test modelů...'
+      ,'toast.test.nothingToSave': '⚠ Není co uložit do test.txt'
+      ,'toast.save.canceled': 'Uložení zrušeno'
+      ,'toast.test.noRawYet': '⚠ Zatím není žádná raw odpověď k uložení'
+      ,'toast.test.rawDownloaded': '✓ Raw odpovědi staženy'
+      ,'toast.file.loadFailed': '✗ Soubor se nepodařilo načíst'
+      ,'toast.auto.stopFirst': '⚠ Nejdřív zastav AUTO'
+      ,'toast.export.nothing': '⚠ Není co exportovat'
+      ,'toast.export.txtDownloaded': '✓ Stažení TXT'
+      ,'toast.copy.nothing': '⚠ Není co kopírovat'
+      ,'toast.output.copied': '✓ Výstup zkopírován'
+      ,'toast.output.cleared': '✓ Výstup testu vymazán'
+      ,'toast.test.outputMissing': '✗ Chybí výstupní okno testu modelů'
+      ,'toast.test.rateLimitAbort': '⚠ Test předčasně ukončen kvůli rate limitu'
+      ,'toast.prompt.switchedSystem': '✓ Přepnuto na systémový prompt'
+      ,'toast.prompt.switchedCustom': '✓ Přepnuto na vlastní prompt'
+      ,'toast.prompt.customNotSaved': '⚠ Vlastní prompt není uložen'
+      ,'toast.prompt.savedApplied': '✓ Prompt uložen a použit'
+      ,'toast.prompt.exported': '✓ Prompty exportovány do TXT'
+      ,'toast.prompt.importFailed': '✗ Nepodařilo se načíst soubor promptů'
+      ,'toast.translation.canceled': '✕ Překlad zrušen'
+      ,'toast.import.noEntries': '✗ Žádná hesla nenalezena v souboru'
+      ,'toast.failed.none': '✓ Žádné neúspěšné překlady'
+      ,'toast.progress.saved': '✓ Progress uložen'
+      ,'toast.topicRepair.noEligible': '⚠ Ve výběru nejsou hesla s max. 2 chybějícími tématy.'
+      ,'toast.topicRepair.modeLocked': '⚠ Nelze měnit režim během běžícího překladu.'
+      ,'toast.topicRepair.queueEmpty': '⚠ Ve zvoleném tématu není nic ve frontě (čekající) — změň výběr nebo dokonči viditelné řádky.'
+      ,'toast.topicRepair.enableProvider': '⚠ Zapni alespoň jednoho providera pro opravu témat.'
+      ,'toast.topicRepair.visibleDone': '✓ Oprava viditelné fronty doběhla, zkontroluj a potvrď přepsání.'
+      ,'toast.topicRepair.checkValidRows': '⚠ Zaškrtni řádky s platným návrhem (po „horší“ analýze zůstávají odškrtnuté).'
+      ,'toast.topicRepair.noValidProposal': '⚠ Žádný platný návrh k přepsání.'
+      ,'toast.topicRepair.nothingMarked': '⚠ Nic nebylo označeno k přepsání'
+      ,'toast.prompt.pickSpecificTopicSave': '⚠ Pro uložení promptu vyber konkrétní téma (ne „Vše“).'
+      ,'toast.prompt.pickSpecificTopicReset': '⚠ Pro obnovu výchozího promptu vyber konkrétní téma (ne „Vše“).'
+      ,'toast.topicRepair.sequentialRunning': '⚠ Sekvenční oprava stále běží — nejdřív dej Pauza a počkej na dokončení aktuálního pokusu.'
+      ,'toast.topicRepair.pickTopicInAllMode': '⚠ V režimu „Vše“ zaškrtni aspoň jedno téma v „Zobrazit v seznamu“.'
+      ,'toast.batchPrompt.empty': '✗ Batch prompt je prázdný'
+      ,'toast.batchRun.nothingSelected': '⚠ Nic není vybrané pro hromadný běh (zkontroluj checkboxy / filtr chyb).'
+      ,'toast.aiResponse.unmatched': '⚠ AI odpověď nešla spárovat na toto heslo'
+      ,'toast.jump.enterGNumber': 'Zadej číslo G hesla'
+      ,'toast.test.cancelFirstAlt': '⚠ Nejprve zruš probíhající test'
+      ,'toast.test.pausing': '⏸ Test se zastaví. Další kliknutí na ▶ spustí nový běh.'
+      ,'toast.test.libraryAfterStop': '⚠ Knihovna je dostupná po zastavení testu, aby se nepřepsal živý report.'
+      ,'toast.error.withMessage': '✗ Chyba: {message}'
+      ,'toast.translated.count': '✓ Přeloženo {count} hesel'
+      ,'toast.specialista.approved': '✓ SPECIALISTA potvrzen: {key}'
+      ,'toast.specialista.rejected': '✕ SPECIALISTA zamítnut: {key}'
+      ,'toast.topic.approved': '✓ Potvrzeno {topic}: {key}'
+      ,'toast.topic.rejected': '✕ Zamítnuto {topic}: {key}'
+      ,'toast.topic.overwritten.count': '✓ Přepsáno {count} témat'
+      ,'toast.topic.overwrittenAndClosing': '✓ Přepsáno {count} témat — u těchto hesel je vše v pořádku, zavírám okno opravy.'
+      ,'toast.field.filled': '✓ Doplněno pole {topic}'
+      ,'toast.batchPrompt.saved': '✓ Uložen batch prompt pro {topic}'
+      ,'toast.batchPrompt.reset': '↺ Obnoven výchozí batch prompt pro {topic}'
+      ,'toast.apiKey.enterForProvider': '✗ Zadej API klíč pro {provider}.'
+      ,'toast.topic.bulkDone': '✓ Hromadná oprava tématu dokončena: {topic} ({count})'
+      ,'toast.topic.savedToField': '✓ Uloženo do pole {topic}'
+      ,'toast.translatedSystem.key': '✓ Přeloženo přes System prompt: {key}'
+      ,'toast.entry.notFoundInFile': '{key} nenalezeno v souboru'
+      ,'toast.translation.resumeFrom': '✓ Překlad bude pokračovat od {key}'
+      ,'toast.translated.partial': '⚠ Přeloženo {translated}/{total} hesel'
+      ,'toast.rateLimit.retryIn': '⏳ Rate limit — další pokus za {seconds}s'
+      ,'toast.rateLimit.waiting': '⏳ Rate limit — čekám {seconds}s{suffix}'
+      ,'toast.timeout.retryIn': '⏳ Timeout API — opakuji pokus za {seconds}s'
+      ,'toast.serviceUnavailable.retryIn': '⏳ 503 Service Unavailable — opakuji pokus za {seconds}s'
+      ,'toast.restored.count': '✓ Obnoveno {count} hesel'
+      ,'toast.exported.count': '✓ Exportováno {count} hesel'
+      ,'toast.apiKey.activeProfile': '✓ Aktivní API klíč: {name}'
+      ,'toast.saved.filename': '✓ Uloženo: {name}'
+      ,'toast.saveDialogFailedFallback': '⚠ Uložení přes dialog selhalo, použiji stažení: {message}'
+      ,'toast.downloaded.filename': '✓ Staženo: {name}'
+      ,'toast.loaded.filename': '✓ Načteno: {name}'
+      ,'toast.apiKey.missingForProviderLabel': '✗ Chybí API klíč pro {provider}'
+      ,'toast.model.notSelectedForProviderLabel': '⚠ Není vybraný model pro {provider}'
+      ,'toast.modelTest.doneWithCount': '✓ Test modelů dokončen ({count})'
+      ,'toast.selected.range': '✓ Označeno {count} hesel, zobrazen rozsah {from}–{to}'
+      ,'toast.systemPrompt.set': '✓ Nastaven systémový prompt ({mode})'
+      ,'toast.autoPrompt.toggled': '✓ Auto prompt {state}'
+      ,'toast.prompts.loaded.count': '✓ Načteno promptů: {count}'
+      ,'toast.noTranslatedInRange': 'Žádná přeložená hesla v rozsahu {from}–{to}'
+      ,'toast.exported.range': '✓ Exportováno {count} hesel ({from}–{to})'
+      ,'toast.saved.entriesWithExtra': '✓ Uloženo {count} hesel{extra}'
+      ,'toast.import.found': '📥 Nalezeno {count} hesel k importu ({format})'
+      ,'toast.failed.found': '⚠ Nalezeno {count} neúspěšných překladů (viz console)'
+      ,'toast.selectedForBatch': '✓ Označeno {count} hesel — klikni na "⚡ Dávka" nebo "▶ AUTO"'
+      ,'resume.found': '⚑ Nalezen uložený průběh ({source}): <b>{count}</b> přeložených hesel (uloženo {ts}). Po spuštění bude automaticky obnoven.'
+      ,'limits.error': 'Chyba: {message}'
+      ,'modal.selectRange.title': 'Označit rozsah hesel'
+      ,'failed.modal.title': '⚠ Neúspěšné překlady — {count} hesel'
+      ,'failed.modal.retry': '↻ Přeložit znovu'
+      ,'failed.modal.close': '✕ Zavřít'
+      ,'failed.modal.note': 'AI nevrátila správný formát (nebo prázdný překlad). Detaily v console (F12).'
+      ,'log.meaning': 'Význam:'
+      ,'log.usage': 'Použití:'
+      ,'log.unparsed': '⚠ Neparsováno'
+      ,'log.records': '{count} záznamů'
+      ,'import.preview.title': 'Náhled překladu ({count} hesel)'
+      ,'import.preview.summary': '<b style="color:var(--acc3)">{newOnes}</b> nových · <b style="color:var(--acc2)">{conflicts}</b> už přeloženo v aktuálním slotu'
+      ,'import.mode.title': 'Režim importu:'
+      ,'import.mode.missing': 'Jen chybějící — přidat pouze hesla, která zatím nejsou přeložena (<b>{count}</b>)'
+      ,'import.mode.all': 'Přepsat vše — nahradit stávající překlady (<b>{count}</b>)'
+      ,'import.mode.fillgaps': 'Doplnit prázdná pole — zachovat existující, přepsat jen „—" a prázdné hodnoty'
+      ,'import.selectAll': 'Označit vše'
+      ,'import.saveSelected': '✓ Uložit označené'
+      ,'import.cancel': '✕ Zrušit'
+      ,'import.badge.conflict': 'kolize'
+      ,'import.badge.new': 'nové'
+      ,'import.czTranslationAi': '🔄 ČESKÝ PŘEKLAD (od AI)'
+      ,'import.fullTranslation': '📝 Celý překlad:'
+      ,'import.enOriginal': '📖 ANGLICKÝ ORIGINÁL'
+      ,'field.meaning': 'Význam:'
+      ,'field.definition': 'Definice:'
+      ,'field.usage': 'Použití:'
+      ,'field.origin': 'Původ:'
+      ,'field.specialist': 'Specialista:'
+      ,'topicRepair.batchLabel': 'dávka'
+      ,'topicRepair.originalTopic': 'Původní téma:'
+      ,'topicRepair.original': 'Originál:'
+      ,'topicRepair.newProposal': 'Nový návrh:'
+      ,'topicRepair.specialistInResponse': 'SPECIALISTA v odpovědi:'
+      ,'topicRepair.yes': 'ano'
+      ,'topicRepair.no': 'ne'
+      ,'topicRepair.status': 'stav:'
+      ,'topicRepair.unchanged': 'beze změny'
+      ,'topicRepair.specialistDetail': 'SPECIALISTA detail'
+      ,'topicRepair.originalSpecialist': 'Původní SPECIALISTA:'
+      ,'topicRepair.aiSpecialist': 'AI SPECIALISTA:'
+      ,'topicRepair.confirmSpecialist': '✓ Potvrdit SPECIALISTA'
+      ,'topicRepair.rejectSpecialist': '✕ Zamítnout SPECIALISTA'
+      ,'topicRepair.extraTopics': 'Další témata z AI odpovědi ({count})'
+      ,'topicRepair.originalShort': 'Původní:'
+      ,'topicRepair.aiShort': 'AI:'
+      ,'topicRepair.confirm': '✓ Potvrdit'
+      ,'topicRepair.reject': '✕ Zamítnout'
+      ,'topicRepair.none': 'Žádná témata k opravě.'
+    },
+    en: {
+      'setup.title': '⟁ Strong GR → CZ — Dictionary Translator',
+      'setup.start': 'Start translation →',
+      'setup.help': '❓ Help',
+      'setup.limits': '📊 Limits',
+      'setup.file.none': '— none selected',
+      'setup.batchSize': 'Batch size (entries per request)',
+      'setup.interval': 'Interval between batches (seconds) — rate limit protection',
+      'setup.file': 'txt file',
+      'setup.chooseFile': '📂 Choose',
+      'setup.loadAuto': '📄 Auto',
+      'lang.modal.title': '🌐 Language settings',
+      'lang.modal.ui': 'Interface language',
+      'lang.modal.target': 'Translate to',
+      'lang.modal.source': 'Source language',
+      'lang.modal.close': '✕ Close',
+      'lang.modal.save': '✓ Save',
+      'lang.btn.title': 'Configure UI and prompt languages',
+      'lang.btn.label': '🌐 Languages (UI: {ui} | AI: {ai})',
+      'entries.count': '{count} entries',
+      'stats.done': 'Done:',
+      'stats.remain': 'Remaining:',
+      'stats.total': 'Total:',
+      'stats.tokenLimit': '🛑 Token stop',
+      'stats.tokenLimit.placeholder': '0 = off',
+      'stats.tokenLimit.title': 'AUTO stops after reaching this value. 0 = unlimited.',
+      'stats.tokens': '📊 Total: {input} in / {output} out = {total}{suffix}',
+      'hdr.import': '⬆ Import TXT/JSON',
+      'hdr.import.aria': 'Import TXT or JSON file with translations',
+      'hdr.auto': '▶ AUTO',
+      'hdr.auto.aria': 'Start automatic translation',
+      'hdr.list': '≡ List',
+      'hdr.list.title': 'Hide/show list',
+      'hdr.list.aria': 'Hide/show list',
+      'hdr.batch': '⚡ Batch',
+      'hdr.batch.aria': 'Translate next batch',
+      'hdr.testModels': '🧪 Model tests',
+      'hdr.testModels.title': 'Configure and run model tests (open modal first, then ▶ Provider test)',
+      'hdr.testModels.aria': 'Model tests — opens configuration',
+      'hdr.exportRange': '⬇ Range',
+      'hdr.exportRange.title': 'Export selected G-number range',
+      'hdr.exportRange.aria': 'Export G-number range',
+      'hdr.failed': '⚠ Failed',
+      'hdr.failed.title': 'Show failed translations',
+      'hdr.failed.aria': 'Show failed translations',
+      'hdr.aiSettings': '⚙ AI Settings',
+      'hdr.aiSettings.title': 'AI settings (provider, model, batch)',
+      'hdr.aiSettings.aria': 'AI settings',
+      'hdr.mobileActions.aria': 'Show actions',
+      'hdr.reset.title': 'Delete all saved progress',
+      'hdr.reset.aria': 'Delete all saved progress',
+      'hdr.restoreBackup': '↺ Backup',
+      'hdr.restoreBackup.title': 'Restore from backup',
+      'hdr.restoreBackup.aria': 'Restore from backup',
+      'auto.info.prefix': 'AUTO: batch',
+      'auto.info.settings': 'settings',
+      'auto.info.seconds': 's',
+      'auto.info.interval': 'interval',
+      'auto.log.waiting': 'Waiting to start...',
+      'auto.stop': '■ Stop',
+      'auto.stop.aria': 'Stop automatic translation',
+      'prompt.library.title': '📚 Prompt Library',
+      'prompt.library.preview.empty': 'Select a prompt from the library for preview...',
+      'prompt.library.editor.placeholder': 'Edit prompt...',
+      'prompt.library.system.title': 'Set system prompt for current mode',
+      'prompt.library.load.title': 'Load prompts from TXT file',
+      'prompt.library.export.title': 'Download prompts to TXT',
+      'prompt.library.load': '⬆ Load',
+      'prompt.library.close': '✕ Close',
+      'prompt.library.saveApply': '✓ Save and apply',
+      'prompt.preview.title': '👁 Test prompt preview',
+      'prompt.preview.copy': '📋 Copy',
+      'prompt.preview.close': '✕ Close',
+      'list.search.placeholder': 'Search...',
+      'list.search.aria': 'Search entry',
+      'list.selectRange': '☑ Selection',
+      'list.selectRange.title': 'Select range of entries for translation',
+      'list.selectRange.aria': 'Select entry range',
+      'list.filterStatus.aria': 'What to display',
+      'list.filterStatus.all': 'All',
+      'list.filterStatus.pending': 'To translate',
+      'list.filterStatus.missing_topic': 'Missing topic',
+      'list.filterStatus.failed': 'Failed',
+      'list.filterStatus.done': 'Done',
+      'list.filterStatus.g_all': 'Greek only (G)',
+      'list.filterStatus.h_all': 'Hebrew only (H)',
+      'list.filterStatus.g_pending': 'G: to translate',
+      'list.filterStatus.h_pending': 'H: to translate',
+      'list.filterStatus.g_done': 'G: done',
+      'list.filterStatus.h_done': 'H: done',
+      'list.filterSort.aria': 'Sorting',
+      'list.filterSort.original': 'Sort: original',
+      'list.filterSort.num': 'Sort: by number',
+      'list.filterSort.greek': 'Sort: A-Z',
+      'list.topicFilter': '⚠ Topic',
+      'list.topicFilter.title': 'Show entries with missing topic fields',
+      'list.topicFilter.aria': 'Filter entries with missing topics',
+      'list.selectAll.title': 'Select all',
+      'list.selectAll.aria': 'Select all entries',
+      'list.selectNone.title': 'Clear selection',
+      'list.selectNone.aria': 'Clear selection for all entries',
+      'list.selectAllVisible': '☑ Select all visible',
+      'list.selectAllVisible.aria': 'Select all visible entries',
+      'list.translateSelected': '⚡ Translate selected',
+      'list.translateSelected.aria': 'Translate selected entries',
+      'log.back': '← Settings',
+      'log.back.aria': 'Back to settings',
+      'log.clear': '✕ Clear',
+      'log.clear.aria': 'Clear log',
+      'log.placeholder': 'Translations will appear here automatically...',
+      'detail.empty': '← Click an entry in the list to view details',
+      'customModal.title': 'Entry range',
+      'customModal.from': 'From G1',
+      'customModal.to': 'To G100',
+      'customModal.cancel': 'Cancel',
+      'customModal.ok': 'OK',
+      'mobile.actions.title': 'Actions',
+      'mobile.import': '⬆ Import TXT',
+      'mobile.import.aria': 'Import TXT file',
+      'mobile.batch': '⚡ Batch translation',
+      'mobile.batch.aria': 'Translate next batch',
+      'mobile.selectRange': '☑ Selection for translator',
+      'mobile.selectRange.aria': 'Select range',
+      'mobile.missingTopic': '⚠ Missing topic',
+      'mobile.missingTopic.aria': 'Filter entries with missing topics',
+      'mobile.exportTxt': '⬇ Export TXT',
+      'mobile.exportTxt.aria': 'Export to TXT',
+      'mobile.exportJson': '⬇ Export JSON',
+      'mobile.exportJson.aria': 'Export to JSON',
+      'mobile.exportRange': '⬇ Export selection',
+      'mobile.exportRange.aria': 'Export range',
+      'mobile.aiSettings': '⚙ AI Settings',
+      'mobile.aiSettings.aria': 'AI settings',
+      'mobile.close': '✕ Close',
+      'mobile.close.aria': 'Close',
+      'settings.title': '⚙ AI Settings',
+      'settings.mainModel': 'Main model (Groq)',
+      'settings.secondaryGemini': 'Secondary model (Gemini)',
+      'settings.secondaryOpenrouter': 'Secondary model (OpenRouter)',
+      'settings.enableFixes': 'enable fixes',
+      'settings.batch': 'Batch',
+      'settings.speed': 'Speed',
+      'settings.save': '✓ Save',
+      'settings.save.aria': 'Save',
+      'settings.close': '✕ Close',
+      'settings.close.aria': 'Close',
+      'limits.title': '📊 Provider limits',
+      'limits.loading': 'Loading...',
+      'limits.close': '✕ Close',
+      'help.title': '❓ Help Strong GR → CZ',
+      'help.about': 'What the app does',
+      'help.keys': 'How to get API keys',
+      'help.library': 'API key library',
+      'help.limits': 'Limits and quotas',
+      'help.close': '✕ Close',
+      'openrouter.loading': 'Loading free models…',
+      'openrouter.none': 'No free models found',
+      'openrouter.error': 'Loading failed — check your connection',
+      'toast.ai.settings.saved': '✓ AI settings (main + secondary) saved',
+      'toast.lang.settings.saved': '✓ Language settings saved + system prompt activated',
+      'toast.loaded.github': '✓ Loaded from GitHub',
+      'toast.loaded.fallback': '⚠ Loaded fallback file',
+      'toast.openrouter.cache': '⚠ OpenRouter API unavailable, using cached model list'
+      ,'toast.prompt.preview.empty': '⚠ Prompt preview is empty'
+      ,'toast.prompt.copied': '✓ Prompt copied'
+      ,'toast.copy.failed': '✗ Copy failed'
+      ,'toast.provider.enableOne': '⚠ Enable at least one AI provider for batch translation.'
+      ,'toast.translation.none': '⚠ No translations were received'
+      ,'toast.filter.missingTopic': '✓ Filter: missing some topic'
+      ,'toast.apiKey.enter': '✗ Enter API key!'
+      ,'toast.prompt.empty': '✗ Prompt is empty'
+      ,'toast.entry.notFound': '✗ Entry not found'
+      ,'toast.retry.done': '✓ Retry completed!'
+      ,'toast.allTranslated': '✓ Everything translated!'
+      ,'toast.auto.notStartedTokenLimit': '⚠ AUTO did not start: token limit reached'
+      ,'toast.auto.enableGroq': '⚠ Enable Groq checkbox for AUTO translation'
+      ,'toast.auto.stoppedTokenLimit': '🛑 AUTO stopped: token limit reached'
+      ,'toast.translation.done': '✓ Translation completed!'
+      ,'toast.storage.full': '⚠ localStorage full — export a backup!'
+      ,'toast.backup.none': '✗ No backup is available'
+      ,'toast.noTranslatedEntry': 'No translated entry'
+      ,'toast.apiKey.insertFirst': '✗ Insert API key first'
+      ,'toast.apiKey.selectToDelete': '⚠ Select a stored key to remove'
+      ,'toast.apiKey.deleted': '✓ API key removed from library'
+      ,'toast.test.cancelFirst': '⚠ Cancel running test first'
+      ,'toast.test.canceling': '⏹ Canceling model tests...'
+      ,'toast.test.nothingToSave': '⚠ Nothing to save to test.txt'
+      ,'toast.save.canceled': 'Save canceled'
+      ,'toast.test.noRawYet': '⚠ No raw response available yet'
+      ,'toast.test.rawDownloaded': '✓ Raw responses downloaded'
+      ,'toast.file.loadFailed': '✗ Failed to load file'
+      ,'toast.auto.stopFirst': '⚠ Stop AUTO first'
+      ,'toast.export.nothing': '⚠ Nothing to export'
+      ,'toast.export.txtDownloaded': '✓ TXT downloaded'
+      ,'toast.copy.nothing': '⚠ Nothing to copy'
+      ,'toast.output.copied': '✓ Output copied'
+      ,'toast.output.cleared': '✓ Test output cleared'
+      ,'toast.test.outputMissing': '✗ Missing model test output window'
+      ,'toast.test.rateLimitAbort': '⚠ Test stopped early due to rate limit'
+      ,'toast.prompt.switchedSystem': '✓ Switched to system prompt'
+      ,'toast.prompt.switchedCustom': '✓ Switched to custom prompt'
+      ,'toast.prompt.customNotSaved': '⚠ Custom prompt is not saved'
+      ,'toast.prompt.savedApplied': '✓ Prompt saved and applied'
+      ,'toast.prompt.exported': '✓ Prompts exported to TXT'
+      ,'toast.prompt.importFailed': '✗ Failed to load prompts file'
+      ,'toast.translation.canceled': '✕ Translation canceled'
+      ,'toast.import.noEntries': '✗ No entries found in file'
+      ,'toast.failed.none': '✓ No failed translations'
+      ,'toast.progress.saved': '✓ Progress saved'
+      ,'toast.topicRepair.noEligible': '⚠ No entries with max. 2 missing topics in current selection.'
+      ,'toast.topicRepair.modeLocked': '⚠ Cannot change mode while translation is running.'
+      ,'toast.topicRepair.queueEmpty': '⚠ No waiting items in selected topic queue — change selection or finish visible rows.'
+      ,'toast.topicRepair.enableProvider': '⚠ Enable at least one provider for topic repair.'
+      ,'toast.topicRepair.visibleDone': '✓ Visible queue repair finished, review and confirm overwrite.'
+      ,'toast.topicRepair.checkValidRows': '⚠ Check rows with valid proposal only (worse analysis rows stay unchecked).'
+      ,'toast.topicRepair.noValidProposal': '⚠ No valid proposal to apply.'
+      ,'toast.topicRepair.nothingMarked': '⚠ Nothing was marked for overwrite'
+      ,'toast.prompt.pickSpecificTopicSave': '⚠ To save prompt, select a specific topic (not "All").'
+      ,'toast.prompt.pickSpecificTopicReset': '⚠ To reset default prompt, select a specific topic (not "All").'
+      ,'toast.topicRepair.sequentialRunning': '⚠ Sequential repair is still running — pause first and wait for current attempt to finish.'
+      ,'toast.topicRepair.pickTopicInAllMode': '⚠ In "All" mode, check at least one topic in "Show in list".'
+      ,'toast.batchPrompt.empty': '✗ Batch prompt is empty'
+      ,'toast.batchRun.nothingSelected': '⚠ Nothing selected for batch run (check checkboxes / error filter).'
+      ,'toast.aiResponse.unmatched': '⚠ AI response could not be matched to this entry'
+      ,'toast.jump.enterGNumber': 'Enter G entry number'
+      ,'toast.test.cancelFirstAlt': '⚠ Cancel current test first'
+      ,'toast.test.pausing': '⏸ Test will stop. Next click on ▶ starts a new run.'
+      ,'toast.test.libraryAfterStop': '⚠ Library is available after stopping test to avoid overwriting live report.'
+      ,'toast.error.withMessage': '✗ Error: {message}'
+      ,'toast.translated.count': '✓ Translated {count} entries'
+      ,'toast.specialista.approved': '✓ SPECIALISTA approved: {key}'
+      ,'toast.specialista.rejected': '✕ SPECIALISTA rejected: {key}'
+      ,'toast.topic.approved': '✓ Approved {topic}: {key}'
+      ,'toast.topic.rejected': '✕ Rejected {topic}: {key}'
+      ,'toast.topic.overwritten.count': '✓ Overwritten {count} topics'
+      ,'toast.topic.overwrittenAndClosing': '✓ Overwritten {count} topics — all good for these entries, closing repair window.'
+      ,'toast.field.filled': '✓ Filled field {topic}'
+      ,'toast.batchPrompt.saved': '✓ Saved batch prompt for {topic}'
+      ,'toast.batchPrompt.reset': '↺ Restored default batch prompt for {topic}'
+      ,'toast.apiKey.enterForProvider': '✗ Enter API key for {provider}.'
+      ,'toast.topic.bulkDone': '✓ Topic bulk repair done: {topic} ({count})'
+      ,'toast.topic.savedToField': '✓ Saved to field {topic}'
+      ,'toast.translatedSystem.key': '✓ Translated via System prompt: {key}'
+      ,'toast.entry.notFoundInFile': '{key} not found in file'
+      ,'toast.translation.resumeFrom': '✓ Translation will continue from {key}'
+      ,'toast.translated.partial': '⚠ Translated {translated}/{total} entries'
+      ,'toast.rateLimit.retryIn': '⏳ Rate limit — retry in {seconds}s'
+      ,'toast.rateLimit.waiting': '⏳ Rate limit — waiting {seconds}s{suffix}'
+      ,'toast.timeout.retryIn': '⏳ API timeout — retry in {seconds}s'
+      ,'toast.serviceUnavailable.retryIn': '⏳ 503 Service Unavailable — retry in {seconds}s'
+      ,'toast.restored.count': '✓ Restored {count} entries'
+      ,'toast.exported.count': '✓ Exported {count} entries'
+      ,'toast.apiKey.activeProfile': '✓ Active API key: {name}'
+      ,'toast.saved.filename': '✓ Saved: {name}'
+      ,'toast.saveDialogFailedFallback': '⚠ Save dialog failed, using download: {message}'
+      ,'toast.downloaded.filename': '✓ Downloaded: {name}'
+      ,'toast.loaded.filename': '✓ Loaded: {name}'
+      ,'toast.apiKey.missingForProviderLabel': '✗ Missing API key for {provider}'
+      ,'toast.model.notSelectedForProviderLabel': '⚠ No model selected for {provider}'
+      ,'toast.modelTest.doneWithCount': '✓ Model test finished ({count})'
+      ,'toast.selected.range': '✓ Selected {count} entries, showing range {from}–{to}'
+      ,'toast.systemPrompt.set': '✓ System prompt set ({mode})'
+      ,'toast.autoPrompt.toggled': '✓ Auto prompt {state}'
+      ,'toast.prompts.loaded.count': '✓ Loaded prompts: {count}'
+      ,'toast.noTranslatedInRange': 'No translated entries in range {from}–{to}'
+      ,'toast.exported.range': '✓ Exported {count} entries ({from}–{to})'
+      ,'toast.saved.entriesWithExtra': '✓ Saved {count} entries{extra}'
+      ,'toast.import.found': '📥 Found {count} entries to import ({format})'
+      ,'toast.failed.found': '⚠ Found {count} failed translations (see console)'
+      ,'toast.selectedForBatch': '✓ Selected {count} entries — click "⚡ Batch" or "▶ AUTO"'
+      ,'resume.found': '⚑ Saved progress found ({source}): <b>{count}</b> translated entries (saved {ts}). It will be restored after start.'
+      ,'limits.error': 'Error: {message}'
+      ,'modal.selectRange.title': 'Select entry range'
+      ,'failed.modal.title': '⚠ Failed translations — {count} entries'
+      ,'failed.modal.retry': '↻ Translate again'
+      ,'failed.modal.close': '✕ Close'
+      ,'failed.modal.note': 'AI returned invalid format (or empty translation). Details in console (F12).'
+      ,'log.meaning': 'Meaning:'
+      ,'log.usage': 'Usage:'
+      ,'log.unparsed': '⚠ Unparsed'
+      ,'log.records': '{count} records'
+      ,'import.preview.title': 'Translation preview ({count} entries)'
+      ,'import.preview.summary': '<b style="color:var(--acc3)">{newOnes}</b> new · <b style="color:var(--acc2)">{conflicts}</b> already translated in current slot'
+      ,'import.mode.title': 'Import mode:'
+      ,'import.mode.missing': 'Missing only — add only entries not yet translated (<b>{count}</b>)'
+      ,'import.mode.all': 'Overwrite all — replace existing translations (<b>{count}</b>)'
+      ,'import.mode.fillgaps': 'Fill empty fields — keep existing values, overwrite only "—" and empty values'
+      ,'import.selectAll': 'Select all'
+      ,'import.saveSelected': '✓ Save selected'
+      ,'import.cancel': '✕ Cancel'
+      ,'import.badge.conflict': 'conflict'
+      ,'import.badge.new': 'new'
+      ,'import.czTranslationAi': '🔄 CZECH TRANSLATION (from AI)'
+      ,'import.fullTranslation': '📝 Full translation:'
+      ,'import.enOriginal': '📖 ENGLISH ORIGINAL'
+      ,'field.meaning': 'Meaning:'
+      ,'field.definition': 'Definition:'
+      ,'field.usage': 'Usage:'
+      ,'field.origin': 'Origin:'
+      ,'field.specialist': 'Specialist:'
+      ,'topicRepair.batchLabel': 'batch'
+      ,'topicRepair.originalTopic': 'Original topic:'
+      ,'topicRepair.original': 'Original:'
+      ,'topicRepair.newProposal': 'New proposal:'
+      ,'topicRepair.specialistInResponse': 'SPECIALISTA in response:'
+      ,'topicRepair.yes': 'yes'
+      ,'topicRepair.no': 'no'
+      ,'topicRepair.status': 'status:'
+      ,'topicRepair.unchanged': 'unchanged'
+      ,'topicRepair.specialistDetail': 'SPECIALISTA detail'
+      ,'topicRepair.originalSpecialist': 'Original SPECIALISTA:'
+      ,'topicRepair.aiSpecialist': 'AI SPECIALISTA:'
+      ,'topicRepair.confirmSpecialist': '✓ Confirm SPECIALISTA'
+      ,'topicRepair.rejectSpecialist': '✕ Reject SPECIALISTA'
+      ,'topicRepair.extraTopics': 'Additional topics from AI response ({count})'
+      ,'topicRepair.originalShort': 'Original:'
+      ,'topicRepair.aiShort': 'AI:'
+      ,'topicRepair.confirm': '✓ Confirm'
+      ,'topicRepair.reject': '✕ Reject'
+      ,'topicRepair.none': 'No topics to repair.'
+    }
+  };
+
+  function getUiLang() {
+    const raw = String(localStorage.getItem(UI_LANG_KEY) || DEFAULT_UI_LANG).toLowerCase();
+    return UI_LANGS.has(raw) ? raw : DEFAULT_UI_LANG;
+  }
+
+  function t(key, params = {}) {
+    const lang = getUiLang();
+    const source = UI_MESSAGES[lang] || UI_MESSAGES[DEFAULT_UI_LANG];
+    const fallback = UI_MESSAGES[DEFAULT_UI_LANG];
+    let text = source?.[key] ?? fallback?.[key] ?? key;
+    for (const [name, value] of Object.entries(params || {})) {
+      text = text.replaceAll(`{${name}}`, String(value));
+    }
+    return text;
+  }
+
+  function applyUiLanguage() {
+    const setText = (id, value) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value;
+    };
+    const setAttr = (id, attr, value) => {
+      const el = document.getElementById(id);
+      if (el) el.setAttribute(attr, value);
+    };
+    setText('setupTitle', t('setup.title'));
+    setText('startBtn', t('setup.start'));
+    setText('btnHelp', t('setup.help'));
+    setText('btnLimits', t('setup.limits'));
+    setText('batchSizeLabel', t('setup.batchSize'));
+    setText('intervalLabel', t('setup.interval'));
+    setText('fileLabel', t('setup.file'));
+    setText('btnChooseFile', t('setup.chooseFile'));
+    setText('btnLoadDefault', t('setup.loadAuto'));
+    setText('lblDone', t('stats.done'));
+    setText('lblRemain', t('stats.remain'));
+    setText('lblTotal', t('stats.total'));
+    setText('autoTokenLimitLabel', t('stats.tokenLimit'));
+    setText('btnImport', t('hdr.import'));
+    setText('btnAuto', t('hdr.auto'));
+    setText('btnToggleList', t('hdr.list'));
+    setText('btnStep', t('hdr.batch'));
+    setText('btnTestModels', t('hdr.testModels'));
+    setText('btnExportRange', t('hdr.exportRange'));
+    setText('btnAISettingsDesktop', t('hdr.aiSettings'));
+    const failedBtn = document.getElementById('btnFailedEntries');
+    if (failedBtn) {
+      const failedCountEl = document.getElementById('failedCount');
+      failedBtn.textContent = `${t('hdr.failed')} `;
+      if (failedCountEl) failedBtn.appendChild(failedCountEl);
+    }
+    const btnRestoreBackup = document.getElementById('btnRestoreBackup');
+    if (btnRestoreBackup) btnRestoreBackup.textContent = t('hdr.restoreBackup');
+    setAttr('btnImport', 'aria-label', t('hdr.import.aria'));
+    setAttr('btnAuto', 'aria-label', t('hdr.auto.aria'));
+    setAttr('btnToggleList', 'title', t('hdr.list.title'));
+    setAttr('btnToggleList', 'aria-label', t('hdr.list.aria'));
+    setAttr('btnStep', 'aria-label', t('hdr.batch.aria'));
+    setAttr('btnTestModels', 'title', t('hdr.testModels.title'));
+    setAttr('btnTestModels', 'aria-label', t('hdr.testModels.aria'));
+    setAttr('btnExportRange', 'title', t('hdr.exportRange.title'));
+    setAttr('btnExportRange', 'aria-label', t('hdr.exportRange.aria'));
+    setAttr('btnFailedEntries', 'title', t('hdr.failed.title'));
+    setAttr('btnFailedEntries', 'aria-label', t('hdr.failed.aria'));
+    setAttr('btnAISettingsDesktop', 'title', t('hdr.aiSettings.title'));
+    setAttr('btnAISettingsDesktop', 'aria-label', t('hdr.aiSettings.aria'));
+    setAttr('mobileMenuBtn', 'aria-label', t('hdr.mobileActions.aria'));
+    const resetBtn = document.querySelector('.hbtn.red.hdr-close');
+    if (resetBtn) {
+      resetBtn.setAttribute('title', t('hdr.reset.title'));
+      resetBtn.setAttribute('aria-label', t('hdr.reset.aria'));
+    }
+    setAttr('btnRestoreBackup', 'title', t('hdr.restoreBackup.title'));
+    setAttr('btnRestoreBackup', 'aria-label', t('hdr.restoreBackup.aria'));
+    setText('autoInfoPrefix', t('auto.info.prefix'));
+    setText('autoInfoSettings', t('auto.info.settings'));
+    setText('autoInfoSeconds', t('auto.info.seconds'));
+    setText('autoInfoInterval', t('auto.info.interval'));
+    setText('btnAutoStop', t('auto.stop'));
+    setAttr('btnAutoStop', 'aria-label', t('auto.stop.aria'));
+    const autoLog = document.getElementById('autoLog');
+    const autoLogText = (autoLog?.textContent || '').trim();
+    if (autoLog && (autoLogText === 'Čeká na start...' || autoLogText === 'Waiting to start...')) {
+      autoLog.textContent = t('auto.log.waiting');
+    }
+    setText('modelTestPromptPreviewTitle', t('prompt.preview.title'));
+    setText('btnCopyPromptPreview', t('prompt.preview.copy'));
+    setText('btnClosePromptPreview', t('prompt.preview.close'));
+    setText('promptLibraryTitle', t('prompt.library.title'));
+    const promptPreview = document.getElementById('promptPreview');
+    const promptPreviewText = (promptPreview?.textContent || '').trim();
+    if (promptPreview && (promptPreviewText === 'Vyberte prompt z knihovny pro náhled...' || promptPreviewText === 'Select a prompt from the library for preview...')) {
+      promptPreview.textContent = t('prompt.library.preview.empty');
+    }
+    setAttr('promptLibraryEditor', 'placeholder', t('prompt.library.editor.placeholder'));
+    setAttr('btnPromptSystem', 'title', t('prompt.library.system.title'));
+    setAttr('btnPromptExportTxt', 'title', t('prompt.library.export.title'));
+    setAttr('btnPromptLoadTxt', 'title', t('prompt.library.load.title'));
+    setText('btnPromptLoadTxt', t('prompt.library.load'));
+    setText('btnPromptLibraryClose', t('prompt.library.close'));
+    setText('btnPromptLibrarySaveApply', t('prompt.library.saveApply'));
+    setAttr('searchInput', 'placeholder', t('list.search.placeholder'));
+    setAttr('searchInput', 'aria-label', t('list.search.aria'));
+    setText('btnSelectRange', t('list.selectRange'));
+    setAttr('btnSelectRange', 'title', t('list.selectRange.title'));
+    setAttr('btnSelectRange', 'aria-label', t('list.selectRange.aria'));
+    setAttr('filterStatus', 'aria-label', t('list.filterStatus.aria'));
+    setAttr('filterSort', 'aria-label', t('list.filterSort.aria'));
+    const filterStatusLabels = {
+      all: t('list.filterStatus.all'),
+      pending: t('list.filterStatus.pending'),
+      missing_topic: t('list.filterStatus.missing_topic'),
+      failed: t('list.filterStatus.failed'),
+      done: t('list.filterStatus.done'),
+      g_all: t('list.filterStatus.g_all'),
+      h_all: t('list.filterStatus.h_all'),
+      g_pending: t('list.filterStatus.g_pending'),
+      h_pending: t('list.filterStatus.h_pending'),
+      g_done: t('list.filterStatus.g_done'),
+      h_done: t('list.filterStatus.h_done')
+    };
+    const filterStatusEl = document.getElementById('filterStatus');
+    if (filterStatusEl) {
+      for (const option of filterStatusEl.options) {
+        if (Object.prototype.hasOwnProperty.call(filterStatusLabels, option.value)) {
+          option.textContent = filterStatusLabels[option.value];
+        }
+      }
+    }
+    const filterSortLabels = {
+      original: t('list.filterSort.original'),
+      num: t('list.filterSort.num'),
+      greek: t('list.filterSort.greek')
+    };
+    const filterSortEl = document.getElementById('filterSort');
+    if (filterSortEl) {
+      for (const option of filterSortEl.options) {
+        if (Object.prototype.hasOwnProperty.call(filterSortLabels, option.value)) {
+          option.textContent = filterSortLabels[option.value];
+        }
+      }
+    }
+    setText('btnMissingTopicFilter', t('list.topicFilter'));
+    setAttr('btnMissingTopicFilter', 'title', t('list.topicFilter.title'));
+    setAttr('btnMissingTopicFilter', 'aria-label', t('list.topicFilter.aria'));
+    setAttr('btnSelectAllSmall', 'title', t('list.selectAll.title'));
+    setAttr('btnSelectAllSmall', 'aria-label', t('list.selectAll.aria'));
+    setAttr('btnSelectNoneSmall', 'title', t('list.selectNone.title'));
+    setAttr('btnSelectNoneSmall', 'aria-label', t('list.selectNone.aria'));
+    setText('btnSelectAllVisible', t('list.selectAllVisible'));
+    setAttr('btnSelectAllVisible', 'aria-label', t('list.selectAllVisible.aria'));
+    setText('btnTranslateSelected', t('list.translateSelected'));
+    setAttr('btnTranslateSelected', 'aria-label', t('list.translateSelected.aria'));
+    setText('btnBackToSetup', t('log.back'));
+    setAttr('btnBackToSetup', 'aria-label', t('log.back.aria'));
+    setText('btnClearLog', t('log.clear'));
+    setAttr('btnClearLog', 'aria-label', t('log.clear.aria'));
+    const logPlaceholder = document.getElementById('logPlaceholder');
+    if (logPlaceholder) logPlaceholder.textContent = t('log.placeholder');
+    setText('detailEmptyText', t('detail.empty'));
+    setText('modalTitle', t('customModal.title'));
+    setAttr('modalFrom', 'placeholder', t('customModal.from'));
+    setAttr('modalTo', 'placeholder', t('customModal.to'));
+    setText('btnCustomModalCancel', t('customModal.cancel'));
+    setText('btnCustomModalOk', t('customModal.ok'));
+    setText('mobileActionsTitle', t('mobile.actions.title'));
+    setText('btnMobileImport', t('mobile.import'));
+    setAttr('btnMobileImport', 'aria-label', t('mobile.import.aria'));
+    setText('btnMobileBatch', t('mobile.batch'));
+    setAttr('btnMobileBatch', 'aria-label', t('mobile.batch.aria'));
+    setText('btnMobileSelectRange', t('mobile.selectRange'));
+    setAttr('btnMobileSelectRange', 'aria-label', t('mobile.selectRange.aria'));
+    setText('btnMobileMissingTopic', t('mobile.missingTopic'));
+    setAttr('btnMobileMissingTopic', 'aria-label', t('mobile.missingTopic.aria'));
+    setText('btnMobileExportTxt', t('mobile.exportTxt'));
+    setAttr('btnMobileExportTxt', 'aria-label', t('mobile.exportTxt.aria'));
+    setText('btnMobileExportJson', t('mobile.exportJson'));
+    setAttr('btnMobileExportJson', 'aria-label', t('mobile.exportJson.aria'));
+    setText('btnMobileExportRange', t('mobile.exportRange'));
+    setAttr('btnMobileExportRange', 'aria-label', t('mobile.exportRange.aria'));
+    setText('btnMobileAiSettings', t('mobile.aiSettings'));
+    setAttr('btnMobileAiSettings', 'aria-label', t('mobile.aiSettings.aria'));
+    setText('btnMobileClose', t('mobile.close'));
+    setAttr('btnMobileClose', 'aria-label', t('mobile.close.aria'));
+    setText('settingsModalTitle', t('settings.title'));
+    setText('settingsMainModelLabel', t('settings.mainModel'));
+    setText('settingsSecondaryGeminiLabel', t('settings.secondaryGemini'));
+    setText('settingsSecondaryGeminiToggleText', t('settings.enableFixes'));
+    setText('settingsSecondaryOpenrouterLabel', t('settings.secondaryOpenrouter'));
+    setText('settingsSecondaryOpenrouterToggleText', t('settings.enableFixes'));
+    setText('settingsBatchLabel', t('settings.batch'));
+    setText('settingsSpeedLabel', t('settings.speed'));
+    setText('btnSettingsSave', t('settings.save'));
+    setAttr('btnSettingsSave', 'aria-label', t('settings.save.aria'));
+    setText('btnSettingsClose', t('settings.close'));
+    setAttr('btnSettingsClose', 'aria-label', t('settings.close.aria'));
+    setText('limitsTitle', t('limits.title'));
+    setText('limitsLoadingText', t('limits.loading'));
+    setText('btnLimitsClose', t('limits.close'));
+    setText('helpTitle', t('help.title'));
+    setText('helpSectionAboutTitle', t('help.about'));
+    setText('helpSectionKeysTitle', t('help.keys'));
+    setText('helpSectionLibraryTitle', t('help.library'));
+    setText('helpSectionLimitsTitle', t('help.limits'));
+    setText('btnHelpClose', t('help.close'));
+    setAttr('autoTokenLimit', 'placeholder', t('stats.tokenLimit.placeholder'));
+    setAttr('autoTokenLimit', 'title', t('stats.tokenLimit.title'));
+    setText('promptLangModalTitle', t('lang.modal.title'));
+    setText('uiLanguageLabel', t('lang.modal.ui'));
+    setText('targetLanguageLabel', t('lang.modal.target'));
+    setText('sourceLanguageLabel', t('lang.modal.source'));
+    setText('btnPromptLangClose', t('lang.modal.close'));
+    setText('btnPromptLangSave', t('lang.modal.save'));
+    const status = document.getElementById('statusTXT');
+    const rawStatus = String(status?.textContent || '').trim();
+    if (status && !status.classList.contains('ok') && (rawStatus === '— nevybráno' || rawStatus === '— none selected')) {
+      status.textContent = t('setup.file.none');
+    }
+    refreshTokenStatsDisplay();
+    updatePromptLangButtonLabel();
+  }
     
    // Use core functions, but override buildPromptMessages to support custom prompts
    // buildPromptMessagesCore is already destructured above
@@ -2031,14 +2908,14 @@ function closeModelTestPromptPreviewModal() {
 async function copyModelTestPromptPreview() {
   const text = String(document.getElementById('modelTestPromptPreviewText')?.value || '');
   if (!text.trim()) {
-    showToast('⚠ Náhled promptu je prázdný');
+    showToast(t('toast.prompt.preview.empty'));
     return;
   }
   try {
     await navigator.clipboard.writeText(text);
-    showToast('✓ Prompt zkopírován');
+    showToast(t('toast.prompt.copied'));
   } catch (_) {
-    showToast('✗ Kopírování selhalo');
+    showToast(t('toast.copy.failed'));
   }
 }
     function getModelTestPromptTopicLabel(promptType) {
@@ -2338,7 +3215,7 @@ function populateOpenRouterModels(selectElement, savedModel, callback) {
   // Loading state only when no cache available
   if (!hadFreshCache) {
     selectElement.disabled = true;
-    selectElement.innerHTML = '<option value="">Načítám free modely…</option>';
+    selectElement.innerHTML = `<option value="">${t('openrouter.loading')}</option>`;
   }
 
   fetch('https://openrouter.ai/api/v1/models?free=true')
@@ -2378,7 +3255,7 @@ function populateOpenRouterModels(selectElement, savedModel, callback) {
       const options = [...topOptions, ...otherOptions];
 
       if (options.length === 0) {
-        selectElement.innerHTML = '<option value="">Žádné free modely nenalezeny</option>';
+        selectElement.innerHTML = `<option value="">${t('openrouter.none')}</option>`;
         selectElement.disabled = true;
         restoreModel();
         return;
@@ -2417,7 +3294,7 @@ function populateOpenRouterModels(selectElement, savedModel, callback) {
             selectElement.innerHTML = fallbackModels.map(o => `<option value="${o.value}">${o.label}</option>`).join('');
             selectElement.disabled = false;
             restoreModel();
-            showToast('⚠ OpenRouter API nedostupné, používám uložený seznam modelů');
+            showToast(t('toast.openrouter.cache'));
             return;
           }
         }
@@ -2425,7 +3302,7 @@ function populateOpenRouterModels(selectElement, savedModel, callback) {
         // Ignore parse errors and show final error state
       }
 
-      selectElement.innerHTML = '<option value="">Chyba načítání — zkontroluj připojení</option>';
+      selectElement.innerHTML = `<option value="">${t('openrouter.error')}</option>`;
       selectElement.disabled = true;
       restoreModel();
     });
@@ -2536,7 +3413,7 @@ function loadTXT(input) {
       entries = parseTXT(ev.target.result);
       currentFileId = computeFileId(entries);
       const el = document.getElementById('statusTXT');
-      el.textContent = `✓ ${file.name} — ${entries.length} hesel`;
+      el.textContent = `✓ ${file.name} — ${t('entries.count', { count: entries.length })}`;
       el.className = 'file-status ok';
       document.getElementById('fileReady').style.display = 'block';
       document.getElementById('startBtn').disabled = false;
@@ -2575,15 +3452,15 @@ function loadDefaultFile() {
       entries = parseTXT(text);
       currentFileId = computeFileId(entries);
       localStorage.setItem(LAST_FILE_KEY, lastFile);
-      document.getElementById('statusTXT').innerHTML = `✓ ${lastFile} — ${entries.length} hesel`;
+      document.getElementById('statusTXT').textContent = `✓ ${lastFile} — ${t('entries.count', { count: entries.length })}`;
       document.getElementById('statusTXT').className = 'file-status ok';
       document.getElementById('fileReady').style.display = 'block';
       document.getElementById('startBtn').disabled = false;
       checkResume();
       if (source === githubUrl) {
-        showToast('✓ Načteno z GitHubu');
+        showToast(t('toast.loaded.github'));
       } else {
-        showToast('⚠ Načten fallback soubor');
+        showToast(t('toast.loaded.fallback'));
       }
      })
     .catch(e => {
@@ -2640,7 +3517,7 @@ function checkResume() {
     if (count > 0 && box) {
       box.style.display = 'block';
       const ts = data.ts ? new Date(data.ts).toLocaleString('cs') : '?';
-      box.innerHTML = `⚑ Nalezen uložený průběh (${source}): <b>${count}</b> přeložených hesel (uloženo ${ts}). Po spuštění bude automaticky obnoven.`;
+      box.innerHTML = t('resume.found', { source, count, ts });
     }
    } catch(e) {
      logWarn('checkResume', 'Failed to parse saved progress', { error: e.message });
@@ -2838,7 +3715,7 @@ function updateSelectedBtn() {
 async function translateSelected() {
   const activeProvider = resolveMainBatchProvider(document.getElementById('provider')?.value || '');
   if (!isAutoProviderEnabled(activeProvider)) {
-    showToast('⚠ Zapni alespoň jednoho AI providera pro hromadný překlad.');
+    showToast(t('toast.provider.enableOne'));
     return;
   }
   const keys = Array.from(selectedKeys);
@@ -2884,7 +3761,7 @@ async function translateSelected() {
          provider: activeProvider,
          model: getPipelineModelForProvider(activeProvider)
        });
-       showToast('✗ Chyba: ' + e.message);
+       showToast(t('toast.error.withMessage', { message: e.message }));
     }
     
     processed += batchKeys.length;
@@ -2905,9 +3782,9 @@ async function translateSelected() {
   
   if (Object.keys(allNewTranslations).length > 0) {
     showPreviewModal(allNewTranslations);
-    showToast(`✓ Přeloženo ${Object.keys(allNewTranslations).length} hesel`);
+    showToast(t('toast.translated.count', { count: Object.keys(allNewTranslations).length }));
   } else {
-    showToast('⚠ Žádné překlady se nepodařilo získat');
+    showToast(t('toast.translation.none'));
   }
 }
 
@@ -3012,46 +3889,46 @@ function updateTopicRepairModalUI() {
           </label>
           <label style="display:flex;align-items:center;gap:6px;cursor:pointer;color:var(--txt3);font-size:11px">
             <input type="checkbox" ${task.includeBulk !== false ? 'checked' : ''} onchange="toggleTopicRepairBulkInclude(${idx}, this.checked)" style="accent-color:var(--acc)">
-            dávka
+            ${t('topicRepair.batchLabel')}
           </label>
           <span style="font-size:11px;color:${statusColor}">${statusText}${task.provider ? ` · ${task.provider}` : ''}</span>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
           <div style="font-size:11px;color:var(--txt2)">
-            <div><b>Původní téma:</b> ${escHtml(task.currentValue || '—')}</div>
-            <div style="margin-top:4px"><b>Originál:</b> ${escHtml(task.sourceValue || '—')}</div>
+            <div><b>${t('topicRepair.originalTopic')}</b> ${escHtml(task.currentValue || '—')}</div>
+            <div style="margin-top:4px"><b>${t('topicRepair.original')}</b> ${escHtml(task.sourceValue || '—')}</div>
           </div>
           <div style="font-size:11px;color:var(--txt)">
-            <div><b>Nový návrh:</b> ${escHtml(task.candidateValue || '—')}</div>
+            <div><b>${t('topicRepair.newProposal')}</b> ${escHtml(task.candidateValue || '—')}</div>
             ${formatTopicRepairQuickCompare(task.topicId, task.currentValue, task.candidateValue)}
             ${rawHeadersHint}
             <div style="margin-top:4px;color:var(--txt2)">
-              <b>SPECIALISTA v odpovědi:</b> ${task.specialistaInRaw ? 'ano' : 'ne'}
-              ${task.specialistaInRaw ? ` · <b>stav:</b> ${escHtml(task.specialistaDecision || 'beze změny')}` : ''}
+              <b>${t('topicRepair.specialistInResponse')}</b> ${task.specialistaInRaw ? t('topicRepair.yes') : t('topicRepair.no')}
+              ${task.specialistaInRaw ? ` · <b>${t('topicRepair.status')}</b> ${escHtml(task.specialistaDecision || t('topicRepair.unchanged'))}` : ''}
             </div>
             ${task.specialistaInRaw ? `
               <details style="margin-top:6px;background:var(--bg2);border:1px solid var(--brd);border-radius:4px;padding:6px">
-                <summary style="cursor:pointer;color:var(--acc)">SPECIALISTA detail</summary>
-                <div style="margin-top:6px;color:var(--txt2)"><b>Původní SPECIALISTA:</b> ${escHtml(task.specialistaPreviousValue || '—')}</div>
-                <div style="margin-top:6px;color:var(--txt)"><b>AI SPECIALISTA:</b> ${escHtml(task.specialistaCandidateValue || '—')}</div>
+                <summary style="cursor:pointer;color:var(--acc)">${t('topicRepair.specialistDetail')}</summary>
+                <div style="margin-top:6px;color:var(--txt2)"><b>${t('topicRepair.originalSpecialist')}</b> ${escHtml(task.specialistaPreviousValue || '—')}</div>
+                <div style="margin-top:6px;color:var(--txt)"><b>${t('topicRepair.aiSpecialist')}</b> ${escHtml(task.specialistaCandidateValue || '—')}</div>
                 <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
-                  <button class="hbtn grn" onclick="setTopicRepairSpecialistaDecision(${idx}, 'accept')">✓ Potvrdit SPECIALISTA</button>
-                  <button class="hbtn red" onclick="setTopicRepairSpecialistaDecision(${idx}, 'reject')">✕ Zamítnout SPECIALISTA</button>
+                  <button class="hbtn grn" onclick="setTopicRepairSpecialistaDecision(${idx}, 'accept')">${t('topicRepair.confirmSpecialist')}</button>
+                  <button class="hbtn red" onclick="setTopicRepairSpecialistaDecision(${idx}, 'reject')">${t('topicRepair.rejectSpecialist')}</button>
                 </div>
               </details>
             ` : ''}
             ${extraTopicsForUi.length > 0 ? `
               <details style="margin-top:6px;background:var(--bg2);border:1px solid var(--brd);border-radius:4px;padding:6px">
-                <summary style="cursor:pointer;color:var(--acc2)">Další témata z AI odpovědi (${extraTopicsForUi.length})</summary>
+                <summary style="cursor:pointer;color:var(--acc2)">${t('topicRepair.extraTopics', { count: extraTopicsForUi.length })}</summary>
                 ${extraTopicsForUi.map(row => `
                   <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--brd)">
-                    <div style="font-size:11px;color:var(--txt2)"><b>${escHtml(TOPIC_LABELS[row.topicId] || row.topicId)}</b> · stav: ${escHtml(row.decision || 'beze změny')}</div>
-                    <div style="margin-top:4px;color:var(--txt2)"><b>Původní:</b> ${escHtml(row.previousValue || '—')}</div>
-                    <div style="margin-top:4px;color:var(--txt)"><b>AI:</b> ${escHtml(row.candidateValue || '—')}</div>
+                    <div style="font-size:11px;color:var(--txt2)"><b>${escHtml(TOPIC_LABELS[row.topicId] || row.topicId)}</b> · ${t('topicRepair.status')} ${escHtml(row.decision || t('topicRepair.unchanged'))}</div>
+                    <div style="margin-top:4px;color:var(--txt2)"><b>${t('topicRepair.originalShort')}</b> ${escHtml(row.previousValue || '—')}</div>
+                    <div style="margin-top:4px;color:var(--txt)"><b>${t('topicRepair.aiShort')}</b> ${escHtml(row.candidateValue || '—')}</div>
                     ${formatTopicRepairQuickCompare(row.topicId, row.previousValue, row.candidateValue)}
                     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">
-                      <button class="hbtn grn" onclick="setTopicRepairDetectedTopicDecision(${idx}, '${row.topicId}', 'accept')">✓ Potvrdit</button>
-                      <button class="hbtn red" onclick="setTopicRepairDetectedTopicDecision(${idx}, '${row.topicId}', 'reject')">✕ Zamítnout</button>
+                      <button class="hbtn grn" onclick="setTopicRepairDetectedTopicDecision(${idx}, '${row.topicId}', 'accept')">${t('topicRepair.confirm')}</button>
+                      <button class="hbtn red" onclick="setTopicRepairDetectedTopicDecision(${idx}, '${row.topicId}', 'reject')">${t('topicRepair.reject')}</button>
                     </div>
                   </div>
                 `).join('')}
@@ -3063,7 +3940,7 @@ function updateTopicRepairModalUI() {
       </div>`;
   }).join('');
   const listEl = document.getElementById('topicRepairList');
-  if (listEl) listEl.innerHTML = rows || '<div style="font-size:12px;color:var(--txt3)">Žádná témata k opravě.</div>';
+  if (listEl) listEl.innerHTML = rows || `<div style="font-size:12px;color:var(--txt3)">${t('topicRepair.none')}</div>`;
   updateTopicRepairProviderStatus();
   syncTopicRepairMinimizeBusyIndicator();
 }
@@ -3221,7 +4098,7 @@ function renderTopicRepairModal() {
 function startTopicRepairFlow(keys) {
   const tasks = buildTopicRepairTasks(keys);
   if (!tasks.length) {
-    showToast('⚠ Ve výběru nejsou hesla s max. 2 chybějícími tématy.');
+    showToast(t('toast.topicRepair.noEligible'));
     return;
   }
   topicRepairState = {
@@ -3252,7 +4129,7 @@ function setTopicRepairStrategy(strategy) {
   if (!state) return;
   const busy = state.tasks.some(t => t.status === 'running') || !!state.currentTask || topicRepairBulkRunning;
   if (busy) {
-    showToast('⚠ Nelze měnit režim během běžícího překladu.');
+    showToast(t('toast.topicRepair.modeLocked'));
     updateTopicRepairModalUI();
     return;
   }
@@ -3269,12 +4146,12 @@ function startTopicRepairSequentialWorker() {
   const state = topicRepairState;
   if (!state || state.repairStrategy !== 'sequential') return;
   if (!findNextTopicRepairWaitingTask(state)) {
-    showToast('⚠ Ve zvoleném tématu není nic ve frontě (čekající) — změň výběr nebo dokonči viditelné řádky.');
+    showToast(t('toast.topicRepair.queueEmpty'));
     return;
   }
   const enabledProviders = ['groq', 'gemini', 'openrouter'].filter(p => state.providerEnabled[p]);
   if (!enabledProviders.length) {
-    showToast('⚠ Zapni alespoň jednoho providera pro opravu témat.');
+    showToast(t('toast.topicRepair.enableProvider'));
     return;
   }
   state.sequentialEverStarted = true;
@@ -3297,7 +4174,7 @@ async function processTopicRepairQueue() {
       if (!nextTask) break;
       const enabledProviders = ['groq', 'gemini', 'openrouter'].filter(p => topicRepairState?.providerEnabled?.[p]);
       if (!enabledProviders.length) {
-        showToast('⚠ Zapni alespoň jednoho providera pro opravu témat.');
+        showToast(t('toast.topicRepair.enableProvider'));
         topicRepairState.paused = true;
         updateTopicRepairModalUI();
         await sleep(500);
@@ -3430,7 +4307,7 @@ async function processTopicRepairQueue() {
     updateTopicRepairModalUI();
     if (topicRepairState && !topicRepairState.closed) {
       const waitingVis = getTopicRepairModalVisibleTasks(topicRepairState).filter(t => t.status === 'waiting').length;
-      if (waitingVis === 0) showToast('✓ Oprava viditelné fronty doběhla, zkontroluj a potvrď přepsání.');
+      if (waitingVis === 0) showToast(t('toast.topicRepair.visibleDone'));
     }
   } finally {
     topicRepairWorkerRunning = false;
@@ -3472,11 +4349,11 @@ function setTopicRepairSpecialistaDecision(index, decision) {
   if (decision === 'accept') {
     translated[task.key].specialista = String(task.specialistaCandidateValue || '').trim();
     task.specialistaDecision = 'přijat ručně';
-    showToast(`✓ SPECIALISTA potvrzen: ${task.key}`);
+    showToast(t('toast.specialista.approved', { key: task.key }));
   } else {
     translated[task.key].specialista = String(task.specialistaPreviousValue || '').trim();
     task.specialistaDecision = 'zamítnut ručně';
-    showToast(`✕ SPECIALISTA zamítnut: ${task.key}`);
+    showToast(t('toast.specialista.rejected', { key: task.key }));
   }
   saveProgress();
   if (activeKey === task.key) renderDetail();
@@ -3493,11 +4370,11 @@ function setTopicRepairDetectedTopicDecision(taskIndex, topicId, decision) {
   if (decision === 'accept') {
     translated[task.key][topicId] = String(row.candidateValue || '').trim();
     row.decision = 'přijat ručně';
-    showToast(`✓ Potvrzeno ${TOPIC_LABELS[topicId] || topicId}: ${task.key}`);
+    showToast(t('toast.topic.approved', { topic: TOPIC_LABELS[topicId] || topicId, key: task.key }));
   } else {
     translated[task.key][topicId] = String(row.previousValue || '').trim();
     row.decision = 'zamítnut ručně';
-    showToast(`✕ Zamítnuto ${TOPIC_LABELS[topicId] || topicId}: ${task.key}`);
+    showToast(t('toast.topic.rejected', { topic: TOPIC_LABELS[topicId] || topicId, key: task.key }));
   }
   if (topicId === 'specialista') {
     task.specialistaDecision = row.decision;
@@ -3531,17 +4408,17 @@ function applyTopicRepairSelected() {
   const checkedOk = state.tasks.filter(t => t.checked && hasMeaningfulValue(t.candidateValue));
   if (applied === 0) {
     if (eligible.length && !checkedOk.length) {
-      showToast('⚠ Zaškrtni řádky s platným návrhem (po „horší“ analýze zůstávají odškrtnuté).');
+      showToast(t('toast.topicRepair.checkValidRows'));
     } else if (!eligible.length) {
-      showToast('⚠ Žádný platný návrh k přepsání.');
+      showToast(t('toast.topicRepair.noValidProposal'));
     } else {
-      showToast('⚠ Nic nebylo označeno k přepsání');
+      showToast(t('toast.topicRepair.nothingMarked'));
     }
   } else {
     const keysInModal = [...new Set(state.tasks.map(t => t.key))];
     const allTopicsOk = keysInModal.every(k => getFailedTopicsForFallback(translated[k] || {}).length === 0);
     if (allTopicsOk) {
-      showToast(`✓ Přepsáno ${applied} témat — u těchto hesel je vše v pořádku, zavírám okno opravy.`);
+      showToast(t('toast.topic.overwrittenAndClosing', { count: applied }));
       stopTopicRepairTicker();
       topicRepairState.closed = true;
       closeTopicRepairModalSafe();
@@ -3552,7 +4429,7 @@ function applyTopicRepairSelected() {
         miniBtn.classList.remove('topicRepairMiniBusy');
       }
     } else {
-      showToast(`✓ Přepsáno ${applied} témat`);
+      showToast(t('toast.topic.overwritten.count', { count: applied }));
     }
   }
   syncTopicRepairMinimizeBusyIndicator();
@@ -3860,7 +4737,7 @@ function filterMissingTopicsList() {
   const filterEl = document.getElementById('filterStatus');
   if (filterEl) filterEl.value = 'missing_topic';
   renderList();
-  showToast('✓ Filtr: chybí některé téma');
+  showToast(t('toast.filter.missingTopic'));
 }
 
 function scrollToActive() {
@@ -4270,7 +5147,7 @@ async function refillSingleField(key, topicId) {
   const model = prov === (document.getElementById('provider').value || '') ? document.getElementById('model').value : getPipelineModelForProvider(prov);
   const apiKey = getCurrentApiKey(prov);
   if (!apiKey) {
-    showToast('✗ Zadej API klíč!');
+    showToast(t('toast.apiKey.enter'));
     return;
   }
   const prompt = buildTopicPrompt(key, topicId);
@@ -4287,9 +5164,9 @@ async function refillSingleField(key, topicId) {
     renderDetail();
     renderList();
     updateStats();
-    showToast(`✓ Doplněno pole ${TOPIC_LABELS[topicId] || topicId}`);
+    showToast(t('toast.field.filled', { topic: TOPIC_LABELS[topicId] || topicId }));
   } catch (e) {
-    showToast('✗ Doplnění selhalo: ' + e.message);
+    showToast(t('toast.error.withMessage', { message: e.message }));
   }
 }
 
@@ -4389,13 +5266,13 @@ function saveTopicRepairBatchPromptDraft() {
   if (!state) return;
   const topicId = document.getElementById('topicRepairBulkTopicSelect')?.value || state.bulkTopicId || 'all';
   if (topicId === 'all') {
-    showToast('⚠ Pro uložení promptu vyber konkrétní téma (ne „Vše“).');
+    showToast(t('toast.prompt.pickSpecificTopicSave'));
     return;
   }
   const ta = document.getElementById('topicRepairBatchPrompt');
   if (!ta) return;
   localStorage.setItem(getTopicRepairBatchPromptStorageKey(topicId), String(ta.value || ''));
-  showToast(`✓ Uložen batch prompt pro ${TOPIC_LABELS[topicId] || topicId}`);
+  showToast(t('toast.batchPrompt.saved', { topic: TOPIC_LABELS[topicId] || topicId }));
 }
 
 function resetTopicRepairBatchPromptToDefault() {
@@ -4403,13 +5280,13 @@ function resetTopicRepairBatchPromptToDefault() {
   if (!state) return;
   const topicId = document.getElementById('topicRepairBulkTopicSelect')?.value || state.bulkTopicId || 'all';
   if (topicId === 'all') {
-    showToast('⚠ Pro obnovu výchozího promptu vyber konkrétní téma (ne „Vše“).');
+    showToast(t('toast.prompt.pickSpecificTopicReset'));
     return;
   }
   localStorage.removeItem(getTopicRepairBatchPromptStorageKey(topicId));
   const ta = document.getElementById('topicRepairBatchPrompt');
   if (ta) ta.value = applyPromptLanguageTokens(getDefaultBatchTopicPromptTemplate(topicId));
-  showToast(`↺ Obnoven výchozí batch prompt pro ${TOPIC_LABELS[topicId] || topicId}`);
+  showToast(t('toast.batchPrompt.reset', { topic: TOPIC_LABELS[topicId] || topicId }));
 }
 
 function refreshTopicRepairBatchPromptEditor() {
@@ -4607,7 +5484,7 @@ async function runTopicRepairBulkTranslationCore(state, topicId, promptTemplate,
     const model = getPipelineModelForProvider(prov) || document.getElementById('model')?.value;
     const apiKey = getCurrentApiKey(prov);
     if (!apiKey) {
-      showToast(`✗ Zadej API klíč pro ${prov}.`);
+      showToast(t('toast.apiKey.enterForProvider', { provider: prov }));
       throw new Error('missing_api_key');
     }
 
@@ -4664,7 +5541,7 @@ async function runTopicRepairBulkTranslation() {
 
   const activeProvider = resolveMainBatchProvider(document.getElementById('provider')?.value || '');
   if (!isAutoProviderEnabled(activeProvider)) {
-    showToast('⚠ Zapni alespoň jednoho AI providera pro hromadný překlad.');
+    showToast(t('toast.provider.enableOne'));
     return;
   }
 
@@ -4679,7 +5556,7 @@ async function runTopicRepairBulkTranslation() {
   state.paused = true;
   const idleOk = await waitTopicRepairSequentialIdle();
   if (!idleOk) {
-    showToast('⚠ Sekvenční oprava stále běží — nejdřív dej Pauza a počkej na dokončení aktuálního pokusu.');
+    showToast(t('toast.topicRepair.sequentialRunning'));
     state.paused = wasPaused;
     topicRepairBulkRunning = false;
     if (bulkBtn) {
@@ -4696,7 +5573,7 @@ async function runTopicRepairBulkTranslation() {
       const mask = state.bulkListTopicFilter || defaultBulkListTopicFilter();
       const topicsToRun = TOPIC_REPAIR_BULK_TOPIC_ORDER.filter(id => mask[id] !== false);
       if (!topicsToRun.length) {
-        showToast('⚠ V režimu „Vše“ zaškrtni aspoň jedno téma v „Zobrazit v seznamu“.');
+        showToast(t('toast.topicRepair.pickTopicInAllMode'));
         return;
       }
       let ranAny = false;
@@ -4719,19 +5596,19 @@ async function runTopicRepairBulkTranslation() {
     } else {
       const promptTemplate = applyPromptLanguageTokens(String(document.getElementById('topicRepairBatchPrompt')?.value || '').trim());
       if (!promptTemplate) {
-        showToast('✗ Batch prompt je prázdný');
+        showToast(t('toast.batchPrompt.empty'));
         return;
       }
       const res = await runTopicRepairBulkTranslationCore(state, selTopic, promptTemplate, onlyFailed, bs);
       if (res.count === 0) {
-        showToast('⚠ Nic není vybrané pro hromadný běh (zkontroluj checkboxy / filtr chyb).');
+        showToast(t('toast.batchRun.nothingSelected'));
         return;
       }
-      showToast(`✓ Hromadná oprava tématu dokončena: ${TOPIC_LABELS[selTopic] || selTopic} (${res.count})`);
+      showToast(t('toast.topic.bulkDone', { topic: TOPIC_LABELS[selTopic] || selTopic, count: res.count }));
     }
   } catch (e) {
     if (e && e.message !== 'missing_api_key') {
-      showToast('✗ Hromadná oprava selhala: ' + (e.message || e));
+      showToast(t('toast.error.withMessage', { message: (e.message || e) }));
     }
   } finally {
     state.paused = wasPaused;
@@ -4871,7 +5748,7 @@ async function runTopicPromptAI() {
   const model = prov === (document.getElementById('provider').value || '') ? document.getElementById('model').value : getPipelineModelForProvider(prov);
   const apiKey = getCurrentApiKey(prov);
   if (!apiKey) {
-    showToast('✗ Zadej API klíč!');
+    showToast(t('toast.apiKey.enter'));
     return;
   }
 
@@ -4882,7 +5759,7 @@ async function runTopicPromptAI() {
 
   const customPrompt = promptInput.value.trim();
   if (!customPrompt) {
-    showToast('✗ Prompt je prázdný');
+    showToast(t('toast.prompt.empty'));
     return;
   }
 
@@ -4903,7 +5780,7 @@ async function runTopicPromptAI() {
     console.groupEnd();
   } catch (e) {
     logError('runTopicPromptAI', e, { key: topicPromptState.key, topic: topicPromptState.topicId });
-    showToast('✗ Chyba: ' + e.message);
+    showToast(t('toast.error.withMessage', { message: e.message }));
   } finally {
     runBtn.disabled = false;
     runBtn.textContent = '▶ Odeslat AI';
@@ -4930,7 +5807,7 @@ function applyTopicPromptResult() {
   renderList();
   updateStats();
   closeTopicPromptModal();
-  showToast(`✓ Uloženo do pole ${TOPIC_LABELS[topicId] || topicId}`);
+  showToast(t('toast.topic.savedToField', { topic: TOPIC_LABELS[topicId] || topicId }));
 }
 
 function getSpecialistaQualityScore(text) {
@@ -5083,7 +5960,7 @@ function closeTopicPromptModal() {
 function openSystemPromptModal(key) {
   const entry = entryMap.get(key);
   if (!entry) {
-    showToast('✗ Heslo nenalezeno');
+    showToast(t('toast.entry.notFound'));
     return;
   }
   const messages = buildPromptMessages([entry]);
@@ -5120,7 +5997,7 @@ async function runSystemPromptAI() {
   const model = prov === (document.getElementById('provider').value || '') ? document.getElementById('model').value : getPipelineModelForProvider(prov);
   const apiKey = getCurrentApiKey(prov);
   if (!apiKey) {
-    showToast('✗ Zadej API klíč!');
+    showToast(t('toast.apiKey.enter'));
     return;
   }
   const promptInput = document.getElementById('systemPromptInput');
@@ -5129,7 +6006,7 @@ async function runSystemPromptAI() {
   if (!promptInput || !resultInput || !runBtn) return;
   const userPrompt = String(promptInput.value || '').trim();
   if (!userPrompt) {
-    showToast('✗ Prompt je prázdný');
+    showToast(t('toast.prompt.empty'));
     return;
   }
   runBtn.disabled = true;
@@ -5153,12 +6030,12 @@ async function runSystemPromptAI() {
       renderDetail();
       renderList();
       updateStats();
-      showToast(`✓ Přeloženo přes System prompt: ${key}`);
+      showToast(t('toast.translatedSystem.key', { key }));
     } else {
-      showToast('⚠ AI odpověď nešla spárovat na toto heslo');
+      showToast(t('toast.aiResponse.unmatched'));
     }
   } catch (e) {
-    showToast('✗ Chyba: ' + e.message);
+    showToast(t('toast.error.withMessage', { message: e.message }));
   } finally {
     runBtn.disabled = false;
     runBtn.textContent = '▶ Odeslat AI';
@@ -5451,7 +6328,7 @@ async function translateSingle(key) {
   const model = getPipelineModelForProvider(prov) || document.getElementById('model').value;
 
    if (!apiKey) {
-     showToast(`✗ Zadej API klíč pro ${prov}.`);
+     showToast(t('toast.apiKey.enterForProvider', { provider: prov }));
      if (btn) { btn.disabled = false; btn.textContent = '⚡ Přeložit toto heslo'; }
      return;
    }
@@ -5495,7 +6372,7 @@ ORIG: ${e.orig || ''}`;
        provider: prov,
        model
      });
-     showToast('✗ Chyba: ' + e.message);
+     showToast(t('toast.error.withMessage', { message: e.message }));
    }
   
   if (btn) { btn.disabled = false; btn.textContent = '⚡ Přeložit toto heslo'; }
@@ -5526,7 +6403,7 @@ async function translateNext() {
   if (autoRunning) return;
   const activeProvider = resolveMainBatchProvider(document.getElementById('provider')?.value || '');
   if (!isAutoProviderEnabled(activeProvider)) {
-    showToast('⚠ Zapni alespoň jednoho AI providera pro hromadný překlad.');
+    showToast(t('toast.provider.enableOne'));
     return;
   }
   
@@ -5544,10 +6421,10 @@ async function translateNext() {
   
   if (!batch.length) { 
     if (retryMode) {
-      showToast('✓ Retry dokončeno!');
+      showToast(t('toast.retry.done'));
       retryMode = false;
     } else {
-      showToast('✓ Vše přeloženo!'); 
+      showToast(t('toast.allTranslated')); 
     }
     stopElapsedTimer();
     return; 
@@ -5570,10 +6447,10 @@ async function translateNext() {
 
 function jumpToStart() {
   const num = parseInt(document.getElementById('startFrom').value);
-  if (!num || num < 1) { showToast('Zadej číslo G hesla'); return; }
+  if (!num || num < 1) { showToast(t('toast.jump.enterGNumber')); return; }
   const key = 'G' + num;
   const found = entryMap.get(key);
-  if (!found) { showToast(`G${num} nenalezeno v souboru`); return; }
+  if (!found) { showToast(t('toast.entry.notFoundInFile', { key: `G${num}` })); return; }
 
   // Označ všechna hesla PŘED tímto číslem jako přeskočená (zachováme existující překlady)
   for (const e of entries) {
@@ -5585,7 +6462,7 @@ function jumpToStart() {
    saveProgress();
    updateStats();
    renderList();
-   showToast(`✓ Překlad bude pokračovat od G${num}`);
+   showToast(t('toast.translation.resumeFrom', { key: `G${num}` }));
    // Scroll na heslo v listu (virtuální)
    setTimeout(() => {
      const scroll = document.getElementById('listScroll');
@@ -5985,7 +6862,7 @@ async function translateBatch(keys, depth = 0) {
   currentInterval = parseInt(document.getElementById('intervalRun').value);
   currentBatchSize = parseInt(document.getElementById('batchSizeRun').value);
 
-  if (!apiKey) { showToast(`✗ Zadej API klíč pro ${prov}.`); return { ok: false }; }
+  if (!apiKey) { showToast(t('toast.apiKey.enterForProvider', { provider: prov })); return { ok: false }; }
 
   // Start timer při prvním překladu
   if (!startTime) {
@@ -6132,7 +7009,7 @@ ${keys.map(k => {
         }
       }
       log(`⚠ Pozor: Přeloženo ${translatedCount}/${keys.length} hesel. Zkuste menší dávku.`);
-      showToast(`⚠ Přeloženo ${translatedCount}/${keys.length} hesel`);
+      showToast(t('toast.translated.partial', { translated: translatedCount, total: keys.length }));
     }
     
      saveProgress();
@@ -6168,7 +7045,7 @@ ${keys.map(k => {
           cooldownSeconds,
           error: e.message
         });
-        showToast(`⏳ Rate limit — další pokus za ${cooldownSeconds}s`);
+        showToast(t('toast.rateLimit.retryIn', { seconds: cooldownSeconds }));
         return { ok: false, rateLimited: true, cooldownSeconds };
       }
       logError('translateBatch', e, {
@@ -6194,7 +7071,7 @@ ${keys.map(k => {
         avgLatencyMs: reqMs
       });
       updateFailedCount();
-      showToast('✗ ' + e.message);
+      showToast(t('toast.error.withMessage', { message: e.message }));
       return { ok: false };
    }
 }
@@ -6295,7 +7172,7 @@ async function callAIWithRetry(provider, apiKey, model, messages) {
            logWarn('callAIWithRetry', `Rate limit na ${m}, čekám ${wait}s...`, {
              provider, model: m, attempt: attempt + 1, waitSeconds: wait
            });
-           showToast(`⏳ Rate limit — čekám ${wait}s${shouldSwitchModelImmediately ? ', pak zkusím jiný model' : ''}`);
+           showToast(t('toast.rateLimit.waiting', { seconds: wait, suffix: shouldSwitchModelImmediately ? ', then try another model' : '' }));
            await sleep(wait * 1000);
            if (shouldSwitchModelImmediately) {
              // U Groq je praktičtější při rate limitu rychle přeskočit na další model.
@@ -6308,7 +7185,7 @@ async function callAIWithRetry(provider, apiKey, model, messages) {
            logWarn('callAIWithRetry', `Timeout/abort na ${m} (pokus ${attempt + 1}), opakuji za ${wait}s...`, {
              provider, model: m, attempt: attempt + 1, waitSeconds: wait, error: e.message
            });
-           showToast(`⏳ Timeout API — opakuji pokus za ${wait}s`);
+           showToast(t('toast.timeout.retryIn', { seconds: wait }));
            await sleep(wait * 1000);
            continue;
          }
@@ -6317,7 +7194,7 @@ async function callAIWithRetry(provider, apiKey, model, messages) {
            logWarn('callAIWithRetry', `503 Service Unavailable na ${m} (pokus ${attempt + 1}), opakuji za ${wait}s...`, {
              provider, model: m, attempt: attempt + 1, waitSeconds: wait, error: e.message
            });
-           showToast(`⏳ 503 Service Unavailable — opakuji pokus za ${wait}s`);
+           showToast(t('toast.serviceUnavailable.retryIn', { seconds: wait }));
            await sleep(wait * 1000);
            continue;
          }
@@ -6532,7 +7409,7 @@ function startAuto() {
   startAutoProviderCountdownTicker();
   if (isAutoTokenLimitReached()) {
     stopAuto();
-    showToast('⚠ AUTO nestartoval: dosažen limit tokenů');
+    showToast(t('toast.auto.notStartedTokenLimit'));
     return;
   }
   runAutoStep();
@@ -6651,20 +7528,20 @@ async function runAutoStep() {
     if (!isAutoProviderEnabled('groq')) {
       stopAuto();
       log('🛑 AUTO zastaven: Groq je vypnutý v AUTO panelu');
-      showToast('⚠ Zapni Groq checkbox pro AUTO překlad');
+      showToast(t('toast.auto.enableGroq'));
       return;
     }
     if (isAutoTokenLimitReached()) {
       stopAuto();
       log('🛑 AUTO zastaven: dosažen limit tokenů');
-      showToast('🛑 AUTO zastaven: dosažen limit tokenů');
+      showToast(t('toast.auto.stoppedTokenLimit'));
       return;
     }
 
     const batch = getNextBatch(currentBatchSize);
     if (!batch.length) {
       stopAuto();
-      showToast('✓ Překlad dokončen!');
+      showToast(t('toast.translation.done'));
       return;
     }
 
@@ -6729,7 +7606,7 @@ function saveProgressImmediate() {
        translatedCount: Object.keys(translated).length,
        approxSizeKB: JSON.stringify(translated).length / 1024
      });
-     showToast('⚠ localStorage plný — exportuj zálohu!');
+     showToast(t('toast.storage.full'));
    }
 }
 
@@ -6815,7 +7692,7 @@ function hasUndo() {
 
 function restoreFromBackup(source) {
   const d = source === 'undo' ? hasUndo() : hasBackup();
-  if (!d) { showToast('✗ Žádná záloha není k dispozici'); return; }
+  if (!d) { showToast(t('toast.backup.none')); return; }
   const count = Object.keys(d.translated).length;
   if (!confirm(`Obnovit ${count} hesel ze zálohy (${new Date(d.ts).toLocaleString('cs')})? Současný stav bude přepsán.`)) return;
   // Ulož aktuální stav jako undo před přepsáním
@@ -6826,7 +7703,7 @@ function restoreFromBackup(source) {
   renderList();
   updateFailedCount();
   if (source === 'undo') localStorage.removeItem(undoKey());
-  showToast(`✓ Obnoveno ${count} hesel`);
+  showToast(t('toast.restored.count', { count }));
 }
 
 function clearProgress() {
@@ -6839,7 +7716,7 @@ function clearProgress() {
   renderList();
   clearLog();
   const pane = document.getElementById('detailPane');
-  if (pane) pane.innerHTML = '<div class="detail-empty">← Klikni na heslo v seznamu pro detail</div>';
+  if (pane) pane.innerHTML = `<div class="detail-empty">${t('detail.empty')}</div>`;
   showToastWithAction('Průběh smazán. Obnovit?', 'Obnovit', () => restoreFromBackup('undo'));
 }
 
@@ -6849,7 +7726,7 @@ function exportTXT() {
     const t = translated[e.key];
     return t && t.vyznam && t.vyznam !== '—' && !t.skipped;
   });
-  if (!done.length) { showToast('Žádné přeložené heslo'); return; }
+  if (!done.length) { showToast(t('toast.noTranslatedEntry')); return; }
 
   const lines = done.map(e => {
     const t = translated[e.key];
@@ -6869,7 +7746,7 @@ function exportTXT() {
   });
 
   download('strong_gr_cz_v2.txt', lines.join('\n'), 'text/plain');
-  showToast(`✓ Exportováno ${done.length} hesel`);
+  showToast(t('toast.exported.count', { count: done.length }));
 }
 
 function exportJSON() {
@@ -6879,7 +7756,7 @@ function exportJSON() {
     out[e.key] = { greek: e.greek, ...translated[e.key] };
   }
   download('strong_gr_cz_v2.json', JSON.stringify(out, null, 2), 'application/json');
-  showToast(`✓ Exportováno ${Object.keys(out).length} hesel`);
+  showToast(t('toast.exported.count', { count: Object.keys(out).length }));
 }
 
 function download(name, content, type) {
@@ -6966,14 +7843,14 @@ function onApiKeyProfileChange() {
   document.getElementById('apiKey').value = profile.key || '';
   localStorage.setItem(API_KEY_ACTIVE_PROFILE_PREFIX + prov, profile.id);
   saveApiKey();
-  showToast(`✓ Aktivní API klíč: ${profile.name || 'bez názvu'}`);
+  showToast(t('toast.apiKey.activeProfile', { name: profile.name || (getUiLang() === 'en' ? 'unnamed' : 'bez názvu') }));
 }
 
 function saveCurrentApiKeyAsProfile() {
   const prov = document.getElementById('provider').value;
   const key = document.getElementById('apiKey').value.trim();
   if (!key) {
-    showToast('✗ Nejdřív vlož API klíč');
+    showToast(t('toast.apiKey.insertFirst'));
     return;
   }
   const defaultName = `${PROVIDERS[prov]?.label?.split(' ')[0] || prov} ${new Date().toLocaleDateString('cs-CZ')}`;
@@ -6999,7 +7876,7 @@ function deleteApiKeyProfile() {
   const prov = document.getElementById('provider').value;
   const select = document.getElementById('apiKeyProfile');
   if (!select || select.value === '__manual__') {
-    showToast('⚠ Vyber uložený klíč k odstranění');
+    showToast(t('toast.apiKey.selectToDelete'));
     return;
   }
   const profiles = getApiKeyProfiles(prov);
@@ -7010,7 +7887,7 @@ function deleteApiKeyProfile() {
   setApiKeyProfiles(prov, filtered);
   localStorage.removeItem(API_KEY_ACTIVE_PROFILE_PREFIX + prov);
   setupApiKeySwitcher(prov);
-  showToast('✓ API klíč odstraněn z knihovny');
+  showToast(t('toast.apiKey.deleted'));
 }
 
 function getCurrentApiKey(prov) {
@@ -7084,8 +7961,11 @@ function loadSavedSettings() {
   
   const targetEl = document.getElementById('targetLanguage');
   const sourceEl = document.getElementById('sourceLanguage');
+  const uiEl = document.getElementById('uiLanguage');
   if (targetEl) targetEl.value = targetLang;
   if (sourceEl) sourceEl.value = sourceLang;
+  if (uiEl) uiEl.value = getUiLang();
+  applyUiLanguage();
 
   const tokenLimitEl = document.getElementById('autoTokenLimit');
   if (tokenLimitEl) {
@@ -7164,11 +8044,11 @@ function logEntry(keys, rawResponse) {
         <span class="log-greek">${escHtml(e.greek)}</span>
       </div>
       ${t && !t.skipped
-        ? `<div class="log-vyznam"><b>Význam:</b> ${escHtml(t.vyznam || '—')}</div>
+        ? `<div class="log-vyznam"><b>${t('log.meaning')}</b> ${escHtml(t.vyznam || '—')}</div>
            <div class="log-definice">${escHtml((t.definice || '').slice(0, 120))}${(t.definice || '').length > 120 ? '…' : ''}</div>
            ${t.kjv ? `<div class="log-orig"><b>KJV:</b> ${escHtml(t.kjv.slice(0, 80))}${(t.kjv || '').length > 80 ? '…' : ''}</div>` : ''}
-           <div class="log-orig"><b>Použití:</b> ${escHtml((t.pouziti || '').slice(0, 80))}${(t.pouziti || '').length > 80 ? '…' : ''}</div>`
-        : `<div class="log-err">⚠ Neparsováno</div>`
+           <div class="log-orig"><b>${t('log.usage')}</b> ${escHtml((t.pouziti || '').slice(0, 80))}${(t.pouziti || '').length > 80 ? '…' : ''}</div>`
+        : `<div class="log-err">${t('log.unparsed')}</div>`
       }
     `;
     scroll.appendChild(div);
@@ -7179,7 +8059,7 @@ function logEntry(keys, rawResponse) {
   // Počítadlo
   const cnt = scroll.children.length;
   const countEl = document.getElementById('logCount');
-  if (countEl) countEl.textContent = `${cnt} záznamů`;
+  if (countEl) countEl.textContent = t('log.records', { count: cnt });
 
   // Limit entries in log
   while (scroll.children.length > CONFIG.LOG_MAX_ENTRIES) scroll.removeChild(scroll.firstChild);
@@ -7287,7 +8167,7 @@ function saveModelTestPromptSettings() {
 
 function closeModelTestModal() {
   if (modelTestRunning) {
-    showToast('⚠ Nejdřív zruš probíhající test');
+    showToast(t('toast.test.cancelFirst'));
     return;
   }
   const modal = document.getElementById('modelTestModal');
@@ -7299,7 +8179,7 @@ function cancelModelTest() {
   modelTestCancelRequested = true;
   if (modelTestAbortController) modelTestAbortController.abort();
   updateModelTestRunButton();
-  showToast('⏹ Ruším test modelů...');
+  showToast(t('toast.test.canceling'));
 }
 
 function modelTestClearCountdownInterval() {
@@ -7487,7 +8367,7 @@ function renderModelStatsTable() {
 async function saveModelTestOutputTxt() {
   const text = document.getElementById('modelTestOutput')?.value || '';
   if (!text.trim()) {
-    showToast('⚠ Není co uložit do test.txt');
+    showToast(t('toast.test.nothingToSave'));
     return;
   }
   if (window.showSaveFilePicker) {
@@ -7505,20 +8385,20 @@ async function saveModelTestOutputTxt() {
       await writable.write(text);
       await writable.close();
       modelTestSetLastStatus(`Uloženo: ${handle.name || DEFAULT_MODEL_TEST_LOG_FILENAME}`, 'ok');
-      showToast(`✓ Uloženo: ${handle.name || DEFAULT_MODEL_TEST_LOG_FILENAME}`);
+      showToast(t('toast.saved.filename', { name: handle.name || DEFAULT_MODEL_TEST_LOG_FILENAME }));
       return;
     } catch (e) {
       const msg = String(e?.message || '');
       if (/AbortError/i.test(msg)) {
-        showToast('Uložení zrušeno');
+        showToast(t('toast.save.canceled'));
         return;
       }
-      showToast(`⚠ Uložení přes dialog selhalo, použiji stažení: ${msg || 'neznámá chyba'}`);
+      showToast(t('toast.saveDialogFailedFallback', { message: msg || (getUiLang() === 'en' ? 'unknown error' : 'neznámá chyba') }));
     }
   }
   download(DEFAULT_MODEL_TEST_LOG_FILENAME, text, 'text/plain');
   modelTestSetLastStatus(`Staženo: ${DEFAULT_MODEL_TEST_LOG_FILENAME}`, 'ok');
-  showToast(`✓ Staženo: ${DEFAULT_MODEL_TEST_LOG_FILENAME}`);
+  showToast(t('toast.downloaded.filename', { name: DEFAULT_MODEL_TEST_LOG_FILENAME }));
 }
 
 function saveModelTestRawOutputToStorage() {
@@ -7532,7 +8412,7 @@ function clearModelTestRawOutputFromStorage() {
 async function saveModelTestRawOutputTxt() {
   const rows = Array.isArray(modelTestRawResponses) ? modelTestRawResponses : [];
   if (!rows.length) {
-    showToast('⚠ Zatím není žádná raw odpověď k uložení');
+    showToast(t('toast.test.noRawYet'));
     return;
   }
   const body = rows.map((row, idx) => {
@@ -7542,7 +8422,7 @@ async function saveModelTestRawOutputTxt() {
     return `${header}\n${promptBlock}\n${rawBlock}`;
   }).join('\n\n');
   download(`strong_model_test_raw_${Date.now()}.txt`, body, 'text/plain');
-  showToast('✓ Raw odpovědi staženy');
+  showToast(t('toast.test.rawDownloaded'));
 }
 
 function loadModelTestOutputFromFile(input) {
@@ -7558,11 +8438,11 @@ function loadModelTestOutputFromFile(input) {
     }
     saveModelTestOutputToStorage(text);
     modelTestSetLastStatus(`Načteno: ${file.name}`, 'ok');
-    showToast(`✓ Načteno: ${file.name}`);
+    showToast(t('toast.loaded.filename', { name: file.name }));
     if (input) input.value = '';
   };
   reader.onerror = () => {
-    showToast('✗ Soubor se nepodařilo načíst');
+    showToast(t('toast.file.loadFailed'));
     if (input) input.value = '';
   };
   reader.readAsText(file, 'utf-8');
@@ -7625,7 +8505,7 @@ function scrollModelTestOutputIntoView() {
 
 function openModelTestModal() {
   if (autoRunning || autoStepRunning) {
-    showToast('⚠ Nejdřív zastav AUTO');
+    showToast(t('toast.auto.stopFirst'));
     return;
   }
   const prov = document.getElementById('provider')?.value || 'groq';
@@ -7638,7 +8518,7 @@ function openModelTestModal() {
 
 function resetModelTestModal() {
   if (modelTestRunning) {
-    showToast('⚠ Nejprve zruš probíhající test');
+    showToast(t('toast.test.cancelFirstAlt'));
     return;
   }
   const output = document.getElementById('modelTestOutput');
@@ -7846,11 +8726,11 @@ function exportModelTestTranslationsTxt() {
   } else if (reportFallback) {
     body = `# Žádné nově parsované bloky v paměti — celý aktuální text z okna\n# ${new Date().toLocaleString('cs-CZ')}\n\n${reportFallback}`;
   } else {
-    showToast('⚠ Není co exportovat');
+    showToast(t('toast.export.nothing'));
     return;
   }
   download(`strong_model_test_export_${Date.now()}.txt`, body, 'text/plain');
-  showToast('✓ Stažení TXT');
+  showToast(t('toast.export.txtDownloaded'));
 }
 
 function getApiKeyForModelTest(prov) {
@@ -8104,7 +8984,7 @@ function getProviderModelOptions(prov) {
 async function runModelTestFromModal() {
   if (modelTestRunning) {
     cancelModelTest();
-    showToast('⏸ Test se zastaví. Další kliknutí na ▶ spustí nový běh.');
+    showToast(t('toast.test.pausing'));
     return;
   }
   restoreModelTestReportFromBackup();
@@ -8129,7 +9009,7 @@ function showModelTestLibrary() {
   const output = document.getElementById('modelTestOutput');
   if (!output) return;
   if (modelTestRunning) {
-    showToast('⚠ Knihovna je dostupná po zastavení testu, aby se nepřepsal živý report.');
+    showToast(t('toast.test.libraryAfterStop'));
     return;
   }
   if (!modelTestLibraryActive) {
@@ -8185,12 +9065,12 @@ async function copyModelTestOutput() {
   if (!output) return;
   const text = output.value || '';
   if (!text.trim()) {
-    showToast('⚠ Není co kopírovat');
+    showToast(t('toast.copy.nothing'));
     return;
   }
   try {
     await navigator.clipboard.writeText(text);
-    showToast('✓ Výstup zkopírován');
+    showToast(t('toast.output.copied'));
     if (btn) {
       btn.textContent = '✓ Zkopírováno';
       setTimeout(() => { btn.textContent = originalBtnText; }, 1200);
@@ -8199,7 +9079,7 @@ async function copyModelTestOutput() {
     output.focus();
     output.select();
     document.execCommand('copy');
-    showToast('✓ Výstup zkopírován');
+    showToast(t('toast.output.copied'));
     if (btn) {
       btn.textContent = '✓ Zkopírováno';
       setTimeout(() => { btn.textContent = originalBtnText; }, 1200);
@@ -8214,7 +9094,7 @@ function clearModelTestOutput() {
   modelTestOutputBackupBeforeLibrary = '';
   modelTestLibraryActive = false;
   clearModelTestOutputFromStorage();
-  showToast('✓ Výstup testu vymazán');
+  showToast(t('toast.output.cleared'));
 }
 
 function getSampleEntriesForModelTest(count = 3) {
@@ -8547,7 +9427,7 @@ async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSign
 
 async function testCurrentProviderModels(forcedProvider = null, resetReport = true, forcedMode = null, forcedPromptType = null, forcedPromptEnabled = null) {
   if (autoRunning || autoStepRunning) {
-    showToast('⚠ Nejdřív zastav AUTO');
+    showToast(t('toast.auto.stopFirst'));
     return;
   }
 
@@ -8576,12 +9456,12 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
     for (const currentProv of providerTargets) {
       const apiKey = getApiKeyForModelTest(currentProv);
       if (!apiKey) {
-        showToast(`✗ Chybí API klíč pro ${PROVIDERS[currentProv]?.label || currentProv}`);
+        showToast(t('toast.apiKey.missingForProviderLabel', { provider: PROVIDERS[currentProv]?.label || currentProv }));
         continue;
       }
       const selectedModel = getModelTestSelectedModelForProvider(currentProv);
       if (!selectedModel) {
-        showToast(`⚠ Není vybraný model pro ${PROVIDERS[currentProv]?.label || currentProv}`);
+        showToast(t('toast.model.notSelectedForProviderLabel', { provider: PROVIDERS[currentProv]?.label || currentProv }));
         continue;
       }
       executionQueue.push({
@@ -8607,7 +9487,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
     updateModelTestProviderUi();
   }
   if (!outputEl) {
-    showToast('✗ Chybí výstupní okno testu modelů');
+    showToast(t('toast.test.outputMissing'));
     return;
   }
   outputEl.value = shouldAppend ? snapshotBefore : '';
@@ -8886,7 +9766,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
           appendReport('Stav: PŘESKOČENO (global rate limit)');
           appendReport('');
         }
-        showToast('⚠ Test předčasně ukončen kvůli rate limitu');
+        showToast(t('toast.test.rateLimitAbort'));
         break;
       }
       if (!modelTestCancelRequested) {
@@ -8913,7 +9793,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
       partial: testResults.filter(r => r.status === 'PARTIAL').length,
       topModels: okModels
     });
-    showToast(modelTestCancelRequested ? '⏹ Test modelů zrušen' : `✓ Test modelů dokončen (${executionQueue.length})`);
+    showToast(modelTestCancelRequested ? (getUiLang() === 'en' ? '⏹ Model test canceled' : '⏹ Test modelů zrušen') : t('toast.modelTest.doneWithCount', { count: executionQueue.length }));
   } finally {
     modelTestClearCountdownInterval();
     modelTestStopProviderCountdownTicker();
@@ -8992,7 +9872,7 @@ function updateETA() {
 let modalCallback = null;
 
 function selectRange() {
-  document.getElementById('modalTitle').textContent = 'Označit rozsah hesel';
+  document.getElementById('modalTitle').textContent = t('modal.selectRange.title');
   document.getElementById('modalFrom').value = '1';
   document.getElementById('modalTo').value = '100';
   modalCallback = function() {
@@ -9010,7 +9890,7 @@ function selectRange() {
     if (filterStatusEl) filterStatusEl.value = 'all';
     if (filterSortEl) filterSortEl.value = 'num';
     renderList();
-    showToast(`✓ Označeno ${selectedKeys.size} hesel, zobrazen rozsah ${from}–${to}`);
+    showToast(t('toast.selected.range', { count: selectedKeys.size, from, to }));
   };
   document.getElementById('customModal').classList.add('show');
 }
@@ -9075,7 +9955,7 @@ function showLimitsModal() {
   const modelLabel = document.getElementById('model')?.selectedOptions?.[0]?.text || model;
   
   document.getElementById('limitsProviderInfo').textContent = `Provider: ${PROVIDERS[prov]?.label || prov} | Model: ${modelLabel}`;
-  document.getElementById('limitsContent').innerHTML = '<div class="limits-loading">Načítám...</div>';
+  document.getElementById('limitsContent').innerHTML = `<div class="limits-loading">${t('limits.loading')}</div>`;
   document.getElementById('limitsNote').style.display = 'none';
   document.getElementById('limitsModal').classList.add('show');
   
@@ -9136,7 +10016,7 @@ async function fetchLimits(prov, model) {
       noteText.innerHTML = 'Google neposkytuje API pro kontrolu limitů. Zkontrolujte limity manuálně v <a href="https://aistudio.google.com/app" target="_blank">AI Studio</a> nebo Google Cloud Console → Quotas.<br>Limity se resetují o půlnoci Pacific Time.';
     }
   } catch (e) {
-    content.innerHTML = `<div style="color:var(--red);padding:10px">Chyba: ${e.message}</div>`;
+    content.innerHTML = `<div style="color:var(--red);padding:10px">${t('limits.error', { message: e.message })}</div>`;
   }
 }
 
@@ -9524,7 +10404,7 @@ function applySystemPromptForCurrentTask() {
   setMainPrompt(systemPrompt, 'system');
   const editor = document.getElementById('promptLibraryEditor');
   if (editor) editor.value = systemPrompt;
-  showToast(`✓ Nastaven systémový prompt (${context === 'topic' ? 'téma' : 'dávka'})`);
+  showToast(t('toast.systemPrompt.set', { mode: context === 'topic' ? (getUiLang() === 'en' ? 'topic' : 'téma') : (getUiLang() === 'en' ? 'batch' : 'dávka') }));
 }
 
 function togglePromptModeQuick() {
@@ -9532,15 +10412,15 @@ function togglePromptModeQuick() {
   const customSaved = localStorage.getItem('strong_custom_prompt') || '';
   if (mode === 'custom') {
     setMainPrompt(getSystemPromptForCurrentTask('batch'), 'system');
-    showToast('✓ Přepnuto na systémový prompt');
+    showToast(t('toast.prompt.switchedSystem'));
     return;
   }
   if (customSaved.trim()) {
     setMainPrompt(customSaved, 'custom');
-    showToast('✓ Přepnuto na vlastní prompt');
+    showToast(t('toast.prompt.switchedCustom'));
     return;
   }
-  showToast('⚠ Vlastní prompt není uložen');
+  showToast(t('toast.prompt.customNotSaved'));
 }
 
 function updatePromptAutoButton() {
@@ -9556,7 +10436,7 @@ function togglePromptAutoMode() {
   const on = isPromptAutoModeEnabled();
   localStorage.setItem('strong_prompt_auto', on ? 'off' : 'on');
   updatePromptAutoButton();
-  showToast(`✓ Auto prompt ${on ? 'vypnut' : 'zapnut'}`);
+  showToast(t('toast.autoPrompt.toggled', { state: on ? (getUiLang() === 'en' ? 'off' : 'vypnut') : (getUiLang() === 'en' ? 'on' : 'zapnut') }));
 }
 
 let selectedPromptCategory = 'default';
@@ -9693,7 +10573,7 @@ function applySelectedPrompt() {
   const promptText = editor ? editor.value.trim() : '';
   
   if (!promptText) {
-    showToast('✗ Prompt je prázdný');
+    showToast(t('toast.prompt.empty'));
     return;
   }
   
@@ -9709,7 +10589,7 @@ function applySelectedPrompt() {
   }
   
   closePromptLibraryModal();
-  showToast('✓ Prompt uložen a použit');
+  showToast(t('toast.prompt.savedApplied'));
 }
 
 function exportPromptLibraryToTxt() {
@@ -9737,7 +10617,7 @@ function exportPromptLibraryToTxt() {
   a.click();
   a.remove();
   URL.revokeObjectURL(url);
-  showToast('✓ Prompty exportovány do TXT');
+  showToast(t('toast.prompt.exported'));
 }
 
 function importPromptLibraryFromFile(input) {
@@ -9779,9 +10659,9 @@ function importPromptLibraryFromFile(input) {
       rebuildPromptLibrary(localStorage.getItem('strong_prompt') || '');
       renderPromptList();
       renderPromptPreview();
-      showToast(`✓ Načteno promptů: ${totalImported}`);
+      showToast(t('toast.prompts.loaded.count', { count: totalImported }));
     } catch (err) {
-      showToast('✗ Nepodařilo se načíst soubor promptů');
+      showToast(t('toast.prompt.importFailed'));
       console.error(err);
     } finally {
       input.value = '';
@@ -9872,15 +10752,18 @@ function saveAISettings() {
     localStorage.setItem(`strong_ai_max_tokens_${prov}`, max);
   });
   closePromptAIModal();
-  showToast('✓ AI nastavení (hlavní + sekundární) uložena');
+  showToast(t('toast.ai.settings.saved'));
 }
 
 function showPromptLangModal() {
   const modal = document.getElementById('promptLangModal');
   const savedLang = localStorage.getItem('strong_target_lang') || 'cz';
   const savedSource = localStorage.getItem('strong_source_lang') || 'gr';
+  const savedUi = getUiLang();
   document.getElementById('targetLanguage').value = savedLang;
   document.getElementById('sourceLanguage').value = savedSource;
+  const uiLanguageEl = document.getElementById('uiLanguage');
+  if (uiLanguageEl) uiLanguageEl.value = savedUi;
   modal.style.display = 'flex';
   // Close on backdrop click
   modal.onclick = (e) => {
@@ -9895,21 +10778,27 @@ function closePromptLangModal() {
 function updatePromptLangButtonLabel() {
   const btn = document.getElementById('btnPromptLang');
   if (!btn) return;
+  const ui = getUiLang();
   let target = String(localStorage.getItem('strong_target_lang') || 'cz').toLowerCase();
   if (target === 'cs') target = 'cz';
-  btn.textContent = `🌐 Jazyk (${target})`;
+  btn.title = t('lang.btn.title');
+  btn.textContent = t('lang.btn.label', { ui, ai: target });
 }
 
 function saveLangSettings() {
   const target = document.getElementById('targetLanguage').value;
   const source = document.getElementById('sourceLanguage').value;
+  const uiRaw = String(document.getElementById('uiLanguage')?.value || DEFAULT_UI_LANG).toLowerCase();
+  const ui = UI_LANGS.has(uiRaw) ? uiRaw : DEFAULT_UI_LANG;
   localStorage.setItem('strong_target_lang', target);
   localStorage.setItem('strong_source_lang', source);
+  localStorage.setItem(UI_LANG_KEY, ui);
   refreshLanguageAwarePromptOptionLabels();
   applySystemPromptForCurrentTask();
+  applyUiLanguage();
   updatePromptLangButtonLabel();
   closePromptLangModal();
-  showToast('✓ Jazyková nastavení uložena + aktivován systémový prompt');
+  showToast(t('toast.lang.settings.saved'));
 }
 
 // Expose functions to window
@@ -9937,7 +10826,7 @@ function exportRange() {
     const t = translated[e.key];
     return n >= from && n <= to && t && t.vyznam && t.vyznam !== '—' && !t.skipped;
   });
-  if (!done.length) { showToast(`Žádná přeložená hesla v rozsahu G${from}–G${to}`); return; }
+  if (!done.length) { showToast(t('toast.noTranslatedInRange', { from: `G${from}`, to: `G${to}` })); return; }
 
   const lines = done.map(e => {
     const t = translated[e.key];
@@ -9948,7 +10837,7 @@ function exportRange() {
       `Původ: ${t.puvod || '—'}`, ''].join('\n');
   });
   download(`strong_gr_cz_G${from}-G${to}.txt`, lines.join('\n'), 'text/plain');
-  showToast(`✓ Exportováno ${done.length} hesel (G${from}–G${to})`);
+  showToast(t('toast.exported.range', { count: done.length, from: `G${from}`, to: `G${to}` }));
 }
 
 // ══ RESIZE PANELS ──────────────────────────────────────────────
@@ -10057,7 +10946,7 @@ function showToastWithAction(msg, actionLabel, onClick) {
   if (autoRunning && isAutoTokenLimitReached()) {
     stopAuto();
     log('🛑 AUTO zastaven po dávce: dosažen limit tokenů');
-    showToast('🛑 AUTO zastaven: dosažen limit tokenů');
+    showToast(t('toast.auto.stoppedTokenLimit'));
   }
 }
 
@@ -10094,7 +10983,12 @@ function refreshTokenStatsDisplay() {
   if (!el) return;
   const limit = getAutoTokenLimit();
   const suffix = limit > 0 ? ` / limit ${limit}` : '';
-  el.textContent = `📊 Celkem: ${totalTokens.in} in / ${totalTokens.out} out = ${totalTokens.total}${suffix}`;
+  el.textContent = t('stats.tokens', {
+    input: totalTokens.in,
+    output: totalTokens.out,
+    total: totalTokens.total,
+    suffix
+  });
 }
 
 // Preview modal pro hromadny preklad
@@ -10115,32 +11009,32 @@ function showPreviewModal(previewData) {
   }
 
   let html = `<div style="max-width:900px;margin:0 auto;background:var(--bg2);border:1px solid var(--brd);border-radius:8px;padding:20px">
-    <h2 style="color:var(--acc);margin:0 0 10px 0">Náhled překladu (${Object.keys(previewData).length} hesel)</h2>
+    <h2 style="color:var(--acc);margin:0 0 10px 0">${t('import.preview.title', { count: Object.keys(previewData).length })}</h2>
     <div style="font-size:11px;color:var(--txt2);margin-bottom:15px">
-      <b style="color:var(--acc3)">${newOnes}</b> nových · <b style="color:var(--acc2)">${conflicts}</b> už přeloženo v aktuálním slotu
+      ${t('import.preview.summary', { newOnes, conflicts })}
     </div>
     <div style="background:var(--bg3);border:1px solid var(--brd);border-radius:6px;padding:10px 12px;margin-bottom:15px">
-      <div style="font-size:11px;color:var(--txt2);margin-bottom:8px"><b>Režim importu:</b></div>
+      <div style="font-size:11px;color:var(--txt2);margin-bottom:8px"><b>${t('import.mode.title')}</b></div>
       <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;margin-bottom:4px">
         <input type="radio" name="importMode" value="missing" checked style="accent-color:var(--acc)">
-        <span>Jen chybějící — přidat pouze hesla, která zatím nejsou přeložena (<b>${newOnes}</b>)</span>
+        <span>${t('import.mode.missing', { count: newOnes })}</span>
       </label>
       <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;margin-bottom:4px">
         <input type="radio" name="importMode" value="all" style="accent-color:var(--acc)">
-        <span>Přepsat vše — nahradit stávající překlady (<b>${Object.keys(previewData).length}</b>)</span>
+        <span>${t('import.mode.all', { count: Object.keys(previewData).length })}</span>
       </label>
       <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px">
         <input type="radio" name="importMode" value="fillgaps" style="accent-color:var(--acc)">
-        <span>Doplnit prázdná pole — zachovat existující, přepsat jen „—" a prázdné hodnoty</span>
+        <span>${t('import.mode.fillgaps')}</span>
       </label>
     </div>
     <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap">
       <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:6px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px">
         <input type="checkbox" id="checkAllPreview" checked onchange="toggleAllPreview(this.checked)" style="width:16px;height:16px;accent-color:var(--acc)">
-        <span style="font-size:12px">Označit vše</span>
+        <span style="font-size:12px">${t('import.selectAll')}</span>
       </label>
-      <button class="hbtn grn" onclick="acceptPreview()">✓ Uložit označené</button>
-      <button class="hbtn red" onclick="discardPreview()">✕ Zrušit</button>
+      <button class="hbtn grn" onclick="acceptPreview()">${t('import.saveSelected')}</button>
+      <button class="hbtn red" onclick="discardPreview()">${t('import.cancel')}</button>
     </div>`;
   
   for (const [key, data] of Object.entries(previewData)) {
@@ -10155,26 +11049,26 @@ function showPreviewModal(previewData) {
         <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
           <input type="checkbox" class="preview-check" data-key="${key}" data-conflict="${isConflict ? '1' : '0'}" checked style="width:18px;height:18px;accent-color:var(--acc)">
           <span style="font-family:'JetBrains Mono';color:var(--acc);font-weight:bold">${key}</span>
-          ${isConflict ? '<span style="font-size:9px;padding:1px 6px;background:var(--acc2);color:#000;border-radius:3px">kolize</span>' : '<span style="font-size:9px;padding:1px 6px;background:var(--acc3);color:#000;border-radius:3px">nové</span>'}
+          ${isConflict ? `<span style="font-size:9px;padding:1px 6px;background:var(--acc2);color:#000;border-radius:3px">${t('import.badge.conflict')}</span>` : `<span style="font-size:9px;padding:1px 6px;background:var(--acc3);color:#000;border-radius:3px">${t('import.badge.new')}</span>`}
         </label>
         <span style="color:var(--txt2)">${escHtml(e?.greek || '')}</span>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px">
         <div>
-          <div style="color:var(--acc);font-size:10px;margin-bottom:5px">🔄 ČESKÝ PŘEKLAD (od AI)</div>
+          <div style="color:var(--acc);font-size:10px;margin-bottom:5px">${t('import.czTranslationAi')}</div>
           <div style="font-size:12px">
-            <div><b>Význam:</b> ${escHtml(data.vyznam || '—')}</div>
-            <div style="margin-top:5px"><b>Definice:</b> ${escHtml(data.definice || '—')}</div>
-            ${hasRaw && rawDef !== data.definice ? `<div style="margin-top:8px;padding:8px;background:var(--bg2);border-radius:4px;border-left:2px solid var(--acc);font-size:11px;color:var(--txt2)"><b>📝 Celý překlad:</b><div style="margin-top:5px;line-height:1.5">${formatPreviewRawTranslation(rawDef)}</div></div>` : ''}
-            <div style="margin-top:5px"><b>Použití:</b> ${escHtml(data.pouziti || '—')}</div>
-            <div style="margin-top:5px"><b>Původ:</b> ${escHtml(data.puvod || '—')}</div>
-            <div style="margin-top:5px"><b>Specialista:</b> ${escHtml(data.specialista || '—')}</div>
+            <div><b>${t('field.meaning')}</b> ${escHtml(data.vyznam || '—')}</div>
+            <div style="margin-top:5px"><b>${t('field.definition')}</b> ${escHtml(data.definice || '—')}</div>
+            ${hasRaw && rawDef !== data.definice ? `<div style="margin-top:8px;padding:8px;background:var(--bg2);border-radius:4px;border-left:2px solid var(--acc);font-size:11px;color:var(--txt2)"><b>${t('import.fullTranslation')}</b><div style="margin-top:5px;line-height:1.5">${formatPreviewRawTranslation(rawDef)}</div></div>` : ''}
+            <div style="margin-top:5px"><b>${t('field.usage')}</b> ${escHtml(data.pouziti || '—')}</div>
+            <div style="margin-top:5px"><b>${t('field.origin')}</b> ${escHtml(data.puvod || '—')}</div>
+            <div style="margin-top:5px"><b>${t('field.specialist')}</b> ${escHtml(data.specialista || '—')}</div>
           </div>
         </div>
         <div>
-          <div style="color:var(--txt3);font-size:10px;margin-bottom:5px">📖 ANGLICKÝ ORIGINÁL</div>
+          <div style="color:var(--txt3);font-size:10px;margin-bottom:5px">${t('import.enOriginal')}</div>
           <div style="font-size:12px;color:var(--txt2)">
-            <div><b>Definice:</b> ${escHtml(e?.definice || e?.def || '—')}</div>
+            <div><b>${t('field.definition')}</b> ${escHtml(e?.definice || e?.def || '—')}</div>
           </div>
         </div>
       </div>
@@ -10241,12 +11135,12 @@ function acceptPreview() {
   const extra = mode === 'fillgaps' && mergedFields
     ? ` (${mergedFields} polí doplněno)`
     : skippedConflicts ? ` · ${skippedConflicts} přeskočeno (kolize)` : '';
-  showToast(`✓ Uloženo ${applied} hesel${extra}`);
+  showToast(t('toast.saved.entriesWithExtra', { count: applied, extra }));
 }
 
 function discardPreview() {
   closePreviewModal();
-  showToast('✕ Překlad zrušen');
+  showToast(t('toast.translation.canceled'));
 }
 
 // ══ IMPORT TXT/JSON ═══════════════════════════════════════════════════
@@ -10272,16 +11166,16 @@ function importFile(input) {
         }
       }
       const count = Object.keys(imported).length;
-      if (!count) { showToast('✗ Žádná hesla nenalezena v souboru'); return; }
+      if (!count) { showToast(t('toast.import.noEntries')); return; }
       const previewData = {};
       for (const [key, data] of Object.entries(imported)) {
         previewData[key] = data;
       }
        showPreviewModal(previewData);
-       showToast(`📥 Nalezeno ${count} hesel k importu (${lowerName.endsWith('.json') ? 'JSON' : lowerName.endsWith('.txt') ? 'TXT' : 'auto'})`);
+       showToast(t('toast.import.found', { count, format: lowerName.endsWith('.json') ? 'JSON' : lowerName.endsWith('.txt') ? 'TXT' : 'auto' }));
      } catch(e) {
        logError('importFile', e, { fileName: file?.name });
-       showToast('✗ Chyba importu: ' + e.message);
+       showToast(t('toast.error.withMessage', { message: e.message }));
      }
     input.value = '';
   };
@@ -10401,7 +11295,7 @@ function showFailedEntries() {
   }
   
   if (!failed.length) {
-    showToast('✓ Žádné neúspěšné překlady');
+    showToast(t('toast.failed.none'));
     return;
   }
   
@@ -10425,19 +11319,19 @@ function showFailedEntries() {
   <div style="max-width:800px;margin:0 auto;background:var(--bg2);border:1px solid var(--brd);border-radius:8px;padding:22px">
     <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;flex-wrap:wrap">
       <h2 style="color:var(--acc);font-family:'JetBrains Mono',monospace;font-size:14px;margin:0">
-        ⚠ Neúspěšné překlady — ${failed.length} hesel
+        ${t('failed.modal.title', { count: failed.length })}
       </h2>
-      <button class="hbtn grn" onclick="retryFailed('${failedKeys.join(',')}')">↻ Přeložit znovu</button>
-      <button class="hbtn red" onclick="closeFailedModalSafe()">✕ Zavřít</button>
+      <button class="hbtn grn" onclick="retryFailed('${failedKeys.join(',')}')">${t('failed.modal.retry')}</button>
+      <button class="hbtn red" onclick="closeFailedModalSafe()">${t('failed.modal.close')}</button>
     </div>
     <div style="font-size:12px;color:var(--txt3);margin-bottom:14px">
-      AI nevrátila správný formát (nebo prázdný překlad). Detaily v console (F12).
+      ${t('failed.modal.note')}
     </div>
     <div id="failedCards">${cards}</div>
   </div>`;
   
   document.body.appendChild(modal);
-  showToast(`⚠ Nalezeno ${failed.length} neúspěšných překladů (viz console)`);
+  showToast(t('toast.failed.found', { count: failed.length }));
 }
 
 function retryFailed(failedKeysStr) {
@@ -10450,7 +11344,7 @@ function retryFailed(failedKeysStr) {
   retryMode = true;
   retryKeysList = keys;
   
-  showToast(`✓ Označeno ${keys.length} hesel — klikni na "⚡ Dávka" nebo "▶ AUTO"`);
+  showToast(t('toast.selectedForBatch', { count: keys.length }));
 }
 
 function closePreviewModal() {
@@ -10463,7 +11357,7 @@ document.addEventListener('keydown', e => {
   if ((e.ctrlKey || e.metaKey) && e.key === 's') {
     e.preventDefault();
     saveProgress();
-    showToast('✓ Progress uložen');
+  showToast(t('toast.progress.saved'));
     return;
   }
   // Ctrl+E = export do TXT
