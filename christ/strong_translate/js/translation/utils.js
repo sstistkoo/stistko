@@ -1,4 +1,4 @@
-﻿// js/translation/utils.js — pomocné funkce pro překlad
+// js/translation/utils.js — pomocné funkce pro překlad
 // Importováno přímo v batch.js, detail.js, list.js, header.js
 import { state } from '../state.js';
 import core from '../../strong_translator_core_new.js';
@@ -20,13 +20,13 @@ function _countFailedTopics(translationEntry) {
 
 export function hasMeaningfulValue(v) {
   const s = String(v || '').trim();
-  return !!s && s !== 'â€”' && s !== '(pÅ™eskoÄeno)';
+  return !!s && s !== '—' && s !== '(přeskočeno)';
 }
 
-/** AnglickÃ¡ ÄÃ¡st za â€žOriginÃ¡l:â€œ nesmÃ­ oznaÄit celou definici jako EN (bÄ›Å¾nÃ© u CZ+AS dvojice). */
+/** Anglická část za „Originál:“ nesmí označit celou definici jako EN (běžné u CZ+AS dvojice). */
 export function stripDefinitionOriginReferenceTail(text) {
   const s = String(text || '');
-  const m = s.match(/\bOriginÃ¡l\s*:/iu);
+  const m = s.match(/\bOriginál\s*:/iu);
   if (!m || m.index === undefined || m.index <= 0) return s.trim();
   return s.slice(0, m.index).trim();
 }
@@ -53,12 +53,12 @@ export function isDefinitionLowQuality(text) {
   const s = String(text || '').trim();
   if (!s) return true;
   if (isDefinitionLikelyEnglish(s)) return true;
-  // UI artefakty nebo technickÃ½ Å¡um mÃ­sto definice.
-  if (/(ðŸ¤–|âœŽ|prompt|upravit|edit|button|klik)/i.test(s)) return true;
-  // Definice mÃ¡ bÃ½t vÄ›cnÃ¡; krÃ¡tkÃ©, ale smysluplnÃ© formulace nechceme trestat.
+  // UI artefakty nebo technický šum místo definice.
+  if (/(🤖|✎|prompt|upravit|edit|button|klik)/i.test(s)) return true;
+  // Definice má být věcná; krátké, ale smysluplné formulace nechceme trestat.
   const words = s.split(/\s+/).filter(Boolean);
   const hasStructure = /[,:;()]/.test(s);
-  const hasCzechDiacritics = /[Ã¡ÄÄÃ©Ä›Ã­ÅˆÃ³Å™Å¡Å¥ÃºÅ¯Ã½Å¾]/i.test(s);
+  const hasCzechDiacritics = /[áčďéěíňóřšťúůýž]/i.test(s);
   if (words.length < 4) return true;
   if (s.length < 30 && !hasStructure) return true;
   if (words.length < 6 && s.length < 45 && !hasStructure && !hasCzechDiacritics) return true;
@@ -109,7 +109,7 @@ export function fillMissingKjvFromSource(keys) {
     const e = state.entryMap.get(key);
     const fallback = String(e?.kjv || '').trim();
     if (fallback) {
-      t.kjv = `${fallback} [POZN.: v angliÄtinÄ› ze vstupu]`;
+      t.kjv = `${fallback} [POZN.: v angličtině ze vstupu]`;
     }
   }
 }
@@ -122,8 +122,8 @@ export function annotateEnglishDefinitionsInTranslated(keys) {
     if (!isDefinitionLikelyEnglish(t.definice)) continue;
     const original = String(t.definice || '').trim();
     if (!original) continue;
-    if (/\[POZN\.: text je v angliÄtinÄ› - Å¡patnÃ½ pÅ™eklad\]/.test(original)) continue;
-    t.definice = `${original} [POZN.: text je v angliÄtinÄ› - Å¡patnÃ½ pÅ™eklad]`;
+    if (/\[POZN\.: text je v angličtině - špatný překlad\]/.test(original)) continue;
+    t.definice = `${original} [POZN.: text je v angličtině - špatný překlad]`;
   }
 }
 
@@ -139,10 +139,10 @@ export function applyFallbacksToParsedMap(keys, parsedMap) {
     }
     if (!hasMeaningfulValue(t.kjv)) {
       const kjvFallback = String(e?.kjv || '').trim();
-      if (kjvFallback) t.kjv = `${kjvFallback} [POZN.: v angliÄtinÄ› ze vstupu]`;
+      if (kjvFallback) t.kjv = `${kjvFallback} [POZN.: v angličtině ze vstupu]`;
     }
     if (isDefinitionLikelyEnglish(t.definice)) {
-      t.definice = `${String(t.definice || '').trim()} [POZN.: text je v angliÄtinÄ› - Å¡patnÃ½ pÅ™eklad]`.trim();
+      t.definice = `${String(t.definice || '').trim()} [POZN.: text je v angličtině - špatný překlad]`.trim();
     }
   }
 }

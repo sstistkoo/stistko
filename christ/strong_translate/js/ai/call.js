@@ -1,4 +1,4 @@
-﻿import { CONFIG, PROVIDERS } from '../config.js';
+import { CONFIG, PROVIDERS } from '../config.js';
 import { sleep } from '../utils.js';
 import { extractOpenRouterText } from './client.js';
 import { getProviderConfiguredModelsForAI, getStaticFallbackModels } from '../../strong_translator_ai.js';
@@ -15,7 +15,7 @@ function resetPrompt() {
 }
 
 
-// â•â• AI VOLÃNÃ S RETRY A FALLBACK â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══ AI VOLÁNÍ S RETRY A FALLBACK ════════════════════════════════
 function getProviderConfiguredModels(provider) {
   return getProviderConfiguredModelsForAI(provider, PROVIDERS);
 }
@@ -37,7 +37,7 @@ function getFallbackModels(provider) {
         }
       }
     } catch(e) { /* ignore */ }
-    // MinimÃ¡lnÃ­ fallback, kdyby cache jeÅ¡tÄ› neexistovala
+    // Minimální fallback, kdyby cache ještě neexistovala
     return ['meta-llama/llama-3.3-70b-instruct:free', 'meta-llama/llama-3.1-8b-instruct:free'];
   }
   return [];
@@ -70,7 +70,7 @@ async function callAIWithRetry(provider, apiKey, model, messages) {
          const isTimeout = e?.name === 'AbortError' || msg.includes('signal is aborted') || msg.includes('timeout');
 
          if (is404) {
-           const errMsg = 'Chyba 404: Model nenalezen, vyberte jinÃ½ v nastavenÃ­';
+           const errMsg = 'Chyba 404: Model nenalezen, vyberte jiný v nastavení';
            logError('callAIWithRetry', new Error(errMsg), {
              provider, model: m, attempt: attempt + 1,
              statusCode: 404
@@ -81,13 +81,13 @@ async function callAIWithRetry(provider, apiKey, model, messages) {
            const parsedRetry = rateInfoFromErrorMessage(e?.message || '')?.retryAfterSec || 0;
            const wait = Math.max(2, Math.min(20, parsedRetry || ((attempt + 1) * 10)));
            const shouldSwitchModelImmediately = provider === 'groq';
-           logWarn('callAIWithRetry', `Rate limit na ${m}, ÄekÃ¡m ${wait}s...`, {
+           logWarn('callAIWithRetry', `Rate limit na ${m}, čekám ${wait}s...`, {
              provider, model: m, attempt: attempt + 1, waitSeconds: wait
            });
            showToast(t('toast.rateLimit.waiting', { seconds: wait, suffix: shouldSwitchModelImmediately ? ', then try another model' : '' }));
            await sleep(wait * 1000);
            if (shouldSwitchModelImmediately) {
-             // U Groq je praktiÄtÄ›jÅ¡Ã­ pÅ™i rate limitu rychle pÅ™eskoÄit na dalÅ¡Ã­ model.
+             // U Groq je praktičtější při rate limitu rychle přeskočit na další model.
              break;
            }
            continue;
@@ -111,20 +111,20 @@ async function callAIWithRetry(provider, apiKey, model, messages) {
            continue;
          }
          if (isBanned) {
-           logError('callAIWithRetry', new Error(`BlokovanÃ½ ÃºÄet: ${m}`), {
+           logError('callAIWithRetry', new Error(`Blokovaný účet: ${m}`), {
              provider, model: m, attempt: attempt + 1
            });
            break;
          }
          // Other errors - log and try next model/attempt
-         logWarn('callAIWithRetry', `Chyba pÅ™i volÃ¡nÃ­ ${m} (pokus ${attempt+1}): ${e.message}`, {
+         logWarn('callAIWithRetry', `Chyba při volání ${m} (pokus ${attempt+1}): ${e.message}`, {
            provider, model: m, attempt: attempt + 1, error: e.message
          });
          break;
        }
     }
   }
-  throw lastErr || new Error('VÅ¡echny modely selhaly');
+  throw lastErr || new Error('Všechny modely selhaly');
 }
 
 function getTranslationEngineLabel(raw, fallbackProvider, fallbackModel) {
@@ -181,22 +181,22 @@ async function callOnce(provider, apiKey, model, messages, externalSignal = null
     };
      if (!r.ok) {
        if (r.status === 429) {
-         throw new Error(`Rate limit! Zkuste za ${rateInfo.retryAfterSec || 'nÄ›kolik'}s. Info: groq.com/pricing${rateInfo.requestId ? ` [req:${rateInfo.requestId}]` : ''}`);
+         throw new Error(`Rate limit! Zkuste za ${rateInfo.retryAfterSec || 'několik'}s. Info: groq.com/pricing${rateInfo.requestId ? ` [req:${rateInfo.requestId}]` : ''}`);
        }
        throw new Error(d.error?.message || String(r.status));
      }
      // Validate response structure
      validateAPIResponse(d, 'groq');
      if (d.usage) {
-       log(`ðŸ“Š Groq: ${d.usage.prompt_tokens} in / ${d.usage.completion_tokens} out / ${d.usage.total_tokens} total`);
+       log(`📊 Groq: ${d.usage.prompt_tokens} in / ${d.usage.completion_tokens} out / ${d.usage.total_tokens} total`);
      }
      const content = d.choices[0].message.content;
-    // Kontrola na nesmyslnou odpovÄ›Ä
-    const weirdChars = (content.match(/[^\x20-\x7E\n\r\tÄ›Å¡ÄÅ™Å¾Ã½Ã¡Ã­Ã©ÃºÅ¯Å¥ÄÅˆÄšÅ ÄŒÅ˜Å½ÃÃÃÃ‰ÃšÅ®Å¤ÄŽÅ‡]/g) || []).length;
+    // Kontrola na nesmyslnou odpověď
+    const weirdChars = (content.match(/[^\x20-\x7E\n\r\těščřžýáíéúůťďňĚŠČŘŽÝÁÍÉÚŮŤĎŇ]/g) || []).length;
     if (content.length > 0 && weirdChars > content.length * 0.5) {
-      console.log('â• PODEZÅ˜ELÃ ODPOVÄšÄŽ â•');
+      console.log('═ PODEZŘELÁ ODPOVĚĎ ═');
       console.log(content);
-      throw new Error('AI vrÃ¡tila nesmyslnou odpovÄ›Ä - zkuste delÅ¡Ã­ interval');
+      throw new Error('AI vrátila nesmyslnou odpověď - zkuste delší interval');
     }
     return { content, usage: d.usage, resolvedModel: d.model || model, rateInfo };
 
@@ -214,18 +214,18 @@ async function callOnce(provider, apiKey, model, messages, externalSignal = null
     const d = await r.json();
      if (!r.ok) {
        if (r.status === 503 || d.error?.status === 'UNAVAILABLE') {
-         throw new Error('503 Service Unavailable: Gemini je doÄasnÄ› pÅ™etÃ­Å¾enÃ©, opakuji pozdÄ›ji.');
+         throw new Error('503 Service Unavailable: Gemini je dočasně přetížené, opakuji později.');
        }
        if (d.error?.status === 'RESOURCE_EXHAUSTED') {
          const details = String(d.error?.message || '').trim();
-         throw new Error(`Gemini limit vyÄerpÃ¡n! PoÄkej ~20min nebo pÅ™epni na Groq.${details ? ` Detail: ${details}` : ''}`);
+         throw new Error(`Gemini limit vyčerpán! Počkej ~20min nebo přepni na Groq.${details ? ` Detail: ${details}` : ''}`);
        }
        throw new Error(d.error?.message || String(r.status));
      }
      // Validate response structure
      validateAPIResponse(d, 'gemini');
      if (d.usageMetadata) {
-       log(`ðŸ“Š Gemini: ${d.usageMetadata.promptTokenCount} in / ${d.usageMetadata.candidatesTokenCount} out`);
+       log(`📊 Gemini: ${d.usageMetadata.promptTokenCount} in / ${d.usageMetadata.candidatesTokenCount} out`);
      }
       const content = d.candidates[0].content.parts[0].text;
       return { content, usage: d.usageMetadata, resolvedModel: d.modelVersion || d.model || model, rateInfo: { provider: 'gemini' } };
@@ -254,16 +254,16 @@ async function callOnce(provider, apiKey, model, messages, externalSignal = null
      }
      validateAPIResponse(d, 'openrouter');
      const content = extractOpenRouterText(d);
-     if (!content) throw new Error('OpenRouter nevrÃ¡til ÄitelnÃ½ text');
+     if (!content) throw new Error('OpenRouter nevrátil čitelný text');
     return { content, usage: d.usage, resolvedModel: d.model || model, rateInfo: { provider: 'openrouter' } };
   }
-  throw new Error('NeznÃ¡mÃ½ provider');
+  throw new Error('Neznámý provider');
   } catch (e) {
     if (timedOut && e?.name === 'AbortError') {
       throw new Error(`API timeout po ${Math.round(CONFIG.API_TIMEOUT / 1000)}s`);
     }
     if (externalSignal?.aborted && e?.name === 'AbortError') {
-      throw new Error('PoÅ¾adavek zruÅ¡en uÅ¾ivatelem');
+      throw new Error('Požadavek zrušen uživatelem');
     }
     throw e;
   } finally {
@@ -279,7 +279,7 @@ async function callOnce(provider, apiKey, model, messages, externalSignal = null
     try {
       const parsed = parseWithOpenRouterNormalization(raw, keys, state.translated);
       if (parsed.normalizedUsed) {
-        log('â„¹ AUTO_NORMALIZOVANO_Z_OPENROUTER_FORMATU');
+        log('ℹ AUTO_NORMALIZOVANO_Z_OPENROUTER_FORMATU');
       }
       return parsed.missing;
     } catch(e) {

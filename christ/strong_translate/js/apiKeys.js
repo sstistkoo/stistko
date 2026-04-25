@@ -1,4 +1,4 @@
-﻿import { state } from './state.js';
+import { state } from './state.js';
 import { PROVIDERS } from './config.js';
 import { API_KEY_PROFILES_PREFIX, API_KEY_ACTIVE_PROFILE_PREFIX } from './config.js';
 import { escHtml } from './utils.js';
@@ -42,7 +42,7 @@ function setApiKeyProfiles(prov, profiles) {
 
 function maskApiKey(v) {
   const s = String(v || '').trim();
-  if (!s) return 'prÃ¡zdnÃ½';
+  if (!s) return 'prázdný';
   if (s.length < 10) return s;
   return `${s.slice(0, 5)}...${s.slice(-4)}`;
 }
@@ -52,9 +52,9 @@ function setupApiKeySwitcher(prov) {
   if (!select) return;
   const profiles = getApiKeyProfiles(prov);
   const activeId = localStorage.getItem(API_KEY_ACTIVE_PROFILE_PREFIX + prov) || '__manual__';
-  const options = ['<option value="__manual__">RuÄnÃ­ klÃ­Ä (aktuÃ¡lnÃ­ pole)</option>'];
+  const options = ['<option value="__manual__">Ruční klíč (aktuální pole)</option>'];
   for (const p of profiles) {
-    options.push(`<option value="${p.id}">${escHtml(p.name || 'KlÃ­Ä')} Â· ${maskApiKey(p.key)}</option>`);
+    options.push(`<option value="${p.id}">${escHtml(p.name || 'Klíč')} · ${maskApiKey(p.key)}</option>`);
   }
   select.innerHTML = options.join('');
   if (activeId !== '__manual__' && select.querySelector(`option[value="${activeId}"]`)) {
@@ -82,7 +82,7 @@ function onApiKeyProfileChange() {
   document.getElementById('apiKey').value = profile.key || '';
   localStorage.setItem(API_KEY_ACTIVE_PROFILE_PREFIX + prov, profile.id);
   saveApiKey();
-  showToast(t('toast.apiKey.activeProfile', { name: profile.name || (getUiLang() === 'en' ? 'unnamed' : 'bez nÃ¡zvu') }));
+  showToast(t('toast.apiKey.activeProfile', { name: profile.name || (getUiLang() === 'en' ? 'unnamed' : 'bez názvu') }));
 }
 
 function saveCurrentApiKeyAsProfile() {

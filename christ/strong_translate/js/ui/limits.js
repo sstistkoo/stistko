@@ -1,4 +1,4 @@
-﻿import { PROVIDERS } from '../config.js';
+import { PROVIDERS } from '../config.js';
 import { t } from '../i18n.js';
 import { escHtml } from '../utils.js';
 
@@ -37,19 +37,19 @@ async function fetchLimits(prov, model) {
     if (prov === 'groq') {
       const apiKey = getCurrentApiKey(prov);
       if (!apiKey) {
-        content.innerHTML = '<div style="color:var(--red);padding:10px">Nejsou nastaveny limity. Zadejte API klÃ­Ä.</div>';
+        content.innerHTML = '<div style="color:var(--red);padding:10px">Nejsou nastaveny limity. Zadejte API klíč.</div>';
         return;
       }
       const dynamicLimits = await fetchGroqLimits(apiKey, model);
       const staticLimits = getGroqLimits(model);
       content.innerHTML = renderGroqLimits(dynamicLimits) + '<div style="margin-top:10px;border-top:1px solid var(--brd);padding-top:8px">' + renderLimitsTable(staticLimits) + '</div>';
       note.style.display = 'block';
-      noteText.innerHTML = 'Groq: zobrazuji Å¾ivÃ© rate-limit hlaviÄky (pokud je API vrÃ¡tÃ­) + fallback limity modelu.<br>VÃ­ce info: <a href="https://console.groq.com/docs/rate-limits" target="_blank">console.groq.com/docs/rate-limits</a>';
+      noteText.innerHTML = 'Groq: zobrazuji živé rate-limit hlavičky (pokud je API vrátí) + fallback limity modelu.<br>Více info: <a href="https://console.groq.com/docs/rate-limits" target="_blank">console.groq.com/docs/rate-limits</a>';
     } else if (prov === 'openrouter') {
       // OpenRouter - can fetch via API
       const apiKey = getCurrentApiKey(prov);
       if (!apiKey) {
-        content.innerHTML = '<div style="color:var(--red);padding:10px">Nejsou nastaveny limity. Zadejte API klÃ­Ä.</div>';
+        content.innerHTML = '<div style="color:var(--red);padding:10px">Nejsou nastaveny limity. Zadejte API klíč.</div>';
         return;
       }
       const [keyData, creditsData] = await Promise.all([
@@ -61,13 +61,13 @@ async function fetchLimits(prov, model) {
       const rateLimitInfo = getOpenRouterRateLimits(keyData);
       content.innerHTML = renderOpenRouterLimits(keyData, creditsData) + rateLimitInfo;
       note.style.display = 'block';
-      noteText.innerHTML = 'OpenRouter: ukazuji usage/credits/limit data z API klÃ­Äe + orientaÄnÃ­ rate limity free tieru.<br>VÃ­ce info: <a href="https://openrouter.ai/docs/api-reference/limits" target="_blank">openrouter.ai/docs</a>';
+      noteText.innerHTML = 'OpenRouter: ukazuji usage/credits/limit data z API klíče + orientační rate limity free tieru.<br>Více info: <a href="https://openrouter.ai/docs/api-reference/limits" target="_blank">openrouter.ai/docs</a>';
     } else if (prov === 'gemini') {
       // Gemini - no API for limits, show static info
       const limits = getGeminiLimits(model);
       content.innerHTML = renderLimitsTable(limits);
       note.style.display = 'block';
-      noteText.innerHTML = 'Google neposkytuje API pro kontrolu limitÅ¯. Zkontrolujte limity manuÃ¡lnÄ› v <a href="https://aistudio.google.com/app" target="_blank">AI Studio</a> nebo Google Cloud Console â†’ Quotas.<br>Limity se resetujÃ­ o pÅ¯lnoci Pacific Time.';
+      noteText.innerHTML = 'Google neposkytuje API pro kontrolu limitů. Zkontrolujte limity manuálně v <a href="https://aistudio.google.com/app" target="_blank">AI Studio</a> nebo Google Cloud Console → Quotas.<br>Limity se resetují o půlnoci Pacific Time.';
     }
   } catch (e) {
     content.innerHTML = `<div style="color:var(--red);padding:10px">${t('limits.error', { message: e.message })}</div>`;
@@ -243,24 +243,24 @@ function renderGroqLimits(result) {
   // Debug: show all headers if nothing parsed
   const debugHeaders = headers._all || rateLimitHeaders;
   if ( rows.length === 0 && debugHeaders.length > 0) {
-    rows.push(`<div style="color:var(--ylw);font-size:10px;margin-bottom:8px">Debug - vÅ¡echny hlaviÄky:</div>`);
+    rows.push(`<div style="color:var(--ylw);font-size:10px;margin-bottom:8px">Debug - všechny hlavičky:</div>`);
     debugHeaders.slice(0, 20).forEach(([k, v]) => {
       rows.push(`<div class="limits-row"><span class="limits-label">${k}</span><span class="limits-value" style="font-size:9px">${String(v).slice(0, 50)}</span></div>`);
     });
     if (debugHeaders.length > 20) {
-      rows.push(`<div style="font-size:9px;color:var(--txt3)">...a dalÅ¡Ã­ch ${debugHeaders.length - 20}</div>`);
+      rows.push(`<div style="font-size:9px;color:var(--txt3)">...a dalších ${debugHeaders.length - 20}</div>`);
     }
   }
   
   if (rows.length === 0) {
-    return `<div style="color:var(--txt3);padding:10px">Å½Ã¡dnÃ© hlaviÄky.<br>Status: ${status}<br>Error: ${errorMsg || 'Å¾Ã¡dnÃ¡'}</div>`;
+    return `<div style="color:var(--txt3);padding:10px">Žádné hlavičky.<br>Status: ${status}<br>Error: ${errorMsg || 'žádná'}</div>`;
   }
   
   return rows.join('');
 }
 
 function renderOpenRouterLimits(keyData, creditsData) {
-  if (!keyData) return '<div style="color:var(--red);padding:10px">Nelze naÄÃ­st limity</div>';
+  if (!keyData) return '<div style="color:var(--red);padding:10px">Nelze načíst limity</div>';
   
   const rows = [];
   
@@ -270,27 +270,27 @@ function renderOpenRouterLimits(keyData, creditsData) {
       rows.push(`<div class="limits-row"><span class="limits-label">Kredity celkem</span><span class="limits-value">$${creditsData.total_credits?.toFixed(2) || '0'}</span></div>`);
     }
     if (creditsData.total_usage !== undefined) {
-      rows.push(`<div class="limits-row"><span class="limits-label">Kredity pouÅ¾ito</span><span class="limits-value">$${creditsData.total_usage?.toFixed(2) || '0'}</span></div>`);
+      rows.push(`<div class="limits-row"><span class="limits-label">Kredity použito</span><span class="limits-value">$${creditsData.total_usage?.toFixed(2) || '0'}</span></div>`);
     }
     if (creditsData.total_credits !== undefined && creditsData.total_usage !== undefined) {
       const remaining = creditsData.total_credits - creditsData.total_usage;
       const cls = remaining > 1 ? 'ok' : remaining > 0.1 ? 'warn' : 'danger';
-      rows.push(`<div class="limits-row"><span class="limits-label">Kredity zbÃ½vÃ¡</span><span class="limits-value ${cls}">$${remaining?.toFixed(2) || '0'}</span></div>`);
+      rows.push(`<div class="limits-row"><span class="limits-label">Kredity zbývá</span><span class="limits-value ${cls}">$${remaining?.toFixed(2) || '0'}</span></div>`);
     }
   }
   
   // Key usage info from /key endpoint
   if (keyData.usage !== undefined) {
-    rows.push(`<div class="limits-row"><span class="limits-label">PouÅ¾ito celkem (USD)</span><span class="limits-value">$${keyData.usage?.toFixed(4) || '0'}</span></div>`);
+    rows.push(`<div class="limits-row"><span class="limits-label">Použito celkem (USD)</span><span class="limits-value">$${keyData.usage?.toFixed(4) || '0'}</span></div>`);
   }
   if (keyData.usage_daily !== undefined) {
-    rows.push(`<div class="limits-row"><span class="limits-label">PouÅ¾ito dnes (USD)</span><span class="limits-value">$${keyData.usage_daily?.toFixed(4) || '0'}</span></div>`);
+    rows.push(`<div class="limits-row"><span class="limits-label">Použito dnes (USD)</span><span class="limits-value">$${keyData.usage_daily?.toFixed(4) || '0'}</span></div>`);
   }
   if (keyData.usage_weekly !== undefined) {
-    rows.push(`<div class="limits-row"><span class="limits-label">PouÅ¾ito tÃ½den (USD)</span><span class="limits-value">$${keyData.usage_weekly?.toFixed(4) || '0'}</span></div>`);
+    rows.push(`<div class="limits-row"><span class="limits-label">Použito týden (USD)</span><span class="limits-value">$${keyData.usage_weekly?.toFixed(4) || '0'}</span></div>`);
   }
   if (keyData.usage_monthly !== undefined) {
-    rows.push(`<div class="limits-row"><span class="limits-label">PouÅ¾ito mÄ›sÃ­c (USD)</span><span class="limits-value">$${keyData.usage_monthly?.toFixed(4) || '0'}</span></div>`);
+    rows.push(`<div class="limits-row"><span class="limits-label">Použito měsíc (USD)</span><span class="limits-value">$${keyData.usage_monthly?.toFixed(4) || '0'}</span></div>`);
   }
   if (keyData.limit !== undefined && keyData.limit > 0) {
     rows.push(`<div class="limits-row"><span class="limits-label">Limit</span><span class="limits-value">$${keyData.limit?.toFixed(2) || '0'}</span></div>`);
@@ -298,20 +298,20 @@ function renderOpenRouterLimits(keyData, creditsData) {
   if (keyData.limit_remaining !== null && keyData.limit_remaining !== undefined && keyData.limit > 0) {
     const pct = Math.round((keyData.limit_remaining / keyData.limit) * 100);
     const cls = pct > 50 ? 'ok' : pct > 20 ? 'warn' : 'danger';
-    rows.push(`<div class="limits-row"><span class="limits-label">Limit zbÃ½vÃ¡</span><span class="limits-value ${cls}">$${keyData.limit_remaining?.toFixed(2) || '0'} (${pct}%)</span></div>`);
+    rows.push(`<div class="limits-row"><span class="limits-label">Limit zbývá</span><span class="limits-value ${cls}">$${keyData.limit_remaining?.toFixed(2) || '0'} (${pct}%)</span></div>`);
   }
   if (keyData.is_free_tier !== undefined) {
-    rows.push(`<div class="limits-row"><span class="limits-label">Free tier</span><span class="limits-value ${keyData.is_free_tier ? 'ok' : ''}">${keyData.is_free_tier ? 'âœ“' : 'â€”'}</span></div>`);
+    rows.push(`<div class="limits-row"><span class="limits-label">Free tier</span><span class="limits-value ${keyData.is_free_tier ? 'ok' : ''}">${keyData.is_free_tier ? '✓' : '—'}</span></div>`);
   }
   if (keyData.label) {
-    rows.push(`<div class="limits-row"><span class="limits-label">KlÃ­Ä</span><span class="limits-value" style="font-size:10px">${keyData.label || 'â€”'}</span></div>`);
+    rows.push(`<div class="limits-row"><span class="limits-label">Klíč</span><span class="limits-value" style="font-size:10px">${keyData.label || '—'}</span></div>`);
   }
   const known = new Set(['usage', 'usage_daily', 'usage_weekly', 'usage_monthly', 'limit', 'limit_remaining', 'is_free_tier', 'label']);
   for (const [k, v] of Object.entries(keyData || {})) {
     if (known.has(k) || v == null || typeof v === 'object') continue;
     rows.push(`<div class="limits-row"><span class="limits-label">${escHtml(k)}</span><span class="limits-value">${escHtml(String(v))}</span></div>`);
   }
-  if (rows.length === 0) return '<div style="color:var(--txt3);padding:10px">Å½Ã¡dnÃ© limity k zobrazenÃ­</div>';
+  if (rows.length === 0) return '<div style="color:var(--txt3);padding:10px">Žádné limity k zobrazení</div>';
   return rows.join('');
 }
 
@@ -329,7 +329,7 @@ function getOpenRouterRateLimits(keyData) {
   rows.push(`<div class="limits-row" style="margin-top:10px;border-top:1px solid var(--brd);padding-top:8px"><span class="limits-label" style="color:var(--acc)">Rate Limity</span><span class="limits-value"></span></div>`);
   rows.push(`<div class="limits-row"><span class="limits-label">Free modely (RPM)</span><span class="limits-value">${freeRpm}</span></div>`);
   rows.push(`<div class="limits-row"><span class="limits-label">Free modely (RPD)</span><span class="limits-value">${freeRpd}</span></div>`);
-  rows.push(`<div class="limits-row"><span class="limits-label">PlacenÃ© modely</span><span class="limits-value ok">bez limitu</span></div>`);
+  rows.push(`<div class="limits-row"><span class="limits-label">Placené modely</span><span class="limits-value ok">bez limitu</span></div>`);
   
   return rows.join('');
  }

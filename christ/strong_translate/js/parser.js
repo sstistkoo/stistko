@@ -1,4 +1,4 @@
-﻿// js/parser.js — parsování importovaných souborů (CZ TXT, JSON)
+// js/parser.js — parsování importovaných souborů (CZ TXT, JSON)
 
 export function parseCzTXT(text) {
   const result = {};
@@ -14,18 +14,18 @@ export function parseCzTXT(text) {
       for (const label of labels) {
         const line = lines.find(l => {
           const trimmed = l.trim();
-          return trimmed.startsWith(label + ':') || trimmed.startsWith(label + 'ï¼š');
+          return trimmed.startsWith(label + ':') || trimmed.startsWith(label + '：');
         });
         if (line) return line.slice(label.length + 1).trim();
       }
       return '';
     };
-    const vyznam = get(['ÄŒeskÃ½ vÃ½znam', 'Vyznam', 'VÃZNAM', 'VYZNAM', 'VÃ½znam', 'Cz', 'CZ']);
-    const definice = get(['Definice (CZ)', 'ÄŒeskÃ¡ definice', 'Definice', 'DEFINICE', 'CZ definice']);
-    const pouziti = get(['BiblickÃ© uÅ¾itÃ­', 'BiblickÃ© uÅ¾itÃ­ (KJV)', 'Pouziti', 'POUZITI', 'PouÅ¾itÃ­']);
-    const puvod = get(['PÅ¯vod', 'Puvod', 'PUVOD']);
-    const specialista = get(['Specialista', 'VÃKLAD', 'VYKLAD', 'KomentÃ¡Å™', 'KOMENTAR', 'Exegeze', 'EXEGEZE']);
-    const kjv = get(['KJV pÅ™eklady (CZ)', 'KJV pÅ™eklady', 'KJV', 'KJV_PREKLADY', 'KJV VÃ½znamy']);
+    const vyznam = get(['Český význam', 'Vyznam', 'VÝZNAM', 'VYZNAM', 'Význam', 'Cz', 'CZ']);
+    const definice = get(['Definice (CZ)', 'Česká definice', 'Definice', 'DEFINICE', 'CZ definice']);
+    const pouziti = get(['Biblické užití', 'Biblické užití (KJV)', 'Pouziti', 'POUZITI', 'Použití']);
+    const puvod = get(['Původ', 'Puvod', 'PUVOD']);
+    const specialista = get(['Specialista', 'VÝKLAD', 'VYKLAD', 'Komentář', 'KOMENTAR', 'Exegeze', 'EXEGEZE']);
+    const kjv = get(['KJV překlady (CZ)', 'KJV překlady', 'KJV', 'KJV_PREKLADY', 'KJV Významy']);
     if (vyznam || definice) {
       result[key] = { vyznam, definice, pouziti, puvod, specialista, kjv };
     }
@@ -66,12 +66,12 @@ export function parseImportJSON(text) {
   }
 
   if (parsed && typeof parsed === 'object') {
-    // Variant A: pÅ™Ã­mÃ½ map exportu { "G1": {...}, "G2": {...} }
+    // Variant A: přímý map exportu { "G1": {...}, "G2": {...} }
     for (const [key, value] of Object.entries(parsed)) {
       addRecord(String(key).trim(), value);
     }
 
-    // Variant B: obÃ¡lka s polem state.entries/translations
+    // Variant B: obálka s polem state.entries/translations
     const wrapped = parsed.entries || parsed.translations || parsed.data;
     if (Array.isArray(wrapped)) {
       for (const row of wrapped) {
