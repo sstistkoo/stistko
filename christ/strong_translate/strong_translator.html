@@ -1154,24 +1154,24 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   </div>
 
   <div class="row">
-    <label>AI pipeline (hlavní + sekundární)</label>
+    <label id="pipelineGroupLabel">AI pipeline (hlavní + sekundární)</label>
     <div class="mobl-set-row">
-      <label>Hlavní (Groq)</label>
+      <label id="pipelineMainLabel">Hlavní (Groq)</label>
       <select id="pipelineModelMainGroq" aria-label="Hlavní model Groq" title="Hlavní model Groq"></select>
     </div>
     <div class="mobl-set-row">
-      <label>Sekundární (Gemini)</label>
+      <label id="pipelineSecondaryGeminiLabel">Sekundární (Gemini)</label>
       <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--txt2)">
         <input type="checkbox" id="pipelineEnableSecondaryGemini" aria-label="Zapnout sekundární Gemini">
-        zapnout opravy
+        <span id="pipelineEnableSecondaryGeminiText">zapnout opravy</span>
       </label>
       <select id="pipelineModelSecondaryGemini" aria-label="Sekundární model Gemini" title="Sekundární model Gemini"></select>
     </div>
     <div class="mobl-set-row">
-      <label>Sekundární (OpenRouter)</label>
+      <label id="pipelineSecondaryOpenrouterLabel">Sekundární (OpenRouter)</label>
       <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--txt2)">
         <input type="checkbox" id="pipelineEnableSecondaryOpenrouter" aria-label="Zapnout sekundární OpenRouter">
-        zapnout opravy
+        <span id="pipelineEnableSecondaryOpenrouterText">zapnout opravy</span>
       </label>
       <select id="pipelineModelSecondaryOpenrouter" aria-label="Sekundární model OpenRouter" title="Sekundární model OpenRouter"></select>
     </div>
@@ -1534,10 +1534,10 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   <!-- Model Test Output Modal -->
   <div id="modelTestModal">
     <div class="limits-modal-box" style="max-width:860px;max-height:92vh;display:flex;flex-direction:column;overflow:auto">
-      <div class="limits-title">🧪 Výstup testu modelů</div>
+      <div class="limits-title" id="modelTestTitle">🧪 Výstup testu modelů</div>
       <div class="limits-provider" id="modelTestInfo">Provider: —</div>
       <div class="mobl-set-row">
-        <label>Provider testu</label>
+        <label id="modelTestProviderLabel">Provider testu</label>
         <select id="modelTestProvider" onchange="updateModelTestProviderUi()"></select>
       </div>
       <div class="modal-btns" style="margin:4px 0 10px 0">
@@ -1545,20 +1545,20 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       </div>
       <div id="modelTestProviderModels" style="margin-bottom:8px;border:1px solid var(--brd);border-radius:6px;padding:8px;background:var(--bg2)">
         <div class="mobl-set-row" id="modelRow_groq">
-          <label>Model (Groq)</label>
+          <label id="modelTestModelGroqLabel">Model (Groq)</label>
           <select id="modelTestModel_groq" onchange="saveModelTestModelSelections()"></select>
         </div>
         <div class="mobl-set-row" id="modelRow_gemini">
-          <label>Model (Gemini)</label>
+          <label id="modelTestModelGeminiLabel">Model (Gemini)</label>
           <select id="modelTestModel_gemini" onchange="saveModelTestModelSelections()"></select>
         </div>
         <div class="mobl-set-row" id="modelRow_openrouter">
-          <label>Model (OpenRouter)</label>
+          <label id="modelTestModelOpenrouterLabel">Model (OpenRouter)</label>
           <select id="modelTestModel_openrouter" onchange="saveModelTestModelSelections()"></select>
         </div>
       </div>
       <div class="mobl-set-row">
-        <label>Režim testu</label>
+        <label id="modelTestModeLabel">Režim testu</label>
         <select id="modelTestMode">
           <option value="smoke">Smoke test (slovo 2x)</option>
           <option value="translate1">Překlad 1 hesla</option>
@@ -1567,7 +1567,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
         </select>
       </div>
       <div class="mobl-set-row">
-        <label>Prompty</label>
+        <label id="modelTestPromptsLabel">Prompty</label>
         <div style="display:flex;gap:8px;align-items:center">
           <select id="modelTestPromptType" style="flex:1">
           <optgroup label="Obecné testovací prompty">
@@ -1621,27 +1621,27 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
       </div>
       <label class="stat" style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
         <input type="checkbox" id="modelTestEnablePromptCompare">
-        Automaticky porovnat 2 prompty (A/B)
+        <span id="modelTestEnablePromptCompareText">Automaticky porovnat 2 prompty (A/B)</span>
       </label>
       <div class="mobl-set-row" id="modelTestPromptCompareRow" style="display:none">
-        <label>Prompt B (porovnání)</label>
+        <label id="modelTestPromptCompareLabel">Prompt B (porovnání)</label>
         <select id="modelTestPromptTypeCompare"></select>
       </div>
       <label class="stat" style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
         <input type="checkbox" id="modelTestEnablePrompt" checked>
-        Testovat prompt (když je vypnuto, jede běžný test modelu)
+        <span id="modelTestEnablePromptText">Testovat prompt (když je vypnuto, jede běžný test modelu)</span>
       </label>
       <div class="mobl-set-row" id="modelTestCustomPromptRow">
-        <label>Vlastní prompt pro test</label>
+        <label id="modelTestCustomPromptLabel">Vlastní prompt pro test</label>
         <textarea id="modelTestCustomPromptInput" rows="5" style="width:100%;padding:10px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.5;resize:vertical" placeholder="Sem vlož vlastní prompt pro test modelů. Pokud necháš prázdné, použije se hlavní strong_prompt."></textarea>
       </div>
       <div class="mobl-set-row">
-        <label>Délka auto testu (min)</label>
+        <label id="modelTestDurationLabel">Délka auto testu (min)</label>
         <input type="number" id="modelTestDurationMin" min="1" max="240" value="10" style="width:100%;padding:10px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:12px;">
       </div>
       <label class="stat" style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
         <input type="checkbox" id="modelTestAppend" checked>
-        Připojit výsledek do stejného reportu
+        <span id="modelTestAppendText">Připojit výsledek do stejného reportu</span>
       </label>
       <div id="modelTestCountdown" class="limits-provider" style="margin-bottom:6px;min-height:1.2em;font-size:12px;color:var(--txt2)"></div>
       <div id="modelTestProviderCountdowns" style="margin-bottom:6px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt2);display:grid;gap:3px">
@@ -1654,32 +1654,32 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
         <table id="modelStatsTable" style="width:100%;border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:10px">
           <thead>
             <tr style="background:var(--bg3);position:sticky;top:0">
-              <th style="text-align:left;padding:6px;border-bottom:1px solid var(--brd)">Provider/Model</th>
-              <th style="text-align:right;padding:6px;border-bottom:1px solid var(--brd)">Úspěšnost</th>
-              <th style="text-align:right;padding:6px;border-bottom:1px solid var(--brd)">OK/NEÚSP</th>
-              <th style="text-align:right;padding:6px;border-bottom:1px solid var(--brd)">Hesel</th>
-              <th style="text-align:right;padding:6px;border-bottom:1px solid var(--brd)">Prům. doba AI</th>
-              <th style="text-align:right;padding:6px;border-bottom:1px solid var(--brd)">Volání</th>
-              <th style="text-align:right;padding:6px;border-bottom:1px solid var(--brd)">Akce</th>
+              <th id="modelStatsThProviderModel" style="text-align:left;padding:6px;border-bottom:1px solid var(--brd)">Provider/Model</th>
+              <th id="modelStatsThSuccess" style="text-align:right;padding:6px;border-bottom:1px solid var(--brd)">Úspěšnost</th>
+              <th id="modelStatsThOkFail" style="text-align:right;padding:6px;border-bottom:1px solid var(--brd)">OK/NEÚSP</th>
+              <th id="modelStatsThEntries" style="text-align:right;padding:6px;border-bottom:1px solid var(--brd)">Hesel</th>
+              <th id="modelStatsThAvgAi" style="text-align:right;padding:6px;border-bottom:1px solid var(--brd)">Prům. doba AI</th>
+              <th id="modelStatsThCalls" style="text-align:right;padding:6px;border-bottom:1px solid var(--brd)">Volání</th>
+              <th id="modelStatsThActions" style="text-align:right;padding:6px;border-bottom:1px solid var(--brd)">Akce</th>
             </tr>
           </thead>
           <tbody id="modelStatsBody"></tbody>
         </table>
       </div>
       <div style="display:flex;justify-content:flex-end;margin:4px 0">
-        <button class="modal-btn cancel" type="button" onclick="clearModelTestOutput()">✕ Vymazat výstup</button>
+        <button class="modal-btn cancel" id="btnModelTestClearOutput" type="button" onclick="clearModelTestOutput()">✕ Vymazat výstup</button>
       </div>
       <textarea id="modelTestOutput" style="width:100%;min-height:240px;max-height:45vh;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:10px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.5;resize:vertical" placeholder="Nastav režim, providera a modely, pak spusť ▶ Test provideru. Odpočet ukáže čekání do dalšího volání API."></textarea>
       <div class="modal-btns" style="margin-top:12px">
         <button class="modal-btn ok" id="btnRunModelTest" onclick="runModelTestFromModal()">▶ Test provideru</button>
-        <button class="modal-btn" onclick="showModelTestLibrary()">📚 Knihovna</button>
-        <button class="modal-btn ok" type="button" onclick="saveModelTestRawOutputTxt()">🧾 Uložit raw odpovědi</button>
-        <button class="modal-btn" type="button" onclick="document.getElementById('modelTestLoadFileInput').click()">📂 Načíst test.txt</button>
-        <button class="modal-btn ok" type="button" onclick="saveModelTestOutputTxt()">💾 Uložit test.txt</button>
-        <button class="modal-btn" type="button" onclick="resetModelTestModal()">↺ Reset</button>
+        <button class="modal-btn" id="btnModelTestLibrary" onclick="showModelTestLibrary()">📚 Knihovna</button>
+        <button class="modal-btn ok" id="btnModelTestSaveRaw" type="button" onclick="saveModelTestRawOutputTxt()">🧾 Uložit raw odpovědi</button>
+        <button class="modal-btn" id="btnModelTestLoadTxt" type="button" onclick="document.getElementById('modelTestLoadFileInput').click()">📂 Načíst test.txt</button>
+        <button class="modal-btn ok" id="btnModelTestSaveTxt" type="button" onclick="saveModelTestOutputTxt()">💾 Uložit test.txt</button>
+        <button class="modal-btn" id="btnModelTestReset" type="button" onclick="resetModelTestModal()">↺ Reset</button>
         <button class="modal-btn cancel" id="btnCancelModelTest" onclick="cancelModelTest()" style="display:none">■ Zrušit test</button>
         <button class="modal-btn ok" id="btnCopyModelTestOutput" onclick="copyModelTestOutput()">📋 Kopírovat</button>
-        <button class="modal-btn cancel" onclick="closeModelTestModal()">✕ Zavřít</button>
+        <button class="modal-btn cancel" id="btnCloseModelTestModal" onclick="closeModelTestModal()">✕ Zavřít</button>
       </div>
       <input type="file" id="modelTestLoadFileInput" accept=".txt,text/plain" style="display:none" onchange="loadModelTestOutputFromFile(this)">
     </div>
@@ -1739,9 +1739,9 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
    <!-- AI Settings Sub-modal -->
    <div id="promptAIModal" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);display:none;align-items:center;justify-content:center;z-index:1004;">
      <div class="prompt-modal-box" style="max-width:400px;">
-       <div class="prompt-modal-title">🤖 AI nastavení</div>
+      <div class="prompt-modal-title" id="promptAiModalTitle">🤖 AI nastavení</div>
        <div class="mobl-set-row">
-        <label>Groq (hlavní) · Temperature</label>
+        <label id="promptAiGroqTempLabel">Groq (hlavní) · Temperature</label>
         <select id="aiTemperature_groq" style="width:100%;padding:10px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:12px;">
            <option value="0.1">0.1 – velmi přesný</option>
            <option value="0.3" selected>0.3 – balanc</option>
@@ -1751,7 +1751,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
          </select>
        </div>
        <div class="mobl-set-row">
-        <label>Groq (hlavní) · Max tokenů</label>
+        <label id="promptAiGroqMaxLabel">Groq (hlavní) · Max tokenů</label>
         <select id="aiMaxTokens_groq" style="width:100%;padding:10px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:12px;">
            <option value="1000">1000</option>
            <option value="2000" selected>2000</option>
@@ -1761,7 +1761,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
          </select>
        </div>
       <div class="mobl-set-row">
-        <label>Gemini (sekundární) · Temperature</label>
+        <label id="promptAiGeminiTempLabel">Gemini (sekundární) · Temperature</label>
         <select id="aiTemperature_gemini" style="width:100%;padding:10px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:12px;">
           <option value="0.1">0.1 – velmi přesný</option>
           <option value="0.3" selected>0.3 – balanc</option>
@@ -1771,7 +1771,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
         </select>
       </div>
       <div class="mobl-set-row">
-        <label>Gemini (sekundární) · Max tokenů</label>
+        <label id="promptAiGeminiMaxLabel">Gemini (sekundární) · Max tokenů</label>
         <select id="aiMaxTokens_gemini" style="width:100%;padding:10px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:12px;">
           <option value="1000">1000</option>
           <option value="2000" selected>2000</option>
@@ -1781,7 +1781,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
         </select>
       </div>
       <div class="mobl-set-row">
-        <label>OpenRouter (sekundární) · Temperature</label>
+        <label id="promptAiOpenrouterTempLabel">OpenRouter (sekundární) · Temperature</label>
         <select id="aiTemperature_openrouter" style="width:100%;padding:10px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:12px;">
           <option value="0.1">0.1 – velmi přesný</option>
           <option value="0.3" selected>0.3 – balanc</option>
@@ -1791,7 +1791,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
         </select>
       </div>
       <div class="mobl-set-row">
-        <label>OpenRouter (sekundární) · Max tokenů</label>
+        <label id="promptAiOpenrouterMaxLabel">OpenRouter (sekundární) · Max tokenů</label>
         <select id="aiMaxTokens_openrouter" style="width:100%;padding:10px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:12px;">
           <option value="1000">1000</option>
           <option value="2000" selected>2000</option>
@@ -1801,8 +1801,8 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
         </select>
       </div>
        <div class="prompt-actions">
-         <button class="prompt-btn cancel" onclick="closePromptAIModal()">✕ Zavřít</button>
-         <button class="prompt-btn ok" onclick="saveAISettings()">✓ Uložit</button>
+        <button class="prompt-btn cancel" id="btnPromptAiClose" onclick="closePromptAIModal()">✕ Zavřít</button>
+        <button class="prompt-btn ok" id="btnPromptAiSave" onclick="saveAISettings()">✓ Uložit</button>
        </div>
      </div>
    </div>
@@ -1878,7 +1878,7 @@ const {
   const UI_LANG_KEY = 'strong_ui_lang';
   const DEFAULT_UI_LANG = 'cs';
   const UI_LANGS = new Set(['cs', 'en']);
-  const UI_MESSAGES = {
+  const INLINE_UI_MESSAGES = {
     cs: {
       'setup.title': '⟁ Strong GR → CZ — Překladač slovníku',
       'setup.start': 'Zahájit překlad →',
@@ -1887,6 +1887,30 @@ const {
       'setup.file.none': '— nevybráno',
       'setup.batchSize': 'Velikost dávky (hesel na jedno volání)',
       'setup.interval': 'Interval mezi dávkami (vteřiny) — ochrana rate limitu',
+      'setup.interval.option.5': '5 s (Groq fast)',
+      'setup.interval.option.10': '10 s (bezpečné)',
+      'setup.interval.option.20': '20 s (Gemini free)',
+      'setup.interval.option.30': '30 s (při chybách)',
+      'pipeline.group': 'AI pipeline (hlavní + sekundární)',
+      'pipeline.main': 'Hlavní (Groq)',
+      'pipeline.secondaryGemini': 'Sekundární (Gemini)',
+      'pipeline.secondaryOpenrouter': 'Sekundární (OpenRouter)',
+      'pipeline.enableFixes': 'zapnout opravy',
+      'setup.batchSize.aria': 'Počet hesel na jednu dávku',
+      'setup.file.input.aria': 'Výběr TXT souboru se Strong slovníkem',
+      'setup.provider.aria': 'Výběr AI providera',
+      'setup.apiKey.input.aria': 'API klíč providera',
+      'setup.apiKey.profile.aria': 'Výběr uloženého API klíče',
+      'setup.model.aria': 'Výběr AI modelu',
+      'pipeline.mainGroq.aria': 'Hlavní model Groq',
+      'pipeline.secondaryGemini.aria': 'Sekundární model Gemini',
+      'pipeline.secondaryOpenrouter.aria': 'Sekundární model OpenRouter',
+      'pipeline.enableGemini.aria': 'Zapnout sekundární Gemini',
+      'pipeline.enableOpenrouter.aria': 'Zapnout sekundární OpenRouter',
+      'auto.enableGroq.aria': 'Zapnout Groq v AUTO',
+      'auto.enableGemini.aria': 'Zapnout Gemini v AUTO',
+      'auto.enableOpenrouter.aria': 'Zapnout OpenRouter v AUTO',
+      'log.scroll.aria': 'Log překladů',
       'setup.file': 'txt soubor',
       'setup.chooseFile': '📂 Vybrat',
       'setup.loadAuto': '📄 Automaticky',
@@ -1894,8 +1918,28 @@ const {
       'lang.modal.ui': 'Jazyk rozhraní',
       'lang.modal.target': 'Překlad do',
       'lang.modal.source': 'Zdrojový jazyk',
+      'lang.option.cs': 'Čeština',
+      'lang.option.en': 'English',
+      'lang.option.bg': 'Bulharština',
+      'lang.option.ch': 'Čínština',
+      'lang.option.sp': 'Španělština',
+      'lang.option.sk': 'Slovenčina',
+      'lang.option.pl': 'Polski',
+      'lang.option.gr': 'Řečtina',
+      'lang.option.he': 'Hebrejština',
+      'lang.source.gr': 'Řečtina (Strong G)',
+      'lang.source.he': 'Hebrejština (Strong H)',
+      'lang.source.both': 'Řečtina i Hebrejština (oba)',
       'lang.modal.close': '✕ Zavřít',
       'lang.modal.save': '✓ Uložit',
+      'prompt.status.title': 'Klikni pro přepnutí Systémový/Vlastní',
+      'prompt.auto.title': 'Automaticky aplikovat systémový prompt',
+      'file.active.title': 'Aktivní soubor (vlastní slot průběhu)',
+      'list.entry.checkbox': 'Vybrat heslo {key}',
+      'confirm.clearProgress': 'Smazat veškerý uložený průběh překladu a log?\n\n(Do 10 minut půjde obnovit přes „↺ Obnovit".)',
+      'prompt.apiKeyName': 'Název pro tento API klíč:',
+      'prompt.range.from': 'Od G čísla:',
+      'prompt.range.to': 'Do G čísla:',
       'lang.btn.title': 'Nastavit jazyky UI a promptu',
       'lang.btn.label': '🌐 Jazyky (UI: {ui} | AI: {ai})',
       'entries.count': '{count} hesel',
@@ -1949,6 +1993,55 @@ const {
       'prompt.library.load': '⬆ Načíst',
       'prompt.library.close': '✕ Zavřít',
       'prompt.library.saveApply': '✓ Uložit a použít',
+      'modelTest.title': '🧪 Výstup testu modelů',
+      'modelTest.providerLabel': 'Provider testu',
+      'modelTest.model.groq': 'Model (Groq)',
+      'modelTest.model.gemini': 'Model (Gemini)',
+      'modelTest.model.openrouter': 'Model (OpenRouter)',
+      'modelTest.modeLabel': 'Režim testu',
+      'modelTest.mode.smoke': 'Smoke test (slovo 2x)',
+      'modelTest.mode.translate1': 'Překlad 1 hesla',
+      'modelTest.mode.translate3': 'Překlad 3 hesel',
+      'modelTest.mode.autoLive': 'Auto test',
+      'modelTest.promptsLabel': 'Prompty',
+      'modelTest.comparePrompts': 'Automaticky porovnat 2 prompty (A/B)',
+      'modelTest.promptB': 'Prompt B (porovnání)',
+      'modelTest.enablePrompt': 'Testovat prompt (když je vypnuto, jede běžný test modelu)',
+      'modelTest.customPromptLabel': 'Vlastní prompt pro test',
+      'modelTest.customPromptPlaceholder': 'Sem vlož vlastní prompt pro test modelů. Pokud necháš prázdné, použije se hlavní strong_prompt.',
+      'modelTest.duration': 'Délka auto testu (min)',
+      'modelTest.appendResult': 'Připojit výsledek do stejného reportu',
+      'modelTest.table.providerModel': 'Provider/Model',
+      'modelTest.table.success': 'Úspěšnost',
+      'modelTest.table.okFail': 'OK/NEÚSP',
+      'modelTest.table.entries': 'Hesel',
+      'modelTest.table.avgAi': 'Prům. doba AI',
+      'modelTest.table.calls': 'Volání',
+      'modelTest.table.actions': 'Akce',
+      'modelTest.clearOutput': '✕ Vymazat výstup',
+      'modelTest.outputPlaceholder': 'Nastav režim, providera a modely, pak spusť ▶ Test provideru. Odpočet ukáže čekání do dalšího volání API.',
+      'modelTest.runProvider': '▶ Test provideru',
+      'modelTest.library': '📚 Knihovna',
+      'modelTest.saveRaw': '🧾 Uložit raw odpovědi',
+      'modelTest.loadTxt': '📂 Načíst test.txt',
+      'modelTest.saveTxt': '💾 Uložit test.txt',
+      'modelTest.reset': '↺ Reset',
+      'modelTest.cancel': '■ Zrušit test',
+      'modelTest.close': '✕ Zavřít',
+      'promptAi.title': '🤖 AI nastavení',
+      'promptAi.groq.temp': 'Groq (hlavní) · Temperature',
+      'promptAi.groq.max': 'Groq (hlavní) · Max tokenů',
+      'promptAi.gemini.temp': 'Gemini (sekundární) · Temperature',
+      'promptAi.gemini.max': 'Gemini (sekundární) · Max tokenů',
+      'promptAi.openrouter.temp': 'OpenRouter (sekundární) · Temperature',
+      'promptAi.openrouter.max': 'OpenRouter (sekundární) · Max tokenů',
+      'promptAi.temp.0.1': '0.1 – velmi přesný',
+      'promptAi.temp.0.3': '0.3 – balanc',
+      'promptAi.temp.0.5': '0.5 – střední',
+      'promptAi.temp.0.7': '0.7 – kreativní',
+      'promptAi.temp.1.0': '1.0 – velmi kreativní',
+      'promptAi.close': '✕ Zavřít',
+      'promptAi.save': '✓ Uložit',
       'prompt.preview.title': '👁 Náhled test promptu',
       'prompt.preview.copy': '📋 Kopírovat',
       'prompt.preview.close': '✕ Zavřít',
@@ -1990,6 +2083,44 @@ const {
       'log.clear.aria': 'Vymazat log',
       'log.placeholder': 'Překlady se budou zobrazovat zde automaticky...',
       'detail.empty': '← Klikni na heslo v seznamu pro detail',
+      'detail.label.studyLinks': 'Studijní odkazy',
+      'detail.label.transliteration': 'Transliterace',
+      'detail.label.grammar': 'Gramatika',
+      'detail.label.definitionEn': 'Definice (EN)',
+      'detail.label.englishSource': 'English (zdroj)',
+      'detail.label.kjv': 'KJV překlady',
+      'detail.label.usageKjv': 'biblické užití (KJV)',
+      'detail.label.vocalization': 'Vokalizace',
+      'detail.label.pronunciation': 'Výslovnost',
+      'detail.label.etymology': 'Etymologie',
+      'detail.label.occurrence': 'Výskyt',
+      'detail.label.twot': 'TWOT',
+      'detail.label.notes': 'Poznámky',
+      'detail.label.greekRefs': 'Řecké reference',
+      'detail.label.category': 'Kategorie',
+      'detail.label.meaningCz': 'Význam (CZ)',
+      'detail.systemPrompt.title': 'Otevřít systémový prompt pro překlad tohoto hesla',
+      'detail.systemPrompt.button': 'System prompt',
+      'detail.translateThis': '⚡ Přeložit toto heslo',
+      'detail.promptButton': '🤖 Prompt',
+      'detail.promptButton.aria': 'AI prompt pro {label}',
+      'detail.editButton': '✎ Upravit',
+      'detail.editButton.aria': 'Upravit {label}',
+      'topicPrompt.title': '🤖 Prompt pro téma: {topic} ({key})',
+      'topicPrompt.editBeforeSend': 'Prompt můžeš upravit před odesláním.',
+      'topicPrompt.send': '▶ Odeslat AI',
+      'topicPrompt.close': '✕ Zavřít',
+      'topicPrompt.currentFilled': 'Aktuálně vyplněno v poli (kontrola před přijetím):',
+      'topicPrompt.resultEditable': 'Výsledek od AI (lze upravit před vložením):',
+      'topicPrompt.resultPlaceholder': 'Po odeslání se sem vloží odpověď...',
+      'topicPrompt.applyToField': '✓ Vložit do pole',
+      'systemPrompt.title': 'System prompt: {key}',
+      'systemPrompt.editBeforeSend': 'Před odesláním můžeš upravit prompt.',
+      'systemPrompt.send': '▶ Odeslat AI',
+      'systemPrompt.sending': '⏳ Odesílám...',
+      'systemPrompt.close': '✕ Zavřít',
+      'systemPrompt.result': 'Výsledek AI:',
+      'systemPrompt.resultPlaceholder': 'Po odeslání se sem vloží odpověď...',
       'customModal.title': 'Rozsah hesel',
       'customModal.from': 'Od G1',
       'customModal.to': 'Do G100',
@@ -2139,6 +2270,26 @@ const {
       ,'toast.apiKey.missingForProviderLabel': '✗ Chybí API klíč pro {provider}'
       ,'toast.model.notSelectedForProviderLabel': '⚠ Není vybraný model pro {provider}'
       ,'toast.modelTest.doneWithCount': '✓ Test modelů dokončen ({count})'
+      ,'toast.parseError': '✗ Chyba parsování: {message}'
+      ,'topicRepair.hint.bulkMode': 'V režimu hromadně použij sekci dávky níže.'
+      ,'topicRepair.hint.startSequential': 'Nejdřív klikni na „Spustit sekvenční opravu“.'
+      ,'topicRepair.bulk.running': '⏳ Hromadně...'
+      ,'topicRepair.bulk.button': '⚡ Hromadný překlad (vybrané)'
+      ,'topicRepair.bulkAllDone': '✓ Hromadná oprava „Vše“ doběhla ({count} typů témat v pořadí).'
+      ,'topicRepair.bulkAllNone': '⚠ Pro „Vše“ nebyly žádné úlohy k běhu nebo chybí uložené batch prompty (💾 u každého tématu).'
+      ,'topicPrompt.sending': '⏳ Odesílám...'
+      ,'translate.single.translating': '⏳ Překládám...'
+      ,'translate.single.button': '⚡ Přeložit toto heslo'
+      ,'confirm.retranslate': 'Přeložit znovu heslo {key}? Stávající překlad bude nahrazen.'
+      ,'btn.step.loading': '⏳ ...'
+      ,'btn.step.default': '⚡ Dávka'
+      ,'confirm.restoreBackup': 'Obnovit {count} hesel ze zálohy ({ts})? Současný stav bude přepsán.'
+      ,'confirm.apiKey.delete': 'Smazat API klíč "{name}"?'
+      ,'toast.output.copiedShort': '✓ Zkopírováno'
+      ,'toast.modelTest.abCanceled': '⏹ A/B test promptů zrušen'
+      ,'toast.modelTest.abDone': '✓ A/B test promptů dokončen'
+      ,'toast.modelTest.canceled': '⏹ Test modelů zrušen'
+      ,'toast.modelTest.autoDone': '✓ Auto test dokončen'
       ,'toast.selected.range': '✓ Označeno {count} hesel, zobrazen rozsah {from}–{to}'
       ,'toast.systemPrompt.set': '✓ Nastaven systémový prompt ({mode})'
       ,'toast.autoPrompt.toggled': '✓ Auto prompt {state}'
@@ -2261,6 +2412,30 @@ const {
       'setup.file.none': '— none selected',
       'setup.batchSize': 'Batch size (entries per request)',
       'setup.interval': 'Interval between batches (seconds) — rate limit protection',
+      'setup.interval.option.5': '5 s (Groq fast)',
+      'setup.interval.option.10': '10 s (safe)',
+      'setup.interval.option.20': '20 s (Gemini free)',
+      'setup.interval.option.30': '30 s (on errors)',
+      'pipeline.group': 'AI pipeline (primary + secondary)',
+      'pipeline.main': 'Primary (Groq)',
+      'pipeline.secondaryGemini': 'Secondary (Gemini)',
+      'pipeline.secondaryOpenrouter': 'Secondary (OpenRouter)',
+      'pipeline.enableFixes': 'enable fixes',
+      'setup.batchSize.aria': 'Number of entries per batch',
+      'setup.file.input.aria': 'Select TXT file with Strong dictionary',
+      'setup.provider.aria': 'AI provider selection',
+      'setup.apiKey.input.aria': 'Provider API key',
+      'setup.apiKey.profile.aria': 'Saved API key selection',
+      'setup.model.aria': 'AI model selection',
+      'pipeline.mainGroq.aria': 'Primary Groq model',
+      'pipeline.secondaryGemini.aria': 'Secondary Gemini model',
+      'pipeline.secondaryOpenrouter.aria': 'Secondary OpenRouter model',
+      'pipeline.enableGemini.aria': 'Enable secondary Gemini',
+      'pipeline.enableOpenrouter.aria': 'Enable secondary OpenRouter',
+      'auto.enableGroq.aria': 'Enable Groq in AUTO',
+      'auto.enableGemini.aria': 'Enable Gemini in AUTO',
+      'auto.enableOpenrouter.aria': 'Enable OpenRouter in AUTO',
+      'log.scroll.aria': 'Translation log',
       'setup.file': 'txt file',
       'setup.chooseFile': '📂 Choose',
       'setup.loadAuto': '📄 Auto',
@@ -2268,8 +2443,28 @@ const {
       'lang.modal.ui': 'Interface language',
       'lang.modal.target': 'Translate to',
       'lang.modal.source': 'Source language',
+      'lang.option.cs': 'Czech',
+      'lang.option.en': 'English',
+      'lang.option.bg': 'Bulgarian',
+      'lang.option.ch': 'Chinese',
+      'lang.option.sp': 'Spanish',
+      'lang.option.sk': 'Slovak',
+      'lang.option.pl': 'Polish',
+      'lang.option.gr': 'Greek',
+      'lang.option.he': 'Hebrew',
+      'lang.source.gr': 'Greek (Strong G)',
+      'lang.source.he': 'Hebrew (Strong H)',
+      'lang.source.both': 'Greek and Hebrew (both)',
       'lang.modal.close': '✕ Close',
       'lang.modal.save': '✓ Save',
+      'prompt.status.title': 'Click to toggle System/Custom',
+      'prompt.auto.title': 'Automatically apply system prompt',
+      'file.active.title': 'Active file (separate progress slot)',
+      'list.entry.checkbox': 'Select entry {key}',
+      'confirm.clearProgress': 'Delete all saved translation progress and log?\n\n(Can be restored within 10 minutes via "↺ Restore".)',
+      'prompt.apiKeyName': 'Name for this API key:',
+      'prompt.range.from': 'From G number:',
+      'prompt.range.to': 'To G number:',
       'lang.btn.title': 'Configure UI and prompt languages',
       'lang.btn.label': '🌐 Languages (UI: {ui} | AI: {ai})',
       'entries.count': '{count} entries',
@@ -2323,6 +2518,55 @@ const {
       'prompt.library.load': '⬆ Load',
       'prompt.library.close': '✕ Close',
       'prompt.library.saveApply': '✓ Save and apply',
+      'modelTest.title': '🧪 Model test output',
+      'modelTest.providerLabel': 'Test provider',
+      'modelTest.model.groq': 'Model (Groq)',
+      'modelTest.model.gemini': 'Model (Gemini)',
+      'modelTest.model.openrouter': 'Model (OpenRouter)',
+      'modelTest.modeLabel': 'Test mode',
+      'modelTest.mode.smoke': 'Smoke test (word 2x)',
+      'modelTest.mode.translate1': 'Translate 1 entry',
+      'modelTest.mode.translate3': 'Translate 3 entries',
+      'modelTest.mode.autoLive': 'Auto test',
+      'modelTest.promptsLabel': 'Prompts',
+      'modelTest.comparePrompts': 'Automatically compare 2 prompts (A/B)',
+      'modelTest.promptB': 'Prompt B (comparison)',
+      'modelTest.enablePrompt': 'Test prompt (when disabled, regular model test is used)',
+      'modelTest.customPromptLabel': 'Custom test prompt',
+      'modelTest.customPromptPlaceholder': 'Insert a custom prompt for model testing. If left empty, the main strong_prompt is used.',
+      'modelTest.duration': 'Auto test duration (min)',
+      'modelTest.appendResult': 'Append result to the same report',
+      'modelTest.table.providerModel': 'Provider/Model',
+      'modelTest.table.success': 'Success rate',
+      'modelTest.table.okFail': 'OK/FAIL',
+      'modelTest.table.entries': 'Entries',
+      'modelTest.table.avgAi': 'Avg AI time',
+      'modelTest.table.calls': 'Calls',
+      'modelTest.table.actions': 'Actions',
+      'modelTest.clearOutput': '✕ Clear output',
+      'modelTest.outputPlaceholder': 'Set mode, provider, and models, then run ▶ Provider test. Countdown shows wait time before next API call.',
+      'modelTest.runProvider': '▶ Provider test',
+      'modelTest.library': '📚 Library',
+      'modelTest.saveRaw': '🧾 Save raw responses',
+      'modelTest.loadTxt': '📂 Load test.txt',
+      'modelTest.saveTxt': '💾 Save test.txt',
+      'modelTest.reset': '↺ Reset',
+      'modelTest.cancel': '■ Cancel test',
+      'modelTest.close': '✕ Close',
+      'promptAi.title': '🤖 AI settings',
+      'promptAi.groq.temp': 'Groq (primary) · Temperature',
+      'promptAi.groq.max': 'Groq (primary) · Max tokens',
+      'promptAi.gemini.temp': 'Gemini (secondary) · Temperature',
+      'promptAi.gemini.max': 'Gemini (secondary) · Max tokens',
+      'promptAi.openrouter.temp': 'OpenRouter (secondary) · Temperature',
+      'promptAi.openrouter.max': 'OpenRouter (secondary) · Max tokens',
+      'promptAi.temp.0.1': '0.1 – very precise',
+      'promptAi.temp.0.3': '0.3 – balanced',
+      'promptAi.temp.0.5': '0.5 – medium',
+      'promptAi.temp.0.7': '0.7 – creative',
+      'promptAi.temp.1.0': '1.0 – very creative',
+      'promptAi.close': '✕ Close',
+      'promptAi.save': '✓ Save',
       'prompt.preview.title': '👁 Test prompt preview',
       'prompt.preview.copy': '📋 Copy',
       'prompt.preview.close': '✕ Close',
@@ -2364,6 +2608,44 @@ const {
       'log.clear.aria': 'Clear log',
       'log.placeholder': 'Translations will appear here automatically...',
       'detail.empty': '← Click an entry in the list to view details',
+      'detail.label.studyLinks': 'Study links',
+      'detail.label.transliteration': 'Transliteration',
+      'detail.label.grammar': 'Grammar',
+      'detail.label.definitionEn': 'Definition (EN)',
+      'detail.label.englishSource': 'English (source)',
+      'detail.label.kjv': 'KJV translations',
+      'detail.label.usageKjv': 'biblical usage (KJV)',
+      'detail.label.vocalization': 'Vocalization',
+      'detail.label.pronunciation': 'Pronunciation',
+      'detail.label.etymology': 'Etymology',
+      'detail.label.occurrence': 'Occurrence',
+      'detail.label.twot': 'TWOT',
+      'detail.label.notes': 'Notes',
+      'detail.label.greekRefs': 'Greek references',
+      'detail.label.category': 'Category',
+      'detail.label.meaningCz': 'Meaning (CZ)',
+      'detail.systemPrompt.title': 'Open system prompt for this entry translation',
+      'detail.systemPrompt.button': 'System prompt',
+      'detail.translateThis': '⚡ Translate this entry',
+      'detail.promptButton': '🤖 Prompt',
+      'detail.promptButton.aria': 'AI prompt for {label}',
+      'detail.editButton': '✎ Edit',
+      'detail.editButton.aria': 'Edit {label}',
+      'topicPrompt.title': '🤖 Topic prompt: {topic} ({key})',
+      'topicPrompt.editBeforeSend': 'You can edit the prompt before sending.',
+      'topicPrompt.send': '▶ Send to AI',
+      'topicPrompt.close': '✕ Close',
+      'topicPrompt.currentFilled': 'Currently filled in field (review before applying):',
+      'topicPrompt.resultEditable': 'AI result (editable before insert):',
+      'topicPrompt.resultPlaceholder': 'AI response will appear here after sending...',
+      'topicPrompt.applyToField': '✓ Insert into field',
+      'systemPrompt.title': 'System prompt: {key}',
+      'systemPrompt.editBeforeSend': 'You can edit the prompt before sending.',
+      'systemPrompt.send': '▶ Send to AI',
+      'systemPrompt.sending': '⏳ Sending...',
+      'systemPrompt.close': '✕ Close',
+      'systemPrompt.result': 'AI result:',
+      'systemPrompt.resultPlaceholder': 'AI response will appear here after sending...',
       'customModal.title': 'Entry range',
       'customModal.from': 'From G1',
       'customModal.to': 'To G100',
@@ -2513,6 +2795,26 @@ const {
       ,'toast.apiKey.missingForProviderLabel': '✗ Missing API key for {provider}'
       ,'toast.model.notSelectedForProviderLabel': '⚠ No model selected for {provider}'
       ,'toast.modelTest.doneWithCount': '✓ Model test finished ({count})'
+      ,'toast.parseError': '✗ Parse error: {message}'
+      ,'topicRepair.hint.bulkMode': 'In bulk mode, use the batch section below.'
+      ,'topicRepair.hint.startSequential': 'First click "Start sequential repair".'
+      ,'topicRepair.bulk.running': '⏳ Bulk running...'
+      ,'topicRepair.bulk.button': '⚡ Bulk translation (selected)'
+      ,'topicRepair.bulkAllDone': '✓ Bulk repair for "All" finished ({count} topic types in order).'
+      ,'topicRepair.bulkAllNone': '⚠ For "All", no tasks were eligible to run or batch prompts are missing (💾 for each topic).'
+      ,'topicPrompt.sending': '⏳ Sending...'
+      ,'translate.single.translating': '⏳ Translating...'
+      ,'translate.single.button': '⚡ Translate this entry'
+      ,'confirm.retranslate': 'Retranslate entry {key}? Current translation will be replaced.'
+      ,'btn.step.loading': '⏳ ...'
+      ,'btn.step.default': '⚡ Batch'
+      ,'confirm.restoreBackup': 'Restore {count} entries from backup ({ts})? Current state will be overwritten.'
+      ,'confirm.apiKey.delete': 'Delete API key "{name}"?'
+      ,'toast.output.copiedShort': '✓ Copied'
+      ,'toast.modelTest.abCanceled': '⏹ Prompt A/B test canceled'
+      ,'toast.modelTest.abDone': '✓ Prompt A/B test finished'
+      ,'toast.modelTest.canceled': '⏹ Model test canceled'
+      ,'toast.modelTest.autoDone': '✓ Auto test finished'
       ,'toast.selected.range': '✓ Selected {count} entries, showing range {from}–{to}'
       ,'toast.systemPrompt.set': '✓ System prompt set ({mode})'
       ,'toast.autoPrompt.toggled': '✓ Auto prompt {state}'
@@ -2628,6 +2930,56 @@ const {
       ,'toast.progressClearedRestore.action': 'Restore'
     }
   };
+  let UI_MESSAGES = INLINE_UI_MESSAGES;
+  let uiMessagesLoadPromise = null;
+
+  async function fetchUiDictionary(lang) {
+    const url = `./i18n/${lang}.json`;
+    const response = await fetch(url, { cache: 'no-store' });
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status} for ${url}`);
+    }
+    return response.json();
+  }
+
+  function validateUiMessages(messages) {
+    const base = messages[DEFAULT_UI_LANG] || {};
+    const baseKeys = Object.keys(base);
+    for (const lang of UI_LANGS) {
+      if (lang === DEFAULT_UI_LANG) continue;
+      const dict = messages[lang] || {};
+      const missing = baseKeys.filter(key => !(key in dict));
+      if (missing.length) {
+        console.warn(`[i18n] Missing keys in "${lang}":`, missing);
+      }
+    }
+  }
+
+  function loadUiMessages(force = false) {
+    if (uiMessagesLoadPromise && !force) return uiMessagesLoadPromise;
+    uiMessagesLoadPromise = (async () => {
+      const fallback = INLINE_UI_MESSAGES;
+      const loaded = { ...fallback };
+      try {
+        loaded[DEFAULT_UI_LANG] = await fetchUiDictionary(DEFAULT_UI_LANG);
+      } catch (err) {
+        console.warn('[i18n] Failed loading default UI dictionary, using inline fallback:', err);
+        loaded[DEFAULT_UI_LANG] = fallback[DEFAULT_UI_LANG] || {};
+      }
+      await Promise.all(Array.from(UI_LANGS).filter(lang => lang !== DEFAULT_UI_LANG).map(async lang => {
+        try {
+          loaded[lang] = await fetchUiDictionary(lang);
+        } catch (err) {
+          console.warn(`[i18n] Failed loading "${lang}" dictionary, using fallback:`, err);
+          loaded[lang] = fallback[lang] || {};
+        }
+      }));
+      UI_MESSAGES = loaded;
+      validateUiMessages(UI_MESSAGES);
+      return UI_MESSAGES;
+    })();
+    return uiMessagesLoadPromise;
+  }
 
   function getUiLang() {
     const raw = String(localStorage.getItem(UI_LANG_KEY) || DEFAULT_UI_LANG).toLowerCase();
@@ -2680,9 +3032,41 @@ const {
     setText('btnLimits', t('setup.limits'));
     setText('batchSizeLabel', t('setup.batchSize'));
     setText('intervalLabel', t('setup.interval'));
+    setText('pipelineGroupLabel', t('pipeline.group'));
+    setText('pipelineMainLabel', t('pipeline.main'));
+    setText('pipelineSecondaryGeminiLabel', t('pipeline.secondaryGemini'));
+    setText('pipelineSecondaryOpenrouterLabel', t('pipeline.secondaryOpenrouter'));
+    setText('pipelineEnableSecondaryGeminiText', t('pipeline.enableFixes'));
+    setText('pipelineEnableSecondaryOpenrouterText', t('pipeline.enableFixes'));
     setText('fileLabel', t('setup.file'));
     setText('btnChooseFile', t('setup.chooseFile'));
     setText('btnLoadDefault', t('setup.loadAuto'));
+    setAttr('provider', 'aria-label', t('setup.provider.aria'));
+    setAttr('apiKey', 'aria-label', t('setup.apiKey.input.aria'));
+    setAttr('apiKeyProfile', 'aria-label', t('setup.apiKey.profile.aria'));
+    setAttr('model', 'aria-label', t('setup.model.aria'));
+    setAttr('batchSize', 'aria-label', t('setup.batchSize.aria'));
+    setAttr('fileTXT', 'aria-label', t('setup.file.input.aria'));
+    setAttr('pipelineModelMainGroq', 'aria-label', t('pipeline.mainGroq.aria'));
+    setAttr('pipelineModelMainGroq', 'title', t('pipeline.mainGroq.aria'));
+    setAttr('pipelineModelSecondaryGemini', 'aria-label', t('pipeline.secondaryGemini.aria'));
+    setAttr('pipelineModelSecondaryGemini', 'title', t('pipeline.secondaryGemini.aria'));
+    setAttr('pipelineModelSecondaryOpenrouter', 'aria-label', t('pipeline.secondaryOpenrouter.aria'));
+    setAttr('pipelineModelSecondaryOpenrouter', 'title', t('pipeline.secondaryOpenrouter.aria'));
+    setAttr('pipelineEnableSecondaryGemini', 'aria-label', t('pipeline.enableGemini.aria'));
+    setAttr('pipelineEnableSecondaryOpenrouter', 'aria-label', t('pipeline.enableOpenrouter.aria'));
+    setAttr('providerRunMainGroqModel', 'aria-label', t('pipeline.mainGroq.aria'));
+    setAttr('providerRunMainGroqModel', 'title', t('pipeline.mainGroq.aria'));
+    setAttr('providerRunSecondaryGeminiModel', 'aria-label', t('pipeline.secondaryGemini.aria'));
+    setAttr('providerRunSecondaryGeminiModel', 'title', t('pipeline.secondaryGemini.aria'));
+    setAttr('providerRunSecondaryOpenrouterModel', 'aria-label', t('pipeline.secondaryOpenrouter.aria'));
+    setAttr('providerRunSecondaryOpenrouterModel', 'title', t('pipeline.secondaryOpenrouter.aria'));
+    setAttr('providerRunEnableSecondaryGemini', 'aria-label', t('pipeline.enableGemini.aria'));
+    setAttr('providerRunEnableSecondaryOpenrouter', 'aria-label', t('pipeline.enableOpenrouter.aria'));
+    setAttr('autoEnable_groq', 'aria-label', t('auto.enableGroq.aria'));
+    setAttr('autoEnable_gemini', 'aria-label', t('auto.enableGemini.aria'));
+    setAttr('autoEnable_openrouter', 'aria-label', t('auto.enableOpenrouter.aria'));
+    setAttr('logScroll', 'aria-label', t('log.scroll.aria'));
     setText('lblDone', t('stats.done'));
     setText('lblRemain', t('stats.remain'));
     setText('lblTotal', t('stats.total'));
@@ -2735,6 +3119,75 @@ const {
       autoLog.textContent = t('auto.log.waiting');
     }
     refreshLanguageAwarePromptOptionLabels();
+    setText('modelTestTitle', t('modelTest.title'));
+    setText('modelTestProviderLabel', t('modelTest.providerLabel'));
+    setText('modelTestModelGroqLabel', t('modelTest.model.groq'));
+    setText('modelTestModelGeminiLabel', t('modelTest.model.gemini'));
+    setText('modelTestModelOpenrouterLabel', t('modelTest.model.openrouter'));
+    setText('modelTestModeLabel', t('modelTest.modeLabel'));
+    setText('modelTestPromptsLabel', t('modelTest.promptsLabel'));
+    setText('modelTestEnablePromptCompareText', t('modelTest.comparePrompts'));
+    setText('modelTestPromptCompareLabel', t('modelTest.promptB'));
+    setText('modelTestEnablePromptText', t('modelTest.enablePrompt'));
+    setText('modelTestCustomPromptLabel', t('modelTest.customPromptLabel'));
+    setAttr('modelTestCustomPromptInput', 'placeholder', t('modelTest.customPromptPlaceholder'));
+    setText('modelTestDurationLabel', t('modelTest.duration'));
+    setText('modelTestAppendText', t('modelTest.appendResult'));
+    setText('modelStatsThProviderModel', t('modelTest.table.providerModel'));
+    setText('modelStatsThSuccess', t('modelTest.table.success'));
+    setText('modelStatsThOkFail', t('modelTest.table.okFail'));
+    setText('modelStatsThEntries', t('modelTest.table.entries'));
+    setText('modelStatsThAvgAi', t('modelTest.table.avgAi'));
+    setText('modelStatsThCalls', t('modelTest.table.calls'));
+    setText('modelStatsThActions', t('modelTest.table.actions'));
+    setText('btnModelTestClearOutput', t('modelTest.clearOutput'));
+    setAttr('modelTestOutput', 'placeholder', t('modelTest.outputPlaceholder'));
+    setText('btnRunModelTestTop', t('modelTest.runProvider'));
+    setText('btnRunModelTest', t('modelTest.runProvider'));
+    setText('btnModelTestLibrary', t('modelTest.library'));
+    setText('btnModelTestSaveRaw', t('modelTest.saveRaw'));
+    setText('btnModelTestLoadTxt', t('modelTest.loadTxt'));
+    setText('btnModelTestSaveTxt', t('modelTest.saveTxt'));
+    setText('btnModelTestReset', t('modelTest.reset'));
+    setText('btnCancelModelTest', t('modelTest.cancel'));
+    setText('btnCloseModelTestModal', t('modelTest.close'));
+    setText('promptAiModalTitle', t('promptAi.title'));
+    setText('promptAiGroqTempLabel', t('promptAi.groq.temp'));
+    setText('promptAiGroqMaxLabel', t('promptAi.groq.max'));
+    setText('promptAiGeminiTempLabel', t('promptAi.gemini.temp'));
+    setText('promptAiGeminiMaxLabel', t('promptAi.gemini.max'));
+    setText('promptAiOpenrouterTempLabel', t('promptAi.openrouter.temp'));
+    setText('promptAiOpenrouterMaxLabel', t('promptAi.openrouter.max'));
+    setText('btnPromptAiClose', t('promptAi.close'));
+    setText('btnPromptAiSave', t('promptAi.save'));
+    const promptAiTempMap = {
+      '0.1': t('promptAi.temp.0.1'),
+      '0.3': t('promptAi.temp.0.3'),
+      '0.5': t('promptAi.temp.0.5'),
+      '0.7': t('promptAi.temp.0.7'),
+      '1.0': t('promptAi.temp.1.0')
+    };
+    ['aiTemperature_groq', 'aiTemperature_gemini', 'aiTemperature_openrouter'].forEach(selectId => {
+      const select = document.getElementById(selectId);
+      if (!select) return;
+      select.querySelectorAll('option').forEach(opt => {
+        const txt = promptAiTempMap[String(opt.value || '')];
+        if (txt) opt.textContent = txt;
+      });
+    });
+    const modelTestModeEl = document.getElementById('modelTestMode');
+    if (modelTestModeEl) {
+      const modeTextByValue = {
+        smoke: t('modelTest.mode.smoke'),
+        translate1: t('modelTest.mode.translate1'),
+        translate3: t('modelTest.mode.translate3'),
+        'auto-live': t('modelTest.mode.autoLive')
+      };
+      modelTestModeEl.querySelectorAll('option').forEach(opt => {
+        const txt = modeTextByValue[String(opt.value || '')];
+        if (txt) opt.textContent = txt;
+      });
+    }
     setText('modelTestPromptPreviewTitle', t('prompt.preview.title'));
     setText('btnCopyPromptPreview', t('prompt.preview.copy'));
     setText('btnClosePromptPreview', t('prompt.preview.close'));
@@ -2757,6 +3210,9 @@ const {
     setAttr('btnDeleteApiKeyProfile', 'title', t('apiKey.deleteButton.title'));
     setText('btnPromptLibraryOpen', t('prompt.library.openButton'));
     setAttr('btnPromptLibraryOpen', 'title', t('prompt.library.openButton.title'));
+    setAttr('promptStatus', 'title', t('prompt.status.title'));
+    setAttr('btnPromptAuto', 'title', t('prompt.auto.title'));
+    setAttr('fileIdBadge', 'title', t('file.active.title'));
     const currentLegacyProv = String(document.getElementById('provider')?.value || '').trim();
     if (currentLegacyProv === 'groq' || currentLegacyProv === 'gemini') {
       refreshStaticProviderSelectLabel('model', currentLegacyProv);
@@ -2790,6 +3246,19 @@ const {
     setAttr('btnSelectRange', 'aria-label', t('list.selectRange.aria'));
     setAttr('filterStatus', 'aria-label', t('list.filterStatus.aria'));
     setAttr('filterSort', 'aria-label', t('list.filterSort.aria'));
+    const intervalLabels = {
+      '5': t('setup.interval.option.5'),
+      '10': t('setup.interval.option.10'),
+      '20': t('setup.interval.option.20'),
+      '30': t('setup.interval.option.30')
+    };
+    const intervalEl = document.getElementById('interval');
+    if (intervalEl) {
+      intervalEl.querySelectorAll('option').forEach(opt => {
+        const txt = intervalLabels[String(opt.value || '')];
+        if (txt) opt.textContent = txt;
+      });
+    }
     const filterStatusLabels = {
       all: t('list.filterStatus.all'),
       pending: t('list.filterStatus.pending'),
@@ -2893,6 +3362,44 @@ const {
     setText('uiLanguageLabel', t('lang.modal.ui'));
     setText('targetLanguageLabel', t('lang.modal.target'));
     setText('sourceLanguageLabel', t('lang.modal.source'));
+    const uiLanguageEl = document.getElementById('uiLanguage');
+    if (uiLanguageEl) {
+      const uiLangByValue = { cs: t('lang.option.cs'), en: t('lang.option.en') };
+      uiLanguageEl.querySelectorAll('option').forEach(opt => {
+        const text = uiLangByValue[String(opt.value || '')];
+        if (text) opt.textContent = text;
+      });
+    }
+    const targetLanguageEl = document.getElementById('targetLanguage');
+    if (targetLanguageEl) {
+      const targetLangByValue = {
+        cz: t('lang.option.cs'),
+        en: t('lang.option.en'),
+        bg: t('lang.option.bg'),
+        ch: t('lang.option.ch'),
+        sp: t('lang.option.sp'),
+        sk: t('lang.option.sk'),
+        pl: t('lang.option.pl'),
+        gr: t('lang.option.gr'),
+        he: t('lang.option.he')
+      };
+      targetLanguageEl.querySelectorAll('option').forEach(opt => {
+        const text = targetLangByValue[String(opt.value || '')];
+        if (text) opt.textContent = text;
+      });
+    }
+    const sourceLanguageEl = document.getElementById('sourceLanguage');
+    if (sourceLanguageEl) {
+      const sourceLangByValue = {
+        gr: t('lang.source.gr'),
+        he: t('lang.source.he'),
+        both: t('lang.source.both')
+      };
+      sourceLanguageEl.querySelectorAll('option').forEach(opt => {
+        const text = sourceLangByValue[String(opt.value || '')];
+        if (text) opt.textContent = text;
+      });
+    }
     setText('btnPromptLangClose', t('lang.modal.close'));
     setText('btnPromptLangSave', t('lang.modal.save'));
     const status = document.getElementById('statusTXT');
@@ -3620,7 +4127,7 @@ function loadTXT(input) {
      } catch(e) {
        logError('loadTXT', e, { fileName: file?.name });
        const el = document.getElementById('statusTXT');
-       el.textContent = '✗ Chyba parsování: ' + e.message;
+       el.textContent = t('toast.parseError', { message: e.message });
      }
   };
   reader.readAsText(file, 'utf-8');
@@ -4525,7 +5032,7 @@ function toggleTopicRepairRun() {
   if (!topicRepairState) return;
   const state = topicRepairState;
   if (state.repairStrategy !== 'sequential' || !state.sequentialEverStarted) {
-    showToast(state.repairStrategy === 'bulk' ? 'V režimu hromadně použij sekci dávky níže.' : 'Nejdřív klikni na „Spustit sekvenční opravu“.');
+    showToast(state.repairStrategy === 'bulk' ? t('topicRepair.hint.bulkMode') : t('topicRepair.hint.startSequential'));
     return;
   }
   state.paused = !state.paused;
@@ -5064,7 +5571,7 @@ function renderVisible() {
       }
     };
     div.innerHTML = `
-      <input type="checkbox" class="li-check" ${isSelected ? 'checked' : ''} onclick="toggleSelect('${key}', event)" aria-label="Vybrat heslo ${key}">
+      <input type="checkbox" class="li-check" ${isSelected ? 'checked' : ''} onclick="toggleSelect('${key}', event)" aria-label="${escHtml(t('list.entry.checkbox', { key }))}">
       <div class="li-key">${key}</div>
       <div class="li-greek">${escHtml(e.greek)}</div>
       <div class="li-dot ${state === 'done' ? 'done' : (state === 'pending' ? 'pending' : (state === 'missing_topic' ? 'missing-topic' : 'failed'))}" aria-hidden="true">${state === 'done' ? '✓' : '•'}</div>
@@ -5109,9 +5616,27 @@ function renderDetail() {
   if (!activeKey) return;
   const e = entryMap.get(activeKey);
   if (!e) return;
-  const t = translated[activeKey];
-  const hasTranslation = isTranslationComplete(t);
+  const tr = translated[activeKey];
+  const hasTranslation = isTranslationComplete(tr);
   const pane = document.getElementById('detailPane');
+  const detailLabel = {
+    studyLinks: t('detail.label.studyLinks'),
+    transliteration: t('detail.label.transliteration'),
+    grammar: t('detail.label.grammar'),
+    definitionEn: t('detail.label.definitionEn'),
+    englishSource: t('detail.label.englishSource'),
+    kjv: t('detail.label.kjv'),
+    usageKjv: t('detail.label.usageKjv'),
+    vocalization: t('detail.label.vocalization'),
+    pronunciation: t('detail.label.pronunciation'),
+    etymology: t('detail.label.etymology'),
+    occurrence: t('detail.label.occurrence'),
+    twot: t('detail.label.twot'),
+    notes: t('detail.label.notes'),
+    greekRefs: t('detail.label.greekRefs'),
+    category: t('detail.label.category'),
+    meaningCz: t('detail.label.meaningCz')
+  };
 
   // Detekce typu podle klíče
   const num = parseInt(activeKey.slice(1));
@@ -5125,7 +5650,7 @@ function renderDetail() {
   const bibleHubPath = activeKey.startsWith('H') ? 'hebrew' : 'greek';
   const studyLinks = `
     <div class="orig-section">
-      <div class="label">Studijní odkazy</div>
+      <div class="label">${detailLabel.studyLinks}</div>
       <div class="value">
         <a href="https://biblehub.com/${bibleHubPath}/${strongNum}.htm" target="_blank" rel="noopener noreferrer">BibleHub</a> ·
         <a href="https://www.blueletterbible.org/lexicon/${activeKey}/kjv/tr/0-1/" target="_blank" rel="noopener noreferrer">Blue Letter Bible</a> ·
@@ -5143,112 +5668,112 @@ function renderDetail() {
       <div class="value">${escHtml(e.beta || '—')}</div>
     </div>
     <div class="orig-section">
-      <div class="label">Transliterace</div>
+      <div class="label">${detailLabel.transliteration}</div>
       <div class="value">${escHtml(e.prepis || '—')}</div>
     </div>
     <div class="orig-section">
-      <div class="label">Gramatika</div>
+      <div class="label">${detailLabel.grammar}</div>
       <div class="value">${escHtml(e.tvaroslovi || '—')}</div>
     </div>
     <div class="orig-section">
-      <div class="label">Definice (EN)</div>
+      <div class="label">${detailLabel.definitionEn}</div>
       <div class="value">${escHtml(e.definice || e.def || '—')}</div>
     </div>
     ${englishSource ? `
     <div class="orig-section">
-      <div class="label">English (zdroj)</div>
+      <div class="label">${detailLabel.englishSource}</div>
       <div class="value">${escHtml(englishSource)}</div>
     </div>` : ''}
     <div class="orig-section">
-      <div class="label">KJV překlady</div>
+      <div class="label">${detailLabel.kjv}</div>
       <div class="value">${escHtml(e.kjv || '—')}</div>
     </div>
     <div class="orig-section">
-      <div class="label">biblické užití (KJV)</div>
+      <div class="label">${detailLabel.usageKjv}</div>
       <div class="value">${escHtml(e.vyskyt || '—')}</div>
     </div>
     ${studyLinks}`;
   } else if (isHebrew) {
     sections = `
     <div class="orig-section">
-      <div class="label">Vokalizace</div>
+      <div class="label">${detailLabel.vocalization}</div>
       <div class="value">${escHtml(e.vokalizace || '—')}</div>
     </div>
     <div class="orig-section">
-      <div class="label">Výslovnost</div>
+      <div class="label">${detailLabel.pronunciation}</div>
       <div class="value">${escHtml(e.vyslovnost || '—')}</div>
     </div>
     <div class="orig-section">
-      <div class="label">Etymologie</div>
+      <div class="label">${detailLabel.etymology}</div>
       <div class="value">${escHtml(e.etimol || e.orig || '—')}</div>
     </div>
     <div class="orig-section">
-      <div class="label">Transliterace</div>
+      <div class="label">${detailLabel.transliteration}</div>
       <div class="value">${escHtml(e.prepis || '—')}</div>
     </div>
 <div class="orig-section">
-      <div class="label">Gramatika</div>
+      <div class="label">${detailLabel.grammar}</div>
       <div class="value">${escHtml(e.tvaroslovi || '—')}</div>
     </div>
     <div class="orig-section">
-      <div class="label">Definice (EN)</div>
+      <div class="label">${detailLabel.definitionEn}</div>
       <div class="value">${escHtml(e.definice || e.def || '—')}</div>
     </div>
     ${englishSource ? `
     <div class="orig-section">
-      <div class="label">English (zdroj)</div>
+      <div class="label">${detailLabel.englishSource}</div>
       <div class="value">${escHtml(englishSource)}</div>
     </div>` : ''}
     <div class="orig-section">
-      <div class="label">KJV překlady</div>
+      <div class="label">${detailLabel.kjv}</div>
       <div class="value">${escHtml(e.kjv || '—')}</div>
     </div>
     <div class="orig-section">
-      <div class="label">Výskyt</div>
+      <div class="label">${detailLabel.occurrence}</div>
       <div class="value">${escHtml(e.vyskyt || '—')}</div>
     </div>
     <div class="orig-section">
-      <div class="label">TWOT</div>
+      <div class="label">${detailLabel.twot}</div>
       <div class="value">${escHtml(e.twot || '—')}</div>
     </div>
     <div class="orig-section">
-      <div class="label">Poznámky</div>
+      <div class="label">${detailLabel.notes}</div>
       <div class="value">${escHtml(e.poznamky || '—')}</div>
     </div>
     <div class="orig-section">
-      <div class="label">Řecké reference</div>
+      <div class="label">${detailLabel.greekRefs}</div>
       <div class="value">${escHtml(e.greekRefs || '—')}</div>
     </div>
     ${studyLinks}`;
   } else if (isGrammar) {
     sections = `
     <div class="orig-section">
-      <div class="label">Vokalizace</div>
+      <div class="label">${detailLabel.vocalization}</div>
       <div class="value">${escHtml(e.vokalizace || '—')}</div>
     </div>
     <div class="orig-section">
-      <div class="label">Kategorie</div>
+      <div class="label">${detailLabel.category}</div>
       <div class="value">${escHtml(e.kategorie || '—')}</div>
     </div>
     <div class="orig-section">
-      <div class="label">Význam (CZ)</div>
+      <div class="label">${detailLabel.meaningCz}</div>
       <div class="value">${escHtml(e.vyznamCz || '—')}</div>
     </div>
     <div class="orig-section">
-      <div class="label">Transliterace</div>
+      <div class="label">${detailLabel.transliteration}</div>
       <div class="value">${escHtml(e.prepis || '—')}</div>
     </div>
     <div class="orig-section">
-      <div class="label">Gramatika</div>
+      <div class="label">${detailLabel.grammar}</div>
       <div class="value">${escHtml(e.tvaroslovi || '—')}</div>
     </div>
     <div class="orig-section">
-      <div class="label">Definice (EN)</div>
+      <div class="label">${detailLabel.definitionEn}</div>
       <div class="value">${escHtml(e.definice || e.def || '—')}</div>
     </div>
     ${englishSource ? `
     <div class="orig-section">
-      <div class="label">English (zdroj)</div>
+      <div class="label">${detailLabel.englishSource}</div>
       <div class="value">${escHtml(englishSource)}</div>
     </div>` : ''}
     ${studyLinks}`;
@@ -5256,11 +5781,11 @@ function renderDetail() {
     // Fallback pro starý formát
     sections = `
     <div class="orig-section">
-      <div class="label">Definice (EN)</div>
+      <div class="label">${detailLabel.definitionEn}</div>
       <div class="value">${escHtml(e.definice || e.def || '—')}</div>
     </div>
     <div class="orig-section">
-      <div class="label">KJV překlady</div>
+      <div class="label">${detailLabel.kjv}</div>
       <div class="value">${escHtml(e.kjv || '—')}</div>
     </div>
     ${studyLinks}`;
@@ -5271,14 +5796,14 @@ function renderDetail() {
       <div class="entry-key">${e.key}</div>
       <div class="entry-greek">${escHtml(e.greek)}</div>
       <div class="entry-status ${hasTranslation ? 'done' : ''}">${hasTranslation ? '✓' : '—'}</div>
-      <button class="hbtn" style="margin-left:8px;font-size:10px;padding:3px 8px" onclick="openSystemPromptModal('${e.key}')" title="Otevřít systémový prompt pro překlad tohoto hesla">System prompt</button>
+      <button class="hbtn" style="margin-left:8px;font-size:10px;padding:3px 8px" onclick="openSystemPromptModal('${e.key}')" title="${escHtml(t('detail.systemPrompt.title'))}">${t('detail.systemPrompt.button')}</button>
     </div>
 
     ${sections}
 
-    ${!hasTranslation ? `<button class="translate-btn" onclick="translateSingle('${e.key}')">⚡ Přeložit toto heslo</button>` : ''}
+    ${!hasTranslation ? `<button class="translate-btn" onclick="translateSingle('${e.key}')">${t('detail.translateThis')}</button>` : ''}
 
-    ${renderTranslation(e.key, t)}
+    ${renderTranslation(e.key, tr)}
   `;
 }
 
@@ -5311,9 +5836,9 @@ function renderTranslation(key, t) {
       <div class="tbox-head">
         <div class="tbox-label">${s.label}</div>
         <div class="tbox-actions">
-          <button class="tbox-btn" onclick="openTopicPromptModal('${key}','${s.id}')" aria-label="AI prompt pro ${s.label}">🤖 Prompt</button>
+          <button class="tbox-btn" onclick="openTopicPromptModal('${key}','${s.id}')" aria-label="${escHtml(t('detail.promptButton.aria', { label: s.label }))}">${t('detail.promptButton')}</button>
           ${!hasMeaningfulValue(s.field) ? `<button class="tbox-btn" onclick="refillSingleField('${key}','${s.id}')" aria-label="Doplnit ${s.label} přes AI">✨ Doplnit</button>` : ''}
-          <button class="tbox-btn" onclick="toggleEditSection('${key}','${s.id}')" aria-label="Upravit ${s.label}">✎ Upravit</button>
+          <button class="tbox-btn" onclick="toggleEditSection('${key}','${s.id}')" aria-label="${escHtml(t('detail.editButton.aria', { label: s.label }))}">${t('detail.editButton')}</button>
         </div>
       </div>
       ${s.rawField ? `<div class="tbox-body" id="traw-${key}-${s.id}" style="color:var(--txt2);font-size:12px;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--brd)">${escHtml(s.rawField)}</div>` : ''}
@@ -5761,7 +6286,7 @@ async function runTopicRepairBulkTranslation() {
   const bulkBtn = document.getElementById('topicRepairBulkRunBtn');
   if (bulkBtn) {
     bulkBtn.disabled = true;
-    bulkBtn.textContent = '⏳ Hromadně...';
+    bulkBtn.textContent = t('topicRepair.bulk.running');
   }
 
   const wasPaused = !!state.paused;
@@ -5773,7 +6298,7 @@ async function runTopicRepairBulkTranslation() {
     topicRepairBulkRunning = false;
     if (bulkBtn) {
       bulkBtn.disabled = false;
-      bulkBtn.textContent = '⚡ Hromadný překlad (vybrané)';
+      bulkBtn.textContent = t('topicRepair.bulk.button');
     }
     return;
   }
@@ -5800,11 +6325,7 @@ async function runTopicRepairBulkTranslation() {
         if (res.count > 0) ranAny = true;
         if (ti < topicsToRun.length - 1 && iv0 > 0) await sleep(iv0 * 1000);
       }
-      showToast(
-        ranAny
-          ? `✓ Hromadná oprava „Vše“ doběhla (${topicsToRun.length} typů témat v pořadí).`
-          : '⚠ Pro „Vše“ nebyly žádné úlohy k běhu nebo chybí uložené batch prompty (💾 u každého tématu).'
-      );
+      showToast(ranAny ? t('topicRepair.bulkAllDone', { count: topicsToRun.length }) : t('topicRepair.bulkAllNone'));
     } else {
       const promptTemplate = applyPromptLanguageTokens(String(document.getElementById('topicRepairBatchPrompt')?.value || '').trim());
       if (!promptTemplate) {
@@ -5827,7 +6348,7 @@ async function runTopicRepairBulkTranslation() {
     topicRepairBulkRunning = false;
     if (bulkBtn) {
       bulkBtn.disabled = false;
-      bulkBtn.textContent = '⚡ Hromadný překlad (vybrané)';
+      bulkBtn.textContent = t('topicRepair.bulk.button');
     }
     updateTopicRepairModalUI();
     if (state.sequentialEverStarted && state.repairStrategy === 'sequential' && !state.paused && !topicRepairWorkerRunning) {
@@ -5927,22 +6448,22 @@ function openTopicPromptModal(key, topicId) {
   modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:10020;padding:16px';
   modal.innerHTML = `
     <div style="width:min(980px,95vw);max-height:92vh;overflow:auto;background:var(--bg2);border:1px solid var(--brd);border-radius:8px;padding:16px">
-      <h3 style="margin:0 0 10px 0;color:var(--acc)">🤖 Prompt pro téma: ${escHtml(topicLabel)} (${escHtml(key)})</h3>
-      <div style="font-size:11px;color:var(--txt2);margin-bottom:8px">Prompt můžeš upravit před odesláním.</div>
+      <h3 style="margin:0 0 10px 0;color:var(--acc)">${escHtml(t('topicPrompt.title', { topic: topicLabel, key }))}</h3>
+      <div style="font-size:11px;color:var(--txt2);margin-bottom:8px">${t('topicPrompt.editBeforeSend')}</div>
       <textarea id="topicPromptInput" style="width:100%;min-height:220px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:10px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.5"></textarea>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
-        <button class="hbtn grn" id="topicPromptRunBtn" onclick="runTopicPromptAI()">▶ Odeslat AI</button>
-        <button class="hbtn" onclick="closeTopicPromptModal()">✕ Zavřít</button>
+        <button class="hbtn grn" id="topicPromptRunBtn" onclick="runTopicPromptAI()">${t('topicPrompt.send')}</button>
+        <button class="hbtn" onclick="closeTopicPromptModal()">${t('topicPrompt.close')}</button>
       </div>
       <div style="margin-top:14px">
-        <div style="font-size:11px;color:var(--txt2);margin-bottom:6px">Aktuálně vyplněno v poli (kontrola před přijetím):</div>
+        <div style="font-size:11px;color:var(--txt2);margin-bottom:6px">${t('topicPrompt.currentFilled')}</div>
         <textarea id="topicPromptCurrentValue" readonly style="width:100%;min-height:120px;background:var(--bg);border:1px solid var(--brd);border-radius:4px;color:var(--txt2);padding:10px;font-family:inherit;font-size:13px;line-height:1.5"></textarea>
       </div>
       <div style="margin-top:14px">
-        <div style="font-size:11px;color:var(--txt2);margin-bottom:6px">Výsledek od AI (lze upravit před vložením):</div>
-        <textarea id="topicPromptResult" style="width:100%;min-height:180px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:10px;font-family:inherit;font-size:13px;line-height:1.5" placeholder="Po odeslání se sem vloží odpověď..."></textarea>
+        <div style="font-size:11px;color:var(--txt2);margin-bottom:6px">${t('topicPrompt.resultEditable')}</div>
+        <textarea id="topicPromptResult" style="width:100%;min-height:180px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:10px;font-family:inherit;font-size:13px;line-height:1.5" placeholder="${escHtml(t('topicPrompt.resultPlaceholder'))}"></textarea>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
-          <button class="hbtn grn" onclick="applyTopicPromptResult()">✓ Vložit do pole</button>
+          <button class="hbtn grn" onclick="applyTopicPromptResult()">${t('topicPrompt.applyToField')}</button>
         </div>
       </div>
     </div>`;
@@ -5976,7 +6497,7 @@ async function runTopicPromptAI() {
   }
 
   runBtn.disabled = true;
-  runBtn.textContent = '⏳ Odesílám...';
+  runBtn.textContent = t('topicPrompt.sending');
   try {
     const messages = [
       { role: 'system', content: SYSTEM_MESSAGE },
@@ -6185,16 +6706,16 @@ function openSystemPromptModal(key) {
   modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:10020;padding:16px';
   modal.innerHTML = `
     <div style="width:min(980px,95vw);max-height:92vh;overflow:auto;background:var(--bg2);border:1px solid var(--brd);border-radius:8px;padding:16px">
-      <h3 style="margin:0 0 10px 0;color:var(--acc)">System prompt: ${escHtml(key)}</h3>
-      <div style="font-size:11px;color:var(--txt2);margin-bottom:8px">Před odesláním můžeš upravit prompt.</div>
+      <h3 style="margin:0 0 10px 0;color:var(--acc)">${escHtml(t('systemPrompt.title', { key }))}</h3>
+      <div style="font-size:11px;color:var(--txt2);margin-bottom:8px">${t('systemPrompt.editBeforeSend')}</div>
       <textarea id="systemPromptInput" style="width:100%;min-height:240px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:10px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.5"></textarea>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
-        <button class="hbtn grn" id="systemPromptRunBtn" onclick="runSystemPromptAI()">▶ Odeslat AI</button>
-        <button class="hbtn" onclick="closeSystemPromptModal()">✕ Zavřít</button>
+        <button class="hbtn grn" id="systemPromptRunBtn" onclick="runSystemPromptAI()">${t('systemPrompt.send')}</button>
+        <button class="hbtn" onclick="closeSystemPromptModal()">${t('systemPrompt.close')}</button>
       </div>
       <div style="margin-top:14px">
-        <div style="font-size:11px;color:var(--txt2);margin-bottom:6px">Výsledek AI:</div>
-        <textarea id="systemPromptResult" style="width:100%;min-height:180px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:10px;font-family:inherit;font-size:13px;line-height:1.5" placeholder="Po odeslání se sem vloží odpověď..."></textarea>
+        <div style="font-size:11px;color:var(--txt2);margin-bottom:6px">${t('systemPrompt.result')}</div>
+        <textarea id="systemPromptResult" style="width:100%;min-height:180px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);padding:10px;font-family:inherit;font-size:13px;line-height:1.5" placeholder="${escHtml(t('systemPrompt.resultPlaceholder'))}"></textarea>
       </div>
     </div>`;
   document.body.appendChild(modal);
@@ -6222,7 +6743,7 @@ async function runSystemPromptAI() {
     return;
   }
   runBtn.disabled = true;
-  runBtn.textContent = '⏳ Odesílám...';
+  runBtn.textContent = t('systemPrompt.sending');
   try {
     const raw = await callAIWithRetry(prov, apiKey, model, [
       { role: 'system', content: systemText || SYSTEM_MESSAGE },
@@ -6250,7 +6771,7 @@ async function runSystemPromptAI() {
     showToast(t('toast.error.withMessage', { message: e.message }));
   } finally {
     runBtn.disabled = false;
-    runBtn.textContent = '▶ Odeslat AI';
+    runBtn.textContent = t('systemPrompt.send');
   }
 }
 
@@ -6533,7 +7054,7 @@ function formatPreviewRawTranslation(rawDef) {
 // ══ PŘEKLAD — SINGLE ════════════════════════════════════════════
 async function translateSingle(key) {
   const btn = document.querySelector('.translate-btn');
-  if (btn) { btn.disabled = true; btn.textContent = '⏳ Překládám...'; }
+  if (btn) { btn.disabled = true; btn.textContent = t('translate.single.translating'); }
   
   const prov = resolveMainBatchProvider(document.getElementById('provider')?.value || '');
   const apiKey = getCurrentApiKey(prov);
@@ -6541,13 +7062,13 @@ async function translateSingle(key) {
 
    if (!apiKey) {
      showToast(t('toast.apiKey.enterForProvider', { provider: prov }));
-     if (btn) { btn.disabled = false; btn.textContent = '⚡ Přeložit toto heslo'; }
+     if (btn) { btn.disabled = false; btn.textContent = t('translate.single.button'); }
      return;
    }
 
    const e = entryMap.get(key);
   if (!e) {
-    if (btn) { btn.disabled = false; btn.textContent = '⚡ Přeložit toto heslo'; }
+    if (btn) { btn.disabled = false; btn.textContent = t('translate.single.button'); }
     return;
   }
   
@@ -6587,7 +7108,7 @@ ORIG: ${e.orig || ''}`;
      showToast(t('toast.error.withMessage', { message: e.message }));
    }
   
-  if (btn) { btn.disabled = false; btn.textContent = '⚡ Přeložit toto heslo'; }
+  if (btn) { btn.disabled = false; btn.textContent = t('translate.single.button'); }
   renderDetail();
   updateStats();
   renderList();
@@ -6595,7 +7116,7 @@ ORIG: ${e.orig || ''}`;
 
 // ══ PŘEKLAD — ZNOVU ════════════════════════════════════════════
 async function retranslateSingle(key) {
-  if (!confirm(`Přeložit znovu heslo ${key}? Stávající překlad bude nahrazen.`)) return;
+  if (!confirm(t('confirm.retranslate', { key }))) return;
   
   // Označ jako nepřeložené pro další zpracování
   delete translated[key];
@@ -6648,10 +7169,10 @@ async function translateNext() {
   }
   
   document.getElementById('btnStep').disabled = true;
-  document.getElementById('btnStep').textContent = '⏳ ...';
+  document.getElementById('btnStep').textContent = t('btn.step.loading');
   await translateBatch(batch);
   document.getElementById('btnStep').disabled = false;
-  document.getElementById('btnStep').textContent = '⚡ Dávka';
+  document.getElementById('btnStep').textContent = t('btn.step.default');
   updateStats();
   renderList();
   if (activeKey && translated[activeKey]) renderDetail();
@@ -7917,7 +8438,7 @@ function restoreFromBackup(source) {
   const d = source === 'undo' ? hasUndo() : hasBackup();
   if (!d) { showToast(t('toast.backup.none')); return; }
   const count = Object.keys(d.translated).length;
-  if (!confirm(`Obnovit ${count} hesel ze zálohy (${new Date(d.ts).toLocaleString('cs')})? Současný stav bude přepsán.`)) return;
+  if (!confirm(t('confirm.restoreBackup', { count, ts: new Date(d.ts).toLocaleString(getUiLang() === 'en' ? 'en' : 'cs') }))) return;
   // Ulož aktuální stav jako undo před přepsáním
   writeBackup(undoKey(), { translated, ts: Date.now(), fileId: currentFileId });
   translated = d.translated;
@@ -7930,7 +8451,7 @@ function restoreFromBackup(source) {
 }
 
 function clearProgress() {
-  if (!confirm('Smazat veškerý uložený průběh překladu a log?\n\n(Do 10 minut půjde obnovit přes „↺ Obnovit".)')) return;
+  if (!confirm(t('confirm.clearProgress'))) return;
   // Ulož snapshot jako undo
   writeBackup(undoKey(), { translated, ts: Date.now(), fileId: currentFileId });
   localStorage.removeItem(storeKey());
@@ -8077,7 +8598,7 @@ function saveCurrentApiKeyAsProfile() {
     return;
   }
   const defaultName = `${PROVIDERS[prov]?.label?.split(' ')[0] || prov} ${new Date().toLocaleDateString('cs-CZ')}`;
-  const name = (prompt('Název pro tento API klíč:', defaultName) || '').trim();
+  const name = (prompt(t('prompt.apiKeyName'), defaultName) || '').trim();
   if (!name) return;
   const profiles = getApiKeyProfiles(prov);
   const existing = profiles.find(p => p.key === key);
@@ -8105,7 +8626,7 @@ function deleteApiKeyProfile() {
   const profiles = getApiKeyProfiles(prov);
   const profile = profiles.find(p => p.id === select.value);
   if (!profile) return;
-  if (!confirm(`Smazat API klíč "${profile.name}"?`)) return;
+  if (!confirm(t('confirm.apiKey.delete', { name: profile.name }))) return;
   const filtered = profiles.filter(p => p.id !== select.value);
   setApiKeyProfiles(prov, filtered);
   localStorage.removeItem(API_KEY_ACTIVE_PROFILE_PREFIX + prov);
@@ -8123,7 +8644,8 @@ function getCurrentApiKey(prov) {
   return (localStorage.getItem('strong_apikey_' + requestedProvider) || '').trim();
 }
 
-function loadSavedSettings() {
+async function loadSavedSettings() {
+  await loadUiMessages();
   const prov = localStorage.getItem('strong_provider') || 'groq';
   const providerEl = document.getElementById('provider');
   if (providerEl) {
@@ -8242,7 +8764,12 @@ function loadSavedSettings() {
 }
 
 // Volej po načtení stránky
-window.addEventListener('DOMContentLoaded', loadSavedSettings);
+window.addEventListener('DOMContentLoaded', () => {
+  loadSavedSettings().catch(err => {
+    console.error('[i18n] Startup failed:', err);
+    showToast(t('toast.error.withMessage', { message: err?.message || String(err) }));
+  });
+});
 
 function logEntry(keys, rawResponse) {
   const scroll = document.getElementById('logScroll');
@@ -9295,7 +9822,7 @@ async function copyModelTestOutput() {
     await navigator.clipboard.writeText(text);
     showToast(t('toast.output.copied'));
     if (btn) {
-      btn.textContent = '✓ Zkopírováno';
+      btn.textContent = t('toast.output.copiedShort');
       setTimeout(() => { btn.textContent = originalBtnText; }, 1200);
     }
   } catch (e) {
@@ -9304,7 +9831,7 @@ async function copyModelTestOutput() {
     document.execCommand('copy');
     showToast(t('toast.output.copied'));
     if (btn) {
-      btn.textContent = '✓ Zkopírováno';
+      btn.textContent = t('toast.output.copiedShort');
       setTimeout(() => { btn.textContent = originalBtnText; }, 1200);
     }
   }
@@ -9785,7 +10312,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
           appendPromptCompareSummary(appendReport, promptType, comparePromptType, autoStatsA, autoStatsB, testResultsA, testResultsB);
         }
         appendReport(modelTestCancelRequested ? 'Ukončeno.' : 'Hotovo.');
-        showToast(modelTestCancelRequested ? '⏹ A/B test promptů zrušen' : '✓ A/B test promptů dokončen');
+        showToast(modelTestCancelRequested ? t('toast.modelTest.abCanceled') : t('toast.modelTest.abDone'));
         return;
       }
       const autoStats = await runAutoLiveModelTest(appendReport, waitMs, testResults, modelTestAbortController.signal, forcedProvider ? prov : null, promptType, promptEnabled);
@@ -9810,7 +10337,7 @@ async function testCurrentProviderModels(forcedProvider = null, resetReport = tr
         avgLatencyMs: autoStats.avgLatencyMs || 0,
         topModels: okModels
       });
-      showToast(modelTestCancelRequested ? '⏹ Test modelů zrušen' : '✓ Auto test dokončen');
+      showToast(modelTestCancelRequested ? t('toast.modelTest.canceled') : t('toast.modelTest.autoDone'));
       return;
     }
 
@@ -11051,8 +11578,8 @@ window.saveLangSettings = saveLangSettings;
 
 // ── Export vybraného rozsahu ───────────────────────────────────
 function exportRange() {
-  const from = parseInt(prompt('Od G čísla:', '1') || '1');
-  const to   = parseInt(prompt('Do G čísla:', '100') || '100');
+  const from = parseInt(prompt(t('prompt.range.from'), '1') || '1');
+  const to   = parseInt(prompt(t('prompt.range.to'), '100') || '100');
   if (isNaN(from) || isNaN(to)) return;
 
   const done = entries.filter(e => {
