@@ -321,21 +321,6 @@ function setModelCooldown(prov, model, seconds) {
   state.providerModelCooldownUntil[prov][model] = sec > 0 ? (Date.now() + sec * 1000) : 0;
 }
 
-async function waitForProviderCooldown(prov, abortVersion = 0) {
-  while (getProviderCooldownLeftSec(prov) > 0) {
-    if (isSideFallbackAborted(abortVersion)) return false;
-    const left = getProviderCooldownLeftSec(prov);
-    const tick = Math.floor(left / 10);
-    if (state.providerCooldownLogTick[prov] !== tick) {
-      state.providerCooldownLogTick[prov] = tick;
-      log(`⏱ ${prov} cooldown: zbývá ${left}s`);
-    }
-    const ok = await sleepMsWithAbort(Math.min(1500, left * 1000), abortVersion);
-    if (!ok) return false;
-  }
-  state.providerCooldownLogTick[prov] = -1;
-  return true;
-}
 
 function shouldAcceptTopicFallback(topicId, candidate) {
   if (!hasMeaningfulValue(candidate)) return false;
@@ -439,9 +424,9 @@ async function requestTopicFallbackForProvider(prov, key, topicId, abortVersion)
   for (let i = 0; i < modelQueue.length; i++) {
     if (isSideFallbackAborted(abortVersion)) return null;
     const model = modelQueue[i];
-    const cooldownOk = await waitForProviderCooldown(prov, abortVersion);
-    if (!cooldownOk) return null;
-    if (isSideFallbackAborted(abortVersion)) return null;
+    // Pokud je provider nebo model v cooldownu, neblokujeme frontu čekáním –
+    // vrátíme null okamžitě a témata pokračují přes druhý provider nebo příště.
+    if (getProviderCooldownLeftSec(prov) > 0) return null;
     const modelCooldownLeft = getModelCooldownLeftSec(prov, model);
     if (modelCooldownLeft > 0) {
       console.warn(`[FALLBACK][${prov}] skip model cooldown: ${model} (${modelCooldownLeft}s)`);
