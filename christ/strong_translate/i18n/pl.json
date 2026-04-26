@@ -603,7 +603,7 @@
   "lang.i18nTool.button": "🌍 Tłumacz plików JSON",
   "lang.i18nTool.title": "Tłumaczenie i18n JSON (Python + Google)",
   "lang.i18nTool.close": "✕ Zamknij",
-  "lang.i18nTool.body": "Szybka pomoc:\n1) Źródło to automatycznie i18n/cs.json (nie trzeba nic wgrywać).\n2) Kliknij „Wybierz języki” i zaznacz języki docelowe.\n3) Silnik:\n   - Google = działa od razu bez klucza\n   - DeepL = podaj API key (w przeciwnym razie użyty będzie Google fallback)\n4) Kliknij „Tłumacz i pobierz”.\n5) Po zakończeniu pojawią się przyciski pobierania dla każdego pliku wyjściowego *.json.\n\nUwaga: tagi językowe (CZ/EN/...) oraz nazwy języków (Czech/English/Slovak/Polish) są automatycznie chronione podczas tłumaczenia.",
+  "lang.i18nTool.body": "Użyj audytu/edytora AI, aby sprawdzić i poprawić tłumaczenia.",
   "lang.contentTag.val_CZ": "CZ (czeski)",
   "lang.contentTag.val_SK": "SK (słowacki)",
   "lang.contentTag.val_PL": "PL (polski)",

@@ -603,7 +603,7 @@
   "lang.i18nTool.button": "🌍 Prekladač JSON súborov",
   "lang.i18nTool.title": "Preklad i18n JSON (Python + Google)",
   "lang.i18nTool.close": "✕ Zavrieť",
-  "lang.i18nTool.body": "Rýchla pomoc:\n1) Zdroj je automaticky i18n/cs.json (netreba nič nahrávať).\n2) Kliknite na „Vybrať jazyky“ a zvoľte cieľové jazyky.\n3) Engine:\n   - Google = funguje hneď bez kľúča\n   - DeepL = zadajte API key (inak sa použije Google fallback)\n4) Kliknite na „Preložiť a stiahnuť“.\n5) Po dokončení sa zobrazia tlačidlá na stiahnutie jednotlivých *.json súborov.\n\nPoznámka: značky (CZ/EN/...) aj slová jazykov (Czech/English/Slovak/Polish) sa pri preklade automaticky chránia.",
+  "lang.i18nTool.body": "Použite AI audit/editor na kontrolu a opravy prekladu.",
   "lang.contentTag.val_CZ": "CZ (čeština)",
   "lang.contentTag.val_SK": "SK (slovenčina)",
   "lang.contentTag.val_PL": "PL (poľština)",

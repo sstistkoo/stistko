@@ -603,7 +603,7 @@
   "lang.i18nTool.button": "🌍 JSON Translation Tool",
   "lang.i18nTool.title": "i18n JSON translation (Python + Google)",
   "lang.i18nTool.close": "✕ Close",
-  "lang.i18nTool.body": "Quick help:\n1) Source is automatically i18n/cs.json (no upload needed).\n2) Click \"Select languages\" and choose target languages.\n3) Engine:\n   - Google = works immediately without API key\n   - DeepL = provide API key (otherwise Google fallback is used)\n4) Click \"Translate and download\".\n5) After completion, download buttons for each *.json output file will appear.\n\nNote: language tags (CZ/EN/...) and language words (Czech/English/Slovak/Polish) are automatically protected during translation.",
+  "lang.i18nTool.body": "Use AI audit/editor to review and fix translations.",
   "lang.contentTag.val_CZ": "CZ (Czech)",
   "lang.contentTag.val_SK": "SK (Slovak)",
   "lang.contentTag.val_PL": "PL (Polish)",
