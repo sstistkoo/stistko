@@ -1134,6 +1134,133 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   .prompt-btn.lang { background: var(--grn); border: 1px solid var(--grn); color: var(--bg); }
   .prompt-btn.lang:hover { background: #4a8a5c; }
 
+.i18n-tool-modal-box {
+  max-width: 860px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.i18n-tool-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.i18n-tool-controls input,
+.i18n-tool-controls select {
+  width: 100%;
+  padding: 10px;
+  background: var(--bg3);
+  border: 1px solid var(--brd);
+  border-radius: 4px;
+  color: var(--txt);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+}
+
+.i18n-tool-selected-summary {
+  margin-top: 10px;
+  color: var(--txt2);
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.i18n-tool-label {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 6px;
+  color: var(--txt3);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.i18n-tool-cmd {
+  width: 100%;
+  min-height: 120px;
+  background: var(--bg);
+  border: 1px solid var(--brd);
+  border-radius: 6px;
+  color: var(--txt);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  line-height: 1.45;
+  padding: 10px;
+  resize: vertical;
+}
+
+.i18n-tool-lang-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1010;
+  padding: 16px;
+}
+
+.i18n-tool-lang-modal.show {
+  display: flex;
+}
+
+.i18n-tool-lang-modal-box {
+  max-width: 960px;
+  width: 100%;
+  max-height: 90vh;
+}
+
+.i18n-tool-lang-actions {
+  margin-bottom: 12px;
+}
+
+.i18n-tool-language-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.i18n-tool-lang-card {
+  background: var(--bg3);
+  border: 1px solid var(--brd);
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+
+.i18n-tool-lang-card:hover {
+  border-color: var(--acc);
+  transform: translateY(-1px);
+}
+
+.i18n-tool-lang-card.selected {
+  background: var(--acc2);
+  border-color: var(--acc);
+}
+
+.i18n-tool-lang-flag {
+  font-size: 24px;
+}
+
+.i18n-tool-lang-name {
+  margin-top: 6px;
+  color: var(--txt);
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.i18n-tool-lang-code {
+  margin-top: 2px;
+  color: var(--txt3);
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
 /* Virtual scrolling - merged with base list-scroll */
 .list-scroll {
   flex: 1;
