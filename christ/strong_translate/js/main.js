@@ -41,7 +41,8 @@
     t,
     uiLabel,
     refreshStaticProviderSelectLabel,
-    getContentLangTag
+    getContentLangTag,
+    getDefaultContentTag
   } from './i18n.js';
   import { sleepMs, sleep, debounce, formatAiResponseTime, escHtml } from './utils.js';
   import { extractOpenRouterText } from './ai/client.js';
@@ -105,8 +106,9 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
       const el = document.getElementById(id);
       if (el) el.setAttribute(attr, value);
     };
-    document.title = t('app.title');
-    setText('setupTitle', t('setup.title'));
+    const targetTitleLang = getDefaultContentTag();
+    document.title = t('app.title', { lang: targetTitleLang });
+    setText('setupTitle', t('setup.title', { lang: targetTitleLang }));
     setText('setupAdvancedSummary', t('setup.advanced'));
     setAttr('setupCompactSummary', 'title', t('setup.compact.title'));
     const providerForLabel = String(document.getElementById('provider')?.value || 'groq');

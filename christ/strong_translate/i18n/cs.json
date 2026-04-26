@@ -1,5 +1,5 @@
 {
-  "setup.title": "⟁ Strong GR → CZ — Překladač slovníku",
+  "setup.title": "⟁ Strong GR → {lang} — Překladač slovníku",
   "setup.start": "Zahájit překlad →",
   "setup.help": "❓ Nápověda",
   "setup.limits": "📊 Limity",
@@ -635,7 +635,7 @@
   "lang.name.genitive.both": "řečtiny i hebrejštiny",
   "modelTest.smoke.system": "Odpovídej stručně a bez komentářů navíc.",
   "modelTest.smoke.user": "Napiš dvakrát po sobě slovo \"heslo\".",
-  "app.title": "Strong GR → CZ Překladač",
+  "app.title": "Strong GR → {lang} — Překladač",
   "setup.advanced": "Pokročilé nastavení",
   "setup.compact.title": "Souhrn aktuálního nastavení",
   "hdr.fromG": "od G",
