@@ -785,13 +785,45 @@
   </div>
 
   <div id="i18nToolModal" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.88);display:none;align-items:center;justify-content:center;z-index:1006;padding:16px" onclick="if(event.target===this)closeI18nToolModal()">
-    <div class="prompt-modal-box" style="max-width:520px;max-height:88vh;overflow-y:auto" onclick="event.stopPropagation()">
+    <div class="prompt-modal-box i18n-tool-modal-box" onclick="event.stopPropagation()">
       <div class="prompt-modal-title" id="i18nToolModalTitle">Překlad i18n JSON</div>
       <pre id="i18nToolBody" style="white-space:pre-wrap;font-size:11px;color:var(--txt2);line-height:1.5;margin:0 0 12px 0"></pre>
+      <div class="i18n-tool-controls">
+        <div class="mobl-set-row" style="margin:0">
+          <label for="i18nToolEngine">Engine</label>
+          <select id="i18nToolEngine">
+            <option value="google" selected>Google (výchozí)</option>
+            <option value="deepl">DeepL</option>
+          </select>
+        </div>
+        <div class="mobl-set-row" style="margin:0">
+          <label for="i18nToolDeeplKey">DeepL API key (volitelné)</label>
+          <input id="i18nToolDeeplKey" type="password" placeholder="Volitelné pro --deepl-key">
+        </div>
+      </div>
+      <div class="prompt-actions" style="margin-top:10px">
+        <button type="button" class="prompt-btn ok" id="btnI18nToolOpenLangModal" onclick="openI18nToolLangModal()">🌐 Vybrat jazyky</button>
+        <button type="button" class="prompt-btn" id="btnI18nToolCopyCmd" onclick="copyI18nToolCmd()">📋 Kopírovat příkaz</button>
+      </div>
+      <div id="i18nToolSelectedSummary" class="i18n-tool-selected-summary">Vybráno jazyků: 0</div>
+      <label for="i18nToolCmd" class="i18n-tool-label">Příkaz(y) pro překlad z i18n/cs.json</label>
+      <textarea id="i18nToolCmd" class="i18n-tool-cmd" readonly></textarea>
       <a id="i18nToolScriptLink" class="modal-btn ok" style="display:inline-block;padding:8px 14px;margin-bottom:10px" href="tools/translate_i18n.py" download>translate_i18n.py</a>
       <div class="prompt-actions" style="margin-top:4px">
         <button type="button" class="prompt-btn cancel" id="btnI18nToolClose" onclick="closeI18nToolModal()">✕ Zavřít</button>
       </div>
+    </div>
+  </div>
+
+  <div id="i18nToolLangModal" class="i18n-tool-lang-modal" onclick="if(event.target===this)closeI18nToolLangModal()">
+    <div class="prompt-modal-box i18n-tool-lang-modal-box" onclick="event.stopPropagation()">
+      <div class="prompt-modal-title">Vyberte cílové jazyky</div>
+      <div class="prompt-actions i18n-tool-lang-actions">
+        <button type="button" class="prompt-btn" onclick="i18nToolSelectAllLangs()">Vybrat vše</button>
+        <button type="button" class="prompt-btn cancel" onclick="i18nToolDeselectAllLangs()">Zrušit výběr</button>
+        <button type="button" class="prompt-btn ok" onclick="closeI18nToolLangModal()">Hotovo</button>
+      </div>
+      <div id="i18nToolLanguageGrid" class="i18n-tool-language-grid"></div>
     </div>
   </div>
 

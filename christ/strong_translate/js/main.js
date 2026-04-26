@@ -2085,11 +2085,146 @@ function showI18nToolModal() {
   if (title) title.textContent = t('lang.i18nTool.title');
   const closeBtn = document.getElementById('btnI18nToolClose');
   if (closeBtn) closeBtn.textContent = t('lang.i18nTool.close');
+  initI18nToolUi();
+  updateI18nToolCommandPreview();
   if (m) m.style.display = 'flex';
 }
 function closeI18nToolModal() {
   const m = document.getElementById('i18nToolModal');
   if (m) m.style.display = 'none';
+}
+const I18N_TOOL_LANGUAGES = [
+  { code: 'en', tag: 'EN', name: 'English', flag: '🇬🇧' },
+  { code: 'sk', tag: 'SK', name: 'Slovak', flag: '🇸🇰' },
+  { code: 'pl', tag: 'PL', name: 'Polish', flag: '🇵🇱' },
+  { code: 'de', tag: 'DE', name: 'German', flag: '🇩🇪' },
+  { code: 'fr', tag: 'FR', name: 'French', flag: '🇫🇷' },
+  { code: 'es', tag: 'ES', name: 'Spanish', flag: '🇪🇸' },
+  { code: 'it', tag: 'IT', name: 'Italian', flag: '🇮🇹' },
+  { code: 'pt', tag: 'PT', name: 'Portuguese', flag: '🇵🇹' },
+  { code: 'ru', tag: 'RU', name: 'Russian', flag: '🇷🇺' },
+  { code: 'uk', tag: 'UK', name: 'Ukrainian', flag: '🇺🇦' },
+  { code: 'bg', tag: 'BG', name: 'Bulgarian', flag: '🇧🇬' },
+  { code: 'ro', tag: 'RO', name: 'Romanian', flag: '🇷🇴' },
+  { code: 'hu', tag: 'HU', name: 'Hungarian', flag: '🇭🇺' },
+  { code: 'nl', tag: 'NL', name: 'Dutch', flag: '🇳🇱' },
+  { code: 'sv', tag: 'SV', name: 'Swedish', flag: '🇸🇪' },
+  { code: 'da', tag: 'DA', name: 'Danish', flag: '🇩🇰' },
+  { code: 'no', tag: 'NO', name: 'Norwegian', flag: '🇳🇴' },
+  { code: 'fi', tag: 'FI', name: 'Finnish', flag: '🇫🇮' },
+  { code: 'el', tag: 'EL', name: 'Greek', flag: '🇬🇷' },
+  { code: 'tr', tag: 'TR', name: 'Turkish', flag: '🇹🇷' },
+  { code: 'ar', tag: 'AR', name: 'Arabic', flag: '🇸🇦' },
+  { code: 'zh-CN', tag: 'zh-CN', name: 'Chinese', flag: '🇨🇳' },
+  { code: 'ja', tag: 'JA', name: 'Japanese', flag: '🇯🇵' },
+  { code: 'ko', tag: 'KO', name: 'Korean', flag: '🇰🇷' },
+  { code: 'he', tag: 'HE', name: 'Hebrew', flag: '🇮🇱' }
+];
+const i18nToolSelectedLanguages = new Set();
+
+function initI18nToolUi() {
+  const engineEl = document.getElementById('i18nToolEngine');
+  const deeplKeyEl = document.getElementById('i18nToolDeeplKey');
+  if (engineEl && !engineEl.dataset.bound) {
+    engineEl.dataset.bound = '1';
+    engineEl.addEventListener('change', updateI18nToolCommandPreview);
+  }
+  if (deeplKeyEl && !deeplKeyEl.dataset.bound) {
+    deeplKeyEl.dataset.bound = '1';
+    deeplKeyEl.addEventListener('input', updateI18nToolCommandPreview);
+  }
+  renderI18nToolLanguageGrid();
+}
+
+function renderI18nToolLanguageGrid() {
+  const grid = document.getElementById('i18nToolLanguageGrid');
+  if (!grid) return;
+  grid.innerHTML = I18N_TOOL_LANGUAGES.map((lang) => `
+    <button type="button" class="i18n-tool-lang-card ${i18nToolSelectedLanguages.has(lang.code) ? 'selected' : ''}" onclick="toggleI18nToolLanguage('${lang.code}')">
+      <div class="i18n-tool-lang-flag">${lang.flag}</div>
+      <div class="i18n-tool-lang-name">${lang.name}</div>
+      <div class="i18n-tool-lang-code">${lang.code}</div>
+    </button>
+  `).join('');
+  updateI18nToolSummary();
+}
+
+function updateI18nToolSummary() {
+  const summary = document.getElementById('i18nToolSelectedSummary');
+  if (!summary) return;
+  const selectedList = I18N_TOOL_LANGUAGES
+    .filter((lang) => i18nToolSelectedLanguages.has(lang.code))
+    .map((lang) => `${lang.name} (${lang.code})`);
+  if (!selectedList.length) {
+    summary.textContent = 'Vybráno jazyků: 0';
+    return;
+  }
+  summary.textContent = `Vybráno jazyků: ${i18nToolSelectedLanguages.size} — ${selectedList.join(', ')}`;
+}
+
+function toggleI18nToolLanguage(code) {
+  if (i18nToolSelectedLanguages.has(code)) i18nToolSelectedLanguages.delete(code);
+  else i18nToolSelectedLanguages.add(code);
+  renderI18nToolLanguageGrid();
+  updateI18nToolCommandPreview();
+}
+
+function openI18nToolLangModal() {
+  renderI18nToolLanguageGrid();
+  const m = document.getElementById('i18nToolLangModal');
+  if (m) m.classList.add('show');
+}
+
+function closeI18nToolLangModal() {
+  const m = document.getElementById('i18nToolLangModal');
+  if (m) m.classList.remove('show');
+}
+
+function i18nToolSelectAllLangs() {
+  I18N_TOOL_LANGUAGES.forEach((lang) => i18nToolSelectedLanguages.add(lang.code));
+  renderI18nToolLanguageGrid();
+  updateI18nToolCommandPreview();
+}
+
+function i18nToolDeselectAllLangs() {
+  i18nToolSelectedLanguages.clear();
+  renderI18nToolLanguageGrid();
+  updateI18nToolCommandPreview();
+}
+
+function updateI18nToolCommandPreview() {
+  const cmdEl = document.getElementById('i18nToolCmd');
+  if (!cmdEl) return;
+  const engine = String(document.getElementById('i18nToolEngine')?.value || 'google');
+  const deeplKey = String(document.getElementById('i18nToolDeeplKey')?.value || '').trim();
+
+  const selected = I18N_TOOL_LANGUAGES.filter((lang) => i18nToolSelectedLanguages.has(lang.code));
+  if (!selected.length) {
+    cmdEl.value = '# Vyberte alespoň jeden cílový jazyk.';
+    updateI18nToolSummary();
+    return;
+  }
+
+  const lines = selected.map((lang) => {
+    const keyArg = engine === 'deepl' ? ` --deepl-key ${deeplKey || 'YOUR_DEEPL_KEY'}` : '';
+    return `python tools/translate_i18n.py -s cs -t ${lang.code} -i i18n/cs.json -o i18n/${lang.code}.json --tag ${lang.tag} --engine ${engine}${keyArg}`;
+  });
+  cmdEl.value = lines.join('\n');
+  updateI18nToolSummary();
+}
+
+async function copyI18nToolCmd() {
+  const cmd = String(document.getElementById('i18nToolCmd')?.value || '').trim();
+  if (!cmd) {
+    showToast('Nejdřív vyberte cílový jazyk.');
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(cmd);
+    showToast('Příkaz zkopírován.');
+  } catch {
+    showToast('Kopírování selhalo.');
+  }
 }
 async function runI18nKeyCheck() {
   try {
@@ -2138,6 +2273,12 @@ async function runCzechDiacriticsCheck() {
 }
 window.showI18nToolModal = showI18nToolModal;
 window.closeI18nToolModal = closeI18nToolModal;
+window.openI18nToolLangModal = openI18nToolLangModal;
+window.closeI18nToolLangModal = closeI18nToolLangModal;
+window.toggleI18nToolLanguage = toggleI18nToolLanguage;
+window.i18nToolSelectAllLangs = i18nToolSelectAllLangs;
+window.i18nToolDeselectAllLangs = i18nToolDeselectAllLangs;
+window.copyI18nToolCmd = copyI18nToolCmd;
 window.runI18nKeyCheck = runI18nKeyCheck;
 window.runCzechDiacriticsCheck = runCzechDiacriticsCheck;
 

@@ -271,6 +271,9 @@
                 <div class="upload-icon">📁</div>
                 <h2>Nahrajte JSON soubor</h2>
                 <p style="margin: 15px 0; color: #666;">Přetáhněte soubor sem nebo klikněte pro výběr</p>
+                <p style="margin: 0 0 15px 0; color: #856404; font-size: 0.95em;">
+                    Doporučení: pro kvalitní překlad použijte vstupní soubor <strong>cs.json</strong>.
+                </p>
                 <input type="file" id="fileInput" class="file-input" accept=".json">
                 <button class="btn" onclick="document.getElementById('fileInput').click()">Vybrat soubor</button>
             </div>
@@ -296,7 +299,7 @@
 
                 <h3 style="margin-bottom: 10px; color: #667eea;">Vyberte cílové jazyky:</h3>
                 <p style="margin-bottom: 14px; color: #666;">
-                    Doporučený vstup je <strong>cz.json</strong>. CZ zkratky i slovo "Czech" zůstávají ošetřené a mapují se na cílový jazyk.
+                    Doporučený vstup je <strong>cs.json</strong>. CZ zkratky i slovo "Czech" zůstávají ošetřené a mapují se na cílový jazyk.
                 </p>
 
                 <div class="file-info" style="margin-top: 10px;">
@@ -346,6 +349,10 @@
                 <button class="btn select-all-btn" type="button" onclick="deselectAllInModal()">Zrušit výběr</button>
             </div>
             <div class="language-grid" id="languageGrid"></div>
+            <div class="action-buttons" style="margin-top: 14px;">
+                <button class="btn select-all-btn" type="button" onclick="closeLanguageModal()">Zrušit</button>
+                <button class="btn" type="button" onclick="applyLanguageSelection()">Použít výběr</button>
+            </div>
         </div>
     </div>
 
@@ -384,7 +391,14 @@
         function updateSelectedLanguagesSummary() {
             const summary = document.getElementById('selectedLanguagesSummary');
             if (!summary) return;
-            summary.textContent = `Vybráno jazyků: ${selectedLanguages.size}`;
+            const selectedList = languages
+                .filter(lang => selectedLanguages.has(lang.code))
+                .map(lang => `${lang.name} (${lang.code})`);
+            if (!selectedList.length) {
+                summary.textContent = 'Vybráno jazyků: 0';
+                return;
+            }
+            summary.textContent = `Vybráno jazyků: ${selectedLanguages.size} — ${selectedList.join(', ')}`;
         }
 
         // Inicializace velkých jazykových tlačítek v modalu
@@ -407,6 +421,11 @@
 
         function closeLanguageModal() {
             document.getElementById('languageModal').classList.remove('open');
+        }
+
+        function applyLanguageSelection() {
+            updateSelectedLanguagesSummary();
+            closeLanguageModal();
         }
 
         function onModalBackdropClick(event) {
@@ -487,7 +506,7 @@
                     if (!/^(cs|cz)\.json$/i.test(file.name)) {
                         status.style.display = 'block';
                         status.className = 'status';
-                        status.textContent = 'Doporučení: použijte vstupní soubor cz.json (aktuální logika je optimalizovaná pro CZ zdroj).';
+                        status.textContent = 'Doporučení: použijte vstupní soubor cs.json (aktuální logika je optimalizovaná pro CZ zdroj).';
                     }
                 } catch (err) {
                     alert('Chyba při načítání JSON: ' + err.message);
