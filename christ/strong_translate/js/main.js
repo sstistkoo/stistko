@@ -104,6 +104,12 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     return text.replace(/(Strong\s*GR\s*→\s*)([A-Za-z-]+)/i, `$1${lang}`);
   }
 
+  function getUiLangTag() {
+    const ui = String(getUiLang() || 'cs').toLowerCase();
+    const map = { cs: 'CZ', en: 'EN', sk: 'SK', pl: 'PL' };
+    return map[ui] || 'CZ';
+  }
+
   function applyUiLanguage() {
     refreshTopicLabels();
     const setText = (id, value) => {
@@ -114,9 +120,9 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
       const el = document.getElementById(id);
       if (el) el.setAttribute(attr, value);
     };
-    const targetTitleLang = getDefaultContentTag();
-    document.title = formatAppTitleWithTargetLang(t('app.title', { lang: targetTitleLang }), targetTitleLang);
-    setText('setupTitle', formatAppTitleWithTargetLang(t('setup.title', { lang: targetTitleLang }), targetTitleLang));
+    const uiTitleLang = getUiLangTag();
+    document.title = formatAppTitleWithTargetLang(t('app.title', { lang: uiTitleLang }), uiTitleLang);
+    setText('setupTitle', formatAppTitleWithTargetLang(t('setup.title', { lang: uiTitleLang }), uiTitleLang));
     setText('setupAdvancedSummary', t('setup.advanced'));
     setAttr('setupCompactSummary', 'title', t('setup.compact.title'));
     const providerForLabel = String(document.getElementById('provider')?.value || 'groq');
@@ -459,7 +465,7 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     setText('limitsTitle', t('limits.title'));
     setText('limitsLoadingText', t('limits.loading'));
     setText('btnLimitsClose', t('limits.close'));
-    setText('helpTitle', t('help.title', { lang: targetTitleLang }));
+    setText('helpTitle', t('help.title', { lang: uiTitleLang }));
     setText('helpSectionAboutTitle', t('help.about'));
     setText('helpSectionKeysTitle', t('help.keys'));
     setText('helpSectionLibraryTitle', t('help.library'));
