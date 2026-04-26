@@ -2184,6 +2184,10 @@ function sanitizeI18nToolLanguages() {
       I18N_TOOL_LANGUAGES.splice(i, 1);
     }
   }
+  // Bezpečnostní pojistka: EN musí být vždy dostupné jako cílový jazyk.
+  if (!I18N_TOOL_LANGUAGES.some((lang) => String(lang?.code || '').toLowerCase() === 'en')) {
+    I18N_TOOL_LANGUAGES.unshift({ code: 'en', tag: 'EN', name: 'Angličtina', flag: '🇬🇧' });
+  }
 }
 
 sanitizeI18nToolLanguages();
