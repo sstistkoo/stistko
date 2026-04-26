@@ -549,20 +549,8 @@ POVINNÝ VÝSTUP NAVÍC:
       // Language substitution
       const targetLang = localStorage.getItem('strong_target_lang') || 'cz';
       const sourceLang = localStorage.getItem('strong_source_lang') || 'gr';
-      const langNames = {
-        cz: 'češtiny',
-        en: 'angličtiny',
-        bg: 'bulharštiny',
-        ch: 'čínštiny',
-        sp: 'španělštiny',
-        sk: 'slovenštiny',
-        pl: 'polštiny',
-        gr: 'řečtiny',
-        he: 'hebrejštiny',
-        both: 'řečtiny i hebrejštiny'
-      };
-      const targetName = langNames[targetLang] || 'češtiny';
-      const sourceName = langNames[sourceLang] || 'řečtiny';
+      const targetName = getPromptLanguageName(targetLang, 'target');
+      const sourceName = getPromptLanguageName(sourceLang, 'source');
       
       let processedPrompt = userPromptTemplate
         .replace(/{TARGET_LANG}/g, targetName)
@@ -621,6 +609,24 @@ POVINNÝ VÝSTUP NAVÍC:
       let target = String(localStorage.getItem('strong_target_lang') || 'cz').toLowerCase();
       if (target === 'cs') target = 'cz';
       return target.toUpperCase();
+    }
+
+    function getPromptLanguageName(code, kind = 'target') {
+      const keyMap = {
+        cz: 'lang.name.genitive.cz',
+        cs: 'lang.name.genitive.cz',
+        en: 'lang.name.genitive.en',
+        bg: 'lang.name.genitive.bg',
+        ch: 'lang.name.genitive.ch',
+        sp: 'lang.name.genitive.sp',
+        sk: 'lang.name.genitive.sk',
+        pl: 'lang.name.genitive.pl',
+        gr: 'lang.name.genitive.gr',
+        he: 'lang.name.genitive.he',
+        both: 'lang.name.genitive.both'
+      };
+      const fallbackKey = kind === 'source' ? 'lang.name.genitive.gr' : 'lang.name.genitive.cz';
+      return t(keyMap[String(code || '').toLowerCase()] || fallbackKey);
     }
 
     function getTopicLabelNoTag(topicId) {
@@ -756,20 +762,8 @@ async function copyModelTestPromptPreview() {
 
       const targetLang = localStorage.getItem('strong_target_lang') || 'cz';
       const sourceLang = localStorage.getItem('strong_source_lang') || 'gr';
-      const langNames = {
-        cz: 'češtiny',
-        en: 'angličtiny',
-        bg: 'bulharštiny',
-        ch: 'čínštiny',
-        sp: 'španělštiny',
-        sk: 'slovenštiny',
-        pl: 'polštiny',
-        gr: 'řečtiny',
-        he: 'hebrejštiny',
-        both: 'řečtiny i hebrejštiny'
-      };
-      const targetName = langNames[targetLang] || 'češtiny';
-      const sourceName = langNames[sourceLang] || 'řečtiny';
+      const targetName = getPromptLanguageName(targetLang, 'target');
+      const sourceName = getPromptLanguageName(sourceLang, 'source');
 
       const userPromptTemplate = getModelTestPromptTemplate(promptType);
       let processedPrompt = String(userPromptTemplate || '')
@@ -789,8 +783,8 @@ async function copyModelTestPromptPreview() {
     function buildModelTestMessages(batch, testMode, promptType, promptEnabled) {
       if (testMode === 'smoke') {
         return [
-          { role: 'system', content: 'Odpovídej stručně a bez komentářů navíc.' },
-          { role: 'user', content: 'Napiš dvakrát po sobě slovo "heslo".' }
+          { role: 'system', content: t('modelTest.smoke.system') },
+          { role: 'user', content: t('modelTest.smoke.user') }
         ];
       }
       if (promptEnabled) {

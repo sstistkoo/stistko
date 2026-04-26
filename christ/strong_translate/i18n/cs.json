@@ -616,5 +616,17 @@
   "lang.contentTag.val_AR": "AR (arabština)",
   "lang.contentTag.val_zhCN": "zh-CN (čínština zjednodušená)",
   "lang.contentTag.val_JA": "JA (japonština)",
-  "lang.contentTag.val_KO": "KO (korejština)"
+  "lang.contentTag.val_KO": "KO (korejština)",
+  "lang.name.genitive.cz": "češtiny",
+  "lang.name.genitive.en": "angličtiny",
+  "lang.name.genitive.bg": "bulharštiny",
+  "lang.name.genitive.ch": "čínštiny",
+  "lang.name.genitive.sp": "španělštiny",
+  "lang.name.genitive.sk": "slovenštiny",
+  "lang.name.genitive.pl": "polštiny",
+  "lang.name.genitive.gr": "řečtiny",
+  "lang.name.genitive.he": "hebrejštiny",
+  "lang.name.genitive.both": "řečtiny i hebrejštiny",
+  "modelTest.smoke.system": "Odpovídej stručně a bez komentářů navíc.",
+  "modelTest.smoke.user": "Napiš dvakrát po sobě slovo \"heslo\"."
 }

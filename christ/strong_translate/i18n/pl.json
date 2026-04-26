@@ -616,5 +616,17 @@
   "lang.contentTag.val_AR": "AR (arabski)",
   "lang.contentTag.val_zhCN": "zh-CN (chiński uproszczony)",
   "lang.contentTag.val_JA": "JA (japoński)",
-  "lang.contentTag.val_KO": "KO (koreański)"
+  "lang.contentTag.val_KO": "KO (koreański)",
+  "lang.name.genitive.cz": "czeskiego",
+  "lang.name.genitive.en": "angielskiego",
+  "lang.name.genitive.bg": "bułgarskiego",
+  "lang.name.genitive.ch": "chińskiego",
+  "lang.name.genitive.sp": "hiszpańskiego",
+  "lang.name.genitive.sk": "słowackiego",
+  "lang.name.genitive.pl": "polskiego",
+  "lang.name.genitive.gr": "greckiego",
+  "lang.name.genitive.he": "hebrajskiego",
+  "lang.name.genitive.both": "greckiego i hebrajskiego",
+  "modelTest.smoke.system": "Odpowiadaj krótko i bez dodatkowych komentarzy.",
+  "modelTest.smoke.user": "Napisz dwa razy z rzędu słowo \"hasło\"."
 }
