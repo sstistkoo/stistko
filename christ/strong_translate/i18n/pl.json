@@ -93,7 +93,7 @@
   "help.keys": "Jak uzyskać klucze API",
   "help.library": "Biblioteka kluczy API",
   "help.limits": "Limity i kwoty",
-  "help.title": "❓ Pomoc Strong GR → PL",
+  "help.title": "❓ Pomoc Strong GR → {lang}",
   "import.badge.conflict": "konflikt",
   "import.badge.new": "nowe",
   "import.cancel": "✕ Anuluj",

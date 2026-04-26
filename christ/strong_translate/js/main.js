@@ -459,7 +459,7 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     setText('limitsTitle', t('limits.title'));
     setText('limitsLoadingText', t('limits.loading'));
     setText('btnLimitsClose', t('limits.close'));
-    setText('helpTitle', t('help.title'));
+    setText('helpTitle', t('help.title', { lang: targetTitleLang }));
     setText('helpSectionAboutTitle', t('help.about'));
     setText('helpSectionKeysTitle', t('help.keys'));
     setText('helpSectionLibraryTitle', t('help.library'));
