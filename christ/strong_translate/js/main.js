@@ -1120,7 +1120,7 @@ function loadDefaultFile() {
 
   const tryFetch = (idx) => {
     if (idx >= fallbacks.length) {
-      throw new Error('Soubor nenalezen (GitHub ani lokální fallback)');
+      throw new Error(t('error.fileNotFoundFallback'));
     }
     const target = fallbacks[idx];
     return fetch(target)
@@ -1255,7 +1255,7 @@ function startApp() {
   const loadingEl = document.createElement('div');
   loadingEl.id = 'appLoading';
   loadingEl.style.cssText = 'display:flex;align-items:center;justify-content:center;height:100%;color:var(--txt3);font-family:JetBrains Mono,monospace;font-size:14px';
-  loadingEl.textContent = '⏳ Načítám...';
+  loadingEl.textContent = t('app.loading');
   app.appendChild(loadingEl);
   
   // Deffered init
@@ -2124,7 +2124,7 @@ const { download, exportTXT, exportJSON, exportRange } = createExportApi({
 
   if (state.autoRunning && isAutoTokenLimitReached()) {
     stopAuto();
-    log('🛑 AUTO zastaven po dávce: dosažen limit tokenů');
+    log(t('auto.log.stoppedTokenLimit'));
     showToast(t('toast.auto.stoppedTokenLimit'));
   }
 }
