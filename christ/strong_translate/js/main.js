@@ -38,6 +38,7 @@
     UI_LANGS,
     loadUiMessages,
     getUiLang,
+    consumeUiLangFallback,
     t,
     uiLabel,
     refreshStaticProviderSelectLabel,
@@ -506,7 +507,10 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
         cs: t('lang.option.cs'),
         en: t('lang.option.en'),
         sk: t('lang.option.sk'),
-        pl: t('lang.option.pl')
+        pl: t('lang.option.pl'),
+        es: t('lang.option.sp'),
+        it: 'Italiano',
+        pt: 'Português'
       };
       uiLanguageEl.querySelectorAll('option').forEach(opt => {
         if (opt.dataset.dynamicUiLang === '1') return;
@@ -2045,6 +2049,10 @@ async function loadSavedSettings() {
   if (targetEl) targetEl.value = targetLang;
   if (sourceEl) sourceEl.value = sourceLang;
   if (uiEl) uiEl.value = getUiLang();
+  const uiFallback = consumeUiLangFallback();
+  if (uiFallback) {
+    showToast(`⚠ UI jazyk "${uiFallback.requested}" není podporovaný, přepínám na "${uiFallback.fallback}".`);
+  }
   applyUiLanguage();
 
   const tokenLimitEl = document.getElementById('autoTokenLimit');

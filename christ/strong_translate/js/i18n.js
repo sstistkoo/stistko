@@ -2,7 +2,7 @@ import { PROVIDERS } from './config.js';
 
 export const UI_LANG_KEY = 'strong_ui_lang';
 export const DEFAULT_UI_LANG = 'cs';
-export const UI_LANGS = new Set(['cs', 'en', 'sk', 'pl', 'de', 'fr']);
+export const UI_LANGS = new Set(['cs', 'en', 'sk', 'pl', 'de', 'fr', 'es', 'it', 'pt']);
 const FIXED_EN_KEYS = new Set([
   'detail.label.definitionEn',
   'export.field.definitionEn'
@@ -69,8 +69,19 @@ export const INLINE_UI_MESSAGES = {
   },
   fr: {
     'toast.error.withMessage': '✗ Erreur: {message}'
+  },
+  es: {
+    'toast.error.withMessage': '✗ Error: {message}'
+  },
+  it: {
+    'toast.error.withMessage': '✗ Errore: {message}'
+  },
+  pt: {
+    'toast.error.withMessage': '✗ Erro: {message}'
   }
 };
+
+let lastUiLangFallback = null;
 
 let UI_MESSAGES = INLINE_UI_MESSAGES;
 let uiMessagesLoadPromise = null;
@@ -125,7 +136,17 @@ export function loadUiMessages(force = false) {
 
 export function getUiLang() {
   const raw = String(localStorage.getItem(UI_LANG_KEY) || DEFAULT_UI_LANG).toLowerCase();
-  return UI_LANGS.has(raw) ? raw : DEFAULT_UI_LANG;
+  if (UI_LANGS.has(raw)) return raw;
+  if (raw && raw !== DEFAULT_UI_LANG) {
+    lastUiLangFallback = { requested: raw, fallback: DEFAULT_UI_LANG };
+  }
+  return DEFAULT_UI_LANG;
+}
+
+export function consumeUiLangFallback() {
+  const info = lastUiLangFallback;
+  lastUiLangFallback = null;
+  return info;
 }
 
 export function t(key, params = {}) {
