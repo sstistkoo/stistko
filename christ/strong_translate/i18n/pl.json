@@ -628,5 +628,10 @@
   "lang.name.genitive.he": "hebrajskiego",
   "lang.name.genitive.both": "greckiego i hebrajskiego",
   "modelTest.smoke.system": "Odpowiadaj krótko i bez dodatkowych komentarzy.",
-  "modelTest.smoke.user": "Napisz dwa razy z rzędu słowo \"hasło\"."
+  "modelTest.smoke.user": "Napisz dwa razy z rzędu słowo \"hasło\".",
+  "app.title": "Strong GR → CZ Tłumacz",
+  "setup.advanced": "Ustawienia zaawansowane",
+  "setup.compact.title": "Podsumowanie bieżących ustawień",
+  "hdr.fromG": "od G",
+  "log.hotkeys.title": "Space=partia  A=auto  ↑↓=nawigacja  Esc=zamknij modal"
 }
