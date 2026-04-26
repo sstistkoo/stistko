@@ -420,6 +420,7 @@
   "topicPrompt.sending": "⏳ Sending...",
   "translate.single.translating": "⏳ Translating...",
   "translate.single.button": "⚡ Translate this entry",
+  "translate.single.titlePrompt": "Opens the prompt window (editable) and send to the AI.",
   "confirm.retranslate": "Retranslate entry {key}? Current translation will be replaced.",
   "btn.step.loading": "⏳ ...",
   "btn.step.default": "⚡ Batch",

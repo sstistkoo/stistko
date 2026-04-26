@@ -420,6 +420,7 @@
   "topicPrompt.sending": "⏳ Odesílám...",
   "translate.single.translating": "⏳ Překládám...",
   "translate.single.button": "⚡ Přeložit toto heslo",
+  "translate.single.titlePrompt": "Otevře okno s promptem (lze upravit) a odesláním do AI.",
   "confirm.retranslate": "Přeložit znovu heslo {key}? Stávající překlad bude nahrazen.",
   "btn.step.loading": "⏳ ...",
   "btn.step.default": "⚡ Dávka",

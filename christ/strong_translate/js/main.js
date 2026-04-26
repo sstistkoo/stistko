@@ -1680,7 +1680,6 @@ _detailApi = createDetailApi({
   buildTopicPrompt: (...a) => buildTopicPrompt(...a),
   openTopicPromptModal: (...a) => openTopicPromptModal(...a),
   callAIWithRetry, extractTopicValueFromAI: (...a) => extractTopicValueFromAI(...a),
-  translateSingle,
   resolveProviderForInteractiveAction, getPipelineModelForProvider: (...a) => getPipelineModelForProvider(...a),
   getCurrentApiKey: (...a) => getCurrentApiKey(...a),
   getSystemMessage: getResolvedSystemMessage
@@ -4120,6 +4119,9 @@ window.stopAuto = stopAuto;
 // Z topicRepairApi
 window.restoreTopicRepairModal = restoreTopicRepairModal;
 window.applySystemPromptForCurrentTask = applySystemPromptForCurrentTask;
+window.openSystemPromptModal = openSystemPromptModal;
+window.runSystemPromptAI = runSystemPromptAI;
+window.closeSystemPromptModal = closeSystemPromptModal;
 
 // Z modelTestUiApi
 window.cancelModelTest = cancelModelTest;

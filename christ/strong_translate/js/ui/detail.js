@@ -4,7 +4,7 @@
  *       TOPIC_LABELS, refreshTopicLabels,
  *       saveProgress, renderList, updateStats, showToast, log,
  *       buildTopicPrompt, openTopicPromptModal,
- *       callAIWithRetry, extractTopicValueFromAI, translateSingle,
+ *       callAIWithRetry, extractTopicValueFromAI,
  *       resolveProviderForInteractiveAction, getPipelineModelForProvider,
  *       getCurrentApiKey, getSystemMessage
  */
@@ -14,7 +14,7 @@ export function createDetailApi({
   TOPIC_LABELS, refreshTopicLabels,
   saveProgress, renderList, updateStats, showToast, log,
   buildTopicPrompt, openTopicPromptModal,
-  callAIWithRetry, extractTopicValueFromAI, translateSingle,
+  callAIWithRetry, extractTopicValueFromAI,
   resolveProviderForInteractiveAction, getPipelineModelForProvider,
   getCurrentApiKey, getSystemMessage
 }) {
@@ -143,7 +143,7 @@ export function createDetailApi({
     }
 
     const translateBtn = !hasTranslation
-      ? `<button class="translate-btn" onclick="translateSingle('${state.activeKey}')">${t('translate.single.button')}</button>`
+      ? `<button class="translate-btn" type="button" onclick="openSystemPromptModal('${state.activeKey}')" title="${escHtml(t('translate.single.titlePrompt'))}">${t('translate.single.button')}</button>`
       : '';
 
     pane.innerHTML = `
