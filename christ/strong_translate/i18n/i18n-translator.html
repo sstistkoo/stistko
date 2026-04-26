@@ -225,6 +225,38 @@
             height: 20px;
             cursor: pointer;
         }
+
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 20px;
+        }
+
+        .modal-backdrop.open {
+            display: flex;
+        }
+
+        .modal-card {
+            width: min(920px, 100%);
+            max-height: 85vh;
+            overflow: auto;
+            background: #fff;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -258,17 +290,36 @@
                         <li><strong>Vstup (CZ):</strong> "KJV překlady (CZ)" → <strong>Výstup (SK):</strong> "KJV preklady (SK)"</li>
                         <li><strong>Vstup CZ:</strong> "Verze CZ" → <strong>Výstup SK:</strong> "Verzia SK"</li>
                         <li>Funguje pro: (CZ), CZ, (EN), EN, (SK), SK, (DE), DE, atd.</li>
+                        <li><strong>Slova jazyků:</strong> "Czech / English / Slovak / Polish" se přepíší na cílový jazyk.</li>
                     </ul>
                 </div>
 
-                <h3 style="margin-bottom: 20px; color: #667eea;">Vyberte cílové jazyky:</h3>
+                <h3 style="margin-bottom: 10px; color: #667eea;">Vyberte cílové jazyky:</h3>
+                <p style="margin-bottom: 14px; color: #666;">
+                    Doporučený vstup je <strong>cz.json</strong>. CZ zkratky i slovo "Czech" zůstávají ošetřené a mapují se na cílový jazyk.
+                </p>
+
+                <div class="file-info" style="margin-top: 10px;">
+                    <h3>🧠 Překladač</h3>
+                    <p style="margin-bottom: 10px; color: #666;">
+                        Google je výchozí. DeepL může mít lepší terminologii (s API klíčem), bez klíče se použije Google fallback.
+                    </p>
+                    <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+                        <select id="translatorEngine" style="padding:10px;border:1px solid #ccc;border-radius:8px;">
+                            <option value="google" selected>Google Translate (výchozí)</option>
+                            <option value="deepl">DeepL (API key)</option>
+                        </select>
+                        <input id="deeplApiKey" type="password" placeholder="DeepL API key (optional for fallback)" style="flex:1;min-width:280px;padding:10px;border:1px solid #ccc;border-radius:8px;">
+                    </div>
+                </div>
                 
                 <div class="action-buttons">
-                    <button class="btn select-all-btn" onclick="selectAll()">Vybrat vše</button>
-                    <button class="btn select-all-btn" onclick="deselectAll()">Zrušit výběr</button>
+                    <button class="btn" type="button" onclick="openLanguageModal()">🌐 Vybrat jazyky</button>
+                    <button class="btn select-all-btn" type="button" onclick="selectAll()">Vybrat vše</button>
+                    <button class="btn select-all-btn" type="button" onclick="deselectAll()">Zrušit výběr</button>
                 </div>
 
-                <div class="language-grid" id="languageGrid"></div>
+                <p id="selectedLanguagesSummary" style="margin-top: 10px; color: #555;">Vybráno jazyků: 0</p>
 
                 <div class="progress-bar" id="progressBar">
                     <div class="progress-fill" id="progressFill">0%</div>
@@ -284,73 +335,111 @@
         </div>
     </div>
 
+    <div id="languageModal" class="modal-backdrop" onclick="onModalBackdropClick(event)">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 style="color:#667eea;">Vyberte cílové jazyky</h3>
+                <button class="btn select-all-btn" type="button" onclick="closeLanguageModal()">Zavřít</button>
+            </div>
+            <div class="action-buttons" style="margin-top: 10px;">
+                <button class="btn select-all-btn" type="button" onclick="selectAllInModal()">Vybrat vše</button>
+                <button class="btn select-all-btn" type="button" onclick="deselectAllInModal()">Zrušit výběr</button>
+            </div>
+            <div class="language-grid" id="languageGrid"></div>
+        </div>
+    </div>
+
     <script>
         const languages = [
-            { code: 'cs', name: 'Čeština', flag: '🇨🇿', tag: 'CZ' },
-            { code: 'sk', name: 'Slovenština', flag: '🇸🇰', tag: 'SK' },
-            { code: 'pl', name: 'Polština', flag: '🇵🇱', tag: 'PL' },
-            { code: 'de', name: 'Němčina', flag: '🇩🇪', tag: 'DE' },
-            { code: 'fr', name: 'Francouzština', flag: '🇫🇷', tag: 'FR' },
-            { code: 'es', name: 'Španělština', flag: '🇪🇸', tag: 'ES' },
-            { code: 'it', name: 'Italština', flag: '🇮🇹', tag: 'IT' },
-            { code: 'pt', name: 'Portugalština', flag: '🇵🇹', tag: 'PT' },
-            { code: 'ru', name: 'Ruština', flag: '🇷🇺', tag: 'RU' },
-            { code: 'uk', name: 'Ukrajinština', flag: '🇺🇦', tag: 'UK' },
-            { code: 'bg', name: 'Bulharština', flag: '🇧🇬', tag: 'BG' },
-            { code: 'ro', name: 'Rumunština', flag: '🇷🇴', tag: 'RO' },
-            { code: 'hu', name: 'Maďarština', flag: '🇭🇺', tag: 'HU' },
-            { code: 'nl', name: 'Holandština', flag: '🇳🇱', tag: 'NL' },
-            { code: 'sv', name: 'Švédština', flag: '🇸🇪', tag: 'SV' },
-            { code: 'da', name: 'Dánština', flag: '🇩🇰', tag: 'DA' },
-            { code: 'no', name: 'Norština', flag: '🇳🇴', tag: 'NO' },
-            { code: 'fi', name: 'Finština', flag: '🇫🇮', tag: 'FI' },
-            { code: 'el', name: 'Řečtina', flag: '🇬🇷', tag: 'EL' },
-            { code: 'tr', name: 'Turečtina', flag: '🇹🇷', tag: 'TR' },
-            { code: 'ar', name: 'Arabština', flag: '🇸🇦', tag: 'AR' },
-            { code: 'zh-CN', name: 'Čínština', flag: '🇨🇳', tag: 'zh-CN' },
-            { code: 'ja', name: 'Japonština', flag: '🇯🇵', tag: 'JA' },
-            { code: 'ko', name: 'Korejština', flag: '🇰🇷', tag: 'KO' },
-            { code: 'he', name: 'Hebrejština', flag: '🇮🇱', tag: 'HE' },
+            { code: 'cs', name: 'Czech', nameEn: 'Czech', flag: '🇨🇿', tag: 'CZ' },
+            { code: 'sk', name: 'Slovak', nameEn: 'Slovak', flag: '🇸🇰', tag: 'SK' },
+            { code: 'pl', name: 'Polish', nameEn: 'Polish', flag: '🇵🇱', tag: 'PL' },
+            { code: 'de', name: 'German', nameEn: 'German', flag: '🇩🇪', tag: 'DE' },
+            { code: 'fr', name: 'French', nameEn: 'French', flag: '🇫🇷', tag: 'FR' },
+            { code: 'es', name: 'Spanish', nameEn: 'Spanish', flag: '🇪🇸', tag: 'ES' },
+            { code: 'it', name: 'Italian', nameEn: 'Italian', flag: '🇮🇹', tag: 'IT' },
+            { code: 'pt', name: 'Portuguese', nameEn: 'Portuguese', flag: '🇵🇹', tag: 'PT' },
+            { code: 'ru', name: 'Russian', nameEn: 'Russian', flag: '🇷🇺', tag: 'RU' },
+            { code: 'uk', name: 'Ukrainian', nameEn: 'Ukrainian', flag: '🇺🇦', tag: 'UK' },
+            { code: 'bg', name: 'Bulgarian', nameEn: 'Bulgarian', flag: '🇧🇬', tag: 'BG' },
+            { code: 'ro', name: 'Romanian', nameEn: 'Romanian', flag: '🇷🇴', tag: 'RO' },
+            { code: 'hu', name: 'Hungarian', nameEn: 'Hungarian', flag: '🇭🇺', tag: 'HU' },
+            { code: 'nl', name: 'Dutch', nameEn: 'Dutch', flag: '🇳🇱', tag: 'NL' },
+            { code: 'sv', name: 'Swedish', nameEn: 'Swedish', flag: '🇸🇪', tag: 'SV' },
+            { code: 'da', name: 'Danish', nameEn: 'Danish', flag: '🇩🇰', tag: 'DA' },
+            { code: 'no', name: 'Norwegian', nameEn: 'Norwegian', flag: '🇳🇴', tag: 'NO' },
+            { code: 'fi', name: 'Finnish', nameEn: 'Finnish', flag: '🇫🇮', tag: 'FI' },
+            { code: 'el', name: 'Greek', nameEn: 'Greek', flag: '🇬🇷', tag: 'EL' },
+            { code: 'tr', name: 'Turkish', nameEn: 'Turkish', flag: '🇹🇷', tag: 'TR' },
+            { code: 'ar', name: 'Arabic', nameEn: 'Arabic', flag: '🇸🇦', tag: 'AR' },
+            { code: 'zh-CN', name: 'Chinese', nameEn: 'Chinese', flag: '🇨🇳', tag: 'zh-CN' },
+            { code: 'ja', name: 'Japanese', nameEn: 'Japanese', flag: '🇯🇵', tag: 'JA' },
+            { code: 'ko', name: 'Korean', nameEn: 'Korean', flag: '🇰🇷', tag: 'KO' },
+            { code: 'he', name: 'Hebrew', nameEn: 'Hebrew', flag: '🇮🇱', tag: 'HE' },
         ];
 
         let sourceData = null;
         let selectedLanguages = new Set();
 
-        // Inicializace jazykové mřížky
+        function updateSelectedLanguagesSummary() {
+            const summary = document.getElementById('selectedLanguagesSummary');
+            if (!summary) return;
+            summary.textContent = `Vybráno jazyků: ${selectedLanguages.size}`;
+        }
+
+        // Inicializace velkých jazykových tlačítek v modalu
         function initLanguageGrid() {
             const grid = document.getElementById('languageGrid');
-            grid.innerHTML = languages.map(lang => `
-                <div class="lang-card" data-code="${lang.code}" onclick="toggleLanguage('${lang.code}')">
+            grid.innerHTML = languages.map(lang => (
+                `<div class="lang-card ${selectedLanguages.has(lang.code) ? 'selected' : ''}" data-code="${lang.code}" onclick="toggleLanguage('${lang.code}')">
                     <div class="lang-flag">${lang.flag}</div>
                     <div class="lang-name">${lang.name}</div>
                     <div class="lang-code">${lang.code}</div>
-                </div>
-            `).join('');
+                </div>`
+            )).join('');
+            updateSelectedLanguagesSummary();
+        }
+
+        function openLanguageModal() {
+            initLanguageGrid();
+            document.getElementById('languageModal').classList.add('open');
+        }
+
+        function closeLanguageModal() {
+            document.getElementById('languageModal').classList.remove('open');
+        }
+
+        function onModalBackdropClick(event) {
+            if (event.target?.id === 'languageModal') closeLanguageModal();
         }
 
         function toggleLanguage(code) {
-            const card = document.querySelector(`[data-code="${code}"]`);
             if (selectedLanguages.has(code)) {
                 selectedLanguages.delete(code);
-                card.classList.remove('selected');
             } else {
                 selectedLanguages.add(code);
-                card.classList.add('selected');
             }
+            const card = document.querySelector(`.lang-card[data-code="${code}"]`);
+            if (card) card.classList.toggle('selected', selectedLanguages.has(code));
+            updateSelectedLanguagesSummary();
+        }
+
+        function selectAllInModal() {
+            languages.forEach(lang => selectedLanguages.add(lang.code));
+            initLanguageGrid();
+        }
+
+        function deselectAllInModal() {
+            selectedLanguages.clear();
+            initLanguageGrid();
         }
 
         function selectAll() {
-            languages.forEach(lang => {
-                selectedLanguages.add(lang.code);
-                document.querySelector(`[data-code="${lang.code}"]`).classList.add('selected');
-            });
+            selectAllInModal();
         }
 
         function deselectAll() {
-            selectedLanguages.clear();
-            document.querySelectorAll('.lang-card').forEach(card => {
-                card.classList.remove('selected');
-            });
+            deselectAllInModal();
         }
 
         // Drag & Drop
@@ -393,6 +482,13 @@
                     document.getElementById('uploadSection').style.display = 'none';
                     document.getElementById('fileInfoSection').style.display = 'block';
                     initLanguageGrid();
+
+                    const status = document.getElementById('status');
+                    if (!/^(cs|cz)\.json$/i.test(file.name)) {
+                        status.style.display = 'block';
+                        status.className = 'status';
+                        status.textContent = 'Doporučení: použijte vstupní soubor cz.json (aktuální logika je optimalizovaná pro CZ zdroj).';
+                    }
                 } catch (err) {
                     alert('Chyba při načítání JSON: ' + err.message);
                 }
@@ -412,26 +508,64 @@
 
         // Ochrana jazykových značek - v závorkách i bez
         const TAG_REGEX = /\b(CZ|EN|SK|PL|DE|FR|ES|IT|PT|RU|UK|BG|RO|HU|NL|SV|DA|NO|FI|EL|TR|AR|JA|KO|HE|zh-CN|ZH-CN)\b|\((CZ|EN|SK|PL|DE|FR|ES|IT|PT|RU|UK|BG|RO|HU|NL|SV|DA|NO|FI|EL|TR|AR|JA|KO|HE|zh-CN|ZH-CN)\)/gi;
+        // Ochrana jazykových slov (např. "Czech meaning"), která chceme sjednotit na cílový jazyk.
+        const LANGUAGE_WORD_REGEX = /\b(Czech|English|Slovak|Polish)\b/gi;
         const PLACEHOLDER = '\uE000';
+        const DEEPL_LANG_MAP = {
+            'cs': 'CS', 'sk': 'SK', 'pl': 'PL', 'de': 'DE', 'fr': 'FR', 'es': 'ES',
+            'it': 'IT', 'pt': 'PT-PT', 'ru': 'RU', 'uk': 'UK', 'bg': 'BG', 'ro': 'RO',
+            'hu': 'HU', 'nl': 'NL', 'sv': 'SV', 'da': 'DA', 'no': 'NB', 'fi': 'FI',
+            'el': 'EL', 'tr': 'TR', 'ja': 'JA', 'ko': 'KO', 'zh-CN': 'ZH', 'he': 'HE', 'en': 'EN-US'
+        };
 
-        function protectTags(str) {
-            return str.replace(TAG_REGEX, (match, standalone, inParens) => {
+        function protectTagsAndLanguageWords(str) {
+            const protectedTags = str.replace(TAG_REGEX, (match, standalone, inParens) => {
                 // Zapamatujeme si, zda byla značka v závorkách
                 return inParens ? `${PLACEHOLDER}P` : `${PLACEHOLDER}S`;
             });
+            return protectedTags.replace(LANGUAGE_WORD_REGEX, `${PLACEHOLDER}W`);
         }
 
-        function restoreTags(str, targetTag) {
+        function restoreTagsAndLanguageWords(str, targetTag, targetLanguageNameEn) {
             // P = v závorkách, S = samostatně
             return str.replace(new RegExp(`${PLACEHOLDER}P`, 'g'), `(${targetTag})`)
-                      .replace(new RegExp(`${PLACEHOLDER}S`, 'g'), targetTag);
+                      .replace(new RegExp(`${PLACEHOLDER}S`, 'g'), targetTag)
+                      .replace(new RegExp(`${PLACEHOLDER}W`, 'g'), targetLanguageNameEn || targetTag);
         }
 
         async function translateText(text, targetLang) {
+            const engine = (document.getElementById('translatorEngine')?.value || 'google').toLowerCase();
+            const deeplKey = String(document.getElementById('deeplApiKey')?.value || '').trim();
+            if (engine === 'deepl' && deeplKey) {
+                const deeplTarget = DEEPL_LANG_MAP[targetLang] || '';
+                if (deeplTarget) {
+                    try {
+                        const res = await fetch('https://api-free.deepl.com/v2/translate', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                            body: new URLSearchParams({
+                                auth_key: deeplKey,
+                                text,
+                                target_lang: deeplTarget
+                            })
+                        });
+                        if (res.ok) {
+                            const data = await res.json();
+                            const out = data?.translations?.[0]?.text;
+                            if (out) return out;
+                        }
+                    } catch (error) {
+                        console.warn('DeepL failed, fallback to Google:', error);
+                    }
+                }
+            }
             const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
             
             try {
-                const response = await fetch(url);
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 15000);
+                const response = await fetch(url, { signal: controller.signal });
+                clearTimeout(timeoutId);
                 const data = await response.json();
                 return data[0][0][0];
             } catch (error) {
@@ -440,26 +574,39 @@
             }
         }
 
-        async function translateValue(value, targetLang, targetTag) {
+        function countTranslatableStrings(value) {
+            if (typeof value === 'string') return value.trim() ? 1 : 0;
+            if (Array.isArray(value)) return value.reduce((sum, item) => sum + countTranslatableStrings(item), 0);
+            if (typeof value === 'object' && value !== null) {
+                let sum = 0;
+                for (let key in value) sum += countTranslatableStrings(value[key]);
+                return sum;
+            }
+            return 0;
+        }
+
+        async function translateValue(value, targetLang, targetTag, targetLanguageNameEn, onProgress = null, path = '') {
             if (typeof value === 'string') {
                 if (!value.trim()) return value;
                 
                 // Vždy chráníme jazykové značky a nahradíme je cílovým
-                const textToTranslate = protectTags(value);
+                const textToTranslate = protectTagsAndLanguageWords(value);
                 const translated = await translateText(textToTranslate, targetLang);
-                await new Promise(resolve => setTimeout(resolve, 100)); // Rate limiting
+                await new Promise(resolve => setTimeout(resolve, 25)); // Rate limiting
+                if (typeof onProgress === 'function') onProgress(path);
                 
-                return restoreTags(translated, targetTag);
+                return restoreTagsAndLanguageWords(translated, targetTag, targetLanguageNameEn);
             } else if (Array.isArray(value)) {
                 const result = [];
-                for (let item of value) {
-                    result.push(await translateValue(item, targetLang, targetTag));
+                for (let i = 0; i < value.length; i++) {
+                    result.push(await translateValue(value[i], targetLang, targetTag, targetLanguageNameEn, onProgress, `${path}[${i}]`));
                 }
                 return result;
             } else if (typeof value === 'object' && value !== null) {
                 const result = {};
                 for (let key in value) {
-                    result[key] = await translateValue(value[key], targetLang, targetTag);
+                    const nextPath = path ? `${path}.${key}` : key;
+                    result[key] = await translateValue(value[key], targetLang, targetTag, targetLanguageNameEn, onProgress, nextPath);
                 }
                 return result;
             }
@@ -470,6 +617,10 @@
             if (selectedLanguages.size === 0) {
                 alert('Vyberte alespoň jeden jazyk!');
                 return;
+            }
+            if ((document.getElementById('translatorEngine')?.value || '') === 'deepl' && !String(document.getElementById('deeplApiKey')?.value || '').trim()) {
+                const ok = confirm('DeepL je vybraný bez API klíče. Pokračovat s Google fallbackem?');
+                if (!ok) return;
             }
 
             const progressBar = document.getElementById('progressBar');
@@ -483,6 +634,9 @@
 
             const translatedFiles = {};
             const totalLangs = selectedLanguages.size;
+            const translatableKeysPerLang = countTranslatableStrings(sourceData);
+            const totalWorkUnits = Math.max(1, totalLangs * translatableKeysPerLang);
+            let doneUnits = 0;
             let completed = 0;
 
             try {
@@ -493,7 +647,22 @@
                     status.className = 'status';
                     status.textContent = `Překládám do: ${lang.name} (${lang.code})...`;
 
-                    const translated = await translateValue(sourceData, langCode, lang.tag);
+                    console.log(`[i18n-translator] start ${langCode}, keys: ${translatableKeysPerLang}`);
+                    const translated = await translateValue(
+                        sourceData,
+                        langCode,
+                        lang.tag,
+                        lang.nameEn,
+                        (path) => {
+                            doneUnits++;
+                            const percent = Math.round((doneUnits / totalWorkUnits) * 100);
+                            progressFill.style.width = percent + '%';
+                            progressFill.textContent = percent + '%';
+                            if (doneUnits % 25 === 0 || doneUnits === totalWorkUnits) {
+                                status.textContent = `Překládám do: ${lang.name} (${lang.code})... ${doneUnits}/${totalWorkUnits}${path ? ` | ${path}` : ''}`;
+                            }
+                        }
+                    );
                     
                     // Nastavit topic.langTag pokud existuje
                     if (translated && typeof translated === 'object' && 'topic.langTag' in translated) {
@@ -558,6 +727,10 @@
             document.getElementById('fileInput').value = '';
             document.getElementById('progressBar').style.display = 'none';
             document.getElementById('status').style.display = 'none';
+            const grid = document.getElementById('languageGrid');
+            if (grid) grid.innerHTML = '';
+            closeLanguageModal();
+            updateSelectedLanguagesSummary();
         }
     </script>
 </body>
