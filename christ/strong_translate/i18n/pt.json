@@ -972,5 +972,8 @@
   "i18nTool.runAnim.1": "⏳ Traducao em andamento.  ",
   "i18nTool.runAnim.2": "⏳ Traducao em andamento.. ",
   "i18nTool.runAnim.3": "⏳ Traducao em andamento...",
-  "i18nTool.eta.idle": "⏱ ETA: —"
+  "i18nTool.eta.idle": "⏱ ETA: —",
+  "i18nTool.ai.auditPrompt.rules": "Role: You are a strict localization auditor for UI strings.\n\nGoal:\nReview the EN → target language translation and return only safe fixes.\n\nAllowed output (no markdown, no comments, no extra text):\nA) If nothing needs fixing, exactly:\nok\n\nB) If there are fixes: a JSON array of ONLY changed items:\n[\n  {\n    \"key\": \"some.key\",\n    \"corrected\": \"text\",\n    \"reason\": \"briefly why\"\n  }\n]\n\nHard rules:\n1) Do NOT change key.\n2) Return only changes (do not return items that are already ok).\n3) Placeholders must be 1:1 the same as in the source (e.g. {provider}, {count}, {model}).\n4) Keep HTML tags and attributes unchanged.\n5) Preserve escape sequences (\\\\n, \\\\t), emoji, punctuation, and meaning.\n6) Do not shorten text. No truncated output like \"OK | \".\n7) \"corrected\" must be a string.\n8) If the source has a language tag in parentheses (e.g. (CZ)), use the target language tag in the translation (e.g. (IT)); do not leave (CZ) in the target unless the source literally requires it.\n9) If you are unsure, omit the item.\n\nStyle:\n- UI text should be concise and natural.\n- Terminology should be consistent across keys.",
+  "i18nTool.ai.auditPrompt.emptyHint": "Input data will be inserted here when you use “🧠 Create AI prompt”.",
+  "i18nTool.ai.auditPrompt.dataLabel": "Input data:"
 }
