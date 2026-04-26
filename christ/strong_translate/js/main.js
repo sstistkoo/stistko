@@ -1750,6 +1750,7 @@ const topicRepairApi = createTopicRepairApi({
   appendModelTestUsage: (...a) => appendModelTestUsage(...a),
   buildModelTestMessages: (...a) => buildModelTestMessages(...a),
   getModelTestPromptCatalog,
+  buildPromptMessages: (...a) => buildPromptMessages(...a),
 });
 const {
   startTopicRepairFlow, closeTopicRepairModalSafe, stopTopicRepairTicker,

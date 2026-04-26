@@ -23,6 +23,7 @@ export function createTopicRepairApi(deps) {
     appendModelTestUsage,
     buildModelTestMessages,
     getModelTestPromptCatalog,
+    buildPromptMessages,
   } = deps;
 function getTopicSourceTextForPreview(key, topicId) {
   const e = state.entryMap.get(key) || {};
