@@ -1,4 +1,34 @@
-// js/parser.js — parsování importovaných souborů (CZ TXT, JSON)
+// js/parser.js — parsování importovaných souborů (TXT, JSON)
+
+const IMPORT_FIELDS = ['vyznam', 'definice', 'pouziti', 'puvod', 'specialista', 'kjv'];
+
+/**
+ * Centralizované aliasy pro import TXT.
+ * Zahrnuje legacy CZ labely i obecné varianty bez jazykové koncovky.
+ */
+const TXT_LABEL_ALIASES = {
+  vyznam: ['Český význam', 'Vyznam', 'VÝZNAM', 'VYZNAM', 'Význam', 'Cz', 'CZ', 'Meaning'],
+  definice: ['Definice (CZ)', 'Česká definice', 'Definice', 'DEFINICE', 'CZ definice', 'Definition'],
+  pouziti: ['Biblické užití', 'Biblické užití (KJV)', 'Pouziti', 'POUZITI', 'Použití', 'Usage'],
+  puvod: ['Původ', 'Puvod', 'PUVOD', 'Origin'],
+  specialista: ['Specialista', 'VÝKLAD', 'VYKLAD', 'Komentář', 'KOMENTAR', 'Exegeze', 'EXEGEZE', 'Specialist'],
+  kjv: ['KJV překlady (CZ)', 'KJV překlady', 'KJV', 'KJV_PREKLADY', 'KJV Významy', 'KJV translations']
+};
+
+/**
+ * Vrátí hodnotu z řádku "Label: text" podle zadaných aliasů.
+ * Podporuje i variantu s fullwidth dvojtečkou (：).
+ */
+function getValueByLabels(lines, labels) {
+  for (const label of labels) {
+    const line = lines.find((l) => {
+      const trimmed = l.trim();
+      return trimmed.startsWith(`${label}:`) || trimmed.startsWith(`${label}：`);
+    });
+    if (line) return line.slice(label.length + 1).trim();
+  }
+  return '';
+}
 
 export function parseCzTXT(text) {
   const result = {};
@@ -10,22 +40,12 @@ export function parseCzTXT(text) {
     const m = header.match(/^([GH]\d+)\s*\|/);
     if (!m) continue;
     const key = m[1];
-    const get = (labels) => {
-      for (const label of labels) {
-        const line = lines.find(l => {
-          const trimmed = l.trim();
-          return trimmed.startsWith(label + ':') || trimmed.startsWith(label + '：');
-        });
-        if (line) return line.slice(label.length + 1).trim();
-      }
-      return '';
-    };
-    const vyznam = get(['Český význam', 'Vyznam', 'VÝZNAM', 'VYZNAM', 'Význam', 'Cz', 'CZ']);
-    const definice = get(['Definice (CZ)', 'Česká definice', 'Definice', 'DEFINICE', 'CZ definice']);
-    const pouziti = get(['Biblické užití', 'Biblické užití (KJV)', 'Pouziti', 'POUZITI', 'Použití']);
-    const puvod = get(['Původ', 'Puvod', 'PUVOD']);
-    const specialista = get(['Specialista', 'VÝKLAD', 'VYKLAD', 'Komentář', 'KOMENTAR', 'Exegeze', 'EXEGEZE']);
-    const kjv = get(['KJV překlady (CZ)', 'KJV překlady', 'KJV', 'KJV_PREKLADY', 'KJV Významy']);
+    const vyznam = getValueByLabels(lines, TXT_LABEL_ALIASES.vyznam);
+    const definice = getValueByLabels(lines, TXT_LABEL_ALIASES.definice);
+    const pouziti = getValueByLabels(lines, TXT_LABEL_ALIASES.pouziti);
+    const puvod = getValueByLabels(lines, TXT_LABEL_ALIASES.puvod);
+    const specialista = getValueByLabels(lines, TXT_LABEL_ALIASES.specialista);
+    const kjv = getValueByLabels(lines, TXT_LABEL_ALIASES.kjv);
     if (vyznam || definice) {
       result[key] = { vyznam, definice, pouziti, puvod, specialista, kjv };
     }
@@ -36,12 +56,11 @@ export function parseCzTXT(text) {
 export function parseImportJSON(text) {
   const parsed = JSON.parse(text);
   const result = {};
-  const FIELDS = ['vyznam', 'definice', 'pouziti', 'puvod', 'specialista', 'kjv'];
 
   const normalizeRecord = (record) => {
     if (!record || typeof record !== 'object') return null;
     const out = {};
-    for (const field of FIELDS) {
+    for (const field of IMPORT_FIELDS) {
       const val = record[field];
       out[field] = typeof val === 'string' ? val.trim() : '';
     }
@@ -52,7 +71,7 @@ export function parseImportJSON(text) {
     if (!/^G\d+$/.test(key) && !/^H\d+$/.test(key)) return;
     const normalized = normalizeRecord(value);
     if (!normalized) return;
-    if (!FIELDS.some(f => normalized[f])) return;
+    if (!IMPORT_FIELDS.some(f => normalized[f])) return;
     result[key] = normalized;
   };
 
