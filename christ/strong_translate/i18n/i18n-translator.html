@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>i18n JSON Překladač</title>
+    <title>i18n JSON Překladač (samostatný)</title>
     <style>
         * {
             margin: 0;
@@ -86,12 +86,13 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            padding: 15px 30px;
+            padding: 11px 18px;
             border-radius: 10px;
-            font-size: 1.1em;
+            font-size: 0.95em;
             cursor: pointer;
             transition: transform 0.2s;
             font-weight: 600;
+            line-height: 1.2;
         }
 
         .btn:hover {
@@ -202,7 +203,10 @@
 
         .select-all-btn {
             background: #6c757d;
-            margin-left: 10px;
+            margin-left: 0;
+            padding: 9px 14px;
+            font-size: 0.88em;
+            font-weight: 600;
         }
 
         .action-buttons {
@@ -296,28 +300,270 @@
             color: #666;
             margin-top: 5px;
         }
+
+        .ai-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .ai-status {
+            margin: 8px 0;
+            color: #444;
+            font-size: 0.9em;
+        }
+
+        .ai-preview-box {
+            margin-top: 10px;
+        }
+
+        .ai-modal-card {
+            width: min(1200px, 100%);
+        }
+
+        .ai-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            margin-bottom: 8px;
+        }
+
+        .ai-field {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .ai-field-label {
+            font-size: 0.78em;
+            color: #586070;
+            font-weight: 600;
+        }
+
+        .prompt-hint {
+            margin: 4px 0 8px 0;
+            color: #667;
+            font-size: 0.83em;
+        }
+
+        .field-select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        .field-input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        .field-input.flex-1 {
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .field-input.flex-2 {
+            flex: 1;
+            min-width: 260px;
+        }
+
+        .field-small {
+            width: 100px;
+        }
+
+        .field-xsmall {
+            width: 90px;
+        }
+
+        .editor-textarea {
+            width: 100%;
+            min-height: 360px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-family: Consolas, 'JetBrains Mono', monospace;
+            font-size: 12px;
+            line-height: 1.45;
+            resize: vertical;
+        }
+
+        .preview-textarea {
+            width: 100%;
+            min-height: 180px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-family: Consolas, 'JetBrains Mono', monospace;
+            font-size: 12px;
+            line-height: 1.45;
+            resize: vertical;
+            background: #fafafa;
+        }
+
+        .muted-text {
+            color: #666;
+        }
+
+        .hint-text {
+            margin: 15px 0;
+        }
+
+        .warning-note {
+            margin: 0 0 15px 0;
+            color: #856404;
+            font-size: 0.95em;
+        }
+
+        .hidden-section {
+            display: none;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+        }
+
+        .warning-color {
+            color: #856404;
+        }
+
+        .ml-20 {
+            margin-left: 20px;
+        }
+
+        .heading-primary {
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+
+        .mb-14 {
+            margin-bottom: 14px;
+        }
+
+        .mt-10 {
+            margin-top: 10px;
+        }
+
+        .toolbar-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .summary-text {
+            margin-top: 10px;
+            color: #555;
+        }
+
+        .hidden-inline {
+            display: none;
+        }
+
+        .accent-title {
+            color: #667eea;
+        }
+
+        .mb-10 {
+            margin-bottom: 10px;
+        }
+
+        .output-editor-toolbar {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+
+        .output-editor-note {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .output-editor-text {
+            width: 100%;
+            min-height: 420px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-family: Consolas, 'JetBrains Mono', monospace;
+            font-size: 12px;
+            line-height: 1.45;
+            resize: vertical;
+        }
+
+        .compact-tools {
+            margin-top: 10px;
+            border: 1px solid #e5e5e5;
+            border-radius: 10px;
+            padding: 10px;
+            background: #fafafa;
+        }
+
+        .compact-tools summary {
+            cursor: pointer;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 1024px) {
+            .ai-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+
+            .header {
+                padding: 16px;
+            }
+
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .action-buttons {
+                flex-wrap: wrap;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .modal-card {
+                padding: 14px;
+                max-height: 92vh;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h1>🌍 i18n JSON Překladač</h1>
-            <p>Přeložte svůj JSON soubor do libovolných jazyků</p>
         </div>
 
         <div class="content">
             <div class="upload-section" id="uploadSection">
                 <div class="upload-icon">📁</div>
                 <h2>Nahrajte JSON soubor</h2>
-                <p style="margin: 15px 0; color: #666;">Přetáhněte soubor sem nebo klikněte pro výběr</p>
-                <p style="margin: 0 0 15px 0; color: #856404; font-size: 0.95em;">
-                    Doporučení: pro kvalitní překlad použijte vstupní soubor <strong>cs.json</strong>.
+                <p class="muted-text hint-text">Přetáhněte soubor sem nebo klikněte pro výběr</p>
+                <p class="warning-note">
+                    Nahrajte libovolný validní JSON soubor s texty k překladu.
                 </p>
                 <input type="file" id="fileInput" class="file-input" accept=".json">
                 <button class="btn" onclick="document.getElementById('fileInput').click()">Vybrat soubor</button>
             </div>
 
-            <div id="fileInfoSection" style="display: none;">
+            <div id="fileInfoSection" class="hidden-section">
                 <div class="file-info">
                     <h3>📄 Načtený soubor</h3>
                     <p><strong>Název:</strong> <span id="fileName"></span></p>
@@ -325,33 +571,19 @@
                     <p><strong>Počet klíčů:</strong> <span id="keyCount"></span></p>
                 </div>
 
-                <div class="file-info" style="background: #fff3cd; border: 2px solid #ffc107;">
-                    <h3 style="color: #856404;">ℹ️ Jak fungují jazykové značky</h3>
-                    <p style="color: #856404;">Všechny jazykové zkratky ve vstupním souboru budou automaticky nahrazeny cílovým jazykem:</p>
-                    <ul style="margin-left: 20px; color: #856404;">
-                        <li><strong>Vstup (CZ):</strong> "KJV překlady (CZ)" → <strong>Výstup (SK):</strong> "KJV preklady (SK)"</li>
-                        <li><strong>Vstup CZ:</strong> "Verze CZ" → <strong>Výstup SK:</strong> "Verzia SK"</li>
-                        <li>Funguje pro: (CZ), CZ, (EN), EN, (SK), SK, (DE), DE, atd.</li>
-                        <li><strong>Slova jazyků:</strong> "Czech / English / Slovak / Polish" se přepíší na cílový jazyk.</li>
-                    </ul>
-                </div>
+                <h3 class="heading-primary">Vyberte cílové jazyky:</h3>
 
-                <h3 style="margin-bottom: 10px; color: #667eea;">Vyberte cílové jazyky:</h3>
-                <p style="margin-bottom: 14px; color: #666;">
-                    Doporučený vstup je <strong>cs.json</strong>. CZ zkratky i slovo "Czech" zůstávají ošetřené a mapují se na cílový jazyk.
-                </p>
-
-                <div class="file-info" style="margin-top: 10px;">
+                <div class="file-info mt-10">
                     <h3>🧠 Překladač</h3>
-                    <p style="margin-bottom: 10px; color: #666;">
+                    <p class="muted-text mb-10">
                         Google je výchozí. DeepL může mít lepší terminologii (s API klíčem), bez klíče se použije Google fallback.
                     </p>
-                    <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-                        <select id="translatorEngine" style="padding:10px;border:1px solid #ccc;border-radius:8px;">
+                    <div class="toolbar-row">
+                        <select id="translatorEngine" class="field-select">
                             <option value="google" selected>Google Translate (výchozí)</option>
                             <option value="deepl">DeepL (API key)</option>
                         </select>
-                        <input id="deeplApiKey" type="password" placeholder="DeepL API key (optional for fallback)" style="flex:1;min-width:280px;padding:10px;border:1px solid #ccc;border-radius:8px;">
+                        <input id="deeplApiKey" type="password" placeholder="DeepL API key (optional for fallback)" class="field-input flex-2">
                     </div>
                 </div>
                 
@@ -361,7 +593,7 @@
                     <button class="btn select-all-btn" type="button" onclick="deselectAll()">Zrušit výběr</button>
                 </div>
 
-                <p id="selectedLanguagesSummary" style="margin-top: 10px; color: #555;">Vybráno jazyků: 0</p>
+                <p id="selectedLanguagesSummary" class="summary-text">Vybráno jazyků: 0</p>
 
                 <div class="progress-bar" id="progressBar">
                     <div class="progress-fill" id="progressFill">0%</div>
@@ -371,16 +603,22 @@
 
                 <div class="action-buttons">
                     <button class="btn" id="translateBtn" onclick="startTranslation()">🚀 Spustit překlad</button>
-                    <button class="btn select-all-btn" id="cancelBtn" onclick="cancelTranslation()" style="display:none;">■ Ukončit překlad</button>
-                    <button class="btn select-all-btn" id="minimizeBtn" onclick="minimizeTranslator()" style="display:none;">— Minimalizovat</button>
+                    <button class="btn select-all-btn hidden-inline" id="cancelBtn" onclick="cancelTranslation()">■ Ukončit překlad</button>
+                    <button class="btn select-all-btn hidden-inline" id="minimizeBtn" onclick="minimizeTranslator()">— Minimalizovat</button>
                     <button class="btn select-all-btn" onclick="resetApp()">🔄 Nový soubor</button>
                 </div>
                 <p id="runStatus" class="run-status">Připraveno.</p>
-                <div class="action-buttons">
-                    <button class="btn select-all-btn" id="editOutputBtn" onclick="openOutputEditor()" disabled>✏ Editovat výstup JSON</button>
-                    <button class="btn select-all-btn" id="loadOutputBtn" onclick="document.getElementById('loadOutputInput').click()">📂 Načíst JSON pro editaci</button>
-                    <input type="file" id="loadOutputInput" class="file-input" accept=".json,application/json">
-                </div>
+                <details class="compact-tools">
+                    <summary>Pokročilé nástroje</summary>
+                    <div class="action-buttons">
+                        <button class="btn select-all-btn" id="editOutputBtn" onclick="openOutputEditor()" disabled>✏ Editovat výstup JSON</button>
+                        <button class="btn select-all-btn" id="loadOutputBtn" onclick="document.getElementById('loadOutputInput').click()">📂 Načíst JSON do editoru</button>
+                        <button class="btn select-all-btn" id="openAiBtn" onclick="openAiModal()">🧠 AI audit/editor</button>
+                        <button class="btn select-all-btn" id="validateStandardBtn" onclick="openStandardValidationPicker()">📏 Validace standardu</button>
+                        <input type="file" id="loadOutputInput" class="file-input" accept=".json,application/json">
+                        <input type="file" id="standardValidationInput" class="file-input" accept=".json,application/json" multiple>
+                    </div>
+                </details>
             </div>
         </div>
     </div>
@@ -388,15 +626,15 @@
     <div id="languageModal" class="modal-backdrop" onclick="onModalBackdropClick(event)">
         <div class="modal-card">
             <div class="modal-header">
-                <h3 style="color:#667eea;">Vyberte cílové jazyky</h3>
+                <h3 class="accent-title">Vyberte cílové jazyky</h3>
                 <button class="btn select-all-btn" type="button" onclick="closeLanguageModal()">Zavřít</button>
             </div>
-            <div class="action-buttons" style="margin-top: 10px;">
+            <div class="action-buttons mt-10">
                 <button class="btn select-all-btn" type="button" onclick="selectAllInModal()">Vybrat vše</button>
                 <button class="btn select-all-btn" type="button" onclick="deselectAllInModal()">Zrušit výběr</button>
             </div>
             <div class="language-grid" id="languageGrid"></div>
-            <div class="action-buttons" style="margin-top: 14px;">
+            <div class="action-buttons mb-14">
                 <button class="btn select-all-btn" type="button" onclick="closeLanguageModal()">Zrušit</button>
                 <button class="btn" type="button" onclick="applyLanguageSelection()">Použít výběr</button>
             </div>
@@ -406,16 +644,16 @@
     <div id="outputEditorModal" class="modal-backdrop" onclick="onOutputEditorBackdropClick(event)">
         <div class="modal-card" onclick="event.stopPropagation()">
             <div class="modal-header">
-                <h3 style="color:#667eea;">✏ Editor výstupního JSON</h3>
+                <h3 class="accent-title">✏ Editor výstupního JSON</h3>
                 <button class="btn select-all-btn" type="button" onclick="closeOutputEditor()">Zavřít</button>
             </div>
-            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:10px;">
+            <div class="output-editor-toolbar">
                 <label for="outputEditorLang"><strong>Jazyk:</strong></label>
-                <select id="outputEditorLang" style="padding:10px;border:1px solid #ccc;border-radius:8px;min-width:160px;"></select>
+                <select id="outputEditorLang" class="field-select"></select>
                 <button class="btn select-all-btn" type="button" onclick="downloadEditedOutput()">💾 Uložit JSON</button>
             </div>
-            <p style="font-size:0.9em;color:#666;margin-bottom:8px;">Můžete upravit JSON ručně. Při nevalidním JSON se změna neuloží.</p>
-            <textarea id="outputEditorText" style="width:100%;min-height:420px;padding:10px;border:1px solid #ccc;border-radius:8px;font-family:monospace;font-size:12px;line-height:1.45;"></textarea>
+            <p class="output-editor-note">Můžete upravit JSON ručně. Při nevalidním JSON se změna neuloží.</p>
+            <textarea id="outputEditorText" class="output-editor-text"></textarea>
         </div>
     </div>
 
@@ -426,6 +664,67 @@
             <button class="btn select-all-btn" type="button" onclick="cancelTranslation()">Ukončit</button>
         </div>
         <div id="minimizedStatus" class="floating-minimized-status">0%</div>
+    </div>
+
+    <div id="aiModal" class="modal-backdrop" onclick="onAiBackdropClick(event)">
+        <div class="modal-card ai-modal-card" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 class="accent-title">🧠 AI audit/editor i18n</h3>
+                <button class="btn select-all-btn" type="button" onclick="closeAiModal()">Zavřít</button>
+            </div>
+            <div class="ai-row">
+                <button class="btn select-all-btn" type="button" onclick="document.getElementById('aiLoadInput').click()">📂 Načíst JSON do AI auditu</button>
+                <input type="file" id="aiLoadInput" class="file-input" accept=".json,application/json">
+                <button class="btn select-all-btn" type="button" onclick="buildAiPromptOnly()">🧱 Vytvořit prompt</button>
+                <button class="btn select-all-btn" type="button" onclick="sendAiBatch()" id="aiSendBtn">📤 Odeslat dávku AI</button>
+                <button class="btn select-all-btn hidden-inline" type="button" onclick="cancelAiRun()" id="aiCancelBtn">■ Zrušit AI běh</button>
+                <button class="btn select-all-btn" type="button" onclick="applyAiResponse()">✅ Aplikovat AI odpověď</button>
+                <button class="btn select-all-btn" type="button" onclick="downloadAiResult()" id="aiDownloadBtn" disabled>💾 Stáhnout AI výstup</button>
+            </div>
+            <div class="ai-row">
+                <div class="ai-field">
+                    <label class="ai-field-label" for="aiProvider">Provider</label>
+                    <select id="aiProvider" class="field-select">
+                        <option value="openrouter" selected>OpenRouter</option>
+                        <option value="openai">OpenAI</option>
+                        <option value="gemini">Gemini</option>
+                    </select>
+                </div>
+                <div class="ai-field flex-1">
+                    <label class="ai-field-label" for="aiApiKey">API klíč</label>
+                    <input id="aiApiKey" type="password" placeholder="Vložte API key" class="field-input flex-1">
+                </div>
+                <div class="ai-field flex-2">
+                    <label class="ai-field-label" for="aiModel">Model</label>
+                    <input id="aiModel" type="text" value="google/gemini-2.0-flash-exp:free" placeholder="Např. gpt-4o-mini / gemini-2.0-flash" class="field-input flex-2">
+                </div>
+                <div class="ai-field">
+                    <label class="ai-field-label" for="aiBatchSize">Dávka</label>
+                    <input id="aiBatchSize" type="number" min="20" max="400" step="10" value="120" class="field-input field-small" title="Počet položek na dávku">
+                </div>
+                <div class="ai-field">
+                    <label class="ai-field-label" for="aiInterval">Interval (s)</label>
+                    <input id="aiInterval" type="number" min="1" max="300" step="1" value="8" class="field-input field-xsmall" title="Interval mezi dávkami (s)">
+                </div>
+            </div>
+            <div id="aiStatus" class="ai-status">Načtený JSON: — | Dávka: 0/0 | Zbývá: 0</div>
+            <div id="aiTokenStats" class="ai-status">Tokeny AI: 0 in / 0 out / 0 total</div>
+            <div class="ai-grid">
+                <div>
+                    <label for="aiPromptText"><strong>Prompt pro AI</strong></label>
+                    <p class="prompt-hint">Použijte tlačítko „Vytvořit prompt“ nebo prompt upravte ručně.</p>
+                    <textarea id="aiPromptText" class="editor-textarea"></textarea>
+                </div>
+                <div>
+                    <label for="aiResponseText"><strong>Odpověď AI</strong></label>
+                    <textarea id="aiResponseText" class="editor-textarea" placeholder='[{"key":"x.y","status":"fix","corrected":"...","reason":"..."}]'></textarea>
+                </div>
+            </div>
+            <div class="ai-preview-box">
+                <label for="aiPreviewText"><strong>Přehled změn (diff)</strong></label>
+                <textarea id="aiPreviewText" readonly class="preview-textarea" placeholder="Po aplikaci AI odpovědi se zde zobrazí změny."></textarea>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -463,6 +762,15 @@
         let cancelRequested = false;
         let translationStartedAtMs = 0;
         let translatedJsonByLang = {};
+        let aiWorkingJson = null;
+        let aiLoadedFileName = '';
+        let aiFlatEntries = [];
+        let aiNextIndex = 0;
+        let aiRunning = false;
+        let aiCancelRequested = false;
+        let aiTokenStats = { in: 0, out: 0, total: 0 };
+        const STORAGE_UI_KEY = 'st_i18n_translator_ui_v1';
+        const STORAGE_AI_SESSION_KEY = 'st_i18n_translator_ai_session_v1';
 
         function updateSelectedLanguagesSummary() {
             const summary = document.getElementById('selectedLanguagesSummary');
@@ -517,16 +825,19 @@
             const card = document.querySelector(`.lang-card[data-code="${code}"]`);
             if (card) card.classList.toggle('selected', selectedLanguages.has(code));
             updateSelectedLanguagesSummary();
+            saveUiState();
         }
 
         function selectAllInModal() {
             languages.forEach(lang => selectedLanguages.add(lang.code));
             initLanguageGrid();
+            saveUiState();
         }
 
         function deselectAllInModal() {
             selectedLanguages.clear();
             initLanguageGrid();
+            saveUiState();
         }
 
         function selectAll() {
@@ -642,6 +953,551 @@
             downloadFile(JSON.stringify(translatedJsonByLang[code], null, 2), `${code}.json`);
         }
 
+        function onAiBackdropClick(event) {
+            if (event.target?.id === 'aiModal') closeAiModal();
+        }
+
+        function getAiPromptTemplate() {
+            return [
+                'Jsi QA editor lokalizace JSON.',
+                'Oprav texty do přirozené češtiny, zachovej význam a styl UI.',
+                'NIKDY neměň placeholdery {name}, HTML tagy <b>...</b> ani strukturu klíčů.',
+                'Vracej pouze validní JSON pole ve tvaru:',
+                '[{"key":"path","status":"ok|fix","corrected":"text","reason":"stručně"}]',
+                '',
+                'Tip: Použij tlačítko "Vytvořit prompt" pro prompt s konkrétní dávkou dat.'
+            ].join('\n');
+        }
+
+        function openAiModal() {
+            document.getElementById('aiModal').classList.add('open');
+            const promptArea = document.getElementById('aiPromptText');
+            if (promptArea && !String(promptArea.value || '').trim()) {
+                promptArea.value = getAiPromptTemplate();
+            }
+            renderAiStatus();
+            renderAiTokenStats();
+        }
+
+        function closeAiModal() {
+            document.getElementById('aiModal').classList.remove('open');
+        }
+
+        function renderAiStatus(extra = '') {
+            const total = aiFlatEntries.length;
+            const remaining = Math.max(0, total - aiNextIndex);
+            const text = `Načtený JSON: ${aiLoadedFileName || '—'} | Dávka: ${aiNextIndex}/${total} | Zbývá: ${remaining}${extra ? ` | ${extra}` : ''}`;
+            document.getElementById('aiStatus').textContent = text;
+        }
+
+        function renderAiTokenStats() {
+            document.getElementById('aiTokenStats').textContent =
+                `Tokeny AI: ${aiTokenStats.in} in / ${aiTokenStats.out} out / ${aiTokenStats.total} total`;
+        }
+
+        function safeLocalStorageSet(key, value) {
+            try {
+                localStorage.setItem(key, value);
+            } catch (error) {
+                console.warn('localStorage save failed', key, error);
+            }
+        }
+
+        function safeLocalStorageGet(key) {
+            try {
+                return localStorage.getItem(key);
+            } catch (error) {
+                console.warn('localStorage read failed', key, error);
+                return null;
+            }
+        }
+
+        function saveUiState() {
+            const payload = {
+                selectedLanguages: Array.from(selectedLanguages),
+                translatorEngine: document.getElementById('translatorEngine')?.value || 'google',
+                aiProvider: document.getElementById('aiProvider')?.value || 'openrouter',
+                aiModel: document.getElementById('aiModel')?.value || '',
+                aiBatchSize: Number(document.getElementById('aiBatchSize')?.value || 120),
+                aiInterval: Number(document.getElementById('aiInterval')?.value || 8)
+            };
+            safeLocalStorageSet(STORAGE_UI_KEY, JSON.stringify(payload));
+        }
+
+        function loadUiState() {
+            const raw = safeLocalStorageGet(STORAGE_UI_KEY);
+            if (!raw) return;
+            try {
+                const parsed = JSON.parse(raw);
+                if (parsed?.translatorEngine) document.getElementById('translatorEngine').value = parsed.translatorEngine;
+                if (parsed?.aiProvider) document.getElementById('aiProvider').value = parsed.aiProvider;
+                if (typeof parsed?.aiModel === 'string') document.getElementById('aiModel').value = parsed.aiModel;
+                if (Number.isFinite(parsed?.aiBatchSize)) document.getElementById('aiBatchSize').value = String(parsed.aiBatchSize);
+                if (Number.isFinite(parsed?.aiInterval)) document.getElementById('aiInterval').value = String(parsed.aiInterval);
+                if (Array.isArray(parsed?.selectedLanguages)) {
+                    selectedLanguages = new Set(parsed.selectedLanguages.filter(code => languages.some(lang => lang.code === code)));
+                    updateSelectedLanguagesSummary();
+                }
+            } catch (error) {
+                console.warn('loadUiState parse failed', error);
+            }
+        }
+
+        function saveAiSessionState() {
+            if (!aiWorkingJson) return;
+            try {
+                const payload = {
+                    aiWorkingJson,
+                    aiLoadedFileName,
+                    aiNextIndex,
+                    aiTokenStats,
+                    aiPromptText: document.getElementById('aiPromptText')?.value || '',
+                    aiResponseText: document.getElementById('aiResponseText')?.value || '',
+                    aiPreviewText: document.getElementById('aiPreviewText')?.value || ''
+                };
+                const str = JSON.stringify(payload);
+                if (str.length > 2_000_000) {
+                    console.warn('AI session too large for localStorage, skip');
+                    return;
+                }
+                safeLocalStorageSet(STORAGE_AI_SESSION_KEY, str);
+            } catch (error) {
+                console.warn('saveAiSessionState failed', error);
+            }
+        }
+
+        function loadAiSessionState() {
+            const raw = safeLocalStorageGet(STORAGE_AI_SESSION_KEY);
+            if (!raw) return;
+            try {
+                const parsed = JSON.parse(raw);
+                if (!parsed?.aiWorkingJson || typeof parsed.aiWorkingJson !== 'object') return;
+                aiWorkingJson = parsed.aiWorkingJson;
+                aiLoadedFileName = String(parsed.aiLoadedFileName || '');
+                aiFlatEntries = flattenStringEntries(aiWorkingJson);
+                aiNextIndex = Math.min(Math.max(0, Number(parsed.aiNextIndex || 0)), aiFlatEntries.length);
+                aiTokenStats = {
+                    in: Number(parsed?.aiTokenStats?.in || 0),
+                    out: Number(parsed?.aiTokenStats?.out || 0),
+                    total: Number(parsed?.aiTokenStats?.total || 0)
+                };
+                if (typeof parsed?.aiPromptText === 'string') document.getElementById('aiPromptText').value = parsed.aiPromptText;
+                if (typeof parsed?.aiResponseText === 'string') document.getElementById('aiResponseText').value = parsed.aiResponseText;
+                if (typeof parsed?.aiPreviewText === 'string') document.getElementById('aiPreviewText').value = parsed.aiPreviewText;
+                document.getElementById('aiDownloadBtn').disabled = false;
+                renderAiTokenStats();
+                renderAiStatus('Obnoven stav AI relace.');
+            } catch (error) {
+                console.warn('loadAiSessionState parse failed', error);
+            }
+        }
+
+        function setAiRunningState(running) {
+            aiRunning = running;
+            document.getElementById('aiSendBtn').disabled = running;
+            document.getElementById('aiCancelBtn').style.display = running ? 'inline-block' : 'none';
+        }
+
+        function flattenStringEntries(value, path = '', out = []) {
+            if (typeof value === 'string') {
+                out.push({ key: path, value });
+                return out;
+            }
+            if (Array.isArray(value)) {
+                value.forEach((item, idx) => flattenStringEntries(item, `${path}[${idx}]`, out));
+                return out;
+            }
+            if (value && typeof value === 'object') {
+                Object.keys(value).forEach((k) => {
+                    const next = path ? `${path}.${k}` : k;
+                    flattenStringEntries(value[k], next, out);
+                });
+            }
+            return out;
+        }
+
+        function openStandardValidationPicker() {
+            const input = document.getElementById('standardValidationInput');
+            if (!input) return;
+            input.click();
+        }
+
+        async function parseJsonFile(file) {
+            const text = await file.text();
+            return JSON.parse(text);
+        }
+
+        function toEntryMap(json) {
+            const entries = flattenStringEntries(json);
+            const map = new Map();
+            for (const item of entries) {
+                map.set(item.key, String(item.value));
+            }
+            return map;
+        }
+
+        function buildStandardValidationReport(filesData, sourceName, sourceMap) {
+            const lines = [];
+            lines.push(`📏 Validace standardu dokončena (zdroj: ${sourceName})`);
+            lines.push(`Zdrojové klíče: ${sourceMap.size}`);
+            lines.push('');
+
+            for (const data of filesData) {
+                if (data.name === sourceName) continue;
+                const targetMap = toEntryMap(data.json);
+                const sourceKeys = new Set(sourceMap.keys());
+                const targetKeys = new Set(targetMap.keys());
+                const missing = [];
+                const extra = [];
+                const placeholderIssues = [];
+
+                for (const key of sourceKeys) {
+                    if (!targetKeys.has(key)) missing.push(key);
+                }
+                for (const key of targetKeys) {
+                    if (!sourceKeys.has(key)) extra.push(key);
+                }
+                for (const key of sourceKeys) {
+                    if (!targetKeys.has(key)) continue;
+                    const sourceVal = sourceMap.get(key);
+                    const targetVal = targetMap.get(key);
+                    if (!hasSamePlaceholderSet(sourceVal, targetVal)) placeholderIssues.push(key);
+                }
+
+                const ok = missing.length === 0 && extra.length === 0 && placeholderIssues.length === 0;
+                lines.push(`${ok ? '✅' : '⚠️'} ${data.name}`);
+                lines.push(`- klíče: ${targetMap.size} | chybí: ${missing.length} | navíc: ${extra.length} | placeholder issue: ${placeholderIssues.length}`);
+
+                if (missing.length) lines.push(`  chybí (max 10): ${missing.slice(0, 10).join(', ')}`);
+                if (extra.length) lines.push(`  navíc (max 10): ${extra.slice(0, 10).join(', ')}`);
+                if (placeholderIssues.length) lines.push(`  placeholder mismatch (max 10): ${placeholderIssues.slice(0, 10).join(', ')}`);
+                lines.push('');
+            }
+
+            return lines.join('\n');
+        }
+
+        async function runStandardValidationFromFiles(fileList) {
+            const status = document.getElementById('status');
+            if (!fileList || fileList.length < 2) {
+                alert('Pro validaci vyberte alespoň 2 JSON soubory.');
+                return;
+            }
+            const files = Array.from(fileList);
+            let filesData = [];
+            try {
+                filesData = await Promise.all(files.map(async (file) => ({
+                    name: file.name,
+                    json: await parseJsonFile(file)
+                })));
+            } catch (error) {
+                alert('Některý vybraný soubor není validní JSON: ' + error.message);
+                return;
+            }
+
+            const sourceCandidate = filesData.find(f => /^(cs|cz)\.json$/i.test(f.name));
+            const source = sourceCandidate || filesData[0];
+            const sourceMap = toEntryMap(source.json);
+            const report = buildStandardValidationReport(filesData, source.name, sourceMap);
+
+            status.style.display = 'block';
+            status.className = 'status';
+            status.textContent = report;
+        }
+
+        function getValueAtPath(root, path) {
+            if (!path) return root;
+            const tokens = [];
+            path.split('.').forEach(part => {
+                const m = part.match(/^([^\[]+)(.*)$/);
+                if (m && m[1]) tokens.push(m[1]);
+                const rest = m ? m[2] : '';
+                const idxMatches = rest.match(/\[(\d+)\]/g) || [];
+                idxMatches.forEach(x => tokens.push(Number(x.slice(1, -1))));
+            });
+            let cur = root;
+            for (const t of tokens) {
+                if (cur === undefined || cur === null) return undefined;
+                cur = cur[t];
+            }
+            return cur;
+        }
+
+        function setValueAtPath(root, path, value) {
+            const tokens = [];
+            path.split('.').forEach(part => {
+                const m = part.match(/^([^\[]+)(.*)$/);
+                if (m && m[1]) tokens.push(m[1]);
+                const rest = m ? m[2] : '';
+                const idxMatches = rest.match(/\[(\d+)\]/g) || [];
+                idxMatches.forEach(x => tokens.push(Number(x.slice(1, -1))));
+            });
+            let cur = root;
+            for (let i = 0; i < tokens.length - 1; i++) {
+                cur = cur[tokens[i]];
+            }
+            cur[tokens[tokens.length - 1]] = value;
+        }
+
+        function buildAiBatchPrompt(startIndex, batchSize) {
+            const slice = aiFlatEntries.slice(startIndex, startIndex + batchSize);
+            const payload = slice.map(item => ({ key: item.key, value: item.value }));
+            return [
+                'Jsi QA editor lokalizace JSON.',
+                'Oprav texty do přirozené češtiny, zachovej význam.',
+                'NIKDY neměň placeholdery {name}, HTML tagy <b>..</b>, ani jazykové značky (CZ/EN/SK/PL/...).',
+                'Vrať POUZE JSON pole objektů ve tvaru:',
+                '[{"key":"path","status":"ok|fix","corrected":"text","reason":"stručně"}]',
+                'Pro status=ok vrať corrected stejné jako vstup.',
+                '',
+                'DATA:',
+                JSON.stringify(payload, null, 2)
+            ].join('\n');
+        }
+
+        function validateAiResponseItems(items) {
+            if (!Array.isArray(items)) throw new Error('AI odpověď musí být JSON pole.');
+            const validItems = [];
+            const errors = [];
+            items.forEach((item, index) => {
+                if (!item || typeof item !== 'object') {
+                    errors.push(`#${index}: položka není objekt`);
+                    return;
+                }
+                const key = String(item.key || '').trim();
+                const statusRaw = String(item.status || '').toLowerCase().trim();
+                const status = statusRaw === 'fix' ? 'fix' : 'ok';
+                if (!key) {
+                    errors.push(`#${index}: chybí key`);
+                    return;
+                }
+                const current = getValueAtPath(aiWorkingJson, key);
+                if (typeof current !== 'string') {
+                    errors.push(`#${index}: key "${key}" neukazuje na string`);
+                    return;
+                }
+                const corrected = String(item.corrected ?? current);
+                if (status === 'fix' && !corrected.trim()) {
+                    errors.push(`#${index}: key "${key}" má prázdné corrected`);
+                    return;
+                }
+                if (!hasSamePlaceholderSet(current, corrected)) {
+                    errors.push(`#${index}: key "${key}" porušuje placeholdery`);
+                    return;
+                }
+                validItems.push({
+                    key,
+                    status,
+                    corrected,
+                    reason: String(item.reason || '')
+                });
+            });
+            return { validItems, errors };
+        }
+
+        function buildAiDiffPreview(validItems, maxLines = 120) {
+            if (!Array.isArray(validItems) || !validItems.length) {
+                return 'Žádné validní položky pro náhled.';
+            }
+            const lines = [];
+            let shown = 0;
+            for (const item of validItems) {
+                const key = String(item?.key || '');
+                if (!key) continue;
+                const before = getValueAtPath(aiWorkingJson, key);
+                if (typeof before !== 'string') continue;
+                const after = String(item?.corrected ?? before);
+                if (before === after) continue;
+                lines.push(`[${key}]`);
+                lines.push(`- ${before}`);
+                lines.push(`+ ${after}`);
+                lines.push('');
+                shown++;
+                if (shown >= maxLines) {
+                    lines.push(`... další změny nejsou zobrazeny (${Math.max(0, validItems.length - shown)}+)`);
+                    break;
+                }
+            }
+            return lines.length ? lines.join('\n') : 'Bez změny (AI vrátila stejné hodnoty).';
+        }
+
+        function extractJsonArrayFromText(text) {
+            const raw = String(text || '').trim();
+            const direct = raw.match(/^\s*\[[\s\S]*\]\s*$/);
+            if (direct) return JSON.parse(raw);
+            const m = raw.match(/\[[\s\S]*\]/);
+            if (!m) throw new Error('AI odpověď neobsahuje JSON pole.');
+            return JSON.parse(m[0]);
+        }
+
+        function applyAiItems(items) {
+            let changed = 0;
+            items.forEach((item) => {
+                const key = String(item?.key || '');
+                if (!key) return;
+                const current = getValueAtPath(aiWorkingJson, key);
+                if (typeof current !== 'string') return;
+                const corrected = String(item?.corrected ?? current);
+                if (corrected !== current) {
+                    setValueAtPath(aiWorkingJson, key, corrected);
+                    changed++;
+                }
+            });
+            return changed;
+        }
+
+        async function callAiApi(promptText) {
+            const provider = document.getElementById('aiProvider').value;
+            const apiKey = String(document.getElementById('aiApiKey').value || '').trim();
+            const model = String(document.getElementById('aiModel').value || '').trim();
+            if (!apiKey) throw new Error('Chybí AI API key.');
+            if (!model) throw new Error('Chybí AI model.');
+
+            if (provider === 'gemini') {
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+                const res = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: promptText }] }],
+                        generationConfig: { temperature: 0.1 }
+                    })
+                });
+                if (!res.ok) throw new Error(`Gemini HTTP ${res.status}`);
+                const data = await res.json();
+                const text = data?.candidates?.[0]?.content?.parts?.map(p => p?.text || '').join('\n') || '';
+                const inTok = Number(data?.usageMetadata?.promptTokenCount || 0);
+                const outTok = Number(data?.usageMetadata?.candidatesTokenCount || 0);
+                const totalTok = Number(data?.usageMetadata?.totalTokenCount || (inTok + outTok));
+                return { text, usage: { inTok, outTok, totalTok } };
+            }
+
+            const isOpenRouter = provider === 'openrouter';
+            const url = isOpenRouter ? 'https://openrouter.ai/api/v1/chat/completions' : 'https://api.openai.com/v1/chat/completions';
+            const headers = {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
+            };
+            if (isOpenRouter) headers['HTTP-Referer'] = location.origin || 'http://localhost';
+            const res = await fetch(url, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify({
+                    model,
+                    temperature: 0.1,
+                    messages: [{ role: 'user', content: promptText }]
+                })
+            });
+            if (!res.ok) throw new Error(`${provider} HTTP ${res.status}`);
+            const data = await res.json();
+            const text = data?.choices?.[0]?.message?.content || '';
+            const inTok = Number(data?.usage?.prompt_tokens || 0);
+            const outTok = Number(data?.usage?.completion_tokens || 0);
+            const totalTok = Number(data?.usage?.total_tokens || (inTok + outTok));
+            return { text, usage: { inTok, outTok, totalTok } };
+        }
+
+        function applyAiResponse() {
+            if (!aiWorkingJson) {
+                alert('Nejdřív načtěte JSON do AI auditu.');
+                return;
+            }
+            try {
+                const items = extractJsonArrayFromText(document.getElementById('aiResponseText').value);
+                const { validItems, errors } = validateAiResponseItems(items);
+                document.getElementById('aiPreviewText').value = buildAiDiffPreview(validItems);
+                const changed = applyAiItems(validItems);
+                document.getElementById('aiDownloadBtn').disabled = false;
+                saveAiSessionState();
+                renderAiStatus(`Aplikováno změn: ${changed}, validní: ${validItems.length}, chyby: ${errors.length}`);
+                if (errors.length) {
+                    console.warn('AI validation errors', errors.slice(0, 30));
+                }
+            } catch (err) {
+                alert('Nelze aplikovat AI odpověď: ' + err.message);
+            }
+        }
+
+        function buildAiPromptOnly() {
+            if (!aiWorkingJson) {
+                alert('Nejdřív načtěte JSON do AI auditu.');
+                return;
+            }
+            const batchSize = Math.max(20, Number(document.getElementById('aiBatchSize').value || 120));
+            document.getElementById('aiPromptText').value = buildAiBatchPrompt(aiNextIndex, batchSize);
+            renderAiStatus('Prompt připraven.');
+        }
+
+        async function sendAiBatch() {
+            if (aiRunning) return;
+            if (!aiWorkingJson) {
+                alert('Nejdřív načtěte JSON do AI auditu.');
+                return;
+            }
+            const batchSize = Math.max(20, Number(document.getElementById('aiBatchSize').value || 120));
+            const intervalSec = Math.max(1, Number(document.getElementById('aiInterval').value || 8));
+            if (aiNextIndex >= aiFlatEntries.length) {
+                renderAiStatus('Všechny dávky jsou hotové.');
+                return;
+            }
+            aiCancelRequested = false;
+            setAiRunningState(true);
+            try {
+                while (aiNextIndex < aiFlatEntries.length) {
+                    if (aiCancelRequested) throw new Error('__AI_CANCELLED__');
+                    const prompt = buildAiBatchPrompt(aiNextIndex, batchSize);
+                    document.getElementById('aiPromptText').value = prompt;
+                    renderAiStatus(`Odesílám dávku od indexu ${aiNextIndex}…`);
+                    const result = await callAiApi(prompt);
+                    document.getElementById('aiResponseText').value = result.text || '';
+                    const inTok = Number(result?.usage?.inTok || 0);
+                    const outTok = Number(result?.usage?.outTok || 0);
+                    const totalTok = Number(result?.usage?.totalTok || (inTok + outTok));
+                    aiTokenStats.in += inTok;
+                    aiTokenStats.out += outTok;
+                    aiTokenStats.total += totalTok;
+                    renderAiTokenStats();
+
+                    const items = extractJsonArrayFromText(result.text || '');
+                    const { validItems, errors } = validateAiResponseItems(items);
+                    document.getElementById('aiPreviewText').value = buildAiDiffPreview(validItems);
+                    const changed = applyAiItems(validItems);
+                    aiNextIndex += batchSize;
+                    document.getElementById('aiDownloadBtn').disabled = false;
+                    saveAiSessionState();
+                    renderAiStatus(`Dávka dokončena, změn: ${changed}, validní: ${validItems.length}, chyby: ${errors.length}`);
+                    if (errors.length) console.warn('AI validation errors', errors.slice(0, 30));
+                    if (aiNextIndex < aiFlatEntries.length) {
+                        await new Promise(resolve => setTimeout(resolve, intervalSec * 1000));
+                    }
+                }
+                renderAiStatus('AI audit dokončen.');
+            } catch (err) {
+                if (err?.message === '__AI_CANCELLED__') {
+                    renderAiStatus('AI běh ukončen uživatelem.');
+                } else {
+                    renderAiStatus(`Chyba AI: ${err.message || err}`);
+                }
+            } finally {
+                setAiRunningState(false);
+                aiCancelRequested = false;
+            }
+        }
+
+        function cancelAiRun() {
+            if (!aiRunning) return;
+            aiCancelRequested = true;
+            renderAiStatus('Ukončuji AI běh…');
+        }
+
+        function downloadAiResult() {
+            if (!aiWorkingJson) return;
+            const content = JSON.stringify(aiWorkingJson, null, 2);
+            const filename = aiLoadedFileName ? aiLoadedFileName.replace(/\.json$/i, '.ai.json') : 'ai-audit-output.json';
+            downloadFile(content, filename);
+            saveAiSessionState();
+        }
+
         // Drag & Drop
         const uploadSection = document.getElementById('uploadSection');
         
@@ -667,6 +1523,12 @@
             const file = e.target.files[0];
             if (file) handleFile(file);
         });
+        document.getElementById('standardValidationInput').addEventListener('change', async (e) => {
+            const files = e.target.files;
+            await runStandardValidationFromFiles(files);
+            e.target.value = '';
+        });
+        document.getElementById('translatorEngine').addEventListener('change', saveUiState);
         document.getElementById('outputEditorLang').addEventListener('change', renderOutputEditorText);
         document.getElementById('loadOutputInput').addEventListener('change', (e) => {
             const file = e.target.files?.[0];
@@ -681,6 +1543,7 @@
                     document.getElementById('editOutputBtn').disabled = false;
                     refreshOutputEditorLangs();
                     openOutputEditor();
+                    saveAiSessionState();
                 } catch (err) {
                     alert('Načtený soubor není validní JSON: ' + err.message);
                 } finally {
@@ -689,6 +1552,43 @@
             };
             reader.readAsText(file);
         });
+        document.getElementById('aiProvider').addEventListener('change', () => {
+            const provider = document.getElementById('aiProvider').value;
+            const modelInput = document.getElementById('aiModel');
+            if (provider === 'openrouter') modelInput.value = 'google/gemini-2.0-flash-exp:free';
+            if (provider === 'openai') modelInput.value = 'gpt-4o-mini';
+            if (provider === 'gemini') modelInput.value = 'gemini-2.0-flash';
+            saveUiState();
+        });
+        document.getElementById('aiModel').addEventListener('change', saveUiState);
+        document.getElementById('aiBatchSize').addEventListener('change', saveUiState);
+        document.getElementById('aiInterval').addEventListener('change', saveUiState);
+        document.getElementById('aiLoadInput').addEventListener('change', (e) => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                try {
+                    aiWorkingJson = JSON.parse(ev.target.result);
+                    aiLoadedFileName = file.name;
+                    aiFlatEntries = flattenStringEntries(aiWorkingJson);
+                    aiNextIndex = 0;
+                    aiTokenStats = { in: 0, out: 0, total: 0 };
+                    renderAiTokenStats();
+                    renderAiStatus('JSON načtený pro audit.');
+                    document.getElementById('aiDownloadBtn').disabled = true;
+                    document.getElementById('aiPreviewText').value = '';
+                    saveAiSessionState();
+                } catch (err) {
+                    alert('Načtený AI soubor není validní JSON: ' + err.message);
+                } finally {
+                    e.target.value = '';
+                }
+            };
+            reader.readAsText(file);
+        });
+        loadUiState();
+        loadAiSessionState();
 
         function handleFile(file) {
             const reader = new FileReader();
@@ -705,12 +1605,6 @@
                     document.getElementById('fileInfoSection').style.display = 'block';
                     initLanguageGrid();
 
-                    const status = document.getElementById('status');
-                    if (!/^(cs|cz)\.json$/i.test(file.name)) {
-                        status.style.display = 'block';
-                        status.className = 'status';
-                        status.textContent = 'Doporučení: použijte vstupní soubor cs.json (aktuální logika je optimalizovaná pro CZ zdroj).';
-                    }
                 } catch (err) {
                     alert('Chyba při načítání JSON: ' + err.message);
                 }
@@ -728,10 +1622,7 @@
             return count;
         }
 
-        // Ochrana jazykových značek - v závorkách i bez
-        const TAG_REGEX = /\b(CZ|EN|SK|PL|DE|FR|ES|IT|PT|RU|UK|BG|RO|HU|NL|SV|DA|NO|FI|EL|TR|AR|JA|KO|HE|zh-CN|ZH-CN)\b|\((CZ|EN|SK|PL|DE|FR|ES|IT|PT|RU|UK|BG|RO|HU|NL|SV|DA|NO|FI|EL|TR|AR|JA|KO|HE|zh-CN|ZH-CN)\)/gi;
-        // Ochrana jazykových slov (např. "Czech meaning"), která chceme sjednotit na cílový jazyk.
-        const LANGUAGE_WORD_REGEX = /\b(Czech|English|Slovak|Polish)\b/gi;
+        // Jazykové značky/slova nepřepisujeme natvrdo; necháváme je na přirozeném překladu.
         const PLACEHOLDER = '__ST_TAG_';
         const IMMUTABLE_TOKEN_PREFIX = 'PHX';
         const IMMUTABLE_TOKEN_SUFFIX = 'XHP';
@@ -747,18 +1638,11 @@
         let strictFallbackCount = 0;
 
         function protectTagsAndLanguageWords(str) {
-            const protectedTags = str.replace(TAG_REGEX, (match, standalone, inParens) => {
-                // Zapamatujeme si, zda byla značka v závorkách
-                return inParens ? `${PLACEHOLDER}P` : `${PLACEHOLDER}S`;
-            });
-            return protectedTags.replace(LANGUAGE_WORD_REGEX, `${PLACEHOLDER}W`);
+            return str;
         }
 
         function restoreTagsAndLanguageWords(str, targetTag, targetLanguageNameEn) {
-            // P = v závorkách, S = samostatně
-            return str.replace(new RegExp(`${PLACEHOLDER}P`, 'g'), `(${targetTag})`)
-                      .replace(new RegExp(`${PLACEHOLDER}S`, 'g'), targetTag)
-                      .replace(new RegExp(`${PLACEHOLDER}W`, 'g'), targetLanguageNameEn || targetTag);
+            return str;
         }
 
         function protectImmutableSegments(str) {
@@ -813,7 +1697,6 @@
             }
             const attempts = [
                 `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`,
-                `https://translate.googleapis.com/translate_a/single?client=gtx&sl=cs&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`,
                 `https://translate.googleapis.com/translate_a/single?client=dict-chrome-ex&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`
             ];
             let lastError = null;
@@ -1112,13 +1995,25 @@
             document.getElementById('runStatus').style.display = 'none';
             document.getElementById('editOutputBtn').disabled = true;
             document.getElementById('outputEditorModal').classList.remove('open');
+            document.getElementById('aiModal').classList.remove('open');
             const outLang = document.getElementById('outputEditorLang');
             if (outLang) outLang.innerHTML = '';
+            aiWorkingJson = null;
+            aiLoadedFileName = '';
+            aiFlatEntries = [];
+            aiNextIndex = 0;
+            aiRunning = false;
+            aiCancelRequested = false;
+            aiTokenStats = { in: 0, out: 0, total: 0 };
+            renderAiTokenStats();
+            document.getElementById('aiPreviewText').value = '';
+            try { localStorage.removeItem(STORAGE_AI_SESSION_KEY); } catch (error) {}
             const grid = document.getElementById('languageGrid');
             if (grid) grid.innerHTML = '';
             restoreTranslator();
             closeLanguageModal();
             updateSelectedLanguagesSummary();
+            saveUiState();
         }
     </script>
 </body>

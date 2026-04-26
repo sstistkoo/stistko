@@ -190,7 +190,7 @@ export function createAutoApi(deps) {
     try {
       if (!isAutoProviderEnabled('groq')) {
         stopAuto();
-        log('🛑 AUTO zastaven: Groq je vypnutý v AUTO panelu');
+        log(t('auto.log.stoppedGroqDisabled'));
         const groqHint = t('auto.groqEnableHint');
         const autoLogEl = document.getElementById('autoLog');
         if (autoLogEl) autoLogEl.textContent = groqHint;
@@ -203,7 +203,7 @@ export function createAutoApi(deps) {
       }
       if (isAutoTokenLimitReached()) {
         stopAuto();
-        log('🛑 AUTO zastaven: dosažen limit tokenů');
+        log(t('auto.log.stoppedTokenLimit'));
         showToast(t('toast.auto.stoppedTokenLimit'));
         return;
       }
@@ -217,7 +217,7 @@ export function createAutoApi(deps) {
 
       const autoBatch = document.getElementById('autoBatch');
       if (autoBatch) autoBatch.textContent = `${batch[0]}–${batch[batch.length - 1]}`;
-      log(`⚡ Překládám ${batch[0]}–${batch[batch.length - 1]}...`);
+      log(t('auto.log.translatingRange', { from: batch[0], to: batch[batch.length - 1] }));
       updateETA();
 
       const result = await translateBatch(batch);
