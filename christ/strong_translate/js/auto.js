@@ -68,6 +68,24 @@ export function createAutoApi(deps) {
     if (el) el.textContent = text;
   }
 
+  function safeSetLocalStorage(key, value) {
+    try {
+      localStorage.setItem(key, value);
+      return true;
+    } catch (err) {
+      console.warn('[AUTO] localStorage setItem failed:', key, err);
+      return false;
+    }
+  }
+
+  function safeRemoveLocalStorage(key) {
+    try {
+      localStorage.removeItem(key);
+    } catch (err) {
+      console.warn('[AUTO] localStorage removeItem failed:', key, err);
+    }
+  }
+
   function isAutoProviderEnabled(prov) {
     if (prov === 'gemini' || prov === 'openrouter') {
       const raw = localStorage.getItem(PIPELINE_SECONDARY_ENABLED_KEY + prov);
@@ -79,7 +97,7 @@ export function createAutoApi(deps) {
     }
     const raw = localStorage.getItem(AUTO_PROVIDER_ENABLED_KEY + prov);
     if (raw === null) {
-      localStorage.setItem(AUTO_PROVIDER_ENABLED_KEY + prov, '1');
+      safeSetLocalStorage(AUTO_PROVIDER_ENABLED_KEY + prov, '1');
       return true;
     }
     return raw === '1';
@@ -92,7 +110,7 @@ export function createAutoApi(deps) {
       syncSecondaryProviderToggles(prov, on);
       return;
     }
-    localStorage.setItem(AUTO_PROVIDER_ENABLED_KEY + prov, on ? '1' : '0');
+    safeSetLocalStorage(AUTO_PROVIDER_ENABLED_KEY + prov, on ? '1' : '0');
   }
 
   function initAutoProviderToggles() {
@@ -232,11 +250,11 @@ export function createAutoApi(deps) {
     const raw = String(input.value || '').trim();
     const value = parseInt(raw, 10);
     if (!raw || Number.isNaN(value) || value <= 0) {
-      localStorage.removeItem(AUTO_TOKEN_LIMIT_KEY);
+      safeRemoveLocalStorage(AUTO_TOKEN_LIMIT_KEY);
       input.value = '';
     } else {
       input.value = String(value);
-      localStorage.setItem(AUTO_TOKEN_LIMIT_KEY, String(value));
+      safeSetLocalStorage(AUTO_TOKEN_LIMIT_KEY, String(value));
     }
     refreshTokenStatsDisplay();
   }
