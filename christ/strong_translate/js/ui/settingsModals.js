@@ -64,13 +64,11 @@ async function detectUiLangAvailability() {
       available: directoryFiles.has(`${String(lang.fileCode).toLowerCase()}.json`)
     }));
   } else {
-    checks = await Promise.all(UI_LANGUAGE_CATALOG.map(async (lang) => {
-      try {
-        const res = await fetch(`./i18n/${lang.fileCode}.json`, { cache: 'no-store' });
-        return { ...lang, available: !!res.ok };
-      } catch {
-        return { ...lang, available: false };
-      }
+    // On hosts without directory listing (e.g. GitHub Pages), avoid noisy 404 probing.
+    const allowedUi = new Set(Array.from(UI_LANGS).map((code) => String(code || '').toLowerCase()));
+    checks = UI_LANGUAGE_CATALOG.map((lang) => ({
+      ...lang,
+      available: allowedUi.has(String(lang.code || '').toLowerCase())
     }));
   }
   uiLangAvailabilityCache = checks;
