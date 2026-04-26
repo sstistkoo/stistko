@@ -1192,6 +1192,49 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   resize: vertical;
 }
 
+.i18n-tool-progress-wrap {
+  margin-top: 10px;
+  display: none;
+}
+
+.i18n-tool-progress-bar {
+  background: var(--bg3);
+  border: 1px solid var(--brd);
+  border-radius: 8px;
+  overflow: hidden;
+  height: 24px;
+}
+
+.i18n-tool-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--acc2), var(--acc));
+  color: var(--txt);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: width .2s ease;
+}
+
+.i18n-tool-status {
+  display: none;
+  margin-top: 8px;
+  color: var(--txt2);
+  font-size: 11px;
+  line-height: 1.4;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.i18n-tool-downloads {
+  display: none;
+  margin-top: 10px;
+  gap: 8px;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+}
+
 .i18n-tool-lang-modal {
   position: fixed;
   inset: 0;
@@ -1231,6 +1274,7 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
   text-align: center;
   cursor: pointer;
   transition: all .2s ease;
+  color: var(--txt) !important;
 }
 
 .i18n-tool-lang-card:hover {
@@ -1256,9 +1300,14 @@ hr.div { border: none; border-top: 1px solid var(--brd); margin: 18px 0; }
 
 .i18n-tool-lang-code {
   margin-top: 2px;
-  color: var(--txt3);
+  color: #9fb6c7 !important;
   font-size: 10px;
   font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+}
+
+.i18n-tool-lang-card.selected .i18n-tool-lang-code {
+  color: var(--acc3) !important;
 }
 
 /* Virtual scrolling - merged with base list-scroll */

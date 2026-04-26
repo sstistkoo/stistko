@@ -2086,6 +2086,7 @@ function showI18nToolModal() {
   const closeBtn = document.getElementById('btnI18nToolClose');
   if (closeBtn) closeBtn.textContent = t('lang.i18nTool.close');
   initI18nToolUi();
+  resetI18nToolRuntimeUi();
   updateI18nToolCommandPreview();
   if (m) m.style.display = 'flex';
 }
@@ -2094,33 +2095,44 @@ function closeI18nToolModal() {
   if (m) m.style.display = 'none';
 }
 const I18N_TOOL_LANGUAGES = [
-  { code: 'en', tag: 'EN', name: 'English', flag: '🇬🇧' },
-  { code: 'sk', tag: 'SK', name: 'Slovak', flag: '🇸🇰' },
-  { code: 'pl', tag: 'PL', name: 'Polish', flag: '🇵🇱' },
-  { code: 'de', tag: 'DE', name: 'German', flag: '🇩🇪' },
-  { code: 'fr', tag: 'FR', name: 'French', flag: '🇫🇷' },
-  { code: 'es', tag: 'ES', name: 'Spanish', flag: '🇪🇸' },
-  { code: 'it', tag: 'IT', name: 'Italian', flag: '🇮🇹' },
-  { code: 'pt', tag: 'PT', name: 'Portuguese', flag: '🇵🇹' },
-  { code: 'ru', tag: 'RU', name: 'Russian', flag: '🇷🇺' },
-  { code: 'uk', tag: 'UK', name: 'Ukrainian', flag: '🇺🇦' },
-  { code: 'bg', tag: 'BG', name: 'Bulgarian', flag: '🇧🇬' },
-  { code: 'ro', tag: 'RO', name: 'Romanian', flag: '🇷🇴' },
-  { code: 'hu', tag: 'HU', name: 'Hungarian', flag: '🇭🇺' },
-  { code: 'nl', tag: 'NL', name: 'Dutch', flag: '🇳🇱' },
-  { code: 'sv', tag: 'SV', name: 'Swedish', flag: '🇸🇪' },
-  { code: 'da', tag: 'DA', name: 'Danish', flag: '🇩🇰' },
-  { code: 'no', tag: 'NO', name: 'Norwegian', flag: '🇳🇴' },
-  { code: 'fi', tag: 'FI', name: 'Finnish', flag: '🇫🇮' },
-  { code: 'el', tag: 'EL', name: 'Greek', flag: '🇬🇷' },
-  { code: 'tr', tag: 'TR', name: 'Turkish', flag: '🇹🇷' },
-  { code: 'ar', tag: 'AR', name: 'Arabic', flag: '🇸🇦' },
-  { code: 'zh-CN', tag: 'zh-CN', name: 'Chinese', flag: '🇨🇳' },
-  { code: 'ja', tag: 'JA', name: 'Japanese', flag: '🇯🇵' },
-  { code: 'ko', tag: 'KO', name: 'Korean', flag: '🇰🇷' },
-  { code: 'he', tag: 'HE', name: 'Hebrew', flag: '🇮🇱' }
+  { code: 'en', tag: 'EN', name: 'Angličtina', flag: '🇬🇧' },
+  { code: 'sk', tag: 'SK', name: 'Slovenština', flag: '🇸🇰' },
+  { code: 'pl', tag: 'PL', name: 'Polština', flag: '🇵🇱' },
+  { code: 'de', tag: 'DE', name: 'Němčina', flag: '🇩🇪' },
+  { code: 'fr', tag: 'FR', name: 'Francouzština', flag: '🇫🇷' },
+  { code: 'es', tag: 'ES', name: 'Španělština', flag: '🇪🇸' },
+  { code: 'it', tag: 'IT', name: 'Italština', flag: '🇮🇹' },
+  { code: 'pt', tag: 'PT', name: 'Portugalština', flag: '🇵🇹' },
+  { code: 'ru', tag: 'RU', name: 'Ruština', flag: '🇷🇺' },
+  { code: 'uk', tag: 'UK', name: 'Ukrajinština', flag: '🇺🇦' },
+  { code: 'bg', tag: 'BG', name: 'Bulharština', flag: '🇧🇬' },
+  { code: 'ro', tag: 'RO', name: 'Rumunština', flag: '🇷🇴' },
+  { code: 'hu', tag: 'HU', name: 'Maďarština', flag: '🇭🇺' },
+  { code: 'nl', tag: 'NL', name: 'Holandština', flag: '🇳🇱' },
+  { code: 'sv', tag: 'SV', name: 'Švédština', flag: '🇸🇪' },
+  { code: 'da', tag: 'DA', name: 'Dánština', flag: '🇩🇰' },
+  { code: 'no', tag: 'NO', name: 'Norština', flag: '🇳🇴' },
+  { code: 'fi', tag: 'FI', name: 'Finština', flag: '🇫🇮' },
+  { code: 'el', tag: 'EL', name: 'Řečtina', flag: '🇬🇷' },
+  { code: 'tr', tag: 'TR', name: 'Turečtina', flag: '🇹🇷' },
+  { code: 'ar', tag: 'AR', name: 'Arabština', flag: '🇸🇦' },
+  { code: 'zh-CN', tag: 'zh-CN', name: 'Čínština', flag: '🇨🇳' },
+  { code: 'ja', tag: 'JA', name: 'Japonština', flag: '🇯🇵' },
+  { code: 'ko', tag: 'KO', name: 'Korejština', flag: '🇰🇷' },
+  { code: 'he', tag: 'HE', name: 'Hebrejština', flag: '🇮🇱' }
 ];
 const i18nToolSelectedLanguages = new Set();
+const I18N_TOOL_PLACEHOLDER = '\uE000';
+const I18N_TOOL_WORD_PLACEHOLDER = '\uE001';
+const I18N_TOOL_TAG_REGEX = /\b(CZ|EN|SK|PL|DE|FR|ES|IT|PT|RU|UK|BG|RO|HU|NL|SV|DA|NO|FI|EL|TR|AR|JA|KO|HE|zh-CN|ZH-CN)\b|\((CZ|EN|SK|PL|DE|FR|ES|IT|PT|RU|UK|BG|RO|HU|NL|SV|DA|NO|FI|EL|TR|AR|JA|KO|HE|zh-CN|ZH-CN)\)/gi;
+const I18N_TOOL_LANGUAGE_WORD_REGEX = /\b(Czech|English|Slovak|Polish)\b/gi;
+const I18N_TOOL_DEEPL_LANG_MAP = {
+  cs: 'CS', sk: 'SK', pl: 'PL', de: 'DE', fr: 'FR', es: 'ES',
+  it: 'IT', pt: 'PT-PT', ru: 'RU', uk: 'UK', bg: 'BG', ro: 'RO',
+  hu: 'HU', nl: 'NL', sv: 'SV', da: 'DA', no: 'NB', fi: 'FI',
+  el: 'EL', tr: 'TR', ja: 'JA', ko: 'KO', 'zh-CN': 'ZH', he: 'HE', en: 'EN-US'
+};
+let i18nToolSourceCsData = null;
 
 function initI18nToolUi() {
   const engineEl = document.getElementById('i18nToolEngine');
@@ -2160,6 +2172,26 @@ function updateI18nToolSummary() {
     return;
   }
   summary.textContent = `Vybráno jazyků: ${i18nToolSelectedLanguages.size} — ${selectedList.join(', ')}`;
+}
+
+function resetI18nToolRuntimeUi() {
+  const progressWrap = document.getElementById('i18nToolProgressWrap');
+  const progressFill = document.getElementById('i18nToolProgressFill');
+  const status = document.getElementById('i18nToolStatus');
+  const downloads = document.getElementById('i18nToolDownloads');
+  if (progressWrap) progressWrap.style.display = 'none';
+  if (progressFill) {
+    progressFill.style.width = '0%';
+    progressFill.textContent = '0%';
+  }
+  if (status) {
+    status.style.display = 'none';
+    status.textContent = '';
+  }
+  if (downloads) {
+    downloads.style.display = 'none';
+    downloads.innerHTML = '';
+  }
 }
 
 function toggleI18nToolLanguage(code) {
@@ -2226,6 +2258,193 @@ async function copyI18nToolCmd() {
     showToast('Kopírování selhalo.');
   }
 }
+
+async function loadI18nToolSourceCsData() {
+  if (i18nToolSourceCsData) return i18nToolSourceCsData;
+  const res = await fetch('./i18n/cs.json', { cache: 'no-store' });
+  if (!res.ok) throw new Error(`Nepodařilo se načíst i18n/cs.json (HTTP ${res.status})`);
+  i18nToolSourceCsData = await res.json();
+  return i18nToolSourceCsData;
+}
+
+function i18nToolProtectTagsAndWords(str) {
+  const protectedTags = str.replace(I18N_TOOL_TAG_REGEX, (match, standalone, inParens) => (
+    inParens ? `${I18N_TOOL_PLACEHOLDER}P` : `${I18N_TOOL_PLACEHOLDER}S`
+  ));
+  return protectedTags.replace(I18N_TOOL_LANGUAGE_WORD_REGEX, `${I18N_TOOL_WORD_PLACEHOLDER}W`);
+}
+
+function i18nToolRestoreTagsAndWords(str, targetTag, targetLanguageName) {
+  return str
+    .replace(new RegExp(`${I18N_TOOL_PLACEHOLDER}P`, 'g'), `(${targetTag})`)
+    .replace(new RegExp(`${I18N_TOOL_PLACEHOLDER}S`, 'g'), targetTag)
+    .replace(new RegExp(`${I18N_TOOL_WORD_PLACEHOLDER}W`, 'g'), targetLanguageName || targetTag);
+}
+
+async function i18nToolTranslateText(text, targetLang) {
+  const engine = String(document.getElementById('i18nToolEngine')?.value || 'google').toLowerCase();
+  const deeplKey = String(document.getElementById('i18nToolDeeplKey')?.value || '').trim();
+  if (engine === 'deepl' && deeplKey) {
+    const deeplTarget = I18N_TOOL_DEEPL_LANG_MAP[targetLang] || '';
+    if (deeplTarget) {
+      try {
+        const res = await fetch('https://api-free.deepl.com/v2/translate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({
+            auth_key: deeplKey,
+            text,
+            target_lang: deeplTarget
+          })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          const out = data?.translations?.[0]?.text;
+          if (out) return out;
+        }
+      } catch (error) {
+        console.warn('DeepL failed, fallback to Google', error);
+      }
+    }
+  }
+  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
+  try {
+    const response = await fetch(url, { signal: controller.signal });
+    const data = await response.json();
+    return data?.[0]?.[0]?.[0] || text;
+  } catch (error) {
+    console.error('Google translation failed', error);
+    return text;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+function i18nToolCountTranslatableStrings(value) {
+  if (typeof value === 'string') return value.trim() ? 1 : 0;
+  if (Array.isArray(value)) return value.reduce((sum, item) => sum + i18nToolCountTranslatableStrings(item), 0);
+  if (typeof value === 'object' && value !== null) {
+    let sum = 0;
+    for (const key of Object.keys(value)) sum += i18nToolCountTranslatableStrings(value[key]);
+    return sum;
+  }
+  return 0;
+}
+
+async function i18nToolTranslateValue(value, targetLang, targetTag, targetLanguageName, onProgress, path = '') {
+  if (typeof value === 'string') {
+    if (!value.trim()) return value;
+    const textToTranslate = i18nToolProtectTagsAndWords(value);
+    const translated = await i18nToolTranslateText(textToTranslate, targetLang);
+    await new Promise((resolve) => setTimeout(resolve, 25));
+    if (typeof onProgress === 'function') onProgress(path);
+    return i18nToolRestoreTagsAndWords(translated, targetTag, targetLanguageName);
+  }
+  if (Array.isArray(value)) {
+    const result = [];
+    for (let i = 0; i < value.length; i++) {
+      result.push(await i18nToolTranslateValue(value[i], targetLang, targetTag, targetLanguageName, onProgress, `${path}[${i}]`));
+    }
+    return result;
+  }
+  if (typeof value === 'object' && value !== null) {
+    const result = {};
+    for (const key of Object.keys(value)) {
+      const nextPath = path ? `${path}.${key}` : key;
+      result[key] = await i18nToolTranslateValue(value[key], targetLang, targetTag, targetLanguageName, onProgress, nextPath);
+    }
+    return result;
+  }
+  return value;
+}
+
+function i18nToolDownloadFile(content, filename) {
+  const blob = new Blob([content], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+async function runI18nToolBrowserTranslate() {
+  try {
+    if (!i18nToolSelectedLanguages.size) {
+      showToast('Nejdřív vyberte cílový jazyk.');
+      return;
+    }
+    const sourceData = await loadI18nToolSourceCsData();
+    const selected = I18N_TOOL_LANGUAGES.filter((lang) => i18nToolSelectedLanguages.has(lang.code));
+    const progressWrap = document.getElementById('i18nToolProgressWrap');
+    const progressFill = document.getElementById('i18nToolProgressFill');
+    const status = document.getElementById('i18nToolStatus');
+    const downloads = document.getElementById('i18nToolDownloads');
+    const runBtn = document.getElementById('btnI18nToolRunBrowser');
+    if (runBtn) runBtn.disabled = true;
+    if (progressWrap) progressWrap.style.display = 'block';
+    if (status) {
+      status.style.display = 'block';
+      status.textContent = 'Spouštím překlad...';
+    }
+    if (downloads) {
+      downloads.style.display = 'none';
+      downloads.innerHTML = '';
+    }
+    const perLangUnits = i18nToolCountTranslatableStrings(sourceData);
+    const totalUnits = Math.max(1, perLangUnits * selected.length);
+    let doneUnits = 0;
+    const translatedFiles = {};
+    for (const lang of selected) {
+      if (status) status.textContent = `Překládám do: ${lang.name} (${lang.code})...`;
+      const translated = await i18nToolTranslateValue(
+        sourceData,
+        lang.code,
+        lang.tag,
+        lang.name,
+        (path) => {
+          doneUnits++;
+          const percent = Math.round((doneUnits / totalUnits) * 100);
+          if (progressFill) {
+            progressFill.style.width = `${percent}%`;
+            progressFill.textContent = `${percent}%`;
+          }
+          if (status && (doneUnits % 25 === 0 || doneUnits === totalUnits)) {
+            status.textContent = `Překládám do: ${lang.name} (${lang.code})... ${doneUnits}/${totalUnits}${path ? ` | ${path}` : ''}`;
+          }
+        }
+      );
+      if (translated && typeof translated === 'object' && 'topic.langTag' in translated) {
+        translated['topic.langTag'] = lang.tag;
+      }
+      translatedFiles[lang.code] = JSON.stringify(translated, null, 2);
+    }
+    if (status) status.textContent = `✓ Hotovo! Přeloženo do ${selected.length} jazyků.`;
+    if (downloads) {
+      downloads.style.display = 'grid';
+      selected.forEach((lang) => {
+        const btn = document.createElement('button');
+        btn.className = 'prompt-btn ok';
+        btn.type = 'button';
+        btn.textContent = `${lang.flag} ${lang.code}.json`;
+        btn.onclick = () => i18nToolDownloadFile(translatedFiles[lang.code], `${lang.code}.json`);
+        downloads.appendChild(btn);
+      });
+    }
+  } catch (e) {
+    const status = document.getElementById('i18nToolStatus');
+    if (status) {
+      status.style.display = 'block';
+      status.textContent = `✗ Chyba: ${e?.message || String(e)}`;
+    }
+    showToast(`Chyba překladu: ${e?.message || String(e)}`);
+  } finally {
+    const runBtn = document.getElementById('btnI18nToolRunBrowser');
+    if (runBtn) runBtn.disabled = false;
+  }
+}
 async function runI18nKeyCheck() {
   try {
     const langs = ['cs', 'en', 'sk', 'pl'];
@@ -2279,6 +2498,7 @@ window.toggleI18nToolLanguage = toggleI18nToolLanguage;
 window.i18nToolSelectAllLangs = i18nToolSelectAllLangs;
 window.i18nToolDeselectAllLangs = i18nToolDeselectAllLangs;
 window.copyI18nToolCmd = copyI18nToolCmd;
+window.runI18nToolBrowserTranslate = runI18nToolBrowserTranslate;
 window.runI18nKeyCheck = runI18nKeyCheck;
 window.runCzechDiacriticsCheck = runCzechDiacriticsCheck;
 
