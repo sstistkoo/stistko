@@ -2129,7 +2129,9 @@ window.saveLangSettings = saveLangSettings;
 function showI18nToolModal() {
   const m = document.getElementById('i18nToolModal');
   const body = document.getElementById('i18nToolBody');
-  if (body) body.textContent = buildI18nToolHelpText();
+  if (body) body.textContent = t('lang.i18nTool.body');
+  const helpBody = document.getElementById('i18nToolHelpBody');
+  if (helpBody) helpBody.textContent = buildI18nToolHelpText();
   const title = document.getElementById('i18nToolModalTitle');
   if (title) title.textContent = t('lang.i18nTool.title');
   const closeBtn = document.getElementById('btnI18nToolClose');
@@ -2165,6 +2167,19 @@ function buildI18nToolHelpText() {
     '4) Sleduj progress, ETA a stavové hlášky.',
     '5) Po překladu můžeš výstup upravit přes „✏ Editovat výstup JSON“.',
     '',
+    'Oprava přes AI (audit/editor):',
+    '1) Klikni na „🧠 AI audit/editor“.',
+    '2) Připoj cílový JSON (jazyk, který chceš opravit).',
+    '3) Klikni na „🧠 Vytvořit AI prompt“.',
+    '4) Buď pošli prompt tlačítkem „📤 Odeslat“, nebo vlož vlastní AI odpověď.',
+    '5) Klikni na „✅ Aplikovat AI odpověď“.',
+    '6) Stáhni opravený výstup přes „💾 Stáhnout AI výstup“.',
+    '',
+    'Tipy pro AI opravy:',
+    '- Používej menší dávku (Batch size), když je odpověď dlouhá nebo padá.',
+    '- Zachovávej placeholdery ve tvaru {name}, nesmí se překládat ani mazat.',
+    '- Po aplikaci změn vždy rychle zkontroluj klíčové texty ve výstupu.',
+    '',
     'Tlačítka:',
     '- 📋 Kopírovat příkaz: zkopíruje CLI příkaz pro stejný překlad.',
     '- 🧠 AI audit/editor: následná kontrola a opravy textů.',
@@ -2175,6 +2190,23 @@ function buildI18nToolHelpText() {
 function closeI18nToolModal() {
   const m = document.getElementById('i18nToolModal');
   if (m) m.style.display = 'none';
+}
+
+function openI18nToolHelpModal() {
+  const editorModal = document.getElementById('i18nToolEditorModal');
+  if (editorModal && editorModal.classList.contains('show')) {
+    openI18nToolEditorHelpModal();
+    return;
+  }
+  const m = document.getElementById('i18nToolHelpModal');
+  const helpBody = document.getElementById('i18nToolHelpBody');
+  if (helpBody) helpBody.textContent = buildI18nToolHelpText();
+  if (m) m.classList.add('show');
+}
+
+function closeI18nToolHelpModal() {
+  const m = document.getElementById('i18nToolHelpModal');
+  if (m) m.classList.remove('show');
 }
 const I18N_TOOL_LANGUAGES = [
   { code: 'en', tag: 'EN', name: 'Angličtina', flag: '🇬🇧' },
@@ -3426,6 +3458,47 @@ function openI18nToolOutputEditor() {
   if (m) m.classList.add('show');
 }
 
+function buildI18nToolEditorHelpText() {
+  return [
+    'Nápověda: Editor výstupního JSON',
+    '',
+    'K čemu slouží:',
+    '- Upravuje už přeložený soubor po jednotlivých klíčích.',
+    '- Přehled je ve formátu: key.path<TAB>"hodnota".',
+    '- Ukládá změny jen do aktuálně vybraného jazyka.',
+    '',
+    'Postup:',
+    '1) Vyber jazyk v poli „Jazyk výstupu“.',
+    '2) Najdi řádek, který chceš opravit.',
+    '3) Uprav jen text vpravo za tabulátorem.',
+    '4) Klikni na „💾 Uložit JSON“.',
+    '5) Stáhne se nový soubor <lang>.json s úpravami.',
+    '',
+    'Důležitá pravidla:',
+    '- Levou část (key.path) neměň.',
+    '- Každý řádek musí obsahovat tabulátor mezi klíčem a hodnotou.',
+    '- Hodnota má být JSON string, typicky v uvozovkách.',
+    '- Neplatné/rozbité řádky se ignorují.',
+    '',
+    'Na co si dát pozor:',
+    '- Placeholdery jako {name}, {count}, {lang} musí zůstat přesně stejné.',
+    '- Nemaž technické značky a proměnné.',
+    '- Po uložení doporučuji rychlou kontrolu ve UI.'
+  ].join('\n');
+}
+
+function openI18nToolEditorHelpModal() {
+  const m = document.getElementById('i18nToolEditorHelpModal');
+  const body = document.getElementById('i18nToolEditorHelpBody');
+  if (body) body.textContent = buildI18nToolEditorHelpText();
+  if (m) m.classList.add('show');
+}
+
+function closeI18nToolEditorHelpModal() {
+  const m = document.getElementById('i18nToolEditorHelpModal');
+  if (m) m.classList.remove('show');
+}
+
 function openI18nToolLoadJsonPicker() {
   const input = document.getElementById('i18nToolLoadJsonInput');
   if (!input) return;
@@ -3729,6 +3802,8 @@ window.toggleI18nToolLanguage = toggleI18nToolLanguage;
 window.i18nToolSelectAllLangs = i18nToolSelectAllLangs;
 window.i18nToolDeselectAllLangs = i18nToolDeselectAllLangs;
 window.copyI18nToolCmd = copyI18nToolCmd;
+window.openI18nToolHelpModal = openI18nToolHelpModal;
+window.closeI18nToolHelpModal = closeI18nToolHelpModal;
 window.runI18nToolBrowserTranslate = runI18nToolBrowserTranslate;
 window.cancelI18nToolBrowserTranslate = cancelI18nToolBrowserTranslate;
 window.minimizeI18nToolModal = minimizeI18nToolModal;
@@ -3736,6 +3811,8 @@ window.closeI18nToolDoneModal = closeI18nToolDoneModal;
 window.reopenI18nToolModalAfterDone = reopenI18nToolModalAfterDone;
 window.openI18nToolOutputEditor = openI18nToolOutputEditor;
 window.closeI18nToolOutputEditor = closeI18nToolOutputEditor;
+window.openI18nToolEditorHelpModal = openI18nToolEditorHelpModal;
+window.closeI18nToolEditorHelpModal = closeI18nToolEditorHelpModal;
 window.onI18nToolEditorLangChange = onI18nToolEditorLangChange;
 window.saveI18nToolOutputEditor = saveI18nToolOutputEditor;
 window.openI18nToolLoadJsonPicker = openI18nToolLoadJsonPicker;
