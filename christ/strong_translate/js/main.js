@@ -4099,6 +4099,8 @@ window.resetModelTestPromptPreview = resetModelTestPromptPreview;
 
 // Z batchApi
 window.translateNext = translateNext;
+window.translateSingle = translateSingle;
+window.retranslateSingle = retranslateSingle;
 window.jumpToStart = jumpToStart;
 
 // Z listApi
