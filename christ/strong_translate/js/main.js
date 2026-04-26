@@ -2239,6 +2239,7 @@ let i18nToolMinimizedDuringRun = false;
 let i18nToolCancelRequested = false;
 let i18nToolGoogleFailureCount = 0;
 let i18nToolStrictFallbackCount = 0;
+let i18nToolRunAnimTimer = null;
 const I18N_TOOL_CANCELLED_ERROR = 'I18N_TOOL_TRANSLATION_CANCELLED';
 const i18nToolTranslatedJsonByLang = {};
 const i18nToolTranslatedTextByLang = {};
@@ -2251,6 +2252,7 @@ let i18nToolAiSending = false;
 let i18nToolAiStopRequested = false;
 let i18nToolAiBusyTimer = null;
 let i18nToolAiResumeState = null;
+let i18nToolAiTokenStats = { in: 0, out: 0, total: 0 };
 const I18N_TOOL_AI_SEND_CANCELLED = 'I18N_TOOL_AI_SEND_CANCELLED';
 
 function i18nToolSetAiStatus(message, isError = false) {
@@ -2266,6 +2268,50 @@ function i18nToolSetAiLoadedFileLabel(text) {
   if (!el) return;
   el.style.display = 'block';
   el.textContent = t('i18nTool.ai.loadedFile', { file: text || t('common.none') });
+}
+
+function i18nToolExtractUsageTotals(usage) {
+  if (!usage || typeof usage !== 'object') return { in: 0, out: 0, total: 0 };
+  const inTokens = Number(
+    usage.prompt_tokens
+    ?? usage.promptTokenCount
+    ?? usage.input_tokens
+    ?? usage.inputTokenCount
+    ?? 0
+  ) || 0;
+  const outTokens = Number(
+    usage.completion_tokens
+    ?? usage.candidatesTokenCount
+    ?? usage.output_tokens
+    ?? usage.outputTokenCount
+    ?? 0
+  ) || 0;
+  const totalTokens = Number(
+    usage.total_tokens
+    ?? usage.totalTokenCount
+    ?? (inTokens + outTokens)
+  ) || (inTokens + outTokens);
+  return { in: inTokens, out: outTokens, total: totalTokens };
+}
+
+function i18nToolRenderAiTokenStats() {
+  const el = document.getElementById('i18nToolAiTokens');
+  if (!el) return;
+  const stats = i18nToolAiTokenStats || { in: 0, out: 0, total: 0 };
+  el.textContent = `📊 Tokeny AI: ${stats.in} in / ${stats.out} out / ${stats.total} total`;
+}
+
+function i18nToolResetAiTokenStats() {
+  i18nToolAiTokenStats = { in: 0, out: 0, total: 0 };
+  i18nToolRenderAiTokenStats();
+}
+
+function i18nToolAccumulateAiTokenStats(usage) {
+  const u = i18nToolExtractUsageTotals(usage);
+  i18nToolAiTokenStats.in += u.in;
+  i18nToolAiTokenStats.out += u.out;
+  i18nToolAiTokenStats.total += u.total;
+  i18nToolRenderAiTokenStats();
 }
 
 function i18nToolSetAiSendButtonState() {
@@ -2465,6 +2511,7 @@ function loadI18nToolAiJsonFromFile(event) {
         : JSON.parse(JSON.stringify(parsed));
       i18nToolAiSourceFileName = String(file.name || '').trim() || 'output.json';
       i18nToolClearAiResumeState();
+      i18nToolResetAiTokenStats();
       i18nToolSetAiLoadedFileLabel(i18nToolAiSourceFileName);
       const dlBtn = document.getElementById('btnI18nToolDownloadAiResult');
       if (dlBtn) dlBtn.disabled = true;
@@ -2682,6 +2729,7 @@ async function sendI18nToolAiPrompt(options = {}) {
       showToast(`Pokračuji od dávky ${startIdx + 1}/${chunks.length}.`);
     } else {
       i18nToolClearAiResumeState();
+      i18nToolResetAiTokenStats();
       apiKey = String(getCurrentApiKey(provider) || '').trim();
       if (!apiKey) {
         i18nToolSetAiStatus(t('i18nTool.ai.status.missingApiKey'), true);
@@ -2741,6 +2789,7 @@ async function sendI18nToolAiPrompt(options = {}) {
             { role: 'system', content: SYSTEM_MESSAGE },
             { role: 'user', content: chunkPrompt }
           ]);
+          i18nToolAccumulateAiTokenStats(raw?.usage || null);
           const content = String(raw?.content || '').trim();
           if (!content) throw new Error('AI nevrátila text odpovědi.');
           const parsed = i18nToolExtractJsonFromText(content);
@@ -2944,11 +2993,48 @@ function updateI18nToolSummary() {
   summary.textContent = t('i18nTool.summary.selected', { count: i18nToolSelectedLanguages.size, list: selectedList.join(', ') });
 }
 
+function i18nToolFormatEta(seconds) {
+  const sec = Math.max(0, Math.round(Number(seconds) || 0));
+  const mm = Math.floor(sec / 60);
+  const ss = sec % 60;
+  return `${mm}:${String(ss).padStart(2, '0')}`;
+}
+
+function i18nToolStartRunAnimation() {
+  const animEl = document.getElementById('i18nToolRunAnim');
+  if (!animEl) return;
+  const frames = ['⏳ Překlad běží   ', '⏳ Překlad běží.  ', '⏳ Překlad běží.. ', '⏳ Překlad běží...'];
+  let idx = 0;
+  animEl.style.display = 'block';
+  animEl.textContent = frames[0];
+  if (i18nToolRunAnimTimer) clearInterval(i18nToolRunAnimTimer);
+  i18nToolRunAnimTimer = setInterval(() => {
+    idx = (idx + 1) % frames.length;
+    animEl.textContent = frames[idx];
+  }, 350);
+}
+
+function i18nToolStopRunAnimation(finalText = '') {
+  const animEl = document.getElementById('i18nToolRunAnim');
+  if (i18nToolRunAnimTimer) {
+    clearInterval(i18nToolRunAnimTimer);
+    i18nToolRunAnimTimer = null;
+  }
+  if (!animEl) return;
+  if (finalText) {
+    animEl.style.display = 'block';
+    animEl.textContent = finalText;
+  } else {
+    animEl.style.display = 'none';
+  }
+}
+
 function resetI18nToolRuntimeUi() {
   const progressWrap = document.getElementById('i18nToolProgressWrap');
   const progressFill = document.getElementById('i18nToolProgressFill');
   const status = document.getElementById('i18nToolStatus');
   const downloads = document.getElementById('i18nToolDownloads');
+  const etaEl = document.getElementById('i18nToolEta');
   if (progressWrap) progressWrap.style.display = 'none';
   if (progressFill) {
     progressFill.style.width = '0%';
@@ -2962,6 +3048,11 @@ function resetI18nToolRuntimeUi() {
     downloads.style.display = 'none';
     downloads.innerHTML = '';
   }
+  if (etaEl) {
+    etaEl.style.display = 'none';
+    etaEl.textContent = '⏱ Odhad do konce: —';
+  }
+  i18nToolStopRunAnimation();
   const editBtn = document.getElementById('btnI18nToolEditOutput');
   if (editBtn) editBtn.disabled = true;
 }
@@ -3374,6 +3465,7 @@ function syncI18nToolAiModalDefaults() {
 function openI18nToolAiModal() {
   const m = document.getElementById('i18nToolAiModal');
   syncI18nToolAiModalDefaults();
+  i18nToolRenderAiTokenStats();
   i18nToolSetAiLoadedFileLabel(i18nToolAiSourceFileName || '—');
   const previewEl = document.getElementById('i18nToolAiPreview');
   if (previewEl && !String(previewEl.value || '').trim()) {
@@ -3454,6 +3546,7 @@ async function runI18nToolBrowserTranslate() {
     const progressFill = document.getElementById('i18nToolProgressFill');
     const status = document.getElementById('i18nToolStatus');
     const downloads = document.getElementById('i18nToolDownloads');
+    const etaEl = document.getElementById('i18nToolEta');
     const runBtn = document.getElementById('btnI18nToolRunBrowser');
     const cancelBtn = document.getElementById('btnI18nToolCancelBrowser');
     if (runBtn) runBtn.disabled = true;
@@ -3466,6 +3559,11 @@ async function runI18nToolBrowserTranslate() {
       status.style.display = 'block';
       status.textContent = t('i18nTool.status.starting');
     }
+    if (etaEl) {
+      etaEl.style.display = 'block';
+      etaEl.textContent = '⏱ Odhad do konce: počítám…';
+    }
+    i18nToolStartRunAnimation();
     if (downloads) {
       downloads.style.display = 'none';
       downloads.innerHTML = '';
@@ -3473,6 +3571,7 @@ async function runI18nToolBrowserTranslate() {
     const perLangUnits = i18nToolCountTranslatableStrings(sourceData);
     const totalUnits = Math.max(1, perLangUnits * selected.length);
     let doneUnits = 0;
+    const startedAtMs = Date.now();
     const translatedFiles = {};
     const placeholderAuditByLang = {};
     for (const lang of selected) {
@@ -3486,9 +3585,17 @@ async function runI18nToolBrowserTranslate() {
         (path) => {
           doneUnits++;
           const percent = Math.round((doneUnits / totalUnits) * 100);
+          const elapsedSec = Math.max(1, (Date.now() - startedAtMs) / 1000);
+          const rate = doneUnits / elapsedSec;
+          const remain = Math.max(0, totalUnits - doneUnits);
+          const etaSec = rate > 0 ? (remain / rate) : 0;
           if (progressFill) {
             progressFill.style.width = `${percent}%`;
             progressFill.textContent = `${percent}%`;
+          }
+          if (etaEl) {
+            etaEl.style.display = 'block';
+            etaEl.textContent = `⏱ Odhad do konce: ${i18nToolFormatEta(etaSec)} (${doneUnits}/${totalUnits})`;
           }
           if (status && (doneUnits % 25 === 0 || doneUnits === totalUnits)) {
             status.textContent = t('i18nTool.status.translatingProgress', {
@@ -3522,6 +3629,8 @@ async function runI18nToolBrowserTranslate() {
         status.textContent = `✓ Hotovo! Přeloženo do ${selected.length} jazyků. Placeholdery jsou v pořádku. Strict fallback: ${i18nToolStrictFallbackCount}.`;
       }
     }
+    if (etaEl) etaEl.textContent = '⏱ Odhad do konce: hotovo';
+    i18nToolStopRunAnimation('✅ Překlad dokončen');
     if (placeholderIssues.length) {
       console.warn('[i18n-tool] Placeholder mismatch audit', placeholderAuditByLang);
     }
@@ -3547,17 +3656,22 @@ async function runI18nToolBrowserTranslate() {
     }
   } catch (e) {
     const status = document.getElementById('i18nToolStatus');
+    const etaEl = document.getElementById('i18nToolEta');
     if (String(e?.message || '') === I18N_TOOL_CANCELLED_ERROR) {
       if (status) {
         status.style.display = 'block';
         status.textContent = t('i18nTool.status.cancelledByUser');
       }
+      if (etaEl) etaEl.textContent = '⏱ Odhad do konce: zastaveno';
+      i18nToolStopRunAnimation('⏹ Překlad zastaven');
       showToast(t('i18nTool.toast.cancelled'));
     } else {
       if (status) {
         status.style.display = 'block';
         status.textContent = `✗ Chyba: ${e?.message || String(e)}`;
       }
+      if (etaEl) etaEl.textContent = '⏱ Odhad do konce: chyba';
+      i18nToolStopRunAnimation('✕ Překlad selhal');
       showToast(`Chyba překladu: ${e?.message || String(e)}`);
     }
   } finally {
