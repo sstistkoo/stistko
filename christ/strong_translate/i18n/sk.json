@@ -601,6 +601,7 @@
   "topicRepair.unchanged": "bez zmeny",
   "topicRepair.yes": "áno",
   "translate.single.button": "⚡ Preložiť toto heslo",
+  "translate.single.titlePrompt": "Opens the prompt window (editable) and send to the AI.",
   "translate.single.translating": "⏳ Prekladám...",
   "lang.contentTag.label": "Kód cieľa v zátvorkách pri témach",
   "lang.contentTag.hint": "Napr. (DE) namiesto (CZ) pri Definícii, význame… Zmena sa prejaví v popisoch a v teste modelu.",

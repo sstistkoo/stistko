@@ -420,6 +420,7 @@
   "topicPrompt.sending": "⏳Enviando...",
   "translate.single.translating": "⏳ Traduciendo...",
   "translate.single.button": "⚡ TraducirES esta contraseña",
+  "translate.single.titlePrompt": "Opens the prompt window (editable) and send to the AI.",
   "confirm.retranslate": "¿TraducirES la contraseña {key} nuevamente? La traducción existente será reemplazada.",
   "btn.step.loading": "⏳...",
   "btn.step.default": "⚡ Dosis",

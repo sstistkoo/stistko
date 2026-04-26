@@ -601,6 +601,7 @@
   "topicRepair.unchanged": "bez zmian",
   "topicRepair.yes": "tak",
   "translate.single.button": "⚡ Przetłumacz to hasło",
+  "translate.single.titlePrompt": "Opens the prompt window (editable) and send to the AI.",
   "translate.single.translating": "⏳ Tłumaczę...",
   "lang.contentTag.label": "Kod języka docelowego w nawiasach",
   "lang.contentTag.hint": "Np. (DE) zamiast (CZ) przy etykietach tematów. Obowiązuje w testach modelu.",
