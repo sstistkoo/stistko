@@ -306,7 +306,7 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     setText('promptLibraryTitle', t('prompt.library.title'));
     const promptPreview = document.getElementById('promptPreview');
     const promptPreviewText = (promptPreview?.textContent || '').trim();
-    if (promptPreview && (promptPreviewText === 'Vyberte prompt z knihovny pro náhled...' || promptPreviewText === 'Select a prompt from the library for preview...')) {
+    if (promptPreview && (promptPreviewText === 'Vyberte prompt z knihovny pro náhled...' || promptPreviewText === 'Select a prompt from the library for preview...' || promptPreviewText === '—')) {
       promptPreview.textContent = t('prompt.library.preview.empty');
     }
     setAttr('promptLibraryEditor', 'placeholder', t('prompt.library.editor.placeholder'));
@@ -327,6 +327,8 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     setAttr('promptStatus', 'title', t('prompt.status.title'));
     setAttr('btnPromptAuto', 'title', t('prompt.auto.title'));
     setAttr('fileIdBadge', 'title', t('file.active.title'));
+    const hdrLangPair = document.getElementById('hdrLangPair');
+    if (hdrLangPair) hdrLangPair.textContent = `GR-${getCurrentTargetLangCode()}`;
     const currentLegacyProv = String(document.getElementById('provider')?.value || '').trim();
     if (currentLegacyProv === 'groq' || currentLegacyProv === 'gemini') {
       refreshStaticProviderSelectLabel('model', currentLegacyProv);
@@ -370,6 +372,27 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     if (intervalEl) {
       intervalEl.querySelectorAll('option').forEach(opt => {
         const txt = intervalLabels[String(opt.value || '')];
+        if (txt) opt.textContent = txt;
+      });
+    }
+    const batchSizeLabels = {
+      '1': t('setup.batch.option.1'),
+      '5': t('setup.batch.option.5'),
+      '10': t('setup.batch.option.10'),
+      '15': t('setup.batch.option.15'),
+      '20': t('setup.batch.option.20')
+    };
+    const batchSizeEl = document.getElementById('batchSize');
+    if (batchSizeEl) {
+      batchSizeEl.querySelectorAll('option').forEach(opt => {
+        const txt = batchSizeLabels[String(opt.value || '')];
+        if (txt) opt.textContent = txt;
+      });
+    }
+    const batchSizeRunMobileEl = document.getElementById('batchSizeRunMobile');
+    if (batchSizeRunMobileEl) {
+      batchSizeRunMobileEl.querySelectorAll('option').forEach(opt => {
+        const txt = batchSizeLabels[String(opt.value || '')];
         if (txt) opt.textContent = txt;
       });
     }
@@ -541,7 +564,7 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     setText('btnPromptLangSave', t('lang.modal.save'));
     const status = document.getElementById('statusTXT');
     const rawStatus = String(status?.textContent || '').trim();
-    if (status && !status.classList.contains('ok') && (rawStatus === '— nevybráno' || rawStatus === '— none selected')) {
+    if (status && !status.classList.contains('ok') && (rawStatus === '— nevybráno' || rawStatus === '— none selected' || rawStatus === '—')) {
       status.textContent = t('setup.file.none');
     }
     refreshTokenStatsDisplay();

@@ -3,6 +3,10 @@ import { PROVIDERS } from './config.js';
 export const UI_LANG_KEY = 'strong_ui_lang';
 export const DEFAULT_UI_LANG = 'cs';
 export const UI_LANGS = new Set(['cs', 'en', 'sk', 'pl']);
+const FIXED_EN_KEYS = new Set([
+  'detail.label.definitionEn',
+  'export.field.definitionEn'
+]);
 
 /** Cílový jazyk slovníku (strong_target_lang) → kód v závorkách v UI, pokud není zvolen ručně. */
 const TARGET_TO_CONTENT_TAG = {
@@ -126,7 +130,10 @@ export function t(key, params = {}) {
   for (const [name, value] of Object.entries(params || {})) {
     text = text.replaceAll(`{${name}}`, String(value));
   }
-  return text;
+  if (!FIXED_EN_KEYS.has(key)) return text;
+  if (/\(EN\)/.test(text)) return text;
+  if (/\([A-Za-z-]+\)/.test(text)) return text.replace(/\([A-Za-z-]+\)/, '(EN)');
+  return `${text} (EN)`;
 }
 
 export function uiLabel(labelOrKey) {

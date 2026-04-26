@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Strong GR → -- Překladač</title>
+<title>Strong GR → --</title>
     <link rel="stylesheet" href="styles/strong_translator.css">
 </head>
 <body>
 
 <!-- ══ SETUP ══════════════════════════════════════════════════════ -->
 <div id="setup">
-  <h1 id="setupTitle">⟁ Strong GR → -- — Překladač slovníku</h1>
+  <h1 id="setupTitle">⟁ Strong GR → --</h1>
   
 
   <div id="resumeBox" class="resume-box"></div>
@@ -139,7 +139,7 @@
   <!-- Header -->
   <div class="hdr">
     <div class="hdr-title">
-      <span>GR-CZ</span>
+      <span id="hdrLangPair">GR-—</span>
       <span id="fileIdBadge" title="Aktivní soubor (vlastní slot průběhu)" style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--txt3);padding:2px 6px;border:1px solid var(--brd);border-radius:3px;display:none"></span>
       <button class="hbtn red hdr-close" onclick="clearProgress()" title="Smazat veškerý uložený průběh" aria-label="Smazat veškerý uložený průběh">Res.</button>
       <button class="hbtn hdr-close" id="btnRestoreBackup" onclick="restoreFromBackup('backup')" title="Obnovit ze zálohy" aria-label="Obnovit ze zálohy" style="display:none">↺ Záloha</button>
@@ -404,7 +404,7 @@
 
   <div id="helpModal">
     <div class="help-modal-box">
-      <div class="limits-title" id="helpTitle">❓ Nápověda Strong GR → CZ</div>
+      <div class="limits-title" id="helpTitle">❓ Strong GR → --</div>
       <div class="help-block">
         <b id="helpSectionAboutTitle">O čem aplikace je</b><br>
         Tento nástroj překládá hesla Strong slovníku (řečtina/hebrejština) do češtiny po dávkách přes AI provider (`Groq`, `Gemini`, `OpenRouter`).
