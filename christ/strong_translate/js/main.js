@@ -677,10 +677,7 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     if (hasSpecialista) return text;
     return `${text}
 
-POVINNÝ VÝSTUP NAVÍC:
-- Přidej řádek SPECIALISTA: [detailní odstavec 3-5 vět jako biblický specialista].
-- Odstavec má vysvětlit teologický a biblický význam slova v kontextu.
-- Nepiš body ani seznam, jen souvislý odstavec.`;
+${t('aiPrompts.enforceSpecialistaExtra')}`;
   }
 
   // Custom buildPromptMessages that reads from localStorage

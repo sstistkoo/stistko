@@ -98,7 +98,8 @@ export async function fetchUiDictionary(lang) {
 /**
  * Načte AI prompt balíčky bez 404 pro každý jazyk zvlášť.
  * Používá jen i18n/prompts.{DEFAULT_UI_LANG}.json a volitelně prompts.en.json (2 requesty).
- * Ostatní UI jazyky (de, sk, …) dostanou výchozí balíček (cs), dokud nepřidáš další logiku.
+ * Jazyk cs: balíček prompts.cs.json. Vše ostatní: prompts.en.json (anglické instrukce pro AI, i když UI není en).
+ * Pokud prompts.en.json chybí, použije se cs balíček.
  */
 async function mergePromptPacksIntoLoaded(loaded) {
   const tryFile = async (filename) => {
@@ -116,7 +117,7 @@ async function mergePromptPacksIntoLoaded(loaded) {
       : packDefault;
 
   for (const lang of Array.from(UI_LANGS)) {
-    const pack = lang === 'en' ? packEn : packDefault;
+    const pack = lang === DEFAULT_UI_LANG ? packDefault : packEn;
     Object.assign(loaded[lang], pack);
   }
 }

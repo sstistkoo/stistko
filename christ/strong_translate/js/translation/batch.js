@@ -86,15 +86,11 @@ async function translateSingle(key) {
     let missingKeys = parseTranslations(raw.content, [key]);
     
     if (missingKeys.length > 0) {
-      const retryContent = `CHYBA: V minulé odpovědi jsi vynechal formátovací značky ###G. 
-ZOPAKUJ PŘEKLAD a u každého hesla MUS͊ začít řádkem ###G[číslo]###. 
-Bez toho nebude překlad zpracován!
-
-Přelož tato hesla:
-${key}
+      const entries = `${key}
 DEF: ${e.definice || e.def || ''}
 KJV: ${e.kjv || ''}
 ORIG: ${e.orig || ''}`;
+      const retryContent = t('batch.retry.missingG', { entries });
       
        const raw2 = await callOnce(prov, apiKey, model, buildRetryMessages(retryContent));
        missingKeys = parseTranslations(raw2.content, [key]);
@@ -614,15 +610,11 @@ async function translateBatch(keys, depth = 0) {
     if (missingKeys.length > 0) {
       console.log(`⚠ ${missingKeys.length} hesel bez překladu: ${missingKeys.join(', ')}`);
       log(`⚠ Pokus o opravu formátu pro ${missingKeys.join(', ')}...`);
-      const retryContent = `CHYBA: V minulé odpovědi jsi vynechal formátovací značky ###G. 
-ZOPAKUJ PŘEKLAD a u každého hesla MUS͊ začít řádkem ###G[číslo]###. 
-Bez toho nebude překlad zpracován!
-
-Přelož tato hesla:
-${keys.map(k => {
-  const e = state.entryMap.get(k);
-  return e ? `${e.key} | ${e.greek}\nDEF: ${e.definice || e.def || ''}\nKJV: ${e.kjv || ''}` : '';
-}).join('\n\n')}`;
+      const entries = keys.map((k) => {
+        const e = state.entryMap.get(k);
+        return e ? `${e.key} | ${e.greek}\nDEF: ${e.definice || e.def || ''}\nKJV: ${e.kjv || ''}` : '';
+      }).join('\n\n');
+      const retryContent = t('batch.retry.missingG', { entries });
       
       try {
         const raw2 = await callOnce(prov, apiKey, model, buildRetryMessages(retryContent));
