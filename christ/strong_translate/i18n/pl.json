@@ -354,7 +354,7 @@
   "setup.loadAuto": "📄 Automatycznie",
   "setup.model.aria": "Wybór modelu AI",
   "setup.provider.aria": "Wybór dostawcy AI",
-  "setup.start": "Uruchom tłumaczenie →",
+  "setup.start": "Editor",
   "setup.title": "⟁ Strong GR → {lang} — Tłumacz słownika",
   "stats.done": "Przetłumaczone:",
   "stats.remain": "Pozostało:",

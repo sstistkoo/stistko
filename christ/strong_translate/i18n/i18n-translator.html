@@ -529,13 +529,19 @@
         const TAG_REGEX = /\b(CZ|EN|SK|PL|DE|FR|ES|IT|PT|RU|UK|BG|RO|HU|NL|SV|DA|NO|FI|EL|TR|AR|JA|KO|HE|zh-CN|ZH-CN)\b|\((CZ|EN|SK|PL|DE|FR|ES|IT|PT|RU|UK|BG|RO|HU|NL|SV|DA|NO|FI|EL|TR|AR|JA|KO|HE|zh-CN|ZH-CN)\)/gi;
         // Ochrana jazykových slov (např. "Czech meaning"), která chceme sjednotit na cílový jazyk.
         const LANGUAGE_WORD_REGEX = /\b(Czech|English|Slovak|Polish)\b/gi;
-        const PLACEHOLDER = '\uE000';
+        const PLACEHOLDER = '__ST_TAG_';
+        const IMMUTABLE_TOKEN_PREFIX = 'PHX';
+        const IMMUTABLE_TOKEN_SUFFIX = 'XHP';
+        const JSON_PLACEHOLDER_REGEX = /\{[A-Za-z0-9_]+\}/g;
+        const HTML_TAG_REGEX = /<[^>]+>/g;
         const DEEPL_LANG_MAP = {
             'cs': 'CS', 'sk': 'SK', 'pl': 'PL', 'de': 'DE', 'fr': 'FR', 'es': 'ES',
             'it': 'IT', 'pt': 'PT-PT', 'ru': 'RU', 'uk': 'UK', 'bg': 'BG', 'ro': 'RO',
             'hu': 'HU', 'nl': 'NL', 'sv': 'SV', 'da': 'DA', 'no': 'NB', 'fi': 'FI',
             'el': 'EL', 'tr': 'TR', 'ja': 'JA', 'ko': 'KO', 'zh-CN': 'ZH', 'he': 'HE', 'en': 'EN-US'
         };
+        let googleFailureCount = 0;
+        let strictFallbackCount = 0;
 
         function protectTagsAndLanguageWords(str) {
             const protectedTags = str.replace(TAG_REGEX, (match, standalone, inParens) => {
@@ -550,6 +556,30 @@
             return str.replace(new RegExp(`${PLACEHOLDER}P`, 'g'), `(${targetTag})`)
                       .replace(new RegExp(`${PLACEHOLDER}S`, 'g'), targetTag)
                       .replace(new RegExp(`${PLACEHOLDER}W`, 'g'), targetLanguageNameEn || targetTag);
+        }
+
+        function protectImmutableSegments(str) {
+            if (typeof str !== 'string' || !str) return { text: str, immutableSegments: [] };
+            const immutableSegments = [];
+            const markSegment = (segment) => {
+                const idx = immutableSegments.push(segment) - 1;
+                return `${IMMUTABLE_TOKEN_PREFIX}${idx}${IMMUTABLE_TOKEN_SUFFIX}`;
+            };
+            const withHtmlProtected = str.replace(HTML_TAG_REGEX, markSegment);
+            const withAllProtected = withHtmlProtected.replace(JSON_PLACEHOLDER_REGEX, markSegment);
+            return { text: withAllProtected, immutableSegments };
+        }
+
+        function restoreImmutableSegments(str, immutableSegments) {
+            if (typeof str !== 'string' || !str || !Array.isArray(immutableSegments) || immutableSegments.length === 0) {
+                return str;
+            }
+            return str.replace(new RegExp(`${IMMUTABLE_TOKEN_PREFIX}(\\d+)${IMMUTABLE_TOKEN_SUFFIX}`, 'g'), (match, indexRaw) => {
+                const index = Number(indexRaw);
+                return Number.isInteger(index) && immutableSegments[index] !== undefined
+                    ? immutableSegments[index]
+                    : match;
+            });
         }
 
         async function translateText(text, targetLang) {
@@ -578,19 +608,41 @@
                     }
                 }
             }
-            const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
-            
-            try {
+            const attempts = [
+                `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`,
+                `https://translate.googleapis.com/translate_a/single?client=gtx&sl=cs&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`,
+                `https://translate.googleapis.com/translate_a/single?client=dict-chrome-ex&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`
+            ];
+            let lastError = null;
+            for (const url of attempts) {
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 15000);
-                const response = await fetch(url, { signal: controller.signal });
-                clearTimeout(timeoutId);
-                const data = await response.json();
-                return data[0][0][0];
-            } catch (error) {
-                console.error('Translation error:', error);
-                return text;
+                try {
+                    const response = await fetch(url, { signal: controller.signal });
+                    if (!response.ok) {
+                        lastError = new Error(`HTTP ${response.status}`);
+                        continue;
+                    }
+                    const raw = await response.text();
+                    const data = JSON.parse(raw);
+                    const translated = data?.[0]?.[0]?.[0];
+                    if (typeof translated === 'string' && translated.trim()) return translated;
+                    lastError = new Error('Missing translation payload');
+                } catch (error) {
+                    lastError = error;
+                } finally {
+                    clearTimeout(timeoutId);
+                }
             }
+            googleFailureCount++;
+            if (googleFailureCount <= 5 || googleFailureCount % 100 === 0) {
+                console.warn('Google translation failed, returning original text', {
+                    targetLang,
+                    failures: googleFailureCount,
+                    error: lastError?.message || String(lastError || '')
+                });
+            }
+            return text;
         }
 
         function countTranslatableStrings(value) {
@@ -604,17 +656,75 @@
             return 0;
         }
 
+        function extractPlaceholderList(text) {
+            if (typeof text !== 'string' || !text) return [];
+            const matches = text.match(JSON_PLACEHOLDER_REGEX) || [];
+            return Array.from(new Set(matches)).sort();
+        }
+
+        function hasSamePlaceholderSet(source, translated) {
+            const sourcePlaceholders = extractPlaceholderList(source);
+            const translatedPlaceholders = extractPlaceholderList(translated);
+            return sourcePlaceholders.join('|') === translatedPlaceholders.join('|');
+        }
+
+        function collectPlaceholderMismatches(source, translated, path = '', out = []) {
+            if (typeof source === 'string') {
+                if (typeof translated !== 'string') return out;
+                const sourcePlaceholders = extractPlaceholderList(source);
+                const translatedPlaceholders = extractPlaceholderList(translated);
+                if (sourcePlaceholders.join('|') !== translatedPlaceholders.join('|')) {
+                    out.push({
+                        path,
+                        sourcePlaceholders,
+                        translatedPlaceholders,
+                        sourceText: source,
+                        translatedText: translated
+                    });
+                }
+                return out;
+            }
+            if (Array.isArray(source)) {
+                source.forEach((item, idx) => {
+                    const nextPath = `${path}[${idx}]`;
+                    collectPlaceholderMismatches(item, translated?.[idx], nextPath, out);
+                });
+                return out;
+            }
+            if (source && typeof source === 'object') {
+                Object.keys(source).forEach((key) => {
+                    const nextPath = path ? `${path}.${key}` : key;
+                    collectPlaceholderMismatches(source[key], translated?.[key], nextPath, out);
+                });
+            }
+            return out;
+        }
+
         async function translateValue(value, targetLang, targetTag, targetLanguageNameEn, onProgress = null, path = '') {
             if (typeof value === 'string') {
                 if (!value.trim()) return value;
                 
-                // Vždy chráníme jazykové značky a nahradíme je cílovým
-                const textToTranslate = protectTagsAndLanguageWords(value);
-                const translated = await translateText(textToTranslate, targetLang);
+                // Vždy chráníme placeholdery/html a jazykové značky.
+                const protectedValue = protectImmutableSegments(value);
+                const textToTranslate = protectTagsAndLanguageWords(protectedValue.text);
+                let translated = await translateText(textToTranslate, targetLang);
                 await new Promise(resolve => setTimeout(resolve, 25)); // Rate limiting
                 if (typeof onProgress === 'function') onProgress(path);
-                
-                return restoreTagsAndLanguageWords(translated, targetTag, targetLanguageNameEn);
+
+                let withRestoredTags = restoreTagsAndLanguageWords(translated, targetTag, targetLanguageNameEn);
+                let restored = restoreImmutableSegments(withRestoredTags, protectedValue.immutableSegments);
+                // Když engine vrátí useknutý text a ztratí placeholdery, zkusíme překlad ještě 2x.
+                for (let retry = 0; retry < 2 && !hasSamePlaceholderSet(value, restored); retry++) {
+                    translated = await translateText(textToTranslate, targetLang);
+                    await new Promise(resolve => setTimeout(resolve, 25));
+                    withRestoredTags = restoreTagsAndLanguageWords(translated, targetTag, targetLanguageNameEn);
+                    restored = restoreImmutableSegments(withRestoredTags, protectedValue.immutableSegments);
+                }
+                if (!hasSamePlaceholderSet(value, restored)) {
+                    strictFallbackCount++;
+                    return value;
+                }
+                return restored;
             } else if (Array.isArray(value)) {
                 const result = [];
                 for (let i = 0; i < value.length; i++) {
@@ -657,6 +767,8 @@
             const totalWorkUnits = Math.max(1, totalLangs * translatableKeysPerLang);
             let doneUnits = 0;
             let completed = 0;
+            strictFallbackCount = 0;
+            const placeholderAuditByLang = {};
 
             try {
                 for (let langCode of selectedLanguages) {
@@ -687,6 +799,7 @@
                     if (translated && typeof translated === 'object' && 'topic.langTag' in translated) {
                         translated['topic.langTag'] = lang.tag;
                     }
+                    placeholderAuditByLang[langCode] = collectPlaceholderMismatches(sourceData, translated);
 
                     translatedFiles[langCode] = JSON.stringify(translated, null, 2);
 
@@ -698,7 +811,18 @@
 
                 // Stažení všech souborů (postupně)
                 status.className = 'status success';
-                status.innerHTML = `✓ Hotovo! Přeloženo do ${totalLangs} jazyků.<br><strong>Klikejte na tlačítka níže pro stažení:</strong>`;
+                const placeholderIssues = Object.entries(placeholderAuditByLang)
+                    .filter(([, issues]) => issues.length > 0);
+                const placeholderIssueCount = placeholderIssues.reduce((sum, [, issues]) => sum + issues.length, 0);
+                if (placeholderIssues.length) {
+                    const byLangText = placeholderIssues
+                        .map(([code, issues]) => `${code}: ${issues.length}`)
+                        .join(', ');
+                    status.innerHTML = `⚠ Překlad dokončen s kontrolou placeholderů: nalezeno ${placeholderIssueCount} nesouladů (${byLangText}). Strict fallback: ${strictFallbackCount}.<br><strong>Klikejte na tlačítka níže pro stažení:</strong>`;
+                    console.warn('[i18n-translator] Placeholder mismatch audit', placeholderAuditByLang);
+                } else {
+                    status.innerHTML = `✓ Hotovo! Přeloženo do ${totalLangs} jazyků. Placeholdery jsou v pořádku. Strict fallback: ${strictFallbackCount}.<br><strong>Klikejte na tlačítka níže pro stažení:</strong>`;
+                }
                 
                 // Vytvoření tlačítek pro stažení
                 const downloadSection = document.createElement('div');

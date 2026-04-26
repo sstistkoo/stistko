@@ -107,8 +107,8 @@
       <button onclick="loadDefaultFile()" id="btnLoadDefault" style="font-size:10px;padding:4px 10px;background:var(--bg4);border:1px solid var(--brd);border-radius:3px;cursor:pointer;display:none;color:var(--txt)" aria-label="Načíst výchozí soubor">📄 Automaticky</button>
       <span class="file-status" id="statusTXT" aria-live="polite">— nevybráno</span>
       <span id="fileReady" style="display:none;width:8px;height:8px;border-radius:50%;background:#5a9a6c;margin-left:6px" aria-hidden="true"></span>
-      <button class="start-btn" id="startBtn" onclick="startApp()" disabled aria-label="Zahájit překlad" style="flex:1">
-        Zahájit překlad →
+      <button class="start-btn" id="startBtn" onclick="startApp()" disabled aria-label="Editor" style="flex:1">
+        Editor
       </button>
       <button id="btnHelp" onclick="showHelpModal()" style="font-family:'JetBrains Mono',monospace;font-size:11px;padding:8px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:3px;color:var(--txt3);cursor:pointer;white-space:nowrap" aria-label="Zobrazit nápovědu k aplikaci" title="Nápověda">❓ Nápověda</button>
       <button id="btnLimits" onclick="showLimitsModal()" style="font-family:'JetBrains Mono',monospace;font-size:11px;padding:8px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:3px;color:var(--txt3);cursor:pointer;white-space:nowrap" aria-label="Zobrazit limity providera" title="Zobrazit limity providera">📊 Limity</button>
@@ -767,7 +767,7 @@
         <div id="contentTagLanguageHint" style="font-size:10px;color:var(--txt3);line-height:1.35;margin-top:4px"></div>
       </div>
       <div class="mobl-set-row" style="margin-top:4px">
-        <button type="button" class="prompt-btn lang" id="btnI18nTranslateTool" onclick="showI18nToolModal()">🌍 Překladač JSON souborů</button>
+        <button type="button" class="prompt-btn lang" id="btnI18nTranslateTool" onclick="showI18nToolModal()">🌍 Překladač/Editor Jazyka rozhraní</button>
       </div>
        <div class="mobl-set-row">
          <label id="sourceLanguageLabel">Zdrojový jazyk</label>
@@ -815,7 +815,7 @@
       <div id="i18nToolStatus" class="i18n-tool-status"></div>
       <div id="i18nToolDownloads" class="i18n-tool-downloads"></div>
       <div class="prompt-actions" style="margin-top:10px">
-        <button type="button" class="prompt-btn ok" id="btnI18nToolRunBrowser" onclick="runI18nToolBrowserTranslate()">🚀 Přeložit a stáhnout</button>
+        <button type="button" class="prompt-btn ok" id="btnI18nToolRunBrowser" onclick="runI18nToolBrowserTranslate()">🚀 Přeložit</button>
         <button type="button" class="prompt-btn cancel" id="btnI18nToolCancelBrowser" onclick="cancelI18nToolBrowserTranslate()" style="display:none">■ Ukončit překlad</button>
         <button type="button" class="prompt-btn" id="btnI18nToolEditOutput" onclick="openI18nToolOutputEditor()" disabled>✏ Editovat výstup JSON</button>
         <button type="button" class="prompt-btn" id="btnI18nToolLoadOutput" onclick="openI18nToolLoadJsonPicker()">📂 Načíst JSON pro editaci</button>
@@ -823,6 +823,9 @@
       </div>
       <label for="i18nToolCmd" class="i18n-tool-label">Příkaz(y) pro překlad z i18n/cs.json</label>
       <textarea id="i18nToolCmd" class="i18n-tool-cmd" readonly></textarea>
+      <div class="prompt-actions" style="margin-top:6px">
+        <button type="button" class="prompt-btn" onclick="openI18nToolAiModal()">🧠 AI audit/editor</button>
+      </div>
       <div class="prompt-actions" style="margin-top:4px">
         <button type="button" class="prompt-btn" id="btnI18nToolMinimize" onclick="minimizeI18nToolModal()">— Minimalizovat</button>
         <button type="button" class="prompt-btn cancel" id="btnI18nToolClose" onclick="closeI18nToolModal()">✕ Zavřít</button>
@@ -867,6 +870,51 @@
       <div class="prompt-actions" style="margin-top:12px">
         <button type="button" class="prompt-btn ok" onclick="saveI18nToolOutputEditor()">💾 Uložit JSON</button>
         <button type="button" class="prompt-btn cancel" onclick="closeI18nToolOutputEditor()">✕ Zavřít editor</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="i18nToolAiModal" class="i18n-tool-lang-modal" onclick="if(event.target===this)closeI18nToolAiModal()">
+    <div class="prompt-modal-box i18n-tool-modal-box" style="max-width:1200px;width:96vw;max-height:92vh" onclick="event.stopPropagation()">
+      <div class="prompt-modal-title">🧠 AI audit/editor i18n</div>
+      <div class="i18n-tool-status" style="display:block;margin-bottom:8px">
+        Nahraj cílový JSON, vytvoř prompt, vlož AI odpověď a aplikuj změny.
+      </div>
+      <div class="prompt-actions" style="margin-top:0">
+        <button type="button" class="prompt-btn" onclick="openI18nToolAiJsonPicker()">📂 Připojit JSON pro AI audit</button>
+        <button type="button" class="prompt-btn" onclick="buildI18nToolAiPrompt()">🧠 Vytvořit AI prompt</button>
+        <button type="button" class="prompt-btn ok" id="btnI18nToolAiSend" onclick="sendI18nToolAiPrompt()">📤 Odeslat</button>
+        <button type="button" class="prompt-btn ok" onclick="applyI18nToolAiResponse()">✅ Aplikovat AI odpověď</button>
+        <button type="button" class="prompt-btn" id="btnI18nToolDownloadAiResult" onclick="downloadI18nToolAiResult()" disabled>💾 Stáhnout AI výstup</button>
+        <input type="file" id="i18nToolAiJsonInput" accept=".json,application/json" style="display:none" onchange="loadI18nToolAiJsonFromFile(event)">
+      </div>
+      <div class="i18n-tool-controls" style="margin-top:8px">
+        <div class="mobl-set-row" style="margin:0">
+          <label for="i18nToolAiBatchSize">Dávka (počet položek na 1 AI request)</label>
+          <input id="i18nToolAiBatchSize" type="number" min="20" max="300" step="10" value="120">
+        </div>
+        <div class="mobl-set-row" style="margin:0">
+          <label for="i18nToolAiInterval">Interval mezi dávkami (sekundy)</label>
+          <input id="i18nToolAiInterval" type="number" min="1" max="300" step="1" value="20">
+        </div>
+      </div>
+      <div id="i18nToolAiLoadedFile" class="i18n-tool-status" style="display:block;margin-top:6px">Načtený soubor: —</div>
+      <div id="i18nToolAiBusy" class="i18n-tool-status" style="display:none;margin-top:6px">⏳ AI audit běží…</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px">
+        <div>
+          <label for="i18nToolAiPrompt" class="i18n-tool-label">Prompt pro AI</label>
+          <textarea id="i18nToolAiPrompt" class="i18n-tool-cmd" style="min-height:360px"></textarea>
+        </div>
+        <div>
+          <label for="i18nToolAiResponse" class="i18n-tool-label">Odpověď AI (může zůstat JSON)</label>
+          <textarea id="i18nToolAiResponse" class="i18n-tool-cmd" style="min-height:360px" placeholder='[{"key":"limits.providerInfo","status":"fix","corrected":"...","reason":"..."}]'></textarea>
+          <label for="i18nToolAiPreview" class="i18n-tool-label" style="margin-top:8px">Přehled změn (česky: klíč → původní/chybně → správně)</label>
+          <textarea id="i18nToolAiPreview" class="i18n-tool-cmd" style="min-height:220px" readonly placeholder="Po načtení odpovědi AI se sem vypíše srozumitelný přehled změn."></textarea>
+        </div>
+      </div>
+      <div id="i18nToolAiStatus" class="i18n-tool-status"></div>
+      <div class="prompt-actions" style="margin-top:8px">
+        <button type="button" class="prompt-btn cancel" onclick="closeI18nToolAiModal()">✕ Zavřít AI modal</button>
       </div>
     </div>
   </div>
