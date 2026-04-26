@@ -84,7 +84,7 @@ async function saveModelTestOutputTxt() {
         showToast(t('toast.save.canceled'));
         return;
       }
-      showToast(t('toast.saveDialogFailedFallback', { message: msg || (getUiLang() === 'en' ? 'unknown error' : 'neznámá chyba') }));
+      showToast(t('toast.saveDialogFailedFallback', { message: msg || t('error.unknown') }));
     }
   }
   download(DEFAULT_MODEL_TEST_LOG_FILENAME, text, 'text/plain');
@@ -328,15 +328,15 @@ function appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, missi
 
   appendReport(`  ▸ Rozsah dávky: ${rangeLabel}`);
   appendReport('');
-  appendReport('  AUDIT: kontrola všech hesel v dávce a jejich parsovatelnosti.');
+  appendReport(`  ${t('modelTest.audit.header')}`);
   appendReport(`  ▸ Poslední heslo (stavový indikátor): ${lastKey}`);
   appendReport(`  ▸ Auditovaný počet hesel: ${batchKeys.length}`);
   appendReport(`  ▸ Neúspěšné v dávce: ${failedKeys.length}`);
   appendReport('');
   if (complete) {
     modelTestSetLastStatus(`OK | ${rangeLabel} | ${lastKey}${totalsSuffix}`, 'ok');
-    appendReport('  Stav posledního hesla: OK — nalezeno v odpovědi a všechna povinná pole vyplněna ve správném formátu.');
-    appendReport('  Data AI pro všechna hesla v dávce:');
+    appendReport(`  ${t('modelTest.audit.lastStatus.ok')}`);
+    appendReport(t('modelTest.audit.dataAll'));
     for (const key of batchKeys) {
       const tk = parsed && parsed[key];
       if (!tk) continue;
@@ -347,8 +347,8 @@ function appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, missi
     }
   } else if (inMissing || !t) {
     modelTestSetLastStatus(`NEÚSPĚCH | ${rangeLabel} | ${lastKey}${totalsSuffix}`, 'error');
-    appendReport('  🔴 CHYBA FORMATU / PÁROVÁNÍ');
-    appendReport('  Stav posledního hesla: NEÚSPĚCH — heslo v odpovědi nešlo spárovat / chybí blok (špatný formát nebo model vynechal heslo).');
+    appendReport(`  ${t('modelTest.audit.errorPairing')}`);
+    appendReport(`  ${t('modelTest.audit.lastStatus.fail')}`);
     if (failedKeys.length) {
       appendReport(`  Neúspěšné v dávce: ${failedKeys.length}/${batchKeys.length} | první ${firstFailed} | poslední ${lastFailed}`);
     }
@@ -357,16 +357,16 @@ function appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, missi
       appendReport(excerptRawForLastKey(rawContent, firstFailed, 1200));
       appendReport('  ---');
     }
-    appendReport('  RAW odpověď AI pro audit celé dávky:');
-    appendReport(rawContent || '(prázdná odpověď)');
+    appendReport(t('modelTest.audit.rawBatch'));
+    appendReport(rawContent || t('modelTest.audit.rawEmptyResponse'));
     appendReport('  --- /RAW ---');
   } else {
     modelTestSetLastStatus(`NEÚPLNÉ | ${rangeLabel} | ${lastKey}${totalsSuffix}`, 'warn');
     appendReport(`  Stav posledního hesla: NEÚPLNÉ — chybí nebo jsou neplatná pole: ${badFields.join(', ') || '?'}`);
     if (englishDefinitionFlag) {
-      appendReport('  POZN.: DEFINICE obsahuje angličtinu, je hodnoceno jako špatný překlad.');
+      appendReport(`  ${t('modelTest.audit.noteDefinitionEnglish')}`);
     }
-    appendReport('  Data AI pro všechna hesla v dávce (to, co šlo vyparsovat):');
+    appendReport(t('modelTest.audit.dataParsedOnly'));
     for (const key of batchKeys) {
       const tk = parsed && parsed[key];
       if (!tk) continue;
@@ -386,13 +386,13 @@ function appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, missi
     complete
       ? 'Stav: OK'
       : (inMissing || !t)
-        ? 'Stav: NEÚSPĚCH'
+        ? t('modelTest.audit.status.fail')
         : `Stav: NEÚPLNÉ (${badFields.join(', ') || '?'})`
   ].filter(Boolean);
   const parsedKeys = batchKeys.filter(k => parsed && parsed[k]);
   if (parsedKeys.length) {
     exportLines.push('');
-    exportLines.push('Data AI pro všechna hesla v dávce:');
+    exportLines.push(t('modelTest.audit.dataAll'));
     for (const key of parsedKeys) {
       exportLines.push(`--- ${key} ---`);
       exportLines.push(formatModelTestParsedBlock(key, parsed[key], state.entryMap.get(key)));
@@ -401,7 +401,7 @@ function appendModelTestLastBatchKeyAudit(appendReport, batchKeys, parsed, missi
     if (firstFailed && firstFailed !== lastFailed) {
       exportLines.push('', `RAW odpověď AI pro první neúspěšné ${firstFailed}:`, excerptRawForLastKey(rawContent, firstFailed, 1200));
     }
-    exportLines.push('', 'RAW odpověď AI pro audit celé dávky:', rawContent || '(prázdná odpověď)');
+    exportLines.push('', t('modelTest.audit.rawBatch'), rawContent || t('modelTest.audit.rawEmptyResponse'));
   }
   exportLines.push('----------------------------------------', '');
   state.modelTestLastKeyAuditExportChunks.push(exportLines.join('\n'));
