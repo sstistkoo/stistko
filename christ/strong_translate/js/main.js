@@ -921,7 +921,17 @@ async function copyModelTestPromptPreview() {
   function pushTestHistory(entry) {
     const history = getTestHistory();
     history.unshift({ ts: Date.now(), ...entry });
-    localStorage.setItem(TEST_HISTORY_KEY, JSON.stringify(history.slice(0, 300)));
+    const persist = (limit) => localStorage.setItem(TEST_HISTORY_KEY, JSON.stringify(history.slice(0, limit)));
+    try {
+      persist(300);
+    } catch (err) {
+      // Fallback for small storage budgets: keep shorter history instead of crashing app flow.
+      try {
+        persist(80);
+      } catch (err2) {
+        console.warn('[main] localStorage setItem failed:', TEST_HISTORY_KEY, err2 || err);
+      }
+    }
   }
 
 function populateOpenRouterModels(selectElement, savedModel, callback) {
