@@ -1,4 +1,4 @@
-import { t, getUiLang } from '../i18n.js';
+import { t, getUiLang, getDefaultContentTag, CONTENT_TAG_LANG_KEY } from '../i18n.js';
 
 export function createSettingsModalsApi({ initRunSelects, updateSetupCompactSummary, initPipelineModelSelectors, initPipelineModelSelectorsInSettingsModal, showToast, refreshTopicLabels, renderList, saveProgress, refreshLanguageAwarePromptOptionLabels, applySystemPromptForCurrentTask, applyUiLanguage, DEFAULT_UI_LANG, UI_LANGS, UI_LANG_KEY, setPipelineModelForProvider, setPipelineSecondaryEnabled, syncSecondaryProviderToggles, updateAutoProviderCountdowns }) {
 
@@ -77,6 +77,14 @@ function showPromptLangModal() {
   document.getElementById('sourceLanguage').value = savedSource;
   const uiLanguageEl = document.getElementById('uiLanguage');
   if (uiLanguageEl) uiLanguageEl.value = savedUi;
+  const ct = document.getElementById('contentTagLanguage');
+  if (ct) {
+    const st = String(localStorage.getItem(CONTENT_TAG_LANG_KEY) || '').trim();
+    const def = getDefaultContentTag();
+    const want = (st && Array.from(ct.options).some(o => o.value === st)) ? st : def;
+    if (Array.from(ct.options).some(o => o.value === want)) ct.value = want;
+    else if (def && Array.from(ct.options).some(o => o.value === def)) ct.value = def;
+  }
   modal.style.display = 'flex';
   // Close on backdrop click
   modal.onclick = (e) => {
@@ -106,6 +114,9 @@ function saveLangSettings() {
   localStorage.setItem('strong_target_lang', target);
   localStorage.setItem('strong_source_lang', source);
   localStorage.setItem(UI_LANG_KEY, ui);
+  const contentTag = String(document.getElementById('contentTagLanguage')?.value || '').trim();
+  if (contentTag) localStorage.setItem(CONTENT_TAG_LANG_KEY, contentTag);
+  else localStorage.removeItem(CONTENT_TAG_LANG_KEY);
   refreshLanguageAwarePromptOptionLabels();
   applySystemPromptForCurrentTask();
   applyUiLanguage();

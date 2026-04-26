@@ -40,7 +40,8 @@
     getUiLang,
     t,
     uiLabel,
-    refreshStaticProviderSelectLabel
+    refreshStaticProviderSelectLabel,
+    getContentLangTag
   } from './i18n.js';
   import { sleepMs, sleep, debounce, formatAiResponseTime, escHtml } from './utils.js';
   import { extractOpenRouterText } from './ai/client.js';
@@ -444,12 +445,34 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     setText('sourceLanguageLabel', t('lang.modal.source'));
     const uiLanguageEl = document.getElementById('uiLanguage');
     if (uiLanguageEl) {
-      const uiLangByValue = { cs: t('lang.option.cs'), en: t('lang.option.en') };
+      const uiLangByValue = {
+        cs: t('lang.option.cs'),
+        en: t('lang.option.en'),
+        sk: t('lang.option.sk'),
+        pl: t('lang.option.pl')
+      };
       uiLanguageEl.querySelectorAll('option').forEach(opt => {
         const text = uiLangByValue[String(opt.value || '')];
         if (text) opt.textContent = text;
       });
     }
+    setText('contentTagLanguageLabel', t('lang.contentTag.label'));
+    setText('contentTagLanguageHint', t('lang.contentTag.hint'));
+    const ctEl = document.getElementById('contentTagLanguage');
+    if (ctEl) {
+      const ctKey = (v) => {
+        if (v === 'zh-CN') return 'lang.contentTag.val_zhCN';
+        return `lang.contentTag.val_${v}`;
+      };
+      Array.from(ctEl.options).forEach(opt => {
+        const v = String(opt.value || '');
+        if (!v) return;
+        const k = ctKey(v);
+        const txt = t(k);
+        if (txt && txt !== k) opt.textContent = txt;
+      });
+    }
+    setText('btnI18nTranslateTool', t('lang.i18nTool.button'));
     const targetLanguageEl = document.getElementById('targetLanguage');
     if (targetLanguageEl) {
       const targetLangByValue = {
@@ -635,7 +658,7 @@ POVINNÝ VÝSTUP NAVÍC:
       Object.entries(topicByPromptType).forEach(([promptType, topicId]) => {
         const option = promptTypeSelect.querySelector(`option[value="${promptType}"]`);
         if (!option) return;
-        option.textContent = `${t('prompt.topic.prefix')} ${getTopicLabelNoTag(topicId)} (${t('topic.langTag')})${promptType.endsWith('_batch') ? ` ${t('prompt.topic.batchSuffix')}` : ''}`;
+        option.textContent = `${t('prompt.topic.prefix')} ${getTopicLabelNoTag(topicId)} (${getContentLangTag()})${promptType.endsWith('_batch') ? ` ${t('prompt.topic.batchSuffix')}` : ''}`;
       });
       Object.entries(EN_TOPIC_PROMPT_MAP).forEach(([promptType, topicId]) => {
         const option = promptTypeSelect.querySelector(`option[value="${promptType}"]`);
@@ -646,7 +669,7 @@ POVINNÝ VÝSTUP NAVÍC:
       const detailGroup = document.getElementById('promptGroupTopicDetail');
       if (detailGroup) detailGroup.label = t('prompt.topic.group.detail');
       const batchGroup = document.getElementById('promptGroupTopicBatch');
-      if (batchGroup) batchGroup.label = t('prompt.topic.group.batch', { lang: t('topic.langTag') });
+      if (batchGroup) batchGroup.label = t('prompt.topic.group.batch', { lang: getContentLangTag() });
       const enGroup = document.getElementById('promptGroupTopicEn');
       if (enGroup) enGroup.label = t('prompt.topic.group.en', { lang: getCurrentTargetLangCode() });
       if (selected) promptTypeSelect.value = selected;
@@ -1376,7 +1399,7 @@ const TOPIC_LABELS = {
 };
 
 function refreshTopicLabels() {
-  const langTag = t('topic.langTag');
+  const langTag = getContentLangTag();
   TOPIC_LABELS.vyznam = `${t('topic.label.vyznam')} (${langTag})`;
   TOPIC_LABELS.definice = `${t('topic.label.definice')} (${langTag})`;
   TOPIC_LABELS.pouziti = `${t('topic.label.pouziti')} (${langTag})`;
@@ -2002,6 +2025,23 @@ window.saveAISettings = saveAISettings;
 window.showPromptLangModal = showPromptLangModal;
 window.closePromptLangModal = closePromptLangModal;
 window.saveLangSettings = saveLangSettings;
+
+function showI18nToolModal() {
+  const m = document.getElementById('i18nToolModal');
+  const body = document.getElementById('i18nToolBody');
+  if (body) body.textContent = t('lang.i18nTool.body');
+  const title = document.getElementById('i18nToolModalTitle');
+  if (title) title.textContent = t('lang.i18nTool.title');
+  const closeBtn = document.getElementById('btnI18nToolClose');
+  if (closeBtn) closeBtn.textContent = t('lang.i18nTool.close');
+  if (m) m.style.display = 'flex';
+}
+function closeI18nToolModal() {
+  const m = document.getElementById('i18nToolModal');
+  if (m) m.style.display = 'none';
+}
+window.showI18nToolModal = showI18nToolModal;
+window.closeI18nToolModal = closeI18nToolModal;
 
 // ══ RESIZE PANELS (logika v ./ui/resize.js) ─────────────────────
 
