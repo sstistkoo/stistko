@@ -767,7 +767,7 @@
         <div id="contentTagLanguageHint" style="font-size:10px;color:var(--txt3);line-height:1.35;margin-top:4px"></div>
       </div>
       <div class="mobl-set-row" style="margin-top:4px">
-        <button type="button" class="prompt-btn" id="btnI18nTranslateTool" style="width:100%" onclick="showI18nToolModal()">Překlad i18n JSON (nástroj)</button>
+        <button type="button" class="prompt-btn lang" id="btnI18nTranslateTool" onclick="showI18nToolModal()">🌍 Překladač JSON souborů</button>
       </div>
        <div class="mobl-set-row">
          <label id="sourceLanguageLabel">Zdrojový jazyk</label>
@@ -803,9 +803,17 @@
       </div>
       <div class="prompt-actions" style="margin-top:10px">
         <button type="button" class="prompt-btn ok" id="btnI18nToolOpenLangModal" onclick="openI18nToolLangModal()">🌐 Vybrat jazyky</button>
+        <button type="button" class="prompt-btn ok" id="btnI18nToolRunBrowser" onclick="runI18nToolBrowserTranslate()">🚀 Přeložit a stáhnout</button>
         <button type="button" class="prompt-btn" id="btnI18nToolCopyCmd" onclick="copyI18nToolCmd()">📋 Kopírovat příkaz</button>
       </div>
       <div id="i18nToolSelectedSummary" class="i18n-tool-selected-summary">Vybráno jazyků: 0</div>
+      <div class="i18n-tool-progress-wrap" id="i18nToolProgressWrap">
+        <div class="i18n-tool-progress-bar">
+          <div class="i18n-tool-progress-fill" id="i18nToolProgressFill">0%</div>
+        </div>
+      </div>
+      <div id="i18nToolStatus" class="i18n-tool-status"></div>
+      <div id="i18nToolDownloads" class="i18n-tool-downloads"></div>
       <label for="i18nToolCmd" class="i18n-tool-label">Příkaz(y) pro překlad z i18n/cs.json</label>
       <textarea id="i18nToolCmd" class="i18n-tool-cmd" readonly></textarea>
       <a id="i18nToolScriptLink" class="modal-btn ok" style="display:inline-block;padding:8px 14px;margin-bottom:10px" href="tools/translate_i18n.py" download>translate_i18n.py</a>
