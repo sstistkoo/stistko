@@ -280,8 +280,12 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
       });
     }
     setText('modelTestPromptPreviewTitle', t('prompt.preview.title'));
+    setText('modelTestPromptPreviewLabel', t('prompt.preview.label', { label: '-' }));
+    setText('btnResetPromptPreview', t('modelTest.reset'));
     setText('btnCopyPromptPreview', t('prompt.preview.copy'));
     setText('btnClosePromptPreview', t('prompt.preview.close'));
+    setAttr('btnOpenPromptPreview', 'title', t('prompt.preview.open.title'));
+    setAttr('btnResetPromptPreview', 'title', t('prompt.preview.reset.title'));
     setText('promptLibraryTitle', t('prompt.library.title'));
     const promptPreview = document.getElementById('promptPreview');
     const promptPreviewText = (promptPreview?.textContent || '').trim();
@@ -722,7 +726,7 @@ function openModelTestPromptPreviewModal() {
   const promptText = isCustom
     ? (customPrompt || localStorage.getItem('strong_prompt') || DEFAULT_PROMPT)
     : getModelTestPromptTemplate(promptType);
-  labelEl.textContent = `Prompt: ${getModelTestPromptTypeLabel(promptType)}`;
+  labelEl.textContent = t('prompt.preview.label', { label: getModelTestPromptTypeLabel(promptType) });
   textEl.value = String(promptText || '').trim();
   _modelTestPromptPreviewOriginal = textEl.value;
   modal.style.display = 'flex';
