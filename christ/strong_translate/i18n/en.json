@@ -1,6 +1,6 @@
 {
   "setup.title": "⟁ Strong GR → {lang} — Dictionary Translator",
-  "setup.start": "Start translation →",
+  "setup.start": "Editor",
   "setup.help": "❓ Help",
   "setup.limits": "📊 Limits",
   "setup.check.keys": "🧩 i18n keys",

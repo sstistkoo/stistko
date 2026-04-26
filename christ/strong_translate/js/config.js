@@ -55,9 +55,9 @@ export const MODEL_TEST_ENABLE_PROMPT_KEY = 'strong_model_test_enable_prompt_v1'
 export const MODEL_TEST_RAW_OUTPUT_KEY = 'strong_model_test_raw_output_v1';
 export const MODEL_TEST_MODEL_STORAGE_KEY = 'strong_model_test_model_';
 export const MODEL_TEST_PINNED_MODELS = [
-  { prov: 'groq', value: 'meta-llama/llama-4-scout-17b-16e-instruct', label: 'Llama 4 Scout (Vysoký limit TPM)' },
-  { prov: 'gemini', value: 'gemini-3.1-flash-lite-preview', label: 'Gemini 3.1 Flash-Lite (Systémový výchozí)' },
-  { prov: 'openrouter', value: 'openrouter/free', label: 'OpenRouter Auto Router (Systémový výchozí)' }
+  { prov: 'groq', value: 'meta-llama/llama-4-scout-17b-16e-instruct', label: 'Llama 4 Scout (Systémový výchozí)' },
+  { prov: 'gemini', value: 'gemini-3.1-flash-lite-preview', label: 'Gemini 3.1 Flash-Lite' },
+  { prov: 'openrouter', value: 'openrouter/free', label: 'OpenRouter Auto Router' }
 ];
 export const API_KEY_PROFILES_PREFIX = 'strong_apikey_profiles_';
 export const API_KEY_ACTIVE_PROFILE_PREFIX = 'strong_apikey_active_';

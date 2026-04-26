@@ -509,6 +509,7 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
         pl: t('lang.option.pl')
       };
       uiLanguageEl.querySelectorAll('option').forEach(opt => {
+        if (opt.dataset.dynamicUiLang === '1') return;
         const text = uiLangByValue[String(opt.value || '')];
         if (text) opt.textContent = text;
       });
@@ -2086,6 +2087,16 @@ function showI18nToolModal() {
   const closeBtn = document.getElementById('btnI18nToolClose');
   if (closeBtn) closeBtn.textContent = t('lang.i18nTool.close');
   initI18nToolUi();
+  const prefillLangRaw = String(localStorage.getItem('strong_i18n_tool_prefill_lang') || '').trim();
+  if (prefillLangRaw) {
+    const prefillLang = I18N_TOOL_LANGUAGES.find((lang) => String(lang.code || '').toLowerCase() === prefillLangRaw.toLowerCase());
+    if (prefillLang) {
+      i18nToolSelectedLanguages.clear();
+      i18nToolSelectedLanguages.add(prefillLang.code);
+      renderI18nToolLanguageGrid();
+    }
+    localStorage.removeItem('strong_i18n_tool_prefill_lang');
+  }
   const isRestoreOpen = i18nToolRunning || i18nToolMinimizedDuringRun;
   if (!isRestoreOpen) resetI18nToolRuntimeUi();
   closeI18nToolDoneModal();
@@ -2124,10 +2135,14 @@ const I18N_TOOL_LANGUAGES = [
   { code: 'he', tag: 'HE', name: 'Hebrejština', flag: '🇮🇱' }
 ];
 const i18nToolSelectedLanguages = new Set();
-const I18N_TOOL_PLACEHOLDER = '\uE000';
-const I18N_TOOL_WORD_PLACEHOLDER = '\uE001';
+const I18N_TOOL_PLACEHOLDER = '__ST_TAG_';
+const I18N_TOOL_WORD_PLACEHOLDER = '__ST_WORD_';
+const I18N_TOOL_IMMUTABLE_TOKEN_PREFIX = 'PHX';
+const I18N_TOOL_IMMUTABLE_TOKEN_SUFFIX = 'XHP';
 const I18N_TOOL_TAG_REGEX = /\b(CZ|EN|SK|PL|DE|FR|ES|IT|PT|RU|UK|BG|RO|HU|NL|SV|DA|NO|FI|EL|TR|AR|JA|KO|HE|zh-CN|ZH-CN)\b|\((CZ|EN|SK|PL|DE|FR|ES|IT|PT|RU|UK|BG|RO|HU|NL|SV|DA|NO|FI|EL|TR|AR|JA|KO|HE|zh-CN|ZH-CN)\)/gi;
 const I18N_TOOL_LANGUAGE_WORD_REGEX = /\b(Czech|English|Slovak|Polish)\b/gi;
+const I18N_TOOL_JSON_PLACEHOLDER_REGEX = /\{[A-Za-z0-9_]+\}/g;
+const I18N_TOOL_HTML_TAG_REGEX = /<[^>]+>/g;
 const I18N_TOOL_DEEPL_LANG_MAP = {
   cs: 'CS', sk: 'SK', pl: 'PL', de: 'DE', fr: 'FR', es: 'ES',
   it: 'IT', pt: 'PT-PT', ru: 'RU', uk: 'UK', bg: 'BG', ro: 'RO',
@@ -2138,9 +2153,467 @@ let i18nToolSourceCsData = null;
 let i18nToolRunning = false;
 let i18nToolMinimizedDuringRun = false;
 let i18nToolCancelRequested = false;
+let i18nToolGoogleFailureCount = 0;
+let i18nToolStrictFallbackCount = 0;
 const I18N_TOOL_CANCELLED_ERROR = 'I18N_TOOL_TRANSLATION_CANCELLED';
 const i18nToolTranslatedJsonByLang = {};
 const i18nToolTranslatedTextByLang = {};
+let i18nToolAiSourceJson = null;
+let i18nToolAiWorkingJson = null;
+let i18nToolAiSourceFileName = '';
+let i18nToolAiEnFlatCache = null;
+const i18nToolAiUiFlatCacheByLang = {};
+let i18nToolAiSending = false;
+let i18nToolAiStopRequested = false;
+let i18nToolAiBusyTimer = null;
+const I18N_TOOL_AI_SEND_CANCELLED = 'I18N_TOOL_AI_SEND_CANCELLED';
+
+function i18nToolSetAiStatus(message, isError = false) {
+  const el = document.getElementById('i18nToolAiStatus');
+  if (!el) return;
+  el.style.display = 'block';
+  el.textContent = message;
+  el.style.color = isError ? 'var(--red)' : 'var(--txt2)';
+}
+
+function i18nToolSetAiLoadedFileLabel(text) {
+  const el = document.getElementById('i18nToolAiLoadedFile');
+  if (!el) return;
+  el.style.display = 'block';
+  el.textContent = `Načtený soubor: ${text || '—'}`;
+}
+
+function i18nToolSetAiSendButtonState() {
+  const btn = document.getElementById('btnI18nToolAiSend');
+  if (!btn) return;
+  btn.disabled = false;
+  btn.textContent = i18nToolAiSending ? '■ Zastavit odesílání' : '📤 Odeslat';
+}
+
+function startI18nToolAiBusyAnimation() {
+  const el = document.getElementById('i18nToolAiBusy');
+  if (!el) return;
+  const frames = ['⏳ AI audit běží   ', '⏳ AI audit běží.  ', '⏳ AI audit běží.. ', '⏳ AI audit běží...'];
+  let idx = 0;
+  el.style.display = 'block';
+  el.textContent = frames[0];
+  if (i18nToolAiBusyTimer) clearInterval(i18nToolAiBusyTimer);
+  i18nToolAiBusyTimer = setInterval(() => {
+    idx = (idx + 1) % frames.length;
+    el.textContent = frames[idx];
+  }, 350);
+}
+
+function stopI18nToolAiBusyAnimation(finalText = '') {
+  const el = document.getElementById('i18nToolAiBusy');
+  if (i18nToolAiBusyTimer) {
+    clearInterval(i18nToolAiBusyTimer);
+    i18nToolAiBusyTimer = null;
+  }
+  if (!el) return;
+  if (finalText) {
+    el.style.display = 'block';
+    el.textContent = finalText;
+    return;
+  }
+  el.style.display = 'none';
+}
+
+function i18nToolExtractJsonFromText(raw) {
+  const text = String(raw || '').trim();
+  if (!text) throw new Error('Prázdná AI odpověď.');
+  try {
+    return JSON.parse(text);
+  } catch {}
+  const codeFence = text.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  if (codeFence?.[1]) {
+    try { return JSON.parse(codeFence[1].trim()); } catch {}
+  }
+  const start = text.indexOf('[');
+  const end = text.lastIndexOf(']');
+  if (start >= 0 && end > start) {
+    return JSON.parse(text.slice(start, end + 1));
+  }
+  const objStart = text.indexOf('{');
+  const objEnd = text.lastIndexOf('}');
+  if (objStart >= 0 && objEnd > objStart) {
+    return JSON.parse(text.slice(objStart, objEnd + 1));
+  }
+  throw new Error('Nelze najít JSON pole se změnami.');
+}
+
+function normalizeI18nToolAiRows(parsed) {
+  if (typeof parsed === 'string') {
+    const s = parsed.trim().toLowerCase();
+    if (s === 'ok') return [];
+  }
+  if (Array.isArray(parsed)) return parsed;
+  if (parsed && typeof parsed === 'object') {
+    const candidates = ['changes', 'results', 'items', 'data', 'output'];
+    for (const key of candidates) {
+      if (Array.isArray(parsed[key])) return parsed[key];
+    }
+    // Fallback: { "some.key": "corrected text", ... }
+    const entries = Object.entries(parsed);
+    if (entries.length && entries.every(([k, v]) => typeof k === 'string' && typeof v === 'string')) {
+      return entries.map(([key, corrected]) => ({ key, status: 'fix', corrected, reason: 'mapped-object' }));
+    }
+  }
+  return [];
+}
+
+function renderI18nToolAiPreview(rows) {
+  const previewEl = document.getElementById('i18nToolAiPreview');
+  if (!previewEl) return;
+  if (!Array.isArray(rows) || !rows.length) {
+    previewEl.value = 'Žádné změny (AI vrátila „ok“ nebo prázdný seznam).';
+    return;
+  }
+  const flatCurrent = i18nToolFlattenStringLeaves(i18nToolAiWorkingJson || i18nToolAiSourceJson || {});
+  const uiLang = String(getUiLang() || 'cs').toLowerCase();
+  const flatUi = i18nToolAiUiFlatCacheByLang[uiLang] || {};
+  const lines = [];
+  rows.forEach((row, idx) => {
+    const key = String(row?.key || '').trim();
+    const corrected = String(row?.corrected ?? '').trim();
+    if (!key || !corrected) return;
+    const current = String(flatCurrent[key] ?? '');
+    const uiText = String(flatUi[key] ?? '');
+    lines.push(
+      `${idx + 1}) Klíč: ${key}`,
+      uiText ? `   UI (${uiLang}): ${uiText}` : `   UI (${uiLang}): —`,
+      `   Chybně / aktuálně: ${current}`,
+      `   Správně (AI): ${corrected}`,
+      ''
+    );
+  });
+  previewEl.value = lines.join('\n').trim() || 'Žádné použitelné změny.';
+}
+
+function openI18nToolAiJsonPicker() {
+  const input = document.getElementById('i18nToolAiJsonInput');
+  if (!input) return;
+  input.value = '';
+  input.click();
+}
+
+function loadI18nToolAiJsonFromFile(event) {
+  const file = event?.target?.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const parsed = JSON.parse(String(reader.result || '{}'));
+      i18nToolAiSourceJson = parsed;
+      i18nToolAiWorkingJson = typeof structuredClone === 'function'
+        ? structuredClone(parsed)
+        : JSON.parse(JSON.stringify(parsed));
+      i18nToolAiSourceFileName = String(file.name || '').trim() || 'output.json';
+      i18nToolSetAiLoadedFileLabel(i18nToolAiSourceFileName);
+      const dlBtn = document.getElementById('btnI18nToolDownloadAiResult');
+      if (dlBtn) dlBtn.disabled = true;
+      i18nToolSetAiStatus(`Načteno pro AI audit: ${i18nToolAiSourceFileName}`);
+      showToast(`AI audit: načten ${i18nToolAiSourceFileName}`);
+    } catch (e) {
+      i18nToolSetAiStatus(`Neplatný JSON: ${e?.message || String(e)}`, true);
+      showToast(`Neplatný JSON: ${e?.message || String(e)}`);
+    }
+  };
+  reader.readAsText(file);
+}
+
+async function buildI18nToolAiPrompt() {
+  if (!i18nToolAiSourceJson) {
+    showToast('Nejdřív připojte JSON soubor pro AI audit.');
+    return;
+  }
+  try {
+    const enFlat = await getI18nToolEnFlat();
+    const targetFlat = i18nToolFlattenStringLeaves(i18nToolAiWorkingJson || i18nToolAiSourceJson);
+    const keys = Object.keys(enFlat).sort((a, b) => a.localeCompare(b, 'cs'));
+    const items = keys.map((key) => ({
+      key,
+      source: String(enFlat[key] ?? ''),
+      target: String(targetFlat[key] ?? '')
+    }));
+    const payload = {
+      source_lang: 'en',
+      target_lang: i18nToolAiSourceFileName.replace(/\.json$/i, ''),
+      filename: i18nToolAiSourceFileName,
+      total_keys: keys.length,
+      items
+    };
+    const prompt = buildI18nToolAiPromptText(payload);
+    const promptEl = document.getElementById('i18nToolAiPrompt');
+    if (promptEl) promptEl.value = prompt;
+    i18nToolSetAiStatus(`Prompt připraven (${keys.length} klíčů, plný JSON přiložen).`);
+    showToast(`Prompt pro AI připraven (${keys.length} klíčů).`);
+  } catch (e) {
+    i18nToolSetAiStatus(`Nepodařilo se připravit prompt: ${e?.message || String(e)}`, true);
+    showToast(`Chyba při tvorbě promptu: ${e?.message || String(e)}`);
+  }
+}
+
+function buildI18nToolAiPromptText(payload = null) {
+  const rules = `Role: Jsi přísný localization auditor pro UI texty.\n\nCíl:\nZkontroluj překlad EN -> cílový jazyk a vrať pouze bezpečné opravy.\n\nPovolený výstup (bez markdownu, bez komentářů, bez textu navíc):\nA) Pokud není co opravovat: přesně\nok\n\nB) Pokud jsou opravy: JSON pole POUZE změněných položek:\n[\n  {\n    \"key\": \"some.key\",\n    \"corrected\": \"text\",\n    \"reason\": \"stručně proč\"\n  }\n]\n\nPevná pravidla:\n1) NEMĚŇ key.\n2) Vrať jen změny (nevracej ok položky).\n3) Placeholdery musí být 1:1 stejné jako source (např. {provider}, {count}, {model}).\n4) HTML tagy a atributy zachovej beze změny.\n5) Zachovej escape sekvence (\\\\n, \\\\t), emoji, interpunkci a význam.\n6) Nezkracuj text. Žádné useknuté výstupy typu \"OK | \".\n7) corrected musí být string.\n8) Pokud source obsahuje jazykový tag v závorkách (např. (CZ)), v cíli použij cílový tag (např. (IT)); nenechávej v cíli (CZ), pokud to není doslovně požadované source.\n9) Pokud si nejsi jistý, položku nevracej.\n\nStyl:\n- UI text má být stručný a přirozený.\n- Terminologie má být konzistentní napříč klíči.`;
+  if (!payload) return `${rules}\n\nSem po kliknutí na „🧠 Vytvořit AI prompt“ doplním vstupní data.`;
+  return `${rules}\n\nVstupní data:\n${JSON.stringify(payload, null, 2)}`;
+}
+
+function buildI18nToolAiItems(enFlat) {
+  if (!i18nToolAiSourceJson || !enFlat) return [];
+  const targetFlat = i18nToolFlattenStringLeaves(i18nToolAiWorkingJson || i18nToolAiSourceJson);
+  const keys = Object.keys(enFlat).sort((a, b) => a.localeCompare(b, 'cs'));
+  return keys.map((key) => ({
+    key,
+    source: String(enFlat[key] ?? ''),
+    target: String(targetFlat[key] ?? '')
+  }));
+}
+
+async function getI18nToolEnFlat() {
+  if (i18nToolAiEnFlatCache) return i18nToolAiEnFlatCache;
+  const res = await fetch('./i18n/en.json', { cache: 'no-store' });
+  if (!res.ok) throw new Error(`Nepodařilo se načíst i18n/en.json (HTTP ${res.status})`);
+  const enJson = await res.json();
+  i18nToolAiEnFlatCache = i18nToolFlattenStringLeaves(enJson);
+  return i18nToolAiEnFlatCache;
+}
+
+async function getI18nToolUiFlat() {
+  const uiLang = String(getUiLang() || 'cs').toLowerCase();
+  if (i18nToolAiUiFlatCacheByLang[uiLang]) return i18nToolAiUiFlatCacheByLang[uiLang];
+  const res = await fetch(`./i18n/${uiLang}.json`, { cache: 'no-store' });
+  if (!res.ok) throw new Error(`Nepodařilo se načíst i18n/${uiLang}.json (HTTP ${res.status})`);
+  const uiJson = await res.json();
+  i18nToolAiUiFlatCacheByLang[uiLang] = i18nToolFlattenStringLeaves(uiJson);
+  return i18nToolAiUiFlatCacheByLang[uiLang];
+}
+
+function chunkArray(arr, size) {
+  const out = [];
+  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
+  return out;
+}
+
+async function applyI18nToolAiResponse() {
+  if (!i18nToolAiSourceJson) {
+    showToast('Nejdřív připojte JSON soubor pro AI audit.');
+    return;
+  }
+  const raw = String(document.getElementById('i18nToolAiResponse')?.value || '').trim();
+  if (!raw) {
+    showToast('Vložte AI odpověď.');
+    return;
+  }
+  if (raw.toLowerCase() === 'ok') {
+    renderI18nToolAiPreview([]);
+    i18nToolSetAiStatus('AI odpověď: ok (žádné změny).');
+    showToast('AI nenašla žádné změny.');
+    return;
+  }
+  try {
+    await getI18nToolUiFlat();
+    const parsed = i18nToolExtractJsonFromText(raw);
+    const rows = normalizeI18nToolAiRows(parsed);
+    renderI18nToolAiPreview(rows);
+    if (!Array.isArray(rows)) throw new Error('AI odpověď musí být JSON pole objektů.');
+    const updated = typeof structuredClone === 'function'
+      ? structuredClone(i18nToolAiSourceJson)
+      : JSON.parse(JSON.stringify(i18nToolAiSourceJson));
+    const validKeys = new Set(Object.keys(i18nToolFlattenStringLeaves(updated)));
+    const sourceEnFlat = i18nToolAiEnFlatCache || {};
+    const targetCode = String(i18nToolAiSourceFileName.replace(/\.json$/i, '') || '').toLowerCase();
+    const targetTagMap = {
+      cs: 'CZ', en: 'EN', sk: 'SK', pl: 'PL', bg: 'BG', de: 'DE', fr: 'FR', es: 'ES', it: 'IT',
+      pt: 'PT', ru: 'RU', uk: 'UK', ro: 'RO', hu: 'HU', nl: 'NL', sv: 'SV', da: 'DA', no: 'NO',
+      fi: 'FI', el: 'EL', tr: 'TR', ar: 'AR', ja: 'JA', ko: 'KO', he: 'HE', 'zh-cn': 'zh-CN', zh: 'zh-CN'
+    };
+    const targetTag = targetTagMap[targetCode] || '';
+    let applied = 0;
+    let warned = 0;
+    let skipped = 0;
+    for (const row of rows) {
+      const key = String(row?.key || '').trim();
+      const corrected = row?.corrected;
+      if (!key || !validKeys.has(key)) { skipped++; continue; }
+      if (typeof corrected !== 'string') { skipped++; continue; }
+      const sourceText = String(sourceEnFlat[key] ?? '');
+      const sourceHasCzTag = /\(CZ\)/.test(sourceText);
+      const correctedHasCzTag = /\(CZ\)/.test(corrected);
+      if (targetTag && sourceHasCzTag && correctedHasCzTag && targetTag !== 'CZ') {
+        warned++;
+        continue;
+      }
+      i18nToolSetByPath(updated, key, corrected);
+      applied++;
+    }
+    i18nToolAiWorkingJson = updated;
+    const normalizedFileCode = i18nToolAiSourceFileName.replace(/\.json$/i, '').toLowerCase();
+    const langCode = normalizedFileCode === 'zh' ? 'zh-CN' : normalizedFileCode;
+    i18nToolTranslatedJsonByLang[langCode] = updated;
+    i18nToolTranslatedTextByLang[langCode] = JSON.stringify(updated, null, 2);
+    const editBtn = document.getElementById('btnI18nToolEditOutput');
+    if (editBtn) editBtn.disabled = false;
+    const dlBtn = document.getElementById('btnI18nToolDownloadAiResult');
+    if (dlBtn) dlBtn.disabled = false;
+    i18nToolSetAiStatus(`AI audit aplikován. Fix: ${applied}, Warn(tag): ${warned}, Přeskočeno: ${skipped}.`);
+    showToast(`AI změny aplikovány: ${applied} oprav.`);
+  } catch (e) {
+    i18nToolSetAiStatus(`Chyba při zpracování AI odpovědi: ${e?.message || String(e)}`, true);
+    showToast(`AI odpověď nejde zpracovat: ${e?.message || String(e)}`);
+  }
+}
+
+async function sendI18nToolAiPrompt() {
+  const promptEl = document.getElementById('i18nToolAiPrompt');
+  const responseEl = document.getElementById('i18nToolAiResponse');
+  if (!promptEl || !responseEl) return;
+  if (i18nToolAiSending) {
+    i18nToolAiStopRequested = true;
+    i18nToolSetAiStatus('Požadavek na zastavení přijat. Dokončuji aktuální dávku...');
+    return;
+  }
+  let promptText = String(promptEl.value || '').trim();
+  if (!promptText) {
+    await buildI18nToolAiPrompt();
+    promptText = String(promptEl.value || '').trim();
+  }
+  if (!promptText) {
+    showToast('Nejdřív vytvořte nebo vložte prompt pro AI.');
+    return;
+  }
+  const provider = 'groq';
+  const model = String(getPipelineModelForProvider('groq') || 'meta-llama/llama-4-scout-17b-16e-instruct').trim();
+  const apiKey = String(getCurrentApiKey(provider) || '').trim();
+  if (!apiKey) {
+    i18nToolSetAiStatus('Chybí API key pro Groq (systémový model).', true);
+    showToast('Chybí API key pro Groq.');
+    return;
+  }
+  try {
+    i18nToolAiSending = true;
+    i18nToolAiStopRequested = false;
+    i18nToolSetAiSendButtonState();
+    startI18nToolAiBusyAnimation();
+    i18nToolSetAiLoadedFileLabel(i18nToolAiSourceFileName || '—');
+    const enFlat = await getI18nToolEnFlat();
+    await getI18nToolUiFlat();
+    const allItems = buildI18nToolAiItems(enFlat);
+    if (!allItems.length) {
+      throw new Error('Chybí data pro AI audit.');
+    }
+    const batchInputValue = parseInt(String(document.getElementById('i18nToolAiBatchSize')?.value || '120'), 10);
+    let batchSize = Math.max(20, Math.min(300, Number.isFinite(batchInputValue) ? batchInputValue : 120));
+    let chunks = chunkArray(allItems, batchSize);
+    const targetLang = i18nToolAiSourceFileName.replace(/\.json$/i, '');
+    const intervalInputValue = parseInt(
+      String(
+        document.getElementById('i18nToolAiInterval')?.value
+        || document.getElementById('intervalRun')?.value
+        || document.getElementById('interval')?.value
+        || '20'
+      ),
+      10
+    );
+    const sendIntervalSec = Math.max(1, Math.min(300, Number.isFinite(intervalInputValue) ? intervalInputValue : 20));
+    const merged = [];
+    let totalFix = 0;
+    let totalWarn = 0;
+    let totalOther = 0;
+    for (let idx = 0; idx < chunks.length; idx++) {
+      if (i18nToolAiStopRequested) throw new Error(I18N_TOOL_AI_SEND_CANCELLED);
+      let done = false;
+      let localBatchSize = batchSize;
+      let attemptGuard = 0;
+      while (!done) {
+        if (i18nToolAiStopRequested) throw new Error(I18N_TOOL_AI_SEND_CANCELLED);
+        attemptGuard++;
+        if (attemptGuard > 5) throw new Error(`AI dávka ${idx + 1} selhala opakovaně.`);
+        const chunk = chunks[idx];
+        const payload = {
+          source_lang: 'en',
+          target_lang: targetLang,
+          filename: i18nToolAiSourceFileName,
+          batch: { index: idx + 1, total: chunks.length, size: chunk.length },
+          items: chunk
+        };
+        const chunkPrompt = buildI18nToolAiPromptText(payload);
+        i18nToolSetAiStatus(`Odesílám dávku ${idx + 1}/${chunks.length} (${chunk.length} položek) přes ${provider}/${model}...`);
+        try {
+          const raw = await callAIWithRetry(provider, apiKey, model, [
+            { role: 'system', content: SYSTEM_MESSAGE },
+            { role: 'user', content: chunkPrompt }
+          ]);
+          const content = String(raw?.content || '').trim();
+          if (!content) throw new Error('AI nevrátila text odpovědi.');
+          const parsed = i18nToolExtractJsonFromText(content);
+          const rows = normalizeI18nToolAiRows(parsed);
+          if (!Array.isArray(rows)) throw new Error('AI odpověď dávky není JSON pole.');
+          merged.push(...rows);
+          const batchFix = rows.filter(r => String(r?.status || '').toLowerCase() === 'fix').length;
+          const batchWarn = rows.filter(r => String(r?.status || '').toLowerCase() === 'warn').length;
+          const batchOther = Math.max(0, rows.length - batchFix - batchWarn);
+          totalFix += batchFix;
+          totalWarn += batchWarn;
+          totalOther += batchOther;
+          responseEl.value = JSON.stringify(merged, null, 2);
+          i18nToolSetAiStatus(
+            `Dávka ${idx + 1}/${chunks.length} hotová: fix ${batchFix}, warn ${batchWarn}, other ${batchOther}. ` +
+            `Průběžně celkem: fix ${totalFix}, warn ${totalWarn}, other ${totalOther}.`
+          );
+          done = true;
+        } catch (e) {
+          const msg = String(e?.message || '').toLowerCase();
+          if ((msg.includes('413') || msg.includes('too large') || msg.includes('content too large')) && localBatchSize > 20) {
+            localBatchSize = Math.max(20, Math.floor(localBatchSize / 2));
+            const rest = allItems.slice(idx * batchSize);
+            chunks = [...chunks.slice(0, idx), ...chunkArray(rest, localBatchSize)];
+            batchSize = localBatchSize;
+            continue;
+          }
+          throw e;
+        }
+      }
+      if (idx < chunks.length - 1) {
+        if (i18nToolAiStopRequested) throw new Error(I18N_TOOL_AI_SEND_CANCELLED);
+        i18nToolSetAiStatus(`Dávka ${idx + 1}/${chunks.length} hotová. Čekám ${sendIntervalSec}s na další odeslání...`);
+        await sleepMs(sendIntervalSec * 1000);
+      }
+    }
+    responseEl.value = JSON.stringify(merged, null, 2);
+    renderI18nToolAiPreview(merged);
+    stopI18nToolAiBusyAnimation('✅ AI audit dokončen.');
+    i18nToolSetAiStatus(
+      `AI odpověď načtena po dávkách: ${chunks.length}, celkem záznamů: ${merged.length}. ` +
+      `Fix: ${totalFix}, Warn: ${totalWarn}, Other: ${totalOther}.`
+    );
+    showToast(`AI odpověď načtena (${chunks.length} dávek).`);
+  } catch (e) {
+    if (String(e?.message || '') === I18N_TOOL_AI_SEND_CANCELLED) {
+      stopI18nToolAiBusyAnimation('⏹ AI audit zastaven uživatelem.');
+      i18nToolSetAiStatus('Odesílání bylo zastaveno uživatelem.');
+      showToast('AI odesílání zastaveno.');
+      return;
+    }
+    stopI18nToolAiBusyAnimation('✕ AI audit selhal.');
+    i18nToolSetAiStatus(`AI volání selhalo: ${e?.message || String(e)}`, true);
+    showToast(`AI volání selhalo: ${e?.message || String(e)}`);
+  } finally {
+    i18nToolAiSending = false;
+    i18nToolAiStopRequested = false;
+    i18nToolSetAiSendButtonState();
+  }
+}
+
+function downloadI18nToolAiResult() {
+  if (!i18nToolAiWorkingJson) {
+    showToast('Nejdřív aplikujte AI odpověď.');
+    return;
+  }
+  const name = i18nToolAiSourceFileName || 'ai-audit-output.json';
+  i18nToolDownloadFile(JSON.stringify(i18nToolAiWorkingJson, null, 2), name);
+}
 
 function minimizeI18nToolModal() {
   if (i18nToolRunning) i18nToolMinimizedDuringRun = true;
@@ -2317,6 +2790,30 @@ function i18nToolRestoreTagsAndWords(str, targetTag, targetLanguageName) {
     .replace(new RegExp(`${I18N_TOOL_WORD_PLACEHOLDER}W`, 'g'), targetLanguageName || targetTag);
 }
 
+function i18nToolProtectImmutableSegments(str) {
+  if (typeof str !== 'string' || !str) return { text: str, immutableSegments: [] };
+  const immutableSegments = [];
+  const markSegment = (segment) => {
+    const idx = immutableSegments.push(segment) - 1;
+    return `${I18N_TOOL_IMMUTABLE_TOKEN_PREFIX}${idx}${I18N_TOOL_IMMUTABLE_TOKEN_SUFFIX}`;
+  };
+  const withProtectedHtml = str.replace(I18N_TOOL_HTML_TAG_REGEX, markSegment);
+  const withAllProtected = withProtectedHtml.replace(I18N_TOOL_JSON_PLACEHOLDER_REGEX, markSegment);
+  return { text: withAllProtected, immutableSegments };
+}
+
+function i18nToolRestoreImmutableSegments(str, immutableSegments) {
+  if (typeof str !== 'string' || !str || !Array.isArray(immutableSegments) || immutableSegments.length === 0) {
+    return str;
+  }
+  return str.replace(new RegExp(`${I18N_TOOL_IMMUTABLE_TOKEN_PREFIX}(\\d+)${I18N_TOOL_IMMUTABLE_TOKEN_SUFFIX}`, 'g'), (match, idxRaw) => {
+    const idx = Number(idxRaw);
+    return Number.isInteger(idx) && immutableSegments[idx] !== undefined
+      ? immutableSegments[idx]
+      : match;
+  });
+}
+
 async function i18nToolTranslateText(text, targetLang) {
   const engine = String(document.getElementById('i18nToolEngine')?.value || 'google').toLowerCase();
   const deeplKey = String(document.getElementById('i18nToolDeeplKey')?.value || '').trim();
@@ -2343,19 +2840,41 @@ async function i18nToolTranslateText(text, targetLang) {
       }
     }
   }
-  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 15000);
-  try {
-    const response = await fetch(url, { signal: controller.signal });
-    const data = await response.json();
-    return data?.[0]?.[0]?.[0] || text;
-  } catch (error) {
-    console.error('Google translation failed', error);
-    return text;
-  } finally {
-    clearTimeout(timeoutId);
+  const attempts = [
+    `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`,
+    `https://translate.googleapis.com/translate_a/single?client=gtx&sl=cs&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`,
+    `https://translate.googleapis.com/translate_a/single?client=dict-chrome-ex&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`
+  ];
+  let lastError = null;
+  for (const url of attempts) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000);
+    try {
+      const response = await fetch(url, { signal: controller.signal });
+      if (!response.ok) {
+        lastError = new Error(`HTTP ${response.status}`);
+        continue;
+      }
+      const raw = await response.text();
+      const data = JSON.parse(raw);
+      const translated = data?.[0]?.[0]?.[0];
+      if (typeof translated === 'string' && translated.trim()) return translated;
+      lastError = new Error('Missing translation payload');
+    } catch (error) {
+      lastError = error;
+    } finally {
+      clearTimeout(timeoutId);
+    }
   }
+  i18nToolGoogleFailureCount++;
+  if (i18nToolGoogleFailureCount <= 5 || i18nToolGoogleFailureCount % 100 === 0) {
+    console.warn('Google translation failed, returning original text', {
+      targetLang,
+      failures: i18nToolGoogleFailureCount,
+      error: lastError?.message || String(lastError || '')
+    });
+  }
+  return text;
 }
 
 function i18nToolCountTranslatableStrings(value) {
@@ -2369,15 +2888,73 @@ function i18nToolCountTranslatableStrings(value) {
   return 0;
 }
 
+function i18nToolExtractPlaceholderList(text) {
+  if (typeof text !== 'string' || !text) return [];
+  const matches = text.match(I18N_TOOL_JSON_PLACEHOLDER_REGEX) || [];
+  return Array.from(new Set(matches)).sort();
+}
+
+function i18nToolHasSamePlaceholderSet(source, translated) {
+  const sourcePlaceholders = i18nToolExtractPlaceholderList(source);
+  const translatedPlaceholders = i18nToolExtractPlaceholderList(translated);
+  return sourcePlaceholders.join('|') === translatedPlaceholders.join('|');
+}
+
+function i18nToolCollectPlaceholderMismatches(source, translated, path = '', out = []) {
+  if (typeof source === 'string') {
+    if (typeof translated !== 'string') return out;
+    const sourcePlaceholders = i18nToolExtractPlaceholderList(source);
+    const translatedPlaceholders = i18nToolExtractPlaceholderList(translated);
+    if (sourcePlaceholders.join('|') !== translatedPlaceholders.join('|')) {
+      out.push({
+        path,
+        sourcePlaceholders,
+        translatedPlaceholders,
+        sourceText: source,
+        translatedText: translated
+      });
+    }
+    return out;
+  }
+  if (Array.isArray(source)) {
+    source.forEach((item, idx) => {
+      const nextPath = `${path}[${idx}]`;
+      i18nToolCollectPlaceholderMismatches(item, translated?.[idx], nextPath, out);
+    });
+    return out;
+  }
+  if (source && typeof source === 'object') {
+    Object.keys(source).forEach((key) => {
+      const nextPath = path ? `${path}.${key}` : key;
+      i18nToolCollectPlaceholderMismatches(source[key], translated?.[key], nextPath, out);
+    });
+  }
+  return out;
+}
+
 async function i18nToolTranslateValue(value, targetLang, targetTag, targetLanguageName, onProgress, path = '') {
   if (i18nToolCancelRequested) throw new Error(I18N_TOOL_CANCELLED_ERROR);
   if (typeof value === 'string') {
     if (!value.trim()) return value;
-    const textToTranslate = i18nToolProtectTagsAndWords(value);
-    const translated = await i18nToolTranslateText(textToTranslate, targetLang);
+    const protectedValue = i18nToolProtectImmutableSegments(value);
+    const textToTranslate = i18nToolProtectTagsAndWords(protectedValue.text);
+    let translated = await i18nToolTranslateText(textToTranslate, targetLang);
     await new Promise((resolve) => setTimeout(resolve, 25));
     if (typeof onProgress === 'function') onProgress(path);
-    return i18nToolRestoreTagsAndWords(translated, targetTag, targetLanguageName);
+    let withRestoredTags = i18nToolRestoreTagsAndWords(translated, targetTag, targetLanguageName);
+    let restored = i18nToolRestoreImmutableSegments(withRestoredTags, protectedValue.immutableSegments);
+    // Když engine vrátí useknutý text a ztratí placeholdery, zkusíme překlad ještě 2x.
+    for (let retry = 0; retry < 2 && !i18nToolHasSamePlaceholderSet(value, restored); retry++) {
+      translated = await i18nToolTranslateText(textToTranslate, targetLang);
+      await new Promise((resolve) => setTimeout(resolve, 25));
+      withRestoredTags = i18nToolRestoreTagsAndWords(translated, targetTag, targetLanguageName);
+      restored = i18nToolRestoreImmutableSegments(withRestoredTags, protectedValue.immutableSegments);
+    }
+    if (!i18nToolHasSamePlaceholderSet(value, restored)) {
+      i18nToolStrictFallbackCount++;
+      return value;
+    }
+    return restored;
   }
   if (Array.isArray(value)) {
     const result = [];
@@ -2506,6 +3083,47 @@ function closeI18nToolOutputEditor() {
   if (m) m.classList.remove('show');
 }
 
+function syncI18nToolAiModalDefaults() {
+  const batchEl = document.getElementById('i18nToolAiBatchSize');
+  const intervalEl = document.getElementById('i18nToolAiInterval');
+  const promptEl = document.getElementById('i18nToolAiPrompt');
+  if (batchEl) {
+    const current = parseInt(String(batchEl.value || '').trim(), 10);
+    batchEl.value = String(Math.max(20, Math.min(300, Number.isFinite(current) ? current : 120)));
+  }
+  if (intervalEl) {
+    const fromProject = parseInt(
+      document.getElementById('intervalRun')?.value
+      || document.getElementById('interval')?.value
+      || '20',
+      10
+    ) || 20;
+    const current = parseInt(String(intervalEl.value || '').trim(), 10);
+    const normalized = Number.isFinite(current) ? current : fromProject;
+    intervalEl.value = String(Math.max(1, Math.min(300, normalized)));
+  }
+  if (promptEl && !String(promptEl.value || '').trim()) {
+    promptEl.value = buildI18nToolAiPromptText();
+  }
+  i18nToolSetAiSendButtonState();
+}
+
+function openI18nToolAiModal() {
+  const m = document.getElementById('i18nToolAiModal');
+  syncI18nToolAiModalDefaults();
+  i18nToolSetAiLoadedFileLabel(i18nToolAiSourceFileName || '—');
+  const previewEl = document.getElementById('i18nToolAiPreview');
+  if (previewEl && !String(previewEl.value || '').trim()) {
+    previewEl.value = 'Po načtení odpovědi AI se sem vypíše přehled změn.';
+  }
+  if (m) m.classList.add('show');
+}
+
+function closeI18nToolAiModal() {
+  const m = document.getElementById('i18nToolAiModal');
+  if (m) m.classList.remove('show');
+}
+
 function onI18nToolEditorLangChange() {
   const select = document.getElementById('i18nToolEditorLang');
   const text = document.getElementById('i18nToolEditorText');
@@ -2561,6 +3179,7 @@ async function runI18nToolBrowserTranslate() {
     i18nToolRunning = true;
     i18nToolMinimizedDuringRun = false;
     i18nToolCancelRequested = false;
+    i18nToolStrictFallbackCount = 0;
     if (!i18nToolSelectedLanguages.size) {
       showToast('Nejdřív vyberte cílový jazyk.');
       i18nToolRunning = false;
@@ -2592,6 +3211,7 @@ async function runI18nToolBrowserTranslate() {
     const totalUnits = Math.max(1, perLangUnits * selected.length);
     let doneUnits = 0;
     const translatedFiles = {};
+    const placeholderAuditByLang = {};
     for (const lang of selected) {
       if (i18nToolCancelRequested) throw new Error(I18N_TOOL_CANCELLED_ERROR);
       if (status) status.textContent = `Překládám do: ${lang.name} (${lang.code})...`;
@@ -2615,11 +3235,27 @@ async function runI18nToolBrowserTranslate() {
       if (translated && typeof translated === 'object' && 'topic.langTag' in translated) {
         translated['topic.langTag'] = lang.tag;
       }
+      placeholderAuditByLang[lang.code] = i18nToolCollectPlaceholderMismatches(sourceData, translated);
       translatedFiles[lang.code] = JSON.stringify(translated, null, 2);
       i18nToolTranslatedJsonByLang[lang.code] = translated;
       i18nToolTranslatedTextByLang[lang.code] = translatedFiles[lang.code];
     }
-    if (status) status.textContent = `✓ Hotovo! Přeloženo do ${selected.length} jazyků.`;
+    const placeholderIssues = Object.entries(placeholderAuditByLang)
+      .filter(([, issues]) => issues.length > 0);
+    const placeholderIssueCount = placeholderIssues.reduce((sum, [, issues]) => sum + issues.length, 0);
+    if (status) {
+      if (placeholderIssues.length) {
+        const byLangText = placeholderIssues
+          .map(([code, issues]) => `${code}: ${issues.length}`)
+          .join(', ');
+        status.textContent = `⚠ Hotovo se zjištěnými nesoulady placeholderů: ${placeholderIssueCount} (${byLangText}). Strict fallback: ${i18nToolStrictFallbackCount}.`;
+      } else {
+        status.textContent = `✓ Hotovo! Přeloženo do ${selected.length} jazyků. Placeholdery jsou v pořádku. Strict fallback: ${i18nToolStrictFallbackCount}.`;
+      }
+    }
+    if (placeholderIssues.length) {
+      console.warn('[i18n-tool] Placeholder mismatch audit', placeholderAuditByLang);
+    }
     if (downloads) {
       downloads.style.display = 'grid';
       selected.forEach((lang) => {
@@ -2633,10 +3269,10 @@ async function runI18nToolBrowserTranslate() {
     }
     const editBtn = document.getElementById('btnI18nToolEditOutput');
     if (editBtn) editBtn.disabled = false;
-    showToast(`Překlad dokončen (${selected.length} jazyků).`);
+    showToast(`Překlad dokončen (${selected.length} jazyků), strict fallback: ${i18nToolStrictFallbackCount}.`);
     if (i18nToolMinimizedDuringRun) {
       const doneText = document.getElementById('i18nToolDoneText');
-      if (doneText) doneText.textContent = `Překlad doběhl na pozadí. Přeloženo do ${selected.length} jazyků.`;
+      if (doneText) doneText.textContent = `Překlad doběhl na pozadí. Přeloženo do ${selected.length} jazyků. Strict fallback: ${i18nToolStrictFallbackCount}.`;
       const doneModal = document.getElementById('i18nToolDoneModal');
       if (doneModal) doneModal.classList.add('show');
     }
@@ -2731,6 +3367,14 @@ window.onI18nToolEditorLangChange = onI18nToolEditorLangChange;
 window.saveI18nToolOutputEditor = saveI18nToolOutputEditor;
 window.openI18nToolLoadJsonPicker = openI18nToolLoadJsonPicker;
 window.loadI18nToolJsonForEditFromFile = loadI18nToolJsonForEditFromFile;
+window.openI18nToolAiModal = openI18nToolAiModal;
+window.closeI18nToolAiModal = closeI18nToolAiModal;
+window.openI18nToolAiJsonPicker = openI18nToolAiJsonPicker;
+window.loadI18nToolAiJsonFromFile = loadI18nToolAiJsonFromFile;
+window.buildI18nToolAiPrompt = buildI18nToolAiPrompt;
+window.sendI18nToolAiPrompt = sendI18nToolAiPrompt;
+window.applyI18nToolAiResponse = applyI18nToolAiResponse;
+window.downloadI18nToolAiResult = downloadI18nToolAiResult;
 window.runI18nKeyCheck = runI18nKeyCheck;
 window.runCzechDiacriticsCheck = runCzechDiacriticsCheck;
 
