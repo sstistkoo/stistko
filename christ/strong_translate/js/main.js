@@ -238,6 +238,7 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     setText('btnModelTestLibrary', t('modelTest.library'));
     setText('btnModelTestSaveRaw', t('modelTest.saveRaw'));
     setText('btnModelTestLoadTxt', t('modelTest.loadTxt'));
+    setText('btnCopyModelTestOutput', t('modelTest.copy'));
     setText('btnModelTestSaveTxt', t('modelTest.saveTxt'));
     setText('btnModelTestReset', t('modelTest.reset'));
     setText('btnCancelModelTest', t('modelTest.cancel'));
@@ -293,6 +294,8 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
       promptPreview.textContent = t('prompt.library.preview.empty');
     }
     setAttr('promptLibraryEditor', 'placeholder', t('prompt.library.editor.placeholder'));
+    setText('btnPromptSystem', t('prompt.library.system.button'));
+    setText('btnPromptExportTxt', t('prompt.library.export.button'));
     setAttr('btnPromptSystem', 'title', t('prompt.library.system.title'));
     setAttr('btnPromptExportTxt', 'title', t('prompt.library.export.title'));
     setAttr('btnPromptLoadTxt', 'title', t('prompt.library.load.title'));
