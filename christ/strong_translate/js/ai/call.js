@@ -64,7 +64,7 @@ async function callAIWithRetry(provider, apiKey, model, messages) {
   let lastErr = null;
 
   if (!tryModels.length) {
-    throw new Error('Žádný dostupný model pro tento provider (fallback modely jsou blokované).');
+    throw new Error(t('ai.error.noModelAvailable'));
   }
 
   for (const m of tryModels) {
@@ -102,7 +102,10 @@ async function callAIWithRetry(provider, apiKey, model, messages) {
            logWarn('callAIWithRetry', t('ai.log.rateLimitWait', { model: m, seconds: wait }), {
              provider, model: m, attempt: attempt + 1, waitSeconds: wait
            });
-           showToast(t('toast.rateLimit.waiting', { seconds: wait, suffix: shouldSwitchModelImmediately ? ', then try another model' : '' }));
+           showToast(t('toast.rateLimit.waiting', {
+             seconds: wait,
+             suffix: shouldSwitchModelImmediately ? t('toast.rateLimit.waiting.switchModelSuffix') : ''
+           }));
            await sleep(wait * 1000);
            if (shouldSwitchModelImmediately) {
              // U Groq je praktičtější při rate limitu rychle přeskočit na další model.
@@ -130,7 +133,7 @@ async function callAIWithRetry(provider, apiKey, model, messages) {
          }
          if (isBanned) {
           markModelBlocked(provider, m);
-           logError('callAIWithRetry', new Error(`Blokovaný účet: ${m}`), {
+           logError('callAIWithRetry', new Error(t('ai.error.blockedAccountModel', { model: m })), {
              provider, model: m, attempt: attempt + 1
            });
            break;

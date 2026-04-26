@@ -131,6 +131,10 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     setText('startBtn', t('setup.start'));
     setText('btnHelp', t('setup.help'));
     setText('btnLimits', t('setup.limits'));
+    setAttr('btnHelp', 'title', t('setup.help'));
+    setAttr('btnHelp', 'aria-label', t('setup.help'));
+    setAttr('btnLimits', 'title', t('setup.limits'));
+    setAttr('btnLimits', 'aria-label', t('setup.limits'));
     setText('batchSizeLabel', t('setup.batchSize'));
     setText('intervalLabel', t('setup.interval'));
     setText('pipelineGroupLabel', t('pipeline.group'));
@@ -142,6 +146,9 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     setText('fileLabel', t('setup.file'));
     setText('btnChooseFile', t('setup.chooseFile'));
     setText('btnLoadDefault', t('setup.loadAuto'));
+    setAttr('btnChooseFile', 'aria-label', t('setup.chooseFile'));
+    setAttr('btnLoadDefault', 'aria-label', t('setup.loadAuto'));
+    setAttr('startBtn', 'aria-label', t('setup.start'));
     setAttr('provider', 'aria-label', t('setup.provider.aria'));
     setAttr('apiKey', 'aria-label', t('setup.apiKey.input.aria'));
     setAttr('apiKeyProfile', 'aria-label', t('setup.apiKey.profile.aria'));
@@ -167,16 +174,25 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     setAttr('autoEnable_groq', 'aria-label', t('auto.enableGroq.aria'));
     setAttr('autoEnable_gemini', 'aria-label', t('auto.enableGemini.aria'));
     setAttr('autoEnable_openrouter', 'aria-label', t('auto.enableOpenrouter.aria'));
+    setAttr('autoEnableLabelGroq', 'title', t('auto.enableGroq.title'));
+    setAttr('autoEnableLabelGemini', 'title', t('auto.enableGemini.title'));
+    setAttr('autoEnableLabelOpenrouter', 'title', t('auto.enableOpenrouter.title'));
     setAttr('logScroll', 'aria-label', t('log.scroll.aria'));
     setText('lblDone', t('stats.done'));
     setText('lblRemain', t('stats.remain'));
     setText('lblTotal', t('stats.total'));
+    setAttr('pbarContainer', 'title', t('progress.main.title'));
+    setAttr('pbarContainer', 'aria-label', t('progress.main.title'));
     setText('autoTokenLimitLabel', t('stats.tokenLimit'));
     setText('btnImport', t('hdr.import'));
     setText('btnAuto', t('hdr.auto'));
     setText('btnToggleList', t('hdr.list'));
     setText('btnStep', t('hdr.batch'));
     setText('startFromLabel', t('hdr.fromG'));
+    setAttr('startFrom', 'title', t('hdr.startFrom.title'));
+    setAttr('startFrom', 'aria-label', t('hdr.startFrom.aria'));
+    setAttr('btnJumpToStart', 'title', t('hdr.jumpToStart.title'));
+    setAttr('btnJumpToStart', 'aria-label', t('hdr.jumpToStart.aria'));
     setText('btnTestModels', t('hdr.testModels'));
     setText('btnExportRange', t('hdr.exportRange'));
     setText('btnAISettingsDesktop', t('hdr.aiSettings'));
@@ -189,12 +205,14 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     const btnRestoreBackup = document.getElementById('btnRestoreBackup');
     if (btnRestoreBackup) btnRestoreBackup.textContent = t('hdr.restoreBackup');
     setAttr('btnImport', 'aria-label', t('hdr.import.aria'));
+    setAttr('importFileInput', 'aria-label', t('hdr.import.aria'));
     setAttr('btnAuto', 'aria-label', t('hdr.auto.aria'));
     setAttr('btnToggleList', 'title', t('hdr.list.title'));
     setAttr('btnToggleList', 'aria-label', t('hdr.list.aria'));
     setAttr('btnStep', 'aria-label', t('hdr.batch.aria'));
     setAttr('btnTestModels', 'title', t('hdr.testModels.title'));
     setAttr('btnTestModels', 'aria-label', t('hdr.testModels.aria'));
+    setAttr('btnI18nHelpTop', 'title', t('setup.help'));
     setAttr('btnExportRange', 'title', t('hdr.exportRange.title'));
     setAttr('btnExportRange', 'aria-label', t('hdr.exportRange.aria'));
     setAttr('btnFailedEntries', 'title', t('hdr.failed.title'));
@@ -213,6 +231,10 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     setText('autoInfoSettings', t('auto.info.settings'));
     setText('autoInfoSeconds', t('auto.info.seconds'));
     setText('autoInfoInterval', t('auto.info.interval'));
+    setAttr('autoBatchSizeInput', 'aria-label', t('setup.batchSize'));
+    setAttr('autoBatchSizeInput', 'title', t('setup.batchSize'));
+    setAttr('autoIntervalInput', 'aria-label', t('setup.interval'));
+    setAttr('autoIntervalInput', 'title', t('setup.interval'));
     setText('btnAutoStop', t('auto.stop'));
     setAttr('btnAutoStop', 'aria-label', t('auto.stop.aria'));
     const autoLog = document.getElementById('autoLog');
@@ -223,17 +245,31 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     refreshLanguageAwarePromptOptionLabels();
     setText('modelTestTitle', t('modelTest.title'));
     setText('modelTestProviderLabel', t('modelTest.providerLabel'));
+    setAttr('modelTestProvider', 'aria-label', t('modelTest.providerLabel'));
+    setAttr('modelTestProvider', 'title', t('modelTest.providerLabel'));
     setText('modelTestModelGroqLabel', t('modelTest.model.groq'));
+    setAttr('modelTestModel_groq', 'aria-label', t('modelTest.model.groq'));
+    setAttr('modelTestModel_groq', 'title', t('modelTest.model.groq'));
     setText('modelTestModelGeminiLabel', t('modelTest.model.gemini'));
+    setAttr('modelTestModel_gemini', 'aria-label', t('modelTest.model.gemini'));
+    setAttr('modelTestModel_gemini', 'title', t('modelTest.model.gemini'));
     setText('modelTestModelOpenrouterLabel', t('modelTest.model.openrouter'));
+    setAttr('modelTestModel_openrouter', 'aria-label', t('modelTest.model.openrouter'));
+    setAttr('modelTestModel_openrouter', 'title', t('modelTest.model.openrouter'));
     setText('modelTestModeLabel', t('modelTest.modeLabel'));
+    setAttr('modelTestMode', 'aria-label', t('modelTest.modeLabel'));
+    setAttr('modelTestMode', 'title', t('modelTest.modeLabel'));
     setText('modelTestPromptsLabel', t('modelTest.promptsLabel'));
+    setAttr('modelTestPromptType', 'aria-label', t('modelTest.promptsLabel'));
+    setAttr('modelTestPromptType', 'title', t('modelTest.promptsLabel'));
     setText('modelTestEnablePromptCompareText', t('modelTest.comparePrompts'));
     setText('modelTestPromptCompareLabel', t('modelTest.promptB'));
     setText('modelTestEnablePromptText', t('modelTest.enablePrompt'));
     setText('modelTestCustomPromptLabel', t('modelTest.customPromptLabel'));
     setAttr('modelTestCustomPromptInput', 'placeholder', t('modelTest.customPromptPlaceholder'));
     setText('modelTestDurationLabel', t('modelTest.duration'));
+    setAttr('modelTestDurationMin', 'aria-label', t('modelTest.duration'));
+    setAttr('modelTestDurationMin', 'title', t('modelTest.duration'));
     setText('modelTestAppendText', t('modelTest.appendResult'));
     setText('modelStatsThProviderModel', t('modelTest.table.providerModel'));
     setText('modelStatsThSuccess', t('modelTest.table.success'));
@@ -432,6 +468,9 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     setAttr('btnSelectAllSmall', 'aria-label', t('list.selectAll.aria'));
     setAttr('btnSelectNoneSmall', 'title', t('list.selectNone.title'));
     setAttr('btnSelectNoneSmall', 'aria-label', t('list.selectNone.aria'));
+    setText('btnTopicRepairMini', t('list.topicRepair.restore'));
+    setAttr('btnTopicRepairMini', 'title', t('list.topicRepair.restore.title'));
+    setAttr('btnTopicRepairMini', 'aria-label', t('list.topicRepair.restore.aria'));
     setText('btnSelectAllVisible', t('list.selectAllVisible'));
     setAttr('btnSelectAllVisible', 'aria-label', t('list.selectAllVisible.aria'));
     setText('btnTranslateSelected', t('list.translateSelected'));
@@ -475,7 +514,11 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     setText('settingsSecondaryOpenrouterLabel', t('settings.secondaryOpenrouter'));
     setText('settingsSecondaryOpenrouterToggleText', t('settings.enableFixes'));
     setText('settingsBatchLabel', t('settings.batch'));
+    setAttr('batchSizeRunMobile', 'aria-label', t('settings.batch'));
+    setAttr('batchSizeRunMobile', 'title', t('settings.batch'));
     setText('settingsSpeedLabel', t('settings.speed'));
+    setAttr('intervalRunMobile', 'aria-label', t('settings.speed'));
+    setAttr('intervalRunMobile', 'title', t('settings.speed'));
     setText('btnSettingsSave', t('settings.save'));
     setAttr('btnSettingsSave', 'aria-label', t('settings.save.aria'));
     setText('btnSettingsClose', t('settings.close'));
@@ -536,6 +579,11 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     setText('btnI18nToolEditOutput', t('i18nTool.buttons.editOutputJson'));
     setText('btnI18nToolLoadOutput', t('i18nTool.buttons.loadJsonForEdit'));
     setText('btnI18nToolMinimize', t('i18nTool.buttons.minimize'));
+    setText('i18nToolEngineLabel', t('i18nTool.engine.label'));
+    setText('i18nToolEngineOptionGoogle', t('i18nTool.engine.google'));
+    setText('i18nToolEngineOptionDeepl', t('i18nTool.engine.deepl'));
+    setText('i18nToolDeeplKeyLabel', t('i18nTool.deeplKey.label'));
+    setAttr('i18nToolDeeplKey', 'placeholder', t('i18nTool.deeplKey.placeholder'));
     setText('i18nToolLangModalTitle', t('i18nTool.langModal.title'));
     setText('btnI18nToolLangCloseTop', t('lang.modal.close'));
     setText('btnI18nToolLangSelectAll', t('i18nTool.langModal.selectAll'));
@@ -546,6 +594,11 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     setText('btnI18nToolDoneReopen', t('i18nTool.done.reopen'));
     setText('btnI18nToolDoneClose', t('i18nTool.done.close'));
     setText('i18nToolEditorTitle', t('i18nTool.editor.title'));
+    setText('i18nToolHelpModalTitle', t('i18nTool.help.title'));
+    setText('i18nToolHelpBody', buildI18nToolHelpText());
+    setText('btnI18nToolHelpClose', t('lang.modal.close'));
+    setAttr('i18nToolEditorText', 'aria-label', t('i18nTool.editor.title'));
+    setAttr('i18nToolEditorText', 'title', t('i18nTool.editor.title'));
     setText('i18nToolEditorLangLabel', t('i18nTool.editor.outputLanguage'));
     setText('i18nToolEditorFormatNote', t('i18nTool.editor.formatNote'));
     setText('btnI18nToolEditorSave', t('i18nTool.editor.saveJson'));
@@ -2055,7 +2108,7 @@ async function loadSavedSettings() {
   if (uiEl) uiEl.value = getUiLang();
   const uiFallback = consumeUiLangFallback();
   if (uiFallback) {
-    showToast(`⚠ UI jazyk "${uiFallback.requested}" není podporovaný, přepínám na "${uiFallback.fallback}".`);
+    showToast(t('toast.uiLanguage.unsupportedFallback', { requested: uiFallback.requested, fallback: uiFallback.fallback }));
   }
   applyUiLanguage();
 
@@ -2155,37 +2208,7 @@ function showI18nToolModal() {
 }
 
 function buildI18nToolHelpText() {
-  return [
-    'Co to dělá:',
-    '- Přeloží i18n klíče z i18n/cs.json do vybraných jazyků (Google / DeepL).',
-    '- Každý dokončený jazyk stáhne hned jako <lang>.json.',
-    '',
-    'Doporučený postup:',
-    '1) Klikni na „🌐 Vybrat jazyky“ a označ cílové jazyky.',
-    '2) Zkontroluj engine (Google/DeepL). DeepL klíč je volitelný.',
-    '3) Spusť „🚀 Přeložit“.',
-    '4) Sleduj progress, ETA a stavové hlášky.',
-    '5) Po překladu můžeš výstup upravit přes „✏ Editovat výstup JSON“.',
-    '',
-    'Oprava přes AI (audit/editor):',
-    '1) Klikni na „🧠 AI audit/editor“.',
-    '2) Připoj cílový JSON (jazyk, který chceš opravit).',
-    '3) Klikni na „🧠 Vytvořit AI prompt“.',
-    '4) Buď pošli prompt tlačítkem „📤 Odeslat“, nebo vlož vlastní AI odpověď.',
-    '5) Klikni na „✅ Aplikovat AI odpověď“.',
-    '6) Stáhni opravený výstup přes „💾 Stáhnout AI výstup“.',
-    '',
-    'Tipy pro AI opravy:',
-    '- Používej menší dávku (Batch size), když je odpověď dlouhá nebo padá.',
-    '- Zachovávej placeholdery ve tvaru {name}, nesmí se překládat ani mazat.',
-    '- Po aplikaci změn vždy rychle zkontroluj klíčové texty ve výstupu.',
-    '',
-    'Tlačítka:',
-    '- 📋 Kopírovat příkaz: zkopíruje CLI příkaz pro stejný překlad.',
-    '- 🧠 AI audit/editor: následná kontrola a opravy textů.',
-    '- — Minimalizovat: nechá překlad běžet na pozadí.',
-    '- ■ Ukončit překlad: bezpečně zastaví běžící překlad.'
-  ].join('\n');
+  return t('i18nTool.help.body');
 }
 function closeI18nToolModal() {
   const m = document.getElementById('i18nToolModal');
@@ -2642,7 +2665,7 @@ function buildI18nToolAiItems(enFlat) {
 async function getI18nToolEnFlat() {
   if (i18nToolAiEnFlatCache) return i18nToolAiEnFlatCache;
   const res = await fetch('./i18n/en.json', { cache: 'no-store' });
-  if (!res.ok) throw new Error(`Nepodařilo se načíst i18n/en.json (HTTP ${res.status})`);
+  if (!res.ok) throw new Error(t('i18nTool.ai.error.loadEnFailed', { status: res.status }));
   const enJson = await res.json();
   i18nToolAiEnFlatCache = i18nToolFlattenStringLeaves(enJson);
   return i18nToolAiEnFlatCache;
@@ -2652,7 +2675,7 @@ async function getI18nToolUiFlat() {
   const uiLang = String(getUiLang() || 'cs').toLowerCase();
   if (i18nToolAiUiFlatCacheByLang[uiLang]) return i18nToolAiUiFlatCacheByLang[uiLang];
   const res = await fetch(`./i18n/${uiLang}.json`, { cache: 'no-store' });
-  if (!res.ok) throw new Error(`Nepodařilo se načíst i18n/${uiLang}.json (HTTP ${res.status})`);
+  if (!res.ok) throw new Error(t('i18nTool.ai.error.loadUiFailed', { lang: uiLang, status: res.status }));
   const uiJson = await res.json();
   i18nToolAiUiFlatCacheByLang[uiLang] = i18nToolFlattenStringLeaves(uiJson);
   return i18nToolAiUiFlatCacheByLang[uiLang];
@@ -2685,7 +2708,7 @@ async function applyI18nToolAiResponse() {
     const parsed = i18nToolExtractJsonFromText(raw);
     const rows = normalizeI18nToolAiRows(parsed);
     renderI18nToolAiPreview(rows);
-    if (!Array.isArray(rows)) throw new Error('AI odpověď musí být JSON pole objektů.');
+    if (!Array.isArray(rows)) throw new Error(t('i18nTool.ai.error.responseMustBeArray'));
     const updated = typeof structuredClone === 'function'
       ? structuredClone(i18nToolAiSourceJson)
       : JSON.parse(JSON.stringify(i18nToolAiSourceJson));
@@ -2761,7 +2784,7 @@ async function sendI18nToolAiPrompt(options = {}) {
 
   try {
     if (resume && !i18nToolAiResumeState) {
-      showToast('Není co obnovit. Spusť nejdřív odeslání.');
+      showToast(t('i18nTool.ai.toast.nothingToResume'));
       return;
     }
 
@@ -2791,7 +2814,7 @@ async function sendI18nToolAiPrompt(options = {}) {
         totalOther,
         nextChunkIndex: startIdx
       } = i18nToolAiResumeState);
-      showToast(`Pokračuji od dávky ${startIdx + 1}/${chunks.length}.`);
+      showToast(t('i18nTool.ai.toast.resumingFromBatch', { current: startIdx + 1, total: chunks.length }));
     } else {
       i18nToolClearAiResumeState();
       i18nToolResetAiTokenStats();
@@ -2804,7 +2827,7 @@ async function sendI18nToolAiPrompt(options = {}) {
       const enFlat = await getI18nToolEnFlat();
       await getI18nToolUiFlat();
       allItems = buildI18nToolAiItems(enFlat);
-      if (!allItems.length) throw new Error('Chybí data pro AI audit.');
+      if (!allItems.length) throw new Error(t('i18nTool.ai.error.missingAuditData'));
 
       const batchInputValue = parseInt(String(document.getElementById('i18nToolAiBatchSize')?.value || '120'), 10);
       batchSize = Math.max(20, Math.min(300, Number.isFinite(batchInputValue) ? batchInputValue : 120));
@@ -2838,7 +2861,7 @@ async function sendI18nToolAiPrompt(options = {}) {
       while (!done) {
         if (i18nToolAiStopRequested) throw new Error(I18N_TOOL_AI_SEND_CANCELLED);
         attemptGuard++;
-        if (attemptGuard > 5) throw new Error(`AI dávka ${idx + 1} selhala opakovaně.`);
+        if (attemptGuard > 5) throw new Error(t('i18nTool.ai.error.batchRepeatedFailure', { index: idx + 1 }));
         const chunk = chunks[idx];
         const payload = {
           source_lang: 'en',
@@ -2848,7 +2871,7 @@ async function sendI18nToolAiPrompt(options = {}) {
           items: chunk
         };
         const chunkPrompt = buildI18nToolAiPromptText(payload);
-        i18nToolSetAiStatus(`Odesílám dávku ${idx + 1}/${chunks.length} (${chunk.length} položek) přes ${provider}/${model}...`);
+        i18nToolSetAiStatus(t('i18nTool.ai.status.sendingBatch', { index: idx + 1, total: chunks.length, size: chunk.length, provider, model }));
         try {
           const raw = await callAIWithRetry(provider, apiKey, model, [
             { role: 'system', content: SYSTEM_MESSAGE },
@@ -2856,10 +2879,10 @@ async function sendI18nToolAiPrompt(options = {}) {
           ]);
           i18nToolAccumulateAiTokenStats(raw?.usage || null);
           const content = String(raw?.content || '').trim();
-          if (!content) throw new Error('AI nevrátila text odpovědi.');
+          if (!content) throw new Error(t('i18nTool.ai.error.noResponseText'));
           const parsed = i18nToolExtractJsonFromText(content);
           const rows = normalizeI18nToolAiRows(parsed);
-          if (!Array.isArray(rows)) throw new Error('AI odpověď dávky není JSON pole.');
+          if (!Array.isArray(rows)) throw new Error(t('i18nTool.ai.error.batchResponseNotArray'));
           merged.push(...rows);
           const batchFix = rows.filter(r => String(r?.status || '').toLowerCase() === 'fix').length;
           const batchWarn = rows.filter(r => String(r?.status || '').toLowerCase() === 'warn').length;
@@ -2868,10 +2891,16 @@ async function sendI18nToolAiPrompt(options = {}) {
           totalWarn += batchWarn;
           totalOther += batchOther;
           responseEl.value = JSON.stringify(merged, null, 2);
-          i18nToolSetAiStatus(
-            `Dávka ${idx + 1}/${chunks.length} hotová: fix ${batchFix}, warn ${batchWarn}, other ${batchOther}. ` +
-            `Průběžně celkem: fix ${totalFix}, warn ${totalWarn}, other ${totalOther}.`
-          );
+          i18nToolSetAiStatus(t('i18nTool.ai.status.batchDoneStats', {
+            index: idx + 1,
+            total: chunks.length,
+            batchFix,
+            batchWarn,
+            batchOther,
+            totalFix,
+            totalWarn,
+            totalOther
+          }));
           done = true;
         } catch (e) {
           const msg = String(e?.message || '').toLowerCase();
@@ -2905,23 +2934,30 @@ async function sendI18nToolAiPrompt(options = {}) {
               const rest = allItems.slice(idx * batchSize);
               chunks = [...chunks.slice(0, idx), ...chunkArray(rest, localBatchSize)];
               batchSize = localBatchSize;
-              i18nToolSetAiStatus(
-                `Dávka ${idx + 1}/${chunks.length}: AI vrátila nevalidní JSON, zmenšuji dávku na ${localBatchSize} a zkouším znovu...`
-              );
+              i18nToolSetAiStatus(t('i18nTool.ai.status.batchJsonInvalidShrink', {
+                index: idx + 1,
+                total: chunks.length,
+                batch: localBatchSize
+              }));
               await sleepMs(1500);
               continue;
             }
-            i18nToolSetAiStatus(
-              `Dávka ${idx + 1}/${chunks.length}: AI vrátila nevalidní JSON, opakuji pokus (${attemptGuard}/5)...`
-            );
+            i18nToolSetAiStatus(t('i18nTool.ai.status.batchJsonInvalidRetry', {
+              index: idx + 1,
+              total: chunks.length,
+              attempt: attemptGuard
+            }));
             await sleepMs(1500);
             continue;
           }
           if (isTransientAiCallIssue && attemptGuard < 5) {
             const waitMs = Math.min(12000, 2000 * attemptGuard);
-            i18nToolSetAiStatus(
-              `Dávka ${idx + 1}/${chunks.length}: dočasná AI chyba (${e?.message || 'unknown'}), opakuji za ${Math.round(waitMs / 1000)}s...`
-            );
+            i18nToolSetAiStatus(t('i18nTool.ai.status.batchTransientRetry', {
+              index: idx + 1,
+              total: chunks.length,
+              message: e?.message || t('error.unknown'),
+              seconds: Math.round(waitMs / 1000)
+            }));
             await sleepMs(waitMs);
             continue;
           }
@@ -2930,7 +2966,11 @@ async function sendI18nToolAiPrompt(options = {}) {
       }
       if (idx < chunks.length - 1) {
         if (i18nToolAiStopRequested) throw new Error(I18N_TOOL_AI_SEND_CANCELLED);
-        i18nToolSetAiStatus(`Dávka ${idx + 1}/${chunks.length} hotová. Čekám ${sendIntervalSec}s na další odeslání...`);
+        i18nToolSetAiStatus(t('i18nTool.ai.status.batchWaitNext', {
+          index: idx + 1,
+          total: chunks.length,
+          seconds: sendIntervalSec
+        }));
         await sleepMs(sendIntervalSec * 1000);
       }
     }
@@ -2938,11 +2978,14 @@ async function sendI18nToolAiPrompt(options = {}) {
     responseEl.value = JSON.stringify(merged, null, 2);
     renderI18nToolAiPreview(merged);
     stopI18nToolAiBusyAnimation('✅ AI audit dokončen.');
-    i18nToolSetAiStatus(
-      `AI odpověď načtena po dávkách: ${chunks.length}, celkem záznamů: ${merged.length}. ` +
-      `Fix: ${totalFix}, Warn: ${totalWarn}, Other: ${totalOther}.`
-    );
-    showToast(`AI odpověď načtena (${chunks.length} dávek).`);
+    i18nToolSetAiStatus(t('i18nTool.ai.status.loadedInBatches', {
+      batches: chunks.length,
+      total: merged.length,
+      fix: totalFix,
+      warn: totalWarn,
+      other: totalOther
+    }));
+    showToast(t('i18nTool.ai.toast.loadedInBatches', { batches: chunks.length }));
     i18nToolClearAiResumeState();
   } catch (e) {
     if (String(e?.message || '') === I18N_TOOL_AI_SEND_CANCELLED) {
@@ -2969,8 +3012,13 @@ async function sendI18nToolAiPrompt(options = {}) {
     };
 
     stopI18nToolAiBusyAnimation(t('i18nTool.ai.status.failed'));
-    i18nToolSetAiStatus(`${t('i18nTool.ai.status.callFailed', { message: e?.message || String(e) })} | Připraveno tlačítko Pokračovat.`, true);
-    i18nToolSetAiResumeButtonState(true, '▶ Pokračovat od poslední dávky');
+    i18nToolSetAiStatus(
+      t('i18nTool.ai.status.resumeReady', {
+        message: e?.message || String(e)
+      }),
+      true
+    );
+    i18nToolSetAiResumeButtonState(true, t('i18nTool.ai.resume.button'));
     showToast(t('i18nTool.ai.toast.callFailed', { message: e?.message || String(e) }));
   } finally {
     i18nToolAiSending = false;
@@ -3068,7 +3116,12 @@ function i18nToolFormatEta(seconds) {
 function i18nToolStartRunAnimation() {
   const animEl = document.getElementById('i18nToolRunAnim');
   if (!animEl) return;
-  const frames = ['⏳ Překlad běží   ', '⏳ Překlad běží.  ', '⏳ Překlad běží.. ', '⏳ Překlad běží...'];
+  const frames = [
+    t('i18nTool.runAnim.0'),
+    t('i18nTool.runAnim.1'),
+    t('i18nTool.runAnim.2'),
+    t('i18nTool.runAnim.3')
+  ];
   let idx = 0;
   animEl.style.display = 'block';
   animEl.textContent = frames[0];
@@ -3115,7 +3168,7 @@ function resetI18nToolRuntimeUi() {
   }
   if (etaEl) {
     etaEl.style.display = 'none';
-    etaEl.textContent = '⏱ Odhad do konce: —';
+    etaEl.textContent = t('i18nTool.eta.idle');
   }
   i18nToolStopRunAnimation();
   const editBtn = document.getElementById('btnI18nToolEditOutput');
@@ -3667,7 +3720,7 @@ async function runI18nToolBrowserTranslate() {
     }
     if (etaEl) {
       etaEl.style.display = 'block';
-      etaEl.textContent = '⏱ Odhad do konce: počítám…';
+      etaEl.textContent = t('i18nTool.eta.calculating');
     }
     i18nToolStartRunAnimation();
     if (downloads) {
@@ -3701,7 +3754,11 @@ async function runI18nToolBrowserTranslate() {
           }
           if (etaEl) {
             etaEl.style.display = 'block';
-            etaEl.textContent = `⏱ Odhad do konce: ${i18nToolFormatEta(etaSec)} (${doneUnits}/${totalUnits})`;
+            etaEl.textContent = t('i18nTool.eta.progress', {
+              eta: i18nToolFormatEta(etaSec),
+              done: doneUnits,
+              total: totalUnits
+            });
           }
           if (status && (doneUnits % 25 === 0 || doneUnits === totalUnits)) {
             status.textContent = t('i18nTool.status.translatingProgress', {
@@ -3732,13 +3789,20 @@ async function runI18nToolBrowserTranslate() {
         const byLangText = placeholderIssues
           .map(([code, issues]) => `${code}: ${issues.length}`)
           .join(', ');
-        status.textContent = `⚠ Hotovo se zjištěnými nesoulady placeholderů: ${placeholderIssueCount} (${byLangText}). Strict fallback: ${i18nToolStrictFallbackCount}.`;
+        status.textContent = t('i18nTool.status.doneWithPlaceholderIssues', {
+          count: placeholderIssueCount,
+          byLang: byLangText,
+          fallback: i18nToolStrictFallbackCount
+        });
       } else {
-        status.textContent = `✓ Hotovo! Přeloženo do ${selected.length} jazyků. Placeholdery jsou v pořádku. Strict fallback: ${i18nToolStrictFallbackCount}.`;
+        status.textContent = t('i18nTool.status.doneSuccess', {
+          count: selected.length,
+          fallback: i18nToolStrictFallbackCount
+        });
       }
     }
-    if (etaEl) etaEl.textContent = '⏱ Odhad do konce: hotovo';
-    i18nToolStopRunAnimation('✅ Překlad dokončen');
+    if (etaEl) etaEl.textContent = t('i18nTool.eta.done');
+    i18nToolStopRunAnimation(t('i18nTool.animation.done'));
     if (placeholderIssues.length) {
       console.warn('[i18n-tool] Placeholder mismatch audit', placeholderAuditByLang);
     }
@@ -3755,10 +3819,18 @@ async function runI18nToolBrowserTranslate() {
     }
     const editBtn = document.getElementById('btnI18nToolEditOutput');
     if (editBtn) editBtn.disabled = false;
-    showToast(`Překlad dokončen (${selected.length} jazyků), strict fallback: ${i18nToolStrictFallbackCount}.`);
+    showToast(t('i18nTool.toast.doneWithFallback', {
+      count: selected.length,
+      fallback: i18nToolStrictFallbackCount
+    }));
     if (i18nToolMinimizedDuringRun) {
       const doneText = document.getElementById('i18nToolDoneText');
-      if (doneText) doneText.textContent = `Překlad doběhl na pozadí. Přeloženo do ${selected.length} jazyků. Strict fallback: ${i18nToolStrictFallbackCount}.`;
+      if (doneText) {
+        doneText.textContent = t('i18nTool.done.text.withStats', {
+          count: selected.length,
+          fallback: i18nToolStrictFallbackCount
+        });
+      }
       const doneModal = document.getElementById('i18nToolDoneModal');
       if (doneModal) doneModal.classList.add('show');
     }
@@ -3770,17 +3842,17 @@ async function runI18nToolBrowserTranslate() {
         status.style.display = 'block';
         status.textContent = t('i18nTool.status.cancelledByUser');
       }
-      if (etaEl) etaEl.textContent = '⏱ Odhad do konce: zastaveno';
-      i18nToolStopRunAnimation('⏹ Překlad zastaven');
+      if (etaEl) etaEl.textContent = t('i18nTool.eta.stopped');
+      i18nToolStopRunAnimation(t('i18nTool.animation.stopped'));
       showToast(t('i18nTool.toast.cancelled'));
     } else {
       if (status) {
         status.style.display = 'block';
-        status.textContent = `✗ Chyba: ${e?.message || String(e)}`;
+        status.textContent = t('i18nTool.status.error', { message: e?.message || String(e) });
       }
-      if (etaEl) etaEl.textContent = '⏱ Odhad do konce: chyba';
-      i18nToolStopRunAnimation('✕ Překlad selhal');
-      showToast(`Chyba překladu: ${e?.message || String(e)}`);
+      if (etaEl) etaEl.textContent = t('i18nTool.eta.error');
+      i18nToolStopRunAnimation(t('i18nTool.animation.failed'));
+      showToast(t('i18nTool.toast.error', { message: e?.message || String(e) }));
     }
   } finally {
     i18nToolRunning = false;
