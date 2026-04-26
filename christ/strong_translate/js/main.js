@@ -2086,7 +2086,9 @@ function showI18nToolModal() {
   const closeBtn = document.getElementById('btnI18nToolClose');
   if (closeBtn) closeBtn.textContent = t('lang.i18nTool.close');
   initI18nToolUi();
-  resetI18nToolRuntimeUi();
+  const isRestoreOpen = i18nToolRunning || i18nToolMinimizedDuringRun;
+  if (!isRestoreOpen) resetI18nToolRuntimeUi();
+  closeI18nToolDoneModal();
   updateI18nToolCommandPreview();
   if (m) m.style.display = 'flex';
 }
@@ -2133,6 +2135,36 @@ const I18N_TOOL_DEEPL_LANG_MAP = {
   el: 'EL', tr: 'TR', ja: 'JA', ko: 'KO', 'zh-CN': 'ZH', he: 'HE', en: 'EN-US'
 };
 let i18nToolSourceCsData = null;
+let i18nToolRunning = false;
+let i18nToolMinimizedDuringRun = false;
+let i18nToolCancelRequested = false;
+const I18N_TOOL_CANCELLED_ERROR = 'I18N_TOOL_TRANSLATION_CANCELLED';
+
+function minimizeI18nToolModal() {
+  if (i18nToolRunning) i18nToolMinimizedDuringRun = true;
+  closeI18nToolModal();
+}
+
+function cancelI18nToolBrowserTranslate() {
+  if (!i18nToolRunning) return;
+  i18nToolCancelRequested = true;
+  const status = document.getElementById('i18nToolStatus');
+  if (status) {
+    status.style.display = 'block';
+    status.textContent = '⏹ Zastavuji překlad...';
+  }
+}
+
+function closeI18nToolDoneModal() {
+  const doneModal = document.getElementById('i18nToolDoneModal');
+  if (doneModal) doneModal.classList.remove('show');
+}
+
+function reopenI18nToolModalAfterDone() {
+  closeI18nToolDoneModal();
+  const m = document.getElementById('i18nToolModal');
+  if (m) m.style.display = 'flex';
+}
 
 function initI18nToolUi() {
   const engineEl = document.getElementById('i18nToolEngine');
@@ -2334,6 +2366,7 @@ function i18nToolCountTranslatableStrings(value) {
 }
 
 async function i18nToolTranslateValue(value, targetLang, targetTag, targetLanguageName, onProgress, path = '') {
+  if (i18nToolCancelRequested) throw new Error(I18N_TOOL_CANCELLED_ERROR);
   if (typeof value === 'string') {
     if (!value.trim()) return value;
     const textToTranslate = i18nToolProtectTagsAndWords(value);
@@ -2372,8 +2405,12 @@ function i18nToolDownloadFile(content, filename) {
 
 async function runI18nToolBrowserTranslate() {
   try {
+    i18nToolRunning = true;
+    i18nToolMinimizedDuringRun = false;
+    i18nToolCancelRequested = false;
     if (!i18nToolSelectedLanguages.size) {
       showToast('Nejdřív vyberte cílový jazyk.');
+      i18nToolRunning = false;
       return;
     }
     const sourceData = await loadI18nToolSourceCsData();
@@ -2383,7 +2420,12 @@ async function runI18nToolBrowserTranslate() {
     const status = document.getElementById('i18nToolStatus');
     const downloads = document.getElementById('i18nToolDownloads');
     const runBtn = document.getElementById('btnI18nToolRunBrowser');
+    const cancelBtn = document.getElementById('btnI18nToolCancelBrowser');
     if (runBtn) runBtn.disabled = true;
+    if (cancelBtn) {
+      cancelBtn.style.display = 'inline-block';
+      cancelBtn.disabled = false;
+    }
     if (progressWrap) progressWrap.style.display = 'block';
     if (status) {
       status.style.display = 'block';
@@ -2398,6 +2440,7 @@ async function runI18nToolBrowserTranslate() {
     let doneUnits = 0;
     const translatedFiles = {};
     for (const lang of selected) {
+      if (i18nToolCancelRequested) throw new Error(I18N_TOOL_CANCELLED_ERROR);
       if (status) status.textContent = `Překládám do: ${lang.name} (${lang.code})...`;
       const translated = await i18nToolTranslateValue(
         sourceData,
@@ -2433,16 +2476,38 @@ async function runI18nToolBrowserTranslate() {
         downloads.appendChild(btn);
       });
     }
+    showToast(`Překlad dokončen (${selected.length} jazyků).`);
+    if (i18nToolMinimizedDuringRun) {
+      const doneText = document.getElementById('i18nToolDoneText');
+      if (doneText) doneText.textContent = `Překlad doběhl na pozadí. Přeloženo do ${selected.length} jazyků.`;
+      const doneModal = document.getElementById('i18nToolDoneModal');
+      if (doneModal) doneModal.classList.add('show');
+    }
   } catch (e) {
     const status = document.getElementById('i18nToolStatus');
-    if (status) {
-      status.style.display = 'block';
-      status.textContent = `✗ Chyba: ${e?.message || String(e)}`;
+    if (String(e?.message || '') === I18N_TOOL_CANCELLED_ERROR) {
+      if (status) {
+        status.style.display = 'block';
+        status.textContent = '⏹ Překlad byl ukončen uživatelem.';
+      }
+      showToast('Překlad byl ukončen.');
+    } else {
+      if (status) {
+        status.style.display = 'block';
+        status.textContent = `✗ Chyba: ${e?.message || String(e)}`;
+      }
+      showToast(`Chyba překladu: ${e?.message || String(e)}`);
     }
-    showToast(`Chyba překladu: ${e?.message || String(e)}`);
   } finally {
+    i18nToolRunning = false;
+    i18nToolCancelRequested = false;
     const runBtn = document.getElementById('btnI18nToolRunBrowser');
+    const cancelBtn = document.getElementById('btnI18nToolCancelBrowser');
     if (runBtn) runBtn.disabled = false;
+    if (cancelBtn) {
+      cancelBtn.disabled = true;
+      cancelBtn.style.display = 'none';
+    }
   }
 }
 async function runI18nKeyCheck() {
@@ -2499,6 +2564,10 @@ window.i18nToolSelectAllLangs = i18nToolSelectAllLangs;
 window.i18nToolDeselectAllLangs = i18nToolDeselectAllLangs;
 window.copyI18nToolCmd = copyI18nToolCmd;
 window.runI18nToolBrowserTranslate = runI18nToolBrowserTranslate;
+window.cancelI18nToolBrowserTranslate = cancelI18nToolBrowserTranslate;
+window.minimizeI18nToolModal = minimizeI18nToolModal;
+window.closeI18nToolDoneModal = closeI18nToolDoneModal;
+window.reopenI18nToolModalAfterDone = reopenI18nToolModalAfterDone;
 window.runI18nKeyCheck = runI18nKeyCheck;
 window.runCzechDiacriticsCheck = runCzechDiacriticsCheck;
 

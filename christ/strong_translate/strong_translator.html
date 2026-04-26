@@ -803,7 +803,7 @@
       </div>
       <div class="prompt-actions" style="margin-top:10px">
         <button type="button" class="prompt-btn ok" id="btnI18nToolOpenLangModal" onclick="openI18nToolLangModal()">🌐 Vybrat jazyky</button>
-        <button type="button" class="prompt-btn ok" id="btnI18nToolRunBrowser" onclick="runI18nToolBrowserTranslate()">🚀 Přeložit a stáhnout</button>
+        <a id="i18nToolScriptLink" class="prompt-btn" style="display:inline-block;text-decoration:none" href="tools/translate_i18n.py" download>⬇ Stáhnout translate_i18n.py</a>
         <button type="button" class="prompt-btn" id="btnI18nToolCopyCmd" onclick="copyI18nToolCmd()">📋 Kopírovat příkaz</button>
       </div>
       <div id="i18nToolSelectedSummary" class="i18n-tool-selected-summary">Vybráno jazyků: 0</div>
@@ -814,10 +814,14 @@
       </div>
       <div id="i18nToolStatus" class="i18n-tool-status"></div>
       <div id="i18nToolDownloads" class="i18n-tool-downloads"></div>
+      <div class="prompt-actions" style="margin-top:10px">
+        <button type="button" class="prompt-btn ok" id="btnI18nToolRunBrowser" onclick="runI18nToolBrowserTranslate()">🚀 Přeložit a stáhnout</button>
+        <button type="button" class="prompt-btn cancel" id="btnI18nToolCancelBrowser" onclick="cancelI18nToolBrowserTranslate()" style="display:none">■ Ukončit překlad</button>
+      </div>
       <label for="i18nToolCmd" class="i18n-tool-label">Příkaz(y) pro překlad z i18n/cs.json</label>
       <textarea id="i18nToolCmd" class="i18n-tool-cmd" readonly></textarea>
-      <a id="i18nToolScriptLink" class="modal-btn ok" style="display:inline-block;padding:8px 14px;margin-bottom:10px" href="tools/translate_i18n.py" download>translate_i18n.py</a>
       <div class="prompt-actions" style="margin-top:4px">
+        <button type="button" class="prompt-btn" id="btnI18nToolMinimize" onclick="minimizeI18nToolModal()">— Minimalizovat</button>
         <button type="button" class="prompt-btn cancel" id="btnI18nToolClose" onclick="closeI18nToolModal()">✕ Zavřít</button>
       </div>
     </div>
@@ -832,6 +836,17 @@
         <button type="button" class="prompt-btn ok" onclick="closeI18nToolLangModal()">Hotovo</button>
       </div>
       <div id="i18nToolLanguageGrid" class="i18n-tool-language-grid"></div>
+    </div>
+  </div>
+
+  <div id="i18nToolDoneModal" class="i18n-tool-lang-modal" onclick="if(event.target===this)closeI18nToolDoneModal()">
+    <div class="prompt-modal-box" style="max-width:460px" onclick="event.stopPropagation()">
+      <div class="prompt-modal-title">✅ Překlad dokončen</div>
+      <div class="i18n-tool-status" style="display:block" id="i18nToolDoneText">Překlad doběhl na pozadí.</div>
+      <div class="prompt-actions" style="margin-top:12px">
+        <button type="button" class="prompt-btn ok" onclick="reopenI18nToolModalAfterDone()">Otevřít překladač</button>
+        <button type="button" class="prompt-btn cancel" onclick="closeI18nToolDoneModal()">Zavřít</button>
+      </div>
     </div>
   </div>
 
