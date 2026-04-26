@@ -64,10 +64,13 @@ async function detectUiLangAvailability() {
       available: directoryFiles.has(`${String(lang.fileCode).toLowerCase()}.json`)
     }));
   } else {
-    checks = UI_LANGUAGE_CATALOG.map((lang) => ({
-      ...lang,
-      // tichý fallback bez 404 requestů na každý jazyk
-      available: ['cs', 'en', 'sk', 'pl'].includes(lang.code)
+    checks = await Promise.all(UI_LANGUAGE_CATALOG.map(async (lang) => {
+      try {
+        const res = await fetch(`./i18n/${lang.fileCode}.json`, { cache: 'no-store' });
+        return { ...lang, available: !!res.ok };
+      } catch {
+        return { ...lang, available: false };
+      }
     }));
   }
   uiLangAvailabilityCache = checks;

@@ -21,7 +21,7 @@
     <details id="setupAdvancedDetails">
       <summary id="setupAdvancedSummary">Pokročilé nastavení</summary>
 
-  <div class="row" id="legacyProviderRow" style="display:none">
+  <div class="row" id="legacyProviderRow">
     <label for="provider">Provider</label>
     <select id="provider" onchange="onProviderChange()" aria-label="Výběr AI providera">
       <option value="groq">Groq (zdarma)</option>
@@ -885,6 +885,7 @@
         <button type="button" class="prompt-btn" id="btnI18nToolAiAttachJson" onclick="openI18nToolAiJsonPicker()">📂 Připojit JSON pro AI audit</button>
         <button type="button" class="prompt-btn" id="btnI18nToolAiBuildPrompt" onclick="buildI18nToolAiPrompt()">🧠 Vytvořit AI prompt</button>
         <button type="button" class="prompt-btn ok" id="btnI18nToolAiSend" onclick="sendI18nToolAiPrompt()">📤 Odeslat</button>
+        <button type="button" class="prompt-btn ok" id="btnI18nToolAiResume" onclick="resumeI18nToolAiPrompt()" style="display:none">▶ Pokračovat</button>
         <button type="button" class="prompt-btn ok" id="btnI18nToolAiApplyResponse" onclick="applyI18nToolAiResponse()">✅ Aplikovat AI odpověď</button>
         <button type="button" class="prompt-btn" id="btnI18nToolDownloadAiResult" onclick="downloadI18nToolAiResult()" disabled>💾 Stáhnout AI výstup</button>
         <input type="file" id="i18nToolAiJsonInput" accept=".json,application/json" style="display:none" onchange="loadI18nToolAiJsonFromFile(event)">
