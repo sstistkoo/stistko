@@ -2170,6 +2170,33 @@ const I18N_TOOL_LANGUAGES = [
   { code: 'ko', tag: 'KO', name: 'Korejština', flag: '🇰🇷' },
   { code: 'he', tag: 'HE', name: 'Hebrejština', flag: '🇮🇱' }
 ];
+const I18N_TOOL_LANG_DISPLAY_CODE = {
+  en: 'GB',
+  sk: 'SK',
+  pl: 'PL',
+  de: 'DE',
+  fr: 'FR',
+  es: 'ES',
+  it: 'IT',
+  pt: 'PT',
+  ru: 'RU',
+  uk: 'UA',
+  bg: 'BG',
+  ro: 'RO',
+  hu: 'HU',
+  nl: 'NL',
+  sv: 'SE',
+  da: 'DK',
+  no: 'NO',
+  fi: 'FI',
+  el: 'GR',
+  tr: 'TR',
+  ar: 'SA',
+  'zh-CN': 'CN',
+  ja: 'JP',
+  ko: 'KR',
+  he: 'IL'
+};
 const I18N_TOOL_TRANSLATOR_TARGET_CODES = new Set([
   'cs', 'cz', 'en', 'sk', 'pl', 'de', 'fr', 'es', 'it', 'pt', 'ru', 'uk',
   'bg', 'ro', 'hu', 'nl', 'sv', 'da', 'no', 'fi', 'el', 'tr', 'ar', 'ja',
@@ -2722,9 +2749,9 @@ function renderI18nToolLanguageGrid() {
   if (!grid) return;
   grid.innerHTML = I18N_TOOL_LANGUAGES.map((lang) => `
     <button type="button" class="i18n-tool-lang-card ${i18nToolSelectedLanguages.has(lang.code) ? 'selected' : ''}" onclick="toggleI18nToolLanguage('${lang.code}')">
-      <div class="i18n-tool-lang-flag">${lang.flag}</div>
+      <div class="i18n-tool-lang-flag">${String(lang.code || '').toUpperCase()}</div>
       <div class="i18n-tool-lang-name">${lang.name}</div>
-      <div class="i18n-tool-lang-code">${lang.code}</div>
+      <div class="i18n-tool-lang-code">${I18N_TOOL_LANG_DISPLAY_CODE[lang.code] || String(lang.code || '').toUpperCase()}</div>
     </button>
   `).join('');
   updateI18nToolSummary();
