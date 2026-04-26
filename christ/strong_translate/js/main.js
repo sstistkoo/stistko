@@ -2250,6 +2250,7 @@ const i18nToolAiUiFlatCacheByLang = {};
 let i18nToolAiSending = false;
 let i18nToolAiStopRequested = false;
 let i18nToolAiBusyTimer = null;
+let i18nToolAiResumeState = null;
 const I18N_TOOL_AI_SEND_CANCELLED = 'I18N_TOOL_AI_SEND_CANCELLED';
 
 function i18nToolSetAiStatus(message, isError = false) {
@@ -2272,6 +2273,20 @@ function i18nToolSetAiSendButtonState() {
   if (!btn) return;
   btn.disabled = false;
   btn.textContent = i18nToolAiSending ? t('i18nTool.ai.send.stop') : t('i18nTool.ai.send.start');
+  if (i18nToolAiResumeState) i18nToolSetAiResumeButtonState(true, '▶ Pokračovat od poslední dávky');
+}
+
+function i18nToolSetAiResumeButtonState(enabled, label = '▶ Pokračovat') {
+  const btn = document.getElementById('btnI18nToolAiResume');
+  if (!btn) return;
+  btn.style.display = enabled ? 'inline-block' : 'none';
+  btn.disabled = !enabled || i18nToolAiSending;
+  btn.textContent = label;
+}
+
+function i18nToolClearAiResumeState() {
+  i18nToolAiResumeState = null;
+  i18nToolSetAiResumeButtonState(false);
 }
 
 function startI18nToolAiBusyAnimation() {
@@ -2326,9 +2341,60 @@ function i18nToolExtractJsonFromText(raw) {
   const objStart = text.indexOf('{');
   const objEnd = text.lastIndexOf('}');
   if (objStart >= 0 && objEnd > objStart) {
-    return JSON.parse(text.slice(objStart, objEnd + 1));
+    try {
+      return JSON.parse(text.slice(objStart, objEnd + 1));
+    } catch {}
+  }
+  const repairedRows = i18nToolExtractRepairableRows(text);
+  if (repairedRows.length) {
+    return repairedRows;
   }
   throw new Error(t('i18nTool.ai.error.cannotFindChanges'));
+}
+
+function i18nToolExtractRepairableRows(rawText) {
+  const text = String(rawText || '');
+  const rows = [];
+  let depth = 0;
+  let inString = false;
+  let escaped = false;
+  let start = -1;
+
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (inString) {
+      if (escaped) {
+        escaped = false;
+      } else if (ch === '\\') {
+        escaped = true;
+      } else if (ch === '"') {
+        inString = false;
+      }
+      continue;
+    }
+    if (ch === '"') {
+      inString = true;
+      continue;
+    }
+    if (ch === '{') {
+      if (depth === 0) start = i;
+      depth++;
+      continue;
+    }
+    if (ch === '}') {
+      if (depth > 0) depth--;
+      if (depth === 0 && start >= 0) {
+        const candidate = text.slice(start, i + 1).trim();
+        start = -1;
+        if (!candidate) continue;
+        try {
+          const parsed = JSON.parse(candidate);
+          if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) rows.push(parsed);
+        } catch {}
+      }
+    }
+  }
+  return rows;
 }
 
 function normalizeI18nToolAiRows(parsed) {
@@ -2398,6 +2464,7 @@ function loadI18nToolAiJsonFromFile(event) {
         ? structuredClone(parsed)
         : JSON.parse(JSON.stringify(parsed));
       i18nToolAiSourceFileName = String(file.name || '').trim() || 'output.json';
+      i18nToolClearAiResumeState();
       i18nToolSetAiLoadedFileLabel(i18nToolAiSourceFileName);
       const dlBtn = document.getElementById('btnI18nToolDownloadAiResult');
       if (dlBtn) dlBtn.disabled = true;
@@ -2554,7 +2621,8 @@ async function applyI18nToolAiResponse() {
   }
 }
 
-async function sendI18nToolAiPrompt() {
+async function sendI18nToolAiPrompt(options = {}) {
+  const resume = !!options?.resume;
   const promptEl = document.getElementById('i18nToolAiPrompt');
   const responseEl = document.getElementById('i18nToolAiResponse');
   if (!promptEl || !responseEl) return;
@@ -2563,54 +2631,93 @@ async function sendI18nToolAiPrompt() {
     i18nToolSetAiStatus(t('i18nTool.ai.status.stopRequested'));
     return;
   }
-  let promptText = String(promptEl.value || '').trim();
-  if (!promptText) {
-    await buildI18nToolAiPrompt();
-    promptText = String(promptEl.value || '').trim();
-  }
-  if (!promptText) {
-    showToast(t('i18nTool.ai.toast.createPromptFirst'));
-    return;
-  }
-  const provider = 'groq';
-  const model = String(getPipelineModelForProvider('groq') || 'meta-llama/llama-4-scout-17b-16e-instruct').trim();
-  const apiKey = String(getCurrentApiKey(provider) || '').trim();
-  if (!apiKey) {
-    i18nToolSetAiStatus(t('i18nTool.ai.status.missingApiKey'), true);
-    showToast(t('i18nTool.ai.toast.missingApiKey'));
-    return;
-  }
+
+  let provider = 'groq';
+  let model = String(getPipelineModelForProvider('groq') || 'meta-llama/llama-4-scout-17b-16e-instruct').trim();
+  let apiKey = '';
+  let allItems = [];
+  let batchSize = 120;
+  let chunks = [];
+  let targetLang = i18nToolAiSourceFileName.replace(/\.json$/i, '');
+  let sendIntervalSec = 20;
+  let merged = [];
+  let totalFix = 0;
+  let totalWarn = 0;
+  let totalOther = 0;
+  let startIdx = 0;
+  let currentIdx = 0;
+
   try {
+    if (resume && !i18nToolAiResumeState) {
+      showToast('Není co obnovit. Spusť nejdřív odeslání.');
+      return;
+    }
+
+    let promptText = String(promptEl.value || '').trim();
+    if (!promptText) {
+      await buildI18nToolAiPrompt();
+      promptText = String(promptEl.value || '').trim();
+    }
+    if (!promptText) {
+      showToast(t('i18nTool.ai.toast.createPromptFirst'));
+      return;
+    }
+
+    if (resume) {
+      ({
+        provider,
+        model,
+        apiKey,
+        allItems,
+        batchSize,
+        chunks,
+        targetLang,
+        sendIntervalSec,
+        merged,
+        totalFix,
+        totalWarn,
+        totalOther,
+        nextChunkIndex: startIdx
+      } = i18nToolAiResumeState);
+      showToast(`Pokračuji od dávky ${startIdx + 1}/${chunks.length}.`);
+    } else {
+      i18nToolClearAiResumeState();
+      apiKey = String(getCurrentApiKey(provider) || '').trim();
+      if (!apiKey) {
+        i18nToolSetAiStatus(t('i18nTool.ai.status.missingApiKey'), true);
+        showToast(t('i18nTool.ai.toast.missingApiKey'));
+        return;
+      }
+      const enFlat = await getI18nToolEnFlat();
+      await getI18nToolUiFlat();
+      allItems = buildI18nToolAiItems(enFlat);
+      if (!allItems.length) throw new Error('Chybí data pro AI audit.');
+
+      const batchInputValue = parseInt(String(document.getElementById('i18nToolAiBatchSize')?.value || '120'), 10);
+      batchSize = Math.max(20, Math.min(300, Number.isFinite(batchInputValue) ? batchInputValue : 120));
+      chunks = chunkArray(allItems, batchSize);
+      targetLang = i18nToolAiSourceFileName.replace(/\.json$/i, '');
+      const intervalInputValue = parseInt(
+        String(
+          document.getElementById('i18nToolAiInterval')?.value
+          || document.getElementById('intervalRun')?.value
+          || document.getElementById('interval')?.value
+          || '20'
+        ),
+        10
+      );
+      sendIntervalSec = Math.max(1, Math.min(300, Number.isFinite(intervalInputValue) ? intervalInputValue : 20));
+    }
+
     i18nToolAiSending = true;
     i18nToolAiStopRequested = false;
     i18nToolSetAiSendButtonState();
+    i18nToolSetAiResumeButtonState(false);
     startI18nToolAiBusyAnimation();
     i18nToolSetAiLoadedFileLabel(i18nToolAiSourceFileName || '—');
-    const enFlat = await getI18nToolEnFlat();
-    await getI18nToolUiFlat();
-    const allItems = buildI18nToolAiItems(enFlat);
-    if (!allItems.length) {
-      throw new Error('Chybí data pro AI audit.');
-    }
-    const batchInputValue = parseInt(String(document.getElementById('i18nToolAiBatchSize')?.value || '120'), 10);
-    let batchSize = Math.max(20, Math.min(300, Number.isFinite(batchInputValue) ? batchInputValue : 120));
-    let chunks = chunkArray(allItems, batchSize);
-    const targetLang = i18nToolAiSourceFileName.replace(/\.json$/i, '');
-    const intervalInputValue = parseInt(
-      String(
-        document.getElementById('i18nToolAiInterval')?.value
-        || document.getElementById('intervalRun')?.value
-        || document.getElementById('interval')?.value
-        || '20'
-      ),
-      10
-    );
-    const sendIntervalSec = Math.max(1, Math.min(300, Number.isFinite(intervalInputValue) ? intervalInputValue : 20));
-    const merged = [];
-    let totalFix = 0;
-    let totalWarn = 0;
-    let totalOther = 0;
-    for (let idx = 0; idx < chunks.length; idx++) {
+
+    for (let idx = startIdx; idx < chunks.length; idx++) {
+      currentIdx = idx;
       if (i18nToolAiStopRequested) throw new Error(I18N_TOOL_AI_SEND_CANCELLED);
       let done = false;
       let localBatchSize = batchSize;
@@ -2654,11 +2761,54 @@ async function sendI18nToolAiPrompt() {
           done = true;
         } catch (e) {
           const msg = String(e?.message || '').toLowerCase();
+          const isJsonParseIssue =
+            e instanceof SyntaxError
+            || msg.includes('unterminated string')
+            || msg.includes('unexpected end of json')
+            || msg.includes('unexpected token')
+            || msg.includes('json at position');
+          const isTransientAiCallIssue =
+            msg.includes('429')
+            || msg.includes('rate limit')
+            || msg.includes('too many')
+            || msg.includes('quota')
+            || msg.includes('service unavailable')
+            || msg.includes('timeout')
+            || msg.includes('request canceled')
+            || msg.includes('blokovaný účet')
+            || msg.includes('restricted')
+            || msg.includes('organization');
           if ((msg.includes('413') || msg.includes('too large') || msg.includes('content too large')) && localBatchSize > 20) {
             localBatchSize = Math.max(20, Math.floor(localBatchSize / 2));
             const rest = allItems.slice(idx * batchSize);
             chunks = [...chunks.slice(0, idx), ...chunkArray(rest, localBatchSize)];
             batchSize = localBatchSize;
+            continue;
+          }
+          if (isJsonParseIssue) {
+            if (localBatchSize > 20) {
+              localBatchSize = Math.max(20, Math.floor(localBatchSize / 2));
+              const rest = allItems.slice(idx * batchSize);
+              chunks = [...chunks.slice(0, idx), ...chunkArray(rest, localBatchSize)];
+              batchSize = localBatchSize;
+              i18nToolSetAiStatus(
+                `Dávka ${idx + 1}/${chunks.length}: AI vrátila nevalidní JSON, zmenšuji dávku na ${localBatchSize} a zkouším znovu...`
+              );
+              await sleepMs(1500);
+              continue;
+            }
+            i18nToolSetAiStatus(
+              `Dávka ${idx + 1}/${chunks.length}: AI vrátila nevalidní JSON, opakuji pokus (${attemptGuard}/5)...`
+            );
+            await sleepMs(1500);
+            continue;
+          }
+          if (isTransientAiCallIssue && attemptGuard < 5) {
+            const waitMs = Math.min(12000, 2000 * attemptGuard);
+            i18nToolSetAiStatus(
+              `Dávka ${idx + 1}/${chunks.length}: dočasná AI chyba (${e?.message || 'unknown'}), opakuji za ${Math.round(waitMs / 1000)}s...`
+            );
+            await sleepMs(waitMs);
             continue;
           }
           throw e;
@@ -2670,6 +2820,7 @@ async function sendI18nToolAiPrompt() {
         await sleepMs(sendIntervalSec * 1000);
       }
     }
+
     responseEl.value = JSON.stringify(merged, null, 2);
     renderI18nToolAiPreview(merged);
     stopI18nToolAiBusyAnimation('✅ AI audit dokončen.');
@@ -2678,6 +2829,7 @@ async function sendI18nToolAiPrompt() {
       `Fix: ${totalFix}, Warn: ${totalWarn}, Other: ${totalOther}.`
     );
     showToast(`AI odpověď načtena (${chunks.length} dávek).`);
+    i18nToolClearAiResumeState();
   } catch (e) {
     if (String(e?.message || '') === I18N_TOOL_AI_SEND_CANCELLED) {
       stopI18nToolAiBusyAnimation(t('i18nTool.ai.status.stoppedByUser'));
@@ -2685,14 +2837,36 @@ async function sendI18nToolAiPrompt() {
       showToast(t('i18nTool.ai.toast.sendStoppedByUser'));
       return;
     }
+
+    i18nToolAiResumeState = {
+      provider,
+      model,
+      apiKey,
+      allItems,
+      batchSize,
+      chunks,
+      targetLang,
+      sendIntervalSec,
+      merged,
+      totalFix,
+      totalWarn,
+      totalOther,
+      nextChunkIndex: currentIdx
+    };
+
     stopI18nToolAiBusyAnimation(t('i18nTool.ai.status.failed'));
-    i18nToolSetAiStatus(t('i18nTool.ai.status.callFailed', { message: e?.message || String(e) }), true);
+    i18nToolSetAiStatus(`${t('i18nTool.ai.status.callFailed', { message: e?.message || String(e) })} | Připraveno tlačítko Pokračovat.`, true);
+    i18nToolSetAiResumeButtonState(true, '▶ Pokračovat od poslední dávky');
     showToast(t('i18nTool.ai.toast.callFailed', { message: e?.message || String(e) }));
   } finally {
     i18nToolAiSending = false;
     i18nToolAiStopRequested = false;
     i18nToolSetAiSendButtonState();
   }
+}
+
+function resumeI18nToolAiPrompt() {
+  return sendI18nToolAiPrompt({ resume: true });
 }
 
 function downloadI18nToolAiResult() {
@@ -3468,6 +3642,7 @@ window.openI18nToolAiJsonPicker = openI18nToolAiJsonPicker;
 window.loadI18nToolAiJsonFromFile = loadI18nToolAiJsonFromFile;
 window.buildI18nToolAiPrompt = buildI18nToolAiPrompt;
 window.sendI18nToolAiPrompt = sendI18nToolAiPrompt;
+window.resumeI18nToolAiPrompt = resumeI18nToolAiPrompt;
 window.applyI18nToolAiResponse = applyI18nToolAiResponse;
 window.downloadI18nToolAiResult = downloadI18nToolAiResult;
 window.runI18nKeyCheck = runI18nKeyCheck;

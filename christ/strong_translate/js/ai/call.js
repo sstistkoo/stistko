@@ -8,6 +8,19 @@ import { state } from '../state.js';
 const { validateAPIResponse, DEFAULT_PROMPT } = core;
 
 export function createCallApi({ log, logError, logWarn, showToast, t, rateInfoFromErrorMessage, parseWithOpenRouterNormalization }) {
+const blockedModelsByProvider = new Map();
+
+function isModelBlocked(provider, model) {
+  const blocked = blockedModelsByProvider.get(provider);
+  return !!(blocked && blocked.has(model));
+}
+
+function markModelBlocked(provider, model) {
+  if (!provider || !model) return;
+  if (!blockedModelsByProvider.has(provider)) blockedModelsByProvider.set(provider, new Set());
+  blockedModelsByProvider.get(provider).add(model);
+}
+
 function resetPrompt() {
   document.getElementById('promptEditor').value = DEFAULT_PROMPT;
   localStorage.setItem('strong_prompt', DEFAULT_PROMPT);
@@ -44,10 +57,15 @@ function getFallbackModels(provider) {
 }
 
 async function callAIWithRetry(provider, apiKey, model, messages) {
-  const tryModels = (provider === 'gemini' || (provider === 'openrouter' && model === 'openrouter/free'))
+  const candidateModels = (provider === 'gemini' || (provider === 'openrouter' && model === 'openrouter/free'))
     ? [model]
     : [...new Set([model, ...getFallbackModels(provider).filter(m => m !== model)])];
+  const tryModels = candidateModels.filter((m) => !isModelBlocked(provider, m));
   let lastErr = null;
+
+  if (!tryModels.length) {
+    throw new Error('Žádný dostupný model pro tento provider (fallback modely jsou blokované).');
+  }
 
   for (const m of tryModels) {
     for (let attempt = 0; attempt < 3; attempt++) {
@@ -111,6 +129,7 @@ async function callAIWithRetry(provider, apiKey, model, messages) {
            continue;
          }
          if (isBanned) {
+          markModelBlocked(provider, m);
            logError('callAIWithRetry', new Error(`Blokovaný účet: ${m}`), {
              provider, model: m, attempt: attempt + 1
            });
