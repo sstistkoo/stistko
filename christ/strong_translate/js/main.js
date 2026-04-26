@@ -131,8 +131,6 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     setText('startBtn', t('setup.start'));
     setText('btnHelp', t('setup.help'));
     setText('btnLimits', t('setup.limits'));
-    setText('btnI18nCheckKeys', t('setup.check.keys'));
-    setText('btnI18nCheckDiacritics', t('setup.check.diacritics'));
     setText('batchSizeLabel', t('setup.batchSize'));
     setText('intervalLabel', t('setup.interval'));
     setText('pipelineGroupLabel', t('pipeline.group'));
@@ -147,10 +145,6 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     setAttr('provider', 'aria-label', t('setup.provider.aria'));
     setAttr('apiKey', 'aria-label', t('setup.apiKey.input.aria'));
     setAttr('apiKeyProfile', 'aria-label', t('setup.apiKey.profile.aria'));
-    setAttr('btnI18nCheckKeys', 'aria-label', t('setup.check.keys.aria'));
-    setAttr('btnI18nCheckDiacritics', 'aria-label', t('setup.check.diacritics.aria'));
-    setAttr('btnI18nCheckKeys', 'title', t('setup.check.keys.title'));
-    setAttr('btnI18nCheckDiacritics', 'title', t('setup.check.diacritics.title'));
     setAttr('model', 'aria-label', t('setup.model.aria'));
     setAttr('batchSize', 'aria-label', t('setup.batchSize.aria'));
     setAttr('fileTXT', 'aria-label', t('setup.file.input.aria'));
@@ -3694,51 +3688,6 @@ async function runI18nToolBrowserTranslate() {
     }
   }
 }
-async function runI18nKeyCheck() {
-  try {
-    const langs = ['cs', 'en', 'sk', 'pl'];
-    const loaded = {};
-    await Promise.all(langs.map(async (lang) => {
-      const res = await fetch(`./i18n/${lang}.json`, { cache: 'no-store' });
-      if (!res.ok) throw new Error(`HTTP ${res.status} (${lang})`);
-      loaded[lang] = await res.json();
-    }));
-    const baseKeys = Object.keys(loaded.cs || {});
-    const missingSummary = [];
-    langs.filter(l => l !== 'cs').forEach(lang => {
-      const dict = loaded[lang] || {};
-      const missing = baseKeys.filter(k => !(k in dict));
-      if (missing.length) {
-        missingSummary.push(`${lang}: ${missing.length}`);
-        console.warn(`[i18n-check] Missing in ${lang}:`, missing);
-      }
-    });
-    if (missingSummary.length) {
-      showToast(t('toast.i18n.keys.missing', { summary: missingSummary.join(', ') }));
-    } else {
-      showToast(t('toast.i18n.keys.ok', { count: baseKeys.length }));
-    }
-  } catch (e) {
-    showToast(t('toast.error.withMessage', { message: e?.message || String(e) }));
-  }
-}
-async function runCzechDiacriticsCheck() {
-  try {
-    const res = await fetch('./i18n/cs.json', { cache: 'no-store' });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const raw = await res.text();
-    const mojibakeMatch = /Ã.|Ä.|Å.|�/.test(raw);
-    const diacriticsCount = (raw.match(/[ěščřžýáíéúůďťňĚŠČŘŽÝÁÍÉÚŮĎŤŇ]/g) || []).length;
-    if (mojibakeMatch || diacriticsCount < 40) {
-      showToast(t('toast.i18n.diacritics.bad', { count: diacriticsCount }));
-      console.warn('[i18n-check] Potential diacritics issue in cs.json', { mojibakeMatch, diacriticsCount });
-      return;
-    }
-    showToast(t('toast.i18n.diacritics.ok', { count: diacriticsCount }));
-  } catch (e) {
-    showToast(t('toast.error.withMessage', { message: e?.message || String(e) }));
-  }
-}
 window.showI18nToolModal = showI18nToolModal;
 window.closeI18nToolModal = closeI18nToolModal;
 window.openI18nToolLangModal = openI18nToolLangModal;
@@ -3767,8 +3716,6 @@ window.sendI18nToolAiPrompt = sendI18nToolAiPrompt;
 window.resumeI18nToolAiPrompt = resumeI18nToolAiPrompt;
 window.applyI18nToolAiResponse = applyI18nToolAiResponse;
 window.downloadI18nToolAiResult = downloadI18nToolAiResult;
-window.runI18nKeyCheck = runI18nKeyCheck;
-window.runCzechDiacriticsCheck = runCzechDiacriticsCheck;
 
 // ══ RESIZE PANELS (logika v ./ui/resize.js) ─────────────────────
 
