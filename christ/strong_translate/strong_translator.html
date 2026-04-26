@@ -19,7 +19,7 @@
 
   <div class="setup-advanced">
     <details id="setupAdvancedDetails">
-      <summary>Pokročilé nastavení</summary>
+      <summary id="setupAdvancedSummary">Pokročilé nastavení</summary>
 
   <div class="row" id="legacyProviderRow" style="display:none">
     <label for="provider">Provider</label>
@@ -35,7 +35,7 @@
     <input type="password" id="apiKey" placeholder="gsk_..." onchange="saveApiKey()" aria-label="API klíč providera">
     <div class="key-switch-row">
       <select id="apiKeyProfile" onchange="onApiKeyProfileChange()" aria-label="Výběr uloženého API klíče">
-        <option value="__manual__">Ruční klíč (aktuální pole)</option>
+        <option id="apiKeyProfileManualOption" value="__manual__">Ruční klíč (aktuální pole)</option>
       </select>
       <button class="hbtn" id="btnSaveApiKeyProfile" style="padding:6px 10px;font-size:10px" onclick="saveCurrentApiKeyAsProfile()" title="Uložit aktuální API klíč do knihovny">💾 Uložit klíč</button>
       <button class="hbtn red" id="btnDeleteApiKeyProfile" style="padding:6px 10px;font-size:10px" onclick="deleteApiKeyProfile()" title="Smazat vybraný API klíč">🗑 Smazat</button>
@@ -403,24 +403,24 @@
   <div id="helpModal">
     <div class="help-modal-box">
       <div class="limits-title" id="helpTitle">❓ Nápověda Strong GR → CZ</div>
-      <div class="help-block">
+      <div class="help-block" id="helpSectionAboutBody">
         <b id="helpSectionAboutTitle">O čem aplikace je</b><br>
         Tento nástroj překládá hesla Strong slovníku (řečtina/hebrejština) do češtiny po dávkách přes AI provider (`Groq`, `Gemini`, `OpenRouter`).
         Umí ukládat průběh, zastavit AUTO podle tokenů, importovat/exportovat TXT/JSON a znovu zpracovat neúspěšné položky.
       </div>
-      <div class="help-block">
+      <div class="help-block" id="helpSectionKeysBody">
         <b id="helpSectionKeysTitle">Jak získat API klíče</b><br>
         `Groq`: vytvoř klíč v <a href="https://console.groq.com/keys" target="_blank" rel="noopener noreferrer">console.groq.com/keys</a>.<br>
         `Gemini`: vytvoř klíč v <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer">AI Studio</a>.<br>
         `OpenRouter`: vytvoř klíč v <a href="https://openrouter.ai/keys" target="_blank" rel="noopener noreferrer">openrouter.ai/keys</a>.<br>
         Pak vlož klíč do pole API a můžeš ho uložit do knihovny tlačítkem <b>Uložit klíč</b>.
       </div>
-      <div class="help-block">
+      <div class="help-block" id="helpSectionLibraryBody">
         <b id="helpSectionLibraryTitle">Knihovna API klíčů</b><br>
         Pro každého providera můžeš mít více klíčů. Vyber klíč v rozbalovacím menu pod API polem a přepni ho jedním klikem.
         Aktivní klíč se používá pro překlad i kontrolu limitů.
       </div>
-      <div class="help-block">
+      <div class="help-block" id="helpSectionLimitsBody">
         <b id="helpSectionLimitsTitle">Limity a kvóty</b><br>
         Tlačítko `📊 Limity` zobrazuje dostupné údaje o kreditech/limitech z API providera a doplňkové odhady.
         U některých providerů nejsou všechny metriky veřejně dostupné, proto se kombinují živá data a fallback informace.<br>
