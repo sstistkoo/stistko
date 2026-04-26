@@ -344,7 +344,7 @@ export function createListApi({
     state.selectedKeys.clear();
     renderList();
     updateFailedCount();
-    document.getElementById('btnTranslateSelected').textContent = '⚡ Přeložit vybrané';
+    document.getElementById('btnTranslateSelected').textContent = t('list.translateSelected');
 
     if (Object.keys(allNewTranslations).length > 0) {
       showPreviewModal(allNewTranslations);

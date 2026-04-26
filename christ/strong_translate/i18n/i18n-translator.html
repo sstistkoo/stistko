@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>i18n JSON Překladač</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 900px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .upload-section {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-section:hover {
+            background: #f8f9ff;
+            border-color: #764ba2;
+        }
+
+        .upload-section.dragover {
+            background: #f0f4ff;
+            border-color: #764ba2;
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: transform 0.2s;
+            font-weight: 600;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .language-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .lang-card {
+            background: #f8f9ff;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .lang-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .lang-card.selected {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #764ba2;
+        }
+
+        .lang-flag {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .lang-name {
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .lang-code {
+            font-size: 0.8em;
+            opacity: 0.7;
+            margin-top: 3px;
+        }
+
+        .file-info {
+            background: #f8f9ff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .file-info h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 30px;
+            overflow: hidden;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .status {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .select-all-btn {
+            background: #6c757d;
+            margin-left: 10px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0;
+            cursor: pointer;
+        }
+
+        .checkbox-label input {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌍 i18n JSON Překladač</h1>
+            <p>Přeložte svůj JSON soubor do libovolných jazyků</p>
+        </div>
+
+        <div class="content">
+            <div class="upload-section" id="uploadSection">
+                <div class="upload-icon">📁</div>
+                <h2>Nahrajte JSON soubor</h2>
+                <p style="margin: 15px 0; color: #666;">Přetáhněte soubor sem nebo klikněte pro výběr</p>
+                <input type="file" id="fileInput" class="file-input" accept=".json">
+                <button class="btn" onclick="document.getElementById('fileInput').click()">Vybrat soubor</button>
+            </div>
+
+            <div id="fileInfoSection" style="display: none;">
+                <div class="file-info">
+                    <h3>📄 Načtený soubor</h3>
+                    <p><strong>Název:</strong> <span id="fileName"></span></p>
+                    <p><strong>Velikost:</strong> <span id="fileSize"></span> KB</p>
+                    <p><strong>Počet klíčů:</strong> <span id="keyCount"></span></p>
+                </div>
+
+                <div class="file-info" style="background: #fff3cd; border: 2px solid #ffc107;">
+                    <h3 style="color: #856404;">ℹ️ Jak fungují jazykové značky</h3>
+                    <p style="color: #856404;">Všechny jazykové zkratky ve vstupním souboru budou automaticky nahrazeny cílovým jazykem:</p>
+                    <ul style="margin-left: 20px; color: #856404;">
+                        <li><strong>Vstup (CZ):</strong> "KJV překlady (CZ)" → <strong>Výstup (SK):</strong> "KJV preklady (SK)"</li>
+                        <li><strong>Vstup CZ:</strong> "Verze CZ" → <strong>Výstup SK:</strong> "Verzia SK"</li>
+                        <li>Funguje pro: (CZ), CZ, (EN), EN, (SK), SK, (DE), DE, atd.</li>
+                    </ul>
+                </div>
+
+                <h3 style="margin-bottom: 20px; color: #667eea;">Vyberte cílové jazyky:</h3>
+                
+                <div class="action-buttons">
+                    <button class="btn select-all-btn" onclick="selectAll()">Vybrat vše</button>
+                    <button class="btn select-all-btn" onclick="deselectAll()">Zrušit výběr</button>
+                </div>
+
+                <div class="language-grid" id="languageGrid"></div>
+
+                <div class="progress-bar" id="progressBar">
+                    <div class="progress-fill" id="progressFill">0%</div>
+                </div>
+
+                <div class="status" id="status"></div>
+
+                <div class="action-buttons">
+                    <button class="btn" id="translateBtn" onclick="startTranslation()">🚀 Spustit překlad</button>
+                    <button class="btn select-all-btn" onclick="resetApp()">🔄 Nový soubor</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const languages = [
+            { code: 'cs', name: 'Čeština', flag: '🇨🇿', tag: 'CZ' },
+            { code: 'sk', name: 'Slovenština', flag: '🇸🇰', tag: 'SK' },
+            { code: 'pl', name: 'Polština', flag: '🇵🇱', tag: 'PL' },
+            { code: 'de', name: 'Němčina', flag: '🇩🇪', tag: 'DE' },
+            { code: 'fr', name: 'Francouzština', flag: '🇫🇷', tag: 'FR' },
+            { code: 'es', name: 'Španělština', flag: '🇪🇸', tag: 'ES' },
+            { code: 'it', name: 'Italština', flag: '🇮🇹', tag: 'IT' },
+            { code: 'pt', name: 'Portugalština', flag: '🇵🇹', tag: 'PT' },
+            { code: 'ru', name: 'Ruština', flag: '🇷🇺', tag: 'RU' },
+            { code: 'uk', name: 'Ukrajinština', flag: '🇺🇦', tag: 'UK' },
+            { code: 'bg', name: 'Bulharština', flag: '🇧🇬', tag: 'BG' },
+            { code: 'ro', name: 'Rumunština', flag: '🇷🇴', tag: 'RO' },
+            { code: 'hu', name: 'Maďarština', flag: '🇭🇺', tag: 'HU' },
+            { code: 'nl', name: 'Holandština', flag: '🇳🇱', tag: 'NL' },
+            { code: 'sv', name: 'Švédština', flag: '🇸🇪', tag: 'SV' },
+            { code: 'da', name: 'Dánština', flag: '🇩🇰', tag: 'DA' },
+            { code: 'no', name: 'Norština', flag: '🇳🇴', tag: 'NO' },
+            { code: 'fi', name: 'Finština', flag: '🇫🇮', tag: 'FI' },
+            { code: 'el', name: 'Řečtina', flag: '🇬🇷', tag: 'EL' },
+            { code: 'tr', name: 'Turečtina', flag: '🇹🇷', tag: 'TR' },
+            { code: 'ar', name: 'Arabština', flag: '🇸🇦', tag: 'AR' },
+            { code: 'zh-CN', name: 'Čínština', flag: '🇨🇳', tag: 'zh-CN' },
+            { code: 'ja', name: 'Japonština', flag: '🇯🇵', tag: 'JA' },
+            { code: 'ko', name: 'Korejština', flag: '🇰🇷', tag: 'KO' },
+            { code: 'he', name: 'Hebrejština', flag: '🇮🇱', tag: 'HE' },
+        ];
+
+        let sourceData = null;
+        let selectedLanguages = new Set();
+
+        // Inicializace jazykové mřížky
+        function initLanguageGrid() {
+            const grid = document.getElementById('languageGrid');
+            grid.innerHTML = languages.map(lang => `
+                <div class="lang-card" data-code="${lang.code}" onclick="toggleLanguage('${lang.code}')">
+                    <div class="lang-flag">${lang.flag}</div>
+                    <div class="lang-name">${lang.name}</div>
+                    <div class="lang-code">${lang.code}</div>
+                </div>
+            `).join('');
+        }
+
+        function toggleLanguage(code) {
+            const card = document.querySelector(`[data-code="${code}"]`);
+            if (selectedLanguages.has(code)) {
+                selectedLanguages.delete(code);
+                card.classList.remove('selected');
+            } else {
+                selectedLanguages.add(code);
+                card.classList.add('selected');
+            }
+        }
+
+        function selectAll() {
+            languages.forEach(lang => {
+                selectedLanguages.add(lang.code);
+                document.querySelector(`[data-code="${lang.code}"]`).classList.add('selected');
+            });
+        }
+
+        function deselectAll() {
+            selectedLanguages.clear();
+            document.querySelectorAll('.lang-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+        }
+
+        // Drag & Drop
+        const uploadSection = document.getElementById('uploadSection');
+        
+        uploadSection.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadSection.classList.add('dragover');
+        });
+
+        uploadSection.addEventListener('dragleave', () => {
+            uploadSection.classList.remove('dragover');
+        });
+
+        uploadSection.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadSection.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file && file.name.endsWith('.json')) {
+                handleFile(file);
+            }
+        });
+
+        document.getElementById('fileInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) handleFile(file);
+        });
+
+        function handleFile(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    sourceData = JSON.parse(e.target.result);
+                    const keyCount = countKeys(sourceData);
+                    
+                    document.getElementById('fileName').textContent = file.name;
+                    document.getElementById('fileSize').textContent = (file.size / 1024).toFixed(2);
+                    document.getElementById('keyCount').textContent = keyCount;
+                    
+                    document.getElementById('uploadSection').style.display = 'none';
+                    document.getElementById('fileInfoSection').style.display = 'block';
+                    initLanguageGrid();
+                } catch (err) {
+                    alert('Chyba při načítání JSON: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function countKeys(obj, count = 0) {
+            if (typeof obj === 'object' && obj !== null) {
+                for (let key in obj) {
+                    count++;
+                    count = countKeys(obj[key], count);
+                }
+            }
+            return count;
+        }
+
+        // Ochrana jazykových značek - v závorkách i bez
+        const TAG_REGEX = /\b(CZ|EN|SK|PL|DE|FR|ES|IT|PT|RU|UK|BG|RO|HU|NL|SV|DA|NO|FI|EL|TR|AR|JA|KO|HE|zh-CN|ZH-CN)\b|\((CZ|EN|SK|PL|DE|FR|ES|IT|PT|RU|UK|BG|RO|HU|NL|SV|DA|NO|FI|EL|TR|AR|JA|KO|HE|zh-CN|ZH-CN)\)/gi;
+        const PLACEHOLDER = '\uE000';
+
+        function protectTags(str) {
+            return str.replace(TAG_REGEX, (match, standalone, inParens) => {
+                // Zapamatujeme si, zda byla značka v závorkách
+                return inParens ? `${PLACEHOLDER}P` : `${PLACEHOLDER}S`;
+            });
+        }
+
+        function restoreTags(str, targetTag) {
+            // P = v závorkách, S = samostatně
+            return str.replace(new RegExp(`${PLACEHOLDER}P`, 'g'), `(${targetTag})`)
+                      .replace(new RegExp(`${PLACEHOLDER}S`, 'g'), targetTag);
+        }
+
+        async function translateText(text, targetLang) {
+            const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
+            
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                return data[0][0][0];
+            } catch (error) {
+                console.error('Translation error:', error);
+                return text;
+            }
+        }
+
+        async function translateValue(value, targetLang, targetTag) {
+            if (typeof value === 'string') {
+                if (!value.trim()) return value;
+                
+                // Vždy chráníme jazykové značky a nahradíme je cílovým
+                const textToTranslate = protectTags(value);
+                const translated = await translateText(textToTranslate, targetLang);
+                await new Promise(resolve => setTimeout(resolve, 100)); // Rate limiting
+                
+                return restoreTags(translated, targetTag);
+            } else if (Array.isArray(value)) {
+                const result = [];
+                for (let item of value) {
+                    result.push(await translateValue(item, targetLang, targetTag));
+                }
+                return result;
+            } else if (typeof value === 'object' && value !== null) {
+                const result = {};
+                for (let key in value) {
+                    result[key] = await translateValue(value[key], targetLang, targetTag);
+                }
+                return result;
+            }
+            return value;
+        }
+
+        async function startTranslation() {
+            if (selectedLanguages.size === 0) {
+                alert('Vyberte alespoň jeden jazyk!');
+                return;
+            }
+
+            const progressBar = document.getElementById('progressBar');
+            const progressFill = document.getElementById('progressFill');
+            const status = document.getElementById('status');
+            const translateBtn = document.getElementById('translateBtn');
+
+            progressBar.style.display = 'block';
+            status.style.display = 'none';
+            translateBtn.disabled = true;
+
+            const translatedFiles = {};
+            const totalLangs = selectedLanguages.size;
+            let completed = 0;
+
+            try {
+                for (let langCode of selectedLanguages) {
+                    const lang = languages.find(l => l.code === langCode);
+                    
+                    status.style.display = 'block';
+                    status.className = 'status';
+                    status.textContent = `Překládám do: ${lang.name} (${lang.code})...`;
+
+                    const translated = await translateValue(sourceData, langCode, lang.tag);
+                    
+                    // Nastavit topic.langTag pokud existuje
+                    if (translated && typeof translated === 'object' && 'topic.langTag' in translated) {
+                        translated['topic.langTag'] = lang.tag;
+                    }
+
+                    translatedFiles[langCode] = JSON.stringify(translated, null, 2);
+
+                    completed++;
+                    const percent = Math.round((completed / totalLangs) * 100);
+                    progressFill.style.width = percent + '%';
+                    progressFill.textContent = percent + '%';
+                }
+
+                // Stažení všech souborů (postupně)
+                status.className = 'status success';
+                status.innerHTML = `✓ Hotovo! Přeloženo do ${totalLangs} jazyků.<br><strong>Klikejte na tlačítka níže pro stažení:</strong>`;
+                
+                // Vytvoření tlačítek pro stažení
+                const downloadSection = document.createElement('div');
+                downloadSection.style.marginTop = '20px';
+                downloadSection.style.display = 'grid';
+                downloadSection.style.gridTemplateColumns = 'repeat(auto-fill, minmax(150px, 1fr))';
+                downloadSection.style.gap = '10px';
+
+                for (let langCode of selectedLanguages) {
+                    const lang = languages.find(l => l.code === langCode);
+                    const btn = document.createElement('button');
+                    btn.className = 'btn';
+                    btn.style.padding = '10px';
+                    btn.style.fontSize = '0.9em';
+                    btn.innerHTML = `${lang.flag} ${langCode}.json`;
+                    btn.onclick = () => downloadFile(translatedFiles[langCode], `${langCode}.json`);
+                    downloadSection.appendChild(btn);
+                }
+
+                status.appendChild(downloadSection);
+
+            } catch (error) {
+                status.className = 'status error';
+                status.textContent = '✗ Chyba při překladu: ' + error.message;
+            } finally {
+                translateBtn.disabled = false;
+            }
+        }
+
+        function downloadFile(content, filename) {
+            const blob = new Blob([content], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function resetApp() {
+            sourceData = null;
+            selectedLanguages.clear();
+            document.getElementById('uploadSection').style.display = 'block';
+            document.getElementById('fileInfoSection').style.display = 'none';
+            document.getElementById('fileInput').value = '';
+            document.getElementById('progressBar').style.display = 'none';
+            document.getElementById('status').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

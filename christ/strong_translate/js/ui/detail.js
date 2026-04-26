@@ -44,14 +44,14 @@ export function createDetailApi({
           <div class="tbox-label">${s.label}</div>
           <div class="tbox-actions">
             <button class="tbox-btn" onclick="openTopicPromptModal('${key}','${s.id}')" aria-label="${escHtml(t('detail.promptButton.aria', { label: s.label }))}">${t('detail.promptButton')}</button>
-            ${!hasMeaningfulValue(s.field) ? `<button class="tbox-btn" onclick="refillSingleField('${key}','${s.id}')" aria-label="Doplnit ${s.label} přes AI">✨ Doplnit</button>` : ''}
+            ${!hasMeaningfulValue(s.field) ? `<button class="tbox-btn" onclick="refillSingleField('${key}','${s.id}')" aria-label="${escHtml(t('detail.refillButton.aria', { label: s.label }))}">${t('detail.refillButton')}</button>` : ''}
             <button class="tbox-btn" onclick="toggleEditSection('${key}','${s.id}')" aria-label="${escHtml(t('detail.editButton.aria', { label: s.label }))}">${t('detail.editButton')}</button>
           </div>
         </div>
         <div class="tbox-body" id="tval-${key}-${s.id}">${escHtml(s.field || '—')}</div>
         <div class="tbox-edit" id="tedit-${key}-${s.id}">
           <textarea id="tinput-${key}-${s.id}" aria-label="${s.label}">${escHtml(s.field || '')}</textarea>
-          <button class="tbox-save" onclick="saveSection('${key}','${s.id}')" aria-label="Uložit ${s.label}">Uložit</button>
+          <button class="tbox-save" onclick="saveSection('${key}','${s.id}')" aria-label="${escHtml(t('detail.saveButton.aria', { label: s.label }))}">${t('detail.saveButton')}</button>
         </div>
       </div>
     `).join('');
@@ -106,11 +106,11 @@ export function createDetailApi({
         <div class="label">${label}</div>
         <div style="display:flex;gap:6px;align-items:center;justify-content:space-between;flex-wrap:wrap">
           <div class="value" id="srcval-${state.activeKey}-${field}" style="margin:0;flex:1 1 auto">${escHtml(value || '—')}</div>
-          <button class="tbox-btn" type="button" onclick="toggleSourceEntryEdit('${state.activeKey}','${field}')">✎ Upravit</button>
+          <button class="tbox-btn" type="button" onclick="toggleSourceEntryEdit('${state.activeKey}','${field}')">${t('detail.source.edit')}</button>
         </div>
         <div class="tbox-edit" id="srcedit-${state.activeKey}-${field}">
           <textarea id="srcinput-${state.activeKey}-${field}" aria-label="${label}">${escHtml(value || '')}</textarea>
-          <button class="tbox-save" type="button" onclick="saveSourceEntryField('${state.activeKey}','${field}')">Uložit</button>
+          <button class="tbox-save" type="button" onclick="saveSourceEntryField('${state.activeKey}','${field}')">${t('detail.saveButton')}</button>
         </div>
       </div>`;
 
@@ -198,7 +198,7 @@ export function createDetailApi({
     updateStats();
     renderList();
     renderDetail();
-    showToast('Upravené pole uloženo.');
+    showToast(t('toast.detail.fieldSaved'));
   }
 
   async function refillSingleField(key, topicId) {

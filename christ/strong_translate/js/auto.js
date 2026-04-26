@@ -138,7 +138,7 @@ export function createAutoApi(deps) {
       if (pending > 0) {
         setAutoProviderCountdownLabel(
           prov,
-          `${providerLabel(prov)}: ${getUiLang() === 'en' ? 'processing partial' : 'zpracovává neúplné'} (${pending})`
+          t('auto.provider.processingPartial', { label: providerLabel(prov), pending })
         );
         return;
       }
@@ -146,7 +146,7 @@ export function createAutoApi(deps) {
       if (nextState.exhausted && nextState.nextSec > 0) {
         setAutoProviderCountdownLabel(
           prov,
-          `${providerLabel(prov)}: ${getUiLang() === 'en' ? 'waiting' : 'čeká'} ${nextState.nextSec}s ${getUiLang() === 'en' ? 'for next attempt' : 'do dalšího pokusu'}`
+          t('auto.provider.waitingNextAttempt', { label: providerLabel(prov), seconds: nextState.nextSec })
         );
         return;
       }
