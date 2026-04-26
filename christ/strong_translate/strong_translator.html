@@ -817,6 +817,7 @@
       <div class="prompt-actions" style="margin-top:10px">
         <button type="button" class="prompt-btn ok" id="btnI18nToolRunBrowser" onclick="runI18nToolBrowserTranslate()">🚀 Přeložit a stáhnout</button>
         <button type="button" class="prompt-btn cancel" id="btnI18nToolCancelBrowser" onclick="cancelI18nToolBrowserTranslate()" style="display:none">■ Ukončit překlad</button>
+        <button type="button" class="prompt-btn" id="btnI18nToolEditOutput" onclick="openI18nToolOutputEditor()" disabled>✏ Editovat výstup JSON</button>
       </div>
       <label for="i18nToolCmd" class="i18n-tool-label">Příkaz(y) pro překlad z i18n/cs.json</label>
       <textarea id="i18nToolCmd" class="i18n-tool-cmd" readonly></textarea>
@@ -846,6 +847,24 @@
       <div class="prompt-actions" style="margin-top:12px">
         <button type="button" class="prompt-btn ok" onclick="reopenI18nToolModalAfterDone()">Otevřít překladač</button>
         <button type="button" class="prompt-btn cancel" onclick="closeI18nToolDoneModal()">Zavřít</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="i18nToolEditorModal" class="i18n-tool-lang-modal" onclick="if(event.target===this)closeI18nToolOutputEditor()">
+    <div class="prompt-modal-box i18n-tool-modal-box" onclick="event.stopPropagation()">
+      <div class="prompt-modal-title">✏ Editor výstupního JSON</div>
+      <div class="i18n-tool-controls">
+        <div class="mobl-set-row" style="margin:0">
+          <label for="i18nToolEditorLang">Jazyk výstupu</label>
+          <select id="i18nToolEditorLang" onchange="onI18nToolEditorLangChange()"></select>
+        </div>
+      </div>
+      <div class="i18n-tool-status" style="display:block">Formát řádků: <code>key.path[TAB]"hodnota"</code>. Klíče jsou seřazené abecedně.</div>
+      <textarea id="i18nToolEditorText" class="i18n-tool-cmd" style="min-height:340px"></textarea>
+      <div class="prompt-actions" style="margin-top:12px">
+        <button type="button" class="prompt-btn ok" onclick="saveI18nToolOutputEditor()">💾 Uložit JSON</button>
+        <button type="button" class="prompt-btn cancel" onclick="closeI18nToolOutputEditor()">✕ Zavřít editor</button>
       </div>
     </div>
   </div>
