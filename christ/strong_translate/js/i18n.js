@@ -3,6 +3,41 @@ import { PROVIDERS } from './config.js';
 export const UI_LANG_KEY = 'strong_ui_lang';
 export const DEFAULT_UI_LANG = 'cs';
 export const UI_LANGS = new Set(['cs', 'en', 'sk', 'pl']);
+
+/** Cílový jazyk slovníku (strong_target_lang) → kód v závorkách v UI, pokud není zvolen ručně. */
+const TARGET_TO_CONTENT_TAG = {
+  cz: 'CZ',
+  cs: 'CZ',
+  en: 'EN',
+  sk: 'SK',
+  pl: 'PL',
+  bg: 'BG',
+  ch: 'zh-CN',
+  sp: 'ES',
+  gr: 'EL',
+  he: 'HE'
+};
+
+export const CONTENT_TAG_LANG_KEY = 'strong_content_tag_lang';
+
+export function getDefaultContentTag() {
+  let target = 'cz';
+  if (typeof localStorage !== 'undefined') {
+    target = String(localStorage.getItem('strong_target_lang') || 'cz').toLowerCase();
+  }
+  if (target === 'cs') return 'CZ';
+  return TARGET_TO_CONTENT_TAG[target] || 'EN';
+}
+
+/**
+ * Kód v závorkách u témat, např. (CZ) / (DE) — dle volby v nastavení jazyků nebo cíle překladu.
+ */
+export function getContentLangTag() {
+  if (typeof localStorage === 'undefined') return 'EN';
+  const stored = String(localStorage.getItem(CONTENT_TAG_LANG_KEY) || '').trim();
+  if (stored) return stored;
+  return getDefaultContentTag();
+}
 export const INLINE_UI_MESSAGES = {
   cs: {
     'toast.error.withMessage': '✗ Chyba: {message}'

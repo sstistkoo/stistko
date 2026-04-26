@@ -709,14 +709,14 @@
 
    <!-- Language Settings Sub-modal -->
    <div id="promptLangModal" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);display:none;align-items:center;justify-content:center;z-index:1004;">
-     <div class="prompt-modal-box" style="max-width:400px;">
+     <div class="prompt-modal-box" style="max-width:440px;max-height:90vh;overflow-y:auto">
       <div class="prompt-modal-title" id="promptLangModalTitle">🌐 Nastavení jazyků</div>
       <div class="mobl-set-row">
         <label id="uiLanguageLabel">Jazyk rozhraní</label>
         <select id="uiLanguage" style="width:100%;padding:10px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:12px;">
           <option value="cs">Čeština</option>
           <option value="en">English</option>
-          <option value="sk">Slovenčina</option>
+          <option value="sk">Slovenština</option>
           <option value="pl">Polski</option>
         </select>
       </div>
@@ -728,11 +728,44 @@
           <option value="bg">Bulharština</option>
           <option value="ch">Čínština</option>
           <option value="sp">Španělština</option>
-          <option value="sk">Slovenčina</option>
+          <option value="sk">Slovenština</option>
           <option value="pl">Polski</option>
           <option value="gr">Řečtina</option>
           <option value="he">Hebrejština</option>
         </select>
+      </div>
+      <div class="mobl-set-row">
+        <label id="contentTagLanguageLabel" for="contentTagLanguage">Kód cíle v textech (…)</label>
+        <select id="contentTagLanguage" style="width:100%;padding:10px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:12px;">
+          <option value="CZ">—</option>
+          <option value="SK">—</option>
+          <option value="PL">—</option>
+          <option value="DE">—</option>
+          <option value="FR">—</option>
+          <option value="ES">—</option>
+          <option value="IT">—</option>
+          <option value="PT">—</option>
+          <option value="RU">—</option>
+          <option value="UK">—</option>
+          <option value="BG">—</option>
+          <option value="RO">—</option>
+          <option value="HU">—</option>
+          <option value="NL">—</option>
+          <option value="SV">—</option>
+          <option value="DA">—</option>
+          <option value="NO">—</option>
+          <option value="FI">—</option>
+          <option value="EL">—</option>
+          <option value="TR">—</option>
+          <option value="AR">—</option>
+          <option value="zh-CN">—</option>
+          <option value="JA">—</option>
+          <option value="KO">—</option>
+        </select>
+        <div id="contentTagLanguageHint" style="font-size:10px;color:var(--txt3);line-height:1.35;margin-top:4px"></div>
+      </div>
+      <div class="mobl-set-row" style="margin-top:4px">
+        <button type="button" class="prompt-btn" id="btnI18nTranslateTool" style="width:100%" onclick="showI18nToolModal()">Překlad i18n JSON (nástroj)</button>
       </div>
        <div class="mobl-set-row">
          <label id="sourceLanguageLabel">Zdrojový jazyk</label>
@@ -746,6 +779,17 @@
         <button class="prompt-btn cancel" id="btnPromptLangClose" onclick="closePromptLangModal()">✕ Zavřít</button>
         <button class="prompt-btn ok" id="btnPromptLangSave" onclick="saveLangSettings()">✓ Uložit</button>
        </div>
+    </div>
+  </div>
+
+  <div id="i18nToolModal" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.88);display:none;align-items:center;justify-content:center;z-index:1006;padding:16px" onclick="if(event.target===this)closeI18nToolModal()">
+    <div class="prompt-modal-box" style="max-width:520px;max-height:88vh;overflow-y:auto" onclick="event.stopPropagation()">
+      <div class="prompt-modal-title" id="i18nToolModalTitle">Překlad i18n JSON</div>
+      <pre id="i18nToolBody" style="white-space:pre-wrap;font-size:11px;color:var(--txt2);line-height:1.5;margin:0 0 12px 0"></pre>
+      <a id="i18nToolScriptLink" class="modal-btn ok" style="display:inline-block;padding:8px 14px;margin-bottom:10px" href="tools/translate_i18n.py" download>translate_i18n.py</a>
+      <div class="prompt-actions" style="margin-top:4px">
+        <button type="button" class="prompt-btn cancel" id="btnI18nToolClose" onclick="closeI18nToolModal()">✕ Zavřít</button>
+      </div>
     </div>
   </div>
 
