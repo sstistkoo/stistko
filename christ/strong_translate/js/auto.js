@@ -90,14 +90,14 @@ export function createAutoApi(deps) {
     if (prov === 'gemini' || prov === 'openrouter') {
       const raw = localStorage.getItem(PIPELINE_SECONDARY_ENABLED_KEY + prov);
       if (raw === null) {
-        setPipelineSecondaryEnabled(prov, true);
+        // Default ON without forced persistence to avoid quota error loops.
         return true;
       }
       return raw === '1';
     }
     const raw = localStorage.getItem(AUTO_PROVIDER_ENABLED_KEY + prov);
     if (raw === null) {
-      safeSetLocalStorage(AUTO_PROVIDER_ENABLED_KEY + prov, '1');
+      // Default ON without forced persistence to avoid quota error loops.
       return true;
     }
     return raw === '1';
