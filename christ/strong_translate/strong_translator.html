@@ -172,6 +172,7 @@
       <button class="hbtn" id="btnToggleList" onclick="toggleListPane()" title="Skrýt/ukázat seznam" aria-label="Skrýt/ukázat seznam">≡ Seznam</button>
       <button class="hbtn" id="btnStep" onclick="translateNext()" aria-label="Přeložit další dávku">⚡ Dávka</button>
       <button class="hbtn" id="btnTestModels" onclick="openModelTestModal()" title="Nastavit a spustit test modelů (nejdřív modal, pak ▶ Test provideru)" aria-label="Test modelů — otevře nastavení">🧪 Test modelů</button>
+      <button class="hbtn" id="btnI18nHelpTop" onclick="openI18nToolHelpModal()" title="Nápověda k i18n překladu a editoru">❓ i18n</button>
       <button class="hbtn grn" id="btnExportTxt" onclick="exportTXT()" aria-label="Exportovat do TXT">⬇ TXT</button>
       <button class="hbtn grn" id="btnExportJson" onclick="exportJSON()" aria-label="Exportovat do JSON">⬇ JSON</button>
       <button class="hbtn" id="btnExportRange" onclick="exportRange()" title="Export vybraného rozsahu G čísel" aria-label="Exportovat rozsah G čísel">⬇ Rozsah</button>
@@ -804,6 +805,7 @@
       </div>
       <div class="prompt-actions" style="margin-top:10px">
         <button type="button" class="prompt-btn ok" id="btnI18nToolOpenLangModal" onclick="openI18nToolLangModal()">🌐 Vybrat jazyky</button>
+        <button type="button" class="prompt-btn" id="btnI18nToolHelp" onclick="openI18nToolHelpModal()">❓ Nápověda</button>
         <a id="i18nToolScriptLink" class="prompt-btn" style="display:inline-block;text-decoration:none" href="tools/translate_i18n.py" download>⬇ Stáhnout translate_i18n.py</a>
         <button type="button" class="prompt-btn" id="btnI18nToolCopyCmd" onclick="copyI18nToolCmd()">📋 Kopírovat příkaz</button>
       </div>
@@ -832,6 +834,16 @@
       <div class="prompt-actions" style="margin-top:4px">
         <button type="button" class="prompt-btn" id="btnI18nToolMinimize" onclick="minimizeI18nToolModal()">— Minimalizovat</button>
         <button type="button" class="prompt-btn cancel" id="btnI18nToolClose" onclick="closeI18nToolModal()">✕ Zavřít</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="i18nToolHelpModal" class="i18n-tool-lang-modal" onclick="if(event.target===this)closeI18nToolHelpModal()">
+    <div class="prompt-modal-box" style="max-width:760px" onclick="event.stopPropagation()">
+      <div class="prompt-modal-title">❓ Nápověda: Překlad i18n JSON</div>
+      <pre id="i18nToolHelpBody" style="white-space:pre-wrap;font-size:11px;color:var(--txt2);line-height:1.55;margin:0"></pre>
+      <div class="prompt-actions" style="margin-top:12px">
+        <button type="button" class="prompt-btn cancel" onclick="closeI18nToolHelpModal()">✕ Zavřít</button>
       </div>
     </div>
   </div>
@@ -872,8 +884,19 @@
       <div class="i18n-tool-status" style="display:block" id="i18nToolEditorFormatNote">Formát řádků: <code>key.path[TAB]"hodnota"</code>. Klíče jsou seřazené abecedně.</div>
       <textarea id="i18nToolEditorText" class="i18n-tool-cmd" style="min-height:340px"></textarea>
       <div class="prompt-actions" style="margin-top:12px">
+        <button type="button" class="prompt-btn" id="btnI18nToolEditorHelp" onclick="openI18nToolEditorHelpModal()">❓ Nápověda</button>
         <button type="button" class="prompt-btn ok" id="btnI18nToolEditorSave" onclick="saveI18nToolOutputEditor()">💾 Uložit JSON</button>
         <button type="button" class="prompt-btn cancel" id="btnI18nToolEditorClose" onclick="closeI18nToolOutputEditor()">✕ Zavřít editor</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="i18nToolEditorHelpModal" class="i18n-tool-lang-modal" onclick="if(event.target===this)closeI18nToolEditorHelpModal()">
+    <div class="prompt-modal-box" style="max-width:760px" onclick="event.stopPropagation()">
+      <div class="prompt-modal-title">❓ Nápověda: Editor výstupního JSON</div>
+      <pre id="i18nToolEditorHelpBody" style="white-space:pre-wrap;font-size:11px;color:var(--txt2);line-height:1.55;margin:0"></pre>
+      <div class="prompt-actions" style="margin-top:12px">
+        <button type="button" class="prompt-btn cancel" onclick="closeI18nToolEditorHelpModal()">✕ Zavřít</button>
       </div>
     </div>
   </div>
