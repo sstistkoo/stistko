@@ -628,5 +628,10 @@
   "lang.name.genitive.he": "hebrejčiny",
   "lang.name.genitive.both": "gréčtiny aj hebrejčiny",
   "modelTest.smoke.system": "Odpovedaj stručne a bez komentárov navyše.",
-  "modelTest.smoke.user": "Napíš dvakrát po sebe slovo \"heslo\"."
+  "modelTest.smoke.user": "Napíš dvakrát po sebe slovo \"heslo\".",
+  "app.title": "Strong GR → CZ Prekladač",
+  "setup.advanced": "Pokročilé nastavenia",
+  "setup.compact.title": "Súhrn aktuálneho nastavenia",
+  "hdr.fromG": "od G",
+  "log.hotkeys.title": "Space=dávka  A=auto  ↑↓=navigácia  Esc=zavrieť modal"
 }

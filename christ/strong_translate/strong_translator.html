@@ -19,7 +19,7 @@
 
   <div class="setup-advanced">
     <details id="setupAdvancedDetails">
-      <summary>Pokročilé nastavení</summary>
+      <summary id="setupAdvancedSummary">Pokročilé nastavení</summary>
 
   <div class="row" id="legacyProviderRow" style="display:none">
     <label for="provider">Provider</label>
@@ -158,7 +158,7 @@
   <div class="stat" id="timeElapsed" style="color:var(--txt3);font-size:10px">⏱ <span id="elapsedTime">0:00</span></div>
     <div class="pbar-wrap" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="pbarContainer"><div class="pbar-fill" id="pbar" style="width:0%"></div></div>
     <div style="display:flex;align-items:center;gap:5px;flex-shrink:0">
-      <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt3)">od G</span>
+      <span id="startFromLabel" style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt3)">od G</span>
       <input type="number" id="startFrom" min="1" max="5624" placeholder="1"
         style="width:60px;background:var(--bg3);border:1px solid var(--brd);border-radius:3px;
         padding:4px 6px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt);
@@ -280,7 +280,7 @@
         <div class="log-head">
           <span></span>
           <span id="logCount" style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt3);margin-left:10px"></span>
-          <span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--txt3)" title="Space=dávka  A=auto  ↑↓=navigace  Esc=zavřít modal">⌨ Space·A·↑↓</span>
+          <span id="logHotkeysHint" style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--txt3)" title="Space=dávka  A=auto  ↑↓=navigace  Esc=zavřít modal">⌨ Space·A·↑↓</span>
       <button class="hbtn" id="btnBackToSetup" style="font-size:9px;padding:2px 8px;margin-left:8px" onclick="showSetup()" aria-label="Zpět do nastavení">← Nastavení</button>
       <button class="hbtn" id="btnClearLog" style="font-size:9px;padding:2px 8px" onclick="clearLog()" aria-label="Vymazat log">✕ Vymazat</button>
         </div>

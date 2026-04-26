@@ -628,5 +628,10 @@
   "lang.name.genitive.he": "Hebrew",
   "lang.name.genitive.both": "Greek and Hebrew",
   "modelTest.smoke.system": "Reply briefly and without extra commentary.",
-  "modelTest.smoke.user": "Write the word \"entry\" twice in a row."
+  "modelTest.smoke.user": "Write the word \"entry\" twice in a row.",
+  "app.title": "Strong GR → CZ Translator",
+  "setup.advanced": "Advanced settings",
+  "setup.compact.title": "Summary of current settings",
+  "hdr.fromG": "from G",
+  "log.hotkeys.title": "Space=batch  A=auto  ↑↓=navigate  Esc=close modal"
 }
