@@ -6,7 +6,7 @@
  *       buildTopicPrompt, openTopicPromptModal,
  *       callAIWithRetry, extractTopicValueFromAI, translateSingle,
  *       resolveProviderForInteractiveAction, getPipelineModelForProvider,
- *       getCurrentApiKey, SYSTEM_MESSAGE
+ *       getCurrentApiKey, getSystemMessage
  */
 import { hasMeaningfulValue, isTranslationComplete } from '../translation/utils.js';
 export function createDetailApi({
@@ -16,7 +16,7 @@ export function createDetailApi({
   buildTopicPrompt, openTopicPromptModal,
   callAIWithRetry, extractTopicValueFromAI, translateSingle,
   resolveProviderForInteractiveAction, getPipelineModelForProvider,
-  getCurrentApiKey, SYSTEM_MESSAGE
+  getCurrentApiKey, getSystemMessage
 }) {
 
   function renderTranslation(key, tr) {
@@ -214,7 +214,7 @@ export function createDetailApi({
     const prompt = buildTopicPrompt(key, topicId);
     try {
       const messages = [
-        { role: 'system', content: SYSTEM_MESSAGE },
+        { role: 'system', content: getSystemMessage() },
         { role: 'user', content: prompt }
       ];
       const raw = await callAIWithRetry(prov, apiKey, model, messages);

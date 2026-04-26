@@ -95,6 +95,19 @@ export async function fetchUiDictionary(lang) {
   return response.json();
 }
 
+/** Volitelné překlady dlouhých AI promptů (i18n/prompts.{lang}.json), při absenci — fallback z výchozího jazyka. */
+export async function fetchPromptPack(lang) {
+  const tryLoad = async (l) => {
+    try {
+      const url = `./i18n/prompts.${l}.json`;
+      const response = await fetch(url, { cache: 'no-store' });
+      if (response.ok) return await response.json();
+    } catch (_) {}
+    return null;
+  };
+  return (await tryLoad(lang)) || (lang !== DEFAULT_UI_LANG ? await tryLoad(DEFAULT_UI_LANG) : null) || {};
+}
+
 export function validateUiMessages(messages) {
   const base = messages[DEFAULT_UI_LANG] || {};
   const baseKeys = Object.keys(base);
@@ -127,6 +140,16 @@ export function loadUiMessages(force = false) {
         loaded[lang] = fallback[lang] || {};
       }
     }));
+    for (const lang of Array.from(UI_LANGS)) {
+      try {
+        const pack = await fetchPromptPack(lang);
+        if (pack && typeof pack === 'object') {
+          Object.assign(loaded[lang], pack);
+        }
+      } catch (err) {
+        console.warn(`[i18n] Failed loading prompt pack for "${lang}":`, err);
+      }
+    }
     UI_MESSAGES = loaded;
     validateUiMessages(UI_MESSAGES);
     return UI_MESSAGES;

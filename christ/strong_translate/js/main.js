@@ -70,6 +70,13 @@
   import { createSettingsModalsApi } from './ui/settingsModals.js';
   import { createCallApi } from './ai/call.js';
   import {
+    getResolvedSystemMessage,
+    getResolvedDefaultPrompt,
+    getResolvedModelTestCatalog,
+    getResolvedFinalPrompt,
+    getResolvedPromptLibraryBase
+  } from './aiPromptsResolve.js';
+  import {
     hasMeaningfulValue, isDefinitionLowQuality, isTranslationComplete,
     hasAnyTranslationContent, getStrongKeyNumber,
     stripDefinitionOriginReferenceTail, isDefinitionLikelyEnglish,
@@ -86,15 +93,12 @@ const {
       buildRetryMessages: buildRetryMessagesCore,
       escHtml: escHtmlCore,
       validateAPIResponse,
-      SYSTEM_MESSAGE,
-      DEFAULT_PROMPT
     } = core;
-const {
-      CATEGORY_LABELS,
-      FINAL_PROMPT,
-      PROMPT_LIBRARY_BASE,
-      MODEL_TEST_PROMPT_CATALOG: modelTestPromptCatalog
-    } = prompts;
+const { MODEL_TEST_PROMPT_CATALOG: modelTestPromptCatalogFallback } = prompts;
+
+function getModelTestPromptCatalog() {
+  return getResolvedModelTestCatalog(modelTestPromptCatalogFallback);
+}
 const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
 
   function formatAppTitleWithTargetLang(rawText, targetLang) {
@@ -657,6 +661,9 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     }
     refreshTokenStatsDisplay();
     updatePromptLangButtonLabel();
+    try {
+      rebuildPromptLibrary(localStorage.getItem('strong_prompt') || getResolvedDefaultPrompt());
+    } catch (_) {}
   }
     
    // Use core functions, but override buildPromptMessages to support custom prompts
@@ -683,7 +690,7 @@ POVINNÝ VÝSTUP NAVÍC:
         return `${e.key} | ${e.greek}\nDEF: ${def}`;
       }).join('\n\n');
       
-      const userPromptTemplate = localStorage.getItem('strong_prompt') || core.DEFAULT_PROMPT;
+      const userPromptTemplate = localStorage.getItem('strong_prompt') || getResolvedDefaultPrompt();
       
       // Language substitution
       const targetLang = localStorage.getItem('strong_target_lang') || 'cz';
@@ -701,7 +708,7 @@ POVINNÝ VÝSTUP NAVÍC:
         : processedPrompt + '\n\n' + items;
       
       return [
-        { role: 'system', content: core.SYSTEM_MESSAGE },
+        { role: 'system', content: getResolvedSystemMessage() },
         { role: 'user', content: userContent }
       ];
     }
@@ -728,11 +735,11 @@ POVINNÝ VÝSTUP NAVÍC:
     function getModelTestPromptTemplate(promptType) {
       const topicTemplate = getTopicPromptTemplateByPromptType(promptType);
       if (topicTemplate) return topicTemplate;
-      const fromCatalog = modelTestPromptCatalog?.[promptType]?.template;
+      const fromCatalog = getModelTestPromptCatalog()?.[promptType]?.template;
       if (fromCatalog) return fromCatalog;
       const custom = getModelTestCustomPromptText().trim();
       if (custom) return custom;
-      return localStorage.getItem('strong_prompt') || core.DEFAULT_PROMPT;
+      return localStorage.getItem('strong_prompt') || getResolvedDefaultPrompt();
     }
 
     const EN_TOPIC_PROMPT_MAP = {
@@ -838,7 +845,7 @@ POVINNÝ VÝSTUP NAVÍC:
       if (isEnTopicPromptType(promptType)) {
         return formatEnTopicPromptLabel(EN_TOPIC_PROMPT_MAP[promptType]);
       }
-      const fromCatalog = modelTestPromptCatalog?.[promptType]?.label;
+      const fromCatalog = getModelTestPromptCatalog()?.[promptType]?.label;
       return fromCatalog || t('prompt.custom');
     }
 
@@ -854,7 +861,7 @@ function openModelTestPromptPreviewModal() {
   const isCustom = promptType === 'custom';
   const customPrompt = String(document.getElementById('modelTestCustomPromptInput')?.value || '').trim();
   const promptText = isCustom
-    ? (customPrompt || localStorage.getItem('strong_prompt') || DEFAULT_PROMPT)
+    ? (customPrompt || localStorage.getItem('strong_prompt') || getResolvedDefaultPrompt())
     : getModelTestPromptTemplate(promptType);
   labelEl.textContent = t('prompt.preview.label', { label: getModelTestPromptTypeLabel(promptType) });
   textEl.value = String(promptText || '').trim();
@@ -890,7 +897,7 @@ async function copyModelTestPromptPreview() {
         const base = String(EN_TOPIC_PROMPT_LABEL_BASE[promptType] || '').replace(/^Téma:\s*/i, '');
         return `${base} (EN -> ${getCurrentTargetLangCode()})`;
       }
-      return modelTestPromptCatalog?.[promptType]?.topicLabel || '';
+      return getModelTestPromptCatalog()?.[promptType]?.topicLabel || '';
     }
 
     function buildPromptMessagesForModelTest(batch, promptType) {
@@ -914,7 +921,7 @@ async function copyModelTestPromptPreview() {
         : `${processedPrompt}\n\n${items}`;
 
       return [
-        { role: 'system', content: core.SYSTEM_MESSAGE },
+        { role: 'system', content: getResolvedSystemMessage() },
         { role: 'user', content: userContent }
       ];
     }
@@ -1675,7 +1682,8 @@ _detailApi = createDetailApi({
   callAIWithRetry, extractTopicValueFromAI: (...a) => extractTopicValueFromAI(...a),
   translateSingle,
   resolveProviderForInteractiveAction, getPipelineModelForProvider: (...a) => getPipelineModelForProvider(...a),
-  getCurrentApiKey: (...a) => getCurrentApiKey(...a), SYSTEM_MESSAGE
+  getCurrentApiKey: (...a) => getCurrentApiKey(...a),
+  getSystemMessage: getResolvedSystemMessage
 });
 const {
   renderDetail, renderTranslation, toggleEditSection, saveSection,
@@ -1742,7 +1750,7 @@ const topicRepairApi = createTopicRepairApi({
   getProviderCooldownLeftSec,
   appendModelTestUsage: (...a) => appendModelTestUsage(...a),
   buildModelTestMessages: (...a) => buildModelTestMessages(...a),
-  modelTestPromptCatalog,
+  getModelTestPromptCatalog,
 });
 const {
   startTopicRepairFlow, closeTopicRepairModalSafe, stopTopicRepairTicker,
@@ -1967,9 +1975,9 @@ const promptLibraryApi = createPromptLibraryApi({
   state,
   t,
   getUiLang,
-  DEFAULT_PROMPT,
-  FINAL_PROMPT,
-  PROMPT_LIBRARY_BASE,
+  getDefaultPrompt: getResolvedDefaultPrompt,
+  getFinalPrompt: getResolvedFinalPrompt,
+  getPromptLibraryBase: getResolvedPromptLibraryBase,
   enforceSpecialistaFormat,
   showToast
 });
@@ -2874,7 +2882,7 @@ async function sendI18nToolAiPrompt(options = {}) {
         i18nToolSetAiStatus(t('i18nTool.ai.status.sendingBatch', { index: idx + 1, total: chunks.length, size: chunk.length, provider, model }));
         try {
           const raw = await callAIWithRetry(provider, apiKey, model, [
-            { role: 'system', content: SYSTEM_MESSAGE },
+            { role: 'system', content: getResolvedSystemMessage() },
             { role: 'user', content: chunkPrompt }
           ]);
           i18nToolAccumulateAiTokenStats(raw?.usage || null);
