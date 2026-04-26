@@ -2129,7 +2129,7 @@ window.saveLangSettings = saveLangSettings;
 function showI18nToolModal() {
   const m = document.getElementById('i18nToolModal');
   const body = document.getElementById('i18nToolBody');
-  if (body) body.textContent = t('lang.i18nTool.body');
+  if (body) body.textContent = buildI18nToolHelpText();
   const title = document.getElementById('i18nToolModalTitle');
   if (title) title.textContent = t('lang.i18nTool.title');
   const closeBtn = document.getElementById('btnI18nToolClose');
@@ -2150,6 +2150,27 @@ function showI18nToolModal() {
   closeI18nToolDoneModal();
   updateI18nToolCommandPreview();
   if (m) m.style.display = 'flex';
+}
+
+function buildI18nToolHelpText() {
+  return [
+    'Co to dělá:',
+    '- Přeloží i18n klíče z i18n/cs.json do vybraných jazyků (Google / DeepL).',
+    '- Každý dokončený jazyk stáhne hned jako <lang>.json.',
+    '',
+    'Doporučený postup:',
+    '1) Klikni na „🌐 Vybrat jazyky“ a označ cílové jazyky.',
+    '2) Zkontroluj engine (Google/DeepL). DeepL klíč je volitelný.',
+    '3) Spusť „🚀 Přeložit“.',
+    '4) Sleduj progress, ETA a stavové hlášky.',
+    '5) Po překladu můžeš výstup upravit přes „✏ Editovat výstup JSON“.',
+    '',
+    'Tlačítka:',
+    '- 📋 Kopírovat příkaz: zkopíruje CLI příkaz pro stejný překlad.',
+    '- 🧠 AI audit/editor: následná kontrola a opravy textů.',
+    '- — Minimalizovat: nechá překlad běžet na pozadí.',
+    '- ■ Ukončit překlad: bezpečně zastaví běžící překlad.'
+  ].join('\n');
 }
 function closeI18nToolModal() {
   const m = document.getElementById('i18nToolModal');
