@@ -166,7 +166,7 @@ async function translateNext() {
   
   // Info o retry módu
   if (state.retryMode) {
-    document.getElementById('btnStep').title = `Retry: zbývá ${state.retryKeysList.length + batch.length} hesel`;
+    document.getElementById('btnStep').title = t('batch.retry.remaining', { count: state.retryKeysList.length + batch.length });
   }
   
   document.getElementById('btnStep').disabled = true;
