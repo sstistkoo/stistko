@@ -257,6 +257,45 @@
             justify-content: space-between;
             margin-bottom: 10px;
         }
+
+        .run-status {
+            margin-top: 10px;
+            color: #555;
+            font-size: 0.95em;
+            display: none;
+        }
+
+        .floating-minimized {
+            position: fixed;
+            right: 16px;
+            bottom: 16px;
+            z-index: 10001;
+            background: #ffffff;
+            border: 1px solid #d9d9d9;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18);
+            border-radius: 10px;
+            padding: 10px 12px;
+            display: none;
+            min-width: 220px;
+        }
+
+        .floating-minimized strong {
+            display: block;
+            margin-bottom: 6px;
+            color: #333;
+        }
+
+        .floating-minimized-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .floating-minimized-status {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
@@ -332,7 +371,15 @@
 
                 <div class="action-buttons">
                     <button class="btn" id="translateBtn" onclick="startTranslation()">🚀 Spustit překlad</button>
+                    <button class="btn select-all-btn" id="cancelBtn" onclick="cancelTranslation()" style="display:none;">■ Ukončit překlad</button>
+                    <button class="btn select-all-btn" id="minimizeBtn" onclick="minimizeTranslator()" style="display:none;">— Minimalizovat</button>
                     <button class="btn select-all-btn" onclick="resetApp()">🔄 Nový soubor</button>
+                </div>
+                <p id="runStatus" class="run-status">Připraveno.</p>
+                <div class="action-buttons">
+                    <button class="btn select-all-btn" id="editOutputBtn" onclick="openOutputEditor()" disabled>✏ Editovat výstup JSON</button>
+                    <button class="btn select-all-btn" id="loadOutputBtn" onclick="document.getElementById('loadOutputInput').click()">📂 Načíst JSON pro editaci</button>
+                    <input type="file" id="loadOutputInput" class="file-input" accept=".json,application/json">
                 </div>
             </div>
         </div>
@@ -354,6 +401,31 @@
                 <button class="btn" type="button" onclick="applyLanguageSelection()">Použít výběr</button>
             </div>
         </div>
+    </div>
+
+    <div id="outputEditorModal" class="modal-backdrop" onclick="onOutputEditorBackdropClick(event)">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 style="color:#667eea;">✏ Editor výstupního JSON</h3>
+                <button class="btn select-all-btn" type="button" onclick="closeOutputEditor()">Zavřít</button>
+            </div>
+            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:10px;">
+                <label for="outputEditorLang"><strong>Jazyk:</strong></label>
+                <select id="outputEditorLang" style="padding:10px;border:1px solid #ccc;border-radius:8px;min-width:160px;"></select>
+                <button class="btn select-all-btn" type="button" onclick="downloadEditedOutput()">💾 Uložit JSON</button>
+            </div>
+            <p style="font-size:0.9em;color:#666;margin-bottom:8px;">Můžete upravit JSON ručně. Při nevalidním JSON se změna neuloží.</p>
+            <textarea id="outputEditorText" style="width:100%;min-height:420px;padding:10px;border:1px solid #ccc;border-radius:8px;font-family:monospace;font-size:12px;line-height:1.45;"></textarea>
+        </div>
+    </div>
+
+    <div id="minimizedBox" class="floating-minimized">
+        <strong>Překlad běží na pozadí</strong>
+        <div class="floating-minimized-actions">
+            <button class="btn select-all-btn" type="button" onclick="restoreTranslator()">Obnovit</button>
+            <button class="btn select-all-btn" type="button" onclick="cancelTranslation()">Ukončit</button>
+        </div>
+        <div id="minimizedStatus" class="floating-minimized-status">0%</div>
     </div>
 
     <script>
@@ -387,6 +459,10 @@
 
         let sourceData = null;
         let selectedLanguages = new Set();
+        let isTranslating = false;
+        let cancelRequested = false;
+        let translationStartedAtMs = 0;
+        let translatedJsonByLang = {};
 
         function updateSelectedLanguagesSummary() {
             const summary = document.getElementById('selectedLanguagesSummary');
@@ -461,6 +537,111 @@
             deselectAllInModal();
         }
 
+        function formatEta(seconds) {
+            if (!Number.isFinite(seconds) || seconds < 0) return '—';
+            const s = Math.max(0, Math.round(seconds));
+            const h = Math.floor(s / 3600);
+            const m = Math.floor((s % 3600) / 60);
+            const sec = s % 60;
+            if (h > 0) return `${h}h ${m}m ${sec}s`;
+            if (m > 0) return `${m}m ${sec}s`;
+            return `${sec}s`;
+        }
+
+        function updateRunStatus(message) {
+            const el = document.getElementById('runStatus');
+            if (el) {
+                el.style.display = 'block';
+                el.textContent = message;
+            }
+            const mini = document.getElementById('minimizedStatus');
+            if (mini) mini.textContent = message;
+        }
+
+        function setRunningButtons(running) {
+            const translateBtn = document.getElementById('translateBtn');
+            const cancelBtn = document.getElementById('cancelBtn');
+            const minimizeBtn = document.getElementById('minimizeBtn');
+            if (translateBtn) translateBtn.disabled = running;
+            if (cancelBtn) cancelBtn.style.display = running ? 'inline-block' : 'none';
+            if (minimizeBtn) minimizeBtn.style.display = running ? 'inline-block' : 'none';
+        }
+
+        function minimizeTranslator() {
+            if (!isTranslating) return;
+            document.querySelector('.container').style.display = 'none';
+            document.getElementById('minimizedBox').style.display = 'block';
+        }
+
+        function restoreTranslator() {
+            document.querySelector('.container').style.display = '';
+            document.getElementById('minimizedBox').style.display = 'none';
+        }
+
+        function cancelTranslation() {
+            if (!isTranslating) return;
+            cancelRequested = true;
+            updateRunStatus('Požadavek na ukončení překladu byl přijat…');
+        }
+
+        function onOutputEditorBackdropClick(event) {
+            if (event.target?.id === 'outputEditorModal') closeOutputEditor();
+        }
+
+        function closeOutputEditor() {
+            document.getElementById('outputEditorModal').classList.remove('open');
+        }
+
+        function renderOutputEditorText() {
+            const select = document.getElementById('outputEditorLang');
+            const area = document.getElementById('outputEditorText');
+            const code = select?.value || '';
+            if (!code || !(code in translatedJsonByLang)) {
+                area.value = '';
+                return;
+            }
+            area.value = JSON.stringify(translatedJsonByLang[code], null, 2);
+        }
+
+        function refreshOutputEditorLangs() {
+            const select = document.getElementById('outputEditorLang');
+            const previous = select.value;
+            const codes = Object.keys(translatedJsonByLang);
+            select.innerHTML = codes.map(code => `<option value="${code}">${code}.json</option>`).join('');
+            if (!codes.length) return;
+            select.value = codes.includes(previous) ? previous : codes[0];
+            renderOutputEditorText();
+        }
+
+        function openOutputEditor() {
+            if (!Object.keys(translatedJsonByLang).length) {
+                alert('Zatím není co editovat. Nejdřív přeložte nebo načtěte JSON.');
+                return;
+            }
+            refreshOutputEditorLangs();
+            document.getElementById('outputEditorModal').classList.add('open');
+        }
+
+        function saveCurrentEditedJson() {
+            const select = document.getElementById('outputEditorLang');
+            const area = document.getElementById('outputEditorText');
+            const code = select?.value || '';
+            if (!code) return false;
+            try {
+                translatedJsonByLang[code] = JSON.parse(area.value);
+                return true;
+            } catch (err) {
+                alert(`Nevalidní JSON (${code}.json): ${err.message}`);
+                return false;
+            }
+        }
+
+        function downloadEditedOutput() {
+            if (!saveCurrentEditedJson()) return;
+            const code = document.getElementById('outputEditorLang').value;
+            downloadFile(JSON.stringify(translatedJsonByLang[code], null, 2), `${code}.json`);
+        }
+
         // Drag & Drop
         const uploadSection = document.getElementById('uploadSection');
         
@@ -485,6 +666,28 @@
         document.getElementById('fileInput').addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) handleFile(file);
+        });
+        document.getElementById('outputEditorLang').addEventListener('change', renderOutputEditorText);
+        document.getElementById('loadOutputInput').addEventListener('change', (e) => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                try {
+                    const parsed = JSON.parse(ev.target.result);
+                    const match = file.name.match(/^([a-z]{2}(?:-[A-Z]{2})?)\.json$/);
+                    const langCode = match ? match[1] : 'custom';
+                    translatedJsonByLang[langCode] = parsed;
+                    document.getElementById('editOutputBtn').disabled = false;
+                    refreshOutputEditorLangs();
+                    openOutputEditor();
+                } catch (err) {
+                    alert('Načtený soubor není validní JSON: ' + err.message);
+                } finally {
+                    e.target.value = '';
+                }
+            };
+            reader.readAsText(file);
         });
 
         function handleFile(file) {
@@ -701,6 +904,7 @@
         }
 
         async function translateValue(value, targetLang, targetTag, targetLanguageNameEn, onProgress = null, path = '') {
+            if (cancelRequested) throw new Error('__CANCELLED__');
             if (typeof value === 'string') {
                 if (!value.trim()) return value;
                 
@@ -728,12 +932,14 @@
             } else if (Array.isArray(value)) {
                 const result = [];
                 for (let i = 0; i < value.length; i++) {
+                    if (cancelRequested) throw new Error('__CANCELLED__');
                     result.push(await translateValue(value[i], targetLang, targetTag, targetLanguageNameEn, onProgress, `${path}[${i}]`));
                 }
                 return result;
             } else if (typeof value === 'object' && value !== null) {
                 const result = {};
                 for (let key in value) {
+                    if (cancelRequested) throw new Error('__CANCELLED__');
                     const nextPath = path ? `${path}.${key}` : key;
                     result[key] = await translateValue(value[key], targetLang, targetTag, targetLanguageNameEn, onProgress, nextPath);
                 }
@@ -743,6 +949,7 @@
         }
 
         async function startTranslation() {
+            if (isTranslating) return;
             if (selectedLanguages.size === 0) {
                 alert('Vyberte alespoň jeden jazyk!');
                 return;
@@ -755,11 +962,17 @@
             const progressBar = document.getElementById('progressBar');
             const progressFill = document.getElementById('progressFill');
             const status = document.getElementById('status');
-            const translateBtn = document.getElementById('translateBtn');
+            const editOutputBtn = document.getElementById('editOutputBtn');
 
             progressBar.style.display = 'block';
             status.style.display = 'none';
-            translateBtn.disabled = true;
+            setRunningButtons(true);
+            isTranslating = true;
+            cancelRequested = false;
+            translationStartedAtMs = Date.now();
+            translatedJsonByLang = {};
+            if (editOutputBtn) editOutputBtn.disabled = true;
+            updateRunStatus('Překlad spuštěn…');
 
             const translatedFiles = {};
             const totalLangs = selectedLanguages.size;
@@ -772,6 +985,7 @@
 
             try {
                 for (let langCode of selectedLanguages) {
+                    if (cancelRequested) throw new Error('__CANCELLED__');
                     const lang = languages.find(l => l.code === langCode);
                     
                     status.style.display = 'block';
@@ -787,8 +1001,13 @@
                         (path) => {
                             doneUnits++;
                             const percent = Math.round((doneUnits / totalWorkUnits) * 100);
+                            const elapsedSec = (Date.now() - translationStartedAtMs) / 1000;
+                            const speed = doneUnits > 0 ? (doneUnits / Math.max(1, elapsedSec)) : 0;
+                            const remainingUnits = Math.max(0, totalWorkUnits - doneUnits);
+                            const etaSec = speed > 0 ? (remainingUnits / speed) : Infinity;
                             progressFill.style.width = percent + '%';
                             progressFill.textContent = percent + '%';
+                            updateRunStatus(`Progress ${percent}% | ETA: ${formatEta(etaSec)}`);
                             if (doneUnits % 25 === 0 || doneUnits === totalWorkUnits) {
                                 status.textContent = `Překládám do: ${lang.name} (${lang.code})... ${doneUnits}/${totalWorkUnits}${path ? ` | ${path}` : ''}`;
                             }
@@ -802,6 +1021,7 @@
                     placeholderAuditByLang[langCode] = collectPlaceholderMismatches(sourceData, translated);
 
                     translatedFiles[langCode] = JSON.stringify(translated, null, 2);
+                    translatedJsonByLang[langCode] = translated;
 
                     completed++;
                     const percent = Math.round((completed / totalLangs) * 100);
@@ -843,12 +1063,25 @@
                 }
 
                 status.appendChild(downloadSection);
+                if (editOutputBtn) editOutputBtn.disabled = false;
+                updateRunStatus('Překlad dokončen.');
 
             } catch (error) {
-                status.className = 'status error';
-                status.textContent = '✗ Chyba při překladu: ' + error.message;
+                if (error && error.message === '__CANCELLED__') {
+                    status.className = 'status';
+                    status.style.display = 'block';
+                    status.textContent = '⏹ Překlad byl ukončen uživatelem.';
+                    updateRunStatus('Překlad ukončen uživatelem.');
+                } else {
+                    status.className = 'status error';
+                    status.textContent = '✗ Chyba při překladu: ' + error.message;
+                    updateRunStatus('Došlo k chybě při překladu.');
+                }
             } finally {
-                translateBtn.disabled = false;
+                isTranslating = false;
+                cancelRequested = false;
+                setRunningButtons(false);
+                restoreTranslator();
             }
         }
 
@@ -863,15 +1096,27 @@
         }
 
         function resetApp() {
+            if (isTranslating) {
+                const ok = confirm('Překlad právě běží. Opravdu chcete resetovat?');
+                if (!ok) return;
+                cancelRequested = true;
+            }
             sourceData = null;
             selectedLanguages.clear();
+            translatedJsonByLang = {};
             document.getElementById('uploadSection').style.display = 'block';
             document.getElementById('fileInfoSection').style.display = 'none';
             document.getElementById('fileInput').value = '';
             document.getElementById('progressBar').style.display = 'none';
             document.getElementById('status').style.display = 'none';
+            document.getElementById('runStatus').style.display = 'none';
+            document.getElementById('editOutputBtn').disabled = true;
+            document.getElementById('outputEditorModal').classList.remove('open');
+            const outLang = document.getElementById('outputEditorLang');
+            if (outLang) outLang.innerHTML = '';
             const grid = document.getElementById('languageGrid');
             if (grid) grid.innerHTML = '';
+            restoreTranslator();
             closeLanguageModal();
             updateSelectedLanguagesSummary();
         }
