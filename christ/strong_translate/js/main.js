@@ -539,6 +539,7 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     setText('btnI18nToolLoadOutput', t('i18nTool.buttons.loadJsonForEdit'));
     setText('btnI18nToolMinimize', t('i18nTool.buttons.minimize'));
     setText('i18nToolLangModalTitle', t('i18nTool.langModal.title'));
+    setText('btnI18nToolLangCloseTop', t('lang.modal.close'));
     setText('btnI18nToolLangSelectAll', t('i18nTool.langModal.selectAll'));
     setText('btnI18nToolLangDeselectAll', t('i18nTool.langModal.deselectAll'));
     setText('btnI18nToolLangDone', t('i18nTool.langModal.done'));
@@ -2169,6 +2170,23 @@ const I18N_TOOL_LANGUAGES = [
   { code: 'ko', tag: 'KO', name: 'Korejština', flag: '🇰🇷' },
   { code: 'he', tag: 'HE', name: 'Hebrejština', flag: '🇮🇱' }
 ];
+const I18N_TOOL_TRANSLATOR_TARGET_CODES = new Set([
+  'cs', 'cz', 'en', 'sk', 'pl', 'de', 'fr', 'es', 'it', 'pt', 'ru', 'uk',
+  'bg', 'ro', 'hu', 'nl', 'sv', 'da', 'no', 'fi', 'el', 'tr', 'ar', 'ja',
+  'ko', 'he', 'zh-CN'
+]);
+
+function sanitizeI18nToolLanguages() {
+  for (let i = I18N_TOOL_LANGUAGES.length - 1; i >= 0; i--) {
+    const code = String(I18N_TOOL_LANGUAGES[i]?.code || '');
+    // "cz"/"cs" je zdroj a nechceme ho v cílovém seznamu.
+    if (code === 'cz' || code === 'cs' || !I18N_TOOL_TRANSLATOR_TARGET_CODES.has(code)) {
+      I18N_TOOL_LANGUAGES.splice(i, 1);
+    }
+  }
+}
+
+sanitizeI18nToolLanguages();
 const i18nToolSelectedLanguages = new Set();
 const I18N_TOOL_PLACEHOLDER = '__ST_TAG_';
 const I18N_TOOL_WORD_PLACEHOLDER = '__ST_WORD_';
