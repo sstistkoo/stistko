@@ -19,6 +19,7 @@ const TARGET_TO_CONTENT_TAG = {
 };
 
 export const CONTENT_TAG_LANG_KEY = 'strong_content_tag_lang';
+export const CONTENT_TAG_LANG_MANUAL_KEY = 'strong_content_tag_lang_manual';
 
 export function getDefaultContentTag() {
   let target = 'cz';
@@ -34,8 +35,16 @@ export function getDefaultContentTag() {
  */
 export function getContentLangTag() {
   if (typeof localStorage === 'undefined') return 'EN';
+  // Tag v závorkách řídíme jazykem UI, aby nebyl mix (např. Definition (EN) v češtině).
+  const ui = getUiLang();
+  if (ui === 'cs') return 'CZ';
+  if (ui === 'en') return 'EN';
+  if (ui === 'sk') return 'SK';
+  if (ui === 'pl') return 'PL';
   const stored = String(localStorage.getItem(CONTENT_TAG_LANG_KEY) || '').trim();
-  if (stored) return stored;
+  const manual = localStorage.getItem(CONTENT_TAG_LANG_MANUAL_KEY) === '1';
+  // Legacy migrace: staré uložené tagy bez "manual" příznaku ignorujeme a bereme dynamický default.
+  if (stored && manual) return stored;
   return getDefaultContentTag();
 }
 export const INLINE_UI_MESSAGES = {

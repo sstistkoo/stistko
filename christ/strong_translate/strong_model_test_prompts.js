@@ -346,8 +346,8 @@ Vstup:
 {HESLA}`
   },
   preset_topic_definice: {
-    label: 'Téma: Definice (CZ)',
-    topicLabel: 'Definice (CZ)',
+    label: 'Téma: Definice',
+    topicLabel: 'Definice',
     template: `Úkol: vytvoř pouze pole DEFINICE pro jedno heslo Strong.
 
 Pravidla:
@@ -374,8 +374,8 @@ Vstup:
 {HESLA}`
   },
   preset_topic_kjv: {
-    label: 'Téma: KJV překlady (CZ)',
-    topicLabel: 'KJV překlady (CZ)',
+    label: 'Téma: KJV překlady',
+    topicLabel: 'KJV překlady',
     template: `Úkol: vytvoř pouze pole KJV pro jedno heslo Strong.
 
 Pravidla:

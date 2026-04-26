@@ -1,6 +1,23 @@
-import { t, getUiLang, getDefaultContentTag, CONTENT_TAG_LANG_KEY } from '../i18n.js';
+import { t, getUiLang, getDefaultContentTag, CONTENT_TAG_LANG_KEY, CONTENT_TAG_LANG_MANUAL_KEY } from '../i18n.js';
 
 export function createSettingsModalsApi({ initRunSelects, updateSetupCompactSummary, initPipelineModelSelectors, initPipelineModelSelectorsInSettingsModal, showToast, refreshTopicLabels, renderList, saveProgress, refreshLanguageAwarePromptOptionLabels, applySystemPromptForCurrentTask, applyUiLanguage, DEFAULT_UI_LANG, UI_LANGS, UI_LANG_KEY, setPipelineModelForProvider, setPipelineSecondaryEnabled, syncSecondaryProviderToggles, updateAutoProviderCountdowns }) {
+
+function getDefaultContentTagForTarget(targetRaw) {
+  let target = String(targetRaw || 'cz').toLowerCase();
+  if (target === 'cs') target = 'cz';
+  const map = {
+    cz: 'CZ',
+    en: 'EN',
+    sk: 'SK',
+    pl: 'PL',
+    bg: 'BG',
+    ch: 'zh-CN',
+    sp: 'ES',
+    gr: 'EL',
+    he: 'HE'
+  };
+  return map[target] || 'EN';
+}
 
 function showSettingsModal() {
   initPipelineModelSelectorsInSettingsModal();
@@ -107,6 +124,7 @@ function updatePromptLangButtonLabel() {
 }
 
 function saveLangSettings() {
+  const prevTarget = String(localStorage.getItem('strong_target_lang') || 'cz').toLowerCase();
   const target = document.getElementById('targetLanguage').value;
   const source = document.getElementById('sourceLanguage').value;
   const uiRaw = String(document.getElementById('uiLanguage')?.value || DEFAULT_UI_LANG).toLowerCase();
@@ -115,8 +133,16 @@ function saveLangSettings() {
   localStorage.setItem('strong_source_lang', source);
   localStorage.setItem(UI_LANG_KEY, ui);
   const contentTag = String(document.getElementById('contentTagLanguage')?.value || '').trim();
-  if (contentTag) localStorage.setItem(CONTENT_TAG_LANG_KEY, contentTag);
-  else localStorage.removeItem(CONTENT_TAG_LANG_KEY);
+  const prevDefaultTag = getDefaultContentTagForTarget(prevTarget);
+  const newDefaultTag = getDefaultContentTagForTarget(target);
+  // Pokud uživatel nechal "výchozí" tag (typicky CZ při cíli cz), přepni ho automaticky s cílem.
+  if (!contentTag || contentTag === prevDefaultTag || contentTag === newDefaultTag) {
+    localStorage.removeItem(CONTENT_TAG_LANG_KEY);
+    localStorage.removeItem(CONTENT_TAG_LANG_MANUAL_KEY);
+  } else {
+    localStorage.setItem(CONTENT_TAG_LANG_KEY, contentTag);
+    localStorage.setItem(CONTENT_TAG_LANG_MANUAL_KEY, '1');
+  }
   refreshLanguageAwarePromptOptionLabels();
   applySystemPromptForCurrentTask();
   applyUiLanguage();

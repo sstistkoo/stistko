@@ -637,8 +637,8 @@ Vstup:
 {HESLA}`
   },
   preset_topic_definice: {
-    label: 'Téma: Definice (CZ)',
-    topicLabel: 'Definice (CZ)',
+    label: 'Téma: Definice',
+    topicLabel: 'Definice',
     template: `Úkol: vytvoř pouze pole DEFINICE pro jedno heslo Strong.
 
 Pravidla:
@@ -651,8 +651,8 @@ Vstup:
 {HESLA}`
   },
   preset_topic_vyznam: {
-    label: 'Téma: Český význam (CZ)',
-    topicLabel: 'Český význam (CZ)',
+    label: 'Téma: Význam',
+    topicLabel: 'Význam',
     template: `Úkol: vytvoř pouze pole VYZNAM pro jedno heslo Strong.
 
 Pravidla:
@@ -665,8 +665,8 @@ Vstup:
 {HESLA}`
   },
   preset_topic_kjv: {
-    label: 'Téma: KJV překlady (CZ)',
-    topicLabel: 'KJV překlady (CZ)',
+    label: 'Téma: KJV překlady',
+    topicLabel: 'KJV překlady',
     template: `Úkol: vytvoř pouze pole KJV pro jedno heslo Strong.
 
 Pravidla:
@@ -679,8 +679,8 @@ Vstup:
 {HESLA}`
   },
   preset_topic_pouziti: {
-    label: 'Téma: Biblické užití (CZ)',
-    topicLabel: 'Biblické užití (CZ)',
+    label: 'Téma: Biblické užití',
+    topicLabel: 'Biblické užití',
     template: `Úkol: vytvoř pouze pole POUZITI pro jedno heslo Strong.
 
 Pravidla:
@@ -693,8 +693,8 @@ Vstup:
 {HESLA}`
   },
   preset_topic_puvod: {
-    label: 'Téma: Původ / Etymologie (CZ)',
-    topicLabel: 'Původ / Etymologie (CZ)',
+    label: 'Téma: Původ / Etymologie',
+    topicLabel: 'Původ / Etymologie',
     template: `Úkol: vytvoř pouze pole PUVOD pro jedno heslo Strong.
 
 Pravidla:
@@ -707,8 +707,8 @@ Vstup:
 {HESLA}`
   },
   preset_topic_specialista: {
-    label: 'Téma: Biblický výklad (specialista) (CZ)',
-    topicLabel: 'Biblický výklad (specialista) (CZ)',
+    label: 'Téma: Biblický výklad (specialista)',
+    topicLabel: 'Biblický výklad (specialista)',
     template: `Úkol: vytvoř pouze pole SPECIALISTA pro jedno heslo Strong.
 
 Pravidla:
@@ -722,8 +722,8 @@ Vstup:
 {HESLA}`
   },
   preset_topic_definice_batch: {
-    label: 'Téma: Definice (CZ) — dávka',
-    topicLabel: 'Definice (CZ)',
+    label: 'Téma: Definice — dávka',
+    topicLabel: 'Definice',
     template: `Úkol: vytvoř pouze pole DEFINICE pro více hesel Strong najednou.
 
 Pravidla:
@@ -742,8 +742,8 @@ Vstup:
 {HESLA}`
   },
   preset_topic_vyznam_batch: {
-    label: 'Téma: Český význam (CZ) — dávka',
-    topicLabel: 'Český význam (CZ)',
+    label: 'Téma: Význam — dávka',
+    topicLabel: 'Význam',
     template: `Úkol: vytvoř pouze pole VYZNAM pro více hesel Strong najednou.
 
 Pravidla:
@@ -759,8 +759,8 @@ Vstup:
 {HESLA}`
   },
   preset_topic_kjv_batch: {
-    label: 'Téma: KJV překlady (CZ) — dávka',
-    topicLabel: 'KJV překlady (CZ)',
+    label: 'Téma: KJV překlady — dávka',
+    topicLabel: 'KJV překlady',
     template: `Úkol: vytvoř pouze pole KJV pro více hesel Strong najednou.
 
 Pravidla:
@@ -776,8 +776,8 @@ Vstup:
 {HESLA}`
   },
   preset_topic_pouziti_batch: {
-    label: 'Téma: Biblické užití (CZ) — dávka',
-    topicLabel: 'Biblické užití (CZ)',
+    label: 'Téma: Biblické užití — dávka',
+    topicLabel: 'Biblické užití',
     template: `Úkol: vytvoř pouze pole POUZITI pro více hesel Strong najednou.
 
 Pravidla:
@@ -794,8 +794,8 @@ Vstup:
 {HESLA}`
   },
   preset_topic_puvod_batch: {
-    label: 'Téma: Původ / Etymologie (CZ) — dávka',
-    topicLabel: 'Původ / Etymologie (CZ)',
+    label: 'Téma: Původ / Etymologie — dávka',
+    topicLabel: 'Původ / Etymologie',
     template: `Úkol: vytvoř pouze pole PUVOD pro více hesel Strong najednou.
 
 Pravidla:
@@ -811,8 +811,8 @@ Vstup:
 {HESLA}`
   },
   preset_topic_specialista_batch: {
-    label: 'Téma: Biblický výklad (specialista) (CZ) — dávka',
-    topicLabel: 'Biblický výklad (specialista) (CZ)',
+    label: 'Téma: Biblický výklad (specialista) — dávka',
+    topicLabel: 'Biblický výklad (specialista)',
     template: `Úkol: vytvoř pouze pole SPECIALISTA pro více hesel Strong najednou.
 
 Pravidla:

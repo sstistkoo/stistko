@@ -1,4 +1,12 @@
 export function createExportApi({ state, t, showToast }) {
+  function getUiTag() {
+    const ui = String(localStorage.getItem('strong_ui_lang') || 'cs').toLowerCase();
+    if (ui === 'en') return 'EN';
+    if (ui === 'sk') return 'SK';
+    if (ui === 'pl') return 'PL';
+    return 'CZ';
+  }
+
   function download(name, content, type) {
     const blob = new Blob([content], { type });
     const a = document.createElement('a');
@@ -19,16 +27,17 @@ export function createExportApi({ state, t, showToast }) {
 
     const lines = done.map(e => {
       const tr = state.translated[e.key];
+      const langTag = getUiTag();
       return [
         `${e.key} | ${e.greek}`,
-        `Gramatika: ${e.tvaroslovi || '—'}`,
-        `Český význam: ${tr.vyznam || '—'}`,
-        `Definice (EN): ${e.definice || e.def || '—'}`,
-        `Česká definice: ${tr.definice || '—'}`,
-        `KJV překlady (CZ): ${tr.kjv || e.kjv || '—'}`,
-        `Biblické užití: ${tr.pouziti || e.vyskyt || '—'}`,
-        `Původ: ${tr.puvod || '—'}`,
-        `Specialista: ${tr.specialista || '—'}`,
+        `${t('export.field.grammar')}: ${e.tvaroslovi || '—'}`,
+        `${t('export.field.meaning', { lang: langTag })}: ${tr.vyznam || '—'}`,
+        `${t('export.field.definitionEn')}: ${e.definice || e.def || '—'}`,
+        `${t('export.field.definition', { lang: langTag })}: ${tr.definice || '—'}`,
+        `${t('export.field.kjv', { lang: langTag })}: ${tr.kjv || e.kjv || '—'}`,
+        `${t('export.field.usage')}: ${tr.pouziti || e.vyskyt || '—'}`,
+        `${t('export.field.origin')}: ${tr.puvod || '—'}`,
+        `${t('export.field.specialist')}: ${tr.specialista || '—'}`,
         ''
       ].join('\n');
     });
@@ -64,12 +73,13 @@ export function createExportApi({ state, t, showToast }) {
 
     const lines = done.map(e => {
       const tr = state.translated[e.key];
+      const langTag = getUiTag();
       return [
         `${e.key} | ${e.greek}`,
-        `Český význam: ${tr.vyznam || '—'}`,
-        `Definice: ${tr.definice || '—'}`,
-        `Biblické užití: ${tr.pouziti || '—'}`,
-        `Původ: ${tr.puvod || '—'}`,
+        `${t('export.field.meaning', { lang: langTag })}: ${tr.vyznam || '—'}`,
+        `${t('export.field.definition', { lang: langTag })}: ${tr.definice || '—'}`,
+        `${t('export.field.usage')}: ${tr.pouziti || '—'}`,
+        `${t('export.field.origin')}: ${tr.puvod || '—'}`,
         ''
       ].join('\n');
     });
