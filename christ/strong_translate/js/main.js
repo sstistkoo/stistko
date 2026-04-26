@@ -2180,20 +2180,25 @@ function i18nToolSetAiLoadedFileLabel(text) {
   const el = document.getElementById('i18nToolAiLoadedFile');
   if (!el) return;
   el.style.display = 'block';
-  el.textContent = `Načtený soubor: ${text || '—'}`;
+  el.textContent = t('i18nTool.ai.loadedFile', { file: text || t('common.none') });
 }
 
 function i18nToolSetAiSendButtonState() {
   const btn = document.getElementById('btnI18nToolAiSend');
   if (!btn) return;
   btn.disabled = false;
-  btn.textContent = i18nToolAiSending ? '■ Zastavit odesílání' : '📤 Odeslat';
+  btn.textContent = i18nToolAiSending ? t('i18nTool.ai.send.stop') : t('i18nTool.ai.send.start');
 }
 
 function startI18nToolAiBusyAnimation() {
   const el = document.getElementById('i18nToolAiBusy');
   if (!el) return;
-  const frames = ['⏳ AI audit běží   ', '⏳ AI audit běží.  ', '⏳ AI audit běží.. ', '⏳ AI audit běží...'];
+  const frames = [
+    t('i18nTool.ai.busy.0'),
+    t('i18nTool.ai.busy.1'),
+    t('i18nTool.ai.busy.2'),
+    t('i18nTool.ai.busy.3')
+  ];
   let idx = 0;
   el.style.display = 'block';
   el.textContent = frames[0];
@@ -2221,7 +2226,7 @@ function stopI18nToolAiBusyAnimation(finalText = '') {
 
 function i18nToolExtractJsonFromText(raw) {
   const text = String(raw || '').trim();
-  if (!text) throw new Error('Prázdná AI odpověď.');
+  if (!text) throw new Error(t('i18nTool.ai.error.emptyResponse'));
   try {
     return JSON.parse(text);
   } catch {}
@@ -2239,7 +2244,7 @@ function i18nToolExtractJsonFromText(raw) {
   if (objStart >= 0 && objEnd > objStart) {
     return JSON.parse(text.slice(objStart, objEnd + 1));
   }
-  throw new Error('Nelze najít JSON pole se změnami.');
+  throw new Error(t('i18nTool.ai.error.cannotFindChanges'));
 }
 
 function normalizeI18nToolAiRows(parsed) {
@@ -2266,7 +2271,7 @@ function renderI18nToolAiPreview(rows) {
   const previewEl = document.getElementById('i18nToolAiPreview');
   if (!previewEl) return;
   if (!Array.isArray(rows) || !rows.length) {
-    previewEl.value = 'Žádné změny (AI vrátila „ok“ nebo prázdný seznam).';
+    previewEl.value = t('i18nTool.ai.preview.noChanges');
     return;
   }
   const flatCurrent = i18nToolFlattenStringLeaves(i18nToolAiWorkingJson || i18nToolAiSourceJson || {});
@@ -2280,14 +2285,14 @@ function renderI18nToolAiPreview(rows) {
     const current = String(flatCurrent[key] ?? '');
     const uiText = String(flatUi[key] ?? '');
     lines.push(
-      `${idx + 1}) Klíč: ${key}`,
-      uiText ? `   UI (${uiLang}): ${uiText}` : `   UI (${uiLang}): —`,
-      `   Chybně / aktuálně: ${current}`,
-      `   Správně (AI): ${corrected}`,
+      `${idx + 1}) ${t('i18nTool.ai.preview.key')}: ${key}`,
+      uiText ? `   UI (${uiLang}): ${uiText}` : `   UI (${uiLang}): ${t('common.none')}`,
+      `   ${t('i18nTool.ai.preview.current')}: ${current}`,
+      `   ${t('i18nTool.ai.preview.corrected')}: ${corrected}`,
       ''
     );
   });
-  previewEl.value = lines.join('\n').trim() || 'Žádné použitelné změny.';
+  previewEl.value = lines.join('\n').trim() || t('i18nTool.ai.preview.noUsableChanges');
 }
 
 function openI18nToolAiJsonPicker() {
@@ -2312,11 +2317,11 @@ function loadI18nToolAiJsonFromFile(event) {
       i18nToolSetAiLoadedFileLabel(i18nToolAiSourceFileName);
       const dlBtn = document.getElementById('btnI18nToolDownloadAiResult');
       if (dlBtn) dlBtn.disabled = true;
-      i18nToolSetAiStatus(`Načteno pro AI audit: ${i18nToolAiSourceFileName}`);
-      showToast(`AI audit: načten ${i18nToolAiSourceFileName}`);
+      i18nToolSetAiStatus(t('i18nTool.ai.status.loadedForAudit', { file: i18nToolAiSourceFileName }));
+      showToast(t('i18nTool.ai.toast.loadedForAudit', { file: i18nToolAiSourceFileName }));
     } catch (e) {
-      i18nToolSetAiStatus(`Neplatný JSON: ${e?.message || String(e)}`, true);
-      showToast(`Neplatný JSON: ${e?.message || String(e)}`);
+      i18nToolSetAiStatus(t('i18nTool.ai.status.invalidJson', { message: e?.message || String(e) }), true);
+      showToast(t('i18nTool.ai.toast.invalidJson', { message: e?.message || String(e) }));
     }
   };
   reader.readAsText(file);
@@ -2324,7 +2329,7 @@ function loadI18nToolAiJsonFromFile(event) {
 
 async function buildI18nToolAiPrompt() {
   if (!i18nToolAiSourceJson) {
-    showToast('Nejdřív připojte JSON soubor pro AI audit.');
+    showToast(t('i18nTool.ai.toast.attachJsonFirst'));
     return;
   }
   try {
@@ -2346,11 +2351,11 @@ async function buildI18nToolAiPrompt() {
     const prompt = buildI18nToolAiPromptText(payload);
     const promptEl = document.getElementById('i18nToolAiPrompt');
     if (promptEl) promptEl.value = prompt;
-    i18nToolSetAiStatus(`Prompt připraven (${keys.length} klíčů, plný JSON přiložen).`);
-    showToast(`Prompt pro AI připraven (${keys.length} klíčů).`);
+    i18nToolSetAiStatus(t('i18nTool.ai.status.promptReady', { count: keys.length }));
+    showToast(t('i18nTool.ai.toast.promptReady', { count: keys.length }));
   } catch (e) {
-    i18nToolSetAiStatus(`Nepodařilo se připravit prompt: ${e?.message || String(e)}`, true);
-    showToast(`Chyba při tvorbě promptu: ${e?.message || String(e)}`);
+    i18nToolSetAiStatus(t('i18nTool.ai.status.promptBuildFailed', { message: e?.message || String(e) }), true);
+    showToast(t('i18nTool.ai.toast.promptBuildFailed', { message: e?.message || String(e) }));
   }
 }
 
@@ -2398,18 +2403,18 @@ function chunkArray(arr, size) {
 
 async function applyI18nToolAiResponse() {
   if (!i18nToolAiSourceJson) {
-    showToast('Nejdřív připojte JSON soubor pro AI audit.');
+    showToast(t('i18nTool.ai.toast.attachJsonFirst'));
     return;
   }
   const raw = String(document.getElementById('i18nToolAiResponse')?.value || '').trim();
   if (!raw) {
-    showToast('Vložte AI odpověď.');
+    showToast(t('i18nTool.ai.toast.pasteResponse'));
     return;
   }
   if (raw.toLowerCase() === 'ok') {
     renderI18nToolAiPreview([]);
-    i18nToolSetAiStatus('AI odpověď: ok (žádné změny).');
-    showToast('AI nenašla žádné změny.');
+    i18nToolSetAiStatus(t('i18nTool.ai.status.okNoChanges'));
+    showToast(t('i18nTool.ai.toast.noChanges'));
     return;
   }
   try {
@@ -2457,11 +2462,11 @@ async function applyI18nToolAiResponse() {
     if (editBtn) editBtn.disabled = false;
     const dlBtn = document.getElementById('btnI18nToolDownloadAiResult');
     if (dlBtn) dlBtn.disabled = false;
-    i18nToolSetAiStatus(`AI audit aplikován. Fix: ${applied}, Warn(tag): ${warned}, Přeskočeno: ${skipped}.`);
-    showToast(`AI změny aplikovány: ${applied} oprav.`);
+    i18nToolSetAiStatus(t('i18nTool.ai.status.auditApplied', { applied, warned, skipped }));
+    showToast(t('i18nTool.ai.toast.applied', { applied }));
   } catch (e) {
-    i18nToolSetAiStatus(`Chyba při zpracování AI odpovědi: ${e?.message || String(e)}`, true);
-    showToast(`AI odpověď nejde zpracovat: ${e?.message || String(e)}`);
+    i18nToolSetAiStatus(t('i18nTool.ai.status.responseProcessFailed', { message: e?.message || String(e) }), true);
+    showToast(t('i18nTool.ai.toast.responseProcessFailed', { message: e?.message || String(e) }));
   }
 }
 
@@ -2471,7 +2476,7 @@ async function sendI18nToolAiPrompt() {
   if (!promptEl || !responseEl) return;
   if (i18nToolAiSending) {
     i18nToolAiStopRequested = true;
-    i18nToolSetAiStatus('Požadavek na zastavení přijat. Dokončuji aktuální dávku...');
+    i18nToolSetAiStatus(t('i18nTool.ai.status.stopRequested'));
     return;
   }
   let promptText = String(promptEl.value || '').trim();
@@ -2480,15 +2485,15 @@ async function sendI18nToolAiPrompt() {
     promptText = String(promptEl.value || '').trim();
   }
   if (!promptText) {
-    showToast('Nejdřív vytvořte nebo vložte prompt pro AI.');
+    showToast(t('i18nTool.ai.toast.createPromptFirst'));
     return;
   }
   const provider = 'groq';
   const model = String(getPipelineModelForProvider('groq') || 'meta-llama/llama-4-scout-17b-16e-instruct').trim();
   const apiKey = String(getCurrentApiKey(provider) || '').trim();
   if (!apiKey) {
-    i18nToolSetAiStatus('Chybí API key pro Groq (systémový model).', true);
-    showToast('Chybí API key pro Groq.');
+    i18nToolSetAiStatus(t('i18nTool.ai.status.missingApiKey'), true);
+    showToast(t('i18nTool.ai.toast.missingApiKey'));
     return;
   }
   try {
@@ -2591,14 +2596,14 @@ async function sendI18nToolAiPrompt() {
     showToast(`AI odpověď načtena (${chunks.length} dávek).`);
   } catch (e) {
     if (String(e?.message || '') === I18N_TOOL_AI_SEND_CANCELLED) {
-      stopI18nToolAiBusyAnimation('⏹ AI audit zastaven uživatelem.');
-      i18nToolSetAiStatus('Odesílání bylo zastaveno uživatelem.');
-      showToast('AI odesílání zastaveno.');
+      stopI18nToolAiBusyAnimation(t('i18nTool.ai.status.stoppedByUser'));
+      i18nToolSetAiStatus(t('i18nTool.ai.status.sendStoppedByUser'));
+      showToast(t('i18nTool.ai.toast.sendStoppedByUser'));
       return;
     }
-    stopI18nToolAiBusyAnimation('✕ AI audit selhal.');
-    i18nToolSetAiStatus(`AI volání selhalo: ${e?.message || String(e)}`, true);
-    showToast(`AI volání selhalo: ${e?.message || String(e)}`);
+    stopI18nToolAiBusyAnimation(t('i18nTool.ai.status.failed'));
+    i18nToolSetAiStatus(t('i18nTool.ai.status.callFailed', { message: e?.message || String(e) }), true);
+    showToast(t('i18nTool.ai.toast.callFailed', { message: e?.message || String(e) }));
   } finally {
     i18nToolAiSending = false;
     i18nToolAiStopRequested = false;
@@ -2608,7 +2613,7 @@ async function sendI18nToolAiPrompt() {
 
 function downloadI18nToolAiResult() {
   if (!i18nToolAiWorkingJson) {
-    showToast('Nejdřív aplikujte AI odpověď.');
+    showToast(t('i18nTool.ai.toast.applyResponseFirst'));
     return;
   }
   const name = i18nToolAiSourceFileName || 'ai-audit-output.json';
@@ -2626,7 +2631,7 @@ function cancelI18nToolBrowserTranslate() {
   const status = document.getElementById('i18nToolStatus');
   if (status) {
     status.style.display = 'block';
-    status.textContent = '⏹ Zastavuji překlad...';
+    status.textContent = t('i18nTool.status.stopping');
   }
 }
 
@@ -2675,10 +2680,10 @@ function updateI18nToolSummary() {
     .filter((lang) => i18nToolSelectedLanguages.has(lang.code))
     .map((lang) => `${lang.name} (${lang.code})`);
   if (!selectedList.length) {
-    summary.textContent = 'Vybráno jazyků: 0';
+    summary.textContent = t('i18nTool.summary.selected', { count: 0, list: t('common.none') });
     return;
   }
-  summary.textContent = `Vybráno jazyků: ${i18nToolSelectedLanguages.size} — ${selectedList.join(', ')}`;
+  summary.textContent = t('i18nTool.summary.selected', { count: i18nToolSelectedLanguages.size, list: selectedList.join(', ') });
 }
 
 function resetI18nToolRuntimeUi() {
@@ -2741,7 +2746,7 @@ function updateI18nToolCommandPreview() {
 
   const selected = I18N_TOOL_LANGUAGES.filter((lang) => i18nToolSelectedLanguages.has(lang.code));
   if (!selected.length) {
-    cmdEl.value = '# Vyberte alespoň jeden cílový jazyk.';
+    cmdEl.value = `# ${t('i18nTool.cmd.selectAtLeastOne')}`;
     updateI18nToolSummary();
     return;
   }
@@ -2757,14 +2762,14 @@ function updateI18nToolCommandPreview() {
 async function copyI18nToolCmd() {
   const cmd = String(document.getElementById('i18nToolCmd')?.value || '').trim();
   if (!cmd) {
-    showToast('Nejdřív vyberte cílový jazyk.');
+    showToast(t('i18nTool.toast.selectTargetFirst'));
     return;
   }
   try {
     await navigator.clipboard.writeText(cmd);
-    showToast('Příkaz zkopírován.');
+    showToast(t('i18nTool.toast.commandCopied'));
   } catch {
-    showToast('Kopírování selhalo.');
+    showToast(t('i18nTool.toast.copyFailed'));
   }
 }
 
@@ -3028,7 +3033,7 @@ function i18nToolFlattenStringLeaves(value, path = '', out = {}) {
 function openI18nToolOutputEditor() {
   const langs = Object.keys(i18nToolTranslatedJsonByLang).sort();
   if (!langs.length) {
-    showToast('Nejdřív dokončete překlad, ať je co editovat.');
+    showToast(t('i18nTool.editor.completeTranslationFirst'));
     return;
   }
   const select = document.getElementById('i18nToolEditorLang');
@@ -3061,7 +3066,7 @@ function loadI18nToolJsonForEditFromFile(event) {
       i18nToolTranslatedTextByLang[langCode] = JSON.stringify(parsed, null, 2);
       const editBtn = document.getElementById('btnI18nToolEditOutput');
       if (editBtn) editBtn.disabled = false;
-      showToast(`Načteno pro editaci: ${rawName}`);
+      showToast(t('i18nTool.editor.loadedForEdit', { file: rawName }));
       openI18nToolOutputEditor();
       const select = document.getElementById('i18nToolEditorLang');
       if (select) {
@@ -3072,7 +3077,7 @@ function loadI18nToolJsonForEditFromFile(event) {
         }
       }
     } catch (e) {
-      showToast(`Neplatný JSON: ${e?.message || String(e)}`);
+      showToast(t('i18nTool.ai.toast.invalidJson', { message: e?.message || String(e) }));
     }
   };
   reader.readAsText(file);
@@ -3114,7 +3119,7 @@ function openI18nToolAiModal() {
   i18nToolSetAiLoadedFileLabel(i18nToolAiSourceFileName || '—');
   const previewEl = document.getElementById('i18nToolAiPreview');
   if (previewEl && !String(previewEl.value || '').trim()) {
-    previewEl.value = 'Po načtení odpovědi AI se sem vypíše přehled změn.';
+    previewEl.value = t('i18nTool.ai.preview.waitingForResponse');
   }
   if (m) m.classList.add('show');
 }
@@ -3146,7 +3151,7 @@ function saveI18nToolOutputEditor() {
   const lang = String(select.value || '');
   const base = i18nToolTranslatedJsonByLang[lang];
   if (!base) {
-    showToast('Výstup pro vybraný jazyk neexistuje.');
+    showToast(t('i18nTool.editor.outputMissing'));
     return;
   }
   const updated = typeof structuredClone === 'function'
@@ -3171,7 +3176,7 @@ function saveI18nToolOutputEditor() {
   i18nToolTranslatedJsonByLang[lang] = updated;
   i18nToolTranslatedTextByLang[lang] = JSON.stringify(updated, null, 2);
   i18nToolDownloadFile(i18nToolTranslatedTextByLang[lang], `${lang}.json`);
-  showToast(`Upravený ${lang}.json uložen.`);
+  showToast(t('i18nTool.editor.saved', { file: `${lang}.json` }));
 }
 
 async function runI18nToolBrowserTranslate() {
@@ -3181,7 +3186,7 @@ async function runI18nToolBrowserTranslate() {
     i18nToolCancelRequested = false;
     i18nToolStrictFallbackCount = 0;
     if (!i18nToolSelectedLanguages.size) {
-      showToast('Nejdřív vyberte cílový jazyk.');
+      showToast(t('i18nTool.toast.selectTargetFirst'));
       i18nToolRunning = false;
       return;
     }
@@ -3201,7 +3206,7 @@ async function runI18nToolBrowserTranslate() {
     if (progressWrap) progressWrap.style.display = 'block';
     if (status) {
       status.style.display = 'block';
-      status.textContent = 'Spouštím překlad...';
+      status.textContent = t('i18nTool.status.starting');
     }
     if (downloads) {
       downloads.style.display = 'none';
@@ -3214,7 +3219,7 @@ async function runI18nToolBrowserTranslate() {
     const placeholderAuditByLang = {};
     for (const lang of selected) {
       if (i18nToolCancelRequested) throw new Error(I18N_TOOL_CANCELLED_ERROR);
-      if (status) status.textContent = `Překládám do: ${lang.name} (${lang.code})...`;
+      if (status) status.textContent = t('i18nTool.status.translatingTo', { name: lang.name, code: lang.code });
       const translated = await i18nToolTranslateValue(
         sourceData,
         lang.code,
@@ -3228,7 +3233,13 @@ async function runI18nToolBrowserTranslate() {
             progressFill.textContent = `${percent}%`;
           }
           if (status && (doneUnits % 25 === 0 || doneUnits === totalUnits)) {
-            status.textContent = `Překládám do: ${lang.name} (${lang.code})... ${doneUnits}/${totalUnits}${path ? ` | ${path}` : ''}`;
+            status.textContent = t('i18nTool.status.translatingProgress', {
+              name: lang.name,
+              code: lang.code,
+              done: doneUnits,
+              total: totalUnits,
+              path: path ? ` | ${path}` : ''
+            });
           }
         }
       );
@@ -3281,9 +3292,9 @@ async function runI18nToolBrowserTranslate() {
     if (String(e?.message || '') === I18N_TOOL_CANCELLED_ERROR) {
       if (status) {
         status.style.display = 'block';
-        status.textContent = '⏹ Překlad byl ukončen uživatelem.';
+        status.textContent = t('i18nTool.status.cancelledByUser');
       }
-      showToast('Překlad byl ukončen.');
+      showToast(t('i18nTool.toast.cancelled'));
     } else {
       if (status) {
         status.style.display = 'block';

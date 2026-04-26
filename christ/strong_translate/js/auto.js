@@ -33,7 +33,7 @@ export function createAutoApi(deps) {
     state.autoRunning = true;
     document.getElementById('btnAuto')?.classList.add('active');
     const btnAuto = document.getElementById('btnAuto');
-    if (btnAuto) btnAuto.textContent = '■ AUTO';
+    if (btnAuto) btnAuto.textContent = t('auto.button.stop');
     document.getElementById('autoPanel')?.classList.add('show');
     const autoInterval = document.getElementById('autoInterval');
     if (autoInterval) autoInterval.textContent = String(state.currentInterval);
@@ -53,7 +53,7 @@ export function createAutoApi(deps) {
     clearInterval(state.autoCountTimer);
     document.getElementById('btnAuto')?.classList.remove('active');
     const btnAuto = document.getElementById('btnAuto');
-    if (btnAuto) btnAuto.textContent = '▶ AUTO';
+    if (btnAuto) btnAuto.textContent = t('auto.button.start');
     if (window.innerWidth <= 600) {
       document.getElementById('autoPanel')?.classList.remove('show');
     }

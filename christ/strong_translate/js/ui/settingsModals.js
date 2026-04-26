@@ -98,7 +98,7 @@ function bindUiLanguageSelectBehavior() {
     closePromptLangModal();
     if (typeof window.showI18nToolModal === 'function') {
       window.showI18nToolModal();
-      showToast(`JSON pro ${fileCode}.json chybí — otevřen překladač.`);
+      showToast(t('toast.i18nTool.jsonMissingOpened', { file: `${fileCode}.json` }));
     }
   });
 }
@@ -118,7 +118,7 @@ async function populateUiLanguageSelect() {
   if (available.length && missing.length) {
     const separator = document.createElement('option');
     separator.disabled = true;
-    separator.textContent = '────────────';
+    separator.textContent = t('uiLanguage.separator');
     fragment.appendChild(separator);
   }
   missing.forEach((lang) => fragment.appendChild(createUiLangOption(lang)));
