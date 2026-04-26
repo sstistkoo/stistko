@@ -23,14 +23,14 @@ export function createHeaderApi({ state, t, getTranslationStateForKey, storeKey,
     const el = document.getElementById('etaLabel');
     if (!el) return;
     const remain = state.entries.filter(e => !state.translated[e.key] || state.translated[e.key].skipped).length;
-    if (!remain) { el.textContent = t('header.eta.done'); return; }
+    if (!remain) { el.textContent = 'hotovo!'; return; }
     const bs = parseInt(document.getElementById('batchSizeRun').value) || state.currentBatchSize;
     const iv = parseInt(document.getElementById('intervalRun').value) || state.currentInterval;
     const batches = Math.ceil(remain / bs);
     const secs = batches * iv;
-    if (secs < 60) el.textContent = t('header.eta.seconds', { seconds: secs });
-    else if (secs < 3600) el.textContent = t('header.eta.minutes', { minutes: Math.ceil(secs / 60) });
-    else el.textContent = t('header.eta.hours', { hours: (secs / 3600).toFixed(1) });
+    if (secs < 60) el.textContent = `~${secs}s`;
+    else if (secs < 3600) el.textContent = `~${Math.ceil(secs / 60)} min`;
+    else el.textContent = `~${(secs / 3600).toFixed(1)} hod`;
   }
 
   function updateStats() {
@@ -45,7 +45,7 @@ export function createHeaderApi({ state, t, getTranslationStateForKey, storeKey,
     const pbarContainer = document.getElementById('pbarContainer');
     if (pbarContainer) {
       pbarContainer.setAttribute('aria-valuenow', pct);
-      pbarContainer.setAttribute('aria-valuetext', t('header.progress.aria', { done, total, pct }));
+      pbarContainer.setAttribute('aria-valuetext', `${done} z ${total} hesel přeloženo (${pct}%)`);
     }
     if (state.autoRunning) updateETA();
   }
@@ -91,7 +91,7 @@ export function createHeaderApi({ state, t, getTranslationStateForKey, storeKey,
     const typeName = typeTag === 'G' ? 'GR' : typeTag === 'H' ? 'HE' : typeTag;
     badge.textContent = `${typeName}·${count}`;
     badge.style.display = 'inline-block';
-    badge.title = t('header.fileBadge.title', { fileId: state.currentFileId, slot: storeKey() });
+    badge.title = `Aktivní soubor: ${state.currentFileId}\nSlot průběhu: ${storeKey()}`;
   }
 
   function hasBackup() {
@@ -110,7 +110,7 @@ export function createHeaderApi({ state, t, getTranslationStateForKey, storeKey,
     const b = hasBackup();
     if (b && b.count > 0) {
       btn.style.display = 'inline-block';
-      btn.title = t('header.restore.titleWithCount', { count: b.count, ts: new Date(b.ts).toLocaleString('cs') });
+      btn.title = `Obnovit ze zálohy (${b.count} hesel, ${new Date(b.ts).toLocaleString('cs')})`;
     } else {
       btn.style.display = 'none';
     }
