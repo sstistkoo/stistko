@@ -95,17 +95,30 @@ export async function fetchUiDictionary(lang) {
   return response.json();
 }
 
-/** Volitelné překlady dlouhých AI promptů (i18n/prompts.{lang}.json), při absenci — fallback z výchozího jazyka. */
-export async function fetchPromptPack(lang) {
-  const tryLoad = async (l) => {
+/**
+ * Načte AI prompt balíčky bez 404 pro každý jazyk zvlášť.
+ * Používá jen i18n/prompts.{DEFAULT_UI_LANG}.json a volitelně prompts.en.json (2 requesty).
+ * Ostatní UI jazyky (de, sk, …) dostanou výchozí balíček (cs), dokud nepřidáš další logiku.
+ */
+async function mergePromptPacksIntoLoaded(loaded) {
+  const tryFile = async (filename) => {
     try {
-      const url = `./i18n/prompts.${l}.json`;
-      const response = await fetch(url, { cache: 'no-store' });
+      const response = await fetch(`./i18n/${filename}`, { cache: 'no-store' });
       if (response.ok) return await response.json();
     } catch (_) {}
     return null;
   };
-  return (await tryLoad(lang)) || (lang !== DEFAULT_UI_LANG ? await tryLoad(DEFAULT_UI_LANG) : null) || {};
+  const packDefault = (await tryFile(`prompts.${DEFAULT_UI_LANG}.json`)) || {};
+  const packEnRaw = await tryFile('prompts.en.json');
+  const packEn =
+    packEnRaw && typeof packEnRaw === 'object' && Object.keys(packEnRaw).length
+      ? packEnRaw
+      : packDefault;
+
+  for (const lang of Array.from(UI_LANGS)) {
+    const pack = lang === 'en' ? packEn : packDefault;
+    Object.assign(loaded[lang], pack);
+  }
 }
 
 export function validateUiMessages(messages) {
@@ -140,15 +153,10 @@ export function loadUiMessages(force = false) {
         loaded[lang] = fallback[lang] || {};
       }
     }));
-    for (const lang of Array.from(UI_LANGS)) {
-      try {
-        const pack = await fetchPromptPack(lang);
-        if (pack && typeof pack === 'object') {
-          Object.assign(loaded[lang], pack);
-        }
-      } catch (err) {
-        console.warn(`[i18n] Failed loading prompt pack for "${lang}":`, err);
-      }
+    try {
+      await mergePromptPacksIntoLoaded(loaded);
+    } catch (err) {
+      console.warn('[i18n] Failed merging prompt packs:', err);
     }
     UI_MESSAGES = loaded;
     validateUiMessages(UI_MESSAGES);
