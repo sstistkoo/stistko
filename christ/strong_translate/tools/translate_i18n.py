@@ -30,9 +30,9 @@ _PH = "\uE000"
 
 # Typické značky v i18n (zdroj en/cs); po překladu se vše sjednotí na --tag
 _TAG_IN_PARENS = re.compile(
-    r"\((?:CZ|EN|SK|PL|DE|FR|ES|IT|PT|RU|UA|BG|RO|HU|NL|SV|DA|NO|FI|EL|TR|"
-    r"AR|JA|KO|HE|OR|IN|"
-    r"zh-CN|zh-TW|ZH-CN|EN)\s*(?:\([^)]+\))*\)",
+    r"\((?:CZ|EN|SK|PL|DE|FR|ES|IT|PT|RU|UK|BG|RO|HU|NL|SV|DA|NO|FI|EL|TR|"
+    r"AR|JA|KO|HE|"
+    r"zh-CN|zh-TW|ZH-CN)\)",
     re.IGNORECASE,
 )
 
