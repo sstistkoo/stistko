@@ -35,7 +35,7 @@ export function createModelTestUiApi(deps) {
     const customPromptInput = document.getElementById('modelTestCustomPromptInput');
     if (!modal || !info || !output || !providerSelect) return;
     providerSelect.innerHTML = [
-      '<option value="parallel-3">3 provideři paralelně</option>',
+      `<option value="parallel-3">${t('modelTest.provider.parallel3')}</option>`,
       ...Object.keys(PROVIDERS).map((k) => `<option value="${k}">${PROVIDERS[k].label}</option>`)
     ].join('');
     const currentProvider = document.getElementById('provider')?.value || 'groq';
@@ -45,7 +45,7 @@ export function createModelTestUiApi(deps) {
     populateModelTestModelSelect('openrouter');
     saveModelTestModelSelections();
     updateModelTestProviderUi();
-    info.textContent = `Provider: ${providerLabel || '—'}`;
+    info.textContent = t('modelTest.providerInfo', { provider: providerLabel || '—' });
     if (clearOutput) {
       output.value = '';
       clearModelTestOutputFromStorage();
@@ -132,7 +132,7 @@ export function createModelTestUiApi(deps) {
       const el = document.getElementById(`modelTestCountdown_${prov}`);
       if (!el) return;
       const sec = Math.max(0, Math.ceil(Number(state.modelTestProviderEta[prov] || 0)));
-      el.textContent = `${labels[prov]}: ${sec > 0 ? `další požadavek za ~${sec}s` : 'připraveno'}`;
+      el.textContent = `${labels[prov]}: ${sec > 0 ? t('modelTest.countdown.nextIn', { seconds: sec }) : t('modelTest.countdown.ready')}`;
     });
   }
 
@@ -172,11 +172,11 @@ export function createModelTestUiApi(deps) {
     };
     if (state.modelTestRunning) {
       if (state.modelTestCancelRequested) {
-        apply('⏹ Zastavuji...', 'modal-btn cancel');
+        apply(t('modelTest.button.stopping'), 'modal-btn cancel');
         return;
       }
       const sec = Math.max(0, Math.ceil(Number(state.modelTestNextRequestEtaSec || 0)));
-      apply(sec > 0 ? `■ Běží (${sec}s)` : '■ Běží', 'modal-btn cancel');
+      apply(sec > 0 ? t('modelTest.button.runningWithSeconds', { seconds: sec }) : t('modelTest.button.running'), 'modal-btn cancel');
       return;
     }
     apply('▶ Test provideru', 'modal-btn ok');
@@ -267,7 +267,7 @@ export function createModelTestUiApi(deps) {
       return (b.calls || 0) - (a.calls || 0);
     });
     if (!rows.length) {
-      body.innerHTML = '<tr><td colspan="7" style="padding:8px;color:var(--txt3)">Zatím bez dat.</td></tr>';
+      body.innerHTML = `<tr><td colspan="7" style="padding:8px;color:var(--txt3)">${t('modelTest.table.noData')}</td></tr>`;
       return;
     }
     body.innerHTML = rows.map((r) => {
@@ -281,7 +281,7 @@ export function createModelTestUiApi(deps) {
       <td style="padding:6px;border-top:1px solid var(--brd);text-align:right">${r.totalKeys || 0}</td>
       <td style="padding:6px;border-top:1px solid var(--brd);text-align:right">${formatAiResponseTime(avgMs)}</td>
       <td style="padding:6px;border-top:1px solid var(--brd);text-align:right">${r.calls || 0}</td>
-      <td style="padding:6px;border-top:1px solid var(--brd);text-align:right"><button class="modal-btn cancel" style="padding:4px 8px;font-size:10px" onclick="deleteModelTestStatsRow('${encodeURIComponent(r.key)}')">Smazat</button></td>
+      <td style="padding:6px;border-top:1px solid var(--brd);text-align:right"><button class="modal-btn cancel" style="padding:4px 8px;font-size:10px" onclick="deleteModelTestStatsRow('${encodeURIComponent(r.key)}')">${t('common.delete')}</button></td>
     </tr>`;
     }).join('');
   }
@@ -418,11 +418,16 @@ export function createModelTestRunnerApi(deps) {
     const done = ok + okRetry + partial;
     const successPct = total > 0 ? Math.round((done / total) * 100) : 0;
     appendReport('');
-    appendReport('=== KONEČNÝ PŘEHLED TESTU ===');
-    appendReport(`Výsledky modelů: OK ${ok} | OK po retry ${okRetry} | PARTIAL ${partial} | RATE_LIMIT ${rateLimited} | ERROR ${error} | CELKEM ${total}`);
-    appendReport(`Úspěšnost modelů: ${successPct}%`);
+    appendReport(t('modelTest.final.header'));
+    appendReport(t('modelTest.final.resultsLine', { ok, okRetry, partial, rateLimited, error, total }));
+    appendReport(t('modelTest.final.successRateLine', { successPct }));
     if (testMode === 'auto-live') {
-      appendReport(`Hesla: OK ${extra.okKeys || 0} | NEÚSP ${extra.failedKeys || 0} | cykly ${extra.cycles || 0}${extra.avgLatencyMs ? ` | prům. AI ${formatAiResponseTime(extra.avgLatencyMs)}` : ''}`);
+      appendReport(t('modelTest.final.entriesLine', {
+        ok: extra.okKeys || 0,
+        fail: extra.failedKeys || 0,
+        cycles: extra.cycles || 0,
+        avgAi: extra.avgLatencyMs ? ` | ${t('modelTest.final.avgAi')}: ${formatAiResponseTime(extra.avgLatencyMs)}` : ''
+      }));
     }
   }
 
@@ -440,7 +445,7 @@ export function createModelTestRunnerApi(deps) {
     const succB = getModelTestSuccessRatePercent(resultsB);
     const latA = Number(statsA?.avgLatencyMs || 0);
     const latB = Number(statsB?.avgLatencyMs || 0);
-    let winner = 'REMÍZA';
+    let winner = t('modelTest.compare.tie');
     if (failA < failB) winner = `A (${getModelTestPromptTypeLabel(promptA)})`;
     else if (failB < failA) winner = `B (${getModelTestPromptTypeLabel(promptB)})`;
     else if (succA > succB) winner = `A (${getModelTestPromptTypeLabel(promptA)})`;
@@ -449,10 +454,10 @@ export function createModelTestRunnerApi(deps) {
     else if (latA > 0 && latB > 0 && latB < latA) winner = `B (${getModelTestPromptTypeLabel(promptB)})`;
 
     appendReport('');
-    appendReport('=== A/B POROVNÁNÍ PROMPTŮ ===');
+    appendReport(t('modelTest.compare.header'));
     appendReport(`A: ${getModelTestPromptTypeLabel(promptA)} | hesla OK ${statsA?.okKeys || 0} / NEÚSP ${failA} | model úspěšnost ${succA}% | prům. AI ${formatAiResponseTime(latA)}`);
     appendReport(`B: ${getModelTestPromptTypeLabel(promptB)} | hesla OK ${statsB?.okKeys || 0} / NEÚSP ${failB} | model úspěšnost ${succB}% | prům. AI ${formatAiResponseTime(latB)}`);
-    appendReport(`Vítěz: ${winner}`);
+    appendReport(t('modelTest.compare.winner', { winner }));
   }
 
   async function runAutoLiveModelTest(appendReport, waitMs, testResults, abortSignal, fixedProvider = null, promptType = 'custom', promptEnabled = true, fixedCyclesPerWorker = null) {
@@ -583,7 +588,9 @@ export function createModelTestRunnerApi(deps) {
       }
       if (!executionQueue.length) return;
     }
-    const providerLabel = forcedProvider ? (PROVIDERS[prov]?.label || prov) : ((modalProviderSelect?.value === 'parallel-3') ? '3 provideři paralelně' : (PROVIDERS[prov]?.label || prov));
+    const providerLabel = forcedProvider
+      ? (PROVIDERS[prov]?.label || prov)
+      : ((modalProviderSelect?.value === 'parallel-3') ? t('modelTest.provider.parallel3') : (PROVIDERS[prov]?.label || prov));
     const outputEl = document.getElementById('modelTestOutput');
     const shouldAppend = appendCheckbox?.checked && !resetReport;
     const snapshotBefore = outputEl ? outputEl.value : '';
@@ -613,7 +620,7 @@ export function createModelTestRunnerApi(deps) {
     state.modelTestRawResponses = [];
     resetModelTestRateLimitHealth();
     clearModelTestRawOutputFromStorage();
-    modelTestSetLastStatus('Běží test modelů…', 'idle');
+    modelTestSetLastStatus(t('modelTest.status.running'), 'idle');
     state.modelTestAbortController = new AbortController();
     const signal = state.modelTestAbortController.signal;
     const waitMs = (ms) => modelTestWaitWithCountdown(ms, signal);
@@ -702,7 +709,7 @@ export function createModelTestRunnerApi(deps) {
       state.modelTestNextRequestEtaSec = 0;
       state.modelTestRunEndTs = 0;
       modelTestSetCountdownLabel('');
-      if (state.modelTestCancelRequested) modelTestSetLastStatus('Test zastaven uživatelem.', 'warn');
+      if (state.modelTestCancelRequested) modelTestSetLastStatus(t('modelTest.status.stoppedByUser'), 'warn');
       state.modelTestRunning = false;
       state.modelTestCancelRequested = false;
       state.modelTestAbortController = null;
@@ -720,7 +727,7 @@ export function createModelTestRunnerApi(deps) {
         error: testResults.filter((r) => r.status === 'ERROR').length,
         partial: testResults.filter((r) => r.status === 'PARTIAL').length
       });
-      showToast(state.modelTestCancelRequested ? (getUiLang() === 'en' ? '⏹ Model test canceled' : '⏹ Test modelů zrušen') : t('toast.modelTest.doneWithCount', { count: Math.max(1, testResults.length) }));
+      showToast(state.modelTestCancelRequested ? t('toast.modelTest.canceled') : t('toast.modelTest.doneWithCount', { count: Math.max(1, testResults.length) }));
     }
   }
 

@@ -57,8 +57,8 @@ export function createPromptLibraryApi(deps) {
         if (!item || typeof item.text !== 'string') continue;
         if (!state.PROMPT_LIBRARY[category].some((p) => p.text === item.text)) {
           state.PROMPT_LIBRARY[category].push({
-            name: String(item.name || 'Importovaný'),
-            desc: String(item.desc || 'Import ze souboru'),
+            name: String(item.name || t('prompt.library.imported.name')),
+            desc: String(item.desc || t('prompt.library.imported.desc')),
             text: item.text
           });
         }
@@ -70,8 +70,8 @@ export function createPromptLibraryApi(deps) {
 
     if (customSaved && customSaved.trim()) {
       customEntries.push({
-        name: 'Moje vlastní',
-        desc: 'Uložený vlastní prompt',
+        name: t('prompt.library.myOwn.name'),
+        desc: t('prompt.library.myOwn.desc'),
         text: customSaved
       });
     }
@@ -84,8 +84,8 @@ export function createPromptLibraryApi(deps) {
 
     if (currentSavedPrompt && !customEntries.some((p) => p.text === currentSavedPrompt)) {
       customEntries.unshift({
-        name: 'Aktuální',
-        desc: 'Aktuálně aktivní prompt',
+        name: t('prompt.library.current.name'),
+        desc: t('prompt.library.current.desc'),
         text: currentSavedPrompt
       });
     }
@@ -130,7 +130,7 @@ DODATEK PRO JEDNO TÉMA:
     setMainPrompt(systemPrompt, 'system');
     const editor = document.getElementById('promptLibraryEditor');
     if (editor) editor.value = systemPrompt;
-    showToast(t('toast.systemPrompt.set', { mode: context === 'topic' ? (getUiLang() === 'en' ? 'topic' : 'téma') : (getUiLang() === 'en' ? 'batch' : 'dávka') }));
+    showToast(t('toast.systemPrompt.set', { mode: context === 'topic' ? t('common.topic') : t('common.batch') }));
   }
 
   function togglePromptModeQuick() {
@@ -153,7 +153,7 @@ DODATEK PRO JEDNO TÉMA:
     const btn = document.getElementById('btnPromptAuto');
     if (!btn) return;
     const on = isPromptAutoModeEnabled();
-    btn.textContent = `⚡ Auto prompt: ${on ? 'ON' : 'OFF'}`;
+    btn.textContent = t('prompt.auto.button', { state: on ? t('common.on') : t('common.off') });
     btn.style.borderColor = on ? 'var(--grn)' : 'var(--brd)';
     btn.style.color = on ? 'var(--grn)' : 'var(--txt2)';
   }
@@ -162,7 +162,7 @@ DODATEK PRO JEDNO TÉMA:
     const on = isPromptAutoModeEnabled();
     localStorage.setItem('strong_prompt_auto', on ? 'off' : 'on');
     updatePromptAutoButton();
-    showToast(t('toast.autoPrompt.toggled', { state: on ? (getUiLang() === 'en' ? 'off' : 'vypnut') : (getUiLang() === 'en' ? 'on' : 'zapnut') }));
+    showToast(t('toast.autoPrompt.toggled', { state: on ? t('common.offLower') : t('common.onLower') }));
   }
 
   function showPromptLibraryModal() {
@@ -224,7 +224,7 @@ DODATEK PRO JEDNO TÉMA:
     const list = document.getElementById('promptList');
     const prompts = state.PROMPT_LIBRARY[state.selectedPromptCategory] || [];
     if (prompts.length === 0) {
-      list.innerHTML = '<div style="color:var(--txt3);font-size:11px;padding:10px">Žádné prompty v této kategorii</div>';
+      list.innerHTML = `<div style="color:var(--txt3);font-size:11px;padding:10px">${t('prompt.library.emptyCategory')}</div>`;
       return;
     }
     list.innerHTML = prompts.map((p, idx) => `
@@ -244,7 +244,7 @@ DODATEK PRO JEDNO TÉMA:
       preview.textContent = prompt.text;
       if (editor) editor.value = prompt.text;
     } else {
-      preview.textContent = 'Vyberte prompt z knihovny...';
+      preview.textContent = t('prompt.library.preview.empty');
     }
   }
 
@@ -281,7 +281,7 @@ DODATEK PRO JEDNO TÉMA:
     for (const [category, prompts] of Object.entries(state.PROMPT_LIBRARY)) {
       lines.push(`## CATEGORY: ${category}`);
       for (const prompt of prompts || []) {
-        lines.push(`### PROMPT: ${prompt.name || 'Bez názvu'}`);
+        lines.push(`### PROMPT: ${prompt.name || t('prompt.library.untitled')}`);
         lines.push(`DESC: ${prompt.desc || ''}`);
         lines.push('---BEGIN---');
         lines.push(String(prompt.text || ''));
@@ -314,8 +314,8 @@ DODATEK PRO JEDNO TÉMA:
         let match;
         while ((match = regex.exec(text)) !== null) {
           const category = (match[1] || '').trim().toLowerCase();
-          const name = (match[2] || '').trim() || 'Importovaný';
-          const desc = (match[3] || '').trim() || 'Import ze souboru';
+          const name = (match[2] || '').trim() || t('prompt.library.imported.name');
+          const desc = (match[3] || '').trim() || t('prompt.library.imported.desc');
           const body = (match[4] || '').trim();
           if (!body) continue;
           totalImported += 1;
@@ -357,7 +357,7 @@ DODATEK PRO JEDNO TÉMA:
     let matchedName = '';
     if (currentPrompt === DEFAULT_PROMPT) {
       matched = true;
-      matchedName = 'Originální';
+      matchedName = t('prompt.library.original');
     }
     if (!matched) {
       for (const [category, prompts] of Object.entries(state.PROMPT_LIBRARY)) {
@@ -374,15 +374,15 @@ DODATEK PRO JEDNO TÉMA:
     if (mode === 'system' || matched) {
       modeDot.style.background = 'var(--grn)';
       modeDot.style.boxShadow = '0 0 6px var(--grn)';
-      nameEl.textContent = mode === 'system' ? 'Systémový (auto)' : matchedName;
+      nameEl.textContent = mode === 'system' ? t('prompt.status.systemAuto') : matchedName;
       nameEl.style.color = 'var(--grn)';
     } else {
       modeDot.style.background = 'var(--red)';
       modeDot.style.boxShadow = 'none';
-      nameEl.textContent = currentPrompt ? 'Vlastní (upravený)' : 'Žádný';
+      nameEl.textContent = currentPrompt ? t('prompt.status.customEdited') : t('prompt.status.none');
       nameEl.style.color = 'var(--red)';
     }
-    if (!isPromptAutoModeEnabled()) nameEl.textContent += ' · auto OFF';
+    if (!isPromptAutoModeEnabled()) nameEl.textContent += ` · ${t('prompt.status.autoOffSuffix')}`;
   }
 
   function initializePromptLibrary() {

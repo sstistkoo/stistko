@@ -70,7 +70,7 @@ async function callAIWithRetry(provider, apiKey, model, messages) {
          const isTimeout = e?.name === 'AbortError' || msg.includes('signal is aborted') || msg.includes('timeout');
 
          if (is404) {
-           const errMsg = 'Chyba 404: Model nenalezen, vyberte jiný v nastavení';
+           const errMsg = t('ai.error.modelNotFound');
            logError('callAIWithRetry', new Error(errMsg), {
              provider, model: m, attempt: attempt + 1,
              statusCode: 404
@@ -81,7 +81,7 @@ async function callAIWithRetry(provider, apiKey, model, messages) {
            const parsedRetry = rateInfoFromErrorMessage(e?.message || '')?.retryAfterSec || 0;
            const wait = Math.max(2, Math.min(20, parsedRetry || ((attempt + 1) * 10)));
            const shouldSwitchModelImmediately = provider === 'groq';
-           logWarn('callAIWithRetry', `Rate limit na ${m}, čekám ${wait}s...`, {
+           logWarn('callAIWithRetry', t('ai.log.rateLimitWait', { model: m, seconds: wait }), {
              provider, model: m, attempt: attempt + 1, waitSeconds: wait
            });
            showToast(t('toast.rateLimit.waiting', { seconds: wait, suffix: shouldSwitchModelImmediately ? ', then try another model' : '' }));
@@ -94,7 +94,7 @@ async function callAIWithRetry(provider, apiKey, model, messages) {
          }
          if (isTimeout) {
            const wait = Math.min(8, (attempt + 1) * 2);
-           logWarn('callAIWithRetry', `Timeout/abort na ${m} (pokus ${attempt + 1}), opakuji za ${wait}s...`, {
+           logWarn('callAIWithRetry', t('ai.log.timeoutRetry', { model: m, attempt: attempt + 1, seconds: wait }), {
              provider, model: m, attempt: attempt + 1, waitSeconds: wait, error: e.message
            });
            showToast(t('toast.timeout.retryIn', { seconds: wait }));
@@ -103,7 +103,7 @@ async function callAIWithRetry(provider, apiKey, model, messages) {
          }
          if (is503) {
            const wait = Math.min(20, Math.max(3, (attempt + 1) * 5));
-           logWarn('callAIWithRetry', `503 Service Unavailable na ${m} (pokus ${attempt + 1}), opakuji za ${wait}s...`, {
+           logWarn('callAIWithRetry', t('ai.log.serviceUnavailableRetry', { model: m, attempt: attempt + 1, seconds: wait }), {
              provider, model: m, attempt: attempt + 1, waitSeconds: wait, error: e.message
            });
            showToast(t('toast.serviceUnavailable.retryIn', { seconds: wait }));
@@ -117,14 +117,14 @@ async function callAIWithRetry(provider, apiKey, model, messages) {
            break;
          }
          // Other errors - log and try next model/attempt
-         logWarn('callAIWithRetry', `Chyba při volání ${m} (pokus ${attempt+1}): ${e.message}`, {
+         logWarn('callAIWithRetry', t('ai.log.callError', { model: m, attempt: attempt + 1, message: e.message }), {
            provider, model: m, attempt: attempt + 1, error: e.message
          });
          break;
        }
     }
   }
-  throw lastErr || new Error('Všechny modely selhaly');
+  throw lastErr || new Error(t('ai.error.allModelsFailed'));
 }
 
 function getTranslationEngineLabel(raw, fallbackProvider, fallbackModel) {
@@ -181,7 +181,10 @@ async function callOnce(provider, apiKey, model, messages, externalSignal = null
     };
      if (!r.ok) {
        if (r.status === 429) {
-         throw new Error(`Rate limit! Zkuste za ${rateInfo.retryAfterSec || 'několik'}s. Info: groq.com/pricing${rateInfo.requestId ? ` [req:${rateInfo.requestId}]` : ''}`);
+         throw new Error(t('ai.error.rateLimitGroq', {
+           seconds: rateInfo.retryAfterSec || t('ai.common.few'),
+           requestId: rateInfo.requestId ? ` [req:${rateInfo.requestId}]` : ''
+         }));
        }
        throw new Error(d.error?.message || String(r.status));
      }
@@ -194,9 +197,9 @@ async function callOnce(provider, apiKey, model, messages, externalSignal = null
     // Kontrola na nesmyslnou odpověď
     const weirdChars = (content.match(/[^\x20-\x7E\n\r\těščřžýáíéúůťďňĚŠČŘŽÝÁÍÉÚŮŤĎŇ]/g) || []).length;
     if (content.length > 0 && weirdChars > content.length * 0.5) {
-      console.log('═ PODEZŘELÁ ODPOVĚĎ ═');
+      console.log(t('ai.log.suspiciousResponse'));
       console.log(content);
-      throw new Error('AI vrátila nesmyslnou odpověď - zkuste delší interval');
+      throw new Error(t('ai.error.gibberishResponse'));
     }
     return { content, usage: d.usage, resolvedModel: d.model || model, rateInfo };
 
@@ -214,11 +217,11 @@ async function callOnce(provider, apiKey, model, messages, externalSignal = null
     const d = await r.json();
      if (!r.ok) {
        if (r.status === 503 || d.error?.status === 'UNAVAILABLE') {
-         throw new Error('503 Service Unavailable: Gemini je dočasně přetížené, opakuji později.');
+         throw new Error(t('ai.error.geminiUnavailable'));
        }
        if (d.error?.status === 'RESOURCE_EXHAUSTED') {
          const details = String(d.error?.message || '').trim();
-         throw new Error(`Gemini limit vyčerpán! Počkej ~20min nebo přepni na Groq.${details ? ` Detail: ${details}` : ''}`);
+         throw new Error(t('ai.error.geminiQuotaExhausted', { detail: details ? ` ${t('ai.error.detailPrefix')}: ${details}` : '' }));
        }
        throw new Error(d.error?.message || String(r.status));
      }
@@ -254,16 +257,16 @@ async function callOnce(provider, apiKey, model, messages, externalSignal = null
      }
      validateAPIResponse(d, 'openrouter');
      const content = extractOpenRouterText(d);
-     if (!content) throw new Error('OpenRouter nevrátil čitelný text');
+     if (!content) throw new Error(t('ai.error.openrouterNoText'));
     return { content, usage: d.usage, resolvedModel: d.model || model, rateInfo: { provider: 'openrouter' } };
   }
-  throw new Error('Neznámý provider');
+  throw new Error(t('ai.error.unknownProvider'));
   } catch (e) {
     if (timedOut && e?.name === 'AbortError') {
-      throw new Error(`API timeout po ${Math.round(CONFIG.API_TIMEOUT / 1000)}s`);
+      throw new Error(t('ai.error.apiTimeout', { seconds: Math.round(CONFIG.API_TIMEOUT / 1000) }));
     }
     if (externalSignal?.aborted && e?.name === 'AbortError') {
-      throw new Error('Požadavek zrušen uživatelem');
+      throw new Error(t('ai.error.requestCanceled'));
     }
     throw e;
   } finally {
