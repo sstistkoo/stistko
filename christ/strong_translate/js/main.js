@@ -2139,6 +2139,8 @@ let i18nToolRunning = false;
 let i18nToolMinimizedDuringRun = false;
 let i18nToolCancelRequested = false;
 const I18N_TOOL_CANCELLED_ERROR = 'I18N_TOOL_TRANSLATION_CANCELLED';
+const i18nToolTranslatedJsonByLang = {};
+const i18nToolTranslatedTextByLang = {};
 
 function minimizeI18nToolModal() {
   if (i18nToolRunning) i18nToolMinimizedDuringRun = true;
@@ -2224,6 +2226,8 @@ function resetI18nToolRuntimeUi() {
     downloads.style.display = 'none';
     downloads.innerHTML = '';
   }
+  const editBtn = document.getElementById('btnI18nToolEditOutput');
+  if (editBtn) editBtn.disabled = true;
 }
 
 function toggleI18nToolLanguage(code) {
@@ -2403,6 +2407,116 @@ function i18nToolDownloadFile(content, filename) {
   URL.revokeObjectURL(url);
 }
 
+function i18nToolParsePath(path) {
+  const parts = [];
+  const re = /([^[.\]]+)|\[(\d+)\]/g;
+  let m;
+  while ((m = re.exec(path)) !== null) {
+    if (m[1] !== undefined) parts.push(m[1]);
+    else parts.push(Number(m[2]));
+  }
+  return parts;
+}
+
+function i18nToolSetByPath(obj, path, value) {
+  const parts = i18nToolParsePath(path);
+  if (!parts.length) return;
+  let cur = obj;
+  for (let i = 0; i < parts.length - 1; i++) {
+    const p = parts[i];
+    if (cur?.[p] === undefined || cur?.[p] === null) return;
+    cur = cur[p];
+  }
+  cur[parts[parts.length - 1]] = value;
+}
+
+function i18nToolFlattenStringLeaves(value, path = '', out = {}) {
+  if (typeof value === 'string') {
+    out[path] = value;
+    return out;
+  }
+  if (Array.isArray(value)) {
+    value.forEach((item, idx) => i18nToolFlattenStringLeaves(item, `${path}[${idx}]`, out));
+    return out;
+  }
+  if (typeof value === 'object' && value !== null) {
+    Object.keys(value).forEach((key) => {
+      const next = path ? `${path}.${key}` : key;
+      i18nToolFlattenStringLeaves(value[key], next, out);
+    });
+  }
+  return out;
+}
+
+function openI18nToolOutputEditor() {
+  const langs = Object.keys(i18nToolTranslatedJsonByLang).sort();
+  if (!langs.length) {
+    showToast('Nejdřív dokončete překlad, ať je co editovat.');
+    return;
+  }
+  const select = document.getElementById('i18nToolEditorLang');
+  if (!select) return;
+  select.innerHTML = langs.map((code) => `<option value="${code}">${code}.json</option>`).join('');
+  onI18nToolEditorLangChange();
+  const m = document.getElementById('i18nToolEditorModal');
+  if (m) m.classList.add('show');
+}
+
+function closeI18nToolOutputEditor() {
+  const m = document.getElementById('i18nToolEditorModal');
+  if (m) m.classList.remove('show');
+}
+
+function onI18nToolEditorLangChange() {
+  const select = document.getElementById('i18nToolEditorLang');
+  const text = document.getElementById('i18nToolEditorText');
+  if (!select || !text) return;
+  const lang = String(select.value || '');
+  const json = i18nToolTranslatedJsonByLang[lang];
+  if (!json) {
+    text.value = '';
+    return;
+  }
+  const flat = i18nToolFlattenStringLeaves(json);
+  const keys = Object.keys(flat).sort((a, b) => a.localeCompare(b, 'cs'));
+  text.value = keys.map((k) => `${k}\t${JSON.stringify(flat[k])}`).join('\n');
+}
+
+function saveI18nToolOutputEditor() {
+  const select = document.getElementById('i18nToolEditorLang');
+  const text = document.getElementById('i18nToolEditorText');
+  if (!select || !text) return;
+  const lang = String(select.value || '');
+  const base = i18nToolTranslatedJsonByLang[lang];
+  if (!base) {
+    showToast('Výstup pro vybraný jazyk neexistuje.');
+    return;
+  }
+  const updated = typeof structuredClone === 'function'
+    ? structuredClone(base)
+    : JSON.parse(JSON.stringify(base));
+  const originalFlat = i18nToolFlattenStringLeaves(base);
+  const validKeys = new Set(Object.keys(originalFlat));
+
+  const lines = String(text.value || '').split(/\r?\n/);
+  for (const line of lines) {
+    if (!line.trim()) continue;
+    const tabIdx = line.indexOf('\t');
+    if (tabIdx <= 0) continue;
+    const key = line.slice(0, tabIdx).trim();
+    if (!validKeys.has(key)) continue;
+    const rawVal = line.slice(tabIdx + 1).trim();
+    let parsedVal = rawVal;
+    try { parsedVal = JSON.parse(rawVal); } catch {}
+    i18nToolSetByPath(updated, key, String(parsedVal));
+  }
+
+  i18nToolTranslatedJsonByLang[lang] = updated;
+  i18nToolTranslatedTextByLang[lang] = JSON.stringify(updated, null, 2);
+  i18nToolDownloadFile(i18nToolTranslatedTextByLang[lang], `${lang}.json`);
+  showToast(`Upravený ${lang}.json uložen.`);
+}
+
 async function runI18nToolBrowserTranslate() {
   try {
     i18nToolRunning = true;
@@ -2463,6 +2577,8 @@ async function runI18nToolBrowserTranslate() {
         translated['topic.langTag'] = lang.tag;
       }
       translatedFiles[lang.code] = JSON.stringify(translated, null, 2);
+      i18nToolTranslatedJsonByLang[lang.code] = translated;
+      i18nToolTranslatedTextByLang[lang.code] = translatedFiles[lang.code];
     }
     if (status) status.textContent = `✓ Hotovo! Přeloženo do ${selected.length} jazyků.`;
     if (downloads) {
@@ -2476,6 +2592,8 @@ async function runI18nToolBrowserTranslate() {
         downloads.appendChild(btn);
       });
     }
+    const editBtn = document.getElementById('btnI18nToolEditOutput');
+    if (editBtn) editBtn.disabled = false;
     showToast(`Překlad dokončen (${selected.length} jazyků).`);
     if (i18nToolMinimizedDuringRun) {
       const doneText = document.getElementById('i18nToolDoneText');
@@ -2568,6 +2686,10 @@ window.cancelI18nToolBrowserTranslate = cancelI18nToolBrowserTranslate;
 window.minimizeI18nToolModal = minimizeI18nToolModal;
 window.closeI18nToolDoneModal = closeI18nToolDoneModal;
 window.reopenI18nToolModalAfterDone = reopenI18nToolModalAfterDone;
+window.openI18nToolOutputEditor = openI18nToolOutputEditor;
+window.closeI18nToolOutputEditor = closeI18nToolOutputEditor;
+window.onI18nToolEditorLangChange = onI18nToolEditorLangChange;
+window.saveI18nToolOutputEditor = saveI18nToolOutputEditor;
 window.runI18nKeyCheck = runI18nKeyCheck;
 window.runCzechDiacriticsCheck = runCzechDiacriticsCheck;
 
