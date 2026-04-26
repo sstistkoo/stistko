@@ -818,6 +818,8 @@
         <button type="button" class="prompt-btn ok" id="btnI18nToolRunBrowser" onclick="runI18nToolBrowserTranslate()">🚀 Přeložit a stáhnout</button>
         <button type="button" class="prompt-btn cancel" id="btnI18nToolCancelBrowser" onclick="cancelI18nToolBrowserTranslate()" style="display:none">■ Ukončit překlad</button>
         <button type="button" class="prompt-btn" id="btnI18nToolEditOutput" onclick="openI18nToolOutputEditor()" disabled>✏ Editovat výstup JSON</button>
+        <button type="button" class="prompt-btn" id="btnI18nToolLoadOutput" onclick="openI18nToolLoadJsonPicker()">📂 Načíst JSON pro editaci</button>
+        <input type="file" id="i18nToolLoadJsonInput" accept=".json,application/json" style="display:none" onchange="loadI18nToolJsonForEditFromFile(event)">
       </div>
       <label for="i18nToolCmd" class="i18n-tool-label">Příkaz(y) pro překlad z i18n/cs.json</label>
       <textarea id="i18nToolCmd" class="i18n-tool-cmd" readonly></textarea>
