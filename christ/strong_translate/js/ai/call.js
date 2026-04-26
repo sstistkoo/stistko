@@ -3,9 +3,10 @@ import { sleep } from '../utils.js';
 import { extractOpenRouterText } from './client.js';
 import { getProviderConfiguredModelsForAI, getStaticFallbackModels } from '../../strong_translator_ai.js';
 import core from '../../strong_translator_core_new.js';
+import { getResolvedDefaultPrompt } from '../aiPromptsResolve.js';
 import { state } from '../state.js';
 
-const { validateAPIResponse, DEFAULT_PROMPT } = core;
+const { validateAPIResponse } = core;
 
 export function createCallApi({ log, logError, logWarn, showToast, t, rateInfoFromErrorMessage, parseWithOpenRouterNormalization }) {
 const blockedModelsByProvider = new Map();
@@ -22,8 +23,9 @@ function markModelBlocked(provider, model) {
 }
 
 function resetPrompt() {
-  document.getElementById('promptEditor').value = DEFAULT_PROMPT;
-  localStorage.setItem('strong_prompt', DEFAULT_PROMPT);
+  const p = getResolvedDefaultPrompt();
+  document.getElementById('promptEditor').value = p;
+  localStorage.setItem('strong_prompt', p);
   updatePromptStatusIndicator();
 }
 

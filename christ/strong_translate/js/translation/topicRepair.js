@@ -1,9 +1,7 @@
 import { PROVIDERS } from '../config.js';
 import { isSideFallbackAborted, sleepMsWithAbort } from '../ai/fallback.js';
 import { hasMeaningfulValue, isDefinitionLowQuality, isDefinitionLikelyEnglish } from './utils.js';
-import core from '../../strong_translator_core_new.js';
-
-const { SYSTEM_MESSAGE } = core;
+import { getResolvedSystemMessage, getResolvedDefaultPrompt } from '../aiPromptsResolve.js';
 
 export function createTopicRepairApi(deps) {
   const {
@@ -24,7 +22,7 @@ export function createTopicRepairApi(deps) {
     getProviderCooldownLeftSec,
     appendModelTestUsage,
     buildModelTestMessages,
-    modelTestPromptCatalog,
+    getModelTestPromptCatalog,
   } = deps;
 function getTopicSourceTextForPreview(key, topicId) {
   const e = state.entryMap.get(key) || {};
@@ -439,7 +437,7 @@ async function processTopicRepairQueue() {
         try {
           nextTask.detectedTopics = [];
           const messages = [
-            { role: 'system', content: SYSTEM_MESSAGE },
+            { role: 'system', content: getResolvedSystemMessage() },
             { role: 'user', content: buildTopicPrompt(nextTask.key, nextTask.topicId) }
           ];
           const raw = await callAIWithRetry(prov, apiKey, model, messages);
@@ -1009,7 +1007,7 @@ async function runTopicRepairBulkTranslationCore(state, topicId, promptTemplate,
     }
 
     const raw = await callAIWithRetry(prov, apiKey, model, [
-      { role: 'system', content: SYSTEM_MESSAGE },
+      { role: 'system', content: getResolvedSystemMessage() },
       { role: 'user', content: enforceSpecialistaFormat(userContent) }
     ]);
     if (abortVersion !== Number(state.topicRepairBulkAbortVersion || 0)) break;
@@ -1167,19 +1165,19 @@ function setTopicRepairBulkIncludeAll(checked) {
 function getTopicPromptTemplateByPromptType(promptType) {
   const topicType = String(promptType || '').trim();
   if (!topicType || !topicType.startsWith('preset_topic_')) return '';
-  return String(modelTestPromptCatalog?.[topicType]?.template || '').trim();
+  return String(getModelTestPromptCatalog()?.[topicType]?.template || '').trim();
 }
 
 function getTopicPromptTemplate(topicId) {
   const promptType = TOPIC_PROMPT_PRESET_MAP[topicId] || '';
   const fromTopicPreset = getTopicPromptTemplateByPromptType(promptType);
   if (fromTopicPreset) return fromTopicPreset;
-  return String(localStorage.getItem('strong_prompt') || DEFAULT_PROMPT || '').trim();
+  return String(localStorage.getItem('strong_prompt') || getResolvedDefaultPrompt() || '').trim();
 }
 
 function syncTopicPromptTemplatesReport() {
   const mismatched = Object.entries(TOPIC_PROMPT_PRESET_MAP).filter(([topicId, promptType]) => {
-    const fromCatalog = String(modelTestPromptCatalog?.[promptType]?.template || '').trim();
+    const fromCatalog = String(getModelTestPromptCatalog()?.[promptType]?.template || '').trim();
     const fromDetailBase = String(getTopicPromptTemplate(topicId) || '').trim();
     return !fromCatalog || fromCatalog !== fromDetailBase;
   });
@@ -1291,7 +1289,7 @@ async function runTopicPromptAI() {
   runBtn.textContent = t('topicPrompt.sending');
   try {
     const messages = [
-      { role: 'system', content: SYSTEM_MESSAGE },
+      { role: 'system', content: getResolvedSystemMessage() },
       { role: 'user', content: customPrompt }
     ];
     const raw = await callAIWithRetry(prov, apiKey, model, messages);
@@ -1530,7 +1528,7 @@ function openSystemPromptModal(key) {
     return;
   }
   const messages = buildPromptMessages([entry]);
-  const systemText = String(messages.find(m => m.role === 'system')?.content || SYSTEM_MESSAGE || '').trim();
+  const systemText = String(messages.find(m => m.role === 'system')?.content || getResolvedSystemMessage() || '').trim();
   const userText = String(messages.find(m => m.role === 'user')?.content || '').trim();
   state.systemPromptState = { key, systemText, userText };
   closeSystemPromptModal();
@@ -1579,7 +1577,7 @@ async function runSystemPromptAI() {
   runBtn.textContent = t('systemPrompt.sending');
   try {
     const raw = await callAIWithRetry(prov, apiKey, model, [
-      { role: 'system', content: systemText || SYSTEM_MESSAGE },
+      { role: 'system', content: systemText || getResolvedSystemMessage() },
       { role: 'user', content: userPrompt }
     ]);
     const rawText = String(raw?.content || '');

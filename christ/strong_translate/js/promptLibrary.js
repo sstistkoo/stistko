@@ -3,9 +3,9 @@ export function createPromptLibraryApi(deps) {
     state,
     t,
     getUiLang,
-    DEFAULT_PROMPT,
-    FINAL_PROMPT,
-    PROMPT_LIBRARY_BASE,
+    getDefaultPrompt,
+    getFinalPrompt,
+    getPromptLibraryBase,
     enforceSpecialistaFormat,
     showToast
   } = deps;
@@ -14,7 +14,7 @@ export function createPromptLibraryApi(deps) {
   const PROMPT_LIBRARY_IMPORTED_KEY = 'strong_prompt_library_imported';
 
   function clonePromptLibraryBase() {
-    return JSON.parse(JSON.stringify(PROMPT_LIBRARY_BASE || {}));
+    return JSON.parse(JSON.stringify(getPromptLibraryBase() || {}));
   }
 
   function getStoredCustomPromptLibrary() {
@@ -80,7 +80,7 @@ export function createPromptLibraryApi(deps) {
       if (item.text !== customSaved) customEntries.push(item);
     }
 
-    customEntries.push(FINAL_PROMPT);
+    customEntries.push(getFinalPrompt());
 
     if (currentSavedPrompt && !customEntries.some((p) => p.text === currentSavedPrompt)) {
       customEntries.unshift({
@@ -94,7 +94,7 @@ export function createPromptLibraryApi(deps) {
   }
 
   function getSystemPromptForCurrentTask(context = 'batch') {
-    let prompt = DEFAULT_PROMPT;
+    let prompt = getDefaultPrompt();
     if (context === 'topic') {
       prompt += `
 
@@ -169,7 +169,7 @@ DODATEK PRO JEDNO TÉMA:
     const modal = document.getElementById('promptLibraryModal');
     const tabs = document.getElementById('promptTabs');
     const editor = document.getElementById('promptLibraryEditor');
-    const savedPrompt = localStorage.getItem('strong_prompt') || DEFAULT_PROMPT;
+    const savedPrompt = localStorage.getItem('strong_prompt') || getDefaultPrompt();
     rebuildPromptLibrary(savedPrompt);
     state.selectedPromptCategory = 'default';
     state.selectedPromptIndex = 0;
@@ -355,7 +355,7 @@ DODATEK PRO JEDNO TÉMA:
     const mode = localStorage.getItem('strong_prompt_mode') || 'custom';
     let matched = false;
     let matchedName = '';
-    if (currentPrompt === DEFAULT_PROMPT) {
+    if (currentPrompt === getDefaultPrompt()) {
       matched = true;
       matchedName = t('prompt.library.original');
     }
@@ -386,7 +386,7 @@ DODATEK PRO JEDNO TÉMA:
   }
 
   function initializePromptLibrary() {
-    rebuildPromptLibrary(localStorage.getItem('strong_prompt') || DEFAULT_PROMPT);
+    rebuildPromptLibrary(localStorage.getItem('strong_prompt') || getDefaultPrompt());
   }
 
   return {
