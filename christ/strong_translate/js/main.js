@@ -122,6 +122,8 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     setText('fileLabel', t('setup.file'));
     setText('btnChooseFile', t('setup.chooseFile'));
     setText('btnLoadDefault', t('setup.loadAuto'));
+    setText('setupAdvancedSummary', t('setup.advanced'));
+    setText('apiKeyProfileManualOption', t('setup.apiKey.manualOption'));
     setAttr('provider', 'aria-label', t('setup.provider.aria'));
     setAttr('apiKey', 'aria-label', t('setup.apiKey.input.aria'));
     setAttr('apiKeyProfile', 'aria-label', t('setup.apiKey.profile.aria'));
@@ -280,6 +282,9 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     }
     setAttr('promptLibraryEditor', 'placeholder', t('prompt.library.editor.placeholder'));
     setAttr('btnPromptSystem', 'title', t('prompt.library.system.title'));
+    setText('btnPromptSystem', t('prompt.library.system.button'));
+    setText('btnPromptAi', t('prompt.library.ai.button'));
+    setText('btnPromptExportTxt', t('prompt.library.export.button'));
     setAttr('btnPromptExportTxt', 'title', t('prompt.library.export.title'));
     setAttr('btnPromptLoadTxt', 'title', t('prompt.library.load.title'));
     setText('btnPromptLoadTxt', t('prompt.library.load'));
@@ -436,6 +441,14 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
     setText('helpSectionKeysTitle', t('help.keys'));
     setText('helpSectionLibraryTitle', t('help.library'));
     setText('helpSectionLimitsTitle', t('help.limits'));
+    const helpAboutBody = document.getElementById('helpSectionAboutBody');
+    if (helpAboutBody) helpAboutBody.innerHTML = `<b id="helpSectionAboutTitle">${t('help.about')}</b><br>${t('help.about.body')}`;
+    const helpKeysBody = document.getElementById('helpSectionKeysBody');
+    if (helpKeysBody) helpKeysBody.innerHTML = `<b id="helpSectionKeysTitle">${t('help.keys')}</b><br>${t('help.keys.body')}`;
+    const helpLibraryBody = document.getElementById('helpSectionLibraryBody');
+    if (helpLibraryBody) helpLibraryBody.innerHTML = `<b id="helpSectionLibraryTitle">${t('help.library')}</b><br>${t('help.library.body')}`;
+    const helpLimitsBody = document.getElementById('helpSectionLimitsBody');
+    if (helpLimitsBody) helpLimitsBody.innerHTML = `<b id="helpSectionLimitsTitle">${t('help.limits')}</b><br>${t('help.limits.body')}`;
     setText('btnHelpClose', t('help.close'));
     setAttr('autoTokenLimit', 'placeholder', t('stats.tokenLimit.placeholder'));
     setAttr('autoTokenLimit', 'title', t('stats.tokenLimit.title'));
@@ -1114,7 +1127,7 @@ function loadDefaultFile() {
 
   const tryFetch = (idx) => {
     if (idx >= fallbacks.length) {
-      throw new Error('Soubor nenalezen (GitHub ani lokální fallback)');
+      throw new Error(t('error.fileNotFoundFallback'));
     }
     const target = fallbacks[idx];
     return fetch(target)
@@ -1144,7 +1157,7 @@ function loadDefaultFile() {
      })
     .catch(e => {
       logError('loadDefaultFile', e, { file: lastFile, githubUrl });
-      document.getElementById('statusTXT').textContent = '✗ ' + e.message;
+      document.getElementById('statusTXT').textContent = t('error.prefix') + e.message;
     });
 }
 
@@ -1219,7 +1232,7 @@ function toggleListPane() {
   
   if (isHidden) {
     pane.classList.remove('hidden');
-    btn.textContent = '≡ Seznam';
+    btn.textContent = t('hdr.list');
     if (isMobile) {
       pane.style.height = '45%';
       logPanel.style.height = '50%';
@@ -1229,7 +1242,7 @@ function toggleListPane() {
     }
   } else {
     pane.classList.add('hidden');
-    btn.textContent = '≡ Seznam';
+    btn.textContent = t('hdr.list');
     if (isMobile) {
       pane.style.height = '0';
       logPanel.style.height = '100%';
@@ -1249,7 +1262,7 @@ function startApp() {
   const loadingEl = document.createElement('div');
   loadingEl.id = 'appLoading';
   loadingEl.style.cssText = 'display:flex;align-items:center;justify-content:center;height:100%;color:var(--txt3);font-family:JetBrains Mono,monospace;font-size:14px';
-  loadingEl.textContent = '⏳ Načítám...';
+  loadingEl.textContent = t('app.loading');
   app.appendChild(loadingEl);
   
   // Deffered init
