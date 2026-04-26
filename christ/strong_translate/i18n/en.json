@@ -290,7 +290,7 @@
   "limits.title": "📊 Provider limits",
   "limits.loading": "Loading...",
   "limits.close": "✕ Close",
-  "help.title": "❓ Help Strong GR → CZ",
+  "help.title": "❓ Help Strong GR → {lang}",
   "help.about": "What the app does",
   "help.keys": "How to get API keys",
   "help.library": "API key library",

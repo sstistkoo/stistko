@@ -93,7 +93,7 @@
   "help.keys": "Ako získať API kľúče",
   "help.library": "Knižnica API kľúčov",
   "help.limits": "Limity a kvóty",
-  "help.title": "❓ Nápoveda Strong GR → SK",
+  "help.title": "❓ Nápoveda Strong GR → {lang}",
   "import.badge.conflict": "kolízia",
   "import.badge.new": "nové",
   "import.cancel": "✕ Zrušiť",

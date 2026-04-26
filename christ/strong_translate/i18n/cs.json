@@ -290,7 +290,7 @@
   "limits.title": "📊 Limity providera",
   "limits.loading": "Načítám...",
   "limits.close": "✕ Zavřít",
-  "help.title": "❓ Nápověda Strong GR → CZ",
+  "help.title": "❓ Nápověda Strong GR → {lang}",
   "help.about": "O čem aplikace je",
   "help.keys": "Jak získat API klíče",
   "help.library": "Knihovna API klíčů",
