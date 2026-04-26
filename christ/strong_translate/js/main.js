@@ -2462,6 +2462,45 @@ function openI18nToolOutputEditor() {
   if (m) m.classList.add('show');
 }
 
+function openI18nToolLoadJsonPicker() {
+  const input = document.getElementById('i18nToolLoadJsonInput');
+  if (!input) return;
+  input.value = '';
+  input.click();
+}
+
+function loadI18nToolJsonForEditFromFile(event) {
+  const file = event?.target?.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const parsed = JSON.parse(String(reader.result || '{}'));
+      const rawName = String(file.name || '').trim();
+      const fileCode = rawName.replace(/\.json$/i, '').toLowerCase();
+      const normalizedCode = fileCode === 'zh' ? 'zh-CN' : fileCode;
+      const langCode = normalizedCode || 'loaded';
+      i18nToolTranslatedJsonByLang[langCode] = parsed;
+      i18nToolTranslatedTextByLang[langCode] = JSON.stringify(parsed, null, 2);
+      const editBtn = document.getElementById('btnI18nToolEditOutput');
+      if (editBtn) editBtn.disabled = false;
+      showToast(`Načteno pro editaci: ${rawName}`);
+      openI18nToolOutputEditor();
+      const select = document.getElementById('i18nToolEditorLang');
+      if (select) {
+        const target = Array.from(select.options).find((opt) => opt.value === langCode);
+        if (target) {
+          select.value = langCode;
+          onI18nToolEditorLangChange();
+        }
+      }
+    } catch (e) {
+      showToast(`Neplatný JSON: ${e?.message || String(e)}`);
+    }
+  };
+  reader.readAsText(file);
+}
+
 function closeI18nToolOutputEditor() {
   const m = document.getElementById('i18nToolEditorModal');
   if (m) m.classList.remove('show');
@@ -2690,6 +2729,8 @@ window.openI18nToolOutputEditor = openI18nToolOutputEditor;
 window.closeI18nToolOutputEditor = closeI18nToolOutputEditor;
 window.onI18nToolEditorLangChange = onI18nToolEditorLangChange;
 window.saveI18nToolOutputEditor = saveI18nToolOutputEditor;
+window.openI18nToolLoadJsonPicker = openI18nToolLoadJsonPicker;
+window.loadI18nToolJsonForEditFromFile = loadI18nToolJsonForEditFromFile;
 window.runI18nKeyCheck = runI18nKeyCheck;
 window.runCzechDiacriticsCheck = runCzechDiacriticsCheck;
 
