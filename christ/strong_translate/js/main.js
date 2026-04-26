@@ -96,6 +96,14 @@ const {
     } = prompts;
 const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
 
+  function formatAppTitleWithTargetLang(rawText, targetLang) {
+    const text = String(rawText || '');
+    const lang = String(targetLang || 'CZ');
+    if (!text) return text;
+    if (text.includes('{lang}')) return text.replaceAll('{lang}', lang);
+    return text.replace(/(Strong\s*GR\s*→\s*)([A-Za-z-]+)/i, `$1${lang}`);
+  }
+
   function applyUiLanguage() {
     refreshTopicLabels();
     const setText = (id, value) => {
@@ -107,8 +115,8 @@ const PIPELINE_SECONDARY_ENABLED_KEY = 'strong_pipeline_secondary_enabled_';
       if (el) el.setAttribute(attr, value);
     };
     const targetTitleLang = getDefaultContentTag();
-    document.title = t('app.title', { lang: targetTitleLang });
-    setText('setupTitle', t('setup.title', { lang: targetTitleLang }));
+    document.title = formatAppTitleWithTargetLang(t('app.title', { lang: targetTitleLang }), targetTitleLang);
+    setText('setupTitle', formatAppTitleWithTargetLang(t('setup.title', { lang: targetTitleLang }), targetTitleLang));
     setText('setupAdvancedSummary', t('setup.advanced'));
     setAttr('setupCompactSummary', 'title', t('setup.compact.title'));
     const providerForLabel = String(document.getElementById('provider')?.value || 'groq');
