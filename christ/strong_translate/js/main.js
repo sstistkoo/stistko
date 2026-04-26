@@ -3627,6 +3627,8 @@ async function runI18nToolBrowserTranslate() {
       translatedFiles[lang.code] = JSON.stringify(translated, null, 2);
       i18nToolTranslatedJsonByLang[lang.code] = translated;
       i18nToolTranslatedTextByLang[lang.code] = translatedFiles[lang.code];
+      // Download each language immediately after it is finished.
+      i18nToolDownloadFile(translatedFiles[lang.code], `${lang.code}.json`);
     }
     const placeholderIssues = Object.entries(placeholderAuditByLang)
       .filter(([, issues]) => issues.length > 0);
