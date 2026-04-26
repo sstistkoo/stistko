@@ -972,5 +972,8 @@
   "auto.log.translatingRange": "⚡ Překládám {from}–{to}...",
   "ai.error.noModelAvailable": "Žádný dostupný model pro tento provider (fallback modely jsou blokované).",
   "toast.rateLimit.waiting.switchModelSuffix": ", pak zkusím jiný model",
-  "ai.error.blockedAccountModel": "Blokovaný účet: {model}"
+  "ai.error.blockedAccountModel": "Blokovaný účet: {model}",
+  "i18nTool.ai.auditPrompt.rules": "Role: Jsi přísný localization auditor pro UI texty.\n\nCíl:\nZkontroluj překlad EN -> cílový jazyk a vrať pouze bezpečné opravy.\n\nPovolený výstup (bez markdownu, bez komentářů, bez textu navíc):\nA) Pokud není co opravovat: přesně\nok\n\nB) Pokud jsou opravy: JSON pole POUZE změněných položek:\n[\n  {\n    \"key\": \"some.key\",\n    \"corrected\": \"text\",\n    \"reason\": \"stručně proč\"\n  }\n]\n\nPevná pravidla:\n1) NEMĚŇ key.\n2) Vrať jen změny (nevracej ok položky).\n3) Placeholdery musí být 1:1 stejné jako source (např. {provider}, {count}, {model}).\n4) HTML tagy a atributy zachovej beze změny.\n5) Zachovej escape sekvence (\\\\n, \\\\t), emoji, interpunkci a význam.\n6) Nezkracuj text. Žádné useknuté výstupy typu \"OK | \".\n7) corrected musí být string.\n8) Pokud source obsahuje jazykový tag v závorkách (např. (CZ)), v cíli použij cílový tag (např. (IT)); nenechávej v cíli (CZ), pokud to není doslovně požadované source.\n9) Pokud si nejsi jistý, položku nevracej.\n\nStyl:\n- UI text má být stručný a přirozený.\n- Terminologie má být konzistentní napříč klíči.",
+  "i18nTool.ai.auditPrompt.emptyHint": "Sem po kliknutí na „🧠 Vytvořit AI prompt“ doplním vstupní data.",
+  "i18nTool.ai.auditPrompt.dataLabel": "Vstupní data:"
 }
