@@ -1,6 +1,6 @@
 import { state } from './state.js';
 import { escHtml } from './utils.js';
-import { t } from './i18n.js';
+import { t, getContentLangTag } from './i18n.js';
 import { CONFIG, PROVIDERS } from './config.js';
 
 export function createModelTestOutputApi({ MODEL_TEST_RAW_OUTPUT_KEY, showToast, log, modelTestStopProviderCountdownTicker, showModelTestModal, showDetail }) {
@@ -50,7 +50,7 @@ function logEntry(keys, rawResponse) {
 
 function clearLog() {
   const s = document.getElementById('logScroll');
-  if (s) s.innerHTML = '<div class="log-placeholder" style="padding:20px;font-family:\'JetBrains Mono\',monospace;font-size:11px;color:var(--txt3)">Překlady se budou zobrazovat zde automaticky...</div>';
+  if (s) s.innerHTML = `<div class="log-placeholder" style="padding:20px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt3)">${t('log.placeholder')}</div>`;
   const c = document.getElementById('logCount');
   if (c) c.textContent = '';
 }
@@ -75,7 +75,7 @@ async function saveModelTestOutputTxt() {
       const writable = await handle.createWritable();
       await writable.write(text);
       await writable.close();
-      modelTestSetLastStatus(`Uloženo: ${handle.name || DEFAULT_MODEL_TEST_LOG_FILENAME}`, 'ok');
+      modelTestSetLastStatus(t('modelTest.status.saved', { name: handle.name || DEFAULT_MODEL_TEST_LOG_FILENAME }), 'ok');
       showToast(t('toast.saved.filename', { name: handle.name || DEFAULT_MODEL_TEST_LOG_FILENAME }));
       return;
     } catch (e) {
@@ -88,7 +88,7 @@ async function saveModelTestOutputTxt() {
     }
   }
   download(DEFAULT_MODEL_TEST_LOG_FILENAME, text, 'text/plain');
-  modelTestSetLastStatus(`Staženo: ${DEFAULT_MODEL_TEST_LOG_FILENAME}`, 'ok');
+  modelTestSetLastStatus(t('modelTest.status.downloaded', { name: DEFAULT_MODEL_TEST_LOG_FILENAME }), 'ok');
   showToast(t('toast.downloaded.filename', { name: DEFAULT_MODEL_TEST_LOG_FILENAME }));
 }
 
@@ -107,9 +107,9 @@ async function saveModelTestRawOutputTxt() {
     return;
   }
   const body = rows.map((row, idx) => {
-    const header = `### ${idx + 1} | provider=${row.prov} | model=${row.model} | režim=${row.mode} | promptTest=${row.promptEnabled ? 'on' : 'off'} | prompt=${row.promptType} | ${new Date(row.ts).toLocaleString('cs-CZ')}`;
-    const promptBlock = `--- ODESLANÝ PROMPT ---\n${row.promptSent || '(není dostupný)'}\n--- /ODESLANÝ PROMPT ---`;
-    const rawBlock = `--- RAW ODPOVĚĎ AI ---\n${row.raw || ''}\n--- /RAW ODPOVĚĎ AI ---`;
+    const header = `### ${idx + 1} | provider=${row.prov} | model=${row.model} | ${t('modelTest.raw.mode')}=${row.mode} | promptTest=${row.promptEnabled ? 'on' : 'off'} | prompt=${row.promptType} | ${new Date(row.ts).toLocaleString('cs-CZ')}`;
+    const promptBlock = `--- ${t('modelTest.raw.sentPrompt')} ---\n${row.promptSent || t('modelTest.raw.notAvailable')}\n--- /${t('modelTest.raw.sentPrompt')} ---`;
+    const rawBlock = `--- ${t('modelTest.raw.aiResponse')} ---\n${row.raw || ''}\n--- /${t('modelTest.raw.aiResponse')} ---`;
     return `${header}\n${promptBlock}\n${rawBlock}`;
   }).join('\n\n');
   download(`strong_model_test_raw_${Date.now()}.txt`, body, 'text/plain');
@@ -128,7 +128,7 @@ function loadModelTestOutputFromFile(input) {
       out.scrollTop = out.scrollHeight;
     }
     saveModelTestOutputToStorage(text);
-    modelTestSetLastStatus(`Načteno: ${file.name}`, 'ok');
+    modelTestSetLastStatus(t('modelTest.status.loaded', { name: file.name }), 'ok');
     showToast(t('toast.loaded.filename', { name: file.name }));
     if (input) input.value = '';
   };
@@ -175,9 +175,9 @@ function modelTestWaitWithCountdown(ms, signal) {
       if (leftTestSec > 0) {
         const mm = Math.floor(leftTestSec / 60);
         const ss = leftTestSec % 60;
-        modelTestSetCountdownLabel(`Další požadavek za cca ${state.modelTestNextRequestEtaSec} s | Zbývá testu ${mm}:${String(ss).padStart(2, '0')}`);
+        modelTestSetCountdownLabel(t('modelTest.countdown.withRemain', { seconds: state.modelTestNextRequestEtaSec, remain: `${mm}:${String(ss).padStart(2, '0')}` }));
       } else {
-        modelTestSetCountdownLabel(`Další požadavek za cca ${state.modelTestNextRequestEtaSec} s`);
+        modelTestSetCountdownLabel(t('modelTest.countdown.nextOnly', { seconds: state.modelTestNextRequestEtaSec }));
       }
       updateModelTestRunButton();
     };
@@ -242,21 +242,22 @@ function restoreModelTestReportFromBackup() {
 
 function formatModelTestParsedBlock(key, t, e) {
   if (!e || !t) return '';
+  const langTag = getContentLangTag();
   const defEnglish = isDefinitionLikelyEnglish(t.definice);
   const defValue = t.definice || '—';
-  const defDisplay = defEnglish && !/\[POZN\.: text je v angličtině - špatný překlad\]/.test(defValue)
-    ? `${defValue} [POZN.: text je v angličtině - špatný překlad]`
+  const defDisplay = defEnglish && !new RegExp(`\\[${t('modelTest.note.definitionEnglish')}\\]`).test(defValue)
+    ? `${defValue} [${t('modelTest.note.definitionEnglish')}]`
     : defValue;
   const parts = [
     `${key} | ${e.greek}`,
-    `Gramatika: ${e.tvaroslovi || '—'}`,
-    `Český význam: ${t.vyznam || '—'}`,
-    `Definice (EN): ${e.definice || e.def || '—'}`,
-    `Česká definice: ${defDisplay}`,
-    `KJV překlady (CZ): ${t.kjv || e.kjv || '—'}`,
-    `Biblické užití: ${t.pouziti || '—'}`,
-    `Původ: ${t.puvod || '—'}`,
-    `Specialista: ${t.specialista || '—'}`,
+    `${t('export.field.grammar')}: ${e.tvaroslovi || '—'}`,
+    `${t('export.field.meaning', { lang: langTag })}: ${t.vyznam || '—'}`,
+    `${t('export.field.definitionEn')}: ${e.definice || e.def || '—'}`,
+    `${t('export.field.definition', { lang: langTag })}: ${defDisplay}`,
+    `${t('export.field.kjv', { lang: langTag })}: ${t.kjv || e.kjv || '—'}`,
+    `${t('export.field.usage')}: ${t.pouziti || '—'}`,
+    `${t('export.field.origin')}: ${t.puvod || '—'}`,
+    `${t('export.field.specialist')}: ${t.specialista || '—'}`,
     ''
   ];
   return parts.join('\n');
@@ -275,7 +276,7 @@ function appendModelTestExportParsed(keys, parsed) {
 
 function excerptRawForLastKey(rawContent, lastKey, maxLen = 2200) {
   const raw = String(rawContent || '').trim();
-  if (!raw) return '(prázdné)';
+  if (!raw) return t('modelTest.raw.empty');
   const escapedKey = String(lastKey || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   if (escapedKey) {
     const markerRe = new RegExp(`###\\s*${escapedKey}\\s*###([\\s\\S]*?)(?=\\n###\\s*G\\d+\\s*###|$)`, 'i');
