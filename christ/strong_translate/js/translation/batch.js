@@ -86,6 +86,11 @@ async function translateSingle(key) {
     let missingKeys = parseTranslations(raw.content, [key]);
     
     if (missingKeys.length > 0) {
+      console.log(`⚠ Single: heslo ${key} bez překladu`);
+      console.groupCollapsed('📤 Prompt odeslaný AI (single):');
+      console.log('messages:', messages);
+      console.log('entry:', `${e.key} | ${e.greek}\nDEF: ${e.definice || e.def || ''}\nKJV: ${e.kjv || ''}`);
+      console.groupEnd();
       const entries = `${key}
 DEF: ${e.definice || e.def || ''}
 KJV: ${e.kjv || ''}
@@ -606,10 +611,14 @@ async function translateBatch(keys, depth = 0) {
       }
     }
     
-    // Pokud něco chybí, zkus opravný retry
-    if (missingKeys.length > 0) {
-      console.log(`⚠ ${missingKeys.length} hesel bez překladu: ${missingKeys.join(', ')}`);
-      log(`⚠ Pokus o opravu formátu pro ${missingKeys.join(', ')}...`);
+     // Pokud něco chybí, zkus opravný retry
+     if (missingKeys.length > 0) {
+       console.log(`⚠ ${missingKeys.length} hesel bez překladu: ${missingKeys.join(', ')}`);
+       console.groupCollapsed('📤 Prompt odeslaný AI (tato dávka):');
+       console.log('messages:', messages);
+       console.log('batch entries:', batch.map(e => `${e.key} | ${e.greek} | DEF:${e.definice||e.def||''} | KJV:${e.kjv||''}`));
+       console.groupEnd();
+       log(`⚠ Pokus o opravu formátu pro ${missingKeys.join(', ')}...`);
       const entries = keys.map((k) => {
         const e = state.entryMap.get(k);
         return e ? `${e.key} | ${e.greek}\nDEF: ${e.definice || e.def || ''}\nKJV: ${e.kjv || ''}` : '';

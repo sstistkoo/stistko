@@ -702,16 +702,16 @@ ${t('aiPrompts.enforceSpecialistaExtra')}`;
       let processedPrompt = userPromptTemplate
         .replace(/{TARGET_LANG}/g, targetName)
         .replace(/{SOURCE_LANG}/g, sourceName);
-      processedPrompt = enforceSpecialistaFormat(processedPrompt);
-      
-      const userContent = processedPrompt.includes('{HESLA}') 
-        ? processedPrompt.replace(/{HESLA}/g, items)
-        : processedPrompt + '\n\n' + items;
-      
-      return [
-        { role: 'system', content: getResolvedSystemMessage() },
-        { role: 'user', content: userContent }
-      ];
+       processedPrompt = enforceSpecialistaFormat(processedPrompt);
+       
+       const userContent = processedPrompt.includes('{HESLA}') 
+         ? processedPrompt.replace(/{HESLA}/g, items)
+         : processedPrompt + '\n\n' + items;
+       
+       return [
+         { role: 'system', content: getActiveSystemMessage() },
+         { role: 'user', content: userContent }
+       ];
     }
 
     function getModelTestPromptType() {
@@ -733,17 +733,23 @@ ${t('aiPrompts.enforceSpecialistaExtra')}`;
       return localStorage.getItem(MODEL_TEST_CUSTOM_PROMPT_KEY) || '';
     }
 
-    function getModelTestPromptTemplate(promptType) {
-      const topicTemplate = getTopicPromptTemplateByPromptType(promptType);
-      if (topicTemplate) return topicTemplate;
-      const fromCatalog = getModelTestPromptCatalog()?.[promptType]?.template;
-      if (fromCatalog) return fromCatalog;
-      const custom = getModelTestCustomPromptText().trim();
-      if (custom) return custom;
-      return getActiveMainPromptTemplate('batch');
-    }
+     function getModelTestPromptTemplate(promptType) {
+       const topicTemplate = getTopicPromptTemplateByPromptType(promptType);
+       if (topicTemplate) return topicTemplate;
+       const fromCatalog = getModelTestPromptCatalog()?.[promptType]?.template;
+       if (fromCatalog) return fromCatalog;
+       const custom = getModelTestCustomPromptText().trim();
+       if (custom) return custom;
+       return getActiveMainPromptTemplate('batch');
+     }
 
-    const EN_TOPIC_PROMPT_MAP = {
+     function getActiveSystemMessage() {
+       const custom = localStorage.getItem('strong_custom_system_prompt');
+       if (custom && custom.trim()) return custom.trim();
+       return getResolvedSystemMessage();
+     }
+
+     const EN_TOPIC_PROMPT_MAP = {
       preset_topic_vyznam_en: 'vyznam',
       preset_topic_definice_en: 'definice',
       preset_topic_kjv_en: 'kjv',
@@ -939,15 +945,15 @@ async function copyModelTestPromptPreview() {
       let processedPrompt = String(userPromptTemplate || '')
         .replace(/{TARGET_LANG}/g, targetName)
         .replace(/{SOURCE_LANG}/g, sourceName);
-      processedPrompt = enforceSpecialistaFormat(processedPrompt);
-      const userContent = processedPrompt.includes('{HESLA}')
-        ? processedPrompt.replace(/{HESLA}/g, items)
-        : `${processedPrompt}\n\n${items}`;
+       processedPrompt = enforceSpecialistaFormat(processedPrompt);
+       const userContent = processedPrompt.includes('{HESLA}')
+         ? processedPrompt.replace(/{HESLA}/g, items)
+         : `${processedPrompt}\n\n${items}`;
 
-      return [
-        { role: 'system', content: getResolvedSystemMessage() },
-        { role: 'user', content: userContent }
-      ];
+       return [
+         { role: 'system', content: getActiveSystemMessage() },
+         { role: 'user', content: userContent }
+       ];
     }
 
     function buildModelTestMessages(batch, testMode, promptType, promptEnabled) {
@@ -1836,27 +1842,28 @@ const {
 } = settingsApi;
 
 const modelTestUiApi = createModelTestUiApi({
-  state,
-  t,
-  PROVIDERS,
-  MODEL_TEST_OUTPUT_KEY,
-  MODEL_TEST_STATS_KEY,
-  MODEL_TEST_PROMPT_TYPE_KEY,
-  MODEL_TEST_PROMPT_COMPARE_TYPE_KEY,
-  MODEL_TEST_PROMPT_COMPARE_ENABLE_KEY,
-  MODEL_TEST_CUSTOM_PROMPT_KEY,
-  MODEL_TEST_ENABLE_PROMPT_KEY,
-  showToast,
-  escHtml,
-  formatAiResponseTime,
-  populateModelTestModelSelect,
-  saveModelTestModelSelections,
-  updateModelTestProviderUi,
-  isModelTestPromptEnabled,
-  isModelTestPromptCompareEnabled,
-  getModelTestPromptType,
-  getModelTestPromptCompareType,
-  getModelTestCustomPromptText
+    state,
+    t,
+    PROVIDERS,
+    MODEL_TEST_OUTPUT_KEY,
+    MODEL_TEST_STATS_KEY,
+    MODEL_TEST_PROMPT_TYPE_KEY,
+    MODEL_TEST_PROMPT_COMPARE_TYPE_KEY,
+    MODEL_TEST_PROMPT_COMPARE_ENABLE_KEY,
+    MODEL_TEST_CUSTOM_PROMPT_KEY,
+    MODEL_TEST_ENABLE_PROMPT_KEY,
+    showToast,
+    escHtml,
+    formatAiResponseTime,
+    populateModelTestModelSelect,
+    saveModelTestModelSelections,
+    updateModelTestProviderUi,
+    isModelTestPromptEnabled,
+    isModelTestPromptCompareEnabled,
+    getModelTestPromptType,
+    getModelTestPromptCompareType,
+    getModelTestCustomPromptText,
+    getModelTestPromptTemplate
 });
 
 const {
@@ -2918,7 +2925,7 @@ async function sendI18nToolAiPrompt(options = {}) {
         i18nToolSetAiStatus(t('i18nTool.ai.status.sendingBatch', { index: idx + 1, total: chunks.length, size: chunk.length, provider, model }));
         try {
           const raw = await callAIWithRetry(provider, apiKey, model, [
-            { role: 'system', content: getResolvedSystemMessage() },
+            { role: 'system', content: getActiveSystemMessage() },
             { role: 'user', content: chunkPrompt }
           ]);
           i18nToolAccumulateAiTokenStats(raw?.usage || null);
@@ -3721,6 +3728,60 @@ function closeI18nToolAiModal() {
   if (m) m.classList.remove('show');
 }
 
+function showPromptEditModal() {
+  const modal = document.getElementById('editPromptModal');
+  const sysTextarea = document.getElementById('editSystemPrompt');
+  const userTextarea = document.getElementById('editUserPrompt');
+  const status = document.getElementById('editPromptStatus');
+  if (!modal || !sysTextarea || !userTextarea) return;
+  sysTextarea.value = getActiveSystemMessage();
+  userTextarea.value = getActiveMainPromptTemplate('batch');
+  if (status) status.textContent = '';
+  modal.classList.add('show');
+}
+
+function closeEditPromptModal() {
+  const modal = document.getElementById('editPromptModal');
+  if (modal) modal.classList.remove('show');
+}
+
+function restoreDefaultPrompt() {
+  localStorage.removeItem('strong_custom_system_prompt');
+  setMainPrompt(getResolvedDefaultPrompt(), 'system');
+  updatePromptStatusIndicator();
+  const sysTextarea = document.getElementById('editSystemPrompt');
+  const userTextarea = document.getElementById('editUserPrompt');
+  const status = document.getElementById('editPromptStatus');
+  if (sysTextarea) sysTextarea.value = getActiveSystemMessage();
+  if (userTextarea) userTextarea.value = getActiveMainPromptTemplate('batch');
+  if (status) {
+    status.textContent = '✅ Obnoveno výchozí';
+    setTimeout(() => { if (status) status.textContent = ''; }, 2000);
+  }
+}
+
+function saveEditedPrompt() {
+  const sysTextarea = document.getElementById('editSystemPrompt');
+  const userTextarea = document.getElementById('editUserPrompt');
+  const status = document.getElementById('editPromptStatus');
+  if (!sysTextarea || !userTextarea) return;
+  const sysVal = (sysTextarea.value || '').trim();
+  const userVal = (userTextarea.value || '').trim();
+  if (!sysVal) {
+    if (status) status.textContent = '⚠ Systémový prompt nesmí být prázdný';
+    return;
+  }
+  if (!userVal) {
+    if (status) status.textContent = '⚠ Uživatelský prompt nesmí být prázdný';
+    return;
+  }
+  localStorage.setItem('strong_custom_system_prompt', sysVal);
+  setMainPrompt(userVal, 'custom');
+  updatePromptStatusIndicator();
+  closeEditPromptModal();
+  showToast('✅ AI prompt uložen');
+}
+
 function onI18nToolEditorLangChange() {
   const select = document.getElementById('i18nToolEditorLang');
   const text = document.getElementById('i18nToolEditorText');
@@ -4215,6 +4276,12 @@ window.updateModelTestProviderUi = updateModelTestProviderUi;
 // Z promptLibraryApi
 window.togglePromptAutoMode = togglePromptAutoMode;
 window.togglePromptModeQuick = togglePromptModeQuick;
+
+// Prompt edit modal
+window.showPromptEditModal = showPromptEditModal;
+window.closeEditPromptModal = closeEditPromptModal;
+window.restoreDefaultPrompt = restoreDefaultPrompt;
+window.saveEditedPrompt = saveEditedPrompt;
 
 // Z exportDataApi
 window.exportTXT = exportTXT;
