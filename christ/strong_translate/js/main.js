@@ -3086,9 +3086,14 @@ function downloadI18nToolAiResult() {
     return;
   }
   const sourceName = i18nToolAiSourceFileName || 'ai-audit-output.json';
-  const name = /-ai-audit\.json$/i.test(sourceName)
-    ? sourceName
-    : sourceName.replace(/\.json$/i, '-ai-audit.json');
+  let name;
+  if (/-ai-audit\.json$/i.test(sourceName)) {
+    name = sourceName;
+  } else if (/\.json$/i.test(sourceName)) {
+    name = sourceName.replace(/\.json$/i, '-ai-audit.json');
+  } else {
+    name = `${sourceName}-ai-audit.json`;
+  }
   i18nToolDownloadFile(JSON.stringify(i18nToolAiWorkingJson, null, 2), name);
 }
 
