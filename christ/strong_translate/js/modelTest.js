@@ -20,7 +20,8 @@ export function createModelTestUiApi(deps) {
     isModelTestPromptCompareEnabled,
     getModelTestPromptType,
     getModelTestPromptCompareType,
-    getModelTestCustomPromptText
+    getModelTestCustomPromptText,
+    getModelTestPromptTemplate
   } = deps;
 
   function showModelTestModal(providerLabel, clearOutput = false) {
@@ -84,18 +85,27 @@ export function createModelTestUiApi(deps) {
     if (customPromptRow) customPromptRow.style.display = isCustom ? 'block' : 'none';
   }
 
-  function saveModelTestPromptSettings() {
+function saveModelTestPromptSettings() {
     const promptEnable = document.getElementById('modelTestEnablePrompt');
     const promptTypeSelect = document.getElementById('modelTestPromptType');
     const promptCompareEnable = document.getElementById('modelTestEnablePromptCompare');
     const promptCompareTypeSelect = document.getElementById('modelTestPromptTypeCompare');
     const customPromptInput = document.getElementById('modelTestCustomPromptInput');
     if (promptEnable) localStorage.setItem(MODEL_TEST_ENABLE_PROMPT_KEY, promptEnable.checked ? '1' : '0');
-    if (promptTypeSelect) localStorage.setItem(MODEL_TEST_PROMPT_TYPE_KEY, promptTypeSelect.value || 'preset_v12');
+    if (promptTypeSelect) {
+        const promptType = promptTypeSelect.value || 'preset_v12';
+        localStorage.setItem(MODEL_TEST_PROMPT_TYPE_KEY, promptType);
+        
+        // Also update the main prompt used for translation
+        const promptTemplate = getModelTestPromptTemplate(promptType);
+        if (promptTemplate) {
+            localStorage.setItem('strong_prompt', promptTemplate);
+        }
+    }
     if (promptCompareEnable) localStorage.setItem(MODEL_TEST_PROMPT_COMPARE_ENABLE_KEY, promptCompareEnable.checked ? '1' : '0');
     if (promptCompareTypeSelect) localStorage.setItem(MODEL_TEST_PROMPT_COMPARE_TYPE_KEY, promptCompareTypeSelect.value || 'preset_v12');
     if (customPromptInput) localStorage.setItem(MODEL_TEST_CUSTOM_PROMPT_KEY, customPromptInput.value || '');
-  }
+}
 
   function closeModelTestModal() {
     if (state.modelTestRunning) {
